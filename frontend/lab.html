@@ -1244,15 +1244,36 @@
 
   /* ===== MOBILE ===== */
   @media (max-width: 768px) {
+    /* Prevent page-level horizontal overflow */
+    html, body { overflow-x: hidden; }
+
     .toolbar {
       padding: 8px 12px;
       gap: 6px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
     }
+    .toolbar::-webkit-scrollbar { display: none; }
     .toolbar-divider { display: none; }
-    .search-box { width: 140px; }
+    .toolbar-section { flex-shrink: 0; }
+    .search-box { width: 140px; flex-shrink: 0; }
     .result-count { display: none; }
+    .toolbar .btn-chunky { flex-shrink: 0; white-space: nowrap; }
 
-    .filter-bar { padding: 6px 12px; }
+    .filter-bar {
+      padding: 6px 12px;
+      flex-wrap: wrap;
+    }
+    .filter-group { flex-shrink: 0; }
+
+    /* Table: touch-friendly horizontal scroll */
+    .table-wrap {
+      -webkit-overflow-scrolling: touch;
+      overflow-x: auto;
+      overflow-y: auto;
+    }
 
     .screener-table th,
     .screener-table td { padding: 5px 8px; font-size: 11px; }
@@ -1272,12 +1293,27 @@
 
     .watermark { font-size: 11px; bottom: 40px; right: 10px; }
 
-    /* Modals */
+    /* Modals — full screen on mobile */
     .filter-modal { width: 95vw; padding: 16px; }
-    .column-picker { width: 85vw; }
-    .store-modal { padding: 16px; }
+    .column-picker {
+      width: 100vw;
+      max-width: 100vw;
+      border-radius: 0;
+      height: 100vh;
+    }
+    .column-picker-overlay { align-items: stretch; justify-content: stretch; }
+    .store-modal { padding: 16px; width: 100vw; max-width: 100vw; border-radius: 0; }
     .store-grid { grid-template-columns: 1fr; }
-    .profile-modal { padding: 16px; }
+
+    /* Profile modal — full screen on mobile */
+    .profile-modal {
+      padding: 16px;
+      width: 100vw;
+      max-width: 100vw;
+      max-height: 100vh;
+      border-radius: 0;
+      box-shadow: none;
+    }
     .profile-name { font-size: 22px; }
     .profile-stat-value { font-size: 18px; }
     .profile-stats-bar { flex-wrap: wrap; }
@@ -1286,6 +1322,26 @@
     .prospect-metric-row { grid-template-columns: 100px 70px 1fr 45px; gap: 6px; }
     .prospect-metric-label { font-size: 10px; }
     .prospect-metric-value { font-size: 14px; }
+
+    /* Chart overlay — full width */
+    .filter-modal-overlay > div,
+    #chartOverlay > div,
+    #tradeValuesOverlay > div,
+    #agingCurvesOverlay > div,
+    #heatMapOverlay > div,
+    #savedViewsOverlay > div,
+    #shareOverlay > div,
+    #rankingsExportOverlay > div {
+      max-width: 100vw !important;
+      width: 100vw !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      max-height: 100vh !important;
+    }
+
+    /* Chart canvas — scale to fit */
+    #chartCanvas { width: 100% !important; height: auto !important; }
+    #chartCanvasWrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   }
 
   @media (max-width: 480px) {
@@ -1298,6 +1354,21 @@
     .btn-primary { font-size: 10px; padding: 4px 10px; }
     .screener-table th.col-player,
     .screener-table td.col-player { min-width: 120px; }
+
+    /* Chips — larger tap targets */
+    .chip { padding: 6px 10px; font-size: 10px; min-height: 32px; }
+
+    /* Filter bar — stack */
+    .filter-bar { gap: 6px; }
+    .filter-group { width: 100%; }
+    .team-chips { width: 100%; }
+
+    /* Profile header — stack */
+    .profile-header { flex-direction: column; gap: 8px; }
+    .profile-combine { grid-template-columns: repeat(2, 1fr); }
+
+    /* Footer — center pagination */
+    .footer-bar { flex-direction: column; align-items: center; text-align: center; }
   }
 </style>
 </head>
