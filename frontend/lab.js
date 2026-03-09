@@ -381,9 +381,10 @@ function renderTableBody() {
       html += `<span class="school-label">${player.school || ""}</span>`;
       html += `</div></td>`;
     } else {
+      const pid = player.player_id || "";
       html += `<td class="col-player"><div class="player-name-cell">`;
       html += `<span class="pos-badge ${posClass(pos)}">${pos}</span>`;
-      html += `<span>${player.full_name}</span>`;
+      html += `<a href="#" onclick="openPlayerProfile('${pid}'); return false;" style="color:var(--ink); text-decoration:none; border-bottom:1px dashed var(--ink-faint);">${player.full_name}</a>`;
       html += `<span class="team-label">${player.team || ""}</span>`;
       html += `</div></td>`;
     }
@@ -805,6 +806,52 @@ function updateSelectionUI() {
   } else {
     updateResultCount();
   }
+  // Persist Lab context for War Room agent bridge
+  saveLabContext();
+}
+
+function saveLabContext() {
+  try {
+    const KEY_STATS = [
+      "fantasy_points_ppr", "ppg", "games", "receptions", "targets", "receiving_yards",
+      "receiving_tds", "rushing_attempts", "rushing_yards", "rushing_tds",
+      "passing_yards", "passing_tds", "interceptions", "completions", "attempts",
+      "target_share", "wopr", "yards_per_carry", "yards_per_rec", "catch_rate"
+    ];
+    const players = state.selectedPlayers.map(sp => {
+      const full = state.items.find(p => p.player_id === sp.player_id);
+      if (!full) return sp;
+      const stats = {};
+      for (const k of KEY_STATS) {
+        if (full[k] != null) stats[k] = full[k];
+      }
+      // Include formula scores
+      for (const f of state.formulas) {
+        const fk = "formula_" + f.name.toLowerCase().replace(/[^a-z0-9]/g, "_");
+        if (full[fk] != null) stats[fk] = full[fk];
+      }
+      return { ...sp, stats };
+    });
+    const ctx = {
+      players,
+      season: state.season || "latest",
+      universe: state.universe,
+      preset: getCurrentPresetName(),
+      filters: state.filters.slice(0, 5),
+      formulas: state.formulas.map(f => ({ name: f.name, components: f.components })),
+      updatedAt: Date.now(),
+    };
+    localStorage.setItem("razzle_lab_context", JSON.stringify(ctx));
+  } catch (e) { /* ignore storage errors */ }
+}
+
+function getCurrentPresetName() {
+  const presets = state.universe === "prospects" ? PROSPECT_PRESETS : PRESETS;
+  for (const [name, preset] of Object.entries(presets)) {
+    const cols = state.universe === "prospects" ? state.prospectColumns : state.visibleColumns;
+    if (JSON.stringify(preset.columns) === JSON.stringify(cols)) return preset.label;
+  }
+  return "Custom";
 }
 
 // ─── Formula columns integration ─────────────────────────────────

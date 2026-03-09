@@ -1513,6 +1513,59 @@ function setupScenarioPanel() {
     }
     runAllAgents(scenario);
   });
+
+  // Render context badges
+  renderContextBadges();
+}
+
+function renderContextBadges() {
+  var host = document.getElementById('contextBadges');
+  if (!host) return;
+
+  var labCtx = getLabContext();
+  var leagueCtx = getLeagueContext();
+
+  var badges = [];
+
+  if (labCtx && labCtx.players && labCtx.players.length) {
+    badges.push(
+      '<span class="context-badge active">' +
+        '<span class="context-badge-dot"></span>' +
+        'Lab: ' + labCtx.players.length + ' player' + (labCtx.players.length > 1 ? 's' : '') + ' selected' +
+      '</span>'
+    );
+  } else {
+    badges.push(
+      '<span class="context-badge inactive">' +
+        '<span class="context-badge-dot"></span>' +
+        'Lab: no players selected' +
+        ' <a href="/lab.html" class="context-badge-link">open Lab</a>' +
+      '</span>'
+    );
+  }
+
+  if (leagueCtx && leagueCtx.username) {
+    var detail = leagueCtx.username;
+    if (leagueCtx.leagues && leagueCtx.leagues.length) {
+      detail += ' (' + leagueCtx.leagues.length + ' league' + (leagueCtx.leagues.length > 1 ? 's' : '') + ')';
+    }
+    badges.push(
+      '<span class="context-badge active">' +
+        '<span class="context-badge-dot"></span>' +
+        'Sleeper: ' + escapeHtml(detail) +
+      '</span>'
+    );
+  } else {
+    badges.push(
+      '<span class="context-badge inactive">' +
+        '<span class="context-badge-dot"></span>' +
+        'Sleeper: not connected' +
+        ' <a href="/league-intel.html" class="context-badge-link">connect</a>' +
+      '</span>'
+    );
+  }
+
+  host.innerHTML = badges.join('');
 }
 
 function setScenarioStatus(msg, type) {
@@ -1608,8 +1661,106 @@ function buildRules(agentDef) {
   return rules.join('\n');
 }
 
+function getLabContext() {
+  try {
+    const raw = localStorage.getItem('razzle_lab_context');
+    if (!raw) return null;
+    const ctx = JSON.parse(raw);
+    // Only use if less than 24h old
+    if (ctx.updatedAt && Date.now() - ctx.updatedAt > 86400000) return null;
+    if (!ctx.players || !ctx.players.length) return null;
+    return ctx;
+  } catch (e) { return null; }
+}
+
+function formatLabContext(ctx) {
+  var lines = ['', '--- WHAT THE LAB KNOWS ---'];
+  lines.push('Season: ' + (ctx.season || 'latest') + ' | View: ' + (ctx.preset || 'Custom'));
+  if (ctx.players && ctx.players.length) {
+    lines.push('Selected players (' + ctx.players.length + '):');
+    ctx.players.forEach(function(p) {
+      var statLine = '';
+      if (p.stats) {
+        var statParts = [];
+        if (p.stats.fantasy_points_ppr != null) statParts.push('PPR: ' + p.stats.fantasy_points_ppr);
+        if (p.stats.ppg != null) statParts.push('PPG: ' + p.stats.ppg);
+        if (p.stats.games != null) statParts.push('G: ' + p.stats.games);
+        if (p.stats.receptions != null) statParts.push('REC: ' + p.stats.receptions);
+        if (p.stats.targets != null) statParts.push('TGT: ' + p.stats.targets);
+        if (p.stats.receiving_yards != null) statParts.push('RecYds: ' + p.stats.receiving_yards);
+        if (p.stats.rushing_yards != null) statParts.push('RuYds: ' + p.stats.rushing_yards);
+        if (p.stats.passing_yards != null) statParts.push('PaYds: ' + p.stats.passing_yards);
+        if (p.stats.target_share != null) statParts.push('TgtShr: ' + (p.stats.target_share * 100).toFixed(1) + '%');
+        if (p.stats.wopr != null) statParts.push('WOPR: ' + p.stats.wopr.toFixed(3));
+        // Include formula scores
+        Object.keys(p.stats).forEach(function(k) {
+          if (k.startsWith('formula_')) statParts.push(k.replace('formula_', '') + ': ' + p.stats[k]);
+        });
+        statLine = ' | ' + statParts.join(', ');
+      }
+      lines.push('  - ' + p.full_name + ' (' + p.position + ', ' + (p.team || '?') + ')' + statLine);
+    });
+  }
+  if (ctx.filters && ctx.filters.length) {
+    lines.push('Active filters: ' + ctx.filters.map(function(f) {
+      return f.stat + ' ' + f.op + ' ' + f.value;
+    }).join('; '));
+  }
+  if (ctx.formulas && ctx.formulas.length) {
+    lines.push('Custom formulas: ' + ctx.formulas.map(function(f) { return f.name; }).join(', '));
+  }
+  lines.push('--- END LAB CONTEXT ---');
+  return lines.join('\n');
+}
+
+function getLeagueContext() {
+  try {
+    var user = localStorage.getItem('razzle_sleeper_user');
+    var leagueData = localStorage.getItem('razzle_league_context');
+    if (!user) return null;
+    var ctx = { username: user };
+    if (leagueData) {
+      var parsed = JSON.parse(leagueData);
+      ctx.leagues = parsed.leagues;
+      ctx.roster = parsed.roster;
+    }
+    return ctx;
+  } catch (e) { return null; }
+}
+
+function formatLeagueContext(ctx) {
+  var lines = ['', '--- WHAT LEAGUE INTEL KNOWS ---'];
+  lines.push('Sleeper user: ' + ctx.username);
+  if (ctx.leagues && ctx.leagues.length) {
+    ctx.leagues.forEach(function(lg) {
+      lines.push('League: ' + lg.name + ' (' + lg.type + ', ' + lg.scoring + ', ' + lg.teams + '-team)');
+    });
+  }
+  if (ctx.roster && ctx.roster.length) {
+    lines.push('Your roster:');
+    ctx.roster.forEach(function(p) {
+      lines.push('  - ' + p.name + ' (' + p.pos + ', ' + (p.team || '?') + ')');
+    });
+  }
+  lines.push('--- END LEAGUE CONTEXT ---');
+  return lines.join('\n');
+}
+
 function buildUserMessage(scenario, agentDef, peerInsights) {
   const parts = [buildRules(agentDef), '', 'Scenario:', scenario];
+
+  // Inject Lab context if available
+  var labCtx = getLabContext();
+  if (labCtx) {
+    parts.push(formatLabContext(labCtx));
+  }
+
+  // Inject League context if available
+  var leagueCtx = getLeagueContext();
+  if (leagueCtx) {
+    parts.push(formatLeagueContext(leagueCtx));
+  }
+
   if (Array.isArray(peerInsights) && peerInsights.length) {
     parts.push('', 'Peer agent insights to synthesize:');
     peerInsights.forEach(function(p, i) {

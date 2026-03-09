@@ -383,6 +383,61 @@
     color: var(--red);
   }
 
+  /* ===== CONTEXT BADGES ===== */
+  .context-badges {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+
+  .context-badge {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 4px 10px;
+    border: 2px solid var(--ink);
+    border-radius: 20px;
+    background: var(--bg-card);
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+
+  .context-badge.active {
+    background: var(--green-light);
+    border-color: var(--green);
+    color: var(--green);
+  }
+
+  .context-badge.inactive {
+    background: var(--bg-warm);
+    border-color: var(--ink-faint);
+    color: var(--ink-light);
+    opacity: 0.7;
+  }
+
+  .context-badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .context-badge.active .context-badge-dot { background: var(--green); }
+  .context-badge.inactive .context-badge-dot { background: var(--ink-faint); }
+
+  .context-badge-link {
+    font-family: var(--font-hand);
+    font-size: 13px;
+    color: var(--orange);
+    text-decoration: none;
+    margin-left: 2px;
+  }
+
   /* ===== AGENT STATUS TRACKER ===== */
   .agent-status-tracker {
     display: flex;
@@ -1034,6 +1089,9 @@
           <div class="scenario-examples-label">try one of these:</div>
           <div class="scenario-chips" id="scenarioChips"></div>
         </div>
+
+        <!-- Context indicators -->
+        <div class="context-badges" id="contextBadges"></div>
 
         <div class="scenario-actions">
           <button class="scenario-run-all" id="scenarioRunAll">Run All Agents</button>

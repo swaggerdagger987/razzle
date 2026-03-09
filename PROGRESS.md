@@ -1,6 +1,21 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 7 — War Room: Agent Personas + Scenario Runner (COMPLETE)
+## Current Phase: Phase 8 — War Room: Context Bridge + Free/Paid Gating
+
+**Exit criterion:** Free user asks a question → gets generic agent analysis. Connected Sleeper user asks the same question → gets league-contextualized answer that references their roster and rivals. The difference is obvious and compelling. Home page demo looks alive.
+
+### Phase 8 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Lab context feed | DONE | Lab saves selected players + stats + formulas to localStorage (razzle_lab_context). War Room reads via getLabContext(), injects "What The Lab Knows" section into agent prompts. Context badges in scenario panel show active/inactive state for Lab and Sleeper. |
+| 2 | League Intel context feed | TODO | |
+| 3 | Free vs. paid prompt tiers | TODO | |
+| 4 | Paywall UI gating | TODO | |
+| 5 | Home page War Room demo upgrade | TODO | |
+| 6 | Agent bio cards | TODO | |
+
+## Previous Phase: Phase 7 — War Room: Agent Personas + Scenario Runner (COMPLETE)
 
 **Exit criterion MET:** User types scenario → 5 specialists respond in parallel with per-agent status tracking → Razzle synthesizes with peer insights → briefing cards render with structured analysis (Razzle at top, specialists collapsible below). Urgency badges, markdown rendering, error states. Works with any OpenRouter-compatible API key.
 
