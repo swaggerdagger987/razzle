@@ -1,6 +1,6 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 2 — Formulas + Visualizations (COMPLETE)
+## Current Phase: Phase 3 — Sharing Engine + Watermark (COMPLETE)
 
 ### Phase 0 Tasks (COMPLETE)
 
@@ -88,6 +88,13 @@
 - [x] Comparison mode: select players via checkboxes, side-by-side stat table + radar overlay
 - [x] API: /api/players/{id}/weeks for trend data, /api/players/compare for multi-player stats
 - [x] Player selection: checkbox column in screener, max 5 players, compare button
+
+### Phase 3 — Sharing Engine + Watermark
+- [x] Watermark: fixed "built different — razzle.lol" on Lab page, semi-transparent, slightly rotated
+- [x] Image export: Canvas-rendered PNG of screener table with position badges, stats, watermark
+- [x] Export PNG button in toolbar, auto-downloads razzle-lab-{season}.png
+- [x] og:meta tags for link previews (og:title, og:description, twitter:card)
+- [x] Share URL button already built in Phase 1
 
 ---
 

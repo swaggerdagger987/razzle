@@ -539,3 +539,144 @@ function computeFormulaValues() {
 
 // Load formulas on startup
 loadFormulas();
+
+// ─── Image export ────────────────────────────────────────────────
+function exportImage() {
+  const table = document.getElementById("screenerTable");
+  const rows = table.querySelectorAll("tr");
+  if (!rows.length) return;
+
+  // Determine dimensions from visible data
+  const visibleCols = state.visibleColumns.filter(k => COLUMNS[k]);
+  const colCount = visibleCols.length + 1; // +1 for player name
+  const rowCount = Math.min(state.items.length, 25); // cap at 25 rows for export
+
+  const colW = 100;
+  const playerColW = 200;
+  const rowH = 28;
+  const headerH = 36;
+  const padX = 20;
+  const padY = 20;
+  const watermarkH = 40;
+
+  const W = padX * 2 + playerColW + colCount * colW;
+  const H = padY * 2 + headerH + rowCount * rowH + watermarkH;
+
+  const canvas = document.createElement("canvas");
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext("2d");
+
+  // Background
+  ctx.fillStyle = "#ede0cf";
+  ctx.fillRect(0, 0, W, H);
+
+  // Header row
+  ctx.fillStyle = "#e5d5c3";
+  ctx.fillRect(padX, padY, W - padX * 2, headerH);
+  ctx.strokeStyle = "#1a1a2e";
+  ctx.lineWidth = 2;
+  ctx.strokeRect(padX, padY, W - padX * 2, headerH);
+
+  ctx.font = "bold 11px 'Space Mono', monospace";
+  ctx.fillStyle = "#1a1a2e";
+  ctx.textAlign = "left";
+  ctx.fillText("PLAYER", padX + 8, padY + headerH / 2 + 4);
+
+  ctx.textAlign = "right";
+  for (let i = 0; i < visibleCols.length; i++) {
+    const col = COLUMNS[visibleCols[i]];
+    const x = padX + playerColW + i * colW + colW - 8;
+    ctx.fillText(col.label.toUpperCase(), x, padY + headerH / 2 + 4);
+  }
+
+  // Data rows
+  const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  for (let r = 0; r < rowCount; r++) {
+    const player = state.items[r];
+    const y = padY + headerH + r * rowH;
+
+    // Alternate row bg
+    if (r % 2 === 0) {
+      ctx.fillStyle = "#f7efe5";
+      ctx.fillRect(padX, y, W - padX * 2, rowH);
+    }
+
+    // Row border
+    ctx.strokeStyle = "#c5c5d0";
+    ctx.lineWidth = 0.5;
+    ctx.beginPath();
+    ctx.moveTo(padX, y + rowH);
+    ctx.lineTo(W - padX, y + rowH);
+    ctx.stroke();
+
+    // Position badge
+    const pos = (player.position || "").toUpperCase();
+    const badgeColor = posColors[pos] || "#8a8a9e";
+    ctx.fillStyle = badgeColor;
+    ctx.fillRect(padX + 6, y + 6, 26, 16);
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 1;
+    ctx.strokeRect(padX + 6, y + 6, 26, 16);
+    ctx.font = "bold 9px 'Space Mono', monospace";
+    ctx.fillStyle = "#fff";
+    ctx.textAlign = "center";
+    ctx.fillText(pos, padX + 19, y + 18);
+
+    // Player name
+    ctx.font = "bold 12px sans-serif";
+    ctx.fillStyle = "#1a1a2e";
+    ctx.textAlign = "left";
+    const displayName = player.full_name.length > 20
+      ? player.full_name.substring(0, 18) + "..."
+      : player.full_name;
+    ctx.fillText(displayName, padX + 38, y + 18);
+
+    // Team
+    ctx.font = "10px 'Space Mono', monospace";
+    ctx.fillStyle = "#8a8a9e";
+    ctx.fillText(player.team || "", padX + playerColW - 30, y + 18);
+
+    // Stats
+    ctx.font = "12px 'Space Mono', monospace";
+    ctx.fillStyle = "#1a1a2e";
+    ctx.textAlign = "right";
+    for (let i = 0; i < visibleCols.length; i++) {
+      const col = COLUMNS[visibleCols[i]];
+      const val = player[visibleCols[i]];
+      const x = padX + playerColW + i * colW + colW - 8;
+      ctx.fillText(formatStat(val, col.decimals), x, y + 18);
+    }
+  }
+
+  // Table border
+  ctx.strokeStyle = "#1a1a2e";
+  ctx.lineWidth = 3;
+  ctx.strokeRect(padX, padY, W - padX * 2, headerH + rowCount * rowH);
+
+  // Player column divider
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(padX + playerColW, padY);
+  ctx.lineTo(padX + playerColW, padY + headerH + rowCount * rowH);
+  ctx.stroke();
+
+  // Watermark
+  const wmY = H - watermarkH / 2;
+  ctx.font = "bold 16px sans-serif";
+  ctx.fillStyle = "#1a1a2e";
+  ctx.globalAlpha = 0.3;
+  ctx.textAlign = "center";
+  ctx.fillText("built different — razzle.lol", W / 2, wmY);
+  ctx.globalAlpha = 1.0;
+
+  // Razzle logo mark
+  ctx.font = "20px serif";
+  ctx.fillText("🐯", W / 2 - 140, wmY + 2);
+
+  // Download
+  const link = document.createElement("a");
+  link.download = `razzle-lab-${state.season}.png`;
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+}

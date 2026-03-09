@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Lab — Razzle</title>
+<meta property="og:title" content="The Lab — Razzle">
+<meta property="og:description" content="Free fantasy football Bloomberg terminal. Filter 600+ players across 40+ stats. Built different.">
+<meta property="og:site_name" content="razzle.lol">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="styles.css">
 <style>
   /* ===== LAB LAYOUT ===== */
@@ -360,6 +365,25 @@
     gap: 6px;
     align-items: center;
   }
+
+  /* ===== WATERMARK ===== */
+  .watermark {
+    position: fixed;
+    bottom: 48px;
+    right: 20px;
+    z-index: 90;
+    font-family: var(--font-display);
+    font-size: 14px;
+    color: var(--ink);
+    opacity: 0.25;
+    pointer-events: none;
+    transform: rotate(-2deg);
+    letter-spacing: 0.5px;
+  }
+
+  .watermark span {
+    color: var(--orange);
+  }
 </style>
 </head>
 <body>
@@ -405,6 +429,7 @@
     <button class="btn-chunky" onclick="openFormulaBuilder()">Formulas</button>
     <button class="btn-chunky" onclick="openChartPanel()">Charts</button>
     <button class="btn-chunky" onclick="copyShareURL()">Share URL</button>
+    <button class="btn-primary" onclick="exportImage()">Export PNG</button>
 
     <span class="result-count" id="resultCount"></span>
   </div>
@@ -424,6 +449,9 @@
     </table>
     <div class="loading-msg" id="loadingMsg">pulling film...</div>
   </div>
+
+  <!-- WATERMARK -->
+  <div class="watermark">built different — <span>razzle.lol</span></div>
 
   <!-- FOOTER -->
   <div class="footer-bar">
