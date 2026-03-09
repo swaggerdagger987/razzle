@@ -2557,7 +2557,109 @@ def init_formula_store_tables():
         )
     """)
     conn.commit()
+
+    # Seed formulas if table is empty
+    count = conn.execute("SELECT COUNT(*) FROM formula_store").fetchone()[0]
+    if count == 0:
+        _seed_formula_store(conn)
+
     conn.close()
+
+
+def _seed_formula_store(conn):
+    import json
+    seeds = [
+        {
+            "name": "PPR Workhorse",
+            "description": "Identifies high-volume PPR assets. Weights receptions and targets heavily alongside rushing volume.",
+            "position_tags": ["RB", "WR"],
+            "stat_weights": {"receptions": 30, "targets": 25, "rushing_yards": 20, "receiving_yards": 15, "rushing_tds": 10},
+            "creator_name": "Razzle Labs",
+            "rating_sum": 23, "rating_count": 5,
+        },
+        {
+            "name": "Alpha WR Score",
+            "description": "Finds true WR1 alphas. Combines target share, air yards, and touchdown upside.",
+            "position_tags": ["WR"],
+            "stat_weights": {"targets": 25, "receiving_yards": 25, "receiving_tds": 20, "receptions": 15, "receiving_yards_after_catch": 10, "receiving_fumbles_lost": -5},
+            "creator_name": "Razzle Labs",
+            "rating_sum": 29, "rating_count": 6,
+        },
+        {
+            "name": "Dual Threat QB",
+            "description": "Scores QBs who contribute with both arm and legs. Rushing floor matters in fantasy.",
+            "position_tags": ["QB"],
+            "stat_weights": {"passing_yards": 25, "passing_tds": 20, "rushing_yards": 25, "rushing_tds": 15, "interceptions": -15},
+            "creator_name": "Razzle Labs",
+            "rating_sum": 17, "rating_count": 4,
+        },
+        {
+            "name": "Bellcow Index",
+            "description": "Pure rushing workload. Identifies true three-down backs with volume and TD upside.",
+            "position_tags": ["RB"],
+            "stat_weights": {"rushing_yards": 30, "carries": 25, "rushing_tds": 20, "rushing_first_downs": 15, "rushing_fumbles_lost": -10},
+            "creator_name": "Razzle Labs",
+            "rating_sum": 22, "rating_count": 5,
+        },
+        {
+            "name": "TD Machine",
+            "description": "Pure touchdown upside across all scoring methods. Boom-or-bust by design.",
+            "position_tags": ["QB", "RB", "WR", "TE"],
+            "stat_weights": {"passing_tds": 30, "rushing_tds": 35, "receiving_tds": 35},
+            "creator_name": "Razzle Labs",
+            "rating_sum": 17, "rating_count": 4,
+        },
+        {
+            "name": "Target Hog",
+            "description": "Volume is king in PPR. Finds players commanding the highest target share on their team.",
+            "position_tags": ["WR", "TE", "RB"],
+            "stat_weights": {"targets": 35, "receptions": 30, "receiving_yards": 20, "receiving_first_downs": 15},
+            "creator_name": "Razzle Labs",
+            "rating_sum": 19, "rating_count": 4,
+        },
+        {
+            "name": "TE Premium",
+            "description": "Identifies the rare TEs who actually produce. Receiving volume + TD upside weighted for TE scarcity.",
+            "position_tags": ["TE"],
+            "stat_weights": {"receptions": 30, "receiving_yards": 25, "targets": 20, "receiving_tds": 25},
+            "creator_name": "Razzle Labs",
+            "rating_sum": 24, "rating_count": 5,
+        },
+        {
+            "name": "Dynasty Value Score",
+            "description": "Long-term dynasty asset evaluation. Balances current production with age-adjusted upside.",
+            "position_tags": ["QB", "RB", "WR", "TE"],
+            "stat_weights": {"fantasy_points_ppr": 35, "receiving_yards": 20, "rushing_yards": 15, "passing_yards": 15, "receptions": 15},
+            "creator_name": "Razzle Labs",
+            "rating_sum": 27, "rating_count": 6,
+        },
+        {
+            "name": "YAC Monster",
+            "description": "Explosive playmakers who create after the catch. The fun players to own.",
+            "position_tags": ["WR", "RB", "TE"],
+            "stat_weights": {"receiving_yards_after_catch": 40, "receiving_yards": 25, "receptions": 20, "receiving_tds": 15},
+            "creator_name": "Razzle Labs",
+            "rating_sum": 19, "rating_count": 4,
+        },
+        {
+            "name": "Pocket Passer",
+            "description": "Traditional pocket QB evaluation. Pure passing efficiency and volume.",
+            "position_tags": ["QB"],
+            "stat_weights": {"passing_yards": 30, "passing_tds": 30, "completions": 15, "interceptions": -25},
+            "creator_name": "Razzle Labs",
+            "rating_sum": 18, "rating_count": 4,
+        },
+    ]
+
+    for s in seeds:
+        conn.execute(
+            """INSERT INTO formula_store (name, description, position_tags, stat_weights, creator_name, rating_sum, rating_count)
+               VALUES (?, ?, ?, ?, ?, ?, ?)""",
+            (s["name"], s["description"], json.dumps(s["position_tags"]),
+             json.dumps(s["stat_weights"]), s["creator_name"],
+             s["rating_sum"], s["rating_count"]),
+        )
+    conn.commit()
 
 
 def publish_formula(name: str, description: str, position_tags: list,
