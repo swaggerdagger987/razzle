@@ -36,8 +36,8 @@
 **Accept when**: Free users see generic mode clearly labeled. League-context sections have blurred/redacted previews. "Unlock with Razzle Pro" CTA visible. Connected Sleeper users see full context (simulated paid for now — no real auth yet).
 **Depends on**: Task 3
 **Size**: M
-**Status**: PENDING
-**Attempt**: 0/3
+**Status**: PASS
+**Attempt**: 1/3
 
 ## Task 5: Home page War Room demo upgrade
 **Requirement**: "Replace static demo with 50-60 pre-built anonymized agent briefing permutations. Agents visibly 'working' with redacted outputs (???, !!!, ...). Rotates on each visit."
@@ -60,9 +60,9 @@
 ## Loop State
 ```
 Current Phase: 8
-Current Task: 4
+Current Task: 5
 Current Stage: DESIGN
 Attempt: 1
-Tasks Completed: 3/6
+Tasks Completed: 4/6
 Loop Iterations: 0
 ```

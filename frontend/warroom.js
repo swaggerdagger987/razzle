@@ -1584,6 +1584,12 @@ function renderContextBadges() {
   }
 
   host.innerHTML = badges.join('');
+
+  // Show/hide pro upsell based on league context
+  var upsellZone = document.getElementById('proUpsellZone');
+  if (upsellZone) {
+    upsellZone.style.display = leagueMode ? 'none' : 'block';
+  }
 }
 
 function setScenarioStatus(msg, type) {
