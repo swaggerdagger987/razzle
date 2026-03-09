@@ -54,8 +54,9 @@
 - No raw 'undefined' or blank screens on any code path
 **Depends on**: none
 **Size**: M
-**Status**: PENDING
-**Attempt**: 0/3
+**Status**: PASS
+**Attempt**: 1/3
+**Result**: Already thoroughly implemented. All 3 data fetchers (NFL/Prospects/College) have: loading ("pulling film..." / "scouting prospects..." / "pulling college film..."), error ("fumbled the data fetch..." in red), empty ("no players match these filters"). Profile, Tiers, Big Board, Class Analytics, Trade Values all have loading→error transitions. Aging Curves and Heat Map show errors on canvas. 15+ error handlers across lab.js. No changes needed.
 
 ## Task 5: Favicon and page title polish
 **Requirement**: "Verify and fix: (a) favicon.svg exists and shows the tiger emoji or Razzle branding. (b) Page titles are descriptive: 'The Lab — Razzle', 'League Intel — Razzle', 'War Room — Razzle', 'Razzle — Fantasy Football Bloomberg Terminal'. (c) Title tag on index.html includes SEO keywords. (d) All pages have the correct active nav link highlighted."
@@ -65,8 +66,9 @@
 - Active nav link matches current page on all 4 main pages
 **Depends on**: none
 **Size**: S
-**Status**: PENDING
-**Attempt**: 0/3
+**Status**: PASS
+**Attempt**: 1/3
+**Result**: All verified. Favicon: tiger emoji SVG linked on all 5 pages. Titles: descriptive and branded. Nav active: correct class="active" on each page. No changes needed.
 
 ## Task 6: Agents page (War Room) mobile responsive
 **Requirement**: "Make agents.html fully responsive on mobile: (a) Canvas container scales or shows appropriate message on small screens. (b) Agent roster sidebar stacks below canvas on mobile. (c) Scenario input panel is full-width on mobile. (d) Config panel is usable on mobile. (e) Agent briefing cards stack single-column."
@@ -77,8 +79,9 @@
 - No horizontal overflow
 **Depends on**: none
 **Size**: M
-**Status**: PENDING
-**Attempt**: 0/3
+**Status**: PASS
+**Attempt**: 1/3
+**Result**: Canvas container already scales via aspect-ratio:30/22 + width:100%. Added 480px breakpoint: bio grid single-column, overflow-x hidden, roster panel narrower (140px), config panel full-viewport width, scenario section compact padding. Existing 768px handles hero, bio grid (2-col), canvas wrap, roster, config panel, scenario buttons.
 
 ## Task 7: SEO and social metadata cleanup
 **Requirement**: "Final pass on all page metadata: (a) Verify all 5 HTML pages have complete OG tags (title, description, image, url, type, site_name). (b) Verify twitter:card tags on all pages. (c) Add canonical URLs. (d) Add meta description tags for SEO. (e) Verify favicon link on all pages."
