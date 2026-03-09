@@ -484,6 +484,8 @@ function applyUniverseUI() {
   if (tiersBtn) tiersBtn.style.display = isProspect ? "" : "none";
   const bigBoardBtn = document.getElementById("bigBoardBtn");
   if (bigBoardBtn) bigBoardBtn.style.display = isProspect ? "" : "none";
+  const classAnalyticsBtn = document.getElementById("classAnalyticsBtn");
+  if (classAnalyticsBtn) classAnalyticsBtn.style.display = isProspect ? "" : "none";
 }
 
 // ─── Sort ────────────────────────────────────────────────────────
@@ -2860,6 +2862,433 @@ function exportBigBoardImage() {
 
   const link = document.createElement("a");
   link.download = `razzle-bigboard-${currentBBData.position.toLowerCase()}-${currentBBData.draft_year}.png`;
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+}
+
+
+// ─── Class Analytics ─────────────────────────────────────────────
+let currentCAPosition = "ALL";
+let currentCAData = null;
+
+function openClassAnalytics() {
+  document.getElementById("classAnalyticsOverlay").classList.add("open");
+  const btnsEl = document.getElementById("caPositionBtns");
+  const positions = ["ALL", "QB", "RB", "WR", "TE"];
+  btnsEl.innerHTML = positions.map(pos => {
+    const posColor = { ALL: "var(--orange)", QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" }[pos];
+    return `<button class="btn-chunky ca-pos-btn" data-pos="${pos}" onclick="loadClassAnalytics('${pos}')" style="font-size:11px; padding:4px 12px; border-color:${posColor};">${pos}</button>`;
+  }).join("");
+
+  const defaultPos = state.position || "ALL";
+  loadClassAnalytics(defaultPos);
+}
+
+function closeClassAnalytics(e) {
+  if (e && e.target !== e.currentTarget) return;
+  document.getElementById("classAnalyticsOverlay").classList.remove("open");
+}
+
+async function loadClassAnalytics(position) {
+  currentCAPosition = position;
+  const contentEl = document.getElementById("caContent");
+  contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">analyzing ${position === "ALL" ? "all" : position} draft classes...</div>`;
+
+  document.querySelectorAll(".ca-pos-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.pos === position);
+  });
+
+  try {
+    const posParam = position === "ALL" ? "" : position;
+    const data = await apiFetch(`/api/draft-class-analytics?position=${posParam}`);
+    currentCAData = { ...data, filterPosition: position };
+    renderClassAnalytics(data, contentEl);
+  } catch (err) {
+    contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the analytics... ${err.message}</div>`;
+  }
+}
+
+function renderClassAnalytics(data, container) {
+  const classes = data.classes || [];
+  if (classes.length === 0) {
+    container.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">no draft class data found</div>`;
+    return;
+  }
+
+  const posLabel = data.position === "ALL" ? "All Positions" : data.position;
+  const gradeColors = { A: "var(--green)", B: "var(--blue)", C: "var(--orange)", D: "var(--red)" };
+  const tierColors = { elite: "#d97757", premium: "#5b7fff", solid: "#2ec4b6", flier: "#8b5cf6" };
+
+  // Find max avg RPS for chart scaling
+  const maxRPS = Math.max(...classes.map(c => c.avg_rps), 60);
+
+  let html = `<div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); margin-bottom:16px;">${posLabel} draft class comparison — year-over-year strength analysis</div>`;
+
+  // Bar chart canvas
+  html += `<div style="margin-bottom:24px;"><canvas id="caBarChart" width="900" height="280" style="width:100%; max-width:900px; border:2px solid var(--ink); border-radius:8px; box-shadow:3px 3px 0 var(--ink);"></canvas></div>`;
+
+  // Class cards grid
+  html += `<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:16px;">`;
+
+  for (const cls of classes) {
+    const gradeColor = gradeColors[cls.grade] || "var(--ink-light)";
+    const topName = cls.top_prospect ? cls.top_prospect.name : "N/A";
+    const topRPS = cls.top_prospect ? cls.top_prospect.rps.toFixed(1) : "-";
+    const totalElitePrem = cls.tiers.elite + cls.tiers.premium;
+
+    html += `
+      <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:10px; box-shadow:4px 4px 0 var(--ink); padding:16px; position:relative;">
+        <!-- Grade badge -->
+        <div style="position:absolute; top:-10px; right:12px; background:${gradeColor}; color:white; font-family:var(--font-display); font-size:18px; font-weight:700; padding:4px 12px; border:2px solid var(--ink); border-radius:6px; box-shadow:2px 2px 0 var(--ink); transform:rotate(3deg);">
+          ${cls.grade}
+        </div>
+
+        <!-- Year heading -->
+        <div style="font-family:var(--font-display); font-size:24px; font-weight:700; color:var(--ink); margin-bottom:8px;">${cls.year}</div>
+
+        <!-- Stats row -->
+        <div style="display:flex; gap:16px; margin-bottom:12px; font-family:var(--font-mono); font-size:13px;">
+          <div><span style="color:var(--ink-light);">Prospects:</span> ${cls.count}</div>
+          <div><span style="color:var(--ink-light);">Avg RPS:</span> <strong>${cls.avg_rps.toFixed(1)}</strong></div>
+        </div>
+
+        <!-- Tier distribution bar -->
+        <div style="margin-bottom:10px;">
+          <div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; color:var(--ink-light); margin-bottom:4px;">Tier Distribution</div>
+          <div style="display:flex; height:20px; border:2px solid var(--ink); border-radius:4px; overflow:hidden;">
+            ${cls.count > 0 ? ['elite','premium','solid','flier'].map(tier => {
+              const pct = (cls.tiers[tier] / cls.count * 100);
+              return pct > 0 ? `<div style="width:${pct}%; background:${tierColors[tier]}; display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:10px; color:white; font-weight:700;">${cls.tiers[tier]}</div>` : '';
+            }).join('') : '<div style="width:100%; background:var(--ink-faint);"></div>'}
+          </div>
+          <div style="display:flex; gap:8px; margin-top:4px; flex-wrap:wrap;">
+            ${['elite','premium','solid','flier'].map(tier =>
+              `<span style="font-family:var(--font-mono); font-size:10px; color:${tierColors[tier]}; font-weight:700;">${tier.charAt(0).toUpperCase() + tier.slice(1)}: ${cls.tiers[tier]}</span>`
+            ).join('')}
+          </div>
+        </div>
+
+        <!-- Top prospect -->
+        <div style="border-top:2px dashed var(--ink-faint); padding-top:8px;">
+          <div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; color:var(--ink-light); margin-bottom:2px;">Top Prospect</div>
+          <div style="font-family:var(--font-display); font-size:14px; font-weight:700;">${topName}</div>
+          <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium);">RPS: ${topRPS}</div>
+        </div>
+      </div>`;
+  }
+
+  html += `</div>`;
+  container.innerHTML = html;
+
+  // Draw bar chart
+  requestAnimationFrame(() => drawClassAnalyticsChart(classes, maxRPS));
+}
+
+function drawClassAnalyticsChart(classes, maxRPS) {
+  const canvas = document.getElementById("caBarChart");
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  const W = canvas.width;
+  const H = canvas.height;
+  const PAD_L = 50, PAD_R = 20, PAD_T = 30, PAD_B = 50;
+  const chartW = W - PAD_L - PAD_R;
+  const chartH = H - PAD_T - PAD_B;
+
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = "#f7efe5";
+  ctx.fillRect(0, 0, W, H);
+
+  const barCount = classes.length;
+  const barGap = 12;
+  const barW = Math.min(80, (chartW - barGap * (barCount + 1)) / barCount);
+  const totalBarsW = barCount * barW + (barCount - 1) * barGap;
+  const startX = PAD_L + (chartW - totalBarsW) / 2;
+
+  const gradeColors = { A: "#2ec4b6", B: "#5b7fff", C: "#d97757", D: "#e63946" };
+  const scaleMax = Math.ceil(maxRPS / 10) * 10;
+
+  // Y-axis gridlines + labels
+  ctx.strokeStyle = "#c5c5d0";
+  ctx.lineWidth = 1;
+  ctx.setLineDash([4, 4]);
+  for (let v = 0; v <= scaleMax; v += 10) {
+    const y = PAD_T + chartH - (v / scaleMax) * chartH;
+    ctx.beginPath();
+    ctx.moveTo(PAD_L, y);
+    ctx.lineTo(W - PAD_R, y);
+    ctx.stroke();
+    ctx.fillStyle = "#8a8a9e";
+    ctx.font = "12px 'Space Mono', monospace";
+    ctx.textAlign = "right";
+    ctx.fillText(v.toString(), PAD_L - 8, y + 4);
+  }
+  ctx.setLineDash([]);
+
+  // Y-axis label
+  ctx.save();
+  ctx.translate(14, PAD_T + chartH / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillStyle = "#4a4a5e";
+  ctx.font = "bold 11px sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText("Avg RPS", 0, 0);
+  ctx.restore();
+
+  // Bars
+  for (let i = 0; i < barCount; i++) {
+    const cls = classes[i];
+    const x = startX + i * (barW + barGap);
+    const barH = (cls.avg_rps / scaleMax) * chartH;
+    const y = PAD_T + chartH - barH;
+
+    // Bar fill
+    const color = gradeColors[cls.grade] || "#8a8a9e";
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, barW, barH);
+
+    // Bar border
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(x, y, barW, barH);
+
+    // Value on top
+    ctx.fillStyle = "#1a1a2e";
+    ctx.font = "bold 12px 'Space Mono', monospace";
+    ctx.textAlign = "center";
+    ctx.fillText(cls.avg_rps.toFixed(1), x + barW / 2, y - 8);
+
+    // Grade badge on top
+    const badgeW = 22, badgeH = 18;
+    const bx = x + barW / 2 - badgeW / 2;
+    const by = y - 28;
+    ctx.fillStyle = color;
+    ctx.fillRect(bx, by, badgeW, badgeH);
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(bx, by, badgeW, badgeH);
+    ctx.fillStyle = "white";
+    ctx.font = "bold 11px sans-serif";
+    ctx.fillText(cls.grade, x + barW / 2, by + 13);
+
+    // Year label
+    ctx.fillStyle = "#1a1a2e";
+    ctx.font = "bold 14px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText(cls.year.toString(), x + barW / 2, PAD_T + chartH + 20);
+
+    // Count label
+    ctx.fillStyle = "#8a8a9e";
+    ctx.font = "11px 'Space Mono', monospace";
+    ctx.fillText(`(${cls.count})`, x + barW / 2, PAD_T + chartH + 36);
+  }
+
+  // Title
+  ctx.fillStyle = "#1a1a2e";
+  ctx.font = "bold 14px sans-serif";
+  ctx.textAlign = "left";
+  const posLabel = currentCAData?.filterPosition === "ALL" ? "All Positions" : (currentCAData?.filterPosition || "ALL");
+  ctx.fillText(`${posLabel} — Average RPS by Draft Class`, PAD_L, 18);
+}
+
+function exportClassAnalyticsImage() {
+  if (!currentCAData || !currentCAData.classes) return;
+
+  const classes = currentCAData.classes;
+  const posLabel = currentCAData.filterPosition === "ALL" ? "All Positions" : currentCAData.filterPosition;
+  const W = 800;
+  const gradeColors = { A: "#2ec4b6", B: "#5b7fff", C: "#d97757", D: "#e63946" };
+  const tierColors = { elite: "#d97757", premium: "#5b7fff", solid: "#2ec4b6", flier: "#8b5cf6" };
+
+  // Calculate height: title + chart + cards
+  const chartH = 240;
+  const cardH = 120;
+  const cardsPerRow = 3;
+  const cardRows = Math.ceil(classes.length / cardsPerRow);
+  const totalH = 60 + chartH + 30 + cardRows * (cardH + 16) + 40;
+
+  const canvas = document.createElement("canvas");
+  canvas.width = W;
+  canvas.height = totalH;
+  const ctx = canvas.getContext("2d");
+
+  // Background
+  ctx.fillStyle = "#f7efe5";
+  ctx.fillRect(0, 0, W, totalH);
+
+  // Title
+  let y = 0;
+  ctx.fillStyle = "#1a1a2e";
+  ctx.font = "bold 24px sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText(`Razzle Draft Class Analytics — ${posLabel}`, W / 2, y + 32);
+  ctx.font = "16px 'Caveat', cursive";
+  ctx.fillStyle = "#8a8a9e";
+  ctx.fillText("year-over-year class strength comparison", W / 2, y + 52);
+  y += 60;
+
+  // Bar chart
+  const PAD_L = 50, PAD_R = 20;
+  const chartAreaW = W - PAD_L - PAD_R;
+  const barCount = classes.length;
+  const barGap = 10;
+  const barW = Math.min(70, (chartAreaW - barGap * (barCount + 1)) / barCount);
+  const totalBarsW = barCount * barW + (barCount - 1) * barGap;
+  const startX = PAD_L + (chartAreaW - totalBarsW) / 2;
+  const scaleMax = Math.ceil(Math.max(...classes.map(c => c.avg_rps), 60) / 10) * 10;
+
+  // Gridlines
+  ctx.strokeStyle = "#c5c5d0";
+  ctx.lineWidth = 1;
+  ctx.setLineDash([3, 3]);
+  for (let v = 0; v <= scaleMax; v += 10) {
+    const gy = y + chartH - 40 - (v / scaleMax) * (chartH - 60);
+    ctx.beginPath();
+    ctx.moveTo(PAD_L, gy);
+    ctx.lineTo(W - PAD_R, gy);
+    ctx.stroke();
+    ctx.fillStyle = "#8a8a9e";
+    ctx.font = "11px monospace";
+    ctx.textAlign = "right";
+    ctx.fillText(v.toString(), PAD_L - 6, gy + 4);
+  }
+  ctx.setLineDash([]);
+
+  // Bars
+  for (let i = 0; i < barCount; i++) {
+    const cls = classes[i];
+    const x = startX + i * (barW + barGap);
+    const bH = (cls.avg_rps / scaleMax) * (chartH - 60);
+    const by = y + chartH - 40 - bH;
+
+    const color = gradeColors[cls.grade] || "#8a8a9e";
+    ctx.fillStyle = color;
+    ctx.fillRect(x, by, barW, bH);
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(x, by, barW, bH);
+
+    // Value
+    ctx.fillStyle = "#1a1a2e";
+    ctx.font = "bold 11px monospace";
+    ctx.textAlign = "center";
+    ctx.fillText(cls.avg_rps.toFixed(1), x + barW / 2, by - 6);
+
+    // Grade
+    const gw = 20, gh = 16;
+    ctx.fillStyle = color;
+    ctx.fillRect(x + barW / 2 - gw / 2, by - 24, gw, gh);
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 1;
+    ctx.strokeRect(x + barW / 2 - gw / 2, by - 24, gw, gh);
+    ctx.fillStyle = "white";
+    ctx.font = "bold 10px sans-serif";
+    ctx.fillText(cls.grade, x + barW / 2, by - 12);
+
+    // Year
+    ctx.fillStyle = "#1a1a2e";
+    ctx.font = "bold 12px sans-serif";
+    ctx.fillText(cls.year.toString(), x + barW / 2, y + chartH - 18);
+  }
+
+  y += chartH + 20;
+
+  // Class cards
+  const cardW = (W - 40 - (cardsPerRow - 1) * 12) / cardsPerRow;
+  for (let i = 0; i < classes.length; i++) {
+    const cls = classes[i];
+    const col = i % cardsPerRow;
+    const row = Math.floor(i / cardsPerRow);
+    const cx = 20 + col * (cardW + 12);
+    const cy = y + row * (cardH + 12);
+
+    // Card bg
+    ctx.fillStyle = "#f7efe5";
+    ctx.fillRect(cx, cy, cardW, cardH);
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(cx, cy, cardW, cardH);
+
+    // Shadow
+    ctx.fillStyle = "#1a1a2e";
+    ctx.fillRect(cx + 3, cy + 3, cardW, cardH);
+    ctx.fillStyle = "#f7efe5";
+    ctx.fillRect(cx, cy, cardW, cardH);
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(cx, cy, cardW, cardH);
+
+    // Grade badge
+    const color = gradeColors[cls.grade] || "#8a8a9e";
+    ctx.fillStyle = color;
+    const gbx = cx + cardW - 30, gby = cy + 6;
+    ctx.fillRect(gbx, gby, 24, 20);
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(gbx, gby, 24, 20);
+    ctx.fillStyle = "white";
+    ctx.font = "bold 13px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText(cls.grade, gbx + 12, gby + 15);
+
+    // Year
+    ctx.textAlign = "left";
+    ctx.fillStyle = "#1a1a2e";
+    ctx.font = "bold 18px sans-serif";
+    ctx.fillText(cls.year.toString(), cx + 10, cy + 24);
+
+    // Stats
+    ctx.font = "12px monospace";
+    ctx.fillStyle = "#4a4a5e";
+    ctx.fillText(`${cls.count} prospects  |  Avg RPS: ${cls.avg_rps.toFixed(1)}`, cx + 10, cy + 44);
+
+    // Tier counts
+    ctx.font = "11px monospace";
+    const tierText = `E:${cls.tiers.elite} P:${cls.tiers.premium} S:${cls.tiers.solid} F:${cls.tiers.flier}`;
+    ctx.fillText(tierText, cx + 10, cy + 62);
+
+    // Top prospect
+    if (cls.top_prospect) {
+      ctx.font = "10px monospace";
+      ctx.fillStyle = "#8a8a9e";
+      ctx.fillText("Top:", cx + 10, cy + 82);
+      ctx.fillStyle = "#1a1a2e";
+      ctx.font = "bold 11px sans-serif";
+      const name = cls.top_prospect.name.length > 22 ? cls.top_prospect.name.slice(0, 20) + "..." : cls.top_prospect.name;
+      ctx.fillText(`${name} (${cls.top_prospect.rps.toFixed(1)})`, cx + 10, cy + 96);
+    }
+
+    // Tier bar at bottom
+    const barY = cy + cardH - 12;
+    const barTotalW = cardW - 20;
+    let barX = cx + 10;
+    if (cls.count > 0) {
+      for (const tier of ["elite", "premium", "solid", "flier"]) {
+        const pct = cls.tiers[tier] / cls.count;
+        const segW = pct * barTotalW;
+        if (segW > 0) {
+          ctx.fillStyle = tierColors[tier];
+          ctx.fillRect(barX, barY, segW, 8);
+          barX += segW;
+        }
+      }
+      ctx.strokeStyle = "#1a1a2e";
+      ctx.lineWidth = 1;
+      ctx.strokeRect(cx + 10, barY, barTotalW, 8);
+    }
+  }
+
+  y += cardRows * (cardH + 12) + 10;
+
+  // Watermark
+  ctx.font = "bold 14px sans-serif";
+  ctx.fillStyle = "#1a1a2e";
+  ctx.globalAlpha = 0.3;
+  ctx.textAlign = "center";
+  ctx.fillText("built different — razzle.lol", W / 2, y + 8);
+  ctx.globalAlpha = 1.0;
+
+  const link = document.createElement("a");
+  link.download = `razzle-class-analytics-${posLabel.toLowerCase().replace(/\s+/g, "-")}.png`;
   link.href = canvas.toDataURL("image/png");
   link.click();
 }

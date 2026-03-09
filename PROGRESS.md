@@ -1,6 +1,18 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 15 — Unified Prospect Report Cards (COMPLETE)
+## Current Phase: Phase 16 — Draft Class Analytics + Cross-Year Comparison (COMPLETE)
+
+**Exit criterion MET:** Lab prospect mode has "Class Analytics" button that opens draft class comparison view. Shows year-over-year analysis for each position (2020-2026): average RPS, tier distribution (Elite/Premium/Solid/Flier counts), class grade badge (A/B/C/D based on avg RPS + elite/premium ratio), top prospect per year. Canvas-rendered bar chart of avg RPS by year with grade-colored bars. Class cards grid with tier distribution bars, prospect counts, top prospect info. Position filter tabs (ALL/QB/RB/WR/TE). Exportable as PNG with Razzle watermark (800px wide portrait). Follows Razzle design system. Deployed to Render.
+
+### Phase 16 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Draft class analytics API endpoint | DONE | GET /api/draft-class-analytics?position=WR. Reuses fetch_prospect_scores per year, computes avg RPS, tier distribution, class grade (A/B/C/D based on avg RPS + elite/premium ratio), top prospect. Covers 2020-2026 draft classes. Works for all positions and ALL. |
+| 2 | Draft class analytics view in Lab frontend | DONE | "Class Analytics" button in prospect toolbar. Overlay with position filter tabs, canvas bar chart (grade-colored bars, gridlines, labels), class cards grid (grade badge, stats, tier distribution bar, top prospect). Razzle design: chunky 3px borders, offset shadows, sand bg, Caveat annotations. Mobile responsive grid. |
+| 3 | Draft class analytics PNG export + deploy | DONE | Canvas-rendered export: title, bar chart with grade badges, class cards with tier bars. Portrait 800px layout. Razzle watermark. Downloads as razzle-class-analytics-{position}.png. All JS syntax passes. Python imports clean. Pushed to master. |
+
+## Previous Phase: Phase 15 — Unified Prospect Report Cards (COMPLETE)
 
 **Exit criterion MET:** Click any prospect name in Lab → profile card shows RPS score bar with tier badge (Elite/Premium/Solid/Flier), component breakdown (Athletic 60% / Draft Cap 30% / Size 10%), athletic percentile bars, spider chart, NFL athletic comps with comp-based stat projections (weighted average of comp NFL careers by similarity), confidence indicator. Enhanced PNG export captures full report card with all sections. Follows Razzle design system. Deployed to Render.
 
@@ -421,3 +433,4 @@ _None currently._
 | 2026-03-09 | Athletic comps + tier view as Phase 13 | "Who is this prospect's NFL athletic comp?" is THE question dynasty managers ask during draft week. Euclidean distance on percentile-normalized combine metrics finds historical matches. Tier view groups a whole position's draft class by athletic profile — creates screenshottable tier lists for Reddit. Prospect comparison mode enables side-by-side analysis. All three features use existing nflverse data, creating maximum content from available data. |
 | 2026-03-09 | Composite prospect scoring as Phase 14 | Razzle Prospect Score (RPS) creates a single "how good is this prospect" number combining athletic percentile (60%), draft capital (30%), and size (10%). Big Board ranked list is THE draft-week content for dynasty Reddit — "Razzle's 2025 WR Big Board" with tier bands is an instant screenshottable PNG. CFBD college production stats blocked (no API key), so RPS maximizes value from available combine+draft data. |
 | 2026-03-09 | Unified prospect report cards as Phase 15 | Prospect profile cards were missing RPS score and comp-based projections — data was spread across Big Board and profile. Consolidating everything (RPS + tier badge + percentile bars + spider chart + comps + projections) into one view creates THE definitive shareable prospect card for Reddit. One click, one card, one PNG. Client-side RPS computation avoids extra API call. Comp-based projections use weighted similarity averages of comp NFL careers. |
+| 2026-03-09 | Draft class analytics as Phase 16 | Cross-year class comparison creates a new category of screenshottable content: "Is the 2025 WR class better than 2024?" posts get massive engagement on r/DynastyFF during draft season. Reuses existing RPS computation across all draft years (2020-2026). Class grades (A/B/C/D) based on avg RPS + elite/premium ratio create instant talking points. Bar chart + class cards = two shareable formats from one feature. No new external dependencies. |

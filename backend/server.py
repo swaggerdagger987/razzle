@@ -217,6 +217,11 @@ def prospect_scores(position: str = "", draft_year: int = 0):
     return live_data.fetch_prospect_scores(position=position, draft_year=draft_year)
 
 
+@app.get("/api/draft-class-analytics")
+def draft_class_analytics(position: str = ""):
+    return live_data.fetch_draft_class_analytics(position=position)
+
+
 @app.get("/api/prospect-options")
 def prospect_options():
     return live_data.fetch_prospect_years()

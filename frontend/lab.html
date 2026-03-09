@@ -1279,6 +1279,7 @@
     <button class="btn-chunky" onclick="openChartPanel()">Charts</button>
     <button class="btn-chunky" id="tiersBtn" onclick="openTierView()" style="display:none;">Tiers</button>
     <button class="btn-chunky" id="bigBoardBtn" onclick="openBigBoard()" style="display:none;">Big Board</button>
+    <button class="btn-chunky" id="classAnalyticsBtn" onclick="openClassAnalytics()" style="display:none;">Class Analytics</button>
     <button class="btn-chunky" onclick="copyShareURL()">Share URL</button>
     <button class="btn-primary" onclick="exportImage()">Export PNG</button>
 
@@ -1444,6 +1445,23 @@
     </div>
     <div style="margin-top:12px; display:flex; justify-content:flex-end;">
       <button class="btn-chunky" onclick="closeBigBoard()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- CLASS ANALYTICS OVERLAY -->
+<div class="filter-modal-overlay" id="classAnalyticsOverlay" onclick="closeClassAnalytics(event)">
+  <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:960px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
+      <h3 style="margin:0;">Draft Class Analytics</h3>
+      <div id="caPositionBtns" style="display:flex; gap:6px; margin-left:auto;"></div>
+      <button class="btn-primary" id="caExportBtn" onclick="exportClassAnalyticsImage()" style="font-size:11px; padding:6px 14px;">Export PNG</button>
+    </div>
+    <div id="caContent">
+      <div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">analyzing draft classes...</div>
+    </div>
+    <div style="margin-top:12px; display:flex; justify-content:flex-end;">
+      <button class="btn-chunky" onclick="closeClassAnalytics()">Close</button>
     </div>
   </div>
 </div>

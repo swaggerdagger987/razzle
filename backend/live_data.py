@@ -1393,6 +1393,89 @@ def fetch_prospect_scores(position="", draft_year=0):
     }
 
 
+def fetch_draft_class_analytics(position=""):
+    """Cross-year draft class strength analysis using RPS data.
+
+    Returns per-year breakdown: count, avg RPS, tier distribution, top prospect, class grade.
+    """
+    conn = get_conn()
+
+    # Get all available draft years
+    years = [r[0] for r in conn.execute(
+        "SELECT DISTINCT draft_year FROM combine_data ORDER BY draft_year ASC"
+    ).fetchall()]
+
+    if not years:
+        conn.close()
+        return {"classes": [], "position": position.upper() if position else "ALL"}
+
+    # For each year, get RPS data via fetch_prospect_scores (reuse existing logic)
+    conn.close()  # close before calling other functions
+
+    classes = []
+    for year in years:
+        data = fetch_prospect_scores(position=position, draft_year=year)
+        prospects = data.get("prospects", [])
+
+        if not prospects:
+            classes.append({
+                "year": year, "count": 0, "avg_rps": 0,
+                "tiers": {"elite": 0, "premium": 0, "solid": 0, "flier": 0},
+                "top_prospect": None, "grade": "N/A"
+            })
+            continue
+
+        rps_values = [p["rps"] for p in prospects]
+        avg_rps = round(sum(rps_values) / len(rps_values), 1)
+
+        # Tier distribution
+        tiers = {"elite": 0, "premium": 0, "solid": 0, "flier": 0}
+        for p in prospects:
+            rps = p["rps"]
+            if rps >= 85:
+                tiers["elite"] += 1
+            elif rps >= 70:
+                tiers["premium"] += 1
+            elif rps >= 55:
+                tiers["solid"] += 1
+            else:
+                tiers["flier"] += 1
+
+        # Top prospect
+        top = prospects[0]  # already sorted by RPS desc
+        top_prospect = {
+            "name": top["player_name"],
+            "position": top["position"],
+            "rps": top["rps"],
+            "school": top.get("school"),
+        }
+
+        # Class grade: elite ratio (% of class that is Elite/Premium) + avg RPS
+        top_tier_pct = (tiers["elite"] + tiers["premium"]) / len(prospects) * 100
+        if avg_rps >= 55 and top_tier_pct >= 15:
+            grade = "A"
+        elif avg_rps >= 50 or top_tier_pct >= 10:
+            grade = "B"
+        elif avg_rps >= 45 or top_tier_pct >= 5:
+            grade = "C"
+        else:
+            grade = "D"
+
+        classes.append({
+            "year": year,
+            "count": len(prospects),
+            "avg_rps": avg_rps,
+            "tiers": tiers,
+            "top_prospect": top_prospect,
+            "grade": grade,
+        })
+
+    return {
+        "classes": classes,
+        "position": position.upper() if position else "ALL",
+    }
+
+
 def fetch_players_compare(player_ids, season=0):
     """Return season aggregates for multiple players (for comparison)."""
     conn = get_conn()
