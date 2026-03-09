@@ -1302,6 +1302,7 @@
     <button class="btn-chunky" id="classAnalyticsBtn" onclick="openClassAnalytics()" style="display:none;">Class Analytics</button>
     <button class="btn-chunky" onclick="openShareModal()" style="border-color:var(--orange);">Share</button>
     <button class="btn-chunky" id="exportRankingsBtn" onclick="openRankingsExport()" style="display:none;">Export Rankings</button>
+    <button class="btn-chunky" id="tradeValuesBtn" onclick="openTradeValues()" style="display:none; border-color:var(--orange);">Trade Values</button>
 
     <span class="result-count" id="resultCount"></span>
   </div>
@@ -1571,6 +1572,58 @@
     </div>
     <div style="margin-top:12px; display:flex; justify-content:flex-end;">
       <button class="btn-chunky" onclick="closeClassAnalytics()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- TRADE VALUE CHART OVERLAY -->
+<div class="filter-modal-overlay" id="tradeValuesOverlay" onclick="closeTradeValues(event)">
+  <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:960px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
+      <h3 style="margin:0; font-family:var(--font-display);">Trade Values</h3>
+      <div style="font-family:var(--font-hand); font-size:18px; color:var(--ink-light);">dynasty trade currency</div>
+      <div id="tvPositionBtns" style="display:flex; gap:6px; margin-left:auto;"></div>
+      <button class="btn-primary" id="tvExportBtn" onclick="exportTradeValuesPNG()" style="font-size:11px; padding:6px 14px;">Export PNG</button>
+    </div>
+    <div id="tvContent">
+      <div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">pulling trade film...</div>
+    </div>
+    <!-- Trade Calculator -->
+    <div id="tvCalculator" style="display:none; margin-top:20px; border-top:2px dashed var(--ink-faint); padding-top:20px;">
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+        <h4 style="margin:0; font-family:var(--font-display); font-size:16px;">Trade Calculator</h4>
+        <span style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light);">check the math</span>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr auto 1fr; gap:16px; align-items:start;">
+        <div>
+          <div style="font-family:var(--font-display); font-size:13px; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Side A</div>
+          <input type="text" class="input-chunky" id="tvSearchA" placeholder="search player..." style="width:100%; margin-bottom:8px; font-size:12px;">
+          <div id="tvAutoA" style="display:none; position:absolute; background:var(--bg-card); border:2px solid var(--ink); border-radius:8px; box-shadow:4px 4px 0 var(--ink); max-height:150px; overflow-y:auto; z-index:100; width:280px;"></div>
+          <div id="tvListA" style="display:flex; flex-direction:column; gap:6px; min-height:40px;"></div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; padding:6px 10px; border:2px solid var(--ink); border-radius:8px; background:var(--bg-warm);">
+            <span style="font-family:var(--font-display); font-size:12px;">TOTAL</span>
+            <span id="tvTotalA" style="font-family:var(--font-mono); font-size:16px; font-weight:bold;">0</span>
+          </div>
+          <button class="btn-chunky" onclick="clearTradeSide('A')" style="font-size:10px; padding:3px 10px; margin-top:6px;">Clear</button>
+        </div>
+        <div id="tvBalance" style="display:flex; flex-direction:column; align-items:center; justify-content:center; padding-top:30px;">
+          <div style="font-family:var(--font-mono); font-size:14px; font-weight:bold; padding:8px 14px; border:2px solid var(--ink); border-radius:8px;" id="tvBalanceBadge">—</div>
+        </div>
+        <div>
+          <div style="font-family:var(--font-display); font-size:13px; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Side B</div>
+          <input type="text" class="input-chunky" id="tvSearchB" placeholder="search player..." style="width:100%; margin-bottom:8px; font-size:12px;">
+          <div id="tvAutoB" style="display:none; position:absolute; background:var(--bg-card); border:2px solid var(--ink); border-radius:8px; box-shadow:4px 4px 0 var(--ink); max-height:150px; overflow-y:auto; z-index:100; width:280px;"></div>
+          <div id="tvListB" style="display:flex; flex-direction:column; gap:6px; min-height:40px;"></div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; padding:6px 10px; border:2px solid var(--ink); border-radius:8px; background:var(--bg-warm);">
+            <span style="font-family:var(--font-display); font-size:12px;">TOTAL</span>
+            <span id="tvTotalB" style="font-family:var(--font-mono); font-size:16px; font-weight:bold;">0</span>
+          </div>
+          <button class="btn-chunky" onclick="clearTradeSide('B')" style="font-size:10px; padding:3px 10px; margin-top:6px;">Clear</button>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:12px; display:flex; justify-content:flex-end;">
+      <button class="btn-chunky" onclick="closeTradeValues()">Close</button>
     </div>
   </div>
 </div>

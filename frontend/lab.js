@@ -674,9 +674,11 @@ function applyUniverseUI() {
   const classAnalyticsBtn = document.getElementById("classAnalyticsBtn");
   if (classAnalyticsBtn) classAnalyticsBtn.style.display = isProspect ? "" : "none";
 
-  // Show Export Rankings only in NFL mode
+  // Show Export Rankings and Trade Values only in NFL mode
   const exportRankingsBtn = document.getElementById("exportRankingsBtn");
   if (exportRankingsBtn) exportRankingsBtn.style.display = (state.universe === "nfl") ? "" : "none";
+  const tradeValuesBtn = document.getElementById("tradeValuesBtn");
+  if (tradeValuesBtn) tradeValuesBtn.style.display = (state.universe === "nfl") ? "" : "none";
 }
 
 // ─── Sort ────────────────────────────────────────────────────────
@@ -4413,6 +4415,417 @@ function exportClassAnalyticsImage() {
 
   const link = document.createElement("a");
   link.download = `razzle-class-analytics-${posLabel.toLowerCase().replace(/\s+/g, "-")}.png`;
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+}
+
+// ─── Trade Value Chart ──────────────────────────────────────────────
+
+const _tvState = { position: "ALL", players: [], sideA: [], sideB: [] };
+
+function openTradeValues() {
+  document.getElementById("tradeValuesOverlay").classList.add("open");
+  renderTVPositionBtns();
+  loadTradeValues();
+}
+
+function closeTradeValues(e) {
+  if (e && e.target !== e.currentTarget) return;
+  document.getElementById("tradeValuesOverlay").classList.remove("open");
+}
+
+function renderTVPositionBtns() {
+  const posColors = { ALL: "#1a1a2e", QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  const container = document.getElementById("tvPositionBtns");
+  container.innerHTML = "";
+  for (const pos of ["ALL", "QB", "RB", "WR", "TE"]) {
+    const active = pos === _tvState.position;
+    const btn = document.createElement("button");
+    btn.className = active ? "btn-primary" : "btn-chunky";
+    btn.textContent = pos;
+    btn.style.cssText = "font-size:11px; padding:4px 12px;";
+    if (!active && posColors[pos] !== "#1a1a2e") btn.style.borderColor = posColors[pos];
+    btn.onclick = () => { _tvState.position = pos; renderTVPositionBtns(); renderTradeValueChart(); };
+    container.appendChild(btn);
+  }
+}
+
+async function loadTradeValues() {
+  const content = document.getElementById("tvContent");
+  content.innerHTML = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">pulling trade film...</div>';
+
+  try {
+    const params = new URLSearchParams({
+      sort: "ppg",
+      order: "desc",
+      limit: "200",
+      season: state.season === "career" ? "career" : String(state.season || 0),
+      relevant: "true",
+    });
+    const data = await apiFetch("/api/players?" + params);
+    const players = data.items || [];
+
+    // Compute DVS for each player
+    for (const p of players) {
+      p._dvs = computeClientDVS(p.ppg, p.age, p.position) || 0;
+      p._tv = Math.round(p._dvs); // Trade value = rounded DVS (0-100 scale)
+    }
+    // Sort by trade value desc
+    players.sort((a, b) => b._tv - a._tv);
+
+    _tvState.players = players;
+    renderTradeValueChart();
+    document.getElementById("tvCalculator").style.display = "";
+    setupTradeCalcSearch();
+  } catch (err) {
+    content.innerHTML = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--orange);">fumbled the data fetch...</div>';
+    console.error("Trade values load failed:", err);
+  }
+}
+
+function renderTradeValueChart() {
+  const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  const tiers = [
+    { name: "Elite", min: 85, color: "#2ec4b6", badge: "ELITE" },
+    { name: "Star", min: 70, color: "#5b7fff", badge: "STAR" },
+    { name: "Starter", min: 55, color: "#d97757", badge: "STARTER" },
+    { name: "Bench", min: 0, color: "#8a8a9e", badge: "BENCH" },
+  ];
+
+  let filtered = _tvState.players;
+  if (_tvState.position !== "ALL") {
+    filtered = filtered.filter(p => p.position === _tvState.position);
+  }
+
+  const content = document.getElementById("tvContent");
+  let html = "";
+
+  for (const tier of tiers) {
+    const tierPlayers = filtered.filter(p => {
+      if (tier.min === 85) return p._tv >= 85;
+      if (tier.min === 70) return p._tv >= 70 && p._tv < 85;
+      if (tier.min === 55) return p._tv >= 55 && p._tv < 70;
+      return p._tv < 55;
+    });
+
+    if (!tierPlayers.length) continue;
+
+    // Tier header with rotated sticker badge
+    html += '<div style="margin-bottom:20px;">';
+    html += '<div style="display:flex; align-items:center; gap:12px; margin-bottom:10px;">';
+    html += '<span style="display:inline-block; font-family:var(--font-display); font-size:12px; text-transform:uppercase; letter-spacing:1px; color:#fff; background:' + tier.color + '; padding:4px 14px; border:2px solid var(--ink); border-radius:4px; transform:rotate(-2deg); box-shadow:2px 2px 0 var(--ink);">' + tier.badge + '</span>';
+    html += '<span style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light);">' + tierPlayers.length + ' player' + (tierPlayers.length !== 1 ? 's' : '') + '</span>';
+    html += '</div>';
+
+    // Player cards grid
+    html += '<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:8px;">';
+    for (const p of tierPlayers) {
+      const pc = posColors[p.position] || "#1a1a2e";
+      const barWidth = Math.max(5, p._tv);
+      html += '<div style="background:var(--bg-card); border:2px solid var(--ink); border-radius:8px; padding:8px 10px; box-shadow:2px 2px 0 var(--ink); display:flex; flex-direction:column; gap:4px; border-left:5px solid ' + pc + ';">';
+      // Name + position
+      html += '<div style="display:flex; align-items:center; gap:6px;">';
+      html += '<span style="font-family:var(--font-display); font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + escapeHtml(p.full_name) + '</span>';
+      html += '<span style="font-family:var(--font-mono); font-size:9px; font-weight:bold; color:#fff; background:' + pc + '; padding:1px 5px; border-radius:3px; border:1px solid var(--ink);">' + escapeHtml(p.position) + '</span>';
+      html += '</div>';
+      // Team + Age
+      html += '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + escapeHtml(p.team || "FA") + (p.age ? ' · Age ' + p.age : '') + '</div>';
+      // Trade value bar
+      html += '<div style="display:flex; align-items:center; gap:6px;">';
+      html += '<div style="flex:1; height:8px; background:var(--bg-warm); border:1px solid var(--ink-faint); border-radius:4px; overflow:hidden;">';
+      html += '<div style="width:' + barWidth + '%; height:100%; background:' + pc + '; border-radius:4px;"></div>';
+      html += '</div>';
+      html += '<span style="font-family:var(--font-mono); font-size:13px; font-weight:bold; min-width:28px; text-align:right;">' + p._tv + '</span>';
+      html += '</div>';
+      html += '</div>';
+    }
+    html += '</div></div>';
+  }
+
+  if (!html) {
+    html = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">no players found</div>';
+  }
+
+  content.innerHTML = html;
+}
+
+// ─── Trade Calculator ───────────────────────────────────────────────
+
+function setupTradeCalcSearch() {
+  setupTradeSearchInput("A");
+  setupTradeSearchInput("B");
+}
+
+function setupTradeSearchInput(side) {
+  const input = document.getElementById("tvSearch" + side);
+  const autoDiv = document.getElementById("tvAuto" + side);
+  let debounce = null;
+
+  input.addEventListener("input", () => {
+    clearTimeout(debounce);
+    debounce = setTimeout(() => {
+      const q = input.value.trim().toLowerCase();
+      if (q.length < 2) { autoDiv.style.display = "none"; return; }
+      const matches = _tvState.players.filter(p =>
+        (p.full_name || "").toLowerCase().includes(q)
+      ).slice(0, 8);
+      if (!matches.length) { autoDiv.style.display = "none"; return; }
+      const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+      autoDiv.innerHTML = matches.map(p => {
+        const pc = posColors[p.position] || "#1a1a2e";
+        return '<div style="padding:6px 10px; cursor:pointer; display:flex; align-items:center; gap:6px; border-bottom:1px solid var(--ink-faint);" onmousedown="addToTradeSide(\'' + side + '\', \'' + escapeAttr(p.player_id || p.full_name) + '\')">'
+          + '<span style="font-family:var(--font-mono); font-size:9px; font-weight:bold; color:#fff; background:' + pc + '; padding:1px 5px; border-radius:3px;">' + escapeHtml(p.position) + '</span>'
+          + '<span style="font-family:var(--font-display); font-size:12px;">' + escapeHtml(p.full_name) + '</span>'
+          + '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); margin-left:auto;">' + p._tv + '</span>'
+          + '</div>';
+      }).join("");
+      autoDiv.style.display = "";
+    }, 150);
+  });
+
+  input.addEventListener("blur", () => {
+    setTimeout(() => { autoDiv.style.display = "none"; }, 200);
+  });
+}
+
+function addToTradeSide(side, playerId) {
+  const arr = side === "A" ? _tvState.sideA : _tvState.sideB;
+  const player = _tvState.players.find(p => (p.player_id || p.full_name) === playerId);
+  if (!player || arr.find(p => (p.player_id || p.full_name) === playerId)) return;
+  arr.push(player);
+  document.getElementById("tvSearch" + side).value = "";
+  document.getElementById("tvAuto" + side).style.display = "none";
+  renderTradeSide(side);
+  updateTradeBalance();
+}
+
+function removeFromTradeSide(side, idx) {
+  const arr = side === "A" ? _tvState.sideA : _tvState.sideB;
+  arr.splice(idx, 1);
+  renderTradeSide(side);
+  updateTradeBalance();
+}
+
+function clearTradeSide(side) {
+  if (side === "A") _tvState.sideA = [];
+  else _tvState.sideB = [];
+  renderTradeSide(side);
+  updateTradeBalance();
+}
+
+function renderTradeSide(side) {
+  const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  const arr = side === "A" ? _tvState.sideA : _tvState.sideB;
+  const container = document.getElementById("tvList" + side);
+  const total = arr.reduce((s, p) => s + (p._tv || 0), 0);
+  document.getElementById("tvTotal" + side).textContent = total;
+
+  if (!arr.length) {
+    container.innerHTML = '<div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-faint); text-align:center; padding:8px;">add players above</div>';
+    return;
+  }
+
+  container.innerHTML = arr.map((p, i) => {
+    const pc = posColors[p.position] || "#1a1a2e";
+    return '<div style="display:flex; align-items:center; gap:6px; padding:5px 8px; background:var(--bg-card); border:2px solid var(--ink); border-radius:6px; border-left:4px solid ' + pc + ';">'
+      + '<span style="font-family:var(--font-mono); font-size:9px; font-weight:bold; color:#fff; background:' + pc + '; padding:1px 4px; border-radius:3px;">' + escapeHtml(p.position) + '</span>'
+      + '<span style="font-family:var(--font-display); font-size:12px; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">' + escapeHtml(p.full_name) + '</span>'
+      + '<span style="font-family:var(--font-mono); font-size:12px; font-weight:bold;">' + p._tv + '</span>'
+      + '<button onclick="removeFromTradeSide(\'' + side + '\', ' + i + ')" style="background:none; border:none; cursor:pointer; font-size:14px; color:var(--ink-light); padding:0 2px;">×</button>'
+      + '</div>';
+  }).join("");
+}
+
+function updateTradeBalance() {
+  const totalA = _tvState.sideA.reduce((s, p) => s + (p._tv || 0), 0);
+  const totalB = _tvState.sideB.reduce((s, p) => s + (p._tv || 0), 0);
+  const badge = document.getElementById("tvBalanceBadge");
+
+  if (!_tvState.sideA.length || !_tvState.sideB.length) {
+    badge.textContent = "—";
+    badge.style.background = "var(--bg-card)";
+    badge.style.color = "var(--ink-light)";
+    return;
+  }
+
+  const diff = totalA - totalB;
+  const avg = (totalA + totalB) / 2;
+  const pctDiff = avg > 0 ? Math.abs(diff) / avg * 100 : 0;
+
+  if (pctDiff <= 10) {
+    badge.textContent = "FAIR";
+    badge.style.background = "#d9efec";
+    badge.style.color = "#2ec4b6";
+  } else {
+    const sign = diff > 0 ? "A+" : "B+";
+    badge.textContent = sign + Math.abs(diff);
+    badge.style.background = "#f2d5d8";
+    badge.style.color = "#e63946";
+  }
+}
+
+// ─── Trade Value PNG Export ──────────────────────────────────────────
+
+function exportTradeValuesPNG() {
+  const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  const tiers = [
+    { name: "Elite", min: 85, color: "#2ec4b6", badge: "ELITE" },
+    { name: "Star", min: 70, color: "#5b7fff", badge: "STAR" },
+    { name: "Starter", min: 55, color: "#d97757", badge: "STARTER" },
+    { name: "Bench", min: 0, color: "#8a8a9e", badge: "BENCH" },
+  ];
+
+  let filtered = _tvState.players;
+  if (_tvState.position !== "ALL") {
+    filtered = filtered.filter(p => p.position === _tvState.position);
+  }
+
+  // Build tier groups
+  const tierGroups = [];
+  for (const tier of tiers) {
+    const tierPlayers = filtered.filter(p => {
+      if (tier.min === 85) return p._tv >= 85;
+      if (tier.min === 70) return p._tv >= 70 && p._tv < 85;
+      if (tier.min === 55) return p._tv >= 55 && p._tv < 70;
+      return p._tv < 55;
+    });
+    if (tierPlayers.length) tierGroups.push({ tier, players: tierPlayers });
+  }
+
+  if (!tierGroups.length) return;
+
+  const padX = 30, padY = 30;
+  const W = 800;
+  const titleH = 55;
+  const tierHeaderH = 32;
+  const rowH = 28;
+  const tierGap = 16;
+  const watermarkH = 40;
+
+  // Calculate height
+  let totalRows = 0;
+  for (const g of tierGroups) totalRows += g.players.length;
+  const H = padY + titleH + tierGroups.length * (tierHeaderH + tierGap) + totalRows * rowH + watermarkH + padY;
+
+  const canvas = document.createElement("canvas");
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext("2d");
+
+  // Background
+  ctx.fillStyle = "#f7efe5";
+  ctx.fillRect(0, 0, W, H);
+
+  // Title
+  ctx.font = "bold 24px sans-serif";
+  ctx.fillStyle = "#1a1a2e";
+  ctx.textAlign = "center";
+  const posLabel = _tvState.position === "ALL" ? "Dynasty" : _tvState.position;
+  ctx.fillText("Razzle " + posLabel + " Trade Values", W / 2, padY + 26);
+
+  // Subtitle
+  ctx.font = "16px 'Caveat', cursive";
+  ctx.fillStyle = "rgba(26,26,46,0.5)";
+  const seasonText = state.season === "career" ? "career" : state.season || "2024";
+  ctx.fillText("dynasty trade currency — " + seasonText + " season", W / 2, padY + 48);
+
+  let y = padY + titleH;
+
+  for (const g of tierGroups) {
+    // Tier badge
+    ctx.save();
+    ctx.translate(padX + 40, y + tierHeaderH / 2);
+    ctx.rotate(-0.04);
+    ctx.fillStyle = g.tier.color;
+    ctx.beginPath();
+    const bw = 70, bh = 20;
+    ctx.roundRect(-bw / 2, -bh / 2, bw, bh, 3);
+    ctx.fill();
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    ctx.fillStyle = "#fff";
+    ctx.font = "bold 10px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText(g.tier.badge, 0, 4);
+    ctx.restore();
+
+    // Player count
+    ctx.font = "14px 'Caveat', cursive";
+    ctx.fillStyle = "#8a8a9e";
+    ctx.textAlign = "left";
+    ctx.fillText(g.players.length + " player" + (g.players.length !== 1 ? "s" : ""), padX + 86, y + tierHeaderH / 2 + 5);
+
+    y += tierHeaderH;
+
+    // Player rows
+    for (let i = 0; i < g.players.length; i++) {
+      const p = g.players[i];
+      const pc = posColors[p.position] || "#1a1a2e";
+      const ry = y + i * rowH;
+
+      // Alternating bg
+      if (i % 2 === 0) {
+        ctx.fillStyle = "rgba(229,213,195,0.25)";
+        ctx.fillRect(padX, ry, W - padX * 2, rowH);
+      }
+
+      // Position badge
+      ctx.fillStyle = pc;
+      ctx.fillRect(padX + 8, ry + 6, 28, 16);
+      ctx.strokeStyle = "#1a1a2e";
+      ctx.lineWidth = 1;
+      ctx.strokeRect(padX + 8, ry + 6, 28, 16);
+      ctx.fillStyle = "#fff";
+      ctx.font = "bold 8px sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText(p.position, padX + 22, ry + 17);
+
+      // Name
+      ctx.textAlign = "left";
+      ctx.fillStyle = "#1a1a2e";
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillText(p.full_name || "", padX + 44, ry + 18);
+
+      // Team + age
+      ctx.fillStyle = "#8a8a9e";
+      ctx.font = "10px monospace";
+      ctx.fillText((p.team || "FA") + (p.age ? "  Age " + p.age : ""), padX + 300, ry + 18);
+
+      // Trade value bar
+      const barX = padX + 430;
+      const barW = 240;
+      const barH = 10;
+      const barY = ry + 9;
+      ctx.fillStyle = "rgba(229,213,195,0.5)";
+      ctx.fillRect(barX, barY, barW, barH);
+      ctx.strokeStyle = "#c5c5d0";
+      ctx.lineWidth = 0.5;
+      ctx.strokeRect(barX, barY, barW, barH);
+      const fillW = Math.max(2, (p._tv / 100) * barW);
+      ctx.fillStyle = pc;
+      ctx.fillRect(barX, barY, fillW, barH);
+
+      // Trade value number
+      ctx.fillStyle = "#1a1a2e";
+      ctx.font = "bold 13px monospace";
+      ctx.textAlign = "right";
+      ctx.fillText(String(p._tv), W - padX - 8, ry + 18);
+    }
+
+    y += g.players.length * rowH + tierGap;
+  }
+
+  // Watermark
+  ctx.font = "bold 14px sans-serif";
+  ctx.fillStyle = "#1a1a2e";
+  ctx.globalAlpha = 0.3;
+  ctx.textAlign = "center";
+  ctx.fillText("built different — razzle.lol", W / 2, y + 8);
+  ctx.globalAlpha = 1.0;
+
+  const link = document.createElement("a");
+  link.download = "razzle-trade-values-" + _tvState.position.toLowerCase() + ".png";
   link.href = canvas.toDataURL("image/png");
   link.click();
 }
