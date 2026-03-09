@@ -180,6 +180,222 @@
     50% { opacity: 0.3; }
   }
 
+  /* ===== SCENARIO PANEL ===== */
+  .scenario-section {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+
+  .scenario-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    overflow: hidden;
+  }
+
+  .scenario-header {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 10px 16px;
+    background: var(--bg-warm);
+    border-bottom: 2px solid var(--ink);
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .scenario-header-icon {
+    font-size: 18px;
+  }
+
+  .scenario-body {
+    padding: 16px;
+  }
+
+  .scenario-textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: 12px 14px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--ink);
+    background: #fff;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    box-sizing: border-box;
+    resize: vertical;
+    line-height: 1.5;
+  }
+
+  .scenario-textarea:focus {
+    outline: none;
+    border-color: var(--orange);
+    box-shadow: 0 0 0 2px var(--orange-light);
+  }
+
+  .scenario-textarea::placeholder {
+    font-family: var(--font-hand);
+    font-size: 16px;
+    color: var(--ink-light);
+  }
+
+  .scenario-examples {
+    margin-top: 10px;
+    margin-bottom: 14px;
+  }
+
+  .scenario-examples-label {
+    font-family: var(--font-hand);
+    font-size: 14px;
+    color: var(--ink-light);
+    margin-bottom: 6px;
+  }
+
+  .scenario-chips {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .scenario-chip {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border: 2px solid var(--ink);
+    border-radius: 20px;
+    background: var(--bg-card);
+    color: var(--ink);
+    cursor: pointer;
+    box-shadow: 2px 2px 0 var(--ink);
+    transition: all 0.12s;
+  }
+
+  .scenario-chip:hover {
+    box-shadow: 3px 3px 0 var(--ink);
+    transform: translate(-1px, -1px);
+    background: var(--orange-light);
+  }
+
+  .scenario-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    border-top: 2px dashed var(--ink-faint);
+    padding-top: 14px;
+  }
+
+  .scenario-run-all {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 8px 20px;
+    background: var(--orange);
+    color: #fff;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    box-shadow: 3px 3px 0 var(--ink);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+
+  .scenario-run-all:hover {
+    box-shadow: 4px 4px 0 var(--ink);
+    transform: translate(-1px, -1px);
+  }
+
+  .scenario-run-all:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+
+  .scenario-agent-btns {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .scenario-agent-btn {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 5px 10px;
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+    background: var(--bg-card);
+    color: var(--ink);
+    cursor: pointer;
+    box-shadow: 2px 2px 0 var(--ink);
+    transition: all 0.12s;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .scenario-agent-btn:hover {
+    box-shadow: 3px 3px 0 var(--ink);
+    transform: translate(-1px, -1px);
+  }
+
+  .scenario-agent-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+
+  .scenario-agent-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .scenario-status {
+    font-family: var(--font-hand);
+    font-size: 15px;
+    color: var(--ink-light);
+    margin-left: auto;
+    min-height: 20px;
+  }
+
+  .scenario-status.running {
+    color: var(--orange);
+    animation: pulse-glow 1.5s ease-in-out infinite;
+  }
+
+  .scenario-status.done {
+    color: var(--green);
+  }
+
+  .scenario-status.error {
+    color: var(--red);
+  }
+
+  /* ===== BRIEFING CARDS PLACEHOLDER ===== */
+  .briefing-zone {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 24px 24px;
+  }
+
+  #briefingCards {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
   /* ===== FOOTER ===== */
   .warroom-footer {
     background: var(--bg-ink);
@@ -488,6 +704,10 @@
     .roster-panel { width: 170px; }
     .roster-avatar { width: 24px; height: 36px; }
     .config-panel { width: 280px; max-height: 400px; }
+    .scenario-section { padding: 16px; }
+    .scenario-run-all { font-size: 12px; padding: 6px 14px; }
+    .scenario-agent-btns { gap: 4px; }
+    .scenario-agent-btn { font-size: 10px; padding: 4px 8px; }
   }
 
   @media (max-width: 480px) {
@@ -594,6 +814,35 @@
   <div class="warroom-status">
     <span><span class="status-dot"></span>6 agents online</span>
     <span>30 x 22 tile grid | 32px tiles</span>
+  </div>
+
+  <!-- SCENARIO INPUT PANEL -->
+  <div class="scenario-section">
+    <div class="scenario-card">
+      <div class="scenario-header">
+        <span class="scenario-header-icon">📋</span>
+        Scenario Briefing
+      </div>
+      <div class="scenario-body">
+        <textarea class="scenario-textarea" id="scenarioInput" placeholder="Describe the situation... e.g. 'Bijan Robinson questionable with knee injury, I need to decide on a flex play'"></textarea>
+
+        <div class="scenario-examples">
+          <div class="scenario-examples-label">try one of these:</div>
+          <div class="scenario-chips" id="scenarioChips"></div>
+        </div>
+
+        <div class="scenario-actions">
+          <button class="scenario-run-all" id="scenarioRunAll">Run All Agents</button>
+          <div class="scenario-agent-btns" id="scenarioAgentBtns"></div>
+          <div class="scenario-status" id="scenarioStatus"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BRIEFING CARDS (rendered by JS after agents respond) -->
+  <div class="briefing-zone">
+    <div id="briefingCards"></div>
   </div>
 </div>
 

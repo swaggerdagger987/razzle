@@ -1446,6 +1446,159 @@ function escapeHtml(str) {
 
 setupConfigPanel();
 
+// ── SCENARIO INPUT PANEL ──────────────────────────────────────────────
+const SCENARIO_EXAMPLES = [
+  "Bijan Robinson questionable with knee injury before my playoff game",
+  "Should I trade Ja'Marr Chase for two mid-tier RBs in dynasty?",
+  "My opponent has Josh Allen and Stefon Diggs stack this week",
+  "Breakout WR candidates on the waiver wire for dynasty stash",
+  "Is it worth rostering a backup QB in a 12-team league?",
+  "Evaluating 2025 rookie draft class — who's the 1.01?",
+];
+
+function setupScenarioPanel() {
+  const input = document.getElementById('scenarioInput');
+  const chipsHost = document.getElementById('scenarioChips');
+  const runAllBtn = document.getElementById('scenarioRunAll');
+  const agentBtnsHost = document.getElementById('scenarioAgentBtns');
+  const statusEl = document.getElementById('scenarioStatus');
+  if (!input || !runAllBtn) return;
+
+  // Build example chips
+  if (chipsHost) {
+    chipsHost.innerHTML = SCENARIO_EXAMPLES.map((ex, i) => {
+      const short = ex.length > 48 ? ex.slice(0, 45) + '...' : ex;
+      return `<button class="scenario-chip" data-example="${i}">${escapeHtml(short)}</button>`;
+    }).join('');
+
+    chipsHost.addEventListener('click', e => {
+      const chip = e.target.closest('.scenario-chip');
+      if (!chip) return;
+      const idx = parseInt(chip.dataset.example);
+      if (SCENARIO_EXAMPLES[idx]) {
+        input.value = SCENARIO_EXAMPLES[idx];
+        input.focus();
+      }
+    });
+  }
+
+  // Build per-agent run buttons
+  if (agentBtnsHost) {
+    agentBtnsHost.innerHTML = AGENT_DEFS.map(a =>
+      `<button class="scenario-agent-btn" data-agent-id="${a.id}">
+        <span class="scenario-agent-dot" style="background:${a.color}"></span>
+        ${escapeHtml(a.name)}
+      </button>`
+    ).join('');
+
+    agentBtnsHost.addEventListener('click', e => {
+      const btn = e.target.closest('.scenario-agent-btn');
+      if (!btn || btn.disabled) return;
+      const id = parseInt(btn.dataset.agentId);
+      const scenario = input.value.trim();
+      if (!scenario) {
+        setScenarioStatus('write a scenario first', 'error');
+        return;
+      }
+      runSingleAgent(id, scenario);
+    });
+  }
+
+  // Run All Agents button
+  runAllBtn.addEventListener('click', () => {
+    const scenario = input.value.trim();
+    if (!scenario) {
+      setScenarioStatus('write a scenario first', 'error');
+      return;
+    }
+    runAllAgents(scenario);
+  });
+}
+
+function setScenarioStatus(msg, type) {
+  const el = document.getElementById('scenarioStatus');
+  if (!el) return;
+  el.textContent = msg;
+  el.className = 'scenario-status' + (type ? ' ' + type : '');
+}
+
+function setScenarioButtonsDisabled(disabled) {
+  const runAll = document.getElementById('scenarioRunAll');
+  if (runAll) runAll.disabled = disabled;
+  const btns = document.querySelectorAll('.scenario-agent-btn');
+  btns.forEach(b => { b.disabled = disabled; });
+}
+
+// Placeholder: will be wired to LLM integration in Task 4
+function runSingleAgent(agentId, scenario) {
+  const agent = AGENT_DEFS[agentId];
+  if (!agent) return;
+
+  const settings = getAgentSettings(agentId);
+  if (!settings.apiKey) {
+    setScenarioStatus('set an API key in Config first', 'error');
+    return;
+  }
+
+  setScenarioStatus('running ' + agent.name + '...', 'running');
+  setScenarioButtonsDisabled(true);
+
+  // Trigger agent activity bubble in canvas
+  const canvasAgent = agents[agentId];
+  if (canvasAgent) {
+    canvasAgent.workBubble = '📡';
+    canvasAgent.bubbleTimer = 8000;
+  }
+
+  // Dispatch custom event for LLM integration (Task 4 will listen)
+  window.dispatchEvent(new CustomEvent('razzle:run-agent', {
+    detail: { agentId, scenario, single: true }
+  }));
+
+  // For now, simulate a placeholder response after a short delay
+  if (!window._razzleLLMReady) {
+    setTimeout(() => {
+      setScenarioStatus(agent.name + ' ready — wire LLM in Task 4', 'done');
+      setScenarioButtonsDisabled(false);
+      if (canvasAgent) { canvasAgent.workBubble = ''; }
+    }, 1500);
+  }
+}
+
+function runAllAgents(scenario) {
+  // Check for at least one API key
+  const hasKey = AGENT_DEFS.some((_, i) => getAgentSettings(i).apiKey);
+  if (!hasKey) {
+    setScenarioStatus('set an API key in Config first', 'error');
+    return;
+  }
+
+  setScenarioStatus('pulling film on all agents...', 'running');
+  setScenarioButtonsDisabled(true);
+
+  // Trigger activity bubbles on all agents
+  agents.forEach(a => {
+    a.workBubble = '📡';
+    a.bubbleTimer = 10000;
+  });
+
+  // Dispatch custom event for LLM integration (Task 4+5 will listen)
+  window.dispatchEvent(new CustomEvent('razzle:run-all-agents', {
+    detail: { scenario }
+  }));
+
+  // For now, simulate placeholder
+  if (!window._razzleLLMReady) {
+    setTimeout(() => {
+      setScenarioStatus('all agents ready — wire LLM in Task 4', 'done');
+      setScenarioButtonsDisabled(false);
+      agents.forEach(a => { a.workBubble = ''; });
+    }, 2000);
+  }
+}
+
+setupScenarioPanel();
+
 // ── START ──────────────────────────────────────────────────────────────
 function waitAndStart() {
   if (spritesLoaded >= 6) {
