@@ -1,16 +1,16 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 22 — Social Preview Cards + Open Graph Polish
+## Current Phase: Phase 22 — Social Preview Cards + Open Graph Polish (COMPLETE)
 
-**Exit criterion:** All 5 HTML pages have og:image meta tags pointing to branded social preview images (1200x630 SVG). Twitter Card meta tags added. When a Razzle URL is shared on Reddit/Discord/Twitter, the preview card shows Razzle branding (sand bg, tiger, tagline). Deployed to Render.
+**Exit criterion MET:** All 5 HTML pages have og:image meta tags pointing to branded social preview SVGs (1200x630). Two variants: og-image.svg (general branding) and og-image-lab.svg (Lab-specific with data counts). Full Twitter Card meta tags on all pages. og:url set per page. Preview images follow Razzle design system (sand bg, terracotta stripe, tiger emoji, position color dots, sticker badges, Caveat annotations). League Intel and 404 pages upgraded from zero og/twitter tags to fully covered. Deployed to Render.
 
 ### Phase 22 Tasks
 
 | # | Task | Status | Notes |
 |---|------|--------|-------|
-| 1 | Create branded social preview image (SVG og:image) | | |
-| 2 | Add og:image + Twitter Card meta tags to all pages | | |
-| 3 | Deploy + smoke test | | |
+| 1 | Create branded social preview image (SVG og:image) | DONE | og-image.svg (general) + og-image-lab.svg (Lab variant). 1200x630, sand bg, terracotta stripe, tiger, display text, position dots, sticker badges. |
+| 2 | Add og:image + Twitter Card meta tags to all pages | DONE | All 5 pages: og:image, og:url, og:image:width/height, twitter:card/title/description/image. Lab uses lab variant. All absolute URLs. |
+| 3 | Deploy + smoke test | DONE | All JS + Python pass. All 5 HTML + 2 SVGs present. All meta tags verified. Pushed to master. |
 
 ## Previous Phase: Phase 21 — Landing Page Draft Week Overhaul (COMPLETE)
 
