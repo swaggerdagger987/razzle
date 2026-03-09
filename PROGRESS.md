@@ -1,6 +1,29 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 40 — Stats Expansion — Computed Columns (COMPLETE)
+## Current Phase: Phase 41 — Stats Expansion — Play-by-Play Extractions (COMPLETE)
+
+**Exit criterion MET:** Play-by-play data extracted from nflverse pbp CSVs via new sync_pbp_data() function. Single-pass extraction populates player_season_pbp table. Stats available: pass/rush success rate, scramble stats, garbage time %, game script, goal-line carries/targets/TDs, two-point conversions, return yards/TDs, intended air yards per target, drop rate, bye week, games missed. 18 new columns wired into Lab screener with tooltips and updated presets. RYOE columns in schema but NULL (nflverse pbp lacks expected rushing yards). Play-action stats NULL (nflverse 2024 lacks is_play_action column).
+
+### Phase 41 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Success rate + RYOE + game script | DONE | Pass/rush success rate via EPA>0, game script via avg score_differential |
+| 2 | Play-action + scramble + garbage time | DONE | Scramble via qb_scramble on run plays, garbage time computed |
+| 3 | Goal-line + 2PT + returns | DONE | GL inside 5-yard line, 2PT via two_point_conv_result, returns from kickoff/punt |
+| 4 | Intended air yards + drop rate | DONE | IAY on all targets, drops estimated via incomplete short-medium passes |
+| 5 | Bye week + injury data | DONE | Bye from schedule gaps, injury from nflverse injury designations |
+| 6 | Wire as Lab screener columns | DONE | 18 new COLUMNS with tooltips, presets updated |
+| 7 | Deploy + smoke test | DONE | All syntax clean, values verified |
+
+### Decisions Log
+- **Single-pass pbp extraction**: All Tasks 1-4 share one pbp CSV download, extracting all stats in parallel. Much faster than 4 separate passes.
+- **Scrambles are run plays**: nflverse 2024 classifies scrambles as play_type=run with qb_scramble=1. Code handles both locations.
+- **Play-action unavailable**: nflverse 2024 pbp lacks is_play_action column. Desc-field fallback also returns nothing. Columns in schema but NULL.
+- **RYOE unavailable**: nflverse pbp has xyac for receiving but no expected rushing yards. Columns in schema but NULL.
+- **Drop rate is estimated**: Uses incomplete short-medium passes (air_yards<15, non-INT) as proxy since nflverse doesn't have a clean drop flag.
+
+## Previous Phase: Phase 40 — Stats Expansion — Computed Columns (COMPLETE)
 
 **Exit criterion MET:** 11 new computed stat columns in the Lab screener, all derived from existing database fields with no adapter changes. Passer rating (NFL formula), AY/A, TD rate, fumble rate, dominator rating (WR/TE), rush share (RB/QB), YPRR* approximation, WOPR/G, PPFD, PPFD/G, plus custom scoring builder with up to 3 named configs. Red zone share skipped (no play-by-play data yet). PPFD ready but first_downs data not yet in DB.
 

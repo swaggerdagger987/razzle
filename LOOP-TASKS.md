@@ -32,20 +32,16 @@
 **Result**: Added 18 new column definitions to COLUMNS in lab.js: pass_success_rate, rush_success_rate, avg_score_differential, garbage_time_pct (Advanced), scramble_attempts/yards/tds (Passing), gl_carries/gl_targets/gl_tds (Rushing/Receiving), intended_air_yards_per_target, drop_rate (Receiving), return_yards, return_tds, two_point_conversions, bye_week, games_missed (General). All with tooltips. Updated presets: passing includes scramble stats, rushing includes goal-line, receiving includes IAY/TGT and drop rate, advanced includes success rates and game script.
 
 ## Task 7: Deploy + smoke test all pbp extractions
-**Status**: PENDING
-**Acceptance Criteria**:
-- All syntax clean
-- All new stats show reasonable data
-- No regression
-- Committed and pushed to master
+**Status**: PASS
+**Result**: All JS syntax clean (lab.js, compare.js, app.js, player.js). All Python imports clean. Smoke test verified: Lamar PSR=0.52, scramble=45/405yds. Saquon RSR=0.445, GL=20/4. Ja'Marr IAY/T=8.7, Drop%=0.16. Bye weeks correct. Games missed populated. All 18 new columns in COLUMNS with tooltips. Committed and pushed to master.
 
 ---
 
 ## Loop State
 ```
 Current Phase: 41
-Current Task: 7
-Current Stage: BUILD
+Current Task: DONE
+Current Stage: COMPLETE
 Attempt: 1
-Tasks Completed: 6/7
+Tasks Completed: 7/7
 ```
