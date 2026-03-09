@@ -2186,7 +2186,14 @@ function renderProfile(data, container) {
   html += `<span class="profile-pos-badge" style="background:${posColor};">${pos}</span>`;
   html += `<div>`;
   html += `<div class="profile-name">${player.full_name}</div>`;
-  html += `<div class="profile-meta">${player.team || "FA"} · Age ${player.age || "?"} · ${player.college || ""}</div>`;
+  const displayAge = player.age ? Math.floor(player.age) : "?";
+  const seasonCount = seasons ? seasons.length : 0;
+  const seasonLabel = seasonCount === 1 ? "Season" : "Seasons";
+  html += `<div class="profile-meta"><span style="color:${posColor}; font-weight:700;">${player.team || "FA"}</span> · Age ${displayAge} · ${player.college || ""} · ${seasonCount} ${seasonLabel}</div>`;
+  if (combine && combine.draft_round) {
+    const draftPick = combine.draft_overall || combine.draft_pick;
+    html += `<span style="display:inline-block; background:var(--ink); color:white; font-family:var(--font-display); font-size:10px; padding:2px 8px; border:2px solid var(--ink); border-radius:4px; transform:rotate(-1deg); margin-right:6px;">Rd ${combine.draft_round}${draftPick ? " #" + draftPick : ""}${combine.draft_year ? " '" + String(combine.draft_year).slice(2) : ""}</span>`;
+  }
   if (breakoutInfo) {
     html += `<span class="breakout-badge">BREAKOUT +${breakoutInfo.pct}% (${breakoutInfo.season})</span>`;
   }
@@ -2223,7 +2230,7 @@ function renderProfile(data, container) {
 
     // Career totals row
     if (career && career.games) {
-      html += `<tr><td>Career</td>`;
+      html += `<tr style="font-weight:700; border-top:2px solid var(--ink);"><td>Career</td>`;
       for (const c of seasonCols) {
         html += `<td>${c.fmt(career[c.key])}</td>`;
       }
@@ -2240,7 +2247,7 @@ function renderProfile(data, container) {
 
     const combineFields = [
       { key: "draft_round", label: "Round", fmt: v => v ? `Rd ${v}` : "UDFA" },
-      { key: "draft_overall", label: "Pick", fmt: v => v ? `#${v}` : "—" },
+      { key: "draft_pick", label: "Pick", fmt: v => v ? `#${v}` : "—" },
       { key: "height_display", label: "Height", fmt: v => v || "—" },
       { key: "weight", label: "Weight", fmt: v => v ? `${v} lbs` : "—" },
       { key: "forty", label: "40-Yard", fmt: v => v ? v.toFixed(2) + "s" : "—" },
@@ -2327,10 +2334,12 @@ function getSeasonColumns(pos) {
       { key: "attempts", label: "ATT", fmt: fmt0 },
       { key: "passing_yards", label: "Pass Yds", fmt: fmt0 },
       { key: "passing_tds", label: "Pass TD", fmt: fmt0 },
+      { key: "turnovers", label: "INT", fmt: fmt0 },
       { key: "comp_pct", label: "CMP%", fmt: fmtPct },
+      { key: "sacks_taken", label: "Sacks", fmt: fmt0 },
       { key: "rushing_yards", label: "Rush Yds", fmt: fmt0 },
       { key: "rushing_tds", label: "Rush TD", fmt: fmt0 },
-      { key: "turnovers", label: "TO", fmt: fmt0 },
+      { key: "cpoe", label: "CPOE", fmt: fmt1 },
     ];
   } else if (pos === "RB") {
     return [...base,
@@ -2338,6 +2347,8 @@ function getSeasonColumns(pos) {
       { key: "rushing_yards", label: "Rush Yds", fmt: fmt0 },
       { key: "rushing_tds", label: "Rush TD", fmt: fmt0 },
       { key: "yards_per_carry", label: "Y/CAR", fmt: fmt1 },
+      { key: "rushing_first_downs", label: "1st", fmt: fmt0 },
+      { key: "fumbles", label: "FUM", fmt: fmt0 },
       { key: "targets", label: "TGT", fmt: fmt0 },
       { key: "receptions", label: "REC", fmt: fmt0 },
       { key: "receiving_yards", label: "Rec Yds", fmt: fmt0 },
@@ -2351,6 +2362,8 @@ function getSeasonColumns(pos) {
       { key: "receiving_tds", label: "Rec TD", fmt: fmt0 },
       { key: "yards_per_rec", label: "Y/REC", fmt: fmt1 },
       { key: "catch_rate", label: "Catch%", fmt: fmtPct },
+      { key: "adot", label: "aDOT", fmt: fmt1 },
+      { key: "receiving_first_downs", label: "1st", fmt: fmt0 },
       { key: "receiving_yards_after_catch", label: "YAC", fmt: fmt0 },
     ];
   }

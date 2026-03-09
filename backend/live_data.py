@@ -1037,7 +1037,10 @@ def fetch_player_profile(player_id):
                      "passing_yards", "passing_tds", "rushing_yards", "rushing_tds",
                      "receiving_yards", "receiving_tds", "receptions", "touchdowns",
                      "turnovers", "targets", "carries", "completions", "attempts",
-                     "passing_air_yards", "receiving_air_yards", "receiving_yards_after_catch"]:
+                     "passing_air_yards", "receiving_air_yards", "receiving_yards_after_catch",
+                     "passing_first_downs", "rushing_first_downs", "receiving_first_downs",
+                     "sacks_taken", "sack_yards_lost", "fumbles", "fumbles_lost",
+                     "offense_snaps"]:
             career[key] = sum(s.get(key) or 0 for s in seasons)
         career["seasons"] = len(seasons)
         _enrich_with_derived_stats([career])

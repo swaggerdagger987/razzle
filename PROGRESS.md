@@ -14,7 +14,7 @@
 | 4 | Fix historical seasons + career aggregates | DONE | All 5 seasons (2020-2024) in DB. Season dropdown shows all + Career. Career aggregates correctly (Mahomes: 27,280 pass yds / 97 games). No duplicates. No code changes needed. |
 | 5 | Positional rank + dash for N/A stats + GP header | DONE | pos_rank column (WR1, QB3, etc.) computed client-side, in PPR preset. N/A dash for non-primary stats (WR passing, RB passing, QB receiving when 0). GP header already correct. |
 | 6 | Tooltips + stat naming cleanup | DONE | Tooltips on all 34 column headers via title attr. RuYPG/ReYPG/PaYPG renamed to Rush Yds/G, Rec Yds/G, Pass Yds/G in both NFL + college columns. |
-| 7 | Enrich player profile card | | |
+| 7 | Enrich player profile card | DONE | Multi-season log, career totals row (bold), QB: INT/Sacks/CPOE, RB: 1st downs/fumbles, WR/TE: aDOT/1st downs. Age=integer, plural fix, draft badge, team color accent. |
 | 8 | New stats as Lab columns | | |
 | 9 | Chart enhancements + comparison tool | | |
 | 10 | DVS transparency + remove test formulas + color legend | | |

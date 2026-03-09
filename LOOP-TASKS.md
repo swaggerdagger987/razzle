@@ -109,9 +109,9 @@
 - Profile still opens/closes smoothly
 **Depends on**: Tasks 1, 4
 **Size**: L
-**Status**: PENDING
-**Attempt**: 0/3
-**Result**:
+**Status**: PASS
+**Attempt**: 1/3
+**Result**: Backend: added new stats (first_downs, sacks, fumbles, offense_snaps) to career totals aggregation. Frontend: (a) All seasons already shown (backend returns all, verified Mahomes 5 seasons 2020-2024). (b) QB profile now shows INT, Sacks, CPOE; RB shows rushing_first_downs, fumbles; WR/TE shows aDOT, receiving_first_downs. (c) Career totals row already existed, now bold with top border. (d) Age fixed: Math.floor(player.age) shows integer. (e) Plural fixed: "1 Season" not "1 Seasons". (f) Draft capital badge in header (Rd X #Y 'YY). Fixed draft_pick/draft_overall field name bug. (g) Team shown with position color accent. All syntax checks pass.
 
 ## Task 8: Red zone share, fumble split, explosive plays as Lab columns
 **Requirement**: "Wire up the new database stats from Task 1 as selectable columns in the Lab screener: (a) Add to Rushing: rushing_first_downs, rush_20plus, rz_carries, rz_rush_td. (b) Add to Receiving: receiving_first_downs, rec_20plus, rz_targets, rz_rec_td, adot. (c) Add to Passing: passing_first_downs, pass_20plus, sacks_taken, sack_yards_lost. (d) Add to General: fumbles, fumbles_lost. (e) Add to Efficiency: snap_share. (f) Update backend queries. (g) Add to column category presets."
@@ -183,9 +183,9 @@
 ## Loop State
 ```
 Current Phase: 29
-Current Task: 6
+Current Task: 7
 Current Stage: PASS
 Attempt: 1/3
-Tasks Completed: 6/12
-Loop Iterations: 6
+Tasks Completed: 7/12
+Loop Iterations: 7
 ```
