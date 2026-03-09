@@ -22,6 +22,21 @@ const PROSPECT_COLUMNS = {
   nfl_rec_yards: { label: "Rec Yds",  group: "NFL Career", decimals: 0 },
   nfl_rec_tds:   { label: "Rec TD",   group: "NFL Career", decimals: 0 },
   nfl_receptions:{ label: "REC",      group: "NFL Career", decimals: 0 },
+  // College production (from cfb_player_season_stats cross-reference)
+  college_games:      { label: "CFB GP",     group: "College", decimals: 0 },
+  college_total_yards:{ label: "CFB Yds",    group: "College", decimals: 0 },
+  college_total_tds:  { label: "CFB TD",     group: "College", decimals: 0 },
+  college_pass_yards: { label: "CFB PaYds",  group: "College", decimals: 0 },
+  college_pass_tds:   { label: "CFB PaTD",   group: "College", decimals: 0 },
+  college_cmp_pct:    { label: "CFB CMP%",   group: "College", decimals: 1 },
+  college_rush_yards: { label: "CFB RuYds",  group: "College", decimals: 0 },
+  college_rush_tds:   { label: "CFB RuTD",   group: "College", decimals: 0 },
+  college_ypc:        { label: "CFB YPC",    group: "College", decimals: 1 },
+  college_rec_yards:  { label: "CFB ReYds",  group: "College", decimals: 0 },
+  college_rec_tds:    { label: "CFB ReTD",   group: "College", decimals: 0 },
+  college_receptions: { label: "CFB REC",    group: "College", decimals: 0 },
+  college_ypr:        { label: "CFB Y/R",    group: "College", decimals: 1 },
+  college_ypg:        { label: "CFB YPG",    group: "College", decimals: 1 },
 };
 
 const PROSPECT_PRESETS = {
@@ -45,6 +60,14 @@ const PROSPECT_PRESETS = {
     columns: ["draft_round", "draft_pick", "nfl_games", "career_av",
               "nfl_pass_yards", "nfl_pass_tds", "nfl_rush_yards", "nfl_rush_tds",
               "nfl_rec_yards", "nfl_rec_tds"],
+  },
+  college_production: {
+    label: "College Production",
+    columns: ["draft_round", "draft_pick", "college_games",
+              "college_total_yards", "college_total_tds",
+              "college_pass_yards", "college_pass_tds", "college_cmp_pct",
+              "college_rush_yards", "college_rush_tds", "college_ypc",
+              "college_rec_yards", "college_rec_tds", "college_ypr", "college_ypg"],
   },
 };
 

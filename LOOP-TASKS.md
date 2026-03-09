@@ -30,9 +30,9 @@
 **Accept when**: Prospect screener has new columns: College Yds, College TDs, College Games, Dominator Rating (WR/TE), College YPC (RB), College CMP% (QB). New preset "College Production" shows these columns alongside combine metrics. Columns sortable. Data populated from backend cross-reference. URL state preserved.
 **Depends on**: Task 1
 **Size**: M
-**Status**: PENDING
-**Attempt**: 0/3
-**Result**:
+**Status**: PASS
+**Attempt**: 1/3
+**Result**: 14 new College group columns in PROSPECT_COLUMNS (CFB GP, CFB Yds, CFB TD, CFB PaYds/PaTD/CMP%, CFB RuYds/RuTD/YPC, CFB ReYds/ReTD/REC/Y/R, CFB YPG). New "College Production" preset showing draft info + all college stats. Sort by college_total_yards desc works correctly (Dillon Gabriel 14950yds leads). Python re-sort for college-derived sorts. Column picker shows College group. URL state preserved via existing prospectColumns serialization.
 
 ## Task 4: Deploy + smoke test
 **Requirement**: "Deploy to Render and verify all college-prospect integration features work end to end."
