@@ -146,6 +146,8 @@ const COLUMNS = {
   fantasy_points_ppr:  { label: "PPR",     group: "Fantasy", decimals: 1 },
   ppg:                 { label: "PPG",      group: "Fantasy", decimals: 1 },
   fantasy_points_std:  { label: "Standard", group: "Fantasy", decimals: 1 },
+  fantasy_points_half_ppr: { label: "Half-PPR", group: "Fantasy", decimals: 1 },
+  half_ppr_ppg:        { label: "HPPR/G",   group: "Fantasy", decimals: 1, derived: true },
   games:               { label: "GP",       group: "Fantasy", decimals: 0 },
   seasons:             { label: "Seasons",  group: "Fantasy", decimals: 0 },
 
@@ -198,6 +200,8 @@ const COLUMNS = {
   receiving_epa:       { label: "Rec EPA",  group: "Advanced", decimals: 1, derived: true },
   rushing_epa:         { label: "Rush EPA", group: "Advanced", decimals: 1, derived: true },
   dakota:              { label: "DAKOTA",   group: "Advanced", decimals: 3, derived: true },
+  cpoe:                { label: "CPOE",     group: "Advanced", decimals: 1, derived: true },
+  epa_per_play:        { label: "EPA/Play", group: "Advanced", decimals: 3, derived: true },
 
   // Breakout detection
   breakout_pct:        { label: "BRK%",    group: "Breakout", decimals: 1, derived: true },

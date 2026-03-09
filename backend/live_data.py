@@ -12,7 +12,7 @@ DB_PATH = Path(__file__).parent.parent / "data" / "terminal.db"
 FANTASY_POSITIONS = {"QB", "RB", "WR", "TE"}
 
 # Rate metrics we pull from player_week_metrics (averaged per game)
-RATE_METRICS = ["target_share", "air_yards_share", "wopr", "racr", "passing_epa", "receiving_epa", "rushing_epa", "dakota"]
+RATE_METRICS = ["target_share", "air_yards_share", "wopr", "racr", "passing_epa", "receiving_epa", "rushing_epa", "dakota", "cpoe"]
 
 # Shared stat SUM columns used across multiple query functions
 _STAT_SUM_COLS = """
@@ -102,9 +102,31 @@ def _enrich_with_derived_stats(items):
             item["adot"] = _safe_div(item.get("passing_air_yards") or 0, item.get("attempts") or 0)
         else:
             item["adot"] = _safe_div(item.get("receiving_air_yards") or 0, item.get("targets") or 0)
+        # Half-PPR per game
+        item["half_ppr_ppg"] = _safe_div(item.get("fantasy_points_half_ppr") or 0, g)
         # Snap share (already averaged in SQL, just round)
         snap_pct = item.get("offense_pct")
         item["snap_share"] = round(snap_pct, 1) if snap_pct else None
+    return items
+
+
+def _enrich_with_epa_per_play(items):
+    """Compute EPA per play from rate metrics (must run after _enrich_with_rate_metrics)."""
+    for item in items:
+        g = item.get("games") or 1
+        pass_epa = item.get("passing_epa") or 0
+        rush_epa = item.get("rushing_epa") or 0
+        rec_epa = item.get("receiving_epa") or 0
+        # EPA values are per-game averages; total plays per game
+        attempts_pg = (item.get("attempts") or 0) / g
+        carries_pg = (item.get("carries") or 0) / g
+        targets_pg = (item.get("targets") or 0) / g
+        total_plays = attempts_pg + carries_pg + targets_pg
+        if total_plays > 0:
+            total_epa = pass_epa + rush_epa + rec_epa
+            item["epa_per_play"] = round(total_epa / total_plays, 3)
+        else:
+            item["epa_per_play"] = None
     return items
 
 
@@ -323,6 +345,7 @@ def fetch_players(
         "sack_fumbles", "sack_fumbles_lost", "fumbles", "fumbles_lost",
         "offense_snaps", "offense_pct",
         "full_name", "position", "team", "games", "seasons", "age",
+        "half_ppr_ppg", "cpoe", "epa_per_play",
     }
     if sort_key not in safe_sorts:
         sort_key = "fantasy_points_ppr"
@@ -394,6 +417,7 @@ def fetch_players(
     items = [dict(r) for r in rows]
     _enrich_with_derived_stats(items)
     _enrich_with_rate_metrics(conn, items, season=season, career_mode=career_mode)
+    _enrich_with_epa_per_play(items)
     _enrich_with_breakout(conn, items, season=season, career_mode=career_mode)
     _enrich_with_dynasty_value(items)
 
@@ -479,7 +503,9 @@ def fetch_screener(body):
         "rush_ypg", "rec_ypg", "pass_ypg", "adot", "snap_share",
         # Rate metrics from player_week_metrics
         "target_share", "air_yards_share", "wopr", "racr",
-        "passing_epa", "receiving_epa", "rushing_epa", "dakota",
+        "passing_epa", "receiving_epa", "rushing_epa", "dakota", "cpoe",
+        # Derived post-enrichment
+        "half_ppr_ppg", "epa_per_play",
         # Dynasty value
         "dynasty_value", "age",
     }
@@ -588,6 +614,7 @@ def fetch_screener(body):
     items = [dict(r) for r in rows]
     _enrich_with_derived_stats(items)
     _enrich_with_rate_metrics(conn, items, season=season, career_mode=career_mode)
+    _enrich_with_epa_per_play(items)
     _enrich_with_breakout(conn, items, season=season, career_mode=career_mode)
     _enrich_with_dynasty_value(items)
 

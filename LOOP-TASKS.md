@@ -31,9 +31,9 @@
 - Column selector shows all new columns in correct categories
 **Depends on**: Task 1
 **Size**: M
-**Status**: PENDING
-**Attempt**: 0/3
-**Result**:
+**Status**: PASS
+**Attempt**: 1/3
+**Result**: Added 4 new columns to Lab screener: (1) Half-PPR (fantasy_points_half_ppr) — already in DB from nflverse, wired to COLUMNS under Fantasy. (2) HPPR/G (half_ppr_ppg) — derived per-game stat computed in _enrich_with_derived_stats. (3) CPOE — added to RATE_METRICS so it's fetched from player_week_metrics and surfaced under Advanced. (4) EPA/Play (epa_per_play) — new _enrich_with_epa_per_play function computes combined EPA / total plays (attempts + carries + targets) per game. All 4 added to safe_sorts in both fetch_players and fetch_screener. All syntax checks pass.
 
 ## Task 3: Team filter + minimum games played filter
 **Requirement**: "Add two new filters to the Lab screener filter bar: (a) Team filter — dropdown or multi-select of all 32 NFL teams. When a team is selected, only show players on that team. Support multi-team selection (e.g. show Ravens AND Chiefs). Use the same filter pill style as existing filters. (b) Minimum games played filter — a number input (default blank = no minimum). When set to e.g. 8, only show players with GP >= 8. This is critical for efficiency stats — a 1-game player with 100% catch rate pollutes leaderboards. Both filters should work with existing position filter and search. URL state should include team and min_gp params so shared links preserve filters."
@@ -183,9 +183,9 @@
 ## Loop State
 ```
 Current Phase: 29
-Current Task: 1
+Current Task: 2
 Current Stage: PASS
 Attempt: 1/3
-Tasks Completed: 1/12
-Loop Iterations: 1
+Tasks Completed: 2/12
+Loop Iterations: 2
 ```

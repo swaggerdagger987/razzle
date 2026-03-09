@@ -9,7 +9,7 @@
 | # | Task | Status | Notes |
 |---|------|--------|-------|
 | 1 | Add missing stats to nflverse adapter + DB schema | DONE | 14 new columns: passing/rushing/receiving_first_downs, sacks_taken, sack_yards_lost, rushing/receiving/sack fumbles + lost, total fumbles/lost, offense_snaps/pct. Snap counts from snap_counts CSV. aDOT derived in live_data.py. ALTER TABLE migration. Red zone + explosive deferred (need PBP). |
-| 2 | Half-PPR scoring + CPOE + EPA/play columns | | |
+| 2 | Half-PPR scoring + CPOE + EPA/play columns | DONE | Half-PPR + HPPR/G in Fantasy, CPOE + EPA/Play in Advanced. CPOE via RATE_METRICS. EPA/Play via new _enrich_with_epa_per_play. |
 | 3 | Team filter + min games played filter | | |
 | 4 | Fix historical seasons + career aggregates | | |
 | 5 | Positional rank + dash for N/A stats + GP header | | |
