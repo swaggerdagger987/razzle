@@ -1,6 +1,26 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 4 — Landing Page + Sleeper Connection (COMPLETE)
+## Current Phase: Phase 1b — College/Prospect Data (COMPLETE)
+
+### Phase 1b Tasks (COMPLETE)
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | College adapter | DONE | adapters/college_adapter.py — fetches combine.csv + draft_picks.csv from nflverse |
+| 2 | Combine data | DONE | 2413 entries (2020-2026), 40-yard, bench, vertical, broad jump, cone, shuttle |
+| 3 | Draft picks data | DONE | 1549 picks (2020-2025), draft capital + career NFL stats |
+| 4 | Prospect API | DONE | GET /api/prospects with sort/filter/search, GET /api/prospect-options |
+| 5 | NFL/Prospect toggle | DONE | Universe toggle in Lab toolbar, blue accent for prospect mode |
+| 6 | Prospect column presets | DONE | Combine, Athletic, Draft Capital, NFL Production presets |
+| 7 | URL state for prospects | DONE | ?u=prospects&draft_year=2025 — full state serialization |
+
+**Exit criterion MET:** Toggle to Prospects, see 2025 draft class sorted by pick, filter by position, sort by 40-yard dash.
+
+---
+
+## Previous Phases
+
+### Phase 4 — Landing Page + Sleeper Connection (COMPLETE)
 
 ### Phase 0 Tasks (COMPLETE)
 
@@ -96,6 +116,19 @@
 - [x] og:meta tags for link previews (og:title, og:description, twitter:card)
 - [x] Share URL button already built in Phase 1
 
+### Phase 1b — College/Prospect Data
+- [x] college_adapter.py: fetches combine.csv and draft_picks.csv from nflverse GitHub releases
+- [x] combine_data table: 2413 entries across 7 draft classes (2020-2026), full athletic testing
+- [x] draft_picks table: 1549 picks with draft capital, career NFL stats, college info
+- [x] Prospect API: GET /api/prospects (search, position, school, sort, draft_year), GET /api/prospect-options
+- [x] NFL team name → abbreviation mapping for combine data (TENNESSEE TITANS → TEN)
+- [x] Universe toggle: NFL/Prospects button in Lab toolbar with blue accent for prospect mode
+- [x] Prospect columns: Draft (Rd, Pick, Team), Measurables (HT, WT), Athletic (40, Bench, Vert, Broad, Cone, Shuttle), NFL Career
+- [x] 4 prospect presets: Combine, Athletic, Draft Capital, NFL Production
+- [x] URL state: ?u=prospects&draft_year=2025 serialization, shareable prospect views
+- [x] Season selector becomes draft year selector in prospect mode
+- [x] render.yaml updated to sync college data at build time
+
 ### Phase 4 — Landing Page + Sleeper Connection
 - [x] Landing page rebuilt: hero, 6 feature cards, mascot section, War Room demo, waitlist
 - [x] War Room demo: 3 anonymized agent briefings with redacted content (Razzle, Scout, Diplomat)
@@ -134,3 +167,7 @@ _None currently._
 | 2026-03-08 | Waitlist in localStorage | No backend auth yet, email capture is just localStorage. Real backend waitlist post-draft |
 | 2026-03-08 | Sleeper players API cached client-side | The /players/nfl endpoint is 25MB+ — should be cached/proxied server-side in production |
 | 2026-03-08 | 3 War Room demo cards | Razzle/Scout/Diplomat covers the breadth of agent types without over-promising |
+| 2026-03-08 | nflverse combine + draft picks over CFBD API | Free CSVs, no API key needed, same adapter pattern as NFL data. Combine metrics + draft capital are the highest-value data for draft week dynasty users |
+| 2026-03-08 | "Prospects" not "College" | Available data is combine/draft focused, not full college production stats. "Prospects" better describes what we have and what dynasty users want during draft week |
+| 2026-03-08 | Blue accent for prospect mode | Per design guide — NFL/NCAA toggle uses blue (#5b7fff) for college/prospect content. Visual differentiation makes the toggle obvious |
+| 2026-03-08 | Filters hidden in prospect mode | Prospect dataset is small (~300/year), position + sort + search covers all use cases. Will add filters if needed later |

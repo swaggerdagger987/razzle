@@ -81,6 +81,36 @@ def players_compare(ids: str = "", season: int = 0):
     return live_data.fetch_players_compare(player_ids, season=season)
 
 
+@app.get("/api/prospects")
+def get_prospects(
+    search: str = "",
+    position: str = "",
+    positions: str = "",
+    school: str = "",
+    sort: str = "draft_pick",
+    order: str = "asc",
+    limit: int = 200,
+    offset: int = 0,
+    draft_year: int = 0,
+):
+    return live_data.fetch_prospects(
+        search=search,
+        position=position,
+        positions=positions,
+        school=school,
+        sort_key=sort,
+        sort_dir=order,
+        limit=min(limit, 1000),
+        offset=offset,
+        draft_year=draft_year,
+    )
+
+
+@app.get("/api/prospect-options")
+def prospect_options():
+    return live_data.fetch_prospect_years()
+
+
 # ---------------------------------------------------------------------------
 # Serve frontend as static files (catch-all for SPA-like behavior)
 # ---------------------------------------------------------------------------

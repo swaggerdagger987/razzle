@@ -384,6 +384,69 @@
   .watermark span {
     color: var(--orange);
   }
+
+  /* ===== UNIVERSE TOGGLE ===== */
+  .universe-toggle {
+    font-size: 12px;
+    padding: 5px 14px;
+    border: 2px solid var(--ink);
+    transition: all 0.15s;
+  }
+
+  .universe-toggle.active {
+    background: var(--orange);
+    color: white;
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+
+  /* ===== PROSPECT MODE ===== */
+  body.prospect-mode .toolbar {
+    border-bottom-color: var(--pos-qb);
+  }
+
+  body.prospect-mode .universe-toggle.active {
+    background: var(--pos-qb);
+  }
+
+  body.prospect-mode .screener-table th {
+    border-bottom-color: var(--pos-qb);
+  }
+
+  body.prospect-mode .footer-bar {
+    border-top-color: var(--pos-qb);
+  }
+
+  body.prospect-mode .chip.active {
+    background: var(--pos-qb);
+    border-color: var(--pos-qb);
+  }
+
+  body.prospect-mode .watermark span {
+    color: var(--pos-qb);
+  }
+
+  .school-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-light);
+    font-weight: 400;
+  }
+
+  .draft-badge {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 3px;
+    border: 1.5px solid var(--ink);
+    background: var(--pos-qb);
+    color: white;
+    white-space: nowrap;
+  }
+
+  .draft-badge.undrafted {
+    background: var(--ink-light);
+  }
 </style>
 </head>
 <body>
@@ -403,7 +466,14 @@
 
 <!-- TOOLBAR -->
 <div class="lab-container">
-  <div class="toolbar">
+  <div class="toolbar" id="mainToolbar">
+    <div class="toolbar-section">
+      <button class="btn-chunky universe-toggle active" id="universeNFL" onclick="setUniverse('nfl')">NFL</button>
+      <button class="btn-chunky universe-toggle" id="universeProspects" onclick="setUniverse('prospects')">Prospects</button>
+    </div>
+
+    <div class="toolbar-divider"></div>
+
     <div class="toolbar-section">
       <span class="chip active" data-pos="ALL" onclick="togglePosition('ALL')">All</span>
       <span class="chip" data-pos="QB" onclick="togglePosition('QB')">QB</span>
@@ -426,7 +496,7 @@
     <div class="toolbar-divider"></div>
 
     <button class="btn-chunky" onclick="openColumnPicker()">Columns</button>
-    <button class="btn-chunky" onclick="openFormulaBuilder()">Formulas</button>
+    <button class="btn-chunky" id="formulaBtn" onclick="openFormulaBuilder()">Formulas</button>
     <button class="btn-chunky" onclick="openChartPanel()">Charts</button>
     <button class="btn-chunky" onclick="copyShareURL()">Share URL</button>
     <button class="btn-primary" onclick="exportImage()">Export PNG</button>

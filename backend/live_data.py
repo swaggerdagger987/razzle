@@ -10,6 +10,23 @@ DB_PATH = Path(__file__).parent.parent / "data" / "terminal.db"
 
 FANTASY_POSITIONS = {"QB", "RB", "WR", "TE"}
 
+# NFL team name → abbreviation (for combine data that stores full names)
+TEAM_ABBREV = {
+    "ARIZONA CARDINALS": "ARI", "ATLANTA FALCONS": "ATL", "BALTIMORE RAVENS": "BAL",
+    "BUFFALO BILLS": "BUF", "CAROLINA PANTHERS": "CAR", "CHICAGO BEARS": "CHI",
+    "CINCINNATI BENGALS": "CIN", "CLEVELAND BROWNS": "CLE", "DALLAS COWBOYS": "DAL",
+    "DENVER BRONCOS": "DEN", "DETROIT LIONS": "DET", "GREEN BAY PACKERS": "GB",
+    "HOUSTON TEXANS": "HOU", "INDIANAPOLIS COLTS": "IND", "JACKSONVILLE JAGUARS": "JAX",
+    "KANSAS CITY CHIEFS": "KC", "LAS VEGAS RAIDERS": "LV", "LOS ANGELES CHARGERS": "LAC",
+    "LOS ANGELES RAMS": "LAR", "MIAMI DOLPHINS": "MIA", "MINNESOTA VIKINGS": "MIN",
+    "NEW ENGLAND PATRIOTS": "NE", "NEW ORLEANS SAINTS": "NO", "NEW YORK GIANTS": "NYG",
+    "NEW YORK JETS": "NYJ", "OAKLAND RAIDERS": "LV", "PHILADELPHIA EAGLES": "PHI",
+    "PITTSBURGH STEELERS": "PIT", "SAN FRANCISCO 49ERS": "SF", "SEATTLE SEAHAWKS": "SEA",
+    "TAMPA BAY BUCCANEERS": "TB", "TENNESSEE TITANS": "TEN", "WASHINGTON COMMANDERS": "WAS",
+    "WASHINGTON REDSKINS": "WAS", "WASHINGTON FOOTBALL TEAM": "WAS",
+    "ST. LOUIS RAMS": "LAR", "SAN DIEGO CHARGERS": "LAC",
+}
+
 
 def get_conn():
     conn = sqlite3.connect(str(DB_PATH), timeout=30)
@@ -355,6 +372,158 @@ def fetch_player_weeks(player_id, season=0):
         "season": season,
         "weeks": [dict(r) for r in rows],
     }
+
+
+def fetch_prospects(
+    search="",
+    position="",
+    positions="",
+    school="",
+    sort_key="draft_pick",
+    sort_dir="asc",
+    limit=200,
+    offset=0,
+    draft_year=0,
+):
+    """Return prospect data from combine + draft picks, joined."""
+    conn = get_conn()
+
+    if not draft_year:
+        row = conn.execute("SELECT MAX(draft_year) FROM combine_data").fetchone()
+        draft_year = row[0] if row and row[0] else 2025
+
+    # Position list
+    pos_list = []
+    if positions:
+        pos_list = [p.strip().upper() for p in positions.split(",") if p.strip()]
+    elif position:
+        pos_list = [position.strip().upper()]
+
+    where = ["c.draft_year = ?"]
+    params = [draft_year]
+
+    if search:
+        search_clean = search.lower().replace(" ", "")
+        where.append("LOWER(REPLACE(c.player_name, ' ', '')) LIKE ?")
+        params.append(f"%{search_clean}%")
+
+    if pos_list:
+        placeholders = ",".join("?" * len(pos_list))
+        where.append(f"c.position IN ({placeholders})")
+        params.extend(pos_list)
+
+    if school:
+        where.append("(c.school LIKE ? OR d.college LIKE ?)")
+        params.extend([f"%{school}%", f"%{school}%"])
+
+    where_clause = " AND ".join(where)
+
+    # Safe sort columns
+    safe_sorts = {
+        "player_name": "c.player_name",
+        "position": "c.position",
+        "school": "c.school",
+        "draft_pick": "c.draft_pick",
+        "draft_round": "c.draft_round",
+        "draft_team": "c.draft_team",
+        "height_inches": "c.height_inches",
+        "weight": "c.weight",
+        "forty": "c.forty",
+        "bench": "c.bench",
+        "vertical": "c.vertical",
+        "broad_jump": "c.broad_jump",
+        "cone": "c.cone",
+        "shuttle": "c.shuttle",
+        "career_av": "d.career_av",
+        "games": "d.games",
+    }
+    order_expr = safe_sorts.get(sort_key, "c.draft_pick")
+    if sort_dir.lower() not in ("asc", "desc"):
+        sort_dir = "asc"
+
+    # NULLS LAST for numeric sorts
+    nulls_clause = ""
+    if sort_key in ("forty", "bench", "vertical", "broad_jump", "cone", "shuttle",
+                     "draft_pick", "draft_round", "height_inches", "weight",
+                     "career_av", "games"):
+        if sort_dir.lower() == "asc":
+            nulls_clause = f"CASE WHEN {order_expr} IS NULL THEN 1 ELSE 0 END,"
+        else:
+            nulls_clause = f"CASE WHEN {order_expr} IS NULL THEN 1 ELSE 0 END,"
+
+    query = f"""
+        SELECT
+            c.player_name, c.position, c.school, c.draft_year,
+            c.draft_team, c.draft_round, c.draft_pick,
+            c.height_inches, c.weight,
+            c.forty, c.bench, c.vertical, c.broad_jump, c.cone, c.shuttle,
+            c.pfr_id, c.cfb_id,
+            d.career_av, d.draft_av, d.games as nfl_games,
+            d.allpro, d.probowls, d.seasons_started,
+            d.pass_yards as nfl_pass_yards, d.pass_tds as nfl_pass_tds,
+            d.rush_yards as nfl_rush_yards, d.rush_tds as nfl_rush_tds,
+            d.rec_yards as nfl_rec_yards, d.rec_tds as nfl_rec_tds,
+            d.receptions as nfl_receptions
+        FROM combine_data c
+        LEFT JOIN draft_picks d
+            ON c.draft_year = d.season
+            AND LOWER(REPLACE(c.player_name, ' ', '')) = LOWER(REPLACE(d.player_name, ' ', ''))
+            AND c.position = d.position
+        WHERE {where_clause}
+        ORDER BY {nulls_clause} {order_expr} {sort_dir}
+        LIMIT ? OFFSET ?
+    """
+    params.extend([limit, offset])
+
+    rows = conn.execute(query, params).fetchall()
+
+    # Count
+    count_query = f"""
+        SELECT COUNT(*)
+        FROM combine_data c
+        LEFT JOIN draft_picks d
+            ON c.draft_year = d.season
+            AND LOWER(REPLACE(c.player_name, ' ', '')) = LOWER(REPLACE(d.player_name, ' ', ''))
+            AND c.position = d.position
+        WHERE {where_clause}
+    """
+    total = conn.execute(count_query, params[:-2]).fetchone()[0]
+
+    items = []
+    for r in rows:
+        item = dict(r)
+        # Compute height display string
+        ht = item.get("height_inches")
+        if ht:
+            item["height_display"] = f"{ht // 12}'{ht % 12}\""
+        else:
+            item["height_display"] = None
+        # Abbreviate team name
+        dt = (item.get("draft_team") or "").upper()
+        item["draft_team"] = TEAM_ABBREV.get(dt, dt[:3] if dt else None)
+        items.append(item)
+
+    conn.close()
+    return {"count": total, "draft_year": draft_year, "items": items}
+
+
+def fetch_prospect_years():
+    """Return available draft years for the prospect screener."""
+    conn = get_conn()
+    years = [r[0] for r in conn.execute(
+        "SELECT DISTINCT draft_year FROM combine_data ORDER BY draft_year DESC"
+    ).fetchall()]
+
+    schools = [r[0] for r in conn.execute(
+        "SELECT DISTINCT school FROM combine_data WHERE school IS NOT NULL AND school != '' ORDER BY school"
+    ).fetchall()]
+
+    positions = [r[0] for r in conn.execute(
+        "SELECT DISTINCT position FROM combine_data ORDER BY position"
+    ).fetchall()]
+
+    conn.close()
+    return {"years": years, "schools": schools, "positions": positions}
 
 
 def fetch_players_compare(player_ids, season=0):

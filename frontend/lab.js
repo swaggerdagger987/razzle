@@ -1,5 +1,53 @@
 /* Razzle — The Lab (screener logic) */
 
+// ─── Prospect column definitions ────────────────────────────────
+const PROSPECT_COLUMNS = {
+  draft_round:   { label: "Rd",       group: "Draft",     decimals: 0 },
+  draft_pick:    { label: "Pick",     group: "Draft",     decimals: 0 },
+  draft_team:    { label: "Team",     group: "Draft",     decimals: null, isText: true },
+  height_display:{ label: "HT",       group: "Measurables", decimals: null, isText: true },
+  weight:        { label: "WT",       group: "Measurables", decimals: 0 },
+  forty:         { label: "40-Yd",    group: "Athletic",  decimals: 2 },
+  bench:         { label: "Bench",    group: "Athletic",  decimals: 0 },
+  vertical:      { label: "Vert",     group: "Athletic",  decimals: 1 },
+  broad_jump:    { label: "Broad",    group: "Athletic",  decimals: 0 },
+  cone:          { label: "3-Cone",   group: "Athletic",  decimals: 2 },
+  shuttle:       { label: "Shuttle",  group: "Athletic",  decimals: 2 },
+  nfl_games:     { label: "NFL GP",   group: "NFL Career", decimals: 0 },
+  career_av:     { label: "CAV",      group: "NFL Career", decimals: 0 },
+  nfl_pass_yards:{ label: "Pass Yds", group: "NFL Career", decimals: 0 },
+  nfl_pass_tds:  { label: "Pass TD",  group: "NFL Career", decimals: 0 },
+  nfl_rush_yards:{ label: "Rush Yds", group: "NFL Career", decimals: 0 },
+  nfl_rush_tds:  { label: "Rush TD",  group: "NFL Career", decimals: 0 },
+  nfl_rec_yards: { label: "Rec Yds",  group: "NFL Career", decimals: 0 },
+  nfl_rec_tds:   { label: "Rec TD",   group: "NFL Career", decimals: 0 },
+  nfl_receptions:{ label: "REC",      group: "NFL Career", decimals: 0 },
+};
+
+const PROSPECT_PRESETS = {
+  combine: {
+    label: "Combine",
+    columns: ["draft_round", "draft_pick", "draft_team", "height_display", "weight",
+              "forty", "bench", "vertical", "broad_jump", "cone", "shuttle"],
+  },
+  athletic: {
+    label: "Athletic",
+    columns: ["forty", "vertical", "broad_jump", "cone", "shuttle", "bench",
+              "height_display", "weight"],
+  },
+  draft_capital: {
+    label: "Draft Capital",
+    columns: ["draft_round", "draft_pick", "draft_team", "height_display", "weight",
+              "forty", "nfl_games", "career_av"],
+  },
+  nfl_production: {
+    label: "NFL Production",
+    columns: ["draft_round", "draft_pick", "nfl_games", "career_av",
+              "nfl_pass_yards", "nfl_pass_tds", "nfl_rush_yards", "nfl_rush_tds",
+              "nfl_rec_yards", "nfl_rec_tds"],
+  },
+};
+
 // ─── Column definitions ─────────────────────────────────────────
 const COLUMNS = {
   // Core fantasy
@@ -66,6 +114,7 @@ const PRESETS = {
 
 // ─── State ───────────────────────────────────────────────────────
 const state = {
+  universe: "nfl", // "nfl" or "prospects"
   position: "ALL",
   search: "",
   season: 0,
@@ -81,23 +130,37 @@ const state = {
   seasons: [],
   selectedPlayers: [], // for compare/charts [{player_id, full_name, position, team}]
   formulas: [], // user custom formulas [{name, components: [{stat, weight}]}]
+  // Prospect-specific state
+  draftYear: 0,
+  draftYears: [],
+  prospectColumns: [...PROSPECT_PRESETS.combine.columns],
 };
 
 // ─── Init ────────────────────────────────────────────────────────
 (async function init() {
   loadStateFromURL();
 
+  // Load both NFL and prospect options in parallel
   try {
-    const opts = await apiFetch("/api/filter-options");
-    state.seasons = opts.seasons || [2024];
+    const [nflOpts, prospectOpts] = await Promise.all([
+      apiFetch("/api/filter-options"),
+      apiFetch("/api/prospect-options").catch(() => ({ years: [], schools: [], positions: [] })),
+    ]);
+
+    state.seasons = nflOpts.seasons || [2024];
     if (!state.season) state.season = state.seasons[0] || 2024;
+
+    state.draftYears = prospectOpts.years || [2025];
+    if (!state.draftYear) state.draftYear = state.draftYears[0] || 2025;
+
     populateSeasonSelect();
-    populateFilterStatSelect(opts.stat_keys);
+    populateFilterStatSelect();
   } catch (e) {
     console.error("Failed to load filter options:", e);
     state.season = 2024;
   }
 
+  applyUniverseUI();
   renderColumnPicker();
   renderPresets();
   await fetchAndRender();
@@ -118,9 +181,17 @@ const state = {
 
 // ─── Data fetching ───────────────────────────────────────────────
 async function fetchAndRender() {
+  if (state.universe === "prospects") {
+    return fetchAndRenderProspects();
+  }
+  return fetchAndRenderNFL();
+}
+
+async function fetchAndRenderNFL() {
   const loading = document.getElementById("loadingMsg");
   const tbody = document.getElementById("tableBody");
   loading.style.display = "block";
+  loading.textContent = "pulling film...";
   tbody.innerHTML = "";
 
   const positions = state.position === "ALL"
@@ -162,23 +233,80 @@ async function fetchAndRender() {
   }
 }
 
+async function fetchAndRenderProspects() {
+  const loading = document.getElementById("loadingMsg");
+  const tbody = document.getElementById("tableBody");
+  loading.style.display = "block";
+  loading.textContent = "scouting prospects...";
+  tbody.innerHTML = "";
+
+  const positions = state.position === "ALL" ? "" : state.position;
+
+  const params = new URLSearchParams({
+    draft_year: state.draftYear,
+    positions: positions,
+    search: state.search,
+    sort: state.sortKey,
+    order: state.sortDir,
+    limit: state.limit,
+    offset: state.offset,
+  });
+
+  try {
+    const data = await apiFetch(`/api/prospects?${params}`);
+
+    state.items = data.items || [];
+    state.totalCount = data.count || 0;
+    state.draftYear = data.draft_year || state.draftYear;
+
+    loading.style.display = "none";
+    renderTable();
+    renderPagination();
+    updateResultCount();
+    saveStateToURL();
+  } catch (e) {
+    loading.textContent = "fumbled the prospect fetch...";
+    console.error(e);
+  }
+}
+
 // ─── Table rendering ─────────────────────────────────────────────
 function renderTable() {
+  if (state.universe === "prospects") {
+    renderProspectTable();
+  } else {
+    renderNFLTable();
+  }
+}
+
+function getActiveColumns() {
+  return state.universe === "prospects" ? state.prospectColumns : state.visibleColumns;
+}
+
+function getColumnDef(key) {
+  if (state.universe === "prospects") return PROSPECT_COLUMNS[key];
+  return COLUMNS[key];
+}
+
+function renderNFLTable() {
   renderTableHead();
   renderTableBody();
 }
 
 function renderTableHead() {
   const thead = document.getElementById("tableHead");
-  let html = '<tr><th style="width:30px; text-align:center; padding:8px 6px;">☆</th>';
-  html += '<th class="col-player" onclick="sortBy(\'full_name\')">Player';
-  if (state.sortKey === "full_name") {
-    html += state.sortDir === "asc" ? " ▲" : " ▼";
+  const cols = getActiveColumns();
+
+  const nameKey = state.universe === "prospects" ? "player_name" : "full_name";
+  let html = '<tr><th style="width:30px; text-align:center; padding:8px 6px;">&#9734;</th>';
+  html += `<th class="col-player" onclick="sortBy('${nameKey}')">Player`;
+  if (state.sortKey === "full_name" || state.sortKey === "player_name") {
+    html += state.sortDir === "asc" ? " &#9650;" : " &#9660;";
   }
   html += "</th>";
 
-  for (const key of state.visibleColumns) {
-    const col = COLUMNS[key];
+  for (const key of cols) {
+    const col = getColumnDef(key);
     if (!col) continue;
     const cls = state.sortKey === key ? `sort-${state.sortDir}` : "";
     html += `<th class="${cls}" onclick="sortBy('${key}')">${col.label}</th>`;
@@ -190,8 +318,13 @@ function renderTableHead() {
 
 function renderTableBody() {
   const tbody = document.getElementById("tableBody");
+  const cols = getActiveColumns();
+  const emptyMsg = state.universe === "prospects"
+    ? "no prospects match these filters"
+    : "no players match these filters";
+
   if (!state.items.length) {
-    tbody.innerHTML = '<tr><td colspan="99" style="text-align:center; padding:40px; font-family: var(--font-hand); font-size: 22px; color: var(--ink-light);">no players match these filters</td></tr>';
+    tbody.innerHTML = `<tr><td colspan="99" style="text-align:center; padding:40px; font-family: var(--font-hand); font-size: 22px; color: var(--ink-light);">${emptyMsg}</td></tr>`;
     return;
   }
 
@@ -201,33 +334,115 @@ function renderTableBody() {
     const selected = state.selectedPlayers.some(p => p.player_id === player.player_id);
     html += '<tr>';
     html += `<td style="text-align:center; padding:7px 6px;">
-      <input type="checkbox" ${selected ? "checked" : ""} onchange="togglePlayerSelect('${player.player_id}', this.checked)"
-        style="accent-color:var(--orange); width:15px; height:15px; cursor:pointer;">
+      <input type="checkbox" ${selected ? "checked" : ""} onchange="togglePlayerSelect('${player.player_id || player.player_name}', this.checked)"
+        style="accent-color:${state.universe === 'prospects' ? 'var(--pos-qb)' : 'var(--orange)'}; width:15px; height:15px; cursor:pointer;">
     </td>`;
-    html += `<td class="col-player"><div class="player-name-cell">`;
-    html += `<span class="pos-badge ${posClass(pos)}">${pos}</span>`;
-    html += `<span>${player.full_name}</span>`;
-    html += `<span class="team-label">${player.team || ""}</span>`;
-    html += `</div></td>`;
 
-    for (const key of state.visibleColumns) {
-      const col = COLUMNS[key];
+    if (state.universe === "prospects") {
+      html += `<td class="col-player"><div class="player-name-cell">`;
+      html += `<span class="pos-badge ${posClass(pos)}">${pos}</span>`;
+      html += `<span>${player.player_name || ""}</span>`;
+      html += `<span class="school-label">${player.school || ""}</span>`;
+      html += `</div></td>`;
+    } else {
+      html += `<td class="col-player"><div class="player-name-cell">`;
+      html += `<span class="pos-badge ${posClass(pos)}">${pos}</span>`;
+      html += `<span>${player.full_name}</span>`;
+      html += `<span class="team-label">${player.team || ""}</span>`;
+      html += `</div></td>`;
+    }
+
+    for (const key of cols) {
+      const col = getColumnDef(key);
       if (!col) continue;
       const val = player[key];
-      html += `<td>${formatStat(val, col.decimals)}</td>`;
+      if (col.isText) {
+        html += `<td>${val || "—"}</td>`;
+      } else {
+        html += `<td>${formatStat(val, col.decimals)}</td>`;
+      }
     }
     html += "</tr>";
   }
   tbody.innerHTML = html;
 }
 
+function renderProspectTable() {
+  renderTableHead();
+  renderTableBody();
+}
+
+// ─── Universe toggle ─────────────────────────────────────────────
+function setUniverse(u) {
+  if (state.universe === u) return;
+  state.universe = u;
+  state.offset = 0;
+  state.search = "";
+  state.filters = [];
+  state.selectedPlayers = [];
+  document.getElementById("searchInput").value = "";
+
+  if (u === "prospects") {
+    state.sortKey = "draft_pick";
+    state.sortDir = "asc";
+  } else {
+    state.sortKey = "fantasy_points_ppr";
+    state.sortDir = "desc";
+  }
+
+  applyUniverseUI();
+  populateSeasonSelect();
+  populateFilterStatSelect();
+  renderColumnPicker();
+  renderPresets();
+  renderActiveFilters();
+  fetchAndRender();
+}
+
+function applyUniverseUI() {
+  const isProspect = state.universe === "prospects";
+
+  // Toggle body class for blue accent
+  document.body.classList.toggle("prospect-mode", isProspect);
+
+  // Toggle buttons
+  document.getElementById("universeNFL").classList.toggle("active", !isProspect);
+  document.getElementById("universeProspects").classList.toggle("active", isProspect);
+
+  // Search placeholder
+  document.getElementById("searchInput").placeholder = isProspect
+    ? "search prospects..." : "search players...";
+
+  // Hide formula button in prospect mode (formulas are NFL-specific)
+  const formulaBtn = document.getElementById("formulaBtn");
+  if (formulaBtn) formulaBtn.style.display = isProspect ? "none" : "";
+
+  // Hide relevance toggle in prospect mode
+  document.getElementById("relevanceToggle").style.display = isProspect ? "none" : "";
+
+  // Hide filter bar in prospect mode (prospect filtering is via sort/position)
+  document.getElementById("filterBar").style.display = isProspect ? "none" : "";
+
+  // Data source label
+  const ds = document.getElementById("dataSource");
+  if (ds) ds.textContent = isProspect ? "powered by nflverse combine + draft data" : "powered by nflverse";
+
+  // Page title
+  document.title = isProspect ? "Prospect Lab — Razzle" : "The Lab — Razzle";
+}
+
 // ─── Sort ────────────────────────────────────────────────────────
 function sortBy(key) {
+  // Normalize player name sort key per universe
+  if (key === "full_name" && state.universe === "prospects") key = "player_name";
+  if (key === "player_name" && state.universe === "nfl") key = "full_name";
+
   if (state.sortKey === key) {
     state.sortDir = state.sortDir === "desc" ? "asc" : "desc";
   } else {
     state.sortKey = key;
-    state.sortDir = key === "full_name" ? "asc" : "desc";
+    // Text fields and draft pick default to asc
+    state.sortDir = (key === "full_name" || key === "player_name" || key === "draft_pick") ? "asc" : "desc";
   }
   state.offset = 0;
   fetchAndRender();
@@ -258,14 +473,26 @@ function toggleRelevance() {
 // ─── Season select ───────────────────────────────────────────────
 function populateSeasonSelect() {
   const sel = document.getElementById("seasonSelect");
-  sel.innerHTML = state.seasons.map(s =>
-    `<option value="${s}" ${s === state.season ? "selected" : ""}>${s}</option>`
-  ).join("");
-  sel.addEventListener("change", (e) => {
-    state.season = parseInt(e.target.value);
-    state.offset = 0;
-    fetchAndRender();
-  });
+
+  if (state.universe === "prospects") {
+    sel.innerHTML = state.draftYears.map(y =>
+      `<option value="${y}" ${y === state.draftYear ? "selected" : ""}>${y} Draft</option>`
+    ).join("");
+    sel.onchange = (e) => {
+      state.draftYear = parseInt(e.target.value);
+      state.offset = 0;
+      fetchAndRender();
+    };
+  } else {
+    sel.innerHTML = state.seasons.map(s =>
+      `<option value="${s}" ${s === state.season ? "selected" : ""}>${s}</option>`
+    ).join("");
+    sel.onchange = (e) => {
+      state.season = parseInt(e.target.value);
+      state.offset = 0;
+      fetchAndRender();
+    };
+  }
 }
 
 // ─── Pagination ──────────────────────────────────────────────────
@@ -289,16 +516,17 @@ function nextPage() {
 
 function updateResultCount() {
   const el = document.getElementById("resultCount");
-  el.innerHTML = `<strong>${state.totalCount}</strong> players`;
+  const label = state.universe === "prospects" ? "prospects" : "players";
+  el.innerHTML = `<strong>${state.totalCount}</strong> ${label}`;
 }
 
 // ─── Filters ─────────────────────────────────────────────────────
-function populateFilterStatSelect(statKeys) {
+function populateFilterStatSelect() {
   const sel = document.getElementById("filterStat");
-  // Use our COLUMNS definition for the select
-  const keys = Object.keys(COLUMNS);
+  const colDefs = state.universe === "prospects" ? PROSPECT_COLUMNS : COLUMNS;
+  const keys = Object.keys(colDefs).filter(k => !colDefs[k].isText);
   sel.innerHTML = keys.map(k => {
-    const col = COLUMNS[k];
+    const col = colDefs[k];
     return `<option value="${k}">${col.label} (${k})</option>`;
   }).join("");
 }
@@ -358,8 +586,11 @@ function closeColumnPicker(e) {
 
 function renderColumnPicker() {
   const container = document.getElementById("columnGroups");
+  const colDefs = state.universe === "prospects" ? PROSPECT_COLUMNS : COLUMNS;
+  const activeCols = getActiveColumns();
+
   const groups = {};
-  for (const [key, col] of Object.entries(COLUMNS)) {
+  for (const [key, col] of Object.entries(colDefs)) {
     if (!groups[col.group]) groups[col.group] = [];
     groups[col.group].push({ key, ...col });
   }
@@ -369,7 +600,7 @@ function renderColumnPicker() {
     html += `<div class="column-group">`;
     html += `<div class="column-group-title">${groupName}</div>`;
     for (const col of cols) {
-      const checked = state.visibleColumns.includes(col.key) ? "checked" : "";
+      const checked = activeCols.includes(col.key) ? "checked" : "";
       html += `<label class="column-option">
         <input type="checkbox" value="${col.key}" ${checked} onchange="toggleColumn('${col.key}', this.checked)">
         ${col.label}
@@ -381,34 +612,43 @@ function renderColumnPicker() {
 }
 
 function toggleColumn(key, checked) {
-  if (checked && !state.visibleColumns.includes(key)) {
-    // Insert in COLUMNS order
-    const allKeys = Object.keys(COLUMNS);
+  const colArray = state.universe === "prospects" ? "prospectColumns" : "visibleColumns";
+  const colDefs = state.universe === "prospects" ? PROSPECT_COLUMNS : COLUMNS;
+
+  if (checked && !state[colArray].includes(key)) {
+    const allKeys = Object.keys(colDefs);
     const idx = allKeys.indexOf(key);
-    let insertAt = state.visibleColumns.length;
-    for (let i = 0; i < state.visibleColumns.length; i++) {
-      if (allKeys.indexOf(state.visibleColumns[i]) > idx) {
+    let insertAt = state[colArray].length;
+    for (let i = 0; i < state[colArray].length; i++) {
+      if (allKeys.indexOf(state[colArray][i]) > idx) {
         insertAt = i;
         break;
       }
     }
-    state.visibleColumns.splice(insertAt, 0, key);
+    state[colArray].splice(insertAt, 0, key);
   } else if (!checked) {
-    state.visibleColumns = state.visibleColumns.filter(k => k !== key);
+    state[colArray] = state[colArray].filter(k => k !== key);
   }
 }
 
 function renderPresets() {
   const container = document.getElementById("presetBar");
-  container.innerHTML = Object.entries(PRESETS).map(([key, preset]) =>
+  const presets = state.universe === "prospects" ? PROSPECT_PRESETS : PRESETS;
+  container.innerHTML = Object.entries(presets).map(([key, preset]) =>
     `<button class="btn-chunky" onclick="applyPreset('${key}')">${preset.label}</button>`
   ).join("");
 }
 
 function applyPreset(key) {
-  const preset = PRESETS[key];
+  const presets = state.universe === "prospects" ? PROSPECT_PRESETS : PRESETS;
+  const preset = presets[key];
   if (!preset) return;
-  state.visibleColumns = [...preset.columns];
+
+  if (state.universe === "prospects") {
+    state.prospectColumns = [...preset.columns];
+  } else {
+    state.visibleColumns = [...preset.columns];
+  }
   renderColumnPicker();
   renderTable();
   saveStateToURL();
@@ -417,19 +657,28 @@ function applyPreset(key) {
 // ─── URL state ───────────────────────────────────────────────────
 function saveStateToURL() {
   const params = new URLSearchParams();
+
+  if (state.universe !== "nfl") params.set("u", state.universe);
   if (state.position !== "ALL") params.set("pos", state.position);
   if (state.search) params.set("q", state.search);
-  if (state.season) params.set("season", state.season);
-  if (state.relevance !== "fantasy") params.set("rel", state.relevance);
-  if (state.sortKey !== "fantasy_points_ppr") params.set("sort", state.sortKey);
   if (state.sortDir !== "desc") params.set("dir", state.sortDir);
   if (state.offset > 0) params.set("offset", state.offset);
   if (state.filters.length) params.set("filters", JSON.stringify(state.filters));
 
-  // Only save columns if not default PPR preset
-  const defaultCols = PRESETS.ppr.columns.join(",");
-  const currentCols = state.visibleColumns.join(",");
-  if (currentCols !== defaultCols) params.set("cols", currentCols);
+  if (state.universe === "prospects") {
+    if (state.draftYear) params.set("draft_year", state.draftYear);
+    if (state.sortKey !== "draft_pick") params.set("sort", state.sortKey);
+    const defaultCols = PROSPECT_PRESETS.combine.columns.join(",");
+    const currentCols = state.prospectColumns.join(",");
+    if (currentCols !== defaultCols) params.set("cols", currentCols);
+  } else {
+    if (state.season) params.set("season", state.season);
+    if (state.relevance !== "fantasy") params.set("rel", state.relevance);
+    if (state.sortKey !== "fantasy_points_ppr") params.set("sort", state.sortKey);
+    const defaultCols = PRESETS.ppr.columns.join(",");
+    const currentCols = state.visibleColumns.join(",");
+    if (currentCols !== defaultCols) params.set("cols", currentCols);
+  }
 
   const qs = params.toString();
   const newURL = window.location.pathname + (qs ? "?" + qs : "");
@@ -438,16 +687,26 @@ function saveStateToURL() {
 
 function loadStateFromURL() {
   const params = new URLSearchParams(window.location.search);
+
+  if (params.has("u")) state.universe = params.get("u");
   if (params.has("pos")) state.position = params.get("pos");
   if (params.has("q")) state.search = params.get("q");
-  if (params.has("season")) state.season = parseInt(params.get("season"));
-  if (params.has("rel")) state.relevance = params.get("rel");
   if (params.has("sort")) state.sortKey = params.get("sort");
   if (params.has("dir")) state.sortDir = params.get("dir");
   if (params.has("offset")) state.offset = parseInt(params.get("offset"));
-  if (params.has("cols")) state.visibleColumns = params.get("cols").split(",");
   if (params.has("filters")) {
     try { state.filters = JSON.parse(params.get("filters")); } catch (e) {}
+  }
+
+  if (state.universe === "prospects") {
+    if (params.has("draft_year")) state.draftYear = parseInt(params.get("draft_year"));
+    if (!params.has("sort")) state.sortKey = "draft_pick";
+    if (!params.has("dir")) state.sortDir = "asc";
+    if (params.has("cols")) state.prospectColumns = params.get("cols").split(",");
+  } else {
+    if (params.has("season")) state.season = parseInt(params.get("season"));
+    if (params.has("rel")) state.relevance = params.get("rel");
+    if (params.has("cols")) state.visibleColumns = params.get("cols").split(",");
   }
 
   // Sync UI
