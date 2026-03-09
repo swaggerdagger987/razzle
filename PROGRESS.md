@@ -11,7 +11,7 @@
 | 3 | Scenario input panel | DONE | Sand-bg card in dark zone below canvas. Textarea with Caveat placeholder, 6 pre-loaded example scenario chips, "Run All Agents" primary button + per-agent run buttons with color dots. Loading states ("pulling film..."). Custom events dispatched for LLM integration (Task 4). Mobile responsive. |
 | 4 | LLM integration | DONE | Browser-side fetch to OpenRouter-compatible API. loadPersona() fetches persona markdown from /agent-personas/. callLLM() with 20s AbortController timeout, temperature 0.3. Error handling for missing key, timeout, bad response. executeAgent() composes persona + rules + scenario into system/user messages. runAllAgents() runs 5 specialists in parallel via Promise.all, then Razzle synthesizes with peer insights. Custom events dispatched for rendering. |
 | 5 | Specialist agent execution | DONE | 5 specialists fire in parallel via Promise.all. Per-agent status tracker chips (running/done/error) with colored indicators. Individual try/catch per agent — one failing doesn't block others. Canvas bubbles + UI status chips update in real-time. |
-| 6 | Razzle orchestration | - | |
+| 6 | Razzle orchestration | DONE | Already implemented in runAllAgents(): await Promise.all for 5 specialists, then Razzle runs with peerInsights from successful results. razzle.md persona defines Urgency Tier, Conflicts and Resolution, GM Decision Needed sections. buildRules() adds synthesis-specific rules. Edge cases: all fail (early return), partial failures, missing key, LLM error. |
 | 7 | Response rendering | - | |
 
 ## Previous Phase: Phase 6 — War Room: Pixel Engine + Agent Canvas (COMPLETE)
