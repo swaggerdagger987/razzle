@@ -2833,3 +2833,125 @@ def get_analytics_summary() -> dict:
         }
     except Exception:
         return {"total": 0, "by_page": [], "by_day": []}
+
+
+# ---------------------------------------------------------------------------
+# Trade Value Model
+# ---------------------------------------------------------------------------
+# Trade value = composite of:
+#   1. PPR points per game (production) — 50% weight
+#   2. Age depreciation curve (youth premium) — 30% weight
+#   3. Positional scarcity (replacement-level gap) — 20% weight
+# Output: 0-100 scale where 100 = elite dynasty asset
+
+# Peak age and decline rate by position
+_AGE_PEAKS = {"QB": 28, "RB": 24, "WR": 26, "TE": 27}
+_AGE_DECAY = {"QB": 0.04, "RB": 0.10, "WR": 0.06, "TE": 0.05}
+
+# PPR PPG thresholds for elite (100th percentile) by position
+_ELITE_PPG = {"QB": 22.0, "RB": 18.0, "WR": 18.0, "TE": 14.0}
+
+# Positional scarcity multipliers (higher = scarcer = more valuable)
+_SCARCITY = {"QB": 0.85, "RB": 1.15, "WR": 1.0, "TE": 0.90}
+
+
+def _age_value(age, position):
+    """Age curve: 100 at/before peak, decays after. Youth gets slight premium."""
+    if not age or not position:
+        return 50.0
+    peak = _AGE_PEAKS.get(position, 26)
+    decay = _AGE_DECAY.get(position, 0.06)
+    if age <= peak:
+        # Youth premium: younger than peak gets a small boost
+        return min(100.0, 100.0 + (peak - age) * 2.0)
+    else:
+        years_past = age - peak
+        return max(0.0, 100.0 * math.exp(-decay * years_past * years_past))
+
+
+def _production_value(ppg, position):
+    """Production score: PPR PPG normalized to 0-100 vs positional elite threshold."""
+    if not ppg or ppg <= 0:
+        return 0.0
+    elite = _ELITE_PPG.get(position, 16.0)
+    return min(100.0, (ppg / elite) * 100.0)
+
+
+def _scarcity_value(position):
+    """Positional scarcity multiplier normalized to 0-100 base."""
+    return _SCARCITY.get(position, 1.0) * 100.0
+
+
+def compute_trade_value(ppg, age, position):
+    """Composite trade value on 0-100 scale."""
+    prod = _production_value(ppg, position)
+    age_v = _age_value(age, position)
+    scar = _scarcity_value(position)
+    # Weighted composite: production 50%, age 30%, scarcity 20%
+    raw = prod * 0.50 + age_v * 0.30 + scar * 0.20
+    # Normalize: scarcity base is ~100, so raw max is ~100
+    return round(min(100.0, max(0.0, raw)), 1)
+
+
+def fetch_trade_values(player_ids):
+    """Return trade values for a list of player IDs."""
+    if not player_ids:
+        return []
+
+    conn = get_conn()
+
+    # Get latest season
+    row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+    latest_season = row[0] if row and row[0] else 2024
+
+    placeholders = ",".join(["?"] * len(player_ids))
+
+    # Fetch player bio + season PPR PPG
+    query = f"""
+        SELECT
+            p.player_id, p.full_name, p.position, p.team, p.age,
+            SUM(s.fantasy_points_ppr) as total_ppr,
+            COUNT(DISTINCT s.week) as games
+        FROM players p
+        LEFT JOIN player_week_stats s
+            ON s.player_id = p.player_id AND s.season = ?
+        WHERE p.player_id IN ({placeholders})
+        GROUP BY p.player_id
+    """
+    params = [latest_season] + list(player_ids)
+    rows = conn.execute(query, params).fetchall()
+    conn.close()
+
+    results = []
+    for r in rows:
+        pid = r[0]
+        name = r[1] or "Unknown"
+        pos = r[2] or "WR"
+        team = r[3] or "FA"
+        age = r[4]
+        total_ppr = r[5] or 0
+        games = r[6] or 0
+        ppg = round(total_ppr / games, 2) if games > 0 else 0.0
+
+        prod_score = round(_production_value(ppg, pos), 1)
+        age_score = round(_age_value(age, pos), 1)
+        scarcity_score = round(_scarcity_value(pos), 1)
+        trade_value = compute_trade_value(ppg, age, pos)
+
+        results.append({
+            "player_id": pid,
+            "full_name": name,
+            "position": pos,
+            "team": team,
+            "age": age,
+            "ppg": ppg,
+            "games": games,
+            "trade_value": trade_value,
+            "components": {
+                "production": prod_score,
+                "age": age_score,
+                "scarcity": scarcity_score,
+            },
+        })
+
+    return results

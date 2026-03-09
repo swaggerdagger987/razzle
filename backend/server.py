@@ -580,6 +580,18 @@ Sitemap: https://razzle.lol/sitemap.xml
 
 
 # ---------------------------------------------------------------------------
+# Trade Value Model
+# ---------------------------------------------------------------------------
+
+@app.get("/api/trade/values")
+def trade_values(player_ids: str = ""):
+    ids = [pid.strip() for pid in player_ids.split(",") if pid.strip()]
+    if not ids:
+        return {"players": []}
+    return {"players": live_data.fetch_trade_values(ids)}
+
+
+# ---------------------------------------------------------------------------
 # Analytics (lightweight page views)
 # ---------------------------------------------------------------------------
 

@@ -1,6 +1,21 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 37 — (next phase pending)
+## Current Phase: Phase 37 — Trade Analyzer
+
+**Exit criterion:** Trade Analyzer accessible from Lab toolbar via "Trade" button. User searches and adds players to "Give" and "Get" sides. Dynamic trade value model computes player values from stats (PPR PPG, age curve, positional scarcity). Value bars, win/loss/fair verdict, Razzle commentary. PNG export with watermark. Mobile responsive. Shareable.
+
+### Phase 37 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend trade value model + API endpoint | DONE | Production 50% + age curve 30% + scarcity 20%, 0-100 scale |
+| 2 | Trade Analyzer UI — two-sided card with player search | | |
+| 3 | Value comparison display + verdict + commentary | | |
+| 4 | Trade card PNG export with watermark | | |
+| 5 | Deploy + smoke test | | |
+
+### Decisions Log
+- **Trade value model**: Chose composite of PPR PPG (production), age depreciation curve (exponential decay past positional peak), and positional scarcity (RB premium). Simple, transparent, no external data dependency. Dynasty-oriented: penalizes aging RBs heavily, rewards young producers.
 
 ## Previous Phase: Phase 36 — Player Watchlist + Tier Board (COMPLETE)
 
