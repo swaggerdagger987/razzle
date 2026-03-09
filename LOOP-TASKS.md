@@ -24,14 +24,8 @@
 **Result**: Half-PPR and HPPR/G already existed from prior work. Added PPFD (PPR + 1pt per first down) and PPFD/G computed columns to _enrich_with_derived_stats(). First downs data exists in DB (passing/rushing/receiving_first_downs). Added PPFD and PPFD/G to COLUMNS in lab.js. Updated PPR tooltip to mention superflex QB scoring relevance.
 
 ## Task 5: Add custom scoring builder
-**Status**: PENDING
-**Acceptance Criteria**:
-- Custom Scoring button in Lab toolbar opens modal
-- Default PPR weights pre-filled, user adjustable
-- Saving adds computed column to table
-- Config saved to localStorage, persists
-- Up to 3 named configs
-- Modal follows Razzle design system
+**Status**: PASS
+**Result**: Added Custom Scoring button to Lab toolbar. Modal overlay with 12 scoring weight inputs (pass yds, pass TDs, INTs, rush yds, rush TDs, receptions, rec yds, rec TDs, fumbles lost, 2PT conversions). Default PPR weights pre-filled. Save & Apply creates computed column in table. Up to 3 named configs stored in localStorage. Load/delete existing configs. Columns registered on startup so they persist across sessions. Modal follows Razzle design system (chunky borders, sand bg, Space Mono).
 
 ## Task 6: Deploy + smoke test computed columns
 **Status**: PENDING
@@ -49,8 +43,8 @@
 ## Loop State
 ```
 Current Phase: 40
-Current Task: 5
+Current Task: 6
 Current Stage: BUILD
 Attempt: 1
-Tasks Completed: 4/6
+Tasks Completed: 5/6
 ```

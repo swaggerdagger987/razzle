@@ -462,6 +462,7 @@ async function fetchAndRenderNFL() {
     state.season = data.season || state.season;
 
     computeFormulaValues();
+    computeCustomScoringValues();
     computePosRanks();
     loading.style.display = "none";
     renderTable();
@@ -1520,6 +1521,163 @@ function computeFormulaValues() {
   }
 }
 
+// ─── Custom Scoring Builder ──────────────────────────────────────
+const SCORING_STATS = [
+  { key: "passing_yards", label: "Pass Yards", default: 0.04 },
+  { key: "passing_tds", label: "Pass TDs", default: 4 },
+  { key: "interceptions", label: "Interceptions", default: -2 },
+  { key: "rushing_yards", label: "Rush Yards", default: 0.1 },
+  { key: "rushing_tds", label: "Rush TDs", default: 6 },
+  { key: "receptions", label: "Receptions", default: 1 },
+  { key: "receiving_yards", label: "Rec Yards", default: 0.1 },
+  { key: "receiving_tds", label: "Rec TDs", default: 6 },
+  { key: "fumbles_lost", label: "Fumbles Lost", default: -2 },
+  { key: "passing_2pt_conversions", label: "Pass 2PT", default: 2 },
+  { key: "rushing_2pt_conversions", label: "Rush 2PT", default: 2 },
+  { key: "receiving_2pt_conversions", label: "Rec 2PT", default: 2 },
+];
+
+function getCustomScoringConfigs() {
+  try { return JSON.parse(localStorage.getItem("razzle_custom_scoring") || "[]"); }
+  catch { return []; }
+}
+
+function saveCustomScoringConfigs(configs) {
+  localStorage.setItem("razzle_custom_scoring", JSON.stringify(configs));
+}
+
+function openCustomScoring() {
+  const overlay = document.getElementById("customScoringOverlay");
+  overlay.classList.add("open");
+  renderScoringWeights();
+  populateScoringSelect();
+}
+
+function closeCustomScoring(e) {
+  if (e && e.target !== e.currentTarget) return;
+  document.getElementById("customScoringOverlay").classList.remove("open");
+}
+
+function renderScoringWeights(weights) {
+  const container = document.getElementById("customScoringWeights");
+  container.innerHTML = SCORING_STATS.map(s => {
+    const val = weights ? (weights[s.key] !== undefined ? weights[s.key] : 0) : s.default;
+    return `<div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+      <label style="flex:1; font-family:var(--font-mono); font-size:12px;">${s.label}</label>
+      <input type="number" step="0.01" data-stat="${s.key}" value="${val}"
+        style="width:70px; font-family:var(--font-mono); font-size:12px; padding:4px 6px;
+               border:2px solid var(--ink); border-radius:4px; background:var(--bg); color:var(--ink); text-align:right;">
+    </div>`;
+  }).join("");
+}
+
+function populateScoringSelect() {
+  const sel = document.getElementById("customScoringSelect");
+  const configs = getCustomScoringConfigs();
+  sel.innerHTML = '<option value="">Load saved...</option>' +
+    configs.map((c, i) => `<option value="${i}">${c.name}</option>`).join("");
+}
+
+function loadCustomScoringConfig(idx) {
+  if (idx === "") return;
+  const configs = getCustomScoringConfigs();
+  const config = configs[parseInt(idx)];
+  if (!config) return;
+  document.getElementById("customScoringName").value = config.name;
+  renderScoringWeights(config.weights);
+}
+
+function saveCustomScoring() {
+  const name = document.getElementById("customScoringName").value.trim();
+  if (!name) { alert("Enter a config name"); return; }
+
+  const weights = {};
+  document.querySelectorAll("#customScoringWeights input[data-stat]").forEach(el => {
+    weights[el.dataset.stat] = parseFloat(el.value) || 0;
+  });
+
+  let configs = getCustomScoringConfigs();
+  const existIdx = configs.findIndex(c => c.name === name);
+  if (existIdx >= 0) {
+    configs[existIdx].weights = weights;
+  } else {
+    if (configs.length >= 3) {
+      alert("Max 3 configs. Delete one first.");
+      return;
+    }
+    configs.push({ name, weights });
+  }
+  saveCustomScoringConfigs(configs);
+  populateScoringSelect();
+
+  // Register column + compute values + add to visible columns
+  const colKey = `custom_${name.toLowerCase().replace(/[^a-z0-9]/g, "_")}`;
+  COLUMNS[colKey] = { label: name, group: "Custom Scoring", decimals: 1, derived: true,
+    tip: "Custom scoring: " + Object.entries(weights).filter(([,v]) => v !== 0).map(([k,v]) => `${v} × ${k.replace(/_/g, " ")}`).join(", ") };
+
+  // Compute for current items
+  computeCustomScoringValues();
+
+  // Add to visible columns if not already there
+  if (!state.visibleColumns.includes(colKey)) {
+    state.visibleColumns.push(colKey);
+  }
+
+  renderColumnPicker();
+  renderTable();
+  saveStateToURL();
+  closeCustomScoring();
+}
+
+function deleteCustomScoring() {
+  const sel = document.getElementById("customScoringSelect");
+  const idx = parseInt(sel.value);
+  if (isNaN(idx)) { alert("Select a config to delete"); return; }
+  const configs = getCustomScoringConfigs();
+  const config = configs[idx];
+  if (!config) return;
+
+  // Remove column from visible columns
+  const colKey = `custom_${config.name.toLowerCase().replace(/[^a-z0-9]/g, "_")}`;
+  state.visibleColumns = state.visibleColumns.filter(c => c !== colKey);
+  delete COLUMNS[colKey];
+
+  configs.splice(idx, 1);
+  saveCustomScoringConfigs(configs);
+  populateScoringSelect();
+  document.getElementById("customScoringName").value = "";
+  renderScoringWeights();
+  renderColumnPicker();
+  renderTable();
+}
+
+function computeCustomScoringValues() {
+  const configs = getCustomScoringConfigs();
+  for (const config of configs) {
+    const colKey = `custom_${config.name.toLowerCase().replace(/[^a-z0-9]/g, "_")}`;
+    for (const player of state.items) {
+      let score = 0;
+      for (const [stat, weight] of Object.entries(config.weights)) {
+        const val = player[stat];
+        if (val !== null && val !== undefined) {
+          score += val * weight;
+        }
+      }
+      player[colKey] = Math.round(score * 10) / 10;
+    }
+  }
+}
+
+function loadCustomScoringColumns() {
+  // Called on init — register saved configs as columns
+  const configs = getCustomScoringConfigs();
+  for (const config of configs) {
+    const colKey = `custom_${config.name.toLowerCase().replace(/[^a-z0-9]/g, "_")}`;
+    COLUMNS[colKey] = { label: config.name, group: "Custom Scoring", decimals: 1, derived: true,
+      tip: "Custom scoring: " + Object.entries(config.weights).filter(([,v]) => v !== 0).map(([k,v]) => `${v} × ${k.replace(/_/g, " ")}`).join(", ") };
+  }
+}
+
 // ─── Non-applicable stats per position (show "—" instead of 0) ──
 // If a player has 0 in a stat that's not primary for their position, show dash.
 // Only applies to counting stats — derived/rate stats handled by null.
@@ -1589,8 +1747,9 @@ function computePosRanks() {
   }
 }
 
-// Load formulas on startup
+// Load formulas and custom scoring on startup
 loadFormulas();
+loadCustomScoringColumns();
 
 // ─── Image export ────────────────────────────────────────────────
 function exportImage() {
