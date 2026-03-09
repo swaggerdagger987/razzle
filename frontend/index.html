@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Razzle — Fantasy Football Bloomberg Terminal</title>
-<meta property="og:title" content="Razzle — Fantasy Football Bloomberg Terminal">
-<meta property="og:description" content="Free data terminal for fantasy football. 1200+ players, 5 seasons, 60+ stats, custom formulas, career arcs. Built different.">
+<meta property="og:title" content="Razzle — Fantasy Football Bloomberg Terminal | NFL + College Data">
+<meta property="og:description" content="Free fantasy football data terminal. NFL stats + college production + prospect scoring. Dynasty Value Score, Big Board, Class Analytics, custom formulas. The tool Reddit can't stop screenshotting.">
 <meta property="og:site_name" content="razzle.lol">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
@@ -146,6 +146,107 @@
     font-size: 13px;
     color: var(--ink-medium);
     line-height: 1.6;
+  }
+
+  /* ===== DRAFT SEASON SHOWCASE ===== */
+  .draft-section {
+    background: var(--blue-light);
+    padding: 48px 24px;
+    margin: 0;
+    border-top: 3px solid var(--ink);
+    border-bottom: 3px solid var(--ink);
+  }
+
+  .draft-inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .draft-section .section-label { color: var(--blue); }
+
+  .draft-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-top: 20px;
+  }
+
+  .draft-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    overflow: hidden;
+    transition: all 0.15s;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .draft-card:hover {
+    box-shadow: 6px 6px 0 var(--ink);
+    transform: translate(-2px, -2px);
+  }
+
+  .draft-card-stripe {
+    height: 6px;
+    background: var(--blue);
+  }
+
+  .draft-card-body {
+    padding: 16px;
+  }
+
+  .draft-card-badge {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 3px 10px;
+    border: 2px solid var(--blue);
+    border-radius: 20px;
+    background: var(--blue-light);
+    color: var(--blue);
+    transform: rotate(-2deg);
+    margin-bottom: 8px;
+  }
+
+  .draft-card h3 {
+    font-family: var(--font-display);
+    font-size: 16px;
+    margin-bottom: 6px;
+  }
+
+  .draft-card p {
+    font-size: 13px;
+    color: var(--ink-medium);
+    line-height: 1.6;
+    margin-bottom: 6px;
+  }
+
+  .draft-card-note {
+    font-family: var(--font-hand);
+    font-size: 15px;
+    color: var(--ink-light);
+  }
+
+  .draft-cta {
+    text-align: center;
+    margin-top: 24px;
+  }
+
+  .draft-cta p {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-medium);
+    margin-bottom: 12px;
+  }
+
+  @media (max-width: 768px) {
+    .draft-section { padding: 32px 16px; }
+    .draft-grid { grid-template-columns: 1fr; }
   }
 
   /* ===== WAR ROOM DEMO ===== */
@@ -458,7 +559,7 @@
 <div class="hero">
   <div class="hero-mascot">🐯</div>
   <h1>Fantasy football's <span>Bloomberg terminal</span></h1>
-  <div class="hero-sub">1200+ players. 5 seasons. 60+ stats. Custom formulas. Zero cost.</div>
+  <div class="hero-sub">NFL + College data. 1200+ NFL players. 9800+ college players. 329 prospects scored. Zero cost.</div>
   <div class="hero-cta">
     <a href="/lab.html" class="btn-hero btn-hero-primary">Open The Lab</a>
     <a href="#waitlist" class="btn-hero btn-hero-secondary">Join Waitlist</a>
@@ -468,39 +569,95 @@
 <!-- FEATURES -->
 <div class="section">
   <div class="section-label">The Lab — Free Forever</div>
-  <h2>Every stat. Every filter. Every angle.</h2>
-  <p class="section-desc">Full nflverse data depth. 5 seasons of NFL data, 60+ metrics including target share, WOPR, EPA, and efficiency stats. Career arcs, custom formulas, radar charts, scatter plots. The tool Reddit power users can't stop screenshotting.</p>
+  <h2>Three data universes. One screener.</h2>
+  <p class="section-desc">NFL stats, college production, and prospect scoring in one unified terminal. 5 seasons of nflverse data, 6 years of college stats from sportsdataverse, 329 scored prospects. Custom formulas, radar charts, scatter plots, heat maps. The tool Reddit power users can't stop screenshotting.</p>
 
   <div class="features">
     <div class="feature-card">
-      <span class="feature-icon">📊</span>
-      <h3>Screener</h3>
-      <p>1200+ players across 5 seasons. Career aggregates, per-game averages, 7 column presets from PPR to Advanced.</p>
+      <span class="feature-icon">🏈</span>
+      <h3>NFL Screener</h3>
+      <p>1200+ players, 60+ metrics. Target share, WOPR, EPA, air yards. 8 column presets from PPR to Dynasty Rankings.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🎓</span>
+      <h3>College Screener</h3>
+      <p>9800+ college players across 6 seasons. Passing, rushing, receiving splits. Efficiency stats, per-game averages, dominator rating.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🎯</span>
+      <h3>Prospect Profiles</h3>
+      <p>329 scored prospects. Combine percentiles, spider charts, NFL athletic comps, college production stats. Full scouting report in one click.</p>
     </div>
     <div class="feature-card">
       <span class="feature-icon">🧪</span>
       <h3>Custom Formulas</h3>
-      <p>Blend stats into weighted composite scores. Your secret sauce becomes a sortable, shareable column.</p>
+      <p>Blend stats into weighted composite scores. Your secret sauce becomes a sortable, shareable column. Works across all three universes.</p>
     </div>
     <div class="feature-card">
-      <span class="feature-icon">🎯</span>
-      <h3>Advanced Metrics</h3>
-      <p>Target share, WOPR, RACR, EPA, air yards share, DAKOTA. The stats that separate casuals from analysts.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">📈</span>
-      <h3>Career Arcs</h3>
-      <p>Season-over-season trend lines. Spot breakouts, track declines, see the full career trajectory.</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">🔗</span>
-      <h3>Shareable URLs</h3>
-      <p>Every filter, sort, and column config serializes to a URL. Share your exact view.</p>
+      <span class="feature-icon">📊</span>
+      <h3>Dynasty Value Score</h3>
+      <p>Age-adjusted PPR production composite. Position-specific aging curves. Tier badges from Elite to Flier. Exportable rankings.</p>
     </div>
     <div class="feature-card">
       <span class="feature-icon">📸</span>
-      <h3>Export to PNG</h3>
-      <p>One-click image export with Razzle watermark baked in. Screenshot-ready for Reddit.</p>
+      <h3>Share to Reddit</h3>
+      <p>One-click PNG export with watermark. Shareable URLs. Auto-generated Reddit titles. Every screenshot is a billboard.</p>
+    </div>
+  </div>
+</div>
+
+<!-- DRAFT SEASON SHOWCASE -->
+<div class="draft-section">
+  <div class="draft-inner">
+    <div class="section-label">Draft Season 2025</div>
+    <h2 style="font-family:var(--font-display); font-size:28px; margin-bottom:8px;">Built for draft week.</h2>
+    <p class="section-desc">The Lab has everything a dynasty manager needs to evaluate the incoming class. College production, athletic profiles, composite scoring, and cross-year analytics — all in one place.</p>
+
+    <div class="draft-grid">
+      <a href="/lab.html?u=prospects" class="draft-card">
+        <div class="draft-card-stripe"></div>
+        <div class="draft-card-body">
+          <div class="draft-card-badge">Prospects</div>
+          <h3>Big Board</h3>
+          <p>329 prospects scored by Razzle Prospect Score. Athletic percentiles, combine data, draft capital, tier bands from Elite to Flier. Exportable as PNG.</p>
+          <div class="draft-card-note">the board r/DynastyFF deserves</div>
+        </div>
+      </a>
+
+      <a href="/lab.html?u=prospects" class="draft-card">
+        <div class="draft-card-stripe"></div>
+        <div class="draft-card-body">
+          <div class="draft-card-badge">Analytics</div>
+          <h3>Class Analytics</h3>
+          <p>Year-over-year draft class comparison (2020-2026). Average RPS, tier distribution, class grades, position breakdowns. See which classes hit and which didn't.</p>
+          <div class="draft-card-note">the chart that settles arguments</div>
+        </div>
+      </a>
+
+      <a href="/lab.html?u=college&season=2024" class="draft-card">
+        <div class="draft-card-stripe"></div>
+        <div class="draft-card-body">
+          <div class="draft-card-badge">College</div>
+          <h3>College Production</h3>
+          <p>6 seasons of college stats from sportsdataverse. Passing, rushing, receiving splits. Dominator rating, efficiency metrics, career arcs. 9800+ players.</p>
+          <div class="draft-card-note">the film that numbers can't lie about</div>
+        </div>
+      </a>
+
+      <a href="/lab.html?preset=dynasty-rankings" class="draft-card">
+        <div class="draft-card-stripe" style="background:var(--orange)"></div>
+        <div class="draft-card-body">
+          <div class="draft-card-badge" style="border-color:var(--orange); background:var(--orange-light); color:var(--orange);">Dynasty</div>
+          <h3>Dynasty Value Score</h3>
+          <p>Age-adjusted PPR production composite with position-specific aging curves. QB peaks 26-30, RB 22-25, WR 24-28, TE 25-29. Tier badges: Elite, Star, Starter, Bench.</p>
+          <div class="draft-card-note">know who's rising and who's fading</div>
+        </div>
+      </a>
+    </div>
+
+    <div class="draft-cta">
+      <p>draft week is coming. be the most prepared manager in your league.</p>
+      <a href="/lab.html?u=prospects" class="btn-hero btn-hero-primary" style="background:var(--blue);">Explore Prospects</a>
     </div>
   </div>
 </div>
@@ -565,7 +722,7 @@
 <!-- FOOTER -->
 <div class="site-footer">
   <p>built different — <a href="/">razzle.lol</a></p>
-  <p style="margin-top:6px;">powered by nflverse | made for Reddit</p>
+  <p style="margin-top:6px;">powered by nflverse + sportsdataverse | made for Reddit</p>
 </div>
 
 <script>

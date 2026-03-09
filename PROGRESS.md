@@ -1,6 +1,18 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 20 — Dynasty Comparison Cards + Quick Rankings Export (COMPLETE)
+## Current Phase: Phase 21 — Landing Page Draft Week Overhaul
+
+**Exit criterion:** Landing page (index.html) showcases the full product: NFL data + College data + Prospect scoring. Hero copy updated to highlight dual-data platform. Feature cards include college screener, prospect profiles, Big Board, DVS, Class Analytics. New "Draft Season" section with prospect-specific showcase. Meta tags updated for SEO/social. All copy reflects current capabilities (3 universes, 19k+ college player-seasons, 329 prospects, DVS scoring). Follows Razzle design system. Deployed to Render.
+
+### Phase 21 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Update hero copy, meta tags, and feature cards for NFL+College+Prospects | TODO | |
+| 2 | Add Draft Season showcase section with prospect features | TODO | |
+| 3 | Deploy + smoke test | TODO | |
+
+## Previous Phase: Phase 20 — Dynasty Comparison Cards + Quick Rankings Export (COMPLETE)
 
 **Exit criterion MET:** NFL player comparison mode has full PNG export (side-by-side comparison cards with DVS, age, position-colored headers, key stats, radar overlay). Quick rankings export generates "Top N at Position" as a shareable PNG with DVS tier badges. Unified share modal provides copy URL + export PNG + suggested Reddit title. All exports follow Razzle design system (sand bg, chunky borders, watermark). Deployed to Render.
 
