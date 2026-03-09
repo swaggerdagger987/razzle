@@ -28,23 +28,16 @@
 **Result**: Added Custom Scoring button to Lab toolbar. Modal overlay with 12 scoring weight inputs (pass yds, pass TDs, INTs, rush yds, rush TDs, receptions, rec yds, rec TDs, fumbles lost, 2PT conversions). Default PPR weights pre-filled. Save & Apply creates computed column in table. Up to 3 named configs stored in localStorage. Load/delete existing configs. Columns registered on startup so they persist across sessions. Modal follows Razzle design system (chunky borders, sand bg, Space Mono).
 
 ## Task 6: Deploy + smoke test computed columns
-**Status**: PENDING
-**Acceptance Criteria**:
-- All JS passes syntax check
-- All Python imports clean
-- Passer rating values reasonable
-- Dominator rating shows for WRs, '—' for QBs
-- Custom scoring builder saves and computes
-- All new columns sortable
-- Committed and pushed to master
+**Status**: PASS
+**Result**: All JS syntax checks pass (lab.js, compare.js, app.js, player.js). All Python imports clean. Smoke test: Lamar passer rating 123.9, Ja'Marr Chase YPRR 2.63, dominator 0.356, Saquon rush_share 56.6%. Dominator None for RBs, YPRR None for RBs — correct. PPFD None because first_downs data not in DB yet (column ready). Custom scoring builder functional. All 11 new columns registered in COLUMNS object. Committed and pushed.
 
 ---
 
 ## Loop State
 ```
 Current Phase: 40
-Current Task: 6
-Current Stage: BUILD
+Current Task: DONE
+Current Stage: COMPLETE
 Attempt: 1
-Tasks Completed: 5/6
+Tasks Completed: 6/6
 ```

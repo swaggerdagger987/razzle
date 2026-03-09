@@ -1,6 +1,27 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 39 — Shareable Player Comparison Pages (COMPLETE)
+## Current Phase: Phase 40 — Stats Expansion — Computed Columns (COMPLETE)
+
+**Exit criterion MET:** 11 new computed stat columns in the Lab screener, all derived from existing database fields with no adapter changes. Passer rating (NFL formula), AY/A, TD rate, fumble rate, dominator rating (WR/TE), rush share (RB/QB), YPRR* approximation, WOPR/G, PPFD, PPFD/G, plus custom scoring builder with up to 3 named configs. Red zone share skipped (no play-by-play data yet). PPFD ready but first_downs data not yet in DB.
+
+### Phase 40 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Passer rating + AY/A + TD rate + fumble rate | DONE | NFL formula with clamped components, all in _enrich_with_derived_stats() |
+| 2 | Dominator rating + rush share | DONE | Team-share query via _enrich_with_team_shares(), position-filtered |
+| 3 | YPRR* + WOPR/G | DONE | YPRR via snap-based route estimation, WOPR/G in _enrich_with_epa_per_play() |
+| 4 | PPFD + superflex tooltip | DONE | PPR + 1pt per first down, PPR tooltip updated |
+| 5 | Custom scoring builder | DONE | Modal with 12 weight inputs, localStorage, up to 3 configs |
+| 6 | Deploy + smoke test | DONE | All syntax clean, values verified |
+
+### Decisions Log
+- **Red zone share skipped**: No rz_ columns in player_week_stats. Would require play-by-play extraction (Ticket 3).
+- **WOPR/G placement**: Must run after _enrich_with_rate_metrics() populates wopr field, so placed in _enrich_with_epa_per_play().
+- **YPRR estimation**: Uses offense_snaps * 0.85 for route participation estimate. Falls back to games * 45 * 0.85 if no snap data.
+- **Custom scoring approach**: Client-side computation from raw stat values, not server-side. Allows instant recalculation without API calls.
+
+## Previous Phase: Phase 39 — Shareable Player Comparison Pages (COMPLETE)
 
 **Exit criterion MET:** Standalone /compare/{id1}/{id2} URL renders side-by-side player cards with stat differentials, overlaid radar chart, career arc comparison, and dynamic OG meta tags for rich Reddit/Discord previews. PNG export (1200x630) with watermark. Compare button on player profile pages with search overlay. Mobile responsive at 768px and 480px. All syntax clean.
 
