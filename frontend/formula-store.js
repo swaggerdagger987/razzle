@@ -462,6 +462,96 @@ function renderFormulaStore() {
   `;
 }
 
+// --- Publishing Flow ---
+
+function isFormulaPublished(name) {
+  const published = JSON.parse(localStorage.getItem("razzle_store_published") || "[]");
+  return published.some(f => f.name === name);
+}
+
+function openPublishFlow(formulaName) {
+  const formula = state.formulas.find(f => f.name === formulaName);
+  if (!formula) return;
+
+  // Close formula builder, open publish modal
+  document.getElementById("formulaOverlay").classList.remove("open");
+
+  const overlay = document.getElementById("publishOverlay");
+  overlay.classList.add("open");
+
+  // Populate publish form
+  document.getElementById("publishName").value = formula.name;
+  document.getElementById("publishDescription").value = "";
+  document.getElementById("publishCreator").value = localStorage.getItem("razzle_store_username") || "";
+
+  // Reset position checkboxes
+  document.querySelectorAll(".publish-pos-check").forEach(cb => cb.checked = false);
+
+  // Store which formula we're publishing
+  overlay.dataset.formulaName = formula.name;
+}
+
+function closePublishFlow(e) {
+  if (e && e.target !== e.currentTarget) return;
+  document.getElementById("publishOverlay").classList.remove("open");
+}
+
+function submitPublish() {
+  const overlay = document.getElementById("publishOverlay");
+  const formulaName = overlay.dataset.formulaName;
+  const formula = state.formulas.find(f => f.name === formulaName);
+  if (!formula) return;
+
+  const name = document.getElementById("publishName").value.trim();
+  const description = document.getElementById("publishDescription").value.trim();
+  const creator = document.getElementById("publishCreator").value.trim();
+
+  if (!name || !description || !creator) {
+    if (!name) document.getElementById("publishName").style.borderColor = "var(--red)";
+    if (!description) document.getElementById("publishDescription").style.borderColor = "var(--red)";
+    if (!creator) document.getElementById("publishCreator").style.borderColor = "var(--red)";
+    return;
+  }
+
+  // Get selected positions
+  const positions = [];
+  document.querySelectorAll(".publish-pos-check:checked").forEach(cb => {
+    positions.push(cb.value);
+  });
+  if (!positions.length) positions.push("QB", "RB", "WR", "TE"); // Default: all positions
+
+  // Save creator name for future
+  localStorage.setItem("razzle_store_username", creator);
+
+  // Create published formula
+  const id = "user_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8);
+  const published = {
+    id,
+    name,
+    creator,
+    description,
+    positions,
+    components: formula.components.map(c => ({ stat: c.stat, weight: c.weight })),
+    installs: 0,
+    ratings: [],
+    reviews: [],
+    createdAt: new Date().toISOString().split("T")[0]
+  };
+
+  // Save to localStorage
+  const allPublished = JSON.parse(localStorage.getItem("razzle_store_published") || "[]");
+  // Remove existing with same name
+  const filtered = allPublished.filter(f => f.name !== name);
+  filtered.push(published);
+  localStorage.setItem("razzle_store_published", JSON.stringify(filtered));
+
+  // Close publish flow
+  closePublishFlow();
+
+  // Re-render saved formulas to show "Published" badge
+  renderSavedFormulas();
+}
+
 function renderFormulaCard(formula) {
   const avgRating = getAvgRating(formula);
   const ratingCount = getRatingCount(formula);

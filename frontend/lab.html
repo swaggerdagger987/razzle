@@ -934,6 +934,49 @@
   </div>
 </div>
 
+<!-- PUBLISH TO STORE -->
+<div class="filter-modal-overlay" id="publishOverlay" onclick="closePublishFlow(event)">
+  <div class="filter-modal" style="width:420px;" onclick="event.stopPropagation()">
+    <h3>Publish to Store</h3>
+    <p style="font-family:var(--font-hand); font-size:18px; color:var(--ink-light); margin-bottom:12px;">
+      share your formula with the community
+    </p>
+    <div class="filter-modal-row">
+      <input type="text" class="input-chunky" id="publishName" placeholder="formula name" style="flex:1" readonly>
+    </div>
+    <div class="filter-modal-row">
+      <input type="text" class="input-chunky" id="publishCreator" placeholder="your name" style="flex:1">
+    </div>
+    <div class="filter-modal-row">
+      <textarea class="input-chunky" id="publishDescription" placeholder="describe what this formula does..." style="flex:1; min-height:60px; resize:vertical; font-family:var(--font-mono); font-size:12px;"></textarea>
+    </div>
+    <div style="margin-bottom:12px;">
+      <div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; color:var(--ink-light); letter-spacing:1px; margin-bottom:6px;">Position Tags</div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <label style="display:flex; align-items:center; gap:4px; font-family:var(--font-mono); font-size:12px; cursor:pointer;">
+          <input type="checkbox" class="publish-pos-check" value="QB" style="accent-color:var(--pos-qb);"> QB
+        </label>
+        <label style="display:flex; align-items:center; gap:4px; font-family:var(--font-mono); font-size:12px; cursor:pointer;">
+          <input type="checkbox" class="publish-pos-check" value="RB" style="accent-color:var(--pos-rb);"> RB
+        </label>
+        <label style="display:flex; align-items:center; gap:4px; font-family:var(--font-mono); font-size:12px; cursor:pointer;">
+          <input type="checkbox" class="publish-pos-check" value="WR" style="accent-color:var(--pos-wr);"> WR
+        </label>
+        <label style="display:flex; align-items:center; gap:4px; font-family:var(--font-mono); font-size:12px; cursor:pointer;">
+          <input type="checkbox" class="publish-pos-check" value="TE" style="accent-color:var(--pos-te);"> TE
+        </label>
+      </div>
+    </div>
+    <div style="font-family:var(--font-hand); font-size:15px; color:var(--ink-light); margin-bottom:12px; padding:8px; background:var(--bg); border-radius:6px; border:1px dashed var(--ink-faint);">
+      weights stay hidden — only stat names are shown in the store
+    </div>
+    <div class="filter-modal-actions">
+      <button class="btn-chunky" onclick="closePublishFlow()">Cancel</button>
+      <button class="btn-primary" onclick="submitPublish()">Publish</button>
+    </div>
+  </div>
+</div>
+
 <!-- FORMULA STORE -->
 <div class="filter-modal-overlay" id="storeOverlay" onclick="closeFormulaStore(event)">
   <div class="store-modal" onclick="event.stopPropagation()">

@@ -20,8 +20,8 @@
 **Accept when**: Formula builder has "Publish to Store" button. Publishing flow asks for name, description, position tags. Published formulas appear in store. Weights are NOT exposed in the store — only the blended score is visible.
 **Depends on**: Task 1
 **Size**: M
-**Status**: PENDING
-**Attempt**: 0/3
+**Status**: PASS
+**Attempt**: 1/3
 
 ## Task 3: Formula ratings/reviews
 **Requirement**: "Star rating + short review per formula. Sort by rating, popularity, newest."
@@ -60,9 +60,9 @@
 ## Loop State
 ```
 Current Phase: 9
-Current Task: 2
+Current Task: 3
 Current Stage: DESIGN
 Attempt: 1/3
-Tasks Completed: 1/6
+Tasks Completed: 2/6
 Loop Iterations: 0
 ```

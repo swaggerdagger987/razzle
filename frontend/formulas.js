@@ -110,12 +110,19 @@ function renderSavedFormulas() {
         const col = COLUMNS[c.stat];
         return `${col ? col.label : c.stat} × ${c.weight}%`;
       }).join(" + ");
-      return `<div style="display:flex; align-items:center; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--ink-faint);">
-        <div>
+      const isPublished = f.fromStore || isFormulaPublished(f.name);
+      const publishBtn = isPublished
+        ? `<span style="font-family:var(--font-mono); font-size:9px; color:var(--green); font-weight:700; padding:2px 6px; border:1.5px solid var(--green); border-radius:4px;">Published</span>`
+        : `<button class="btn-chunky" style="font-size:9px; padding:2px 8px;" onclick="event.stopPropagation(); openPublishFlow('${f.name.replace(/'/g, "\\'")}')">Publish</button>`;
+      return `<div style="display:flex; align-items:center; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--ink-faint); gap:6px;">
+        <div style="flex:1; min-width:0;">
           <strong style="font-family:var(--font-display); font-size:13px;">${f.name}</strong>
           <span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); margin-left:8px;">${desc}</span>
         </div>
-        <span style="cursor:pointer; color:var(--red); font-weight:700; font-size:14px;" onclick="deleteFormula('${f.name}')">×</span>
+        <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
+          ${publishBtn}
+          <span style="cursor:pointer; color:var(--red); font-weight:700; font-size:14px;" onclick="deleteFormula('${f.name}')">×</span>
+        </div>
       </div>`;
     }).join("");
 }
