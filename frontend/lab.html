@@ -788,6 +788,83 @@
     }
   }
 
+  /* ===== PROSPECT TIER VIEW ===== */
+  .tier-group {
+    margin-bottom: 20px;
+  }
+
+  .tier-badge {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 20px;
+    border: 2px solid var(--ink);
+    color: white;
+    box-shadow: 2px 2px 0 var(--ink);
+    transform: rotate(-2deg);
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+  }
+
+  .tier-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px;
+  }
+
+  .tier-card {
+    padding: 12px;
+    border: 2px solid var(--ink);
+    border-radius: 10px;
+    background: var(--bg);
+    box-shadow: 2px 2px 0 var(--ink);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .tier-card:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+
+  .tier-card-name {
+    font-family: var(--font-display);
+    font-size: 15px;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+
+  .tier-card-meta {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-light);
+    margin-top: 2px;
+  }
+
+  .tier-card-pct {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    margin-top: 6px;
+    line-height: 1;
+  }
+
+  .tier-card-metrics {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-medium);
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 480px) {
+    .tier-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
   /* ===== FORMULA STORE ===== */
   .store-modal {
     background: var(--bg-card);
@@ -965,6 +1042,7 @@
     <button class="btn-chunky" id="formulaBtn" onclick="openFormulaBuilder()">Formulas</button>
     <button class="btn-chunky" onclick="openFormulaStore()">Store</button>
     <button class="btn-chunky" onclick="openChartPanel()">Charts</button>
+    <button class="btn-chunky" id="tiersBtn" onclick="openTierView()" style="display:none;">Tiers</button>
     <button class="btn-chunky" onclick="copyShareURL()">Share URL</button>
     <button class="btn-primary" onclick="exportImage()">Export PNG</button>
 
@@ -1096,6 +1174,23 @@
     </div>
     <div style="margin-top:12px; display:flex; justify-content:flex-end;">
       <button class="btn-chunky" onclick="closeCompare()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- PROSPECT TIER VIEW -->
+<div class="filter-modal-overlay" id="tierOverlay" onclick="closeTierView(event)">
+  <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:900px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+      <h3 style="margin:0;">Draft Class Athletic Tiers</h3>
+      <div id="tierPositionBtns" style="display:flex; gap:6px; margin-left:auto;"></div>
+      <button class="btn-primary" onclick="exportTierImage()" style="font-size:11px; padding:6px 14px;">Export PNG</button>
+    </div>
+    <div id="tierContent">
+      <div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">pick a position above</div>
+    </div>
+    <div style="margin-top:12px; display:flex; justify-content:flex-end;">
+      <button class="btn-chunky" onclick="closeTierView()">Close</button>
     </div>
   </div>
 </div>

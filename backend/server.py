@@ -202,6 +202,11 @@ def prospects_compare(names: str = "", draft_year: int = 0):
     return live_data.fetch_prospects_compare(names=name_list, draft_year=draft_year)
 
 
+@app.get("/api/prospect-tiers")
+def prospect_tiers(position: str = "", draft_year: int = 0):
+    return live_data.fetch_prospect_tiers(position=position, draft_year=draft_year)
+
+
 @app.get("/api/prospect-comps")
 def prospect_comps(name: str = "", position: str = "", draft_year: int = 0, limit: int = 5):
     return live_data.fetch_prospect_comps(name=name, position=position, draft_year=draft_year, limit=min(limit, 10))

@@ -1134,6 +1134,106 @@ def fetch_prospect_comps(name, position="", draft_year=0, limit=5):
     }
 
 
+def fetch_prospect_tiers(position, draft_year=0):
+    """Return prospects at a position grouped by athletic percentile tier."""
+    conn = get_conn()
+
+    if not draft_year:
+        row = conn.execute("SELECT MAX(draft_year) FROM combine_data").fetchone()
+        draft_year = row[0] if row and row[0] else 2025
+
+    if not position:
+        conn.close()
+        return {"tiers": {}, "draft_year": draft_year, "position": position}
+
+    pos = position.upper()
+
+    # Get all prospects at this position for this draft year
+    rows = conn.execute("""
+        SELECT c.player_name, c.position, c.school, c.draft_year,
+               c.draft_team, c.draft_round, c.draft_pick,
+               c.height_inches, c.weight,
+               c.forty, c.bench, c.vertical, c.broad_jump, c.cone, c.shuttle
+        FROM combine_data c
+        WHERE c.position = ? AND c.draft_year = ?
+    """, (pos, draft_year)).fetchall()
+
+    if not rows:
+        conn.close()
+        return {"tiers": {}, "draft_year": draft_year, "position": pos}
+
+    # Get position-group stats for percentile computation
+    metric_keys = ["forty", "bench", "vertical", "broad_jump", "cone", "shuttle"]
+    metric_dirs = {"forty": "lower", "bench": "higher", "vertical": "higher",
+                   "broad_jump": "higher", "cone": "lower", "shuttle": "lower"}
+
+    pos_stats = {}
+    for mk in metric_keys:
+        all_rows = conn.execute(
+            f"SELECT {mk} FROM combine_data WHERE position = ? AND {mk} IS NOT NULL", (pos,)
+        ).fetchall()
+        vals = [r[0] for r in all_rows]
+        if vals:
+            pos_stats[mk] = vals
+
+    prospects = []
+    for row in rows:
+        p = dict(row)
+
+        # Abbreviate team
+        dt = (p.get("draft_team") or "").upper()
+        p["draft_team"] = TEAM_ABBREV.get(dt, dt[:3] if dt else None)
+
+        # Height display
+        ht = p.get("height_inches")
+        p["height_display"] = f"{ht // 12}'{ht % 12}\"" if ht else None
+
+        # Compute percentiles
+        pcts = {}
+        for mk in metric_keys:
+            val = p.get(mk)
+            if val is None or mk not in pos_stats:
+                continue
+            all_vals = pos_stats[mk]
+            if metric_dirs[mk] == "lower":
+                pct = sum(1 for v in all_vals if v > val) / len(all_vals) * 100
+            else:
+                pct = sum(1 for v in all_vals if v < val) / len(all_vals) * 100
+            pcts[mk] = round(pct, 1)
+
+        p["percentiles"] = pcts
+
+        # Average athletic percentile (across available metrics)
+        if pcts:
+            p["avg_percentile"] = round(sum(pcts.values()) / len(pcts), 1)
+        else:
+            p["avg_percentile"] = None
+
+        prospects.append(p)
+
+    # Group into tiers
+    tiers = {"elite": [], "above_avg": [], "average": [], "below_avg": [], "no_data": []}
+    for p in prospects:
+        avg = p["avg_percentile"]
+        if avg is None:
+            tiers["no_data"].append(p)
+        elif avg >= 80:
+            tiers["elite"].append(p)
+        elif avg >= 60:
+            tiers["above_avg"].append(p)
+        elif avg >= 40:
+            tiers["average"].append(p)
+        else:
+            tiers["below_avg"].append(p)
+
+    # Sort within tiers by avg_percentile descending
+    for tier in tiers.values():
+        tier.sort(key=lambda x: x.get("avg_percentile") or 0, reverse=True)
+
+    conn.close()
+    return {"tiers": tiers, "draft_year": draft_year, "position": pos}
+
+
 def fetch_prospects_compare(names, draft_year=0):
     """Return combine data + percentiles for multiple prospects (for comparison)."""
     conn = get_conn()

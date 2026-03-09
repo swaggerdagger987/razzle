@@ -10,7 +10,7 @@
 |---|------|--------|-------|
 | 1 | Historical athletic comps API + UI | DONE | Backend: /api/prospect-comps endpoint. Euclidean distance on percentile-normalized combine metrics (40, bench, vert, broad, cone, shuttle). NFL career boost in sorting. Frontend: "NFL Athletic Comps" section in prospect profile card with top 3 comp cards showing similarity %, draft info, career stats. Chunky borders, offset shadows, colored similarity badges. Mobile responsive. |
 | 2 | Prospect comparison mode | DONE | Backend: /api/prospects/compare returns multiple prospects with percentiles. Frontend: prospect checkboxes work in Lab, Compare button opens overlay with side-by-side spider chart (2-3 prospects, different colors) + combine stat comparison table with percentiles. Best values highlighted green. PNG export with watermark. Mobile responsive. |
-| 3 | Draft class position tier view | PENDING | |
+| 3 | Draft class position tier view | DONE | Backend: /api/prospect-tiers returns prospects grouped by avg athletic percentile tier (Elite 80+, Above Avg 60-80, Avg 40-60, Below Avg <40, No Data). Frontend: "Tiers" button in prospect mode toolbar, position selector (QB/RB/WR/TE), tier grid with sticker badges, prospect cards with avg percentile + key metrics. PNG export with watermark. Responsive grid layout. |
 | 4 | Deploy + smoke test | PENDING | |
 
 ## Previous Phase: Phase 12 — Prospect Cards + Athletic Percentiles (COMPLETE)

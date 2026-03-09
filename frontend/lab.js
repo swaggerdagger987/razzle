@@ -478,6 +478,10 @@ function applyUniverseUI() {
 
   // Page title
   document.title = isProspect ? "Prospect Lab — Razzle" : "The Lab — Razzle";
+
+  // Show Tiers button only in prospect mode
+  const tiersBtn = document.getElementById("tiersBtn");
+  if (tiersBtn) tiersBtn.style.display = isProspect ? "" : "none";
 }
 
 // ─── Sort ────────────────────────────────────────────────────────
@@ -2029,6 +2033,250 @@ function exportProspectImage() {
   const safeName = name.replace(/[^a-zA-Z0-9]/g, "-").toLowerCase();
   const link = document.createElement("a");
   link.download = `razzle-prospect-${safeName}.png`;
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+}
+
+
+// ─── Prospect Tier View ──────────────────────────────────────────
+
+let currentTierPosition = "";
+
+function openTierView() {
+  document.getElementById("tierOverlay").classList.add("open");
+  const btnsEl = document.getElementById("tierPositionBtns");
+  const positions = ["QB", "RB", "WR", "TE"];
+  btnsEl.innerHTML = positions.map(pos => {
+    const posColor = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" }[pos];
+    return `<button class="btn-chunky tier-pos-btn" data-pos="${pos}" onclick="loadTierData('${pos}')" style="font-size:11px; padding:4px 12px; border-color:${posColor};">${pos}</button>`;
+  }).join("");
+
+  // Auto-load first position or current filter
+  const defaultPos = state.position || "WR";
+  loadTierData(defaultPos);
+}
+
+function closeTierView(e) {
+  if (e && e.target !== e.currentTarget) return;
+  document.getElementById("tierOverlay").classList.remove("open");
+}
+
+async function loadTierData(position) {
+  currentTierPosition = position;
+  const contentEl = document.getElementById("tierContent");
+  contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">grading the ${position} prospects...</div>`;
+
+  // Highlight active button
+  document.querySelectorAll(".tier-pos-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.pos === position);
+  });
+
+  try {
+    const data = await apiFetch(`/api/prospect-tiers?position=${position}&draft_year=${state.season}`);
+    renderTierView(data, contentEl);
+  } catch (err) {
+    contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the tier data... ${err.message}</div>`;
+  }
+}
+
+function renderTierView(data, container) {
+  const tierDefs = [
+    { key: "elite", label: "Elite", color: "#22a06b", desc: "80th+ percentile avg" },
+    { key: "above_avg", label: "Above Average", color: "#2ec4b6", desc: "60th-80th percentile" },
+    { key: "average", label: "Average", color: "#ffc857", desc: "40th-60th percentile" },
+    { key: "below_avg", label: "Below Average", color: "#e87422", desc: "below 40th percentile" },
+    { key: "no_data", label: "No Combine Data", color: "#8a8a9e", desc: "did not test" },
+  ];
+
+  let html = `<div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); margin-bottom:16px;">${data.draft_year} ${data.position} prospects — grouped by average combine percentile</div>`;
+
+  let hasAnyProspects = false;
+
+  for (const td of tierDefs) {
+    const prospects = data.tiers[td.key] || [];
+    if (prospects.length === 0) continue;
+    hasAnyProspects = true;
+
+    html += `<div class="tier-group">`;
+    html += `<div class="tier-badge" style="background:${td.color};">${td.label}</div>`;
+    html += `<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); margin-left:8px;">${td.desc}</span>`;
+    html += `<div class="tier-grid">`;
+
+    for (const p of prospects) {
+      const avgPct = p.avg_percentile != null ? Math.round(p.avg_percentile) : null;
+      const pctColor = avgPct != null ? getPercentileColor(avgPct) : "var(--ink-faint)";
+
+      // Key metrics summary
+      let metricsStr = "";
+      if (p.forty) metricsStr += `40: ${p.forty.toFixed(2)}s`;
+      if (p.vertical) metricsStr += (metricsStr ? " · " : "") + `Vert: ${p.vertical.toFixed(1)}"`;
+      if (p.broad_jump) metricsStr += (metricsStr ? " · " : "") + `Broad: ${p.broad_jump}"`;
+
+      const draftInfo = p.draft_round && p.draft_pick ? `Rd ${p.draft_round}, #${p.draft_pick}` : "";
+
+      html += `<div class="tier-card">`;
+      html += `<div style="display:flex; align-items:flex-start; gap:10px;">`;
+      html += `<div style="flex:1;">`;
+      html += `<div class="tier-card-name">${p.player_name}</div>`;
+      html += `<div class="tier-card-meta">${p.school || ""}${draftInfo ? " · " + draftInfo : ""}</div>`;
+      html += `</div>`;
+      if (avgPct != null) {
+        html += `<div class="tier-card-pct" style="color:${pctColor};">${avgPct}<span style="font-size:11px;">th</span></div>`;
+      }
+      html += `</div>`;
+      if (metricsStr) {
+        html += `<div class="tier-card-metrics">${metricsStr}</div>`;
+      }
+      html += `</div>`;
+    }
+
+    html += `</div></div>`;
+  }
+
+  if (!hasAnyProspects) {
+    html += `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">no ${data.position} prospects found for ${data.draft_year}</div>`;
+  }
+
+  container.innerHTML = html;
+}
+
+function exportTierImage() {
+  const contentEl = document.getElementById("tierContent");
+  if (!contentEl) return;
+
+  const canvas = document.createElement("canvas");
+  const W = 900;
+  const padX = 30;
+  const padY = 30;
+
+  // Estimate height from tier groups
+  const tierGroups = contentEl.querySelectorAll(".tier-group");
+  let H = padY * 2 + 60; // header + subheader
+  tierGroups.forEach(g => {
+    const cards = g.querySelectorAll(".tier-card");
+    const rows = Math.ceil(cards.length / 3);
+    H += 50 + rows * 80; // badge + cards
+  });
+  H += 40; // watermark
+
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext("2d");
+
+  // Background
+  ctx.fillStyle = "#ede0cf";
+  ctx.fillRect(0, 0, W, H);
+
+  let y = padY;
+
+  // Title
+  ctx.font = "bold 24px sans-serif";
+  ctx.fillStyle = "#1a1a2e";
+  ctx.textAlign = "center";
+  ctx.fillText(`${state.season} ${currentTierPosition} Athletic Tiers`, W / 2, y + 24);
+  y += 40;
+
+  ctx.font = "16px 'Caveat', cursive";
+  ctx.fillStyle = "#8a8a9e";
+  ctx.fillText("grouped by avg combine percentile — razzle.lol", W / 2, y + 14);
+  y += 30;
+
+  // Draw each tier group
+  const tierColors = { elite: "#22a06b", above_avg: "#2ec4b6", average: "#ffc857", below_avg: "#e87422", no_data: "#8a8a9e" };
+  const tierLabels = { elite: "ELITE", above_avg: "ABOVE AVG", average: "AVERAGE", below_avg: "BELOW AVG", no_data: "NO DATA" };
+
+  tierGroups.forEach(g => {
+    const badge = g.querySelector(".tier-badge");
+    const cards = g.querySelectorAll(".tier-card");
+    if (!badge || cards.length === 0) return;
+
+    const badgeText = badge.textContent.toUpperCase();
+    const badgeColor = badge.style.background || "#8a8a9e";
+
+    // Draw badge
+    ctx.save();
+    ctx.translate(padX + 60, y + 14);
+    ctx.rotate(-0.03);
+    const tw = ctx.measureText(badgeText).width + 28;
+    ctx.fillStyle = badgeColor;
+    ctx.beginPath();
+    ctx.roundRect(-tw / 2, -12, tw, 24, 12);
+    ctx.fill();
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.fillStyle = "white";
+    ctx.font = "bold 12px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText(badgeText, 0, 4);
+    ctx.restore();
+
+    y += 34;
+
+    // Draw cards in rows of 3
+    const cardW = (W - padX * 2 - 20) / 3;
+    cards.forEach((card, i) => {
+      const col = i % 3;
+      const row = Math.floor(i / 3);
+      const cx = padX + col * (cardW + 10);
+      const cy = y + row * 72;
+
+      const name = card.querySelector(".tier-card-name")?.textContent || "";
+      const meta = card.querySelector(".tier-card-meta")?.textContent || "";
+      const pctEl = card.querySelector(".tier-card-pct");
+      const metrics = card.querySelector(".tier-card-metrics")?.textContent || "";
+
+      // Card background
+      ctx.fillStyle = "#f7efe5";
+      ctx.strokeStyle = "#1a1a2e";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.roundRect(cx, cy, cardW, 64, 8);
+      ctx.fill();
+      ctx.stroke();
+
+      // Name
+      ctx.font = "bold 14px sans-serif";
+      ctx.fillStyle = "#1a1a2e";
+      ctx.textAlign = "left";
+      ctx.fillText(name.substring(0, 22), cx + 8, cy + 18);
+
+      // Meta
+      ctx.font = "10px monospace";
+      ctx.fillStyle = "#8a8a9e";
+      ctx.fillText(meta.substring(0, 35), cx + 8, cy + 32);
+
+      // Metrics
+      ctx.font = "9px monospace";
+      ctx.fillStyle = "#4a4a5e";
+      ctx.fillText(metrics.substring(0, 45), cx + 8, cy + 48);
+
+      // Percentile
+      if (pctEl) {
+        const pctText = pctEl.textContent;
+        const pctColor = pctEl.style.color;
+        ctx.font = "bold 18px sans-serif";
+        ctx.fillStyle = pctColor;
+        ctx.textAlign = "right";
+        ctx.fillText(pctText, cx + cardW - 8, cy + 24);
+        ctx.textAlign = "left";
+      }
+    });
+
+    const rows = Math.ceil(cards.length / 3);
+    y += rows * 72 + 10;
+  });
+
+  // Watermark
+  ctx.font = "bold 16px sans-serif";
+  ctx.fillStyle = "#1a1a2e";
+  ctx.globalAlpha = 0.3;
+  ctx.textAlign = "center";
+  ctx.fillText("built different — razzle.lol", W / 2, y + 10);
+  ctx.globalAlpha = 1.0;
+
+  const link = document.createElement("a");
+  link.download = `razzle-tiers-${currentTierPosition}-${state.season}.png`;
   link.href = canvas.toDataURL("image/png");
   link.click();
 }
