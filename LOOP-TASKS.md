@@ -44,8 +44,8 @@
 **Accept when**: Landing page has 50+ demo briefings (up from 33). Agents show more varied redacted outputs. Rotation still works. Demo section feels alive with working agents aesthetic.
 **Depends on**: none
 **Size**: M
-**Status**: PENDING
-**Attempt**: 0/3
+**Status**: PASS
+**Attempt**: 1/3
 
 ## Task 6: Agent bio cards
 **Requirement**: "Public-facing bio cards for each agent: pixel avatar, name, animal, role description, 'specialty' one-liner. Shown on landing page + War Room intro."
@@ -60,9 +60,9 @@
 ## Loop State
 ```
 Current Phase: 8
-Current Task: 5
+Current Task: 6
 Current Stage: DESIGN
 Attempt: 1
-Tasks Completed: 4/6
+Tasks Completed: 5/6
 Loop Iterations: 0
 ```

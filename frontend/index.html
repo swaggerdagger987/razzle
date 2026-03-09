@@ -530,6 +530,42 @@ const demoBriefings = [
   { agent: '📚 Historian', urgency: 'opportunity', text: 'Draft ROI analysis: <r>████████</r> overdrafts <r>██</r>s by an average of <r>██</r> picks. In your upcoming rookie draft, they\'ll reach — let value fall to you at pick <r>██</r>.' },
   { agent: '📚 Historian', urgency: 'monitor', text: 'League trend: teams that started <r>██</r>-<r>██</r> in your league have made the playoffs <r>██</r>% of the time over <r>██</r> seasons. You\'re <r>██</r>-<r>██</r>. <r>████████████████</r>.' },
   { agent: '📚 Historian', urgency: 'opportunity', text: 'This week\'s matchup history: you\'re <r>██</r>-<r>██</r> all-time vs <r>████████</r>. They roster-construct for floor (<r>██</r>% of starts are high-floor plays). You win with ceiling — start <r>██████</r> over <r>██████</r>.' },
+
+  // --- ADDITIONAL BRIEFINGS (expanding to 55+) ---
+
+  // RAZZLE — more synthesis/decision items
+  { agent: '🐯 Razzle', urgency: 'urgent', text: 'Roster alert: you have <r>██</r> players on bye Week <r>██</r>. I\'ve mapped replacements from waivers. Best available: <r>██████████</r> (<r>██</r> projected). Act before <r>████</r> claims them.' },
+  { agent: '🐯 Razzle', urgency: 'opportunity', text: 'All agents agree: <r>██████████</r> is the single best asset available in your league right now. Quant values at <r>██</r>, Scout confirms usage trend, Diplomat identified <r>████</r> as the seller. Green light.' },
+  { agent: '🐯 Razzle', urgency: 'monitor', text: 'Playoff clinch scenario: win either of the next <r>██</r> games OR <r>████</r> loses once. You control your destiny. Roster is set — no moves needed unless Medical flags something.' },
+  { agent: '🐯 Razzle', urgency: 'urgent', text: 'Breaking: <r>██████████</r> just posted a cryptic social media update. Medical is evaluating. If he sits, your lineup drops <r>██</r> projected points. Backup plan ready: <r>██████████</r> slots in at <r>██</r>.' },
+
+  // SCOUT — more evaluations
+  { agent: '🦅 Scout', urgency: 'opportunity', text: 'Handcuff alert: <r>██████████</r>\'s backup <r>██████████</r> is rostered in only <r>██</r>% of leagues. If the starter misses time, backup projects as <r>██</r><r>██</r> overall. Stash now.' },
+  { agent: '🦅 Scout', urgency: 'monitor', text: 'Snap count report: <r>██████████</r> played <r>██</r>% of snaps last week vs. season average of <r>██</r>%. New offensive coordinator <r>██████████</r> is shifting the scheme. Monitor one more week before acting.' },
+  { agent: '🦅 Scout', urgency: 'urgent', text: 'DFS correlation alert — in Week <r>██</r>, <r>██████████</r> and <r>██████████</r> have a <r>██</r>% target correlation. Stack in best ball, pair in redraft if both available.' },
+  { agent: '🦅 Scout', urgency: 'opportunity', text: 'Red zone usage spike: <r>██████████</r> saw <r>██</r> red zone targets last <r>██</r> games (was <r>██</r> prior). TD regression coming in the positive direction. <r>██</r>% rostered — free in most leagues.' },
+
+  // DIPLOMAT — more trade intel
+  { agent: '🐻 Diplomat', urgency: 'urgent', text: 'Trade veto incoming: <r>████████</r> is lobbying to block the <r>██████</r>-for-<r>██████</r> deal. They need <r>██</r> votes. I count <r>██</r> likely vetoes. You need to message <r>████████</r> and <r>████████</r> to secure passage.' },
+  { agent: '🐻 Diplomat', urgency: 'opportunity', text: 'Dynasty rookie draft positioning: <r>████████</r> wants to trade up for pick <r>█</r>.<r>██</r>. They\'ll overpay. Your pick <r>█</r>.<r>██</r> + <r>██████</r> gets you their <r>██████</r>. Pull the trigger.' },
+  { agent: '🐻 Diplomat', urgency: 'monitor', text: 'Leaguemate behavior shift: <r>████████</r> changed their team name and avatar — historically correlates with increased trade activity (<r>██</r>% of the time). They may be rebuilding. Target their stars.' },
+
+  // QUANT — more analytics
+  { agent: '📊 Quant', urgency: 'urgent', text: 'Start/sit alert: <r>██████████</r> vs <r>███</r> defense projects <r>██</r> points (floor <r>██</r>, ceiling <r>██</r>). Meanwhile <r>██████████</r> vs <r>███</r> projects <r>██</r> (floor <r>██</r>, ceiling <r>██</r>). Go ceiling: start <r>██████████</r>.' },
+  { agent: '📊 Quant', urgency: 'monitor', text: 'Expected points model: your <r>██</r> slot is bleeding <r>██</r> points per week vs. league average. Fixing this one position raises title odds from <r>██</r>% to <r>██</r>%. Top targets: <r>██████████</r>, <r>██████████</r>.' },
+  { agent: '📊 Quant', urgency: 'opportunity', text: 'Value over replacement: <r>██████████</r> is the <r>██</r><r>██</r> highest VOR player available on waivers. That\'s a <r>██</r>-point weekly edge. In <r>████</r> simulations, adding him wins you <r>██</r> more games ROS.' },
+
+  // MEDICAL — more injury intel
+  { agent: '🏥 Medical', urgency: 'urgent', text: '<r>██████████</r> is playing through a <r>████████</r> injury that\'s not on the official report. Practice film shows compensating mechanics. Sell-high window: <r>██</r> days before the market adjusts.' },
+  { agent: '🏥 Medical', urgency: 'monitor', text: 'Injury prone flag: <r>██████████</r> has missed <r>██</r> games over <r>██</r> seasons with <r>████████</r> issues. Current workload (<r>██</r> touches/game) correlates with <r>██</r>% re-injury risk by Week <r>██</r>.' },
+  { agent: '🏥 Medical', urgency: 'opportunity', text: '<r>██████████</r> cleared concussion protocol faster than expected. Market is still pricing in a <r>██</r>-week absence. Reality: he plays this week at <r>██</r>% snap share. Buy the dip.' },
+  { agent: '🏥 Medical', urgency: 'monitor', text: 'Soft tissue watch list: <r>██████████</r>, <r>██████████</r>, and <r>██████████</r> all logged limited practices this week. None are on your roster, but <r>████</r> owns two of them. Their lineup may be weakened.' },
+
+  // HISTORIAN — more pattern recognition
+  { agent: '📚 Historian', urgency: 'opportunity', text: 'Historical comp: <r>██████████</r>\'s Year <r>██</r> profile matches <r>██████████</r>\'s breakout season at <r>██</r>% similarity. That comp finished as the <r>██</r><r>██</r> overall. Buy in dynasty.' },
+  { agent: '📚 Historian', urgency: 'monitor', text: 'FAAB spending audit: you\'ve spent $<r>██</r> of $<r>███</r> through Week <r>██</r>. League average is $<r>██</r>. You have a budget advantage for the playoff push — deploy <r>██</r>% of remaining on impact adds.' },
+  { agent: '📚 Historian', urgency: 'urgent', text: 'Precedent alert: the last <r>██</r> times <r>████████</r> fell below .<r>███</r> win rate at this point in the season, they fire-sold within <r>██</r> days. Watch for <r>██████████</r> hitting the trade block.' },
+  { agent: '📚 Historian', urgency: 'opportunity', text: 'Coaching carousel impact: <r>██████████</r>\'s new OC <r>██████████</r> historically boosts <r>██</r> production by <r>██</r>% in Year 1. The market hasn\'t priced this in yet. <r>██████████</r> is a buy.' },
 ];
 
 function renderDemoCards() {

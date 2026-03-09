@@ -12,7 +12,7 @@
 | 2 | League Intel context feed | DONE | League-intel.html saves league metadata (name, type, scoring, teams) on loadLeagues() and roster + rivals on toggleLeague() to razzle_league_context localStorage. War Room reads via getLeagueContext(), formats with record, roster, top 5 rival managers + their top players. Disconnect clears context. 7-day TTL. |
 | 3 | Free vs. paid prompt tiers | DONE | Automatic mode detection via isLeagueContextMode(). Free/generic mode: no league context, rules instruct general analysis. League context mode: rules instruct roster-specific, rival-aware analysis. Mode badge in scenario panel shows current state. |
 | 4 | Paywall UI gating | DONE | Pro upsell card with blurred/redacted league context preview. Visible only in generic mode (no Sleeper). "Connect Sleeper to Unlock" CTA links to league-intel. Hidden when league context available. Razzle design system: chunky orange border, offset shadow, handwritten text, blurred preview lines. |
-| 5 | Home page War Room demo upgrade | TODO | |
+| 5 | Home page War Room demo upgrade | DONE | 55 briefings (up from 33): Razzle 11, Scout 11, Diplomat 9, Quant 8, Medical 8, Historian 8. New content covers bye week alerts, playoff clinch scenarios, trade vetoes, coaching changes, injury sell-highs, FAAB budget strategy, historical comps. Rotation picks 3 from different agents. |
 | 6 | Agent bio cards | TODO | |
 
 ## Previous Phase: Phase 7 — War Room: Agent Personas + Scenario Runner (COMPLETE)
