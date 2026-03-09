@@ -1,6 +1,17 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 23 — CSV Export + Server-Side Waitlist (COMPLETE)
+## Current Phase: Phase 24 — Saved Screener Views (COMPLETE)
+
+**Exit criterion MET:** Lab screener has "Views" button in toolbar that opens a Saved Views overlay. Users can name and save current screener configuration (universe, position, columns, filters, sort, season, relevance) to localStorage. Saved views display with universe badge (NFL/PROSP/CFB), position badge (pos-colored), filter count, and date. Click to load restores full state (including UI controls) and refreshes data. Delete removes the view. Hover-lift cards. Razzle design system. Deployed to Render.
+
+### Phase 24 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Saved Views system (save/load/delete + UI) | DONE | Views button in toolbar. savedViewsOverlay with save input + scrollable list. saveCurrentView() captures full state snapshot. loadSavedView() restores state, syncs UI (position chips, search, relevance, universe mode), calls applyUniverseUI + populateSeasonSelect + fetchData. deleteSavedView() by id. renderSavedViewsList() with universe/position badges, filter count, date. Chunky borders, hover lift, Caveat annotation. |
+| 2 | Deploy + smoke test | DONE | lab.js, app.js, charts.js pass syntax. Python imports clean. Views button visible. All element IDs match. Pushed to master. |
+
+## Previous Phase: Phase 23 — CSV Export + Server-Side Waitlist (COMPLETE)
 
 **Exit criterion MET:** Lab screener has "Download CSV" button in share modal that exports current view (all rows × visible columns) as a CSV file with Razzle branding header. Works for all 3 universes (NFL/Prospects/College) using correct column definitions. File named razzle-{universe}-{position}-{season}.csv. Server-side waitlist endpoint (POST /api/waitlist) stores emails in SQLite waitlist table with UNIQUE constraint. Landing page submitWaitlist() upgraded from localStorage to API POST with ok/duplicate/error responses and Razzle personality messages. Deployed to Render.
 

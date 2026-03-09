@@ -1040,6 +1040,137 @@ function generateRedditTitle() {
   return `${season} Fantasy Football ${preset} Stats | Razzle`;
 }
 
+// ─── Saved Views ─────────────────────────────────────────────────
+
+function openSavedViews() {
+  document.getElementById("savedViewsOverlay").classList.add("open");
+  renderSavedViewsList();
+}
+
+function closeSavedViews(e) {
+  if (e && e.target !== e.currentTarget) return;
+  document.getElementById("savedViewsOverlay").classList.remove("open");
+}
+
+function getSavedViews() {
+  try { return JSON.parse(localStorage.getItem("razzle_saved_views") || "[]"); }
+  catch (e) { return []; }
+}
+
+function saveCurrentView() {
+  const nameInput = document.getElementById("saveViewName");
+  const name = nameInput.value.trim();
+  if (!name) { nameInput.style.borderColor = "var(--red)"; setTimeout(() => nameInput.style.borderColor = "", 1500); return; }
+
+  const view = {
+    id: Date.now().toString(36),
+    name,
+    createdAt: new Date().toISOString(),
+    universe: state.universe,
+    position: state.position,
+    search: state.search,
+    season: state.universe === "college" ? state.collegeSeason : state.universe === "prospects" ? state.draftYear : state.season,
+    relevance: state.relevance,
+    sortKey: state.sortKey,
+    sortDir: state.sortDir,
+    filters: [...state.filters],
+    columns: state.universe === "prospects" ? [...state.prospectColumns] : state.universe === "college" ? [...state.collegeColumns] : [...state.visibleColumns],
+  };
+
+  const views = getSavedViews();
+  views.unshift(view);
+  localStorage.setItem("razzle_saved_views", JSON.stringify(views));
+
+  nameInput.value = "";
+  renderSavedViewsList();
+}
+
+function loadSavedView(id) {
+  const views = getSavedViews();
+  const view = views.find(v => v.id === id);
+  if (!view) return;
+
+  // Apply state
+  state.universe = view.universe || "nfl";
+  state.position = view.position || "ALL";
+  state.search = view.search || "";
+  state.sortKey = view.sortKey || "fantasy_points_ppr";
+  state.sortDir = view.sortDir || "desc";
+  state.filters = view.filters ? [...view.filters] : [];
+  state.relevance = view.relevance || "fantasy";
+
+  if (view.universe === "prospects") {
+    if (view.season) state.draftYear = view.season;
+    state.prospectColumns = view.columns ? [...view.columns] : [...PROSPECT_PRESETS.combine.columns];
+  } else if (view.universe === "college") {
+    if (view.season) state.collegeSeason = view.season;
+    state.collegeColumns = view.columns ? [...view.columns] : [...COLLEGE_PRESETS.production.columns];
+  } else {
+    if (view.season !== undefined) state.season = view.season;
+    state.visibleColumns = view.columns ? [...view.columns] : [...PRESETS.ppr.columns];
+  }
+
+  // Sync UI controls
+  document.querySelectorAll(".chip[data-pos]").forEach(chip => {
+    chip.classList.toggle("active", chip.dataset.pos === state.position);
+  });
+  document.getElementById("searchInput").value = state.search;
+  const relBtn = document.getElementById("relevanceToggle");
+  relBtn.textContent = state.relevance === "all" ? "All Players" : "Fantasy Only";
+  relBtn.classList.toggle("active", state.relevance === "all");
+  applyUniverseUI();
+  populateSeasonSelect();
+  populateFilterStatSelect();
+  renderActiveFilters();
+  saveStateToURL();
+
+  state.offset = 0;
+  closeSavedViews();
+  fetchData();
+}
+
+function deleteSavedView(id) {
+  const views = getSavedViews().filter(v => v.id !== id);
+  localStorage.setItem("razzle_saved_views", JSON.stringify(views));
+  renderSavedViewsList();
+}
+
+function renderSavedViewsList() {
+  const container = document.getElementById("savedViewsList");
+  const views = getSavedViews();
+
+  if (!views.length) {
+    container.innerHTML = '<p style="font-family:var(--font-hand); font-size:18px; color:var(--ink-light); text-align:center; padding:24px 0;">no saved views yet. build something worth saving.</p>';
+    return;
+  }
+
+  const universeBadge = (u) => {
+    const colors = { nfl: "var(--orange)", prospects: "var(--blue)", college: "var(--blue)" };
+    const labels = { nfl: "NFL", prospects: "PROSP", college: "CFB" };
+    return `<span style="font-family:var(--font-mono); font-size:10px; font-weight:700; padding:2px 6px; border:2px solid ${colors[u] || "var(--ink)"}; border-radius:4px; color:${colors[u] || "var(--ink)"}; text-transform:uppercase;">${labels[u] || u}</span>`;
+  };
+
+  const posBadge = (pos) => {
+    if (!pos || pos === "ALL") return "";
+    const colors = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
+    return ` <span style="font-family:var(--font-mono); font-size:10px; font-weight:700; padding:2px 6px; border:2px solid ${colors[pos] || "var(--ink)"}; border-radius:4px; color:${colors[pos] || "var(--ink)"};">${pos}</span>`;
+  };
+
+  container.innerHTML = views.map(v => {
+    const date = new Date(v.createdAt);
+    const dateStr = date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    const filterCount = (v.filters && v.filters.length) ? ` <span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">${v.filters.length} filter${v.filters.length > 1 ? "s" : ""}</span>` : "";
+
+    return `<div style="display:flex; align-items:center; gap:10px; padding:10px 12px; border:2px solid var(--ink); border-radius:8px; margin-bottom:8px; background:var(--bg); cursor:pointer; transition:transform 0.1s, box-shadow 0.1s;" onmouseenter="this.style.transform='translate(-2px,-2px)';this.style.boxShadow='4px 4px 0 var(--ink)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
+      <div style="flex:1; min-width:0;" onclick="loadSavedView('${v.id}')">
+        <div style="font-family:var(--font-display); font-size:14px; font-weight:600; margin-bottom:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${v.name}</div>
+        <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">${universeBadge(v.universe)}${posBadge(v.position)}${filterCount}<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">${dateStr}</span></div>
+      </div>
+      <button onclick="event.stopPropagation(); deleteSavedView('${v.id}')" style="background:none; border:2px solid var(--ink-faint); border-radius:6px; padding:4px 8px; cursor:pointer; font-family:var(--font-mono); font-size:11px; color:var(--ink-light);" title="Delete view">✕</button>
+    </div>`;
+  }).join("");
+}
+
 // ─── Player selection (for compare/charts) ───────────────────────
 function togglePlayerSelect(playerId, checked) {
   if (checked) {

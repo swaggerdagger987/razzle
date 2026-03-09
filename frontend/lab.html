@@ -1296,6 +1296,7 @@
     <button class="btn-chunky" id="formulaBtn" onclick="openFormulaBuilder()">Formulas</button>
     <button class="btn-chunky" onclick="openFormulaStore()">Store</button>
     <button class="btn-chunky" onclick="openChartPanel()">Charts</button>
+    <button class="btn-chunky" onclick="openSavedViews()">Views</button>
     <button class="btn-chunky" id="tiersBtn" onclick="openTierView()" style="display:none;">Tiers</button>
     <button class="btn-chunky" id="bigBoardBtn" onclick="openBigBoard()" style="display:none;">Big Board</button>
     <button class="btn-chunky" id="classAnalyticsBtn" onclick="openClassAnalytics()" style="display:none;">Class Analytics</button>
@@ -1469,6 +1470,30 @@
     <p style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); margin:8px 0 16px 0;">screenshots are billboards. share generously.</p>
     <div style="display:flex; justify-content:flex-end;">
       <button class="btn-chunky" onclick="closeShareModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- SAVED VIEWS OVERLAY -->
+<div class="filter-modal-overlay" id="savedViewsOverlay" onclick="closeSavedViews(event)">
+  <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:520px; max-width:95vw;" onclick="event.stopPropagation()">
+    <h3 style="margin:0 0 16px 0; font-family:var(--font-display);">Saved Views</h3>
+
+    <!-- Save current view -->
+    <div style="margin-bottom:16px; padding-bottom:16px; border-bottom:2px dashed var(--ink-faint);">
+      <label style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; display:block; margin-bottom:6px;">Save Current View</label>
+      <div style="display:flex; gap:8px; align-items:center;">
+        <input type="text" id="saveViewName" placeholder="e.g. Dynasty WR Targets" style="flex:1; font-family:var(--font-mono); font-size:12px; padding:8px 10px; border:2px solid var(--ink); border-radius:6px; background:var(--bg); color:var(--ink);">
+        <button class="btn-primary" onclick="saveCurrentView()" style="font-size:11px; padding:6px 14px; white-space:nowrap;">Save</button>
+      </div>
+    </div>
+
+    <!-- Saved views list -->
+    <div id="savedViewsList" style="max-height:360px; overflow-y:auto;"></div>
+
+    <p style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); margin:12px 0 16px 0;">your setups, always ready.</p>
+    <div style="display:flex; justify-content:flex-end;">
+      <button class="btn-chunky" onclick="closeSavedViews()">Close</button>
     </div>
   </div>
 </div>
