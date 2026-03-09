@@ -358,6 +358,13 @@
     white-space: nowrap;
   }
 
+  .screener-table tbody tr:nth-child(even) td {
+    background: rgba(0,0,0,0.02);
+  }
+  .screener-table tbody tr:nth-child(even) td.col-player {
+    background: color-mix(in srgb, var(--bg) 97%, var(--ink));
+  }
+
   .screener-table tr:hover td {
     background: var(--orange-light);
   }

@@ -5683,3 +5683,143 @@ function exportHeatMapPNG() {
   link.href = canvas.toDataURL("image/png");
   link.click();
 }
+
+// ─── Keyboard shortcuts ────────────────────────────────────────
+
+function isAnyOverlayOpen() {
+  const overlays = document.querySelectorAll(".filter-modal-overlay.open");
+  return overlays.length > 0;
+}
+
+function closeAllOverlays() {
+  document.querySelectorAll(".filter-modal-overlay.open").forEach(el => el.classList.remove("open"));
+}
+
+function isInputFocused() {
+  const el = document.activeElement;
+  return el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.tagName === "SELECT" || el.isContentEditable);
+}
+
+document.addEventListener("keydown", function(e) {
+  // Escape: close overlays or blur search
+  if (e.key === "Escape") {
+    if (isAnyOverlayOpen()) {
+      closeAllOverlays();
+      e.preventDefault();
+      return;
+    }
+    if (isInputFocused()) {
+      document.activeElement.blur();
+      e.preventDefault();
+      return;
+    }
+  }
+
+  // Don't intercept when typing in inputs
+  if (isInputFocused()) return;
+
+  // / or Ctrl+K: focus search
+  if (e.key === "/" || (e.key === "k" && (e.ctrlKey || e.metaKey))) {
+    e.preventDefault();
+    const search = document.getElementById("searchInput");
+    if (search) search.focus();
+    return;
+  }
+
+  // ? : toggle shortcut reference
+  if (e.key === "?") {
+    e.preventDefault();
+    toggleShortcutRef();
+    return;
+  }
+
+  // Position filters: 1=ALL, 2=QB, 3=RB, 4=WR, 5=TE
+  const posMap = { "1": "", "2": "QB", "3": "RB", "4": "WR", "5": "TE" };
+  if (posMap.hasOwnProperty(e.key)) {
+    setPosition(posMap[e.key]);
+    return;
+  }
+
+  // S: saved views
+  if (e.key === "s" || e.key === "S") {
+    openSavedViews();
+    return;
+  }
+
+  // C: column picker
+  if (e.key === "c" || e.key === "C") {
+    openColumnPicker();
+    return;
+  }
+
+  // F: formula builder
+  if (e.key === "f" || e.key === "F") {
+    if (typeof openFormulaBuilder === "function") openFormulaBuilder();
+    return;
+  }
+
+  // M: formula store (marketplace)
+  if (e.key === "m" || e.key === "M") {
+    if (typeof openFormulaStore === "function") openFormulaStore();
+    return;
+  }
+
+  // X: share/export
+  if (e.key === "x" || e.key === "X") {
+    openShareModal();
+    return;
+  }
+});
+
+// Shortcut reference overlay
+function toggleShortcutRef() {
+  let overlay = document.getElementById("shortcutRefOverlay");
+  if (overlay) {
+    overlay.classList.toggle("open");
+    return;
+  }
+
+  overlay = document.createElement("div");
+  overlay.id = "shortcutRefOverlay";
+  overlay.className = "filter-modal-overlay open";
+  overlay.onclick = function(e) { if (e.target === overlay) overlay.classList.remove("open"); };
+  overlay.innerHTML = `
+    <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); max-width:420px; width:90%; padding:24px; margin:auto; margin-top:120px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h3 style="font-family:var(--font-display); font-size:18px; margin:0;">Keyboard Shortcuts</h3>
+        <button class="btn-chunky" onclick="document.getElementById('shortcutRefOverlay').classList.remove('open')" style="font-size:11px; padding:4px 10px;">Close</button>
+      </div>
+      <table style="width:100%; font-family:var(--font-mono); font-size:12px; border-collapse:collapse;">
+        <tbody>
+          ${shortcutRow("/", "Focus search")}
+          ${shortcutRow("Esc", "Close overlay / blur input")}
+          ${shortcutRow("1-5", "Position: ALL / QB / RB / WR / TE")}
+          ${shortcutRow("S", "Saved views")}
+          ${shortcutRow("C", "Column picker")}
+          ${shortcutRow("F", "Formula builder")}
+          ${shortcutRow("M", "Formula store")}
+          ${shortcutRow("X", "Share / export")}
+          ${shortcutRow("?", "This reference")}
+        </tbody>
+      </table>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+}
+
+function shortcutRow(key, desc) {
+  return `<tr style="border-bottom:1px solid var(--ink-faint);">
+    <td style="padding:6px 8px; width:80px;"><kbd style="font-family:var(--font-display); font-size:13px; background:var(--bg); border:2px solid var(--ink); border-radius:4px; padding:2px 8px; box-shadow:1px 1px 0 var(--ink);">${key}</kbd></td>
+    <td style="padding:6px 8px;">${desc}</td>
+  </tr>`;
+}
+
+// Keyboard hint strip (appended to toolbar area)
+(function addKeyboardHint() {
+  const toolbar = document.querySelector(".toolbar");
+  if (!toolbar) return;
+  const hint = document.createElement("div");
+  hint.style.cssText = "font-family:var(--font-mono); font-size:10px; color:var(--ink-faint); padding:2px 0; white-space:nowrap;";
+  hint.innerHTML = `<kbd style="font-size:10px; border:1px solid var(--ink-faint); border-radius:2px; padding:0 3px;">/</kbd> search &nbsp; <kbd style="font-size:10px; border:1px solid var(--ink-faint); border-radius:2px; padding:0 3px;">1-5</kbd> position &nbsp; <kbd style="font-size:10px; border:1px solid var(--ink-faint); border-radius:2px; padding:0 3px;">?</kbd> shortcuts`;
+  toolbar.appendChild(hint);
+})();
