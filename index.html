@@ -1,0 +1,1828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Razzle — razzle.lol</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap');
+
+  @font-face {
+    font-family: 'Garfield';
+    src: url('https://fonts.cdnfonts.com/css/garfield') format('woff2');
+    font-weight: 400 700;
+    font-display: swap;
+  }
+
+  /* Fallback: Luckiest Guy has the same chunky comic energy if Garfield doesn't load */
+  @import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap');
+
+  :root {
+    /* Anthropic beige — warm sand, not sterile white */
+    --bg: #ede0cf;
+    --bg-warm: #e5d5c3;
+    --bg-card: #f7efe5;
+    --bg-dark-card: #1a1a2e;
+    --bg-ink: #0f0f1a;
+
+    /* Ink colors */
+    --ink: #1a1a2e;
+    --ink-medium: #4a4a5e;
+    --ink-light: #8a8a9e;
+    --ink-faint: #c5c5d0;
+
+    /* The accent stack — bold, not corporate */
+    --orange: #d97757;
+    --orange-light: #f7e4d8;
+    --yellow: #ffc857;
+    --yellow-light: #f5eacc;
+    --green: #2ec4b6;
+    --green-light: #d9efec;
+    --blue: #5b7fff;
+    --blue-light: #dde4f7;
+    --red: #e63946;
+    --red-light: #f2d5d8;
+    --purple: #8b5cf6;
+    --purple-light: #e5dcf7;
+
+    /* Position colors — chunky and ownable */
+    --pos-qb: #5b7fff;
+    --pos-rb: #2ec4b6;
+    --pos-wr: #d97757;
+    --pos-te: #8b5cf6;
+
+    --font-display: 'Garfield', 'Luckiest Guy', 'Garfield', cursive;
+    --font-mono: 'Space Mono', monospace;
+    --font-hand: 'Caveat', cursive;
+
+    --radius: 12px;
+    --radius-chunky: 16px;
+    --shadow-sm: 0 1px 3px rgba(15,15,26,0.06);
+    --shadow-md: 0 4px 12px rgba(15,15,26,0.08);
+    --shadow-lg: 0 8px 30px rgba(15,15,26,0.1);
+    --shadow-chunky: 4px 4px 0 var(--ink);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  /* ===== NAV — looks like notebook tabs ===== */
+  .topnav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 32px;
+    background: var(--bg);
+    border-bottom: 3px solid var(--ink);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-mark {
+    width: 42px;
+    height: 42px;
+    background: var(--bg-card);
+    border-radius: 10px;
+    border: 3px solid var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    box-shadow: 3px 3px 0 var(--ink);
+    transform: rotate(-2deg);
+    line-height: 1;
+  }
+
+  .logo-text {
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -0.5px;
+    color: var(--ink);
+  }
+
+  .logo-text .labs {
+    color: var(--orange);
+  }
+
+  /* ===== RAZZLE MASCOT ===== */
+  .mascot-section {
+    margin: 0 32px 48px;
+    max-width: 800px;
+  }
+
+  .mascot-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: var(--radius-chunky);
+    box-shadow: 6px 6px 0 var(--ink);
+    overflow: hidden;
+    display: flex;
+  }
+
+  .mascot-visual {
+    width: 260px;
+    min-height: 320px;
+    background: linear-gradient(135deg, var(--orange), #c4643d);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border-right: 3px solid var(--ink);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .mascot-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 18px,
+      rgba(0,0,0,0.06) 18px,
+      rgba(0,0,0,0.06) 22px
+    );
+  }
+
+  .mascot-emoji {
+    font-size: 120px;
+    filter: drop-shadow(3px 3px 0 rgba(0,0,0,0.2));
+    position: relative;
+    z-index: 1;
+    transform: rotate(-3deg);
+  }
+
+  .mascot-nameplate {
+    position: relative;
+    z-index: 1;
+    margin-top: 8px;
+    padding: 4px 16px;
+    background: var(--ink);
+    border-radius: 6px;
+    color: white;
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    transform: rotate(2deg);
+  }
+
+  .mascot-info {
+    flex: 1;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .mascot-title {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    letter-spacing: -0.5px;
+  }
+
+  .mascot-role {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 16px;
+  }
+
+  .mascot-bio {
+    font-size: 14px;
+    color: var(--ink-medium);
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+
+  .mascot-traits {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .mascot-trait {
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    border: 2px solid var(--ink);
+    border-radius: 20px;
+    background: var(--bg-warm);
+    transform: rotate(-1deg);
+  }
+
+  .mascot-trait:nth-child(2) { transform: rotate(0.5deg); }
+  .mascot-trait:nth-child(3) { transform: rotate(-0.5deg); }
+  .mascot-trait:nth-child(4) { transform: rotate(1deg); }
+
+  .mascot-scribble {
+    font-family: var(--font-hand);
+    font-size: 18px;
+    color: var(--orange);
+    margin-top: 12px;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 4px;
+  }
+
+  .nav-link {
+    padding: 8px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink-medium);
+    text-decoration: none;
+    border-radius: 8px 8px 0 0;
+    border: 2px solid transparent;
+    border-bottom: none;
+    transition: all 0.15s;
+    position: relative;
+    top: 3px;
+  }
+
+  .nav-link:hover {
+    color: var(--ink);
+    background: var(--bg-warm);
+  }
+
+  .nav-link.active {
+    color: var(--ink);
+    background: var(--bg-card);
+    border-color: var(--ink);
+    box-shadow: 0 2px 0 var(--bg-card);
+  }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .sync-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--green);
+    background: var(--green-light);
+    border: 2px solid var(--green);
+    border-radius: 20px;
+    font-family: var(--font-mono);
+  }
+
+  .sync-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* ===== SECTION HEADERS — handwritten annotations ===== */
+  .section-header {
+    margin: 48px 32px 8px;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  .section-annotation {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--orange);
+    transform: rotate(-1deg);
+    display: inline-block;
+  }
+
+  .section-note {
+    margin: 0 32px 24px;
+    font-size: 14px;
+    color: var(--ink-medium);
+    max-width: 600px;
+    line-height: 1.6;
+  }
+
+  /* ===== SCREENER ===== */
+  .screener-container {
+    margin: 0 32px 48px;
+    border: 3px solid var(--ink);
+    border-radius: var(--radius-chunky);
+    overflow: hidden;
+    background: var(--bg-card);
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+
+  .screener-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    border-bottom: 3px solid var(--ink);
+    background: var(--yellow-light);
+  }
+
+  .toolbar-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* NFL / NCAA toggle — chunky switch */
+  .league-toggle {
+    display: inline-flex;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--bg-card);
+  }
+
+  .toggle-opt {
+    padding: 6px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink-medium);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--font-mono);
+    border-right: 2px solid var(--ink);
+  }
+
+  .toggle-opt:last-child {
+    border-right: none;
+  }
+
+  .toggle-opt.active {
+    color: white;
+    background: var(--ink);
+  }
+
+  .toggle-opt:hover:not(.active) {
+    background: var(--bg-warm);
+  }
+
+  /* Filter chips — sticker style */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink);
+    background: var(--bg-card);
+    border: 2px solid var(--ink);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.1s;
+  }
+
+  .chip:hover {
+    box-shadow: 2px 2px 0 var(--ink);
+    transform: translate(-1px, -1px);
+  }
+
+  .chip.active-wr {
+    background: var(--orange-light);
+    border-color: var(--pos-wr);
+    color: var(--pos-wr);
+  }
+
+  .chip .x {
+    font-size: 10px;
+    opacity: 0.5;
+  }
+
+  .toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .player-count {
+    font-size: 12px;
+    color: var(--ink-light);
+    font-family: var(--font-mono);
+  }
+
+  .btn-chunky {
+    padding: 7px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink);
+    background: var(--bg-card);
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.1s;
+    font-family: var(--font-display);
+  }
+
+  .btn-chunky:hover {
+    box-shadow: 2px 2px 0 var(--ink);
+    transform: translate(-1px, -1px);
+  }
+
+  .btn-primary {
+    padding: 7px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    color: white;
+    background: var(--orange);
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.1s;
+    font-family: var(--font-display);
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 3px 3px 0 var(--ink);
+    transform: translate(-1px, -1px);
+  }
+
+  /* Table */
+  .screener-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .screener-table th {
+    padding: 10px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    background: var(--bg-warm);
+    border-bottom: 2px solid var(--ink);
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .screener-table th:hover {
+    color: var(--ink);
+  }
+
+  .screener-table th.sorted {
+    color: var(--orange);
+  }
+
+  .screener-table th.sorted::after {
+    content: ' ▼';
+    font-size: 9px;
+  }
+
+  .screener-table th.numeric { text-align: right; }
+
+  .screener-table td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--ink-faint);
+    white-space: nowrap;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-medium);
+  }
+
+  .screener-table td.numeric {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .screener-table tbody tr {
+    transition: background 0.1s;
+  }
+
+  .screener-table tbody tr:hover {
+    background: var(--yellow-light);
+  }
+
+  .player-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-display);
+  }
+
+  .player-name-text {
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--ink);
+  }
+
+  .player-meta-text {
+    font-size: 11px;
+    color: var(--ink-light);
+    font-weight: 400;
+  }
+
+  /* Position badges — chunky, ownable */
+  .pos {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 22px;
+    font-size: 10px;
+    font-weight: 700;
+    border-radius: 5px;
+    font-family: var(--font-mono);
+    border: 2px solid;
+    letter-spacing: 0.3px;
+  }
+
+  .pos-qb { background: var(--blue-light); color: var(--pos-qb); border-color: var(--pos-qb); }
+  .pos-rb { background: var(--green-light); color: var(--pos-rb); border-color: var(--pos-rb); }
+  .pos-wr { background: var(--orange-light); color: var(--pos-wr); border-color: var(--pos-wr); }
+  .pos-te { background: var(--purple-light); color: var(--pos-te); border-color: var(--pos-te); }
+
+  /* Stat highlights */
+  .s-hot { color: var(--green); font-weight: 700; }
+  .s-fire { color: var(--orange); font-weight: 700; }
+  .s-cold { color: var(--red); }
+
+  /* Handwritten table annotations */
+  .table-annotation {
+    position: absolute;
+    font-family: var(--font-hand);
+    font-size: 16px;
+    color: var(--red);
+    transform: rotate(-4deg);
+    pointer-events: none;
+  }
+
+  /* ===== PLAYER CARDS — the "stat card" ===== */
+  .cards-row {
+    display: flex;
+    gap: 24px;
+    margin: 0 32px 48px;
+    flex-wrap: wrap;
+  }
+
+  .player-card {
+    width: 300px;
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: var(--radius-chunky);
+    overflow: hidden;
+    transition: all 0.15s;
+    box-shadow: 4px 4px 0 var(--ink);
+    position: relative;
+  }
+
+  .player-card:hover {
+    box-shadow: 6px 6px 0 var(--ink);
+    transform: translate(-2px, -2px);
+  }
+
+  .card-top-stripe {
+    height: 6px;
+  }
+
+  .stripe-wr { background: var(--pos-wr); }
+  .stripe-rb { background: var(--pos-rb); }
+  .stripe-qb { background: var(--pos-qb); }
+
+  .card-head {
+    padding: 16px 20px 12px;
+    border-bottom: 2px dashed var(--ink-faint);
+    position: relative;
+  }
+
+  .card-pname {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 4px;
+  }
+
+  .card-psub {
+    font-size: 12px;
+    color: var(--ink-light);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-psub .dot {
+    width: 3px; height: 3px; border-radius: 50%; background: var(--ink-faint);
+  }
+
+  /* Tier sticker — rotated, looks slapped on */
+  .tier-sticker {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    font-size: 10px;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    padding: 3px 10px;
+    border-radius: 4px;
+    border: 2px solid;
+    transform: rotate(3deg);
+  }
+
+  .sticker-elite {
+    color: var(--orange);
+    border-color: var(--orange);
+    background: var(--orange-light);
+  }
+
+  .sticker-prospect {
+    color: var(--blue);
+    border-color: var(--blue);
+    background: var(--blue-light);
+  }
+
+  .sticker-starter {
+    color: var(--green);
+    border-color: var(--green);
+    background: var(--green-light);
+  }
+
+  /* Stat bars — chunky with personality */
+  .card-stats {
+    padding: 14px 20px;
+  }
+
+  .srow {
+    display: flex;
+    align-items: center;
+    margin-bottom: 9px;
+  }
+
+  .srow:last-child { margin-bottom: 0; }
+
+  .slabel {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--ink-medium);
+    width: 80px;
+    flex-shrink: 0;
+  }
+
+  .sbar-track {
+    flex: 1;
+    height: 10px;
+    background: var(--bg-warm);
+    border-radius: 5px;
+    margin: 0 10px;
+    overflow: hidden;
+    border: 1.5px solid var(--ink-faint);
+  }
+
+  .sbar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .fill-orange { background: var(--orange); }
+  .fill-green { background: var(--green); }
+  .fill-blue { background: var(--blue); }
+  .fill-purple { background: var(--purple); }
+  .fill-yellow { background: var(--yellow); }
+  .fill-red { background: var(--red); }
+
+  .sval {
+    font-size: 13px;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--ink);
+    width: 48px;
+    text-align: right;
+  }
+
+  /* Card footer */
+  .card-foot {
+    padding: 10px 20px;
+    border-top: 2px dashed var(--ink-faint);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg-warm);
+  }
+
+  .cfoot-label {
+    font-size: 11px;
+    color: var(--ink-light);
+  }
+
+  .cfoot-value {
+    font-size: 14px;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    color: var(--orange);
+  }
+
+  /* Handwritten card annotation */
+  .card-scribble {
+    position: absolute;
+    font-family: var(--font-hand);
+    font-size: 15px;
+    color: var(--red);
+    transform: rotate(-6deg);
+    right: 16px;
+    bottom: 52px;
+    pointer-events: none;
+  }
+
+  /* ===== AGENT OUTPUT ===== */
+  .agent-section {
+    margin: 0 32px 48px;
+    max-width: 720px;
+  }
+
+  .agent-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: var(--radius-chunky);
+    overflow: hidden;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+
+  .agent-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    border-bottom: 3px solid var(--ink);
+    background: var(--bg-warm);
+  }
+
+  /* Pixel-art-style agent avatar */
+  .agent-avi {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    border: 2px solid var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    background: var(--yellow-light);
+    box-shadow: 2px 2px 0 var(--ink);
+    image-rendering: pixelated;
+  }
+
+  .agent-avi.hawk { background: var(--orange-light); }
+  .agent-avi.owl { background: var(--yellow-light); }
+
+  .agent-id {
+    flex: 1;
+  }
+
+  .agent-nm {
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: -0.3px;
+  }
+
+  .agent-rl {
+    font-size: 11px;
+    color: var(--ink-light);
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .agent-time {
+    font-size: 11px;
+    color: var(--ink-light);
+    font-family: var(--font-mono);
+  }
+
+  .agent-body {
+    padding: 20px;
+  }
+
+  .agent-body p {
+    font-size: 14px;
+    line-height: 1.75;
+    color: var(--ink-medium);
+    margin-bottom: 14px;
+  }
+
+  .agent-body p:last-child { margin-bottom: 0; }
+
+  /* Urgency tags — sticker energy */
+  .utag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    border-radius: 6px;
+    border: 2px solid;
+    letter-spacing: 0.5px;
+  }
+
+  .utag-opp {
+    color: var(--green);
+    border-color: var(--green);
+    background: var(--green-light);
+    transform: rotate(-1deg);
+    display: inline-block;
+  }
+
+  .utag-urgent {
+    color: var(--red);
+    border-color: var(--red);
+    background: var(--red-light);
+    transform: rotate(1deg);
+    display: inline-block;
+  }
+
+  .utag-monitor {
+    color: var(--orange);
+    border-color: var(--orange);
+    background: var(--orange-light);
+  }
+
+  .agent-callout {
+    font-family: var(--font-hand);
+    font-size: 18px;
+    color: var(--orange);
+    margin-top: 4px;
+  }
+
+  /* Evidence box */
+  .evidence-box {
+    margin-top: 16px;
+    padding: 14px 16px;
+    background: var(--bg-warm);
+    border-radius: 10px;
+    border: 2px solid var(--ink-faint);
+    border-left: 4px solid var(--orange);
+  }
+
+  .ev-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    margin-bottom: 6px;
+  }
+
+  .ev-text {
+    font-size: 12px;
+    font-family: var(--font-mono);
+    color: var(--ink-medium);
+    line-height: 1.7;
+  }
+
+  .agent-foot {
+    padding: 10px 20px;
+    border-top: 2px solid var(--ink-faint);
+    display: flex;
+    gap: 16px;
+    background: var(--bg-warm);
+  }
+
+  .agent-foot a {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-light);
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.15s;
+  }
+
+  .agent-foot a:hover {
+    color: var(--orange);
+  }
+
+  /* ===== BRIEFING ===== */
+  .briefing-section {
+    margin: 0 32px 48px;
+    max-width: 720px;
+  }
+
+  .briefing {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: var(--radius-chunky);
+    overflow: hidden;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+
+  .briefing-top {
+    padding: 16px 20px;
+    border-bottom: 3px solid var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--yellow-light);
+  }
+
+  .briefing-tl {
+    font-size: 16px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .briefing-tl .emoji {
+    font-size: 22px;
+  }
+
+  .briefing-dt {
+    font-size: 12px;
+    color: var(--ink-light);
+    font-family: var(--font-mono);
+  }
+
+  .brief-item {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--ink-faint);
+    display: flex;
+    gap: 14px;
+    transition: background 0.1s;
+    cursor: pointer;
+  }
+
+  .brief-item:last-child { border-bottom: none; }
+  .brief-item:hover { background: var(--bg-warm); }
+
+  .brief-dot-wrap { padding-top: 4px; }
+
+  .bdot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid;
+  }
+
+  .bdot-red { background: var(--red-light); border-color: var(--red); }
+  .bdot-orange { background: var(--orange-light); border-color: var(--orange); }
+  .bdot-green { background: var(--green-light); border-color: var(--green); }
+
+  .brief-content { flex: 1; }
+
+  .brief-hl {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 2px;
+    color: var(--ink);
+  }
+
+  .brief-detail {
+    font-size: 13px;
+    color: var(--ink-medium);
+    line-height: 1.5;
+  }
+
+  .brief-src {
+    font-size: 11px;
+    color: var(--ink-light);
+    font-family: var(--font-mono);
+    margin-top: 4px;
+  }
+
+  /* ===== FORMULAS — sticker collection ===== */
+  .formulas-row {
+    margin: 0 32px 48px;
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .formula-sticker {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    background: var(--bg-card);
+    border: 2px solid var(--ink);
+    border-radius: 10px;
+    box-shadow: 3px 3px 0 var(--ink);
+    transition: all 0.1s;
+    cursor: pointer;
+  }
+
+  .formula-sticker:hover {
+    box-shadow: 4px 4px 0 var(--ink);
+    transform: translate(-1px, -1px);
+  }
+
+  .formula-sticker:nth-child(1) { transform: rotate(-1deg); }
+  .formula-sticker:nth-child(2) { transform: rotate(0.5deg); }
+  .formula-sticker:nth-child(3) { transform: rotate(-0.5deg); }
+
+  .formula-sticker:nth-child(1):hover { transform: rotate(-1deg) translate(-1px, -1px); }
+  .formula-sticker:nth-child(2):hover { transform: rotate(0.5deg) translate(-1px, -1px); }
+  .formula-sticker:nth-child(3):hover { transform: rotate(-0.5deg) translate(-1px, -1px); }
+
+  .fsticker-name {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .fsticker-by {
+    font-size: 11px;
+    color: var(--ink-light);
+  }
+
+  .fsticker-stars {
+    font-size: 12px;
+    color: var(--yellow);
+  }
+
+  /* ===== LOADING ===== */
+  .loading-section {
+    margin: 0 32px 48px;
+  }
+
+  .loading-msg {
+    font-size: 14px;
+    color: var(--ink-light);
+    font-family: var(--font-mono);
+    margin-bottom: 10px;
+  }
+
+  .loading-bar {
+    height: 6px;
+    background: var(--bg-warm);
+    border-radius: 3px;
+    border: 1.5px solid var(--ink-faint);
+    overflow: hidden;
+    max-width: 300px;
+  }
+
+  .loading-fill {
+    height: 100%;
+    width: 30%;
+    background: var(--orange);
+    border-radius: 2px;
+    animation: slide 1.5s ease-in-out infinite;
+  }
+
+  @keyframes slide {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(400%); }
+  }
+
+  /* ===== PALETTE DISPLAY ===== */
+  .palette-row {
+    display: flex;
+    gap: 14px;
+    margin: 0 32px 48px;
+    flex-wrap: wrap;
+  }
+
+  .swatch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .swatch-box {
+    width: 64px;
+    height: 64px;
+    border-radius: 10px;
+    border: 3px solid var(--ink);
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+
+  .swatch-name {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--ink-medium);
+  }
+
+  .swatch-hex {
+    font-size: 10px;
+    color: var(--ink-light);
+    font-family: var(--font-mono);
+  }
+
+  /* ===== TYPE SCALE ===== */
+  .type-section {
+    margin: 0 32px 48px;
+  }
+
+  .type-row {
+    margin-bottom: 16px;
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+  }
+
+  .type-label {
+    width: 160px;
+    font-size: 11px;
+    color: var(--ink-light);
+    font-family: var(--font-mono);
+    flex-shrink: 0;
+  }
+
+  .ts-xl { font-size: 32px; font-weight: 700; letter-spacing: -1px; }
+  .ts-lg { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
+  .ts-body { font-size: 14px; color: var(--ink-medium); }
+  .ts-mono { font-size: 13px; font-family: var(--font-mono); color: var(--ink-medium); }
+  .ts-hand { font-size: 24px; font-family: var(--font-hand); color: var(--orange); }
+  .ts-label-ex { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink-light); }
+
+  /* ===== NCAA SCREENER VARIANT ===== */
+  .ncaa-toolbar {
+    background: var(--blue-light) !important;
+  }
+
+  .ncaa-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--blue);
+    background: var(--blue-light);
+    border: 2px solid var(--blue);
+    border-radius: 5px;
+    font-family: var(--font-mono);
+  }
+
+  /* ===== WATERMARK ===== */
+  .watermark {
+    text-align: center;
+    padding: 40px 32px;
+    font-family: var(--font-hand);
+    font-size: 18px;
+    color: var(--ink-faint);
+  }
+
+  /* ===== DARK MODE AGENT PANEL (contrast section) ===== */
+  .dark-panel {
+    background: var(--bg-ink);
+    margin: 0 32px 48px;
+    border: 3px solid var(--ink);
+    border-radius: var(--radius-chunky);
+    padding: 32px;
+    box-shadow: 6px 6px 0 var(--ink);
+    max-width: 720px;
+  }
+
+  .dark-panel .section-title {
+    color: var(--ink-faint);
+  }
+
+  .dark-panel .section-annotation {
+    color: var(--yellow);
+  }
+
+  .dark-panel-note {
+    font-size: 14px;
+    color: var(--ink-light);
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+
+  .dark-briefing-item {
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    gap: 12px;
+  }
+
+  .dark-briefing-item:last-child { border-bottom: none; }
+
+  .dark-hl {
+    font-size: 14px;
+    font-weight: 700;
+    color: #e8ecf1;
+    margin-bottom: 2px;
+  }
+
+  .dark-detail {
+    font-size: 13px;
+    color: var(--ink-light);
+    line-height: 1.5;
+  }
+
+  .dark-src {
+    font-size: 11px;
+    color: rgba(255,255,255,0.25);
+    font-family: var(--font-mono);
+    margin-top: 3px;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="topnav">
+  <div class="logo">
+    <div class="logo-mark">&#x1F42F;</div>
+    <div class="logo-text">Razzle</div>
+  </div>
+  <div class="nav-links">
+    <a class="nav-link" href="#">Home</a>
+    <a class="nav-link active" href="#">The Lab</a>
+    <a class="nav-link" href="#">League Intel</a>
+    <a class="nav-link" href="#">War Room</a>
+  </div>
+  <div class="nav-right">
+    <div class="sync-pill">
+      <div class="sync-dot"></div>
+      synced 4m ago
+    </div>
+  </div>
+</nav>
+
+<!-- MASCOT -->
+<div class="section-header">
+  <div class="section-title">The Mascot</div>
+  <div class="section-annotation">the gigachad garfield of fantasy football</div>
+</div>
+<div class="section-note">Razzle is a Bengal tiger. Chief of Staff. Runs the whole operation. Toylike, chunky, unbothered — but the smartest one in the room and he knows it. He doesn't brief you because he has to. He briefs you because he's already figured it all out.</div>
+
+<div class="mascot-section">
+  <div class="mascot-card">
+    <div class="mascot-visual">
+      <div class="mascot-emoji">&#x1F42F;</div>
+      <div class="mascot-nameplate">RAZZLE</div>
+    </div>
+    <div class="mascot-info">
+      <div class="mascot-title">Razzle</div>
+      <div class="mascot-role">Chief of Staff &middot; Bengal Tiger</div>
+      <div class="mascot-bio">
+        Runs the front office. Coordinates all agent intel, resolves conflicts, delivers your morning briefing. Has the energy of a cat who knocked your fantasy projections off the table and then showed you better ones. Never rushes. Never wrong. Occasionally smug about it.
+      </div>
+      <div class="mascot-traits">
+        <div class="mascot-trait">unbothered</div>
+        <div class="mascot-trait">always right</div>
+        <div class="mascot-trait">slightly smug</div>
+        <div class="mascot-trait">your GM</div>
+      </div>
+      <div class="mascot-scribble">he's not impressed by your league. he's helping anyway.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PALETTE -->
+<div class="section-header">
+  <div class="section-title">Color Palette</div>
+  <div class="section-annotation">warm paper, not dark void</div>
+</div>
+<div class="section-note">Warm sand. Tiger orange. Bold borders. Every color earns its spot.</div>
+
+<div class="palette-row">
+  <div class="swatch">
+    <div class="swatch-box" style="background: #ede0cf;"></div>
+    <div class="swatch-name">Sand</div>
+    <div class="swatch-hex">#ede0cf</div>
+  </div>
+  <div class="swatch">
+    <div class="swatch-box" style="background: #1a1a2e;"></div>
+    <div class="swatch-name">Ink</div>
+    <div class="swatch-hex">#1a1a2e</div>
+  </div>
+  <div class="swatch">
+    <div class="swatch-box" style="background: #d97757;"></div>
+    <div class="swatch-name">Tiger</div>
+    <div class="swatch-hex">#d97757</div>
+  </div>
+  <div class="swatch">
+    <div class="swatch-box" style="background: #ffc857;"></div>
+    <div class="swatch-name">Yellow</div>
+    <div class="swatch-hex">#ffc857</div>
+  </div>
+  <div class="swatch">
+    <div class="swatch-box" style="background: #2ec4b6;"></div>
+    <div class="swatch-name">Teal</div>
+    <div class="swatch-hex">#2ec4b6</div>
+  </div>
+  <div class="swatch">
+    <div class="swatch-box" style="background: #5b7fff;"></div>
+    <div class="swatch-name">Blue/NCAA</div>
+    <div class="swatch-hex">#5b7fff</div>
+  </div>
+  <div class="swatch">
+    <div class="swatch-box" style="background: #e63946;"></div>
+    <div class="swatch-name">Red</div>
+    <div class="swatch-hex">#e63946</div>
+  </div>
+  <div class="swatch">
+    <div class="swatch-box" style="background: #8b5cf6;"></div>
+    <div class="swatch-name">Purple</div>
+    <div class="swatch-hex">#8b5cf6</div>
+  </div>
+</div>
+
+<!-- TYPOGRAPHY -->
+<div class="section-header">
+  <div class="section-title">Typography</div>
+  <div class="section-annotation">three fonts, three jobs</div>
+</div>
+<div class="section-note">Space Garfield for structure. Space Mono for data. Caveat for the scribbles in the margins — the personality that leaks through.</div>
+
+<div class="type-section">
+  <div class="type-row">
+    <div class="type-label">32 / 700 Garfield</div>
+    <div class="ts-xl">The War Room</div>
+  </div>
+  <div class="type-row">
+    <div class="type-label">20 / 700 Garfield</div>
+    <div class="ts-lg">Ja'Marr Chase</div>
+  </div>
+  <div class="type-row">
+    <div class="type-label">14 / 400 Garfield</div>
+    <div class="ts-body">Snap share trending up 8% over three weeks. Route participation is elite-tier.</div>
+  </div>
+  <div class="type-row">
+    <div class="type-label">13 / 400 Mono</div>
+    <div class="ts-mono">tgt_share: 28.4% · air_yds: 12.3 · epa: 0.31</div>
+  </div>
+  <div class="type-row">
+    <div class="type-label">24 / 600 Caveat</div>
+    <div class="ts-hand">this is the one ^</div>
+  </div>
+  <div class="type-row">
+    <div class="type-label">11 / 700 Upper</div>
+    <div class="ts-label-ex">Weekly Briefing · Urgency Tier · Evidence</div>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div class="section-header">
+  <div class="section-title">Loading</div>
+  <div class="section-annotation">the small moments matter</div>
+</div>
+<div class="loading-section">
+  <div class="loading-msg">pulling film...</div>
+  <div class="loading-bar">
+    <div class="loading-fill"></div>
+  </div>
+</div>
+
+<!-- SCREENER — NFL -->
+<div class="section-header">
+  <div class="section-title">The Lab</div>
+  <div class="section-annotation">the Bloomberg terminal that doesn't dress like one</div>
+</div>
+<div class="section-note">Same analytical power. Doesn't look like it wants to sell you a Bloomberg subscription.</div>
+
+<div class="screener-container">
+  <div class="screener-toolbar">
+    <div class="toolbar-left">
+      <div class="league-toggle">
+        <div class="toggle-opt active">NFL</div>
+        <div class="toggle-opt">NCAA</div>
+      </div>
+      <div class="chip active-wr">WR <span class="x">×</span></div>
+      <div class="chip">Snap% > 60 <span class="x">×</span></div>
+      <div class="chip">Tgt Share > 18% <span class="x">×</span></div>
+      <div class="chip">+ Filter</div>
+    </div>
+    <div class="toolbar-right">
+      <span class="player-count">47 players</span>
+      <button class="btn-chunky">Save View</button>
+      <button class="btn-primary">Share</button>
+    </div>
+  </div>
+  <table class="screener-table">
+    <thead>
+      <tr>
+        <th style="width: 44px;"></th>
+        <th>Player</th>
+        <th class="numeric sorted">PPR/G</th>
+        <th class="numeric">Tgt Share</th>
+        <th class="numeric">Snap %</th>
+        <th class="numeric">Air Yds/Tgt</th>
+        <th class="numeric">EPA/Play</th>
+        <th class="numeric">Sep Rating</th>
+        <th class="numeric">RZ Tgt%</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="pos pos-wr">WR</span></td>
+        <td><div class="player-cell"><div><span class="player-name-text">Ja'Marr Chase</span> <span class="player-meta-text">CIN · 25</span></div></div></td>
+        <td class="numeric s-fire">24.8</td>
+        <td class="numeric s-hot">31.2%</td>
+        <td class="numeric">94.1%</td>
+        <td class="numeric">11.4</td>
+        <td class="numeric s-hot">0.38</td>
+        <td class="numeric">8.7</td>
+        <td class="numeric s-hot">28.4%</td>
+      </tr>
+      <tr>
+        <td><span class="pos pos-wr">WR</span></td>
+        <td><div class="player-cell"><div><span class="player-name-text">CeeDee Lamb</span> <span class="player-meta-text">DAL · 26</span></div></div></td>
+        <td class="numeric s-fire">22.1</td>
+        <td class="numeric s-hot">29.8%</td>
+        <td class="numeric">96.3%</td>
+        <td class="numeric">9.2</td>
+        <td class="numeric s-hot">0.29</td>
+        <td class="numeric">9.1</td>
+        <td class="numeric">22.1%</td>
+      </tr>
+      <tr>
+        <td><span class="pos pos-wr">WR</span></td>
+        <td><div class="player-cell"><div><span class="player-name-text">Amon-Ra St. Brown</span> <span class="player-meta-text">DET · 25</span></div></div></td>
+        <td class="numeric s-fire">21.4</td>
+        <td class="numeric s-hot">27.6%</td>
+        <td class="numeric">91.8%</td>
+        <td class="numeric">7.1</td>
+        <td class="numeric">0.22</td>
+        <td class="numeric s-hot">9.4</td>
+        <td class="numeric s-hot">25.7%</td>
+      </tr>
+      <tr>
+        <td><span class="pos pos-wr">WR</span></td>
+        <td><div class="player-cell"><div><span class="player-name-text">Malik Nabers</span> <span class="player-meta-text">NYG · 22</span></div></div></td>
+        <td class="numeric">19.7</td>
+        <td class="numeric s-hot">26.3%</td>
+        <td class="numeric">89.2%</td>
+        <td class="numeric s-hot">12.8</td>
+        <td class="numeric s-hot">0.31</td>
+        <td class="numeric s-hot">9.2</td>
+        <td class="numeric">19.3%</td>
+      </tr>
+      <tr>
+        <td><span class="pos pos-wr">WR</span></td>
+        <td><div class="player-cell"><div><span class="player-name-text">Garrett Wilson</span> <span class="player-meta-text">NYJ · 25</span></div></div></td>
+        <td class="numeric">17.2</td>
+        <td class="numeric">24.1%</td>
+        <td class="numeric">92.7%</td>
+        <td class="numeric">8.9</td>
+        <td class="numeric s-cold">0.08</td>
+        <td class="numeric">8.3</td>
+        <td class="numeric">18.6%</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- PLAYER CARDS -->
+<div class="section-header">
+  <div class="section-title">Player Cards</div>
+  <div class="section-annotation">the Pokemon card DNA lives here ^</div>
+</div>
+<div class="section-note">Chunky borders. Stat bars you can read from across the room. Tier stickers slapped on like they mean it. Dashed dividers like a scouting report torn from a notebook.</div>
+
+<div class="cards-row">
+  <div class="player-card">
+    <div class="card-top-stripe stripe-wr"></div>
+    <div class="card-head">
+      <div class="card-pname">Ja'Marr Chase</div>
+      <div class="card-psub">
+        <span class="pos pos-wr">WR</span>
+        <span class="dot"></span>
+        CIN
+        <span class="dot"></span>
+        25 yrs
+      </div>
+      <div class="tier-sticker sticker-elite">ELITE</div>
+    </div>
+    <div class="card-stats">
+      <div class="srow">
+        <div class="slabel">PPR / Gm</div>
+        <div class="sbar-track"><div class="sbar-fill fill-orange" style="width: 92%;"></div></div>
+        <div class="sval">24.8</div>
+      </div>
+      <div class="srow">
+        <div class="slabel">Tgt Share</div>
+        <div class="sbar-track"><div class="sbar-fill fill-orange" style="width: 88%;"></div></div>
+        <div class="sval">31.2%</div>
+      </div>
+      <div class="srow">
+        <div class="slabel">Snap %</div>
+        <div class="sbar-track"><div class="sbar-fill fill-green" style="width: 94%;"></div></div>
+        <div class="sval">94.1%</div>
+      </div>
+      <div class="srow">
+        <div class="slabel">EPA / Play</div>
+        <div class="sbar-track"><div class="sbar-fill fill-green" style="width: 78%;"></div></div>
+        <div class="sval">0.38</div>
+      </div>
+      <div class="srow">
+        <div class="slabel">Separation</div>
+        <div class="sbar-track"><div class="sbar-fill fill-blue" style="width: 72%;"></div></div>
+        <div class="sval">8.7</div>
+      </div>
+      <div class="srow">
+        <div class="slabel">RZ Tgt %</div>
+        <div class="sbar-track"><div class="sbar-fill fill-red" style="width: 82%;"></div></div>
+        <div class="sval">28.4%</div>
+      </div>
+    </div>
+    <div class="card-foot">
+      <div class="cfoot-label">My WR Score</div>
+      <div class="cfoot-value">94.2</div>
+    </div>
+    <div class="card-scribble">unguardable rn</div>
+  </div>
+
+  <div class="player-card">
+    <div class="card-top-stripe stripe-rb"></div>
+    <div class="card-head">
+      <div class="card-pname">Ashton Jeanty</div>
+      <div class="card-psub">
+        <span class="pos pos-rb">RB</span>
+        <span class="dot"></span>
+        <span class="ncaa-badge">PROSPECT</span>
+        <span class="dot"></span>
+        Boise St
+      </div>
+      <div class="tier-sticker sticker-prospect">NCAA</div>
+    </div>
+    <div class="card-stats">
+      <div class="srow">
+        <div class="slabel">Yds / Carry</div>
+        <div class="sbar-track"><div class="sbar-fill fill-green" style="width: 95%;"></div></div>
+        <div class="sval">7.1</div>
+      </div>
+      <div class="srow">
+        <div class="slabel">Broken Tkl</div>
+        <div class="sbar-track"><div class="sbar-fill fill-green" style="width: 91%;"></div></div>
+        <div class="sval">89</div>
+      </div>
+      <div class="srow">
+        <div class="slabel">Yds After</div>
+        <div class="sbar-track"><div class="sbar-fill fill-orange" style="width: 88%;"></div></div>
+        <div class="sval">4.8</div>
+      </div>
+      <div class="srow">
+        <div class="slabel">Rec / Game</div>
+        <div class="sbar-track"><div class="sbar-fill fill-blue" style="width: 52%;"></div></div>
+        <div class="sval">2.1</div>
+      </div>
+      <div class="srow">
+        <div class="slabel">Rush Share</div>
+        <div class="sbar-track"><div class="sbar-fill fill-purple" style="width: 84%;"></div></div>
+        <div class="sval">71.3%</div>
+      </div>
+      <div class="srow">
+        <div class="slabel">TD Rate</div>
+        <div class="sbar-track"><div class="sbar-fill fill-red" style="width: 76%;"></div></div>
+        <div class="sval">8.2%</div>
+      </div>
+    </div>
+    <div class="card-foot">
+      <div class="cfoot-label">Draft Projection</div>
+      <div class="cfoot-value">Rd 1 · Top 10</div>
+    </div>
+    <div class="card-scribble">generational?</div>
+  </div>
+
+  <div class="player-card">
+    <div class="card-top-stripe stripe-qb"></div>
+    <div class="card-head">
+      <div class="card-pname">Caleb Williams</div>
+      <div class="card-psub">
+        <span class="pos pos-qb">QB</span>
+        <span class="dot"></span>
+        CHI
+        <span class="dot"></span>
+        23 yrs
+      </div>
+      <div class="tier-sticker sticker-starter">STARTER</div>
+    </div>
+    <div class="card-stats">
+      <div class="srow">
+        <div class="slabel">PPR / Gm</div>
+        <div class="sbar-track"><div class="sbar-fill fill-blue" style="width: 74%;"></div></div>
+        <div class="sval">19.4</div>
+      </div>
+      <div class="srow">
+        <div class="slabel">Comp %</div>
+        <div class="sbar-track"><div class="sbar-fill fill-blue" style="width: 68%;"></div></div>
+        <div class="sval">64.2%</div>
+      </div>
+      <div class="srow">
+        <div class="slabel">CPOE</div>
+        <div class="sbar-track"><div class="sbar-fill fill-green" style="width: 62%;"></div></div>
+        <div class="sval">+2.1</div>
+      </div>
+      <div class="srow">
+        <div class="slabel">EPA / Drop</div>
+        <div class="sbar-track"><div class="sbar-fill fill-green" style="width: 58%;"></div></div>
+        <div class="sval">0.14</div>
+      </div>
+      <div class="srow">
+        <div class="slabel">Pressure %</div>
+        <div class="sbar-track"><div class="sbar-fill fill-red" style="width: 71%;"></div></div>
+        <div class="sval">34.1%</div>
+      </div>
+      <div class="srow">
+        <div class="slabel">Rush Yds/G</div>
+        <div class="sbar-track"><div class="sbar-fill fill-orange" style="width: 55%;"></div></div>
+        <div class="sval">28.3</div>
+      </div>
+    </div>
+    <div class="card-foot">
+      <div class="cfoot-label">Razzle Signal</div>
+      <div class="cfoot-value">Breakout Watch</div>
+    </div>
+  </div>
+</div>
+
+<!-- AGENT OUTPUT -->
+<div class="section-header">
+  <div class="section-title">Agent Output</div>
+  <div class="section-annotation">scouting found something</div>
+</div>
+<div class="section-note">Warm paper, chunky borders, evidence you can check. The analysis is dead serious. The frame isn't pretending to be a terminal.</div>
+
+<div class="agent-section">
+  <div class="agent-card">
+    <div class="agent-head">
+      <div class="agent-avi hawk">&#x1F985;</div>
+      <div class="agent-id">
+        <div class="agent-nm">Talon</div>
+        <div class="agent-rl">Scout &middot; Philadelphia Eagles</div>
+      </div>
+      <div class="agent-time">today 6:42am</div>
+    </div>
+    <div class="agent-body">
+      <p><span class="utag utag-opp">OPPORTUNITY</span></p>
+      <p>Ladd McConkey's route participation rate has quietly climbed to 91% over the last four weeks — up from 74% in weeks 1-4. He's running the full tree now, not just the slot underneath work from early season. The target share hasn't caught up yet (16.2%), but the usage profile says it will.</p>
+      <p>Worth noting: Herbert's average depth of target to McConkey has increased from 6.8 to 11.3 yards over the same window. They're trusting him downfield.</p>
+      <p class="agent-callout">the box score doesn't show it yet. the film does.</p>
+      <div class="evidence-box">
+        <div class="ev-label">Evidence</div>
+        <div class="ev-text">
+          route_participation: 91.2% (wk5-8) vs 74.1% (wk1-4)<br>
+          aDOT: 11.3 (wk5-8) vs 6.8 (wk1-4)<br>
+          snap_pct: 88.4% (stable)<br>
+          separation: 9.1 (86th percentile)
+        </div>
+      </div>
+    </div>
+    <div class="agent-foot">
+      <a>View in Lab</a>
+      <a>Compare Players</a>
+      <a>Ask Follow-up</a>
+    </div>
+  </div>
+</div>
+
+<!-- BRIEFING -->
+<div class="section-header">
+  <div class="section-title">Morning Briefing</div>
+  <div class="section-annotation">Razzle never sleeps</div>
+</div>
+
+<div class="briefing-section">
+  <div class="briefing">
+    <div class="briefing-top">
+      <div class="briefing-tl">
+        <span class="emoji">&#x1F42F;</span>
+        Razzle's Morning Briefing
+      </div>
+      <div class="briefing-dt">Week 9 · Tue Nov 4</div>
+    </div>
+
+    <div class="brief-item">
+      <div class="brief-dot-wrap"><div class="bdot bdot-red"></div></div>
+      <div class="brief-content">
+        <div class="brief-hl">De'Von Achane — DNP Monday, hip</div>
+        <div class="brief-detail">Medical staff flags this as a 40% chance to miss Week 9. You have no viable RB2 on your bench. Scouting has three waiver targets ready.</div>
+        <div class="brief-src">src: medical, scouting</div>
+      </div>
+    </div>
+
+    <div class="brief-item">
+      <div class="brief-dot-wrap"><div class="bdot bdot-orange"></div></div>
+      <div class="brief-content">
+        <div class="brief-hl">Trade window closing on "BeerMe_Brady"</div>
+        <div class="brief-detail">Intel notes he's 6-2 and historically stops making moves after clinching. If you're targeting his bench depth, this week is the window.</div>
+        <div class="brief-src">src: intel, history</div>
+      </div>
+    </div>
+
+    <div class="brief-item">
+      <div class="brief-dot-wrap"><div class="bdot bdot-green"></div></div>
+      <div class="brief-content">
+        <div class="brief-hl">McConkey breakout signal</div>
+        <div class="brief-detail">Available in 68% of leagues. Projections show a 4-point PPR/G increase ROS if route participation holds. Worth a speculative add.</div>
+        <div class="brief-src">src: scouting, projections</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DARK MODE WAR ROOM PREVIEW -->
+<div class="section-header">
+  <div class="section-title">War Room</div>
+  <div class="section-annotation">lights off when it's game time</div>
+</div>
+<div class="section-note">The War Room flips to dark. When you're in decision mode, the playful chrome steps aside. The contrast is intentional — the rest of the app is warm and inviting, but the War Room says "okay, we're locked in now."</div>
+
+<div class="dark-panel">
+  <div class="section-header" style="margin: 0 0 8px;">
+    <div class="section-title">Active Operations</div>
+    <div class="section-annotation">week 9 war room</div>
+  </div>
+  <div class="dark-panel-note">3 items need your attention before Wednesday waivers.</div>
+
+  <div class="dark-briefing-item">
+    <div class="brief-dot-wrap"><div class="bdot bdot-red"></div></div>
+    <div>
+      <div class="dark-hl">RB2 Vacancy — Achane likely out</div>
+      <div class="dark-detail">Scouting's top waiver pick: Roschon Johnson (72% snap projection). FAAB bid recommendation: $18 (54% of remaining budget).</div>
+      <div class="dark-src">confidence: high · sources: 3 agents</div>
+    </div>
+  </div>
+
+  <div class="dark-briefing-item">
+    <div class="brief-dot-wrap"><div class="bdot bdot-orange"></div></div>
+    <div>
+      <div class="dark-hl">Trade package ready for BeerMe_Brady</div>
+      <div class="dark-detail">Intel has a proposal staged. Opening offer: your Diontae Johnson + 2026 3rd for his Jaylen Waddle. Walkaway: adding a 2026 2nd.</div>
+      <div class="dark-src">confidence: medium · behavioral profile: 3 seasons</div>
+    </div>
+  </div>
+
+  <div class="dark-briefing-item">
+    <div class="brief-dot-wrap"><div class="bdot bdot-green"></div></div>
+    <div>
+      <div class="dark-hl">McConkey — speculative stash</div>
+      <div class="dark-detail">No FAAB needed, he's a free agent. Roster analysis says you can absorb a bench stash. Drop candidate: Dontayvion Wicks.</div>
+      <div class="dark-src">confidence: high · breakout model: 78th percentile</div>
+    </div>
+  </div>
+</div>
+
+<!-- FORMULAS -->
+<div class="section-header">
+  <div class="section-title">Formula Store</div>
+  <div class="section-annotation">community sticker collection</div>
+</div>
+<div class="section-note">Formulas from the community. They look like stickers because that's what they are — collect the ones you like, slap them on your screener.</div>
+
+<div class="formulas-row">
+  <div class="formula-sticker">
+    <div>
+      <div class="fsticker-name">Dynasty Stash Score</div>
+      <div class="fsticker-by">by u/TapeGrinder</div>
+    </div>
+    <div class="fsticker-stars">★★★★★</div>
+  </div>
+  <div class="formula-sticker">
+    <div>
+      <div class="fsticker-name">Boom/Bust Index</div>
+      <div class="fsticker-by">by u/VarianceLord</div>
+    </div>
+    <div class="fsticker-stars">★★★★☆</div>
+  </div>
+  <div class="formula-sticker">
+    <div>
+      <div class="fsticker-name">Target Quality Score</div>
+      <div class="fsticker-by">by u/FilmRoomFC</div>
+    </div>
+    <div class="fsticker-stars">★★★★★</div>
+  </div>
+</div>
+
+<div class="watermark">built different — razzle.lol</div>
+
+</body>
+</html>
