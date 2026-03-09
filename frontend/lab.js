@@ -268,6 +268,8 @@ const state = {
   limit: 100,
   offset: 0,
   filters: [],
+  teams: [],    // selected team abbreviations for team filter
+  minGP: 0,     // minimum games played filter
   visibleColumns: [...PRESETS.ppr.columns],
   items: [],
   totalCount: 0,
@@ -307,9 +309,17 @@ const state = {
 
     populateSeasonSelect();
     populateFilterStatSelect();
+    populateTeamFilter();
   } catch (e) {
     console.error("Failed to load filter options:", e);
     state.season = 2024;
+  }
+
+  // Sync team/minGP UI from URL state
+  renderTeamChips();
+  if (state.minGP > 0) {
+    const inp = document.getElementById("minGPInput");
+    if (inp) inp.value = state.minGP;
   }
 
   applyUniverseUI();
@@ -363,6 +373,8 @@ async function fetchAndRenderNFL() {
     offset: state.offset,
     filters: state.filters,
     relevance: state.relevance,
+    teams: state.teams,
+    min_gp: state.minGP,
   };
 
   try {
@@ -834,11 +846,92 @@ function removeFilter(idx) {
 function renderActiveFilters() {
   const container = document.getElementById("activeFilters");
   const opLabels = { gte: "≥", lte: "≤", gt: ">", lt: "<", eq: "=" };
-  container.innerHTML = state.filters.map((f, i) => {
+  let html = "";
+
+  // Min GP pill (team chips shown inline next to dropdown)
+  if (state.minGP > 0) {
+    html += `<span class="filter-tag" style="background:var(--bg-sand);">GP ≥ ${state.minGP} <span class="remove" onclick="clearMinGP()">×</span></span> `;
+  }
+
+  // Stat filters
+  html += state.filters.map((f, i) => {
     const col = COLUMNS[f.key];
     const label = col ? col.label : f.key;
     return `<span class="filter-tag">${label} ${opLabels[f.op] || f.op} ${f.value} <span class="remove" onclick="removeFilter(${i})">×</span></span>`;
   }).join(" ");
+
+  container.innerHTML = html;
+}
+
+function clearTeamFilter() {
+  state.teams = [];
+  state.offset = 0;
+  const sel = document.getElementById("teamFilter");
+  if (sel) sel.value = "";
+  renderActiveFilters();
+  renderTeamChips();
+  fetchAndRender();
+}
+
+function clearMinGP() {
+  state.minGP = 0;
+  state.offset = 0;
+  const inp = document.getElementById("minGPInput");
+  if (inp) inp.value = "";
+  renderActiveFilters();
+  fetchAndRender();
+}
+
+// ─── Team filter ──────────────────────────────────────────────────
+const NFL_TEAMS = [
+  "ARI","ATL","BAL","BUF","CAR","CHI","CIN","CLE","DAL","DEN",
+  "DET","GB","HOU","IND","JAX","KC","LA","LAC","LV","MIA",
+  "MIN","NE","NO","NYG","NYJ","PHI","PIT","SEA","SF","TB","TEN","WAS"
+];
+
+function populateTeamFilter() {
+  const sel = document.getElementById("teamFilter");
+  if (!sel) return;
+  sel.innerHTML = '<option value="">+ Team</option>' +
+    NFL_TEAMS.map(t => `<option value="${t}">${t}</option>`).join("");
+}
+
+function addTeamFromSelect(sel) {
+  const team = sel.value;
+  if (!team || state.teams.includes(team)) {
+    sel.value = "";
+    return;
+  }
+  state.teams.push(team);
+  state.offset = 0;
+  sel.value = "";
+  renderTeamChips();
+  renderActiveFilters();
+  fetchAndRender();
+}
+
+function removeTeam(team) {
+  state.teams = state.teams.filter(t => t !== team);
+  state.offset = 0;
+  renderTeamChips();
+  renderActiveFilters();
+  fetchAndRender();
+}
+
+function renderTeamChips() {
+  const container = document.getElementById("teamChips");
+  if (!container) return;
+  container.innerHTML = state.teams.map(t =>
+    `<span class="team-chip">${t} <span class="remove" onclick="removeTeam('${t}')">×</span></span>`
+  ).join("");
+}
+
+function setMinGP(val) {
+  const v = parseInt(val) || 0;
+  state.minGP = v > 0 ? v : 0;
+  state.offset = 0;
+  renderActiveFilters();
+  fetchAndRender();
 }
 
 // ─── Column picker ───────────────────────────────────────────────
@@ -935,6 +1028,8 @@ function saveStateToURL() {
   if (state.sortDir !== "desc") params.set("dir", state.sortDir);
   if (state.offset > 0) params.set("offset", state.offset);
   if (state.filters.length) params.set("filters", JSON.stringify(state.filters));
+  if (state.teams.length) params.set("teams", state.teams.join(","));
+  if (state.minGP > 0) params.set("min_gp", state.minGP);
 
   if (state.universe === "prospects") {
     if (state.draftYear) params.set("draft_year", state.draftYear);
@@ -973,6 +1068,12 @@ function loadStateFromURL() {
   if (params.has("offset")) state.offset = parseInt(params.get("offset"));
   if (params.has("filters")) {
     try { state.filters = JSON.parse(params.get("filters")); } catch (e) {}
+  }
+  if (params.has("teams")) {
+    state.teams = params.get("teams").split(",").filter(t => t);
+  }
+  if (params.has("min_gp")) {
+    state.minGP = parseInt(params.get("min_gp")) || 0;
   }
 
   if (state.universe === "prospects") {

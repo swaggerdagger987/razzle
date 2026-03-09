@@ -478,9 +478,20 @@ def fetch_screener(body):
         where.append(f"p.position IN ({placeholders})")
         params.extend(pos_list)
 
-    if team:
+    # Support multi-team filtering: comma-separated or list
+    teams_param = body.get("teams", [])
+    if teams_param and isinstance(teams_param, list) and len(teams_param) > 0:
+        team_list = [t.strip().upper() for t in teams_param if t.strip()]
+        if team_list:
+            placeholders_t = ",".join("?" * len(team_list))
+            where.append(f"p.team IN ({placeholders_t})")
+            params.extend(team_list)
+    elif team:
         where.append("p.team = ?")
         params.append(team.strip().upper())
+
+    # Support minimum games played filter (HAVING clause added later)
+    min_gp = body.get("min_gp", 0)
 
     where_clause = " AND ".join(where) if where else "1=1"
 
@@ -545,6 +556,11 @@ def fetch_screener(body):
             else:
                 having.append(f"SUM(s.{key}) {op} ?")
             params.append(float(val))
+
+    # Add minimum games played filter
+    if min_gp and int(min_gp) > 0:
+        having.append("COUNT(*) >= ?")
+        params.append(int(min_gp))
 
     having_clause = ""
     if having:

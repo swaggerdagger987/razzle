@@ -48,9 +48,9 @@
 - Filter pills show active filters with X to clear
 **Depends on**: none
 **Size**: M
-**Status**: PENDING
-**Attempt**: 0/3
-**Result**:
+**Status**: PASS
+**Attempt**: 1/3
+**Result**: Added team multi-select dropdown and min games played input to Lab filter bar. Team filter: select-chunky dropdown with all 32 NFL teams, multi-select via orange team chips with X to remove. Backend updated to support `teams` array param with IN clause. Min GP: number input in filter bar, backend adds HAVING COUNT(*) >= ? clause. Both filters serialize to URL params (teams=, min_gp=) for shareable links. Filter pills show active state with clear buttons. All combine with existing position/search/stat filters. CSS follows comic-strip aesthetic (chunky borders, border-radius: 20px, orange team chips).
 
 ## Task 4: Fix historical seasons + career aggregates
 **Requirement**: "The season dropdown currently shows 2024 and Career, but Career appears to mirror 2024 data. Verify and fix: (a) Confirm the database has data for seasons 2020, 2021, 2022, 2023, 2024. If any are missing, run the adapter to populate them. (b) The season dropdown should list all available seasons (2020, 2021, 2022, 2023, 2024, Career). (c) Career aggregates must SUM across all seasons for counting stats (yards, TDs, receptions) and compute weighted averages for rate stats (catch%, Y/A, etc.). Career games_played = sum of all season GP. Career per-game stats = career totals / career GP. (d) Switching seasons in the dropdown should reload the table with that season's data. (e) Spot check: Patrick Mahomes Career passing_yards should be the sum of his 2020-2024 passing yards, not just 2024."
@@ -183,9 +183,9 @@
 ## Loop State
 ```
 Current Phase: 29
-Current Task: 2
+Current Task: 3
 Current Stage: PASS
 Attempt: 1/3
-Tasks Completed: 2/12
-Loop Iterations: 2
+Tasks Completed: 3/12
+Loop Iterations: 3
 ```
