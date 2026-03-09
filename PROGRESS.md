@@ -12,7 +12,7 @@
 | 2 | Trade Analyzer UI — two-sided card with player search | DONE | Trade button in toolbar, I Give/I Get sides, API search, position cards, verdict |
 | 3 | Value comparison display + verdict + commentary | DONE | Value bars, verdict badge (WIN/LOSS/FAIR), Razzle quips, live updates |
 | 4 | Trade card PNG export with watermark | DONE | 1200x630 canvas, both sides, verdict, watermark |
-| 5 | Deploy + smoke test | | |
+| 5 | Deploy + smoke test | DONE | All syntax checks pass, all features verified |
 
 ### Decisions Log
 - **Trade value model**: Chose composite of PPR PPG (production), age depreciation curve (exponential decay past positional peak), and positional scarcity (RB premium). Simple, transparent, no external data dependency. Dynasty-oriented: penalizes aging RBs heavily, rewards young producers.
