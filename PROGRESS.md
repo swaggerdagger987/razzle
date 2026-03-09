@@ -10,7 +10,7 @@
 |---|------|--------|-------|
 | 1 | cfbfastR adapter — play-level CSV aggregation | DONE | adapters/cfbfastr_adapter.py fetches play-level CSVs from sportsdataverse GitHub (2020-2025), aggregates into per-player per-season totals. 19,454 player-season rows, 9,875 unique players. Passing, rushing, receiving stats with correct TD attribution (handles both QB-credited and receiver-credited patterns). Position inferred from stats, refined via combine/draft data (918 refinements). Bootstrap in server.py + render.yaml updated. |
 | 2 | College stats API endpoints | DONE | GET /api/college/players (paginated, search/position/team/conference/season/sort with derived sorts), GET /api/college/player-profile/{id} (all seasons + career totals + combine/draft), GET /api/college/filter-options (6 seasons, 330 teams, 50 conferences). Derived efficiency stats: CMP%, YPC, Y/REC, catch_rate, per-game avgs. Python re-sort for derived metrics. |
-| 3 | College mode in Lab screener | TODO | |
+| 3 | College mode in Lab screener | DONE | Three-way universe toggle (NFL/Prospects/College). 30 college columns (Production/Usage/Efficiency/Per Game). 3 presets (Production, Efficiency, Draft Profile). Blue accent mode. College player profiles with position-specific headlines, season log, combine, NFL career data. URL state ?u=college&season=2024. Season selector 2020-2025. |
 | 4 | Deploy + smoke test | TODO | |
 
 ## Previous Phase: Phase 16 — Draft Class Analytics + Cross-Year Comparison (COMPLETE)

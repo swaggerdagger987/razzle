@@ -48,6 +48,62 @@ const PROSPECT_PRESETS = {
   },
 };
 
+// ─── College column definitions ─────────────────────────────────
+const COLLEGE_COLUMNS = {
+  // Production
+  games:           { label: "GP",       group: "Production", decimals: 0 },
+  pass_yards:      { label: "Pass Yds", group: "Production", decimals: 0 },
+  pass_tds:        { label: "Pass TD",  group: "Production", decimals: 0 },
+  rush_yards:      { label: "Rush Yds", group: "Production", decimals: 0 },
+  rush_tds:        { label: "Rush TD",  group: "Production", decimals: 0 },
+  rec_yards:       { label: "Rec Yds",  group: "Production", decimals: 0 },
+  rec_tds:         { label: "Rec TD",   group: "Production", decimals: 0 },
+  total_yards:     { label: "Total Yds",group: "Production", decimals: 0 },
+  total_tds:       { label: "Total TD", group: "Production", decimals: 0 },
+
+  // Usage
+  pass_attempts:   { label: "ATT",      group: "Usage", decimals: 0 },
+  completions:     { label: "CMP",      group: "Usage", decimals: 0 },
+  carries:         { label: "CAR",      group: "Usage", decimals: 0 },
+  receptions:      { label: "REC",      group: "Usage", decimals: 0 },
+  targets:         { label: "TGT",      group: "Usage", decimals: 0 },
+  ints_thrown:      { label: "INT",      group: "Usage", decimals: 0 },
+  fumbles:         { label: "FUM",      group: "Usage", decimals: 0 },
+
+  // Efficiency (derived)
+  completion_pct:  { label: "CMP%",     group: "Efficiency", decimals: 1, derived: true },
+  yards_per_carry: { label: "Y/CAR",    group: "Efficiency", decimals: 1, derived: true },
+  yards_per_rec:   { label: "Y/REC",    group: "Efficiency", decimals: 1, derived: true },
+  yards_per_target:{ label: "Y/TGT",    group: "Efficiency", decimals: 1, derived: true },
+  catch_rate:      { label: "Catch%",   group: "Efficiency", decimals: 1, derived: true },
+  yards_per_att:   { label: "Y/ATT",    group: "Efficiency", decimals: 1, derived: true },
+
+  // Per Game (derived)
+  total_ypg:       { label: "YPG",      group: "Per Game", decimals: 1, derived: true },
+  pass_ypg:        { label: "PaYPG",    group: "Per Game", decimals: 1, derived: true },
+  rush_ypg:        { label: "RuYPG",    group: "Per Game", decimals: 1, derived: true },
+  rec_ypg:         { label: "ReYPG",    group: "Per Game", decimals: 1, derived: true },
+  tds_per_game:    { label: "TD/G",     group: "Per Game", decimals: 1, derived: true },
+};
+
+const COLLEGE_PRESETS = {
+  production: {
+    label: "Production",
+    columns: ["games", "pass_yards", "pass_tds", "rush_yards", "rush_tds",
+              "rec_yards", "rec_tds", "total_yards", "total_tds"],
+  },
+  efficiency: {
+    label: "Efficiency",
+    columns: ["games", "completion_pct", "yards_per_carry", "yards_per_rec",
+              "yards_per_target", "catch_rate", "yards_per_att", "total_ypg", "tds_per_game"],
+  },
+  draft_profile: {
+    label: "Draft Profile",
+    columns: ["games", "total_yards", "total_tds", "pass_yards", "pass_tds",
+              "rush_yards", "rush_tds", "rec_yards", "rec_tds", "ints_thrown", "fumbles"],
+  },
+};
+
 // ─── Column definitions ─────────────────────────────────────────
 const COLUMNS = {
   // Core fantasy
@@ -173,17 +229,22 @@ const state = {
   draftYear: 0,
   draftYears: [],
   prospectColumns: [...PROSPECT_PRESETS.combine.columns],
+  // College-specific state
+  collegeSeason: 0,
+  collegeSeasons: [],
+  collegeColumns: [...COLLEGE_PRESETS.production.columns],
 };
 
 // ─── Init ────────────────────────────────────────────────────────
 (async function init() {
   loadStateFromURL();
 
-  // Load both NFL and prospect options in parallel
+  // Load NFL, prospect, and college options in parallel
   try {
-    const [nflOpts, prospectOpts] = await Promise.all([
+    const [nflOpts, prospectOpts, collegeOpts] = await Promise.all([
       apiFetch("/api/filter-options"),
       apiFetch("/api/prospect-options").catch(() => ({ years: [], schools: [], positions: [] })),
+      apiFetch("/api/college/filter-options").catch(() => ({ seasons: [], teams: [], conferences: [], positions: [] })),
     ]);
 
     state.seasons = nflOpts.seasons || [2024];
@@ -191,6 +252,9 @@ const state = {
 
     state.draftYears = prospectOpts.years || [2025];
     if (!state.draftYear) state.draftYear = state.draftYears[0] || 2025;
+
+    state.collegeSeasons = collegeOpts.seasons || [2024];
+    if (!state.collegeSeason) state.collegeSeason = state.collegeSeasons[0] || 2024;
 
     populateSeasonSelect();
     populateFilterStatSelect();
@@ -222,6 +286,9 @@ const state = {
 async function fetchAndRender() {
   if (state.universe === "prospects") {
     return fetchAndRenderProspects();
+  }
+  if (state.universe === "college") {
+    return fetchAndRenderCollege();
   }
   return fetchAndRenderNFL();
 }
@@ -309,21 +376,68 @@ async function fetchAndRenderProspects() {
   }
 }
 
+async function fetchAndRenderCollege() {
+  const loading = document.getElementById("loadingMsg");
+  const tbody = document.getElementById("tableBody");
+  loading.style.display = "block";
+  loading.textContent = "pulling college film...";
+  tbody.innerHTML = "";
+
+  const positions = state.position === "ALL" ? "" : state.position;
+
+  const params = new URLSearchParams({
+    season: state.collegeSeason,
+    positions: positions,
+    search: state.search,
+    sort: state.sortKey,
+    order: state.sortDir,
+    limit: state.limit,
+    offset: state.offset,
+  });
+
+  try {
+    const data = await apiFetch(`/api/college/players?${params}`);
+
+    state.items = data.items || [];
+    state.totalCount = data.count || 0;
+    state.collegeSeason = data.season || state.collegeSeason;
+
+    loading.style.display = "none";
+    renderTable();
+    renderPagination();
+    updateResultCount();
+    saveStateToURL();
+  } catch (e) {
+    loading.textContent = "fumbled the college data fetch...";
+    console.error(e);
+  }
+}
+
 // ─── Table rendering ─────────────────────────────────────────────
 function renderTable() {
   if (state.universe === "prospects") {
     renderProspectTable();
+  } else if (state.universe === "college") {
+    renderCollegeTable();
   } else {
     renderNFLTable();
   }
 }
 
+function renderCollegeTable() {
+  renderTableHead();
+  renderTableBody();
+}
+
 function getActiveColumns() {
-  return state.universe === "prospects" ? state.prospectColumns : state.visibleColumns;
+  if (state.universe === "prospects") return state.prospectColumns;
+  if (state.universe === "college") return state.collegeColumns;
+  return state.visibleColumns;
 }
 
 function getColumnDef(key) {
   if (state.universe === "prospects") return PROSPECT_COLUMNS[key];
+  if (state.universe === "college") return COLLEGE_COLUMNS[key];
   return COLUMNS[key];
 }
 
@@ -336,7 +450,7 @@ function renderTableHead() {
   const thead = document.getElementById("tableHead");
   const cols = getActiveColumns();
 
-  const nameKey = state.universe === "prospects" ? "player_name" : "full_name";
+  const nameKey = (state.universe === "prospects" || state.universe === "college") ? "player_name" : "full_name";
   let html = '<tr><th style="width:30px; text-align:center; padding:8px 6px;">&#9734;</th>';
   html += `<th class="col-player" onclick="sortBy('${nameKey}')">Player`;
   if (state.sortKey === "full_name" || state.sortKey === "player_name") {
@@ -360,6 +474,8 @@ function renderTableBody() {
   const cols = getActiveColumns();
   const emptyMsg = state.universe === "prospects"
     ? "no prospects match these filters"
+    : state.universe === "college"
+    ? "no college players match these filters"
     : "no players match these filters";
 
   if (!state.items.length) {
@@ -375,10 +491,18 @@ function renderTableBody() {
     html += '<tr>';
     html += `<td style="text-align:center; padding:7px 6px;">
       <input type="checkbox" ${selected ? "checked" : ""} onchange="togglePlayerSelect('${player.player_id || player.player_name}', this.checked)"
-        style="accent-color:${state.universe === 'prospects' ? 'var(--pos-qb)' : 'var(--orange)'}; width:15px; height:15px; cursor:pointer;">
+        style="accent-color:${(state.universe === 'prospects' || state.universe === 'college') ? 'var(--pos-qb)' : 'var(--orange)'}; width:15px; height:15px; cursor:pointer;">
     </td>`;
 
-    if (state.universe === "prospects") {
+    if (state.universe === "college") {
+      const cid = (player.player_id || "").replace(/'/g, "\\'");
+      html += `<td class="col-player"><div class="player-name-cell">`;
+      html += `<span class="pos-badge ${posClass(pos)}">${pos}</span>`;
+      html += `<a href="#" onclick="openCollegeProfile('${cid}'); return false;" style="color:var(--ink); text-decoration:none; border-bottom:1px dashed var(--pos-qb);">${player.player_name || ""}</a>`;
+      html += `<span class="team-label">${player.team || ""}</span>`;
+      if (player.conference) html += `<span class="school-label" style="font-size:10px; color:var(--ink-light);">${player.conference}</span>`;
+      html += `</div></td>`;
+    } else if (state.universe === "prospects") {
       const pName = (player.player_name || "").replace(/'/g, "\\'");
       const pPos = (player.position || "").toUpperCase();
       const pYear = player.draft_year || state.season;
@@ -434,6 +558,9 @@ function setUniverse(u) {
   if (u === "prospects") {
     state.sortKey = "draft_pick";
     state.sortDir = "asc";
+  } else if (u === "college") {
+    state.sortKey = "total_yards";
+    state.sortDir = "desc";
   } else {
     state.sortKey = "fantasy_points_ppr";
     state.sortDir = "desc";
@@ -450,34 +577,43 @@ function setUniverse(u) {
 
 function applyUniverseUI() {
   const isProspect = state.universe === "prospects";
+  const isCollege = state.universe === "college";
+  const isNFL = state.universe === "nfl";
 
-  // Toggle body class for blue accent
-  document.body.classList.toggle("prospect-mode", isProspect);
+  // Toggle body class for blue accent (college and prospect modes use blue)
+  document.body.classList.toggle("prospect-mode", isProspect || isCollege);
 
   // Toggle buttons
-  document.getElementById("universeNFL").classList.toggle("active", !isProspect);
+  document.getElementById("universeNFL").classList.toggle("active", isNFL);
   document.getElementById("universeProspects").classList.toggle("active", isProspect);
+  document.getElementById("universeCollege").classList.toggle("active", isCollege);
 
   // Search placeholder
   document.getElementById("searchInput").placeholder = isProspect
-    ? "search prospects..." : "search players...";
+    ? "search prospects..." : isCollege ? "search college players..." : "search players...";
 
-  // Hide formula button in prospect mode (formulas are NFL-specific)
+  // Hide formula button in non-NFL modes
   const formulaBtn = document.getElementById("formulaBtn");
-  if (formulaBtn) formulaBtn.style.display = isProspect ? "none" : "";
+  if (formulaBtn) formulaBtn.style.display = isNFL ? "" : "none";
 
-  // Hide relevance toggle in prospect mode
-  document.getElementById("relevanceToggle").style.display = isProspect ? "none" : "";
+  // Hide relevance toggle in non-NFL modes
+  document.getElementById("relevanceToggle").style.display = isNFL ? "" : "none";
 
-  // Hide filter bar in prospect mode (prospect filtering is via sort/position)
-  document.getElementById("filterBar").style.display = isProspect ? "none" : "";
+  // Hide filter bar in non-NFL modes
+  document.getElementById("filterBar").style.display = isNFL ? "" : "none";
 
   // Data source label
   const ds = document.getElementById("dataSource");
-  if (ds) ds.textContent = isProspect ? "powered by nflverse combine + draft data" : "powered by nflverse";
+  if (ds) {
+    if (isCollege) ds.textContent = "powered by sportsdataverse cfbfastR data";
+    else if (isProspect) ds.textContent = "powered by nflverse combine + draft data";
+    else ds.textContent = "powered by nflverse";
+  }
 
   // Page title
-  document.title = isProspect ? "Prospect Lab — Razzle" : "The Lab — Razzle";
+  if (isCollege) document.title = "College Lab — Razzle";
+  else if (isProspect) document.title = "Prospect Lab — Razzle";
+  else document.title = "The Lab — Razzle";
 
   // Show Tiers and Big Board buttons only in prospect mode
   const tiersBtn = document.getElementById("tiersBtn");
@@ -491,7 +627,7 @@ function applyUniverseUI() {
 // ─── Sort ────────────────────────────────────────────────────────
 function sortBy(key) {
   // Normalize player name sort key per universe
-  if (key === "full_name" && state.universe === "prospects") key = "player_name";
+  if (key === "full_name" && (state.universe === "prospects" || state.universe === "college")) key = "player_name";
   if (key === "player_name" && state.universe === "nfl") key = "full_name";
 
   if (state.sortKey === key) {
@@ -540,6 +676,15 @@ function populateSeasonSelect() {
       state.offset = 0;
       fetchAndRender();
     };
+  } else if (state.universe === "college") {
+    sel.innerHTML = state.collegeSeasons.map(s =>
+      `<option value="${s}" ${s === state.collegeSeason ? "selected" : ""}>${s}</option>`
+    ).join("");
+    sel.onchange = (e) => {
+      state.collegeSeason = parseInt(e.target.value);
+      state.offset = 0;
+      fetchAndRender();
+    };
   } else {
     let html = `<option value="career" ${state.season === "career" ? "selected" : ""}>Career</option>`;
     html += state.seasons.map(s =>
@@ -575,14 +720,14 @@ function nextPage() {
 
 function updateResultCount() {
   const el = document.getElementById("resultCount");
-  const label = state.universe === "prospects" ? "prospects" : "players";
+  const label = state.universe === "prospects" ? "prospects" : state.universe === "college" ? "college players" : "players";
   el.innerHTML = `<strong>${state.totalCount}</strong> ${label}`;
 }
 
 // ─── Filters ─────────────────────────────────────────────────────
 function populateFilterStatSelect() {
   const sel = document.getElementById("filterStat");
-  const colDefs = state.universe === "prospects" ? PROSPECT_COLUMNS : COLUMNS;
+  const colDefs = state.universe === "prospects" ? PROSPECT_COLUMNS : state.universe === "college" ? COLLEGE_COLUMNS : COLUMNS;
   const keys = Object.keys(colDefs).filter(k => !colDefs[k].isText && !colDefs[k].derived);
   sel.innerHTML = keys.map(k => {
     const col = colDefs[k];
@@ -645,7 +790,7 @@ function closeColumnPicker(e) {
 
 function renderColumnPicker() {
   const container = document.getElementById("columnGroups");
-  const colDefs = state.universe === "prospects" ? PROSPECT_COLUMNS : COLUMNS;
+  const colDefs = state.universe === "prospects" ? PROSPECT_COLUMNS : state.universe === "college" ? COLLEGE_COLUMNS : COLUMNS;
   const activeCols = getActiveColumns();
 
   const groups = {};
@@ -671,8 +816,8 @@ function renderColumnPicker() {
 }
 
 function toggleColumn(key, checked) {
-  const colArray = state.universe === "prospects" ? "prospectColumns" : "visibleColumns";
-  const colDefs = state.universe === "prospects" ? PROSPECT_COLUMNS : COLUMNS;
+  const colArray = state.universe === "prospects" ? "prospectColumns" : state.universe === "college" ? "collegeColumns" : "visibleColumns";
+  const colDefs = state.universe === "prospects" ? PROSPECT_COLUMNS : state.universe === "college" ? COLLEGE_COLUMNS : COLUMNS;
 
   if (checked && !state[colArray].includes(key)) {
     const allKeys = Object.keys(colDefs);
@@ -692,19 +837,21 @@ function toggleColumn(key, checked) {
 
 function renderPresets() {
   const container = document.getElementById("presetBar");
-  const presets = state.universe === "prospects" ? PROSPECT_PRESETS : PRESETS;
+  const presets = state.universe === "prospects" ? PROSPECT_PRESETS : state.universe === "college" ? COLLEGE_PRESETS : PRESETS;
   container.innerHTML = Object.entries(presets).map(([key, preset]) =>
     `<button class="btn-chunky" onclick="applyPreset('${key}')">${preset.label}</button>`
   ).join("");
 }
 
 function applyPreset(key) {
-  const presets = state.universe === "prospects" ? PROSPECT_PRESETS : PRESETS;
+  const presets = state.universe === "prospects" ? PROSPECT_PRESETS : state.universe === "college" ? COLLEGE_PRESETS : PRESETS;
   const preset = presets[key];
   if (!preset) return;
 
   if (state.universe === "prospects") {
     state.prospectColumns = [...preset.columns];
+  } else if (state.universe === "college") {
+    state.collegeColumns = [...preset.columns];
   } else {
     state.visibleColumns = [...preset.columns];
   }
@@ -729,6 +876,12 @@ function saveStateToURL() {
     if (state.sortKey !== "draft_pick") params.set("sort", state.sortKey);
     const defaultCols = PROSPECT_PRESETS.combine.columns.join(",");
     const currentCols = state.prospectColumns.join(",");
+    if (currentCols !== defaultCols) params.set("cols", currentCols);
+  } else if (state.universe === "college") {
+    if (state.collegeSeason) params.set("season", state.collegeSeason);
+    if (state.sortKey !== "total_yards") params.set("sort", state.sortKey);
+    const defaultCols = COLLEGE_PRESETS.production.columns.join(",");
+    const currentCols = state.collegeColumns.join(",");
     if (currentCols !== defaultCols) params.set("cols", currentCols);
   } else {
     if (state.season) params.set("season", state.season);
@@ -762,6 +915,11 @@ function loadStateFromURL() {
     if (!params.has("sort")) state.sortKey = "draft_pick";
     if (!params.has("dir")) state.sortDir = "asc";
     if (params.has("cols")) state.prospectColumns = params.get("cols").split(",");
+  } else if (state.universe === "college") {
+    if (params.has("season")) state.collegeSeason = parseInt(params.get("season"));
+    if (!params.has("sort")) state.sortKey = "total_yards";
+    if (!params.has("dir")) state.sortDir = "desc";
+    if (params.has("cols")) state.collegeColumns = params.get("cols").split(",");
   } else {
     if (params.has("season")) {
       const sv = params.get("season");
@@ -1081,6 +1239,215 @@ async function openPlayerProfile(playerId) {
 function closeProfile(e) {
   if (e && e.target !== e.currentTarget) return;
   document.getElementById("profileOverlay").classList.remove("open");
+}
+
+async function openCollegeProfile(playerId) {
+  if (!playerId) return;
+  const overlay = document.getElementById("profileOverlay");
+  const content = document.getElementById("profileContent");
+  overlay.classList.add("open");
+  content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">scouting the college tape...</div>`;
+
+  try {
+    const data = await apiFetch(`/api/college/player-profile/${encodeURIComponent(playerId)}`);
+    renderCollegeProfile(data, content);
+  } catch (err) {
+    content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the college data fetch... ${err.message}</div>`;
+  }
+}
+
+function renderCollegeProfile(data, container) {
+  const { player, seasons, career, combine, draft } = data;
+  if (!player || !player.player_name) {
+    container.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">player not found on the film</div>`;
+    return;
+  }
+
+  const pos = (player.position || "").toUpperCase();
+  const posColors = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
+  const posColor = posColors[pos] || "var(--pos-qb)";
+
+  let html = "";
+
+  // Header (blue accent for college)
+  html += `<div class="profile-header" style="border-left:6px solid var(--pos-qb);">`;
+  html += `<span class="profile-pos-badge" style="background:${posColor};">${pos}</span>`;
+  html += `<div>`;
+  html += `<div class="profile-name">${player.player_name}</div>`;
+  html += `<div class="profile-meta">${player.team || ""} · ${player.conference || ""} · ${player.seasons_played} season${player.seasons_played > 1 ? "s" : ""}</div>`;
+  html += `<span style="display:inline-block; background:var(--pos-qb); color:white; font-family:var(--font-display); font-size:10px; padding:2px 8px; border:2px solid var(--ink); border-radius:4px; transform:rotate(-2deg);">COLLEGE</span>`;
+  html += `</div>`;
+  html += `</div>`;
+
+  // Career headline stats
+  const headlines = getCollegeHeadlines(pos, career);
+  html += `<div class="profile-stats-bar">`;
+  for (const h of headlines) {
+    html += `<div class="profile-stat-box">`;
+    html += `<div class="profile-stat-value">${h.value}</div>`;
+    html += `<div class="profile-stat-label">${h.label}</div>`;
+    html += `</div>`;
+  }
+  html += `</div>`;
+
+  // Season-by-season table
+  if (seasons && seasons.length > 0) {
+    const seasonCols = getCollegeSeasonColumns(pos);
+    html += `<div class="profile-section-title">College Season Log</div>`;
+    html += `<table class="profile-season-table"><thead><tr>`;
+    html += `<th>Year</th><th>Team</th>`;
+    for (const c of seasonCols) html += `<th>${c.label}</th>`;
+    html += `</tr></thead><tbody>`;
+
+    for (const s of seasons) {
+      html += `<tr><td>${s.season}</td><td>${s.team || ""}</td>`;
+      for (const c of seasonCols) {
+        html += `<td>${c.fmt(s[c.key])}</td>`;
+      }
+      html += `</tr>`;
+    }
+
+    // Career totals
+    if (career && career.games) {
+      html += `<tr style="font-weight:700; border-top:2px solid var(--ink);"><td>Career</td><td></td>`;
+      for (const c of seasonCols) {
+        html += `<td>${c.fmt(career[c.key])}</td>`;
+      }
+      html += `</tr>`;
+    }
+    html += `</tbody></table>`;
+  }
+
+  // Combine data
+  if (combine) {
+    html += `<div class="profile-section-title">Combine / Measurables</div>`;
+    html += `<div class="profile-combine-grid">`;
+    const metrics = [
+      { key: "height_display", label: "Height" },
+      { key: "weight", label: "Weight", suffix: " lbs" },
+      { key: "forty", label: "40-Yard" },
+      { key: "bench", label: "Bench" },
+      { key: "vertical", label: "Vertical", suffix: '"' },
+      { key: "broad_jump", label: "Broad", suffix: '"' },
+      { key: "cone", label: "3-Cone" },
+      { key: "shuttle", label: "Shuttle" },
+    ];
+    for (const m of metrics) {
+      const val = combine[m.key];
+      if (val != null) {
+        html += `<div class="profile-combine-item"><span class="profile-combine-label">${m.label}</span><span class="profile-combine-value">${val}${m.suffix || ""}</span></div>`;
+      }
+    }
+    if (combine.draft_round && combine.draft_pick) {
+      html += `<div class="profile-combine-item"><span class="profile-combine-label">Draft</span><span class="profile-combine-value">Rd ${combine.draft_round} Pick ${combine.draft_pick}</span></div>`;
+    }
+    if (combine.draft_team) {
+      html += `<div class="profile-combine-item"><span class="profile-combine-label">NFL Team</span><span class="profile-combine-value">${combine.draft_team}</span></div>`;
+    }
+    html += `</div>`;
+  }
+
+  // Draft / NFL career
+  if (draft && draft.nfl_games) {
+    html += `<div class="profile-section-title">NFL Career</div>`;
+    html += `<div class="profile-combine-grid">`;
+    const nflStats = [
+      { key: "nfl_games", label: "Games" },
+      { key: "career_av", label: "Career AV" },
+      { key: "nfl_pass_yards", label: "Pass Yds" },
+      { key: "nfl_pass_tds", label: "Pass TD" },
+      { key: "nfl_rush_yards", label: "Rush Yds" },
+      { key: "nfl_rush_tds", label: "Rush TD" },
+      { key: "nfl_rec_yards", label: "Rec Yds" },
+      { key: "nfl_rec_tds", label: "Rec TD" },
+    ];
+    for (const s of nflStats) {
+      const val = draft[s.key];
+      if (val != null && val > 0) {
+        html += `<div class="profile-combine-item"><span class="profile-combine-label">${s.label}</span><span class="profile-combine-value">${val.toLocaleString()}</span></div>`;
+      }
+    }
+    html += `</div>`;
+  }
+
+  container.innerHTML = html;
+}
+
+function getCollegeHeadlines(pos, career) {
+  if (!career) return [];
+  const f = (v) => v != null ? v.toLocaleString() : "—";
+  if (pos === "QB") {
+    return [
+      { label: "Games", value: f(career.games) },
+      { label: "Pass Yds", value: f(career.pass_yards) },
+      { label: "Pass TD", value: f(career.pass_tds) },
+      { label: "CMP%", value: career.completion_pct != null ? career.completion_pct + "%" : "—" },
+      { label: "Rush Yds", value: f(career.rush_yards) },
+      { label: "Total TD", value: f(career.total_tds) },
+    ];
+  }
+  if (pos === "RB") {
+    return [
+      { label: "Games", value: f(career.games) },
+      { label: "Rush Yds", value: f(career.rush_yards) },
+      { label: "Rush TD", value: f(career.rush_tds) },
+      { label: "Y/CAR", value: career.yards_per_carry != null ? String(career.yards_per_carry) : "—" },
+      { label: "Rec Yds", value: f(career.rec_yards) },
+      { label: "Total TD", value: f(career.total_tds) },
+    ];
+  }
+  // WR / TE
+  return [
+    { label: "Games", value: f(career.games) },
+    { label: "Rec Yds", value: f(career.rec_yards) },
+    { label: "Rec TD", value: f(career.rec_tds) },
+    { label: "Receptions", value: f(career.receptions) },
+    { label: "Y/REC", value: career.yards_per_rec != null ? String(career.yards_per_rec) : "—" },
+    { label: "Total TD", value: f(career.total_tds) },
+  ];
+}
+
+function getCollegeSeasonColumns(pos) {
+  const f0 = (v) => v != null ? v.toLocaleString() : "—";
+  const f1 = (v) => v != null ? Number(v).toFixed(1) : "—";
+
+  const common = [{ key: "games", label: "GP", fmt: f0 }];
+
+  if (pos === "QB") {
+    return [...common,
+      { key: "pass_yards", label: "Pass Yds", fmt: f0 },
+      { key: "pass_tds", label: "Pass TD", fmt: f0 },
+      { key: "completions", label: "CMP", fmt: f0 },
+      { key: "pass_attempts", label: "ATT", fmt: f0 },
+      { key: "completion_pct", label: "CMP%", fmt: f1 },
+      { key: "ints_thrown", label: "INT", fmt: f0 },
+      { key: "rush_yards", label: "Rush Yds", fmt: f0 },
+      { key: "rush_tds", label: "Rush TD", fmt: f0 },
+    ];
+  }
+  if (pos === "RB") {
+    return [...common,
+      { key: "rush_yards", label: "Rush Yds", fmt: f0 },
+      { key: "rush_tds", label: "Rush TD", fmt: f0 },
+      { key: "carries", label: "CAR", fmt: f0 },
+      { key: "yards_per_carry", label: "Y/CAR", fmt: f1 },
+      { key: "rec_yards", label: "Rec Yds", fmt: f0 },
+      { key: "receptions", label: "REC", fmt: f0 },
+      { key: "rec_tds", label: "Rec TD", fmt: f0 },
+      { key: "total_tds", label: "Total TD", fmt: f0 },
+    ];
+  }
+  // WR / TE
+  return [...common,
+    { key: "rec_yards", label: "Rec Yds", fmt: f0 },
+    { key: "rec_tds", label: "Rec TD", fmt: f0 },
+    { key: "receptions", label: "REC", fmt: f0 },
+    { key: "targets", label: "TGT", fmt: f0 },
+    { key: "yards_per_rec", label: "Y/REC", fmt: f1 },
+    { key: "catch_rate", label: "Catch%", fmt: f1 },
+    { key: "rush_yards", label: "Rush Yds", fmt: f0 },
+    { key: "total_tds", label: "Total TD", fmt: f0 },
+  ];
 }
 
 function renderProfile(data, container) {
