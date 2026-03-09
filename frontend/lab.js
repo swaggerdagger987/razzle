@@ -13,6 +13,59 @@ function escapeAttr(str) {
   return String(str).replace(/&/g, "&amp;").replace(/'/g, "&#39;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
+// ─── Watchlist (localStorage) ───────────────────────────────────
+function getWatchlist() {
+  try { return JSON.parse(localStorage.getItem("razzle_watchlist")) || []; }
+  catch { return []; }
+}
+
+function saveWatchlist(list) {
+  localStorage.setItem("razzle_watchlist", JSON.stringify(list));
+  updateWatchlistBadge();
+}
+
+function isOnWatchlist(playerId) {
+  return getWatchlist().some(function(p) { return p.player_id === playerId; });
+}
+
+function toggleWatchlistPlayer(playerId, name, position, team, universe) {
+  var list = getWatchlist();
+  var idx = list.findIndex(function(p) { return p.player_id === playerId; });
+  if (idx >= 0) {
+    list.splice(idx, 1);
+  } else {
+    list.push({
+      player_id: playerId,
+      name: name,
+      position: (position || "").toUpperCase(),
+      team: team || "",
+      universe: universe || state.universe,
+      tier: 0,
+      added_at: Date.now()
+    });
+  }
+  saveWatchlist(list);
+  renderTable();
+}
+
+function setWatchlistTier(playerId, tier) {
+  var list = getWatchlist();
+  var p = list.find(function(p) { return p.player_id === playerId; });
+  if (p) { p.tier = parseInt(tier) || 0; saveWatchlist(list); }
+}
+
+function removeFromWatchlist(playerId) {
+  var list = getWatchlist().filter(function(p) { return p.player_id !== playerId; });
+  saveWatchlist(list);
+}
+
+function updateWatchlistBadge() {
+  var btn = document.getElementById("watchlistBtn");
+  if (!btn) return;
+  var count = getWatchlist().length;
+  btn.textContent = count > 0 ? "Watchlist (" + count + ")" : "Watchlist";
+}
+
 // ─── Prospect column definitions ────────────────────────────────
 const PROSPECT_COLUMNS = {
   draft_round:   { label: "Rd",       group: "Draft",     decimals: 0 },
@@ -337,6 +390,7 @@ const state = {
   applyUniverseUI();
   renderColumnPicker();
   renderPresets();
+  updateWatchlistBadge();
   await fetchAndRender();
 
   // Search debounce
@@ -534,7 +588,7 @@ function renderTableHead() {
   const cols = getActiveColumns();
 
   const nameKey = (state.universe === "prospects" || state.universe === "college") ? "player_name" : "full_name";
-  let html = '<tr><th style="width:30px; text-align:center; padding:8px 6px;">&#9734;</th>';
+  let html = '<tr><th style="width:28px; text-align:center; padding:8px 4px;" title="Watchlist">&#9733;</th><th style="width:30px; text-align:center; padding:8px 6px;">&#9744;</th>';
   html += `<th class="col-player" onclick="sortBy('${nameKey}')">Player`;
   if (state.sortKey === "full_name" || state.sortKey === "player_name") {
     html += state.sortDir === "asc" ? " &#9650;" : " &#9660;";
@@ -576,7 +630,11 @@ function renderTableBody() {
     const pos = (player.position || "").toUpperCase();
     const playKey = player.player_id || player.player_name;
     const selected = state.selectedPlayers.some(p => p.player_id === playKey);
+    const starred = isOnWatchlist(playKey);
+    const pName = escapeAttr(player.full_name || player.player_name || "");
+    const pTeam = escapeAttr(player.team || player.school || "");
     html += '<tr>';
+    html += `<td style="text-align:center; padding:7px 4px; cursor:pointer; font-size:16px;" onclick="toggleWatchlistPlayer('${escapeAttr(playKey)}', '${pName}', '${escapeAttr(pos)}', '${pTeam}', '${state.universe}')" title="${starred ? 'Remove from watchlist' : 'Add to watchlist'}">${starred ? '<span style="color:var(--orange);">&#9733;</span>' : '<span style="color:var(--ink-faint);">&#9734;</span>'}</td>`;
     html += `<td style="text-align:center; padding:7px 6px;">
       <input type="checkbox" ${selected ? "checked" : ""} onchange="togglePlayerSelect('${escapeAttr(player.player_id || player.player_name)}', this.checked)"
         style="accent-color:${(state.universe === 'prospects' || state.universe === 'college') ? 'var(--pos-qb)' : 'var(--orange)'}; width:15px; height:15px; cursor:pointer;">
@@ -5684,6 +5742,325 @@ function exportHeatMapPNG() {
   link.click();
 }
 
+// ─── Watchlist panel ────────────────────────────────────────────
+
+function openWatchlistPanel() {
+  var overlay = document.getElementById("watchlistOverlay");
+  if (!overlay) {
+    overlay = document.createElement("div");
+    overlay.id = "watchlistOverlay";
+    overlay.className = "filter-modal-overlay";
+    overlay.onclick = function(e) { if (e.target === overlay) overlay.classList.remove("open"); };
+    document.body.appendChild(overlay);
+  }
+  renderWatchlistPanel();
+  overlay.classList.add("open");
+}
+
+function closeWatchlistPanel(e) {
+  if (e && e.target !== e.currentTarget) return;
+  var overlay = document.getElementById("watchlistOverlay");
+  if (overlay) overlay.classList.remove("open");
+}
+
+function renderWatchlistPanel() {
+  var overlay = document.getElementById("watchlistOverlay");
+  if (!overlay) return;
+  var list = getWatchlist();
+  var tierNames = ["Untiered", "Tier 1", "Tier 2", "Tier 3", "Tier 4", "Tier 5"];
+
+  var html = '<div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:600px; max-width:95vw; max-height:85vh; overflow-y:auto;" onclick="event.stopPropagation()">';
+  html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">';
+  html += '<h3 style="font-family:var(--font-display); font-size:22px; margin:0;">Watchlist <span style="color:var(--orange);">(' + list.length + ')</span></h3>';
+  html += '<div style="display:flex; gap:6px;">';
+  if (list.length > 0) {
+    html += '<button class="btn-primary" onclick="openTierBoard()">Tier Board</button>';
+  }
+  html += '<button class="btn-chunky" onclick="closeWatchlistPanel(event)">Close</button>';
+  html += '</div></div>';
+
+  if (list.length === 0) {
+    html += '<p style="font-family:var(--font-hand); font-size:22px; color:var(--ink-light); text-align:center; padding:40px 0;">no players watchlisted yet</p>';
+    html += '<p style="font-family:var(--font-mono); font-size:12px; color:var(--ink-faint); text-align:center;">click the &#9734; star next to any player in the table</p>';
+    html += '</div>';
+    overlay.innerHTML = html;
+    return;
+  }
+
+  // Group by position
+  var groups = { QB: [], RB: [], WR: [], TE: [], OTHER: [] };
+  list.forEach(function(p) {
+    var g = groups[p.position] ? p.position : "OTHER";
+    groups[g].push(p);
+  });
+
+  var posColors = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)", OTHER: "var(--ink-light)" };
+
+  ["QB", "RB", "WR", "TE", "OTHER"].forEach(function(pos) {
+    if (groups[pos].length === 0) return;
+    html += '<div style="margin-bottom:14px;">';
+    html += '<div style="font-family:var(--font-display); font-size:14px; color:' + posColors[pos] + '; margin-bottom:6px; border-bottom:2px dashed var(--ink-faint); padding-bottom:4px;">' + pos + ' (' + groups[pos].length + ')</div>';
+
+    groups[pos].forEach(function(p) {
+      html += '<div style="display:flex; align-items:center; gap:8px; padding:5px 8px; border-radius:6px; margin-bottom:3px; background:var(--bg);">';
+      html += '<span class="pos-badge pos-' + p.position.toLowerCase() + '" style="font-size:10px; padding:1px 6px;">' + escapeHtml(p.position) + '</span>';
+      html += '<span style="font-family:var(--font-display); font-size:13px; flex:1;">' + escapeHtml(p.name) + '</span>';
+      html += '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + escapeHtml(p.team) + '</span>';
+      html += '<select class="select-chunky" style="font-size:11px; padding:2px 6px; width:90px;" onchange="setWatchlistTier(\'' + escapeAttr(p.player_id) + '\', this.value); renderWatchlistPanel();">';
+      for (var t = 0; t <= 5; t++) {
+        html += '<option value="' + t + '"' + (p.tier === t ? ' selected' : '') + '>' + tierNames[t] + '</option>';
+      }
+      html += '</select>';
+      html += '<button class="btn-chunky" style="font-size:10px; padding:2px 6px; color:var(--red);" onclick="removeFromWatchlist(\'' + escapeAttr(p.player_id) + '\'); renderWatchlistPanel(); renderTable();" title="Remove">&#10005;</button>';
+      html += '</div>';
+    });
+    html += '</div>';
+  });
+
+  html += '</div>';
+  overlay.innerHTML = html;
+}
+
+// ─── Tier Board ─────────────────────────────────────────────────
+
+var TIER_COLORS = ["var(--ink-faint)", "var(--green)", "var(--pos-qb)", "var(--orange)", "var(--purple)", "var(--red)"];
+var TIER_LABELS = ["Untiered", "Tier 1", "Tier 2", "Tier 3", "Tier 4", "Tier 5"];
+
+function openTierBoard() {
+  // Close watchlist first
+  var wl = document.getElementById("watchlistOverlay");
+  if (wl) wl.classList.remove("open");
+
+  var overlay = document.getElementById("tierBoardOverlay");
+  if (!overlay) {
+    overlay = document.createElement("div");
+    overlay.id = "tierBoardOverlay";
+    overlay.className = "filter-modal-overlay";
+    overlay.onclick = function(e) { if (e.target === overlay) overlay.classList.remove("open"); };
+    document.body.appendChild(overlay);
+  }
+  renderTierBoard();
+  overlay.classList.add("open");
+}
+
+function closeTierBoard(e) {
+  if (e && e.target !== e.currentTarget) return;
+  var overlay = document.getElementById("tierBoardOverlay");
+  if (overlay) overlay.classList.remove("open");
+}
+
+function renderTierBoard() {
+  var overlay = document.getElementById("tierBoardOverlay");
+  if (!overlay) return;
+  var list = getWatchlist();
+  var posColors = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
+
+  var html = '<div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:800px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">';
+  html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">';
+  html += '<h3 style="font-family:var(--font-display); font-size:22px; margin:0;">Tier Board</h3>';
+  html += '<div style="display:flex; gap:6px;">';
+  html += '<button class="btn-primary" onclick="exportTierBoardPNG()">Export PNG</button>';
+  html += '<button class="btn-chunky" onclick="openWatchlistPanel(); closeTierBoard();">Back</button>';
+  html += '<button class="btn-chunky" onclick="closeTierBoard(event)">Close</button>';
+  html += '</div></div>';
+  html += '<p style="font-family:var(--font-hand); font-size:18px; color:var(--ink-light); margin-bottom:16px;">drag-free tier assignment — use dropdowns to move players between tiers</p>';
+
+  // Render tiers 1-5 then untiered (0)
+  var tierOrder = [1, 2, 3, 4, 5, 0];
+  tierOrder.forEach(function(tier) {
+    var players = list.filter(function(p) { return p.tier === tier; });
+    var color = TIER_COLORS[tier];
+    var label = TIER_LABELS[tier];
+
+    html += '<div style="margin-bottom:14px; border:2px solid var(--ink); border-radius:10px; overflow:hidden; background:var(--bg);">';
+    // Tier header
+    html += '<div style="display:flex; align-items:center; gap:10px; padding:8px 14px; background:var(--bg-warm); border-bottom:2px dashed var(--ink-faint);">';
+    html += '<span style="display:inline-block; font-family:var(--font-display); font-size:13px; color:white; background:' + color + '; border:2px solid var(--ink); border-radius:8px; padding:2px 12px; transform:rotate(-2deg); box-shadow:2px 2px 0 var(--ink);">' + label + '</span>';
+    html += '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + players.length + ' player' + (players.length !== 1 ? 's' : '') + '</span>';
+    html += '</div>';
+
+    // Player cards flow
+    html += '<div style="display:flex; flex-wrap:wrap; gap:6px; padding:10px 14px; min-height:36px;">';
+    if (players.length === 0) {
+      html += '<span style="font-family:var(--font-hand); font-size:16px; color:var(--ink-faint);">empty</span>';
+    }
+    players.forEach(function(p) {
+      var pc = posColors[p.position] || "var(--ink-light)";
+      html += '<div style="display:inline-flex; align-items:center; gap:5px; padding:4px 10px 4px 0; border:2px solid var(--ink); border-radius:8px; background:var(--bg-card); box-shadow:2px 2px 0 var(--ink); font-size:12px;">';
+      html += '<div style="width:5px; align-self:stretch; background:' + pc + '; border-radius:6px 0 0 6px;"></div>';
+      html += '<span class="pos-badge pos-' + p.position.toLowerCase() + '" style="font-size:9px; padding:1px 5px; margin-left:4px;">' + escapeHtml(p.position) + '</span>';
+      html += '<span style="font-family:var(--font-display); font-size:12px;">' + escapeHtml(p.name) + '</span>';
+      html += '<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + escapeHtml(p.team) + '</span>';
+      html += '<select class="select-chunky" style="font-size:10px; padding:1px 4px; width:72px; border-width:1px;" onchange="setWatchlistTier(\'' + escapeAttr(p.player_id) + '\', this.value); renderTierBoard();">';
+      for (var t = 0; t <= 5; t++) {
+        html += '<option value="' + t + '"' + (p.tier === t ? ' selected' : '') + '>' + TIER_LABELS[t] + '</option>';
+      }
+      html += '</select>';
+      html += '</div>';
+    });
+    html += '</div></div>';
+  });
+
+  html += '</div>';
+  overlay.innerHTML = html;
+}
+
+// ─── Tier Board PNG Export ───────────────────────────────────────
+
+function exportTierBoardPNG() {
+  var list = getWatchlist();
+  var tierOrder = [1, 2, 3, 4, 5, 0];
+  var tierColorHex = ["#c5c5d0", "#2ec4b6", "#5b7fff", "#d97757", "#8b5cf6", "#e63946"];
+  var posColorHex = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+
+  var W = 800;
+  var TIER_H = 52;
+  var CARD_H = 28;
+  var CARD_GAP = 6;
+  var CARD_PAD = 14;
+  var TIER_PAD = 10;
+  var HEADER_H = 60;
+  var FOOTER_H = 40;
+
+  // Calculate total height
+  var totalH = HEADER_H;
+  tierOrder.forEach(function(tier) {
+    var players = list.filter(function(p) { return p.tier === tier; });
+    var rows = Math.max(1, Math.ceil(players.length / 4));
+    totalH += TIER_H + rows * (CARD_H + CARD_GAP) + TIER_PAD;
+  });
+  totalH += FOOTER_H;
+
+  var canvas = document.createElement("canvas");
+  canvas.width = W;
+  canvas.height = totalH;
+  var ctx = canvas.getContext("2d");
+
+  // Sand background
+  ctx.fillStyle = "#ede0cf";
+  ctx.fillRect(0, 0, W, totalH);
+
+  // Header
+  ctx.fillStyle = "#1a1a2e";
+  ctx.font = "bold 24px 'Luckiest Guy', cursive";
+  ctx.fillText("Tier Board", 24, 38);
+  ctx.fillStyle = "#8a8a9e";
+  ctx.font = "18px 'Caveat', cursive";
+  ctx.fillText("my watchlist rankings", 190, 38);
+
+  var y = HEADER_H;
+
+  tierOrder.forEach(function(tier) {
+    var players = list.filter(function(p) { return p.tier === tier; });
+    var rows = Math.max(1, Math.ceil(players.length / 4));
+    var sectionH = TIER_H + rows * (CARD_H + CARD_GAP) + TIER_PAD;
+    var color = tierColorHex[tier];
+
+    // Section bg
+    ctx.fillStyle = "#f7efe5";
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.roundRect(16, y, W - 32, sectionH - 4, 8);
+    ctx.fill();
+    ctx.stroke();
+
+    // Tier badge (rotated sticker)
+    ctx.save();
+    ctx.translate(40, y + 22);
+    ctx.rotate(-0.04);
+    ctx.fillStyle = color;
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.roundRect(-14, -12, 80, 24, 6);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "bold 12px 'Luckiest Guy', cursive";
+    ctx.textAlign = "center";
+    ctx.fillText(TIER_LABELS[tier], 26, 5);
+    ctx.restore();
+    ctx.textAlign = "left";
+
+    // Player count
+    ctx.fillStyle = "#8a8a9e";
+    ctx.font = "11px 'Space Mono', monospace";
+    ctx.fillText(players.length + " player" + (players.length !== 1 ? "s" : ""), 130, y + 26);
+
+    // Player cards
+    var cx = CARD_PAD + 16;
+    var cy = y + TIER_H;
+    var cardW = (W - 32 - CARD_PAD * 2 - CARD_GAP * 3) / 4;
+
+    players.forEach(function(p, i) {
+      var col = i % 4;
+      var row = Math.floor(i / 4);
+      var px = cx + col * (cardW + CARD_GAP);
+      var py = cy + row * (CARD_H + CARD_GAP);
+      var pc = posColorHex[p.position] || "#8a8a9e";
+
+      // Card bg
+      ctx.fillStyle = "#f7efe5";
+      ctx.strokeStyle = "#1a1a2e";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.roundRect(px, py, cardW, CARD_H, 5);
+      ctx.fill();
+      ctx.stroke();
+
+      // Position color stripe
+      ctx.fillStyle = pc;
+      ctx.beginPath();
+      ctx.roundRect(px, py, 5, CARD_H, [5, 0, 0, 5]);
+      ctx.fill();
+
+      // Position badge
+      ctx.fillStyle = pc;
+      ctx.beginPath();
+      ctx.roundRect(px + 10, py + 6, 24, 16, 4);
+      ctx.fill();
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 9px 'Space Mono', monospace";
+      ctx.textAlign = "center";
+      ctx.fillText(p.position, px + 22, py + 18);
+      ctx.textAlign = "left";
+
+      // Player name
+      ctx.fillStyle = "#1a1a2e";
+      ctx.font = "bold 11px 'Luckiest Guy', cursive";
+      var nameW = cardW - 64;
+      var dispName = p.name;
+      while (ctx.measureText(dispName).width > nameW && dispName.length > 3) {
+        dispName = dispName.slice(0, -1);
+      }
+      if (dispName !== p.name) dispName += "..";
+      ctx.fillText(dispName, px + 38, py + 18);
+
+      // Team
+      ctx.fillStyle = "#8a8a9e";
+      ctx.font = "10px 'Space Mono', monospace";
+      ctx.textAlign = "right";
+      ctx.fillText(p.team, px + cardW - 6, py + 18);
+      ctx.textAlign = "left";
+    });
+
+    y += sectionH;
+  });
+
+  // Watermark
+  ctx.fillStyle = "#8a8a9e";
+  ctx.font = "14px 'Caveat', cursive";
+  ctx.textAlign = "right";
+  ctx.fillText("built different — razzle.lol", W - 20, totalH - 14);
+
+  // Download
+  var link = document.createElement("a");
+  link.download = "razzle-tier-board.png";
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+}
+
 // ─── Keyboard shortcuts ────────────────────────────────────────
 
 function isAnyOverlayOpen() {
@@ -5764,6 +6141,12 @@ document.addEventListener("keydown", function(e) {
     return;
   }
 
+  // W: watchlist
+  if (e.key === "w" || e.key === "W") {
+    openWatchlistPanel();
+    return;
+  }
+
   // X: share/export
   if (e.key === "x" || e.key === "X") {
     openShareModal();
@@ -5798,6 +6181,7 @@ function toggleShortcutRef() {
           ${shortcutRow("C", "Column picker")}
           ${shortcutRow("F", "Formula builder")}
           ${shortcutRow("M", "Formula store")}
+          ${shortcutRow("W", "Watchlist")}
           ${shortcutRow("X", "Share / export")}
           ${shortcutRow("?", "This reference")}
         </tbody>

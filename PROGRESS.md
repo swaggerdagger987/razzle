@@ -1,6 +1,20 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 36 — (next phase pending)
+## Current Phase: Phase 37 — (next phase pending)
+
+## Previous Phase: Phase 36 — Player Watchlist + Tier Board (COMPLETE)
+
+**Exit criterion MET:** Star button (★/☆) on every player row in Lab screener toggles watchlist (localStorage). Watchlist button in toolbar shows count badge. Watchlist panel groups players by position with tier dropdown (Untiered/Tier 1-5) and remove button. Tier Board view renders visual tier list with position-colored player cards, rotated tier sticker badges, chunky borders. PNG export (800px wide, sand bg, watermark). Keyboard shortcut W. All 3 universes supported. Pushed to master.
+
+### Phase 36 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Watchlist data model + star button | DONE | localStorage razzle_watchlist, ★/☆ toggle, terracotta filled star |
+| 2 | Watchlist panel overlay | DONE | Position-grouped, tier dropdown, remove button, W shortcut |
+| 3 | Tier board view | DONE | 6 tier sections, rotated sticker badges, position-colored cards |
+| 4 | Tier board PNG export | DONE | 800px canvas, 4-column cards, watermark, auto-height |
+| 5 | Deploy + smoke test | DONE | All syntax clean, pushed to master |
 
 ## Previous Phase: Phase 35 — SEO + Analytics + Revenue Foundation (COMPLETE)
 
