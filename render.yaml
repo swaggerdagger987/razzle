@@ -2,9 +2,5 @@ services:
   - type: web
     name: razzle
     runtime: static
-    buildCommand: ""
+    buildCommand: echo "no build needed"
     staticPublishPath: .
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
