@@ -245,6 +245,7 @@ const COLUMNS = {
   td_rate:             { label: "TD%",      tip: "TD Rate — touchdowns / (carries + targets) as percentage", group: "Efficiency", decimals: 1, derived: true },
   fumble_rate:         { label: "FUM%",     tip: "Fumble Rate — fumbles lost / (carries + receptions) as percentage", group: "Efficiency", decimals: 1, derived: true },
   snap_share:          { label: "Snap%",    tip: "Snap Share — percentage of offensive snaps played", group: "Efficiency", decimals: 1, derived: true },
+  yprr:                { label: "YPRR*",    tip: "Yards Per Route Run (estimated — assumes 85% route participation from snap counts)", group: "Efficiency", decimals: 2, derived: true },
 
   // Per-game averages (derived — sort only)
   rec_per_game:        { label: "REC/G",    tip: "Receptions Per Game", group: "Per Game", decimals: 1, derived: true },
@@ -252,6 +253,7 @@ const COLUMNS = {
   rush_ypg:            { label: "Rush Yds/G", tip: "Rushing Yards Per Game", group: "Per Game", decimals: 1, derived: true },
   rec_ypg:             { label: "Rec Yds/G",  tip: "Receiving Yards Per Game", group: "Per Game", decimals: 1, derived: true },
   pass_ypg:            { label: "Pass Yds/G", tip: "Passing Yards Per Game", group: "Per Game", decimals: 1, derived: true },
+  wopr_per_game:       { label: "WOPR/G",    tip: "WOPR Per Game — weighted opportunity rating per game played", group: "Per Game", decimals: 3, derived: true },
 
   // Advanced (from nflverse rate stats — sort only)
   target_share:        { label: "TGT%",     tip: "Target Share — percentage of team total targets", group: "Advanced", decimals: 1, pct: true, derived: true },
@@ -315,12 +317,12 @@ const PRESETS = {
     label: "Efficiency",
     columns: ["fantasy_points_ppr", "ppg", "games", "yards_per_carry", "yards_per_rec",
               "yards_per_target", "catch_rate", "comp_pct", "yards_per_att", "passer_rating",
-              "ay_per_att", "td_rate", "fumble_rate", "target_share"],
+              "ay_per_att", "td_rate", "fumble_rate", "yprr", "target_share"],
   },
   advanced: {
     label: "Advanced",
     columns: ["fantasy_points_ppr", "ppg", "games", "target_share", "air_yards_share",
-              "wopr", "racr", "receiving_epa", "passing_epa", "rushing_epa"],
+              "wopr", "wopr_per_game", "racr", "receiving_epa", "passing_epa", "rushing_epa"],
   },
 };
 

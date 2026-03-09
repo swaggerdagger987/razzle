@@ -138,6 +138,19 @@ def _enrich_with_derived_stats(items):
         fl = item.get("fumbles_lost") or 0
         touch_opps = car + rec
         item["fumble_rate"] = round(fl / touch_opps * 100, 1) if touch_opps > 0 else None
+
+        # YPRR approximation: receiving_yards / (snap_count * 0.85)
+        # WR/TE only. Uses offense_snaps if available, else games * 45 as estimate
+        pos = (item.get("position") or "").upper()
+        if pos in ("WR", "TE"):
+            snaps = item.get("offense_snaps") or 0
+            if snaps < 1:
+                snaps = g * 45  # rough estimate
+            routes_est = snaps * 0.85
+            item["yprr"] = round((item.get("receiving_yards") or 0) / routes_est, 2) if routes_est > 0 else None
+        else:
+            item["yprr"] = None
+
     return items
 
 
@@ -158,6 +171,9 @@ def _enrich_with_epa_per_play(items):
             item["epa_per_play"] = round(total_epa / total_plays, 3)
         else:
             item["epa_per_play"] = None
+        # WOPR per game (wopr is populated by _enrich_with_rate_metrics)
+        wopr_val = item.get("wopr")
+        item["wopr_per_game"] = round(wopr_val / g, 3) if wopr_val and g > 0 else None
     return items
 
 
