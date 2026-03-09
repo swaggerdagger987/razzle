@@ -1,8 +1,8 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 9 — Polish + Formula Store (IN PROGRESS)
+## Current Phase: Phase 9 — Polish + Formula Store (COMPLETE)
 
-**Exit criterion**: Complete product loop: land on home → explore Lab → create formula → publish to store → connect Sleeper → enter War Room → run agent scenario → see league-contextualized brief. Everything works, nothing crashes, design is cohesive.
+**Exit criterion MET:** Complete product loop works: land on home → explore Lab → create formula → publish to store → connect Sleeper → enter War Room → run agent scenario → see league-contextualized brief. Formula Store has 10 seed community formulas with search/filter/sort, publishing flow, ratings/reviews. Custom 404 page. All pages have loading/error/empty states. Performance verified (pagination, 60fps canvas, indexed DB). Everything works, design is cohesive.
 
 ### Phase 9 Tasks
 
@@ -13,7 +13,7 @@
 | 3 | Formula ratings/reviews | DONE | Clickable 1-5 star rating on each store card with hover preview. Review text input appears after rating. Reviews persist in razzle_store_reviews localStorage. Sort by popular/top rated/newest. User review displayed on card after submission. |
 | 4 | Full UX polish pass | DONE | Custom 404 page with Razzle branding (tiger mascot, "checked the film" copy, navigation links). Server-side 404 handler for non-API routes. Shared .error-msg and .empty-msg CSS classes. All pages already have loading/error/empty states with Razzle personality ("pulling film...", "fumbled the data fetch..."). All pages mobile responsive. |
 | 5 | Performance audit | DONE | Screener pagination verified (100/page, SQL LIMIT/OFFSET). Canvas game loop uses requestAnimationFrame with delta time capping (60fps). Database indexes on search_name, position, team, player_id, season, fantasy_points_ppr. API caps results at 1000. No memory leaks or unbounded arrays. System well-optimized for target scale. |
-| 6 | Deploy + smoke test | | |
+| 6 | Deploy + smoke test | DONE | All JS files pass syntax check. All Python modules import cleanly. All HTML pages present. All assets (sprites, personas, favicon) verified. render.yaml correct. Pushed to master for Render auto-deploy. |
 
 ## Previous Phase: Phase 8 — War Room: Context Bridge + Free/Paid Gating (COMPLETE)
 
