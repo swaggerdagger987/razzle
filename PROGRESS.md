@@ -1,6 +1,22 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 32 — (pending auto-generation)
+## Current Phase: Phase 33 — (next phase pending)
+
+## Previous Phase: Phase 32 — Formula Store (Community Marketplace) (COMPLETE)
+
+**Exit criterion MET:** Formula Store fully operational. Backend: formula_store + formula_ratings SQLite tables, 4 API endpoints (publish, browse, rate, detail). Frontend: formula-store.js fully API-backed with async fetch, position filter, sort, debounced search, star ratings, review input, import with toast, publish with duplicate prevention. 10 seed formulas auto-populate on first boot (PPR Workhorse, Alpha WR, Dual Threat QB, Bellcow Index, TD Machine, Target Hog, TE Premium, Dynasty Value, YAC Monster, Pocket Passer). All JS/Python syntax clean. Pushed to master.
+
+### Phase 32 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend formula store endpoints + database schema | DONE | formula_store + formula_ratings tables, 4 endpoints, 5 data functions |
+| 2 | Formula Store browse UI | DONE | API-backed browse with filter/sort/search, position badges, star ratings |
+| 3 | Publish flow from formula builder | DONE | async POST to API, duplicate prevention, success toast |
+| 4 | Rating and review system | DONE | POST to API, optimistic update, localStorage tracking, review input |
+| 5 | Formula detail view + import | DONE | GET detail for weights, localStorage + COLUMNS registration, toast |
+| 6 | Seed store with starter formulas | DONE | 10 seed formulas in _seed_formula_store(), auto-inserted on empty table |
+| 7 | Deploy + smoke test | DONE | All syntax clean, pushed to master |
 
 ## Previous Phase: Phase 31 — Performance + UX Polish + Reddit Launch Prep (COMPLETE)
 
