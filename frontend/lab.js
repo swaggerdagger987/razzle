@@ -603,7 +603,7 @@ function renderTableBody() {
       const pid = escapeAttr(player.player_id || "");
       html += `<td class="col-player"><div class="player-name-cell">`;
       html += `<span class="pos-badge ${posClass(pos)}">${escapeHtml(pos)}</span>`;
-      html += `<a href="#" onclick="openPlayerProfile('${pid}'); return false;" style="color:var(--ink); text-decoration:none; border-bottom:1px dashed var(--ink-faint);">${escapeHtml(player.full_name)}</a>`;
+      html += `<a href="/player/${encodeURIComponent(pid)}" onclick="event.preventDefault(); openPlayerProfile('${pid}');" style="color:var(--ink); text-decoration:none; border-bottom:1px dashed var(--ink-faint);">${escapeHtml(player.full_name)}</a>`;
       html += `<span class="team-label">${escapeHtml(player.team)}</span>`;
       html += `</div></td>`;
     }

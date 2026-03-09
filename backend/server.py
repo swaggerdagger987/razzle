@@ -462,6 +462,52 @@ async def lab_with_og_tags(request: Request):
 
 
 # ---------------------------------------------------------------------------
+# Dynamic OG tags for player profile pages
+# ---------------------------------------------------------------------------
+
+@app.get("/player/{player_id:path}")
+async def player_profile_page(player_id: str):
+    """Serve player.html with dynamic OG meta tags for the specific player."""
+    import re
+    player_file = FRONTEND_DIR / "player.html"
+    if not player_file.exists():
+        return HTMLResponse("Not found", status_code=404)
+
+    html = player_file.read_text(encoding="utf-8")
+
+    # Try to get player info for OG tags
+    try:
+        data = live_data.fetch_player_profile(player_id)
+        p = data.get("player", {})
+        name = p.get("full_name", "Unknown Player")
+        pos = p.get("position", "")
+        team = p.get("team", "")
+        career = data.get("career", {})
+        ppr = career.get("fantasy_points_ppr")
+        games = career.get("games")
+        pprg = f"{ppr / games:.1f}" if ppr and games else ""
+
+        og_title = f"{name} ({pos}, {team}) — Razzle"
+        og_desc = f"Player profile for {name}"
+        if pos and team:
+            og_desc = f"{name} ({pos}, {team})"
+            if pprg:
+                og_desc += f" — {pprg} PPR/G career"
+            og_desc += ". Full stats, radar chart, career arc on razzle.lol"
+    except Exception:
+        og_title = "Player Profile — Razzle"
+        og_desc = "Fantasy football player profile on razzle.lol"
+
+    html = re.sub(r'<meta property="og:title" content="[^"]*">', f'<meta property="og:title" content="{og_title}">', html)
+    html = re.sub(r'<meta property="og:description" content="[^"]*">', f'<meta property="og:description" content="{og_desc}">', html)
+    html = re.sub(r'<meta name="twitter:title" content="[^"]*">', f'<meta name="twitter:title" content="{og_title}">', html)
+    html = re.sub(r'<meta name="twitter:description" content="[^"]*">', f'<meta name="twitter:description" content="{og_desc}">', html)
+    html = re.sub(r'<title>[^<]*</title>', f'<title>{og_title}</title>', html)
+
+    return HTMLResponse(content=html)
+
+
+# ---------------------------------------------------------------------------
 # Serve frontend as static files (catch-all for SPA-like behavior)
 # ---------------------------------------------------------------------------
 

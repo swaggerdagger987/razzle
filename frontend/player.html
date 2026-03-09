@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Player Profile — Razzle</title>
+<meta property="og:title" content="Player Profile — Razzle">
+<meta property="og:description" content="Fantasy football player profile on razzle.lol">
+<meta property="og:site_name" content="razzle.lol">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Player Profile — Razzle">
+<meta name="twitter:description" content="Fantasy football player profile on razzle.lol">
+<meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
+<meta name="description" content="Fantasy football player profile with stats, career arc, and combine data on razzle.lol">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .player-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+  }
+
+  .player-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-light);
+    text-decoration: none;
+    margin-bottom: 16px;
+    padding: 4px 0;
+  }
+  .player-back:hover { color: var(--orange); }
+
+  .player-hero {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 24px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .player-hero-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .player-pos-badge {
+    font-family: var(--font-display);
+    font-size: 28px;
+    color: white;
+    padding: 6px 14px;
+    border: 3px solid var(--ink);
+    border-radius: 8px;
+    box-shadow: 2px 2px 0 var(--ink);
+    transform: rotate(-2deg);
+    flex-shrink: 0;
+  }
+
+  .player-name {
+    font-family: var(--font-display);
+    font-size: 32px;
+    line-height: 1.1;
+    margin-bottom: 4px;
+  }
+
+  .player-meta {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--ink-medium);
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+
+  .player-draft-badge {
+    display: inline-block;
+    background: var(--ink);
+    color: white;
+    font-family: var(--font-display);
+    font-size: 11px;
+    padding: 3px 10px;
+    border: 2px solid var(--ink);
+    border-radius: 4px;
+    transform: rotate(-1deg);
+    margin-right: 6px;
+  }
+
+  .player-breakout-badge {
+    display: inline-block;
+    background: var(--green-light, #d4edda);
+    color: var(--green, #28a745);
+    font-family: var(--font-display);
+    font-size: 11px;
+    padding: 3px 10px;
+    border: 2px solid var(--green, #28a745);
+    border-radius: 4px;
+    transform: rotate(1deg);
+  }
+
+  .player-hero-actions {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .player-stats-bar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 2px dashed var(--ink-faint);
+  }
+
+  .player-stat-card {
+    flex: 1;
+    min-width: 90px;
+    background: var(--bg);
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    box-shadow: 2px 2px 0 var(--ink);
+    padding: 10px 12px;
+    text-align: center;
+  }
+
+  .player-stat-value {
+    font-family: var(--font-display);
+    font-size: 22px;
+    line-height: 1;
+  }
+
+  .player-stat-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-light);
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .player-section {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 20px 24px;
+    margin-bottom: 20px;
+  }
+
+  .player-section-title {
+    font-family: var(--font-display);
+    font-size: 16px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .player-season-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+
+  .player-season-table th {
+    text-align: right;
+    padding: 6px 8px;
+    border-bottom: 2px solid var(--ink);
+    font-family: var(--font-display);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--ink-light);
+    white-space: nowrap;
+  }
+  .player-season-table th:first-child { text-align: left; }
+
+  .player-season-table td {
+    text-align: right;
+    padding: 5px 8px;
+    border-bottom: 1px solid var(--ink-faint);
+    white-space: nowrap;
+  }
+  .player-season-table td:first-child {
+    text-align: left;
+    font-weight: 700;
+  }
+
+  .player-combine-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 8px;
+  }
+
+  .player-combine-item {
+    background: var(--bg);
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    padding: 8px 10px;
+    text-align: center;
+  }
+
+  .player-combine-value {
+    font-family: var(--font-display);
+    font-size: 18px;
+  }
+
+  .player-combine-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-light);
+    text-transform: uppercase;
+  }
+
+  .player-charts-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .player-chart-wrap {
+    text-align: center;
+  }
+
+  .player-chart-wrap canvas {
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--bg);
+    width: 100%;
+  }
+
+  .player-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    text-align: center;
+  }
+
+  .player-loading-text {
+    font-family: var(--font-hand);
+    font-size: 22px;
+    color: var(--ink-light);
+  }
+
+  .player-share-url {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-light);
+    margin-top: 6px;
+  }
+
+  .watermark {
+    position: fixed;
+    bottom: 12px;
+    right: 16px;
+    font-family: var(--font-display);
+    font-size: 14px;
+    color: var(--ink-faint);
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  @media (max-width: 768px) {
+    .player-page { padding: 16px 12px 48px; }
+    .player-name { font-size: 24px; }
+    .player-hero { padding: 16px; }
+    .player-hero-actions { margin-left: 0; margin-top: 12px; width: 100%; }
+    .player-hero-actions .btn-primary,
+    .player-hero-actions .btn-chunky { flex: 1; min-height: 44px; }
+    .player-charts-row { grid-template-columns: 1fr; }
+    .player-section { padding: 14px 16px; }
+    .player-season-table { font-size: 11px; }
+  }
+
+  @media (max-width: 480px) {
+    .player-name { font-size: 20px; }
+    .player-pos-badge { font-size: 22px; padding: 4px 10px; }
+    .player-stat-card { min-width: 70px; }
+    .player-stat-value { font-size: 18px; }
+    .player-combine-grid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="topnav">
+  <a href="/" class="logo">
+    <div class="logo-mark">&#x1F42F;</div>
+    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/lab.html">The Lab</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
+    <li><a href="/agents.html">War Room</a></li>
+  </ul>
+</nav>
+
+<div class="player-page" id="playerPage">
+  <div class="player-loading">
+    <div class="player-loading-text">pulling film...</div>
+  </div>
+</div>
+
+<div class="watermark">razzle.lol</div>
+
+<script src="player.js"></script>
+</body>
+</html>
