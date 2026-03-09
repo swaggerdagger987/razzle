@@ -1566,14 +1566,17 @@ async function openProspectProfile(name, position, draftYear) {
 
   try {
     const params = new URLSearchParams({ name, position, draft_year: draftYear });
-    const data = await apiFetch(`/api/prospect-profile?${params}`);
-    renderProspectProfile(data, content);
+    const [data, compsData] = await Promise.all([
+      apiFetch(`/api/prospect-profile?${params}`),
+      apiFetch(`/api/prospect-comps?${params}`).catch(() => ({ comps: [] })),
+    ]);
+    renderProspectProfile(data, content, compsData);
   } catch (err) {
     content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the prospect data... ${err.message}</div>`;
   }
 }
 
-function renderProspectProfile(data, container) {
+function renderProspectProfile(data, container, compsData) {
   const { prospect, percentiles } = data;
   if (!prospect || !prospect.player_name) {
     container.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">prospect not found on the board</div>`;
@@ -1694,6 +1697,56 @@ function renderProspectProfile(data, container) {
       html += `<div class="profile-stat-label">${s.label}</div>`;
       html += `</div>`;
     }
+    html += `</div>`;
+  }
+
+  // NFL Athletic Comps section
+  const comps = (compsData && compsData.comps) ? compsData.comps.slice(0, 3) : [];
+  if (comps.length > 0) {
+    html += `<div class="profile-section-title">NFL Athletic Comps</div>`;
+    html += `<div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); margin:-6px 0 10px 0;">closest combine profiles at ${pos}</div>`;
+    html += `<div class="prospect-comps-grid">`;
+
+    for (const comp of comps) {
+      const simPct = Math.round(comp.similarity);
+      const simColor = simPct >= 85 ? "#22a06b" : simPct >= 70 ? "#2ec4b6" : simPct >= 55 ? "#ffc857" : "#e87422";
+
+      // Career headline stat based on position
+      let headline = "";
+      if (pos === "QB" && comp.nfl_pass_yards) {
+        headline = `${Math.round(comp.nfl_pass_yards).toLocaleString()} pass yds`;
+      } else if (pos === "RB" && comp.nfl_rush_yards) {
+        headline = `${Math.round(comp.nfl_rush_yards).toLocaleString()} rush yds`;
+      } else if ((pos === "WR" || pos === "TE") && comp.nfl_rec_yards) {
+        headline = `${Math.round(comp.nfl_rec_yards).toLocaleString()} rec yds`;
+      } else if (comp.career_av) {
+        headline = `${comp.career_av} career AV`;
+      }
+
+      const draftInfo = comp.draft_round && comp.draft_pick
+        ? `Rd ${comp.draft_round}, #${comp.draft_pick}`
+        : `${comp.draft_year} class`;
+
+      html += `<div class="prospect-comp-card">`;
+      html += `<div class="prospect-comp-sim" style="background:${simColor};">${simPct}%</div>`;
+      html += `<div class="prospect-comp-info">`;
+      html += `<div class="prospect-comp-name">${comp.player_name}</div>`;
+      html += `<div class="prospect-comp-meta">${comp.draft_year}`;
+      if (comp.draft_team) html += ` · ${comp.draft_team}`;
+      html += ` · ${draftInfo}</div>`;
+      if (comp.nfl_games) {
+        html += `<div class="prospect-comp-stats">`;
+        html += `<span>${comp.nfl_games} games</span>`;
+        if (headline) html += `<span> · ${headline}</span>`;
+        if (comp.allpro) html += `<span> · ${comp.allpro}× All-Pro</span>`;
+        html += `</div>`;
+      } else {
+        html += `<div class="prospect-comp-stats" style="color:var(--ink-light);">no NFL stats yet</div>`;
+      }
+      html += `</div>`;
+      html += `</div>`;
+    }
+
     html += `</div>`;
   }
 

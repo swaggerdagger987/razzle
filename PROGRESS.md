@@ -1,6 +1,19 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 12 — Prospect Cards + Athletic Percentiles (COMPLETE)
+## Current Phase: Phase 13 — Historical Athletic Comps + Prospect Comparisons
+
+**Exit criterion:** Prospect profile cards show top 3 NFL historical athletic comps (players with most similar combine profiles at same position). Prospect comparison mode: select 2-3 prospects → side-by-side spider chart overlays + stat table. Draft class tier view: position-filtered visual grid grouping prospects by athletic tier. All exportable as PNG with Razzle watermark. Deployed to Render.
+
+### Phase 13 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Historical athletic comps API + UI | DONE | Backend: /api/prospect-comps endpoint. Euclidean distance on percentile-normalized combine metrics (40, bench, vert, broad, cone, shuttle). NFL career boost in sorting. Frontend: "NFL Athletic Comps" section in prospect profile card with top 3 comp cards showing similarity %, draft info, career stats. Chunky borders, offset shadows, colored similarity badges. Mobile responsive. |
+| 2 | Prospect comparison mode | PENDING | |
+| 3 | Draft class position tier view | PENDING | |
+| 4 | Deploy + smoke test | PENDING | |
+
+## Previous Phase: Phase 12 — Prospect Cards + Athletic Percentiles (COMPLETE)
 
 **Exit criterion MET:** Click any prospect name in Lab prospect mode → rich profile card opens with blue prospect accent header, PROSPECT badge, combine metrics as percentile bars (color-coded by position-group rank: red→orange→yellow→teal→green), athletic spider chart (canvas radar with percentile axes), measurables bar, draft capital, NFL career stats (if available). Prospect cards exportable as PNG with Razzle watermark. Follows Razzle design system (chunky borders, offset shadows, sand bg, Space Mono data, Caveat annotations). Mobile responsive. Deployed to Render.
 

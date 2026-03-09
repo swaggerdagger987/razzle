@@ -3,6 +3,7 @@ Razzle data layer — all SQLite queries for the API.
 server.py calls these functions; they return dicts ready for JSON.
 """
 
+import math
 import sqlite3
 from pathlib import Path
 
@@ -971,6 +972,166 @@ def fetch_prospect_profile(name, position="", draft_year=0):
 
     conn.close()
     return {"prospect": prospect, "percentiles": percentiles}
+
+
+def fetch_prospect_comps(name, position="", draft_year=0, limit=5):
+    """Find NFL players with the most similar combine athletic profiles."""
+    conn = get_conn()
+
+    if not draft_year:
+        row = conn.execute("SELECT MAX(draft_year) FROM combine_data").fetchone()
+        draft_year = row[0] if row and row[0] else 2025
+
+    search_name = name.lower().replace(" ", "")
+
+    # Get the target prospect's combine data
+    where = "LOWER(REPLACE(player_name, ' ', '')) = ?"
+    params = [search_name]
+    if position:
+        where += " AND position = ?"
+        params.append(position.upper())
+
+    target = conn.execute(f"""
+        SELECT player_name, position, draft_year,
+               forty, bench, vertical, broad_jump, cone, shuttle
+        FROM combine_data
+        WHERE {where}
+        ORDER BY draft_year DESC LIMIT 1
+    """, params).fetchone()
+
+    if not target:
+        conn.close()
+        return {"comps": [], "prospect_name": name}
+
+    target = dict(target)
+    pos = target["position"]
+
+    # Combine metrics with direction for percentile computation
+    metric_keys = ["forty", "bench", "vertical", "broad_jump", "cone", "shuttle"]
+    metric_dirs = {"forty": "lower", "bench": "higher", "vertical": "higher",
+                   "broad_jump": "higher", "cone": "lower", "shuttle": "lower"}
+
+    # Get position-group stats for percentile normalization
+    pos_stats = {}
+    for mk in metric_keys:
+        rows = conn.execute(
+            f"SELECT {mk} FROM combine_data WHERE position = ? AND {mk} IS NOT NULL", (pos,)
+        ).fetchall()
+        vals = sorted([r[0] for r in rows])
+        if vals:
+            pos_stats[mk] = vals
+
+    # Compute target's percentiles
+    target_pcts = {}
+    for mk in metric_keys:
+        val = target.get(mk)
+        if val is None or mk not in pos_stats:
+            continue
+        all_vals = pos_stats[mk]
+        if metric_dirs[mk] == "lower":
+            pct = sum(1 for v in all_vals if v > val) / len(all_vals) * 100
+        else:
+            pct = sum(1 for v in all_vals if v < val) / len(all_vals) * 100
+        target_pcts[mk] = pct
+
+    if len(target_pcts) < 2:
+        conn.close()
+        return {"comps": [], "prospect_name": target["player_name"]}
+
+    # Get all other players at same position (excluding target) with draft pick data
+    others = conn.execute("""
+        SELECT c.player_name, c.position, c.draft_year, c.school,
+               c.draft_team, c.draft_round, c.draft_pick,
+               c.forty, c.bench, c.vertical, c.broad_jump, c.cone, c.shuttle,
+               d.career_av, d.games as nfl_games,
+               d.pass_yards as nfl_pass_yards, d.pass_tds as nfl_pass_tds,
+               d.rush_yards as nfl_rush_yards, d.rush_tds as nfl_rush_tds,
+               d.rec_yards as nfl_rec_yards, d.rec_tds as nfl_rec_tds,
+               d.receptions as nfl_receptions, d.allpro, d.probowls
+        FROM combine_data c
+        LEFT JOIN draft_picks d
+            ON c.draft_year = d.season
+            AND LOWER(REPLACE(c.player_name, ' ', '')) = LOWER(REPLACE(d.player_name, ' ', ''))
+            AND c.position = d.position
+        WHERE c.position = ?
+          AND LOWER(REPLACE(c.player_name, ' ', '')) != ?
+    """, (pos, search_name)).fetchall()
+
+    # Compute similarity for each candidate
+    comps = []
+    for row in others:
+        other = dict(row)
+
+        # Compute this player's percentiles on shared metrics
+        shared_metrics = []
+        other_pcts = {}
+        for mk in metric_keys:
+            oval = other.get(mk)
+            if oval is None or mk not in target_pcts or mk not in pos_stats:
+                continue
+            all_vals = pos_stats[mk]
+            if metric_dirs[mk] == "lower":
+                pct = sum(1 for v in all_vals if v > oval) / len(all_vals) * 100
+            else:
+                pct = sum(1 for v in all_vals if v < oval) / len(all_vals) * 100
+            other_pcts[mk] = pct
+            shared_metrics.append(mk)
+
+        if len(shared_metrics) < 2:
+            continue
+
+        # Euclidean distance on shared percentiles (normalized to 0-100 scale)
+        dist_sq = sum((target_pcts[mk] - other_pcts[mk]) ** 2 for mk in shared_metrics)
+        max_dist = math.sqrt(len(shared_metrics) * 100 ** 2)
+        dist = math.sqrt(dist_sq)
+
+        # Convert distance to similarity score (0-100, higher = more similar)
+        similarity = round(max(0, (1 - dist / max_dist) * 100), 1)
+
+        # Abbreviate team
+        dt = (other.get("draft_team") or "").upper()
+        other["draft_team"] = TEAM_ABBREV.get(dt, dt[:3] if dt else None)
+
+        comps.append({
+            "player_name": other["player_name"],
+            "position": other["position"],
+            "draft_year": other["draft_year"],
+            "school": other.get("school"),
+            "draft_team": other.get("draft_team"),
+            "draft_round": other.get("draft_round"),
+            "draft_pick": other.get("draft_pick"),
+            "nfl_games": other.get("nfl_games"),
+            "career_av": other.get("career_av"),
+            "nfl_pass_yards": other.get("nfl_pass_yards"),
+            "nfl_pass_tds": other.get("nfl_pass_tds"),
+            "nfl_rush_yards": other.get("nfl_rush_yards"),
+            "nfl_rush_tds": other.get("nfl_rush_tds"),
+            "nfl_rec_yards": other.get("nfl_rec_yards"),
+            "nfl_rec_tds": other.get("nfl_rec_tds"),
+            "nfl_receptions": other.get("nfl_receptions"),
+            "allpro": other.get("allpro"),
+            "probowls": other.get("probowls"),
+            "similarity": similarity,
+            "shared_metrics": len(shared_metrics),
+            "percentiles": {mk: round(other_pcts[mk], 1) for mk in shared_metrics},
+        })
+
+    # Sort by similarity descending, but boost players with NFL careers
+    # Players with NFL games get priority at similar similarity levels
+    for c in comps:
+        nfl_bonus = min(5, (c.get("nfl_games") or 0) / 10)  # up to 5 pts for 50+ games
+        c["_sort_score"] = c["similarity"] + nfl_bonus
+    comps.sort(key=lambda c: c["_sort_score"], reverse=True)
+    for c in comps:
+        del c["_sort_score"]
+    comps = comps[:limit]
+
+    conn.close()
+    return {
+        "comps": comps,
+        "prospect_name": target["player_name"],
+        "prospect_percentiles": {mk: round(v, 1) for mk, v in target_pcts.items()},
+    }
 
 
 def fetch_players_compare(player_ids, season=0):

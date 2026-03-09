@@ -704,6 +704,90 @@
     text-align: right;
   }
 
+  /* ===== PROSPECT COMP CARDS ===== */
+  .prospect-comps-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .prospect-comp-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 14px;
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    background: var(--bg);
+    box-shadow: 3px 3px 0 var(--ink);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .prospect-comp-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0 var(--ink);
+  }
+
+  .prospect-comp-sim {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    min-width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 3px solid var(--ink);
+    box-shadow: 2px 2px 0 var(--ink);
+    flex-shrink: 0;
+  }
+
+  .prospect-comp-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .prospect-comp-name {
+    font-family: var(--font-display);
+    font-size: 16px;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+
+  .prospect-comp-meta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-light);
+    margin-top: 2px;
+  }
+
+  .prospect-comp-stats {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-medium);
+    margin-top: 4px;
+  }
+
+  @media (max-width: 480px) {
+    .prospect-comp-card {
+      padding: 10px;
+      gap: 10px;
+    }
+    .prospect-comp-sim {
+      min-width: 44px;
+      height: 44px;
+      font-size: 14px;
+    }
+    .prospect-comp-name { font-size: 14px; }
+    .prospect-metric-row {
+      grid-template-columns: 100px 60px 1fr 40px;
+      gap: 6px;
+    }
+  }
+
   /* ===== FORMULA STORE ===== */
   .store-modal {
     background: var(--bg-card);

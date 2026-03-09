@@ -196,6 +196,11 @@ def prospect_profile(name: str = "", position: str = "", draft_year: int = 0):
     return live_data.fetch_prospect_profile(name=name, position=position, draft_year=draft_year)
 
 
+@app.get("/api/prospect-comps")
+def prospect_comps(name: str = "", position: str = "", draft_year: int = 0, limit: int = 5):
+    return live_data.fetch_prospect_comps(name=name, position=position, draft_year=draft_year, limit=min(limit, 10))
+
+
 @app.get("/api/prospect-options")
 def prospect_options():
     return live_data.fetch_prospect_years()
