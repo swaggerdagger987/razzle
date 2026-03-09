@@ -538,11 +538,13 @@
   }
 
   @media (max-width: 480px) {
+    html, body { overflow-x: hidden; }
     .hero h1 { font-size: 24px; }
     .hero-sub { font-size: 18px; }
     .hero-cta { flex-direction: column; align-items: center; }
     .btn-hero { width: 100%; max-width: 260px; text-align: center; }
     .section h2 { font-size: 20px; }
+    .agent-bio-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>

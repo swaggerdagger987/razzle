@@ -90,8 +90,9 @@
 - Waitlist form works on mobile
 **Depends on**: none
 **Size**: M
-**Status**: PENDING
-**Attempt**: 0/3
+**Status**: PASS
+**Attempt**: 1/3
+**Result**: Landing page already had solid 768px + 480px media queries. Added: overflow-x: hidden on html/body at 480px, agent-bio-grid goes single-column at 480px. Existing: hero stacks + font reduces, feature cards single-column, mascot stacks, waitlist form stacks, CTA buttons full-width, demo section padding reduced. Nav uses existing compact styles from styles.css (font-size, padding reductions).
 
 ## Task 7: League Intel page mobile layout
 **Requirement**: "Verify and fix the League Intel page (league-intel.html) on mobile: (a) Sleeper username input and connect button are full-width on mobile. (b) League cards stack and are readable on mobile. (c) Roster player list within expanded league cards wraps properly. (d) Disconnect button is accessible. (e) No horizontal overflow."
@@ -131,9 +132,9 @@
 ## Loop State
 ```
 Current Phase: 30
-Current Task: 6
+Current Task: 7
 Current Stage: PENDING
 Attempt: 0/3
-Tasks Completed: 5/9
-Loop Iterations: 5
+Tasks Completed: 6/9
+Loop Iterations: 6
 ```
