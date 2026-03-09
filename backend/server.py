@@ -539,6 +539,55 @@ async def player_profile_page(player_id: str):
 
 
 # ---------------------------------------------------------------------------
+# Dynamic OG tags for player comparison pages
+# ---------------------------------------------------------------------------
+
+@app.get("/compare/{id1}/{id2}")
+async def compare_page(id1: str, id2: str):
+    """Serve compare.html with dynamic OG meta tags for two players."""
+    compare_file = FRONTEND_DIR / "compare.html"
+    if not compare_file.exists():
+        return HTMLResponse("Not found", status_code=404)
+
+    html = compare_file.read_text(encoding="utf-8")
+
+    try:
+        d1 = live_data.fetch_player_profile(id1)
+        d2 = live_data.fetch_player_profile(id2)
+        p1 = d1.get("player", {})
+        p2 = d2.get("player", {})
+        n1 = p1.get("full_name", "Player 1")
+        n2 = p2.get("full_name", "Player 2")
+        pos1 = p1.get("position", "")
+        pos2 = p2.get("position", "")
+        team1 = p1.get("team", "")
+        team2 = p2.get("team", "")
+
+        og_title = f"{n1} vs {n2} — Razzle"
+        parts = []
+        if pos1 and team1:
+            parts.append(f"{n1} ({pos1}, {team1})")
+        else:
+            parts.append(n1)
+        if pos2 and team2:
+            parts.append(f"{n2} ({pos2}, {team2})")
+        else:
+            parts.append(n2)
+        og_desc = " vs ".join(parts) + ". Head-to-head stats, radar overlay, career arc on razzle.lol"
+    except Exception:
+        og_title = "Player Comparison — Razzle"
+        og_desc = "Head-to-head fantasy football player comparison on razzle.lol"
+
+    html = re.sub(r'<meta property="og:title" content="[^"]*">', f'<meta property="og:title" content="{og_title}">', html)
+    html = re.sub(r'<meta property="og:description" content="[^"]*">', f'<meta property="og:description" content="{og_desc}">', html)
+    html = re.sub(r'<meta name="twitter:title" content="[^"]*">', f'<meta name="twitter:title" content="{og_title}">', html)
+    html = re.sub(r'<meta name="twitter:description" content="[^"]*">', f'<meta name="twitter:description" content="{og_desc}">', html)
+    html = re.sub(r'<title>[^<]*</title>', f'<title>{og_title}</title>', html)
+
+    return HTMLResponse(content=html)
+
+
+# ---------------------------------------------------------------------------
 # Sitemap + robots.txt
 # ---------------------------------------------------------------------------
 

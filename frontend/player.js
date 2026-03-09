@@ -117,6 +117,7 @@ function renderPlayerPage(data, container) {
   html += `<div class="player-hero-actions">`;
   html += `<button class="btn-primary" onclick="exportPlayerPNG()" style="font-size:12px; padding:8px 16px;">Export PNG</button>`;
   html += `<button class="btn-chunky" onclick="copyPlayerURL()" style="font-size:12px; padding:8px 16px;">Copy Link</button>`;
+  html += `<button class="btn-chunky" onclick="openCompareSearch()" style="font-size:12px; padding:8px 16px;">Compare</button>`;
   html += `</div>`;
   html += `</div>`; // hero-top
 
@@ -697,6 +698,46 @@ function roundRect(ctx, x, y, w, h, r) {
   ctx.lineTo(x, y + r);
   ctx.arcTo(x, y, x + r, y, r);
   ctx.closePath();
+}
+
+function openCompareSearch() {
+  if (!_profileData || !_profileData.player) return;
+  var currentId = _profileData.player.player_id;
+  // Create a search overlay
+  var overlay = document.createElement("div");
+  overlay.id = "compareOverlay";
+  overlay.style.cssText = "position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;display:flex;align-items:center;justify-content:center;";
+  overlay.innerHTML = '<div style="background:var(--bg-card);border:3px solid var(--ink);border-radius:12px;box-shadow:4px 4px 0 var(--ink);padding:24px;width:380px;max-width:90vw;">' +
+    '<div style="font-family:var(--font-display);font-size:18px;margin-bottom:12px;">Compare ' + esc(_profileData.player.full_name) + ' with...</div>' +
+    '<input id="compareSearchInput" type="text" placeholder="Search player name..." style="width:100%;box-sizing:border-box;padding:10px 14px;border:2px solid var(--ink);border-radius:8px;font-family:var(--font-mono);font-size:14px;background:var(--bg);margin-bottom:8px;">' +
+    '<div id="compareSearchResults" style="max-height:200px;overflow-y:auto;"></div>' +
+    '<button onclick="document.getElementById(\'compareOverlay\').remove()" class="btn-chunky" style="margin-top:10px;font-size:12px;width:100%;">Cancel</button>' +
+    '</div>';
+  document.body.appendChild(overlay);
+  overlay.addEventListener("click", function(e) { if (e.target === overlay) overlay.remove(); });
+
+  var input = document.getElementById("compareSearchInput");
+  input.focus();
+  var debounce = null;
+  input.addEventListener("input", function() {
+    clearTimeout(debounce);
+    debounce = setTimeout(function() {
+      var q = input.value.trim();
+      if (q.length < 2) { document.getElementById("compareSearchResults").innerHTML = ""; return; }
+      fetch("/api/players?search=" + encodeURIComponent(q) + "&limit=8")
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          var results = document.getElementById("compareSearchResults");
+          if (!results) return;
+          var players = data.players || [];
+          results.innerHTML = players.map(function(p) {
+            if (p.player_id === currentId) return "";
+            return '<div onclick="window.location.href=\'/compare/' + encodeURIComponent(currentId) + '/' + encodeURIComponent(p.player_id) + '\'" style="padding:8px 12px;cursor:pointer;border-bottom:1px solid var(--ink-faint);font-family:var(--font-mono);font-size:13px;" onmouseover="this.style.background=\'var(--bg-warm)\'" onmouseout="this.style.background=\'transparent\'">' +
+              '<span style="font-weight:700;">' + esc(p.full_name) + '</span> <span style="color:var(--ink-light);">' + esc(p.position || "") + ' ' + esc(p.team || "") + '</span></div>';
+          }).join("");
+        }).catch(function() {});
+    }, 250);
+  });
 }
 
 function copyPlayerURL() {

@@ -1,8 +1,24 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 38 — QA Audit Round 2 — Critical + High Bugfixes
+## Current Phase: Phase 39 — Shareable Player Comparison Pages (COMPLETE)
 
-**Exit criterion:** All critical and high-priority bugs from QA audit fixed. Missing Response import added. fetchData() reference fixed. CORS restricted to razzle.lol. SQL filter keys use explicit mapping. DVS popover age curves corrected. Rams team abbreviation fixed. War Room game loop cleanup added. Waitlist validation added. QB profile INT label fixed. College preset detection fixed. Prospect filter labels fixed. All medium issues addressed. Deployed to Render.
+**Exit criterion MET:** Standalone /compare/{id1}/{id2} URL renders side-by-side player cards with stat differentials, overlaid radar chart, career arc comparison, and dynamic OG meta tags for rich Reddit/Discord previews. PNG export (1200x630) with watermark. Compare button on player profile pages with search overlay. Mobile responsive at 768px and 480px. All syntax clean.
+
+### Phase 39 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Build compare.html + compare.js | DONE | Side-by-side heroes, stat diff table, radar overlay, career arc, PNG export |
+| 2 | Server route + OG tags + profile compare button | DONE | /compare/{id1}/{id2} with dynamic OG, player profile "Compare" button |
+| 3 | Syntax check + smoke test | DONE | All 8 JS files + Python modules clean |
+
+### Decisions Log
+- **Compare via profiles, not Lab rows**: Chose to add Compare button to player profile pages rather than cluttering the dense Lab screener table. Users click a player name → see profile → hit Compare → search for second player. Clean flow, doesn't bloat the screener UI.
+- **Same-position color differentiation**: When comparing two players of the same position, the second player gets a darker shade of the position color to maintain visual distinction in radar overlay and stat table.
+
+## Previous Phase: Phase 38 — QA Audit Round 2 — Critical + High Bugfixes (COMPLETE)
+
+**Exit criterion MET:** All critical and high-priority bugs from QA audit fixed. Missing Response import added. fetchData() reference fixed. CORS restricted to razzle.lol. SQL filter keys use explicit mapping. DVS popover age curves corrected. Rams team abbreviation fixed. War Room game loop cleanup added. Waitlist validation added. QB profile INT label fixed. College preset detection fixed. Prospect filter labels fixed. All medium issues addressed. Deployed to Render.
 
 ### Phase 38 Tasks
 
