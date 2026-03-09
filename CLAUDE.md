@@ -155,5 +155,20 @@ The old FDL project at `C:\Users\mcgui\Documents\FDL` has working implementation
 - Sleeper API integration (`live_data.py` — fetch_sleeper_players_cached)
 - Screener query logic (`live_data.py` — fetch_screener_query)
 - Terminal server endpoints (`terminal_server.py`)
+- **Pixel War Room** (`pixel-agents/index.html` — complete canvas engine, 51KB):
+  - Canvas: 30×22 tile grid, 32px tiles, `image-rendering: pixelated`
+  - Sprites: 16×24 frames, 7 cols × 4 rows, drawn at 2× scale (32×48)
+  - Agent AI: state machine (IDLE/WALK/WORK_DESK/ANALYZE_BOARD/DISCUSS/THINK/COFFEE)
+  - Collision system, furniture sprites, wood floor + turf war table
+  - Walk animation: `WALK_FRAMES = [0, 1, 2, 1]` at 150ms/frame
+  - Agent selection: click + dashed ellipse, camera follow, D-pad controls
+- **Agent personas** (`agent-personas/` — 6 markdown files):
+  - Hootsworth (Chief of Staff) → adapt to Razzle (Bengal Tiger)
+  - Dr. Dolphin (Medical), Hawkeye (Scout), The Fox (Diplomat), The Octopus (Quant), The Elephant (Historian)
+  - Each has personality, reasoning style, mandatory output sections
+- **Agent integration** (`agents.html` + `agents.js`):
+  - Scenario panel, per-agent API key config (OpenRouter), LLM calls from browser
+  - 5 specialists run in parallel → Razzle synthesizes with urgency tiers
+- **Character sprites** (`pixel-agents/assets/characters/char_0.png` through `char_5.png`)
 
 Use these as reference for proven patterns, but rewrite everything clean for the razzle repo. Every line should be intentional.
