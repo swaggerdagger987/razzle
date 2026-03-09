@@ -272,6 +272,25 @@ const COLUMNS = {
   // Breakout detection
   breakout_pct:        { label: "BRK%",    tip: "Breakout Percentage — max year-over-year PPR increase", group: "Breakout", decimals: 1, derived: true },
 
+  // Play-by-play derived (from player_season_pbp)
+  pass_success_rate:   { label: "Pass Succ%", tip: "Pass Success Rate — percentage of pass plays with EPA > 0", group: "Advanced", decimals: 3, derived: true },
+  rush_success_rate:   { label: "Rush Succ%", tip: "Rush Success Rate — percentage of rush plays with EPA > 0", group: "Advanced", decimals: 3, derived: true },
+  avg_score_differential: { label: "Game Script", tip: "Avg Score Differential — mean point margin at snap (positive = winning)", group: "Advanced", decimals: 1, derived: true },
+  garbage_time_pct:    { label: "Garb%",    tip: "Garbage Time % — percentage of plays in blowout situations", group: "Advanced", decimals: 3, derived: true },
+  scramble_attempts:   { label: "Scram Att", tip: "Scramble Attempts — QB scramble plays (classified as runs)", group: "Passing", decimals: 0, derived: true },
+  scramble_yards:      { label: "Scram Yds", tip: "Scramble Yards — yards gained on QB scrambles", group: "Passing", decimals: 0, derived: true },
+  scramble_tds:        { label: "Scram TD",  tip: "Scramble Touchdowns", group: "Passing", decimals: 0, derived: true },
+  gl_carries:          { label: "GL Carries", tip: "Goal-Line Carries — rushing attempts inside the 5-yard line", group: "Rushing", decimals: 0, derived: true },
+  gl_targets:          { label: "GL Targets", tip: "Goal-Line Targets — pass targets inside the 5-yard line", group: "Receiving", decimals: 0, derived: true },
+  gl_tds:              { label: "GL TD",     tip: "Goal-Line TDs — touchdowns scored inside the 5-yard line", group: "Rushing", decimals: 0, derived: true },
+  intended_air_yards_per_target: { label: "IAY/TGT", tip: "Intended Air Yards Per Target — avg depth of all targets (not just catches)", group: "Receiving", decimals: 1, derived: true },
+  drop_rate:           { label: "Drop%",    tip: "Drop Rate — estimated drops / targets (incomplete short-medium non-INT passes)", group: "Receiving", decimals: 3, derived: true },
+  return_yards:        { label: "Ret Yds",  tip: "Return Yards — kickoff + punt return yards", group: "General", decimals: 0, derived: true },
+  return_tds:          { label: "Ret TD",   tip: "Return Touchdowns — kickoff + punt return TDs", group: "General", decimals: 0, derived: true },
+  two_point_conversions: { label: "2PT",    tip: "Two-Point Conversions — successful two-point conversion plays", group: "General", decimals: 0, derived: true },
+  bye_week:            { label: "Bye",      tip: "Bye Week — team's bye week number", group: "General", decimals: 0, derived: true },
+  games_missed:        { label: "Missed",   tip: "Games Missed — weeks with Out/IR/Doubtful designation", group: "General", decimals: 0, derived: true },
+
   // Team shares (derived from team aggregates — sort only)
   dominator_rating:    { label: "DOM",     tip: "Dominator Rating — share of team receiving production (WR/TE only)", group: "Dynasty", decimals: 1, pct: true, derived: true },
   rush_share:          { label: "Rush%",   tip: "Rush Share — percentage of team carries (RB/QB only)", group: "Efficiency", decimals: 1, derived: true },
@@ -293,17 +312,19 @@ const PRESETS = {
     label: "Passing",
     columns: ["fantasy_points_ppr", "ppg", "games", "passing_yards", "passing_tds",
               "completions", "attempts", "interceptions", "passer_rating", "ay_per_att",
-              "passing_air_yards", "rushing_yards", "rushing_tds"],
+              "passing_air_yards", "scramble_attempts", "scramble_yards"],
   },
   rushing: {
     label: "Rushing",
     columns: ["fantasy_points_ppr", "ppg", "games", "rushing_yards", "rushing_tds",
-              "carries", "receiving_yards", "receptions", "targets", "touchdowns"],
+              "carries", "gl_carries", "gl_tds", "rush_success_rate",
+              "receiving_yards", "receptions", "targets"],
   },
   receiving: {
     label: "Receiving",
     columns: ["fantasy_points_ppr", "ppg", "games", "receiving_yards", "receiving_tds",
-              "receptions", "targets", "receiving_air_yards", "receiving_yards_after_catch", "touchdowns"],
+              "receptions", "targets", "receiving_air_yards", "receiving_yards_after_catch",
+              "intended_air_yards_per_target", "drop_rate"],
   },
   dynasty: {
     label: "Dynasty",
@@ -323,8 +344,9 @@ const PRESETS = {
   },
   advanced: {
     label: "Advanced",
-    columns: ["fantasy_points_ppr", "ppg", "games", "target_share", "air_yards_share",
-              "wopr", "wopr_per_game", "racr", "receiving_epa", "passing_epa", "rushing_epa"],
+    columns: ["fantasy_points_ppr", "ppg", "games", "pass_success_rate", "rush_success_rate",
+              "avg_score_differential", "garbage_time_pct", "target_share", "wopr",
+              "receiving_epa", "passing_epa", "rushing_epa"],
   },
 };
 

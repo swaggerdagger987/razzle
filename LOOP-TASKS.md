@@ -28,14 +28,8 @@
 **Result**: Bye weeks from nflverse games.csv — computed as missing week in 18-week schedule per team. ARI bye=11, BAL bye=14 verified correct. Games missed from nflverse injuries CSV — counts weeks with Out/IR/Doubtful designation. Derek Carr 7 games missed, Kenneth Walker 4 — verified. Added bye_week and games_missed to player_season_pbp table with migration. Enrichment chain updated.
 
 ## Task 6: Wire all new pbp stats as Lab screener columns
-**Status**: PENDING
-**Acceptance Criteria**:
-- All new columns appear in column selector under correct categories
-- All columns show real data
-- Tooltips present on all new column headers
-- '—' for non-applicable stats
-- All sortable
-- No regression in existing columns
+**Status**: PASS
+**Result**: Added 18 new column definitions to COLUMNS in lab.js: pass_success_rate, rush_success_rate, avg_score_differential, garbage_time_pct (Advanced), scramble_attempts/yards/tds (Passing), gl_carries/gl_targets/gl_tds (Rushing/Receiving), intended_air_yards_per_target, drop_rate (Receiving), return_yards, return_tds, two_point_conversions, bye_week, games_missed (General). All with tooltips. Updated presets: passing includes scramble stats, rushing includes goal-line, receiving includes IAY/TGT and drop rate, advanced includes success rates and game script.
 
 ## Task 7: Deploy + smoke test all pbp extractions
 **Status**: PENDING
@@ -50,8 +44,8 @@
 ## Loop State
 ```
 Current Phase: 41
-Current Task: 6
+Current Task: 7
 Current Stage: BUILD
 Attempt: 1
-Tasks Completed: 5/7
+Tasks Completed: 6/7
 ```
