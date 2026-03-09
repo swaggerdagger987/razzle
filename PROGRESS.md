@@ -17,7 +17,7 @@
 | 7 | Enrich player profile card | DONE | Multi-season log, career totals row (bold), QB: INT/Sacks/CPOE, RB: 1st downs/fumbles, WR/TE: aDOT/1st downs. Age=integer, plural fix, draft badge, team color accent. |
 | 8 | New stats as Lab columns | DONE | 9 new columns: Pass 1st, Sacks, Sack Yds, Rush 1st, Rec 1st, aDOT, FUM, FUM Lost, Snap%. Red zone + explosive deferred (need PBP adapter). |
 | 9 | Chart enhancements + comparison tool | DONE | Radar: 3-4 player support. Scatter: trend line + R-squared toggle. Compare button in toolbar. Existing compare modal already has stat table + radar. |
-| 10 | DVS transparency + remove test formulas + color legend | | |
+| 10 | DVS transparency + remove test formulas + color legend | DONE | DVS info popover on click, dev formula blocklist (auto-remove from localStorage), color legend below table. |
 | 11 | Player count fix + preset alignment + 562 bug | | |
 | 12 | Deploy + smoke test | | |
 

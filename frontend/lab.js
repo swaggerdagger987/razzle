@@ -537,7 +537,11 @@ function renderTableHead() {
     if (!col) continue;
     const cls = state.sortKey === key ? `sort-${state.sortDir}` : "";
     const tip = col.tip ? ` title="${col.tip}"` : "";
-    html += `<th class="${cls}"${tip} onclick="sortBy('${key}')">${col.label}</th>`;
+    let extra = "";
+    if (key === "dynasty_value") {
+      extra = ` <span class="dvs-info" onclick="event.stopPropagation(); toggleDVSInfo()" title="Click for DVS methodology" style="cursor:help; font-size:10px; opacity:0.6;">&#9432;</span>`;
+    }
+    html += `<th class="${cls}"${tip} onclick="sortBy('${key}')">${col.label}${extra}</th>`;
   }
 
   html += "</tr>";
@@ -1402,9 +1406,17 @@ function getCurrentPresetName() {
 }
 
 // ─── Formula columns integration ─────────────────────────────────
+const DEV_FORMULA_NAMES = new Set(["yerrr", "testing"]);
+
 function loadFormulas() {
   try {
-    state.formulas = JSON.parse(localStorage.getItem("razzle_formulas") || "[]");
+    const raw = JSON.parse(localStorage.getItem("razzle_formulas") || "[]");
+    // Filter out dev/test formulas
+    state.formulas = raw.filter(f => !DEV_FORMULA_NAMES.has(f.name.toLowerCase()));
+    // Clean them from storage too
+    if (state.formulas.length < raw.length) {
+      localStorage.setItem("razzle_formulas", JSON.stringify(state.formulas));
+    }
   } catch (e) {
     state.formulas = [];
   }
@@ -1459,6 +1471,28 @@ function isNonApplicableStat(pos, statKey, value) {
 }
 
 // ─── Positional rank computation ─────────────────────────────────
+function toggleDVSInfo() {
+  let el = document.getElementById("dvsInfoPopover");
+  if (el) { el.remove(); return; }
+  el = document.createElement("div");
+  el.id = "dvsInfoPopover";
+  el.style.cssText = "position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:20px 24px; max-width:400px; z-index:9999; font-family:var(--font-mono); font-size:13px; line-height:1.6;";
+  el.innerHTML = `
+    <h4 style="font-family:var(--font-display); margin:0 0 10px;">DVS Methodology</h4>
+    <p><b>DVS = PPR/G &times; Age Curve Multiplier</b></p>
+    <p>Age curves vary by position:</p>
+    <ul style="margin:4px 0; padding-left:18px;">
+      <li>QB: peak 25\u201330</li>
+      <li>RB: peak 23\u201327</li>
+      <li>WR: peak 24\u201329</li>
+      <li>TE: peak 25\u201330</li>
+    </ul>
+    <p>Higher DVS = more dynasty value per game adjusted for age. Tiers: Elite (85+), Star (70+), Starter (55+).</p>
+    <button class="btn-chunky" onclick="document.getElementById('dvsInfoPopover').remove()" style="margin-top:8px; font-size:11px;">Got it</button>
+  `;
+  document.body.appendChild(el);
+}
+
 function computePosRanks() {
   // Group players by position, sort within each group by current sort key
   const byPos = {};

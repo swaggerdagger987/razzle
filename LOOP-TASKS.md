@@ -152,9 +152,9 @@
 - No broken references after removing test formulas
 **Depends on**: none
 **Size**: S
-**Status**: PENDING
-**Attempt**: 0/3
-**Result**:
+**Status**: PASS
+**Attempt**: 1/3
+**Result**: (a) DVS info icon (&#9432;) added next to DVS column header. Clicking opens a popover with methodology: "DVS = PPR/G × Age Curve Multiplier" with position-specific age curve ranges and tier definitions. (b) Dev formulas "Yerrr" and "Testing" auto-filtered from localStorage on load via DEV_FORMULA_NAMES blocklist — also cleaned from storage. (c) Color legend added below table explaining DVS tiers (Elite/Star/Starter badges), Breakout badge, and dash meaning. All styled per Razzle design system. JS syntax passes.
 
 ## Task 11: Player count fix + category preset alignment + 562 bug
 **Requirement**: "Three general polish fixes: (a) Player count updates when switching universes/filters. (b) Column presets map to actual categories. (c) Career vs 2024 produce different results."
@@ -183,9 +183,9 @@
 ## Loop State
 ```
 Current Phase: 29
-Current Task: 9
+Current Task: 10
 Current Stage: PASS
 Attempt: 1/3
-Tasks Completed: 9/12
-Loop Iterations: 9
+Tasks Completed: 10/12
+Loop Iterations: 10
 ```
