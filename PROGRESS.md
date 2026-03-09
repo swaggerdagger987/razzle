@@ -8,9 +8,9 @@
 |---|------|--------|-------|
 | 1 | agents.html page | DONE | War Room hero (sand bg, Luckiest Guy, agent badges), dark mode canvas zone, nav on all pages |
 | 2 | Pixel agent sprite sheets | DONE | 6 character PNGs (112×96, 7×4 grid of 16×24 frames) ported from FDL to frontend/assets/characters/ |
-| 3 | Canvas War Room engine | NOT STARTED | 30×22 tile grid, wood floor, turf war table, furniture, collision. Ref: FDL pixel-agents/index.html |
-| 4 | Agent AI + animation | NOT STARTED | State machine: IDLE/WALK/WORK/ANALYZE/DISCUSS/THINK/COFFEE. Walk frames 150ms. |
-| 5 | Agent selection + camera | NOT STARTED | Click to select, camera follows, D-pad controls, name tags |
+| 3 | Canvas War Room engine | DONE | 30×22 tile grid, wood floor, turf war table, 6 desks, collision map. warroom.js (full canvas engine) |
+| 4 | Agent AI + animation | DONE | State machine (IDLE/WALK/WORK/THINK/DISCUSS/COFFEE/CELEBRATE), walk frames [0,1,2,1] at 150ms, directional facing |
+| 5 | Agent selection + camera | DONE | Click select (dashed ellipse), camera follow, arrow key controls, name tags with role colors |
 | 6 | Agent roster sidebar | NOT STARTED | Overlay panel: 6 agents with avatar, name, role, click to select |
 
 **Exit criterion:** agents.html loads with live pixel War Room. 6 agents walk around, work at desks, visit war table. Clicking selects. Room has Razzle comic-strip aesthetic. Feels alive.

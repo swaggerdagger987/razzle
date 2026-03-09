@@ -28,21 +28,24 @@
 **Accept when**: Canvas renders a 30x22 tile grid with wood floor tiles, war table in center, desks around perimeter, collision map prevents walking through furniture. Pixel-art aesthetic with `image-rendering: pixelated`. Dark mode palette for the War Room canvas area.
 **Depends on**: Task 1
 **Size**: L
-**Status**: PENDING
+**Status**: PASS
+**Attempt**: 1/3
 
 ## Task 4: Agent AI + sprite animation
 **Requirement**: "State machine: IDLE/WALK/WORK/ANALYZE/DISCUSS/THINK/COFFEE. Walk frames 150ms."
 **Accept when**: 6 agents render on canvas with correct sprites. State machine drives behavior: agents walk between furniture, sit at desks, gather at war table, think with thought bubbles. Walk animation uses frames [0,1,2,1] at 150ms/frame. Agents have directional facing (up/down/left/right rows in sprite sheet).
 **Depends on**: Task 2, Task 3
 **Size**: L
-**Status**: PENDING
+**Status**: PASS
+**Attempt**: 1/3
 
 ## Task 5: Agent selection + camera follow
 **Requirement**: "Click to select, camera follows, D-pad controls, name tags"
 **Accept when**: Clicking an agent selects them (dashed ellipse indicator). Camera smoothly follows selected agent. D-pad or arrow key controls for manual camera. Name tags float above each agent (Razzle, Scout, Diplomat, Quant, Medical, Historian). Selected agent's name tag is highlighted.
 **Depends on**: Task 4
 **Size**: M
-**Status**: PENDING
+**Status**: PASS
+**Attempt**: 1/3
 
 ## Task 6: Agent roster sidebar
 **Requirement**: "Overlay panel: 6 agents with avatar, name, role, click to select"
@@ -56,9 +59,9 @@
 ## Loop State
 ```
 Current Phase: 6
-Current Task: 3
+Current Task: 6
 Current Stage: PENDING
 Attempt: 0/3
-Tasks Completed: 2/6
+Tasks Completed: 5/6
 Loop Iterations: 1
 ```
