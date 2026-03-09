@@ -1,8 +1,26 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 37 — Trade Analyzer
+## Current Phase: Phase 38 — QA Audit Round 2 — Critical + High Bugfixes
 
-**Exit criterion:** Trade Analyzer accessible from Lab toolbar via "Trade" button. User searches and adds players to "Give" and "Get" sides. Dynamic trade value model computes player values from stats (PPR PPG, age curve, positional scarcity). Value bars, win/loss/fair verdict, Razzle commentary. PNG export with watermark. Mobile responsive. Shareable.
+**Exit criterion:** All critical and high-priority bugs from QA audit fixed. Missing Response import added. fetchData() reference fixed. CORS restricted to razzle.lol. SQL filter keys use explicit mapping. DVS popover age curves corrected. Rams team abbreviation fixed. War Room game loop cleanup added. Waitlist validation added. QB profile INT label fixed. College preset detection fixed. Prospect filter labels fixed. All medium issues addressed. Deployed to Render.
+
+### Phase 38 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Fix critical server crashes + security | | |
+| 2 | Fix DVS popover + Rams abbreviation + QB INT label | | |
+| 3 | Fix War Room memory leaks + waitlist validation | | |
+| 4 | Fix college/prospect mode bugs | | |
+| 5 | Fix medium issues — fonts, performance, error handling | | |
+| 6 | Fix low issues — og:image, dead code, collision map | | |
+| 7 | Deploy + smoke test all QA fixes | | |
+
+### Decisions Log
+
+## Previous Phase: Phase 37 — Trade Analyzer (COMPLETE)
+
+**Exit criterion MET:** Trade Analyzer accessible from Lab toolbar via "Trade" button. Two-sided player search, dynamic trade value model (PPR PPG 50% + age curve 30% + scarcity 20%). Value bars with position-colored segments, WIN/LOSS/FAIR verdict badge, Razzle commentary quips. Trade card PNG export (1200x630) with watermark. Mobile responsive. All tasks PASS.
 
 ### Phase 37 Tasks
 
