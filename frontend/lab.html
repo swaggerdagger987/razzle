@@ -893,6 +893,7 @@
         <button class="btn-chunky" id="chartTabRadar" onclick="switchChartTab('radar')">Radar</button>
         <button class="btn-chunky" id="chartTabScatter" onclick="switchChartTab('scatter')">Scatter</button>
         <button class="btn-chunky" id="chartTabTrend" onclick="switchChartTab('trend')">Trend</button>
+        <button class="btn-chunky" id="chartTabHeatmap" onclick="switchChartTab('heatmap')">Heat Map</button>
       </div>
     </div>
 
@@ -900,7 +901,9 @@
     <div id="chartConfig" style="margin-bottom:16px;"></div>
 
     <!-- Canvas -->
-    <canvas id="chartCanvas" width="760" height="460" style="border:2px solid var(--ink); border-radius:8px; background:var(--bg); width:100%;"></canvas>
+    <div id="chartCanvasWrap" style="overflow-x:auto;">
+      <canvas id="chartCanvas" width="760" height="460" style="border:2px solid var(--ink); border-radius:8px; background:var(--bg); width:100%;"></canvas>
+    </div>
 
     <div style="margin-top:12px; display:flex; justify-content:flex-end;">
       <button class="btn-chunky" onclick="closeChartPanel()">Close</button>

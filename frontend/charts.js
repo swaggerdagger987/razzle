@@ -20,6 +20,18 @@ function switchChartTab(tab) {
   const btn = document.getElementById("chartTab" + tab.charAt(0).toUpperCase() + tab.slice(1));
   if (btn) btn.classList.add("active");
 
+  // Heat map needs natural canvas size (scrollable); others scale to fit
+  const canvas = document.getElementById("chartCanvas");
+  if (tab === "heatmap") {
+    canvas.style.width = "";
+    canvas.style.minWidth = "700px";
+  } else {
+    canvas.style.width = "100%";
+    canvas.style.minWidth = "";
+    canvas.width = 760;
+    canvas.height = 460;
+  }
+
   renderChartConfig();
   drawChart();
 }
@@ -54,6 +66,36 @@ function renderChartConfig() {
         <span style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; color:var(--ink-light);">Y:</span>
         <select class="select-chunky" id="scatterY" onchange="drawChart()">${statOptions.replace('value="receiving_yards"', 'value="receiving_yards" selected')}</select>
       </div>`;
+  } else if (currentChartTab === "heatmap") {
+    const heatmapPresets = {
+      ppr_core: { label: "PPR Core", stats: ["fantasy_points_ppr", "ppg", "games", "touchdowns", "receptions", "targets", "receiving_yards", "rushing_yards"] },
+      passing: { label: "Passing", stats: ["passing_yards", "passing_tds", "completions", "attempts", "interceptions", "comp_pct", "yards_per_att", "passing_epa"] },
+      rushing: { label: "Rushing", stats: ["rushing_yards", "rushing_tds", "carries", "yards_per_carry", "rush_ypg", "rushing_epa", "touchdowns", "games"] },
+      receiving: { label: "Receiving", stats: ["receiving_yards", "receiving_tds", "receptions", "targets", "catch_rate", "yards_per_target", "target_share", "wopr"] },
+      efficiency: { label: "Efficiency", stats: ["ppg", "yards_per_carry", "yards_per_rec", "yards_per_target", "catch_rate", "target_share", "wopr", "racr"] },
+    };
+    const presetOptions = Object.entries(heatmapPresets).map(([k, v]) => `<option value="${k}">${v.label}</option>`).join("");
+    container.innerHTML = `
+      <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+        <span style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; color:var(--ink-light);">Position:</span>
+        <select class="select-chunky" id="heatmapPos" onchange="drawChart()">
+          <option value="QB">QB</option>
+          <option value="RB">RB</option>
+          <option value="WR" selected>WR</option>
+          <option value="TE">TE</option>
+        </select>
+        <span style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; color:var(--ink-light);">Stats:</span>
+        <select class="select-chunky" id="heatmapPreset" onchange="drawChart()">${presetOptions}</select>
+        <span style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; color:var(--ink-light);">Top:</span>
+        <select class="select-chunky" id="heatmapCount" onchange="drawChart()">
+          <option value="15">15</option>
+          <option value="20" selected>20</option>
+          <option value="30">30</option>
+        </select>
+      </div>
+      <p style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); margin:6px 0 0;">
+        percentile ranks within position group
+      </p>`;
   } else if (currentChartTab === "trend") {
     const playerOptions = getPlayerOptions();
     const isCareer = state.season === "career";
@@ -87,6 +129,7 @@ function drawChart() {
   if (currentChartTab === "radar") drawRadar();
   else if (currentChartTab === "scatter") drawScatter();
   else if (currentChartTab === "trend") drawTrend();
+  else if (currentChartTab === "heatmap") drawHeatmap();
 }
 
 // ─── Radar chart ─────────────────────────────────────────────────
@@ -480,6 +523,251 @@ function _drawTrendLine(ctx, W, H, pad, vals, labels, playerName, statKey, subti
   ctx.fillStyle = "#1a1a2e";
   ctx.textAlign = "left";
   ctx.fillText(`${playerName} — ${statLabel} ${subtitle}`, pad.left, 20);
+}
+
+// ─── Heat map ───────────────────────────────────────────────────
+const HEATMAP_PRESETS = {
+  ppr_core: ["fantasy_points_ppr", "ppg", "games", "touchdowns", "receptions", "targets", "receiving_yards", "rushing_yards"],
+  passing: ["passing_yards", "passing_tds", "completions", "attempts", "interceptions", "comp_pct", "yards_per_att", "passing_epa"],
+  rushing: ["rushing_yards", "rushing_tds", "carries", "yards_per_carry", "rush_ypg", "rushing_epa", "touchdowns", "games"],
+  receiving: ["receiving_yards", "receiving_tds", "receptions", "targets", "catch_rate", "yards_per_target", "target_share", "wopr"],
+  efficiency: ["ppg", "yards_per_carry", "yards_per_rec", "yards_per_target", "catch_rate", "target_share", "wopr", "racr"],
+};
+
+// Stats where lower is better (for correct percentile coloring)
+const LOWER_IS_BETTER = ["interceptions"];
+
+function drawHeatmap() {
+  const canvas = document.getElementById("chartCanvas");
+  const ctx = canvas.getContext("2d");
+
+  const pos = document.getElementById("heatmapPos")?.value || "WR";
+  const presetKey = document.getElementById("heatmapPreset")?.value || "ppr_core";
+  const count = parseInt(document.getElementById("heatmapCount")?.value || "20");
+  const stats = HEATMAP_PRESETS[presetKey] || HEATMAP_PRESETS.ppr_core;
+
+  // Filter players by position from current data
+  const posPlayers = state.items
+    .filter(p => p.position === pos)
+    .sort((a, b) => (b.fantasy_points_ppr || 0) - (a.fantasy_points_ppr || 0))
+    .slice(0, count);
+
+  if (posPlayers.length < 2) {
+    canvas.width = 760;
+    canvas.height = 460;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.font = "24px 'Caveat', cursive";
+    ctx.fillStyle = "#8a8a9e";
+    ctx.textAlign = "center";
+    ctx.fillText(`no ${pos} data — try loading more players`, canvas.width / 2, canvas.height / 2);
+    return;
+  }
+
+  // Compute percentile ranks per stat
+  const percentiles = {};
+  for (const stat of stats) {
+    const vals = posPlayers.map(p => p[stat] ?? null).filter(v => v !== null);
+    vals.sort((a, b) => a - b);
+    percentiles[stat] = {};
+    for (const p of posPlayers) {
+      const v = p[stat];
+      if (v == null) { percentiles[stat][p.player_id] = null; continue; }
+      const rank = vals.filter(x => x <= v).length;
+      let pct = (rank / vals.length) * 100;
+      if (LOWER_IS_BETTER.includes(stat)) pct = 100 - pct;
+      percentiles[stat][p.player_id] = pct;
+    }
+  }
+
+  // Layout
+  const nameColW = 140;
+  const cellW = 72;
+  const cellH = 28;
+  const headerH = 60;
+  const padL = 16;
+  const padT = 40;
+  const gridW = stats.length * cellW;
+  const gridH = posPlayers.length * cellH;
+
+  const W = padL + nameColW + gridW + 20;
+  const H = padT + headerH + gridH + 30;
+  canvas.width = W;
+  canvas.height = H;
+
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = "#ede0cf";
+  ctx.fillRect(0, 0, W, H);
+
+  // Position colors
+  const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  const posColor = posColors[pos] || "#d97757";
+
+  // Title
+  ctx.font = "bold 18px 'Luckiest Guy', cursive";
+  ctx.fillStyle = "#1a1a2e";
+  ctx.textAlign = "left";
+  ctx.fillText(`${pos} Heat Map — Positional Percentiles`, padL, 26);
+
+  // Subtitle
+  ctx.font = "16px 'Caveat', cursive";
+  ctx.fillStyle = "#8a8a9e";
+  ctx.fillText(`top ${posPlayers.length} by PPR`, padL + ctx.measureText(`${pos} Heat Map — Positional Percentiles`).width + 12, 26);
+
+  const gridX = padL + nameColW;
+  const gridY = padT + headerH;
+
+  // Column headers (rotated stat labels)
+  ctx.save();
+  ctx.font = "bold 11px 'Space Mono', monospace";
+  ctx.fillStyle = "#1a1a2e";
+  for (let c = 0; c < stats.length; c++) {
+    const col = COLUMNS[stats[c]];
+    const label = col ? col.label : stats[c];
+    const x = gridX + c * cellW + cellW / 2;
+    const y = gridY - 6;
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(-Math.PI / 4);
+    ctx.textAlign = "left";
+    ctx.fillText(label, 0, 0);
+    ctx.restore();
+  }
+  ctx.restore();
+
+  // Grid border
+  ctx.strokeStyle = "#1a1a2e";
+  ctx.lineWidth = 3;
+  ctx.strokeRect(gridX, gridY, gridW, gridH);
+
+  // Rows
+  for (let r = 0; r < posPlayers.length; r++) {
+    const player = posPlayers[r];
+    const y = gridY + r * cellH;
+
+    // Alternating row bg
+    if (r % 2 === 0) {
+      ctx.fillStyle = "#f7efe5";
+      ctx.fillRect(padL, y, nameColW, cellH);
+    }
+
+    // Player name
+    ctx.font = "bold 12px 'Luckiest Guy', cursive";
+    ctx.fillStyle = "#1a1a2e";
+    ctx.textAlign = "left";
+    const lastName = player.full_name.split(" ").slice(-1)[0];
+    const firstName = player.full_name.split(" ")[0];
+    const shortName = firstName.charAt(0) + ". " + lastName;
+    ctx.fillText(shortName, padL + 4, y + cellH / 2 + 4);
+
+    // Team badge
+    ctx.font = "bold 9px 'Space Mono', monospace";
+    ctx.fillStyle = "#8a8a9e";
+    ctx.fillText(player.team || "", padL + nameColW - 30, y + cellH / 2 + 3);
+
+    // Stat cells
+    for (let c = 0; c < stats.length; c++) {
+      const stat = stats[c];
+      const x = gridX + c * cellW;
+      const pct = percentiles[stat][player.player_id];
+
+      // Cell background color based on percentile
+      if (pct !== null) {
+        ctx.fillStyle = heatmapColor(pct);
+        ctx.fillRect(x, y, cellW, cellH);
+      } else {
+        ctx.fillStyle = "#e5d5c3";
+        ctx.fillRect(x, y, cellW, cellH);
+      }
+
+      // Cell border
+      ctx.strokeStyle = "#1a1a2e22";
+      ctx.lineWidth = 1;
+      ctx.strokeRect(x, y, cellW, cellH);
+
+      // Stat value
+      const val = player[stat];
+      const col = COLUMNS[stat];
+      if (val != null) {
+        const dec = col ? col.decimals : 1;
+        const pctSuffix = col && col.pct ? "%" : "";
+        const formatted = dec !== null ? val.toFixed(dec) + pctSuffix : val;
+        ctx.font = "bold 11px 'Space Mono', monospace";
+        ctx.fillStyle = pct !== null && pct > 75 ? "#ffffff" : "#1a1a2e";
+        ctx.textAlign = "center";
+        ctx.fillText(formatted, x + cellW / 2, y + cellH / 2 + 4);
+      } else {
+        ctx.font = "11px 'Caveat', cursive";
+        ctx.fillStyle = "#8a8a9e";
+        ctx.textAlign = "center";
+        ctx.fillText("—", x + cellW / 2, y + cellH / 2 + 4);
+      }
+    }
+
+    // Row divider
+    ctx.strokeStyle = "#1a1a2e33";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(padL, y + cellH);
+    ctx.lineTo(gridX + gridW, y + cellH);
+    ctx.stroke();
+  }
+
+  // Grid outer border (redraw on top)
+  ctx.strokeStyle = "#1a1a2e";
+  ctx.lineWidth = 3;
+  ctx.strokeRect(gridX, gridY, gridW, gridH);
+
+  // Legend
+  const legendY = gridY + gridH + 14;
+  const legendX = gridX;
+  const legendW = 200;
+  const legendH = 12;
+
+  // Gradient bar
+  for (let i = 0; i < legendW; i++) {
+    ctx.fillStyle = heatmapColor((i / legendW) * 100);
+    ctx.fillRect(legendX + i, legendY, 1, legendH);
+  }
+  ctx.strokeStyle = "#1a1a2e";
+  ctx.lineWidth = 2;
+  ctx.strokeRect(legendX, legendY, legendW, legendH);
+
+  ctx.font = "bold 10px 'Space Mono', monospace";
+  ctx.fillStyle = "#1a1a2e";
+  ctx.textAlign = "left";
+  ctx.fillText("0%", legendX, legendY + legendH + 12);
+  ctx.textAlign = "center";
+  ctx.fillText("50%", legendX + legendW / 2, legendY + legendH + 12);
+  ctx.textAlign = "right";
+  ctx.fillText("100%", legendX + legendW, legendY + legendH + 12);
+
+  ctx.font = "14px 'Caveat', cursive";
+  ctx.fillStyle = "#8a8a9e";
+  ctx.textAlign = "left";
+  ctx.fillText("positional percentile", legendX + legendW + 10, legendY + legendH + 2);
+
+  // Watermark
+  ctx.font = "bold 12px 'Luckiest Guy', cursive";
+  ctx.fillStyle = "#1a1a2e33";
+  ctx.textAlign = "right";
+  ctx.fillText("built different — razzle.lol", W - 12, H - 8);
+}
+
+function heatmapColor(pct) {
+  // 0% = red (#e63946), 50% = yellow (#ffc857), 100% = green (#2ec4b6)
+  if (pct <= 50) {
+    const t = pct / 50;
+    const r = Math.round(230 + (255 - 230) * t);
+    const g = Math.round(57 + (200 - 57) * t);
+    const b = Math.round(70 + (87 - 70) * t);
+    return `rgb(${r}, ${g}, ${b})`;
+  } else {
+    const t = (pct - 50) / 50;
+    const r = Math.round(255 - (255 - 46) * t);
+    const g = Math.round(200 + (196 - 200) * t);
+    const b = Math.round(87 + (182 - 87) * t);
+    return `rgb(${r}, ${g}, ${b})`;
+  }
 }
 
 // ─── Comparison mode ─────────────────────────────────────────────

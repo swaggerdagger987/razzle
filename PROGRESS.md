@@ -1,6 +1,19 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 10 — Player Profiles + Lab Enhancement (COMPLETE)
+## Current Phase: Phase 11 — Positional Heat Maps + Breakout Detection
+
+**Exit criterion:** Lab has a heat map visualization: select a position → see top players × stats grid with cells colored by percentile rank. Breakout badges on players with 50%+ YoY PPR increase. Both features follow Razzle design system. Heat map exportable as PNG. Mobile responsive. Deployed to Render.
+
+### Phase 11 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Positional heat map visualization | DONE | Heat Map tab in chart panel. Position selector (QB/RB/WR/TE), 5 stat presets (PPR Core, Passing, Rushing, Receiving, Efficiency), configurable top 15/20/30. Canvas-rendered grid with percentile-colored cells (red→yellow→green). Player names + team badges on Y-axis, rotated stat headers on X-axis. Razzle design: chunky borders, sand bg, Luckiest Guy/Space Mono/Caveat fonts, watermark. Horizontal scroll on mobile. |
+| 2 | Heat map PNG export | PENDING | |
+| 3 | Breakout detection badges | PENDING | |
+| 4 | Deploy + smoke test | PENDING | |
+
+## Previous Phase: Phase 10 — Player Profiles + Lab Enhancement (COMPLETE)
 
 **Exit criterion MET:** Click any player name in the Lab screener → rich profile modal opens with position-colored header, career headline stats bar (position-specific), season-by-season breakdown table with career totals, combine/draft data grid (if available), and career arc canvas chart. Profile PNG export with Razzle watermark. Mobile responsive. Follows Razzle design system (chunky borders, offset shadows, position colors, sand bg).
 
