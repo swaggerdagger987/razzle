@@ -1,16 +1,16 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 21 — Landing Page Draft Week Overhaul
+## Current Phase: Phase 21 — Landing Page Draft Week Overhaul (COMPLETE)
 
-**Exit criterion:** Landing page (index.html) showcases the full product: NFL data + College data + Prospect scoring. Hero copy updated to highlight dual-data platform. Feature cards include college screener, prospect profiles, Big Board, DVS, Class Analytics. New "Draft Season" section with prospect-specific showcase. Meta tags updated for SEO/social. All copy reflects current capabilities (3 universes, 19k+ college player-seasons, 329 prospects, DVS scoring). Follows Razzle design system. Deployed to Render.
+**Exit criterion MET:** Landing page showcases the full product: NFL data + College data + Prospect scoring. Hero copy highlights dual-data platform ("NFL + College data. 1200+ NFL players. 9800+ college players. 329 prospects scored."). Feature cards cover all three universes (NFL Screener, College Screener, Prospect Profiles, Custom Formulas, DVS, Share to Reddit). New "Draft Season 2025" section with 4 linked cards (Big Board, Class Analytics, College Production, DVS) between features and mascot. Blue-light NCAA-themed section with Razzle design system (chunky borders, offset shadows, Caveat annotations, sticker badges). Meta tags updated for SEO/social. Footer credits sportsdataverse. Deployed to Render.
 
 ### Phase 21 Tasks
 
 | # | Task | Status | Notes |
 |---|------|--------|-------|
-| 1 | Update hero copy, meta tags, and feature cards for NFL+College+Prospects | TODO | |
-| 2 | Add Draft Season showcase section with prospect features | TODO | |
-| 3 | Deploy + smoke test | TODO | |
+| 1 | Update hero copy, meta tags, and feature cards for NFL+College+Prospects | DONE | Hero subtitle: "NFL + College data. 1200+ NFL players. 9800+ college players. 329 prospects scored." og:title/description updated. 6 feature cards: NFL Screener, College Screener, Prospect Profiles, Custom Formulas, DVS, Share to Reddit. Footer credits sportsdataverse. |
+| 2 | Add Draft Season showcase section with prospect features | DONE | New blue-light section between features and mascot. 4 linked cards: Big Board, Class Analytics, College Production, DVS. Each with badge, description, Caveat annotation. Links to Lab with correct URL params. 2-col grid, mobile responsive. Chunky borders, offset shadows, hover lift. |
+| 3 | Deploy + smoke test | DONE | All 6 JS pass syntax. All Python imports clean. 5 HTML pages + assets present. div tags balanced. All content checks pass. Pushed to master for Render auto-deploy. |
 
 ## Previous Phase: Phase 20 — Dynasty Comparison Cards + Quick Rankings Export (COMPLETE)
 
