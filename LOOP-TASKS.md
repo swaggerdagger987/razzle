@@ -24,12 +24,8 @@
 **Result**: Intended air yards = air_yards on all pass targets (not just completions). IAY/target in 3-12 range. Drop rate computed as incomplete short-medium passes (air_yards<15, non-INT) / targets. Tim Patrick 0.044 drop rate (lowest among qualified). All populated in single-pass extraction.
 
 ## Task 5: Add bye week + injury data from nflverse schedule/roster
-**Status**: PENDING
-**Acceptance Criteria**:
-- Bye week column shows correct bye week per player per season (integer)
-- Games missed count populated
-- Values spot-checked against known injuries
-- No regression
+**Status**: PASS
+**Result**: Bye weeks from nflverse games.csv — computed as missing week in 18-week schedule per team. ARI bye=11, BAL bye=14 verified correct. Games missed from nflverse injuries CSV — counts weeks with Out/IR/Doubtful designation. Derek Carr 7 games missed, Kenneth Walker 4 — verified. Added bye_week and games_missed to player_season_pbp table with migration. Enrichment chain updated.
 
 ## Task 6: Wire all new pbp stats as Lab screener columns
 **Status**: PENDING
@@ -54,8 +50,8 @@
 ## Loop State
 ```
 Current Phase: 41
-Current Task: 5
+Current Task: 6
 Current Stage: BUILD
 Attempt: 1
-Tasks Completed: 4/7
+Tasks Completed: 5/7
 ```

@@ -418,6 +418,7 @@ def _enrich_with_pbp_stats(conn, items, season=None, career_mode=False):
         "scramble_tds", "garbage_time_pct", "gl_carries", "gl_targets", "gl_tds",
         "two_point_conversions", "return_yards", "return_tds",
         "intended_air_yards", "intended_air_yards_per_target", "drops", "drop_rate",
+        "bye_week", "games_missed",
     ]
 
     for item in items:

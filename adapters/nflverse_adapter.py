@@ -58,6 +58,8 @@ CORE_STATS = {
 
 SNAP_COUNTS_URL = "https://github.com/nflverse/nflverse-data/releases/download/snap_counts/snap_counts_{season}.csv"
 PBP_URL = "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_{season}.csv.gz"
+SCHEDULE_URL = "https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv"
+INJURIES_URL = "https://github.com/nflverse/nflverse-data/releases/download/injuries/injuries_{season}.csv"
 
 
 def utc_now():
@@ -231,6 +233,9 @@ def initialize_database(conn):
             intended_air_yards_per_target REAL,
             drops INTEGER,
             drop_rate REAL,
+            -- Task 5: Bye week, injury
+            bye_week INTEGER,
+            games_missed INTEGER,
             -- Metadata
             updated_at TEXT,
             PRIMARY KEY (player_id, season)
@@ -1034,6 +1039,111 @@ def _process_return_play(row, get_accum):
 
 
 # ---------------------------------------------------------------------------
+# Bye week + injury extraction
+# ---------------------------------------------------------------------------
+
+def sync_bye_weeks(conn, seasons=None):
+    """Fetch schedule data and compute bye weeks per team per season."""
+    if seasons is None:
+        seasons = [current_nfl_season()]
+
+    print(f"  Fetching schedule data...")
+    try:
+        rows = fetch_csv(SCHEDULE_URL)
+    except Exception as e:
+        print(f"  Schedule fetch failed: {e}")
+        return
+
+    # Compute bye weeks: find the missing week for each team in each season
+    # team -> season -> set of weeks played
+    team_weeks = {}
+    for row in rows:
+        s = safe_int(row.get("season"))
+        if s not in seasons:
+            continue
+        if (row.get("game_type") or "").upper() != "REG":
+            continue
+        week = safe_int(row.get("week"))
+        if not week:
+            continue
+        for team_col in ("home_team", "away_team"):
+            team = (row.get(team_col) or "").strip().upper()
+            if not team:
+                continue
+            key = (team, s)
+            if key not in team_weeks:
+                team_weeks[key] = set()
+            team_weeks[key].add(week)
+
+    # Find bye week = the missing week in regular season (1-18)
+    bye_map = {}  # (team, season) -> bye_week
+    for (team, season), played in team_weeks.items():
+        all_weeks = set(range(1, 19))
+        missing = all_weeks - played
+        if missing:
+            bye_map[(team, season)] = min(missing)
+
+    # Update player_season_pbp with bye weeks based on player team
+    updated = 0
+    for (team, season), bye in bye_map.items():
+        # Get player_ids for this team in this season
+        result = conn.execute("""
+            UPDATE player_season_pbp SET bye_week = ?
+            WHERE season = ? AND player_id IN (
+                SELECT DISTINCT player_id FROM player_week_stats
+                WHERE season = ? AND team = ?
+            )
+        """, (bye, season, season, team))
+        updated += result.rowcount
+
+    conn.commit()
+    print(f"  Updated {updated} bye week entries across {len(bye_map)} team-seasons.")
+
+
+def sync_injuries(conn, seasons=None):
+    """Fetch nflverse injury data and compute games_missed per player per season."""
+    if seasons is None:
+        seasons = [current_nfl_season()]
+
+    gsis_map, name_map = build_player_lookup(conn)
+
+    for season in seasons:
+        url = INJURIES_URL.format(season=season)
+        print(f"  Fetching injury data for {season}...")
+        try:
+            rows = fetch_csv(url)
+        except Exception as e:
+            print(f"  Injuries {season} fetch failed: {e}")
+            continue
+
+        # Count games missed: report_status in (Out, Injured Reserve, Doubtful)
+        # gsis_id -> count of weeks with Out/IR designation
+        missed = {}
+        for row in rows:
+            if (row.get("game_type") or "").upper() != "REG":
+                continue
+            gsis = (row.get("gsis_id") or "").strip()
+            status = (row.get("report_status") or "").strip().lower()
+            if status in ("out", "injured reserve", "doubtful"):
+                missed[gsis] = missed.get(gsis, 0) + 1
+
+        # Update player_season_pbp
+        updated = 0
+        for gsis, count in missed.items():
+            pid = gsis_map.get(gsis)
+            if not pid:
+                continue
+            conn.execute("""
+                UPDATE player_season_pbp SET games_missed = ?
+                WHERE player_id = ? AND season = ?
+            """, (count, pid, season))
+            updated += 1
+
+        conn.commit()
+        print(f"  Updated {updated} injury entries for {season}.")
+
+
+# ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
 
@@ -1063,6 +1173,19 @@ def migrate_add_columns(conn):
     conn.commit()
 
 
+def migrate_pbp_columns(conn):
+    """Add bye_week and games_missed to existing player_season_pbp (idempotent)."""
+    try:
+        existing = {row[1] for row in conn.execute("PRAGMA table_info(player_season_pbp)").fetchall()}
+    except Exception:
+        return  # table doesn't exist yet
+    for col_name, col_type in [("bye_week", "INTEGER"), ("games_missed", "INTEGER")]:
+        if col_name not in existing:
+            conn.execute(f"ALTER TABLE player_season_pbp ADD COLUMN {col_name} {col_type}")
+            print(f"  Added pbp column: {col_name}")
+    conn.commit()
+
+
 def current_nfl_season():
     now = datetime.now()
     return now.year if now.month >= 8 else now.year - 1
@@ -1081,6 +1204,7 @@ def main():
     # Migrate existing DB to add new columns (idempotent)
     print("Checking for schema migrations...")
     migrate_add_columns(conn)
+    migrate_pbp_columns(conn)
 
     total = 0
     for season in seasons:
@@ -1093,6 +1217,11 @@ def main():
     # Extract play-by-play advanced stats
     print(f"\nExtracting play-by-play stats...")
     sync_pbp_data(conn, sorted(seasons))
+
+    # Bye weeks and injuries
+    print(f"\nSyncing bye weeks and injuries...")
+    sync_bye_weeks(conn, sorted(seasons))
+    sync_injuries(conn, sorted(seasons))
 
     # Enrich players with age/demographics from roster CSVs
     print(f"\nEnriching players with roster demographics...")
