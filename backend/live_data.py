@@ -322,6 +322,87 @@ def _enrich_with_dynasty_value(items):
     return items
 
 
+def _enrich_with_team_shares(conn, items, season=None, career_mode=False):
+    """Compute team-relative share stats: dominator rating, rush share."""
+    if not items:
+        return items
+
+    # Collect unique team/season pairs from result set
+    teams_needed = set()
+    for item in items:
+        team = item.get("team")
+        if team:
+            teams_needed.add(team)
+
+    if not teams_needed:
+        for item in items:
+            item["dominator_rating"] = None
+            item["rush_share"] = None
+        return items
+
+    # Query team totals from player_week_stats
+    team_placeholders = ",".join("?" * len(teams_needed))
+    team_list = list(teams_needed)
+
+    if career_mode:
+        team_query = f"""
+            SELECT p.team,
+                   SUM(s.receiving_yards) as team_rec_yds,
+                   SUM(s.receiving_tds) as team_rec_tds,
+                   SUM(s.carries) as team_carries
+            FROM players p
+            JOIN player_week_stats s ON p.player_id = s.player_id
+            WHERE p.team IN ({team_placeholders})
+            GROUP BY p.team
+        """
+        team_rows = conn.execute(team_query, team_list).fetchall()
+        team_map = {}
+        for r in team_rows:
+            team_map[r[0]] = {"rec_yds": r[1] or 0, "rec_tds": r[2] or 0, "carries": r[3] or 0}
+    else:
+        s = int(season) if season else 0
+        if not s:
+            row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+            s = row[0] if row and row[0] else 2024
+        team_query = f"""
+            SELECT p.team,
+                   SUM(s.receiving_yards) as team_rec_yds,
+                   SUM(s.receiving_tds) as team_rec_tds,
+                   SUM(s.carries) as team_carries
+            FROM players p
+            JOIN player_week_stats s ON p.player_id = s.player_id
+            WHERE p.team IN ({team_placeholders}) AND s.season = ?
+            GROUP BY p.team
+        """
+        team_rows = conn.execute(team_query, team_list + [s]).fetchall()
+        team_map = {}
+        for r in team_rows:
+            team_map[r[0]] = {"rec_yds": r[1] or 0, "rec_tds": r[2] or 0, "carries": r[3] or 0}
+
+    for item in items:
+        team = item.get("team")
+        pos = (item.get("position") or "").upper()
+        totals = team_map.get(team, {})
+
+        # Dominator Rating: (rec_yds + rec_tds*20) / (team_rec_yds + team_rec_tds*20)
+        # Only meaningful for WR/TE
+        if pos in ("WR", "TE") and totals.get("rec_yds"):
+            player_val = (item.get("receiving_yards") or 0) + (item.get("receiving_tds") or 0) * 20
+            team_val = totals["rec_yds"] + totals["rec_tds"] * 20
+            item["dominator_rating"] = round(player_val / team_val, 3) if team_val > 0 else None
+        else:
+            item["dominator_rating"] = None
+
+        # Rush Share: player carries / team carries
+        # Only meaningful for RB/QB
+        if pos in ("RB", "QB") and totals.get("carries"):
+            item["rush_share"] = round((item.get("carries") or 0) / totals["carries"] * 100, 1) if totals["carries"] > 0 else None
+        else:
+            item["rush_share"] = None
+
+    return items
+
+
 def db_stats():
     conn = get_conn()
     players = conn.execute("SELECT COUNT(*) FROM players").fetchone()[0]
@@ -451,6 +532,7 @@ def fetch_players(
     _enrich_with_epa_per_play(items)
     _enrich_with_breakout(conn, items, season=season, career_mode=career_mode)
     _enrich_with_dynasty_value(items)
+    _enrich_with_team_shares(conn, items, season=season, career_mode=career_mode)
 
     conn.close()
     return {"count": total, "season": "career" if career_mode else season, "items": items}
@@ -684,6 +766,7 @@ def fetch_screener(body):
     _enrich_with_epa_per_play(items)
     _enrich_with_breakout(conn, items, season=season, career_mode=career_mode)
     _enrich_with_dynasty_value(items)
+    _enrich_with_team_shares(conn, items, season=season, career_mode=career_mode)
 
     # Re-sort in Python if sorting by a derived/rate metric
     if python_sort:

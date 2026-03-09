@@ -12,13 +12,8 @@
 **Result**: Added 4 computed columns to _enrich_with_derived_stats() in live_data.py: passer_rating (NFL formula with clamped components), ay_per_att (adjusted yards per attempt), td_rate (TDs/(carries+targets)%), fumble_rate (fumbles_lost/(carries+receptions)%). Added to COLUMNS in lab.js with tooltips. Added to passing and efficiency presets. All computed in Python post-processing, not SQL.
 
 ## Task 2: Add dominator rating + rush share + red zone share
-**Status**: PENDING
-**Acceptance Criteria**:
-- Dominator Rating in Dynasty category (0-1 range for WRs)
-- Rush Share in Efficiency for RBs
-- Red Zone Share in Efficiency (if rz columns exist)
-- '—' for non-applicable positions
-- All sortable
+**Status**: PASS
+**Result**: Added _enrich_with_team_shares() function that queries team totals from player_week_stats. Dominator rating = (rec_yds + rec_tds*20) / (team_rec_yds + team_rec_tds*20) for WR/TE only. Rush share = player carries / team carries for RB/QB only. Red zone share SKIPPED — no rz columns exist in database (would require play-by-play extraction from Ticket 3). Both enrichment chains updated (fetch_players + fetch_screener). Columns added to COLUMNS with tooltips, dynasty preset includes DOM.
 
 ## Task 3: Add YPRR approximation + WOPR per game
 **Status**: PENDING
@@ -62,8 +57,8 @@
 ## Loop State
 ```
 Current Phase: 40
-Current Task: 2
+Current Task: 3
 Current Stage: BUILD
 Attempt: 1
-Tasks Completed: 1/6
+Tasks Completed: 2/6
 ```

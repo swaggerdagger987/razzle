@@ -268,6 +268,10 @@ const COLUMNS = {
   // Breakout detection
   breakout_pct:        { label: "BRK%",    tip: "Breakout Percentage — max year-over-year PPR increase", group: "Breakout", decimals: 1, derived: true },
 
+  // Team shares (derived from team aggregates — sort only)
+  dominator_rating:    { label: "DOM",     tip: "Dominator Rating — share of team receiving production (WR/TE only)", group: "Dynasty", decimals: 1, pct: true, derived: true },
+  rush_share:          { label: "Rush%",   tip: "Rush Share — percentage of team carries (RB/QB only)", group: "Efficiency", decimals: 1, derived: true },
+
   // Dynasty value
   dynasty_value:       { label: "DVS",     tip: "Dynasty Value Score — age-adjusted PPR value for dynasty leagues", group: "Dynasty", decimals: 1, derived: true },
   age:                 { label: "Age",     tip: "Player age (current)", group: "Dynasty", decimals: 0 },
@@ -300,7 +304,7 @@ const PRESETS = {
   dynasty: {
     label: "Dynasty",
     columns: ["dynasty_value", "age", "fantasy_points_ppr", "ppg", "games", "seasons", "breakout_pct",
-              "receiving_yards", "receiving_tds", "rushing_yards", "rushing_tds", "touchdowns"],
+              "dominator_rating", "receiving_yards", "receiving_tds", "rushing_yards", "rushing_tds", "touchdowns"],
   },
   dynasty_rankings: {
     label: "Dynasty Rankings",
