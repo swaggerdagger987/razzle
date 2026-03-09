@@ -409,6 +409,9 @@ async function fetchAndRenderNFL() {
     saveStateToURL();
   } catch (e) {
     loading.textContent = "fumbled the data fetch...";
+    state.items = [];
+    state.totalCount = 0;
+    updateResultCount();
     console.error(e);
   }
 }
@@ -446,6 +449,9 @@ async function fetchAndRenderProspects() {
     saveStateToURL();
   } catch (e) {
     loading.textContent = "fumbled the prospect fetch...";
+    state.items = [];
+    state.totalCount = 0;
+    updateResultCount();
     console.error(e);
   }
 }
@@ -483,6 +489,9 @@ async function fetchAndRenderCollege() {
     saveStateToURL();
   } catch (e) {
     loading.textContent = "fumbled the college data fetch...";
+    state.items = [];
+    state.totalCount = 0;
+    updateResultCount();
     console.error(e);
   }
 }

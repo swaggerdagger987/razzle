@@ -18,7 +18,7 @@
 | 8 | New stats as Lab columns | DONE | 9 new columns: Pass 1st, Sacks, Sack Yds, Rush 1st, Rec 1st, aDOT, FUM, FUM Lost, Snap%. Red zone + explosive deferred (need PBP adapter). |
 | 9 | Chart enhancements + comparison tool | DONE | Radar: 3-4 player support. Scatter: trend line + R-squared toggle. Compare button in toolbar. Existing compare modal already has stat table + radar. |
 | 10 | DVS transparency + remove test formulas + color legend | DONE | DVS info popover on click, dev formula blocklist (auto-remove from localStorage), color legend below table. |
-| 11 | Player count fix + preset alignment + 562 bug | | |
+| 11 | Player count fix + preset alignment + 562 bug | DONE | Error handlers reset count to 0 on fetch failure. Presets are curated selections (by design). Career vs 2024 verified different. |
 | 12 | Deploy + smoke test | | |
 
 ## Previous Phase: Phase 28 — Positional Heat Maps (COMPLETE)

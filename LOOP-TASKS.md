@@ -165,9 +165,9 @@
 - Career and 2024 produce different results (Career has higher counting stats)
 **Depends on**: Task 4
 **Size**: S
-**Status**: PENDING
-**Attempt**: 0/3
-**Result**:
+**Status**: PASS
+**Attempt**: 1/3
+**Result**: (a) Player count: already updates on each fetch (state.totalCount from API). Fixed: error handlers now reset count to 0 on fetch failure (prevents stale "562" from persisting when switching to Prospects if API errors). (b) Presets: column presets are curated column selections, not 1:1 group mappings — this is by design (e.g., PPR preset pulls from multiple groups). Column picker groups by actual COLUMNS groups. No changes needed. (c) Career vs 2024: verified different results — Career top is Josh Allen 2278.54 PPR / 94g vs 2024 top Lamar Jackson 471.54 PPR / 19g. Already fixed by Task 4.
 
 ## Task 12: Deploy + smoke test all P0/P1 changes
 **Requirement**: "Verify all Phase 29 changes work together. All JS passes syntax. All Python imports clean. All new features render without errors. Push to master."
@@ -183,9 +183,9 @@
 ## Loop State
 ```
 Current Phase: 29
-Current Task: 10
+Current Task: 11
 Current Stage: PASS
 Attempt: 1/3
-Tasks Completed: 10/12
-Loop Iterations: 10
+Tasks Completed: 11/12
+Loop Iterations: 11
 ```
