@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>War Room — Razzle</title>
+<meta property="og:title" content="War Room — Razzle">
+<meta property="og:description" content="Razzle's War Room. Specialist agents with full league context. Personalized briefings, trade strategies, championship probability.">
+<meta property="og:site_name" content="razzle.lol">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* ===== WAR ROOM HERO (sand bg) ===== */
+  .warroom-hero {
+    text-align: center;
+    padding: 48px 24px 36px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .warroom-hero-mascot {
+    font-size: 64px;
+    filter: drop-shadow(3px 3px 0 rgba(0,0,0,0.15));
+    transform: rotate(-3deg);
+    display: inline-block;
+    margin-bottom: 12px;
+  }
+
+  .warroom-hero h1 {
+    font-family: var(--font-display);
+    font-size: 36px;
+    letter-spacing: -1px;
+    margin-bottom: 6px;
+  }
+
+  .warroom-hero h1 span { color: var(--orange); }
+
+  .warroom-hero-sub {
+    font-family: var(--font-hand);
+    font-size: 22px;
+    color: var(--ink-medium);
+    margin-bottom: 20px;
+  }
+
+  .warroom-hero-badges {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .agent-badge {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border: 2px solid var(--ink);
+    border-radius: 20px;
+    background: var(--bg-card);
+    box-shadow: 2px 2px 0 var(--ink);
+    transition: all 0.12s;
+  }
+
+  .agent-badge:nth-child(odd) { transform: rotate(-1.5deg); }
+  .agent-badge:nth-child(even) { transform: rotate(1.5deg); }
+
+  .agent-badge:hover {
+    box-shadow: 3px 3px 0 var(--ink);
+    transform: translate(-1px, -1px);
+  }
+
+  /* ===== WAR ROOM DARK ZONE ===== */
+  .warroom-dark {
+    background: var(--bg-ink);
+    border-top: 3px solid var(--ink);
+    min-height: 600px;
+    position: relative;
+  }
+
+  .warroom-canvas-wrap {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 24px;
+    position: relative;
+  }
+
+  .warroom-canvas-label {
+    font-family: var(--font-display);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--yellow);
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  .canvas-container {
+    border: 3px solid var(--ink-medium);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 6px 6px 0 rgba(0,0,0,0.4);
+    background: #1a1a2e;
+    position: relative;
+    aspect-ratio: 30 / 22;
+    max-height: 704px;
+  }
+
+  .canvas-container canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    image-rendering: pixelated;
+  }
+
+  .canvas-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .canvas-placeholder-icon {
+    font-size: 48px;
+    filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.3));
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
+  }
+
+  .canvas-placeholder-text {
+    font-family: var(--font-hand);
+    font-size: 22px;
+    color: var(--ink-light);
+  }
+
+  .canvas-placeholder-sub {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-medium);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* ===== STATUS BAR ===== */
+  .warroom-status {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    background: rgba(26, 26, 46, 0.8);
+    border-top: 2px solid var(--ink-medium);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-light);
+    max-width: 980px;
+    margin: 0 auto;
+  }
+
+  .warroom-status .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    display: inline-block;
+    margin-right: 6px;
+    animation: blink 2s ease-in-out infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* ===== FOOTER ===== */
+  .warroom-footer {
+    background: var(--bg-ink);
+    text-align: center;
+    padding: 24px;
+    border-top: 2px solid var(--ink-medium);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-light);
+  }
+
+  .warroom-footer a { color: var(--orange); text-decoration: none; font-weight: 700; }
+
+  /* ===== MOBILE ===== */
+  @media (max-width: 768px) {
+    .warroom-hero { padding: 32px 16px 24px; }
+    .warroom-hero-mascot { font-size: 48px; }
+    .warroom-hero h1 { font-size: 26px; }
+    .warroom-hero-sub { font-size: 18px; }
+    .agent-badge { font-size: 10px; padding: 3px 8px; }
+
+    .warroom-canvas-wrap { padding: 16px; }
+    .warroom-dark { min-height: 400px; }
+    .canvas-placeholder-icon { font-size: 36px; }
+    .canvas-placeholder-text { font-size: 18px; }
+  }
+
+  @media (max-width: 480px) {
+    .warroom-hero h1 { font-size: 22px; }
+    .warroom-hero-sub { font-size: 16px; }
+    .warroom-hero-badges { gap: 4px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="topnav">
+  <a href="/" class="logo">
+    <div class="logo-mark">🐯</div>
+    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/lab.html">The Lab</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
+    <li><a href="/agents.html" class="active">War Room</a></li>
+  </ul>
+</nav>
+
+<!-- HERO (sand bg, Razzle design system) -->
+<div class="warroom-hero">
+  <div class="warroom-hero-mascot">🐯</div>
+  <h1>The <span>War Room</span></h1>
+  <div class="warroom-hero-sub">six specialist agents, one mission: your championship</div>
+  <div class="warroom-hero-badges">
+    <span class="agent-badge">🐯 Razzle</span>
+    <span class="agent-badge">🦅 Scout</span>
+    <span class="agent-badge">🐻 Diplomat</span>
+    <span class="agent-badge">📊 Quant</span>
+    <span class="agent-badge">🏥 Medical</span>
+    <span class="agent-badge">📚 Historian</span>
+  </div>
+</div>
+
+<!-- DARK ZONE — pixel engine canvas area -->
+<div class="warroom-dark">
+  <div class="warroom-canvas-wrap">
+    <div class="warroom-canvas-label">War Room — Live Feed</div>
+    <div class="canvas-container" id="canvasContainer">
+      <canvas id="warRoomCanvas" width="960" height="704"></canvas>
+      <!-- Placeholder until pixel engine is built (Task 3) -->
+      <div class="canvas-placeholder" id="canvasPlaceholder">
+        <div class="canvas-placeholder-icon">🐯</div>
+        <div class="canvas-placeholder-text">agents are setting up the war room...</div>
+        <div class="canvas-placeholder-sub">pixel engine loading</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Status bar -->
+  <div class="warroom-status">
+    <span><span class="status-dot"></span>6 agents online</span>
+    <span>30 x 22 tile grid | 32px tiles</span>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="warroom-footer">
+  <p>built different — <a href="/">razzle.lol</a></p>
+  <p style="margin-top:6px;">agents powered by league context | made for Reddit</p>
+</div>
+
+</body>
+</html>
