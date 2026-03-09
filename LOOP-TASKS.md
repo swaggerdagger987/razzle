@@ -33,8 +33,9 @@
 - Overlays scroll if content is taller than viewport
 **Depends on**: none
 **Size**: M
-**Status**: PENDING
-**Attempt**: 0/3
+**Status**: PASS
+**Attempt**: 1/3
+**Result**: All chart overlays (Radar, Scatter, Trend, Compare, Trade Values, Aging Curves, Heat Map) get full-viewport width on mobile via !important overrides on inline-styled divs. Canvas elements scale to 100% width with auto height. Chart tab buttons wrap. Close buttons get 44px min tap targets. Compare radar canvas also scales. All overlay divs get overflow-y: auto for scrolling.
 
 ## Task 3: Player profile popup mobile layout
 **Requirement**: "The player profile popup (triggered by clicking player name) needs mobile treatment: (a) On mobile, profile takes full viewport width and height (position: fixed, inset: 0). (b) Close button is prominent and touch-friendly. (c) Multi-season career log table scrolls horizontally within the popup. (d) Profile header (name, team, age, draft info) wraps gracefully. (e) Combine data section stacks vertically. (f) Add a swipe-down-to-close gesture or prominent close bar at top."
@@ -127,9 +128,9 @@
 ## Loop State
 ```
 Current Phase: 30
-Current Task: 2
+Current Task: 3
 Current Stage: PENDING
 Attempt: 0/3
-Tasks Completed: 1/9
-Loop Iterations: 1
+Tasks Completed: 2/9
+Loop Iterations: 2
 ```

@@ -1323,9 +1323,10 @@
     .prospect-metric-label { font-size: 10px; }
     .prospect-metric-value { font-size: 14px; }
 
-    /* Chart overlay — full width */
+    /* All overlays — full width on mobile */
     .filter-modal-overlay > div,
     #chartOverlay > div,
+    #compareOverlay > div,
     #tradeValuesOverlay > div,
     #agingCurvesOverlay > div,
     #heatMapOverlay > div,
@@ -1337,11 +1338,25 @@
       border-radius: 0 !important;
       box-shadow: none !important;
       max-height: 100vh !important;
+      overflow-y: auto !important;
     }
 
     /* Chart canvas — scale to fit */
-    #chartCanvas { width: 100% !important; height: auto !important; }
+    #chartCanvas, #compareRadar { width: 100% !important; height: auto !important; }
     #chartCanvasWrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+    /* Chart tab buttons — wrap on mobile */
+    #chartOverlay h3 + div,
+    #chartOverlay > div > div:first-child > div {
+      flex-wrap: wrap;
+    }
+
+    /* Close buttons — larger tap targets */
+    .filter-modal-overlay .btn-chunky,
+    .filter-modal-overlay .btn-primary {
+      min-height: 44px;
+      min-width: 44px;
+    }
   }
 
   @media (max-width: 480px) {
