@@ -216,6 +216,8 @@ furniture.push({ type: 'plant', x: 28, y: 4 });
 furniture.push({ type: 'plant', x: 28, y: 17 });
 blockTile(1, 8);
 blockTile(1, 14);
+blockTile(28, 4);
+blockTile(28, 17);
 
 furniture.push({ type: 'helmet', x: 22, y: 1 });
 furniture.push({ type: 'helmet', x: 23, y: 1 });

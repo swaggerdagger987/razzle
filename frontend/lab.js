@@ -1425,7 +1425,7 @@ function saveLabContext() {
   try {
     const KEY_STATS = [
       "fantasy_points_ppr", "ppg", "games", "receptions", "targets", "receiving_yards",
-      "receiving_tds", "rushing_attempts", "rushing_yards", "rushing_tds",
+      "receiving_tds", "carries", "rushing_yards", "rushing_tds",
       "passing_yards", "passing_tds", "interceptions", "completions", "attempts",
       "target_share", "wopr", "yards_per_carry", "yards_per_rec", "catch_rate"
     ];
@@ -1751,7 +1751,7 @@ function exportCSV() {
      state.universe === "prospects" ? state.draftYear : state.season));
 
   // Header row
-  const nameCol = state.universe === "prospects" ? "Player" : "Player";
+  const nameCol = "Player";
   const headers = [nameCol, "POS", "Team", ...visCols.map(k => colDefs[k].label)];
   lines.push(headers.map(csvEscape).join(","));
 

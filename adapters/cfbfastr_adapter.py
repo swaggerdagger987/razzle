@@ -209,6 +209,7 @@ def aggregate_season(csv_text, season):
             # Count as passing TD if TD on this completion play
             if td_id and (td_id == comp_id or (rec_id and td_id == rec_id)):
                 p["pass_tds"] += 1
+                p["total_tds"] += 1
 
         # --- Passing: incompletions ---
         if inc_id:

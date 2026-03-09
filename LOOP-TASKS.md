@@ -28,14 +28,8 @@
 **Result**: (a) Font stack: 'Garfield', 'Luckiest Guy', cursive. (b) .screener-table td uses var(--font-mono). (c) escapeHtml+escapeAttr moved to app.js, removed from lab.js/warroom.js, app.js added to agents.html. (d) Watchlist cached in _watchlistCache var. (e) apiFetch wraps resp.json() in try-catch. (f) _enrich_prospects_with_college uses WHERE name_key IN (...) instead of loading all rows.
 
 ## Task 6: Fix low issues — og:image, dead code, collision map
-**Status**: PENDING
-**Acceptance Criteria**:
-- og:image points to a PNG file, not SVG
-- Dead ternary removed
-- rushing_attempts changed to carries
-- QB total_tds includes passing TDs in college adapter
-- Plant tiles blocked consistently
-- No regression
+**Status**: PASS
+**Result**: (a) Generated og-image.png + og-image-lab.png (1200x630), updated meta tags. (b) Dead ternary removed. (c) rushing_attempts → carries. (d) QB pass TDs increment total_tds. (e) blockTile(28,4) and blockTile(28,17) added.
 
 ## Task 7: Deploy + smoke test all QA fixes
 **Status**: PENDING
@@ -50,8 +44,8 @@
 ## Loop State
 ```
 Current Phase: 38
-Current Task: 6
+Current Task: 7
 Current Stage: PENDING
 Attempt: 1/3
-Tasks Completed: 5/7
+Tasks Completed: 6/7
 ```
