@@ -435,7 +435,7 @@
     background: var(--red-light);
   }
 
-  /* ===== BRIEFING CARDS PLACEHOLDER ===== */
+  /* ===== BRIEFING CARDS ===== */
   .briefing-zone {
     max-width: 980px;
     margin: 0 auto;
@@ -446,6 +446,158 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+  }
+
+  .briefing-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    overflow: hidden;
+  }
+
+  .briefing-card.razzle-card {
+    border-color: var(--orange);
+    box-shadow: 4px 4px 0 var(--orange);
+  }
+
+  .briefing-card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: var(--bg-warm);
+    border-bottom: 2px solid var(--ink);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .briefing-card.razzle-card .briefing-card-header {
+    background: var(--orange-light);
+    border-bottom-color: var(--orange);
+  }
+
+  .briefing-card-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .briefing-card-name {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--ink);
+  }
+
+  .briefing-card-role {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-medium);
+  }
+
+  .briefing-card-toggle {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-light);
+  }
+
+  .briefing-card-body {
+    padding: 14px 16px;
+  }
+
+  .briefing-card.collapsed .briefing-card-body {
+    display: none;
+  }
+
+  .briefing-card-body p,
+  .briefing-card-body li {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--ink-medium);
+    line-height: 1.6;
+    margin: 0 0 8px;
+  }
+
+  .briefing-card-body h1,
+  .briefing-card-body h2,
+  .briefing-card-body h3 {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--ink);
+    margin: 12px 0 4px;
+    padding-bottom: 4px;
+    border-bottom: 2px dashed var(--ink-faint);
+  }
+
+  .briefing-card-body h1:first-child,
+  .briefing-card-body h2:first-child,
+  .briefing-card-body h3:first-child {
+    margin-top: 0;
+  }
+
+  .briefing-card-body strong {
+    color: var(--ink);
+    font-weight: 700;
+  }
+
+  .briefing-card-body ul,
+  .briefing-card-body ol {
+    padding-left: 20px;
+    margin: 0 0 8px;
+  }
+
+  .briefing-card-body .urgency-badge {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 3px 10px;
+    border: 2px solid var(--ink);
+    border-radius: 20px;
+    box-shadow: 2px 2px 0 var(--ink);
+    margin-bottom: 8px;
+  }
+
+  .urgency-badge.urgent { background: var(--red-light); color: var(--red); border-color: var(--red); }
+  .urgency-badge.monitor { background: var(--yellow-light); color: #996600; border-color: #996600; }
+  .urgency-badge.opportunity { background: var(--green-light); color: var(--green); border-color: var(--green); }
+
+  .briefing-card.loading .briefing-card-body {
+    text-align: center;
+    padding: 24px 16px;
+  }
+
+  .briefing-card-loading-text {
+    font-family: var(--font-hand);
+    font-size: 18px;
+    color: var(--ink-light);
+    animation: pulse-glow 1.5s ease-in-out infinite;
+  }
+
+  .briefing-card.error .briefing-card-body {
+    color: var(--red);
+  }
+
+  .briefing-card-error {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--red);
+  }
+
+  @media (max-width: 768px) {
+    .briefing-zone { padding: 0 16px 16px; }
+    .briefing-card-body { padding: 10px 12px; }
+    .briefing-card-name { font-size: 12px; }
   }
 
   /* ===== FOOTER ===== */

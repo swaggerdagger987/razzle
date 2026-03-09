@@ -1,6 +1,8 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 7 — War Room: Agent Personas + Scenario Runner
+## Current Phase: Phase 7 — War Room: Agent Personas + Scenario Runner (COMPLETE)
+
+**Exit criterion MET:** User types scenario → 5 specialists respond in parallel with per-agent status tracking → Razzle synthesizes with peer insights → briefing cards render with structured analysis (Razzle at top, specialists collapsible below). Urgency badges, markdown rendering, error states. Works with any OpenRouter-compatible API key.
 
 ### Phase 7 Tasks
 
@@ -12,7 +14,7 @@
 | 4 | LLM integration | DONE | Browser-side fetch to OpenRouter-compatible API. loadPersona() fetches persona markdown from /agent-personas/. callLLM() with 20s AbortController timeout, temperature 0.3. Error handling for missing key, timeout, bad response. executeAgent() composes persona + rules + scenario into system/user messages. runAllAgents() runs 5 specialists in parallel via Promise.all, then Razzle synthesizes with peer insights. Custom events dispatched for rendering. |
 | 5 | Specialist agent execution | DONE | 5 specialists fire in parallel via Promise.all. Per-agent status tracker chips (running/done/error) with colored indicators. Individual try/catch per agent — one failing doesn't block others. Canvas bubbles + UI status chips update in real-time. |
 | 6 | Razzle orchestration | DONE | Already implemented in runAllAgents(): await Promise.all for 5 specialists, then Razzle runs with peerInsights from successful results. razzle.md persona defines Urgency Tier, Conflicts and Resolution, GM Decision Needed sections. buildRules() adds synthesis-specific rules. Edge cases: all fail (early return), partial failures, missing key, LLM error. |
-| 7 | Response rendering | - | |
+| 7 | Response rendering | DONE | Briefing cards render in War Room dark zone via razzle:all-agents-done and razzle:agent-result event listeners. Razzle card at top (prominent, orange accent border, expanded). Specialist cards below (collapsible, start collapsed). Simple markdown→HTML renderer for agent responses. Urgency badge detection (URGENT/MONITOR/OPPORTUNITY) on Razzle card. Error states per card. CSS: chunky 3px borders, offset shadows, font-display headings, font-mono data, position-colored dots. Mobile responsive. |
 
 ## Previous Phase: Phase 6 — War Room: Pixel Engine + Agent Canvas (COMPLETE)
 

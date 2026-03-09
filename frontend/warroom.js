@@ -1817,6 +1817,165 @@ async function runAllAgents(scenario) {
 
 setupScenarioPanel();
 
+// ── BRIEFING CARD RENDERER ────────────────────────────────────────────
+
+function markdownToHtml(md) {
+  // Simple markdown → HTML for agent responses
+  var html = md
+    // Headers
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+    // Bold
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    // Italic
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    // Unordered lists
+    .replace(/^[*-] (.+)$/gm, '<li>$1</li>')
+    // Numbered lists
+    .replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
+
+  // Wrap consecutive <li> in <ul>
+  html = html.replace(/((?:<li>.*<\/li>\n?)+)/g, '<ul>$1</ul>');
+
+  // Paragraphs: split by double newlines
+  var parts = html.split(/\n{2,}/);
+  html = parts.map(function(p) {
+    p = p.trim();
+    if (!p) return '';
+    if (p.startsWith('<h') || p.startsWith('<ul') || p.startsWith('<ol')) return p;
+    return '<p>' + p.replace(/\n/g, '<br>') + '</p>';
+  }).join('\n');
+
+  return html;
+}
+
+function detectUrgency(text) {
+  var upper = text.toUpperCase();
+  if (upper.indexOf('URGENT') !== -1) return 'urgent';
+  if (upper.indexOf('MONITOR') !== -1) return 'monitor';
+  if (upper.indexOf('OPPORTUNITY') !== -1) return 'opportunity';
+  return null;
+}
+
+function renderBriefingCard(agentId, content, isError) {
+  var agent = AGENT_DEFS[agentId];
+  if (!agent) return '';
+
+  var isRazzle = agentId === 0;
+  var cardClass = 'briefing-card' + (isRazzle ? ' razzle-card' : '') + (isError ? ' error' : '');
+
+  var bodyHtml;
+  if (isError) {
+    bodyHtml = '<div class="briefing-card-error">' + escapeHtml(content) + '</div>';
+  } else {
+    bodyHtml = markdownToHtml(content);
+    // Inject urgency badge for Razzle
+    if (isRazzle) {
+      var urgency = detectUrgency(content);
+      if (urgency) {
+        bodyHtml = '<span class="urgency-badge ' + urgency + '">' + urgency + '</span>\n' + bodyHtml;
+      }
+    }
+  }
+
+  var collapsed = !isRazzle ? ' collapsed' : '';
+  var toggleText = !isRazzle ? (collapsed ? '[expand]' : '[collapse]') : '';
+
+  return '<div class="' + cardClass + collapsed + '" data-briefing-agent="' + agentId + '">' +
+    '<div class="briefing-card-header" onclick="toggleBriefingCard(this)">' +
+      '<span class="briefing-card-dot" style="background:' + agent.color + '"></span>' +
+      '<span class="briefing-card-name">' + escapeHtml(agent.name) + '</span>' +
+      '<span class="briefing-card-role">' + escapeHtml(agent.role) + '</span>' +
+      '<span class="briefing-card-toggle">' + toggleText + '</span>' +
+    '</div>' +
+    '<div class="briefing-card-body">' + bodyHtml + '</div>' +
+  '</div>';
+}
+
+function renderLoadingCard(agentId) {
+  var agent = AGENT_DEFS[agentId];
+  if (!agent) return '';
+
+  var isRazzle = agentId === 0;
+  var cardClass = 'briefing-card loading' + (isRazzle ? ' razzle-card' : '');
+
+  return '<div class="' + cardClass + '" data-briefing-agent="' + agentId + '">' +
+    '<div class="briefing-card-header">' +
+      '<span class="briefing-card-dot" style="background:' + agent.color + '"></span>' +
+      '<span class="briefing-card-name">' + escapeHtml(agent.name) + '</span>' +
+      '<span class="briefing-card-role">' + escapeHtml(agent.role) + '</span>' +
+    '</div>' +
+    '<div class="briefing-card-body">' +
+      '<div class="briefing-card-loading-text">pulling film...</div>' +
+    '</div>' +
+  '</div>';
+}
+
+window.toggleBriefingCard = function(header) {
+  var card = header.closest('.briefing-card');
+  if (!card) return;
+  card.classList.toggle('collapsed');
+  var toggle = header.querySelector('.briefing-card-toggle');
+  if (toggle) {
+    toggle.textContent = card.classList.contains('collapsed') ? '[expand]' : '[collapse]';
+  }
+};
+
+function renderAllBriefings(detail) {
+  var host = document.getElementById('briefingCards');
+  if (!host) return;
+
+  var html = '';
+
+  // Razzle synthesis at top (prominent)
+  if (detail.razzleSynthesis) {
+    html += renderBriefingCard(0, detail.razzleSynthesis, false);
+  } else if (detail.errors && detail.errors[0]) {
+    html += renderBriefingCard(0, detail.errors[0], true);
+  }
+
+  // Specialist cards below (collapsible)
+  var specialistIds = [1, 2, 3, 4, 5];
+  specialistIds.forEach(function(id) {
+    if (detail.results && detail.results[id]) {
+      html += renderBriefingCard(id, detail.results[id], false);
+    } else if (detail.errors && detail.errors[id]) {
+      html += renderBriefingCard(id, detail.errors[id], true);
+    }
+  });
+
+  host.innerHTML = html;
+}
+
+// Listen for all-agents-done to render full briefing
+window.addEventListener('razzle:all-agents-done', function(e) {
+  renderAllBriefings(e.detail);
+});
+
+// Listen for single agent result to render individual card
+window.addEventListener('razzle:agent-result', function(e) {
+  var host = document.getElementById('briefingCards');
+  if (!host) return;
+  var d = e.detail;
+
+  // Remove existing card for this agent
+  var existing = host.querySelector('[data-briefing-agent="' + d.agentId + '"]');
+  if (existing) existing.remove();
+
+  // Render and insert
+  var temp = document.createElement('div');
+  temp.innerHTML = renderBriefingCard(d.agentId, d.result, false);
+  var card = temp.firstElementChild;
+
+  // Razzle goes first, specialists after
+  if (d.agentId === 0) {
+    host.insertBefore(card, host.firstChild);
+  } else {
+    host.appendChild(card);
+  }
+});
+
 // ── START ──────────────────────────────────────────────────────────────
 function waitAndStart() {
   if (spritesLoaded >= 6) {
