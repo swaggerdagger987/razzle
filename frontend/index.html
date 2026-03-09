@@ -420,19 +420,10 @@
     <h2>This is a real manager's War Room.</h2>
     <p class="section-desc">Razzle and specialist agents with full league context. Personalized briefings, trade strategies, championship probability. This is what $240/year gets you.</p>
 
-    <div class="demo-card">
-      <div class="agent-name">🐯 Razzle <span class="urgency urgency-urgent">Urgent</span></div>
-      <span class="redacted">████████</span> just dropped <span class="redacted">██████</span> to waivers. Based on <span class="redacted">████</span>'s FAAB patterns, they'll bid $<span class="redacted">██</span>. You should bid $<span class="redacted">██</span> to guarantee the pickup. This changes your championship odds from <span class="redacted">██</span>% to <span class="redacted">██</span>%.
-    </div>
+    <div id="demoCards"></div>
 
-    <div class="demo-card">
-      <div class="agent-name">🦅 Scout <span class="urgency urgency-opportunity">Opportunity</span></div>
-      <span class="redacted">██████████</span> saw a usage spike in Weeks <span class="redacted">██</span>-<span class="redacted">██</span>: snap share up from <span class="redacted">██</span>% to <span class="redacted">██</span>%, target share <span class="redacted">██</span>%. Dynasty buy window before price corrects.
-    </div>
-
-    <div class="demo-card">
-      <div class="agent-name">🐻 Diplomat <span class="urgency urgency-monitor">Monitor</span></div>
-      <span class="redacted">████████</span> in your league has lost 3 straight and historically panic-sells RBs at this point. They're holding <span class="redacted">██████</span> — send an offer this week at <span class="redacted">██</span>% of market value. Acceptance probability: <span class="redacted">██</span>%.
+    <div style="text-align:center; margin-top:12px;">
+      <button class="btn-chunky" onclick="renderDemoCards()" style="border-color:#555; color:#8a8a9e; font-size:11px; background:transparent;">shuffle briefings</button>
     </div>
 
     <div class="demo-cta">
@@ -460,6 +451,82 @@
 </div>
 
 <script>
+// War Room demo rotation — shuffled on each visit
+const demoBriefings = [
+  // RAZZLE (Chief of Staff) — urgent/action items
+  { agent: '🐯 Razzle', urgency: 'urgent', text: '<r>████████</r> just dropped <r>██████</r> to waivers. Based on <r>████</r>\'s FAAB patterns, they\'ll bid $<r>██</r>. You should bid $<r>██</r> to guarantee the pickup. This changes your championship odds from <r>██</r>% to <r>██</r>%.' },
+  { agent: '🐯 Razzle', urgency: 'urgent', text: 'Priority alert: <r>██████</r> ruled OUT for Week <r>██</r>. You own him. I\'ve already pulled <r>████████</r>\'s usage data — he\'s the handcuff. Add him before <r>████</r> notices.' },
+  { agent: '🐯 Razzle', urgency: 'monitor', text: 'Your Week <r>██</r> projected score is <r>███</r> points. <r>████</r> projects <r>███</r>. Key swing: your <r>██</r> at flex vs. their <r>██</r>. I like your odds if <r>██████</r> gets <r>██</r>+ targets.' },
+  { agent: '🐯 Razzle', urgency: 'urgent', text: 'Trade deadline is in <r>██</r> days. Three leaguemates are in desperation range. I\'ve briefed the Diplomat. You have a <r>██</r>-hour window on <r>██████</r> before the price adjusts.' },
+  { agent: '🐯 Razzle', urgency: 'opportunity', text: 'End-of-week briefing: your roster is <r>██</r>th in projected points ROS. Biggest upgrade path is <r>██</r> — Scout has <r>██</r> waiver targets ranked by ceiling.' },
+  { agent: '🐯 Razzle', urgency: 'urgent', text: 'Conflict between Scout and Quant on <r>██████</r>. Scout says buy, Quant says overpriced by <r>██</r>%. I side with <r>█████</r>. Here\'s why: <r>████████████████████████</r>.' },
+  { agent: '🐯 Razzle', urgency: 'monitor', text: 'Weekly audit complete. Your roster construction: <r>██</r> startable RBs, <r>██</r> WRs, <r>██</r> QBs. Weakness at <r>██</r> is exploitable in Weeks <r>██</r>-<r>██</r>. Addressing now.' },
+
+  // SCOUT — player evaluation, breakouts, waivers
+  { agent: '🦅 Scout', urgency: 'opportunity', text: '<r>██████████</r> saw a usage spike in Weeks <r>██</r>-<r>██</r>: snap share up from <r>██</r>% to <r>██</r>%, target share <r>██</r>%. Dynasty buy window before price corrects.' },
+  { agent: '🦅 Scout', urgency: 'opportunity', text: 'Waiver priority: <r>██████████</r> — <r>██</r> targets last 3 weeks, <r>██</r>% snap rate, <r>██</r>% WOPR. Available in <r>██</r>% of leagues. FAAB suggestion: $<r>██</r>.' },
+  { agent: '🦅 Scout', urgency: 'monitor', text: '<r>██████████</r>\'s route participation dropped from <r>██</r>% to <r>██</r>% since Week <r>██</r>. Correlated with <r>██████</r>\'s return from IR. Downgrade from HOLD to SELL.' },
+  { agent: '🦅 Scout', urgency: 'opportunity', text: 'Breakout model flagged <r>██████████</r>: age <r>██</r>, <r>██</r>% dominator rating, <r>██</r>th percentile athleticism. <r>██</r>% chance of top-<r>██</r> positional finish next season. Buy now at <r>██</r>% discount.' },
+  { agent: '🦅 Scout', urgency: 'urgent', text: '<r>██████████</r> just got traded to <r>███</r>. New offense projects <r>██</r>% more targets. Dynasty value jumps from <r>██</r> to <r>██</r>. Acquire before your league reacts.' },
+  { agent: '🦅 Scout', urgency: 'monitor', text: 'Rookie watch: <r>██████████</r> (Rd <r>█</r>, Pick <r>██</r>) ran <r>██</r>% of routes in preseason. OC <r>██████████</r> historically features rookie <r>██</r>s early. Stash candidate.' },
+  { agent: '🦅 Scout', urgency: 'opportunity', text: 'Air yards leader among <r>██</r>s: <r>██████████</r> at <r>███</r> total. Converting at only <r>██</r>% — regression to mean adds <r>██</r> PPG. Cheapest top-<r>██</r> upside at the position.' },
+
+  // DIPLOMAT — adversarial intel, trade strategy
+  { agent: '🐻 Diplomat', urgency: 'monitor', text: '<r>████████</r> in your league has lost 3 straight and historically panic-sells RBs at this point. They\'re holding <r>██████</r> — send an offer this week at <r>██</r>% of market value. Acceptance probability: <r>██</r>%.' },
+  { agent: '🐻 Diplomat', urgency: 'opportunity', text: '<r>████████</r> is <r>██</r>-<r>██</r> and needs a QB. They have <r>██████</r> on their bench. Propose <r>██████</r> + <r>██████</r> for <r>██████</r>. Based on their trade history, they accept 2-for-1s <r>██</r>% of the time.' },
+  { agent: '🐻 Diplomat', urgency: 'monitor', text: 'FAAB intel: <r>████████</r> has $<r>██</r> remaining and historically spends <r>██</r>% of budget on <r>██</r>s. They\'ll likely bid $<r>██</r>-$<r>██</r> on <r>██████████</r> this week.' },
+  { agent: '🐻 Diplomat', urgency: 'urgent', text: '<r>████████</r> just offered <r>██████</r> to <r>████████</r> for <r>██████</r>. If that trade goes through, <r>████████</r>\'s roster becomes unbeatable. Counter-offer NOW: <r>██████</r> + <r>██████</r>.' },
+  { agent: '🐻 Diplomat', urgency: 'opportunity', text: 'Trade partner ranking for moving <r>██████</r>: 1) <r>████████</r> (needs <r>██</r>, overpays <r>██</r>%), 2) <r>████████</r> (contender, will bid fair), 3) <r>████████</r> (lowballer, avoid). Start with #1.' },
+  { agent: '🐻 Diplomat', urgency: 'monitor', text: 'League power rankings shifted. <r>████████</r> moved from 4th to 1st after adding <r>██████</r>. Your path to the championship now runs through them. Exploitable weakness: <r>██</r> depth.' },
+
+  // QUANT — projections, valuations, probability
+  { agent: '📊 Quant', urgency: 'monitor', text: 'Championship probability update: you\'re at <r>██</r>% (up from <r>██</r>% last week). Optimal path: win <r>██</r> of next <r>██</r>, secure the <r>██</r> seed. Key risk: Week <r>██</r> bye stack.' },
+  { agent: '📊 Quant', urgency: 'opportunity', text: '<r>██████</r>\'s dynasty value model shows <r>██████████</r> is undervalued by <r>██</r>% relative to production. Buy window closes after Week <r>██</r> when the market corrects.' },
+  { agent: '📊 Quant', urgency: 'monitor', text: 'Roster optimization: swapping <r>██████</r> into flex over <r>██████</r> adds <r>██</r> projected points this week. Season-long, <r>██████</r> has a <r>██</r>% higher floor but <r>██</r>% lower ceiling.' },
+  { agent: '📊 Quant', urgency: 'urgent', text: 'Simulation ran <r>████</r> season outcomes. Trading <r>██████</r> for <r>██████</r> + <r>██████</r> increases your title odds from <r>██</r>% to <r>██</r>%. This is a clear accept.' },
+  { agent: '📊 Quant', urgency: 'monitor', text: 'Bye week risk: Weeks <r>██</r>-<r>██</r> you lose <r>██</r> starters. Projected shortfall: <r>██</r> points. Recommend acquiring a <r>██</r> before Week <r>██</r> to cover.' },
+
+  // MEDICAL — injury intel
+  { agent: '🏥 Medical', urgency: 'urgent', text: '<r>██████████</r> (your <r>██</r>1) has a Grade <r>█</r> <r>████████</r> strain. Historical recovery: <r>██</r>-<r>██</r> weeks. Return projection: Week <r>██</r>. Activate <r>██████████</r> from IR stash.' },
+  { agent: '🏥 Medical', urgency: 'monitor', text: '<r>██████████</r> returned to practice but was limited. Snap count likely capped at <r>██</r>-<r>██</r>% this week. Downgrade from locked starter to flex consideration. Full return Week <r>██</r>.' },
+  { agent: '🏥 Medical', urgency: 'opportunity', text: '<r>██████████</r>\'s <r>████████</r> injury is being overreacted to. Recovery timeline is <r>██</r> days, not <r>██</r> weeks. Buy in dynasty at <r>██</r>% below market — price rebounds by Week <r>██</r>.' },
+  { agent: '🏥 Medical', urgency: 'urgent', text: 'Monitoring <r>██████████</r>: missed 2 practices this week with "<r>████████</r>." Historical data shows <r>██</r>% chance he sits. Pivot to <r>██████████</r> if inactive — decision by <r>████████</r> kickoff.' },
+
+  // HISTORIAN — patterns, precedents
+  { agent: '📚 Historian', urgency: 'monitor', text: '<r>████████</r> has made <r>██</r> trades in <r>██</r> seasons. Pattern: they sell after Week <r>██</r> every year, buy before playoffs. Current window: they\'re <r>██</r> days from their typical sell point.' },
+  { agent: '📚 Historian', urgency: 'opportunity', text: 'Draft ROI analysis: <r>████████</r> overdrafts <r>██</r>s by an average of <r>██</r> picks. In your upcoming rookie draft, they\'ll reach — let value fall to you at pick <r>██</r>.' },
+  { agent: '📚 Historian', urgency: 'monitor', text: 'League trend: teams that started <r>██</r>-<r>██</r> in your league have made the playoffs <r>██</r>% of the time over <r>██</r> seasons. You\'re <r>██</r>-<r>██</r>. <r>████████████████</r>.' },
+  { agent: '📚 Historian', urgency: 'opportunity', text: 'This week\'s matchup history: you\'re <r>██</r>-<r>██</r> all-time vs <r>████████</r>. They roster-construct for floor (<r>██</r>% of starts are high-floor plays). You win with ceiling — start <r>██████</r> over <r>██████</r>.' },
+];
+
+function renderDemoCards() {
+  const container = document.getElementById('demoCards');
+  // Shuffle and pick 3
+  const shuffled = demoBriefings.slice().sort(() => Math.random() - 0.5);
+  // Pick 3 from different agents when possible
+  const seen = new Set();
+  const picks = [];
+  for (const b of shuffled) {
+    if (picks.length >= 3) break;
+    if (!seen.has(b.agent) || picks.length >= shuffled.length - 3) {
+      picks.push(b);
+      seen.add(b.agent);
+    }
+  }
+  // Ensure we have 3
+  while (picks.length < 3) picks.push(shuffled[picks.length]);
+
+  container.innerHTML = picks.map(b => {
+    const text = b.text.replace(/<r>/g, '<span class="redacted">').replace(/<\/r>/g, '</span>');
+    return `<div class="demo-card">
+      <div class="agent-name">${b.agent} <span class="urgency urgency-${b.urgency}">${b.urgency}</span></div>
+      ${text}
+    </div>`;
+  }).join('');
+}
+
+renderDemoCards();
+
 function submitWaitlist() {
   const email = document.getElementById('waitlistEmail').value.trim();
   if (!email || !email.includes('@')) {
