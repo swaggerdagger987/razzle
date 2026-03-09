@@ -1,6 +1,27 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 28 — Positional Heat Maps (COMPLETE)
+## Current Phase: Phase 29 — Lab Audit: Database, Filters, Display, Polish (IN PROGRESS)
+
+**Exit criterion:** Half-PPR scoring added. Snap counts and snap share columns available. Team filter works. Minimum games played filter works. Historical seasons 2020-2024 verified working with real career aggregates. Positional rank column added. Non-applicable stats show dash instead of 0. GP column header fixed. Tooltips on all abbreviations. Stat naming consistent. aDOT, CPOE, first downs, fumble split added to adapter and available as columns. Player profile card enriched with multi-year log. Deployed to Render.
+
+### Phase 29 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Add missing stats to nflverse adapter + DB schema | DONE | 14 new columns: passing/rushing/receiving_first_downs, sacks_taken, sack_yards_lost, rushing/receiving/sack fumbles + lost, total fumbles/lost, offense_snaps/pct. Snap counts from snap_counts CSV. aDOT derived in live_data.py. ALTER TABLE migration. Red zone + explosive deferred (need PBP). |
+| 2 | Half-PPR scoring + CPOE + EPA/play columns | | |
+| 3 | Team filter + min games played filter | | |
+| 4 | Fix historical seasons + career aggregates | | |
+| 5 | Positional rank + dash for N/A stats + GP header | | |
+| 6 | Tooltips + stat naming cleanup | | |
+| 7 | Enrich player profile card | | |
+| 8 | New stats as Lab columns | | |
+| 9 | Chart enhancements + comparison tool | | |
+| 10 | DVS transparency + remove test formulas + color legend | | |
+| 11 | Player count fix + preset alignment + 562 bug | | |
+| 12 | Deploy + smoke test | | |
+
+## Previous Phase: Phase 28 — Positional Heat Maps (COMPLETE)
 
 **Exit criterion MET:** Lab screener has "Heat Map" button (NFL mode only, red border) that opens a 1000px overlay with canvas-rendered positional heat map. Backend endpoint GET /api/heatmap?position={QB|RB|WR|TE}&group={production|efficiency|usage} returns top 25 fantasy-relevant players with percentile rankings across 6 position-specific stats per group. Canvas renders dense color-coded grid: rows = players (name + team), columns = stats (rotated labels). Cells colored by percentile (red at 0th, yellow at 50th, green at 100th) with raw values displayed. Position selector tabs and stat group buttons (Production/Efficiency/Usage). Position-specific stat sets: QB gets passing stats, RB rushing, WR/TE receiving. "Higher is better" inversion for negative stats (TO, INT%). Export PNG with Razzle watermark. Color legend bar. Razzle design: sand bg, chunky chart border, Luckiest Guy title, Caveat subtitle, Space Mono data. Deployed to Render.
 

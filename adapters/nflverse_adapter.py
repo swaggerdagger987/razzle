@@ -43,7 +43,20 @@ CORE_STATS = {
     "passing_air_yards": "passing_air_yards",
     "receiving_air_yards": "receiving_air_yards",
     "receiving_yards_after_catch": "receiving_yards_after_catch",
+    # Phase 29: additional stats from nflverse player_stats CSV
+    "passing_first_downs": "passing_first_downs",
+    "rushing_first_downs": "rushing_first_downs",
+    "receiving_first_downs": "receiving_first_downs",
+    "sacks": "sacks_taken",
+    "sack_yards": "sack_yards_lost",
+    "rushing_fumbles": "rushing_fumbles",
+    "receiving_fumbles": "receiving_fumbles",
+    "receiving_fumbles_lost": "receiving_fumbles_lost",
+    "sack_fumbles": "sack_fumbles",
+    "sack_fumbles_lost": "sack_fumbles_lost",
 }
+
+SNAP_COUNTS_URL = "https://github.com/nflverse/nflverse-data/releases/download/snap_counts/snap_counts_{season}.csv"
 
 
 def utc_now():
@@ -148,6 +161,21 @@ def initialize_database(conn):
             receiving_yards_after_catch REAL,
             touchdowns REAL,
             turnovers REAL,
+            -- Phase 29: additional stats
+            passing_first_downs REAL,
+            rushing_first_downs REAL,
+            receiving_first_downs REAL,
+            sacks_taken REAL,
+            sack_yards_lost REAL,
+            rushing_fumbles REAL,
+            receiving_fumbles REAL,
+            receiving_fumbles_lost REAL,
+            sack_fumbles REAL,
+            sack_fumbles_lost REAL,
+            fumbles REAL,
+            fumbles_lost REAL,
+            offense_snaps REAL,
+            offense_pct REAL,
             stats_json TEXT,
             source TEXT DEFAULT 'nflverse',
             updated_at TEXT,
@@ -385,8 +413,14 @@ def process_season(conn, season):
         touchdowns = passing_tds + rushing_tds + receiving_tds
 
         ints = core.get("interceptions") or 0
-        fum = core.get("rushing_fumbles_lost") or 0
-        turnovers = ints + fum
+        fum_rush = core.get("rushing_fumbles_lost") or 0
+        fum_rec = core.get("receiving_fumbles_lost") or 0
+        fum_sack = core.get("sack_fumbles_lost") or 0
+        turnovers = ints + fum_rush + fum_rec + fum_sack
+
+        # Total fumbles and fumbles_lost (all types combined)
+        fumbles = (core.get("rushing_fumbles") or 0) + (core.get("receiving_fumbles") or 0) + (core.get("sack_fumbles") or 0)
+        fumbles_lost = fum_rush + fum_rec + fum_sack
 
         stats_batch.append((
             pid, s, w, season_type, team, opp,
@@ -411,6 +445,21 @@ def process_season(conn, season):
             core.get("receiving_yards_after_catch"),
             touchdowns,
             turnovers,
+            # Phase 29: new stats
+            core.get("passing_first_downs"),
+            core.get("rushing_first_downs"),
+            core.get("receiving_first_downs"),
+            core.get("sacks_taken"),
+            core.get("sack_yards_lost"),
+            core.get("rushing_fumbles"),
+            core.get("receiving_fumbles"),
+            core.get("receiving_fumbles_lost"),
+            core.get("sack_fumbles"),
+            core.get("sack_fumbles_lost"),
+            fumbles,
+            fumbles_lost,
+            None,  # offense_snaps (populated by sync_snap_counts)
+            None,  # offense_pct (populated by sync_snap_counts)
             json.dumps({k: v for k, v in row.items() if v and v != "NA"}),
             "nflverse",
             now,
@@ -451,8 +500,14 @@ def upsert_stats(conn, batch):
             receiving_yards, receiving_tds, receptions, interceptions,
             rushing_fumbles_lost, targets, carries, completions, attempts,
             passing_air_yards, receiving_air_yards, receiving_yards_after_catch,
-            touchdowns, turnovers, stats_json, source, updated_at
-        ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+            touchdowns, turnovers,
+            passing_first_downs, rushing_first_downs, receiving_first_downs,
+            sacks_taken, sack_yards_lost, rushing_fumbles,
+            receiving_fumbles, receiving_fumbles_lost,
+            sack_fumbles, sack_fumbles_lost, fumbles, fumbles_lost,
+            offense_snaps, offense_pct,
+            stats_json, source, updated_at
+        ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         ON CONFLICT(player_id, season, week, season_type, source)
         DO UPDATE SET
             team=excluded.team, opponent_team=excluded.opponent_team,
@@ -470,6 +525,17 @@ def upsert_stats(conn, batch):
             receiving_air_yards=excluded.receiving_air_yards,
             receiving_yards_after_catch=excluded.receiving_yards_after_catch,
             touchdowns=excluded.touchdowns, turnovers=excluded.turnovers,
+            passing_first_downs=excluded.passing_first_downs,
+            rushing_first_downs=excluded.rushing_first_downs,
+            receiving_first_downs=excluded.receiving_first_downs,
+            sacks_taken=excluded.sacks_taken, sack_yards_lost=excluded.sack_yards_lost,
+            rushing_fumbles=excluded.rushing_fumbles,
+            receiving_fumbles=excluded.receiving_fumbles,
+            receiving_fumbles_lost=excluded.receiving_fumbles_lost,
+            sack_fumbles=excluded.sack_fumbles, sack_fumbles_lost=excluded.sack_fumbles_lost,
+            fumbles=excluded.fumbles, fumbles_lost=excluded.fumbles_lost,
+            offense_snaps=COALESCE(excluded.offense_snaps, player_week_stats.offense_snaps),
+            offense_pct=COALESCE(excluded.offense_pct, player_week_stats.offense_pct),
             stats_json=excluded.stats_json, updated_at=excluded.updated_at
     """, batch)
 
@@ -488,6 +554,85 @@ def upsert_metrics(conn, batch):
 # ---------------------------------------------------------------------------
 
 ROSTER_URL = "https://github.com/nflverse/nflverse-data/releases/download/rosters/roster_{season}.csv"
+
+
+# ---------------------------------------------------------------------------
+# Snap count enrichment
+# ---------------------------------------------------------------------------
+
+def sync_snap_counts(conn, seasons=None):
+    """Fetch nflverse snap_counts CSVs and merge offense snap data into player_week_stats."""
+    if seasons is None:
+        seasons = [current_nfl_season()]
+
+    total_updated = 0
+    gsis_map, name_map = build_player_lookup(conn)
+
+    for season in seasons:
+        url = SNAP_COUNTS_URL.format(season=season)
+        print(f"  Fetching snap counts for {season}...")
+        try:
+            rows = fetch_csv(url)
+        except Exception as e:
+            print(f"  Snap counts {season} fetch failed: {e}")
+            continue
+
+        print(f"  Got {len(rows)} snap count rows.")
+        batch = []
+        for row in rows:
+            game_type = (row.get("game_type") or "REG").strip().upper()
+            if game_type not in ("REG", "REGULAR"):
+                continue
+
+            week = safe_int(row.get("week"))
+            if week is None:
+                continue
+
+            # Resolve player via pfr_player_id or name+team
+            pfr_id = (row.get("pfr_player_id") or "").strip()
+            player_name = (row.get("player") or "").strip()
+            team = (row.get("team") or "").strip().upper()
+
+            # Try gsis lookup by pfr_id (won't match, different ID space)
+            # Use name+team+position matching instead
+            search = normalize_name(player_name)
+            pid = None
+
+            # Try all positions for this name+team combo
+            for pos in ("QB", "RB", "WR", "TE", "FB", "K", "P"):
+                if (search, team, pos) in name_map:
+                    pid = name_map[(search, team, pos)]
+                    break
+
+            if not pid:
+                # Try gsis_map in case pfr_id overlaps
+                if pfr_id and pfr_id in gsis_map:
+                    pid = gsis_map[pfr_id]
+
+            if not pid:
+                continue
+
+            off_snaps = safe_float(row.get("offense_snaps"))
+            off_pct = safe_float(row.get("offense_pct"))
+            if off_pct is not None:
+                off_pct = round(off_pct * 100, 1) if off_pct <= 1.0 else round(off_pct, 1)
+
+            batch.append((off_snaps, off_pct, pid, season, week))
+
+        # Batch update
+        if batch:
+            conn.executemany("""
+                UPDATE player_week_stats
+                SET offense_snaps = ?, offense_pct = ?
+                WHERE player_id = ? AND season = ? AND week = ?
+                  AND season_type = 'regular' AND source = 'nflverse'
+            """, batch)
+            conn.commit()
+            updated = sum(1 for _ in batch)
+            total_updated += updated
+            print(f"  Updated {updated} snap count rows for {season}.")
+
+    return total_updated
 
 
 def sync_rosters(conn, seasons=None):
@@ -555,6 +700,32 @@ def sync_rosters(conn, seasons=None):
 # CLI
 # ---------------------------------------------------------------------------
 
+def migrate_add_columns(conn):
+    """Add Phase 29 columns to existing player_week_stats tables (idempotent)."""
+    new_cols = [
+        ("passing_first_downs", "REAL"),
+        ("rushing_first_downs", "REAL"),
+        ("receiving_first_downs", "REAL"),
+        ("sacks_taken", "REAL"),
+        ("sack_yards_lost", "REAL"),
+        ("rushing_fumbles", "REAL"),
+        ("receiving_fumbles", "REAL"),
+        ("receiving_fumbles_lost", "REAL"),
+        ("sack_fumbles", "REAL"),
+        ("sack_fumbles_lost", "REAL"),
+        ("fumbles", "REAL"),
+        ("fumbles_lost", "REAL"),
+        ("offense_snaps", "REAL"),
+        ("offense_pct", "REAL"),
+    ]
+    existing = {row[1] for row in conn.execute("PRAGMA table_info(player_week_stats)").fetchall()}
+    for col_name, col_type in new_cols:
+        if col_name not in existing:
+            conn.execute(f"ALTER TABLE player_week_stats ADD COLUMN {col_name} {col_type}")
+            print(f"  Added column: {col_name}")
+    conn.commit()
+
+
 def current_nfl_season():
     now = datetime.now()
     return now.year if now.month >= 8 else now.year - 1
@@ -570,9 +741,17 @@ def main():
     conn = get_connection()
     initialize_database(conn)
 
+    # Migrate existing DB to add new columns (idempotent)
+    print("Checking for schema migrations...")
+    migrate_add_columns(conn)
+
     total = 0
     for season in seasons:
         total += process_season(conn, season)
+
+    # Enrich with snap counts
+    print(f"\nSyncing snap counts...")
+    sync_snap_counts(conn, sorted(seasons))
 
     # Enrich players with age/demographics from roster CSVs
     print(f"\nEnriching players with roster demographics...")

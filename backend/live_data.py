@@ -33,7 +33,21 @@ _STAT_SUM_COLS = """
             SUM(s.attempts) as attempts,
             SUM(s.passing_air_yards) as passing_air_yards,
             SUM(s.receiving_air_yards) as receiving_air_yards,
-            SUM(s.receiving_yards_after_catch) as receiving_yards_after_catch"""
+            SUM(s.receiving_yards_after_catch) as receiving_yards_after_catch,
+            SUM(s.passing_first_downs) as passing_first_downs,
+            SUM(s.rushing_first_downs) as rushing_first_downs,
+            SUM(s.receiving_first_downs) as receiving_first_downs,
+            SUM(s.sacks_taken) as sacks_taken,
+            SUM(s.sack_yards_lost) as sack_yards_lost,
+            SUM(s.rushing_fumbles) as rushing_fumbles,
+            SUM(s.receiving_fumbles) as receiving_fumbles,
+            SUM(s.receiving_fumbles_lost) as receiving_fumbles_lost,
+            SUM(s.sack_fumbles) as sack_fumbles,
+            SUM(s.sack_fumbles_lost) as sack_fumbles_lost,
+            SUM(s.fumbles) as fumbles,
+            SUM(s.fumbles_lost) as fumbles_lost,
+            SUM(s.offense_snaps) as offense_snaps,
+            AVG(s.offense_pct) as offense_pct"""
 
 # NFL team name → abbreviation (for combine data that stores full names)
 TEAM_ABBREV = {
@@ -82,6 +96,15 @@ def _enrich_with_derived_stats(items):
         item["rush_ypg"] = _safe_div(item.get("rushing_yards") or 0, g)
         item["rec_ypg"] = _safe_div(item.get("receiving_yards") or 0, g)
         item["pass_ypg"] = _safe_div(item.get("passing_yards") or 0, g)
+        # aDOT: average depth of target (receiving_air_yards / targets for WR/RB/TE, passing_air_yards / attempts for QB)
+        pos = (item.get("position") or "").upper()
+        if pos == "QB":
+            item["adot"] = _safe_div(item.get("passing_air_yards") or 0, item.get("attempts") or 0)
+        else:
+            item["adot"] = _safe_div(item.get("receiving_air_yards") or 0, item.get("targets") or 0)
+        # Snap share (already averaged in SQL, just round)
+        snap_pct = item.get("offense_pct")
+        item["snap_share"] = round(snap_pct, 1) if snap_pct else None
     return items
 
 
@@ -294,6 +317,11 @@ def fetch_players(
         "receiving_yards", "receiving_tds", "receptions", "touchdowns",
         "turnovers", "targets", "carries", "completions", "attempts",
         "passing_air_yards", "receiving_air_yards", "receiving_yards_after_catch",
+        "passing_first_downs", "rushing_first_downs", "receiving_first_downs",
+        "sacks_taken", "sack_yards_lost", "rushing_fumbles",
+        "receiving_fumbles", "receiving_fumbles_lost",
+        "sack_fumbles", "sack_fumbles_lost", "fumbles", "fumbles_lost",
+        "offense_snaps", "offense_pct",
         "full_name", "position", "team", "games", "seasons", "age",
     }
     if sort_key not in safe_sorts:
@@ -439,10 +467,16 @@ def fetch_screener(body):
         "receiving_yards", "receiving_tds", "receptions", "touchdowns",
         "turnovers", "targets", "carries", "games", "ppg", "seasons",
         "full_name", "position", "team",
+        # Phase 29: new aggregate stats
+        "passing_first_downs", "rushing_first_downs", "receiving_first_downs",
+        "sacks_taken", "sack_yards_lost", "rushing_fumbles",
+        "receiving_fumbles", "receiving_fumbles_lost",
+        "sack_fumbles", "sack_fumbles_lost", "fumbles", "fumbles_lost",
+        "offense_snaps", "offense_pct",
         # Derived metrics (computed in Python, sorted client-side)
         "yards_per_carry", "yards_per_rec", "yards_per_target", "catch_rate",
         "comp_pct", "yards_per_att", "rec_per_game", "targets_per_game",
-        "rush_ypg", "rec_ypg", "pass_ypg",
+        "rush_ypg", "rec_ypg", "pass_ypg", "adot", "snap_share",
         # Rate metrics from player_week_metrics
         "target_share", "air_yards_share", "wopr", "racr",
         "passing_epa", "receiving_epa", "rushing_epa", "dakota",
@@ -460,6 +494,9 @@ def fetch_screener(body):
         "passing_yards", "passing_tds", "rushing_yards", "rushing_tds",
         "receiving_yards", "receiving_tds", "receptions", "touchdowns",
         "turnovers", "targets", "carries", "games", "ppg", "seasons",
+        "passing_first_downs", "rushing_first_downs", "receiving_first_downs",
+        "sacks_taken", "sack_yards_lost", "fumbles", "fumbles_lost",
+        "offense_snaps",
     }
 
     # Build having clause for advanced filters
@@ -493,6 +530,9 @@ def fetch_screener(body):
         "passing_yards", "passing_tds", "rushing_yards", "rushing_tds",
         "receiving_yards", "receiving_tds", "receptions", "touchdowns",
         "turnovers", "targets", "carries",
+        "passing_first_downs", "rushing_first_downs", "receiving_first_downs",
+        "sacks_taken", "sack_yards_lost", "fumbles", "fumbles_lost",
+        "offense_snaps",
     }
     python_sort = sort_key not in sql_sortable and sort_key not in ("ppg", "games", "seasons", "full_name", "position", "team", "age")
 

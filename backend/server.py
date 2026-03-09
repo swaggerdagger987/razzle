@@ -24,7 +24,7 @@ def bootstrap_database():
     sys.path.insert(0, str(Path(__file__).parent.parent))
     from adapters.nflverse_adapter import (
         get_connection, initialize_database, process_season, current_nfl_season,
-        sync_rosters,
+        sync_rosters, migrate_add_columns, sync_snap_counts,
     )
     from adapters.college_adapter import (
         get_connection as college_conn,
@@ -34,6 +34,7 @@ def bootstrap_database():
 
     conn = get_connection()
     initialize_database(conn)
+    migrate_add_columns(conn)
 
     # Check if we already have data
     try:
@@ -50,6 +51,14 @@ def bootstrap_database():
                 logger.info(f"  Season {s} synced")
             except Exception as e:
                 logger.warning(f"  Season {s} failed: {e}")
+
+        # Snap counts
+        logger.info("Syncing snap counts...")
+        try:
+            sync_snap_counts(conn, sorted(seasons))
+            logger.info("  Snap count sync complete")
+        except Exception as e:
+            logger.warning(f"  Snap count sync failed: {e}")
 
         # Enrich players with age/demographics from roster CSVs
         logger.info("Enriching players with roster demographics...")
