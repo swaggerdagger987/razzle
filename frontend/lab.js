@@ -2035,6 +2035,118 @@ function renderProspectProfile(data, container, compsData) {
     html += `</div>`;
   }
 
+  // ── College Production Section ──────────────────────────────────
+  const college = data.college;
+  if (college && college.seasons && college.seasons.length > 0) {
+    const career = college.career;
+    html += `<div class="profile-section-title" style="color:var(--blue);">College Production</div>`;
+
+    // Headline stats bar (position-specific)
+    html += `<div class="profile-stats-bar" style="border-color:var(--blue);">`;
+    const collegeMeta = [];
+    collegeMeta.push({ label: "Seasons", value: college.seasons_played });
+    collegeMeta.push({ label: "Games", value: career.games || 0 });
+
+    if (pos === "QB" || (career.pass_yards || 0) > 1000) {
+      collegeMeta.push({ label: "Pass Yds", value: (career.pass_yards || 0).toLocaleString() });
+      collegeMeta.push({ label: "Pass TD", value: career.pass_tds || 0 });
+      if (career.completion_pct) collegeMeta.push({ label: "CMP%", value: career.completion_pct.toFixed(1) + "%" });
+      if (career.ints_thrown) collegeMeta.push({ label: "INT", value: career.ints_thrown });
+    }
+    if (pos === "RB" || (career.rush_yards || 0) > 500) {
+      collegeMeta.push({ label: "Rush Yds", value: (career.rush_yards || 0).toLocaleString() });
+      collegeMeta.push({ label: "Rush TD", value: career.rush_tds || 0 });
+      if (career.yards_per_carry) collegeMeta.push({ label: "YPC", value: career.yards_per_carry.toFixed(1) });
+    }
+    if (pos === "WR" || pos === "TE" || pos.includes("WR") || (career.rec_yards || 0) > 300) {
+      collegeMeta.push({ label: "Rec Yds", value: (career.rec_yards || 0).toLocaleString() });
+      collegeMeta.push({ label: "Rec TD", value: career.rec_tds || 0 });
+      collegeMeta.push({ label: "Receptions", value: career.receptions || 0 });
+      if (career.yards_per_rec) collegeMeta.push({ label: "Y/REC", value: career.yards_per_rec.toFixed(1) });
+    }
+
+    for (const m of collegeMeta) {
+      html += `<div class="profile-stat-box"><div class="profile-stat-value">${m.value}</div><div class="profile-stat-label">${m.label}</div></div>`;
+    }
+    html += `</div>`;
+
+    // Dominator rating badge (WR/TE)
+    if (college.dominator_rating) {
+      const domColor = college.dominator_rating >= 30 ? "#22a06b" : college.dominator_rating >= 20 ? "#2ec4b6" : "#ffc857";
+      html += `<div style="display:flex; align-items:center; gap:8px; margin:8px 0 12px 0;">`;
+      html += `<span class="tier-badge" style="background:${domColor}; transform:rotate(-2deg); font-size:11px;">${college.dominator_rating.toFixed(1)}% DOM</span>`;
+      html += `<span style="font-family:var(--font-hand); font-size:15px; color:var(--ink-light);">peak dominator rating (team rec share)</span>`;
+      html += `</div>`;
+    }
+
+    // Season log table
+    html += `<div class="profile-season-table-wrap">`;
+    html += `<table class="profile-season-table">`;
+    html += `<thead><tr>`;
+    html += `<th>Year</th><th>Team</th><th>G</th>`;
+    // Show columns based on position
+    const isQB = pos === "QB" || (career.pass_yards || 0) > 1000;
+    const isRush = pos === "RB" || (career.rush_yards || 0) > 500;
+    const isRec = pos === "WR" || pos === "TE" || pos.includes("WR") || (career.rec_yards || 0) > 300;
+    if (isQB) html += `<th>CMP</th><th>ATT</th><th>PaYds</th><th>PaTD</th><th>INT</th><th>CMP%</th>`;
+    if (isRush) html += `<th>CAR</th><th>RuYds</th><th>RuTD</th><th>YPC</th>`;
+    if (isRec) html += `<th>REC</th><th>TGT</th><th>ReYds</th><th>ReTD</th><th>Y/R</th>`;
+    html += `</tr></thead><tbody>`;
+
+    for (const s of college.seasons) {
+      html += `<tr>`;
+      html += `<td style="font-weight:600;">${s.season}</td>`;
+      html += `<td>${s.team || ""}</td>`;
+      html += `<td>${s.games || 0}</td>`;
+      if (isQB) {
+        html += `<td>${s.completions || 0}</td><td>${s.pass_attempts || 0}</td>`;
+        html += `<td>${(s.pass_yards || 0).toLocaleString()}</td><td>${s.pass_tds || 0}</td>`;
+        html += `<td>${s.ints_thrown || 0}</td>`;
+        html += `<td>${s.completion_pct ? s.completion_pct.toFixed(1) : "—"}</td>`;
+      }
+      if (isRush) {
+        html += `<td>${s.carries || 0}</td><td>${(s.rush_yards || 0).toLocaleString()}</td>`;
+        html += `<td>${s.rush_tds || 0}</td>`;
+        html += `<td>${s.yards_per_carry ? s.yards_per_carry.toFixed(1) : "—"}</td>`;
+      }
+      if (isRec) {
+        html += `<td>${s.receptions || 0}</td><td>${s.targets || 0}</td>`;
+        html += `<td>${(s.rec_yards || 0).toLocaleString()}</td><td>${s.rec_tds || 0}</td>`;
+        html += `<td>${s.yards_per_rec ? s.yards_per_rec.toFixed(1) : "—"}</td>`;
+      }
+      html += `</tr>`;
+    }
+
+    // Career totals row
+    html += `<tr class="career-total-row">`;
+    html += `<td style="font-weight:700;">Career</td><td></td><td>${career.games || 0}</td>`;
+    if (isQB) {
+      html += `<td>${career.completions || 0}</td><td>${career.pass_attempts || 0}</td>`;
+      html += `<td>${(career.pass_yards || 0).toLocaleString()}</td><td>${career.pass_tds || 0}</td>`;
+      html += `<td>${career.ints_thrown || 0}</td>`;
+      html += `<td>${career.completion_pct ? career.completion_pct.toFixed(1) : "—"}</td>`;
+    }
+    if (isRush) {
+      html += `<td>${career.carries || 0}</td><td>${(career.rush_yards || 0).toLocaleString()}</td>`;
+      html += `<td>${career.rush_tds || 0}</td>`;
+      html += `<td>${career.yards_per_carry ? career.yards_per_carry.toFixed(1) : "—"}</td>`;
+    }
+    if (isRec) {
+      html += `<td>${career.receptions || 0}</td><td>${career.targets || 0}</td>`;
+      html += `<td>${(career.rec_yards || 0).toLocaleString()}</td><td>${career.rec_tds || 0}</td>`;
+      html += `<td>${career.yards_per_rec ? career.yards_per_rec.toFixed(1) : "—"}</td>`;
+    }
+    html += `</tr>`;
+    html += `</tbody></table></div>`;
+
+    // College production arc chart
+    if (college.seasons.length >= 2) {
+      html += `<div class="profile-chart-wrap" style="text-align:center; margin-top:10px;">`;
+      html += `<canvas id="collegeArcCanvas" width="480" height="200" style="border:2px solid var(--ink); border-radius:8px; background:var(--bg); max-width:100%;"></canvas>`;
+      html += `</div>`;
+    }
+  }
+
   // Athletic testing with percentile bars
   const combineMetrics = [
     { key: "forty", label: "40-Yard Dash", fmt: v => v ? v.toFixed(2) + "s" : null, unit: "s" },
@@ -2188,6 +2300,114 @@ function renderProspectProfile(data, container, compsData) {
   // Draw spider chart after DOM update
   if (hasSpiderData) {
     requestAnimationFrame(() => drawProspectSpider(prospect, percentiles, combineMetrics));
+  }
+
+  // Draw college production arc chart
+  if (college && college.seasons && college.seasons.length >= 2) {
+    requestAnimationFrame(() => drawCollegeArc(college, pos));
+  }
+}
+
+function drawCollegeArc(college, pos) {
+  const canvas = document.getElementById("collegeArcCanvas");
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  const W = canvas.width, H = canvas.height;
+  const pad = { top: 30, right: 20, bottom: 30, left: 55 };
+  const plotW = W - pad.left - pad.right;
+  const plotH = H - pad.top - pad.bottom;
+
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = "#ede0cf";
+  ctx.fillRect(0, 0, W, H);
+
+  const seasons = college.seasons;
+  // Pick the primary stat based on position
+  let statKey = "total_yards", statLabel = "Total Yards";
+  if (pos === "QB") { statKey = "pass_yards"; statLabel = "Pass Yards"; }
+  else if (pos === "RB") { statKey = "rush_yards"; statLabel = "Rush Yards"; }
+  else if (pos === "WR" || pos === "TE" || pos.includes("WR")) { statKey = "rec_yards"; statLabel = "Rec Yards"; }
+
+  const values = seasons.map(s => s[statKey] || 0);
+  const labels = seasons.map(s => s.season);
+  const maxVal = Math.max(...values, 1);
+
+  // Title
+  ctx.font = "bold 14px 'Caveat', cursive";
+  ctx.fillStyle = "#5b7fff";
+  ctx.textAlign = "center";
+  ctx.fillText(`college ${statLabel.toLowerCase()} by season`, W / 2, 18);
+
+  // Y-axis gridlines
+  ctx.font = "10px 'Space Mono', monospace";
+  ctx.fillStyle = "#8a8a9e";
+  ctx.textAlign = "right";
+  const gridSteps = 4;
+  for (let i = 0; i <= gridSteps; i++) {
+    const v = Math.round((maxVal / gridSteps) * i);
+    const y = pad.top + plotH - (i / gridSteps) * plotH;
+    ctx.beginPath();
+    ctx.moveTo(pad.left, y);
+    ctx.lineTo(W - pad.right, y);
+    ctx.strokeStyle = "rgba(26,26,46,0.08)";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    ctx.fillText(v.toLocaleString(), pad.left - 5, y + 3);
+  }
+
+  if (values.length < 2) return;
+  const stepX = plotW / (values.length - 1);
+
+  // Filled area
+  ctx.beginPath();
+  for (let i = 0; i < values.length; i++) {
+    const x = pad.left + i * stepX;
+    const y = pad.top + plotH - (values[i] / maxVal) * plotH;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.lineTo(pad.left + (values.length - 1) * stepX, pad.top + plotH);
+  ctx.lineTo(pad.left, pad.top + plotH);
+  ctx.closePath();
+  ctx.fillStyle = "rgba(91,127,255,0.15)";
+  ctx.fill();
+
+  // Line
+  ctx.beginPath();
+  for (let i = 0; i < values.length; i++) {
+    const x = pad.left + i * stepX;
+    const y = pad.top + plotH - (values[i] / maxVal) * plotH;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.strokeStyle = "#5b7fff";
+  ctx.lineWidth = 3;
+  ctx.lineJoin = "round";
+  ctx.stroke();
+
+  // Data points + labels
+  for (let i = 0; i < values.length; i++) {
+    const x = pad.left + i * stepX;
+    const y = pad.top + plotH - (values[i] / maxVal) * plotH;
+
+    ctx.beginPath();
+    ctx.arc(x, y, 5, 0, Math.PI * 2);
+    ctx.fillStyle = "#5b7fff";
+    ctx.fill();
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Value label
+    ctx.font = "bold 11px 'Space Mono', monospace";
+    ctx.fillStyle = "#1a1a2e";
+    ctx.textAlign = "center";
+    ctx.fillText(values[i].toLocaleString(), x, y - 10);
+
+    // Season label
+    ctx.font = "11px 'Space Mono', monospace";
+    ctx.fillStyle = "#4a4a5e";
+    ctx.fillText(labels[i], x, pad.top + plotH + 18);
   }
 }
 
