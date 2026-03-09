@@ -44,8 +44,8 @@
 **Accept when**: Lab loads in <2s. War Room canvas runs at 60fps. Screener pagination works smoothly. No jank or lag in UI interactions. API responses are fast.
 **Depends on**: none
 **Size**: M
-**Status**: PENDING
-**Attempt**: 0/3
+**Status**: PASS
+**Attempt**: 1/3
 
 ## Task 6: Deploy + smoke test
 **Requirement**: "Full deploy to Render. Hit every page, every API endpoint, every feature."
@@ -60,9 +60,9 @@
 ## Loop State
 ```
 Current Phase: 9
-Current Task: 5
+Current Task: 6
 Current Stage: DESIGN
 Attempt: 1/3
-Tasks Completed: 4/6
+Tasks Completed: 5/6
 Loop Iterations: 0
 ```

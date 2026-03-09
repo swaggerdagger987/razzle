@@ -12,7 +12,7 @@
 | 2 | Formula publishing | DONE | "Publish" button on each saved formula in formula builder. Publish modal with name, creator name, description, position tag checkboxes. Published formulas saved to razzle_store_published localStorage and appear in store. Weights hidden (stat names only). "Published" badge shows on already-published formulas. |
 | 3 | Formula ratings/reviews | DONE | Clickable 1-5 star rating on each store card with hover preview. Review text input appears after rating. Reviews persist in razzle_store_reviews localStorage. Sort by popular/top rated/newest. User review displayed on card after submission. |
 | 4 | Full UX polish pass | DONE | Custom 404 page with Razzle branding (tiger mascot, "checked the film" copy, navigation links). Server-side 404 handler for non-API routes. Shared .error-msg and .empty-msg CSS classes. All pages already have loading/error/empty states with Razzle personality ("pulling film...", "fumbled the data fetch..."). All pages mobile responsive. |
-| 5 | Performance audit | | |
+| 5 | Performance audit | DONE | Screener pagination verified (100/page, SQL LIMIT/OFFSET). Canvas game loop uses requestAnimationFrame with delta time capping (60fps). Database indexes on search_name, position, team, player_id, season, fantasy_points_ppr. API caps results at 1000. No memory leaks or unbounded arrays. System well-optimized for target scale. |
 | 6 | Deploy + smoke test | | |
 
 ## Previous Phase: Phase 8 — War Room: Context Bridge + Free/Paid Gating (COMPLETE)
