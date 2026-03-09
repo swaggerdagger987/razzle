@@ -1533,3 +1533,278 @@ def fetch_players_compare(player_ids, season=0):
 
     conn.close()
     return {"season": "career" if career_mode else season, "players": players}
+
+
+# ---------------------------------------------------------------------------
+# College production stats (cfbfastR data)
+# ---------------------------------------------------------------------------
+
+def _enrich_college_derived(items):
+    """Add derived efficiency stats to college player rows."""
+    for item in items:
+        g = item.get("games") or 1
+        item["completion_pct"] = _safe_div((item.get("completions") or 0) * 100, item.get("pass_attempts") or 0)
+        item["yards_per_carry"] = _safe_div(item.get("rush_yards") or 0, item.get("carries") or 0)
+        item["yards_per_rec"] = _safe_div(item.get("rec_yards") or 0, item.get("receptions") or 0)
+        item["yards_per_target"] = _safe_div(item.get("rec_yards") or 0, item.get("targets") or 0)
+        item["catch_rate"] = _safe_div((item.get("receptions") or 0) * 100, item.get("targets") or 0)
+        item["yards_per_att"] = _safe_div(item.get("pass_yards") or 0, item.get("pass_attempts") or 0)
+        item["pass_ypg"] = _safe_div(item.get("pass_yards") or 0, g)
+        item["rush_ypg"] = _safe_div(item.get("rush_yards") or 0, g)
+        item["rec_ypg"] = _safe_div(item.get("rec_yards") or 0, g)
+        item["total_ypg"] = _safe_div(item.get("total_yards") or 0, g)
+        item["tds_per_game"] = _safe_div(item.get("total_tds") or 0, g)
+    return items
+
+
+def fetch_college_players(
+    search="",
+    position="",
+    positions="",
+    team="",
+    conference="",
+    sort_key="total_yards",
+    sort_dir="desc",
+    limit=200,
+    offset=0,
+    season=0,
+):
+    """Return paginated college player stats from cfb_player_season_stats."""
+    conn = get_conn()
+
+    # Default to latest season
+    if not season:
+        row = conn.execute("SELECT MAX(season) FROM cfb_player_season_stats").fetchone()
+        season = row[0] if row and row[0] else 2024
+
+    # Position list
+    pos_list = []
+    if positions:
+        pos_list = [p.strip().upper() for p in positions.split(",") if p.strip()]
+    elif position:
+        pos_list = [position.strip().upper()]
+
+    where = ["c.season = ?"]
+    params = [season]
+
+    if search:
+        search_clean = search.lower().replace(" ", "")
+        where.append("LOWER(REPLACE(c.player_name, ' ', '')) LIKE ?")
+        params.append(f"%{search_clean}%")
+
+    if pos_list:
+        placeholders = ",".join("?" * len(pos_list))
+        where.append(f"c.position IN ({placeholders})")
+        params.extend(pos_list)
+
+    if team:
+        where.append("c.team LIKE ?")
+        params.append(f"%{team}%")
+
+    if conference:
+        where.append("c.conference LIKE ?")
+        params.append(f"%{conference}%")
+
+    where_clause = " AND ".join(where)
+
+    # Safe sort columns
+    safe_sorts = {
+        "player_name": "c.player_name",
+        "position": "c.position",
+        "team": "c.team",
+        "conference": "c.conference",
+        "games": "c.games",
+        "completions": "c.completions",
+        "pass_attempts": "c.pass_attempts",
+        "pass_yards": "c.pass_yards",
+        "pass_tds": "c.pass_tds",
+        "ints_thrown": "c.ints_thrown",
+        "carries": "c.carries",
+        "rush_yards": "c.rush_yards",
+        "rush_tds": "c.rush_tds",
+        "receptions": "c.receptions",
+        "targets": "c.targets",
+        "rec_yards": "c.rec_yards",
+        "rec_tds": "c.rec_tds",
+        "fumbles": "c.fumbles",
+        "total_tds": "c.total_tds",
+        "total_yards": "c.total_yards",
+    }
+    # Derived sorts handled in Python
+    derived_sorts = {"completion_pct", "yards_per_carry", "yards_per_rec",
+                     "yards_per_target", "catch_rate", "yards_per_att",
+                     "pass_ypg", "rush_ypg", "rec_ypg", "total_ypg", "tds_per_game"}
+
+    is_derived_sort = sort_key in derived_sorts
+    order_expr = safe_sorts.get(sort_key, "c.total_yards")
+    if sort_dir.lower() not in ("asc", "desc"):
+        sort_dir = "desc"
+
+    # NULLS LAST
+    nulls_clause = ""
+    if not is_derived_sort and sort_key not in ("player_name", "position", "team", "conference"):
+        nulls_clause = f"CASE WHEN {order_expr} IS NULL THEN 1 ELSE 0 END,"
+
+    # For derived sorts, fetch extra rows and sort in Python
+    fetch_limit = limit * 3 if is_derived_sort else limit
+    fetch_offset = 0 if is_derived_sort else offset
+
+    query = f"""
+        SELECT
+            c.player_id, c.player_name, c.position, c.team, c.conference, c.season,
+            c.games, c.completions, c.pass_attempts, c.pass_yards, c.pass_tds,
+            c.ints_thrown, c.sacks_taken, c.carries, c.rush_yards, c.rush_tds,
+            c.receptions, c.targets, c.rec_yards, c.rec_tds,
+            c.fumbles, c.total_tds, c.total_yards
+        FROM cfb_player_season_stats c
+        WHERE {where_clause}
+        ORDER BY {nulls_clause} {order_expr} {sort_dir}
+        LIMIT ? OFFSET ?
+    """
+    params.extend([fetch_limit, fetch_offset])
+
+    rows = conn.execute(query, params).fetchall()
+
+    # Count
+    count_params = params[:-2]
+    total = conn.execute(f"""
+        SELECT COUNT(*) FROM cfb_player_season_stats c WHERE {where_clause}
+    """, count_params).fetchone()[0]
+
+    items = [dict(r) for r in rows]
+    items = _enrich_college_derived(items)
+
+    # Python re-sort for derived metrics
+    if is_derived_sort:
+        reverse = sort_dir.lower() == "desc"
+        items.sort(key=lambda x: (x.get(sort_key) is None, -(x.get(sort_key) or 0) if reverse else (x.get(sort_key) or 0)))
+        items = items[offset:offset + limit]
+
+    conn.close()
+    return {"count": total, "season": season, "items": items}
+
+
+def fetch_college_player_profile(player_id):
+    """Return a rich college player profile with all seasons + combine/draft data."""
+    conn = get_conn()
+
+    # Get all seasons for this player
+    seasons = conn.execute("""
+        SELECT player_id, player_name, position, team, conference, season,
+               games, completions, pass_attempts, pass_yards, pass_tds,
+               ints_thrown, sacks_taken, carries, rush_yards, rush_tds,
+               receptions, targets, rec_yards, rec_tds,
+               fumbles, total_tds, total_yards
+        FROM cfb_player_season_stats
+        WHERE player_id = ?
+        ORDER BY season ASC
+    """, (player_id,)).fetchall()
+
+    if not seasons:
+        conn.close()
+        return {"player": None, "seasons": [], "combine": None, "draft": None}
+
+    season_items = [dict(r) for r in seasons]
+    season_items = _enrich_college_derived(season_items)
+
+    # Player bio from most recent season
+    latest = season_items[-1]
+    player = {
+        "player_id": latest["player_id"],
+        "player_name": latest["player_name"],
+        "position": latest["position"],
+        "team": latest["team"],
+        "conference": latest["conference"],
+        "seasons_played": len(season_items),
+    }
+
+    # Career totals
+    career = {
+        "games": sum(s.get("games") or 0 for s in season_items),
+        "completions": sum(s.get("completions") or 0 for s in season_items),
+        "pass_attempts": sum(s.get("pass_attempts") or 0 for s in season_items),
+        "pass_yards": sum(s.get("pass_yards") or 0 for s in season_items),
+        "pass_tds": sum(s.get("pass_tds") or 0 for s in season_items),
+        "ints_thrown": sum(s.get("ints_thrown") or 0 for s in season_items),
+        "carries": sum(s.get("carries") or 0 for s in season_items),
+        "rush_yards": sum(s.get("rush_yards") or 0 for s in season_items),
+        "rush_tds": sum(s.get("rush_tds") or 0 for s in season_items),
+        "receptions": sum(s.get("receptions") or 0 for s in season_items),
+        "targets": sum(s.get("targets") or 0 for s in season_items),
+        "rec_yards": sum(s.get("rec_yards") or 0 for s in season_items),
+        "rec_tds": sum(s.get("rec_tds") or 0 for s in season_items),
+        "total_tds": sum(s.get("total_tds") or 0 for s in season_items),
+        "total_yards": sum(s.get("total_yards") or 0 for s in season_items),
+    }
+    # Derive career efficiency
+    career = _enrich_college_derived([career])[0]
+
+    # Try to match with combine data (by normalized name + position)
+    name_clean = latest["player_name"].lower().replace(" ", "")
+    combine_row = conn.execute("""
+        SELECT player_name, position, school, draft_year,
+               height_inches, weight,
+               forty, bench, vertical, broad_jump, cone, shuttle,
+               draft_team, draft_round, draft_pick, pfr_id
+        FROM combine_data
+        WHERE LOWER(REPLACE(player_name, ' ', '')) = ?
+        ORDER BY draft_year DESC LIMIT 1
+    """, (name_clean,)).fetchone()
+
+    combine = None
+    if combine_row:
+        combine = dict(combine_row)
+        ht = combine.get("height_inches")
+        if ht:
+            combine["height_display"] = f"{ht // 12}'{ht % 12}\""
+        dt = (combine.get("draft_team") or "").upper()
+        combine["draft_team"] = TEAM_ABBREV.get(dt, dt[:3] if dt else None)
+
+    # Try to match with draft picks
+    draft_row = conn.execute("""
+        SELECT player_name, position, college, season as draft_year,
+               round, pick, team as nfl_team,
+               career_av, games as nfl_games, allpro, probowls,
+               pass_yards as nfl_pass_yards, pass_tds as nfl_pass_tds,
+               rush_yards as nfl_rush_yards, rush_tds as nfl_rush_tds,
+               rec_yards as nfl_rec_yards, rec_tds as nfl_rec_tds,
+               receptions as nfl_receptions
+        FROM draft_picks
+        WHERE LOWER(REPLACE(player_name, ' ', '')) = ?
+        ORDER BY season DESC LIMIT 1
+    """, (name_clean,)).fetchone()
+
+    draft = dict(draft_row) if draft_row else None
+
+    conn.close()
+    return {
+        "player": player,
+        "seasons": season_items,
+        "career": career,
+        "combine": combine,
+        "draft": draft,
+    }
+
+
+def fetch_college_filter_options():
+    """Return available filter values for the college screener."""
+    conn = get_conn()
+
+    seasons = [r[0] for r in conn.execute(
+        "SELECT DISTINCT season FROM cfb_player_season_stats ORDER BY season DESC"
+    ).fetchall()]
+
+    teams = [r[0] for r in conn.execute(
+        "SELECT DISTINCT team FROM cfb_player_season_stats WHERE team IS NOT NULL AND team != '' ORDER BY team"
+    ).fetchall()]
+
+    conferences = [r[0] for r in conn.execute(
+        "SELECT DISTINCT conference FROM cfb_player_season_stats WHERE conference IS NOT NULL AND conference != '' ORDER BY conference"
+    ).fetchall()]
+
+    positions = [r[0] for r in conn.execute(
+        "SELECT DISTINCT position FROM cfb_player_season_stats WHERE position IN ('QB','RB','WR','TE','FB','ATH') ORDER BY position"
+    ).fetchall()]
+
+    conn.close()
+    return {"seasons": seasons, "teams": teams, "conferences": conferences, "positions": positions}

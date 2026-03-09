@@ -21,8 +21,9 @@
 **Accept when**: GET /api/college/players returns paginated college player stats with search, position, team, conference, season, sort parameters. GET /api/college/player-profile/{id} returns individual player with all seasons + combine/draft data from existing tables. Position filter works. Integrates with existing prospect data via name+team matching.
 **Depends on**: Task 1
 **Size**: M
-**Status**: PENDING
-**Attempt**: 0/3
+**Status**: PASS
+**Attempt**: 1/3
+**Result**: Three endpoints implemented: GET /api/college/players (paginated with search, position, team, conference, season, sort — including derived sorts like YPC/CMP%/Y/REC), GET /api/college/player-profile/{player_id} (all seasons + career totals + combine/draft cross-reference), GET /api/college/filter-options (6 seasons, 330 teams, 50 conferences, 5 positions). 4148 players for 2025 season. Derived efficiency stats: completion_pct, yards_per_carry, yards_per_rec, yards_per_target, catch_rate, yards_per_att, per-game averages. Python re-sort for derived metrics. Combine/draft data matched by normalized name.
 
 ## Task 3: College mode in Lab screener
 **Requirement**: "Add College universe toggle in Lab with production-focused columns and presets."
@@ -45,9 +46,9 @@
 ## Loop State
 ```
 Current Phase: 17
-Current Task: 1
+Current Task: 2
 Current Stage: PASS
 Attempt: 1/3
-Tasks Completed: 1/4
-Loop Iterations: 1
+Tasks Completed: 2/4
+Loop Iterations: 2
 ```

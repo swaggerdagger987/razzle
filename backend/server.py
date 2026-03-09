@@ -257,6 +257,47 @@ def prospect_options():
 
 
 # ---------------------------------------------------------------------------
+# College production stats endpoints (cfbfastR data)
+# ---------------------------------------------------------------------------
+
+@app.get("/api/college/players")
+def get_college_players(
+    search: str = "",
+    position: str = "",
+    positions: str = "",
+    team: str = "",
+    conference: str = "",
+    sort: str = "total_yards",
+    order: str = "desc",
+    limit: int = 200,
+    offset: int = 0,
+    season: int = 0,
+):
+    return live_data.fetch_college_players(
+        search=search,
+        position=position,
+        positions=positions,
+        team=team,
+        conference=conference,
+        sort_key=sort,
+        sort_dir=order,
+        limit=min(limit, 1000),
+        offset=offset,
+        season=season,
+    )
+
+
+@app.get("/api/college/player-profile/{player_id}")
+def college_player_profile(player_id: str):
+    return live_data.fetch_college_player_profile(player_id)
+
+
+@app.get("/api/college/filter-options")
+def college_filter_options():
+    return live_data.fetch_college_filter_options()
+
+
+# ---------------------------------------------------------------------------
 # Serve frontend as static files (catch-all for SPA-like behavior)
 # ---------------------------------------------------------------------------
 
