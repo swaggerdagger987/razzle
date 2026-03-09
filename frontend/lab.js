@@ -161,11 +161,15 @@ const COLUMNS = {
   attempts:            { label: "ATT",        tip: "Pass Attempts", group: "Passing", decimals: 0 },
   interceptions:       { label: "INT",        tip: "Interceptions Thrown", group: "Passing", decimals: 0 },
   passing_air_yards:   { label: "Air Yds",    tip: "Passing Air Yards — intended yards through the air", group: "Passing", decimals: 0 },
+  passing_first_downs: { label: "Pass 1st",   tip: "Passing First Downs", group: "Passing", decimals: 0 },
+  sacks_taken:         { label: "Sacks",      tip: "Sacks Taken — times sacked", group: "Passing", decimals: 0 },
+  sack_yards_lost:     { label: "Sack Yds",   tip: "Sack Yards Lost", group: "Passing", decimals: 0 },
 
   // Rushing
   rushing_yards:       { label: "Rush Yds",  tip: "Rushing Yards — total rushing yards", group: "Rushing", decimals: 0 },
   rushing_tds:         { label: "Rush TD",   tip: "Rushing Touchdowns", group: "Rushing", decimals: 0 },
   carries:             { label: "CAR",       tip: "Carries — rushing attempts", group: "Rushing", decimals: 0 },
+  rushing_first_downs: { label: "Rush 1st",  tip: "Rushing First Downs", group: "Rushing", decimals: 0 },
 
   // Receiving
   receiving_yards:     { label: "Rec Yds",   tip: "Receiving Yards — total receiving yards", group: "Receiving", decimals: 0 },
@@ -174,10 +178,14 @@ const COLUMNS = {
   targets:             { label: "TGT",       tip: "Targets — times targeted by a pass", group: "Receiving", decimals: 0 },
   receiving_air_yards: { label: "Rec Air",   tip: "Receiving Air Yards — intended air yards on targets", group: "Receiving", decimals: 0 },
   receiving_yards_after_catch: { label: "YAC", tip: "Yards After Catch — yards gained after reception", group: "Receiving", decimals: 0 },
+  receiving_first_downs: { label: "Rec 1st", tip: "Receiving First Downs", group: "Receiving", decimals: 0 },
+  adot:                { label: "aDOT",      tip: "Average Depth of Target — mean air yards per target", group: "Receiving", decimals: 1, derived: true },
 
   // Totals
   touchdowns:          { label: "TD",        tip: "Total Touchdowns — all scoring TDs", group: "Totals", decimals: 0 },
   turnovers:           { label: "TO",        tip: "Turnovers — interceptions + fumbles lost", group: "Totals", decimals: 0 },
+  fumbles:             { label: "FUM",       tip: "Total Fumbles", group: "Totals", decimals: 0 },
+  fumbles_lost:        { label: "FUM Lost",  tip: "Fumbles Lost — fumbles recovered by opponent", group: "Totals", decimals: 0 },
 
   // Efficiency (derived from aggregates — sort only, no SQL filter)
   yards_per_carry:     { label: "Y/CAR",    tip: "Yards Per Carry — rushing yards / carries", group: "Efficiency", decimals: 1, derived: true },
@@ -186,6 +194,7 @@ const COLUMNS = {
   catch_rate:          { label: "Catch%",   tip: "Catch Rate — receptions / targets as percentage", group: "Efficiency", decimals: 1, derived: true },
   comp_pct:            { label: "CMP%",     tip: "Completion Percentage — completions / attempts", group: "Efficiency", decimals: 1, derived: true },
   yards_per_att:       { label: "Y/ATT",    tip: "Yards Per Attempt — passing yards / attempts", group: "Efficiency", decimals: 1, derived: true },
+  snap_share:          { label: "Snap%",    tip: "Snap Share — percentage of offensive snaps played", group: "Efficiency", decimals: 1, derived: true },
 
   // Per-game averages (derived — sort only)
   rec_per_game:        { label: "REC/G",    tip: "Receptions Per Game", group: "Per Game", decimals: 1, derived: true },
@@ -1430,13 +1439,16 @@ function computeFormulaValues() {
 // Only applies to counting stats — derived/rate stats handled by null.
 const NON_PRIMARY_STATS = {
   QB: new Set(["receptions", "receiving_yards", "receiving_tds", "targets",
-               "receiving_air_yards", "receiving_yards_after_catch"]),
+               "receiving_air_yards", "receiving_yards_after_catch", "receiving_first_downs"]),
   RB: new Set(["passing_yards", "passing_tds", "completions", "attempts",
-               "interceptions", "passing_air_yards"]),
+               "interceptions", "passing_air_yards", "passing_first_downs",
+               "sacks_taken", "sack_yards_lost"]),
   WR: new Set(["passing_yards", "passing_tds", "completions", "attempts",
-               "interceptions", "passing_air_yards"]),
+               "interceptions", "passing_air_yards", "passing_first_downs",
+               "sacks_taken", "sack_yards_lost"]),
   TE: new Set(["passing_yards", "passing_tds", "completions", "attempts",
-               "interceptions", "passing_air_yards"]),
+               "interceptions", "passing_air_yards", "passing_first_downs",
+               "sacks_taken", "sack_yards_lost"]),
 };
 
 function isNonApplicableStat(pos, statKey, value) {

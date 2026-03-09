@@ -124,9 +124,9 @@
 - No regression in existing columns
 **Depends on**: Task 1
 **Size**: L
-**Status**: PENDING
-**Attempt**: 0/3
-**Result**:
+**Status**: PASS
+**Attempt**: 1/3
+**Result**: Added 9 new columns to Lab COLUMNS definition: Passing: passing_first_downs (Pass 1st), sacks_taken (Sacks), sack_yards_lost (Sack Yds). Rushing: rushing_first_downs (Rush 1st). Receiving: receiving_first_downs (Rec 1st), adot (aDOT — already computed as derived stat). Totals: fumbles (FUM), fumbles_lost (FUM Lost). Efficiency: snap_share (Snap%). All have tooltips. Backend already supports all these in safe_sorts, sql_filterable, _STAT_SUM_COLS. Updated NON_PRIMARY_STATS for new columns. Red zone (rz_*) and explosive plays (*_20plus) deferred — require PBP data adapter (~500MB/season). JS syntax check passes.
 
 ## Task 9: Chart enhancements + comparison tool
 **Requirement**: "Three chart improvements: (a) Radar chart: support 3-4 player overlays. (b) Scatter chart: add trend/regression line toggle with R-squared. (c) Add Compare Players button with side-by-side stat table and mini radar."
@@ -183,9 +183,9 @@
 ## Loop State
 ```
 Current Phase: 29
-Current Task: 7
+Current Task: 8
 Current Stage: PASS
 Attempt: 1/3
-Tasks Completed: 7/12
-Loop Iterations: 7
+Tasks Completed: 8/12
+Loop Iterations: 8
 ```
