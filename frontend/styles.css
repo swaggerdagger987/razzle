@@ -237,3 +237,50 @@ body {
   cursor: pointer;
   outline: none;
 }
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media (max-width: 768px) {
+  /* Nav */
+  .topnav {
+    padding: 8px 12px;
+  }
+  .logo-mark {
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+  }
+  .logo-text {
+    font-size: 16px;
+  }
+  .nav-links a {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+
+  /* Buttons & chips */
+  .btn-chunky, .btn-primary {
+    font-size: 11px;
+    padding: 5px 10px;
+  }
+  .chip {
+    font-size: 10px;
+    padding: 2px 7px;
+  }
+}
+
+@media (max-width: 480px) {
+  .topnav {
+    padding: 6px 8px;
+    gap: 4px;
+  }
+  .logo-text {
+    font-size: 14px;
+  }
+  .nav-links {
+    gap: 2px;
+  }
+  .nav-links a {
+    font-size: 10px;
+    padding: 3px 6px;
+  }
+}
