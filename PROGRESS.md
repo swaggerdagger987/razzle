@@ -11,7 +11,7 @@
 | 1 | Add missing stats to nflverse adapter + DB schema | DONE | 14 new columns: passing/rushing/receiving_first_downs, sacks_taken, sack_yards_lost, rushing/receiving/sack fumbles + lost, total fumbles/lost, offense_snaps/pct. Snap counts from snap_counts CSV. aDOT derived in live_data.py. ALTER TABLE migration. Red zone + explosive deferred (need PBP). |
 | 2 | Half-PPR scoring + CPOE + EPA/play columns | DONE | Half-PPR + HPPR/G in Fantasy, CPOE + EPA/Play in Advanced. CPOE via RATE_METRICS. EPA/Play via new _enrich_with_epa_per_play. |
 | 3 | Team filter + min games played filter | DONE | Team multi-select dropdown (32 teams) + min GP number input in filter bar. Backend supports teams[] array + min_gp HAVING clause. URL state serialized. Comic-strip styled chips. |
-| 4 | Fix historical seasons + career aggregates | | |
+| 4 | Fix historical seasons + career aggregates | DONE | All 5 seasons (2020-2024) in DB. Season dropdown shows all + Career. Career aggregates correctly (Mahomes: 27,280 pass yds / 97 games). No duplicates. No code changes needed. |
 | 5 | Positional rank + dash for N/A stats + GP header | | |
 | 6 | Tooltips + stat naming cleanup | | |
 | 7 | Enrich player profile card | | |

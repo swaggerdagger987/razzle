@@ -63,9 +63,9 @@
 - No duplicate players in career view
 **Depends on**: Task 1
 **Size**: M
-**Status**: PENDING
-**Attempt**: 0/3
-**Result**:
+**Status**: PASS
+**Attempt**: 1/3
+**Result**: Verified all acceptance criteria pass. Database has data for seasons 2020-2024 (5,447-5,698 rows each). /api/filter-options returns [2024, 2023, 2022, 2021, 2020]. Frontend season dropdown renders Career + all 5 seasons. Career mode aggregates across all seasons: Mahomes career = 27,280 pass yds / 97 games / 5 seasons vs 2024 = 4,607 / 19 games. Per-game stats use total career games (PPG = 2075.5/97 = 21.4). No duplicate players in career view. Individual season selection (tested 2022) returns correct single-season data. No code changes needed — backend career_mode logic and multi-season data were already correct.
 
 ## Task 5: Positional rank column + dash for non-applicable stats + GP header fix
 **Requirement**: "Three table display fixes: (a) Add a 'Pos Rank' column that shows positional rank (WR1, WR2, RB1, RB12, etc.) based on the current sort column. When sorted by PPR points, WR1 is the WR with the most PPR points. This column should update dynamically when sort changes. Add it as a default-visible column near the player name. (b) Change all stat cells where a stat is not applicable for a position to show dash instead of 0. Rules: QBs show dash for receiving stats (REC, Rec Yds, Rec TD, TGT) unless they actually have receiving stats. WRs/TEs show dash for passing stats (Pass Yds, Pass TD, INT, Comp, Att). RBs show dash for passing stats. Logic: if a player has 0 in a stat AND the stat is not a primary stat for their position, show dash. If they actually recorded the stat (even 0 attempts), show 0. (c) Fix the GP column header — it currently renders with no visible label text. Ensure it shows GP in the header cell."
@@ -183,9 +183,9 @@
 ## Loop State
 ```
 Current Phase: 29
-Current Task: 3
+Current Task: 4
 Current Stage: PASS
 Attempt: 1/3
-Tasks Completed: 3/12
-Loop Iterations: 3
+Tasks Completed: 4/12
+Loop Iterations: 4
 ```
