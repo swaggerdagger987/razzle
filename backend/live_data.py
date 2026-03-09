@@ -139,6 +139,19 @@ def _enrich_with_derived_stats(items):
         touch_opps = car + rec
         item["fumble_rate"] = round(fl / touch_opps * 100, 1) if touch_opps > 0 else None
 
+        # Points Per First Down scoring: standard + 1pt per first down
+        pass_fd = item.get("passing_first_downs") or 0
+        rush_fd = item.get("rushing_first_downs") or 0
+        rec_fd = item.get("receiving_first_downs") or 0
+        total_fd = pass_fd + rush_fd + rec_fd
+        std_pts = item.get("fantasy_points_ppr") or 0
+        if total_fd > 0:
+            item["ppfd"] = round(std_pts + total_fd, 1)
+            item["ppfd_per_game"] = _safe_div(item["ppfd"], g)
+        else:
+            item["ppfd"] = None
+            item["ppfd_per_game"] = None
+
         # YPRR approximation: receiving_yards / (snap_count * 0.85)
         # WR/TE only. Uses offense_snaps if available, else games * 45 as estimate
         pos = (item.get("position") or "").upper()

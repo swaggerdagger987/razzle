@@ -20,12 +20,8 @@
 **Result**: Added YPRR* to _enrich_with_derived_stats() — receiving_yards / (offense_snaps * 0.85) for WR/TE only, falls back to games*45 if no snap data. Added WOPR/G to _enrich_with_epa_per_play() (runs after rate metrics populate wopr). Both columns added to COLUMNS in lab.js with tooltips. YPRR* in Efficiency preset, WOPR/G in Advanced preset. Non-applicable positions return None (rendered as '—').
 
 ## Task 4: Add Half-PPR + Points Per First Down + Superflex tooltip
-**Status**: PENDING
-**Acceptance Criteria**:
-- Half-PPR and Half-PPR/G columns in Fantasy
-- PPFD and PPFD/G in Fantasy (if first_downs data exists)
-- PPR tooltip mentions superflex relevance
-- Values reasonable
+**Status**: PASS
+**Result**: Half-PPR and HPPR/G already existed from prior work. Added PPFD (PPR + 1pt per first down) and PPFD/G computed columns to _enrich_with_derived_stats(). First downs data exists in DB (passing/rushing/receiving_first_downs). Added PPFD and PPFD/G to COLUMNS in lab.js. Updated PPR tooltip to mention superflex QB scoring relevance.
 
 ## Task 5: Add custom scoring builder
 **Status**: PENDING
@@ -53,8 +49,8 @@
 ## Loop State
 ```
 Current Phase: 40
-Current Task: 4
+Current Task: 5
 Current Stage: BUILD
 Attempt: 1
-Tasks Completed: 3/6
+Tasks Completed: 4/6
 ```

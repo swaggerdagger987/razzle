@@ -192,11 +192,13 @@ const COLUMNS = {
   pos_rank:            { label: "Pos Rank", tip: "Positional Rank — rank within position by current sort", group: "Fantasy", decimals: 0, isText: true, derived: true },
 
   // Core fantasy
-  fantasy_points_ppr:  { label: "PPR",     tip: "PPR Fantasy Points — full PPR scoring total", group: "Fantasy", decimals: 1 },
+  fantasy_points_ppr:  { label: "PPR",     tip: "PPR Fantasy Points — full PPR scoring total (superflex: QBs typically score 1.5-2x more)", group: "Fantasy", decimals: 1 },
   ppg:                 { label: "PPG",      tip: "Points Per Game — PPR points per game played", group: "Fantasy", decimals: 1 },
   fantasy_points_std:  { label: "Standard", tip: "Standard Fantasy Points — non-PPR scoring total", group: "Fantasy", decimals: 1 },
   fantasy_points_half_ppr: { label: "Half-PPR", tip: "Half-PPR Fantasy Points — 0.5 PPR scoring total", group: "Fantasy", decimals: 1 },
   half_ppr_ppg:        { label: "HPPR/G",   tip: "Half-PPR Per Game — half-PPR points per game", group: "Fantasy", decimals: 1, derived: true },
+  ppfd:                { label: "PPFD",     tip: "Points Per First Down — PPR + 1pt per first down (rushing + receiving + passing)", group: "Fantasy", decimals: 1, derived: true },
+  ppfd_per_game:       { label: "PPFD/G",   tip: "PPFD Per Game — points per first down scoring per game", group: "Fantasy", decimals: 1, derived: true },
   games:               { label: "GP",       tip: "Games Played", group: "Fantasy", decimals: 0 },
   seasons:             { label: "Seasons",  tip: "Number of NFL seasons with stats", group: "Fantasy", decimals: 0 },
 
