@@ -1,43 +1,61 @@
-# Razzle Loop — Phase 40 Task List
+# Razzle Loop — Phase 41 Task List
 
-> Consumed from TICKETS.md (Ticket 2).
+> Consumed from TICKETS.md (Ticket 1).
 
-**Current Phase**: 40 — Stats Expansion — Computed Columns
-**Exit Criterion**: 13 new computed stat columns available in the Lab screener, all derived from existing database fields with no adapter changes. Passer rating, AY/A, TD rate, fumble rate, rush share, dominator rating, red zone share, YPRR approximation, points per first down scoring, superflex PPR scoring, and custom scoring builder functional. Deployed to Render.
+**Current Phase**: 41 — Stats Expansion — Play-by-Play Extractions
+**Exit Criterion**: 14 new stats extracted from nflverse play-by-play data and available as Lab columns. Success rate, RYOE, play-action stats, scramble stats, garbage time flags, game script, goal-line stats, two-point conversions, return yards, special teams TDs, intended air yards, drop rate, bye week, and injury data all populated. Deployed to Render.
 
 ---
 
-## Task 1: Add passer rating + AY/A + TD rate + fumble rate
+## Task 1: Extract success rate + RYOE + game script from pbp
 **Status**: PASS
-**Result**: Added 4 computed columns to _enrich_with_derived_stats() in live_data.py: passer_rating (NFL formula with clamped components), ay_per_att (adjusted yards per attempt), td_rate (TDs/(carries+targets)%), fumble_rate (fumbles_lost/(carries+receptions)%). Added to COLUMNS in lab.js with tooltips. Added to passing and efficiency presets. All computed in Python post-processing, not SQL.
+**Result**: Added sync_pbp_data() to nflverse_adapter.py. Created player_season_pbp table with 25+ columns. Single-pass extraction from nflverse play_by_play CSV (~50k rows/season). Pass success rate (EPA>0), rush success rate populated (0.3-0.6 range). RYOE columns in schema but NULL — nflverse pbp lacks expected rushing yards field. Game script (avg_score_differential) populated. Enrichment via _enrich_with_pbp_stats() added to both fetch_players and fetch_screener chains.
 
-## Task 2: Add dominator rating + rush share + red zone share
+## Task 2: Extract play-action + scramble + garbage time stats from pbp
 **Status**: PASS
-**Result**: Added _enrich_with_team_shares() function that queries team totals from player_week_stats. Dominator rating = (rec_yds + rec_tds*20) / (team_rec_yds + team_rec_tds*20) for WR/TE only. Rush share = player carries / team carries for RB/QB only. Red zone share SKIPPED — no rz columns exist in database (would require play-by-play extraction from Ticket 3). Both enrichment chains updated (fetch_players + fetch_screener). Columns added to COLUMNS with tooltips, dynasty preset includes DOM.
+**Result**: Scramble stats populated via qb_scramble flag on run plays (nflverse 2024 classifies scrambles as play_type=run). Jayden Daniels 72 scrambles/577yds leads. Play-action stats in schema but NULL — nflverse 2024 pbp lacks is_play_action column (desc fallback also empty). Garbage time pct computed (|score_diff|>14 in Q4 or >21 in Q3). All via single-pass pbp extraction.
 
-## Task 3: Add YPRR approximation + WOPR per game
+## Task 3: Extract goal-line + two-point + return + special teams stats from pbp
 **Status**: PASS
-**Result**: Added YPRR* to _enrich_with_derived_stats() — receiving_yards / (offense_snaps * 0.85) for WR/TE only, falls back to games*45 if no snap data. Added WOPR/G to _enrich_with_epa_per_play() (runs after rate metrics populate wopr). Both columns added to COLUMNS in lab.js with tooltips. YPRR* in Efficiency preset, WOPR/G in Advanced preset. Non-applicable positions return None (rendered as '—').
+**Result**: Goal-line stats (yardline_100<=5): Kyren Williams 20GL/13TD, Derrick Henry 20GL/11TD. Two-point conversions via two_point_conv_result=success. Return yards from kickoff/punt plays: Kavontae Turpin 1091yds/2TD leads. Special teams TDs included in return_tds.
 
-## Task 4: Add Half-PPR + Points Per First Down + Superflex tooltip
+## Task 4: Extract intended air yards + drop rate from pbp
 **Status**: PASS
-**Result**: Half-PPR and HPPR/G already existed from prior work. Added PPFD (PPR + 1pt per first down) and PPFD/G computed columns to _enrich_with_derived_stats(). First downs data exists in DB (passing/rushing/receiving_first_downs). Added PPFD and PPFD/G to COLUMNS in lab.js. Updated PPR tooltip to mention superflex QB scoring relevance.
+**Result**: Intended air yards = air_yards on all pass targets (not just completions). IAY/target in 3-12 range. Drop rate computed as incomplete short-medium passes (air_yards<15, non-INT) / targets. Tim Patrick 0.044 drop rate (lowest among qualified). All populated in single-pass extraction.
 
-## Task 5: Add custom scoring builder
-**Status**: PASS
-**Result**: Added Custom Scoring button to Lab toolbar. Modal overlay with 12 scoring weight inputs (pass yds, pass TDs, INTs, rush yds, rush TDs, receptions, rec yds, rec TDs, fumbles lost, 2PT conversions). Default PPR weights pre-filled. Save & Apply creates computed column in table. Up to 3 named configs stored in localStorage. Load/delete existing configs. Columns registered on startup so they persist across sessions. Modal follows Razzle design system (chunky borders, sand bg, Space Mono).
+## Task 5: Add bye week + injury data from nflverse schedule/roster
+**Status**: PENDING
+**Acceptance Criteria**:
+- Bye week column shows correct bye week per player per season (integer)
+- Games missed count populated
+- Values spot-checked against known injuries
+- No regression
 
-## Task 6: Deploy + smoke test computed columns
-**Status**: PASS
-**Result**: All JS syntax checks pass (lab.js, compare.js, app.js, player.js). All Python imports clean. Smoke test: Lamar passer rating 123.9, Ja'Marr Chase YPRR 2.63, dominator 0.356, Saquon rush_share 56.6%. Dominator None for RBs, YPRR None for RBs — correct. PPFD None because first_downs data not in DB yet (column ready). Custom scoring builder functional. All 11 new columns registered in COLUMNS object. Committed and pushed.
+## Task 6: Wire all new pbp stats as Lab screener columns
+**Status**: PENDING
+**Acceptance Criteria**:
+- All new columns appear in column selector under correct categories
+- All columns show real data
+- Tooltips present on all new column headers
+- '—' for non-applicable stats
+- All sortable
+- No regression in existing columns
+
+## Task 7: Deploy + smoke test all pbp extractions
+**Status**: PENDING
+**Acceptance Criteria**:
+- All syntax clean
+- All new stats show reasonable data
+- No regression
+- Committed and pushed to master
 
 ---
 
 ## Loop State
 ```
-Current Phase: 40
-Current Task: DONE
-Current Stage: COMPLETE
+Current Phase: 41
+Current Task: 5
+Current Stage: BUILD
 Attempt: 1
-Tasks Completed: 6/6
+Tasks Completed: 4/7
 ```

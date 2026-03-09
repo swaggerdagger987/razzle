@@ -57,6 +57,7 @@ CORE_STATS = {
 }
 
 SNAP_COUNTS_URL = "https://github.com/nflverse/nflverse-data/releases/download/snap_counts/snap_counts_{season}.csv"
+PBP_URL = "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_{season}.csv.gz"
 
 
 def utc_now():
@@ -199,6 +200,43 @@ def initialize_database(conn):
 
         CREATE INDEX IF NOT EXISTS idx_pwm_key_val ON player_week_metrics(stat_key, stat_value);
         CREATE INDEX IF NOT EXISTS idx_pwm_player ON player_week_metrics(player_id, season, week);
+
+        CREATE TABLE IF NOT EXISTS player_season_pbp (
+            player_id TEXT,
+            season INTEGER,
+            -- Task 1: Success rate, RYOE, game script
+            pass_success_rate REAL,
+            rush_success_rate REAL,
+            total_ryoe REAL,
+            ryoe_per_carry REAL,
+            avg_score_differential REAL,
+            -- Task 2: Play-action, scramble, garbage time
+            play_action_attempts INTEGER,
+            play_action_completions INTEGER,
+            play_action_yards REAL,
+            play_action_tds INTEGER,
+            scramble_attempts INTEGER,
+            scramble_yards REAL,
+            scramble_tds INTEGER,
+            garbage_time_pct REAL,
+            -- Task 3: Goal-line, 2PT, returns, special teams
+            gl_carries INTEGER,
+            gl_targets INTEGER,
+            gl_tds INTEGER,
+            two_point_conversions INTEGER,
+            return_yards REAL,
+            return_tds INTEGER,
+            -- Task 4: Intended air yards, drop rate
+            intended_air_yards REAL,
+            intended_air_yards_per_target REAL,
+            drops INTEGER,
+            drop_rate REAL,
+            -- Metadata
+            updated_at TEXT,
+            PRIMARY KEY (player_id, season)
+        );
+
+        CREATE INDEX IF NOT EXISTS idx_pbp_player ON player_season_pbp(player_id, season);
 
         CREATE TABLE IF NOT EXISTS sync_state (
             key TEXT PRIMARY KEY,
@@ -697,6 +735,305 @@ def sync_rosters(conn, seasons=None):
 
 
 # ---------------------------------------------------------------------------
+# Play-by-play extraction
+# ---------------------------------------------------------------------------
+
+def _new_pbp_accum():
+    """Create a fresh pbp accumulator dict for one player-season."""
+    return {
+        # Success rate
+        "pass_plays": 0, "pass_successes": 0,
+        "rush_plays": 0, "rush_successes": 0,
+        # RYOE
+        "total_ryoe": 0.0, "ryoe_carries": 0,
+        # Game script
+        "score_diffs": [],
+        # Play-action
+        "pa_att": 0, "pa_comp": 0, "pa_yds": 0.0, "pa_td": 0,
+        # Scramble
+        "scram_att": 0, "scram_yds": 0.0, "scram_td": 0,
+        # Garbage time
+        "total_plays": 0, "garbage_plays": 0,
+        # Goal-line
+        "gl_carries": 0, "gl_targets": 0, "gl_tds": 0,
+        # Two-point
+        "two_pt": 0,
+        # Returns
+        "return_yds": 0.0, "return_tds": 0,
+        # Intended air yards (receiver-side)
+        "intended_air_yds": 0.0, "target_count": 0,
+        # Drops
+        "drops": 0,
+    }
+
+
+def sync_pbp_data(conn, seasons=None):
+    """Fetch nflverse play-by-play CSVs and extract advanced stats per player-season."""
+    if seasons is None:
+        seasons = [current_nfl_season()]
+
+    gsis_map, name_map = build_player_lookup(conn)
+
+    for season in seasons:
+        url = PBP_URL.format(season=season)
+        print(f"  Fetching play-by-play for {season} (large file)...")
+        try:
+            req = urllib.request.Request(url)
+            req.add_header("User-Agent", "razzle-adapter/1.0")
+            with urllib.request.urlopen(req, timeout=300) as resp:
+                raw = resp.read()
+            raw = gzip.decompress(raw)
+            text = raw.decode("utf-8-sig")
+        except Exception as e:
+            print(f"  PBP {season} fetch failed: {e}")
+            continue
+
+        reader = csv.DictReader(io.StringIO(text))
+
+        # Accumulators: gsis_id -> _new_pbp_accum()
+        accum = {}
+
+        def get_accum(gsis_id):
+            if not gsis_id or gsis_id == "NA":
+                return None
+            if gsis_id not in accum:
+                accum[gsis_id] = _new_pbp_accum()
+            return accum[gsis_id]
+
+        row_count = 0
+        for row in reader:
+            row_count += 1
+            # Only regular season
+            season_type = (row.get("season_type") or "").upper()
+            if season_type not in ("REG", "REGULAR"):
+                continue
+
+            play_type = (row.get("play_type") or "").lower()
+            if play_type not in ("pass", "run", "qb_kneel", "qb_spike"):
+                # Check for special teams (kickoff, punt) for return stats
+                if play_type in ("kickoff", "punt"):
+                    _process_return_play(row, get_accum)
+                continue
+
+            epa = safe_float(row.get("epa"))
+            score_diff = safe_float(row.get("score_differential"))
+            qtr = safe_int(row.get("qtr")) or 0
+            yardline = safe_float(row.get("yardline_100"))
+
+            # Determine garbage time: |score_diff| > 14 in Q4, or > 21 in Q3
+            is_garbage = False
+            if score_diff is not None:
+                if (qtr == 4 and abs(score_diff) > 14) or (qtr == 3 and abs(score_diff) > 21):
+                    is_garbage = True
+
+            # Two-point attempt check
+            two_pt = (row.get("two_point_attempt") or "0").strip()
+            is_two_pt = two_pt == "1" or two_pt.lower() == "true"
+            two_pt_result = (row.get("two_point_conv_result") or "").lower()
+            is_two_pt_success = is_two_pt and two_pt_result == "success"
+
+            # Goal-line check (inside 5-yard line)
+            is_goal_line = yardline is not None and yardline <= 5
+
+            # --- PASSING PLAYS ---
+            if play_type == "pass":
+                passer_id = (row.get("passer_player_id") or "").strip()
+                receiver_id = (row.get("receiver_player_id") or "").strip()
+                is_complete = (row.get("complete_pass") or "0").strip() == "1"
+                pass_yards = safe_float(row.get("passing_yards")) or 0
+                air_yards = safe_float(row.get("air_yards"))
+                is_td = (row.get("pass_touchdown") or "0").strip() == "1"
+                is_interception = (row.get("interception") or "0").strip() == "1"
+                is_play_action = (row.get("is_play_action") or "0").strip()
+                is_play_action = is_play_action == "1" or is_play_action.lower() == "true"
+                # Fallback: detect play-action from play description
+                if not is_play_action:
+                    desc = (row.get("desc") or "").lower()
+                    if "play action" in desc or "play-action" in desc or "play fake" in desc:
+                        is_play_action = True
+                # Passer stats (non-scramble passes — scrambles handled in run block)
+                pa = get_accum(passer_id)
+                if pa:
+                    pa["pass_plays"] += 1
+                    if epa is not None and epa > 0:
+                        pa["pass_successes"] += 1
+
+                    # Play-action
+                    if is_play_action:
+                        pa["pa_att"] += 1
+                        if is_complete:
+                            pa["pa_comp"] += 1
+                        pa["pa_yds"] += pass_yards
+                        if is_td:
+                            pa["pa_td"] += 1
+
+                    # Game script + garbage time
+                    if score_diff is not None:
+                        pa["score_diffs"].append(score_diff)
+                    pa["total_plays"] += 1
+                    if is_garbage:
+                        pa["garbage_plays"] += 1
+
+                    # Two-point (passer)
+                    if is_two_pt_success:
+                        pa["two_pt"] += 1
+
+                # Receiver stats
+                ra = get_accum(receiver_id)
+                if ra:
+                    # Intended air yards (all targets, not just completions)
+                    if air_yards is not None:
+                        ra["intended_air_yds"] += air_yards
+                    ra["target_count"] += 1
+
+                    # Drop detection: incomplete, not intercepted, short-medium throw
+                    if not is_complete and not is_interception:
+                        if air_yards is not None and air_yards < 15:
+                            ra["drops"] += 1
+
+                    # Goal-line targets
+                    if is_goal_line:
+                        ra["gl_targets"] += 1
+                        if is_td:
+                            ra["gl_tds"] += 1
+
+                    # Two-point (receiver)
+                    if is_two_pt_success and is_complete:
+                        ra["two_pt"] += 1
+
+                    # Game script + garbage for receiver
+                    if score_diff is not None:
+                        ra["score_diffs"].append(score_diff)
+                    ra["total_plays"] += 1
+                    if is_garbage:
+                        ra["garbage_plays"] += 1
+
+            # --- RUSHING PLAYS ---
+            elif play_type == "run":
+                rusher_id = (row.get("rusher_player_id") or "").strip()
+                rush_yards = safe_float(row.get("rushing_yards")) or 0
+                expected_yds = safe_float(row.get("xyac_mean_yardage"))
+                if expected_yds is None:
+                    expected_yds = safe_float(row.get("expected_yards"))
+                is_td = (row.get("rush_touchdown") or "0").strip() == "1"
+                is_scramble = (row.get("qb_scramble") or "0").strip() == "1"
+
+                ru = get_accum(rusher_id)
+                if ru:
+                    # Scramble stats (QB scrambles classified as run plays)
+                    if is_scramble:
+                        ru["scram_att"] += 1
+                        ru["scram_yds"] += rush_yards
+                        if is_td:
+                            ru["scram_td"] += 1
+                    else:
+                        # Success rate (only designed runs, not scrambles)
+                        ru["rush_plays"] += 1
+                        if epa is not None and epa > 0:
+                            ru["rush_successes"] += 1
+
+                        # RYOE (designed runs only)
+                        if expected_yds is not None:
+                            ru["total_ryoe"] += (rush_yards - expected_yds)
+                            ru["ryoe_carries"] += 1
+
+                    # Game script + garbage (all rushing plays)
+                    if score_diff is not None:
+                        ru["score_diffs"].append(score_diff)
+                    ru["total_plays"] += 1
+                    if is_garbage:
+                        ru["garbage_plays"] += 1
+
+                    # Goal-line carries
+                    if is_goal_line:
+                        ru["gl_carries"] += 1
+                        if is_td:
+                            ru["gl_tds"] += 1
+
+                    # Two-point
+                    if is_two_pt_success:
+                        ru["two_pt"] += 1
+
+        print(f"  Processed {row_count} pbp rows for {season}, {len(accum)} players.")
+
+        # Write aggregated stats to player_season_pbp
+        batch = []
+        for gsis_id, a in accum.items():
+            pid = gsis_map.get(gsis_id)
+            if not pid:
+                continue
+
+            pass_sr = round(a["pass_successes"] / a["pass_plays"], 3) if a["pass_plays"] > 0 else None
+            rush_sr = round(a["rush_successes"] / a["rush_plays"], 3) if a["rush_plays"] > 0 else None
+            ryoe = round(a["total_ryoe"], 1) if a["ryoe_carries"] > 0 else None
+            ryoe_pc = round(a["total_ryoe"] / a["ryoe_carries"], 2) if a["ryoe_carries"] > 0 else None
+            avg_sd = round(sum(a["score_diffs"]) / len(a["score_diffs"]), 1) if a["score_diffs"] else None
+            gt_pct = round(a["garbage_plays"] / a["total_plays"], 3) if a["total_plays"] > 0 else None
+            iay_pt = round(a["intended_air_yds"] / a["target_count"], 1) if a["target_count"] > 0 else None
+            dr = round(a["drops"] / a["target_count"], 3) if a["target_count"] > 0 else None
+
+            batch.append((
+                pid, season,
+                pass_sr, rush_sr, ryoe, ryoe_pc, avg_sd,
+                a["pa_att"] or None, a["pa_comp"] or None,
+                a["pa_yds"] if a["pa_att"] > 0 else None,
+                a["pa_td"] or None,
+                a["scram_att"] or None, a["scram_yds"] if a["scram_att"] > 0 else None,
+                a["scram_td"] or None,
+                gt_pct,
+                a["gl_carries"] or None, a["gl_targets"] or None, a["gl_tds"] or None,
+                a["two_pt"] or None,
+                a["return_yds"] if a["return_yds"] > 0 else None,
+                a["return_tds"] or None,
+                a["intended_air_yds"] if a["target_count"] > 0 else None, iay_pt,
+                a["drops"] or None, dr,
+                utc_now(),
+            ))
+
+        if batch:
+            conn.executemany("""
+                INSERT OR REPLACE INTO player_season_pbp (
+                    player_id, season,
+                    pass_success_rate, rush_success_rate, total_ryoe, ryoe_per_carry, avg_score_differential,
+                    play_action_attempts, play_action_completions, play_action_yards, play_action_tds,
+                    scramble_attempts, scramble_yards, scramble_tds,
+                    garbage_time_pct,
+                    gl_carries, gl_targets, gl_tds,
+                    two_point_conversions,
+                    return_yards, return_tds,
+                    intended_air_yards, intended_air_yards_per_target,
+                    drops, drop_rate,
+                    updated_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, batch)
+            conn.commit()
+            print(f"  Wrote {len(batch)} player-season pbp rows for {season}.")
+
+
+def _process_return_play(row, get_accum):
+    """Process kickoff/punt return plays for return stats."""
+    play_type = (row.get("play_type") or "").lower()
+
+    if play_type == "kickoff":
+        returner_id = (row.get("kickoff_returner_player_id") or "").strip()
+        ret_yds = safe_float(row.get("return_yards")) or 0
+        # Check for return TD
+        is_td = (row.get("return_touchdown") or "0").strip() == "1"
+    elif play_type == "punt":
+        returner_id = (row.get("punt_returner_player_id") or "").strip()
+        ret_yds = safe_float(row.get("return_yards")) or 0
+        is_td = (row.get("return_touchdown") or "0").strip() == "1"
+    else:
+        return
+
+    ra = get_accum(returner_id)
+    if ra and ret_yds != 0:
+        ra["return_yds"] += ret_yds
+        if is_td:
+            ra["return_tds"] += 1
+
+
+# ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
 
@@ -752,6 +1089,10 @@ def main():
     # Enrich with snap counts
     print(f"\nSyncing snap counts...")
     sync_snap_counts(conn, sorted(seasons))
+
+    # Extract play-by-play advanced stats
+    print(f"\nExtracting play-by-play stats...")
+    sync_pbp_data(conn, sorted(seasons))
 
     # Enrich players with age/demographics from roster CSVs
     print(f"\nEnriching players with roster demographics...")

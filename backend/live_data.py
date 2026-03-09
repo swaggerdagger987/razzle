@@ -351,6 +351,88 @@ def _enrich_with_dynasty_value(items):
     return items
 
 
+def _enrich_with_pbp_stats(conn, items, season=None, career_mode=False):
+    """Fetch play-by-play derived stats from player_season_pbp table."""
+    if not items:
+        return items
+
+    player_ids = [item["player_id"] for item in items if item.get("player_id")]
+    if not player_ids:
+        return items
+
+    # Check if table exists
+    table_check = conn.execute(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name='player_season_pbp'"
+    ).fetchone()
+    if not table_check:
+        return items
+
+    placeholders = ",".join(["?"] * len(player_ids))
+
+    if career_mode:
+        query = f"""
+            SELECT player_id,
+                AVG(pass_success_rate) as pass_success_rate,
+                AVG(rush_success_rate) as rush_success_rate,
+                SUM(total_ryoe) as total_ryoe,
+                AVG(ryoe_per_carry) as ryoe_per_carry,
+                AVG(avg_score_differential) as avg_score_differential,
+                SUM(play_action_attempts) as play_action_attempts,
+                SUM(play_action_completions) as play_action_completions,
+                SUM(play_action_yards) as play_action_yards,
+                SUM(play_action_tds) as play_action_tds,
+                SUM(scramble_attempts) as scramble_attempts,
+                SUM(scramble_yards) as scramble_yards,
+                SUM(scramble_tds) as scramble_tds,
+                AVG(garbage_time_pct) as garbage_time_pct,
+                SUM(gl_carries) as gl_carries,
+                SUM(gl_targets) as gl_targets,
+                SUM(gl_tds) as gl_tds,
+                SUM(two_point_conversions) as two_point_conversions,
+                SUM(return_yards) as return_yards,
+                SUM(return_tds) as return_tds,
+                SUM(intended_air_yards) as intended_air_yards,
+                AVG(intended_air_yards_per_target) as intended_air_yards_per_target,
+                SUM(drops) as drops,
+                AVG(drop_rate) as drop_rate
+            FROM player_season_pbp
+            WHERE player_id IN ({placeholders})
+            GROUP BY player_id
+        """
+        params = player_ids
+    else:
+        query = f"""
+            SELECT * FROM player_season_pbp
+            WHERE player_id IN ({placeholders}) AND season = ?
+        """
+        params = player_ids + [season]
+
+    pbp_map = {}
+    for row in conn.execute(query, params):
+        pbp_map[row["player_id"]] = dict(row)
+
+    pbp_cols = [
+        "pass_success_rate", "rush_success_rate", "total_ryoe", "ryoe_per_carry",
+        "avg_score_differential", "play_action_attempts", "play_action_completions",
+        "play_action_yards", "play_action_tds", "scramble_attempts", "scramble_yards",
+        "scramble_tds", "garbage_time_pct", "gl_carries", "gl_targets", "gl_tds",
+        "two_point_conversions", "return_yards", "return_tds",
+        "intended_air_yards", "intended_air_yards_per_target", "drops", "drop_rate",
+    ]
+
+    for item in items:
+        pid = item.get("player_id")
+        pbp = pbp_map.get(pid, {})
+        for col in pbp_cols:
+            val = pbp.get(col)
+            if val is not None:
+                item[col] = round(val, 3) if isinstance(val, float) else val
+            else:
+                item[col] = None
+
+    return items
+
+
 def _enrich_with_team_shares(conn, items, season=None, career_mode=False):
     """Compute team-relative share stats: dominator rating, rush share."""
     if not items:
@@ -562,6 +644,7 @@ def fetch_players(
     _enrich_with_breakout(conn, items, season=season, career_mode=career_mode)
     _enrich_with_dynasty_value(items)
     _enrich_with_team_shares(conn, items, season=season, career_mode=career_mode)
+    _enrich_with_pbp_stats(conn, items, season=season, career_mode=career_mode)
 
     conn.close()
     return {"count": total, "season": "career" if career_mode else season, "items": items}
@@ -796,6 +879,7 @@ def fetch_screener(body):
     _enrich_with_breakout(conn, items, season=season, career_mode=career_mode)
     _enrich_with_dynasty_value(items)
     _enrich_with_team_shares(conn, items, season=season, career_mode=career_mode)
+    _enrich_with_pbp_stats(conn, items, season=season, career_mode=career_mode)
 
     # Re-sort in Python if sorting by a derived/rate metric
     if python_sort:
