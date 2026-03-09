@@ -6376,8 +6376,8 @@ function _taUpdateVerdict() {
   let verdict, verdictColor, verdictBg;
   if (pctDiff <= 10) {
     verdict = "FAIR";
-    verdictColor = "#d97757";
-    verdictBg = "#f7e4d8";
+    verdictColor = "#c5a000";
+    verdictBg = "#f5eacc";
   } else if (diff > 0) {
     verdict = "WIN";
     verdictColor = "#2ec4b6";
