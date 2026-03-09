@@ -370,7 +370,8 @@ function renderTableBody() {
   let html = "";
   for (const player of state.items) {
     const pos = (player.position || "").toUpperCase();
-    const selected = state.selectedPlayers.some(p => p.player_id === player.player_id);
+    const playKey = player.player_id || player.player_name;
+    const selected = state.selectedPlayers.some(p => p.player_id === playKey);
     html += '<tr>';
     html += `<td style="text-align:center; padding:7px 6px;">
       <input type="checkbox" ${selected ? "checked" : ""} onchange="togglePlayerSelect('${player.player_id || player.player_name}', this.checked)"
@@ -790,14 +791,27 @@ function copyShareURL() {
 function togglePlayerSelect(playerId, checked) {
   if (checked) {
     if (state.selectedPlayers.length >= 5) return; // max 5
-    const player = state.items.find(p => p.player_id === playerId);
-    if (player && !state.selectedPlayers.some(p => p.player_id === playerId)) {
-      state.selectedPlayers.push({
-        player_id: player.player_id,
-        full_name: player.full_name,
-        position: player.position,
-        team: player.team,
-      });
+    if (state.universe === "prospects") {
+      const player = state.items.find(p => (p.player_id || p.player_name) === playerId);
+      if (player && !state.selectedPlayers.some(p => p.player_id === playerId)) {
+        state.selectedPlayers.push({
+          player_id: playerId,
+          full_name: player.player_name,
+          player_name: player.player_name,
+          position: player.position,
+          team: player.draft_team || player.school || "",
+        });
+      }
+    } else {
+      const player = state.items.find(p => p.player_id === playerId);
+      if (player && !state.selectedPlayers.some(p => p.player_id === playerId)) {
+        state.selectedPlayers.push({
+          player_id: player.player_id,
+          full_name: player.full_name,
+          position: player.position,
+          team: player.team,
+        });
+      }
     }
   } else {
     state.selectedPlayers = state.selectedPlayers.filter(p => p.player_id !== playerId);

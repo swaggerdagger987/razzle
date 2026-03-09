@@ -1134,6 +1134,31 @@ def fetch_prospect_comps(name, position="", draft_year=0, limit=5):
     }
 
 
+def fetch_prospects_compare(names, draft_year=0):
+    """Return combine data + percentiles for multiple prospects (for comparison)."""
+    conn = get_conn()
+
+    if not draft_year:
+        row = conn.execute("SELECT MAX(draft_year) FROM combine_data").fetchone()
+        draft_year = row[0] if row and row[0] else 2025
+
+    if not names:
+        conn.close()
+        return {"draft_year": draft_year, "prospects": []}
+
+    results = []
+    for name in names[:5]:  # max 5
+        profile = fetch_prospect_profile(name, draft_year=draft_year)
+        if profile.get("prospect"):
+            results.append({
+                "prospect": profile["prospect"],
+                "percentiles": profile["percentiles"],
+            })
+
+    conn.close()
+    return {"draft_year": draft_year, "prospects": results}
+
+
 def fetch_players_compare(player_ids, season=0):
     """Return season aggregates for multiple players (for comparison)."""
     conn = get_conn()

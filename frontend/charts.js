@@ -789,15 +789,28 @@ async function openCompare() {
   if (state.selectedPlayers.length < 2) return;
   document.getElementById("compareOverlay").classList.add("open");
 
-  const ids = state.selectedPlayers.map(p => p.player_id).join(",");
-  try {
-    const data = await apiFetch(`/api/players/compare?ids=${ids}&season=${state.season}`);
-    renderCompareTable(data.players);
-    drawCompareRadar(data.players);
-  } catch (e) {
-    document.getElementById("compareContent").innerHTML =
-      '<p style="font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the comparison...</p>';
-    console.error(e);
+  if (state.universe === "prospects") {
+    const names = state.selectedPlayers.map(p => p.player_name || p.full_name).join(",");
+    try {
+      const data = await apiFetch(`/api/prospects/compare?names=${encodeURIComponent(names)}&draft_year=${state.season}`);
+      renderProspectCompareTable(data.prospects);
+      drawProspectCompareSpider(data.prospects);
+    } catch (e) {
+      document.getElementById("compareContent").innerHTML =
+        '<p style="font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the prospect comparison...</p>';
+      console.error(e);
+    }
+  } else {
+    const ids = state.selectedPlayers.map(p => p.player_id).join(",");
+    try {
+      const data = await apiFetch(`/api/players/compare?ids=${ids}&season=${state.season}`);
+      renderCompareTable(data.players);
+      drawCompareRadar(data.players);
+    } catch (e) {
+      document.getElementById("compareContent").innerHTML =
+        '<p style="font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the comparison...</p>';
+      console.error(e);
+    }
   }
 }
 
@@ -929,4 +942,275 @@ function drawCompareRadar(players) {
     ctx.font = "bold 12px 'Luckiest Guy', cursive";
     ctx.fillText(player.full_name, 28, 21 + pIdx * 22);
   });
+}
+
+
+// ─── Prospect Comparison ─────────────────────────────────────────
+
+const PROSPECT_COMPARE_COLORS = ["#5b7fff", "#d97757", "#2ec4b6", "#8b5cf6", "#e63946"];
+
+function renderProspectCompareTable(prospects) {
+  if (!prospects || prospects.length < 2) {
+    document.getElementById("compareContent").innerHTML =
+      '<p style="font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">need at least 2 prospects with combine data</p>';
+    return;
+  }
+
+  const combineMetrics = [
+    { key: "forty", label: "40-Yard Dash", fmt: v => v ? v.toFixed(2) + "s" : "—" },
+    { key: "bench", label: "Bench Press", fmt: v => v ? v + " reps" : "—" },
+    { key: "vertical", label: "Vertical Jump", fmt: v => v ? v.toFixed(1) + '"' : "—" },
+    { key: "broad_jump", label: "Broad Jump", fmt: v => v ? v + '"' : "—" },
+    { key: "cone", label: "3-Cone Drill", fmt: v => v ? v.toFixed(2) + "s" : "—" },
+    { key: "shuttle", label: "20-Yd Shuttle", fmt: v => v ? v.toFixed(2) + "s" : "—" },
+  ];
+
+  // Lower is better for time metrics
+  const lowerBetter = { forty: true, cone: true, shuttle: true };
+
+  let html = '<table style="width:100%; border-collapse:collapse; font-family:var(--font-mono); font-size:13px; margin-top:16px;">';
+
+  // Header
+  html += '<tr><th style="text-align:left; padding:8px; border-bottom:3px solid var(--ink); font-family:var(--font-display); font-size:11px; text-transform:uppercase;">Metric</th>';
+  prospects.forEach((p, i) => {
+    const color = PROSPECT_COMPARE_COLORS[i % PROSPECT_COMPARE_COLORS.length];
+    html += `<th style="text-align:right; padding:8px; border-bottom:3px solid var(--ink);">
+      <span style="font-family:var(--font-display); font-size:13px;">${p.prospect.player_name}</span>
+      <span style="display:inline-block; background:${color}; color:white; padding:1px 5px; border-radius:4px; border:2px solid var(--ink); font-size:9px; margin-left:4px;">${p.prospect.position}</span>
+    </th>`;
+  });
+  html += '</tr>';
+
+  // Measurables
+  const measRows = [
+    { key: "height_display", label: "Height" },
+    { key: "weight", label: "Weight", fmt: v => v ? v + " lbs" : "—" },
+  ];
+  for (const mr of measRows) {
+    html += `<tr><td style="padding:6px 8px; border-bottom:1px solid var(--ink-faint); font-weight:700; font-size:11px;">${mr.label}</td>`;
+    for (const p of prospects) {
+      const val = p.prospect[mr.key];
+      const display = mr.fmt ? mr.fmt(val) : (val || "—");
+      html += `<td style="text-align:right; padding:6px 8px; border-bottom:1px solid var(--ink-faint);">${display}</td>`;
+    }
+    html += '</tr>';
+  }
+
+  // Combine metrics (value + percentile)
+  for (const m of combineMetrics) {
+    const vals = prospects.map(p => p.prospect[m.key]);
+    const pcts = prospects.map(p => p.percentiles[m.key]);
+    const numericVals = vals.filter(v => v != null);
+    let bestIdx = -1;
+    if (numericVals.length >= 2) {
+      if (lowerBetter[m.key]) {
+        const best = Math.min(...numericVals);
+        bestIdx = vals.indexOf(best);
+      } else {
+        const best = Math.max(...numericVals);
+        bestIdx = vals.indexOf(best);
+      }
+    }
+
+    html += `<tr><td style="padding:6px 8px; border-bottom:1px solid var(--ink-faint); font-weight:700; font-size:11px;">${m.label}</td>`;
+    prospects.forEach((p, i) => {
+      const val = p.prospect[m.key];
+      const pct = p.percentiles[m.key];
+      const display = m.fmt(val);
+      const isBest = i === bestIdx;
+      const pctColor = pct != null ? getPercentileColor(pct) : "var(--ink-faint)";
+      const pctLabel = pct != null ? `${Math.round(pct)}th` : "";
+      const style = isBest ? "font-weight:700; color:var(--green);" : "";
+      html += `<td style="text-align:right; padding:6px 8px; border-bottom:1px solid var(--ink-faint); ${style}">${display}`;
+      if (pctLabel) html += ` <span style="color:${pctColor}; font-size:10px; font-weight:700;">${pctLabel}</span>`;
+      html += `</td>`;
+    });
+    html += '</tr>';
+  }
+
+  // Draft info row
+  html += `<tr><td style="padding:6px 8px; border-bottom:1px solid var(--ink-faint); font-weight:700; font-size:11px;">Draft Capital</td>`;
+  for (const p of prospects) {
+    const pr = p.prospect;
+    const draftText = pr.draft_round && pr.draft_pick ? `Rd ${pr.draft_round}, #${pr.draft_pick}` : `${pr.draft_year} class`;
+    html += `<td style="text-align:right; padding:6px 8px; border-bottom:1px solid var(--ink-faint);">${draftText}</td>`;
+  }
+  html += '</tr>';
+
+  html += '</table>';
+
+  // Export button
+  html += `<div style="margin-top:12px; text-align:right;">`;
+  html += `<button class="btn-primary" onclick="exportProspectCompareImage()" style="font-size:11px; padding:6px 14px;">Export PNG</button>`;
+  html += `</div>`;
+
+  document.getElementById("compareContent").innerHTML = html;
+}
+
+
+function drawProspectCompareSpider(prospects) {
+  const canvas = document.getElementById("compareRadar");
+  const ctx = canvas.getContext("2d");
+  const W = canvas.width, H = canvas.height;
+  const cx = W / 2, cy = H / 2;
+  const R = Math.min(cx, cy) - 55;
+
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = "#ede0cf";
+  ctx.fillRect(0, 0, W, H);
+
+  if (!prospects || prospects.length < 2) return;
+
+  const metricDefs = [
+    { key: "forty", label: "40-Yard" },
+    { key: "bench", label: "Bench" },
+    { key: "vertical", label: "Vertical" },
+    { key: "broad_jump", label: "Broad" },
+    { key: "cone", label: "3-Cone" },
+    { key: "shuttle", label: "Shuttle" },
+  ];
+
+  // Only show metrics where at least one prospect has data
+  const activeMetrics = metricDefs.filter(m =>
+    prospects.some(p => p.percentiles[m.key] != null)
+  );
+  if (activeMetrics.length < 3) return;
+
+  const n = activeMetrics.length;
+  const angleStep = (2 * Math.PI) / n;
+  const startAngle = -Math.PI / 2;
+
+  // Grid rings
+  const rings = [20, 40, 60, 80, 100];
+  for (const ring of rings) {
+    ctx.beginPath();
+    for (let i = 0; i <= n; i++) {
+      const angle = startAngle + (i % n) * angleStep;
+      const r = (ring / 100) * R;
+      const x = cx + r * Math.cos(angle);
+      const y = cy + r * Math.sin(angle);
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = ring === 50 ? "rgba(26,26,46,0.2)" : "rgba(26,26,46,0.08)";
+    ctx.lineWidth = ring === 50 ? 1.5 : 1;
+    ctx.stroke();
+  }
+
+  // Axis lines
+  for (let i = 0; i < n; i++) {
+    const angle = startAngle + i * angleStep;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + R * Math.cos(angle), cy + R * Math.sin(angle));
+    ctx.strokeStyle = "rgba(26,26,46,0.1)";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // Draw each prospect's polygon
+  prospects.forEach((pData, pIdx) => {
+    const color = PROSPECT_COMPARE_COLORS[pIdx % PROSPECT_COMPARE_COLORS.length];
+    ctx.beginPath();
+    for (let i = 0; i <= n; i++) {
+      const idx = i % n;
+      const angle = startAngle + idx * angleStep;
+      const pct = pData.percentiles[activeMetrics[idx].key] || 0;
+      const r = (pct / 100) * R;
+      const x = cx + r * Math.cos(angle);
+      const y = cy + r * Math.sin(angle);
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.fillStyle = color + "25";
+    ctx.fill();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+
+    // Data points
+    for (let i = 0; i < n; i++) {
+      const angle = startAngle + i * angleStep;
+      const pct = pData.percentiles[activeMetrics[i].key] || 0;
+      const r = (pct / 100) * R;
+      const x = cx + r * Math.cos(angle);
+      const y = cy + r * Math.sin(angle);
+      ctx.beginPath();
+      ctx.arc(x, y, 4, 0, Math.PI * 2);
+      ctx.fillStyle = color;
+      ctx.fill();
+      ctx.strokeStyle = "#1a1a2e";
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+  });
+
+  // Labels
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  for (let i = 0; i < n; i++) {
+    const angle = startAngle + i * angleStep;
+    const labelR = R + 30;
+    const x = cx + labelR * Math.cos(angle);
+    const y = cy + labelR * Math.sin(angle);
+    ctx.font = "bold 11px 'Space Mono', monospace";
+    ctx.fillStyle = "#1a1a2e";
+    ctx.fillText(activeMetrics[i].label, x, y);
+  }
+
+  // Legend
+  ctx.textAlign = "left";
+  prospects.forEach((pData, pIdx) => {
+    const color = PROSPECT_COMPARE_COLORS[pIdx % PROSPECT_COMPARE_COLORS.length];
+    ctx.fillStyle = color;
+    ctx.fillRect(10, 10 + pIdx * 22, 12, 12);
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(10, 10 + pIdx * 22, 12, 12);
+    ctx.fillStyle = "#1a1a2e";
+    ctx.font = "bold 12px 'Luckiest Guy', cursive";
+    ctx.fillText(pData.prospect.player_name, 28, 21 + pIdx * 22);
+  });
+
+  // Title
+  ctx.font = "18px 'Caveat', cursive";
+  ctx.fillStyle = "rgba(26,26,46,0.5)";
+  ctx.textAlign = "center";
+  ctx.fillText("prospect athletic comparison", cx, H - 10);
+}
+
+
+function exportProspectCompareImage() {
+  // Export the compare overlay as PNG
+  const canvas = document.getElementById("compareRadar");
+  if (!canvas) return;
+
+  // Create export canvas with table + radar + watermark
+  const expCanvas = document.createElement("canvas");
+  const W = 800;
+  const H = 500;
+  expCanvas.width = W;
+  expCanvas.height = H;
+  const ctx = expCanvas.getContext("2d");
+
+  // Background
+  ctx.fillStyle = "#ede0cf";
+  ctx.fillRect(0, 0, W, H);
+
+  // Draw radar canvas centered
+  const radarW = Math.min(canvas.width, W - 40);
+  const radarH = Math.min(canvas.height, H - 60);
+  const rx = (W - radarW) / 2;
+  ctx.drawImage(canvas, rx, 20, radarW, radarH);
+
+  // Watermark
+  ctx.font = "16px 'Caveat', cursive";
+  ctx.fillStyle = "rgba(217, 119, 87, 0.5)";
+  ctx.textAlign = "right";
+  ctx.fillText("built different — razzle.lol", W - 20, H - 16);
+
+  const link = document.createElement("a");
+  link.download = "razzle-prospect-compare.png";
+  link.href = expCanvas.toDataURL("image/png");
+  link.click();
 }
