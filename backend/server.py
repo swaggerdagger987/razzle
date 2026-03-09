@@ -70,6 +70,17 @@ def filter_options():
     return live_data.get_filter_options()
 
 
+@app.get("/api/players/{player_id}/weeks")
+def player_weeks(player_id: str, season: int = 0):
+    return live_data.fetch_player_weeks(player_id, season=season)
+
+
+@app.get("/api/players/compare")
+def players_compare(ids: str = "", season: int = 0):
+    player_ids = [p.strip() for p in ids.split(",") if p.strip()]
+    return live_data.fetch_players_compare(player_ids, season=season)
+
+
 # ---------------------------------------------------------------------------
 # Serve frontend as static files (catch-all for SPA-like behavior)
 # ---------------------------------------------------------------------------

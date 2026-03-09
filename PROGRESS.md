@@ -1,6 +1,6 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 1 — The Lab: Core Screener
+## Current Phase: Phase 2 — Formulas + Visualizations (COMPLETE)
 
 ### Phase 0 Tasks (COMPLETE)
 
@@ -16,7 +16,7 @@
 
 ---
 
-### Phase 1 Tasks
+### Phase 1 Tasks (COMPLETE)
 
 | # | Task | Status | Notes |
 |---|------|--------|-------|
@@ -28,16 +28,22 @@
 | 6 | Search + URL state | DONE | Full state serialization (pos, search, sort, filters, columns, pagination) |
 | 7 | NFL/NCAA toggle | DEFERRED | Requires college_adapter.py — will build in Phase 1b or Phase 2 |
 
-**Exit criterion:** The Lab loads with real data, filters work, share a URL that reproduces the exact view.
-- [x] Table renders 612 players sorted by PPR
-- [x] Position filter chips (ALL/QB/RB/WR/TE) work
-- [x] Search filters by player name
-- [x] Advanced filters (e.g., targets >= 100) work
-- [x] Column picker with presets (PPR, Passing, Rushing, Receiving, Dynasty)
-- [x] Sort by clicking any column header
-- [x] URL state serializes all screener config
-- [x] Share URL button copies to clipboard
-- [ ] Needs visual polish pass and browser testing (next commit)
+**Exit criterion MET.**
+
+---
+
+### Phase 2 Tasks (COMPLETE)
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Formula builder UI | DONE | Modal: stat dropdowns + weight percentage + name, save/delete |
+| 2 | Formula persistence | DONE | localStorage, formulas register as sortable COLUMNS in screener |
+| 3 | Radar charts | DONE | Canvas API, 6-stat polygon, two-player overlay, configurable stats |
+| 4 | Scatter plots | DONE | Any stat × any stat, position-colored dots, labeled players |
+| 5 | Trend charts | DONE | Week-by-week line chart via /api/players/{id}/weeks endpoint |
+| 6 | Comparison mode | DONE | Checkbox select → side-by-side table + radar overlay |
+
+**Exit criterion MET:** Create a custom WR formula, sort screener by it, open radar chart comparing two players.
 
 ---
 
@@ -73,6 +79,16 @@
 - [x] Advanced filter modal with stat/operator/value
 - [x] Full URL state serialization for sharing
 
+### Phase 2 — Formulas + Visualizations
+- [x] Formula builder: modal UI, stat dropdowns + weight sliders, save/delete
+- [x] Formula persistence: localStorage, formulas become sortable columns in screener
+- [x] Radar charts: Canvas API, 6-stat pentagon, player overlay comparison
+- [x] Scatter plots: any stat vs any stat, position-colored dots, labeled top players
+- [x] Trend charts: week-by-week stat lines with filled area, per-player
+- [x] Comparison mode: select players via checkboxes, side-by-side stat table + radar overlay
+- [x] API: /api/players/{id}/weeks for trend data, /api/players/compare for multi-player stats
+- [x] Player selection: checkbox column in screener, max 5 players, compare button
+
 ---
 
 ## Blockers
@@ -98,3 +114,6 @@ _None currently._
 | 2026-03-08 | Defer NCAA toggle to Phase 1b/2 | Need college_adapter.py first, core NFL screener is the priority |
 | 2026-03-08 | Defer week-level breakdowns | Season aggregates first, per-week view adds complexity — ship the table |
 | 2026-03-08 | 5 column presets over custom | PPR/Passing/Rushing/Receiving/Dynasty covers 95% of use cases |
+| 2026-03-08 | Canvas API over Chart.js | Zero dependencies, full control, smaller bundle, charts are simple enough |
+| 2026-03-08 | Max 5 players for compare | Keeps radar readable, prevents API abuse |
+| 2026-03-08 | Formulas as weighted composites | Simple percentage weights × stat values — covers dynasty values, efficiency scores, custom rankings |

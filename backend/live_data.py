@@ -325,3 +325,85 @@ def get_filter_options():
         "stat_keys": stat_keys,
         "seasons": seasons,
     }
+
+
+def fetch_player_weeks(player_id, season=0):
+    """Return week-by-week stats for a single player."""
+    conn = get_conn()
+
+    if not season:
+        row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+        season = row[0] if row and row[0] else 2024
+
+    rows = conn.execute("""
+        SELECT s.*, p.full_name, p.position, p.team
+        FROM player_week_stats s
+        JOIN players p ON p.player_id = s.player_id
+        WHERE s.player_id = ? AND s.season = ?
+        ORDER BY s.week ASC
+    """, (player_id, season)).fetchall()
+
+    player_info = conn.execute(
+        "SELECT player_id, full_name, position, team, age, college FROM players WHERE player_id = ?",
+        (player_id,)
+    ).fetchone()
+
+    conn.close()
+
+    return {
+        "player": dict(player_info) if player_info else {},
+        "season": season,
+        "weeks": [dict(r) for r in rows],
+    }
+
+
+def fetch_players_compare(player_ids, season=0):
+    """Return season aggregates for multiple players (for comparison)."""
+    conn = get_conn()
+
+    if not season:
+        row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+        season = row[0] if row and row[0] else 2024
+
+    if not player_ids:
+        conn.close()
+        return {"season": season, "players": []}
+
+    placeholders = ",".join("?" * len(player_ids))
+    rows = conn.execute(f"""
+        SELECT
+            p.player_id, p.full_name, p.position, p.team, p.age, p.college,
+            COUNT(*) as games,
+            SUM(s.fantasy_points_ppr) as fantasy_points_ppr,
+            SUM(s.fantasy_points_std) as fantasy_points_std,
+            SUM(s.passing_yards) as passing_yards,
+            SUM(s.passing_tds) as passing_tds,
+            SUM(s.rushing_yards) as rushing_yards,
+            SUM(s.rushing_tds) as rushing_tds,
+            SUM(s.receiving_yards) as receiving_yards,
+            SUM(s.receiving_tds) as receiving_tds,
+            SUM(s.receptions) as receptions,
+            SUM(s.touchdowns) as touchdowns,
+            SUM(s.turnovers) as turnovers,
+            SUM(s.targets) as targets,
+            SUM(s.carries) as carries,
+            SUM(s.completions) as completions,
+            SUM(s.attempts) as attempts,
+            SUM(s.passing_air_yards) as passing_air_yards,
+            SUM(s.receiving_air_yards) as receiving_air_yards,
+            SUM(s.receiving_yards_after_catch) as receiving_yards_after_catch
+        FROM players p
+        JOIN player_week_stats s ON p.player_id = s.player_id
+        WHERE p.player_id IN ({placeholders}) AND s.season = ?
+        GROUP BY p.player_id
+    """, (*player_ids, season)).fetchall()
+
+    players = []
+    for r in rows:
+        item = dict(r)
+        g = item["games"] or 1
+        item["ppg"] = round((item["fantasy_points_ppr"] or 0) / g, 1)
+        players.append(item)
+
+    conn.close()
+    return {"season": season, "players": players}

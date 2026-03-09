@@ -1,0 +1,581 @@
+/* Razzle — Charts (Canvas API, no dependencies) */
+
+const CHART_COLORS = ["#d97757", "#5b7fff", "#2ec4b6", "#8b5cf6", "#e63946"];
+let currentChartTab = "radar";
+
+// ─── Chart panel ─────────────────────────────────────────────────
+function openChartPanel() {
+  document.getElementById("chartOverlay").classList.add("open");
+  switchChartTab("radar");
+}
+
+function closeChartPanel(e) {
+  if (e && e.target !== e.currentTarget) return;
+  document.getElementById("chartOverlay").classList.remove("open");
+}
+
+function switchChartTab(tab) {
+  currentChartTab = tab;
+  document.querySelectorAll("[id^=chartTab]").forEach(b => b.classList.remove("active"));
+  const btn = document.getElementById("chartTab" + tab.charAt(0).toUpperCase() + tab.slice(1));
+  if (btn) btn.classList.add("active");
+
+  renderChartConfig();
+  drawChart();
+}
+
+// ─── Chart config UI ─────────────────────────────────────────────
+function renderChartConfig() {
+  const container = document.getElementById("chartConfig");
+  const statOptions = Object.entries(COLUMNS)
+    .filter(([k, c]) => c.group !== "Formulas" && !["full_name", "position", "team"].includes(k))
+    .map(([k, c]) => `<option value="${k}">${c.label}</option>`)
+    .join("");
+
+  if (currentChartTab === "radar") {
+    const playerOptions = getPlayerOptions();
+    container.innerHTML = `
+      <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+        <span style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; color:var(--ink-light);">Players:</span>
+        <select class="select-chunky" id="radarPlayer1" onchange="drawChart()">${playerOptions}</select>
+        <select class="select-chunky" id="radarPlayer2" onchange="drawChart()"><option value="">— compare —</option>${playerOptions}</select>
+      </div>
+      <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;">
+        <span style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; color:var(--ink-light);">Stats (5-6):</span>
+        ${["fantasy_points_ppr", "rushing_yards", "receiving_yards", "touchdowns", "targets", "receptions"].map((s, i) =>
+          `<select class="select-chunky radar-stat" onchange="drawChart()">${statOptions.replace(`value="${s}"`, `value="${s}" selected`)}</select>`
+        ).join("")}
+      </div>`;
+  } else if (currentChartTab === "scatter") {
+    container.innerHTML = `
+      <div style="display:flex; gap:8px; align-items:center;">
+        <span style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; color:var(--ink-light);">X:</span>
+        <select class="select-chunky" id="scatterX" onchange="drawChart()">${statOptions.replace('value="targets"', 'value="targets" selected')}</select>
+        <span style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; color:var(--ink-light);">Y:</span>
+        <select class="select-chunky" id="scatterY" onchange="drawChart()">${statOptions.replace('value="receiving_yards"', 'value="receiving_yards" selected')}</select>
+      </div>`;
+  } else if (currentChartTab === "trend") {
+    const playerOptions = getPlayerOptions();
+    container.innerHTML = `
+      <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+        <span style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; color:var(--ink-light);">Player:</span>
+        <select class="select-chunky" id="trendPlayer" onchange="drawChart()">${playerOptions}</select>
+        <span style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; color:var(--ink-light);">Stat:</span>
+        <select class="select-chunky" id="trendStat" onchange="drawChart()">${statOptions.replace('value="fantasy_points_ppr"', 'value="fantasy_points_ppr" selected')}</select>
+      </div>`;
+  }
+}
+
+function getPlayerOptions() {
+  // Use selected players first, then top items
+  const players = state.selectedPlayers.length > 0
+    ? state.selectedPlayers
+    : state.items.slice(0, 20);
+  return players.map(p =>
+    `<option value="${p.player_id}">${p.full_name} (${p.position} - ${p.team})</option>`
+  ).join("");
+}
+
+// ─── Draw chart dispatcher ───────────────────────────────────────
+function drawChart() {
+  if (currentChartTab === "radar") drawRadar();
+  else if (currentChartTab === "scatter") drawScatter();
+  else if (currentChartTab === "trend") drawTrend();
+}
+
+// ─── Radar chart ─────────────────────────────────────────────────
+function drawRadar() {
+  const canvas = document.getElementById("chartCanvas");
+  const ctx = canvas.getContext("2d");
+  const W = canvas.width, H = canvas.height;
+  const cx = W / 2, cy = H / 2;
+  const R = Math.min(cx, cy) - 60;
+
+  ctx.clearRect(0, 0, W, H);
+
+  // Get stats
+  const statSelects = document.querySelectorAll(".radar-stat");
+  const stats = Array.from(statSelects).map(s => s.value).filter(Boolean);
+  if (stats.length < 3) return;
+
+  const n = stats.length;
+  const angleStep = (2 * Math.PI) / n;
+
+  // Get players
+  const p1Id = document.getElementById("radarPlayer1")?.value;
+  const p2Id = document.getElementById("radarPlayer2")?.value;
+  const players = [];
+  if (p1Id) {
+    const p = state.items.find(i => i.player_id === p1Id);
+    if (p) players.push(p);
+  }
+  if (p2Id) {
+    const p = state.items.find(i => i.player_id === p2Id);
+    if (p) players.push(p);
+  }
+
+  // Find max values for normalization
+  const maxVals = {};
+  for (const s of stats) {
+    maxVals[s] = Math.max(...state.items.map(i => Math.abs(i[s] || 0)), 1);
+  }
+
+  // Draw grid
+  ctx.strokeStyle = "#c5c5d0";
+  ctx.lineWidth = 1;
+  for (let ring = 1; ring <= 4; ring++) {
+    const r = (R * ring) / 4;
+    ctx.beginPath();
+    for (let i = 0; i <= n; i++) {
+      const angle = i * angleStep - Math.PI / 2;
+      const x = cx + r * Math.cos(angle);
+      const y = cy + r * Math.sin(angle);
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.stroke();
+  }
+
+  // Draw axes and labels
+  ctx.fillStyle = "#1a1a2e";
+  ctx.font = "bold 11px 'Space Mono', monospace";
+  ctx.textAlign = "center";
+  for (let i = 0; i < n; i++) {
+    const angle = i * angleStep - Math.PI / 2;
+    const x = cx + R * Math.cos(angle);
+    const y = cy + R * Math.sin(angle);
+
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(x, y);
+    ctx.strokeStyle = "#c5c5d0";
+    ctx.stroke();
+
+    const col = COLUMNS[stats[i]];
+    const label = col ? col.label : stats[i];
+    const lx = cx + (R + 30) * Math.cos(angle);
+    const ly = cy + (R + 30) * Math.sin(angle);
+    ctx.fillText(label, lx, ly + 4);
+  }
+
+  // Draw player polygons
+  players.forEach((player, pIdx) => {
+    const color = CHART_COLORS[pIdx];
+    ctx.beginPath();
+    for (let i = 0; i <= n; i++) {
+      const si = i % n;
+      const angle = si * angleStep - Math.PI / 2;
+      const val = (player[stats[si]] || 0) / maxVals[stats[si]];
+      const r = R * Math.max(0, Math.min(1, val));
+      const x = cx + r * Math.cos(angle);
+      const y = cy + r * Math.sin(angle);
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.fillStyle = color + "33";
+    ctx.fill();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    // Draw dots
+    for (let i = 0; i < n; i++) {
+      const angle = i * angleStep - Math.PI / 2;
+      const val = (player[stats[i]] || 0) / maxVals[stats[i]];
+      const r = R * Math.max(0, Math.min(1, val));
+      const x = cx + r * Math.cos(angle);
+      const y = cy + r * Math.sin(angle);
+      ctx.beginPath();
+      ctx.arc(x, y, 4, 0, 2 * Math.PI);
+      ctx.fillStyle = color;
+      ctx.fill();
+      ctx.strokeStyle = "#1a1a2e";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+  });
+
+  // Legend
+  players.forEach((player, pIdx) => {
+    ctx.fillStyle = CHART_COLORS[pIdx];
+    ctx.fillRect(20, 20 + pIdx * 24, 14, 14);
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(20, 20 + pIdx * 24, 14, 14);
+    ctx.fillStyle = "#1a1a2e";
+    ctx.font = "bold 13px 'Luckiest Guy', cursive";
+    ctx.textAlign = "left";
+    ctx.fillText(player.full_name, 40, 32 + pIdx * 24);
+  });
+}
+
+// ─── Scatter plot ────────────────────────────────────────────────
+function drawScatter() {
+  const canvas = document.getElementById("chartCanvas");
+  const ctx = canvas.getContext("2d");
+  const W = canvas.width, H = canvas.height;
+  const pad = { top: 30, right: 30, bottom: 50, left: 70 };
+
+  ctx.clearRect(0, 0, W, H);
+
+  const xKey = document.getElementById("scatterX")?.value || "targets";
+  const yKey = document.getElementById("scatterY")?.value || "receiving_yards";
+  const xCol = COLUMNS[xKey] || { label: xKey };
+  const yCol = COLUMNS[yKey] || { label: yKey };
+
+  const data = state.items.filter(p => p[xKey] != null && p[yKey] != null);
+  if (!data.length) return;
+
+  const xVals = data.map(p => p[xKey]);
+  const yVals = data.map(p => p[yKey]);
+  const xMin = Math.min(...xVals), xMax = Math.max(...xVals);
+  const yMin = Math.min(...yVals), yMax = Math.max(...yVals);
+  const xRange = xMax - xMin || 1;
+  const yRange = yMax - yMin || 1;
+
+  const plotW = W - pad.left - pad.right;
+  const plotH = H - pad.top - pad.bottom;
+
+  const toX = v => pad.left + ((v - xMin) / xRange) * plotW;
+  const toY = v => pad.top + plotH - ((v - yMin) / yRange) * plotH;
+
+  // Grid lines
+  ctx.strokeStyle = "#c5c5d0";
+  ctx.lineWidth = 1;
+  ctx.setLineDash([4, 4]);
+  for (let i = 0; i <= 4; i++) {
+    const x = pad.left + (plotW * i) / 4;
+    const y = pad.top + (plotH * i) / 4;
+    ctx.beginPath(); ctx.moveTo(x, pad.top); ctx.lineTo(x, pad.top + plotH); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(pad.left + plotW, y); ctx.stroke();
+  }
+  ctx.setLineDash([]);
+
+  // Axes
+  ctx.strokeStyle = "#1a1a2e";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(pad.left, pad.top);
+  ctx.lineTo(pad.left, pad.top + plotH);
+  ctx.lineTo(pad.left + plotW, pad.top + plotH);
+  ctx.stroke();
+
+  // Axis labels
+  ctx.fillStyle = "#1a1a2e";
+  ctx.font = "bold 12px 'Space Mono', monospace";
+  ctx.textAlign = "center";
+  ctx.fillText(xCol.label, pad.left + plotW / 2, H - 10);
+  ctx.save();
+  ctx.translate(16, pad.top + plotH / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillText(yCol.label, 0, 0);
+  ctx.restore();
+
+  // Dots
+  const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  for (const p of data) {
+    const x = toX(p[xKey]);
+    const y = toY(p[yKey]);
+    const color = posColors[p.position] || "#8a8a9e";
+
+    ctx.beginPath();
+    ctx.arc(x, y, 5, 0, 2 * Math.PI);
+    ctx.fillStyle = color;
+    ctx.fill();
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+  }
+
+  // Label selected/top players
+  const labeled = state.selectedPlayers.length > 0
+    ? data.filter(p => state.selectedPlayers.some(s => s.player_id === p.player_id))
+    : data.slice(0, 8);
+  ctx.font = "bold 10px 'Space Mono', monospace";
+  ctx.textAlign = "left";
+  ctx.fillStyle = "#1a1a2e";
+  for (const p of labeled) {
+    const x = toX(p[xKey]);
+    const y = toY(p[yKey]);
+    const lastName = p.full_name.split(" ").pop();
+    ctx.fillText(lastName, x + 7, y + 3);
+  }
+}
+
+// ─── Trend chart ─────────────────────────────────────────────────
+async function drawTrend() {
+  const canvas = document.getElementById("chartCanvas");
+  const ctx = canvas.getContext("2d");
+  const W = canvas.width, H = canvas.height;
+  const pad = { top: 30, right: 30, bottom: 50, left: 70 };
+
+  ctx.clearRect(0, 0, W, H);
+
+  const playerId = document.getElementById("trendPlayer")?.value;
+  const statKey = document.getElementById("trendStat")?.value || "fantasy_points_ppr";
+  if (!playerId) return;
+
+  // Loading text
+  ctx.font = "24px 'Caveat', cursive";
+  ctx.fillStyle = "#8a8a9e";
+  ctx.textAlign = "center";
+  ctx.fillText("pulling film...", W / 2, H / 2);
+
+  try {
+    const data = await apiFetch(`/api/players/${playerId}/weeks?season=${state.season}`);
+    const weeks = data.weeks || [];
+    if (!weeks.length) {
+      ctx.clearRect(0, 0, W, H);
+      ctx.fillText("no weekly data", W / 2, H / 2);
+      return;
+    }
+
+    ctx.clearRect(0, 0, W, H);
+
+    const vals = weeks.map(w => w[statKey] || 0);
+    const weekNums = weeks.map(w => w.week);
+    const maxVal = Math.max(...vals, 1);
+
+    const plotW = W - pad.left - pad.right;
+    const plotH = H - pad.top - pad.bottom;
+
+    const toX = (i) => pad.left + (i / Math.max(weekNums.length - 1, 1)) * plotW;
+    const toY = (v) => pad.top + plotH - (v / maxVal) * plotH;
+
+    // Grid
+    ctx.strokeStyle = "#c5c5d0";
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 4]);
+    for (let i = 0; i <= 4; i++) {
+      const y = pad.top + (plotH * i) / 4;
+      ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(pad.left + plotW, y); ctx.stroke();
+      // Value label
+      const val = maxVal * (1 - i / 4);
+      ctx.font = "11px 'Space Mono', monospace";
+      ctx.fillStyle = "#8a8a9e";
+      ctx.textAlign = "right";
+      ctx.fillText(val.toFixed(1), pad.left - 8, y + 4);
+    }
+    ctx.setLineDash([]);
+
+    // Axes
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(pad.left, pad.top);
+    ctx.lineTo(pad.left, pad.top + plotH);
+    ctx.lineTo(pad.left + plotW, pad.top + plotH);
+    ctx.stroke();
+
+    // Line
+    ctx.beginPath();
+    ctx.strokeStyle = "#d97757";
+    ctx.lineWidth = 3;
+    for (let i = 0; i < vals.length; i++) {
+      const x = toX(i);
+      const y = toY(vals[i]);
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+
+    // Fill area
+    ctx.beginPath();
+    ctx.moveTo(toX(0), toY(vals[0]));
+    for (let i = 1; i < vals.length; i++) ctx.lineTo(toX(i), toY(vals[i]));
+    ctx.lineTo(toX(vals.length - 1), pad.top + plotH);
+    ctx.lineTo(toX(0), pad.top + plotH);
+    ctx.closePath();
+    ctx.fillStyle = "#d9775722";
+    ctx.fill();
+
+    // Dots and week labels
+    ctx.font = "10px 'Space Mono', monospace";
+    ctx.textAlign = "center";
+    for (let i = 0; i < vals.length; i++) {
+      const x = toX(i);
+      const y = toY(vals[i]);
+
+      ctx.beginPath();
+      ctx.arc(x, y, 5, 0, 2 * Math.PI);
+      ctx.fillStyle = "#d97757";
+      ctx.fill();
+      ctx.strokeStyle = "#1a1a2e";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Week number
+      ctx.fillStyle = "#1a1a2e";
+      ctx.fillText(`W${weekNums[i]}`, x, pad.top + plotH + 16);
+
+      // Value on hover area (always show for now)
+      if (vals.length <= 20) {
+        ctx.fillStyle = "#8a8a9e";
+        ctx.fillText(vals[i].toFixed(1), x, y - 10);
+      }
+    }
+
+    // Title
+    const playerName = data.player?.full_name || playerId;
+    const col = COLUMNS[statKey];
+    const statLabel = col ? col.label : statKey;
+    ctx.font = "bold 16px 'Luckiest Guy', cursive";
+    ctx.fillStyle = "#1a1a2e";
+    ctx.textAlign = "left";
+    ctx.fillText(`${playerName} — ${statLabel} by Week`, pad.left, 20);
+
+  } catch (e) {
+    ctx.clearRect(0, 0, W, H);
+    ctx.font = "24px 'Caveat', cursive";
+    ctx.fillStyle = "#e63946";
+    ctx.textAlign = "center";
+    ctx.fillText("couldn't load weekly data", W / 2, H / 2);
+    console.error(e);
+  }
+}
+
+// ─── Comparison mode ─────────────────────────────────────────────
+async function openCompare() {
+  if (state.selectedPlayers.length < 2) return;
+  document.getElementById("compareOverlay").classList.add("open");
+
+  const ids = state.selectedPlayers.map(p => p.player_id).join(",");
+  try {
+    const data = await apiFetch(`/api/players/compare?ids=${ids}&season=${state.season}`);
+    renderCompareTable(data.players);
+    drawCompareRadar(data.players);
+  } catch (e) {
+    document.getElementById("compareContent").innerHTML =
+      '<p style="font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the comparison...</p>';
+    console.error(e);
+  }
+}
+
+function closeCompare(e) {
+  if (e && e.target !== e.currentTarget) return;
+  document.getElementById("compareOverlay").classList.remove("open");
+}
+
+function renderCompareTable(players) {
+  const compareStats = ["fantasy_points_ppr", "ppg", "games", "passing_yards", "rushing_yards",
+    "receiving_yards", "receptions", "targets", "touchdowns", "turnovers"];
+
+  let html = '<table style="width:100%; border-collapse:collapse; font-family:var(--font-mono); font-size:13px; margin-top:16px;">';
+
+  // Header
+  html += '<tr><th style="text-align:left; padding:8px; border-bottom:3px solid var(--ink); font-family:var(--font-display); font-size:11px; text-transform:uppercase;">Stat</th>';
+  for (const p of players) {
+    const posColor = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" }[p.position] || "var(--ink)";
+    html += `<th style="text-align:right; padding:8px; border-bottom:3px solid var(--ink);">
+      <span style="font-family:var(--font-display); font-size:13px;">${p.full_name}</span>
+      <span style="display:inline-block; background:${posColor}; color:white; padding:1px 5px; border-radius:4px; border:2px solid var(--ink); font-size:9px; margin-left:4px;">${p.position}</span>
+    </th>`;
+  }
+  html += '</tr>';
+
+  // Rows
+  for (const statKey of compareStats) {
+    const col = COLUMNS[statKey];
+    if (!col) continue;
+    const vals = players.map(p => p[statKey] || 0);
+    const maxVal = Math.max(...vals);
+
+    html += `<tr>`;
+    html += `<td style="padding:6px 8px; border-bottom:1px solid var(--ink-faint); font-weight:700; font-size:11px;">${col.label}</td>`;
+    for (let i = 0; i < players.length; i++) {
+      const isBest = vals[i] === maxVal && maxVal > 0;
+      const style = isBest ? "font-weight:700; color:var(--green);" : "";
+      html += `<td style="text-align:right; padding:6px 8px; border-bottom:1px solid var(--ink-faint); ${style}">${formatStat(vals[i], col.decimals)}</td>`;
+    }
+    html += '</tr>';
+  }
+  html += '</table>';
+
+  document.getElementById("compareContent").innerHTML = html;
+}
+
+function drawCompareRadar(players) {
+  const canvas = document.getElementById("compareRadar");
+  const ctx = canvas.getContext("2d");
+  const W = canvas.width, H = canvas.height;
+  const cx = W / 2, cy = H / 2;
+  const R = Math.min(cx, cy) - 50;
+
+  ctx.clearRect(0, 0, W, H);
+
+  const stats = ["fantasy_points_ppr", "rushing_yards", "receiving_yards", "touchdowns", "targets", "receptions"];
+  const n = stats.length;
+  const angleStep = (2 * Math.PI) / n;
+
+  // Normalize using max across compared players
+  const maxVals = {};
+  for (const s of stats) {
+    maxVals[s] = Math.max(...players.map(p => Math.abs(p[s] || 0)), 1);
+  }
+
+  // Grid
+  ctx.strokeStyle = "#c5c5d0";
+  ctx.lineWidth = 1;
+  for (let ring = 1; ring <= 4; ring++) {
+    const r = (R * ring) / 4;
+    ctx.beginPath();
+    for (let i = 0; i <= n; i++) {
+      const angle = i * angleStep - Math.PI / 2;
+      const x = cx + r * Math.cos(angle);
+      const y = cy + r * Math.sin(angle);
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.stroke();
+  }
+
+  // Labels
+  ctx.fillStyle = "#1a1a2e";
+  ctx.font = "bold 11px 'Space Mono', monospace";
+  ctx.textAlign = "center";
+  for (let i = 0; i < n; i++) {
+    const angle = i * angleStep - Math.PI / 2;
+    ctx.beginPath(); ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + R * Math.cos(angle), cy + R * Math.sin(angle));
+    ctx.strokeStyle = "#c5c5d0";
+    ctx.stroke();
+
+    const col = COLUMNS[stats[i]];
+    const lx = cx + (R + 25) * Math.cos(angle);
+    const ly = cy + (R + 25) * Math.sin(angle);
+    ctx.fillText(col ? col.label : stats[i], lx, ly + 4);
+  }
+
+  // Player polygons
+  players.forEach((player, pIdx) => {
+    const color = CHART_COLORS[pIdx % CHART_COLORS.length];
+    ctx.beginPath();
+    for (let i = 0; i <= n; i++) {
+      const si = i % n;
+      const angle = si * angleStep - Math.PI / 2;
+      const val = (player[stats[si]] || 0) / maxVals[stats[si]];
+      const r = R * Math.max(0, Math.min(1, val));
+      const x = cx + r * Math.cos(angle);
+      const y = cy + r * Math.sin(angle);
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.fillStyle = color + "33";
+    ctx.fill();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 3;
+    ctx.stroke();
+  });
+
+  // Legend
+  ctx.textAlign = "left";
+  players.forEach((player, pIdx) => {
+    ctx.fillStyle = CHART_COLORS[pIdx % CHART_COLORS.length];
+    ctx.fillRect(10, 10 + pIdx * 22, 12, 12);
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(10, 10 + pIdx * 22, 12, 12);
+    ctx.fillStyle = "#1a1a2e";
+    ctx.font = "bold 12px 'Luckiest Guy', cursive";
+    ctx.fillText(player.full_name, 28, 21 + pIdx * 22);
+  });
+}

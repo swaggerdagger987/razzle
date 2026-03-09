@@ -79,6 +79,8 @@ const state = {
   items: [],
   totalCount: 0,
   seasons: [],
+  selectedPlayers: [], // for compare/charts [{player_id, full_name, position, team}]
+  formulas: [], // user custom formulas [{name, components: [{stat, weight}]}]
 };
 
 // ─── Init ────────────────────────────────────────────────────────
@@ -148,6 +150,7 @@ async function fetchAndRender() {
     state.totalCount = data.count || 0;
     state.season = data.season || state.season;
 
+    computeFormulaValues();
     loading.style.display = "none";
     renderTable();
     renderPagination();
@@ -167,7 +170,8 @@ function renderTable() {
 
 function renderTableHead() {
   const thead = document.getElementById("tableHead");
-  let html = '<tr><th class="col-player" onclick="sortBy(\'full_name\')">Player';
+  let html = '<tr><th style="width:30px; text-align:center; padding:8px 6px;">☆</th>';
+  html += '<th class="col-player" onclick="sortBy(\'full_name\')">Player';
   if (state.sortKey === "full_name") {
     html += state.sortDir === "asc" ? " ▲" : " ▼";
   }
@@ -194,7 +198,12 @@ function renderTableBody() {
   let html = "";
   for (const player of state.items) {
     const pos = (player.position || "").toUpperCase();
+    const selected = state.selectedPlayers.some(p => p.player_id === player.player_id);
     html += '<tr>';
+    html += `<td style="text-align:center; padding:7px 6px;">
+      <input type="checkbox" ${selected ? "checked" : ""} onchange="togglePlayerSelect('${player.player_id}', this.checked)"
+        style="accent-color:var(--orange); width:15px; height:15px; cursor:pointer;">
+    </td>`;
     html += `<td class="col-player"><div class="player-name-cell">`;
     html += `<span class="pos-badge ${posClass(pos)}">${pos}</span>`;
     html += `<span>${player.full_name}</span>`;
@@ -464,3 +473,69 @@ function copyShareURL() {
     setTimeout(() => btn.textContent = orig, 1500);
   });
 }
+
+// ─── Player selection (for compare/charts) ───────────────────────
+function togglePlayerSelect(playerId, checked) {
+  if (checked) {
+    if (state.selectedPlayers.length >= 5) return; // max 5
+    const player = state.items.find(p => p.player_id === playerId);
+    if (player && !state.selectedPlayers.some(p => p.player_id === playerId)) {
+      state.selectedPlayers.push({
+        player_id: player.player_id,
+        full_name: player.full_name,
+        position: player.position,
+        team: player.team,
+      });
+    }
+  } else {
+    state.selectedPlayers = state.selectedPlayers.filter(p => p.player_id !== playerId);
+  }
+  updateSelectionUI();
+}
+
+function updateSelectionUI() {
+  const count = state.selectedPlayers.length;
+  const resultEl = document.getElementById("resultCount");
+  if (count > 0) {
+    resultEl.innerHTML = `<strong>${state.totalCount}</strong> players &nbsp;|&nbsp; <strong>${count}</strong> selected
+      <button class="btn-primary" style="margin-left:8px; padding:3px 10px; font-size:11px;" onclick="openCompare()">Compare</button>`;
+  } else {
+    updateResultCount();
+  }
+}
+
+// ─── Formula columns integration ─────────────────────────────────
+function loadFormulas() {
+  try {
+    state.formulas = JSON.parse(localStorage.getItem("razzle_formulas") || "[]");
+  } catch (e) {
+    state.formulas = [];
+  }
+  // Register formula columns
+  for (const formula of state.formulas) {
+    const key = `formula_${formula.name.toLowerCase().replace(/[^a-z0-9]/g, "_")}`;
+    COLUMNS[key] = { label: formula.name, group: "Formulas", decimals: 1 };
+  }
+}
+
+function computeFormulaValues() {
+  // After fetching items, compute formula values for each player
+  for (const formula of state.formulas) {
+    const key = `formula_${formula.name.toLowerCase().replace(/[^a-z0-9]/g, "_")}`;
+    for (const player of state.items) {
+      let score = 0;
+      let totalWeight = 0;
+      for (const comp of formula.components) {
+        const val = player[comp.stat];
+        if (val !== null && val !== undefined) {
+          score += (val * comp.weight) / 100;
+          totalWeight += Math.abs(comp.weight);
+        }
+      }
+      player[key] = totalWeight > 0 ? Math.round(score * 10) / 10 : null;
+    }
+  }
+}
+
+// Load formulas on startup
+loadFormulas();

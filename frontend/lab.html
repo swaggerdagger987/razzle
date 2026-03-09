@@ -402,6 +402,8 @@
     <div class="toolbar-divider"></div>
 
     <button class="btn-chunky" onclick="openColumnPicker()">Columns</button>
+    <button class="btn-chunky" onclick="openFormulaBuilder()">Formulas</button>
+    <button class="btn-chunky" onclick="openChartPanel()">Charts</button>
     <button class="btn-chunky" onclick="copyShareURL()">Share URL</button>
 
     <span class="result-count" id="resultCount"></span>
@@ -471,7 +473,67 @@
   </div>
 </div>
 
+<!-- FORMULA BUILDER -->
+<div class="filter-modal-overlay" id="formulaOverlay" onclick="closeFormulaBuilder(event)">
+  <div class="filter-modal" style="width:440px;" onclick="event.stopPropagation()">
+    <h3>Custom Formula</h3>
+    <p style="font-family:var(--font-hand); font-size:18px; color:var(--ink-light); margin-bottom:12px;">
+      blend stats into a weighted score
+    </p>
+    <div class="filter-modal-row">
+      <input type="text" class="input-chunky" id="formulaName" placeholder="formula name" style="flex:1">
+    </div>
+    <div id="formulaComponents"></div>
+    <button class="add-filter-btn" onclick="addFormulaComponent()" style="margin:8px 0;">+ add stat</button>
+    <div class="filter-modal-actions">
+      <button class="btn-chunky" onclick="closeFormulaBuilder()">Cancel</button>
+      <button class="btn-primary" onclick="saveFormula()">Save Formula</button>
+    </div>
+    <div id="savedFormulas" style="margin-top:16px; border-top:2px dashed var(--ink-faint); padding-top:12px;"></div>
+  </div>
+</div>
+
+<!-- CHART PANEL -->
+<div class="filter-modal-overlay" id="chartOverlay" onclick="closeChartPanel(event)">
+  <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:820px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+      <h3>Charts</h3>
+      <div style="display:flex; gap:6px;">
+        <button class="btn-chunky" id="chartTabRadar" onclick="switchChartTab('radar')">Radar</button>
+        <button class="btn-chunky" id="chartTabScatter" onclick="switchChartTab('scatter')">Scatter</button>
+        <button class="btn-chunky" id="chartTabTrend" onclick="switchChartTab('trend')">Trend</button>
+      </div>
+    </div>
+
+    <!-- Chart config -->
+    <div id="chartConfig" style="margin-bottom:16px;"></div>
+
+    <!-- Canvas -->
+    <canvas id="chartCanvas" width="760" height="460" style="border:2px solid var(--ink); border-radius:8px; background:var(--bg); width:100%;"></canvas>
+
+    <div style="margin-top:12px; display:flex; justify-content:flex-end;">
+      <button class="btn-chunky" onclick="closeChartPanel()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- PLAYER COMPARE PANEL -->
+<div class="filter-modal-overlay" id="compareOverlay" onclick="closeCompare(event)">
+  <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:860px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
+    <h3>Player Comparison</h3>
+    <div id="compareContent"></div>
+    <div style="margin-top:16px; text-align:center;">
+      <canvas id="compareRadar" width="400" height="400" style="border:2px solid var(--ink); border-radius:8px; background:var(--bg); max-width:100%;"></canvas>
+    </div>
+    <div style="margin-top:12px; display:flex; justify-content:flex-end;">
+      <button class="btn-chunky" onclick="closeCompare()">Close</button>
+    </div>
+  </div>
+</div>
+
 <script src="app.js"></script>
 <script src="lab.js"></script>
+<script src="formulas.js"></script>
+<script src="charts.js"></script>
 </body>
 </html>
