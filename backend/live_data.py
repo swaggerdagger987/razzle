@@ -2198,3 +2198,244 @@ def fetch_aging_curves(position="WR"):
 
     conn.close()
     return {"baseline": baseline, "players": players_out}
+
+
+# ---------------------------------------------------------------------------
+# Positional Heat Maps
+# ---------------------------------------------------------------------------
+
+# Stat groups per position — each stat has (sql_expression_or_key, display_label, higher_is_better)
+_HEATMAP_STATS = {
+    "QB": {
+        "production": [
+            ("ppg", "PPG", True),
+            ("passing_yards", "Pass Yds", True),
+            ("passing_tds", "Pass TD", True),
+            ("rushing_yards", "Rush Yds", True),
+            ("touchdowns", "Total TD", True),
+            ("turnovers", "TO", False),
+        ],
+        "efficiency": [
+            ("comp_pct", "CMP%", True),
+            ("yards_per_attempt", "Y/A", True),
+            ("td_rate", "TD%", True),
+            ("int_rate", "INT%", False),
+            ("passing_epa", "EPA", True),
+            ("dakota", "DAKOTA", True),
+        ],
+        "usage": [
+            ("games", "GP", True),
+            ("attempts", "Att", True),
+            ("carries", "Rush", True),
+            ("completions", "CMP", True),
+            ("ppg", "PPG", True),
+            ("fantasy_points_ppr", "Total Pts", True),
+        ],
+    },
+    "RB": {
+        "production": [
+            ("ppg", "PPG", True),
+            ("rushing_yards", "Rush Yds", True),
+            ("rushing_tds", "Rush TD", True),
+            ("receptions", "Rec", True),
+            ("receiving_yards", "Rec Yds", True),
+            ("touchdowns", "Total TD", True),
+        ],
+        "efficiency": [
+            ("yards_per_carry", "YPC", True),
+            ("yards_per_reception", "Y/Rec", True),
+            ("catch_rate", "Catch%", True),
+            ("rushing_epa", "Rush EPA", True),
+            ("receiving_epa", "Rec EPA", True),
+            ("racr", "RACR", True),
+        ],
+        "usage": [
+            ("games", "GP", True),
+            ("carries", "Carries", True),
+            ("targets", "Targets", True),
+            ("target_share", "Tgt Share", True),
+            ("snap_pct", "Snap%", True),
+            ("fantasy_points_ppr", "Total Pts", True),
+        ],
+    },
+    "WR": {
+        "production": [
+            ("ppg", "PPG", True),
+            ("receiving_yards", "Rec Yds", True),
+            ("receiving_tds", "Rec TD", True),
+            ("receptions", "Rec", True),
+            ("targets", "Targets", True),
+            ("touchdowns", "Total TD", True),
+        ],
+        "efficiency": [
+            ("yards_per_reception", "Y/Rec", True),
+            ("yards_per_target", "Y/Tgt", True),
+            ("catch_rate", "Catch%", True),
+            ("receiving_epa", "Rec EPA", True),
+            ("racr", "RACR", True),
+            ("wopr", "WOPR", True),
+        ],
+        "usage": [
+            ("games", "GP", True),
+            ("targets", "Targets", True),
+            ("target_share", "Tgt Share", True),
+            ("air_yards_share", "Air Yds Share", True),
+            ("snap_pct", "Snap%", True),
+            ("fantasy_points_ppr", "Total Pts", True),
+        ],
+    },
+    "TE": {
+        "production": [
+            ("ppg", "PPG", True),
+            ("receiving_yards", "Rec Yds", True),
+            ("receiving_tds", "Rec TD", True),
+            ("receptions", "Rec", True),
+            ("targets", "Targets", True),
+            ("touchdowns", "Total TD", True),
+        ],
+        "efficiency": [
+            ("yards_per_reception", "Y/Rec", True),
+            ("yards_per_target", "Y/Tgt", True),
+            ("catch_rate", "Catch%", True),
+            ("receiving_epa", "Rec EPA", True),
+            ("racr", "RACR", True),
+            ("wopr", "WOPR", True),
+        ],
+        "usage": [
+            ("games", "GP", True),
+            ("targets", "Targets", True),
+            ("target_share", "Tgt Share", True),
+            ("air_yards_share", "Air Yds Share", True),
+            ("snap_pct", "Snap%", True),
+            ("fantasy_points_ppr", "Total Pts", True),
+        ],
+    },
+}
+
+
+def fetch_heatmap(position="WR", group="production", season=None):
+    """Return top 25 players at position with percentile rankings across key stats.
+
+    Returns:
+        {
+            players: [{name, team, stats: {stat_key: {value, percentile}}}],
+            stat_keys: [ordered stat keys],
+            stat_labels: {key: display_label},
+            higher_is_better: {key: bool}
+        }
+    """
+    position = position.strip().upper()
+    if position not in FANTASY_POSITIONS:
+        position = "WR"
+    group = group.strip().lower()
+    if group not in ("production", "efficiency", "usage"):
+        group = "production"
+
+    stat_defs = _HEATMAP_STATS[position][group]
+    stat_keys = [s[0] for s in stat_defs]
+    stat_labels = {s[0]: s[1] for s in stat_defs}
+    higher_is_better = {s[0]: s[2] for s in stat_defs}
+
+    conn = get_conn()
+
+    # Determine season
+    if not season:
+        row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+        season = row[0] if row and row[0] else 2024
+
+    # Fetch all players at this position with aggregated season stats
+    rows = conn.execute(f"""
+        SELECT
+            p.player_id,
+            p.full_name,
+            p.team,
+            p.position,
+            COUNT(DISTINCT s.week) as games,
+            {_STAT_SUM_COLS}
+        FROM players p
+        JOIN player_week_stats s ON p.player_id = s.player_id
+        WHERE p.position = ?
+          AND s.season = ?
+          AND s.fantasy_points_ppr IS NOT NULL
+        GROUP BY p.player_id
+        HAVING games >= 4
+        ORDER BY fantasy_points_ppr DESC
+    """, (position, season)).fetchall()
+
+    if not rows:
+        conn.close()
+        return {"players": [], "stat_keys": stat_keys, "stat_labels": stat_labels, "higher_is_better": higher_is_better}
+
+    # Build player dicts with derived stats
+    all_players = []
+    for r in rows:
+        d = dict(r)
+        games = d["games"] or 1
+        ppr = d.get("fantasy_points_ppr") or 0
+        d["ppg"] = round(ppr / games, 1)
+        d["comp_pct"] = _safe_div((d.get("completions") or 0) * 100, d.get("attempts"), 1)
+        d["yards_per_attempt"] = _safe_div(d.get("passing_yards") or 0, d.get("attempts"), 1)
+        d["td_rate"] = _safe_div((d.get("passing_tds") or 0) * 100, d.get("attempts"), 1)
+        d["int_rate"] = _safe_div((d.get("turnovers") or 0) * 100, d.get("attempts"), 1)
+        d["yards_per_carry"] = _safe_div(d.get("rushing_yards") or 0, d.get("carries"), 1)
+        d["yards_per_reception"] = _safe_div(d.get("receiving_yards") or 0, d.get("receptions"), 1)
+        d["yards_per_target"] = _safe_div(d.get("receiving_yards") or 0, d.get("targets"), 1)
+        d["catch_rate"] = _safe_div((d.get("receptions") or 0) * 100, d.get("targets"), 1)
+        d["snap_pct"] = None  # will be filled from rate metrics
+        all_players.append(d)
+
+    # Enrich with rate metrics from player_week_metrics
+    _enrich_with_rate_metrics(conn, all_players, season=season)
+
+    conn.close()
+
+    # Compute percentiles within position group for each stat
+    # First, collect all values for each stat (exclude None)
+    stat_values = {key: [] for key in stat_keys}
+    for p in all_players:
+        for key in stat_keys:
+            val = p.get(key)
+            if val is not None:
+                stat_values[key].append(val)
+
+    # Sort values for percentile computation
+    for key in stat_keys:
+        stat_values[key].sort()
+
+    def percentile_of(val, sorted_vals):
+        """Compute percentile rank of val within sorted_vals."""
+        if not sorted_vals or val is None:
+            return None
+        n = len(sorted_vals)
+        count_below = sum(1 for v in sorted_vals if v < val)
+        count_equal = sum(1 for v in sorted_vals if v == val)
+        pct = round((count_below + count_equal * 0.5) / n * 100, 1)
+        return pct
+
+    # Build top 25 output (already sorted by PPR desc)
+    top_25 = all_players[:25]
+    players_out = []
+    for p in top_25:
+        stats = {}
+        for key in stat_keys:
+            val = p.get(key)
+            pct = percentile_of(val, stat_values[key])
+            # For "lower is better" stats, invert the percentile
+            if pct is not None and not higher_is_better.get(key, True):
+                pct = round(100 - pct, 1)
+            stats[key] = {
+                "value": val,
+                "percentile": pct,
+            }
+        players_out.append({
+            "name": p.get("full_name") or p.get("player_name") or "Unknown",
+            "team": p.get("team") or "",
+            "stats": stats,
+        })
+
+    return {
+        "players": players_out,
+        "stat_keys": stat_keys,
+        "stat_labels": stat_labels,
+        "higher_is_better": higher_is_better,
+    }

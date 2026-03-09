@@ -313,6 +313,11 @@ def aging_curves(position: str = "WR"):
     return live_data.fetch_aging_curves(position=position)
 
 
+@app.get("/api/heatmap")
+def heatmap(position: str = "WR", group: str = "production", season: int = None):
+    return live_data.fetch_heatmap(position=position, group=group, season=season)
+
+
 @app.post("/api/waitlist")
 async def waitlist(request: Request):
     body = await request.json()

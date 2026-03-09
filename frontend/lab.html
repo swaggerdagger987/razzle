@@ -1304,6 +1304,7 @@
     <button class="btn-chunky" id="exportRankingsBtn" onclick="openRankingsExport()" style="display:none;">Export Rankings</button>
     <button class="btn-chunky" id="tradeValuesBtn" onclick="openTradeValues()" style="display:none; border-color:var(--orange);">Trade Values</button>
     <button class="btn-chunky" id="agingCurvesBtn" onclick="openAgingCurves()" style="display:none; border-color:var(--green);">Aging Curves</button>
+    <button class="btn-chunky" id="heatMapBtn" onclick="openHeatMap()" style="display:none; border-color:var(--red);">Heat Map</button>
 
     <span class="result-count" id="resultCount"></span>
   </div>
@@ -1711,6 +1712,27 @@
       <canvas id="acCanvas" width="900" height="500" style="width:100%; border:2px solid var(--ink); border-radius:8px; background:var(--bg);"></canvas>
     </div>
     <div id="acLegend" style="margin-top:16px; display:flex; flex-wrap:wrap; gap:8px;"></div>
+  </div>
+</div>
+
+<!-- HEAT MAP -->
+<div class="filter-modal-overlay" id="heatMapOverlay" onclick="closeHeatMap(event)">
+  <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:1000px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
+      <h3 style="margin:0; font-family:var(--font-display);">Heat Map</h3>
+      <div style="font-family:var(--font-hand); font-size:18px; color:var(--ink-light);">positional stat percentiles...</div>
+      <div id="hmPositionBtns" style="display:flex; gap:6px;"></div>
+      <div id="hmGroupBtns" style="display:flex; gap:6px; margin-left:auto;"></div>
+      <button class="btn-primary" id="hmExportBtn" onclick="exportHeatMapPNG()" style="font-size:11px; padding:6px 14px;">Export PNG</button>
+    </div>
+    <div id="hmChartContainer" style="position:relative; overflow-x:auto;">
+      <canvas id="hmCanvas" width="960" height="900" style="width:100%; border:2px solid var(--ink); border-radius:8px; background:var(--bg);"></canvas>
+    </div>
+    <div id="hmLegend" style="margin-top:12px; display:flex; align-items:center; gap:12px; justify-content:center;">
+      <span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">0th</span>
+      <div style="width:200px; height:14px; border:2px solid var(--ink); border-radius:4px; background:linear-gradient(to right, #e63946, #ffc857, #2ec4b6);"></div>
+      <span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">100th percentile</span>
+    </div>
   </div>
 </div>
 

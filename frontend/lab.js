@@ -681,6 +681,8 @@ function applyUniverseUI() {
   if (tradeValuesBtn) tradeValuesBtn.style.display = (state.universe === "nfl") ? "" : "none";
   const agingCurvesBtn = document.getElementById("agingCurvesBtn");
   if (agingCurvesBtn) agingCurvesBtn.style.display = (state.universe === "nfl") ? "" : "none";
+  const heatMapBtn = document.getElementById("heatMapBtn");
+  if (heatMapBtn) heatMapBtn.style.display = (state.universe === "nfl") ? "" : "none";
 }
 
 // ─── Sort ────────────────────────────────────────────────────────
@@ -5161,6 +5163,298 @@ function exportAgingCurvesPNG() {
 
   const link = document.createElement("a");
   link.download = "razzle-aging-curves-" + _acState.position.toLowerCase() + ".png";
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+}
+
+
+// ===== HEAT MAP =====
+const _hmPosColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+const _hmState = { position: "WR", group: "production", data: null };
+
+function openHeatMap() {
+  document.getElementById("heatMapOverlay").classList.add("open");
+  renderHMPositionBtns();
+  renderHMGroupBtns();
+  loadHeatMap();
+}
+
+function closeHeatMap(e) {
+  if (e && e.target !== e.currentTarget) return;
+  document.getElementById("heatMapOverlay").classList.remove("open");
+}
+
+function renderHMPositionBtns() {
+  const container = document.getElementById("hmPositionBtns");
+  container.innerHTML = "";
+  for (const pos of ["QB", "RB", "WR", "TE"]) {
+    const active = pos === _hmState.position;
+    const btn = document.createElement("button");
+    btn.className = active ? "btn-primary" : "btn-chunky";
+    btn.textContent = pos;
+    btn.style.cssText = "font-size:11px; padding:4px 12px;";
+    if (!active) btn.style.borderColor = _hmPosColors[pos];
+    btn.onclick = () => { _hmState.position = pos; renderHMPositionBtns(); loadHeatMap(); };
+    container.appendChild(btn);
+  }
+}
+
+function renderHMGroupBtns() {
+  const container = document.getElementById("hmGroupBtns");
+  container.innerHTML = "";
+  const groups = [
+    { key: "production", label: "Production" },
+    { key: "efficiency", label: "Efficiency" },
+    { key: "usage", label: "Usage" },
+  ];
+  for (const g of groups) {
+    const active = g.key === _hmState.group;
+    const btn = document.createElement("button");
+    btn.className = active ? "btn-primary" : "btn-chunky";
+    btn.textContent = g.label;
+    btn.style.cssText = "font-size:11px; padding:4px 12px;";
+    btn.onclick = () => { _hmState.group = g.key; renderHMGroupBtns(); loadHeatMap(); };
+    container.appendChild(btn);
+  }
+}
+
+function heatColor(pct) {
+  // red (#e63946) at 0, yellow (#ffc857) at 50, green (#2ec4b6) at 100
+  if (pct == null) return "#c5c5d0";
+  pct = Math.max(0, Math.min(100, pct));
+  let r, g, b;
+  if (pct <= 50) {
+    const t = pct / 50;
+    r = Math.round(230 + (255 - 230) * t);
+    g = Math.round(57 + (200 - 57) * t);
+    b = Math.round(70 + (87 - 70) * t);
+  } else {
+    const t = (pct - 50) / 50;
+    r = Math.round(255 - (255 - 46) * t);
+    g = Math.round(200 + (196 - 200) * t);
+    b = Math.round(87 + (182 - 87) * t);
+  }
+  return "rgb(" + r + "," + g + "," + b + ")";
+}
+
+function textColorForBg(pct) {
+  // Dark text on light cells, light text on very saturated cells
+  if (pct == null) return "#8a8a9e";
+  return "#1a1a2e";
+}
+
+async function loadHeatMap() {
+  const canvas = document.getElementById("hmCanvas");
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "#ede0cf";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.font = "22px 'Caveat', cursive";
+  ctx.fillStyle = "#8a8a9e";
+  ctx.textAlign = "center";
+  ctx.fillText("pulling positional film...", canvas.width / 2, canvas.height / 2);
+
+  try {
+    const url = "/api/heatmap?position=" + _hmState.position + "&group=" + _hmState.group;
+    const resp = await apiFetch(url);
+    _hmState.data = resp;
+    renderHeatMapChart();
+  } catch (err) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#ede0cf";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.font = "22px 'Caveat', cursive";
+    ctx.fillStyle = "#d97757";
+    ctx.textAlign = "center";
+    ctx.fillText("fumbled the heat map data...", canvas.width / 2, canvas.height / 2);
+    console.error("Heat map load failed:", err);
+  }
+}
+
+function renderHeatMapChart(targetCanvas) {
+  const data = _hmState.data;
+  if (!data || !data.players || data.players.length === 0) return;
+
+  const players = data.players;
+  const statKeys = data.stat_keys;
+  const statLabels = data.stat_labels;
+  const numPlayers = players.length;
+  const numStats = statKeys.length;
+
+  // Layout constants
+  const nameColW = 160;  // player name column width
+  const cellW = 100;     // stat cell width
+  const cellH = 28;      // row height
+  const headerH = 70;    // rotated header area
+  const titleH = 50;     // title area
+  const padL = 16;
+  const padR = 16;
+  const padB = 16;
+
+  const totalW = padL + nameColW + numStats * cellW + padR;
+  const totalH = titleH + headerH + numPlayers * cellH + padB;
+
+  const canvas = targetCanvas || document.getElementById("hmCanvas");
+  canvas.width = totalW;
+  canvas.height = totalH;
+  const ctx = canvas.getContext("2d");
+
+  // Background
+  ctx.fillStyle = "#ede0cf";
+  ctx.fillRect(0, 0, totalW, totalH);
+
+  // Title
+  ctx.font = "bold 22px 'Luckiest Guy', cursive";
+  ctx.fillStyle = "#1a1a2e";
+  ctx.textAlign = "left";
+  ctx.fillText(_hmState.position + " Heat Map", padL, 30);
+
+  // Subtitle
+  ctx.font = "18px 'Caveat', cursive";
+  ctx.fillStyle = "#8a8a9e";
+  const groupLabel = _hmState.group.charAt(0).toUpperCase() + _hmState.group.slice(1);
+  ctx.fillText(groupLabel + " — percentile ranks within position", padL + 280, 32);
+
+  // Chart border
+  const chartX = padL;
+  const chartY = titleH;
+  const chartW = nameColW + numStats * cellW;
+  const chartH = headerH + numPlayers * cellH;
+  ctx.strokeStyle = "#1a1a2e";
+  ctx.lineWidth = 2;
+  ctx.strokeRect(chartX, chartY, chartW, chartH);
+
+  // Column headers (rotated stat labels)
+  ctx.save();
+  ctx.font = "bold 11px 'Space Mono', monospace";
+  ctx.fillStyle = "#1a1a2e";
+  ctx.textAlign = "left";
+  for (let c = 0; c < numStats; c++) {
+    const x = padL + nameColW + c * cellW + cellW / 2;
+    const y = titleH + headerH - 8;
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(-Math.PI / 4);
+    ctx.fillText(statLabels[statKeys[c]] || statKeys[c], 0, 0);
+    ctx.restore();
+  }
+  ctx.restore();
+
+  // Header separator
+  ctx.strokeStyle = "#1a1a2e";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(chartX, titleH + headerH);
+  ctx.lineTo(chartX + chartW, titleH + headerH);
+  ctx.stroke();
+
+  // Name column header
+  ctx.font = "bold 11px 'Space Mono', monospace";
+  ctx.fillStyle = "#4a4a5e";
+  ctx.textAlign = "left";
+  ctx.fillText("PLAYER", padL + 8, titleH + headerH - 8);
+
+  // Rows
+  const posColor = _hmPosColors[_hmState.position] || "#d97757";
+  for (let r = 0; r < numPlayers; r++) {
+    const player = players[r];
+    const rowY = titleH + headerH + r * cellH;
+
+    // Alternating row bg
+    if (r % 2 === 0) {
+      ctx.fillStyle = "rgba(0,0,0,0.03)";
+      ctx.fillRect(padL, rowY, chartW, cellH);
+    }
+
+    // Player name + team
+    ctx.font = "bold 12px 'Space Mono', monospace";
+    ctx.fillStyle = "#1a1a2e";
+    ctx.textAlign = "left";
+    const displayName = player.name.length > 16 ? player.name.substring(0, 15) + "." : player.name;
+    ctx.fillText(displayName, padL + 8, rowY + 18);
+
+    // Team badge
+    ctx.font = "bold 9px 'Space Mono', monospace";
+    ctx.fillStyle = posColor;
+    const nameW = ctx.measureText(displayName).width;
+    ctx.fillText(player.team, padL + 12 + nameW + 4, rowY + 18);
+
+    // Stat cells
+    for (let c = 0; c < numStats; c++) {
+      const stat = player.stats[statKeys[c]];
+      const cellX = padL + nameColW + c * cellW;
+      const pct = stat ? stat.percentile : null;
+      const val = stat ? stat.value : null;
+
+      // Cell fill
+      ctx.fillStyle = heatColor(pct);
+      ctx.fillRect(cellX + 1, rowY + 1, cellW - 2, cellH - 2);
+
+      // Cell border
+      ctx.strokeStyle = "rgba(26,26,46,0.12)";
+      ctx.lineWidth = 1;
+      ctx.strokeRect(cellX, rowY, cellW, cellH);
+
+      // Value text
+      if (val != null) {
+        ctx.font = "bold 11px 'Space Mono', monospace";
+        ctx.fillStyle = textColorForBg(pct);
+        ctx.textAlign = "center";
+        // Format: show percentile value with sensible rounding
+        let display;
+        if (val >= 1000) display = Math.round(val).toLocaleString();
+        else if (val >= 100) display = Math.round(val).toString();
+        else if (Number.isInteger(val)) display = val.toString();
+        else display = val.toFixed(1);
+        ctx.fillText(display, cellX + cellW / 2, rowY + 18);
+      } else {
+        ctx.font = "11px 'Space Mono', monospace";
+        ctx.fillStyle = "#8a8a9e";
+        ctx.textAlign = "center";
+        ctx.fillText("—", cellX + cellW / 2, rowY + 18);
+      }
+    }
+
+    // Row separator
+    ctx.strokeStyle = "rgba(26,26,46,0.08)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(padL, rowY + cellH);
+    ctx.lineTo(padL + chartW, rowY + cellH);
+    ctx.stroke();
+  }
+
+  // Name column separator
+  ctx.strokeStyle = "#1a1a2e";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(padL + nameColW, titleH);
+  ctx.lineTo(padL + nameColW, titleH + chartH);
+  ctx.stroke();
+
+  ctx.textAlign = "left";
+}
+
+function exportHeatMapPNG() {
+  if (!_hmState.data) return;
+
+  const canvas = document.createElement("canvas");
+  renderHeatMapChart(canvas);
+
+  const ctx = canvas.getContext("2d");
+  const W = canvas.width;
+  const H = canvas.height;
+
+  // Watermark
+  ctx.font = "bold 14px sans-serif";
+  ctx.fillStyle = "#1a1a2e";
+  ctx.globalAlpha = 0.3;
+  ctx.textAlign = "center";
+  ctx.fillText("built different — razzle.lol", W / 2, H - 4);
+  ctx.globalAlpha = 1.0;
+
+  const link = document.createElement("a");
+  link.download = "razzle-heatmap-" + _hmState.position.toLowerCase() + "-" + _hmState.group + ".png";
   link.href = canvas.toDataURL("image/png");
   link.click();
 }

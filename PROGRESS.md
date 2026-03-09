@@ -1,6 +1,18 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 27 — Aging Curves (COMPLETE)
+## Current Phase: Phase 28 — Positional Heat Maps (COMPLETE)
+
+**Exit criterion MET:** Lab screener has "Heat Map" button (NFL mode only, red border) that opens a 1000px overlay with canvas-rendered positional heat map. Backend endpoint GET /api/heatmap?position={QB|RB|WR|TE}&group={production|efficiency|usage} returns top 25 fantasy-relevant players with percentile rankings across 6 position-specific stats per group. Canvas renders dense color-coded grid: rows = players (name + team), columns = stats (rotated labels). Cells colored by percentile (red at 0th, yellow at 50th, green at 100th) with raw values displayed. Position selector tabs and stat group buttons (Production/Efficiency/Usage). Position-specific stat sets: QB gets passing stats, RB rushing, WR/TE receiving. "Higher is better" inversion for negative stats (TO, INT%). Export PNG with Razzle watermark. Color legend bar. Razzle design: sand bg, chunky chart border, Luckiest Guy title, Caveat subtitle, Space Mono data. Deployed to Render.
+
+### Phase 28 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/heatmap endpoint | DONE | fetch_heatmap() in live_data.py. Queries player_week_stats JOIN players, aggregates season, computes derived stats + rate metrics. Percentiles within full position group. Position-specific stat sets. 3 stat groups per position. Tested: QB Lamar 99.2, WR Chase 99.7, RB Barkley 99.5, TE Bowers 98.4. |
+| 2 | Heat map UI overlay + canvas rendering | DONE | 1000px overlay with position tabs + stat group buttons. Canvas: auto-sized grid, player names with team, rotated stat labels, cells colored red→yellow→green by percentile. 9 functions total. |
+| 3 | PNG export + deploy + smoke test | DONE | Export PNG button. exportHeatMapPNG() with watermark. Downloads as razzle-heatmap-{pos}-{group}.png. All 6 JS pass syntax. Python imports clean. All 8 HTML IDs match. Committed and pushed. |
+
+## Previous Phase: Phase 27 — Aging Curves (COMPLETE)
 
 **Exit criterion MET:** Lab screener has "Aging Curves" button (NFL mode only, green border) that opens a 960px overlay with canvas-rendered aging curve chart. Backend endpoint GET /api/aging-curves?position={QB|RB|WR|TE} returns position-average PPG by integer age bucket (min 5 player-seasons) and top 10 individual player career arcs. Canvas chart: auto-scaled axes, dashed grid lines, Space Mono labels, age X-axis, PPG Y-axis. Thick position-colored baseline curve with bordered data dots. Individual player curves as dashed lines with toggleable legend pills (top 3 enabled by default). Position tabs switch data. Export PNG (800x520, watermark). Razzle design: sand bg, chunky chart border, Luckiest Guy title, Caveat subtitle. Deployed to Render.
 
