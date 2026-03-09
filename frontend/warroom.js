@@ -1565,6 +1565,24 @@ function renderContextBadges() {
     );
   }
 
+  // Mode badge
+  var leagueMode = isLeagueContextMode();
+  if (leagueMode) {
+    badges.unshift(
+      '<span class="context-badge active" style="border-color:var(--orange); background:var(--orange-light); color:var(--orange);">' +
+        '<span class="context-badge-dot" style="background:var(--orange);"></span>' +
+        'League Context Mode' +
+      '</span>'
+    );
+  } else {
+    badges.unshift(
+      '<span class="context-badge inactive">' +
+        '<span class="context-badge-dot"></span>' +
+        'Generic Mode' +
+      '</span>'
+    );
+  }
+
   host.innerHTML = badges.join('');
 }
 
@@ -1644,7 +1662,13 @@ async function loadPersona(agentId) {
   return text;
 }
 
+function isLeagueContextMode() {
+  var leagueCtx = getLeagueContext();
+  return leagueCtx && leagueCtx.roster && leagueCtx.roster.length > 0;
+}
+
 function buildRules(agentDef) {
+  var leagueMode = isLeagueContextMode();
   const rules = [
     'Hard rules:',
     '- Return structured analysis using your mandatory output sections.',
@@ -1653,6 +1677,14 @@ function buildRules(agentDef) {
     '- Keep each section concise — 2-4 sentences max.',
     '- Use real-world knowledge of NFL players and injuries.',
   ];
+  if (leagueMode) {
+    rules.push('- LEAGUE CONTEXT MODE: You have the manager\'s actual roster, league settings, and rival data.');
+    rules.push('- Reference specific roster players, rival managers, and league format in your analysis.');
+    rules.push('- Tailor advice to their specific league situation, not generic advice.');
+  } else {
+    rules.push('- GENERIC MODE: No league context available. Give general fantasy football analysis.');
+    rules.push('- Use broad rankings and general strategy, not league-specific advice.');
+  }
   if (agentDef.id === 0) {
     rules.push('- Lead with the Urgency Tier.');
     rules.push('- Synthesize specialist insights, do not just repeat them.');
