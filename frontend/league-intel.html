@@ -185,11 +185,13 @@
 
   /* ===== MOBILE ===== */
   @media (max-width: 768px) {
+    html, body { overflow-x: hidden; }
     .intel-container { padding: 20px 12px; }
     .connect-card { padding: 20px; margin: 24px auto; }
     .connect-card h2 { font-size: 20px; }
     .connect-form { flex-direction: column; align-items: center; }
     .connect-form input { width: 100%; }
+    .connect-form button { width: 100%; max-width: 300px; min-height: 44px; }
 
     .leagues-header { flex-direction: column; gap: 8px; align-items: flex-start; }
     .league-header { flex-direction: column; gap: 6px; padding: 12px 14px; }
