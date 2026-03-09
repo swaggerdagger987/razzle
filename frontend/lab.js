@@ -943,7 +943,7 @@ function renderActiveFilters() {
 
   // Stat filters
   html += state.filters.map((f, i) => {
-    const col = COLUMNS[f.key];
+    const col = getColumnDef(f.key);
     const label = col ? col.label : f.key;
     return `<span class="filter-tag">${label} ${opLabels[f.op] || f.op} ${f.value} <span class="remove" onclick="removeFilter(${i})">×</span></span>`;
   }).join(" ");
@@ -1464,9 +1464,9 @@ function saveLabContext() {
 }
 
 function getCurrentPresetName() {
-  const presets = state.universe === "prospects" ? PROSPECT_PRESETS : PRESETS;
+  const presets = state.universe === "prospects" ? PROSPECT_PRESETS : state.universe === "college" ? COLLEGE_PRESETS : PRESETS;
   for (const [name, preset] of Object.entries(presets)) {
-    const cols = state.universe === "prospects" ? state.prospectColumns : state.visibleColumns;
+    const cols = state.universe === "prospects" ? state.prospectColumns : state.universe === "college" ? state.collegeColumns : state.visibleColumns;
     if (JSON.stringify(preset.columns) === JSON.stringify(cols)) return preset.label;
   }
   return "Custom";
@@ -1592,7 +1592,7 @@ function exportImage() {
   if (!rows.length) return;
 
   // Determine dimensions from visible data
-  const visibleCols = state.visibleColumns.filter(k => COLUMNS[k]);
+  const visibleCols = getActiveColumns().filter(k => getColumnDef(k));
   const colCount = visibleCols.length + 1; // +1 for player name
   const rowCount = Math.min(state.items.length, 25); // cap at 25 rows for export
 
@@ -1630,9 +1630,9 @@ function exportImage() {
 
   ctx.textAlign = "right";
   for (let i = 0; i < visibleCols.length; i++) {
-    const col = COLUMNS[visibleCols[i]];
+    const col = getColumnDef(visibleCols[i]);
     const x = padX + playerColW + i * colW + colW - 8;
-    ctx.fillText(col.label.toUpperCase(), x, padY + headerH / 2 + 4);
+    ctx.fillText((col ? col.label : visibleCols[i]).toUpperCase(), x, padY + headerH / 2 + 4);
   }
 
   // Data rows
@@ -1672,9 +1672,10 @@ function exportImage() {
     ctx.font = "bold 12px sans-serif";
     ctx.fillStyle = "#1a1a2e";
     ctx.textAlign = "left";
-    const displayName = player.full_name.length > 20
-      ? player.full_name.substring(0, 18) + "..."
-      : player.full_name;
+    const pName = player.full_name || player.player_name || "";
+    const displayName = pName.length > 20
+      ? pName.substring(0, 18) + "..."
+      : pName;
     ctx.fillText(displayName, padX + 38, y + 18);
 
     // Team
@@ -1687,10 +1688,10 @@ function exportImage() {
     ctx.fillStyle = "#1a1a2e";
     ctx.textAlign = "right";
     for (let i = 0; i < visibleCols.length; i++) {
-      const col = COLUMNS[visibleCols[i]];
+      const col = getColumnDef(visibleCols[i]);
       const val = player[visibleCols[i]];
       const x = padX + playerColW + i * colW + colW - 8;
-      ctx.fillText(formatStat(val, col.decimals), x, y + 18);
+      ctx.fillText(formatStat(val, col ? col.decimals : 0), x, y + 18);
     }
   }
 

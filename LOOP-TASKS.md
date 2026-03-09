@@ -20,12 +20,8 @@
 **Result**: (a) rAF ID stored, cancelAnimationFrame on visibilitychange. (b) Particle cap at 200. (c) setInterval cleared on page hide, restarted on visible. (d) Email regex validation returns 400. (e) IP rate limit dict returns 429 if <60s. lastTime reset on resume to avoid dt spike.
 
 ## Task 4: Fix college/prospect mode bugs
-**Status**: PENDING
-**Acceptance Criteria**:
-- getCurrentPresetName() returns correct preset name in college mode
-- Active filter pills show correct labels in prospect/college mode
-- Image export works in prospect and college modes without errors
-- No regression in NFL mode
+**Status**: PASS
+**Result**: (a) getCurrentPresetName() now checks COLLEGE_PRESETS + collegeColumns in college mode. (b) renderActiveFilters() uses getColumnDef() for universe-aware labels. (c) exportImage() uses getActiveColumns(), getColumnDef(), and player.full_name || player.player_name.
 
 ## Task 5: Fix medium issues — fonts, performance, error handling
 **Status**: PENDING
@@ -61,8 +57,8 @@
 ## Loop State
 ```
 Current Phase: 38
-Current Task: 4
+Current Task: 5
 Current Stage: PENDING
 Attempt: 1/3
-Tasks Completed: 3/7
+Tasks Completed: 4/7
 ```
