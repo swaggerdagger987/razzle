@@ -3,16 +3,76 @@ Razzle API server — thin FastAPI layer over SQLite.
 All data queries live in live_data.py.
 """
 
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from pathlib import Path
+import logging
 import uvicorn
 
 from . import live_data
 
-app = FastAPI(title="Razzle API", version="0.1.0")
+logger = logging.getLogger("razzle")
+
+
+def bootstrap_database():
+    """Sync nflverse + college data if the DB is empty or missing."""
+    import sys, os
+    sys.path.insert(0, str(Path(__file__).parent.parent))
+    from adapters.nflverse_adapter import (
+        get_connection, initialize_database, process_season, current_nfl_season,
+    )
+    from adapters.college_adapter import (
+        get_connection as college_conn,
+        initialize_tables as college_init_tables,
+        process_combine, process_draft_picks,
+    )
+
+    conn = get_connection()
+    initialize_database(conn)
+
+    # Check if we already have data
+    try:
+        count = conn.execute("SELECT COUNT(*) FROM players").fetchone()[0]
+    except Exception:
+        count = 0
+
+    if count < 50:
+        logger.info("Database empty — bootstrapping nflverse data...")
+        seasons = list(range(2020, current_nfl_season() + 1))
+        for s in seasons:
+            try:
+                process_season(conn, s)
+                logger.info(f"  Season {s} synced")
+            except Exception as e:
+                logger.warning(f"  Season {s} failed: {e}")
+        conn.close()
+
+        # College/prospect data
+        logger.info("Bootstrapping college/prospect data...")
+        cconn = college_conn()
+        college_init_tables(cconn)
+        try:
+            process_combine(cconn)
+            process_draft_picks(cconn)
+            logger.info("  College data synced")
+        except Exception as e:
+            logger.warning(f"  College data failed: {e}")
+        cconn.close()
+    else:
+        logger.info(f"Database has {count} players — skipping bootstrap")
+        conn.close()
+
+
+@asynccontextmanager
+async def lifespan(app):
+    bootstrap_database()
+    yield
+
+
+app = FastAPI(title="Razzle API", version="0.1.0", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -44,7 +104,7 @@ def get_players(
     order: str = "desc",
     limit: int = 200,
     offset: int = 0,
-    season: int = 0,
+    season: str = "0",
 ):
     return live_data.fetch_players(
         search=search,
@@ -71,12 +131,13 @@ def filter_options():
 
 
 @app.get("/api/players/{player_id}/weeks")
-def player_weeks(player_id: str, season: int = 0):
-    return live_data.fetch_player_weeks(player_id, season=season)
+def player_weeks(player_id: str, season: str = "0"):
+    s = int(season) if season.isdigit() else 0
+    return live_data.fetch_player_weeks(player_id, season=s)
 
 
 @app.get("/api/players/compare")
-def players_compare(ids: str = "", season: int = 0):
+def players_compare(ids: str = "", season: str = "0"):
     player_ids = [p.strip() for p in ids.split(",") if p.strip()]
     return live_data.fetch_players_compare(player_ids, season=season)
 
