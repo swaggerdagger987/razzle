@@ -52,16 +52,17 @@
 **Accept when**: Side panel overlays the canvas showing all 6 agents with: pixel avatar preview, name, role title, current activity status. Clicking an agent in the roster selects them on canvas and camera follows. Panel uses Razzle design system (sand bg card on dark War Room). Toggleable open/close.
 **Depends on**: Task 4, Task 5
 **Size**: M
-**Status**: PENDING
+**Status**: PASS
+**Attempt**: 1/3
 
 ---
 
 ## Loop State
 ```
 Current Phase: 6
-Current Task: 6
-Current Stage: PENDING
+Current Task: DONE
+Current Stage: ALL PASS
 Attempt: 0/3
-Tasks Completed: 5/6
+Tasks Completed: 6/6
 Loop Iterations: 1
 ```

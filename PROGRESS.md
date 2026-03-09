@@ -1,6 +1,8 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 6 — War Room: Pixel Engine + Agent Canvas
+## Current Phase: Phase 7 — War Room: Agent Personas + Scenario Runner
+
+## Previous Phase: Phase 6 — War Room: Pixel Engine + Agent Canvas (COMPLETE)
 
 ### Phase 6 Tasks
 
@@ -11,9 +13,9 @@
 | 3 | Canvas War Room engine | DONE | 30×22 tile grid, wood floor, turf war table, 6 desks, collision map. warroom.js (full canvas engine) |
 | 4 | Agent AI + animation | DONE | State machine (IDLE/WALK/WORK/THINK/DISCUSS/COFFEE/CELEBRATE), walk frames [0,1,2,1] at 150ms, directional facing |
 | 5 | Agent selection + camera | DONE | Click select (dashed ellipse), camera follow, arrow key controls, name tags with role colors |
-| 6 | Agent roster sidebar | NOT STARTED | Overlay panel: 6 agents with avatar, name, role, click to select |
+| 6 | Agent roster sidebar | DONE | Toggleable panel: pixel avatars, names, roles, live activity status, click to select + camera follow |
 
-**Exit criterion:** agents.html loads with live pixel War Room. 6 agents walk around, work at desks, visit war table. Clicking selects. Room has Razzle comic-strip aesthetic. Feels alive.
+**Exit criterion MET:** agents.html loads with live pixel War Room. 6 agents walk around autonomously, work at desks, visit war table. Click to select, camera follows, roster sidebar. Room has Razzle comic-strip aesthetic with draft board, TVs, whiteboard, trophy case.
 
 ---
 

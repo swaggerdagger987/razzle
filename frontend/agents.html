@@ -193,6 +193,113 @@
 
   .warroom-footer a { color: var(--orange); text-decoration: none; font-weight: 700; }
 
+  /* ===== ROSTER SIDEBAR ===== */
+  .roster-toggle {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 10;
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 6px 14px;
+    background: var(--bg-card);
+    color: var(--ink);
+    border: 2px solid var(--ink);
+    border-radius: 20px;
+    box-shadow: 2px 2px 0 var(--ink);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+
+  .roster-toggle:hover {
+    box-shadow: 3px 3px 0 var(--ink);
+    transform: translate(-1px, -1px);
+  }
+
+  .roster-panel {
+    position: absolute;
+    top: 48px;
+    right: 12px;
+    z-index: 10;
+    width: 200px;
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    overflow: hidden;
+    display: none;
+  }
+
+  .roster-panel.open { display: block; }
+
+  .roster-header {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 8px 12px;
+    background: var(--bg-warm);
+    border-bottom: 2px solid var(--ink);
+    color: var(--ink);
+  }
+
+  .roster-agent {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-bottom: 1px dashed var(--ink-faint);
+    transition: background 0.1s;
+  }
+
+  .roster-agent:last-child { border-bottom: none; }
+  .roster-agent:hover { background: var(--bg-warm); }
+  .roster-agent.selected { background: var(--orange-light); }
+
+  .roster-avatar {
+    width: 32px;
+    height: 48px;
+    image-rendering: pixelated;
+    flex-shrink: 0;
+  }
+
+  .roster-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .roster-name {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .roster-role {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-medium);
+  }
+
+  .roster-status {
+    font-family: var(--font-hand);
+    font-size: 12px;
+    color: var(--ink-light);
+    margin-top: 1px;
+  }
+
+  .roster-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 4px;
+  }
+
   /* ===== MOBILE ===== */
   @media (max-width: 768px) {
     .warroom-hero { padding: 32px 16px 24px; }
@@ -205,6 +312,8 @@
     .warroom-dark { min-height: 400px; }
     .canvas-placeholder-icon { font-size: 36px; }
     .canvas-placeholder-text { font-size: 18px; }
+    .roster-panel { width: 170px; }
+    .roster-avatar { width: 24px; height: 36px; }
   }
 
   @media (max-width: 480px) {
@@ -251,11 +360,17 @@
     <div class="warroom-canvas-label">War Room — Live Feed</div>
     <div class="canvas-container" id="canvasContainer">
       <canvas id="warRoomCanvas" width="960" height="704"></canvas>
-      <!-- Placeholder until pixel engine is built (Task 3) -->
+      <!-- Placeholder until pixel engine loads -->
       <div class="canvas-placeholder" id="canvasPlaceholder">
         <div class="canvas-placeholder-icon">🐯</div>
         <div class="canvas-placeholder-text">agents are setting up the war room...</div>
         <div class="canvas-placeholder-sub">pixel engine loading</div>
+      </div>
+      <!-- Roster toggle + panel -->
+      <button class="roster-toggle" id="rosterToggle">Roster</button>
+      <div class="roster-panel" id="rosterPanel">
+        <div class="roster-header">Agent Roster</div>
+        <div id="rosterList"></div>
       </div>
     </div>
   </div>

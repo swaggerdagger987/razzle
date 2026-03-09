@@ -1209,6 +1209,113 @@ function gameLoop() {
   requestAnimationFrame(gameLoop);
 }
 
+// ── ROSTER SIDEBAR ─────────────────────────────────────────────────────
+const STATE_LABELS = {
+  [STATE.IDLE]: 'idle',
+  [STATE.WALK]: 'walking',
+  [STATE.WORK_DESK]: 'at desk',
+  [STATE.ANALYZE_BOARD]: 'analyzing',
+  [STATE.DISCUSS]: 'discussing',
+  [STATE.THINK]: 'thinking',
+  [STATE.CELEBRATE]: 'eureka!',
+  [STATE.COFFEE]: 'coffee break',
+};
+
+const STATE_COLORS = {
+  [STATE.IDLE]: '#666',
+  [STATE.WALK]: '#33cc55',
+  [STATE.WORK_DESK]: '#3388cc',
+  [STATE.ANALYZE_BOARD]: '#3388cc',
+  [STATE.DISCUSS]: '#cc6633',
+  [STATE.THINK]: '#ccaa33',
+  [STATE.CELEBRATE]: '#cc3333',
+  [STATE.COFFEE]: '#8B6914',
+};
+
+function buildRoster() {
+  const list = document.getElementById('rosterList');
+  if (!list) return;
+  list.innerHTML = '';
+
+  for (const a of agents) {
+    const row = document.createElement('div');
+    row.className = 'roster-agent' + (a.selected ? ' selected' : '');
+    row.dataset.agentId = a.id;
+
+    // Draw mini sprite avatar onto a tiny canvas
+    const miniCvs = document.createElement('canvas');
+    miniCvs.width = FR_W;
+    miniCvs.height = FR_H;
+    miniCvs.className = 'roster-avatar';
+    const miniCtx = miniCvs.getContext('2d');
+    const img = spriteImgs[a.sprite];
+    if (img && img.complete) {
+      miniCtx.drawImage(img, 0, 0, FR_W, FR_H, 0, 0, FR_W, FR_H);
+    }
+
+    const info = document.createElement('div');
+    info.className = 'roster-info';
+    info.innerHTML = `
+      <div class="roster-name" style="color:${a.color}">${a.name}</div>
+      <div class="roster-role">${a.role}</div>
+      <div class="roster-status">
+        <span class="roster-dot" style="background:${STATE_COLORS[a.state] || '#666'}"></span>
+        ${STATE_LABELS[a.state] || 'idle'}
+      </div>
+    `;
+
+    row.appendChild(miniCvs);
+    row.appendChild(info);
+    row.addEventListener('click', () => {
+      selectAgent(a.id);
+      updateRosterSelection();
+    });
+    list.appendChild(row);
+  }
+}
+
+function updateRosterSelection() {
+  const rows = document.querySelectorAll('.roster-agent');
+  rows.forEach(row => {
+    const id = parseInt(row.dataset.agentId);
+    row.classList.toggle('selected', agents[id].selected);
+  });
+}
+
+function updateRosterStatus() {
+  const rows = document.querySelectorAll('.roster-agent');
+  rows.forEach(row => {
+    const id = parseInt(row.dataset.agentId);
+    const a = agents[id];
+    const statusEl = row.querySelector('.roster-status');
+    if (statusEl) {
+      const dot = statusEl.querySelector('.roster-dot');
+      if (dot) dot.style.background = STATE_COLORS[a.state] || '#666';
+      statusEl.lastChild.textContent = ' ' + (STATE_LABELS[a.state] || 'idle');
+    }
+  });
+}
+
+// Toggle button
+const rosterToggle = document.getElementById('rosterToggle');
+const rosterPanel = document.getElementById('rosterPanel');
+if (rosterToggle && rosterPanel) {
+  rosterToggle.addEventListener('click', () => {
+    rosterPanel.classList.toggle('open');
+    if (rosterPanel.classList.contains('open')) {
+      buildRoster();
+    }
+  });
+}
+
+// Update roster status every second
+setInterval(() => {
+  if (rosterPanel && rosterPanel.classList.contains('open')) {
+    updateRosterStatus();
+    updateRosterSelection();
+  }
+}, 1000);
+
 // ── START ──────────────────────────────────────────────────────────────
 function waitAndStart() {
   if (spritesLoaded >= 6) {
