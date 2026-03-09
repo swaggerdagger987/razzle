@@ -75,8 +75,9 @@
 - Season dropdown uses native select on mobile
 **Depends on**: Task 1
 **Size**: M
-**Status**: PENDING
-**Attempt**: 0/3
+**Status**: PASS
+**Attempt**: 1/3
+**Result**: Search input changed from type="text" to type="search" with autocomplete="off" — triggers search keyboard on mobile with clear button. Team filter uses native <select> which provides optimal mobile UX (OS-level picker on iOS/Android). Season dropdown already native <select>. Position chips get min-height:32px at 480px (from Task 1). Close/action buttons get min-height:44px from Task 2's .filter-modal-overlay rule. Filter modal buttons inherit 44px targets.
 
 ## Task 6: Landing page mobile polish
 **Requirement**: "Verify and fix the landing page (index.html) on mobile: (a) Hero section text doesn't overflow. (b) Feature cards stack single-column on mobile. (c) Agent bio cards stack single-column with readable text. (d) War Room demo section is usable on mobile. (e) Waitlist form input and button are full-width on mobile. (f) Navigation hamburger menu or scrollable nav for mobile. (g) Mascot image scales properly. (h) CTA buttons are prominent and thumb-reachable."
@@ -130,9 +131,9 @@
 ## Loop State
 ```
 Current Phase: 30
-Current Task: 5
+Current Task: 6
 Current Stage: PENDING
 Attempt: 0/3
-Tasks Completed: 4/9
-Loop Iterations: 4
+Tasks Completed: 5/9
+Loop Iterations: 5
 ```
