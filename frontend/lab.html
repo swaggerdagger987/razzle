@@ -1294,6 +1294,7 @@
     <button class="btn-chunky" id="classAnalyticsBtn" onclick="openClassAnalytics()" style="display:none;">Class Analytics</button>
     <button class="btn-chunky" onclick="copyShareURL()">Share URL</button>
     <button class="btn-primary" onclick="exportImage()">Export PNG</button>
+    <button class="btn-chunky" id="exportRankingsBtn" onclick="openRankingsExport()" style="display:none;">Export Rankings</button>
 
     <span class="result-count" id="resultCount"></span>
   </div>
@@ -1423,6 +1424,32 @@
     </div>
     <div style="margin-top:12px; display:flex; justify-content:flex-end;">
       <button class="btn-chunky" onclick="closeCompare()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- RANKINGS EXPORT OVERLAY -->
+<div class="filter-modal-overlay" id="rankingsExportOverlay" onclick="closeRankingsExport(event)">
+  <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:500px; max-width:95vw;" onclick="event.stopPropagation()">
+    <h3 style="margin:0 0 16px 0; font-family:var(--font-display);">Export Rankings</h3>
+    <div style="display:flex; flex-direction:column; gap:12px;">
+      <div>
+        <label style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; display:block; margin-bottom:4px;">Position</label>
+        <div id="rankPosButtons" style="display:flex; gap:6px; flex-wrap:wrap;"></div>
+      </div>
+      <div>
+        <label style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; display:block; margin-bottom:4px;">Count</label>
+        <div id="rankCountButtons" style="display:flex; gap:6px;"></div>
+      </div>
+      <div>
+        <label style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; display:block; margin-bottom:4px;">Sort By</label>
+        <div id="rankSortButtons" style="display:flex; gap:6px;"></div>
+      </div>
+      <p id="rankingsPreview" style="font-family:var(--font-hand); font-size:18px; color:var(--ink-medium); margin:4px 0;"></p>
+      <div style="display:flex; justify-content:flex-end; gap:8px;">
+        <button class="btn-chunky" onclick="closeRankingsExport()">Cancel</button>
+        <button class="btn-primary" onclick="generateRankingsExport()">Generate PNG</button>
+      </div>
     </div>
   </div>
 </div>

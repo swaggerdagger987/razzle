@@ -21,9 +21,9 @@
 **Accept when**: "Export Rankings" button visible in NFL toolbar. Overlay lets user pick position + count + sort. Generates clean PNG with ranked players, DVS badges, position colors. Downloads as razzle-rankings-{position}-top{N}.png. Looks like a Reddit-ready tier list.
 **Depends on**: none
 **Size**: L
-**Status**: PENDING
-**Attempt**: 0/3
-**Result**:
+**Status**: PASS
+**Attempt**: 1/3
+**Result**: "Export Rankings" button in NFL toolbar (hidden in prospect/college modes). Overlay with position tabs (ALL/QB/RB/WR/TE), count buttons (Top 10/15/20/25), sort buttons (DVS/PPR). Preview text shows what will be generated. generateRankingsExport() fetches from API, computes DVS client-side, re-sorts if DVS selected. renderRankingsPNG() draws 800px canvas: title + subtitle (Caveat), ranked rows with position-colored circle rank badges, position chips, player name, team, age, DVS tier badges (tier-colored with transparency), PPG stat. Alternating row bg, chunky 3px border, Razzle watermark. Downloads as razzle-rankings-{pos}-topN.png. computeClientDVS() moved to app.js for shared access.
 
 ## Task 3: Unified share modal with Reddit title suggestion
 **Requirement**: "Replace the bare 'Copy URL' button with a share modal. Share button (terracotta accent) opens modal with: 1) Shareable URL with copy button, 2) 'Export as PNG' button (triggers existing export), 3) Suggested Reddit title auto-generated from current view (e.g. 'Top 25 Dynasty WRs by DVS — Razzle'). Modal follows Razzle design system."
@@ -48,9 +48,9 @@
 ## Loop State
 ```
 Current Phase: 20
-Current Task: 2
+Current Task: 3
 Current Stage: DESIGN
 Attempt: 0/3
-Tasks Completed: 1/4
-Loop Iterations: 1
+Tasks Completed: 2/4
+Loop Iterations: 2
 ```

@@ -660,6 +660,10 @@ function applyUniverseUI() {
   if (bigBoardBtn) bigBoardBtn.style.display = isProspect ? "" : "none";
   const classAnalyticsBtn = document.getElementById("classAnalyticsBtn");
   if (classAnalyticsBtn) classAnalyticsBtn.style.display = isProspect ? "" : "none";
+
+  // Show Export Rankings only in NFL mode
+  const exportRankingsBtn = document.getElementById("exportRankingsBtn");
+  if (exportRankingsBtn) exportRankingsBtn.style.display = (state.universe === "nfl") ? "" : "none";
 }
 
 // ─── Sort ────────────────────────────────────────────────────────
@@ -1253,6 +1257,245 @@ function exportImage() {
   // Download
   const link = document.createElement("a");
   link.download = `razzle-lab-${state.season === "career" ? "career" : state.season}.png`;
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+}
+
+// ─── Rankings Export ───────────────────────────────────────────────
+
+const _rankState = { position: "ALL", count: 10, sortBy: "dynasty_value" };
+
+function openRankingsExport() {
+  document.getElementById("rankingsExportOverlay").classList.add("open");
+
+  // Position buttons
+  const posDiv = document.getElementById("rankPosButtons");
+  posDiv.innerHTML = "";
+  for (const pos of ["ALL", "QB", "RB", "WR", "TE"]) {
+    const active = pos === _rankState.position;
+    const btn = document.createElement("button");
+    btn.className = active ? "btn-primary" : "btn-chunky";
+    btn.textContent = pos;
+    btn.style.cssText = "font-size:11px; padding:4px 12px;";
+    btn.onclick = () => { _rankState.position = pos; openRankingsExport(); };
+    posDiv.appendChild(btn);
+  }
+
+  // Count buttons
+  const countDiv = document.getElementById("rankCountButtons");
+  countDiv.innerHTML = "";
+  for (const n of [10, 15, 20, 25]) {
+    const active = n === _rankState.count;
+    const btn = document.createElement("button");
+    btn.className = active ? "btn-primary" : "btn-chunky";
+    btn.textContent = "Top " + n;
+    btn.style.cssText = "font-size:11px; padding:4px 12px;";
+    btn.onclick = () => { _rankState.count = n; openRankingsExport(); };
+    countDiv.appendChild(btn);
+  }
+
+  // Sort buttons
+  const sortDiv = document.getElementById("rankSortButtons");
+  sortDiv.innerHTML = "";
+  for (const s of [{ key: "dynasty_value", label: "DVS" }, { key: "fantasy_points_ppr", label: "PPR" }]) {
+    const active = s.key === _rankState.sortBy;
+    const btn = document.createElement("button");
+    btn.className = active ? "btn-primary" : "btn-chunky";
+    btn.textContent = s.label;
+    btn.style.cssText = "font-size:11px; padding:4px 12px;";
+    btn.onclick = () => { _rankState.sortBy = s.key; openRankingsExport(); };
+    sortDiv.appendChild(btn);
+  }
+
+  // Preview text
+  const sortLabel = _rankState.sortBy === "dynasty_value" ? "DVS" : "PPR";
+  const posLabel = _rankState.position === "ALL" ? "Players" : _rankState.position + "s";
+  document.getElementById("rankingsPreview").textContent =
+    `"Razzle Dynasty Top ${_rankState.count} ${posLabel} by ${sortLabel}"`;
+}
+
+function closeRankingsExport(e) {
+  if (e && e.target !== e.currentTarget) return;
+  document.getElementById("rankingsExportOverlay").classList.remove("open");
+}
+
+async function generateRankingsExport() {
+  const pos = _rankState.position;
+  const count = _rankState.count;
+  const sortKey = _rankState.sortBy;
+  const sortLabel = sortKey === "dynasty_value" ? "DVS" : "PPR";
+  const posLabel = pos === "ALL" ? "Players" : pos + "s";
+
+  // Fetch data from API
+  const params = new URLSearchParams({
+    sort: sortKey === "dynasty_value" ? "ppg" : sortKey,
+    order: "desc",
+    limit: String(count),
+    season: state.season === "career" ? "career" : String(state.season || 0),
+  });
+  if (pos !== "ALL") params.set("position", pos);
+
+  try {
+    const data = await apiFetch(`/api/players?${params}`);
+    const players = data.items || [];
+    if (!players.length) return;
+
+    // If sorting by DVS, compute and re-sort client-side
+    if (sortKey === "dynasty_value") {
+      for (const p of players) {
+        p._dvs = computeClientDVS(p.ppg, p.age, p.position);
+      }
+      players.sort((a, b) => (b._dvs || 0) - (a._dvs || 0));
+    }
+
+    renderRankingsPNG(players.slice(0, count), posLabel, sortLabel);
+    closeRankingsExport();
+  } catch (err) {
+    console.error("Rankings export failed:", err);
+  }
+}
+
+function renderRankingsPNG(players, posLabel, sortLabel) {
+  const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  const padX = 30, padY = 30;
+  const W = 800;
+  const titleH = 50;
+  const rowH = 36;
+  const watermarkH = 40;
+  const H = padY + titleH + 10 + players.length * rowH + 10 + watermarkH + padY;
+
+  const canvas = document.createElement("canvas");
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext("2d");
+
+  // Background
+  ctx.fillStyle = "#f7efe5";
+  ctx.fillRect(0, 0, W, H);
+
+  // Title
+  ctx.font = "bold 24px sans-serif";
+  ctx.fillStyle = "#1a1a2e";
+  ctx.textAlign = "center";
+  ctx.fillText(`Razzle Dynasty Top ${players.length} ${posLabel}`, W / 2, padY + 28);
+
+  // Subtitle (sort + season)
+  ctx.font = "14px 'Caveat', cursive";
+  ctx.fillStyle = "rgba(26,26,46,0.5)";
+  const seasonText = state.season === "career" ? "career" : state.season || "2024";
+  ctx.fillText(`ranked by ${sortLabel} — ${seasonText} season`, W / 2, padY + 46);
+
+  // Content area
+  const listY = padY + titleH + 10;
+  const listH = players.length * rowH;
+  const listW = W - padX * 2;
+
+  // Outer border
+  ctx.strokeStyle = "#1a1a2e";
+  ctx.lineWidth = 3;
+  ctx.strokeRect(padX, listY, listW, listH);
+
+  // Player rows
+  players.forEach((p, i) => {
+    const y = listY + i * rowH;
+    const pColor = posColors[p.position] || "#1a1a2e";
+
+    // Alternating bg
+    if (i % 2 === 0) {
+      ctx.fillStyle = "rgba(229,213,195,0.3)";
+      ctx.fillRect(padX + 1.5, y, listW - 3, rowH);
+    }
+
+    // Row divider
+    if (i > 0) {
+      ctx.strokeStyle = "#c5c5d0";
+      ctx.lineWidth = 0.5;
+      ctx.beginPath();
+      ctx.moveTo(padX, y);
+      ctx.lineTo(padX + listW, y);
+      ctx.stroke();
+    }
+
+    // Rank badge (position-colored circle)
+    const rankX = padX + 24;
+    const rankCY = y + rowH / 2;
+    ctx.beginPath();
+    ctx.arc(rankX, rankCY, 13, 0, Math.PI * 2);
+    ctx.fillStyle = pColor;
+    ctx.fill();
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.fillStyle = "#fff";
+    ctx.font = "bold 12px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText(String(i + 1), rankX, rankCY + 4);
+
+    // Position badge
+    const posBadgeX = padX + 48;
+    ctx.fillStyle = pColor;
+    ctx.fillRect(posBadgeX, y + 8, 30, 20);
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(posBadgeX, y + 8, 30, 20);
+    ctx.fillStyle = "#fff";
+    ctx.font = "bold 9px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText(p.position, posBadgeX + 15, y + 22);
+
+    // Player name
+    ctx.textAlign = "left";
+    ctx.fillStyle = "#1a1a2e";
+    ctx.font = "bold 14px sans-serif";
+    ctx.fillText(p.full_name || p.player_name, padX + 88, y + 23);
+
+    // Team
+    ctx.fillStyle = "#8a8a9e";
+    ctx.font = "11px monospace";
+    ctx.fillText(p.team || "FA", padX + 320, y + 23);
+
+    // Age
+    if (p.age) {
+      ctx.fillStyle = "#8a8a9e";
+      ctx.font = "11px monospace";
+      ctx.fillText("Age " + p.age, padX + 380, y + 23);
+    }
+
+    // DVS badge
+    const dvs = p._dvs != null ? p._dvs : computeClientDVS(p.ppg, p.age, p.position);
+    if (dvs != null) {
+      const dvsColor = dvs >= 85 ? "#2ec4b6" : dvs >= 70 ? "#5b7fff" : dvs >= 55 ? "#d97757" : "#8a8a9e";
+      const badgeX = padX + 450;
+      ctx.fillStyle = dvsColor + "30";
+      ctx.fillRect(badgeX, y + 7, 70, 22);
+      ctx.strokeStyle = dvsColor;
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(badgeX, y + 7, 70, 22);
+      ctx.fillStyle = dvsColor;
+      ctx.font = "bold 11px monospace";
+      ctx.textAlign = "center";
+      ctx.fillText("DVS " + dvs.toFixed(1), badgeX + 35, y + 22);
+    }
+
+    // Key stat (PPG)
+    if (p.ppg != null) {
+      ctx.fillStyle = "#1a1a2e";
+      ctx.font = "bold 13px monospace";
+      ctx.textAlign = "right";
+      ctx.fillText(p.ppg.toFixed(1) + " PPG", padX + listW - 16, y + 23);
+    }
+  });
+
+  // Watermark
+  ctx.font = "16px 'Caveat', cursive";
+  ctx.fillStyle = "rgba(217, 119, 87, 0.5)";
+  ctx.textAlign = "right";
+  ctx.fillText("built different — razzle.lol", W - 20, H - 16);
+
+  // Download
+  const posFile = posLabel.toLowerCase().replace(/\s+/g, "-");
+  const link = document.createElement("a");
+  link.download = `razzle-rankings-${posFile}-top${players.length}.png`;
   link.href = canvas.toDataURL("image/png");
   link.click();
 }
