@@ -1917,5 +1917,6 @@
 <script src="formulas.js"></script>
 <script src="formula-store.js"></script>
 <script src="charts.js"></script>
+<script>fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({page:location.pathname})}).catch(function(){});</script>
 </body>
 </html>

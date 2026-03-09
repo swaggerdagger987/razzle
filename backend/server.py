@@ -120,6 +120,7 @@ async def lifespan(app):
     bootstrap_database()
     live_data.init_waitlist_table()
     live_data.init_formula_store_tables()
+    live_data._init_analytics_table()
     yield
 
 
@@ -504,7 +505,95 @@ async def player_profile_page(player_id: str):
     html = re.sub(r'<meta name="twitter:description" content="[^"]*">', f'<meta name="twitter:description" content="{og_desc}">', html)
     html = re.sub(r'<title>[^<]*</title>', f'<title>{og_title}</title>', html)
 
+    # Inject JSON-LD structured data
+    try:
+        import json as _json
+        jsonld = {
+            "@context": "https://schema.org",
+            "@type": "Person",
+            "name": name,
+            "url": f"https://razzle.lol/player/{player_id}",
+        }
+        if pos:
+            jsonld["jobTitle"] = f"{pos} — Fantasy Football"
+        if team:
+            jsonld["affiliation"] = {"@type": "SportsTeam", "name": team}
+        jsonld_tag = f'<script type="application/ld+json">{_json.dumps(jsonld)}</script>'
+        html = html.replace("</head>", f"{jsonld_tag}\n</head>")
+    except Exception:
+        pass
+
     return HTMLResponse(content=html)
+
+
+# ---------------------------------------------------------------------------
+# Sitemap + robots.txt
+# ---------------------------------------------------------------------------
+
+@app.get("/sitemap.xml")
+def sitemap_xml():
+    """Dynamic sitemap with all pages + top player profiles."""
+    import xml.etree.ElementTree as ET
+
+    base = "https://razzle.lol"
+    pages = [
+        ("", "1.0", "weekly"),
+        ("/lab.html", "1.0", "daily"),
+        ("/league-intel.html", "0.7", "monthly"),
+        ("/agents.html", "0.7", "monthly"),
+    ]
+
+    urlset = ET.Element("urlset", xmlns="http://www.sitemaps.org/schemas/sitemap/0.9")
+
+    for path, priority, freq in pages:
+        url = ET.SubElement(urlset, "url")
+        ET.SubElement(url, "loc").text = f"{base}{path}"
+        ET.SubElement(url, "priority").text = priority
+        ET.SubElement(url, "changefreq").text = freq
+
+    # Top 200 NFL players by PPR
+    try:
+        data = live_data.fetch_players(sort_key="fantasy_points_ppr", limit=200)
+        for p in data.get("players", []):
+            pid = p.get("player_id", "")
+            if pid:
+                url = ET.SubElement(urlset, "url")
+                ET.SubElement(url, "loc").text = f"{base}/player/{pid}"
+                ET.SubElement(url, "priority").text = "0.6"
+                ET.SubElement(url, "changefreq").text = "weekly"
+    except Exception:
+        pass
+
+    xml_str = '<?xml version="1.0" encoding="UTF-8"?>\n'
+    xml_str += ET.tostring(urlset, encoding="unicode")
+    return Response(content=xml_str, media_type="application/xml")
+
+
+@app.get("/robots.txt")
+def robots_txt():
+    content = """User-agent: *
+Allow: /
+
+Sitemap: https://razzle.lol/sitemap.xml
+"""
+    return Response(content=content, media_type="text/plain")
+
+
+# ---------------------------------------------------------------------------
+# Analytics (lightweight page views)
+# ---------------------------------------------------------------------------
+
+@app.post("/api/analytics/pageview")
+async def log_pageview(request: Request):
+    body = await request.json()
+    page = body.get("page", "/")
+    live_data.log_pageview(page)
+    return {"status": "ok"}
+
+
+@app.get("/api/analytics/summary")
+def analytics_summary():
+    return live_data.get_analytics_summary()
 
 
 # ---------------------------------------------------------------------------

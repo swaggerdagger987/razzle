@@ -248,6 +248,18 @@
   </div>
 </div>
 
+<!-- FOOTER -->
+<div style="text-align:center; padding:24px 20px 40px; font-family:var(--font-mono); font-size:12px; color:var(--ink-light);">
+  <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-bottom:8px;">
+    <a href="/" style="color:var(--ink-light); text-decoration:none;">Home</a>
+    <a href="/lab.html" style="color:var(--ink-light); text-decoration:none;">The Lab</a>
+    <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none;">League Intel</a>
+    <a href="/agents.html" style="color:var(--ink-light); text-decoration:none;">War Room</a>
+  </div>
+  <p>built different — <a href="/" style="color:var(--orange); text-decoration:none;">razzle.lol</a></p>
+  <p style="margin-top:4px;">powered by nflverse + Sleeper API | made for Reddit</p>
+</div>
+
 <script src="app.js"></script>
 <script>
 const SLEEPER_API = "https://api.sleeper.app/v1";
@@ -489,5 +501,6 @@ function disconnect() {
   document.getElementById("leaguesView").style.display = "none";
 }
 </script>
+<script>fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({page:location.pathname})}).catch(function(){});</script>
 </body>
 </html>

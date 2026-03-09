@@ -1,6 +1,52 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 33 — (next phase pending)
+## Current Phase: Phase 36 — (next phase pending)
+
+## Previous Phase: Phase 35 — SEO + Analytics + Revenue Foundation (COMPLETE)
+
+**Exit criterion MET:** Dynamic sitemap.xml with all pages + top 200 player profiles. robots.txt. JSON-LD Schema.org Person data on player pages. Lightweight pageview analytics (SQLite) with inline tracking on all 6 pages. AdSense-ready ad slot divs. Consistent footer with nav links on all pages. Pushed to master.
+
+### Phase 35 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | sitemap.xml + robots.txt | DONE | Dynamic XML with pages + player profiles |
+| 2 | Structured data (JSON-LD) | DONE | Schema.org Person on player pages |
+| 3 | Analytics tracking | DONE | SQLite pageviews + inline scripts on all pages |
+| 4 | AdSense ad slots | DONE | Divs on index + player pages |
+| 5 | Consistent footer | DONE | Nav links + tagline on all pages |
+| 6 | Deploy + smoke test | DONE | All syntax clean, pushed |
+
+## Previous Phase: Phase 34 — Lab Power-User Polish + Keyboard Shortcuts (COMPLETE)
+
+**Exit criterion MET:** Keyboard shortcuts: / focuses search, Esc closes overlays, 1-5 switches position, S/C/F/M/X open panels, ? opens styled reference overlay. Hint strip in toolbar. Table alternating row stripes. Confirmed existing: checkboxes, compare, saved views, filter breadcrumbs all working. Pushed to master.
+
+### Phase 34 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Keyboard shortcuts | DONE | /, Esc, 1-5, S/C/F/M/X, ? reference overlay, hint strip |
+| 2 | Table row stripes | DONE | nth-child(even) subtle stripes + hover |
+| 3 | Quick-compare | DONE | Already existed: checkboxes + compare button |
+| 4 | Filter breadcrumbs | DONE | Already existed: activeFilters with dismiss |
+| 5 | Saved views | DONE | Already existed: overlay with names |
+| 6 | Deploy + smoke test | DONE | All syntax clean, pushed to master |
+
+## Previous Phase: Phase 33 — Shareable Player Profile Pages (COMPLETE)
+
+**Exit criterion MET:** Dedicated /player/{id} URL with standalone player.html + player.js. Dynamic OG meta tags (player name, position, team, PPR/G) for rich Reddit/Discord previews. Hero card with position badge, headline stat cards, position-specific radar chart, career arc line chart, season log table, combine/draft data. Export PNG (1200x630) with watermark. Copy link button. Lab player names href for middle-click deep linking. Mobile responsive at 768px and 480px. All syntax clean. Pushed to master.
+
+### Phase 33 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend player profile endpoint | DONE | Already existed at /api/players/{id}/profile |
+| 2 | Player profile HTML page + routing | DONE | player.html + server route with dynamic OG tags |
+| 3 | Player profile stats display | DONE | Hero card, stat cards, season log, combine grid |
+| 4 | Embedded radar + trend charts | DONE | Position-specific radar + career arc canvas charts |
+| 5 | Player profile PNG export | DONE | 1200x630 canvas with watermark + copy link |
+| 6 | Link player names in Lab | DONE | href for middle-click, onclick for overlay |
+| 7 | Mobile responsive + deploy | DONE | 768px + 480px breakpoints, pushed to master |
 
 ## Previous Phase: Phase 32 — Formula Store (Community Marketplace) (COMPLETE)
 

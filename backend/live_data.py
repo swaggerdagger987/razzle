@@ -2786,3 +2786,50 @@ def rate_formula(formula_id: int, rating: int, review: str = "") -> dict:
     conn.commit()
     conn.close()
     return {"status": "ok"}
+
+
+# ---------------------------------------------------------------------------
+# Analytics — lightweight page view tracking
+# ---------------------------------------------------------------------------
+
+def _init_analytics_table():
+    conn = get_conn()
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS pageviews (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            page TEXT NOT NULL,
+            created_at TEXT NOT NULL DEFAULT (datetime('now'))
+        )
+    """)
+    conn.commit()
+    conn.close()
+
+
+def log_pageview(page: str):
+    try:
+        conn = get_conn()
+        conn.execute("INSERT INTO pageviews (page) VALUES (?)", (page[:200],))
+        conn.commit()
+        conn.close()
+    except Exception:
+        pass
+
+
+def get_analytics_summary() -> dict:
+    try:
+        conn = get_conn()
+        total = conn.execute("SELECT COUNT(*) FROM pageviews").fetchone()[0]
+        by_page = conn.execute(
+            "SELECT page, COUNT(*) as views FROM pageviews GROUP BY page ORDER BY views DESC LIMIT 20"
+        ).fetchall()
+        by_day = conn.execute(
+            "SELECT DATE(created_at) as day, COUNT(*) as views FROM pageviews GROUP BY day ORDER BY day DESC LIMIT 30"
+        ).fetchall()
+        conn.close()
+        return {
+            "total": total,
+            "by_page": [{"page": r[0], "views": r[1]} for r in by_page],
+            "by_day": [{"day": r[0], "views": r[1]} for r in by_day],
+        }
+    except Exception:
+        return {"total": 0, "by_page": [], "by_day": []}

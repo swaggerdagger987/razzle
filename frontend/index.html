@@ -730,8 +730,19 @@
   <div id="waitlistMsg" style="margin-top:12px; font-family:var(--font-hand); font-size:18px; color:var(--green);"></div>
 </div>
 
+<!-- AD SLOT -->
+<div class="ad-slot" data-ad-unit="home-bottom" style="max-width:728px; margin:0 auto 20px; min-height:0; text-align:center;">
+  <!-- AdSense code goes here when activated -->
+</div>
+
 <!-- FOOTER -->
 <div class="site-footer">
+  <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-bottom:8px; font-family:var(--font-mono); font-size:12px;">
+    <a href="/" style="color:var(--ink-light); text-decoration:none;">Home</a>
+    <a href="/lab.html" style="color:var(--ink-light); text-decoration:none;">The Lab</a>
+    <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none;">League Intel</a>
+    <a href="/agents.html" style="color:var(--ink-light); text-decoration:none;">War Room</a>
+  </div>
   <p>built different — <a href="/">razzle.lol</a></p>
   <p style="margin-top:6px;">powered by nflverse + sportsdataverse | made for Reddit</p>
 </div>
@@ -919,5 +930,6 @@ async function submitWaitlist() {
   }
 }
 </script>
+<script>fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({page:location.pathname})}).catch(function(){});</script>
 </body>
 </html>
