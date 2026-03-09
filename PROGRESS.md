@@ -1,6 +1,6 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 3 — Sharing Engine + Watermark (COMPLETE)
+## Current Phase: Phase 4 — Landing Page + Sleeper Connection (COMPLETE)
 
 ### Phase 0 Tasks (COMPLETE)
 
@@ -96,6 +96,13 @@
 - [x] og:meta tags for link previews (og:title, og:description, twitter:card)
 - [x] Share URL button already built in Phase 1
 
+### Phase 4 — Landing Page + Sleeper Connection
+- [x] Landing page rebuilt: hero, 6 feature cards, mascot section, War Room demo, waitlist
+- [x] War Room demo: 3 anonymized agent briefings with redacted content (Razzle, Scout, Diplomat)
+- [x] Sleeper connection: league-intel.html with username input, Sleeper API integration
+- [x] League Intel: shows leagues, expandable roster view with position groups, W-L record
+- [x] Email waitlist capture (localStorage for now, backend later)
+
 ---
 
 ## Blockers
@@ -124,3 +131,6 @@ _None currently._
 | 2026-03-08 | Canvas API over Chart.js | Zero dependencies, full control, smaller bundle, charts are simple enough |
 | 2026-03-08 | Max 5 players for compare | Keeps radar readable, prevents API abuse |
 | 2026-03-08 | Formulas as weighted composites | Simple percentage weights × stat values — covers dynasty values, efficiency scores, custom rankings |
+| 2026-03-08 | Waitlist in localStorage | No backend auth yet, email capture is just localStorage. Real backend waitlist post-draft |
+| 2026-03-08 | Sleeper players API cached client-side | The /players/nfl endpoint is 25MB+ — should be cached/proxied server-side in production |
+| 2026-03-08 | 3 War Room demo cards | Razzle/Scout/Diplomat covers the breadth of agent types without over-promising |

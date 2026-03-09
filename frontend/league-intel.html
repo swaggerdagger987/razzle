@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>League Intel — Razzle</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  .intel-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 32px 24px;
+  }
+
+  .connect-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 16px;
+    box-shadow: 6px 6px 0 var(--ink);
+    padding: 32px;
+    text-align: center;
+    max-width: 500px;
+    margin: 40px auto;
+  }
+
+  .connect-card h2 {
+    font-family: var(--font-display);
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+
+  .connect-card p {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-medium);
+    margin-bottom: 20px;
+  }
+
+  .connect-form {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .connect-form input { width: 240px; }
+
+  .connect-error {
+    font-family: var(--font-hand);
+    font-size: 18px;
+    color: var(--red);
+    margin-top: 12px;
+  }
+
+  /* ===== LEAGUES LIST ===== */
+  .leagues-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .leagues-header h2 {
+    font-family: var(--font-display);
+    font-size: 24px;
+  }
+
+  .user-badge {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 4px 12px;
+    border: 2px solid var(--ink);
+    border-radius: 20px;
+    background: var(--green-light);
+    color: var(--green);
+    font-weight: 700;
+  }
+
+  .league-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    margin-bottom: 16px;
+    overflow: hidden;
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+
+  .league-card:hover {
+    box-shadow: 6px 6px 0 var(--ink);
+    transform: translate(-2px, -2px);
+  }
+
+  .league-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 2px dashed var(--ink-faint);
+  }
+
+  .league-name {
+    font-family: var(--font-display);
+    font-size: 18px;
+  }
+
+  .league-meta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-light);
+    display: flex;
+    gap: 12px;
+  }
+
+  .league-roster {
+    padding: 12px 20px;
+    display: none;
+  }
+
+  .league-card.expanded .league-roster { display: block; }
+
+  .roster-section {
+    margin-bottom: 12px;
+  }
+
+  .roster-section-title {
+    font-family: var(--font-display);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--ink-light);
+    margin-bottom: 6px;
+    padding-bottom: 4px;
+    border-bottom: 2px dashed var(--ink-faint);
+  }
+
+  .roster-player {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 4px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .roster-pos {
+    font-size: 9px;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 3px;
+    border: 1.5px solid var(--ink);
+    color: white;
+    font-family: var(--font-display);
+    min-width: 24px;
+    text-align: center;
+  }
+
+  .roster-pos.qb { background: var(--pos-qb); }
+  .roster-pos.rb { background: var(--pos-rb); }
+  .roster-pos.wr { background: var(--pos-wr); }
+  .roster-pos.te { background: var(--pos-te); }
+  .roster-pos.k { background: var(--ink-light); }
+  .roster-pos.def { background: var(--ink-medium); }
+
+  .loading-intel {
+    font-family: var(--font-hand);
+    font-size: 24px;
+    color: var(--ink-light);
+    text-align: center;
+    padding: 40px;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="topnav">
+  <a href="/" class="logo">
+    <div class="logo-mark">🐯</div>
+    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/lab.html">The Lab</a></li>
+    <li><a href="/league-intel.html" class="active">League Intel</a></li>
+  </ul>
+</nav>
+
+<div class="intel-container">
+  <!-- Connect Card (shown when no username) -->
+  <div id="connectView">
+    <div class="connect-card">
+      <div style="font-size:48px; margin-bottom:12px;">🐯</div>
+      <h2>Connect Your Sleeper</h2>
+      <p>enter your Sleeper username to see your leagues</p>
+      <div class="connect-form">
+        <input type="text" class="input-chunky" id="sleeperUsername" placeholder="sleeper username">
+        <button class="btn-primary" onclick="connectSleeper()">Connect</button>
+      </div>
+      <div class="connect-error" id="connectError"></div>
+    </div>
+  </div>
+
+  <!-- Leagues View (shown after connection) -->
+  <div id="leaguesView" style="display:none;">
+    <div class="leagues-header">
+      <h2>Your Leagues</h2>
+      <div>
+        <span class="user-badge" id="connectedUser"></span>
+        <button class="btn-chunky" style="margin-left:8px; font-size:11px;" onclick="disconnect()">Disconnect</button>
+      </div>
+    </div>
+    <div id="leaguesList">
+      <div class="loading-intel">pulling film on your leagues...</div>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+const SLEEPER_API = "https://api.sleeper.app/v1";
+
+// Check for saved connection
+const savedUser = localStorage.getItem("razzle_sleeper_user");
+if (savedUser) {
+  showLeagues(savedUser);
+}
+
+async function connectSleeper() {
+  const username = document.getElementById("sleeperUsername").value.trim();
+  if (!username) return;
+
+  document.getElementById("connectError").textContent = "";
+
+  try {
+    // Verify user exists
+    const resp = await fetch(`${SLEEPER_API}/user/${username}`);
+    if (!resp.ok) throw new Error("User not found");
+    const user = await resp.json();
+    if (!user || !user.user_id) throw new Error("User not found");
+
+    localStorage.setItem("razzle_sleeper_user", username);
+    localStorage.setItem("razzle_sleeper_user_id", user.user_id);
+    showLeagues(username);
+  } catch (e) {
+    document.getElementById("connectError").textContent = "couldn't find that username on Sleeper";
+  }
+}
+
+async function showLeagues(username) {
+  document.getElementById("connectView").style.display = "none";
+  document.getElementById("leaguesView").style.display = "block";
+  document.getElementById("connectedUser").textContent = username;
+
+  const userId = localStorage.getItem("razzle_sleeper_user_id");
+  if (!userId) {
+    // Need to fetch user ID first
+    try {
+      const resp = await fetch(`${SLEEPER_API}/user/${username}`);
+      const user = await resp.json();
+      localStorage.setItem("razzle_sleeper_user_id", user.user_id);
+      await loadLeagues(user.user_id);
+    } catch (e) {
+      document.getElementById("leaguesList").innerHTML =
+        '<div class="loading-intel" style="color:var(--red);">couldn\'t connect to Sleeper</div>';
+    }
+  } else {
+    await loadLeagues(userId);
+  }
+}
+
+async function loadLeagues(userId) {
+  const container = document.getElementById("leaguesList");
+  container.innerHTML = '<div class="loading-intel">pulling film on your leagues...</div>';
+
+  try {
+    // Get current NFL season
+    const now = new Date();
+    const season = now.getMonth() >= 7 ? now.getFullYear() : now.getFullYear() - 1;
+
+    const resp = await fetch(`${SLEEPER_API}/user/${userId}/leagues/nfl/${season}`);
+    const leagues = await resp.json();
+
+    if (!leagues || !leagues.length) {
+      container.innerHTML = '<div class="loading-intel">no leagues found for this season</div>';
+      return;
+    }
+
+    let html = "";
+    for (const league of leagues) {
+      const totalRosters = league.total_rosters || "?";
+      const scoringType = league.scoring_settings?.rec === 1 ? "PPR"
+        : league.scoring_settings?.rec === 0.5 ? "Half PPR"
+        : "Standard";
+      const leagueType = league.settings?.type === 2 ? "Dynasty"
+        : league.settings?.type === 1 ? "Keeper"
+        : "Redraft";
+
+      html += `
+        <div class="league-card" onclick="toggleLeague(this, '${league.league_id}', '${userId}')">
+          <div class="league-header">
+            <span class="league-name">${league.name}</span>
+            <div class="league-meta">
+              <span>${totalRosters}-team</span>
+              <span>${scoringType}</span>
+              <span>${leagueType}</span>
+              <span>${season}</span>
+            </div>
+          </div>
+          <div class="league-roster" id="roster-${league.league_id}">
+            <div class="loading-intel" style="font-size:18px; padding:16px;">checking the tape...</div>
+          </div>
+        </div>`;
+    }
+
+    container.innerHTML = html;
+  } catch (e) {
+    container.innerHTML = '<div class="loading-intel" style="color:var(--red);">fumbled the Sleeper connection</div>';
+    console.error(e);
+  }
+}
+
+async function toggleLeague(card, leagueId, userId) {
+  card.classList.toggle("expanded");
+  const rosterDiv = document.getElementById(`roster-${leagueId}`);
+
+  // Only load once
+  if (rosterDiv.dataset.loaded) return;
+  rosterDiv.dataset.loaded = "true";
+
+  try {
+    // Fetch rosters and users
+    const [rostersResp, usersResp, playersResp] = await Promise.all([
+      fetch(`${SLEEPER_API}/league/${leagueId}/rosters`),
+      fetch(`${SLEEPER_API}/league/${leagueId}/users`),
+      fetch(`${SLEEPER_API}/players/nfl`),
+    ]);
+
+    const rosters = await rostersResp.json();
+    const users = await usersResp.json();
+    const allPlayers = await playersResp.json();
+
+    // Map user_id to display name
+    const userMap = {};
+    for (const u of users) {
+      userMap[u.user_id] = u.display_name || u.username;
+    }
+
+    // Find user's roster
+    const myRoster = rosters.find(r => r.owner_id === userId);
+
+    if (!myRoster) {
+      rosterDiv.innerHTML = '<div class="loading-intel" style="font-size:16px;">couldn\'t find your roster</div>';
+      return;
+    }
+
+    // Group players by position
+    const posGroups = { QB: [], RB: [], WR: [], TE: [], K: [], DEF: [] };
+    for (const pid of (myRoster.players || [])) {
+      const p = allPlayers[pid];
+      if (!p) continue;
+      const pos = p.position || "?";
+      const group = posGroups[pos] || (posGroups["DEF"] = posGroups["DEF"] || []);
+      if (posGroups[pos]) {
+        posGroups[pos].push({ name: `${p.first_name} ${p.last_name}`, team: p.team || "", pos });
+      }
+    }
+
+    let html = `<div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); margin-bottom:12px;">
+      ${userMap[userId] || "your"} roster — ${myRoster.players?.length || 0} players
+    </div>`;
+
+    for (const [pos, players] of Object.entries(posGroups)) {
+      if (!players.length) continue;
+      html += `<div class="roster-section">
+        <div class="roster-section-title">${pos} (${players.length})</div>`;
+      for (const p of players) {
+        html += `<div class="roster-player">
+          <span class="roster-pos ${pos.toLowerCase()}">${pos}</span>
+          <span>${p.name}</span>
+          <span style="color:var(--ink-light); font-size:10px;">${p.team}</span>
+        </div>`;
+      }
+      html += `</div>`;
+    }
+
+    // Record and standings
+    const wins = myRoster.settings?.wins || 0;
+    const losses = myRoster.settings?.losses || 0;
+    const fpts = myRoster.settings?.fpts || 0;
+    html += `<div style="margin-top:12px; padding-top:12px; border-top:2px dashed var(--ink-faint);">
+      <span style="font-family:var(--font-mono); font-size:12px; color:var(--ink-light);">
+        Record: <strong style="color:var(--ink);">${wins}-${losses}</strong> &nbsp;|&nbsp;
+        Points: <strong style="color:var(--ink);">${fpts}</strong>
+      </span>
+    </div>`;
+
+    rosterDiv.innerHTML = html;
+  } catch (e) {
+    rosterDiv.innerHTML = '<div class="loading-intel" style="color:var(--red); font-size:16px;">fumbled the roster load</div>';
+    console.error(e);
+  }
+}
+
+function disconnect() {
+  localStorage.removeItem("razzle_sleeper_user");
+  localStorage.removeItem("razzle_sleeper_user_id");
+  document.getElementById("connectView").style.display = "block";
+  document.getElementById("leaguesView").style.display = "none";
+}
+</script>
+</body>
+</html>

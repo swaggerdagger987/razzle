@@ -3,1253 +3,328 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Razzle — razzle.lol</title>
+<title>Razzle — Fantasy Football Bloomberg Terminal</title>
+<meta property="og:title" content="Razzle — Fantasy Football Bloomberg Terminal">
+<meta property="og:description" content="Free data terminal for fantasy football. 600+ players, 40+ stats, custom formulas, radar charts. Built different.">
+<meta property="og:site_name" content="razzle.lol">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="styles.css">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap');
-
-  @font-face {
-    font-family: 'Garfield';
-    src: url('https://fonts.cdnfonts.com/css/garfield') format('woff2');
-    font-weight: 400 700;
-    font-display: swap;
+  /* ===== HERO ===== */
+  .hero {
+    text-align: center;
+    padding: 60px 24px 40px;
+    max-width: 800px;
+    margin: 0 auto;
   }
 
-  /* Fallback: Luckiest Guy has the same chunky comic energy if Garfield doesn't load */
-  @import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap');
-
-  :root {
-    /* Anthropic beige — warm sand, not sterile white */
-    --bg: #ede0cf;
-    --bg-warm: #e5d5c3;
-    --bg-card: #f7efe5;
-    --bg-dark-card: #1a1a2e;
-    --bg-ink: #0f0f1a;
-
-    /* Ink colors */
-    --ink: #1a1a2e;
-    --ink-medium: #4a4a5e;
-    --ink-light: #8a8a9e;
-    --ink-faint: #c5c5d0;
-
-    /* The accent stack — bold, not corporate */
-    --orange: #d97757;
-    --orange-light: #f7e4d8;
-    --yellow: #ffc857;
-    --yellow-light: #f5eacc;
-    --green: #2ec4b6;
-    --green-light: #d9efec;
-    --blue: #5b7fff;
-    --blue-light: #dde4f7;
-    --red: #e63946;
-    --red-light: #f2d5d8;
-    --purple: #8b5cf6;
-    --purple-light: #e5dcf7;
-
-    /* Position colors — chunky and ownable */
-    --pos-qb: #5b7fff;
-    --pos-rb: #2ec4b6;
-    --pos-wr: #d97757;
-    --pos-te: #8b5cf6;
-
-    --font-display: 'Garfield', 'Luckiest Guy', 'Garfield', cursive;
-    --font-mono: 'Space Mono', monospace;
-    --font-hand: 'Caveat', cursive;
-
-    --radius: 12px;
-    --radius-chunky: 16px;
-    --shadow-sm: 0 1px 3px rgba(15,15,26,0.06);
-    --shadow-md: 0 4px 12px rgba(15,15,26,0.08);
-    --shadow-lg: 0 8px 30px rgba(15,15,26,0.1);
-    --shadow-chunky: 4px 4px 0 var(--ink);
+  .hero-mascot {
+    font-size: 80px;
+    filter: drop-shadow(3px 3px 0 rgba(0,0,0,0.15));
+    transform: rotate(-3deg);
+    display: inline-block;
+    margin-bottom: 16px;
   }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: 42px;
+    letter-spacing: -1px;
+    margin-bottom: 8px;
+  }
 
-  body {
-    background: var(--bg);
+  .hero h1 span { color: var(--orange); }
+
+  .hero-sub {
+    font-family: var(--font-hand);
+    font-size: 26px;
+    color: var(--ink-medium);
+    margin-bottom: 28px;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .btn-hero {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 700;
+    padding: 12px 28px;
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.15s;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+
+  .btn-hero:hover {
+    box-shadow: 6px 6px 0 var(--ink);
+    transform: translate(-2px, -2px);
+  }
+
+  .btn-hero-primary {
+    background: var(--orange);
+    color: white;
+  }
+
+  .btn-hero-secondary {
+    background: var(--bg-card);
     color: var(--ink);
+  }
+
+  /* ===== SECTIONS ===== */
+  .section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 24px;
+  }
+
+  .section-label {
+    font-family: var(--font-display);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--orange);
+    margin-bottom: 8px;
+  }
+
+  .section h2 {
+    font-family: var(--font-display);
+    font-size: 28px;
+    margin-bottom: 8px;
+  }
+
+  .section-desc {
+    font-size: 15px;
+    color: var(--ink-medium);
+    margin-bottom: 24px;
+    max-width: 600px;
+  }
+
+  /* ===== FEATURE CARDS ===== */
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-top: 20px;
+  }
+
+  .feature-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 4px 4px 0 var(--ink);
+    transition: all 0.15s;
+  }
+
+  .feature-card:hover {
+    box-shadow: 6px 6px 0 var(--ink);
+    transform: translate(-2px, -2px);
+  }
+
+  .feature-icon {
+    font-size: 32px;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .feature-card h3 {
+    font-family: var(--font-display);
+    font-size: 16px;
+    margin-bottom: 6px;
+  }
+
+  .feature-card p {
+    font-size: 13px;
+    color: var(--ink-medium);
+    line-height: 1.6;
+  }
+
+  /* ===== WAR ROOM DEMO ===== */
+  .demo-section {
+    background: var(--bg-ink);
+    padding: 48px 24px;
+    margin: 40px 0;
+    border-top: 3px solid var(--ink);
+    border-bottom: 3px solid var(--ink);
+  }
+
+  .demo-inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .demo-section .section-label { color: var(--yellow); }
+  .demo-section h2 { color: white; }
+  .demo-section .section-desc { color: #8a8a9e; }
+
+  .demo-card {
+    background: #1a1a2e;
+    border: 2px solid #333;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 12px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: #ccc;
+  }
+
+  .demo-card .agent-name {
     font-family: var(--font-display);
     font-size: 14px;
-    line-height: 1.5;
-    min-height: 100vh;
-  }
-
-  /* ===== NAV — looks like notebook tabs ===== */
-  .topnav {
+    color: var(--yellow);
+    margin-bottom: 8px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 12px 32px;
-    background: var(--bg);
-    border-bottom: 3px solid var(--ink);
-    position: sticky;
-    top: 0;
-    z-index: 100;
+    gap: 8px;
   }
 
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .logo-mark {
-    width: 42px;
-    height: 42px;
-    background: var(--bg-card);
-    border-radius: 10px;
-    border: 3px solid var(--ink);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    box-shadow: 3px 3px 0 var(--ink);
-    transform: rotate(-2deg);
-    line-height: 1;
-  }
-
-  .logo-text {
+  .demo-card .urgency {
+    font-size: 10px;
     font-weight: 700;
-    font-size: 20px;
-    letter-spacing: -0.5px;
-    color: var(--ink);
+    padding: 2px 8px;
+    border-radius: 10px;
+    border: 1.5px solid;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
   }
 
-  .logo-text .labs {
-    color: var(--orange);
+  .urgency-urgent { color: var(--red); border-color: var(--red); }
+  .urgency-monitor { color: var(--yellow); border-color: var(--yellow); }
+  .urgency-opportunity { color: var(--green); border-color: var(--green); }
+
+  .redacted {
+    background: #333;
+    color: #333;
+    border-radius: 3px;
+    padding: 0 8px;
+    user-select: none;
   }
 
-  /* ===== RAZZLE MASCOT ===== */
-  .mascot-section {
-    margin: 0 32px 48px;
-    max-width: 800px;
+  .demo-cta {
+    text-align: center;
+    margin-top: 24px;
   }
 
-  .mascot-card {
-    background: var(--bg-card);
-    border: 3px solid var(--ink);
-    border-radius: var(--radius-chunky);
-    box-shadow: 6px 6px 0 var(--ink);
-    overflow: hidden;
+  .demo-cta p {
+    font-family: var(--font-hand);
+    font-size: 22px;
+    color: var(--yellow);
+    margin-bottom: 12px;
+  }
+
+  /* ===== MASCOT SECTION ===== */
+  .mascot-row {
     display: flex;
+    gap: 24px;
+    align-items: center;
+    margin-top: 20px;
   }
 
   .mascot-visual {
-    width: 260px;
-    min-height: 320px;
-    background: linear-gradient(135deg, var(--orange), #c4643d);
+    width: 140px;
+    height: 140px;
+    background: var(--orange);
+    border: 3px solid var(--ink);
+    border-radius: 16px;
+    box-shadow: 4px 4px 0 var(--ink);
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
-    border-right: 3px solid var(--ink);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .mascot-visual::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 18px,
-      rgba(0,0,0,0.06) 18px,
-      rgba(0,0,0,0.06) 22px
-    );
-  }
-
-  .mascot-emoji {
-    font-size: 120px;
-    filter: drop-shadow(3px 3px 0 rgba(0,0,0,0.2));
-    position: relative;
-    z-index: 1;
+    font-size: 72px;
     transform: rotate(-3deg);
+    flex-shrink: 0;
   }
 
-  .mascot-nameplate {
-    position: relative;
-    z-index: 1;
-    margin-top: 8px;
-    padding: 4px 16px;
-    background: var(--ink);
-    border-radius: 6px;
-    color: white;
+  .mascot-info h3 {
     font-family: var(--font-display);
     font-size: 22px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    transform: rotate(2deg);
-  }
-
-  .mascot-info {
-    flex: 1;
-    padding: 28px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  .mascot-title {
-    font-family: var(--font-display);
-    font-size: 28px;
-    font-weight: 700;
     margin-bottom: 4px;
-    letter-spacing: -0.5px;
   }
 
   .mascot-role {
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
+    font-family: var(--font-display);
+    font-size: 11px;
     text-transform: uppercase;
+    letter-spacing: 1.5px;
     color: var(--orange);
-    margin-bottom: 16px;
+    margin-bottom: 8px;
   }
 
   .mascot-bio {
     font-size: 14px;
     color: var(--ink-medium);
     line-height: 1.7;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
   }
 
   .mascot-traits {
     display: flex;
-    gap: 8px;
+    gap: 6px;
     flex-wrap: wrap;
   }
 
   .mascot-trait {
-    padding: 4px 12px;
+    font-family: var(--font-mono);
     font-size: 11px;
     font-weight: 700;
-    font-family: var(--font-mono);
-    border: 2px solid var(--ink);
-    border-radius: 20px;
-    background: var(--bg-warm);
-    transform: rotate(-1deg);
-  }
-
-  .mascot-trait:nth-child(2) { transform: rotate(0.5deg); }
-  .mascot-trait:nth-child(3) { transform: rotate(-0.5deg); }
-  .mascot-trait:nth-child(4) { transform: rotate(1deg); }
-
-  .mascot-scribble {
-    font-family: var(--font-hand);
-    font-size: 18px;
-    color: var(--orange);
-    margin-top: 12px;
-  }
-
-  .nav-links {
-    display: flex;
-    gap: 4px;
-  }
-
-  .nav-link {
-    padding: 8px 18px;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--ink-medium);
-    text-decoration: none;
-    border-radius: 8px 8px 0 0;
-    border: 2px solid transparent;
-    border-bottom: none;
-    transition: all 0.15s;
-    position: relative;
-    top: 3px;
-  }
-
-  .nav-link:hover {
-    color: var(--ink);
-    background: var(--bg-warm);
-  }
-
-  .nav-link.active {
-    color: var(--ink);
-    background: var(--bg-card);
-    border-color: var(--ink);
-    box-shadow: 0 2px 0 var(--bg-card);
-  }
-
-  .nav-right {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .sync-pill {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 5px 12px;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--green);
-    background: var(--green-light);
-    border: 2px solid var(--green);
-    border-radius: 20px;
-    font-family: var(--font-mono);
-  }
-
-  .sync-dot {
-    width: 6px;
-    height: 6px;
-    background: var(--green);
-    border-radius: 50%;
-    animation: pulse 2s infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-  }
-
-  /* ===== SECTION HEADERS — handwritten annotations ===== */
-  .section-header {
-    margin: 48px 32px 8px;
-    display: flex;
-    align-items: baseline;
-    gap: 12px;
-  }
-
-  .section-title {
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--ink);
-  }
-
-  .section-annotation {
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--orange);
-    transform: rotate(-1deg);
-    display: inline-block;
-  }
-
-  .section-note {
-    margin: 0 32px 24px;
-    font-size: 14px;
-    color: var(--ink-medium);
-    max-width: 600px;
-    line-height: 1.6;
-  }
-
-  /* ===== SCREENER ===== */
-  .screener-container {
-    margin: 0 32px 48px;
-    border: 3px solid var(--ink);
-    border-radius: var(--radius-chunky);
-    overflow: hidden;
-    background: var(--bg-card);
-    box-shadow: 6px 6px 0 var(--ink);
-  }
-
-  .screener-toolbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 20px;
-    border-bottom: 3px solid var(--ink);
-    background: var(--yellow-light);
-  }
-
-  .toolbar-left {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  /* NFL / NCAA toggle — chunky switch */
-  .league-toggle {
-    display: inline-flex;
-    border: 2px solid var(--ink);
-    border-radius: 8px;
-    overflow: hidden;
-    background: var(--bg-card);
-  }
-
-  .toggle-opt {
-    padding: 6px 16px;
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--ink-medium);
-    cursor: pointer;
-    transition: all 0.15s;
-    font-family: var(--font-mono);
-    border-right: 2px solid var(--ink);
-  }
-
-  .toggle-opt:last-child {
-    border-right: none;
-  }
-
-  .toggle-opt.active {
-    color: white;
-    background: var(--ink);
-  }
-
-  .toggle-opt:hover:not(.active) {
-    background: var(--bg-warm);
-  }
-
-  /* Filter chips — sticker style */
-  .chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 5px 12px;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--ink);
-    background: var(--bg-card);
-    border: 2px solid var(--ink);
-    border-radius: 20px;
-    cursor: pointer;
-    transition: all 0.1s;
-  }
-
-  .chip:hover {
-    box-shadow: 2px 2px 0 var(--ink);
-    transform: translate(-1px, -1px);
-  }
-
-  .chip.active-wr {
-    background: var(--orange-light);
-    border-color: var(--pos-wr);
-    color: var(--pos-wr);
-  }
-
-  .chip .x {
-    font-size: 10px;
-    opacity: 0.5;
-  }
-
-  .toolbar-right {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .player-count {
-    font-size: 12px;
-    color: var(--ink-light);
-    font-family: var(--font-mono);
-  }
-
-  .btn-chunky {
-    padding: 7px 16px;
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--ink);
-    background: var(--bg-card);
-    border: 2px solid var(--ink);
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.1s;
-    font-family: var(--font-display);
-  }
-
-  .btn-chunky:hover {
-    box-shadow: 2px 2px 0 var(--ink);
-    transform: translate(-1px, -1px);
-  }
-
-  .btn-primary {
-    padding: 7px 16px;
-    font-size: 12px;
-    font-weight: 700;
-    color: white;
-    background: var(--orange);
-    border: 2px solid var(--ink);
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.1s;
-    font-family: var(--font-display);
-    box-shadow: 2px 2px 0 var(--ink);
-  }
-
-  .btn-primary:hover {
-    box-shadow: 3px 3px 0 var(--ink);
-    transform: translate(-1px, -1px);
-  }
-
-  /* Table */
-  .screener-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-  }
-
-  .screener-table th {
-    padding: 10px 16px;
-    text-align: left;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-    color: var(--ink-light);
-    background: var(--bg-warm);
-    border-bottom: 2px solid var(--ink);
-    white-space: nowrap;
-    cursor: pointer;
-    user-select: none;
-  }
-
-  .screener-table th:hover {
-    color: var(--ink);
-  }
-
-  .screener-table th.sorted {
-    color: var(--orange);
-  }
-
-  .screener-table th.sorted::after {
-    content: ' ▼';
-    font-size: 9px;
-  }
-
-  .screener-table th.numeric { text-align: right; }
-
-  .screener-table td {
-    padding: 11px 16px;
-    border-bottom: 1px solid var(--ink-faint);
-    white-space: nowrap;
-    font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--ink-medium);
-  }
-
-  .screener-table td.numeric {
-    text-align: right;
-    font-variant-numeric: tabular-nums;
-  }
-
-  .screener-table tbody tr {
-    transition: background 0.1s;
-  }
-
-  .screener-table tbody tr:hover {
-    background: var(--yellow-light);
-  }
-
-  .player-cell {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-family: var(--font-display);
-  }
-
-  .player-name-text {
-    font-weight: 700;
-    font-size: 13px;
-    color: var(--ink);
-  }
-
-  .player-meta-text {
-    font-size: 11px;
-    color: var(--ink-light);
-    font-weight: 400;
-  }
-
-  /* Position badges — chunky, ownable */
-  .pos {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 22px;
-    font-size: 10px;
-    font-weight: 700;
-    border-radius: 5px;
-    font-family: var(--font-mono);
-    border: 2px solid;
-    letter-spacing: 0.3px;
-  }
-
-  .pos-qb { background: var(--blue-light); color: var(--pos-qb); border-color: var(--pos-qb); }
-  .pos-rb { background: var(--green-light); color: var(--pos-rb); border-color: var(--pos-rb); }
-  .pos-wr { background: var(--orange-light); color: var(--pos-wr); border-color: var(--pos-wr); }
-  .pos-te { background: var(--purple-light); color: var(--pos-te); border-color: var(--pos-te); }
-
-  /* Stat highlights */
-  .s-hot { color: var(--green); font-weight: 700; }
-  .s-fire { color: var(--orange); font-weight: 700; }
-  .s-cold { color: var(--red); }
-
-  /* Handwritten table annotations */
-  .table-annotation {
-    position: absolute;
-    font-family: var(--font-hand);
-    font-size: 16px;
-    color: var(--red);
-    transform: rotate(-4deg);
-    pointer-events: none;
-  }
-
-  /* ===== PLAYER CARDS — the "stat card" ===== */
-  .cards-row {
-    display: flex;
-    gap: 24px;
-    margin: 0 32px 48px;
-    flex-wrap: wrap;
-  }
-
-  .player-card {
-    width: 300px;
-    background: var(--bg-card);
-    border: 3px solid var(--ink);
-    border-radius: var(--radius-chunky);
-    overflow: hidden;
-    transition: all 0.15s;
-    box-shadow: 4px 4px 0 var(--ink);
-    position: relative;
-  }
-
-  .player-card:hover {
-    box-shadow: 6px 6px 0 var(--ink);
-    transform: translate(-2px, -2px);
-  }
-
-  .card-top-stripe {
-    height: 6px;
-  }
-
-  .stripe-wr { background: var(--pos-wr); }
-  .stripe-rb { background: var(--pos-rb); }
-  .stripe-qb { background: var(--pos-qb); }
-
-  .card-head {
-    padding: 16px 20px 12px;
-    border-bottom: 2px dashed var(--ink-faint);
-    position: relative;
-  }
-
-  .card-pname {
-    font-size: 20px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-    margin-bottom: 4px;
-  }
-
-  .card-psub {
-    font-size: 12px;
-    color: var(--ink-light);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .card-psub .dot {
-    width: 3px; height: 3px; border-radius: 50%; background: var(--ink-faint);
-  }
-
-  /* Tier sticker — rotated, looks slapped on */
-  .tier-sticker {
-    position: absolute;
-    top: 12px;
-    right: 14px;
-    font-size: 10px;
-    font-weight: 700;
-    font-family: var(--font-mono);
     padding: 3px 10px;
-    border-radius: 4px;
-    border: 2px solid;
-    transform: rotate(3deg);
-  }
-
-  .sticker-elite {
-    color: var(--orange);
-    border-color: var(--orange);
-    background: var(--orange-light);
-  }
-
-  .sticker-prospect {
-    color: var(--blue);
-    border-color: var(--blue);
-    background: var(--blue-light);
-  }
-
-  .sticker-starter {
-    color: var(--green);
-    border-color: var(--green);
-    background: var(--green-light);
-  }
-
-  /* Stat bars — chunky with personality */
-  .card-stats {
-    padding: 14px 20px;
-  }
-
-  .srow {
-    display: flex;
-    align-items: center;
-    margin-bottom: 9px;
-  }
-
-  .srow:last-child { margin-bottom: 0; }
-
-  .slabel {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--ink-medium);
-    width: 80px;
-    flex-shrink: 0;
-  }
-
-  .sbar-track {
-    flex: 1;
-    height: 10px;
-    background: var(--bg-warm);
-    border-radius: 5px;
-    margin: 0 10px;
-    overflow: hidden;
-    border: 1.5px solid var(--ink-faint);
-  }
-
-  .sbar-fill {
-    height: 100%;
-    border-radius: 4px;
-    transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-
-  .fill-orange { background: var(--orange); }
-  .fill-green { background: var(--green); }
-  .fill-blue { background: var(--blue); }
-  .fill-purple { background: var(--purple); }
-  .fill-yellow { background: var(--yellow); }
-  .fill-red { background: var(--red); }
-
-  .sval {
-    font-size: 13px;
-    font-family: var(--font-mono);
-    font-weight: 700;
-    color: var(--ink);
-    width: 48px;
-    text-align: right;
-  }
-
-  /* Card footer */
-  .card-foot {
-    padding: 10px 20px;
-    border-top: 2px dashed var(--ink-faint);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: var(--bg-warm);
-  }
-
-  .cfoot-label {
-    font-size: 11px;
-    color: var(--ink-light);
-  }
-
-  .cfoot-value {
-    font-size: 14px;
-    font-weight: 700;
-    font-family: var(--font-mono);
-    color: var(--orange);
-  }
-
-  /* Handwritten card annotation */
-  .card-scribble {
-    position: absolute;
-    font-family: var(--font-hand);
-    font-size: 15px;
-    color: var(--red);
-    transform: rotate(-6deg);
-    right: 16px;
-    bottom: 52px;
-    pointer-events: none;
-  }
-
-  /* ===== AGENT OUTPUT ===== */
-  .agent-section {
-    margin: 0 32px 48px;
-    max-width: 720px;
-  }
-
-  .agent-card {
-    background: var(--bg-card);
-    border: 3px solid var(--ink);
-    border-radius: var(--radius-chunky);
-    overflow: hidden;
-    box-shadow: 4px 4px 0 var(--ink);
-  }
-
-  .agent-head {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 14px 20px;
-    border-bottom: 3px solid var(--ink);
-    background: var(--bg-warm);
-  }
-
-  /* Pixel-art-style agent avatar */
-  .agent-avi {
-    width: 44px;
-    height: 44px;
-    border-radius: 10px;
     border: 2px solid var(--ink);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    background: var(--yellow-light);
-    box-shadow: 2px 2px 0 var(--ink);
-    image-rendering: pixelated;
-  }
-
-  .agent-avi.hawk { background: var(--orange-light); }
-  .agent-avi.owl { background: var(--yellow-light); }
-
-  .agent-id {
-    flex: 1;
-  }
-
-  .agent-nm {
-    font-weight: 700;
-    font-size: 16px;
-    letter-spacing: -0.3px;
-  }
-
-  .agent-rl {
-    font-size: 11px;
-    color: var(--ink-light);
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
-
-  .agent-time {
-    font-size: 11px;
-    color: var(--ink-light);
-    font-family: var(--font-mono);
-  }
-
-  .agent-body {
-    padding: 20px;
-  }
-
-  .agent-body p {
-    font-size: 14px;
-    line-height: 1.75;
-    color: var(--ink-medium);
-    margin-bottom: 14px;
-  }
-
-  .agent-body p:last-child { margin-bottom: 0; }
-
-  /* Urgency tags — sticker energy */
-  .utag {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 4px 12px;
-    font-size: 11px;
-    font-weight: 700;
-    font-family: var(--font-mono);
-    border-radius: 6px;
-    border: 2px solid;
-    letter-spacing: 0.5px;
-  }
-
-  .utag-opp {
-    color: var(--green);
-    border-color: var(--green);
-    background: var(--green-light);
-    transform: rotate(-1deg);
-    display: inline-block;
-  }
-
-  .utag-urgent {
-    color: var(--red);
-    border-color: var(--red);
-    background: var(--red-light);
-    transform: rotate(1deg);
-    display: inline-block;
-  }
-
-  .utag-monitor {
-    color: var(--orange);
-    border-color: var(--orange);
-    background: var(--orange-light);
-  }
-
-  .agent-callout {
-    font-family: var(--font-hand);
-    font-size: 18px;
-    color: var(--orange);
-    margin-top: 4px;
-  }
-
-  /* Evidence box */
-  .evidence-box {
-    margin-top: 16px;
-    padding: 14px 16px;
-    background: var(--bg-warm);
-    border-radius: 10px;
-    border: 2px solid var(--ink-faint);
-    border-left: 4px solid var(--orange);
-  }
-
-  .ev-label {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-    color: var(--ink-light);
-    margin-bottom: 6px;
-  }
-
-  .ev-text {
-    font-size: 12px;
-    font-family: var(--font-mono);
-    color: var(--ink-medium);
-    line-height: 1.7;
-  }
-
-  .agent-foot {
-    padding: 10px 20px;
-    border-top: 2px solid var(--ink-faint);
-    display: flex;
-    gap: 16px;
+    border-radius: 20px;
     background: var(--bg-warm);
   }
 
-  .agent-foot a {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--ink-light);
-    text-decoration: none;
-    cursor: pointer;
-    transition: color 0.15s;
-  }
+  .mascot-trait:nth-child(odd) { transform: rotate(-1deg); }
+  .mascot-trait:nth-child(even) { transform: rotate(1deg); }
 
-  .agent-foot a:hover {
-    color: var(--orange);
-  }
-
-  /* ===== BRIEFING ===== */
-  .briefing-section {
-    margin: 0 32px 48px;
-    max-width: 720px;
-  }
-
-  .briefing {
-    background: var(--bg-card);
-    border: 3px solid var(--ink);
-    border-radius: var(--radius-chunky);
-    overflow: hidden;
-    box-shadow: 4px 4px 0 var(--ink);
-  }
-
-  .briefing-top {
-    padding: 16px 20px;
-    border-bottom: 3px solid var(--ink);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: var(--yellow-light);
-  }
-
-  .briefing-tl {
-    font-size: 16px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .briefing-tl .emoji {
-    font-size: 22px;
-  }
-
-  .briefing-dt {
-    font-size: 12px;
-    color: var(--ink-light);
-    font-family: var(--font-mono);
-  }
-
-  .brief-item {
-    padding: 14px 20px;
-    border-bottom: 1px solid var(--ink-faint);
-    display: flex;
-    gap: 14px;
-    transition: background 0.1s;
-    cursor: pointer;
-  }
-
-  .brief-item:last-child { border-bottom: none; }
-  .brief-item:hover { background: var(--bg-warm); }
-
-  .brief-dot-wrap { padding-top: 4px; }
-
-  .bdot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    border: 2px solid;
-  }
-
-  .bdot-red { background: var(--red-light); border-color: var(--red); }
-  .bdot-orange { background: var(--orange-light); border-color: var(--orange); }
-  .bdot-green { background: var(--green-light); border-color: var(--green); }
-
-  .brief-content { flex: 1; }
-
-  .brief-hl {
-    font-size: 14px;
-    font-weight: 700;
-    margin-bottom: 2px;
-    color: var(--ink);
-  }
-
-  .brief-detail {
-    font-size: 13px;
-    color: var(--ink-medium);
-    line-height: 1.5;
-  }
-
-  .brief-src {
-    font-size: 11px;
-    color: var(--ink-light);
-    font-family: var(--font-mono);
-    margin-top: 4px;
-  }
-
-  /* ===== FORMULAS — sticker collection ===== */
-  .formulas-row {
-    margin: 0 32px 48px;
-    display: flex;
-    gap: 14px;
-    flex-wrap: wrap;
-  }
-
-  .formula-sticker {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 16px;
-    background: var(--bg-card);
-    border: 2px solid var(--ink);
-    border-radius: 10px;
-    box-shadow: 3px 3px 0 var(--ink);
-    transition: all 0.1s;
-    cursor: pointer;
-  }
-
-  .formula-sticker:hover {
-    box-shadow: 4px 4px 0 var(--ink);
-    transform: translate(-1px, -1px);
-  }
-
-  .formula-sticker:nth-child(1) { transform: rotate(-1deg); }
-  .formula-sticker:nth-child(2) { transform: rotate(0.5deg); }
-  .formula-sticker:nth-child(3) { transform: rotate(-0.5deg); }
-
-  .formula-sticker:nth-child(1):hover { transform: rotate(-1deg) translate(-1px, -1px); }
-  .formula-sticker:nth-child(2):hover { transform: rotate(0.5deg) translate(-1px, -1px); }
-  .formula-sticker:nth-child(3):hover { transform: rotate(-0.5deg) translate(-1px, -1px); }
-
-  .fsticker-name {
-    font-weight: 700;
-    font-size: 14px;
-    color: var(--ink);
-  }
-
-  .fsticker-by {
-    font-size: 11px;
-    color: var(--ink-light);
-  }
-
-  .fsticker-stars {
-    font-size: 12px;
-    color: var(--yellow);
-  }
-
-  /* ===== LOADING ===== */
-  .loading-section {
-    margin: 0 32px 48px;
-  }
-
-  .loading-msg {
-    font-size: 14px;
-    color: var(--ink-light);
-    font-family: var(--font-mono);
-    margin-bottom: 10px;
-  }
-
-  .loading-bar {
-    height: 6px;
-    background: var(--bg-warm);
-    border-radius: 3px;
-    border: 1.5px solid var(--ink-faint);
-    overflow: hidden;
-    max-width: 300px;
-  }
-
-  .loading-fill {
-    height: 100%;
-    width: 30%;
-    background: var(--orange);
-    border-radius: 2px;
-    animation: slide 1.5s ease-in-out infinite;
-  }
-
-  @keyframes slide {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(400%); }
-  }
-
-  /* ===== PALETTE DISPLAY ===== */
-  .palette-row {
-    display: flex;
-    gap: 14px;
-    margin: 0 32px 48px;
-    flex-wrap: wrap;
-  }
-
-  .swatch {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .swatch-box {
-    width: 64px;
-    height: 64px;
-    border-radius: 10px;
-    border: 3px solid var(--ink);
-    box-shadow: 3px 3px 0 var(--ink);
-  }
-
-  .swatch-name {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--ink-medium);
-  }
-
-  .swatch-hex {
-    font-size: 10px;
-    color: var(--ink-light);
-    font-family: var(--font-mono);
-  }
-
-  /* ===== TYPE SCALE ===== */
-  .type-section {
-    margin: 0 32px 48px;
-  }
-
-  .type-row {
-    margin-bottom: 16px;
-    display: flex;
-    align-items: baseline;
-    gap: 24px;
-  }
-
-  .type-label {
-    width: 160px;
-    font-size: 11px;
-    color: var(--ink-light);
-    font-family: var(--font-mono);
-    flex-shrink: 0;
-  }
-
-  .ts-xl { font-size: 32px; font-weight: 700; letter-spacing: -1px; }
-  .ts-lg { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
-  .ts-body { font-size: 14px; color: var(--ink-medium); }
-  .ts-mono { font-size: 13px; font-family: var(--font-mono); color: var(--ink-medium); }
-  .ts-hand { font-size: 24px; font-family: var(--font-hand); color: var(--orange); }
-  .ts-label-ex { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink-light); }
-
-  /* ===== NCAA SCREENER VARIANT ===== */
-  .ncaa-toolbar {
-    background: var(--blue-light) !important;
-  }
-
-  .ncaa-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 3px 8px;
-    font-size: 10px;
-    font-weight: 700;
-    color: var(--blue);
-    background: var(--blue-light);
-    border: 2px solid var(--blue);
-    border-radius: 5px;
-    font-family: var(--font-mono);
-  }
-
-  /* ===== WATERMARK ===== */
-  .watermark {
+  /* ===== FOOTER ===== */
+  .site-footer {
     text-align: center;
-    padding: 40px 32px;
-    font-family: var(--font-hand);
-    font-size: 18px;
-    color: var(--ink-faint);
-  }
-
-  /* ===== DARK MODE AGENT PANEL (contrast section) ===== */
-  .dark-panel {
-    background: var(--bg-ink);
-    margin: 0 32px 48px;
-    border: 3px solid var(--ink);
-    border-radius: var(--radius-chunky);
-    padding: 32px;
-    box-shadow: 6px 6px 0 var(--ink);
-    max-width: 720px;
-  }
-
-  .dark-panel .section-title {
-    color: var(--ink-faint);
-  }
-
-  .dark-panel .section-annotation {
-    color: var(--yellow);
-  }
-
-  .dark-panel-note {
-    font-size: 14px;
-    color: var(--ink-light);
-    margin-bottom: 20px;
-    line-height: 1.6;
-  }
-
-  .dark-briefing-item {
-    padding: 12px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-    display: flex;
-    gap: 12px;
-  }
-
-  .dark-briefing-item:last-child { border-bottom: none; }
-
-  .dark-hl {
-    font-size: 14px;
-    font-weight: 700;
-    color: #e8ecf1;
-    margin-bottom: 2px;
-  }
-
-  .dark-detail {
-    font-size: 13px;
-    color: var(--ink-light);
-    line-height: 1.5;
-  }
-
-  .dark-src {
-    font-size: 11px;
-    color: rgba(255,255,255,0.25);
+    padding: 32px 24px;
+    border-top: 3px solid var(--ink);
     font-family: var(--font-mono);
-    margin-top: 3px;
+    font-size: 12px;
+    color: var(--ink-light);
+  }
+
+  .site-footer a { color: var(--orange); text-decoration: none; font-weight: 700; }
+
+  /* ===== WAITLIST ===== */
+  .waitlist {
+    max-width: 500px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 40px 24px;
+  }
+
+  .waitlist h2 {
+    font-family: var(--font-display);
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+
+  .waitlist p {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-medium);
+    margin-bottom: 16px;
+  }
+
+  .waitlist-form {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .waitlist-form input {
+    width: 260px;
   }
 </style>
 </head>
@@ -1257,572 +332,151 @@
 
 <!-- NAV -->
 <nav class="topnav">
-  <div class="logo">
-    <div class="logo-mark">&#x1F42F;</div>
-    <div class="logo-text">Razzle</div>
-  </div>
-  <div class="nav-links">
-    <a class="nav-link" href="#">Home</a>
-    <a class="nav-link active" href="#">The Lab</a>
-    <a class="nav-link" href="#">League Intel</a>
-    <a class="nav-link" href="#">War Room</a>
-  </div>
-  <div class="nav-right">
-    <div class="sync-pill">
-      <div class="sync-dot"></div>
-      synced 4m ago
-    </div>
-  </div>
+  <a href="/" class="logo">
+    <div class="logo-mark">🐯</div>
+    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/" class="active">Home</a></li>
+    <li><a href="/lab.html">The Lab</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
+  </ul>
 </nav>
 
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-mascot">🐯</div>
+  <h1>Fantasy football's <span>Bloomberg terminal</span></h1>
+  <div class="hero-sub">600+ players. 40+ stats. Custom formulas. Zero cost.</div>
+  <div class="hero-cta">
+    <a href="/lab.html" class="btn-hero btn-hero-primary">Open The Lab</a>
+    <a href="#waitlist" class="btn-hero btn-hero-secondary">Join Waitlist</a>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<div class="section">
+  <div class="section-label">The Lab — Free Forever</div>
+  <h2>Every stat. Every filter. Every angle.</h2>
+  <p class="section-desc">Full nflverse data depth. 100+ metrics, advanced filters, custom formulas, radar charts, scatter plots. The tool Reddit power users can't stop screenshotting.</p>
+
+  <div class="features">
+    <div class="feature-card">
+      <span class="feature-icon">📊</span>
+      <h3>Screener</h3>
+      <p>Sort and filter 600+ players across 40+ stats. Position chips, advanced threshold filters, column presets.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🧪</span>
+      <h3>Custom Formulas</h3>
+      <p>Blend stats into weighted composite scores. Your secret sauce becomes a sortable, shareable column.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🎯</span>
+      <h3>Radar Charts</h3>
+      <p>See a player's shape across 6 stats. Overlay two players to compare profiles instantly.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">📈</span>
+      <h3>Trend Lines</h3>
+      <p>Week-by-week stat trajectories. Spot breakouts, catch declines, see the arc.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🔗</span>
+      <h3>Shareable URLs</h3>
+      <p>Every filter, sort, and column config serializes to a URL. Share your exact view.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">📸</span>
+      <h3>Export to PNG</h3>
+      <p>One-click image export with Razzle watermark baked in. Screenshot-ready for Reddit.</p>
+    </div>
+  </div>
+</div>
+
 <!-- MASCOT -->
-<div class="section-header">
-  <div class="section-title">The Mascot</div>
-  <div class="section-annotation">the gigachad garfield of fantasy football</div>
-</div>
-<div class="section-note">Razzle is a Bengal tiger. Chief of Staff. Runs the whole operation. Toylike, chunky, unbothered — but the smartest one in the room and he knows it. He doesn't brief you because he has to. He briefs you because he's already figured it all out.</div>
-
-<div class="mascot-section">
-  <div class="mascot-card">
-    <div class="mascot-visual">
-      <div class="mascot-emoji">&#x1F42F;</div>
-      <div class="mascot-nameplate">RAZZLE</div>
-    </div>
+<div class="section">
+  <div class="section-label">Meet Your GM</div>
+  <div class="mascot-row">
+    <div class="mascot-visual">🐯</div>
     <div class="mascot-info">
-      <div class="mascot-title">Razzle</div>
-      <div class="mascot-role">Chief of Staff &middot; Bengal Tiger</div>
-      <div class="mascot-bio">
-        Runs the front office. Coordinates all agent intel, resolves conflicts, delivers your morning briefing. Has the energy of a cat who knocked your fantasy projections off the table and then showed you better ones. Never rushes. Never wrong. Occasionally smug about it.
-      </div>
+      <h3>Razzle</h3>
+      <div class="mascot-role">Chief of Staff</div>
+      <p class="mascot-bio">Bengal tiger. Runs the whole operation. Doesn't brief you because he has to — briefs you because he's already figured it all out. Your GM, whether you asked for one or not.</p>
       <div class="mascot-traits">
-        <div class="mascot-trait">unbothered</div>
-        <div class="mascot-trait">always right</div>
-        <div class="mascot-trait">slightly smug</div>
-        <div class="mascot-trait">your GM</div>
-      </div>
-      <div class="mascot-scribble">he's not impressed by your league. he's helping anyway.</div>
-    </div>
-  </div>
-</div>
-
-<!-- PALETTE -->
-<div class="section-header">
-  <div class="section-title">Color Palette</div>
-  <div class="section-annotation">warm paper, not dark void</div>
-</div>
-<div class="section-note">Warm sand. Tiger orange. Bold borders. Every color earns its spot.</div>
-
-<div class="palette-row">
-  <div class="swatch">
-    <div class="swatch-box" style="background: #ede0cf;"></div>
-    <div class="swatch-name">Sand</div>
-    <div class="swatch-hex">#ede0cf</div>
-  </div>
-  <div class="swatch">
-    <div class="swatch-box" style="background: #1a1a2e;"></div>
-    <div class="swatch-name">Ink</div>
-    <div class="swatch-hex">#1a1a2e</div>
-  </div>
-  <div class="swatch">
-    <div class="swatch-box" style="background: #d97757;"></div>
-    <div class="swatch-name">Tiger</div>
-    <div class="swatch-hex">#d97757</div>
-  </div>
-  <div class="swatch">
-    <div class="swatch-box" style="background: #ffc857;"></div>
-    <div class="swatch-name">Yellow</div>
-    <div class="swatch-hex">#ffc857</div>
-  </div>
-  <div class="swatch">
-    <div class="swatch-box" style="background: #2ec4b6;"></div>
-    <div class="swatch-name">Teal</div>
-    <div class="swatch-hex">#2ec4b6</div>
-  </div>
-  <div class="swatch">
-    <div class="swatch-box" style="background: #5b7fff;"></div>
-    <div class="swatch-name">Blue/NCAA</div>
-    <div class="swatch-hex">#5b7fff</div>
-  </div>
-  <div class="swatch">
-    <div class="swatch-box" style="background: #e63946;"></div>
-    <div class="swatch-name">Red</div>
-    <div class="swatch-hex">#e63946</div>
-  </div>
-  <div class="swatch">
-    <div class="swatch-box" style="background: #8b5cf6;"></div>
-    <div class="swatch-name">Purple</div>
-    <div class="swatch-hex">#8b5cf6</div>
-  </div>
-</div>
-
-<!-- TYPOGRAPHY -->
-<div class="section-header">
-  <div class="section-title">Typography</div>
-  <div class="section-annotation">three fonts, three jobs</div>
-</div>
-<div class="section-note">Space Garfield for structure. Space Mono for data. Caveat for the scribbles in the margins — the personality that leaks through.</div>
-
-<div class="type-section">
-  <div class="type-row">
-    <div class="type-label">32 / 700 Garfield</div>
-    <div class="ts-xl">The War Room</div>
-  </div>
-  <div class="type-row">
-    <div class="type-label">20 / 700 Garfield</div>
-    <div class="ts-lg">Ja'Marr Chase</div>
-  </div>
-  <div class="type-row">
-    <div class="type-label">14 / 400 Garfield</div>
-    <div class="ts-body">Snap share trending up 8% over three weeks. Route participation is elite-tier.</div>
-  </div>
-  <div class="type-row">
-    <div class="type-label">13 / 400 Mono</div>
-    <div class="ts-mono">tgt_share: 28.4% · air_yds: 12.3 · epa: 0.31</div>
-  </div>
-  <div class="type-row">
-    <div class="type-label">24 / 600 Caveat</div>
-    <div class="ts-hand">this is the one ^</div>
-  </div>
-  <div class="type-row">
-    <div class="type-label">11 / 700 Upper</div>
-    <div class="ts-label-ex">Weekly Briefing · Urgency Tier · Evidence</div>
-  </div>
-</div>
-
-<!-- LOADING -->
-<div class="section-header">
-  <div class="section-title">Loading</div>
-  <div class="section-annotation">the small moments matter</div>
-</div>
-<div class="loading-section">
-  <div class="loading-msg">pulling film...</div>
-  <div class="loading-bar">
-    <div class="loading-fill"></div>
-  </div>
-</div>
-
-<!-- SCREENER — NFL -->
-<div class="section-header">
-  <div class="section-title">The Lab</div>
-  <div class="section-annotation">the Bloomberg terminal that doesn't dress like one</div>
-</div>
-<div class="section-note">Same analytical power. Doesn't look like it wants to sell you a Bloomberg subscription.</div>
-
-<div class="screener-container">
-  <div class="screener-toolbar">
-    <div class="toolbar-left">
-      <div class="league-toggle">
-        <div class="toggle-opt active">NFL</div>
-        <div class="toggle-opt">NCAA</div>
-      </div>
-      <div class="chip active-wr">WR <span class="x">×</span></div>
-      <div class="chip">Snap% > 60 <span class="x">×</span></div>
-      <div class="chip">Tgt Share > 18% <span class="x">×</span></div>
-      <div class="chip">+ Filter</div>
-    </div>
-    <div class="toolbar-right">
-      <span class="player-count">47 players</span>
-      <button class="btn-chunky">Save View</button>
-      <button class="btn-primary">Share</button>
-    </div>
-  </div>
-  <table class="screener-table">
-    <thead>
-      <tr>
-        <th style="width: 44px;"></th>
-        <th>Player</th>
-        <th class="numeric sorted">PPR/G</th>
-        <th class="numeric">Tgt Share</th>
-        <th class="numeric">Snap %</th>
-        <th class="numeric">Air Yds/Tgt</th>
-        <th class="numeric">EPA/Play</th>
-        <th class="numeric">Sep Rating</th>
-        <th class="numeric">RZ Tgt%</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="pos pos-wr">WR</span></td>
-        <td><div class="player-cell"><div><span class="player-name-text">Ja'Marr Chase</span> <span class="player-meta-text">CIN · 25</span></div></div></td>
-        <td class="numeric s-fire">24.8</td>
-        <td class="numeric s-hot">31.2%</td>
-        <td class="numeric">94.1%</td>
-        <td class="numeric">11.4</td>
-        <td class="numeric s-hot">0.38</td>
-        <td class="numeric">8.7</td>
-        <td class="numeric s-hot">28.4%</td>
-      </tr>
-      <tr>
-        <td><span class="pos pos-wr">WR</span></td>
-        <td><div class="player-cell"><div><span class="player-name-text">CeeDee Lamb</span> <span class="player-meta-text">DAL · 26</span></div></div></td>
-        <td class="numeric s-fire">22.1</td>
-        <td class="numeric s-hot">29.8%</td>
-        <td class="numeric">96.3%</td>
-        <td class="numeric">9.2</td>
-        <td class="numeric s-hot">0.29</td>
-        <td class="numeric">9.1</td>
-        <td class="numeric">22.1%</td>
-      </tr>
-      <tr>
-        <td><span class="pos pos-wr">WR</span></td>
-        <td><div class="player-cell"><div><span class="player-name-text">Amon-Ra St. Brown</span> <span class="player-meta-text">DET · 25</span></div></div></td>
-        <td class="numeric s-fire">21.4</td>
-        <td class="numeric s-hot">27.6%</td>
-        <td class="numeric">91.8%</td>
-        <td class="numeric">7.1</td>
-        <td class="numeric">0.22</td>
-        <td class="numeric s-hot">9.4</td>
-        <td class="numeric s-hot">25.7%</td>
-      </tr>
-      <tr>
-        <td><span class="pos pos-wr">WR</span></td>
-        <td><div class="player-cell"><div><span class="player-name-text">Malik Nabers</span> <span class="player-meta-text">NYG · 22</span></div></div></td>
-        <td class="numeric">19.7</td>
-        <td class="numeric s-hot">26.3%</td>
-        <td class="numeric">89.2%</td>
-        <td class="numeric s-hot">12.8</td>
-        <td class="numeric s-hot">0.31</td>
-        <td class="numeric s-hot">9.2</td>
-        <td class="numeric">19.3%</td>
-      </tr>
-      <tr>
-        <td><span class="pos pos-wr">WR</span></td>
-        <td><div class="player-cell"><div><span class="player-name-text">Garrett Wilson</span> <span class="player-meta-text">NYJ · 25</span></div></div></td>
-        <td class="numeric">17.2</td>
-        <td class="numeric">24.1%</td>
-        <td class="numeric">92.7%</td>
-        <td class="numeric">8.9</td>
-        <td class="numeric s-cold">0.08</td>
-        <td class="numeric">8.3</td>
-        <td class="numeric">18.6%</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-<!-- PLAYER CARDS -->
-<div class="section-header">
-  <div class="section-title">Player Cards</div>
-  <div class="section-annotation">the Pokemon card DNA lives here ^</div>
-</div>
-<div class="section-note">Chunky borders. Stat bars you can read from across the room. Tier stickers slapped on like they mean it. Dashed dividers like a scouting report torn from a notebook.</div>
-
-<div class="cards-row">
-  <div class="player-card">
-    <div class="card-top-stripe stripe-wr"></div>
-    <div class="card-head">
-      <div class="card-pname">Ja'Marr Chase</div>
-      <div class="card-psub">
-        <span class="pos pos-wr">WR</span>
-        <span class="dot"></span>
-        CIN
-        <span class="dot"></span>
-        25 yrs
-      </div>
-      <div class="tier-sticker sticker-elite">ELITE</div>
-    </div>
-    <div class="card-stats">
-      <div class="srow">
-        <div class="slabel">PPR / Gm</div>
-        <div class="sbar-track"><div class="sbar-fill fill-orange" style="width: 92%;"></div></div>
-        <div class="sval">24.8</div>
-      </div>
-      <div class="srow">
-        <div class="slabel">Tgt Share</div>
-        <div class="sbar-track"><div class="sbar-fill fill-orange" style="width: 88%;"></div></div>
-        <div class="sval">31.2%</div>
-      </div>
-      <div class="srow">
-        <div class="slabel">Snap %</div>
-        <div class="sbar-track"><div class="sbar-fill fill-green" style="width: 94%;"></div></div>
-        <div class="sval">94.1%</div>
-      </div>
-      <div class="srow">
-        <div class="slabel">EPA / Play</div>
-        <div class="sbar-track"><div class="sbar-fill fill-green" style="width: 78%;"></div></div>
-        <div class="sval">0.38</div>
-      </div>
-      <div class="srow">
-        <div class="slabel">Separation</div>
-        <div class="sbar-track"><div class="sbar-fill fill-blue" style="width: 72%;"></div></div>
-        <div class="sval">8.7</div>
-      </div>
-      <div class="srow">
-        <div class="slabel">RZ Tgt %</div>
-        <div class="sbar-track"><div class="sbar-fill fill-red" style="width: 82%;"></div></div>
-        <div class="sval">28.4%</div>
-      </div>
-    </div>
-    <div class="card-foot">
-      <div class="cfoot-label">My WR Score</div>
-      <div class="cfoot-value">94.2</div>
-    </div>
-    <div class="card-scribble">unguardable rn</div>
-  </div>
-
-  <div class="player-card">
-    <div class="card-top-stripe stripe-rb"></div>
-    <div class="card-head">
-      <div class="card-pname">Ashton Jeanty</div>
-      <div class="card-psub">
-        <span class="pos pos-rb">RB</span>
-        <span class="dot"></span>
-        <span class="ncaa-badge">PROSPECT</span>
-        <span class="dot"></span>
-        Boise St
-      </div>
-      <div class="tier-sticker sticker-prospect">NCAA</div>
-    </div>
-    <div class="card-stats">
-      <div class="srow">
-        <div class="slabel">Yds / Carry</div>
-        <div class="sbar-track"><div class="sbar-fill fill-green" style="width: 95%;"></div></div>
-        <div class="sval">7.1</div>
-      </div>
-      <div class="srow">
-        <div class="slabel">Broken Tkl</div>
-        <div class="sbar-track"><div class="sbar-fill fill-green" style="width: 91%;"></div></div>
-        <div class="sval">89</div>
-      </div>
-      <div class="srow">
-        <div class="slabel">Yds After</div>
-        <div class="sbar-track"><div class="sbar-fill fill-orange" style="width: 88%;"></div></div>
-        <div class="sval">4.8</div>
-      </div>
-      <div class="srow">
-        <div class="slabel">Rec / Game</div>
-        <div class="sbar-track"><div class="sbar-fill fill-blue" style="width: 52%;"></div></div>
-        <div class="sval">2.1</div>
-      </div>
-      <div class="srow">
-        <div class="slabel">Rush Share</div>
-        <div class="sbar-track"><div class="sbar-fill fill-purple" style="width: 84%;"></div></div>
-        <div class="sval">71.3%</div>
-      </div>
-      <div class="srow">
-        <div class="slabel">TD Rate</div>
-        <div class="sbar-track"><div class="sbar-fill fill-red" style="width: 76%;"></div></div>
-        <div class="sval">8.2%</div>
-      </div>
-    </div>
-    <div class="card-foot">
-      <div class="cfoot-label">Draft Projection</div>
-      <div class="cfoot-value">Rd 1 · Top 10</div>
-    </div>
-    <div class="card-scribble">generational?</div>
-  </div>
-
-  <div class="player-card">
-    <div class="card-top-stripe stripe-qb"></div>
-    <div class="card-head">
-      <div class="card-pname">Caleb Williams</div>
-      <div class="card-psub">
-        <span class="pos pos-qb">QB</span>
-        <span class="dot"></span>
-        CHI
-        <span class="dot"></span>
-        23 yrs
-      </div>
-      <div class="tier-sticker sticker-starter">STARTER</div>
-    </div>
-    <div class="card-stats">
-      <div class="srow">
-        <div class="slabel">PPR / Gm</div>
-        <div class="sbar-track"><div class="sbar-fill fill-blue" style="width: 74%;"></div></div>
-        <div class="sval">19.4</div>
-      </div>
-      <div class="srow">
-        <div class="slabel">Comp %</div>
-        <div class="sbar-track"><div class="sbar-fill fill-blue" style="width: 68%;"></div></div>
-        <div class="sval">64.2%</div>
-      </div>
-      <div class="srow">
-        <div class="slabel">CPOE</div>
-        <div class="sbar-track"><div class="sbar-fill fill-green" style="width: 62%;"></div></div>
-        <div class="sval">+2.1</div>
-      </div>
-      <div class="srow">
-        <div class="slabel">EPA / Drop</div>
-        <div class="sbar-track"><div class="sbar-fill fill-green" style="width: 58%;"></div></div>
-        <div class="sval">0.14</div>
-      </div>
-      <div class="srow">
-        <div class="slabel">Pressure %</div>
-        <div class="sbar-track"><div class="sbar-fill fill-red" style="width: 71%;"></div></div>
-        <div class="sval">34.1%</div>
-      </div>
-      <div class="srow">
-        <div class="slabel">Rush Yds/G</div>
-        <div class="sbar-track"><div class="sbar-fill fill-orange" style="width: 55%;"></div></div>
-        <div class="sval">28.3</div>
-      </div>
-    </div>
-    <div class="card-foot">
-      <div class="cfoot-label">Razzle Signal</div>
-      <div class="cfoot-value">Breakout Watch</div>
-    </div>
-  </div>
-</div>
-
-<!-- AGENT OUTPUT -->
-<div class="section-header">
-  <div class="section-title">Agent Output</div>
-  <div class="section-annotation">scouting found something</div>
-</div>
-<div class="section-note">Warm paper, chunky borders, evidence you can check. The analysis is dead serious. The frame isn't pretending to be a terminal.</div>
-
-<div class="agent-section">
-  <div class="agent-card">
-    <div class="agent-head">
-      <div class="agent-avi hawk">&#x1F985;</div>
-      <div class="agent-id">
-        <div class="agent-nm">Talon</div>
-        <div class="agent-rl">Scout &middot; Philadelphia Eagles</div>
-      </div>
-      <div class="agent-time">today 6:42am</div>
-    </div>
-    <div class="agent-body">
-      <p><span class="utag utag-opp">OPPORTUNITY</span></p>
-      <p>Ladd McConkey's route participation rate has quietly climbed to 91% over the last four weeks — up from 74% in weeks 1-4. He's running the full tree now, not just the slot underneath work from early season. The target share hasn't caught up yet (16.2%), but the usage profile says it will.</p>
-      <p>Worth noting: Herbert's average depth of target to McConkey has increased from 6.8 to 11.3 yards over the same window. They're trusting him downfield.</p>
-      <p class="agent-callout">the box score doesn't show it yet. the film does.</p>
-      <div class="evidence-box">
-        <div class="ev-label">Evidence</div>
-        <div class="ev-text">
-          route_participation: 91.2% (wk5-8) vs 74.1% (wk1-4)<br>
-          aDOT: 11.3 (wk5-8) vs 6.8 (wk1-4)<br>
-          snap_pct: 88.4% (stable)<br>
-          separation: 9.1 (86th percentile)
-        </div>
-      </div>
-    </div>
-    <div class="agent-foot">
-      <a>View in Lab</a>
-      <a>Compare Players</a>
-      <a>Ask Follow-up</a>
-    </div>
-  </div>
-</div>
-
-<!-- BRIEFING -->
-<div class="section-header">
-  <div class="section-title">Morning Briefing</div>
-  <div class="section-annotation">Razzle never sleeps</div>
-</div>
-
-<div class="briefing-section">
-  <div class="briefing">
-    <div class="briefing-top">
-      <div class="briefing-tl">
-        <span class="emoji">&#x1F42F;</span>
-        Razzle's Morning Briefing
-      </div>
-      <div class="briefing-dt">Week 9 · Tue Nov 4</div>
-    </div>
-
-    <div class="brief-item">
-      <div class="brief-dot-wrap"><div class="bdot bdot-red"></div></div>
-      <div class="brief-content">
-        <div class="brief-hl">De'Von Achane — DNP Monday, hip</div>
-        <div class="brief-detail">Medical staff flags this as a 40% chance to miss Week 9. You have no viable RB2 on your bench. Scouting has three waiver targets ready.</div>
-        <div class="brief-src">src: medical, scouting</div>
-      </div>
-    </div>
-
-    <div class="brief-item">
-      <div class="brief-dot-wrap"><div class="bdot bdot-orange"></div></div>
-      <div class="brief-content">
-        <div class="brief-hl">Trade window closing on "BeerMe_Brady"</div>
-        <div class="brief-detail">Intel notes he's 6-2 and historically stops making moves after clinching. If you're targeting his bench depth, this week is the window.</div>
-        <div class="brief-src">src: intel, history</div>
-      </div>
-    </div>
-
-    <div class="brief-item">
-      <div class="brief-dot-wrap"><div class="bdot bdot-green"></div></div>
-      <div class="brief-content">
-        <div class="brief-hl">McConkey breakout signal</div>
-        <div class="brief-detail">Available in 68% of leagues. Projections show a 4-point PPR/G increase ROS if route participation holds. Worth a speculative add.</div>
-        <div class="brief-src">src: scouting, projections</div>
+        <span class="mascot-trait">unbothered</span>
+        <span class="mascot-trait">always right</span>
+        <span class="mascot-trait">slightly smug</span>
+        <span class="mascot-trait">your GM</span>
       </div>
     </div>
   </div>
 </div>
 
-<!-- DARK MODE WAR ROOM PREVIEW -->
-<div class="section-header">
-  <div class="section-title">War Room</div>
-  <div class="section-annotation">lights off when it's game time</div>
-</div>
-<div class="section-note">The War Room flips to dark. When you're in decision mode, the playful chrome steps aside. The contrast is intentional — the rest of the app is warm and inviting, but the War Room says "okay, we're locked in now."</div>
+<!-- WAR ROOM DEMO -->
+<div class="demo-section">
+  <div class="demo-inner">
+    <div class="section-label">The War Room — Coming Soon</div>
+    <h2>This is a real manager's War Room.</h2>
+    <p class="section-desc">Razzle and specialist agents with full league context. Personalized briefings, trade strategies, championship probability. This is what $240/year gets you.</p>
 
-<div class="dark-panel">
-  <div class="section-header" style="margin: 0 0 8px;">
-    <div class="section-title">Active Operations</div>
-    <div class="section-annotation">week 9 war room</div>
-  </div>
-  <div class="dark-panel-note">3 items need your attention before Wednesday waivers.</div>
-
-  <div class="dark-briefing-item">
-    <div class="brief-dot-wrap"><div class="bdot bdot-red"></div></div>
-    <div>
-      <div class="dark-hl">RB2 Vacancy — Achane likely out</div>
-      <div class="dark-detail">Scouting's top waiver pick: Roschon Johnson (72% snap projection). FAAB bid recommendation: $18 (54% of remaining budget).</div>
-      <div class="dark-src">confidence: high · sources: 3 agents</div>
+    <div class="demo-card">
+      <div class="agent-name">🐯 Razzle <span class="urgency urgency-urgent">Urgent</span></div>
+      <span class="redacted">████████</span> just dropped <span class="redacted">██████</span> to waivers. Based on <span class="redacted">████</span>'s FAAB patterns, they'll bid $<span class="redacted">██</span>. You should bid $<span class="redacted">██</span> to guarantee the pickup. This changes your championship odds from <span class="redacted">██</span>% to <span class="redacted">██</span>%.
     </div>
-  </div>
 
-  <div class="dark-briefing-item">
-    <div class="brief-dot-wrap"><div class="bdot bdot-orange"></div></div>
-    <div>
-      <div class="dark-hl">Trade package ready for BeerMe_Brady</div>
-      <div class="dark-detail">Intel has a proposal staged. Opening offer: your Diontae Johnson + 2026 3rd for his Jaylen Waddle. Walkaway: adding a 2026 2nd.</div>
-      <div class="dark-src">confidence: medium · behavioral profile: 3 seasons</div>
+    <div class="demo-card">
+      <div class="agent-name">🦅 Scout <span class="urgency urgency-opportunity">Opportunity</span></div>
+      <span class="redacted">██████████</span> saw a usage spike in Weeks <span class="redacted">██</span>-<span class="redacted">██</span>: snap share up from <span class="redacted">██</span>% to <span class="redacted">██</span>%, target share <span class="redacted">██</span>%. Dynasty buy window before price corrects.
     </div>
-  </div>
 
-  <div class="dark-briefing-item">
-    <div class="brief-dot-wrap"><div class="bdot bdot-green"></div></div>
-    <div>
-      <div class="dark-hl">McConkey — speculative stash</div>
-      <div class="dark-detail">No FAAB needed, he's a free agent. Roster analysis says you can absorb a bench stash. Drop candidate: Dontayvion Wicks.</div>
-      <div class="dark-src">confidence: high · breakout model: 78th percentile</div>
+    <div class="demo-card">
+      <div class="agent-name">🐻 Diplomat <span class="urgency urgency-monitor">Monitor</span></div>
+      <span class="redacted">████████</span> in your league has lost 3 straight and historically panic-sells RBs at this point. They're holding <span class="redacted">██████</span> — send an offer this week at <span class="redacted">██</span>% of market value. Acceptance probability: <span class="redacted">██</span>%.
+    </div>
+
+    <div class="demo-cta">
+      <p>this is what league context looks like</p>
+      <a href="#waitlist" class="btn-hero btn-hero-primary" style="background:var(--yellow); color:var(--ink);">Join the Waitlist</a>
     </div>
   </div>
 </div>
 
-<!-- FORMULAS -->
-<div class="section-header">
-  <div class="section-title">Formula Store</div>
-  <div class="section-annotation">community sticker collection</div>
-</div>
-<div class="section-note">Formulas from the community. They look like stickers because that's what they are — collect the ones you like, slap them on your screener.</div>
-
-<div class="formulas-row">
-  <div class="formula-sticker">
-    <div>
-      <div class="fsticker-name">Dynasty Stash Score</div>
-      <div class="fsticker-by">by u/TapeGrinder</div>
-    </div>
-    <div class="fsticker-stars">★★★★★</div>
+<!-- WAITLIST -->
+<div class="waitlist" id="waitlist">
+  <h2>Get notified when The War Room opens</h2>
+  <p>personalized agent intelligence, $240/year, your league context</p>
+  <div class="waitlist-form">
+    <input type="email" class="input-chunky" id="waitlistEmail" placeholder="your@email.com">
+    <button class="btn-primary" onclick="submitWaitlist()">Notify Me</button>
   </div>
-  <div class="formula-sticker">
-    <div>
-      <div class="fsticker-name">Boom/Bust Index</div>
-      <div class="fsticker-by">by u/VarianceLord</div>
-    </div>
-    <div class="fsticker-stars">★★★★☆</div>
-  </div>
-  <div class="formula-sticker">
-    <div>
-      <div class="fsticker-name">Target Quality Score</div>
-      <div class="fsticker-by">by u/FilmRoomFC</div>
-    </div>
-    <div class="fsticker-stars">★★★★★</div>
-  </div>
+  <div id="waitlistMsg" style="margin-top:12px; font-family:var(--font-hand); font-size:18px; color:var(--green);"></div>
 </div>
 
-<div class="watermark">built different — razzle.lol</div>
+<!-- FOOTER -->
+<div class="site-footer">
+  <p>built different — <a href="/">razzle.lol</a></p>
+  <p style="margin-top:6px;">powered by nflverse | made for Reddit</p>
+</div>
 
+<script>
+function submitWaitlist() {
+  const email = document.getElementById('waitlistEmail').value.trim();
+  if (!email || !email.includes('@')) {
+    document.getElementById('waitlistMsg').textContent = 'need a real email, chief';
+    document.getElementById('waitlistMsg').style.color = 'var(--red)';
+    return;
+  }
+  // Store in localStorage for now (no backend auth yet)
+  const waitlist = JSON.parse(localStorage.getItem('razzle_waitlist') || '[]');
+  if (!waitlist.includes(email)) {
+    waitlist.push(email);
+    localStorage.setItem('razzle_waitlist', JSON.stringify(waitlist));
+  }
+  document.getElementById('waitlistMsg').textContent = "you're on the list. Razzle will find you.";
+  document.getElementById('waitlistMsg').style.color = 'var(--green)';
+  document.getElementById('waitlistEmail').value = '';
+}
+</script>
 </body>
 </html>
