@@ -9,7 +9,7 @@
 | # | Task | Status | Notes |
 |---|------|--------|-------|
 | 1 | Fix critical server crashes + security | DONE | Response import, fetchData fix, CORS restrict, FILTER_COLUMN_MAP |
-| 2 | Fix DVS popover + Rams abbreviation + QB INT label | | |
+| 2 | Fix DVS popover + Rams abbreviation + QB INT label | DONE | Age curves corrected, LA→LAR, INT→TO |
 | 3 | Fix War Room memory leaks + waitlist validation | | |
 | 4 | Fix college/prospect mode bugs | | |
 | 5 | Fix medium issues — fonts, performance, error handling | | |

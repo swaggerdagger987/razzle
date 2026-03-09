@@ -973,7 +973,7 @@ function clearMinGP() {
 // ─── Team filter ──────────────────────────────────────────────────
 const NFL_TEAMS = [
   "ARI","ATL","BAL","BUF","CAR","CHI","CIN","CLE","DAL","DEN",
-  "DET","GB","HOU","IND","JAX","KC","LA","LAC","LV","MIA",
+  "DET","GB","HOU","IND","JAX","KC","LAR","LAC","LV","MIA",
   "MIN","NE","NO","NYG","NYJ","PHI","PIT","SEA","SF","TB","TEN","WAS"
 ];
 
@@ -1549,10 +1549,10 @@ function toggleDVSInfo() {
     <p><b>DVS = PPR/G &times; Age Curve Multiplier</b></p>
     <p>Age curves vary by position:</p>
     <ul style="margin:4px 0; padding-left:18px;">
-      <li>QB: peak 25\u201330</li>
-      <li>RB: peak 23\u201327</li>
-      <li>WR: peak 24\u201329</li>
-      <li>TE: peak 25\u201330</li>
+      <li>QB: peak 26\u201330</li>
+      <li>RB: peak 22\u201325</li>
+      <li>WR: peak 24\u201328</li>
+      <li>TE: peak 25\u201329</li>
     </ul>
     <p>Higher DVS = more dynasty value per game adjusted for age. Tiers: Elite (85+), Star (70+), Starter (55+).</p>
     <button class="btn-chunky" onclick="document.getElementById('dvsInfoPopover').remove()" style="margin-top:8px; font-size:11px;">Got it</button>
@@ -2447,7 +2447,7 @@ function getSeasonColumns(pos) {
       { key: "attempts", label: "ATT", fmt: fmt0 },
       { key: "passing_yards", label: "Pass Yds", fmt: fmt0 },
       { key: "passing_tds", label: "Pass TD", fmt: fmt0 },
-      { key: "turnovers", label: "INT", fmt: fmt0 },
+      { key: "turnovers", label: "TO", fmt: fmt0 },
       { key: "comp_pct", label: "CMP%", fmt: fmtPct },
       { key: "sacks_taken", label: "Sacks", fmt: fmt0 },
       { key: "rushing_yards", label: "Rush Yds", fmt: fmt0 },

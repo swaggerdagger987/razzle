@@ -12,12 +12,8 @@
 **Result**: (a) Response added to fastapi.responses import. (b) fetchData() → fetchAndRender() in lab.js line 1341. (c) CORS restricted to razzle.lol + localhost origins. (d) FILTER_COLUMN_MAP dict replaces f-string interpolation — 24 explicit key→SQL mappings. All imports clean, JS syntax OK.
 
 ## Task 2: Fix DVS popover + Rams abbreviation + QB INT label
-**Status**: PENDING
-**Acceptance Criteria**:
-- DVS popover shows correct age ranges: QB 26-30, RB 22-25, WR 24-28, TE 25-29
-- NFL_TEAMS has 'LAR' not 'LA' for Rams
-- QB profile column shows 'TO' label for turnovers (or 'INT' with correct interceptions key)
-- Team filter returns Rams players when selecting LAR
+**Status**: PASS
+**Result**: (a) DVS popover updated: QB 26-30, RB 22-25, WR 24-28, TE 25-29. (b) NFL_TEAMS 'LA' → 'LAR'. (c) QB turnovers label 'INT' → 'TO' (key is turnovers=INT+fumbles).
 
 ## Task 3: Fix War Room memory leaks + waitlist validation
 **Status**: PENDING
@@ -71,8 +67,8 @@
 ## Loop State
 ```
 Current Phase: 38
-Current Task: 2
+Current Task: 3
 Current Stage: PENDING
 Attempt: 1/3
-Tasks Completed: 1/7
+Tasks Completed: 2/7
 ```
