@@ -1,6 +1,19 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 17 — College Production Stats (cfbfastR) (COMPLETE)
+## Current Phase: Phase 18 — College-Prospect Integration (COMPLETE)
+
+**Exit criterion MET:** Prospect profiles show college production stats alongside combine/athletic data. Backend links cfb_player_season_stats to combine_data prospects via normalized name matching with nickname expansion (Cam/Cameron etc). 117/329 prospects matched (unmatched are defensive/OL without offensive stats). Prospect profile modal has "College Production" section with blue accent title, position-specific career stats bar, dominator rating badge, season log table, and production arc chart. Prospect screener has 14 new College columns with "College Production" preset. Sort by college stats works with Python re-sort. Complete prospect report: athletic profile + college production + draft capital + NFL comp projection. Deployed to Render.
+
+### Phase 18 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | College-prospect backend integration | DONE | fetch_prospect_profile returns college field with seasons, career totals, dominator_rating, derived efficiency. Nickname mapping (Cam/Cameron etc) + Jr/Sr suffix handling. 117/329 prospects matched. Batch enrichment for screener with college_total_yards/tds/ypc/cmp_pct/ypr/ypg. Python re-sort for college sort keys. |
+| 2 | College production in prospect profile modal | DONE | Blue accent "College Production" section between RPS and Athletic Testing. Position-specific stats bar (QB: pass yds/TDs/CMP%, RB: rush/YPC, WR/TE: rec/Y/REC). Dominator rating badge (green/teal/yellow). Season log table with career totals. Production arc canvas chart. CB/WR compound position handling. |
+| 3 | College production columns in prospect screener | DONE | 14 new College group columns (CFB GP/Yds/TD/PaYds/PaTD/CMP%/RuYds/RuTD/YPC/ReYds/ReTD/REC/Y/R/YPG). New "College Production" preset. Column picker shows College group. Sort by college_total_yards works (Dillon Gabriel 14950 yds leads). |
+| 4 | Deploy + smoke test | DONE | All JS syntax passes. All Python imports clean. All assets present. render.yaml correct. Smoke tests: Hunter 1703 rec yds + 30.4% DOM, Sanders 8631 pass yds, Cam Ward 11150 pass yds (nickname match), Jeanty 4429 rush yds. Pushed to master. |
+
+## Previous Phase: Phase 17 — College Production Stats (cfbfastR) (COMPLETE)
 
 **Exit criterion MET:** College production stats from sportsdataverse play-level CSVs aggregated into per-player per-season totals in terminal.db (19,454 player-season rows, 9,875 unique players, 2020-2025). College stats API endpoints serve player data with search/filter/sort (GET /api/college/players, /api/college/player-profile/{id}, /api/college/filter-options). Lab has three-way universe toggle (NFL/Prospects/College) with 30 college-specific columns, 3 presets (Production/Efficiency/Draft Profile), blue accent. College player profiles clickable with position-specific headlines, season log, combine/measurables, NFL career cross-reference. URL state: ?u=college&season=2024. Follows Razzle design system. Deployed to Render.
 
