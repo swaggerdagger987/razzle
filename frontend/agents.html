@@ -383,6 +383,58 @@
     color: var(--red);
   }
 
+  /* ===== AGENT STATUS TRACKER ===== */
+  .agent-status-tracker {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 2px dashed var(--ink-faint);
+  }
+
+  .agent-status-chip {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    border: 2px solid var(--ink-faint);
+    border-radius: 20px;
+    background: var(--bg-card);
+    color: var(--ink-light);
+    transition: all 0.2s;
+  }
+
+  .agent-status-chip .status-icon {
+    font-size: 10px;
+    width: 12px;
+    text-align: center;
+  }
+
+  .agent-status-chip.running {
+    border-color: var(--orange);
+    color: var(--orange);
+    background: var(--orange-light);
+  }
+
+  .agent-status-chip.running .status-icon {
+    animation: pulse-glow 1s ease-in-out infinite;
+  }
+
+  .agent-status-chip.done {
+    border-color: var(--green);
+    color: var(--green);
+    background: var(--green-light);
+  }
+
+  .agent-status-chip.error {
+    border-color: var(--red);
+    color: var(--red);
+    background: var(--red-light);
+  }
+
   /* ===== BRIEFING CARDS PLACEHOLDER ===== */
   .briefing-zone {
     max-width: 980px;
@@ -836,6 +888,9 @@
           <div class="scenario-agent-btns" id="scenarioAgentBtns"></div>
           <div class="scenario-status" id="scenarioStatus"></div>
         </div>
+
+        <!-- Per-agent status tracker -->
+        <div class="agent-status-tracker" id="agentStatusTracker" style="display:none;"></div>
       </div>
     </div>
   </div>

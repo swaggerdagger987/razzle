@@ -1529,6 +1529,42 @@ function setScenarioButtonsDisabled(disabled) {
   btns.forEach(b => { b.disabled = disabled; });
 }
 
+// ── PER-AGENT STATUS TRACKER ──────────────────────────────────────────
+function initAgentStatusTracker(agentIds) {
+  const tracker = document.getElementById('agentStatusTracker');
+  if (!tracker) return;
+  tracker.style.display = 'flex';
+  tracker.innerHTML = agentIds.map(function(id) {
+    var a = AGENT_DEFS[id];
+    return '<div class="agent-status-chip" data-tracker-id="' + id + '">' +
+      '<span class="status-icon" style="color:' + a.color + '">●</span>' +
+      '<span>' + escapeHtml(a.name) + '</span>' +
+      '</div>';
+  }).join('');
+}
+
+function setAgentStatus(agentId, status) {
+  var chip = document.querySelector('.agent-status-chip[data-tracker-id="' + agentId + '"]');
+  if (!chip) return;
+  chip.className = 'agent-status-chip ' + status;
+  var icon = chip.querySelector('.status-icon');
+  if (!icon) return;
+  var a = AGENT_DEFS[agentId];
+  if (status === 'running') {
+    icon.textContent = '◎';
+    icon.style.color = '';
+  } else if (status === 'done') {
+    icon.textContent = '✓';
+    icon.style.color = '';
+  } else if (status === 'error') {
+    icon.textContent = '✗';
+    icon.style.color = '';
+  } else {
+    icon.textContent = '●';
+    icon.style.color = a ? a.color : '';
+  }
+}
+
 // ── LLM INTEGRATION ──────────────────────────────────────────────────
 const LLM_TIMEOUT_MS = 20000;
 const LLM_TEMPERATURE = 0.3;
@@ -1653,6 +1689,8 @@ async function runSingleAgent(agentId, scenario) {
     return;
   }
 
+  initAgentStatusTracker([agentId]);
+  setAgentStatus(agentId, 'running');
   setScenarioStatus('running ' + agent.name + '...', 'running');
   setScenarioButtonsDisabled(true);
 
@@ -1664,12 +1702,14 @@ async function runSingleAgent(agentId, scenario) {
 
   try {
     var result = await executeAgent(agentId, scenario);
+    setAgentStatus(agentId, 'done');
     setScenarioStatus(agent.name + ' done', 'done');
 
     window.dispatchEvent(new CustomEvent('razzle:agent-result', {
       detail: { agentId, result, scenario }
     }));
   } catch (err) {
+    setAgentStatus(agentId, 'error');
     setScenarioStatus(agent.name + ': ' + err.message, 'error');
   } finally {
     setScenarioButtonsDisabled(false);
@@ -1683,6 +1723,9 @@ async function runAllAgents(scenario) {
     setScenarioStatus('set an API key in Config first', 'error');
     return;
   }
+
+  // Initialize per-agent status tracker (specialists first, then Razzle)
+  initAgentStatusTracker([1, 2, 3, 4, 5, 0]);
 
   setScenarioStatus('pulling film on all agents...', 'running');
   setScenarioButtonsDisabled(true);
@@ -1700,13 +1743,20 @@ async function runAllAgents(scenario) {
   var specialistPromises = specialistIds.map(function(id) {
     return (async function() {
       var s = getAgentSettings(id);
-      if (!s.apiKey) { errors[id] = 'no API key'; return; }
+      if (!s.apiKey) {
+        errors[id] = 'no API key';
+        setAgentStatus(id, 'error');
+        return;
+      }
+      setAgentStatus(id, 'running');
       try {
         results[id] = await executeAgent(id, scenario);
+        setAgentStatus(id, 'done');
         var ca = agents[id];
         if (ca) { ca.workBubble = '✅'; ca.bubbleTimer = 3000; }
       } catch (err) {
         errors[id] = err.message;
+        setAgentStatus(id, 'error');
         var ca = agents[id];
         if (ca) { ca.workBubble = '❌'; ca.bubbleTimer = 3000; }
       }
@@ -1730,6 +1780,7 @@ async function runAllAgents(scenario) {
 
   // Run Razzle (agent 0) with specialist outputs as peer insights
   setScenarioStatus('Razzle is synthesizing...', 'running');
+  setAgentStatus(0, 'running');
   var peerInsights = specialistIds
     .filter(function(id) { return results[id]; })
     .map(function(id) { return { name: AGENT_DEFS[id].name, text: results[id] }; });
@@ -1739,13 +1790,16 @@ async function runAllAgents(scenario) {
     var razzleSettings = getAgentSettings(0);
     if (razzleSettings.apiKey) {
       razzleSynthesis = await executeAgent(0, scenario, peerInsights);
+      setAgentStatus(0, 'done');
       var ca = agents[0];
       if (ca) { ca.workBubble = '✅'; ca.bubbleTimer = 3000; }
     } else {
       errors[0] = 'no API key for Razzle';
+      setAgentStatus(0, 'error');
     }
   } catch (err) {
     errors[0] = err.message;
+    setAgentStatus(0, 'error');
     var ca = agents[0];
     if (ca) { ca.workBubble = '❌'; ca.bubbleTimer = 3000; }
   }
