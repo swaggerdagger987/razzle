@@ -1,8 +1,8 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 13 — Historical Athletic Comps + Prospect Comparisons
+## Current Phase: Phase 13 — Historical Athletic Comps + Prospect Comparisons (COMPLETE)
 
-**Exit criterion:** Prospect profile cards show top 3 NFL historical athletic comps (players with most similar combine profiles at same position). Prospect comparison mode: select 2-3 prospects → side-by-side spider chart overlays + stat table. Draft class tier view: position-filtered visual grid grouping prospects by athletic tier. All exportable as PNG with Razzle watermark. Deployed to Render.
+**Exit criterion MET:** Prospect profile cards show top 3 NFL historical athletic comps (players with most similar combine profiles at same position, Euclidean distance on percentile-normalized metrics, NFL career boost). Prospect comparison mode: select 2-3 prospects → side-by-side spider chart overlays with different colors + combine stat table with percentiles. Draft class tier view: "Tiers" button in prospect toolbar, position selector, prospects grouped by avg athletic percentile (Elite 80+, Above Avg, Avg, Below Avg, No Data) with sticker badge tier labels. All exportable as PNG with Razzle watermark. Follows Razzle design system. Deployed to Render.
 
 ### Phase 13 Tasks
 
@@ -11,7 +11,7 @@
 | 1 | Historical athletic comps API + UI | DONE | Backend: /api/prospect-comps endpoint. Euclidean distance on percentile-normalized combine metrics (40, bench, vert, broad, cone, shuttle). NFL career boost in sorting. Frontend: "NFL Athletic Comps" section in prospect profile card with top 3 comp cards showing similarity %, draft info, career stats. Chunky borders, offset shadows, colored similarity badges. Mobile responsive. |
 | 2 | Prospect comparison mode | DONE | Backend: /api/prospects/compare returns multiple prospects with percentiles. Frontend: prospect checkboxes work in Lab, Compare button opens overlay with side-by-side spider chart (2-3 prospects, different colors) + combine stat comparison table with percentiles. Best values highlighted green. PNG export with watermark. Mobile responsive. |
 | 3 | Draft class position tier view | DONE | Backend: /api/prospect-tiers returns prospects grouped by avg athletic percentile tier (Elite 80+, Above Avg 60-80, Avg 40-60, Below Avg <40, No Data). Frontend: "Tiers" button in prospect mode toolbar, position selector (QB/RB/WR/TE), tier grid with sticker badges, prospect cards with avg percentile + key metrics. PNG export with watermark. Responsive grid layout. |
-| 4 | Deploy + smoke test | PENDING | |
+| 4 | Deploy + smoke test | DONE | All JS passes syntax check. All Python imports clean. All HTML pages + assets present. render.yaml correct. All 3 new endpoints (prospect-comps, prospects/compare, prospect-tiers) return correct data. Pushed to master for Render auto-deploy. |
 
 ## Previous Phase: Phase 12 — Prospect Cards + Athletic Percentiles (COMPLETE)
 
@@ -392,3 +392,4 @@ _None currently._
 | 2026-03-09 | Position-specific profile layouts | QB/RB/WR/TE each get different headline stats and season table columns. QBs see pass yards/TDs/CMP%, RBs see rush/rec, WR/TE see targets/receptions/YAC. More useful than one-size-fits-all. |
 | 2026-03-09 | Heat maps + breakout detection as Phase 11 | Heat maps fill the last major visualization gap from the North Star. Positional percentile heat maps are extremely screenshottable for Reddit — dynasty managers love position tier grids. Breakout detection (50%+ YoY PPR) leverages multi-season data for a uniquely useful dynasty signal. Both create new shareable content types. |
 | 2026-03-09 | Prospect cards as Phase 12 | Clickable prospect profiles with athletic percentile bars and spider charts are THE draft week content for r/DynastyFF and r/NFL_Draft. Combine percentiles within position group give instant context (is 4.50 fast for a WR?). Spider charts create a unique visual fingerprint per prospect — highly screenshottable. Uses existing nflverse combine data, no CFBD API key needed. |
+| 2026-03-09 | Athletic comps + tier view as Phase 13 | "Who is this prospect's NFL athletic comp?" is THE question dynasty managers ask during draft week. Euclidean distance on percentile-normalized combine metrics finds historical matches. Tier view groups a whole position's draft class by athletic profile — creates screenshottable tier lists for Reddit. Prospect comparison mode enables side-by-side analysis. All three features use existing nflverse data, creating maximum content from available data. |
