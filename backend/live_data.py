@@ -537,6 +537,33 @@ def fetch_screener(body):
     }
 
     # Build having clause for advanced filters
+    # Explicit mapping from filter key to SQL expression (no f-string interpolation)
+    FILTER_COLUMN_MAP = {
+        "ppg": "(SUM(s.fantasy_points_ppr) / MAX(1, COUNT(*)))",
+        "games": "COUNT(*)",
+        "seasons": "COUNT(DISTINCT s.season)",
+        "fantasy_points_ppr": "SUM(s.fantasy_points_ppr)",
+        "completions": "SUM(s.completions)",
+        "pass_attempts": "SUM(s.pass_attempts)",
+        "passing_yards": "SUM(s.passing_yards)",
+        "passing_tds": "SUM(s.passing_tds)",
+        "interceptions": "SUM(s.interceptions)",
+        "carries": "SUM(s.carries)",
+        "rushing_yards": "SUM(s.rushing_yards)",
+        "rushing_tds": "SUM(s.rushing_tds)",
+        "targets": "SUM(s.targets)",
+        "receptions": "SUM(s.receptions)",
+        "receiving_yards": "SUM(s.receiving_yards)",
+        "receiving_tds": "SUM(s.receiving_tds)",
+        "total_tds": "SUM(s.total_tds)",
+        "turnovers": "SUM(s.turnovers)",
+        "sacks_taken": "SUM(s.sacks_taken)",
+        "sack_yards_lost": "SUM(s.sack_yards_lost)",
+        "fumbles": "SUM(s.fumbles)",
+        "fumbles_lost": "SUM(s.fumbles_lost)",
+        "offense_snaps": "SUM(s.offense_snaps)",
+    }
+
     having = []
     ops = {"gt": ">", "gte": ">=", "lt": "<", "lte": "<=", "eq": "=", "neq": "!="}
     for f in filters:
@@ -545,16 +572,9 @@ def fetch_screener(body):
         val = f.get("value")
         if not key or not op or val is None:
             continue
-        # Only allow SQL-safe aggregate columns
-        if key in sql_filterable:
-            if key == "ppg":
-                having.append(f"(SUM(s.fantasy_points_ppr) / MAX(1, COUNT(*))) {op} ?")
-            elif key == "games":
-                having.append(f"COUNT(*) {op} ?")
-            elif key == "seasons":
-                having.append(f"COUNT(DISTINCT s.season) {op} ?")
-            else:
-                having.append(f"SUM(s.{key}) {op} ?")
+        sql_expr = FILTER_COLUMN_MAP.get(key)
+        if sql_expr:
+            having.append(f"{sql_expr} {op} ?")
             params.append(float(val))
 
     # Add minimum games played filter

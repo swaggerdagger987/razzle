@@ -1338,7 +1338,7 @@ function loadSavedView(id) {
 
   state.offset = 0;
   closeSavedViews();
-  fetchData();
+  fetchAndRender();
 }
 
 function deleteSavedView(id) {

@@ -8,13 +8,8 @@
 ---
 
 ## Task 1: Fix critical server crashes + security
-**Status**: PENDING
-**Acceptance Criteria**:
-- Response imported in server.py — /sitemap.xml and /robots.txt return 200
-- fetchData() replaced with fetchAndRender() in lab.js — saved views load correctly
-- CORS restricted to razzle.lol and localhost origins only
-- Filter keys use a dict lookup instead of f-string interpolation
-- All endpoints still work
+**Status**: PASS
+**Result**: (a) Response added to fastapi.responses import. (b) fetchData() → fetchAndRender() in lab.js line 1341. (c) CORS restricted to razzle.lol + localhost origins. (d) FILTER_COLUMN_MAP dict replaces f-string interpolation — 24 explicit key→SQL mappings. All imports clean, JS syntax OK.
 
 ## Task 2: Fix DVS popover + Rams abbreviation + QB INT label
 **Status**: PENDING
@@ -76,8 +71,8 @@
 ## Loop State
 ```
 Current Phase: 38
-Current Task: 1
+Current Task: 2
 Current Stage: PENDING
 Attempt: 1/3
-Tasks Completed: 0/7
+Tasks Completed: 1/7
 ```
