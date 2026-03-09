@@ -116,9 +116,9 @@ const COLLEGE_COLUMNS = {
 
   // Per Game (derived)
   total_ypg:       { label: "YPG",      group: "Per Game", decimals: 1, derived: true },
-  pass_ypg:        { label: "PaYPG",    group: "Per Game", decimals: 1, derived: true },
-  rush_ypg:        { label: "RuYPG",    group: "Per Game", decimals: 1, derived: true },
-  rec_ypg:         { label: "ReYPG",    group: "Per Game", decimals: 1, derived: true },
+  pass_ypg:        { label: "Pass Yds/G", group: "Per Game", decimals: 1, derived: true },
+  rush_ypg:        { label: "Rush Yds/G", group: "Per Game", decimals: 1, derived: true },
+  rec_ypg:         { label: "Rec Yds/G",  group: "Per Game", decimals: 1, derived: true },
   tds_per_game:    { label: "TD/G",     group: "Per Game", decimals: 1, derived: true },
 };
 
@@ -143,75 +143,75 @@ const COLLEGE_PRESETS = {
 // ─── Column definitions ─────────────────────────────────────────
 const COLUMNS = {
   // Positional rank (virtual, computed client-side)
-  pos_rank:            { label: "Pos Rank", group: "Fantasy", decimals: 0, isText: true, derived: true },
+  pos_rank:            { label: "Pos Rank", tip: "Positional Rank — rank within position by current sort", group: "Fantasy", decimals: 0, isText: true, derived: true },
 
   // Core fantasy
-  fantasy_points_ppr:  { label: "PPR",     group: "Fantasy", decimals: 1 },
-  ppg:                 { label: "PPG",      group: "Fantasy", decimals: 1 },
-  fantasy_points_std:  { label: "Standard", group: "Fantasy", decimals: 1 },
-  fantasy_points_half_ppr: { label: "Half-PPR", group: "Fantasy", decimals: 1 },
-  half_ppr_ppg:        { label: "HPPR/G",   group: "Fantasy", decimals: 1, derived: true },
-  games:               { label: "GP",       group: "Fantasy", decimals: 0 },
-  seasons:             { label: "Seasons",  group: "Fantasy", decimals: 0 },
+  fantasy_points_ppr:  { label: "PPR",     tip: "PPR Fantasy Points — full PPR scoring total", group: "Fantasy", decimals: 1 },
+  ppg:                 { label: "PPG",      tip: "Points Per Game — PPR points per game played", group: "Fantasy", decimals: 1 },
+  fantasy_points_std:  { label: "Standard", tip: "Standard Fantasy Points — non-PPR scoring total", group: "Fantasy", decimals: 1 },
+  fantasy_points_half_ppr: { label: "Half-PPR", tip: "Half-PPR Fantasy Points — 0.5 PPR scoring total", group: "Fantasy", decimals: 1 },
+  half_ppr_ppg:        { label: "HPPR/G",   tip: "Half-PPR Per Game — half-PPR points per game", group: "Fantasy", decimals: 1, derived: true },
+  games:               { label: "GP",       tip: "Games Played", group: "Fantasy", decimals: 0 },
+  seasons:             { label: "Seasons",  tip: "Number of NFL seasons with stats", group: "Fantasy", decimals: 0 },
 
   // Passing
-  passing_yards:       { label: "Pass Yds",   group: "Passing", decimals: 0 },
-  passing_tds:         { label: "Pass TD",    group: "Passing", decimals: 0 },
-  completions:         { label: "CMP",        group: "Passing", decimals: 0 },
-  attempts:            { label: "ATT",        group: "Passing", decimals: 0 },
-  interceptions:       { label: "INT",        group: "Passing", decimals: 0 },
-  passing_air_yards:   { label: "Air Yds",    group: "Passing", decimals: 0 },
+  passing_yards:       { label: "Pass Yds",   tip: "Passing Yards — total passing yards", group: "Passing", decimals: 0 },
+  passing_tds:         { label: "Pass TD",    tip: "Passing Touchdowns", group: "Passing", decimals: 0 },
+  completions:         { label: "CMP",        tip: "Completions — completed passes", group: "Passing", decimals: 0 },
+  attempts:            { label: "ATT",        tip: "Pass Attempts", group: "Passing", decimals: 0 },
+  interceptions:       { label: "INT",        tip: "Interceptions Thrown", group: "Passing", decimals: 0 },
+  passing_air_yards:   { label: "Air Yds",    tip: "Passing Air Yards — intended yards through the air", group: "Passing", decimals: 0 },
 
   // Rushing
-  rushing_yards:       { label: "Rush Yds",  group: "Rushing", decimals: 0 },
-  rushing_tds:         { label: "Rush TD",   group: "Rushing", decimals: 0 },
-  carries:             { label: "CAR",       group: "Rushing", decimals: 0 },
+  rushing_yards:       { label: "Rush Yds",  tip: "Rushing Yards — total rushing yards", group: "Rushing", decimals: 0 },
+  rushing_tds:         { label: "Rush TD",   tip: "Rushing Touchdowns", group: "Rushing", decimals: 0 },
+  carries:             { label: "CAR",       tip: "Carries — rushing attempts", group: "Rushing", decimals: 0 },
 
   // Receiving
-  receiving_yards:     { label: "Rec Yds",   group: "Receiving", decimals: 0 },
-  receiving_tds:       { label: "Rec TD",    group: "Receiving", decimals: 0 },
-  receptions:          { label: "REC",       group: "Receiving", decimals: 0 },
-  targets:             { label: "TGT",       group: "Receiving", decimals: 0 },
-  receiving_air_yards: { label: "Rec Air",   group: "Receiving", decimals: 0 },
-  receiving_yards_after_catch: { label: "YAC", group: "Receiving", decimals: 0 },
+  receiving_yards:     { label: "Rec Yds",   tip: "Receiving Yards — total receiving yards", group: "Receiving", decimals: 0 },
+  receiving_tds:       { label: "Rec TD",    tip: "Receiving Touchdowns", group: "Receiving", decimals: 0 },
+  receptions:          { label: "REC",       tip: "Receptions — total catches", group: "Receiving", decimals: 0 },
+  targets:             { label: "TGT",       tip: "Targets — times targeted by a pass", group: "Receiving", decimals: 0 },
+  receiving_air_yards: { label: "Rec Air",   tip: "Receiving Air Yards — intended air yards on targets", group: "Receiving", decimals: 0 },
+  receiving_yards_after_catch: { label: "YAC", tip: "Yards After Catch — yards gained after reception", group: "Receiving", decimals: 0 },
 
   // Totals
-  touchdowns:          { label: "TD",        group: "Totals", decimals: 0 },
-  turnovers:           { label: "TO",        group: "Totals", decimals: 0 },
+  touchdowns:          { label: "TD",        tip: "Total Touchdowns — all scoring TDs", group: "Totals", decimals: 0 },
+  turnovers:           { label: "TO",        tip: "Turnovers — interceptions + fumbles lost", group: "Totals", decimals: 0 },
 
   // Efficiency (derived from aggregates — sort only, no SQL filter)
-  yards_per_carry:     { label: "Y/CAR",    group: "Efficiency", decimals: 1, derived: true },
-  yards_per_rec:       { label: "Y/REC",    group: "Efficiency", decimals: 1, derived: true },
-  yards_per_target:    { label: "Y/TGT",    group: "Efficiency", decimals: 1, derived: true },
-  catch_rate:          { label: "Catch%",   group: "Efficiency", decimals: 1, derived: true },
-  comp_pct:            { label: "CMP%",     group: "Efficiency", decimals: 1, derived: true },
-  yards_per_att:       { label: "Y/ATT",    group: "Efficiency", decimals: 1, derived: true },
+  yards_per_carry:     { label: "Y/CAR",    tip: "Yards Per Carry — rushing yards / carries", group: "Efficiency", decimals: 1, derived: true },
+  yards_per_rec:       { label: "Y/REC",    tip: "Yards Per Reception — receiving yards / receptions", group: "Efficiency", decimals: 1, derived: true },
+  yards_per_target:    { label: "Y/TGT",    tip: "Yards Per Target — receiving yards / targets", group: "Efficiency", decimals: 1, derived: true },
+  catch_rate:          { label: "Catch%",   tip: "Catch Rate — receptions / targets as percentage", group: "Efficiency", decimals: 1, derived: true },
+  comp_pct:            { label: "CMP%",     tip: "Completion Percentage — completions / attempts", group: "Efficiency", decimals: 1, derived: true },
+  yards_per_att:       { label: "Y/ATT",    tip: "Yards Per Attempt — passing yards / attempts", group: "Efficiency", decimals: 1, derived: true },
 
   // Per-game averages (derived — sort only)
-  rec_per_game:        { label: "REC/G",    group: "Per Game", decimals: 1, derived: true },
-  targets_per_game:    { label: "TGT/G",    group: "Per Game", decimals: 1, derived: true },
-  rush_ypg:            { label: "RuYPG",    group: "Per Game", decimals: 1, derived: true },
-  rec_ypg:             { label: "ReYPG",    group: "Per Game", decimals: 1, derived: true },
-  pass_ypg:            { label: "PaYPG",    group: "Per Game", decimals: 1, derived: true },
+  rec_per_game:        { label: "REC/G",    tip: "Receptions Per Game", group: "Per Game", decimals: 1, derived: true },
+  targets_per_game:    { label: "TGT/G",    tip: "Targets Per Game", group: "Per Game", decimals: 1, derived: true },
+  rush_ypg:            { label: "Rush Yds/G", tip: "Rushing Yards Per Game", group: "Per Game", decimals: 1, derived: true },
+  rec_ypg:             { label: "Rec Yds/G",  tip: "Receiving Yards Per Game", group: "Per Game", decimals: 1, derived: true },
+  pass_ypg:            { label: "Pass Yds/G", tip: "Passing Yards Per Game", group: "Per Game", decimals: 1, derived: true },
 
   // Advanced (from nflverse rate stats — sort only)
-  target_share:        { label: "TGT%",     group: "Advanced", decimals: 1, pct: true, derived: true },
-  air_yards_share:     { label: "AirYd%",   group: "Advanced", decimals: 1, pct: true, derived: true },
-  wopr:                { label: "WOPR",     group: "Advanced", decimals: 3, derived: true },
-  racr:                { label: "RACR",     group: "Advanced", decimals: 2, derived: true },
-  passing_epa:         { label: "Pass EPA", group: "Advanced", decimals: 1, derived: true },
-  receiving_epa:       { label: "Rec EPA",  group: "Advanced", decimals: 1, derived: true },
-  rushing_epa:         { label: "Rush EPA", group: "Advanced", decimals: 1, derived: true },
-  dakota:              { label: "DAKOTA",   group: "Advanced", decimals: 3, derived: true },
-  cpoe:                { label: "CPOE",     group: "Advanced", decimals: 1, derived: true },
-  epa_per_play:        { label: "EPA/Play", group: "Advanced", decimals: 3, derived: true },
+  target_share:        { label: "TGT%",     tip: "Target Share — percentage of team total targets", group: "Advanced", decimals: 1, pct: true, derived: true },
+  air_yards_share:     { label: "AirYd%",   tip: "Team Air Yard Share — percentage of team total air yards", group: "Advanced", decimals: 1, pct: true, derived: true },
+  wopr:                { label: "WOPR",     tip: "Weighted Opportunity Rating — target share \u00d7 1.5 + air yard share \u00d7 0.7", group: "Advanced", decimals: 3, derived: true },
+  racr:                { label: "RACR",     tip: "Receiver Air Conversion Ratio — receiving yards \u00f7 air yards", group: "Advanced", decimals: 2, derived: true },
+  passing_epa:         { label: "Pass EPA", tip: "Passing EPA — expected points added per game (passing)", group: "Advanced", decimals: 1, derived: true },
+  receiving_epa:       { label: "Rec EPA",  tip: "Receiving EPA — expected points added per game (receiving)", group: "Advanced", decimals: 1, derived: true },
+  rushing_epa:         { label: "Rush EPA", tip: "Rushing EPA — expected points added per game (rushing)", group: "Advanced", decimals: 1, derived: true },
+  dakota:              { label: "DAKOTA",   tip: "Adjusted EPA + CPOE composite (nflfastR)", group: "Advanced", decimals: 3, derived: true },
+  cpoe:                { label: "CPOE",     tip: "Completion Percentage Over Expected — actual CMP% minus expected CMP%", group: "Advanced", decimals: 1, derived: true },
+  epa_per_play:        { label: "EPA/Play", tip: "EPA Per Play — total EPA divided by total plays", group: "Advanced", decimals: 3, derived: true },
 
   // Breakout detection
-  breakout_pct:        { label: "BRK%",    group: "Breakout", decimals: 1, derived: true },
+  breakout_pct:        { label: "BRK%",    tip: "Breakout Percentage — max year-over-year PPR increase", group: "Breakout", decimals: 1, derived: true },
 
   // Dynasty value
-  dynasty_value:       { label: "DVS",     group: "Dynasty", decimals: 1, derived: true },
-  age:                 { label: "Age",     group: "Dynasty", decimals: 0 },
+  dynasty_value:       { label: "DVS",     tip: "Dynasty Value Score — age-adjusted PPR value for dynasty leagues", group: "Dynasty", decimals: 1, derived: true },
+  age:                 { label: "Age",     tip: "Player age (current)", group: "Dynasty", decimals: 0 },
 };
 
 // ─── Presets ─────────────────────────────────────────────────────
@@ -527,7 +527,8 @@ function renderTableHead() {
     const col = getColumnDef(key);
     if (!col) continue;
     const cls = state.sortKey === key ? `sort-${state.sortDir}` : "";
-    html += `<th class="${cls}" onclick="sortBy('${key}')">${col.label}</th>`;
+    const tip = col.tip ? ` title="${col.tip}"` : "";
+    html += `<th class="${cls}"${tip} onclick="sortBy('${key}')">${col.label}</th>`;
   }
 
   html += "</tr>";

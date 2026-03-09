@@ -93,9 +93,9 @@
 - No broken column references after renaming
 **Depends on**: none
 **Size**: M
-**Status**: PENDING
-**Attempt**: 0/3
-**Result**:
+**Status**: PASS
+**Attempt**: 1/3
+**Result**: Added `tip` property to all 34 COLUMNS entries with descriptive tooltips. Rendered as HTML `title` attribute on `<th>` elements in renderTableHead(). Key tooltips: WOPR = "Weighted Opportunity Rating — target share × 1.5 + air yard share × 0.7", RACR = "Receiver Air Conversion Ratio", DAKOTA = "Adjusted EPA + CPOE composite (nflfastR)", BRK% = "Breakout Percentage — max year-over-year PPR increase", DVS = "Dynasty Value Score — age-adjusted PPR value for dynasty leagues", TGT% = "Target Share", AirYd% = "Team Air Yard Share". Renamed per-game labels: RuYPG → Rush Yds/G, ReYPG → Rec Yds/G, PaYPG → Pass Yds/G in both NFL COLUMNS and COLLEGE_COLUMNS. Keys unchanged — no broken references.
 
 ## Task 7: Enrich player profile card
 **Requirement**: "The player profile popup (click on player name) is too thin. Enrich it: (a) Show ALL seasons the player has data for, not just current season. Each season as a row in the career log table. (b) Add more columns to the profile: for QBs add INT, sacks, passer_rating, CPOE. For RBs add rushing_first_downs, yards_per_carry, fumbles. For WRs/TEs add aDOT, first_downs, drop_rate. (c) Add a career totals row. (d) Fix display issues: integer age, fix plural. (e) Add draft capital info if available. (f) Show team with color accent."
@@ -183,9 +183,9 @@
 ## Loop State
 ```
 Current Phase: 29
-Current Task: 5
+Current Task: 6
 Current Stage: PASS
 Attempt: 1/3
-Tasks Completed: 5/12
-Loop Iterations: 5
+Tasks Completed: 6/12
+Loop Iterations: 6
 ```
