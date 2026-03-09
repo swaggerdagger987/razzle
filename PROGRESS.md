@@ -1,6 +1,26 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 29 — Lab Audit: Database, Filters, Display, Polish (IN PROGRESS)
+## Current Phase: Phase 31 — (pending auto-generation)
+
+## Previous Phase: Phase 30 — Lab Mobile + Social Previews + Reddit-Ready Polish (COMPLETE)
+
+**Exit criterion MET:** Lab screener fully responsive on mobile (scrollable toolbar, touch-momentum table, full-viewport overlays, stacking filters). Dynamic OG meta tags on shared Lab URLs (position/sort/season in title). All chart overlays, profile popup, landing page, League Intel page responsive at 768px and 480px. 44px tap targets on buttons. OG images on all 5 pages. All 6 JS + 4 Python pass syntax/import checks. Pushed to master.
+
+### Phase 30 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Lab screener mobile responsive layout | DONE | Scrollable toolbar, touch-momentum table, overflow-x hidden, full-viewport overlays |
+| 2 | Chart overlays mobile-friendly | DONE | All overlays full-width, canvas scales, 44px tap targets, chart tabs wrap |
+| 3 | Player profile popup mobile layout | DONE | Covered by Task 1-2 CSS (full-viewport, stacking header, scrollable tables) |
+| 4 | Dynamic OG meta tags for shared URLs | DONE | Server route injects title/description from URL params (position, sort, season) |
+| 5 | Touch-friendly filter interactions | DONE | Search type=search, autocomplete=off, native selects for mobile |
+| 6 | Landing page mobile polish | DONE | Agent bio grid single-column at 480px, overflow-x hidden |
+| 7 | League Intel page mobile layout | DONE | Connect button full-width 44px, overflow-x hidden |
+| 8 | Create static OG image for social previews | DONE | SVG OG images already exist (1200x630) on all 5 pages |
+| 9 | Deploy + mobile smoke test | DONE | All 6 JS + 4 Python pass. All pages have OG tags. Pushed to master. |
+
+## Previous Phase: Phase 29 — Lab Audit: Database, Filters, Display, Polish (COMPLETE)
 
 **Exit criterion:** Half-PPR scoring added. Snap counts and snap share columns available. Team filter works. Minimum games played filter works. Historical seasons 2020-2024 verified working with real career aggregates. Positional rank column added. Non-applicable stats show dash instead of 0. GP column header fixed. Tooltips on all abbreviations. Stat naming consistent. aDOT, CPOE, first downs, fumble split added to adapter and available as columns. Player profile card enriched with multi-year log. Deployed to Render.
 
