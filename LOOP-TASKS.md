@@ -22,7 +22,8 @@
 - JWT_SECRET read from env var
 
 ## Task 2: Frontend login/register modal + token management
-**Status**: PENDING
+**Status**: PASS
+**Result**: Added auth UI to app.js (injected via JS on all pages): login/register modal with tabbed interface, Sign In button in nav, email + Sign Out when logged in. Token stored in localStorage (razzle_token/razzle_user). checkAuth() verifies token on page load via GET /api/auth/me, auto-clears expired tokens. Added app.js to index.html, player.html, compare.html, 404.html. Auth modal CSS follows Razzle design system (sand bg, chunky 3px borders, orange tabs, Space Mono inputs). Responsive at 768px and 480px.
 **Acceptance Criteria**:
 - Sign In button visible on all pages when logged out
 - Email + Sign Out visible when logged in
@@ -89,8 +90,8 @@
 ## Loop State
 ```
 Current Phase: 42
-Current Task: 2
+Current Task: 3
 Current Stage: BUILD
 Attempt: 1
-Tasks Completed: 1/7
+Tasks Completed: 2/7
 ```
