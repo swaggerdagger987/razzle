@@ -202,6 +202,25 @@ body {
   padding: 60px 20px;
 }
 
+/* ===== ERROR STATE ===== */
+.error-msg {
+  font-family: var(--font-hand);
+  font-size: 20px;
+  color: var(--red);
+  text-align: center;
+  padding: 40px 20px;
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-msg {
+  font-family: var(--font-hand);
+  font-size: 22px;
+  color: var(--ink-light);
+  text-align: center;
+  padding: 40px 20px;
+}
+
+
 /* ===== INPUTS ===== */
 .input-chunky {
   font-family: var(--font-mono);

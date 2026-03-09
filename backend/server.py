@@ -7,7 +7,8 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, HTMLResponse
+from starlette.exceptions import HTTPException as StarletteHTTPException
 from pathlib import Path
 import logging
 import uvicorn
@@ -82,6 +83,19 @@ app.add_middleware(
 )
 
 FRONTEND_DIR = Path(__file__).parent.parent / "frontend"
+
+
+# ---------------------------------------------------------------------------
+# Custom 404 page for non-API routes
+# ---------------------------------------------------------------------------
+
+@app.exception_handler(StarletteHTTPException)
+async def custom_http_exception_handler(request: Request, exc: StarletteHTTPException):
+    if exc.status_code == 404 and not request.url.path.startswith("/api/"):
+        four_oh_four = FRONTEND_DIR / "404.html"
+        if four_oh_four.exists():
+            return HTMLResponse(content=four_oh_four.read_text(), status_code=404)
+    return HTMLResponse(content=str(exc.detail), status_code=exc.status_code)
 
 
 # ---------------------------------------------------------------------------
