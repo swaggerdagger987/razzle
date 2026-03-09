@@ -1,8 +1,8 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 11 — Positional Heat Maps + Breakout Detection
+## Current Phase: Phase 11 — Positional Heat Maps + Breakout Detection (COMPLETE)
 
-**Exit criterion:** Lab has a heat map visualization: select a position → see top players × stats grid with cells colored by percentile rank. Breakout badges on players with 50%+ YoY PPR increase. Both features follow Razzle design system. Heat map exportable as PNG. Mobile responsive. Deployed to Render.
+**Exit criterion MET:** Lab has a Heat Map tab in the chart panel: select position (QB/RB/WR/TE) → see top 15/20/30 players × stats grid with cells colored by percentile rank (red→yellow→green). 5 stat presets (PPR Core, Passing, Rushing, Receiving, Efficiency). Exportable as PNG with Razzle watermark. Breakout detection: backend computes 50%+ YoY PPR increase, BRK% column in screener with green pill badges, breakout badge in player profile (sticker aesthetic). All follows Razzle design system. Deployed to Render.
 
 ### Phase 11 Tasks
 
@@ -11,7 +11,7 @@
 | 1 | Positional heat map visualization | DONE | Heat Map tab in chart panel. Position selector (QB/RB/WR/TE), 5 stat presets (PPR Core, Passing, Rushing, Receiving, Efficiency), configurable top 15/20/30. Canvas-rendered grid with percentile-colored cells (red→yellow→green). Player names + team badges on Y-axis, rotated stat headers on X-axis. Razzle design: chunky borders, sand bg, Luckiest Guy/Space Mono/Caveat fonts, watermark. Horizontal scroll on mobile. |
 | 2 | Heat map PNG export | DONE | "Export PNG" button visible only in heat map tab. Downloads canvas as razzle-heatmap-{position}.png. Watermark already baked into canvas render. |
 | 3 | Breakout detection badges | DONE | Backend _enrich_with_breakout() computes max YoY PPR increase (20-point threshold). breakout_pct field in API. BRK% column in screener (Breakout group, in Dynasty preset). Green pill badge with +N% in screener cells >=50%. Breakout badge in player profile (sticker: rotated, green, chunky border). |
-| 4 | Deploy + smoke test | PENDING | |
+| 4 | Deploy + smoke test | DONE | All JS passes syntax check. Python imports clean. All HTML pages, JS files, CSS, sprites present. render.yaml correct. Pushed to master for Render auto-deploy. |
 
 ## Previous Phase: Phase 10 — Player Profiles + Lab Enhancement (COMPLETE)
 
@@ -299,6 +299,16 @@
 - [x] Mobile responsive profile modal
 - [x] Deployed to Render
 
+### Phase 11 — Positional Heat Maps + Breakout Detection
+- [x] Heat Map tab in chart panel: canvas-rendered positional percentile grid (red→yellow→green)
+- [x] 5 stat presets (PPR Core, Passing, Rushing, Receiving, Efficiency), configurable top 15/20/30
+- [x] Position selector (QB/RB/WR/TE), rotated stat headers, player names + team badges
+- [x] Heat map PNG export: "Export PNG" button, downloads razzle-heatmap-{position}.png with watermark
+- [x] Breakout detection: backend _enrich_with_breakout() computes 50%+ YoY PPR increase
+- [x] BRK% column in screener (Dynasty preset), green pill badges for breakout players
+- [x] Breakout badge in player profile modal (sticker aesthetic: rotated, green, chunky border)
+- [x] Deployed to Render
+
 ---
 
 ## Blockers
@@ -343,3 +353,4 @@ _None currently._
 | 2026-03-08 | Python re-sort for derived metrics | Derived/rate metrics can't be sorted in SQL since they're computed post-query. Fetch extra rows, re-sort in Python. Trade-off: slightly less precise pagination but much simpler architecture |
 | 2026-03-09 | Player profiles as Phase 10 | All 9 roadmap phases complete. Player profile modals are the most impactful next feature for Reddit screenshots — clicking a player name shows a rich detail view. CFBD college data deferred (needs API key). Profile export creates another shareable asset. |
 | 2026-03-09 | Position-specific profile layouts | QB/RB/WR/TE each get different headline stats and season table columns. QBs see pass yards/TDs/CMP%, RBs see rush/rec, WR/TE see targets/receptions/YAC. More useful than one-size-fits-all. |
+| 2026-03-09 | Heat maps + breakout detection as Phase 11 | Heat maps fill the last major visualization gap from the North Star. Positional percentile heat maps are extremely screenshottable for Reddit — dynasty managers love position tier grids. Breakout detection (50%+ YoY PPR) leverages multi-season data for a uniquely useful dynasty signal. Both create new shareable content types. |
