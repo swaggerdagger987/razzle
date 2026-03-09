@@ -52,17 +52,19 @@
 **Accept when**: 6 agent bio cards with pixel avatar (from sprite sheets), name, role, specialty one-liner. Cards shown on both landing page (agents section) and War Room hero. Cards use Razzle design system (chunky borders, offset shadows, position colors).
 **Depends on**: none
 **Size**: M
-**Status**: PENDING
-**Attempt**: 0/3
+**Status**: PASS
+**Attempt**: 1/3
 
 ---
 
 ## Loop State
 ```
 Current Phase: 8
-Current Task: 6
-Current Stage: DESIGN
-Attempt: 1
-Tasks Completed: 5/6
+Current Phase: 8
+Current Task: COMPLETE
+Current Stage: ALL PASS
+Attempt: -
+Tasks Completed: 6/6
+Loop Iterations: 1
 Loop Iterations: 0
 ```

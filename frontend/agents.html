@@ -72,6 +72,77 @@
     transform: translate(-1px, -1px);
   }
 
+  /* ===== AGENT BIO GRID (War Room hero) ===== */
+  .warroom-bio-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    max-width: 720px;
+    margin: 20px auto 0;
+    text-align: left;
+  }
+
+  .warroom-bio-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    box-shadow: 3px 3px 0 var(--ink);
+    overflow: hidden;
+    transition: all 0.12s;
+  }
+
+  .warroom-bio-card:hover {
+    box-shadow: 5px 5px 0 var(--ink);
+    transform: translate(-2px, -2px);
+  }
+
+  .warroom-bio-card:nth-child(odd) { transform: rotate(-0.5deg); }
+  .warroom-bio-card:nth-child(even) { transform: rotate(0.5deg); }
+  .warroom-bio-card:hover { transform: translate(-2px, -2px) rotate(0deg); }
+
+  .warroom-bio-stripe { height: 5px; }
+
+  .warroom-bio-body {
+    padding: 10px;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+
+  .warroom-bio-avatar {
+    width: 32px;
+    height: 48px;
+    background-size: 224px 96px;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+    flex-shrink: 0;
+    border: 2px solid var(--ink);
+    border-radius: 3px;
+    background-color: var(--bg-warm);
+  }
+
+  .warroom-bio-name {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .warroom-bio-role {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .warroom-bio-specialty {
+    font-family: var(--font-hand);
+    font-size: 14px;
+    color: var(--ink-light);
+    line-height: 1.2;
+    margin-top: 3px;
+  }
+
   /* ===== WAR ROOM DARK ZONE ===== */
   .warroom-dark {
     background: var(--bg-ink);
@@ -1053,6 +1124,8 @@
     .warroom-hero-sub { font-size: 18px; }
     .agent-badge { font-size: 10px; padding: 3px 8px; }
 
+    .warroom-bio-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .warroom-bio-specialty { font-size: 12px; }
     .warroom-canvas-wrap { padding: 16px; }
     .warroom-dark { min-height: 400px; }
     .canvas-placeholder-icon { font-size: 36px; }
@@ -1102,6 +1175,7 @@
     <span class="agent-badge">🏥 Medical</span>
     <span class="agent-badge">📚 Historian</span>
   </div>
+  <div class="warroom-bio-grid" id="warroomBioGrid"></div>
 </div>
 
 <!-- DARK ZONE — pixel engine canvas area -->

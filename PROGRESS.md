@@ -1,8 +1,8 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 8 — War Room: Context Bridge + Free/Paid Gating
+## Current Phase: Phase 8 — War Room: Context Bridge + Free/Paid Gating (COMPLETE)
 
-**Exit criterion:** Free user asks a question → gets generic agent analysis. Connected Sleeper user asks the same question → gets league-contextualized answer that references their roster and rivals. The difference is obvious and compelling. Home page demo looks alive.
+**Exit criterion MET:** Free user asks a question → gets generic agent analysis (Generic Mode badge, no league context in prompts). Connected Sleeper user asks the same question → gets league-contextualized answer that references their roster and rivals (League Context Mode badge, roster/rivals/record in prompts, rules instruct personalized analysis). Pro upsell card with blurred preview for non-connected users. Home page demo has 55 briefings with agent bio cards showing pixel avatars.
 
 ### Phase 8 Tasks
 
@@ -13,7 +13,7 @@
 | 3 | Free vs. paid prompt tiers | DONE | Automatic mode detection via isLeagueContextMode(). Free/generic mode: no league context, rules instruct general analysis. League context mode: rules instruct roster-specific, rival-aware analysis. Mode badge in scenario panel shows current state. |
 | 4 | Paywall UI gating | DONE | Pro upsell card with blurred/redacted league context preview. Visible only in generic mode (no Sleeper). "Connect Sleeper to Unlock" CTA links to league-intel. Hidden when league context available. Razzle design system: chunky orange border, offset shadow, handwritten text, blurred preview lines. |
 | 5 | Home page War Room demo upgrade | DONE | 55 briefings (up from 33): Razzle 11, Scout 11, Diplomat 9, Quant 8, Medical 8, Historian 8. New content covers bye week alerts, playoff clinch scenarios, trade vetoes, coaching changes, injury sell-highs, FAAB budget strategy, historical comps. Rotation picks 3 from different agents. |
-| 6 | Agent bio cards | TODO | |
+| 6 | Agent bio cards | DONE | 6 bio cards on landing page ("Meet the Team" grid) and War Room hero. Pixel avatars from sprite sheets (background-position into 112x96 PNGs). Position-colored stripes, agent names, roles, specialty one-liners. Razzle design: 3px borders, offset shadows, slight rotation, hover lift. Mobile responsive (3→2 cols at 768px). |
 
 ## Previous Phase: Phase 7 — War Room: Agent Personas + Scenario Runner (COMPLETE)
 

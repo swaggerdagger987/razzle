@@ -328,6 +328,83 @@
     width: 260px;
   }
 
+  /* ===== AGENT BIO CARDS ===== */
+  .agent-bio-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  .agent-bio-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    overflow: hidden;
+    transition: all 0.12s;
+  }
+
+  .agent-bio-card:hover {
+    box-shadow: 6px 6px 0 var(--ink);
+    transform: translate(-2px, -2px);
+  }
+
+  .agent-bio-card:nth-child(odd) { transform: rotate(-0.5deg); }
+  .agent-bio-card:nth-child(even) { transform: rotate(0.5deg); }
+  .agent-bio-card:hover { transform: translate(-2px, -2px) rotate(0deg); }
+
+  .agent-bio-stripe {
+    height: 6px;
+  }
+
+  .agent-bio-content {
+    padding: 14px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .agent-bio-avatar {
+    width: 32px;
+    height: 48px;
+    background-size: 224px 96px;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+    flex-shrink: 0;
+    border: 2px solid var(--ink);
+    border-radius: 4px;
+    background-color: var(--bg-warm);
+  }
+
+  .agent-bio-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .agent-bio-name {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+
+  .agent-bio-role {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+
+  .agent-bio-specialty {
+    font-family: var(--font-hand);
+    font-size: 16px;
+    color: var(--ink-light);
+    line-height: 1.3;
+  }
+
   /* ===== MOBILE ===== */
   @media (max-width: 768px) {
     .hero { padding: 40px 16px 28px; }
@@ -345,6 +422,7 @@
 
     .demo-section { padding: 32px 16px; }
     .demo-card { padding: 14px; font-size: 12px; }
+    .agent-bio-grid { grid-template-columns: repeat(2, 1fr); }
 
     .waitlist { padding: 28px 16px; }
     .waitlist-form { flex-direction: column; align-items: center; }
@@ -444,6 +522,13 @@
       </div>
     </div>
   </div>
+</div>
+
+<!-- AGENT BIO CARDS -->
+<div style="max-width:960px; margin:0 auto; padding:32px 24px;">
+  <div class="section-label" style="text-align:center;">Meet the Team</div>
+  <h2 style="text-align:center; font-family:var(--font-display); font-size:28px; margin-bottom:20px;">Six Minds. One War Room.</h2>
+  <div class="agent-bio-grid" id="agentBioGrid"></div>
 </div>
 
 <!-- WAR ROOM DEMO -->
@@ -595,6 +680,44 @@ function renderDemoCards() {
 }
 
 renderDemoCards();
+
+// Agent bio cards
+const AGENT_BIOS = [
+  { name: 'Razzle', role: 'Chief of Staff', color: '#d97757', sprite: 'char_0',
+    specialty: 'synthesizes all intel, resolves conflicts, delivers the final call' },
+  { name: 'Medical', role: 'Medical Analyst', color: '#5b7fff', sprite: 'char_1',
+    specialty: 'injury timelines, return-to-play risk, practice report tracking' },
+  { name: 'Scout', role: 'Scout', color: '#2ec4b6', sprite: 'char_2',
+    specialty: 'breakout detection, usage trends, waiver wire targets' },
+  { name: 'Diplomat', role: 'Diplomat', color: '#8b5cf6', sprite: 'char_3',
+    specialty: 'trade strategy, FAAB intel, leaguemate behavioral profiling' },
+  { name: 'Quant', role: 'Quant', color: '#e87422', sprite: 'char_4',
+    specialty: 'valuations, championship probability, optimal roster paths' },
+  { name: 'Historian', role: 'Historian', color: '#d44040', sprite: 'char_5',
+    specialty: 'league precedents, multi-season patterns, draft ROI analysis' },
+];
+
+function renderAgentBios() {
+  const grid = document.getElementById('agentBioGrid');
+  if (!grid) return;
+  grid.innerHTML = AGENT_BIOS.map(a => {
+    // Sprite sheet: 112x96, 7 cols x 4 rows, 16x24 per frame
+    // Show frame 0 (first frame, facing down) scaled to 32x48
+    // background-position: 0 0 shows frame (0,0)
+    return `<div class="agent-bio-card">
+      <div class="agent-bio-stripe" style="background:${a.color}"></div>
+      <div class="agent-bio-content">
+        <div class="agent-bio-avatar" style="background-image:url('assets/characters/${a.sprite}.png'); background-position:0 0; background-size:224px 96px;"></div>
+        <div class="agent-bio-info">
+          <div class="agent-bio-name" style="color:${a.color}">${a.name}</div>
+          <div class="agent-bio-role">${a.role}</div>
+          <div class="agent-bio-specialty">${a.specialty}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+renderAgentBios();
 
 function submitWaitlist() {
   const email = document.getElementById('waitlistEmail').value.trim();

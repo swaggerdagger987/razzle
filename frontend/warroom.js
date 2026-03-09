@@ -2019,6 +2019,41 @@ async function runAllAgents(scenario) {
 
 setupScenarioPanel();
 
+// ── AGENT BIO CARDS (War Room hero) ───────────────────────────────────
+(function renderWarRoomBios() {
+  var grid = document.getElementById('warroomBioGrid');
+  if (!grid) return;
+
+  var BIOS = [
+    { name: 'Razzle', role: 'Chief of Staff', color: '#d97757', sprite: 'char_0',
+      specialty: 'synthesizes all intel, delivers the final call' },
+    { name: 'Medical', role: 'Medical Analyst', color: '#5b7fff', sprite: 'char_1',
+      specialty: 'injury timelines, return-to-play risk' },
+    { name: 'Scout', role: 'Scout', color: '#2ec4b6', sprite: 'char_2',
+      specialty: 'breakout detection, usage trends' },
+    { name: 'Diplomat', role: 'Diplomat', color: '#8b5cf6', sprite: 'char_3',
+      specialty: 'trade strategy, leaguemate profiling' },
+    { name: 'Quant', role: 'Quant', color: '#e87422', sprite: 'char_4',
+      specialty: 'valuations, championship probability' },
+    { name: 'Historian', role: 'Historian', color: '#d44040', sprite: 'char_5',
+      specialty: 'league precedents, pattern recognition' },
+  ];
+
+  grid.innerHTML = BIOS.map(function(a) {
+    return '<div class="warroom-bio-card">' +
+      '<div class="warroom-bio-stripe" style="background:' + a.color + '"></div>' +
+      '<div class="warroom-bio-body">' +
+        '<div class="warroom-bio-avatar" style="background-image:url(\'assets/characters/' + a.sprite + '.png\'); background-position:0 0; background-size:224px 96px;"></div>' +
+        '<div>' +
+          '<div class="warroom-bio-name" style="color:' + a.color + '">' + a.name + '</div>' +
+          '<div class="warroom-bio-role">' + a.role + '</div>' +
+          '<div class="warroom-bio-specialty">' + a.specialty + '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+})();
+
 // ── BRIEFING CARD RENDERER ────────────────────────────────────────────
 
 function markdownToHtml(md) {
