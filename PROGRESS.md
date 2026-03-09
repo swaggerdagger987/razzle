@@ -7,7 +7,7 @@
 | # | Task | Status | Notes |
 |---|------|--------|-------|
 | 1 | agents.html page | DONE | War Room hero (sand bg, Luckiest Guy, agent badges), dark mode canvas zone, nav on all pages |
-| 2 | Pixel agent sprite sheets | NOT STARTED | 6 character PNGs in frontend/assets/characters/. Port FDL's char_0–5.png. |
+| 2 | Pixel agent sprite sheets | DONE | 6 character PNGs (112×96, 7×4 grid of 16×24 frames) ported from FDL to frontend/assets/characters/ |
 | 3 | Canvas War Room engine | NOT STARTED | 30×22 tile grid, wood floor, turf war table, furniture, collision. Ref: FDL pixel-agents/index.html |
 | 4 | Agent AI + animation | NOT STARTED | State machine: IDLE/WALK/WORK/ANALYZE/DISCUSS/THINK/COFFEE. Walk frames 150ms. |
 | 5 | Agent selection + camera | NOT STARTED | Click to select, camera follows, D-pad controls, name tags |

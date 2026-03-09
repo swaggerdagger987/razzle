@@ -20,7 +20,8 @@
 **Accept when**: frontend/assets/characters/ contains char_0.png through char_5.png, copied from FDL pixel-agents/assets/characters/. Files are valid PNGs with 16x24 frame grid (7 cols x 4 rows).
 **Depends on**: none
 **Size**: S
-**Status**: PENDING
+**Status**: PASS
+**Attempt**: 1/3
 
 ## Task 3: Canvas War Room engine — tile grid + room rendering
 **Requirement**: "30x22 tile grid, wood floor, turf war table, furniture, collision. Ref: FDL pixel-agents/index.html"
@@ -55,9 +56,9 @@
 ## Loop State
 ```
 Current Phase: 6
-Current Task: 2
+Current Task: 3
 Current Stage: PENDING
 Attempt: 0/3
-Tasks Completed: 1/6
+Tasks Completed: 2/6
 Loop Iterations: 1
 ```
