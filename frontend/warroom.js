@@ -1529,8 +1529,121 @@ function setScenarioButtonsDisabled(disabled) {
   btns.forEach(b => { b.disabled = disabled; });
 }
 
-// Placeholder: will be wired to LLM integration in Task 4
-function runSingleAgent(agentId, scenario) {
+// ── LLM INTEGRATION ──────────────────────────────────────────────────
+const LLM_TIMEOUT_MS = 20000;
+const LLM_TEMPERATURE = 0.3;
+
+const PERSONA_PATHS = {
+  0: '/agent-personas/razzle.md',
+  1: '/agent-personas/medical.md',
+  2: '/agent-personas/scout.md',
+  3: '/agent-personas/diplomat.md',
+  4: '/agent-personas/quant.md',
+  5: '/agent-personas/historian.md',
+};
+
+const personaCache = new Map();
+
+async function loadPersona(agentId) {
+  if (personaCache.has(agentId)) return personaCache.get(agentId);
+  const path = PERSONA_PATHS[agentId];
+  if (!path) throw new Error('Unknown agent ID: ' + agentId);
+  const resp = await fetch(path, { cache: 'no-store' });
+  if (!resp.ok) throw new Error('Could not load persona for agent ' + agentId);
+  const text = await resp.text();
+  personaCache.set(agentId, text);
+  return text;
+}
+
+function buildRules(agentDef) {
+  const rules = [
+    'Hard rules:',
+    '- Return structured analysis using your mandatory output sections.',
+    '- Be specific, decisive, and action-oriented for a fantasy manager.',
+    '- No disclaimers or excessive hedging.',
+    '- Keep each section concise — 2-4 sentences max.',
+    '- Use real-world knowledge of NFL players and injuries.',
+  ];
+  if (agentDef.id === 0) {
+    rules.push('- Lead with the Urgency Tier.');
+    rules.push('- Synthesize specialist insights, do not just repeat them.');
+    rules.push('- End with one clear recommendation.');
+  }
+  return rules.join('\n');
+}
+
+function buildUserMessage(scenario, agentDef, peerInsights) {
+  const parts = [buildRules(agentDef), '', 'Scenario:', scenario];
+  if (Array.isArray(peerInsights) && peerInsights.length) {
+    parts.push('', 'Peer agent insights to synthesize:');
+    peerInsights.forEach(function(p, i) {
+      parts.push((i + 1) + '. ' + p.name + ': ' + p.text);
+    });
+  }
+  return parts.join('\n');
+}
+
+async function callLLM(apiKey, model, baseUrl, systemPrompt, userMessage) {
+  const controller = new AbortController();
+  const timer = setTimeout(function() { controller.abort(); }, LLM_TIMEOUT_MS);
+
+  try {
+    const resp = await fetch(baseUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + apiKey,
+        'HTTP-Referer': 'https://razzle.lol',
+        'X-Title': 'Razzle War Room',
+      },
+      body: JSON.stringify({
+        model: model,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userMessage },
+        ],
+        temperature: LLM_TEMPERATURE,
+      }),
+      signal: controller.signal,
+    });
+
+    if (!resp.ok) {
+      const detail = await resp.text().catch(function() { return ''; });
+      throw new Error('API error ' + resp.status + (detail ? ': ' + detail.slice(0, 200) : ''));
+    }
+
+    const data = await resp.json();
+    const content = data && data.choices && data.choices[0] && data.choices[0].message
+      ? data.choices[0].message.content : null;
+    if (!content) throw new Error('No content in model response');
+    return content.trim();
+  } catch (err) {
+    if (err.name === 'AbortError') throw new Error('Request timed out after 20s');
+    throw err;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+// Store last results per agent for Razzle synthesis
+const agentResults = new Map();
+
+async function executeAgent(agentId, scenario, peerInsights) {
+  const agentDef = AGENT_DEFS[agentId];
+  if (!agentDef) throw new Error('Unknown agent');
+
+  const settings = getAgentSettings(agentId);
+  if (!settings.apiKey) throw new Error('No API key configured');
+
+  const persona = await loadPersona(agentId);
+  const userMessage = buildUserMessage(scenario, agentDef, peerInsights);
+  var result = await callLLM(settings.apiKey, settings.model, settings.baseUrl, persona, userMessage);
+
+  agentResults.set(agentId, { name: agentDef.name, text: result, at: Date.now() });
+  return result;
+}
+
+async function runSingleAgent(agentId, scenario) {
   const agent = AGENT_DEFS[agentId];
   if (!agent) return;
 
@@ -1543,31 +1656,29 @@ function runSingleAgent(agentId, scenario) {
   setScenarioStatus('running ' + agent.name + '...', 'running');
   setScenarioButtonsDisabled(true);
 
-  // Trigger agent activity bubble in canvas
   const canvasAgent = agents[agentId];
   if (canvasAgent) {
     canvasAgent.workBubble = '📡';
-    canvasAgent.bubbleTimer = 8000;
+    canvasAgent.bubbleTimer = 25000;
   }
 
-  // Dispatch custom event for LLM integration (Task 4 will listen)
-  window.dispatchEvent(new CustomEvent('razzle:run-agent', {
-    detail: { agentId, scenario, single: true }
-  }));
+  try {
+    var result = await executeAgent(agentId, scenario);
+    setScenarioStatus(agent.name + ' done', 'done');
 
-  // For now, simulate a placeholder response after a short delay
-  if (!window._razzleLLMReady) {
-    setTimeout(() => {
-      setScenarioStatus(agent.name + ' ready — wire LLM in Task 4', 'done');
-      setScenarioButtonsDisabled(false);
-      if (canvasAgent) { canvasAgent.workBubble = ''; }
-    }, 1500);
+    window.dispatchEvent(new CustomEvent('razzle:agent-result', {
+      detail: { agentId, result, scenario }
+    }));
+  } catch (err) {
+    setScenarioStatus(agent.name + ': ' + err.message, 'error');
+  } finally {
+    setScenarioButtonsDisabled(false);
+    if (canvasAgent) { canvasAgent.workBubble = ''; }
   }
 }
 
-function runAllAgents(scenario) {
-  // Check for at least one API key
-  const hasKey = AGENT_DEFS.some((_, i) => getAgentSettings(i).apiKey);
+async function runAllAgents(scenario) {
+  const hasKey = AGENT_DEFS.some(function(_, i) { return getAgentSettings(i).apiKey; });
   if (!hasKey) {
     setScenarioStatus('set an API key in Config first', 'error');
     return;
@@ -1576,25 +1687,78 @@ function runAllAgents(scenario) {
   setScenarioStatus('pulling film on all agents...', 'running');
   setScenarioButtonsDisabled(true);
 
-  // Trigger activity bubbles on all agents
-  agents.forEach(a => {
+  agents.forEach(function(a) {
     a.workBubble = '📡';
-    a.bubbleTimer = 10000;
+    a.bubbleTimer = 30000;
   });
 
-  // Dispatch custom event for LLM integration (Task 4+5 will listen)
-  window.dispatchEvent(new CustomEvent('razzle:run-all-agents', {
-    detail: { scenario }
-  }));
+  // Run 5 specialists (IDs 1-5) in parallel
+  var specialistIds = [1, 2, 3, 4, 5];
+  var results = {};
+  var errors = {};
 
-  // For now, simulate placeholder
-  if (!window._razzleLLMReady) {
-    setTimeout(() => {
-      setScenarioStatus('all agents ready — wire LLM in Task 4', 'done');
-      setScenarioButtonsDisabled(false);
-      agents.forEach(a => { a.workBubble = ''; });
-    }, 2000);
+  var specialistPromises = specialistIds.map(function(id) {
+    return (async function() {
+      var s = getAgentSettings(id);
+      if (!s.apiKey) { errors[id] = 'no API key'; return; }
+      try {
+        results[id] = await executeAgent(id, scenario);
+        var ca = agents[id];
+        if (ca) { ca.workBubble = '✅'; ca.bubbleTimer = 3000; }
+      } catch (err) {
+        errors[id] = err.message;
+        var ca = agents[id];
+        if (ca) { ca.workBubble = '❌'; ca.bubbleTimer = 3000; }
+      }
+    })();
+  });
+
+  await Promise.all(specialistPromises);
+
+  var successCount = Object.keys(results).length;
+  var errorCount = Object.keys(errors).length;
+
+  if (successCount === 0) {
+    setScenarioStatus('all specialists failed', 'error');
+    setScenarioButtonsDisabled(false);
+    agents.forEach(function(a) { a.workBubble = ''; });
+    window.dispatchEvent(new CustomEvent('razzle:all-agents-done', {
+      detail: { scenario: scenario, results: results, errors: errors, razzleSynthesis: null }
+    }));
+    return;
   }
+
+  // Run Razzle (agent 0) with specialist outputs as peer insights
+  setScenarioStatus('Razzle is synthesizing...', 'running');
+  var peerInsights = specialistIds
+    .filter(function(id) { return results[id]; })
+    .map(function(id) { return { name: AGENT_DEFS[id].name, text: results[id] }; });
+
+  var razzleSynthesis = null;
+  try {
+    var razzleSettings = getAgentSettings(0);
+    if (razzleSettings.apiKey) {
+      razzleSynthesis = await executeAgent(0, scenario, peerInsights);
+      var ca = agents[0];
+      if (ca) { ca.workBubble = '✅'; ca.bubbleTimer = 3000; }
+    } else {
+      errors[0] = 'no API key for Razzle';
+    }
+  } catch (err) {
+    errors[0] = err.message;
+    var ca = agents[0];
+    if (ca) { ca.workBubble = '❌'; ca.bubbleTimer = 3000; }
+  }
+
+  var statusMsg = razzleSynthesis
+    ? 'briefing complete — ' + successCount + ' specialists reported'
+    : successCount + ' specialists done' + (errorCount ? ', ' + errorCount + ' failed' : '');
+  setScenarioStatus(statusMsg, razzleSynthesis ? 'done' : 'error');
+  setScenarioButtonsDisabled(false);
+
+  window.dispatchEvent(new CustomEvent('razzle:all-agents-done', {
+    detail: { scenario: scenario, results: results, errors: errors, razzleSynthesis: razzleSynthesis }
+  }));
 }
 
 setupScenarioPanel();

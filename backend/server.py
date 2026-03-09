@@ -130,6 +130,11 @@ def filter_options():
     return live_data.get_filter_options()
 
 
+@app.get("/api/players/{player_id}/profile")
+def player_profile(player_id: str):
+    return live_data.fetch_player_profile(player_id)
+
+
 @app.get("/api/players/{player_id}/weeks")
 def player_weeks(player_id: str, season: str = "0"):
     s = int(season) if season.isdigit() else 0
@@ -180,6 +185,10 @@ def prospect_options():
 # ---------------------------------------------------------------------------
 # Serve frontend as static files (catch-all for SPA-like behavior)
 # ---------------------------------------------------------------------------
+
+PERSONAS_DIR = Path(__file__).parent.parent / "agent-personas"
+if PERSONAS_DIR.exists():
+    app.mount("/agent-personas", StaticFiles(directory=str(PERSONAS_DIR)), name="personas")
 
 if FRONTEND_DIR.exists():
     app.mount("/", StaticFiles(directory=str(FRONTEND_DIR), html=True), name="frontend")

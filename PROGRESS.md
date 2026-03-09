@@ -9,7 +9,7 @@
 | 1 | Agent persona files | DONE | 6 markdown files in agent-personas/: razzle.md (Chief of Staff), medical.md, scout.md, diplomat.md, quant.md, historian.md. Adapted from FDL personas with Razzle brand voice, mandatory output sections per roadmap spec |
 | 2 | Agent config panel | DONE | Config toggle + sand-bg overlay panel in War Room dark zone. Shared API key with "Apply to All", model selector (default openrouter/auto), base URL, per-agent key overrides with color dots. localStorage persistence via razzle_agent_config key. Razzle design system: chunky borders, offset shadows, font-display labels, font-mono inputs, font-hand hints |
 | 3 | Scenario input panel | DONE | Sand-bg card in dark zone below canvas. Textarea with Caveat placeholder, 6 pre-loaded example scenario chips, "Run All Agents" primary button + per-agent run buttons with color dots. Loading states ("pulling film..."). Custom events dispatched for LLM integration (Task 4). Mobile responsive. |
-| 4 | LLM integration | - | |
+| 4 | LLM integration | DONE | Browser-side fetch to OpenRouter-compatible API. loadPersona() fetches persona markdown from /agent-personas/. callLLM() with 20s AbortController timeout, temperature 0.3. Error handling for missing key, timeout, bad response. executeAgent() composes persona + rules + scenario into system/user messages. runAllAgents() runs 5 specialists in parallel via Promise.all, then Razzle synthesizes with peer insights. Custom events dispatched for rendering. |
 | 5 | Specialist agent execution | - | |
 | 6 | Razzle orchestration | - | |
 | 7 | Response rendering | - | |
