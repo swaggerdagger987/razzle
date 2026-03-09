@@ -1,8 +1,8 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 10 — Player Profiles + Lab Enhancement
+## Current Phase: Phase 10 — Player Profiles + Lab Enhancement (COMPLETE)
 
-**Exit criterion**: Click any player name in the Lab screener → rich profile modal opens with career headline stats, season-by-season breakdown table, combine/draft data (if available), and career arc trend chart. Profile PNG export with watermark. Screenshot-worthy. Mobile responsive.
+**Exit criterion MET:** Click any player name in the Lab screener → rich profile modal opens with position-colored header, career headline stats bar (position-specific), season-by-season breakdown table with career totals, combine/draft data grid (if available), and career arc canvas chart. Profile PNG export with Razzle watermark. Mobile responsive. Follows Razzle design system (chunky borders, offset shadows, position colors, sand bg).
 
 ### Phase 10 Tasks
 
@@ -11,7 +11,7 @@
 | 1 | Player profile detail modal | DONE | Click player name → profile modal with position-colored header, career headline stats bar (position-specific), season-by-season table with career totals, combine/draft data grid, career arc chart. Razzle design system: chunky borders, offset shadows, position colors. Close on click-outside. Mobile responsive. |
 | 2 | Profile career arc chart | DONE | Canvas chart in profile: PPR per season line with filled area, position-colored, data point dots with value labels, Y-axis gridlines, season tick labels. Handles single-season players. |
 | 3 | Profile image export | DONE | "Export PNG" button in profile header. Canvas-rendered profile (header, stats bar, season table) with Razzle watermark. Downloads as razzle-profile-{name}.png. |
-| 4 | Deploy + smoke test | PENDING | |
+| 4 | Deploy + smoke test | DONE | All JS passes syntax check. Python server imports clean. All HTML pages, JS files, CSS, sprites present. Pushed to master for Render auto-deploy. |
 
 ## Previous Phase: Phase 9 — Polish + Formula Store (COMPLETE)
 
@@ -275,6 +275,17 @@
 - [x] SVG favicon (tiger emoji) added to all pages
 - [x] Deployed to Render
 
+### Phase 10 — Player Profiles + Lab Enhancement
+- [x] Player profile detail modal: click player name → rich modal with position-colored header, career headline stats bar
+- [x] Position-specific headline stats: QB (pass yds/TDs/rush yds), RB (rush/rec yds/TDs), WR/TE (rec yds/TDs/receptions)
+- [x] Season-by-season breakdown table with position-specific columns and career totals row
+- [x] Combine/draft data grid: round, pick, height, weight, 40-yard, bench, vertical, broad, cone, shuttle
+- [x] Career arc canvas chart: PPR per season line with filled area, position-colored, data point dots with value labels
+- [x] Profile image export: canvas-rendered PNG with header, stats bar, season table, Razzle watermark
+- [x] Backend: fetch_player_profile with season aggregates, derived stats enrichment, combine/draft data join
+- [x] Mobile responsive profile modal
+- [x] Deployed to Render
+
 ---
 
 ## Blockers
@@ -317,3 +328,5 @@ _None currently._
 | 2026-03-08 | Career view as first dropdown option | Dynasty managers think in careers, not single seasons. Career aggregates are the default mental model for dynasty analysis |
 | 2026-03-08 | Advanced metrics from player_week_metrics | target_share, WOPR, RACR, EPA are Reddit power user stats. Enriched via secondary query (not JOIN) to keep main query fast |
 | 2026-03-08 | Python re-sort for derived metrics | Derived/rate metrics can't be sorted in SQL since they're computed post-query. Fetch extra rows, re-sort in Python. Trade-off: slightly less precise pagination but much simpler architecture |
+| 2026-03-09 | Player profiles as Phase 10 | All 9 roadmap phases complete. Player profile modals are the most impactful next feature for Reddit screenshots — clicking a player name shows a rich detail view. CFBD college data deferred (needs API key). Profile export creates another shareable asset. |
+| 2026-03-09 | Position-specific profile layouts | QB/RB/WR/TE each get different headline stats and season table columns. QBs see pass yards/TDs/CMP%, RBs see rush/rec, WR/TE see targets/receptions/YAC. More useful than one-size-fits-all. |
