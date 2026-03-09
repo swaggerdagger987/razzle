@@ -7,10 +7,12 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse, HTMLResponse, Response
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, Response
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from pathlib import Path
 import logging
+import re
+import time as _time
 import uvicorn
 
 from . import live_data
@@ -329,10 +331,20 @@ def heatmap(position: str = "WR", group: str = "production", season: int = None)
     return live_data.fetch_heatmap(position=position, group=group, season=season)
 
 
+_waitlist_rate: dict[str, float] = {}
+_EMAIL_RE = re.compile(r'^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$')
+
 @app.post("/api/waitlist")
 async def waitlist(request: Request):
     body = await request.json()
-    email = body.get("email", "")
+    email = body.get("email", "").strip()
+    if not email or not _EMAIL_RE.match(email):
+        return JSONResponse({"error": "Invalid email format"}, status_code=400)
+    ip = request.client.host if request.client else "unknown"
+    now_ts = _time.time()
+    if ip in _waitlist_rate and now_ts - _waitlist_rate[ip] < 60:
+        return JSONResponse({"error": "Rate limited. Try again in 60 seconds."}, status_code=429)
+    _waitlist_rate[ip] = now_ts
     return live_data.add_to_waitlist(email)
 
 

@@ -16,14 +16,8 @@
 **Result**: (a) DVS popover updated: QB 26-30, RB 22-25, WR 24-28, TE 25-29. (b) NFL_TEAMS 'LA' → 'LAR'. (c) QB turnovers label 'INT' → 'TO' (key is turnovers=INT+fumbles).
 
 ## Task 3: Fix War Room memory leaks + waitlist validation
-**Status**: PENDING
-**Acceptance Criteria**:
-- Game loop pauses when page is hidden, resumes when visible
-- Particle array capped at 200
-- Roster status interval clears on page hide
-- Waitlist rejects emails without proper format (returns 400)
-- Waitlist rate limits by IP (returns 429 if <60s since last submit)
-- No regression in War Room functionality
+**Status**: PASS
+**Result**: (a) rAF ID stored, cancelAnimationFrame on visibilitychange. (b) Particle cap at 200. (c) setInterval cleared on page hide, restarted on visible. (d) Email regex validation returns 400. (e) IP rate limit dict returns 429 if <60s. lastTime reset on resume to avoid dt spike.
 
 ## Task 4: Fix college/prospect mode bugs
 **Status**: PENDING
@@ -67,8 +61,8 @@
 ## Loop State
 ```
 Current Phase: 38
-Current Task: 3
+Current Task: 4
 Current Stage: PENDING
 Attempt: 1/3
-Tasks Completed: 2/7
+Tasks Completed: 3/7
 ```

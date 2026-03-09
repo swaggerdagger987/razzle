@@ -644,6 +644,7 @@ function drawFurniture() {
 const particles = [];
 
 function spawnParticle(x, y, type) {
+  if (particles.length >= 200) return; // Cap particle array
   particles.push({
     x, y,
     vx: (Math.random() - 0.5) * 2,
@@ -1169,6 +1170,7 @@ function drawHUD() {
 
 // ── GAME LOOP ──────────────────────────────────────────────────────────
 let lastTime = now();
+let _rafId = null;
 
 function gameLoop() {
   const t = now();
@@ -1206,7 +1208,7 @@ function gameLoop() {
 
   drawHUD();
 
-  requestAnimationFrame(gameLoop);
+  _rafId = requestAnimationFrame(gameLoop);
 }
 
 // ── ROSTER SIDEBAR ─────────────────────────────────────────────────────
@@ -1309,12 +1311,31 @@ if (rosterToggle && rosterPanel) {
 }
 
 // Update roster status every second
-setInterval(() => {
+let _rosterInterval = setInterval(() => {
   if (rosterPanel && rosterPanel.classList.contains('open')) {
     updateRosterStatus();
     updateRosterSelection();
   }
 }, 1000);
+
+// Pause game loop and intervals when page is hidden
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    if (_rafId) { cancelAnimationFrame(_rafId); _rafId = null; }
+    if (_rosterInterval) { clearInterval(_rosterInterval); _rosterInterval = null; }
+  } else {
+    lastTime = now();
+    if (!_rafId) _rafId = requestAnimationFrame(gameLoop);
+    if (!_rosterInterval) {
+      _rosterInterval = setInterval(() => {
+        if (rosterPanel && rosterPanel.classList.contains('open')) {
+          updateRosterStatus();
+          updateRosterSelection();
+        }
+      }, 1000);
+    }
+  }
+});
 
 // ── AGENT CONFIG PANEL ────────────────────────────────────────────────
 const AGENT_CONFIG_KEY = 'razzle_agent_config';
