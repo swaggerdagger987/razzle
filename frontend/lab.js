@@ -679,6 +679,8 @@ function applyUniverseUI() {
   if (exportRankingsBtn) exportRankingsBtn.style.display = (state.universe === "nfl") ? "" : "none";
   const tradeValuesBtn = document.getElementById("tradeValuesBtn");
   if (tradeValuesBtn) tradeValuesBtn.style.display = (state.universe === "nfl") ? "" : "none";
+  const agingCurvesBtn = document.getElementById("agingCurvesBtn");
+  if (agingCurvesBtn) agingCurvesBtn.style.display = (state.universe === "nfl") ? "" : "none";
 }
 
 // ─── Sort ────────────────────────────────────────────────────────
@@ -4826,6 +4828,339 @@ function exportTradeValuesPNG() {
 
   const link = document.createElement("a");
   link.download = "razzle-trade-values-" + _tvState.position.toLowerCase() + ".png";
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+}
+
+// ─── Aging Curves ────────────────────────────────────────────────
+
+const _acState = {
+  position: "WR",
+  data: null,
+  enabledPlayers: {},  // name -> boolean
+};
+
+const _acPosColors = {
+  QB: "#5b7fff",
+  RB: "#2ec4b6",
+  WR: "#d97757",
+  TE: "#8b5cf6",
+};
+
+function openAgingCurves() {
+  document.getElementById("agingCurvesOverlay").classList.add("open");
+  renderACPositionBtns();
+  loadAgingCurves();
+}
+
+function closeAgingCurves(e) {
+  if (e && e.target !== e.currentTarget) return;
+  document.getElementById("agingCurvesOverlay").classList.remove("open");
+}
+
+function renderACPositionBtns() {
+  const container = document.getElementById("acPositionBtns");
+  container.innerHTML = "";
+  for (const pos of ["QB", "RB", "WR", "TE"]) {
+    const active = pos === _acState.position;
+    const btn = document.createElement("button");
+    btn.className = active ? "btn-primary" : "btn-chunky";
+    btn.textContent = pos;
+    btn.style.cssText = "font-size:11px; padding:4px 12px;";
+    if (!active) btn.style.borderColor = _acPosColors[pos];
+    btn.onclick = () => { _acState.position = pos; _acState.enabledPlayers = {}; renderACPositionBtns(); loadAgingCurves(); };
+    container.appendChild(btn);
+  }
+}
+
+async function loadAgingCurves() {
+  const canvas = document.getElementById("acCanvas");
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "#ede0cf";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.font = "22px 'Caveat', cursive";
+  ctx.fillStyle = "#8a8a9e";
+  ctx.textAlign = "center";
+  ctx.fillText("pulling aging film...", canvas.width / 2, canvas.height / 2);
+
+  try {
+    const resp = await apiFetch("/api/aging-curves?position=" + _acState.position);
+    _acState.data = resp;
+
+    // Enable top 3 players by default
+    _acState.enabledPlayers = {};
+    for (let i = 0; i < Math.min(3, resp.players.length); i++) {
+      _acState.enabledPlayers[resp.players[i].name] = true;
+    }
+
+    renderAgingCurveChart();
+    renderACLegend();
+  } catch (err) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#ede0cf";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.font = "22px 'Caveat', cursive";
+    ctx.fillStyle = "#d97757";
+    ctx.textAlign = "center";
+    ctx.fillText("fumbled the aging data...", canvas.width / 2, canvas.height / 2);
+    console.error("Aging curves load failed:", err);
+  }
+}
+
+function renderAgingCurveChart(targetCanvas) {
+  const data = _acState.data;
+  if (!data) return;
+
+  const canvas = targetCanvas || document.getElementById("acCanvas");
+  const ctx = canvas.getContext("2d");
+  const W = canvas.width;
+  const H = canvas.height;
+
+  // Chart area
+  const padL = 60, padR = 30, padT = 40, padB = 50;
+  const chartW = W - padL - padR;
+  const chartH = H - padT - padB;
+
+  // Clear
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = "#ede0cf";
+  ctx.fillRect(0, 0, W, H);
+
+  const baseline = data.baseline;
+  if (!baseline.length) return;
+
+  // Compute ranges
+  const ages = baseline.map(b => b.age);
+  const minAge = Math.min(...ages);
+  const maxAge = Math.max(...ages);
+
+  // Include player data in max PPG
+  let maxPPG = Math.max(...baseline.map(b => b.avg_ppg));
+  for (const p of data.players) {
+    if (_acState.enabledPlayers[p.name]) {
+      for (const pt of p.points) {
+        if (pt.ppg > maxPPG) maxPPG = pt.ppg;
+      }
+    }
+  }
+  maxPPG = Math.ceil(maxPPG / 5) * 5 + 5; // Round up with padding
+
+  // Scale functions
+  const xScale = (age) => padL + ((age - minAge) / (maxAge - minAge)) * chartW;
+  const yScale = (ppg) => padT + chartH - (ppg / maxPPG) * chartH;
+
+  // Grid lines
+  ctx.strokeStyle = "#c5c5d0";
+  ctx.lineWidth = 0.5;
+  ctx.setLineDash([4, 4]);
+  const ppgStep = maxPPG <= 20 ? 2 : 5;
+  for (let ppg = 0; ppg <= maxPPG; ppg += ppgStep) {
+    const y = yScale(ppg);
+    ctx.beginPath();
+    ctx.moveTo(padL, y);
+    ctx.lineTo(W - padR, y);
+    ctx.stroke();
+  }
+  ctx.setLineDash([]);
+
+  // Y-axis labels
+  ctx.fillStyle = "#4a4a5e";
+  ctx.font = "11px 'Space Mono', monospace";
+  ctx.textAlign = "right";
+  for (let ppg = 0; ppg <= maxPPG; ppg += ppgStep) {
+    ctx.fillText(String(ppg), padL - 8, yScale(ppg) + 4);
+  }
+
+  // X-axis labels
+  ctx.textAlign = "center";
+  for (let age = minAge; age <= maxAge; age++) {
+    const x = xScale(age);
+    ctx.fillText(String(age), x, H - padB + 20);
+    // Tick
+    ctx.beginPath();
+    ctx.strokeStyle = "#c5c5d0";
+    ctx.lineWidth = 1;
+    ctx.moveTo(x, padT + chartH);
+    ctx.lineTo(x, padT + chartH + 4);
+    ctx.stroke();
+  }
+
+  // Axis labels
+  ctx.font = "bold 12px 'Space Mono', monospace";
+  ctx.fillStyle = "#1a1a2e";
+  ctx.textAlign = "center";
+  ctx.fillText("Age", padL + chartW / 2, H - 6);
+
+  ctx.save();
+  ctx.translate(16, padT + chartH / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillText("PPG (PPR)", 0, 0);
+  ctx.restore();
+
+  // Draw individual player curves FIRST (behind baseline)
+  const playerColors = [
+    "#e87422", "#5b7fff", "#2ec4b6", "#8b5cf6", "#d44040",
+    "#ffc857", "#e63946", "#1a1a2e", "#4a9e5c", "#c44daa",
+  ];
+  let colorIdx = 0;
+  for (const p of data.players) {
+    if (!_acState.enabledPlayers[p.name]) { colorIdx++; continue; }
+    const pts = p.points.filter(pt => pt.age >= minAge && pt.age <= maxAge);
+    if (pts.length < 2) { colorIdx++; continue; }
+
+    const color = playerColors[colorIdx % playerColors.length];
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1.5;
+    ctx.globalAlpha = 0.7;
+    ctx.setLineDash([6, 3]);
+    ctx.beginPath();
+    for (let i = 0; i < pts.length; i++) {
+      const x = xScale(pts[i].age);
+      const y = yScale(pts[i].ppg);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Data points
+    for (const pt of pts) {
+      const x = xScale(pt.age);
+      const y = yScale(pt.ppg);
+      ctx.beginPath();
+      ctx.arc(x, y, 3, 0, Math.PI * 2);
+      ctx.fillStyle = color;
+      ctx.fill();
+    }
+
+    // Label at last point
+    const last = pts[pts.length - 1];
+    ctx.font = "bold 10px 'Space Mono', monospace";
+    ctx.fillStyle = color;
+    ctx.textAlign = "left";
+    ctx.fillText(p.name.split(" ").pop(), xScale(last.age) + 6, yScale(last.ppg) + 3);
+
+    ctx.globalAlpha = 1.0;
+    colorIdx++;
+  }
+
+  // Draw baseline curve (thick, on top)
+  const posColor = _acPosColors[_acState.position] || "#d97757";
+  ctx.strokeStyle = posColor;
+  ctx.lineWidth = 3.5;
+  ctx.globalAlpha = 0.9;
+  ctx.beginPath();
+  for (let i = 0; i < baseline.length; i++) {
+    const x = xScale(baseline[i].age);
+    const y = yScale(baseline[i].avg_ppg);
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+  ctx.globalAlpha = 1.0;
+
+  // Baseline data points
+  for (const b of baseline) {
+    const x = xScale(b.age);
+    const y = yScale(b.avg_ppg);
+    ctx.beginPath();
+    ctx.arc(x, y, 5, 0, Math.PI * 2);
+    ctx.fillStyle = posColor;
+    ctx.fill();
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+  }
+
+  // Baseline label
+  ctx.font = "bold 13px 'Space Mono', monospace";
+  ctx.fillStyle = posColor;
+  ctx.textAlign = "left";
+  const lastB = baseline[baseline.length - 1];
+  ctx.fillText(_acState.position + " avg", xScale(lastB.age) + 8, yScale(lastB.avg_ppg) + 4);
+
+  // Title
+  ctx.font = "bold 18px 'Luckiest Guy', cursive";
+  ctx.fillStyle = "#1a1a2e";
+  ctx.textAlign = "left";
+  ctx.fillText(_acState.position + " Aging Curve", padL, 24);
+
+  // Subtitle annotation
+  ctx.font = "16px 'Caveat', cursive";
+  ctx.fillStyle = "#8a8a9e";
+  ctx.textAlign = "right";
+  ctx.fillText("avg PPG by age, 2020-2024", W - padR, 28);
+
+  // Chart border
+  ctx.strokeStyle = "#1a1a2e";
+  ctx.lineWidth = 2;
+  ctx.strokeRect(padL, padT, chartW, chartH);
+}
+
+function renderACLegend() {
+  const data = _acState.data;
+  if (!data) return;
+  const container = document.getElementById("acLegend");
+
+  const playerColors = [
+    "#e87422", "#5b7fff", "#2ec4b6", "#8b5cf6", "#d44040",
+    "#ffc857", "#e63946", "#1a1a2e", "#4a9e5c", "#c44daa",
+  ];
+
+  let html = '<div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--ink-light); margin-right:8px; padding-top:6px;">Players</div>';
+  data.players.forEach((p, i) => {
+    const color = playerColors[i % playerColors.length];
+    const enabled = _acState.enabledPlayers[p.name];
+    const opacity = enabled ? "1" : "0.4";
+    const border = enabled ? "2px solid " + color : "2px solid var(--ink-faint)";
+    html += '<button onclick="toggleACPlayer(\'' + escapeAttr(p.name) + '\')" style="'
+      + 'display:inline-flex; align-items:center; gap:6px; padding:4px 10px; border-radius:20px;'
+      + 'border:' + border + '; background:' + (enabled ? color + '15' : 'transparent') + ';'
+      + 'cursor:pointer; opacity:' + opacity + '; font-family:var(--font-mono); font-size:11px;'
+      + 'transition:all 0.15s;">'
+      + '<span style="width:10px; height:10px; border-radius:50%; background:' + color + '; display:inline-block;"></span>'
+      + escapeHtml(p.name) + ' <span style="color:var(--ink-light);">' + p.career_ppg + '</span>'
+      + '</button>';
+  });
+  container.innerHTML = html;
+}
+
+function toggleACPlayer(name) {
+  _acState.enabledPlayers[name] = !_acState.enabledPlayers[name];
+  renderAgingCurveChart();
+  renderACLegend();
+}
+
+function exportAgingCurvesPNG() {
+  const data = _acState.data;
+  if (!data) return;
+
+  const W = 800;
+  const H = 520;
+  const canvas = document.createElement("canvas");
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext("2d");
+
+  // Render chart to export canvas
+  // Temporarily adjust canvas size reference
+  const origCanvas = document.getElementById("acCanvas");
+  const origW = origCanvas.width;
+  const origH = origCanvas.height;
+
+  canvas.width = W;
+  canvas.height = H;
+  renderAgingCurveChart(canvas);
+
+  // Watermark
+  ctx.font = "bold 14px sans-serif";
+  ctx.fillStyle = "#1a1a2e";
+  ctx.globalAlpha = 0.3;
+  ctx.textAlign = "center";
+  ctx.fillText("built different — razzle.lol", W / 2, H - 10);
+  ctx.globalAlpha = 1.0;
+
+  const link = document.createElement("a");
+  link.download = "razzle-aging-curves-" + _acState.position.toLowerCase() + ".png";
   link.href = canvas.toDataURL("image/png");
   link.click();
 }

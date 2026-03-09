@@ -308,6 +308,11 @@ def college_filter_options():
     return live_data.fetch_college_filter_options()
 
 
+@app.get("/api/aging-curves")
+def aging_curves(position: str = "WR"):
+    return live_data.fetch_aging_curves(position=position)
+
+
 @app.post("/api/waitlist")
 async def waitlist(request: Request):
     body = await request.json()

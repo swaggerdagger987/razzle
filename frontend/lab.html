@@ -1303,6 +1303,7 @@
     <button class="btn-chunky" onclick="openShareModal()" style="border-color:var(--orange);">Share</button>
     <button class="btn-chunky" id="exportRankingsBtn" onclick="openRankingsExport()" style="display:none;">Export Rankings</button>
     <button class="btn-chunky" id="tradeValuesBtn" onclick="openTradeValues()" style="display:none; border-color:var(--orange);">Trade Values</button>
+    <button class="btn-chunky" id="agingCurvesBtn" onclick="openAgingCurves()" style="display:none; border-color:var(--green);">Aging Curves</button>
 
     <span class="result-count" id="resultCount"></span>
   </div>
@@ -1694,6 +1695,22 @@
       <button class="btn-chunky" onclick="closeFormulaStore()">Close</button>
     </div>
     <div id="storeContent"></div>
+  </div>
+</div>
+
+<!-- AGING CURVES -->
+<div class="filter-modal-overlay" id="agingCurvesOverlay" onclick="closeAgingCurves(event)">
+  <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:960px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
+      <h3 style="margin:0; font-family:var(--font-display);">Aging Curves</h3>
+      <div style="font-family:var(--font-hand); font-size:18px; color:var(--ink-light);">how players age at each position...</div>
+      <div id="acPositionBtns" style="display:flex; gap:6px; margin-left:auto;"></div>
+      <button class="btn-primary" id="acExportBtn" onclick="exportAgingCurvesPNG()" style="font-size:11px; padding:6px 14px;">Export PNG</button>
+    </div>
+    <div id="acChartContainer" style="position:relative;">
+      <canvas id="acCanvas" width="900" height="500" style="width:100%; border:2px solid var(--ink); border-radius:8px; background:var(--bg);"></canvas>
+    </div>
+    <div id="acLegend" style="margin-top:16px; display:flex; flex-wrap:wrap; gap:8px;"></div>
   </div>
 </div>
 

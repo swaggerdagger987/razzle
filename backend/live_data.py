@@ -2070,3 +2070,131 @@ def add_to_waitlist(email: str) -> dict:
         result = {"status": "duplicate"}
     conn.close()
     return result
+
+
+# ---------------------------------------------------------------------------
+# Aging Curves
+# ---------------------------------------------------------------------------
+
+def fetch_aging_curves(position="WR"):
+    """Return position-average PPG by age and top individual player career arcs.
+
+    Returns:
+        {
+            baseline: [{age, avg_ppg, count}],
+            players: [{name, team, position, points: [{age, ppg, season}]}]
+        }
+    """
+    position = position.strip().upper()
+    if position not in FANTASY_POSITIONS:
+        position = "WR"
+
+    conn = get_conn()
+
+    # --- Baseline: average PPG per age bucket for this position ---
+    # Each player-season = one data point: (age_at_season, ppg_that_season)
+    # We compute age at each season from birth_date or the stored age column
+    # Since we store current age, we back-compute: age_at_season = current_age - (latest_season - season)
+    latest_season_row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+    latest_season = latest_season_row[0] if latest_season_row and latest_season_row[0] else 2024
+
+    rows = conn.execute("""
+        SELECT
+            p.player_id,
+            p.full_name,
+            p.team,
+            p.position,
+            p.age,
+            s.season,
+            COUNT(DISTINCT s.week) as games,
+            SUM(s.fantasy_points_ppr) as total_ppr
+        FROM player_week_stats s
+        JOIN players p ON p.player_id = s.player_id
+        WHERE p.position = ?
+          AND p.age IS NOT NULL
+          AND s.fantasy_points_ppr IS NOT NULL
+        GROUP BY p.player_id, s.season
+        HAVING games >= 4
+        ORDER BY total_ppr DESC
+    """, (position,)).fetchall()
+
+    # Compute age-at-season for each player-season
+    # age_at_season = current_age - (latest_season - season)
+    baseline_buckets = {}  # age -> [ppg_values]
+    player_arcs = {}  # player_id -> {name, team, points: [{age, ppg, season}]}
+
+    for r in rows:
+        player_id = r[0]
+        name = r[1]
+        team = r[2]
+        pos = r[3]
+        current_age = r[4]
+        season = r[5]
+        games = r[6]
+        total_ppr = r[7] or 0
+
+        age_at_season = round(current_age - (latest_season - season))
+        if age_at_season < 19 or age_at_season > 42:
+            continue
+
+        ppg = round(total_ppr / max(games, 1), 1)
+
+        # Add to baseline
+        if age_at_season not in baseline_buckets:
+            baseline_buckets[age_at_season] = []
+        baseline_buckets[age_at_season].append(ppg)
+
+        # Add to player arc
+        if player_id not in player_arcs:
+            player_arcs[player_id] = {
+                "name": name,
+                "team": team,
+                "position": pos,
+                "career_ppg": 0,
+                "total_ppr": 0,
+                "total_games": 0,
+                "points": [],
+            }
+        player_arcs[player_id]["points"].append({
+            "age": age_at_season,
+            "ppg": ppg,
+            "season": season,
+        })
+        player_arcs[player_id]["total_ppr"] += total_ppr
+        player_arcs[player_id]["total_games"] += games
+
+    # Build baseline (min 5 player-seasons per age bucket)
+    baseline = []
+    for age in sorted(baseline_buckets.keys()):
+        values = baseline_buckets[age]
+        if len(values) >= 5:
+            baseline.append({
+                "age": age,
+                "avg_ppg": round(sum(values) / len(values), 1),
+                "count": len(values),
+            })
+
+    # Pick top 10 players by career PPG (min 2 seasons)
+    for pid, arc in player_arcs.items():
+        arc["career_ppg"] = round(arc["total_ppr"] / max(arc["total_games"], 1), 1)
+        arc["points"].sort(key=lambda x: x["age"])
+
+    top_players = sorted(
+        [arc for arc in player_arcs.values() if len(arc["points"]) >= 2],
+        key=lambda x: x["career_ppg"],
+        reverse=True,
+    )[:10]
+
+    # Clean up output
+    players_out = []
+    for arc in top_players:
+        players_out.append({
+            "name": arc["name"],
+            "team": arc["team"],
+            "position": arc["position"],
+            "career_ppg": arc["career_ppg"],
+            "points": arc["points"],
+        })
+
+    conn.close()
+    return {"baseline": baseline, "players": players_out}

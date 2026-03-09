@@ -1,6 +1,18 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 26 — Trade Value Chart (COMPLETE)
+## Current Phase: Phase 27 — Aging Curves (COMPLETE)
+
+**Exit criterion MET:** Lab screener has "Aging Curves" button (NFL mode only, green border) that opens a 960px overlay with canvas-rendered aging curve chart. Backend endpoint GET /api/aging-curves?position={QB|RB|WR|TE} returns position-average PPG by integer age bucket (min 5 player-seasons) and top 10 individual player career arcs. Canvas chart: auto-scaled axes, dashed grid lines, Space Mono labels, age X-axis, PPG Y-axis. Thick position-colored baseline curve with bordered data dots. Individual player curves as dashed lines with toggleable legend pills (top 3 enabled by default). Position tabs switch data. Export PNG (800x520, watermark). Razzle design: sand bg, chunky chart border, Luckiest Guy title, Caveat subtitle. Deployed to Render.
+
+### Phase 27 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/aging-curves endpoint | DONE | fetch_aging_curves() in live_data.py. Queries player_week_stats JOIN players, groups by player+season, computes age_at_season. Baseline: avg PPG per integer age (min 5 samples). Top 10 players by career PPG (min 2 seasons). QB 16 ages, RB 12, WR 14, TE 14. |
+| 2 | Aging curve chart UI + player overlay | DONE | 960px overlay with position tabs. Canvas chart: baseline (thick, position-colored), individual curves (dashed, toggleable). Legend with 10 player pills. Luckiest Guy title + Caveat subtitle. 8 functions total. |
+| 3 | PNG export + deploy + smoke test | DONE | Export PNG button. 800x520 canvas with watermark. All 7 JS pass syntax. Python imports clean. All HTML IDs match. Committed and pushed. |
+
+## Previous Phase: Phase 26 — Trade Value Chart (COMPLETE)
 
 **Exit criterion MET:** Lab screener has "Trade Values" button (NFL mode only, orange border) that opens a 960px overlay with visual trade value chart. Players fetched from API, DVS computed client-side, rounded to trade values (0-100). Grouped by tier: Elite (85+, green), Star (70-84, blue), Starter (55-69, terracotta), Bench (<55, gray). Tier headers with rotated sticker badges. Player cards with position-colored left stripe, name, position badge, team, age, trade value bar + number. Position filter tabs (ALL/QB/RB/WR/TE). Canvas PNG export (800px portrait, watermark). Trade Calculator: two-side player search with debounced autocomplete, position-colored player chips with remove buttons, total value per side, balance indicator (FAIR green ≤10% / red with difference >10%). Razzle design system throughout. Deployed to Render.
 
