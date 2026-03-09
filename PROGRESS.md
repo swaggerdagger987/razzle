@@ -1,8 +1,8 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 20 — Dynasty Comparison Cards + Quick Rankings Export
+## Current Phase: Phase 20 — Dynasty Comparison Cards + Quick Rankings Export (COMPLETE)
 
-**Exit criterion:** NFL player comparison mode has full PNG export (side-by-side comparison cards with DVS, age, position-colored headers, key stats, radar overlay). Quick rankings export generates "Top N at Position" as a shareable PNG with DVS tier badges. Unified share modal provides copy URL + export PNG + suggested Reddit title. All exports follow Razzle design system (sand bg, chunky borders, watermark). Deployed to Render.
+**Exit criterion MET:** NFL player comparison mode has full PNG export (side-by-side comparison cards with DVS, age, position-colored headers, key stats, radar overlay). Quick rankings export generates "Top N at Position" as a shareable PNG with DVS tier badges. Unified share modal provides copy URL + export PNG + suggested Reddit title. All exports follow Razzle design system (sand bg, chunky borders, watermark). Deployed to Render.
 
 ### Phase 20 Tasks
 
