@@ -1,47 +1,96 @@
-# Razzle Loop — Phase 41 Task List
+# Razzle Loop — Phase 42 Task List
 
 > Consumed from TICKETS.md (Ticket 1).
 
-**Current Phase**: 41 — Stats Expansion — Play-by-Play Extractions
-**Exit Criterion**: 14 new stats extracted from nflverse play-by-play data and available as Lab columns. Success rate, RYOE, play-action stats, scramble stats, garbage time flags, game script, goal-line stats, two-point conversions, return yards, special teams TDs, intended air yards, drop rate, bye week, and injury data all populated. Deployed to Render.
+**Current Phase**: 42 — Auth System — Registration, Login, JWT, Protected Endpoints
+**Exit Criterion**: Users can register with email/password, log in, receive a JWT token, and access protected endpoints. Passwords stored as bcrypt hashes. JWT secret stored as environment variable. Frontend shows login/register modal, stores token in localStorage, sends Authorization header on all API requests. Protected endpoints return 401 without valid token. User table persists in SQLite. Sleeper username linkable to account. Deployed to Render.
 
 ---
 
-## Task 1: Extract success rate + RYOE + game script from pbp
+## Task 1: Backend auth endpoints + user table
 **Status**: PASS
-**Result**: Added sync_pbp_data() to nflverse_adapter.py. Created player_season_pbp table with 25+ columns. Single-pass extraction from nflverse play_by_play CSV (~50k rows/season). Pass success rate (EPA>0), rush success rate populated (0.3-0.6 range). RYOE columns in schema but NULL — nflverse pbp lacks expected rushing yards field. Game script (avg_score_differential) populated. Enrichment via _enrich_with_pbp_stats() added to both fetch_players and fetch_screener chains.
+**Result**: Created backend/auth.py with users.db (separate from terminal.db), bcrypt password hashing (12 rounds), JWT tokens (7-day expiry). Endpoints: POST /api/auth/register, POST /api/auth/login, GET /api/auth/me, POST /api/auth/link-sleeper (validates against Sleeper API). All error cases handled (409 duplicate, 400 invalid email, 401 wrong password, 401 invalid token). JWT_SECRET from env var with dev fallback. Added bcrypt and PyJWT to requirements.txt.
+**Acceptance Criteria**:
+- POST /api/auth/register creates user and returns JWT
+- POST /api/auth/register rejects duplicate email (409)
+- POST /api/auth/register rejects invalid email format (400)
+- POST /api/auth/login returns JWT for valid credentials
+- POST /api/auth/login returns 401 for wrong password
+- GET /api/auth/me returns user info with valid token
+- GET /api/auth/me returns 401 without token
+- Passwords stored as bcrypt hashes (not plaintext)
+- JWT_SECRET read from env var
 
-## Task 2: Extract play-action + scramble + garbage time stats from pbp
-**Status**: PASS
-**Result**: Scramble stats populated via qb_scramble flag on run plays (nflverse 2024 classifies scrambles as play_type=run). Jayden Daniels 72 scrambles/577yds leads. Play-action stats in schema but NULL — nflverse 2024 pbp lacks is_play_action column (desc fallback also empty). Garbage time pct computed (|score_diff|>14 in Q4 or >21 in Q3). All via single-pass pbp extraction.
+## Task 2: Frontend login/register modal + token management
+**Status**: PENDING
+**Acceptance Criteria**:
+- Sign In button visible on all pages when logged out
+- Email + Sign Out visible when logged in
+- Register flow works end-to-end
+- Login flow works end-to-end
+- Sign Out clears state and shows Sign In button
+- Token persists across page reloads
+- Expired token gets cleared automatically
+- Modal matches Razzle design system
 
-## Task 3: Extract goal-line + two-point + return + special teams stats from pbp
-**Status**: PASS
-**Result**: Goal-line stats (yardline_100<=5): Kyren Williams 20GL/13TD, Derrick Henry 20GL/11TD. Two-point conversions via two_point_conv_result=success. Return yards from kickoff/punt plays: Kavontae Turpin 1091yds/2TD leads. Special teams TDs included in return_tds.
+## Task 3: Link Sleeper username to account
+**Status**: PENDING
+**Acceptance Criteria**:
+- POST /api/auth/link-sleeper validates username against Sleeper API
+- Invalid Sleeper username returns 400
+- Valid username saved to user record
+- Frontend prompts for Sleeper connection after first login
+- Connected username shown in nav
+- League Intel page respects connection status
 
-## Task 4: Extract intended air yards + drop rate from pbp
-**Status**: PASS
-**Result**: Intended air yards = air_yards on all pass targets (not just completions). IAY/target in 3-12 range. Drop rate computed as incomplete short-medium passes (air_yards<15, non-INT) / targets. Tim Patrick 0.044 drop rate (lowest among qualified). All populated in single-pass extraction.
+## Task 4: Protect War Room endpoints + free vs paid gating
+**Status**: PENDING
+**Acceptance Criteria**:
+- Lab works fully without login
+- Formula publish requires auth
+- War Room free mode works without auth
+- War Room pro mode requires auth + pro plan
+- Paywall UI shows correct state based on actual auth
+- Upgrade CTA visible for free-plan users
+- require_plan() returns 403 for insufficient plan
 
-## Task 5: Add bye week + injury data from nflverse schedule/roster
-**Status**: PASS
-**Result**: Bye weeks from nflverse games.csv — computed as missing week in 18-week schedule per team. ARI bye=11, BAL bye=14 verified correct. Games missed from nflverse injuries CSV — counts weeks with Out/IR/Doubtful designation. Derek Carr 7 games missed, Kenneth Walker 4 — verified. Added bye_week and games_missed to player_season_pbp table with migration. Enrichment chain updated.
+## Task 5: Migrate user formulas from localStorage to database
+**Status**: PENDING
+**Acceptance Criteria**:
+- Logged-in users' formulas stored in database
+- Formulas persist across devices when logged in
+- Non-logged-in users still use localStorage (no regression)
+- Formula migration prompt on first login
+- GET/POST/DELETE formula endpoints work with auth
+- Can't delete another user's formula
 
-## Task 6: Wire all new pbp stats as Lab screener columns
-**Status**: PASS
-**Result**: Added 18 new column definitions to COLUMNS in lab.js: pass_success_rate, rush_success_rate, avg_score_differential, garbage_time_pct (Advanced), scramble_attempts/yards/tds (Passing), gl_carries/gl_targets/gl_tds (Rushing/Receiving), intended_air_yards_per_target, drop_rate (Receiving), return_yards, return_tds, two_point_conversions, bye_week, games_missed (General). All with tooltips. Updated presets: passing includes scramble stats, rushing includes goal-line, receiving includes IAY/TGT and drop rate, advanced includes success rates and game script.
+## Task 6: Add persistent user database separate from stats
+**Status**: PENDING
+**Acceptance Criteria**:
+- users.db exists separate from terminal.db
+- Auth endpoints use users.db
+- Formula endpoints use users.db
+- Deploying/rebuilding terminal.db does not affect users.db
+- Server creates users.db with schema on first startup
+- All user data survives a simulated rebuild of terminal.db
 
-## Task 7: Deploy + smoke test all pbp extractions
-**Status**: PASS
-**Result**: All JS syntax clean (lab.js, compare.js, app.js, player.js). All Python imports clean. Smoke test verified: Lamar PSR=0.52, scramble=45/405yds. Saquon RSR=0.445, GL=20/4. Ja'Marr IAY/T=8.7, Drop%=0.16. Bye weeks correct. Games missed populated. All 18 new columns in COLUMNS with tooltips. Committed and pushed to master.
+## Task 7: Deploy + smoke test auth system
+**Status**: PENDING
+**Acceptance Criteria**:
+- All syntax clean
+- Auth flow works end-to-end
+- Protected endpoints enforce auth
+- Lab stays free
+- users.db separate from terminal.db
+- Committed and pushed to master
 
 ---
 
 ## Loop State
 ```
-Current Phase: 41
-Current Task: DONE
-Current Stage: COMPLETE
+Current Phase: 42
+Current Task: 2
+Current Stage: BUILD
 Attempt: 1
-Tasks Completed: 7/7
+Tasks Completed: 1/7
 ```

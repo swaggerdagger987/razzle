@@ -16,6 +16,7 @@ import time as _time
 import uvicorn
 
 from . import live_data
+from . import auth as auth_module
 
 logger = logging.getLogger("razzle")
 
@@ -120,6 +121,7 @@ def bootstrap_database():
 @asynccontextmanager
 async def lifespan(app):
     bootstrap_database()
+    auth_module.initialize_users_db()
     live_data.init_waitlist_table()
     live_data.init_formula_store_tables()
     live_data._init_analytics_table()
@@ -160,6 +162,96 @@ def health():
     stats = live_data.db_stats()
     return {"status": "ok", "db": stats}
 
+
+# ---------------------------------------------------------------------------
+# Auth endpoints
+# ---------------------------------------------------------------------------
+
+def _extract_token(request: Request) -> str:
+    """Extract Bearer token from Authorization header."""
+    auth_header = request.headers.get("Authorization", "")
+    if auth_header.startswith("Bearer "):
+        return auth_header[7:]
+    return ""
+
+
+def require_auth(request: Request) -> dict:
+    """Verify auth and return user dict. Raises JSONResponse on failure."""
+    token = _extract_token(request)
+    if not token:
+        return None
+    result = auth_module.get_current_user(token)
+    if "error" in result:
+        return None
+    return result["user"]
+
+
+@app.post("/api/auth/register")
+async def auth_register(request: Request):
+    body = await request.json()
+    email = body.get("email", "")
+    password = body.get("password", "")
+    result = auth_module.register(email, password)
+    if "error" in result:
+        return JSONResponse({"error": result["error"]}, status_code=result["status"])
+    return result
+
+
+@app.post("/api/auth/login")
+async def auth_login(request: Request):
+    body = await request.json()
+    email = body.get("email", "")
+    password = body.get("password", "")
+    result = auth_module.login(email, password)
+    if "error" in result:
+        return JSONResponse({"error": result["error"]}, status_code=result["status"])
+    return result
+
+
+@app.get("/api/auth/me")
+async def auth_me(request: Request):
+    token = _extract_token(request)
+    if not token:
+        return JSONResponse({"error": "No token provided"}, status_code=401)
+    result = auth_module.get_current_user(token)
+    if "error" in result:
+        return JSONResponse({"error": result["error"]}, status_code=result["status"])
+    return result
+
+
+@app.post("/api/auth/link-sleeper")
+async def auth_link_sleeper(request: Request):
+    user = require_auth(request)
+    if not user:
+        return JSONResponse({"error": "Authentication required"}, status_code=401)
+    body = await request.json()
+    sleeper_username = body.get("sleeper_username", "").strip()
+    if not sleeper_username:
+        return JSONResponse({"error": "Sleeper username required"}, status_code=400)
+
+    # Validate against Sleeper API
+    import urllib.request
+    try:
+        url = f"https://api.sleeper.app/v1/user/{sleeper_username}"
+        req = urllib.request.Request(url)
+        req.add_header("User-Agent", "razzle/1.0")
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            import json
+            data = json.loads(resp.read())
+            if not data or not data.get("user_id"):
+                return JSONResponse({"error": "Sleeper username not found"}, status_code=400)
+    except Exception:
+        return JSONResponse({"error": "Could not validate Sleeper username"}, status_code=400)
+
+    result = auth_module.link_sleeper(user["id"], sleeper_username)
+    if "error" in result:
+        return JSONResponse({"error": result["error"]}, status_code=result["status"])
+    return result
+
+
+# ---------------------------------------------------------------------------
+# Player endpoints
+# ---------------------------------------------------------------------------
 
 @app.get("/api/players")
 def get_players(
