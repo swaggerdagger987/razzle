@@ -1,6 +1,21 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 8 — War Room: Context Bridge + Free/Paid Gating (COMPLETE)
+## Current Phase: Phase 9 — Polish + Formula Store (IN PROGRESS)
+
+**Exit criterion**: Complete product loop: land on home → explore Lab → create formula → publish to store → connect Sleeper → enter War Room → run agent scenario → see league-contextualized brief. Everything works, nothing crashes, design is cohesive.
+
+### Phase 9 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Formula Store UI | DONE | Store overlay with 10 seed community formulas, search/filter by position, sort by popular/rating/newest, formula cards with chunky borders + offset shadows, install/uninstall, star ratings, stat preview (weights hidden), creator names. Mobile responsive. |
+| 2 | Formula publishing | | |
+| 3 | Formula ratings/reviews | | |
+| 4 | Full UX polish pass | | |
+| 5 | Performance audit | | |
+| 6 | Deploy + smoke test | | |
+
+## Previous Phase: Phase 8 — War Room: Context Bridge + Free/Paid Gating (COMPLETE)
 
 **Exit criterion MET:** Free user asks a question → gets generic agent analysis (Generic Mode badge, no league context in prompts). Connected Sleeper user asks the same question → gets league-contextualized answer that references their roster and rivals (League Context Mode badge, roster/rivals/record in prompts, rules instruct personalized analysis). Pro upsell card with blurred preview for non-connected users. Home page demo has 55 briefings with agent bio cards showing pixel avatars.
 

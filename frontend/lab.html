@@ -617,6 +617,73 @@
     margin-bottom: 20px;
   }
 
+  /* ===== FORMULA STORE ===== */
+  .store-modal {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 6px 6px 0 var(--ink);
+    padding: 24px;
+    width: 880px;
+    max-width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .store-controls {
+    margin-bottom: 16px;
+  }
+
+  .store-search-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+
+  .store-sort-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .store-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .store-card {
+    background: var(--bg);
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    padding: 14px;
+    box-shadow: 4px 4px 0 var(--ink);
+    transition: all 0.12s;
+  }
+
+  .store-card:hover {
+    box-shadow: 6px 6px 0 var(--ink);
+    transform: translate(-2px, -2px);
+  }
+
+  .store-card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    justify-content: space-between;
+  }
+
+  .store-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
   /* ===== MOBILE ===== */
   @media (max-width: 768px) {
     .toolbar {
@@ -650,6 +717,8 @@
     /* Modals */
     .filter-modal { width: 95vw; padding: 16px; }
     .column-picker { width: 85vw; }
+    .store-modal { padding: 16px; }
+    .store-grid { grid-template-columns: 1fr; }
     .profile-modal { padding: 16px; }
     .profile-name { font-size: 22px; }
     .profile-stat-value { font-size: 18px; }
@@ -720,6 +789,7 @@
 
     <button class="btn-chunky" onclick="openColumnPicker()">Columns</button>
     <button class="btn-chunky" id="formulaBtn" onclick="openFormulaBuilder()">Formulas</button>
+    <button class="btn-chunky" onclick="openFormulaStore()">Store</button>
     <button class="btn-chunky" onclick="openChartPanel()">Charts</button>
     <button class="btn-chunky" onclick="copyShareURL()">Share URL</button>
     <button class="btn-primary" onclick="exportImage()">Export PNG</button>
@@ -864,9 +934,24 @@
   </div>
 </div>
 
+<!-- FORMULA STORE -->
+<div class="filter-modal-overlay" id="storeOverlay" onclick="closeFormulaStore(event)">
+  <div class="store-modal" onclick="event.stopPropagation()">
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+      <div>
+        <h3 style="font-family:var(--font-display); font-size:22px;">Formula Store</h3>
+        <p style="font-family:var(--font-hand); font-size:18px; color:var(--ink-light);">community-built scoring formulas</p>
+      </div>
+      <button class="btn-chunky" onclick="closeFormulaStore()">Close</button>
+    </div>
+    <div id="storeContent"></div>
+  </div>
+</div>
+
 <script src="app.js"></script>
 <script src="lab.js"></script>
 <script src="formulas.js"></script>
+<script src="formula-store.js"></script>
 <script src="charts.js"></script>
 </body>
 </html>
