@@ -1,5 +1,18 @@
 /* Razzle — The Lab (screener logic) */
 
+// ─── HTML sanitization ──────────────────────────────────────────
+function escapeHtml(str) {
+  if (!str) return "";
+  var d = document.createElement("div");
+  d.textContent = String(str);
+  return d.innerHTML;
+}
+
+function escapeAttr(str) {
+  if (!str) return "";
+  return String(str).replace(/&/g, "&amp;").replace(/'/g, "&#39;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
 // ─── Prospect column definitions ────────────────────────────────
 const PROSPECT_COLUMNS = {
   draft_round:   { label: "Rd",       group: "Draft",     decimals: 0 },
@@ -522,33 +535,33 @@ function renderTableBody() {
     const selected = state.selectedPlayers.some(p => p.player_id === playKey);
     html += '<tr>';
     html += `<td style="text-align:center; padding:7px 6px;">
-      <input type="checkbox" ${selected ? "checked" : ""} onchange="togglePlayerSelect('${player.player_id || player.player_name}', this.checked)"
+      <input type="checkbox" ${selected ? "checked" : ""} onchange="togglePlayerSelect('${escapeAttr(player.player_id || player.player_name)}', this.checked)"
         style="accent-color:${(state.universe === 'prospects' || state.universe === 'college') ? 'var(--pos-qb)' : 'var(--orange)'}; width:15px; height:15px; cursor:pointer;">
     </td>`;
 
     if (state.universe === "college") {
-      const cid = (player.player_id || "").replace(/'/g, "\\'");
+      const cid = escapeAttr(player.player_id || "");
       html += `<td class="col-player"><div class="player-name-cell">`;
-      html += `<span class="pos-badge ${posClass(pos)}">${pos}</span>`;
-      html += `<a href="#" onclick="openCollegeProfile('${cid}'); return false;" style="color:var(--ink); text-decoration:none; border-bottom:1px dashed var(--pos-qb);">${player.player_name || ""}</a>`;
-      html += `<span class="team-label">${player.team || ""}</span>`;
-      if (player.conference) html += `<span class="school-label" style="font-size:10px; color:var(--ink-light);">${player.conference}</span>`;
+      html += `<span class="pos-badge ${posClass(pos)}">${escapeHtml(pos)}</span>`;
+      html += `<a href="#" onclick="openCollegeProfile('${cid}'); return false;" style="color:var(--ink); text-decoration:none; border-bottom:1px dashed var(--pos-qb);">${escapeHtml(player.player_name)}</a>`;
+      html += `<span class="team-label">${escapeHtml(player.team)}</span>`;
+      if (player.conference) html += `<span class="school-label" style="font-size:10px; color:var(--ink-light);">${escapeHtml(player.conference)}</span>`;
       html += `</div></td>`;
     } else if (state.universe === "prospects") {
-      const pName = (player.player_name || "").replace(/'/g, "\\'");
+      const pName = escapeAttr(player.player_name || "");
       const pPos = (player.position || "").toUpperCase();
       const pYear = player.draft_year || state.season;
       html += `<td class="col-player"><div class="player-name-cell">`;
-      html += `<span class="pos-badge ${posClass(pos)}">${pos}</span>`;
-      html += `<a href="#" onclick="openProspectProfile('${pName}', '${pPos}', ${pYear}); return false;" style="color:var(--ink); text-decoration:none; border-bottom:1px dashed var(--pos-qb);">${player.player_name || ""}</a>`;
-      html += `<span class="school-label">${player.school || ""}</span>`;
+      html += `<span class="pos-badge ${posClass(pos)}">${escapeHtml(pos)}</span>`;
+      html += `<a href="#" onclick="openProspectProfile('${pName}', '${escapeAttr(pPos)}', ${pYear}); return false;" style="color:var(--ink); text-decoration:none; border-bottom:1px dashed var(--pos-qb);">${escapeHtml(player.player_name)}</a>`;
+      html += `<span class="school-label">${escapeHtml(player.school)}</span>`;
       html += `</div></td>`;
     } else {
-      const pid = player.player_id || "";
+      const pid = escapeAttr(player.player_id || "");
       html += `<td class="col-player"><div class="player-name-cell">`;
-      html += `<span class="pos-badge ${posClass(pos)}">${pos}</span>`;
-      html += `<a href="#" onclick="openPlayerProfile('${pid}'); return false;" style="color:var(--ink); text-decoration:none; border-bottom:1px dashed var(--ink-faint);">${player.full_name}</a>`;
-      html += `<span class="team-label">${player.team || ""}</span>`;
+      html += `<span class="pos-badge ${posClass(pos)}">${escapeHtml(pos)}</span>`;
+      html += `<a href="#" onclick="openPlayerProfile('${pid}'); return false;" style="color:var(--ink); text-decoration:none; border-bottom:1px dashed var(--ink-faint);">${escapeHtml(player.full_name)}</a>`;
+      html += `<span class="team-label">${escapeHtml(player.team)}</span>`;
       html += `</div></td>`;
     }
 
@@ -557,7 +570,7 @@ function renderTableBody() {
       if (!col) continue;
       let val = player[key];
       if (col.isText) {
-        html += `<td>${val || "—"}</td>`;
+        html += `<td>${val ? escapeHtml(val) : "—"}</td>`;
       } else if (key === "dynasty_value" && val != null) {
         const dvsColor = val >= 85 ? "var(--green)" : val >= 70 ? "var(--pos-qb)" : val >= 55 ? "var(--orange)" : "var(--ink-light)";
         const dvsTier = val >= 85 ? "Elite" : val >= 70 ? "Star" : val >= 55 ? "Starter" : "";

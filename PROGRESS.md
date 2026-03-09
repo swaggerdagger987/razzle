@@ -1,6 +1,21 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 24 — Saved Screener Views (COMPLETE)
+## Current Phase: Phase 25 — Code Quality Bugfixes (QA Audit) (COMPLETE)
+
+**Exit criterion MET:** All critical and high-priority bugs from QA audit fixed. DVS age curve synced between backend (live_data.py) and frontend (app.js) — identical constants and interpolation. HTML sanitization added to lab.js (escapeHtml + escapeAttr on all user-visible text in renderTableBody). N+1 queries in prospect profiles eliminated (8 percentile queries → 1 batch, N dominator queries → 1 batch). Shared _STAT_SUM_COLS constant extracts 18 duplicated SUM columns across 5 functions. Dead code removed (career = career no-op, unused career_items). Deployed to Render.
+
+### Phase 25 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Fix DVS age curve mismatch | DONE | app.js computeClientDVS() synced to live_data.py: QB rise_start 24→21, below-rise flat 0.7 (was 0.6 ramp), rise-to-peak 0.7+0.3x (was 0.85+0.15x). Verified: 25yo QB 18.5 PPG = 69.6 both places. |
+| 2 | Add HTML sanitization to lab.js | DONE | escapeHtml() + escapeAttr() at top of lab.js. Applied to all player_name, full_name, team, school, conference, isText values and onclick params in renderTableBody(). XSS-safe. |
+| 3 | Reduce N+1 queries in prospect profiles | DONE | Percentiles: 8 queries → 1 (batch SELECT all metrics). Dominator: N queries → 1 (batch OR with GROUP BY). Identical output, fewer round-trips. |
+| 4 | Extract shared SELECT columns | DONE | _STAT_SUM_COLS constant (18 columns). Used in fetch_players, fetch_screener, fetch_player_seasons, fetch_player_profile, fetch_players_compare. |
+| 5 | Clean up dead code | DONE | Removed career=career no-op, unused career_items variable. |
+| 6 | Deploy + smoke test | DONE | All JS syntax OK. Python imports clean. All functions import. Pushed to master. |
+
+## Previous Phase: Phase 24 — Saved Screener Views (COMPLETE)
 
 **Exit criterion MET:** Lab screener has "Views" button in toolbar that opens a Saved Views overlay. Users can name and save current screener configuration (universe, position, columns, filters, sort, season, relevance) to localStorage. Saved views display with universe badge (NFL/PROSP/CFB), position badge (pos-colored), filter count, and date. Click to load restores full state (including UI controls) and refreshes data. Delete removes the view. Hover-lift cards. Razzle design system. Deployed to Render.
 

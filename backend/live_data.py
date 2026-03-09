@@ -14,6 +14,27 @@ FANTASY_POSITIONS = {"QB", "RB", "WR", "TE"}
 # Rate metrics we pull from player_week_metrics (averaged per game)
 RATE_METRICS = ["target_share", "air_yards_share", "wopr", "racr", "passing_epa", "receiving_epa", "rushing_epa", "dakota"]
 
+# Shared stat SUM columns used across multiple query functions
+_STAT_SUM_COLS = """
+            SUM(s.fantasy_points_ppr) as fantasy_points_ppr,
+            SUM(s.fantasy_points_std) as fantasy_points_std,
+            SUM(s.passing_yards) as passing_yards,
+            SUM(s.passing_tds) as passing_tds,
+            SUM(s.rushing_yards) as rushing_yards,
+            SUM(s.rushing_tds) as rushing_tds,
+            SUM(s.receiving_yards) as receiving_yards,
+            SUM(s.receiving_tds) as receiving_tds,
+            SUM(s.receptions) as receptions,
+            SUM(s.touchdowns) as touchdowns,
+            SUM(s.turnovers) as turnovers,
+            SUM(s.targets) as targets,
+            SUM(s.carries) as carries,
+            SUM(s.completions) as completions,
+            SUM(s.attempts) as attempts,
+            SUM(s.passing_air_yards) as passing_air_yards,
+            SUM(s.receiving_air_yards) as receiving_air_yards,
+            SUM(s.receiving_yards_after_catch) as receiving_yards_after_catch"""
+
 # NFL team name → abbreviation (for combine data that stores full names)
 TEAM_ABBREV = {
     "ARIZONA CARDINALS": "ARI", "ATLANTA FALCONS": "ATL", "BALTIMORE RAVENS": "BAL",
@@ -320,25 +341,8 @@ def fetch_players(
             p.player_id, p.full_name, p.position, p.team, p.age, p.college,
             COUNT(*) as games,
             COUNT(DISTINCT s.season) as seasons,
-            SUM(s.fantasy_points_ppr) as fantasy_points_ppr,
             SUM(s.fantasy_points_half_ppr) as fantasy_points_half_ppr,
-            SUM(s.fantasy_points_std) as fantasy_points_std,
-            SUM(s.passing_yards) as passing_yards,
-            SUM(s.passing_tds) as passing_tds,
-            SUM(s.rushing_yards) as rushing_yards,
-            SUM(s.rushing_tds) as rushing_tds,
-            SUM(s.receiving_yards) as receiving_yards,
-            SUM(s.receiving_tds) as receiving_tds,
-            SUM(s.receptions) as receptions,
-            SUM(s.touchdowns) as touchdowns,
-            SUM(s.turnovers) as turnovers,
-            SUM(s.targets) as targets,
-            SUM(s.carries) as carries,
-            SUM(s.completions) as completions,
-            SUM(s.attempts) as attempts,
-            SUM(s.passing_air_yards) as passing_air_yards,
-            SUM(s.receiving_air_yards) as receiving_air_yards,
-            SUM(s.receiving_yards_after_catch) as receiving_yards_after_catch
+            {_STAT_SUM_COLS}
         FROM players p
         JOIN player_week_stats s ON p.player_id = s.player_id
         WHERE {where_clause}
@@ -513,25 +517,8 @@ def fetch_screener(body):
             p.player_id, p.full_name, p.position, p.team, p.age, p.college,
             COUNT(*) as games,
             COUNT(DISTINCT s.season) as seasons,
-            SUM(s.fantasy_points_ppr) as fantasy_points_ppr,
             SUM(s.fantasy_points_half_ppr) as fantasy_points_half_ppr,
-            SUM(s.fantasy_points_std) as fantasy_points_std,
-            SUM(s.passing_yards) as passing_yards,
-            SUM(s.passing_tds) as passing_tds,
-            SUM(s.rushing_yards) as rushing_yards,
-            SUM(s.rushing_tds) as rushing_tds,
-            SUM(s.receiving_yards) as receiving_yards,
-            SUM(s.receiving_tds) as receiving_tds,
-            SUM(s.receptions) as receptions,
-            SUM(s.touchdowns) as touchdowns,
-            SUM(s.turnovers) as turnovers,
-            SUM(s.targets) as targets,
-            SUM(s.carries) as carries,
-            SUM(s.completions) as completions,
-            SUM(s.attempts) as attempts,
-            SUM(s.passing_air_yards) as passing_air_yards,
-            SUM(s.receiving_air_yards) as receiving_air_yards,
-            SUM(s.receiving_yards_after_catch) as receiving_yards_after_catch
+            {_STAT_SUM_COLS}
         FROM players p
         JOIN player_week_stats s ON p.player_id = s.player_id
         WHERE {where_clause}
@@ -641,28 +628,11 @@ def fetch_player_seasons(player_id):
         (player_id,)
     ).fetchone()
 
-    rows = conn.execute("""
+    rows = conn.execute(f"""
         SELECT
             s.season,
             COUNT(*) as games,
-            SUM(s.fantasy_points_ppr) as fantasy_points_ppr,
-            SUM(s.fantasy_points_std) as fantasy_points_std,
-            SUM(s.passing_yards) as passing_yards,
-            SUM(s.passing_tds) as passing_tds,
-            SUM(s.rushing_yards) as rushing_yards,
-            SUM(s.rushing_tds) as rushing_tds,
-            SUM(s.receiving_yards) as receiving_yards,
-            SUM(s.receiving_tds) as receiving_tds,
-            SUM(s.receptions) as receptions,
-            SUM(s.touchdowns) as touchdowns,
-            SUM(s.turnovers) as turnovers,
-            SUM(s.targets) as targets,
-            SUM(s.carries) as carries,
-            SUM(s.completions) as completions,
-            SUM(s.attempts) as attempts,
-            SUM(s.passing_air_yards) as passing_air_yards,
-            SUM(s.receiving_air_yards) as receiving_air_yards,
-            SUM(s.receiving_yards_after_catch) as receiving_yards_after_catch
+            {_STAT_SUM_COLS}
         FROM player_week_stats s
         WHERE s.player_id = ?
         GROUP BY s.season
@@ -956,28 +926,11 @@ def fetch_player_profile(player_id):
     player = dict(player_info)
 
     # Season-by-season aggregates
-    rows = conn.execute("""
+    rows = conn.execute(f"""
         SELECT
             s.season,
             COUNT(*) as games,
-            SUM(s.fantasy_points_ppr) as fantasy_points_ppr,
-            SUM(s.fantasy_points_std) as fantasy_points_std,
-            SUM(s.passing_yards) as passing_yards,
-            SUM(s.passing_tds) as passing_tds,
-            SUM(s.rushing_yards) as rushing_yards,
-            SUM(s.rushing_tds) as rushing_tds,
-            SUM(s.receiving_yards) as receiving_yards,
-            SUM(s.receiving_tds) as receiving_tds,
-            SUM(s.receptions) as receptions,
-            SUM(s.touchdowns) as touchdowns,
-            SUM(s.turnovers) as turnovers,
-            SUM(s.targets) as targets,
-            SUM(s.carries) as carries,
-            SUM(s.completions) as completions,
-            SUM(s.attempts) as attempts,
-            SUM(s.passing_air_yards) as passing_air_yards,
-            SUM(s.receiving_air_yards) as receiving_air_yards,
-            SUM(s.receiving_yards_after_catch) as receiving_yards_after_catch
+            {_STAT_SUM_COLS}
         FROM player_week_stats s
         WHERE s.player_id = ?
         GROUP BY s.season
@@ -997,7 +950,6 @@ def fetch_player_profile(player_id):
     # Career totals
     career = {}
     if seasons:
-        career_items = [{"player_id": player_id}]
         for key in ["games", "fantasy_points_ppr", "fantasy_points_std",
                      "passing_yards", "passing_tds", "rushing_yards", "rushing_tds",
                      "receiving_yards", "receiving_tds", "receptions", "touchdowns",
@@ -1006,7 +958,6 @@ def fetch_player_profile(player_id):
             career[key] = sum(s.get(key) or 0 for s in seasons)
         career["seasons"] = len(seasons)
         _enrich_with_derived_stats([career])
-        career = career
 
     # Combine/draft data (match by name + position)
     combine = None
@@ -1116,24 +1067,26 @@ def fetch_prospect_profile(name, position="", draft_year=0):
         "weight": "higher",
     }
 
+    # Batch percentile computation: single query for all 8 metrics
+    metric_cols = ", ".join(combine_metrics.keys())
+    all_rows = conn.execute(
+        f"SELECT {metric_cols} FROM combine_data WHERE position = ?", (pos,)
+    ).fetchall()
+    metric_names = list(combine_metrics.keys())
+
     percentiles = {}
-    for metric, direction in combine_metrics.items():
+    for i, metric in enumerate(metric_names):
         val = prospect.get(metric)
         if val is None:
             percentiles[metric] = None
             continue
 
-        # Get all values for this position group across all years
-        all_vals_rows = conn.execute(
-            f"SELECT {metric} FROM combine_data WHERE position = ? AND {metric} IS NOT NULL",
-            (pos,)
-        ).fetchall()
-        all_vals = [r[0] for r in all_vals_rows]
-
+        all_vals = [r[i] for r in all_rows if r[i] is not None]
         if not all_vals:
             percentiles[metric] = None
             continue
 
+        direction = combine_metrics[metric]
         if direction == "lower":
             # For time-based metrics, lower is better → percentile = % of players slower than you
             pct = sum(1 for v in all_vals if v > val) / len(all_vals) * 100
@@ -1227,25 +1180,37 @@ def _fetch_college_for_prospect(conn, prospect):
     if not has_receiving and (career.get("receptions") or 0) >= 30:
         has_receiving = True
     if has_receiving:
+        # Batch: collect all (team, season) pairs and query once
+        team_season_pairs = []
         for s in season_items:
             team = s.get("team")
             season_yr = s.get("season")
-            rec_yds = s.get("rec_yards") or 0
-            rec_tds = s.get("rec_tds") or 0
-            if not team or not season_yr or rec_yds < 100:
-                continue
-            # Get team totals for that season
-            team_row = conn.execute("""
-                SELECT SUM(rec_yards), SUM(rec_tds)
+            if team and season_yr and (s.get("rec_yards") or 0) >= 100:
+                team_season_pairs.append((team, season_yr))
+        if team_season_pairs:
+            placeholders = " OR ".join(["(team = ? AND season = ?)"] * len(team_season_pairs))
+            flat_params = [v for pair in team_season_pairs for v in pair]
+            team_totals = conn.execute(f"""
+                SELECT team, season, SUM(rec_yards), SUM(rec_tds)
                 FROM cfb_player_season_stats
-                WHERE team = ? AND season = ? AND position IN ('WR', 'TE', 'RB')
-            """, (team, season_yr)).fetchone()
-            if team_row and team_row[0] and team_row[0] > 0:
-                yd_share = rec_yds / team_row[0] * 100
-                td_share = (rec_tds / team_row[1] * 100) if team_row[1] and team_row[1] > 0 else 0
-                dom = (yd_share + td_share) / 2
-                if dominator is None or dom > dominator:
-                    dominator = round(dom, 1)
+                WHERE ({placeholders}) AND position IN ('WR', 'TE', 'RB')
+                GROUP BY team, season
+            """, flat_params).fetchall()
+            totals_map = {(r[0], r[1]): (r[2], r[3]) for r in team_totals}
+            for s in season_items:
+                team = s.get("team")
+                season_yr = s.get("season")
+                rec_yds = s.get("rec_yards") or 0
+                rec_tds = s.get("rec_tds") or 0
+                if not team or not season_yr or rec_yds < 100:
+                    continue
+                totals = totals_map.get((team, season_yr))
+                if totals and totals[0] and totals[0] > 0:
+                    yd_share = rec_yds / totals[0] * 100
+                    td_share = (rec_tds / totals[1] * 100) if totals[1] and totals[1] > 0 else 0
+                    dom = (yd_share + td_share) / 2
+                    if dominator is None or dom > dominator:
+                        dominator = round(dom, 1)
 
     return {
         "seasons": season_items,
@@ -1782,24 +1747,7 @@ def fetch_players_compare(player_ids, season=0):
             p.player_id, p.full_name, p.position, p.team, p.age, p.college,
             COUNT(*) as games,
             COUNT(DISTINCT s.season) as seasons,
-            SUM(s.fantasy_points_ppr) as fantasy_points_ppr,
-            SUM(s.fantasy_points_std) as fantasy_points_std,
-            SUM(s.passing_yards) as passing_yards,
-            SUM(s.passing_tds) as passing_tds,
-            SUM(s.rushing_yards) as rushing_yards,
-            SUM(s.rushing_tds) as rushing_tds,
-            SUM(s.receiving_yards) as receiving_yards,
-            SUM(s.receiving_tds) as receiving_tds,
-            SUM(s.receptions) as receptions,
-            SUM(s.touchdowns) as touchdowns,
-            SUM(s.turnovers) as turnovers,
-            SUM(s.targets) as targets,
-            SUM(s.carries) as carries,
-            SUM(s.completions) as completions,
-            SUM(s.attempts) as attempts,
-            SUM(s.passing_air_yards) as passing_air_yards,
-            SUM(s.receiving_air_yards) as receiving_air_yards,
-            SUM(s.receiving_yards_after_catch) as receiving_yards_after_catch
+            {_STAT_SUM_COLS}
         FROM players p
         JOIN player_week_stats s ON p.player_id = s.player_id
         WHERE p.player_id IN ({placeholders}) {season_filter}
