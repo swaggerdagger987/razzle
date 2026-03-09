@@ -1,12 +1,28 @@
 /* Razzle — shared utilities */
 
+function escapeHtml(str) {
+  if (!str) return "";
+  var d = document.createElement("div");
+  d.textContent = String(str);
+  return d.innerHTML;
+}
+
+function escapeAttr(str) {
+  if (!str) return "";
+  return String(str).replace(/&/g, "&amp;").replace(/'/g, "&#39;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
 const API_BASE = window.location.origin;
 
 async function apiFetch(path, options = {}) {
   const url = API_BASE + path;
   const resp = await fetch(url, options);
   if (!resp.ok) throw new Error(`API ${resp.status}: ${resp.statusText}`);
-  return resp.json();
+  try {
+    return await resp.json();
+  } catch (e) {
+    throw new Error('Server returned non-JSON response');
+  }
 }
 
 function formatStat(val, decimals = 1) {

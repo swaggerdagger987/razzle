@@ -939,8 +939,19 @@ def _enrich_prospects_with_college(conn, items):
     if not items:
         return
 
-    # Build a lookup of college career totals by normalized name
-    all_college = conn.execute("""
+    # Collect all name variants for the prospects being enriched
+    all_name_keys = set()
+    for item in items:
+        name = item.get("player_name", "")
+        if name:
+            all_name_keys.update(_name_variants(name))
+
+    if not all_name_keys:
+        return
+
+    # Build a lookup of college career totals only for relevant names
+    placeholders = ",".join("?" for _ in all_name_keys)
+    all_college = conn.execute(f"""
         SELECT
             LOWER(REPLACE(REPLACE(REPLACE(REPLACE(player_name, ' ', ''), '.', ''), '''', ''), '-', '')) as name_key,
             SUM(games) as college_games,
@@ -958,8 +969,9 @@ def _enrich_prospects_with_college(conn, items):
             SUM(total_tds) as college_total_tds,
             SUM(total_yards) as college_total_yards
         FROM cfb_player_season_stats
+        WHERE LOWER(REPLACE(REPLACE(REPLACE(REPLACE(player_name, ' ', ''), '.', ''), '''', ''), '-', '')) IN ({placeholders})
         GROUP BY name_key
-    """).fetchall()
+    """, list(all_name_keys)).fetchall()
 
     college_lookup = {}
     for r in all_college:

@@ -1,25 +1,18 @@
 /* Razzle — The Lab (screener logic) */
+// escapeHtml and escapeAttr are in app.js (shared)
 
-// ─── HTML sanitization ──────────────────────────────────────────
-function escapeHtml(str) {
-  if (!str) return "";
-  var d = document.createElement("div");
-  d.textContent = String(str);
-  return d.innerHTML;
-}
+// ─── Watchlist (localStorage, cached in memory) ────────────────
+let _watchlistCache = null;
 
-function escapeAttr(str) {
-  if (!str) return "";
-  return String(str).replace(/&/g, "&amp;").replace(/'/g, "&#39;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-}
-
-// ─── Watchlist (localStorage) ───────────────────────────────────
 function getWatchlist() {
-  try { return JSON.parse(localStorage.getItem("razzle_watchlist")) || []; }
-  catch { return []; }
+  if (_watchlistCache !== null) return _watchlistCache;
+  try { _watchlistCache = JSON.parse(localStorage.getItem("razzle_watchlist")) || []; }
+  catch { _watchlistCache = []; }
+  return _watchlistCache;
 }
 
 function saveWatchlist(list) {
+  _watchlistCache = list;
   localStorage.setItem("razzle_watchlist", JSON.stringify(list));
   updateWatchlistBadge();
 }

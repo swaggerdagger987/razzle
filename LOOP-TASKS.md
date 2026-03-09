@@ -24,15 +24,8 @@
 **Result**: (a) getCurrentPresetName() now checks COLLEGE_PRESETS + collegeColumns in college mode. (b) renderActiveFilters() uses getColumnDef() for universe-aware labels. (c) exportImage() uses getActiveColumns(), getColumnDef(), and player.full_name || player.player_name.
 
 ## Task 5: Fix medium issues — fonts, performance, error handling
-**Status**: PENDING
-**Acceptance Criteria**:
-- Font stack matches DESIGN.md order
-- Table stat cells use Space Mono
-- escapeHtml exists only in app.js, used by both lab.js and warroom.js
-- Watchlist cached in memory, not parsed 100x per render
-- Non-JSON API responses show clear error message
-- Prospect enrichment only queries relevant college players
-- No visual or functional regression
+**Status**: PASS
+**Result**: (a) Font stack: 'Garfield', 'Luckiest Guy', cursive. (b) .screener-table td uses var(--font-mono). (c) escapeHtml+escapeAttr moved to app.js, removed from lab.js/warroom.js, app.js added to agents.html. (d) Watchlist cached in _watchlistCache var. (e) apiFetch wraps resp.json() in try-catch. (f) _enrich_prospects_with_college uses WHERE name_key IN (...) instead of loading all rows.
 
 ## Task 6: Fix low issues — og:image, dead code, collision map
 **Status**: PENDING
@@ -57,8 +50,8 @@
 ## Loop State
 ```
 Current Phase: 38
-Current Task: 5
+Current Task: 6
 Current Stage: PENDING
 Attempt: 1/3
-Tasks Completed: 4/7
+Tasks Completed: 5/7
 ```

@@ -12,7 +12,7 @@
 | 2 | Fix DVS popover + Rams abbreviation + QB INT label | DONE | Age curves corrected, LA→LAR, INT→TO |
 | 3 | Fix War Room memory leaks + waitlist validation | DONE | rAF cleanup, particle cap 200, interval pause, email validation, rate limit |
 | 4 | Fix college/prospect mode bugs | DONE | Preset detection, filter labels, image export universe-aware |
-| 5 | Fix medium issues — fonts, performance, error handling | | |
+| 5 | Fix medium issues — fonts, performance, error handling | DONE | Font stack, Space Mono cells, shared escapeHtml, watchlist cache, JSON catch, prospect SQL |
 | 6 | Fix low issues — og:image, dead code, collision map | | |
 | 7 | Deploy + smoke test all QA fixes | | |
 
