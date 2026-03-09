@@ -9,7 +9,7 @@
 | # | Task | Status | Notes |
 |---|------|--------|-------|
 | 1 | Lab context feed | DONE | Lab saves selected players + stats + formulas to localStorage (razzle_lab_context). War Room reads via getLabContext(), injects "What The Lab Knows" section into agent prompts. Context badges in scenario panel show active/inactive state for Lab and Sleeper. |
-| 2 | League Intel context feed | TODO | |
+| 2 | League Intel context feed | DONE | League-intel.html saves league metadata (name, type, scoring, teams) on loadLeagues() and roster + rivals on toggleLeague() to razzle_league_context localStorage. War Room reads via getLeagueContext(), formats with record, roster, top 5 rival managers + their top players. Disconnect clears context. 7-day TTL. |
 | 3 | Free vs. paid prompt tiers | TODO | |
 | 4 | Paywall UI gating | TODO | |
 | 5 | Home page War Room demo upgrade | TODO | |

@@ -330,6 +330,24 @@ async function loadLeagues(userId) {
     }
 
     container.innerHTML = html;
+
+    // Save league metadata for War Room context bridge
+    try {
+      const leagueMeta = leagues.map(lg => ({
+        id: lg.league_id,
+        name: lg.name,
+        teams: lg.total_rosters || "?",
+        scoring: lg.scoring_settings?.rec === 1 ? "PPR"
+          : lg.scoring_settings?.rec === 0.5 ? "Half PPR" : "Standard",
+        type: lg.settings?.type === 2 ? "Dynasty"
+          : lg.settings?.type === 1 ? "Keeper" : "Redraft",
+        season: season,
+      }));
+      const existing = JSON.parse(localStorage.getItem("razzle_league_context") || "{}");
+      existing.leagues = leagueMeta;
+      existing.updatedAt = Date.now();
+      localStorage.setItem("razzle_league_context", JSON.stringify(existing));
+    } catch (e) { /* ignore storage errors */ }
   } catch (e) {
     container.innerHTML = '<div class="loading-intel" style="color:var(--red);">fumbled the Sleeper connection</div>';
     console.error(e);
@@ -412,6 +430,35 @@ async function toggleLeague(card, leagueId, userId) {
     </div>`;
 
     rosterDiv.innerHTML = html;
+
+    // Save roster data for War Room context bridge
+    try {
+      const rosterPlayers = [];
+      for (const [pos, players] of Object.entries(posGroups)) {
+        for (const p of players) {
+          rosterPlayers.push({ name: p.name, pos: p.pos, team: p.team });
+        }
+      }
+      const existing = JSON.parse(localStorage.getItem("razzle_league_context") || "{}");
+      existing.roster = rosterPlayers;
+      existing.record = { wins, losses, fpts };
+      // Save rival rosters (other managers)
+      const rivals = rosters
+        .filter(r => r.owner_id !== userId)
+        .slice(0, 5)
+        .map(r => {
+          const managerName = userMap[r.owner_id] || "Unknown";
+          const rosterNames = (r.players || []).slice(0, 8).map(pid => {
+            const pl = allPlayers[pid];
+            return pl ? (pl.first_name + " " + pl.last_name + " (" + (pl.position || "?") + ")") : pid;
+          });
+          return { manager: managerName, topPlayers: rosterNames,
+            wins: r.settings?.wins || 0, losses: r.settings?.losses || 0 };
+        });
+      existing.rivals = rivals;
+      existing.updatedAt = Date.now();
+      localStorage.setItem("razzle_league_context", JSON.stringify(existing));
+    } catch (e) { /* ignore storage errors */ }
   } catch (e) {
     rosterDiv.innerHTML = '<div class="loading-intel" style="color:var(--red); font-size:16px;">fumbled the roster load</div>';
     console.error(e);
@@ -421,6 +468,7 @@ async function toggleLeague(card, leagueId, userId) {
 function disconnect() {
   localStorage.removeItem("razzle_sleeper_user");
   localStorage.removeItem("razzle_sleeper_user_id");
+  localStorage.removeItem("razzle_league_context");
   document.getElementById("connectView").style.display = "block";
   document.getElementById("leaguesView").style.display = "none";
 }

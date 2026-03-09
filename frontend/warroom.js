@@ -1721,8 +1721,12 @@ function getLeagueContext() {
     var ctx = { username: user };
     if (leagueData) {
       var parsed = JSON.parse(leagueData);
+      // Only use if less than 7 days old
+      if (parsed.updatedAt && Date.now() - parsed.updatedAt > 604800000) return ctx;
       ctx.leagues = parsed.leagues;
       ctx.roster = parsed.roster;
+      ctx.record = parsed.record;
+      ctx.rivals = parsed.rivals;
     }
     return ctx;
   } catch (e) { return null; }
@@ -1733,13 +1737,22 @@ function formatLeagueContext(ctx) {
   lines.push('Sleeper user: ' + ctx.username);
   if (ctx.leagues && ctx.leagues.length) {
     ctx.leagues.forEach(function(lg) {
-      lines.push('League: ' + lg.name + ' (' + lg.type + ', ' + lg.scoring + ', ' + lg.teams + '-team)');
+      lines.push('League: ' + lg.name + ' (' + lg.type + ', ' + lg.scoring + ', ' + lg.teams + '-team, ' + lg.season + ')');
     });
   }
+  if (ctx.record) {
+    lines.push('Your record: ' + ctx.record.wins + '-' + ctx.record.losses + ' | Points: ' + ctx.record.fpts);
+  }
   if (ctx.roster && ctx.roster.length) {
-    lines.push('Your roster:');
+    lines.push('Your roster (' + ctx.roster.length + ' players):');
     ctx.roster.forEach(function(p) {
       lines.push('  - ' + p.name + ' (' + p.pos + ', ' + (p.team || '?') + ')');
+    });
+  }
+  if (ctx.rivals && ctx.rivals.length) {
+    lines.push('Rival managers:');
+    ctx.rivals.forEach(function(r) {
+      lines.push('  - ' + r.manager + ' (' + r.wins + '-' + r.losses + '): ' + r.topPlayers.slice(0, 4).join(', '));
     });
   }
   lines.push('--- END LEAGUE CONTEXT ---');
