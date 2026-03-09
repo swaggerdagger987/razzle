@@ -110,6 +110,61 @@ def _enrich_with_rate_metrics(conn, items, season=None, career_mode=False):
     return items
 
 
+def _enrich_with_breakout(conn, items, season=None, career_mode=False):
+    """Detect breakout seasons (50%+ YoY PPR increase). Adds breakout_pct to items."""
+    if not items:
+        return items
+
+    player_ids = [item["player_id"] for item in items if item.get("player_id")]
+    if not player_ids:
+        return items
+
+    placeholders = ",".join("?" * len(player_ids))
+
+    # Get per-season PPR totals for all returned players
+    rows = conn.execute(f"""
+        SELECT player_id, season, SUM(fantasy_points_ppr) as ppr
+        FROM player_week_stats
+        WHERE player_id IN ({placeholders})
+        GROUP BY player_id, season
+        ORDER BY player_id, season
+    """, player_ids).fetchall()
+
+    # Compute max YoY breakout % per player
+    seasons_by_player = {}
+    for r in rows:
+        pid = r[0]
+        if pid not in seasons_by_player:
+            seasons_by_player[pid] = []
+        seasons_by_player[pid].append({"season": r[1], "ppr": r[2] or 0})
+
+    breakouts = {}
+    for pid, seasons_list in seasons_by_player.items():
+        seasons_list.sort(key=lambda x: x["season"])
+        best_pct = 0
+        best_season = None
+        for i in range(1, len(seasons_list)):
+            prev_ppr = seasons_list[i - 1]["ppr"]
+            curr_ppr = seasons_list[i]["ppr"]
+            if prev_ppr > 20:  # minimum threshold to avoid noise
+                pct_change = ((curr_ppr - prev_ppr) / prev_ppr) * 100
+                if pct_change > best_pct:
+                    best_pct = pct_change
+                    best_season = seasons_list[i]["season"]
+        breakouts[pid] = {"pct": round(best_pct, 1), "season": best_season}
+
+    for item in items:
+        pid = item.get("player_id")
+        if pid and pid in breakouts:
+            item["breakout_pct"] = breakouts[pid]["pct"]
+            item["breakout_season"] = breakouts[pid]["season"]
+        else:
+            item["breakout_pct"] = 0
+            item["breakout_season"] = None
+
+    return items
+
+
 def db_stats():
     conn = get_conn()
     players = conn.execute("SELECT COUNT(*) FROM players").fetchone()[0]
@@ -247,6 +302,7 @@ def fetch_players(
     items = [dict(r) for r in rows]
     _enrich_with_derived_stats(items)
     _enrich_with_rate_metrics(conn, items, season=season, career_mode=career_mode)
+    _enrich_with_breakout(conn, items, season=season, career_mode=career_mode)
 
     conn.close()
     return {"count": total, "season": "career" if career_mode else season, "items": items}
@@ -440,6 +496,7 @@ def fetch_screener(body):
     items = [dict(r) for r in rows]
     _enrich_with_derived_stats(items)
     _enrich_with_rate_metrics(conn, items, season=season, career_mode=career_mode)
+    _enrich_with_breakout(conn, items, season=season, career_mode=career_mode)
 
     # Re-sort in Python if sorting by a derived/rate metric
     if python_sort:

@@ -106,6 +106,9 @@ const COLUMNS = {
   receiving_epa:       { label: "Rec EPA",  group: "Advanced", decimals: 1, derived: true },
   rushing_epa:         { label: "Rush EPA", group: "Advanced", decimals: 1, derived: true },
   dakota:              { label: "DAKOTA",   group: "Advanced", decimals: 3, derived: true },
+
+  // Breakout detection
+  breakout_pct:        { label: "BRK%",    group: "Breakout", decimals: 1, derived: true },
 };
 
 // ─── Presets ─────────────────────────────────────────────────────
@@ -133,7 +136,7 @@ const PRESETS = {
   },
   dynasty: {
     label: "Dynasty",
-    columns: ["fantasy_points_ppr", "ppg", "games", "seasons", "receiving_yards", "receiving_tds",
+    columns: ["fantasy_points_ppr", "ppg", "games", "seasons", "breakout_pct", "receiving_yards", "receiving_tds",
               "receptions", "targets", "rushing_yards", "rushing_tds", "touchdowns"],
   },
   efficiency: {
@@ -395,6 +398,8 @@ function renderTableBody() {
       let val = player[key];
       if (col.isText) {
         html += `<td>${val || "—"}</td>`;
+      } else if (key === "breakout_pct" && val != null && val >= 50) {
+        html += `<td><span style="background:var(--green); color:white; padding:1px 6px; border-radius:10px; border:2px solid var(--ink); font-size:11px; font-weight:700;">+${val.toFixed(0)}%</span></td>`;
       } else if (col.pct && val != null) {
         // Rate stats come as decimals (0.32 = 32%), display as percentage
         html += `<td>${(val * 100).toFixed(col.decimals)}%</td>`;
@@ -1066,6 +1071,22 @@ function renderProfile(data, container) {
 
   const headlines = getHeadlineStats(pos, career);
 
+  // Detect breakout from seasons data
+  let breakoutInfo = null;
+  if (seasons && seasons.length >= 2) {
+    const sorted = [...seasons].sort((a, b) => a.season - b.season);
+    for (let i = 1; i < sorted.length; i++) {
+      const prev = sorted[i - 1].fantasy_points_ppr || 0;
+      const curr = sorted[i].fantasy_points_ppr || 0;
+      if (prev > 20) {
+        const pct = ((curr - prev) / prev) * 100;
+        if (pct >= 50 && (!breakoutInfo || pct > breakoutInfo.pct)) {
+          breakoutInfo = { pct: Math.round(pct), season: sorted[i].season };
+        }
+      }
+    }
+  }
+
   let html = "";
 
   // Header
@@ -1074,6 +1095,9 @@ function renderProfile(data, container) {
   html += `<div>`;
   html += `<div class="profile-name">${player.full_name}</div>`;
   html += `<div class="profile-meta">${player.team || "FA"} · Age ${player.age || "?"} · ${player.college || ""}</div>`;
+  if (breakoutInfo) {
+    html += `<span class="breakout-badge">BREAKOUT +${breakoutInfo.pct}% (${breakoutInfo.season})</span>`;
+  }
   html += `</div>`;
   html += `<button class="btn-primary" onclick="exportProfileImage()" style="margin-left:auto; font-size:11px; padding:6px 14px;">Export PNG</button>`;
   html += `</div>`;
