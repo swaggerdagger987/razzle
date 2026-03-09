@@ -335,6 +335,87 @@ async def waitlist(request: Request):
 
 
 # ---------------------------------------------------------------------------
+# Dynamic OG tags for Lab shared URLs
+# ---------------------------------------------------------------------------
+
+@app.get("/lab.html")
+async def lab_with_og_tags(request: Request):
+    """Serve lab.html with dynamic OG meta tags based on URL params."""
+    lab_file = FRONTEND_DIR / "lab.html"
+    if not lab_file.exists():
+        return HTMLResponse("Not found", status_code=404)
+
+    html = lab_file.read_text(encoding="utf-8")
+
+    # Extract URL params for OG tag generation
+    params = request.query_params
+    position = params.get("position", "").upper()
+    sort_key = params.get("sort", "fantasy_points_ppr")
+    season = params.get("season", "2024")
+    universe = params.get("universe", "nfl").upper()
+
+    # Build dynamic title
+    pos_label = position if position and position != "ALL" else "All Positions"
+    sort_labels = {
+        "fantasy_points_ppr": "PPR Points",
+        "fantasy_points_std": "Standard Points",
+        "fantasy_points_half_ppr": "Half-PPR Points",
+        "dynasty_value": "Dynasty Value",
+        "passing_yards": "Passing Yards",
+        "rushing_yards": "Rushing Yards",
+        "receiving_yards": "Receiving Yards",
+        "receptions": "Receptions",
+        "touchdowns": "Touchdowns",
+        "target_share": "Target Share",
+    }
+    sort_label = sort_labels.get(sort_key, sort_key.replace("_", " ").title())
+    season_label = "Career" if season.lower() == "career" else season
+
+    if universe == "PROSPECTS":
+        og_title = f"Razzle Lab — {pos_label} Prospect Rankings"
+    elif universe == "COLLEGE":
+        og_title = f"Razzle Lab — College {pos_label} by {sort_label}"
+    else:
+        og_title = f"Razzle Lab — {pos_label} by {sort_label} ({season_label})"
+
+    og_desc = f"Fantasy football screener: {pos_label}, sorted by {sort_label}"
+    if season_label != "Career":
+        og_desc += f", {season_label} season"
+    min_gp = params.get("min_gp", "")
+    if min_gp:
+        og_desc += f", min {min_gp} GP"
+    teams = params.get("teams", "")
+    if teams:
+        og_desc += f", teams: {teams}"
+    og_desc += ". Powered by razzle.lol"
+
+    # Replace static OG tags with dynamic ones
+    import re
+    html = re.sub(
+        r'<meta property="og:title" content="[^"]*">',
+        f'<meta property="og:title" content="{og_title}">',
+        html,
+    )
+    html = re.sub(
+        r'<meta property="og:description" content="[^"]*">',
+        f'<meta property="og:description" content="{og_desc}">',
+        html,
+    )
+    html = re.sub(
+        r'<meta name="twitter:title" content="[^"]*">',
+        f'<meta name="twitter:title" content="{og_title}">',
+        html,
+    )
+    html = re.sub(
+        r'<meta name="twitter:description" content="[^"]*">',
+        f'<meta name="twitter:description" content="{og_desc}">',
+        html,
+    )
+
+    return HTMLResponse(content=html)
+
+
+# ---------------------------------------------------------------------------
 # Serve frontend as static files (catch-all for SPA-like behavior)
 # ---------------------------------------------------------------------------
 
