@@ -10,6 +10,9 @@ DB_PATH = Path(__file__).parent.parent / "data" / "terminal.db"
 
 FANTASY_POSITIONS = {"QB", "RB", "WR", "TE"}
 
+# Rate metrics we pull from player_week_metrics (averaged per game)
+RATE_METRICS = ["target_share", "air_yards_share", "wopr", "racr", "passing_epa", "receiving_epa", "rushing_epa", "dakota"]
+
 # NFL team name → abbreviation (for combine data that stores full names)
 TEAM_ABBREV = {
     "ARIZONA CARDINALS": "ARI", "ATLANTA FALCONS": "ATL", "BALTIMORE RAVENS": "BAL",
@@ -32,6 +35,79 @@ def get_conn():
     conn = sqlite3.connect(str(DB_PATH), timeout=30)
     conn.row_factory = sqlite3.Row
     return conn
+
+
+def _safe_div(a, b, decimals=1):
+    """Safe division, returns None if denominator is 0/None."""
+    if not b:
+        return None
+    return round(a / b, decimals)
+
+
+def _enrich_with_derived_stats(items):
+    """Add derived efficiency stats computed from existing aggregates."""
+    for item in items:
+        g = item.get("games") or 1
+        item["ppg"] = _safe_div(item.get("fantasy_points_ppr") or 0, g)
+        item["yards_per_carry"] = _safe_div(item.get("rushing_yards") or 0, item.get("carries") or 0)
+        item["yards_per_rec"] = _safe_div(item.get("receiving_yards") or 0, item.get("receptions") or 0)
+        item["yards_per_target"] = _safe_div(item.get("receiving_yards") or 0, item.get("targets") or 0)
+        item["catch_rate"] = _safe_div((item.get("receptions") or 0) * 100, item.get("targets") or 0)
+        item["comp_pct"] = _safe_div((item.get("completions") or 0) * 100, item.get("attempts") or 0)
+        item["yards_per_att"] = _safe_div(item.get("passing_yards") or 0, item.get("attempts") or 0)
+        item["rec_per_game"] = _safe_div(item.get("receptions") or 0, g)
+        item["targets_per_game"] = _safe_div(item.get("targets") or 0, g)
+        item["rush_ypg"] = _safe_div(item.get("rushing_yards") or 0, g)
+        item["rec_ypg"] = _safe_div(item.get("receiving_yards") or 0, g)
+        item["pass_ypg"] = _safe_div(item.get("passing_yards") or 0, g)
+    return items
+
+
+def _enrich_with_rate_metrics(conn, items, season=None, career_mode=False):
+    """Fetch average rate metrics from player_week_metrics for returned players."""
+    if not items:
+        return items
+
+    player_ids = [item["player_id"] for item in items if item.get("player_id")]
+    if not player_ids:
+        return items
+
+    placeholders = ",".join("?" * len(player_ids))
+    stat_placeholders = ",".join("?" * len(RATE_METRICS))
+
+    where = f"m.player_id IN ({placeholders}) AND m.stat_key IN ({stat_placeholders})"
+    params = list(player_ids) + list(RATE_METRICS)
+
+    if not career_mode and season:
+        where += " AND m.season = ?"
+        params.append(season)
+
+    rows = conn.execute(f"""
+        SELECT m.player_id, m.stat_key, AVG(m.stat_value) as avg_val
+        FROM player_week_metrics m
+        WHERE {where}
+        GROUP BY m.player_id, m.stat_key
+    """, params).fetchall()
+
+    # Build lookup
+    lookup = {}
+    for r in rows:
+        pid = r[0]
+        if pid not in lookup:
+            lookup[pid] = {}
+        lookup[pid][r[1]] = round(r[2], 3) if r[2] is not None else None
+
+    # Merge into items
+    for item in items:
+        pid = item.get("player_id")
+        if pid and pid in lookup:
+            for metric in RATE_METRICS:
+                item[metric] = lookup[pid].get(metric)
+        else:
+            for metric in RATE_METRICS:
+                item[metric] = None
+
+    return items
 
 
 def db_stats():
@@ -168,13 +244,9 @@ def fetch_players(
     """
     total = conn.execute(count_query, params[:-2]).fetchone()[0]
 
-    items = []
-    for r in rows:
-        item = dict(r)
-        # Per-game averages for key stats
-        g = item["games"] or 1
-        item["ppg"] = round((item["fantasy_points_ppr"] or 0) / g, 1)
-        items.append(item)
+    items = [dict(r) for r in rows]
+    _enrich_with_derived_stats(items)
+    _enrich_with_rate_metrics(conn, items, season=season, career_mode=career_mode)
 
     conn.close()
     return {"count": total, "season": "career" if career_mode else season, "items": items}
@@ -239,13 +311,20 @@ def fetch_screener(body):
 
     where_clause = " AND ".join(where) if where else "1=1"
 
-    # Safe sort
+    # Safe sort — includes derived and rate metrics (computed post-query)
     safe_sorts = {
         "fantasy_points_ppr", "fantasy_points_half_ppr", "fantasy_points_std",
         "passing_yards", "passing_tds", "rushing_yards", "rushing_tds",
         "receiving_yards", "receiving_tds", "receptions", "touchdowns",
         "turnovers", "targets", "carries", "games", "ppg", "seasons",
         "full_name", "position", "team",
+        # Derived metrics (computed in Python, sorted client-side)
+        "yards_per_carry", "yards_per_rec", "yards_per_target", "catch_rate",
+        "comp_pct", "yards_per_att", "rec_per_game", "targets_per_game",
+        "rush_ypg", "rec_ypg", "pass_ypg",
+        # Rate metrics from player_week_metrics
+        "target_share", "air_yards_share", "wopr", "racr",
+        "passing_epa", "receiving_epa", "rushing_epa", "dakota",
     }
     if sort_key not in safe_sorts:
         sort_key = "fantasy_points_ppr"
@@ -277,18 +356,28 @@ def fetch_screener(body):
     if having:
         having_clause = "HAVING " + " AND ".join(having)
 
+    # Derived/rate metrics are computed post-query — sort by PPR in SQL, re-sort in Python
+    sql_sortable = {
+        "fantasy_points_ppr", "fantasy_points_half_ppr", "fantasy_points_std",
+        "passing_yards", "passing_tds", "rushing_yards", "rushing_tds",
+        "receiving_yards", "receiving_tds", "receptions", "touchdowns",
+        "turnovers", "targets", "carries",
+    }
+    python_sort = sort_key not in sql_sortable and sort_key not in ("ppg", "games", "seasons", "full_name", "position", "team")
+
     # Handle sort expression
-    order_expr = sort_key
-    if sort_key == "ppg":
+    effective_sort = sort_key if not python_sort else "fantasy_points_ppr"
+    order_expr = effective_sort
+    if effective_sort == "ppg":
         order_expr = "(SUM(s.fantasy_points_ppr) / MAX(1, COUNT(*)))"
-    elif sort_key == "games":
+    elif effective_sort == "games":
         order_expr = "COUNT(*)"
-    elif sort_key == "seasons":
+    elif effective_sort == "seasons":
         order_expr = "COUNT(DISTINCT s.season)"
-    elif sort_key in ("full_name", "position", "team"):
-        order_expr = f"p.{sort_key}"
+    elif effective_sort in ("full_name", "position", "team"):
+        order_expr = f"p.{effective_sort}"
     else:
-        order_expr = f"SUM(s.{sort_key})"
+        order_expr = f"SUM(s.{effective_sort})"
 
     query = f"""
         SELECT
@@ -340,12 +429,14 @@ def fetch_screener(body):
     count_params = params[:-2]  # exclude limit/offset
     total = conn.execute(count_query, count_params).fetchone()[0]
 
-    items = []
-    for r in rows:
-        item = dict(r)
-        g = item["games"] or 1
-        item["ppg"] = round((item["fantasy_points_ppr"] or 0) / g, 1)
-        items.append(item)
+    items = [dict(r) for r in rows]
+    _enrich_with_derived_stats(items)
+    _enrich_with_rate_metrics(conn, items, season=season, career_mode=career_mode)
+
+    # Re-sort in Python if sorting by a derived/rate metric
+    if python_sort:
+        reverse = sort_dir.lower() == "desc"
+        items.sort(key=lambda x: x.get(sort_key) or 0, reverse=reverse)
 
     conn.close()
     return {"count": total, "season": "career" if career_mode else season, "items": items}

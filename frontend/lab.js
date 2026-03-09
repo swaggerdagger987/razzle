@@ -81,6 +81,31 @@ const COLUMNS = {
   // Totals
   touchdowns:          { label: "TD",        group: "Totals", decimals: 0 },
   turnovers:           { label: "TO",        group: "Totals", decimals: 0 },
+
+  // Efficiency (derived from aggregates)
+  yards_per_carry:     { label: "Y/CAR",    group: "Efficiency", decimals: 1 },
+  yards_per_rec:       { label: "Y/REC",    group: "Efficiency", decimals: 1 },
+  yards_per_target:    { label: "Y/TGT",    group: "Efficiency", decimals: 1 },
+  catch_rate:          { label: "Catch%",   group: "Efficiency", decimals: 1 },
+  comp_pct:            { label: "CMP%",     group: "Efficiency", decimals: 1 },
+  yards_per_att:       { label: "Y/ATT",    group: "Efficiency", decimals: 1 },
+
+  // Per-game averages
+  rec_per_game:        { label: "REC/G",    group: "Per Game", decimals: 1 },
+  targets_per_game:    { label: "TGT/G",    group: "Per Game", decimals: 1 },
+  rush_ypg:            { label: "RuYPG",    group: "Per Game", decimals: 1 },
+  rec_ypg:             { label: "ReYPG",    group: "Per Game", decimals: 1 },
+  pass_ypg:            { label: "PaYPG",    group: "Per Game", decimals: 1 },
+
+  // Advanced (from nflverse rate stats)
+  target_share:        { label: "TGT%",     group: "Advanced", decimals: 1, pct: true },
+  air_yards_share:     { label: "AirYd%",   group: "Advanced", decimals: 1, pct: true },
+  wopr:                { label: "WOPR",     group: "Advanced", decimals: 3 },
+  racr:                { label: "RACR",     group: "Advanced", decimals: 2 },
+  passing_epa:         { label: "Pass EPA", group: "Advanced", decimals: 1 },
+  receiving_epa:       { label: "Rec EPA",  group: "Advanced", decimals: 1 },
+  rushing_epa:         { label: "Rush EPA", group: "Advanced", decimals: 1 },
+  dakota:              { label: "DAKOTA",   group: "Advanced", decimals: 3 },
 };
 
 // ─── Presets ─────────────────────────────────────────────────────
@@ -110,6 +135,16 @@ const PRESETS = {
     label: "Dynasty",
     columns: ["fantasy_points_ppr", "ppg", "games", "seasons", "receiving_yards", "receiving_tds",
               "receptions", "targets", "rushing_yards", "rushing_tds", "touchdowns"],
+  },
+  efficiency: {
+    label: "Efficiency",
+    columns: ["fantasy_points_ppr", "ppg", "games", "yards_per_carry", "yards_per_rec",
+              "yards_per_target", "catch_rate", "comp_pct", "yards_per_att", "target_share"],
+  },
+  advanced: {
+    label: "Advanced",
+    columns: ["fantasy_points_ppr", "ppg", "games", "target_share", "air_yards_share",
+              "wopr", "racr", "receiving_epa", "passing_epa", "rushing_epa"],
   },
 };
 
@@ -356,9 +391,12 @@ function renderTableBody() {
     for (const key of cols) {
       const col = getColumnDef(key);
       if (!col) continue;
-      const val = player[key];
+      let val = player[key];
       if (col.isText) {
         html += `<td>${val || "—"}</td>`;
+      } else if (col.pct && val != null) {
+        // Rate stats come as decimals (0.32 = 32%), display as percentage
+        html += `<td>${(val * 100).toFixed(col.decimals)}%</td>`;
       } else {
         html += `<td>${formatStat(val, col.decimals)}</td>`;
       }

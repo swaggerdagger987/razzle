@@ -10,6 +10,10 @@
 | 2 | Career view in Lab | DONE | Season selector includes "Career" option, aggregates all seasons. Dynasty preset includes seasons column. |
 | 3 | Bootstrap on startup | DONE | server.py lifespan bootstrap syncs data if DB empty (Render cold start resilience) |
 | 4 | render.yaml multi-season | DONE | Build command syncs 2020-2024 seasons |
+| 5 | Advanced metrics | DONE | target_share, air_yards_share, WOPR, RACR, EPA (pass/rec/rush), DAKOTA from nflverse rate stats |
+| 6 | Efficiency columns | DONE | Y/CAR, Y/REC, Y/TGT, Catch%, CMP%, Y/ATT derived from aggregates |
+| 7 | Per-game averages | DONE | REC/G, TGT/G, RuYPG, ReYPG, PaYPG computed per player |
+| 8 | New presets | DONE | Efficiency + Advanced presets added to Lab toolbar |
 
 ---
 
@@ -173,6 +177,12 @@
 - [x] Backend career mode: fetch_players, fetch_screener, fetch_players_compare all support season="career"
 - [x] Bootstrap on startup: server.py lifespan auto-syncs data if DB empty
 - [x] render.yaml updated to sync 2020-2024 at build time
+- [x] Advanced metrics: target_share, air_yards_share, WOPR, RACR, passing/receiving/rushing EPA, DAKOTA
+- [x] Efficiency columns: Y/CAR, Y/REC, Y/TGT, Catch%, CMP%, Y/ATT (derived from aggregates)
+- [x] Per-game averages: REC/G, TGT/G, RuYPG, ReYPG, PaYPG
+- [x] Efficiency + Advanced column presets added to Lab toolbar
+- [x] Rate metrics enrichment: secondary query fetches averages from player_week_metrics table
+- [x] Python re-sort for derived/rate metric sorts (SQL sorts by PPR, Python re-sorts)
 
 ### Pre-Launch Polish
 - [x] War Room demo rotation: 33 briefings across 6 agent types, shuffled on each page load
@@ -224,3 +234,5 @@ _None currently._
 | 2026-03-08 | Pre-launch polish before Phase 5 | All code phases done. Polish (mobile, demo rotation, design audit) maximizes Reddit launch impact |
 | 2026-03-08 | Multi-season data (2020-2024) | Single-season severely limits dynasty analysis. 5 seasons enables career arcs, breakout detection, year-over-year trends. Essential for Reddit draft-week content |
 | 2026-03-08 | Career view as first dropdown option | Dynasty managers think in careers, not single seasons. Career aggregates are the default mental model for dynasty analysis |
+| 2026-03-08 | Advanced metrics from player_week_metrics | target_share, WOPR, RACR, EPA are Reddit power user stats. Enriched via secondary query (not JOIN) to keep main query fast |
+| 2026-03-08 | Python re-sort for derived metrics | Derived/rate metrics can't be sorted in SQL since they're computed post-query. Fetch extra rows, re-sort in Python. Trade-off: slightly less precise pagination but much simpler architecture |
