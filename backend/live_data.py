@@ -677,6 +677,15 @@ def fetch_prospects(
         "career_av": "d.career_av",
         "games": "d.games",
     }
+    # College sort keys use Python re-sort (derived from batch enrichment)
+    college_sort_keys = {
+        "college_games", "college_pass_yards", "college_pass_tds",
+        "college_rush_yards", "college_rush_tds", "college_carries",
+        "college_rec_yards", "college_rec_tds", "college_receptions",
+        "college_targets", "college_total_tds", "college_total_yards",
+        "college_ypc", "college_cmp_pct", "college_ypr", "college_ypg",
+    }
+    python_resort = sort_key in college_sort_keys
     order_expr = safe_sorts.get(sort_key, "c.draft_pick")
     if sort_dir.lower() not in ("asc", "desc"):
         sort_dir = "asc"
@@ -691,8 +700,7 @@ def fetch_prospects(
         else:
             nulls_clause = f"CASE WHEN {order_expr} IS NULL THEN 1 ELSE 0 END,"
 
-    query = f"""
-        SELECT
+    select_cols = """
             c.player_name, c.position, c.school, c.draft_year,
             c.draft_team, c.draft_round, c.draft_pick,
             c.height_inches, c.weight,
@@ -704,30 +712,26 @@ def fetch_prospects(
             d.rush_yards as nfl_rush_yards, d.rush_tds as nfl_rush_tds,
             d.rec_yards as nfl_rec_yards, d.rec_tds as nfl_rec_tds,
             d.receptions as nfl_receptions
+    """
+    from_clause = """
         FROM combine_data c
         LEFT JOIN draft_picks d
             ON c.draft_year = d.season
             AND LOWER(REPLACE(c.player_name, ' ', '')) = LOWER(REPLACE(d.player_name, ' ', ''))
             AND c.position = d.position
         WHERE {where_clause}
-        ORDER BY {nulls_clause} {order_expr} {sort_dir}
-        LIMIT ? OFFSET ?
-    """
-    params.extend([limit, offset])
-
-    rows = conn.execute(query, params).fetchall()
+    """.format(where_clause=where_clause)
 
     # Count
-    count_query = f"""
-        SELECT COUNT(*)
-        FROM combine_data c
-        LEFT JOIN draft_picks d
-            ON c.draft_year = d.season
-            AND LOWER(REPLACE(c.player_name, ' ', '')) = LOWER(REPLACE(d.player_name, ' ', ''))
-            AND c.position = d.position
-        WHERE {where_clause}
-    """
-    total = conn.execute(count_query, params[:-2]).fetchone()[0]
+    total = conn.execute(f"SELECT COUNT(*) {from_clause}", params).fetchone()[0]
+
+    if python_resort:
+        # Fetch all for Python re-sort after college enrichment
+        query = f"SELECT {select_cols} {from_clause} ORDER BY c.player_name ASC"
+        rows = conn.execute(query, params).fetchall()
+    else:
+        query = f"SELECT {select_cols} {from_clause} ORDER BY {nulls_clause} {order_expr} {sort_dir} LIMIT ? OFFSET ?"
+        rows = conn.execute(query, params + [limit, offset]).fetchall()
 
     items = []
     for r in rows:
@@ -743,8 +747,112 @@ def fetch_prospects(
         item["draft_team"] = TEAM_ABBREV.get(dt, dt[:3] if dt else None)
         items.append(item)
 
+    # Enrich with college production stats (batch cross-reference)
+    _enrich_prospects_with_college(conn, items)
+
+    # Python re-sort for college-derived columns
+    if python_resort:
+        reverse = sort_dir.lower() == "desc"
+        items.sort(key=lambda x: (x.get(sort_key) is None, -(x.get(sort_key) or 0) if reverse else (x.get(sort_key) or 0)))
+        items = items[offset:offset + limit]
+
     conn.close()
     return {"count": total, "draft_year": draft_year, "items": items}
+
+
+# Common nickname → full name mapping for college-prospect matching
+_NICKNAME_MAP = {
+    "cam": "cameron", "rob": "robert", "mike": "michael", "will": "william",
+    "joe": "joseph", "dan": "daniel", "tom": "thomas", "matt": "matthew",
+    "ben": "benjamin", "jake": "jacob", "nick": "nicholas", "tony": "anthony",
+    "chris": "christopher", "alex": "alexander", "sam": "samuel", "max": "maximilian",
+    "drew": "andrew", "ted": "theodore", "jim": "james", "pat": "patrick",
+    "dave": "david", "rick": "richard", "dick": "richard", "bill": "william",
+    "bob": "robert", "ed": "edward", "abe": "abraham", "ty": "tyler",
+    "jo": "joseph", "ray": "raymond", "ken": "kenneth", "ron": "ronald",
+    "greg": "gregory", "phil": "philip", "nic": "nicholas", "nate": "nathan",
+}
+
+def _name_variants(name):
+    """Generate normalized name variants including nickname expansions."""
+    clean = name.lower().replace(" ", "").replace(".", "").replace("'", "").replace("-", "")
+    variants = {clean}
+    # Try expanding first name
+    parts = name.lower().strip().split()
+    if len(parts) >= 2:
+        first = parts[0].replace(".", "").replace("'", "").replace("-", "")
+        rest = "".join(p.replace(".", "").replace("'", "").replace("-", "") for p in parts[1:])
+        # Nickname → full name
+        if first in _NICKNAME_MAP:
+            variants.add(_NICKNAME_MAP[first] + rest)
+        # Full name → nickname (reverse lookup)
+        for nick, full in _NICKNAME_MAP.items():
+            if first == full:
+                variants.add(nick + rest)
+        # Jr/Sr/III suffix handling
+        for suffix in ("jr", "sr", "ii", "iii", "iv"):
+            variants.add(clean.replace(suffix, ""))
+            variants.add(clean + suffix)
+    return variants
+
+
+def _enrich_prospects_with_college(conn, items):
+    """Batch-enrich prospect rows with college career stats from cfb_player_season_stats."""
+    if not items:
+        return
+
+    # Build a lookup of college career totals by normalized name
+    all_college = conn.execute("""
+        SELECT
+            LOWER(REPLACE(REPLACE(REPLACE(REPLACE(player_name, ' ', ''), '.', ''), '''', ''), '-', '')) as name_key,
+            SUM(games) as college_games,
+            SUM(pass_yards) as college_pass_yards,
+            SUM(pass_tds) as college_pass_tds,
+            SUM(completions) as college_completions,
+            SUM(pass_attempts) as college_pass_attempts,
+            SUM(rush_yards) as college_rush_yards,
+            SUM(rush_tds) as college_rush_tds,
+            SUM(carries) as college_carries,
+            SUM(rec_yards) as college_rec_yards,
+            SUM(rec_tds) as college_rec_tds,
+            SUM(receptions) as college_receptions,
+            SUM(targets) as college_targets,
+            SUM(total_tds) as college_total_tds,
+            SUM(total_yards) as college_total_yards
+        FROM cfb_player_season_stats
+        GROUP BY name_key
+    """).fetchall()
+
+    college_lookup = {}
+    for r in all_college:
+        d = dict(r)
+        key = d.pop("name_key")
+        college_lookup[key] = d
+
+    for item in items:
+        name = item.get("player_name", "")
+        variants = _name_variants(name)
+        college = None
+        for v in variants:
+            college = college_lookup.get(v)
+            if college:
+                break
+        if college:
+            item.update(college)
+            # Derived stats
+            g = college.get("college_games") or 1
+            item["college_ypc"] = _safe_div(college.get("college_rush_yards") or 0, college.get("college_carries") or 0)
+            item["college_cmp_pct"] = _safe_div((college.get("college_completions") or 0) * 100, college.get("college_pass_attempts") or 0)
+            item["college_ypr"] = _safe_div(college.get("college_rec_yards") or 0, college.get("college_receptions") or 0)
+            item["college_ypg"] = _safe_div(college.get("college_total_yards") or 0, g)
+        else:
+            # Set nulls so frontend can check
+            for k in ("college_games", "college_pass_yards", "college_pass_tds",
+                       "college_rush_yards", "college_rush_tds", "college_carries",
+                       "college_rec_yards", "college_rec_tds", "college_receptions",
+                       "college_targets", "college_total_tds", "college_total_yards",
+                       "college_ypc", "college_cmp_pct", "college_ypr", "college_ypg"):
+                item[k] = None
 
 
 def fetch_prospect_years():
@@ -970,8 +1078,117 @@ def fetch_prospect_profile(name, position="", draft_year=0):
 
         percentiles[metric] = round(pct, 1)
 
+    # ── College production cross-reference ──────────────────────────
+    college = _fetch_college_for_prospect(conn, prospect)
+
     conn.close()
-    return {"prospect": prospect, "percentiles": percentiles}
+    return {"prospect": prospect, "percentiles": percentiles, "college": college}
+
+
+def _fetch_college_for_prospect(conn, prospect):
+    """Cross-reference a prospect with cfb_player_season_stats via name matching."""
+    name = prospect.get("player_name", "")
+    school = prospect.get("school", "")
+    if not name:
+        return None
+
+    variants = _name_variants(name)
+
+    # Try each variant until we find a match
+    rows = []
+    for variant in variants:
+        rows = conn.execute("""
+            SELECT player_id, player_name, position, team, conference, season,
+                   games, completions, pass_attempts, pass_yards, pass_tds,
+                   ints_thrown, sacks_taken, carries, rush_yards, rush_tds,
+                   receptions, targets, rec_yards, rec_tds,
+                   fumbles, total_tds, total_yards
+            FROM cfb_player_season_stats
+            WHERE LOWER(REPLACE(REPLACE(REPLACE(REPLACE(player_name, ' ', ''), '.', ''), '''', ''), '-', '')) = ?
+            ORDER BY season ASC
+        """, (variant,)).fetchall()
+        if rows:
+            break
+
+    if not rows:
+        return None
+
+    season_items = [dict(r) for r in rows]
+
+    # If multiple players match the name, narrow by school if possible
+    if school and len(set(r["player_id"] for r in season_items)) > 1:
+        school_clean = school.lower().replace(" ", "")
+        filtered = [r for r in season_items if r.get("team", "").lower().replace(" ", "") == school_clean]
+        if filtered:
+            season_items = filtered
+        else:
+            # Try partial match (e.g., "Ohio State" in "Ohio St")
+            filtered = [r for r in season_items if school_clean[:6] in r.get("team", "").lower().replace(" ", "")]
+            if filtered:
+                season_items = filtered
+
+    # Keep only one player_id (the best match)
+    pid = season_items[0]["player_id"]
+    season_items = [r for r in season_items if r["player_id"] == pid]
+
+    # Enrich with derived stats
+    season_items = _enrich_college_derived(season_items)
+
+    # Career totals
+    career = {
+        "games": sum(s.get("games") or 0 for s in season_items),
+        "completions": sum(s.get("completions") or 0 for s in season_items),
+        "pass_attempts": sum(s.get("pass_attempts") or 0 for s in season_items),
+        "pass_yards": sum(s.get("pass_yards") or 0 for s in season_items),
+        "pass_tds": sum(s.get("pass_tds") or 0 for s in season_items),
+        "ints_thrown": sum(s.get("ints_thrown") or 0 for s in season_items),
+        "carries": sum(s.get("carries") or 0 for s in season_items),
+        "rush_yards": sum(s.get("rush_yards") or 0 for s in season_items),
+        "rush_tds": sum(s.get("rush_tds") or 0 for s in season_items),
+        "receptions": sum(s.get("receptions") or 0 for s in season_items),
+        "targets": sum(s.get("targets") or 0 for s in season_items),
+        "rec_yards": sum(s.get("rec_yards") or 0 for s in season_items),
+        "rec_tds": sum(s.get("rec_tds") or 0 for s in season_items),
+        "total_tds": sum(s.get("total_tds") or 0 for s in season_items),
+        "total_yards": sum(s.get("total_yards") or 0 for s in season_items),
+    }
+    career = _enrich_college_derived([career])[0]
+
+    # Compute dominator rating for WR/TE (team receiving share in best season)
+    dominator = None
+    pos = (prospect.get("position") or "").upper()
+    has_receiving = pos in ("WR", "TE") or "WR" in pos or "TE" in pos
+    # Also compute for anyone with significant receiving stats
+    if not has_receiving and (career.get("receptions") or 0) >= 30:
+        has_receiving = True
+    if has_receiving:
+        for s in season_items:
+            team = s.get("team")
+            season_yr = s.get("season")
+            rec_yds = s.get("rec_yards") or 0
+            rec_tds = s.get("rec_tds") or 0
+            if not team or not season_yr or rec_yds < 100:
+                continue
+            # Get team totals for that season
+            team_row = conn.execute("""
+                SELECT SUM(rec_yards), SUM(rec_tds)
+                FROM cfb_player_season_stats
+                WHERE team = ? AND season = ? AND position IN ('WR', 'TE', 'RB')
+            """, (team, season_yr)).fetchone()
+            if team_row and team_row[0] and team_row[0] > 0:
+                yd_share = rec_yds / team_row[0] * 100
+                td_share = (rec_tds / team_row[1] * 100) if team_row[1] and team_row[1] > 0 else 0
+                dom = (yd_share + td_share) / 2
+                if dominator is None or dom > dominator:
+                    dominator = round(dom, 1)
+
+    return {
+        "seasons": season_items,
+        "career": career,
+        "dominator_rating": dominator,
+        "seasons_played": len(season_items),
+        "player_id": pid,
+    }
 
 
 def fetch_prospect_comps(name, position="", draft_year=0, limit=5):
