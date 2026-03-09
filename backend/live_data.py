@@ -708,6 +708,112 @@ def fetch_prospect_years():
     return {"years": years, "schools": schools, "positions": positions}
 
 
+def fetch_player_profile(player_id):
+    """Return a rich player profile: bio, season-by-season stats, combine/draft data."""
+    conn = get_conn()
+
+    # Player bio
+    player_info = conn.execute(
+        "SELECT player_id, full_name, position, team, age, college FROM players WHERE player_id = ?",
+        (player_id,)
+    ).fetchone()
+
+    if not player_info:
+        conn.close()
+        return {"player": {}, "seasons": [], "combine": None}
+
+    player = dict(player_info)
+
+    # Season-by-season aggregates
+    rows = conn.execute("""
+        SELECT
+            s.season,
+            COUNT(*) as games,
+            SUM(s.fantasy_points_ppr) as fantasy_points_ppr,
+            SUM(s.fantasy_points_std) as fantasy_points_std,
+            SUM(s.passing_yards) as passing_yards,
+            SUM(s.passing_tds) as passing_tds,
+            SUM(s.rushing_yards) as rushing_yards,
+            SUM(s.rushing_tds) as rushing_tds,
+            SUM(s.receiving_yards) as receiving_yards,
+            SUM(s.receiving_tds) as receiving_tds,
+            SUM(s.receptions) as receptions,
+            SUM(s.touchdowns) as touchdowns,
+            SUM(s.turnovers) as turnovers,
+            SUM(s.targets) as targets,
+            SUM(s.carries) as carries,
+            SUM(s.completions) as completions,
+            SUM(s.attempts) as attempts,
+            SUM(s.passing_air_yards) as passing_air_yards,
+            SUM(s.receiving_air_yards) as receiving_air_yards,
+            SUM(s.receiving_yards_after_catch) as receiving_yards_after_catch
+        FROM player_week_stats s
+        WHERE s.player_id = ?
+        GROUP BY s.season
+        ORDER BY s.season ASC
+    """, (player_id,)).fetchall()
+
+    seasons = [dict(r) for r in rows]
+    _enrich_with_derived_stats(seasons)
+
+    # Enrich each season with rate metrics
+    for season_row in seasons:
+        items_for_rate = [{"player_id": player_id, **season_row}]
+        _enrich_with_rate_metrics(conn, items_for_rate, season=season_row["season"])
+        for metric in RATE_METRICS:
+            season_row[metric] = items_for_rate[0].get(metric)
+
+    # Career totals
+    career = {}
+    if seasons:
+        career_items = [{"player_id": player_id}]
+        for key in ["games", "fantasy_points_ppr", "fantasy_points_std",
+                     "passing_yards", "passing_tds", "rushing_yards", "rushing_tds",
+                     "receiving_yards", "receiving_tds", "receptions", "touchdowns",
+                     "turnovers", "targets", "carries", "completions", "attempts",
+                     "passing_air_yards", "receiving_air_yards", "receiving_yards_after_catch"]:
+            career[key] = sum(s.get(key) or 0 for s in seasons)
+        career["seasons"] = len(seasons)
+        _enrich_with_derived_stats([career])
+        career = career
+
+    # Combine/draft data (match by name + position)
+    combine = None
+    name = player.get("full_name", "")
+    pos = player.get("position", "")
+    if name and pos:
+        search_name = name.lower().replace(" ", "")
+        combine_row = conn.execute("""
+            SELECT c.*, d.career_av, d.draft_av, d.allpro, d.probowls, d.seasons_started
+            FROM combine_data c
+            LEFT JOIN draft_picks d
+                ON c.draft_year = d.season
+                AND LOWER(REPLACE(c.player_name, ' ', '')) = LOWER(REPLACE(d.player_name, ' ', ''))
+                AND c.position = d.position
+            WHERE LOWER(REPLACE(c.player_name, ' ', '')) = ?
+                AND c.position = ?
+            ORDER BY c.draft_year DESC
+            LIMIT 1
+        """, (search_name, pos)).fetchone()
+
+        if combine_row:
+            c = dict(combine_row)
+            ht = c.get("height_inches")
+            if ht:
+                c["height_display"] = f"{ht // 12}'{ht % 12}\""
+            dt = (c.get("draft_team") or "").upper()
+            c["draft_team"] = TEAM_ABBREV.get(dt, dt[:3] if dt else None)
+            combine = c
+
+    conn.close()
+    return {
+        "player": player,
+        "seasons": seasons,
+        "career": career,
+        "combine": combine,
+    }
+
+
 def fetch_players_compare(player_ids, season=0):
     """Return season aggregates for multiple players (for comparison)."""
     conn = get_conn()

@@ -172,3 +172,13 @@ The old FDL project at `C:\Users\mcgui\Documents\FDL` has working implementation
 - **Character sprites** (`pixel-agents/assets/characters/char_0.png` through `char_5.png`)
 
 Use these as reference for proven patterns, but rewrite everything clean for the razzle repo. Every line should be intentional.
+
+## Razzle Loop (Autonomous Agent Workflow)
+
+The Razzle Loop is an autonomous multi-agent workflow defined in `~/.claude/agents/razzle-loop.md`. It runs a recursive PLAN → DESIGN → BUILD → TEST → FIX loop with zero human stops.
+
+- **Task tracker**: `LOOP-TASKS.md` (root of repo) — tracks current task, attempts, pass/fail
+- **Activation**: Say "activate razzle loop" or "start the loop"
+- **Agents used**: Sprint Prioritizer, UI Designer, Whimsy Injector, Frontend Developer, Evidence Collector, Reality Checker
+- **Loop logic**: Each task gets max 3 attempts. PASS → commit + next task. FAIL → fix loop. All tasks PASS → phase gate → push.
+- **Full autonomy**: The loop reads north star, roadmap, design guide, and progress tracker. It makes its own decisions. It does not stop to ask.

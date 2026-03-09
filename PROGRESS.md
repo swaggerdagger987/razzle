@@ -1,6 +1,19 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 9 — Polish + Formula Store (COMPLETE)
+## Current Phase: Phase 10 — Player Profiles + Lab Enhancement
+
+**Exit criterion**: Click any player name in the Lab screener → rich profile modal opens with career headline stats, season-by-season breakdown table, combine/draft data (if available), and career arc trend chart. Profile PNG export with watermark. Screenshot-worthy. Mobile responsive.
+
+### Phase 10 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Player profile detail modal | DONE | Click player name → profile modal with position-colored header, career headline stats bar (position-specific), season-by-season table with career totals, combine/draft data grid, career arc chart. Razzle design system: chunky borders, offset shadows, position colors. Close on click-outside. Mobile responsive. |
+| 2 | Profile career arc chart | DONE | Canvas chart in profile: PPR per season line with filled area, position-colored, data point dots with value labels, Y-axis gridlines, season tick labels. Handles single-season players. |
+| 3 | Profile image export | DONE | "Export PNG" button in profile header. Canvas-rendered profile (header, stats bar, season table) with Razzle watermark. Downloads as razzle-profile-{name}.png. |
+| 4 | Deploy + smoke test | PENDING | |
+
+## Previous Phase: Phase 9 — Polish + Formula Store (COMPLETE)
 
 **Exit criterion MET:** Complete product loop works: land on home → explore Lab → create formula → publish to store → connect Sleeper → enter War Room → run agent scenario → see league-contextualized brief. Formula Store has 10 seed community formulas with search/filter/sort, publishing flow, ratings/reviews. Custom 404 page. All pages have loading/error/empty states. Performance verified (pagination, 60fps canvas, indexed DB). Everything works, design is cohesive.
 

@@ -1030,3 +1030,499 @@ function exportImage() {
   link.href = canvas.toDataURL("image/png");
   link.click();
 }
+
+// ─── Player Profile Modal ──────────────────────────────────────────
+
+async function openPlayerProfile(playerId) {
+  if (!playerId) return;
+  const overlay = document.getElementById("profileOverlay");
+  const content = document.getElementById("profileContent");
+  overlay.classList.add("open");
+  content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">pulling film...</div>`;
+
+  try {
+    const data = await apiFetch(`/api/players/${playerId}/profile`);
+    renderProfile(data, content);
+  } catch (err) {
+    content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the data fetch... ${err.message}</div>`;
+  }
+}
+
+function closeProfile(e) {
+  if (e && e.target !== e.currentTarget) return;
+  document.getElementById("profileOverlay").classList.remove("open");
+}
+
+function renderProfile(data, container) {
+  const { player, seasons, career, combine } = data;
+  if (!player || !player.full_name) {
+    container.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">player not found on the film</div>`;
+    return;
+  }
+
+  const pos = (player.position || "").toUpperCase();
+  const posColors = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
+  const posColor = posColors[pos] || "var(--ink)";
+
+  const headlines = getHeadlineStats(pos, career);
+
+  let html = "";
+
+  // Header
+  html += `<div class="profile-header">`;
+  html += `<span class="profile-pos-badge" style="background:${posColor};">${pos}</span>`;
+  html += `<div>`;
+  html += `<div class="profile-name">${player.full_name}</div>`;
+  html += `<div class="profile-meta">${player.team || "FA"} · Age ${player.age || "?"} · ${player.college || ""}</div>`;
+  html += `</div>`;
+  html += `<button class="btn-primary" onclick="exportProfileImage()" style="margin-left:auto; font-size:11px; padding:6px 14px;">Export PNG</button>`;
+  html += `</div>`;
+
+  // Career headline stats bar
+  html += `<div class="profile-stats-bar">`;
+  for (const h of headlines) {
+    html += `<div class="profile-stat-box">`;
+    html += `<div class="profile-stat-value">${h.value}</div>`;
+    html += `<div class="profile-stat-label">${h.label}</div>`;
+    html += `</div>`;
+  }
+  html += `</div>`;
+
+  // Season-by-season table
+  if (seasons && seasons.length > 0) {
+    const seasonCols = getSeasonColumns(pos);
+    html += `<div class="profile-section-title">Season Log</div>`;
+    html += `<table class="profile-season-table"><thead><tr>`;
+    html += `<th>Year</th>`;
+    for (const c of seasonCols) html += `<th>${c.label}</th>`;
+    html += `</tr></thead><tbody>`;
+
+    for (const s of seasons) {
+      html += `<tr><td>${s.season}</td>`;
+      for (const c of seasonCols) {
+        html += `<td>${c.fmt(s[c.key])}</td>`;
+      }
+      html += `</tr>`;
+    }
+
+    // Career totals row
+    if (career && career.games) {
+      html += `<tr><td>Career</td>`;
+      for (const c of seasonCols) {
+        html += `<td>${c.fmt(career[c.key])}</td>`;
+      }
+      html += `</tr>`;
+    }
+
+    html += `</tbody></table>`;
+  }
+
+  // Combine / draft data
+  if (combine) {
+    html += `<div class="profile-section-title">Combine & Draft</div>`;
+    html += `<div class="profile-combine">`;
+
+    const combineFields = [
+      { key: "draft_round", label: "Round", fmt: v => v ? `Rd ${v}` : "UDFA" },
+      { key: "draft_overall", label: "Pick", fmt: v => v ? `#${v}` : "—" },
+      { key: "height_display", label: "Height", fmt: v => v || "—" },
+      { key: "weight", label: "Weight", fmt: v => v ? `${v} lbs` : "—" },
+      { key: "forty", label: "40-Yard", fmt: v => v ? v.toFixed(2) + "s" : "—" },
+      { key: "bench", label: "Bench", fmt: v => v ? `${v} reps` : "—" },
+      { key: "vertical", label: "Vertical", fmt: v => v ? v.toFixed(1) + '"' : "—" },
+      { key: "broad_jump", label: "Broad", fmt: v => v ? v + '"' : "—" },
+      { key: "cone", label: "3-Cone", fmt: v => v ? v.toFixed(2) + "s" : "—" },
+      { key: "shuttle", label: "Shuttle", fmt: v => v ? v.toFixed(2) + "s" : "—" },
+    ];
+
+    for (const f of combineFields) {
+      const val = combine[f.key];
+      const display = f.fmt(val);
+      if (display === "—") continue;
+      html += `<div class="profile-combine-item">`;
+      html += `<div class="profile-combine-value">${display}</div>`;
+      html += `<div class="profile-combine-label">${f.label}</div>`;
+      html += `</div>`;
+    }
+    html += `</div>`;
+  }
+
+  // Career arc chart
+  if (seasons && seasons.length > 1) {
+    html += `<div class="profile-section-title">Career Arc</div>`;
+    html += `<div class="profile-chart-wrap">`;
+    html += `<canvas id="profileArcCanvas" width="720" height="240" style="border:2px solid var(--ink); border-radius:8px; background:var(--bg); width:100%;"></canvas>`;
+    html += `</div>`;
+  }
+
+  container.innerHTML = html;
+
+  // Draw career arc chart after DOM update
+  if (seasons && seasons.length > 1) {
+    requestAnimationFrame(() => drawProfileArc(seasons, pos));
+  }
+}
+
+function getHeadlineStats(pos, career) {
+  if (!career || !career.games) return [];
+  const fmt0 = v => v != null ? Math.round(v).toLocaleString() : "—";
+  const fmt1 = v => v != null ? v.toFixed(1) : "—";
+
+  const common = [
+    { label: "PPR Total", value: fmt1(career.fantasy_points_ppr) },
+    { label: "Games", value: fmt0(career.games) },
+    { label: "Seasons", value: fmt0(career.seasons) },
+  ];
+
+  if (pos === "QB") {
+    return [...common,
+      { label: "Pass Yds", value: fmt0(career.passing_yards) },
+      { label: "Pass TD", value: fmt0(career.passing_tds) },
+      { label: "Rush Yds", value: fmt0(career.rushing_yards) },
+    ];
+  } else if (pos === "RB") {
+    return [...common,
+      { label: "Rush Yds", value: fmt0(career.rushing_yards) },
+      { label: "Rush TD", value: fmt0(career.rushing_tds) },
+      { label: "Rec Yds", value: fmt0(career.receiving_yards) },
+    ];
+  } else {
+    return [...common,
+      { label: "Rec Yds", value: fmt0(career.receiving_yards) },
+      { label: "Rec TD", value: fmt0(career.receiving_tds) },
+      { label: "Receptions", value: fmt0(career.receptions) },
+    ];
+  }
+}
+
+function getSeasonColumns(pos) {
+  const fmt0 = v => v != null ? Math.round(v) : "—";
+  const fmt1 = v => v != null ? Number(v).toFixed(1) : "—";
+  const fmtPct = v => v != null ? Number(v).toFixed(1) + "%" : "—";
+
+  const base = [
+    { key: "games", label: "GP", fmt: fmt0 },
+    { key: "fantasy_points_ppr", label: "PPR", fmt: fmt1 },
+  ];
+
+  if (pos === "QB") {
+    return [...base,
+      { key: "completions", label: "CMP", fmt: fmt0 },
+      { key: "attempts", label: "ATT", fmt: fmt0 },
+      { key: "passing_yards", label: "Pass Yds", fmt: fmt0 },
+      { key: "passing_tds", label: "Pass TD", fmt: fmt0 },
+      { key: "comp_pct", label: "CMP%", fmt: fmtPct },
+      { key: "rushing_yards", label: "Rush Yds", fmt: fmt0 },
+      { key: "rushing_tds", label: "Rush TD", fmt: fmt0 },
+      { key: "turnovers", label: "TO", fmt: fmt0 },
+    ];
+  } else if (pos === "RB") {
+    return [...base,
+      { key: "carries", label: "CAR", fmt: fmt0 },
+      { key: "rushing_yards", label: "Rush Yds", fmt: fmt0 },
+      { key: "rushing_tds", label: "Rush TD", fmt: fmt0 },
+      { key: "yards_per_carry", label: "Y/CAR", fmt: fmt1 },
+      { key: "targets", label: "TGT", fmt: fmt0 },
+      { key: "receptions", label: "REC", fmt: fmt0 },
+      { key: "receiving_yards", label: "Rec Yds", fmt: fmt0 },
+      { key: "receiving_tds", label: "Rec TD", fmt: fmt0 },
+    ];
+  } else {
+    return [...base,
+      { key: "targets", label: "TGT", fmt: fmt0 },
+      { key: "receptions", label: "REC", fmt: fmt0 },
+      { key: "receiving_yards", label: "Rec Yds", fmt: fmt0 },
+      { key: "receiving_tds", label: "Rec TD", fmt: fmt0 },
+      { key: "yards_per_rec", label: "Y/REC", fmt: fmt1 },
+      { key: "catch_rate", label: "Catch%", fmt: fmtPct },
+      { key: "receiving_yards_after_catch", label: "YAC", fmt: fmt0 },
+    ];
+  }
+}
+
+function drawProfileArc(seasons, pos) {
+  const canvas = document.getElementById("profileArcCanvas");
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  const W = canvas.width;
+  const H = canvas.height;
+  const pad = { top: 20, right: 30, bottom: 35, left: 55 };
+  const plotW = W - pad.left - pad.right;
+  const plotH = H - pad.top - pad.bottom;
+
+  const posHex = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  const lineColor = posHex[pos] || "#d97757";
+
+  ctx.clearRect(0, 0, W, H);
+
+  const values = seasons.map(s => s.fantasy_points_ppr || 0);
+  const labels = seasons.map(s => String(s.season));
+  const maxVal = Math.max(...values, 1);
+
+  // Y-axis gridlines
+  ctx.strokeStyle = "#c5c5d0";
+  ctx.lineWidth = 1;
+  ctx.setLineDash([4, 4]);
+  const yTicks = 4;
+  for (let i = 0; i <= yTicks; i++) {
+    const y = pad.top + plotH - (i / yTicks) * plotH;
+    ctx.beginPath();
+    ctx.moveTo(pad.left, y);
+    ctx.lineTo(W - pad.right, y);
+    ctx.stroke();
+
+    ctx.fillStyle = "#8a8a9e";
+    ctx.font = "11px 'Space Mono', monospace";
+    ctx.textAlign = "right";
+    ctx.fillText(Math.round((i / yTicks) * maxVal), pad.left - 8, y + 4);
+  }
+  ctx.setLineDash([]);
+
+  // X-axis labels
+  ctx.fillStyle = "#8a8a9e";
+  ctx.font = "11px 'Space Mono', monospace";
+  ctx.textAlign = "center";
+  for (let i = 0; i < labels.length; i++) {
+    const x = pad.left + (labels.length === 1 ? plotW / 2 : (i / (labels.length - 1)) * plotW);
+    ctx.fillText(labels[i], x, H - pad.bottom + 18);
+  }
+
+  if (labels.length === 1) {
+    // Single season — just a dot
+    const x = pad.left + plotW / 2;
+    const y = pad.top + plotH - (values[0] / maxVal) * plotH;
+    ctx.beginPath();
+    ctx.arc(x, y, 6, 0, Math.PI * 2);
+    ctx.fillStyle = lineColor;
+    ctx.fill();
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.fillStyle = "#1a1a2e";
+    ctx.font = "bold 11px 'Space Mono', monospace";
+    ctx.fillText(Math.round(values[0]), x, y - 14);
+    return;
+  }
+
+  // Filled area
+  ctx.beginPath();
+  for (let i = 0; i < values.length; i++) {
+    const x = pad.left + (i / (values.length - 1)) * plotW;
+    const y = pad.top + plotH - (values[i] / maxVal) * plotH;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.lineTo(pad.left + plotW, pad.top + plotH);
+  ctx.lineTo(pad.left, pad.top + plotH);
+  ctx.closePath();
+  ctx.fillStyle = lineColor;
+  ctx.globalAlpha = 0.15;
+  ctx.fill();
+  ctx.globalAlpha = 1.0;
+
+  // Line
+  ctx.beginPath();
+  ctx.strokeStyle = lineColor;
+  ctx.lineWidth = 3;
+  for (let i = 0; i < values.length; i++) {
+    const x = pad.left + (i / (values.length - 1)) * plotW;
+    const y = pad.top + plotH - (values[i] / maxVal) * plotH;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+
+  // Data points + labels
+  for (let i = 0; i < values.length; i++) {
+    const x = pad.left + (i / (values.length - 1)) * plotW;
+    const y = pad.top + plotH - (values[i] / maxVal) * plotH;
+    ctx.beginPath();
+    ctx.arc(x, y, 5, 0, Math.PI * 2);
+    ctx.fillStyle = lineColor;
+    ctx.fill();
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.fillStyle = "#1a1a2e";
+    ctx.font = "bold 11px 'Space Mono', monospace";
+    ctx.textAlign = "center";
+    ctx.fillText(Math.round(values[i]), x, y - 12);
+  }
+
+  // Y-axis label
+  ctx.save();
+  ctx.translate(14, pad.top + plotH / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillStyle = "#8a8a9e";
+  ctx.font = "10px 'Space Mono', monospace";
+  ctx.textAlign = "center";
+  ctx.fillText("PPR Points", 0, 0);
+  ctx.restore();
+}
+
+// ─── Profile Image Export ──────────────────────────────────────────
+
+function exportProfileImage() {
+  const content = document.getElementById("profileContent");
+  if (!content) return;
+
+  const nameEl = content.querySelector(".profile-name");
+  const metaEl = content.querySelector(".profile-meta");
+  const badgeEl = content.querySelector(".profile-pos-badge");
+  if (!nameEl) return;
+
+  const name = nameEl.textContent;
+  const meta = metaEl ? metaEl.textContent : "";
+  const pos = badgeEl ? badgeEl.textContent.trim() : "";
+
+  // Stat boxes
+  const statBoxes = content.querySelectorAll(".profile-stat-box");
+  const stats = [];
+  statBoxes.forEach(box => {
+    const val = box.querySelector(".profile-stat-value")?.textContent || "";
+    const label = box.querySelector(".profile-stat-label")?.textContent || "";
+    stats.push({ val, label });
+  });
+
+  // Season table
+  const seasonTable = content.querySelector(".profile-season-table");
+  const headers = [];
+  const rows = [];
+  if (seasonTable) {
+    seasonTable.querySelectorAll("thead th").forEach(th => headers.push(th.textContent));
+    seasonTable.querySelectorAll("tbody tr").forEach(tr => {
+      const cells = [];
+      tr.querySelectorAll("td").forEach(td => cells.push(td.textContent));
+      rows.push(cells);
+    });
+  }
+
+  const padX = 30, padY = 30;
+  const headerH = 80, statsBarH = 70;
+  const tableHeaderH = 28, tableRowH = 24;
+  const tableH = rows.length > 0 ? tableHeaderH + rows.length * tableRowH : 0;
+  const watermarkH = 40;
+  const W = 800;
+  const H = padY + headerH + statsBarH + 20 + tableH + watermarkH + padY;
+
+  const canvas = document.createElement("canvas");
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext("2d");
+
+  // Background
+  ctx.fillStyle = "#f7efe5";
+  ctx.fillRect(0, 0, W, H);
+
+  const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  const pColor = posColors[pos] || "#1a1a2e";
+
+  // Position badge
+  ctx.fillStyle = pColor;
+  ctx.fillRect(padX, padY, 50, 36);
+  ctx.strokeStyle = "#1a1a2e";
+  ctx.lineWidth = 2;
+  ctx.strokeRect(padX, padY, 50, 36);
+  ctx.fillStyle = "#fff";
+  ctx.font = "bold 16px sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText(pos, padX + 25, padY + 24);
+
+  // Name + meta
+  ctx.textAlign = "left";
+  ctx.fillStyle = "#1a1a2e";
+  ctx.font = "bold 28px sans-serif";
+  ctx.fillText(name, padX + 64, padY + 28);
+  ctx.fillStyle = "#8a8a9e";
+  ctx.font = "12px monospace";
+  ctx.fillText(meta, padX + 64, padY + 48);
+
+  // Stats bar
+  const sbY = padY + headerH;
+  const sbW = (W - padX * 2) / Math.max(stats.length, 1);
+  ctx.strokeStyle = "#1a1a2e";
+  ctx.lineWidth = 3;
+  ctx.strokeRect(padX, sbY, W - padX * 2, statsBarH);
+
+  for (let i = 0; i < stats.length; i++) {
+    const x = padX + i * sbW;
+    if (i > 0) {
+      ctx.strokeStyle = "#c5c5d0";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(x, sbY);
+      ctx.lineTo(x, sbY + statsBarH);
+      ctx.stroke();
+    }
+    ctx.fillStyle = "#1a1a2e";
+    ctx.font = "bold 22px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText(stats[i].val, x + sbW / 2, sbY + 32);
+    ctx.fillStyle = "#8a8a9e";
+    ctx.font = "10px monospace";
+    ctx.fillText(stats[i].label.toUpperCase(), x + sbW / 2, sbY + 52);
+  }
+
+  // Season table
+  if (rows.length > 0) {
+    const tY = sbY + statsBarH + 20;
+    const colW = (W - padX * 2) / headers.length;
+
+    ctx.fillStyle = "#e5d5c3";
+    ctx.fillRect(padX, tY, W - padX * 2, tableHeaderH);
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 3;
+    ctx.strokeRect(padX, tY, W - padX * 2, tableHeaderH);
+
+    ctx.fillStyle = "#1a1a2e";
+    ctx.font = "bold 10px monospace";
+    for (let i = 0; i < headers.length; i++) {
+      ctx.textAlign = i === 0 ? "left" : "right";
+      const x = i === 0 ? padX + 8 : padX + (i + 1) * colW - 8;
+      ctx.fillText(headers[i], x, tY + 18);
+    }
+
+    for (let r = 0; r < rows.length; r++) {
+      const rY = tY + tableHeaderH + r * tableRowH;
+      const isCareer = r === rows.length - 1;
+      if (isCareer) {
+        ctx.fillStyle = "#e5d5c3";
+        ctx.fillRect(padX, rY, W - padX * 2, tableRowH);
+      }
+      ctx.strokeStyle = "#c5c5d0";
+      ctx.lineWidth = 0.5;
+      ctx.beginPath();
+      ctx.moveTo(padX, rY + tableRowH);
+      ctx.lineTo(W - padX, rY + tableRowH);
+      ctx.stroke();
+
+      ctx.fillStyle = "#1a1a2e";
+      ctx.font = isCareer ? "bold 11px monospace" : "11px monospace";
+      for (let c = 0; c < rows[r].length; c++) {
+        ctx.textAlign = c === 0 ? "left" : "right";
+        const x = c === 0 ? padX + 8 : padX + (c + 1) * colW - 8;
+        ctx.fillText(rows[r][c], x, rY + 16);
+      }
+    }
+
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 3;
+    ctx.strokeRect(padX, tY, W - padX * 2, tableHeaderH + rows.length * tableRowH);
+  }
+
+  // Watermark
+  const wmY = H - watermarkH / 2;
+  ctx.font = "bold 16px sans-serif";
+  ctx.fillStyle = "#1a1a2e";
+  ctx.globalAlpha = 0.3;
+  ctx.textAlign = "center";
+  ctx.fillText("built different — razzle.lol", W / 2, wmY);
+  ctx.globalAlpha = 1.0;
+
+  const safeName = name.replace(/[^a-zA-Z0-9]/g, "-").toLowerCase();
+  const link = document.createElement("a");
+  link.download = `razzle-profile-${safeName}.png`;
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+}
