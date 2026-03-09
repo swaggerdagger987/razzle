@@ -9,7 +9,7 @@
 | # | Task | Status | Notes |
 |---|------|--------|-------|
 | 1 | Positional heat map visualization | DONE | Heat Map tab in chart panel. Position selector (QB/RB/WR/TE), 5 stat presets (PPR Core, Passing, Rushing, Receiving, Efficiency), configurable top 15/20/30. Canvas-rendered grid with percentile-colored cells (red→yellow→green). Player names + team badges on Y-axis, rotated stat headers on X-axis. Razzle design: chunky borders, sand bg, Luckiest Guy/Space Mono/Caveat fonts, watermark. Horizontal scroll on mobile. |
-| 2 | Heat map PNG export | PENDING | |
+| 2 | Heat map PNG export | DONE | "Export PNG" button visible only in heat map tab. Downloads canvas as razzle-heatmap-{position}.png. Watermark already baked into canvas render. |
 | 3 | Breakout detection badges | PENDING | |
 | 4 | Deploy + smoke test | PENDING | |
 

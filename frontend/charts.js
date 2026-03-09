@@ -22,14 +22,17 @@ function switchChartTab(tab) {
 
   // Heat map needs natural canvas size (scrollable); others scale to fit
   const canvas = document.getElementById("chartCanvas");
+  const exportBtn = document.getElementById("chartExportBtn");
   if (tab === "heatmap") {
     canvas.style.width = "";
     canvas.style.minWidth = "700px";
+    if (exportBtn) exportBtn.style.display = "";
   } else {
     canvas.style.width = "100%";
     canvas.style.minWidth = "";
     canvas.width = 760;
     canvas.height = 460;
+    if (exportBtn) exportBtn.style.display = "none";
   }
 
   renderChartConfig();
@@ -523,6 +526,17 @@ function _drawTrendLine(ctx, W, H, pad, vals, labels, playerName, statKey, subti
   ctx.fillStyle = "#1a1a2e";
   ctx.textAlign = "left";
   ctx.fillText(`${playerName} — ${statLabel} ${subtitle}`, pad.left, 20);
+}
+
+// ─── Chart PNG export ────────────────────────────────────────────
+function exportChartPNG() {
+  const canvas = document.getElementById("chartCanvas");
+  if (!canvas) return;
+  const pos = document.getElementById("heatmapPos")?.value || "heatmap";
+  const link = document.createElement("a");
+  link.download = `razzle-heatmap-${pos.toLowerCase()}.png`;
+  link.href = canvas.toDataURL("image/png");
+  link.click();
 }
 
 // ─── Heat map ───────────────────────────────────────────────────

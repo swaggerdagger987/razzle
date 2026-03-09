@@ -905,7 +905,8 @@
       <canvas id="chartCanvas" width="760" height="460" style="border:2px solid var(--ink); border-radius:8px; background:var(--bg); width:100%;"></canvas>
     </div>
 
-    <div style="margin-top:12px; display:flex; justify-content:flex-end;">
+    <div style="margin-top:12px; display:flex; justify-content:flex-end; gap:8px;">
+      <button class="btn-primary" id="chartExportBtn" onclick="exportChartPNG()" style="display:none;">Export PNG</button>
       <button class="btn-chunky" onclick="closeChartPanel()">Close</button>
     </div>
   </div>
