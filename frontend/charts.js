@@ -54,6 +54,8 @@ function renderChartConfig() {
         <span style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; color:var(--ink-light);">Players:</span>
         <select class="select-chunky" id="radarPlayer1" onchange="drawChart()">${playerOptions}</select>
         <select class="select-chunky" id="radarPlayer2" onchange="drawChart()"><option value="">— compare —</option>${playerOptions}</select>
+        <select class="select-chunky" id="radarPlayer3" onchange="drawChart()"><option value="">— player 3 —</option>${playerOptions}</select>
+        <select class="select-chunky" id="radarPlayer4" onchange="drawChart()"><option value="">— player 4 —</option>${playerOptions}</select>
       </div>
       <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;">
         <span style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; color:var(--ink-light);">Stats (5-6):</span>
@@ -63,11 +65,14 @@ function renderChartConfig() {
       </div>`;
   } else if (currentChartTab === "scatter") {
     container.innerHTML = `
-      <div style="display:flex; gap:8px; align-items:center;">
+      <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
         <span style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; color:var(--ink-light);">X:</span>
         <select class="select-chunky" id="scatterX" onchange="drawChart()">${statOptions.replace('value="targets"', 'value="targets" selected')}</select>
         <span style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; color:var(--ink-light);">Y:</span>
         <select class="select-chunky" id="scatterY" onchange="drawChart()">${statOptions.replace('value="receiving_yards"', 'value="receiving_yards" selected')}</select>
+        <label style="display:flex; align-items:center; gap:4px; font-family:var(--font-mono); font-size:11px; cursor:pointer;">
+          <input type="checkbox" id="scatterTrend" onchange="drawChart()" style="accent-color:var(--orange); width:14px; height:14px;"> Trend line
+        </label>
       </div>`;
   } else if (currentChartTab === "heatmap") {
     const heatmapPresets = {
@@ -153,17 +158,15 @@ function drawRadar() {
   const n = stats.length;
   const angleStep = (2 * Math.PI) / n;
 
-  // Get players
-  const p1Id = document.getElementById("radarPlayer1")?.value;
-  const p2Id = document.getElementById("radarPlayer2")?.value;
+  // Get players (up to 4)
   const players = [];
-  if (p1Id) {
-    const p = state.items.find(i => i.player_id === p1Id);
-    if (p) players.push(p);
-  }
-  if (p2Id) {
-    const p = state.items.find(i => i.player_id === p2Id);
-    if (p) players.push(p);
+  for (let pi = 1; pi <= 4; pi++) {
+    const sel = document.getElementById(`radarPlayer${pi}`);
+    const pId = sel?.value;
+    if (pId) {
+      const p = state.items.find(i => i.player_id === pId);
+      if (p) players.push(p);
+    }
   }
 
   // Find max values for normalization
@@ -337,6 +340,40 @@ function drawScatter() {
     ctx.strokeStyle = "#1a1a2e";
     ctx.lineWidth = 1.5;
     ctx.stroke();
+  }
+
+  // Trend / regression line
+  const showTrend = document.getElementById("scatterTrend")?.checked;
+  if (showTrend && data.length >= 3) {
+    const n = data.length;
+    const sumX = xVals.reduce((a, b) => a + b, 0);
+    const sumY = yVals.reduce((a, b) => a + b, 0);
+    const sumXY = data.reduce((a, p) => a + p[xKey] * p[yKey], 0);
+    const sumX2 = xVals.reduce((a, b) => a + b * b, 0);
+    const sumY2 = yVals.reduce((a, b) => a + b * b, 0);
+    const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+    const intercept = (sumY - slope * sumX) / n;
+    // R-squared
+    const ssRes = data.reduce((a, p) => { const pred = slope * p[xKey] + intercept; return a + (p[yKey] - pred) ** 2; }, 0);
+    const meanY = sumY / n;
+    const ssTot = yVals.reduce((a, v) => a + (v - meanY) ** 2, 0);
+    const r2 = ssTot > 0 ? 1 - ssRes / ssTot : 0;
+
+    // Draw line
+    ctx.beginPath();
+    ctx.moveTo(toX(xMin), toY(slope * xMin + intercept));
+    ctx.lineTo(toX(xMax), toY(slope * xMax + intercept));
+    ctx.strokeStyle = "#d97757";
+    ctx.lineWidth = 2;
+    ctx.setLineDash([6, 4]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // R² label
+    ctx.font = "bold 11px 'Space Mono', monospace";
+    ctx.fillStyle = "#d97757";
+    ctx.textAlign = "right";
+    ctx.fillText(`R\u00b2 = ${r2.toFixed(3)}`, W - pad.right - 5, pad.top + 16);
   }
 
   // Label selected/top players

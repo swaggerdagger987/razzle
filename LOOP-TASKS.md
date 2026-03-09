@@ -139,9 +139,9 @@
 - All follow Razzle design system
 **Depends on**: none
 **Size**: L
-**Status**: PENDING
-**Attempt**: 0/3
-**Result**:
+**Status**: PASS
+**Attempt**: 1/3
+**Result**: (a) Radar chart: added player 3 and player 4 dropdowns. Updated draw logic to loop 1-4 selectors. CHART_COLORS already has 5 entries for distinct colors. (b) Scatter chart: added "Trend line" checkbox. When checked, draws OLS linear regression line (dashed terracotta) with R-squared value in top-right corner. (c) Compare Players: button already existed in selection UI; added standalone "Compare" button in toolbar for discoverability. Modal already has searchable player selection (checkboxes in table), side-by-side stat table with green best-value highlighting, and mini radar chart. Compare radar already supports any number of players. All follow Razzle design. JS syntax passes.
 
 ## Task 10: DVS transparency + remove test formulas + color legend
 **Requirement**: "Three polish items: (a) DVS info icon with methodology popover. (b) Remove Yerrr and Testing dev formulas. (c) Add color legend for colored numbers in table."
@@ -183,9 +183,9 @@
 ## Loop State
 ```
 Current Phase: 29
-Current Task: 8
+Current Task: 9
 Current Stage: PASS
 Attempt: 1/3
-Tasks Completed: 8/12
-Loop Iterations: 8
+Tasks Completed: 9/12
+Loop Iterations: 9
 ```
