@@ -11,7 +11,7 @@
 | 1 | Backend trade value model + API endpoint | DONE | Production 50% + age curve 30% + scarcity 20%, 0-100 scale |
 | 2 | Trade Analyzer UI — two-sided card with player search | DONE | Trade button in toolbar, I Give/I Get sides, API search, position cards, verdict |
 | 3 | Value comparison display + verdict + commentary | DONE | Value bars, verdict badge (WIN/LOSS/FAIR), Razzle quips, live updates |
-| 4 | Trade card PNG export with watermark | | |
+| 4 | Trade card PNG export with watermark | DONE | 1200x630 canvas, both sides, verdict, watermark |
 | 5 | Deploy + smoke test | | |
 
 ### Decisions Log

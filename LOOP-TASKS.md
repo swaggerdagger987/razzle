@@ -20,14 +20,8 @@
 **Result**: Value bars with position-colored segments showing each side's total. Percentage diff displayed prominently ("+X% in your favor" / "-X% against you" / "Even value"). Verdict badge: WIN (green #2ec4b6), LOSS (red #e63946), FAIR (yellow #c5a000) — rotated sticker (-2deg) with 3px border + offset shadow. Razzle commentary quips in Caveat font, randomized per verdict. Updates live on every add/remove. FAIR color updated from orange to yellow per spec.
 
 ## Task 4: Trade card PNG export with watermark
-**Status**: PENDING
-**Acceptance Criteria**:
-- "Export PNG" button renders trade card to canvas
-- 1200x630px output with sand background
-- Both sides rendered with player cards, value bars, verdict
-- Razzle watermark baked into bottom-right
-- Downloads as razzle-trade-{timestamp}.png
-- Reddit-ready aspect ratio
+**Status**: PASS
+**Result**: Export PNG button in verdict area. 1200x630 canvas with sand bg (#f7efe5), 4px ink border. Both sides rendered: I GIVE (red accent) / I GET (green accent) panels with position-colored player cards (badge, name, team, age, value). Segmented value bars, rotated verdict badge (WIN/LOSS/FAIR), percentage label, Razzle commentary quip in Caveat. Watermark "built different — razzle.lol" at 30% opacity bottom-right. Downloads as razzle-trade-{timestamp}.png.
 
 ## Task 5: Deploy + smoke test
 **Status**: PENDING
@@ -45,8 +39,8 @@
 ## Loop State
 ```
 Current Phase: 37
-Current Task: 4
+Current Task: 5
 Current Stage: PENDING
 Attempt: 1/3
-Tasks Completed: 3/5
+Tasks Completed: 4/5
 ```

@@ -6424,6 +6424,265 @@ function _taUpdateVerdict() {
   document.getElementById("taCommentary").innerHTML = '<div style="font-family:var(--font-hand); font-size:20px; color:var(--ink-light); margin-top:10px; font-style:italic;">' + quip + '</div>';
 }
 
+// ─── Trade Analyzer PNG Export ───────────────────────────────────────
+
+function exportTradeAnalyzerPNG() {
+  if (!_taState.give.length || !_taState.get.length) return;
+
+  const W = 1200, H = 630;
+  const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  const canvas = document.createElement("canvas");
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext("2d");
+
+  // Background
+  ctx.fillStyle = "#f7efe5";
+  ctx.fillRect(0, 0, W, H);
+
+  // Border
+  ctx.strokeStyle = "#1a1a2e";
+  ctx.lineWidth = 4;
+  ctx.strokeRect(4, 4, W - 8, H - 8);
+
+  // Title
+  ctx.font = "bold 28px sans-serif";
+  ctx.fillStyle = "#1a1a2e";
+  ctx.textAlign = "center";
+  ctx.fillText("Razzle Trade Analyzer", W / 2, 44);
+
+  // Subtitle
+  ctx.font = "20px 'Caveat', cursive";
+  ctx.fillStyle = "rgba(26,26,46,0.5)";
+  ctx.fillText("check the math on that deal", W / 2, 68);
+
+  const sideW = 460;
+  const giveX = 40;
+  const getX = W - 40 - sideW;
+  const topY = 90;
+
+  // Draw a side panel
+  function drawSide(x, label, labelBg, labelBorder, players) {
+    // Card background
+    ctx.fillStyle = "#ede0cf";
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.roundRect(x, topY, sideW, 380, 8);
+    ctx.fill();
+    ctx.stroke();
+    // Shadow
+    ctx.fillStyle = "#1a1a2e";
+    ctx.fillRect(x + 4, topY + 4 + 380, sideW, 4);
+    ctx.fillRect(x + sideW, topY + 4, 4, 380);
+
+    // Label badge
+    ctx.fillStyle = labelBg;
+    ctx.strokeStyle = labelBorder;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.roundRect(x + 16, topY + 12, 80, 28, 4);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = "#1a1a2e";
+    ctx.font = "bold 13px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText(label, x + 56, topY + 30);
+
+    // Total
+    const total = players.reduce((s, p) => s + (p.trade_value || 0), 0);
+    ctx.font = "bold 18px monospace";
+    ctx.fillStyle = "#1a1a2e";
+    ctx.textAlign = "right";
+    ctx.fillText(String(total), x + sideW - 16, topY + 32);
+
+    // Player cards
+    const cardY = topY + 52;
+    const cardH = 44;
+    for (let i = 0; i < Math.min(players.length, 7); i++) {
+      const p = players[i];
+      const pc = posColors[p.position] || "#8a8a9e";
+      const cy = cardY + i * (cardH + 4);
+
+      // Row bg
+      if (i % 2 === 0) {
+        ctx.fillStyle = "rgba(247,239,229,0.8)";
+        ctx.fillRect(x + 12, cy, sideW - 24, cardH);
+      }
+
+      // Position badge
+      ctx.fillStyle = pc;
+      ctx.beginPath();
+      ctx.roundRect(x + 18, cy + 10, 36, 22, 3);
+      ctx.fill();
+      ctx.strokeStyle = "#1a1a2e";
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+      ctx.fillStyle = "#fff";
+      ctx.font = "bold 10px sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText(p.position, x + 36, cy + 25);
+
+      // Name
+      ctx.textAlign = "left";
+      ctx.fillStyle = "#1a1a2e";
+      ctx.font = "bold 14px sans-serif";
+      ctx.fillText(p.full_name || "", x + 62, cy + 22);
+
+      // Team + age
+      ctx.fillStyle = "#8a8a9e";
+      ctx.font = "11px monospace";
+      ctx.fillText((p.team || "FA") + (p.age ? " · " + p.age : ""), x + 62, cy + 37);
+
+      // Value
+      ctx.fillStyle = pc;
+      ctx.font = "bold 18px monospace";
+      ctx.textAlign = "right";
+      ctx.fillText(String(p.trade_value || 0), x + sideW - 20, cy + 28);
+    }
+    if (players.length > 7) {
+      ctx.font = "14px 'Caveat', cursive";
+      ctx.fillStyle = "#8a8a9e";
+      ctx.textAlign = "center";
+      ctx.fillText("+" + (players.length - 7) + " more", x + sideW / 2, cardY + 7 * (cardH + 4) + 16);
+    }
+  }
+
+  drawSide(giveX, "I GIVE", "#f2d5d8", "#e63946", _taState.give);
+  drawSide(getX, "I GET", "#d9efec", "#2ec4b6", _taState.get);
+
+  // VS divider
+  ctx.save();
+  ctx.fillStyle = "#1a1a2e";
+  ctx.font = "bold 22px sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText("VS", W / 2, topY + 200);
+  ctx.restore();
+
+  // Value bars at bottom
+  const barY = 490;
+  const giveTotal = _taState.give.reduce((s, p) => s + (p.trade_value || 0), 0);
+  const getTotal = _taState.get.reduce((s, p) => s + (p.trade_value || 0), 0);
+  const maxVal = Math.max(giveTotal, getTotal, 1);
+
+  // Give bar
+  ctx.fillStyle = "#ede0cf";
+  ctx.strokeStyle = "#1a1a2e";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.roundRect(giveX, barY, sideW, 18, 4);
+  ctx.fill();
+  ctx.stroke();
+  let bx = giveX;
+  for (const p of _taState.give) {
+    const pc = posColors[p.position] || "#8a8a9e";
+    const w = ((p.trade_value || 0) / maxVal) * sideW;
+    ctx.fillStyle = pc;
+    ctx.fillRect(bx, barY, w, 18);
+    bx += w;
+  }
+
+  // Get bar
+  ctx.fillStyle = "#ede0cf";
+  ctx.beginPath();
+  ctx.roundRect(getX, barY, sideW, 18, 4);
+  ctx.fill();
+  ctx.stroke();
+  bx = getX;
+  for (const p of _taState.get) {
+    const pc = posColors[p.position] || "#8a8a9e";
+    const w = ((p.trade_value || 0) / maxVal) * sideW;
+    ctx.fillStyle = pc;
+    ctx.fillRect(bx, barY, w, 18);
+    bx += w;
+  }
+
+  // Bar labels
+  ctx.font = "bold 13px monospace";
+  ctx.fillStyle = "#1a1a2e";
+  ctx.textAlign = "right";
+  ctx.fillText(String(giveTotal), giveX + sideW, barY - 6);
+  ctx.fillText(String(getTotal), getX + sideW, barY - 6);
+  ctx.font = "bold 11px sans-serif";
+  ctx.textAlign = "left";
+  ctx.fillText("GIVE", giveX, barY - 6);
+  ctx.fillText("GET", getX, barY - 6);
+
+  // Verdict badge
+  const diff = getTotal - giveTotal;
+  const avg = (giveTotal + getTotal) / 2;
+  const pctDiff = avg > 0 ? Math.round(Math.abs(diff) / avg * 100) : 0;
+  let verdict, verdictColor, verdictBg;
+  if (pctDiff <= 10) {
+    verdict = "FAIR";
+    verdictColor = "#c5a000";
+    verdictBg = "#f5eacc";
+  } else if (diff > 0) {
+    verdict = "WIN";
+    verdictColor = "#2ec4b6";
+    verdictBg = "#d9efec";
+  } else {
+    verdict = "LOSS";
+    verdictColor = "#e63946";
+    verdictBg = "#f2d5d8";
+  }
+
+  ctx.save();
+  ctx.translate(W / 2, barY + 8);
+  ctx.rotate(-0.04);
+  const bw = 80, bh = 32;
+  ctx.fillStyle = verdictBg;
+  ctx.strokeStyle = verdictColor;
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.roundRect(-bw / 2, -bh / 2, bw, bh, 6);
+  ctx.fill();
+  ctx.stroke();
+  // Shadow
+  ctx.fillStyle = "#1a1a2e";
+  ctx.globalAlpha = 0.3;
+  ctx.fillRect(-bw / 2 + 3, -bh / 2 + 3 + bh, bw, 3);
+  ctx.globalAlpha = 1.0;
+  ctx.fillStyle = verdictColor;
+  ctx.font = "bold 18px sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText(verdict, 0, 7);
+  ctx.restore();
+
+  // Pct label
+  const pctLabel = pctDiff <= 10 ? "Even value" : (diff > 0 ? "+" + pctDiff + "% in your favor" : "-" + pctDiff + "% against you");
+  ctx.font = "13px monospace";
+  ctx.fillStyle = "#4a4a5e";
+  ctx.textAlign = "center";
+  ctx.fillText(pctLabel, W / 2, 540);
+
+  // Commentary
+  const quips = {
+    WIN: ["take that and run before they notice", "robbery in broad daylight", "smash accept before they check the numbers"],
+    LOSS: ["you're giving up the ranch on this one", "might want to sleep on this one, chief", "the math is not in your favor"],
+    FAIR: ["both sides can feel good about this one", "clean deal, no drama", "perfectly balanced, as all things should be"]
+  };
+  const pool = quips[verdict] || quips.FAIR;
+  const quip = pool[Math.floor(Math.random() * pool.length)];
+  ctx.font = "20px 'Caveat', cursive";
+  ctx.fillStyle = "rgba(26,26,46,0.5)";
+  ctx.textAlign = "center";
+  ctx.fillText(quip, W / 2, 565);
+
+  // Watermark
+  ctx.font = "bold 14px sans-serif";
+  ctx.fillStyle = "#1a1a2e";
+  ctx.globalAlpha = 0.3;
+  ctx.textAlign = "right";
+  ctx.fillText("built different — razzle.lol", W - 20, H - 16);
+  ctx.globalAlpha = 1.0;
+
+  const link = document.createElement("a");
+  link.download = "razzle-trade-" + Date.now() + ".png";
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+}
+
 // Initialize trade analyzer search inputs
 (function initTradeAnalyzer() {
   _taSetupSearch("give");
