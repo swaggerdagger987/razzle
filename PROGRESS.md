@@ -1,6 +1,19 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 14 — Composite Prospect Scoring + Big Board (COMPLETE)
+## Current Phase: Phase 15 — Unified Prospect Report Cards (COMPLETE)
+
+**Exit criterion MET:** Click any prospect name in Lab → profile card shows RPS score bar with tier badge (Elite/Premium/Solid/Flier), component breakdown (Athletic 60% / Draft Cap 30% / Size 10%), athletic percentile bars, spider chart, NFL athletic comps with comp-based stat projections (weighted average of comp NFL careers by similarity), confidence indicator. Enhanced PNG export captures full report card with all sections. Follows Razzle design system. Deployed to Render.
+
+### Phase 15 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | RPS score + tier badge in prospect profile | DONE | Client-side RPS computation from profile percentiles (same formula as backend). RPS score bar colored by tier, rotated tier sticker badge, component breakdown boxes (Athletic/Draft Cap/Size) with dashed borders. Chunky 3px card border with offset shadow. |
+| 2 | Comp-based stat projections | DONE | computeCompProjection() computes weighted average of comp NFL careers by similarity %. Position-specific stats (QB: pass, RB: rush+rec, WR/TE: rec). Confidence indicator based on average comp similarity. Caveat annotation. Only shows when comps have NFL data. |
+| 3 | Enhanced prospect report card PNG export | DONE | Canvas-rendered export now includes: header, measurables, RPS section (score bar + tier badge + component breakdown), athletic testing bars, spider chart, comp cards (similarity badge + name + stats), projection boxes. Portrait layout (800px wide). Razzle watermark baked in. |
+| 4 | Deploy + smoke test | DONE | All JS passes syntax check. Python imports clean. All HTML pages + assets present. render.yaml correct. Pushed to master for Render auto-deploy. |
+
+## Previous Phase: Phase 14 — Composite Prospect Scoring + Big Board (COMPLETE)
 
 **Exit criterion MET:** Lab prospect mode has "Big Board" button that opens visual ranked board scored by Razzle Prospect Score (RPS). RPS = weighted composite of avg athletic percentile (60%) + draft capital value (30%) + position-relative size score (10%). Big Board shows ranked prospects with position filter tabs (ALL/QB/RB/WR/TE), tier bands (Elite 85+/Premium 70-85/Solid 55-70/Flier <55) with rotated sticker badges, ranked prospect cards with RPS score bars, key combine metrics, draft info. Exportable as PNG with Razzle watermark. 329 total prospects scored for 2025 draft class. Follows Razzle design system. Deployed to Render.
 
@@ -407,3 +420,4 @@ _None currently._
 | 2026-03-09 | Prospect cards as Phase 12 | Clickable prospect profiles with athletic percentile bars and spider charts are THE draft week content for r/DynastyFF and r/NFL_Draft. Combine percentiles within position group give instant context (is 4.50 fast for a WR?). Spider charts create a unique visual fingerprint per prospect — highly screenshottable. Uses existing nflverse combine data, no CFBD API key needed. |
 | 2026-03-09 | Athletic comps + tier view as Phase 13 | "Who is this prospect's NFL athletic comp?" is THE question dynasty managers ask during draft week. Euclidean distance on percentile-normalized combine metrics finds historical matches. Tier view groups a whole position's draft class by athletic profile — creates screenshottable tier lists for Reddit. Prospect comparison mode enables side-by-side analysis. All three features use existing nflverse data, creating maximum content from available data. |
 | 2026-03-09 | Composite prospect scoring as Phase 14 | Razzle Prospect Score (RPS) creates a single "how good is this prospect" number combining athletic percentile (60%), draft capital (30%), and size (10%). Big Board ranked list is THE draft-week content for dynasty Reddit — "Razzle's 2025 WR Big Board" with tier bands is an instant screenshottable PNG. CFBD college production stats blocked (no API key), so RPS maximizes value from available combine+draft data. |
+| 2026-03-09 | Unified prospect report cards as Phase 15 | Prospect profile cards were missing RPS score and comp-based projections — data was spread across Big Board and profile. Consolidating everything (RPS + tier badge + percentile bars + spider chart + comps + projections) into one view creates THE definitive shareable prospect card for Reddit. One click, one card, one PNG. Client-side RPS computation avoids extra API call. Comp-based projections use weighted similarity averages of comp NFL careers. |

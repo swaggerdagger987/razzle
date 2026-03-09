@@ -1645,6 +1645,27 @@ function renderProspectProfile(data, container, compsData) {
     html += `</div>`;
   }
 
+  // RPS Score + Tier Badge (computed client-side from profile data)
+  const rpsData = computeProspectRPS(prospect, percentiles);
+  if (rpsData) {
+    const tier = getRPSTierDef(rpsData.rps);
+    html += `<div class="prospect-rps-section">`;
+    html += `<div class="prospect-rps-header">`;
+    html += `<div class="profile-section-title" style="margin-bottom:0;">Razzle Prospect Score</div>`;
+    html += `<div class="tier-badge" style="background:${tier.color}; transform:rotate(-3deg); margin-left:10px;">${tier.label}</div>`;
+    html += `</div>`;
+    html += `<div class="prospect-rps-score-row">`;
+    html += `<div class="prospect-rps-big">${rpsData.rps.toFixed(1)}</div>`;
+    html += `<div class="prospect-rps-bar-wrap"><div class="prospect-rps-bar-fill" style="width:${Math.min(100, rpsData.rps)}%; background:${tier.color};"></div></div>`;
+    html += `</div>`;
+    html += `<div class="prospect-rps-breakdown">`;
+    html += `<div class="prospect-rps-component"><span class="prospect-rps-comp-val">${rpsData.athleticAvg != null ? Math.round(rpsData.athleticAvg) : "—"}</span><span class="prospect-rps-comp-label">Athletic (60%)</span></div>`;
+    html += `<div class="prospect-rps-component"><span class="prospect-rps-comp-val">${Math.round(rpsData.draftCapital)}</span><span class="prospect-rps-comp-label">Draft Cap (30%)</span></div>`;
+    html += `<div class="prospect-rps-component"><span class="prospect-rps-comp-val">${Math.round(rpsData.sizeScore)}</span><span class="prospect-rps-comp-label">Size (10%)</span></div>`;
+    html += `</div>`;
+    html += `</div>`;
+  }
+
   // Athletic testing with percentile bars
   const combineMetrics = [
     { key: "forty", label: "40-Yard Dash", fmt: v => v ? v.toFixed(2) + "s" : null, unit: "s" },
@@ -1768,6 +1789,29 @@ function renderProspectProfile(data, container, compsData) {
     }
 
     html += `</div>`;
+  }
+
+  // Comp-based stat projections (weighted average of comp NFL careers)
+  const compProjection = computeCompProjection(comps, pos);
+  if (compProjection) {
+    html += `<div class="profile-section-title">Comp-Based Projection</div>`;
+    html += `<div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); margin:-6px 0 12px 0;">based on athletic comp averages — not a guarantee</div>`;
+    html += `<div class="prospect-projection-grid">`;
+    for (const stat of compProjection.stats) {
+      html += `<div class="prospect-proj-box">`;
+      html += `<div class="prospect-proj-val">${stat.value}</div>`;
+      html += `<div class="prospect-proj-label">${stat.label}</div>`;
+      html += `</div>`;
+    }
+    html += `</div>`;
+    if (compProjection.confidence) {
+      const confColor = compProjection.confidence >= 75 ? "#22a06b" : compProjection.confidence >= 50 ? "#ffc857" : "#e87422";
+      html += `<div class="prospect-proj-confidence">`;
+      html += `<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">Comp confidence:</span> `;
+      html += `<span style="font-family:var(--font-display); font-size:14px; font-weight:700; color:${confColor};">${Math.round(compProjection.confidence)}%</span>`;
+      html += `<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); margin-left:8px;">(${compProjection.compCount} comps with NFL data)</span>`;
+      html += `</div>`;
+    }
   }
 
   container.innerHTML = html;
@@ -1907,8 +1951,8 @@ function drawProspectSpider(prospect, percentiles, metrics) {
 function exportProspectImage() {
   const content = document.getElementById("profileContent");
   if (!content) return;
-  const prospect = content.querySelector(".profile-name");
-  const name = prospect ? prospect.textContent : "prospect";
+  const prospectEl = content.querySelector(".profile-name");
+  const name = prospectEl ? prospectEl.textContent : "prospect";
 
   // Create canvas for export
   const canvas = document.createElement("canvas");
@@ -1917,15 +1961,21 @@ function exportProspectImage() {
   const padY = 30;
 
   // Gather info from DOM
-  const header = content.querySelector(".profile-header");
   const statsBar = content.querySelector(".profile-stats-bar");
+  const rpsSection = content.querySelector(".prospect-rps-section");
   const combineGrid = content.querySelector(".prospect-combine-grid");
   const spiderCanvas = document.getElementById("prospectSpiderCanvas");
+  const compsGrid = content.querySelector(".prospect-comps-grid");
+  const projGrid = content.querySelector(".prospect-projection-grid");
 
+  // Calculate height
   let H = padY * 2 + 80; // header
   if (statsBar) H += 80;
+  if (rpsSection) H += 120;
   if (combineGrid) H += combineGrid.children.length * 36 + 50;
   if (spiderCanvas) H += 380;
+  if (compsGrid) H += compsGrid.children.length * 56 + 50;
+  if (projGrid) H += 100;
   H += 40; // watermark
 
   canvas.width = W;
@@ -1972,6 +2022,78 @@ function exportProspectImage() {
       ctx.fillText(lbl, bx + boxW / 2, y + 42);
     });
     y += 60;
+  }
+
+  // RPS Score section
+  if (rpsSection) {
+    const rpsVal = rpsSection.querySelector(".prospect-rps-big")?.textContent || "";
+    const tierBadge = rpsSection.querySelector(".tier-badge");
+    const tierLabel = tierBadge?.textContent || "";
+    const tierColor = tierBadge?.style.background || "#ffc857";
+    const compBoxes = rpsSection.querySelectorAll(".prospect-rps-component");
+
+    // Section border
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 3;
+    ctx.strokeRect(padX, y, W - padX * 2, 100);
+    ctx.fillStyle = "#f7efe5";
+    ctx.fillRect(padX + 1, y + 1, W - padX * 2 - 2, 98);
+
+    // Title
+    ctx.font = "bold 13px sans-serif";
+    ctx.fillStyle = "#1a1a2e";
+    ctx.textAlign = "left";
+    ctx.fillText("Razzle Prospect Score", padX + 14, y + 22);
+
+    // Tier badge
+    ctx.save();
+    ctx.translate(padX + 210, y + 16);
+    ctx.rotate(-3 * Math.PI / 180);
+    ctx.fillStyle = tierColor;
+    const badgeW = ctx.measureText(tierLabel).width + 16;
+    ctx.fillRect(-badgeW / 2, -10, badgeW, 20);
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(-badgeW / 2, -10, badgeW, 20);
+    ctx.font = "bold 11px sans-serif";
+    ctx.fillStyle = "white";
+    ctx.textAlign = "center";
+    ctx.fillText(tierLabel.toUpperCase(), 0, 4);
+    ctx.restore();
+
+    // RPS big number
+    ctx.font = "bold 36px sans-serif";
+    ctx.fillStyle = "#1a1a2e";
+    ctx.textAlign = "left";
+    ctx.fillText(rpsVal, padX + 14, y + 68);
+
+    // RPS bar
+    const rpsNum = parseFloat(rpsVal) || 0;
+    const barX = padX + 80;
+    const barW = W - padX * 2 - 100;
+    ctx.fillStyle = "rgba(26,26,46,0.06)";
+    ctx.fillRect(barX, y + 48, barW, 14);
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(barX, y + 48, barW, 14);
+    ctx.fillStyle = tierColor;
+    ctx.fillRect(barX + 1, y + 49, (Math.min(100, rpsNum) / 100) * (barW - 2), 12);
+
+    // Component breakdown
+    compBoxes.forEach((box, i) => {
+      const cVal = box.querySelector(".prospect-rps-comp-val")?.textContent || "";
+      const cLbl = box.querySelector(".prospect-rps-comp-label")?.textContent || "";
+      const bx = padX + 14 + i * 140;
+      ctx.font = "bold 14px sans-serif";
+      ctx.fillStyle = "#1a1a2e";
+      ctx.textAlign = "left";
+      ctx.fillText(cVal, bx, y + 90);
+      ctx.font = "10px sans-serif";
+      ctx.fillStyle = "#8a8a9e";
+      ctx.fillText(cLbl, bx + 30, y + 90);
+    });
+
+    y += 110;
   }
 
   // Combine metrics with bars
@@ -2022,6 +2144,91 @@ function exportProspectImage() {
   if (spiderCanvas) {
     ctx.drawImage(spiderCanvas, (W - 400) / 2, y, 400, 360);
     y += 370;
+  }
+
+  // Athletic comps
+  if (compsGrid) {
+    ctx.font = "bold 13px sans-serif";
+    ctx.fillStyle = "#1a1a2e";
+    ctx.textAlign = "left";
+    ctx.fillText("NFL Athletic Comps", padX + 8, y + 16);
+    y += 30;
+
+    const cards = compsGrid.querySelectorAll(".prospect-comp-card");
+    cards.forEach(card => {
+      const simEl = card.querySelector(".prospect-comp-sim");
+      const simText = simEl?.textContent || "";
+      const simBg = simEl?.style.background || "#2ec4b6";
+      const compName = card.querySelector(".prospect-comp-name")?.textContent || "";
+      const compMeta = card.querySelector(".prospect-comp-meta")?.textContent || "";
+      const compStats = card.querySelector(".prospect-comp-stats")?.textContent || "";
+
+      // Card background
+      ctx.fillStyle = "#f7efe5";
+      ctx.fillRect(padX, y, W - padX * 2, 44);
+      ctx.strokeStyle = "#1a1a2e";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(padX, y, W - padX * 2, 44);
+
+      // Similarity badge
+      ctx.fillStyle = simBg;
+      ctx.fillRect(padX + 8, y + 8, 44, 28);
+      ctx.strokeRect(padX + 8, y + 8, 44, 28);
+      ctx.font = "bold 14px sans-serif";
+      ctx.fillStyle = "white";
+      ctx.textAlign = "center";
+      ctx.fillText(simText, padX + 30, y + 27);
+
+      // Comp info
+      ctx.textAlign = "left";
+      ctx.font = "bold 14px sans-serif";
+      ctx.fillStyle = "#1a1a2e";
+      ctx.fillText(compName, padX + 62, y + 20);
+      ctx.font = "10px monospace";
+      ctx.fillStyle = "#8a8a9e";
+      ctx.fillText(compMeta, padX + 62, y + 34);
+
+      // Stats on right
+      ctx.font = "10px monospace";
+      ctx.fillStyle = "#4a4a5e";
+      ctx.textAlign = "right";
+      ctx.fillText(compStats, W - padX - 8, y + 27);
+
+      y += 50;
+    });
+    y += 10;
+  }
+
+  // Comp-based projections
+  if (projGrid) {
+    ctx.font = "bold 13px sans-serif";
+    ctx.fillStyle = "#1a1a2e";
+    ctx.textAlign = "left";
+    ctx.fillText("Comp-Based Projection", padX + 8, y + 16);
+    y += 28;
+
+    const boxes = projGrid.querySelectorAll(".prospect-proj-box");
+    const boxW = Math.min(100, (W - padX * 2 - 10 * boxes.length) / boxes.length);
+    boxes.forEach((box, i) => {
+      const val = box.querySelector(".prospect-proj-val")?.textContent || "";
+      const lbl = box.querySelector(".prospect-proj-label")?.textContent || "";
+      const bx = padX + i * (boxW + 10);
+
+      ctx.fillStyle = "#f7efe5";
+      ctx.fillRect(bx, y, boxW, 50);
+      ctx.strokeStyle = "#1a1a2e";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(bx, y, boxW, 50);
+
+      ctx.font = "bold 16px sans-serif";
+      ctx.fillStyle = "#1a1a2e";
+      ctx.textAlign = "center";
+      ctx.fillText(val, bx + boxW / 2, y + 22);
+      ctx.font = "9px sans-serif";
+      ctx.fillStyle = "#8a8a9e";
+      ctx.fillText(lbl, bx + boxW / 2, y + 40);
+    });
+    y += 60;
   }
 
   // Watermark
@@ -2322,6 +2529,91 @@ async function loadBigBoard(position) {
   } catch (err) {
     contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the big board... ${err.message}</div>`;
   }
+}
+
+function computeProspectRPS(prospect, percentiles) {
+  // Same formula as backend: athletic 60% + draft capital 30% + size 10%
+  const metricKeys = ["forty", "bench", "vertical", "broad_jump", "cone", "shuttle"];
+  const pcts = metricKeys.map(k => percentiles[k]).filter(v => v != null);
+  const athleticAvg = pcts.length > 0 ? pcts.reduce((a, b) => a + b, 0) / pcts.length : null;
+
+  // Draft capital score
+  const pk = prospect.draft_pick;
+  const rd = prospect.draft_round;
+  let draftCapital = 20; // undrafted default
+  if (rd && pk) {
+    draftCapital = Math.min(100, Math.max(20, 100 - (pk - 1) * 0.314));
+  }
+
+  // Size score (weight percentile) — use weight percentile from profile data if available
+  const sizeScore = percentiles.weight != null ? Math.min(100, percentiles.weight) : 50;
+
+  // RPS composite
+  let rps;
+  if (athleticAvg != null) {
+    rps = athleticAvg * 0.6 + draftCapital * 0.3 + sizeScore * 0.1;
+  } else {
+    rps = draftCapital * 0.5 + sizeScore * 0.2;
+  }
+
+  return { rps: Math.round(rps * 10) / 10, athleticAvg, draftCapital: Math.round(draftCapital * 10) / 10, sizeScore: Math.round(sizeScore * 10) / 10 };
+}
+
+function computeCompProjection(comps, pos) {
+  // Weighted average of comp NFL careers, weighted by similarity %
+  if (!comps || comps.length === 0) return null;
+
+  const nflComps = comps.filter(c => c.nfl_games && c.nfl_games > 0);
+  if (nflComps.length === 0) return null;
+
+  // Compute weighted averages
+  let totalWeight = 0;
+  const sums = { games: 0, career_av: 0, pass_yards: 0, pass_tds: 0, rush_yards: 0, rush_tds: 0, rec_yards: 0, rec_tds: 0, receptions: 0 };
+
+  for (const c of nflComps) {
+    const w = (c.similarity || 50) / 100;
+    totalWeight += w;
+    sums.games += (c.nfl_games || 0) * w;
+    sums.career_av += (c.career_av || 0) * w;
+    sums.pass_yards += (c.nfl_pass_yards || 0) * w;
+    sums.pass_tds += (c.nfl_pass_tds || 0) * w;
+    sums.rush_yards += (c.nfl_rush_yards || 0) * w;
+    sums.rush_tds += (c.nfl_rush_tds || 0) * w;
+    sums.rec_yards += (c.nfl_rec_yards || 0) * w;
+    sums.rec_tds += (c.nfl_rec_tds || 0) * w;
+    sums.receptions += (c.nfl_receptions || 0) * w;
+  }
+
+  if (totalWeight === 0) return null;
+
+  const avg = {};
+  for (const k in sums) avg[k] = Math.round(sums[k] / totalWeight);
+
+  // Build position-appropriate stat display
+  const stats = [];
+  stats.push({ label: "Games", value: avg.games.toLocaleString() });
+  if (avg.career_av) stats.push({ label: "Career AV", value: avg.career_av.toLocaleString() });
+
+  if (pos === "QB") {
+    if (avg.pass_yards) stats.push({ label: "Pass Yds", value: avg.pass_yards.toLocaleString() });
+    if (avg.pass_tds) stats.push({ label: "Pass TD", value: avg.pass_tds.toLocaleString() });
+    if (avg.rush_yards) stats.push({ label: "Rush Yds", value: avg.rush_yards.toLocaleString() });
+  } else if (pos === "RB") {
+    if (avg.rush_yards) stats.push({ label: "Rush Yds", value: avg.rush_yards.toLocaleString() });
+    if (avg.rush_tds) stats.push({ label: "Rush TD", value: avg.rush_tds.toLocaleString() });
+    if (avg.rec_yards) stats.push({ label: "Rec Yds", value: avg.rec_yards.toLocaleString() });
+    if (avg.receptions) stats.push({ label: "Receptions", value: avg.receptions.toLocaleString() });
+  } else {
+    // WR/TE
+    if (avg.rec_yards) stats.push({ label: "Rec Yds", value: avg.rec_yards.toLocaleString() });
+    if (avg.rec_tds) stats.push({ label: "Rec TD", value: avg.rec_tds.toLocaleString() });
+    if (avg.receptions) stats.push({ label: "Receptions", value: avg.receptions.toLocaleString() });
+  }
+
+  // Confidence = average similarity of comps with NFL data
+  const confidence = nflComps.reduce((s, c) => s + (c.similarity || 50), 0) / nflComps.length;
+
+  return { stats, confidence, compCount: nflComps.length };
 }
 
 function getRPSTierDef(rps) {
