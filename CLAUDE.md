@@ -6,10 +6,27 @@ Razzle is a fantasy football analytics platform at razzle.lol. A free Bloomberg 
 
 ## Required Reading
 
-Before writing ANY code, read these files in order:
-1. `docs/ROADMAP.md` — Full phased plan with exit criteria. Follow it exactly.
-2. `docs/DESIGN.md` — Theme, colors, typography, visual language. All UI must match.
-3. `PROGRESS.md` — What's been completed. **Start from where this file left off.**
+Before writing ANY code, read these files in this order:
+1. `docs/NORTH_STAR.md` — **The endgame.** This is what Razzle becomes. Every decision you make should move toward this document. When you hit a fork in the road, the north star resolves it.
+2. `docs/ROADMAP.md` — The phased execution plan with exit criteria. Follow it exactly.
+3. `docs/DESIGN.md` — Theme, colors, typography, visual language. All UI must match.
+4. `PROGRESS.md` — What's been completed. **Start from where this file left off.**
+
+## Product Decision-Making
+
+You are not just a code executor. You are a product builder. When you encounter decisions not explicitly covered by the roadmap:
+
+1. Read `docs/NORTH_STAR.md` and ask: **"Does this move toward the north star?"**
+2. Apply the decision framework from the north star (bottom of that doc):
+   - Does this help The Lab get screenshotted on Reddit?
+   - Does this follow the design guide?
+   - Does this move toward the three-layer architecture?
+   - Is this the simplest version that works?
+   - Would a Reddit power user care?
+3. Make the call. Document your reasoning in `PROGRESS.md` under Decisions Log.
+4. If a decision is truly ambiguous and high-stakes (would be expensive to reverse), note it as a blocker instead of guessing.
+
+You should be opinionated. The north star gives you the values. The roadmap gives you the sequence. The design guide gives you the aesthetics. Between these three documents, most decisions are answerable without human input.
 
 ## Current Phase
 
@@ -37,6 +54,7 @@ razzle/
 │   └── terminal.db    # SQLite — single source of truth
 ├── scripts/           # One-off scripts, data imports
 ├── docs/
+│   ├── NORTH_STAR.md  # Product vision — the endgame. Read first.
 │   ├── ROADMAP.md     # Phased development plan
 │   └── DESIGN.md      # Theme and design guide
 ├── CLAUDE.md          # This file
@@ -103,14 +121,32 @@ razzle/
 ## Autonomous Work Rules
 
 When running autonomously (no user input):
-1. Read `PROGRESS.md` first. Continue from where it left off.
+
+### Execution
+1. Read `docs/NORTH_STAR.md`, then `PROGRESS.md`. Understand the vision, then find where you left off.
 2. Follow the roadmap phase-by-phase. Do not skip.
-3. Make your own decisions on implementation details — the roadmap and design guide have the constraints.
+3. Make your own decisions on implementation details — the north star, roadmap, and design guide have the constraints.
 4. Update `PROGRESS.md` after completing each task.
 5. Commit after each completed task.
 6. If genuinely blocked (API down, missing critical info), document the blocker in PROGRESS.md and move to the next unblocked task.
 7. Deploy to Render after completing each phase.
 8. Reference the old FDL codebase at `C:\Users\mcgui\Documents\FDL` for proven patterns (especially live_data.py and nflverse sync logic) — but rewrite, don't copy.
+
+### Product Thinking (Brainstormer Mode)
+Between phases or when encountering non-trivial design/architecture decisions:
+1. Re-read `docs/NORTH_STAR.md` to recalibrate.
+2. Consider 2-3 approaches with trade-offs before choosing.
+3. Pick the approach that best serves the north star's priorities (Lab quality → Reddit screenshots → conversion funnel).
+4. Log the decision and reasoning in `PROGRESS.md` Decisions Log.
+5. Bias toward shipping. A working ugly version beats a planned perfect version.
+6. If a decision would significantly change the north star's architecture (new pages, different monetization, different data sources), document it as a proposed change in PROGRESS.md rather than implementing it unilaterally.
+
+### Quality Checks
+At the end of each phase, before moving to the next:
+1. Re-read the phase's exit criterion from `docs/ROADMAP.md`. Is it actually met?
+2. Re-read `docs/DESIGN.md`. Does the UI match? Chunky borders, right colors, right fonts?
+3. Screenshot test: would a Reddit power user from r/DynastyFF screenshot this? If no, that's your priority before moving on.
+4. Does the code follow the project structure? No files outside the defined folders.
 
 ## Reference Codebase
 
