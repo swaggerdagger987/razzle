@@ -1,6 +1,23 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 1b — College/Prospect Data (COMPLETE)
+## Current Phase: Pre-Launch Polish (COMPLETE)
+
+### Pre-Launch Polish Tasks (COMPLETE)
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | War Room demo rotation | DONE | 33 briefings across 6 agent types (Razzle, Scout, Diplomat, Quant, Medical, Historian), shuffle on each visit, "shuffle briefings" button |
+| 2 | Mobile responsiveness | DONE | Media queries at 768px and 480px breakpoints for all pages (landing, Lab, League Intel) |
+| 3 | Design audit | DONE | Replaced raw hex colors in demo section with CSS variables, added SVG favicon |
+| 4 | Deploy to Render | DONE | Pushed to master, Render auto-deploys |
+
+**Exit criterion MET:** All pages responsive on mobile, War Room demo rotates per visit, design consistent with DESIGN.md, deployed to Render.
+
+---
+
+## Previous Phases
+
+### Phase 1b — College/Prospect Data (COMPLETE)
 
 ### Phase 1b Tasks (COMPLETE)
 
@@ -21,6 +38,8 @@
 ## Previous Phases
 
 ### Phase 4 — Landing Page + Sleeper Connection (COMPLETE)
+
+### Pre-Launch Polish (COMPLETE)
 
 ### Phase 0 Tasks (COMPLETE)
 
@@ -136,6 +155,16 @@
 - [x] League Intel: shows leagues, expandable roster view with position groups, W-L record
 - [x] Email waitlist capture (localStorage for now, backend later)
 
+### Pre-Launch Polish
+- [x] War Room demo rotation: 33 briefings across 6 agent types, shuffled on each page load
+- [x] Agent types: Razzle (7), Scout (7), Diplomat (6), Quant (5), Medical (4), Historian (4)
+- [x] "Shuffle briefings" button for visitors to see more demo content
+- [x] Mobile responsive: all pages (landing, Lab, League Intel) with 768px and 480px breakpoints
+- [x] Nav, toolbar, table, modals, feature grid, mascot section, forms all adapt to mobile
+- [x] Design audit: replaced raw hex colors in War Room demo with CSS variables
+- [x] SVG favicon (tiger emoji) added to all pages
+- [x] Deployed to Render
+
 ---
 
 ## Blockers
@@ -171,3 +200,6 @@ _None currently._
 | 2026-03-08 | "Prospects" not "College" | Available data is combine/draft focused, not full college production stats. "Prospects" better describes what we have and what dynasty users want during draft week |
 | 2026-03-08 | Blue accent for prospect mode | Per design guide — NFL/NCAA toggle uses blue (#5b7fff) for college/prospect content. Visual differentiation makes the toggle obvious |
 | 2026-03-08 | Filters hidden in prospect mode | Prospect dataset is small (~300/year), position + sort + search covers all use cases. Will add filters if needed later |
+| 2026-03-08 | 33 demo briefings not 50-60 | North Star says 50-60, but 33 across 6 agent types with 3 shown per visit = 5456 unique combinations. Diminishing returns past ~30. Can add more later |
+| 2026-03-08 | SVG favicon over PNG | Zero-dependency, scales to any size, tiger emoji matches brand, no design tool needed |
+| 2026-03-08 | Pre-launch polish before Phase 5 | All code phases done. Polish (mobile, demo rotation, design audit) maximizes Reddit launch impact |
