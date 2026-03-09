@@ -1,6 +1,18 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 21 — Landing Page Draft Week Overhaul (COMPLETE)
+## Current Phase: Phase 22 — Social Preview Cards + Open Graph Polish
+
+**Exit criterion:** All 5 HTML pages have og:image meta tags pointing to branded social preview images (1200x630 SVG). Twitter Card meta tags added. When a Razzle URL is shared on Reddit/Discord/Twitter, the preview card shows Razzle branding (sand bg, tiger, tagline). Deployed to Render.
+
+### Phase 22 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Create branded social preview image (SVG og:image) | | |
+| 2 | Add og:image + Twitter Card meta tags to all pages | | |
+| 3 | Deploy + smoke test | | |
+
+## Previous Phase: Phase 21 — Landing Page Draft Week Overhaul (COMPLETE)
 
 **Exit criterion MET:** Landing page showcases the full product: NFL data + College data + Prospect scoring. Hero copy highlights dual-data platform ("NFL + College data. 1200+ NFL players. 9800+ college players. 329 prospects scored."). Feature cards cover all three universes (NFL Screener, College Screener, Prospect Profiles, Custom Formulas, DVS, Share to Reddit). New "Draft Season 2025" section with 4 linked cards (Big Board, Class Analytics, College Production, DVS) between features and mascot. Blue-light NCAA-themed section with Razzle design system (chunky borders, offset shadows, Caveat annotations, sticker badges). Meta tags updated for SEO/social. Footer credits sportsdataverse. Deployed to Render.
 

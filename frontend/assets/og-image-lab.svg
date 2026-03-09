@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&amp;family=Space+Mono:wght@400;700&amp;family=Caveat:wght@500;600&amp;display=swap');
+    </style>
+  </defs>
+
+  <!-- Sand background -->
+  <rect width="1200" height="630" fill="#ede0cf"/>
+
+  <!-- Card background -->
+  <rect x="40" y="40" width="1120" height="550" rx="16" fill="#f7efe5" stroke="#1a1a2e" stroke-width="3"/>
+
+  <!-- Terracotta top stripe -->
+  <rect x="40" y="40" width="1120" height="48" fill="#d97757"/>
+  <rect x="40" y="72" width="1120" height="16" fill="#f7efe5"/>
+
+  <!-- Tiger emoji -->
+  <text x="600" y="210" text-anchor="middle" font-size="96" fill="#1a1a2e">&#x1F42F;</text>
+
+  <!-- The Lab title -->
+  <text x="600" y="300" text-anchor="middle" font-family="'Luckiest Guy', 'Impact', sans-serif" font-size="64" font-weight="700" fill="#1a1a2e">The Lab</text>
+
+  <!-- Subtitle -->
+  <text x="600" y="350" text-anchor="middle" font-family="'Space Mono', 'Courier New', monospace" font-size="20" font-weight="700" fill="#d97757">by Razzle.lol</text>
+
+  <!-- Description -->
+  <text x="600" y="405" text-anchor="middle" font-family="'Space Mono', 'Courier New', monospace" font-size="18" fill="#4a4a5e">1200+ NFL players. 9800+ college players. 329 prospects scored.</text>
+  <text x="600" y="435" text-anchor="middle" font-family="'Space Mono', 'Courier New', monospace" font-size="18" fill="#4a4a5e">100+ filterable columns. Custom formulas. Shareable URLs.</text>
+
+  <!-- Handwritten annotation -->
+  <text x="600" y="490" text-anchor="middle" font-family="'Caveat', cursive" font-size="28" fill="#8a8a9e">the free Bloomberg terminal for fantasy football</text>
+
+  <!-- Position color bar -->
+  <rect x="350" y="520" width="120" height="6" rx="3" fill="#5b7fff"/>
+  <rect x="480" y="520" width="120" height="6" rx="3" fill="#2ec4b6"/>
+  <rect x="610" y="520" width="120" height="6" rx="3" fill="#d97757"/>
+  <rect x="740" y="520" width="120" height="6" rx="3" fill="#8b5cf6"/>
+
+  <!-- Bottom -->
+  <text x="600" y="565" text-anchor="middle" font-family="'Space Mono', monospace" font-size="14" fill="#8a8a9e">built different — razzle.lol</text>
+
+  <!-- Sticker badges -->
+  <g transform="translate(90, 110) rotate(-3)">
+    <rect x="0" y="0" width="80" height="28" rx="14" fill="#d97757" stroke="#1a1a2e" stroke-width="2"/>
+    <text x="40" y="19" text-anchor="middle" font-family="'Space Mono', monospace" font-size="10" font-weight="700" fill="white">FREE</text>
+  </g>
+
+  <g transform="translate(1030, 110) rotate(2)">
+    <rect x="0" y="0" width="80" height="28" rx="14" fill="#5b7fff" stroke="#1a1a2e" stroke-width="2"/>
+    <text x="40" y="19" text-anchor="middle" font-family="'Space Mono', monospace" font-size="10" font-weight="700" fill="white">NFL+CFB</text>
+  </g>
+</svg>
