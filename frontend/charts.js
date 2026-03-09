@@ -56,12 +56,18 @@ function renderChartConfig() {
       </div>`;
   } else if (currentChartTab === "trend") {
     const playerOptions = getPlayerOptions();
+    const isCareer = state.season === "career";
     container.innerHTML = `
       <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
         <span style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; color:var(--ink-light);">Player:</span>
         <select class="select-chunky" id="trendPlayer" onchange="drawChart()">${playerOptions}</select>
         <span style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; color:var(--ink-light);">Stat:</span>
         <select class="select-chunky" id="trendStat" onchange="drawChart()">${statOptions.replace('value="fantasy_points_ppr"', 'value="fantasy_points_ppr" selected')}</select>
+        <span style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; color:var(--ink-light);">View:</span>
+        <select class="select-chunky" id="trendMode" onchange="drawChart()">
+          <option value="weekly" ${!isCareer ? "selected" : ""}>Weekly</option>
+          <option value="seasons" ${isCareer ? "selected" : ""}>By Season</option>
+        </select>
       </div>`;
   }
 }
@@ -304,6 +310,12 @@ function drawScatter() {
 
 // ─── Trend chart ─────────────────────────────────────────────────
 async function drawTrend() {
+  const trendMode = document.getElementById("trendMode")?.value || "weekly";
+  if (trendMode === "seasons") return drawSeasonTrend();
+  return drawWeeklyTrend();
+}
+
+async function drawWeeklyTrend() {
   const canvas = document.getElementById("chartCanvas");
   const ctx = canvas.getContext("2d");
   const W = canvas.width, H = canvas.height;
@@ -315,14 +327,14 @@ async function drawTrend() {
   const statKey = document.getElementById("trendStat")?.value || "fantasy_points_ppr";
   if (!playerId) return;
 
-  // Loading text
   ctx.font = "24px 'Caveat', cursive";
   ctx.fillStyle = "#8a8a9e";
   ctx.textAlign = "center";
   ctx.fillText("pulling film...", W / 2, H / 2);
 
   try {
-    const data = await apiFetch(`/api/players/${playerId}/weeks?season=${state.season}`);
+    const season = state.season === "career" ? 0 : state.season;
+    const data = await apiFetch(`/api/players/${playerId}/weeks?season=${season}`);
     const weeks = data.weeks || [];
     if (!weeks.length) {
       ctx.clearRect(0, 0, W, H);
@@ -331,97 +343,8 @@ async function drawTrend() {
     }
 
     ctx.clearRect(0, 0, W, H);
-
-    const vals = weeks.map(w => w[statKey] || 0);
-    const weekNums = weeks.map(w => w.week);
-    const maxVal = Math.max(...vals, 1);
-
-    const plotW = W - pad.left - pad.right;
-    const plotH = H - pad.top - pad.bottom;
-
-    const toX = (i) => pad.left + (i / Math.max(weekNums.length - 1, 1)) * plotW;
-    const toY = (v) => pad.top + plotH - (v / maxVal) * plotH;
-
-    // Grid
-    ctx.strokeStyle = "#c5c5d0";
-    ctx.lineWidth = 1;
-    ctx.setLineDash([4, 4]);
-    for (let i = 0; i <= 4; i++) {
-      const y = pad.top + (plotH * i) / 4;
-      ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(pad.left + plotW, y); ctx.stroke();
-      // Value label
-      const val = maxVal * (1 - i / 4);
-      ctx.font = "11px 'Space Mono', monospace";
-      ctx.fillStyle = "#8a8a9e";
-      ctx.textAlign = "right";
-      ctx.fillText(val.toFixed(1), pad.left - 8, y + 4);
-    }
-    ctx.setLineDash([]);
-
-    // Axes
-    ctx.strokeStyle = "#1a1a2e";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(pad.left, pad.top);
-    ctx.lineTo(pad.left, pad.top + plotH);
-    ctx.lineTo(pad.left + plotW, pad.top + plotH);
-    ctx.stroke();
-
-    // Line
-    ctx.beginPath();
-    ctx.strokeStyle = "#d97757";
-    ctx.lineWidth = 3;
-    for (let i = 0; i < vals.length; i++) {
-      const x = toX(i);
-      const y = toY(vals[i]);
-      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-    }
-    ctx.stroke();
-
-    // Fill area
-    ctx.beginPath();
-    ctx.moveTo(toX(0), toY(vals[0]));
-    for (let i = 1; i < vals.length; i++) ctx.lineTo(toX(i), toY(vals[i]));
-    ctx.lineTo(toX(vals.length - 1), pad.top + plotH);
-    ctx.lineTo(toX(0), pad.top + plotH);
-    ctx.closePath();
-    ctx.fillStyle = "#d9775722";
-    ctx.fill();
-
-    // Dots and week labels
-    ctx.font = "10px 'Space Mono', monospace";
-    ctx.textAlign = "center";
-    for (let i = 0; i < vals.length; i++) {
-      const x = toX(i);
-      const y = toY(vals[i]);
-
-      ctx.beginPath();
-      ctx.arc(x, y, 5, 0, 2 * Math.PI);
-      ctx.fillStyle = "#d97757";
-      ctx.fill();
-      ctx.strokeStyle = "#1a1a2e";
-      ctx.lineWidth = 2;
-      ctx.stroke();
-
-      // Week number
-      ctx.fillStyle = "#1a1a2e";
-      ctx.fillText(`W${weekNums[i]}`, x, pad.top + plotH + 16);
-
-      // Value on hover area (always show for now)
-      if (vals.length <= 20) {
-        ctx.fillStyle = "#8a8a9e";
-        ctx.fillText(vals[i].toFixed(1), x, y - 10);
-      }
-    }
-
-    // Title
-    const playerName = data.player?.full_name || playerId;
-    const col = COLUMNS[statKey];
-    const statLabel = col ? col.label : statKey;
-    ctx.font = "bold 16px 'Luckiest Guy', cursive";
-    ctx.fillStyle = "#1a1a2e";
-    ctx.textAlign = "left";
-    ctx.fillText(`${playerName} — ${statLabel} by Week`, pad.left, 20);
+    _drawTrendLine(ctx, W, H, pad, weeks.map(w => w[statKey] || 0), weeks.map(w => `W${w.week}`),
+      data.player?.full_name || playerId, statKey, `by Week (${data.season})`);
 
   } catch (e) {
     ctx.clearRect(0, 0, W, H);
@@ -431,6 +354,132 @@ async function drawTrend() {
     ctx.fillText("couldn't load weekly data", W / 2, H / 2);
     console.error(e);
   }
+}
+
+async function drawSeasonTrend() {
+  const canvas = document.getElementById("chartCanvas");
+  const ctx = canvas.getContext("2d");
+  const W = canvas.width, H = canvas.height;
+  const pad = { top: 30, right: 30, bottom: 50, left: 70 };
+
+  ctx.clearRect(0, 0, W, H);
+
+  const playerId = document.getElementById("trendPlayer")?.value;
+  const statKey = document.getElementById("trendStat")?.value || "fantasy_points_ppr";
+  if (!playerId) return;
+
+  ctx.font = "24px 'Caveat', cursive";
+  ctx.fillStyle = "#8a8a9e";
+  ctx.textAlign = "center";
+  ctx.fillText("pulling film...", W / 2, H / 2);
+
+  try {
+    const data = await apiFetch(`/api/players/${playerId}/seasons`);
+    const seasons = data.seasons || [];
+    if (!seasons.length) {
+      ctx.clearRect(0, 0, W, H);
+      ctx.fillText("no season data", W / 2, H / 2);
+      return;
+    }
+
+    ctx.clearRect(0, 0, W, H);
+    _drawTrendLine(ctx, W, H, pad, seasons.map(s => s[statKey] || 0), seasons.map(s => `${s.season}`),
+      data.player?.full_name || playerId, statKey, "by Season");
+
+  } catch (e) {
+    ctx.clearRect(0, 0, W, H);
+    ctx.font = "24px 'Caveat', cursive";
+    ctx.fillStyle = "#e63946";
+    ctx.textAlign = "center";
+    ctx.fillText("couldn't load season data", W / 2, H / 2);
+    console.error(e);
+  }
+}
+
+function _drawTrendLine(ctx, W, H, pad, vals, labels, playerName, statKey, subtitle) {
+  const maxVal = Math.max(...vals, 1);
+  const plotW = W - pad.left - pad.right;
+  const plotH = H - pad.top - pad.bottom;
+
+  const toX = (i) => pad.left + (i / Math.max(labels.length - 1, 1)) * plotW;
+  const toY = (v) => pad.top + plotH - (v / maxVal) * plotH;
+
+  // Grid
+  ctx.strokeStyle = "#c5c5d0";
+  ctx.lineWidth = 1;
+  ctx.setLineDash([4, 4]);
+  for (let i = 0; i <= 4; i++) {
+    const y = pad.top + (plotH * i) / 4;
+    ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(pad.left + plotW, y); ctx.stroke();
+    const val = maxVal * (1 - i / 4);
+    ctx.font = "11px 'Space Mono', monospace";
+    ctx.fillStyle = "#8a8a9e";
+    ctx.textAlign = "right";
+    ctx.fillText(val.toFixed(1), pad.left - 8, y + 4);
+  }
+  ctx.setLineDash([]);
+
+  // Axes
+  ctx.strokeStyle = "#1a1a2e";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(pad.left, pad.top);
+  ctx.lineTo(pad.left, pad.top + plotH);
+  ctx.lineTo(pad.left + plotW, pad.top + plotH);
+  ctx.stroke();
+
+  // Line
+  ctx.beginPath();
+  ctx.strokeStyle = "#d97757";
+  ctx.lineWidth = 3;
+  for (let i = 0; i < vals.length; i++) {
+    const x = toX(i);
+    const y = toY(vals[i]);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+
+  // Fill area
+  ctx.beginPath();
+  ctx.moveTo(toX(0), toY(vals[0]));
+  for (let i = 1; i < vals.length; i++) ctx.lineTo(toX(i), toY(vals[i]));
+  ctx.lineTo(toX(vals.length - 1), pad.top + plotH);
+  ctx.lineTo(toX(0), pad.top + plotH);
+  ctx.closePath();
+  ctx.fillStyle = "#d9775722";
+  ctx.fill();
+
+  // Dots and labels
+  ctx.font = "10px 'Space Mono', monospace";
+  ctx.textAlign = "center";
+  for (let i = 0; i < vals.length; i++) {
+    const x = toX(i);
+    const y = toY(vals[i]);
+
+    ctx.beginPath();
+    ctx.arc(x, y, 5, 0, 2 * Math.PI);
+    ctx.fillStyle = "#d97757";
+    ctx.fill();
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.fillStyle = "#1a1a2e";
+    ctx.fillText(labels[i], x, pad.top + plotH + 16);
+
+    if (vals.length <= 20) {
+      ctx.fillStyle = "#8a8a9e";
+      ctx.fillText(vals[i].toFixed(1), x, y - 10);
+    }
+  }
+
+  // Title
+  const col = COLUMNS[statKey];
+  const statLabel = col ? col.label : statKey;
+  ctx.font = "bold 16px 'Luckiest Guy', cursive";
+  ctx.fillStyle = "#1a1a2e";
+  ctx.textAlign = "left";
+  ctx.fillText(`${playerName} — ${statLabel} ${subtitle}`, pad.left, 20);
 }
 
 // ─── Comparison mode ─────────────────────────────────────────────

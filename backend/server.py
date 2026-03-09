@@ -136,6 +136,11 @@ def player_weeks(player_id: str, season: str = "0"):
     return live_data.fetch_player_weeks(player_id, season=s)
 
 
+@app.get("/api/players/{player_id}/seasons")
+def player_seasons(player_id: str):
+    return live_data.fetch_player_seasons(player_id)
+
+
 @app.get("/api/players/compare")
 def players_compare(ids: str = "", season: str = "0"):
     player_ids = [p.strip() for p in ids.split(",") if p.strip()]

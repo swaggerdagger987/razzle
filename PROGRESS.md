@@ -14,6 +14,8 @@
 | 6 | Efficiency columns | DONE | Y/CAR, Y/REC, Y/TGT, Catch%, CMP%, Y/ATT derived from aggregates |
 | 7 | Per-game averages | DONE | REC/G, TGT/G, RuYPG, ReYPG, PaYPG computed per player |
 | 8 | New presets | DONE | Efficiency + Advanced presets added to Lab toolbar |
+| 9 | Season trend charts | DONE | Weekly + By Season toggle in trend chart, /api/players/{id}/seasons endpoint |
+| 10 | Filter safeguards | DONE | Derived/rate metrics excluded from HAVING clause and filter dropdown |
 
 ---
 
@@ -183,6 +185,9 @@
 - [x] Efficiency + Advanced column presets added to Lab toolbar
 - [x] Rate metrics enrichment: secondary query fetches averages from player_week_metrics table
 - [x] Python re-sort for derived/rate metric sorts (SQL sorts by PPR, Python re-sorts)
+- [x] Season trend charts: Weekly + By Season toggle, /api/players/{id}/seasons endpoint
+- [x] Season trend shows career arc across all available seasons (2020-2024)
+- [x] Filter safeguards: derived metrics excluded from SQL HAVING and filter dropdown
 
 ### Pre-Launch Polish
 - [x] War Room demo rotation: 33 briefings across 6 agent types, shuffled on each page load

@@ -331,6 +331,14 @@ def fetch_screener(body):
     if sort_dir.lower() not in ("asc", "desc"):
         sort_dir = "desc"
 
+    # Columns that can be filtered via SQL HAVING (not derived/rate metrics)
+    sql_filterable = {
+        "fantasy_points_ppr", "fantasy_points_half_ppr", "fantasy_points_std",
+        "passing_yards", "passing_tds", "rushing_yards", "rushing_tds",
+        "receiving_yards", "receiving_tds", "receptions", "touchdowns",
+        "turnovers", "targets", "carries", "games", "ppg", "seasons",
+    }
+
     # Build having clause for advanced filters
     having = []
     ops = {"gt": ">", "gte": ">=", "lt": "<", "lte": "<=", "eq": "=", "neq": "!="}
@@ -340,8 +348,8 @@ def fetch_screener(body):
         val = f.get("value")
         if not key or not op or val is None:
             continue
-        # Only allow known aggregate columns
-        if key in safe_sorts and key not in ("full_name", "position", "team"):
+        # Only allow SQL-safe aggregate columns
+        if key in sql_filterable:
             if key == "ppg":
                 having.append(f"(SUM(s.fantasy_points_ppr) / MAX(1, COUNT(*))) {op} ?")
             elif key == "games":
@@ -498,6 +506,53 @@ def fetch_player_weeks(player_id, season=0):
         "player": dict(player_info) if player_info else {},
         "season": season,
         "weeks": [dict(r) for r in rows],
+    }
+
+
+def fetch_player_seasons(player_id):
+    """Return season-level aggregates for a single player (for trend charts)."""
+    conn = get_conn()
+
+    player_info = conn.execute(
+        "SELECT player_id, full_name, position, team, age, college FROM players WHERE player_id = ?",
+        (player_id,)
+    ).fetchone()
+
+    rows = conn.execute("""
+        SELECT
+            s.season,
+            COUNT(*) as games,
+            SUM(s.fantasy_points_ppr) as fantasy_points_ppr,
+            SUM(s.fantasy_points_std) as fantasy_points_std,
+            SUM(s.passing_yards) as passing_yards,
+            SUM(s.passing_tds) as passing_tds,
+            SUM(s.rushing_yards) as rushing_yards,
+            SUM(s.rushing_tds) as rushing_tds,
+            SUM(s.receiving_yards) as receiving_yards,
+            SUM(s.receiving_tds) as receiving_tds,
+            SUM(s.receptions) as receptions,
+            SUM(s.touchdowns) as touchdowns,
+            SUM(s.turnovers) as turnovers,
+            SUM(s.targets) as targets,
+            SUM(s.carries) as carries,
+            SUM(s.completions) as completions,
+            SUM(s.attempts) as attempts,
+            SUM(s.passing_air_yards) as passing_air_yards,
+            SUM(s.receiving_air_yards) as receiving_air_yards,
+            SUM(s.receiving_yards_after_catch) as receiving_yards_after_catch
+        FROM player_week_stats s
+        WHERE s.player_id = ?
+        GROUP BY s.season
+        ORDER BY s.season ASC
+    """, (player_id,)).fetchall()
+
+    seasons = [dict(r) for r in rows]
+    _enrich_with_derived_stats(seasons)
+
+    conn.close()
+    return {
+        "player": dict(player_info) if player_info else {},
+        "seasons": seasons,
     }
 
 

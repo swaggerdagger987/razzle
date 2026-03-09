@@ -82,30 +82,30 @@ const COLUMNS = {
   touchdowns:          { label: "TD",        group: "Totals", decimals: 0 },
   turnovers:           { label: "TO",        group: "Totals", decimals: 0 },
 
-  // Efficiency (derived from aggregates)
-  yards_per_carry:     { label: "Y/CAR",    group: "Efficiency", decimals: 1 },
-  yards_per_rec:       { label: "Y/REC",    group: "Efficiency", decimals: 1 },
-  yards_per_target:    { label: "Y/TGT",    group: "Efficiency", decimals: 1 },
-  catch_rate:          { label: "Catch%",   group: "Efficiency", decimals: 1 },
-  comp_pct:            { label: "CMP%",     group: "Efficiency", decimals: 1 },
-  yards_per_att:       { label: "Y/ATT",    group: "Efficiency", decimals: 1 },
+  // Efficiency (derived from aggregates — sort only, no SQL filter)
+  yards_per_carry:     { label: "Y/CAR",    group: "Efficiency", decimals: 1, derived: true },
+  yards_per_rec:       { label: "Y/REC",    group: "Efficiency", decimals: 1, derived: true },
+  yards_per_target:    { label: "Y/TGT",    group: "Efficiency", decimals: 1, derived: true },
+  catch_rate:          { label: "Catch%",   group: "Efficiency", decimals: 1, derived: true },
+  comp_pct:            { label: "CMP%",     group: "Efficiency", decimals: 1, derived: true },
+  yards_per_att:       { label: "Y/ATT",    group: "Efficiency", decimals: 1, derived: true },
 
-  // Per-game averages
-  rec_per_game:        { label: "REC/G",    group: "Per Game", decimals: 1 },
-  targets_per_game:    { label: "TGT/G",    group: "Per Game", decimals: 1 },
-  rush_ypg:            { label: "RuYPG",    group: "Per Game", decimals: 1 },
-  rec_ypg:             { label: "ReYPG",    group: "Per Game", decimals: 1 },
-  pass_ypg:            { label: "PaYPG",    group: "Per Game", decimals: 1 },
+  // Per-game averages (derived — sort only)
+  rec_per_game:        { label: "REC/G",    group: "Per Game", decimals: 1, derived: true },
+  targets_per_game:    { label: "TGT/G",    group: "Per Game", decimals: 1, derived: true },
+  rush_ypg:            { label: "RuYPG",    group: "Per Game", decimals: 1, derived: true },
+  rec_ypg:             { label: "ReYPG",    group: "Per Game", decimals: 1, derived: true },
+  pass_ypg:            { label: "PaYPG",    group: "Per Game", decimals: 1, derived: true },
 
-  // Advanced (from nflverse rate stats)
-  target_share:        { label: "TGT%",     group: "Advanced", decimals: 1, pct: true },
-  air_yards_share:     { label: "AirYd%",   group: "Advanced", decimals: 1, pct: true },
-  wopr:                { label: "WOPR",     group: "Advanced", decimals: 3 },
-  racr:                { label: "RACR",     group: "Advanced", decimals: 2 },
-  passing_epa:         { label: "Pass EPA", group: "Advanced", decimals: 1 },
-  receiving_epa:       { label: "Rec EPA",  group: "Advanced", decimals: 1 },
-  rushing_epa:         { label: "Rush EPA", group: "Advanced", decimals: 1 },
-  dakota:              { label: "DAKOTA",   group: "Advanced", decimals: 3 },
+  // Advanced (from nflverse rate stats — sort only)
+  target_share:        { label: "TGT%",     group: "Advanced", decimals: 1, pct: true, derived: true },
+  air_yards_share:     { label: "AirYd%",   group: "Advanced", decimals: 1, pct: true, derived: true },
+  wopr:                { label: "WOPR",     group: "Advanced", decimals: 3, derived: true },
+  racr:                { label: "RACR",     group: "Advanced", decimals: 2, derived: true },
+  passing_epa:         { label: "Pass EPA", group: "Advanced", decimals: 1, derived: true },
+  receiving_epa:       { label: "Rec EPA",  group: "Advanced", decimals: 1, derived: true },
+  rushing_epa:         { label: "Rush EPA", group: "Advanced", decimals: 1, derived: true },
+  dakota:              { label: "DAKOTA",   group: "Advanced", decimals: 3, derived: true },
 };
 
 // ─── Presets ─────────────────────────────────────────────────────
@@ -565,7 +565,7 @@ function updateResultCount() {
 function populateFilterStatSelect() {
   const sel = document.getElementById("filterStat");
   const colDefs = state.universe === "prospects" ? PROSPECT_COLUMNS : COLUMNS;
-  const keys = Object.keys(colDefs).filter(k => !colDefs[k].isText);
+  const keys = Object.keys(colDefs).filter(k => !colDefs[k].isText && !colDefs[k].derived);
   sel.innerHTML = keys.map(k => {
     const col = colDefs[k];
     return `<option value="${k}">${col.label} (${k})</option>`;
