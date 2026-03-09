@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Lab — Razzle</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* ===== LAB LAYOUT ===== */
+  .lab-container {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 56px);
+  }
+
+  /* ===== TOOLBAR ===== */
+  .toolbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    background: var(--bg-warm);
+    border-bottom: 3px solid var(--ink);
+    flex-wrap: wrap;
+  }
+
+  .toolbar-section {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .toolbar-divider {
+    width: 2px;
+    height: 28px;
+    background: var(--ink-faint);
+    margin: 0 6px;
+  }
+
+  .search-box {
+    width: 200px;
+  }
+
+  .result-count {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-light);
+    margin-left: auto;
+  }
+
+  .result-count strong {
+    color: var(--ink);
+  }
+
+  /* ===== FILTER BAR ===== */
+  .filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 20px;
+    background: var(--bg-card);
+    border-bottom: 2px dashed var(--ink-faint);
+    flex-wrap: wrap;
+  }
+
+  .filter-bar-label {
+    font-family: var(--font-display);
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    letter-spacing: 1px;
+  }
+
+  .filter-tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 3px 10px;
+    border: 2px solid var(--ink);
+    border-radius: 20px;
+    background: var(--yellow-light);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .filter-tag .remove {
+    cursor: pointer;
+    font-weight: 700;
+    color: var(--red);
+    font-size: 13px;
+    line-height: 1;
+  }
+
+  .add-filter-btn {
+    font-family: var(--font-display);
+    font-size: 11px;
+    padding: 3px 10px;
+    border: 2px dashed var(--ink-faint);
+    border-radius: 20px;
+    background: transparent;
+    color: var(--ink-light);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+
+  .add-filter-btn:hover {
+    border-color: var(--ink);
+    color: var(--ink);
+    background: var(--bg-card);
+  }
+
+  /* ===== FILTER MODAL ===== */
+  .filter-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15,15,26,0.3);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .filter-modal-overlay.open { display: flex; }
+
+  .filter-modal {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 6px 6px 0 var(--ink);
+    padding: 24px;
+    width: 380px;
+    max-width: 90vw;
+  }
+
+  .filter-modal h3 {
+    font-family: var(--font-display);
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+
+  .filter-modal-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    align-items: center;
+  }
+
+  .filter-modal-row select,
+  .filter-modal-row input {
+    flex: 1;
+  }
+
+  .filter-modal-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    margin-top: 16px;
+  }
+
+  /* ===== COLUMN PICKER ===== */
+  .column-picker-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15,15,26,0.3);
+    z-index: 200;
+    align-items: flex-start;
+    justify-content: flex-end;
+  }
+
+  .column-picker-overlay.open { display: flex; }
+
+  .column-picker {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px 0 0 12px;
+    box-shadow: -4px 4px 0 var(--ink);
+    padding: 20px;
+    width: 320px;
+    max-width: 90vw;
+    height: 100vh;
+    overflow-y: auto;
+    margin-top: 0;
+  }
+
+  .column-picker h3 {
+    font-family: var(--font-display);
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+
+  .preset-bar {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .column-group {
+    margin-bottom: 16px;
+  }
+
+  .column-group-title {
+    font-family: var(--font-display);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--ink-light);
+    margin-bottom: 6px;
+    border-bottom: 2px dashed var(--ink-faint);
+    padding-bottom: 4px;
+  }
+
+  .column-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  .column-option input[type="checkbox"] {
+    accent-color: var(--orange);
+    width: 16px;
+    height: 16px;
+  }
+
+  /* ===== DATA TABLE ===== */
+  .table-wrap {
+    flex: 1;
+    overflow: auto;
+    position: relative;
+  }
+
+  .screener-table {
+    width: max-content;
+    min-width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-mono);
+    font-size: 13px;
+  }
+
+  .screener-table thead {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .screener-table th {
+    background: var(--bg-warm);
+    border-bottom: 3px solid var(--ink);
+    padding: 8px 14px;
+    text-align: right;
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    transition: background 0.1s;
+  }
+
+  .screener-table th:hover { background: var(--bg-card); }
+
+  .screener-table th.sort-asc::after { content: " ▲"; font-size: 9px; }
+  .screener-table th.sort-desc::after { content: " ▼"; font-size: 9px; }
+
+  .screener-table th.col-player {
+    text-align: left;
+    position: sticky;
+    left: 0;
+    z-index: 11;
+    min-width: 200px;
+    background: var(--bg-warm);
+    border-right: 3px solid var(--ink);
+  }
+
+  .screener-table td {
+    padding: 7px 14px;
+    text-align: right;
+    border-bottom: 1px solid var(--ink-faint);
+    white-space: nowrap;
+  }
+
+  .screener-table tr:hover td {
+    background: var(--orange-light);
+  }
+
+  .screener-table td.col-player {
+    text-align: left;
+    position: sticky;
+    left: 0;
+    z-index: 5;
+    background: var(--bg);
+    border-right: 3px solid var(--ink);
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .screener-table tr:hover td.col-player {
+    background: var(--orange-light);
+  }
+
+  .player-name-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .pos-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 2px solid var(--ink);
+    color: white;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+
+  .pos-badge.qb { background: var(--pos-qb); }
+  .pos-badge.rb { background: var(--pos-rb); }
+  .pos-badge.wr { background: var(--pos-wr); }
+  .pos-badge.te { background: var(--pos-te); }
+
+  .team-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-light);
+    font-weight: 400;
+  }
+
+  /* ===== FOOTER BAR ===== */
+  .footer-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 20px;
+    background: var(--bg-warm);
+    border-top: 3px solid var(--ink);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-light);
+  }
+
+  .footer-bar a {
+    color: var(--orange);
+    text-decoration: none;
+    font-weight: 700;
+  }
+
+  .pagination {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="topnav">
+  <a href="/" class="logo">
+    <div class="logo-mark">🐯</div>
+    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/lab.html" class="active">The Lab</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
+  </ul>
+</nav>
+
+<!-- TOOLBAR -->
+<div class="lab-container">
+  <div class="toolbar">
+    <div class="toolbar-section">
+      <span class="chip active" data-pos="ALL" onclick="togglePosition('ALL')">All</span>
+      <span class="chip" data-pos="QB" onclick="togglePosition('QB')">QB</span>
+      <span class="chip" data-pos="RB" onclick="togglePosition('RB')">RB</span>
+      <span class="chip" data-pos="WR" onclick="togglePosition('WR')">WR</span>
+      <span class="chip" data-pos="TE" onclick="togglePosition('TE')">TE</span>
+    </div>
+
+    <div class="toolbar-divider"></div>
+
+    <input type="text" class="input-chunky search-box" id="searchInput" placeholder="search players...">
+
+    <div class="toolbar-divider"></div>
+
+    <div class="toolbar-section">
+      <select class="select-chunky" id="seasonSelect"></select>
+      <button class="btn-chunky" id="relevanceToggle" onclick="toggleRelevance()">Fantasy Only</button>
+    </div>
+
+    <div class="toolbar-divider"></div>
+
+    <button class="btn-chunky" onclick="openColumnPicker()">Columns</button>
+    <button class="btn-chunky" onclick="copyShareURL()">Share URL</button>
+
+    <span class="result-count" id="resultCount"></span>
+  </div>
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar" id="filterBar">
+    <span class="filter-bar-label">Filters</span>
+    <div id="activeFilters"></div>
+    <button class="add-filter-btn" onclick="openFilterModal()">+ add filter</button>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-wrap">
+    <table class="screener-table" id="screenerTable">
+      <thead id="tableHead"></thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+    <div class="loading-msg" id="loadingMsg">pulling film...</div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer-bar">
+    <span>built different — <a href="/">razzle.lol</a></span>
+    <div class="pagination">
+      <button class="btn-chunky" id="prevBtn" onclick="prevPage()">← prev</button>
+      <span id="pageInfo"></span>
+      <button class="btn-chunky" id="nextBtn" onclick="nextPage()">next →</button>
+    </div>
+    <span id="dataSource" style="font-family: var(--font-hand); font-size: 16px; color: var(--ink-light);">
+      powered by nflverse
+    </span>
+  </div>
+</div>
+
+<!-- FILTER MODAL -->
+<div class="filter-modal-overlay" id="filterModalOverlay" onclick="closeFilterModal(event)">
+  <div class="filter-modal" onclick="event.stopPropagation()">
+    <h3>Add Filter</h3>
+    <div class="filter-modal-row">
+      <select class="select-chunky" id="filterStat" style="flex:2"></select>
+      <select class="select-chunky" id="filterOp" style="flex:1">
+        <option value="gte">≥</option>
+        <option value="lte">≤</option>
+        <option value="gt">></option>
+        <option value="lt"><</option>
+        <option value="eq">=</option>
+      </select>
+      <input type="number" class="input-chunky" id="filterValue" placeholder="0" style="flex:1">
+    </div>
+    <div class="filter-modal-actions">
+      <button class="btn-chunky" onclick="closeFilterModal()">Cancel</button>
+      <button class="btn-primary" onclick="addFilter()">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- COLUMN PICKER -->
+<div class="column-picker-overlay" id="columnPickerOverlay" onclick="closeColumnPicker(event)">
+  <div class="column-picker" onclick="event.stopPropagation()">
+    <h3>Columns</h3>
+    <div class="preset-bar" id="presetBar"></div>
+    <div id="columnGroups"></div>
+    <div style="margin-top: 16px; display: flex; gap: 8px; justify-content: flex-end;">
+      <button class="btn-primary" onclick="closeColumnPicker()">Done</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script src="lab.js"></script>
+</body>
+</html>

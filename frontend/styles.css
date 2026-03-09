@@ -1,0 +1,239 @@
+/* Razzle — shared styles (follows DESIGN.md) */
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&family=Luckiest+Guy&display=swap');
+
+:root {
+  --bg: #ede0cf;
+  --bg-warm: #e5d5c3;
+  --bg-card: #f7efe5;
+  --bg-ink: #0f0f1a;
+
+  --ink: #1a1a2e;
+  --ink-medium: #4a4a5e;
+  --ink-light: #8a8a9e;
+  --ink-faint: #c5c5d0;
+
+  --orange: #d97757;
+  --orange-light: #f7e4d8;
+  --yellow: #ffc857;
+  --yellow-light: #f5eacc;
+  --green: #2ec4b6;
+  --green-light: #d9efec;
+  --blue: #5b7fff;
+  --blue-light: #dde4f7;
+  --red: #e63946;
+  --red-light: #f2d5d8;
+  --purple: #8b5cf6;
+  --purple-light: #e5dcf7;
+
+  --pos-qb: #5b7fff;
+  --pos-rb: #2ec4b6;
+  --pos-wr: #d97757;
+  --pos-te: #8b5cf6;
+
+  --font-display: 'Luckiest Guy', 'Garfield', cursive;
+  --font-mono: 'Space Mono', monospace;
+  --font-hand: 'Caveat', cursive;
+
+  --radius: 12px;
+  --shadow-chunky: 4px 4px 0 var(--ink);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+/* ===== NAV ===== */
+.topnav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 24px;
+  background: var(--bg);
+  border-bottom: 3px solid var(--ink);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.logo-mark {
+  width: 38px;
+  height: 38px;
+  background: var(--bg-card);
+  border-radius: 10px;
+  border: 3px solid var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  box-shadow: 3px 3px 0 var(--ink);
+  transform: rotate(-2deg);
+  line-height: 1;
+}
+
+.logo-text {
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: -0.5px;
+}
+
+.logo-text .accent { color: var(--orange); }
+
+.nav-links {
+  display: flex;
+  gap: 6px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--ink);
+  padding: 6px 14px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  transition: all 0.15s;
+}
+
+.nav-links a:hover {
+  border-color: var(--ink);
+  background: var(--bg-card);
+  box-shadow: 2px 2px 0 var(--ink);
+  transform: translate(-1px, -1px);
+}
+
+.nav-links a.active {
+  border-color: var(--ink);
+  background: var(--orange);
+  color: white;
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+/* ===== BUTTONS ===== */
+.btn-chunky {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  background: var(--bg-card);
+  color: var(--ink);
+  cursor: pointer;
+  box-shadow: 2px 2px 0 var(--ink);
+  transition: all 0.12s;
+}
+
+.btn-chunky:hover {
+  box-shadow: 3px 3px 0 var(--ink);
+  transform: translate(-1px, -1px);
+}
+
+.btn-chunky.active {
+  background: var(--ink);
+  color: white;
+}
+
+.btn-primary {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 16px;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  background: var(--orange);
+  color: white;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 var(--ink);
+  transition: all 0.12s;
+}
+
+.btn-primary:hover {
+  box-shadow: 3px 3px 0 var(--ink);
+  transform: translate(-1px, -1px);
+}
+
+/* ===== CHIPS / BADGES ===== */
+.chip {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border: 2px solid var(--ink);
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.12s;
+  background: var(--bg-card);
+}
+
+.chip:hover { box-shadow: 2px 2px 0 var(--ink); transform: translate(-1px, -1px); }
+.chip.active { color: white; }
+.chip.active[data-pos="QB"] { background: var(--pos-qb); }
+.chip.active[data-pos="RB"] { background: var(--pos-rb); }
+.chip.active[data-pos="WR"] { background: var(--pos-wr); }
+.chip.active[data-pos="TE"] { background: var(--pos-te); }
+.chip.active[data-pos="ALL"] { background: var(--ink); }
+
+/* ===== LOADING ===== */
+.loading-msg {
+  font-family: var(--font-hand);
+  font-size: 24px;
+  color: var(--ink-medium);
+  text-align: center;
+  padding: 60px 20px;
+}
+
+/* ===== INPUTS ===== */
+.input-chunky {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 6px 12px;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  background: var(--bg-card);
+  color: var(--ink);
+  outline: none;
+  transition: box-shadow 0.12s;
+}
+
+.input-chunky:focus {
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.input-chunky::placeholder {
+  color: var(--ink-light);
+  font-family: var(--font-hand);
+  font-size: 15px;
+}
+
+/* ===== SELECT ===== */
+.select-chunky {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 5px 10px;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  background: var(--bg-card);
+  color: var(--ink);
+  cursor: pointer;
+  outline: none;
+}

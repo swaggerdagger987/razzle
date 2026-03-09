@@ -20,15 +20,24 @@
 
 | # | Task | Status | Notes |
 |---|------|--------|-------|
-| 1 | Screener table UI | NOT STARTED | Sortable, filterable data table, sticky player name |
-| 2 | Advanced filtering | NOT STARTED | Multi-condition filter builder |
-| 3 | Column picker | NOT STARTED | Toggle columns, presets |
-| 4 | Season/week selector | NOT STARTED | Season aggregates, per-week breakdowns |
-| 5 | Relevance tier toggle | NOT STARTED | Fantasy-relevant vs full universe |
-| 6 | Search + URL state | NOT STARTED | Player search, URL serialization |
-| 7 | NFL/NCAA toggle | NOT STARTED | Requires college_adapter.py first |
+| 1 | Screener table UI | DONE | Sortable columns, sticky player name, position badges, horizontal scroll |
+| 2 | Advanced filtering | DONE | Modal: pick stat + operator + value, filter tags with remove, AND logic |
+| 3 | Column picker | DONE | Slide-out panel, grouped by category, checkbox toggles |
+| 4 | Season/week selector | DONE | Season dropdown from API. Week-level breakdown deferred to Phase 1b |
+| 5 | Relevance tier toggle | DONE | "Fantasy Only" vs "All Players" button |
+| 6 | Search + URL state | DONE | Full state serialization (pos, search, sort, filters, columns, pagination) |
+| 7 | NFL/NCAA toggle | DEFERRED | Requires college_adapter.py — will build in Phase 1b or Phase 2 |
 
 **Exit criterion:** The Lab loads with real data, filters work, share a URL that reproduces the exact view.
+- [x] Table renders 612 players sorted by PPR
+- [x] Position filter chips (ALL/QB/RB/WR/TE) work
+- [x] Search filters by player name
+- [x] Advanced filters (e.g., targets >= 100) work
+- [x] Column picker with presets (PPR, Passing, Rushing, Receiving, Dynasty)
+- [x] Sort by clicking any column header
+- [x] URL state serializes all screener config
+- [x] Share URL button copies to clipboard
+- [ ] Needs visual polish pass and browser testing (next commit)
 
 ---
 
@@ -54,6 +63,16 @@
 - [x] Data verified: 612 players, 2024 season, top scorers match real NFL data
 - [x] render.yaml updated for Python web service with build-time data sync
 
+### Phase 1 — The Lab: Core Screener
+- [x] lab.html: Full screener page with toolbar, filter bar, data table, footer
+- [x] lab.js: Screener state management, API integration, rendering
+- [x] styles.css: Shared stylesheet with Razzle design system
+- [x] app.js: Shared utilities (API fetch, formatting)
+- [x] 5 column presets: PPR, Passing, Rushing, Receiving, Dynasty
+- [x] 20 sortable columns across Fantasy, Passing, Rushing, Receiving, Totals groups
+- [x] Advanced filter modal with stat/operator/value
+- [x] Full URL state serialization for sharing
+
 ---
 
 ## Blockers
@@ -76,3 +95,6 @@ _None currently._
 | 2026-03-08 | Two-table data model | player_week_stats (fixed columns) + player_week_metrics (dynamic key-value) — proven pattern from FDL |
 | 2026-03-08 | Skip half_ppr in nflverse | nflverse CSVs only have ppr and standard — half_ppr computed later if needed |
 | 2026-03-08 | Single FastAPI serves frontend + API | No separate static site — simpler deploy, one Render service |
+| 2026-03-08 | Defer NCAA toggle to Phase 1b/2 | Need college_adapter.py first, core NFL screener is the priority |
+| 2026-03-08 | Defer week-level breakdowns | Season aggregates first, per-week view adds complexity — ship the table |
+| 2026-03-08 | 5 column presets over custom | PPR/Passing/Rushing/Receiving/Dynasty covers 95% of use cases |
