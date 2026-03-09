@@ -78,9 +78,9 @@
 - No visual regression in table rendering
 **Depends on**: none
 **Size**: M
-**Status**: PENDING
-**Attempt**: 0/3
-**Result**:
+**Status**: PASS
+**Attempt**: 1/3
+**Result**: Added pos_rank as virtual column (isText, Fantasy group) computed client-side by computePosRanks(). Groups players by position, sorts within each group by current sort key, assigns WR1/RB3/QB2 etc. Recomputes on every data fetch (sort change triggers re-fetch). Added to PPR preset as first column. N/A stats: NON_PRIMARY_STATS map defines which stats are non-primary per position (QB: receiving stats, RB/WR/TE: passing stats). isNonApplicableStat() shows dash when value is 0 and stat is non-primary. Players with actual stats (e.g. Lamar Jackson receiving) still show values. GP header already correctly defined as label: "GP" in COLUMNS — renders via col.label in renderTableHead(). JS syntax check passes.
 
 ## Task 6: Tooltips for all abbreviations + stat naming cleanup
 **Requirement**: "Two readability fixes: (a) Add hover tooltips to ALL column headers in the Lab table. Each tooltip should show the full stat name and a one-line description. Key tooltips needed: BRK% = 'Breakout Percentage', DAKOTA = 'Adjusted EPA + CPOE composite', WOPR = 'Weighted Opportunity Rating', RACR = 'Receiver Air Conversion Ratio', AirYd% = 'Team Air Yard Share', TGT% = 'Target Share', DVS = 'Dynasty Value Score'. Use the HTML title attribute on th elements. (b) Rename ugly per-game abbreviations: RuYPG to Rush Yds/G, ReYPG to Rec Yds/G, PaYPG to Pass Yds/G. Keep REC/G and TGT/G as-is."
@@ -183,9 +183,9 @@
 ## Loop State
 ```
 Current Phase: 29
-Current Task: 4
+Current Task: 5
 Current Stage: PASS
 Attempt: 1/3
-Tasks Completed: 4/12
-Loop Iterations: 4
+Tasks Completed: 5/12
+Loop Iterations: 5
 ```

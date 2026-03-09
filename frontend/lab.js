@@ -142,6 +142,9 @@ const COLLEGE_PRESETS = {
 
 // ─── Column definitions ─────────────────────────────────────────
 const COLUMNS = {
+  // Positional rank (virtual, computed client-side)
+  pos_rank:            { label: "Pos Rank", group: "Fantasy", decimals: 0, isText: true, derived: true },
+
   // Core fantasy
   fantasy_points_ppr:  { label: "PPR",     group: "Fantasy", decimals: 1 },
   ppg:                 { label: "PPG",      group: "Fantasy", decimals: 1 },
@@ -215,7 +218,7 @@ const COLUMNS = {
 const PRESETS = {
   ppr: {
     label: "PPR",
-    columns: ["fantasy_points_ppr", "ppg", "games", "passing_yards", "passing_tds",
+    columns: ["pos_rank", "fantasy_points_ppr", "ppg", "games", "passing_yards", "passing_tds",
               "rushing_yards", "rushing_tds", "receptions", "receiving_yards", "receiving_tds",
               "targets", "touchdowns"],
   },
@@ -389,6 +392,7 @@ async function fetchAndRenderNFL() {
     state.season = data.season || state.season;
 
     computeFormulaValues();
+    computePosRanks();
     loading.style.display = "none";
     renderTable();
     renderPagination();
@@ -585,7 +589,10 @@ function renderTableBody() {
       const col = getColumnDef(key);
       if (!col) continue;
       let val = player[key];
-      if (col.isText) {
+      // Show dash for non-applicable stats (e.g., WR passing stats)
+      if (state.universe === "nfl" && isNonApplicableStat(pos, key, val)) {
+        html += `<td style="color:var(--ink-faint);">—</td>`;
+      } else if (col.isText) {
         html += `<td>${val ? escapeHtml(val) : "—"}</td>`;
       } else if (key === "dynasty_value" && val != null) {
         const dvsColor = val >= 85 ? "var(--green)" : val >= 70 ? "var(--pos-qb)" : val >= 55 ? "var(--orange)" : "var(--ink-light)";
@@ -1414,6 +1421,50 @@ function computeFormulaValues() {
       }
       player[key] = totalWeight > 0 ? Math.round(score * 10) / 10 : null;
     }
+  }
+}
+
+// ─── Non-applicable stats per position (show "—" instead of 0) ──
+// If a player has 0 in a stat that's not primary for their position, show dash.
+// Only applies to counting stats — derived/rate stats handled by null.
+const NON_PRIMARY_STATS = {
+  QB: new Set(["receptions", "receiving_yards", "receiving_tds", "targets",
+               "receiving_air_yards", "receiving_yards_after_catch"]),
+  RB: new Set(["passing_yards", "passing_tds", "completions", "attempts",
+               "interceptions", "passing_air_yards"]),
+  WR: new Set(["passing_yards", "passing_tds", "completions", "attempts",
+               "interceptions", "passing_air_yards"]),
+  TE: new Set(["passing_yards", "passing_tds", "completions", "attempts",
+               "interceptions", "passing_air_yards"]),
+};
+
+function isNonApplicableStat(pos, statKey, value) {
+  const nonPrimary = NON_PRIMARY_STATS[pos];
+  if (!nonPrimary) return false;
+  // Only show dash if value is 0 or null AND stat is non-primary for position
+  return nonPrimary.has(statKey) && (value === 0 || value === null || value === undefined);
+}
+
+// ─── Positional rank computation ─────────────────────────────────
+function computePosRanks() {
+  // Group players by position, sort within each group by current sort key
+  const byPos = {};
+  for (const player of state.items) {
+    const pos = (player.position || "").toUpperCase();
+    if (!byPos[pos]) byPos[pos] = [];
+    byPos[pos].push(player);
+  }
+  // Sort each group by the current sort key
+  const key = state.sortKey;
+  const desc = state.sortDir === "desc";
+  for (const pos of Object.keys(byPos)) {
+    byPos[pos].sort((a, b) => {
+      const av = a[key] ?? 0, bv = b[key] ?? 0;
+      return desc ? bv - av : av - bv;
+    });
+    byPos[pos].forEach((p, i) => {
+      p.pos_rank = `${pos}${i + 1}`;
+    });
   }
 }
 
