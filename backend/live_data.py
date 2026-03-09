@@ -166,6 +166,65 @@ def _enrich_with_breakout(conn, items, season=None, career_mode=False):
     return items
 
 
+# ---------------------------------------------------------------------------
+# Dynasty Value Score (DVS)
+# ---------------------------------------------------------------------------
+
+# Age curves: (peak_start, peak_end, rise_start, fall_end)
+# Value is 1.0 during peak, ramps up from rise_start, decays to 0 at fall_end
+_DVS_AGE_CURVES = {
+    "QB": {"peak_start": 26, "peak_end": 30, "rise_start": 21, "fall_end": 40},
+    "RB": {"peak_start": 22, "peak_end": 25, "rise_start": 20, "fall_end": 30},
+    "WR": {"peak_start": 24, "peak_end": 28, "rise_start": 21, "fall_end": 33},
+    "TE": {"peak_start": 25, "peak_end": 29, "rise_start": 22, "fall_end": 34},
+}
+
+
+def _age_multiplier(position, age):
+    """Return 0.0-1.0 age curve multiplier for dynasty value."""
+    if age is None:
+        return 0.5  # unknown age gets neutral value
+    curve = _DVS_AGE_CURVES.get(position, _DVS_AGE_CURVES["WR"])
+    if age < curve["rise_start"]:
+        return 0.7  # very young = still high upside
+    if age <= curve["peak_start"]:
+        # Ramp up to peak
+        span = curve["peak_start"] - curve["rise_start"]
+        return 0.7 + 0.3 * ((age - curve["rise_start"]) / max(span, 1))
+    if age <= curve["peak_end"]:
+        return 1.0  # peak years
+    if age >= curve["fall_end"]:
+        return 0.1  # past prime
+    # Decline phase
+    span = curve["fall_end"] - curve["peak_end"]
+    return max(0.1, 1.0 - 0.9 * ((age - curve["peak_end"]) / max(span, 1)))
+
+
+def _enrich_with_dynasty_value(items):
+    """Compute Dynasty Value Score (DVS) for each player.
+
+    DVS = production_score × age_multiplier
+    production_score: PPR/game normalized to 0-100 (25 PPG = 100)
+    age_multiplier: position-specific curve (0.1 to 1.0)
+    """
+    for item in items:
+        ppg = item.get("ppg") or 0
+        age = item.get("age")
+        pos = item.get("position", "WR")
+
+        # Production score: 25 PPG maps to 100 (elite), capped at 100
+        production = min(100.0, ppg * 4.0)
+
+        # Age multiplier
+        age_mult = _age_multiplier(pos, age)
+
+        # Dynasty value = production weighted by remaining career value
+        dvs = round(production * age_mult, 1)
+        item["dynasty_value"] = dvs
+
+    return items
+
+
 def db_stats():
     conn = get_conn()
     players = conn.execute("SELECT COUNT(*) FROM players").fetchone()[0]
@@ -214,7 +273,7 @@ def fetch_players(
         "receiving_yards", "receiving_tds", "receptions", "touchdowns",
         "turnovers", "targets", "carries", "completions", "attempts",
         "passing_air_yards", "receiving_air_yards", "receiving_yards_after_catch",
-        "full_name", "position", "team", "games", "seasons",
+        "full_name", "position", "team", "games", "seasons", "age",
     }
     if sort_key not in safe_sorts:
         sort_key = "fantasy_points_ppr"
@@ -304,6 +363,7 @@ def fetch_players(
     _enrich_with_derived_stats(items)
     _enrich_with_rate_metrics(conn, items, season=season, career_mode=career_mode)
     _enrich_with_breakout(conn, items, season=season, career_mode=career_mode)
+    _enrich_with_dynasty_value(items)
 
     conn.close()
     return {"count": total, "season": "career" if career_mode else season, "items": items}
@@ -382,6 +442,8 @@ def fetch_screener(body):
         # Rate metrics from player_week_metrics
         "target_share", "air_yards_share", "wopr", "racr",
         "passing_epa", "receiving_epa", "rushing_epa", "dakota",
+        # Dynasty value
+        "dynasty_value", "age",
     }
     if sort_key not in safe_sorts:
         sort_key = "fantasy_points_ppr"
@@ -428,13 +490,15 @@ def fetch_screener(body):
         "receiving_yards", "receiving_tds", "receptions", "touchdowns",
         "turnovers", "targets", "carries",
     }
-    python_sort = sort_key not in sql_sortable and sort_key not in ("ppg", "games", "seasons", "full_name", "position", "team")
+    python_sort = sort_key not in sql_sortable and sort_key not in ("ppg", "games", "seasons", "full_name", "position", "team", "age")
 
     # Handle sort expression
     effective_sort = sort_key if not python_sort else "fantasy_points_ppr"
     order_expr = effective_sort
     if effective_sort == "ppg":
         order_expr = "(SUM(s.fantasy_points_ppr) / MAX(1, COUNT(*)))"
+    elif effective_sort == "age":
+        order_expr = "p.age"
     elif effective_sort == "games":
         order_expr = "COUNT(*)"
     elif effective_sort == "seasons":
@@ -498,6 +562,7 @@ def fetch_screener(body):
     _enrich_with_derived_stats(items)
     _enrich_with_rate_metrics(conn, items, season=season, career_mode=career_mode)
     _enrich_with_breakout(conn, items, season=season, career_mode=career_mode)
+    _enrich_with_dynasty_value(items)
 
     # Re-sort in Python if sorting by a derived/rate metric
     if python_sort:

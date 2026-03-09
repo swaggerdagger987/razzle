@@ -188,6 +188,10 @@ const COLUMNS = {
 
   // Breakout detection
   breakout_pct:        { label: "BRK%",    group: "Breakout", decimals: 1, derived: true },
+
+  // Dynasty value
+  dynasty_value:       { label: "DVS",     group: "Dynasty", decimals: 1, derived: true },
+  age:                 { label: "Age",     group: "Dynasty", decimals: 0 },
 };
 
 // ─── Presets ─────────────────────────────────────────────────────
@@ -215,8 +219,13 @@ const PRESETS = {
   },
   dynasty: {
     label: "Dynasty",
-    columns: ["fantasy_points_ppr", "ppg", "games", "seasons", "breakout_pct", "receiving_yards", "receiving_tds",
-              "receptions", "targets", "rushing_yards", "rushing_tds", "touchdowns"],
+    columns: ["dynasty_value", "age", "fantasy_points_ppr", "ppg", "games", "seasons", "breakout_pct",
+              "receiving_yards", "receiving_tds", "rushing_yards", "rushing_tds", "touchdowns"],
+  },
+  dynasty_rankings: {
+    label: "Dynasty Rankings",
+    columns: ["dynasty_value", "age", "ppg", "games", "fantasy_points_ppr",
+              "passing_yards", "rushing_yards", "receiving_yards", "touchdowns"],
   },
   efficiency: {
     label: "Efficiency",
@@ -549,6 +558,12 @@ function renderTableBody() {
       let val = player[key];
       if (col.isText) {
         html += `<td>${val || "—"}</td>`;
+      } else if (key === "dynasty_value" && val != null) {
+        const dvsColor = val >= 85 ? "var(--green)" : val >= 70 ? "var(--pos-qb)" : val >= 55 ? "var(--orange)" : "var(--ink-light)";
+        const dvsTier = val >= 85 ? "Elite" : val >= 70 ? "Star" : val >= 55 ? "Starter" : "";
+        html += `<td><span style="background:${dvsColor}; color:white; padding:1px 8px; border-radius:10px; border:2px solid var(--ink); font-size:11px; font-weight:700; white-space:nowrap;">${val.toFixed(1)}${dvsTier ? " " + dvsTier : ""}</span></td>`;
+      } else if (key === "age" && val != null) {
+        html += `<td style="font-weight:600;">${Math.round(val)}</td>`;
       } else if (key === "breakout_pct" && val != null && val >= 50) {
         html += `<td><span style="background:var(--green); color:white; padding:1px 6px; border-radius:10px; border:2px solid var(--ink); font-size:11px; font-weight:700;">+${val.toFixed(0)}%</span></td>`;
       } else if (col.pct && val != null) {

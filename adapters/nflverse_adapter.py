@@ -484,6 +484,74 @@ def upsert_metrics(conn, batch):
 
 
 # ---------------------------------------------------------------------------
+# Roster enrichment — age, height, weight, college, years_exp
+# ---------------------------------------------------------------------------
+
+ROSTER_URL = "https://github.com/nflverse/nflverse-data/releases/download/rosters/roster_{season}.csv"
+
+
+def sync_rosters(conn, seasons=None):
+    """Fetch nflverse roster CSVs and enrich players table with demographics."""
+    if seasons is None:
+        seasons = [current_nfl_season()]
+
+    enriched = 0
+    for season in seasons:
+        url = ROSTER_URL.format(season=season)
+        print(f"  Fetching roster for {season}...")
+        try:
+            rows = fetch_csv(url)
+        except Exception as e:
+            print(f"  Roster {season} fetch failed: {e}")
+            continue
+
+        for row in rows:
+            gsis = (row.get("gsis_id") or "").strip()
+            if not gsis:
+                continue
+
+            # Compute age from birth_date
+            age = None
+            bd = (row.get("birth_date") or "").strip()
+            if bd:
+                try:
+                    birth = datetime.strptime(bd, "%Y-%m-%d")
+                    today = datetime.now()
+                    age = round((today - birth).days / 365.25, 1)
+                except Exception:
+                    pass
+
+            years_exp = safe_int(row.get("years_exp"))
+            height = (row.get("height") or "").strip() or None
+            weight = safe_int(row.get("weight"))
+            college = (row.get("college") or "").strip() or None
+            status = (row.get("status") or "").strip() or None
+            jersey = safe_int(row.get("jersey_number"))
+
+            # Update existing player by gsis_id match
+            result = conn.execute("""
+                UPDATE players SET
+                    age = COALESCE(?, age),
+                    years_exp = COALESCE(?, years_exp),
+                    height = COALESCE(?, height),
+                    weight = COALESCE(?, weight),
+                    college = COALESCE(?, college),
+                    status = COALESCE(?, status),
+                    jersey_number = COALESCE(?, jersey_number),
+                    updated_at = ?
+                WHERE gsis_id = ? OR player_id = ?
+            """, (age, years_exp, height, weight, college, status, jersey,
+                  utc_now(), gsis, gsis))
+
+            if result.rowcount > 0:
+                enriched += 1
+
+    conn.commit()
+    print(f"  Enriched {enriched} players with roster demographics.")
+    return enriched
+
+
+# ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
 
@@ -506,6 +574,10 @@ def main():
     for season in seasons:
         total += process_season(conn, season)
 
+    # Enrich players with age/demographics from roster CSVs
+    print(f"\nEnriching players with roster demographics...")
+    sync_rosters(conn, sorted(seasons))
+
     # Update sync state
     conn.execute("""
         INSERT OR REPLACE INTO sync_state (key, value, updated_at)
@@ -516,7 +588,8 @@ def main():
     # Quick summary
     player_count = conn.execute("SELECT COUNT(*) FROM players").fetchone()[0]
     stat_count = conn.execute("SELECT COUNT(*) FROM player_week_stats").fetchone()[0]
-    print(f"\nDone. {player_count} players, {stat_count} stat rows in terminal.db")
+    age_count = conn.execute("SELECT COUNT(*) FROM players WHERE age IS NOT NULL").fetchone()[0]
+    print(f"\nDone. {player_count} players ({age_count} with age), {stat_count} stat rows in terminal.db")
     conn.close()
 
 

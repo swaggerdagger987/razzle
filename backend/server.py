@@ -24,6 +24,7 @@ def bootstrap_database():
     sys.path.insert(0, str(Path(__file__).parent.parent))
     from adapters.nflverse_adapter import (
         get_connection, initialize_database, process_season, current_nfl_season,
+        sync_rosters,
     )
     from adapters.college_adapter import (
         get_connection as college_conn,
@@ -49,6 +50,15 @@ def bootstrap_database():
                 logger.info(f"  Season {s} synced")
             except Exception as e:
                 logger.warning(f"  Season {s} failed: {e}")
+
+        # Enrich players with age/demographics from roster CSVs
+        logger.info("Enriching players with roster demographics...")
+        try:
+            # Sync all years to catch retired/cut players, newest last (overwrites with latest)
+            sync_rosters(conn, sorted(seasons))
+            logger.info("  Roster enrichment complete")
+        except Exception as e:
+            logger.warning(f"  Roster enrichment failed: {e}")
         conn.close()
 
         # College/prospect data

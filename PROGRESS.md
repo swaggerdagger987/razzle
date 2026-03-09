@@ -1,6 +1,19 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 18 — College-Prospect Integration (COMPLETE)
+## Current Phase: Phase 19 — Player Age Enrichment + Dynasty Value Score
+
+**Exit criterion:** Players table enriched with age from nflverse roster CSVs. Dynasty Value Score (DVS) computed for all skill position players: age-adjusted PPR production composite. DVS column in Lab screener with "Dynasty Rankings" preset. Creates "Razzle Dynasty Top 200" shareable content. Follows Razzle design system. Deployed to Render.
+
+### Phase 19 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Enrich players with age/demographics from nflverse rosters | DONE | sync_rosters() fetches roster CSVs (2020-2024), extracts birth_date→age, years_exp, height, weight, college, status. 100% coverage for active 2024 players (562/562). Total 1074/1074 skill players enriched. Runs in CLI and server bootstrap. |
+| 2 | Dynasty Value Score (DVS) backend computation | DONE | DVS = production_score × age_multiplier. Production = min(100, PPG×4). Position-specific age curves: QB peaks 26-30, RB 22-25, WR 24-28, TE 25-29. Enriched via _enrich_with_dynasty_value() on all screener results. Sortable via Python re-sort. Top: Lamar 99.2, Chase 94.8, Allen 92.4, Burrow 87.6. |
+| 3 | DVS column + Dynasty Rankings preset in Lab | DONE | "Dynasty" group in COLUMNS: dynasty_value (DVS) and age. Tier-colored DVS badges (Elite 85+/green, Star 70+/blue, Starter 55+/orange). Updated "Dynasty" preset includes DVS+age. New "Dynasty Rankings" preset (DVS, Age, PPG, games, PPR, yards, TDs). Column picker shows Dynasty group. |
+| 4 | Deploy + smoke test | DONE | All JS passes syntax check (lab/app/charts/warroom). All Python imports clean. DVS rankings verified: young elite producers at top, aging veterans properly discounted. Age sort works. render.yaml build includes roster sync via nflverse_adapter CLI. Pushed to master. |
+
+## Previous Phase: Phase 18 — College-Prospect Integration (COMPLETE)
 
 **Exit criterion MET:** Prospect profiles show college production stats alongside combine/athletic data. Backend links cfb_player_season_stats to combine_data prospects via normalized name matching with nickname expansion (Cam/Cameron etc). 117/329 prospects matched (unmatched are defensive/OL without offensive stats). Prospect profile modal has "College Production" section with blue accent title, position-specific career stats bar, dominator rating badge, season log table, and production arc chart. Prospect screener has 14 new College columns with "College Production" preset. Sort by college stats works with Python re-sort. Complete prospect report: athletic profile + college production + draft capital + NFL comp projection. Deployed to Render.
 
@@ -461,3 +474,4 @@ _None currently._
 | 2026-03-09 | Unified prospect report cards as Phase 15 | Prospect profile cards were missing RPS score and comp-based projections — data was spread across Big Board and profile. Consolidating everything (RPS + tier badge + percentile bars + spider chart + comps + projections) into one view creates THE definitive shareable prospect card for Reddit. One click, one card, one PNG. Client-side RPS computation avoids extra API call. Comp-based projections use weighted similarity averages of comp NFL careers. |
 | 2026-03-09 | Draft class analytics as Phase 16 | Cross-year class comparison creates a new category of screenshottable content: "Is the 2025 WR class better than 2024?" posts get massive engagement on r/DynastyFF during draft season. Reuses existing RPS computation across all draft years (2020-2026). Class grades (A/B/C/D) based on avg RPS + elite/premium ratio create instant talking points. Bar chart + class cards = two shareable formats from one feature. No new external dependencies. |
 | 2026-03-09 | College production stats as Phase 17 | cfbfastR play-level CSV aggregation unlocks "which WR dominated in college?" content for Reddit. sportsdataverse GitHub CSVs = free, no API key, same pattern as nflverse. Three-way universe toggle (NFL/Prospects/College) keeps the Lab as the single power tool. College profiles cross-reference combine/draft data for prospect pipeline analysis. |
+| 2026-03-09 | Dynasty Value Score as Phase 19 | Dynasty rankings are THE most shared content on r/DynastyFF. Every tool has them, Razzle didn't. DVS = age-adjusted PPR composite with position-specific curves (QBs age slowly, RBs drop fast). nflverse roster CSVs provide free age data (birth_date). "Dynasty Rankings" preset creates instant shareable content: "Razzle's Top 200 Dynasty Rankings." Simple formula, huge screenshotability. |
