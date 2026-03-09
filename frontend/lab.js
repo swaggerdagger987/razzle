@@ -479,9 +479,11 @@ function applyUniverseUI() {
   // Page title
   document.title = isProspect ? "Prospect Lab — Razzle" : "The Lab — Razzle";
 
-  // Show Tiers button only in prospect mode
+  // Show Tiers and Big Board buttons only in prospect mode
   const tiersBtn = document.getElementById("tiersBtn");
   if (tiersBtn) tiersBtn.style.display = isProspect ? "" : "none";
+  const bigBoardBtn = document.getElementById("bigBoardBtn");
+  if (bigBoardBtn) bigBoardBtn.style.display = isProspect ? "" : "none";
 }
 
 // ─── Sort ────────────────────────────────────────────────────────
@@ -2277,6 +2279,295 @@ function exportTierImage() {
 
   const link = document.createElement("a");
   link.download = `razzle-tiers-${currentTierPosition}-${state.season}.png`;
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+}
+
+// ─── Big Board ────────────────────────────────────────────────────
+let currentBBPosition = "ALL";
+let currentBBData = null;
+
+function openBigBoard() {
+  document.getElementById("bigBoardOverlay").classList.add("open");
+  const btnsEl = document.getElementById("bbPositionBtns");
+  const positions = ["ALL", "QB", "RB", "WR", "TE"];
+  btnsEl.innerHTML = positions.map(pos => {
+    const posColor = { ALL: "var(--orange)", QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" }[pos];
+    return `<button class="btn-chunky bb-pos-btn" data-pos="${pos}" onclick="loadBigBoard('${pos}')" style="font-size:11px; padding:4px 12px; border-color:${posColor};">${pos}</button>`;
+  }).join("");
+
+  const defaultPos = state.position || "ALL";
+  loadBigBoard(defaultPos);
+}
+
+function closeBigBoard(e) {
+  if (e && e.target !== e.currentTarget) return;
+  document.getElementById("bigBoardOverlay").classList.remove("open");
+}
+
+async function loadBigBoard(position) {
+  currentBBPosition = position;
+  const contentEl = document.getElementById("bbContent");
+  contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">scouting the ${position === "ALL" ? "" : position + " "}board...</div>`;
+
+  document.querySelectorAll(".bb-pos-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.pos === position);
+  });
+
+  try {
+    const posParam = position === "ALL" ? "" : position;
+    const data = await apiFetch(`/api/prospect-scores?position=${posParam}&draft_year=${state.season}`);
+    currentBBData = data;
+    renderBigBoard(data, contentEl);
+  } catch (err) {
+    contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the big board... ${err.message}</div>`;
+  }
+}
+
+function getRPSTierDef(rps) {
+  if (rps >= 85) return { key: "elite", label: "Elite", color: "#22a06b" };
+  if (rps >= 70) return { key: "premium", label: "Premium", color: "#2ec4b6" };
+  if (rps >= 55) return { key: "solid", label: "Solid", color: "#ffc857" };
+  return { key: "flier", label: "Flier", color: "#e87422" };
+}
+
+function renderBigBoard(data, container) {
+  const prospects = data.prospects || [];
+  if (prospects.length === 0) {
+    container.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">no prospects found for ${data.draft_year} ${data.position}</div>`;
+    return;
+  }
+
+  const posColors = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
+
+  // Group by tier
+  const tiers = { elite: [], premium: [], solid: [], flier: [] };
+  for (const p of prospects) {
+    const td = getRPSTierDef(p.rps);
+    tiers[td.key].push(p);
+  }
+
+  const tierDefs = [
+    { key: "elite", label: "Elite", color: "#22a06b", desc: "RPS 85+" },
+    { key: "premium", label: "Premium", color: "#2ec4b6", desc: "RPS 70-85" },
+    { key: "solid", label: "Solid", color: "#ffc857", desc: "RPS 55-70" },
+    { key: "flier", label: "Flier", color: "#e87422", desc: "RPS below 55" },
+  ];
+
+  let html = `<div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); margin-bottom:16px;">${data.draft_year} ${data.position} Big Board — ranked by Razzle Prospect Score</div>`;
+
+  for (const td of tierDefs) {
+    const tierProspects = tiers[td.key];
+    if (tierProspects.length === 0) continue;
+
+    html += `<div class="bb-tier-group">`;
+    html += `<div class="tier-badge" style="background:${td.color}; transform:rotate(-2deg);">${td.label}</div>`;
+    html += `<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); margin-left:8px;">${td.desc}</span>`;
+    html += `<div class="bb-tier-list">`;
+
+    for (const p of tierProspects) {
+      const posColor = posColors[p.position] || "var(--orange)";
+      const rpsPct = Math.min(100, p.rps);
+      const draftInfo = p.draft_round && p.draft_pick ? `Rd ${p.draft_round}, #${p.draft_pick}` : "UDFA";
+      const athStr = p.athletic_avg != null ? `${Math.round(p.athletic_avg)}th` : "—";
+
+      let metricsStr = "";
+      if (p.forty) metricsStr += `40: ${p.forty.toFixed(2)}`;
+      if (p.vertical) metricsStr += (metricsStr ? " · " : "") + `Vert: ${p.vertical.toFixed(1)}"`;
+      if (p.broad_jump) metricsStr += (metricsStr ? " · " : "") + `Broad: ${p.broad_jump}"`;
+
+      html += `<div class="bb-card">`;
+      html += `<div class="bb-card-rank" style="border-color:${posColor};">${p.rank}</div>`;
+      html += `<div class="bb-card-body">`;
+      html += `<div class="bb-card-header">`;
+      html += `<span class="bb-card-name">${p.player_name}</span>`;
+      html += `<span class="bb-card-pos" style="background:${posColor};">${p.position}</span>`;
+      html += `</div>`;
+      html += `<div class="bb-card-meta">${p.school || ""} · ${draftInfo}</div>`;
+      html += `<div class="bb-card-rps-row">`;
+      html += `<div class="bb-card-rps-bar"><div class="bb-card-rps-fill" style="width:${rpsPct}%; background:${td.color};"></div></div>`;
+      html += `<span class="bb-card-rps-val">${p.rps.toFixed(1)}</span>`;
+      html += `</div>`;
+      html += `<div class="bb-card-stats">`;
+      html += `<span>Ath: ${athStr}</span>`;
+      html += `<span>DC: ${Math.round(p.draft_capital_score)}</span>`;
+      if (metricsStr) html += `<span>${metricsStr}</span>`;
+      html += `</div>`;
+      html += `</div></div>`;
+    }
+
+    html += `</div></div>`;
+  }
+
+  container.innerHTML = html;
+}
+
+function exportBigBoardImage() {
+  if (!currentBBData || !currentBBData.prospects || currentBBData.prospects.length === 0) return;
+
+  const prospects = currentBBData.prospects;
+  const canvas = document.createElement("canvas");
+  const W = 800;
+  const padX = 24;
+  const padY = 24;
+  const rowH = 44;
+  const tierHeaderH = 40;
+
+  // Group by tier
+  const tiers = { elite: [], premium: [], solid: [], flier: [] };
+  for (const p of prospects) {
+    const td = getRPSTierDef(p.rps);
+    tiers[td.key].push(p);
+  }
+  const tierDefs = [
+    { key: "elite", label: "ELITE", color: "#22a06b" },
+    { key: "premium", label: "PREMIUM", color: "#2ec4b6" },
+    { key: "solid", label: "SOLID", color: "#ffc857" },
+    { key: "flier", label: "FLIER", color: "#e87422" },
+  ];
+
+  // Calculate height
+  let H = padY * 2 + 70; // header + subheader
+  for (const td of tierDefs) {
+    if (tiers[td.key].length > 0) {
+      H += tierHeaderH + tiers[td.key].length * rowH + 12;
+    }
+  }
+  H += 30; // watermark
+
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext("2d");
+
+  // Background
+  ctx.fillStyle = "#ede0cf";
+  ctx.fillRect(0, 0, W, H);
+
+  let y = padY;
+
+  // Title
+  ctx.font = "bold 26px sans-serif";
+  ctx.fillStyle = "#1a1a2e";
+  ctx.textAlign = "center";
+  ctx.fillText(`Razzle Big Board — ${currentBBData.position} ${currentBBData.draft_year}`, W / 2, y + 26);
+  y += 42;
+
+  ctx.font = "16px 'Caveat', cursive";
+  ctx.fillStyle = "#8a8a9e";
+  ctx.fillText("ranked by Razzle Prospect Score (RPS)", W / 2, y + 14);
+  y += 28;
+
+  const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  const barW = 120;
+  const barH = 10;
+
+  for (const td of tierDefs) {
+    const tierProspects = tiers[td.key];
+    if (tierProspects.length === 0) continue;
+
+    // Tier badge
+    ctx.save();
+    ctx.translate(padX + 50, y + 16);
+    ctx.rotate(-0.03);
+    const label = td.label;
+    const tw = ctx.measureText(label).width + 28;
+    ctx.fillStyle = td.color;
+    ctx.beginPath();
+    ctx.roundRect(-tw / 2, -12, tw, 24, 12);
+    ctx.fill();
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.fillStyle = "white";
+    ctx.font = "bold 12px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText(label, 0, 4);
+    ctx.restore();
+    y += tierHeaderH;
+
+    // Prospect rows
+    for (const p of tierProspects) {
+      const rowY = y;
+      const posColor = posColors[p.position] || "#d97757";
+
+      // Row bg
+      ctx.fillStyle = p.rank % 2 === 0 ? "#f7efe5" : "#f0e4d4";
+      ctx.fillRect(padX, rowY, W - padX * 2, rowH - 2);
+      ctx.strokeStyle = "#1a1a2e";
+      ctx.lineWidth = 1;
+      ctx.strokeRect(padX, rowY, W - padX * 2, rowH - 2);
+
+      // Rank
+      ctx.font = "bold 16px sans-serif";
+      ctx.fillStyle = posColor;
+      ctx.textAlign = "center";
+      ctx.fillText(`${p.rank}`, padX + 22, rowY + 27);
+
+      // Name
+      ctx.font = "bold 14px sans-serif";
+      ctx.fillStyle = "#1a1a2e";
+      ctx.textAlign = "left";
+      ctx.fillText(p.player_name.substring(0, 22), padX + 44, rowY + 18);
+
+      // Meta
+      ctx.font = "10px monospace";
+      ctx.fillStyle = "#8a8a9e";
+      const draftInfo = p.draft_round && p.draft_pick ? `Rd ${p.draft_round} #${p.draft_pick}` : "UDFA";
+      ctx.fillText(`${p.school || ""} · ${draftInfo}`, padX + 44, rowY + 34);
+
+      // Position chip
+      ctx.fillStyle = posColor;
+      const chipX = padX + 280;
+      ctx.beginPath();
+      ctx.roundRect(chipX, rowY + 10, 30, 20, 10);
+      ctx.fill();
+      ctx.font = "bold 10px sans-serif";
+      ctx.fillStyle = "white";
+      ctx.textAlign = "center";
+      ctx.fillText(p.position, chipX + 15, rowY + 24);
+
+      // RPS bar
+      const barX = padX + 330;
+      ctx.fillStyle = "#e5d5c3";
+      ctx.beginPath();
+      ctx.roundRect(barX, rowY + 16, barW, barH, 5);
+      ctx.fill();
+      const fillW = Math.min(barW, (p.rps / 100) * barW);
+      ctx.fillStyle = td.color;
+      ctx.beginPath();
+      ctx.roundRect(barX, rowY + 16, fillW, barH, 5);
+      ctx.fill();
+
+      // RPS value
+      ctx.font = "bold 14px monospace";
+      ctx.fillStyle = "#1a1a2e";
+      ctx.textAlign = "left";
+      ctx.fillText(p.rps.toFixed(1), barX + barW + 8, rowY + 27);
+
+      // Key metrics
+      ctx.font = "10px monospace";
+      ctx.fillStyle = "#4a4a5e";
+      ctx.textAlign = "right";
+      let metricStr = "";
+      if (p.forty) metricStr += `40: ${p.forty.toFixed(2)}`;
+      if (p.athletic_avg != null) metricStr += (metricStr ? "  " : "") + `Ath: ${Math.round(p.athletic_avg)}th`;
+      ctx.fillText(metricStr, W - padX - 4, rowY + 27);
+
+      y += rowH;
+    }
+    y += 12;
+  }
+
+  // Watermark
+  ctx.font = "bold 14px sans-serif";
+  ctx.fillStyle = "#1a1a2e";
+  ctx.globalAlpha = 0.3;
+  ctx.textAlign = "center";
+  ctx.fillText("built different — razzle.lol", W / 2, y + 8);
+  ctx.globalAlpha = 1.0;
+
+  const link = document.createElement("a");
+  link.download = `razzle-bigboard-${currentBBData.position.toLowerCase()}-${currentBBData.draft_year}.png`;
   link.href = canvas.toDataURL("image/png");
   link.click();
 }

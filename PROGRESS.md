@@ -1,6 +1,19 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 13 — Historical Athletic Comps + Prospect Comparisons (COMPLETE)
+## Current Phase: Phase 14 — Composite Prospect Scoring + Big Board (COMPLETE)
+
+**Exit criterion MET:** Lab prospect mode has "Big Board" button that opens visual ranked board scored by Razzle Prospect Score (RPS). RPS = weighted composite of avg athletic percentile (60%) + draft capital value (30%) + position-relative size score (10%). Big Board shows ranked prospects with position filter tabs (ALL/QB/RB/WR/TE), tier bands (Elite 85+/Premium 70-85/Solid 55-70/Flier <55) with rotated sticker badges, ranked prospect cards with RPS score bars, key combine metrics, draft info. Exportable as PNG with Razzle watermark. 329 total prospects scored for 2025 draft class. Follows Razzle design system. Deployed to Render.
+
+### Phase 14 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Razzle Prospect Score (RPS) backend | DONE | New endpoint GET /api/prospect-scores. RPS formula: athletic_avg*0.6 + draft_capital*0.3 + size_score*0.1. Draft capital: pick 1=100, linear decay to pick 256=20, undrafted=20. Size score: position-relative weight percentile. Handles missing combine data gracefully. 329 prospects scored for 2025. |
+| 2 | Big Board view in Lab frontend | DONE | "Big Board" button in prospect toolbar. Overlay with position filter tabs (ALL/QB/RB/WR/TE), tier bands (Elite/Premium/Solid/Flier) with rotated sticker badges. Ranked prospect cards: rank circle, name, position chip, school, draft info, RPS bar with tier color, key metrics. Chunky 2px borders, offset shadows, hover lift. Mobile responsive. |
+| 3 | Big Board PNG export | DONE | Canvas-rendered export with title, tier sections, prospect rows with RPS bars, position chips, combine metrics. Portrait layout (800px wide). Razzle watermark baked in. Downloads as razzle-bigboard-{position}-{year}.png. |
+| 4 | Deploy + smoke test | DONE | All JS passes syntax check. Python imports clean. RPS endpoint returns correct data for all positions. Render.yaml correct. Pushed to master for Render auto-deploy. |
+
+## Previous Phase: Phase 13 — Historical Athletic Comps + Prospect Comparisons (COMPLETE)
 
 **Exit criterion MET:** Prospect profile cards show top 3 NFL historical athletic comps (players with most similar combine profiles at same position, Euclidean distance on percentile-normalized metrics, NFL career boost). Prospect comparison mode: select 2-3 prospects → side-by-side spider chart overlays with different colors + combine stat table with percentiles. Draft class tier view: "Tiers" button in prospect toolbar, position selector, prospects grouped by avg athletic percentile (Elite 80+, Above Avg, Avg, Below Avg, No Data) with sticker badge tier labels. All exportable as PNG with Razzle watermark. Follows Razzle design system. Deployed to Render.
 
@@ -393,3 +406,4 @@ _None currently._
 | 2026-03-09 | Heat maps + breakout detection as Phase 11 | Heat maps fill the last major visualization gap from the North Star. Positional percentile heat maps are extremely screenshottable for Reddit — dynasty managers love position tier grids. Breakout detection (50%+ YoY PPR) leverages multi-season data for a uniquely useful dynasty signal. Both create new shareable content types. |
 | 2026-03-09 | Prospect cards as Phase 12 | Clickable prospect profiles with athletic percentile bars and spider charts are THE draft week content for r/DynastyFF and r/NFL_Draft. Combine percentiles within position group give instant context (is 4.50 fast for a WR?). Spider charts create a unique visual fingerprint per prospect — highly screenshottable. Uses existing nflverse combine data, no CFBD API key needed. |
 | 2026-03-09 | Athletic comps + tier view as Phase 13 | "Who is this prospect's NFL athletic comp?" is THE question dynasty managers ask during draft week. Euclidean distance on percentile-normalized combine metrics finds historical matches. Tier view groups a whole position's draft class by athletic profile — creates screenshottable tier lists for Reddit. Prospect comparison mode enables side-by-side analysis. All three features use existing nflverse data, creating maximum content from available data. |
+| 2026-03-09 | Composite prospect scoring as Phase 14 | Razzle Prospect Score (RPS) creates a single "how good is this prospect" number combining athletic percentile (60%), draft capital (30%), and size (10%). Big Board ranked list is THE draft-week content for dynasty Reddit — "Razzle's 2025 WR Big Board" with tier bands is an instant screenshottable PNG. CFBD college production stats blocked (no API key), so RPS maximizes value from available combine+draft data. |

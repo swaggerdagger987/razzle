@@ -865,6 +865,125 @@
     }
   }
 
+  /* ===== BIG BOARD ===== */
+  .bb-tier-group {
+    margin-bottom: 20px;
+  }
+  .bb-tier-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .bb-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border: 2px solid var(--ink);
+    border-radius: 10px;
+    background: var(--bg);
+    box-shadow: 2px 2px 0 var(--ink);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .bb-card:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+  .bb-card-rank {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ink);
+    min-width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .bb-card-body {
+    flex: 1;
+    min-width: 0;
+  }
+  .bb-card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .bb-card-name {
+    font-family: var(--font-display);
+    font-size: 16px;
+    color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .bb-card-pos {
+    font-family: var(--font-display);
+    font-size: 10px;
+    font-weight: 700;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 10px;
+    flex-shrink: 0;
+  }
+  .bb-card-meta {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-light);
+    margin-top: 2px;
+  }
+  .bb-card-rps-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+  }
+  .bb-card-rps-bar {
+    flex: 1;
+    height: 8px;
+    background: var(--bg-warm);
+    border-radius: 4px;
+    overflow: hidden;
+    max-width: 160px;
+  }
+  .bb-card-rps-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s;
+  }
+  .bb-card-rps-val {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+    min-width: 36px;
+  }
+  .bb-card-stats {
+    display: flex;
+    gap: 12px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-medium);
+    margin-top: 4px;
+    flex-wrap: wrap;
+  }
+  @media (max-width: 480px) {
+    .bb-card {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .bb-card-rank {
+      align-self: flex-start;
+    }
+    .bb-card-rps-bar {
+      max-width: 100%;
+    }
+  }
+
   /* ===== FORMULA STORE ===== */
   .store-modal {
     background: var(--bg-card);
@@ -1043,6 +1162,7 @@
     <button class="btn-chunky" onclick="openFormulaStore()">Store</button>
     <button class="btn-chunky" onclick="openChartPanel()">Charts</button>
     <button class="btn-chunky" id="tiersBtn" onclick="openTierView()" style="display:none;">Tiers</button>
+    <button class="btn-chunky" id="bigBoardBtn" onclick="openBigBoard()" style="display:none;">Big Board</button>
     <button class="btn-chunky" onclick="copyShareURL()">Share URL</button>
     <button class="btn-primary" onclick="exportImage()">Export PNG</button>
 
@@ -1191,6 +1311,23 @@
     </div>
     <div style="margin-top:12px; display:flex; justify-content:flex-end;">
       <button class="btn-chunky" onclick="closeTierView()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- BIG BOARD OVERLAY -->
+<div class="filter-modal-overlay" id="bigBoardOverlay" onclick="closeBigBoard(event)">
+  <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:960px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
+      <h3 style="margin:0;">Razzle Big Board</h3>
+      <div id="bbPositionBtns" style="display:flex; gap:6px; margin-left:auto;"></div>
+      <button class="btn-primary" id="bbExportBtn" onclick="exportBigBoardImage()" style="font-size:11px; padding:6px 14px;">Export PNG</button>
+    </div>
+    <div id="bbContent">
+      <div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">scouting the board...</div>
+    </div>
+    <div style="margin-top:12px; display:flex; justify-content:flex-end;">
+      <button class="btn-chunky" onclick="closeBigBoard()">Close</button>
     </div>
   </div>
 </div>
