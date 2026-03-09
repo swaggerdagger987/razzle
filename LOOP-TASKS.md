@@ -30,9 +30,9 @@
 **Accept when**: Share button in Lab toolbar opens modal with URL copy + PNG export + Reddit title suggestion. Modal has sand bg, chunky borders, Razzle styling. Reddit title adapts to current view (position, preset, filters). Works in NFL, Prospect, and College modes.
 **Depends on**: none
 **Size**: M
-**Status**: PENDING
-**Attempt**: 0/3
-**Result**:
+**Status**: PASS
+**Attempt**: 1/3
+**Result**: Replaced "Share URL" + "Export PNG" with single "Share" button (terracotta border). Modal: shareable URL input + Copy URL (with "Copied." feedback), Download PNG button (triggers exportImage + closes), auto-generated Reddit title via generateRedditTitle() adapting to universe/position/preset/season. NFL dynasty example: "Dynasty WR Rankings by DVS (2024) | Razzle". Prospect example: "2025 WR Prospect Class — Combine View | Razzle". Caveat annotation: "screenshots are billboards. share generously." Card bg, chunky 3px borders, offset shadow.
 
 ## Task 4: Deploy + smoke test
 **Requirement**: "Deploy to Render and verify all sharing/export features work end to end."
@@ -48,9 +48,9 @@
 ## Loop State
 ```
 Current Phase: 20
-Current Task: 3
+Current Task: 4
 Current Stage: DESIGN
 Attempt: 0/3
-Tasks Completed: 2/4
-Loop Iterations: 2
+Tasks Completed: 3/4
+Loop Iterations: 3
 ```

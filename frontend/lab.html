@@ -1292,8 +1292,7 @@
     <button class="btn-chunky" id="tiersBtn" onclick="openTierView()" style="display:none;">Tiers</button>
     <button class="btn-chunky" id="bigBoardBtn" onclick="openBigBoard()" style="display:none;">Big Board</button>
     <button class="btn-chunky" id="classAnalyticsBtn" onclick="openClassAnalytics()" style="display:none;">Class Analytics</button>
-    <button class="btn-chunky" onclick="copyShareURL()">Share URL</button>
-    <button class="btn-primary" onclick="exportImage()">Export PNG</button>
+    <button class="btn-chunky" onclick="openShareModal()" style="border-color:var(--orange);">Share</button>
     <button class="btn-chunky" id="exportRankingsBtn" onclick="openRankingsExport()" style="display:none;">Export Rankings</button>
 
     <span class="result-count" id="resultCount"></span>
@@ -1424,6 +1423,42 @@
     </div>
     <div style="margin-top:12px; display:flex; justify-content:flex-end;">
       <button class="btn-chunky" onclick="closeCompare()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- SHARE MODAL -->
+<div class="filter-modal-overlay" id="shareOverlay" onclick="closeShareModal(event)">
+  <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:520px; max-width:95vw;" onclick="event.stopPropagation()">
+    <h3 style="margin:0 0 16px 0; font-family:var(--font-display);">Share This View</h3>
+
+    <!-- Shareable URL -->
+    <div style="margin-bottom:16px;">
+      <label style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; display:block; margin-bottom:6px;">Shareable URL</label>
+      <div style="display:flex; gap:8px; align-items:center;">
+        <input type="text" id="shareURLInput" readonly style="flex:1; font-family:var(--font-mono); font-size:12px; padding:8px 10px; border:2px solid var(--ink); border-radius:6px; background:var(--bg); color:var(--ink);">
+        <button class="btn-primary" id="shareURLCopyBtn" onclick="copyShareURLFromModal()" style="font-size:11px; padding:6px 14px; white-space:nowrap;">Copy URL</button>
+      </div>
+    </div>
+
+    <!-- Export PNG -->
+    <div style="margin-bottom:16px;">
+      <label style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; display:block; margin-bottom:6px;">Export Image</label>
+      <button class="btn-chunky" onclick="exportImage(); closeShareModal();" style="font-size:12px; padding:6px 14px;">Download PNG</button>
+    </div>
+
+    <!-- Reddit Title -->
+    <div style="margin-bottom:16px;">
+      <label style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; display:block; margin-bottom:6px;">Suggested Reddit Title</label>
+      <div style="display:flex; gap:8px; align-items:center;">
+        <input type="text" id="redditTitleInput" readonly style="flex:1; font-family:var(--font-mono); font-size:12px; padding:8px 10px; border:2px solid var(--ink); border-radius:6px; background:var(--bg); color:var(--ink);">
+        <button class="btn-chunky" id="redditTitleCopyBtn" onclick="copyRedditTitle()" style="font-size:11px; padding:6px 14px; white-space:nowrap;">Copy</button>
+      </div>
+    </div>
+
+    <p style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); margin:8px 0 16px 0;">screenshots are billboards. share generously.</p>
+    <div style="display:flex; justify-content:flex-end;">
+      <button class="btn-chunky" onclick="closeShareModal()">Close</button>
     </div>
   </div>
 </div>

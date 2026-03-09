@@ -10,7 +10,7 @@
 |---|------|--------|-------|
 | 1 | NFL player comparison PNG export | DONE | exportNFLCompareImage() in charts.js: 800px canvas with sand bg, Caveat title, side-by-side player cards (position-colored stripes, DVS tier badges via client-side computation), stats comparison table (green best values), radar chart overlay, watermark. Export button in renderCompareTable(). Downloads as razzle-compare-{name1}-vs-{name2}.png. |
 | 2 | Quick rankings export (Top N at Position) | DONE | "Export Rankings" button in NFL toolbar. Overlay: position/count/sort selectors. Fetches from API, computes DVS client-side, renders 800px canvas with ranked rows (position-colored rank badges, DVS tier badges, PPG). computeClientDVS() shared via app.js. Downloads as razzle-rankings-{pos}-topN.png. |
-| 3 | Unified share modal with Reddit title suggestion | PENDING | |
+| 3 | Unified share modal with Reddit title suggestion | DONE | "Share" button (terracotta border) replaces separate Share URL + Export PNG. Modal: shareable URL + copy, Download PNG, auto-generated Reddit title adapting to universe/position/preset/season. Caveat annotation. Chunky borders, sand card bg. |
 | 4 | Deploy + smoke test | PENDING | |
 
 ## Previous Phase: Phase 19 — Player Age Enrichment + Dynasty Value Score (COMPLETE)

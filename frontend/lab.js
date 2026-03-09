@@ -985,14 +985,59 @@ function loadStateFromURL() {
   renderActiveFilters();
 }
 
-function copyShareURL() {
+function openShareModal() {
   saveStateToURL();
-  navigator.clipboard.writeText(window.location.href).then(() => {
-    const btn = event.target;
-    const orig = btn.textContent;
+  document.getElementById("shareOverlay").classList.add("open");
+  document.getElementById("shareURLInput").value = window.location.href;
+  document.getElementById("redditTitleInput").value = generateRedditTitle();
+}
+
+function closeShareModal(e) {
+  if (e && e.target !== e.currentTarget) return;
+  document.getElementById("shareOverlay").classList.remove("open");
+}
+
+function copyShareURLFromModal() {
+  const input = document.getElementById("shareURLInput");
+  navigator.clipboard.writeText(input.value).then(() => {
+    const btn = document.getElementById("shareURLCopyBtn");
     btn.textContent = "Copied.";
-    setTimeout(() => btn.textContent = orig, 1500);
+    setTimeout(() => btn.textContent = "Copy URL", 1500);
   });
+}
+
+function copyRedditTitle() {
+  const input = document.getElementById("redditTitleInput");
+  navigator.clipboard.writeText(input.value).then(() => {
+    const btn = document.getElementById("redditTitleCopyBtn");
+    btn.textContent = "Copied.";
+    setTimeout(() => btn.textContent = "Copy", 1500);
+  });
+}
+
+function generateRedditTitle() {
+  const preset = getCurrentPresetName();
+  const season = state.season === "career" ? "Career" : (state.season || "2024");
+  const posFilter = state.position ? state.position.toUpperCase() : "";
+
+  if (state.universe === "prospects") {
+    const year = state.season || "2025";
+    if (posFilter) return `${year} ${posFilter} Prospect Class — ${preset} View | Razzle`;
+    return `${year} Draft Prospect ${preset} Rankings | Razzle`;
+  }
+
+  if (state.universe === "college") {
+    if (posFilter) return `College ${posFilter} ${preset} Stats (${season}) | Razzle`;
+    return `College Football ${preset} Stats (${season}) | Razzle`;
+  }
+
+  // NFL
+  if (preset === "Dynasty Rankings" || preset === "Dynasty") {
+    if (posFilter) return `Dynasty ${posFilter} Rankings by DVS (${season}) | Razzle`;
+    return `Dynasty Rankings — Top Players by DVS (${season}) | Razzle`;
+  }
+  if (posFilter) return `${season} ${posFilter} ${preset} Stats — Fantasy Football | Razzle`;
+  return `${season} Fantasy Football ${preset} Stats | Razzle`;
 }
 
 // ─── Player selection (for compare/charts) ───────────────────────
