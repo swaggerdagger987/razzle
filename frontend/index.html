@@ -9,6 +9,7 @@
 <meta property="og:site_name" content="razzle.lol">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="styles.css">
 <style>
   /* ===== HERO ===== */
@@ -163,17 +164,17 @@
 
   .demo-section .section-label { color: var(--yellow); }
   .demo-section h2 { color: white; }
-  .demo-section .section-desc { color: #8a8a9e; }
+  .demo-section .section-desc { color: var(--ink-light); }
 
   .demo-card {
-    background: #1a1a2e;
-    border: 2px solid #333;
+    background: var(--ink);
+    border: 2px solid var(--ink-medium);
     border-radius: 12px;
     padding: 20px;
     margin-bottom: 12px;
     font-family: var(--font-mono);
     font-size: 13px;
-    color: #ccc;
+    color: var(--ink-faint);
   }
 
   .demo-card .agent-name {
@@ -201,8 +202,8 @@
   .urgency-opportunity { color: var(--green); border-color: var(--green); }
 
   .redacted {
-    background: #333;
-    color: #333;
+    background: var(--ink-medium);
+    color: var(--ink-medium);
     border-radius: 3px;
     padding: 0 8px;
     user-select: none;
@@ -454,7 +455,7 @@
     <div id="demoCards"></div>
 
     <div style="text-align:center; margin-top:12px;">
-      <button class="btn-chunky" onclick="renderDemoCards()" style="border-color:#555; color:#8a8a9e; font-size:11px; background:transparent;">shuffle briefings</button>
+      <button class="btn-chunky" onclick="renderDemoCards()" style="border-color:var(--ink-medium); color:var(--ink-light); font-size:11px; background:transparent;">shuffle briefings</button>
     </div>
 
     <div class="demo-cta">
