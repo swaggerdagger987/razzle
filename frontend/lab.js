@@ -240,6 +240,10 @@ const COLUMNS = {
   catch_rate:          { label: "Catch%",   tip: "Catch Rate — receptions / targets as percentage", group: "Efficiency", decimals: 1, derived: true },
   comp_pct:            { label: "CMP%",     tip: "Completion Percentage — completions / attempts", group: "Efficiency", decimals: 1, derived: true },
   yards_per_att:       { label: "Y/ATT",    tip: "Yards Per Attempt — passing yards / attempts", group: "Efficiency", decimals: 1, derived: true },
+  passer_rating:       { label: "Rating",   tip: "Passer Rating — NFL passer rating formula (0-158.3)", group: "Efficiency", decimals: 1, derived: true },
+  ay_per_att:          { label: "AY/A",     tip: "Adjusted Yards Per Attempt — (pass yds + 20\u00d7TD - 45\u00d7INT) / ATT", group: "Efficiency", decimals: 1, derived: true },
+  td_rate:             { label: "TD%",      tip: "TD Rate — touchdowns / (carries + targets) as percentage", group: "Efficiency", decimals: 1, derived: true },
+  fumble_rate:         { label: "FUM%",     tip: "Fumble Rate — fumbles lost / (carries + receptions) as percentage", group: "Efficiency", decimals: 1, derived: true },
   snap_share:          { label: "Snap%",    tip: "Snap Share — percentage of offensive snaps played", group: "Efficiency", decimals: 1, derived: true },
 
   // Per-game averages (derived — sort only)
@@ -280,7 +284,8 @@ const PRESETS = {
   passing: {
     label: "Passing",
     columns: ["fantasy_points_ppr", "ppg", "games", "passing_yards", "passing_tds",
-              "completions", "attempts", "interceptions", "passing_air_yards", "rushing_yards", "rushing_tds"],
+              "completions", "attempts", "interceptions", "passer_rating", "ay_per_att",
+              "passing_air_yards", "rushing_yards", "rushing_tds"],
   },
   rushing: {
     label: "Rushing",
@@ -305,7 +310,8 @@ const PRESETS = {
   efficiency: {
     label: "Efficiency",
     columns: ["fantasy_points_ppr", "ppg", "games", "yards_per_carry", "yards_per_rec",
-              "yards_per_target", "catch_rate", "comp_pct", "yards_per_att", "target_share"],
+              "yards_per_target", "catch_rate", "comp_pct", "yards_per_att", "passer_rating",
+              "ay_per_att", "td_rate", "fumble_rate", "target_share"],
   },
   advanced: {
     label: "Advanced",

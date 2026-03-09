@@ -107,6 +107,37 @@ def _enrich_with_derived_stats(items):
         # Snap share (already averaged in SQL, just round)
         snap_pct = item.get("offense_pct")
         item["snap_share"] = round(snap_pct, 1) if snap_pct else None
+
+        # Passer Rating (NFL formula)
+        att = item.get("attempts") or 0
+        if att > 0:
+            comp = item.get("completions") or 0
+            p_yds = item.get("passing_yards") or 0
+            p_td = item.get("passing_tds") or 0
+            ints = item.get("interceptions") or 0
+            a = max(0, min(2.375, ((comp / att) - 0.3) * 5))
+            b = max(0, min(2.375, ((p_yds / att) - 3) * 0.25))
+            c = max(0, min(2.375, (p_td / att) * 20))
+            d = max(0, min(2.375, 2.375 - ((ints / att) * 25)))
+            item["passer_rating"] = round(((a + b + c + d) / 6) * 100, 1)
+            # Adjusted Yards per Attempt
+            item["ay_per_att"] = round((p_yds + 20 * p_td - 45 * ints) / att, 1)
+        else:
+            item["passer_rating"] = None
+            item["ay_per_att"] = None
+
+        # TD Rate: total TDs / (carries + targets)
+        car = item.get("carries") or 0
+        tgt = item.get("targets") or 0
+        total_opps = car + tgt
+        tds = item.get("touchdowns") or 0
+        item["td_rate"] = round(tds / total_opps * 100, 1) if total_opps > 0 else None
+
+        # Fumble Rate: fumbles_lost / (carries + receptions)
+        rec = item.get("receptions") or 0
+        fl = item.get("fumbles_lost") or 0
+        touch_opps = car + rec
+        item["fumble_rate"] = round(fl / touch_opps * 100, 1) if touch_opps > 0 else None
     return items
 
 
