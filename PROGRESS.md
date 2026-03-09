@@ -9,7 +9,7 @@
 | # | Task | Status | Notes |
 |---|------|--------|-------|
 | 1 | Backend trade value model + API endpoint | DONE | Production 50% + age curve 30% + scarcity 20%, 0-100 scale |
-| 2 | Trade Analyzer UI — two-sided card with player search | | |
+| 2 | Trade Analyzer UI — two-sided card with player search | DONE | Trade button in toolbar, I Give/I Get sides, API search, position cards, verdict |
 | 3 | Value comparison display + verdict + commentary | | |
 | 4 | Trade card PNG export with watermark | | |
 | 5 | Deploy + smoke test | | |

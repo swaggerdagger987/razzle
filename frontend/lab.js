@@ -6198,6 +6198,238 @@ function shortcutRow(key, desc) {
   </tr>`;
 }
 
+// ─── Trade Analyzer ─────────────────────────────────────────────────
+
+const _taState = { give: [], get: [], valueCache: {} };
+
+function openTradeAnalyzer() {
+  document.getElementById("tradeAnalyzerOverlay").classList.add("open");
+  // Focus give search
+  setTimeout(() => document.getElementById("taSearchGive").focus(), 100);
+}
+
+function closeTradeAnalyzer(e) {
+  if (e && e.target !== e.currentTarget) return;
+  document.getElementById("tradeAnalyzerOverlay").classList.remove("open");
+}
+
+function _taSetupSearch(side) {
+  const inputId = side === "give" ? "taSearchGive" : "taSearchGet";
+  const autoId = side === "give" ? "taAutoGive" : "taAutoGet";
+  const input = document.getElementById(inputId);
+  const autoDiv = document.getElementById(autoId);
+  let debounce = null;
+
+  input.addEventListener("input", () => {
+    clearTimeout(debounce);
+    debounce = setTimeout(async () => {
+      const q = input.value.trim();
+      if (q.length < 2) { autoDiv.style.display = "none"; return; }
+      try {
+        const data = await apiFetch("/api/players?search=" + encodeURIComponent(q) + "&limit=8&relevant=true");
+        const players = data.items || [];
+        if (!players.length) { autoDiv.style.display = "none"; return; }
+        const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+        autoDiv.innerHTML = players.map(p => {
+          const pc = posColors[p.position] || "#1a1a2e";
+          const pid = p.player_id || p.full_name;
+          return '<div class="trade-autocomplete-item" data-pid="' + escapeAttr(pid) + '" data-side="' + side + '">'
+            + '<span class="pos-badge" style="background:' + pc + ';">' + escapeHtml(p.position) + '</span>'
+            + '<span style="font-family:var(--font-display); font-size:12px;">' + escapeHtml(p.full_name) + '</span>'
+            + '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); margin-left:auto;">' + escapeHtml(p.team || "FA") + '</span>'
+            + '</div>';
+        }).join("");
+        autoDiv.style.display = "";
+      } catch (err) {
+        console.error("Trade search failed:", err);
+        autoDiv.style.display = "none";
+      }
+    }, 200);
+  });
+
+  autoDiv.addEventListener("mousedown", (e) => {
+    const item = e.target.closest(".trade-autocomplete-item");
+    if (!item) return;
+    e.preventDefault();
+    const pid = item.dataset.pid;
+    _taAddPlayer(side, pid);
+    input.value = "";
+    autoDiv.style.display = "none";
+  });
+
+  input.addEventListener("blur", () => {
+    setTimeout(() => { autoDiv.style.display = "none"; }, 200);
+  });
+}
+
+async function _taAddPlayer(side, playerId) {
+  const arr = _taState[side];
+  if (arr.find(p => p.player_id === playerId)) return;
+
+  // Fetch trade value from backend
+  let playerData = _taState.valueCache[playerId];
+  if (!playerData) {
+    try {
+      const resp = await apiFetch("/api/trade/values?player_ids=" + encodeURIComponent(playerId));
+      const players = resp.players || [];
+      if (players.length) {
+        playerData = players[0];
+        _taState.valueCache[playerId] = playerData;
+      }
+    } catch (err) {
+      console.error("Trade value fetch failed:", err);
+    }
+  }
+  if (!playerData) return;
+
+  arr.push(playerData);
+  _taRenderSide(side);
+  _taUpdateVerdict();
+}
+
+function _taRemovePlayer(side, idx) {
+  _taState[side].splice(idx, 1);
+  _taRenderSide(side);
+  _taUpdateVerdict();
+}
+
+function _taRenderSide(side) {
+  const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  const arr = _taState[side];
+  const listId = side === "give" ? "taListGive" : "taListGet";
+  const totalId = side === "give" ? "taTotalGive" : "taTotalGet";
+  const container = document.getElementById(listId);
+  const total = arr.reduce((s, p) => s + (p.trade_value || 0), 0);
+  document.getElementById(totalId).textContent = total;
+
+  if (!arr.length) {
+    const hint = side === "give" ? "drop players here to trade away" : "drop players here to acquire";
+    container.innerHTML = '<div class="trade-empty-hint">' + hint + '</div>';
+    return;
+  }
+
+  container.innerHTML = arr.map((p, i) => {
+    const pc = posColors[p.position] || "#1a1a2e";
+    return '<div class="trade-player-card" style="border-left:4px solid ' + pc + ';">'
+      + '<span class="pos-badge" style="background:' + pc + ';">' + escapeHtml(p.position) + '</span>'
+      + '<div class="player-info">'
+      + '<div class="player-name">' + escapeHtml(p.full_name) + '</div>'
+      + '<div class="player-meta">' + escapeHtml(p.team || "FA") + (p.age ? ' · Age ' + p.age : '') + '</div>'
+      + '</div>'
+      + '<span class="player-value">' + (p.trade_value || 0) + '</span>'
+      + '<button class="remove-btn" onclick="_taRemovePlayer(\'' + side + '\', ' + i + ')" title="Remove">×</button>'
+      + '</div>';
+  }).join("");
+}
+
+function _taUpdateVerdict() {
+  const verdictArea = document.getElementById("taVerdictArea");
+  const giveTotal = _taState.give.reduce((s, p) => s + (p.trade_value || 0), 0);
+  const getTotal = _taState.get.reduce((s, p) => s + (p.trade_value || 0), 0);
+
+  if (!_taState.give.length || !_taState.get.length) {
+    verdictArea.style.display = "none";
+    return;
+  }
+
+  verdictArea.style.display = "";
+  const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+
+  // Value bars
+  const maxVal = Math.max(giveTotal, getTotal, 1);
+  const givePct = Math.round((giveTotal / maxVal) * 100);
+  const getPct = Math.round((getTotal / maxVal) * 100);
+
+  // Build segmented bars from player values
+  let giveSegments = _taState.give.map(p => {
+    const pc = posColors[p.position] || "#8a8a9e";
+    const w = maxVal > 0 ? ((p.trade_value || 0) / maxVal * 100) : 0;
+    return '<div style="width:' + w + '%; height:100%; background:' + pc + '; display:inline-block;" title="' + escapeAttr(p.full_name) + ': ' + p.trade_value + '"></div>';
+  }).join("");
+
+  let getSegments = _taState.get.map(p => {
+    const pc = posColors[p.position] || "#8a8a9e";
+    const w = maxVal > 0 ? ((p.trade_value || 0) / maxVal * 100) : 0;
+    return '<div style="width:' + w + '%; height:100%; background:' + pc + '; display:inline-block;" title="' + escapeAttr(p.full_name) + ': ' + p.trade_value + '"></div>';
+  }).join("");
+
+  const barsHtml = '<div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">'
+    + '<div style="display:flex; align-items:center; gap:8px;">'
+    + '<span style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; min-width:50px;">Give</span>'
+    + '<div style="flex:1; height:14px; background:var(--bg-warm); border:2px solid var(--ink); border-radius:6px; overflow:hidden; display:flex;">' + giveSegments + '</div>'
+    + '<span style="font-family:var(--font-mono); font-size:13px; font-weight:bold; min-width:32px; text-align:right;">' + giveTotal + '</span>'
+    + '</div>'
+    + '<div style="display:flex; align-items:center; gap:8px;">'
+    + '<span style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; min-width:50px;">Get</span>'
+    + '<div style="flex:1; height:14px; background:var(--bg-warm); border:2px solid var(--ink); border-radius:6px; overflow:hidden; display:flex;">' + getSegments + '</div>'
+    + '<span style="font-family:var(--font-mono); font-size:13px; font-weight:bold; min-width:32px; text-align:right;">' + getTotal + '</span>'
+    + '</div>'
+    + '</div>';
+
+  document.getElementById("taValueBars").innerHTML = barsHtml;
+
+  // Verdict
+  const diff = getTotal - giveTotal;
+  const avg = (giveTotal + getTotal) / 2;
+  const pctDiff = avg > 0 ? Math.round(Math.abs(diff) / avg * 100) : 0;
+
+  let verdict, verdictColor, verdictBg;
+  if (pctDiff <= 10) {
+    verdict = "FAIR";
+    verdictColor = "#d97757";
+    verdictBg = "#f7e4d8";
+  } else if (diff > 0) {
+    verdict = "WIN";
+    verdictColor = "#2ec4b6";
+    verdictBg = "#d9efec";
+  } else {
+    verdict = "LOSS";
+    verdictColor = "#e63946";
+    verdictBg = "#f2d5d8";
+  }
+
+  const pctLabel = pctDiff <= 10 ? "Even value" : (diff > 0 ? "+" + pctDiff + "% in your favor" : "-" + pctDiff + "% against you");
+
+  document.getElementById("taVerdict").innerHTML = '<div style="display:inline-block; margin:8px 0;">'
+    + '<span style="display:inline-block; font-family:var(--font-display); font-size:20px; color:' + verdictColor + '; background:' + verdictBg + '; padding:8px 24px; border:3px solid ' + verdictColor + '; border-radius:8px; box-shadow:3px 3px 0 var(--ink); transform:rotate(-2deg); letter-spacing:2px;">' + verdict + '</span>'
+    + '</div>'
+    + '<div style="font-family:var(--font-mono); font-size:13px; color:var(--ink-medium); margin-top:6px;">' + pctLabel + '</div>';
+
+  // Commentary
+  const quips = {
+    WIN: [
+      "take that and run before they notice",
+      "robbery in broad daylight",
+      "you fleeced them and they'll figure it out by week 4",
+      "smash accept before they check the numbers",
+      "the kind of deal that gets you banned from group chats"
+    ],
+    LOSS: [
+      "you're giving up the ranch on this one",
+      "their side of the deal is doing the heavy lifting",
+      "might want to sleep on this one, chief",
+      "the math is mathing and it's not in your favor",
+      "this trade needs more seasoning on your end"
+    ],
+    FAIR: [
+      "both sides can feel good about this one",
+      "a trade where nobody gets flamed in the group chat",
+      "clean deal, no drama",
+      "the rare trade that actually makes sense for both sides",
+      "perfectly balanced, as all things should be"
+    ]
+  };
+  const pool = quips[verdict] || quips.FAIR;
+  const quip = pool[Math.floor(Math.random() * pool.length)];
+  document.getElementById("taCommentary").innerHTML = '<div style="font-family:var(--font-hand); font-size:20px; color:var(--ink-light); margin-top:10px; font-style:italic;">' + quip + '</div>';
+}
+
+// Initialize trade analyzer search inputs
+(function initTradeAnalyzer() {
+  _taSetupSearch("give");
+  _taSetupSearch("get");
+})();
+
 // Keyboard hint strip (appended to toolbar area)
 (function addKeyboardHint() {
   const toolbar = document.querySelector(".toolbar");

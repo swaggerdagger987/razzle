@@ -1394,6 +1394,200 @@
     /* Footer — center pagination */
     .footer-bar { flex-direction: column; align-items: center; text-align: center; }
   }
+
+  /* ===== TRADE ANALYZER ===== */
+  .trade-analyzer-modal {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 6px 6px 0 var(--ink);
+    padding: 24px;
+    width: 800px;
+    max-width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .trade-analyzer-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .trade-analyzer-sides {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+  .trade-side {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .trade-side-label {
+    padding: 6px 14px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+  .trade-search-wrap {
+    position: relative;
+  }
+  .trade-search-wrap .input-chunky {
+    width: 100%;
+    font-size: 12px;
+  }
+  .trade-autocomplete {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--bg-card);
+    border: 2px solid var(--ink);
+    border-radius: 0 0 8px 8px;
+    box-shadow: 4px 4px 0 var(--ink);
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 200;
+  }
+  .trade-autocomplete-item {
+    padding: 8px 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--ink-faint);
+    transition: background 0.1s;
+  }
+  .trade-autocomplete-item:hover {
+    background: var(--bg-warm);
+  }
+  .trade-autocomplete-item:last-child {
+    border-bottom: none;
+  }
+  .trade-player-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-height: 60px;
+  }
+  .trade-empty-hint {
+    font-family: var(--font-hand);
+    font-size: 18px;
+    color: var(--ink-faint);
+    text-align: center;
+    padding: 20px 8px;
+  }
+  .trade-player-card {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    background: var(--bg-card);
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    box-shadow: 2px 2px 0 var(--ink);
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
+  .trade-player-card:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+  .trade-player-card .pos-badge {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: bold;
+    color: #fff;
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--ink);
+  }
+  .trade-player-card .player-info {
+    flex: 1;
+    overflow: hidden;
+  }
+  .trade-player-card .player-name {
+    font-family: var(--font-display);
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .trade-player-card .player-meta {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-light);
+  }
+  .trade-player-card .player-value {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: bold;
+    min-width: 28px;
+    text-align: right;
+  }
+  .trade-player-card .remove-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--ink-light);
+    padding: 0 2px;
+    line-height: 1;
+  }
+  .trade-player-card .remove-btn:hover {
+    color: var(--red);
+  }
+  .trade-side-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--bg-warm);
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+  .trade-total-value {
+    font-family: var(--font-mono);
+    font-size: 18px;
+    font-weight: bold;
+  }
+  .trade-vs-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 50px;
+  }
+  .trade-verdict-area {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 2px dashed var(--ink-faint);
+    text-align: center;
+  }
+
+  @media (max-width: 768px) {
+    .trade-analyzer-sides {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    .trade-vs-divider {
+      padding-top: 0;
+    }
+    .trade-analyzer-modal {
+      padding: 16px;
+    }
+  }
+  @media (max-width: 480px) {
+    .trade-analyzer-modal {
+      width: 100vw;
+      max-width: 100vw;
+      border-radius: 0;
+      padding: 12px;
+    }
+  }
 </style>
 </head>
 <body>
@@ -1454,6 +1648,7 @@
     <button class="btn-chunky" id="tiersBtn" onclick="openTierView()" style="display:none;">Tiers</button>
     <button class="btn-chunky" id="bigBoardBtn" onclick="openBigBoard()" style="display:none;">Big Board</button>
     <button class="btn-chunky" id="classAnalyticsBtn" onclick="openClassAnalytics()" style="display:none;">Class Analytics</button>
+    <button class="btn-chunky" onclick="openTradeAnalyzer()" style="border-color:var(--orange);">Trade</button>
     <button class="btn-chunky" onclick="openShareModal()" style="border-color:var(--orange);">Share</button>
     <button class="btn-chunky" id="exportRankingsBtn" onclick="openRankingsExport()" style="display:none;">Export Rankings</button>
     <button class="btn-chunky" id="tradeValuesBtn" onclick="openTradeValues()" style="display:none; border-color:var(--orange);">Trade Values</button>
@@ -1751,6 +1946,67 @@
     </div>
     <div style="margin-top:12px; display:flex; justify-content:flex-end;">
       <button class="btn-chunky" onclick="closeClassAnalytics()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- TRADE ANALYZER OVERLAY -->
+<div class="filter-modal-overlay" id="tradeAnalyzerOverlay" onclick="closeTradeAnalyzer(event)">
+  <div class="trade-analyzer-modal" onclick="event.stopPropagation()">
+    <div class="trade-analyzer-header">
+      <h3 style="margin:0; font-family:var(--font-display); font-size:22px;">Trade Analyzer</h3>
+      <span style="font-family:var(--font-hand); font-size:18px; color:var(--ink-light);">check the math on that deal</span>
+      <button class="btn-chunky" onclick="closeTradeAnalyzer()" style="margin-left:auto; font-size:12px; padding:4px 14px;">Close</button>
+    </div>
+
+    <div class="trade-analyzer-sides">
+      <!-- I GIVE side -->
+      <div class="trade-side">
+        <div class="trade-side-label" style="background:var(--red-light); border-color:var(--red);">
+          <span style="font-family:var(--font-display); font-size:14px; text-transform:uppercase; letter-spacing:1px;">I Give</span>
+        </div>
+        <div class="trade-search-wrap">
+          <input type="text" class="input-chunky" id="taSearchGive" placeholder="search player..." autocomplete="off">
+          <div class="trade-autocomplete" id="taAutoGive"></div>
+        </div>
+        <div class="trade-player-list" id="taListGive">
+          <div class="trade-empty-hint">drop players here to trade away</div>
+        </div>
+        <div class="trade-side-total">
+          <span style="font-family:var(--font-display); font-size:13px;">TOTAL</span>
+          <span class="trade-total-value" id="taTotalGive">0</span>
+        </div>
+      </div>
+
+      <!-- VS divider -->
+      <div class="trade-vs-divider">
+        <span style="font-family:var(--font-display); font-size:16px; color:var(--ink-light);">VS</span>
+      </div>
+
+      <!-- I GET side -->
+      <div class="trade-side">
+        <div class="trade-side-label" style="background:var(--green-light); border-color:var(--green);">
+          <span style="font-family:var(--font-display); font-size:14px; text-transform:uppercase; letter-spacing:1px;">I Get</span>
+        </div>
+        <div class="trade-search-wrap">
+          <input type="text" class="input-chunky" id="taSearchGet" placeholder="search player..." autocomplete="off">
+          <div class="trade-autocomplete" id="taAutoGet"></div>
+        </div>
+        <div class="trade-player-list" id="taListGet">
+          <div class="trade-empty-hint">drop players here to acquire</div>
+        </div>
+        <div class="trade-side-total">
+          <span style="font-family:var(--font-display); font-size:13px;">TOTAL</span>
+          <span class="trade-total-value" id="taTotalGet">0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Verdict area -->
+    <div class="trade-verdict-area" id="taVerdictArea" style="display:none;">
+      <div id="taValueBars"></div>
+      <div id="taVerdict"></div>
+      <div id="taCommentary"></div>
     </div>
   </div>
 </div>
