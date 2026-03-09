@@ -62,6 +62,35 @@ def bootstrap_database():
         except Exception as e:
             logger.warning(f"  College data failed: {e}")
         cconn.close()
+
+        # cfbfastR college production stats
+        logger.info("Bootstrapping cfbfastR college production stats...")
+        try:
+            from adapters.cfbfastr_adapter import (
+                get_connection as cfb_conn,
+                initialize_tables as cfb_init_tables,
+                fetch_season_csv, aggregate_season, upsert_stats,
+                refine_positions_from_combine,
+            )
+            fconn = cfb_conn()
+            cfb_init_tables(fconn)
+            for s in range(2020, 2026):
+                try:
+                    csv_text = fetch_season_csv(s)
+                    if csv_text:
+                        results = aggregate_season(csv_text, s)
+                        upsert_stats(fconn, results)
+                        logger.info(f"  cfbfastR {s}: {len(results)} players")
+                except Exception as e:
+                    logger.warning(f"  cfbfastR {s} failed: {e}")
+            try:
+                refine_positions_from_combine(fconn)
+            except Exception:
+                pass
+            fconn.close()
+            logger.info("  cfbfastR data synced")
+        except Exception as e:
+            logger.warning(f"  cfbfastR bootstrap failed: {e}")
     else:
         logger.info(f"Database has {count} players — skipping bootstrap")
         conn.close()

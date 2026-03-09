@@ -1,6 +1,19 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 16 — Draft Class Analytics + Cross-Year Comparison (COMPLETE)
+## Current Phase: Phase 17 — College Production Stats (cfbfastR)
+
+**Exit criterion**: College production stats from sportsdataverse play-level CSVs aggregated into per-player per-season totals in terminal.db. College stats API endpoints serve player data with search/filter/sort. Lab has "College" universe toggle with college-specific columns and presets. College player profiles clickable. Follows Razzle design system. Deployed to Render.
+
+### Phase 17 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | cfbfastR adapter — play-level CSV aggregation | DONE | adapters/cfbfastr_adapter.py fetches play-level CSVs from sportsdataverse GitHub (2020-2025), aggregates into per-player per-season totals. 19,454 player-season rows, 9,875 unique players. Passing, rushing, receiving stats with correct TD attribution (handles both QB-credited and receiver-credited patterns). Position inferred from stats, refined via combine/draft data (918 refinements). Bootstrap in server.py + render.yaml updated. |
+| 2 | College stats API endpoints | TODO | |
+| 3 | College mode in Lab screener | TODO | |
+| 4 | Deploy + smoke test | TODO | |
+
+## Previous Phase: Phase 16 — Draft Class Analytics + Cross-Year Comparison (COMPLETE)
 
 **Exit criterion MET:** Lab prospect mode has "Class Analytics" button that opens draft class comparison view. Shows year-over-year analysis for each position (2020-2026): average RPS, tier distribution (Elite/Premium/Solid/Flier counts), class grade badge (A/B/C/D based on avg RPS + elite/premium ratio), top prospect per year. Canvas-rendered bar chart of avg RPS by year with grade-colored bars. Class cards grid with tier distribution bars, prospect counts, top prospect info. Position filter tabs (ALL/QB/RB/WR/TE). Exportable as PNG with Razzle watermark (800px wide portrait). Follows Razzle design system. Deployed to Render.
 
