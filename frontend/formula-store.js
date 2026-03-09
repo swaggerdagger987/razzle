@@ -356,6 +356,18 @@ function rateFormula(formulaId, rating) {
   renderFormulaStore();
 }
 
+function submitReview(formulaId) {
+  const input = document.getElementById("review_" + formulaId);
+  if (!input) return;
+  const text = input.value.trim();
+  if (!text) return;
+
+  const rating = storeState.userRatings[formulaId] || 5;
+  storeState.userReviews[formulaId] = { rating, text };
+  localStorage.setItem("razzle_store_reviews", JSON.stringify(storeState.userReviews));
+  renderFormulaStore();
+}
+
 function installFormula(formulaId) {
   const formula = storeState.formulas.find(f => f.id === formulaId);
   if (!formula) return;
@@ -557,6 +569,7 @@ function renderFormulaCard(formula) {
   const ratingCount = getRatingCount(formula);
   const isInstalled = storeState.installed.includes(formula.id);
   const userRating = storeState.userRatings[formula.id] || 0;
+  const existingUserReview = storeState.userReviews[formula.id] || null;
 
   // Position tags
   const posTags = formula.positions.map(p => {
@@ -609,15 +622,31 @@ function renderFormulaCard(formula) {
           </div>
         </div>
       ` : ""}
-      <div style="margin-top:10px; padding-top:10px; border-top:2px dashed var(--ink-faint); display:flex; align-items:center; justify-content:space-between;">
-        <div style="display:flex; align-items:center; gap:4px;">
-          <span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">rate:</span>
-          ${renderClickableStars(formula.id, userRating, 16)}
+      <div style="margin-top:10px; padding-top:10px; border-top:2px dashed var(--ink-faint);">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
+          <div style="display:flex; align-items:center; gap:4px;">
+            <span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">rate:</span>
+            ${renderClickableStars(formula.id, userRating, 16)}
+          </div>
+          ${isInstalled
+            ? `<button class="btn-chunky" style="font-size:11px; padding:4px 10px; background:var(--green-light); border-color:var(--green);" onclick="uninstallFormula('${formula.id}')">Installed</button>`
+            : `<button class="btn-primary" style="font-size:11px; padding:4px 10px;" onclick="installFormula('${formula.id}')">Install</button>`
+          }
         </div>
-        ${isInstalled
-          ? `<button class="btn-chunky" style="font-size:11px; padding:4px 10px; background:var(--green-light); border-color:var(--green);" onclick="uninstallFormula('${formula.id}')">Installed</button>`
-          : `<button class="btn-primary" style="font-size:11px; padding:4px 10px;" onclick="installFormula('${formula.id}')">Install</button>`
-        }
+        ${userRating > 0 && !existingUserReview ? `
+          <div style="display:flex; gap:4px; align-items:center;">
+            <input type="text" class="input-chunky" placeholder="leave a short review..."
+              style="flex:1; font-size:11px; padding:4px 8px;"
+              id="review_${formula.id}"
+              onkeydown="if(event.key==='Enter') submitReview('${formula.id}')">
+            <button class="btn-chunky" style="font-size:10px; padding:3px 8px;" onclick="submitReview('${formula.id}')">Post</button>
+          </div>
+        ` : ""}
+        ${existingUserReview ? `
+          <div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-medium); margin-top:4px;">
+            your review: "${existingUserReview.text}"
+          </div>
+        ` : ""}
       </div>
     </div>
   `;
