@@ -1,6 +1,19 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 11 — Positional Heat Maps + Breakout Detection (COMPLETE)
+## Current Phase: Phase 12 — Prospect Cards + Athletic Percentiles (COMPLETE)
+
+**Exit criterion MET:** Click any prospect name in Lab prospect mode → rich profile card opens with blue prospect accent header, PROSPECT badge, combine metrics as percentile bars (color-coded by position-group rank: red→orange→yellow→teal→green), athletic spider chart (canvas radar with percentile axes), measurables bar, draft capital, NFL career stats (if available). Prospect cards exportable as PNG with Razzle watermark. Follows Razzle design system (chunky borders, offset shadows, sand bg, Space Mono data, Caveat annotations). Mobile responsive. Deployed to Render.
+
+### Phase 12 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Prospect profile cards | DONE | Click prospect name → rich modal with blue prospect accent header, PROSPECT badge, school + draft info, combine metrics, measurables bar, NFL career stats (if any). Export PNG with watermark. Backend: /api/prospect-profile endpoint with position-group percentile computation. Mobile responsive. |
+| 2 | Athletic percentile bars | DONE | Each combine metric (40, bench, vert, broad, cone, shuttle) rendered as horizontal percentile bar. Percentile computed against all same-position prospects in DB. Color gradient: red (0-20) → orange → yellow → teal → green (80-100). Inverted for time metrics (lower = better). Space Mono numbers, chunky bar styling. |
+| 3 | Prospect combine spider chart | DONE | Canvas-rendered radar chart showing combine percentiles on 0-100 scale. Blue fill (prospect accent), grid rings at 20/40/60/80/100, axis lines, percentile-colored labels. Handles missing metrics by filtering axes. Caveat title annotation. |
+| 4 | Deploy + smoke test | DONE | All JS passes syntax check. Python server imports clean. All HTML pages, JS files, CSS, sprites present. render.yaml correct. Pushed to master for Render auto-deploy. |
+
+## Previous Phase: Phase 11 — Positional Heat Maps + Breakout Detection (COMPLETE)
 
 **Exit criterion MET:** Lab has a Heat Map tab in the chart panel: select position (QB/RB/WR/TE) → see top 15/20/30 players × stats grid with cells colored by percentile rank (red→yellow→green). 5 stat presets (PPR Core, Passing, Rushing, Receiving, Efficiency). Exportable as PNG with Razzle watermark. Breakout detection: backend computes 50%+ YoY PPR increase, BRK% column in screener with green pill badges, breakout badge in player profile (sticker aesthetic). All follows Razzle design system. Deployed to Render.
 
@@ -309,6 +322,17 @@
 - [x] Breakout badge in player profile modal (sticker aesthetic: rotated, green, chunky border)
 - [x] Deployed to Render
 
+### Phase 12 — Prospect Cards + Athletic Percentiles
+- [x] Prospect profile cards: click prospect name → rich modal with blue accent header, PROSPECT badge, school + draft info
+- [x] Backend: /api/prospect-profile endpoint with position-group percentile computation for combine metrics
+- [x] Athletic percentile bars: horizontal bars colored by percentile (red→orange→yellow→teal→green), inverted for time metrics
+- [x] Prospect combine spider chart: canvas-rendered radar chart, 6 axes for combine metrics as percentiles, blue fill
+- [x] Measurables bar: height, weight, draft round/pick, team
+- [x] NFL career stats section: conditional on having NFL data (games, yards, TDs, All-Pro, Pro Bowls)
+- [x] Export PNG with Razzle watermark
+- [x] Mobile responsive prospect profile (responsive metric grid)
+- [x] Deployed to Render
+
 ---
 
 ## Blockers
@@ -354,3 +378,4 @@ _None currently._
 | 2026-03-09 | Player profiles as Phase 10 | All 9 roadmap phases complete. Player profile modals are the most impactful next feature for Reddit screenshots — clicking a player name shows a rich detail view. CFBD college data deferred (needs API key). Profile export creates another shareable asset. |
 | 2026-03-09 | Position-specific profile layouts | QB/RB/WR/TE each get different headline stats and season table columns. QBs see pass yards/TDs/CMP%, RBs see rush/rec, WR/TE see targets/receptions/YAC. More useful than one-size-fits-all. |
 | 2026-03-09 | Heat maps + breakout detection as Phase 11 | Heat maps fill the last major visualization gap from the North Star. Positional percentile heat maps are extremely screenshottable for Reddit — dynasty managers love position tier grids. Breakout detection (50%+ YoY PPR) leverages multi-season data for a uniquely useful dynasty signal. Both create new shareable content types. |
+| 2026-03-09 | Prospect cards as Phase 12 | Clickable prospect profiles with athletic percentile bars and spider charts are THE draft week content for r/DynastyFF and r/NFL_Draft. Combine percentiles within position group give instant context (is 4.50 fast for a WR?). Spider charts create a unique visual fingerprint per prospect — highly screenshottable. Uses existing nflverse combine data, no CFBD API key needed. |

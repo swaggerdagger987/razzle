@@ -634,6 +634,76 @@
     margin-bottom: 20px;
   }
 
+  /* ===== PROSPECT BADGE ===== */
+  .prospect-badge {
+    display: inline-block;
+    margin-top: 6px;
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 2px solid var(--ink);
+    background: var(--blue);
+    color: white;
+    box-shadow: 2px 2px 0 var(--ink);
+    transform: rotate(2deg);
+    letter-spacing: 0.5px;
+  }
+
+  /* ===== PROSPECT COMBINE GRID ===== */
+  .prospect-combine-grid {
+    margin-bottom: 20px;
+  }
+
+  .prospect-metric-row {
+    display: grid;
+    grid-template-columns: 130px 80px 1fr 50px;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--ink-faint);
+  }
+
+  .prospect-metric-row:last-child { border-bottom: none; }
+
+  .prospect-metric-label {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  .prospect-metric-value {
+    font-family: var(--font-display);
+    font-size: 18px;
+    color: var(--ink);
+    text-align: right;
+  }
+
+  .prospect-metric-bar-wrap {
+    height: 16px;
+    background: rgba(26,26,46,0.06);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--ink-faint);
+  }
+
+  .prospect-metric-bar {
+    height: 100%;
+    border-radius: 8px;
+    transition: width 0.4s ease;
+  }
+
+  .prospect-metric-pct {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    text-align: right;
+  }
+
   /* ===== FORMULA STORE ===== */
   .store-modal {
     background: var(--bg-card);
@@ -742,6 +812,9 @@
     .profile-stats-bar { flex-wrap: wrap; }
     .profile-stat-box { min-width: 80px; }
     .profile-combine { grid-template-columns: repeat(3, 1fr); }
+    .prospect-metric-row { grid-template-columns: 100px 70px 1fr 45px; gap: 6px; }
+    .prospect-metric-label { font-size: 10px; }
+    .prospect-metric-value { font-size: 14px; }
   }
 
   @media (max-width: 480px) {

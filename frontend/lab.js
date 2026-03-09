@@ -378,9 +378,12 @@ function renderTableBody() {
     </td>`;
 
     if (state.universe === "prospects") {
+      const pName = (player.player_name || "").replace(/'/g, "\\'");
+      const pPos = (player.position || "").toUpperCase();
+      const pYear = player.draft_year || state.season;
       html += `<td class="col-player"><div class="player-name-cell">`;
       html += `<span class="pos-badge ${posClass(pos)}">${pos}</span>`;
-      html += `<span>${player.player_name || ""}</span>`;
+      html += `<a href="#" onclick="openProspectProfile('${pName}', '${pPos}', ${pYear}); return false;" style="color:var(--ink); text-decoration:none; border-bottom:1px dashed var(--pos-qb);">${player.player_name || ""}</a>`;
       html += `<span class="school-label">${player.school || ""}</span>`;
       html += `</div></td>`;
     } else {
@@ -1547,6 +1550,418 @@ function exportProfileImage() {
   const safeName = name.replace(/[^a-zA-Z0-9]/g, "-").toLowerCase();
   const link = document.createElement("a");
   link.download = `razzle-profile-${safeName}.png`;
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+}
+
+
+// ─── Prospect Profile ──────────────────────────────────────────────
+
+async function openProspectProfile(name, position, draftYear) {
+  if (!name) return;
+  const overlay = document.getElementById("profileOverlay");
+  const content = document.getElementById("profileContent");
+  overlay.classList.add("open");
+  content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">scouting the prospect...</div>`;
+
+  try {
+    const params = new URLSearchParams({ name, position, draft_year: draftYear });
+    const data = await apiFetch(`/api/prospect-profile?${params}`);
+    renderProspectProfile(data, content);
+  } catch (err) {
+    content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the prospect data... ${err.message}</div>`;
+  }
+}
+
+function renderProspectProfile(data, container) {
+  const { prospect, percentiles } = data;
+  if (!prospect || !prospect.player_name) {
+    container.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">prospect not found on the board</div>`;
+    return;
+  }
+
+  const pos = (prospect.position || "").toUpperCase();
+  const posColor = "var(--pos-qb)"; // Blue accent for all prospects per design guide
+
+  let html = "";
+
+  // Header with blue prospect accent
+  html += `<div class="profile-header" style="border-top: 6px solid ${posColor};">`;
+  html += `<span class="profile-pos-badge" style="background:${posColor};">${pos}</span>`;
+  html += `<div>`;
+  html += `<div class="profile-name">${prospect.player_name}</div>`;
+  html += `<div class="profile-meta">`;
+  html += prospect.school || "";
+  if (prospect.draft_team) html += ` · ${prospect.draft_team}`;
+  if (prospect.draft_round && prospect.draft_pick) {
+    html += ` · Rd ${prospect.draft_round}, Pick #${prospect.draft_pick}`;
+  } else {
+    html += ` · ${prospect.draft_year} Draft Class`;
+  }
+  html += `</div>`;
+  html += `<span class="prospect-badge">PROSPECT</span>`;
+  html += `</div>`;
+  html += `<button class="btn-primary" onclick="exportProspectImage()" style="margin-left:auto; font-size:11px; padding:6px 14px;">Export PNG</button>`;
+  html += `</div>`;
+
+  // Measurables bar
+  const measurables = [];
+  if (prospect.height_display) measurables.push({ label: "Height", value: prospect.height_display });
+  if (prospect.weight) measurables.push({ label: "Weight", value: `${prospect.weight} lbs` });
+  if (prospect.draft_round) measurables.push({ label: "Draft", value: `Rd ${prospect.draft_round}, #${prospect.draft_pick}` });
+  if (prospect.draft_team) measurables.push({ label: "Team", value: prospect.draft_team });
+
+  if (measurables.length) {
+    html += `<div class="profile-stats-bar">`;
+    for (const m of measurables) {
+      html += `<div class="profile-stat-box">`;
+      html += `<div class="profile-stat-value">${m.value}</div>`;
+      html += `<div class="profile-stat-label">${m.label}</div>`;
+      html += `</div>`;
+    }
+    html += `</div>`;
+  }
+
+  // Athletic testing with percentile bars
+  const combineMetrics = [
+    { key: "forty", label: "40-Yard Dash", fmt: v => v ? v.toFixed(2) + "s" : null, unit: "s" },
+    { key: "bench", label: "Bench Press", fmt: v => v ? `${v} reps` : null, unit: "reps" },
+    { key: "vertical", label: "Vertical Jump", fmt: v => v ? v.toFixed(1) + '"' : null, unit: '"' },
+    { key: "broad_jump", label: "Broad Jump", fmt: v => v ? v + '"' : null, unit: '"' },
+    { key: "cone", label: "3-Cone Drill", fmt: v => v ? v.toFixed(2) + "s" : null, unit: "s" },
+    { key: "shuttle", label: "20-Yd Shuttle", fmt: v => v ? v.toFixed(2) + "s" : null, unit: "s" },
+  ];
+
+  const hasAnyMetric = combineMetrics.some(m => prospect[m.key] != null);
+  if (hasAnyMetric) {
+    html += `<div class="profile-section-title">Athletic Testing</div>`;
+    html += `<div class="prospect-combine-grid">`;
+
+    for (const m of combineMetrics) {
+      const val = prospect[m.key];
+      const pct = percentiles[m.key];
+      const display = m.fmt(val);
+      if (!display) continue;
+
+      const pctColor = pct != null ? getPercentileColor(pct) : "var(--ink-faint)";
+      const pctLabel = pct != null ? `${Math.round(pct)}th` : "—";
+      const barWidth = pct != null ? Math.max(pct, 3) : 0;
+
+      html += `<div class="prospect-metric-row">`;
+      html += `<div class="prospect-metric-label">${m.label}</div>`;
+      html += `<div class="prospect-metric-value">${display}</div>`;
+      html += `<div class="prospect-metric-bar-wrap">`;
+      html += `<div class="prospect-metric-bar" style="width:${barWidth}%; background:${pctColor};"></div>`;
+      html += `</div>`;
+      html += `<div class="prospect-metric-pct" style="color:${pctColor};">${pctLabel}</div>`;
+      html += `</div>`;
+    }
+
+    html += `</div>`;
+  }
+
+  // Spider chart canvas for combine percentiles
+  const hasSpiderData = combineMetrics.some(m => percentiles[m.key] != null);
+  if (hasSpiderData) {
+    html += `<div class="profile-section-title">Athletic Profile</div>`;
+    html += `<div class="profile-chart-wrap" style="text-align:center;">`;
+    html += `<canvas id="prospectSpiderCanvas" width="400" height="360" style="border:2px solid var(--ink); border-radius:8px; background:var(--bg); max-width:100%;"></canvas>`;
+    html += `</div>`;
+  }
+
+  // NFL Career stats (if drafted and has played)
+  const hasNFL = prospect.nfl_games && prospect.nfl_games > 0;
+  if (hasNFL) {
+    html += `<div class="profile-section-title">NFL Career</div>`;
+    html += `<div class="profile-stats-bar">`;
+
+    const nflStats = [];
+    nflStats.push({ label: "Games", value: prospect.nfl_games });
+    if (prospect.career_av) nflStats.push({ label: "Career AV", value: prospect.career_av });
+    if (prospect.nfl_pass_yards) nflStats.push({ label: "Pass Yds", value: Math.round(prospect.nfl_pass_yards).toLocaleString() });
+    if (prospect.nfl_pass_tds) nflStats.push({ label: "Pass TD", value: prospect.nfl_pass_tds });
+    if (prospect.nfl_rush_yards) nflStats.push({ label: "Rush Yds", value: Math.round(prospect.nfl_rush_yards).toLocaleString() });
+    if (prospect.nfl_rush_tds) nflStats.push({ label: "Rush TD", value: prospect.nfl_rush_tds });
+    if (prospect.nfl_rec_yards) nflStats.push({ label: "Rec Yds", value: Math.round(prospect.nfl_rec_yards).toLocaleString() });
+    if (prospect.nfl_rec_tds) nflStats.push({ label: "Rec TD", value: prospect.nfl_rec_tds });
+    if (prospect.nfl_receptions) nflStats.push({ label: "Receptions", value: prospect.nfl_receptions });
+    if (prospect.allpro) nflStats.push({ label: "All-Pro", value: prospect.allpro });
+    if (prospect.probowls) nflStats.push({ label: "Pro Bowl", value: prospect.probowls });
+
+    for (const s of nflStats) {
+      html += `<div class="profile-stat-box">`;
+      html += `<div class="profile-stat-value">${s.value}</div>`;
+      html += `<div class="profile-stat-label">${s.label}</div>`;
+      html += `</div>`;
+    }
+    html += `</div>`;
+  }
+
+  container.innerHTML = html;
+
+  // Draw spider chart after DOM update
+  if (hasSpiderData) {
+    requestAnimationFrame(() => drawProspectSpider(prospect, percentiles, combineMetrics));
+  }
+}
+
+function getPercentileColor(pct) {
+  // Red (0) → Yellow (50) → Green (100)
+  if (pct <= 20) return "#e63946";
+  if (pct <= 40) return "#e87422";
+  if (pct <= 60) return "#ffc857";
+  if (pct <= 80) return "#2ec4b6";
+  return "#22a06b";
+}
+
+function drawProspectSpider(prospect, percentiles, metrics) {
+  const canvas = document.getElementById("prospectSpiderCanvas");
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  const W = canvas.width;
+  const H = canvas.height;
+  const cx = W / 2;
+  const cy = H / 2 + 10;
+  const R = Math.min(W, H) / 2 - 60;
+
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = "#ede0cf";
+  ctx.fillRect(0, 0, W, H);
+
+  // Filter to metrics that have data
+  const activeMetrics = metrics.filter(m => percentiles[m.key] != null);
+  if (activeMetrics.length < 3) return;
+
+  const n = activeMetrics.length;
+  const angleStep = (Math.PI * 2) / n;
+  const startAngle = -Math.PI / 2;
+
+  // Draw grid rings
+  const rings = [20, 40, 60, 80, 100];
+  for (const ring of rings) {
+    ctx.beginPath();
+    for (let i = 0; i <= n; i++) {
+      const angle = startAngle + i * angleStep;
+      const r = (ring / 100) * R;
+      const x = cx + r * Math.cos(angle);
+      const y = cy + r * Math.sin(angle);
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = ring === 50 ? "rgba(26,26,46,0.2)" : "rgba(26,26,46,0.08)";
+    ctx.lineWidth = ring === 50 ? 1.5 : 1;
+    ctx.stroke();
+  }
+
+  // Draw axis lines
+  for (let i = 0; i < n; i++) {
+    const angle = startAngle + i * angleStep;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + R * Math.cos(angle), cy + R * Math.sin(angle));
+    ctx.strokeStyle = "rgba(26,26,46,0.1)";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // Draw data polygon
+  ctx.beginPath();
+  for (let i = 0; i <= n; i++) {
+    const idx = i % n;
+    const angle = startAngle + idx * angleStep;
+    const pct = percentiles[activeMetrics[idx].key] || 0;
+    const r = (pct / 100) * R;
+    const x = cx + r * Math.cos(angle);
+    const y = cy + r * Math.sin(angle);
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.closePath();
+  ctx.fillStyle = "rgba(91, 127, 255, 0.25)";
+  ctx.fill();
+  ctx.strokeStyle = "#5b7fff";
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+
+  // Draw data points
+  for (let i = 0; i < n; i++) {
+    const angle = startAngle + i * angleStep;
+    const pct = percentiles[activeMetrics[i].key] || 0;
+    const r = (pct / 100) * R;
+    const x = cx + r * Math.cos(angle);
+    const y = cy + r * Math.sin(angle);
+
+    ctx.beginPath();
+    ctx.arc(x, y, 5, 0, Math.PI * 2);
+    ctx.fillStyle = "#5b7fff";
+    ctx.fill();
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+  }
+
+  // Draw labels
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  for (let i = 0; i < n; i++) {
+    const angle = startAngle + i * angleStep;
+    const labelR = R + 35;
+    const x = cx + labelR * Math.cos(angle);
+    const y = cy + labelR * Math.sin(angle);
+
+    const pct = percentiles[activeMetrics[i].key];
+    const pctColor = getPercentileColor(pct);
+
+    // Metric name
+    ctx.font = "bold 11px 'Space Mono', monospace";
+    ctx.fillStyle = "#1a1a2e";
+    ctx.fillText(activeMetrics[i].label.replace(" Drill", "").replace(" Dash", "").replace(" Press", "").replace(" Jump", ""), x, y - 8);
+
+    // Percentile value
+    ctx.font = "bold 12px 'Space Mono', monospace";
+    ctx.fillStyle = pctColor;
+    ctx.fillText(`${Math.round(pct)}th`, x, y + 8);
+  }
+
+  // Title
+  ctx.font = "18px 'Caveat', cursive";
+  ctx.fillStyle = "rgba(26,26,46,0.5)";
+  ctx.textAlign = "center";
+  ctx.fillText(`${prospect.player_name} — ${prospect.position} Athletic Profile`, cx, 20);
+}
+
+function exportProspectImage() {
+  const content = document.getElementById("profileContent");
+  if (!content) return;
+  const prospect = content.querySelector(".profile-name");
+  const name = prospect ? prospect.textContent : "prospect";
+
+  // Create canvas for export
+  const canvas = document.createElement("canvas");
+  const W = 800;
+  const padX = 30;
+  const padY = 30;
+
+  // Gather info from DOM
+  const header = content.querySelector(".profile-header");
+  const statsBar = content.querySelector(".profile-stats-bar");
+  const combineGrid = content.querySelector(".prospect-combine-grid");
+  const spiderCanvas = document.getElementById("prospectSpiderCanvas");
+
+  let H = padY * 2 + 80; // header
+  if (statsBar) H += 80;
+  if (combineGrid) H += combineGrid.children.length * 36 + 50;
+  if (spiderCanvas) H += 380;
+  H += 40; // watermark
+
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext("2d");
+
+  // Background
+  ctx.fillStyle = "#ede0cf";
+  ctx.fillRect(0, 0, W, H);
+
+  let y = padY;
+
+  // Header
+  const posText = content.querySelector(".profile-pos-badge")?.textContent || "";
+  const metaText = content.querySelector(".profile-meta")?.textContent || "";
+  ctx.fillStyle = "#5b7fff";
+  ctx.fillRect(padX, y, W - padX * 2, 6);
+  y += 14;
+
+  ctx.font = "bold 24px sans-serif";
+  ctx.fillStyle = "#1a1a2e";
+  ctx.textAlign = "left";
+  ctx.fillText(`${posText}  ${name}`, padX + 8, y + 24);
+
+  ctx.font = "14px sans-serif";
+  ctx.fillStyle = "#4a4a5e";
+  ctx.fillText(metaText, padX + 8, y + 46);
+  y += 70;
+
+  // Stats bar
+  if (statsBar) {
+    const boxes = statsBar.querySelectorAll(".profile-stat-box");
+    const boxW = (W - padX * 2) / boxes.length;
+    boxes.forEach((box, i) => {
+      const val = box.querySelector(".profile-stat-value")?.textContent || "";
+      const lbl = box.querySelector(".profile-stat-label")?.textContent || "";
+      const bx = padX + i * boxW;
+      ctx.font = "bold 20px sans-serif";
+      ctx.fillStyle = "#1a1a2e";
+      ctx.textAlign = "center";
+      ctx.fillText(val, bx + boxW / 2, y + 24);
+      ctx.font = "11px sans-serif";
+      ctx.fillStyle = "#8a8a9e";
+      ctx.fillText(lbl, bx + boxW / 2, y + 42);
+    });
+    y += 60;
+  }
+
+  // Combine metrics with bars
+  if (combineGrid) {
+    ctx.font = "bold 13px sans-serif";
+    ctx.fillStyle = "#1a1a2e";
+    ctx.textAlign = "left";
+    ctx.fillText("Athletic Testing", padX + 8, y + 16);
+    y += 30;
+
+    const rows = combineGrid.querySelectorAll(".prospect-metric-row");
+    rows.forEach(row => {
+      const label = row.querySelector(".prospect-metric-label")?.textContent || "";
+      const value = row.querySelector(".prospect-metric-value")?.textContent || "";
+      const pctText = row.querySelector(".prospect-metric-pct")?.textContent || "";
+      const bar = row.querySelector(".prospect-metric-bar");
+      const barWidth = bar ? parseFloat(bar.style.width) || 0 : 0;
+      const barColor = bar ? bar.style.background : "#ccc";
+
+      ctx.font = "12px sans-serif";
+      ctx.fillStyle = "#1a1a2e";
+      ctx.textAlign = "left";
+      ctx.fillText(label, padX + 8, y + 12);
+
+      ctx.font = "bold 12px monospace";
+      ctx.textAlign = "right";
+      ctx.fillText(value, padX + 200, y + 12);
+
+      // Bar
+      const barStartX = padX + 210;
+      const barMaxW = W - padX * 2 - 280;
+      ctx.fillStyle = "rgba(26,26,46,0.06)";
+      ctx.fillRect(barStartX, y + 2, barMaxW, 14);
+      ctx.fillStyle = barColor;
+      ctx.fillRect(barStartX, y + 2, (barWidth / 100) * barMaxW, 14);
+
+      ctx.font = "bold 11px monospace";
+      ctx.fillStyle = barColor;
+      ctx.textAlign = "right";
+      ctx.fillText(pctText, W - padX - 8, y + 14);
+
+      y += 32;
+    });
+    y += 10;
+  }
+
+  // Spider chart
+  if (spiderCanvas) {
+    ctx.drawImage(spiderCanvas, (W - 400) / 2, y, 400, 360);
+    y += 370;
+  }
+
+  // Watermark
+  ctx.font = "bold 16px sans-serif";
+  ctx.fillStyle = "#1a1a2e";
+  ctx.globalAlpha = 0.3;
+  ctx.textAlign = "center";
+  ctx.fillText("built different — razzle.lol", W / 2, y + 10);
+  ctx.globalAlpha = 1.0;
+
+  const safeName = name.replace(/[^a-zA-Z0-9]/g, "-").toLowerCase();
+  const link = document.createElement("a");
+  link.download = `razzle-prospect-${safeName}.png`;
   link.href = canvas.toDataURL("image/png");
   link.click();
 }

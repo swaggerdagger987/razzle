@@ -191,6 +191,11 @@ def get_prospects(
     )
 
 
+@app.get("/api/prospect-profile")
+def prospect_profile(name: str = "", position: str = "", draft_year: int = 0):
+    return live_data.fetch_prospect_profile(name=name, position=position, draft_year=draft_year)
+
+
 @app.get("/api/prospect-options")
 def prospect_options():
     return live_data.fetch_prospect_years()

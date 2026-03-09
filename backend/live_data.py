@@ -871,6 +871,108 @@ def fetch_player_profile(player_id):
     }
 
 
+def fetch_prospect_profile(name, position="", draft_year=0):
+    """Return a rich prospect profile with combine data and position-group percentiles."""
+    conn = get_conn()
+
+    if not draft_year:
+        row = conn.execute("SELECT MAX(draft_year) FROM combine_data").fetchone()
+        draft_year = row[0] if row and row[0] else 2025
+
+    search_name = name.lower().replace(" ", "")
+
+    # Build WHERE clause
+    where = "LOWER(REPLACE(c.player_name, ' ', '')) = ?"
+    params = [search_name]
+    if position:
+        where += " AND c.position = ?"
+        params.append(position.upper())
+
+    # Get this prospect's data
+    prospect_row = conn.execute(f"""
+        SELECT
+            c.player_name, c.position, c.school, c.draft_year,
+            c.draft_team, c.draft_round, c.draft_pick,
+            c.height_inches, c.weight,
+            c.forty, c.bench, c.vertical, c.broad_jump, c.cone, c.shuttle,
+            c.pfr_id, c.cfb_id,
+            d.career_av, d.draft_av, d.games as nfl_games,
+            d.allpro, d.probowls, d.seasons_started,
+            d.pass_yards as nfl_pass_yards, d.pass_tds as nfl_pass_tds,
+            d.rush_yards as nfl_rush_yards, d.rush_tds as nfl_rush_tds,
+            d.rec_yards as nfl_rec_yards, d.rec_tds as nfl_rec_tds,
+            d.receptions as nfl_receptions
+        FROM combine_data c
+        LEFT JOIN draft_picks d
+            ON c.draft_year = d.season
+            AND LOWER(REPLACE(c.player_name, ' ', '')) = LOWER(REPLACE(d.player_name, ' ', ''))
+            AND c.position = d.position
+        WHERE {where}
+        ORDER BY c.draft_year DESC
+        LIMIT 1
+    """, params).fetchone()
+
+    if not prospect_row:
+        conn.close()
+        return {"prospect": None, "percentiles": {}}
+
+    prospect = dict(prospect_row)
+
+    # Format height display
+    ht = prospect.get("height_inches")
+    if ht:
+        prospect["height_display"] = f"{ht // 12}'{ht % 12}\""
+    else:
+        prospect["height_display"] = None
+
+    # Abbreviate team name
+    dt = (prospect.get("draft_team") or "").upper()
+    prospect["draft_team"] = TEAM_ABBREV.get(dt, dt[:3] if dt else None)
+
+    # Compute position-group percentiles for combine metrics
+    pos = prospect["position"]
+    combine_metrics = {
+        "forty": "lower",       # lower is better
+        "bench": "higher",
+        "vertical": "higher",
+        "broad_jump": "higher",
+        "cone": "lower",        # lower is better
+        "shuttle": "lower",     # lower is better
+        "height_inches": "higher",
+        "weight": "higher",
+    }
+
+    percentiles = {}
+    for metric, direction in combine_metrics.items():
+        val = prospect.get(metric)
+        if val is None:
+            percentiles[metric] = None
+            continue
+
+        # Get all values for this position group across all years
+        all_vals_rows = conn.execute(
+            f"SELECT {metric} FROM combine_data WHERE position = ? AND {metric} IS NOT NULL",
+            (pos,)
+        ).fetchall()
+        all_vals = [r[0] for r in all_vals_rows]
+
+        if not all_vals:
+            percentiles[metric] = None
+            continue
+
+        if direction == "lower":
+            # For time-based metrics, lower is better → percentile = % of players slower than you
+            pct = sum(1 for v in all_vals if v > val) / len(all_vals) * 100
+        else:
+            # For distance/reps metrics, higher is better → percentile = % of players below you
+            pct = sum(1 for v in all_vals if v < val) / len(all_vals) * 100
+
+        percentiles[metric] = round(pct, 1)
+
+    conn.close()
+    return {"prospect": prospect, "percentiles": percentiles}
+
+
 def fetch_players_compare(player_ids, season=0):
     """Return season aggregates for multiple players (for comparison)."""
     conn = get_conn()
