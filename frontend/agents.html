@@ -300,6 +300,179 @@
     margin-right: 4px;
   }
 
+  /* ===== CONFIG PANEL ===== */
+  .config-toggle {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 10;
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 6px 14px;
+    background: var(--bg-card);
+    color: var(--ink);
+    border: 2px solid var(--ink);
+    border-radius: 20px;
+    box-shadow: 2px 2px 0 var(--ink);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+
+  .config-toggle:hover {
+    box-shadow: 3px 3px 0 var(--ink);
+    transform: translate(-1px, -1px);
+  }
+
+  .config-panel {
+    position: absolute;
+    top: 48px;
+    left: 12px;
+    z-index: 10;
+    width: 340px;
+    max-height: 520px;
+    overflow-y: auto;
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    display: none;
+  }
+
+  .config-panel.open { display: block; }
+
+  .config-header {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 10px 14px;
+    background: var(--bg-warm);
+    border-bottom: 2px solid var(--ink);
+    color: var(--ink);
+  }
+
+  .config-section {
+    padding: 12px 14px;
+    border-bottom: 2px dashed var(--ink-faint);
+  }
+
+  .config-section:last-child { border-bottom: none; }
+
+  .config-label {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--ink-medium);
+    margin-bottom: 4px;
+    display: block;
+  }
+
+  .config-input {
+    width: 100%;
+    padding: 6px 10px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+    background: #fff;
+    color: var(--ink);
+    box-sizing: border-box;
+    margin-bottom: 8px;
+  }
+
+  .config-input:focus {
+    outline: none;
+    border-color: var(--orange);
+    box-shadow: 0 0 0 2px var(--orange-light);
+  }
+
+  .config-btn {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+    background: var(--bg-warm);
+    color: var(--ink);
+    cursor: pointer;
+    box-shadow: 2px 2px 0 var(--ink);
+    transition: all 0.1s;
+  }
+
+  .config-btn:hover {
+    box-shadow: 3px 3px 0 var(--ink);
+    transform: translate(-1px, -1px);
+  }
+
+  .config-btn-primary {
+    background: var(--orange);
+    color: #fff;
+  }
+
+  .config-status {
+    font-family: var(--font-hand);
+    font-size: 14px;
+    color: var(--green);
+    margin-top: 6px;
+    min-height: 18px;
+  }
+
+  .config-agent-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    border-bottom: 1px dashed var(--ink-faint);
+  }
+
+  .config-agent-row:last-child { border-bottom: none; }
+
+  .config-agent-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .config-agent-name {
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 700;
+    min-width: 60px;
+  }
+
+  .config-agent-key {
+    flex: 1;
+    padding: 4px 8px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    border: 2px solid var(--ink-faint);
+    border-radius: 4px;
+    background: #fff;
+    color: var(--ink);
+    min-width: 0;
+  }
+
+  .config-agent-key:focus {
+    outline: none;
+    border-color: var(--orange);
+  }
+
+  .config-hint {
+    font-family: var(--font-hand);
+    font-size: 13px;
+    color: var(--ink-light);
+    margin-top: 2px;
+  }
+
   /* ===== MOBILE ===== */
   @media (max-width: 768px) {
     .warroom-hero { padding: 32px 16px 24px; }
@@ -314,6 +487,7 @@
     .canvas-placeholder-text { font-size: 18px; }
     .roster-panel { width: 170px; }
     .roster-avatar { width: 24px; height: 36px; }
+    .config-panel { width: 280px; max-height: 400px; }
   }
 
   @media (max-width: 480px) {
@@ -366,6 +540,47 @@
         <div class="canvas-placeholder-text">agents are setting up the war room...</div>
         <div class="canvas-placeholder-sub">pixel engine loading</div>
       </div>
+      <!-- Config toggle + panel -->
+      <button class="config-toggle" id="configToggle">Config</button>
+      <div class="config-panel" id="configPanel">
+        <div class="config-header">Agent Configuration</div>
+
+        <!-- Shared API Key -->
+        <div class="config-section">
+          <label class="config-label">API Key (all agents)</label>
+          <input class="config-input" id="cfgSharedKey" type="password" autocomplete="off" placeholder="sk-or-v1-...">
+          <div style="display:flex;gap:6px;align-items:center;">
+            <button class="config-btn config-btn-primary" id="cfgApplyKey">Apply to All</button>
+            <span class="config-hint">stored locally</span>
+          </div>
+        </div>
+
+        <!-- Model -->
+        <div class="config-section">
+          <label class="config-label">Model</label>
+          <input class="config-input" id="cfgModel" type="text" placeholder="openrouter/auto" value="openrouter/auto">
+          <button class="config-btn" id="cfgApplyModel">Apply to All</button>
+        </div>
+
+        <!-- Base URL -->
+        <div class="config-section">
+          <label class="config-label">Base URL</label>
+          <input class="config-input" id="cfgBaseUrl" type="text" placeholder="https://openrouter.ai/api/v1/chat/completions">
+          <button class="config-btn" id="cfgApplyUrl">Apply to All</button>
+        </div>
+
+        <!-- Per-agent key overrides -->
+        <div class="config-section">
+          <label class="config-label">Per-Agent Key Overrides</label>
+          <div id="cfgAgentKeys"></div>
+        </div>
+
+        <!-- Status -->
+        <div class="config-section" style="padding:8px 14px;">
+          <div class="config-status" id="cfgStatus"></div>
+        </div>
+      </div>
+
       <!-- Roster toggle + panel -->
       <button class="roster-toggle" id="rosterToggle">Roster</button>
       <div class="roster-panel" id="rosterPanel">

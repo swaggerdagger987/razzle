@@ -7,7 +7,7 @@
 | # | Task | Status | Notes |
 |---|------|--------|-------|
 | 1 | Agent persona files | DONE | 6 markdown files in agent-personas/: razzle.md (Chief of Staff), medical.md, scout.md, diplomat.md, quant.md, historian.md. Adapted from FDL personas with Razzle brand voice, mandatory output sections per roadmap spec |
-| 2 | Agent config panel | - | |
+| 2 | Agent config panel | DONE | Config toggle + sand-bg overlay panel in War Room dark zone. Shared API key with "Apply to All", model selector (default openrouter/auto), base URL, per-agent key overrides with color dots. localStorage persistence via razzle_agent_config key. Razzle design system: chunky borders, offset shadows, font-display labels, font-mono inputs, font-hand hints |
 | 3 | Scenario input panel | - | |
 | 4 | LLM integration | - | |
 | 5 | Specialist agent execution | - | |

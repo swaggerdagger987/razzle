@@ -1316,6 +1316,136 @@ setInterval(() => {
   }
 }, 1000);
 
+// ── AGENT CONFIG PANEL ────────────────────────────────────────────────
+const AGENT_CONFIG_KEY = 'razzle_agent_config';
+const DEFAULT_MODEL = 'openrouter/auto';
+const DEFAULT_BASE_URL = 'https://openrouter.ai/api/v1/chat/completions';
+
+function loadAgentConfig() {
+  try {
+    const raw = localStorage.getItem(AGENT_CONFIG_KEY);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    return (parsed && typeof parsed === 'object') ? parsed : {};
+  } catch (_) { return {}; }
+}
+
+function saveAgentConfig(cfg) {
+  localStorage.setItem(AGENT_CONFIG_KEY, JSON.stringify(cfg));
+}
+
+function getAgentSettings(agentId) {
+  const cfg = loadAgentConfig();
+  const entry = cfg[String(agentId)] || {};
+  return {
+    apiKey: (typeof entry.apiKey === 'string') ? entry.apiKey : '',
+    model: (typeof entry.model === 'string' && entry.model.trim()) ? entry.model.trim() : DEFAULT_MODEL,
+    baseUrl: (typeof entry.baseUrl === 'string' && entry.baseUrl.trim()) ? entry.baseUrl.trim() : DEFAULT_BASE_URL,
+  };
+}
+
+function setupConfigPanel() {
+  const toggle = document.getElementById('configToggle');
+  const panel = document.getElementById('configPanel');
+  const sharedKeyInput = document.getElementById('cfgSharedKey');
+  const modelInput = document.getElementById('cfgModel');
+  const baseUrlInput = document.getElementById('cfgBaseUrl');
+  const applyKeyBtn = document.getElementById('cfgApplyKey');
+  const applyModelBtn = document.getElementById('cfgApplyModel');
+  const applyUrlBtn = document.getElementById('cfgApplyUrl');
+  const agentKeysHost = document.getElementById('cfgAgentKeys');
+  const statusEl = document.getElementById('cfgStatus');
+  if (!toggle || !panel) return;
+
+  // Load existing config into fields
+  const cfg = loadAgentConfig();
+  const first = cfg['0'] || {};
+  modelInput.value = (typeof first.model === 'string' && first.model.trim()) ? first.model.trim() : DEFAULT_MODEL;
+  baseUrlInput.value = (typeof first.baseUrl === 'string' && first.baseUrl.trim()) ? first.baseUrl.trim() : DEFAULT_BASE_URL;
+
+  // Build per-agent key rows
+  agentKeysHost.innerHTML = AGENT_DEFS.map(a => {
+    const entry = cfg[String(a.id)] || {};
+    const key = (typeof entry.apiKey === 'string') ? entry.apiKey : '';
+    return `<div class="config-agent-row" data-agent-id="${a.id}">
+      <span class="config-agent-dot" style="background:${a.color}"></span>
+      <span class="config-agent-name">${a.name}</span>
+      <input class="config-agent-key" type="password" autocomplete="off"
+        placeholder="shared key" value="${escapeHtml(key)}">
+    </div>`;
+  }).join('');
+
+  function showStatus(msg) {
+    if (statusEl) { statusEl.textContent = msg; }
+  }
+
+  // Toggle panel
+  toggle.addEventListener('click', () => {
+    panel.classList.toggle('open');
+  });
+
+  // Apply shared key to all agents
+  applyKeyBtn.addEventListener('click', () => {
+    const key = sharedKeyInput.value.trim();
+    if (!key) { showStatus('enter a key first'); return; }
+    const cfg = loadAgentConfig();
+    AGENT_DEFS.forEach(a => {
+      const existing = cfg[String(a.id)] || {};
+      cfg[String(a.id)] = { ...existing, apiKey: key };
+    });
+    saveAgentConfig(cfg);
+    // Update per-agent inputs
+    agentKeysHost.querySelectorAll('.config-agent-key').forEach(inp => { inp.value = key; });
+    sharedKeyInput.value = '';
+    showStatus('key applied to all 6 agents');
+  });
+
+  // Apply model to all
+  applyModelBtn.addEventListener('click', () => {
+    const model = modelInput.value.trim() || DEFAULT_MODEL;
+    const cfg = loadAgentConfig();
+    AGENT_DEFS.forEach(a => {
+      const existing = cfg[String(a.id)] || {};
+      cfg[String(a.id)] = { ...existing, model };
+    });
+    saveAgentConfig(cfg);
+    showStatus('model set: ' + model);
+  });
+
+  // Apply base URL to all
+  applyUrlBtn.addEventListener('click', () => {
+    const baseUrl = baseUrlInput.value.trim() || DEFAULT_BASE_URL;
+    const cfg = loadAgentConfig();
+    AGENT_DEFS.forEach(a => {
+      const existing = cfg[String(a.id)] || {};
+      cfg[String(a.id)] = { ...existing, baseUrl };
+    });
+    saveAgentConfig(cfg);
+    showStatus('base URL updated');
+  });
+
+  // Per-agent key save on blur
+  agentKeysHost.querySelectorAll('.config-agent-row').forEach(row => {
+    const id = row.dataset.agentId;
+    const input = row.querySelector('.config-agent-key');
+    input.addEventListener('change', () => {
+      const cfg = loadAgentConfig();
+      const existing = cfg[String(id)] || {};
+      cfg[String(id)] = { ...existing, apiKey: input.value.trim() };
+      saveAgentConfig(cfg);
+      showStatus(AGENT_DEFS[id].name + ' key saved');
+    });
+  });
+}
+
+function escapeHtml(str) {
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+setupConfigPanel();
+
 // ── START ──────────────────────────────────────────────────────────────
 function waitAndStart() {
   if (spritesLoaded >= 6) {
