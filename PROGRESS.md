@@ -1,6 +1,19 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 25 — Code Quality Bugfixes (QA Audit) (COMPLETE)
+## Current Phase: Phase 26 — Trade Value Chart (COMPLETE)
+
+**Exit criterion MET:** Lab screener has "Trade Values" button (NFL mode only, orange border) that opens a 960px overlay with visual trade value chart. Players fetched from API, DVS computed client-side, rounded to trade values (0-100). Grouped by tier: Elite (85+, green), Star (70-84, blue), Starter (55-69, terracotta), Bench (<55, gray). Tier headers with rotated sticker badges. Player cards with position-colored left stripe, name, position badge, team, age, trade value bar + number. Position filter tabs (ALL/QB/RB/WR/TE). Canvas PNG export (800px portrait, watermark). Trade Calculator: two-side player search with debounced autocomplete, position-colored player chips with remove buttons, total value per side, balance indicator (FAIR green ≤10% / red with difference >10%). Razzle design system throughout. Deployed to Render.
+
+### Phase 26 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Trade Value Chart overlay UI + data fetch | DONE | Trade Values button in toolbar (NFL mode only). Overlay with position filters, tier grouping, player cards with DVS-based trade values. 200 fantasy-relevant players. Razzle design: chunky borders, offset shadows, position colors, Caveat annotations. |
+| 2 | Trade Value Chart PNG export | DONE | Export PNG button in overlay. 800px canvas: title, Caveat subtitle, tier sections with rotated badge stickers, player rows with position badge + name + team + value bar. Watermark baked in. Downloads as razzle-trade-values-{position}.png. |
+| 3 | Trade Calculator | DONE | Two-side calculator below chart. Search with 150ms debounced autocomplete (top 8 matches). Player chips with position badge + TV + remove. Total value display. Balance indicator: FAIR (green, ≤10%) or A+N/B+N (red, >10%). Clear button per side. |
+| 4 | Deploy + smoke test | DONE | All 4 JS pass syntax. Python imports clean. 13 trade value functions verified. All HTML IDs match. Pushed to master. |
+
+## Previous Phase: Phase 25 — Code Quality Bugfixes (QA Audit) (COMPLETE)
 
 **Exit criterion MET:** All critical and high-priority bugs from QA audit fixed. DVS age curve synced between backend (live_data.py) and frontend (app.js) — identical constants and interpolation. HTML sanitization added to lab.js (escapeHtml + escapeAttr on all user-visible text in renderTableBody). N+1 queries in prospect profiles eliminated (8 percentile queries → 1 batch, N dominator queries → 1 batch). Shared _STAT_SUM_COLS constant extracts 18 duplicated SUM columns across 5 functions. Dead code removed (career = career no-op, unused career_items). Deployed to Render.
 
