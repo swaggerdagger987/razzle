@@ -1,6 +1,23 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 31 — (pending auto-generation)
+## Current Phase: Phase 32 — (pending auto-generation)
+
+## Previous Phase: Phase 31 — Performance + UX Polish + Reddit Launch Prep (COMPLETE)
+
+**Exit criterion MET:** Performance audit: Lab already optimized (100 row limit, 300ms search debounce, single API calls). Console audit: no debug console.logs, only console.error for error handling. Viewport: maximum-scale=1.0 on all 5 pages prevents iOS zoom on input focus. Loading states: "pulling film..." / "fumbled the data fetch..." pattern across all 15+ async flows. Favicon: tiger emoji SVG on all pages. Page titles: descriptive and branded. SEO: meta descriptions + canonical URLs on all 5 pages. War Room mobile: 480px breakpoint with single-column bio grid, full-width config panel. Deployed to Render.
+
+### Phase 31 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Optimize Lab screener load performance | DONE | Already optimized: 100 row limit, 300ms debounce, no duplicate API calls |
+| 2 | Fix all console errors and warnings | DONE | Clean: only console.error for error handling, no debug logs |
+| 3 | Mobile viewport zoom prevention | DONE | maximum-scale=1.0 on all 5 HTML pages |
+| 4 | Consistent loading, error, and empty states | DONE | Already implemented: 15+ async flows with loading/error/empty patterns |
+| 5 | Favicon and page title polish | DONE | Tiger SVG favicon, descriptive titles, correct active nav links |
+| 6 | Agents page (War Room) mobile responsive | DONE | 480px: single-column bio grid, full-width config, compact scenario |
+| 7 | SEO and social metadata cleanup | DONE | Meta descriptions + canonical URLs on all 5 pages |
+| 8 | Deploy + full smoke test | DONE | All 6 JS + 4 Python pass. All SEO tags present. Pushed to master. |
 
 ## Previous Phase: Phase 30 — Lab Mobile + Social Previews + Reddit-Ready Polish (COMPLETE)
 
