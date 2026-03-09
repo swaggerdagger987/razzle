@@ -1306,6 +1306,73 @@ function exportImage() {
   link.click();
 }
 
+// ─── CSV Export ───────────────────────────────────────────────────
+
+function exportCSV() {
+  if (!state.items.length) return;
+
+  // Determine column definitions and visible columns based on universe
+  let colDefs, visCols;
+  if (state.universe === "prospects") {
+    colDefs = PROSPECT_COLUMNS;
+    visCols = state.prospectColumns;
+  } else if (state.universe === "college") {
+    colDefs = COLLEGE_COLUMNS;
+    visCols = state.collegeColumns;
+  } else {
+    colDefs = COLUMNS;
+    visCols = state.visibleColumns;
+  }
+
+  // Filter to valid columns
+  visCols = visCols.filter(k => colDefs[k]);
+
+  // Build CSV content
+  const lines = [];
+
+  // Branding header comment
+  lines.push("# razzle.lol — Fantasy Football Bloomberg Terminal");
+  lines.push("# " + state.universe.toUpperCase() + " | " + state.position + " | " +
+    (state.universe === "college" ? state.collegeSeason :
+     state.universe === "prospects" ? state.draftYear : state.season));
+
+  // Header row
+  const nameCol = state.universe === "prospects" ? "Player" : "Player";
+  const headers = [nameCol, "POS", "Team", ...visCols.map(k => colDefs[k].label)];
+  lines.push(headers.map(csvEscape).join(","));
+
+  // Data rows
+  for (const player of state.items) {
+    const name = player.player_name || player.full_name || player.name || "";
+    const pos = player.position || "";
+    const team = player.team || player.school || player.draft_team || "";
+    const vals = visCols.map(k => {
+      const v = player[k];
+      if (v == null || v === "") return "";
+      return v;
+    });
+    lines.push([name, pos, team, ...vals].map(csvEscape).join(","));
+  }
+
+  // Download
+  const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8;" });
+  const link = document.createElement("a");
+  const season = state.universe === "college" ? state.collegeSeason :
+                 state.universe === "prospects" ? state.draftYear : state.season;
+  link.download = `razzle-${state.universe}-${state.position.toLowerCase()}-${season}.csv`;
+  link.href = URL.createObjectURL(blob);
+  link.click();
+  URL.revokeObjectURL(link.href);
+}
+
+function csvEscape(val) {
+  const s = String(val == null ? "" : val);
+  if (s.includes(",") || s.includes('"') || s.includes("\n")) {
+    return '"' + s.replace(/"/g, '""') + '"';
+  }
+  return s;
+}
+
 // ─── Rankings Export ───────────────────────────────────────────────
 
 const _rankState = { position: "ALL", count: 10, sortBy: "dynasty_value" };

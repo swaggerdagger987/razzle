@@ -2090,3 +2090,35 @@ def fetch_college_filter_options():
 
     conn.close()
     return {"seasons": seasons, "teams": teams, "conferences": conferences, "positions": positions}
+
+
+# ---------------------------------------------------------------------------
+# Waitlist
+# ---------------------------------------------------------------------------
+
+def init_waitlist_table():
+    conn = get_conn()
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS waitlist (
+            email TEXT UNIQUE NOT NULL,
+            created_at TEXT NOT NULL DEFAULT (datetime('now'))
+        )
+    """)
+    conn.commit()
+    conn.close()
+
+
+def add_to_waitlist(email: str) -> dict:
+    import re
+    email = email.strip().lower()
+    if not re.match(r'^[^@\s]+@[^@\s]+\.[^@\s]+$', email):
+        return {"status": "error", "message": "invalid email format"}
+    conn = get_conn()
+    try:
+        conn.execute("INSERT INTO waitlist (email) VALUES (?)", (email,))
+        conn.commit()
+        result = {"status": "ok"}
+    except sqlite3.IntegrityError:
+        result = {"status": "duplicate"}
+    conn.close()
+    return result

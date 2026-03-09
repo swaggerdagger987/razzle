@@ -883,22 +883,36 @@ function renderAgentBios() {
 }
 renderAgentBios();
 
-function submitWaitlist() {
+async function submitWaitlist() {
   const email = document.getElementById('waitlistEmail').value.trim();
+  const msgEl = document.getElementById('waitlistMsg');
   if (!email || !email.includes('@')) {
-    document.getElementById('waitlistMsg').textContent = 'need a real email, chief';
-    document.getElementById('waitlistMsg').style.color = 'var(--red)';
+    msgEl.textContent = 'need a real email, chief';
+    msgEl.style.color = 'var(--red)';
     return;
   }
-  // Store in localStorage for now (no backend auth yet)
-  const waitlist = JSON.parse(localStorage.getItem('razzle_waitlist') || '[]');
-  if (!waitlist.includes(email)) {
-    waitlist.push(email);
-    localStorage.setItem('razzle_waitlist', JSON.stringify(waitlist));
+  try {
+    const res = await fetch('/api/waitlist', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+    const data = await res.json();
+    if (data.status === 'ok') {
+      msgEl.textContent = "you're on the list. Razzle will find you.";
+      msgEl.style.color = 'var(--green)';
+      document.getElementById('waitlistEmail').value = '';
+    } else if (data.status === 'duplicate') {
+      msgEl.textContent = "already on the list. patience, grasshopper.";
+      msgEl.style.color = 'var(--orange)';
+    } else {
+      msgEl.textContent = data.message || 'something went wrong';
+      msgEl.style.color = 'var(--red)';
+    }
+  } catch (err) {
+    msgEl.textContent = 'network error. try again.';
+    msgEl.style.color = 'var(--red)';
   }
-  document.getElementById('waitlistMsg').textContent = "you're on the list. Razzle will find you.";
-  document.getElementById('waitlistMsg').style.color = 'var(--green)';
-  document.getElementById('waitlistEmail').value = '';
 }
 </script>
 </body>

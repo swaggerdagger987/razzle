@@ -109,6 +109,7 @@ def bootstrap_database():
 @asynccontextmanager
 async def lifespan(app):
     bootstrap_database()
+    live_data.init_waitlist_table()
     yield
 
 
@@ -305,6 +306,13 @@ def college_player_profile(player_id: str):
 @app.get("/api/college/filter-options")
 def college_filter_options():
     return live_data.fetch_college_filter_options()
+
+
+@app.post("/api/waitlist")
+async def waitlist(request: Request):
+    body = await request.json()
+    email = body.get("email", "")
+    return live_data.add_to_waitlist(email)
 
 
 # ---------------------------------------------------------------------------

@@ -1,6 +1,18 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 22 — Social Preview Cards + Open Graph Polish (COMPLETE)
+## Current Phase: Phase 23 — CSV Export + Server-Side Waitlist (COMPLETE)
+
+**Exit criterion MET:** Lab screener has "Download CSV" button in share modal that exports current view (all rows × visible columns) as a CSV file with Razzle branding header. Works for all 3 universes (NFL/Prospects/College) using correct column definitions. File named razzle-{universe}-{position}-{season}.csv. Server-side waitlist endpoint (POST /api/waitlist) stores emails in SQLite waitlist table with UNIQUE constraint. Landing page submitWaitlist() upgraded from localStorage to API POST with ok/duplicate/error responses and Razzle personality messages. Deployed to Render.
+
+### Phase 23 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | CSV export from Lab screener | DONE | exportCSV() in lab.js: branding header comments, column labels per universe, all rows, csvEscape for special chars. Download CSV button in share modal. |
+| 2 | Server-side waitlist endpoint | DONE | POST /api/waitlist → SQLite waitlist table (email UNIQUE, created_at). Email validation. Three response states. Landing page uses async fetch POST. |
+| 3 | Deploy + smoke test | DONE | All 6 JS pass syntax. All Python imports clean. 5 HTML pages + 2 SVGs present. Pushed to master. |
+
+## Previous Phase: Phase 22 — Social Preview Cards + Open Graph Polish (COMPLETE)
 
 **Exit criterion MET:** All 5 HTML pages have og:image meta tags pointing to branded social preview SVGs (1200x630). Two variants: og-image.svg (general branding) and og-image-lab.svg (Lab-specific with data counts). Full Twitter Card meta tags on all pages. og:url set per page. Preview images follow Razzle design system (sand bg, terracotta stripe, tiger emoji, position color dots, sticker badges, Caveat annotations). League Intel and 404 pages upgraded from zero og/twitter tags to fully covered. Deployed to Render.
 
