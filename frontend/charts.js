@@ -854,7 +854,15 @@ function renderCompareTable(players) {
   }
   html += '</table>';
 
+  // Export button
+  html += `<div style="margin-top:12px; text-align:right;">`;
+  html += `<button class="btn-primary" onclick="exportNFLCompareImage()" style="font-size:11px; padding:6px 14px;">Export PNG</button>`;
+  html += `</div>`;
+
   document.getElementById("compareContent").innerHTML = html;
+
+  // Stash players for export
+  window._nflComparePlayers = players;
 }
 
 function drawCompareRadar(players) {
@@ -944,6 +952,238 @@ function drawCompareRadar(players) {
   });
 }
 
+
+// ─── NFL Comparison Export ────────────────────────────────────────
+
+function computeClientDVS(ppg, age, position) {
+  if (!ppg || !age) return null;
+  const prodScore = Math.min(100, ppg * 4);
+  const curves = {
+    QB:  { rise: 24, peak_start: 26, peak_end: 30, fall_end: 40 },
+    RB:  { rise: 20, peak_start: 22, peak_end: 25, fall_end: 30 },
+    WR:  { rise: 21, peak_start: 24, peak_end: 28, fall_end: 33 },
+    TE:  { rise: 22, peak_start: 25, peak_end: 29, fall_end: 34 },
+  };
+  const c = curves[position] || curves.WR;
+  let mult = 0.5;
+  if (age < c.rise) mult = 0.6 + 0.4 * ((age - 18) / (c.rise - 18));
+  else if (age < c.peak_start) mult = 0.85 + 0.15 * ((age - c.rise) / (c.peak_start - c.rise));
+  else if (age <= c.peak_end) mult = 1.0;
+  else if (age <= c.fall_end) mult = 1.0 - 0.9 * ((age - c.peak_end) / (c.fall_end - c.peak_end));
+  else mult = 0.1;
+  mult = Math.max(0.1, Math.min(1.0, mult));
+  return Math.round(prodScore * mult * 10) / 10;
+}
+
+function exportNFLCompareImage() {
+  const players = window._nflComparePlayers;
+  if (!players || players.length < 2) return;
+
+  const radarCanvas = document.getElementById("compareRadar");
+  const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  const padX = 30, padY = 30;
+  const W = 800;
+
+  // Layout measurements
+  const titleH = 40;
+  const cardH = 100;
+  const cardGap = 16;
+  const playerCardW = (W - padX * 2 - cardGap * (players.length - 1)) / players.length;
+  const statsH = 28; // per stat row
+  const compareStats = ["ppg", "fantasy_points_ppr", "games", "passing_yards", "rushing_yards",
+    "receiving_yards", "receptions", "targets", "touchdowns"];
+  // Filter to stats where at least one player has data
+  const activeStats = compareStats.filter(k => players.some(p => (p[k] || 0) > 0));
+  const tableH = 28 + activeStats.length * statsH; // header + rows
+  const radarH = 320;
+  const watermarkH = 40;
+  const H = padY + titleH + cardH + 16 + tableH + 16 + radarH + watermarkH + padY;
+
+  const canvas = document.createElement("canvas");
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext("2d");
+
+  // Background
+  ctx.fillStyle = "#f7efe5";
+  ctx.fillRect(0, 0, W, H);
+
+  // Title (handwritten annotation)
+  ctx.font = "24px 'Caveat', cursive";
+  ctx.fillStyle = "rgba(26,26,46,0.5)";
+  ctx.textAlign = "center";
+  ctx.fillText("player comparison", W / 2, padY + 24);
+
+  // Player cards
+  let cardY = padY + titleH;
+  players.forEach((p, i) => {
+    const cx = padX + i * (playerCardW + cardGap);
+    const pColor = posColors[p.position] || "#1a1a2e";
+
+    // Card bg + border
+    ctx.fillStyle = "#f7efe5";
+    ctx.fillRect(cx, cardY, playerCardW, cardH);
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 3;
+    ctx.strokeRect(cx, cardY, playerCardW, cardH);
+    // Offset shadow
+    ctx.fillStyle = "#1a1a2e";
+    ctx.fillRect(cx + 4, cardY + 4, playerCardW, cardH);
+    ctx.fillStyle = "#f7efe5";
+    ctx.fillRect(cx, cardY, playerCardW, cardH);
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 3;
+    ctx.strokeRect(cx, cardY, playerCardW, cardH);
+
+    // Position color top stripe
+    ctx.fillStyle = pColor;
+    ctx.fillRect(cx + 1.5, cardY + 1.5, playerCardW - 3, 6);
+
+    // Position badge
+    const badgeW = 36, badgeH = 20;
+    const badgeX = cx + 10, badgeY = cardY + 16;
+    ctx.fillStyle = pColor;
+    ctx.fillRect(badgeX, badgeY, badgeW, badgeH);
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(badgeX, badgeY, badgeW, badgeH);
+    ctx.fillStyle = "#fff";
+    ctx.font = "bold 11px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText(p.position, badgeX + badgeW / 2, badgeY + 15);
+
+    // Player name
+    ctx.textAlign = "left";
+    ctx.fillStyle = "#1a1a2e";
+    ctx.font = "bold 18px sans-serif";
+    const nameX = badgeX + badgeW + 8;
+    ctx.fillText(p.full_name, nameX, cardY + 32);
+
+    // Team + Age
+    ctx.fillStyle = "#8a8a9e";
+    ctx.font = "12px monospace";
+    const ageText = p.age ? ` | Age ${p.age}` : "";
+    ctx.fillText((p.team || "FA") + ageText, nameX, cardY + 48);
+
+    // DVS badge
+    const dvs = computeClientDVS(p.ppg, p.age, p.position);
+    if (dvs != null) {
+      const dvsColor = dvs >= 85 ? "#2ec4b6" : dvs >= 70 ? "#5b7fff" : dvs >= 55 ? "#d97757" : "#8a8a9e";
+      const dvsLabel = dvs >= 85 ? "ELITE" : dvs >= 70 ? "STAR" : dvs >= 55 ? "STARTER" : "";
+      const dvsW = 80, dvsH = 24;
+      const dvsX = cx + playerCardW - dvsW - 10;
+      const dvsY = cardY + 60;
+      ctx.fillStyle = dvsColor + "30";
+      ctx.fillRect(dvsX, dvsY, dvsW, dvsH);
+      ctx.strokeStyle = dvsColor;
+      ctx.lineWidth = 2;
+      ctx.strokeRect(dvsX, dvsY, dvsW, dvsH);
+      ctx.fillStyle = dvsColor;
+      ctx.font = "bold 13px monospace";
+      ctx.textAlign = "center";
+      ctx.fillText("DVS " + dvs.toFixed(1), dvsX + dvsW / 2, dvsY + 16);
+
+      // Tier label
+      if (dvsLabel) {
+        ctx.font = "bold 9px sans-serif";
+        ctx.fillText(dvsLabel, cx + 10 + 18, cardY + 68);
+      }
+    }
+  });
+
+  // Stats comparison table
+  const tY = cardY + cardH + 16;
+  const tableW = W - padX * 2;
+  const colW = tableW / (players.length + 1); // stat label + each player
+
+  // Table border
+  ctx.strokeStyle = "#1a1a2e";
+  ctx.lineWidth = 3;
+  ctx.strokeRect(padX, tY, tableW, tableH);
+
+  // Table header
+  ctx.fillStyle = "#e5d5c3";
+  ctx.fillRect(padX + 1.5, tY + 1.5, tableW - 3, 26);
+  ctx.strokeStyle = "#1a1a2e";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(padX, tY + 28);
+  ctx.lineTo(padX + tableW, tY + 28);
+  ctx.stroke();
+
+  ctx.fillStyle = "#1a1a2e";
+  ctx.font = "bold 10px monospace";
+  ctx.textAlign = "left";
+  ctx.fillText("STAT", padX + 8, tY + 18);
+  players.forEach((p, i) => {
+    ctx.textAlign = "right";
+    ctx.font = "bold 10px sans-serif";
+    ctx.fillText(p.full_name.split(" ").pop(), padX + (i + 2) * colW - 8, tY + 18);
+  });
+
+  // Stat rows
+  activeStats.forEach((statKey, rowIdx) => {
+    const rY = tY + 28 + rowIdx * statsH;
+    const col = COLUMNS[statKey];
+    if (!col) return;
+    const vals = players.map(p => p[statKey] || 0);
+    const maxVal = Math.max(...vals);
+
+    // Alternating bg
+    if (rowIdx % 2 === 0) {
+      ctx.fillStyle = "rgba(229,213,195,0.3)";
+      ctx.fillRect(padX + 1.5, rY, tableW - 3, statsH);
+    }
+
+    // Row divider
+    ctx.strokeStyle = "#c5c5d0";
+    ctx.lineWidth = 0.5;
+    ctx.beginPath();
+    ctx.moveTo(padX, rY + statsH);
+    ctx.lineTo(padX + tableW, rY + statsH);
+    ctx.stroke();
+
+    // Label
+    ctx.fillStyle = "#1a1a2e";
+    ctx.font = "bold 11px sans-serif";
+    ctx.textAlign = "left";
+    ctx.fillText(col.label, padX + 8, rY + 18);
+
+    // Values
+    players.forEach((p, i) => {
+      const val = p[statKey] || 0;
+      const isBest = val === maxVal && maxVal > 0;
+      ctx.fillStyle = isBest ? "#2ec4b6" : "#1a1a2e";
+      ctx.font = isBest ? "bold 12px monospace" : "12px monospace";
+      ctx.textAlign = "right";
+      const dec = col.decimals != null ? col.decimals : (statKey === "ppg" ? 1 : 0);
+      ctx.fillText(formatStat(val, dec), padX + (i + 2) * colW - 8, rY + 18);
+    });
+  });
+
+  // Radar chart
+  const radarY = tY + tableH + 16;
+  if (radarCanvas) {
+    const radarDrawW = 300;
+    const radarDrawH = 300;
+    const radarX = (W - radarDrawW) / 2;
+    ctx.drawImage(radarCanvas, radarX, radarY, radarDrawW, radarDrawH);
+  }
+
+  // Watermark
+  ctx.font = "16px 'Caveat', cursive";
+  ctx.fillStyle = "rgba(217, 119, 87, 0.5)";
+  ctx.textAlign = "right";
+  ctx.fillText("built different — razzle.lol", W - 20, H - 16);
+
+  // Download
+  const names = players.map(p => (p.full_name || "player").replace(/\s+/g, "-").toLowerCase());
+  const filename = "razzle-compare-" + names.join("-vs-") + ".png";
+  const link = document.createElement("a");
+  link.download = filename;
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+}
 
 // ─── Prospect Comparison ─────────────────────────────────────────
 

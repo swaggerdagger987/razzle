@@ -1,8 +1,21 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 19 — Player Age Enrichment + Dynasty Value Score
+## Current Phase: Phase 20 — Dynasty Comparison Cards + Quick Rankings Export
 
-**Exit criterion:** Players table enriched with age from nflverse roster CSVs. Dynasty Value Score (DVS) computed for all skill position players: age-adjusted PPR production composite. DVS column in Lab screener with "Dynasty Rankings" preset. Creates "Razzle Dynasty Top 200" shareable content. Follows Razzle design system. Deployed to Render.
+**Exit criterion:** NFL player comparison mode has full PNG export (side-by-side comparison cards with DVS, age, position-colored headers, key stats, radar overlay). Quick rankings export generates "Top N at Position" as a shareable PNG with DVS tier badges. Unified share modal provides copy URL + export PNG + suggested Reddit title. All exports follow Razzle design system (sand bg, chunky borders, watermark). Deployed to Render.
+
+### Phase 20 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | NFL player comparison PNG export | DONE | exportNFLCompareImage() in charts.js: 800px canvas with sand bg, Caveat title, side-by-side player cards (position-colored stripes, DVS tier badges via client-side computation), stats comparison table (green best values), radar chart overlay, watermark. Export button in renderCompareTable(). Downloads as razzle-compare-{name1}-vs-{name2}.png. |
+| 2 | Quick rankings export (Top N at Position) | PENDING | |
+| 3 | Unified share modal with Reddit title suggestion | PENDING | |
+| 4 | Deploy + smoke test | PENDING | |
+
+## Previous Phase: Phase 19 — Player Age Enrichment + Dynasty Value Score (COMPLETE)
+
+**Exit criterion MET:** Players table enriched with age from nflverse roster CSVs. Dynasty Value Score (DVS) computed for all skill position players: age-adjusted PPR production composite. DVS column in Lab screener with "Dynasty Rankings" preset. Creates "Razzle Dynasty Top 200" shareable content. Follows Razzle design system. Deployed to Render.
 
 ### Phase 19 Tasks
 
