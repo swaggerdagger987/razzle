@@ -2525,3 +2525,162 @@ def fetch_heatmap(position="WR", group="production", season=None):
         "stat_labels": stat_labels,
         "higher_is_better": higher_is_better,
     }
+
+
+# ---------------------------------------------------------------------------
+# Formula Store
+# ---------------------------------------------------------------------------
+
+def init_formula_store_tables():
+    conn = get_conn()
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS formula_store (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            description TEXT NOT NULL DEFAULT '',
+            position_tags TEXT NOT NULL DEFAULT '[]',
+            stat_weights TEXT NOT NULL DEFAULT '{}',
+            creator_name TEXT NOT NULL DEFAULT 'anonymous',
+            created_at TEXT NOT NULL DEFAULT (datetime('now')),
+            rating_sum REAL NOT NULL DEFAULT 0,
+            rating_count INTEGER NOT NULL DEFAULT 0
+        )
+    """)
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS formula_ratings (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            formula_id INTEGER NOT NULL,
+            rating INTEGER NOT NULL CHECK(rating >= 1 AND rating <= 5),
+            review TEXT NOT NULL DEFAULT '',
+            created_at TEXT NOT NULL DEFAULT (datetime('now')),
+            FOREIGN KEY (formula_id) REFERENCES formula_store(id)
+        )
+    """)
+    conn.commit()
+    conn.close()
+
+
+def publish_formula(name: str, description: str, position_tags: list,
+                    stat_weights: dict, creator_name: str) -> dict:
+    import json
+    conn = get_conn()
+    try:
+        cur = conn.execute(
+            """INSERT INTO formula_store (name, description, position_tags, stat_weights, creator_name)
+               VALUES (?, ?, ?, ?, ?)""",
+            (name.strip(), description.strip(),
+             json.dumps(position_tags), json.dumps(stat_weights),
+             creator_name.strip() or "anonymous"),
+        )
+        conn.commit()
+        formula_id = cur.lastrowid
+        result = {"status": "ok", "id": formula_id}
+    except Exception as e:
+        result = {"status": "error", "message": str(e)}
+    conn.close()
+    return result
+
+
+def fetch_formula_store(position: str = "", sort: str = "newest",
+                        search: str = "", limit: int = 50, offset: int = 0) -> dict:
+    import json
+    conn = get_conn()
+
+    where_parts = []
+    params = []
+
+    if position and position.upper() != "ALL":
+        where_parts.append("position_tags LIKE ?")
+        params.append(f'%"{position.upper()}"%')
+
+    if search:
+        where_parts.append("name LIKE ?")
+        params.append(f"%{search}%")
+
+    where_sql = ("WHERE " + " AND ".join(where_parts)) if where_parts else ""
+
+    sort_map = {
+        "newest": "created_at DESC",
+        "rating": "CASE WHEN rating_count > 0 THEN rating_sum / rating_count ELSE 0 END DESC",
+        "popular": "rating_count DESC",
+    }
+    order_sql = sort_map.get(sort, "created_at DESC")
+
+    rows = conn.execute(f"""
+        SELECT id, name, description, position_tags, creator_name, created_at,
+               rating_sum, rating_count
+        FROM formula_store
+        {where_sql}
+        ORDER BY {order_sql}
+        LIMIT ? OFFSET ?
+    """, params + [limit, offset]).fetchall()
+
+    count_row = conn.execute(f"SELECT COUNT(*) FROM formula_store {where_sql}", params).fetchone()
+    total = count_row[0] if count_row else 0
+    conn.close()
+
+    formulas = []
+    for r in rows:
+        avg_rating = round(r[6] / r[7], 1) if r[7] > 0 else 0
+        formulas.append({
+            "id": r[0],
+            "name": r[1],
+            "description": r[2],
+            "position_tags": json.loads(r[3]) if r[3] else [],
+            "creator_name": r[4],
+            "created_at": r[5],
+            "avg_rating": avg_rating,
+            "rating_count": r[7],
+        })
+
+    return {"formulas": formulas, "total": total}
+
+
+def get_formula_detail(formula_id: int) -> dict:
+    import json
+    conn = get_conn()
+    row = conn.execute(
+        "SELECT id, name, description, position_tags, stat_weights, creator_name, created_at, rating_sum, rating_count FROM formula_store WHERE id = ?",
+        (formula_id,),
+    ).fetchone()
+    conn.close()
+
+    if not row:
+        return {"status": "not_found"}
+
+    avg_rating = round(row[7] / row[8], 1) if row[8] > 0 else 0
+    return {
+        "id": row[0],
+        "name": row[1],
+        "description": row[2],
+        "position_tags": json.loads(row[3]) if row[3] else [],
+        "stat_weights": json.loads(row[4]) if row[4] else {},
+        "creator_name": row[5],
+        "created_at": row[6],
+        "avg_rating": avg_rating,
+        "rating_count": row[8],
+    }
+
+
+def rate_formula(formula_id: int, rating: int, review: str = "") -> dict:
+    if rating < 1 or rating > 5:
+        return {"status": "error", "message": "rating must be 1-5"}
+
+    conn = get_conn()
+    # Check formula exists
+    exists = conn.execute("SELECT id FROM formula_store WHERE id = ?", (formula_id,)).fetchone()
+    if not exists:
+        conn.close()
+        return {"status": "not_found"}
+
+    conn.execute(
+        "INSERT INTO formula_ratings (formula_id, rating, review) VALUES (?, ?, ?)",
+        (formula_id, rating, review.strip()),
+    )
+    conn.execute(
+        "UPDATE formula_store SET rating_sum = rating_sum + ?, rating_count = rating_count + 1 WHERE id = ?",
+        (rating, formula_id),
+    )
+    conn.commit()
+    conn.close()
+    return {"status": "ok"}

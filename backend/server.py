@@ -119,6 +119,7 @@ def bootstrap_database():
 async def lifespan(app):
     bootstrap_database()
     live_data.init_waitlist_table()
+    live_data.init_formula_store_tables()
     yield
 
 
@@ -332,6 +333,51 @@ async def waitlist(request: Request):
     body = await request.json()
     email = body.get("email", "")
     return live_data.add_to_waitlist(email)
+
+
+# ---------------------------------------------------------------------------
+# Formula Store
+# ---------------------------------------------------------------------------
+
+@app.get("/api/formulas/store")
+def get_formula_store(
+    position: str = "",
+    sort: str = "newest",
+    search: str = "",
+    limit: int = 50,
+    offset: int = 0,
+):
+    return live_data.fetch_formula_store(
+        position=position, sort=sort, search=search,
+        limit=min(limit, 200), offset=offset,
+    )
+
+
+@app.post("/api/formulas/publish")
+async def publish_formula(request: Request):
+    body = await request.json()
+    return live_data.publish_formula(
+        name=body.get("name", ""),
+        description=body.get("description", ""),
+        position_tags=body.get("position_tags", []),
+        stat_weights=body.get("stat_weights", {}),
+        creator_name=body.get("creator_name", "anonymous"),
+    )
+
+
+@app.get("/api/formulas/{formula_id}")
+def get_formula_detail(formula_id: int):
+    return live_data.get_formula_detail(formula_id)
+
+
+@app.post("/api/formulas/{formula_id}/rate")
+async def rate_formula(formula_id: int, request: Request):
+    body = await request.json()
+    return live_data.rate_formula(
+        formula_id=formula_id,
+        rating=body.get("rating", 0),
+        review=body.get("review", ""),
+    )
 
 
 # ---------------------------------------------------------------------------
