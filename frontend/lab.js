@@ -55,6 +55,7 @@ const COLUMNS = {
   ppg:                 { label: "PPG",      group: "Fantasy", decimals: 1 },
   fantasy_points_std:  { label: "Standard", group: "Fantasy", decimals: 1 },
   games:               { label: "GP",       group: "Fantasy", decimals: 0 },
+  seasons:             { label: "Seasons",  group: "Fantasy", decimals: 0 },
 
   // Passing
   passing_yards:       { label: "Pass Yds",   group: "Passing", decimals: 0 },
@@ -107,7 +108,7 @@ const PRESETS = {
   },
   dynasty: {
     label: "Dynasty",
-    columns: ["fantasy_points_ppr", "ppg", "games", "receiving_yards", "receiving_tds",
+    columns: ["fantasy_points_ppr", "ppg", "games", "seasons", "receiving_yards", "receiving_tds",
               "receptions", "targets", "rushing_yards", "rushing_tds", "touchdowns"],
   },
 };
@@ -148,7 +149,7 @@ const state = {
     ]);
 
     state.seasons = nflOpts.seasons || [2024];
-    if (!state.season) state.season = state.seasons[0] || 2024;
+    if (!state.season && state.season !== "career") state.season = state.seasons[0] || 2024;
 
     state.draftYears = prospectOpts.years || [2025];
     if (!state.draftYear) state.draftYear = state.draftYears[0] || 2025;
@@ -484,11 +485,13 @@ function populateSeasonSelect() {
       fetchAndRender();
     };
   } else {
-    sel.innerHTML = state.seasons.map(s =>
+    let html = `<option value="career" ${state.season === "career" ? "selected" : ""}>Career</option>`;
+    html += state.seasons.map(s =>
       `<option value="${s}" ${s === state.season ? "selected" : ""}>${s}</option>`
     ).join("");
+    sel.innerHTML = html;
     sel.onchange = (e) => {
-      state.season = parseInt(e.target.value);
+      state.season = e.target.value === "career" ? "career" : parseInt(e.target.value);
       state.offset = 0;
       fetchAndRender();
     };
@@ -704,7 +707,10 @@ function loadStateFromURL() {
     if (!params.has("dir")) state.sortDir = "asc";
     if (params.has("cols")) state.prospectColumns = params.get("cols").split(",");
   } else {
-    if (params.has("season")) state.season = parseInt(params.get("season"));
+    if (params.has("season")) {
+      const sv = params.get("season");
+      state.season = sv === "career" ? "career" : parseInt(sv);
+    }
     if (params.has("rel")) state.relevance = params.get("rel");
     if (params.has("cols")) state.visibleColumns = params.get("cols").split(",");
   }
@@ -935,7 +941,7 @@ function exportImage() {
 
   // Download
   const link = document.createElement("a");
-  link.download = `razzle-lab-${state.season}.png`;
+  link.download = `razzle-lab-${state.season === "career" ? "career" : state.season}.png`;
   link.href = canvas.toDataURL("image/png");
   link.click();
 }

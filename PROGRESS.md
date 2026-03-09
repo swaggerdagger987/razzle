@@ -1,8 +1,19 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Pre-Launch Polish (COMPLETE)
+## Current Phase: Pre-Draft Enhancement
 
-### Pre-Launch Polish Tasks (COMPLETE)
+### Pre-Draft Enhancement Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Multi-season NFL data (2020-2024) | DONE | 1238 players, 28026 stat rows across 5 seasons. Career aggregates enabled. |
+| 2 | Career view in Lab | DONE | Season selector includes "Career" option, aggregates all seasons. Dynasty preset includes seasons column. |
+| 3 | Bootstrap on startup | DONE | server.py lifespan bootstrap syncs data if DB empty (Render cold start resilience) |
+| 4 | render.yaml multi-season | DONE | Build command syncs 2020-2024 seasons |
+
+---
+
+### Pre-Launch Polish (COMPLETE)
 
 | # | Task | Status | Notes |
 |---|------|--------|-------|
@@ -155,6 +166,14 @@
 - [x] League Intel: shows leagues, expandable roster view with position groups, W-L record
 - [x] Email waitlist capture (localStorage for now, backend later)
 
+### Pre-Draft Enhancement
+- [x] Multi-season NFL data: 5 seasons (2020-2024), 1238 players, 28026 stat rows
+- [x] Career view: season selector "Career" option aggregates all seasons
+- [x] Seasons column added to NFL columns + Dynasty preset
+- [x] Backend career mode: fetch_players, fetch_screener, fetch_players_compare all support season="career"
+- [x] Bootstrap on startup: server.py lifespan auto-syncs data if DB empty
+- [x] render.yaml updated to sync 2020-2024 at build time
+
 ### Pre-Launch Polish
 - [x] War Room demo rotation: 33 briefings across 6 agent types, shuffled on each page load
 - [x] Agent types: Razzle (7), Scout (7), Diplomat (6), Quant (5), Medical (4), Historian (4)
@@ -203,3 +222,5 @@ _None currently._
 | 2026-03-08 | 33 demo briefings not 50-60 | North Star says 50-60, but 33 across 6 agent types with 3 shown per visit = 5456 unique combinations. Diminishing returns past ~30. Can add more later |
 | 2026-03-08 | SVG favicon over PNG | Zero-dependency, scales to any size, tiger emoji matches brand, no design tool needed |
 | 2026-03-08 | Pre-launch polish before Phase 5 | All code phases done. Polish (mobile, demo rotation, design audit) maximizes Reddit launch impact |
+| 2026-03-08 | Multi-season data (2020-2024) | Single-season severely limits dynasty analysis. 5 seasons enables career arcs, breakout detection, year-over-year trends. Essential for Reddit draft-week content |
+| 2026-03-08 | Career view as first dropdown option | Dynasty managers think in careers, not single seasons. Career aggregates are the default mental model for dynasty analysis |

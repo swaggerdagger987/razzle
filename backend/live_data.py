@@ -60,10 +60,13 @@ def fetch_players(
 ):
     conn = get_conn()
 
-    # Determine season
-    if not season:
-        row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-        season = row[0] if row and row[0] else 2024
+    # Determine season: 0 = latest, "career" = all seasons
+    career_mode = str(season).lower() == "career"
+    if not career_mode:
+        season = int(season) if season else 0
+        if not season:
+            row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+            season = row[0] if row and row[0] else 2024
 
     # Build position filter
     pos_list = []
@@ -79,15 +82,21 @@ def fetch_players(
         "receiving_yards", "receiving_tds", "receptions", "touchdowns",
         "turnovers", "targets", "carries", "completions", "attempts",
         "passing_air_yards", "receiving_air_yards", "receiving_yards_after_catch",
-        "full_name", "position", "team", "games",
+        "full_name", "position", "team", "games", "seasons",
     }
     if sort_key not in safe_sorts:
         sort_key = "fantasy_points_ppr"
     if sort_dir.lower() not in ("asc", "desc"):
         sort_dir = "desc"
 
-    where = ["s.season = ?"]
-    params = [season]
+    where = []
+    params = []
+
+    if career_mode:
+        pass  # no season filter — aggregate all
+    else:
+        where.append("s.season = ?")
+        params.append(season)
 
     if search:
         where.append("p.search_name LIKE ?")
@@ -102,12 +111,24 @@ def fetch_players(
         where.append("p.team = ?")
         params.append(team.strip().upper())
 
-    where_clause = " AND ".join(where)
+    where_clause = " AND ".join(where) if where else "1=1"
+
+    # Handle sort expression
+    sort_expr = sort_key
+    if sort_key == "seasons":
+        sort_expr = "COUNT(DISTINCT s.season)"
+    elif sort_key == "games":
+        sort_expr = "COUNT(*)"
+    elif sort_key in ("full_name", "position", "team"):
+        sort_expr = f"p.{sort_key}"
+    elif sort_key in safe_sorts:
+        sort_expr = f"SUM(s.{sort_key})"
 
     query = f"""
         SELECT
             p.player_id, p.full_name, p.position, p.team, p.age, p.college,
             COUNT(*) as games,
+            COUNT(DISTINCT s.season) as seasons,
             SUM(s.fantasy_points_ppr) as fantasy_points_ppr,
             SUM(s.fantasy_points_half_ppr) as fantasy_points_half_ppr,
             SUM(s.fantasy_points_std) as fantasy_points_std,
@@ -131,7 +152,7 @@ def fetch_players(
         JOIN player_week_stats s ON p.player_id = s.player_id
         WHERE {where_clause}
         GROUP BY p.player_id
-        ORDER BY {sort_key} {sort_dir}
+        ORDER BY {sort_expr} {sort_dir}
         LIMIT ? OFFSET ?
     """
     params.extend([limit, offset])
@@ -156,7 +177,7 @@ def fetch_players(
         items.append(item)
 
     conn.close()
-    return {"count": total, "season": season, "items": items}
+    return {"count": total, "season": "career" if career_mode else season, "items": items}
 
 
 def fetch_screener(body):
@@ -175,9 +196,13 @@ def fetch_screener(body):
     filters = body.get("filters", [])
     relevance = body.get("relevance", "fantasy")
 
-    if not season:
-        row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-        season = row[0] if row and row[0] else 2024
+    # Determine season: 0 = latest, "career" = all seasons
+    career_mode = str(season).lower() == "career"
+    if not career_mode:
+        season = int(season) if season else 0
+        if not season:
+            row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+            season = row[0] if row and row[0] else 2024
 
     # Position list
     pos_list = []
@@ -190,8 +215,14 @@ def fetch_screener(body):
     if relevance == "fantasy" and not pos_list:
         pos_list = list(FANTASY_POSITIONS)
 
-    where = ["s.season = ?"]
-    params = [season]
+    where = []
+    params = []
+
+    if career_mode:
+        pass  # no season filter
+    else:
+        where.append("s.season = ?")
+        params.append(season)
 
     if search:
         where.append("p.search_name LIKE ?")
@@ -206,14 +237,14 @@ def fetch_screener(body):
         where.append("p.team = ?")
         params.append(team.strip().upper())
 
-    where_clause = " AND ".join(where)
+    where_clause = " AND ".join(where) if where else "1=1"
 
     # Safe sort
     safe_sorts = {
         "fantasy_points_ppr", "fantasy_points_half_ppr", "fantasy_points_std",
         "passing_yards", "passing_tds", "rushing_yards", "rushing_tds",
         "receiving_yards", "receiving_tds", "receptions", "touchdowns",
-        "turnovers", "targets", "carries", "games", "ppg",
+        "turnovers", "targets", "carries", "games", "ppg", "seasons",
         "full_name", "position", "team",
     }
     if sort_key not in safe_sorts:
@@ -236,6 +267,8 @@ def fetch_screener(body):
                 having.append(f"(SUM(s.fantasy_points_ppr) / MAX(1, COUNT(*))) {op} ?")
             elif key == "games":
                 having.append(f"COUNT(*) {op} ?")
+            elif key == "seasons":
+                having.append(f"COUNT(DISTINCT s.season) {op} ?")
             else:
                 having.append(f"SUM(s.{key}) {op} ?")
             params.append(float(val))
@@ -244,12 +277,14 @@ def fetch_screener(body):
     if having:
         having_clause = "HAVING " + " AND ".join(having)
 
-    # Handle ppg sort
+    # Handle sort expression
     order_expr = sort_key
     if sort_key == "ppg":
         order_expr = "(SUM(s.fantasy_points_ppr) / MAX(1, COUNT(*)))"
     elif sort_key == "games":
         order_expr = "COUNT(*)"
+    elif sort_key == "seasons":
+        order_expr = "COUNT(DISTINCT s.season)"
     elif sort_key in ("full_name", "position", "team"):
         order_expr = f"p.{sort_key}"
     else:
@@ -259,6 +294,7 @@ def fetch_screener(body):
         SELECT
             p.player_id, p.full_name, p.position, p.team, p.age, p.college,
             COUNT(*) as games,
+            COUNT(DISTINCT s.season) as seasons,
             SUM(s.fantasy_points_ppr) as fantasy_points_ppr,
             SUM(s.fantasy_points_half_ppr) as fantasy_points_half_ppr,
             SUM(s.fantasy_points_std) as fantasy_points_std,
@@ -312,7 +348,7 @@ def fetch_screener(body):
         items.append(item)
 
     conn.close()
-    return {"count": total, "season": season, "items": items}
+    return {"count": total, "season": "career" if career_mode else season, "items": items}
 
 
 def get_filter_options():
@@ -530,19 +566,26 @@ def fetch_players_compare(player_ids, season=0):
     """Return season aggregates for multiple players (for comparison)."""
     conn = get_conn()
 
-    if not season:
-        row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-        season = row[0] if row and row[0] else 2024
+    career_mode = str(season).lower() == "career"
+    if not career_mode:
+        season = int(season) if season else 0
+        if not season:
+            row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+            season = row[0] if row and row[0] else 2024
 
     if not player_ids:
         conn.close()
-        return {"season": season, "players": []}
+        return {"season": "career" if career_mode else season, "players": []}
 
     placeholders = ",".join("?" * len(player_ids))
+    season_filter = "" if career_mode else "AND s.season = ?"
+    query_params = list(player_ids) if career_mode else list(player_ids) + [season]
+
     rows = conn.execute(f"""
         SELECT
             p.player_id, p.full_name, p.position, p.team, p.age, p.college,
             COUNT(*) as games,
+            COUNT(DISTINCT s.season) as seasons,
             SUM(s.fantasy_points_ppr) as fantasy_points_ppr,
             SUM(s.fantasy_points_std) as fantasy_points_std,
             SUM(s.passing_yards) as passing_yards,
@@ -563,9 +606,9 @@ def fetch_players_compare(player_ids, season=0):
             SUM(s.receiving_yards_after_catch) as receiving_yards_after_catch
         FROM players p
         JOIN player_week_stats s ON p.player_id = s.player_id
-        WHERE p.player_id IN ({placeholders}) AND s.season = ?
+        WHERE p.player_id IN ({placeholders}) {season_filter}
         GROUP BY p.player_id
-    """, (*player_ids, season)).fetchall()
+    """, query_params).fetchall()
 
     players = []
     for r in rows:
@@ -575,4 +618,4 @@ def fetch_players_compare(player_ids, season=0):
         players.append(item)
 
     conn.close()
-    return {"season": season, "players": players}
+    return {"season": "career" if career_mode else season, "players": players}
