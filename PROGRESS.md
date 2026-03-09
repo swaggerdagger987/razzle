@@ -2,6 +2,18 @@
 
 ## Current Phase: Phase 7 — War Room: Agent Personas + Scenario Runner
 
+### Phase 7 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Agent persona files | DONE | 6 markdown files in agent-personas/: razzle.md (Chief of Staff), medical.md, scout.md, diplomat.md, quant.md, historian.md. Adapted from FDL personas with Razzle brand voice, mandatory output sections per roadmap spec |
+| 2 | Agent config panel | - | |
+| 3 | Scenario input panel | - | |
+| 4 | LLM integration | - | |
+| 5 | Specialist agent execution | - | |
+| 6 | Razzle orchestration | - | |
+| 7 | Response rendering | - | |
+
 ## Previous Phase: Phase 6 — War Room: Pixel Engine + Agent Canvas (COMPLETE)
 
 ### Phase 6 Tasks
