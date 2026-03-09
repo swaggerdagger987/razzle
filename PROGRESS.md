@@ -1,8 +1,8 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 17 — College Production Stats (cfbfastR)
+## Current Phase: Phase 17 — College Production Stats (cfbfastR) (COMPLETE)
 
-**Exit criterion**: College production stats from sportsdataverse play-level CSVs aggregated into per-player per-season totals in terminal.db. College stats API endpoints serve player data with search/filter/sort. Lab has "College" universe toggle with college-specific columns and presets. College player profiles clickable. Follows Razzle design system. Deployed to Render.
+**Exit criterion MET:** College production stats from sportsdataverse play-level CSVs aggregated into per-player per-season totals in terminal.db (19,454 player-season rows, 9,875 unique players, 2020-2025). College stats API endpoints serve player data with search/filter/sort (GET /api/college/players, /api/college/player-profile/{id}, /api/college/filter-options). Lab has three-way universe toggle (NFL/Prospects/College) with 30 college-specific columns, 3 presets (Production/Efficiency/Draft Profile), blue accent. College player profiles clickable with position-specific headlines, season log, combine/measurables, NFL career cross-reference. URL state: ?u=college&season=2024. Follows Razzle design system. Deployed to Render.
 
 ### Phase 17 Tasks
 
@@ -11,7 +11,7 @@
 | 1 | cfbfastR adapter — play-level CSV aggregation | DONE | adapters/cfbfastr_adapter.py fetches play-level CSVs from sportsdataverse GitHub (2020-2025), aggregates into per-player per-season totals. 19,454 player-season rows, 9,875 unique players. Passing, rushing, receiving stats with correct TD attribution (handles both QB-credited and receiver-credited patterns). Position inferred from stats, refined via combine/draft data (918 refinements). Bootstrap in server.py + render.yaml updated. |
 | 2 | College stats API endpoints | DONE | GET /api/college/players (paginated, search/position/team/conference/season/sort with derived sorts), GET /api/college/player-profile/{id} (all seasons + career totals + combine/draft), GET /api/college/filter-options (6 seasons, 330 teams, 50 conferences). Derived efficiency stats: CMP%, YPC, Y/REC, catch_rate, per-game avgs. Python re-sort for derived metrics. |
 | 3 | College mode in Lab screener | DONE | Three-way universe toggle (NFL/Prospects/College). 30 college columns (Production/Usage/Efficiency/Per Game). 3 presets (Production, Efficiency, Draft Profile). Blue accent mode. College player profiles with position-specific headlines, season log, combine, NFL career data. URL state ?u=college&season=2024. Season selector 2020-2025. |
-| 4 | Deploy + smoke test | TODO | |
+| 4 | Deploy + smoke test | DONE | All JS passes syntax check. All Python imports clean. All frontend assets present. render.yaml correct (cfbfastr 2020-2025 at build). Smoke tests pass: 3887 college players, sort/filter/profiles work, combine cross-reference. Pushed to master for Render auto-deploy. |
 
 ## Previous Phase: Phase 16 — Draft Class Analytics + Cross-Year Comparison (COMPLETE)
 
@@ -447,3 +447,4 @@ _None currently._
 | 2026-03-09 | Composite prospect scoring as Phase 14 | Razzle Prospect Score (RPS) creates a single "how good is this prospect" number combining athletic percentile (60%), draft capital (30%), and size (10%). Big Board ranked list is THE draft-week content for dynasty Reddit — "Razzle's 2025 WR Big Board" with tier bands is an instant screenshottable PNG. CFBD college production stats blocked (no API key), so RPS maximizes value from available combine+draft data. |
 | 2026-03-09 | Unified prospect report cards as Phase 15 | Prospect profile cards were missing RPS score and comp-based projections — data was spread across Big Board and profile. Consolidating everything (RPS + tier badge + percentile bars + spider chart + comps + projections) into one view creates THE definitive shareable prospect card for Reddit. One click, one card, one PNG. Client-side RPS computation avoids extra API call. Comp-based projections use weighted similarity averages of comp NFL careers. |
 | 2026-03-09 | Draft class analytics as Phase 16 | Cross-year class comparison creates a new category of screenshottable content: "Is the 2025 WR class better than 2024?" posts get massive engagement on r/DynastyFF during draft season. Reuses existing RPS computation across all draft years (2020-2026). Class grades (A/B/C/D) based on avg RPS + elite/premium ratio create instant talking points. Bar chart + class cards = two shareable formats from one feature. No new external dependencies. |
+| 2026-03-09 | College production stats as Phase 17 | cfbfastR play-level CSV aggregation unlocks "which WR dominated in college?" content for Reddit. sportsdataverse GitHub CSVs = free, no API key, same pattern as nflverse. Three-way universe toggle (NFL/Prospects/College) keeps the Lab as the single power tool. College profiles cross-reference combine/draft data for prospect pipeline analysis. |
