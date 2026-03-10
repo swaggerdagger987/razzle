@@ -69,7 +69,8 @@
 - Can't delete another user's formula
 
 ## Task 6: Add persistent user database separate from stats
-**Status**: PENDING
+**Status**: PASS
+**Result**: users.db at data/users.db is completely separate from data/terminal.db. Auth + formula endpoints all use users.db via auth.py get_users_conn(). Server initializes users.db schema on startup via initialize_users_db() in lifespan. Build command only runs nflverse/college adapters (terminal.db), never touches users.db. Tables: users, user_formulas. Note: Render persistent disk needed for full cross-deploy persistence (documented for Phase 43).
 **Acceptance Criteria**:
 - users.db exists separate from terminal.db
 - Auth endpoints use users.db
@@ -93,8 +94,8 @@
 ## Loop State
 ```
 Current Phase: 42
-Current Task: 6
+Current Task: 7
 Current Stage: BUILD
 Attempt: 1
-Tasks Completed: 5/7
+Tasks Completed: 6/7
 ```
