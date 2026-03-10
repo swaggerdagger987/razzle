@@ -506,7 +506,10 @@ def prospect_comps(name: str = "", position: str = "", draft_year: int = 0, limi
 
 @app.get("/api/prospect-scores")
 def prospect_scores(position: str = "", draft_year: int = 0):
-    return live_data.fetch_prospect_scores(position=position, draft_year=draft_year)
+    pos = position.strip().upper() if position else ""
+    if pos and pos not in ("QB", "RB", "WR", "TE", "OL", "DL", "LB", "CB", "S", "EDGE"):
+        pos = ""
+    return live_data.fetch_prospect_scores(position=pos, draft_year=draft_year)
 
 
 @app.get("/api/draft-class-analytics")

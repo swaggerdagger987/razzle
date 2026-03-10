@@ -392,9 +392,13 @@
 </head>
 <body>
 
-<nav class="main-nav">
-  <div class="nav-brand"><a href="/" style="text-decoration:none; color:inherit;">razzle.lol</a></div>
+<nav class="topnav">
+  <a href="/" class="logo">
+    <div class="logo-mark">&#x1F42F;</div>
+    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
+  </a>
   <ul class="nav-links">
+    <li><a href="/">Home</a></li>
     <li><a href="/lab.html">The Lab</a></li>
     <li><a href="/rankings.html">Rankings</a></li>
     <li><a href="/leaders.html">Leaders</a></li>
@@ -411,7 +415,7 @@
 <main class="buysell-page" id="buysell-content">
   <div class="buysell-header">
     <h1>Buy Low / Sell High</h1>
-    <div class="buysell-subtitle">dynasty value mismatches the market hasn't priced in</div>
+    <div class="buysell-subtitle">efficiency vs dynasty ranking — who's mispriced?</div>
   </div>
 
   <div class="buysell-controls">
@@ -422,7 +426,7 @@
       <button class="buysell-pos-tab" data-pos="WR">WR</button>
       <button class="buysell-pos-tab" data-pos="TE">TE</button>
     </div>
-    <select class="buysell-season-select" id="season-select" title="Season"></select>
+    <select class="buysell-season-select" id="season-select" title="Season" aria-label="Season"></select>
   </div>
 
   <div class="buysell-actions">
@@ -508,20 +512,20 @@
     var stats = p.eff_stats || {};
     var html = '';
     if (p.position === 'QB') {
-      html += '<div class="buysell-stat"><div class="buysell-stat-val">' + (stats.yards_per_att || 0) + '</div><div class="buysell-stat-key">Y/ATT</div></div>';
-      html += '<div class="buysell-stat"><div class="buysell-stat-val">' + (stats.td_rate || 0) + '%</div><div class="buysell-stat-key">TD%</div></div>';
-      html += '<div class="buysell-stat"><div class="buysell-stat-val">' + (stats.int_rate || 0) + '%</div><div class="buysell-stat-key">INT%</div></div>';
+      html += '<div class="buysell-stat"><div class="buysell-stat-val">' + escapeHtml(String(stats.yards_per_att || 0)) + '</div><div class="buysell-stat-key">Y/ATT</div></div>';
+      html += '<div class="buysell-stat"><div class="buysell-stat-val">' + escapeHtml(String(stats.td_rate || 0)) + '%</div><div class="buysell-stat-key">TD%</div></div>';
+      html += '<div class="buysell-stat"><div class="buysell-stat-val">' + escapeHtml(String(stats.int_rate || 0)) + '%</div><div class="buysell-stat-key">INT%</div></div>';
     } else if (p.position === 'RB') {
-      html += '<div class="buysell-stat"><div class="buysell-stat-val">' + (stats.yards_per_carry || 0) + '</div><div class="buysell-stat-key">YPC</div></div>';
-      html += '<div class="buysell-stat"><div class="buysell-stat-val">' + (stats.yards_per_target || 0) + '</div><div class="buysell-stat-key">Y/TGT</div></div>';
-      html += '<div class="buysell-stat"><div class="buysell-stat-val">' + (stats.td_rate || 0) + '%</div><div class="buysell-stat-key">TD%</div></div>';
+      html += '<div class="buysell-stat"><div class="buysell-stat-val">' + escapeHtml(String(stats.yards_per_carry || 0)) + '</div><div class="buysell-stat-key">YPC</div></div>';
+      html += '<div class="buysell-stat"><div class="buysell-stat-val">' + escapeHtml(String(stats.yards_per_target || 0)) + '</div><div class="buysell-stat-key">Y/TGT</div></div>';
+      html += '<div class="buysell-stat"><div class="buysell-stat-val">' + escapeHtml(String(stats.td_rate || 0)) + '%</div><div class="buysell-stat-key">TD%</div></div>';
     } else {
-      html += '<div class="buysell-stat"><div class="buysell-stat-val">' + (stats.yards_per_target || 0) + '</div><div class="buysell-stat-key">Y/TGT</div></div>';
-      html += '<div class="buysell-stat"><div class="buysell-stat-val">' + (stats.catch_rate || 0) + '%</div><div class="buysell-stat-key">CATCH%</div></div>';
-      html += '<div class="buysell-stat"><div class="buysell-stat-val">' + (stats.yac_per_rec || 0) + '</div><div class="buysell-stat-key">YAC/R</div></div>';
-      html += '<div class="buysell-stat"><div class="buysell-stat-val">' + (stats.td_rate || 0) + '%</div><div class="buysell-stat-key">TD%</div></div>';
+      html += '<div class="buysell-stat"><div class="buysell-stat-val">' + escapeHtml(String(stats.yards_per_target || 0)) + '</div><div class="buysell-stat-key">Y/TGT</div></div>';
+      html += '<div class="buysell-stat"><div class="buysell-stat-val">' + escapeHtml(String(stats.catch_rate || 0)) + '%</div><div class="buysell-stat-key">CATCH%</div></div>';
+      html += '<div class="buysell-stat"><div class="buysell-stat-val">' + escapeHtml(String(stats.yac_per_rec || 0)) + '</div><div class="buysell-stat-key">YAC/R</div></div>';
+      html += '<div class="buysell-stat"><div class="buysell-stat-val">' + escapeHtml(String(stats.td_rate || 0)) + '%</div><div class="buysell-stat-key">TD%</div></div>';
     }
-    html += '<div class="buysell-stat"><div class="buysell-stat-val">' + p.ppg + '</div><div class="buysell-stat-key">PPG</div></div>';
+    html += '<div class="buysell-stat"><div class="buysell-stat-val">' + escapeHtml(String(p.ppg)) + '</div><div class="buysell-stat-key">PPG</div></div>';
     return html;
   }
 
@@ -540,7 +544,7 @@
 
     // Row 1: rank, headshot, info, grade
     html += '<div class="buysell-card-row1">';
-    html += '<div class="buysell-rank">' + p.rank + '</div>';
+    html += '<div class="buysell-rank">' + escapeHtml(String(p.rank)) + '</div>';
     if (p.headshot_url) {
       html += '<img class="buysell-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
     }
@@ -563,9 +567,9 @@
     html += '<div class="buysell-mismatch">';
     html += '<div class="buysell-mismatch-row">';
     html += '<span class="buysell-mismatch-label">Value Mismatch</span>';
-    html += '<span class="buysell-mismatch-val ' + type + '">' + p.mismatch_score + '</span>';
+    html += '<span class="buysell-mismatch-val ' + type + '">' + escapeHtml(String(p.mismatch_score)) + '</span>';
     html += '</div>';
-    html += '<div class="buysell-mismatch-track"><div class="buysell-mismatch-fill ' + type + '" style="width:' + barWidth + '%"></div></div>';
+    html += '<div class="buysell-mismatch-track"><div class="buysell-mismatch-fill ' + type + '" style="width:' + parseFloat(barWidth) + '%"></div></div>';
     html += '</div>';
 
     // Annotation

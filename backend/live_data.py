@@ -1913,14 +1913,15 @@ def fetch_prospect_scores(position="", draft_year=0):
     """
     conn = get_conn()
 
-    if not draft_year:
-        row = conn.execute("SELECT MAX(draft_year) FROM combine_data").fetchone()
-        draft_year = row[0] if row and row[0] else 2025
+    try:
+        if not draft_year:
+            row = conn.execute("SELECT MAX(draft_year) FROM combine_data").fetchone()
+            draft_year = row[0] if row and row[0] else 2025
 
-    pos_filter = "AND c.position = ?" if position else ""
-    params = [draft_year] + ([position.upper()] if position else [])
+        pos_filter = "AND c.position = ?" if position else ""
+        params = [draft_year] + ([position.upper()] if position else [])
 
-    rows = conn.execute(f"""
+        rows = conn.execute(f"""
         SELECT c.player_name, c.position, c.school, c.draft_year,
                c.draft_team, c.draft_round, c.draft_pick,
                c.height_inches, c.weight,
@@ -1929,115 +1930,115 @@ def fetch_prospect_scores(position="", draft_year=0):
         WHERE c.draft_year = ? {pos_filter}
     """, params).fetchall()
 
-    if not rows:
-        conn.close()
-        return {"prospects": [], "draft_year": draft_year, "position": position.upper() if position else "ALL"}
+        if not rows:
+            return {"prospects": [], "draft_year": draft_year, "position": position.upper() if position else "ALL"}
 
-    # Gather position-group stats for percentile computation
-    metric_keys = ["forty", "bench", "vertical", "broad_jump", "cone", "shuttle"]
-    metric_dirs = {"forty": "lower", "bench": "higher", "vertical": "higher",
-                   "broad_jump": "higher", "cone": "lower", "shuttle": "lower"}
+        # Gather position-group stats for percentile computation
+        metric_keys = ["forty", "bench", "vertical", "broad_jump", "cone", "shuttle"]
+        metric_dirs = {"forty": "lower", "bench": "higher", "vertical": "higher",
+                       "broad_jump": "higher", "cone": "lower", "shuttle": "lower"}
 
-    # Get all positions we need stats for
-    positions_in_data = set()
-    for r in rows:
-        positions_in_data.add(r["position"])
+        # Get all positions we need stats for
+        positions_in_data = set()
+        for r in rows:
+            positions_in_data.add(r["position"])
 
-    pos_stats = {}
-    for pos in positions_in_data:
-        pos_stats[pos] = {}
-        for mk in metric_keys:
-            all_rows = conn.execute(
-                f"SELECT {mk} FROM combine_data WHERE position = ? AND {mk} IS NOT NULL", (pos,)
+        pos_stats = {}
+        for pos in positions_in_data:
+            pos_stats[pos] = {}
+            for mk in metric_keys:
+                all_rows = conn.execute(
+                    f"SELECT {mk} FROM combine_data WHERE position = ? AND {mk} IS NOT NULL", (pos,)
+                ).fetchall()
+                vals = [r[0] for r in all_rows]
+                if vals:
+                    pos_stats[pos][mk] = vals
+
+        # Position-relative size benchmarks (median weight for the position)
+        size_benchmarks = {}
+        for pos in positions_in_data:
+            wt_rows = conn.execute(
+                "SELECT weight FROM combine_data WHERE position = ? AND weight IS NOT NULL", (pos,)
             ).fetchall()
-            vals = [r[0] for r in all_rows]
-            if vals:
-                pos_stats[pos][mk] = vals
+            wts = sorted([r[0] for r in wt_rows])
+            if wts:
+                size_benchmarks[pos] = {"median": wts[len(wts)//2], "values": wts}
 
-    # Position-relative size benchmarks (median weight for the position)
-    size_benchmarks = {}
-    for pos in positions_in_data:
-        wt_rows = conn.execute(
-            "SELECT weight FROM combine_data WHERE position = ? AND weight IS NOT NULL", (pos,)
-        ).fetchall()
-        wts = sorted([r[0] for r in wt_rows])
-        if wts:
-            size_benchmarks[pos] = {"median": wts[len(wts)//2], "values": wts}
+        prospects = []
+        for row in rows:
+            p = dict(row)
+            pos = p["position"]
 
-    prospects = []
-    for row in rows:
-        p = dict(row)
-        pos = p["position"]
+            # Abbreviate team
+            dt = (p.get("draft_team") or "").upper()
+            p["draft_team"] = TEAM_ABBREV.get(dt, dt[:3] if dt else None)
 
-        # Abbreviate team
-        dt = (p.get("draft_team") or "").upper()
-        p["draft_team"] = TEAM_ABBREV.get(dt, dt[:3] if dt else None)
+            # Height display
+            ht = p.get("height_inches")
+            p["height_display"] = f"{ht // 12}'{ht % 12}\"" if ht else None
 
-        # Height display
-        ht = p.get("height_inches")
-        p["height_display"] = f"{ht // 12}'{ht % 12}\"" if ht else None
+            # 1) Athletic percentiles
+            pcts = {}
+            for mk in metric_keys:
+                val = p.get(mk)
+                if val is None or mk not in pos_stats.get(pos, {}):
+                    continue
+                all_vals = pos_stats[pos][mk]
+                if metric_dirs[mk] == "lower":
+                    pct = sum(1 for v in all_vals if v > val) / len(all_vals) * 100
+                else:
+                    pct = sum(1 for v in all_vals if v < val) / len(all_vals) * 100
+                pcts[mk] = round(pct, 1)
 
-        # 1) Athletic percentiles
-        pcts = {}
-        for mk in metric_keys:
-            val = p.get(mk)
-            if val is None or mk not in pos_stats.get(pos, {}):
-                continue
-            all_vals = pos_stats[pos][mk]
-            if metric_dirs[mk] == "lower":
-                pct = sum(1 for v in all_vals if v > val) / len(all_vals) * 100
+            p["percentiles"] = pcts
+            athletic_avg = round(sum(pcts.values()) / len(pcts), 1) if pcts else None
+            p["athletic_avg"] = athletic_avg
+
+            # 2) Draft capital score (0-100)
+            rd = p.get("draft_round")
+            pk = p.get("draft_pick")
+            if rd and pk:
+                # Pick 1 = 100, pick 32 = 75, pick 64 = 55, pick 256 = 20
+                draft_capital = max(20, 100 - (pk - 1) * 0.314)
+                draft_capital = round(min(100, draft_capital), 1)
             else:
-                pct = sum(1 for v in all_vals if v < val) / len(all_vals) * 100
-            pcts[mk] = round(pct, 1)
+                draft_capital = 20  # undrafted
+            p["draft_capital_score"] = draft_capital
 
-        p["percentiles"] = pcts
-        athletic_avg = round(sum(pcts.values()) / len(pcts), 1) if pcts else None
-        p["athletic_avg"] = athletic_avg
+            # 3) Size score (position-relative, 0-100)
+            wt = p.get("weight")
+            if wt and pos in size_benchmarks:
+                all_wts = size_benchmarks[pos]["values"]
+                size_pct = sum(1 for w in all_wts if w < wt) / len(all_wts) * 100
+                size_score = round(min(100, size_pct), 1)
+            else:
+                size_score = 50  # default median
+            p["size_score"] = size_score
 
-        # 2) Draft capital score (0-100)
-        rd = p.get("draft_round")
-        pk = p.get("draft_pick")
-        if rd and pk:
-            # Pick 1 = 100, pick 32 = 75, pick 64 = 55, pick 256 = 20
-            draft_capital = max(20, 100 - (pk - 1) * 0.314)
-            draft_capital = round(min(100, draft_capital), 1)
-        else:
-            draft_capital = 20  # undrafted
-        p["draft_capital_score"] = draft_capital
+            # RPS composite: athletic 60% + draft capital 30% + size 10%
+            if athletic_avg is not None:
+                rps = round(athletic_avg * 0.6 + draft_capital * 0.3 + size_score * 0.1, 1)
+            else:
+                # No combine data — use draft capital + size only, penalize missing data
+                rps = round(draft_capital * 0.5 + size_score * 0.2, 1)
+            p["rps"] = rps
 
-        # 3) Size score (position-relative, 0-100)
-        wt = p.get("weight")
-        if wt and pos in size_benchmarks:
-            all_wts = size_benchmarks[pos]["values"]
-            size_pct = sum(1 for w in all_wts if w < wt) / len(all_wts) * 100
-            size_score = round(min(100, size_pct), 1)
-        else:
-            size_score = 50  # default median
-        p["size_score"] = size_score
+            prospects.append(p)
 
-        # RPS composite: athletic 60% + draft capital 30% + size 10%
-        if athletic_avg is not None:
-            rps = round(athletic_avg * 0.6 + draft_capital * 0.3 + size_score * 0.1, 1)
-        else:
-            # No combine data — use draft capital + size only, penalize missing data
-            rps = round(draft_capital * 0.5 + size_score * 0.2, 1)
-        p["rps"] = rps
+        # Sort by RPS descending
+        prospects.sort(key=lambda x: x["rps"], reverse=True)
 
-        prospects.append(p)
+        # Add rank
+        for i, p in enumerate(prospects):
+            p["rank"] = i + 1
 
-    # Sort by RPS descending
-    prospects.sort(key=lambda x: x["rps"], reverse=True)
-
-    # Add rank
-    for i, p in enumerate(prospects):
-        p["rank"] = i + 1
-
-    conn.close()
-    return {
-        "prospects": prospects,
-        "draft_year": draft_year,
-        "position": position.upper() if position else "ALL",
-    }
+        return {
+            "prospects": prospects,
+            "draft_year": draft_year,
+            "position": position.upper() if position else "ALL",
+        }
+    finally:
+        conn.close()
 
 
 def fetch_draft_class_analytics(position=""):
@@ -4463,6 +4464,7 @@ def fetch_breakout_candidates(season=None, position=None, limit=50):
             GROUP BY p.player_id
             HAVING games >= 6
             ORDER BY total_ppr DESC
+            LIMIT 500
         """
         rows = conn.execute(query, params).fetchall()
 
@@ -4698,6 +4700,7 @@ def fetch_buy_sell_candidates(season=None, position=None, limit=15):
             GROUP BY p.player_id
             HAVING games >= 6
             ORDER BY total_ppr DESC
+            LIMIT 500
         """
         rows = conn.execute(query, params).fetchall()
 

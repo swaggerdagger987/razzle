@@ -1,6 +1,20 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 70 — Buy Low / Sell High Dashboard (COMPLETE)
+## Current Phase: Phase 71 — QA + UX Audit Fixes (COMPLETE)
+
+**Exit criterion MET:** All CRITICAL and HIGH findings from phases 66-70 QA+UX audit resolved. Nav class fixed on scarcity/breakouts/buysell (main-nav → topnav with tiger logo). Connection leak fixed in fetch_prospect_scores (try/finally). XSS fixed: all numeric API values escaped in breakouts/buysell/scarcity innerHTML. Prospect click improved with position filter param. RBS/RPS tooltips added. Age badges standardized (young ≤24, prime 25-27, aging 28+). Scarcity summary labels improved (PPG units, ranked scarcity labels). Breakouts vs Buy/Sell subtitles clarified. Medium: LIMIT 500 on SQL queries, position validation on prospect-scores, aria-labels on season selects.
+
+### Phase 71 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | CRITICAL + HIGH QA fixes | DONE | Nav class, connection leak, XSS escaping |
+| 2 | Prospects click navigation | DONE | Added position filter, name-based search correct for combine data |
+| 3 | HIGH UX fixes | DONE | Tooltips, age badges, labels, page differentiation |
+| 4 | MEDIUM fixes | DONE | LIMIT 500, position validation, aria-labels |
+| 5 | Smoke test | DONE | All syntax valid, all fixes verified |
+
+## Previous Phase: Phase 70 — Buy Low / Sell High Dashboard (COMPLETE)
 
 **Exit criterion MET:** /buysell.html page shows two columns: Buy Low candidates (high efficiency, low dynasty rank) and Sell High candidates (low efficiency, high dynasty rank). Each player rendered as a comic-strip card with position-colored top stripe, rank, headshot, name, position badge, team, age badge (young/prime/aging/veteran), efficiency grade badge (A+ to F, color-coded), value mismatch bar, Caveat annotation, and position-specific efficiency stats (QB: Y/A, TD%, INT%; RB: YPC, Y/TGT, TD%; WR/TE: Y/TGT, Catch%, YAC/R, TD%). Position filter tabs (All/QB/RB/WR/TE). Season selector dropdown. PNG export via html2canvas with watermark. Click card → player profile. "Buy/Sell" nav link added to all 14 HTML pages (nav + footer). Sitemap updated. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, hand annotations, position colors.
 

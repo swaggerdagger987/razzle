@@ -564,7 +564,7 @@
         html += '</div>';
         html += '<div class="prospect-rps">';
         html += '<div class="prospect-rps-value">' + formatStat(p.rps, 1) + '</div>';
-        html += '<div class="prospect-rps-label">RPS</div>';
+        html += '<div class="prospect-rps-label" title="Razzle Prospect Score — athleticism 60% + draft capital 30% + size 10%">RPS</div>';
         html += '</div>';
         html += '</div>';
 
@@ -607,14 +607,15 @@
 
     content.innerHTML = html;
 
-    // Click handlers — open prospect in Lab prospect mode
+    // Click handlers — open prospect in Lab prospect mode with position filter
     content.querySelectorAll(".prospect-card").forEach(function(card) {
       card.addEventListener("click", function() {
         var name = this.getAttribute("data-name");
         var pos = this.getAttribute("data-pos");
-        var year = this.getAttribute("data-year");
         if (name) {
-          window.location.href = "/lab.html?mode=prospects&search=" + encodeURIComponent(name);
+          var url = "/lab.html?mode=prospects&search=" + encodeURIComponent(name);
+          if (pos) url += "&position=" + encodeURIComponent(pos);
+          window.location.href = url;
         }
       });
     });

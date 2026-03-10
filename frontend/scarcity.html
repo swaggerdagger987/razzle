@@ -283,9 +283,13 @@
 </style>
 </head>
 <body>
-<nav class="main-nav">
-  <div class="nav-brand"><a href="/" style="text-decoration:none; color:inherit;">razzle.lol</a></div>
+<nav class="topnav">
+  <a href="/" class="logo">
+    <div class="logo-mark">&#x1F42F;</div>
+    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
+  </a>
   <ul class="nav-links">
+    <li><a href="/">Home</a></li>
     <li><a href="/lab.html">The Lab</a></li>
     <li><a href="/rankings.html">Rankings</a></li>
     <li><a href="/leaders.html">Leaders</a></li>
@@ -306,7 +310,7 @@
   </div>
 
   <div class="scarcity-controls">
-    <select class="scarcity-season-select" id="season-select" title="Season"></select>
+    <select class="scarcity-season-select" id="season-select" title="Season" aria-label="Season"></select>
   </div>
 
   <div class="scarcity-actions">
@@ -411,10 +415,10 @@
     let summaryHtml = '<div class="scarcity-summary">';
     ranking.forEach(function(r, i) {
       const pos = r.position.toLowerCase();
-      const label = i === 0 ? 'most scarce' : i === ranking.length - 1 ? 'most replaceable' : 'drop-off';
+      const label = i === 0 ? 'most scarce' : i === ranking.length - 1 ? 'most replaceable' : '#' + (i + 1) + ' scarcity';
       summaryHtml += '<div class="scarcity-summary-card">' +
         '<div class="scarcity-summary-pos ' + pos + '">' + escapeHtml(r.position) + '</div>' +
-        '<div class="scarcity-summary-dropoff">' + escapeHtml(String(r.drop_off)) + '</div>' +
+        '<div class="scarcity-summary-dropoff">' + escapeHtml(String(r.drop_off)) + ' <span style="font-size:11px;color:var(--ink-light);">PPG</span></div>' +
         '<div class="scarcity-summary-label">' + escapeHtml(label) + '</div>' +
         '<div class="scarcity-summary-range">' + escapeHtml(String(r.top_ppg)) + ' &rarr; ' + escapeHtml(String(r.replacement_ppg)) + ' PPG</div>' +
         '</div>';
@@ -455,13 +459,13 @@
         }
 
         var pct = maxPpg > 0 ? (p.ppg / maxPpg) * 100 : 0;
-        chartsHtml += '<div class="scarcity-bar-row" data-pid="' + escapeHtml(p.player_id) + '" title="' + escapeHtml(p.name) + ' (' + escapeHtml(p.team) + ') — ' + p.ppg + ' PPG">' +
-          '<div class="scarcity-bar-rank">' + p.rank + '</div>' +
+        chartsHtml += '<div class="scarcity-bar-row" data-pid="' + escapeHtml(p.player_id) + '" title="' + escapeHtml(p.name) + ' (' + escapeHtml(p.team) + ') — ' + escapeHtml(String(p.ppg)) + ' PPG">' +
+          '<div class="scarcity-bar-rank">' + escapeHtml(String(p.rank)) + '</div>' +
           '<div class="scarcity-bar-name">' + escapeHtml(p.name) + '</div>' +
           '<div class="scarcity-bar-track">' +
-          '<div class="scarcity-bar-fill ' + posLower + '" style="width:' + pct.toFixed(1) + '%"></div>' +
+          '<div class="scarcity-bar-fill ' + posLower + '" style="width:' + parseFloat(pct.toFixed(1)) + '%"></div>' +
           '</div>' +
-          '<div class="scarcity-bar-ppg">' + p.ppg + '</div>' +
+          '<div class="scarcity-bar-ppg">' + escapeHtml(String(p.ppg)) + '</div>' +
           '</div>';
       });
 

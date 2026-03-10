@@ -339,9 +339,13 @@
 </head>
 <body>
 
-<nav class="main-nav">
-  <div class="nav-brand"><a href="/" style="text-decoration:none; color:inherit;">razzle.lol</a></div>
+<nav class="topnav">
+  <a href="/" class="logo">
+    <div class="logo-mark">&#x1F42F;</div>
+    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
+  </a>
   <ul class="nav-links">
+    <li><a href="/">Home</a></li>
     <li><a href="/lab.html">The Lab</a></li>
     <li><a href="/rankings.html">Rankings</a></li>
     <li><a href="/leaders.html">Leaders</a></li>
@@ -358,7 +362,7 @@
 <main class="breakouts-page" id="breakouts-content">
   <div class="breakouts-header">
     <h1>Breakout Candidates</h1>
-    <div class="breakouts-subtitle">opportunity outpacing production</div>
+    <div class="breakouts-subtitle">opportunity outpacing production — volume-based, not efficiency</div>
   </div>
 
   <div class="breakouts-controls">
@@ -369,7 +373,7 @@
       <button class="breakouts-pos-tab" data-pos="WR">WR</button>
       <button class="breakouts-pos-tab" data-pos="TE">TE</button>
     </div>
-    <select class="breakouts-season-select" id="season-select" title="Season"></select>
+    <select class="breakouts-season-select" id="season-select" title="Season" aria-label="Season"></select>
   </div>
 
   <div class="breakouts-actions">
@@ -428,7 +432,7 @@
   function ageClass(age) {
     if (!age) return 'prime';
     if (age <= 24) return 'young';
-    if (age <= 26) return 'prime';
+    if (age <= 27) return 'prime';
     return 'aging';
   }
 
@@ -510,7 +514,7 @@
 
       // Row 1: rank, headshot, info, RBS
       html += '<div class="breakout-card-row1">';
-      html += '<div class="breakout-rank">' + p.rank + '</div>';
+      html += '<div class="breakout-rank">' + escapeHtml(String(p.rank)) + '</div>';
       if (p.headshot_url) {
         html += '<img class="breakout-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
       }
@@ -524,20 +528,20 @@
       }
       html += '</div></div>';
       html += '<div class="breakout-rbs">';
-      html += '<div class="breakout-rbs-score">' + p.rbs_score + '</div>';
-      html += '<div class="breakout-rbs-label">RBS</div>';
+      html += '<div class="breakout-rbs-score">' + escapeHtml(String(p.rbs_score)) + '</div>';
+      html += '<div class="breakout-rbs-label" title="Razzle Breakout Score — measures opportunity vs production gap">RBS</div>';
       html += '</div>';
       html += '</div>';
 
       // Opportunity vs Production bars
       html += '<div class="breakout-bars">';
       html += '<div class="breakout-bar-group">';
-      html += '<div class="breakout-bar-label"><span>Opportunity</span><span>' + p.opportunity_pct + '%</span></div>';
-      html += '<div class="breakout-bar-track"><div class="breakout-bar-fill opportunity" style="width:' + p.opportunity_pct + '%"></div></div>';
+      html += '<div class="breakout-bar-label"><span>Opportunity</span><span>' + escapeHtml(String(p.opportunity_pct)) + '%</span></div>';
+      html += '<div class="breakout-bar-track"><div class="breakout-bar-fill opportunity" style="width:' + parseFloat(p.opportunity_pct) + '%"></div></div>';
       html += '</div>';
       html += '<div class="breakout-bar-group">';
-      html += '<div class="breakout-bar-label"><span>Production</span><span>' + p.production_pct + '%</span></div>';
-      html += '<div class="breakout-bar-track"><div class="breakout-bar-fill production" style="width:' + p.production_pct + '%"></div></div>';
+      html += '<div class="breakout-bar-label"><span>Production</span><span>' + escapeHtml(String(p.production_pct)) + '%</span></div>';
+      html += '<div class="breakout-bar-track"><div class="breakout-bar-fill production" style="width:' + parseFloat(p.production_pct) + '%"></div></div>';
       html += '</div>';
       html += '</div>';
 
@@ -549,13 +553,13 @@
 
       // Key stats
       html += '<div class="breakout-stats">';
-      html += '<div class="breakout-stat"><div class="breakout-stat-val">' + p.ppg + '</div><div class="breakout-stat-key">PPG</div></div>';
-      html += '<div class="breakout-stat"><div class="breakout-stat-val">' + p.snap_pct + '%</div><div class="breakout-stat-key">Snap%</div></div>';
-      html += '<div class="breakout-stat"><div class="breakout-stat-val">' + posStatVal(p) + '</div><div class="breakout-stat-key">' + posStatLabel(p.position) + '</div></div>';
+      html += '<div class="breakout-stat"><div class="breakout-stat-val">' + escapeHtml(String(p.ppg)) + '</div><div class="breakout-stat-key">PPG</div></div>';
+      html += '<div class="breakout-stat"><div class="breakout-stat-val">' + escapeHtml(String(p.snap_pct)) + '%</div><div class="breakout-stat-key">Snap%</div></div>';
+      html += '<div class="breakout-stat"><div class="breakout-stat-val">' + escapeHtml(String(posStatVal(p))) + '</div><div class="breakout-stat-key">' + posStatLabel(p.position) + '</div></div>';
       if (p.position !== 'QB' && p.position !== 'RB') {
-        html += '<div class="breakout-stat"><div class="breakout-stat-val">' + p.target_share + '%</div><div class="breakout-stat-key">TGT%</div></div>';
+        html += '<div class="breakout-stat"><div class="breakout-stat-val">' + escapeHtml(String(p.target_share)) + '%</div><div class="breakout-stat-key">TGT%</div></div>';
       }
-      html += '<div class="breakout-stat"><div class="breakout-stat-val">' + p.games + '</div><div class="breakout-stat-key">Games</div></div>';
+      html += '<div class="breakout-stat"><div class="breakout-stat-val">' + escapeHtml(String(p.games)) + '</div><div class="breakout-stat-key">Games</div></div>';
       html += '</div>';
 
       html += '</div></div>';
