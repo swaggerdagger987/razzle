@@ -106,7 +106,8 @@ function renderPlayerPage(data, container) {
   html += `<div class="player-name">${esc(player.full_name)}</div>`;
   const displayAge = player.age ? Math.floor(player.age) : "?";
   const seasonCount = seasons ? seasons.length : 0;
-  html += `<div class="player-meta"><span style="color:${posColor}; font-weight:700;">${esc(player.team || "FA")}</span> &middot; Age ${displayAge} &middot; ${esc(player.college || "")} &middot; ${seasonCount} Season${seasonCount !== 1 ? "s" : ""}</div>`;
+  const teamLink = player.team ? `<a href="/team/${encodeURIComponent(player.team)}" style="color:${posColor}; font-weight:700; text-decoration:none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${esc(player.team)}</a>` : `<span style="color:${posColor}; font-weight:700;">FA</span>`;
+  html += `<div class="player-meta">${teamLink} &middot; Age ${displayAge} &middot; ${esc(player.college || "")} &middot; ${seasonCount} Season${seasonCount !== 1 ? "s" : ""}</div>`;
   if (combine && combine.draft_round) {
     const pick = combine.draft_overall || combine.draft_pick;
     html += `<span class="player-draft-badge">Rd ${combine.draft_round}${pick ? " #" + pick : ""}${combine.draft_year ? " '" + String(combine.draft_year).slice(2) : ""}</span>`;

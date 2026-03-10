@@ -895,6 +895,13 @@ def sitemap_xml():
         ET.SubElement(url, "priority").text = priority
         ET.SubElement(url, "changefreq").text = freq
 
+    # All 32 NFL team pages
+    for abbr in sorted(live_data.ABBREV_TO_TEAM.keys()):
+        url = ET.SubElement(urlset, "url")
+        ET.SubElement(url, "loc").text = f"{base}/team/{abbr}"
+        ET.SubElement(url, "priority").text = "0.7"
+        ET.SubElement(url, "changefreq").text = "weekly"
+
     # Top 200 NFL players by PPR
     try:
         data = live_data.fetch_players(sort_key="fantasy_points_ppr", limit=200)

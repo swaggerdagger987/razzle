@@ -2642,7 +2642,8 @@ function renderProfile(data, container) {
   const displayAge = player.age ? Math.floor(player.age) : "?";
   const seasonCount = seasons ? seasons.length : 0;
   const seasonLabel = seasonCount === 1 ? "Season" : "Seasons";
-  html += `<div class="profile-meta"><span style="color:${posColor}; font-weight:700;">${player.team || "FA"}</span> · Age ${displayAge} · ${player.college || ""} · ${seasonCount} ${seasonLabel}</div>`;
+  const teamDisplay = player.team ? `<a href="/team/${encodeURIComponent(player.team)}" style="color:${posColor}; font-weight:700; text-decoration:none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${escapeHtml(player.team)}</a>` : `<span style="color:${posColor}; font-weight:700;">FA</span>`;
+  html += `<div class="profile-meta">${teamDisplay} · Age ${displayAge} · ${escapeHtml(player.college || "")} · ${seasonCount} ${seasonLabel}</div>`;
   if (combine && combine.draft_round) {
     const draftPick = combine.draft_overall || combine.draft_pick;
     html += `<span style="display:inline-block; background:var(--ink); color:white; font-family:var(--font-display); font-size:10px; padding:2px 8px; border:2px solid var(--ink); border-radius:4px; transform:rotate(-1deg); margin-right:6px;">Rd ${combine.draft_round}${draftPick ? " #" + draftPick : ""}${combine.draft_year ? " '" + String(combine.draft_year).slice(2) : ""}</span>`;

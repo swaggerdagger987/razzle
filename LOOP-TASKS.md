@@ -18,8 +18,8 @@
 **Notes**: Full page with position group cards (QB, RB, WR, TE sections). Each card: position name in display font with position color top stripe, Caveat annotation, player rows with headshot/initials fallback, name, age badge (green ≤25, yellow 26-28, red ≥29), key stats in mono font. Cards have 3px ink borders, 4px offset shadows. Click player row → navigate to /player/{id}. Team selector dropdown + season selector. Team header with team name. Sand bg, card bg, all fonts correct per DESIGN.md.
 
 ## Task 3: Nav links + team links from profiles + sitemap
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 **Notes**: "Teams" nav link added to all HTML pages. Team column in Lab screener links to /team/{abbr}. Player profile pages show team name as clickable link to team page. Sitemap updated. URL routing handles /team/{abbr} pattern.
 
 ## Task 4: Smoke test + verification
