@@ -1,8 +1,23 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 5 — College Football Integration
+## Current Phase: Phase 6 — QA + UX Audit Fixes
 
-**Exit Criterion**: Every applicable Lab panel supports an NFL/College universe toggle. College mode shifts to blue accent. College data covers 2015-present. Panels that don't apply to college show a friendly message.
+**Exit Criterion**: All CRITICAL and HIGH findings from Phase 5 QA+UX audit resolved. No panels silently serve NFL data in college mode. NFL-only message has clickable switch button. DB connection leak fixed.
+
+### Phase 6 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Add showNflOnlyMsg guards to 14 unguarded panels | | |
+| 2 | Add clickable "Switch to NFL" button in NFL-only messages | | |
+| 3 | Fix DB connection leak in fetch_college_player_profile | | |
+| 4 | Fix college season defaults and YoY panel duplication | | |
+| 5 | Add sidebar visual indicators for NFL-only panels | | |
+| 6 | Fix MEDIUM findings (grouped) | | |
+
+## Previous Phase: Phase 5 — College Football Integration (COMPLETE)
+
+**Exit Criterion MET**: Every applicable Lab panel supports an NFL/College universe toggle. College mode shifts to blue accent. College data covers 2015-2025 (31,039 player-season rows). Panels that don't apply to college show a friendly message.
 
 ### Phase 5 Tasks
 
