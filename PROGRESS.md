@@ -1,6 +1,20 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 32 — Lab QA: Fix Data Loading, Year Bugs, and Reliability (COMPLETE)
+## Current Phase: Phase 33 — Backend Cleanup: Add Structured Logging (COMPLETE)
+
+**Exit Criterion MET**: All bare `except Exception` blocks have proper logging. Request middleware logs method/path/status/duration. `backend/logging_config.py` provides JSON format for production, colored console for dev. 14 hierarchical razzle.* loggers across all backend modules. Zero silent failures.
+
+### Phase 33 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Create logging config module | DONE | JSONFormatter + ConsoleFormatter, ENVIRONMENT env var |
+| 2 | Add request logging middleware | DONE | HTTP middleware, health check at DEBUG level |
+| 3 | Add logging to all modules | DONE | 12 files, hierarchical razzle.* loggers |
+| 4 | Fix bare except blocks | DONE | 12 blocks fixed with appropriate log levels |
+| 5 | End-to-end verification | DONE | Console colors, JSON format, stack traces all working |
+
+## Previous Phase: Phase 32 — Lab QA: Fix Data Loading, Year Bugs, and Reliability (COMPLETE)
 
 **Exit Criterion MET**: Zero hardcoded years in Python or JS. _current_nfl_season() and _current_draft_year() helpers in core.py. Prospect tiers use state.draftYear. AbortController race condition protection. Error handlers keep previous data visible. Toast notification system. 100+ year values replaced across 12 files.
 
