@@ -148,6 +148,14 @@
   /* ===== LAB PANELS ===== */
   .lab-panel {
     min-height: calc(100vh - 56px);
+    opacity: 1;
+    transition: opacity 150ms ease;
+  }
+  .lab-panel.panel-fade-out {
+    opacity: 0;
+  }
+  .lab-panel.panel-fade-in {
+    opacity: 0;
   }
 
   .lab-panel-header {
@@ -2831,59 +2839,80 @@
   window.switchPanel = function(panelName) {
     if (panelName === currentPanel) return;
 
-    // Hide all visible panels
-    document.querySelectorAll('.lab-panel').forEach(function(p) { p.style.display = 'none'; });
-
     // Update sidebar active state
     document.querySelectorAll('.lab-sidebar-item').forEach(function(item) {
       item.classList.toggle('active', item.dataset.panel === panelName);
     });
 
-    var entry = panelRegistry[panelName];
+    // Find current visible panel for fade-out
+    var currentVisible = currentPanel ? document.querySelector('.lab-panel[data-panel="' + currentPanel + '"]') : null;
 
-    if (entry) {
-      // ── Native panel ──
-      // Create container on first access (except screener which is static)
-      if (!entry.container) {
-        var section = document.createElement('section');
-        section.className = 'lab-panel';
-        section.dataset.panel = panelName;
-        section.id = 'panel-' + panelName;
+    function showNewPanel() {
+      // Hide all panels
+      document.querySelectorAll('.lab-panel').forEach(function(p) {
+        p.style.display = 'none';
+        p.classList.remove('panel-fade-out', 'panel-fade-in');
+      });
 
-        // Add breadcrumb header
-        var label = PANEL_LABELS[panelName] || panelName;
-        var cat = PANEL_CATEGORIES[panelName] || 'The Lab';
-        var header = document.createElement('div');
-        header.className = 'lab-panel-header';
-        header.innerHTML = '<span class="breadcrumb">' + escapeHtml('The Lab > ' + cat) + '</span>' +
-                           '<span>' + escapeHtml(label) + '</span>';
-        section.appendChild(header);
+      var entry = panelRegistry[panelName];
 
-        // Content area for the render function
-        var content = document.createElement('div');
-        content.className = 'lab-panel-content';
-        section.appendChild(content);
+      if (entry) {
+        // Create container on first access (except screener which is static)
+        if (!entry.container) {
+          var section = document.createElement('section');
+          section.className = 'lab-panel';
+          section.dataset.panel = panelName;
+          section.id = 'panel-' + panelName;
 
-        labMain.appendChild(section);
-        entry.container = section;
-      }
+          // Add breadcrumb header
+          var label = PANEL_LABELS[panelName] || panelName;
+          var cat = PANEL_CATEGORIES[panelName] || 'The Lab';
+          var header = document.createElement('div');
+          header.className = 'lab-panel-header';
+          header.innerHTML = '<span class="breadcrumb">' + escapeHtml('The Lab > ' + cat) + '</span>' +
+                             '<span>' + escapeHtml(label) + '</span>';
+          section.appendChild(header);
 
-      // Show the container
-      entry.container.style.display = '';
+          // Content area for the render function
+          var content = document.createElement('div');
+          content.className = 'lab-panel-content';
+          section.appendChild(content);
 
-      // Lazy-load: render on first access
-      if (!entry.loaded) {
-        var contentEl = entry.container.querySelector('.lab-panel-content') || entry.container;
-        // Show loading state
-        contentEl.innerHTML = '<div class="lab-panel-loading"><div class="loading-msg">pulling film...</div></div>';
-        try {
-          entry.render(contentEl);
-        } catch (err) {
-          contentEl.innerHTML = '<div class="lab-panel-loading"><div class="loading-msg" style="color:var(--red);">something broke... try refreshing</div></div>';
-          console.error('Panel render error (' + panelName + '):', err);
+          labMain.appendChild(section);
+          entry.container = section;
         }
-        entry.loaded = true;
+
+        // Show the container with fade-in
+        entry.container.style.display = '';
+        entry.container.classList.add('panel-fade-in');
+        requestAnimationFrame(function() {
+          requestAnimationFrame(function() {
+            entry.container.classList.remove('panel-fade-in');
+          });
+        });
+
+        // Lazy-load: render on first access
+        if (!entry.loaded) {
+          var contentEl = entry.container.querySelector('.lab-panel-content') || entry.container;
+          contentEl.innerHTML = '<div class="lab-panel-loading"><div class="loading-msg">pulling film...</div></div>';
+          try {
+            entry.render(contentEl);
+          } catch (err) {
+            contentEl.innerHTML = '<div class="lab-panel-loading"><div class="loading-msg" style="color:var(--red);">something broke... try refreshing</div></div>';
+            console.error('Panel render error (' + panelName + '):', err);
+          }
+          entry.loaded = true;
+        }
       }
+
+    }
+
+    // Fade out current panel, then show new one
+    if (currentVisible && currentVisible.offsetParent !== null) {
+      currentVisible.classList.add('panel-fade-out');
+      setTimeout(showNewPanel, 150);
+    } else {
+      showNewPanel();
     }
 
     currentPanel = panelName;
