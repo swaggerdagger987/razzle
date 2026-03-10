@@ -1,8 +1,30 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 35 (QA + UX Audit — Fixes for Phases 31-34)
-## Phase 35: QA + UX Audit — Fixes for Phases 31-34
+- Phase: 36 (Fix Missing player_season_stats Table + stat_value Bug)
+## Phase 36: Fix Missing player_season_stats Table + stat_value Bug
+**Exit Criterion**: player_season_stats table created as aggregation from player_week_stats during bootstrap. m.value bug fixed in analytics.py. All affected endpoints return 200. Smoke tests pass.
+
+- Task 1: PENDING
+- Task 2: PENDING
+- Task 3: PENDING
+
+### Task 1: Create player_season_stats table in bootstrap
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: player_season_stats created with all needed columns. Populated from player_week_stats aggregation.
+
+### Task 2: Fix m.value -> m.stat_value in analytics.py
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: fetch_stat_leaders query uses correct column name.
+
+### Task 3: Verify affected endpoints return 200
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: td-regression, snap-efficiency, workload-monitor, garbage-time, stat-leaders all return 200. Smoke tests updated.
+
+## Phase 35: QA + UX Audit — Fixes for Phases 31-34 (COMPLETE)
 **Exit Criterion**: All HIGH findings from QA audit resolved. MEDIUM findings addressed where practical.
 
 - Task 1: PASS

@@ -150,10 +150,56 @@ def bootstrap_database():
             logger.warning(f"  cfbfastR bootstrap failed: {e}")
 
 
+def _ensure_season_stats_table():
+    """Create player_season_stats as an aggregate from player_week_stats if missing."""
+    from .db import get_db
+    with get_db() as conn:
+        exists = conn.execute(
+            "SELECT name FROM sqlite_master WHERE type='table' AND name='player_season_stats'"
+        ).fetchone()
+        if exists:
+            return
+        logger.info("Creating player_season_stats aggregate table...")
+        conn.execute("""
+            CREATE TABLE player_season_stats AS
+            SELECT
+                player_id, season,
+                COUNT(DISTINCT week) as games,
+                SUM(passing_yards) as passing_yards,
+                SUM(passing_tds) as passing_tds,
+                SUM(interceptions) as interceptions,
+                SUM(rushing_yards) as rushing_yards,
+                SUM(rushing_tds) as rushing_tds,
+                SUM(receiving_yards) as receiving_yards,
+                SUM(receiving_tds) as receiving_tds,
+                SUM(receptions) as receptions,
+                SUM(carries) as carries,
+                SUM(targets) as targets,
+                SUM(touchdowns) as touchdowns,
+                SUM(turnovers) as turnovers,
+                SUM(fantasy_points_ppr) as fantasy_points_ppr,
+                SUM(fantasy_points_half_ppr) as fantasy_points_half_ppr,
+                SUM(fantasy_points_std) as fantasy_points_std,
+                SUM(completions) as completions,
+                SUM(attempts) as attempts,
+                SUM(offense_snaps) as offense_snaps,
+                AVG(offense_pct) as offense_pct
+            FROM player_week_stats
+            WHERE season_type = 'regular'
+            GROUP BY player_id, season
+        """)
+        conn.execute("CREATE INDEX idx_pss_player_season ON player_season_stats(player_id, season)")
+        conn.execute("CREATE INDEX idx_pss_season ON player_season_stats(season)")
+        conn.commit()
+        count = conn.execute("SELECT COUNT(*) FROM player_season_stats").fetchone()[0]
+        logger.info(f"  player_season_stats: {count} rows")
+
+
 @asynccontextmanager
 async def lifespan(app):
     setup_logging()
     bootstrap_database()
+    _ensure_season_stats_table()
     auth_module.initialize_users_db()
     billing_module.initialize_subscriptions_table()
     live_data.init_waitlist_table()
