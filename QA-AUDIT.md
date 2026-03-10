@@ -1,61 +1,69 @@
-# QA + UX Audit — Phases 16-19
+# QA + UX Audit — Phases 20-24
 
 **Date**: 2026-03-10
-**Scope**: Phase 16 (Rename), Phase 17 (Data Expansion), Phase 18 (Prospects Merge), Phase 19 (Draft Class Tracker)
+**Scope**: Phase 20 (QA fixes), Phase 21 (Turso migration), Phase 22 (Correlations), Phase 23 (Power Rankings), Phase 24 (Game Script)
 
 ---
 
 ## QA FINDINGS
 
-### HIGH — Variable shadowing in applyUniverseUI()
-- **File**: frontend/lab.js:1098
-- **Issue**: `const isProspect = isProspectView()` creates a local variable that could be confused with the helper function. While not technically broken (the function is called, result stored), it's a maintenance trap.
-- **Fix**: Rename to `const prospectMode = isProspectView()` and update all references within the function.
+### QA-1: HIGH — Missing 'powerrankings' in NFL_ONLY_PANELS
+- **File**: frontend/lab.js, line 1174
+- **Issue**: The `powerrankings` panel has `showNflOnlyMsg()` in lab-panels.js but is NOT listed in the `NFL_ONLY_PANELS` array. When a user switches to College mode, the Power Rankings sidebar item does not dim, misleading users into clicking it.
+- **Fix**: Add `'powerrankings'` to the NFL_ONLY_PANELS array.
 
-### HIGH — Duplicate year calculation in try/catch
-- **File**: frontend/lab.js:552-553, 569
-- **Issue**: Year fallback logic is computed independently in both try and catch blocks. The catch block uses a different variable name (`_fb` vs `_nflYear`).
-- **Fix**: Move year calculation before try/catch block so both paths use the same value.
+### QA-2: HIGH — Missing try-except on /api/stat-correlations endpoint
+- **File**: backend/server.py, line 2017-2024
+- **Issue**: The stat-correlations endpoint has no try-except wrapper, unlike dynasty-power-rankings and game-script. Unhandled exceptions return raw 500 HTML instead of JSON error response.
+- **Fix**: Wrap in try-except returning `JSONResponse({"error": "..."}, status_code=500)`.
 
-### MEDIUM — Wrong state variable for prospect page title
-- **File**: frontend/lab.js:1662
-- **Issue**: `generateRedditTitle()` uses `state.season` for prospect view but should use `state.draftYear`. Results in title showing "0 Draft Prospect Rankings" instead of the actual draft year.
-- **Fix**: Change `state.season` to `state.draftYear` on line 1662.
+### QA-3: MEDIUM — Missing encodeURIComponent on correlations x_stat/y_stat
+- **File**: frontend/lab-panels.js, correlations panel
+- **Issue**: When clicking a heat map cell, x_stat and y_stat are appended to the URL without `encodeURIComponent()`.
+- **Fix**: Wrap in `encodeURIComponent()`.
 
-### LOW — No validation on `cv` URL parameter
-- **File**: frontend/lab.js:1557
-- **Issue**: `state.collegeView = params.get("cv")` accepts any string. Invalid values like `?cv=foo` would silently set collegeView to an unknown value.
-- **Fix**: Validate that cv is either "stats" or "prospects" before assigning.
+### QA-4: MEDIUM — Missing encodeURIComponent on draft tracker position param
+- **File**: frontend/lab-panels.js, drafttracker panel
+- **Issue**: Position parameter in draft tracker API call is not URL-encoded.
+- **Fix**: Wrap in `encodeURIComponent()`.
 
-### LOW — URL construction in Draft Class Tracker panel
-- **File**: frontend/lab-panels.js:8957
-- **Issue**: URL built with string concatenation + leading `&` replacement. Works but could leave trailing `?` when no params.
-- **Fix**: No action needed — functional as-is.
+### QA-5: LOW — POS_COLS constant redefined locally in multiple panels
+- **File**: frontend/lab-panels.js
+- **Issue**: Position color map defined locally in powerrankings and gamescript panels (code duplication).
 
 ---
 
 ## UX FINDINGS
 
-### MEDIUM — College sub-toggle discoverability
-- **Issue**: Users switching to College mode now see "Season Stats" and "Draft Prospects" sub-toggles. This adds one extra step compared to the old dedicated Prospects button. The sub-toggle is visually smaller than the universe buttons and could be missed.
-- **Fix**: No action needed — the sub-toggle is visible and clearly labeled. The reduction from 3 to 2 universe buttons actually simplifies the top-level choice.
+### UX-1: HIGH — Abbreviations lack tooltips in new panels
+- **Panels**: Game Script (GT%, Avg Diff), Correlations (r, Tgt, Rec), Draft Class Tracker (FPTS, AV)
+- **Issue**: Fantasy abbreviations have no hover tooltips. Users from r/DynastyFF may not know what GT% or AV means.
+- **Fix**: Add `title` attributes to table headers with full descriptions.
 
-### LOW — Draft Class Tracker "reviewing the tape..." loading message
-- **Issue**: The loading message uses "reviewing the tape..." which is creative but less obvious than other Lab panels' loading messages.
-- **Fix**: No action needed — consistent with the playful copy style.
+### UX-2: MEDIUM — Game Script table mobile responsiveness
+- **Issue**: The `.gs-table` uses custom CSS. On small screens (480px), the two-column grid may cause issues.
+- **Fix**: Add `overflow-x: auto` wrapper around each `.gs-table`.
 
-### LOW — All 37+ standalone pages work with dynamic seasons
-- Verified that all standalone pages pull available_seasons from API. No hardcoded season values block the 2015-2025 expansion.
+### UX-3: LOW — Loading messages inconsistent across panels
+- **Issue**: Different panels use different loading flavor text. Variety is arguably brand personality.
+
+### UX-4: LOW — Sidebar collapsed icons not all intuitive
+- **Issue**: Some sidebar icons are abstract Unicode. Tooltips provide clarity on hover.
 
 ---
 
 ## SUMMARY
 
-| Severity | Count | Action |
-|----------|-------|--------|
-| CRITICAL | 0 | — |
-| HIGH | 2 | Fix |
-| MEDIUM | 2 | Fix (1 QA, 1 UX logged only) |
-| LOW | 3 | Logged |
+| ID | Severity | Type | Description |
+|----|----------|------|-------------|
+| QA-1 | HIGH | Logic | powerrankings missing from NFL_ONLY_PANELS |
+| QA-2 | HIGH | Error handling | stat-correlations endpoint missing try-except |
+| QA-3 | MEDIUM | URL encoding | correlations x_stat/y_stat not encoded |
+| QA-4 | MEDIUM | URL encoding | draft tracker position not encoded |
+| QA-5 | LOW | Code quality | POS_COLS duplicated across panels |
+| UX-1 | HIGH | Readability | Abbreviations lack tooltips in new panels |
+| UX-2 | MEDIUM | Mobile | Game Script table needs overflow wrapper |
+| UX-3 | LOW | Branding | Loading messages inconsistent |
+| UX-4 | LOW | Visual | Sidebar icons abstract |
 
-No CRITICAL findings. 2 HIGH and 1 MEDIUM fixes required.
+No CRITICAL findings. 3 HIGH and 3 MEDIUM fixes required. LOW items logged but not tasked.
