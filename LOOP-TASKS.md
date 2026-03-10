@@ -1,35 +1,31 @@
-# Razzle Loop — Phase 114 Task List
+# Razzle Loop — Phase 115 Task List
 
-> Weekly Leaders Dashboard
+> QA + UX Audit — Auto-Generated Fixes (Phases 111-114)
 
-**Current Phase**: 114 — Weekly Leaders Dashboard
-**Exit Criterion**: /weeklyleaders.html shows top fantasy performers for a selected week, with position tabs, sortable table, season/week selectors, PNG export.
+**Current Phase**: 115 — QA + UX Audit Fixes
+**Exit Criterion**: All HIGH and MEDIUM findings from QA-AUDIT.md (Phases 111-114) resolved.
 
 ---
 
-## Task 1: Backend /api/weekly-leaders endpoint
-**Status**: PENDING
-**Attempts**: 0
+## Task 1: MEDIUM fix — TD regression fantasy_relevant filter (QA-1)
+**Status**: PASS
+**Attempts**: 1
 
-## Task 2: Frontend weeklyleaders.html page
-**Status**: PENDING
-**Attempts**: 0
+## Task 2: LOW fix — Weekly leaders stat escaping (QA-2)
+**Status**: PASS
+**Attempts**: 1
 
-## Task 3: Nav links + sitemap + tools hub
-**Status**: PENDING
-**Attempts**: 0
-
-## Task 4: Smoke test + commit + push
-**Status**: PENDING
-**Attempts**: 0
+## Task 3: Smoke test + commit + push
+**Status**: PASS
+**Attempts**: 1
 
 ---
 
 ## Loop State
 ```
-Current Phase: 114
-Current Task: 1
-Current Stage: BUILD
+Current Phase: 115
+Current Task: 3
+Current Stage: COMPLETE
 Attempt: 1
-Tasks Completed: 0/4
+Tasks Completed: 3/3
 ```

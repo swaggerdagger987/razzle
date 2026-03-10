@@ -9851,6 +9851,7 @@ def fetch_td_regression(season=None, position=None, limit=30):
             JOIN player_week_stats s
                 ON s.player_id = p.player_id AND s.season = ?
             WHERE p.position IN ('QB','RB','WR','TE')
+              AND p.fantasy_relevant = 1
               {pos_filter}
             GROUP BY p.player_id
             HAVING games >= 6

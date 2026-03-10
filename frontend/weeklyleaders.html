@@ -596,14 +596,14 @@
       html += '<td class="center"><span class="wl-pts ' + ptsCls + '">' + fmt(pts, 1) + '</span></td>';
 
       // Stats
-      html += '<td class="center hide-mobile">' + (p.pass_yd || '-') + '</td>';
-      html += '<td class="center hide-mobile">' + (p.pass_td || '-') + '</td>';
-      html += '<td class="center">' + (p.rush_yd || '-') + '</td>';
-      html += '<td class="center hide-mobile">' + (p.rush_td || '-') + '</td>';
-      html += '<td class="center">' + (p.rec || '-') + '</td>';
-      html += '<td class="center">' + (p.rec_yd || '-') + '</td>';
-      html += '<td class="center hide-mobile">' + (p.rec_td || '-') + '</td>';
-      html += '<td class="center hide-mobile">' + (p.tgt || '-') + '</td>';
+      html += '<td class="center hide-mobile">' + escapeHtml(String(p.pass_yd || '-')) + '</td>';
+      html += '<td class="center hide-mobile">' + escapeHtml(String(p.pass_td || '-')) + '</td>';
+      html += '<td class="center">' + escapeHtml(String(p.rush_yd || '-')) + '</td>';
+      html += '<td class="center hide-mobile">' + escapeHtml(String(p.rush_td || '-')) + '</td>';
+      html += '<td class="center">' + escapeHtml(String(p.rec || '-')) + '</td>';
+      html += '<td class="center">' + escapeHtml(String(p.rec_yd || '-')) + '</td>';
+      html += '<td class="center hide-mobile">' + escapeHtml(String(p.rec_td || '-')) + '</td>';
+      html += '<td class="center hide-mobile">' + escapeHtml(String(p.tgt || '-')) + '</td>';
 
       html += '</tr>';
     });

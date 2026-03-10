@@ -1,6 +1,31 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 113 — Fantasy Points Breakdown (COMPLETE)
+## Current Phase: Phase 115 — QA+UX Audit Fixes for Phases 111-114 (COMPLETE)
+
+**Exit criterion MET:** All HIGH and MEDIUM findings from QA audit resolved. QA-1 (MEDIUM): Added fantasy_relevant filter to fetch_td_regression in live_data.py. QA-2 (LOW): Wrapped 8 stat cell outputs in escapeHtml in weeklyleaders.html. 2 LOW findings (QA-3, QA-4) triaged as no-action-needed.
+
+### Phase 115 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | MEDIUM fix — TD regression fantasy_relevant filter | DONE | Added AND p.fantasy_relevant = 1 |
+| 2 | LOW fix — Weekly leaders stat escaping | DONE | 8 stat cells wrapped in escapeHtml |
+| 3 | Smoke test + commit + push | DONE | All fixes verified |
+
+## Previous Phase: Phase 114 — Weekly Leaders Dashboard (COMPLETE)
+
+**Exit criterion MET:** /weeklyleaders.html shows top fantasy performers for any selected week with gold/silver/bronze rank badges, sortable stat columns (PPR, pass yd, rush yd, rec, etc.), week navigation arrows (prev/next), position filter tabs, season selector, URL state (?season=&week=&pos=), PNG export with watermark. GET /api/weekly-leaders endpoint returns top 25 players for a given season/week with all box score stats, available weeks for the season. 7 escapeHtml calls, 58/58 braces balanced. "Week Leaders" nav link on all 49 pages. Sitemap + tools hub entry under Matchup & Schedule. Design matches DESIGN.md.
+
+### Phase 114 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/weekly-leaders endpoint | DONE | fetch_weekly_leaders, per-week box score stats |
+| 2 | Weekly Leaders page | DONE | Rank badges, sortable table, week nav, 7 escapeHtml |
+| 3 | Nav links + sitemap + tools hub | DONE | All 49 pages updated, sitemap + tools hub |
+| 4 | Smoke test | DONE | Python OK, JS OK, 49/49 nav links |
+
+## Previous Phase: Phase 113 — Fantasy Points Breakdown (COMPLETE)
 
 **Exit criterion MET:** /breakdown.html lets users search any player and see a canvas donut chart breaking down where their PPR fantasy points come from (passing yards, passing TDs, rushing yards, rushing TDs, receiving yards, receiving TDs, receptions). Color-coded donut slices with percentage labels, legend with point values, detail cards with raw stat counts. Player search autocomplete, season selector, URL state (?player=ID&season=), PNG export with watermark. GET /api/points-breakdown endpoint computes PPR scoring components (0.04/yd pass, 4/TD pass, 0.1/yd rush/rec, 6/TD, 1/rec). 16 escapeHtml calls, 54/54 braces balanced. "Breakdown" nav link on all 48 pages. Sitemap + tools hub entry under Performance Analysis. Design matches DESIGN.md.
 
