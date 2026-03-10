@@ -1,44 +1,39 @@
-# Razzle Loop — Phase 81 Task List
+# Razzle Loop — Phase 82 Task List
 
-> QA + UX Audit — Auto-Generated Fixes (Phases 76-80)
+> Red Zone & Goal-Line Dashboard
 
-**Current Phase**: 81 — QA + UX Audit Fixes
-**Exit Criterion**: All CRITICAL and HIGH findings from phases 76-80 audit resolved. All MEDIUM findings addressed as grouped task. Code verified syntax-clean after fixes.
+**Current Phase**: 82 — Red Zone & Goal-Line Dashboard
+**Exit Criterion**: /redzone.html page shows goal-line usage leaders with two sections: "Goal-Line Dominators" (most GL opportunities) and "TD Dependent" (highest TD% of fantasy scoring). Each player row shows: position badge, headshot, name, team, GL carries, GL targets, GL TDs, GL TD rate, total TDs, fantasy PPG, TD% of fantasy points, GP. Position filter tabs (All/QB/RB/WR/TE). Season selector. Sortable columns. Click player row → player profile. PNG export with watermark. Responsive at 768px + 480px. /api/redzone-usage endpoint returns data from player_season_pbp + player_week_stats. "Red Zone" nav link added to all 23 HTML pages. Sitemap entry. Analytics tracking. Design matches DESIGN.md.
 
 ---
 
-## Task 1: CRITICAL fixes
+## Task 1: Backend /api/redzone-usage endpoint
 **Status**: PASS
 **Attempts**: 1
-**Notes**: (1) usage.html: Renamed `window` param to `trendWindow` in loadData function (2 refs). (2) airyards.html: Renamed "Reg" column to "Regr" and added title tooltips to ALL column headers (WOPR, RACR, aDOT, AY%, Regr, etc).
+**Notes**: GET /api/redzone-usage returns `dominators` (sorted by gl_opportunities, min 3 GL opps) and `td_dependent` (sorted by td_pct_of_fantasy, min 2 TDs). Queries player_week_stats for fantasy points + TDs + games, joins player_season_pbp for gl_carries/gl_targets/gl_tds. Computes gl_td_rate, td_pct_of_fantasy. Season + position params. Parameterized SQL, position whitelist.
 
-## Task 2: HIGH QA fixes
+## Task 2: Red Zone dashboard page (frontend)
 **Status**: PASS
 **Attempts**: 1
-**Notes**: (1) yoy/airyards/explorer: Replaced `trackPageview()` with inline `fetch('/api/analytics/pageview', ...)` — 3 pages fixed. (2) usage.html: Moved `<script src="app.js">` before inline script (was at line 646, now at line 392). (3) explorer.html: Escaped `p.x`/`p.y` in tooltip with `escapeHtml(String(Number(...).toFixed(1)))` — XSS fixed + value formatting.
+**Notes**: /redzone.html with two-section table layout. Dominators table: Player, GL Opp, GL Car, GL Tgt, GL TD, GL TD%, TDs, PPG, GP, annotation. TD Dependent table: Player, TD%, TDs, RuTD, ReTD, PPG, GL TD, GL Opp, GP, annotation. GL TD% badge (green/yellow/red by rate). TD% badge (red=heavy, orange=moderate, green=light). Position tabs, season selector, sortable columns, row click → profile, PNG export with watermark. Responsive hide-mobile columns. Caveat annotations.
 
-## Task 3: HIGH UX fixes
+## Task 3: Nav links + sitemap + analytics
 **Status**: PASS
 **Attempts**: 1
-**Notes**: (1) airyards.html: Tooltips on all column headers explaining each metric. (2) explorer.html: Cursor changes to `pointer` on dot hover, `crosshair` elsewhere; click opens player profile in new tab (`window.open` instead of `window.location.href`). (3) usage.html: Updated H1 from "Snap Count Trends" to "Usage Trends" to match nav label.
+**Notes**: "Red Zone" link added to nav + footer of all 23 HTML pages (23/23 verified). Sitemap entry added ("/redzone.html", "0.8", "weekly"). Analytics pageview tracking via inline fetch to /api/analytics/pageview.
 
-## Task 4: MEDIUM fixes (grouped)
+## Task 4: Smoke test + verification
 **Status**: PASS
 **Attempts**: 1
-**Notes**: (1) airyards.html: Added `.air-pos-badge.qb` CSS. (2) explorer.html: Fixed event listener leak — `removeEventListener` before `addEventListener`. (3) matchups.html: Changed legend swatch border from 1px to 2px. (4) yoy/airyards/explorer: Added canvas watermark ("razzle.lol") to PNG export. (5) airyards.html: Updated subtitle to clarify "pass catchers (WR/RB/TE)". (6) explorer.html: Pre-populated axis selects with default options (Targets/G and PPG). (7) usage.html: Added title tooltip on Delta column header.
-
-## Task 5: Smoke test + verification
-**Status**: PASS
-**Attempts**: 1
-**Notes**: Python syntax valid (server.py + live_data.py). JS syntax valid (5 files checked). All fixes verified: window shadow renamed (2 refs), trackPageview removed (0 on 3 pages), analytics/pageview added (1 each), app.js load order fixed (line 392), XSS escaped, QB badge added, watermarks added, Regr label updated.
+**Notes**: Python syntax valid (server.py + live_data.py). JS syntax valid (redzone.html). 23/23 pages have Red Zone nav link. XSS: 9 escapeHtml calls covering all dynamic content. SQL: parameterized queries, position whitelist. Design compliance: 3px borders (3), 4px shadows (2), display font (6), mono font (5), hand font (7), position colors present.
 
 ---
 
 ## Loop State
 ```
-Current Phase: 81
-Current Task: 5
+Current Phase: 82
+Current Task: 4
 Current Stage: COMPLETE
 Attempt: 1
-Tasks Completed: 5/5
+Tasks Completed: 4/4
 ```

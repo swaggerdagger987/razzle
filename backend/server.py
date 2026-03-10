@@ -898,6 +898,7 @@ def sitemap_xml():
         ("/yoy.html", "0.8", "weekly"),
         ("/airyards.html", "0.8", "weekly"),
         ("/explorer.html", "0.8", "weekly"),
+        ("/redzone.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1149,6 +1150,19 @@ def air_yards(season: int = 0, position: str = "", limit: int = 25):
     except Exception as e:
         logger.error(f"air_yards error: {e}")
         return JSONResponse({"error": "Failed to fetch air yards data"}, status_code=500)
+
+
+@app.get("/api/redzone-usage")
+def redzone_usage(season: int = 0, position: str = "", limit: int = 30):
+    """Return goal-line usage leaders and TD-dependent players."""
+    try:
+        s = season if season > 0 else None
+        pos = position.upper() if position else None
+        lim = max(1, min(limit, 50))
+        return live_data.fetch_redzone_usage(season=s, position=pos, limit=lim)
+    except Exception as e:
+        logger.error(f"redzone_usage error: {e}")
+        return JSONResponse({"error": "Failed to fetch red zone data"}, status_code=500)
 
 
 @app.get("/api/analytics/summary")

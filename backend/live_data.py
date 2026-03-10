@@ -6014,3 +6014,156 @@ def fetch_air_yards(season=None, position=None, limit=25):
         }
     finally:
         conn.close()
+
+
+# ---------------------------------------------------------------------------
+# Red Zone & Goal-Line Dashboard
+# ---------------------------------------------------------------------------
+
+_GL_DOMINATOR_ANNOTATIONS = [
+    "goal-line king", "TD machine", "vulture alert", "owns the paint",
+    "red zone magnet", "short-yardage beast", "the closer", "money zone",
+]
+
+_TD_DEPENDENT_ANNOTATIONS = [
+    "TD or bust", "boom-or-bust vibes", "needs TDs to eat", "fragile floor",
+    "TD reliant", "scoring dependent", "touchdown or nothing", "risky profile",
+]
+
+
+def fetch_redzone_usage(season=None, position=None, limit=30):
+    """Return goal-line usage leaders and TD-dependent players."""
+    conn = get_conn()
+
+    try:
+        # Determine season + available seasons
+        row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
+        available_seasons = [r[0] for r in row] if row else [2024]
+        if not season:
+            season = available_seasons[0] if available_seasons else 2024
+
+        pos_filter = ""
+        params = [season]
+        if position and position.upper() in ("QB", "RB", "WR", "TE"):
+            pos_filter = "AND p.position = ?"
+            params.append(position.upper())
+
+        # Get season stats: fantasy points + TDs + games
+        query = f"""
+            SELECT
+                p.player_id, p.full_name, p.position, p.team,
+                p.headshot_url,
+                SUM(s.fantasy_points_ppr) as total_ppr,
+                COUNT(DISTINCT s.week) as games,
+                SUM(s.rushing_tds) as rush_tds,
+                SUM(s.receiving_tds) as rec_tds,
+                SUM(s.passing_tds) as pass_tds
+            FROM players p
+            JOIN player_week_stats s
+                ON s.player_id = p.player_id AND s.season = ?
+            WHERE p.position IN ('QB','RB','WR','TE')
+              AND p.fantasy_relevant = 1
+              {pos_filter}
+            GROUP BY p.player_id
+            HAVING games >= 4
+            ORDER BY total_ppr DESC
+            LIMIT 500
+        """
+        rows = conn.execute(query, params).fetchall()
+
+        if not rows:
+            return {
+                "season": season,
+                "available_seasons": available_seasons,
+                "dominators": [],
+                "td_dependent": [],
+            }
+
+        # Check if player_season_pbp table exists
+        table_check = conn.execute(
+            "SELECT name FROM sqlite_master WHERE type='table' AND name='player_season_pbp'"
+        ).fetchone()
+
+        # Build lookup for goal-line stats from PBP table
+        gl_lookup = {}
+        if table_check:
+            pids = [r[0] for r in rows]
+            placeholders = ",".join("?" * len(pids))
+            gl_rows = conn.execute(f"""
+                SELECT player_id, gl_carries, gl_targets, gl_tds
+                FROM player_season_pbp
+                WHERE player_id IN ({placeholders}) AND season = ?
+            """, pids + [season]).fetchall()
+            for gr in gl_rows:
+                gl_lookup[gr[0]] = {
+                    "gl_carries": gr[1] or 0,
+                    "gl_targets": gr[2] or 0,
+                    "gl_tds": gr[3] or 0,
+                }
+
+        # Build player objects
+        players = []
+        for r in rows:
+            pid = r[0]
+            games = r[6] or 1
+            total_ppr = r[5] or 0
+            ppg = round(total_ppr / games, 2)
+            rush_tds = r[7] or 0
+            rec_tds = r[8] or 0
+            pass_tds = r[9] or 0
+            total_tds = rush_tds + rec_tds + pass_tds
+
+            gl = gl_lookup.get(pid, {"gl_carries": 0, "gl_targets": 0, "gl_tds": 0})
+            gl_opps = gl["gl_carries"] + gl["gl_targets"]
+            gl_td_rate = round(gl["gl_tds"] / gl_opps * 100, 1) if gl_opps > 0 else 0
+
+            # TD points as % of total fantasy points
+            # PPR: rush TD = 6, rec TD = 6, pass TD = 4
+            td_pts = rush_tds * 6 + rec_tds * 6 + pass_tds * 4
+            td_pct = round(td_pts / total_ppr * 100, 1) if total_ppr > 0 else 0
+
+            players.append({
+                "player_id": pid,
+                "name": r[1] or "Unknown",
+                "position": r[2] or "RB",
+                "team": r[3] or "FA",
+                "headshot_url": r[4] or "",
+                "ppg": ppg,
+                "games": games,
+                "total_tds": total_tds,
+                "rush_tds": rush_tds,
+                "rec_tds": rec_tds,
+                "gl_carries": gl["gl_carries"],
+                "gl_targets": gl["gl_targets"],
+                "gl_tds": gl["gl_tds"],
+                "gl_opportunities": gl_opps,
+                "gl_td_rate": gl_td_rate,
+                "td_pct_of_fantasy": td_pct,
+            })
+
+        # Goal-Line Dominators: sorted by GL opportunities, min 3
+        dominators = sorted(
+            [p for p in players if p["gl_opportunities"] >= 3],
+            key=lambda x: x["gl_opportunities"], reverse=True
+        )[:limit]
+
+        for i, p in enumerate(dominators):
+            p["annotation"] = _GL_DOMINATOR_ANNOTATIONS[i % len(_GL_DOMINATOR_ANNOTATIONS)]
+
+        # TD Dependent: sorted by td_pct_of_fantasy desc, min 2 TDs
+        td_dependent = sorted(
+            [p for p in players if p["total_tds"] >= 2],
+            key=lambda x: x["td_pct_of_fantasy"], reverse=True
+        )[:limit]
+
+        for i, p in enumerate(td_dependent):
+            p["annotation"] = _TD_DEPENDENT_ANNOTATIONS[i % len(_TD_DEPENDENT_ANNOTATIONS)]
+
+        return {
+            "season": season,
+            "available_seasons": available_seasons,
+            "dominators": dominators,
+            "td_dependent": td_dependent,
+        }
+    finally:
+        conn.close()

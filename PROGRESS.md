@@ -1,6 +1,25 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 81 — QA + UX Audit Fixes (COMPLETE)
+## Current Phase: Phase 82 — Red Zone & Goal-Line Dashboard (COMPLETE)
+
+**Exit criterion MET:** /redzone.html page shows goal-line usage leaders with two sections: "Goal-Line Dominators" (most GL opportunities, min 3) and "TD Dependent" (highest TD% of fantasy scoring, min 2 TDs). Dominators table shows: player (headshot, name, pos badge, team), GL Opp, GL Carries, GL Targets, GL TDs, GL TD% (color-coded badge: green>=50%, yellow>=25%, red<25%), total TDs, PPG, GP, Caveat annotations. TD Dependent table shows: player, TD% of fantasy points (color-coded badge: red>=50% heavy, orange>=35% moderate, green<35% light), total TDs, Rush TDs, Rec TDs, PPG, GL TDs, GL Opp, GP, Caveat annotations. Position filter tabs (All/QB/RB/WR/TE). Season selector. Sortable columns with sort state tracking per section. Click player row → player profile. PNG export via html2canvas with watermark. Responsive at 768px + 480px with hide-mobile columns. /api/redzone-usage endpoint queries player_week_stats for fantasy points + TDs + games, joins player_season_pbp for gl_carries/gl_targets/gl_tds, computes gl_td_rate and td_pct_of_fantasy. Min 4 games filter. "Red Zone" nav link added to all 23 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors.
+
+### Phase 82 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/redzone-usage endpoint | DONE | GL stats from player_season_pbp, TD% computed, dominators + td_dependent split |
+| 2 | Red Zone dashboard page | DONE | Two-section table, GL TD% badges, TD% badges, sortable, responsive, PNG export |
+| 3 | Nav links + sitemap + analytics | DONE | All 23 pages updated, sitemap entry, pageview tracking |
+| 4 | Smoke test | DONE | Python + JS syntax clean, 23/23 nav links verified, XSS escaped, design compliance confirmed |
+
+### Decisions Log
+- **Red Zone & Goal-Line as Phase 82**: Goal-line usage is one of the most discussed topics in fantasy football — "who's getting the carries inside the 5?" directly predicts TD upside. The two-section approach (Dominators = who gets the opportunities, TD Dependent = who needs TDs to produce) gives both actionable and cautionary insights. Highly screenshottable for r/DynastyFF ("these RBs own the goal line" / "these players are TD-or-bust").
+- **Goal-line (inside 5) vs red zone (inside 20)**: Used goal-line data (inside 5-yard line) from player_season_pbp rather than broader red zone data because it's more predictive of actual TD scoring and more actionable. The 5-yard line is where TDs happen.
+- **TD% of fantasy as dependency metric**: Calculating what percentage of a player's fantasy points come from touchdowns reveals floor risk — a player with 55% TD dependency has a fragile fantasy floor that collapses in weeks without scores.
+- **Color-coded badges**: GL TD% uses green/yellow/red (conversion efficiency), TD% uses red/orange/green (higher = riskier dependency). Different color semantics for different meanings.
+
+## Previous Phase: Phase 81 — QA + UX Audit Fixes (COMPLETE)
 
 **Exit criterion MET:** All CRITICAL and HIGH findings from phases 76-80 QA+UX audit resolved. usage.html `window` parameter shadow fixed (renamed to `trendWindow`). Analytics pageview tracking fixed on yoy/airyards/explorer (replaced nonexistent `trackPageview()` with inline fetch). app.js load order fixed in usage.html (moved before inline script). XSS in explorer.html tooltip escaped + formatted. Air yards column headers all have title tooltips (WOPR, RACR, aDOT, AY%, Regr explained). Explorer dot click opens in new tab, cursor changes to pointer on hover. Usage H1 renamed to "Usage Trends" to match nav. QB position badge CSS added to airyards.html. Explorer event listener leak fixed. Matchups legend swatch border 1px→2px. PNG export watermark added to yoy/airyards/explorer. Air yards subtitle clarifies "pass catchers (WR/RB/TE)". Explorer axis selects pre-populated with defaults. Usage Delta header has tooltip.
 
