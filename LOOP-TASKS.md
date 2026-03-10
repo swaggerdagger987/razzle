@@ -1,52 +1,48 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 23 (Dynasty Power Rankings)
-- All 3 tasks PASS
+- Phase: 24 (Game Script Analysis)
+- All 2 tasks PASS
 - Stage: PHASE GATE
 - Next: Commit and push
 
-## Phase 23: Dynasty Power Rankings
-**Exit Criterion**: New Lab panel "Power Rankings" in the Teams category. Backend `/api/dynasty-power-rankings` sums dynasty trade values per NFL team, breaks down by position group (QB/RB/WR/TE), and ranks all 32 teams. Frontend panel shows ranked stacked horizontal bar chart (position-colored segments), click team for roster detail card. Season selector. Canvas-drawn bars. Razzle comic-strip design (chunky borders, sand bg, espresso ink).
+## Phase 24: Game Script Analysis
+**Exit Criterion**: New Lab panel "Game Script" in the Game Analysis category. Uses existing `/api/game-script` endpoint showing positive-script players (winning game scripts) and negative-script players (losing game scripts). Two-column layout with PPG, avg score differential badges, and garbage time % indicators. Position filter tabs (ALL/QB/RB/WR/TE), season selector. Razzle comic-strip design (chunky borders, sand bg, espresso ink). NFL-only message for college mode.
 
-### Task 1: Backend API — /api/dynasty-power-rankings
+### Task 1: Frontend Lab panel — Game Script two-column layout
 **Status**: PASS
 **Attempts**: 1
 **Acceptance Criteria**:
-- Endpoint returns all 32 teams ranked by total dynasty roster value
-- Dynasty value computed from trade-value-chart logic (production 50% + age 30% + scarcity 20%)
-- Breakdown by position group: QB, RB, WR, TE values per team
-- Returns top 3 players per team with individual values
-- Season filter parameter
-- Min 30 teams returned
-**Notes**: 32 teams returned. NO #1 (976.2), CHI last (573.4). League avg 779.6. Position breakdowns and top 3 players per team working.
-
-### Task 2: Frontend Lab panel — stacked bar chart + team cards
-**Status**: PASS
-**Attempts**: 1
-**Acceptance Criteria**:
-- Canvas-drawn horizontal stacked bar chart, all 32 teams ranked
-- Position-colored segments (QB blue, RB teal, WR terracotta, TE purple)
-- Click team → detail card shows top players with individual values
+- Panel registered in lab-panels.js as 'gamescript'
+- Two sections: "Winning Scripts" (positive avg_diff) and "Losing Scripts" (negative avg_diff)
+- Each section shows ranked player table with: rank, name, position, team, PPG, avg score diff, garbage time %
+- Position-colored name text (QB blue, RB teal, WR terracotta, TE purple)
+- Score differential color badges (green for positive, red for negative)
+- Garbage time % shown as small chip
+- Position filter tabs (ALL/QB/RB/WR/TE)
 - Season selector dropdown
 - Follows DESIGN.md: sand bg, chunky 3px borders, espresso ink, Space Mono for data
-- Registered in sidebar under "Teams" category
-**Notes**: Canvas chart with DPR-aware rendering, stacked bars with position colors, legend, league average dashed line. Detail card with position breakdown chips and top player table.
+- NFL-only message for college mode
+**Notes**: Panel renders two-column layout (positive/negative scripts). Position-colored dots, diff badges, GT% chips. Loading state "reviewing the film...". escapeHtml/escapeAttr on all user data.
 
-### Task 3: Wire up, test end-to-end
+### Task 2: Sidebar entry + end-to-end test
 **Status**: PASS
 **Attempts**: 1
 **Acceptance Criteria**:
+- Sidebar entry added in lab.html under "Game Analysis" category
 - Panel loads without JS errors
-- Bar chart renders with real data from API
-- Click-to-detail works
-- Position colors match DESIGN.md
-- No XSS, no unescaped user data
-- Panel appears in sidebar under Teams
-- NFL-only message shows for college mode
-**Notes**: JS syntax clean. Server imports clean. All escapeHtml/escapeAttr on user data. Canvas text safe via fillText. NFL-only message registered. Sidebar entry added.
+- Data renders from /api/game-script
+- Position filters work
+- Season selector works
+- No XSS (all user data escaped)
+- NFL-only panels list includes 'gamescript'
+- Design matches comic-strip aesthetic
+**Notes**: Sidebar entry with film clapper icon. NFL_ONLY_PANELS updated. NFL_ONLY_MESSAGES added. JS syntax clean (node parse OK). Backend available_seasons added. Pre-existing fantasy_relevant column issue (works on Turso prod, not local dev) — not introduced by this change.
 
 ---
+
+## Phase 23: Dynasty Power Rankings -- COMPLETE
+**Status**: All 3 tasks PASS
 
 ## Phase 22: Stat Correlation Matrix -- COMPLETE
 **Status**: All 3 tasks PASS

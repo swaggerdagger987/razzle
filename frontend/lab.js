@@ -1176,7 +1176,8 @@ function applyUniverseUI() {
     'buysell', 'waivers', 'handcuffs', 'targetpremium', 'drops',
     'garbagetime', 'matchups', 'stacks', 'redzone', 'streaks',
     'weeklymvp', 'playoffs', 'yoy', 'pace', 'tdregression',
-    'airyards', 'dashboard', 'rosterbuilder', 'tradefinder'
+    'airyards', 'dashboard', 'rosterbuilder', 'tradefinder',
+    'gamescript'
   ];
   document.querySelectorAll('.lab-sidebar-item[data-panel]').forEach(item => {
     const panel = item.getAttribute('data-panel');

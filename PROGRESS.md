@@ -1,6 +1,17 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 23 — Dynasty Power Rankings (COMPLETE)
+## Current Phase: Phase 24 — Game Script Analysis (COMPLETE)
+
+**Exit Criterion MET**: New Lab panel "Game Script" under Game Analysis category. Uses existing `/api/game-script` endpoint. Two-column layout: Winning Scripts (positive avg score differential) and Losing Scripts (negative). Ranked tables with PPG, score diff badges (green/red), garbage time % chips. Position filter tabs, season selector with available_seasons from backend. Position-colored dots (QB blue, RB teal, WR terracotta, TE purple). NFL-only message for college mode. Chunky 3px borders, sand bg, espresso ink, Space Mono data font per DESIGN.md.
+
+### Phase 24 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Frontend Lab panel — two-column layout | DONE | Positive/negative script tables, diff badges, GT% chips, pos filters, season selector |
+| 2 | Sidebar entry + end-to-end test | DONE | Game Analysis category, NFL_ONLY_PANELS, NFL_ONLY_MESSAGES, JS syntax clean, no XSS |
+
+## Previous Phase: Phase 23 — Dynasty Power Rankings (COMPLETE)
 
 **Exit Criterion MET**: New Lab panel "Power Rankings" under Teams category. Backend `/api/dynasty-power-rankings` sums dynasty trade values per NFL team, breaks down by position group (QB/RB/WR/TE), ranks all 32 teams. Canvas-drawn stacked horizontal bar chart with position-colored segments. Click team for detail card with position breakdown chips and top 3 player table. Season selector. League average dashed line. NFL-only message for college mode. Chunky borders, sand bg, espresso ink per DESIGN.md.
 

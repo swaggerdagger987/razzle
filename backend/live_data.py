@@ -14517,9 +14517,10 @@ def fetch_game_script(season=None, position=None, limit=40):
     """Show how game script (avg score diff) correlates with fantasy production."""
     conn = get_conn()
     try:
+        row = conn.execute("SELECT DISTINCT season FROM player_season_pbp ORDER BY season DESC").fetchall()
+        available_seasons = [r[0] for r in row] if row else [2024]
         if not season:
-            cur = conn.execute("SELECT MAX(season) FROM player_season_pbp")
-            season = cur.fetchone()[0] or 2024
+            season = available_seasons[0] if available_seasons else 2024
 
         pos_filter = ""
         params = [season]
@@ -14579,6 +14580,7 @@ def fetch_game_script(season=None, position=None, limit=40):
             "positive_script": positive_script[:limit],
             "negative_script": negative_script[:limit],
             "season": season,
+            "available_seasons": available_seasons,
             "count": len(positive_script) + len(negative_script),
         }
     finally:

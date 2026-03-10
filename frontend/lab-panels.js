@@ -42,7 +42,8 @@
     airyards: 'air yards, aDOT, WOPR, and RACR come from NFL tracking data. switch to NFL for target efficiency.',
     yoy: 'year-over-year comparison uses NFL per-game deltas across seasons. switch to NFL for risers and fallers.',
     targetpremium: 'target premium uses NFL receiving efficiency metrics. switch to NFL for target quality rankings.',
-    powerrankings: 'dynasty power rankings are based on NFL roster trade values. switch to NFL to see which teams are loaded.'
+    powerrankings: 'dynasty power rankings are based on NFL roster trade values. switch to NFL to see which teams are loaded.',
+    gamescript: 'game script analysis uses NFL play-by-play score differentials. switch to NFL for winning/losing script breakdowns.'
   };
 
   function showNflOnlyMsg(el, panelName, title, subtitle) {
@@ -9636,6 +9637,119 @@
     });
 
     loadData();
+  }});
+
+  // ===== GAME SCRIPT =====
+  defs.push({ name: 'gamescript', render: function(el) {
+    if (showNflOnlyMsg(el, 'gamescript', 'Game Script', 'see how game script affects fantasy production')) return;
+    var POS_COLS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+    var curPos = '';
+    var seasonsPopulated = false;
+
+    el.innerHTML =
+      '<div class="lp-page">' +
+      '<div class="lp-header"><h2>Game Script</h2>' +
+      '<div class="lp-subtitle">fantasy production in winning vs losing game scripts</div></div>' +
+      '<div class="lp-controls">' +
+      '<div class="lp-pos-tabs" id="gs-pos-tabs">' +
+      '<button class="lp-pos-tab active" data-pos="">All</button>' +
+      '<button class="lp-pos-tab" data-pos="QB">QB</button>' +
+      '<button class="lp-pos-tab" data-pos="RB">RB</button>' +
+      '<button class="lp-pos-tab" data-pos="WR">WR</button>' +
+      '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
+      '</div>' +
+      '<select class="lp-select" id="gs-season" aria-label="Season"></select>' +
+      '</div>' +
+      '<div id="gs-body"><div class="lp-loading">reviewing the film...</div></div>' +
+      '</div>';
+
+    function diffBadge(val) {
+      var v = parseFloat(val) || 0;
+      var cls = v > 0 ? 'gs-diff-pos' : 'gs-diff-neg';
+      var sign = v > 0 ? '+' : '';
+      return '<span class="gs-diff-badge ' + cls + '">' + sign + v.toFixed(1) + '</span>';
+    }
+
+    function gtChip(val) {
+      var v = parseFloat(val) || 0;
+      if (v <= 0) return '';
+      var cls = v >= 25 ? 'gs-gt-high' : v >= 15 ? 'gs-gt-mid' : 'gs-gt-low';
+      return '<span class="gs-gt-chip ' + cls + '">' + v.toFixed(0) + '% GT</span>';
+    }
+
+    function renderTable(players, isPositive) {
+      if (!players || !players.length) return '<div class="lp-empty">no ' + (isPositive ? 'winning' : 'losing') + ' script players</div>';
+      var h = '<table class="gs-table"><thead><tr>';
+      h += '<th>#</th><th>Player</th><th>Team</th><th>GP</th>';
+      h += '<th>PPG</th><th>Avg Diff</th><th>GT%</th></tr></thead><tbody>';
+      players.forEach(function(p, i) {
+        var posColor = POS_COLS[p.position] || '#8a7565';
+        h += '<tr class="gs-row" data-pid="' + escapeAttr(p.player_id) + '">';
+        h += '<td class="gs-rank">' + (i + 1) + '</td>';
+        h += '<td class="gs-player"><span class="gs-pos-dot" style="background:' + posColor + '"></span>';
+        h += '<span class="gs-name">' + escapeHtml(p.name) + '</span>';
+        h += '<span class="gs-pos" style="color:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
+        h += '<td class="gs-team">' + escapeHtml(p.team) + '</td>';
+        h += '<td class="gs-gp">' + p.games + '</td>';
+        h += '<td class="gs-ppg"><strong>' + p.ppg.toFixed(1) + '</strong></td>';
+        h += '<td class="gs-diff">' + diffBadge(p.avg_diff) + '</td>';
+        h += '<td class="gs-gt">' + gtChip(p.gt_pct) + '</td>';
+        h += '</tr>';
+      });
+      h += '</tbody></table>';
+      return h;
+    }
+
+    function loadGS() {
+      var body = el.querySelector('#gs-body');
+      body.innerHTML = '<div class="lp-loading">reviewing the film...</div>';
+      var season = el.querySelector('#gs-season').value;
+      var url = '/api/game-script?limit=25';
+      if (season) url += '&season=' + season;
+      if (curPos) url += '&position=' + curPos;
+
+      fetch(url).then(function(r) { if (!r.ok) throw new Error('API error'); return r.json(); }).then(function(data) {
+        if (!seasonsPopulated && data.available_seasons) {
+          var sel = el.querySelector('#gs-season');
+          data.available_seasons.forEach(function(s) {
+            var o = document.createElement('option');
+            o.value = s; o.textContent = s;
+            if (s == data.season) o.selected = true;
+            sel.appendChild(o);
+          });
+          seasonsPopulated = true;
+        }
+        var html = '<div class="gs-columns">';
+        html += '<div class="gs-column"><div class="gs-column-header positive">';
+        html += '<span class="gs-column-icon">&#9650;</span>';
+        html += '<span class="gs-column-title">Winning Scripts</span>';
+        html += '<span class="gs-column-note">teams ahead on the scoreboard</span></div>';
+        html += renderTable(data.positive_script, true) + '</div>';
+        html += '<div class="gs-column"><div class="gs-column-header negative">';
+        html += '<span class="gs-column-icon">&#9660;</span>';
+        html += '<span class="gs-column-title">Losing Scripts</span>';
+        html += '<span class="gs-column-note">teams trailing on the scoreboard</span></div>';
+        html += renderTable(data.negative_script, false) + '</div></div>';
+        body.innerHTML = html;
+
+        body.querySelectorAll('.gs-row[data-pid]').forEach(function(row) {
+          row.addEventListener('click', function() {
+            window.location.href = '/player/' + encodeURIComponent(row.getAttribute('data-pid'));
+          });
+        });
+      }).catch(function() { body.innerHTML = '<div class="lp-empty">failed to load game script data</div>'; });
+    }
+
+    el.querySelector('#gs-pos-tabs').addEventListener('click', function(e) {
+      var tab = e.target.closest('.lp-pos-tab');
+      if (!tab) return;
+      el.querySelectorAll('#gs-pos-tabs .lp-pos-tab').forEach(function(t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      curPos = tab.getAttribute('data-pos') || '';
+      loadGS();
+    });
+    el.querySelector('#gs-season').addEventListener('change', loadGS);
+    loadGS();
   }});
 
 })();
