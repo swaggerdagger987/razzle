@@ -9,7 +9,7 @@
 | # | Task | Status | Notes |
 |---|------|--------|-------|
 | 1 | Create package structure and proxy __init__.py | DONE | git mv live_data.py → live_data/_monolith.py, __init__.py re-exports via wildcard, 132 functions, server imports clean |
-| 2 | Extract core.py — shared helpers, constants, enrichment | PENDING | |
+| 2 | Extract core.py — shared helpers, constants, enrichment | DONE | 985 lines, all shared helpers/constants/enrich functions/trade value/grading/comp finder extracted, _monolith imports from core |
 | 3 | Extract players.py — NFL player CRUD functions | PENDING | |
 | 4 | Extract prospects.py and college.py | PENDING | |
 | 5 | Extract dynasty.py and storage.py | PENDING | |

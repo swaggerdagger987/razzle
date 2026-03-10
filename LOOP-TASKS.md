@@ -3,8 +3,9 @@
 ## Current State
 - Phase: 27 (Backend Cleanup: Split live_data.py into Modules)
 - Task 1: PASS
+- Task 2: PASS
 - Stage: EXECUTING
-- Next: Task 2
+- Next: Task 3
 
 ## Phase 27: Backend Cleanup: Split live_data.py into Modules
 **Exit Criterion**: `live_data.py` is replaced by a `live_data/` package with logical submodules (e.g., `players.py`, `prospects.py`, `college.py`, `analytics.py`, `cache.py`, `storage.py`). All imports in `server.py` updated. No function lost, no endpoint broken. Each module under 3,000 lines.
@@ -15,8 +16,9 @@
 **Notes**: `backend/live_data/` package created. `live_data.py` → `_monolith.py` via git mv. `__init__.py` uses `from ._monolith import *`. Relative import fixed (`..db`). 132 functions accessible. server.py imports clean. db_stats() returns live data (1238 players).
 
 ### Task 2: Extract core.py — shared helpers, constants, enrichment functions
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
+**Notes**: `core.py` (985 lines) contains all shared helpers (_cached, _safe_div), constants (FANTASY_POSITIONS, RATE_METRICS, _STAT_SUM_COLS, TEAM_ABBREV, ABBREV_TO_TEAM), enrichment functions (_enrich_with_derived_stats, _enrich_with_epa_per_play, _enrich_with_rate_metrics, _enrich_with_breakout, _enrich_with_dynasty_value, _enrich_with_pbp_stats, _enrich_with_team_shares, _enrich_prospects_with_college, _enrich_college_derived, _name_variants), trade value model (compute_trade_value, _age_value, _production_value, _scarcity_value, _pick_value), grading/tier functions (_efficiency_grade, _assign_tier, _tv_tier, _roster_grade, _competing_status), and comp finder (_build_stat_vector, _cosine_similarity). _monolith.py imports all from core. All files compile clean.
 **Acceptance**: `core.py` contains `_cached`, `_safe_div`, `_enrich_*` functions, `FANTASY_POSITIONS`, `RATE_METRICS`, `_STAT_SUM_COLS`, `TEAM_ABBREV`, `ABBREV_TO_TEAM`, `_DVS_AGE_CURVES`, `_age_multiplier`, `compute_trade_value`, `_age_value`, `_production_value`, `_scarcity_value`, `_pick_value`, `_efficiency_grade`, `_assign_tier`, `_tv_tier`, `_roster_grade`, `_competing_status`, `_build_stat_vector`, `_cosine_similarity`. `_monolith.py` updated to import from core. All files compile.
 
 ### Task 3: Extract players.py — NFL player CRUD functions
