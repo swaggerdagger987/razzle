@@ -305,6 +305,7 @@
   <div class="rankings-header">
     <h1>Dynasty Rankings</h1>
     <div class="rankings-subtitle">who's worth the most in your league</div>
+    <div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); margin-top:4px;">ranked by DVS (Dynasty Value Score) — production x age curve</div>
     <div class="rankings-season" id="rankingsSeason"></div>
   </div>
 
@@ -407,7 +408,7 @@
         }
         html += '</div></div>';
         html += '<div class="rankings-scores">';
-        html += '<div class="rankings-value">' + formatStat(p.dynasty_value, 1) + '</div>';
+        html += '<div class="rankings-value">' + formatStat(p.dynasty_value, 1) + ' <span style="font-size:10px; font-weight:400; color:var(--ink-light);">DVS</span></div>';
         html += '<div class="rankings-ppg">' + formatStat(p.ppg, 1) + ' ppg</div>';
         html += '</div>';
         html += '</div>';

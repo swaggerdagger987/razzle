@@ -18,8 +18,8 @@
 **Notes**: (Q4) Replace trackPageview calls in team.html and leaders.html with inline fetch pattern matching rankings.html. Or define trackPageview in app.js. Ensure all new pages (team, leaders, rankings) consistently track pageviews.
 
 ## Task 3: HIGH — Rankings DVS label + methodology explainer
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 **Notes**: (U1, U3) Add "DVS" text label next to dynasty value number on rankings.html player cards. Add one-line methodology note near page header: "ranked by Dynasty Value Score (production x age curve)." Make the number meaningful for Reddit screenshots.
 
 ## Task 4: MEDIUM fixes — design borders, age badge consistency, profile overlay link, contextual back nav
