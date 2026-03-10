@@ -893,6 +893,7 @@ def sitemap_xml():
         ("/aging.html", "0.8", "weekly"),
         ("/weekly.html", "0.8", "weekly"),
         ("/targets.html", "0.8", "weekly"),
+        ("/matchups.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1079,6 +1080,18 @@ def target_distribution(season: int = 0, team: str = ""):
     except Exception as e:
         logger.error(f"target_distribution error: {e}")
         return JSONResponse({"error": "Failed to fetch target distribution"}, status_code=500)
+
+
+@app.get("/api/matchup-heatmap")
+def matchup_heatmap(season: int = 0, position: str = ""):
+    """Return fantasy points allowed by defense per position — matchup heatmap."""
+    try:
+        s = season if season > 0 else None
+        pos = position.upper() if position else None
+        return live_data.fetch_matchup_heatmap(season=s, position=pos)
+    except Exception as e:
+        logger.error(f"matchup_heatmap error: {e}")
+        return JSONResponse({"error": "Failed to fetch matchup heatmap"}, status_code=500)
 
 
 @app.get("/api/analytics/summary")

@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Matchup Heatmap — Razzle</title>
+<meta property="og:title" content="Matchup Heatmap — Razzle">
+<meta property="og:description" content="Fantasy points allowed by defense per position — find the easiest matchups. razzle.lol">
+<meta property="og:site_name" content="razzle.lol">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Matchup Heatmap — Razzle">
+<meta name="twitter:description" content="Fantasy points allowed by defense per position — find the easiest matchups. razzle.lol">
+<meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
+<meta name="description" content="Matchup heatmap dashboard — see which defenses allow the most fantasy points by position on razzle.lol">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .matchups-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+  }
+
+  .matchups-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .matchups-header h1 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: var(--ink);
+    margin: 0 0 4px;
+  }
+  .matchups-header .matchups-subtitle {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+  }
+
+  /* Controls */
+  .matchups-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .matchups-season-select {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    padding: 6px 12px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--bg-card);
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  .matchups-pos-tabs {
+    display: flex;
+    gap: 6px;
+  }
+  .matchups-pos-tab {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--bg-card);
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .matchups-pos-tab:hover {
+    background: var(--bg-warm);
+    box-shadow: 2px 2px 0 var(--ink);
+    transform: translate(-1px, -1px);
+  }
+  .matchups-pos-tab.active {
+    background: var(--ink);
+    color: var(--bg-card);
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+
+  .matchups-export-btn {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--orange);
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 var(--ink);
+    transition: all 0.15s;
+  }
+  .matchups-export-btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0 var(--ink);
+  }
+
+  /* Legend */
+  .matchups-legend {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-medium);
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .legend-swatch {
+    width: 20px;
+    height: 14px;
+    border: 1px solid var(--ink-faint);
+    border-radius: 3px;
+  }
+
+  /* Heatmap table */
+  .matchups-table-wrap {
+    overflow-x: auto;
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    background: var(--bg-card);
+  }
+  .matchups-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-mono);
+    font-size: 13px;
+  }
+  .matchups-table thead th {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 700;
+    background: var(--bg-warm);
+    color: var(--ink);
+    padding: 10px 12px;
+    text-align: center;
+    border-bottom: 3px solid var(--ink);
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+    position: relative;
+  }
+  .matchups-table thead th:hover {
+    background: var(--bg);
+  }
+  .matchups-table thead th .sort-arrow {
+    font-size: 10px;
+    margin-left: 4px;
+    opacity: 0.4;
+  }
+  .matchups-table thead th.sorted .sort-arrow {
+    opacity: 1;
+  }
+  .matchups-table thead th.team-col {
+    text-align: left;
+    min-width: 120px;
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    background: var(--bg-warm);
+  }
+  .matchups-table tbody td {
+    padding: 8px 12px;
+    text-align: center;
+    border-bottom: 1px solid var(--ink-faint);
+    transition: all 0.15s;
+    cursor: pointer;
+    position: relative;
+  }
+  .matchups-table tbody td.team-cell {
+    text-align: left;
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 700;
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    background: var(--bg-card);
+    border-right: 2px solid var(--ink-faint);
+  }
+  .matchups-table tbody tr:hover td {
+    filter: brightness(0.95);
+  }
+  .matchups-table tbody tr:hover td.team-cell {
+    filter: none;
+    background: var(--bg-warm);
+  }
+
+  /* Heatmap cell content */
+  .heat-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+  }
+  .heat-ppg {
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .heat-rank {
+    font-size: 10px;
+    color: var(--ink-light);
+  }
+
+  /* Annotation */
+  .matchup-annotation {
+    font-family: var(--font-hand);
+    font-size: 14px;
+    color: var(--ink-light);
+    position: absolute;
+    bottom: 1px;
+    right: 4px;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  /* Detail panel */
+  .matchups-detail {
+    margin-top: 20px;
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    background: var(--bg-card);
+    padding: 16px;
+    display: none;
+  }
+  .matchups-detail.visible { display: block; }
+  .matchups-detail h3 {
+    font-family: var(--font-display);
+    font-size: 18px;
+    color: var(--ink);
+    margin: 0 0 12px;
+  }
+  .detail-players {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+  }
+  .detail-player {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border: 2px solid var(--ink-faint);
+    border-radius: 8px;
+    background: var(--bg);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .detail-player:hover {
+    box-shadow: 3px 3px 0 var(--ink);
+    transform: translate(-1px, -1px);
+  }
+  .detail-player img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid var(--ink-faint);
+    object-fit: cover;
+  }
+  .detail-player-info {
+    flex: 1;
+    min-width: 0;
+  }
+  .detail-player-name {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .detail-player-stats {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-medium);
+  }
+  .detail-pos-badge {
+    font-family: var(--font-display);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #fff;
+  }
+
+  /* Loading / error */
+  .matchups-loading {
+    text-align: center;
+    padding: 60px 20px;
+    font-family: var(--font-hand);
+    font-size: 22px;
+    color: var(--ink-light);
+  }
+  .matchups-error {
+    text-align: center;
+    padding: 40px 20px;
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--red);
+  }
+  .matchups-retry-btn {
+    font-family: var(--font-display);
+    font-size: 13px;
+    padding: 6px 16px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--bg-card);
+    color: var(--ink);
+    cursor: pointer;
+    margin-top: 12px;
+  }
+
+  /* Watermark */
+  .matchups-watermark {
+    position: fixed;
+    bottom: 10px;
+    right: 14px;
+    font-family: var(--font-hand);
+    font-size: 14px;
+    color: var(--ink-faint);
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .matchups-page { padding: 16px 10px 40px; }
+    .matchups-header h1 { font-size: 26px; }
+    .matchups-table { font-size: 12px; }
+    .matchups-table thead th { padding: 8px 6px; font-size: 12px; }
+    .matchups-table tbody td { padding: 6px 6px; }
+    .heat-ppg { font-size: 12px; }
+    .detail-players { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 480px) {
+    .matchups-header h1 { font-size: 22px; }
+    .matchups-controls { gap: 8px; }
+    .matchups-pos-tab { padding: 5px 10px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="/" class="logo">
+    <div class="logo-mark">&#x1F42F;</div>
+    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/lab.html">The Lab</a></li>
+    <li><a href="/rankings.html">Rankings</a></li>
+    <li><a href="/leaders.html">Leaders</a></li>
+    <li><a href="/prospects.html">Prospects</a></li>
+    <li><a href="/scarcity.html">Scarcity</a></li>
+    <li><a href="/breakouts.html">Breakouts</a></li>
+    <li><a href="/buysell.html">Buy/Sell</a></li>
+    <li><a href="/aging.html">Aging</a></li>
+    <li><a href="/weekly.html">Weekly</a></li>
+    <li><a href="/targets.html">Targets</a></li>
+    <li><a href="/matchups.html" class="active">Matchups</a></li>
+    <li><a href="/team/KC">Teams</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
+    <li><a href="/agents.html">War Room</a></li>
+  </ul>
+</nav>
+
+<div class="matchups-page" id="matchups-root">
+  <div class="matchups-header">
+    <h1>Matchup Heatmap</h1>
+    <div class="matchups-subtitle">which defenses give up the bag</div>
+  </div>
+
+  <div class="matchups-controls">
+    <select id="season-select" class="matchups-season-select" aria-label="Select season"></select>
+    <div class="matchups-pos-tabs">
+      <button class="matchups-pos-tab active" data-pos="ALL" aria-label="All positions">All</button>
+      <button class="matchups-pos-tab" data-pos="QB" aria-label="Quarterbacks" style="border-color:#5b7fff;">QB</button>
+      <button class="matchups-pos-tab" data-pos="RB" aria-label="Running backs" style="border-color:#2ec4b6;">RB</button>
+      <button class="matchups-pos-tab" data-pos="WR" aria-label="Wide receivers" style="border-color:#d97757;">WR</button>
+      <button class="matchups-pos-tab" data-pos="TE" aria-label="Tight ends" style="border-color:#8b5cf6;">TE</button>
+    </div>
+    <button class="matchups-export-btn" id="export-btn">Export PNG</button>
+  </div>
+
+  <div class="matchups-legend">
+    <div class="legend-item"><div class="legend-swatch" style="background:#2ec4b6;"></div> Easy (allows most pts)</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#d9efec;"></div> Soft</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#f7efe5;"></div> Average</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#f2d5d8;"></div> Tough</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#e63946;"></div> Hard (allows fewest pts)</div>
+  </div>
+
+  <div id="matchups-content">
+    <div class="matchups-loading">pulling film on every defense...</div>
+  </div>
+
+  <div id="matchups-detail" class="matchups-detail"></div>
+</div>
+
+<div class="matchups-watermark">razzle.lol</div>
+
+<footer style="text-align:center; padding:24px 20px 32px; font-family:var(--font-hand); font-size:15px; color:var(--ink-light); border-top:2px dashed var(--ink-faint); margin-top:40px;">
+  <div style="margin-bottom:10px;">
+    <a href="/lab.html" style="color:var(--ink-light); text-decoration:none;">The Lab</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/rankings.html" style="color:var(--ink-light); text-decoration:none;">Rankings</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/leaders.html" style="color:var(--ink-light); text-decoration:none;">Leaders</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/prospects.html" style="color:var(--ink-light); text-decoration:none;">Prospects</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/scarcity.html" style="color:var(--ink-light); text-decoration:none;">Scarcity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/breakouts.html" style="color:var(--ink-light); text-decoration:none;">Breakouts</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/buysell.html" style="color:var(--ink-light); text-decoration:none;">Buy/Sell</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/aging.html" style="color:var(--ink-light); text-decoration:none;">Aging</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/weekly.html" style="color:var(--ink-light); text-decoration:none;">Weekly</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/targets.html" style="color:var(--ink-light); text-decoration:none;">Targets</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/matchups.html" style="color:var(--ink-light); text-decoration:none;">Matchups</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none;">League Intel</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/agents.html" style="color:var(--ink-light); text-decoration:none;">War Room</a>
+  </div>
+  razzle.lol — let's razzle dazzle em baby
+</footer>
+
+<script src="app.js"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+  var POS_LIGHT = { QB: '#dde4f7', RB: '#d9efec', WR: '#f7e4d8', TE: '#e5dcf7' };
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  var currentData = null;
+  var activePosition = 'ALL';
+  var sortCol = null;
+  var sortAsc = true;
+
+  function loadData() {
+    var season = document.getElementById('season-select').value || '';
+    var posParam = activePosition === 'ALL' ? '' : activePosition;
+    var url = '/api/matchup-heatmap?season=' + season;
+    if (posParam) url += '&position=' + posParam;
+
+    document.getElementById('matchups-content').innerHTML = '<div class="matchups-loading">pulling film on every defense...</div>';
+    document.getElementById('matchups-detail').classList.remove('visible');
+
+    fetch(url).then(function(resp) {
+      if (!resp.ok) throw new Error('HTTP ' + resp.status);
+      return resp.json();
+    }).then(function(data) {
+      currentData = data;
+      populateSeasons(data.available_seasons, data.season);
+      renderHeatmap(data);
+    }).catch(function(err) {
+      document.getElementById('matchups-content').innerHTML =
+        '<div class="matchups-error">could not pull defensive data<br><button class="matchups-retry-btn" onclick="location.reload()">retry</button></div>';
+    });
+  }
+
+  function populateSeasons(seasons, current) {
+    var sel = document.getElementById('season-select');
+    if (sel.options.length > 0) return;
+    seasons.forEach(function(s) {
+      var opt = document.createElement('option');
+      opt.value = s;
+      opt.textContent = s;
+      if (s == current) opt.selected = true;
+      sel.appendChild(opt);
+    });
+  }
+
+  function getHeatColor(ppg, avg, allValues) {
+    if (!allValues || allValues.length === 0) return '#f7efe5';
+    var sorted = allValues.slice().sort(function(a, b) { return a - b; });
+    var p20 = sorted[Math.floor(sorted.length * 0.2)] || 0;
+    var p40 = sorted[Math.floor(sorted.length * 0.4)] || 0;
+    var p60 = sorted[Math.floor(sorted.length * 0.6)] || 0;
+    var p80 = sorted[Math.floor(sorted.length * 0.8)] || 0;
+
+    // High PPG allowed = easy matchup = green. Low = hard = red.
+    if (ppg >= p80) return '#2ec4b6';      // easy — teal/green
+    if (ppg >= p60) return '#d9efec';      // soft — light green
+    if (ppg >= p40) return '#f7efe5';      // average — sand
+    if (ppg >= p20) return '#f2d5d8';      // tough — light red
+    return '#e63946';                       // hard — red
+  }
+
+  function getAnnotation(rank, total) {
+    if (rank <= 3) return 'cake';
+    if (rank <= 6) return 'soft';
+    if (rank >= total - 2) return 'avoid';
+    if (rank >= total - 5) return 'tough';
+    return '';
+  }
+
+  function sortTeams(teams, col, asc) {
+    return teams.slice().sort(function(a, b) {
+      var va, vb;
+      if (col === 'team') {
+        va = a.team; vb = b.team;
+        return asc ? va.localeCompare(vb) : vb.localeCompare(va);
+      } else if (col === 'total') {
+        va = a.total_avg; vb = b.total_avg;
+      } else {
+        va = (a.positions[col] || {}).avg_ppg || 0;
+        vb = (b.positions[col] || {}).avg_ppg || 0;
+      }
+      return asc ? va - vb : vb - va;
+    });
+  }
+
+  function renderHeatmap(data) {
+    if (!data.teams || data.teams.length === 0) {
+      document.getElementById('matchups-content').innerHTML =
+        '<div class="matchups-loading">no matchup data available for this season</div>';
+      return;
+    }
+
+    var positions = activePosition === 'ALL' ? ['QB', 'RB', 'WR', 'TE'] : [activePosition];
+    var teams = data.teams;
+
+    // Collect all values per position for color scale
+    var posValues = {};
+    positions.forEach(function(pos) {
+      posValues[pos] = [];
+      teams.forEach(function(t) {
+        var v = (t.positions[pos] || {}).avg_ppg || 0;
+        if (v > 0) posValues[pos].push(v);
+      });
+    });
+
+    // Sort
+    if (sortCol) {
+      teams = sortTeams(teams, sortCol, sortAsc);
+    }
+
+    var totalTeams = teams.length;
+
+    // Build table
+    var html = '<div class="matchups-table-wrap"><table class="matchups-table"><thead><tr>';
+    html += '<th class="team-col' + (sortCol === 'team' ? ' sorted' : '') + '" data-sort="team">Team <span class="sort-arrow">' + (sortCol === 'team' ? (sortAsc ? '\u25B2' : '\u25BC') : '\u25B2') + '</span></th>';
+
+    positions.forEach(function(pos) {
+      var cls = sortCol === pos ? ' sorted' : '';
+      var arrow = sortCol === pos ? (sortAsc ? '\u25B2' : '\u25BC') : '\u25BC';
+      html += '<th class="' + cls + '" data-sort="' + pos + '" style="color:' + POS_COLORS[pos] + ';">' + pos + ' PPG Allowed <span class="sort-arrow">' + arrow + '</span></th>';
+    });
+
+    if (positions.length > 1) {
+      var cls = sortCol === 'total' ? ' sorted' : '';
+      var arrow = sortCol === 'total' ? (sortAsc ? '\u25B2' : '\u25BC') : '\u25BC';
+      html += '<th class="' + cls + '" data-sort="total">Total <span class="sort-arrow">' + arrow + '</span></th>';
+    }
+    html += '</tr></thead><tbody>';
+
+    teams.forEach(function(t) {
+      html += '<tr>';
+      html += '<td class="team-cell">' + escapeHtml(t.team) + '<span style="font-family:var(--font-mono);font-size:11px;color:var(--ink-light);margin-left:6px;">' + t.games + 'G</span></td>';
+
+      positions.forEach(function(pos) {
+        var d = t.positions[pos] || {};
+        var ppg = d.avg_ppg || 0;
+        var rank = d.rank || 0;
+        var bg = getHeatColor(ppg, data.averages[pos] || 0, posValues[pos]);
+        var textColor = (bg === '#e63946' || bg === '#2ec4b6') ? '#fff' : 'var(--ink)';
+        var annotation = getAnnotation(rank, totalTeams);
+
+        html += '<td style="background:' + bg + ';color:' + textColor + ';" data-team="' + escapeHtml(t.team) + '" data-pos="' + pos + '">';
+        html += '<div class="heat-cell">';
+        html += '<span class="heat-ppg">' + ppg.toFixed(1) + '</span>';
+        html += '<span class="heat-rank">#' + rank + '</span>';
+        html += '</div>';
+        if (annotation) {
+          html += '<span class="matchup-annotation">' + annotation + '</span>';
+        }
+        html += '</td>';
+      });
+
+      if (positions.length > 1) {
+        html += '<td style="font-weight:700;">' + t.total_avg.toFixed(1) + '</td>';
+      }
+      html += '</tr>';
+    });
+
+    html += '</tbody></table></div>';
+    document.getElementById('matchups-content').innerHTML = html;
+
+    // Bind sort headers
+    document.querySelectorAll('.matchups-table thead th[data-sort]').forEach(function(th) {
+      th.addEventListener('click', function() {
+        var col = this.getAttribute('data-sort');
+        if (sortCol === col) {
+          sortAsc = !sortAsc;
+        } else {
+          sortCol = col;
+          sortAsc = col === 'team' ? true : false; // default desc for numbers, asc for team
+        }
+        renderHeatmap(currentData);
+      });
+    });
+
+    // Bind cell clicks for detail
+    document.querySelectorAll('.matchups-table tbody td[data-team]').forEach(function(td) {
+      td.addEventListener('click', function() {
+        var team = this.getAttribute('data-team');
+        var pos = this.getAttribute('data-pos');
+        showDetail(team, pos);
+      });
+    });
+  }
+
+  function showDetail(team, pos) {
+    var panel = document.getElementById('matchups-detail');
+
+    // If detail data exists (position mode), show it
+    if (currentData.detail && currentData.detail[team]) {
+      var players = currentData.detail[team];
+      var html = '<h3>Top scorers vs ' + escapeHtml(team) + ' (' + pos + ')</h3>';
+      html += '<div class="detail-players">';
+      players.forEach(function(p) {
+        var posColor = POS_COLORS[p.position] || '#8a8a9e';
+        var img = p.headshot_url ? '<img src="' + escapeHtml(p.headshot_url) + '" alt="" onerror="this.style.display=\'none\'">' : '';
+        html += '<div class="detail-player" onclick="window.location.href=\'/player/' + escapeHtml(p.player_id) + '\'">';
+        html += img;
+        html += '<div class="detail-player-info">';
+        html += '<div class="detail-player-name">' + escapeHtml(p.name) + '</div>';
+        html += '<div class="detail-player-stats">' + p.games_vs + 'G vs ' + escapeHtml(team) + ' — ' + p.total_ppr + ' pts (' + p.ppg_vs + ' PPG)</div>';
+        html += '</div>';
+        html += '<span class="detail-pos-badge" style="background:' + posColor + ';">' + escapeHtml(p.position) + '</span>';
+        html += '</div>';
+      });
+      html += '</div>';
+      panel.innerHTML = html;
+      panel.classList.add('visible');
+      panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } else {
+      // If no detail (ALL mode), reload with specific position
+      var tabs = document.querySelectorAll('.matchups-pos-tab');
+      tabs.forEach(function(t) { t.classList.remove('active'); });
+      var targetTab = document.querySelector('.matchups-pos-tab[data-pos="' + pos + '"]');
+      if (targetTab) targetTab.classList.add('active');
+      activePosition = pos;
+      sortCol = null;
+      loadData();
+    }
+  }
+
+  // Position tabs
+  document.querySelectorAll('.matchups-pos-tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.matchups-pos-tab').forEach(function(t) { t.classList.remove('active'); });
+      this.classList.add('active');
+      activePosition = this.getAttribute('data-pos');
+      sortCol = null;
+      sortAsc = true;
+      loadData();
+    });
+  });
+
+  // Season selector
+  document.getElementById('season-select').addEventListener('change', function() {
+    sortCol = null;
+    loadData();
+  });
+
+  // Export PNG
+  document.getElementById('export-btn').addEventListener('click', function() {
+    if (typeof html2canvas === 'undefined') return;
+    var root = document.getElementById('matchups-root');
+    html2canvas(root, {
+      backgroundColor: '#ede0cf',
+      scale: 2,
+      useCORS: true,
+      logging: false,
+    }).then(function(canvas) {
+      // Add watermark
+      var ctx = canvas.getContext('2d');
+      ctx.font = '24px Caveat, cursive';
+      ctx.fillStyle = 'rgba(26, 26, 46, 0.3)';
+      ctx.textAlign = 'right';
+      ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 16);
+      // Download
+      var link = document.createElement('a');
+      link.download = 'razzle-matchup-heatmap.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+  });
+
+  // Analytics
+  try {
+    fetch('/api/analytics/pageview', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ page: '/matchups.html', referrer: document.referrer || '' })
+    });
+  } catch(e) {}
+
+  // Initial load
+  loadData();
+})();
+</script>
+
+</body>
+</html>

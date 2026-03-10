@@ -1,44 +1,39 @@
-# Razzle Loop — Phase 75 Task List
+# Razzle Loop — Phase 76 Task List
 
-> QA + UX Audit Fixes — Auto-Generated from Phases 71-75 audit
+> Matchup Heatmap — Fantasy Points Allowed by Defense per Position
 
-**Current Phase**: 75 — QA + UX Audit Fixes
-**Exit Criterion**: All CRITICAL and HIGH findings from the phases 71-75 QA+UX audit resolved. All MEDIUM findings addressed. Code verified with syntax checks and design compliance.
+**Current Phase**: 76 — Matchup Heatmap (Points Allowed Dashboard)
+**Exit Criterion**: /matchups.html page shows a color-coded 32-team x 4-position heatmap grid of average fantasy points allowed per game. Green = easy matchup (high points allowed), red = hard matchup (low points allowed). Click a cell to see which players scored against that defense. Position filter tabs. Season selector. Sortable columns. PNG export with watermark. "Matchups" nav link added to all HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md.
 
 ---
 
-## Task 1: CRITICAL + HIGH QA fixes (Q1-Q5)
+## Task 1: Backend /api/matchup-heatmap endpoint
 **Status**: PASS
 **Attempts**: 1
-**Notes**: Q1 aging.html canvas: removed escapeHtml+unescape chain, use plain text + last name only for labels. Q2 weekly+targets: added resp.ok check on fetch. Q3 weekly+targets: added app.js script tag for Ctrl+K quick search. Q4 targets: added client-side re-sort by active mode (targets or carries). Q5 aging: name labels use last name for readability.
+**Notes**: GET /api/matchup-heatmap with season/position params. Computes avg fantasy_points_ppr allowed per game by each defense per position from opponent_team field. Returns teams array with positions grid, ranks, averages. Detail view (top 5 scorers vs each defense) when position specified. try/except with proper error handling.
 
-## Task 2: HIGH UX fixes (U1-U2)
+## Task 2: Matchups heatmap page with grid + detail view
 **Status**: PASS
 **Attempts**: 1
-**Notes**: U1 nav overflow: added flex-wrap to nav-links for desktop, horizontal scroll with hidden scrollbar for mobile (768px). U2 weekly heatmap sorting: added click-to-sort on all column headers (Player=total pts, W1-W18=week score, PPG=ppg). Sort indicators (arrows) shown. Toggle asc/desc on re-click.
+**Notes**: /matchups.html with 32-team x 4-position color-coded grid. 5-tier color scale (green=easy to red=hard) using positional percentiles. Rank numbers in each cell. Click cell in ALL mode switches to position mode; in position mode shows top scorers detail panel. Sortable columns (team, per-position, total). Caveat annotations (cake/soft/tough/avoid). PNG export via html2canvas. Responsive at 768px + 480px. All design rules: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors.
 
-## Task 3: MEDIUM QA fixes (Q6-Q12)
+## Task 3: Nav links + sitemap + analytics
 **Status**: PASS
 **Attempts**: 1
-**Notes**: Q6 aging already had resp.ok (false positive). Q7 aria-labels added to all position/mode tabs on 3 pages. Q8 "peak season" to "peak age" on aging summary cards. Q9 heat legend now shows numeric thresholds and position context. Q11 try/except added to all 3 new server endpoints. Q12 FANTASY_POSITIONS constant used in fetch_aging_curves.
+**Notes**: "Matchups" nav link added to all 18 HTML pages (nav + footer). Sitemap.xml entry added (/matchups.html, 0.8 priority, weekly). Analytics pageview tracking on matchups.html.
 
-## Task 4: MEDIUM UX fixes (U3-U7)
+## Task 4: Smoke test + verification
 **Status**: PASS
 **Attempts**: 1
-**Notes**: U4 weekly heatmap: added GP (games played) column. U5 aging subtitle clarifies "curves = all seasons, dots = selected season". U7 retry button added to error states on weekly + targets.
-
-## Task 5: Smoke test + verification
-**Status**: PASS
-**Attempts**: 1
-**Notes**: Python + JS syntax valid. All fixes verified with grep counts.
+**Notes**: Python syntax valid (server.py + live_data.py). JS syntax valid. 18/18 pages have matchups nav link. Design compliance verified: 20 font refs, 36 color var refs, 15 border/shadow refs, 4 position color refs. All acceptance criteria met.
 
 ---
 
 ## Loop State
 ```
-Current Phase: 75
-Current Task: 5
+Current Phase: 76
+Current Task: 4
 Current Stage: COMPLETE
 Attempt: 1
-Tasks Completed: 5/5
+Tasks Completed: 4/4
 ```

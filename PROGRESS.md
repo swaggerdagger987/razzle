@@ -1,6 +1,26 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 75 — QA + UX Audit Fixes (COMPLETE)
+## Current Phase: Phase 76 — Matchup Heatmap (COMPLETE)
+
+**Exit criterion MET:** /matchups.html page shows a color-coded 32-team x 4-position heatmap grid of average fantasy points allowed per game (PPR). Green gradient = easy matchup (defense allows lots of points), red gradient = hard matchup (defense allows few points). 5-tier color scale using positional percentiles (p20/p40/p60/p80). Each cell shows avg PPG allowed and rank number. Caveat annotations ("cake", "soft", "tough", "avoid") on extreme matchups. Click cell in ALL mode → switches to position mode; in position mode → shows top 5 scorers detail panel with headshots. Position filter tabs (All/QB/RB/WR/TE). Season selector. Sortable column headers (team, per-position, total). PNG export via html2canvas with watermark. Color legend. Responsive at 768px + 480px. /api/matchup-heatmap endpoint computes from opponent_team field in player_week_stats. "Matchups" nav link added to all 18 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors.
+
+### Phase 76 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/matchup-heatmap endpoint | DONE | Avg PPR allowed per game by defense per position, ranks, detail view |
+| 2 | Matchups heatmap page | DONE | 5-tier color grid, cell click detail, sort, annotations, responsive, PNG export |
+| 3 | Nav links + sitemap + analytics | DONE | All 18 pages updated, sitemap entry, pageview tracking |
+| 4 | Smoke test | DONE | Python + JS syntax clean, 18/18 nav links verified, design compliance confirmed |
+
+### Decisions Log
+- **Matchup Heatmap as Phase 76**: "Which defenses give up the most points?" is a fundamental fantasy question asked every single week. Matchup heatmaps are among the most screenshotted content on r/fantasyfootball during the season. Having this as a standalone dashboard adds a high-value tool that complements the existing analytics suite.
+- **5-tier color scale**: Using positional percentiles (p20/p40/p60/p80) ensures the color coding is meaningful relative to each position. QB averaging 22 PPG allowed and RB averaging 14 PPG both appear "green" if they're top-quartile for their position.
+- **Click-through detail**: In ALL mode, clicking a cell switches to position mode for that position. In position mode, clicking shows top 5 scorers against that defense — lets users understand WHY a defense is easy/hard.
+- **Opponent_team field**: nflverse provides opponent_team on every player_week_stats row, so we can compute points allowed by simply summing fantasy_points_ppr grouped by opponent_team and position. No additional data needed.
+- **Annotations**: "cake" (rank 1-3), "soft" (4-6), "tough" (bottom 6), "avoid" (bottom 3) — adds personality without cluttering the heatmap.
+
+## Previous Phase: Phase 75 — QA + UX Audit Fixes (COMPLETE)
 
 **Exit criterion MET:** All CRITICAL and HIGH findings from phases 71-75 QA+UX audit resolved. Canvas XSS pattern fixed (aging.html). Fetch resp.ok checks added (weekly+targets). app.js added (weekly+targets). Carries mode re-sort fixed (targets). Nav overflow handled with flex-wrap + mobile scroll. Weekly heatmap column sorting added. aria-labels on all tabs. "peak age" label fixed. Heat legend shows numeric thresholds. GP column added to weekly. try/except on 3 server endpoints. FANTASY_POSITIONS constant consistency. Retry buttons on error states. Aging subtitle clarifies curve vs dots data.
 

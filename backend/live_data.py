@@ -5203,3 +5203,158 @@ def fetch_target_distribution(season=None, team=None):
         }
     finally:
         conn.close()
+
+
+# ---------------------------------------------------------------------------
+# Matchup Heatmap — Fantasy Points Allowed by Defense per Position
+# ---------------------------------------------------------------------------
+
+def fetch_matchup_heatmap(season=None, position=None):
+    """Return avg fantasy points allowed per game by each defense to each position.
+
+    Computes from opponent_team in player_week_stats: group all player scores
+    by opponent_team and position to find how many PPR points each defense allows.
+    """
+    conn = get_conn()
+    try:
+        row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
+        available_seasons = [r[0] for r in row] if row else [2024]
+        if not season:
+            season = available_seasons[0] if available_seasons else 2024
+
+        pos_filter = ""
+        params = [season]
+        if position and position.upper() in FANTASY_POSITIONS:
+            pos_filter = "AND p.position = ?"
+            params.append(position.upper())
+
+        # Sum fantasy points scored AGAINST each opponent_team, grouped by position
+        rows = conn.execute(f"""
+            SELECT
+                s.opponent_team as defense,
+                p.position,
+                COALESCE(SUM(s.fantasy_points_ppr), 0) as total_ppr
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE s.season = ?
+              AND p.position IN ('QB', 'RB', 'WR', 'TE')
+              AND s.opponent_team IS NOT NULL AND s.opponent_team != ''
+              {pos_filter}
+            GROUP BY s.opponent_team, p.position
+            ORDER BY s.opponent_team, p.position
+        """, params).fetchall()
+
+        if not rows:
+            return {"season": season, "available_seasons": available_seasons, "teams": [], "averages": {}}
+
+        # Count distinct weeks per defense for games played
+        game_rows = conn.execute("""
+            SELECT opponent_team, COUNT(DISTINCT week) as games
+            FROM player_week_stats
+            WHERE season = ? AND opponent_team IS NOT NULL AND opponent_team != ''
+            GROUP BY opponent_team
+        """, [season]).fetchall()
+        defense_games = {r[0]: r[1] for r in game_rows}
+
+        # Build team x position grid
+        team_data = {}
+        all_pos_totals = {"QB": [], "RB": [], "WR": [], "TE": []}
+
+        for r in rows:
+            defense = r[0]
+            pos = r[1]
+            total_ppr = r[2]
+            games = defense_games.get(defense, 1)
+            avg_ppg = round(total_ppr / games, 1) if games > 0 else 0
+
+            if defense not in team_data:
+                team_data[defense] = {}
+            team_data[defense][pos] = {
+                "total": round(total_ppr, 1),
+                "avg_ppg": avg_ppg,
+                "games": games,
+            }
+            all_pos_totals[pos].append({"defense": defense, "avg": avg_ppg})
+
+        # Rank each defense per position (1 = allows most = easiest matchup)
+        pos_ranks = {}
+        pos_averages = {}
+        for pos in ["QB", "RB", "WR", "TE"]:
+            sorted_teams = sorted(all_pos_totals[pos], key=lambda x: x["avg"], reverse=True)
+            pos_ranks[pos] = {t["defense"]: i + 1 for i, t in enumerate(sorted_teams)}
+            if sorted_teams:
+                pos_averages[pos] = round(
+                    sum(t["avg"] for t in sorted_teams) / len(sorted_teams), 1
+                )
+            else:
+                pos_averages[pos] = 0
+
+        # Assemble output
+        teams_out = []
+        for defense in sorted(team_data.keys()):
+            entry = {
+                "team": defense,
+                "team_name": ABBREV_TO_TEAM.get(defense, defense),
+                "games": defense_games.get(defense, 0),
+                "positions": {},
+                "total_avg": 0,
+            }
+            total = 0
+            for pos in ["QB", "RB", "WR", "TE"]:
+                if pos in team_data[defense]:
+                    d = team_data[defense][pos]
+                    d["rank"] = pos_ranks.get(pos, {}).get(defense, 0)
+                    entry["positions"][pos] = d
+                    total += d["avg_ppg"]
+                else:
+                    entry["positions"][pos] = {"total": 0, "avg_ppg": 0, "games": 0, "rank": 0}
+            entry["total_avg"] = round(total, 1)
+            teams_out.append(entry)
+
+        # Top scorers against each defense (detail view) — only when position specified
+        detail = {}
+        if position and position.upper() in FANTASY_POSITIONS:
+            pos_up = position.upper()
+            detail_rows = conn.execute("""
+                SELECT
+                    p.player_id, p.full_name, p.position, p.team, p.headshot_url,
+                    s.opponent_team as defense,
+                    COUNT(DISTINCT s.week) as games_vs,
+                    COALESCE(SUM(s.fantasy_points_ppr), 0) as total_ppr,
+                    ROUND(COALESCE(SUM(s.fantasy_points_ppr), 0) * 1.0 / MAX(1, COUNT(DISTINCT s.week)), 1) as ppg_vs
+                FROM player_week_stats s
+                JOIN players p ON p.player_id = s.player_id
+                WHERE s.season = ?
+                  AND p.position = ?
+                  AND s.opponent_team IS NOT NULL AND s.opponent_team != ''
+                  AND s.fantasy_points_ppr > 0
+                GROUP BY s.opponent_team, p.player_id
+                HAVING games_vs >= 1
+                ORDER BY s.opponent_team, total_ppr DESC
+            """, [season, pos_up]).fetchall()
+
+            for dr in detail_rows:
+                defense = dr[5]
+                if defense not in detail:
+                    detail[defense] = []
+                if len(detail[defense]) < 5:
+                    detail[defense].append({
+                        "player_id": dr[0],
+                        "name": dr[1] or "Unknown",
+                        "position": dr[2],
+                        "team": dr[3] or "",
+                        "headshot_url": dr[4] or "",
+                        "games_vs": dr[6],
+                        "total_ppr": round(dr[7], 1),
+                        "ppg_vs": dr[8],
+                    })
+
+        return {
+            "season": season,
+            "available_seasons": available_seasons,
+            "teams": teams_out,
+            "averages": pos_averages,
+            "detail": detail,
+        }
+    finally:
+        conn.close()
