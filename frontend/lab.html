@@ -429,6 +429,9 @@
     .lab-menu-toggle {
       display: flex;
     }
+    .lab-sidebar-category .cat-chevron {
+      font-size: 14px;
+    }
   }
 
   @media (min-width: 769px) {
@@ -3001,6 +3004,15 @@
 (function() {
   var currentPanel = 'screener';
   var labMain = document.getElementById('labMain');
+
+  // ─── escapeHtml fallback (in case app.js fails to load) ────────
+  if (typeof escapeHtml !== 'function') {
+    window.escapeHtml = function(s) {
+      var d = document.createElement('div');
+      d.textContent = s;
+      return d.innerHTML;
+    };
+  }
 
   // ─── Panel Registry ────────────────────────────────────────────
   // Native panels register here.

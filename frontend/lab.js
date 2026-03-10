@@ -424,7 +424,7 @@ const state = {
     setTimeout(function() {
       var toast = document.createElement("div");
       toast.className = "first-visit-toast";
-      toast.innerHTML = 'showing <strong>PPR</strong> preset \u2014 try other views with the preset buttons above';
+      toast.innerHTML = '62 tools in the sidebar \u2014 press <kbd>?</kbd> for shortcuts';
       toast.onclick = function() { toast.remove(); };
       document.body.appendChild(toast);
       setTimeout(function() { toast.remove(); }, 6000);
