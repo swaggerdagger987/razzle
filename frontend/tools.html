@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Tools Hub — Razzle</title>
+<meta property="og:title" content="Tools Hub — Razzle">
+<meta property="og:description" content="Every fantasy football analytics tool on razzle.lol — rankings, trade values, efficiency, matchups, and more.">
+<meta property="og:site_name" content="razzle.lol">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Tools Hub — Razzle">
+<meta name="twitter:description" content="Every fantasy football analytics tool on razzle.lol — rankings, trade values, efficiency, matchups, and more.">
+<meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
+<meta name="description" content="Tools hub — browse all 30+ fantasy football analytics dashboards on razzle.lol organized by category.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .tools-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+  }
+
+  .tools-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .tools-header h1 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: var(--ink);
+    margin: 0 0 4px;
+  }
+  .tools-header .tools-subtitle {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+  }
+  .tools-total-badge {
+    display: inline-block;
+    background: var(--orange);
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 2px solid var(--ink);
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  /* Search + filter bar */
+  .tools-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+  .tools-search {
+    padding: 8px 14px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--bg-card);
+    width: 280px;
+    outline: none;
+  }
+  .tools-search:focus {
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+  .tools-cat-tabs {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .tools-cat-tab {
+    padding: 5px 12px;
+    font-family: var(--font-display);
+    font-size: 12px;
+    border: 2px solid var(--ink);
+    border-radius: 20px;
+    background: var(--bg-card);
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .tools-cat-tab:hover {
+    background: var(--bg-warm);
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+  .tools-cat-tab.active {
+    background: var(--ink);
+    color: var(--bg-card);
+  }
+
+  /* Category sections */
+  .tools-category {
+    margin-bottom: 32px;
+  }
+  .tools-category.hidden {
+    display: none;
+  }
+  .cat-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 2px dashed var(--ink-faint);
+  }
+  .cat-icon {
+    font-size: 24px;
+  }
+  .cat-name {
+    font-family: var(--font-display);
+    font-size: 20px;
+    color: var(--ink);
+  }
+  .cat-count {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    background: var(--bg-warm);
+    color: var(--ink-medium);
+    padding: 2px 8px;
+    border-radius: 12px;
+    border: 2px solid var(--ink-faint);
+  }
+
+  /* Tool cards grid */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+  }
+  .tool-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  .tool-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+  .tool-card.hidden {
+    display: none;
+  }
+  .tool-card-name {
+    font-family: var(--font-display);
+    font-size: 16px;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .tool-card-desc {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-medium);
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+  .tool-card-positions {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+  .pos-chip {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 10px;
+    border: 2px solid var(--ink);
+    color: #fff;
+  }
+  .pos-chip.QB { background: var(--pos-qb); }
+  .pos-chip.RB { background: var(--pos-rb); }
+  .pos-chip.WR { background: var(--pos-wr); }
+  .pos-chip.TE { background: var(--pos-te); }
+
+  /* Tool card top stripe by category */
+  .tool-card[data-cat="rankings"] { border-top: 6px solid var(--orange); }
+  .tool-card[data-cat="discovery"] { border-top: 6px solid var(--green); }
+  .tool-card[data-cat="performance"] { border-top: 6px solid var(--blue); }
+  .tool-card[data-cat="usage"] { border-top: 6px solid var(--purple); }
+  .tool-card[data-cat="matchup"] { border-top: 6px solid var(--red); }
+  .tool-card[data-cat="visualizations"] { border-top: 6px solid var(--yellow); }
+  .tool-card[data-cat="team"] { border-top: 6px solid var(--ink-medium); }
+
+  /* Export button */
+  .tools-export {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+    margin-bottom: 8px;
+  }
+  .tools-export button {
+    font-family: var(--font-display);
+    font-size: 13px;
+    padding: 8px 18px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--bg-card);
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .tools-export button:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+
+  /* Loading state */
+  .tools-loading {
+    text-align: center;
+    padding: 60px 20px;
+    font-family: var(--font-hand);
+    font-size: 22px;
+    color: var(--ink-light);
+  }
+
+  /* Watermark */
+  .tools-watermark {
+    position: fixed;
+    bottom: 10px;
+    right: 14px;
+    font-family: var(--font-hand);
+    font-size: 13px;
+    color: var(--ink-faint);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Empty search state */
+  .tools-empty {
+    text-align: center;
+    padding: 40px 20px;
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+    display: none;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .tools-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .tools-search { width: 220px; }
+  }
+  @media (max-width: 480px) {
+    .tools-grid {
+      grid-template-columns: 1fr;
+    }
+    .tools-header h1 { font-size: 26px; }
+    .tools-search { width: 100%; }
+    .tools-controls { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="/" class="logo">
+    <div class="logo-mark">&#x1F42F;</div>
+    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/lab.html">The Lab</a></li>
+    <li><a href="/tools.html" class="active">Tools</a></li>
+    <li><a href="/rankings.html">Rankings</a></li>
+    <li><a href="/leaders.html">Leaders</a></li>
+    <li><a href="/prospects.html">Prospects</a></li>
+    <li><a href="/scarcity.html">Scarcity</a></li>
+    <li><a href="/breakouts.html">Breakouts</a></li>
+    <li><a href="/buysell.html">Buy/Sell</a></li>
+    <li><a href="/aging.html">Aging</a></li>
+    <li><a href="/weekly.html">Weekly</a></li>
+    <li><a href="/targets.html">Targets</a></li>
+    <li><a href="/matchups.html">Matchups</a></li>
+    <li><a href="/usage.html">Usage</a></li>
+    <li><a href="/yoy.html">YoY</a></li>
+    <li><a href="/airyards.html">Air Yards</a></li>
+    <li><a href="/explorer.html">Explorer</a></li>
+    <li><a href="/redzone.html">Red Zone</a></li>
+    <li><a href="/efficiency.html">Efficiency</a></li>
+    <li><a href="/consistency.html">Consistency</a></li>
+    <li><a href="/schedule.html">Schedule</a></li>
+    <li><a href="/stocks.html">Stocks</a></li>
+    <li><a href="/opportunity.html">Opportunity</a></li>
+    <li><a href="/reportcard.html">Report Card</a></li>
+    <li><a href="/awards.html">Awards</a></li>
+    <li><a href="/vorp.html">VORP</a></li>
+    <li><a href="/tradevalues.html">Trade Values</a></li>
+    <li><a href="/tradefinder.html">Trade Finder</a></li>
+    <li><a href="/team/KC">Teams</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
+    <li><a href="/agents.html">War Room</a></li>
+  </ul>
+</nav>
+
+<main class="tools-page" id="tools-content">
+  <div class="tools-header">
+    <h1>Tools Hub<span class="tools-total-badge" id="total-badge"></span></h1>
+    <div class="tools-subtitle">every analytics tool in one place</div>
+  </div>
+
+  <div class="tools-controls">
+    <input type="text" class="tools-search" id="tools-search" placeholder="search tools...">
+    <div class="tools-cat-tabs" id="cat-tabs"></div>
+  </div>
+
+  <div class="tools-loading" id="tools-loading">pulling the playbook...</div>
+  <div id="tools-container"></div>
+  <div class="tools-empty" id="tools-empty">no tools match that search</div>
+
+  <div class="tools-export">
+    <button onclick="exportPng()">Export PNG</button>
+  </div>
+</main>
+
+<div class="tools-watermark">razzle.lol</div>
+
+<footer style="text-align:center; padding:24px 20px 32px; font-family:var(--font-hand); font-size:15px; color:var(--ink-light); border-top:2px dashed var(--ink-faint); margin-top:40px;">
+  <div style="margin-bottom:10px;">
+    <a href="/lab.html" style="color:var(--ink-light); text-decoration:none;">The Lab</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tools.html" style="color:var(--ink-light); text-decoration:none;">Tools</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/rankings.html" style="color:var(--ink-light); text-decoration:none;">Rankings</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/leaders.html" style="color:var(--ink-light); text-decoration:none;">Leaders</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/prospects.html" style="color:var(--ink-light); text-decoration:none;">Prospects</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/scarcity.html" style="color:var(--ink-light); text-decoration:none;">Scarcity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/breakouts.html" style="color:var(--ink-light); text-decoration:none;">Breakouts</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/buysell.html" style="color:var(--ink-light); text-decoration:none;">Buy/Sell</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/aging.html" style="color:var(--ink-light); text-decoration:none;">Aging</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/weekly.html" style="color:var(--ink-light); text-decoration:none;">Weekly</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/targets.html" style="color:var(--ink-light); text-decoration:none;">Targets</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/matchups.html" style="color:var(--ink-light); text-decoration:none;">Matchups</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/usage.html" style="color:var(--ink-light); text-decoration:none;">Usage</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/yoy.html" style="color:var(--ink-light); text-decoration:none;">YoY</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/airyards.html" style="color:var(--ink-light); text-decoration:none;">Air Yards</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/explorer.html" style="color:var(--ink-light); text-decoration:none;">Explorer</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/redzone.html" style="color:var(--ink-light); text-decoration:none;">Red Zone</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/efficiency.html" style="color:var(--ink-light); text-decoration:none;">Efficiency</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/consistency.html" style="color:var(--ink-light); text-decoration:none;">Consistency</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/schedule.html" style="color:var(--ink-light); text-decoration:none;">Schedule</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/stocks.html" style="color:var(--ink-light); text-decoration:none;">Stocks</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/opportunity.html" style="color:var(--ink-light); text-decoration:none;">Opportunity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/reportcard.html" style="color:var(--ink-light); text-decoration:none;">Report Card</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/awards.html" style="color:var(--ink-light); text-decoration:none;">Awards</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/vorp.html" style="color:var(--ink-light); text-decoration:none;">VORP</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tradevalues.html" style="color:var(--ink-light); text-decoration:none;">Trade Values</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tradefinder.html" style="color:var(--ink-light); text-decoration:none;">Trade Finder</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/team/KC" style="color:var(--ink-light); text-decoration:none;">Teams</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none;">League Intel</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/agents.html" style="color:var(--ink-light); text-decoration:none;">War Room</a>
+  </div>
+  razzle.lol — let's razzle dazzle em baby
+</footer>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script src="app.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  var state = {
+    categories: [],
+    totalTools: 0,
+    activeCategory: 'all',
+    searchQuery: ''
+  };
+
+  function init() {
+    // Analytics
+    if (window.__razzleAnalytics) window.__razzleAnalytics('tools');
+
+    fetch('/api/tools-hub')
+      .then(function(r) {
+        if (!r.ok) throw new Error('Failed to load tools');
+        return r.json();
+      })
+      .then(function(data) {
+        state.categories = data.categories || [];
+        state.totalTools = data.total_tools || 0;
+        render();
+      })
+      .catch(function(err) {
+        document.getElementById('tools-loading').textContent = 'failed to load tools — try refreshing';
+      });
+
+    document.getElementById('tools-search').addEventListener('input', function(e) {
+      state.searchQuery = e.target.value.toLowerCase().trim();
+      applyFilters();
+    });
+  }
+
+  function render() {
+    document.getElementById('tools-loading').style.display = 'none';
+    document.getElementById('total-badge').textContent = state.totalTools + ' tools';
+
+    // Build category tabs
+    var tabsHtml = '<button class="tools-cat-tab active" data-cat="all">All</button>';
+    state.categories.forEach(function(cat) {
+      tabsHtml += '<button class="tools-cat-tab" data-cat="' + escapeHtml(cat.id) + '">' + escapeHtml(cat.icon) + ' ' + escapeHtml(cat.name) + '</button>';
+    });
+    document.getElementById('cat-tabs').innerHTML = tabsHtml;
+
+    // Tab click handlers
+    document.querySelectorAll('.tools-cat-tab').forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        state.activeCategory = this.getAttribute('data-cat');
+        document.querySelectorAll('.tools-cat-tab').forEach(function(t) { t.classList.remove('active'); });
+        this.classList.add('active');
+        applyFilters();
+      });
+    });
+
+    // Build category sections
+    var container = document.getElementById('tools-container');
+    var html = '';
+    state.categories.forEach(function(cat) {
+      html += '<div class="tools-category" data-cat-section="' + escapeHtml(cat.id) + '">';
+      html += '<div class="cat-header">';
+      html += '<span class="cat-icon">' + escapeHtml(cat.icon) + '</span>';
+      html += '<span class="cat-name">' + escapeHtml(cat.name) + '</span>';
+      html += '<span class="cat-count">' + cat.tools.length + ' tools</span>';
+      html += '</div>';
+      html += '<div class="tools-grid">';
+      cat.tools.forEach(function(tool) {
+        html += '<a href="' + escapeHtml(tool.url) + '" class="tool-card" data-cat="' + escapeHtml(cat.id) + '" data-search="' + escapeHtml((tool.name + ' ' + tool.desc).toLowerCase()) + '">';
+        html += '<div class="tool-card-name">' + escapeHtml(tool.name) + '</div>';
+        html += '<div class="tool-card-desc">' + escapeHtml(tool.desc) + '</div>';
+        html += '<div class="tool-card-positions">';
+        (tool.positions || []).forEach(function(pos) {
+          html += '<span class="pos-chip ' + escapeHtml(pos) + '">' + escapeHtml(pos) + '</span>';
+        });
+        html += '</div>';
+        html += '</a>';
+      });
+      html += '</div>';
+      html += '</div>';
+    });
+    container.innerHTML = html;
+  }
+
+  function applyFilters() {
+    var catFilter = state.activeCategory;
+    var q = state.searchQuery;
+    var visibleCount = 0;
+
+    // Filter category sections
+    document.querySelectorAll('.tools-category').forEach(function(section) {
+      var sectionCat = section.getAttribute('data-cat-section');
+      if (catFilter !== 'all' && sectionCat !== catFilter) {
+        section.classList.add('hidden');
+      } else {
+        section.classList.remove('hidden');
+      }
+    });
+
+    // Filter individual tool cards by search
+    document.querySelectorAll('.tool-card').forEach(function(card) {
+      var searchText = card.getAttribute('data-search');
+      var catSection = card.closest('.tools-category');
+      var sectionHidden = catSection.classList.contains('hidden');
+      if (sectionHidden) {
+        card.classList.add('hidden');
+        return;
+      }
+      if (q && searchText.indexOf(q) === -1) {
+        card.classList.add('hidden');
+      } else {
+        card.classList.remove('hidden');
+        visibleCount++;
+      }
+    });
+
+    // Show/hide empty state
+    document.getElementById('tools-empty').style.display = (visibleCount === 0 && q) ? 'block' : 'none';
+
+    // Update category counts for visible cards
+    document.querySelectorAll('.tools-category').forEach(function(section) {
+      if (section.classList.contains('hidden')) return;
+      var visible = section.querySelectorAll('.tool-card:not(.hidden)').length;
+      var countEl = section.querySelector('.cat-count');
+      if (countEl) countEl.textContent = visible + ' tool' + (visible !== 1 ? 's' : '');
+      // Hide entire category if no visible cards
+      if (visible === 0 && q) {
+        section.classList.add('hidden');
+      }
+    });
+  }
+
+  window.exportPng = function() {
+    var el = document.getElementById('tools-content');
+    if (typeof html2canvas === 'undefined') return;
+    html2canvas(el, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+      var ctx = canvas.getContext('2d');
+      ctx.font = '24px Caveat, cursive';
+      ctx.fillStyle = 'rgba(26,26,46,0.18)';
+      ctx.fillText('razzle.lol', canvas.width - 160, canvas.height - 20);
+      var link = document.createElement('a');
+      link.download = 'razzle-tools-hub.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+  };
+
+  init();
+})();
+</script>
+
+</body>
+</html>

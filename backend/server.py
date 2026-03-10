@@ -909,6 +909,7 @@ def sitemap_xml():
         ("/vorp.html", "0.8", "weekly"),
         ("/tradevalues.html", "0.8", "weekly"),
         ("/tradefinder.html", "0.8", "weekly"),
+        ("/tools.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1306,6 +1307,93 @@ def trade_finder(player_id: str = "", season: int = 0):
     except Exception as e:
         logger.error(f"trade-finder error: {e}")
         return JSONResponse({"error": "Failed to fetch trade finder data"}, status_code=500)
+
+
+@app.get("/api/tools-hub")
+def tools_hub():
+    """Return the static tools catalog organized by category."""
+    categories = [
+        {
+            "id": "rankings",
+            "name": "Rankings & Values",
+            "icon": "\U0001f3c6",
+            "tools": [
+                {"name": "Dynasty Rankings", "desc": "Tiered player rankings across all positions", "url": "/rankings.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Trade Values", "desc": "Composite trade value chart with production, age, and scarcity", "url": "/tradevalues.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "VORP", "desc": "Value Over Replacement Player — cross-position ranking", "url": "/vorp.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Stat Leaders", "desc": "Top performers across 10 statistical categories", "url": "/leaders.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Season Awards", "desc": "Data-driven fantasy superlatives — MVP, Iron Man, and more", "url": "/awards.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Report Card", "desc": "Composite Fantasy GPA grading efficiency, consistency, and more", "url": "/reportcard.html", "positions": ["QB", "RB", "WR", "TE"]},
+            ],
+        },
+        {
+            "id": "discovery",
+            "name": "Player Discovery",
+            "icon": "\U0001f50d",
+            "tools": [
+                {"name": "Trade Finder", "desc": "Search a player, find equal-value, buy-low, and sell-high targets", "url": "/tradefinder.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Buy Low / Sell High", "desc": "Efficiency vs. dynasty rank mismatches", "url": "/buysell.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Stock Watch", "desc": "Rising and falling dynasty stocks by composite metrics", "url": "/stocks.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Breakout Candidates", "desc": "Opportunity vs. production gap — who's due for a leap", "url": "/breakouts.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Rookie Big Board", "desc": "Prospect tiers with RPS scoring and percentile bars", "url": "/prospects.html", "positions": ["QB", "RB", "WR", "TE"]},
+            ],
+        },
+        {
+            "id": "performance",
+            "name": "Performance Analysis",
+            "icon": "\U0001f4ca",
+            "tools": [
+                {"name": "Efficiency", "desc": "Fantasy points per opportunity and volume rankings", "url": "/efficiency.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Consistency", "desc": "Coefficient of variation, floor, ceiling, and scoring range", "url": "/consistency.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Air Yards", "desc": "aDOT, RACR, WOPR, and regression buy/sell indicators", "url": "/airyards.html", "positions": ["WR", "RB", "TE"]},
+                {"name": "Red Zone & Goal-Line", "desc": "Goal-line carries, targets, TDs, and TD dependency", "url": "/redzone.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Boom/Bust", "desc": "Weekly score distributions, boom rates, and consistency grades", "url": "/compare.html", "positions": ["QB", "RB", "WR", "TE"]},
+            ],
+        },
+        {
+            "id": "usage",
+            "name": "Usage & Opportunity",
+            "icon": "\u26a1",
+            "tools": [
+                {"name": "Opportunity Share", "desc": "Target and carry share as percentage of team volume", "url": "/opportunity.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Snap Trends", "desc": "Risers and fallers with sparklines over 3/5/8 week windows", "url": "/usage.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Target Distribution", "desc": "Team-level target and carry allocation by position", "url": "/targets.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Positional Scarcity", "desc": "PPG drop-off by position — where the cliffs are", "url": "/scarcity.html", "positions": ["QB", "RB", "WR", "TE"]},
+            ],
+        },
+        {
+            "id": "matchup",
+            "name": "Matchup & Schedule",
+            "icon": "\U0001f4c5",
+            "tools": [
+                {"name": "Matchup Heatmap", "desc": "32-team defensive PPG allowed by position — find soft matchups", "url": "/matchups.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Strength of Schedule", "desc": "SOS grades, buy targets vs. sell candidates", "url": "/schedule.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Weekly Heatmap", "desc": "Player-by-week scoring grid with color-coded tiers", "url": "/weekly.html", "positions": ["QB", "RB", "WR", "TE"]},
+            ],
+        },
+        {
+            "id": "visualizations",
+            "name": "Visualizations",
+            "icon": "\U0001f3a8",
+            "tools": [
+                {"name": "Stat Explorer", "desc": "Scatter plot — any stat vs. any stat with trendlines", "url": "/explorer.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Aging Curves", "desc": "PPG-by-age curves per position with player overlays", "url": "/aging.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Year-over-Year", "desc": "Cross-season stat deltas — risers and fallers", "url": "/yoy.html", "positions": ["QB", "RB", "WR", "TE"]},
+            ],
+        },
+        {
+            "id": "team",
+            "name": "Team & League",
+            "icon": "\U0001f3c8",
+            "tools": [
+                {"name": "Team Rosters", "desc": "Full roster breakdown by position group with age badges", "url": "/team/KC", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "League Intel", "desc": "Connect Sleeper — see leagues, rosters, and manager profiles", "url": "/league-intel.html", "positions": []},
+                {"name": "The Lab", "desc": "Full Bloomberg screener — 100+ columns, filters, formulas", "url": "/lab.html", "positions": ["QB", "RB", "WR", "TE"]},
+            ],
+        },
+    ]
+    total_tools = sum(len(c["tools"]) for c in categories)
+    return {"categories": categories, "total_tools": total_tools}
 
 
 # ---------------------------------------------------------------------------

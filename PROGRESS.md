@@ -1,6 +1,24 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 95 — QA + UX Audit Fixes (COMPLETE)
+## Current Phase: Phase 96 — Tools Hub (COMPLETE)
+
+**Exit criterion MET:** /tools.html page organizes all 30 analytical dashboards into 7 categorized sections (Rankings & Values, Player Discovery, Performance Analysis, Usage & Opportunity, Matchup & Schedule, Visualizations, Team & League). Each category: header with icon + name + tool count badge. Each tool card: name, 1-line description, position chips (QB/RB/WR/TE), category-colored top stripe, direct link to page. Search input filters tools by name/description in real-time. Category filter tabs (All + 7 categories). Empty state for no matches. Hover-lift on cards. PNG export with watermark. Responsive at 768px + 480px. /api/tools-hub endpoint returns static JSON catalog with 7 categories and 30 tools. "Tools" nav link added to all 34 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md.
+
+### Phase 96 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/tools-hub endpoint | DONE | Static JSON catalog, 7 categories, 30 tools |
+| 2 | Tools Hub page | DONE | Card grid, search, category tabs, 14 escapeHtml, 29/29 balanced |
+| 3 | Nav links + sitemap + analytics | DONE | All 34 pages updated, sitemap entry, pageview tracking |
+| 4 | Smoke test | DONE | Python + JS syntax clean, 34/34 nav links, XSS escaped, 15/15 design checks |
+
+### Decisions Log
+- **Tools Hub as Phase 96**: With 33 HTML pages, new users are overwhelmed by the nav bar. A Bloomberg-style "Tools Hub" directory page organizes all analytical dashboards into categorized cards, making the platform discoverable. Extremely screenshottable: "look at everything this free tool offers." Serves as a natural landing page for users exploring beyond the Lab. Also helps SEO — one page that links to every tool with descriptions.
+- **7 categories**: Grouped tools by user intent (Rankings & Values = "what are players worth?", Player Discovery = "who should I target?", Performance Analysis = "how good is this player?", etc.) rather than by technical implementation. This matches how fantasy managers think.
+- **Static endpoint**: Tool catalog is configuration data, not database-driven. Simple static JSON endpoint keeps it lightweight with zero DB queries.
+
+## Previous Phase: Phase 95 — QA + UX Audit Fixes (COMPLETE)
 
 **Exit criterion MET:** All HIGH and MEDIUM findings from QA-AUDIT.md (Phases 91-94) resolved. Trade finder shows helpful error with player info when player doesn't qualify (min 4 games / 2 PPG). fantasy_relevant filter added to fetch_trade_value_chart and fetch_trade_finder SQL queries. Trade finder percentile computation uses pre-sorted arrays with bisect (O(n log n) vs O(n^2)). Trade finder 3-factor stock scoring documented (excludes SOS for performance). Trade finder buy_low/sell_high deduplicated from equal_targets. VORP `name` → `full_name` field consistency across backend + frontend. Trade finder contextual empty-state messages for buy-low/sell-high. VORP replacement section adapts count to position filter (10 vs 25).
 
