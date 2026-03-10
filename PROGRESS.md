@@ -1,18 +1,18 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 12 — Panel Export & Shareability (IN PROGRESS)
+## Current Phase: Phase 12 — Panel Export & Shareability (COMPLETE)
 
-**Exit Criterion**: Every table-based Lab panel has CSV export and screenshot buttons. Favorite panels. Methodology tooltips. Share URL with copy. A user can find, understand, screenshot, and share a panel in under 60 seconds.
+**Exit Criterion MET**: Every Lab panel has CSV export, PNG screenshot (with watermark), and Share URL buttons. Users can favorite panels. Info button toggles methodology tooltips. 10 panels have detailed methodology text, others show generic note.
 
 ### Phase 12 Tasks
 
 | # | Task | Status | Notes |
 |---|------|--------|-------|
-| 1 | CSV export button for all table-based panels | TODO | |
-| 2 | Panel screenshot button (PNG with watermark) | TODO | |
-| 3 | Favorite panels with star icon in sidebar | TODO | |
-| 4 | Panel methodology tooltips | TODO | |
-| 5 | Share URL button with copy-to-clipboard | TODO | |
+| 1 | CSV export button for all table-based panels | DONE | exportPanelCSV() extracts table DOM to CSV, btn-panel-action styling |
+| 2 | Panel screenshot button (PNG with watermark) | DONE | html2canvas CDN, 2x scale, "razzle.lol" watermark via Canvas API |
+| 3 | Favorite panels with star icon in sidebar | DONE | Star toggle, Favorites section above Recent, max 10, localStorage |
+| 4 | Panel methodology tooltips | DONE | 10 specific + generic fallback, Caveat font, dashed border |
+| 5 | Share URL button with copy-to-clipboard | DONE | Clipboard API + execCommand fallback, panel/season/pos/universe params |
 
 ## Previous Phase: Phase 11 — QA + UX Audit Fixes for Phases 6-10 (COMPLETE)
 

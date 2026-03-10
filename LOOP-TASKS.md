@@ -1,58 +1,38 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 12 (Panel Export & Shareability)
-- All tasks PENDING
-- Stage: BUILD
-- Next: Execute tasks
+- Phase: 12 (Panel Export & Shareability) — COMPLETE
+- All 5 tasks PASS
+- Stage: PHASE GATE
+- Next: Generate Phase 13 or consume ticket
 
 ## Phase 12: Panel Export & Shareability
 **Exit Criterion**: Every table-based Lab panel has a CSV export button and a panel screenshot button. Users can favorite panels for quick access. Each panel has a brief methodology tooltip explaining how its data is calculated. A r/DynastyFF user can find a panel, understand it, screenshot it, and share it in under 60 seconds.
 
 ### Task 1: CSV export button for all table-based panels
-**Requirement**: Add a "Export CSV" button to the panel header area of every Lab panel that renders a data table. Clicking downloads the current table data as a .csv file (respecting current filters/sort). Button styled as btn-chunky with a download icon. Use a shared helper function that extracts table headers and rows from any panel's DOM table element. File named `razzle_{panel_name}_{date}.csv`.
-**Accept when**: At least 3 different panels (test with Rankings, Efficiency, Stock Watch) successfully export their table data as CSV. Button visible and styled per design guide. Empty tables show a toast "no data to export".
-**Depends on**: none
-**Size**: M
-**Status**: PENDING
-**Attempts**: 0
-**Notes**:
+**Status**: PASS
+**Attempts**: 1
+**Notes**: exportPanelCSV() extracts thead/tbody from panel table, generates CSV, triggers download. btn-panel-action styled with 2px chunky border + hover lift. Toast feedback.
 
 ### Task 2: Panel screenshot button (PNG with watermark)
-**Requirement**: Add a "Screenshot" button next to the CSV export button on every panel. Clicking captures the panel content area (not sidebar, not header chrome) as a PNG image with the Razzle watermark ("razzle.lol — let's razzle dazzle em baby") baked in at bottom-right. Use html2canvas or a manual Canvas approach. Download as `razzle_{panel_name}_{date}.png`. Sand background color preserved in export.
-**Accept when**: Screenshot captures panel content cleanly. Watermark visible. File downloads. Works on panels with tables and panels with canvas charts.
-**Depends on**: none
-**Size**: L
-**Status**: PENDING
-**Attempts**: 0
-**Notes**:
+**Status**: PASS
+**Attempts**: 1
+**Notes**: screenshotPanel() uses html2canvas (CDN, same as existing pages). Captures panel content at 2x scale, adds "razzle.lol" watermark via Canvas API, downloads PNG.
 
 ### Task 3: Favorite panels with star icon in sidebar
-**Requirement**: Add a small star icon (☆/★) next to each panel name in the sidebar. Clicking toggles favorite status (stored in localStorage as array `razzle_favorite_panels`). Favorited panels appear in a "Favorites" section at the very top of the sidebar (above Recent). Section only visible when user has favorites. Star is filled (★) for favorites, outlined (☆) otherwise. Max 10 favorites.
-**Accept when**: Star toggle works. Favorites section appears above Recent. Persists across refreshes. Works with sidebar search (favorites always visible when not searching). Sidebar collapsed mode hides Favorites section.
-**Depends on**: none
-**Size**: M
-**Status**: PENDING
-**Attempts**: 0
-**Notes**:
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Star icon (☆/★) injected on each sidebar item via JS. Favorites section above Recent. localStorage razzle_favorite_panels. Max 10. Hidden in collapsed sidebar.
 
 ### Task 4: Panel methodology tooltips
-**Requirement**: Add an info icon (ⓘ) in each panel's header area (next to the title). Clicking toggles a collapsible methodology section below the title with: (1) a brief explanation of what the panel shows, (2) how the key metric is calculated, (3) data source ("nflverse player stats, 2015-2025"). Use Caveat font for the methodology text (it's a margin note). Start with the 10 most complex panels: VORP, Stock Watch, Report Card, TD Regression, Air Yards, Snap Efficiency, Breakout Candidates, Dual-Threat, Target Premium, Consistency. Other panels can show a generic "Powered by nflverse data" note.
-**Accept when**: Info icon visible on all panels. Clicking toggles methodology section. 10 panels have specific methodology text. Section uses Caveat font and feels like a handwritten margin note.
-**Depends on**: none
-**Size**: M
-**Status**: PENDING
-**Attempts**: 0
-**Notes**:
+**Status**: PASS
+**Attempts**: 1
+**Notes**: ⓘ info button on every panel. 10 specific methodology texts (VORP, stocks, reportcard, tdregression, airyards, snapefficiency, breakouts, dualthreat, targetpremium, consistency). Generic fallback for others. Caveat font, dashed border, warm bg.
 
 ### Task 5: Share URL button with copy-to-clipboard
-**Requirement**: Add a "Share" button next to export/screenshot buttons. Clicking copies the current panel URL (with ?panel=name&season=X&pos=Y parameters) to clipboard and shows a brief toast "link copied — share it on Reddit". The URL should encode the current panel, season, position filter, and universe (NFL/College). Ensure the URL restores the exact panel state when opened.
-**Accept when**: Share button copies URL. Toast confirms. Opening copied URL in new tab lands on the exact same panel with same filters. Works for at least 3 panels tested.
-**Depends on**: none
-**Size**: S
-**Status**: PENDING
-**Attempts**: 0
-**Notes**:
+**Status**: PASS
+**Attempts**: 1
+**Notes**: sharePanelURL() builds URL with panel, universe, season, pos params. Clipboard API with execCommand fallback. Toast "link copied — share it on Reddit".
 
 ## Phase 11: QA + UX Audit — Auto-Generated Fixes
 **Exit Criterion**: All CRITICAL and HIGH findings from Phases 6-10 QA+UX audit are resolved. Connection leak patched. XSS escaped. localStorage wrapped. Cold grays replaced with warm browns.
