@@ -1,6 +1,21 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 26 — Backend Cleanup: Connection Management (COMPLETE)
+## Current Phase: Phase 27 — Backend Cleanup: Split live_data.py into Modules (IN PROGRESS)
+
+**Exit Criterion**: `live_data.py` is replaced by a `live_data/` package with logical submodules. All imports in `server.py` updated. No function lost, no endpoint broken. Each module under 3,000 lines.
+
+### Phase 27 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Create package structure and proxy __init__.py | DONE | git mv live_data.py → live_data/_monolith.py, __init__.py re-exports via wildcard, 132 functions, server imports clean |
+| 2 | Extract core.py — shared helpers, constants, enrichment | PENDING | |
+| 3 | Extract players.py — NFL player CRUD functions | PENDING | |
+| 4 | Extract prospects.py and college.py | PENDING | |
+| 5 | Extract dynasty.py and storage.py | PENDING | |
+| 6 | Extract analytics.py and tools.py, delete monolith | PENDING | |
+
+## Previous Phase: Phase 26 — Backend Cleanup: Connection Management (COMPLETE)
 
 **Exit Criterion MET**: Every `get_conn()` call uses a context manager (`with get_db() as conn:`) or `try/finally` pattern. Added `get_db()` context manager to `backend/db.py`. Refactored all 117 call sites in `live_data.py` (82 try/finally patterns collapsed into `with` blocks, 35 bare patterns wrapped). All 3 adapters and `server.py` bootstrap wrapped in `try/finally`. Zero leaked connections under any error path. All files compile clean, imports verified.
 

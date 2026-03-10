@@ -10,7 +10,7 @@ import statistics
 import time as _time
 from pathlib import Path
 
-from .db import get_conn, get_db, DB_PATH
+from ..db import get_conn, get_db, DB_PATH
 
 # Simple in-memory cache for stable endpoints (filter options, featured)
 _cache = {}

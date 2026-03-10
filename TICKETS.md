@@ -7,9 +7,6 @@
 
 ---
 
-## Backend Cleanup: Split live_data.py into Modules
-**Exit Criterion**: `live_data.py` is replaced by a `live_data/` package with logical submodules (e.g., `players.py`, `prospects.py`, `college.py`, `analytics.py`, `cache.py`, `storage.py`). All imports in `server.py` updated. No function lost, no endpoint broken. Each module under 3,000 lines.
-
 ## Backend Cleanup: Add Caching to Popular Endpoints
 **Exit Criterion**: All frequently-hit read endpoints (dynasty rankings, trade values, tier lists, stat leaders, filter options, featured) use the existing TTL cache pattern. Cache TTL of 5 minutes for volatile data, 60 minutes for stable data. At least 30 endpoints cached. Cache invalidates correctly on universe/season change.
 

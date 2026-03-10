@@ -1,35 +1,48 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 26 (Backend Cleanup: Connection Management)
-- All 4 tasks PASS
-- Stage: PHASE GATE
-- Next: Commit and push
+- Phase: 27 (Backend Cleanup: Split live_data.py into Modules)
+- Task 1: PASS
+- Stage: EXECUTING
+- Next: Task 2
 
-## Phase 26: Backend Cleanup: Connection Management
-**Exit Criterion**: Every `get_conn()` call in the codebase uses a context manager or `try/finally` pattern so connections are always closed, even on errors. Create a shared context manager helper in `db.py`. Refactor all call sites in `live_data.py`, `server.py`, and adapters. Zero leaked connections under any error path.
+## Phase 27: Backend Cleanup: Split live_data.py into Modules
+**Exit Criterion**: `live_data.py` is replaced by a `live_data/` package with logical submodules (e.g., `players.py`, `prospects.py`, `college.py`, `analytics.py`, `cache.py`, `storage.py`). All imports in `server.py` updated. No function lost, no endpoint broken. Each module under 3,000 lines.
 
-### Task 1: Add context manager helper to db.py
+### Task 1: Create package structure and proxy __init__.py
 **Status**: PASS
 **Attempts**: 1
-**Notes**: `get_db()` context manager using `@contextmanager` decorator. Yields connection, closes in finally block.
+**Notes**: `backend/live_data/` package created. `live_data.py` → `_monolith.py` via git mv. `__init__.py` uses `from ._monolith import *`. Relative import fixed (`..db`). 132 functions accessible. server.py imports clean. db_stats() returns live data (1238 players).
 
-### Task 2: Refactor all get_conn() calls in live_data.py to use context manager
-**Status**: PASS
-**Attempts**: 1
-**Notes**: All 117 `conn = get_conn()` calls replaced with `with get_db() as conn:`. 82 try/finally patterns collapsed into with blocks. 35 bare patterns wrapped in with blocks. Zero bare get_conn() or conn.close() remain. Special case: fetch_draft_class_analytics closes connection early before calling other functions.
+### Task 2: Extract core.py — shared helpers, constants, enrichment functions
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: `core.py` contains `_cached`, `_safe_div`, `_enrich_*` functions, `FANTASY_POSITIONS`, `RATE_METRICS`, `_STAT_SUM_COLS`, `TEAM_ABBREV`, `ABBREV_TO_TEAM`, `_DVS_AGE_CURVES`, `_age_multiplier`, `compute_trade_value`, `_age_value`, `_production_value`, `_scarcity_value`, `_pick_value`, `_efficiency_grade`, `_assign_tier`, `_tv_tier`, `_roster_grade`, `_competing_status`, `_build_stat_vector`, `_cosine_similarity`. `_monolith.py` updated to import from core. All files compile.
 
-### Task 3: Refactor adapter connection patterns
-**Status**: PASS
-**Attempts**: 1
-**Notes**: All 3 adapters (nflverse, college, cfbfastr) main() functions wrapped in try/finally. server.py bootstrap wrapped in try/finally with proper connection cleanup for all 3 connection objects (conn, cconn, fconn).
+### Task 3: Extract players.py — NFL player CRUD functions
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: `players.py` contains `db_stats`, `quick_search_players`, `fetch_players`, `fetch_screener`, `get_filter_options`, `fetch_player_weeks`, `fetch_player_seasons`, `fetch_player_profile`, `fetch_players_compare`, `fetch_team_roster`, `fetch_career_stats`, `fetch_player_percentiles`, `fetch_player_strengths`, `fetch_points_breakdown`, `fetch_game_log`, `fetch_compare_table`, `fetch_player_boom_bust`, `fetch_player_comps`. `_monolith.py` updated. All files compile.
 
-### Task 4: Verify server starts and endpoints work
-**Status**: PASS
-**Attempts**: 1
-**Notes**: All 6 modified files compile clean. Imports succeed. Context manager tested with live DB query (1238 players). Zero leaked connections.
+### Task 4: Extract prospects.py and college.py
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: `prospects.py` contains all `fetch_prospect*` + `fetch_draft_class*` + prospect helpers. `college.py` contains all `fetch_college_*` functions + college helpers. `_monolith.py` updated. All files compile.
+
+### Task 5: Extract dynasty.py and storage.py
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: `dynasty.py` contains dynasty rankings, trade values, trade finder, trade value chart, dynasty dashboard, tier list, power rankings, roster value/grade, pick values, auction values. `storage.py` contains formula store, waitlist, analytics logging functions + init functions. `_monolith.py` updated. All files compile.
+
+### Task 6: Extract analytics.py and tools.py — remaining functions, delete monolith
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: All remaining functions split between `analytics.py` (analytical dashboards) and `tools.py` (utility endpoints). `_monolith.py` deleted. `__init__.py` updated with explicit re-exports from all submodules. `server.py` unchanged (still uses `live_data.func()`). Every function accounted for. Each module under 3,000 lines. Python compiles clean.
 
 ---
+
+## Phase 26: Backend Cleanup: Connection Management -- COMPLETE
+**Status**: All 4 tasks PASS
 
 ## Phase 25: QA + UX Audit — Auto-Generated Fixes -- COMPLETE
 **Status**: All 2 tasks PASS
