@@ -12250,3 +12250,85 @@ def fetch_workload_monitor(season=None, position=None, limit=50):
         }
     finally:
         conn.close()
+
+
+def fetch_drop_rate(season=None, position=None, limit=50):
+    """Rank pass catchers by drop rate — sure hands vs butterfingers."""
+    conn = get_conn()
+    try:
+        if not season:
+            cur = conn.execute("SELECT MAX(season) FROM player_season_pbp")
+            season = cur.fetchone()[0] or 2024
+
+        pos_filter = ""
+        params = [season]
+        if position:
+            pos_filter = "AND p.position = ?"
+            params.append(position)
+
+        rows = conn.execute(f"""
+            SELECT p.player_id, p.full_name, p.position, p.team,
+                   pb.drops, pb.drop_rate,
+                   SUM(w.targets) as targets,
+                   SUM(w.receptions) as receptions,
+                   SUM(w.receiving_yards) as rec_yds,
+                   SUM(w.receiving_yards_after_catch) as yac,
+                   COUNT(DISTINCT w.week) as games
+            FROM player_season_pbp pb
+            JOIN players p ON p.player_id = pb.player_id
+            JOIN player_week_stats w ON w.player_id = pb.player_id AND w.season = pb.season
+                AND w.season_type = 'REG'
+            WHERE pb.season = ?
+              AND p.position IN ('WR','TE','RB')
+              AND p.fantasy_relevant = 1
+              AND pb.drops IS NOT NULL
+              {pos_filter}
+            GROUP BY p.player_id
+            HAVING targets >= 20
+        """, params).fetchall()
+
+        sure_hands = []
+        butterfingers = []
+
+        for r in rows:
+            pid, name, pos, team, drops, drop_rate, targets, recs, rec_yds, yac, games = r
+            drops = drops or 0
+            drop_rate_pct = (drop_rate or 0) * 100 if drop_rate and drop_rate < 1 else (drop_rate or 0)
+            targets = targets or 0
+            recs = recs or 0
+            yac = yac or 0
+
+            catch_rate = (recs / targets * 100) if targets > 0 else 0
+            tgt_pg = targets / games if games > 0 else 0
+            yac_per_rec = yac / recs if recs > 0 else 0
+
+            entry = {
+                "player_id": pid,
+                "name": name,
+                "position": pos,
+                "team": team,
+                "games": games,
+                "drops": drops,
+                "drop_rate": round(drop_rate_pct, 1),
+                "targets": targets,
+                "catch_rate": round(catch_rate, 1),
+                "tgt_pg": round(tgt_pg, 1),
+                "yac_per_rec": round(yac_per_rec, 1),
+            }
+
+            if drop_rate_pct <= 8:
+                sure_hands.append(entry)
+            if drop_rate_pct >= 15:
+                butterfingers.append(entry)
+
+        sure_hands.sort(key=lambda x: x["drop_rate"])
+        butterfingers.sort(key=lambda x: x["drop_rate"], reverse=True)
+
+        return {
+            "sure_hands": sure_hands[:limit],
+            "butterfingers": butterfingers[:limit],
+            "season": season,
+            "count": len(sure_hands) + len(butterfingers),
+        }
+    finally:
+        conn.close()

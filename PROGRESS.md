@@ -1,6 +1,16 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 140 — QA+UX Audit for Phases 136-139 (COMPLETE)
+## Current Phase: Phase 141 — Drop Rate Dashboard (COMPLETE)
+
+**Exit criterion MET:** /drops.html ranks pass catchers by drop rate — sure hands (drop rate <= 8%) vs butterfingers (drop rate >= 15%). Drop rate % badges, drops count, targets, catch rate, YAC per reception, bar visualization. WR/TE/RB position filter tabs, season selector, PNG export with watermark. GET /api/drop-rate returns data. 10 escapeHtml calls, 27/27 braces balanced. "Drops" nav link on all 70 pages. Sitemap + tools hub entry under Performance Analysis.
+
+### Phase 141 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend + frontend + nav + smoke test | DONE | fetch_drop_rate, sure_hands/butterfingers split, 10 escapeHtml, 70/70 nav |
+
+## Previous Phase: Phase 140 — QA+UX Audit for Phases 136-139 (COMPLETE)
 
 **Exit criterion MET:** QA+UX audit of Garbage Time (136), Season Pace (137), Target Premium (138), Workload Monitor (139). 1 HIGH finding: redundant `import math` inside loop in fetch_dual_threat (Phase 133) — fixed. All 4 pages pass XSS, error handling, loading states, PNG export, analytics, design compliance checks.
 
