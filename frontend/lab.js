@@ -2515,7 +2515,7 @@ async function openPlayerProfile(playerId) {
     const data = await apiFetch(`/api/players/${playerId}/profile`);
     renderProfile(data, content);
   } catch (err) {
-    content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the data fetch... ${err.message}</div>`;
+    content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the data fetch... ${escapeHtml(err.message)}</div>`;
   }
 }
 
@@ -2535,7 +2535,7 @@ async function openCollegeProfile(playerId) {
     const data = await apiFetch(`/api/college/player-profile/${encodeURIComponent(playerId)}`);
     renderCollegeProfile(data, content);
   } catch (err) {
-    content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the college data fetch... ${err.message}</div>`;
+    content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the college data fetch... ${escapeHtml(err.message)}</div>`;
   }
 }
 
@@ -3272,7 +3272,7 @@ async function openProspectProfile(name, position, draftYear) {
     ]);
     renderProspectProfile(data, content, compsData);
   } catch (err) {
-    content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the prospect data... ${err.message}</div>`;
+    content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the prospect data... ${escapeHtml(err.message)}</div>`;
   }
 }
 
@@ -4184,7 +4184,7 @@ async function loadTierData(position) {
     const data = await apiFetch(`/api/prospect-tiers?position=${position}&draft_year=${state.season}`);
     renderTierView(data, contentEl);
   } catch (err) {
-    contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the tier data... ${err.message}</div>`;
+    contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the tier data... ${escapeHtml(err.message)}</div>`;
   }
 }
 
@@ -4427,7 +4427,7 @@ async function loadBigBoard(position) {
     currentBBData = data;
     renderBigBoard(data, contentEl);
   } catch (err) {
-    contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the big board... ${err.message}</div>`;
+    contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the big board... ${escapeHtml(err.message)}</div>`;
   }
 }
 
@@ -4802,7 +4802,7 @@ async function loadClassAnalytics(position) {
     currentCAData = { ...data, filterPosition: position };
     renderClassAnalytics(data, contentEl);
   } catch (err) {
-    contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the analytics... ${err.message}</div>`;
+    contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the analytics... ${escapeHtml(err.message)}</div>`;
   }
 }
 
@@ -8033,7 +8033,7 @@ async function loadPlayerComps(playerId) {
     _compData = data;
     renderPlayerComps(data, section);
   } catch (err) {
-    section.innerHTML = `<div style="text-align:center; padding:30px; font-family:var(--font-hand); font-size:18px; color:var(--red);">fumbled the comp search... ${err.message}</div>`;
+    section.innerHTML = `<div style="text-align:center; padding:30px; font-family:var(--font-hand); font-size:18px; color:var(--red);">fumbled the comp search... ${escapeHtml(err.message)}</div>`;
   }
 }
 
