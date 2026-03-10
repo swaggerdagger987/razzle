@@ -1254,6 +1254,43 @@ def main():
         print(f"\nEnriching players with roster demographics...")
         sync_rosters(conn, sorted(seasons))
 
+        # Build player_season_stats aggregate table
+        print("\nBuilding player_season_stats aggregate table...")
+        conn.execute("DROP TABLE IF EXISTS player_season_stats")
+        conn.execute("""
+            CREATE TABLE player_season_stats AS
+            SELECT
+                player_id, season,
+                COUNT(DISTINCT week) as games,
+                SUM(passing_yards) as passing_yards,
+                SUM(passing_tds) as passing_tds,
+                SUM(interceptions) as interceptions,
+                SUM(rushing_yards) as rushing_yards,
+                SUM(rushing_tds) as rushing_tds,
+                SUM(receiving_yards) as receiving_yards,
+                SUM(receiving_tds) as receiving_tds,
+                SUM(receptions) as receptions,
+                SUM(carries) as carries,
+                SUM(targets) as targets,
+                SUM(touchdowns) as touchdowns,
+                SUM(turnovers) as turnovers,
+                SUM(fantasy_points_ppr) as fantasy_points_ppr,
+                SUM(fantasy_points_half_ppr) as fantasy_points_half_ppr,
+                SUM(fantasy_points_std) as fantasy_points_std,
+                SUM(completions) as completions,
+                SUM(attempts) as attempts,
+                SUM(offense_snaps) as offense_snaps,
+                AVG(offense_pct) as offense_pct
+            FROM player_week_stats
+            WHERE season_type = 'regular'
+            GROUP BY player_id, season
+        """)
+        conn.execute("CREATE INDEX idx_pss_player_season ON player_season_stats(player_id, season)")
+        conn.execute("CREATE INDEX idx_pss_season ON player_season_stats(season)")
+        conn.commit()
+        pss_count = conn.execute("SELECT COUNT(*) FROM player_season_stats").fetchone()[0]
+        print(f"  player_season_stats: {pss_count} rows")
+
         # Update sync state
         conn.execute("""
             INSERT OR REPLACE INTO sync_state (key, value, updated_at)

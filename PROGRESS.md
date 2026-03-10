@@ -1,6 +1,18 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 36 — Fix Missing player_season_stats Table + stat_value Bug (COMPLETE)
+## Current Phase: Phase 37 — Bake player_season_stats into Adapter Pipeline + Re-upload DB (COMPLETE)
+
+**Exit Criterion MET**: player_season_stats creation moved from server boot to nflverse adapter pipeline (adapters/nflverse_adapter.py main()). Updated 541MB terminal.db uploaded to GitHub release data-v1. Server.py fallback kept as idempotent safety net. All 34 smoke tests pass.
+
+### Phase 37 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Add player_season_stats to adapter pipeline | DONE | DROP+CREATE in nflverse_adapter.py main(), 20 stat columns + 2 indexes |
+| 2 | Re-upload terminal.db to GitHub release | DONE | 541MB (up from 512MB), data-v1 release |
+| 3 | Verify all smoke tests pass | DONE | 34 passed in 13.33s |
+
+## Previous Phase: Phase 36 — Fix Missing player_season_stats Table + stat_value Bug (COMPLETE)
 
 **Exit Criterion MET**: player_season_stats table created as aggregate (6,098 rows). m.value -> m.stat_value fixed in stat_leaders. s.passing_attempts -> s.attempts fixed in td_regression. All 34 smoke tests pass with 200 status.
 
