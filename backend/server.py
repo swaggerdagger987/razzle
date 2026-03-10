@@ -1189,7 +1189,11 @@ def stat_leaders(season: int = 0, position: str = "", limit: int = 10):
     s = season if season > 0 else None
     pos = position.strip().upper() if position else None
     limit = max(1, min(25, limit))
-    return live_data.fetch_stat_leaders(season=s, position=pos, limit=limit)
+    try:
+        return live_data.fetch_stat_leaders(season=s, position=pos, limit=limit)
+    except Exception as e:
+        logger.error(f"stat-leaders error: {e}")
+        return JSONResponse({"error": "Failed to fetch stat leaders"}, status_code=500)
 
 
 # ---------------------------------------------------------------------------
