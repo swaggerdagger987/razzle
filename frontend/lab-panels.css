@@ -2651,3 +2651,366 @@
   .ay-player-cell { min-width: 110px; }
   .ay-name { font-size: 11px; }
 }
+
+/* ===================================================================
+   PLAYER SEARCH AUTOCOMPLETE (shared)
+   =================================================================== */
+.lp-search-wrap { position: relative; display: inline-block; }
+.lp-search-list {
+  display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 50;
+  background: var(--bg-card); border: 2px solid var(--ink); border-radius: 8px;
+  box-shadow: 4px 4px 0 var(--ink); max-height: 260px; overflow-y: auto; margin-top: 2px;
+}
+.lp-search-list > div {
+  display: flex; align-items: center; gap: 6px; padding: 7px 10px; cursor: pointer;
+  font-family: var(--font-mono); font-size: 12px; border-bottom: 1px solid var(--ink-faint);
+}
+.lp-search-list > div:last-child { border-bottom: none; }
+.lp-search-list > div:hover { background: rgba(217,119,87,0.08); }
+.cst-search-pos, .ccp-search-pos, .cmt-search-pos, .sw2-search-pos, .glo-search-pos, .pbd-search-pos {
+  font-size: 9px; color: #fff; padding: 1px 5px; border-radius: 3px; font-weight: 700;
+}
+.cst-search-name, .ccp-search-name, .cmt-search-name, .sw2-search-name, .glo-search-name, .pbd-search-name { font-weight: 700; }
+.cst-search-team, .ccp-search-team, .cmt-search-team, .sw2-search-team, .glo-search-team, .pbd-search-team { color: var(--ink-light); font-size: 11px; }
+.cst-search-empty, .ccp-search-empty, .cmt-search-empty, .sw2-search-empty, .glo-search-empty, .pbd-search-empty {
+  padding: 10px; color: var(--ink-light); font-family: var(--font-mono); font-size: 12px; text-align: center;
+}
+
+/* ===================================================================
+   37. CAREER STATS TIMELINE (cst-)
+   =================================================================== */
+.cst-player-card {
+  display: flex; align-items: center; gap: 12px; padding: 16px;
+  background: var(--bg-card); border: 3px solid var(--ink); border-radius: 10px;
+  box-shadow: 4px 4px 0 var(--ink); margin-bottom: 16px;
+}
+.cst-player-info { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.cst-player-name { font-family: var(--font-display); font-size: 18px; color: var(--ink); }
+.cst-pos-badge { font-size: 10px; color: #fff; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
+.cst-team { font-family: var(--font-mono); font-size: 12px; color: var(--ink-light); }
+.cst-age { font-family: var(--font-mono); font-size: 12px; color: var(--ink-light); }
+.cst-traj { font-size: 10px; color: #fff; padding: 2px 8px; border-radius: 4px; font-weight: 700; }
+
+.cst-chips {
+  display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 16px;
+}
+.cst-chip {
+  background: var(--bg-card); border: 2px solid var(--ink); border-radius: 8px;
+  padding: 8px 14px; text-align: center; min-width: 80px;
+}
+.cst-chip-val { font-family: var(--font-mono); font-size: 18px; font-weight: 700; color: var(--ink); }
+.cst-chip-label { font-family: var(--font-mono); font-size: 10px; color: var(--ink-light); text-transform: uppercase; }
+
+.cst-chart-card {
+  background: var(--bg-card); border: 3px solid var(--ink); border-radius: 10px;
+  box-shadow: 4px 4px 0 var(--ink); padding: 16px; margin-bottom: 16px; overflow-x: auto;
+}
+.cst-chart-card canvas { display: block; max-width: 100%; }
+
+.cst-highs-title { font-family: var(--font-display); font-size: 16px; color: var(--ink); margin: 0 0 8px; }
+.cst-highs { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+.cst-high-card {
+  background: var(--bg-card); border: 2px solid var(--ink); border-radius: 8px;
+  padding: 8px 14px; text-align: center;
+}
+.cst-high-val { font-family: var(--font-mono); font-size: 16px; font-weight: 700; color: var(--accent); }
+.cst-high-label { font-family: var(--font-mono); font-size: 10px; color: var(--ink-light); text-transform: uppercase; }
+
+.cst-table-wrap { overflow-x: auto; margin-bottom: 16px; }
+.cst-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 12px; }
+.cst-table thead th { text-align: left; padding: 6px 8px; font-size: 10px; text-transform: uppercase; color: var(--ink-light); border-bottom: 2px solid var(--ink); white-space: nowrap; }
+.cst-table tbody tr { border-bottom: 1px solid var(--ink-faint); }
+.cst-table tbody tr:hover { background: rgba(217,119,87,0.07); }
+.cst-table td { padding: 5px 8px; text-align: right; font-variant-numeric: tabular-nums; }
+.cst-table td:first-child { text-align: left; font-weight: 700; }
+.cst-ppg-cell { font-weight: 700; color: var(--accent); }
+.cst-totals { font-weight: 700; border-top: 2px solid var(--ink); background: rgba(217,119,87,0.05); }
+
+/* ===================================================================
+   38. CAREER COMPARISON (ccp-)
+   =================================================================== */
+.ccp-chips { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 12px; }
+.ccp-chip {
+  display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px;
+  border: 2px solid; border-radius: 20px; font-family: var(--font-mono); font-size: 12px;
+  background: var(--bg-card);
+}
+.ccp-chip-dot { width: 8px; height: 8px; border-radius: 50%; }
+.ccp-chip-rm { background: none; border: none; font-size: 16px; cursor: pointer; color: var(--ink-light); padding: 0 2px; }
+.ccp-chip-rm:hover { color: var(--ink); }
+
+.ccp-chart-card {
+  background: var(--bg-card); border: 3px solid var(--ink); border-radius: 10px;
+  box-shadow: 4px 4px 0 var(--ink); padding: 16px; margin-bottom: 16px; overflow-x: auto;
+}
+.ccp-chart-card canvas { display: block; max-width: 100%; }
+
+.ccp-table-wrap { overflow-x: auto; margin-bottom: 16px; }
+.ccp-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 12px; }
+.ccp-table thead th { text-align: left; padding: 6px 8px; font-size: 10px; text-transform: uppercase; border-bottom: 2px solid var(--ink); white-space: nowrap; }
+.ccp-table tbody tr { border-bottom: 1px solid var(--ink-faint); }
+.ccp-table tbody tr:hover { background: rgba(217,119,87,0.07); }
+.ccp-table td { padding: 5px 8px; text-align: right; font-variant-numeric: tabular-nums; }
+.ccp-table td:first-child { text-align: left; font-weight: 700; }
+.ccp-best { background: #dcfce7; font-weight: 700; }
+
+/* ===================================================================
+   39. COMPARE TABLE (cmt-)
+   =================================================================== */
+.cmt-chips { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 12px; }
+.cmt-chip {
+  display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px;
+  border: 2px solid; border-radius: 20px; font-family: var(--font-mono); font-size: 12px;
+  background: var(--bg-card);
+}
+.cmt-chip-pos { font-size: 9px; color: #fff; padding: 1px 5px; border-radius: 3px; font-weight: 700; }
+.cmt-chip-rm { background: none; border: none; font-size: 16px; cursor: pointer; color: var(--ink-light); padding: 0 2px; }
+.cmt-chip-rm:hover { color: var(--ink); }
+
+.cmt-table-wrap { overflow-x: auto; }
+.cmt-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 12px; }
+.cmt-table thead th { text-align: left; padding: 6px 8px; font-size: 10px; text-transform: uppercase; color: var(--ink-light); border-bottom: 2px solid var(--ink); white-space: nowrap; cursor: default; }
+.cmt-table thead th.cmt-sortable { cursor: pointer; }
+.cmt-table thead th.cmt-sortable:hover { color: var(--ink); }
+.cmt-table tbody tr { border-bottom: 1px solid var(--ink-faint); }
+.cmt-table tbody tr:hover { background: rgba(217,119,87,0.07); }
+.cmt-player-cell { display: flex; align-items: center; gap: 5px; padding: 5px 8px; min-width: 160px; }
+.cmt-headshot { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--ink); object-fit: cover; }
+.cmt-pos { font-size: 9px; color: #fff; padding: 1px 5px; border-radius: 3px; font-weight: 700; }
+.cmt-num { text-align: right; padding: 5px 8px; font-variant-numeric: tabular-nums; }
+.cmt-best { background: #dcfce7; font-weight: 700; }
+
+/* ===================================================================
+   40. STRENGTHS & WEAKNESSES (sw2-)
+   =================================================================== */
+.sw2-player-card {
+  display: flex; align-items: center; gap: 12px; padding: 16px;
+  background: var(--bg-card); border: 3px solid var(--ink); border-radius: 10px;
+  box-shadow: 4px 4px 0 var(--ink); margin-bottom: 16px;
+}
+.sw2-player-info { display: flex; align-items: center; gap: 8px; flex: 1; flex-wrap: wrap; }
+.sw2-player-name { font-family: var(--font-display); font-size: 18px; color: var(--ink); }
+.sw2-pos-badge { font-size: 10px; color: #fff; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
+.sw2-team { font-family: var(--font-mono); font-size: 12px; color: var(--ink-light); }
+.sw2-overall-grade {
+  font-family: var(--font-display); font-size: 22px; color: #fff; width: 48px; height: 48px;
+  display: flex; align-items: center; justify-content: center; border-radius: 10px; font-weight: 700;
+}
+
+.sw2-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+.sw2-col-header {
+  font-family: var(--font-display); font-size: 16px; padding: 8px 14px; border-radius: 8px 8px 0 0;
+  color: #fff; margin-bottom: 8px;
+}
+.sw2-strengths-header { background: #16a34a; }
+.sw2-weaknesses-header { background: #dc2626; }
+
+.sw2-stat-card {
+  display: flex; align-items: center; gap: 8px; padding: 8px 12px;
+  background: var(--bg-card); border: 2px solid var(--ink-faint); border-radius: 8px; margin-bottom: 6px;
+}
+.sw2-stat-rank { font-family: var(--font-mono); font-size: 11px; color: var(--ink-light); min-width: 28px; }
+.sw2-stat-info { flex: 1; }
+.sw2-stat-label { font-family: var(--font-mono); font-size: 11px; font-weight: 700; }
+.sw2-stat-value { font-family: var(--font-mono); font-size: 13px; color: var(--accent); }
+.sw2-stat-pct-bar { width: 60px; height: 6px; background: var(--ink-faint); border-radius: 3px; overflow: hidden; }
+.sw2-stat-pct-fill { height: 100%; border-radius: 3px; }
+.sw2-stat-grade { font-size: 10px; color: #fff; padding: 2px 6px; border-radius: 4px; font-weight: 700; min-width: 24px; text-align: center; }
+
+.sw2-bars-title { font-family: var(--font-display); font-size: 16px; color: var(--ink); margin: 0 0 10px; }
+.sw2-bars { margin-bottom: 16px; }
+.sw2-bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.sw2-bar-label { font-family: var(--font-mono); font-size: 11px; width: 100px; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sw2-bar-track { flex: 1; height: 14px; background: var(--ink-faint); border-radius: 7px; overflow: hidden; }
+.sw2-bar-fill { height: 100%; border-radius: 7px; transition: width 0.3s; }
+.sw2-bar-val { font-family: var(--font-mono); font-size: 11px; width: 36px; text-align: right; }
+.sw2-bar-grade { font-family: var(--font-mono); font-size: 10px; font-weight: 700; width: 24px; }
+
+/* ===================================================================
+   41. REPORT CARD (rpc-)
+   =================================================================== */
+.rpc-section { margin-bottom: 24px; }
+.rpc-section-title {
+  font-family: var(--font-display); font-size: 18px; padding: 8px 14px; border-radius: 8px;
+  color: #fff; margin-bottom: 10px;
+}
+.rpc-honor-title { background: #16a34a; }
+.rpc-needs-title { background: #dc2626; }
+
+.rpc-table-wrap { overflow-x: auto; }
+.rpc-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 12px; }
+.rpc-table thead th { text-align: left; padding: 6px 8px; font-size: 10px; text-transform: uppercase; color: var(--ink-light); border-bottom: 2px solid var(--ink); white-space: nowrap; cursor: default; }
+.rpc-table thead th.rpc-sortable { cursor: pointer; }
+.rpc-table thead th.rpc-sortable:hover { color: var(--ink); }
+.rpc-table tbody tr { border-bottom: 1px solid var(--ink-faint); }
+.rpc-table tbody tr:hover { background: rgba(217,119,87,0.07); }
+.rpc-player-cell { display: flex; align-items: center; gap: 5px; padding: 5px 8px; min-width: 160px; }
+.rpc-headshot { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--ink); object-fit: cover; }
+.rpc-name { font-weight: 700; font-size: 12px; white-space: nowrap; }
+.rpc-pos { font-size: 9px; color: #fff; padding: 1px 5px; border-radius: 3px; font-weight: 700; }
+.rpc-team { font-size: 9px; color: var(--ink-light); }
+.rpc-num { text-align: right; padding: 5px 8px; font-variant-numeric: tabular-nums; }
+.rpc-annotation { font-size: 11px; color: var(--ink-light); max-width: 120px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.rpc-grade-badge {
+  display: inline-block; padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 11px; color: #fff;
+}
+.rpc-elite { background: #16a34a; }
+.rpc-good { background: #5b7fff; }
+.rpc-avg { background: #eab308; }
+.rpc-below { background: #f97316; }
+.rpc-poor { background: #dc2626; }
+
+/* ===================================================================
+   42. FPTS BREAKDOWN (fpb-)
+   =================================================================== */
+.fpb-legend { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-bottom: 12px; }
+.fpb-legend-item { display: flex; align-items: center; gap: 4px; font-family: var(--font-mono); font-size: 11px; }
+.fpb-legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+.fpb-card {
+  background: var(--bg-card); border: 3px solid var(--ink); border-radius: 10px;
+  box-shadow: 4px 4px 0 var(--ink); padding: 16px;
+}
+.fpb-row { display: flex; align-items: center; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--ink-faint); }
+.fpb-row:last-child { border-bottom: none; }
+.fpb-rank { font-family: var(--font-mono); font-size: 11px; color: var(--ink-light); min-width: 24px; text-align: right; }
+.fpb-player { display: flex; align-items: center; gap: 5px; min-width: 140px; }
+.fpb-name { font-family: var(--font-mono); font-size: 12px; font-weight: 700; white-space: nowrap; }
+.fpb-team { font-family: var(--font-mono); font-size: 10px; color: var(--ink-light); }
+.fpb-pos { font-size: 9px; color: #fff; padding: 1px 5px; border-radius: 3px; font-weight: 700; }
+.fpb-ppg { font-family: var(--font-mono); font-size: 12px; font-weight: 700; min-width: 40px; text-align: right; }
+.fpb-bar { flex: 1; display: flex; height: 22px; border-radius: 4px; overflow: hidden; min-width: 100px; }
+.fpb-segment { display: flex; align-items: center; justify-content: center; transition: width 0.3s; }
+.fpb-seg-label { font-family: var(--font-mono); font-size: 9px; color: #fff; font-weight: 700; }
+
+/* ===================================================================
+   43. GAME LOG (glo-)
+   =================================================================== */
+.glo-player-card {
+  display: flex; align-items: center; gap: 12px; padding: 16px;
+  background: var(--bg-card); border: 3px solid var(--ink); border-radius: 10px;
+  box-shadow: 4px 4px 0 var(--ink); margin-bottom: 16px; flex-wrap: wrap;
+}
+.glo-player-info { display: flex; align-items: center; gap: 8px; flex: 1; }
+.glo-player-name { font-family: var(--font-display); font-size: 18px; color: var(--ink); }
+.glo-pos { font-size: 10px; color: #fff; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
+.glo-team { font-family: var(--font-mono); font-size: 12px; color: var(--ink-light); }
+.glo-summary { display: flex; gap: 8px; }
+.glo-chip {
+  font-family: var(--font-mono); font-size: 12px; font-weight: 700; padding: 4px 10px;
+  background: var(--bg); border: 2px solid var(--ink-faint); border-radius: 6px;
+}
+
+.glo-table-wrap { overflow-x: auto; }
+.glo-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 12px; }
+.glo-table thead th { text-align: left; padding: 6px 8px; font-size: 10px; text-transform: uppercase; color: var(--ink-light); border-bottom: 2px solid var(--ink); white-space: nowrap; cursor: pointer; }
+.glo-table thead th:hover { color: var(--ink); }
+.glo-table tbody tr { border-bottom: 1px solid var(--ink-faint); }
+.glo-table tbody tr:hover { background: rgba(217,119,87,0.07); }
+.glo-num { text-align: right; padding: 5px 8px; font-variant-numeric: tabular-nums; }
+.glo-elite { font-weight: 700; color: #16a34a; }
+.glo-great { font-weight: 700; color: #5b7fff; }
+.glo-ok { color: var(--ink); }
+.glo-bad { color: #dc2626; }
+.glo-totals { font-weight: 700; border-top: 2px solid var(--ink); background: rgba(217,119,87,0.05); }
+
+/* ===================================================================
+   44. PLAYER ARCHETYPES (arc-)
+   =================================================================== */
+.arc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
+.arc-card {
+  background: var(--bg-card); border: 3px solid var(--ink); border-radius: 10px;
+  box-shadow: 4px 4px 0 var(--ink); overflow: hidden;
+}
+.arc-card-header { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-bottom: 2px solid var(--ink-faint); }
+.arc-icon { font-size: 24px; }
+.arc-card-title { flex: 1; }
+.arc-name { font-family: var(--font-display); font-size: 15px; color: var(--ink); }
+.arc-desc { font-family: var(--font-mono); font-size: 10px; color: var(--ink-light); }
+.arc-pos-badge { font-size: 9px; color: #fff; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
+.arc-count { font-family: var(--font-mono); font-size: 11px; color: var(--ink-light); }
+
+.arc-players { padding: 8px 14px; }
+.arc-player {
+  display: flex; align-items: center; gap: 6px; padding: 4px 0; border-bottom: 1px solid var(--ink-faint);
+  font-family: var(--font-mono); font-size: 11px;
+}
+.arc-player:last-child { border-bottom: none; }
+.arc-player-pos { font-size: 8px; color: #fff; padding: 1px 4px; border-radius: 3px; font-weight: 700; }
+.arc-player-name { font-weight: 700; }
+.arc-player-team { color: var(--ink-light); }
+.arc-player-age { color: var(--ink-light); font-size: 10px; }
+.arc-player-ppg { color: var(--accent); font-weight: 700; margin-left: auto; }
+.arc-player-stat { color: var(--ink-light); font-size: 10px; }
+
+/* ===================================================================
+   45. POINTS BREAKDOWN / DONUT (pbd-)
+   =================================================================== */
+.pbd-player-card {
+  display: flex; align-items: center; gap: 12px; padding: 16px;
+  background: var(--bg-card); border: 3px solid var(--ink); border-radius: 10px;
+  box-shadow: 4px 4px 0 var(--ink); margin-bottom: 16px; flex-wrap: wrap;
+}
+.pbd-player-info { display: flex; align-items: center; gap: 8px; flex: 1; }
+.pbd-player-name { font-family: var(--font-display); font-size: 18px; color: var(--ink); }
+.pbd-pos { font-size: 10px; color: #fff; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
+.pbd-team { font-family: var(--font-mono); font-size: 12px; color: var(--ink-light); }
+.pbd-summary { display: flex; gap: 8px; }
+.pbd-chip {
+  font-family: var(--font-mono); font-size: 12px; font-weight: 700; padding: 4px 10px;
+  background: var(--bg); border: 2px solid var(--ink-faint); border-radius: 6px;
+}
+
+.pbd-chart-area { display: flex; align-items: center; gap: 24px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
+.pbd-chart-area canvas { flex-shrink: 0; }
+.pbd-legend { display: flex; flex-direction: column; gap: 6px; }
+.pbd-legend-item { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 12px; }
+.pbd-legend-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+.pbd-legend-label { font-weight: 700; }
+.pbd-legend-val { color: var(--ink-light); }
+
+.pbd-details { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+.pbd-detail-card {
+  background: var(--bg-card); border: 2px solid var(--ink-faint); border-radius: 8px;
+  padding: 10px 14px;
+}
+.pbd-detail-label { font-family: var(--font-mono); font-size: 11px; color: var(--ink-light); text-transform: uppercase; }
+.pbd-detail-pts { font-family: var(--font-mono); font-size: 16px; font-weight: 700; color: var(--ink); }
+.pbd-detail-raw { font-family: var(--font-mono); font-size: 11px; color: var(--ink-light); }
+
+/* ===================================================================
+   PLAYER TOOLS RESPONSIVE
+   =================================================================== */
+@media (max-width: 768px) {
+  .cst-chips { gap: 6px; }
+  .cst-chip { min-width: 60px; padding: 6px 10px; }
+  .cst-chip-val { font-size: 14px; }
+  .cst-table { font-size: 11px; }
+  .ccp-table { font-size: 11px; }
+  .cmt-table { font-size: 11px; }
+  .cmt-player-cell { min-width: 130px; }
+  .sw2-columns { grid-template-columns: 1fr; }
+  .sw2-bar-label { width: 80px; }
+  .rpc-table { font-size: 11px; }
+  .rpc-player-cell { min-width: 130px; }
+  .fpb-player { min-width: 110px; }
+  .fpb-name { font-size: 11px; }
+  .glo-table { font-size: 11px; }
+  .arc-grid { grid-template-columns: 1fr; }
+  .pbd-chart-area { flex-direction: column; }
+  .pbd-details { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .cst-player-name { font-size: 15px; }
+  .cst-chip { min-width: auto; padding: 5px 8px; }
+  .cst-chip-val { font-size: 13px; }
+  .cmt-player-cell { min-width: 110px; }
+  .sw2-player-card { flex-direction: column; text-align: center; }
+  .sw2-overall-grade { margin: 0 auto; }
+  .rpc-player-cell { min-width: 110px; }
+  .fpb-row { flex-wrap: wrap; }
+  .fpb-bar { min-width: 100%; }
+  .glo-player-card { flex-direction: column; }
+  .pbd-details { grid-template-columns: 1fr; }
+}

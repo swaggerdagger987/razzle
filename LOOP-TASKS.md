@@ -2,10 +2,10 @@
 
 ## Current State
 - Phase: 4 (Inline Panel Migration)
-- Task: Migrate Player Tools panels
+- Task: Migrate remaining panels
 - Stage: PLAN
 - Attempt: 1/3
-- Tasks Done: 7/10
+- Tasks Done: 8/10
 
 ## Phase 1: Navigation Surgery -- COMPLETE
 ### Task 1: Slim nav to 4 items on all pages
@@ -188,12 +188,12 @@
 **Attempts**: 1
 
 ### Task 8: Migrate Player Tools panels
-**Requirement**: Convert: Career Stats, Career Compare, Compare Table, Strengths, Report Card, FPTS Breakdown, Game Log, Scoring Breakdown. Player Profile remains search-activated.
-**Accept when**: All 8 panels render natively. Player search within panels works.
+**Requirement**: Convert: Career Stats, Career Compare, Compare Table, Strengths, Report Card, FPTS Breakdown, Game Log, Archetypes, Scoring Breakdown. Player Profile remains search-activated.
+**Accept when**: All 9 panels render natively. Player search within panels works.
 **Depends on**: Task 2
 **Size**: L
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task 9: Migrate remaining panels
 **Requirement**: Convert: Prospects/Big Board, Draft Class, College Production, Percentiles, Roster Builder, Trade Finder, Scoring Comparison, Dashboard, League Intel, Schedule/SOS, Records, Season Recap, Awards, Stat Leaders, Explorer, Teams.

@@ -4708,4 +4708,1326 @@
     loadAY();
   }});
 
+  // ─── PLAYER SEARCH HELPER ──────────────────────────────────────
+  // Reusable autocomplete builder for panels that need player search
+  function buildPlayerSearch(el, prefix, placeholder, onSelect) {
+    var wrap = el.querySelector('.' + prefix + 'search-wrap');
+    if (!wrap) return;
+    var inp = wrap.querySelector('.' + prefix + 'search-input');
+    var list = wrap.querySelector('.' + prefix + 'search-list');
+    var timer = null;
+    inp.addEventListener('input', function() {
+      var q = inp.value.trim();
+      if (q.length < 2) { list.innerHTML = ''; list.style.display = 'none'; return; }
+      clearTimeout(timer);
+      timer = setTimeout(function() {
+        fetch('/api/players/quick-search?q=' + encodeURIComponent(q) + '&limit=8').then(function(r) {
+          if (!r.ok) throw new Error('API error');
+          return r.json();
+        }).then(function(data) {
+          var players = data.players || [];
+          if (!players.length) { list.innerHTML = '<div class="' + prefix + 'search-empty">no players found</div>'; list.style.display = 'block'; return; }
+          var html = '';
+          players.forEach(function(p) {
+            var posColor = POS_COLORS[p.position] || '#888';
+            html += '<div class="' + prefix + 'search-item" data-id="' + escapeAttr(p.player_id) + '" data-name="' + escapeAttr(p.full_name || p.name) + '" data-pos="' + escapeAttr(p.position) + '" data-team="' + escapeAttr(p.team) + '">';
+            html += '<span class="' + prefix + 'search-pos" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span>';
+            html += '<span class="' + prefix + 'search-name">' + escapeHtml(p.full_name || p.name) + '</span>';
+            html += '<span class="' + prefix + 'search-team">' + escapeHtml(p.team || '') + '</span>';
+            html += '</div>';
+          });
+          list.innerHTML = html;
+          list.style.display = 'block';
+        }).catch(function() { list.innerHTML = ''; list.style.display = 'none'; });
+      }, 250);
+    });
+    list.addEventListener('click', function(e) {
+      var item = e.target.closest('.' + prefix + 'search-item');
+      if (!item) return;
+      var id = item.getAttribute('data-id');
+      var name = item.getAttribute('data-name');
+      var pos = item.getAttribute('data-pos');
+      var team = item.getAttribute('data-team');
+      inp.value = name;
+      list.innerHTML = '';
+      list.style.display = 'none';
+      onSelect({ player_id: id, full_name: name, position: pos, team: team });
+    });
+    document.addEventListener('click', function(e) {
+      if (!wrap.contains(e.target)) { list.style.display = 'none'; }
+    });
+  }
+
+  function searchWrapHTML(prefix, placeholder) {
+    return '<div class="' + prefix + 'search-wrap lp-search-wrap">' +
+      '<input type="text" class="' + prefix + 'search-input lp-search" placeholder="' + (placeholder || 'search player...') + '">' +
+      '<div class="' + prefix + 'search-list lp-search-list"></div>' +
+    '</div>';
+  }
+
+  function seasonOptions(selected) {
+    var html = '';
+    for (var y = 2025; y >= 2018; y--) {
+      html += '<option value="' + y + '"' + (y === (selected || 2025) ? ' selected' : '') + '>' + y + '</option>';
+    }
+    return html;
+  }
+
+  function posTabsHTML(id, includeAll) {
+    var positions = ['QB', 'RB', 'WR', 'TE'];
+    var html = '<div class="lp-pos-tabs" id="' + id + '">';
+    if (includeAll) html += '<button class="lp-pos-tab active" data-pos="">All</button>';
+    positions.forEach(function(p, i) {
+      html += '<button class="lp-pos-tab' + (!includeAll && i === 0 ? ' active' : '') + '" data-pos="' + p + '">' + p + '</button>';
+    });
+    html += '</div>';
+    return html;
+  }
+
+  // ─── 37. CAREER STATS TIMELINE ──────────────────────────────────
+  defs.push({ name: 'career', render: function(el) {
+    el.innerHTML =
+      '<div class="lp-page">' +
+        '<div class="lp-header"><h2>Career Stats Timeline</h2>' +
+        '<div class="lp-subtitle">a player\'s full career arc</div></div>' +
+        '<div class="lp-controls">' + searchWrapHTML('cst-', 'search player...') + '</div>' +
+        '<div id="cst-content"><div class="lp-empty">search for a player to view career stats</div></div>' +
+      '</div>';
+
+    buildPlayerSearch(el, 'cst-', 'search player...', function(p) {
+      loadCareer(p.player_id);
+    });
+
+    function loadCareer(pid) {
+      var content = el.querySelector('#cst-content');
+      content.innerHTML = '<div class="lp-loading">pulling film on career stats...</div>';
+      fetch('/api/career-stats?player_id=' + encodeURIComponent(pid)).then(function(r) {
+        if (!r.ok) throw new Error('API error');
+        return r.json();
+      }).then(function(data) {
+        renderCareer(data, content);
+      }).catch(function() {
+        content.innerHTML = '<div class="lp-error">could not load career stats</div>';
+      });
+    }
+
+    function renderCareer(data, content) {
+      var p = data.player || data;
+      var seasons = data.seasons || [];
+      var pos = p.position || '';
+      var posColor = POS_COLORS[pos] || '#888';
+      var careerPPG = 0, totalPts = 0, totalGP = 0, peakPPG = 0;
+      seasons.forEach(function(s) {
+        totalPts += (s.total_points || s.fantasy_points || 0);
+        totalGP += (s.games || s.games_played || 0);
+        var sppg = s.ppg || (s.games ? (s.total_points || s.fantasy_points || 0) / s.games : 0);
+        if (sppg > peakPPG) peakPPG = sppg;
+      });
+      careerPPG = totalGP > 0 ? totalPts / totalGP : 0;
+      var trajectory = peakPPG > 0 && seasons.length > 1 ? (function() {
+        var last = seasons[seasons.length - 1];
+        var lastPPG = last.ppg || (last.games ? (last.total_points || last.fantasy_points || 0) / last.games : 0);
+        if (lastPPG >= peakPPG * 0.9) return 'ascending';
+        if (lastPPG >= peakPPG * 0.7) return 'plateau';
+        return 'declining';
+      })() : 'new';
+      var trajLabels = { ascending: 'Rising', plateau: 'Steady', declining: 'Declining', 'new': 'New' };
+      var trajColors = { ascending: '#16a34a', plateau: '#5b7fff', declining: '#dc2626', 'new': '#8b5cf6' };
+
+      var html = '<div class="cst-player-card">';
+      html += playerHeadshot(p, pos);
+      html += '<div class="cst-player-info">';
+      html += '<div class="cst-player-name">' + escapeHtml(p.full_name || p.name || '') + '</div>';
+      html += '<span class="cst-pos-badge" style="background:' + posColor + '">' + escapeHtml(pos) + '</span>';
+      html += '<span class="cst-team">' + escapeHtml(p.team || '') + '</span>';
+      if (p.age) html += '<span class="cst-age">Age ' + p.age + '</span>';
+      html += '<span class="cst-traj" style="background:' + trajColors[trajectory] + '">' + trajLabels[trajectory] + '</span>';
+      html += '</div></div>';
+
+      // Summary chips
+      html += '<div class="cst-chips">';
+      html += '<div class="cst-chip"><div class="cst-chip-val">' + fmt(careerPPG) + '</div><div class="cst-chip-label">Career PPG</div></div>';
+      html += '<div class="cst-chip"><div class="cst-chip-val">' + fmt(totalPts, 0) + '</div><div class="cst-chip-label">Total PPR</div></div>';
+      html += '<div class="cst-chip"><div class="cst-chip-val">' + totalGP + '</div><div class="cst-chip-label">Games</div></div>';
+      html += '<div class="cst-chip"><div class="cst-chip-val">' + seasons.length + '</div><div class="cst-chip-label">Seasons</div></div>';
+      html += '<div class="cst-chip"><div class="cst-chip-val">' + fmt(peakPPG) + '</div><div class="cst-chip-label">Peak PPG</div></div>';
+      html += '</div>';
+
+      // Canvas chart placeholder
+      html += '<div class="cst-chart-card"><canvas id="cst-canvas" width="700" height="260"></canvas></div>';
+
+      // Career highs
+      var highs = data.career_highs || {};
+      if (Object.keys(highs).length) {
+        html += '<div class="cst-highs-title">Career Highs</div><div class="cst-highs">';
+        Object.keys(highs).forEach(function(k) {
+          html += '<div class="cst-high-card"><div class="cst-high-val">' + fmt(highs[k], k.indexOf('td') >= 0 ? 0 : 1) + '</div><div class="cst-high-label">' + escapeHtml(k.replace(/_/g, ' ')) + '</div></div>';
+        });
+        html += '</div>';
+      }
+
+      // Season table
+      html += '<div class="cst-table-wrap"><table class="cst-table"><thead><tr>';
+      html += '<th>Season</th><th>GP</th><th>PPG</th><th>Total</th>';
+      if (pos === 'QB') { html += '<th>Pass Yd</th><th>Pass TD</th><th>INT</th><th>Rush Yd</th><th>Rush TD</th>'; }
+      else if (pos === 'RB') { html += '<th>Rush Yd</th><th>Rush TD</th><th>Car</th><th>Rec</th><th>Rec Yd</th><th>Rec TD</th>'; }
+      else { html += '<th>Rec</th><th>Rec Yd</th><th>Rec TD</th><th>Tgt</th><th>Rush Yd</th><th>Rush TD</th>'; }
+      html += '</tr></thead><tbody>';
+      var totals = { gp: 0, pts: 0, pass_yd: 0, pass_td: 0, int: 0, rush_yd: 0, rush_td: 0, car: 0, rec: 0, rec_yd: 0, rec_td: 0, tgt: 0 };
+      seasons.forEach(function(s) {
+        var gp = s.games || s.games_played || 0;
+        var pts = s.total_points || s.fantasy_points || 0;
+        var ppg = gp > 0 ? pts / gp : 0;
+        totals.gp += gp; totals.pts += pts;
+        totals.pass_yd += (s.passing_yards || 0); totals.pass_td += (s.passing_tds || 0); totals.int += (s.interceptions || 0);
+        totals.rush_yd += (s.rushing_yards || 0); totals.rush_td += (s.rushing_tds || 0); totals.car += (s.carries || 0);
+        totals.rec += (s.receptions || 0); totals.rec_yd += (s.receiving_yards || 0); totals.rec_td += (s.receiving_tds || 0); totals.tgt += (s.targets || 0);
+        html += '<tr><td>' + (s.season || '') + '</td><td>' + gp + '</td><td class="cst-ppg-cell">' + fmt(ppg) + '</td><td>' + fmt(pts, 0) + '</td>';
+        if (pos === 'QB') { html += '<td>' + fmt(s.passing_yards, 0) + '</td><td>' + (s.passing_tds || 0) + '</td><td>' + (s.interceptions || 0) + '</td><td>' + fmt(s.rushing_yards, 0) + '</td><td>' + (s.rushing_tds || 0) + '</td>'; }
+        else if (pos === 'RB') { html += '<td>' + fmt(s.rushing_yards, 0) + '</td><td>' + (s.rushing_tds || 0) + '</td><td>' + (s.carries || 0) + '</td><td>' + (s.receptions || 0) + '</td><td>' + fmt(s.receiving_yards, 0) + '</td><td>' + (s.receiving_tds || 0) + '</td>'; }
+        else { html += '<td>' + (s.receptions || 0) + '</td><td>' + fmt(s.receiving_yards, 0) + '</td><td>' + (s.receiving_tds || 0) + '</td><td>' + (s.targets || 0) + '</td><td>' + fmt(s.rushing_yards, 0) + '</td><td>' + (s.rushing_tds || 0) + '</td>'; }
+        html += '</tr>';
+      });
+      // Totals row
+      html += '<tr class="cst-totals"><td>Career</td><td>' + totals.gp + '</td><td class="cst-ppg-cell">' + fmt(totals.gp > 0 ? totals.pts / totals.gp : 0) + '</td><td>' + fmt(totals.pts, 0) + '</td>';
+      if (pos === 'QB') { html += '<td>' + fmt(totals.pass_yd, 0) + '</td><td>' + totals.pass_td + '</td><td>' + totals.int + '</td><td>' + fmt(totals.rush_yd, 0) + '</td><td>' + totals.rush_td + '</td>'; }
+      else if (pos === 'RB') { html += '<td>' + fmt(totals.rush_yd, 0) + '</td><td>' + totals.rush_td + '</td><td>' + totals.car + '</td><td>' + totals.rec + '</td><td>' + fmt(totals.rec_yd, 0) + '</td><td>' + totals.rec_td + '</td>'; }
+      else { html += '<td>' + totals.rec + '</td><td>' + fmt(totals.rec_yd, 0) + '</td><td>' + totals.rec_td + '</td><td>' + totals.tgt + '</td><td>' + fmt(totals.rush_yd, 0) + '</td><td>' + totals.rush_td + '</td>'; }
+      html += '</tr></tbody></table></div>';
+
+      content.innerHTML = html;
+
+      // Draw PPG chart
+      var canvas = el.querySelector('#cst-canvas');
+      if (canvas && seasons.length > 0) {
+        var ctx = canvas.getContext('2d');
+        var W = canvas.width, H = canvas.height;
+        var pad = { t: 20, r: 20, b: 30, l: 40 };
+        var cw = W - pad.l - pad.r, ch = H - pad.t - pad.b;
+        var ppgArr = seasons.map(function(s) { var g = s.games || s.games_played || 1; return (s.total_points || s.fantasy_points || 0) / g; });
+        var maxPPG = Math.max.apply(null, ppgArr) * 1.15 || 1;
+
+        ctx.clearRect(0, 0, W, H);
+        // Grid
+        ctx.strokeStyle = '#ddd'; ctx.lineWidth = 1;
+        for (var g = 0; g <= 4; g++) {
+          var gy = pad.t + ch - (g / 4) * ch;
+          ctx.beginPath(); ctx.moveTo(pad.l, gy); ctx.lineTo(pad.l + cw, gy); ctx.stroke();
+          ctx.fillStyle = '#999'; ctx.font = '10px monospace'; ctx.textAlign = 'right';
+          ctx.fillText(fmt(maxPPG * g / 4), pad.l - 5, gy + 3);
+        }
+        // Area fill
+        ctx.beginPath();
+        ppgArr.forEach(function(v, i) {
+          var x = pad.l + (seasons.length > 1 ? i / (seasons.length - 1) : 0.5) * cw;
+          var y = pad.t + ch - (v / maxPPG) * ch;
+          if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        });
+        ctx.lineTo(pad.l + cw, pad.t + ch);
+        ctx.lineTo(pad.l, pad.t + ch);
+        ctx.closePath();
+        ctx.fillStyle = posColor + '26';
+        ctx.fill();
+        // Line
+        ctx.beginPath();
+        ppgArr.forEach(function(v, i) {
+          var x = pad.l + (seasons.length > 1 ? i / (seasons.length - 1) : 0.5) * cw;
+          var y = pad.t + ch - (v / maxPPG) * ch;
+          if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        });
+        ctx.strokeStyle = posColor; ctx.lineWidth = 3; ctx.stroke();
+        // Dots + labels
+        ppgArr.forEach(function(v, i) {
+          var x = pad.l + (seasons.length > 1 ? i / (seasons.length - 1) : 0.5) * cw;
+          var y = pad.t + ch - (v / maxPPG) * ch;
+          ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2); ctx.fillStyle = posColor; ctx.fill();
+          ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
+          ctx.fillStyle = '#333'; ctx.font = 'bold 10px monospace'; ctx.textAlign = 'center';
+          ctx.fillText(fmt(v), x, y - 10);
+          // Season label
+          ctx.fillStyle = '#888'; ctx.font = '10px monospace';
+          ctx.fillText(String(seasons[i].season || ''), x, pad.t + ch + 16);
+        });
+        // Y-axis label
+        ctx.save(); ctx.translate(12, pad.t + ch / 2); ctx.rotate(-Math.PI / 2);
+        ctx.fillStyle = '#888'; ctx.font = '11px monospace'; ctx.textAlign = 'center';
+        ctx.fillText('PPG', 0, 0); ctx.restore();
+      }
+    }
+  }});
+
+  // ─── 38. CAREER COMPARISON ──────────────────────────────────────
+  defs.push({ name: 'career-compare', render: function(el) {
+    var slotColors = ['#d97757', '#5b7fff', '#2ec4b6'];
+    var players = []; // {player_id, full_name, position, team, data}
+
+    el.innerHTML =
+      '<div class="lp-page">' +
+        '<div class="lp-header"><h2>Career Comparison</h2>' +
+        '<div class="lp-subtitle">overlay career arcs for up to 3 players</div></div>' +
+        '<div class="lp-controls">' + searchWrapHTML('ccp-', 'add player (max 3)...') + '</div>' +
+        '<div id="ccp-chips" class="ccp-chips"></div>' +
+        '<div id="ccp-content"><div class="lp-empty">search and add players to compare careers</div></div>' +
+      '</div>';
+
+    buildPlayerSearch(el, 'ccp-', 'add player...', function(p) {
+      if (players.length >= 3) return;
+      if (players.some(function(x) { return x.player_id === p.player_id; })) return;
+      var entry = { player_id: p.player_id, full_name: p.full_name, position: p.position, team: p.team, data: null };
+      players.push(entry);
+      el.querySelector('.ccp-search-input').value = '';
+      renderChips();
+      loadPlayerData(entry);
+    });
+
+    function renderChips() {
+      var chipsEl = el.querySelector('#ccp-chips');
+      var html = '';
+      players.forEach(function(p, i) {
+        html += '<span class="ccp-chip" style="border-color:' + slotColors[i] + '"><span class="ccp-chip-dot" style="background:' + slotColors[i] + '"></span>' + escapeHtml(p.full_name) + '<button class="ccp-chip-rm" data-idx="' + i + '">&times;</button></span>';
+      });
+      chipsEl.innerHTML = html;
+      chipsEl.querySelectorAll('.ccp-chip-rm').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          players.splice(parseInt(this.getAttribute('data-idx')), 1);
+          renderChips();
+          renderComparison();
+        });
+      });
+    }
+
+    function loadPlayerData(entry) {
+      var content = el.querySelector('#ccp-content');
+      content.innerHTML = '<div class="lp-loading">pulling film...</div>';
+      fetch('/api/career-stats?player_id=' + encodeURIComponent(entry.player_id)).then(function(r) {
+        if (!r.ok) throw new Error('API error');
+        return r.json();
+      }).then(function(data) {
+        entry.data = data;
+        renderComparison();
+      }).catch(function() {
+        content.innerHTML = '<div class="lp-error">could not load career data</div>';
+      });
+    }
+
+    function renderComparison() {
+      var content = el.querySelector('#ccp-content');
+      var loaded = players.filter(function(p) { return p.data; });
+      if (!loaded.length) { content.innerHTML = '<div class="lp-empty">search and add players to compare careers</div>'; return; }
+
+      var html = '<div class="ccp-chart-card"><canvas id="ccp-canvas" width="700" height="280"></canvas></div>';
+
+      // Summary comparison table
+      html += '<div class="ccp-table-wrap"><table class="ccp-table"><thead><tr><th>Metric</th>';
+      loaded.forEach(function(p, i) {
+        html += '<th style="color:' + slotColors[i] + '">' + escapeHtml(p.full_name) + '</th>';
+      });
+      html += '</tr></thead><tbody>';
+      var metrics = ['Career PPG', 'Total Points', 'Games', 'Seasons', 'Peak PPG'];
+      var vals = loaded.map(function(p) {
+        var ss = p.data.seasons || [];
+        var gp = 0, pts = 0, peak = 0;
+        ss.forEach(function(s) { gp += (s.games || s.games_played || 0); pts += (s.total_points || s.fantasy_points || 0); var sp = s.ppg || ((s.games||1)>0?(s.total_points||s.fantasy_points||0)/(s.games||1):0); if(sp>peak)peak=sp; });
+        return [gp > 0 ? pts / gp : 0, pts, gp, ss.length, peak];
+      });
+      metrics.forEach(function(m, mi) {
+        html += '<tr><td>' + m + '</td>';
+        var best = -Infinity;
+        vals.forEach(function(v) { if (v[mi] > best) best = v[mi]; });
+        vals.forEach(function(v) {
+          var cls = v[mi] === best && loaded.length > 1 ? ' class="ccp-best"' : '';
+          html += '<td' + cls + '>' + fmt(v[mi], mi === 2 || mi === 3 ? 0 : 1) + '</td>';
+        });
+        html += '</tr>';
+      });
+      html += '</tbody></table></div>';
+
+      // Season-by-season PPG table
+      var allYears = {};
+      loaded.forEach(function(p) { (p.data.seasons || []).forEach(function(s) { allYears[s.season] = true; }); });
+      var years = Object.keys(allYears).sort();
+      if (years.length) {
+        html += '<div class="ccp-table-wrap"><table class="ccp-table"><thead><tr><th>Season</th>';
+        loaded.forEach(function(p, i) { html += '<th style="color:' + slotColors[i] + '">' + escapeHtml(p.full_name) + '</th>'; });
+        html += '</tr></thead><tbody>';
+        years.forEach(function(yr) {
+          html += '<tr><td>' + yr + '</td>';
+          var yrVals = loaded.map(function(p) {
+            var s = (p.data.seasons || []).filter(function(ss) { return String(ss.season) === String(yr); })[0];
+            if (!s) return null;
+            var g = s.games || s.games_played || 1;
+            return (s.total_points || s.fantasy_points || 0) / g;
+          });
+          var best = -Infinity;
+          yrVals.forEach(function(v) { if (v !== null && v > best) best = v; });
+          yrVals.forEach(function(v) {
+            if (v === null) { html += '<td>-</td>'; }
+            else {
+              var cls = v === best && loaded.length > 1 ? ' class="ccp-best"' : '';
+              html += '<td' + cls + '>' + fmt(v) + '</td>';
+            }
+          });
+          html += '</tr>';
+        });
+        html += '</tbody></table></div>';
+      }
+
+      content.innerHTML = html;
+
+      // Draw overlay chart
+      var canvas = el.querySelector('#ccp-canvas');
+      if (canvas) {
+        var ctx = canvas.getContext('2d');
+        var W = canvas.width, H = canvas.height;
+        var pad = { t: 20, r: 20, b: 30, l: 40 };
+        var cw = W - pad.l - pad.r, ch = H - pad.t - pad.b;
+        ctx.clearRect(0, 0, W, H);
+
+        // Determine all seasons for x-axis
+        var xYears = Object.keys(allYears).sort();
+        if (!xYears.length) return;
+        var maxPPG = 1;
+        loaded.forEach(function(p) {
+          (p.data.seasons || []).forEach(function(s) {
+            var g = s.games || s.games_played || 1;
+            var ppg = (s.total_points || s.fantasy_points || 0) / g;
+            if (ppg > maxPPG) maxPPG = ppg;
+          });
+        });
+        maxPPG *= 1.15;
+
+        // Grid
+        ctx.strokeStyle = '#ddd'; ctx.lineWidth = 1;
+        for (var g = 0; g <= 4; g++) {
+          var gy = pad.t + ch - (g / 4) * ch;
+          ctx.beginPath(); ctx.moveTo(pad.l, gy); ctx.lineTo(pad.l + cw, gy); ctx.stroke();
+          ctx.fillStyle = '#999'; ctx.font = '10px monospace'; ctx.textAlign = 'right';
+          ctx.fillText(fmt(maxPPG * g / 4), pad.l - 5, gy + 3);
+        }
+        // X labels
+        xYears.forEach(function(yr, i) {
+          var x = pad.l + (xYears.length > 1 ? i / (xYears.length - 1) : 0.5) * cw;
+          ctx.fillStyle = '#888'; ctx.font = '10px monospace'; ctx.textAlign = 'center';
+          ctx.fillText(yr, x, pad.t + ch + 16);
+        });
+
+        // Draw each player
+        loaded.forEach(function(p, pi) {
+          var color = slotColors[pi];
+          var seasonMap = {};
+          (p.data.seasons || []).forEach(function(s) {
+            var g = s.games || s.games_played || 1;
+            seasonMap[s.season] = (s.total_points || s.fantasy_points || 0) / g;
+          });
+          ctx.beginPath(); ctx.strokeStyle = color; ctx.lineWidth = 3;
+          var first = true;
+          xYears.forEach(function(yr, i) {
+            if (seasonMap[yr] === undefined) { first = true; return; }
+            var x = pad.l + (xYears.length > 1 ? i / (xYears.length - 1) : 0.5) * cw;
+            var y = pad.t + ch - (seasonMap[yr] / maxPPG) * ch;
+            if (first) { ctx.moveTo(x, y); first = false; } else { ctx.lineTo(x, y); }
+          });
+          ctx.stroke();
+          // Dots
+          xYears.forEach(function(yr) {
+            if (seasonMap[yr] === undefined) return;
+            var i = xYears.indexOf(yr);
+            var x = pad.l + (xYears.length > 1 ? i / (xYears.length - 1) : 0.5) * cw;
+            var y = pad.t + ch - (seasonMap[yr] / maxPPG) * ch;
+            ctx.beginPath(); ctx.arc(x, y, 4, 0, Math.PI * 2); ctx.fillStyle = color; ctx.fill();
+            ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
+          });
+        });
+      }
+    }
+  }});
+
+  // ─── 39. COMPARE TABLE ──────────────────────────────────────────
+  defs.push({ name: 'comptable', render: function(el) {
+    var selectedPlayers = []; // {player_id, full_name, position, team}
+    var curSeason = 2025;
+    var sortCol = 'ppg';
+    var sortAsc = false;
+    var INVERSE = { interceptions: true, int: true };
+
+    var cols = [
+      { key: 'name', label: 'Player', sortable: false },
+      { key: 'games', label: 'G', sortable: true },
+      { key: 'total_points', label: 'Total', sortable: true },
+      { key: 'ppg', label: 'PPG', sortable: true },
+      { key: 'passing_yards', label: 'Pass Yd', sortable: true },
+      { key: 'passing_tds', label: 'Pass TD', sortable: true },
+      { key: 'interceptions', label: 'INT', sortable: true },
+      { key: 'rushing_yards', label: 'Rush Yd', sortable: true },
+      { key: 'rushing_tds', label: 'Rush TD', sortable: true },
+      { key: 'carries', label: 'Car', sortable: true },
+      { key: 'receptions', label: 'Rec', sortable: true },
+      { key: 'receiving_yards', label: 'Rec Yd', sortable: true },
+      { key: 'receiving_tds', label: 'Rec TD', sortable: true },
+      { key: 'targets', label: 'Tgt', sortable: true },
+      { key: 'yards_per_carry', label: 'Y/Car', sortable: true },
+      { key: 'yards_per_rec', label: 'Y/Rec', sortable: true },
+      { key: 'catch_rate', label: 'Catch%', sortable: true }
+    ];
+
+    el.innerHTML =
+      '<div class="lp-page">' +
+        '<div class="lp-header"><h2>Compare Table</h2>' +
+        '<div class="lp-subtitle">side-by-side stats for 2-8 players</div></div>' +
+        '<div class="lp-controls">' +
+          searchWrapHTML('cmt-', 'add player...') +
+          '<select class="lp-select" id="cmt-season">' + seasonOptions(2025) + '</select>' +
+          '<button class="lp-pos-tab" id="cmt-compare-btn" style="background:var(--accent);color:#fff;">Compare</button>' +
+        '</div>' +
+        '<div id="cmt-chips" class="cmt-chips"></div>' +
+        '<div id="cmt-content"><div class="lp-empty">add 2-8 players then click Compare</div></div>' +
+      '</div>';
+
+    buildPlayerSearch(el, 'cmt-', 'add player...', function(p) {
+      if (selectedPlayers.length >= 8) return;
+      if (selectedPlayers.some(function(x) { return x.player_id === p.player_id; })) return;
+      selectedPlayers.push(p);
+      el.querySelector('.cmt-search-input').value = '';
+      renderChips();
+    });
+
+    function renderChips() {
+      var chipsEl = el.querySelector('#cmt-chips');
+      var html = '';
+      selectedPlayers.forEach(function(p, i) {
+        var posColor = POS_COLORS[p.position] || '#888';
+        html += '<span class="cmt-chip" style="border-color:' + posColor + '"><span class="cmt-chip-pos" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span>' + escapeHtml(p.full_name) + '<button class="cmt-chip-rm" data-idx="' + i + '">&times;</button></span>';
+      });
+      chipsEl.innerHTML = html;
+      chipsEl.querySelectorAll('.cmt-chip-rm').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          selectedPlayers.splice(parseInt(this.getAttribute('data-idx')), 1);
+          renderChips();
+        });
+      });
+    }
+
+    el.querySelector('#cmt-season').addEventListener('change', function() { curSeason = parseInt(this.value); });
+    el.querySelector('#cmt-compare-btn').addEventListener('click', function() { loadCompare(); });
+
+    function loadCompare() {
+      if (selectedPlayers.length < 2) { el.querySelector('#cmt-content').innerHTML = '<div class="lp-empty">add at least 2 players</div>'; return; }
+      var ids = selectedPlayers.map(function(p) { return p.player_id; }).join(',');
+      var content = el.querySelector('#cmt-content');
+      content.innerHTML = '<div class="lp-loading">pulling film...</div>';
+      fetch('/api/compare-table?players=' + encodeURIComponent(ids) + '&season=' + curSeason).then(function(r) {
+        if (!r.ok) throw new Error('API error');
+        return r.json();
+      }).then(function(data) {
+        renderTable(data.players || data, content);
+      }).catch(function() {
+        content.innerHTML = '<div class="lp-error">could not load comparison</div>';
+      });
+    }
+
+    function renderTable(data, content) {
+      if (!data || !data.length) { content.innerHTML = '<div class="lp-empty">no data found</div>'; return; }
+      // Sort
+      data.sort(function(a, b) {
+        var va = a[sortCol], vb = b[sortCol];
+        if (va === undefined || va === null) va = -Infinity;
+        if (vb === undefined || vb === null) vb = -Infinity;
+        return sortAsc ? va - vb : vb - va;
+      });
+      // Find best per column
+      var bests = {};
+      cols.forEach(function(c) {
+        if (!c.sortable) return;
+        var best = null;
+        data.forEach(function(p) {
+          var v = p[c.key];
+          if (v === undefined || v === null) return;
+          if (INVERSE[c.key]) { if (best === null || v < best) best = v; }
+          else { if (best === null || v > best) best = v; }
+        });
+        bests[c.key] = best;
+      });
+
+      var html = '<div class="cmt-table-wrap"><table class="cmt-table"><thead><tr>';
+      cols.forEach(function(c) {
+        var arrow = '';
+        if (c.sortable && sortCol === c.key) arrow = sortAsc ? ' &#9650;' : ' &#9660;';
+        html += '<th' + (c.sortable ? ' class="cmt-sortable" data-col="' + c.key + '"' : '') + '>' + c.label + arrow + '</th>';
+      });
+      html += '</tr></thead><tbody>';
+      data.forEach(function(p) {
+        html += '<tr>';
+        cols.forEach(function(c) {
+          if (c.key === 'name') {
+            var posColor = POS_COLORS[p.position] || '#888';
+            html += '<td class="cmt-player-cell">';
+            if (p.headshot_url) html += '<img class="cmt-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+            html += '<span>' + escapeHtml(p.full_name || p.name || '') + '</span>';
+            html += '<span class="cmt-pos" style="background:' + posColor + '">' + escapeHtml(p.position || '') + '</span>';
+            html += '</td>';
+          } else {
+            var v = p[c.key];
+            var isBest = bests[c.key] !== undefined && v === bests[c.key] && data.length > 1;
+            var dec = c.key === 'catch_rate' ? 1 : (c.key === 'yards_per_carry' || c.key === 'yards_per_rec' ? 1 : (c.key === 'ppg' ? 1 : 0));
+            html += '<td class="cmt-num' + (isBest ? ' cmt-best' : '') + '">' + fmt(v, dec) + '</td>';
+          }
+        });
+        html += '</tr>';
+      });
+      html += '</tbody></table></div>';
+      content.innerHTML = html;
+
+      content.querySelectorAll('.cmt-sortable').forEach(function(th) {
+        th.addEventListener('click', function() {
+          var col = this.getAttribute('data-col');
+          if (sortCol === col) sortAsc = !sortAsc;
+          else { sortCol = col; sortAsc = false; }
+          renderTable(data, content);
+        });
+      });
+    }
+  }});
+
+  // ─── 40. STRENGTHS & WEAKNESSES ─────────────────────────────────
+  defs.push({ name: 'strengths', render: function(el) {
+    var curSeason = 2025;
+
+    el.innerHTML =
+      '<div class="lp-page">' +
+        '<div class="lp-header"><h2>Strengths &amp; Weaknesses</h2>' +
+        '<div class="lp-subtitle">what they do best and where they fall short</div></div>' +
+        '<div class="lp-controls">' +
+          searchWrapHTML('sw2-', 'search player...') +
+          '<select class="lp-select" id="sw2-season">' + seasonOptions(2025) + '</select>' +
+        '</div>' +
+        '<div id="sw2-content"><div class="lp-empty">search for a player to see their profile</div></div>' +
+      '</div>';
+
+    buildPlayerSearch(el, 'sw2-', 'search player...', function(p) {
+      loadStrengths(p.player_id);
+    });
+    el.querySelector('#sw2-season').addEventListener('change', function() { curSeason = parseInt(this.value); });
+
+    function gradeColor(g) {
+      if (!g) return '#888';
+      if (g === 'A+' || g === 'A') return '#16a34a';
+      if (g === 'B+' || g === 'B') return '#5b7fff';
+      if (g === 'C+' || g === 'C') return '#eab308';
+      if (g === 'D') return '#f97316';
+      return '#dc2626';
+    }
+    function barColor(pct) {
+      if (pct >= 90) return '#16a34a';
+      if (pct >= 75) return '#5b7fff';
+      if (pct >= 50) return '#eab308';
+      if (pct >= 25) return '#f97316';
+      return '#dc2626';
+    }
+
+    function loadStrengths(pid) {
+      var content = el.querySelector('#sw2-content');
+      content.innerHTML = '<div class="lp-loading">pulling film...</div>';
+      fetch('/api/player-strengths?player_id=' + encodeURIComponent(pid) + '&season=' + curSeason).then(function(r) {
+        if (!r.ok) throw new Error('API error');
+        return r.json();
+      }).then(function(data) {
+        renderStrengths(data, content);
+      }).catch(function() {
+        content.innerHTML = '<div class="lp-error">could not load strengths data</div>';
+      });
+    }
+
+    function renderStrengths(data, content) {
+      var p = data.player || data;
+      var strengths = data.strengths || [];
+      var weaknesses = data.weaknesses || [];
+      var all = data.all_stats || (strengths.concat(weaknesses));
+      var pos = p.position || '';
+      var posColor = POS_COLORS[pos] || '#888';
+      var overallGrade = data.overall_grade || p.grade || '-';
+
+      var html = '<div class="sw2-player-card">';
+      html += playerHeadshot(p, pos);
+      html += '<div class="sw2-player-info">';
+      html += '<span class="sw2-player-name">' + escapeHtml(p.full_name || p.name || '') + '</span>';
+      html += '<span class="sw2-pos-badge" style="background:' + posColor + '">' + escapeHtml(pos) + '</span>';
+      html += '<span class="sw2-team">' + escapeHtml(p.team || '') + '</span>';
+      html += '</div>';
+      html += '<div class="sw2-overall-grade" style="background:' + gradeColor(overallGrade) + '">' + escapeHtml(overallGrade) + '</div>';
+      html += '</div>';
+
+      // Two-column grid
+      html += '<div class="sw2-columns">';
+      html += '<div class="sw2-col"><div class="sw2-col-header sw2-strengths-header">Strengths</div>';
+      strengths.forEach(function(s) {
+        html += renderStatCard(s, true);
+      });
+      html += '</div>';
+      html += '<div class="sw2-col"><div class="sw2-col-header sw2-weaknesses-header">Weaknesses</div>';
+      weaknesses.forEach(function(s) {
+        html += renderStatCard(s, false);
+      });
+      html += '</div></div>';
+
+      // Full percentile bars
+      var sorted = all.slice().sort(function(a, b) { return (b.percentile || 0) - (a.percentile || 0); });
+      html += '<div class="sw2-bars-title">Full Percentile Profile</div>';
+      html += '<div class="sw2-bars">';
+      sorted.forEach(function(s) {
+        var pct = s.percentile || 0;
+        html += '<div class="sw2-bar-row">';
+        html += '<div class="sw2-bar-label">' + escapeHtml(s.label || s.stat || '') + '</div>';
+        html += '<div class="sw2-bar-track"><div class="sw2-bar-fill" style="width:' + pct + '%;background:' + barColor(pct) + '"></div></div>';
+        html += '<div class="sw2-bar-val">' + fmt(pct, 0) + '%</div>';
+        html += '<div class="sw2-bar-grade" style="color:' + gradeColor(s.grade) + '">' + escapeHtml(s.grade || '') + '</div>';
+        html += '</div>';
+      });
+      html += '</div>';
+
+      content.innerHTML = html;
+    }
+
+    function renderStatCard(s, isStrength) {
+      var pct = s.percentile || 0;
+      var html = '<div class="sw2-stat-card">';
+      html += '<div class="sw2-stat-rank">#' + (s.rank || '-') + '</div>';
+      html += '<div class="sw2-stat-info">';
+      html += '<div class="sw2-stat-label">' + escapeHtml(s.label || s.stat || '') + '</div>';
+      html += '<div class="sw2-stat-value">' + fmt(s.value) + '</div>';
+      html += '</div>';
+      html += '<div class="sw2-stat-pct-bar"><div class="sw2-stat-pct-fill" style="width:' + pct + '%;background:' + barColor(pct) + '"></div></div>';
+      html += '<div class="sw2-stat-grade" style="background:' + gradeColor(s.grade) + '">' + escapeHtml(s.grade || '') + '</div>';
+      html += '</div>';
+      return html;
+    }
+  }});
+
+  // ─── 41. REPORT CARD ────────────────────────────────────────────
+  defs.push({ name: 'reportcard', render: function(el) {
+    var curPos = '';
+    var curSeason = 2025;
+    var honorSort = { col: 'gpa', asc: false };
+    var needsSort = { col: 'gpa', asc: true };
+    var lastData = null;
+
+    var GRADE_ORDER = { 'A+': 8, 'A': 7, 'B+': 6, 'B': 5, 'C+': 4, 'C': 3, 'D': 2, 'F': 1 };
+
+    el.innerHTML =
+      '<div class="lp-page">' +
+        '<div class="lp-header"><h2>Report Card</h2>' +
+        '<div class="lp-subtitle">fantasy GPA — the full picture</div></div>' +
+        '<div class="lp-controls">' +
+          posTabsHTML('rpc-pos-tabs', true) +
+          '<select class="lp-select" id="rpc-season">' + seasonOptions(2025) + '</select>' +
+        '</div>' +
+        '<div id="rpc-content"><div class="lp-loading">pulling film on report cards...</div></div>' +
+      '</div>';
+
+    function gradeClass(g) {
+      if (g === 'A+' || g === 'A') return 'rpc-elite';
+      if (g === 'B+' || g === 'B') return 'rpc-good';
+      if (g === 'C+' || g === 'C') return 'rpc-avg';
+      if (g === 'D') return 'rpc-below';
+      return 'rpc-poor';
+    }
+    function stockClass(v) {
+      if (v >= 80) return 'rpc-elite';
+      if (v >= 60) return 'rpc-good';
+      if (v >= 40) return 'rpc-avg';
+      if (v >= 20) return 'rpc-below';
+      return 'rpc-poor';
+    }
+
+    function loadData() {
+      var content = el.querySelector('#rpc-content');
+      content.innerHTML = '<div class="lp-loading">pulling film on report cards...</div>';
+      var url = '/api/report-cards?limit=25&season=' + curSeason;
+      if (curPos) url += '&position=' + encodeURIComponent(curPos);
+      fetch(url).then(function(r) {
+        if (!r.ok) throw new Error('API error');
+        return r.json();
+      }).then(function(data) {
+        lastData = data;
+        renderCards(data, content);
+      }).catch(function() {
+        content.innerHTML = '<div class="lp-error">could not load report cards</div>';
+      });
+    }
+
+    function sortPlayers(arr, s) {
+      return arr.slice().sort(function(a, b) {
+        var va = a[s.col], vb = b[s.col];
+        // Grade columns
+        if (typeof va === 'string' && GRADE_ORDER[va] !== undefined) va = GRADE_ORDER[va];
+        if (typeof vb === 'string' && GRADE_ORDER[vb] !== undefined) vb = GRADE_ORDER[vb];
+        if (va === undefined || va === null) va = -Infinity;
+        if (vb === undefined || vb === null) vb = -Infinity;
+        return s.asc ? va - vb : vb - va;
+      });
+    }
+
+    function renderCards(data, content) {
+      var honor = data.honor_roll || [];
+      var needs = data.needs_improvement || [];
+
+      var html = '';
+      html += renderSection('Honor Roll', honor, honorSort, 'honor');
+      html += renderSection('Needs Improvement', needs, needsSort, 'needs');
+      content.innerHTML = html;
+
+      content.querySelectorAll('.rpc-sortable').forEach(function(th) {
+        th.addEventListener('click', function() {
+          var col = this.getAttribute('data-col');
+          var section = this.getAttribute('data-section');
+          var s = section === 'honor' ? honorSort : needsSort;
+          if (s.col === col) s.asc = !s.asc;
+          else { s.col = col; s.asc = false; }
+          renderCards(lastData, content);
+        });
+      });
+    }
+
+    function renderSection(title, players, sortState, section) {
+      var sorted = sortPlayers(players, sortState);
+      var isHonor = section === 'honor';
+      var html = '<div class="rpc-section"><div class="rpc-section-title ' + (isHonor ? 'rpc-honor-title' : 'rpc-needs-title') + '">' + title + '</div>';
+      html += '<div class="rpc-table-wrap"><table class="rpc-table"><thead><tr>';
+      var thCols = [
+        { key: 'name', label: 'Player', sort: false },
+        { key: 'gpa', label: 'GPA', sort: true },
+        { key: 'efficiency_grade', label: 'Eff', sort: true },
+        { key: 'consistency_grade', label: 'Con', sort: true },
+        { key: 'sos_grade', label: 'SOS', sort: true },
+        { key: 'stock_score', label: 'Stock', sort: true },
+        { key: 'opp_share', label: 'Opp%', sort: true },
+        { key: 'dominator', label: 'Dom', sort: true },
+        { key: 'ppg', label: 'PPG', sort: true },
+        { key: 'age', label: 'Age', sort: true },
+        { key: 'games_played', label: 'GP', sort: true },
+        { key: 'annotation', label: 'Note', sort: false }
+      ];
+      thCols.forEach(function(c) {
+        var arrow = '';
+        if (c.sort && sortState.col === c.key) arrow = sortState.asc ? ' &#9650;' : ' &#9660;';
+        html += '<th' + (c.sort ? ' class="rpc-sortable" data-col="' + c.key + '" data-section="' + section + '"' : '') + '>' + c.label + arrow + '</th>';
+      });
+      html += '</tr></thead><tbody>';
+      sorted.forEach(function(p) {
+        var posColor = POS_COLORS[p.position] || '#888';
+        html += '<tr>';
+        // Player cell
+        html += '<td class="rpc-player-cell">';
+        if (p.headshot_url) html += '<img class="rpc-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+        html += '<span class="rpc-name">' + escapeHtml(p.full_name || p.name || '') + '</span>';
+        html += '<span class="rpc-pos" style="background:' + posColor + '">' + escapeHtml(p.position || '') + '</span>';
+        html += '<span class="rpc-team">' + escapeHtml(p.team || '') + '</span>';
+        html += '</td>';
+        // GPA
+        html += '<td><span class="rpc-grade-badge ' + gradeClass(p.gpa_grade || p.grade) + '">' + escapeHtml(p.gpa_grade || p.grade || fmt(p.gpa)) + '</span></td>';
+        // Eff/Con/SOS
+        html += '<td><span class="rpc-grade-badge ' + gradeClass(p.efficiency_grade) + '">' + escapeHtml(p.efficiency_grade || '-') + '</span></td>';
+        html += '<td><span class="rpc-grade-badge ' + gradeClass(p.consistency_grade) + '">' + escapeHtml(p.consistency_grade || '-') + '</span></td>';
+        html += '<td><span class="rpc-grade-badge ' + gradeClass(p.sos_grade) + '">' + escapeHtml(p.sos_grade || '-') + '</span></td>';
+        // Stock
+        html += '<td><span class="rpc-grade-badge ' + stockClass(p.stock_score || 0) + '">' + fmt(p.stock_score, 0) + '</span></td>';
+        // Opp% / Dom
+        html += '<td class="rpc-num">' + fmt(p.opp_share) + '%</td>';
+        html += '<td class="rpc-num">' + fmt(p.dominator) + '%</td>';
+        // PPG / Age / GP
+        html += '<td class="rpc-num">' + fmt(p.ppg) + '</td>';
+        html += '<td class="rpc-num">' + (p.age || '-') + '</td>';
+        html += '<td class="rpc-num">' + (p.games_played || '-') + '</td>';
+        html += '<td class="rpc-annotation">' + escapeHtml(p.annotation || '') + '</td>';
+        html += '</tr>';
+      });
+      html += '</tbody></table></div></div>';
+      return html;
+    }
+
+    el.querySelector('#rpc-pos-tabs').addEventListener('click', function(e) {
+      var tab = e.target.closest('.lp-pos-tab');
+      if (!tab) return;
+      el.querySelectorAll('#rpc-pos-tabs .lp-pos-tab').forEach(function(t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      curPos = tab.getAttribute('data-pos') || '';
+      loadData();
+    });
+    el.querySelector('#rpc-season').addEventListener('change', function() { curSeason = parseInt(this.value); loadData(); });
+    loadData();
+  }});
+
+  // ─── 42. FPTS BREAKDOWN ─────────────────────────────────────────
+  defs.push({ name: 'fptsbreakdown', render: function(el) {
+    var curPos = '';
+    var curSeason = 2025;
+    var compColors = { pass_yd: '#5b7fff', rush_yd: '#2ec4b6', rec_yd: '#d97757', rec: '#8b5cf6', td: '#e74c3c' };
+    var compLabels = { pass_yd: 'Pass Yd', rush_yd: 'Rush Yd', rec_yd: 'Rec Yd', rec: 'Receptions', td: 'Touchdowns' };
+
+    el.innerHTML =
+      '<div class="lp-page">' +
+        '<div class="lp-header"><h2>FPTS Breakdown</h2>' +
+        '<div class="lp-subtitle">where do fantasy points come from?</div></div>' +
+        '<div class="lp-controls">' +
+          posTabsHTML('fpb-pos-tabs', true) +
+          '<select class="lp-select" id="fpb-season">' + seasonOptions(2025) + '</select>' +
+        '</div>' +
+        '<div id="fpb-content"><div class="lp-loading">pulling film...</div></div>' +
+      '</div>';
+
+    function loadData() {
+      var content = el.querySelector('#fpb-content');
+      content.innerHTML = '<div class="lp-loading">pulling film on scoring breakdown...</div>';
+      var url = '/api/fpts-breakdown?season=' + curSeason;
+      if (curPos) url += '&position=' + encodeURIComponent(curPos);
+      fetch(url).then(function(r) {
+        if (!r.ok) throw new Error('API error');
+        return r.json();
+      }).then(function(data) {
+        renderBreakdown(data.players || data, content);
+      }).catch(function() {
+        content.innerHTML = '<div class="lp-error">could not load breakdown data</div>';
+      });
+    }
+
+    function renderBreakdown(players, content) {
+      if (!players || !players.length) { content.innerHTML = '<div class="lp-empty">no data found</div>'; return; }
+
+      // Legend
+      var html = '<div class="fpb-legend">';
+      Object.keys(compColors).forEach(function(k) {
+        html += '<span class="fpb-legend-item"><span class="fpb-legend-dot" style="background:' + compColors[k] + '"></span>' + compLabels[k] + '</span>';
+      });
+      html += '</div>';
+
+      html += '<div class="fpb-card">';
+      players.forEach(function(p, i) {
+        var posColor = POS_COLORS[p.position] || '#888';
+        var total = (p.pass_yd_pts || 0) + (p.rush_yd_pts || 0) + (p.rec_yd_pts || 0) + (p.rec_pts || 0) + (p.td_pts || 0);
+        if (total <= 0) total = p.ppg || 1;
+
+        html += '<div class="fpb-row">';
+        html += '<div class="fpb-rank">' + (i + 1) + '</div>';
+        html += '<div class="fpb-player">';
+        html += '<span class="fpb-name">' + escapeHtml(p.full_name || p.name || '') + '</span>';
+        html += '<span class="fpb-team">' + escapeHtml(p.team || '') + '</span>';
+        html += '<span class="fpb-pos" style="background:' + posColor + '">' + escapeHtml(p.position || '') + '</span>';
+        html += '</div>';
+        html += '<div class="fpb-ppg">' + fmt(p.ppg) + '</div>';
+        html += '<div class="fpb-bar">';
+
+        var components = [
+          { key: 'pass_yd_pts', color: compColors.pass_yd },
+          { key: 'rush_yd_pts', color: compColors.rush_yd },
+          { key: 'rec_yd_pts', color: compColors.rec_yd },
+          { key: 'rec_pts', color: compColors.rec },
+          { key: 'td_pts', color: compColors.td }
+        ];
+        components.forEach(function(c) {
+          var val = p[c.key] || 0;
+          var pct = total > 0 ? (val / total) * 100 : 0;
+          if (pct > 0) {
+            html += '<div class="fpb-segment" style="width:' + pct + '%;background:' + c.color + '">';
+            if (pct >= 10) html += '<span class="fpb-seg-label">' + fmt(pct, 0) + '%</span>';
+            html += '</div>';
+          }
+        });
+        html += '</div></div>';
+      });
+      html += '</div>';
+      content.innerHTML = html;
+    }
+
+    el.querySelector('#fpb-pos-tabs').addEventListener('click', function(e) {
+      var tab = e.target.closest('.lp-pos-tab');
+      if (!tab) return;
+      el.querySelectorAll('#fpb-pos-tabs .lp-pos-tab').forEach(function(t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      curPos = tab.getAttribute('data-pos') || '';
+      loadData();
+    });
+    el.querySelector('#fpb-season').addEventListener('change', function() { curSeason = parseInt(this.value); loadData(); });
+    loadData();
+  }});
+
+  // ─── 43. GAME LOG ───────────────────────────────────────────────
+  defs.push({ name: 'gamelog', render: function(el) {
+    var curSeason = 2025;
+    var curPlayer = null;
+    var sortCol = 'week';
+    var sortAsc = true;
+
+    el.innerHTML =
+      '<div class="lp-page">' +
+        '<div class="lp-header"><h2>Game Log</h2>' +
+        '<div class="lp-subtitle">week-by-week performance</div></div>' +
+        '<div class="lp-controls">' +
+          searchWrapHTML('glo-', 'search player...') +
+          '<select class="lp-select" id="glo-season">' + seasonOptions(2025) + '</select>' +
+        '</div>' +
+        '<div id="glo-content"><div class="lp-empty">search for a player to view game log</div></div>' +
+      '</div>';
+
+    buildPlayerSearch(el, 'glo-', 'search player...', function(p) {
+      curPlayer = p;
+      loadGameLog();
+    });
+    el.querySelector('#glo-season').addEventListener('change', function() { curSeason = parseInt(this.value); if (curPlayer) loadGameLog(); });
+
+    function fptsClass(v) {
+      if (v >= 30) return 'glo-elite';
+      if (v >= 20) return 'glo-great';
+      if (v >= 10) return 'glo-ok';
+      return 'glo-bad';
+    }
+
+    function loadGameLog() {
+      if (!curPlayer) return;
+      var content = el.querySelector('#glo-content');
+      content.innerHTML = '<div class="lp-loading">pulling film...</div>';
+      fetch('/api/game-log?player_id=' + encodeURIComponent(curPlayer.player_id) + '&season=' + curSeason).then(function(r) {
+        if (!r.ok) throw new Error('API error');
+        return r.json();
+      }).then(function(data) {
+        renderGameLog(data, content);
+      }).catch(function() {
+        content.innerHTML = '<div class="lp-error">could not load game log</div>';
+      });
+    }
+
+    function renderGameLog(data, content) {
+      var p = data.player || curPlayer;
+      var games = data.games || data.weeks || [];
+      var pos = p.position || curPlayer.position || '';
+      var posColor = POS_COLORS[pos] || '#888';
+      var totalPts = 0, gp = games.length;
+      games.forEach(function(g) { totalPts += (g.fantasy_points || g.fpts || 0); });
+
+      var html = '<div class="glo-player-card">';
+      html += playerHeadshot(p, pos);
+      html += '<div class="glo-player-info">';
+      html += '<span class="glo-player-name">' + escapeHtml(p.full_name || p.name || curPlayer.full_name) + '</span>';
+      html += '<span class="glo-pos" style="background:' + posColor + '">' + escapeHtml(pos) + '</span>';
+      html += '<span class="glo-team">' + escapeHtml(p.team || curPlayer.team || '') + '</span>';
+      html += '</div>';
+      html += '<div class="glo-summary">';
+      html += '<span class="glo-chip">' + gp + ' G</span>';
+      html += '<span class="glo-chip">' + fmt(totalPts, 0) + ' pts</span>';
+      html += '<span class="glo-chip">' + fmt(gp > 0 ? totalPts / gp : 0) + ' PPG</span>';
+      html += '</div></div>';
+
+      // Sort games
+      games.sort(function(a, b) {
+        var va = a[sortCol] !== undefined ? a[sortCol] : 0;
+        var vb = b[sortCol] !== undefined ? b[sortCol] : 0;
+        return sortAsc ? va - vb : vb - va;
+      });
+
+      // Build columns based on position
+      var colDefs = [{ key: 'week', label: 'Wk' }, { key: 'opponent', label: 'Opp' }];
+      if (pos === 'QB') {
+        colDefs = colDefs.concat([
+          { key: 'passing_yards', label: 'Pass Yd' }, { key: 'passing_tds', label: 'Pass TD' }, { key: 'interceptions', label: 'INT' },
+          { key: 'rushing_yards', label: 'Rush Yd' }, { key: 'rushing_tds', label: 'Rush TD' }, { key: 'carries', label: 'Car' }
+        ]);
+      } else if (pos === 'RB') {
+        colDefs = colDefs.concat([
+          { key: 'rushing_yards', label: 'Rush Yd' }, { key: 'rushing_tds', label: 'Rush TD' }, { key: 'carries', label: 'Car' },
+          { key: 'receptions', label: 'Rec' }, { key: 'receiving_yards', label: 'Rec Yd' }, { key: 'targets', label: 'Tgt' }
+        ]);
+      } else {
+        colDefs = colDefs.concat([
+          { key: 'receptions', label: 'Rec' }, { key: 'receiving_yards', label: 'Rec Yd' }, { key: 'receiving_tds', label: 'Rec TD' },
+          { key: 'targets', label: 'Tgt' }, { key: 'rushing_yards', label: 'Rush Yd' }, { key: 'carries', label: 'Car' }
+        ]);
+      }
+      colDefs.push({ key: 'fantasy_points', label: 'FPTS' });
+
+      html += '<div class="glo-table-wrap"><table class="glo-table"><thead><tr>';
+      colDefs.forEach(function(c) {
+        var arrow = '';
+        if (sortCol === c.key) arrow = sortAsc ? ' &#9650;' : ' &#9660;';
+        html += '<th class="glo-sortable" data-col="' + c.key + '">' + c.label + arrow + '</th>';
+      });
+      html += '</tr></thead><tbody>';
+
+      games.forEach(function(g) {
+        html += '<tr>';
+        colDefs.forEach(function(c) {
+          var v = g[c.key];
+          if (c.key === 'fantasy_points' || c.key === 'fpts') {
+            var fpts = g.fantasy_points || g.fpts || 0;
+            html += '<td class="glo-num ' + fptsClass(fpts) + '">' + fmt(fpts) + '</td>';
+          } else if (c.key === 'opponent') {
+            html += '<td>' + escapeHtml(g.opponent || g.opp || '-') + '</td>';
+          } else if (c.key === 'week') {
+            html += '<td class="glo-num">' + (v || '-') + '</td>';
+          } else {
+            html += '<td class="glo-num">' + fmt(v, (c.key.indexOf('yards') >= 0 ? 0 : 0)) + '</td>';
+          }
+        });
+        html += '</tr>';
+      });
+
+      // Totals row
+      html += '<tr class="glo-totals"><td>Total</td><td></td>';
+      colDefs.slice(2).forEach(function(c) {
+        if (c.key === 'fantasy_points' || c.key === 'fpts') {
+          html += '<td class="glo-num">' + fmt(totalPts, 0) + '</td>';
+        } else {
+          var sum = 0;
+          games.forEach(function(g) { sum += (g[c.key] || 0); });
+          html += '<td class="glo-num">' + fmt(sum, 0) + '</td>';
+        }
+      });
+      html += '</tr></tbody></table></div>';
+
+      content.innerHTML = html;
+
+      content.querySelectorAll('.glo-sortable').forEach(function(th) {
+        th.addEventListener('click', function() {
+          var col = this.getAttribute('data-col');
+          if (sortCol === col) sortAsc = !sortAsc;
+          else { sortCol = col; sortAsc = col === 'week'; }
+          renderGameLog(data, content);
+        });
+      });
+    }
+  }});
+
+  // ─── 44. PLAYER ARCHETYPES ──────────────────────────────────────
+  defs.push({ name: 'archetypes', render: function(el) {
+    var curPos = '';
+    var curSeason = 2025;
+    var iconMap = {
+      workhorse: '\u{1F3CB}', alpha_target: '\u{1F451}', deep_threat: '\u{1F680}', slot_machine: '\u{1F3B0}',
+      dual_threat: '\u26A1', pocket_passer: '\u{1F3AF}', mobile_qb: '\u{1F3C3}', receiving_back: '\u{1F3C8}',
+      goal_line: '\u{1F6A9}', possession: '\u{1F91D}', yac_monster: '\u{1F4A8}', volume: '\u{1F4E6}',
+      td_dependent: '\u{1F3C6}', scheme: '\u2699\uFE0F', athletic: '\u{1F4AA}', red_zone: '\u{1F534}',
+      elite: '\u2B50', default: '\u{1F4CA}'
+    };
+
+    el.innerHTML =
+      '<div class="lp-page">' +
+        '<div class="lp-header"><h2>Player Archetypes</h2>' +
+        '<div class="lp-subtitle">how players are built to score</div></div>' +
+        '<div class="lp-controls">' +
+          posTabsHTML('arc-pos-tabs', true) +
+          '<select class="lp-select" id="arc-season">' + seasonOptions(2025) + '</select>' +
+        '</div>' +
+        '<div id="arc-content"><div class="lp-loading">pulling film...</div></div>' +
+      '</div>';
+
+    function getIcon(archetype) {
+      var key = (archetype || '').toLowerCase().replace(/[\s-]/g, '_');
+      for (var k in iconMap) {
+        if (key.indexOf(k) >= 0) return iconMap[k];
+      }
+      return iconMap['default'];
+    }
+
+    function loadData() {
+      var content = el.querySelector('#arc-content');
+      content.innerHTML = '<div class="lp-loading">pulling film on archetypes...</div>';
+      var url = '/api/player-archetypes?season=' + curSeason;
+      if (curPos) url += '&position=' + encodeURIComponent(curPos);
+      fetch(url).then(function(r) {
+        if (!r.ok) throw new Error('API error');
+        return r.json();
+      }).then(function(data) {
+        renderArchetypes(data.archetypes || data, content);
+      }).catch(function() {
+        content.innerHTML = '<div class="lp-error">could not load archetypes</div>';
+      });
+    }
+
+    function renderArchetypes(archetypes, content) {
+      if (!archetypes || !archetypes.length) { content.innerHTML = '<div class="lp-empty">no archetypes found</div>'; return; }
+      var html = '<div class="arc-grid">';
+      archetypes.forEach(function(arch) {
+        var archPlayers = arch.players || [];
+        var posColor = POS_COLORS[arch.position] || '#888';
+        html += '<div class="arc-card">';
+        html += '<div class="arc-card-header">';
+        html += '<span class="arc-icon">' + getIcon(arch.name || arch.archetype) + '</span>';
+        html += '<div class="arc-card-title">';
+        html += '<div class="arc-name">' + escapeHtml(arch.name || arch.archetype || '') + '</div>';
+        html += '<div class="arc-desc">' + escapeHtml(arch.description || '') + '</div>';
+        html += '</div>';
+        html += '<span class="arc-pos-badge" style="background:' + posColor + '">' + escapeHtml(arch.position || '') + '</span>';
+        html += '<span class="arc-count">' + archPlayers.length + '</span>';
+        html += '</div>';
+        html += '<div class="arc-players">';
+        archPlayers.forEach(function(p) {
+          var pPosColor = POS_COLORS[p.position] || posColor;
+          html += '<div class="arc-player">';
+          html += '<span class="arc-player-pos" style="background:' + pPosColor + '">' + escapeHtml(p.position || '') + '</span>';
+          html += '<span class="arc-player-name">' + escapeHtml(p.full_name || p.name || '') + '</span>';
+          html += '<span class="arc-player-team">' + escapeHtml(p.team || '') + '</span>';
+          if (p.age) html += '<span class="arc-player-age">Age ' + p.age + '</span>';
+          html += '<span class="arc-player-ppg">' + fmt(p.ppg) + ' ppg</span>';
+          if (p.key_stat) html += '<span class="arc-player-stat">' + escapeHtml(p.key_stat) + '</span>';
+          html += '</div>';
+        });
+        html += '</div></div>';
+      });
+      html += '</div>';
+      content.innerHTML = html;
+    }
+
+    el.querySelector('#arc-pos-tabs').addEventListener('click', function(e) {
+      var tab = e.target.closest('.lp-pos-tab');
+      if (!tab) return;
+      el.querySelectorAll('#arc-pos-tabs .lp-pos-tab').forEach(function(t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      curPos = tab.getAttribute('data-pos') || '';
+      loadData();
+    });
+    el.querySelector('#arc-season').addEventListener('change', function() { curSeason = parseInt(this.value); loadData(); });
+    loadData();
+  }});
+
+  // ─── 45. POINTS BREAKDOWN (DONUT) ──────────────────────────────
+  defs.push({ name: 'breakdown', render: function(el) {
+    var curSeason = 2025;
+
+    el.innerHTML =
+      '<div class="lp-page">' +
+        '<div class="lp-header"><h2>Scoring Breakdown</h2>' +
+        '<div class="lp-subtitle">where do their points come from?</div></div>' +
+        '<div class="lp-controls">' +
+          searchWrapHTML('pbd-', 'search player...') +
+          '<select class="lp-select" id="pbd-season">' + seasonOptions(2025) + '</select>' +
+        '</div>' +
+        '<div id="pbd-content"><div class="lp-empty">search for a player to see scoring breakdown</div></div>' +
+      '</div>';
+
+    buildPlayerSearch(el, 'pbd-', 'search player...', function(p) {
+      loadBreakdown(p.player_id, p);
+    });
+    el.querySelector('#pbd-season').addEventListener('change', function() { curSeason = parseInt(this.value); });
+
+    var compColors = ['#5b7fff', '#2ec4b6', '#d97757', '#8b5cf6', '#e74c3c', '#eab308', '#16a34a', '#f472b6'];
+
+    function loadBreakdown(pid, playerInfo) {
+      var content = el.querySelector('#pbd-content');
+      content.innerHTML = '<div class="lp-loading">pulling film...</div>';
+      fetch('/api/points-breakdown?player_id=' + encodeURIComponent(pid) + '&season=' + curSeason).then(function(r) {
+        if (!r.ok) throw new Error('API error');
+        return r.json();
+      }).then(function(data) {
+        renderBreakdown(data, playerInfo, content);
+      }).catch(function() {
+        content.innerHTML = '<div class="lp-error">could not load breakdown</div>';
+      });
+    }
+
+    function renderBreakdown(data, playerInfo, content) {
+      var p = data.player || playerInfo || {};
+      var components = data.components || data.breakdown || [];
+      var pos = p.position || playerInfo.position || '';
+      var posColor = POS_COLORS[pos] || '#888';
+      var gp = p.games || p.games_played || 1;
+      var totalPts = p.total_points || p.fantasy_points || 0;
+      var ppg = gp > 0 ? totalPts / gp : (p.ppg || 0);
+
+      var html = '<div class="pbd-player-card">';
+      html += playerHeadshot(p, pos);
+      html += '<div class="pbd-player-info">';
+      html += '<span class="pbd-player-name">' + escapeHtml(p.full_name || p.name || playerInfo.full_name || '') + '</span>';
+      html += '<span class="pbd-pos" style="background:' + posColor + '">' + escapeHtml(pos) + '</span>';
+      html += '<span class="pbd-team">' + escapeHtml(p.team || playerInfo.team || '') + '</span>';
+      html += '</div>';
+      html += '<div class="pbd-summary">';
+      html += '<span class="pbd-chip">' + gp + ' G</span>';
+      html += '<span class="pbd-chip">' + fmt(totalPts, 0) + ' pts</span>';
+      html += '<span class="pbd-chip">' + fmt(ppg) + ' PPG</span>';
+      html += '</div></div>';
+
+      // Canvas donut + legend
+      html += '<div class="pbd-chart-area">';
+      html += '<canvas id="pbd-canvas" width="280" height="280"></canvas>';
+      html += '<div class="pbd-legend">';
+      var total = 0;
+      components.forEach(function(c) { total += Math.abs(c.points || c.value || 0); });
+      components.forEach(function(c, i) {
+        var color = compColors[i % compColors.length];
+        var val = c.points || c.value || 0;
+        var pct = total > 0 ? (val / total) * 100 : 0;
+        html += '<div class="pbd-legend-item"><span class="pbd-legend-dot" style="background:' + color + '"></span>';
+        html += '<span class="pbd-legend-label">' + escapeHtml(c.label || c.category || '') + '</span>';
+        html += '<span class="pbd-legend-val">' + fmt(val) + ' (' + fmt(pct, 0) + '%)</span>';
+        html += '</div>';
+      });
+      html += '</div></div>';
+
+      // Detail cards
+      html += '<div class="pbd-details">';
+      components.forEach(function(c, i) {
+        var color = compColors[i % compColors.length];
+        html += '<div class="pbd-detail-card" style="border-left:4px solid ' + color + '">';
+        html += '<div class="pbd-detail-label">' + escapeHtml(c.label || c.category || '') + '</div>';
+        html += '<div class="pbd-detail-pts">' + fmt(c.points || c.value || 0) + ' pts</div>';
+        if (c.raw_stat !== undefined) html += '<div class="pbd-detail-raw">' + fmt(c.raw_stat, c.raw_stat % 1 === 0 ? 0 : 1) + ' ' + escapeHtml(c.raw_label || '') + '</div>';
+        html += '</div>';
+      });
+      html += '</div>';
+
+      content.innerHTML = html;
+
+      // Draw donut
+      var canvas = el.querySelector('#pbd-canvas');
+      if (canvas && components.length > 0) {
+        var ctx = canvas.getContext('2d');
+        var cx = 140, cy = 140, outerR = 120, innerR = 72;
+        ctx.clearRect(0, 0, 280, 280);
+
+        var angle = -Math.PI / 2;
+        components.forEach(function(c, i) {
+          var val = Math.abs(c.points || c.value || 0);
+          var sweep = total > 0 ? (val / total) * Math.PI * 2 : 0;
+          if (sweep <= 0) return;
+          var color = compColors[i % compColors.length];
+
+          ctx.beginPath();
+          ctx.arc(cx, cy, outerR, angle, angle + sweep);
+          ctx.arc(cx, cy, innerR, angle + sweep, angle, true);
+          ctx.closePath();
+          ctx.fillStyle = color;
+          ctx.fill();
+
+          // Sand border between slices
+          ctx.strokeStyle = '#ede0cf';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Label if >= 8%
+          var pct = total > 0 ? (val / total) * 100 : 0;
+          if (pct >= 8) {
+            var midAngle = angle + sweep / 2;
+            var labelR = (outerR + innerR) / 2;
+            var lx = cx + Math.cos(midAngle) * labelR;
+            var ly = cy + Math.sin(midAngle) * labelR;
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 11px monospace';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(fmt(pct, 0) + '%', lx, ly);
+          }
+
+          angle += sweep;
+        });
+
+        // Center label
+        ctx.fillStyle = '#333';
+        ctx.font = 'bold 24px monospace';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(fmt(ppg), cx, cy - 8);
+        ctx.font = '12px monospace';
+        ctx.fillStyle = '#888';
+        ctx.fillText('PPG', cx, cy + 12);
+      }
+    }
+  }});
+
 })();
