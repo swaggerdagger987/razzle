@@ -577,6 +577,7 @@ def quick_search_players(query, limit=8):
         FROM players p
         WHERE p.search_name LIKE ?
           AND p.position IN ('QB', 'RB', 'WR', 'TE')
+          AND p.fantasy_relevant = 1
         ORDER BY ppg DESC
         LIMIT ?
     """, (search_term, limit)).fetchall()

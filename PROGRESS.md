@@ -1,6 +1,17 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 119 — Season Recap (COMPLETE)
+## Current Phase: Phase 120 — QA+UX Audit Fixes for Phases 116-119 (COMPLETE)
+
+**Exit criterion MET:** All HIGH and MEDIUM findings resolved. QA-1 (MEDIUM): Added fantasy_relevant = 1 filter to quick_search_players in live_data.py. 3 LOW findings (QA-2, QA-3, QA-4) triaged as no-action-needed. All 4 new pages pass security, design, and functionality checks.
+
+### Phase 120 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | MEDIUM fix — quick-search fantasy_relevant | DONE | Added AND p.fantasy_relevant = 1 |
+| 2 | Smoke test + commit + push | DONE | Verified |
+
+## Previous Phase: Phase 119 — Season Recap (COMPLETE)
 
 **Exit criterion MET:** /recap.html shows data-driven season year-in-review. MVP hero card with overall #1 scorer's total PPR + PPG + games. Position leader cards (QB1/RB1/WR1/TE1) with totals. Six recap sections: Highest Single Game (top 5 weekly scores with week badge), Biggest Breakouts (YoY PPG increase with delta badge), Biggest Busts (YoY PPG decrease), Most Consistent (lowest CoV), Most Volatile (highest CoV), Season Stats (total players + avg PPG). Season selector, URL state (?season=), PNG export with watermark. GET /api/season-recap computes all recap data including YoY comparisons. 30 escapeHtml calls, 73/73 braces balanced. "Recap" nav link on all 53 pages. Sitemap + tools hub entry under Matchup & Schedule.
 
