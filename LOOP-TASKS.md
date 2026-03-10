@@ -1,33 +1,25 @@
-# Razzle Loop — Phase 100 Task List
+# Razzle Loop — Phase 101 Task List
 
-> QA + UX Audit — Auto-Generated Fixes (Phases 96-99)
+> Dynasty Auction Value Calculator — Auto-Generated Phase
 
-**Current Phase**: 100 — QA + UX Audit Fixes
-**Exit Criterion**: All HIGH and MEDIUM findings from QA-AUDIT.md (Phases 96-99) resolved.
+**Current Phase**: 101 — Dynasty Auction Value Calculator
+**Exit Criterion**: /auction.html page converts dynasty trade values into auction dollar amounts for a configurable budget. Position-adjusted values, budget slider, position group totals, PNG export with watermark. GET /api/auction-values endpoint. Design matches DESIGN.md.
 
 ---
 
-## Task 1: HIGH fix — Deduplicate + validate roster-grade player_ids (QA-1)
+## Task 1: Backend /api/auction-values endpoint
 **Status**: PASS
 **Attempts**: 1
 
-## Task 2: HIGH fix — Consistent standard scoring formula (QA-2)
+## Task 2: Frontend auction.html page
 **Status**: PASS
 **Attempts**: 1
 
-## Task 3: MEDIUM fixes — escapeHtml consistency (QA-3, QA-4, QA-5)
+## Task 3: Nav links + sitemap + analytics
 **Status**: PASS
 **Attempts**: 1
 
-## Task 4: MEDIUM fix — tools-hub Cache-Control header (QA-6)
-**Status**: PASS
-**Attempts**: 1
-
-## Task 5: LOW grouped fixes (QA-7, QA-8, QA-9, UX-2)
-**Status**: PASS
-**Attempts**: 1
-
-## Task 6: Smoke test
+## Task 4: Smoke test + commit + push
 **Status**: PASS
 **Attempts**: 1
 
@@ -35,9 +27,9 @@
 
 ## Loop State
 ```
-Current Phase: 100
-Current Task: 6
+Current Phase: 101
+Current Task: 4
 Current Stage: COMPLETE
 Attempt: 1
-Tasks Completed: 6/6
+Tasks Completed: 4/4
 ```

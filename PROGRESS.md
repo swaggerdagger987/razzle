@@ -1,6 +1,23 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 100 — QA+UX Audit Fixes (Phases 96-99) (COMPLETE)
+## Current Phase: Phase 101 — Dynasty Auction Value Calculator (COMPLETE)
+
+**Exit criterion MET:** /auction.html page converts dynasty trade values into auction dollar amounts for a configurable budget ($50-$500 slider). Budget slider with live display, roster size input (8-25), season selector. Position summary cards showing top value and avg per position. Sortable player table with rank, position badge, auction dollar value (color-coded by tier), trade value bar, PPG, tier badge (Premium/Starter/Value/Bargain/$1 Filler). Position filter tabs. Player search. PNG export with watermark. GET /api/auction-values endpoint with budget, roster_size, season params. 15 escapeHtml calls, 118/118 braces balanced. "Auction" nav link on all 38 HTML pages. Sitemap entry. Tools hub catalog entry under Rankings & Values. Design matches DESIGN.md.
+
+### Phase 101 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/auction-values endpoint | DONE | fetch_auction_values in live_data.py, proportional dollar conversion |
+| 2 | Auction Values page | DONE | Budget slider, pos summary, sortable table, tier badges, 15 escapeHtml |
+| 3 | Nav links + sitemap + analytics | DONE | All 38 pages updated, sitemap entry, tools hub catalog |
+| 4 | Smoke test | DONE | Python syntax OK, JS braces balanced, 38/38 nav links |
+
+### Decisions Log
+- **Auction Value Calculator as Phase 101**: With NFL Draft approaching (April 24), auction draft tools are in peak demand. Converts our existing trade value infrastructure into practical auction dollars. Budget slider ($50-$500) covers all league formats. Roster size input (8-25) handles dynasty to redraft. Tier system (Premium $40+, Starter $20+, Value $10+, Bargain $5+, $1 Filler) gives quick draft-day guidance. Highly screenshottable — dollar values on every player is the most shared format in fantasy communities.
+- **Dollar conversion formula**: Reserve $1 per roster spot for bench filler, distribute remaining budget proportionally by trade value across all players × roster size. This naturally creates a realistic distribution where top players command large shares.
+
+## Previous Phase: Phase 100 — QA+UX Audit Fixes (Phases 96-99) (COMPLETE)
 
 **Exit criterion MET:** All HIGH and MEDIUM findings from QA-AUDIT.md resolved. QA-1: roster-grade player_ids deduplicated + type-validated. QA-2: standard scoring formula consistent (Python subtraction in both scoring-comparison and cheat-sheet). QA-3/4/5: escapeHtml on numeric values (rank_ppr, rank_std, age, rank). QA-6: tools-hub Cache-Control header. QA-7: Boom/Bust→Player Comparison rename. QA-8: removed redundant import math. QA-9: cheat sheet limited to top 40 per position. UX-2: dimension bar tooltips on roster builder.
 

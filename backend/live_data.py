@@ -8788,3 +8788,114 @@ def fetch_cheat_sheet(season=None, fmt="ppr"):
         }
     finally:
         conn.close()
+
+
+# ---------------------------------------------------------------------------
+# Auction Value Calculator
+# ---------------------------------------------------------------------------
+
+def fetch_auction_values(season=None, budget=200, roster_size=15):
+    """Convert trade values into auction dollar amounts for a given budget and roster size."""
+    budget = max(50, min(500, budget))
+    roster_size = max(8, min(25, roster_size))
+    conn = get_conn()
+    try:
+        if not season:
+            row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+            season = row[0] if row and row[0] else 2024
+
+        available_seasons = [
+            r[0] for r in conn.execute(
+                "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
+            ).fetchall()
+        ]
+
+        query = """
+            SELECT
+                p.player_id, p.full_name, p.position, p.team, p.age,
+                p.headshot_url,
+                SUM(s.fantasy_points_ppr) as total_ppr,
+                COUNT(DISTINCT s.week) as games
+            FROM players p
+            JOIN player_week_stats s
+                ON s.player_id = p.player_id AND s.season = ?
+            WHERE p.position IN ('QB','RB','WR','TE')
+              AND p.fantasy_relevant = 1
+            GROUP BY p.player_id
+            HAVING games >= 4 AND (total_ppr / games) >= 2.0
+            ORDER BY total_ppr DESC
+        """
+        rows = conn.execute(query, [season]).fetchall()
+
+        players = []
+        for r in rows:
+            pid = r[0]
+            name = r[1] or "Unknown"
+            pos = r[2] or "WR"
+            team = r[3] or "FA"
+            age = r[4]
+            headshot = r[5] or ""
+            total_ppr = r[6] or 0
+            games = r[7] or 1
+            ppg = round(total_ppr / games, 2)
+            tv = compute_trade_value(ppg, age, pos)
+
+            players.append({
+                "player_id": pid,
+                "full_name": name,
+                "position": pos,
+                "team": team,
+                "age": age,
+                "headshot_url": headshot,
+                "ppg": ppg,
+                "games": games,
+                "trade_value": tv,
+            })
+
+        players.sort(key=lambda x: x["trade_value"], reverse=True)
+
+        # Convert trade values to auction dollars
+        # Reserve $1 per roster spot for bench filler, allocate rest proportionally
+        reserve = roster_size  # $1 per roster spot minimum
+        allocatable = max(1, budget - reserve)
+        total_tv = sum(p["trade_value"] for p in players) or 1.0
+
+        for i, p in enumerate(players):
+            p["rank"] = i + 1
+            # Dollar value = proportional share of allocatable budget
+            raw_dollars = (p["trade_value"] / total_tv) * allocatable * roster_size
+            # Cap at budget, floor at $1
+            p["auction_value"] = max(1, round(raw_dollars))
+            # Value tier
+            if p["auction_value"] >= 40:
+                p["tier"] = "premium"
+            elif p["auction_value"] >= 20:
+                p["tier"] = "starter"
+            elif p["auction_value"] >= 10:
+                p["tier"] = "value"
+            elif p["auction_value"] >= 5:
+                p["tier"] = "bargain"
+            else:
+                p["tier"] = "dollar"
+
+        # Position group summaries
+        pos_totals = {}
+        for pos in ("QB", "RB", "WR", "TE"):
+            pos_players = [p for p in players if p["position"] == pos]
+            pos_totals[pos] = {
+                "count": len(pos_players),
+                "total_value": sum(p["auction_value"] for p in pos_players),
+                "avg_value": round(sum(p["auction_value"] for p in pos_players) / len(pos_players), 1) if pos_players else 0,
+                "top_value": pos_players[0]["auction_value"] if pos_players else 0,
+            }
+
+        return {
+            "season": season,
+            "available_seasons": available_seasons,
+            "budget": budget,
+            "roster_size": roster_size,
+            "players": players[:200],
+            "position_totals": pos_totals,
+        }
+    finally:
+        conn.close()

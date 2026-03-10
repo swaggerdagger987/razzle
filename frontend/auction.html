@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Auction Values — Razzle</title>
+<meta property="og:title" content="Auction Values — Razzle">
+<meta property="og:description" content="Dynasty auction dollar values for any budget on razzle.lol">
+<meta property="og:site_name" content="razzle.lol">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Auction Values — Razzle">
+<meta name="twitter:description" content="Dynasty auction dollar values on razzle.lol">
+<meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
+<meta name="description" content="Fantasy auction dollar values — convert trade values to auction bids for any budget on razzle.lol">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .av-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+  }
+  .av-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .av-header h1 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: var(--ink);
+    margin: 0 0 4px;
+  }
+  .av-header .av-subtitle {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+  }
+
+  /* Controls */
+  .av-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .av-controls label {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-light);
+  }
+  .av-controls select, .av-controls input[type="number"] {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    padding: 6px 10px;
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+    background: var(--card);
+    color: var(--ink);
+  }
+  .av-controls input[type="range"] {
+    width: 120px;
+    accent-color: var(--terracotta);
+  }
+  .av-budget-display {
+    font-family: var(--font-display);
+    font-size: 20px;
+    color: var(--terracotta);
+    min-width: 50px;
+    text-align: center;
+  }
+
+  /* Position filter tabs */
+  .av-pos-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .av-pos-tab {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 5px 14px;
+    border: 2px solid var(--ink);
+    border-radius: 20px;
+    background: var(--card);
+    color: var(--ink);
+    cursor: pointer;
+    box-shadow: 2px 2px 0 var(--ink);
+    transition: transform 0.1s;
+  }
+  .av-pos-tab:hover { transform: translateY(-1px); }
+  .av-pos-tab.active {
+    background: var(--ink);
+    color: var(--card);
+  }
+
+  /* Position summary cards */
+  .av-summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .av-sum-card {
+    background: var(--card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 12px;
+    text-align: center;
+  }
+  .av-sum-pos {
+    font-family: var(--font-display);
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+  .av-sum-pos.QB { color: var(--qb); }
+  .av-sum-pos.RB { color: var(--rb); }
+  .av-sum-pos.WR { color: var(--wr); }
+  .av-sum-pos.TE { color: var(--te); }
+  .av-sum-stat {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-light);
+    line-height: 1.6;
+  }
+  .av-sum-big {
+    font-family: var(--font-display);
+    font-size: 24px;
+    color: var(--ink);
+  }
+
+  /* Player table */
+  .av-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .av-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-mono);
+    font-size: 13px;
+  }
+  .av-table th {
+    font-family: var(--font-display);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 8px 10px;
+    border-bottom: 3px solid var(--ink);
+    text-align: left;
+    cursor: pointer;
+    white-space: nowrap;
+    user-select: none;
+  }
+  .av-table th:hover { color: var(--terracotta); }
+  .av-table td {
+    padding: 7px 10px;
+    border-bottom: 1px solid var(--ink-faint);
+    white-space: nowrap;
+  }
+  .av-table tr:hover { background: rgba(217,119,87,0.06); }
+
+  /* Position badges */
+  .av-pos-badge {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    color: white;
+    min-width: 28px;
+    text-align: center;
+  }
+  .av-pos-badge.QB { background: var(--qb); }
+  .av-pos-badge.RB { background: var(--rb); }
+  .av-pos-badge.WR { background: var(--wr); }
+  .av-pos-badge.TE { background: var(--te); }
+
+  /* Dollar value */
+  .av-dollar {
+    font-family: var(--font-display);
+    font-size: 16px;
+    color: var(--ink);
+  }
+  .av-dollar.premium { color: #d44040; }
+  .av-dollar.starter { color: var(--terracotta); }
+  .av-dollar.value { color: var(--rb); }
+  .av-dollar.bargain { color: var(--qb); }
+  .av-dollar.dollar-tier { color: var(--ink-light); }
+
+  /* Trade value bar */
+  .av-tv-bar {
+    width: 80px;
+    height: 8px;
+    background: var(--ink-faint);
+    border-radius: 4px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+  }
+  .av-tv-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: var(--terracotta);
+  }
+
+  /* Tier badge */
+  .av-tier-badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 8px;
+    border: 1px solid;
+  }
+  .av-tier-badge.premium { background: rgba(212,64,64,0.12); color: #d44040; border-color: #d44040; }
+  .av-tier-badge.starter { background: rgba(217,119,87,0.12); color: var(--terracotta); border-color: var(--terracotta); }
+  .av-tier-badge.value { background: rgba(46,196,182,0.12); color: var(--rb); border-color: var(--rb); }
+  .av-tier-badge.bargain { background: rgba(91,127,255,0.12); color: var(--qb); border-color: var(--qb); }
+  .av-tier-badge.dollar-tier { background: rgba(0,0,0,0.06); color: var(--ink-light); border-color: var(--ink-faint); }
+
+  /* Search */
+  .av-search {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+  .av-search input {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    padding: 7px 14px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--card);
+    color: var(--ink);
+    width: 260px;
+  }
+  .av-search input::placeholder { color: var(--ink-faint); }
+
+  /* Export button */
+  .av-export-btn {
+    font-family: var(--font-display);
+    font-size: 13px;
+    padding: 6px 16px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--card);
+    color: var(--ink);
+    cursor: pointer;
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+  .av-export-btn:hover { background: var(--terracotta); color: white; }
+
+  /* Loading */
+  .av-loading {
+    text-align: center;
+    font-family: var(--font-hand);
+    font-size: 18px;
+    color: var(--ink-light);
+    padding: 60px 20px;
+  }
+  .av-error {
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: #d44040;
+    padding: 40px 20px;
+  }
+
+  /* Watermark */
+  .av-watermark {
+    position: fixed;
+    bottom: 10px;
+    right: 14px;
+    font-family: var(--font-hand);
+    font-size: 14px;
+    color: rgba(0,0,0,0.15);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  @media (max-width: 768px) {
+    .av-summary { grid-template-columns: repeat(2, 1fr); }
+    .av-header h1 { font-size: 26px; }
+    .av-controls { gap: 8px; }
+  }
+  @media (max-width: 480px) {
+    .av-summary { grid-template-columns: 1fr; }
+    .av-page { padding: 16px 10px 40px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="/" class="logo">
+    <div class="logo-mark">&#x1F42F;</div>
+    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/lab.html">The Lab</a></li>
+    <li><a href="/tools.html">Tools</a></li>
+    <li><a href="/rankings.html">Rankings</a></li>
+    <li><a href="/leaders.html">Leaders</a></li>
+    <li><a href="/prospects.html">Prospects</a></li>
+    <li><a href="/scarcity.html">Scarcity</a></li>
+    <li><a href="/breakouts.html">Breakouts</a></li>
+    <li><a href="/buysell.html">Buy/Sell</a></li>
+    <li><a href="/aging.html">Aging</a></li>
+    <li><a href="/weekly.html">Weekly</a></li>
+    <li><a href="/targets.html">Targets</a></li>
+    <li><a href="/matchups.html">Matchups</a></li>
+    <li><a href="/usage.html">Usage</a></li>
+    <li><a href="/yoy.html">YoY</a></li>
+    <li><a href="/airyards.html">Air Yards</a></li>
+    <li><a href="/explorer.html">Explorer</a></li>
+    <li><a href="/redzone.html">Red Zone</a></li>
+    <li><a href="/efficiency.html">Efficiency</a></li>
+    <li><a href="/consistency.html">Consistency</a></li>
+    <li><a href="/schedule.html">Schedule</a></li>
+    <li><a href="/stocks.html">Stocks</a></li>
+    <li><a href="/opportunity.html">Opportunity</a></li>
+    <li><a href="/reportcard.html">Report Card</a></li>
+    <li><a href="/awards.html">Awards</a></li>
+    <li><a href="/vorp.html">VORP</a></li>
+    <li><a href="/tradevalues.html">Trade Values</a></li>
+    <li><a href="/tradefinder.html">Trade Finder</a></li>
+    <li><a href="/rosterbuilder.html">Roster Builder</a></li>
+    <li><a href="/scoring.html">Scoring</a></li>
+    <li><a href="/cheatsheet.html">Cheat Sheet</a></li>
+    <li><a href="/auction.html" class="active">Auction</a></li>
+    <li><a href="/team/KC">Teams</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
+    <li><a href="/agents.html">War Room</a></li>
+  </ul>
+</nav>
+
+<main class="av-page" id="av-content">
+  <div class="av-header">
+    <h1>Auction Values</h1>
+    <div class="av-subtitle">trade values converted to draft-day dollars</div>
+  </div>
+
+  <div class="av-controls">
+    <label>Budget:
+      <input type="range" id="budget-slider" min="50" max="500" step="10" value="200">
+    </label>
+    <div class="av-budget-display" id="budget-display">$200</div>
+    <label>Roster:
+      <input type="number" id="roster-input" min="8" max="25" value="15" style="width:60px;">
+    </label>
+    <label>Season:
+      <select id="season-select"></select>
+    </label>
+    <button class="av-export-btn" id="export-btn">Export PNG</button>
+  </div>
+
+  <div class="av-pos-tabs" id="pos-tabs">
+    <button class="av-pos-tab active" data-pos="ALL">All</button>
+    <button class="av-pos-tab" data-pos="QB">QB</button>
+    <button class="av-pos-tab" data-pos="RB">RB</button>
+    <button class="av-pos-tab" data-pos="WR">WR</button>
+    <button class="av-pos-tab" data-pos="TE">TE</button>
+  </div>
+
+  <div class="av-search">
+    <input type="text" id="search-input" placeholder="search players...">
+  </div>
+
+  <div class="av-summary" id="pos-summary"></div>
+
+  <div class="av-table-wrap" id="table-wrap">
+    <div class="av-loading">pulling film...</div>
+  </div>
+</main>
+
+<div class="av-watermark">razzle.lol</div>
+
+<footer style="text-align:center; padding:24px 20px 32px; font-family:var(--font-hand); font-size:15px; color:var(--ink-light); border-top:2px dashed var(--ink-faint); margin-top:40px;">
+  <div style="margin-bottom:10px;">
+    <a href="/lab.html" style="color:var(--ink-light); text-decoration:none;">The Lab</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tools.html" style="color:var(--ink-light); text-decoration:none;">Tools</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/rankings.html" style="color:var(--ink-light); text-decoration:none;">Rankings</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/leaders.html" style="color:var(--ink-light); text-decoration:none;">Leaders</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/prospects.html" style="color:var(--ink-light); text-decoration:none;">Prospects</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/scarcity.html" style="color:var(--ink-light); text-decoration:none;">Scarcity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/breakouts.html" style="color:var(--ink-light); text-decoration:none;">Breakouts</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/buysell.html" style="color:var(--ink-light); text-decoration:none;">Buy/Sell</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/aging.html" style="color:var(--ink-light); text-decoration:none;">Aging</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/weekly.html" style="color:var(--ink-light); text-decoration:none;">Weekly</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/targets.html" style="color:var(--ink-light); text-decoration:none;">Targets</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/matchups.html" style="color:var(--ink-light); text-decoration:none;">Matchups</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/usage.html" style="color:var(--ink-light); text-decoration:none;">Usage</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/yoy.html" style="color:var(--ink-light); text-decoration:none;">YoY</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/airyards.html" style="color:var(--ink-light); text-decoration:none;">Air Yards</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/explorer.html" style="color:var(--ink-light); text-decoration:none;">Explorer</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/redzone.html" style="color:var(--ink-light); text-decoration:none;">Red Zone</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/efficiency.html" style="color:var(--ink-light); text-decoration:none;">Efficiency</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/consistency.html" style="color:var(--ink-light); text-decoration:none;">Consistency</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/schedule.html" style="color:var(--ink-light); text-decoration:none;">Schedule</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/stocks.html" style="color:var(--ink-light); text-decoration:none;">Stocks</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/opportunity.html" style="color:var(--ink-light); text-decoration:none;">Opportunity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/reportcard.html" style="color:var(--ink-light); text-decoration:none;">Report Card</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/awards.html" style="color:var(--ink-light); text-decoration:none;">Awards</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/vorp.html" style="color:var(--ink-light); text-decoration:none;">VORP</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tradevalues.html" style="color:var(--ink-light); text-decoration:none;">Trade Values</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tradefinder.html" style="color:var(--ink-light); text-decoration:none;">Trade Finder</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/rosterbuilder.html" style="color:var(--ink-light); text-decoration:none;">Roster Builder</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/scoring.html" style="color:var(--ink-light); text-decoration:none;">Scoring</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/cheatsheet.html" style="color:var(--ink-light); text-decoration:none;">Cheat Sheet</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/auction.html" style="color:var(--ink-light); text-decoration:none;">Auction</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/team/KC" style="color:var(--ink-light); text-decoration:none;">Teams</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none;">League Intel</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/agents.html" style="color:var(--ink-light); text-decoration:none;">War Room</a>
+  </div>
+  razzle.lol — let's razzle dazzle em baby
+</footer>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script src="app.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  var state = {
+    budget: 200,
+    rosterSize: 15,
+    season: 0,
+    position: 'ALL',
+    search: '',
+    sortKey: 'auction_value',
+    sortDir: -1,
+    data: null,
+  };
+
+  var budgetSlider = document.getElementById('budget-slider');
+  var budgetDisplay = document.getElementById('budget-display');
+  var rosterInput = document.getElementById('roster-input');
+  var seasonSelect = document.getElementById('season-select');
+  var searchInput = document.getElementById('search-input');
+  var posTabs = document.getElementById('pos-tabs');
+  var tableWrap = document.getElementById('table-wrap');
+  var posSummary = document.getElementById('pos-summary');
+
+  // Budget slider
+  budgetSlider.addEventListener('input', function() {
+    state.budget = parseInt(this.value, 10);
+    budgetDisplay.textContent = '$' + state.budget;
+  });
+  budgetSlider.addEventListener('change', function() {
+    fetchData();
+  });
+
+  // Roster size
+  rosterInput.addEventListener('change', function() {
+    state.rosterSize = Math.max(8, Math.min(25, parseInt(this.value, 10) || 15));
+    this.value = state.rosterSize;
+    fetchData();
+  });
+
+  // Season select
+  seasonSelect.addEventListener('change', function() {
+    state.season = parseInt(this.value, 10) || 0;
+    fetchData();
+  });
+
+  // Position tabs
+  posTabs.addEventListener('click', function(e) {
+    var tab = e.target.closest('.av-pos-tab');
+    if (!tab) return;
+    posTabs.querySelectorAll('.av-pos-tab').forEach(function(t) { t.classList.remove('active'); });
+    tab.classList.add('active');
+    state.position = tab.getAttribute('data-pos');
+    renderTable();
+  });
+
+  // Search
+  searchInput.addEventListener('input', function() {
+    state.search = this.value.toLowerCase();
+    renderTable();
+  });
+
+  // Export
+  document.getElementById('export-btn').addEventListener('click', function() {
+    var el = document.getElementById('av-content');
+    if (typeof html2canvas !== 'undefined') {
+      html2canvas(el, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+        var ctx = canvas.getContext('2d');
+        ctx.font = '24px sans-serif';
+        ctx.fillStyle = 'rgba(0,0,0,0.12)';
+        ctx.fillText('razzle.lol', canvas.width - 160, canvas.height - 20);
+        var link = document.createElement('a');
+        link.download = 'razzle-auction-values.png';
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    }
+  });
+
+  function fetchData() {
+    tableWrap.innerHTML = '<div class="av-loading">pulling film...</div>';
+    var url = '/api/auction-values?budget=' + state.budget + '&roster_size=' + state.rosterSize;
+    if (state.season > 0) url += '&season=' + state.season;
+
+    fetch(url).then(function(resp) {
+      if (!resp.ok) throw new Error('HTTP ' + resp.status);
+      return resp.json();
+    }).then(function(data) {
+      state.data = data;
+
+      // Populate season selector
+      if (data.available_seasons && seasonSelect.options.length <= 1) {
+        seasonSelect.innerHTML = '';
+        data.available_seasons.forEach(function(s) {
+          var opt = document.createElement('option');
+          opt.value = s;
+          opt.textContent = s;
+          if (s === data.season) opt.selected = true;
+          seasonSelect.appendChild(opt);
+        });
+      }
+
+      renderSummary();
+      renderTable();
+    }).catch(function(err) {
+      tableWrap.innerHTML = '<div class="av-error">failed to load auction values: ' + escapeHtml(err.message) + '</div>';
+    });
+  }
+
+  function renderSummary() {
+    if (!state.data) return;
+    var pt = state.data.position_totals || {};
+    var html = '';
+    ['QB', 'RB', 'WR', 'TE'].forEach(function(pos) {
+      var s = pt[pos] || { count: 0, total_value: 0, avg_value: 0, top_value: 0 };
+      html += '<div class="av-sum-card">';
+      html += '<div class="av-sum-pos ' + pos + '">' + pos + '</div>';
+      html += '<div class="av-sum-big">$' + escapeHtml(String(s.top_value)) + '</div>';
+      html += '<div class="av-sum-stat">top value</div>';
+      html += '<div class="av-sum-stat">' + escapeHtml(String(s.count)) + ' players &middot; avg $' + escapeHtml(String(s.avg_value)) + '</div>';
+      html += '</div>';
+    });
+    posSummary.innerHTML = html;
+  }
+
+  function renderTable() {
+    if (!state.data || !state.data.players) {
+      tableWrap.innerHTML = '<div class="av-loading">no data</div>';
+      return;
+    }
+
+    var players = state.data.players.slice();
+
+    // Position filter
+    if (state.position !== 'ALL') {
+      players = players.filter(function(p) { return p.position === state.position; });
+    }
+
+    // Search filter
+    if (state.search) {
+      players = players.filter(function(p) {
+        return (p.full_name || '').toLowerCase().indexOf(state.search) !== -1 ||
+               (p.team || '').toLowerCase().indexOf(state.search) !== -1;
+      });
+    }
+
+    // Sort
+    players.sort(function(a, b) {
+      var av = a[state.sortKey] || 0;
+      var bv = b[state.sortKey] || 0;
+      if (typeof av === 'string') {
+        return state.sortDir * av.localeCompare(bv);
+      }
+      return state.sortDir * (bv - av);
+    });
+
+    if (players.length === 0) {
+      tableWrap.innerHTML = '<div class="av-loading">no players match your filters</div>';
+      return;
+    }
+
+    var cols = [
+      { key: 'rank', label: '#', w: '40px' },
+      { key: 'full_name', label: 'Player' },
+      { key: 'position', label: 'Pos', w: '50px' },
+      { key: 'team', label: 'Team', w: '50px' },
+      { key: 'age', label: 'Age', w: '45px' },
+      { key: 'auction_value', label: 'Auction $' },
+      { key: 'trade_value', label: 'Trade Value' },
+      { key: 'ppg', label: 'PPG', w: '60px' },
+      { key: 'tier', label: 'Tier', w: '80px' },
+    ];
+
+    var html = '<table class="av-table"><thead><tr>';
+    cols.forEach(function(col) {
+      var arrow = state.sortKey === col.key ? (state.sortDir > 0 ? ' &#9650;' : ' &#9660;') : '';
+      html += '<th data-sort="' + col.key + '"' + (col.w ? ' style="width:' + col.w + '"' : '') + '>' + col.label + arrow + '</th>';
+    });
+    html += '</tr></thead><tbody>';
+
+    players.forEach(function(p, i) {
+      html += '<tr>';
+      html += '<td>' + escapeHtml(String(i + 1)) + '</td>';
+      html += '<td>' + escapeHtml(p.full_name) + '</td>';
+      html += '<td><span class="av-pos-badge ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span></td>';
+      html += '<td>' + escapeHtml(p.team) + '</td>';
+      html += '<td>' + escapeHtml(String(p.age || '-')) + '</td>';
+      html += '<td><span class="av-dollar ' + tierClass(p.tier) + '">$' + escapeHtml(String(p.auction_value)) + '</span></td>';
+      html += '<td>';
+      html += '<div class="av-tv-bar"><div class="av-tv-fill" style="width:' + Math.min(100, p.trade_value) + '%"></div></div>';
+      html += escapeHtml(String(p.trade_value));
+      html += '</td>';
+      html += '<td>' + escapeHtml(String(p.ppg)) + '</td>';
+      html += '<td><span class="av-tier-badge ' + tierClass(p.tier) + '">' + escapeHtml(tierLabel(p.tier)) + '</span></td>';
+      html += '</tr>';
+    });
+
+    html += '</tbody></table>';
+    tableWrap.innerHTML = html;
+
+    // Sort click handlers
+    tableWrap.querySelectorAll('th[data-sort]').forEach(function(th) {
+      th.addEventListener('click', function() {
+        var key = this.getAttribute('data-sort');
+        if (state.sortKey === key) {
+          state.sortDir *= -1;
+        } else {
+          state.sortKey = key;
+          state.sortDir = -1;
+        }
+        renderTable();
+      });
+    });
+  }
+
+  function tierClass(tier) {
+    if (tier === 'dollar') return 'dollar-tier';
+    return tier || '';
+  }
+
+  function tierLabel(tier) {
+    var labels = { premium: 'Premium', starter: 'Starter', value: 'Value', bargain: 'Bargain', dollar: '$1 Filler' };
+    return labels[tier] || tier || '';
+  }
+
+  // Analytics
+  if (typeof fetch !== 'undefined') {
+    fetch('/api/analytics/pageview', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ page: 'auction', referrer: document.referrer || '' })
+    }).catch(function() {});
+  }
+
+  // Init
+  fetchData();
+})();
+</script>
+</body>
+</html>

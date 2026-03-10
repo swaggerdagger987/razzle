@@ -913,6 +913,7 @@ def sitemap_xml():
         ("/rosterbuilder.html", "0.8", "weekly"),
         ("/scoring.html", "0.8", "weekly"),
         ("/cheatsheet.html", "0.8", "weekly"),
+        ("/auction.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1355,6 +1356,17 @@ async def roster_grade(request: Request):
         return JSONResponse({"error": "Failed to grade roster"}, status_code=500)
 
 
+@app.get("/api/auction-values")
+def auction_values(season: int = 0, budget: int = 200, roster_size: int = 15):
+    """Convert trade values into auction dollar amounts."""
+    try:
+        s = season if season > 0 else None
+        return live_data.fetch_auction_values(season=s, budget=budget, roster_size=roster_size)
+    except Exception as e:
+        logger.error(f"auction-values error: {e}")
+        return JSONResponse({"error": "Failed to fetch auction values"}, status_code=500)
+
+
 @app.get("/api/tools-hub")
 def tools_hub():
     """Return the static tools catalog organized by category."""
@@ -1371,6 +1383,7 @@ def tools_hub():
                 {"name": "Season Awards", "desc": "Data-driven fantasy superlatives — MVP, Iron Man, and more", "url": "/awards.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Report Card", "desc": "Composite Fantasy GPA grading efficiency, consistency, and more", "url": "/reportcard.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Draft Cheat Sheet", "desc": "Printable position rankings with tier breaks — PPR, Half, Standard", "url": "/cheatsheet.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Auction Values", "desc": "Trade values converted to auction dollars for any budget", "url": "/auction.html", "positions": ["QB", "RB", "WR", "TE"]},
             ],
         },
         {
