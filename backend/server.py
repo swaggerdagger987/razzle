@@ -73,7 +73,7 @@ def bootstrap_database():
 
     if count < 50:
         logger.info("Database empty — bootstrapping nflverse data...")
-        seasons = list(range(2020, current_nfl_season() + 1))
+        seasons = list(range(2015, current_nfl_season() + 1))
         for s in seasons:
             try:
                 process_season(conn, s)
@@ -122,7 +122,7 @@ def bootstrap_database():
             )
             fconn = cfb_conn()
             cfb_init_tables(fconn)
-            for s in range(2020, 2026):
+            for s in range(2015, current_nfl_season() + 1):
                 try:
                     csv_text = fetch_season_csv(s)
                     if csv_text:

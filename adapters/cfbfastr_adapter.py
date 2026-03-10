@@ -496,8 +496,8 @@ def refine_positions_from_combine(conn):
 
 def main():
     current_year = datetime.now().year
-    # Default: 2020-current (matches nflverse range for cross-referencing)
-    seasons = list(range(2020, current_year + 1))
+    # Default: 2015-current (expanded for deeper historical analysis)
+    seasons = list(range(2015, current_year + 1))
 
     if len(sys.argv) > 1 and sys.argv[1] == "--seasons":
         seasons = [int(y) for y in sys.argv[2:]]
