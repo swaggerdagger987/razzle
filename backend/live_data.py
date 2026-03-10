@@ -10213,7 +10213,7 @@ def fetch_weekly_leaders(season=None, week=None, position=None, limit=25):
 
 def fetch_pace_tracker(season=None, position=None, limit=50):
     """Project per-game stats to 17-game season and track milestone progress."""
-    conn = get_db()
+    conn = get_conn()
     try:
         cursor = conn.cursor()
 
@@ -10369,7 +10369,7 @@ def fetch_pace_tracker(season=None, position=None, limit=50):
 
 def fetch_game_log(player_id, season=None):
     """Return week-by-week box score stats for a player in a given season."""
-    conn = get_db()
+    conn = get_conn()
     try:
         cursor = conn.cursor()
 
@@ -10454,7 +10454,7 @@ def fetch_game_log(player_id, season=None):
 
 def fetch_streaks(season=None, position=None, window=4, limit=25):
     """Identify players on hot or cold scoring streaks vs their season average."""
-    conn = get_db()
+    conn = get_conn()
     try:
         cursor = conn.cursor()
 
@@ -10542,7 +10542,7 @@ def fetch_streaks(season=None, position=None, window=4, limit=25):
 
 def fetch_season_recap(season=None):
     """Generate a data-driven season recap with key storylines."""
-    conn = get_db()
+    conn = get_conn()
     try:
         cursor = conn.cursor()
 
@@ -10714,7 +10714,7 @@ def fetch_compare_table(player_ids, season=None):
     if not player_ids:
         return {"error": "No player IDs provided"}
 
-    conn = get_db()
+    conn = get_conn()
     try:
         cursor = conn.cursor()
 
@@ -10784,7 +10784,7 @@ def fetch_compare_table(player_ids, season=None):
 
 def fetch_records(position=None, limit=10):
     """Return all-time fantasy records: single-game, single-season, career PPG."""
-    conn = get_db()
+    conn = get_conn()
     try:
         cursor = conn.cursor()
 
@@ -10905,7 +10905,7 @@ def fetch_waivers(season=None, position=None, window=4, limit=30):
     These are likely unrostered players who have been producing recently.
     Compares recent window PPG vs full season PPG; big positive delta = waiver target.
     """
-    conn = get_db()
+    conn = get_conn()
     try:
         cursor = conn.cursor()
 
@@ -11002,7 +11002,7 @@ def fetch_playoff_schedule(season=None, position=None, limit=40):
     Uses defense PPG-allowed-by-position to rate each week's difficulty.
     Returns players ranked by playoff SOS (easiest first = best playoff schedule).
     """
-    conn = get_db()
+    conn = get_conn()
     try:
         cursor = conn.cursor()
 
@@ -11161,7 +11161,7 @@ def fetch_fpts_breakdown(season=None, position=None, limit=40):
     PPR scoring: 0.04 per pass yd, 0.1 per rush/rec yd, 1 per reception,
                  4 per pass TD, 6 per rush/rec TD, -2 per INT.
     """
-    conn = get_db()
+    conn = get_conn()
     try:
         cursor = conn.cursor()
 
@@ -11260,7 +11260,7 @@ def fetch_handcuffs(season=None, limit=30):
     For each team, find the #1 RB (most carries) and #2 RB (handcuff).
     Rank handcuffs by team rushing volume and their own efficiency/usage.
     """
-    conn = get_db()
+    conn = get_conn()
     try:
         cursor = conn.cursor()
 
@@ -11353,7 +11353,7 @@ def fetch_weekly_mvp(season=None):
     Weekly MVP grid — the #1 PPR scorer at each position for every week.
     Returns a grid: {weeks: [{week, QB: {name, fpts}, RB: ..., WR: ..., TE: ...}]}
     """
-    conn = get_db()
+    conn = get_conn()
     try:
         cursor = conn.cursor()
 
@@ -11407,7 +11407,7 @@ def fetch_stacks(season=None, limit=30):
     Computes Pearson correlation between QB weekly scores and their pass
     catchers' weekly scores (same team). Best stacks = highest correlation.
     """
-    conn = get_db()
+    conn = get_conn()
     try:
         cursor = conn.cursor()
 

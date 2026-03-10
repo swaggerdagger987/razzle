@@ -1,6 +1,10 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 129 — Stack Correlation Finder (COMPLETE)
+## Current Phase: Phase 130 — QA+UX Audit for Phases 126-129 (COMPLETE)
+
+**Exit criterion MET:** QA+UX audit of FPTS Breakdown (126), Handcuff Rankings (127), Weekly MVP Grid (128), Stack Correlation Finder (129). 1 HIGH finding: `get_db()` → `get_conn()` in 12 backend functions from Phases 116-129. All 12 occurrences fixed. All 4 pages pass XSS, error handling, loading states, PNG export, analytics, design compliance. No other issues found.
+
+## Previous Phase: Phase 129 — Stack Correlation Finder (COMPLETE)
 
 **Exit criterion MET:** /stacks.html shows QB-WR/TE stacking correlations. Computes Pearson correlation between QB weekly scores and their same-team pass catchers. Ranked by correlation strength with color-coded badges (high/mid/low/negative), correlation bar visualization, combined PPG, common games count. Season selector, PNG export with watermark. GET /api/stacks returns correlation data. 11 escapeHtml calls, 55/55 braces balanced. "Stacks" nav link on all 61 pages. Sitemap + tools hub entry under Player Discovery.
 
