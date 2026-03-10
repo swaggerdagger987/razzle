@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Target Distribution — Razzle</title>
+<meta property="og:title" content="Target Distribution — Razzle">
+<meta property="og:description" content="Fantasy football target and carry distribution by team — see who gets the ball. razzle.lol">
+<meta property="og:site_name" content="razzle.lol">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Target Distribution — Razzle">
+<meta name="twitter:description" content="Fantasy football target and carry distribution by team — see who gets the ball. razzle.lol">
+<meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
+<meta name="description" content="Target distribution dashboard — see team-by-team target and carry shares on razzle.lol">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .targets-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+  }
+
+  .targets-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .targets-header h1 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: var(--ink);
+    margin: 0 0 4px;
+  }
+  .targets-header .targets-subtitle {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+  }
+
+  /* Controls */
+  .targets-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .targets-season-select, .targets-team-select {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    padding: 6px 12px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--bg-card);
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  .targets-mode-tabs {
+    display: flex;
+    gap: 6px;
+  }
+  .targets-mode-tab {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--bg-card);
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .targets-mode-tab:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+  .targets-mode-tab.active {
+    background: var(--ink);
+    color: var(--bg-card);
+  }
+
+  .targets-actions {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  /* Team card */
+  .team-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+
+  .team-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: var(--bg-warm);
+    border-bottom: 2px dashed var(--ink-faint);
+  }
+  .team-card-name {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .team-card-abbr {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-light);
+    margin-left: 8px;
+  }
+  .team-card-totals {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-medium);
+  }
+
+  /* Distribution bar */
+  .dist-bar-container {
+    padding: 12px 16px;
+  }
+  .dist-bar-label {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .dist-bar {
+    display: flex;
+    height: 32px;
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 4px;
+  }
+  .dist-segment {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--ink);
+    cursor: pointer;
+    transition: opacity 0.15s;
+    overflow: hidden;
+    white-space: nowrap;
+    min-width: 0;
+    position: relative;
+  }
+  .dist-segment:hover {
+    opacity: 0.8;
+  }
+  .dist-segment .seg-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 3px;
+  }
+
+  /* Player detail rows */
+  .team-players {
+    padding: 8px 16px 12px;
+  }
+  .team-player-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--ink-faint);
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+  .team-player-row:hover {
+    background: rgba(217, 119, 87, 0.06);
+  }
+  .team-player-row:last-child {
+    border-bottom: none;
+  }
+  .player-row-pos {
+    width: 28px;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 4px;
+    border-radius: 4px;
+    border: 1.5px solid var(--ink);
+    color: white;
+    flex-shrink: 0;
+  }
+  .player-row-name {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink);
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .player-row-stat {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-medium);
+    text-align: right;
+    min-width: 50px;
+  }
+  .player-row-share {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink);
+    text-align: right;
+    min-width: 44px;
+  }
+
+  /* Annotation */
+  .team-annotation {
+    font-family: var(--font-hand);
+    font-size: 15px;
+    color: var(--ink-light);
+    padding: 0 16px 10px;
+  }
+
+  /* Loading */
+  .targets-loading {
+    text-align: center;
+    font-family: var(--font-hand);
+    font-size: 22px;
+    color: var(--ink-light);
+    padding: 60px 20px;
+  }
+
+  /* Legend */
+  .targets-legend {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-medium);
+  }
+  .legend-swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    border: 1.5px solid var(--ink);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .targets-header h1 { font-size: 24px; }
+    .team-card-header { flex-direction: column; align-items: flex-start; gap: 4px; }
+    .player-row-stat { min-width: 40px; font-size: 10px; }
+  }
+  @media (max-width: 480px) {
+    .targets-page { padding: 16px 10px 40px; }
+    .dist-bar { height: 26px; }
+    .dist-segment { font-size: 9px; }
+  }
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <a href="/" class="logo">
+    <div class="logo-mark">&#x1F42F;</div>
+    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/lab.html">The Lab</a></li>
+    <li><a href="/rankings.html">Rankings</a></li>
+    <li><a href="/leaders.html">Leaders</a></li>
+    <li><a href="/prospects.html">Prospects</a></li>
+    <li><a href="/scarcity.html">Scarcity</a></li>
+    <li><a href="/breakouts.html">Breakouts</a></li>
+    <li><a href="/buysell.html">Buy/Sell</a></li>
+    <li><a href="/aging.html">Aging</a></li>
+    <li><a href="/weekly.html">Weekly</a></li>
+    <li><a href="/targets.html" class="active">Targets</a></li>
+    <li><a href="/team/KC">Teams</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
+    <li><a href="/agents.html">War Room</a></li>
+  </ul>
+</nav>
+
+<main class="targets-page" id="targets-content">
+  <div class="targets-header">
+    <h1>Target Distribution</h1>
+    <div class="targets-subtitle">who gets the ball? follow the volume.</div>
+  </div>
+
+  <div class="targets-controls">
+    <div class="targets-mode-tabs">
+      <button class="targets-mode-tab active" data-mode="targets">Targets</button>
+      <button class="targets-mode-tab" data-mode="carries">Carries</button>
+    </div>
+    <select class="targets-team-select" id="team-select" aria-label="Team">
+      <option value="">All Teams</option>
+    </select>
+    <select class="targets-season-select" id="season-select" title="Season" aria-label="Season"></select>
+  </div>
+
+  <div class="targets-legend">
+    <div class="legend-item"><div class="legend-swatch" style="background:#5b7fff"></div>QB</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#2ec4b6"></div>RB</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#d97757"></div>WR</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#8b5cf6"></div>TE</div>
+  </div>
+
+  <div class="targets-actions">
+    <button class="btn-chunky" id="export-btn" title="Export as PNG">Export PNG</button>
+  </div>
+
+  <div id="targets-body">
+    <div class="targets-loading" id="targets-loading">studying the film...</div>
+  </div>
+</main>
+
+<!-- Watermark -->
+<div style="position:fixed; bottom:10px; right:14px; font-family:var(--font-hand); font-size:14px; color:var(--ink-light); opacity:0.7; pointer-events:none; z-index:999;">razzle.lol</div>
+
+<!-- Footer -->
+<footer style="text-align:center; padding:24px 20px 32px; font-family:var(--font-hand); font-size:15px; color:var(--ink-light); border-top:2px dashed var(--ink-faint); margin-top:40px;">
+  <div style="margin-bottom:10px;">
+    <a href="/lab.html" style="color:var(--ink-light); text-decoration:none;">The Lab</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/rankings.html" style="color:var(--ink-light); text-decoration:none;">Rankings</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/leaders.html" style="color:var(--ink-light); text-decoration:none;">Leaders</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/prospects.html" style="color:var(--ink-light); text-decoration:none;">Prospects</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/scarcity.html" style="color:var(--ink-light); text-decoration:none;">Scarcity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/breakouts.html" style="color:var(--ink-light); text-decoration:none;">Breakouts</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/buysell.html" style="color:var(--ink-light); text-decoration:none;">Buy/Sell</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/aging.html" style="color:var(--ink-light); text-decoration:none;">Aging</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/weekly.html" style="color:var(--ink-light); text-decoration:none;">Weekly</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/targets.html" style="color:var(--ink-light); text-decoration:none;">Targets</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/team/KC" style="color:var(--ink-light); text-decoration:none;">Teams</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none;">League Intel</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/agents.html" style="color:var(--ink-light); text-decoration:none;">War Room</a>
+  </div>
+  razzle.lol — let's razzle dazzle em baby
+</footer>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+  var POS_LIGHT = { QB: '#dde4f7', RB: '#d9efec', WR: '#f7e4d8', TE: '#e5dcf7' };
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  var currentData = null;
+  var activeMode = 'targets';
+
+  function loadData() {
+    var season = document.getElementById('season-select').value || '';
+    var team = document.getElementById('team-select').value || '';
+    var url = '/api/target-distribution?';
+    if (season) url += 'season=' + season + '&';
+    if (team) url += 'team=' + team;
+
+    document.getElementById('targets-loading').style.display = '';
+    document.getElementById('targets-loading').textContent = 'studying the film...';
+    document.getElementById('targets-body').innerHTML = '<div class="targets-loading" id="targets-loading">studying the film...</div>';
+
+    fetch(url)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        currentData = data;
+        populateSeasons(data.available_seasons, data.season);
+        populateTeams(data.teams);
+        renderDistribution(data);
+      })
+      .catch(function() {
+        document.getElementById('targets-body').innerHTML = '<div class="targets-loading">fumbled the data...</div>';
+      });
+  }
+
+  function populateSeasons(seasons, current) {
+    var sel = document.getElementById('season-select');
+    if (sel.options.length > 0) return;
+    seasons.forEach(function(s) {
+      var opt = document.createElement('option');
+      opt.value = s;
+      opt.textContent = s;
+      if (s === current) opt.selected = true;
+      sel.appendChild(opt);
+    });
+  }
+
+  function populateTeams(teams) {
+    var sel = document.getElementById('team-select');
+    if (sel.options.length > 1) return;
+    teams.forEach(function(t) {
+      var opt = document.createElement('option');
+      opt.value = t.team;
+      opt.textContent = t.team;
+      sel.appendChild(opt);
+    });
+  }
+
+  function getAnnotation(team, mode) {
+    // Find the dominant player
+    if (!team.players || team.players.length === 0) return '';
+    var top = team.players[0];
+    var share = mode === 'targets' ? top.target_share : top.carry_share;
+    if (share > 30) return escapeHtml(top.name.split(' ').pop()) + ' owns this ' + mode.slice(0, -1) + ' tree';
+    if (share > 22) return escapeHtml(top.name.split(' ').pop()) + ' leads the way';
+    return 'spread it around';
+  }
+
+  function renderDistribution(data) {
+    var container = document.getElementById('targets-body');
+    if (!data.teams || data.teams.length === 0) {
+      container.innerHTML = '<div class="targets-loading">no data for this selection...</div>';
+      return;
+    }
+
+    var html = '';
+    data.teams.forEach(function(team) {
+      var total = activeMode === 'targets' ? team.total_targets : team.total_carries;
+      var label = activeMode === 'targets' ? 'Targets' : 'Carries';
+
+      html += '<div class="team-card">';
+      html += '<div class="team-card-header">';
+      html += '<div><span class="team-card-name">' + escapeHtml(team.team_name) + '</span>';
+      html += '<span class="team-card-abbr">' + escapeHtml(team.team) + '</span></div>';
+      html += '<div class="team-card-totals">' + total + ' total ' + label.toLowerCase() + '</div>';
+      html += '</div>';
+
+      // Distribution bar
+      html += '<div class="dist-bar-container">';
+      html += '<div class="dist-bar-label">' + label + ' Distribution</div>';
+      html += '<div class="dist-bar">';
+
+      var otherPct = 100;
+      team.players.forEach(function(p) {
+        var share = activeMode === 'targets' ? p.target_share : p.carry_share;
+        if (share < 2) return;
+        otherPct -= share;
+        var posColor = POS_COLORS[p.position] || '#d97757';
+        var lightColor = POS_LIGHT[p.position] || '#f7e4d8';
+        var lastName = p.name.split(' ').pop();
+        html += '<div class="dist-segment" style="width:' + share + '%; background:' + lightColor + '; border-right:1px solid ' + posColor + ';" ';
+        html += 'title="' + escapeHtml(p.name) + ': ' + share + '% (' + (activeMode === 'targets' ? p.targets : p.carries) + ')" ';
+        html += 'data-pid="' + escapeHtml(p.player_id) + '">';
+        if (share > 8) {
+          html += '<span class="seg-label">' + escapeHtml(lastName) + '</span>';
+        }
+        html += '</div>';
+      });
+      if (otherPct > 2) {
+        html += '<div class="dist-segment" style="width:' + Math.max(otherPct, 0).toFixed(1) + '%; background:var(--bg-warm);">';
+        if (otherPct > 8) html += '<span class="seg-label" style="color:var(--ink-light)">other</span>';
+        html += '</div>';
+      }
+      html += '</div></div>';
+
+      // Annotation
+      var ann = getAnnotation(team, activeMode);
+      if (ann) {
+        html += '<div class="team-annotation">' + ann + '</div>';
+      }
+
+      // Player detail rows
+      html += '<div class="team-players">';
+      team.players.forEach(function(p) {
+        var share = activeMode === 'targets' ? p.target_share : p.carry_share;
+        var count = activeMode === 'targets' ? p.targets : p.carries;
+        if (count === 0) return;
+        var posColor = POS_COLORS[p.position] || '#d97757';
+        html += '<div class="team-player-row" data-pid="' + escapeHtml(p.player_id) + '">';
+        html += '<div class="player-row-pos" style="background:' + posColor + '">' + escapeHtml(p.position) + '</div>';
+        html += '<div class="player-row-name">' + escapeHtml(p.name) + '</div>';
+        html += '<div class="player-row-stat">' + count + ' ' + (activeMode === 'targets' ? 'tgt' : 'car') + '</div>';
+        html += '<div class="player-row-share">' + share + '%</div>';
+        html += '</div>';
+      });
+      html += '</div>';
+
+      html += '</div>';
+    });
+
+    container.innerHTML = html;
+
+    // Click handlers
+    container.querySelectorAll('[data-pid]').forEach(function(el) {
+      el.addEventListener('click', function() {
+        var pid = el.getAttribute('data-pid');
+        if (pid) window.location.href = '/player/' + encodeURIComponent(pid);
+      });
+    });
+  }
+
+  // Mode tabs
+  document.querySelectorAll('.targets-mode-tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.targets-mode-tab').forEach(function(t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      activeMode = tab.getAttribute('data-mode');
+      if (currentData) renderDistribution(currentData);
+    });
+  });
+
+  // Season selector
+  document.getElementById('season-select').addEventListener('change', function() {
+    loadData();
+  });
+
+  // Team selector
+  document.getElementById('team-select').addEventListener('change', function() {
+    loadData();
+  });
+
+  // Export PNG
+  document.getElementById('export-btn').addEventListener('click', function() {
+    var el = document.getElementById('targets-content');
+    if (typeof html2canvas === 'undefined') return;
+    html2canvas(el, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+      var ctx = canvas.getContext('2d');
+      ctx.font = '24px Caveat, cursive';
+      ctx.fillStyle = 'rgba(26, 26, 46, 0.35)';
+      ctx.textAlign = 'right';
+      ctx.fillText('razzle.lol', canvas.width - 30, canvas.height - 20);
+
+      var link = document.createElement('a');
+      link.download = 'razzle-target-distribution.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+  });
+
+  // Analytics
+  if (navigator.sendBeacon) {
+    navigator.sendBeacon('/api/analytics/pageview', JSON.stringify({ page: '/targets.html' }));
+  } else {
+    fetch('/api/analytics/pageview', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ page: '/targets.html' }) }).catch(function() {});
+  }
+
+  // Load on init
+  loadData();
+})();
+</script>
+</body>
+</html>

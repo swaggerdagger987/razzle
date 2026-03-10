@@ -5106,3 +5106,100 @@ def fetch_weekly_heatmap(season=None, position=None, limit=40):
         }
     finally:
         conn.close()
+
+
+def fetch_target_distribution(season=None, team=None):
+    """Return target and carry distribution by team.
+
+    For each team, returns players sorted by targets (or carries for RB-heavy),
+    with their share of team totals.
+    """
+    conn = get_conn()
+    try:
+        row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
+        available_seasons = [r[0] for r in row] if row else [2024]
+        if not season:
+            season = available_seasons[0] if available_seasons else 2024
+
+        teams_filter = ""
+        params = [season]
+        if team and team.upper() in ABBREV_TO_TEAM:
+            teams_filter = "AND p.team = ?"
+            params.append(team.upper())
+
+        # Get all players with targets or carries
+        rows = conn.execute(f"""
+            SELECT
+                p.player_id, p.full_name, p.position, p.team, p.headshot_url,
+                COUNT(DISTINCT s.week) as games,
+                COALESCE(SUM(s.targets), 0) as targets,
+                COALESCE(SUM(s.carries), 0) as carries,
+                COALESCE(SUM(s.receptions), 0) as receptions,
+                COALESCE(SUM(s.receiving_yards), 0) as rec_yards,
+                COALESCE(SUM(s.rushing_yards), 0) as rush_yards,
+                COALESCE(SUM(s.receiving_tds), 0) as rec_tds,
+                COALESCE(SUM(s.rushing_tds), 0) as rush_tds,
+                COALESCE(SUM(s.fantasy_points_ppr), 0) as ppr_pts
+            FROM players p
+            JOIN player_week_stats s ON s.player_id = p.player_id AND s.season = ?
+            WHERE p.position IN ('QB', 'RB', 'WR', 'TE')
+              AND p.team IS NOT NULL AND p.team != ''
+              {teams_filter}
+            GROUP BY p.player_id
+            HAVING (targets > 0 OR carries > 0) AND games >= 3
+            ORDER BY p.team, targets DESC
+            LIMIT 500
+        """, params).fetchall()
+
+        # Group by team
+        team_data = {}
+        for r in rows:
+            t = r[3]
+            if t not in team_data:
+                team_data[t] = {"team": t, "team_name": ABBREV_TO_TEAM.get(t, t), "total_targets": 0, "total_carries": 0, "players": []}
+            targets = r[6]
+            carries = r[7]
+            team_data[t]["total_targets"] += targets
+            team_data[t]["total_carries"] += carries
+            team_data[t]["players"].append({
+                "player_id": r[0],
+                "name": r[1] or "Unknown",
+                "position": r[2] or "",
+                "team": t,
+                "headshot_url": r[4] or "",
+                "games": r[5],
+                "targets": targets,
+                "carries": carries,
+                "receptions": r[8],
+                "rec_yards": r[9],
+                "rush_yards": r[10],
+                "rec_tds": r[11],
+                "rush_tds": r[12],
+                "ppr_pts": round(r[13], 1),
+            })
+
+        # Compute shares and sort teams by total targets
+        teams_out = []
+        for t in sorted(team_data.keys()):
+            td = team_data[t]
+            tt = td["total_targets"] or 1
+            tc = td["total_carries"] or 1
+            for p in td["players"]:
+                p["target_share"] = round(p["targets"] / tt * 100, 1)
+                p["carry_share"] = round(p["carries"] / tc * 100, 1)
+            # Sort players: WR/TE by targets, RB by carries, QB last
+            td["players"].sort(key=lambda x: x["targets"] + x["carries"], reverse=True)
+            # Keep top 8 per team to avoid clutter
+            td["players"] = td["players"][:8]
+            teams_out.append(td)
+
+        # Sort teams alphabetically
+        teams_out.sort(key=lambda x: x["team"])
+
+        return {
+            "season": season,
+            "available_seasons": available_seasons,
+            "teams": teams_out,
+        }
+    finally:
+        conn.close()

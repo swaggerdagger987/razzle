@@ -1,6 +1,26 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 73 — Weekly Scoring Heatmap (COMPLETE)
+## Current Phase: Phase 74 — Team Target Distribution (COMPLETE)
+
+**Exit criterion MET:** /targets.html page shows team-by-team target and carry distribution as stacked horizontal bars (treemap-style). Each team card shows player segments sized by target/carry share, color-coded by position (QB blue, RB teal, WR terracotta, TE purple). Targets/Carries mode toggle. Player name labels on segments >8%. Player detail rows with position badge, name, count, share%. Team selector dropdown. Season selector. Caveat annotations ("owns this target tree", "spread it around"). Click player segment or row → player profile. PNG export with watermark. Position color legend. "Targets" nav link added to all 17 HTML pages (nav + footer). Sitemap entry added. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors.
+
+### Phase 74 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/target-distribution endpoint | DONE | Per-team player targets/carries, shares, top 8 per team |
+| 2 | Target distribution page with bars | DONE | Stacked bars, mode toggle, annotations, responsive, PNG export |
+| 3 | Nav links + sitemap + analytics | DONE | All 17 pages updated, sitemap entry, pageview tracking |
+| 4 | Smoke test | DONE | Python + JS syntax clean, 18/18 design checks, nav links verified |
+
+### Decisions Log
+- **Target Distribution as Phase 74**: "Where do the targets go?" is a fundamental dynasty question. Target distribution by team shows opportunity share at a glance — critical for evaluating landing spots pre-draft and identifying opportunity vacuums. Highly screenshottable.
+- **Stacked horizontal bars**: Treemap-style bars make share distribution instantly visual. Position-colored segments let you see at a glance which positions dominate each team's passing game.
+- **Targets/Carries mode toggle**: Both target distribution AND carry distribution matter. Separate modes let users switch context without cluttering one view.
+- **Top 8 per team**: Prevents clutter from practice squad players with 1-2 targets. Shows the meaningful usage tree.
+- **Caveat annotations**: "Owns this target tree" for dominant players (>30% share), "leads the way" (>22%), "spread it around" for balanced attacks. Adds the personality without cluttering.
+
+## Previous Phase: Phase 73 — Weekly Scoring Heatmap (COMPLETE)
 
 **Exit criterion MET:** /weekly.html page shows a color-coded grid of player weekly fantasy scores (rows = players, columns = weeks). Cells color-coded in 5 tiers from red (bad) to green (good) based on positional percentile thresholds. Position filter tabs (All/QB/RB/WR/TE). Season selector. Click player name → player profile. PNG export with watermark. Color legend (cold → hot). Bye weeks shown. Sticky player column. "Weekly" nav link added to all 16 HTML pages (nav + footer). Sitemap entry added. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors.
 

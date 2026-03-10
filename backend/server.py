@@ -892,6 +892,7 @@ def sitemap_xml():
         ("/buysell.html", "0.8", "weekly"),
         ("/aging.html", "0.8", "weekly"),
         ("/weekly.html", "0.8", "weekly"),
+        ("/targets.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1058,6 +1059,14 @@ def weekly_heatmap(season: int = 0, position: str = "", limit: int = 40):
     s = season if season > 0 else None
     pos = position.upper() if position else None
     return live_data.fetch_weekly_heatmap(season=s, position=pos, limit=max(1, min(limit, 50)))
+
+
+@app.get("/api/target-distribution")
+def target_distribution(season: int = 0, team: str = ""):
+    """Return target and carry distribution by team."""
+    s = season if season > 0 else None
+    t = team.upper() if team else None
+    return live_data.fetch_target_distribution(season=s, team=t)
 
 
 @app.get("/api/analytics/summary")
