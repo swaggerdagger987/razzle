@@ -3,53 +3,58 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Season Pace Tracker — Razzle</title>
-<meta property="og:title" content="Season Pace Tracker — Razzle">
-<meta property="og:description" content="Projected season totals and milestone tracking on razzle.lol">
+<title>Workload Monitor — Razzle</title>
+<meta property="og:title" content="Workload Monitor — Razzle">
+<meta property="og:description" content="Snap counts, touches per game, and heavy usage tracking on razzle.lol">
 <meta property="og:site_name" content="razzle.lol">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Season Pace Tracker — Razzle">
-<meta name="twitter:description" content="Projected season totals and milestone tracking on razzle.lol">
+<meta name="twitter:title" content="Workload Monitor — Razzle">
+<meta name="twitter:description" content="Snap counts, touches per game, and heavy usage tracking on razzle.lol">
 <meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
-<meta name="description" content="Season pace tracker — projected totals and milestone watch on razzle.lol">
+<meta name="description" content="Workload monitor — snap counts, touches, and usage flags on razzle.lol">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="styles.css">
 <style>
-  .sp-page { max-width: 1100px; margin: 0 auto; padding: 24px 20px 60px; }
-  .sp-header { text-align: center; margin-bottom: 24px; }
-  .sp-header h1 { font-family: var(--font-display); font-size: 32px; color: var(--ink); margin: 0 0 4px; }
-  .sp-header .sp-subtitle { font-family: var(--font-hand); font-size: 20px; color: var(--ink-light); }
-  .sp-controls { display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
-  .sp-controls select { font-family: var(--font-mono); font-size: 13px; padding: 6px 10px; border: 2px solid var(--ink); border-radius: 4px; background: var(--card); }
-  .sp-controls .pos-tabs { display: flex; gap: 4px; }
-  .sp-controls .pos-tab { font-family: var(--font-mono); font-size: 12px; padding: 5px 12px; border: 2px solid var(--ink); border-radius: 4px; background: var(--card); cursor: pointer; font-weight: 700; }
-  .sp-controls .pos-tab.active { background: var(--ink); color: var(--sand); }
-  .sp-export { font-family: var(--font-mono); font-size: 12px; padding: 5px 14px; border: 2px solid var(--ink); border-radius: 4px; background: var(--card); cursor: pointer; font-weight: 700; }
-  .sp-export:hover { background: var(--ink); color: var(--sand); }
-  .sp-loading { text-align: center; font-family: var(--font-hand); font-size: 18px; color: var(--ink-light); padding: 60px 0; }
+  .wl-page { max-width: 1100px; margin: 0 auto; padding: 24px 20px 60px; }
+  .wl-header { text-align: center; margin-bottom: 24px; }
+  .wl-header h1 { font-family: var(--font-display); font-size: 32px; color: var(--ink); margin: 0 0 4px; }
+  .wl-header .wl-subtitle { font-family: var(--font-hand); font-size: 20px; color: var(--ink-light); }
+  .wl-controls { display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+  .wl-controls select { font-family: var(--font-mono); font-size: 13px; padding: 6px 10px; border: 2px solid var(--ink); border-radius: 4px; background: var(--card); }
+  .wl-controls .pos-tabs { display: flex; gap: 4px; }
+  .wl-controls .pos-tab { font-family: var(--font-mono); font-size: 12px; padding: 5px 12px; border: 2px solid var(--ink); border-radius: 4px; background: var(--card); cursor: pointer; font-weight: 700; }
+  .wl-controls .pos-tab.active { background: var(--ink); color: var(--sand); }
+  .wl-export { font-family: var(--font-mono); font-size: 12px; padding: 5px 14px; border: 2px solid var(--ink); border-radius: 4px; background: var(--card); cursor: pointer; font-weight: 700; }
+  .wl-export:hover { background: var(--ink); color: var(--sand); }
+  .wl-loading { text-align: center; font-family: var(--font-hand); font-size: 18px; color: var(--ink-light); padding: 60px 0; }
 
-  .sp-card { background: var(--card); border: 3px solid var(--ink); border-radius: 10px; box-shadow: 4px 4px 0 var(--ink); overflow: hidden; }
-  .sp-card-header { font-family: var(--font-display); font-size: 18px; padding: 10px 16px; background: var(--ink); color: var(--sand); }
-  .sp-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 12px; }
-  .sp-table th { background: var(--sand); padding: 6px 8px; text-align: right; font-size: 10px; font-weight: 700; border-bottom: 2px solid var(--ink-faint); white-space: nowrap; }
-  .sp-table th:first-child, .sp-table th:nth-child(2), .sp-table th:nth-child(3) { text-align: left; }
-  .sp-table td { padding: 6px 8px; text-align: right; border-bottom: 1px solid var(--ink-faint); }
-  .sp-table td:first-child, .sp-table td:nth-child(2), .sp-table td:nth-child(3) { text-align: left; }
-  .sp-table tbody tr:hover { background: rgba(217,119,87,0.08); }
-  .sp-rank { font-weight: 700; color: var(--ink-light); font-size: 11px; }
-  .sp-pos-badge { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 3px; color: #fff; }
-  .sp-milestone { display: inline-block; font-family: var(--font-mono); font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 3px; margin: 1px 2px; border: 1px solid; }
-  .sp-milestone-gold { background: #fef9c3; color: #854d0e; border-color: #854d0e; }
-  .sp-milestone-silver { background: #dbeafe; color: #1e40af; border-color: #1e40af; }
-  .sp-empty { text-align: center; padding: 40px 16px; font-family: var(--font-hand); font-size: 16px; color: var(--ink-light); }
+  .wl-card { background: var(--card); border: 3px solid var(--ink); border-radius: 10px; box-shadow: 4px 4px 0 var(--ink); overflow: hidden; }
+  .wl-card-header { font-family: var(--font-display); font-size: 18px; padding: 10px 16px; background: var(--ink); color: var(--sand); }
+  .wl-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 12px; }
+  .wl-table th { background: var(--sand); padding: 6px 8px; text-align: right; font-size: 10px; font-weight: 700; border-bottom: 2px solid var(--ink-faint); white-space: nowrap; }
+  .wl-table th:first-child, .wl-table th:nth-child(2), .wl-table th:nth-child(3) { text-align: left; }
+  .wl-table td { padding: 6px 8px; text-align: right; border-bottom: 1px solid var(--ink-faint); }
+  .wl-table td:first-child, .wl-table td:nth-child(2), .wl-table td:nth-child(3) { text-align: left; }
+  .wl-table tbody tr:hover { background: rgba(217,119,87,0.08); }
+  .wl-rank { font-weight: 700; color: var(--ink-light); font-size: 11px; }
+  .wl-pos-badge { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 3px; color: #fff; }
+  .wl-score-badge { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 3px; border: 1px solid; }
+  .wl-score-high { background: #fee2e2; color: #991b1b; border-color: #991b1b; }
+  .wl-score-mid { background: #fef9c3; color: #854d0e; border-color: #854d0e; }
+  .wl-score-low { background: #dcfce7; color: #166534; border-color: #166534; }
+  .wl-flag { display: inline-block; font-family: var(--font-mono); font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 3px; margin: 1px 2px; background: #d97757; color: #fff; }
+  .wl-bar-cell { width: 80px; }
+  .wl-bar { height: 12px; border-radius: 2px; background: #d97757; min-width: 2px; }
+  .wl-empty { text-align: center; padding: 40px 16px; font-family: var(--font-hand); font-size: 16px; color: var(--ink-light); }
 
   @media (max-width: 768px) {
-    .sp-page { padding: 16px 12px 40px; }
-    .sp-header h1 { font-size: 24px; }
+    .wl-page { padding: 16px 12px 40px; }
+    .wl-header h1 { font-size: 24px; }
+    .wl-bar-cell { width: 50px; }
   }
 </style>
 </head>
@@ -111,14 +116,14 @@
   </ul>
 </nav>
 
-<div class="sp-page" id="sp-container">
-  <div class="sp-header">
-    <h1>Season Pace Tracker</h1>
-    <div class="sp-subtitle">projected season totals — who's on track for milestone seasons?</div>
+<div class="wl-page" id="wl-container">
+  <div class="wl-header">
+    <h1>Workload Monitor</h1>
+    <div class="wl-subtitle">who's carrying the heaviest load?</div>
   </div>
 
-  <div class="sp-controls">
-    <select id="sp-season" aria-label="Season selector"></select>
+  <div class="wl-controls">
+    <select id="wl-season" aria-label="Season selector"></select>
     <div class="pos-tabs">
       <button class="pos-tab active" data-pos="">ALL</button>
       <button class="pos-tab" data-pos="QB">QB</button>
@@ -126,14 +131,14 @@
       <button class="pos-tab" data-pos="WR">WR</button>
       <button class="pos-tab" data-pos="TE">TE</button>
     </div>
-    <button class="sp-export" onclick="exportPNG()">Export PNG</button>
+    <button class="wl-export" onclick="exportPNG()">Export PNG</button>
   </div>
 
-  <div id="sp-loading" class="sp-loading">pulling film...</div>
-  <div id="sp-content" style="display:none;">
-    <div class="sp-card">
-      <div class="sp-card-header">Milestone Watch</div>
-      <div id="sp-table-wrap"></div>
+  <div id="wl-loading" class="wl-loading">pulling film...</div>
+  <div id="wl-content" style="display:none;">
+    <div class="wl-card">
+      <div class="wl-card-header">Workload Rankings</div>
+      <div id="wl-table-wrap"></div>
     </div>
   </div>
 </div>
@@ -236,11 +241,10 @@ function escapeHtml(t) {
 }
 
 const POS_COLORS = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
-const ELITE_MILESTONES = ["5000 pass yd", "40 pass TD", "1500 rush yd", "1500 rec yd"];
 let state = { season: null, position: "", data: null };
 
 function initSeasons() {
-  const sel = document.getElementById("sp-season");
+  const sel = document.getElementById("wl-season");
   const now = new Date().getFullYear();
   for (let y = now; y >= 2020; y--) {
     const opt = document.createElement("option");
@@ -278,9 +282,9 @@ document.querySelectorAll(".pos-tab").forEach(tab => {
 });
 
 async function loadData() {
-  document.getElementById("sp-loading").style.display = "";
-  document.getElementById("sp-content").style.display = "none";
-  let url = "/api/season-pace?season=" + state.season;
+  document.getElementById("wl-loading").style.display = "";
+  document.getElementById("wl-content").style.display = "none";
+  let url = "/api/workload-monitor?season=" + state.season;
   if (state.position) url += "&position=" + state.position;
   try {
     const resp = await fetch(url);
@@ -288,37 +292,49 @@ async function loadData() {
     state.data = await resp.json();
     render();
   } catch (e) {
-    document.getElementById("sp-loading").textContent = "failed to load season pace data";
+    document.getElementById("wl-loading").textContent = "failed to load workload data";
   }
 }
 
+function scoreClass(s) {
+  if (s >= 80) return "wl-score-high";
+  if (s >= 50) return "wl-score-mid";
+  return "wl-score-low";
+}
+
 function render() {
-  document.getElementById("sp-loading").style.display = "none";
-  document.getElementById("sp-content").style.display = "";
+  document.getElementById("wl-loading").style.display = "none";
+  document.getElementById("wl-content").style.display = "";
   const players = state.data.players || [];
-  const wrap = document.getElementById("sp-table-wrap");
+  const wrap = document.getElementById("wl-table-wrap");
 
   if (players.length === 0) {
-    wrap.innerHTML = '<div class="sp-empty">no players on pace for milestones with this filter</div>';
+    wrap.innerHTML = '<div class="wl-empty">no workload data found for this filter</div>';
     return;
   }
 
-  let html = '<table class="sp-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>GP</th><th>PPG</th><th>Milestones</th></tr></thead><tbody>';
+  const maxWL = Math.max(...players.map(p => p.workload));
+  let html = '<table class="wl-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Load</th><th>Tch/G</th><th>Snp/G</th><th>Snp%</th><th>Car/G</th><th>Tgt/G</th><th>Flags</th><th></th></tr></thead><tbody>';
 
   players.forEach((p, i) => {
     const posColor = POS_COLORS[p.position] || "#333";
-    const milestoneHtml = p.milestones.map(m => {
-      const cls = ELITE_MILESTONES.includes(m) ? "sp-milestone-gold" : "sp-milestone-silver";
-      return '<span class="sp-milestone ' + cls + '">' + escapeHtml(m) + '</span>';
-    }).join(" ");
+    const cls = scoreClass(p.workload);
+    const barPct = maxWL > 0 ? p.workload / maxWL * 100 : 0;
+    const flagsHtml = p.flags.map(f => '<span class="wl-flag">' + escapeHtml(f) + '</span>').join("");
+    const snapPct = p.snap_pct !== null ? escapeHtml(String(p.snap_pct)) + "%" : "-";
 
     html += '<tr>';
-    html += '<td class="sp-rank">' + (i + 1) + '</td>';
+    html += '<td class="wl-rank">' + (i + 1) + '</td>';
     html += '<td>' + escapeHtml(p.name) + ' <span style="color:var(--ink-light);font-size:10px;">' + escapeHtml(p.team) + '</span></td>';
-    html += '<td><span class="sp-pos-badge" style="background:' + escapeHtml(posColor) + '">' + escapeHtml(p.position) + '</span></td>';
-    html += '<td>' + escapeHtml(String(p.games)) + '</td>';
-    html += '<td>' + escapeHtml(String(p.ppg)) + '</td>';
-    html += '<td style="text-align:left">' + milestoneHtml + '</td>';
+    html += '<td><span class="wl-pos-badge" style="background:' + escapeHtml(posColor) + '">' + escapeHtml(p.position) + '</span></td>';
+    html += '<td><span class="wl-score-badge ' + cls + '">' + escapeHtml(String(p.workload)) + '</span></td>';
+    html += '<td>' + escapeHtml(String(p.touches_pg)) + '</td>';
+    html += '<td>' + escapeHtml(String(p.snaps_pg)) + '</td>';
+    html += '<td>' + snapPct + '</td>';
+    html += '<td>' + escapeHtml(String(p.carries_pg)) + '</td>';
+    html += '<td>' + escapeHtml(String(p.targets_pg)) + '</td>';
+    html += '<td style="text-align:left">' + flagsHtml + '</td>';
+    html += '<td class="wl-bar-cell"><div class="wl-bar" style="width:' + barPct + '%"></div></td>';
     html += '</tr>';
   });
 
@@ -327,21 +343,21 @@ function render() {
 }
 
 function exportPNG() {
-  const el = document.getElementById("sp-container");
+  const el = document.getElementById("wl-container");
   html2canvas(el, { backgroundColor: "#ede0cf", scale: 2 }).then(canvas => {
     const ctx = canvas.getContext("2d");
     ctx.font = "bold 28px 'Space Mono', monospace";
     ctx.fillStyle = "rgba(0,0,0,0.13)";
     ctx.fillText("razzle.lol", canvas.width - 220, canvas.height - 20);
     const link = document.createElement("a");
-    link.download = "razzle-season-pace.png";
+    link.download = "razzle-workload.png";
     link.href = canvas.toDataURL();
     link.click();
   });
 }
 
 // Analytics
-fetch("/api/analytics/pageview", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ page: "/seasonpace.html", referrer: document.referrer }) }).catch(() => {});
+fetch("/api/analytics/pageview", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ page: "/workload.html", referrer: document.referrer }) }).catch(() => {});
 
 initSeasons();
 loadData();

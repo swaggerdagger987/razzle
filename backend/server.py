@@ -944,6 +944,7 @@ def sitemap_xml():
         ("/garbagetime.html", "0.8", "weekly"),
         ("/seasonpace.html", "0.8", "weekly"),
         ("/targetpremium.html", "0.8", "weekly"),
+        ("/workload.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1596,6 +1597,16 @@ def records(position: str = ""):
         return JSONResponse({"error": "Failed to fetch records"}, status_code=500)
 
 
+@app.get("/api/workload-monitor")
+def workload_monitor(season: int = None, position: str = None):
+    try:
+        pos = position.upper() if position else None
+        return live_data.fetch_workload_monitor(season=season, position=pos)
+    except Exception as e:
+        logger.error(f"workload-monitor error: {e}")
+        return JSONResponse({"error": "Failed to fetch workload data"}, status_code=500)
+
+
 @app.get("/api/target-premium")
 def target_premium(season: int = None, position: str = None):
     try:
@@ -1771,6 +1782,7 @@ def tools_hub():
                 {"name": "Garbage Time", "desc": "Stat padders vs clean producers — who scores in garbage time?", "url": "/garbagetime.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Season Pace", "desc": "Projected season totals and milestone tracking based on per-game pace", "url": "/seasonpace.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Target Premium", "desc": "Target quality composite — aDOT, catch rate, YAC, yards per target", "url": "/targetpremium.html", "positions": ["WR", "RB", "TE"]},
+                {"name": "Workload Monitor", "desc": "Snap counts, touches/game, heavy usage flags — who's carrying the load?", "url": "/workload.html", "positions": ["QB", "RB", "WR", "TE"]},
             ],
         },
         {

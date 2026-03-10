@@ -12162,3 +12162,92 @@ def fetch_target_premium(season=None, position=None, limit=50):
         }
     finally:
         conn.close()
+
+
+def fetch_workload_monitor(season=None, position=None, limit=50):
+    """Workload monitor — snap counts, touches/game, heavy usage flags."""
+    conn = get_conn()
+    try:
+        cursor = conn.cursor()
+        if not season:
+            cursor.execute("SELECT MAX(season) FROM player_season_stats")
+            season = cursor.fetchone()[0] or 2025
+
+        pos_filter = ""
+        params = [season]
+        if position:
+            pos_filter = "AND p.position = ?"
+            params.append(position)
+
+        cursor.execute(f"""
+            SELECT p.gsis_id, p.full_name, p.position, p.team,
+                   s.games, s.offense_snaps, s.offense_pct,
+                   s.carries, s.targets, s.receptions,
+                   s.rushing_yards, s.receiving_yards
+            FROM player_season_stats s
+            JOIN players p ON p.gsis_id = s.player_id
+            WHERE s.season = ? AND p.fantasy_relevant = 1
+            {pos_filter}
+            AND s.games >= 4
+        """, params)
+
+        players = []
+        for r in cursor.fetchall():
+            pid, name, pos, team = r[0], r[1] or "Unknown", r[2] or "RB", r[3] or "FA"
+            games = r[4] or 1
+            snaps = r[5] or 0
+            snap_pct = r[6]
+            carries = r[7] or 0
+            targets = r[8] or 0
+            recs = r[9] or 0
+            rush_yd = r[10] or 0
+            rec_yd = r[11] or 0
+
+            touches = carries + recs
+            touches_pg = touches / games
+            snaps_pg = snaps / games
+            carries_pg = carries / games
+            targets_pg = targets / games
+            total_yd_pg = (rush_yd + rec_yd) / games
+
+            if touches_pg < 3 and snaps_pg < 15:
+                continue
+
+            # Workload flags
+            flags = []
+            if pos in ("RB",) and touches_pg >= 20: flags.append("bell cow")
+            if pos in ("RB",) and touches_pg >= 25: flags.append("extreme volume")
+            if snap_pct and snap_pct >= 85: flags.append("snap hog")
+            if pos in ("WR", "TE") and targets_pg >= 10: flags.append("target monster")
+            if snaps_pg >= 65: flags.append("iron man")
+
+            workload_score = (touches_pg * 3) + (snaps_pg * 0.3)
+            if snap_pct:
+                workload_score += snap_pct * 0.2
+
+            players.append({
+                "player_id": pid,
+                "name": name,
+                "position": pos,
+                "team": team,
+                "games": games,
+                "snaps_pg": round(snaps_pg, 1),
+                "snap_pct": round(snap_pct, 1) if snap_pct else None,
+                "touches_pg": round(touches_pg, 1),
+                "carries_pg": round(carries_pg, 1),
+                "targets_pg": round(targets_pg, 1),
+                "total_yd_pg": round(total_yd_pg, 1),
+                "workload": round(workload_score, 0),
+                "flags": flags,
+            })
+
+        players.sort(key=lambda x: x["workload"], reverse=True)
+        players = players[:limit]
+
+        return {
+            "players": players,
+            "season": season,
+            "count": len(players),
+        }
+    finally:
+        conn.close()

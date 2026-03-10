@@ -1,6 +1,16 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 138 — Target Premium (COMPLETE)
+## Current Phase: Phase 139 — Workload Monitor (COMPLETE)
+
+**Exit criterion MET:** /workload.html ranks players by workload score (touches/g weighted + snaps/g + snap%). Workload score badges (high/mid/low), usage flags (bell cow, extreme volume, snap hog, target monster, iron man), touches/g, snaps/g, snap%, carries/g, targets/g, bar visualization. Position filter tabs, season selector, PNG export with watermark. GET /api/workload-monitor returns data. 12 escapeHtml calls, 59/59 braces balanced. "Workload" nav link on all 69 pages. Sitemap + tools hub entry under Performance Analysis.
+
+### Phase 139 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend + frontend + nav + smoke test | DONE | fetch_workload_monitor, usage flags, 12 escapeHtml, 69/69 nav |
+
+## Previous Phase: Phase 138 — Target Premium (COMPLETE)
 
 **Exit criterion MET:** /targetpremium.html ranks pass catchers by target quality composite (30% Y/Tgt + 25% catch rate + 25% YAC/rec + 20% aDOT percentiles). Premium score badges (elite/high/mid/low), aDOT, catch rate, YAC per reception, yards per target, targets per game, bar visualization. WR/TE/RB filter tabs, season selector, PNG export with watermark. GET /api/target-premium returns data. 11 escapeHtml calls, 59/59 braces balanced. "Target Premium" nav link on all 68 pages. Sitemap + tools hub entry under Performance Analysis.
 
