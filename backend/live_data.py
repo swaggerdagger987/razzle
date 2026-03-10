@@ -10208,3 +10208,159 @@ def fetch_weekly_leaders(season=None, week=None, position=None, limit=25):
         }
     finally:
         conn.close()
+
+
+def fetch_pace_tracker(season=None, position=None, limit=50):
+    """Project per-game stats to 17-game season and track milestone progress."""
+    conn = get_db()
+    try:
+        cursor = conn.cursor()
+
+        if not season:
+            cursor.execute("SELECT MAX(season) FROM player_week_stats")
+            season = cursor.fetchone()[0] or 2024
+
+        query = """
+            SELECT p.player_id, p.full_name, p.position, p.team,
+                   COUNT(DISTINCT s.week) as games,
+                   COALESCE(SUM(s.pass_yards), 0) as total_pass_yd,
+                   COALESCE(SUM(s.pass_td), 0) as total_pass_td,
+                   COALESCE(SUM(s.rush_yards), 0) as total_rush_yd,
+                   COALESCE(SUM(s.rush_td), 0) as total_rush_td,
+                   COALESCE(SUM(s.rec_yards), 0) as total_rec_yd,
+                   COALESCE(SUM(s.rec_td), 0) as total_rec_td,
+                   COALESCE(SUM(s.receptions), 0) as total_rec,
+                   COALESCE(SUM(s.targets), 0) as total_tgt,
+                   COALESCE(SUM(s.carries), 0) as total_car,
+                   COALESCE(SUM(s.fantasy_points_ppr), 0) as total_fpts
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE s.season = ?
+              AND p.fantasy_relevant = 1
+        """
+        params = [season]
+
+        if position:
+            query += " AND p.position = ?"
+            params.append(position)
+
+        query += " GROUP BY p.player_id HAVING games >= 3 ORDER BY total_fpts DESC LIMIT ?"
+        params.append(limit)
+
+        cursor.execute(query, params)
+        rows = cursor.fetchall()
+
+        total_weeks = 17
+
+        milestones_def = {
+            "QB": [
+                {"label": "4,000 Pass Yd", "stat": "pass_yd", "target": 4000},
+                {"label": "4,500 Pass Yd", "stat": "pass_yd", "target": 4500},
+                {"label": "30 Pass TD", "stat": "pass_td", "target": 30},
+                {"label": "40 Pass TD", "stat": "pass_td", "target": 40},
+                {"label": "500 Rush Yd", "stat": "rush_yd", "target": 500},
+            ],
+            "RB": [
+                {"label": "1,000 Rush Yd", "stat": "rush_yd", "target": 1000},
+                {"label": "1,500 Rush Yd", "stat": "rush_yd", "target": 1500},
+                {"label": "10 Rush TD", "stat": "rush_td", "target": 10},
+                {"label": "50 Rec", "stat": "rec", "target": 50},
+                {"label": "500 Rec Yd", "stat": "rec_yd", "target": 500},
+            ],
+            "WR": [
+                {"label": "1,000 Rec Yd", "stat": "rec_yd", "target": 1000},
+                {"label": "1,500 Rec Yd", "stat": "rec_yd", "target": 1500},
+                {"label": "100 Rec", "stat": "rec", "target": 100},
+                {"label": "10 Rec TD", "stat": "rec_td", "target": 10},
+                {"label": "150 Tgt", "stat": "tgt", "target": 150},
+            ],
+            "TE": [
+                {"label": "800 Rec Yd", "stat": "rec_yd", "target": 800},
+                {"label": "1,000 Rec Yd", "stat": "rec_yd", "target": 1000},
+                {"label": "70 Rec", "stat": "rec", "target": 70},
+                {"label": "8 Rec TD", "stat": "rec_td", "target": 8},
+                {"label": "100 Tgt", "stat": "tgt", "target": 100},
+            ],
+        }
+
+        stat_idx_map = {
+            "pass_yd": 5, "pass_td": 6, "rush_yd": 7, "rush_td": 8,
+            "rec_yd": 9, "rec_td": 10, "rec": 11, "tgt": 12, "car": 13,
+        }
+
+        players = []
+        for r in rows:
+            pid = r[0]
+            pos = r[2] or "RB"
+            games = r[4]
+            games_remaining = max(0, total_weeks - games)
+
+            ppg_fpts = round(r[14] / games, 1) if games else 0
+            ppg_pass_yd = round(r[5] / games, 1) if games else 0
+            ppg_pass_td = round(r[6] / games, 1) if games else 0
+            ppg_rush_yd = round(r[7] / games, 1) if games else 0
+            ppg_rush_td = round(r[8] / games, 1) if games else 0
+            ppg_rec_yd = round(r[9] / games, 1) if games else 0
+            ppg_rec_td = round(r[10] / games, 1) if games else 0
+            ppg_rec = round(r[11] / games, 1) if games else 0
+
+            proj_pass_yd = round(ppg_pass_yd * total_weeks)
+            proj_pass_td = round(ppg_pass_td * total_weeks, 1)
+            proj_rush_yd = round(ppg_rush_yd * total_weeks)
+            proj_rush_td = round(ppg_rush_td * total_weeks, 1)
+            proj_rec_yd = round(ppg_rec_yd * total_weeks)
+            proj_rec_td = round(ppg_rec_td * total_weeks, 1)
+            proj_rec = round(ppg_rec * total_weeks, 1)
+            proj_fpts = round(ppg_fpts * total_weeks, 1)
+
+            pos_milestones = milestones_def.get(pos, milestones_def.get("WR", []))
+            tracked = []
+            for ms in pos_milestones:
+                stat_key = ms["stat"]
+                idx = stat_idx_map.get(stat_key, 5)
+                current = r[idx] or 0
+                target = ms["target"]
+                remaining = max(0, target - current)
+                per_game_avg = round(current / games, 1) if games else 0
+                projected = round(per_game_avg * total_weeks, 1)
+                pace_needed = round(remaining / games_remaining, 1) if games_remaining > 0 else 0
+                on_pace = projected >= target
+
+                tracked.append({
+                    "label": ms["label"],
+                    "target": target,
+                    "current": round(current, 1),
+                    "projected": projected,
+                    "remaining": round(remaining, 1),
+                    "pace_needed": pace_needed,
+                    "per_game_avg": per_game_avg,
+                    "on_pace": on_pace,
+                    "pct": round(min(100, (current / target) * 100), 1) if target else 0,
+                })
+
+            players.append({
+                "player_id": pid,
+                "name": r[1] or "Unknown",
+                "position": pos,
+                "team": r[3] or "FA",
+                "games": games,
+                "games_remaining": games_remaining,
+                "ppg": ppg_fpts,
+                "proj_fpts": proj_fpts,
+                "proj_pass_yd": proj_pass_yd,
+                "proj_pass_td": proj_pass_td,
+                "proj_rush_yd": proj_rush_yd,
+                "proj_rush_td": proj_rush_td,
+                "proj_rec_yd": proj_rec_yd,
+                "proj_rec_td": proj_rec_td,
+                "proj_rec": proj_rec,
+                "milestones": tracked,
+            })
+
+        return {
+            "season": season,
+            "total_weeks": total_weeks,
+            "players": players,
+        }
+    finally:
+        conn.close()

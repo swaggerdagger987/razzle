@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Pace & Milestones — Razzle</title>
+<meta property="og:title" content="Pace & Milestones — Razzle">
+<meta property="og:description" content="17-game pace projections and milestone tracking for every fantasy-relevant player on razzle.lol">
+<meta property="og:site_name" content="razzle.lol">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Pace & Milestones — Razzle">
+<meta name="twitter:description" content="17-game pace projections and milestone tracking for every fantasy-relevant player on razzle.lol">
+<meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
+<meta name="description" content="Season pace projections and milestone tracking — who's on pace for 1,000 yards, 100 receptions, 40 TDs? Track progress toward key fantasy milestones on razzle.lol">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .pace-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+  }
+
+  .pace-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .pace-header h1 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: var(--ink);
+    margin: 0 0 4px;
+  }
+  .pace-header .pace-subtitle {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+  }
+
+  /* Controls */
+  .pace-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .pace-controls select {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    padding: 6px 10px;
+    border: 2px solid var(--ink);
+    border-radius: 4px;
+    background: var(--card);
+  }
+  .pace-controls .pos-tabs {
+    display: flex;
+    gap: 4px;
+  }
+  .pace-controls .pos-tab {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 5px 12px;
+    border: 2px solid var(--ink);
+    border-radius: 4px;
+    background: var(--card);
+    cursor: pointer;
+    font-weight: 700;
+  }
+  .pace-controls .pos-tab.active {
+    background: var(--ink);
+    color: var(--sand);
+  }
+
+  /* Export button */
+  .pace-export {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 5px 14px;
+    border: 2px solid var(--ink);
+    border-radius: 4px;
+    background: var(--card);
+    cursor: pointer;
+    font-weight: 700;
+  }
+  .pace-export:hover { background: var(--ink); color: var(--sand); }
+
+  /* Loading */
+  .pace-loading {
+    text-align: center;
+    font-family: var(--font-hand);
+    font-size: 18px;
+    color: var(--ink-light);
+    padding: 60px 0;
+  }
+
+  /* Player cards */
+  .pace-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .pace-card {
+    background: var(--card);
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 16px 20px;
+  }
+
+  .pace-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .pace-player-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .pace-player-name {
+    font-family: var(--font-display);
+    font-size: 18px;
+    color: var(--ink);
+  }
+  .pace-pos-badge {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    color: #fff;
+    border: 2px solid var(--ink);
+  }
+  .pace-team {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-light);
+  }
+  .pace-games {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-light);
+  }
+
+  .pace-stats-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+  .pace-stat-chip {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 3px 10px;
+    border: 2px solid var(--ink-faint);
+    border-radius: 4px;
+    background: var(--sand);
+    color: var(--ink);
+  }
+  .pace-stat-chip .val {
+    font-weight: 700;
+  }
+
+  /* Milestone bars */
+  .pace-milestones {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+  }
+  .ms-item {
+    background: var(--sand);
+    border: 2px solid var(--ink-faint);
+    border-radius: 6px;
+    padding: 8px 10px;
+  }
+  .ms-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .ms-badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-weight: 700;
+    border: 1px solid;
+  }
+  .ms-badge.on-pace {
+    background: #dcfce7;
+    color: #166534;
+    border-color: #166534;
+  }
+  .ms-badge.off-pace {
+    background: #fef2f2;
+    color: #991b1b;
+    border-color: #991b1b;
+  }
+  .ms-bar-bg {
+    height: 8px;
+    background: var(--ink-faint);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 3px;
+  }
+  .ms-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s;
+  }
+  .ms-detail {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-light);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* Projected fpts highlight */
+  .pace-proj-fpts {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border: 2px solid var(--ink);
+    border-radius: 4px;
+    background: var(--sand);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .pace-header h1 { font-size: 26px; }
+    .pace-card { padding: 12px 14px; }
+    .pace-milestones { grid-template-columns: 1fr 1fr; }
+    .pace-stats-row { gap: 6px; }
+  }
+  @media (max-width: 480px) {
+    .pace-milestones { grid-template-columns: 1fr; }
+    .pace-controls { gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="/" class="logo">
+    <div class="logo-mark">&#x1F42F;</div>
+    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/lab.html">The Lab</a></li>
+    <li><a href="/tools.html">Tools</a></li>
+    <li><a href="/rankings.html">Rankings</a></li>
+    <li><a href="/leaders.html">Leaders</a></li>
+    <li><a href="/prospects.html">Prospects</a></li>
+    <li><a href="/scarcity.html">Scarcity</a></li>
+    <li><a href="/breakouts.html">Breakouts</a></li>
+    <li><a href="/buysell.html">Buy/Sell</a></li>
+    <li><a href="/aging.html">Aging</a></li>
+    <li><a href="/weekly.html">Weekly</a></li>
+    <li><a href="/targets.html">Targets</a></li>
+    <li><a href="/matchups.html">Matchups</a></li>
+    <li><a href="/usage.html">Usage</a></li>
+    <li><a href="/yoy.html">YoY</a></li>
+    <li><a href="/airyards.html">Air Yards</a></li>
+    <li><a href="/explorer.html">Explorer</a></li>
+    <li><a href="/redzone.html">Red Zone</a></li>
+    <li><a href="/efficiency.html">Efficiency</a></li>
+    <li><a href="/consistency.html">Consistency</a></li>
+    <li><a href="/schedule.html">Schedule</a></li>
+    <li><a href="/stocks.html">Stocks</a></li>
+    <li><a href="/opportunity.html">Opportunity</a></li>
+    <li><a href="/reportcard.html">Report Card</a></li>
+    <li><a href="/awards.html">Awards</a></li>
+    <li><a href="/vorp.html">VORP</a></li>
+    <li><a href="/tradevalues.html">Trade Values</a></li>
+    <li><a href="/tradefinder.html">Trade Finder</a></li>
+    <li><a href="/rosterbuilder.html">Roster Builder</a></li>
+    <li><a href="/scoring.html">Scoring</a></li>
+    <li><a href="/cheatsheet.html">Cheat Sheet</a></li>
+    <li><a href="/auction.html">Auction</a></li>
+    <li><a href="/dashboard.html">Dashboard</a></li>
+    <li><a href="/tiers.html">Tiers</a></li>
+    <li><a href="/archetypes.html">Archetypes</a></li>
+    <li><a href="/career.html">Career</a></li>
+    <li><a href="/career-compare.html">Career Compare</a></li>
+    <li><a href="/draftclass.html">Draft Class</a></li>
+    <li><a href="/percentiles.html">Percentiles</a></li>
+    <li><a href="/regression.html">TD Regression</a></li>
+    <li><a href="/strengths.html">Strengths</a></li>
+    <li><a href="/breakdown.html">Breakdown</a></li>
+    <li><a href="/weeklyleaders.html">Week Leaders</a></li>
+    <li><a href="/pace.html" class="active">Pace</a></li>
+    <li><a href="/team/KC">Teams</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
+    <li><a href="/agents.html">War Room</a></li>
+  </ul>
+</nav>
+
+<main class="pace-page" id="paceRoot">
+  <div class="pace-header">
+    <h1>Pace & Milestones</h1>
+    <div class="pace-subtitle">who's on track for a monster season</div>
+  </div>
+
+  <div class="pace-controls">
+    <select id="paceSeason" aria-label="Season"></select>
+    <div class="pos-tabs">
+      <button class="pos-tab active" data-pos="">ALL</button>
+      <button class="pos-tab" data-pos="QB">QB</button>
+      <button class="pos-tab" data-pos="RB">RB</button>
+      <button class="pos-tab" data-pos="WR">WR</button>
+      <button class="pos-tab" data-pos="TE">TE</button>
+    </div>
+    <button class="pace-export" id="paceExport" title="Export as PNG">Export PNG</button>
+  </div>
+
+  <div id="paceContent">
+    <div class="pace-loading">pulling film...</div>
+  </div>
+</main>
+
+<footer style="text-align:center; padding:24px 20px 32px; font-family:var(--font-hand); font-size:15px; color:var(--ink-light); border-top:2px dashed var(--ink-faint); margin-top:40px;">
+  <div style="margin-bottom:10px;">
+    <a href="/lab.html" style="color:var(--ink-light); text-decoration:none;">The Lab</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tools.html" style="color:var(--ink-light); text-decoration:none;">Tools</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/rankings.html" style="color:var(--ink-light); text-decoration:none;">Rankings</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/leaders.html" style="color:var(--ink-light); text-decoration:none;">Leaders</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/prospects.html" style="color:var(--ink-light); text-decoration:none;">Prospects</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/scarcity.html" style="color:var(--ink-light); text-decoration:none;">Scarcity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/breakouts.html" style="color:var(--ink-light); text-decoration:none;">Breakouts</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/buysell.html" style="color:var(--ink-light); text-decoration:none;">Buy/Sell</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/aging.html" style="color:var(--ink-light); text-decoration:none;">Aging</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/weekly.html" style="color:var(--ink-light); text-decoration:none;">Weekly</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/targets.html" style="color:var(--ink-light); text-decoration:none;">Targets</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/matchups.html" style="color:var(--ink-light); text-decoration:none;">Matchups</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/usage.html" style="color:var(--ink-light); text-decoration:none;">Usage</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/yoy.html" style="color:var(--ink-light); text-decoration:none;">YoY</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/airyards.html" style="color:var(--ink-light); text-decoration:none;">Air Yards</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/explorer.html" style="color:var(--ink-light); text-decoration:none;">Explorer</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/redzone.html" style="color:var(--ink-light); text-decoration:none;">Red Zone</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/efficiency.html" style="color:var(--ink-light); text-decoration:none;">Efficiency</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/consistency.html" style="color:var(--ink-light); text-decoration:none;">Consistency</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/schedule.html" style="color:var(--ink-light); text-decoration:none;">Schedule</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/stocks.html" style="color:var(--ink-light); text-decoration:none;">Stocks</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/opportunity.html" style="color:var(--ink-light); text-decoration:none;">Opportunity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/reportcard.html" style="color:var(--ink-light); text-decoration:none;">Report Card</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/awards.html" style="color:var(--ink-light); text-decoration:none;">Awards</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/vorp.html" style="color:var(--ink-light); text-decoration:none;">VORP</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tradevalues.html" style="color:var(--ink-light); text-decoration:none;">Trade Values</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tradefinder.html" style="color:var(--ink-light); text-decoration:none;">Trade Finder</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/rosterbuilder.html" style="color:var(--ink-light); text-decoration:none;">Roster Builder</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/scoring.html" style="color:var(--ink-light); text-decoration:none;">Scoring</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/cheatsheet.html" style="color:var(--ink-light); text-decoration:none;">Cheat Sheet</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/auction.html" style="color:var(--ink-light); text-decoration:none;">Auction</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/dashboard.html" style="color:var(--ink-light); text-decoration:none;">Dashboard</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tiers.html" style="color:var(--ink-light); text-decoration:none;">Tiers</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/archetypes.html" style="color:var(--ink-light); text-decoration:none;">Archetypes</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/career.html" style="color:var(--ink-light); text-decoration:none;">Career</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/career-compare.html" style="color:var(--ink-light); text-decoration:none;">Career Compare</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/draftclass.html" style="color:var(--ink-light); text-decoration:none;">Draft Class</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/percentiles.html" style="color:var(--ink-light); text-decoration:none;">Percentiles</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/regression.html" style="color:var(--ink-light); text-decoration:none;">TD Regression</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/strengths.html" style="color:var(--ink-light); text-decoration:none;">Strengths</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/breakdown.html" style="color:var(--ink-light); text-decoration:none;">Breakdown</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/weeklyleaders.html" style="color:var(--ink-light); text-decoration:none;">Week Leaders</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/pace.html" style="color:var(--ink-light); text-decoration:none;">Pace</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/team/KC" style="color:var(--ink-light); text-decoration:none;">Teams</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none;">League Intel</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/agents.html" style="color:var(--ink-light); text-decoration:none;">War Room</a>
+  </div>
+  razzle.lol — let's razzle dazzle em baby
+</footer>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script src="app.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function fmt(v, dec) {
+    if (v === null || v === undefined) return '-';
+    return Number(v).toFixed(dec === undefined ? 1 : dec);
+  }
+
+  var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+
+  var currentPosition = '';
+  var currentData = null;
+
+  /* ---- URL state ---- */
+  function readURL() {
+    var p = new URLSearchParams(window.location.search);
+    return { season: p.get('season') || '', pos: p.get('pos') || '' };
+  }
+  function writeURL(season, pos) {
+    var p = new URLSearchParams();
+    if (season) p.set('season', season);
+    if (pos) p.set('pos', pos);
+    var qs = p.toString();
+    history.replaceState(null, '', qs ? '?' + qs : location.pathname);
+  }
+
+  /* ---- Fetch ---- */
+  function load() {
+    var sel = document.getElementById('paceSeason');
+    var season = sel.value || '';
+    var pos = currentPosition;
+    writeURL(season, pos);
+
+    var url = '/api/pace-tracker?';
+    if (season) url += 'season=' + encodeURIComponent(season) + '&';
+    if (pos) url += 'position=' + encodeURIComponent(pos);
+
+    document.getElementById('paceContent').innerHTML = '<div class="pace-loading">pulling film...</div>';
+
+    fetch(url).then(function(r) {
+      if (!r.ok) throw new Error('API error');
+      return r.json();
+    }).then(function(data) {
+      currentData = data;
+      populateSeasons(data.season);
+      render(data);
+    }).catch(function() {
+      document.getElementById('paceContent').innerHTML = '<div class="pace-loading">something went wrong — try again</div>';
+    });
+  }
+
+  function populateSeasons(current) {
+    var sel = document.getElementById('paceSeason');
+    if (sel.options.length <= 1) {
+      sel.innerHTML = '';
+      for (var y = 2024; y >= 2020; y--) {
+        var opt = document.createElement('option');
+        opt.value = y;
+        opt.textContent = y;
+        if (y === current) opt.selected = true;
+        sel.appendChild(opt);
+      }
+    }
+  }
+
+  /* ---- Render ---- */
+  function render(data) {
+    var players = data.players || [];
+    if (!players.length) {
+      document.getElementById('paceContent').innerHTML = '<div class="pace-loading">no qualifying players found (min 3 games)</div>';
+      return;
+    }
+
+    var html = '<div class="pace-grid">';
+    for (var i = 0; i < players.length; i++) {
+      var p = players[i];
+      var posColor = POS_COLORS[p.position] || '#888';
+
+      html += '<div class="pace-card">';
+      html += '<div class="pace-card-header">';
+      html += '<div class="pace-player-info">';
+      html += '<span class="pace-player-name">' + escapeHtml(p.name) + '</span>';
+      html += '<span class="pace-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span>';
+      html += '<span class="pace-team">' + escapeHtml(p.team) + '</span>';
+      html += '<span class="pace-games">' + escapeHtml(String(p.games)) + 'G / ' + escapeHtml(String(p.games_remaining)) + ' left</span>';
+      html += '</div>';
+      html += '<span class="pace-proj-fpts" title="Projected 17-game PPR total">' + escapeHtml(String(fmt(p.proj_fpts, 0))) + ' proj pts</span>';
+      html += '</div>';
+
+      // Stat chips — position-specific projected totals
+      html += '<div class="pace-stats-row">';
+      html += '<span class="pace-stat-chip">' + escapeHtml(String(fmt(p.ppg, 1))) + ' <span class="val">PPG</span></span>';
+      if (p.position === 'QB') {
+        html += '<span class="pace-stat-chip"><span class="val">' + escapeHtml(String(p.proj_pass_yd)) + '</span> pass yd</span>';
+        html += '<span class="pace-stat-chip"><span class="val">' + escapeHtml(String(fmt(p.proj_pass_td, 0))) + '</span> pass TD</span>';
+        if (p.proj_rush_yd > 100) {
+          html += '<span class="pace-stat-chip"><span class="val">' + escapeHtml(String(p.proj_rush_yd)) + '</span> rush yd</span>';
+        }
+      } else if (p.position === 'RB') {
+        html += '<span class="pace-stat-chip"><span class="val">' + escapeHtml(String(p.proj_rush_yd)) + '</span> rush yd</span>';
+        html += '<span class="pace-stat-chip"><span class="val">' + escapeHtml(String(fmt(p.proj_rush_td, 0))) + '</span> rush TD</span>';
+        html += '<span class="pace-stat-chip"><span class="val">' + escapeHtml(String(fmt(p.proj_rec, 0))) + '</span> rec</span>';
+        html += '<span class="pace-stat-chip"><span class="val">' + escapeHtml(String(p.proj_rec_yd)) + '</span> rec yd</span>';
+      } else {
+        html += '<span class="pace-stat-chip"><span class="val">' + escapeHtml(String(p.proj_rec_yd)) + '</span> rec yd</span>';
+        html += '<span class="pace-stat-chip"><span class="val">' + escapeHtml(String(fmt(p.proj_rec, 0))) + '</span> rec</span>';
+        html += '<span class="pace-stat-chip"><span class="val">' + escapeHtml(String(fmt(p.proj_rec_td, 0))) + '</span> rec TD</span>';
+      }
+      html += '</div>';
+
+      // Milestones
+      var ms = p.milestones || [];
+      if (ms.length) {
+        html += '<div class="pace-milestones">';
+        for (var j = 0; j < ms.length; j++) {
+          var m = ms[j];
+          var barColor = m.on_pace ? '#2ec4b6' : '#d97757';
+          var badgeClass = m.on_pace ? 'on-pace' : 'off-pace';
+          var badgeText = m.on_pace ? 'ON PACE' : 'OFF PACE';
+          var pctWidth = Math.min(100, m.pct);
+
+          html += '<div class="ms-item">';
+          html += '<div class="ms-label">';
+          html += '<span>' + escapeHtml(m.label) + '</span>';
+          html += '<span class="ms-badge ' + badgeClass + '">' + badgeText + '</span>';
+          html += '</div>';
+          html += '<div class="ms-bar-bg"><div class="ms-bar-fill" style="width:' + pctWidth + '%;background:' + barColor + '"></div></div>';
+          html += '<div class="ms-detail">';
+          html += '<span>' + escapeHtml(String(fmt(m.current, 0))) + ' / ' + escapeHtml(String(m.target)) + '</span>';
+          if (m.pace_needed > 0) {
+            html += '<span>need ' + escapeHtml(String(fmt(m.pace_needed, 1))) + '/g</span>';
+          } else {
+            html += '<span>done</span>';
+          }
+          html += '</div>';
+          html += '</div>';
+        }
+        html += '</div>';
+      }
+
+      html += '</div>';
+    }
+    html += '</div>';
+
+    document.getElementById('paceContent').innerHTML = html;
+  }
+
+  /* ---- Position tabs ---- */
+  document.querySelectorAll('.pos-tab').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.pos-tab').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      currentPosition = btn.getAttribute('data-pos') || '';
+      load();
+    });
+  });
+
+  /* ---- Season change ---- */
+  document.getElementById('paceSeason').addEventListener('change', load);
+
+  /* ---- PNG export ---- */
+  document.getElementById('paceExport').addEventListener('click', function() {
+    var root = document.getElementById('paceRoot');
+    if (typeof html2canvas === 'undefined') return;
+    html2canvas(root, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+      var ctx = canvas.getContext('2d');
+      ctx.font = 'bold 16px Space Mono, monospace';
+      ctx.fillStyle = 'rgba(0,0,0,0.12)';
+      ctx.fillText('razzle.lol', canvas.width - 130, canvas.height - 16);
+      var link = document.createElement('a');
+      link.download = 'razzle-pace.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    });
+  });
+
+  /* ---- Analytics ---- */
+  fetch('/api/analytics/pageview', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ page: '/pace.html', referrer: document.referrer || '' })
+  }).catch(function() {});
+
+  /* ---- Init from URL ---- */
+  var init = readURL();
+  if (init.pos) {
+    currentPosition = init.pos;
+    document.querySelectorAll('.pos-tab').forEach(function(b) {
+      b.classList.toggle('active', (b.getAttribute('data-pos') || '') === init.pos);
+    });
+  }
+  if (init.season) {
+    var sel = document.getElementById('paceSeason');
+    var opt = document.createElement('option');
+    opt.value = init.season;
+    opt.textContent = init.season;
+    opt.selected = true;
+    sel.appendChild(opt);
+  }
+
+  load();
+})();
+</script>
+</body>
+</html>

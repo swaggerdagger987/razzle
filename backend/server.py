@@ -925,6 +925,7 @@ def sitemap_xml():
         ("/strengths.html", "0.8", "weekly"),
         ("/breakdown.html", "0.8", "weekly"),
         ("/weeklyleaders.html", "0.8", "weekly"),
+        ("/pace.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1501,6 +1502,18 @@ def td_regression(season: int = 0, position: str = ""):
         return JSONResponse({"error": "Failed to fetch TD regression"}, status_code=500)
 
 
+@app.get("/api/pace-tracker")
+def pace_tracker(season: int = 0, position: str = ""):
+    """Return season pace projections and milestone tracking."""
+    try:
+        s = season if season > 0 else None
+        pos = position if position else None
+        return live_data.fetch_pace_tracker(season=s, position=pos)
+    except Exception as e:
+        logger.error(f"pace-tracker error: {e}")
+        return JSONResponse({"error": "Failed to fetch pace tracker"}, status_code=500)
+
+
 @app.get("/api/tools-hub")
 def tools_hub():
     """Return the static tools catalog organized by category."""
@@ -1551,6 +1564,7 @@ def tools_hub():
                 {"name": "Player Comparison", "desc": "Side-by-side stat comparison with radar charts and boom/bust rates", "url": "/compare.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Scoring Formats", "desc": "How PPR vs Half-PPR vs Standard changes rankings", "url": "/scoring.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Points Breakdown", "desc": "Where a player's fantasy points come from — donut chart by scoring category", "url": "/breakdown.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Pace & Milestones", "desc": "17-game pace projections and milestone tracking — who's on pace for 1,000 yards?", "url": "/pace.html", "positions": ["QB", "RB", "WR", "TE"]},
             ],
         },
         {

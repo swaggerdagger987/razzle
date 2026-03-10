@@ -1,6 +1,19 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 115 — QA+UX Audit Fixes for Phases 111-114 (COMPLETE)
+## Current Phase: Phase 116 — Season Pace & Milestone Tracker (COMPLETE)
+
+**Exit criterion MET:** /pace.html projects per-game stats to full 17-game season, tracks progress toward position-specific milestones (QB: 4000/4500 pass yd, 30/40 pass TD, 500 rush yd; RB: 1000/1500 rush yd, 10 rush TD, 50 rec, 500 rec yd; WR: 1000/1500 rec yd, 100 rec, 10 rec TD, 150 tgt; TE: 800/1000 rec yd, 70 rec, 8 rec TD, 100 tgt). Progress bars with ON PACE/OFF PACE badges, pace-needed-per-game calculation, projected 17-game totals, position-specific stat chips. Position filter tabs, season selector, URL state (?season=&pos=), PNG export with watermark. GET /api/pace-tracker returns projections and milestone tracking. 22 escapeHtml calls, 79/79 braces balanced. "Pace" nav link on all 50 pages. Sitemap + tools hub entry under Performance Analysis.
+
+### Phase 116 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/pace-tracker endpoint | DONE | fetch_pace_tracker, position-specific milestones |
+| 2 | Pace & Milestones page | DONE | Player cards, milestone bars, stat chips, 22 escapeHtml |
+| 3 | Nav links + sitemap + tools hub | DONE | All 50 pages updated |
+| 4 | Smoke test | DONE | Python OK, JS OK, 50/50 nav links |
+
+## Previous Phase: Phase 115 — QA+UX Audit Fixes for Phases 111-114 (COMPLETE)
 
 **Exit criterion MET:** All HIGH and MEDIUM findings from QA audit resolved. QA-1 (MEDIUM): Added fantasy_relevant filter to fetch_td_regression in live_data.py. QA-2 (LOW): Wrapped 8 stat cell outputs in escapeHtml in weeklyleaders.html. 2 LOW findings (QA-3, QA-4) triaged as no-action-needed.
 
