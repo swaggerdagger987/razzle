@@ -1,6 +1,24 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 53 — Reddit Launch Prep (COMPLETE)
+## Current Phase: Phase 54 — Lab Percentile Heat Coloring (COMPLETE)
+
+**Exit criterion MET:** Lab table cells color-coded by positional percentile rank via "Heat" toggle button. Per-position percentile computation (frontend-only). Elite (90th+) green-tinted, poor (<10th) red-tinted, average neutral. Inverse stats (turnovers, fumbles, INTs, etc.) correctly inverted. Toggle persists in URL (heat=1) and localStorage. Keyboard shortcut H. Warm-shifted rgba colors match Anthropic sand palette.
+
+### Phase 54 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Percentile calculation | DONE | Frontend-only, per-position, cached |
+| 2 | Heat coloring UI | DONE | Toggle button, color scale, all universes |
+| 3 | Polish & edge cases | DONE | Inverse stats, URL/localStorage, shortcut H |
+| 4 | Deploy + smoke test | DONE | All syntax clean |
+
+### Decisions Log
+- **Frontend-only percentiles**: Chose client-side computation over backend endpoint. Data already loaded in state.items. No API changes, no additional DB queries. Percentiles are relative to current view/filters which is more useful.
+- **Per-position percentiles**: A WR with 800 receiving yards is elite among WRs but that shouldn't be compared to QBs. Each position group gets its own distribution.
+- **Warm-shifted rgba**: Used rgba() with low opacity to tint cells rather than solid backgrounds, keeping the Anthropic sand aesthetic. Green = teal-shifted (#2ec4b6), Red = warm (#e63946).
+
+## Previous Phase: Phase 53 — Reddit Launch Prep (COMPLETE)
 
 **Exit criterion MET:** Featured card "Open in Lab" links enhanced with rich preset URLs (dynasty_value sort, receiving columns, min_gp filters). All preset URL system verified working. Reddit title generator comprehensive.
 

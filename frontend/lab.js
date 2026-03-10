@@ -369,6 +369,7 @@ const state = {
   totalCount: 0,
   seasons: [],
   selectedPlayers: [], // for compare/charts [{player_id, full_name, position, team}]
+  heatColors: false, // percentile heat coloring toggle
   formulas: [], // user custom formulas [{name, components: [{stat, weight}]}]
   // Prospect-specific state
   draftYear: 0,
@@ -669,6 +670,10 @@ function renderTableBody() {
     return;
   }
 
+  // Percentile heat coloring
+  const heatOn = state.heatColors;
+  const pctData = heatOn ? computePercentiles() : {};
+
   let html = "";
   for (const player of state.items) {
     const pos = (player.position || "").toUpperCase();
@@ -710,10 +715,16 @@ function renderTableBody() {
       html += `</div></td>`;
     }
 
+    // Heat color percentile data for this player
+    const heatPcts = heatOn ? (pctData[playKey] || {}) : null;
+
     for (const key of cols) {
       const col = getColumnDef(key);
       if (!col) continue;
       let val = player[key];
+      // Heat color background style
+      const hBg = heatPcts && heatPcts[key] != null ? getHeatColor(heatPcts[key]) : "";
+      const hStyle = hBg ? ` style="background:${hBg};"` : "";
       // Show dash for zero stats in prospect/college mode (e.g., NFL career stats for undrafted prospects)
       if ((state.universe === "prospects" || state.universe === "college") && !col.isText && (val === 0 || val === null || val === undefined)) {
         html += `<td style="color:var(--ink-faint);">\u2014</td>`;
@@ -727,16 +738,16 @@ function renderTableBody() {
       } else if (key === "dynasty_value" && val != null) {
         const dvsColor = val >= 85 ? "var(--green)" : val >= 70 ? "var(--pos-qb)" : val >= 55 ? "var(--orange)" : "var(--ink-light)";
         const dvsTier = val >= 85 ? "Elite" : val >= 70 ? "Star" : val >= 55 ? "Starter" : "";
-        html += `<td><span style="background:${dvsColor}; color:white; padding:1px 8px; border-radius:10px; border:2px solid var(--ink); font-size:11px; font-weight:700; white-space:nowrap;">${val.toFixed(1)}${dvsTier ? " " + dvsTier : ""}</span></td>`;
+        html += `<td${hStyle}><span style="background:${dvsColor}; color:white; padding:1px 8px; border-radius:10px; border:2px solid var(--ink); font-size:11px; font-weight:700; white-space:nowrap;">${val.toFixed(1)}${dvsTier ? " " + dvsTier : ""}</span></td>`;
       } else if (key === "age" && val != null) {
         html += `<td style="font-weight:600;">${Math.round(val)}</td>`;
       } else if (key === "breakout_pct" && val != null && val >= 50) {
-        html += `<td><span style="background:var(--green); color:white; padding:1px 6px; border-radius:10px; border:2px solid var(--ink); font-size:11px; font-weight:700;">+${val.toFixed(0)}%</span></td>`;
+        html += `<td${hStyle}><span style="background:var(--green); color:white; padding:1px 6px; border-radius:10px; border:2px solid var(--ink); font-size:11px; font-weight:700;">+${val.toFixed(0)}%</span></td>`;
       } else if (col.pct && val != null) {
         // Rate stats come as decimals (0.32 = 32%), display as percentage
-        html += `<td>${(val * 100).toFixed(col.decimals)}%</td>`;
+        html += `<td${hStyle}>${(val * 100).toFixed(col.decimals)}%</td>`;
       } else {
-        html += `<td>${formatStat(val, col.decimals)}</td>`;
+        html += `<td${hStyle}>${formatStat(val, col.decimals)}</td>`;
       }
     }
     html += "</tr>";
@@ -1167,6 +1178,7 @@ function saveStateToURL() {
   if (state.filters.length) params.set("filters", JSON.stringify(state.filters));
   if (state.teams.length) params.set("teams", state.teams.join(","));
   if (state.minGP > 0) params.set("min_gp", state.minGP);
+  if (state.heatColors) params.set("heat", "1");
 
   if (state.universe === "prospects") {
     if (state.draftYear) params.set("draft_year", state.draftYear);
@@ -1212,6 +1224,12 @@ function loadStateFromURL() {
   if (params.has("min_gp")) {
     state.minGP = parseInt(params.get("min_gp")) || 0;
   }
+  if (params.has("heat")) {
+    state.heatColors = params.get("heat") === "1";
+  } else {
+    // Fall back to localStorage preference
+    state.heatColors = localStorage.getItem("razzle_heat_colors") === "1";
+  }
 
   if (state.universe === "prospects") {
     if (params.has("draft_year")) state.draftYear = parseInt(params.get("draft_year"));
@@ -1241,6 +1259,12 @@ function loadStateFromURL() {
     const btn = document.getElementById("relevanceToggle");
     btn.textContent = "All Players";
     btn.classList.add("active");
+  }
+
+  // Sync heat colors button
+  if (state.heatColors) {
+    const hcBtn = document.getElementById("heatColorsBtn");
+    if (hcBtn) { hcBtn.classList.add("active"); hcBtn.style.borderColor = "var(--green)"; }
   }
 
   renderActiveFilters();
@@ -1741,6 +1765,100 @@ function isNonApplicableStat(pos, statKey, value) {
   if (!nonPrimary) return false;
   // Only show dash if value is 0 or null AND stat is non-primary for position
   return nonPrimary.has(statKey) && (value === 0 || value === null || value === undefined);
+}
+
+// ─── Percentile heat coloring ────────────────────────────────────
+// Stats where lower is better (inverted coloring: low = green, high = red)
+const INVERSE_STATS = new Set([
+  "interceptions", "turnovers", "fumbles", "fumbles_lost",
+  "sacks_taken", "sack_yards_lost", "fumble_rate", "drop_rate",
+  "garbage_time_pct", "games_missed",
+]);
+
+// Cache percentile data — recomputed when items change
+let _percentileCache = null;
+let _percentileCacheKey = "";
+
+function computePercentiles() {
+  // Cache key: item count + first/last player IDs
+  const items = state.items;
+  if (!items.length) return {};
+  const cacheKey = items.length + "|" + (items[0].player_id || items[0].player_name) + "|" + (items[items.length - 1].player_id || items[items.length - 1].player_name);
+  if (_percentileCacheKey === cacheKey && _percentileCache) return _percentileCache;
+
+  const cols = getActiveColumns();
+  const result = {}; // player_id -> { col_key: percentile (0-100) }
+
+  for (const key of cols) {
+    const col = getColumnDef(key);
+    if (!col || col.isText || key === "pos_rank" || key === "age") continue;
+
+    // Group values by position for per-position percentiles
+    const byPos = {};
+    for (const p of items) {
+      const pos = (p.position || "").toUpperCase();
+      const val = p[key];
+      if (val == null || val === "" || (typeof val !== "number")) continue;
+      if (!byPos[pos]) byPos[pos] = [];
+      byPos[pos].push(val);
+    }
+
+    // Sort each position group
+    const inverted = INVERSE_STATS.has(key);
+    for (const pos in byPos) {
+      byPos[pos].sort(function(a, b) { return a - b; });
+    }
+
+    // Calculate percentile for each player
+    for (const p of items) {
+      const pos = (p.position || "").toUpperCase();
+      const val = p[key];
+      if (val == null || val === "" || (typeof val !== "number")) continue;
+      const arr = byPos[pos];
+      if (!arr || arr.length < 3) continue; // need 3+ players for meaningful percentile
+
+      // Percentile rank: (count of values below) / (total - 1)
+      let below = 0;
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i] < val) below++;
+        else break;
+      }
+      let pct = arr.length > 1 ? (below / (arr.length - 1)) * 100 : 50;
+      if (inverted) pct = 100 - pct;
+
+      const pid = p.player_id || p.player_name;
+      if (!result[pid]) result[pid] = {};
+      result[pid][key] = pct;
+    }
+  }
+
+  _percentileCache = result;
+  _percentileCacheKey = cacheKey;
+  return result;
+}
+
+function getHeatColor(pct) {
+  // Warm-shifted colors that work on Anthropic sand background
+  if (pct >= 90) return "rgba(46, 196, 182, 0.22)";  // elite green-tinted
+  if (pct >= 75) return "rgba(46, 196, 182, 0.12)";  // good green
+  if (pct >= 60) return "rgba(46, 196, 182, 0.05)";  // slight green
+  if (pct <= 10) return "rgba(230, 57, 70, 0.18)";   // poor red-tinted
+  if (pct <= 25) return "rgba(230, 57, 70, 0.10)";   // below avg red
+  if (pct <= 40) return "rgba(230, 57, 70, 0.04)";   // slight red
+  return "";  // neutral (40-60th percentile)
+}
+
+function toggleHeatColors() {
+  state.heatColors = !state.heatColors;
+  localStorage.setItem("razzle_heat_colors", state.heatColors ? "1" : "0");
+  const btn = document.getElementById("heatColorsBtn");
+  if (btn) {
+    btn.classList.toggle("active", state.heatColors);
+    btn.style.borderColor = state.heatColors ? "var(--green)" : "";
+  }
+  _percentileCache = null; // force recompute
+  renderTable();
+  saveStateToURL();
 }
 
 // ─── Positional rank computation ─────────────────────────────────
@@ -6360,6 +6478,12 @@ document.addEventListener("keydown", function(e) {
     openShareModal();
     return;
   }
+
+  // H: heat colors toggle
+  if (e.key === "h" || e.key === "H") {
+    toggleHeatColors();
+    return;
+  }
 });
 
 // Shortcut reference overlay
@@ -6391,6 +6515,7 @@ function toggleShortcutRef() {
           ${shortcutRow("M", "Formula store")}
           ${shortcutRow("W", "Watchlist")}
           ${shortcutRow("X", "Share / export")}
+          ${shortcutRow("H", "Heat colors (percentiles)")}
           ${shortcutRow("?", "This reference")}
         </tbody>
       </table>
