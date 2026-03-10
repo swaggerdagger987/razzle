@@ -34,15 +34,34 @@ Think Luffy: goofy on the outside, strongest person in the room.
 | `--bg` | `#ede0cf` | Page background — warm sand |
 | `--bg-warm` | `#e5d5c3` | Toolbars, subtle sections, table headers |
 | `--bg-card` | `#f7efe5` | Cards, elevated surfaces |
-| `--bg-ink` | `#0f0f1a` | War Room dark mode only |
+| `--bg-ink` | `#1a110a` | War Room dark mode only — deepest espresso |
 
-### Ink
+### Ink — "Espresso"
+The ink palette is warm espresso brown, not blue-black. Brown on sand is the Razzle signature — everything feels like one material, leather and parchment, not screen and pixels.
+
 | Token | Hex | Usage |
 |-------|-----|-------|
-| `--ink` | `#1a1a2e` | Primary text, borders, shadows |
-| `--ink-medium` | `#4a4a5e` | Body text, secondary content |
-| `--ink-light` | `#8a8a9e` | Labels, metadata, timestamps |
-| `--ink-faint` | `#c5c5d0` | Dividers, dashed borders |
+| `--ink` | `#2d1f14` | **Espresso.** Primary text, borders, shadows |
+| `--ink-medium` | `#5c4a3d` | Body text, secondary content |
+| `--ink-light` | `#8a7565` | Labels, metadata, timestamps |
+| `--ink-faint` | `#c4b5a5` | Dividers, dashed borders |
+
+### Dark Mode — "Espresso Flip"
+Dark mode inverts the sand/espresso relationship. Espresso becomes background, sand becomes text. The orange accent stays the same — it works on both. Toggle via `[data-theme="dark"]` on `<html>`.
+
+| Token | Light Mode | Dark Mode |
+|-------|-----------|-----------|
+| `--bg` | `#ede0cf` sand | `#2d1f14` espresso |
+| `--bg-warm` | `#e5d5c3` warm sand | `#3b2821` warm espresso |
+| `--bg-card` | `#f7efe5` cream | `#4a3728` mocha |
+| `--ink` | `#2d1f14` espresso | `#ede0cf` sand |
+| `--ink-medium` | `#5c4a3d` medium brown | `#c4b5a5` medium sand |
+| `--ink-light` | `#8a7565` light brown | `#8a7565` (shared) |
+| `--ink-faint` | `#c4b5a5` faint brown | `#5c4a3d` dark dividers |
+
+Light tints also shift in dark mode to muted deep versions (e.g., `--orange-light` goes from `#f7e4d8` to `#5c3325`).
+
+**Rule**: Dark mode is available site-wide via toggle. It is NOT the default. The War Room still uses its own `--bg-ink` deepest-dark override.
 
 ### Accents
 | Token | Hex | Role |
@@ -128,8 +147,11 @@ Personality, not spinners:
 - "checking the tape..." (data sync)
 - "running the numbers..." (formula calculation)
 
+### Dark Mode Toggle
+Users can toggle dark mode site-wide. The espresso flip inverts sand ↔ brown while keeping all accents, position colors, and personality intact. Implementation: set `data-theme="dark"` on `<html>`, CSS variables handle the rest. Persist preference in localStorage.
+
 ### The War Room Exception
-War Room flips to dark mode (`--bg-ink`). Playful chrome steps aside. Contrast is intentional.
+War Room uses `--bg-ink` (deepest espresso `#1a110a`) regardless of theme toggle. It's always dark. Playful chrome steps aside. Contrast is intentional.
 
 ---
 
@@ -179,10 +201,11 @@ Bengal tiger. Chief of Staff. Runs the whole operation.
 - Hover-lift — interaction should feel physical
 
 **Don't:**
-- Dark mode (except War Room)
+- Blue-black ink — always use espresso brown (`#2d1f14`), never navy/charcoal/gray
 - Thin 1px borders on primary elements
 - Gradients
 - Generic loading spinners
 - Over-explain in UI — trust the user
 - Caveat for critical information
 - More than one accent color per component
+- Cold grays anywhere — even dark mode stays warm (brown, not gray)

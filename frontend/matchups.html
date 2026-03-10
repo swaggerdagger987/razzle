@@ -431,6 +431,8 @@
     <li><a href="/seasonpace.html">Pace</a></li>
     <li><a href="/targetpremium.html">Target Premium</a></li>
     <li><a href="/workload.html">Workload</a></li>
+    <li><a href="/drops.html">Drops</a></li>
+    <li><a href="/successrate.html">Success Rate</a></li>
     <li><a href="/team/KC">Teams</a></li>
     <li><a href="/league-intel.html">League Intel</a></li>
     <li><a href="/agents.html">War Room</a></li>
@@ -597,6 +599,10 @@
     <a href="/targetpremium.html" style="color:var(--ink-light); text-decoration:none;">Target Premium</a>
     <span style="margin:0 8px;">|</span>
     <a href="/workload.html" style="color:var(--ink-light); text-decoration:none;">Workload</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/drops.html" style="color:var(--ink-light); text-decoration:none;">Drops</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/successrate.html" style="color:var(--ink-light); text-decoration:none;">Success Rate</a>
     <span style="margin:0 8px;">|</span>
     <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none;">League Intel</a>
     <span style="margin:0 8px;">|</span>
@@ -807,7 +813,7 @@
       var html = '<h3>Top scorers vs ' + escapeHtml(team) + ' (' + pos + ')</h3>';
       html += '<div class="detail-players">';
       players.forEach(function(p) {
-        var posColor = POS_COLORS[p.position] || '#8a8a9e';
+        var posColor = POS_COLORS[p.position] || '#8a7565';
         var img = p.headshot_url ? '<img src="' + escapeHtml(p.headshot_url) + '" alt="" onerror="this.style.display=\'none\'">' : '';
         html += '<div class="detail-player" onclick="window.location.href=\'/player/' + escapeHtml(p.player_id) + '\'">';
         html += img;

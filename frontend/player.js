@@ -357,7 +357,7 @@ function drawRadar(seasons, career, pos) {
       i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
     }
     ctx.closePath();
-    ctx.strokeStyle = "#c5c5d0";
+    ctx.strokeStyle = "#c4b5a5";
     ctx.lineWidth = 1;
     ctx.stroke();
   }
@@ -473,7 +473,7 @@ function drawArc(seasons, pos) {
   const maxVal = Math.max(...values, 1);
 
   // Y gridlines
-  ctx.strokeStyle = "#c5c5d0";
+  ctx.strokeStyle = "#c4b5a5";
   ctx.lineWidth = 1;
   ctx.setLineDash([4, 4]);
   const yTicks = 4;
@@ -483,7 +483,7 @@ function drawArc(seasons, pos) {
     ctx.moveTo(pad.left, y);
     ctx.lineTo(W - pad.right, y);
     ctx.stroke();
-    ctx.fillStyle = "#8a8a9e";
+    ctx.fillStyle = "#8a7565";
     ctx.font = "11px 'Space Mono', monospace";
     ctx.textAlign = "right";
     ctx.fillText(Math.round((i / yTicks) * maxVal), pad.left - 8, y + 4);
@@ -491,7 +491,7 @@ function drawArc(seasons, pos) {
   ctx.setLineDash([]);
 
   // X labels
-  ctx.fillStyle = "#8a8a9e";
+  ctx.fillStyle = "#8a7565";
   ctx.font = "11px 'Space Mono', monospace";
   ctx.textAlign = "center";
   for (let i = 0; i < labels.length; i++) {
@@ -540,7 +540,7 @@ function drawArc(seasons, pos) {
   ctx.save();
   ctx.translate(14, pad.top + plotH / 2);
   ctx.rotate(-Math.PI / 2);
-  ctx.fillStyle = "#8a8a9e";
+  ctx.fillStyle = "#8a7565";
   ctx.font = "11px 'Space Mono', monospace";
   ctx.textAlign = "center";
   ctx.fillText("PPR Points", 0, 0);
@@ -624,7 +624,7 @@ async function exportPlayerPNG() {
     ctx.textAlign = "center";
     ctx.fillText(stats[i].value, x + boxW / 2, y + 38);
 
-    ctx.fillStyle = "#8a8a9e";
+    ctx.fillStyle = "#8a7565";
     ctx.font = "12px 'Space Mono', monospace";
     ctx.fillText(stats[i].label.toUpperCase(), x + boxW / 2, y + 62);
   }
@@ -664,7 +664,7 @@ function drawRadarOnCanvas(ctx, cx, cy, R, seasons, career, pos) {
               : ctx.lineTo(cx + r * Math.cos(angle), cy + r * Math.sin(angle));
     }
     ctx.closePath();
-    ctx.strokeStyle = "#c5c5d0";
+    ctx.strokeStyle = "#c4b5a5";
     ctx.lineWidth = 1;
     ctx.stroke();
   }

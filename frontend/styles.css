@@ -5,12 +5,12 @@
   --bg: #ede0cf;
   --bg-warm: #e5d5c3;
   --bg-card: #f7efe5;
-  --bg-ink: #0f0f1a;
+  --bg-ink: #1a110a;
 
-  --ink: #1a1a2e;
-  --ink-medium: #4a4a5e;
-  --ink-light: #8a8a9e;
-  --ink-faint: #c5c5d0;
+  --ink: #2d1f14;
+  --ink-medium: #5c4a3d;
+  --ink-light: #8a7565;
+  --ink-faint: #c4b5a5;
 
   --orange: #d97757;
   --orange-light: #f7e4d8;
@@ -36,6 +36,26 @@
 
   --radius: 12px;
   --shadow-chunky: 4px 4px 0 var(--ink);
+}
+
+/* ===== DARK MODE — Espresso flip ===== */
+[data-theme="dark"] {
+  --bg: #2d1f14;
+  --bg-warm: #3b2821;
+  --bg-card: #4a3728;
+  --bg-ink: #1a110a;
+
+  --ink: #ede0cf;
+  --ink-medium: #c4b5a5;
+  --ink-light: #8a7565;
+  --ink-faint: #5c4a3d;
+
+  --orange-light: #5c3325;
+  --yellow-light: #4a3a1e;
+  --green-light: #1a3a36;
+  --blue-light: #2a3350;
+  --red-light: #4a1a1e;
+  --purple-light: #352450;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -183,7 +203,7 @@ body {
 .auth-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(15, 15, 26, 0.5);
+  background: rgba(45, 31, 20, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -254,7 +274,7 @@ body {
   padding: 10px 14px;
   border: 2px solid var(--ink);
   border-radius: 8px;
-  background: white;
+  background: var(--bg);
   color: var(--ink);
   outline: none;
 }
@@ -470,12 +490,35 @@ body {
   .nav-signout { font-size: 10px !important; }
 }
 
+/* ===== THEME TOGGLE ===== */
+.theme-toggle {
+  background: none;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  transition: all 0.15s;
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+.theme-toggle:hover {
+  box-shadow: 3px 3px 0 var(--ink);
+  transform: translate(-1px, -1px);
+}
+
+/* Dark mode transition */
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
 /* ========== Command Palette (Ctrl+K) ========== */
 .cmd-palette-backdrop {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(26, 26, 46, 0.45);
+  background: rgba(45, 31, 20, 0.45);
   backdrop-filter: blur(4px);
   z-index: 9000;
   align-items: flex-start;

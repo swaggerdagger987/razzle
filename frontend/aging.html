@@ -350,6 +350,8 @@
     <li><a href="/seasonpace.html">Pace</a></li>
     <li><a href="/targetpremium.html">Target Premium</a></li>
     <li><a href="/workload.html">Workload</a></li>
+    <li><a href="/drops.html">Drops</a></li>
+    <li><a href="/successrate.html">Success Rate</a></li>
     <li><a href="/team/KC">Teams</a></li>
     <li><a href="/league-intel.html">League Intel</a></li>
     <li><a href="/agents.html">War Room</a></li>
@@ -512,6 +514,10 @@
     <span style="margin:0 8px;">|</span>
     <a href="/workload.html" style="color:var(--ink-light); text-decoration:none;">Workload</a>
     <span style="margin:0 8px;">|</span>
+    <a href="/drops.html" style="color:var(--ink-light); text-decoration:none;">Drops</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/successrate.html" style="color:var(--ink-light); text-decoration:none;">Success Rate</a>
+    <span style="margin:0 8px;">|</span>
     <a href="/team/KC" style="color:var(--ink-light); text-decoration:none;">Teams</a>
     <span style="margin:0 8px;">|</span>
     <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none;">League Intel</a>
@@ -568,7 +574,7 @@
 
     if (!curveData || curveData.length === 0) {
       ctx.font = '16px Caveat, cursive';
-      ctx.fillStyle = '#8a8a9e';
+      ctx.fillStyle = '#8a7565';
       ctx.textAlign = 'center';
       ctx.fillText('not enough data...', w / 2, h / 2);
       return;
@@ -598,7 +604,7 @@
       ctx.stroke();
       // Y-axis label
       ctx.font = '11px "Space Mono", monospace';
-      ctx.fillStyle = '#8a8a9e';
+      ctx.fillStyle = '#8a7565';
       ctx.textAlign = 'right';
       ctx.fillText(yVal.toFixed(0), ml - 6, yy + 4);
     }
@@ -608,19 +614,19 @@
     for (var age = minAge; age <= maxAge; age++) {
       var xx = xScale(age);
       ctx.font = '11px "Space Mono", monospace';
-      ctx.fillStyle = '#8a8a9e';
+      ctx.fillStyle = '#8a7565';
       ctx.fillText(String(age), xx, h - mb + 18);
       // Tick mark
       ctx.beginPath();
       ctx.moveTo(xx, mt + ch);
       ctx.lineTo(xx, mt + ch + 4);
-      ctx.strokeStyle = '#c5c5d0';
+      ctx.strokeStyle = '#c4b5a5';
       ctx.stroke();
     }
 
     // Axis labels
     ctx.font = '11px "Space Mono", monospace';
-    ctx.fillStyle = '#8a8a9e';
+    ctx.fillStyle = '#8a7565';
     ctx.textAlign = 'center';
     ctx.fillText('Age', ml + cw / 2, h - 2);
     ctx.save();
@@ -693,7 +699,7 @@
       ctx.globalAlpha = 0.5;
       ctx.fill();
       ctx.globalAlpha = 1;
-      ctx.strokeStyle = '#1a1a2e';
+      ctx.strokeStyle = '#2d1f14';
       ctx.lineWidth = 1.2;
       ctx.stroke();
     });
@@ -705,7 +711,7 @@
       var lx = xScale(p.age);
       var ly = yScale(p.ppg);
       ctx.font = '11px "Space Mono", monospace';
-      ctx.fillStyle = '#1a1a2e';
+      ctx.fillStyle = '#2d1f14';
       ctx.textAlign = 'center';
       var nameParts = p.name.split(' ');
       var nameShort = nameParts.length > 1 ? nameParts[nameParts.length - 1] : p.name;

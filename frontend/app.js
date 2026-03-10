@@ -1,5 +1,46 @@
 /* Razzle — shared utilities */
 
+/* ===== Theme Toggle (Espresso Dark Mode) ===== */
+(function initTheme() {
+  var saved = localStorage.getItem("razzle_theme");
+  if (saved === "dark") document.documentElement.setAttribute("data-theme", "dark");
+})();
+
+function toggleTheme() {
+  var html = document.documentElement;
+  var isDark = html.getAttribute("data-theme") === "dark";
+  if (isDark) {
+    html.removeAttribute("data-theme");
+    localStorage.setItem("razzle_theme", "light");
+  } else {
+    html.setAttribute("data-theme", "dark");
+    localStorage.setItem("razzle_theme", "dark");
+  }
+}
+
+function _injectThemeToggle() {
+  var nav = document.querySelector(".topnav");
+  if (!nav || document.querySelector(".theme-toggle")) return;
+  var btn = document.createElement("button");
+  btn.className = "theme-toggle";
+  btn.setAttribute("aria-label", "Toggle dark mode");
+  btn.title = "Toggle dark mode";
+  var isDark = document.documentElement.getAttribute("data-theme") === "dark";
+  btn.textContent = isDark ? "\u2600" : "\u263D";
+  btn.addEventListener("click", function() {
+    toggleTheme();
+    var nowDark = document.documentElement.getAttribute("data-theme") === "dark";
+    btn.textContent = nowDark ? "\u2600" : "\u263D";
+  });
+  nav.appendChild(btn);
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", _injectThemeToggle);
+} else {
+  _injectThemeToggle();
+}
+
 function escapeHtml(str) {
   if (!str) return "";
   var d = document.createElement("div");
@@ -49,7 +90,7 @@ function playerHeadshot(player, pos) {
   var url = player.headshot_url;
   var size = 28;
   var initials = ((player.full_name || player.player_name || "").split(" ").map(function(w) { return w[0] || ""; }).join("").substring(0, 2)).toUpperCase();
-  var bgColor = POS_COLOR_MAP[pos] || "#8a8a9e";
+  var bgColor = POS_COLOR_MAP[pos] || "#8a7565";
   if (url) {
     return '<img class="player-headshot" src="' + escapeAttr(url) + '" alt="" width="' + size + '" height="' + size + '" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">' +
            '<span class="player-headshot-fallback" style="display:none;background:' + bgColor + ';">' + escapeHtml(initials) + '</span>';

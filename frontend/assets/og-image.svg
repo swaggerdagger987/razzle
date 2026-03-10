@@ -9,13 +9,13 @@
   <rect width="1200" height="630" fill="#ede0cf"/>
 
   <!-- Subtle border frame -->
-  <rect x="24" y="24" width="1152" height="582" rx="20" fill="none" stroke="#1a1a2e" stroke-width="4"/>
+  <rect x="24" y="24" width="1152" height="582" rx="20" fill="none" stroke="#2d1f14" stroke-width="4"/>
 
   <!-- Card background -->
-  <rect x="40" y="40" width="1120" height="550" rx="16" fill="#f7efe5" stroke="#1a1a2e" stroke-width="3"/>
+  <rect x="40" y="40" width="1120" height="550" rx="16" fill="#f7efe5" stroke="#2d1f14" stroke-width="3"/>
   <!-- Card shadow -->
-  <rect x="44" y="44" width="1120" height="550" rx="16" fill="#1a1a2e" opacity="0.15"/>
-  <rect x="40" y="40" width="1120" height="550" rx="16" fill="#f7efe5" stroke="#1a1a2e" stroke-width="3"/>
+  <rect x="44" y="44" width="1120" height="550" rx="16" fill="#2d1f14" opacity="0.15"/>
+  <rect x="40" y="40" width="1120" height="550" rx="16" fill="#f7efe5" stroke="#2d1f14" stroke-width="3"/>
 
   <!-- Terracotta top stripe -->
   <rect x="40" y="40" width="1120" height="8" rx="16" fill="#d97757"/>
@@ -23,16 +23,16 @@
   <rect x="40" y="72" width="1120" height="16" fill="#f7efe5"/>
 
   <!-- Tiger emoji area -->
-  <text x="600" y="230" text-anchor="middle" font-size="120" fill="#1a1a2e">&#x1F42F;</text>
+  <text x="600" y="230" text-anchor="middle" font-size="120" fill="#2d1f14">&#x1F42F;</text>
 
   <!-- Razzle logo text -->
-  <text x="600" y="330" text-anchor="middle" font-family="'Luckiest Guy', 'Impact', sans-serif" font-size="72" font-weight="700" fill="#1a1a2e">Razzle<tspan fill="#d97757">.lol</tspan></text>
+  <text x="600" y="330" text-anchor="middle" font-family="'Luckiest Guy', 'Impact', sans-serif" font-size="72" font-weight="700" fill="#2d1f14">Razzle<tspan fill="#d97757">.lol</tspan></text>
 
   <!-- Tagline -->
-  <text x="600" y="385" text-anchor="middle" font-family="'Space Mono', 'Courier New', monospace" font-size="22" font-weight="700" fill="#4a4a5e">Fantasy Football Bloomberg Terminal</text>
+  <text x="600" y="385" text-anchor="middle" font-family="'Space Mono', 'Courier New', monospace" font-size="22" font-weight="700" fill="#5c4a3d">Fantasy Football Bloomberg Terminal</text>
 
   <!-- Subtitle -->
-  <text x="600" y="430" text-anchor="middle" font-family="'Caveat', cursive" font-size="28" fill="#8a8a9e">NFL + College data. Custom formulas. Share to Reddit.</text>
+  <text x="600" y="430" text-anchor="middle" font-family="'Caveat', cursive" font-size="28" fill="#8a7565">NFL + College data. Custom formulas. Share to Reddit.</text>
 
   <!-- Position color dots -->
   <circle cx="420" cy="490" r="10" fill="#5b7fff"/>
@@ -48,16 +48,16 @@
   <text x="708" y="496" font-family="'Space Mono', monospace" font-size="13" font-weight="700" fill="#8b5cf6">TE</text>
 
   <!-- Bottom tagline -->
-  <text x="600" y="555" text-anchor="middle" font-family="'Space Mono', monospace" font-size="14" fill="#8a8a9e">razzle.lol — let's razzle dazzle em baby</text>
+  <text x="600" y="555" text-anchor="middle" font-family="'Space Mono', monospace" font-size="14" fill="#8a7565">razzle.lol — let's razzle dazzle em baby</text>
 
   <!-- Decorative corner badges (sticker aesthetic) -->
   <g transform="translate(100, 120) rotate(-3)">
-    <rect x="0" y="0" width="80" height="28" rx="14" fill="#d97757" stroke="#1a1a2e" stroke-width="2"/>
+    <rect x="0" y="0" width="80" height="28" rx="14" fill="#d97757" stroke="#2d1f14" stroke-width="2"/>
     <text x="40" y="19" text-anchor="middle" font-family="'Space Mono', monospace" font-size="10" font-weight="700" fill="white">FREE</text>
   </g>
 
   <g transform="translate(1020, 120) rotate(2)">
-    <rect x="0" y="0" width="100" height="28" rx="14" fill="#2ec4b6" stroke="#1a1a2e" stroke-width="2"/>
+    <rect x="0" y="0" width="100" height="28" rx="14" fill="#2ec4b6" stroke="#2d1f14" stroke-width="2"/>
     <text x="50" y="19" text-anchor="middle" font-family="'Space Mono', monospace" font-size="10" font-weight="700" fill="white">OPEN DATA</text>
   </g>
 </svg>

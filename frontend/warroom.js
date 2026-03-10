@@ -69,7 +69,7 @@ const C = {
   chairSeat:   '#3a3a3a',
   chairBack:   '#2a2a2a',
   bannerBg:    '#d97757', // Razzle terracotta
-  bannerText:  '#1a1a2e',
+  bannerText:  '#2d1f14',
   nameTag:     'rgba(0,0,0,0.7)',
   nameText:    '#ffffff',
   bubbleBg:    '#ffffff',
@@ -411,7 +411,7 @@ function drawWarTable(f) {
   ctx.strokeStyle = '#ffc857';
   ctx.lineWidth = 2;
   ctx.stroke();
-  ctx.fillStyle = '#1a1a2e';
+  ctx.fillStyle = '#2d1f14';
   ctx.font = 'bold 9px monospace';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
@@ -2479,7 +2479,7 @@ function waitAndStart() {
     gameLoop();
   } else {
     // Loading screen on canvas
-    ctx.fillStyle = '#1a1a2e';
+    ctx.fillStyle = '#2d1f14';
     ctx.fillRect(0, 0, cvs.width, cvs.height);
     ctx.fillStyle = '#d97757';
     ctx.font = 'bold 14px monospace';

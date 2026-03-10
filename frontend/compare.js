@@ -346,7 +346,7 @@ function drawCompareRadar(color1, color2, pos) {
       i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
     }
     ctx.closePath();
-    ctx.strokeStyle = "#c5c5d0";
+    ctx.strokeStyle = "#c4b5a5";
     ctx.lineWidth = 1;
     ctx.stroke();
   }
@@ -478,7 +478,7 @@ function drawCompareArc(color1, color2) {
   var maxVal = Math.max.apply(null, allVals.concat([1]));
 
   // Y gridlines
-  ctx.strokeStyle = "#c5c5d0";
+  ctx.strokeStyle = "#c4b5a5";
   ctx.lineWidth = 1;
   ctx.setLineDash([4, 4]);
   for (var i = 0; i <= 4; i++) {
@@ -487,7 +487,7 @@ function drawCompareArc(color1, color2) {
     ctx.moveTo(pad.left, y);
     ctx.lineTo(W - pad.right, y);
     ctx.stroke();
-    ctx.fillStyle = "#8a8a9e";
+    ctx.fillStyle = "#8a7565";
     ctx.font = "11px 'Space Mono', monospace";
     ctx.textAlign = "right";
     ctx.fillText(String(Math.round((i / 4) * maxVal)), pad.left - 8, y + 4);
@@ -495,7 +495,7 @@ function drawCompareArc(color1, color2) {
   ctx.setLineDash([]);
 
   // X labels
-  ctx.fillStyle = "#8a8a9e";
+  ctx.fillStyle = "#8a7565";
   ctx.font = "11px 'Space Mono', monospace";
   ctx.textAlign = "center";
   for (var i = 0; i < years.length; i++) {
@@ -511,7 +511,7 @@ function drawCompareArc(color1, color2) {
   ctx.save();
   ctx.translate(14, pad.top + plotH / 2);
   ctx.rotate(-Math.PI / 2);
-  ctx.fillStyle = "#8a8a9e";
+  ctx.fillStyle = "#8a7565";
   ctx.font = "11px 'Space Mono', monospace";
   ctx.textAlign = "center";
   ctx.fillText("PPR Points", 0, 0);
@@ -749,7 +749,7 @@ function drawExportPlayerCard(ctx, x, y, w, h, player, career, pos, color) {
     ctx.textAlign = "center";
     ctx.fillText(stats[i].value, bx + boxW / 2, by + 26);
 
-    ctx.fillStyle = "#8a8a9e";
+    ctx.fillStyle = "#8a7565";
     ctx.font = "9px 'Space Mono', monospace";
     ctx.fillText(stats[i].label, bx + boxW / 2, by + 42);
   }
@@ -774,7 +774,7 @@ function drawRadarOnExport(ctx, cx, cy, R, color1, color2, pos) {
               : ctx.lineTo(cx + r * Math.cos(angle), cy + r * Math.sin(angle));
     }
     ctx.closePath();
-    ctx.strokeStyle = "#c5c5d0";
+    ctx.strokeStyle = "#c4b5a5";
     ctx.lineWidth = 1;
     ctx.stroke();
   }
