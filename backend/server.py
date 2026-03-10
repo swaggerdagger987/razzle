@@ -71,6 +71,7 @@ def bootstrap_database():
         try:
             count = conn.execute("SELECT COUNT(*) FROM players").fetchone()[0]
         except Exception:
+            logger.warning("Could not count players table — may not exist yet", exc_info=True)
             count = 0
 
         if count < 50:
@@ -141,7 +142,7 @@ def bootstrap_database():
                 try:
                     refine_positions_from_combine(fconn)
                 except Exception:
-                    pass
+                    logger.warning("refine_positions_from_combine failed", exc_info=True)
                 logger.info("  cfbfastR data synced")
             finally:
                 fconn.close()
@@ -320,6 +321,7 @@ async def auth_link_sleeper(request: Request):
             if not data or not data.get("user_id"):
                 return JSONResponse({"error": "Sleeper username not found"}, status_code=400)
     except Exception:
+        logger.warning("Sleeper username validation failed for %s", sleeper_username, exc_info=True)
         return JSONResponse({"error": "Could not validate Sleeper username"}, status_code=400)
 
     result = auth_module.link_sleeper(user["id"], sleeper_username)
@@ -895,6 +897,7 @@ async def player_profile_page(player_id: str):
                 og_desc += f" — {pprg} PPR/G career"
             og_desc += ". Full stats, radar chart, career arc on razzle.lol"
     except Exception:
+        logger.debug("OG tag generation failed for player page", exc_info=True)
         og_title = "Player Profile — Razzle"
         og_desc = "Fantasy football player profile on razzle.lol"
 
@@ -923,7 +926,7 @@ async def player_profile_page(player_id: str):
         jsonld_tag = f'<script type="application/ld+json">{_json.dumps(jsonld)}</script>'
         html = html.replace("</head>", f"{jsonld_tag}\n</head>")
     except Exception:
-        pass
+        logger.debug("JSON-LD injection failed for player page", exc_info=True)
 
     return HTMLResponse(content=html)
 
@@ -965,6 +968,7 @@ async def compare_page(id1: str, id2: str):
             parts.append(n2)
         og_desc = " vs ".join(parts) + ". Head-to-head stats, radar overlay, career arc on razzle.lol"
     except Exception:
+        logger.debug("OG tag generation failed for compare page", exc_info=True)
         og_title = "Player Comparison — Razzle"
         og_desc = "Head-to-head fantasy football player comparison on razzle.lol"
 
@@ -1117,7 +1121,7 @@ def sitemap_xml():
                 ET.SubElement(url, "priority").text = "0.6"
                 ET.SubElement(url, "changefreq").text = "weekly"
     except Exception:
-        pass
+        logger.warning("Sitemap player URL generation failed", exc_info=True)
 
     xml_str = '<?xml version="1.0" encoding="UTF-8"?>\n'
     xml_str += ET.tostring(urlset, encoding="unicode")

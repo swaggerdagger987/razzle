@@ -53,7 +53,7 @@ def initialize_subscriptions_table():
     try:
         conn.execute("ALTER TABLE users ADD COLUMN stripe_customer_id TEXT")
     except Exception:
-        pass  # Column already exists
+        logger.debug("stripe_customer_id column already exists or migration failed", exc_info=True)
     conn.commit()
     conn.close()
     logger.info("Subscriptions table initialized")

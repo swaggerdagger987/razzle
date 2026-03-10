@@ -193,6 +193,7 @@ def publish_formula(name: str, description: str, position_tags: list,
             formula_id = cur.lastrowid
             result = {"status": "ok", "id": formula_id}
         except Exception as e:
+            logger.exception("publish_formula failed")
             result = {"status": "error", "message": str(e)}
         return result
 
@@ -320,7 +321,7 @@ def log_pageview(page: str):
             conn.execute("INSERT INTO pageviews (page) VALUES (?)", (page[:200],))
             conn.commit()
     except Exception:
-        pass
+        logger.warning("log_pageview failed for page=%s", page, exc_info=True)
 
 
 def get_analytics_summary() -> dict:
@@ -339,4 +340,5 @@ def get_analytics_summary() -> dict:
                 "by_day": [{"day": r[0], "views": r[1]} for r in by_day],
             }
     except Exception:
+        logger.exception("get_analytics_summary failed")
         return {"total": 0, "by_page": [], "by_day": []}

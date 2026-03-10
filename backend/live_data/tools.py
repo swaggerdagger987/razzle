@@ -54,6 +54,7 @@ def _fetch_featured_uncached():
                 "ppg": round(r[5] / r[6], 1) if r[6] else 0, "games": r[6]
             } for r in rows]
         except Exception:
+            logger.exception("featured: dynasty_risers query failed")
             results["dynasty_risers"] = []
 
         # 2. Rookie Big Board — top prospects by draft pick
@@ -81,6 +82,7 @@ def _fetch_featured_uncached():
             } for r in rows]
             results["draft_year"] = draft_year
         except Exception:
+            logger.exception("featured: rookie_board query failed")
             results["rookie_board"] = []
 
         # 3. Breakout Candidates — high target share, below-average PPG (upside)
@@ -109,6 +111,7 @@ def _fetch_featured_uncached():
                 "games": r[6]
             } for r in rows]
         except Exception:
+            logger.exception("featured: breakout_candidates query failed")
             results["breakout_candidates"] = []
 
         results["season"] = season
