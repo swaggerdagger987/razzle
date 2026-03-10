@@ -2319,103 +2319,135 @@ def fetch_college_players(
 def fetch_college_player_profile(player_id):
     """Return a rich college player profile with all seasons + combine/draft data."""
     conn = get_conn()
+    try:
+        # Get all seasons for this player
+        seasons = conn.execute("""
+            SELECT player_id, player_name, position, team, conference, season,
+                   games, completions, pass_attempts, pass_yards, pass_tds,
+                   ints_thrown, sacks_taken, carries, rush_yards, rush_tds,
+                   receptions, targets, rec_yards, rec_tds,
+                   fumbles, total_tds, total_yards
+            FROM cfb_player_season_stats
+            WHERE player_id = ?
+            ORDER BY season ASC
+        """, (player_id,)).fetchall()
 
-    # Get all seasons for this player
-    seasons = conn.execute("""
-        SELECT player_id, player_name, position, team, conference, season,
-               games, completions, pass_attempts, pass_yards, pass_tds,
-               ints_thrown, sacks_taken, carries, rush_yards, rush_tds,
-               receptions, targets, rec_yards, rec_tds,
-               fumbles, total_tds, total_yards
-        FROM cfb_player_season_stats
-        WHERE player_id = ?
-        ORDER BY season ASC
-    """, (player_id,)).fetchall()
+        if not seasons:
+            return {"player": None, "seasons": [], "combine": None, "draft": None}
 
-    if not seasons:
+        season_items = [dict(r) for r in seasons]
+        season_items = _enrich_college_derived(season_items)
+
+        # Player bio from most recent season
+        latest = season_items[-1]
+        player = {
+            "player_id": latest["player_id"],
+            "player_name": latest["player_name"],
+            "position": latest["position"],
+            "team": latest["team"],
+            "conference": latest["conference"],
+            "seasons_played": len(season_items),
+        }
+
+        # Career totals
+        career = {
+            "games": sum(s.get("games") or 0 for s in season_items),
+            "completions": sum(s.get("completions") or 0 for s in season_items),
+            "pass_attempts": sum(s.get("pass_attempts") or 0 for s in season_items),
+            "pass_yards": sum(s.get("pass_yards") or 0 for s in season_items),
+            "pass_tds": sum(s.get("pass_tds") or 0 for s in season_items),
+            "ints_thrown": sum(s.get("ints_thrown") or 0 for s in season_items),
+            "carries": sum(s.get("carries") or 0 for s in season_items),
+            "rush_yards": sum(s.get("rush_yards") or 0 for s in season_items),
+            "rush_tds": sum(s.get("rush_tds") or 0 for s in season_items),
+            "receptions": sum(s.get("receptions") or 0 for s in season_items),
+            "targets": sum(s.get("targets") or 0 for s in season_items),
+            "rec_yards": sum(s.get("rec_yards") or 0 for s in season_items),
+            "rec_tds": sum(s.get("rec_tds") or 0 for s in season_items),
+            "total_tds": sum(s.get("total_tds") or 0 for s in season_items),
+            "total_yards": sum(s.get("total_yards") or 0 for s in season_items),
+        }
+        # Derive career efficiency
+        career = _enrich_college_derived([career])[0]
+
+        # Normalize name: strip all non-alpha chars (matches adapter logic)
+        import re
+        name_alpha = re.sub(r"[^a-z]", "", latest["player_name"].lower())
+        name_nospace = latest["player_name"].lower().replace(" ", "")
+
+        # Try to match with combine data (try space-stripped first, then alpha-only)
+        combine_row = conn.execute("""
+            SELECT player_name, position, school, draft_year,
+                   height_inches, weight,
+                   forty, bench, vertical, broad_jump, cone, shuttle,
+                   draft_team, draft_round, draft_pick, pfr_id
+            FROM combine_data
+            WHERE LOWER(REPLACE(player_name, ' ', '')) = ?
+            ORDER BY draft_year DESC LIMIT 1
+        """, (name_nospace,)).fetchone()
+
+        # Fallback: broader match for names with apostrophes/hyphens
+        if not combine_row:
+            candidates = conn.execute("""
+                SELECT player_name, position, school, draft_year,
+                       height_inches, weight,
+                       forty, bench, vertical, broad_jump, cone, shuttle,
+                       draft_team, draft_round, draft_pick, pfr_id
+                FROM combine_data
+                WHERE LOWER(REPLACE(REPLACE(REPLACE(player_name, ' ', ''), '''', ''), '-', '')) = ?
+                ORDER BY draft_year DESC LIMIT 1
+            """, (name_alpha,)).fetchone()
+            if candidates:
+                combine_row = candidates
+
+        combine = None
+        if combine_row:
+            combine = dict(combine_row)
+            ht = combine.get("height_inches")
+            if ht:
+                combine["height_display"] = f"{ht // 12}'{ht % 12}\""
+            dt = (combine.get("draft_team") or "").upper()
+            combine["draft_team"] = TEAM_ABBREV.get(dt, dt[:3] if dt else None)
+
+        # Try to match with draft picks
+        draft_row = conn.execute("""
+            SELECT player_name, position, college, season as draft_year,
+                   round, pick, team as nfl_team,
+                   career_av, games as nfl_games, allpro, probowls,
+                   pass_yards as nfl_pass_yards, pass_tds as nfl_pass_tds,
+                   rush_yards as nfl_rush_yards, rush_tds as nfl_rush_tds,
+                   rec_yards as nfl_rec_yards, rec_tds as nfl_rec_tds,
+                   receptions as nfl_receptions
+            FROM draft_picks
+            WHERE LOWER(REPLACE(player_name, ' ', '')) = ?
+            ORDER BY season DESC LIMIT 1
+        """, (name_nospace,)).fetchone()
+
+        if not draft_row:
+            draft_row = conn.execute("""
+                SELECT player_name, position, college, season as draft_year,
+                       round, pick, team as nfl_team,
+                       career_av, games as nfl_games, allpro, probowls,
+                       pass_yards as nfl_pass_yards, pass_tds as nfl_pass_tds,
+                       rush_yards as nfl_rush_yards, rush_tds as nfl_rush_tds,
+                       rec_yards as nfl_rec_yards, rec_tds as nfl_rec_tds,
+                       receptions as nfl_receptions
+                FROM draft_picks
+                WHERE LOWER(REPLACE(REPLACE(REPLACE(player_name, ' ', ''), '''', ''), '-', '')) = ?
+                ORDER BY season DESC LIMIT 1
+            """, (name_alpha,)).fetchone()
+
+        draft = dict(draft_row) if draft_row else None
+
+        return {
+            "player": player,
+            "seasons": season_items,
+            "career": career,
+            "combine": combine,
+            "draft": draft,
+        }
+    finally:
         conn.close()
-        return {"player": None, "seasons": [], "combine": None, "draft": None}
-
-    season_items = [dict(r) for r in seasons]
-    season_items = _enrich_college_derived(season_items)
-
-    # Player bio from most recent season
-    latest = season_items[-1]
-    player = {
-        "player_id": latest["player_id"],
-        "player_name": latest["player_name"],
-        "position": latest["position"],
-        "team": latest["team"],
-        "conference": latest["conference"],
-        "seasons_played": len(season_items),
-    }
-
-    # Career totals
-    career = {
-        "games": sum(s.get("games") or 0 for s in season_items),
-        "completions": sum(s.get("completions") or 0 for s in season_items),
-        "pass_attempts": sum(s.get("pass_attempts") or 0 for s in season_items),
-        "pass_yards": sum(s.get("pass_yards") or 0 for s in season_items),
-        "pass_tds": sum(s.get("pass_tds") or 0 for s in season_items),
-        "ints_thrown": sum(s.get("ints_thrown") or 0 for s in season_items),
-        "carries": sum(s.get("carries") or 0 for s in season_items),
-        "rush_yards": sum(s.get("rush_yards") or 0 for s in season_items),
-        "rush_tds": sum(s.get("rush_tds") or 0 for s in season_items),
-        "receptions": sum(s.get("receptions") or 0 for s in season_items),
-        "targets": sum(s.get("targets") or 0 for s in season_items),
-        "rec_yards": sum(s.get("rec_yards") or 0 for s in season_items),
-        "rec_tds": sum(s.get("rec_tds") or 0 for s in season_items),
-        "total_tds": sum(s.get("total_tds") or 0 for s in season_items),
-        "total_yards": sum(s.get("total_yards") or 0 for s in season_items),
-    }
-    # Derive career efficiency
-    career = _enrich_college_derived([career])[0]
-
-    # Try to match with combine data (by normalized name + position)
-    name_clean = latest["player_name"].lower().replace(" ", "")
-    combine_row = conn.execute("""
-        SELECT player_name, position, school, draft_year,
-               height_inches, weight,
-               forty, bench, vertical, broad_jump, cone, shuttle,
-               draft_team, draft_round, draft_pick, pfr_id
-        FROM combine_data
-        WHERE LOWER(REPLACE(player_name, ' ', '')) = ?
-        ORDER BY draft_year DESC LIMIT 1
-    """, (name_clean,)).fetchone()
-
-    combine = None
-    if combine_row:
-        combine = dict(combine_row)
-        ht = combine.get("height_inches")
-        if ht:
-            combine["height_display"] = f"{ht // 12}'{ht % 12}\""
-        dt = (combine.get("draft_team") or "").upper()
-        combine["draft_team"] = TEAM_ABBREV.get(dt, dt[:3] if dt else None)
-
-    # Try to match with draft picks
-    draft_row = conn.execute("""
-        SELECT player_name, position, college, season as draft_year,
-               round, pick, team as nfl_team,
-               career_av, games as nfl_games, allpro, probowls,
-               pass_yards as nfl_pass_yards, pass_tds as nfl_pass_tds,
-               rush_yards as nfl_rush_yards, rush_tds as nfl_rush_tds,
-               rec_yards as nfl_rec_yards, rec_tds as nfl_rec_tds,
-               receptions as nfl_receptions
-        FROM draft_picks
-        WHERE LOWER(REPLACE(player_name, ' ', '')) = ?
-        ORDER BY season DESC LIMIT 1
-    """, (name_clean,)).fetchone()
-
-    draft = dict(draft_row) if draft_row else None
-
-    conn.close()
-    return {
-        "player": player,
-        "seasons": season_items,
-        "career": career,
-        "combine": combine,
-        "draft": draft,
-    }
 
 
 def fetch_college_filter_options():
