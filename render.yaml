@@ -8,6 +8,7 @@ services:
       ASSET_URL=$(curl -sL -H "Authorization: token $GH_TOKEN" "https://api.github.com/repos/swaggerdagger987/razzle/releases/tags/data-v1" | python -c "import sys,json; print(json.load(sys.stdin)['assets'][0]['url'])")
       curl -sL -H "Authorization: token $GH_TOKEN" -H "Accept: application/octet-stream" -o data/terminal.db "$ASSET_URL"
       echo "Downloaded terminal.db: $(ls -lh data/terminal.db | awk '{print $5}')"
+      python -c "import sqlite3; c=sqlite3.connect('data/terminal.db'); tables=c.execute('SELECT COUNT(*) FROM sqlite_master WHERE type=\"table\"').fetchone()[0]; print(f'DB has {tables} tables'); assert tables>0, 'EMPTY DB'; c.close()"
     startCommand: uvicorn backend.server:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: PYTHON_VERSION
