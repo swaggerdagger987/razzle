@@ -902,6 +902,7 @@ def sitemap_xml():
         ("/efficiency.html", "0.8", "weekly"),
         ("/consistency.html", "0.8", "weekly"),
         ("/schedule.html", "0.8", "weekly"),
+        ("/stocks.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1205,6 +1206,19 @@ def strength_of_schedule(season: int = 0, position: str = "", limit: int = 30):
     except Exception as e:
         logger.error(f"strength_of_schedule error: {e}")
         return JSONResponse({"error": "Failed to fetch strength of schedule data"}, status_code=500)
+
+
+@app.get("/api/stock-watch")
+def stock_watch(season: int = 0, position: str = "", limit: int = 30):
+    """Return dynasty stock watch: rising (undervalued) + falling (overvalued)."""
+    try:
+        s = season if season > 0 else None
+        pos = position.upper() if position else None
+        lim = max(1, min(limit, 50))
+        return live_data.fetch_stock_watch(season=s, position=pos, limit=lim)
+    except Exception as e:
+        logger.error(f"stock_watch error: {e}")
+        return JSONResponse({"error": "Failed to fetch stock watch data"}, status_code=500)
 
 
 @app.get("/api/analytics/summary")

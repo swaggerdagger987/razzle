@@ -6717,3 +6717,267 @@ def fetch_strength_of_schedule(season=None, position=None, limit=30):
         }
     finally:
         conn.close()
+
+
+# ---------------------------------------------------------------------------
+# Phase 87: Dynasty Stock Watch
+# ---------------------------------------------------------------------------
+
+_RISING_ANNOTATIONS = [
+    "buy window open",
+    "metrics say undervalued",
+    "stock price climbing",
+    "the data backs the hype",
+    "quietly outperforming",
+    "sleeper alert",
+    "the numbers don't lie",
+    "upside not priced in",
+    "production exceeds perception",
+    "dynasty steal",
+]
+
+_FALLING_ANNOTATIONS = [
+    "sell window closing",
+    "metrics say overvalued",
+    "stock price dropping",
+    "production doesn't match price",
+    "quietly underperforming",
+    "red flags in the data",
+    "regression candidate",
+    "buy the name, not the stats",
+    "perception exceeds production",
+    "dynasty fade",
+]
+
+
+def fetch_stock_watch(season=None, position=None, limit=30):
+    """Composite dynasty stock watch — blends efficiency, consistency, SOS, and PPG
+    into a 0-100 stock score.  Rising = undervalued (stock > PPG rank).
+    Falling = overvalued (stock < PPG rank)."""
+    import math
+    from collections import defaultdict
+
+    conn = get_conn()
+    try:
+        row = conn.execute(
+            "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
+        ).fetchall()
+        available_seasons = [r[0] for r in row] if row else [2024]
+        if not season:
+            season = available_seasons[0] if available_seasons else 2024
+
+        pos_filter = ""
+        params = [season]
+        if position and position.upper() in FANTASY_POSITIONS:
+            pos_filter = "AND p.position = ?"
+            params.append(position.upper())
+
+        # ---- Gather weekly data per player ----
+        rows = conn.execute(f"""
+            SELECT s.player_id, p.full_name, p.position, p.team,
+                   p.headshot_url, p.age,
+                   s.fantasy_points_ppr, s.targets, s.carries,
+                   s.opponent_team, s.week
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE s.season = ?
+              AND p.position IN ('QB', 'RB', 'WR', 'TE')
+              AND p.fantasy_relevant = 1
+              AND s.opponent_team IS NOT NULL AND s.opponent_team != ''
+              {pos_filter}
+            ORDER BY s.player_id, s.week
+        """, params).fetchall()
+
+        if not rows:
+            return {
+                "season": season,
+                "available_seasons": available_seasons,
+                "rising": [],
+                "falling": [],
+            }
+
+        # ---- Build defense PPG-allowed grid for SOS ----
+        def_rows = conn.execute("""
+            SELECT s.opponent_team, p.position,
+                   COALESCE(SUM(s.fantasy_points_ppr), 0) as total_ppr,
+                   COUNT(DISTINCT s.week) as games
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE s.season = ?
+              AND p.position IN ('QB', 'RB', 'WR', 'TE')
+              AND s.opponent_team IS NOT NULL AND s.opponent_team != ''
+            GROUP BY s.opponent_team, p.position
+        """, [season]).fetchall()
+
+        defense_ppg = {}
+        for r in def_rows:
+            team, pos, total, games = r[0], r[1], r[2], r[3]
+            if games <= 0:
+                continue
+            if team not in defense_ppg:
+                defense_ppg[team] = {}
+            defense_ppg[team][pos] = round(total / games, 2)
+
+        league_avg = {}
+        for pos in ("QB", "RB", "WR", "TE"):
+            vals = [defense_ppg[t][pos] for t in defense_ppg if pos in defense_ppg[t]]
+            league_avg[pos] = sum(vals) / len(vals) if vals else 0
+
+        # ---- Aggregate per player ----
+        player_info = {}
+        player_weeks = defaultdict(list)  # weekly fantasy pts
+        player_opps = defaultdict(lambda: {"targets": 0, "carries": 0, "total_pts": 0, "games": 0})
+        player_sos = defaultdict(list)  # opp ppg allowed per week
+
+        for r in rows:
+            pid = r[0]
+            if pid not in player_info:
+                player_info[pid] = {
+                    "player_id": pid,
+                    "name": r[1] or "Unknown",
+                    "position": r[2] or "RB",
+                    "team": r[3] or "FA",
+                    "headshot_url": r[4] or "",
+                    "age": r[5],
+                }
+
+            pts = r[6] or 0
+            targets = r[7] or 0
+            carries = r[8] or 0
+            opp = r[9] or ""
+            pos = r[2] or "RB"
+
+            player_weeks[pid].append(pts)
+            d = player_opps[pid]
+            d["targets"] += targets
+            d["carries"] += carries
+            d["total_pts"] += pts
+            d["games"] += 1
+
+            opp_allows = defense_ppg.get(opp, {}).get(pos, league_avg.get(pos, 0))
+            player_sos[pid].append(opp_allows)
+
+        # ---- Compute metrics per player (min 6 games, 2 PPG) ----
+        players = []
+        for pid, weeks in player_weeks.items():
+            n = len(weeks)
+            if n < 6:
+                continue
+            info = player_info[pid]
+            opps_d = player_opps[pid]
+            total_pts = opps_d["total_pts"]
+            games = opps_d["games"]
+            ppg = round(total_pts / games, 2) if games > 0 else 0
+            if ppg < 2:
+                continue
+
+            # Efficiency: PPO
+            opportunities = opps_d["targets"] + opps_d["carries"]
+            ppo = round(total_pts / opportunities, 2) if opportunities > 50 else None
+
+            # Consistency: CoV
+            mean = sum(weeks) / n
+            variance = sum((w - mean) ** 2 for w in weeks) / (n - 1) if n > 1 else 0
+            stddev = math.sqrt(variance)
+            cov = round(stddev / mean, 3) if mean > 0 else None
+
+            # SOS: avg opp ppg allowed
+            sos_list = player_sos[pid]
+            avg_opp_ppg = sum(sos_list) / len(sos_list) if sos_list else 0
+            pos = info["position"]
+            sos_delta = round(league_avg.get(pos, 0) - avg_opp_ppg, 1)
+
+            players.append({
+                **info,
+                "ppg": ppg,
+                "games": games,
+                "ppo": ppo,
+                "cov": cov,
+                "sos_delta": sos_delta,
+            })
+
+        if not players:
+            return {
+                "season": season,
+                "available_seasons": available_seasons,
+                "rising": [],
+                "falling": [],
+            }
+
+        # ---- Compute percentiles for each metric ----
+        # PPG percentile
+        ppg_sorted = sorted([p["ppg"] for p in players])
+        n_total = len(ppg_sorted)
+
+        # PPO percentile (only players with enough opps)
+        ppo_vals = sorted([p["ppo"] for p in players if p["ppo"] is not None])
+        n_ppo = len(ppo_vals)
+
+        # Inverse CoV percentile (lower CoV = higher percentile)
+        cov_vals = sorted([p["cov"] for p in players if p["cov"] is not None])
+        n_cov = len(cov_vals)
+
+        # SOS delta percentile (higher delta = harder schedule = higher percentile)
+        sos_sorted = sorted([p["sos_delta"] for p in players])
+        n_sos = len(sos_sorted)
+
+        def percentile_rank(val, sorted_vals, count):
+            if count == 0:
+                return 50
+            rank = sum(1 for v in sorted_vals if v < val)
+            return round(rank / count * 100, 1)
+
+        def grade_from_percentile(pct):
+            if pct >= 95:
+                return "A+"
+            elif pct >= 85:
+                return "A"
+            elif pct >= 70:
+                return "B"
+            elif pct >= 45:
+                return "C"
+            elif pct >= 25:
+                return "D"
+            return "F"
+
+        for p in players:
+            ppg_pct = percentile_rank(p["ppg"], ppg_sorted, n_total)
+            ppo_pct = percentile_rank(p["ppo"], ppo_vals, n_ppo) if p["ppo"] is not None else 50
+            # Inverse CoV: lower CoV = better, so count values ABOVE
+            cov_pct = (sum(1 for v in cov_vals if v > p["cov"]) / n_cov * 100) if p["cov"] is not None and n_cov > 0 else 50
+            sos_pct = percentile_rank(p["sos_delta"], sos_sorted, n_sos)
+
+            # Composite stock score: 25% each
+            stock_score = round(ppo_pct * 0.25 + cov_pct * 0.25 + sos_pct * 0.25 + ppg_pct * 0.25)
+
+            p["stock_score"] = stock_score
+            p["ppg_pct"] = round(ppg_pct)
+            p["efficiency_grade"] = grade_from_percentile(ppo_pct)
+            p["consistency_grade"] = grade_from_percentile(cov_pct)
+            p["sos_grade"] = grade_from_percentile(sos_pct)
+            # Stock delta: positive = undervalued (stock > production rank)
+            p["stock_delta"] = stock_score - round(ppg_pct)
+
+        # ---- Split into rising (undervalued) and falling (overvalued) ----
+        rising = sorted(
+            [p for p in players if p["stock_delta"] > 0],
+            key=lambda x: x["stock_delta"], reverse=True
+        )[:limit]
+        for i, p in enumerate(rising):
+            p["annotation"] = _RISING_ANNOTATIONS[i % len(_RISING_ANNOTATIONS)]
+
+        falling = sorted(
+            [p for p in players if p["stock_delta"] < 0],
+            key=lambda x: x["stock_delta"]
+        )[:limit]
+        for i, p in enumerate(falling):
+            p["annotation"] = _FALLING_ANNOTATIONS[i % len(_FALLING_ANNOTATIONS)]
+
+        return {
+            "season": season,
+            "available_seasons": available_seasons,
+            "rising": rising,
+            "falling": falling,
+        }
+    finally:
+        conn.close()

@@ -1,6 +1,24 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 86 — QA + UX Audit Fixes (COMPLETE)
+## Current Phase: Phase 87 — Dynasty Stock Watch Dashboard (COMPLETE)
+
+**Exit criterion MET:** /stocks.html page shows dynasty stock watch with two sections: "Rising Stocks" (players whose composite metrics exceed their PPG ranking — undervalued) and "Falling Stocks" (players whose PPG ranking exceeds their composite metrics — overvalued). For each player: position badge, headshot, name, team, Stock Score (0-100 color-coded badge: elite 80+ green, good 60-79 blue, avg 40-59 yellow, below 20-39 orange, poor <20 red), PPG, Efficiency grade, Consistency grade, SOS grade, Stock Delta, Age, GP, and Caveat annotation. Composite stock score = PPO percentile (25%) + inverse CoV percentile (25%) + SOS difficulty percentile (25%) + PPG percentile (25%). Position filter tabs (All/QB/RB/WR/TE). Season selector. Sortable columns with sort state tracking per section. Click player row → player profile. PNG export via html2canvas with watermark. Responsive at 768px + 480px with hide-mobile columns. /api/stock-watch endpoint computes per-player efficiency (PPO), consistency (CoV), SOS (avg opp PPG), and PPG, converts each to percentile, blends into 0-100 stock score, compares to PPG rank percentile, splits into rising (stock > PPG rank) and falling (stock < PPG rank). Min 6 games + 2 PPG + 50 opps filter. "Stocks" nav link added to all 27 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors.
+
+### Phase 87 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/stock-watch endpoint | DONE | Composite stock score, rising/falling split, grades |
+| 2 | Stock Watch dashboard page | DONE | Two-section table, score badges, grade badges, 13 escapeHtml |
+| 3 | Nav links + sitemap + analytics | DONE | All 27 pages updated, sitemap entry, pageview tracking |
+| 4 | Smoke test | DONE | Python + JS syntax clean, 27/27 nav links, XSS escaped, design compliance |
+
+### Decisions Log
+- **Dynasty Stock Watch as Phase 87**: After building 15+ individual metric dashboards (efficiency, consistency, SOS, usage, air yards, etc.), the natural culmination is a composite view that synthesizes them all. "Rising/falling stocks" is the most shared content format on r/DynastyFF. The composite score gives actionable buy/sell signals grounded in our data rather than opinions.
+- **Equal 25% weighting**: PPO, inverse CoV, SOS difficulty, and PPG rank each get 25%. No metric dominates — the stock score is a balanced view of efficiency + consistency + schedule context + raw production.
+- **Stock vs PPG rank comparison**: "Rising" means a player's multi-metric composite exceeds their PPG ranking (efficient + consistent + hard schedule = undervalued). "Falling" means their production rank overstates their underlying metrics.
+
+## Previous Phase: Phase 86 — QA + UX Audit Fixes (COMPLETE)
 
 **Exit criterion MET:** All HIGH findings from QA-AUDIT.md (Phases 81-85) resolved. SOS endpoint uses `full_name` instead of `display_name`. SOS endpoint includes `fantasy_relevant = 1` filter. MEDIUM fixes applied: efficiency YAC/Rec clamped to non-negative, consistency uses sample variance (Bessel's correction), efficiency column header "Y/Tch" renamed to "YPT", consistency CoV displayed as percentage (CoV%). All fixes verified with Python syntax checks and JS structure validation.
 
