@@ -1,6 +1,18 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 34 — Backend Hardening: Production Config + Smoke Tests (COMPLETE)
+## Current Phase: Phase 35 — QA + UX Audit Fixes for Phases 31-34 (COMPLETE)
+
+**Exit Criterion MET**: 2 HIGH + 1 MEDIUM findings fixed. 58 error handlers upgraded to logger.exception() for stack traces. Hardcoded year in trade_pick_values and OG tag defaults replaced with dynamic helpers. 7 redundant imports removed.
+
+### Phase 35 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Fix error handlers — stack traces | DONE | 58 logger.error -> logger.exception |
+| 2 | Fix hardcoded year defaults | DONE | trade_pick_values + OG tag |
+| 3 | Remove redundant imports | DONE | 7 local defaultdict imports in tools.py |
+
+## Previous Phase: Phase 34 — Backend Hardening: Production Config + Smoke Tests (COMPLETE)
 
 **Exit Criterion MET**: render.yaml sets ENVIRONMENT=production for JSON logging. pytest + httpx in requirements. 34 smoke tests (7 core + 27 panel) covering health, players, filter-options, featured, and 27 analytics/dashboard/dynasty/tool endpoints. All pass with local DB.
 
