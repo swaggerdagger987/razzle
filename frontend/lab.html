@@ -433,6 +433,21 @@
     transform: translate(0, 0);
     box-shadow: none;
   }
+  .panel-methodology {
+    font-family: var(--font-hand);
+    font-size: 16px;
+    color: var(--ink-light);
+    padding: 8px 12px;
+    margin-top: 6px;
+    background: var(--bg-warm);
+    border-radius: 4px;
+    border: 2px dashed var(--ink-faint);
+    line-height: 1.4;
+  }
+  .btn-info-toggle {
+    font-size: 14px;
+    padding: 4px 8px;
+  }
   .razzle-toast {
     position: fixed;
     bottom: 24px;
@@ -3249,6 +3264,21 @@
     team: 'full roster views by team'
   };
 
+  // Panel methodology descriptions (top 10 complex panels + generic fallback)
+  var PANEL_METHODS = {
+    vorp: 'VORP = Player PPG minus replacement-level PPG for their position. Replacement thresholds: QB12, RB24, WR36, TE12. Higher VORP = more value above what you could get for free on waivers. Data: nflverse player stats.',
+    stocks: 'Stock Score is a composite of 4 percentile rankings: PPO (efficiency), CoV (consistency), SOS (schedule), and PPG (production) — 25% each. Rising stocks = composite outperforms PPG rank. Falling = PPG rank outperforms composite.',
+    reportcard: 'Fantasy GPA combines 5 equal-weighted grades (20% each): Efficiency (PPO), Consistency (inverse CoV), Schedule (SOS), Production (PPG), and Opportunity Share. Each graded A+ to F on positional percentile curves.',
+    tdregression: 'Compares actual TDs scored to expected TDs based on historical TD rates per opportunity type (rush attempt, target, etc). Buy targets: fewer TDs than expected. Sell candidates: more TDs than expected.',
+    airyards: 'Air Yards measure target depth. Key metrics: aDOT (avg depth of target), RACR (receiver air conversion ratio = rec yards / air yards), WOPR (weighted opportunity rating = target share * 1.5 + air yard share * 0.7). Buy low: low RACR + high aDOT.',
+    snapefficiency: 'Fantasy Points Per Snap shows who produces the most per opportunity on the field. Filters to players with meaningful snap counts. Higher Pts/Snap = efficient usage. Data: nflverse snap counts + scoring.',
+    breakouts: 'Breakout Score measures the gap between opportunity metrics (targets, carries, snap%) and current production (PPG, YPG). High opportunity + low production = breakout candidate. Position-specific weighting.',
+    dualthreat: 'Dual-Threat Index uses the geometric mean of rushing and receiving production (yards, TDs, touches). Geometric mean rewards balance — a player must contribute in BOTH to score high. Primarily for RBs and QBs.',
+    targetpremium: 'Target Premium composite: YPT (yards per target) + catch rate + YAC/rec (yards after catch) + aDOT (target depth). Measures target quality over quantity — who does the most per target?',
+    consistency: 'Consistency grade is based on inverse Coefficient of Variation (StdDev / Mean PPG). Lower CoV = more consistent. A+ = rock solid weekly scores. F = wild swings. Minimum 6 games and 2 PPG to qualify.'
+  };
+  var PANEL_METHOD_DEFAULT = 'Powered by nflverse data (2015-2025). College data from cfbfastR.';
+
   // Map each panel to its sidebar category for breadcrumbs
   var PANEL_CATEGORIES = {};
   document.querySelectorAll('.lab-sidebar-category').forEach(function(cat) {
@@ -3298,16 +3328,20 @@
           var flavor = PANEL_FLAVORS[panelName] || '';
           var header = document.createElement('div');
           header.className = 'lab-panel-header';
+          var methodText = PANEL_METHODS[panelName] || PANEL_METHOD_DEFAULT;
+          var methodId = 'method-' + panelName;
           header.innerHTML = '<span class="breadcrumb">' + escapeHtml('The Lab > ' + cat + ' > ' + label) + '</span>' +
                              '<div class="panel-title-row">' +
                                '<div class="panel-title">' + escapeHtml(label) + '</div>' +
                                '<div class="panel-actions">' +
+                                 '<button class="btn-panel-action btn-info-toggle" onclick="toggleMethodology(\'' + escapeAttr(methodId) + '\')" title="How is this calculated?">&#9432;</button>' +
                                  '<button class="btn-panel-action" onclick="exportPanelCSV(\'' + escapeAttr(panelName) + '\')" title="Export as CSV">CSV</button>' +
                                  '<button class="btn-panel-action" onclick="screenshotPanel(\'' + escapeAttr(panelName) + '\')" title="Screenshot as PNG">PNG</button>' +
                                  '<button class="btn-panel-action" onclick="sharePanelURL(\'' + escapeAttr(panelName) + '\')" title="Copy share link">Share</button>' +
                                '</div>' +
                              '</div>' +
-                             (flavor ? '<div class="panel-flavor">' + escapeHtml(flavor) + '</div>' : '');
+                             (flavor ? '<div class="panel-flavor">' + escapeHtml(flavor) + '</div>' : '') +
+                             '<div class="panel-methodology" id="' + escapeAttr(methodId) + '" style="display:none;">' + escapeHtml(methodText) + '</div>';
           section.appendChild(header);
 
           // Content area for the render function

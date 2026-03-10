@@ -89,6 +89,12 @@ function screenshotPanel(panelName) {
   });
 }
 
+function toggleMethodology(methodId) {
+  var el = document.getElementById(methodId);
+  if (!el) return;
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
 function sharePanelURL(panelName) {
   var params = new URLSearchParams(window.location.search);
   params.set('panel', panelName);
