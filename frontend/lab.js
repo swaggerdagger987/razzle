@@ -7412,15 +7412,21 @@ function renderRosterReport() {
 
   // Summary row: grade + total value + status
   html += '<div style="display:flex; align-items:center; gap:16px; margin-bottom:16px; flex-wrap:wrap;">';
-  // Grade badge
-  html += '<div style="background:' + gc + '; color:white; font-family:var(--font-display); font-size:32px; padding:8px 16px; border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); transform:rotate(-3deg); min-width:60px; text-align:center;">' + escapeHtml(r.grade) + '</div>';
+  // Grade badge with explainer
+  html += '<div style="text-align:center;">';
+  html += '<div title="Overall roster strength based on total trade value" style="background:' + gc + '; color:white; font-family:var(--font-display); font-size:32px; padding:8px 16px; border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); transform:rotate(-3deg); min-width:60px; text-align:center; cursor:help;">' + escapeHtml(r.grade) + '</div>';
+  html += '<div style="font-family:var(--font-mono); font-size:9px; color:var(--ink-light); text-transform:uppercase; margin-top:4px;">Roster Grade</div>';
+  html += '</div>';
   // Stats
   html += '<div style="flex:1;">';
   html += '<div style="font-family:var(--font-display); font-size:24px;">' + r.total_value + ' <span style="font-size:14px; color:var(--ink-light);">total value</span></div>';
   html += '<div style="font-family:var(--font-mono); font-size:13px; color:var(--ink-light);">avg age: ' + r.average_age + '</div>';
   html += '</div>';
-  // Status badge
-  html += '<div style="background:' + sc + '; color:white; font-family:var(--font-display); font-size:14px; padding:6px 14px; border:2px solid var(--ink); border-radius:8px; box-shadow:3px 3px 0 var(--ink); transform:rotate(2deg); text-transform:uppercase;">' + escapeHtml(r.competing_status) + '</div>';
+  // Status badge with explainer
+  html += '<div style="text-align:center;">';
+  html += '<div title="Based on total value + average age: high value + young = competing, low value or old = rebuilding" style="background:' + sc + '; color:white; font-family:var(--font-display); font-size:14px; padding:6px 14px; border:2px solid var(--ink); border-radius:8px; box-shadow:3px 3px 0 var(--ink); transform:rotate(2deg); text-transform:uppercase; cursor:help;">' + escapeHtml(r.competing_status) + '</div>';
+  html += '<div style="font-family:var(--font-mono); font-size:9px; color:var(--ink-light); text-transform:uppercase; margin-top:4px;">Window</div>';
+  html += '</div>';
   html += '</div>';
 
   // Charts row
