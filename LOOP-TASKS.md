@@ -1,39 +1,44 @@
-# Razzle Loop — Phase 74 Task List
+# Razzle Loop — Phase 75 Task List
 
-> Team Target Distribution — treemap showing team usage breakdown
+> QA + UX Audit Fixes — Auto-Generated from Phases 71-75 audit
 
-**Current Phase**: 74 — Team Target Distribution
-**Exit Criterion**: /targets.html page shows team-by-team target and carry distribution as stacked horizontal bars. Each team shows player segments sized by share, color-coded by position. Click player → profile. Team selector. Targets/Carries mode toggle. Season selector. PNG export with watermark. "Targets" nav link on all pages. Sitemap updated. Analytics tracking. Design matches DESIGN.md.
+**Current Phase**: 75 — QA + UX Audit Fixes
+**Exit Criterion**: All CRITICAL and HIGH findings from the phases 71-75 QA+UX audit resolved. All MEDIUM findings addressed. Code verified with syntax checks and design compliance.
 
 ---
 
-## Task 1: Backend /api/target-distribution endpoint
-**Status**: PASS
-**Attempts**: 1
-**Notes**: GET /api/target-distribution endpoint added to server.py. fetch_target_distribution() in live_data.py queries player_week_stats grouped by team to compute: targets, carries, receptions, yards, TDs, PPR pts per player, with target_share and carry_share percentages. Season + team parameters. Top 8 players per team. LIMIT 500 safety cap. Min 3 games filter.
+## Task 1: CRITICAL + HIGH QA fixes (Q1-Q5)
+**Status**: PENDING
+**Attempts**: 0
+**Notes**: Fix: Q1 aging.html canvas escapeHtml→plain text. Q2 all three pages add resp.ok check on fetch. Q3 weekly+targets add app.js script tag. Q4 targets carries mode re-sort by carries. Q5 aging name labels use last name only.
 
-## Task 2: Frontend targets.html with distribution bars
-**Status**: PASS
-**Attempts**: 1
-**Notes**: Team cards with: stacked horizontal distribution bars (segments sized by share, position-colored), player name labels on segments >8%, "other" bucket. Targets/Carries mode toggle. Player detail rows showing position badge, name, count, share%. Team header with name + total count. Caveat annotations ("owns this target tree", "spread it around"). Click player → profile. Team selector dropdown. Season selector. PNG export with watermark. Position color legend. Sand bg, chunky 3px borders, 4px offset shadows, all 3 fonts, position colors.
+## Task 2: HIGH UX fixes (U1-U2)
+**Status**: PENDING
+**Attempts**: 0
+**Notes**: Fix: U1 nav overflow — add responsive hamburger/collapse for mobile or group dashboard links. U2 weekly heatmap add column sort (click header to sort by that week or PPG).
 
-## Task 3: Nav links + sitemap + analytics
-**Status**: PASS
-**Attempts**: 1
-**Notes**: "Targets" nav link added to all 17 HTML pages (nav + footer where applicable). 404.html and lab.html: nav only. Sitemap entry added with 0.8 priority. Analytics pageview tracking on targets.html.
+## Task 3: MEDIUM QA fixes (Q6-Q12)
+**Status**: PENDING
+**Attempts**: 0
+**Notes**: Fix: Q6 aging fetch resp.ok. Q7 aria-labels on tabs. Q8 "peak age" label fix. Q9 heat legend thresholds. Q10 targets small segment tooltip improvement. Q11 try/except on server endpoints. Q12 FANTASY_POSITIONS constant.
 
-## Task 4: Smoke test + verification
-**Status**: PASS
-**Attempts**: 1
-**Notes**: Python syntax valid (live_data.py, server.py). JS syntax valid (targets.html). 18/18 design checks passed (sand bg, 3px borders, 4px shadows, 3 fonts, 4 position colors, escapeHtml, topnav, watermark, analytics, html2canvas, responsive 768+480, aria-label). Nav links: 17 files with targets.html references.
+## Task 4: MEDIUM UX fixes (U3-U7)
+**Status**: PENDING
+**Attempts**: 0
+**Notes**: Fix: U3 targets default view improvement. U4 weekly games column. U5 aging curve/dots explanation. U6 cross-links. U7 retry button on error.
+
+## Task 5: Smoke test + verification
+**Status**: PENDING
+**Attempts**: 0
+**Notes**:
 
 ---
 
 ## Loop State
 ```
-Current Phase: 74
-Current Task: 4
-Current Stage: COMPLETE
+Current Phase: 75
+Current Task: 1
+Current Stage: BUILD
 Attempt: 1
-Tasks Completed: 4/4
+Tasks Completed: 0/5
 ```

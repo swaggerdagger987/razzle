@@ -1,138 +1,92 @@
-# QA + UX Audit — Phases 66-70
+# QA + UX Audit — Phases 71-75
 
 **Date**: 2026-03-10
-**Scope**: All files changed in Phases 66 (QA Fixes), 67 (Prospects), 68 (Scarcity), 69 (Breakouts), 70 (Buy/Sell)
+**Scope**: aging.html, weekly.html, targets.html, live_data.py, server.py
+**Pages audited**: 3 new pages (Aging Curves, Weekly Scoring Heatmap, Target Distribution)
 
 ---
 
 ## QA FINDINGS
 
-### CRITICAL
-
-**(none)**
-
 ### HIGH
 
-**QA-H1: Connection leak in `fetch_prospect_scores` — no try/finally**
-- File: `backend/live_data.py`, lines ~1914-2035
-- `fetch_prospect_scores` does NOT use try/finally. If an exception occurs during percentile computation or sorting, the SQLite connection leaks. All three newer functions (scarcity, breakouts, buy/sell) correctly use try/finally.
-- Fix: Wrap function body in try/finally with conn.close() in finally block.
+**Q1. aging.html:555 — escapeHtml then unescape on canvas text**
+Canvas `fillText()` takes plain text, not HTML. Calling `escapeHtml()` then immediately un-escaping with `.replace()` chains is pointless and a code smell. Use plain text directly for canvas rendering.
 
-**QA-H2: Unescaped numeric API values in innerHTML (breakouts, buysell, scarcity)**
-- Files: `frontend/breakouts.html` (lines 513, 527, 535-540, 552-558), `frontend/buysell.html` (lines 508-526, 543, 566), `frontend/scarcity.html` (lines 458-464)
-- Numeric values from API responses (rank, scores, percentages, efficiency stats) are injected directly into innerHTML without escapeHtml(). While these should be numeric, a malformed API response could inject HTML.
-- Fix: Wrap all API values in escapeHtml() or coerce to Number before injection. For CSS width values, use parseFloat().
+**Q2. weekly.html + targets.html — fetch() missing resp.ok check**
+Both pages call `.then(r => r.json())` without checking `r.ok`. A 404/500 response will try to parse HTML as JSON and fail silently or show misleading error.
 
-**QA-H3: Nav uses `main-nav` class — not matching styles.css `topnav` class**
-- Files: `frontend/scarcity.html`, `frontend/breakouts.html`, `frontend/buysell.html`
-- These three pages use `class="main-nav"` but styles.css defines `.topnav`. Navigation bar is unstyled/inconsistently styled on these pages.
-- Fix: Change `main-nav` to `topnav` and align nav HTML structure with the rest of the site.
+**Q3. weekly.html + targets.html — missing app.js script tag**
+Both new pages lack `<script src="app.js"></script>`. The Ctrl+K quick search command palette does not work on these pages, breaking a platform-wide feature. aging.html has it (line 762).
+
+**Q4. targets.html — carries mode does not re-sort players by carries**
+When toggling from Targets to Carries, players remain sorted by `targets + carries` combined. RBs (who dominate carries) are buried below WRs. The active mode should sort by the relevant metric.
+
+**Q5. aging.html:554 — player name truncation too aggressive**
+Top player labels truncate at 12 chars ("Jonathan Tay."). For fantasy players who know these names, this is unhelpful. Use last name only for cleaner labels.
 
 ### MEDIUM
 
-**QA-M1: Unbounded SQL queries in breakout and buy/sell functions**
-- File: `backend/live_data.py`, lines ~4444-4467 (breakout), ~4675-4702 (buy/sell)
-- Main queries fetch ALL qualifying players from DB before Python-side truncation. No SQL LIMIT as safety cap.
-- Fix: Add `LIMIT 500` to SQL queries as safety cap.
+**Q6. No resp.ok check in aging.html fetch either** — same pattern as Q2.
 
-**QA-M2: Position input not validated in `fetch_prospect_scores`**
-- File: `backend/server.py`, line ~508
-- `/api/prospect-scores` passes position without whitelist validation, unlike other endpoints.
-- Fix: Add position whitelist check.
+**Q7. Position/mode tabs lack aria-labels** — all three pages have filter buttons without `aria-label` attributes for screen readers.
 
-**QA-M3: Missing accessibility labels on season selects**
-- Files: scarcity.html, breakouts.html, buysell.html
-- Season `<select>` elements have `title="Season"` but no `aria-label` for screen readers.
-- Fix: Add `aria-label="Season"` to each select.
+**Q8. aging.html "peak season" label misleading** — summary cards say "peak season" but show peak age.
 
-**QA-M4: Inconsistent html2canvas CDN source and loading strategy**
-- prospects.html lazy-loads from cdnjs.cloudflare.com; other pages eagerly load from html2canvas.hertzen.com
-- Fix: Standardize on lazy-load pattern with consistent CDN.
+**Q9. weekly.html heat legend shows no numeric thresholds** — user cannot tell what score counts as "hot" vs "cold."
+
+**Q10. targets.html small bar segments lack visible labels** — segments <8% width have no text, rely on slow browser title tooltip.
+
+**Q11. server.py — no try/except on 3 new endpoints** — aging-curves, weekly-heatmap, target-distribution endpoints have no error handling. Database errors return raw 500 tracebacks.
+
+**Q12. live_data.py — fetch_aging_curves uses hardcoded position list** — uses `("QB", "RB", "WR", "TE")` instead of the `FANTASY_POSITIONS` constant.
 
 ### LOW
 
-**QA-L1: 1px borders on bar track elements**
-- Files: prospects.html, scarcity.html, breakouts.html, buysell.html
-- Bar track containers use `1px solid` borders. DESIGN.md says no thin 1px borders on primary elements.
-- Fix: Change to 2px or remove border.
+**Q13. Inconsistent loading messages** — "studying the tape..." vs "studying the film..." are near-identical.
 
-**QA-L2: Inconsistent row access patterns (index vs dict) in live_data.py**
-- `fetch_prospect_scores` uses dict-style row access; newer functions use fragile index-based access.
-- Fix: Low priority — consider refactoring newer functions to dict-style for resilience.
+**Q14. weekly.html cell hover scale(1.1) feels odd** — numbers shouldn't grow on hover in a data table.
+
+**Q15. targets.html "car" abbreviation** — "rush" or "att" more standard than "car" in fantasy.
+
+**Q16. Random dot jitter in aging curves** — non-deterministic rendering across page loads.
 
 ---
 
 ## UX FINDINGS
 
-### CRITICAL
-
-**UX-C1: Prospects click navigates by player NAME to Lab search, not by player ID**
-- File: `frontend/prospects.html`
-- Clicking a prospect card navigates to `/lab.html?mode=prospects&search={name}` instead of `/player/{id}` like every other page. Name-based search is fragile (duplicate names, special characters, partial matches). Users experience a jarring context switch from card UI to spreadsheet view.
-- Fix: Navigate to `/player/{id}` like other pages, or create a prospect profile view.
-
 ### HIGH
 
-**UX-H1: "RBS" score has zero explanation on Breakouts page**
-- File: `frontend/breakouts.html`
-- "RBS" appears on every card but "Razzle Breakout Score" is never spelled out anywhere on the page.
-- Fix: Add tooltip on RBS label: "Razzle Breakout Score — measures opportunity vs production gap"
+**U1. Nav overflow at 14 links** — the topnav now has 14 items. On screens under 1400px this will wrap or overflow. Needs a responsive strategy (e.g., hamburger menu or grouped dropdown).
 
-**UX-H2: "RPS" score lacks tooltip on Prospects page**
-- File: `frontend/prospects.html`
-- "RPS" appears on every card; methodology text is small and easily missed in header.
-- Fix: Add tooltip on RPS label explaining the scoring methodology.
-
-**UX-H3: Scarcity summary drop-off numbers shown without units**
-- File: `frontend/scarcity.html`
-- The summary cards show raw drop-off values (e.g., "12.4") with no units. Middle positions both labeled just "drop-off" with no differentiation.
-- Fix: Add "PPG" unit label. Give middle cards ranked labels like "2nd most scarce".
-
-**UX-H4: Age badge thresholds inconsistent across pages**
-- Breakouts: young (<=24), prime (25-26), aging (27+)
-- Buy/Sell: young (<=24), prime (25-27), aging (28-30), veteran (31+)
-- A 27-year-old shows as "aging" on Breakouts but "prime" on Buy/Sell.
-- Fix: Standardize age thresholds across all pages.
-
-**UX-H5: No explanation of how Breakouts vs Buy/Sell differ**
-- Users can't self-select the right tool. Both show player cards with scores and stats. The conceptual difference (opportunity gap vs efficiency mismatch) isn't clearly communicated.
-- Fix: Add a brief one-line distinction on each page subtitle.
-
-**UX-H6: Nav styling differs between Prospects and other new pages**
-- Prospects uses `topnav` with tiger emoji logo. Scarcity/Breakouts/Buy/Sell use `main-nav` with plain text brand. Nav appearance changes when navigating between pages.
-- Fix: Align all pages to use the same nav component.
+**U2. Weekly heatmap has no sorting** — users cannot sort by consistency, ceiling, or floor. For a dynasty player evaluating floor vs ceiling, this is a major gap.
 
 ### MEDIUM
 
-**UX-M1: No season/year badge visible in PNG exports**
-- When screenshots are shared on Reddit, there's no temporal context showing which season the data is from.
-- Fix: Include season badge in export header area.
+**U3. Default "All Teams" view on targets page** — 32 team cards in a vertical scroll with no ranking or hierarchy. Overwhelming for new visitors.
 
-**UX-M2: Percentile bar colors on Prospects have no legend**
-- Green/blue/yellow/orange/red scale used without documenting thresholds.
-- Fix: Add a small color legend or tooltip explaining percentile ranges.
+**U4. Weekly heatmap has no games played column** — no context for how many weeks a player missed.
 
-**UX-M3: Breakouts card information density**
-- Each card has 7-8 visible data points. Bottom stats row could be hover/expand detail.
-- Fix: Consider collapsing stats row or making it expandable.
+**U5. Aging curves — no explanation that curve = all-time while dots = selected season** — only the legend explains this, easy to miss.
+
+**U6. No cross-linking between related dashboards** — aging, weekly, and targets are complementary tools but don't link to each other.
+
+**U7. No error recovery on failed loads** — all three pages show a single error line with no retry button.
 
 ### LOW
 
-**UX-L1: Mismatch bar maxMismatch hardcoded at 60 in Buy/Sell**
-- If scores cluster in a narrow range, bars all look similar.
+**U8. Aging curves — no "sell window" annotation after peak** — dynasty players think in these terms.
 
-**UX-L2: Scarcity player name column truncates at 100px**
-- Longer names get cut off even on wide screens.
+**U9. Footer link list is 13+ items** — becoming unwieldy on narrow viewports.
 
-**UX-L3: Efficiency grade label size (9px) may be too small**
-- The "efficiency" label under the grade badge could be slightly larger for readability.
+**U10. Team dropdown shows abbreviations only** — full team names would be more scannable.
 
 ---
 
-## Summary
+## SUMMARY
 
-| Category | CRITICAL | HIGH | MEDIUM | LOW |
-|----------|----------|------|--------|-----|
-| QA | 0 | 3 | 4 | 2 |
-| UX | 1 | 6 | 3 | 3 |
-| **Total** | **1** | **9** | **7** | **5** |
+| Severity | QA | UX | Total |
+|----------|----|----|-------|
+| HIGH     | 5  | 2  | 7     |
+| MEDIUM   | 7  | 5  | 12    |
+| LOW      | 4  | 3  | 7     |
