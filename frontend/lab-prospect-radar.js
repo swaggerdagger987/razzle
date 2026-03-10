@@ -36,6 +36,13 @@
 
   // ─── Register panel ────────────────────────────────────────────
   defs.push({ name: 'proradar', render: function(el) {
+    // Reset state on each render to avoid stale data
+    panelState.selected = [null, null];
+    panelState.allProspects = [];
+    panelState.prospects = [];
+    panelState.posFilter = '';
+    panelState.searchTerm = '';
+
     el.innerHTML = '<div class="lab-panel-loading"><div class="loading-msg">measuring wingspans...</div></div>';
 
     fetch('/api/prospect-scores?position=')
@@ -126,7 +133,7 @@
 
       html += '<div class="pr-prospect-row' + (isSelected ? ' pr-selected' : '') + '" data-name="' + escapeHtml(p.player_name) + '">';
       html += '<span class="pr-prospect-rank">' + p.rank + '</span>';
-      html += '<span class="pr-prospect-pos" style="background:' + posColor + ';">' + p.position + '</span>';
+      html += '<span class="pr-prospect-pos" style="background:' + posColor + ';">' + escapeHtml(p.position) + '</span>';
       html += '<span class="pr-prospect-name">' + escapeHtml(p.player_name) + '</span>';
       html += '<span class="pr-prospect-school">' + escapeHtml(p.school || '') + '</span>';
       html += '<span class="pr-prospect-rps">' + (p.rps || 0).toFixed(1) + '</span>';
@@ -158,7 +165,7 @@
       html += '<span class="pr-tag-dot" style="background:' + CHART_COLORS[0] + ';"></span>';
       html += '<span class="pr-tag-name">' + escapeHtml(p1.player_name) + '</span>';
       html += '<span class="pr-tag-pos" style="color:' + (POS_COLORS[p1.position] || 'var(--ink)') + ';">' + p1.position + '</span>';
-      html += '<button class="pr-tag-remove" data-idx="0">\u00D7</button>';
+      html += '<button class="pr-tag-remove" aria-label="Remove player" data-idx="0">\u00D7</button>';
       html += '</div>';
     }
     if (p2) {
@@ -166,7 +173,7 @@
       html += '<span class="pr-tag-dot" style="background:' + CHART_COLORS[1] + ';"></span>';
       html += '<span class="pr-tag-name">' + escapeHtml(p2.player_name) + '</span>';
       html += '<span class="pr-tag-pos" style="color:' + (POS_COLORS[p2.position] || 'var(--ink)') + ';">' + p2.position + '</span>';
-      html += '<button class="pr-tag-remove" data-idx="1">\u00D7</button>';
+      html += '<button class="pr-tag-remove" aria-label="Remove player" data-idx="1">\u00D7</button>';
       html += '</div>';
     }
     if (!p2 && p1) {
@@ -185,8 +192,8 @@
       html += '<span class="pr-pct-label">' + m.short + '</span>';
       players.forEach(function(p, i) {
         var pct = (p.percentiles && p.percentiles[m.key]) || 0;
-        var val = p[m.key];
-        var valStr = val != null ? (m.dir === 'lower' ? val.toFixed(2) : Math.round(val)) : '-';
+        var val = parseFloat(p[m.key]);
+        var valStr = !isNaN(val) ? (m.dir === 'lower' ? val.toFixed(2) : Math.round(val)) : '-';
         var barColor = CHART_COLORS[i];
         var pctClass = pct >= 80 ? 'pr-pct-elite' : pct >= 60 ? 'pr-pct-good' : pct >= 40 ? 'pr-pct-avg' : 'pr-pct-below';
         html += '<div class="pr-pct-col">';

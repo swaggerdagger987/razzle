@@ -1,40 +1,28 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 14 (Prospect Athletic Radar) — COMPLETE
-- All 5 tasks PASS
+- Phase: 15 (QA + UX Audit for Phases 11-14) — COMPLETE
+- All fixes applied inline during audit
 - Stage: PHASE GATE
-- Next: Generate Phase 15 (QA + UX Audit since 15 is multiple of 5)
+- Next: Check TICKETS.md, then generate Phase 16
 
-## Phase 14: Prospect Athletic Radar
-**Exit Criterion**: A user can select any prospect and see their combine athletic profile as a spider/radar chart with position-relative percentiles. Compare up to 2 prospects on the same chart. Percentile bars show raw values and percentile rank per metric. Athletic grade badge (Elite/Above Avg/Average/Below Avg/Poor). Search and position filter for prospect selection. Screenshot-ready card layout.
+## Phase 15: QA + UX Audit for Phases 11-14
+**Exit Criterion**: All CRITICAL and HIGH findings from Phases 11-14 audit are resolved. Code quality verified for new Mock Draft and Athletic Radar panels.
 
-### Task 1: Prospect Radar panel with canvas spider chart
+### Task 1: Fix HIGH — Stale state in Prospect Radar
 **Status**: PASS
 **Attempts**: 1
-**Notes**: Canvas spider chart with 6 axes (40, Bench, Vert, Broad, Cone, Shuttle). HiDPI rendering. Position-relative percentiles plotted as polygon. Grid rings, axis labels, dots at vertices.
+**Notes**: Added panelState reset at top of render function.
 
-### Task 2: Prospect comparison overlay (2 players on same chart)
+### Task 2: Fix MEDIUM — Button order, aria-label, type safety, XSS, grade color
 **Status**: PASS
 **Attempts**: 1
-**Notes**: Select up to 2 prospects. Each gets a different color (terracotta + blue). Overlaid semi-transparent polygons. Player tags with remove buttons. Click to toggle selection.
-
-### Task 3: Percentile bars + athletic grade badge
-**Status**: PASS
-**Attempts**: 1
-**Notes**: Horizontal percentile bars per metric with raw value and percentile rank. Color-coded: elite (80+), good (60+), avg (40+), below. Athletic grade card: score + label (Elite/Above Avg/Average/Below Avg/Poor) + position + school + RPS.
-
-### Task 4: Screenshot-optimized card layout
-**Status**: PASS
-**Attempts**: 1
-**Notes**: Chart card with 3px chunky border + 4px offset shadow. Clean card layout: player tags on top, canvas in middle, percentile bars below, grade cards at bottom. Responsive grid layout.
-
-### Task 5: Search + position filter for prospect selection
-**Status**: PASS
-**Attempts**: 1
-**Notes**: Search input filters by name/school. Position tabs (ALL/QB/RB/WR/TE) with active state. Prospect list (max 40 shown) with rank, pos badge, name, school, RPS. Click to select. Selected rows highlighted orange.
+**Notes**: 5 fixes applied: button order (8,10,12,14), aria-label on remove buttons, parseFloat+isNaN guard, escapeHtml(position), default gradeColor to warm brown.
 
 ---
+
+## Phase 14: Prospect Athletic Radar — COMPLETE
+**Status**: All 5 tasks PASS
 
 ## Phase 13: Dynasty Rookie Mock Draft — COMPLETE
 **Status**: All 5 tasks PASS

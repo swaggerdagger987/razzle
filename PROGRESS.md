@@ -1,6 +1,17 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 14 — Prospect Athletic Radar (COMPLETE)
+## Current Phase: Phase 15 — QA + UX Audit for Phases 11-14 (COMPLETE)
+
+**Exit Criterion MET**: All HIGH and MEDIUM findings fixed inline. 1 HIGH (stale radar state), 3 MEDIUM (button order, aria-labels, type safety), 3 LOW (XSS consistency, grade color, unescaped position) — all resolved. No CRITICAL findings. No UX issues. Both new panels production-ready.
+
+### Phase 15 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Fix stale panelState in prospect radar | DONE | Reset state at top of render function |
+| 2 | Fix button order, aria-label, type safety, XSS, grade color | DONE | 5 inline fixes applied |
+
+## Previous Phase: Phase 14 — Prospect Athletic Radar (COMPLETE)
 
 **Exit Criterion MET**: Users can select any prospect and see their combine athletic profile as a canvas spider chart with position-relative percentiles (40, Bench, Vert, Broad, Cone, Shuttle). Compare 2 prospects overlaid on the same chart. Percentile bars with raw values. Athletic grade badges. Search and position filter. Screenshot-ready card layout.
 

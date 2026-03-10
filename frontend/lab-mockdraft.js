@@ -173,8 +173,8 @@
           '<label>League Size</label>' +
           '<div class="md-btn-group" id="mdTeams">' +
             '<button class="md-opt" data-val="8">8</button>' +
-            '<button class="md-opt active" data-val="12">12</button>' +
             '<button class="md-opt" data-val="10">10</button>' +
+            '<button class="md-opt active" data-val="12">12</button>' +
             '<button class="md-opt" data-val="14">14</button>' +
           '</div>' +
         '</div>' +
@@ -451,12 +451,11 @@
     var userPicks = draft.picks.filter(function(p) { return p.isUser; });
     var grade = overallDraftGrade(userPicks);
 
-    var gradeColor = '#2ec4b6';
+    var gradeColor = '#8a7565';
     if (grade.charAt(0) === 'A') gradeColor = '#d97757';
     else if (grade.charAt(0) === 'B') gradeColor = '#2ec4b6';
     else if (grade.charAt(0) === 'C') gradeColor = '#ffc857';
-    else if (grade.charAt(0) === 'D') gradeColor = '#e63946';
-    else if (grade === 'F') gradeColor = '#e63946';
+    else if (grade.charAt(0) === 'D' || grade === 'F') gradeColor = '#e63946';
 
     var html = '<div class="md-recap">';
     html += '<div class="md-recap-header">';
