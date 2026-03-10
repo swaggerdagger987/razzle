@@ -1,6 +1,25 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 64 — Stat Leaders Dashboard (COMPLETE)
+## Current Phase: Phase 65 — Team Roster Pages (COMPLETE)
+
+**Exit criterion MET:** /team/{abbr} pages show full fantasy-relevant roster organized by position (QB, RB, WR, TE). Each position group rendered as a comic-strip card with position-colored header tint, display font title, Caveat annotation, and player rows. Player rows show rank, headshot/initials, name, age badge (green ≤25/yellow 26-28/red ≥29), and position-specific stats (PPG highlighted, yards, TDs, games) in mono font. Click player row → player profile. Team selector dropdown with all 32 NFL teams. Season selector dropdown. PNG export via html2canvas with watermark. Teams nav link added to all 10 HTML pages (nav + footer). Team name in player profile and Lab overlay links to /team/{abbr}. Sitemap includes all 32 team pages. OG tags dynamically set per team. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, position-colored light tint headers, Space Mono for data, display font for headers, Caveat for annotations.
+
+### Phase 65 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend team roster endpoint | DONE | GET /api/team-roster, grouped by position, ABBREV_TO_TEAM mapping |
+| 2 | Team page with position group cards | DONE | Responsive grid, headshots, age badges, position-specific stats |
+| 3 | Nav links + team links + sitemap | DONE | All 10 pages updated, player.js + lab.js team links, 32 sitemap entries |
+| 4 | Smoke test | DONE | Python + JS syntax clean, design verified, XSS safe, route order correct |
+
+### Decisions Log
+- **Team selector default**: Defaults to first team alphabetically (ARI) if no team specified in URL. URL updates via history.replaceState when team changes.
+- **Position-specific stats**: QB shows Pass Yds/Pass TD/Rush Yds, RB shows Rush Yds/Rush TD/Rec, WR/TE show Rec Yds/Rec TD/Rec. PPG highlighted in terracotta for all positions. Makes each group immediately useful for its context.
+- **Team links from profiles**: Team name in player profile hero and Lab overlay is now a clickable link to /team/{abbr}. Creates natural navigation flow: Lab → player → team → other players on that team.
+- **No position filter tabs**: Unlike Rankings/Leaders, team pages don't need position filters since they already organize by position group. Keeps it clean.
+
+## Previous Phase: Phase 64 — Stat Leaders Dashboard (COMPLETE)
 
 **Exit criterion MET:** /leaders.html page shows top 10 players in 10 key fantasy stat categories (PPG, Passing Yards, Passing TDs, Rushing Yards, Rushing TDs, Receiving Yards, Receiving TDs, Receptions, Target Share, Yards Per Carry). Each category rendered as a comic-strip card with category name (display font), Caveat annotation, and top 10 list. Gold/silver/bronze circular rank badges for top 3 with ink borders and offset shadows. Player rows show headshot/initials, name, position badge (color-coded), team, stat value in mono font. Click row → player profile. Position filter tabs (All/QB/RB/WR/TE) with position-specific category filtering. Season selector dropdown. PNG export via html2canvas with watermark. Leaders nav link added to all 9 HTML pages. Sitemap updated. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, position colors, Space Mono for data, display font for headers, Caveat for annotations.
 

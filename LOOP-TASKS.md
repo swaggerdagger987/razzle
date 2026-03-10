@@ -23,17 +23,17 @@
 **Notes**: "Teams" nav link added to all HTML pages. Team column in Lab screener links to /team/{abbr}. Player profile pages show team name as clickable link to team page. Sitemap updated. URL routing handles /team/{abbr} pattern.
 
 ## Task 4: Smoke test + verification
-**Status**: PENDING
-**Attempts**: 0
-**Notes**: Python syntax valid. JS syntax valid. All HTML pages have Teams nav link. Design matches DESIGN.md. XSS safe. Route order clean.
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Python syntax valid (py_compile both files). JS syntax valid (Function constructor check on team.html, player.js, lab.js). All 10 HTML pages have Teams nav link in nav + footer. Design matches DESIGN.md (3px borders, 4px shadows, position-colored headers with light tints, correct fonts, sand bg, Caveat annotations, hover lift). XSS safe (escapeHtml/escapeAttr on all player data). Route order clean (/team/{abbr} before static mount). Sitemap includes all 32 team pages. Player profile and Lab overlay team names link to /team/{abbr}.
 
 ---
 
 ## Loop State
 ```
 Current Phase: 65
-Current Task: 1
-Current Stage: BUILD
+Current Task: 4
+Current Stage: COMPLETE
 Attempt: 1
-Tasks Completed: 0/4
+Tasks Completed: 4/4
 ```
