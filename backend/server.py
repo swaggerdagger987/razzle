@@ -645,6 +645,11 @@ def college_snap_efficiency(season: int = None, position: str = "", limit: int =
     )
 
 
+@app.get("/api/college/aging-curves")
+def college_aging_curves(position: str = ""):
+    return live_data.fetch_college_aging_curves(position=position or None)
+
+
 @app.get("/api/aging-curves")
 def aging_curves(position: str = "WR"):
     return live_data.fetch_aging_curves(position=position)

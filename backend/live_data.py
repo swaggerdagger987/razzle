@@ -3773,6 +3773,127 @@ def fetch_college_snap_efficiency(season=None, position=None, limit=50):
         conn.close()
 
 
+def fetch_college_aging_curves(position=None):
+    """College production curves by experience year (1st through 5th+ season).
+
+    Returns average total YPG at each college experience level, plus individual
+    player arcs for the top producers.
+    """
+    conn = get_conn()
+    try:
+        available_seasons = _cfb_available_seasons(conn)
+        pos_upper = position.strip().upper() if position else None
+        if pos_upper and pos_upper not in _CFB_POSITIONS:
+            pos_upper = None
+
+        pos_where = ""
+        pos_params: list = []
+        if pos_upper:
+            pos_where = "AND c.position = ?"
+            pos_params = [pos_upper]
+        else:
+            pos_where = "AND c.position IN ('QB','RB','WR','TE')"
+
+        # For each player, rank their seasons chronologically to get experience year
+        query = f"""
+            SELECT c.player_id, c.player_name, c.position, c.team, c.conference,
+                   c.season, c.games, c.total_yards, c.total_tds,
+                   c.rush_yards, c.rec_yards, c.pass_yards, c.carries,
+                   c.receptions, c.pass_tds
+            FROM cfb_player_season_stats c
+            WHERE c.games >= 3
+              {pos_where}
+            ORDER BY c.player_id, c.season
+        """
+        rows = conn.execute(query, pos_params).fetchall()
+
+        # Group by player, assign experience year
+        from collections import defaultdict
+        player_seasons: dict = {}
+        for r in rows:
+            d = dict(r)
+            pid = d["player_id"]
+            if pid not in player_seasons:
+                player_seasons[pid] = []
+            player_seasons[pid].append(d)
+
+        # Build curve data: average YPG by experience year
+        exp_buckets: dict = defaultdict(list)  # exp_year -> [ypg values]
+        player_arcs: list = []
+
+        for pid, seasons in player_seasons.items():
+            seasons.sort(key=lambda x: x["season"])
+            arc_points = []
+            total_career_yards = 0
+            for i, s in enumerate(seasons):
+                exp_year = i + 1  # 1st year, 2nd year, etc.
+                g = s["games"] or 1
+                ypg = round((s["total_yards"] or 0) / g, 1)
+                total_career_yards += s["total_yards"] or 0
+                exp_buckets[exp_year].append(ypg)
+                arc_points.append({
+                    "exp_year": exp_year,
+                    "season": s["season"],
+                    "ypg": ypg,
+                    "games": g,
+                })
+
+            if len(seasons) >= 2:
+                player_arcs.append({
+                    "player_id": pid,
+                    "name": seasons[-1]["player_name"] or "Unknown",
+                    "position": seasons[-1]["position"] or "ATH",
+                    "team": seasons[-1]["team"] or "",
+                    "conference": seasons[-1]["conference"] or "",
+                    "career_yards": total_career_yards,
+                    "seasons_played": len(seasons),
+                    "points": arc_points,
+                })
+
+        # Build curve: average at each experience year
+        curve = []
+        peak_year = None
+        peak_ypg = 0
+        for exp_year in sorted(exp_buckets.keys()):
+            if exp_year > 6:
+                break
+            vals = exp_buckets[exp_year]
+            avg_ypg = round(sum(vals) / len(vals), 1) if vals else 0
+            curve.append({
+                "age": exp_year,  # reuse "age" field for chart compat
+                "ppg": avg_ypg,   # reuse "ppg" field (actually YPG)
+                "sample_size": len(vals),
+            })
+            if avg_ypg > peak_ypg:
+                peak_ypg = avg_ypg
+                peak_year = exp_year
+
+        # Top 10 player arcs by career yards
+        player_arcs.sort(key=lambda x: x["career_yards"], reverse=True)
+        top_arcs = player_arcs[:10]
+
+        # Decline start: first year after peak where avg drops 10%+
+        decline_start = None
+        for pt in curve:
+            if peak_year and pt["age"] > peak_year and pt["ppg"] < peak_ypg * 0.9:
+                decline_start = pt["age"]
+                break
+
+        return {
+            "curve": curve,
+            "peak": {"age": peak_year, "ppg": peak_ypg},
+            "decline_start": decline_start,
+            "sample_size": sum(len(v) for v in exp_buckets.values()),
+            "players": top_arcs,
+            "position": pos_upper or "ALL",
+            "available_seasons": available_seasons,
+            "x_label": "Experience Year",
+            "y_label": "Total YPG",
+        }
+    finally:
+        conn.close()
+
+
 # ---------------------------------------------------------------------------
 # Waitlist
 # ---------------------------------------------------------------------------

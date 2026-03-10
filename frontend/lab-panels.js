@@ -3542,6 +3542,21 @@
 
   // ===== WEEKLY LEADERS =====
   defs.push({ name: 'weeklyleaders', render: function(el) {
+    var wklCollege = typeof state !== 'undefined' && state.universe === 'college';
+    if (wklCollege) {
+      el.innerHTML =
+        '<div class="lp-page">' +
+          '<div class="lp-header"><h2>Weekly Leaders</h2>' +
+          '<div class="lp-subtitle">who went off this week</div></div>' +
+          '<div style="text-align:center;padding:60px 20px;">' +
+            '<div style="font-family:var(--font-hand,Caveat,cursive);font-size:22px;color:var(--ink-light);transform:rotate(-1deg);max-width:400px;margin:0 auto;">' +
+              'college stats are season-level only — weekly game data isn\'t available for college players. check <b>Stat Leaders</b> for season totals!' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      return;
+    }
+
     var curPos = '';
     var currentWeek = 0;
     var availableWeeks = [];
@@ -3908,13 +3923,14 @@
 
   // ─── 30. USAGE TRENDS ──────────────────────────────────────
   defs.push({ name: 'usage', render: function(el) {
+    var utCollege = typeof state !== 'undefined' && state.universe === 'college';
     var curPos = '';
     var curWeeks = '5';
 
     el.innerHTML =
       '<div class="lp-page">' +
-        '<div class="lp-header"><h2>Usage Trends</h2>' +
-        '<div class="lp-subtitle">who\'s trending up and who\'s fading</div></div>' +
+        '<div class="lp-header"><h2>' + (utCollege ? 'College Production Trends' : 'Usage Trends') + '</h2>' +
+        '<div class="lp-subtitle">' + (utCollege ? 'season-over-season production risers and fallers' : 'who\'s trending up and who\'s fading') + '</div></div>' +
         '<div class="lp-controls">' +
           '<div class="lp-pos-tabs" id="ut-pos-tabs">' +
             '<button class="lp-pos-tab active" data-pos="">ALL</button>' +
@@ -3923,20 +3939,28 @@
             '<button class="lp-pos-tab" data-pos="WR">WR</button>' +
             '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
           '</div>' +
+          (utCollege ? '' :
           '<select class="lp-select" id="ut-weeks">' +
             '<option value="3">3 weeks</option>' +
             '<option value="5" selected>5 weeks</option>' +
             '<option value="8">8 weeks</option>' +
-          '</select>' +
+          '</select>') +
         '</div>' +
-        '<div id="ut-body"><div class="lp-loading">pulling film on usage trends...</div></div>' +
+        '<div id="ut-body"><div class="lp-loading">pulling film on ' + (utCollege ? 'college trends' : 'usage trends') + '...</div></div>' +
       '</div>';
 
     function loadUT() {
       var body = el.querySelector('#ut-body');
-      body.innerHTML = '<div class="lp-loading">pulling film on usage trends...</div>';
-      var url = '/api/usage-trends?weeks=' + curWeeks;
-      if (curPos) url += '&position=' + encodeURIComponent(curPos);
+      var isCollege = typeof state !== 'undefined' && state.universe === 'college';
+      body.innerHTML = '<div class="lp-loading">pulling film on ' + (isCollege ? 'college trends' : 'usage trends') + '...</div>';
+      var url;
+      if (isCollege) {
+        url = '/api/college/trends?limit=30';
+        if (curPos) url += '&position=' + encodeURIComponent(curPos);
+      } else {
+        url = '/api/usage-trends?weeks=' + curWeeks;
+        if (curPos) url += '&position=' + encodeURIComponent(curPos);
+      }
 
       fetch(url).then(function(r) {
         if (!r.ok) throw new Error('API error');
@@ -4006,26 +4030,38 @@
     }
 
     function buildUTTable(players, isRiser) {
+      var isCollege = typeof state !== 'undefined' && state.universe === 'college';
       var html = '<div class="ut-table-wrap"><table class="ut-table"><thead><tr>';
-      html += '<th>#</th><th>Player</th><th>PPG</th><th>Delta</th><th>Trend</th>';
+      if (isCollege) {
+        html += '<th>#</th><th>Player</th><th>YPG</th><th>Delta</th><th>%</th>';
+      } else {
+        html += '<th>#</th><th>Player</th><th>PPG</th><th>Delta</th><th>Trend</th>';
+      }
       html += '</tr></thead><tbody>';
       players.forEach(function(p, i) {
         var posColor = POS_COLORS[p.position] || '#888';
-        var delta = p.delta || 0;
+        var delta = isCollege ? (p.delta_ypg || 0) : (p.delta || 0);
         var arrow = delta >= 0 ? '&#9650;' : '&#9660;';
         var deltaClass = delta >= 0 ? 'ut-delta-up' : 'ut-delta-down';
-        var scoresJson = escapeHtml(JSON.stringify(p.weekly_scores || []));
         html += '<tr>';
         html += '<td class="ut-rank">' + (i + 1) + '</td>';
         html += '<td class="ut-player-cell">';
-        if (p.headshot_url) html += '<img class="ut-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="" loading="lazy">';
+        if (!isCollege && p.headshot_url) html += '<img class="ut-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="" loading="lazy">';
         html += '<span class="ut-name">' + escapeHtml(p.name) + '</span>';
         html += '<span class="ut-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span>';
         html += '<span class="ut-team">' + escapeHtml(p.team || '') + '</span>';
+        if (isCollege && p.conference) html += '<span class="ut-team" style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
         html += '</td>';
-        html += '<td class="ut-num">' + fmt(p.ppg) + '</td>';
-        html += '<td class="ut-num"><span class="' + deltaClass + '">' + arrow + ' ' + fmt(Math.abs(delta)) + '</span></td>';
-        html += '<td><canvas data-ut-spark data-ut-scores="' + scoresJson + '" data-ut-riser="' + (isRiser ? '1' : '0') + '" width="80" height="24"></canvas></td>';
+        if (isCollege) {
+          html += '<td class="ut-num">' + fmt(p.curr_ypg) + '</td>';
+          html += '<td class="ut-num"><span class="' + deltaClass + '">' + arrow + ' ' + fmt(Math.abs(delta)) + '</span></td>';
+          html += '<td class="ut-num"><span class="' + deltaClass + '">' + (p.delta_pct >= 0 ? '+' : '') + fmt(p.delta_pct) + '%</span></td>';
+        } else {
+          var scoresJson = escapeHtml(JSON.stringify(p.weekly_scores || []));
+          html += '<td class="ut-num">' + fmt(p.ppg) + '</td>';
+          html += '<td class="ut-num"><span class="' + deltaClass + '">' + arrow + ' ' + fmt(Math.abs(delta)) + '</span></td>';
+          html += '<td><canvas data-ut-spark data-ut-scores="' + scoresJson + '" data-ut-riser="' + (isRiser ? '1' : '0') + '" width="80" height="24"></canvas></td>';
+        }
         html += '</tr>';
       });
       html += '</tbody></table></div>';
@@ -4040,15 +4076,19 @@
       curPos = tab.getAttribute('data-pos') || '';
       loadUT();
     });
-    el.querySelector('#ut-weeks').addEventListener('change', function(e) {
-      curWeeks = e.target.value;
-      loadUT();
-    });
+    var utWeeksSel = el.querySelector('#ut-weeks');
+    if (utWeeksSel) {
+      utWeeksSel.addEventListener('change', function(e) {
+        curWeeks = e.target.value;
+        loadUT();
+      });
+    }
     loadUT();
   }});
 
   // ─── 31. YEAR-OVER-YEAR ──────────────────────────────────────
   defs.push({ name: 'yoy', render: function(el) {
+    var yyCollege = typeof state !== 'undefined' && state.universe === 'college';
     var curPos = '';
     var curS1 = '2024';
     var curS2 = '2025';
@@ -4061,8 +4101,8 @@
 
     el.innerHTML =
       '<div class="lp-page">' +
-        '<div class="lp-header"><h2>Year-over-Year</h2>' +
-        '<div class="lp-subtitle">who improved and who regressed</div></div>' +
+        '<div class="lp-header"><h2>' + (yyCollege ? 'College Year-over-Year' : 'Year-over-Year') + '</h2>' +
+        '<div class="lp-subtitle">' + (yyCollege ? 'season-over-season production changes' : 'who improved and who regressed') + '</div></div>' +
         '<div class="lp-controls">' +
           '<div class="lp-pos-tabs" id="yy-pos-tabs">' +
             '<button class="lp-pos-tab active" data-pos="">ALL</button>' +
@@ -4071,6 +4111,7 @@
             '<button class="lp-pos-tab" data-pos="WR">WR</button>' +
             '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
           '</div>' +
+          (yyCollege ? '' :
           '<select class="lp-select" id="yy-s1">' +
             '<option value="2022">2022</option>' +
             '<option value="2023">2023</option>' +
@@ -4090,82 +4131,102 @@
             '<option value="rush_yd_g">Rush Yd/G</option>' +
             '<option value="total_tds">TDs</option>' +
             '<option value="snap_pct">Snap%</option>' +
-          '</select>' +
+          '</select>') +
         '</div>' +
         '<div id="yy-body"><div class="lp-loading">pulling film on year-over-year...</div></div>' +
       '</div>';
 
     function loadYY() {
       var body = el.querySelector('#yy-body');
+      var isCollege = typeof state !== 'undefined' && state.universe === 'college';
       body.innerHTML = '<div class="lp-loading">pulling film on year-over-year...</div>';
-      var url = '/api/year-over-year?season1=' + curS1 + '&season2=' + curS2 + '&metric=' + curMetric;
-      if (curPos) url += '&position=' + encodeURIComponent(curPos);
+      var url;
+      if (isCollege) {
+        url = '/api/college/trends?limit=30';
+        if (curPos) url += '&position=' + encodeURIComponent(curPos);
+      } else {
+        url = '/api/year-over-year?season1=' + curS1 + '&season2=' + curS2 + '&metric=' + curMetric;
+        if (curPos) url += '&position=' + encodeURIComponent(curPos);
+      }
 
       fetch(url).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
-        renderYY(data, body);
+        renderYY(data, body, isCollege);
       }).catch(function() {
         body.innerHTML = '<div class="lp-error">could not load year-over-year data</div>';
       });
     }
 
-    function renderYY(data, body) {
+    function renderYY(data, body, isCollege) {
       var risers = data.risers || [];
       var fallers = data.fallers || [];
       if (!risers.length && !fallers.length) {
         body.innerHTML = '<div class="lp-empty">no year-over-year data available</div>';
         return;
       }
-      var label = metricLabels[curMetric] || curMetric;
+      var label = isCollege ? 'YPG' : (metricLabels[curMetric] || curMetric);
       var html = '';
       if (risers.length) {
         html += '<div class="yy-section"><h3 class="yy-section-title yy-risers-title">Risers (' + escapeHtml(label) + ')</h3>';
-        html += buildYYTable(risers, true, label);
+        html += buildYYTable(risers, true, label, isCollege);
         html += '</div>';
       }
       if (fallers.length) {
         html += '<div class="yy-section"><h3 class="yy-section-title yy-fallers-title">Fallers (' + escapeHtml(label) + ')</h3>';
-        html += buildYYTable(fallers, false, label);
+        html += buildYYTable(fallers, false, label, isCollege);
         html += '</div>';
       }
       body.innerHTML = html;
     }
 
-    function buildYYTable(players, isRiser, label) {
+    function buildYYTable(players, isRiser, label, isCollege) {
       var html = '<div class="yy-table-wrap"><table class="yy-table"><thead><tr>';
-      html += '<th>#</th><th>Player</th><th>' + escapeHtml(curS1) + '</th><th>' + escapeHtml(curS2) + '</th><th>Delta</th><th class="hide-mobile">Other Metrics</th>';
+      if (isCollege) {
+        html += '<th>#</th><th>Player</th><th>Prev YPG</th><th>Curr YPG</th><th>Delta</th><th class="hide-mobile">TD/G</th>';
+      } else {
+        html += '<th>#</th><th>Player</th><th>' + escapeHtml(curS1) + '</th><th>' + escapeHtml(curS2) + '</th><th>Delta</th><th class="hide-mobile">Other Metrics</th>';
+      }
       html += '</tr></thead><tbody>';
       players.forEach(function(p, i) {
         var posColor = POS_COLORS[p.position] || '#888';
-        var delta = p.delta || 0;
+        var delta = isCollege ? (p.delta_ypg || 0) : (p.delta || 0);
         var deltaClass = delta >= 0 ? 'yy-delta-pos' : 'yy-delta-neg';
         var sign = delta >= 0 ? '+' : '';
         html += '<tr>';
         html += '<td class="yy-rank">' + (i + 1) + '</td>';
         html += '<td class="yy-player-cell">';
-        if (p.headshot_url) html += '<img class="yy-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="" loading="lazy">';
+        if (!isCollege && p.headshot_url) html += '<img class="yy-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="" loading="lazy">';
         html += '<span class="yy-name">' + escapeHtml(p.name) + '</span>';
         html += '<span class="yy-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span>';
         html += '<span class="yy-team">' + escapeHtml(p.team || '') + '</span>';
+        if (isCollege && p.conference) html += '<span class="yy-team" style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
         html += '</td>';
-        html += '<td class="yy-num">' + fmt(p.season1_value) + '</td>';
-        html += '<td class="yy-num">' + fmt(p.season2_value) + '</td>';
-        html += '<td class="yy-num"><span class="yy-delta-badge ' + deltaClass + '">' + sign + fmt(delta) + '</span></td>';
-        // mini chips for other metrics
-        html += '<td class="yy-chips hide-mobile">';
-        var otherMetrics = p.other_deltas || {};
-        var keys = Object.keys(otherMetrics);
-        keys.forEach(function(k) {
-          if (k === curMetric) return;
-          var val = otherMetrics[k];
-          var chipClass = val >= 0 ? 'yy-chip-pos' : 'yy-chip-neg';
-          var chipSign = val >= 0 ? '+' : '';
-          var chipLabel = metricLabels[k] || k;
-          html += '<span class="yy-mini-chip ' + chipClass + '">' + escapeHtml(chipLabel) + ' ' + chipSign + fmt(val) + '</span>';
-        });
-        html += '</td>';
+        if (isCollege) {
+          html += '<td class="yy-num">' + fmt(p.prev_ypg) + '</td>';
+          html += '<td class="yy-num">' + fmt(p.curr_ypg) + '</td>';
+          html += '<td class="yy-num"><span class="yy-delta-badge ' + deltaClass + '">' + sign + fmt(delta) + '</span></td>';
+          html += '<td class="yy-chips hide-mobile">';
+          html += '<span class="yy-mini-chip">' + fmt(p.curr_tds_pg) + ' TD/G</span>';
+          html += '</td>';
+        } else {
+          html += '<td class="yy-num">' + fmt(p.season1_value) + '</td>';
+          html += '<td class="yy-num">' + fmt(p.season2_value) + '</td>';
+          html += '<td class="yy-num"><span class="yy-delta-badge ' + deltaClass + '">' + sign + fmt(delta) + '</span></td>';
+          html += '<td class="yy-chips hide-mobile">';
+          var otherMetrics = p.other_deltas || {};
+          var keys = Object.keys(otherMetrics);
+          keys.forEach(function(k) {
+            if (k === curMetric) return;
+            var val = otherMetrics[k];
+            var chipClass = val >= 0 ? 'yy-chip-pos' : 'yy-chip-neg';
+            var chipSign = val >= 0 ? '+' : '';
+            var chipLabel = metricLabels[k] || k;
+            html += '<span class="yy-mini-chip ' + chipClass + '">' + escapeHtml(chipLabel) + ' ' + chipSign + fmt(val) + '</span>';
+          });
+          html += '</td>';
+        }
         html += '</tr>';
       });
       html += '</tbody></table></div>';
@@ -4180,20 +4241,24 @@
       curPos = tab.getAttribute('data-pos') || '';
       loadYY();
     });
-    el.querySelector('#yy-s1').addEventListener('change', function(e) { curS1 = e.target.value; loadYY(); });
-    el.querySelector('#yy-s2').addEventListener('change', function(e) { curS2 = e.target.value; loadYY(); });
-    el.querySelector('#yy-metric').addEventListener('change', function(e) { curMetric = e.target.value; loadYY(); });
+    var yyS1 = el.querySelector('#yy-s1');
+    var yyS2 = el.querySelector('#yy-s2');
+    var yyMetric = el.querySelector('#yy-metric');
+    if (yyS1) yyS1.addEventListener('change', function(e) { curS1 = e.target.value; loadYY(); });
+    if (yyS2) yyS2.addEventListener('change', function(e) { curS2 = e.target.value; loadYY(); });
+    if (yyMetric) yyMetric.addEventListener('change', function(e) { curMetric = e.target.value; loadYY(); });
     loadYY();
   }});
 
   // ─── 32. AGING CURVES ──────────────────────────────────────
   defs.push({ name: 'aging', render: function(el) {
+    var agCollege = typeof state !== 'undefined' && state.universe === 'college';
     var curPos = 'QB';
 
     el.innerHTML =
       '<div class="lp-page">' +
-        '<div class="lp-header"><h2>Aging Curves</h2>' +
-        '<div class="lp-subtitle">when players peak and decline by position</div></div>' +
+        '<div class="lp-header"><h2>' + (agCollege ? 'College Experience Curves' : 'Aging Curves') + '</h2>' +
+        '<div class="lp-subtitle">' + (agCollege ? 'how production changes by college experience year' : 'when players peak and decline by position') + '</div></div>' +
         '<div class="lp-controls">' +
           '<div class="lp-pos-tabs" id="ag-pos-tabs">' +
             '<button class="lp-pos-tab active" data-pos="QB">QB</button>' +
@@ -4202,13 +4267,16 @@
             '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
           '</div>' +
         '</div>' +
-        '<div id="ag-body"><div class="lp-loading">pulling film on aging curves...</div></div>' +
+        '<div id="ag-body"><div class="lp-loading">pulling film on ' + (agCollege ? 'experience curves' : 'aging curves') + '...</div></div>' +
       '</div>';
 
     function loadAG() {
       var body = el.querySelector('#ag-body');
-      body.innerHTML = '<div class="lp-loading">pulling film on aging curves...</div>';
-      var url = '/api/aging-curves?position=' + encodeURIComponent(curPos);
+      var isCollege = typeof state !== 'undefined' && state.universe === 'college';
+      body.innerHTML = '<div class="lp-loading">pulling film on ' + (isCollege ? 'experience curves' : 'aging curves') + '...</div>';
+      var url = isCollege
+        ? '/api/college/aging-curves?position=' + encodeURIComponent(curPos)
+        : '/api/aging-curves?position=' + encodeURIComponent(curPos);
 
       fetch(url).then(function(r) {
         if (!r.ok) throw new Error('API error');
@@ -4229,9 +4297,13 @@
       }
       var html = '<div class="ag-chart-wrap"><canvas id="ag-canvas" width="600" height="350"></canvas></div>';
       html += '<div class="ag-summary">';
-      html += '<div class="ag-card"><div class="ag-card-label">Peak Age</div><div class="ag-card-value">' + (peak.age || '-') + '</div></div>';
-      html += '<div class="ag-card"><div class="ag-card-label">Peak PPG</div><div class="ag-card-value">' + fmt(peak.ppg) + '</div></div>';
-      html += '<div class="ag-card"><div class="ag-card-label">Decline Start</div><div class="ag-card-value">' + (data.decline_start || '-') + '</div></div>';
+      var agIsCollege = typeof state !== 'undefined' && state.universe === 'college';
+      var agPeakLabel = agIsCollege ? 'Peak Year' : 'Peak Age';
+      var agPeakVal = agIsCollege ? ('Yr ' + (peak.age || '-')) : (peak.age || '-');
+      var agStatLabel = agIsCollege ? 'Peak YPG' : 'Peak PPG';
+      html += '<div class="ag-card"><div class="ag-card-label">' + agPeakLabel + '</div><div class="ag-card-value">' + agPeakVal + '</div></div>';
+      html += '<div class="ag-card"><div class="ag-card-label">' + agStatLabel + '</div><div class="ag-card-value">' + fmt(peak.ppg) + '</div></div>';
+      html += '<div class="ag-card"><div class="ag-card-label">Decline Start</div><div class="ag-card-value">' + (data.decline_start ? (agIsCollege ? 'Yr ' + data.decline_start : data.decline_start) : '-') + '</div></div>';
       html += '<div class="ag-card"><div class="ag-card-label">Sample Size</div><div class="ag-card-value">' + (data.sample_size || '-') + '</div></div>';
       html += '</div>';
       body.innerHTML = html;
@@ -4317,14 +4389,17 @@
       }
 
       // X axis labels
+      var agChartCollege = typeof state !== 'undefined' && state.universe === 'college';
       ctx.fillStyle = '#666';
       ctx.font = '10px Space Mono, monospace';
       ctx.textAlign = 'center';
-      for (var a = minAge; a <= maxAge; a += 2) {
-        ctx.fillText(a.toString(), xPos(a), H - pad.bottom + 16);
+      var ageStep = agChartCollege ? 1 : 2;
+      for (var a = minAge; a <= maxAge; a += ageStep) {
+        var axLabel = agChartCollege ? 'Yr ' + a : a.toString();
+        ctx.fillText(axLabel, xPos(a), H - pad.bottom + 16);
       }
       ctx.textAlign = 'center';
-      ctx.fillText('Age', W / 2, H - 4);
+      ctx.fillText(agChartCollege ? 'Experience Year' : 'Age', W / 2, H - 4);
 
       // Y axis labels
       ctx.textAlign = 'right';
@@ -4336,7 +4411,7 @@
       ctx.translate(12, pad.top + ch / 2);
       ctx.rotate(-Math.PI / 2);
       ctx.textAlign = 'center';
-      ctx.fillText('PPG', 0, 0);
+      ctx.fillText(agChartCollege ? 'Total YPG' : 'PPG', 0, 0);
       ctx.restore();
     }
 
@@ -6871,21 +6946,24 @@
 
   // ─── LEADERS ─────────────────────────────────────────────────
   defs.push({ name: 'leaders', render: function(el) {
-    var state = { position: '', season: 0, data: null };
+    var ldCollege = typeof state !== 'undefined' && state.universe === 'college';
+    var ldState = { position: '', season: 0, data: null };
     var annotations = {
       ppg: 'the whole package', passing_yards: 'slinging it', passing_tds: 'finding the end zone',
       rushing_yards: 'ground game kings', rushing_tds: 'punching it in', receiving_yards: 'racking up yardage',
       receiving_tds: 'red zone royalty', receptions: 'the target hogs',
-      target_share: 'eating all the targets', yards_per_carry: 'efficiency kings'
+      target_share: 'eating all the targets', yards_per_carry: 'efficiency kings',
+      total_yards: 'all-purpose monsters', total_tds: 'end zone royalty',
+      pass_yards: 'airing it out', rush_yards: 'ground pounders', rec_yards: 'yardage machines'
     };
     var rateStats = { target_share: true, yards_per_carry: true };
 
     el.innerHTML =
       '<div class="lp-page">' +
-        '<div class="lp-header"><h2>Stat Leaders</h2>' +
-        '<div class="lp-subtitle">who\'s leading the pack</div></div>' +
+        '<div class="lp-header"><h2>' + (ldCollege ? 'College Stat Leaders' : 'Stat Leaders') + '</h2>' +
+        '<div class="lp-subtitle">' + (ldCollege ? 'who\'s leading the pack in college football' : 'who\'s leading the pack') + '</div></div>' +
         '<div class="lp-controls">' +
-          '<select class="lp-select ld2-season">' + seasonOptions(2025) + '</select>' +
+          '<select class="lp-select ld2-season">' + seasonOptions(ldCollege ? 2024 : 2025) + '</select>' +
           posTabsHTML('ld2-pos-tabs', true) +
         '</div>' +
         '<div class="ld2-content"><div class="lp-loading">pulling film on the leaders...</div></div>' +
@@ -6893,30 +6971,39 @@
 
     function load() {
       var content = el.querySelector('.ld2-content');
+      var isCollege = typeof state !== 'undefined' && state.universe === 'college';
       content.innerHTML = '<div class="lp-loading">pulling film on the leaders...</div>';
-      var url = '/api/stat-leaders?limit=10';
-      if (state.position) url += '&position=' + encodeURIComponent(state.position);
-      if (state.season) url += '&season=' + state.season;
+      var url;
+      if (isCollege) {
+        url = '/api/college/leaders?limit=10';
+        if (ldState.position) url += '&position=' + encodeURIComponent(ldState.position);
+        if (ldState.season) url += '&season=' + ldState.season;
+      } else {
+        url = '/api/stat-leaders?limit=10';
+        if (ldState.position) url += '&position=' + encodeURIComponent(ldState.position);
+        if (ldState.season) url += '&season=' + ldState.season;
+      }
 
       fetch(url).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
-        state.data = data;
-        if (data.seasons) {
+        ldState.data = data;
+        var seasonList = data.seasons || data.available_seasons || [];
+        if (seasonList.length) {
           var sel = el.querySelector('.ld2-season');
           sel.innerHTML = '';
-          for (var i = 0; i < data.seasons.length; i++) {
-            sel.innerHTML += '<option value="' + data.seasons[i] + '"' + (data.seasons[i] === data.season ? ' selected' : '') + '>' + data.seasons[i] + '</option>';
+          for (var i = 0; i < seasonList.length; i++) {
+            sel.innerHTML += '<option value="' + seasonList[i] + '"' + (seasonList[i] === data.season ? ' selected' : '') + '>' + seasonList[i] + '</option>';
           }
         }
-        renderCategories(data.categories || []);
+        renderCategories(data.categories || [], isCollege);
       }).catch(function() {
         content.innerHTML = '<div class="lp-error">could not load stat leaders</div>';
       });
     }
 
-    function renderCategories(categories) {
+    function renderCategories(categories, isCollege) {
       var content = el.querySelector('.ld2-content');
       if (!categories.length) {
         content.innerHTML = '<div class="lp-empty">no stat leaders found</div>';
@@ -6925,7 +7012,7 @@
       var html = '<div class="ld2-grid">';
       for (var c = 0; c < categories.length; c++) {
         var cat = categories[c];
-        if (!state.position && rateStats[cat.key]) continue;
+        if (!isCollege && !ldState.position && rateStats[cat.key]) continue;
         var annotation = annotations[cat.key] || '';
         html += '<div class="ld2-card"><div class="ld2-card-header">';
         html += '<span class="ld2-card-title">' + escapeHtml(cat.label) + '</span>';
@@ -6936,13 +7023,15 @@
           var rank = i + 1;
           var rankCls = rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : 'normal';
           var posLower = (p.position || 'wr').toLowerCase();
+          var playerName = p.full_name || p.name || 'Unknown';
           html += '<li class="ld2-row" data-pid="' + escapeAttr(p.player_id) + '">';
           html += '<span class="ld2-rank ' + rankCls + '">' + rank + '</span>';
-          html += playerHeadshot(p, p.position);
+          if (!isCollege) html += playerHeadshot(p, p.position);
           html += '<div class="ld2-player-info">';
-          html += '<span class="ld2-player-name">' + escapeHtml(p.full_name) + '</span>';
+          html += '<span class="ld2-player-name">' + escapeHtml(playerName) + '</span>';
           html += '<span class="ld2-pos-badge ' + posLower + '">' + escapeHtml(p.position) + '</span>';
           html += '<span class="ld2-team">' + escapeHtml(p.team) + '</span>';
+          if (isCollege && p.conference) html += '<span class="ld2-team" style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
           html += '</div>';
           html += '<span class="ld2-stat-value">' + escapeHtml(p.stat_display) + '</span>';
           html += '</li>';
@@ -6964,12 +7053,12 @@
       if (!tab) return;
       el.querySelectorAll('#ld2-pos-tabs .lp-pos-tab').forEach(function(t) { t.classList.remove('active'); });
       tab.classList.add('active');
-      state.position = tab.getAttribute('data-pos') || '';
+      ldState.position = tab.getAttribute('data-pos') || '';
       load();
     });
 
     el.querySelector('.ld2-season').addEventListener('change', function() {
-      state.season = parseInt(this.value, 10) || 0;
+      ldState.season = parseInt(this.value, 10) || 0;
       load();
     });
 
