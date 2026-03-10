@@ -1,6 +1,26 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 83 — Fantasy Efficiency Dashboard (COMPLETE)
+## Current Phase: Phase 84 — Consistency Rankings Dashboard (COMPLETE)
+
+**Exit criterion MET:** /consistency.html page shows fantasy consistency rankings with two sections: "Rock Solid" (lowest coefficient of variation, most consistent week-to-week scorers) and "Wild Cards" (highest coefficient of variation, most volatile scorers). Each player row shows: position badge, headshot, name, team, PPG, StdDev, CoV (coefficient of variation = StdDev/PPG), Floor (10th percentile weekly score), Ceiling (90th percentile weekly score), Range (Ceiling - Floor), consistency grade badge (A+ to F based on inverse CoV percentile — lower CoV = higher grade), GP, and Caveat annotation. Position filter tabs (All/QB/RB/WR/TE). Season selector. Sortable columns with sort state tracking per section. Click player row → player profile. PNG export via html2canvas with watermark. Responsive at 768px + 480px with hide-mobile columns. /api/consistency-rankings endpoint queries player_week_stats for weekly fantasy_points_ppr per player, computes mean/stddev/CoV/floor(10th pctile)/ceiling(90th pctile)/range, grades by inverse CoV percentile (A+ = most consistent >= 95th, F = least consistent < 25th), splits into rock_solid and wild_cards. Min 6 games + 2 PPG filter. "Consistency" nav link added to all 25 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors.
+
+### Phase 84 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/consistency-rankings endpoint | DONE | PPG, StdDev, CoV, Floor, Ceiling, Range, grade by inverse CoV percentile |
+| 2 | Consistency dashboard page | DONE | Two-section table, grade badges, sortable, responsive, PNG export |
+| 3 | Nav links + sitemap + analytics | DONE | All 25 pages updated, sitemap entry, pageview tracking |
+| 4 | Smoke test | DONE | Python + JS syntax clean, 25/25 nav links verified, XSS escaped, design compliance confirmed |
+
+### Decisions Log
+- **Consistency Rankings as Phase 84**: Week-to-week consistency is one of the most debated topics in dynasty fantasy football — "is this player a safe floor play or a volatile boom/bust?" The coefficient of variation (StdDev/PPG) is the cleanest consistency metric because it normalizes for scoring volume. A player averaging 20 PPG with 5 StdDev is more consistent than one averaging 10 PPG with 5 StdDev. Highly screenshottable for r/DynastyFF ("most consistent fantasy players by position" / "these players are weekly rollercoasters").
+- **CoV as primary metric**: Coefficient of variation normalizes variance by scoring level, making cross-position comparisons meaningful. Raw standard deviation favors low scorers as "consistent" (a player scoring 2 PPG every week has low StdDev but isn't useful).
+- **Inverse CoV for grading**: Lower CoV = more consistent = higher grade. A+ goes to the most predictable scorers. This is intuitive — you want your "Rock Solid" players graded A+.
+- **Min 6 games + 2 PPG**: 6 games gives enough weeks for meaningful variance calculation. 2 PPG floor removes irrelevant players who are "consistent" at scoring nothing.
+- **Floor/Ceiling as 10th/90th percentile**: More robust than min/max which are heavily influenced by single outlier weeks. The 10th percentile floor tells you "in 9 out of 10 weeks, you'll get at least this much."
+
+## Previous Phase: Phase 83 — Fantasy Efficiency Dashboard (COMPLETE)
 
 **Exit criterion MET:** /efficiency.html page shows fantasy efficiency rankings with two sections: "Most Efficient" (highest fantasy points per opportunity, min 50 opportunities) and "Volume Kings" (most total opportunities with efficiency grade). Each player row shows: position badge, headshot, name, team, PPO (fantasy points per opportunity), Yards/Touch, Catch Rate, YAC/Rec, TD Rate per Touch, total opportunities, fantasy PPG, GP, efficiency grade badge (A+ to F based on PPO percentile, color-coded: A+/A green, B blue, C yellow, D orange, F red). Position filter tabs (All/QB/RB/WR/TE). Season selector. Sortable columns with sort state tracking per section. Click player row → player profile. PNG export via html2canvas with watermark. Responsive at 768px + 480px with hide-mobile columns. /api/efficiency-rankings endpoint queries player_week_stats for targets/carries/receptions/yards/air yards/TDs/fantasy points, computes PPO/YPT/catch rate/YAC per rec/TD rate, grades by PPO percentile, splits into most_efficient and volume_kings. Min 4 games + 50 opportunities filter. "Efficiency" nav link added to all 24 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors.
 

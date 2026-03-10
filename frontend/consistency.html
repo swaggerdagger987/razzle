@@ -3,46 +3,46 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Red Zone &amp; Goal-Line — Razzle</title>
-<meta property="og:title" content="Red Zone & Goal-Line — Razzle">
-<meta property="og:description" content="Goal-line usage leaders and TD dependency analysis on razzle.lol">
+<title>Consistency Rankings — Razzle</title>
+<meta property="og:title" content="Consistency Rankings — Razzle">
+<meta property="og:description" content="Fantasy consistency rankings — who are the safest and riskiest weekly starters on razzle.lol">
 <meta property="og:site_name" content="razzle.lol">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Red Zone & Goal-Line — Razzle">
-<meta name="twitter:description" content="Goal-line usage leaders and TD dependency analysis on razzle.lol">
+<meta name="twitter:title" content="Consistency Rankings — Razzle">
+<meta name="twitter:description" content="Fantasy consistency rankings — who are the safest and riskiest weekly starters on razzle.lol">
 <meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
-<meta name="description" content="Red zone and goal-line usage dashboard — who owns the goal line and who depends on TDs for fantasy value on razzle.lol">
+<meta name="description" content="Consistency rankings dashboard — the most and least consistent fantasy football scorers by coefficient of variation on razzle.lol">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="styles.css">
 <style>
-  .rz-page {
+  .con-page {
     max-width: 1200px;
     margin: 0 auto;
     padding: 24px 20px 60px;
   }
 
-  .rz-header {
+  .con-header {
     text-align: center;
     margin-bottom: 24px;
   }
-  .rz-header h1 {
+  .con-header h1 {
     font-family: var(--font-display);
     font-size: 32px;
     color: var(--ink);
     margin: 0 0 4px;
   }
-  .rz-header .rz-subtitle {
+  .con-header .con-subtitle {
     font-family: var(--font-hand);
     font-size: 20px;
     color: var(--ink-light);
   }
 
   /* Controls row */
-  .rz-controls {
+  .con-controls {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -51,7 +51,7 @@
     flex-wrap: wrap;
   }
 
-  .rz-select {
+  .con-select {
     font-family: var(--font-mono);
     font-size: 13px;
     padding: 7px 12px;
@@ -63,13 +63,13 @@
   }
 
   /* Position filter tabs */
-  .rz-pos-tabs {
+  .con-pos-tabs {
     display: flex;
     border: 2px solid var(--ink);
     border-radius: 8px;
     overflow: hidden;
   }
-  .rz-pos-tab {
+  .con-pos-tab {
     font-family: var(--font-display);
     font-size: 13px;
     font-weight: 700;
@@ -81,17 +81,17 @@
     cursor: pointer;
     transition: all 0.12s;
   }
-  .rz-pos-tab:last-child { border-right: none; }
-  .rz-pos-tab.active {
+  .con-pos-tab:last-child { border-right: none; }
+  .con-pos-tab.active {
     background: var(--ink);
     color: var(--bg-card);
   }
-  .rz-pos-tab:hover:not(.active) {
+  .con-pos-tab:hover:not(.active) {
     background: var(--bg-warm);
   }
 
   /* Actions */
-  .rz-actions {
+  .con-actions {
     display: flex;
     justify-content: center;
     gap: 10px;
@@ -99,8 +99,8 @@
   }
 
   /* Section headers */
-  .rz-section { margin-bottom: 32px; }
-  .rz-section-header {
+  .con-section { margin-bottom: 32px; }
+  .con-section-header {
     font-family: var(--font-display);
     font-size: 20px;
     font-weight: 700;
@@ -111,14 +111,14 @@
     border-radius: 10px;
     box-shadow: 4px 4px 0 var(--ink);
   }
-  .rz-section-header.dominators { background: var(--green-light); }
-  .rz-section-header.td-dependent { background: var(--orange-light); }
+  .con-section-header.solid { background: var(--green-light); }
+  .con-section-header.wild { background: var(--red-light); }
   .section-icon { font-size: 20px; margin-right: 4px; }
-  .section-icon.dominators { color: var(--green); }
-  .section-icon.td-dependent { color: var(--orange); }
+  .section-icon.solid { color: var(--green); }
+  .section-icon.wild { color: var(--red); }
 
   /* Table styles */
-  .rz-table {
+  .con-table {
     width: 100%;
     border-collapse: collapse;
     font-family: var(--font-mono);
@@ -129,7 +129,7 @@
     overflow: hidden;
     box-shadow: 4px 4px 0 var(--ink);
   }
-  .rz-table th {
+  .con-table th {
     font-family: var(--font-display);
     font-size: 11px;
     font-weight: 700;
@@ -144,32 +144,32 @@
     user-select: none;
     position: relative;
   }
-  .rz-table th.center,
-  .rz-table td.center { text-align: center; }
-  .rz-table th.sorted { color: var(--orange); }
-  .rz-table th .sort-arrow { font-size: 10px; margin-left: 2px; }
-  .rz-table th:hover { background: var(--bg); }
-  .rz-table td {
+  .con-table th.center,
+  .con-table td.center { text-align: center; }
+  .con-table th.sorted { color: var(--orange); }
+  .con-table th .sort-arrow { font-size: 10px; margin-left: 2px; }
+  .con-table th:hover { background: var(--bg); }
+  .con-table td {
     padding: 8px;
     border-bottom: 1px solid var(--ink-faint);
     vertical-align: middle;
   }
-  .rz-table tbody tr {
+  .con-table tbody tr {
     cursor: pointer;
     transition: background 0.1s;
   }
-  .rz-table tbody tr:hover {
+  .con-table tbody tr:hover {
     background: var(--bg-warm);
   }
 
   /* Player cell */
-  .rz-player-cell {
+  .con-player-cell {
     display: flex;
     align-items: center;
     gap: 8px;
     min-width: 160px;
   }
-  .rz-headshot {
+  .con-headshot {
     width: 32px;
     height: 32px;
     border-radius: 50%;
@@ -178,8 +178,8 @@
     flex-shrink: 0;
     background: var(--bg-warm);
   }
-  .rz-player-info { min-width: 0; }
-  .rz-player-name {
+  .con-player-info { min-width: 0; }
+  .con-player-name {
     font-family: var(--font-display);
     font-size: 14px;
     font-weight: 700;
@@ -188,13 +188,13 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .rz-player-meta {
+  .con-player-meta {
     display: flex;
     align-items: center;
     gap: 5px;
     margin-top: 1px;
   }
-  .rz-pos-badge {
+  .con-pos-badge {
     font-family: var(--font-display);
     font-size: 10px;
     font-weight: 700;
@@ -202,46 +202,35 @@
     border-radius: 5px;
     color: #fff;
   }
-  .rz-pos-badge.qb { background: var(--pos-qb); }
-  .rz-pos-badge.rb { background: var(--pos-rb); }
-  .rz-pos-badge.wr { background: var(--pos-wr); }
-  .rz-pos-badge.te { background: var(--pos-te); }
-  .rz-team-label {
+  .con-pos-badge.qb { background: var(--pos-qb); }
+  .con-pos-badge.rb { background: var(--pos-rb); }
+  .con-pos-badge.wr { background: var(--pos-wr); }
+  .con-pos-badge.te { background: var(--pos-te); }
+  .con-team-label {
     font-family: var(--font-mono);
     font-size: 11px;
     color: var(--ink-medium);
   }
 
-  /* GL TD Rate badge */
-  .rz-rate-badge {
+  /* Consistency grade badge */
+  .con-grade-badge {
     display: inline-block;
-    font-family: var(--font-mono);
-    font-size: 12px;
+    font-family: var(--font-display);
+    font-size: 13px;
     font-weight: 700;
-    padding: 2px 8px;
+    padding: 2px 10px;
     border-radius: 6px;
     border: 2px solid;
   }
-  .rz-rate-badge.high { background: var(--green-light); color: #1a7a6d; border-color: var(--green); }
-  .rz-rate-badge.mid { background: var(--yellow-light); color: #8a6d20; border-color: var(--yellow); }
-  .rz-rate-badge.low { background: var(--red-light); color: #a83240; border-color: var(--red); }
-
-  /* TD% badge */
-  .rz-tdpct-badge {
-    display: inline-block;
-    font-family: var(--font-mono);
-    font-size: 12px;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 6px;
-    border: 2px solid;
-  }
-  .rz-tdpct-badge.heavy { background: var(--red-light); color: #a83240; border-color: var(--red); }
-  .rz-tdpct-badge.moderate { background: var(--orange-light); color: #a85a3a; border-color: var(--orange); }
-  .rz-tdpct-badge.light { background: var(--green-light); color: #1a7a6d; border-color: var(--green); }
+  .con-grade-badge.grade-aplus { background: var(--green-light); color: #1a7a6d; border-color: var(--green); }
+  .con-grade-badge.grade-a { background: var(--green-light); color: #1a7a6d; border-color: var(--green); }
+  .con-grade-badge.grade-b { background: var(--blue-light); color: #3a5abf; border-color: var(--blue); }
+  .con-grade-badge.grade-c { background: var(--yellow-light); color: #8a6d20; border-color: var(--yellow); }
+  .con-grade-badge.grade-d { background: var(--orange-light); color: #a85a3a; border-color: var(--orange); }
+  .con-grade-badge.grade-f { background: var(--red-light); color: #a83240; border-color: var(--red); }
 
   /* Annotation */
-  .rz-annotation {
+  .con-annotation {
     font-family: var(--font-hand);
     font-size: 14px;
     color: var(--ink-light);
@@ -249,37 +238,37 @@
   }
 
   /* Loading / Empty / Error */
-  .rz-loading, .rz-empty {
+  .con-loading, .con-empty {
     text-align: center;
     padding: 60px 20px;
     font-family: var(--font-hand);
     font-size: 22px;
     color: var(--ink-light);
   }
-  .rz-error {
+  .con-error {
     text-align: center;
     padding: 40px 20px;
     font-family: var(--font-hand);
     font-size: 20px;
     color: var(--red);
   }
-  .rz-error button {
+  .con-error button {
     margin-top: 12px;
   }
 
   /* Responsive */
   @media (max-width: 768px) {
-    .rz-page { padding: 16px 10px 40px; }
-    .rz-header h1 { font-size: 26px; }
-    .rz-table { font-size: 12px; }
+    .con-page { padding: 16px 10px 40px; }
+    .con-header h1 { font-size: 26px; }
+    .con-table { font-size: 12px; }
     .hide-mobile { display: none !important; }
-    .rz-player-cell { min-width: 120px; }
-    .rz-headshot { width: 28px; height: 28px; }
-    .rz-player-name { font-size: 12px; }
+    .con-player-cell { min-width: 120px; }
+    .con-headshot { width: 28px; height: 28px; }
+    .con-player-name { font-size: 12px; }
   }
   @media (max-width: 480px) {
-    .rz-controls { gap: 8px; }
-    .rz-pos-tab { padding: 5px 10px; font-size: 12px; }
+    .con-controls { gap: 8px; }
+    .con-pos-tab { padding: 5px 10px; font-size: 12px; }
   }
 </style>
 </head>
@@ -307,38 +296,38 @@
     <li><a href="/yoy.html">YoY</a></li>
     <li><a href="/airyards.html">Air Yards</a></li>
     <li><a href="/explorer.html">Explorer</a></li>
-    <li><a href="/redzone.html" class="active">Red Zone</a></li>
+    <li><a href="/redzone.html">Red Zone</a></li>
     <li><a href="/efficiency.html">Efficiency</a></li>
-    <li><a href="/consistency.html">Consistency</a></li>
+    <li><a href="/consistency.html" class="active">Consistency</a></li>
     <li><a href="/team/KC">Teams</a></li>
     <li><a href="/league-intel.html">League Intel</a></li>
     <li><a href="/agents.html">War Room</a></li>
   </ul>
 </nav>
 
-<main class="rz-page" id="rz-content">
-  <div class="rz-header">
-    <h1>Red Zone &amp; Goal-Line</h1>
-    <div class="rz-subtitle">who owns the goal line, and who needs TDs to eat</div>
+<main class="con-page" id="con-content">
+  <div class="con-header">
+    <h1>Consistency Rankings</h1>
+    <div class="con-subtitle">the safest floors and the wildest swings, week to week</div>
   </div>
 
-  <div class="rz-controls">
-    <div class="rz-pos-tabs" id="pos-tabs">
-      <button class="rz-pos-tab active" data-pos="" aria-label="All positions">All</button>
-      <button class="rz-pos-tab" data-pos="QB" aria-label="Quarterbacks">QB</button>
-      <button class="rz-pos-tab" data-pos="RB" aria-label="Running Backs">RB</button>
-      <button class="rz-pos-tab" data-pos="WR" aria-label="Wide Receivers">WR</button>
-      <button class="rz-pos-tab" data-pos="TE" aria-label="Tight Ends">TE</button>
+  <div class="con-controls">
+    <div class="con-pos-tabs" id="pos-tabs">
+      <button class="con-pos-tab active" data-pos="" aria-label="All positions">All</button>
+      <button class="con-pos-tab" data-pos="QB" aria-label="Quarterbacks">QB</button>
+      <button class="con-pos-tab" data-pos="RB" aria-label="Running Backs">RB</button>
+      <button class="con-pos-tab" data-pos="WR" aria-label="Wide Receivers">WR</button>
+      <button class="con-pos-tab" data-pos="TE" aria-label="Tight Ends">TE</button>
     </div>
-    <select class="rz-select" id="season-select" title="Season" aria-label="Season"></select>
+    <select class="con-select" id="season-select" title="Season" aria-label="Season"></select>
   </div>
 
-  <div class="rz-actions">
+  <div class="con-actions">
     <button class="btn-chunky" id="export-btn" title="Export as PNG">Export PNG</button>
   </div>
 
-  <div id="rz-body">
-    <div class="rz-loading" id="rz-loading">scouting the goal line...</div>
+  <div id="con-body">
+    <div class="con-loading" id="con-loading">checking the tape...</div>
   </div>
 </main>
 
@@ -414,40 +403,49 @@
 
   // Sort state per section
   var sortState = {
-    dominators: { col: 'gl_opportunities', dir: -1 },
-    td_dependent: { col: 'td_pct_of_fantasy', dir: -1 }
+    rock_solid: { col: 'cov', dir: 1 },
+    wild_cards: { col: 'cov', dir: -1 }
   };
 
-  // Dominator columns
-  var DOM_COLUMNS = [
+  function gradeClass(grade) {
+    if (grade === 'A+') return 'grade-aplus';
+    if (grade === 'A') return 'grade-a';
+    if (grade === 'B') return 'grade-b';
+    if (grade === 'C') return 'grade-c';
+    if (grade === 'D') return 'grade-d';
+    return 'grade-f';
+  }
+
+  // Rock Solid columns
+  var SOLID_COLUMNS = [
     { key: 'name', label: 'Player', tip: '' },
-    { key: 'gl_opportunities', label: 'GL Opp', tip: 'Goal-line opportunities (carries + targets inside the 5-yard line)' },
-    { key: 'gl_carries', label: 'GL Car', tip: 'Goal-line carries (rushes inside the 5-yard line)' },
-    { key: 'gl_targets', label: 'GL Tgt', tip: 'Goal-line targets (targets inside the 5-yard line)', hide: true },
-    { key: 'gl_tds', label: 'GL TD', tip: 'Goal-line touchdowns' },
-    { key: 'gl_td_rate', label: 'GL TD%', tip: 'Goal-line TD conversion rate (GL TDs / GL Opportunities)' },
-    { key: 'total_tds', label: 'TDs', tip: 'Total touchdowns (rush + rec + pass)', hide: true },
     { key: 'ppg', label: 'PPG', tip: 'Fantasy points per game (PPR)' },
+    { key: 'grade', label: 'Grade', tip: 'Consistency grade based on CoV percentile (A+ = most consistent top 5%, F = most volatile bottom 25%)' },
+    { key: 'stddev', label: 'StdDev', tip: 'Standard deviation of weekly fantasy scores — lower = more consistent' },
+    { key: 'cov', label: 'CoV', tip: 'Coefficient of variation (StdDev / PPG) — lower = more predictable' },
+    { key: 'floor', label: 'Floor', tip: '10th percentile weekly score — your worst-case week' },
+    { key: 'ceiling', label: 'Ceiling', tip: '90th percentile weekly score — your best-case week', hide: true },
+    { key: 'range', label: 'Range', tip: 'Ceiling minus Floor — the weekly scoring spread', hide: true },
     { key: 'games', label: 'GP', hide: true, tip: 'Games played' },
     { key: 'annotation', label: '', hide: true, nosort: true, tip: '' }
   ];
 
-  // TD Dependent columns
-  var TDD_COLUMNS = [
+  // Wild Cards columns
+  var WILD_COLUMNS = [
     { key: 'name', label: 'Player', tip: '' },
-    { key: 'td_pct_of_fantasy', label: 'TD%', tip: 'Percentage of fantasy points that come from touchdowns — higher = more TD dependent' },
-    { key: 'total_tds', label: 'TDs', tip: 'Total touchdowns (rush + rec + pass)' },
-    { key: 'rush_tds', label: 'RuTD', tip: 'Rushing touchdowns', hide: true },
-    { key: 'rec_tds', label: 'ReTD', tip: 'Receiving touchdowns', hide: true },
     { key: 'ppg', label: 'PPG', tip: 'Fantasy points per game (PPR)' },
-    { key: 'gl_tds', label: 'GL TD', tip: 'Goal-line touchdowns' },
-    { key: 'gl_opportunities', label: 'GL Opp', tip: 'Goal-line opportunities (carries + targets inside the 5)', hide: true },
+    { key: 'grade', label: 'Grade', tip: 'Consistency grade based on CoV percentile (A+ = most consistent, F = most volatile)' },
+    { key: 'stddev', label: 'StdDev', tip: 'Standard deviation of weekly fantasy scores — higher = more volatile' },
+    { key: 'cov', label: 'CoV', tip: 'Coefficient of variation (StdDev / PPG) — higher = less predictable' },
+    { key: 'floor', label: 'Floor', tip: '10th percentile weekly score — your worst-case week' },
+    { key: 'ceiling', label: 'Ceiling', tip: '90th percentile weekly score — your best-case week' },
+    { key: 'range', label: 'Range', tip: 'Ceiling minus Floor — the weekly scoring spread', hide: true },
     { key: 'games', label: 'GP', hide: true, tip: 'Games played' },
     { key: 'annotation', label: '', hide: true, nosort: true, tip: '' }
   ];
 
   function getColumns(section) {
-    return section === 'dominators' ? DOM_COLUMNS : TDD_COLUMNS;
+    return section === 'rock_solid' ? SOLID_COLUMNS : WILD_COLUMNS;
   }
 
   function buildPlayerRow(p, section) {
@@ -463,33 +461,36 @@
 
       if (col.key === 'name') {
         html += '<td>';
-        html += '<div class="rz-player-cell">';
+        html += '<div class="con-player-cell">';
         if (p.headshot_url) {
-          html += '<img class="rz-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+          html += '<img class="con-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
         }
-        html += '<div class="rz-player-info">';
-        html += '<div class="rz-player-name">' + escapeHtml(p.name) + '</div>';
-        html += '<div class="rz-player-meta">';
-        html += '<span class="rz-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
-        html += '<span class="rz-team-label">' + escapeHtml(p.team) + '</span>';
+        html += '<div class="con-player-info">';
+        html += '<div class="con-player-name">' + escapeHtml(p.name) + '</div>';
+        html += '<div class="con-player-meta">';
+        html += '<span class="con-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
+        html += '<span class="con-team-label">' + escapeHtml(p.team) + '</span>';
         html += '</div></div></div>';
         html += '</td>';
-      } else if (col.key === 'gl_td_rate') {
-        var rate = p.gl_td_rate || 0;
-        var rateClass = rate >= 50 ? 'high' : rate >= 25 ? 'mid' : 'low';
+      } else if (col.key === 'grade') {
+        var g = p.grade || 'C';
         html += '<td class="' + classes.join(' ') + '">';
-        html += '<span class="rz-rate-badge ' + rateClass + '">' + fmt(rate, 1) + '%</span>';
+        html += '<span class="con-grade-badge ' + gradeClass(g) + '">' + escapeHtml(g) + '</span>';
         html += '</td>';
-      } else if (col.key === 'td_pct_of_fantasy') {
-        var pct = p.td_pct_of_fantasy || 0;
-        var pctClass = pct >= 50 ? 'heavy' : pct >= 35 ? 'moderate' : 'light';
-        html += '<td class="' + classes.join(' ') + '">';
-        html += '<span class="rz-tdpct-badge ' + pctClass + '">' + fmt(pct, 1) + '%</span>';
-        html += '</td>';
-      } else if (col.key === 'annotation') {
-        html += '<td class="' + classes.join(' ') + '"><span class="rz-annotation">' + escapeHtml(p.annotation || '') + '</span></td>';
       } else if (col.key === 'ppg') {
-        html += '<td class="' + classes.join(' ') + '" style="font-weight:700;">' + fmt(p[col.key]) + '</td>';
+        html += '<td class="' + classes.join(' ') + '" style="font-weight:700;">' + fmt(p.ppg) + '</td>';
+      } else if (col.key === 'stddev') {
+        html += '<td class="' + classes.join(' ') + '">' + fmt(p.stddev) + '</td>';
+      } else if (col.key === 'cov') {
+        html += '<td class="' + classes.join(' ') + '" style="font-weight:700;">' + fmt(p.cov, 3) + '</td>';
+      } else if (col.key === 'floor') {
+        html += '<td class="' + classes.join(' ') + '" style="color:var(--green);">' + fmt(p.floor) + '</td>';
+      } else if (col.key === 'ceiling') {
+        html += '<td class="' + classes.join(' ') + '" style="color:var(--blue);">' + fmt(p.ceiling) + '</td>';
+      } else if (col.key === 'range') {
+        html += '<td class="' + classes.join(' ') + '">' + fmt(p.range) + '</td>';
+      } else if (col.key === 'annotation') {
+        html += '<td class="' + classes.join(' ') + '"><span class="con-annotation">' + escapeHtml(p.annotation || '') + '</span></td>';
       } else {
         var val = p[col.key];
         html += '<td class="' + classes.join(' ') + '">' + (val !== null && val !== undefined ? escapeHtml(String(val)) : '-') + '</td>';
@@ -531,28 +532,28 @@
 
   function buildTable(players, section) {
     if (!players || !players.length) {
-      var label = section === 'dominators' ? 'goal-line dominators' : 'TD-dependent players';
-      return '<div class="rz-empty">no ' + label + ' found for this filter</div>';
+      var label = section === 'rock_solid' ? 'consistent players' : 'volatile players';
+      return '<div class="con-empty">no ' + label + ' found for this filter</div>';
     }
 
-    var isDom = section === 'dominators';
-    var icon = isDom ? '&#x1F3C8;' : '&#x1F4A5;';
-    var title = isDom ? 'Goal-Line Dominators' : 'TD Dependent';
-    var subtitle = isDom
-      ? 'most goal-line opportunities (carries + targets inside the 5)'
-      : 'highest % of fantasy points from touchdowns';
-    var headerClass = isDom ? 'dominators' : 'td-dependent';
+    var isSolid = section === 'rock_solid';
+    var icon = isSolid ? '&#x1F3AF;' : '&#x1F3B2;';
+    var title = isSolid ? 'Rock Solid' : 'Wild Cards';
+    var subtitle = isSolid
+      ? 'lowest week-to-week variance (min 6 games, 2+ PPG)'
+      : 'highest week-to-week variance (most volatile scorers)';
+    var headerClass = isSolid ? 'solid' : 'wild';
 
     var state = sortState[section];
     var sorted = sortPlayers(players, state.col, state.dir);
 
-    var html = '<div class="rz-section">';
-    html += '<div class="rz-section-header ' + headerClass + '">';
+    var html = '<div class="con-section">';
+    html += '<div class="con-section-header ' + headerClass + '">';
     html += '<span class="section-icon ' + headerClass + '">' + icon + '</span> ';
     html += title + ' <span style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); font-weight:400;">(' + players.length + ' players) — ' + subtitle + '</span>';
     html += '</div>';
 
-    html += '<table class="rz-table" data-section="' + section + '">';
+    html += '<table class="con-table" data-section="' + section + '">';
     html += buildTableHeader(section);
     html += '<tbody>';
     sorted.forEach(function(p) {
@@ -565,16 +566,16 @@
 
   function render(data) {
     currentData = data;
-    var body = document.getElementById('rz-body');
+    var body = document.getElementById('con-body');
 
-    if (!data || (!data.dominators.length && !data.td_dependent.length)) {
-      body.innerHTML = '<div class="rz-empty">no red zone data found for this selection</div>';
+    if (!data || (!data.rock_solid.length && !data.wild_cards.length)) {
+      body.innerHTML = '<div class="con-empty">no consistency data found for this selection</div>';
       return;
     }
 
     var html = '';
-    html += buildTable(data.dominators, 'dominators');
-    html += buildTable(data.td_dependent, 'td_dependent');
+    html += buildTable(data.rock_solid, 'rock_solid');
+    html += buildTable(data.wild_cards, 'wild_cards');
     body.innerHTML = html;
 
     // Attach sort listeners
@@ -602,12 +603,12 @@
   }
 
   function loadData() {
-    var body = document.getElementById('rz-body');
-    body.innerHTML = '<div class="rz-loading">scouting the goal line...</div>';
+    var body = document.getElementById('con-body');
+    body.innerHTML = '<div class="con-loading">checking the tape...</div>';
 
     var seasonSel = document.getElementById('season-select');
     var season = seasonSel.value || '';
-    var url = '/api/redzone-usage?limit=30';
+    var url = '/api/consistency-rankings?limit=30';
     if (season) url += '&season=' + season;
     if (currentPosition) url += '&position=' + currentPosition;
 
@@ -628,15 +629,15 @@
       }
       render(data);
     }).catch(function(err) {
-      body.innerHTML = '<div class="rz-error">failed to load red zone data<br><button class="btn-chunky" onclick="location.reload()">retry</button></div>';
+      body.innerHTML = '<div class="con-error">failed to load consistency data<br><button class="btn-chunky" onclick="location.reload()">retry</button></div>';
     });
   }
 
   // Position tab clicks
   document.getElementById('pos-tabs').addEventListener('click', function(e) {
-    var tab = e.target.closest('.rz-pos-tab');
+    var tab = e.target.closest('.con-pos-tab');
     if (!tab) return;
-    document.querySelectorAll('.rz-pos-tab').forEach(function(t) { t.classList.remove('active'); });
+    document.querySelectorAll('.con-pos-tab').forEach(function(t) { t.classList.remove('active'); });
     tab.classList.add('active');
     currentPosition = tab.getAttribute('data-pos') || '';
     loadData();
@@ -649,10 +650,9 @@
 
   // Export PNG
   document.getElementById('export-btn').addEventListener('click', function() {
-    var el = document.getElementById('rz-content');
+    var el = document.getElementById('con-content');
     if (typeof html2canvas !== 'undefined') {
       html2canvas(el, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
-        // Add watermark
         var ctx = canvas.getContext('2d');
         ctx.font = '24px Caveat, cursive';
         ctx.fillStyle = 'rgba(26,26,46,0.3)';
@@ -660,7 +660,7 @@
         ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 16);
 
         var link = document.createElement('a');
-        link.download = 'razzle-redzone.png';
+        link.download = 'razzle-consistency.png';
         link.href = canvas.toDataURL('image/png');
         link.click();
       });
@@ -671,7 +671,7 @@
   fetch('/api/analytics/pageview', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ page: '/redzone.html', referrer: document.referrer || '' })
+    body: JSON.stringify({ page: '/consistency.html', referrer: document.referrer || '' })
   }).catch(function() {});
 
   // Initial load

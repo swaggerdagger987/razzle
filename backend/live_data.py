@@ -6344,3 +6344,162 @@ def fetch_efficiency_rankings(season=None, position=None, limit=30):
         }
     finally:
         conn.close()
+
+
+# ---------------------------------------------------------------------------
+# Consistency Rankings
+# ---------------------------------------------------------------------------
+
+_ROCK_SOLID_ANNOTATIONS = [
+    "metronome", "bankable", "set-and-forget", "steady Eddie",
+    "reliable as gravity", "floor merchant", "plug and play",
+    "boring in the best way", "autopilot", "old faithful",
+    "cash money", "no-drama zone", "Swiss watch", "rock of ages",
+    "comfort blanket", "ironclad", "steady hand", "safe harbor",
+]
+
+_WILD_CARD_ANNOTATIONS = [
+    "buckle up", "boom or bust", "volatility king", "rollercoaster",
+    "white-knuckle ride", "high variance", "feast or famine",
+    "chaos merchant", "gambler's delight", "ceiling chaser",
+    "weekly coin flip", "heart attack starter", "spicy lineup play",
+    "start at your own risk", "living on the edge", "the wild card",
+]
+
+
+def fetch_consistency_rankings(season=None, position=None, limit=30):
+    """Return consistency rankings: rock solid (low CoV) and wild cards (high CoV)."""
+    import math
+
+    conn = get_conn()
+
+    try:
+        # Determine season + available seasons
+        row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
+        available_seasons = [r[0] for r in row] if row else [2024]
+        if not season:
+            season = available_seasons[0] if available_seasons else 2024
+
+        pos_filter = ""
+        params = [season]
+        if position and position.upper() in ("QB", "RB", "WR", "TE"):
+            pos_filter = "AND p.position = ?"
+            params.append(position.upper())
+
+        # Get weekly fantasy points per player
+        query = f"""
+            SELECT
+                p.player_id, p.full_name, p.position, p.team,
+                p.headshot_url,
+                s.fantasy_points_ppr, s.week
+            FROM players p
+            JOIN player_week_stats s
+                ON s.player_id = p.player_id AND s.season = ?
+            WHERE p.position IN ('QB','RB','WR','TE')
+              AND p.fantasy_relevant = 1
+              {pos_filter}
+            ORDER BY p.player_id, s.week
+        """
+        rows = conn.execute(query, params).fetchall()
+
+        if not rows:
+            return {
+                "season": season,
+                "available_seasons": available_seasons,
+                "rock_solid": [],
+                "wild_cards": [],
+            }
+
+        # Group weekly scores by player
+        from collections import defaultdict
+        player_info = {}
+        player_weeks = defaultdict(list)
+        for r in rows:
+            pid = r[0]
+            if pid not in player_info:
+                player_info[pid] = {
+                    "player_id": pid,
+                    "name": r[1] or "Unknown",
+                    "position": r[2] or "RB",
+                    "team": r[3] or "FA",
+                    "headshot_url": r[4] or "",
+                }
+            pts = r[5] or 0
+            player_weeks[pid].append(pts)
+
+        # Compute stats for players with >= 6 games
+        players = []
+        for pid, weeks in player_weeks.items():
+            if len(weeks) < 6:
+                continue
+
+            info = player_info[pid]
+            n = len(weeks)
+            mean = sum(weeks) / n
+            if mean < 2:
+                continue  # Skip very low scorers (irrelevant)
+
+            variance = sum((w - mean) ** 2 for w in weeks) / n
+            stddev = math.sqrt(variance)
+            cov = round(stddev / mean, 3) if mean > 0 else 0
+
+            # Floor (10th percentile) and ceiling (90th percentile)
+            sorted_weeks = sorted(weeks)
+            floor_idx = max(0, int(n * 0.1))
+            ceil_idx = min(n - 1, int(n * 0.9))
+            floor_val = round(sorted_weeks[floor_idx], 1)
+            ceil_val = round(sorted_weeks[ceil_idx], 1)
+            score_range = round(ceil_val - floor_val, 1)
+
+            players.append({
+                **info,
+                "ppg": round(mean, 2),
+                "stddev": round(stddev, 2),
+                "cov": cov,
+                "floor": floor_val,
+                "ceiling": ceil_val,
+                "range": score_range,
+                "games": n,
+            })
+
+        # Grade by INVERSE CoV percentile (lower CoV = better grade)
+        cov_values = sorted([p["cov"] for p in players])
+        total = len(cov_values)
+        for p in players:
+            if total == 0:
+                p["grade"] = "C"
+                continue
+            # Lower CoV = more consistent = higher percentile
+            rank = sum(1 for v in cov_values if v > p["cov"])
+            percentile = rank / total * 100
+            if percentile >= 95:
+                p["grade"] = "A+"
+            elif percentile >= 85:
+                p["grade"] = "A"
+            elif percentile >= 70:
+                p["grade"] = "B"
+            elif percentile >= 45:
+                p["grade"] = "C"
+            elif percentile >= 25:
+                p["grade"] = "D"
+            else:
+                p["grade"] = "F"
+
+        # Rock Solid: lowest CoV (most consistent)
+        rock_solid = sorted(players, key=lambda x: x["cov"])[:limit]
+        for i, p in enumerate(rock_solid):
+            p["annotation"] = _ROCK_SOLID_ANNOTATIONS[i % len(_ROCK_SOLID_ANNOTATIONS)]
+
+        # Wild Cards: highest CoV (most volatile)
+        wild_cards = sorted(players, key=lambda x: x["cov"], reverse=True)[:limit]
+        for i, p in enumerate(wild_cards):
+            p["annotation"] = _WILD_CARD_ANNOTATIONS[i % len(_WILD_CARD_ANNOTATIONS)]
+
+        return {
+            "season": season,
+            "available_seasons": available_seasons,
+            "rock_solid": rock_solid,
+            "wild_cards": wild_cards,
+        }
+    finally:
+        conn.close()

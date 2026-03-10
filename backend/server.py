@@ -900,6 +900,7 @@ def sitemap_xml():
         ("/explorer.html", "0.8", "weekly"),
         ("/redzone.html", "0.8", "weekly"),
         ("/efficiency.html", "0.8", "weekly"),
+        ("/consistency.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1177,6 +1178,19 @@ def efficiency_rankings(season: int = 0, position: str = "", limit: int = 30):
     except Exception as e:
         logger.error(f"efficiency_rankings error: {e}")
         return JSONResponse({"error": "Failed to fetch efficiency data"}, status_code=500)
+
+
+@app.get("/api/consistency-rankings")
+def consistency_rankings(season: int = 0, position: str = "", limit: int = 30):
+    """Return consistency rankings: rock solid (low variance) + wild cards (high variance)."""
+    try:
+        s = season if season > 0 else None
+        pos = position.upper() if position else None
+        lim = max(1, min(limit, 50))
+        return live_data.fetch_consistency_rankings(season=s, position=pos, limit=lim)
+    except Exception as e:
+        logger.error(f"consistency_rankings error: {e}")
+        return JSONResponse({"error": "Failed to fetch consistency data"}, status_code=500)
 
 
 @app.get("/api/analytics/summary")
