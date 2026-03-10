@@ -1,39 +1,44 @@
-# Razzle Loop — Phase 80 Task List
+# Razzle Loop — Phase 81 Task List
 
-> Stat Explorer — Configurable scatter plot with user-selectable X/Y axes
+> QA + UX Audit — Auto-Generated Fixes (Phases 76-80)
 
-**Current Phase**: 80 — Stat Explorer
-**Exit Criterion**: /explorer.html page shows an interactive scatter plot where users can select any two metrics for X and Y axes from dropdown menus. Each dot is a player, color-coded by position. Hover/click dot shows player details. Position filter tabs. Season selector. Canvas-drawn scatter with axis labels, gridlines, tick marks, and trendline. PNG export with watermark. "Explorer" nav link added to all HTML pages. Sitemap entry. Analytics tracking. Design matches DESIGN.md. Responsive.
+**Current Phase**: 81 — QA + UX Audit Fixes
+**Exit Criterion**: All CRITICAL and HIGH findings from phases 76-80 audit resolved. All MEDIUM findings addressed as grouped task. Code verified syntax-clean after fixes.
 
 ---
 
-## Task 1: Backend /api/stat-explorer endpoint
-**Status**: PASS
-**Attempts**: 1
-**Notes**: GET /api/stat-explorer with season/position/x_stat/y_stat params. 17 available metrics. Per-game computed from player_week_stats. Rate metrics enriched from player_week_metrics. Min 4 games filter. try/except error handling.
+## Task 1: CRITICAL fixes
+**Status**: PENDING
+**Attempts**: 0
+**Notes**: (1) usage.html: Rename `window` parameter to `trendWindow` in loadData function and all call sites to fix global window shadowing. (2) airyards.html: Rename "Reg" column to "Regression" and add title tooltip explaining "Regression Delta: PPG rank vs Air Yards rank gap. Positive = buy low, Negative = sell high".
 
-## Task 2: Scatter plot page with canvas-drawn chart
-**Status**: PASS
-**Attempts**: 1
-**Notes**: /explorer.html with canvas-drawn scatter plot. X/Y axis dropdowns populated from API. Position-colored dots. Hover tooltip. Click dot → profile. Gridlines, trendline, axis labels. Position filter tabs. Season selector. Resize handler. PNG export. Error state with retry. Responsive.
+## Task 2: HIGH QA fixes
+**Status**: PENDING
+**Attempts**: 0
+**Notes**: (1) yoy.html, airyards.html, explorer.html: Replace `trackPageview()` calls with inline `fetch('/api/analytics/pageview', ...)` pattern from matchups.html. (2) usage.html: Move `<script src="app.js">` before inline script block. (3) explorer.html: Escape `p.x` and `p.y` in tooltip with `escapeHtml(String(...))`.
 
-## Task 3: Nav links + sitemap + analytics
-**Status**: PASS
-**Attempts**: 1
-**Notes**: "Explorer" nav link added to all 22 HTML pages (nav + footer). 42 total occurrences. Sitemap.xml entry. Analytics pageview tracking.
+## Task 3: HIGH UX fixes
+**Status**: PENDING
+**Attempts**: 0
+**Notes**: (1) airyards.html: Add title tooltips to all column headers (WOPR = "Weighted Opportunity Rating", RACR = "Receiver Air Conversion Ratio", aDOT = "Average Depth of Target", AY% = "Air Yards Share of team total", Reg = "Regression Delta"). (2) explorer.html: Change cursor to `pointer` when hovering a dot, prevent navigation on click (show info panel or open in new tab). (3) usage.html: Update H1 from "Snap Count Trends" to "Usage Trends" to match nav label.
 
-## Task 4: Smoke test + verification
-**Status**: PASS
-**Attempts**: 1
-**Notes**: Python + JS syntax valid. 22/22 pages have Explorer nav link. Design compliance confirmed.
+## Task 4: MEDIUM fixes (grouped)
+**Status**: PENDING
+**Attempts**: 0
+**Notes**: (1) airyards.html: Add `.air-pos-badge.qb` CSS. (2) explorer.html: Fix event listener leak by adding listeners once with closure state. (3) matchups.html: Change legend swatch border from 1px to 2px. (4) yoy.html, airyards.html, explorer.html: Add canvas watermark to PNG export. (5) airyards.html: Add subtitle explaining no QB. (6) explorer.html: Add placeholder text to axis selects before API loads. (7) usage.html: Update "Delta" header to include window context.
+
+## Task 5: Smoke test + verification
+**Status**: PENDING
+**Attempts**: 0
+**Notes**: Python + JS syntax valid. All fixes verified. No regressions introduced.
 
 ---
 
 ## Loop State
 ```
-Current Phase: 80
-Current Task: 4
-Current Stage: COMPLETE
+Current Phase: 81
+Current Task: 1
+Current Stage: BUILD
 Attempt: 1
-Tasks Completed: 4/4
+Tasks Completed: 0/5
 ```

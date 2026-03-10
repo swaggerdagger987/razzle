@@ -1,85 +1,76 @@
-# QA + UX Audit — Phases 71-75
+# QA + UX Audit — Phases 76-80
 
 **Date**: 2026-03-10
-**Scope**: aging.html, weekly.html, targets.html, live_data.py, server.py
-**Pages audited**: 3 new pages (Aging Curves, Weekly Scoring Heatmap, Target Distribution)
+**Scope**: matchups.html, usage.html, yoy.html, airyards.html, explorer.html + backend endpoints
+**Pages audited**: 5 pages (Matchup Heatmap, Snap Count Trends, Year-over-Year, Air Yards, Stat Explorer)
 
 ---
 
 ## QA FINDINGS
 
+### CRITICAL
+
+1. **usage.html: `window` parameter shadows global `window` object** — Line 540: `loadData(season, position, window)` shadows the browser's `window` object. Player row click handlers using `window.location.href` throw TypeError. **Fix**: Rename parameter to `trendWindow`.
+
 ### HIGH
 
-**Q1. aging.html:555 — escapeHtml then unescape on canvas text**
-Canvas `fillText()` takes plain text, not HTML. Calling `escapeHtml()` then immediately un-escaping with `.replace()` chains is pointless and a code smell. Use plain text directly for canvas rendering.
+2. **yoy.html, airyards.html, explorer.html: Analytics pageview never fires** — All three call `trackPageview()` which doesn't exist. matchups.html and usage.html use the working inline `fetch('/api/analytics/pageview', ...)` pattern. **Fix**: Replace with inline fetch pattern.
 
-**Q2. weekly.html + targets.html — fetch() missing resp.ok check**
-Both pages call `.then(r => r.json())` without checking `r.ok`. A 404/500 response will try to parse HTML as JSON and fail silently or show misleading error.
+3. **usage.html: app.js loaded AFTER inline script** — Line 646 loads app.js after the inline script block runs. `initQuickSearch()` call silently fails. **Fix**: Move `<script src="app.js">` before inline script.
 
-**Q3. weekly.html + targets.html — missing app.js script tag**
-Both new pages lack `<script src="app.js"></script>`. The Ctrl+K quick search command palette does not work on these pages, breaking a platform-wide feature. aging.html has it (line 762).
-
-**Q4. targets.html — carries mode does not re-sort players by carries**
-When toggling from Targets to Carries, players remain sorted by `targets + carries` combined. RBs (who dominate carries) are buried below WRs. The active mode should sort by the relevant metric.
-
-**Q5. aging.html:554 — player name truncation too aggressive**
-Top player labels truncate at 12 chars ("Jonathan Tay."). For fantasy players who know these names, this is unhelpful. Use last name only for cleaner labels.
+4. **explorer.html: XSS via unescaped `p.x` and `p.y` in tooltip** — Lines 562-563 render API values directly via innerHTML without escaping. **Fix**: Wrap with `escapeHtml(String(p.x))` and `escapeHtml(String(p.y))`.
 
 ### MEDIUM
 
-**Q6. No resp.ok check in aging.html fetch either** — same pattern as Q2.
+5. **airyards.html: Missing QB position badge CSS** — WR/RB/TE badge colors defined but not QB. **Fix**: Add `.air-pos-badge.qb { background: var(--pos-qb); }`.
 
-**Q7. Position/mode tabs lack aria-labels** — all three pages have filter buttons without `aria-label` attributes for screen readers.
+6. **explorer.html: Event listener accumulation (memory leak)** — Every `drawChart()` call adds new event listeners without removing previous ones. **Fix**: Remove old listeners before adding new, or add once with closure.
 
-**Q8. aging.html "peak season" label misleading** — summary cards say "peak season" but show peak age.
+7. **matchups.html: 1px border on legend swatches violates design guide** — Design guide: "NO thin 1px borders." **Fix**: Change to `2px solid var(--ink)`.
 
-**Q9. weekly.html heat legend shows no numeric thresholds** — user cannot tell what score counts as "hot" vs "cold."
+8. **airyards.html, matchups.html: Season selector only populates once** — If first API call fails, selector stays empty. **Fix**: Always repopulate or handle error case.
 
-**Q10. targets.html small bar segments lack visible labels** — segments <8% width have no text, rely on slow browser title tooltip.
-
-**Q11. server.py — no try/except on 3 new endpoints** — aging-curves, weekly-heatmap, target-distribution endpoints have no error handling. Database errors return raw 500 tracebacks.
-
-**Q12. live_data.py — fetch_aging_curves uses hardcoded position list** — uses `("QB", "RB", "WR", "TE")` instead of the `FANTASY_POSITIONS` constant.
+9. **yoy.html, airyards.html, explorer.html: PNG export missing watermark** — Unlike matchups/usage, these 3 pages export without "razzle.lol" branding. **Fix**: Add canvas watermark after html2canvas capture.
 
 ### LOW
 
-**Q13. Inconsistent loading messages** — "studying the tape..." vs "studying the film..." are near-identical.
-
-**Q14. weekly.html cell hover scale(1.1) feels odd** — numbers shouldn't grow on hover in a data table.
-
-**Q15. targets.html "car" abbreviation** — "rush" or "att" more standard than "car" in fantasy.
-
-**Q16. Random dot jitter in aging curves** — non-deterministic rendering across page loads.
+10. **explorer.html: Tooltip shows raw unformatted values** — Should format with `toFixed(1)`.
+11. **explorer.html: Click-while-not-hovering results in silent no-op** — `hoveredPlayer` may be null between hover and click.
+12. **server.py: No validation of x_stat/y_stat at server layer** — Live_data.py validates, but defense-in-depth gap. Add allowlist in server.py.
 
 ---
 
 ## UX FINDINGS
 
+### CRITICAL
+
+1. **airyards.html: "Reg" column header is unreadable** — The primary insight (regression delta) labeled "Reg" with no tooltip. Users cannot determine what this number means.
+
 ### HIGH
 
-**U1. Nav overflow at 14 links** — the topnav now has 14 items. On screens under 1400px this will wrap or overflow. Needs a responsive strategy (e.g., hamburger menu or grouped dropdown).
+2. **airyards.html: Multiple unexplained abbreviations** — "WOPR", "RACR", "aDOT", "AY%", "Reg" — no tooltips anywhere. Advanced analytics page is inaccessible without prior knowledge.
 
-**U2. Weekly heatmap has no sorting** — users cannot sort by consistency, ceiling, or floor. For a dynasty player evaluating floor vs ceiling, this is a major gap.
+3. **explorer.html: Clicking dot navigates away without warning** — Cursor is `crosshair` not `pointer`, and clicking accidentally leaves the page. Users lose axis selection.
+
+4. **usage.html: "Usage" nav vs "Snap Count Trends" H1 naming mismatch** — Sets wrong expectations.
 
 ### MEDIUM
 
-**U3. Default "All Teams" view on targets page** — 32 team cards in a vertical scroll with no ranking or hierarchy. Overwhelming for new visitors.
-
-**U4. Weekly heatmap has no games played column** — no context for how many weeks a player missed.
-
-**U5. Aging curves — no explanation that curve = all-time while dots = selected season** — only the legend explains this, easy to miss.
-
-**U6. No cross-linking between related dashboards** — aging, weekly, and targets are complementary tools but don't link to each other.
-
-**U7. No error recovery on failed loads** — all three pages show a single error line with no retry button.
+5. **Navigation: "YoY" is jargon** — Many users won't recognize the abbreviation.
+6. **explorer.html: No player labels on outlier dots** — Must hover every dot to identify players.
+7. **usage.html: "Delta" column doesn't specify window context** — Should include window size.
+8. **yoy.html: Mobile hides too many columns** — Delta lacks context without previous season value.
+9. **airyards.html: No explanation for missing QB tab** — Users may think it's a bug.
+10. **matchups.html: Click behavior in ALL mode is disorienting** — Silently switches position view.
+11. **explorer.html: X/Y dropdowns start empty** — No placeholder or default options before API loads.
 
 ### LOW
 
-**U8. Aging curves — no "sell window" annotation after peak** — dynasty players think in these terms.
-
-**U9. Footer link list is 13+ items** — becoming unwieldy on narrow viewports.
-
-**U10. Team dropdown shows abbreviations only** — full team names would be more scannable.
+12. **matchups.html: "Total" column header is vague** — Should be "Avg PPG Allowed".
+13. **matchups.html: "cake"/"avoid" annotations undocumented** — Slang without legend.
+14. **explorer.html: No correlation coefficient shown** — Trendline without R-squared.
+15. **usage.html: Empty annotation column header** — `<th>` with no text.
+16. **Cross-page: Watermark CSS implementation varies** — Different approaches (class vs inline).
 
 ---
 
@@ -87,6 +78,8 @@ Top player labels truncate at 12 chars ("Jonathan Tay."). For fantasy players wh
 
 | Severity | QA | UX | Total |
 |----------|----|----|-------|
-| HIGH     | 5  | 2  | 7     |
-| MEDIUM   | 7  | 5  | 12    |
-| LOW      | 4  | 3  | 7     |
+| CRITICAL | 1  | 1  | 2     |
+| HIGH     | 3  | 3  | 6     |
+| MEDIUM   | 5  | 7  | 12    |
+| LOW      | 3  | 5  | 8     |
+| **Total**| **12** | **16** | **28** |
