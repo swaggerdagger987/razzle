@@ -1,9 +1,10 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 9 (Lab Sidebar Intelligence)
-- Stage: BUILD
-- Next: Task 1
+- Phase: 9 (Lab Sidebar Intelligence) — COMPLETE
+- All 5 tasks PASS
+- Stage: PHASE GATE
+- Next: Phase 10 (multiple of 5 → QA+UX audit) or consume ticket
 
 ## Phase 9: Lab Sidebar Intelligence — search, memory, category UX
 **Exit Criterion**: The Lab sidebar supports instant text search filtering, remembers the user's last panel across sessions, shows recently viewed panels for quick access, and allows category sections to collapse individually. A power user with 62 panels can find any tool in under 3 seconds.
@@ -49,8 +50,9 @@
 **Accept when**: Badge shows correct count. All 3 new features (search, recent, category collapse) work together smoothly. No layout jumps when typing in search. No visual regressions.
 **Depends on**: Tasks 1, 3, 4
 **Size**: S
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Dynamic "62 tools" badge inline with search input via flex layout. Badge hidden in collapsed sidebar. All features verified: search filters items + overrides category collapse, recent chips update on panel switch, category collapse persists. No layout shifts.
 
 ---
 

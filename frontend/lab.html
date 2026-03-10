@@ -112,9 +112,13 @@
     z-index: 2;
     background: var(--bg-card);
     border-bottom: 1px dashed var(--ink-faint);
+    display: flex;
+    align-items: center;
+    gap: 6px;
   }
   .sidebar-search {
-    width: 100%;
+    flex: 1;
+    min-width: 0;
     box-sizing: border-box;
     padding: 6px 10px 6px 28px;
     font-family: var(--font-mono);
@@ -146,6 +150,7 @@
     border-bottom: none;
   }
   .lab-sidebar.collapsed .sidebar-search {
+    flex: none;
     width: 40px;
     padding: 6px 4px;
     text-indent: -9999px;
@@ -205,6 +210,22 @@
   }
   .lab-sidebar.collapsed .sidebar-recent {
     display: none !important;
+  }
+
+  /* ===== TOOL COUNT BADGE ===== */
+  .sidebar-tool-count {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: var(--ink-light);
+    background: var(--bg-warm);
+    padding: 1px 6px;
+    border-radius: 8px;
+    border: 1px solid var(--ink-faint);
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .lab-sidebar.collapsed .sidebar-tool-count {
+    display: none;
   }
 
   .lab-sidebar-category {
@@ -2237,6 +2258,7 @@
 
     <div class="sidebar-search-wrap">
       <input type="text" class="sidebar-search" id="sidebarSearch" placeholder="Search tools..." autocomplete="off" spellcheck="false">
+      <span class="sidebar-tool-count" id="sidebarToolCount"></span>
     </div>
 
     <div class="sidebar-recent" id="sidebarRecent">
@@ -3362,6 +3384,14 @@
 
   // Initial render of recent panels
   _renderRecentPanels();
+
+  // Set tool count badge
+  (function() {
+    var badge = document.getElementById('sidebarToolCount');
+    if (!badge) return;
+    var count = document.querySelectorAll('.lab-sidebar-item').length;
+    badge.textContent = count + ' tools';
+  })();
 
   // ─── Category collapse/expand ─────────────────────────────────
   (function() {
