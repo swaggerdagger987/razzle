@@ -1,6 +1,19 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 128 — Weekly MVP Grid (COMPLETE)
+## Current Phase: Phase 129 — Stack Correlation Finder (COMPLETE)
+
+**Exit criterion MET:** /stacks.html shows QB-WR/TE stacking correlations. Computes Pearson correlation between QB weekly scores and their same-team pass catchers. Ranked by correlation strength with color-coded badges (high/mid/low/negative), correlation bar visualization, combined PPG, common games count. Season selector, PNG export with watermark. GET /api/stacks returns correlation data. 11 escapeHtml calls, 55/55 braces balanced. "Stacks" nav link on all 61 pages. Sitemap + tools hub entry under Player Discovery.
+
+### Phase 129 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/stacks endpoint | DONE | fetch_stacks, Pearson correlation |
+| 2 | Stack Finder page | DONE | Corr badges, bar viz, combo PPG, 11 escapeHtml |
+| 3 | Nav links + sitemap + tools hub | DONE | All 61 pages updated |
+| 4 | Smoke test | DONE | Python OK, JS OK, 61/61 nav links |
+
+## Previous Phase: Phase 128 — Weekly MVP Grid (COMPLETE)
 
 **Exit criterion MET:** /weeklymvp.html shows the #1 PPR scorer at each position (QB/RB/WR/TE) for every week of the season. Grid layout with week rows and position columns. Each cell shows player name, team, and score with position-colored badge. Season selector, PNG export with watermark. GET /api/weekly-mvp returns weekly MVP data. 8 escapeHtml calls, 51/51 braces balanced. "Weekly MVP" nav link on all 60 pages. Sitemap + tools hub entry under Matchup & Schedule.
 

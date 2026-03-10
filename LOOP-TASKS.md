@@ -1,8 +1,8 @@
-# Razzle Loop — Phase 128 Task List
+# Razzle Loop — Phase 129 Task List
 
-> Weekly MVP Grid
+> Stack Correlation Finder
 
-**Current Phase**: 128 — Weekly MVP Grid
+**Current Phase**: 129 — Stack Correlation Finder
 **Exit Criterion**: COMPLETE
 
 ---
@@ -15,7 +15,7 @@
 
 ## Loop State
 ```
-Current Phase: 128
+Current Phase: 129
 Current Task: 1
 Current Stage: COMPLETE
 Attempt: 1

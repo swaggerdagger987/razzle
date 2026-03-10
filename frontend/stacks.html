@@ -3,82 +3,163 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Record Book — Razzle</title>
-<meta property="og:title" content="Record Book — Razzle">
-<meta property="og:description" content="All-time fantasy football records — single-game, single-season, and career leaders since 2020 on razzle.lol">
+<title>Stack Correlation Finder — Razzle</title>
+<meta property="og:title" content="Stack Correlation Finder — Razzle">
+<meta property="og:description" content="Find the best QB-WR/TE stacking pairs by scoring correlation on razzle.lol">
 <meta property="og:site_name" content="razzle.lol">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Record Book — Razzle">
-<meta name="twitter:description" content="All-time fantasy football records — single-game, single-season, and career leaders since 2020 on razzle.lol">
+<meta name="twitter:title" content="Stack Correlation Finder — Razzle">
+<meta name="twitter:description" content="Find the best QB-WR/TE stacking pairs by scoring correlation on razzle.lol">
 <meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
-<meta name="description" content="Fantasy football record book — highest single-game scores, best season totals, career PPG leaders, and most career points since 2020 on razzle.lol">
+<meta name="description" content="Stack correlation finder — which QB and WR/TE pairs score together most consistently on razzle.lol">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="styles.css">
 <style>
-  .rb-page { max-width: 1100px; margin: 0 auto; padding: 24px 20px 60px; }
-  .rb-header { text-align: center; margin-bottom: 24px; }
-  .rb-header h1 { font-family: var(--font-display); font-size: 32px; color: var(--ink); margin: 0 0 4px; }
-  .rb-header .rb-subtitle { font-family: var(--font-hand); font-size: 20px; color: var(--ink-light); }
-
-  .rb-controls { display: flex; justify-content: center; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
-  .rb-controls .pos-tabs { display: flex; gap: 4px; }
-  .rb-controls .pos-tab {
-    font-family: var(--font-mono); font-size: 12px; padding: 5px 12px;
-    border: 2px solid var(--ink); border-radius: 4px; background: var(--card);
-    cursor: pointer; font-weight: 700;
+  .sk-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
   }
-  .rb-controls .pos-tab.active { background: var(--ink); color: var(--sand); }
-  .rb-export {
-    font-family: var(--font-mono); font-size: 12px; padding: 5px 14px;
-    border: 2px solid var(--ink); border-radius: 4px; background: var(--card);
-    cursor: pointer; font-weight: 700;
+  .sk-header {
+    text-align: center;
+    margin-bottom: 24px;
   }
-  .rb-export:hover { background: var(--ink); color: var(--sand); }
-
-  .rb-loading { text-align: center; font-family: var(--font-hand); font-size: 18px; color: var(--ink-light); padding: 60px 0; }
-
-  .rb-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-  @media (max-width: 768px) { .rb-grid { grid-template-columns: 1fr; } }
-
-  .rb-section {
-    background: var(--card); border: 3px solid var(--ink); border-radius: 10px;
-    box-shadow: 4px 4px 0 var(--ink); overflow: hidden;
+  .sk-header h1 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: var(--ink);
+    margin: 0 0 4px;
   }
-  .rb-section-header {
-    font-family: var(--font-display); font-size: 16px; padding: 10px 14px;
-    background: var(--ink); color: var(--sand);
+  .sk-header .sk-subtitle {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
   }
-
-  .rb-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 12px; }
-  .rb-table th {
-    background: var(--sand); padding: 6px 8px; text-align: right;
-    font-size: 10px; font-weight: 700; border-bottom: 2px solid var(--ink-faint);
+  .sk-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
   }
-  .rb-table th:first-child { text-align: center; width: 30px; }
-  .rb-table th:nth-child(2) { text-align: left; }
-  .rb-table td { padding: 6px 8px; text-align: right; border-bottom: 1px solid var(--ink-faint); }
-  .rb-table td:first-child { text-align: center; font-weight: 700; }
-  .rb-table td:nth-child(2) { text-align: left; }
-  .rb-table tbody tr:hover { background: rgba(217,119,87,0.08); }
-
-  .rb-rank { font-family: var(--font-display); font-size: 14px; }
-  .rb-rank.gold { color: #b8860b; }
-  .rb-rank.silver { color: #808080; }
-  .rb-rank.bronze { color: #cd7f32; }
-
-  .rb-pos-chip {
-    font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 3px;
-    color: #fff; margin-left: 4px;
+  .sk-controls select {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    padding: 6px 10px;
+    border: 2px solid var(--ink);
+    border-radius: 4px;
+    background: var(--card);
   }
-  .rb-season-badge {
-    font-size: 10px; padding: 1px 5px; border-radius: 3px;
-    background: var(--sand); border: 1px solid var(--ink-faint);
+  .sk-export {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 5px 14px;
+    border: 2px solid var(--ink);
+    border-radius: 4px;
+    background: var(--card);
+    cursor: pointer;
+    font-weight: 700;
   }
-  .rb-fpts { font-weight: 700; }
+  .sk-export:hover { background: var(--ink); color: var(--sand); }
+  .sk-loading {
+    text-align: center;
+    font-family: var(--font-hand);
+    font-size: 18px;
+    color: var(--ink-light);
+    padding: 60px 0;
+  }
+  .sk-card {
+    background: var(--card);
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    box-shadow: 4px 4px 0 var(--ink);
+    overflow: hidden;
+  }
+  .sk-card-header {
+    font-family: var(--font-display);
+    font-size: 18px;
+    padding: 10px 16px;
+    background: var(--ink);
+    color: var(--sand);
+  }
+  .sk-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+  .sk-table th {
+    background: var(--sand);
+    padding: 6px 8px;
+    text-align: right;
+    font-size: 10px;
+    font-weight: 700;
+    border-bottom: 2px solid var(--ink-faint);
+    white-space: nowrap;
+  }
+  .sk-table th:first-child, .sk-table th:nth-child(2), .sk-table th:nth-child(3), .sk-table th:nth-child(4) { text-align: left; }
+  .sk-table td {
+    padding: 6px 8px;
+    text-align: right;
+    border-bottom: 1px solid var(--ink-faint);
+  }
+  .sk-table td:first-child, .sk-table td:nth-child(2), .sk-table td:nth-child(3), .sk-table td:nth-child(4) { text-align: left; }
+  .sk-table tbody tr:hover { background: rgba(217,119,87,0.08); }
+  .sk-rank {
+    font-weight: 700;
+    color: var(--ink-light);
+    font-size: 11px;
+  }
+  .sk-team-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 3px;
+    background: var(--ink);
+    color: var(--sand);
+  }
+  .sk-pos-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: #fff;
+  }
+  .sk-corr-badge {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid;
+  }
+  .sk-corr-high { background: #dcfce7; color: #166534; border-color: #166534; }
+  .sk-corr-mid { background: #dbeafe; color: #1e40af; border-color: #1e40af; }
+  .sk-corr-low { background: #fef9c3; color: #854d0e; border-color: #854d0e; }
+  .sk-corr-neg { background: #fef2f2; color: #991b1b; border-color: #991b1b; }
+  .sk-corr-bar {
+    display: inline-block;
+    height: 8px;
+    border-radius: 4px;
+    background: #2ec4b6;
+    vertical-align: middle;
+    margin-left: 4px;
+  }
+  .sk-empty {
+    text-align: center;
+    font-family: var(--font-hand);
+    font-size: 15px;
+    color: var(--ink-light);
+    padding: 30px 16px;
+  }
+  @media (max-width: 768px) {
+    .sk-table { font-size: 11px; }
+  }
 </style>
 </head>
 <body>
@@ -137,32 +218,32 @@
     <li><a href="/streaks.html">Streaks</a></li>
     <li><a href="/recap.html">Recap</a></li>
     <li><a href="/comptable.html">Compare Table</a></li>
-    <li><a href="/records.html" class="active">Records</a></li>
+    <li><a href="/records.html">Records</a></li>
+    <li><a href="/waivers.html">Waivers</a></li>
+    <li><a href="/playoffs.html">Playoffs</a></li>
+    <li><a href="/fptsbreakdown.html">FPTS Breakdown</a></li>
+    <li><a href="/handcuffs.html">Handcuffs</a></li>
+    <li><a href="/weeklymvp.html">Weekly MVP</a></li>
+    <li><a href="/stacks.html" class="active">Stacks</a></li>
     <li><a href="/team/KC">Teams</a></li>
     <li><a href="/league-intel.html">League Intel</a></li>
     <li><a href="/agents.html">War Room</a></li>
   </ul>
 </nav>
 
-<main class="rb-page" id="rbRoot">
-  <div class="rb-header">
-    <h1>Record Book</h1>
-    <div class="rb-subtitle">the all-time fantasy greats (2020-present)</div>
+<main class="sk-page" id="skRoot">
+  <div class="sk-header">
+    <h1>Stack Correlation Finder</h1>
+    <div class="sk-subtitle">which QB + WR/TE pairs boom together</div>
   </div>
 
-  <div class="rb-controls">
-    <div class="pos-tabs">
-      <button class="pos-tab active" data-pos="">ALL</button>
-      <button class="pos-tab" data-pos="QB">QB</button>
-      <button class="pos-tab" data-pos="RB">RB</button>
-      <button class="pos-tab" data-pos="WR">WR</button>
-      <button class="pos-tab" data-pos="TE">TE</button>
-    </div>
-    <button class="rb-export" id="rbExport">Export PNG</button>
+  <div class="sk-controls">
+    <select id="skSeason" aria-label="Season"></select>
+    <button class="sk-export" id="skExport">Export PNG</button>
   </div>
 
-  <div id="rbContent">
-    <div class="rb-loading">pulling film...</div>
+  <div id="skContent">
+    <div class="sk-loading">pulling film...</div>
   </div>
 </main>
 
@@ -296,109 +377,112 @@
     return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
+  function fmt(v, dec) {
+    if (v === null || v === undefined) return '-';
+    return Number(v).toFixed(dec === undefined ? 1 : dec);
+  }
+
   var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
-  var currentPosition = '';
 
-  function posChip(pos) {
-    var c = POS_COLORS[pos] || '#888';
-    return '<span class="rb-pos-chip" style="background:' + c + '">' + escapeHtml(pos) + '</span>';
+  /* ---- URL state ---- */
+  function readURL() {
+    var p = new URLSearchParams(window.location.search);
+    return { season: p.get('season') || '' };
+  }
+  function writeURL(season) {
+    var p = new URLSearchParams();
+    if (season) p.set('season', season);
+    var qs = p.toString();
+    history.replaceState(null, '', qs ? '?' + qs : location.pathname);
   }
 
-  function rankClass(i) {
-    if (i === 0) return 'gold';
-    if (i === 1) return 'silver';
-    if (i === 2) return 'bronze';
-    return '';
+  function corrClass(c) {
+    if (c >= 0.6) return 'sk-corr-high';
+    if (c >= 0.3) return 'sk-corr-mid';
+    if (c >= 0) return 'sk-corr-low';
+    return 'sk-corr-neg';
   }
 
+  /* ---- Fetch ---- */
   function load() {
-    var url = '/api/records?';
-    if (currentPosition) url += 'position=' + encodeURIComponent(currentPosition);
+    var selSeason = document.getElementById('skSeason');
+    var season = selSeason.value || '';
+    writeURL(season);
 
-    document.getElementById('rbContent').innerHTML = '<div class="rb-loading">pulling film...</div>';
+    var url = '/api/stacks';
+    if (season) url += '?season=' + encodeURIComponent(season);
+
+    document.getElementById('skContent').innerHTML = '<div class="sk-loading">pulling film...</div>';
 
     fetch(url).then(function(r) {
       if (!r.ok) throw new Error('API error');
       return r.json();
     }).then(function(data) {
+      populateSeasons(data.season);
       render(data);
     }).catch(function() {
-      document.getElementById('rbContent').innerHTML = '<div class="rb-loading">something went wrong — try again</div>';
+      document.getElementById('skContent').innerHTML = '<div class="sk-loading">something went wrong — try again</div>';
     });
   }
 
+  function populateSeasons(current) {
+    var sel = document.getElementById('skSeason');
+    if (sel.options.length <= 1) {
+      sel.innerHTML = '';
+      for (var y = 2024; y >= 2020; y--) {
+        var opt = document.createElement('option');
+        opt.value = y;
+        opt.textContent = y;
+        if (y === current) opt.selected = true;
+        sel.appendChild(opt);
+      }
+    }
+  }
+
+  /* ---- Render ---- */
   function render(data) {
-    var html = '<div class="rb-grid">';
+    var stacks = data.stacks || [];
 
-    // Single-game records
-    html += '<div class="rb-section">';
-    html += '<div class="rb-section-header">Single-Game Records</div>';
-    html += '<table class="rb-table"><thead><tr><th>#</th><th>Player</th><th>Szn</th><th>Wk</th><th>PPR</th></tr></thead><tbody>';
-    (data.single_game || []).forEach(function(p, i) {
-      html += '<tr><td><span class="rb-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
-      html += '<td>' + escapeHtml(p.name) + posChip(p.position) + '</td>';
-      html += '<td><span class="rb-season-badge">' + escapeHtml(String(p.season)) + '</span></td>';
-      html += '<td>' + escapeHtml(String(p.week)) + '</td>';
-      html += '<td class="rb-fpts">' + escapeHtml(String(p.fpts)) + '</td></tr>';
-    });
+    if (!stacks.length) {
+      document.getElementById('skContent').innerHTML = '<div class="sk-card"><div class="sk-card-header">Stack Finder</div><div class="sk-empty">no correlation data found</div></div>';
+      return;
+    }
+
+    var html = '<div class="sk-card">';
+    html += '<div class="sk-card-header">Best QB + WR/TE Stacks (' + escapeHtml(String(data.count)) + ' pairs)</div>';
+    html += '<table class="sk-table"><thead><tr>';
+    html += '<th>#</th><th>Team</th><th>QB</th><th>Receiver</th><th>Pos</th><th>Corr</th><th></th><th>QB PPG</th><th>Rec PPG</th><th>Combo PPG</th><th>Games</th>';
+    html += '</tr></thead><tbody>';
+
+    for (var i = 0; i < stacks.length; i++) {
+      var s = stacks[i];
+      var posColor = POS_COLORS[s.receiver_pos] || '#888';
+      var barWidth = Math.max(0, Math.min(100, Math.round(s.correlation * 100)));
+
+      html += '<tr>';
+      html += '<td class="sk-rank">' + (i + 1) + '</td>';
+      html += '<td><span class="sk-team-badge">' + escapeHtml(s.team) + '</span></td>';
+      html += '<td style="font-weight:700">' + escapeHtml(s.qb_name) + '</td>';
+      html += '<td style="font-weight:700">' + escapeHtml(s.receiver_name) + '</td>';
+      html += '<td><span class="sk-pos-badge" style="background:' + posColor + '">' + escapeHtml(s.receiver_pos) + '</span></td>';
+      html += '<td><span class="sk-corr-badge ' + corrClass(s.correlation) + '">' + escapeHtml(String(fmt(s.correlation, 3))) + '</span></td>';
+      html += '<td><div class="sk-corr-bar" style="width:' + barWidth + 'px"></div></td>';
+      html += '<td>' + escapeHtml(String(fmt(s.qb_ppg))) + '</td>';
+      html += '<td>' + escapeHtml(String(fmt(s.receiver_ppg))) + '</td>';
+      html += '<td style="font-weight:700">' + escapeHtml(String(fmt(s.combined_ppg))) + '</td>';
+      html += '<td>' + escapeHtml(String(s.common_games)) + '</td>';
+      html += '</tr>';
+    }
+
     html += '</tbody></table></div>';
-
-    // Single-season records
-    html += '<div class="rb-section">';
-    html += '<div class="rb-section-header">Single-Season Records</div>';
-    html += '<table class="rb-table"><thead><tr><th>#</th><th>Player</th><th>Szn</th><th>G</th><th>Total</th><th>PPG</th></tr></thead><tbody>';
-    (data.single_season || []).forEach(function(p, i) {
-      html += '<tr><td><span class="rb-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
-      html += '<td>' + escapeHtml(p.name) + posChip(p.position) + '</td>';
-      html += '<td><span class="rb-season-badge">' + escapeHtml(String(p.season)) + '</span></td>';
-      html += '<td>' + escapeHtml(String(p.games)) + '</td>';
-      html += '<td class="rb-fpts">' + escapeHtml(String(p.total_fpts)) + '</td>';
-      html += '<td>' + escapeHtml(String(p.ppg)) + '</td></tr>';
-    });
-    html += '</tbody></table></div>';
-
-    // Career PPG leaders
-    html += '<div class="rb-section">';
-    html += '<div class="rb-section-header">Career PPG Leaders</div>';
-    html += '<table class="rb-table"><thead><tr><th>#</th><th>Player</th><th>G</th><th>PPG</th><th>Total</th></tr></thead><tbody>';
-    (data.career_ppg || []).forEach(function(p, i) {
-      html += '<tr><td><span class="rb-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
-      html += '<td>' + escapeHtml(p.name) + posChip(p.position) + '</td>';
-      html += '<td>' + escapeHtml(String(p.games)) + '</td>';
-      html += '<td class="rb-fpts">' + escapeHtml(String(p.ppg)) + '</td>';
-      html += '<td>' + escapeHtml(String(p.total_fpts)) + '</td></tr>';
-    });
-    html += '</tbody></table></div>';
-
-    // Career total points
-    html += '<div class="rb-section">';
-    html += '<div class="rb-section-header">Most Career Points</div>';
-    html += '<table class="rb-table"><thead><tr><th>#</th><th>Player</th><th>G</th><th>Total</th><th>PPG</th></tr></thead><tbody>';
-    (data.career_total || []).forEach(function(p, i) {
-      html += '<tr><td><span class="rb-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
-      html += '<td>' + escapeHtml(p.name) + posChip(p.position) + '</td>';
-      html += '<td>' + escapeHtml(String(p.games)) + '</td>';
-      html += '<td class="rb-fpts">' + escapeHtml(String(p.total_fpts)) + '</td>';
-      html += '<td>' + escapeHtml(String(p.ppg)) + '</td></tr>';
-    });
-    html += '</tbody></table></div>';
-
-    html += '</div>';
-    document.getElementById('rbContent').innerHTML = html;
+    document.getElementById('skContent').innerHTML = html;
   }
 
-  /* ---- Position tabs ---- */
-  document.querySelectorAll('.pos-tab').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      document.querySelectorAll('.pos-tab').forEach(function(b) { b.classList.remove('active'); });
-      btn.classList.add('active');
-      currentPosition = btn.getAttribute('data-pos') || '';
-      load();
-    });
-  });
+  document.getElementById('skSeason').addEventListener('change', load);
 
-  document.getElementById('rbExport').addEventListener('click', function() {
-    var root = document.getElementById('rbRoot');
+  /* ---- PNG export ---- */
+  document.getElementById('skExport').addEventListener('click', function() {
+    var root = document.getElementById('skRoot');
     if (typeof html2canvas === 'undefined') return;
     html2canvas(root, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
       var ctx = canvas.getContext('2d');
@@ -406,17 +490,29 @@
       ctx.fillStyle = 'rgba(0,0,0,0.12)';
       ctx.fillText('razzle.lol', canvas.width - 130, canvas.height - 16);
       var link = document.createElement('a');
-      link.download = 'razzle-records.png';
+      link.download = 'razzle-stacks.png';
       link.href = canvas.toDataURL();
       link.click();
     });
   });
 
+  /* ---- Analytics ---- */
   fetch('/api/analytics/pageview', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ page: '/records.html', referrer: document.referrer || '' })
+    body: JSON.stringify({ page: '/stacks.html', referrer: document.referrer || '' })
   }).catch(function() {});
+
+  /* ---- Init from URL ---- */
+  var init = readURL();
+  if (init.season) {
+    var sel = document.getElementById('skSeason');
+    var opt = document.createElement('option');
+    opt.value = init.season;
+    opt.textContent = init.season;
+    opt.selected = true;
+    sel.appendChild(opt);
+  }
 
   load();
 })();

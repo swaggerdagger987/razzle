@@ -11399,3 +11399,114 @@ def fetch_weekly_mvp(season=None):
         }
     finally:
         conn.close()
+
+
+def fetch_stacks(season=None, limit=30):
+    """
+    Stack correlation finder — QB + WR/TE same-team scoring correlations.
+    Computes Pearson correlation between QB weekly scores and their pass
+    catchers' weekly scores (same team). Best stacks = highest correlation.
+    """
+    conn = get_db()
+    try:
+        cursor = conn.cursor()
+
+        if not season:
+            cursor.execute("SELECT MAX(season) FROM player_week_stats")
+            season = cursor.fetchone()[0] or 2024
+
+        # Get all weekly scores for QBs and WR/TEs
+        cursor.execute("""
+            SELECT p.player_id, p.full_name, p.position, s.team,
+                   s.week, s.fantasy_points_ppr
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE s.season = ? AND p.fantasy_relevant = 1
+              AND p.position IN ('QB', 'WR', 'TE')
+              AND s.fantasy_points_ppr IS NOT NULL
+            ORDER BY p.player_id, s.week
+        """, [season])
+
+        from collections import defaultdict
+        player_weeks = defaultdict(dict)
+        player_info = {}
+        for r in cursor.fetchall():
+            pid = r[0]
+            player_weeks[pid][r[4]] = r[5] or 0
+            if pid not in player_info:
+                player_info[pid] = {
+                    "player_id": pid,
+                    "name": r[1] or "Unknown",
+                    "position": r[2] or "WR",
+                    "team": r[3] or "FA",
+                }
+
+        # Group by team
+        team_qbs = defaultdict(list)
+        team_receivers = defaultdict(list)
+        for pid, info in player_info.items():
+            if info["position"] == "QB":
+                team_qbs[info["team"]].append(pid)
+            elif info["position"] in ("WR", "TE"):
+                team_receivers[info["team"]].append(pid)
+
+        import math
+        stacks = []
+        for team in team_qbs:
+            if team not in team_receivers:
+                continue
+            for qb_id in team_qbs[team]:
+                qb_info = player_info[qb_id]
+                qb_weeks = player_weeks[qb_id]
+                if len(qb_weeks) < 5:
+                    continue
+
+                qb_ppg = sum(qb_weeks.values()) / len(qb_weeks)
+
+                for rec_id in team_receivers[team]:
+                    rec_info = player_info[rec_id]
+                    rec_weeks = player_weeks[rec_id]
+
+                    # Find common weeks
+                    common = sorted(set(qb_weeks.keys()) & set(rec_weeks.keys()))
+                    if len(common) < 5:
+                        continue
+
+                    qb_scores = [qb_weeks[w] for w in common]
+                    rec_scores = [rec_weeks[w] for w in common]
+
+                    # Pearson correlation
+                    n = len(common)
+                    mean_q = sum(qb_scores) / n
+                    mean_r = sum(rec_scores) / n
+                    num = sum((qb_scores[i] - mean_q) * (rec_scores[i] - mean_r) for i in range(n))
+                    den_q = math.sqrt(sum((qb_scores[i] - mean_q) ** 2 for i in range(n)))
+                    den_r = math.sqrt(sum((rec_scores[i] - mean_r) ** 2 for i in range(n)))
+                    corr = num / (den_q * den_r) if den_q > 0 and den_r > 0 else 0
+
+                    rec_ppg = sum(rec_scores) / n
+
+                    stacks.append({
+                        "team": team,
+                        "qb_name": qb_info["name"],
+                        "qb_id": qb_id,
+                        "qb_ppg": round(qb_ppg, 1),
+                        "receiver_name": rec_info["name"],
+                        "receiver_id": rec_id,
+                        "receiver_pos": rec_info["position"],
+                        "receiver_ppg": round(rec_ppg, 1),
+                        "correlation": round(corr, 3),
+                        "common_games": n,
+                        "combined_ppg": round(qb_ppg + rec_ppg, 1),
+                    })
+
+        stacks.sort(key=lambda x: x["correlation"], reverse=True)
+        stacks = stacks[:limit]
+
+        return {
+            "stacks": stacks,
+            "season": season,
+            "count": len(stacks),
+        }
+    finally:
+        conn.close()

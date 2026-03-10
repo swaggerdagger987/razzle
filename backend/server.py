@@ -936,6 +936,7 @@ def sitemap_xml():
         ("/fptsbreakdown.html", "0.8", "weekly"),
         ("/handcuffs.html", "0.8", "weekly"),
         ("/weeklymvp.html", "0.8", "weekly"),
+        ("/stacks.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1588,6 +1589,15 @@ def records(position: str = ""):
         return JSONResponse({"error": "Failed to fetch records"}, status_code=500)
 
 
+@app.get("/api/stacks")
+def stacks(season: int = None):
+    try:
+        return live_data.fetch_stacks(season=season)
+    except Exception as e:
+        logger.error(f"stacks error: {e}")
+        return JSONResponse({"error": "Failed to fetch stack correlations"}, status_code=500)
+
+
 @app.get("/api/weekly-mvp")
 def weekly_mvp(season: int = None):
     try:
@@ -1676,6 +1686,7 @@ def tools_hub():
                 {"name": "Hot & Cold Streaks", "desc": "Who's on fire or ice cold over their last few games vs season average", "url": "/streaks.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Waiver Wire", "desc": "High recent PPG, low season PPG — likely unrostered and surging", "url": "/waivers.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Handcuff Rankings", "desc": "Most valuable backup RBs by team rushing volume and efficiency", "url": "/handcuffs.html", "positions": ["RB"]},
+                {"name": "Stack Finder", "desc": "QB-WR/TE scoring correlations — find the best same-team stacks", "url": "/stacks.html", "positions": ["QB", "WR", "TE"]},
             ],
         },
         {
