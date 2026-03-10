@@ -106,6 +106,17 @@
   .lab-sidebar-item.sidebar-nfl-only:hover {
     opacity: 0.7;
   }
+  .lab-sidebar-item:focus {
+    outline: 2px solid var(--orange);
+    outline-offset: -2px;
+  }
+  .lab-sidebar-item:focus:not(:focus-visible) {
+    outline: none;
+  }
+  .lab-sidebar-item:focus-visible {
+    outline: 2px solid var(--orange);
+    outline-offset: -2px;
+  }
 
   .lab-sidebar-toggle {
     position: sticky;
@@ -1997,7 +2008,7 @@
 </nav>
 
 <!-- SIDEBAR -->
-<aside class="lab-sidebar" id="labSidebar">
+<aside class="lab-sidebar" id="labSidebar" role="navigation" aria-label="Lab panels">
   <div class="lab-sidebar-inner">
 
     <div class="lab-sidebar-category">Screener</div>
@@ -2938,6 +2949,63 @@
   if (localStorage.getItem('razzle_sidebar_collapsed') === '1') {
     document.getElementById('labSidebar').classList.add('collapsed');
   }
+
+  // ─── Sidebar keyboard navigation ─────────────────────────────
+  (function() {
+    var sidebar = document.getElementById('labSidebar');
+    if (!sidebar) return;
+
+    // Add tabindex to all sidebar items
+    sidebar.querySelectorAll('.lab-sidebar-item').forEach(function(item) {
+      item.setAttribute('tabindex', '0');
+      item.setAttribute('role', 'link');
+    });
+
+    // Add aria-label to category headers
+    sidebar.querySelectorAll('.lab-sidebar-category').forEach(function(cat) {
+      cat.setAttribute('role', 'heading');
+      cat.setAttribute('aria-level', '3');
+    });
+
+    sidebar.addEventListener('keydown', function(e) {
+      var focused = document.activeElement;
+      if (!focused || !focused.classList.contains('lab-sidebar-item')) return;
+
+      var items = Array.from(sidebar.querySelectorAll('.lab-sidebar-item'));
+      var idx = items.indexOf(focused);
+      if (idx < 0) return;
+
+      switch (e.key) {
+        case 'ArrowDown':
+          e.preventDefault();
+          if (idx < items.length - 1) items[idx + 1].focus();
+          break;
+        case 'ArrowUp':
+          e.preventDefault();
+          if (idx > 0) items[idx - 1].focus();
+          break;
+        case 'Home':
+          e.preventDefault();
+          items[0].focus();
+          break;
+        case 'End':
+          e.preventDefault();
+          items[items.length - 1].focus();
+          break;
+        case 'Enter':
+        case ' ':
+          e.preventDefault();
+          focused.click();
+          break;
+        case 'Escape':
+          // Close mobile sidebar
+          if (window.innerWidth <= 768) {
+            sidebar.classList.add('collapsed');
+          }
+          break;
+      }
+    });
+  })();
 
   // ─── URL state on load ─────────────────────────────────────────
   var params = new URLSearchParams(window.location.search);
