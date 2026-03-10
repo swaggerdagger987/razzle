@@ -1,6 +1,25 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 88 — Opportunity Share & Dominator Rating Dashboard (COMPLETE)
+## Current Phase: Phase 89 — Player Report Card Dashboard (COMPLETE)
+
+**Exit criterion MET:** /reportcard.html page shows player report cards aggregating all Razzle grading systems into a composite "Fantasy GPA." Two sections: "Honor Roll" (highest composite GPA, top performers across all metrics) and "Needs Improvement" (lowest composite GPA among fantasy-relevant starters). Each player row: position badge, headshot, name, team, Fantasy GPA badge (A+ to F, 5-tier color-coded with B+/C+ granularity), Efficiency grade, Consistency grade, SOS grade, Stock Score (0-100), Opp Share %, Dominator Rating, PPG, Age, GP, Caveat annotation. Composite GPA = weighted average of efficiency percentile (20%), consistency percentile (20%), SOS percentile (20%), PPG percentile (20%), opportunity share percentile (20%). Position filter tabs (All/QB/RB/WR/TE). Season selector. Sortable columns with sort state tracking per section. Click player row → player profile. PNG export via html2canvas with watermark. Responsive at 768px + 480px with hide-mobile columns. /api/report-cards endpoint computes per-player efficiency (PPO), consistency (inv CoV), SOS difficulty, PPG, opportunity share, dominator rating, blends into composite GPA percentile → letter grade. Min 6 games + 2 PPG + 50 opps filter. "Report Card" nav link added to all 29 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors.
+
+### Phase 89 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/report-cards endpoint | DONE | Composite GPA, 5-dimensional percentile blend, honor_roll/needs_improvement split |
+| 2 | Report Card dashboard page | DONE | Two-section table, GPA/grade/stock badges, 11 escapeHtml, balanced JS |
+| 3 | Nav links + sitemap + analytics | DONE | All 29 pages updated, sitemap entry, pageview tracking |
+| 4 | Smoke test | DONE | Python + JS syntax clean, 29/29 nav links, XSS escaped, design compliance |
+
+### Decisions Log
+- **Player Report Card as Phase 89**: After building 20+ individual metric dashboards (efficiency, consistency, SOS, stocks, opportunity share, dominator rating, etc.), the natural culmination is a composite view that synthesizes ALL grades into a single "Fantasy GPA." This is the most screenshottable format for r/DynastyFF — "here's the full Razzle report card for [player]." The composite GPA gives a single number that captures the complete picture.
+- **5-dimensional GPA weighting**: Equal 20% for efficiency (PPO), consistency (inv CoV), SOS difficulty, raw production (PPG), and volume (opp share). No single dimension dominates — the GPA rewards well-rounded players who are efficient, consistent, face tough schedules, produce, and get volume.
+- **B+/C+ grade granularity**: Added B+ and C+ tiers to the grading scale for more resolution in the middle of the distribution. A+ remains at 95th percentile, F at below 25th.
+- **Honor Roll / Needs Improvement framing**: School report card metaphor. Honor Roll = top 25 by GPA (the complete packages). Needs Improvement = bottom 25 (underperforming across metrics despite being fantasy-relevant starters). The framing is more actionable than generic "top/bottom."
+
+## Previous Phase: Phase 88 — Opportunity Share & Dominator Rating Dashboard (COMPLETE)
 
 **Exit criterion MET:** /opportunity.html page shows opportunity share analysis with two sections: "Alpha Dogs" (highest opportunity share — targets+carries as % of team total, min 30 opps + 4 games) and "Dominator Rating Leaders" (highest dominator rating — receiving yards share + receiving TD share of team totals for WR/TE, rush yards share for RB/QB). Each player: position badge, headshot, name, team, Opp Share % (color-coded badge: green>=25%, blue>=18%, yellow>=12%, orange>=8%, red<8%), Dominator Rating badge (green>=30, blue>=20, yellow>=12, orange>=6, red<6), Targets/G, Carries/G, Total Opps, PPG, GP, Caveat annotation. Position filter tabs (All/QB/RB/WR/TE). Season selector. Sortable columns with sort state tracking per section. Click player row → player profile. PNG export via html2canvas with watermark. Responsive at 768px + 480px with hide-mobile columns. /api/opportunity-share endpoint computes per-player opportunity share (targets+carries / team total), dominator rating (WR/TE: avg of rec yd share + rec TD share; RB/QB: rush yd share), targets/g, carries/g, PPG. Min 30 opportunities + 4 games filter. "Opportunity" nav link added to all 28 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors.
 
