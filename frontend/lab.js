@@ -416,6 +416,20 @@ const state = {
     if (inp) inp.value = state.minGP;
   }
 
+  // First-visit hint: show a brief toast if user has never visited the Lab
+  var hasVisited = localStorage.getItem("razzle_lab_visited");
+  if (!hasVisited && !window.location.search) {
+    localStorage.setItem("razzle_lab_visited", "1");
+    setTimeout(function() {
+      var toast = document.createElement("div");
+      toast.className = "first-visit-toast";
+      toast.innerHTML = 'showing <strong>PPR</strong> preset \u2014 try other views with the preset buttons above';
+      toast.onclick = function() { toast.remove(); };
+      document.body.appendChild(toast);
+      setTimeout(function() { toast.remove(); }, 6000);
+    }, 800);
+  }
+
   applyUniverseUI();
   renderColumnPicker();
   renderPresets();
@@ -700,6 +714,11 @@ function renderTableBody() {
       const col = getColumnDef(key);
       if (!col) continue;
       let val = player[key];
+      // Show dash for zero stats in prospect/college mode (e.g., NFL career stats for undrafted prospects)
+      if ((state.universe === "prospects" || state.universe === "college") && !col.isText && (val === 0 || val === null || val === undefined)) {
+        html += `<td style="color:var(--ink-faint);">\u2014</td>`;
+        continue;
+      }
       // Show dash for non-applicable stats (e.g., WR passing stats)
       if (state.universe === "nfl" && isNonApplicableStat(pos, key, val)) {
         html += `<td style="color:var(--ink-faint);">—</td>`;

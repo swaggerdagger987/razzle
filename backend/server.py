@@ -15,11 +15,28 @@ import re
 import time as _time
 import uvicorn
 
+from collections import defaultdict
 from . import live_data
 from . import auth as auth_module
 from . import billing as billing_module
 
 logger = logging.getLogger("razzle")
+
+# Simple in-memory rate limiter for auth endpoints
+_rate_buckets = defaultdict(list)  # ip -> [timestamps]
+_RATE_LIMIT = 10  # max attempts
+_RATE_WINDOW = 60  # per 60 seconds
+
+def _check_rate_limit(ip: str) -> bool:
+    """Return True if request is allowed, False if rate limited."""
+    now = _time.time()
+    bucket = _rate_buckets[ip]
+    # Remove old entries
+    _rate_buckets[ip] = [t for t in bucket if now - t < _RATE_WINDOW]
+    if len(_rate_buckets[ip]) >= _RATE_LIMIT:
+        return False
+    _rate_buckets[ip].append(now)
+    return True
 
 
 def bootstrap_database():
@@ -200,23 +217,29 @@ def require_plan(request: Request, plan: str = "pro"):
 
 @app.post("/api/auth/register")
 async def auth_register(request: Request):
+    ip = request.client.host if request.client else "unknown"
+    if not _check_rate_limit(ip):
+        return JSONResponse({"error": "Too many attempts. Try again in a minute."}, status_code=429)
     body = await request.json()
     email = body.get("email", "")
     password = body.get("password", "")
     result = auth_module.register(email, password)
     if "error" in result:
-        return JSONResponse({"error": result["error"]}, status_code=result["status"])
+        return JSONResponse({"error": result["error"]}, status_code=result.get("status", 400))
     return result
 
 
 @app.post("/api/auth/login")
 async def auth_login(request: Request):
+    ip = request.client.host if request.client else "unknown"
+    if not _check_rate_limit(ip):
+        return JSONResponse({"error": "Too many attempts. Try again in a minute."}, status_code=429)
     body = await request.json()
     email = body.get("email", "")
     password = body.get("password", "")
     result = auth_module.login(email, password)
     if "error" in result:
-        return JSONResponse({"error": result["error"]}, status_code=result["status"])
+        return JSONResponse({"error": result["error"]}, status_code=result.get("status", 400))
     return result
 
 

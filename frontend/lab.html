@@ -1591,6 +1591,30 @@
       padding: 12px;
     }
   }
+
+  .first-visit-toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-card);
+    border: 3px solid var(--orange);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 12px 20px;
+    font-family: var(--font-hand);
+    font-size: 16px;
+    color: var(--ink);
+    z-index: 9999;
+    cursor: pointer;
+    animation: toastIn 0.3s ease-out;
+    max-width: 90vw;
+  }
+  .first-visit-toast strong { color: var(--orange); }
+  @keyframes toastIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+  }
 </style>
 </head>
 <body>

@@ -1350,6 +1350,13 @@
         <!-- Context indicators -->
         <div class="context-badges" id="contextBadges"></div>
 
+        <!-- API key notice (shown when no key configured) -->
+        <div id="apiKeyNotice" style="display:none; background:#fff5ee; border:2px solid var(--orange); border-radius:8px; padding:10px 14px; margin-bottom:10px; font-family:var(--font-mono); font-size:12px; color:var(--ink);">
+          <strong style="font-family:var(--font-display);">API key needed</strong> &mdash; agents use OpenRouter for LLM calls.
+          <a href="#" onclick="event.preventDefault(); document.getElementById('configToggle').click();" style="color:var(--orange); text-decoration:underline;">Open config panel</a> to set your key.
+          <span style="color:var(--ink-light); font-size:10px; display:block; margin-top:4px;">Free at openrouter.ai &mdash; works with GPT-4o-mini, Claude, and more.</span>
+        </div>
+
         <div class="scenario-actions">
           <button class="scenario-run-all" id="scenarioRunAll">Run All Agents</button>
           <div class="scenario-agent-btns" id="scenarioAgentBtns"></div>

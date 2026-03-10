@@ -134,7 +134,8 @@ def register(email: str, password: str) -> dict:
         return {"token": token, "user": user}
     except Exception as e:
         conn.close()
-        return {"error": str(e), "status": 500}
+        logger.error(f"Registration error: {e}")
+        return {"error": "Registration failed. Please try again.", "status": 500}
 
 
 def login(email: str, password: str) -> dict:

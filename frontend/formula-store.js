@@ -466,12 +466,12 @@ function renderFormulaCard(formula, userReviews) {
     <div class="store-card">
       <div class="store-card-header">
         <div style="flex:1; min-width:0;">
-          <div style="font-family:var(--font-display); font-size:16px; line-height:1.2; margin-bottom:4px;">${formula.name}</div>
-          <div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">by ${formula.creator}</div>
+          <div style="font-family:var(--font-display); font-size:16px; line-height:1.2; margin-bottom:4px;">${escapeHtml(formula.name)}</div>
+          <div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">by ${escapeHtml(formula.creator)}</div>
         </div>
         <div style="display:flex; gap:3px; flex-shrink:0;">${posTags}</div>
       </div>
-      <p style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); margin:10px 0; line-height:1.4;">${formula.description}</p>
+      <p style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); margin:10px 0; line-height:1.4;">${escapeHtml(formula.description)}</p>
       <div class="store-card-footer">
         <div style="display:flex; align-items:center; gap:6px;">
           ${renderStars(formula.avgRating)}

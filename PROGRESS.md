@@ -1,6 +1,26 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 45 — War Room Pro Gating — Free vs Paid Context (COMPLETE)
+## Current Phase: Phase 46 — QA + UX Audit Fixes (COMPLETE)
+
+**Exit criterion MET:** All critical and high findings from Phases 41-45 QA+UX audit fixed. Formula store XSS patched (escapeHtml on name/creator/description). War Room API key notice shown upfront with disabled Run button until key set. Lab first-visit toast guides new users to presets. Auth rate limiting (10/min/IP) on login/register. Generic error messages in auth.py. Home page "Coming Soon" updated. Prospect/college zero values show "—" instead of 0. Draft year range validated.
+
+### Phase 46 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Formula store XSS fix | DONE | escapeHtml on name, creator, description |
+| 2 | War Room API key messaging | DONE | Notice div, disabled Run button, updateApiKeyNotice() |
+| 3 | Lab first-visit preset toast | DONE | razzle_lab_visited flag, PPR preset hint, 6s auto-dismiss |
+| 4 | Rate limiting + error messages + copy | DONE | 10/min/IP, generic errors, "The War Room" |
+| 5 | MEDIUM fixes — zeros, draft year | DONE | Prospect/college dash for 0, draft_year range validation |
+| 6 | Deploy + smoke test | DONE | All syntax clean |
+
+### Decisions Log
+- **In-memory rate limiter**: Simple defaultdict-based rate limiter. No external dependency. Resets on restart, but sufficient for current scale. Replace with Redis-backed limiter when needed.
+- **First-visit toast not modal**: Chose a dismissible toast over a modal overlay. Modals block the user; toasts inform without friction. Matches the "trust the user" design principle.
+- **Prospect zero suppression**: All 0/null/undefined values in prospect and college mode show "—". This is aggressive but correct — prospects without NFL stats shouldn't show 0.
+
+## Previous Phase: Phase 45 — War Room Pro Gating — Free vs Paid Context (COMPLETE)
 
 **Exit criterion MET:** War Room league context injection gated to Pro subscribers only. `isLeagueContextMode()` now requires `isProUser()` (user.plan === "pro") AND `hasLeagueData()`. Free users with Sleeper connected see "League Context — Pro Only" locked badge, forced into generic mode. Pro users get full league context injected into agent prompts. Post-scenario teaser card for free users: "your league data is connected but locked" with Upgrade CTA. Briefing cards show "Pro" pill when league context active, or generic mode hint for free users. CSS for locked badges, pro pill, generic hint, and teaser card all follow design system.
 

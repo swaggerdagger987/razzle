@@ -992,9 +992,11 @@ def fetch_prospects(
     draft_year=0,
 ):
     """Return prospect data from combine + draft picks, joined."""
+    import datetime as _dt
     conn = get_conn()
 
-    if not draft_year:
+    _cur_year = _dt.datetime.now().year
+    if not draft_year or draft_year < 2000 or draft_year > _cur_year + 2:
         row = conn.execute("SELECT MAX(draft_year) FROM combine_data").fetchone()
         draft_year = row[0] if row and row[0] else 2025
 

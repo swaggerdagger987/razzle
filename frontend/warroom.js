@@ -1421,6 +1421,7 @@ function setupConfigPanel() {
     agentKeysHost.querySelectorAll('.config-agent-key').forEach(inp => { inp.value = key; });
     sharedKeyInput.value = '';
     showStatus('key applied to all 6 agents');
+    if (typeof updateApiKeyNotice === 'function') updateApiKeyNotice();
   });
 
   // Apply model to all
@@ -1457,6 +1458,7 @@ function setupConfigPanel() {
       cfg[String(id)] = { ...existing, apiKey: input.value.trim() };
       saveAgentConfig(cfg);
       showStatus(AGENT_DEFS[id].name + ' key saved');
+      if (typeof updateApiKeyNotice === 'function') updateApiKeyNotice();
     });
   });
 }
@@ -1535,6 +1537,21 @@ function setupScenarioPanel() {
 
   // Render context badges
   renderContextBadges();
+
+  // Check API key status and show/hide notice
+  updateApiKeyNotice();
+}
+
+function updateApiKeyNotice() {
+  var notice = document.getElementById('apiKeyNotice');
+  var runBtn = document.getElementById('scenarioRunAll');
+  if (!notice) return;
+  var hasKey = AGENT_DEFS.some(function(_, i) { return getAgentSettings(i).apiKey; });
+  notice.style.display = hasKey ? 'none' : 'block';
+  if (runBtn) {
+    runBtn.disabled = !hasKey;
+    runBtn.title = hasKey ? '' : 'Set an API key in the config panel first';
+  }
 }
 
 function renderContextBadges() {
