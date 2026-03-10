@@ -946,6 +946,7 @@ def sitemap_xml():
         ("/targetpremium.html", "0.8", "weekly"),
         ("/workload.html", "0.8", "weekly"),
         ("/drops.html", "0.8", "weekly"),
+        ("/successrate.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1618,6 +1619,16 @@ def drop_rate(season: int = None, position: str = None):
         return JSONResponse({"error": "Failed to fetch drop rate data"}, status_code=500)
 
 
+@app.get("/api/success-rate")
+def success_rate(season: int = None, position: str = None):
+    try:
+        pos = position.upper() if position else None
+        return live_data.fetch_success_rate(season=season, position=pos)
+    except Exception as e:
+        logger.error(f"success-rate error: {e}")
+        return JSONResponse({"error": "Failed to fetch success rate data"}, status_code=500)
+
+
 @app.get("/api/target-premium")
 def target_premium(season: int = None, position: str = None):
     try:
@@ -1805,6 +1816,7 @@ def tools_hub():
                 {"name": "Consistency", "desc": "Coefficient of variation, floor, ceiling, and scoring range", "url": "/consistency.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Air Yards", "desc": "aDOT, RACR, WOPR, and regression buy/sell indicators", "url": "/airyards.html", "positions": ["WR", "RB", "TE"]},
                 {"name": "Drop Rate", "desc": "Sure hands vs butterfingers — drop rate, catch rate, YAC/rec", "url": "/drops.html", "positions": ["WR", "RB", "TE"]},
+                {"name": "Success Rate", "desc": "Rush and pass success rate — efficient play-makers vs volume runners", "url": "/successrate.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Red Zone & Goal-Line", "desc": "Goal-line carries, targets, TDs, and TD dependency", "url": "/redzone.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Player Comparison", "desc": "Side-by-side stat comparison with radar charts and boom/bust rates", "url": "/compare.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Comparison Table", "desc": "Add 3-8 players and compare in a sortable stat grid", "url": "/comptable.html", "positions": ["QB", "RB", "WR", "TE"]},

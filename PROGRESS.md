@@ -1,6 +1,16 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 141 — Drop Rate Dashboard (COMPLETE)
+## Current Phase: Phase 142 — Success Rate Dashboard (COMPLETE)
+
+**Exit criterion MET:** /successrate.html ranks players by rush/pass success rate from PBP data. Success rate % badges (high/mid/low), type chip (rush/pass), volume, PPG, YPC, bar visualization. Position filter tabs, season selector, PNG export with watermark. GET /api/success-rate returns data. 10 escapeHtml calls, 25/25 braces balanced. "Success Rate" nav link on all 71 pages. Sitemap + tools hub entry under Performance Analysis.
+
+### Phase 142 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend + frontend + nav + smoke test | DONE | fetch_success_rate, rush/pass SR, 10 escapeHtml, 71/71 nav |
+
+## Previous Phase: Phase 141 — Drop Rate Dashboard (COMPLETE)
 
 **Exit criterion MET:** /drops.html ranks pass catchers by drop rate — sure hands (drop rate <= 8%) vs butterfingers (drop rate >= 15%). Drop rate % badges, drops count, targets, catch rate, YAC per reception, bar visualization. WR/TE/RB position filter tabs, season selector, PNG export with watermark. GET /api/drop-rate returns data. 10 escapeHtml calls, 27/27 braces balanced. "Drops" nav link on all 70 pages. Sitemap + tools hub entry under Performance Analysis.
 

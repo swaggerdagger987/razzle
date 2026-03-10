@@ -12332,3 +12332,94 @@ def fetch_drop_rate(season=None, position=None, limit=50):
         }
     finally:
         conn.close()
+
+
+def fetch_success_rate(season=None, position=None, limit=50):
+    """Rank players by rush/pass success rate from PBP data."""
+    conn = get_conn()
+    try:
+        if not season:
+            cur = conn.execute("SELECT MAX(season) FROM player_season_pbp")
+            season = cur.fetchone()[0] or 2024
+
+        pos_filter = ""
+        params = [season]
+        if position:
+            pos_filter = "AND p.position = ?"
+            params.append(position)
+
+        rows = conn.execute(f"""
+            SELECT p.player_id, p.full_name, p.position, p.team,
+                   pb.rush_success_rate, pb.pass_success_rate,
+                   SUM(w.carries) as carries,
+                   SUM(w.rushing_yards) as rush_yds,
+                   SUM(w.rushing_tds) as rush_tds,
+                   SUM(w.attempts) as pass_att,
+                   SUM(w.passing_yards) as pass_yds,
+                   SUM(w.passing_tds) as pass_tds,
+                   SUM(w.fantasy_points_ppr) as total_ppr,
+                   COUNT(DISTINCT w.week) as games
+            FROM player_season_pbp pb
+            JOIN players p ON p.player_id = pb.player_id
+            JOIN player_week_stats w ON w.player_id = pb.player_id AND w.season = pb.season
+                AND w.season_type = 'REG'
+            WHERE pb.season = ?
+              AND p.position IN ('QB','RB','WR','TE')
+              AND p.fantasy_relevant = 1
+              AND (pb.rush_success_rate IS NOT NULL OR pb.pass_success_rate IS NOT NULL)
+              {pos_filter}
+            GROUP BY p.player_id
+        """, params).fetchall()
+
+        players = []
+        for r in rows:
+            pid, name, pos, team, rush_sr, pass_sr, carries, rush_yds, rush_tds, pass_att, pass_yds, pass_tds, total_ppr, games = r
+            carries = carries or 0
+            rush_yds = rush_yds or 0
+            pass_att = pass_att or 0
+            total_ppr = total_ppr or 0
+
+            # Determine primary metric
+            if pos == "QB":
+                primary_sr = pass_sr if pass_sr else rush_sr
+                sr_type = "pass" if pass_sr else "rush"
+                volume = pass_att if pass_sr else carries
+                if volume < 50:
+                    continue
+            else:
+                primary_sr = rush_sr
+                sr_type = "rush"
+                volume = carries
+                if volume < 30:
+                    continue
+
+            if not primary_sr:
+                continue
+
+            ppg = total_ppr / games if games > 0 else 0
+            ypc = rush_yds / carries if carries > 0 else 0
+
+            players.append({
+                "player_id": pid,
+                "name": name,
+                "position": pos,
+                "team": team,
+                "games": games,
+                "success_rate": round(primary_sr * 100, 1),
+                "sr_type": sr_type,
+                "rush_sr": round(rush_sr * 100, 1) if rush_sr else None,
+                "pass_sr": round(pass_sr * 100, 1) if pass_sr else None,
+                "volume": volume,
+                "ppg": round(ppg, 1),
+                "ypc": round(ypc, 1) if carries > 0 else None,
+            })
+
+        players.sort(key=lambda x: x["success_rate"], reverse=True)
+
+        return {
+            "players": players[:limit],
+            "season": season,
+            "count": len(players),
+        }
+    finally:
+        conn.close()

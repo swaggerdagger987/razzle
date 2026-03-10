@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Success Rate — Razzle</title>
+<meta property="og:title" content="Success Rate — Razzle">
+<meta property="og:description" content="Rush and pass success rate rankings on razzle.lol">
+<meta property="og:site_name" content="razzle.lol">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Success Rate — Razzle">
+<meta name="twitter:description" content="Rush and pass success rate rankings on razzle.lol">
+<meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
+<meta name="description" content="Success rate dashboard — rush and pass efficiency on razzle.lol">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .sr-page { max-width: 1100px; margin: 0 auto; padding: 24px 20px 60px; }
+  .sr-header { text-align: center; margin-bottom: 24px; }
+  .sr-header h1 { font-family: var(--font-display); font-size: 32px; color: var(--ink); margin: 0 0 4px; }
+  .sr-header .sr-subtitle { font-family: var(--font-hand); font-size: 20px; color: var(--ink-light); }
+  .sr-controls { display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+  .sr-controls select { font-family: var(--font-mono); font-size: 13px; padding: 6px 10px; border: 2px solid var(--ink); border-radius: 4px; background: var(--card); }
+  .sr-controls .pos-tabs { display: flex; gap: 4px; }
+  .sr-controls .pos-tab { font-family: var(--font-mono); font-size: 12px; padding: 5px 12px; border: 2px solid var(--ink); border-radius: 4px; background: var(--card); cursor: pointer; font-weight: 700; }
+  .sr-controls .pos-tab.active { background: var(--ink); color: var(--sand); }
+  .sr-export { font-family: var(--font-mono); font-size: 12px; padding: 5px 14px; border: 2px solid var(--ink); border-radius: 4px; background: var(--card); cursor: pointer; font-weight: 700; }
+  .sr-export:hover { background: var(--ink); color: var(--sand); }
+  .sr-loading { text-align: center; font-family: var(--font-hand); font-size: 18px; color: var(--ink-light); padding: 60px 0; }
+
+  .sr-card { background: var(--card); border: 3px solid var(--ink); border-radius: 10px; box-shadow: 4px 4px 0 var(--ink); overflow: hidden; }
+  .sr-card-header { font-family: var(--font-display); font-size: 18px; padding: 10px 16px; background: var(--ink); color: var(--sand); }
+  .sr-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 12px; }
+  .sr-table th { background: var(--sand); padding: 6px 8px; text-align: right; font-size: 10px; font-weight: 700; border-bottom: 2px solid var(--ink-faint); white-space: nowrap; }
+  .sr-table th:first-child, .sr-table th:nth-child(2), .sr-table th:nth-child(3) { text-align: left; }
+  .sr-table td { padding: 6px 8px; text-align: right; border-bottom: 1px solid var(--ink-faint); }
+  .sr-table td:first-child, .sr-table td:nth-child(2), .sr-table td:nth-child(3) { text-align: left; }
+  .sr-table tbody tr:hover { background: rgba(217,119,87,0.08); }
+  .sr-rank { font-weight: 700; color: var(--ink-light); font-size: 11px; }
+  .sr-pos-badge { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 3px; color: #fff; }
+  .sr-rate-badge { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 3px; border: 1px solid; }
+  .sr-rate-high { background: #dcfce7; color: #166534; border-color: #166534; }
+  .sr-rate-mid { background: #fef9c3; color: #854d0e; border-color: #854d0e; }
+  .sr-rate-low { background: #fee2e2; color: #991b1b; border-color: #991b1b; }
+  .sr-type-chip { font-family: var(--font-mono); font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 3px; background: var(--ink-faint); color: var(--ink); }
+  .sr-bar-cell { width: 80px; }
+  .sr-bar { height: 12px; border-radius: 2px; background: #2ec4b6; min-width: 2px; }
+  .sr-empty { text-align: center; padding: 40px 16px; font-family: var(--font-hand); font-size: 16px; color: var(--ink-light); }
+
+  @media (max-width: 768px) {
+    .sr-page { padding: 16px 12px 40px; }
+    .sr-header h1 { font-size: 24px; }
+    .sr-bar-cell { width: 50px; }
+  }
+</style>
+</head>
+<body>
+<nav class="topnav" role="navigation" aria-label="Main navigation">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/lab.html">The Lab</a></li>
+    <li><a href="/tools.html">Tools</a></li>
+    <li><a href="/rankings.html">Rankings</a></li>
+    <li><a href="/leaders.html">Leaders</a></li>
+    <li><a href="/scarcity.html">Scarcity</a></li>
+    <li><a href="/breakouts.html">Breakouts</a></li>
+    <li><a href="/buysell.html">Buy/Sell</a></li>
+    <li><a href="/aging.html">Aging</a></li>
+    <li><a href="/weekly.html">Weekly</a></li>
+    <li><a href="/targets.html">Targets</a></li>
+    <li><a href="/matchups.html">Matchups</a></li>
+    <li><a href="/usage.html">Usage</a></li>
+    <li><a href="/yoy.html">YoY</a></li>
+    <li><a href="/airyards.html">Air Yards</a></li>
+    <li><a href="/redzone.html">Red Zone</a></li>
+    <li><a href="/efficiency.html">Efficiency</a></li>
+    <li><a href="/consistency.html">Consistency</a></li>
+    <li><a href="/schedule.html">Schedule</a></li>
+    <li><a href="/stocks.html">Stocks</a></li>
+    <li><a href="/opportunity.html">Opportunity</a></li>
+    <li><a href="/reportcard.html">Report Card</a></li>
+    <li><a href="/awards.html">Awards</a></li>
+    <li><a href="/vorp.html">VORP</a></li>
+    <li><a href="/tradevalues.html">Trade Values</a></li>
+    <li><a href="/tradefinder.html">Trade Finder</a></li>
+    <li><a href="/explorer.html">Explorer</a></li>
+    <li><a href="/prospects.html">Prospects</a></li>
+    <li><a href="/compare.html">Compare</a></li>
+    <li><a href="/waivers.html">Waivers</a></li>
+    <li><a href="/playoffs.html">Playoffs</a></li>
+    <li><a href="/fptsbreakdown.html">FPTS</a></li>
+    <li><a href="/handcuffs.html">Handcuffs</a></li>
+    <li><a href="/weeklymvp.html">Weekly MVP</a></li>
+    <li><a href="/stacks.html">Stacks</a></li>
+    <li><a href="/advantage.html">Advantage</a></li>
+    <li><a href="/tdregression.html">TD Regression</a></li>
+    <li><a href="/dualthreat.html">Dual-Threat</a></li>
+    <li><a href="/snapefficiency.html">Snap Eff</a></li>
+    <li><a href="/garbagetime.html">Garbage Time</a></li>
+    <li><a href="/seasonpace.html">Pace</a></li>
+    <li><a href="/targetpremium.html">Target Premium</a></li>
+    <li><a href="/workload.html">Workload</a></li>
+    <li><a href="/drops.html">Drops</a></li>
+    <li><a href="/successrate.html">Success Rate</a></li>
+    <li><a href="/watchlist.html">Watchlist</a></li>
+    <li><a href="/tierboard.html">Tier Board</a></li>
+    <li><a href="/boombust.html">Boom/Bust</a></li>
+    <li><a href="/tradeanalyzer.html">Trade</a></li>
+    <li><a href="/draftpicks.html">Draft Picks</a></li>
+    <li><a href="/rostervalue.html">Roster Value</a></li>
+    <li><a href="/playercomps.html">Comps</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
+    <li><a href="/agents.html">War Room</a></li>
+  </ul>
+</nav>
+
+<div class="sr-page" id="sr-container">
+  <div class="sr-header">
+    <h1>Success Rate</h1>
+    <div class="sr-subtitle">who makes the most of every play?</div>
+  </div>
+
+  <div class="sr-controls">
+    <select id="sr-season" aria-label="Season selector"></select>
+    <div class="pos-tabs">
+      <button class="pos-tab active" data-pos="">ALL</button>
+      <button class="pos-tab" data-pos="QB">QB</button>
+      <button class="pos-tab" data-pos="RB">RB</button>
+      <button class="pos-tab" data-pos="WR">WR</button>
+      <button class="pos-tab" data-pos="TE">TE</button>
+    </div>
+    <button class="sr-export" onclick="exportPNG()">Export PNG</button>
+  </div>
+
+  <div id="sr-loading" class="sr-loading">pulling film...</div>
+  <div id="sr-content" style="display:none;">
+    <div class="sr-card">
+      <div class="sr-card-header">Success Rate Rankings</div>
+      <div id="sr-table-wrap"></div>
+    </div>
+  </div>
+</div>
+
+<footer style="text-align:center; padding:32px 16px; font-family:var(--font-hand); font-size:15px; color:var(--ink-light);">
+  <div style="margin-bottom:10px;">
+    <a href="/" style="color:var(--ink-light); text-decoration:none;">Home</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/lab.html" style="color:var(--ink-light); text-decoration:none;">The Lab</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tools.html" style="color:var(--ink-light); text-decoration:none;">Tools</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/rankings.html" style="color:var(--ink-light); text-decoration:none;">Rankings</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/leaders.html" style="color:var(--ink-light); text-decoration:none;">Leaders</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/scarcity.html" style="color:var(--ink-light); text-decoration:none;">Scarcity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/breakouts.html" style="color:var(--ink-light); text-decoration:none;">Breakouts</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/buysell.html" style="color:var(--ink-light); text-decoration:none;">Buy/Sell</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/aging.html" style="color:var(--ink-light); text-decoration:none;">Aging Curves</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/weekly.html" style="color:var(--ink-light); text-decoration:none;">Weekly Heatmap</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/targets.html" style="color:var(--ink-light); text-decoration:none;">Targets</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/matchups.html" style="color:var(--ink-light); text-decoration:none;">Matchups</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/usage.html" style="color:var(--ink-light); text-decoration:none;">Usage</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/yoy.html" style="color:var(--ink-light); text-decoration:none;">Year-over-Year</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/airyards.html" style="color:var(--ink-light); text-decoration:none;">Air Yards</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/redzone.html" style="color:var(--ink-light); text-decoration:none;">Red Zone</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/efficiency.html" style="color:var(--ink-light); text-decoration:none;">Efficiency</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/consistency.html" style="color:var(--ink-light); text-decoration:none;">Consistency</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/schedule.html" style="color:var(--ink-light); text-decoration:none;">Schedule</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/stocks.html" style="color:var(--ink-light); text-decoration:none;">Stocks</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/opportunity.html" style="color:var(--ink-light); text-decoration:none;">Opportunity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/reportcard.html" style="color:var(--ink-light); text-decoration:none;">Report Card</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/awards.html" style="color:var(--ink-light); text-decoration:none;">Awards</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/vorp.html" style="color:var(--ink-light); text-decoration:none;">VORP</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tradevalues.html" style="color:var(--ink-light); text-decoration:none;">Trade Values</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tradefinder.html" style="color:var(--ink-light); text-decoration:none;">Trade Finder</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/explorer.html" style="color:var(--ink-light); text-decoration:none;">Explorer</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/prospects.html" style="color:var(--ink-light); text-decoration:none;">Prospects</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/waivers.html" style="color:var(--ink-light); text-decoration:none;">Waivers</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/playoffs.html" style="color:var(--ink-light); text-decoration:none;">Playoffs</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/fptsbreakdown.html" style="color:var(--ink-light); text-decoration:none;">FPTS Breakdown</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/handcuffs.html" style="color:var(--ink-light); text-decoration:none;">Handcuffs</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/weeklymvp.html" style="color:var(--ink-light); text-decoration:none;">Weekly MVP</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/stacks.html" style="color:var(--ink-light); text-decoration:none;">Stacks</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/advantage.html" style="color:var(--ink-light); text-decoration:none;">Advantage</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tdregression.html" style="color:var(--ink-light); text-decoration:none;">TD Regression</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/dualthreat.html" style="color:var(--ink-light); text-decoration:none;">Dual-Threat</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/snapefficiency.html" style="color:var(--ink-light); text-decoration:none;">Snap Efficiency</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/garbagetime.html" style="color:var(--ink-light); text-decoration:none;">Garbage Time</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/seasonpace.html" style="color:var(--ink-light); text-decoration:none;">Season Pace</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/targetpremium.html" style="color:var(--ink-light); text-decoration:none;">Target Premium</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/workload.html" style="color:var(--ink-light); text-decoration:none;">Workload</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/drops.html" style="color:var(--ink-light); text-decoration:none;">Drops</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/successrate.html" style="color:var(--ink-light); text-decoration:none;">Success Rate</a>
+  </div>
+  <div>razzle.lol — fantasy football, overanalyzed</div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+function escapeHtml(t) {
+  const d = document.createElement("div");
+  d.appendChild(document.createTextNode(t));
+  return d.innerHTML;
+}
+
+const POS_COLORS = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+let state = { season: null, position: "", data: null };
+
+function initSeasons() {
+  const sel = document.getElementById("sr-season");
+  const now = new Date().getFullYear();
+  for (let y = now; y >= 2020; y--) {
+    const opt = document.createElement("option");
+    opt.value = y; opt.textContent = y;
+    sel.appendChild(opt);
+  }
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("season")) sel.value = params.get("season");
+  if (params.get("position")) {
+    state.position = params.get("position").toUpperCase();
+    document.querySelectorAll(".pos-tab").forEach(t => {
+      t.classList.toggle("active", t.dataset.pos === state.position);
+    });
+  }
+  state.season = parseInt(sel.value);
+  sel.addEventListener("change", () => { state.season = parseInt(sel.value); updateURL(); loadData(); });
+}
+
+function updateURL() {
+  const params = new URLSearchParams();
+  if (state.season) params.set("season", state.season);
+  if (state.position) params.set("position", state.position);
+  const qs = params.toString();
+  history.replaceState(null, "", qs ? "?" + qs : window.location.pathname);
+}
+
+document.querySelectorAll(".pos-tab").forEach(tab => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".pos-tab").forEach(t => t.classList.remove("active"));
+    tab.classList.add("active");
+    state.position = tab.dataset.pos;
+    updateURL();
+    loadData();
+  });
+});
+
+async function loadData() {
+  document.getElementById("sr-loading").style.display = "";
+  document.getElementById("sr-content").style.display = "none";
+  let url = "/api/success-rate?season=" + state.season;
+  if (state.position) url += "&position=" + state.position;
+  try {
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error("API error");
+    state.data = await resp.json();
+    render();
+  } catch (e) {
+    document.getElementById("sr-loading").textContent = "failed to load success rate data";
+  }
+}
+
+function rateClass(r) {
+  if (r >= 45) return "sr-rate-high";
+  if (r >= 35) return "sr-rate-mid";
+  return "sr-rate-low";
+}
+
+function render() {
+  document.getElementById("sr-loading").style.display = "none";
+  document.getElementById("sr-content").style.display = "";
+  const players = state.data.players || [];
+  const wrap = document.getElementById("sr-table-wrap");
+
+  if (players.length === 0) {
+    wrap.innerHTML = '<div class="sr-empty">no success rate data found for this filter</div>';
+    return;
+  }
+
+  const maxSR = Math.max(...players.map(p => p.success_rate));
+  let html = '<table class="sr-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>SR%</th><th>Type</th><th>Vol</th><th>PPG</th><th>YPC</th><th></th></tr></thead><tbody>';
+
+  players.forEach((p, i) => {
+    const posColor = POS_COLORS[p.position] || "#333";
+    const cls = rateClass(p.success_rate);
+    const barPct = maxSR > 0 ? p.success_rate / maxSR * 100 : 0;
+    const ypc = p.ypc !== null ? escapeHtml(String(p.ypc)) : "-";
+
+    html += '<tr>';
+    html += '<td class="sr-rank">' + (i + 1) + '</td>';
+    html += '<td>' + escapeHtml(p.name) + ' <span style="color:var(--ink-light);font-size:10px;">' + escapeHtml(p.team) + '</span></td>';
+    html += '<td><span class="sr-pos-badge" style="background:' + escapeHtml(posColor) + '">' + escapeHtml(p.position) + '</span></td>';
+    html += '<td><span class="sr-rate-badge ' + cls + '">' + escapeHtml(String(p.success_rate)) + '%</span></td>';
+    html += '<td><span class="sr-type-chip">' + escapeHtml(p.sr_type) + '</span></td>';
+    html += '<td>' + escapeHtml(String(p.volume)) + '</td>';
+    html += '<td>' + escapeHtml(String(p.ppg)) + '</td>';
+    html += '<td>' + ypc + '</td>';
+    html += '<td class="sr-bar-cell"><div class="sr-bar" style="width:' + barPct + '%"></div></td>';
+    html += '</tr>';
+  });
+
+  html += '</tbody></table>';
+  wrap.innerHTML = html;
+}
+
+function exportPNG() {
+  const el = document.getElementById("sr-container");
+  html2canvas(el, { backgroundColor: "#ede0cf", scale: 2 }).then(canvas => {
+    const ctx = canvas.getContext("2d");
+    ctx.font = "bold 28px 'Space Mono', monospace";
+    ctx.fillStyle = "rgba(0,0,0,0.13)";
+    ctx.fillText("razzle.lol", canvas.width - 220, canvas.height - 20);
+    const link = document.createElement("a");
+    link.download = "razzle-success-rate.png";
+    link.href = canvas.toDataURL();
+    link.click();
+  });
+}
+
+// Analytics
+fetch("/api/analytics/pageview", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ page: "/successrate.html", referrer: document.referrer }) }).catch(() => {});
+
+initSeasons();
+loadData();
+</script>
+</body>
+</html>
