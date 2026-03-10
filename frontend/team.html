@@ -118,7 +118,7 @@
     font-size: 12px;
     color: var(--ink-light);
     padding: 2px 8px;
-    border: 1px solid var(--ink-faint);
+    border: 2px solid var(--ink-faint);
     border-radius: 10px;
   }
 
@@ -196,12 +196,12 @@
     font-weight: 700;
     padding: 1px 6px;
     border-radius: 10px;
-    border: 1px solid;
+    border: 2px solid;
     white-space: nowrap;
   }
   .team-age-badge.young { background: var(--green-light); color: #0f7b6f; border-color: #0f7b6f; }
-  .team-age-badge.mid { background: var(--yellow-light); color: #8a6e00; border-color: #8a6e00; }
-  .team-age-badge.old { background: var(--red-light); color: #b22d36; border-color: #b22d36; }
+  .team-age-badge.prime { background: var(--yellow-light); color: #8a6e00; border-color: #8a6e00; }
+  .team-age-badge.aging { background: var(--red-light); color: #b22d36; border-color: #b22d36; }
 
   /* Stats block */
   .team-player-stats {
@@ -497,7 +497,7 @@
         // Age badge
         var ageBadge = "";
         if (p.age) {
-          var ageClass = p.age <= 25 ? "young" : p.age <= 28 ? "mid" : "old";
+          var ageClass = p.age <= 25 ? "young" : p.age <= 28 ? "prime" : "aging";
           ageBadge = '<span class="team-age-badge ' + ageClass + '">' + p.age + '</span>';
         }
 

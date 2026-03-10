@@ -92,8 +92,14 @@ function renderPlayerPage(data, container) {
 
   let html = "";
 
-  // Back link
-  html += `<a href="/lab.html" class="player-back">&larr; Back to The Lab</a>`;
+  // Contextual back link based on referrer
+  const ref = document.referrer || "";
+  let backHref = "/lab.html";
+  let backLabel = "Back to The Lab";
+  if (ref.includes("/rankings")) { backHref = "/rankings.html"; backLabel = "Back to Rankings"; }
+  else if (ref.includes("/leaders")) { backHref = "/leaders.html"; backLabel = "Back to Leaders"; }
+  else if (ref.includes("/team/")) { backHref = ref.split("?")[0]; backLabel = "Back to Team"; }
+  html += `<a href="${esc(backHref)}" class="player-back">&larr; ${esc(backLabel)}</a>`;
 
   // Hero card
   html += `<div class="player-hero">`;

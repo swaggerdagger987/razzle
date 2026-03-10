@@ -2652,7 +2652,8 @@ function renderProfile(data, container) {
     html += `<span class="breakout-badge">BREAKOUT +${breakoutInfo.pct}% (${breakoutInfo.season})</span>`;
   }
   html += `</div>`;
-  html += `<div style="margin-left:auto; display:flex; gap:8px;">`;
+  html += `<div style="margin-left:auto; display:flex; gap:8px; flex-wrap:wrap;">`;
+  html += `<a href="/player/${encodeURIComponent(player.player_id)}" class="btn-chunky" style="font-size:11px; padding:6px 14px; text-decoration:none; display:inline-flex; align-items:center;">Full Profile</a>`;
   html += `<button class="btn-chunky" onclick="loadBoomBust('${player.player_id}')" style="font-size:11px; padding:6px 14px; border-color:var(--green);">Boom/Bust</button>`;
   html += `<button class="btn-chunky" onclick="loadPlayerComps('${player.player_id}')" style="font-size:11px; padding:6px 14px; border-color:var(--orange);">Find Comps</button>`;
   html += `<button class="btn-primary" onclick="exportProfileImage()" style="font-size:11px; padding:6px 14px;">Export PNG</button>`;

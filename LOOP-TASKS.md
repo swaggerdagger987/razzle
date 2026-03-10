@@ -23,8 +23,8 @@
 **Notes**: (U1, U3) Add "DVS" text label next to dynasty value number on rankings.html player cards. Add one-line methodology note near page header: "ranked by Dynasty Value Score (production x age curve)." Make the number meaningful for Reddit screenshots.
 
 ## Task 4: MEDIUM fixes — design borders, age badge consistency, profile overlay link, contextual back nav
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 **Notes**: (Q6) Change team.html age badge and group count borders from 1px to 2px. (U4) Standardize PPG label across team.html, rankings.html, player.js. (U5) Standardize age badge terminology to "Young/Prime/Aging" on both team.html and rankings.html. (U6) Add "View full profile" link in Lab profile overlay. (U7) Make player.js back link contextual based on referrer. (U8) Hide rate stat categories on leaders.html when "All" position filter is active.
 
 ## Task 5: Smoke test + verification

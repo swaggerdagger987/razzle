@@ -415,6 +415,9 @@
     }
   }
 
+  // Rate stats only shown when a specific position is filtered
+  var rateStats = { target_share: true, yards_per_carry: true };
+
   // ---- Render category cards ----
   function renderCategories(categories) {
     if (!categories.length) {
@@ -426,6 +429,8 @@
 
     for (var c = 0; c < categories.length; c++) {
       var cat = categories[c];
+      // Hide rate stats on "All" view — they only make sense per position
+      if (!state.position && rateStats[cat.key]) continue;
       var annotation = annotations[cat.key] || "";
 
       html += '<div class="leaders-card">';
