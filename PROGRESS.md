@@ -1,6 +1,23 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 91 — QA + UX Audit Fixes (COMPLETE)
+## Current Phase: Phase 92 — Value Over Replacement Player (VORP) Dashboard (COMPLETE)
+
+**Exit criterion MET:** /vorp.html page shows VORP analysis with two sections: "League Winners" (highest VORP — PPG above position replacement level, cross-position ranking) and "Replacement Level" (near/below replacement level — waiver-wire caliber players). Each player: position badge, headshot, name, team, VORP value badge (elite >=6 green, starter >=3 blue, flex >=1 yellow, fringe >=0 orange, replacement <0 red), PPG, Replacement PPG, Position Rank, GP, Caveat annotation. Replacement threshold chips showing QB12/RB24/WR36/TE12 PPG baselines. Position filter tabs (All/QB/RB/WR/TE). Season selector. Sortable columns with sort state per section. Click row → player profile. PNG export via html2canvas with watermark. Responsive at 768px + 480px. /api/vorp endpoint computes VORP = player PPG - position replacement PPG (QB12/RB24/WR36/TE12). Min 6 games + 2 PPG filter. "VORP" nav link added to all 31 HTML pages. Sitemap entry. Analytics tracking. Design matches DESIGN.md.
+
+### Phase 92 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/vorp endpoint | DONE | fetch_vorp in live_data.py, replacement-level per position, league_winners/replacement_level split |
+| 2 | VORP Dashboard page | DONE | Two-section table, VORP badges, threshold chips, 10 escapeHtml, 61/61 balanced |
+| 3 | Nav links + sitemap + analytics | DONE | All 31 pages updated, sitemap entry, pageview tracking |
+| 4 | Smoke test | DONE | Python + JS syntax clean, 31/31 nav links, XSS escaped, design compliance |
+
+### Decisions Log
+- **VORP as Phase 92**: After building 20+ individual metric dashboards and composite views (report card, awards), VORP fills a foundational gap. Value Over Replacement is the single most important cross-position ranking metric in fantasy football analytics — it answers "how much better is this player than what I can get for free?" Replacement thresholds (QB12/RB24/WR36/TE12) are standard for 12-team leagues. Highly screenshottable for r/DynastyFF ("VORP leaders: these players are the biggest league-winners").
+- **Replacement threshold chips**: Added visual chips above the tables showing each position's replacement-level PPG baseline. This gives context to the VORP numbers and helps users understand why a QB with 22 PPG has lower VORP than an RB with 18 PPG.
+
+## Previous Phase: Phase 91 — QA + UX Audit Fixes (COMPLETE)
 
 **Exit criterion MET:** All HIGH findings from QA-AUDIT.md (Phases 86-90) resolved. Position-filtered team totals now use separate unfiltered SQL query for correct opp_share/dominator metrics in fetch_opportunity_share, fetch_report_cards, and fetch_season_awards. PNG export watermark overlay added to reportcard.html and awards.html (ctx.fillText). MEDIUM fixes applied: grade string sort uses numeric GRADE_ORDER map (A+=8...F=1) in reportcard/stocks/opportunity, reportcard analytics includes referrer field, awards analytics uses .catch() instead of try/catch. All fixes verified with Python syntax checks and JS structure validation.
 

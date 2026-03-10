@@ -3,46 +3,46 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Strength of Schedule — Razzle</title>
-<meta property="og:title" content="Strength of Schedule — Razzle">
-<meta property="og:description" content="Strength of schedule analysis — who overcame the toughest matchups and who padded stats on razzle.lol">
+<title>Value Over Replacement — Razzle</title>
+<meta property="og:title" content="Value Over Replacement — Razzle">
+<meta property="og:description" content="VORP rankings — who provides the most value above replacement level on razzle.lol">
 <meta property="og:site_name" content="razzle.lol">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Strength of Schedule — Razzle">
-<meta name="twitter:description" content="Strength of schedule analysis — who overcame the toughest matchups and who padded stats on razzle.lol">
+<meta name="twitter:title" content="Value Over Replacement — Razzle">
+<meta name="twitter:description" content="VORP rankings — who provides the most value above replacement level on razzle.lol">
 <meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
-<meta name="description" content="Strength of schedule dashboard — find players who thrived against tough defenses and those who benefited from cupcake matchups on razzle.lol">
+<meta name="description" content="Value Over Replacement Player dashboard — cross-position fantasy value rankings on razzle.lol">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="styles.css">
 <style>
-  .sos-page {
+  .vorp-page {
     max-width: 1200px;
     margin: 0 auto;
     padding: 24px 20px 60px;
   }
 
-  .sos-header {
+  .vorp-header {
     text-align: center;
     margin-bottom: 24px;
   }
-  .sos-header h1 {
+  .vorp-header h1 {
     font-family: var(--font-display);
     font-size: 32px;
     color: var(--ink);
     margin: 0 0 4px;
   }
-  .sos-header .sos-subtitle {
+  .vorp-header .vorp-subtitle {
     font-family: var(--font-hand);
     font-size: 20px;
     color: var(--ink-light);
   }
 
   /* Controls row */
-  .sos-controls {
+  .vorp-controls {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -51,7 +51,7 @@
     flex-wrap: wrap;
   }
 
-  .sos-select {
+  .vorp-select {
     font-family: var(--font-mono);
     font-size: 13px;
     padding: 7px 12px;
@@ -63,13 +63,13 @@
   }
 
   /* Position filter tabs */
-  .sos-pos-tabs {
+  .vorp-pos-tabs {
     display: flex;
     border: 2px solid var(--ink);
     border-radius: 8px;
     overflow: hidden;
   }
-  .sos-pos-tab {
+  .vorp-pos-tab {
     font-family: var(--font-display);
     font-size: 13px;
     font-weight: 700;
@@ -81,17 +81,40 @@
     cursor: pointer;
     transition: all 0.12s;
   }
-  .sos-pos-tab:last-child { border-right: none; }
-  .sos-pos-tab.active {
+  .vorp-pos-tab:last-child { border-right: none; }
+  .vorp-pos-tab.active {
     background: var(--ink);
     color: var(--bg-card);
   }
-  .sos-pos-tab:hover:not(.active) {
+  .vorp-pos-tab:hover:not(.active) {
     background: var(--bg-warm);
   }
 
+  /* Replacement thresholds info */
+  .vorp-thresholds {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .vorp-threshold-chip {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 4px 10px;
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+    background: var(--bg-card);
+    color: var(--ink-medium);
+  }
+  .vorp-threshold-chip .pos-label {
+    font-family: var(--font-display);
+    font-weight: 700;
+    margin-right: 4px;
+  }
+
   /* Actions */
-  .sos-actions {
+  .vorp-actions {
     display: flex;
     justify-content: center;
     gap: 10px;
@@ -99,8 +122,8 @@
   }
 
   /* Section headers */
-  .sos-section { margin-bottom: 32px; }
-  .sos-section-header {
+  .vorp-section { margin-bottom: 32px; }
+  .vorp-section-header {
     font-family: var(--font-display);
     font-size: 20px;
     font-weight: 700;
@@ -111,14 +134,14 @@
     border-radius: 10px;
     box-shadow: 4px 4px 0 var(--ink);
   }
-  .sos-section-header.suppressed { background: var(--green-light); }
-  .sos-section-header.inflated { background: var(--red-light); }
+  .vorp-section-header.winners { background: var(--green-light); }
+  .vorp-section-header.replacement { background: var(--red-light); }
   .section-icon { font-size: 20px; margin-right: 4px; }
-  .section-icon.suppressed { color: var(--green); }
-  .section-icon.inflated { color: var(--red); }
+  .section-icon.winners { color: var(--green); }
+  .section-icon.replacement { color: var(--red); }
 
   /* Table styles */
-  .sos-table {
+  .vorp-table {
     width: 100%;
     border-collapse: collapse;
     font-family: var(--font-mono);
@@ -129,7 +152,7 @@
     overflow: hidden;
     box-shadow: 4px 4px 0 var(--ink);
   }
-  .sos-table th {
+  .vorp-table th {
     font-family: var(--font-display);
     font-size: 11px;
     font-weight: 700;
@@ -144,32 +167,32 @@
     user-select: none;
     position: relative;
   }
-  .sos-table th.center,
-  .sos-table td.center { text-align: center; }
-  .sos-table th.sorted { color: var(--orange); }
-  .sos-table th .sort-arrow { font-size: 10px; margin-left: 2px; }
-  .sos-table th:hover { background: var(--bg); }
-  .sos-table td {
+  .vorp-table th.center,
+  .vorp-table td.center { text-align: center; }
+  .vorp-table th.sorted { color: var(--orange); }
+  .vorp-table th .sort-arrow { font-size: 10px; margin-left: 2px; }
+  .vorp-table th:hover { background: var(--bg); }
+  .vorp-table td {
     padding: 8px;
     border-bottom: 1px solid var(--ink-faint);
     vertical-align: middle;
   }
-  .sos-table tbody tr {
+  .vorp-table tbody tr {
     cursor: pointer;
     transition: background 0.1s;
   }
-  .sos-table tbody tr:hover {
+  .vorp-table tbody tr:hover {
     background: var(--bg-warm);
   }
 
   /* Player cell */
-  .sos-player-cell {
+  .vorp-player-cell {
     display: flex;
     align-items: center;
     gap: 8px;
     min-width: 160px;
   }
-  .sos-headshot {
+  .vorp-headshot {
     width: 32px;
     height: 32px;
     border-radius: 50%;
@@ -178,8 +201,8 @@
     flex-shrink: 0;
     background: var(--bg-warm);
   }
-  .sos-player-info { min-width: 0; }
-  .sos-player-name {
+  .vorp-player-info { min-width: 0; }
+  .vorp-player-name {
     font-family: var(--font-display);
     font-size: 14px;
     font-weight: 700;
@@ -188,13 +211,13 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .sos-player-meta {
+  .vorp-player-meta {
     display: flex;
     align-items: center;
     gap: 5px;
     margin-top: 1px;
   }
-  .sos-pos-badge {
+  .vorp-pos-badge {
     font-family: var(--font-display);
     font-size: 10px;
     font-weight: 700;
@@ -202,18 +225,18 @@
     border-radius: 5px;
     color: #fff;
   }
-  .sos-pos-badge.qb { background: var(--pos-qb); }
-  .sos-pos-badge.rb { background: var(--pos-rb); }
-  .sos-pos-badge.wr { background: var(--pos-wr); }
-  .sos-pos-badge.te { background: var(--pos-te); }
-  .sos-team-label {
+  .vorp-pos-badge.qb { background: var(--pos-qb); }
+  .vorp-pos-badge.rb { background: var(--pos-rb); }
+  .vorp-pos-badge.wr { background: var(--pos-wr); }
+  .vorp-pos-badge.te { background: var(--pos-te); }
+  .vorp-team-label {
     font-family: var(--font-mono);
     font-size: 11px;
     color: var(--ink-medium);
   }
 
-  /* SOS grade badge */
-  .sos-grade-badge {
+  /* VORP value badge */
+  .vorp-badge {
     display: inline-block;
     font-family: var(--font-display);
     font-size: 13px;
@@ -222,28 +245,14 @@
     border-radius: 6px;
     border: 2px solid;
   }
-  .sos-grade-badge.grade-aplus { background: var(--green-light); color: #1a7a6d; border-color: var(--green); }
-  .sos-grade-badge.grade-a { background: var(--green-light); color: #1a7a6d; border-color: var(--green); }
-  .sos-grade-badge.grade-b { background: var(--blue-light); color: #3a5abf; border-color: var(--blue); }
-  .sos-grade-badge.grade-c { background: var(--yellow-light); color: #8a6d20; border-color: var(--yellow); }
-  .sos-grade-badge.grade-d { background: var(--orange-light); color: #a85a3a; border-color: var(--orange); }
-  .sos-grade-badge.grade-f { background: var(--red-light); color: #a83240; border-color: var(--red); }
-
-  /* Delta badge */
-  .sos-delta {
-    display: inline-block;
-    font-family: var(--font-mono);
-    font-size: 12px;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 5px;
-    border: 2px solid;
-  }
-  .sos-delta.hard { background: var(--green-light); color: #1a7a6d; border-color: var(--green); }
-  .sos-delta.easy { background: var(--red-light); color: #a83240; border-color: var(--red); }
+  .vorp-badge.elite { background: var(--green-light); color: #1a7a6d; border-color: var(--green); }
+  .vorp-badge.starter { background: var(--blue-light); color: #3a5abf; border-color: var(--blue); }
+  .vorp-badge.flex { background: var(--yellow-light); color: #8a6d20; border-color: var(--yellow); }
+  .vorp-badge.fringe { background: var(--orange-light); color: #a85a3a; border-color: var(--orange); }
+  .vorp-badge.replacement { background: var(--red-light); color: #a83240; border-color: var(--red); }
 
   /* Annotation */
-  .sos-annotation {
+  .vorp-annotation {
     font-family: var(--font-hand);
     font-size: 14px;
     color: var(--ink-light);
@@ -251,37 +260,37 @@
   }
 
   /* Loading / Empty / Error */
-  .sos-loading, .sos-empty {
+  .vorp-loading, .vorp-empty {
     text-align: center;
     padding: 60px 20px;
     font-family: var(--font-hand);
     font-size: 22px;
     color: var(--ink-light);
   }
-  .sos-error {
+  .vorp-error {
     text-align: center;
     padding: 40px 20px;
     font-family: var(--font-hand);
     font-size: 20px;
     color: var(--red);
   }
-  .sos-error button {
+  .vorp-error button {
     margin-top: 12px;
   }
 
   /* Responsive */
   @media (max-width: 768px) {
-    .sos-page { padding: 16px 10px 40px; }
-    .sos-header h1 { font-size: 26px; }
-    .sos-table { font-size: 12px; }
+    .vorp-page { padding: 16px 10px 40px; }
+    .vorp-header h1 { font-size: 26px; }
+    .vorp-table { font-size: 12px; }
     .hide-mobile { display: none !important; }
-    .sos-player-cell { min-width: 120px; }
-    .sos-headshot { width: 28px; height: 28px; }
-    .sos-player-name { font-size: 12px; }
+    .vorp-player-cell { min-width: 120px; }
+    .vorp-headshot { width: 28px; height: 28px; }
+    .vorp-player-name { font-size: 12px; }
   }
   @media (max-width: 480px) {
-    .sos-controls { gap: 8px; }
-    .sos-pos-tab { padding: 5px 10px; font-size: 12px; }
+    .vorp-controls { gap: 8px; }
+    .vorp-pos-tab { padding: 5px 10px; font-size: 12px; }
   }
 </style>
 </head>
@@ -312,41 +321,43 @@
     <li><a href="/redzone.html">Red Zone</a></li>
     <li><a href="/efficiency.html">Efficiency</a></li>
     <li><a href="/consistency.html">Consistency</a></li>
-    <li><a href="/schedule.html" class="active">Schedule</a></li>
+    <li><a href="/schedule.html">Schedule</a></li>
     <li><a href="/stocks.html">Stocks</a></li>
     <li><a href="/opportunity.html">Opportunity</a></li>
     <li><a href="/reportcard.html">Report Card</a></li>
     <li><a href="/awards.html">Awards</a></li>
-    <li><a href="/vorp.html">VORP</a></li>
+    <li><a href="/vorp.html" class="active">VORP</a></li>
     <li><a href="/team/KC">Teams</a></li>
     <li><a href="/league-intel.html">League Intel</a></li>
     <li><a href="/agents.html">War Room</a></li>
   </ul>
 </nav>
 
-<main class="sos-page" id="sos-content">
-  <div class="sos-header">
-    <h1>Strength of Schedule</h1>
-    <div class="sos-subtitle">who thrived against killers and who feasted on cupcakes</div>
+<main class="vorp-page" id="vorp-content">
+  <div class="vorp-header">
+    <h1>Value Over Replacement</h1>
+    <div class="vorp-subtitle">who actually moves the needle vs. who you can find on waivers</div>
   </div>
 
-  <div class="sos-controls">
-    <div class="sos-pos-tabs" id="pos-tabs">
-      <button class="sos-pos-tab active" data-pos="" aria-label="All positions">All</button>
-      <button class="sos-pos-tab" data-pos="QB" aria-label="Quarterbacks">QB</button>
-      <button class="sos-pos-tab" data-pos="RB" aria-label="Running Backs">RB</button>
-      <button class="sos-pos-tab" data-pos="WR" aria-label="Wide Receivers">WR</button>
-      <button class="sos-pos-tab" data-pos="TE" aria-label="Tight Ends">TE</button>
+  <div class="vorp-controls">
+    <div class="vorp-pos-tabs" id="pos-tabs">
+      <button class="vorp-pos-tab active" data-pos="" aria-label="All positions">All</button>
+      <button class="vorp-pos-tab" data-pos="QB" aria-label="Quarterbacks">QB</button>
+      <button class="vorp-pos-tab" data-pos="RB" aria-label="Running Backs">RB</button>
+      <button class="vorp-pos-tab" data-pos="WR" aria-label="Wide Receivers">WR</button>
+      <button class="vorp-pos-tab" data-pos="TE" aria-label="Tight Ends">TE</button>
     </div>
-    <select class="sos-select" id="season-select" title="Season" aria-label="Season"></select>
+    <select class="vorp-select" id="season-select" title="Season" aria-label="Season"></select>
   </div>
 
-  <div class="sos-actions">
+  <div class="vorp-thresholds" id="thresholds-row"></div>
+
+  <div class="vorp-actions">
     <button class="btn-chunky" id="export-btn" title="Export as PNG">Export PNG</button>
   </div>
 
-  <div id="sos-body">
-    <div class="sos-loading" id="sos-loading">scouting the schedule...</div>
+  <div id="vorp-body">
+    <div class="vorp-loading" id="vorp-loading">calculating replacement value...</div>
   </div>
 </main>
 
@@ -434,91 +445,65 @@
 
   // Sort state per section
   var sortState = {
-    schedule_suppressed: { col: 'sos_delta', dir: -1 },
-    schedule_inflated: { col: 'sos_delta', dir: 1 }
+    league_winners: { col: 'vorp', dir: -1 },
+    replacement_level: { col: 'vorp', dir: 1 }
   };
 
-  function gradeClass(grade) {
-    if (grade === 'A+') return 'grade-aplus';
-    if (grade === 'A') return 'grade-a';
-    if (grade === 'B') return 'grade-b';
-    if (grade === 'C') return 'grade-c';
-    if (grade === 'D') return 'grade-d';
-    return 'grade-f';
+  function vorpTier(vorp) {
+    if (vorp >= 6) return 'elite';
+    if (vorp >= 3) return 'starter';
+    if (vorp >= 1) return 'flex';
+    if (vorp >= 0) return 'fringe';
+    return 'replacement';
   }
 
-  // Suppressed columns (hardest schedule)
-  var SUPPRESSED_COLUMNS = [
+  var COLUMNS = [
     { key: 'name', label: 'Player', tip: '' },
+    { key: 'vorp', label: 'VORP', tip: 'Value Over Replacement — PPG above replacement level for position' },
     { key: 'ppg', label: 'PPG', tip: 'Fantasy points per game (PPR)' },
-    { key: 'grade', label: 'SOS', tip: 'Strength of schedule grade (A+ = hardest schedule faced)' },
-    { key: 'sos_rank', label: 'Rank', tip: 'Schedule difficulty rank (1 = hardest schedule)' },
-    { key: 'avg_opp_ppg', label: 'Opp PPG', tip: 'Average PPG allowed by opponents faced at this position — lower = tougher schedule' },
-    { key: 'sos_delta', label: 'Delta', tip: 'Schedule difficulty delta — positive = harder than average, negative = easier than average' },
+    { key: 'replacement_ppg', label: 'Repl PPG', tip: 'Replacement-level PPG for this position (QB12/RB24/WR36/TE12)' },
+    { key: 'pos_rank', label: 'Pos Rk', tip: 'Position rank by PPG' },
     { key: 'games', label: 'GP', hide: true, tip: 'Games played' },
     { key: 'annotation', label: '', hide: true, nosort: true, tip: '' }
   ];
 
-  // Inflated columns (easiest schedule)
-  var INFLATED_COLUMNS = [
-    { key: 'name', label: 'Player', tip: '' },
-    { key: 'ppg', label: 'PPG', tip: 'Fantasy points per game (PPR)' },
-    { key: 'grade', label: 'SOS', tip: 'Strength of schedule grade (F = easiest schedule faced)' },
-    { key: 'sos_rank', label: 'Rank', tip: 'Schedule difficulty rank (higher = easier schedule)' },
-    { key: 'avg_opp_ppg', label: 'Opp PPG', tip: 'Average PPG allowed by opponents faced at this position — higher = softer schedule' },
-    { key: 'sos_delta', label: 'Delta', tip: 'Schedule difficulty delta — negative = easier than average' },
-    { key: 'games', label: 'GP', hide: true, tip: 'Games played' },
-    { key: 'annotation', label: '', hide: true, nosort: true, tip: '' }
-  ];
-
-  function getColumns(section) {
-    return section === 'schedule_suppressed' ? SUPPRESSED_COLUMNS : INFLATED_COLUMNS;
-  }
-
-  function buildPlayerRow(p, section) {
+  function buildPlayerRow(p) {
     var pos = (p.position || 'RB').toLowerCase();
-    var cols = getColumns(section);
 
     var html = '<tr data-pid="' + escapeHtml(p.player_id) + '">';
 
-    cols.forEach(function(col) {
+    COLUMNS.forEach(function(col) {
       var classes = [];
       if (col.key !== 'name') classes.push('center');
       if (col.hide) classes.push('hide-mobile');
 
       if (col.key === 'name') {
         html += '<td>';
-        html += '<div class="sos-player-cell">';
+        html += '<div class="vorp-player-cell">';
         if (p.headshot_url) {
-          html += '<img class="sos-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+          html += '<img class="vorp-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
         }
-        html += '<div class="sos-player-info">';
-        html += '<div class="sos-player-name">' + escapeHtml(p.name) + '</div>';
-        html += '<div class="sos-player-meta">';
-        html += '<span class="sos-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
-        html += '<span class="sos-team-label">' + escapeHtml(p.team) + '</span>';
+        html += '<div class="vorp-player-info">';
+        html += '<div class="vorp-player-name">' + escapeHtml(p.name) + '</div>';
+        html += '<div class="vorp-player-meta">';
+        html += '<span class="vorp-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
+        html += '<span class="vorp-team-label">' + escapeHtml(p.team) + '</span>';
         html += '</div></div></div>';
         html += '</td>';
-      } else if (col.key === 'grade') {
-        var g = p.grade || 'C';
+      } else if (col.key === 'vorp') {
+        var tier = vorpTier(p.vorp);
+        var sign = p.vorp > 0 ? '+' : '';
         html += '<td class="' + classes.join(' ') + '">';
-        html += '<span class="sos-grade-badge ' + gradeClass(g) + '">' + escapeHtml(g) + '</span>';
+        html += '<span class="vorp-badge ' + tier + '">' + sign + fmt(p.vorp, 2) + '</span>';
         html += '</td>';
       } else if (col.key === 'ppg') {
         html += '<td class="' + classes.join(' ') + '" style="font-weight:700;">' + fmt(p.ppg) + '</td>';
-      } else if (col.key === 'sos_rank') {
-        html += '<td class="' + classes.join(' ') + '">#' + escapeHtml(String(p.sos_rank)) + '</td>';
-      } else if (col.key === 'avg_opp_ppg') {
-        html += '<td class="' + classes.join(' ') + '">' + fmt(p.avg_opp_ppg) + '</td>';
-      } else if (col.key === 'sos_delta') {
-        var d = p.sos_delta || 0;
-        var cls = d > 0 ? 'hard' : 'easy';
-        var sign = d > 0 ? '+' : '';
-        html += '<td class="' + classes.join(' ') + '">';
-        html += '<span class="sos-delta ' + cls + '">' + sign + fmt(d) + '</span>';
-        html += '</td>';
+      } else if (col.key === 'replacement_ppg') {
+        html += '<td class="' + classes.join(' ') + '" style="color:var(--ink-medium);">' + fmt(p.replacement_ppg) + '</td>';
+      } else if (col.key === 'pos_rank') {
+        html += '<td class="' + classes.join(' ') + '">' + escapeHtml(String(p.pos_rank || '-')) + '</td>';
       } else if (col.key === 'annotation') {
-        html += '<td class="' + classes.join(' ') + '"><span class="sos-annotation">' + escapeHtml(p.annotation || '') + '</span></td>';
+        html += '<td class="' + classes.join(' ') + '"><span class="vorp-annotation">' + escapeHtml(p.annotation || '') + '</span></td>';
       } else {
         var val = p[col.key];
         html += '<td class="' + classes.join(' ') + '">' + (val !== null && val !== undefined ? escapeHtml(String(val)) : '-') + '</td>';
@@ -531,9 +516,8 @@
 
   function buildTableHeader(section) {
     var state = sortState[section];
-    var cols = getColumns(section);
     var html = '<thead><tr>';
-    cols.forEach(function(col) {
+    COLUMNS.forEach(function(col) {
       var classes = [];
       if (col.key !== 'name') classes.push('center');
       if (col.hide) classes.push('hide-mobile');
@@ -560,50 +544,71 @@
 
   function buildTable(players, section) {
     if (!players || !players.length) {
-      var label = section === 'schedule_suppressed' ? 'schedule-suppressed players' : 'schedule-inflated players';
-      return '<div class="sos-empty">no ' + label + ' found for this filter</div>';
+      var label = section === 'league_winners' ? 'league winners' : 'replacement-level players';
+      return '<div class="vorp-empty">no ' + label + ' found for this filter</div>';
     }
 
-    var isSuppressed = section === 'schedule_suppressed';
-    var icon = isSuppressed ? '&#x1F6E1;' : '&#x1F36D;';
-    var title = isSuppressed ? 'Schedule Suppressed' : 'Schedule Inflated';
-    var subtitle = isSuppressed
-      ? 'hardest schedules faced (opponents allowed fewest PPG at position)'
-      : 'easiest schedules faced (opponents allowed most PPG at position)';
-    var headerClass = isSuppressed ? 'suppressed' : 'inflated';
+    var isWinners = section === 'league_winners';
+    var icon = isWinners ? '&#x1F3C6;' : '&#x1F6A8;';
+    var title = isWinners ? 'League Winners' : 'Replacement Level';
+    var subtitle = isWinners
+      ? 'highest value above replacement (the needle-movers)'
+      : 'near or below replacement level (waiver-wire caliber)';
+    var headerClass = isWinners ? 'winners' : 'replacement';
 
     var state = sortState[section];
     var sorted = sortPlayers(players, state.col, state.dir);
 
-    var html = '<div class="sos-section">';
-    html += '<div class="sos-section-header ' + headerClass + '">';
+    var html = '<div class="vorp-section">';
+    html += '<div class="vorp-section-header ' + headerClass + '">';
     html += '<span class="section-icon ' + headerClass + '">' + icon + '</span> ';
     html += title + ' <span style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); font-weight:400;">(' + players.length + ' players) — ' + subtitle + '</span>';
     html += '</div>';
 
-    html += '<table class="sos-table" data-section="' + section + '">';
+    html += '<table class="vorp-table" data-section="' + section + '">';
     html += buildTableHeader(section);
     html += '<tbody>';
     sorted.forEach(function(p) {
-      html += buildPlayerRow(p, section);
+      html += buildPlayerRow(p);
     });
     html += '</tbody></table>';
     html += '</div>';
     return html;
   }
 
+  function renderThresholds(thresholds) {
+    var row = document.getElementById('thresholds-row');
+    if (!thresholds || !Object.keys(thresholds).length) {
+      row.innerHTML = '';
+      return;
+    }
+    var labels = { QB: 'QB12', RB: 'RB24', WR: 'WR36', TE: 'TE12' };
+    var html = '';
+    ['QB', 'RB', 'WR', 'TE'].forEach(function(pos) {
+      if (thresholds[pos] !== undefined) {
+        html += '<div class="vorp-threshold-chip">';
+        html += '<span class="pos-label">' + labels[pos] + ':</span>';
+        html += fmt(thresholds[pos]) + ' PPG';
+        html += '</div>';
+      }
+    });
+    row.innerHTML = html;
+  }
+
   function render(data) {
     currentData = data;
-    var body = document.getElementById('sos-body');
+    var body = document.getElementById('vorp-body');
 
-    if (!data || (!data.schedule_suppressed.length && !data.schedule_inflated.length)) {
-      body.innerHTML = '<div class="sos-empty">no strength of schedule data found for this selection</div>';
+    renderThresholds(data.replacement_thresholds);
+
+    if (!data || (!data.league_winners.length && !data.replacement_level.length)) {
+      body.innerHTML = '<div class="vorp-empty">no VORP data found for this selection</div>';
       return;
     }
 
     var html = '';
-    html += buildTable(data.schedule_suppressed, 'schedule_suppressed');
-    html += buildTable(data.schedule_inflated, 'schedule_inflated');
+    html += buildTable(data.league_winners, 'league_winners');
+    html += buildTable(data.replacement_level, 'replacement_level');
     body.innerHTML = html;
 
     // Attach sort listeners
@@ -631,12 +636,12 @@
   }
 
   function loadData() {
-    var body = document.getElementById('sos-body');
-    body.innerHTML = '<div class="sos-loading">scouting the schedule...</div>';
+    var body = document.getElementById('vorp-body');
+    body.innerHTML = '<div class="vorp-loading">calculating replacement value...</div>';
 
     var seasonSel = document.getElementById('season-select');
     var season = seasonSel.value || '';
-    var url = '/api/strength-of-schedule?limit=30';
+    var url = '/api/vorp?limit=30';
     if (season) url += '&season=' + season;
     if (currentPosition) url += '&position=' + currentPosition;
 
@@ -657,15 +662,15 @@
       }
       render(data);
     }).catch(function(err) {
-      body.innerHTML = '<div class="sos-error">failed to load schedule data<br><button class="btn-chunky" onclick="location.reload()">retry</button></div>';
+      body.innerHTML = '<div class="vorp-error">failed to load VORP data<br><button class="btn-chunky" onclick="location.reload()">retry</button></div>';
     });
   }
 
   // Position tab clicks
   document.getElementById('pos-tabs').addEventListener('click', function(e) {
-    var tab = e.target.closest('.sos-pos-tab');
+    var tab = e.target.closest('.vorp-pos-tab');
     if (!tab) return;
-    document.querySelectorAll('.sos-pos-tab').forEach(function(t) { t.classList.remove('active'); });
+    document.querySelectorAll('.vorp-pos-tab').forEach(function(t) { t.classList.remove('active'); });
     tab.classList.add('active');
     currentPosition = tab.getAttribute('data-pos') || '';
     loadData();
@@ -678,7 +683,7 @@
 
   // Export PNG
   document.getElementById('export-btn').addEventListener('click', function() {
-    var el = document.getElementById('sos-content');
+    var el = document.getElementById('vorp-content');
     if (typeof html2canvas !== 'undefined') {
       html2canvas(el, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
         var ctx = canvas.getContext('2d');
@@ -688,7 +693,7 @@
         ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 16);
 
         var link = document.createElement('a');
-        link.download = 'razzle-schedule-sos.png';
+        link.download = 'razzle-vorp.png';
         link.href = canvas.toDataURL('image/png');
         link.click();
       });
@@ -699,7 +704,7 @@
   fetch('/api/analytics/pageview', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ page: '/schedule.html', referrer: document.referrer || '' })
+    body: JSON.stringify({ page: '/vorp.html', referrer: document.referrer || '' })
   }).catch(function() {});
 
   // Initial load

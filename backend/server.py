@@ -906,6 +906,7 @@ def sitemap_xml():
         ("/opportunity.html", "0.8", "weekly"),
         ("/reportcard.html", "0.8", "weekly"),
         ("/awards.html", "0.8", "weekly"),
+        ("/vorp.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1260,6 +1261,18 @@ def season_awards(season: int = 0, position: str = ""):
     except Exception as e:
         logger.error(f"season_awards error: {e}")
         return JSONResponse({"error": "Failed to fetch season awards data"}, status_code=500)
+
+
+@app.get("/api/vorp")
+def vorp(season: int = 0, position: str = "", limit: int = 30):
+    """Return Value Over Replacement Player rankings."""
+    try:
+        s = season if season > 0 else None
+        pos = position.upper() if position else None
+        return live_data.fetch_vorp(season=s, position=pos, limit=limit)
+    except Exception as e:
+        logger.error(f"vorp error: {e}")
+        return JSONResponse({"error": "Failed to fetch VORP data"}, status_code=500)
 
 
 @app.get("/api/analytics/summary")

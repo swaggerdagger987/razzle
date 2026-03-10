@@ -1,37 +1,37 @@
-# Razzle Loop — Phase 91 Task List
+# Razzle Loop — Phase 92 Task List
 
-> QA + UX Audit — Auto-Generated Fixes (Phases 86-90)
+> Value Over Replacement Player (VORP) Dashboard
 
-**Current Phase**: 91 — QA + UX Audit Fixes
-**Exit Criterion**: All HIGH findings from QA-AUDIT.md (Phases 86-90) resolved. Position-filtered team totals use unfiltered aggregation for correct opp_share/dominator metrics. PNG export watermark overlay added to reportcard.html and awards.html. MEDIUM fixes applied: grade sort order, referrer field, promise catch. All fixes verified with Python syntax checks and JS structure validation.
+**Current Phase**: 92 — VORP Dashboard
+**Exit Criterion**: /vorp.html page shows VORP analysis with two sections: "League Winners" (highest VORP — PPG above position replacement level, cross-position ranking) and "Replacement Level" (lowest VORP among fantasy-relevant starters — replaceable players). Each player: position badge, headshot, name, team, VORP value (color-coded badge: elite >=6 green, starter >=3 blue, flex >=1 yellow, fringe >=0 orange, replacement <0 red), PPG, Replacement PPG for position, VORP Rank, Position Rank, GP, Caveat annotation. Replacement thresholds: QB12, RB24, WR36, TE12 (standard 12-team league). Position filter tabs (All/QB/RB/WR/TE). Season selector. Sortable columns with sort state tracking per section. Click player row → player profile. PNG export via html2canvas with watermark. Responsive at 768px + 480px with hide-mobile columns. /api/vorp endpoint computes per-player VORP (PPG minus position replacement-level PPG), splits into league_winners (VORP > 0, sorted desc) and replacement_level (VORP <= 0 or bottom 25, sorted asc). Min 6 games + 2 PPG filter. "VORP" nav link added to all 31 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors.
 
 ---
 
-## Task 1: HIGH fix — Position filter team totals (backend)
+## Task 1: Backend /api/vorp endpoint
 **Status**: PASS
 **Attempts**: 1
-**Notes**: Fixed fetch_opportunity_share, fetch_report_cards, and fetch_season_awards in live_data.py. Added separate unfiltered SQL query for team totals (GROUP BY p.team, all positions). Removed in-loop team_totals accumulation from filtered rows. 3/3 functions fixed. Python syntax valid.
+**Notes**: fetch_vorp in live_data.py. Computes replacement-level PPG per position (QB12/RB24/WR36/TE12), VORP = PPG - replacement PPG, splits into league_winners (VORP > 0) and replacement_level (bottom 25). Min 6 games + 2 PPG. Server endpoint at /api/vorp with season/position/limit params. Python syntax valid.
 
-## Task 2: HIGH fix — PNG export watermark overlay (frontend)
+## Task 2: VORP Dashboard page (frontend)
 **Status**: PASS
 **Attempts**: 1
-**Notes**: Added canvas watermark drawing (ctx.fillText('razzle.lol', ...)) to PNG export handlers in reportcard.html and awards.html. Also fixed awards.html toDataURL to include 'image/png' format. Both files now match stocks.html pattern.
+**Notes**: /vorp.html with two-section table layout. VORP badge tiers (elite/starter/flex/fringe/replacement). Replacement threshold chips showing QB12/RB24/WR36/TE12 PPG. Position tabs, season select, sortable columns, click→profile, PNG export with canvas watermark. 10 escapeHtml calls. JS braces balanced 61/61. Design compliant.
 
-## Task 3: MEDIUM fixes — Grade sort + analytics (frontend)
+## Task 3: Nav links + sitemap + analytics
 **Status**: PASS
 **Attempts**: 1
-**Notes**: (a) Added GRADE_ORDER map to sortPlayers in reportcard.html, stocks.html, opportunity.html — grade strings now sort numerically (A+=8 > A=7 > B+=6 > B=5 > C+=4 > C=3 > D=2 > F=1). (b) Added referrer field to reportcard.html analytics POST. (c) Fixed awards.html analytics from try/catch to .catch().
+**Notes**: VORP nav link added to all 31 pages (nav + footer where applicable). Sitemap entry added. Analytics pageview POST in vorp.html with referrer.
 
 ## Task 4: Smoke test
 **Status**: PASS
 **Attempts**: 1
-**Notes**: Python syntax valid (live_data.py + server.py). JS structure balanced in all 4 files (reportcard 266/266, awards 166/166, stocks 293/293, opportunity 277/277). 3 unfiltered team totals queries confirmed. 0 in-loop team_totals accumulations confirmed. GRADE_ORDER present in 3 table-based pages. Watermark fillText present in all 4 files. .catch() present in all 4 files.
+**Notes**: Python syntax valid (live_data.py + server.py). JS braces balanced 61/61. 31/31 pages have VORP nav link. 10 escapeHtml calls for XSS. Design compliance: sand bg, chunky 3px borders, 4px shadows, display font headers, mono data, Caveat annotations, position colors.
 
 ---
 
 ## Loop State
 ```
-Current Phase: 91
+Current Phase: 92
 Current Task: 4
 Current Stage: COMPLETE
 Attempt: 1

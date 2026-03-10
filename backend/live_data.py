@@ -7933,3 +7933,126 @@ def fetch_season_awards(season=None, position=None):
         }
     finally:
         conn.close()
+
+
+# ---------------------------------------------------------------------------
+# Value Over Replacement Player (VORP)
+# ---------------------------------------------------------------------------
+
+_VORP_ANNOTATIONS = {
+    "QB": "QB replacement = QB12 in 12-team",
+    "RB": "RB replacement = RB24 in 12-team",
+    "WR": "WR replacement = WR36 in 12-team",
+    "TE": "TE replacement = TE12 in 12-team",
+}
+
+_REPLACEMENT_RANKS = {"QB": 12, "RB": 24, "WR": 36, "TE": 12}
+
+
+def fetch_vorp(season=None, position=None, limit=30):
+    """Return VORP rankings: league winners and replacement-level players."""
+    conn = get_conn()
+
+    try:
+        # Determine season + available seasons
+        row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
+        available_seasons = [r[0] for r in row] if row else [2024]
+        if not season:
+            season = available_seasons[0] if available_seasons else 2024
+
+        # Fetch all fantasy-relevant players (no position filter yet — need all for replacement calc)
+        query = """
+            SELECT
+                p.player_id, p.full_name, p.position, p.team,
+                p.headshot_url,
+                SUM(s.fantasy_points_ppr) as total_ppr,
+                COUNT(DISTINCT s.week) as games
+            FROM players p
+            JOIN player_week_stats s
+                ON s.player_id = p.player_id AND s.season = ?
+            WHERE p.position IN ('QB','RB','WR','TE')
+              AND p.fantasy_relevant = 1
+            GROUP BY p.player_id
+            HAVING games >= 6 AND (total_ppr / games) >= 2
+            ORDER BY total_ppr DESC
+        """
+        rows = conn.execute(query, [season]).fetchall()
+
+        if not rows:
+            return {
+                "season": season,
+                "available_seasons": available_seasons,
+                "replacement_thresholds": {},
+                "league_winners": [],
+                "replacement_level": [],
+            }
+
+        # Build player list with PPG
+        all_players = []
+        for r in rows:
+            games = r[6] or 1
+            total_ppr = r[5] or 0
+            ppg = round(total_ppr / games, 2)
+            all_players.append({
+                "player_id": r[0],
+                "name": r[1] or "Unknown",
+                "position": r[2] or "RB",
+                "team": r[3] or "FA",
+                "headshot_url": r[4] or "",
+                "ppg": ppg,
+                "games": games,
+            })
+
+        # Compute replacement-level PPG for each position
+        replacement_thresholds = {}
+        for pos, repl_rank in _REPLACEMENT_RANKS.items():
+            pos_players = sorted(
+                [p for p in all_players if p["position"] == pos],
+                key=lambda x: x["ppg"],
+                reverse=True,
+            )
+            if len(pos_players) >= repl_rank:
+                replacement_thresholds[pos] = pos_players[repl_rank - 1]["ppg"]
+            elif pos_players:
+                replacement_thresholds[pos] = pos_players[-1]["ppg"]
+            else:
+                replacement_thresholds[pos] = 0
+
+        # Compute VORP and pos_rank for each player
+        # First, compute pos_rank per position
+        pos_groups = {}
+        for p in all_players:
+            pos_groups.setdefault(p["position"], []).append(p)
+        for pos in pos_groups:
+            pos_groups[pos].sort(key=lambda x: x["ppg"], reverse=True)
+            for i, p in enumerate(pos_groups[pos]):
+                p["pos_rank"] = i + 1
+
+        for p in all_players:
+            repl_ppg = replacement_thresholds.get(p["position"], 0)
+            p["replacement_ppg"] = round(repl_ppg, 2)
+            p["vorp"] = round(p["ppg"] - repl_ppg, 2)
+            p["annotation"] = _VORP_ANNOTATIONS.get(p["position"], "")
+
+        # Apply position filter if specified
+        if position and position.upper() in ("QB", "RB", "WR", "TE"):
+            all_players = [p for p in all_players if p["position"] == position.upper()]
+
+        # Split into league winners (VORP > 0) and replacement level (bottom 25)
+        sorted_by_vorp = sorted(all_players, key=lambda x: x["vorp"], reverse=True)
+
+        league_winners = [p for p in sorted_by_vorp if p["vorp"] > 0][:limit]
+        replacement_level = sorted(
+            sorted_by_vorp[-25:] if len(sorted_by_vorp) > 25 else sorted_by_vorp,
+            key=lambda x: x["vorp"],
+        )[:25]
+
+        return {
+            "season": season,
+            "available_seasons": available_seasons,
+            "replacement_thresholds": {k: round(v, 2) for k, v in replacement_thresholds.items()},
+            "league_winners": league_winners,
+            "replacement_level": replacement_level,
+        }
+    finally:
+        conn.close()
