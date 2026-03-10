@@ -172,12 +172,14 @@
     padding: 60px 20px;
   }
 
-  /* ===== COLLEGE MODE INDICATOR ===== */
-  .prospect-mode .lab-sidebar {
+  /* ===== COLLEGE/PROSPECT MODE INDICATOR ===== */
+  .prospect-mode .lab-sidebar,
+  .college-mode .lab-sidebar {
     border-right-color: var(--blue);
   }
 
-  .prospect-mode .lab-sidebar-item.active {
+  .prospect-mode .lab-sidebar-item.active,
+  .college-mode .lab-sidebar-item.active {
     background: var(--blue-light);
     border-left-color: var(--blue);
   }
@@ -675,6 +677,36 @@
     color: var(--orange);
   }
 
+  /* ===== UNIVERSE BAR (persistent across panels) ===== */
+  .universe-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 20px;
+    background: var(--bg-warm);
+    border-bottom: 3px solid var(--ink);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .universe-bar-inner {
+    display: flex;
+    gap: 6px;
+  }
+
+  body.college-mode .universe-bar {
+    background: var(--blue-light);
+    border-bottom-color: var(--blue);
+  }
+
+  body.prospect-mode .universe-bar {
+    background: var(--blue-light);
+    border-bottom-color: var(--blue);
+  }
+
   /* ===== UNIVERSE TOGGLE ===== */
   .universe-toggle {
     font-size: 12px;
@@ -689,29 +721,38 @@
     box-shadow: 2px 2px 0 var(--ink);
   }
 
-  /* ===== PROSPECT MODE ===== */
+  /* ===== PROSPECT/COLLEGE MODE ===== */
   body.prospect-mode .toolbar {
     border-bottom-color: var(--pos-qb);
   }
 
-  body.prospect-mode .universe-toggle.active {
-    background: var(--pos-qb);
-  }
-
-  body.prospect-mode .screener-table th {
+  body.college-mode .toolbar {
     border-bottom-color: var(--pos-qb);
   }
 
-  body.prospect-mode .footer-bar {
+  body.prospect-mode .universe-toggle.active,
+  body.college-mode .universe-toggle.active {
+    background: var(--pos-qb);
+  }
+
+  body.prospect-mode .screener-table th,
+  body.college-mode .screener-table th {
+    border-bottom-color: var(--pos-qb);
+  }
+
+  body.prospect-mode .footer-bar,
+  body.college-mode .footer-bar {
     border-top-color: var(--pos-qb);
   }
 
-  body.prospect-mode .chip.active {
+  body.prospect-mode .chip.active,
+  body.college-mode .chip.active {
     background: var(--pos-qb);
     border-color: var(--pos-qb);
   }
 
-  body.prospect-mode .watermark span {
+  body.prospect-mode .watermark span,
+  body.college-mode .watermark span {
     color: var(--pos-qb);
   }
 
@@ -1482,6 +1523,11 @@
     /* Prevent page-level horizontal overflow */
     html, body { overflow-x: hidden; }
 
+    .universe-bar {
+      padding: 6px 12px;
+    }
+    .universe-bar-label { display: none; }
+
     .toolbar {
       padding: 8px 12px;
       gap: 6px;
@@ -2034,20 +2080,22 @@
 <!-- LAB MAIN -->
 <div class="lab-main" id="labMain">
 
+<!-- PERSISTENT UNIVERSE TOGGLE BAR -->
+<div class="universe-bar" id="universeBar">
+  <div class="universe-bar-inner">
+    <button class="btn-chunky universe-toggle active" id="universeNFL" onclick="setUniverse('nfl')">NFL</button>
+    <button class="btn-chunky universe-toggle" id="universeProspects" onclick="setUniverse('prospects')">Prospects</button>
+    <button class="btn-chunky universe-toggle" id="universeCollege" onclick="setUniverse('college')">College</button>
+  </div>
+  <span class="universe-bar-label" id="universeLabel" style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light);">NFL universe</span>
+</div>
+
 <!-- PANEL: SCREENER (default) -->
 <div class="lab-panel" id="panel-screener">
 
 <!-- TOOLBAR -->
 <div class="lab-container">
   <div class="toolbar" id="mainToolbar">
-    <div class="toolbar-section">
-      <button class="btn-chunky universe-toggle active" id="universeNFL" onclick="setUniverse('nfl')">NFL</button>
-      <button class="btn-chunky universe-toggle" id="universeProspects" onclick="setUniverse('prospects')">Prospects</button>
-      <button class="btn-chunky universe-toggle" id="universeCollege" onclick="setUniverse('college')">College</button>
-    </div>
-
-    <div class="toolbar-divider"></div>
-
     <div class="toolbar-section">
       <span class="chip active" data-pos="ALL" onclick="togglePosition('ALL')">All</span>
       <span class="chip" data-pos="QB" onclick="togglePosition('QB')">QB</span>
@@ -2695,6 +2743,31 @@
     entry.loaded = true;
   };
 
+  // Public API: invalidate all non-screener panel caches (on universe change)
+  window._invalidatePanelCaches = function() {
+    for (var name in panelRegistry) {
+      if (name === 'screener') continue;
+      var entry = panelRegistry[name];
+      if (entry.loaded && entry.container) {
+        entry.loaded = false;
+        var contentEl = entry.container.querySelector('.lab-panel-content');
+        if (contentEl) contentEl.innerHTML = '';
+      }
+    }
+    // Re-render the currently visible panel if it was invalidated
+    if (currentPanel !== 'screener' && panelRegistry[currentPanel]) {
+      var cur = panelRegistry[currentPanel];
+      if (!cur.loaded && cur.container) {
+        var el = cur.container.querySelector('.lab-panel-content');
+        if (el) {
+          el.innerHTML = '<div class="lab-panel-loading"><div class="loading-msg">pulling film...</div></div>';
+          try { cur.render(el); } catch(e) { console.error(e); }
+          cur.loaded = true;
+        }
+      }
+    }
+  };
+
   // Register the screener — it already exists in the DOM
   registerPanel('screener', function() {
     // No-op: panel-screener is statically rendered in lab.html
@@ -2808,11 +2881,14 @@
 
     currentPanel = panelName;
 
-    // Update URL state
-    var newUrl = panelName === 'screener'
-      ? window.location.pathname
-      : window.location.pathname + '?panel=' + panelName;
-    history.pushState({ panel: panelName }, '', newUrl);
+    // Update URL state (include universe if not NFL)
+    var urlParams = new URLSearchParams();
+    if (panelName !== 'screener') urlParams.set('panel', panelName);
+    var uni = (typeof state !== 'undefined' && state.universe && state.universe !== 'nfl') ? state.universe : '';
+    if (uni) urlParams.set('u', uni);
+    var qs = urlParams.toString();
+    var newUrl = window.location.pathname + (qs ? '?' + qs : '');
+    history.pushState({ panel: panelName, universe: uni || 'nfl' }, '', newUrl);
   };
 
   // ─── Sidebar toggle ────────────────────────────────────────────
@@ -2829,6 +2905,17 @@
 
   // ─── URL state on load ─────────────────────────────────────────
   var params = new URLSearchParams(window.location.search);
+
+  // Restore universe from URL param (overrides localStorage)
+  var urlUniverse = params.get('u');
+  if (urlUniverse && (urlUniverse === 'college' || urlUniverse === 'prospects')) {
+    if (typeof state !== 'undefined' && state.universe !== urlUniverse) {
+      state.universe = urlUniverse;
+      localStorage.setItem('razzle_universe', urlUniverse);
+      if (typeof applyUniverseUI === 'function') applyUniverseUI();
+    }
+  }
+
   var initPanel = params.get('panel');
   if (initPanel && initPanel !== 'screener') {
     switchPanel(initPanel);
@@ -2840,6 +2927,13 @@
       switchPanel(e.state.panel);
     } else {
       switchPanel('screener');
+    }
+    // Restore universe on popstate
+    if (e.state && e.state.universe && typeof state !== 'undefined') {
+      var newUni = e.state.universe;
+      if (state.universe !== newUni && typeof setUniverse === 'function') {
+        setUniverse(newUni);
+      }
     }
   });
 

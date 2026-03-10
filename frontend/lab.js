@@ -352,7 +352,7 @@ const PRESETS = {
 
 // ─── State ───────────────────────────────────────────────────────
 const state = {
-  universe: "nfl", // "nfl" or "prospects"
+  universe: localStorage.getItem('razzle_universe') || "nfl", // "nfl", "prospects", or "college"
   position: "ALL",
   search: "",
   season: 0,
@@ -767,6 +767,7 @@ function renderProspectTable() {
 function setUniverse(u) {
   if (state.universe === u) return;
   state.universe = u;
+  localStorage.setItem('razzle_universe', u);
   state.offset = 0;
   state.search = "";
   state.filters = [];
@@ -791,6 +792,9 @@ function setUniverse(u) {
   renderPresets();
   renderActiveFilters();
   fetchAndRender();
+
+  // Invalidate cached panels so they re-fetch with new universe
+  if (window._invalidatePanelCaches) window._invalidatePanelCaches();
 }
 
 function applyUniverseUI() {
@@ -798,8 +802,15 @@ function applyUniverseUI() {
   const isCollege = state.universe === "college";
   const isNFL = state.universe === "nfl";
 
-  // Toggle body class for blue accent (college and prospect modes use blue)
-  document.body.classList.toggle("prospect-mode", isProspect || isCollege);
+  // Toggle body classes for blue accent
+  document.body.classList.toggle("prospect-mode", isProspect);
+  document.body.classList.toggle("college-mode", isCollege);
+
+  // Update universe bar label
+  const uLabel = document.getElementById("universeLabel");
+  if (uLabel) {
+    uLabel.textContent = isCollege ? "college universe" : isProspect ? "prospect universe" : "NFL universe";
+  }
 
   // Toggle buttons
   document.getElementById("universeNFL").classList.toggle("active", isNFL);

@@ -1,6 +1,23 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Consolidation — Inline Panel Migration (COMPLETE)
+## Current Phase: Phase 5 — College Football Integration
+
+**Exit Criterion**: Every applicable Lab panel supports an NFL/College universe toggle. College mode shifts to blue accent. College data covers 2015-present. Panels that don't apply to college show a friendly message.
+
+### Phase 5 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Add persistent universe toggle to Lab toolbar | DONE | Extracted NFL/Prospects/College toggle from screener toolbar into persistent universe-bar above all panels. Blue accent shift via body.college-mode/.prospect-mode CSS classes. localStorage + URL param persistence. Panel cache invalidation on universe change. |
+| 2 | Create college API endpoints for analytical panels | | |
+| 3 | Wire college toggle into Discovery panels | | |
+| 4 | Wire college toggle into Performance panels | | |
+| 5 | Wire college toggle into Trends & Game Analysis panels | | |
+| 6 | Wire college toggle into Records & History panels | | |
+| 7 | Add NFL-only messages for inapplicable panels | | |
+| 8 | College data season expansion verification | | |
+
+## Previous Phase: Consolidation — Inline Panel Migration (COMPLETE)
 
 All 62 iframe panels migrated to native render functions. Zero iframes remain. Panel switching is instant for cached panels.
 
