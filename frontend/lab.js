@@ -1918,14 +1918,25 @@ let _percentileCache = null;
 let _percentileCacheKey = "";
 
 function computePercentiles() {
-  // Cache key: item count + first/last player IDs
   const items = state.items;
   if (!items.length) return {};
-  const cacheKey = items.length + "|" + (items[0].player_id || items[0].player_name) + "|" + (items[items.length - 1].player_id || items[items.length - 1].player_name);
+  const cols = getActiveColumns();
+  // Cache key: item count + first/last player IDs + active columns
+  const cacheKey = items.length + "|" + (items[0].player_id || "") + "|" + (items[items.length - 1].player_id || "") + "|" + cols.join(",");
   if (_percentileCacheKey === cacheKey && _percentileCache) return _percentileCache;
 
-  const cols = getActiveColumns();
   const result = {}; // player_id -> { col_key: percentile (0-100) }
+
+  // Binary search: count of values < target in sorted array
+  function countBelow(arr, val) {
+    let lo = 0, hi = arr.length;
+    while (lo < hi) {
+      const mid = (lo + hi) >> 1;
+      if (arr[mid] < val) lo = mid + 1;
+      else hi = mid;
+    }
+    return lo;
+  }
 
   for (const key of cols) {
     const col = getColumnDef(key);
@@ -1947,20 +1958,15 @@ function computePercentiles() {
       byPos[pos].sort(function(a, b) { return a - b; });
     }
 
-    // Calculate percentile for each player
+    // Calculate percentile for each player using binary search
     for (const p of items) {
       const pos = (p.position || "").toUpperCase();
       const val = p[key];
       if (val == null || val === "" || (typeof val !== "number")) continue;
       const arr = byPos[pos];
-      if (!arr || arr.length < 3) continue; // need 3+ players for meaningful percentile
+      if (!arr || arr.length < 3) continue;
 
-      // Percentile rank: (count of values below) / (total - 1)
-      let below = 0;
-      for (let i = 0; i < arr.length; i++) {
-        if (arr[i] < val) below++;
-        else break;
-      }
+      const below = countBelow(arr, val);
       let pct = arr.length > 1 ? (below / (arr.length - 1)) * 100 : 50;
       if (inverted) pct = 100 - pct;
 

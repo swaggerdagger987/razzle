@@ -15,7 +15,7 @@
 | 5 | Sidebar collapse/expand polish | DONE | 200ms width transition, 12 category icons, 63 item data-icons with ::before, hover tooltips, localStorage persistence. |
 | 6 | Breadcrumb and panel header polish | DONE | Full breadcrumb path (Lab > Category > Panel), display-font title, Caveat flavor text for all 62 panels. CSS hides duplicate h2 in panel content. |
 | 7 | Mobile responsiveness audit | DONE | Sticky first column on all tables (screener + panels). Panel content overflow containment. 375px/480px/768px breakpoints. Slide-out drawer, hamburger toggle, backdrop close, auto-close on nav already existed. |
-| 8 | Performance audit and optimization | | |
+| 8 | Performance audit and optimization | DONE | defer on formulas/formula-store/charts scripts. Binary search percentile computation (O(n log n) to O(n log n) but faster inner loop). Column-aware cache key. Panel innerHTML cleanup on universe switch prevents memory leaks. |
 
 ## Previous Phase: Phase 6 — QA + UX Audit Fixes (COMPLETE)
 

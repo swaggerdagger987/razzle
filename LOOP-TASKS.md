@@ -5,7 +5,7 @@
 - Task: Sidebar collapse/expand polish
 - Stage: PLAN
 - Attempt: 1/3
-- Tasks Done: 7/8
+- Tasks Done: 8/8
 
 ## Phase 7: Lab Polish — transitions, keyboard nav, virtual scrolling, UX refinements
 **Exit Criterion**: The Lab feels fast, fluid, and professional. Panel transitions are smooth. Keyboard users can navigate the full sidebar and table. Tables with 500+ rows don't lag. The experience is screenshot-worthy.
@@ -71,8 +71,8 @@
 **Accept when**: Initial load <2s on broadband. Cached panel switch <500ms. No memory leaks.
 **Depends on**: none
 **Size**: L
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ---
 
