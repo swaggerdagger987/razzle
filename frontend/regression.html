@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>TD Regression — Razzle</title>
+<meta property="og:title" content="TD Regression — Razzle">
+<meta property="og:description" content="Touchdown regression candidates — players due for more or fewer TDs based on opportunity volume on razzle.lol">
+<meta property="og:site_name" content="razzle.lol">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="TD Regression — Razzle">
+<meta name="twitter:description" content="Touchdown regression candidates — players due for more or fewer TDs based on opportunity volume on razzle.lol">
+<meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
+<meta name="description" content="Touchdown regression dashboard — identify players whose TD rates are unsustainably high or low relative to opportunity volume on razzle.lol">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .reg-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+  }
+
+  .reg-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .reg-header h1 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: var(--ink);
+    margin: 0 0 4px;
+  }
+  .reg-header .reg-subtitle {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+  }
+
+  /* Controls */
+  .reg-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .reg-select {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    padding: 7px 12px;
+    border: 3px solid var(--ink);
+    border-radius: 8px;
+    background: var(--bg-card);
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  .reg-pos-tabs {
+    display: flex;
+    border: 3px solid var(--ink);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .reg-pos-tab {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 6px 14px;
+    background: var(--bg-card);
+    color: var(--ink);
+    border: none;
+    border-right: 3px solid var(--ink);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .reg-pos-tab:last-child { border-right: none; }
+  .reg-pos-tab.active {
+    background: var(--ink);
+    color: var(--bg-card);
+  }
+  .reg-pos-tab:hover:not(.active) {
+    background: var(--bg-warm);
+  }
+
+  /* Actions */
+  .reg-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  /* Rate chips row */
+  .reg-rate-chips {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .reg-rate-chip {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 5px 12px;
+    border: 3px solid var(--ink);
+    border-radius: 8px;
+    background: var(--bg-card);
+    box-shadow: 3px 3px 0 var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .reg-rate-chip .chip-pos {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 11px;
+    padding: 1px 6px;
+    border-radius: 5px;
+    color: #fff;
+  }
+  .reg-rate-chip .chip-pos.qb { background: var(--pos-qb); }
+  .reg-rate-chip .chip-pos.rb { background: var(--pos-rb); }
+  .reg-rate-chip .chip-pos.wr { background: var(--pos-wr); }
+  .reg-rate-chip .chip-pos.te { background: var(--pos-te); }
+
+  /* Section headers */
+  .reg-section { margin-bottom: 32px; }
+  .reg-section-header {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 12px;
+    padding: 10px 14px;
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .reg-section-header.up { background: var(--green-light); }
+  .reg-section-header.down { background: var(--red-light); }
+
+  /* Table styles */
+  .reg-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .reg-table th {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 10px 8px;
+    background: var(--bg-warm);
+    color: var(--ink);
+    border-bottom: 3px solid var(--ink);
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+  }
+  .reg-table th.center,
+  .reg-table td.center { text-align: center; }
+  .reg-table th.sorted { color: var(--orange); }
+  .reg-table th .sort-arrow { font-size: 10px; margin-left: 2px; }
+  .reg-table th:hover { background: var(--bg); }
+  .reg-table td {
+    padding: 8px;
+    border-bottom: 1px solid var(--ink-faint);
+    vertical-align: middle;
+  }
+  .reg-table tbody tr {
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+  .reg-table tbody tr:hover {
+    background: var(--bg-warm);
+  }
+
+  /* Player cell */
+  .reg-player-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 160px;
+  }
+  .reg-player-info { min-width: 0; }
+  .reg-player-name {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .reg-player-meta {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 1px;
+  }
+  .reg-pos-badge {
+    font-family: var(--font-display);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 5px;
+    color: #fff;
+  }
+  .reg-pos-badge.qb { background: var(--pos-qb); }
+  .reg-pos-badge.rb { background: var(--pos-rb); }
+  .reg-pos-badge.wr { background: var(--pos-wr); }
+  .reg-pos-badge.te { background: var(--pos-te); }
+  .reg-team-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-medium);
+  }
+
+  /* Delta badge */
+  .reg-delta-badge {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 6px;
+    border: 2px solid;
+    min-width: 36px;
+    text-align: center;
+  }
+  .reg-delta-badge.positive { background: var(--green-light); color: #1a7a6d; border-color: var(--green); }
+  .reg-delta-badge.negative { background: var(--red-light); color: #a83240; border-color: var(--red); }
+
+  /* TD rate badge */
+  .reg-rate-badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 5px;
+    border: 2px solid;
+  }
+  .reg-rate-badge.hot { background: var(--red-light); color: #a83240; border-color: var(--red); }
+  .reg-rate-badge.warm { background: var(--orange-light); color: #a85a3a; border-color: var(--orange); }
+  .reg-rate-badge.avg { background: var(--yellow-light); color: #8a6d20; border-color: var(--yellow); }
+  .reg-rate-badge.cool { background: var(--blue-light); color: #3a5abf; border-color: var(--blue); }
+  .reg-rate-badge.cold { background: var(--green-light); color: #1a7a6d; border-color: var(--green); }
+
+  /* Annotation */
+  .reg-annotation {
+    font-family: var(--font-hand);
+    font-size: 14px;
+    color: var(--ink-light);
+    white-space: nowrap;
+  }
+
+  /* Loading / Empty / Error */
+  .reg-loading, .reg-empty {
+    text-align: center;
+    padding: 60px 20px;
+    font-family: var(--font-hand);
+    font-size: 22px;
+    color: var(--ink-light);
+  }
+  .reg-error {
+    text-align: center;
+    padding: 40px 20px;
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--red);
+  }
+  .reg-error button {
+    margin-top: 12px;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .reg-page { padding: 16px 10px 40px; }
+    .reg-header h1 { font-size: 26px; }
+    .reg-table { font-size: 12px; }
+    .hide-mobile { display: none !important; }
+    .reg-player-cell { min-width: 120px; }
+    .reg-player-name { font-size: 12px; }
+  }
+  @media (max-width: 480px) {
+    .reg-controls { gap: 8px; }
+    .reg-pos-tab { padding: 5px 10px; font-size: 12px; }
+    .reg-rate-chips { gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="/" class="logo">
+    <div class="logo-mark">&#x1F42F;</div>
+    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/lab.html">The Lab</a></li>
+    <li><a href="/tools.html">Tools</a></li>
+    <li><a href="/rankings.html">Rankings</a></li>
+    <li><a href="/leaders.html">Leaders</a></li>
+    <li><a href="/prospects.html">Prospects</a></li>
+    <li><a href="/scarcity.html">Scarcity</a></li>
+    <li><a href="/breakouts.html">Breakouts</a></li>
+    <li><a href="/buysell.html">Buy/Sell</a></li>
+    <li><a href="/aging.html">Aging</a></li>
+    <li><a href="/weekly.html">Weekly</a></li>
+    <li><a href="/targets.html">Targets</a></li>
+    <li><a href="/matchups.html">Matchups</a></li>
+    <li><a href="/usage.html">Usage</a></li>
+    <li><a href="/yoy.html">YoY</a></li>
+    <li><a href="/airyards.html">Air Yards</a></li>
+    <li><a href="/explorer.html">Explorer</a></li>
+    <li><a href="/redzone.html">Red Zone</a></li>
+    <li><a href="/efficiency.html">Efficiency</a></li>
+    <li><a href="/consistency.html">Consistency</a></li>
+    <li><a href="/schedule.html">Schedule</a></li>
+    <li><a href="/stocks.html">Stocks</a></li>
+    <li><a href="/opportunity.html">Opportunity</a></li>
+    <li><a href="/reportcard.html">Report Card</a></li>
+    <li><a href="/awards.html">Awards</a></li>
+    <li><a href="/vorp.html">VORP</a></li>
+    <li><a href="/tradevalues.html">Trade Values</a></li>
+    <li><a href="/tradefinder.html">Trade Finder</a></li>
+    <li><a href="/rosterbuilder.html">Roster Builder</a></li>
+    <li><a href="/scoring.html">Scoring</a></li>
+    <li><a href="/cheatsheet.html">Cheat Sheet</a></li>
+    <li><a href="/auction.html">Auction</a></li>
+    <li><a href="/dashboard.html">Dashboard</a></li>
+    <li><a href="/tiers.html">Tiers</a></li>
+    <li><a href="/archetypes.html">Archetypes</a></li>
+    <li><a href="/career.html">Career</a></li>
+    <li><a href="/career-compare.html">Career Compare</a></li>
+    <li><a href="/draftclass.html">Draft Class</a></li>
+    <li><a href="/percentiles.html">Percentiles</a></li>
+    <li><a href="/regression.html" class="active">TD Regression</a></li>
+    <li><a href="/team/KC">Teams</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
+    <li><a href="/agents.html">War Room</a></li>
+  </ul>
+</nav>
+
+<main class="reg-page" id="regRoot">
+  <div class="reg-header">
+    <h1>TD Regression</h1>
+    <div class="reg-subtitle">who's due for more (or fewer) touchdowns</div>
+  </div>
+
+  <div class="reg-controls">
+    <select class="reg-select" id="regSeason" aria-label="Season selector"></select>
+    <div class="reg-pos-tabs" role="tablist" aria-label="Position filter">
+      <button class="reg-pos-tab active" data-pos="" role="tab" aria-selected="true">ALL</button>
+      <button class="reg-pos-tab" data-pos="QB" role="tab" aria-selected="false">QB</button>
+      <button class="reg-pos-tab" data-pos="RB" role="tab" aria-selected="false">RB</button>
+      <button class="reg-pos-tab" data-pos="WR" role="tab" aria-selected="false">WR</button>
+      <button class="reg-pos-tab" data-pos="TE" role="tab" aria-selected="false">TE</button>
+    </div>
+  </div>
+
+  <div class="reg-actions">
+    <button class="btn btn-outline" id="regExport" title="Export as PNG">Export PNG</button>
+  </div>
+
+  <div id="regRateChips" class="reg-rate-chips"></div>
+
+  <div id="regContent">
+    <div class="reg-loading">pulling film...</div>
+  </div>
+</main>
+
+<footer style="text-align:center; padding:24px 20px 32px; font-family:var(--font-hand); font-size:15px; color:var(--ink-light); border-top:2px dashed var(--ink-faint); margin-top:40px;">
+  <div style="margin-bottom:10px;">
+    <a href="/lab.html" style="color:var(--ink-light); text-decoration:none;">The Lab</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tools.html" style="color:var(--ink-light); text-decoration:none;">Tools</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/rankings.html" style="color:var(--ink-light); text-decoration:none;">Rankings</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/leaders.html" style="color:var(--ink-light); text-decoration:none;">Leaders</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/prospects.html" style="color:var(--ink-light); text-decoration:none;">Prospects</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/scarcity.html" style="color:var(--ink-light); text-decoration:none;">Scarcity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/breakouts.html" style="color:var(--ink-light); text-decoration:none;">Breakouts</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/buysell.html" style="color:var(--ink-light); text-decoration:none;">Buy/Sell</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/aging.html" style="color:var(--ink-light); text-decoration:none;">Aging</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/weekly.html" style="color:var(--ink-light); text-decoration:none;">Weekly</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/targets.html" style="color:var(--ink-light); text-decoration:none;">Targets</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/matchups.html" style="color:var(--ink-light); text-decoration:none;">Matchups</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/usage.html" style="color:var(--ink-light); text-decoration:none;">Usage</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/yoy.html" style="color:var(--ink-light); text-decoration:none;">YoY</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/airyards.html" style="color:var(--ink-light); text-decoration:none;">Air Yards</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/explorer.html" style="color:var(--ink-light); text-decoration:none;">Explorer</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/redzone.html" style="color:var(--ink-light); text-decoration:none;">Red Zone</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/efficiency.html" style="color:var(--ink-light); text-decoration:none;">Efficiency</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/consistency.html" style="color:var(--ink-light); text-decoration:none;">Consistency</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/schedule.html" style="color:var(--ink-light); text-decoration:none;">Schedule</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/stocks.html" style="color:var(--ink-light); text-decoration:none;">Stocks</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/opportunity.html" style="color:var(--ink-light); text-decoration:none;">Opportunity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/reportcard.html" style="color:var(--ink-light); text-decoration:none;">Report Card</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/awards.html" style="color:var(--ink-light); text-decoration:none;">Awards</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/vorp.html" style="color:var(--ink-light); text-decoration:none;">VORP</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tradevalues.html" style="color:var(--ink-light); text-decoration:none;">Trade Values</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tradefinder.html" style="color:var(--ink-light); text-decoration:none;">Trade Finder</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/rosterbuilder.html" style="color:var(--ink-light); text-decoration:none;">Roster Builder</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/scoring.html" style="color:var(--ink-light); text-decoration:none;">Scoring</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/cheatsheet.html" style="color:var(--ink-light); text-decoration:none;">Cheat Sheet</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/auction.html" style="color:var(--ink-light); text-decoration:none;">Auction</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/dashboard.html" style="color:var(--ink-light); text-decoration:none;">Dashboard</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tiers.html" style="color:var(--ink-light); text-decoration:none;">Tiers</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/archetypes.html" style="color:var(--ink-light); text-decoration:none;">Archetypes</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/career.html" style="color:var(--ink-light); text-decoration:none;">Career</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/career-compare.html" style="color:var(--ink-light); text-decoration:none;">Career Compare</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/draftclass.html" style="color:var(--ink-light); text-decoration:none;">Draft Class</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/percentiles.html" style="color:var(--ink-light); text-decoration:none;">Percentiles</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/regression.html" style="color:var(--ink-light); text-decoration:none;">TD Regression</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/team/KC" style="color:var(--ink-light); text-decoration:none;">Teams</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none;">League Intel</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/agents.html" style="color:var(--ink-light); text-decoration:none;">War Room</a>
+  </div>
+  razzle.lol — let's razzle dazzle em baby
+</footer>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script src="app.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function fmt(v, dec) {
+    if (v === null || v === undefined) return '-';
+    return Number(v).toFixed(dec === undefined ? 1 : dec);
+  }
+
+  var currentPosition = '';
+  var currentData = null;
+
+  // Sort state per section
+  var sortState = {
+    up: { col: 'regression_delta', dir: -1 },
+    down: { col: 'regression_delta', dir: 1 }
+  };
+
+  /* ---- URL state ---- */
+  function readURL() {
+    var p = new URLSearchParams(window.location.search);
+    return {
+      season: p.get('season') || '',
+      pos: p.get('pos') || ''
+    };
+  }
+  function writeURL(season, pos) {
+    var p = new URLSearchParams();
+    if (season) p.set('season', season);
+    if (pos) p.set('pos', pos);
+    var qs = p.toString();
+    history.replaceState(null, '', qs ? '?' + qs : location.pathname);
+  }
+
+  /* ---- Fetch ---- */
+  function load() {
+    var sel = document.getElementById('regSeason');
+    var season = sel.value || '';
+    var pos = currentPosition;
+    writeURL(season, pos);
+
+    var url = '/api/td-regression?';
+    if (season) url += 'season=' + encodeURIComponent(season) + '&';
+    if (pos) url += 'position=' + encodeURIComponent(pos);
+
+    document.getElementById('regContent').innerHTML = '<div class="reg-loading">pulling film...</div>';
+
+    fetch(url).then(function(r) {
+      if (!r.ok) throw new Error('API error');
+      return r.json();
+    }).then(function(data) {
+      currentData = data;
+      populateSeasons(data.available_seasons, data.season);
+      renderRateChips(data.pos_avg_rates || {});
+      render(data);
+    }).catch(function(err) {
+      document.getElementById('regContent').innerHTML =
+        '<div class="reg-error">failed to load TD regression data<br><button class="btn btn-outline" onclick="location.reload()">retry</button></div>';
+    });
+  }
+
+  function populateSeasons(seasons, current) {
+    var sel = document.getElementById('regSeason');
+    if (sel.children.length > 0 && sel.value) return;
+    sel.innerHTML = '';
+    (seasons || []).forEach(function(s) {
+      var o = document.createElement('option');
+      o.value = s;
+      o.textContent = s;
+      if (String(s) === String(current)) o.selected = true;
+      sel.appendChild(o);
+    });
+  }
+
+  /* ---- Rate chips ---- */
+  function renderRateChips(rates) {
+    var container = document.getElementById('regRateChips');
+    if (!rates || Object.keys(rates).length === 0) { container.innerHTML = ''; return; }
+    var html = '<span style="font-family:var(--font-hand);font-size:14px;color:var(--ink-light);">Avg TD Rate:</span>';
+    var order = ['QB','RB','WR','TE'];
+    order.forEach(function(pos) {
+      if (rates[pos] !== undefined) {
+        html += '<div class="reg-rate-chip"><span class="chip-pos ' + escapeHtml(pos.toLowerCase()) + '">' + escapeHtml(pos) + '</span>' + fmt(rates[pos], 2) + '%</div>';
+      }
+    });
+    container.innerHTML = html;
+  }
+
+  /* ---- Render ---- */
+  function render(data) {
+    var c = document.getElementById('regContent');
+    if (!data.regression_up.length && !data.regression_down.length) {
+      c.innerHTML = '<div class="reg-empty">no regression candidates found for this filter</div>';
+      return;
+    }
+
+    var html = '';
+
+    // Regression Up section
+    if (data.regression_up.length) {
+      html += '<div class="reg-section">';
+      html += '<div class="reg-section-header up">&#x1F4C8; Regression Up — Due for More TDs</div>';
+      html += buildTable(data.regression_up, 'up');
+      html += '</div>';
+    }
+
+    // Regression Down section
+    if (data.regression_down.length) {
+      html += '<div class="reg-section">';
+      html += '<div class="reg-section-header down">&#x1F4C9; Regression Down — TD Rate Unsustainable</div>';
+      html += buildTable(data.regression_down, 'down');
+      html += '</div>';
+    }
+
+    c.innerHTML = html;
+
+    // Bind sort
+    c.querySelectorAll('th[data-col]').forEach(function(th) {
+      th.addEventListener('click', function() {
+        var section = th.closest('.reg-section').querySelector('.reg-section-header').classList.contains('up') ? 'up' : 'down';
+        var col = th.getAttribute('data-col');
+        if (sortState[section].col === col) {
+          sortState[section].dir *= -1;
+        } else {
+          sortState[section].col = col;
+          sortState[section].dir = col === 'name' ? 1 : -1;
+        }
+        render(currentData);
+      });
+    });
+
+    // Row clicks
+    c.querySelectorAll('tr[data-pid]').forEach(function(tr) {
+      tr.addEventListener('click', function() {
+        window.location.href = '/player/' + encodeURIComponent(tr.getAttribute('data-pid'));
+      });
+    });
+  }
+
+  function buildTable(players, section) {
+    var ss = sortState[section];
+    var sorted = players.slice().sort(function(a, b) {
+      var va = a[ss.col], vb = b[ss.col];
+      if (typeof va === 'string') return ss.dir * va.localeCompare(vb);
+      return ss.dir * ((va || 0) - (vb || 0));
+    });
+
+    var cols = [
+      { key: 'name', label: 'Player', cls: '' },
+      { key: 'games', label: 'G', cls: 'center' },
+      { key: 'opportunities', label: 'Opps', cls: 'center' },
+      { key: 'actual_tds', label: 'Actual TDs', cls: 'center' },
+      { key: 'expected_tds', label: 'Expected TDs', cls: 'center' },
+      { key: 'regression_delta', label: 'Delta', cls: 'center' },
+      { key: 'td_rate', label: 'TD Rate', cls: 'center' },
+      { key: 'pos_avg_td_rate', label: 'Pos Avg', cls: 'center hide-mobile' },
+      { key: 'ppg', label: 'PPG', cls: 'center hide-mobile' }
+    ];
+
+    var html = '<table class="reg-table" role="grid"><thead><tr>';
+    cols.forEach(function(c) {
+      var arrow = '';
+      var scls = '';
+      if (ss.col === c.key) {
+        arrow = '<span class="sort-arrow">' + (ss.dir > 0 ? '&#9650;' : '&#9660;') + '</span>';
+        scls = ' sorted';
+      }
+      html += '<th data-col="' + escapeHtml(c.key) + '" class="' + escapeHtml(c.cls) + scls + '">' + escapeHtml(c.label) + arrow + '</th>';
+    });
+    html += '</tr></thead><tbody>';
+
+    sorted.forEach(function(p) {
+      html += '<tr data-pid="' + escapeHtml(p.player_id) + '">';
+
+      // Player cell
+      html += '<td><div class="reg-player-cell"><div class="reg-player-info">';
+      html += '<div class="reg-player-name">' + escapeHtml(p.name) + '</div>';
+      html += '<div class="reg-player-meta">';
+      html += '<span class="reg-pos-badge ' + escapeHtml((p.position || '').toLowerCase()) + '">' + escapeHtml(p.position) + '</span>';
+      html += '<span class="reg-team-label">' + escapeHtml(p.team) + '</span>';
+      html += '</div></div></div></td>';
+
+      // Games
+      html += '<td class="center">' + escapeHtml(String(p.games)) + '</td>';
+
+      // Opportunities
+      html += '<td class="center">' + escapeHtml(String(p.opportunities)) + '</td>';
+
+      // Actual TDs
+      html += '<td class="center">' + escapeHtml(String(p.actual_tds)) + '</td>';
+
+      // Expected TDs
+      html += '<td class="center">' + fmt(p.expected_tds, 1) + '</td>';
+
+      // Delta badge
+      var delta = p.regression_delta || 0;
+      var deltaCls = delta >= 0 ? 'positive' : 'negative';
+      var deltaSign = delta >= 0 ? '+' : '';
+      html += '<td class="center"><span class="reg-delta-badge ' + deltaCls + '">' + deltaSign + fmt(delta, 1) + '</span></td>';
+
+      // TD Rate badge
+      var rate = p.td_rate || 0;
+      var avgRate = p.pos_avg_td_rate || 0;
+      var rateRatio = avgRate > 0 ? rate / avgRate : 1;
+      var rateCls = rateRatio >= 1.5 ? 'hot' : rateRatio >= 1.2 ? 'warm' : rateRatio >= 0.8 ? 'avg' : rateRatio >= 0.5 ? 'cool' : 'cold';
+      html += '<td class="center"><span class="reg-rate-badge ' + rateCls + '">' + fmt(rate, 2) + '%</span></td>';
+
+      // Pos avg
+      html += '<td class="center hide-mobile">' + fmt(avgRate, 2) + '%</td>';
+
+      // PPG
+      html += '<td class="center hide-mobile">' + fmt(p.ppg, 1) + '</td>';
+
+      html += '</tr>';
+    });
+
+    html += '</tbody></table>';
+    return html;
+  }
+
+  /* ---- Controls ---- */
+  document.querySelectorAll('.reg-pos-tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.reg-pos-tab').forEach(function(t) {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
+      currentPosition = tab.getAttribute('data-pos') || '';
+      load();
+    });
+  });
+
+  document.getElementById('regSeason').addEventListener('change', load);
+
+  /* ---- PNG Export ---- */
+  document.getElementById('regExport').addEventListener('click', function() {
+    var root = document.getElementById('regRoot');
+    if (typeof html2canvas === 'undefined') return;
+    html2canvas(root, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+      var ctx = canvas.getContext('2d');
+      ctx.font = 'bold 18px Space Mono, monospace';
+      ctx.fillStyle = 'rgba(0,0,0,0.15)';
+      ctx.fillText('razzle.lol', canvas.width - 160, canvas.height - 20);
+      var link = document.createElement('a');
+      link.download = 'razzle-td-regression.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+  });
+
+  /* ---- Analytics ---- */
+  if (typeof fetch !== 'undefined') {
+    fetch('/api/analytics/pageview', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ page: 'regression', referrer: document.referrer || '' })
+    }).catch(function() {});
+  }
+
+  /* ---- Init ---- */
+  var urlState = readURL();
+  if (urlState.pos) {
+    currentPosition = urlState.pos;
+    document.querySelectorAll('.reg-pos-tab').forEach(function(t) {
+      t.classList.remove('active');
+      t.setAttribute('aria-selected', 'false');
+      if ((t.getAttribute('data-pos') || '') === urlState.pos) {
+        t.classList.add('active');
+        t.setAttribute('aria-selected', 'true');
+      }
+    });
+  }
+  if (urlState.season) {
+    var sel = document.getElementById('regSeason');
+    var o = document.createElement('option');
+    o.value = urlState.season;
+    o.textContent = urlState.season;
+    o.selected = true;
+    sel.appendChild(o);
+  }
+
+  load();
+})();
+</script>
+</body>
+</html>

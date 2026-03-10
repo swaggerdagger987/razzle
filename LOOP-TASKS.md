@@ -1,31 +1,35 @@
-# Razzle Loop — Phase 110 Task List
+# Razzle Loop — Phase 111 Task List
 
-> QA + UX Audit — Auto-Generated Fixes (Phases 106-109)
+> Touchdown Regression Dashboard
 
-**Current Phase**: 110 — QA + UX Audit Fixes
-**Exit Criterion**: All HIGH and MEDIUM findings from QA-AUDIT.md (Phases 106-109) resolved.
+**Current Phase**: 111 — TD Regression Dashboard
+**Exit Criterion**: /regression.html shows players due for positive/negative TD regression based on TD rate vs opportunity volume, with expected vs actual TDs, regression delta, position filters, season selector, PNG export.
 
 ---
 
-## Task 1: HIGH fix — Career row rate stats weighted (QA-1)
+## Task 1: Backend /api/td-regression endpoint
 **Status**: PASS
 **Attempts**: 1
 
-## Task 2: MEDIUM fixes — 2px borders, draft class name join (QA-2-5)
+## Task 2: Frontend regression.html page
 **Status**: PASS
 **Attempts**: 1
 
-## Task 3: Smoke test + commit + push
-**Status**: PASS
+## Task 3: Nav links + sitemap + tools hub
+**Status**: IN PROGRESS
 **Attempts**: 1
+
+## Task 4: Smoke test + commit + push
+**Status**: PENDING
+**Attempts**: 0
 
 ---
 
 ## Loop State
 ```
-Current Phase: 110
+Current Phase: 111
 Current Task: 3
-Current Stage: COMPLETE
+Current Stage: BUILD
 Attempt: 1
-Tasks Completed: 3/3
+Tasks Completed: 2/4
 ```

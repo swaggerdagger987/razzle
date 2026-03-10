@@ -921,6 +921,7 @@ def sitemap_xml():
         ("/career-compare.html", "0.8", "weekly"),
         ("/draftclass.html", "0.8", "weekly"),
         ("/percentiles.html", "0.8", "weekly"),
+        ("/regression.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1446,6 +1447,18 @@ def draft_class(year: int = 0, position: str = ""):
         return JSONResponse({"error": "Failed to fetch draft class"}, status_code=500)
 
 
+@app.get("/api/td-regression")
+def td_regression(season: int = 0, position: str = ""):
+    """Return players due for positive/negative TD regression."""
+    try:
+        s = season if season > 0 else None
+        pos = position if position else None
+        return live_data.fetch_td_regression(season=s, position=pos)
+    except Exception as e:
+        logger.error(f"td-regression error: {e}")
+        return JSONResponse({"error": "Failed to fetch TD regression"}, status_code=500)
+
+
 @app.get("/api/tools-hub")
 def tools_hub():
     """Return the static tools catalog organized by category."""
@@ -1480,6 +1493,7 @@ def tools_hub():
                 {"name": "Breakout Candidates", "desc": "Opportunity vs. production gap — who's due for a leap", "url": "/breakouts.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Rookie Big Board", "desc": "Prospect tiers with RPS scoring and percentile bars", "url": "/prospects.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Player Percentiles", "desc": "Position-relative percentile rankings across 8+ categories", "url": "/percentiles.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "TD Regression", "desc": "Players due for positive or negative touchdown regression", "url": "/regression.html", "positions": ["QB", "RB", "WR", "TE"]},
             ],
         },
         {

@@ -9810,3 +9810,149 @@ def fetch_player_percentiles(player_id, season=None):
         }
     finally:
         conn.close()
+
+
+# ---------------------------------------------------------------------------
+# TD Regression — players due for positive/negative touchdown regression
+# ---------------------------------------------------------------------------
+
+def fetch_td_regression(season=None, position=None, limit=30):
+    """Return players whose TD rate deviates most from position average."""
+    conn = get_conn()
+
+    try:
+        row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
+        available_seasons = [r[0] for r in row] if row else [2024]
+        if not season:
+            season = available_seasons[0] if available_seasons else 2024
+
+        pos_filter = ""
+        params = [season]
+        if position and position.upper() in ("QB", "RB", "WR", "TE"):
+            pos_filter = "AND p.position = ?"
+            params.append(position.upper())
+
+        query = f"""
+            SELECT
+                p.player_id, p.full_name, p.position, p.team,
+                SUM(s.fantasy_points_ppr) as total_ppr,
+                COUNT(DISTINCT s.week) as games,
+                SUM(s.targets) as targets,
+                SUM(s.carries) as carries,
+                SUM(s.receptions) as receptions,
+                SUM(s.receiving_tds) as rec_tds,
+                SUM(s.rushing_tds) as rush_tds,
+                SUM(s.passing_tds) as pass_tds,
+                SUM(s.attempts) as pass_att,
+                SUM(s.touchdowns) as total_tds,
+                SUM(s.receiving_yards) as rec_yd,
+                SUM(s.rushing_yards) as rush_yd
+            FROM players p
+            JOIN player_week_stats s
+                ON s.player_id = p.player_id AND s.season = ?
+            WHERE p.position IN ('QB','RB','WR','TE')
+              {pos_filter}
+            GROUP BY p.player_id
+            HAVING games >= 6
+            ORDER BY total_ppr DESC
+            LIMIT 500
+        """
+        rows = conn.execute(query, params).fetchall()
+
+        if not rows:
+            return {
+                "season": season,
+                "available_seasons": available_seasons,
+                "regression_up": [],
+                "regression_down": [],
+            }
+
+        # Build player list and compute position-level TD rates
+        players = []
+        pos_opp_totals = {}  # position -> {opps: int, tds: int}
+
+        for r in rows:
+            pos = r[2] or "RB"
+            targets = r[6] or 0
+            carries = r[7] or 0
+            rec_tds = r[9] or 0
+            rush_tds = r[10] or 0
+            pass_tds = r[11] or 0
+            pass_att = r[12] or 0
+            total_tds = r[13] or 0
+            games = r[5] or 1
+
+            # Opportunities depend on position
+            if pos == "QB":
+                opps = pass_att + carries
+                tds = pass_tds + rush_tds
+            elif pos == "RB":
+                opps = carries + targets
+                tds = rush_tds + rec_tds
+            else:  # WR, TE
+                opps = targets + carries
+                tds = rec_tds + rush_tds
+
+            # Need meaningful opportunity sample
+            if opps < 40:
+                continue
+
+            td_rate = tds / opps if opps > 0 else 0
+            ppg = round((r[4] or 0) / games, 2)
+
+            # Accumulate position totals for average
+            if pos not in pos_opp_totals:
+                pos_opp_totals[pos] = {"opps": 0, "tds": 0}
+            pos_opp_totals[pos]["opps"] += opps
+            pos_opp_totals[pos]["tds"] += tds
+
+            players.append({
+                "player_id": r[0],
+                "name": r[1] or "Unknown",
+                "position": pos,
+                "team": r[3] or "FA",
+                "games": games,
+                "ppg": ppg,
+                "opportunities": opps,
+                "actual_tds": tds,
+                "td_rate": round(td_rate * 100, 2),
+                "rec_yd": r[14] or 0,
+                "rush_yd": r[15] or 0,
+            })
+
+        # Compute position-average TD rate
+        pos_avg_rates = {}
+        for pos, totals in pos_opp_totals.items():
+            pos_avg_rates[pos] = totals["tds"] / totals["opps"] if totals["opps"] > 0 else 0
+
+        # Compute expected TDs and regression delta for each player
+        for p in players:
+            pos = p["position"]
+            avg_rate = pos_avg_rates.get(pos, 0)
+            expected_tds = round(p["opportunities"] * avg_rate, 1)
+            delta = round(expected_tds - p["actual_tds"], 1)
+            p["pos_avg_td_rate"] = round(avg_rate * 100, 2)
+            p["expected_tds"] = expected_tds
+            p["regression_delta"] = delta  # positive = due for more TDs
+
+        # Sort by regression delta
+        regression_up = sorted(
+            [p for p in players if p["regression_delta"] > 0],
+            key=lambda x: x["regression_delta"],
+            reverse=True,
+        )[:limit]
+
+        regression_down = sorted(
+            [p for p in players if p["regression_delta"] < 0],
+            key=lambda x: x["regression_delta"],
+        )[:limit]
+
+        return {
+            "season": season,
+            "available_seasons": available_seasons,
+            "pos_avg_rates": {k: round(v * 100, 2) for k, v in pos_avg_rates.items()},
+            "regression_up": regression_up,
+            "regression_down": regression_down,
+        }
+    finally:
+        conn.close()

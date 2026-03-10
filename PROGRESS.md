@@ -1,6 +1,19 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 110 — QA+UX Audit Fixes (Phases 106-109) (COMPLETE)
+## Current Phase: Phase 111 — TD Regression Dashboard (IN PROGRESS)
+
+**Exit criterion:** /regression.html shows players due for positive/negative TD regression based on TD rate vs opportunity volume, with expected vs actual TDs, regression delta, position filters, season selector, PNG export.
+
+### Phase 111 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/td-regression endpoint | DONE | fetch_td_regression, position avg TD rates, expected vs actual TDs |
+| 2 | TD Regression page | DONE | Two sections (up/down), delta badges, rate badges, rate chips, 10 escapeHtml |
+| 3 | Nav links + sitemap + tools hub | IN PROGRESS | Sitemap + tools hub done, nav links updating |
+| 4 | Smoke test | PENDING | |
+
+## Previous Phase: Phase 110 — QA+UX Audit Fixes (Phases 106-109) (COMPLETE)
 
 **Exit criterion MET:** All HIGH and MEDIUM findings resolved. QA-1: Career row rate stats now computed from weighted counting-stat totals (rec/tgt, completions/att, rush_yd/car) instead of simple season averages. QA-2: Draft class position tab borders 2px to 3px. QA-3: Percentile bar track border 2px to 3px. QA-4: Career compare legend dot border 2px to 3px. QA-5: Draft class player join now strips Jr./III/II suffixes for better name matching.
 
