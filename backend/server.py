@@ -897,6 +897,7 @@ def sitemap_xml():
         ("/usage.html", "0.8", "weekly"),
         ("/yoy.html", "0.8", "weekly"),
         ("/airyards.html", "0.8", "weekly"),
+        ("/explorer.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1123,6 +1124,18 @@ def year_over_year(season: int = 0, position: str = "", metric: str = "ppg", lim
     except Exception as e:
         logger.error(f"year_over_year error: {e}")
         return JSONResponse({"error": "Failed to fetch year-over-year data"}, status_code=500)
+
+
+@app.get("/api/stat-explorer")
+def stat_explorer(season: int = 0, position: str = "", x_stat: str = "targets_g", y_stat: str = "ppg"):
+    """Return scatter plot data for two user-chosen stats."""
+    try:
+        s = season if season > 0 else None
+        pos = position.upper() if position else None
+        return live_data.fetch_stat_explorer(season=s, position=pos, x_stat=x_stat, y_stat=y_stat)
+    except Exception as e:
+        logger.error(f"stat_explorer error: {e}")
+        return JSONResponse({"error": "Failed to fetch explorer data"}, status_code=500)
 
 
 @app.get("/api/air-yards")

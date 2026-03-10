@@ -1,6 +1,26 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 79 — Air Yards Dashboard (COMPLETE)
+## Current Phase: Phase 80 — Stat Explorer (COMPLETE)
+
+**Exit criterion MET:** /explorer.html page shows an interactive scatter plot where users can select any two metrics for X and Y axes from dropdown menus (17 metrics: PPG, Targets/G, Rec/G, Rec Yards/G, Rush Yards/G, Carries/G, Air Yards/G, TDs, Age, Snap%, aDOT, Catch Rate, RACR, Target Share, Air Yards Share, WOPR, Games). Each dot is a player, color-coded by position (QB blue, RB teal, WR terracotta, TE purple). Hover tooltip shows player name, team, and both stat values. Click dot → player profile. Canvas-drawn scatter with axis labels, gridlines, nice tick values, and linear regression trendline (dashed terracotta). Position filter tabs (All/QB/RB/WR/TE). Season selector. Resize handler redraws on window resize. PNG export via html2canvas with watermark. Error state with retry button. /api/stat-explorer endpoint returns player data with any two requested stats. Min 4 games filter. Rate metrics (target_share, air_yards_share, wopr) enriched from player_week_metrics only when needed. "Explorer" nav link added to all 22 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations.
+
+### Phase 80 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/stat-explorer endpoint | DONE | 17 metrics, per-game + rate metric enrichment, min 4 games |
+| 2 | Scatter plot page | DONE | Canvas scatter, axis dropdowns, hover tooltip, trendline, click→profile |
+| 3 | Nav links + sitemap + analytics | DONE | All 22 pages updated, sitemap entry, pageview tracking |
+| 4 | Smoke test | DONE | Python + JS syntax clean, 22/22 nav links verified, design compliance confirmed |
+
+### Decisions Log
+- **Stat Explorer as Phase 80**: The ability to plot any two stats against each other is quintessentially Bloomberg-terminal. It lets users discover relationships that predefined dashboards don't surface — "who has high aDOT but low PPG?" or "targets/game vs RACR" to find efficiency outliers. Each scatter plot is a unique screenshot opportunity for r/DynastyFF.
+- **Canvas-drawn scatter**: Canvas gives us full control over the visualization — dot sizes, hover detection, trendlines, gridlines. No charting library needed. Keeps the bundle size at zero (no additional dependencies).
+- **17 metrics**: Covers all major fantasy-relevant stats from both the core player_week_stats table and the player_week_metrics rate table. Adding new metrics later just means adding to the EXPLORER_METRICS list.
+- **Linear regression trendline**: Shows the overall relationship direction at a glance. Dashed terracotta to match the brand accent without overwhelming the data points.
+- **On-demand rate metric enrichment**: Only queries player_week_metrics when the user selects a rate metric (target_share, air_yards_share, wopr). This avoids unnecessary DB work for core stat pairs.
+
+## Previous Phase: Phase 79 — Air Yards Dashboard (COMPLETE)
 
 **Exit criterion MET:** /airyards.html page shows an air yards analytics dashboard for pass catchers (WR/RB/TE). Two sections: "Buy Low" (high air yards rank, underperforming in PPG — positive regression candidates) and "Sell High" (low air yards rank, overperforming in PPG — negative regression candidates). Each player row shows: position badge, headshot, name, team, Tgt/G, total air yards, AY/G, aDOT, AirYd%, WOPR, RACR, PPG, regression delta badge (green=buy low, red=sell high), GP, and Caveat annotations. Position filter tabs (All/WR/RB/TE — no QB). Season selector. Sortable column headers with sort state tracking per section. Click player row → player profile. PNG export via html2canvas with watermark. Color legend for regression indicator. Error state with retry button. Responsive at 768px + 480px with hide-mobile columns. /api/air-yards endpoint queries player_week_stats for receiving_air_yards + targets, enriches with air_yards_share/wopr/target_share from player_week_metrics, computes aDOT and RACR, ranks by air yards vs PPG, and splits into buy_low (delta >3) and sell_high (delta <-3). Min 4 games + 10 targets filter. "Air Yards" nav link added to all 21 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors.
 

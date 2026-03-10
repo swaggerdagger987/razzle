@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Stat Explorer — Razzle</title>
+<meta property="og:title" content="Stat Explorer — Razzle">
+<meta property="og:description" content="Fantasy football stat explorer — interactive scatter plots on razzle.lol">
+<meta property="og:site_name" content="razzle.lol">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Stat Explorer — Razzle">
+<meta name="twitter:description" content="Fantasy football stat explorer — interactive scatter plots on razzle.lol">
+<meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
+<meta name="description" content="Stat explorer — interactive scatter plots to visualize stat relationships on razzle.lol">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .explorer-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+  }
+
+  .explorer-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .explorer-header h1 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: var(--ink);
+    margin: 0 0 4px;
+  }
+  .explorer-header .explorer-subtitle {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+  }
+
+  /* Controls */
+  .explorer-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .explorer-select {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    padding: 7px 12px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--bg-card);
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  .explorer-axis-label {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink-medium);
+  }
+
+  .explorer-pos-tabs {
+    display: flex;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .explorer-pos-tab {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 6px 14px;
+    background: var(--bg-card);
+    color: var(--ink);
+    border: none;
+    border-right: 2px solid var(--ink);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .explorer-pos-tab:last-child { border-right: none; }
+  .explorer-pos-tab.active {
+    background: var(--ink);
+    color: var(--bg-card);
+  }
+  .explorer-pos-tab:hover:not(.active) {
+    background: var(--bg-warm);
+  }
+
+  .explorer-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  /* Legend */
+  .explorer-legend {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 16px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-medium);
+  }
+  .explorer-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .explorer-legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1px solid var(--ink);
+  }
+
+  /* Chart container */
+  .explorer-chart-wrap {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 20px;
+    position: relative;
+    margin-bottom: 24px;
+  }
+
+  .explorer-canvas {
+    width: 100%;
+    cursor: crosshair;
+  }
+
+  /* Tooltip */
+  .explorer-tooltip {
+    display: none;
+    position: absolute;
+    background: var(--bg-card);
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    padding: 8px 12px;
+    box-shadow: 3px 3px 0 var(--ink);
+    pointer-events: none;
+    z-index: 10;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink);
+    max-width: 220px;
+  }
+  .explorer-tooltip .tt-name {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+  .explorer-tooltip .tt-meta {
+    color: var(--ink-medium);
+    margin-bottom: 4px;
+  }
+  .explorer-tooltip .tt-stat {
+    white-space: nowrap;
+  }
+
+  /* Player count */
+  .explorer-count {
+    text-align: center;
+    font-family: var(--font-hand);
+    font-size: 16px;
+    color: var(--ink-light);
+    margin-bottom: 8px;
+  }
+
+  /* Loading / error */
+  .explorer-loading {
+    text-align: center;
+    font-family: var(--font-hand);
+    font-size: 22px;
+    color: var(--ink-light);
+    padding: 60px 20px;
+  }
+  .explorer-error {
+    text-align: center;
+    padding: 60px 20px;
+  }
+  .explorer-error-msg {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--red);
+    margin-bottom: 12px;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .explorer-header h1 { font-size: 26px; }
+    .explorer-chart-wrap { padding: 12px; }
+  }
+  @media (max-width: 480px) {
+    .explorer-page { padding: 16px 12px 40px; }
+    .explorer-header h1 { font-size: 22px; }
+    .explorer-controls { gap: 8px; }
+    .explorer-select { font-size: 11px; padding: 5px 8px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="/" class="logo">
+    <div class="logo-mark">&#x1F42F;</div>
+    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/lab.html">The Lab</a></li>
+    <li><a href="/rankings.html">Rankings</a></li>
+    <li><a href="/leaders.html">Leaders</a></li>
+    <li><a href="/prospects.html">Prospects</a></li>
+    <li><a href="/scarcity.html">Scarcity</a></li>
+    <li><a href="/breakouts.html">Breakouts</a></li>
+    <li><a href="/buysell.html">Buy/Sell</a></li>
+    <li><a href="/aging.html">Aging</a></li>
+    <li><a href="/weekly.html">Weekly</a></li>
+    <li><a href="/targets.html">Targets</a></li>
+    <li><a href="/matchups.html">Matchups</a></li>
+    <li><a href="/usage.html">Usage</a></li>
+    <li><a href="/yoy.html">YoY</a></li>
+    <li><a href="/airyards.html">Air Yards</a></li>
+    <li><a href="/explorer.html" class="active">Explorer</a></li>
+    <li><a href="/team/KC">Teams</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
+    <li><a href="/agents.html">War Room</a></li>
+  </ul>
+</nav>
+
+<main class="explorer-page" id="explorer-content">
+  <div class="explorer-header">
+    <h1>Stat Explorer</h1>
+    <div class="explorer-subtitle">pick any two stats and see how they relate</div>
+  </div>
+
+  <div class="explorer-controls">
+    <span class="explorer-axis-label">X:</span>
+    <select class="explorer-select" id="x-select" aria-label="X axis stat"></select>
+    <span class="explorer-axis-label">Y:</span>
+    <select class="explorer-select" id="y-select" aria-label="Y axis stat"></select>
+    <div class="explorer-pos-tabs" id="pos-tabs">
+      <button class="explorer-pos-tab active" data-pos="" aria-label="All positions">All</button>
+      <button class="explorer-pos-tab" data-pos="QB" aria-label="Quarterbacks">QB</button>
+      <button class="explorer-pos-tab" data-pos="RB" aria-label="Running Backs">RB</button>
+      <button class="explorer-pos-tab" data-pos="WR" aria-label="Wide Receivers">WR</button>
+      <button class="explorer-pos-tab" data-pos="TE" aria-label="Tight Ends">TE</button>
+    </div>
+    <select class="explorer-select" id="season-select" title="Season" aria-label="Season"></select>
+  </div>
+
+  <div class="explorer-legend">
+    <div class="explorer-legend-item"><div class="explorer-legend-dot" style="background:#5b7fff;"></div>QB</div>
+    <div class="explorer-legend-item"><div class="explorer-legend-dot" style="background:#2ec4b6;"></div>RB</div>
+    <div class="explorer-legend-item"><div class="explorer-legend-dot" style="background:#d97757;"></div>WR</div>
+    <div class="explorer-legend-item"><div class="explorer-legend-dot" style="background:#8b5cf6;"></div>TE</div>
+  </div>
+
+  <div class="explorer-actions">
+    <button class="btn-chunky" id="export-btn" title="Export as PNG">Export PNG</button>
+  </div>
+
+  <div id="explorer-body">
+    <div class="explorer-loading" id="explorer-loading">crunching numbers...</div>
+  </div>
+</main>
+
+<!-- Watermark -->
+<div style="position:fixed; bottom:10px; right:14px; font-family:var(--font-hand); font-size:14px; color:var(--ink-light); opacity:0.7; pointer-events:none; z-index:999;">razzle.lol</div>
+
+<!-- Footer -->
+<footer style="text-align:center; padding:24px 20px 32px; font-family:var(--font-hand); font-size:15px; color:var(--ink-light); border-top:2px dashed var(--ink-faint); margin-top:40px;">
+  <div style="margin-bottom:10px;">
+    <a href="/lab.html" style="color:var(--ink-light); text-decoration:none;">The Lab</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/rankings.html" style="color:var(--ink-light); text-decoration:none;">Rankings</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/leaders.html" style="color:var(--ink-light); text-decoration:none;">Leaders</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/prospects.html" style="color:var(--ink-light); text-decoration:none;">Prospects</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/scarcity.html" style="color:var(--ink-light); text-decoration:none;">Scarcity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/breakouts.html" style="color:var(--ink-light); text-decoration:none;">Breakouts</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/buysell.html" style="color:var(--ink-light); text-decoration:none;">Buy/Sell</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/aging.html" style="color:var(--ink-light); text-decoration:none;">Aging</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/weekly.html" style="color:var(--ink-light); text-decoration:none;">Weekly</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/targets.html" style="color:var(--ink-light); text-decoration:none;">Targets</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/matchups.html" style="color:var(--ink-light); text-decoration:none;">Matchups</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/usage.html" style="color:var(--ink-light); text-decoration:none;">Usage</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/yoy.html" style="color:var(--ink-light); text-decoration:none;">YoY</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/airyards.html" style="color:var(--ink-light); text-decoration:none;">Air Yards</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/explorer.html" style="color:var(--ink-light); text-decoration:none;">Explorer</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/team/KC" style="color:var(--ink-light); text-decoration:none;">Teams</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none;">League Intel</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/agents.html" style="color:var(--ink-light); text-decoration:none;">War Room</a>
+  </div>
+  razzle.lol — let's razzle dazzle em baby
+</footer>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script src="app.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+
+  var METRIC_LABELS = {
+    ppg: 'PPG', targets_g: 'Targets/G', receptions_g: 'Rec/G', rec_yards_g: 'Rec Yards/G',
+    rush_yards_g: 'Rush Yards/G', carries_g: 'Carries/G', air_yards_g: 'Air Yards/G',
+    tds: 'Total TDs', age: 'Age', snap_pct: 'Snap %', adot: 'aDOT',
+    catch_rate: 'Catch Rate %', racr: 'RACR', target_share: 'Target Share',
+    air_yards_share: 'Air Yards Share', wopr: 'WOPR', games: 'Games'
+  };
+
+  var currentPosition = '';
+  var currentData = null;
+  var hoveredPlayer = null;
+  var chartCanvas = null;
+  var chartRect = null;
+  var plotPoints = []; // [{x, y, px, py, player}]
+
+  // Chart margins
+  var MARGIN = { top: 20, right: 30, bottom: 50, left: 60 };
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function populateAxisSelects(metrics) {
+    var xSel = document.getElementById('x-select');
+    var ySel = document.getElementById('y-select');
+    if (xSel.options.length > 0) return;
+
+    metrics.forEach(function(m) {
+      var label = METRIC_LABELS[m] || m;
+      var xOpt = document.createElement('option');
+      xOpt.value = m;
+      xOpt.textContent = label;
+      if (m === 'targets_g') xOpt.selected = true;
+      xSel.appendChild(xOpt);
+
+      var yOpt = document.createElement('option');
+      yOpt.value = m;
+      yOpt.textContent = label;
+      if (m === 'ppg') yOpt.selected = true;
+      ySel.appendChild(yOpt);
+    });
+  }
+
+  function drawChart(data) {
+    currentData = data;
+    var body = document.getElementById('explorer-body');
+    var players = data.players || [];
+
+    if (!players.length) {
+      body.innerHTML = '<div class="explorer-loading">no data for this selection</div>';
+      return;
+    }
+
+    var xLabel = METRIC_LABELS[data.x_stat] || data.x_stat;
+    var yLabel = METRIC_LABELS[data.y_stat] || data.y_stat;
+
+    // Create chart container
+    var html = '<div class="explorer-count">' + players.length + ' players shown</div>';
+    html += '<div class="explorer-chart-wrap" id="chart-wrap">';
+    html += '<canvas class="explorer-canvas" id="scatter-canvas"></canvas>';
+    html += '<div class="explorer-tooltip" id="tooltip"></div>';
+    html += '</div>';
+    body.innerHTML = html;
+
+    chartCanvas = document.getElementById('scatter-canvas');
+    var wrap = document.getElementById('chart-wrap');
+    var wrapW = wrap.clientWidth - 40; // padding
+    var canvasH = Math.min(600, Math.max(350, wrapW * 0.6));
+
+    var dpr = window.devicePixelRatio || 1;
+    chartCanvas.width = wrapW * dpr;
+    chartCanvas.height = canvasH * dpr;
+    chartCanvas.style.width = wrapW + 'px';
+    chartCanvas.style.height = canvasH + 'px';
+
+    var ctx = chartCanvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+
+    var plotW = wrapW - MARGIN.left - MARGIN.right;
+    var plotH = canvasH - MARGIN.top - MARGIN.bottom;
+
+    // Compute ranges
+    var xVals = players.map(function(p) { return p.x; });
+    var yVals = players.map(function(p) { return p.y; });
+    var xMin = Math.min.apply(null, xVals);
+    var xMax = Math.max.apply(null, xVals);
+    var yMin = Math.min.apply(null, yVals);
+    var yMax = Math.max.apply(null, yVals);
+
+    // Add 5% padding
+    var xPad = (xMax - xMin) * 0.05 || 1;
+    var yPad = (yMax - yMin) * 0.05 || 1;
+    xMin -= xPad; xMax += xPad;
+    yMin -= yPad; yMax += yPad;
+
+    function xScale(v) { return MARGIN.left + ((v - xMin) / (xMax - xMin)) * plotW; }
+    function yScale(v) { return MARGIN.top + plotH - ((v - yMin) / (yMax - yMin)) * plotH; }
+
+    // Background
+    ctx.fillStyle = '#f7efe5';
+    ctx.fillRect(0, 0, wrapW, canvasH);
+
+    // Gridlines
+    ctx.strokeStyle = '#c5c5d0';
+    ctx.lineWidth = 0.5;
+    var xTicks = niceTickValues(xMin, xMax, 6);
+    var yTicks = niceTickValues(yMin, yMax, 6);
+
+    xTicks.forEach(function(v) {
+      var x = xScale(v);
+      ctx.beginPath(); ctx.moveTo(x, MARGIN.top); ctx.lineTo(x, MARGIN.top + plotH); ctx.stroke();
+    });
+    yTicks.forEach(function(v) {
+      var y = yScale(v);
+      ctx.beginPath(); ctx.moveTo(MARGIN.left, y); ctx.lineTo(MARGIN.left + plotW, y); ctx.stroke();
+    });
+
+    // Axes
+    ctx.strokeStyle = '#1a1a2e';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(MARGIN.left, MARGIN.top);
+    ctx.lineTo(MARGIN.left, MARGIN.top + plotH);
+    ctx.lineTo(MARGIN.left + plotW, MARGIN.top + plotH);
+    ctx.stroke();
+
+    // Tick labels
+    ctx.fillStyle = '#4a4a5e';
+    ctx.font = '11px "Space Mono", monospace';
+    ctx.textAlign = 'center';
+    xTicks.forEach(function(v) {
+      ctx.fillText(formatTickValue(v), xScale(v), MARGIN.top + plotH + 18);
+    });
+    ctx.textAlign = 'right';
+    yTicks.forEach(function(v) {
+      ctx.fillText(formatTickValue(v), MARGIN.left - 8, yScale(v) + 4);
+    });
+
+    // Axis labels
+    ctx.fillStyle = '#1a1a2e';
+    ctx.font = 'bold 13px "Luckiest Guy", "Garfield Sans", cursive';
+    ctx.textAlign = 'center';
+    ctx.fillText(xLabel, MARGIN.left + plotW / 2, canvasH - 6);
+
+    ctx.save();
+    ctx.translate(16, MARGIN.top + plotH / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillText(yLabel, 0, 0);
+    ctx.restore();
+
+    // Linear regression trendline
+    if (players.length > 2) {
+      var sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0, n = players.length;
+      players.forEach(function(p) {
+        sumX += p.x; sumY += p.y; sumXY += p.x * p.y; sumX2 += p.x * p.x;
+      });
+      var slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+      var intercept = (sumY - slope * sumX) / n;
+
+      if (isFinite(slope) && isFinite(intercept)) {
+        ctx.strokeStyle = 'rgba(217, 119, 87, 0.4)';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([6, 4]);
+        ctx.beginPath();
+        ctx.moveTo(xScale(xMin), yScale(slope * xMin + intercept));
+        ctx.lineTo(xScale(xMax), yScale(slope * xMax + intercept));
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+    }
+
+    // Plot dots
+    plotPoints = [];
+    var dotR = players.length > 100 ? 4 : (players.length > 50 ? 5 : 6);
+
+    players.forEach(function(p) {
+      var px = xScale(p.x);
+      var py = yScale(p.y);
+      var color = POS_COLORS[p.position] || '#8a8a9e';
+
+      ctx.beginPath();
+      ctx.arc(px, py, dotR, 0, Math.PI * 2);
+      ctx.fillStyle = color;
+      ctx.globalAlpha = 0.75;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+      ctx.strokeStyle = '#1a1a2e';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      plotPoints.push({ px: px, py: py, x: p.x, y: p.y, player: p });
+    });
+
+    // Hover handler
+    chartCanvas.addEventListener('mousemove', handleHover);
+    chartCanvas.addEventListener('mouseleave', hideTooltip);
+    chartCanvas.addEventListener('click', handleClick);
+
+    chartRect = chartCanvas.getBoundingClientRect();
+  }
+
+  function handleHover(e) {
+    var rect = chartCanvas.getBoundingClientRect();
+    var mx = (e.clientX - rect.left) * (chartCanvas.width / (window.devicePixelRatio || 1)) / rect.width / (window.devicePixelRatio || 1);
+    var my = (e.clientY - rect.top) * (chartCanvas.height / (window.devicePixelRatio || 1)) / rect.height / (window.devicePixelRatio || 1);
+
+    var closest = null;
+    var minDist = 20;
+
+    plotPoints.forEach(function(pt) {
+      var dist = Math.sqrt(Math.pow(pt.px - mx, 2) + Math.pow(pt.py - my, 2));
+      if (dist < minDist) {
+        minDist = dist;
+        closest = pt;
+      }
+    });
+
+    var tooltip = document.getElementById('tooltip');
+    if (closest) {
+      hoveredPlayer = closest.player;
+      var p = closest.player;
+      var xLabel = METRIC_LABELS[currentData.x_stat] || currentData.x_stat;
+      var yLabel = METRIC_LABELS[currentData.y_stat] || currentData.y_stat;
+
+      tooltip.innerHTML = '<div class="tt-name">' + escapeHtml(p.name) + '</div>' +
+        '<div class="tt-meta">' + escapeHtml(p.position) + ' — ' + escapeHtml(p.team) + '</div>' +
+        '<div class="tt-stat">' + escapeHtml(xLabel) + ': <b>' + p.x + '</b></div>' +
+        '<div class="tt-stat">' + escapeHtml(yLabel) + ': <b>' + p.y + '</b></div>';
+      tooltip.style.display = 'block';
+
+      // Position tooltip
+      var wrap = document.getElementById('chart-wrap');
+      var wrapRect = wrap.getBoundingClientRect();
+      var tipX = e.clientX - wrapRect.left + 15;
+      var tipY = e.clientY - wrapRect.top - 10;
+      if (tipX + 200 > wrap.clientWidth) tipX = e.clientX - wrapRect.left - 200;
+      tooltip.style.left = tipX + 'px';
+      tooltip.style.top = tipY + 'px';
+    } else {
+      hoveredPlayer = null;
+      tooltip.style.display = 'none';
+    }
+  }
+
+  function hideTooltip() {
+    var tooltip = document.getElementById('tooltip');
+    if (tooltip) tooltip.style.display = 'none';
+    hoveredPlayer = null;
+  }
+
+  function handleClick() {
+    if (hoveredPlayer && hoveredPlayer.player_id) {
+      window.location.href = '/player/' + encodeURIComponent(hoveredPlayer.player_id);
+    }
+  }
+
+  function niceTickValues(min, max, count) {
+    var range = max - min;
+    if (range <= 0) return [min];
+    var step = range / count;
+    var mag = Math.pow(10, Math.floor(Math.log10(step)));
+    var norm = step / mag;
+    var niceStep;
+    if (norm <= 1.5) niceStep = mag;
+    else if (norm <= 3) niceStep = 2 * mag;
+    else if (norm <= 7) niceStep = 5 * mag;
+    else niceStep = 10 * mag;
+
+    var ticks = [];
+    var start = Math.ceil(min / niceStep) * niceStep;
+    for (var v = start; v <= max; v += niceStep) {
+      ticks.push(Math.round(v * 1000) / 1000);
+    }
+    return ticks;
+  }
+
+  function formatTickValue(v) {
+    if (Math.abs(v) >= 100) return Math.round(v).toString();
+    if (Math.abs(v) >= 1) return v.toFixed(1);
+    return v.toFixed(2);
+  }
+
+  function loadData() {
+    var body = document.getElementById('explorer-body');
+    body.innerHTML = '<div class="explorer-loading">crunching numbers...</div>';
+
+    var xSel = document.getElementById('x-select');
+    var ySel = document.getElementById('y-select');
+    var seasonSel = document.getElementById('season-select');
+
+    var xStat = xSel.value || 'targets_g';
+    var yStat = ySel.value || 'ppg';
+    var season = seasonSel.value || '';
+
+    var url = '/api/stat-explorer?x_stat=' + xStat + '&y_stat=' + yStat;
+    if (season) url += '&season=' + season;
+    if (currentPosition) url += '&position=' + currentPosition;
+
+    fetch(url).then(function(resp) {
+      if (!resp.ok) throw new Error('API error ' + resp.status);
+      return resp.json();
+    }).then(function(data) {
+      // Populate selects on first load
+      if (data.metrics) populateAxisSelects(data.metrics);
+
+      if (data.available_seasons && !seasonSel.options.length) {
+        data.available_seasons.forEach(function(s) {
+          var opt = document.createElement('option');
+          opt.value = s;
+          opt.textContent = s;
+          if (s === data.season) opt.selected = true;
+          seasonSel.appendChild(opt);
+        });
+      }
+
+      drawChart(data);
+    }).catch(function(err) {
+      body.innerHTML = '<div class="explorer-error"><div class="explorer-error-msg">failed to load explorer data</div><button class="btn-chunky" onclick="window.location.reload()">Retry</button></div>';
+    });
+  }
+
+  // Position tabs
+  document.getElementById('pos-tabs').addEventListener('click', function(e) {
+    var tab = e.target.closest('.explorer-pos-tab');
+    if (!tab) return;
+    document.querySelectorAll('.explorer-pos-tab').forEach(function(t) { t.classList.remove('active'); });
+    tab.classList.add('active');
+    currentPosition = tab.getAttribute('data-pos') || '';
+    loadData();
+  });
+
+  // Axis selects
+  document.getElementById('x-select').addEventListener('change', loadData);
+  document.getElementById('y-select').addEventListener('change', loadData);
+  document.getElementById('season-select').addEventListener('change', loadData);
+
+  // Export PNG
+  document.getElementById('export-btn').addEventListener('click', function() {
+    var el = document.getElementById('explorer-content');
+    if (typeof html2canvas === 'function') {
+      html2canvas(el, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+        var link = document.createElement('a');
+        link.download = 'razzle-stat-explorer.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      });
+    }
+  });
+
+  // Resize handler
+  var resizeTimer;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function() {
+      if (currentData) drawChart(currentData);
+    }, 200);
+  });
+
+  // Analytics
+  if (typeof trackPageview === 'function') trackPageview();
+
+  // Initial load
+  loadData();
+})();
+</script>
+</body>
+</html>

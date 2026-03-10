@@ -4882,6 +4882,167 @@ def fetch_buy_sell_candidates(season=None, position=None, limit=15):
 
 
 # ---------------------------------------------------------------------------
+# Stat Explorer — configurable scatter plot data
+# ---------------------------------------------------------------------------
+
+# Core stats computed from player_week_stats aggregates (per-game where noted)
+_EXPLORER_CORE = {
+    "ppg", "targets_g", "receptions_g", "rec_yards_g", "rush_yards_g",
+    "carries_g", "air_yards_g", "tds", "age", "snap_pct", "adot",
+    "catch_rate", "racr", "games",
+}
+# Rate stats from player_week_metrics
+_EXPLORER_RATE = {"target_share", "air_yards_share", "wopr"}
+
+EXPLORER_METRICS = sorted(_EXPLORER_CORE | _EXPLORER_RATE)
+
+
+def fetch_stat_explorer(season=None, position=None, x_stat="targets_g", y_stat="ppg"):
+    """Return player data for scatter plot with two user-chosen stats."""
+    conn = get_conn()
+
+    try:
+        row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
+        available_seasons = [r[0] for r in row] if row else [2024]
+
+        if not season:
+            season = available_seasons[0] if available_seasons else 2024
+
+        # Validate stat names
+        if x_stat not in (_EXPLORER_CORE | _EXPLORER_RATE):
+            x_stat = "targets_g"
+        if y_stat not in (_EXPLORER_CORE | _EXPLORER_RATE):
+            y_stat = "ppg"
+
+        pos_filter = ""
+        params = [season]
+        if position and position.upper() in FANTASY_POSITIONS:
+            pos_filter = "AND p.position = ?"
+            params.append(position.upper())
+
+        rows = conn.execute(f"""
+            SELECT
+                p.player_id, p.full_name, p.position, p.team, p.age,
+                p.headshot_url,
+                COUNT(DISTINCT s.week) as games,
+                SUM(s.fantasy_points_ppr) as total_ppr,
+                SUM(s.targets) as total_targets,
+                SUM(s.receptions) as total_receptions,
+                SUM(s.receiving_yards) as total_rec_yards,
+                SUM(s.rushing_yards) as total_rush_yards,
+                SUM(s.carries) as total_carries,
+                SUM(s.receiving_air_yards) as total_air_yards,
+                SUM(s.touchdowns) as total_tds,
+                AVG(s.offense_pct) as avg_snap_pct
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE s.season = ?
+              AND p.position IN ('QB','RB','WR','TE')
+              {pos_filter}
+            GROUP BY p.player_id
+            HAVING COUNT(DISTINCT s.week) >= 4
+        """, params).fetchall()
+
+        if not rows:
+            return {
+                "season": season,
+                "available_seasons": available_seasons,
+                "x_stat": x_stat,
+                "y_stat": y_stat,
+                "players": [],
+                "metrics": EXPLORER_METRICS,
+            }
+
+        players = []
+        for r in rows:
+            games = r[6] or 1
+            targets = r[8] or 0
+            receptions = r[9] or 0
+            air_yards = r[13] or 0
+            rec_yards = r[10] or 0
+
+            p = {
+                "player_id": r[0],
+                "name": r[1] or "Unknown",
+                "position": r[2] or "WR",
+                "team": r[3] or "FA",
+                "age": r[4],
+                "headshot_url": r[5] or "",
+                # Core computed stats
+                "games": games,
+                "ppg": round((r[7] or 0) / games, 1),
+                "targets_g": round(targets / games, 1),
+                "receptions_g": round(receptions / games, 1),
+                "rec_yards_g": round(rec_yards / games, 1),
+                "rush_yards_g": round((r[11] or 0) / games, 1),
+                "carries_g": round((r[12] or 0) / games, 1),
+                "air_yards_g": round(air_yards / games, 1),
+                "tds": r[14] or 0,
+                "snap_pct": round(r[15] or 0, 1),
+                "adot": round(air_yards / targets, 1) if targets > 0 else 0,
+                "catch_rate": round(receptions / targets * 100, 1) if targets > 0 else 0,
+                "racr": round(rec_yards / air_yards, 2) if air_yards > 0 else 0,
+            }
+            players.append(p)
+
+        # Enrich with rate metrics if needed
+        need_rate = {x_stat, y_stat} & _EXPLORER_RATE
+        if need_rate:
+            pid_list = [p["player_id"] for p in players]
+            placeholders = ",".join("?" * len(pid_list))
+            rate_keys = list(need_rate)
+            stat_ph = ",".join("?" * len(rate_keys))
+
+            rate_rows = conn.execute(f"""
+                SELECT m.player_id, m.stat_key, AVG(m.stat_value) as avg_val
+                FROM player_week_metrics m
+                WHERE m.player_id IN ({placeholders})
+                  AND m.stat_key IN ({stat_ph})
+                  AND m.season = ?
+                GROUP BY m.player_id, m.stat_key
+            """, pid_list + rate_keys + [season]).fetchall()
+
+            rate_lookup = {}
+            for rr in rate_rows:
+                if rr[0] not in rate_lookup:
+                    rate_lookup[rr[0]] = {}
+                rate_lookup[rr[0]][rr[1]] = round(rr[2], 3) if rr[2] is not None else None
+
+            for p in players:
+                rm = rate_lookup.get(p["player_id"], {})
+                for rk in rate_keys:
+                    p[rk] = rm.get(rk)
+
+        # Extract x/y values, filter out nulls
+        result = []
+        for p in players:
+            xv = p.get(x_stat)
+            yv = p.get(y_stat)
+            if xv is None or yv is None:
+                continue
+            result.append({
+                "player_id": p["player_id"],
+                "name": p["name"],
+                "position": p["position"],
+                "team": p["team"],
+                "headshot_url": p["headshot_url"],
+                "x": xv,
+                "y": yv,
+            })
+
+        return {
+            "season": season,
+            "available_seasons": available_seasons,
+            "x_stat": x_stat,
+            "y_stat": y_stat,
+            "players": result,
+            "metrics": EXPLORER_METRICS,
+        }
+    finally:
+        conn.close()
+
+
+# ---------------------------------------------------------------------------
 # Aging Curves — PPG by age per position
 # ---------------------------------------------------------------------------
 

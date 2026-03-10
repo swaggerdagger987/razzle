@@ -1,37 +1,37 @@
-# Razzle Loop — Phase 79 Task List
+# Razzle Loop — Phase 80 Task List
 
-> Air Yards Dashboard — Advanced receiving metrics leaderboard with regression indicators
+> Stat Explorer — Configurable scatter plot with user-selectable X/Y axes
 
-**Current Phase**: 79 — Air Yards Dashboard
-**Exit Criterion**: /airyards.html page shows an air yards analytics dashboard for pass catchers. Leaderboard table with columns: position badge, headshot, player name, team, targets, air yards, aDOT, air yards share, WOPR, RACR, PPG, and a "regression indicator" column (air yards rank vs PPG rank delta). Two sections: "Buy Low" (high air yards, underperforming in PPG — positive regression candidates) and "Sell High" (low air yards, overperforming in PPG — negative regression candidates). Caveat annotations ("due for more", "efficiency monster", "volume mirage", "TD regression"). Position filter tabs (All/WR/RB/TE — no QB). Season selector. Metric sort on any column. Click player row → player profile. PNG export with watermark. Color legend for regression indicator. "Air Yards" nav link added to all HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors. Responsive at 768px + 480px with hide-mobile columns.
+**Current Phase**: 80 — Stat Explorer
+**Exit Criterion**: /explorer.html page shows an interactive scatter plot where users can select any two metrics for X and Y axes from dropdown menus. Each dot is a player, color-coded by position. Hover/click dot shows player details. Position filter tabs. Season selector. Canvas-drawn scatter with axis labels, gridlines, tick marks, and trendline. PNG export with watermark. "Explorer" nav link added to all HTML pages. Sitemap entry. Analytics tracking. Design matches DESIGN.md. Responsive.
 
 ---
 
-## Task 1: Backend /api/air-yards endpoint
+## Task 1: Backend /api/stat-explorer endpoint
 **Status**: PASS
 **Attempts**: 1
-**Notes**: GET /api/air-yards with season/position/limit params. Queries player_week_stats for receiving_air_yards, targets, and joins with player_week_metrics for air_yards_share, wopr, target_share. Computes aDOT (receiving_air_yards / targets), RACR (rec_yards / air_yards), per-game stats, regression indicator (PPG rank minus air yards rank). Returns buy_low (positive delta >3) and sell_high (negative delta <-3). Min 4 games + 10 targets filter. try/except with proper error handling in server.py.
+**Notes**: GET /api/stat-explorer with season/position/x_stat/y_stat params. 17 available metrics. Per-game computed from player_week_stats. Rate metrics enriched from player_week_metrics. Min 4 games filter. try/except error handling.
 
-## Task 2: Air Yards dashboard page with buy low / sell high tables
+## Task 2: Scatter plot page with canvas-drawn chart
 **Status**: PASS
 **Attempts**: 1
-**Notes**: /airyards.html with two sections: Buy Low (high air yards, low production) and Sell High (low air yards, high production). Each player row: position badge, headshot, name, team, Tgt/G, Air Yards, AY/G, aDOT, AY%, WOPR, RACR, PPG, regression badge (green=buy/red=sell), GP, Caveat annotation. Season selector. Position filter tabs (All/WR/RB/TE). Sortable columns with sort state tracking. Click player → profile. PNG export via html2canvas with watermark. Error state with retry. Responsive at 768px + 480px with hide-mobile. Design: sand bg, chunky 3px borders, 4px offset shadows, 7 font-display, 4 font-mono, 8 font-hand, position colors.
+**Notes**: /explorer.html with canvas-drawn scatter plot. X/Y axis dropdowns populated from API. Position-colored dots. Hover tooltip. Click dot → profile. Gridlines, trendline, axis labels. Position filter tabs. Season selector. Resize handler. PNG export. Error state with retry. Responsive.
 
 ## Task 3: Nav links + sitemap + analytics
 **Status**: PASS
 **Attempts**: 1
-**Notes**: "Air Yards" nav link added to all 21 HTML pages (nav + footer). 40 total occurrences (21 nav + 19 footer). Sitemap.xml entry (/airyards.html, 0.8 priority, weekly). Analytics pageview tracking via app.js trackPageview().
+**Notes**: "Explorer" nav link added to all 22 HTML pages (nav + footer). 42 total occurrences. Sitemap.xml entry. Analytics pageview tracking.
 
 ## Task 4: Smoke test + verification
 **Status**: PASS
 **Attempts**: 1
-**Notes**: Python syntax valid (server.py + live_data.py). JS syntax valid (1 script block OK). 21/21 pages have Air Yards nav link. Design compliance: 7 font-display, 4 font-mono, 8 font-hand, 2 chunky borders, 1 offset shadow, 4 bg-card, 4 bg-warm, 3 position color refs, 44 ink refs. All acceptance criteria met.
+**Notes**: Python + JS syntax valid. 22/22 pages have Explorer nav link. Design compliance confirmed.
 
 ---
 
 ## Loop State
 ```
-Current Phase: 79
+Current Phase: 80
 Current Task: 4
 Current Stage: COMPLETE
 Attempt: 1
