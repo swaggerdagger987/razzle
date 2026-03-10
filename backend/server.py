@@ -914,6 +914,7 @@ def sitemap_xml():
         ("/scoring.html", "0.8", "weekly"),
         ("/cheatsheet.html", "0.8", "weekly"),
         ("/auction.html", "0.8", "weekly"),
+        ("/dashboard.html", "0.9", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1367,6 +1368,17 @@ def auction_values(season: int = 0, budget: int = 200, roster_size: int = 15):
         return JSONResponse({"error": "Failed to fetch auction values"}, status_code=500)
 
 
+@app.get("/api/dynasty-dashboard")
+def dynasty_dashboard(season: int = 0):
+    """Aggregated dynasty dashboard with risers, fallers, value picks, and scarcity."""
+    try:
+        s = season if season > 0 else None
+        return live_data.fetch_dynasty_dashboard(season=s)
+    except Exception as e:
+        logger.error(f"dynasty-dashboard error: {e}")
+        return JSONResponse({"error": "Failed to fetch dynasty dashboard"}, status_code=500)
+
+
 @app.get("/api/tools-hub")
 def tools_hub():
     """Return the static tools catalog organized by category."""
@@ -1384,6 +1396,7 @@ def tools_hub():
                 {"name": "Report Card", "desc": "Composite Fantasy GPA grading efficiency, consistency, and more", "url": "/reportcard.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Draft Cheat Sheet", "desc": "Printable position rankings with tier breaks — PPR, Half, Standard", "url": "/cheatsheet.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Auction Values", "desc": "Trade values converted to auction dollars for any budget", "url": "/auction.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Dynasty Dashboard", "desc": "At-a-glance overview: risers, fallers, value picks, scarcity alerts", "url": "/dashboard.html", "positions": ["QB", "RB", "WR", "TE"]},
             ],
         },
         {

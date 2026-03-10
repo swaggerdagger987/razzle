@@ -1,17 +1,17 @@
-# Razzle Loop — Phase 101 Task List
+# Razzle Loop — Phase 102 Task List
 
-> Dynasty Auction Value Calculator — Auto-Generated Phase
+> Dynasty Dashboard — At-a-Glance Overview
 
-**Current Phase**: 101 — Dynasty Auction Value Calculator
-**Exit Criterion**: /auction.html page converts dynasty trade values into auction dollar amounts for a configurable budget. Position-adjusted values, budget slider, position group totals, PNG export with watermark. GET /api/auction-values endpoint. Design matches DESIGN.md.
+**Current Phase**: 102 — Dynasty Dashboard
+**Exit Criterion**: /dashboard.html shows a single-page overview aggregating key insights: top risers, top fallers, best value picks, position scarcity alerts, and league-wide trends. Design matches DESIGN.md.
 
 ---
 
-## Task 1: Backend /api/auction-values endpoint
+## Task 1: Backend /api/dynasty-dashboard endpoint
 **Status**: PASS
 **Attempts**: 1
 
-## Task 2: Frontend auction.html page
+## Task 2: Frontend dashboard.html page
 **Status**: PASS
 **Attempts**: 1
 
@@ -27,7 +27,7 @@
 
 ## Loop State
 ```
-Current Phase: 101
+Current Phase: 102
 Current Task: 4
 Current Stage: COMPLETE
 Attempt: 1

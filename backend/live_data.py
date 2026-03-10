@@ -8899,3 +8899,132 @@ def fetch_auction_values(season=None, budget=200, roster_size=15):
         }
     finally:
         conn.close()
+
+
+# ---------------------------------------------------------------------------
+# Dynasty Dashboard — At-a-Glance Overview
+# ---------------------------------------------------------------------------
+
+def fetch_dynasty_dashboard(season=None):
+    """Aggregated dynasty dashboard: risers, fallers, value picks, scarcity alerts."""
+    conn = get_conn()
+    try:
+        if not season:
+            row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+            season = row[0] if row and row[0] else 2024
+
+        # Get all fantasy-relevant players with stats
+        query = """
+            SELECT
+                p.player_id, p.full_name, p.position, p.team, p.age,
+                p.headshot_url,
+                SUM(s.fantasy_points_ppr) as total_ppr,
+                COUNT(DISTINCT s.week) as games
+            FROM players p
+            JOIN player_week_stats s
+                ON s.player_id = p.player_id AND s.season = ?
+            WHERE p.position IN ('QB','RB','WR','TE')
+              AND p.fantasy_relevant = 1
+            GROUP BY p.player_id
+            HAVING games >= 4 AND (total_ppr / games) >= 2.0
+            ORDER BY total_ppr DESC
+        """
+        rows = conn.execute(query, [season]).fetchall()
+
+        # Build player list with all metrics
+        players = []
+        for r in rows:
+            pos = r[2] or "WR"
+            games = r[7] or 1
+            ppg = round((r[6] or 0) / games, 2)
+            age = r[4] or 25
+            tv = compute_trade_value(ppg, age, pos)
+
+            players.append({
+                "player_id": r[0],
+                "full_name": r[1] or "Unknown",
+                "position": pos,
+                "team": r[3] or "FA",
+                "age": age,
+                "headshot_url": r[5] or "",
+                "ppg": ppg,
+                "games": games,
+                "trade_value": tv,
+            })
+
+        # Rank by PPG and trade value
+        players.sort(key=lambda x: x["ppg"], reverse=True)
+        for i, p in enumerate(players):
+            p["ppg_rank"] = i + 1
+
+        players.sort(key=lambda x: x["trade_value"], reverse=True)
+        for i, p in enumerate(players):
+            p["tv_rank"] = i + 1
+            p["rank_diff"] = p["ppg_rank"] - p["tv_rank"]
+
+        # Risers: trade value much higher than PPG rank (undervalued by production age/scarcity boost)
+        risers = sorted(
+            [p for p in players if p["rank_diff"] > 5],
+            key=lambda x: x["rank_diff"], reverse=True
+        )[:8]
+
+        # Fallers: PPG rank much higher than trade value rank (overvalued)
+        fallers = sorted(
+            [p for p in players if p["rank_diff"] < -5],
+            key=lambda x: x["rank_diff"]
+        )[:8]
+
+        # Value picks: high trade value, young, good PPG
+        value_picks = sorted(
+            [p for p in players if p["age"] <= 26 and p["ppg"] >= 10 and p["trade_value"] >= 40],
+            key=lambda x: x["trade_value"], reverse=True
+        )[:8]
+
+        # Position scarcity: top player PPG by position and drop-off
+        pos_scarcity = {}
+        for pos in ("QB", "RB", "WR", "TE"):
+            pos_players = sorted(
+                [p for p in players if p["position"] == pos],
+                key=lambda x: x["ppg"], reverse=True
+            )
+            if len(pos_players) >= 2:
+                top_ppg = pos_players[0]["ppg"]
+                mid_idx = min(11, len(pos_players) - 1)
+                mid_ppg = pos_players[mid_idx]["ppg"]
+                drop = round(top_ppg - mid_ppg, 1)
+                pos_scarcity[pos] = {
+                    "top_player": pos_players[0]["full_name"],
+                    "top_ppg": top_ppg,
+                    "mid_player": pos_players[mid_idx]["full_name"],
+                    "mid_ppg": mid_ppg,
+                    "dropoff": drop,
+                    "count": len(pos_players),
+                }
+
+        # League trends: avg age, avg PPG by position
+        trends = {}
+        for pos in ("QB", "RB", "WR", "TE"):
+            pos_p = [p for p in players if p["position"] == pos]
+            if pos_p:
+                trends[pos] = {
+                    "count": len(pos_p),
+                    "avg_ppg": round(sum(p["ppg"] for p in pos_p) / len(pos_p), 1),
+                    "avg_age": round(sum(p["age"] for p in pos_p) / len(pos_p), 1),
+                    "avg_tv": round(sum(p["trade_value"] for p in pos_p) / len(pos_p), 1),
+                }
+
+        # Top 5 overall
+        top5 = sorted(players, key=lambda x: x["trade_value"], reverse=True)[:5]
+
+        return {
+            "season": season,
+            "total_players": len(players),
+            "top5": top5,
+            "risers": risers,
+            "fallers": fallers,
+            "value_picks": value_picks,
+            "position_scarcity": pos_scarcity,
+            "trends": trends,
+        }
+    finally:
+        conn.close()

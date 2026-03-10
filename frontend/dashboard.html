@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Dynasty Dashboard — Razzle</title>
+<meta property="og:title" content="Dynasty Dashboard — Razzle">
+<meta property="og:description" content="At-a-glance dynasty overview: risers, fallers, value picks, scarcity alerts on razzle.lol">
+<meta property="og:site_name" content="razzle.lol">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Dynasty Dashboard — Razzle">
+<meta name="twitter:description" content="At-a-glance dynasty overview on razzle.lol">
+<meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
+<meta name="description" content="Dynasty dashboard — risers, fallers, value picks, and position scarcity alerts at a glance on razzle.lol">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .db-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+  }
+  .db-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .db-header h1 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: var(--ink);
+    margin: 0 0 4px;
+  }
+  .db-header .db-subtitle {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+  }
+  .db-meta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-light);
+    margin-top: 6px;
+  }
+
+  /* Top 5 banner */
+  .db-top5 {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+  .db-top5-card {
+    background: var(--card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 12px 16px;
+    text-align: center;
+    min-width: 140px;
+    flex: 1;
+    max-width: 200px;
+  }
+  .db-top5-rank {
+    font-family: var(--font-display);
+    font-size: 14px;
+    color: var(--ink-light);
+  }
+  .db-top5-name {
+    font-family: var(--font-display);
+    font-size: 15px;
+    color: var(--ink);
+    margin: 4px 0 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .db-top5-tv {
+    font-family: var(--font-display);
+    font-size: 22px;
+    color: var(--terracotta);
+  }
+  .db-top5-meta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-light);
+  }
+
+  /* Grid layout */
+  .db-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+
+  /* Section cards */
+  .db-section {
+    background: var(--card);
+    border: 3px solid var(--ink);
+    border-radius: 14px;
+    box-shadow: 4px 4px 0 var(--ink);
+    overflow: hidden;
+  }
+  .db-section-header {
+    font-family: var(--font-display);
+    font-size: 16px;
+    padding: 10px 16px;
+    border-bottom: 2px solid var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .db-section-header .db-icon {
+    font-size: 18px;
+  }
+  .db-section-header.risers { background: rgba(46,196,182,0.1); }
+  .db-section-header.fallers { background: rgba(212,64,64,0.1); }
+  .db-section-header.value { background: rgba(91,127,255,0.1); }
+  .db-section-header.scarcity { background: rgba(139,92,246,0.1); }
+
+  /* Player rows */
+  .db-row {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    border-bottom: 1px solid var(--ink-faint);
+    gap: 10px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+  }
+  .db-row:last-child { border-bottom: none; }
+  .db-row:hover { background: rgba(217,119,87,0.05); }
+  .db-row-rank {
+    font-family: var(--font-display);
+    font-size: 14px;
+    color: var(--ink-light);
+    min-width: 20px;
+  }
+  .db-row-name {
+    flex: 1;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .db-row-team {
+    color: var(--ink-light);
+    font-size: 11px;
+  }
+
+  /* Position badge */
+  .db-pos {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 8px;
+    color: white;
+    min-width: 24px;
+    text-align: center;
+  }
+  .db-pos.QB { background: var(--qb); }
+  .db-pos.RB { background: var(--rb); }
+  .db-pos.WR { background: var(--wr); }
+  .db-pos.TE { background: var(--te); }
+
+  /* Chips */
+  .db-chip {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    border: 1px solid;
+    white-space: nowrap;
+  }
+  .db-chip.up { background: rgba(46,196,182,0.12); color: var(--rb); border-color: var(--rb); }
+  .db-chip.down { background: rgba(212,64,64,0.12); color: #d44040; border-color: #d44040; }
+  .db-chip.tv { background: rgba(217,119,87,0.12); color: var(--terracotta); border-color: var(--terracotta); }
+  .db-chip.ppg { background: rgba(91,127,255,0.12); color: var(--qb); border-color: var(--qb); }
+
+  /* Scarcity bars */
+  .db-scar-row {
+    display: flex;
+    align-items: center;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--ink-faint);
+    gap: 12px;
+  }
+  .db-scar-row:last-child { border-bottom: none; }
+  .db-scar-pos {
+    font-family: var(--font-display);
+    font-size: 16px;
+    min-width: 30px;
+  }
+  .db-scar-bar-wrap {
+    flex: 1;
+    height: 12px;
+    background: var(--ink-faint);
+    border-radius: 6px;
+    position: relative;
+    overflow: hidden;
+  }
+  .db-scar-bar {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 0.3s;
+  }
+  .db-scar-bar.QB { background: var(--qb); }
+  .db-scar-bar.RB { background: var(--rb); }
+  .db-scar-bar.WR { background: var(--wr); }
+  .db-scar-bar.TE { background: var(--te); }
+  .db-scar-info {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-light);
+    min-width: 160px;
+    text-align: right;
+  }
+
+  /* Trends row */
+  .db-trends {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .db-trend-card {
+    background: var(--card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 12px;
+    text-align: center;
+  }
+  .db-trend-pos {
+    font-family: var(--font-display);
+    font-size: 15px;
+  }
+  .db-trend-pos.QB { color: var(--qb); }
+  .db-trend-pos.RB { color: var(--rb); }
+  .db-trend-pos.WR { color: var(--wr); }
+  .db-trend-pos.TE { color: var(--te); }
+  .db-trend-stat {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-light);
+    line-height: 1.7;
+  }
+  .db-trend-big {
+    font-family: var(--font-display);
+    font-size: 20px;
+    color: var(--ink);
+  }
+
+  /* Export */
+  .db-export {
+    text-align: center;
+    margin-top: 8px;
+    margin-bottom: 16px;
+  }
+  .db-export-btn {
+    font-family: var(--font-display);
+    font-size: 13px;
+    padding: 6px 16px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--card);
+    color: var(--ink);
+    cursor: pointer;
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+  .db-export-btn:hover { background: var(--terracotta); color: white; }
+
+  /* Loading */
+  .db-loading {
+    text-align: center;
+    font-family: var(--font-hand);
+    font-size: 18px;
+    color: var(--ink-light);
+    padding: 60px 20px;
+  }
+  .db-error {
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: #d44040;
+    padding: 40px 20px;
+  }
+
+  /* Watermark */
+  .db-watermark {
+    position: fixed;
+    bottom: 10px;
+    right: 14px;
+    font-family: var(--font-hand);
+    font-size: 14px;
+    color: rgba(0,0,0,0.15);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  @media (max-width: 768px) {
+    .db-grid { grid-template-columns: 1fr; }
+    .db-trends { grid-template-columns: repeat(2, 1fr); }
+    .db-top5-card { min-width: 110px; }
+    .db-header h1 { font-size: 26px; }
+  }
+  @media (max-width: 480px) {
+    .db-trends { grid-template-columns: 1fr; }
+    .db-top5 { flex-direction: column; align-items: center; }
+    .db-page { padding: 16px 10px 40px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="/" class="logo">
+    <div class="logo-mark">&#x1F42F;</div>
+    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/lab.html">The Lab</a></li>
+    <li><a href="/tools.html">Tools</a></li>
+    <li><a href="/rankings.html">Rankings</a></li>
+    <li><a href="/leaders.html">Leaders</a></li>
+    <li><a href="/prospects.html">Prospects</a></li>
+    <li><a href="/scarcity.html">Scarcity</a></li>
+    <li><a href="/breakouts.html">Breakouts</a></li>
+    <li><a href="/buysell.html">Buy/Sell</a></li>
+    <li><a href="/aging.html">Aging</a></li>
+    <li><a href="/weekly.html">Weekly</a></li>
+    <li><a href="/targets.html">Targets</a></li>
+    <li><a href="/matchups.html">Matchups</a></li>
+    <li><a href="/usage.html">Usage</a></li>
+    <li><a href="/yoy.html">YoY</a></li>
+    <li><a href="/airyards.html">Air Yards</a></li>
+    <li><a href="/explorer.html">Explorer</a></li>
+    <li><a href="/redzone.html">Red Zone</a></li>
+    <li><a href="/efficiency.html">Efficiency</a></li>
+    <li><a href="/consistency.html">Consistency</a></li>
+    <li><a href="/schedule.html">Schedule</a></li>
+    <li><a href="/stocks.html">Stocks</a></li>
+    <li><a href="/opportunity.html">Opportunity</a></li>
+    <li><a href="/reportcard.html">Report Card</a></li>
+    <li><a href="/awards.html">Awards</a></li>
+    <li><a href="/vorp.html">VORP</a></li>
+    <li><a href="/tradevalues.html">Trade Values</a></li>
+    <li><a href="/tradefinder.html">Trade Finder</a></li>
+    <li><a href="/rosterbuilder.html">Roster Builder</a></li>
+    <li><a href="/scoring.html">Scoring</a></li>
+    <li><a href="/cheatsheet.html">Cheat Sheet</a></li>
+    <li><a href="/auction.html">Auction</a></li>
+    <li><a href="/dashboard.html" class="active">Dashboard</a></li>
+    <li><a href="/team/KC">Teams</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
+    <li><a href="/agents.html">War Room</a></li>
+  </ul>
+</nav>
+
+<main class="db-page" id="db-content">
+  <div class="db-header">
+    <h1>Dynasty Dashboard</h1>
+    <div class="db-subtitle">your dynasty universe at a glance</div>
+    <div class="db-meta" id="db-meta"></div>
+  </div>
+
+  <div class="db-export">
+    <button class="db-export-btn" id="export-btn">Export PNG</button>
+  </div>
+
+  <div id="db-top5-wrap"></div>
+
+  <div id="db-trends-wrap"></div>
+
+  <div class="db-grid" id="db-grid">
+    <div class="db-loading">pulling film...</div>
+  </div>
+
+  <div id="db-scarcity-wrap"></div>
+</main>
+
+<div class="db-watermark">razzle.lol</div>
+
+<footer style="text-align:center; padding:24px 20px 32px; font-family:var(--font-hand); font-size:15px; color:var(--ink-light); border-top:2px dashed var(--ink-faint); margin-top:40px;">
+  <div style="margin-bottom:10px;">
+    <a href="/lab.html" style="color:var(--ink-light); text-decoration:none;">The Lab</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tools.html" style="color:var(--ink-light); text-decoration:none;">Tools</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/rankings.html" style="color:var(--ink-light); text-decoration:none;">Rankings</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/leaders.html" style="color:var(--ink-light); text-decoration:none;">Leaders</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/prospects.html" style="color:var(--ink-light); text-decoration:none;">Prospects</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/scarcity.html" style="color:var(--ink-light); text-decoration:none;">Scarcity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/breakouts.html" style="color:var(--ink-light); text-decoration:none;">Breakouts</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/buysell.html" style="color:var(--ink-light); text-decoration:none;">Buy/Sell</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/aging.html" style="color:var(--ink-light); text-decoration:none;">Aging</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/weekly.html" style="color:var(--ink-light); text-decoration:none;">Weekly</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/targets.html" style="color:var(--ink-light); text-decoration:none;">Targets</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/matchups.html" style="color:var(--ink-light); text-decoration:none;">Matchups</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/usage.html" style="color:var(--ink-light); text-decoration:none;">Usage</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/yoy.html" style="color:var(--ink-light); text-decoration:none;">YoY</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/airyards.html" style="color:var(--ink-light); text-decoration:none;">Air Yards</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/explorer.html" style="color:var(--ink-light); text-decoration:none;">Explorer</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/redzone.html" style="color:var(--ink-light); text-decoration:none;">Red Zone</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/efficiency.html" style="color:var(--ink-light); text-decoration:none;">Efficiency</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/consistency.html" style="color:var(--ink-light); text-decoration:none;">Consistency</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/schedule.html" style="color:var(--ink-light); text-decoration:none;">Schedule</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/stocks.html" style="color:var(--ink-light); text-decoration:none;">Stocks</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/opportunity.html" style="color:var(--ink-light); text-decoration:none;">Opportunity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/reportcard.html" style="color:var(--ink-light); text-decoration:none;">Report Card</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/awards.html" style="color:var(--ink-light); text-decoration:none;">Awards</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/vorp.html" style="color:var(--ink-light); text-decoration:none;">VORP</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tradevalues.html" style="color:var(--ink-light); text-decoration:none;">Trade Values</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tradefinder.html" style="color:var(--ink-light); text-decoration:none;">Trade Finder</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/rosterbuilder.html" style="color:var(--ink-light); text-decoration:none;">Roster Builder</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/scoring.html" style="color:var(--ink-light); text-decoration:none;">Scoring</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/cheatsheet.html" style="color:var(--ink-light); text-decoration:none;">Cheat Sheet</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/auction.html" style="color:var(--ink-light); text-decoration:none;">Auction</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/dashboard.html" style="color:var(--ink-light); text-decoration:none;">Dashboard</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/team/KC" style="color:var(--ink-light); text-decoration:none;">Teams</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none;">League Intel</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/agents.html" style="color:var(--ink-light); text-decoration:none;">War Room</a>
+  </div>
+  razzle.lol — let's razzle dazzle em baby
+</footer>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script src="app.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function fmt(v, d) { return v != null ? Number(v).toFixed(d || 0) : '-'; }
+
+  var grid = document.getElementById('db-grid');
+
+  function fetchDashboard() {
+    grid.innerHTML = '<div class="db-loading">pulling film...</div>';
+    fetch('/api/dynasty-dashboard').then(function(resp) {
+      if (!resp.ok) throw new Error('HTTP ' + resp.status);
+      return resp.json();
+    }).then(function(d) {
+      document.getElementById('db-meta').textContent = d.season + ' season \u00b7 ' + d.total_players + ' players tracked';
+      renderTop5(d.top5 || []);
+      renderTrends(d.trends || {});
+      renderGrid(d);
+      renderScarcity(d.position_scarcity || {});
+    }).catch(function(err) {
+      grid.innerHTML = '<div class="db-error">failed to load dashboard: ' + escapeHtml(err.message) + '</div>';
+    });
+  }
+
+  function renderTop5(top5) {
+    var html = '<div class="db-top5">';
+    top5.forEach(function(p, i) {
+      html += '<div class="db-top5-card">';
+      html += '<div class="db-top5-rank">#' + escapeHtml(String(i + 1)) + '</div>';
+      html += '<div class="db-top5-name">' + escapeHtml(p.full_name) + '</div>';
+      html += '<div class="db-top5-tv">' + escapeHtml(String(p.trade_value)) + '</div>';
+      html += '<div class="db-top5-meta"><span class="db-pos ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span> ' + escapeHtml(p.team) + ' &middot; ' + escapeHtml(String(p.ppg)) + ' PPG</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+    document.getElementById('db-top5-wrap').innerHTML = html;
+  }
+
+  function renderTrends(trends) {
+    var html = '<div class="db-trends">';
+    ['QB', 'RB', 'WR', 'TE'].forEach(function(pos) {
+      var t = trends[pos] || { count: 0, avg_ppg: 0, avg_age: 0, avg_tv: 0 };
+      html += '<div class="db-trend-card">';
+      html += '<div class="db-trend-pos ' + pos + '">' + pos + '</div>';
+      html += '<div class="db-trend-big">' + escapeHtml(String(t.avg_ppg)) + '</div>';
+      html += '<div class="db-trend-stat">avg PPG</div>';
+      html += '<div class="db-trend-stat">' + escapeHtml(String(t.count)) + ' players &middot; avg age ' + escapeHtml(String(t.avg_age)) + '</div>';
+      html += '<div class="db-trend-stat">avg TV: ' + escapeHtml(String(t.avg_tv)) + '</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+    document.getElementById('db-trends-wrap').innerHTML = html;
+  }
+
+  function renderGrid(d) {
+    var html = '';
+
+    // Risers section
+    html += '<div class="db-section">';
+    html += '<div class="db-section-header risers"><span class="db-icon">&#x2197;</span> Rising Stocks</div>';
+    (d.risers || []).forEach(function(p, i) {
+      html += playerRow(p, i, 'up', '+' + escapeHtml(String(p.rank_diff)));
+    });
+    if (!d.risers || d.risers.length === 0) {
+      html += '<div class="db-row"><span class="db-row-name">no risers found</span></div>';
+    }
+    html += '</div>';
+
+    // Fallers section
+    html += '<div class="db-section">';
+    html += '<div class="db-section-header fallers"><span class="db-icon">&#x2198;</span> Falling Stocks</div>';
+    (d.fallers || []).forEach(function(p, i) {
+      html += playerRow(p, i, 'down', escapeHtml(String(p.rank_diff)));
+    });
+    if (!d.fallers || d.fallers.length === 0) {
+      html += '<div class="db-row"><span class="db-row-name">no fallers found</span></div>';
+    }
+    html += '</div>';
+
+    // Value picks
+    html += '<div class="db-section">';
+    html += '<div class="db-section-header value"><span class="db-icon">&#x1F4A1;</span> Value Picks</div>';
+    (d.value_picks || []).forEach(function(p, i) {
+      html += playerRow(p, i, 'tv', escapeHtml(String(p.trade_value)));
+    });
+    if (!d.value_picks || d.value_picks.length === 0) {
+      html += '<div class="db-row"><span class="db-row-name">no value picks found</span></div>';
+    }
+    html += '</div>';
+
+    // Empty 4th slot with link to tools
+    html += '<div class="db-section">';
+    html += '<div class="db-section-header scarcity"><span class="db-icon">&#x1F527;</span> Quick Links</div>';
+    html += '<div class="db-row"><a href="/tradefinder.html" style="color:var(--terracotta);">Trade Finder</a></div>';
+    html += '<div class="db-row"><a href="/stocks.html" style="color:var(--terracotta);">Stock Watch</a></div>';
+    html += '<div class="db-row"><a href="/buysell.html" style="color:var(--terracotta);">Buy Low / Sell High</a></div>';
+    html += '<div class="db-row"><a href="/cheatsheet.html" style="color:var(--terracotta);">Draft Cheat Sheet</a></div>';
+    html += '<div class="db-row"><a href="/auction.html" style="color:var(--terracotta);">Auction Values</a></div>';
+    html += '<div class="db-row"><a href="/rosterbuilder.html" style="color:var(--terracotta);">Roster Builder</a></div>';
+    html += '<div class="db-row"><a href="/reportcard.html" style="color:var(--terracotta);">Report Cards</a></div>';
+    html += '<div class="db-row"><a href="/tools.html" style="color:var(--terracotta);">All Tools &rarr;</a></div>';
+    html += '</div>';
+
+    grid.innerHTML = html;
+  }
+
+  function playerRow(p, i, chipType, chipText) {
+    var html = '<div class="db-row">';
+    html += '<span class="db-row-rank">' + escapeHtml(String(i + 1)) + '</span>';
+    html += '<span class="db-pos ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span>';
+    html += '<span class="db-row-name">' + escapeHtml(p.full_name) + '</span>';
+    html += '<span class="db-row-team">' + escapeHtml(p.team) + '</span>';
+    html += '<span class="db-chip ppg">' + escapeHtml(String(p.ppg)) + ' PPG</span>';
+    html += '<span class="db-chip ' + chipType + '">' + chipText + '</span>';
+    html += '</div>';
+    return html;
+  }
+
+  function renderScarcity(scarcity) {
+    var html = '<div class="db-section" style="margin-top:0;">';
+    html += '<div class="db-section-header scarcity"><span class="db-icon">&#x26A0;</span> Position Scarcity</div>';
+    var maxDrop = 0;
+    ['QB', 'RB', 'WR', 'TE'].forEach(function(pos) {
+      var s = scarcity[pos];
+      if (s && s.dropoff > maxDrop) maxDrop = s.dropoff;
+    });
+    ['QB', 'RB', 'WR', 'TE'].forEach(function(pos) {
+      var s = scarcity[pos];
+      if (!s) return;
+      var pct = maxDrop > 0 ? Math.round((s.dropoff / maxDrop) * 100) : 0;
+      html += '<div class="db-scar-row">';
+      html += '<span class="db-scar-pos ' + pos + '">' + pos + '</span>';
+      html += '<div class="db-scar-bar-wrap"><div class="db-scar-bar ' + pos + '" style="width:' + pct + '%"></div></div>';
+      html += '<span class="db-scar-info">' + escapeHtml(s.top_player) + ' (' + escapeHtml(String(s.top_ppg)) + ') &rarr; #12 (' + escapeHtml(String(s.mid_ppg)) + ') = -' + escapeHtml(String(s.dropoff)) + '</span>';
+      html += '</div>';
+    });
+    html += '</div>';
+    document.getElementById('db-scarcity-wrap').innerHTML = html;
+  }
+
+  // Export
+  document.getElementById('export-btn').addEventListener('click', function() {
+    var el = document.getElementById('db-content');
+    if (typeof html2canvas !== 'undefined') {
+      html2canvas(el, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+        var ctx = canvas.getContext('2d');
+        ctx.font = '24px sans-serif';
+        ctx.fillStyle = 'rgba(0,0,0,0.12)';
+        ctx.fillText('razzle.lol', canvas.width - 160, canvas.height - 20);
+        var link = document.createElement('a');
+        link.download = 'razzle-dynasty-dashboard.png';
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    }
+  });
+
+  // Analytics
+  if (typeof fetch !== 'undefined') {
+    fetch('/api/analytics/pageview', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ page: 'dashboard', referrer: document.referrer || '' })
+    }).catch(function() {});
+  }
+
+  fetchDashboard();
+})();
+</script>
+</body>
+</html>

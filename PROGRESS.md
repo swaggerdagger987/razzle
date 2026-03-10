@@ -1,6 +1,23 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 101 — Dynasty Auction Value Calculator (COMPLETE)
+## Current Phase: Phase 102 — Dynasty Dashboard (COMPLETE)
+
+**Exit criterion MET:** /dashboard.html shows a single-page dynasty overview aggregating key insights. Top 5 overall players with trade value cards. Position trend cards (avg PPG, player count, avg age, avg TV per position). Four-panel grid: Rising Stocks (trade value >> PPG rank), Falling Stocks (PPG rank >> trade value), Value Picks (young + high TV + strong PPG), and Quick Links to key tools. Position Scarcity section with drop-off bars showing PPG cliff from #1 to #12 per position. PNG export with watermark. GET /api/dynasty-dashboard endpoint returns risers, fallers, value_picks, position_scarcity, trends, top5. 26 escapeHtml calls, 103/103 braces balanced. "Dashboard" nav link on all 39 HTML pages. Sitemap entry. Tools hub catalog entry. Design matches DESIGN.md.
+
+### Phase 102 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/dynasty-dashboard endpoint | DONE | Single optimized query, PPG/TV rank diff for risers/fallers |
+| 2 | Dashboard page | DONE | Top 5, trends, 4-panel grid, scarcity bars, 26 escapeHtml |
+| 3 | Nav links + sitemap + analytics | DONE | All 39 pages updated, sitemap + tools hub |
+| 4 | Smoke test | DONE | Python syntax OK, JS braces balanced, 39/39 nav links |
+
+### Decisions Log
+- **Dynasty Dashboard as Phase 102**: A single-page overview that aggregates the most useful insights from multiple tools. This is the "front page" of dynasty analysis — the thing a user opens every day to check what's changed. Risers/fallers catch attention, value picks drive action, scarcity bars inform draft strategy. Quick links section turns the dashboard into a hub that drives traffic to deeper tools.
+- **Rank diff approach for risers/fallers**: Instead of calling multiple expensive functions (stock watch, efficiency, etc.), we compute a simple rank_diff (ppg_rank - tv_rank). Players where trade value is much higher than PPG rank are "rising" (age/scarcity boost their dynasty value beyond current production). Players where PPG rank is much higher are "falling" (producing now but aging/position works against them). Clean, fast, and meaningful.
+
+## Previous Phase: Phase 101 — Dynasty Auction Value Calculator (COMPLETE)
 
 **Exit criterion MET:** /auction.html page converts dynasty trade values into auction dollar amounts for a configurable budget ($50-$500 slider). Budget slider with live display, roster size input (8-25), season selector. Position summary cards showing top value and avg per position. Sortable player table with rank, position badge, auction dollar value (color-coded by tier), trade value bar, PPG, tier badge (Premium/Starter/Value/Bargain/$1 Filler). Position filter tabs. Player search. PNG export with watermark. GET /api/auction-values endpoint with budget, roster_size, season params. 15 escapeHtml calls, 118/118 braces balanced. "Auction" nav link on all 38 HTML pages. Sitemap entry. Tools hub catalog entry under Rankings & Values. Design matches DESIGN.md.
 
