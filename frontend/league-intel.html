@@ -177,6 +177,95 @@
   .roster-pos.k { background: var(--ink-light); }
   .roster-pos.def { background: var(--ink-medium); }
 
+  /* ===== MANAGER PROFILES ===== */
+  .profiles-trigger {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 2px dashed var(--ink-faint);
+    text-align: center;
+  }
+
+  .profiles-trigger button {
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--bg-warm);
+    box-shadow: 2px 2px 0 var(--ink);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+
+  .profiles-trigger button:hover {
+    box-shadow: 3px 3px 0 var(--ink);
+    transform: translate(-1px, -1px);
+  }
+
+  .profile-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 12px;
+  }
+
+  .profile-card {
+    background: var(--bg-card);
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    box-shadow: 2px 2px 0 var(--ink);
+    overflow: hidden;
+    transition: all 0.12s;
+  }
+
+  .profile-card:hover {
+    box-shadow: 3px 3px 0 var(--ink);
+    transform: translate(-1px, -1px);
+  }
+
+  .profile-stripe { height: 4px; }
+  .profile-body { padding: 10px; }
+
+  .profile-name {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .profile-record {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-light);
+    margin-bottom: 6px;
+  }
+
+  .profile-summary {
+    font-family: var(--font-hand);
+    font-size: 15px;
+    color: var(--ink-medium);
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+
+  .profile-stats {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .profile-stat {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    padding: 2px 6px;
+    border: 1px solid var(--ink-faint);
+    border-radius: 4px;
+    background: var(--bg-warm);
+  }
+
+  .profile-stat strong { color: var(--orange); }
+
   .loading-intel {
     font-family: var(--font-hand);
     font-size: 24px;
@@ -199,6 +288,7 @@
     .league-header { flex-direction: column; gap: 6px; padding: 12px 14px; }
     .league-meta { flex-wrap: wrap; gap: 6px; }
     .league-roster { padding: 10px 14px; }
+    .profile-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -464,7 +554,24 @@ async function toggleLeague(card, leagueId, userId) {
       </span>
     </div>`;
 
+    // Add manager profiles trigger
+    html += '<div class="profiles-trigger">' +
+      '<button id="profileBtn-' + leagueId + '">scout rival managers</button>' +
+      '</div>' +
+      '<div id="profiles-' + leagueId + '"></div>';
+
     rosterDiv.innerHTML = html;
+
+    // Bind profile button with closure over variables
+    var profileBtn = document.getElementById("profileBtn-" + leagueId);
+    if (profileBtn) {
+      profileBtn.addEventListener("click", function(e) {
+        e.stopPropagation();
+        this.disabled = true;
+        this.textContent = "scouting...";
+        loadManagerProfiles(leagueId, userId, allPlayers, userMap, rosters);
+      });
+    }
 
     // Save roster data for War Room context bridge
     try {
@@ -496,6 +603,180 @@ async function toggleLeague(card, leagueId, userId) {
     } catch (e) { /* ignore storage errors */ }
   } catch (e) {
     rosterDiv.innerHTML = '<div class="loading-intel" style="color:var(--red); font-size:16px;">fumbled the roster load</div>';
+    console.error(e);
+  }
+}
+
+// ── Manager Behavioral Profiles ────────────────────────────────────
+
+async function loadManagerProfiles(leagueId, userId, allPlayers, userMap, rosters) {
+  var profileDiv = document.getElementById("profiles-" + leagueId);
+  if (!profileDiv) return;
+  profileDiv.innerHTML = '<div class="loading-intel" style="font-size:16px; padding:12px;">scouting the competition...</div>';
+
+  try {
+    // Fetch transactions for all weeks (Sleeper uses rounds 1-18+)
+    var allTxns = [];
+    var fetches = [];
+    for (var wk = 1; wk <= 18; wk++) {
+      fetches.push(
+        fetch(SLEEPER_API + "/league/" + leagueId + "/transactions/" + wk)
+          .then(function(r) { return r.ok ? r.json() : []; })
+          .catch(function() { return []; })
+      );
+    }
+    var results = await Promise.all(fetches);
+    for (var i = 0; i < results.length; i++) {
+      if (Array.isArray(results[i])) allTxns = allTxns.concat(results[i]);
+    }
+
+    // Build per-manager profile data
+    var profiles = {};
+    for (var t = 0; t < allTxns.length; t++) {
+      var txn = allTxns[t];
+      if (txn.status !== "complete") continue;
+
+      var rosterIds = txn.roster_ids || [];
+      var adds = txn.adds || {};
+      var drops = txn.drops || {};
+      var settings = txn.settings || {};
+      var waiver_bid = settings.waiver_bid || 0;
+
+      for (var r = 0; r < rosterIds.length; r++) {
+        var rid = rosterIds[r];
+        if (!profiles[rid]) {
+          profiles[rid] = { trades: 0, waivers: 0, freeAgent: 0, faabSpent: 0,
+            posAdds: {}, posDrops: {}, totalAdds: 0, totalDrops: 0, total: 0 };
+        }
+        var p = profiles[rid];
+        p.total++;
+
+        if (txn.type === "trade") {
+          p.trades++;
+        } else if (txn.type === "waiver") {
+          p.waivers++;
+          p.faabSpent += waiver_bid;
+        } else if (txn.type === "free_agent") {
+          p.freeAgent++;
+        }
+
+        // Track position adds/drops for this roster
+        for (var pid in adds) {
+          if (adds[pid] === rid) {
+            p.totalAdds++;
+            var pl = allPlayers[pid];
+            var pos = pl ? pl.position : "?";
+            p.posAdds[pos] = (p.posAdds[pos] || 0) + 1;
+          }
+        }
+        for (var pid2 in drops) {
+          if (drops[pid2] === rid) {
+            p.totalDrops++;
+            var pl2 = allPlayers[pid2];
+            var pos2 = pl2 ? pl2.position : "?";
+            p.posDrops[pos2] = (p.posDrops[pos2] || 0) + 1;
+          }
+        }
+      }
+    }
+
+    // Map roster_id to owner_id
+    var rosterOwnerMap = {};
+    for (var ri = 0; ri < rosters.length; ri++) {
+      rosterOwnerMap[rosters[ri].roster_id] = rosters[ri].owner_id;
+    }
+
+    // Generate behavioral summaries
+    var cards = [];
+    for (var rosterId in profiles) {
+      var prof = profiles[rosterId];
+      var ownerId = rosterOwnerMap[rosterId];
+      if (ownerId === userId) continue; // skip self
+
+      var managerName = userMap[ownerId] || "Manager " + rosterId;
+      var roster = rosters.find(function(rx) { return rx.roster_id == rosterId; });
+      var wins = roster ? (roster.settings?.wins || 0) : 0;
+      var losses = roster ? (roster.settings?.losses || 0) : 0;
+
+      // Determine behavioral traits
+      var traits = [];
+
+      // Trade tendency
+      if (prof.trades >= 5) traits.push("active trader");
+      else if (prof.trades === 0) traits.push("never trades");
+
+      // Position bias
+      var topPos = null;
+      var topCount = 0;
+      for (var pp in prof.posAdds) {
+        if (prof.posAdds[pp] > topCount) { topCount = prof.posAdds[pp]; topPos = pp; }
+      }
+      if (topPos && topCount >= 3) traits.push("stockpiles " + topPos + "s");
+
+      // FAAB aggression
+      if (prof.faabSpent > 150) traits.push("FAAB whale");
+      else if (prof.faabSpent > 50) traits.push("spends FAAB");
+      else if (prof.waivers > 3 && prof.faabSpent < 20) traits.push("bargain hunter");
+
+      // Activity level
+      if (prof.total >= 15) traits.push("hyperactive");
+      else if (prof.total <= 3) traits.push("set-and-forget");
+
+      // Net buyer/seller
+      if (prof.totalAdds > prof.totalDrops + 3) traits.push("net buyer");
+      else if (prof.totalDrops > prof.totalAdds + 3) traits.push("net seller");
+
+      var summary = traits.length > 0 ? traits.join(", ") : "plays it safe";
+
+      // Color based on activity
+      var color = prof.total >= 10 ? "var(--orange)" : prof.total >= 5 ? "var(--pos-rb)" : "var(--ink-light)";
+
+      cards.push({
+        name: managerName, wins: wins, losses: losses,
+        summary: summary, prof: prof, color: color
+      });
+    }
+
+    // Sort by activity (most active first)
+    cards.sort(function(a, b) { return b.prof.total - a.prof.total; });
+
+    if (cards.length === 0) {
+      profileDiv.innerHTML = '<div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); text-align:center; padding:12px;">no transaction history found</div>';
+      return;
+    }
+
+    var html = '<div class="profile-grid">';
+    for (var ci = 0; ci < cards.length; ci++) {
+      var c = cards[ci];
+      html += '<div class="profile-card">';
+      html += '<div class="profile-stripe" style="background:' + c.color + '"></div>';
+      html += '<div class="profile-body">';
+      html += '<div class="profile-name" style="color:' + c.color + '">' + escapeHtml(c.name) + '</div>';
+      html += '<div class="profile-record">' + c.wins + '-' + c.losses + '</div>';
+      html += '<div class="profile-summary">' + escapeHtml(c.summary) + '</div>';
+      html += '<div class="profile-stats">';
+      html += '<span class="profile-stat"><strong>' + c.prof.trades + '</strong> trades</span>';
+      html += '<span class="profile-stat"><strong>' + c.prof.waivers + '</strong> waivers</span>';
+      if (c.prof.faabSpent > 0) html += '<span class="profile-stat"><strong>$' + c.prof.faabSpent + '</strong> FAAB</span>';
+      html += '<span class="profile-stat"><strong>' + c.prof.total + '</strong> total moves</span>';
+      html += '</div></div></div>';
+    }
+    html += '</div>';
+    profileDiv.innerHTML = html;
+
+    // Save profiles to localStorage for War Room context bridge
+    try {
+      var existing = JSON.parse(localStorage.getItem("razzle_league_context") || "{}");
+      existing.managerProfiles = cards.map(function(c) {
+        return { name: c.name, record: c.wins + "-" + c.losses, summary: c.summary,
+          trades: c.prof.trades, waivers: c.prof.waivers, faab: c.prof.faabSpent };
+      });
+      existing.updatedAt = Date.now();
+      localStorage.setItem("razzle_league_context", JSON.stringify(existing));
+    } catch (e) { /* ignore */ }
+
+  } catch (e) {
+    profileDiv.innerHTML = '<div style="font-family:var(--font-hand); font-size:16px; color:var(--red); text-align:center; padding:12px;">couldn\'t scout the managers</div>';
     console.error(e);
   }
 }

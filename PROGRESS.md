@@ -1,6 +1,23 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 50 — QA + UX Audit Fixes (COMPLETE)
+## Current Phase: Phase 51 — League Intel Manager Profiles (COMPLETE)
+
+**Exit criterion MET:** League Intel page now has "Scout Rival Managers" button that fetches Sleeper transaction history (weeks 1-18) and generates behavioral profiles for rival managers. Each profile shows: manager name, record, behavioral summary (e.g., "active trader, stockpiles WRs, FAAB whale"), trade count, waiver count, FAAB spent, total moves. Profiles saved to localStorage for War Room context bridge. Comic-strip card design, mobile responsive.
+
+### Phase 51 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Fetch Sleeper transactions | DONE | Parallel fetch weeks 1-18 |
+| 2 | Behavioral analysis engine | DONE | Traits: trade tendency, position bias, FAAB, activity |
+| 3 | Manager profile cards UI | DONE | 2-col grid, color stripes, context bridge |
+| 4 | Deploy + smoke test | DONE | All syntax clean |
+
+### Decisions Log
+- **Client-side analysis**: Transaction data fetched from Sleeper API directly in browser. No backend needed.
+- **18-week parallel fetch**: All weeks in parallel for ~500ms total.
+
+## Previous Phase: Phase 50 — QA + UX Audit Fixes (COMPLETE)
 
 **Exit criterion MET:** All CRITICAL and HIGH findings from Phases 46-49 audit fixed. XSS in OG tags patched (html.escape on all 3 handlers). Stored XSS in formula review text patched (escapeHtml). User enumeration fixed (generic login error). Rate limiter memory bounded (10k IP cap). Shuffle button visibility improved (yellow on dark bg). Accessibility improved (aria-live on demo cards). Position values escaped in featured cards.
 

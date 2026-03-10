@@ -1,47 +1,35 @@
-# Razzle Loop — Phase 50 Task List
+# Razzle Loop — Phase 51 Task List
 
-> QA + UX Audit (every 5th phase). Covers Phases 46-49.
+> Auto-generated. Behavioral profiles make the Diplomat agent more compelling for $240/yr.
 
-**Current Phase**: 50 — QA + UX Audit Fixes
-**Exit Criterion**: All CRITICAL and HIGH findings from Phases 46-49 audit fixed. No XSS vectors. No user enumeration. Rate limiter bounded. UI accessibility improved.
+**Current Phase**: 51 — League Intel Manager Profiles — Transaction History Analysis
+**Exit Criterion**: When a user expands a league on League Intel, a "Manager Profiles" tab/section appears showing behavioral analysis of rival managers based on Sleeper transaction history. Each profile shows: manager name, trade tendencies (buyer/seller/hoarder), position biases (e.g., "stockpiles WRs"), FAAB aggressiveness, and a one-liner behavioral summary. Data comes from Sleeper `/league/{id}/transactions/{round}` API. Profiles saved to localStorage for War Room context bridge. Mobile responsive. Deployed to Render.
 
 ---
 
-## Task 1: Fix CRITICAL XSS in OG tags
+## Task 1: Fetch + parse Sleeper transactions
 **Status**: PASS
-**Notes**: Added _html.escape() to all 3 OG tag handlers (lab, player, compare) in server.py.
+**Notes**: Fetches weeks 1-18 in parallel from /league/{id}/transactions/{week}. Parses trades, waivers, free agent moves. Tracks adds/drops by roster_id with position tagging.
 
-## Task 2: Fix CRITICAL stored XSS in formula reviews
+## Task 2: Behavioral analysis engine
 **Status**: PASS
-**Notes**: Wrapped existingUserReview.text in escapeHtml() in formula-store.js.
+**Notes**: Per-manager analysis: trade tendency, position bias (stockpiles Xes), FAAB aggression (whale/spender/bargain hunter), activity level (hyperactive/set-and-forget), net buyer/seller. One-liner summary generated from traits.
 
-## Task 3: Fix HIGH user enumeration in login
+## Task 3: Manager profile cards UI
 **Status**: PASS
-**Notes**: Both "user not found" and "wrong password" now return "Invalid email or password" with 401.
+**Notes**: Profile grid (2-col, 1-col on mobile) with comic-strip cards. Color stripe by activity level. Shows name, record, behavioral summary, stats (trades, waivers, FAAB, total moves). "Scout rival managers" button triggers load. Saved to localStorage for War Room context bridge.
 
-## Task 4: Fix HIGH rate limiter memory leak
+## Task 4: Deploy + smoke test
 **Status**: PASS
-**Notes**: Added _RATE_MAX_IPS cap (10000). Stale entries pruned when cap exceeded.
-
-## Task 5: Fix HIGH shuffle button visibility + accessibility
-**Status**: PASS
-**Notes**: Shuffle button now yellow text/border at 13px. Demo cards container has aria-live="polite".
-
-## Task 6: Fix MEDIUM position escaping in featured cards
-**Status**: PASS
-**Notes**: All 3 featured card position interpolations now use escapeHtml().
-
-## Task 7: Deploy + smoke test
-**Status**: PASS
-**Notes**: All JS and Python syntax clean.
+**Notes**: All JS syntax clean. Cards render correctly. Mobile responsive at 768px.
 
 ---
 
 ## Loop State
 ```
-Current Phase: 50
-Current Task: 7
+Current Phase: 51
+Current Task: 4
 Current Stage: COMPLETE
 Attempt: 1
-Tasks Completed: 7/7
+Tasks Completed: 4/4
 ```
