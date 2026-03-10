@@ -9956,3 +9956,67 @@ def fetch_td_regression(season=None, position=None, limit=30):
         }
     finally:
         conn.close()
+
+
+# ---------------------------------------------------------------------------
+# Player Strengths & Weaknesses — top/bottom percentile categories
+# ---------------------------------------------------------------------------
+
+def fetch_player_strengths(player_id, season=None, top_n=4):
+    """Return a player's top strengths and weaknesses from percentile data."""
+    if not player_id:
+        return {"error": "player_id is required"}
+
+    # Leverage existing percentile computation
+    pct_data = fetch_player_percentiles(player_id, season)
+    if "error" in pct_data:
+        return pct_data
+
+    percentiles = pct_data.get("percentiles", [])
+    if not percentiles:
+        return {
+            "player": pct_data.get("player", {}),
+            "season": pct_data.get("season"),
+            "available_seasons": pct_data.get("available_seasons", []),
+            "strengths": [],
+            "weaknesses": [],
+            "all_percentiles": [],
+        }
+
+    # Sort by percentile descending for strengths
+    sorted_pcts = sorted(percentiles, key=lambda x: x["percentile"], reverse=True)
+
+    # Strengths = highest percentiles, weaknesses = lowest
+    strengths = sorted_pcts[:top_n]
+    weaknesses = sorted_pcts[-top_n:][::-1]  # reverse so worst is first
+
+    # Assign grades to each
+    def grade_pct(p):
+        if p >= 95: return "A+"
+        if p >= 85: return "A"
+        if p >= 75: return "B+"
+        if p >= 65: return "B"
+        if p >= 55: return "C+"
+        if p >= 45: return "C"
+        if p >= 35: return "D+"
+        if p >= 25: return "D"
+        if p >= 15: return "F+"
+        return "F"
+
+    for item in strengths + weaknesses:
+        item["grade"] = grade_pct(item["percentile"])
+
+    # Average percentile
+    avg_pct = round(sum(p["percentile"] for p in percentiles) / len(percentiles))
+
+    return {
+        "player": pct_data.get("player", {}),
+        "season": pct_data.get("season"),
+        "available_seasons": pct_data.get("available_seasons", []),
+        "position_pool": pct_data.get("position_pool", 0),
+        "avg_percentile": avg_pct,
+        "overall_grade": grade_pct(avg_pct),
+        "strengths": strengths,
+        "weaknesses": weaknesses,
+        "all_percentiles": percentiles,
+    }

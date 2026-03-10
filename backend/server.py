@@ -922,6 +922,7 @@ def sitemap_xml():
         ("/draftclass.html", "0.8", "weekly"),
         ("/percentiles.html", "0.8", "weekly"),
         ("/regression.html", "0.8", "weekly"),
+        ("/strengths.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1447,6 +1448,19 @@ def draft_class(year: int = 0, position: str = ""):
         return JSONResponse({"error": "Failed to fetch draft class"}, status_code=500)
 
 
+@app.get("/api/player-strengths")
+def player_strengths(player_id: str = "", season: int = 0):
+    """Return a player's top strengths and weaknesses from percentile data."""
+    if not player_id:
+        return JSONResponse({"error": "player_id is required"}, status_code=400)
+    try:
+        s = season if season > 0 else None
+        return live_data.fetch_player_strengths(player_id=player_id, season=s)
+    except Exception as e:
+        logger.error(f"player-strengths error: {e}")
+        return JSONResponse({"error": "Failed to fetch player strengths"}, status_code=500)
+
+
 @app.get("/api/td-regression")
 def td_regression(season: int = 0, position: str = ""):
     """Return players due for positive/negative TD regression."""
@@ -1494,6 +1508,7 @@ def tools_hub():
                 {"name": "Rookie Big Board", "desc": "Prospect tiers with RPS scoring and percentile bars", "url": "/prospects.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Player Percentiles", "desc": "Position-relative percentile rankings across 8+ categories", "url": "/percentiles.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "TD Regression", "desc": "Players due for positive or negative touchdown regression", "url": "/regression.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Strengths & Weaknesses", "desc": "A player's top strengths and weaknesses by percentile ranking", "url": "/strengths.html", "positions": ["QB", "RB", "WR", "TE"]},
             ],
         },
         {

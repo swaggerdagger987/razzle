@@ -1,8 +1,8 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 111 — TD Regression Dashboard (IN PROGRESS)
+## Current Phase: Phase 111 — TD Regression Dashboard (COMPLETE)
 
-**Exit criterion:** /regression.html shows players due for positive/negative TD regression based on TD rate vs opportunity volume, with expected vs actual TDs, regression delta, position filters, season selector, PNG export.
+**Exit criterion MET:** /regression.html shows touchdown regression candidates — players whose TD rate deviates from position average, with expected vs actual TDs, regression delta badges, TD rate badges colored by deviation from average, position avg rate chips, "Regression Up" (due for more TDs) and "Regression Down" (unsustainable TD rate) sections, sortable columns, position filter tabs, season selector, URL state (?season=&pos=), PNG export with watermark. GET /api/td-regression endpoint computes position-average TD rates from aggregate opportunity totals, expected TDs from opportunities × avg rate, regression delta. Min 6 games, 40+ opportunities. 10 escapeHtml calls, 259/259 braces balanced. "TD Regression" nav link on all 46 pages. Sitemap + tools hub entry under Player Discovery. Design matches DESIGN.md.
 
 ### Phase 111 Tasks
 
@@ -10,8 +10,8 @@
 |---|------|--------|-------|
 | 1 | Backend /api/td-regression endpoint | DONE | fetch_td_regression, position avg TD rates, expected vs actual TDs |
 | 2 | TD Regression page | DONE | Two sections (up/down), delta badges, rate badges, rate chips, 10 escapeHtml |
-| 3 | Nav links + sitemap + tools hub | IN PROGRESS | Sitemap + tools hub done, nav links updating |
-| 4 | Smoke test | PENDING | |
+| 3 | Nav links + sitemap + tools hub | DONE | All 46 pages updated, sitemap + tools hub |
+| 4 | Smoke test | DONE | Python OK, JS OK, 46/46 nav links |
 
 ## Previous Phase: Phase 110 — QA+UX Audit Fixes (Phases 106-109) (COMPLETE)
 
