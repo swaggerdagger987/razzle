@@ -230,7 +230,7 @@ async function installFormula(formulaId) {
     renderFormulaStore();
   } catch (e) {
     console.error("Install formula failed:", e);
-    showStoreToast("Import failed. Try again.");
+    showStoreToast("fumbled the import. try again.");
   }
 }
 
@@ -381,11 +381,11 @@ async function submitPublish() {
       // Re-render saved formulas to show "Published" badge
       if (typeof renderSavedFormulas === "function") renderSavedFormulas();
     } else {
-      showStoreToast(data.message || "Publish failed. Try again.");
+      showStoreToast(data.message || "couldn't publish. Razzle's on it.");
     }
   } catch (e) {
     console.error("Publish failed:", e);
-    showStoreToast("Publish failed. Try again.");
+    showStoreToast("couldn't publish. Razzle's on it.");
   }
 }
 

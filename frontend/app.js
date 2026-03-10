@@ -172,7 +172,7 @@ async function handleLogin(e) {
     updateAuthUI(data.user);
     migrateLocalFormulas();
   } catch (err) {
-    errEl.textContent = "Connection error. Try again.";
+    errEl.textContent = "network fumble. try again.";
   }
 }
 
@@ -199,7 +199,7 @@ async function handleRegister(e) {
     updateAuthUI(data.user);
     migrateLocalFormulas();
   } catch (err) {
-    errEl.textContent = "Connection error. Try again.";
+    errEl.textContent = "network fumble. try again.";
   }
 }
 
@@ -278,7 +278,7 @@ async function startCheckout(interval) {
       alert(data.error || "Could not start checkout");
     }
   } catch (e) {
-    alert("Connection error. Try again.");
+    alert("network fumble. try again.");
   }
 }
 
