@@ -13,7 +13,7 @@ function getWatchlist() {
 
 function saveWatchlist(list) {
   _watchlistCache = list;
-  localStorage.setItem("razzle_watchlist", JSON.stringify(list));
+  try { localStorage.setItem("razzle_watchlist", JSON.stringify(list)); } catch(e) {}
   updateWatchlistBadge();
 }
 
@@ -352,7 +352,7 @@ const PRESETS = {
 
 // ─── State ───────────────────────────────────────────────────────
 const state = {
-  universe: localStorage.getItem('razzle_universe') || "nfl", // "nfl", "prospects", or "college"
+  universe: (function() { try { return localStorage.getItem('razzle_universe'); } catch(e) { return null; } })() || "nfl", // "nfl", "prospects", or "college"
   position: "ALL",
   search: "",
   season: 0,
@@ -418,9 +418,9 @@ const state = {
   }
 
   // First-visit hint: show a brief toast if user has never visited the Lab
-  var hasVisited = localStorage.getItem("razzle_lab_visited");
+  var hasVisited = (function() { try { return localStorage.getItem("razzle_lab_visited"); } catch(e) { return "1"; } })();
   if (!hasVisited && !window.location.search) {
-    localStorage.setItem("razzle_lab_visited", "1");
+    try { localStorage.setItem("razzle_lab_visited", "1"); } catch(e) {}
     setTimeout(function() {
       var toast = document.createElement("div");
       toast.className = "first-visit-toast";
@@ -870,7 +870,7 @@ function renderProspectTable() {
 function setUniverse(u) {
   if (state.universe === u) return;
   state.universe = u;
-  localStorage.setItem('razzle_universe', u);
+  try { localStorage.setItem('razzle_universe', u); } catch(e) {}
   state.offset = 0;
   state.search = "";
   state.filters = [];
@@ -1358,7 +1358,7 @@ function loadStateFromURL() {
     state.heatColors = params.get("heat") === "1";
   } else {
     // Fall back to localStorage preference
-    state.heatColors = localStorage.getItem("razzle_heat_colors") === "1";
+    state.heatColors = (function() { try { return localStorage.getItem("razzle_heat_colors") === "1"; } catch(e) { return false; } })();
   }
 
   if (state.universe === "prospects") {
@@ -1502,7 +1502,7 @@ function saveCurrentView() {
 
   const views = getSavedViews();
   views.unshift(view);
-  localStorage.setItem("razzle_saved_views", JSON.stringify(views));
+  try { localStorage.setItem("razzle_saved_views", JSON.stringify(views)); } catch(e) {}
 
   nameInput.value = "";
   renderSavedViewsList();
@@ -1554,7 +1554,7 @@ function loadSavedView(id) {
 
 function deleteSavedView(id) {
   const views = getSavedViews().filter(v => v.id !== id);
-  localStorage.setItem("razzle_saved_views", JSON.stringify(views));
+  try { localStorage.setItem("razzle_saved_views", JSON.stringify(views)); } catch(e) {}
   renderSavedViewsList();
 }
 
@@ -1746,7 +1746,7 @@ function getCustomScoringConfigs() {
 }
 
 function saveCustomScoringConfigs(configs) {
-  localStorage.setItem("razzle_custom_scoring", JSON.stringify(configs));
+  try { localStorage.setItem("razzle_custom_scoring", JSON.stringify(configs)); } catch(e) {}
 }
 
 function openCustomScoring() {
@@ -1994,7 +1994,7 @@ function getHeatColor(pct) {
 
 function toggleHeatColors() {
   state.heatColors = !state.heatColors;
-  localStorage.setItem("razzle_heat_colors", state.heatColors ? "1" : "0");
+  try { localStorage.setItem("razzle_heat_colors", state.heatColors ? "1" : "0"); } catch(e) {}
   const btn = document.getElementById("heatColorsBtn");
   if (btn) {
     btn.classList.toggle("active", state.heatColors);
@@ -7370,7 +7370,7 @@ function getMyRoster() {
 }
 function saveMyRoster(list) {
   _rosterCache = list;
-  localStorage.setItem("razzle_my_roster", JSON.stringify(list));
+  try { localStorage.setItem("razzle_my_roster", JSON.stringify(list)); } catch(e) {}
 }
 function addToRoster(playerId, name, position, team) {
   var list = getMyRoster();

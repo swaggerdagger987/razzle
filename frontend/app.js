@@ -56,8 +56,10 @@ function escapeAttr(str) {
 const API_BASE = window.location.origin;
 
 function getAuthHeaders() {
-  const token = localStorage.getItem("razzle_token");
-  return token ? { "Authorization": "Bearer " + token } : {};
+  try {
+    const token = localStorage.getItem("razzle_token");
+    return token ? { "Authorization": "Bearer " + token } : {};
+  } catch(e) { return {}; }
 }
 
 async function apiFetch(path, options = {}) {

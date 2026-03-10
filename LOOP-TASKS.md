@@ -22,8 +22,9 @@
 **Accept when**: All localStorage operations are wrapped. No uncaught exceptions in private browsing mode.
 **Depends on**: none
 **Size**: M
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Wrapped 10 localStorage calls in lab.js (saveWatchlist, state.universe init, first-visit, setUniverse, heatColors init, saveCurrentView, deleteSavedView, saveCustomScoringConfigs, toggleHeatColors, saveMyRoster). Wrapped getAuthHeaders in app.js. Already-protected calls (loadFormulas, getSavedViews, lab_context) left as-is.
 
 ### Task 3: Fix HIGH — Descriptive sidebar tooltips for jargon panels
 **Requirement**: Update sidebar tooltip content for panels with jargon names. Instead of repeating the panel name, show a brief description. Target panels: VORP ("Value over replacement player"), Snap Efficiency ("Fantasy points per snap"), Target Premium ("Target quality composite score"), Garbage Time ("Stat padders vs clean producers"), Drop Rate ("Pass drop rates by receiver"), Success Rate ("Positive play rate by player"), TD Regression ("Expected vs actual touchdowns"), Air Yards ("Target depth and air yard share"), Dual-Threat ("Rush + receiving versatility").
