@@ -1,18 +1,18 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 11 — QA + UX Audit Fixes for Phases 6-10 (IN PROGRESS)
+## Current Phase: Phase 11 — QA + UX Audit Fixes for Phases 6-10 (COMPLETE)
 
-**Exit Criterion**: All CRITICAL and HIGH findings from Phases 6-10 QA+UX audit resolved. Connection leak patched. XSS escaped. localStorage wrapped. Cold grays replaced.
+**Exit Criterion MET**: All CRITICAL and HIGH findings from Phases 6-10 QA+UX audit resolved. Connection leak patched. XSS escaped. localStorage wrapped. Cold grays replaced with warm browns.
 
 ### Phase 11 Tasks
 
 | # | Task | Status | Notes |
 |---|------|--------|-------|
-| 1 | Fix CRITICAL — Connection leak in quick_search_players | TODO | |
-| 2 | Fix HIGH — XSS via unescaped err.message (7 instances) | TODO | |
-| 3 | Fix HIGH — Unprotected localStorage in app.js | TODO | |
-| 4 | Fix HIGH — Cold gray #888 design violation | TODO | |
-| 5 | Fix MEDIUM findings (badge borders, import re, CTE) | TODO | |
+| 1 | Fix CRITICAL — Connection leak in quick_search_players | DONE | try/finally with conn.close() |
+| 2 | Fix HIGH — XSS via unescaped err.message (7 instances) | DONE | All 7 now use escapeHtml(err.message) |
+| 3 | Fix HIGH — Unprotected localStorage in app.js | DONE | initTheme + toggleTheme wrapped |
+| 4 | Fix HIGH — Cold gray #888 design violation | DONE | Replaced with var(--ink-light) |
+| 5 | Fix MEDIUM findings (badge borders, import re, CTE) | DONE | 16 badges to 2px, re at module level, CTE for MAX(season) |
 
 ## Previous Phase: Phase 10 — QA + UX Audit Fixes (COMPLETE)
 
