@@ -5024,8 +5024,10 @@
 
   function seasonOptions(selected) {
     var html = '';
-    for (var y = 2025; y >= 2015; y--) {
-      html += '<option value="' + y + '"' + (y === (selected || 2025) ? ' selected' : '') + '>' + y + '</option>';
+    var now = new Date();
+    var latest = now.getMonth() >= 7 ? now.getFullYear() : now.getFullYear() - 1;
+    for (var y = latest; y >= 2015; y--) {
+      html += '<option value="' + y + '"' + (y === (selected || latest) ? ' selected' : '') + '>' + y + '</option>';
     }
     return html;
   }

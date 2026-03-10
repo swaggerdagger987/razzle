@@ -1,6 +1,18 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 30 — Backend Cleanup: Fix Duplicate Routes + Shared Utils (COMPLETE)
+## Current Phase: Phase 31 — QA + UX Audit Fixes for Phases 26-30 (COMPLETE)
+
+**Exit Criterion MET**: CRITICAL: Added nonlocal to 26 tools.py cached closures (prevented UnboundLocalError). HIGH: Fixed metric_key→stat_key in analytics.py, made seasonOptions() dynamic. MEDIUM: Aging curves label → "all seasons", NFL 0.0 → em-dash, toast count 62→70.
+
+### Phase 31 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Fix CRITICAL — nonlocal in tools.py closures | DONE | 26 closures fixed |
+| 2 | Fix HIGH — metric_key typo + seasonOptions | DONE | SQL column fix + dynamic year |
+| 3 | Fix MEDIUM — aging label, 0.0 em-dash, toast count | DONE | 3 frontend fixes |
+
+## Previous Phase: Phase 30 — Backend Cleanup: Fix Duplicate Routes + Shared Utils (COMPLETE)
 
 **Exit Criterion MET**: Duplicate routes removed (aging-curves line 685, td-regression line 1812). normalize_name() extracted to adapters/utils.py, imported by both nflverse and cfbfastr adapters. push_to_turso.py optimized with transaction batching and increased batch size.
 

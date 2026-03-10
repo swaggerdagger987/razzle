@@ -584,7 +584,7 @@ function isProspectView() {
     setTimeout(function() {
       var toast = document.createElement("div");
       toast.className = "first-visit-toast";
-      toast.innerHTML = '62 tools in the sidebar \u2014 press <kbd>?</kbd> for shortcuts';
+      toast.innerHTML = '70 tools in the sidebar \u2014 press <kbd>?</kbd> for shortcuts';
       toast.onclick = function() { toast.remove(); };
       document.body.appendChild(toast);
       setTimeout(function() { toast.remove(); }, 6000);
@@ -879,6 +879,8 @@ function buildRowHTML(player, cols, heatOn, pctData) {
       continue;
     }
     if (state.universe === "nfl" && isNonApplicableStat(pos, key, val)) {
+      html += `<td style="color:var(--ink-faint);">—</td>`;
+    } else if (state.universe === "nfl" && !col.isText && !col.pct && !col.isRate && (val === 0 || val === null || val === undefined) && key !== "age" && key !== "games") {
       html += `<td style="color:var(--ink-faint);">—</td>`;
     } else if (col.isText) {
       html += `<td>${val ? escapeHtml(val) : "—"}</td>`;
@@ -6079,7 +6081,7 @@ function renderAgingCurveChart(targetCanvas) {
   ctx.font = "16px 'Caveat', cursive";
   ctx.fillStyle = "#8a7565";
   ctx.textAlign = "right";
-  ctx.fillText("avg PPG by age, 2020-2024", W - padR, 28);
+  ctx.fillText("avg PPG by age, all seasons", W - padR, 28);
 
   // Chart border
   ctx.strokeStyle = "#2d1f14";

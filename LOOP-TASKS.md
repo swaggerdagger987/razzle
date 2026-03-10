@@ -2,26 +2,29 @@
 
 ## Current State
 - Phase: 31 (QA + UX Audit — Auto-Generated Fixes)
-- Stage: EXECUTING
-- Next: Task 1
+- Task 1: PASS
+- Task 2: PASS
+- Task 3: PASS
+- Stage: COMPLETE
+- Next: Phase transition
 
 ## Phase 31: QA + UX Audit — Auto-Generated Fixes
 **Exit Criterion**: All CRITICAL and HIGH findings from QA+UX audit resolved. MEDIUM findings addressed.
 
 ### Task 1: Fix CRITICAL — Add nonlocal to all tools.py cached closures
-**Status**: PENDING
-**Attempts**: 0
-**Acceptance**: Every `_query()` closure in tools.py that assigns to outer variables (season, draft_year, week, window) has `nonlocal` declarations. No `UnboundLocalError` at runtime.
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Added nonlocal to 26 of 28 _query() closures (2 don't assign outer vars). season, draft_year, week, window covered.
 
 ### Task 2: Fix HIGH — analytics.py metric_key typo + seasonOptions hardcoded years
-**Status**: PENDING
-**Attempts**: 0
-**Acceptance**: `m.metric_key` changed to `m.stat_key` in analytics.py. `seasonOptions()` in lab-panels.js uses dynamic year computation instead of hardcoded 2025-2015.
+**Status**: PASS
+**Attempts**: 1
+**Notes**: m.metric_key → m.stat_key. seasonOptions() now computes latest year dynamically.
 
 ### Task 3: Fix MEDIUM — Aging curves label, NFL 0.0 em-dash, grouped LOW fixes
-**Status**: PENDING
-**Attempts**: 0
-**Acceptance**: Aging curves label updated. NFL screener shows em-dash for zero counting stats. First-visit toast count updated. state.season initialized to null.
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Label → "all seasons". NFL 0.0 → em-dash for zero non-pct counting stats. Toast → "70 tools".
 
 ## Phase 30: Backend Cleanup: Fix Duplicate Routes + Shared Utils
 **Exit Criterion**: Duplicate routes for aging_curves and td_regression in server.py removed. normalize_name() extracted to shared utils.py. Push script optimized.

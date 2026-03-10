@@ -368,7 +368,7 @@ def fetch_stat_leaders(season=None, position=None, limit=10):
                             ON s.player_id = p.player_id AND s.season = ?
                         JOIN player_week_metrics m
                             ON m.player_id = p.player_id AND m.season = ? AND m.week = s.week
-                            AND m.metric_key = 'target_share'
+                            AND m.stat_key = 'target_share'
                         WHERE p.fantasy_relevant = 1
                           {pos_where}
                         GROUP BY p.player_id

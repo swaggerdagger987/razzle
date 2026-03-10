@@ -115,6 +115,7 @@ def _fetch_featured_uncached():
 def fetch_scoring_comparison(season=None, position=None, limit=40):
     """Compare player rankings across PPR, Half-PPR, and Standard scoring."""
     def _query():
+        nonlocal season
         with get_db() as conn:
             row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
             available_seasons = [r[0] for r in row] if row else [2024]
@@ -229,6 +230,7 @@ _CHEAT_TIERS = [
 def fetch_cheat_sheet(season=None, fmt="ppr"):
     """Return a printable draft cheat sheet grouped by position with tier breaks."""
     def _query():
+        nonlocal season
         with get_db() as conn:
             row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
             available_seasons = [r[0] for r in row] if row else [2024]
@@ -374,6 +376,7 @@ _QB_ARCHETYPES = [
 def fetch_player_archetypes(season=None, position=None):
     """Classify players into statistical archetypes based on per-game stats."""
     def _query():
+        nonlocal season
         with get_db() as conn:
             if not season:
                 row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
@@ -508,6 +511,7 @@ def fetch_player_archetypes(season=None, position=None):
 def fetch_draft_class(draft_year=None, position=None):
     """Return fantasy production stats for players from a given draft class."""
     def _query():
+        nonlocal draft_year
         with get_db() as conn:
             available_classes = [
                 r[0] for r in conn.execute(
@@ -633,6 +637,7 @@ def fetch_draft_class(draft_year=None, position=None):
 def fetch_weekly_leaders(season=None, week=None, position=None, limit=25):
     """Return top fantasy performers for a given week."""
     def _query():
+        nonlocal season, week
         with get_db() as conn:
             # Available seasons
             row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
@@ -709,6 +714,7 @@ def fetch_weekly_leaders(season=None, week=None, position=None, limit=25):
 def fetch_pace_tracker(season=None, position=None, limit=50):
     """Project per-game stats to 17-game season and track milestone progress."""
     def _query():
+        nonlocal season
         with get_db() as conn:
             cursor = conn.cursor()
 
@@ -862,6 +868,7 @@ def fetch_pace_tracker(season=None, position=None, limit=50):
 def fetch_streaks(season=None, position=None, window=4, limit=25):
     """Identify players on hot or cold scoring streaks vs their season average."""
     def _query():
+        nonlocal season, window
         with get_db() as conn:
             cursor = conn.cursor()
 
@@ -949,6 +956,7 @@ def fetch_streaks(season=None, position=None, window=4, limit=25):
 def fetch_season_recap(season=None):
     """Generate a data-driven season recap with key storylines."""
     def _query():
+        nonlocal season
         with get_db() as conn:
             cursor = conn.cursor()
 
@@ -1235,6 +1243,7 @@ def fetch_waivers(season=None, position=None, window=4, limit=30):
     Compares recent window PPG vs full season PPG; big positive delta = waiver target.
     """
     def _query():
+        nonlocal season
         with get_db() as conn:
             cursor = conn.cursor()
 
@@ -1331,6 +1340,7 @@ def fetch_playoff_schedule(season=None, position=None, limit=40):
     Returns players ranked by playoff SOS (easiest first = best playoff schedule).
     """
     def _query():
+        nonlocal season
         with get_db() as conn:
             cursor = conn.cursor()
 
@@ -1489,6 +1499,7 @@ def fetch_fpts_breakdown(season=None, position=None, limit=40):
                  4 per pass TD, 6 per rush/rec TD, -2 per INT.
     """
     def _query():
+        nonlocal season
         with get_db() as conn:
             cursor = conn.cursor()
 
@@ -1583,6 +1594,7 @@ def fetch_fpts_breakdown(season=None, position=None, limit=40):
 def fetch_garbage_time(season=None, position=None, limit=40):
     """Garbage time detector — identifies stat padders with high garbage-time scoring %."""
     def _query():
+        nonlocal season
         with get_db() as conn:
             cursor = conn.cursor()
             if not season:
@@ -1661,6 +1673,7 @@ def fetch_garbage_time(season=None, position=None, limit=40):
 def fetch_snap_efficiency(season=None, position=None, limit=50):
     """Snap efficiency — fantasy points per snap played."""
     def _query():
+        nonlocal season
         with get_db() as conn:
             cursor = conn.cursor()
             if not season:
@@ -1741,6 +1754,7 @@ def fetch_handcuffs(season=None, limit=30):
     Rank handcuffs by team rushing volume and their own efficiency/usage.
     """
     def _query():
+        nonlocal season
         with get_db() as conn:
             cursor = conn.cursor()
 
@@ -1833,6 +1847,7 @@ def fetch_weekly_mvp(season=None):
     Returns a grid: {weeks: [{week, QB: {name, fpts}, RB: ..., WR: ..., TE: ...}]}
     """
     def _query():
+        nonlocal season
         with get_db() as conn:
             cursor = conn.cursor()
 
@@ -1886,6 +1901,7 @@ def fetch_stacks(season=None, limit=30):
     catchers' weekly scores (same team). Best stacks = highest correlation.
     """
     def _query():
+        nonlocal season
         with get_db() as conn:
             cursor = conn.cursor()
 
@@ -1995,6 +2011,7 @@ def fetch_positional_advantage(season=None, position=None, limit=40):
     over the positional average PPG. Distinct from VORP (replacement level).
     """
     def _query():
+        nonlocal season
         with get_db() as conn:
             cursor = conn.cursor()
 
@@ -2076,6 +2093,7 @@ def fetch_positional_advantage(season=None, position=None, limit=40):
 def fetch_td_regression(season=None, position=None, limit=50):
     """TD regression candidates — expected vs actual TDs based on opportunity volume."""
     def _query():
+        nonlocal season
         with get_db() as conn:
             cursor = conn.cursor()
             if not season:
@@ -2181,6 +2199,7 @@ def fetch_td_regression(season=None, position=None, limit=50):
 def fetch_dual_threat(season=None, position=None, limit=50):
     """Dual-threat index — players who contribute in both rushing and receiving."""
     def _query():
+        nonlocal season
         with get_db() as conn:
             cursor = conn.cursor()
             if not season:
@@ -2269,6 +2288,7 @@ def fetch_dual_threat(season=None, position=None, limit=50):
 def fetch_season_pace(season=None, position=None, limit=50):
     """Season pace tracker — projects season totals and milestone tracking."""
     def _query():
+        nonlocal season
         with get_db() as conn:
             cursor = conn.cursor()
             if not season:
@@ -2376,6 +2396,7 @@ def fetch_season_pace(season=None, position=None, limit=50):
 def fetch_target_premium(season=None, position=None, limit=50):
     """Target premium — target quality composite for pass catchers."""
     def _query():
+        nonlocal season
         with get_db() as conn:
             cursor = conn.cursor()
             if not season:
@@ -2482,6 +2503,7 @@ def fetch_target_premium(season=None, position=None, limit=50):
 def fetch_workload_monitor(season=None, position=None, limit=50):
     """Workload monitor — snap counts, touches/game, heavy usage flags."""
     def _query():
+        nonlocal season
         with get_db() as conn:
             cursor = conn.cursor()
             if not season:
@@ -2570,6 +2592,7 @@ def fetch_workload_monitor(season=None, position=None, limit=50):
 def fetch_drop_rate(season=None, position=None, limit=50):
     """Rank pass catchers by drop rate — sure hands vs butterfingers."""
     def _query():
+        nonlocal season
         with get_db() as conn:
             if not season:
                 cur = conn.execute("SELECT MAX(season) FROM player_season_pbp")
@@ -2651,6 +2674,7 @@ def fetch_drop_rate(season=None, position=None, limit=50):
 def fetch_success_rate(season=None, position=None, limit=50):
     """Rank players by rush/pass success rate from PBP data."""
     def _query():
+        nonlocal season
         with get_db() as conn:
             if not season:
                 cur = conn.execute("SELECT MAX(season) FROM player_season_pbp")
@@ -2741,6 +2765,7 @@ def fetch_success_rate(season=None, position=None, limit=50):
 def fetch_game_script(season=None, position=None, limit=40):
     """Show how game script (avg score diff) correlates with fantasy production."""
     def _query():
+        nonlocal season
         with get_db() as conn:
             row = conn.execute("SELECT DISTINCT season FROM player_season_pbp ORDER BY season DESC").fetchall()
             available_seasons = [r[0] for r in row] if row else [2024]
@@ -2821,6 +2846,7 @@ def fetch_draft_class_tracker(draft_year=None, position=None):
     and hit/miss classification.
     """
     def _query():
+        nonlocal draft_year
         with get_db() as conn:
             # Available draft years
             year_rows = conn.execute(
