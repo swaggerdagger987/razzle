@@ -5,7 +5,7 @@
 - Task: Migrate Rankings & Values panels
 - Stage: BUILD
 - Attempt: 1/3
-- Tasks Done: 3/10
+- Tasks Done: 4/10
 
 ## Phase 1: Navigation Surgery -- COMPLETE
 ### Task 1: Slim nav to 4 items on all pages
@@ -160,8 +160,8 @@
 **Accept when**: All 6 panels render natively. Data matches standalone page output.
 **Depends on**: Task 2
 **Size**: L
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task 5: Migrate Performance panels
 **Requirement**: Convert: Efficiency, Consistency, Snap Efficiency, Workload Monitor, Dual-Threat, Target Premium, Drop Rate, Garbage Time.
