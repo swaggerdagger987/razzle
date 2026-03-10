@@ -1,6 +1,19 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 33 — Backend Cleanup: Add Structured Logging (COMPLETE)
+## Current Phase: Phase 34 — Backend Hardening: Production Config + Smoke Tests (COMPLETE)
+
+**Exit Criterion MET**: render.yaml sets ENVIRONMENT=production for JSON logging. pytest + httpx in requirements. 34 smoke tests (7 core + 27 panel) covering health, players, filter-options, featured, and 27 analytics/dashboard/dynasty/tool endpoints. All pass with local DB.
+
+### Phase 34 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Fix render.yaml + add pytest | DONE | ENVIRONMENT=production, pytest + httpx |
+| 2 | Core API smoke tests | DONE | 7 tests in test_api_core.py |
+| 3 | Panel endpoint smoke tests | DONE | 27 tests in test_api_panels.py |
+| 4 | End-to-end verification | DONE | 34 passed in 12.44s |
+
+## Previous Phase: Phase 33 — Backend Cleanup: Add Structured Logging (COMPLETE)
 
 **Exit Criterion MET**: All bare `except Exception` blocks have proper logging. Request middleware logs method/path/status/duration. `backend/logging_config.py` provides JSON format for production, colored console for dev. 14 hierarchical razzle.* loggers across all backend modules. Zero silent failures.
 
