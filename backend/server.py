@@ -925,6 +925,18 @@ async def roster_value(request: Request):
 
 
 # ---------------------------------------------------------------------------
+# Dynasty Rankings Board
+# ---------------------------------------------------------------------------
+
+@app.get("/api/dynasty-rankings")
+def dynasty_rankings(position: str = "", limit: int = 200):
+    """Return tiered dynasty rankings for all fantasy-relevant players."""
+    pos = position.strip().upper() if position else None
+    limit = max(1, min(300, limit))
+    return live_data.fetch_dynasty_rankings(position=pos, limit=limit)
+
+
+# ---------------------------------------------------------------------------
 # Analytics (lightweight page views)
 # ---------------------------------------------------------------------------
 

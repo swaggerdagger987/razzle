@@ -3367,6 +3367,125 @@ def fetch_roster_value(player_ids):
 
 
 # ---------------------------------------------------------------------------
+# Dynasty Rankings Board
+# ---------------------------------------------------------------------------
+
+_TIER_LABELS = {
+    1: "Elite",
+    2: "Star",
+    3: "Starter",
+    4: "Solid",
+    5: "Bench",
+    6: "Depth",
+    7: "Flier",
+    8: "Deep Stash",
+}
+
+
+def _assign_tier(value):
+    """Assign dynasty tier 1-8 based on trade value score."""
+    if value >= 90:
+        return 1
+    elif value >= 80:
+        return 2
+    elif value >= 70:
+        return 3
+    elif value >= 60:
+        return 4
+    elif value >= 50:
+        return 5
+    elif value >= 40:
+        return 6
+    elif value >= 30:
+        return 7
+    else:
+        return 8
+
+
+def fetch_dynasty_rankings(position=None, limit=200):
+    """Return top dynasty-relevant players ranked by dynasty value with tiers."""
+    limit = max(1, min(300, limit))
+    conn = get_conn()
+
+    # Get latest season
+    row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+    latest_season = row[0] if row and row[0] else 2024
+
+    pos_filter = ""
+    params = [latest_season]
+    if position and position.upper() in ("QB", "RB", "WR", "TE"):
+        pos_filter = "AND p.position = ?"
+        params.append(position.upper())
+
+    query = f"""
+        SELECT
+            p.player_id, p.full_name, p.position, p.team, p.age,
+            p.headshot_url,
+            SUM(s.fantasy_points_ppr) as total_ppr,
+            COUNT(DISTINCT s.week) as games
+        FROM players p
+        JOIN player_week_stats s
+            ON s.player_id = p.player_id AND s.season = ?
+        WHERE p.position IN ('QB','RB','WR','TE')
+          AND p.fantasy_relevant = 1
+          {pos_filter}
+        GROUP BY p.player_id
+        HAVING games >= 3
+        ORDER BY total_ppr DESC
+    """
+    rows = conn.execute(query, params).fetchall()
+    conn.close()
+
+    results = []
+    for r in rows:
+        pid = r[0]
+        name = r[1] or "Unknown"
+        pos = r[2] or "WR"
+        team = r[3] or "FA"
+        age = r[4]
+        headshot = r[5] or ""
+        total_ppr = r[6] or 0
+        games = r[7] or 0
+        ppg = round(total_ppr / games, 2) if games > 0 else 0.0
+
+        trade_value = compute_trade_value(ppg, age, pos)
+        tier = _assign_tier(trade_value)
+
+        results.append({
+            "player_id": pid,
+            "full_name": name,
+            "position": pos,
+            "team": team,
+            "age": age,
+            "headshot_url": headshot,
+            "ppg": ppg,
+            "games": games,
+            "dynasty_value": trade_value,
+            "tier": tier,
+            "tier_label": _TIER_LABELS[tier],
+        })
+
+    # Sort by dynasty value descending
+    results.sort(key=lambda x: x["dynasty_value"], reverse=True)
+    results = results[:limit]
+
+    # Group by tier for convenience
+    tiers = {}
+    for p in results:
+        t = p["tier"]
+        if t not in tiers:
+            tiers[t] = {"tier": t, "label": _TIER_LABELS[t], "players": []}
+        tiers[t]["players"].append(p)
+
+    return {
+        "players": results,
+        "tiers": [tiers[t] for t in sorted(tiers.keys())],
+        "total": len(results),
+        "season": latest_season,
+    }
+
+
+# ---------------------------------------------------------------------------
 # Featured Analysis — curated lists for home page
 # ---------------------------------------------------------------------------
 

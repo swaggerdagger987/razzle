@@ -1,6 +1,25 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 62 — Global Quick Search (COMPLETE)
+## Current Phase: Phase 63 — Dynasty Rankings Board (COMPLETE)
+
+**Exit criterion MET:** /rankings.html page shows top 200 dynasty-relevant players ranked by dynasty value (0-100), grouped into 8 visual tiers (Tier 1: Elite through Tier 8: Deep Stash). Each player card shows position badge (color-coded), team, age badge (green/yellow/red), dynasty value score, and PPG. Position filter tabs (All/QB/RB/WR/TE) with chunky segmented control. PNG export via html2canvas with watermark. Rankings nav link added to all 8 HTML pages (nav + footer). Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, rotated tier badge stickers, position colors, Space Mono for data, display font for headers, Caveat for annotations.
+
+### Phase 63 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend dynasty-rankings endpoint | DONE | GET /api/dynasty-rankings, compute_trade_value + tier assignment |
+| 2 | Rankings page with tiered cards | DONE | Responsive grid, headshots, age badges, hover lift |
+| 3 | Position filters + PNG export + nav | DONE | Segmented tabs, html2canvas export, all pages updated |
+| 4 | Smoke test | DONE | Python + JS syntax clean, design verified, XSS safe |
+
+### Decisions Log
+- **Dedicated page vs Lab view**: Rankings is a different user intent than the Lab screener. The Lab is for exploring/filtering data. The Rankings Board is for seeing the dynasty landscape at a glance — who's in Tier 1, who's a deep stash. Different enough to warrant its own page.
+- **8 tiers**: Tier 1 (90+) through Tier 8 (<30) gives granular separation. Labels (Elite, Star, Starter, Solid, Bench, Depth, Flier, Deep Stash) match dynasty community vernacular.
+- **Age badges**: Green (≤25), yellow (26-28), red (≥29) — instant visual signal of dynasty window status. Dynasty players care deeply about age.
+- **Top-4 tier colors**: Tiers 1-4 get colored badges (terracotta, blue, teal, purple — matching position colors for visual consistency). Lower tiers get neutral badges.
+
+## Previous Phase: Phase 62 — Global Quick Search (COMPLETE)
 
 **Exit criterion MET:** Ctrl+K / Cmd+K opens command palette from any page. Type-ahead search hits lightweight /api/players/quick-search endpoint (indexed search_name LIKE + latest season PPG). Results show player headshot/initials, position badge (color-coded), team, PPG in mono font. Arrow keys navigate, Enter opens player profile, Escape closes. Recently viewed players (max 8) stored in localStorage, shown when input empty. Debounced 300ms search. Works on all 7 pages via app.js injection. Design matches DESIGN.md: sand bg card, 3px ink borders, 4px offset shadow, Caveat annotation, "pulling film..." loading state.
 
