@@ -649,7 +649,7 @@ function renderTableHead() {
     if (key === "dynasty_value") {
       extra = ` <span class="dvs-info" onclick="event.stopPropagation(); toggleDVSInfo()" title="Click for DVS methodology" style="cursor:help; font-size:10px; opacity:0.6;">&#9432;</span>`;
     }
-    html += `<th class="${cls}"${tip} onclick="sortBy('${key}')">${col.label}${extra}</th>`;
+    html += `<th class="${cls}"${tip} tabindex="0" onclick="sortBy('${key}')" onkeydown="if(event.key==='Enter'){sortBy('${key}');event.preventDefault();}">${col.label}${extra}</th>`;
   }
 
   html += "</tr>";
@@ -682,7 +682,7 @@ function renderTableBody() {
     const starred = isOnWatchlist(playKey);
     const pName = escapeAttr(player.full_name || player.player_name || "");
     const pTeam = escapeAttr(player.team || player.school || "");
-    html += '<tr>';
+    html += '<tr tabindex="0" data-player-id="' + escapeAttr(playKey) + '">';
     html += `<td style="text-align:center; padding:7px 4px; cursor:pointer; font-size:16px;" onclick="toggleWatchlistPlayer('${escapeAttr(playKey)}', '${pName}', '${escapeAttr(pos)}', '${pTeam}', '${state.universe}')" title="${starred ? 'Remove from watchlist' : 'Add to watchlist'}">${starred ? '<span style="color:var(--orange);">&#9733;</span>' : '<span style="color:var(--ink-faint);">&#9734;</span>'}</td>`;
     html += `<td style="text-align:center; padding:7px 6px;">
       <input type="checkbox" ${selected ? "checked" : ""} onchange="togglePlayerSelect('${escapeAttr(player.player_id || player.player_name)}', this.checked)"
@@ -762,6 +762,52 @@ function renderProspectTable() {
   renderTableHead();
   renderTableBody();
 }
+
+// ─── Table keyboard navigation ──────────────────────────────────
+(function() {
+  var table = document.getElementById("screenerTable");
+  if (!table) return;
+
+  table.addEventListener("keydown", function(e) {
+    var focused = document.activeElement;
+    if (!focused || focused.tagName !== "TR") return;
+
+    var tbody = document.getElementById("tableBody");
+    if (!tbody) return;
+    var rows = Array.from(tbody.querySelectorAll("tr[tabindex]"));
+    var idx = rows.indexOf(focused);
+
+    switch (e.key) {
+      case "ArrowDown":
+        e.preventDefault();
+        if (idx < rows.length - 1) rows[idx + 1].focus();
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        if (idx > 0) rows[idx - 1].focus();
+        else if (idx === 0) {
+          // Focus first header
+          var headers = table.querySelectorAll("th[tabindex]");
+          if (headers.length) headers[0].focus();
+        }
+        break;
+      case "Enter":
+        e.preventDefault();
+        // Click the player name link in this row
+        var link = focused.querySelector("a[onclick]");
+        if (link) link.click();
+        break;
+      case "Home":
+        e.preventDefault();
+        if (rows.length) rows[0].focus();
+        break;
+      case "End":
+        e.preventDefault();
+        if (rows.length) rows[rows.length - 1].focus();
+        break;
+    }
+  });
+})();
 
 // ─── Universe toggle ─────────────────────────────────────────────
 function setUniverse(u) {
