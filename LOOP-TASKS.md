@@ -1,14 +1,30 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 28 (Backend Cleanup: Add Caching to Popular Endpoints)
+- Phase: 29 (Expand Data to 2015-2025 + Full College Stats)
 - Task 1: PASS
 - Task 2: PASS
 - Task 3: PASS
-- Task 4: PASS
-- Task 5: PASS
 - Stage: COMPLETE
 - Next: Phase transition
+
+## Phase 29: Expand Data to 2015-2025 + Full College Stats
+**Exit Criterion**: terminal.db contains NFL player data for ALL seasons 2015-2025. College football stats cover all available years. Database rebuilt locally. Upload to GitHub release.
+
+### Task 1: Run nflverse adapter for full 2015-2025 range
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Ran for 2015-2019, then 2020-2023 for PBP gap. NFL player_week_stats: 54,479 rows (2015-2024). PBP: 6,666 rows (2015-2025). 2025 NFL season not yet available.
+
+### Task 2: Verify college data and run other adapters
+**Status**: PASS
+**Attempts**: 1
+**Notes**: CFB already covered 2015-2025 (31,039 rows). combine_data (2,413) and draft_picks (1,549) already complete.
+
+### Task 3: Verify row counts and upload DB
+**Status**: PASS
+**Attempts**: 1
+**Notes**: DB 515 MB. Uploaded to data-v1 release. player_week_stats up from 28,026 to 54,479. PBP up from 615 to 6,666. player_week_metrics: 2,059,712.
 
 ## Phase 28: Backend Cleanup: Add Caching to Popular Endpoints
 **Exit Criterion**: All frequently-hit read endpoints (dynasty rankings, trade values, tier lists, stat leaders, filter options, featured) use the existing TTL cache pattern. Cache TTL of 5 minutes for volatile data, 60 minutes for stable data. At least 30 endpoints cached. Cache invalidates correctly on universe/season change.

@@ -1,6 +1,18 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 28 — Backend Cleanup: Add Caching to Popular Endpoints (COMPLETE)
+## Current Phase: Phase 29 — Expand Data to 2015-2025 + Full College Stats (COMPLETE)
+
+**Exit Criterion MET**: terminal.db contains NFL data for 2015-2024 (54,479 player-week rows, up from 28,026). PBP data for 2015-2025 (6,666 rows, up from 615). CFB data 2015-2025 (31,039 rows, already complete). DB uploaded to GitHub release data-v1 (515 MB).
+
+### Phase 29 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Run nflverse adapter for 2015-2025 | DONE | Added 2015-2019, filled 2020-2023 PBP gap |
+| 2 | Verify college data and other adapters | DONE | Already complete |
+| 3 | Verify row counts and upload DB | DONE | 515 MB uploaded to data-v1 |
+
+## Previous Phase: Phase 28 — Backend Cleanup: Add Caching to Popular Endpoints (COMPLETE)
 
 **Exit Criterion MET**: 108 read-only endpoints cached with `_cached()`. TTL parameter added to `_cached()` function. 5-min default for volatile data, 60-min `_CACHE_TTL_STABLE` for historical/stable data (aging curves, records, draft classes, archetypes, correlations, stat explorer). Cache keys include all varying params (season, position, limit, etc.) so universe/season changes get fresh data. Write functions excluded. All files compile clean.
 
