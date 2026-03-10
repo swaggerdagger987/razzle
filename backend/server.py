@@ -930,6 +930,7 @@ def sitemap_xml():
         ("/streaks.html", "0.8", "weekly"),
         ("/recap.html", "0.8", "weekly"),
         ("/comptable.html", "0.8", "weekly"),
+        ("/records.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1571,6 +1572,17 @@ def compare_table(players: str = "", season: int = 0):
         return JSONResponse({"error": "Failed to fetch comparison data"}, status_code=500)
 
 
+@app.get("/api/records")
+def records(position: str = ""):
+    """Return all-time fantasy records."""
+    try:
+        pos = position if position else None
+        return live_data.fetch_records(position=pos)
+    except Exception as e:
+        logger.error(f"records error: {e}")
+        return JSONResponse({"error": "Failed to fetch records"}, status_code=500)
+
+
 @app.get("/api/tools-hub")
 def tools_hub():
     """Return the static tools catalog organized by category."""
@@ -1592,6 +1604,7 @@ def tools_hub():
                 {"name": "Tier List", "desc": "S/A/B/C/D/F tier rankings based on composite trade value", "url": "/tiers.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Player Archetypes", "desc": "Statistical archetypes — Workhorse, Deep Threat, Dual-Threat, and more", "url": "/archetypes.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Draft Class Tracker", "desc": "Fantasy production by draft class — hits, busts, and round-by-round ROI", "url": "/draftclass.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Record Book", "desc": "All-time fantasy records — single-game, single-season, career leaders", "url": "/records.html", "positions": ["QB", "RB", "WR", "TE"]},
             ],
         },
         {

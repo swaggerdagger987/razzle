@@ -10780,3 +10780,120 @@ def fetch_compare_table(player_ids, season=None):
         }
     finally:
         conn.close()
+
+
+def fetch_records(position=None, limit=10):
+    """Return all-time fantasy records: single-game, single-season, career PPG."""
+    conn = get_db()
+    try:
+        cursor = conn.cursor()
+
+        pos_filter = ""
+        params_base = []
+        if position:
+            pos_filter = " AND p.position = ?"
+            params_base = [position]
+
+        # 1. Single-game records (highest PPR score in one week)
+        cursor.execute(f"""
+            SELECT p.player_id, p.full_name, p.position, p.team,
+                   s.season, s.week, s.fantasy_points_ppr
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE p.fantasy_relevant = 1 {pos_filter}
+            ORDER BY s.fantasy_points_ppr DESC
+            LIMIT ?
+        """, params_base + [limit])
+        single_game = []
+        for r in cursor.fetchall():
+            single_game.append({
+                "player_id": r[0], "name": r[1] or "Unknown",
+                "position": r[2] or "RB", "team": r[3] or "FA",
+                "season": r[4], "week": r[5],
+                "fpts": round(r[6] or 0, 1),
+            })
+
+        # 2. Single-season records (highest total PPR in one season)
+        cursor.execute(f"""
+            SELECT p.player_id, p.full_name, p.position, p.team,
+                   s.season, COUNT(DISTINCT s.week) as games,
+                   SUM(s.fantasy_points_ppr) as total_fpts
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE p.fantasy_relevant = 1 {pos_filter}
+            GROUP BY p.player_id, s.season
+            HAVING games >= 6
+            ORDER BY total_fpts DESC
+            LIMIT ?
+        """, params_base + [limit])
+        single_season = []
+        for r in cursor.fetchall():
+            games = r[5] or 1
+            total = r[6] or 0
+            single_season.append({
+                "player_id": r[0], "name": r[1] or "Unknown",
+                "position": r[2] or "RB", "team": r[3] or "FA",
+                "season": r[4], "games": games,
+                "total_fpts": round(total, 1),
+                "ppg": round(total / games, 1),
+            })
+
+        # 3. Career PPG leaders (across all seasons, min 20 games)
+        cursor.execute(f"""
+            SELECT p.player_id, p.full_name, p.position, p.team,
+                   COUNT(DISTINCT s.week || '-' || s.season) as games,
+                   SUM(s.fantasy_points_ppr) as total_fpts,
+                   MIN(s.season) as first_season,
+                   MAX(s.season) as last_season
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE p.fantasy_relevant = 1 {pos_filter}
+            GROUP BY p.player_id
+            HAVING games >= 20
+            ORDER BY (total_fpts * 1.0 / games) DESC
+            LIMIT ?
+        """, params_base + [limit])
+        career_ppg = []
+        for r in cursor.fetchall():
+            games = r[4] or 1
+            total = r[5] or 0
+            career_ppg.append({
+                "player_id": r[0], "name": r[1] or "Unknown",
+                "position": r[2] or "RB", "team": r[3] or "FA",
+                "games": games, "total_fpts": round(total, 1),
+                "ppg": round(total / games, 1),
+                "seasons": f"{r[6]}-{r[7]}",
+            })
+
+        # 4. Most total career points
+        cursor.execute(f"""
+            SELECT p.player_id, p.full_name, p.position, p.team,
+                   COUNT(DISTINCT s.week || '-' || s.season) as games,
+                   SUM(s.fantasy_points_ppr) as total_fpts
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE p.fantasy_relevant = 1 {pos_filter}
+            GROUP BY p.player_id
+            HAVING games >= 20
+            ORDER BY total_fpts DESC
+            LIMIT ?
+        """, params_base + [limit])
+        career_total = []
+        for r in cursor.fetchall():
+            games = r[4] or 1
+            total = r[5] or 0
+            career_total.append({
+                "player_id": r[0], "name": r[1] or "Unknown",
+                "position": r[2] or "RB", "team": r[3] or "FA",
+                "games": games, "total_fpts": round(total, 1),
+                "ppg": round(total / games, 1),
+            })
+
+        return {
+            "single_game": single_game,
+            "single_season": single_season,
+            "career_ppg": career_ppg,
+            "career_total": career_total,
+        }
+    finally:
+        conn.close()

@@ -3,261 +3,82 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Dynasty Tier List — Razzle</title>
-<meta property="og:title" content="Dynasty Tier List — Razzle">
-<meta property="og:description" content="S/A/B/C/D/F dynasty tier rankings on razzle.lol">
+<title>Record Book — Razzle</title>
+<meta property="og:title" content="Record Book — Razzle">
+<meta property="og:description" content="All-time fantasy football records — single-game, single-season, and career leaders since 2020 on razzle.lol">
 <meta property="og:site_name" content="razzle.lol">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Dynasty Tier List — Razzle">
-<meta name="twitter:description" content="S/A/B/C/D/F dynasty tier rankings on razzle.lol">
+<meta name="twitter:title" content="Record Book — Razzle">
+<meta name="twitter:description" content="All-time fantasy football records — single-game, single-season, and career leaders since 2020 on razzle.lol">
 <meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
-<meta name="description" content="Dynasty tier list — S/A/B/C/D/F player tiers based on composite trade value on razzle.lol">
+<meta name="description" content="Fantasy football record book — highest single-game scores, best season totals, career PPG leaders, and most career points since 2020 on razzle.lol">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="styles.css">
 <style>
-  .tl-page {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 24px 20px 60px;
+  .rb-page { max-width: 1100px; margin: 0 auto; padding: 24px 20px 60px; }
+  .rb-header { text-align: center; margin-bottom: 24px; }
+  .rb-header h1 { font-family: var(--font-display); font-size: 32px; color: var(--ink); margin: 0 0 4px; }
+  .rb-header .rb-subtitle { font-family: var(--font-hand); font-size: 20px; color: var(--ink-light); }
+
+  .rb-controls { display: flex; justify-content: center; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+  .rb-controls .pos-tabs { display: flex; gap: 4px; }
+  .rb-controls .pos-tab {
+    font-family: var(--font-mono); font-size: 12px; padding: 5px 12px;
+    border: 2px solid var(--ink); border-radius: 4px; background: var(--card);
+    cursor: pointer; font-weight: 700;
   }
-  .tl-header {
-    text-align: center;
-    margin-bottom: 20px;
+  .rb-controls .pos-tab.active { background: var(--ink); color: var(--sand); }
+  .rb-export {
+    font-family: var(--font-mono); font-size: 12px; padding: 5px 14px;
+    border: 2px solid var(--ink); border-radius: 4px; background: var(--card);
+    cursor: pointer; font-weight: 700;
   }
-  .tl-header h1 {
-    font-family: var(--font-display);
-    font-size: 32px;
-    color: var(--ink);
-    margin: 0 0 4px;
+  .rb-export:hover { background: var(--ink); color: var(--sand); }
+
+  .rb-loading { text-align: center; font-family: var(--font-hand); font-size: 18px; color: var(--ink-light); padding: 60px 0; }
+
+  .rb-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 768px) { .rb-grid { grid-template-columns: 1fr; } }
+
+  .rb-section {
+    background: var(--card); border: 3px solid var(--ink); border-radius: 10px;
+    box-shadow: 4px 4px 0 var(--ink); overflow: hidden;
   }
-  .tl-header .tl-subtitle {
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-  }
-  .tl-meta {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--ink-light);
-    margin-top: 6px;
+  .rb-section-header {
+    font-family: var(--font-display); font-size: 16px; padding: 10px 14px;
+    background: var(--ink); color: var(--sand);
   }
 
-  /* Controls */
-  .tl-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
+  .rb-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 12px; }
+  .rb-table th {
+    background: var(--sand); padding: 6px 8px; text-align: right;
+    font-size: 10px; font-weight: 700; border-bottom: 2px solid var(--ink-faint);
   }
-  .tl-controls select {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    padding: 6px 10px;
-    border: 3px solid var(--ink);
-    border-radius: 6px;
-    background: var(--card);
-    color: var(--ink);
-  }
-  .tl-export-btn {
-    font-family: var(--font-display);
-    font-size: 13px;
-    padding: 6px 16px;
-    border: 2px solid var(--ink);
-    border-radius: 8px;
-    background: var(--card);
-    color: var(--ink);
-    cursor: pointer;
-    box-shadow: 2px 2px 0 var(--ink);
-  }
-  .tl-export-btn:hover { background: var(--terracotta); color: white; }
+  .rb-table th:first-child { text-align: center; width: 30px; }
+  .rb-table th:nth-child(2) { text-align: left; }
+  .rb-table td { padding: 6px 8px; text-align: right; border-bottom: 1px solid var(--ink-faint); }
+  .rb-table td:first-child { text-align: center; font-weight: 700; }
+  .rb-table td:nth-child(2) { text-align: left; }
+  .rb-table tbody tr:hover { background: rgba(217,119,87,0.08); }
 
-  /* Position tabs */
-  .tl-pos-tabs {
-    display: flex;
-    justify-content: center;
-    gap: 6px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-  }
-  .tl-pos-tab {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    padding: 5px 14px;
-    border: 2px solid var(--ink);
-    border-radius: 20px;
-    background: var(--card);
-    color: var(--ink);
-    cursor: pointer;
-    box-shadow: 2px 2px 0 var(--ink);
-    transition: transform 0.1s;
-  }
-  .tl-pos-tab:hover { transform: translateY(-1px); }
-  .tl-pos-tab.active {
-    background: var(--ink);
-    color: var(--card);
-  }
+  .rb-rank { font-family: var(--font-display); font-size: 14px; }
+  .rb-rank.gold { color: #b8860b; }
+  .rb-rank.silver { color: #808080; }
+  .rb-rank.bronze { color: #cd7f32; }
 
-  /* Tier rows */
-  .tl-tier {
-    display: flex;
-    align-items: stretch;
-    margin-bottom: 12px;
-    border: 3px solid var(--ink);
-    border-radius: 14px;
-    box-shadow: 4px 4px 0 var(--ink);
-    overflow: hidden;
-    background: var(--card);
+  .rb-pos-chip {
+    font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 3px;
+    color: #fff; margin-left: 4px;
   }
-  .tl-tier-label {
-    min-width: 70px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 12px 8px;
-    border-right: 3px solid var(--ink);
+  .rb-season-badge {
+    font-size: 10px; padding: 1px 5px; border-radius: 3px;
+    background: var(--sand); border: 1px solid var(--ink-faint);
   }
-  .tl-tier-letter {
-    font-family: var(--font-display);
-    font-size: 36px;
-    line-height: 1;
-    color: white;
-    text-shadow: 2px 2px 0 rgba(0,0,0,0.2);
-  }
-  .tl-tier-count {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    color: rgba(255,255,255,0.8);
-    margin-top: 4px;
-  }
-
-  /* Tier colors */
-  .tl-tier-label.S { background: #d44040; }
-  .tl-tier-label.A { background: var(--terracotta); }
-  .tl-tier-label.B { background: #e8a838; }
-  .tl-tier-label.C { background: var(--rb); }
-  .tl-tier-label.D { background: var(--qb); }
-  .tl-tier-label.F { background: #888; }
-
-  /* Player chips in tier */
-  .tl-tier-players {
-    flex: 1;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    padding: 10px 12px;
-    align-items: center;
-    align-content: center;
-    min-height: 50px;
-  }
-
-  .tl-player-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 4px 10px 4px 4px;
-    border: 2px solid var(--ink);
-    border-radius: 20px;
-    background: var(--card);
-    font-family: var(--font-mono);
-    font-size: 12px;
-    white-space: nowrap;
-    box-shadow: 2px 2px 0 var(--ink-faint);
-    transition: transform 0.1s;
-  }
-  .tl-player-chip:hover {
-    transform: translateY(-1px);
-    box-shadow: 2px 3px 0 var(--ink-faint);
-  }
-
-  .tl-chip-pos {
-    display: inline-block;
-    font-family: var(--font-display);
-    font-size: 10px;
-    padding: 2px 6px;
-    border-radius: 10px;
-    color: white;
-  }
-  .tl-chip-pos.QB { background: var(--qb); }
-  .tl-chip-pos.RB { background: var(--rb); }
-  .tl-chip-pos.WR { background: var(--wr); }
-  .tl-chip-pos.TE { background: var(--te); }
-
-  .tl-chip-name { font-weight: 600; }
-  .tl-chip-tv {
-    font-size: 10px;
-    color: var(--ink-light);
-  }
-
-  .tl-empty-tier {
-    font-family: var(--font-hand);
-    font-size: 14px;
-    color: var(--ink-faint);
-    padding: 8px;
-  }
-
-  /* Tier description */
-  .tl-tier-desc {
-    font-family: var(--font-hand);
-    font-size: 12px;
-    color: rgba(255,255,255,0.7);
-    max-width: 60px;
-    text-align: center;
-    line-height: 1.2;
-  }
-
-  /* Loading */
-  .tl-loading {
-    text-align: center;
-    font-family: var(--font-hand);
-    font-size: 18px;
-    color: var(--ink-light);
-    padding: 60px 20px;
-  }
-  .tl-error {
-    text-align: center;
-    font-family: var(--font-mono);
-    font-size: 14px;
-    color: #d44040;
-    padding: 40px 20px;
-  }
-
-  /* Watermark */
-  .tl-watermark {
-    position: fixed;
-    bottom: 10px;
-    right: 14px;
-    font-family: var(--font-hand);
-    font-size: 14px;
-    color: rgba(0,0,0,0.15);
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  @media (max-width: 768px) {
-    .tl-tier { flex-direction: column; }
-    .tl-tier-label {
-      flex-direction: row;
-      min-width: auto;
-      border-right: none;
-      border-bottom: 3px solid var(--ink);
-      padding: 8px 16px;
-      gap: 8px;
-    }
-    .tl-tier-letter { font-size: 24px; }
-    .tl-tier-desc { max-width: none; }
-    .tl-header h1 { font-size: 26px; }
-  }
-  @media (max-width: 480px) {
-    .tl-page { padding: 16px 10px 40px; }
-    .tl-player-chip { font-size: 11px; }
-  }
+  .rb-fpts { font-weight: 700; }
 </style>
 </head>
 <body>
@@ -301,7 +122,7 @@
     <li><a href="/cheatsheet.html">Cheat Sheet</a></li>
     <li><a href="/auction.html">Auction</a></li>
     <li><a href="/dashboard.html">Dashboard</a></li>
-    <li><a href="/tiers.html" class="active">Tiers</a></li>
+    <li><a href="/tiers.html">Tiers</a></li>
     <li><a href="/archetypes.html">Archetypes</a></li>
     <li><a href="/career.html">Career</a></li>
     <li><a href="/career-compare.html">Career Compare</a></li>
@@ -316,39 +137,34 @@
     <li><a href="/streaks.html">Streaks</a></li>
     <li><a href="/recap.html">Recap</a></li>
     <li><a href="/comptable.html">Compare Table</a></li>
-    <li><a href="/records.html">Records</a></li>
+    <li><a href="/records.html" class="active">Records</a></li>
     <li><a href="/team/KC">Teams</a></li>
     <li><a href="/league-intel.html">League Intel</a></li>
     <li><a href="/agents.html">War Room</a></li>
   </ul>
 </nav>
 
-<main class="tl-page" id="tl-content">
-  <div class="tl-header">
-    <h1>Dynasty Tier List</h1>
-    <div class="tl-subtitle">who's untouchable and who's getting cut</div>
-    <div class="tl-meta" id="tl-meta"></div>
+<main class="rb-page" id="rbRoot">
+  <div class="rb-header">
+    <h1>Record Book</h1>
+    <div class="rb-subtitle">the all-time fantasy greats (2020-present)</div>
   </div>
 
-  <div class="tl-controls">
-    <select id="season-select"></select>
-    <button class="tl-export-btn" id="export-btn">Export PNG</button>
+  <div class="rb-controls">
+    <div class="pos-tabs">
+      <button class="pos-tab active" data-pos="">ALL</button>
+      <button class="pos-tab" data-pos="QB">QB</button>
+      <button class="pos-tab" data-pos="RB">RB</button>
+      <button class="pos-tab" data-pos="WR">WR</button>
+      <button class="pos-tab" data-pos="TE">TE</button>
+    </div>
+    <button class="rb-export" id="rbExport">Export PNG</button>
   </div>
 
-  <div class="tl-pos-tabs" id="pos-tabs">
-    <button class="tl-pos-tab active" data-pos="">All</button>
-    <button class="tl-pos-tab" data-pos="QB">QB</button>
-    <button class="tl-pos-tab" data-pos="RB">RB</button>
-    <button class="tl-pos-tab" data-pos="WR">WR</button>
-    <button class="tl-pos-tab" data-pos="TE">TE</button>
-  </div>
-
-  <div id="tl-tiers">
-    <div class="tl-loading">pulling film...</div>
+  <div id="rbContent">
+    <div class="rb-loading">pulling film...</div>
   </div>
 </main>
-
-<div class="tl-watermark">razzle.lol</div>
 
 <footer style="text-align:center; padding:24px 20px 32px; font-family:var(--font-hand); font-size:15px; color:var(--ink-light); border-top:2px dashed var(--ink-faint); margin-top:40px;">
   <div style="margin-bottom:10px;">
@@ -468,111 +284,129 @@
     return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  var state = { season: 0, position: '' };
-  var tiersEl = document.getElementById('tl-tiers');
-  var seasonSelect = document.getElementById('season-select');
-  var posTabs = document.getElementById('pos-tabs');
+  var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+  var currentPosition = '';
 
-  // Season select
-  seasonSelect.addEventListener('change', function() {
-    state.season = parseInt(this.value, 10) || 0;
-    fetchData();
-  });
+  function posChip(pos) {
+    var c = POS_COLORS[pos] || '#888';
+    return '<span class="rb-pos-chip" style="background:' + c + '">' + escapeHtml(pos) + '</span>';
+  }
 
-  // Position tabs
-  posTabs.addEventListener('click', function(e) {
-    var tab = e.target.closest('.tl-pos-tab');
-    if (!tab) return;
-    posTabs.querySelectorAll('.tl-pos-tab').forEach(function(t) { t.classList.remove('active'); });
-    tab.classList.add('active');
-    state.position = tab.getAttribute('data-pos');
-    fetchData();
-  });
+  function rankClass(i) {
+    if (i === 0) return 'gold';
+    if (i === 1) return 'silver';
+    if (i === 2) return 'bronze';
+    return '';
+  }
 
-  // Export
-  document.getElementById('export-btn').addEventListener('click', function() {
-    var el = document.getElementById('tl-content');
-    if (typeof html2canvas !== 'undefined') {
-      html2canvas(el, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
-        var ctx = canvas.getContext('2d');
-        ctx.font = '24px sans-serif';
-        ctx.fillStyle = 'rgba(0,0,0,0.12)';
-        ctx.fillText('razzle.lol', canvas.width - 160, canvas.height - 20);
-        var link = document.createElement('a');
-        link.download = 'razzle-tier-list.png';
-        link.href = canvas.toDataURL();
-        link.click();
-      });
-    }
-  });
+  function load() {
+    var url = '/api/records?';
+    if (currentPosition) url += 'position=' + encodeURIComponent(currentPosition);
 
-  function fetchData() {
-    tiersEl.innerHTML = '<div class="tl-loading">pulling film...</div>';
-    var params = [];
-    if (state.season > 0) params.push('season=' + state.season);
-    if (state.position) params.push('position=' + state.position);
-    var url = '/api/tier-list' + (params.length ? '?' + params.join('&') : '');
+    document.getElementById('rbContent').innerHTML = '<div class="rb-loading">pulling film...</div>';
 
-    fetch(url).then(function(resp) {
-      if (!resp.ok) throw new Error('HTTP ' + resp.status);
-      return resp.json();
+    fetch(url).then(function(r) {
+      if (!r.ok) throw new Error('API error');
+      return r.json();
     }).then(function(data) {
-      // Populate season selector
-      if (data.available_seasons && seasonSelect.options.length <= 1) {
-        seasonSelect.innerHTML = '';
-        data.available_seasons.forEach(function(s) {
-          var opt = document.createElement('option');
-          opt.value = s;
-          opt.textContent = s;
-          if (s === data.season) opt.selected = true;
-          seasonSelect.appendChild(opt);
-        });
-      }
-
-      document.getElementById('tl-meta').textContent = data.season + ' season \u00b7 ' + data.total_players + ' players \u00b7 ' + (data.position === 'ALL' ? 'all positions' : data.position);
-      renderTiers(data.tiers || []);
-    }).catch(function(err) {
-      tiersEl.innerHTML = '<div class="tl-error">failed to load tier list: ' + escapeHtml(err.message) + '</div>';
+      render(data);
+    }).catch(function() {
+      document.getElementById('rbContent').innerHTML = '<div class="rb-loading">something went wrong — try again</div>';
     });
   }
 
-  function renderTiers(tiers) {
-    var html = '';
-    tiers.forEach(function(tier) {
-      html += '<div class="tl-tier">';
-      html += '<div class="tl-tier-label ' + escapeHtml(tier.tier) + '">';
-      html += '<div class="tl-tier-letter">' + escapeHtml(tier.tier) + '</div>';
-      html += '<div class="tl-tier-count">' + escapeHtml(String(tier.players.length)) + '</div>';
-      html += '<div class="tl-tier-desc">' + escapeHtml(tier.label || '') + '</div>';
-      html += '</div>';
-      html += '<div class="tl-tier-players">';
-      if (tier.players.length === 0) {
-        html += '<span class="tl-empty-tier">no players in this tier</span>';
-      } else {
-        tier.players.forEach(function(p) {
-          html += '<div class="tl-player-chip">';
-          html += '<span class="tl-chip-pos ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span>';
-          html += '<span class="tl-chip-name">' + escapeHtml(p.full_name) + '</span>';
-          html += '<span class="tl-chip-tv">' + escapeHtml(String(p.trade_value)) + '</span>';
-          html += '</div>';
-        });
-      }
-      html += '</div>';
-      html += '</div>';
+  function render(data) {
+    var html = '<div class="rb-grid">';
+
+    // Single-game records
+    html += '<div class="rb-section">';
+    html += '<div class="rb-section-header">Single-Game Records</div>';
+    html += '<table class="rb-table"><thead><tr><th>#</th><th>Player</th><th>Szn</th><th>Wk</th><th>PPR</th></tr></thead><tbody>';
+    (data.single_game || []).forEach(function(p, i) {
+      html += '<tr><td><span class="rb-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
+      html += '<td>' + escapeHtml(p.name) + posChip(p.position) + '</td>';
+      html += '<td><span class="rb-season-badge">' + escapeHtml(String(p.season)) + '</span></td>';
+      html += '<td>' + escapeHtml(String(p.week)) + '</td>';
+      html += '<td class="rb-fpts">' + escapeHtml(String(p.fpts)) + '</td></tr>';
     });
-    tiersEl.innerHTML = html;
+    html += '</tbody></table></div>';
+
+    // Single-season records
+    html += '<div class="rb-section">';
+    html += '<div class="rb-section-header">Single-Season Records</div>';
+    html += '<table class="rb-table"><thead><tr><th>#</th><th>Player</th><th>Szn</th><th>G</th><th>Total</th><th>PPG</th></tr></thead><tbody>';
+    (data.single_season || []).forEach(function(p, i) {
+      html += '<tr><td><span class="rb-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
+      html += '<td>' + escapeHtml(p.name) + posChip(p.position) + '</td>';
+      html += '<td><span class="rb-season-badge">' + escapeHtml(String(p.season)) + '</span></td>';
+      html += '<td>' + escapeHtml(String(p.games)) + '</td>';
+      html += '<td class="rb-fpts">' + escapeHtml(String(p.total_fpts)) + '</td>';
+      html += '<td>' + escapeHtml(String(p.ppg)) + '</td></tr>';
+    });
+    html += '</tbody></table></div>';
+
+    // Career PPG leaders
+    html += '<div class="rb-section">';
+    html += '<div class="rb-section-header">Career PPG Leaders</div>';
+    html += '<table class="rb-table"><thead><tr><th>#</th><th>Player</th><th>G</th><th>PPG</th><th>Total</th></tr></thead><tbody>';
+    (data.career_ppg || []).forEach(function(p, i) {
+      html += '<tr><td><span class="rb-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
+      html += '<td>' + escapeHtml(p.name) + posChip(p.position) + '</td>';
+      html += '<td>' + escapeHtml(String(p.games)) + '</td>';
+      html += '<td class="rb-fpts">' + escapeHtml(String(p.ppg)) + '</td>';
+      html += '<td>' + escapeHtml(String(p.total_fpts)) + '</td></tr>';
+    });
+    html += '</tbody></table></div>';
+
+    // Career total points
+    html += '<div class="rb-section">';
+    html += '<div class="rb-section-header">Most Career Points</div>';
+    html += '<table class="rb-table"><thead><tr><th>#</th><th>Player</th><th>G</th><th>Total</th><th>PPG</th></tr></thead><tbody>';
+    (data.career_total || []).forEach(function(p, i) {
+      html += '<tr><td><span class="rb-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
+      html += '<td>' + escapeHtml(p.name) + posChip(p.position) + '</td>';
+      html += '<td>' + escapeHtml(String(p.games)) + '</td>';
+      html += '<td class="rb-fpts">' + escapeHtml(String(p.total_fpts)) + '</td>';
+      html += '<td>' + escapeHtml(String(p.ppg)) + '</td></tr>';
+    });
+    html += '</tbody></table></div>';
+
+    html += '</div>';
+    document.getElementById('rbContent').innerHTML = html;
   }
 
-  // Analytics
-  if (typeof fetch !== 'undefined') {
-    fetch('/api/analytics/pageview', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ page: 'tiers', referrer: document.referrer || '' })
-    }).catch(function() {});
-  }
+  /* ---- Position tabs ---- */
+  document.querySelectorAll('.pos-tab').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.pos-tab').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      currentPosition = btn.getAttribute('data-pos') || '';
+      load();
+    });
+  });
 
-  fetchData();
+  document.getElementById('rbExport').addEventListener('click', function() {
+    var root = document.getElementById('rbRoot');
+    if (typeof html2canvas === 'undefined') return;
+    html2canvas(root, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+      var ctx = canvas.getContext('2d');
+      ctx.font = 'bold 16px Space Mono, monospace';
+      ctx.fillStyle = 'rgba(0,0,0,0.12)';
+      ctx.fillText('razzle.lol', canvas.width - 130, canvas.height - 16);
+      var link = document.createElement('a');
+      link.download = 'razzle-records.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    });
+  });
+
+  fetch('/api/analytics/pageview', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ page: '/records.html', referrer: document.referrer || '' })
+  }).catch(function() {});
+
+  load();
 })();
 </script>
 </body>

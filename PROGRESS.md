@@ -1,6 +1,19 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 121 — Multi-Player Comparison Table (COMPLETE)
+## Current Phase: Phase 122 — Fantasy Record Book (COMPLETE)
+
+**Exit criterion MET:** /records.html shows all-time fantasy records across 2020-present data. Four record categories: Single-Game Records (highest PPR score in one week), Single-Season Records (highest season total), Career PPG Leaders (min 20 games), Most Career Points. Gold/silver/bronze rank styling for top 3. Position filter tabs, position-colored chips, season badges. PNG export with watermark. GET /api/records returns all four record categories. 19 escapeHtml calls, 55/55 braces balanced. "Records" nav link on all 55 pages. Sitemap + tools hub entry under Rankings & Values.
+
+### Phase 122 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/records endpoint | DONE | fetch_records, 4 record categories |
+| 2 | Record Book page | DONE | 4-section grid, rank badges, 19 escapeHtml |
+| 3 | Nav links + sitemap + tools hub | DONE | All 55 pages updated |
+| 4 | Smoke test | DONE | Python OK, JS OK, 55/55 nav links |
+
+## Previous Phase: Phase 121 — Multi-Player Comparison Table (COMPLETE)
 
 **Exit criterion MET:** /comptable.html lets users add 2-8 players via search autocomplete and compare them in a sortable stat table. All box score stats shown (pass yd, rush yd, rec yd, TDs, targets, carries, catch rate, yards per carry/reception). Best-value highlighting (green bold) for the highest stat in each column. Player chip management (add/remove), season selector, URL state (?players=ID1,ID2,ID3&season=), PNG export with watermark. GET /api/compare-table returns full season stats for multiple players. 16 escapeHtml calls, 128/128 braces balanced. "Compare Table" nav link on all 54 pages. Sitemap + tools hub entry under Performance Analysis.
 

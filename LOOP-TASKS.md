@@ -1,17 +1,17 @@
-# Razzle Loop — Phase 121 Task List
+# Razzle Loop — Phase 122 Task List
 
-> Multi-Player Comparison Table
+> Fantasy Record Book
 
-**Current Phase**: 121 — Multi-Player Comparison Table
-**Exit Criterion**: /comptable.html — multi-player sortable stat grid with best-value highlighting.
+**Current Phase**: 122 — Fantasy Record Book
+**Exit Criterion**: /records.html shows all-time fantasy records in 4 categories.
 
 ---
 
-## Task 1: Backend /api/compare-table endpoint
+## Task 1: Backend /api/records endpoint
 **Status**: PASS
 **Attempts**: 1
 
-## Task 2: Frontend /comptable.html page
+## Task 2: Frontend /records.html page
 **Status**: PASS
 **Attempts**: 1
 
@@ -27,7 +27,7 @@
 
 ## Loop State
 ```
-Current Phase: 121
+Current Phase: 122
 Current Task: 4
 Current Stage: COMPLETE
 Attempt: 1
