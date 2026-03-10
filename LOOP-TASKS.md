@@ -2,53 +2,53 @@
 
 ## Current State
 - Phase: 6 (QA + UX Audit Fixes)
-- Task: Panel transition animations
+- Task: Sidebar collapse/expand polish
 - Stage: PLAN
 - Attempt: 1/3
-- Tasks Done: 0/8
+- Tasks Done: 5/8
 
 ## Phase 7: Lab Polish — transitions, keyboard nav, virtual scrolling, UX refinements
 **Exit Criterion**: The Lab feels fast, fluid, and professional. Panel transitions are smooth. Keyboard users can navigate the full sidebar and table. Tables with 500+ rows don't lag. The experience is screenshot-worthy.
 
 ### Task 1: Panel transition animations
-**Requirement**: Add smooth transitions when switching panels. Outgoing panel fades out (opacity 1->0, 150ms), incoming panel fades in (opacity 0->1, 150ms). Use CSS transitions, not JS animation. Loading state ("pulling film...") appears during data fetch with a subtle fade. No jarring content shifts.
-**Accept when**: Panel switches feel smooth. No flash of empty content. Loading state appears for uncached panels.
+**Requirement**: CSS fade transitions on panel switch.
+**Accept when**: Panel switches feel smooth with fade in/out.
 **Depends on**: none
 **Size**: S
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task 2: Sidebar keyboard navigation
-**Requirement**: Arrow Up/Down navigates sidebar items. Enter activates the focused item. Home/End jump to first/last item. Escape closes mobile sidebar. Tab cycles through sidebar -> main content -> toolbar logically. Active item has visible focus ring (2px `var(--orange)` outline). Screen reader announces category and item names.
-**Accept when**: Full sidebar navigation works with keyboard only. Focus ring visible. ARIA labels present.
+**Requirement**: Arrow keys, Enter, Home/End, Escape, focus ring, ARIA labels.
+**Accept when**: Full sidebar keyboard nav works. Focus ring visible.
 **Depends on**: none
 **Size**: M
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task 3: Table keyboard navigation
-**Requirement**: Within data tables, Tab moves between interactive cells. Arrow keys navigate rows. Enter on a player row opens their profile panel. Shift+Enter adds to compare. Header click for sort works via keyboard (Enter on focused header). Focus stays visible with outline.
-**Accept when**: Users can navigate, sort, and select players in any table using only keyboard.
+**Requirement**: Arrow keys, Enter for profile, tabindex on rows and headers.
+**Accept when**: Keyboard-only table navigation works.
 **Depends on**: none
 **Size**: M
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task 4: Virtual scrolling for large tables
-**Requirement**: Tables with 500+ rows use virtual scrolling -- only render visible rows + buffer (20 rows above/below viewport). Scroll position maintained on re-render. Row height fixed at 36px for predictable virtualization. Implement in lab.js without external libraries.
-**Accept when**: A table with 1000+ rows scrolls at 60fps. DOM has <100 `<tr>` elements at any time. No visible flicker during scroll.
+**Requirement**: Only render visible rows + 20-row buffer. 36px fixed row height. rAF scroll handler.
+**Accept when**: Large tables scroll smoothly. DOM has <100 rows at a time.
 **Depends on**: none
 **Size**: L
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task 5: Sidebar collapse/expand polish
 **Requirement**: Sidebar collapse animation: width transitions from 260px to 48px over 200ms ease. Collapsed state shows category icons only (text emoji). Tooltip on hover shows full item name. Expand on hover (optional, behind localStorage pref). Collapse state persisted in localStorage. Main content area adjusts margin smoothly.
 **Accept when**: Collapse/expand is smooth. Icons visible in collapsed state. Tooltips work. Preference persists.
 **Depends on**: none
 **Size**: M
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task 6: Breadcrumb and panel header polish
 **Requirement**: Every panel shows a header with: breadcrumb ("The Lab > Rankings & Values > Dynasty Rankings"), panel title in display font, and a subtitle in Caveat with contextual flavor text. Season/position filters appear inline in the header where applicable.

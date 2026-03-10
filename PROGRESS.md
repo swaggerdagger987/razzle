@@ -8,11 +8,11 @@
 
 | # | Task | Status | Notes |
 |---|------|--------|-------|
-| 1 | Panel transition animations | | |
-| 2 | Sidebar keyboard navigation | | |
-| 3 | Table keyboard navigation | | |
-| 4 | Virtual scrolling for large tables | | |
-| 5 | Sidebar collapse/expand polish | | |
+| 1 | Panel transition animations | DONE | CSS opacity transitions 150ms. Fade-out on current, fade-in on new via rAF double-buffer. |
+| 2 | Sidebar keyboard navigation | DONE | Arrow Up/Down, Enter/Space, Home/End, Escape. Focus ring, ARIA roles. |
+| 3 | Table keyboard navigation | DONE | Arrow Up/Down rows, Enter opens profile, Home/End, header sort via Enter. Focus rings. |
+| 4 | Virtual scrolling for large tables | DONE | Pre-computed row HTML + visible-only rendering. 20-row buffer, rAF scroll, 36px rows, spacer rows. |
+| 5 | Sidebar collapse/expand polish | DONE | 200ms width transition, 12 category icons, 63 item data-icons with ::before, hover tooltips, localStorage persistence. |
 | 6 | Breadcrumb and panel header polish | | |
 | 7 | Mobile responsiveness audit | | |
 | 8 | Performance audit and optimization | | |
