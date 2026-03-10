@@ -1,6 +1,24 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 66 — QA + UX Audit Fixes (COMPLETE)
+## Current Phase: Phase 67 — Rookie Big Board (COMPLETE)
+
+**Exit criterion MET:** /prospects.html page shows all prospects ranked by Razzle Prospect Score (RPS), grouped into 4 tiers (Elite 80+, Premium 60-79, Solid 40-59, Raw <40). Each prospect card shows rank, position badge (color-coded), name, school, draft round/pick chip, height/weight, and combine percentile mini-bars (40yd, Vert, Broad, Bench, 3Cone, Shuttle) with color-coded fills (green 80%+, blue 60%+, yellow 40%+, orange 20%+, red <20%). RPS score displayed prominently. Position filter tabs (All/QB/RB/WR/TE) with segmented control. Draft year selector dropdown. PNG export via html2canvas with watermark. Click card → Lab prospect search. "Prospects" nav link added to all 11 HTML pages (nav + footer). Sitemap updated. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, hand annotations, position colors.
+
+### Phase 67 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Build prospects.html with tiered cards | DONE | RPS tiers, percentile bars, position filters, year selector, PNG export |
+| 2 | Nav links + sitemap + analytics | DONE | All 11 pages updated, sitemap entry, pageview tracking |
+| 3 | Smoke test | DONE | 14/14 design checks pass, JS syntax clean, nav verified |
+
+### Decisions Log
+- **RPS as primary ranking**: Razzle Prospect Score (athleticism 60% + draft capital 30% + size 10%) gives a data-driven composite that's unique to Razzle. More screenshottable than just listing combine numbers.
+- **4 tiers not 8**: Unlike dynasty rankings (8 tiers), prospects only need 4 — the data is sparser and the tiers are more meaningful when fewer.
+- **Percentile mini-bars**: Color-coded horizontal bars for each combine metric give an instant visual read on athletic profile. Green = elite, red = concern. Makes each card a mini scouting report.
+- **Click → Lab search**: Rather than building a separate prospect profile page, clicking a card searches the Lab in prospect mode. Reuses existing infrastructure and drives users to the Lab.
+
+## Previous Phase: Phase 66 — QA + UX Audit Fixes (COMPLETE)
 
 **Exit criterion MET:** All CRITICAL and HIGH findings from phases 61-65 QA audit resolved. fantasy_relevant column added to DB migration. SQL injection pattern replaced with parameterized queries. Connection leak fixed with try/finally and single connection. trackPageview standardized to inline fetch. DVS label and methodology note added to rankings page. Medium fixes: 2px borders on team.html badges, age badge terminology standardized (young/prime/aging), "Full Profile" link in Lab overlay, contextual back navigation in player.js, rate stats hidden on leaders.html "All" view.
 

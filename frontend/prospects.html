@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Rookie Big Board — Razzle</title>
+<meta property="og:title" content="Rookie Big Board — Razzle">
+<meta property="og:description" content="NFL prospect rankings by Razzle Prospect Score on razzle.lol">
+<meta property="og:site_name" content="razzle.lol">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Rookie Big Board — Razzle">
+<meta name="twitter:description" content="NFL prospect rankings by Razzle Prospect Score on razzle.lol">
+<meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
+<meta name="description" content="Rookie prospect big board ranked by Razzle Prospect Score (RPS) — combine measurables, draft capital, and athletic percentiles on razzle.lol">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .prospects-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+  }
+
+  .prospects-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .prospects-header h1 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: var(--ink);
+    margin: 0 0 4px;
+  }
+  .prospects-header .prospects-subtitle {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+  }
+  .prospects-header .prospects-method {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-light);
+    margin-top: 4px;
+  }
+
+  /* Controls row */
+  .prospects-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  /* Position filter tabs */
+  .prospects-filters {
+    display: flex;
+    gap: 0;
+  }
+  .prospects-filter-btn {
+    font-family: var(--font-display);
+    font-size: 14px;
+    padding: 8px 18px;
+    border: 2px solid var(--ink);
+    background: var(--bg-card);
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .prospects-filter-btn:first-child { border-radius: 8px 0 0 8px; }
+  .prospects-filter-btn:last-child { border-radius: 0 8px 8px 0; }
+  .prospects-filter-btn:not(:first-child) { border-left: none; }
+  .prospects-filter-btn:hover { background: var(--bg-warm); }
+  .prospects-filter-btn.active {
+    background: var(--ink);
+    color: var(--bg-card);
+  }
+  .prospects-filter-btn.active.pos-qb { background: var(--pos-qb); border-color: var(--pos-qb); }
+  .prospects-filter-btn.active.pos-rb { background: var(--pos-rb); border-color: var(--pos-rb); }
+  .prospects-filter-btn.active.pos-wr { background: var(--pos-wr); border-color: var(--pos-wr); }
+  .prospects-filter-btn.active.pos-te { background: var(--pos-te); border-color: var(--pos-te); }
+
+  /* Draft year selector */
+  .prospects-year-select {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    padding: 7px 12px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--bg-card);
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  /* Actions */
+  .prospects-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  /* Tier section */
+  .prospects-tier {
+    margin-bottom: 28px;
+  }
+  .prospects-tier-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px dashed var(--ink-faint);
+  }
+  .prospects-tier-badge {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border: 2px solid var(--ink);
+    border-radius: 20px;
+    background: var(--bg-card);
+    box-shadow: 2px 2px 0 var(--ink);
+    transform: rotate(-2deg);
+    white-space: nowrap;
+  }
+  .prospects-tier-label {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+  }
+  .prospects-tier-count {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-light);
+    margin-left: auto;
+  }
+
+  /* Tier colors */
+  .rps-elite .prospects-tier-badge { background: #d97757; color: #fff; }
+  .rps-premium .prospects-tier-badge { background: #5b7fff; color: #fff; }
+  .rps-solid .prospects-tier-badge { background: #2ec4b6; color: #fff; }
+  .rps-raw .prospects-tier-badge { background: #8b5cf6; color: #fff; }
+  .rps-unknown .prospects-tier-badge { background: var(--bg-warm); color: var(--ink-light); }
+
+  /* Player card grid */
+  .prospects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 12px;
+  }
+
+  .prospect-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+  }
+  .prospect-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+
+  /* Card top row */
+  .prospect-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .prospect-rank {
+    font-family: var(--font-display);
+    font-size: 16px;
+    color: var(--ink-light);
+    min-width: 28px;
+    text-align: center;
+  }
+  .rps-elite .prospect-rank { color: var(--orange); }
+  .rps-premium .prospect-rank { color: var(--blue); }
+
+  .prospect-pos-badge {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 4px;
+    color: #fff;
+  }
+  .prospect-pos-badge.qb { background: var(--pos-qb); }
+  .prospect-pos-badge.rb { background: var(--pos-rb); }
+  .prospect-pos-badge.wr { background: var(--pos-wr); }
+  .prospect-pos-badge.te { background: var(--pos-te); }
+
+  .prospect-info {
+    flex: 1;
+    min-width: 0;
+  }
+  .prospect-name {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .prospect-meta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-light);
+    margin-top: 1px;
+  }
+
+  .prospect-rps {
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .prospect-rps-value {
+    font-family: var(--font-mono);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .prospect-rps-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-light);
+  }
+
+  /* Draft info row */
+  .prospect-draft-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 2px dashed var(--ink-faint);
+  }
+  .prospect-draft-chip {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border: 2px solid var(--ink);
+    border-radius: 12px;
+    background: var(--bg-warm);
+  }
+  .prospect-measurables {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-medium);
+  }
+
+  /* Percentile bars */
+  .prospect-pcts {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 4px 12px;
+  }
+  .pct-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .pct-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-light);
+    width: 38px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .pct-bar-bg {
+    flex: 1;
+    height: 8px;
+    background: var(--bg-warm);
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid var(--ink-faint);
+  }
+  .pct-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s;
+  }
+  .pct-val {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--ink-medium);
+    width: 28px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* Loading state */
+  .prospects-loading {
+    text-align: center;
+    padding: 60px 20px;
+    font-family: var(--font-hand);
+    font-size: 22px;
+    color: var(--ink-light);
+  }
+
+  /* Empty state */
+  .prospects-empty {
+    text-align: center;
+    padding: 40px 20px;
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .prospects-grid { grid-template-columns: 1fr; }
+    .prospects-header h1 { font-size: 24px; }
+    .prospects-filter-btn { padding: 6px 12px; font-size: 12px; }
+    .prospect-pcts { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 480px) {
+    .prospect-card { padding: 10px; }
+    .prospect-rank { font-size: 13px; min-width: 22px; }
+    .prospect-name { font-size: 13px; }
+    .prospect-rps-value { font-size: 15px; }
+    .prospect-pcts { grid-template-columns: 1fr; }
+    .prospects-controls { gap: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="topnav">
+  <a href="/" class="logo">
+    <div class="logo-mark">&#x1F42F;</div>
+    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/lab.html">The Lab</a></li>
+    <li><a href="/rankings.html">Rankings</a></li>
+    <li><a href="/leaders.html">Leaders</a></li>
+    <li><a href="/prospects.html" class="active">Prospects</a></li>
+    <li><a href="/team/KC">Teams</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
+    <li><a href="/agents.html">War Room</a></li>
+  </ul>
+</nav>
+
+<div class="prospects-page" id="prospectsPage">
+  <div class="prospects-header">
+    <h1>Rookie Big Board</h1>
+    <div class="prospects-subtitle">scouting the next wave</div>
+    <div class="prospects-method">ranked by RPS (Razzle Prospect Score) — athleticism 60% + draft capital 30% + size 10%</div>
+  </div>
+
+  <div class="prospects-controls">
+    <div class="prospects-filters" id="prospectsFilters">
+      <button class="prospects-filter-btn active" data-pos="">All</button>
+      <button class="prospects-filter-btn pos-qb" data-pos="QB">QB</button>
+      <button class="prospects-filter-btn pos-rb" data-pos="RB">RB</button>
+      <button class="prospects-filter-btn pos-wr" data-pos="WR">WR</button>
+      <button class="prospects-filter-btn pos-te" data-pos="TE">TE</button>
+    </div>
+    <select class="prospects-year-select" id="prospectsYear">
+      <option value="">Loading...</option>
+    </select>
+  </div>
+
+  <div class="prospects-actions">
+    <button class="btn-chunky" id="prospectsExportBtn" title="Export as PNG">Export PNG</button>
+  </div>
+
+  <div id="prospectsContent">
+    <div class="prospects-loading">scouting the board...</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div style="text-align:center; padding:24px 20px 40px; font-family:var(--font-mono); font-size:12px; color:var(--ink-light);">
+  <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-bottom:8px;">
+    <a href="/" style="color:var(--ink-light); text-decoration:none;">Home</a>
+    <a href="/lab.html" style="color:var(--ink-light); text-decoration:none;">The Lab</a>
+    <a href="/rankings.html" style="color:var(--ink-light); text-decoration:none;">Rankings</a>
+    <a href="/leaders.html" style="color:var(--ink-light); text-decoration:none;">Leaders</a>
+    <a href="/prospects.html" style="color:var(--ink-light); text-decoration:none;">Prospects</a>
+    <a href="/team/KC" style="color:var(--ink-light); text-decoration:none;">Teams</a>
+    <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none;">League Intel</a>
+    <a href="/agents.html" style="color:var(--ink-light); text-decoration:none;">War Room</a>
+  </div>
+  <p><a href="/" style="color:var(--orange); text-decoration:none;">razzle.lol</a> — let's razzle dazzle em baby</p>
+</div>
+
+<div class="watermark">razzle.lol</div>
+
+<script src="app.js"></script>
+<script>
+(function() {
+  var state = { position: "", draftYear: 0, data: null, loading: false };
+
+  var content = document.getElementById("prospectsContent");
+  var yearSelect = document.getElementById("prospectsYear");
+
+  var TIER_CONFIG = [
+    { key: "elite", min: 80, label: "Elite", annotation: "freaks of nature" },
+    { key: "premium", min: 60, label: "Premium", annotation: "day 1-2 impact" },
+    { key: "solid", min: 40, label: "Solid", annotation: "developmental upside" },
+    { key: "raw", min: 0, label: "Raw", annotation: "lottery tickets" }
+  ];
+
+  var PCT_LABELS = {
+    forty: "40yd",
+    vertical: "Vert",
+    broad_jump: "Broad",
+    bench: "Bench",
+    cone: "3Cone",
+    shuttle: "Shuttle"
+  };
+
+  // ---- Load draft years ----
+  async function loadYears() {
+    try {
+      var data = await apiFetch("/api/prospect-options");
+      var years = data.years || [];
+      if (!years.length) return;
+      yearSelect.innerHTML = "";
+      for (var i = 0; i < years.length; i++) {
+        var opt = document.createElement("option");
+        opt.value = years[i];
+        opt.textContent = years[i] + " Draft Class";
+        yearSelect.appendChild(opt);
+      }
+      state.draftYear = years[0];
+      loadProspects();
+    } catch (err) {
+      yearSelect.innerHTML = '<option value="">No data</option>';
+    }
+  }
+
+  // ---- Fetch prospect scores ----
+  async function loadProspects() {
+    state.loading = true;
+    content.innerHTML = '<div class="prospects-loading">scouting the board...</div>';
+
+    try {
+      var url = "/api/prospect-scores?draft_year=" + (state.draftYear || "");
+      if (state.position) url += "&position=" + encodeURIComponent(state.position);
+      var data = await apiFetch(url);
+      state.data = data;
+      state.loading = false;
+      renderBoard(data.prospects || []);
+    } catch (err) {
+      state.loading = false;
+      content.innerHTML = '<div class="prospects-empty">could not load prospect data</div>';
+    }
+  }
+
+  // ---- Group into tiers ----
+  function groupByTier(prospects) {
+    var tiers = {};
+    for (var i = 0; i < TIER_CONFIG.length; i++) {
+      tiers[TIER_CONFIG[i].key] = [];
+    }
+    tiers["unknown"] = [];
+
+    for (var j = 0; j < prospects.length; j++) {
+      var p = prospects[j];
+      var rps = p.rps;
+      if (rps == null) { tiers["unknown"].push(p); continue; }
+      var placed = false;
+      for (var k = 0; k < TIER_CONFIG.length; k++) {
+        if (rps >= TIER_CONFIG[k].min) {
+          tiers[TIER_CONFIG[k].key].push(p);
+          placed = true;
+          break;
+        }
+      }
+      if (!placed) tiers["raw"].push(p);
+    }
+    return tiers;
+  }
+
+  // ---- Percentile bar color ----
+  function pctColor(val) {
+    if (val >= 80) return "var(--green)";
+    if (val >= 60) return "var(--blue)";
+    if (val >= 40) return "var(--yellow)";
+    if (val >= 20) return "var(--orange)";
+    return "var(--red)";
+  }
+
+  // ---- Render board ----
+  function renderBoard(prospects) {
+    if (!prospects.length) {
+      content.innerHTML = '<div class="prospects-empty">no prospects found for this class</div>';
+      return;
+    }
+
+    var tiers = groupByTier(prospects);
+    var html = "";
+
+    var tierOrder = TIER_CONFIG.map(function(t) { return t.key; });
+    tierOrder.push("unknown");
+
+    for (var ti = 0; ti < tierOrder.length; ti++) {
+      var tierKey = tierOrder[ti];
+      var players = tiers[tierKey];
+      if (!players || !players.length) continue;
+
+      var cfg = TIER_CONFIG.find(function(t) { return t.key === tierKey; });
+      var tierLabel = cfg ? cfg.label : "No Combine Data";
+      var tierAnnotation = cfg ? cfg.annotation : "limited measurables";
+
+      html += '<div class="prospects-tier rps-' + tierKey + '">';
+      html += '<div class="prospects-tier-header">';
+      html += '<div class="prospects-tier-badge">' + escapeHtml(tierLabel) + '</div>';
+      html += '<div class="prospects-tier-label">' + escapeHtml(tierAnnotation) + '</div>';
+      html += '<div class="prospects-tier-count">' + players.length + ' prospects</div>';
+      html += '</div>';
+      html += '<div class="prospects-grid">';
+
+      for (var pi = 0; pi < players.length; pi++) {
+        var p = players[pi];
+        var posLc = (p.position || "").toLowerCase();
+        var school = p.school || "";
+        var draftInfo = "";
+        if (p.draft_round && p.draft_pick) {
+          draftInfo = "Rd " + p.draft_round + " Pick " + p.draft_pick;
+          if (p.draft_team) draftInfo += " — " + p.draft_team;
+        } else {
+          draftInfo = "Undrafted";
+        }
+
+        var measStr = "";
+        if (p.height_display) measStr += p.height_display;
+        if (p.weight) measStr += (measStr ? " / " : "") + p.weight + " lbs";
+
+        html += '<div class="prospect-card" data-name="' + escapeAttr(p.player_name) + '" data-pos="' + escapeAttr(p.position) + '" data-year="' + (p.draft_year || "") + '">';
+
+        // Top row: rank + badge + name + RPS
+        html += '<div class="prospect-top">';
+        html += '<div class="prospect-rank">#' + (p.rank || "") + '</div>';
+        html += '<span class="prospect-pos-badge ' + posLc + '">' + escapeHtml(p.position || "") + '</span>';
+        html += '<div class="prospect-info">';
+        html += '<div class="prospect-name">' + escapeHtml(p.player_name || "") + '</div>';
+        html += '<div class="prospect-meta">' + escapeHtml(school) + '</div>';
+        html += '</div>';
+        html += '<div class="prospect-rps">';
+        html += '<div class="prospect-rps-value">' + formatStat(p.rps, 1) + '</div>';
+        html += '<div class="prospect-rps-label">RPS</div>';
+        html += '</div>';
+        html += '</div>';
+
+        // Draft info row
+        html += '<div class="prospect-draft-row">';
+        html += '<div class="prospect-draft-chip">' + escapeHtml(draftInfo) + '</div>';
+        if (measStr) {
+          html += '<div class="prospect-measurables">' + escapeHtml(measStr) + '</div>';
+        }
+        html += '</div>';
+
+        // Percentile bars
+        var pcts = p.percentiles || {};
+        var pctKeys = Object.keys(PCT_LABELS);
+        var hasPcts = false;
+        for (var pk = 0; pk < pctKeys.length; pk++) {
+          if (pcts[pctKeys[pk]] != null) { hasPcts = true; break; }
+        }
+
+        if (hasPcts) {
+          html += '<div class="prospect-pcts">';
+          for (var pk2 = 0; pk2 < pctKeys.length; pk2++) {
+            var mk = pctKeys[pk2];
+            var val = pcts[mk];
+            if (val == null) continue;
+            html += '<div class="pct-row">';
+            html += '<div class="pct-label">' + PCT_LABELS[mk] + '</div>';
+            html += '<div class="pct-bar-bg"><div class="pct-bar-fill" style="width:' + val + '%; background:' + pctColor(val) + ';"></div></div>';
+            html += '<div class="pct-val">' + Math.round(val) + '%</div>';
+            html += '</div>';
+          }
+          html += '</div>';
+        }
+
+        html += '</div>'; // end card
+      }
+
+      html += '</div></div>'; // end grid + tier
+    }
+
+    content.innerHTML = html;
+
+    // Click handlers — open prospect in Lab prospect mode
+    content.querySelectorAll(".prospect-card").forEach(function(card) {
+      card.addEventListener("click", function() {
+        var name = this.getAttribute("data-name");
+        var pos = this.getAttribute("data-pos");
+        var year = this.getAttribute("data-year");
+        if (name) {
+          window.location.href = "/lab.html?mode=prospects&search=" + encodeURIComponent(name);
+        }
+      });
+    });
+  }
+
+  // ---- Position filter buttons ----
+  document.getElementById("prospectsFilters").addEventListener("click", function(e) {
+    var btn = e.target.closest(".prospects-filter-btn");
+    if (!btn) return;
+    document.querySelectorAll(".prospects-filter-btn").forEach(function(b) { b.classList.remove("active"); });
+    btn.classList.add("active");
+    state.position = btn.getAttribute("data-pos") || "";
+    loadProspects();
+  });
+
+  // ---- Draft year selector ----
+  yearSelect.addEventListener("change", function() {
+    state.draftYear = parseInt(this.value) || 0;
+    loadProspects();
+  });
+
+  // ---- PNG Export ----
+  document.getElementById("prospectsExportBtn").addEventListener("click", function() {
+    var el = document.getElementById("prospectsPage");
+    if (typeof html2canvas === "undefined") {
+      var script = document.createElement("script");
+      script.src = "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js";
+      script.onload = function() { doExport(); };
+      document.head.appendChild(script);
+      return;
+    }
+    doExport();
+  });
+
+  function doExport() {
+    var el = document.getElementById("prospectsPage");
+    if (!el || typeof html2canvas === "undefined") return;
+    html2canvas(el, {
+      backgroundColor: "#ede0cf",
+      scale: 2,
+      useCORS: true,
+      logging: false,
+    }).then(function(canvas) {
+      var ctx = canvas.getContext("2d");
+      ctx.font = "bold 16px 'Space Mono', monospace";
+      ctx.fillStyle = "rgba(26,26,46,0.25)";
+      ctx.textAlign = "right";
+      ctx.fillText("razzle.lol", canvas.width - 20, canvas.height - 16);
+      var link = document.createElement("a");
+      link.download = "razzle-rookie-big-board.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    });
+  }
+
+  // ---- Initial load ----
+  loadYears();
+})();
+</script>
+<script>fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({page:location.pathname})}).catch(function(){});</script>
+</body>
+</html>

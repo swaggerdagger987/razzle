@@ -883,6 +883,7 @@ def sitemap_xml():
         ("/lab.html", "1.0", "daily"),
         ("/rankings.html", "0.9", "weekly"),
         ("/leaders.html", "0.9", "weekly"),
+        ("/prospects.html", "0.9", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]

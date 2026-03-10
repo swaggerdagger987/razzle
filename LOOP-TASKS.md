@@ -1,44 +1,34 @@
-# Razzle Loop — Phase 66 Task List
+# Razzle Loop — Phase 67 Task List
 
-> QA + UX Audit — Auto-Generated Fixes (Phases 61-65)
+> Rookie Big Board — Prospect Rankings Page
 
-**Current Phase**: 66 — QA + UX Audit Fixes
-**Exit Criterion**: All CRITICAL and HIGH findings from QA-AUDIT.md resolved. fantasy_relevant column issue fixed. SQL injection pattern in fetch_stat_leaders replaced with parameterized queries. Connection leak fixed. trackPageview standardized. DVS label and methodology added to rankings page. Medium fixes applied.
+**Current Phase**: 67 — Rookie Big Board
+**Exit Criterion**: /prospects.html page shows all prospects ranked by RPS (Razzle Prospect Score), grouped into tiers (Elite/Premium/Solid/Raw). Each prospect card shows rank, position badge, school, draft capital (round/pick), combine measurables with percentile bars, and RPS score. Position filter tabs (All/QB/RB/WR/TE). Draft year selector. PNG export with watermark. Click prospect → prospect profile in Lab. Nav links on all pages. Design matches DESIGN.md.
 
 ---
 
-## Task 1: CRITICAL — Fix fantasy_relevant column + SQL injection + connection leak
+## Task 1: Build prospects.html with tiered prospect cards
 **Status**: PASS
 **Attempts**: 1
-**Notes**: (Q1) Check if fantasy_relevant column exists in nflverse_adapter.py schema. If not, either add it to migrate_add_columns or remove the filter from all queries in live_data.py. (Q2) Replace f-string position filter in fetch_stat_leaders with parameterized queries. (Q3) Fix connection leak: combine double connection into single session with try/finally. (Q5) Move seasons query before conn.close().
+**Notes**: Created /frontend/prospects.html. Fetches /api/prospect-scores. Groups by RPS tiers: Elite (80+), Premium (60-79), Solid (40-59), Raw (<40). Each card: rank, position badge (colored), name, school, draft round/pick, combine percentile mini-bars (40yd, Vert, Broad, Bench, 3Cone, Shuttle) with color-coded fills, RPS score. Position filter tabs (All/QB/RB/WR/TE) with segmented control. Draft year selector dropdown via /api/prospect-options. PNG export with html2canvas + watermark. Loading state "scouting the board...". Click card → Lab prospect search.
 
-## Task 2: HIGH — Fix trackPageview + analytics standardization
+## Task 2: Nav links + sitemap + analytics
 **Status**: PASS
 **Attempts**: 1
-**Notes**: (Q4) Replace trackPageview calls in team.html and leaders.html with inline fetch pattern matching rankings.html. Or define trackPageview in app.js. Ensure all new pages (team, leaders, rankings) consistently track pageviews.
+**Notes**: Added "Prospects" link to nav and footer on all 11 HTML pages (10 existing + prospects.html itself). Added /prospects.html to sitemap.xml generator in server.py (priority 0.9, weekly). Analytics pageview tracking via inline fetch. OG tags set for title/description/image.
 
-## Task 3: HIGH — Rankings DVS label + methodology explainer
+## Task 3: Smoke test + verification
 **Status**: PASS
 **Attempts**: 1
-**Notes**: (U1, U3) Add "DVS" text label next to dynasty value number on rankings.html player cards. Add one-line methodology note near page header: "ranked by Dynasty Value Score (production x age curve)." Make the number meaningful for Reddit screenshots.
-
-## Task 4: MEDIUM fixes — design borders, age badge consistency, profile overlay link, contextual back nav
-**Status**: PASS
-**Attempts**: 1
-**Notes**: (Q6) Change team.html age badge and group count borders from 1px to 2px. (U4) Standardize PPG label across team.html, rankings.html, player.js. (U5) Standardize age badge terminology to "Young/Prime/Aging" on both team.html and rankings.html. (U6) Add "View full profile" link in Lab profile overlay. (U7) Make player.js back link contextual based on referrer. (U8) Hide rate stat categories on leaders.html when "All" position filter is active.
-
-## Task 5: Smoke test + verification
-**Status**: PASS
-**Attempts**: 1
-**Notes**: Python syntax valid (server.py, live_data.py, nflverse_adapter.py). JS syntax valid (lab.js, player.js, app.js, all HTML inline scripts). All 10 audit findings verified fixed: fantasy_relevant migration, parameterized SQL, single connection with try/finally, inline fetch analytics, DVS label, 2px borders, young/prime/aging terminology, Full Profile link, contextual back nav, rate stat filtering.
+**Notes**: JS syntax valid (2 script blocks). Python syntax valid (server.py). Design rules: 14/14 checks pass — 3px borders, 4px offset shadows, display/mono/hand fonts, card bg, ink colors, XSS protection (escapeHtml + escapeAttr), watermark, responsive 768px + 480px, all 4 position colors, analytics tracking. Nav link count: 20 occurrences across 11 files (nav + footer on 9 pages, nav-only on lab.html and 404.html).
 
 ---
 
 ## Loop State
 ```
-Current Phase: 66
-Current Task: 5
+Current Phase: 67
+Current Task: 3
 Current Stage: COMPLETE
 Attempt: 1
-Tasks Completed: 5/5
+Tasks Completed: 3/3
 ```
