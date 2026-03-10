@@ -1,6 +1,20 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 12 — Panel Export & Shareability (COMPLETE)
+## Current Phase: Phase 13 — Dynasty Rookie Mock Draft (COMPLETE)
+
+**Exit Criterion MET**: Users can run a simulated dynasty rookie draft in the Lab. Configure league size (8/10/12/14), rounds (3/4/5), draft position, and snake/linear order. CPU teams pick best available by RPS. Position-colored draft board grid. Recap card with pick grades (Steal/Value/Fair/Reach) and overall draft grade. Screenshot and Draft Again buttons.
+
+### Phase 13 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Mock Draft panel UI + configuration | DONE | Panel in Lab sidebar. Config card with league size, rounds, pick position, snake/linear. Chunky border design. |
+| 2 | Draft engine + auto-pick logic | DONE | Snake/linear pick order. CPU picks BPA by RPS. State machine: config → started → finished. |
+| 3 | User pick interface | DONE | Best Available table (20 shown), Draft buttons, double-click, Undo, On the Clock banner with pulse. |
+| 4 | Draft board grid | DONE | Rounds × Teams grid. Position-colored cells. User column terracotta highlight. Current pick pulsing outline. |
+| 5 | Draft recap card with grades | DONE | Steal/Value/Fair/Reach grades. Overall A+ to F. Screenshot + Draft Again. Expandable full board. |
+
+## Previous Phase: Phase 12 — Panel Export & Shareability (COMPLETE)
 
 **Exit Criterion MET**: Every Lab panel has CSV export, PNG screenshot (with watermark), and Share URL buttons. Users can favorite panels. Info button toggles methodology tooltips. 10 panels have detailed methodology text, others show generic note.
 
