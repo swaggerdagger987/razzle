@@ -563,6 +563,48 @@ def college_filter_options():
     return live_data.fetch_college_filter_options()
 
 
+@app.get("/api/college/breakouts")
+def college_breakouts(season: int = None, position: str = "", limit: int = 50):
+    return live_data.fetch_college_breakouts(
+        season=season, position=position or None, limit=limit,
+    )
+
+
+@app.get("/api/college/efficiency")
+def college_efficiency(season: int = None, position: str = "", limit: int = 30):
+    return live_data.fetch_college_efficiency(
+        season=season, position=position or None, limit=limit,
+    )
+
+
+@app.get("/api/college/leaders")
+def college_leaders(season: int = None, position: str = "", limit: int = 10):
+    return live_data.fetch_college_leaders(
+        season=season, position=position or None, limit=limit,
+    )
+
+
+@app.get("/api/college/trends")
+def college_trends(season: int = None, position: str = "", limit: int = 30):
+    return live_data.fetch_college_trends(
+        season=season, position=position or None, limit=limit,
+    )
+
+
+@app.get("/api/college/rankings")
+def college_rankings(season: int = None, position: str = "", limit: int = 50):
+    return live_data.fetch_college_rankings(
+        season=season, position=position or None, limit=limit,
+    )
+
+
+@app.get("/api/college/streaks")
+def college_streaks(season: int = None, position: str = "", limit: int = 25):
+    return live_data.fetch_college_streaks(
+        season=season, position=position or None, limit=limit,
+    )
+
+
 @app.get("/api/aging-curves")
 def aging_curves(position: str = "WR"):
     return live_data.fetch_aging_curves(position=position)

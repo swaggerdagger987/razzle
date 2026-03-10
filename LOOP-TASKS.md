@@ -2,10 +2,10 @@
 
 ## Current State
 - Phase: 5 (College Football Integration)
-- Task: Create college API endpoints for analytical panels
+- Task: Wire college toggle into Discovery panels
 - Stage: PLAN
 - Attempt: 1/3
-- Tasks Done: 1/8
+- Tasks Done: 2/8
 
 ## Phase 5: College Football Integration — NFL/College toggle across all panels
 **Exit Criterion**: Every applicable Lab panel supports an NFL/College universe toggle. College mode shifts to blue accent. College data covers 2015-present. Panels that don't apply to college show a friendly message.
@@ -23,8 +23,8 @@
 **Accept when**: All college endpoints return valid JSON with real college data. At least 1000+ players per query.
 **Depends on**: none
 **Size**: L
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task 3: Wire college toggle into Discovery panels
 **Requirement**: Breakouts, Stock Watch, Scarcity panels check `state.universe` and call college endpoints when "college" is active. College results show school, conference columns instead of NFL team. Position badges use college-appropriate labels.
