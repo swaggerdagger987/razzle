@@ -5,9 +5,12 @@ Used by all other live_data submodules. No DB imports here;
 enrichment functions that need a connection receive it as a parameter.
 """
 
+import logging
 import math
 import time as _time
 from datetime import datetime as _datetime
+
+logger = logging.getLogger("razzle.live_data.core")
 
 
 def _current_nfl_season():

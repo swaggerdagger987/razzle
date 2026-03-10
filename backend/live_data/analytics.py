@@ -6,10 +6,13 @@ stat explorer, aging curves, weekly heatmap, target distribution,
 matchup heatmap, usage trends, year-over-year, air yards, red zone.
 """
 
+import logging
 import math  # noqa: F401 — used by some callers transitively
 from collections import defaultdict
 
 from ..db import get_db
+
+logger = logging.getLogger("razzle.live_data.analytics")
 from .core import (
     FANTASY_POSITIONS,
     ABBREV_TO_TEAM,

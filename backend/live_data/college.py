@@ -2,10 +2,13 @@
 College football functions — cfb player stats, analytics, records, awards.
 """
 
+import logging
 import math
 
 from ..db import get_db
 from .core import _cached, _CACHE_TTL_STABLE, _current_nfl_season, _enrich_college_derived
+
+logger = logging.getLogger("razzle.live_data.college")
 
 def _fetch_college_players_uncached(
     search="",

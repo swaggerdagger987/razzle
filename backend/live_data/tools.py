@@ -7,11 +7,14 @@ season pace, target premium, workload monitor, drop rate, success rate,
 game script, draft class tracker, featured.
 """
 
+import logging
 import math
 from collections import defaultdict
 
 from ..db import get_db
 from .core import _cached, _CACHE_TTL_STABLE, _current_nfl_season, _current_draft_year, compute_trade_value
+
+logger = logging.getLogger("razzle.live_data.tools")
 
 def fetch_featured():
     """Return 3 curated player lists for home page widgets (cached 5 min)."""

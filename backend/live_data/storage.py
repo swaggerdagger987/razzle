@@ -5,10 +5,13 @@ These are non-analytical data management functions that handle user-generated
 content, community features, and internal tracking.
 """
 
+import logging
 import re
 import sqlite3
 
 from ..db import get_db
+
+logger = logging.getLogger("razzle.live_data.storage")
 
 
 # ---------------------------------------------------------------------------

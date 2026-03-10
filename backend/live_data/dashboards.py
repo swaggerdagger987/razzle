@@ -3,11 +3,14 @@ live_data.dashboards -- efficiency, consistency, SOS, stock watch,
 opportunity share, report cards, awards, VORP, stat correlations.
 """
 
+import logging
 import math
 from collections import defaultdict
 
 from ..db import get_db
 from .core import FANTASY_POSITIONS, _cached, _CACHE_TTL_STABLE, _current_nfl_season
+
+logger = logging.getLogger("razzle.live_data.dashboards")
 
 _EFFICIENCY_ANNOTATIONS = [
     "does more with less",

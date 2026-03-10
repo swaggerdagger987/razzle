@@ -4,11 +4,14 @@ dynasty dashboard, tier list, power rankings, roster value/grade, pick values,
 auction values.
 """
 
+import logging
 import math
 from collections import defaultdict
 from bisect import bisect_left, bisect_right
 
 from ..db import get_db
+
+logger = logging.getLogger("razzle.live_data.dynasty")
 from .core import (
     _cached, _CACHE_TTL_STABLE,
     _current_nfl_season, _current_draft_year,

@@ -14,7 +14,7 @@ from pathlib import Path
 import bcrypt
 import jwt
 
-logger = logging.getLogger("razzle")
+logger = logging.getLogger("razzle.auth")
 
 USERS_DB_PATH = Path(__file__).parent.parent / "data" / "users.db"
 

@@ -3,9 +3,12 @@ NFL player CRUD functions — search, screener, profiles, comparisons, boom/bust
 Extracted from _monolith.py in Phase 27 Task 3.
 """
 
+import logging
 import statistics
 
 from ..db import get_db
+
+logger = logging.getLogger("razzle.live_data.players")
 
 from .core import (
     _cached, _CACHE_TTL_STABLE,

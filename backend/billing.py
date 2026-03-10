@@ -11,7 +11,7 @@ import stripe
 
 from . import auth as auth_module
 
-logger = logging.getLogger("razzle")
+logger = logging.getLogger("razzle.billing")
 
 # Stripe config — all from env vars
 STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY", "")

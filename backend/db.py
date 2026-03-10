@@ -5,9 +5,12 @@ Single source of truth for DB connections. Plain SQLite — the database
 file is downloaded during build on Render, or used locally from data/.
 """
 
+import logging
 import sqlite3
 from contextlib import contextmanager
 from pathlib import Path
+
+logger = logging.getLogger("razzle.db")
 
 DB_PATH = Path(__file__).parent.parent / "data" / "terminal.db"
 

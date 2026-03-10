@@ -2,9 +2,12 @@
 Prospect functions — combine data, athletic profiles, tiers, comparisons.
 """
 
+import logging
 import math
 
 from ..db import get_db
+
+logger = logging.getLogger("razzle.live_data.prospects")
 from .core import (
     _cached, _CACHE_TTL_STABLE,
     _current_draft_year,
