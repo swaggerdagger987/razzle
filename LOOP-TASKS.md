@@ -2,10 +2,10 @@
 
 ## Current State
 - Phase: 5 (College Football Integration)
-- Task: Wire college toggle into Records & History panels
+- Task: Add NFL-only messages for inapplicable panels
 - Stage: PLAN
 - Attempt: 1/3
-- Tasks Done: 5/8
+- Tasks Done: 6/8
 
 ## Phase 5: College Football Integration — NFL/College toggle across all panels
 **Exit Criterion**: Every applicable Lab panel supports an NFL/College universe toggle. College mode shifts to blue accent. College data covers 2015-present. Panels that don't apply to college show a friendly message.
@@ -55,8 +55,8 @@
 **Accept when**: All 5 panels show college records and history.
 **Depends on**: Tasks 1, 2
 **Size**: M
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task 7: Add NFL-only messages for inapplicable panels
 **Requirement**: Panels that don't apply to college (Trade Values, Roster Builder, Waivers, Trade Finder, Auction, Cheat Sheet, League Intel, Dashboard, Handcuffs) show a friendly Caveat-font message when college is selected: "NFL only — college players don't have dynasty trade values... yet" (with slight rotation and tiger emoji). The message should feel on-brand, not like an error.

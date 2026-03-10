@@ -650,6 +650,26 @@ def college_aging_curves(position: str = ""):
     return live_data.fetch_college_aging_curves(position=position or None)
 
 
+@app.get("/api/college/records")
+def college_records(position: str = "", limit: int = 10):
+    return live_data.fetch_college_records(position=position or None, limit=limit)
+
+
+@app.get("/api/college/season-recap")
+def college_season_recap(season: int = None):
+    return live_data.fetch_college_season_recap(season=season)
+
+
+@app.get("/api/college/season-awards")
+def college_season_awards(season: int = None, position: str = ""):
+    return live_data.fetch_college_season_awards(season=season, position=position or None)
+
+
+@app.get("/api/college/stat-explorer")
+def college_stat_explorer(season: int = None, position: str = "", x_stat: str = "total_ypg", y_stat: str = "ppg"):
+    return live_data.fetch_college_stat_explorer(season=season, position=position or None, x_stat=x_stat, y_stat=y_stat)
+
+
 @app.get("/api/aging-curves")
 def aging_curves(position: str = "WR"):
     return live_data.fetch_aging_curves(position=position)

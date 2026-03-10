@@ -6220,7 +6220,8 @@
 
   // ─── AWARDS ──────────────────────────────────────────────────
   defs.push({ name: 'awards', render: function(el) {
-    var state = { position: '', season: 0, data: null };
+    var awCollege = typeof state !== 'undefined' && state.universe === 'college';
+    var awState = { position: '', season: 0, data: null };
 
     var TROPHY_MAP = {
       mvp: '&#x1F3C6;', most_efficient: '&#x26A1;', iron_man: '&#x1F6E1;',
@@ -6238,7 +6239,7 @@
       return 'poor';
     }
 
-    function buildAwardCard(award) {
+    function buildAwardCard(award, isCollege) {
       var w = award.winner;
       var pos = (w.position || 'RB').toLowerCase();
       var trophy = TROPHY_MAP[award.key] || '&#x1F3C6;';
@@ -6248,7 +6249,7 @@
       html += '<div class="aw2-card-desc">' + escapeHtml(award.description) + '</div>';
       html += '</div></div>';
       html += '<div class="aw2-winner" data-pid="' + escapeAttr(w.player_id) + '">';
-      if (w.headshot_url) {
+      if (!isCollege && w.headshot_url) {
         html += '<img class="aw2-winner-headshot" src="' + escapeAttr(w.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
       }
       html += '<div class="aw2-winner-info">';
@@ -6256,19 +6257,30 @@
       html += '<div class="aw2-winner-meta">';
       html += '<span class="aw2-pos-badge ' + pos + '">' + escapeHtml(w.position) + '</span>';
       html += '<span>' + escapeHtml(w.team) + '</span>';
+      if (isCollege && w.conference) html += '<span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(w.conference) + '</span>';
       html += '<span>' + escapeHtml(String(w.ppg)) + ' PPG</span>';
       html += '</div>';
-      html += '<div class="aw2-winner-grades">';
-      html += '<span class="aw2-grade ' + gradeClass(w.gpa_grade) + '">GPA ' + escapeHtml(w.gpa_grade) + '</span>';
-      html += '<span class="aw2-grade ' + gradeClass(w.efficiency_grade) + '">Eff ' + escapeHtml(w.efficiency_grade) + '</span>';
-      html += '<span class="aw2-grade ' + gradeClass(w.consistency_grade) + '">Con ' + escapeHtml(w.consistency_grade) + '</span>';
-      html += '</div>';
+      if (!isCollege) {
+        html += '<div class="aw2-winner-grades">';
+        html += '<span class="aw2-grade ' + gradeClass(w.gpa_grade) + '">GPA ' + escapeHtml(w.gpa_grade || '') + '</span>';
+        html += '<span class="aw2-grade ' + gradeClass(w.efficiency_grade) + '">Eff ' + escapeHtml(w.efficiency_grade || '') + '</span>';
+        html += '<span class="aw2-grade ' + gradeClass(w.consistency_grade) + '">Con ' + escapeHtml(w.consistency_grade || '') + '</span>';
+        html += '</div>';
+      } else {
+        html += '<div class="aw2-winner-grades">';
+        if (w.tds !== undefined) html += '<span class="aw2-grade good">' + w.tds + ' TDs</span>';
+        if (w.ppo) html += '<span class="aw2-grade elite">' + w.ppo + ' PPO</span>';
+        html += '<span class="aw2-grade avg">' + w.games + ' G</span>';
+        html += '</div>';
+      }
       if (award.annotation) {
         html += '<div class="aw2-annotation">' + escapeHtml(award.annotation) + '</div>';
       }
       html += '</div>';
-      html += '<div class="aw2-winner-stat"><div class="aw2-stat-value">' + escapeHtml(w.key_stat) + '</div>';
-      html += '<div class="aw2-stat-label">' + escapeHtml(award.stat_label) + '</div></div>';
+      if (!isCollege && w.key_stat) {
+        html += '<div class="aw2-winner-stat"><div class="aw2-stat-value">' + escapeHtml(w.key_stat) + '</div>';
+        html += '<div class="aw2-stat-label">' + escapeHtml(award.stat_label || '') + '</div></div>';
+      }
       html += '</div>';
       if (award.runners_up && award.runners_up.length) {
         html += '<div class="aw2-runners"><div class="aw2-runners-title">Runners Up</div>';
@@ -6276,12 +6288,13 @@
           var rPos = (r.position || 'RB').toLowerCase();
           html += '<div class="aw2-runner-row" data-pid="' + escapeAttr(r.player_id) + '">';
           html += '<span class="aw2-runner-rank">' + (i + 2) + '</span>';
-          if (r.headshot_url) {
+          if (!isCollege && r.headshot_url) {
             html += '<img class="aw2-runner-headshot" src="' + escapeAttr(r.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
           }
           html += '<span class="aw2-runner-pos ' + rPos + '">' + escapeHtml(r.position) + '</span>';
           html += '<span class="aw2-runner-name">' + escapeHtml(r.name) + '</span>';
-          html += '<span class="aw2-runner-stat">' + escapeHtml(r.key_stat) + '</span>';
+          if (isCollege && r.team) html += '<span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(r.team) + '</span>';
+          html += '<span class="aw2-runner-stat">' + escapeHtml(isCollege ? String(r.ppg || '') + ' PPG' : (r.key_stat || '')) + '</span>';
           html += '</div>';
         });
         html += '</div>';
@@ -6292,10 +6305,10 @@
 
     el.innerHTML =
       '<div class="lp-page">' +
-        '<div class="lp-header"><h2>Season Superlatives</h2>' +
-        '<div class="lp-subtitle">the hardware that matters</div></div>' +
+        '<div class="lp-header"><h2>' + (awCollege ? 'College Superlatives' : 'Season Superlatives') + '</h2>' +
+        '<div class="lp-subtitle">' + (awCollege ? 'the college hardware that matters' : 'the hardware that matters') + '</div></div>' +
         '<div class="lp-controls">' +
-          '<select class="lp-select aw2-season">' + seasonOptions(2025) + '</select>' +
+          '<select class="lp-select aw2-season">' + seasonOptions(awCollege ? 2024 : 2025) + '</select>' +
           posTabsHTML('aw2-pos-tabs', true) +
         '</div>' +
         '<div class="aw2-content"><div class="lp-loading">tallying the votes...</div></div>' +
@@ -6303,18 +6316,19 @@
 
     function load() {
       var content = el.querySelector('.aw2-content');
-      content.innerHTML = '<div class="lp-loading">tallying the votes...</div>';
-      var url = '/api/season-awards?';
+      var isCollege = typeof state !== 'undefined' && state.universe === 'college';
+      content.innerHTML = '<div class="lp-loading">tallying the ' + (isCollege ? 'college ' : '') + 'votes...</div>';
+      var url = isCollege ? '/api/college/season-awards?' : '/api/season-awards?';
       var params = [];
-      if (state.position) params.push('position=' + encodeURIComponent(state.position));
-      if (state.season) params.push('season=' + encodeURIComponent(state.season));
+      if (awState.position) params.push('position=' + encodeURIComponent(awState.position));
+      if (awState.season) params.push('season=' + encodeURIComponent(awState.season));
       url += params.join('&');
 
       fetch(url).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
-        state.data = data;
+        awState.data = data;
         if (data.available_seasons && data.available_seasons.length) {
           var sel = el.querySelector('.aw2-season');
           sel.innerHTML = '';
@@ -6322,29 +6336,31 @@
             sel.innerHTML += '<option value="' + s + '"' + (s === data.season ? ' selected' : '') + '>' + s + '</option>';
           });
         }
-        renderAwards(data);
+        renderAwards(data, isCollege);
       }).catch(function() {
         content.innerHTML = '<div class="lp-error">could not load awards data</div>';
       });
     }
 
-    function renderAwards(data) {
+    function renderAwards(data, isCollege) {
       var content = el.querySelector('.aw2-content');
       if (!data || !data.awards || !data.awards.length) {
         content.innerHTML = '<div class="lp-empty">no awards data found</div>';
         return;
       }
       var html = '<div class="aw2-grid">';
-      data.awards.forEach(function(award) { html += buildAwardCard(award); });
+      data.awards.forEach(function(award) { html += buildAwardCard(award, isCollege); });
       html += '</div>';
       content.innerHTML = html;
-      content.querySelectorAll('[data-pid]').forEach(function(el2) {
-        el2.style.cursor = 'pointer';
-        el2.addEventListener('click', function() {
-          var pid = this.getAttribute('data-pid');
-          if (pid) window.location.href = '/player/' + encodeURIComponent(pid);
+      if (!isCollege) {
+        content.querySelectorAll('[data-pid]').forEach(function(el2) {
+          el2.style.cursor = 'pointer';
+          el2.addEventListener('click', function() {
+            var pid = this.getAttribute('data-pid');
+            if (pid) window.location.href = '/player/' + encodeURIComponent(pid);
+          });
         });
-      });
+      }
     }
 
     el.querySelector('#aw2-pos-tabs').addEventListener('click', function(e) {
@@ -6352,12 +6368,12 @@
       if (!tab) return;
       el.querySelectorAll('#aw2-pos-tabs .lp-pos-tab').forEach(function(t) { t.classList.remove('active'); });
       tab.classList.add('active');
-      state.position = tab.getAttribute('data-pos') || '';
+      awState.position = tab.getAttribute('data-pos') || '';
       load();
     });
 
     el.querySelector('.aw2-season').addEventListener('change', function() {
-      state.season = parseInt(this.value, 10) || 0;
+      awState.season = parseInt(this.value, 10) || 0;
       load();
     });
 
@@ -6680,39 +6696,51 @@
 
   // ─── EXPLORER ────────────────────────────────────────────────
   defs.push({ name: 'explorer', render: function(el) {
-    var METRIC_LABELS = {
+    var expCollege = typeof state !== 'undefined' && state.universe === 'college';
+    var NFL_METRIC_LABELS = {
       ppg: 'PPG', targets_g: 'Targets/G', receptions_g: 'Rec/G', rec_yards_g: 'Rec Yards/G',
       rush_yards_g: 'Rush Yards/G', carries_g: 'Carries/G', air_yards_g: 'Air Yards/G',
       tds: 'Total TDs', age: 'Age', snap_pct: 'Snap %', adot: 'aDOT',
       catch_rate: 'Catch Rate %', racr: 'RACR', target_share: 'Target Share',
       air_yards_share: 'Air Yards Share', wopr: 'WOPR', games: 'Games'
     };
+    var COLLEGE_METRIC_LABELS = {
+      ppg: 'PPG', total_ypg: 'Total YPG', rush_ypg: 'Rush YPG',
+      rec_ypg: 'Rec YPG', pass_ypg: 'Pass YPG', tds: 'Total TDs',
+      tds_per_game: 'TDs/Game', carries_g: 'Carries/G', targets_g: 'Targets/G',
+      receptions_g: 'Rec/G', yards_per_carry: 'Yards/Carry',
+      yards_per_rec: 'Yards/Rec', catch_rate: 'Catch Rate %',
+      games: 'Games', opportunities_g: 'Opps/G'
+    };
+    var METRIC_LABELS = expCollege ? COLLEGE_METRIC_LABELS : NFL_METRIC_LABELS;
     var MARGIN = { top: 20, right: 30, bottom: 50, left: 60 };
     var currentData = null;
     var hoveredPlayer = null;
     var chartCanvas = null;
     var plotPoints = [];
 
+    var defaultX = expCollege ? 'total_ypg' : 'targets_g';
+    var defaultY = 'ppg';
     var metricOpts = '';
     var mkeys = Object.keys(METRIC_LABELS);
     for (var mi = 0; mi < mkeys.length; mi++) {
       var mk = mkeys[mi];
-      metricOpts += '<option value="' + mk + '"' + (mk === 'targets_g' ? ' selected' : '') + '>' + escapeHtml(METRIC_LABELS[mk]) + '</option>';
+      metricOpts += '<option value="' + mk + '"' + (mk === defaultX ? ' selected' : '') + '>' + escapeHtml(METRIC_LABELS[mk]) + '</option>';
     }
     var yOpts = '';
     for (var yi = 0; yi < mkeys.length; yi++) {
       var yk = mkeys[yi];
-      yOpts += '<option value="' + yk + '"' + (yk === 'ppg' ? ' selected' : '') + '>' + escapeHtml(METRIC_LABELS[yk]) + '</option>';
+      yOpts += '<option value="' + yk + '"' + (yk === defaultY ? ' selected' : '') + '>' + escapeHtml(METRIC_LABELS[yk]) + '</option>';
     }
 
     el.innerHTML =
       '<div class="lp-page">' +
-        '<div class="lp-header"><h2>Stat Explorer</h2>' +
-        '<div class="lp-subtitle">plot any stat against any other</div></div>' +
+        '<div class="lp-header"><h2>' + (expCollege ? 'College Stat Explorer' : 'Stat Explorer') + '</h2>' +
+        '<div class="lp-subtitle">' + (expCollege ? 'plot any college stat against any other' : 'plot any stat against any other') + '</div></div>' +
         '<div class="lp-controls">' +
           '<label style="font-family:var(--font-mono);font-size:12px;">X: <select class="lp-select exp-x-select">' + metricOpts + '</select></label>' +
           '<label style="font-family:var(--font-mono);font-size:12px;">Y: <select class="lp-select exp-y-select">' + yOpts + '</select></label>' +
-          '<select class="lp-select exp-season">' + seasonOptions(2025) + '</select>' +
+          '<select class="lp-select exp-season">' + seasonOptions(expCollege ? 2024 : 2025) + '</select>' +
           posTabsHTML('exp-pos-tabs', true) +
         '</div>' +
         '<div class="exp-body"><div class="lp-loading">crunching numbers...</div></div>' +
@@ -6745,14 +6773,20 @@
 
     function load() {
       var body = el.querySelector('.exp-body');
-      body.innerHTML = '<div class="lp-loading">crunching numbers...</div>';
+      var isCollege = typeof state !== 'undefined' && state.universe === 'college';
+      body.innerHTML = '<div class="lp-loading">crunching ' + (isCollege ? 'college ' : '') + 'numbers...</div>';
       var xStat = el.querySelector('.exp-x-select').value;
       var yStat = el.querySelector('.exp-y-select').value;
       var season = el.querySelector('.exp-season').value;
       var posTab = el.querySelector('#exp-pos-tabs .lp-pos-tab.active');
       var position = posTab ? posTab.getAttribute('data-pos') || '' : '';
 
-      var url = '/api/stat-explorer?x_stat=' + encodeURIComponent(xStat) + '&y_stat=' + encodeURIComponent(yStat);
+      var url;
+      if (isCollege) {
+        url = '/api/college/stat-explorer?x_stat=' + encodeURIComponent(xStat) + '&y_stat=' + encodeURIComponent(yStat);
+      } else {
+        url = '/api/stat-explorer?x_stat=' + encodeURIComponent(xStat) + '&y_stat=' + encodeURIComponent(yStat);
+      }
       if (season) url += '&season=' + season;
       if (position) url += '&position=' + position;
 
@@ -6761,12 +6795,33 @@
         return r.json();
       }).then(function(data) {
         currentData = data;
-        if (data.available_metrics) {
+        // Update metric labels from server if college returns different metrics
+        if (data.metrics) {
+          var activeLabels = data.metrics;
           var xSel = el.querySelector('.exp-x-select');
           var ySel = el.querySelector('.exp-y-select');
-          if (xSel.options.length <= mkeys.length) {
-            // metrics already populated from METRIC_LABELS
+          var curX = xSel.value;
+          var curY = ySel.value;
+          var newKeys = Object.keys(activeLabels);
+          if (newKeys.length !== mkeys.length || newKeys[0] !== mkeys[0]) {
+            xSel.innerHTML = '';
+            ySel.innerHTML = '';
+            for (var ki = 0; ki < newKeys.length; ki++) {
+              var nk = newKeys[ki];
+              xSel.innerHTML += '<option value="' + nk + '"' + (nk === curX ? ' selected' : '') + '>' + escapeHtml(activeLabels[nk]) + '</option>';
+              ySel.innerHTML += '<option value="' + nk + '"' + (nk === curY ? ' selected' : '') + '>' + escapeHtml(activeLabels[nk]) + '</option>';
+            }
+            METRIC_LABELS = activeLabels;
+            mkeys = newKeys;
           }
+        }
+        if (data.available_seasons && data.available_seasons.length) {
+          var sSel = el.querySelector('.exp-season');
+          var curSeason = sSel.value;
+          sSel.innerHTML = '';
+          data.available_seasons.forEach(function(s) {
+            sSel.innerHTML += '<option value="' + s + '"' + (String(s) === curSeason ? ' selected' : '') + '>' + s + '</option>';
+          });
         }
         drawChart(data);
       }).catch(function() {
@@ -6900,8 +6955,10 @@
           chartCanvas.style.cursor = 'pointer';
           hoveredPlayer = closest.player;
           var p = closest.player;
+          var teamLine = escapeHtml(p.position) + ' — ' + escapeHtml(p.team);
+          if (p.conference) teamLine += ' (' + escapeHtml(p.conference) + ')';
           tooltip.innerHTML = '<div style="font-weight:700">' + escapeHtml(p.name) + '</div>' +
-            '<div>' + escapeHtml(p.position) + ' — ' + escapeHtml(p.team) + '</div>' +
+            '<div>' + teamLine + '</div>' +
             '<div>' + escapeHtml(xLabel) + ': ' + Number(p.x).toFixed(1) + '</div>' +
             '<div>' + escapeHtml(yLabel) + ': ' + Number(p.y).toFixed(1) + '</div>';
           tooltip.style.display = 'block';
@@ -7517,12 +7574,13 @@
 
   // ─── RECAP ───────────────────────────────────────────────────
   defs.push({ name: 'recap', render: function(el) {
+    var rcCollege = typeof state !== 'undefined' && state.universe === 'college';
     el.innerHTML =
       '<div class="lp-page">' +
-        '<div class="lp-header"><h2>Season Recap</h2>' +
-        '<div class="lp-subtitle">the season in review</div></div>' +
+        '<div class="lp-header"><h2>' + (rcCollege ? 'College Season Recap' : 'Season Recap') + '</h2>' +
+        '<div class="lp-subtitle">' + (rcCollege ? 'the college season in review' : 'the season in review') + '</div></div>' +
         '<div class="lp-controls">' +
-          '<select class="lp-select rc2-season">' + seasonOptions(2025) + '</select>' +
+          '<select class="lp-select rc2-season">' + seasonOptions(rcCollege ? 2024 : 2025) + '</select>' +
         '</div>' +
         '<div class="rc2-content"><div class="lp-loading">pulling film...</div></div>' +
       '</div>';
@@ -7542,9 +7600,10 @@
 
     function load() {
       var content = el.querySelector('.rc2-content');
-      content.innerHTML = '<div class="lp-loading">pulling film...</div>';
+      var isCollege = typeof state !== 'undefined' && state.universe === 'college';
+      content.innerHTML = '<div class="lp-loading">pulling film on ' + (isCollege ? 'college recap' : 'recap') + '...</div>';
       var season = el.querySelector('.rc2-season').value || '';
-      var url = '/api/season-recap?';
+      var url = isCollege ? '/api/college/season-recap?' : '/api/season-recap?';
       if (season) url += 'season=' + encodeURIComponent(season);
 
       fetch(url).then(function(r) {
@@ -7553,29 +7612,29 @@
       }).then(function(data) {
         if (data.available_seasons) {
           var sel = el.querySelector('.rc2-season');
-          if (sel.options.length <= 8) {
-            sel.innerHTML = '';
-            (data.available_seasons || []).forEach(function(s) {
-              sel.innerHTML += '<option value="' + s + '"' + (s === data.season ? ' selected' : '') + '>' + s + '</option>';
-            });
-          }
+          sel.innerHTML = '';
+          (data.available_seasons || []).forEach(function(s) {
+            sel.innerHTML += '<option value="' + s + '"' + (s === data.season ? ' selected' : '') + '>' + s + '</option>';
+          });
         }
-        render(data);
+        render(data, isCollege);
       }).catch(function() {
         content.innerHTML = '<div class="lp-error">something went wrong</div>';
       });
     }
 
-    function render(data) {
+    function render(data, isCollege) {
       var html = '';
       var mvp = data.overall_1;
       if (mvp) {
-        html += '<div class="rc2-mvp"><div class="rc2-mvp-label">' + data.season + ' Fantasy MVP</div>';
+        html += '<div class="rc2-mvp"><div class="rc2-mvp-label">' + data.season + (isCollege ? ' College Fantasy MVP' : ' Fantasy MVP') + '</div>';
         html += '<div class="rc2-mvp-name">' + escapeHtml(mvp.name) + ' ' + posChip(mvp.position) + '</div>';
+        if (isCollege && mvp.team) html += '<div style="font-size:12px;color:var(--ink-light);margin-bottom:6px">' + escapeHtml(mvp.team) + (mvp.conference ? ' (' + escapeHtml(mvp.conference) + ')' : '') + '</div>';
         html += '<div class="rc2-mvp-stats">';
-        html += '<div class="rc2-mvp-stat"><div class="rc2-mvp-val">' + escapeHtml(String(mvp.total_fpts)) + '</div><div class="rc2-mvp-lbl">Total PPR</div></div>';
+        html += '<div class="rc2-mvp-stat"><div class="rc2-mvp-val">' + escapeHtml(String(mvp.total_fpts)) + '</div><div class="rc2-mvp-lbl">Total Pts</div></div>';
         html += '<div class="rc2-mvp-stat"><div class="rc2-mvp-val">' + escapeHtml(String(mvp.ppg)) + '</div><div class="rc2-mvp-lbl">PPG</div></div>';
         html += '<div class="rc2-mvp-stat"><div class="rc2-mvp-val">' + escapeHtml(String(mvp.games)) + '</div><div class="rc2-mvp-lbl">Games</div></div>';
+        if (isCollege && mvp.tds !== undefined) html += '<div class="rc2-mvp-stat"><div class="rc2-mvp-val">' + escapeHtml(String(mvp.tds)) + '</div><div class="rc2-mvp-lbl">TDs</div></div>';
         html += '</div></div>';
       }
 
@@ -7586,6 +7645,7 @@
         html += '<div class="rc2-pos-card"><div class="rc2-pos-label" style="background:' + pc + '">' + pos + '1</div>';
         if (ldr) {
           html += '<div class="rc2-pos-name">' + escapeHtml(ldr.name) + '</div>';
+          if (isCollege && ldr.team) html += '<div style="font-size:10px;color:var(--ink-light)">' + escapeHtml(ldr.team) + '</div>';
           html += '<div class="rc2-pos-stat">' + ldr.total_fpts + ' pts / ' + ldr.ppg + ' PPG</div>';
         } else { html += '<div class="rc2-pos-stat">&mdash;</div>'; }
         html += '</div>';
@@ -7593,39 +7653,60 @@
       html += '</div>';
 
       html += '<div class="rc2-sections">';
-      html += '<div class="rc2-section"><div class="rc2-section-header">Highest Single Game</div>';
-      html += renderList(data.top_weeks || [], function(p) {
-        return '<span>' + escapeHtml(p.name) + posChip(p.position) + '</span><span><span class="rc2-badge gold">Wk ' + p.week + '</span> ' + fmt(p.fpts) + ' pts</span>';
-      });
-      html += '</div>';
+
+      if (!isCollege) {
+        html += '<div class="rc2-section"><div class="rc2-section-header">Highest Single Game</div>';
+        html += renderList(data.top_weeks || [], function(p) {
+          return '<span>' + escapeHtml(p.name) + posChip(p.position) + '</span><span><span class="rc2-badge gold">Wk ' + p.week + '</span> ' + fmt(p.fpts) + ' pts</span>';
+        });
+        html += '</div>';
+      }
+
+      if (isCollege) {
+        html += '<div class="rc2-section"><div class="rc2-section-header">Top Yardage Producers</div>';
+        html += renderList(data.top_yards || [], function(p) {
+          return '<span>' + escapeHtml(p.name) + posChip(p.position) + ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></span><span><span class="rc2-badge gold">' + p.total_yards + ' yds</span> ' + p.ppg + ' PPG</span>';
+        });
+        html += '</div>';
+
+        html += '<div class="rc2-section"><div class="rc2-section-header">TD Leaders</div>';
+        html += renderList(data.top_tds || [], function(p) {
+          return '<span>' + escapeHtml(p.name) + posChip(p.position) + ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></span><span><span class="rc2-badge gold">' + p.tds + ' TDs</span></span>';
+        });
+        html += '</div>';
+      }
 
       html += '<div class="rc2-section"><div class="rc2-section-header">Biggest Breakouts</div>';
       html += renderList(data.breakouts || [], function(p) {
-        return '<span>' + escapeHtml(p.name) + posChip(p.position) + '</span><span><span class="rc2-badge green">+' + fmt(p.delta) + ' PPG</span> ' + p.prev_ppg + ' &rarr; ' + p.ppg + '</span>';
+        var delta = isCollege ? p.delta_ppg : p.delta;
+        return '<span>' + escapeHtml(p.name) + posChip(p.position) + (isCollege && p.team ? ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span>' : '') + '</span><span><span class="rc2-badge green">+' + fmt(delta) + ' PPG</span> ' + p.prev_ppg + ' &rarr; ' + p.ppg + '</span>';
       });
       html += '</div>';
 
-      html += '<div class="rc2-section"><div class="rc2-section-header">Biggest Busts</div>';
+      html += '<div class="rc2-section"><div class="rc2-section-header">Biggest ' + (isCollege ? 'Declines' : 'Busts') + '</div>';
       html += renderList(data.busts || [], function(p) {
-        return '<span>' + escapeHtml(p.name) + posChip(p.position) + '</span><span><span class="rc2-badge red">' + fmt(p.delta) + ' PPG</span> ' + p.prev_ppg + ' &rarr; ' + p.ppg + '</span>';
+        var delta = isCollege ? p.delta_ppg : p.delta;
+        return '<span>' + escapeHtml(p.name) + posChip(p.position) + (isCollege && p.team ? ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span>' : '') + '</span><span><span class="rc2-badge red">' + fmt(delta) + ' PPG</span> ' + p.prev_ppg + ' &rarr; ' + p.ppg + '</span>';
       });
       html += '</div>';
 
-      html += '<div class="rc2-section"><div class="rc2-section-header">Most Consistent</div>';
-      html += renderList(data.most_consistent || [], function(p) {
-        return '<span>' + escapeHtml(p.name) + posChip(p.position) + '</span><span><span class="rc2-badge blue">CoV ' + fmt(p.cov, 0) + '%</span> ' + p.ppg + ' PPG</span>';
-      });
-      html += '</div>';
+      if (!isCollege) {
+        html += '<div class="rc2-section"><div class="rc2-section-header">Most Consistent</div>';
+        html += renderList(data.most_consistent || [], function(p) {
+          return '<span>' + escapeHtml(p.name) + posChip(p.position) + '</span><span><span class="rc2-badge blue">CoV ' + fmt(p.cov, 0) + '%</span> ' + p.ppg + ' PPG</span>';
+        });
+        html += '</div>';
 
-      html += '<div class="rc2-section"><div class="rc2-section-header">Most Volatile</div>';
-      html += renderList(data.most_volatile || [], function(p) {
-        return '<span>' + escapeHtml(p.name) + posChip(p.position) + '</span><span><span class="rc2-badge red">CoV ' + fmt(p.cov, 0) + '%</span> ' + p.ppg + ' PPG</span>';
-      });
-      html += '</div>';
+        html += '<div class="rc2-section"><div class="rc2-section-header">Most Volatile</div>';
+        html += renderList(data.most_volatile || [], function(p) {
+          return '<span>' + escapeHtml(p.name) + posChip(p.position) + '</span><span><span class="rc2-badge red">CoV ' + fmt(p.cov, 0) + '%</span> ' + p.ppg + ' PPG</span>';
+        });
+        html += '</div>';
 
-      html += '<div class="rc2-section"><div class="rc2-section-header">Season Stats</div>';
-      html += '<ul class="rc2-list"><li><span>Total Players</span><span>' + data.total_players + '</span></li>';
-      html += '<li><span>Average PPG</span><span>' + data.avg_ppg + '</span></li></ul></div>';
+        html += '<div class="rc2-section"><div class="rc2-section-header">Season Stats</div>';
+        html += '<ul class="rc2-list"><li><span>Total Players</span><span>' + data.total_players + '</span></li>';
+        html += '<li><span>Average PPG</span><span>' + data.avg_ppg + '</span></li></ul></div>';
+      }
       html += '</div>';
 
       el.querySelector('.rc2-content').innerHTML = html;
@@ -7637,6 +7718,7 @@
 
   // ─── RECORDS ─────────────────────────────────────────────────
   defs.push({ name: 'records', render: function(el) {
+    var recCollege = typeof state !== 'undefined' && state.universe === 'college';
     var currentPosition = '';
 
     function posChip(pos) {
@@ -7649,8 +7731,8 @@
 
     el.innerHTML =
       '<div class="lp-page">' +
-        '<div class="lp-header"><h2>Fantasy Record Book</h2>' +
-        '<div class="lp-subtitle">the all-time greats</div></div>' +
+        '<div class="lp-header"><h2>' + (recCollege ? 'College Record Book' : 'Fantasy Record Book') + '</h2>' +
+        '<div class="lp-subtitle">' + (recCollege ? 'the best college seasons and careers' : 'the all-time greats') + '</div></div>' +
         '<div class="lp-controls">' +
           posTabsHTML('rec-pos-tabs', true) +
         '</div>' +
@@ -7659,58 +7741,115 @@
 
     function load() {
       var content = el.querySelector('.rec-content');
-      content.innerHTML = '<div class="lp-loading">pulling film...</div>';
-      var url = '/api/records?';
+      var isCollege = typeof state !== 'undefined' && state.universe === 'college';
+      content.innerHTML = '<div class="lp-loading">pulling film on ' + (isCollege ? 'college records' : 'records') + '...</div>';
+      var url;
+      if (isCollege) {
+        url = '/api/college/records?';
+      } else {
+        url = '/api/records?';
+      }
       if (currentPosition) url += 'position=' + encodeURIComponent(currentPosition);
 
       fetch(url).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
-      }).then(function(data) { render(data); }).catch(function() {
+      }).then(function(data) { render(data, isCollege); }).catch(function() {
         content.innerHTML = '<div class="lp-error">something went wrong</div>';
       });
     }
 
-    function render(data) {
+    function playerCell(p, isCollege) {
+      var html = escapeHtml(p.name) + posChip(p.position);
+      if (isCollege && p.team) html += ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span>';
+      if (isCollege && p.conference) html += ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
+      return html;
+    }
+
+    function render(data, isCollege) {
       var html = '<div class="rec-grid">';
 
-      html += '<div class="rec-section"><div class="rec-section-header">Single-Game Records</div>';
-      html += '<table class="rec-table"><thead><tr><th>#</th><th>Player</th><th>Szn</th><th>Wk</th><th>PPR</th></tr></thead><tbody>';
-      (data.single_game || []).forEach(function(p, i) {
-        html += '<tr><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
-        html += '<td>' + escapeHtml(p.name) + posChip(p.position) + '</td>';
-        html += '<td><span class="rec-season-badge">' + p.season + '</span></td>';
-        html += '<td>' + p.week + '</td><td class="rec-fpts">' + p.fpts + '</td></tr>';
-      });
-      html += '</tbody></table></div>';
+      if (!isCollege) {
+        html += '<div class="rec-section"><div class="rec-section-header">Single-Game Records</div>';
+        html += '<table class="rec-table"><thead><tr><th>#</th><th>Player</th><th>Szn</th><th>Wk</th><th>PPR</th></tr></thead><tbody>';
+        (data.single_game || []).forEach(function(p, i) {
+          html += '<tr><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
+          html += '<td>' + escapeHtml(p.name) + posChip(p.position) + '</td>';
+          html += '<td><span class="rec-season-badge">' + p.season + '</span></td>';
+          html += '<td>' + p.week + '</td><td class="rec-fpts">' + p.fpts + '</td></tr>';
+        });
+        html += '</tbody></table></div>';
+      }
 
-      html += '<div class="rec-section"><div class="rec-section-header">Single-Season Records</div>';
+      html += '<div class="rec-section"><div class="rec-section-header">' + (isCollege ? 'Best Single Seasons (Fantasy Pts)' : 'Single-Season Records') + '</div>';
       html += '<table class="rec-table"><thead><tr><th>#</th><th>Player</th><th>Szn</th><th>G</th><th>Total</th><th>PPG</th></tr></thead><tbody>';
       (data.single_season || []).forEach(function(p, i) {
         html += '<tr><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
-        html += '<td>' + escapeHtml(p.name) + posChip(p.position) + '</td>';
+        html += '<td>' + playerCell(p, isCollege) + '</td>';
         html += '<td><span class="rec-season-badge">' + p.season + '</span></td>';
         html += '<td>' + p.games + '</td><td class="rec-fpts">' + p.total_fpts + '</td><td>' + p.ppg + '</td></tr>';
       });
       html += '</tbody></table></div>';
 
-      html += '<div class="rec-section"><div class="rec-section-header">Career PPG Leaders</div>';
-      html += '<table class="rec-table"><thead><tr><th>#</th><th>Player</th><th>G</th><th>PPG</th><th>Total</th></tr></thead><tbody>';
-      (data.career_ppg || []).forEach(function(p, i) {
-        html += '<tr><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
-        html += '<td>' + escapeHtml(p.name) + posChip(p.position) + '</td>';
-        html += '<td>' + p.games + '</td><td class="rec-fpts">' + p.ppg + '</td><td>' + p.total_fpts + '</td></tr>';
-      });
-      html += '</tbody></table></div>';
+      if (isCollege) {
+        html += '<div class="rec-section"><div class="rec-section-header">Best Single Seasons (Total Yards)</div>';
+        html += '<table class="rec-table"><thead><tr><th>#</th><th>Player</th><th>Szn</th><th>G</th><th>Yards</th><th>YPG</th></tr></thead><tbody>';
+        (data.season_yards || []).forEach(function(p, i) {
+          html += '<tr><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
+          html += '<td>' + playerCell(p, true) + '</td>';
+          html += '<td><span class="rec-season-badge">' + p.season + '</span></td>';
+          html += '<td>' + p.games + '</td><td class="rec-fpts">' + p.total_yards + '</td><td>' + p.ypg + '</td></tr>';
+        });
+        html += '</tbody></table></div>';
 
-      html += '<div class="rec-section"><div class="rec-section-header">Most Career Points</div>';
-      html += '<table class="rec-table"><thead><tr><th>#</th><th>Player</th><th>G</th><th>Total</th><th>PPG</th></tr></thead><tbody>';
-      (data.career_total || []).forEach(function(p, i) {
-        html += '<tr><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
-        html += '<td>' + escapeHtml(p.name) + posChip(p.position) + '</td>';
-        html += '<td>' + p.games + '</td><td class="rec-fpts">' + p.total_fpts + '</td><td>' + p.ppg + '</td></tr>';
-      });
-      html += '</tbody></table></div>';
+        html += '<div class="rec-section"><div class="rec-section-header">Best Single Seasons (TDs)</div>';
+        html += '<table class="rec-table"><thead><tr><th>#</th><th>Player</th><th>Szn</th><th>G</th><th>TDs</th></tr></thead><tbody>';
+        (data.season_tds || []).forEach(function(p, i) {
+          html += '<tr><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
+          html += '<td>' + playerCell(p, true) + '</td>';
+          html += '<td><span class="rec-season-badge">' + p.season + '</span></td>';
+          html += '<td>' + p.games + '</td><td class="rec-fpts">' + p.tds + '</td></tr>';
+        });
+        html += '</tbody></table></div>';
+
+        html += '<div class="rec-section"><div class="rec-section-header">Career Fantasy Points Leaders</div>';
+        html += '<table class="rec-table"><thead><tr><th>#</th><th>Player</th><th>Szns</th><th>G</th><th>Total</th><th>PPG</th></tr></thead><tbody>';
+        (data.career_fpts || []).forEach(function(p, i) {
+          html += '<tr><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
+          html += '<td>' + playerCell(p, true) + '</td>';
+          html += '<td><span class="rec-season-badge">' + escapeHtml(p.seasons) + '</span></td>';
+          html += '<td>' + p.games + '</td><td class="rec-fpts">' + p.total_fpts + '</td><td>' + p.ppg + '</td></tr>';
+        });
+        html += '</tbody></table></div>';
+
+        html += '<div class="rec-section"><div class="rec-section-header">Career Yards Leaders</div>';
+        html += '<table class="rec-table"><thead><tr><th>#</th><th>Player</th><th>Szns</th><th>G</th><th>Yards</th><th>YPG</th></tr></thead><tbody>';
+        (data.career_yards || []).forEach(function(p, i) {
+          html += '<tr><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
+          html += '<td>' + playerCell(p, true) + '</td>';
+          html += '<td><span class="rec-season-badge">' + escapeHtml(p.seasons) + '</span></td>';
+          html += '<td>' + p.games + '</td><td class="rec-fpts">' + p.total_yards + '</td><td>' + p.ypg + '</td></tr>';
+        });
+        html += '</tbody></table></div>';
+      } else {
+        html += '<div class="rec-section"><div class="rec-section-header">Career PPG Leaders</div>';
+        html += '<table class="rec-table"><thead><tr><th>#</th><th>Player</th><th>G</th><th>PPG</th><th>Total</th></tr></thead><tbody>';
+        (data.career_ppg || []).forEach(function(p, i) {
+          html += '<tr><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
+          html += '<td>' + escapeHtml(p.name) + posChip(p.position) + '</td>';
+          html += '<td>' + p.games + '</td><td class="rec-fpts">' + p.ppg + '</td><td>' + p.total_fpts + '</td></tr>';
+        });
+        html += '</tbody></table></div>';
+
+        html += '<div class="rec-section"><div class="rec-section-header">Most Career Points</div>';
+        html += '<table class="rec-table"><thead><tr><th>#</th><th>Player</th><th>G</th><th>Total</th><th>PPG</th></tr></thead><tbody>';
+        (data.career_total || []).forEach(function(p, i) {
+          html += '<tr><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
+          html += '<td>' + escapeHtml(p.name) + posChip(p.position) + '</td>';
+          html += '<td>' + p.games + '</td><td class="rec-fpts">' + p.total_fpts + '</td><td>' + p.ppg + '</td></tr>';
+        });
+        html += '</tbody></table></div>';
+      }
 
       html += '</div>';
       el.querySelector('.rec-content').innerHTML = html;

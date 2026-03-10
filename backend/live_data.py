@@ -3895,6 +3895,594 @@ def fetch_college_aging_curves(position=None):
 
 
 # ---------------------------------------------------------------------------
+# College Records & History endpoints
+# ---------------------------------------------------------------------------
+
+
+def fetch_college_records(position=None, limit=10):
+    """College fantasy record book: single-season and career leaders."""
+    conn = get_conn()
+    try:
+        pos_filter = ""
+        params_base = []
+        if position and position.upper() in ("QB", "RB", "WR", "TE", "ATH", "FB"):
+            pos_filter = " AND c.position = ?"
+            params_base = [position.upper()]
+
+        # 1. Single-season records (highest approx fantasy points in one season)
+        cursor = conn.cursor()
+        cursor.execute(f"""
+            SELECT c.player_id, c.player_name, c.position, c.team, c.conference,
+                   c.season, c.games,
+                   (COALESCE(c.rush_yards, 0) + COALESCE(c.rec_yards, 0)) * 0.1
+                   + COALESCE(c.total_tds, 0) * 6
+                   + COALESCE(c.receptions, 0) * 1.0
+                   + COALESCE(c.pass_yards, 0) * 0.04
+                   + COALESCE(c.pass_tds, 0) * 4 as fpts
+            FROM cfb_player_season_stats c
+            WHERE c.games >= 3 {pos_filter}
+            ORDER BY fpts DESC
+            LIMIT ?
+        """, params_base + [limit])
+        single_season = []
+        for r in cursor.fetchall():
+            games = r[6] or 1
+            fpts = r[7] or 0
+            single_season.append({
+                "player_id": r[0], "name": r[1] or "Unknown",
+                "position": r[2] or "ATH", "team": r[3] or "",
+                "conference": r[4] or "", "season": r[5],
+                "games": games, "total_fpts": round(fpts, 1),
+                "ppg": round(fpts / games, 1),
+            })
+
+        # 2. Single-season yards (highest total yards)
+        cursor.execute(f"""
+            SELECT c.player_id, c.player_name, c.position, c.team, c.conference,
+                   c.season, c.games,
+                   COALESCE(c.rush_yards, 0) + COALESCE(c.rec_yards, 0) + COALESCE(c.pass_yards, 0) as total_yards
+            FROM cfb_player_season_stats c
+            WHERE c.games >= 3 {pos_filter}
+            ORDER BY total_yards DESC
+            LIMIT ?
+        """, params_base + [limit])
+        season_yards = []
+        for r in cursor.fetchall():
+            games = r[6] or 1
+            season_yards.append({
+                "player_id": r[0], "name": r[1] or "Unknown",
+                "position": r[2] or "ATH", "team": r[3] or "",
+                "conference": r[4] or "", "season": r[5],
+                "games": games, "total_yards": r[7] or 0,
+                "ypg": round((r[7] or 0) / games, 1),
+            })
+
+        # 3. Single-season TDs
+        cursor.execute(f"""
+            SELECT c.player_id, c.player_name, c.position, c.team, c.conference,
+                   c.season, c.games, COALESCE(c.total_tds, 0) as tds
+            FROM cfb_player_season_stats c
+            WHERE c.games >= 3 {pos_filter}
+            ORDER BY tds DESC
+            LIMIT ?
+        """, params_base + [limit])
+        season_tds = []
+        for r in cursor.fetchall():
+            season_tds.append({
+                "player_id": r[0], "name": r[1] or "Unknown",
+                "position": r[2] or "ATH", "team": r[3] or "",
+                "conference": r[4] or "", "season": r[5],
+                "games": r[6] or 1, "tds": r[7] or 0,
+            })
+
+        # 4. Career leaders (multi-season totals, min 2 seasons)
+        cursor.execute(f"""
+            SELECT c.player_id, c.player_name, c.position,
+                   GROUP_CONCAT(DISTINCT c.team) as teams,
+                   GROUP_CONCAT(DISTINCT c.conference) as confs,
+                   COUNT(DISTINCT c.season) as seasons_played,
+                   SUM(c.games) as total_games,
+                   SUM(
+                       (COALESCE(c.rush_yards, 0) + COALESCE(c.rec_yards, 0)) * 0.1
+                       + COALESCE(c.total_tds, 0) * 6
+                       + COALESCE(c.receptions, 0) * 1.0
+                       + COALESCE(c.pass_yards, 0) * 0.04
+                       + COALESCE(c.pass_tds, 0) * 4
+                   ) as career_fpts,
+                   MIN(c.season) as first_season,
+                   MAX(c.season) as last_season
+            FROM cfb_player_season_stats c
+            WHERE c.games >= 3 {pos_filter}
+            GROUP BY c.player_id
+            HAVING seasons_played >= 2
+            ORDER BY career_fpts DESC
+            LIMIT ?
+        """, params_base + [limit])
+        career_fpts = []
+        for r in cursor.fetchall():
+            games = r[6] or 1
+            total = r[7] or 0
+            career_fpts.append({
+                "player_id": r[0], "name": r[1] or "Unknown",
+                "position": r[2] or "ATH", "team": r[3] or "",
+                "conference": r[4] or "",
+                "seasons_played": r[5], "games": games,
+                "total_fpts": round(total, 1),
+                "ppg": round(total / games, 1),
+                "seasons": f"{r[8]}-{r[9]}",
+            })
+
+        # 5. Career yards leaders
+        cursor.execute(f"""
+            SELECT c.player_id, c.player_name, c.position,
+                   GROUP_CONCAT(DISTINCT c.team) as teams,
+                   GROUP_CONCAT(DISTINCT c.conference) as confs,
+                   COUNT(DISTINCT c.season) as seasons_played,
+                   SUM(c.games) as total_games,
+                   SUM(COALESCE(c.rush_yards, 0) + COALESCE(c.rec_yards, 0) + COALESCE(c.pass_yards, 0)) as career_yards,
+                   MIN(c.season) as first_season,
+                   MAX(c.season) as last_season
+            FROM cfb_player_season_stats c
+            WHERE c.games >= 3 {pos_filter}
+            GROUP BY c.player_id
+            HAVING seasons_played >= 2
+            ORDER BY career_yards DESC
+            LIMIT ?
+        """, params_base + [limit])
+        career_yards = []
+        for r in cursor.fetchall():
+            games = r[6] or 1
+            career_yards.append({
+                "player_id": r[0], "name": r[1] or "Unknown",
+                "position": r[2] or "ATH", "team": r[3] or "",
+                "conference": r[4] or "",
+                "seasons_played": r[5], "games": games,
+                "total_yards": r[7] or 0,
+                "ypg": round((r[7] or 0) / games, 1),
+                "seasons": f"{r[8]}-{r[9]}",
+            })
+
+        return {
+            "single_season": single_season,
+            "season_yards": season_yards,
+            "season_tds": season_tds,
+            "career_fpts": career_fpts,
+            "career_yards": career_yards,
+        }
+    finally:
+        conn.close()
+
+
+def fetch_college_season_recap(season=None):
+    """College season recap with MVP, position leaders, breakouts."""
+    conn = get_conn()
+    try:
+        cursor = conn.cursor()
+
+        if not season:
+            cursor.execute("SELECT MAX(season) FROM cfb_player_season_stats")
+            row = cursor.fetchone()
+            season = row[0] if row else 2024
+
+        cursor.execute("SELECT DISTINCT season FROM cfb_player_season_stats ORDER BY season DESC")
+        available_seasons = [r[0] for r in cursor.fetchall()]
+
+        # Season totals with approx fantasy points
+        cursor.execute("""
+            SELECT c.player_id, c.player_name, c.position, c.team, c.conference,
+                   c.games,
+                   (COALESCE(c.rush_yards, 0) + COALESCE(c.rec_yards, 0)) * 0.1
+                   + COALESCE(c.total_tds, 0) * 6
+                   + COALESCE(c.receptions, 0) * 1.0
+                   + COALESCE(c.pass_yards, 0) * 0.04
+                   + COALESCE(c.pass_tds, 0) * 4 as fpts,
+                   COALESCE(c.rush_yards, 0) + COALESCE(c.rec_yards, 0) + COALESCE(c.pass_yards, 0) as total_yards,
+                   COALESCE(c.total_tds, 0) as tds
+            FROM cfb_player_season_stats c
+            WHERE c.season = ? AND c.games >= 3
+            ORDER BY fpts DESC
+        """, (season,))
+        season_rows = cursor.fetchall()
+
+        def player_dict(r, rank=None):
+            games = r[5] or 1
+            fpts = r[6] or 0
+            d = {
+                "player_id": r[0], "name": r[1] or "Unknown",
+                "position": r[2] or "ATH", "team": r[3] or "",
+                "conference": r[4] or "",
+                "games": games, "total_fpts": round(fpts, 1),
+                "ppg": round(fpts / games, 1),
+                "total_yards": r[7] or 0, "tds": r[8] or 0,
+            }
+            if rank is not None:
+                d["rank"] = rank
+            return d
+
+        # 1. Overall MVP
+        overall_1 = player_dict(season_rows[0], 1) if season_rows else None
+
+        # 2. Top per position
+        pos_leaders = {}
+        for r in season_rows:
+            pos = r[2] or "ATH"
+            if pos not in pos_leaders:
+                pos_leaders[pos] = player_dict(r, 1)
+
+        # 3. Top 5 by total yards
+        top_yards = []
+        yards_sorted = sorted(season_rows, key=lambda r: r[7] or 0, reverse=True)[:5]
+        for r in yards_sorted:
+            d = player_dict(r)
+            top_yards.append(d)
+
+        # 4. Top 5 by TDs
+        tds_sorted = sorted(season_rows, key=lambda r: r[8] or 0, reverse=True)[:5]
+        top_tds = [player_dict(r) for r in tds_sorted]
+
+        # 5. Biggest YoY breakouts
+        prev_season = season - 1
+        cursor.execute("""
+            SELECT c.player_id, c.player_name, c.position, c.team, c.conference,
+                   c.games,
+                   (COALESCE(c.rush_yards, 0) + COALESCE(c.rec_yards, 0)) * 0.1
+                   + COALESCE(c.total_tds, 0) * 6
+                   + COALESCE(c.receptions, 0) * 1.0
+                   + COALESCE(c.pass_yards, 0) * 0.04
+                   + COALESCE(c.pass_tds, 0) * 4 as fpts
+            FROM cfb_player_season_stats c
+            WHERE c.season = ? AND c.games >= 3
+        """, (prev_season,))
+        prev_map = {}
+        for r in cursor.fetchall():
+            games = r[5] or 1
+            prev_map[r[0]] = round((r[6] or 0) / games, 1)
+
+        breakouts = []
+        for r in season_rows[:200]:
+            pid = r[0]
+            if pid in prev_map:
+                games = r[5] or 1
+                curr_ppg = round((r[6] or 0) / games, 1)
+                prev_ppg = prev_map[pid]
+                if prev_ppg > 0:
+                    delta = curr_ppg - prev_ppg
+                    if delta > 2:
+                        d = player_dict(r)
+                        d["prev_ppg"] = prev_ppg
+                        d["delta_ppg"] = round(delta, 1)
+                        breakouts.append(d)
+        breakouts.sort(key=lambda x: x["delta_ppg"], reverse=True)
+
+        # 6. Biggest busts (YoY decline)
+        busts = []
+        for r in season_rows[:200]:
+            pid = r[0]
+            if pid in prev_map:
+                games = r[5] or 1
+                curr_ppg = round((r[6] or 0) / games, 1)
+                prev_ppg = prev_map[pid]
+                if prev_ppg > 5:
+                    delta = curr_ppg - prev_ppg
+                    if delta < -2:
+                        d = player_dict(r)
+                        d["prev_ppg"] = prev_ppg
+                        d["delta_ppg"] = round(delta, 1)
+                        busts.append(d)
+        busts.sort(key=lambda x: x["delta_ppg"])
+
+        return {
+            "season": season,
+            "available_seasons": available_seasons,
+            "overall_1": overall_1,
+            "pos_leaders": pos_leaders,
+            "top_yards": top_yards,
+            "top_tds": top_tds,
+            "breakouts": breakouts[:5],
+            "busts": busts[:5],
+        }
+    finally:
+        conn.close()
+
+
+def fetch_college_season_awards(season=None, position=None):
+    """College fantasy season superlatives — simplified awards using season-level data."""
+    conn = get_conn()
+    try:
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT DISTINCT season FROM cfb_player_season_stats ORDER BY season DESC")
+        available_seasons = [r[0] for r in cursor.fetchall()]
+        if not season:
+            season = available_seasons[0] if available_seasons else 2024
+
+        pos_filter = ""
+        params = [season]
+        if position and position.upper() in ("QB", "RB", "WR", "TE", "ATH", "FB"):
+            pos_filter = "AND c.position = ?"
+            params.append(position.upper())
+
+        cursor.execute(f"""
+            SELECT c.player_id, c.player_name, c.position, c.team, c.conference,
+                   c.games,
+                   (COALESCE(c.rush_yards, 0) + COALESCE(c.rec_yards, 0)) * 0.1
+                   + COALESCE(c.total_tds, 0) * 6
+                   + COALESCE(c.receptions, 0) * 1.0
+                   + COALESCE(c.pass_yards, 0) * 0.04
+                   + COALESCE(c.pass_tds, 0) * 4 as fpts,
+                   COALESCE(c.rush_yards, 0) + COALESCE(c.rec_yards, 0) as scrimmage_yards,
+                   COALESCE(c.total_tds, 0) as tds,
+                   COALESCE(c.carries, 0) + COALESCE(c.targets, 0) as opportunities,
+                   COALESCE(c.receptions, 0) as receptions,
+                   COALESCE(c.rush_yards, 0) as rush_yards,
+                   COALESCE(c.rec_yards, 0) as rec_yards,
+                   COALESCE(c.pass_yards, 0) as pass_yards,
+                   COALESCE(c.pass_tds, 0) as pass_tds
+            FROM cfb_player_season_stats c
+            WHERE c.season = ? AND c.games >= 4 {pos_filter}
+            ORDER BY fpts DESC
+        """, params)
+        rows = cursor.fetchall()
+
+        if not rows:
+            return {"season": season, "available_seasons": available_seasons, "awards": []}
+
+        def pdict(r):
+            games = r[5] or 1
+            fpts = r[6] or 0
+            opps = r[9] or 1
+            return {
+                "player_id": r[0], "name": r[1] or "Unknown",
+                "position": r[2] or "ATH", "team": r[3] or "",
+                "conference": r[4] or "", "games": games,
+                "ppg": round(fpts / games, 1),
+                "total_fpts": round(fpts, 1),
+                "scrimmage_yards": r[7] or 0,
+                "tds": r[8] or 0,
+                "opportunities": opps,
+                "ppo": round(fpts / opps, 2) if opps > 0 else 0,
+                "receptions": r[10] or 0,
+                "rush_yards": r[11] or 0,
+                "rec_yards": r[12] or 0,
+                "pass_yards": r[13] or 0,
+                "pass_tds": r[14] or 0,
+            }
+
+        players = [pdict(r) for r in rows]
+
+        # Build awards
+        awards = []
+
+        # 1. MVP - highest total fantasy points
+        mvp = max(players, key=lambda p: p["total_fpts"])
+        awards.append({
+            "key": "mvp", "name": "Fantasy MVP",
+            "description": "highest total fantasy output",
+            "winner": mvp,
+            "runners_up": sorted(players, key=lambda p: p["total_fpts"], reverse=True)[1:5],
+        })
+
+        # 2. Most Efficient - highest PPO (min 50 opportunities)
+        eff_players = [p for p in players if p["opportunities"] >= 50]
+        if eff_players:
+            best_eff = max(eff_players, key=lambda p: p["ppo"])
+            awards.append({
+                "key": "most_efficient", "name": "Most Efficient",
+                "description": "highest fantasy points per opportunity",
+                "winner": best_eff,
+                "runners_up": sorted(eff_players, key=lambda p: p["ppo"], reverse=True)[1:5],
+            })
+
+        # 3. Iron Man - most games played with high production
+        iron_players = sorted(players, key=lambda p: (p["games"], p["ppg"]), reverse=True)
+        if iron_players:
+            awards.append({
+                "key": "iron_man", "name": "Iron Man",
+                "description": "most durable high-output player",
+                "winner": iron_players[0],
+                "runners_up": iron_players[1:5],
+            })
+
+        # 4. Volume King - most total opportunities
+        vol = max(players, key=lambda p: p["opportunities"])
+        awards.append({
+            "key": "volume_king", "name": "Volume King",
+            "description": "most total touches and targets",
+            "winner": vol,
+            "runners_up": sorted(players, key=lambda p: p["opportunities"], reverse=True)[1:5],
+        })
+
+        # 5. Breakout Star - biggest YoY PPG increase
+        prev_season = season - 1
+        cursor.execute("""
+            SELECT c.player_id,
+                   (COALESCE(c.rush_yards, 0) + COALESCE(c.rec_yards, 0)) * 0.1
+                   + COALESCE(c.total_tds, 0) * 6
+                   + COALESCE(c.receptions, 0) * 1.0
+                   + COALESCE(c.pass_yards, 0) * 0.04
+                   + COALESCE(c.pass_tds, 0) * 4 as fpts,
+                   c.games
+            FROM cfb_player_season_stats c
+            WHERE c.season = ? AND c.games >= 3
+        """, (prev_season,))
+        prev_map = {}
+        for pr in cursor.fetchall():
+            g = pr[2] or 1
+            prev_map[pr[0]] = round((pr[1] or 0) / g, 1)
+
+        breakout_candidates = []
+        for p in players:
+            if p["player_id"] in prev_map:
+                prev_ppg = prev_map[p["player_id"]]
+                if prev_ppg > 0:
+                    delta = p["ppg"] - prev_ppg
+                    p2 = dict(p)
+                    p2["delta_ppg"] = round(delta, 1)
+                    p2["prev_ppg"] = prev_ppg
+                    breakout_candidates.append(p2)
+        breakout_candidates.sort(key=lambda x: x.get("delta_ppg", 0), reverse=True)
+        if breakout_candidates:
+            awards.append({
+                "key": "breakout_star", "name": "Breakout Star",
+                "description": "biggest year-over-year production jump",
+                "winner": breakout_candidates[0],
+                "runners_up": breakout_candidates[1:5],
+            })
+
+        # 6. TD King - most total touchdowns
+        td_king = max(players, key=lambda p: p["tds"])
+        awards.append({
+            "key": "redzone_king", "name": "TD King",
+            "description": "most total touchdowns scored",
+            "winner": td_king,
+            "runners_up": sorted(players, key=lambda p: p["tds"], reverse=True)[1:5],
+        })
+
+        # 7. Yardage Machine - most scrimmage yards
+        yd_machine = max(players, key=lambda p: p["scrimmage_yards"])
+        awards.append({
+            "key": "rising_stock", "name": "Yardage Machine",
+            "description": "most total scrimmage yards",
+            "winner": yd_machine,
+            "runners_up": sorted(players, key=lambda p: p["scrimmage_yards"], reverse=True)[1:5],
+        })
+
+        # 8. Best PPG - highest per-game output (min 6 games)
+        ppg_players = [p for p in players if p["games"] >= 6]
+        if ppg_players:
+            best_ppg = max(ppg_players, key=lambda p: p["ppg"])
+            awards.append({
+                "key": "best_floor", "name": "PPG Leader",
+                "description": "highest per-game fantasy production",
+                "winner": best_ppg,
+                "runners_up": sorted(ppg_players, key=lambda p: p["ppg"], reverse=True)[1:5],
+            })
+
+        return {
+            "season": season,
+            "available_seasons": available_seasons,
+            "awards": awards,
+        }
+    finally:
+        conn.close()
+
+
+def fetch_college_stat_explorer(season=None, position=None, x_stat="total_ypg", y_stat="ppg"):
+    """College stat explorer — scatter plot with college-specific metrics."""
+    COLLEGE_METRICS = {
+        "ppg": "PPG", "total_ypg": "Total YPG", "rush_ypg": "Rush YPG",
+        "rec_ypg": "Rec YPG", "pass_ypg": "Pass YPG", "tds": "Total TDs",
+        "tds_per_game": "TDs/Game", "carries_g": "Carries/G", "targets_g": "Targets/G",
+        "receptions_g": "Rec/G", "yards_per_carry": "Yards/Carry",
+        "yards_per_rec": "Yards/Rec", "catch_rate": "Catch Rate %",
+        "games": "Games", "opportunities_g": "Opps/G",
+    }
+
+    conn = get_conn()
+    try:
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT DISTINCT season FROM cfb_player_season_stats ORDER BY season DESC")
+        available_seasons = [r[0] for r in cursor.fetchall()]
+        if not season:
+            season = available_seasons[0] if available_seasons else 2024
+
+        if x_stat not in COLLEGE_METRICS:
+            x_stat = "total_ypg"
+        if y_stat not in COLLEGE_METRICS:
+            y_stat = "ppg"
+
+        pos_filter = ""
+        params = [season]
+        if position and position.upper() in ("QB", "RB", "WR", "TE", "ATH", "FB"):
+            pos_filter = "AND c.position = ?"
+            params.append(position.upper())
+
+        cursor.execute(f"""
+            SELECT c.player_id, c.player_name, c.position, c.team, c.conference,
+                   c.games,
+                   COALESCE(c.rush_yards, 0) as rush_yards,
+                   COALESCE(c.rec_yards, 0) as rec_yards,
+                   COALESCE(c.pass_yards, 0) as pass_yards,
+                   COALESCE(c.total_tds, 0) as tds,
+                   COALESCE(c.carries, 0) as carries,
+                   COALESCE(c.targets, 0) as targets,
+                   COALESCE(c.receptions, 0) as receptions,
+                   (COALESCE(c.rush_yards, 0) + COALESCE(c.rec_yards, 0)) * 0.1
+                   + COALESCE(c.total_tds, 0) * 6
+                   + COALESCE(c.receptions, 0) * 1.0
+                   + COALESCE(c.pass_yards, 0) * 0.04
+                   + COALESCE(c.pass_tds, 0) * 4 as fpts
+            FROM cfb_player_season_stats c
+            WHERE c.season = ? AND c.games >= 3 {pos_filter}
+            ORDER BY fpts DESC
+            LIMIT 300
+        """, params)
+        rows = cursor.fetchall()
+
+        if not rows:
+            return {
+                "season": season, "available_seasons": available_seasons,
+                "x_stat": x_stat, "y_stat": y_stat,
+                "players": [], "metrics": COLLEGE_METRICS,
+            }
+
+        players = []
+        for r in rows:
+            games = r[5] or 1
+            rush_yards = r[6] or 0
+            rec_yards = r[7] or 0
+            pass_yards = r[8] or 0
+            tds = r[9] or 0
+            carries = r[10] or 0
+            targets = r[11] or 0
+            receptions = r[12] or 0
+            fpts = r[13] or 0
+            opps = carries + targets
+
+            p = {
+                "player_id": r[0],
+                "name": r[1] or "Unknown",
+                "position": r[2] or "ATH",
+                "team": r[3] or "",
+                "conference": r[4] or "",
+                "games": games,
+                "ppg": round(fpts / games, 1),
+                "total_ypg": round((rush_yards + rec_yards + pass_yards) / games, 1),
+                "rush_ypg": round(rush_yards / games, 1),
+                "rec_ypg": round(rec_yards / games, 1),
+                "pass_ypg": round(pass_yards / games, 1),
+                "tds": tds,
+                "tds_per_game": round(tds / games, 2),
+                "carries_g": round(carries / games, 1),
+                "targets_g": round(targets / games, 1),
+                "receptions_g": round(receptions / games, 1),
+                "yards_per_carry": round(rush_yards / carries, 1) if carries > 0 else 0,
+                "yards_per_rec": round(rec_yards / receptions, 1) if receptions > 0 else 0,
+                "catch_rate": round(receptions / targets * 100, 1) if targets > 0 else 0,
+                "opportunities_g": round(opps / games, 1),
+            }
+
+            xv = p.get(x_stat)
+            yv = p.get(y_stat)
+            if xv is not None and yv is not None:
+                p["x"] = xv
+                p["y"] = yv
+                players.append(p)
+
+        return {
+            "season": season,
+            "available_seasons": available_seasons,
+            "x_stat": x_stat,
+            "y_stat": y_stat,
+            "players": players,
+            "metrics": COLLEGE_METRICS,
+        }
+    finally:
+        conn.close()
+
+
+# ---------------------------------------------------------------------------
 # Waitlist
 # ---------------------------------------------------------------------------
 
