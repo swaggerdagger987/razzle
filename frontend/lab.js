@@ -861,6 +861,19 @@ function applyUniverseUI() {
   if (agingCurvesBtn) agingCurvesBtn.style.display = (state.universe === "nfl") ? "" : "none";
   const heatMapBtn = document.getElementById("heatMapBtn");
   if (heatMapBtn) heatMapBtn.style.display = (state.universe === "nfl") ? "" : "none";
+
+  // Dim NFL-only sidebar items in college mode
+  const NFL_ONLY_PANELS = [
+    'rankings', 'tiers', 'tradevalues', 'auction', 'cheatsheet',
+    'buysell', 'waivers', 'handcuffs', 'targetpremium', 'drops',
+    'garbagetime', 'matchups', 'stacks', 'redzone', 'streaks',
+    'weeklymvp', 'playoffs', 'yoy', 'pace', 'tdregression',
+    'airyards', 'dashboard', 'rosterbuilder', 'tradefinder'
+  ];
+  document.querySelectorAll('.lab-sidebar-item[data-panel]').forEach(item => {
+    const panel = item.getAttribute('data-panel');
+    item.classList.toggle('sidebar-nfl-only', isCollege && NFL_ONLY_PANELS.includes(panel));
+  });
 }
 
 // ─── Sort ────────────────────────────────────────────────────────
