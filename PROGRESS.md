@@ -1,10 +1,13 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Consolidation — Inline Panel Migration (IN PROGRESS)
+## Current Phase: Consolidation — Inline Panel Migration (COMPLETE)
 
-Migrating all 62 iframe panels to native render functions in lab.js. Each panel will fetch from its API and build DOM directly — no more iframes. Panel switching will be instant for cached panels.
+All 62 iframe panels migrated to native render functions. Zero iframes remain. Panel switching is instant for cached panels.
 
 ### Consolidation Phase 5: Inline Panel Migration
+#### Task 10: Remove iframe fallbacks and clean up (DONE)
+Removed all iframe infrastructure from lab.html: `panel-iframe` container div, `<iframe>` element, `loadedFrames` variable, `PANEL_URLS` map, `isPanelNative()` function, and the entire iframe fallback `else` branch in `switchPanel()`. Cleaned 62 sidebar `onclick` attributes to remove URL params (e.g. `switchPanel('rankings','/rankings.html')` → `switchPanel('rankings')`). Updated stale comments. Zero iframes remain in lab.html. All 62 native panels verified against sidebar entries. JS syntax validated.
+
 #### Task 9: Migrate remaining panels (DONE)
 Converted 17 remaining iframe panels to native render: Awards, Dashboard, Draft Class Analytics, Explorer, Stat Leaders, Opportunity Share, Percentiles, Prospects/Big Board, Season Recap, Records, Roster Builder, Schedule/SOS, Scoring Comparison, Success Rate, Target Distribution, Team Rosters, Trade Finder. Appended to `lab-panels.js` (~2474 lines added, total 8507 lines) and `lab-panels.css` (~489 lines added, total 3505 lines). Draft Class: canvas bar chart with DPR-aware rendering, summary chips. Explorer: canvas scatter plot with 17 configurable metrics, trendline, click tooltip. Roster Builder: search+add players, POST /api/roster-grade, dynamic grade card. Trade Finder: player search with 3 target sections (equal/buy-low/sell-high), value diff chips. Opportunity: dual sortable tables (alpha dogs + dominator leaders). Schedule: dual sortable tables (suppressed + inflated). Dashboard: 5-section overview (top5, risers, fallers, value picks, scarcity). All panels use scoped `el.querySelector()` with unique prefixes (aw2-, db2-, dc2-, exp-, ld2-, opp2-, pct2-, bb-, rc2-, rec-, rbld-, sos2-, sc2-, sr2-, td2-, tm-, tf2-). Total native panels: 62. Zero iframes remaining to migrate.
 

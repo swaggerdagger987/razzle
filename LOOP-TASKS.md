@@ -5,7 +5,7 @@
 - Task: Migrate remaining panels
 - Stage: PLAN
 - Attempt: 1/3
-- Tasks Done: 9/10
+- Tasks Done: 10/10
 
 ## Phase 1: Navigation Surgery -- COMPLETE
 ### Task 1: Slim nav to 4 items on all pages
@@ -208,5 +208,5 @@
 **Accept when**: Zero iframes in lab.html. All 60+ panels work. No dead code from old iframe system.
 **Depends on**: Tasks 3-9
 **Size**: M
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
