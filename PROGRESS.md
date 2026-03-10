@@ -1,6 +1,24 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 43 — Stripe Integration — Subscriptions and Payment (COMPLETE)
+## Current Phase: Phase 44 — Brand Voice — Watermark, Copy, Personality Pass (COMPLETE)
+
+**Exit criterion MET:** All watermarks updated to "razzle.lol — let's razzle dazzle em baby". Zero instances of "built different" remain. All UI copy matches brand identity — film room energy, peer tone, no corporate language. Loading states use "pulling film...", "checking the tape...", "running the numbers...". Error states use "fumble" language. 404 page: "This page got cut from the roster." 28 column tooltips rewritten in warm, peer-like brand voice. Home page hero subtitle updated. War Room upsell copy on-brand. Export PNGs carry new watermark.
+
+### Phase 44 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Update all watermarks to new tagline | DONE | 12 canvas in lab.js, 3 in charts.js, 5 HTML footers, 2 SVG OG images, meta desc, DESIGN.md |
+| 2 | Brand voice pass on all UI copy | DONE | 404, error messages, War Room upsell, home hero, formula store errors |
+| 3 | Tooltip voice pass | DONE | 28 tooltips rewritten — WOPR, RACR, DAKOTA, DVS, aDOT, YPRR, CPOE etc. |
+| 4 | Deploy + smoke test | DONE | All syntax clean, zero "built different", brand voice consistent |
+
+### Decisions Log
+- **Watermark tagline**: "razzle.lol — let's razzle dazzle em baby" per DESIGN.md brand voice section.
+- **Tooltip tone**: Warm, slightly opinionated, peer-like. One sentence max. No clinical definitions.
+- **Error language**: "fumble" metaphor for failures, consistent with football film room voice.
+
+## Previous Phase: Phase 43 — Stripe Integration — Subscriptions and Payment (COMPLETE)
 
 **Exit criterion MET:** Stripe integration complete. Backend: POST /api/billing/create-checkout (yearly/monthly), POST /api/billing/webhook (signature verified, handles checkout completed/subscription deleted/payment failed), GET /api/billing/status (plan + portal URL). Subscriptions table in users.db. Frontend: plan badge in nav (Free/Pro), Manage Subscription link for pro users, War Room upsell calls startCheckout(), pricing section on home page ($240/year + $20/month). All keys from env vars. stripe>=7.0.0 added to requirements.txt.
 
