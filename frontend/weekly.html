@@ -300,11 +300,11 @@
 
   <div class="weekly-controls">
     <div class="weekly-pos-tabs">
-      <button class="weekly-pos-tab active" data-pos="ALL">All</button>
-      <button class="weekly-pos-tab" data-pos="QB">QB</button>
-      <button class="weekly-pos-tab" data-pos="RB">RB</button>
-      <button class="weekly-pos-tab" data-pos="WR">WR</button>
-      <button class="weekly-pos-tab" data-pos="TE">TE</button>
+      <button class="weekly-pos-tab active" data-pos="ALL" aria-label="All positions">All</button>
+      <button class="weekly-pos-tab" data-pos="QB" aria-label="Quarterbacks">QB</button>
+      <button class="weekly-pos-tab" data-pos="RB" aria-label="Running backs">RB</button>
+      <button class="weekly-pos-tab" data-pos="WR" aria-label="Wide receivers">WR</button>
+      <button class="weekly-pos-tab" data-pos="TE" aria-label="Tight ends">TE</button>
     </div>
     <select class="weekly-season-select" id="season-select" title="Season" aria-label="Season"></select>
   </div>
@@ -385,6 +385,8 @@
 
   var currentData = null;
   var activePos = 'ALL';
+  var sortCol = 'total'; // 'total', 'ppg', or week number
+  var sortDir = -1; // -1 = desc, 1 = asc
 
   function loadData() {
     var season = document.getElementById('season-select').value || '';
@@ -397,14 +399,17 @@
     document.getElementById('weekly-loading').textContent = 'pulling film...';
 
     fetch(url)
-      .then(function(r) { return r.json(); })
+      .then(function(r) {
+        if (!r.ok) throw new Error('API error');
+        return r.json();
+      })
       .then(function(data) {
         currentData = data;
         populateSeasons(data.available_seasons, data.season);
         renderHeatmap(data);
       })
       .catch(function() {
-        document.getElementById('weekly-loading').textContent = 'fumbled the data...';
+        document.getElementById('weekly-body').innerHTML = '<div class="weekly-loading">fumbled the data... <button class="btn-chunky" onclick="location.reload()" style="margin-left:12px">retry</button></div>';
       });
   }
 
@@ -430,16 +435,34 @@
     var weeks = data.weeks || [];
     var thresholds = data.thresholds || {};
 
-    // Build table HTML
-    var html = '<div class="heatmap-container"><table class="heatmap-table"><thead><tr>';
-    html += '<th class="player-col">Player</th>';
-    weeks.forEach(function(w) {
-      html += '<th>W' + w + '</th>';
+    // Sort players
+    var sorted = data.players.slice();
+    sorted.sort(function(a, b) {
+      var va, vb;
+      if (sortCol === 'total') {
+        va = a.total_pts || 0; vb = b.total_pts || 0;
+      } else if (sortCol === 'ppg') {
+        va = a.ppg || 0; vb = b.ppg || 0;
+      } else {
+        va = a.weeks[String(sortCol)]; vb = b.weeks[String(sortCol)];
+        va = va === null || va === undefined ? -999 : va;
+        vb = vb === null || vb === undefined ? -999 : vb;
+      }
+      return (va - vb) * sortDir;
     });
-    html += '<th class="ppg-col">PPG</th>';
+
+    // Build table HTML
+    var arrow = sortDir === -1 ? ' \u25BC' : ' \u25B2';
+    var html = '<div class="heatmap-container"><table class="heatmap-table"><thead><tr>';
+    html += '<th class="player-col" data-sort="total" style="cursor:pointer">Player' + (sortCol === 'total' ? arrow : '') + '</th>';
+    weeks.forEach(function(w) {
+      html += '<th data-sort="' + w + '" style="cursor:pointer">W' + w + (sortCol === w ? arrow : '') + '</th>';
+    });
+    html += '<th class="ppg-col">GP</th>';
+    html += '<th class="ppg-col" data-sort="ppg" style="cursor:pointer">PPG' + (sortCol === 'ppg' ? arrow : '') + '</th>';
     html += '</tr></thead><tbody>';
 
-    data.players.forEach(function(p, idx) {
+    sorted.forEach(function(p, idx) {
       var pos = p.position || 'WR';
       var posColor = POS_COLORS[pos] || '#d97757';
       var t = thresholds[pos] || thresholds['WR'] || { p20: 5, p40: 10, p60: 15, p80: 20 };
@@ -464,7 +487,8 @@
         }
       });
 
-      // PPG column
+      // Games + PPG columns
+      html += '<td class="ppg-cell" style="color:var(--ink-light)">' + p.games + '</td>';
       var ppgColor = getHeatColor(p.ppg, t);
       html += '<td class="ppg-cell score-cell" style="background:' + (ppgColor ? ppgColor.bg : '') + '; color:' + (ppgColor ? ppgColor.text : '') + ';">' + p.ppg.toFixed(1) + '</td>';
       html += '</tr>';
@@ -472,18 +496,37 @@
 
     html += '</tbody></table></div>';
 
-    // Legend
+    // Legend with thresholds
+    var legendPos = activePos !== 'ALL' ? activePos : 'WR';
+    var lt = thresholds[legendPos] || { p20: 5, p40: 10, p60: 15, p80: 20 };
     html += '<div class="heatmap-legend">';
-    html += '<span>cold</span>';
+    html += '<span>&lt;' + lt.p20.toFixed(0) + '</span>';
     html += '<div class="legend-bar">';
     HEAT_COLORS.forEach(function(hc) {
       html += '<div class="legend-cell" style="background:' + hc.bg + '"></div>';
     });
     html += '</div>';
-    html += '<span>hot</span>';
+    html += '<span>' + lt.p80.toFixed(0) + '+</span>';
     html += '</div>';
+    html += '<div style="text-align:center; font-family:var(--font-hand); font-size:14px; color:var(--ink-light); margin-top:4px;">PPR points (' + legendPos + ' thresholds) — click column headers to sort</div>';
 
     container.innerHTML = html;
+
+    // Click handlers for sort headers
+    container.querySelectorAll('th[data-sort]').forEach(function(th) {
+      th.addEventListener('click', function() {
+        var col = th.getAttribute('data-sort');
+        var numCol = parseInt(col, 10);
+        col = isNaN(numCol) ? col : numCol;
+        if (sortCol === col) {
+          sortDir = sortDir * -1;
+        } else {
+          sortCol = col;
+          sortDir = -1;
+        }
+        renderHeatmap(currentData);
+      });
+    });
 
     // Click handlers for player names
     container.querySelectorAll('.player-cell-inner').forEach(function(el) {
@@ -539,5 +582,6 @@
   loadData();
 })();
 </script>
+<script src="app.js"></script>
 </body>
 </html>

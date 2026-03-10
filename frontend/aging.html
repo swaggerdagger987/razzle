@@ -307,16 +307,16 @@
 <main class="aging-page" id="aging-content">
   <div class="aging-header">
     <h1>Aging Curves</h1>
-    <div class="aging-subtitle">when do they peak? when do they fall off?</div>
+    <div class="aging-subtitle">when do they peak? when do they fall off? curves = all seasons, dots = selected season</div>
   </div>
 
   <div class="aging-controls">
     <div class="aging-pos-tabs">
-      <button class="aging-pos-tab active" data-pos="ALL">All</button>
-      <button class="aging-pos-tab" data-pos="QB">QB</button>
-      <button class="aging-pos-tab" data-pos="RB">RB</button>
-      <button class="aging-pos-tab" data-pos="WR">WR</button>
-      <button class="aging-pos-tab" data-pos="TE">TE</button>
+      <button class="aging-pos-tab active" data-pos="ALL" aria-label="All positions">All</button>
+      <button class="aging-pos-tab" data-pos="QB" aria-label="Quarterbacks">QB</button>
+      <button class="aging-pos-tab" data-pos="RB" aria-label="Running backs">RB</button>
+      <button class="aging-pos-tab" data-pos="WR" aria-label="Wide receivers">WR</button>
+      <button class="aging-pos-tab" data-pos="TE" aria-label="Tight ends">TE</button>
     </div>
     <select class="aging-season-select" id="season-select" title="Season" aria-label="Season"></select>
   </div>
@@ -551,8 +551,9 @@
       ctx.font = '11px "Space Mono", monospace';
       ctx.fillStyle = '#1a1a2e';
       ctx.textAlign = 'center';
-      var nameShort = p.name.length > 12 ? p.name.substring(0, 11) + '.' : p.name;
-      ctx.fillText(escapeHtml(nameShort).replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"'), lx, ly - 8);
+      var nameParts = p.name.split(' ');
+      var nameShort = nameParts.length > 1 ? nameParts[nameParts.length - 1] : p.name;
+      ctx.fillText(nameShort, lx, ly - 8);
     });
 
     // Store dot positions on canvas for hover/click
@@ -623,7 +624,7 @@
       summaryHtml += '<div class="aging-summary-card">' +
         '<div class="aging-summary-pos ' + posLower + '">' + escapeHtml(pos) + '</div>' +
         '<div class="aging-summary-peak">Age ' + (pd.peak_age !== null ? escapeHtml(String(pd.peak_age)) : '?') + '</div>' +
-        '<div class="aging-summary-label">peak season</div>' +
+        '<div class="aging-summary-label">peak age</div>' +
         '<div class="aging-summary-ppg">' + (pd.peak_ppg ? escapeHtml(String(pd.peak_ppg)) + ' PPG avg' : '') + '</div>' +
         '</div>';
     });

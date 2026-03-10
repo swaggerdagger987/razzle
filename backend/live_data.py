@@ -4896,7 +4896,7 @@ def fetch_aging_curves(season=None, position=None):
         if not season:
             season = available_seasons[0] if available_seasons else 2024
 
-        positions = [position] if position and position in ("QB", "RB", "WR", "TE") else ["QB", "RB", "WR", "TE"]
+        positions = [position] if position and position in FANTASY_POSITIONS else list(FANTASY_POSITIONS)
         latest_season = available_seasons[0] if available_seasons else 2024
         result = {}
 

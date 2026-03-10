@@ -1048,25 +1048,37 @@ def buy_sell_candidates(season: int = 0, position: str = "", limit: int = 15):
 @app.get("/api/aging-curves")
 def aging_curves(season: int = 0, position: str = ""):
     """Return aging curve data — average PPG by age per position with player dots."""
-    s = season if season > 0 else None
-    pos = position.upper() if position else None
-    return live_data.fetch_aging_curves(season=s, position=pos)
+    try:
+        s = season if season > 0 else None
+        pos = position.upper() if position else None
+        return live_data.fetch_aging_curves(season=s, position=pos)
+    except Exception as e:
+        logger.error(f"aging_curves error: {e}")
+        return JSONResponse({"error": "Failed to fetch aging curves"}, status_code=500)
 
 
 @app.get("/api/weekly-heatmap")
 def weekly_heatmap(season: int = 0, position: str = "", limit: int = 40):
     """Return weekly scoring heatmap — players × weeks with PPR scores."""
-    s = season if season > 0 else None
-    pos = position.upper() if position else None
-    return live_data.fetch_weekly_heatmap(season=s, position=pos, limit=max(1, min(limit, 50)))
+    try:
+        s = season if season > 0 else None
+        pos = position.upper() if position else None
+        return live_data.fetch_weekly_heatmap(season=s, position=pos, limit=max(1, min(limit, 50)))
+    except Exception as e:
+        logger.error(f"weekly_heatmap error: {e}")
+        return JSONResponse({"error": "Failed to fetch weekly heatmap"}, status_code=500)
 
 
 @app.get("/api/target-distribution")
 def target_distribution(season: int = 0, team: str = ""):
     """Return target and carry distribution by team."""
-    s = season if season > 0 else None
-    t = team.upper() if team else None
-    return live_data.fetch_target_distribution(season=s, team=t)
+    try:
+        s = season if season > 0 else None
+        t = team.upper() if team else None
+        return live_data.fetch_target_distribution(season=s, team=t)
+    except Exception as e:
+        logger.error(f"target_distribution error: {e}")
+        return JSONResponse({"error": "Failed to fetch target distribution"}, status_code=500)
 
 
 @app.get("/api/analytics/summary")

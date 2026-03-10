@@ -314,8 +314,8 @@
 
   <div class="targets-controls">
     <div class="targets-mode-tabs">
-      <button class="targets-mode-tab active" data-mode="targets">Targets</button>
-      <button class="targets-mode-tab" data-mode="carries">Carries</button>
+      <button class="targets-mode-tab active" data-mode="targets" aria-label="View by targets">Targets</button>
+      <button class="targets-mode-tab" data-mode="carries" aria-label="View by carries">Carries</button>
     </div>
     <select class="targets-team-select" id="team-select" aria-label="Team">
       <option value="">All Teams</option>
@@ -402,7 +402,10 @@
     document.getElementById('targets-body').innerHTML = '<div class="targets-loading" id="targets-loading">studying the film...</div>';
 
     fetch(url)
-      .then(function(r) { return r.json(); })
+      .then(function(r) {
+        if (!r.ok) throw new Error('API error');
+        return r.json();
+      })
       .then(function(data) {
         currentData = data;
         populateSeasons(data.available_seasons, data.season);
@@ -410,7 +413,7 @@
         renderDistribution(data);
       })
       .catch(function() {
-        document.getElementById('targets-body').innerHTML = '<div class="targets-loading">fumbled the data...</div>';
+        document.getElementById('targets-body').innerHTML = '<div class="targets-loading">fumbled the data... <button class="btn-chunky" onclick="location.reload()" style="margin-left:12px">retry</button></div>';
       });
   }
 
@@ -456,6 +459,9 @@
 
     var html = '';
     data.teams.forEach(function(team) {
+      // Re-sort players by active mode metric
+      var sortKey = activeMode === 'targets' ? 'targets' : 'carries';
+      team.players.sort(function(a, b) { return b[sortKey] - a[sortKey]; });
       var total = activeMode === 'targets' ? team.total_targets : team.total_carries;
       var label = activeMode === 'targets' ? 'Targets' : 'Carries';
 
@@ -579,5 +585,6 @@
   loadData();
 })();
 </script>
+<script src="app.js"></script>
 </body>
 </html>

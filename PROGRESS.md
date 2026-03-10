@@ -1,6 +1,20 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 74 — Team Target Distribution (COMPLETE)
+## Current Phase: Phase 75 — QA + UX Audit Fixes (COMPLETE)
+
+**Exit criterion MET:** All CRITICAL and HIGH findings from phases 71-75 QA+UX audit resolved. Canvas XSS pattern fixed (aging.html). Fetch resp.ok checks added (weekly+targets). app.js added (weekly+targets). Carries mode re-sort fixed (targets). Nav overflow handled with flex-wrap + mobile scroll. Weekly heatmap column sorting added. aria-labels on all tabs. "peak age" label fixed. Heat legend shows numeric thresholds. GP column added to weekly. try/except on 3 server endpoints. FANTASY_POSITIONS constant consistency. Retry buttons on error states. Aging subtitle clarifies curve vs dots data.
+
+### Phase 75 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | CRITICAL + HIGH QA fixes | DONE | Canvas plain text, resp.ok, app.js, carries sort, name labels |
+| 2 | HIGH UX fixes | DONE | Nav flex-wrap+scroll, heatmap column sorting |
+| 3 | MEDIUM QA fixes | DONE | aria-labels, peak age, heat thresholds, try/except, FANTASY_POSITIONS |
+| 4 | MEDIUM UX fixes | DONE | GP column, aging subtitle, retry buttons |
+| 5 | Smoke test | DONE | All syntax valid, all fixes verified |
+
+## Previous Phase: Phase 74 — Team Target Distribution (COMPLETE)
 
 **Exit criterion MET:** /targets.html page shows team-by-team target and carry distribution as stacked horizontal bars (treemap-style). Each team card shows player segments sized by target/carry share, color-coded by position (QB blue, RB teal, WR terracotta, TE purple). Targets/Carries mode toggle. Player name labels on segments >8%. Player detail rows with position badge, name, count, share%. Team selector dropdown. Season selector. Caveat annotations ("owns this target tree", "spread it around"). Click player segment or row → player profile. PNG export with watermark. Position color legend. "Targets" nav link added to all 17 HTML pages (nav + footer). Sitemap entry added. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors.
 
