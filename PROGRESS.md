@@ -1,6 +1,30 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 142 — Success Rate Dashboard (COMPLETE)
+## Current Phase: Consolidation — Lab Sidebar Architecture (IN PROGRESS)
+
+The Lab is now the single hub for all 60+ analytical tools. Major consolidation work completed:
+
+### Consolidation Phase 1: Navigation Surgery (COMPLETE)
+Replaced 67-link mega-nav with clean 4-item nav on all 72 HTML pages: Home | The Lab | War Room | Sign In. Added Ctrl+K search hint. Updated auth UI for new nav container.
+
+### Consolidation Phase 2: Lab Sidebar (COMPLETE)
+Added collapsible left sidebar to lab.html with all 60+ tools organized into 10 categories:
+- Screener (default), Rankings & Values, Discovery, Performance, Game Analysis
+- Trends & Projections, Prospects & College, Player Tools, League Tools, Records & History, Teams
+Panel switching via iframe loading for standalone pages. URL state (?panel=X) with browser back/forward. Mobile hamburger drawer. Sidebar remembers collapsed state. College mode visual indicator.
+
+### Consolidation Phase 3: Smart Redirects (COMPLETE)
+63 standalone pages now redirect to lab.html?panel=X when loaded directly, preserving all bookmarks and shared URLs. Redirect skips when page is loaded in iframe (for sidebar panel loading).
+
+### Consolidation Phase 4: Season Expansion (COMPLETE)
+Expanded data range from 2020-present to 2015-present for both nflverse (NFL) and cfbfastR (college) adapters and bootstrap. Season dropdown is already dynamic from DB.
+
+### Decisions Log
+- **Iframe vs Inline panels**: Using iframe loading as initial approach for all 60+ panels. This gets the UX right immediately (sidebar + panel switching + URL state) while content can be gradually inlined. The redirect script uses `window.self===window.top` to only fire on direct access, not iframe loading.
+- **Sidebar width**: 240px (slightly narrower than spec's 260px) to give more space to main content. Collapses to 48px.
+- **Mobile approach**: Sidebar becomes a slide-out drawer triggered by hamburger button. Closes on panel selection or outside click.
+
+## Previous Phase: Phase 142 — Success Rate Dashboard (COMPLETE)
 
 **Exit criterion MET:** /successrate.html ranks players by rush/pass success rate from PBP data. Success rate % badges (high/mid/low), type chip (rush/pass), volume, PPG, YPC, bar visualization. Position filter tabs, season selector, PNG export with watermark. GET /api/success-rate returns data. 10 escapeHtml calls, 25/25 braces balanced. "Success Rate" nav link on all 71 pages. Sitemap + tools hub entry under Performance Analysis.
 
