@@ -32,13 +32,13 @@ The dual-data approach also creates a moat. Plenty of tools have NFL stats. Very
 | Ships Pre-Draft | Ships Later (Summer / Season) |
 |---|---|
 | The Lab: NFL screener (nflverse data) | Formula Store (marketplace) |
-| The Lab: College screener (CFBD data) | Full War Room (6 agents, paid tier) |
+| The Lab: College screener (CFBD data) | Full Situation Room (6 agents, paid tier) |
 | NFL ↔ College toggle / unified view | League Intel (behavioral profiles) |
 | Custom formula builder (works on both datasets) | Auth + Stripe payments |
 | Radar charts + scatter plots (both datasets) | Agent memory / The Elephant |
 | Shareable URLs with watermark | Weekly briefings |
 | Image export (Share to Reddit) | NFL Combine / Pro Day data integration |
-| Landing page with War Room teaser | Draft capital weighting (pick value models) |
+| Landing page with Situation Room teaser | Draft capital weighting (pick value models) |
 | Basic Sleeper connection (show leagues) | Transfer portal tracking |
 | Rookie prospect cards (college stats for incoming class) | AdSense integration |
 
@@ -176,12 +176,12 @@ The front door, the conversion funnel entry, and the draft-season killer feature
 
 | # | Task | Detail | Done When |
 |---|---|---|---|
-| 1 | Landing page | Hero section: tagline + CTA to Lab. Sections: Lab preview (show BOTH NFL + College), agent teasers, War Room demo placeholder. | Landing page looks sharp, highlights dual-data |
-| 2 | War Room demo (static) | 10–15 pre-built anonymized demo scripts. Agents "working" with redacted outputs. Rotates on load. | Demo plays on landing page, looks compelling |
+| 1 | Landing page | Hero section: tagline + CTA to Lab. Sections: Lab preview (show BOTH NFL + College), agent teasers, Situation Room demo placeholder. | Landing page looks sharp, highlights dual-data |
+| 2 | Situation Room demo (static) | 10–15 pre-built anonymized demo scripts. Agents "working" with redacted outputs. Rotates on load. | Demo plays on landing page, looks compelling |
 | 3 | Sleeper connection flow | Input Sleeper username → fetch leagues → display rosters on league-intel.html. | User enters username → sees their leagues |
 | 4 | League Intel (free tier) | Leagues, rosters, standings, bye weeks, position depth. Clean, useful, free. | Connected user sees their league structure |
 | 5 | Prospect cards | Dedicated view for incoming draft class. College stats + radar chart + recruiting composite + NFL comp suggestion (based on similar college profiles). These are THE draft-week content. | Prospect card for a WR shows 3-year college arc + radar + comp |
-| 6 | Waitlist / email capture | Email capture for War Room launch. Store in DB or Mailchimp. | Users can sign up for paid tier notifications |
+| 6 | Waitlist / email capture | Email capture for Situation Room launch. Store in DB or Mailchimp. | Users can sign up for paid tier notifications |
 
 **Exit criterion:** New visitor lands on home, sees dual-data pitch, explores Lab (both modes), connects Sleeper, views prospect cards for incoming class, and optionally joins waitlist.
 
@@ -223,8 +223,8 @@ Sustained campaign. Seed content across subreddits using The Lab as the content.
 | 1 | Auth + payments + mapping | Email/password registration, Stripe ($240/yr), Sleeper binding, JWT. Automate player_mapping for drafted rookies (CFBD ID → nflverse ID). |
 | 2 | Agent infrastructure | Claude API integration, Razzle routing, agent personas. Use college data for rookie scouting reports. Free generic queries (rate-limited). |
 | 3 | League Intel + memory | Full league history via previous_league_id, behavioral profiles, manager profiling. Track draft history + rookie hit rates using college-to-NFL mapping. |
-| 4 | War Room + polish | All agents with full league context. Factor rookie projections (college-based) into championship probability. Formula Store v1. Load testing. |
-| 5 | Season launch | Paid tier live. War Room open. Continue Reddit cadence through season. College screener stays live for dynasty rookie evaluation. |
+| 4 | Situation Room + polish | All agents with full league context. Factor rookie projections (college-based) into championship probability. Formula Store v1. Load testing. |
+| 5 | Season launch | Paid tier live. Situation Room open. Continue Reddit cadence through season. College screener stays live for dynasty rookie evaluation. |
 
 ---
 

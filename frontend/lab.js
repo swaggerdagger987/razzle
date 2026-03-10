@@ -1773,7 +1773,7 @@ function updateSelectionUI() {
   } else {
     updateResultCount();
   }
-  // Persist Lab context for War Room agent bridge
+  // Persist Lab context for Situation Room agent bridge
   saveLabContext();
 }
 

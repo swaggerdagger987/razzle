@@ -1,6 +1,20 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 15 — QA + UX Audit for Phases 11-14 (COMPLETE)
+## Current Phase: Phase 16 — Rename War Room → Situation Room (COMPLETE)
+
+**Exit Criterion MET**: All references to "War Room" renamed to "Situation Room" across 72 HTML files, warroom.js, lab.js, CLAUDE.md, DESIGN.md, ROADMAP.md (x2), NORTH_STAR.md, and 6 agent-persona files. agents.html filename preserved. Zero remaining "War Room" references in active code.
+
+### Phase 16 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Rename in all standalone HTML nav/footer links | DONE | Bulk sed across 72 HTML files |
+| 2 | Rename in agents.html (main page) | DONE | Title, meta, h1, nav, canvas label, footer |
+| 3 | Rename in index.html (home page) | DONE | Nav, hero, pricing, waitlist, footer, JS |
+| 4 | Rename in warroom.js, lab.html, lab.js | DONE | Comments, API headers, nav links |
+| 5 | Rename in docs and config files | DONE | CLAUDE.md, DESIGN.md, ROADMAP.md, NORTH_STAR.md, agent-personas |
+
+## Previous Phase: Phase 15 — QA + UX Audit for Phases 11-14 (COMPLETE)
 
 **Exit Criterion MET**: All HIGH and MEDIUM findings fixed inline. 1 HIGH (stale radar state), 3 MEDIUM (button order, aria-labels, type safety), 3 LOW (XSS consistency, grade color, unescaped position) — all resolved. No CRITICAL findings. No UX issues. Both new panels production-ready.
 

@@ -34,7 +34,7 @@ Think Luffy: goofy on the outside, strongest person in the room.
 | `--bg` | `#ede0cf` | Page background — warm sand |
 | `--bg-warm` | `#e5d5c3` | Toolbars, subtle sections, table headers |
 | `--bg-card` | `#f7efe5` | Cards, elevated surfaces |
-| `--bg-ink` | `#1a110a` | War Room dark mode only — deepest espresso |
+| `--bg-ink` | `#1a110a` | Situation Room dark mode only — deepest espresso |
 
 ### Ink — "Espresso"
 The ink palette is warm espresso brown, not blue-black. Brown on sand is the Razzle signature — everything feels like one material, leather and parchment, not screen and pixels.
@@ -61,7 +61,7 @@ Dark mode inverts the sand/espresso relationship. Espresso becomes background, s
 
 Light tints also shift in dark mode to muted deep versions (e.g., `--orange-light` goes from `#f7e4d8` to `#5c3325`).
 
-**Rule**: Dark mode is available site-wide via toggle. It is NOT the default. The War Room still uses its own `--bg-ink` deepest-dark override.
+**Rule**: Dark mode is available site-wide via toggle. It is NOT the default. The Situation Room still uses its own `--bg-ink` deepest-dark override.
 
 ### Accents
 | Token | Hex | Role |
@@ -150,8 +150,8 @@ Personality, not spinners:
 ### Dark Mode Toggle
 Users can toggle dark mode site-wide. The espresso flip inverts sand ↔ brown while keeping all accents, position colors, and personality intact. Implementation: set `data-theme="dark"` on `<html>`, CSS variables handle the rest. Persist preference in localStorage.
 
-### The War Room Exception
-War Room uses `--bg-ink` (deepest espresso `#1a110a`) regardless of theme toggle. It's always dark. Playful chrome steps aside. Contrast is intentional.
+### The Situation Room Exception
+Situation Room uses `--bg-ink` (deepest espresso `#1a110a`) regardless of theme toggle. It's always dark. Playful chrome steps aside. Contrast is intentional.
 
 ---
 

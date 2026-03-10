@@ -24,17 +24,17 @@ The Bloomberg terminal. Full nflverse + college stat depth (100+ columns), custo
 ### 2. The Connection (Free, Sleeper-linked)
 Connect Sleeper username to see leagues, rosters, and basic league structure in League Intel. This is the conversion funnel — once users see their data in Razzle, they want intelligence on top of it.
 
-### 3. The War Room (Paid, $240/year)
+### 3. The Situation Room (Paid, $240/year)
 Razzle and specialist agents operating with full league context and multi-season memory. Personalized briefings, trade strategies against specific leaguemates, championship probability for your roster, injury impact on your lineup. Sleeper username tied to Razzle account — no free trial abuse.
 
 ---
 
 ## Pages
 
-- `home` — Landing with live anonymized War Room demo (50-60 pre-built permutations)
+- `home` — Landing with live anonymized Situation Room demo (50-60 pre-built permutations)
 - `lab` — The Bloomberg terminal (screener, formulas, visualizations)
 - `league-intel` — League context view (free: roster overview, paid: full intel)
-- `agents` — The War Room (free: generic, paid: league-contextualized)
+- `agents` — The Situation Room (free: generic, paid: league-contextualized)
 
 ---
 
@@ -81,7 +81,7 @@ Razzle and specialist agents operating with full league context and multi-season
 
 ---
 
-## League Intel & The War Room
+## League Intel & The Situation Room
 
 ### Free (Sleeper connected)
 - See your leagues, rosters, standings.
@@ -93,17 +93,17 @@ Razzle and specialist agents operating with full league context and multi-season
 - Trade deadline pressure maps — which managers are desperate and when.
 - League economy trends over time.
 
-### Paid — The War Room
+### Paid — The Situation Room
 - All agents operate with full context: your roster, league scoring, rivals' rosters, multi-season history.
 - **Razzle** (Bengal tiger) delivers prioritized daily/weekly briefings, orchestrates all agents, resolves conflicts.
 - **Specialist agents** (NFL team animals, TBD) cover: injury intelligence, scouting/breakout detection, trade negotiation/adversarial intel, projections/championship probability, league history/pattern recognition.
 - Agents reference each other — Razzle synthesizes and resolves conflicts.
 
-### Home Page — War Room Demo
-- 50-60 pre-built anonymized War Room permutations.
+### Home Page — Situation Room Demo
+- 50-60 pre-built anonymized Situation Room permutations.
 - Agents visibly working but content redacted (???, !!!, ...).
 - Rotates on each visit.
-- CTA: "This is a real manager's War Room. Connect Sleeper to get yours."
+- CTA: "This is a real manager's Situation Room. Connect Sleeper to get yours."
 
 ---
 
@@ -119,7 +119,7 @@ Razzle and specialist agents operating with full league context and multi-season
 1. Reddit user sees screenshot/link → clicks through to Lab.
 2. Lab is genuinely powerful for free → user builds views, creates formulas.
 3. User connects Sleeper → sees their leagues, no friction.
-4. User sees War Room demo on home page → curiosity builds.
+4. User sees Situation Room demo on home page → curiosity builds.
 5. User hits a decision point → generic agent answer is fine, but league-contextualized answer is clearly better → converts to $240/year.
 
 ### Retention
@@ -200,7 +200,7 @@ data/terminal.db (SQLite - single source of truth)
 2. Razzle parses intent → routes to relevant specialist(s).
 3. Specialists return structured JSON responses.
 4. Razzle synthesizes, resolves conflicts, assigns urgency tiers (URGENT, MONITOR, OPPORTUNITY).
-5. Final output rendered in the War Room UI.
+5. Final output rendered in the Situation Room UI.
 
 ### Memory Engine
 - On Sleeper connection (paid), recursively pulls league history via `previous_league_id`.
@@ -245,6 +245,6 @@ When making any product or implementation decision, ask in this order:
 
 1. **Does this help The Lab get screenshotted on Reddit?** If yes, prioritize it. If no, it can wait.
 2. **Does this follow the design guide?** Anthropic sand, chunky borders, Garfield font, trust the user.
-3. **Does this move toward the three-layer architecture?** Free Lab → Sleeper Connection → Paid War Room.
+3. **Does this move toward the three-layer architecture?** Free Lab → Sleeper Connection → Paid Situation Room.
 4. **Is this the simplest version that works?** No over-engineering. Ship ugly, then polish.
 5. **Would a Reddit power user care?** If no, it's not a priority before draft week.

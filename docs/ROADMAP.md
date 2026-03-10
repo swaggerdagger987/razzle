@@ -16,11 +16,11 @@
 - Radar charts + scatter plots
 - Shareable URLs with Razzle watermark
 - Image export (Share to Reddit)
-- Landing page with War Room teaser
+- Landing page with Situation Room teaser
 - Basic Sleeper connection (show leagues)
 
 ### Ships by May–June (Pre-Season Build)
-- The War Room: pixel agent canvas + agent personas + scenario runner
+- The Situation Room: pixel agent canvas + agent personas + scenario runner
 - Agent page (agents.html) wired into nav
 - OpenRouter LLM integration (browser-side, API key per user)
 - Context bridge: Lab + League Intel data feeds into agent prompts
@@ -106,11 +106,11 @@ Without this phase, everything is invisible. With it, every screenshot is a bill
 
 | # | Task | Detail | Done When |
 |---|------|--------|-----------|
-| 1 | Landing page | Hero + CTA to Lab. Sections: Lab preview, agent teasers, War Room demo placeholder. Razzle mascot featured. | Landing page looks polished |
-| 2 | War Room demo (static) | 10-15 pre-built anonymized demo scripts. Razzle "working" with redacted outputs. | Demo plays on landing page |
+| 1 | Landing page | Hero + CTA to Lab. Sections: Lab preview, agent teasers, Situation Room demo placeholder. Razzle mascot featured. | Landing page looks polished |
+| 2 | Situation Room demo (static) | 10-15 pre-built anonymized demo scripts. Razzle "working" with redacted outputs. | Demo plays on landing page |
 | 3 | Sleeper connection | Input Sleeper username → fetch leagues → display rosters on league-intel page. | User enters username → sees leagues |
 | 4 | League Intel (free tier) | Show leagues, rosters, standings, bye weeks, position depth. | Connected user sees league structure |
-| 5 | Waitlist / email capture | Email capture for War Room launch notifications. | Users can sign up |
+| 5 | Waitlist / email capture | Email capture for Situation Room launch notifications. | Users can sign up |
 
 **Exit criterion:** New visitor lands on home, sees polished pitch, clicks to Lab, explores data, connects Sleeper, sees leagues, optionally joins waitlist.
 
@@ -129,15 +129,15 @@ Without this phase, everything is invisible. With it, every screenshot is a bill
 
 ---
 
-## Phase 6: War Room — Pixel Engine + Agent Canvas (Days 43-52, Apr 20-29)
+## Phase 6: Situation Room — Pixel Engine + Agent Canvas (Days 43-52, Apr 20-29)
 
-The War Room is the paid product's visual identity. Pixel agents living in a room makes Razzle feel alive. Reference FDL's `pixel-agents/index.html` for the proven canvas engine.
+The Situation Room is the paid product's visual identity. Pixel agents living in a room makes Razzle feel alive. Reference FDL's `pixel-agents/index.html` for the proven canvas engine.
 
 | # | Task | Detail | Done When |
 |---|------|--------|-----------|
-| 1 | agents.html page | New page in nav: "War Room". Razzle design system, hero section "Six Minds. One War Room." | Page exists, nav links to it, follows design guide |
+| 1 | agents.html page | New page in nav: "Situation Room". Razzle design system, hero section "Six Minds. One Situation Room." | Page exists, nav links to it, follows design guide |
 | 2 | Pixel agent sprite sheets | 6 character PNGs (16×24 frames, 7×4 grid). Razzle tiger + 5 NFL team animals. Port FDL's char_0–5.png or create new. | 6 sprite files in `frontend/assets/characters/` |
-| 3 | Canvas War Room engine | Full-screen canvas: 30×22 tile grid, wood floor + turf war table, furniture sprites, collision map. Port from FDL's pixel-agents/index.html. | Canvas renders the room with furniture, floor, turf table |
+| 3 | Canvas Situation Room engine | Full-screen canvas: 30×22 tile grid, wood floor + turf war table, furniture sprites, collision map. Port from FDL's pixel-agents/index.html. | Canvas renders the room with furniture, floor, turf table |
 | 4 | Agent AI + animation | State machine: IDLE → WALK → WORK_DESK → ANALYZE_BOARD → DISCUSS → THINK → COFFEE. Walk frames cycle at 150ms. Collision detection with furniture. | Agents walk around room autonomously, visit stations, show activity bubbles |
 | 5 | Agent selection + camera | Click agent to select (dashed ellipse highlight). Camera follows selected agent. D-pad controls for manual movement. Agent name tags + role labels. | Can click agents, camera tracks, D-pad works |
 | 6 | Agent roster sidebar | Overlay panel showing all 6 agents: pixel avatar, name, role, current activity status. Click to select + pan camera. | Roster visible, click agent → selects + pans |
@@ -153,11 +153,11 @@ The War Room is the paid product's visual identity. Pixel agents living in a roo
 | 4 | **TBD** | TBD (NFL team animal) | Quant | Orange #e87422 |
 | 5 | **TBD** | TBD (NFL team animal) | Historian | Red #d44040 |
 
-**Exit criterion:** agents.html loads with a live pixel War Room. 6 agents walk around, work at desks, visit the war table. Clicking an agent selects them. Room looks like an NFL war room with the Razzle comic-strip aesthetic. Feels alive.
+**Exit criterion:** agents.html loads with a live pixel Situation Room. 6 agents walk around, work at desks, visit the war table. Clicking an agent selects them. Room looks like an NFL war room with the Razzle comic-strip aesthetic. Feels alive.
 
 ---
 
-## Phase 7: War Room — Agent Personas + Scenario Runner (Days 53-62, Apr 30-May 9)
+## Phase 7: Situation Room — Agent Personas + Scenario Runner (Days 53-62, Apr 30-May 9)
 
 The brains behind the pixels. Each agent gets a persona prompt, structured output format, and the scenario panel lets users ask questions.
 
@@ -169,7 +169,7 @@ The brains behind the pixels. Each agent gets a persona prompt, structured outpu
 | 4 | LLM integration | Browser-side fetch to OpenRouter (or custom base URL). Send persona + scenario + rules → receive structured response. 20s timeout, temperature 0.3. | Agent returns structured response from LLM provider |
 | 5 | Specialist agent execution | 5 specialists run in parallel. Each returns role-specific structured output (Medical: injury type + duration + risk; Scout: usage trend + breakout signal; etc). | All 5 specialists return structured responses |
 | 6 | Razzle orchestration | Razzle (agent 0) receives all 5 specialist outputs as peer insights. Synthesizes into prioritized brief with urgency tiers (URGENT, MONITOR, OPPORTUNITY) + conflict resolution. | Razzle synthesizes all specialist outputs into final brief |
-| 7 | Response rendering | Briefing cards per agent in War Room UI. Razzle's synthesis at top. Collapsible specialist details. Comic-strip card styling matching design guide. | Responses render as styled cards, Razzle brief is prominent |
+| 7 | Response rendering | Briefing cards per agent in Situation Room UI. Razzle's synthesis at top. Collapsible specialist details. Comic-strip card styling matching design guide. | Responses render as styled cards, Razzle brief is prominent |
 
 **Mandatory Output Sections per Agent:**
 - **Razzle**: Urgency Tier, Conflicts and Resolution, GM Decision Needed
@@ -183,18 +183,18 @@ The brains behind the pixels. Each agent gets a persona prompt, structured outpu
 
 ---
 
-## Phase 8: War Room — Context Bridge + Free/Paid Gating (Days 63-72, May 10-19)
+## Phase 8: Situation Room — Context Bridge + Free/Paid Gating (Days 63-72, May 10-19)
 
-Connect the War Room to real data. Free users get generic answers; paid users get league-contextualized intelligence.
+Connect the Situation Room to real data. Free users get generic answers; paid users get league-contextualized intelligence.
 
 | # | Task | Detail | Done When |
 |---|------|--------|-----------|
 | 1 | Lab context feed | Agent prompts auto-include: player stats from screener selection, formula scores, comparison data. "What The Lab knows" section in prompt. | Selected players in Lab feed into agent context |
 | 2 | League Intel context feed | If Sleeper connected: include user's roster, league scoring settings, rival rosters, standings. "What League Intel knows" section in prompt. | Connected Sleeper data feeds into agent prompts |
 | 3 | Free vs. paid prompt tiers | Free mode: agent receives question + generic player data from SQLite. Paid mode: agent receives question + player data + full league context. | Both modes work, paid mode clearly richer |
-| 4 | Paywall UI gating | War Room page shows free generic mode by default. League-contextualized sections show blurred/redacted previews with "Unlock with Razzle Pro" CTA. | Free users see generic, paid content teased but gated |
-| 5 | Home page War Room demo upgrade | Replace static demo with 50-60 pre-built anonymized agent briefing permutations. Agents visibly "working" with redacted outputs (???, !!!, ...). Rotates on each visit. | Landing page shows live-looking War Room demo |
-| 6 | Agent bio cards | Public-facing bio cards for each agent: pixel avatar, name, animal, role description, "specialty" one-liner. Shown on landing page + War Room intro. | Agent bios visible on home + agents page |
+| 4 | Paywall UI gating | Situation Room page shows free generic mode by default. League-contextualized sections show blurred/redacted previews with "Unlock with Razzle Pro" CTA. | Free users see generic, paid content teased but gated |
+| 5 | Home page Situation Room demo upgrade | Replace static demo with 50-60 pre-built anonymized agent briefing permutations. Agents visibly "working" with redacted outputs (???, !!!, ...). Rotates on each visit. | Landing page shows live-looking Situation Room demo |
+| 6 | Agent bio cards | Public-facing bio cards for each agent: pixel avatar, name, animal, role description, "specialty" one-liner. Shown on landing page + Situation Room intro. | Agent bios visible on home + agents page |
 
 **Exit criterion:** Free user asks a question → gets generic agent analysis. Connected Sleeper user asks the same question → gets league-contextualized answer that references their roster and rivals. The difference is obvious and compelling. Home page demo looks alive.
 
@@ -210,10 +210,10 @@ Polish everything. Formula store creates community content and another Reddit gr
 | 2 | Formula publishing | "Publish to Store" button in formula builder. Name, description, position tags. Weights stay hidden (creator IP protected). | User publishes formula, appears in store |
 | 3 | Formula ratings/reviews | Star rating + short review per formula. Sort by rating, popularity, newest. | Users can rate formulas, best rise to top |
 | 4 | Full UX polish pass | Loading states ("pulling film..."), error states, empty states, transitions, mobile responsiveness, favicon, 404 page. | Every page has proper loading/error/empty states |
-| 5 | Performance audit | Screener pagination, lazy loading, API response times, canvas frame rate. | Lab loads in <2s, War Room canvas runs at 60fps |
+| 5 | Performance audit | Screener pagination, lazy loading, API response times, canvas frame rate. | Lab loads in <2s, Situation Room canvas runs at 60fps |
 | 6 | Deploy + smoke test | Full deploy to Render. Hit every page, every API endpoint, every feature. | razzle.lol fully functional end to end |
 
-**Exit criterion:** Complete product loop: land on home → explore Lab → create formula → publish to store → connect Sleeper → enter War Room → run agent scenario → see league-contextualized brief. Everything works, nothing crashes, design is cohesive.
+**Exit criterion:** Complete product loop: land on home → explore Lab → create formula → publish to store → connect Sleeper → enter Situation Room → run agent scenario → see league-contextualized brief. Everything works, nothing crashes, design is cohesive.
 
 ---
 
@@ -239,7 +239,7 @@ Polish everything. Formula store creates community content and another Reddit gr
 | 29-35 | Phase 4: Landing + Sleeper | Home page + league connection | Apr 6-12 |
 | 36-42 | Phase 5: Reddit Launch | Sustained content campaign | Apr 13-19 |
 | — | **NFL Draft Week** | **Brand presence established** | **Apr 24-26** |
-| 43-52 | Phase 6: Pixel Engine | War Room canvas + agent sprites + AI | Apr 20-29 |
+| 43-52 | Phase 6: Pixel Engine | Situation Room canvas + agent sprites + AI | Apr 20-29 |
 | 53-62 | Phase 7: Agent Brains | Personas + scenario runner + LLM | Apr 30-May 9 |
 | 63-72 | Phase 8: Context Bridge | Lab/League feeds + free/paid gating | May 10-19 |
 | 73-82 | Phase 9: Polish + Store | Formula store + full UX polish | May 20-29 |

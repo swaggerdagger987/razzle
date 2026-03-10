@@ -22,7 +22,7 @@ const WALK_FRAMES = [0, 1, 2, 1];
 const IDLE_FRAME = 0;
 const ANIM_SPEED = 150; // ms per walk frame
 
-// ── PALETTE (dark War Room) ────────────────────────────────────────────
+// ── PALETTE (dark Situation Room) ────────────────────────────────────────────
 const C = {
   wallDark:    '#121a2e',
   wallMid:     '#1b2845',
@@ -1908,7 +1908,7 @@ function buildUserMessage(scenario, agentDef, peerInsights) {
     }
   }
 
-  // Inject War Room memory (past briefings) if available
+  // Inject Situation Room memory (past briefings) if available
   var memoryEntries = getRelevantMemory(scenario, 3);
   if (memoryEntries.length) {
     parts.push(formatMemoryContext(memoryEntries));
@@ -1934,7 +1934,7 @@ async function callLLM(apiKey, model, baseUrl, systemPrompt, userMessage) {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + apiKey,
         'HTTP-Referer': 'https://razzle.lol',
-        'X-Title': 'Razzle War Room',
+        'X-Title': 'Razzle Situation Room',
       },
       body: JSON.stringify({
         model: model,
@@ -2121,7 +2121,7 @@ async function runAllAgents(scenario) {
 
 setupScenarioPanel();
 
-// ── AGENT BIO CARDS (War Room hero) ───────────────────────────────────
+// ── AGENT BIO CARDS (Situation Room hero) ───────────────────────────────────
 (function renderWarRoomBios() {
   var grid = document.getElementById('warroomBioGrid');
   if (!grid) return;

@@ -1,25 +1,43 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 15 (QA + UX Audit for Phases 11-14) — COMPLETE
-- All fixes applied inline during audit
+- Phase: 16 (Rename War Room → Situation Room) — COMPLETE
+- All 5 tasks PASS
 - Stage: PHASE GATE
-- Next: Check TICKETS.md, then generate Phase 16
+- Next: Commit and push
 
-## Phase 15: QA + UX Audit for Phases 11-14
-**Exit Criterion**: All CRITICAL and HIGH findings from Phases 11-14 audit are resolved. Code quality verified for new Mock Draft and Athletic Radar panels.
+## Phase 16: Rename War Room → Situation Room
+**Exit Criterion**: All references to "War Room" are renamed to "Situation Room" across the codebase — page titles, nav links, display names, CLAUDE.md, design docs, and any UI copy. The agents.html filename stays but the user-facing name is "Situation Room" everywhere.
 
-### Task 1: Fix HIGH — Stale state in Prospect Radar
+### Task 1: Rename War Room → Situation Room in all standalone HTML nav/footer links (~68 pages)
 **Status**: PASS
 **Attempts**: 1
-**Notes**: Added panelState reset at top of render function.
+**Notes**: Bulk sed replacement across all 72 frontend HTML files. Nav links and footer links all updated.
 
-### Task 2: Fix MEDIUM — Button order, aria-label, type safety, XSS, grade color
+### Task 2: Rename War Room → Situation Room in agents.html (the main page)
 **Status**: PASS
 **Attempts**: 1
-**Notes**: 5 fixes applied: button order (8,10,12,14), aria-label on remove buttons, parseFloat+isNaN guard, escapeHtml(position), default gradeColor to warm brown.
+**Notes**: Title, meta tags, h1, nav, canvas label, pro upsell text, footer all updated. File stays agents.html.
+
+### Task 3: Rename War Room → Situation Room in index.html (home page)
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Nav, hero section ("Six Minds. One Situation Room."), pricing copy, email waitlist, footer, JS comments all updated.
+
+### Task 4: Rename War Room → Situation Room in warroom.js, lab.html, lab.js
+**Status**: PASS
+**Attempts**: 1
+**Notes**: warroom.js palette comment, memory injection comment, API header, bio cards comment. lab.html nav link. lab.js had no occurrences.
+
+### Task 5: Rename War Room → Situation Room in docs and config (CLAUDE.md, DESIGN.md, ROADMAP.md, NORTH_STAR.md, agent-personas/*.md)
+**Status**: PASS
+**Attempts**: 1
+**Notes**: All docs, both ROADMAP.md files, CLAUDE.md, and all 6 agent persona files updated.
 
 ---
+
+## Phase 15: QA + UX Audit for Phases 11-14 — COMPLETE
+**Status**: All 2 tasks PASS
 
 ## Phase 14: Prospect Athletic Radar — COMPLETE
 **Status**: All 5 tasks PASS

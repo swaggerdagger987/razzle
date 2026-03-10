@@ -40,7 +40,7 @@ razzle/
 │   ├── index.html     # Landing page (home)
 │   ├── lab.html       # The Lab (screener)
 │   ├── league-intel.html
-│   ├── agents.html    # War Room (later)
+│   ├── agents.html    # Situation Room (later)
 │   ├── styles.css     # Single stylesheet, follows DESIGN.md
 │   ├── lab.js         # Screener logic
 │   └── app.js         # Shared logic
@@ -78,7 +78,7 @@ razzle/
 - Borders: 3px solid ink, 4px 4px 0 offset box-shadows
 - Position colors: QB=blue `#5b7fff`, RB=teal `#2ec4b6`, WR=terracotta `#d97757`, TE=purple `#8b5cf6`
 - Loading states: "pulling film..." not "Loading..."
-- NO dark mode (except War Room). NO gradients. NO thin 1px borders.
+- NO dark mode (except Situation Room). NO gradients. NO thin 1px borders.
 - Sticker/badge aesthetic, slightly rotated tier badges
 - Trust the user — don't over-explain in UI
 
@@ -155,7 +155,7 @@ The old FDL project at `C:\Users\mcgui\Documents\FDL` has working implementation
 - Sleeper API integration (`live_data.py` — fetch_sleeper_players_cached)
 - Screener query logic (`live_data.py` — fetch_screener_query)
 - Terminal server endpoints (`terminal_server.py`)
-- **Pixel War Room** (`pixel-agents/index.html` — complete canvas engine, 51KB):
+- **Pixel Situation Room** (`pixel-agents/index.html` — complete canvas engine, 51KB):
   - Canvas: 30×22 tile grid, 32px tiles, `image-rendering: pixelated`
   - Sprites: 16×24 frames, 7 cols × 4 rows, drawn at 2× scale (32×48)
   - Agent AI: state machine (IDLE/WALK/WORK_DESK/ANALYZE_BOARD/DISCUSS/THINK/COFFEE)

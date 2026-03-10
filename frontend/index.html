@@ -667,7 +667,7 @@
   <ul class="nav-links">
     <li><a href="/" class="active">Home</a></li>
     <li><a href="/lab.html">The Lab</a></li>
-    <li><a href="/agents.html">War Room</a></li>
+    <li><a href="/agents.html">Situation Room</a></li>
   </ul>
   <div class="nav-auth" id="nav-auth">
     <span class="nav-search-hint" onclick="document.querySelector('.cmd-palette-backdrop')?.classList.add('open'); document.querySelector('.cmd-palette-input')?.focus();" title="Quick search"><kbd>Ctrl+K</kbd> Search</span>
@@ -813,15 +813,15 @@
 <!-- AGENT BIO CARDS -->
 <div style="max-width:960px; margin:0 auto; padding:32px 24px;">
   <div class="section-label" style="text-align:center;">Meet the Team</div>
-  <h2 style="text-align:center; font-family:var(--font-display); font-size:28px; margin-bottom:20px;">Six Minds. One War Room.</h2>
+  <h2 style="text-align:center; font-family:var(--font-display); font-size:28px; margin-bottom:20px;">Six Minds. One Situation Room.</h2>
   <div class="agent-bio-grid" id="agentBioGrid"></div>
 </div>
 
 <!-- WAR ROOM DEMO -->
 <div class="demo-section">
   <div class="demo-inner">
-    <div class="section-label">The War Room</div>
-    <h2>This is a real manager's War Room.</h2>
+    <div class="section-label">The Situation Room</div>
+    <h2>This is a real manager's Situation Room.</h2>
     <p class="section-desc">Razzle and specialist agents with full league context. Personalized briefings, trade strategies, championship probability. This is what $240/year gets you.</p>
 
     <div id="demoCards" aria-live="polite"></div>
@@ -852,12 +852,12 @@
       <button class="btn-chunky" style="margin-top:12px; font-size:13px;" onclick="if(typeof startCheckout==='function'){startCheckout('month')}else{window.location='/agents.html'}">Get Started</button>
     </div>
   </div>
-  <p style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">The Lab is free forever. Pro unlocks the War Room.</p>
+  <p style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">The Lab is free forever. Pro unlocks the Situation Room.</p>
 </div>
 
 <!-- WAITLIST -->
 <div class="waitlist" id="waitlist">
-  <h2>Get notified when The War Room opens</h2>
+  <h2>Get notified when The Situation Room opens</h2>
   <p>personalized agent intelligence, $240/year, your league context</p>
   <div class="waitlist-form">
     <input type="email" class="input-chunky" id="waitlistEmail" placeholder="your@email.com">
@@ -994,7 +994,7 @@
     <span style="margin:0 8px;">|</span>
     <a href="/team/KC" style="color:var(--ink-light); text-decoration:none;">Teams</a>
     <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none;">League Intel</a>
-    <a href="/agents.html" style="color:var(--ink-light); text-decoration:none;">War Room</a>
+    <a href="/agents.html" style="color:var(--ink-light); text-decoration:none;">Situation Room</a>
   </div>
   <p><a href="/" style="color:var(--orange); text-decoration:none;">razzle.lol</a> — let's razzle dazzle em baby</p>
   <p style="margin-top:6px;">powered by nflverse + sportsdataverse | made for Reddit</p>
@@ -1002,7 +1002,7 @@
 
 <script src="app.js"></script>
 <script>
-// War Room demo rotation — shuffled on each visit
+// Situation Room demo rotation — shuffled on each visit
 const demoBriefings = [
   // RAZZLE (Chief of Staff) — urgent/action items
   { agent: '🐯 Razzle', urgency: 'urgent', text: '<r>████████</r> just dropped <r>██████</r> to waivers. Based on <r>████</r>\'s FAAB patterns, they\'ll bid $<r>██</r>. You should bid $<r>██</r> to guarantee the pickup. This changes your championship odds from <r>██</r>% to <r>██</r>%.' },
