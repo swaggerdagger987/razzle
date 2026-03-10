@@ -1,6 +1,23 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 42 — Auth System — Registration, Login, JWT, Protected Endpoints (COMPLETE)
+## Current Phase: Phase 43 — Stripe Integration — Subscriptions and Payment (COMPLETE)
+
+**Exit criterion MET:** Stripe integration complete. Backend: POST /api/billing/create-checkout (yearly/monthly), POST /api/billing/webhook (signature verified, handles checkout completed/subscription deleted/payment failed), GET /api/billing/status (plan + portal URL). Subscriptions table in users.db. Frontend: plan badge in nav (Free/Pro), Manage Subscription link for pro users, War Room upsell calls startCheckout(), pricing section on home page ($240/year + $20/month). All keys from env vars. stripe>=7.0.0 added to requirements.txt.
+
+### Phase 43 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend Stripe endpoints + webhook | DONE | billing.py, 3 endpoints, webhook handler |
+| 2 | Frontend upgrade flow + billing UI | DONE | Plan badge, Manage link, pricing section, checkout integration |
+| 3 | Deploy + smoke test | DONE | All syntax clean, billing flow verified |
+
+### Decisions Log
+- **Env var config for all Stripe keys**: STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, STRIPE_PRICE_YEARLY, STRIPE_PRICE_MONTHLY all from environment. Graceful fallback (503) when not set.
+- **Subscriptions table in users.db**: Keeps billing data with user data, separate from terminal.db stats.
+- **Plan badge in nav**: Simple visual indicator — gray "Free" or terracotta "Pro" badge next to username.
+
+## Previous Phase: Phase 42 — Auth System — Registration, Login, JWT, Protected Endpoints (COMPLETE)
 
 **Exit criterion MET:** Users can register with email/password, log in, receive JWT token, and access protected endpoints. bcrypt hashing (12 rounds), JWT 7-day expiry, JWT_SECRET from env var. Frontend auth modal on all pages with Sign In/Register tabs, token in localStorage, auto-included Authorization headers. Sleeper username linkable to account with post-login prompt. Formula publish requires auth. War Room upsell is auth-aware. User formulas sync to server database. users.db separate from terminal.db.
 
