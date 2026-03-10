@@ -1,6 +1,27 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 69 — Breakout Candidate Finder (COMPLETE)
+## Current Phase: Phase 70 — Buy Low / Sell High Dashboard (COMPLETE)
+
+**Exit criterion MET:** /buysell.html page shows two columns: Buy Low candidates (high efficiency, low dynasty rank) and Sell High candidates (low efficiency, high dynasty rank). Each player rendered as a comic-strip card with position-colored top stripe, rank, headshot, name, position badge, team, age badge (young/prime/aging/veteran), efficiency grade badge (A+ to F, color-coded), value mismatch bar, Caveat annotation, and position-specific efficiency stats (QB: Y/A, TD%, INT%; RB: YPC, Y/TGT, TD%; WR/TE: Y/TGT, Catch%, YAC/R, TD%). Position filter tabs (All/QB/RB/WR/TE). Season selector dropdown. PNG export via html2canvas with watermark. Click card → player profile. "Buy/Sell" nav link added to all 14 HTML pages (nav + footer). Sitemap updated. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, hand annotations, position colors.
+
+### Phase 70 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend buy-sell-candidates endpoint | DONE | GET /api/buy-sell-candidates, position-specific efficiency, dynasty value comparison, age amplifier |
+| 2 | Buy/Sell page with two-column layout | DONE | Buy Low (green) / Sell High (red), efficiency grades, mismatch bars, responsive, PNG export |
+| 3 | Nav links + sitemap + analytics | DONE | All 14 pages updated, sitemap entry, pageview tracking |
+| 4 | Smoke test | DONE | Python + JS syntax clean, 16/16 design checks, XSS safe |
+
+### Decisions Log
+- **Buy Low / Sell High as Phase 70**: With dynasty trade season in full swing pre-draft, identifying value mismatches is core content for r/DynastyFF. "Buy low on X, sell high on Y" is the most common dynasty discussion format. Making these debates data-driven and screenshottable.
+- **Efficiency vs dynasty rank percentile**: Comparing efficiency percentile (within position) against dynasty value rank percentile reveals true mismatches. A player can have elite efficiency but low dynasty value (buy) or high dynasty value but mediocre efficiency (sell).
+- **Position-specific efficiency metrics**: QB uses Y/A + TD% - INT%. RB uses YPC + Y/TGT + TD%. WR/TE uses Y/TGT + Catch% + YAC/R + TD%. Each position's efficiency is measured by the stats that matter most for that role.
+- **Age amplifier**: Young buy lows get a boost (more upside), old sell highs get a boost (more decline risk). Makes the signals dynasty-relevant, not just redraft.
+- **10-point mismatch threshold**: Prevents marginal candidates from cluttering the lists. Only meaningful mismatches qualify.
+- **Two-column layout**: Side-by-side Buy/Sell makes the page immediately scannable and highly screenshottable. Green up-arrow vs red down-arrow gives instant visual signal.
+
+## Previous Phase: Phase 69 — Breakout Candidate Finder (COMPLETE)
 
 **Exit criterion MET:** /breakouts.html page shows top breakout candidates ranked by Razzle Breakout Score (RBS) measuring the gap between opportunity metrics (snap%, target share, carries, air yards) and production (PPG). Each candidate rendered as a comic-strip card with position-colored top stripe, rank badge, headshot, name, position badge, team, age badge (young/prime/aging), RBS score, opportunity vs production horizontal bars, Caveat annotation, and key stats (PPG, snap%, position-specific usage, games). Position filter tabs (All/QB/RB/WR/TE). Season selector dropdown. PNG export via html2canvas with watermark. Click card → player profile. "Breakouts" nav link added to all 13 HTML pages (nav + footer). Sitemap updated. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, hand annotations, position colors.
 

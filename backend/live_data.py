@@ -4582,3 +4582,297 @@ def fetch_breakout_candidates(season=None, position=None, limit=50):
         }
     finally:
         conn.close()
+
+
+# ---------------------------------------------------------------------------
+# Buy Low / Sell High — Dynasty value mismatch finder
+# ---------------------------------------------------------------------------
+
+_EFFICIENCY_ANNOTATIONS_BUY = [
+    "efficiency says undervalued",
+    "production quality exceeds ranking",
+    "the market is sleeping on this one",
+    "better than his ADP suggests",
+    "sneaky good efficiency numbers",
+    "the stats say buy",
+    "value mismatch detected",
+    "producing above his pay grade",
+    "efficiency trending the right way",
+    "under the radar performer",
+    "league winner territory",
+    "the film doesn't lie",
+    "market hasn't caught up yet",
+    "quiet performer, loud stats",
+    "discount dynasty asset",
+]
+
+_EFFICIENCY_ANNOTATIONS_SELL = [
+    "efficiency says overvalued",
+    "ranking exceeds production quality",
+    "the market is too high on this one",
+    "numbers trending the wrong way",
+    "volume masking declining efficiency",
+    "the stats say sell",
+    "value mismatch detected",
+    "producing below his price tag",
+    "efficiency heading south",
+    "sell before the cliff",
+    "name value exceeding stat value",
+    "the film tells a different story",
+    "market hasn't adjusted yet",
+    "loud name, quiet production",
+    "premium dynasty price, discount stats",
+]
+
+
+def _efficiency_grade(pct):
+    """Convert efficiency percentile (0-100) to letter grade."""
+    if pct >= 95:
+        return "A+"
+    if pct >= 88:
+        return "A"
+    if pct >= 80:
+        return "A-"
+    if pct >= 72:
+        return "B+"
+    if pct >= 64:
+        return "B"
+    if pct >= 56:
+        return "B-"
+    if pct >= 48:
+        return "C+"
+    if pct >= 40:
+        return "C"
+    if pct >= 32:
+        return "C-"
+    if pct >= 24:
+        return "D+"
+    if pct >= 16:
+        return "D"
+    if pct >= 8:
+        return "D-"
+    return "F"
+
+
+def fetch_buy_sell_candidates(season=None, position=None, limit=15):
+    """Return players split into buy-low and sell-high based on efficiency vs dynasty rank."""
+    conn = get_conn()
+
+    try:
+        # Determine season + available seasons
+        row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
+        available_seasons = [r[0] for r in row] if row else [2024]
+        if not season:
+            season = available_seasons[0] if available_seasons else 2024
+
+        pos_filter = ""
+        params = [season]
+        if position and position.upper() in ("QB", "RB", "WR", "TE"):
+            pos_filter = "AND p.position = ?"
+            params.append(position.upper())
+
+        # Get all fantasy-relevant players with season stats
+        query = f"""
+            SELECT
+                p.player_id, p.full_name, p.position, p.team, p.age,
+                p.headshot_url,
+                SUM(s.fantasy_points_ppr) as total_ppr,
+                COUNT(DISTINCT s.week) as games,
+                SUM(s.rushing_yards) as rush_yds,
+                SUM(s.carries) as carries,
+                SUM(s.receiving_yards) as rec_yds,
+                SUM(s.targets) as targets,
+                SUM(s.receptions) as receptions,
+                SUM(s.touchdowns) as tds,
+                SUM(s.passing_yards) as pass_yds,
+                SUM(s.attempts) as pass_att,
+                SUM(s.passing_tds) as pass_tds,
+                SUM(s.turnovers) as turnovers,
+                SUM(s.receiving_yards_after_catch) as yac
+            FROM players p
+            JOIN player_week_stats s
+                ON s.player_id = p.player_id AND s.season = ?
+            WHERE p.position IN ('QB','RB','WR','TE')
+              AND p.fantasy_relevant = 1
+              {pos_filter}
+            GROUP BY p.player_id
+            HAVING games >= 6
+            ORDER BY total_ppr DESC
+        """
+        rows = conn.execute(query, params).fetchall()
+
+        if not rows:
+            return {
+                "season": season,
+                "available_seasons": available_seasons,
+                "buy_low": [],
+                "sell_high": [],
+            }
+
+        # Build player list with raw stats + dynasty value
+        players = []
+        for r in rows:
+            games = r[7] or 1
+            ppg = round((r[6] or 0) / games, 2)
+            rush_yds = r[8] or 0
+            carries = r[9] or 0
+            rec_yds = r[10] or 0
+            targets = r[11] or 0
+            receptions = r[12] or 0
+            tds = r[13] or 0
+            pass_yds = r[14] or 0
+            pass_att = r[15] or 0
+            pass_tds = r[16] or 0
+            turnovers = r[17] or 0
+            yac = r[18] or 0
+            pos = r[2] or "WR"
+            age = r[4]
+
+            # Compute dynasty value for ranking
+            dynasty_val = compute_trade_value(ppg, age, pos)
+
+            # Compute position-specific efficiency metrics
+            if pos == "QB":
+                yards_per_att = round(pass_yds / pass_att, 2) if pass_att > 0 else 0
+                td_rate = round((pass_tds / pass_att) * 100, 2) if pass_att > 0 else 0
+                int_rate = round((turnovers / pass_att) * 100, 2) if pass_att > 0 else 0
+                eff_stats = {
+                    "yards_per_att": yards_per_att,
+                    "td_rate": td_rate,
+                    "int_rate": int_rate,
+                }
+                # QB efficiency: high Y/A + high TD% + low INT%
+                eff_raw = yards_per_att * 8 + td_rate * 10 - int_rate * 8
+            elif pos == "RB":
+                ypc = round(rush_yds / carries, 2) if carries > 0 else 0
+                yds_per_tgt = round(rec_yds / targets, 2) if targets > 0 else 0
+                touches = carries + receptions
+                td_rate = round((tds / touches) * 100, 2) if touches > 0 else 0
+                eff_stats = {
+                    "yards_per_carry": ypc,
+                    "yards_per_target": yds_per_tgt,
+                    "td_rate": td_rate,
+                }
+                eff_raw = ypc * 10 + yds_per_tgt * 3 + td_rate * 5
+            else:
+                # WR / TE
+                yds_per_tgt = round(rec_yds / targets, 2) if targets > 0 else 0
+                catch_rate = round((receptions / targets) * 100, 1) if targets > 0 else 0
+                yac_per_rec = round(yac / receptions, 2) if receptions > 0 else 0
+                td_rate = round((tds / receptions) * 100, 2) if receptions > 0 else 0
+                eff_stats = {
+                    "yards_per_target": yds_per_tgt,
+                    "catch_rate": catch_rate,
+                    "yac_per_rec": yac_per_rec,
+                    "td_rate": td_rate,
+                }
+                eff_raw = yds_per_tgt * 5 + catch_rate * 0.5 + yac_per_rec * 3 + td_rate * 4
+
+            players.append({
+                "player_id": r[0],
+                "name": r[1] or "Unknown",
+                "position": pos,
+                "team": r[3] or "FA",
+                "age": age,
+                "headshot_url": r[5] or "",
+                "ppg": ppg,
+                "games": games,
+                "dynasty_value": dynasty_val,
+                "eff_raw": eff_raw,
+                "eff_stats": eff_stats,
+            })
+
+        # Compute percentiles within each position group
+        by_pos = {}
+        for p in players:
+            pos = p["position"]
+            if pos not in by_pos:
+                by_pos[pos] = []
+            by_pos[pos].append(p)
+
+        for pos, pos_players in by_pos.items():
+            n = len(pos_players)
+            if n < 3:
+                for p in pos_players:
+                    p["eff_pct"] = 50
+                    p["rank_pct"] = 50
+                    p["mismatch"] = 0
+                continue
+
+            # Efficiency percentile
+            eff_sorted = sorted(pos_players, key=lambda x: x["eff_raw"])
+            for i, p in enumerate(eff_sorted):
+                p["eff_pct"] = round((i / (n - 1)) * 100)
+
+            # Dynasty rank percentile (higher dynasty value = higher rank percentile)
+            rank_sorted = sorted(pos_players, key=lambda x: x["dynasty_value"])
+            for i, p in enumerate(rank_sorted):
+                p["rank_pct"] = round((i / (n - 1)) * 100)
+
+            # Mismatch = efficiency_pct - rank_pct
+            # Positive = buy low (efficient but low ranked)
+            # Negative = sell high (ranked high but inefficient)
+            for p in pos_players:
+                mismatch = p["eff_pct"] - p["rank_pct"]
+                # Age amplifier: young buy lows get bonus, old sell highs get penalty
+                age = p["age"] or 27
+                if mismatch > 0:
+                    # Buy low: younger = stronger signal
+                    age_mult = 1.0 + max(0, (27 - age)) * 0.05
+                else:
+                    # Sell high: older = stronger signal
+                    age_mult = 1.0 + max(0, (age - 25)) * 0.05
+                p["mismatch"] = round(mismatch * age_mult, 1)
+
+        # Flatten all players
+        all_players = []
+        for pos_players in by_pos.values():
+            all_players.extend(pos_players)
+
+        # Split into buy low (positive mismatch) and sell high (negative mismatch)
+        # Minimum threshold of 10 points mismatch to qualify
+        buy_candidates = sorted(
+            [p for p in all_players if p["mismatch"] >= 10],
+            key=lambda x: x["mismatch"],
+            reverse=True,
+        )[:limit]
+
+        sell_candidates = sorted(
+            [p for p in all_players if p["mismatch"] <= -10],
+            key=lambda x: x["mismatch"],
+        )[:limit]
+
+        # Clean up internal fields and add presentation data
+        def _format_player(p, idx, is_buy):
+            grade = _efficiency_grade(p["eff_pct"])
+            annotations = _EFFICIENCY_ANNOTATIONS_BUY if is_buy else _EFFICIENCY_ANNOTATIONS_SELL
+            return {
+                "player_id": p["player_id"],
+                "name": p["name"],
+                "position": p["position"],
+                "team": p["team"],
+                "age": p["age"],
+                "headshot_url": p["headshot_url"],
+                "ppg": p["ppg"],
+                "games": p["games"],
+                "dynasty_value": p["dynasty_value"],
+                "dynasty_rank_pct": p["rank_pct"],
+                "efficiency_pct": p["eff_pct"],
+                "efficiency_grade": grade,
+                "mismatch_score": abs(p["mismatch"]),
+                "eff_stats": p["eff_stats"],
+                "rank": idx + 1,
+                "annotation": annotations[idx % len(annotations)],
+            }
+
+        buy_low = [_format_player(p, i, True) for i, p in enumerate(buy_candidates)]
+        sell_high = [_format_player(p, i, False) for i, p in enumerate(sell_candidates)]
+
+        return {
+            "season": season,
+            "available_seasons": available_seasons,
+            "buy_low": buy_low,
+            "sell_high": sell_high,
+        }
+    finally:
+        conn.close()

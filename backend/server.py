@@ -886,6 +886,7 @@ def sitemap_xml():
         ("/prospects.html", "0.9", "weekly"),
         ("/scarcity.html", "0.8", "weekly"),
         ("/breakouts.html", "0.8", "weekly"),
+        ("/buysell.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1028,6 +1029,14 @@ def breakout_candidates(season: int = 0, position: str = "", limit: int = 50):
     s = season if season > 0 else None
     pos = position.upper() if position else None
     return live_data.fetch_breakout_candidates(season=s, position=pos, limit=max(1, min(limit, 100)))
+
+
+@app.get("/api/buy-sell-candidates")
+def buy_sell_candidates(season: int = 0, position: str = "", limit: int = 15):
+    """Return players split into buy-low and sell-high based on efficiency vs dynasty rank."""
+    s = season if season > 0 else None
+    pos = position.upper() if position else None
+    return live_data.fetch_buy_sell_candidates(season=s, position=pos, limit=max(1, min(limit, 30)))
 
 
 @app.get("/api/analytics/summary")
