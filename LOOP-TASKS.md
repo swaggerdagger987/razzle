@@ -46,7 +46,8 @@
 - League Intel page respects connection status
 
 ## Task 4: Protect War Room endpoints + free vs paid gating
-**Status**: PENDING
+**Status**: PASS
+**Result**: Added require_plan() helper to server.py (returns 403 for insufficient plan). Formula publish requires auth (401 without token, uses account name as creator). War Room upsell CTA is auth-aware: "Sign In" for logged-out, "Connect Sleeper" for no-sleeper, "Upgrade to Pro" for free-plan. Formula Store handles 401 with auth prompt. Lab fully accessible without login.
 **Acceptance Criteria**:
 - Lab works fully without login
 - Formula publish requires auth
@@ -91,8 +92,8 @@
 ## Loop State
 ```
 Current Phase: 42
-Current Task: 4
+Current Task: 5
 Current Stage: BUILD
 Attempt: 1
-Tasks Completed: 3/7
+Tasks Completed: 4/7
 ```

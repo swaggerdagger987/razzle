@@ -186,6 +186,16 @@ def require_auth(request: Request) -> dict:
     return result["user"]
 
 
+def require_plan(request: Request, plan: str = "pro"):
+    """Verify auth + plan. Returns (user, error_response). If error_response is not None, return it."""
+    user = require_auth(request)
+    if not user:
+        return None, JSONResponse({"error": "Authentication required"}, status_code=401)
+    if user.get("plan", "free") != plan and plan != "free":
+        return user, JSONResponse({"error": f"Requires {plan} plan"}, status_code=403)
+    return user, None
+
+
 @app.post("/api/auth/register")
 async def auth_register(request: Request):
     body = await request.json()
@@ -460,13 +470,16 @@ def get_formula_store(
 
 @app.post("/api/formulas/publish")
 async def publish_formula(request: Request):
+    user = require_auth(request)
+    if not user:
+        return JSONResponse({"error": "Sign in to publish formulas"}, status_code=401)
     body = await request.json()
     return live_data.publish_formula(
         name=body.get("name", ""),
         description=body.get("description", ""),
         position_tags=body.get("position_tags", []),
         stat_weights=body.get("stat_weights", {}),
-        creator_name=body.get("creator_name", "anonymous"),
+        creator_name=user.get("sleeper_username") or user["email"].split("@")[0],
     )
 
 

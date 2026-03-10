@@ -351,9 +351,10 @@ async function submitPublish() {
   });
 
   try {
+    var authHeaders = typeof getAuthHeaders === "function" ? getAuthHeaders() : {};
     const resp = await fetch("/api/formulas/publish", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: Object.assign({ "Content-Type": "application/json" }, authHeaders),
       body: JSON.stringify({
         name,
         description,
@@ -362,6 +363,11 @@ async function submitPublish() {
         creator_name: creator
       })
     });
+    if (resp.status === 401) {
+      showStoreToast("Sign in to publish formulas");
+      if (typeof openAuthModal === "function") openAuthModal();
+      return;
+    }
     const data = await resp.json();
     if (data.status === "ok") {
       // Track locally

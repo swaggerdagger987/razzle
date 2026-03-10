@@ -1604,10 +1604,35 @@ function renderContextBadges() {
 
   host.innerHTML = badges.join('');
 
-  // Show/hide pro upsell based on league context
+  // Show/hide pro upsell based on league context + auth
   var upsellZone = document.getElementById('proUpsellZone');
   if (upsellZone) {
-    upsellZone.style.display = leagueMode ? 'none' : 'block';
+    var user = null;
+    try { user = JSON.parse(localStorage.getItem("razzle_user")); } catch(e) {}
+    var isPro = user && user.plan === "pro";
+    // Hide upsell if in league mode OR pro user
+    upsellZone.style.display = (leagueMode || isPro) ? 'none' : 'block';
+    // Update CTA based on auth state
+    var btn = document.getElementById('proUpsellBtn');
+    var hint = document.getElementById('proUpsellHint');
+    if (btn && hint) {
+      if (!user) {
+        btn.textContent = 'Sign In to Get Started';
+        btn.href = '#';
+        btn.onclick = function(e) { e.preventDefault(); if (typeof openAuthModal === 'function') openAuthModal(); };
+        hint.textContent = 'free preview — sign in then connect Sleeper';
+      } else if (!user.sleeper_username) {
+        btn.textContent = 'Connect Sleeper to Unlock';
+        btn.href = '/league-intel.html';
+        btn.onclick = null;
+        hint.textContent = 'free preview — connect your leagues for full context';
+      } else {
+        btn.textContent = 'Upgrade to Pro';
+        btn.href = '#';
+        btn.onclick = null;
+        hint.textContent = '$240/year — full league context, agent memory, personalized briefings';
+      }
+    }
   }
 }
 
