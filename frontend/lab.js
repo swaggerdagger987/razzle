@@ -2652,6 +2652,7 @@ function renderProfile(data, container) {
   }
   html += `</div>`;
   html += `<div style="margin-left:auto; display:flex; gap:8px;">`;
+  html += `<button class="btn-chunky" onclick="loadBoomBust('${player.player_id}')" style="font-size:11px; padding:6px 14px; border-color:var(--green);">Boom/Bust</button>`;
   html += `<button class="btn-chunky" onclick="loadPlayerComps('${player.player_id}')" style="font-size:11px; padding:6px 14px; border-color:var(--orange);">Find Comps</button>`;
   html += `<button class="btn-primary" onclick="exportProfileImage()" style="font-size:11px; padding:6px 14px;">Export PNG</button>`;
   html += `</div>`;
@@ -2733,6 +2734,9 @@ function renderProfile(data, container) {
     html += `<canvas id="profileArcCanvas" width="720" height="240" style="border:2px solid var(--ink); border-radius:8px; background:var(--bg); width:100%;"></canvas>`;
     html += `</div>`;
   }
+
+  // Boom/Bust section placeholder
+  html += `<div id="profileBoomBustSection"></div>`;
 
   // Comps section placeholder
   html += `<div id="profileCompsSection"></div>`;
@@ -8308,6 +8312,509 @@ function exportCompsImage() {
   link.click();
 }
 
+
+// ── Boom/Bust Analyzer ──────────────────────────────────────────────
+
+let _boomBustData = null;
+
+async function loadBoomBust(playerId) {
+  const section = document.getElementById("profileBoomBustSection");
+  if (!section) return;
+
+  section.innerHTML = `<div style="text-align:center; padding:30px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">studying the game log variance...</div>`;
+
+  try {
+    const data = await apiFetch(`/api/players/${playerId}/boom-bust`);
+    if (data.error) {
+      section.innerHTML = `<div style="text-align:center; padding:30px; font-family:var(--font-hand); font-size:18px; color:var(--ink-light);">${escapeHtml(data.error)}</div>`;
+      return;
+    }
+    _boomBustData = data;
+    renderBoomBust(data, section);
+  } catch (err) {
+    section.innerHTML = `<div style="text-align:center; padding:30px; font-family:var(--font-hand); font-size:18px; color:var(--red);">fumbled the boom/bust analysis... ${escapeHtml(err.message)}</div>`;
+  }
+}
+
+function renderBoomBust(data, container) {
+  const { player, season, games_played, weekly_scores, mean_ppg, median_ppg,
+          floor_ppg, ceiling_ppg, stdev, boom_rate, bust_rate,
+          boom_threshold, bust_threshold, position_avg_ppg,
+          consistency_score, grade, position_rank, position_total } = data;
+
+  const pos = (player.position || "").toUpperCase();
+  const posColors = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
+  const posColor = posColors[pos] || "var(--ink)";
+
+  // Grade color
+  const gradeColor = grade.startsWith("A") ? "var(--green)" :
+                     grade.startsWith("B") ? "#5b7fff" :
+                     grade.startsWith("C") ? "var(--orange)" :
+                     grade.startsWith("D") ? "#e87422" : "var(--red)";
+
+  let html = "";
+
+  // Section header
+  html += `<div class="profile-section-title" style="display:flex; align-items:center; justify-content:space-between;">`;
+  html += `<span>Boom/Bust Profile — ${season} Season</span>`;
+  html += `<button class="btn-chunky" onclick="exportBoomBustImage()" style="font-size:10px; padding:4px 10px;">Export Boom/Bust PNG</button>`;
+  html += `</div>`;
+
+  // Annotation
+  html += `<div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); margin-bottom:12px; padding-left:4px;">boom = ${boom_threshold}+ PPR pts (1.5× ${pos} avg) · bust = ${bust_threshold} or below (0.5× ${pos} avg)</div>`;
+
+  // Grade badge + stat cards row
+  html += `<div style="display:flex; gap:12px; align-items:flex-start; flex-wrap:wrap; margin-bottom:16px;">`;
+
+  // Grade sticker
+  html += `<div style="background:${gradeColor}; color:white; font-family:var(--font-display); font-size:36px; font-weight:700; width:72px; height:72px; display:flex; align-items:center; justify-content:center; border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); transform:rotate(-3deg); flex-shrink:0;">`;
+  html += grade;
+  html += `</div>`;
+
+  // Stat cards
+  const stats = [
+    { label: "Median", value: median_ppg.toFixed(1), sub: "PPR/G" },
+    { label: "Floor", value: floor_ppg.toFixed(1), sub: "10th pct" },
+    { label: "Ceiling", value: ceiling_ppg.toFixed(1), sub: "90th pct" },
+    { label: "Boom%", value: boom_rate.toFixed(0) + "%", sub: `${Math.round(boom_rate * games_played / 100)}/${games_played} wks` },
+    { label: "Bust%", value: bust_rate.toFixed(0) + "%", sub: `${Math.round(bust_rate * games_played / 100)}/${games_played} wks` },
+    { label: "Rank", value: `#${position_rank}`, sub: `of ${position_total} ${pos}s` },
+  ];
+
+  html += `<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(90px, 1fr)); gap:8px; flex:1;">`;
+  for (const st of stats) {
+    const cardColor = st.label === "Boom%" ? "var(--green)" :
+                      st.label === "Bust%" ? "var(--red)" : posColor;
+    html += `<div style="background:var(--bg-card); border:2px solid var(--ink); border-radius:8px; box-shadow:3px 3px 0 var(--ink); padding:8px; text-align:center;">`;
+    html += `<div style="font-family:var(--font-display); font-size:20px; font-weight:700; color:${cardColor};">${st.value}</div>`;
+    html += `<div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-medium); text-transform:uppercase;">${st.label}</div>`;
+    html += `<div style="font-family:var(--font-mono); font-size:9px; color:var(--ink-light);">${st.sub}</div>`;
+    html += `</div>`;
+  }
+  html += `</div>`;
+  html += `</div>`;
+
+  // Histogram canvas
+  html += `<div class="profile-chart-wrap">`;
+  html += `<canvas id="boomBustHistogram" width="720" height="280" style="border:2px solid var(--ink); border-radius:8px; background:var(--bg); width:100%;"></canvas>`;
+  html += `</div>`;
+
+  // Floor-ceiling range bar
+  html += `<div style="margin-top:12px; padding:12px; background:var(--bg-card); border:2px solid var(--ink); border-radius:8px;">`;
+  html += `<div style="font-family:var(--font-display); font-size:12px; text-transform:uppercase; margin-bottom:8px; color:var(--ink-medium);">Score Range</div>`;
+  html += `<canvas id="boomBustRangeBar" width="720" height="50" style="width:100%; height:50px;"></canvas>`;
+  html += `</div>`;
+
+  container.innerHTML = html;
+
+  // Draw charts after DOM update
+  requestAnimationFrame(() => {
+    drawBoomBustHistogram(data);
+    drawBoomBustRangeBar(data);
+  });
+}
+
+function drawBoomBustHistogram(data) {
+  const canvas = document.getElementById("boomBustHistogram");
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  const { weekly_scores, boom_threshold, bust_threshold, player } = data;
+  const scores = weekly_scores.map(w => w.score);
+  const pos = (player.position || "").toUpperCase();
+  const posHex = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  const posColor = posHex[pos] || "#d97757";
+
+  // Build histogram buckets (5-point buckets)
+  const maxScore = Math.max(...scores, boom_threshold + 5);
+  const bucketSize = 5;
+  const numBuckets = Math.ceil(maxScore / bucketSize) + 1;
+  const buckets = new Array(numBuckets).fill(0);
+  for (const s of scores) {
+    const idx = Math.min(Math.floor(s / bucketSize), numBuckets - 1);
+    buckets[idx]++;
+  }
+  const maxCount = Math.max(...buckets, 1);
+
+  // Chart area
+  const pad = { top: 30, right: 20, bottom: 45, left: 45 };
+  const cW = W - pad.left - pad.right;
+  const cH = H - pad.top - pad.bottom;
+  const barW = Math.floor(cW / numBuckets) - 2;
+
+  // Y-axis labels
+  ctx.fillStyle = "#4a4a5e";
+  ctx.font = "11px 'Space Mono', monospace";
+  ctx.textAlign = "right";
+  for (let i = 0; i <= maxCount; i++) {
+    const y = pad.top + cH - (i / maxCount) * cH;
+    ctx.fillText(i.toString(), pad.left - 6, y + 4);
+    ctx.strokeStyle = "#e0d5c5";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(pad.left, y);
+    ctx.lineTo(W - pad.right, y);
+    ctx.stroke();
+  }
+
+  // Draw bars
+  for (let i = 0; i < numBuckets; i++) {
+    const x = pad.left + i * (cW / numBuckets) + 1;
+    const barH = (buckets[i] / maxCount) * cH;
+    const y = pad.top + cH - barH;
+    const bucketMid = (i + 0.5) * bucketSize;
+
+    // Color: green for boom, red for bust, position color for middle
+    if (bucketMid >= boom_threshold) {
+      ctx.fillStyle = "#2ec4b6";
+    } else if ((i + 1) * bucketSize <= bust_threshold) {
+      ctx.fillStyle = "#e63946";
+    } else {
+      ctx.fillStyle = posColor;
+    }
+
+    ctx.fillRect(x, y, barW, barH);
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(x, y, barW, barH);
+
+    // X-axis label
+    ctx.fillStyle = "#4a4a5e";
+    ctx.font = "10px 'Space Mono', monospace";
+    ctx.textAlign = "center";
+    ctx.fillText(`${i * bucketSize}`, x + barW / 2, pad.top + cH + 16);
+  }
+
+  // X-axis title
+  ctx.fillStyle = "#4a4a5e";
+  ctx.font = "11px 'Space Mono', monospace";
+  ctx.textAlign = "center";
+  ctx.fillText("Fantasy Points (PPR)", W / 2, H - 5);
+
+  // Y-axis title
+  ctx.save();
+  ctx.translate(12, H / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillStyle = "#4a4a5e";
+  ctx.font = "11px 'Space Mono', monospace";
+  ctx.textAlign = "center";
+  ctx.fillText("Weeks", 0, 0);
+  ctx.restore();
+
+  // Boom threshold line
+  const boomX = pad.left + (boom_threshold / bucketSize) * (cW / numBuckets);
+  if (boomX < W - pad.right) {
+    ctx.strokeStyle = "#2ec4b6";
+    ctx.lineWidth = 2;
+    ctx.setLineDash([6, 4]);
+    ctx.beginPath();
+    ctx.moveTo(boomX, pad.top);
+    ctx.lineTo(boomX, pad.top + cH);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = "#2ec4b6";
+    ctx.font = "bold 11px 'Space Mono', monospace";
+    ctx.textAlign = "left";
+    ctx.fillText("BOOM", boomX + 4, pad.top + 14);
+  }
+
+  // Bust threshold line
+  const bustX = pad.left + (bust_threshold / bucketSize) * (cW / numBuckets);
+  if (bustX > pad.left) {
+    ctx.strokeStyle = "#e63946";
+    ctx.lineWidth = 2;
+    ctx.setLineDash([6, 4]);
+    ctx.beginPath();
+    ctx.moveTo(bustX, pad.top);
+    ctx.lineTo(bustX, pad.top + cH);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = "#e63946";
+    ctx.font = "bold 11px 'Space Mono', monospace";
+    ctx.textAlign = "right";
+    ctx.fillText("BUST", bustX - 4, pad.top + 14);
+  }
+
+  // Title annotation
+  ctx.fillStyle = "#8a8a9e";
+  ctx.font = "16px 'Caveat', cursive";
+  ctx.textAlign = "right";
+  ctx.fillText("weekly score distribution", W - pad.right, pad.top - 8);
+}
+
+function drawBoomBustRangeBar(data) {
+  const canvas = document.getElementById("boomBustRangeBar");
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  const { floor_ppg, ceiling_ppg, median_ppg, mean_ppg, player } = data;
+  const pos = (player.position || "").toUpperCase();
+  const posHex = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  const posColor = posHex[pos] || "#d97757";
+
+  const maxVal = Math.max(ceiling_ppg * 1.2, 35);
+  const pad = { left: 40, right: 40 };
+  const barY = 16, barH = 18;
+  const cW = W - pad.left - pad.right;
+
+  const toX = (val) => pad.left + (val / maxVal) * cW;
+
+  // Floor-ceiling range bar
+  const floorX = toX(floor_ppg);
+  const ceilX = toX(ceiling_ppg);
+  ctx.fillStyle = posColor + "40";
+  ctx.fillRect(floorX, barY, ceilX - floorX, barH);
+  ctx.strokeStyle = posColor;
+  ctx.lineWidth = 2;
+  ctx.strokeRect(floorX, barY, ceilX - floorX, barH);
+
+  // Median marker
+  const medX = toX(median_ppg);
+  ctx.fillStyle = posColor;
+  ctx.fillRect(medX - 2, barY - 4, 4, barH + 8);
+
+  // Labels
+  ctx.font = "bold 10px 'Space Mono', monospace";
+  ctx.textAlign = "center";
+  ctx.fillStyle = "#e63946";
+  ctx.fillText(floor_ppg.toFixed(1), floorX, barY - 4);
+  ctx.fillStyle = posColor;
+  ctx.fillText(median_ppg.toFixed(1), medX, H - 2);
+  ctx.fillStyle = "#2ec4b6";
+  ctx.fillText(ceiling_ppg.toFixed(1), ceilX, barY - 4);
+
+  // Tiny labels
+  ctx.font = "9px 'Space Mono', monospace";
+  ctx.fillStyle = "#8a8a9e";
+  ctx.textAlign = "center";
+  ctx.fillText("FLOOR", floorX, H - 2);
+  ctx.fillText("MED", medX, barY - 14 > 0 ? barY - 14 : barY + barH + 14);
+  ctx.fillText("CEILING", ceilX, H - 2);
+}
+
+function exportBoomBustImage() {
+  if (!_boomBustData) return;
+  const data = _boomBustData;
+  const { player, season, games_played, weekly_scores, mean_ppg, median_ppg,
+          floor_ppg, ceiling_ppg, boom_rate, bust_rate,
+          boom_threshold, bust_threshold, consistency_score, grade,
+          position_rank, position_total } = data;
+
+  const pos = (player.position || "").toUpperCase();
+  const posHex = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  const posColor = posHex[pos] || "#d97757";
+  const gradeColor = grade.startsWith("A") ? "#2ec4b6" :
+                     grade.startsWith("B") ? "#5b7fff" :
+                     grade.startsWith("C") ? "#d97757" :
+                     grade.startsWith("D") ? "#e87422" : "#e63946";
+
+  const canvas = document.createElement("canvas");
+  canvas.width = 800;
+  canvas.height = 700;
+  const ctx = canvas.getContext("2d");
+
+  // Background
+  ctx.fillStyle = "#ede0cf";
+  ctx.fillRect(0, 0, 800, 700);
+
+  // Header bar
+  ctx.fillStyle = "#1a1a2e";
+  ctx.fillRect(0, 0, 800, 56);
+  ctx.fillStyle = "#f7efe5";
+  ctx.font = "bold 22px 'Segoe UI', Arial, sans-serif";
+  ctx.textAlign = "left";
+  ctx.fillText(`BOOM/BUST PROFILE — ${player.full_name}`, 20, 36);
+
+  // Position badge
+  ctx.fillStyle = posColor;
+  ctx.fillRect(700, 10, 80, 36);
+  ctx.fillStyle = "white";
+  ctx.font = "bold 18px 'Segoe UI', Arial, sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText(pos, 740, 35);
+
+  // Subtitle
+  ctx.fillStyle = "#4a4a5e";
+  ctx.font = "13px 'Segoe UI', Arial, sans-serif";
+  ctx.textAlign = "left";
+  ctx.fillText(`${player.team || "FA"} · ${season} Season · ${games_played} Games · Avg ${mean_ppg} PPR/G`, 20, 80);
+
+  // Grade sticker
+  ctx.save();
+  ctx.translate(740, 95);
+  ctx.rotate(-0.05);
+  ctx.fillStyle = gradeColor;
+  ctx.beginPath();
+  ctx.roundRect(-30, -30, 60, 60, 10);
+  ctx.fill();
+  ctx.strokeStyle = "#1a1a2e";
+  ctx.lineWidth = 3;
+  ctx.stroke();
+  ctx.fillStyle = "white";
+  ctx.font = "bold 32px 'Segoe UI', Arial, sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText(grade, 0, 12);
+  ctx.restore();
+
+  // Stat cards row
+  const cardStats = [
+    { label: "MEDIAN", value: median_ppg.toFixed(1), color: posColor },
+    { label: "FLOOR", value: floor_ppg.toFixed(1), color: "#e63946" },
+    { label: "CEILING", value: ceiling_ppg.toFixed(1), color: "#2ec4b6" },
+    { label: "BOOM%", value: boom_rate.toFixed(0) + "%", color: "#2ec4b6" },
+    { label: "BUST%", value: bust_rate.toFixed(0) + "%", color: "#e63946" },
+    { label: "RANK", value: `#${position_rank}`, color: posColor },
+  ];
+  const cardW = 105, cardH = 60, startX = 20, startY = 100;
+  for (let i = 0; i < cardStats.length; i++) {
+    const x = startX + i * (cardW + 10);
+    ctx.fillStyle = "#f7efe5";
+    ctx.beginPath();
+    ctx.roundRect(x, startY, cardW, cardH, 6);
+    ctx.fill();
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.fillStyle = cardStats[i].color;
+    ctx.font = "bold 22px 'Segoe UI', Arial, sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText(cardStats[i].value, x + cardW / 2, startY + 28);
+    ctx.fillStyle = "#4a4a5e";
+    ctx.font = "bold 10px 'Segoe UI', Arial, sans-serif";
+    ctx.fillText(cardStats[i].label, x + cardW / 2, startY + 50);
+  }
+
+  // Histogram in export
+  const hPad = { top: 200, left: 60, right: 40, bottom: 60 };
+  const hW = 800 - hPad.left - hPad.right;
+  const hH = 300;
+  const scores = weekly_scores.map(w => w.score);
+  const maxScore = Math.max(...scores, boom_threshold + 5);
+  const bucketSize = 5;
+  const numBuckets = Math.ceil(maxScore / bucketSize) + 1;
+  const buckets = new Array(numBuckets).fill(0);
+  for (const s of scores) {
+    const idx = Math.min(Math.floor(s / bucketSize), numBuckets - 1);
+    buckets[idx]++;
+  }
+  const maxCount = Math.max(...buckets, 1);
+  const barW = Math.floor(hW / numBuckets) - 2;
+
+  // Grid lines
+  for (let i = 0; i <= maxCount; i++) {
+    const y = hPad.top + hH - (i / maxCount) * hH;
+    ctx.strokeStyle = "#e0d5c5";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(hPad.left, y);
+    ctx.lineTo(800 - hPad.right, y);
+    ctx.stroke();
+    ctx.fillStyle = "#4a4a5e";
+    ctx.font = "11px 'Segoe UI', Arial, sans-serif";
+    ctx.textAlign = "right";
+    ctx.fillText(i.toString(), hPad.left - 6, y + 4);
+  }
+
+  // Bars
+  for (let i = 0; i < numBuckets; i++) {
+    const x = hPad.left + i * (hW / numBuckets) + 1;
+    const bH = (buckets[i] / maxCount) * hH;
+    const y = hPad.top + hH - bH;
+    const mid = (i + 0.5) * bucketSize;
+    ctx.fillStyle = mid >= boom_threshold ? "#2ec4b6" :
+                    (i + 1) * bucketSize <= bust_threshold ? "#e63946" : posColor;
+    ctx.fillRect(x, y, barW, bH);
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(x, y, barW, bH);
+    ctx.fillStyle = "#4a4a5e";
+    ctx.font = "10px 'Segoe UI', Arial, sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText(`${i * bucketSize}`, x + barW / 2, hPad.top + hH + 16);
+  }
+
+  // Threshold lines
+  const boomX = hPad.left + (boom_threshold / bucketSize) * (hW / numBuckets);
+  ctx.strokeStyle = "#2ec4b6";
+  ctx.lineWidth = 2;
+  ctx.setLineDash([6, 4]);
+  ctx.beginPath();
+  ctx.moveTo(boomX, hPad.top);
+  ctx.lineTo(boomX, hPad.top + hH);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = "#2ec4b6";
+  ctx.font = "bold 11px 'Segoe UI', Arial, sans-serif";
+  ctx.textAlign = "left";
+  ctx.fillText("BOOM", boomX + 4, hPad.top + 14);
+
+  const bustX = hPad.left + (bust_threshold / bucketSize) * (hW / numBuckets);
+  ctx.strokeStyle = "#e63946";
+  ctx.lineWidth = 2;
+  ctx.setLineDash([6, 4]);
+  ctx.beginPath();
+  ctx.moveTo(bustX, hPad.top);
+  ctx.lineTo(bustX, hPad.top + hH);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = "#e63946";
+  ctx.font = "bold 11px 'Segoe UI', Arial, sans-serif";
+  ctx.textAlign = "right";
+  ctx.fillText("BUST", bustX - 4, hPad.top + 14);
+
+  // Axis labels
+  ctx.fillStyle = "#4a4a5e";
+  ctx.font = "12px 'Segoe UI', Arial, sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText("Fantasy Points (PPR)", 400, hPad.top + hH + 40);
+
+  // Range bar at bottom
+  const rbY = hPad.top + hH + 55;
+  const rbLeft = hPad.left;
+  const rbRight = 800 - hPad.right;
+  const rbW = rbRight - rbLeft;
+  const rbMax = Math.max(ceiling_ppg * 1.2, 35);
+  const rbToX = (v) => rbLeft + (v / rbMax) * rbW;
+
+  const flX = rbToX(floor_ppg);
+  const ceX = rbToX(ceiling_ppg);
+  const mdX = rbToX(median_ppg);
+  ctx.fillStyle = posColor + "40";
+  ctx.fillRect(flX, rbY, ceX - flX, 18);
+  ctx.strokeStyle = posColor;
+  ctx.lineWidth = 2;
+  ctx.strokeRect(flX, rbY, ceX - flX, 18);
+  ctx.fillStyle = posColor;
+  ctx.fillRect(mdX - 2, rbY - 4, 4, 26);
+
+  ctx.font = "bold 10px 'Segoe UI', Arial, sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillStyle = "#e63946";
+  ctx.fillText(`${floor_ppg.toFixed(1)} FLOOR`, flX, rbY - 6);
+  ctx.fillStyle = posColor;
+  ctx.fillText(`${median_ppg.toFixed(1)} MED`, mdX, rbY + 36);
+  ctx.fillStyle = "#2ec4b6";
+  ctx.fillText(`${ceiling_ppg.toFixed(1)} CEIL`, ceX, rbY - 6);
+
+  // Watermark
+  ctx.fillStyle = "#1a1a2e";
+  ctx.globalAlpha = 0.4;
+  ctx.font = "bold 14px 'Segoe UI', Arial, sans-serif";
+  ctx.textAlign = "right";
+  ctx.fillText("razzle.lol", 780, 690);
+  ctx.globalAlpha = 1;
+
+  // Download
+  const safeName = (player.full_name || "player").replace(/[^a-zA-Z0-9]/g, "-").toLowerCase();
+  const link = document.createElement("a");
+  link.download = `razzle-boombust-${safeName}.png`;
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+}
 
 // Keyboard hint strip (appended to toolbar area)
 (function addKeyboardHint() {
