@@ -628,7 +628,7 @@ def fetch_players(
 
     query = f"""
         SELECT
-            p.player_id, p.full_name, p.position, p.team, p.age, p.college,
+            p.player_id, p.full_name, p.position, p.team, p.age, p.college, p.headshot_url,
             COUNT(*) as games,
             COUNT(DISTINCT s.season) as seasons,
             SUM(s.fantasy_points_half_ppr) as fantasy_points_half_ppr,
@@ -857,7 +857,7 @@ def fetch_screener(body):
 
     query = f"""
         SELECT
-            p.player_id, p.full_name, p.position, p.team, p.age, p.college,
+            p.player_id, p.full_name, p.position, p.team, p.age, p.college, p.headshot_url,
             COUNT(*) as games,
             COUNT(DISTINCT s.season) as seasons,
             SUM(s.fantasy_points_half_ppr) as fantasy_points_half_ppr,
@@ -949,7 +949,7 @@ def fetch_player_weeks(player_id, season=0):
     """, (player_id, season)).fetchall()
 
     player_info = conn.execute(
-        "SELECT player_id, full_name, position, team, age, college FROM players WHERE player_id = ?",
+        "SELECT player_id, full_name, position, team, age, college, headshot_url FROM players WHERE player_id = ?",
         (player_id,)
     ).fetchone()
 
@@ -967,7 +967,7 @@ def fetch_player_seasons(player_id):
     conn = get_conn()
 
     player_info = conn.execute(
-        "SELECT player_id, full_name, position, team, age, college FROM players WHERE player_id = ?",
+        "SELECT player_id, full_name, position, team, age, college, headshot_url FROM players WHERE player_id = ?",
         (player_id,)
     ).fetchone()
 
@@ -1272,7 +1272,7 @@ def fetch_player_profile(player_id):
 
     # Player bio
     player_info = conn.execute(
-        "SELECT player_id, full_name, position, team, age, college FROM players WHERE player_id = ?",
+        "SELECT player_id, full_name, position, team, age, college, headshot_url FROM players WHERE player_id = ?",
         (player_id,)
     ).fetchone()
 
@@ -2104,7 +2104,7 @@ def fetch_players_compare(player_ids, season=0):
 
     rows = conn.execute(f"""
         SELECT
-            p.player_id, p.full_name, p.position, p.team, p.age, p.college,
+            p.player_id, p.full_name, p.position, p.team, p.age, p.college, p.headshot_url,
             COUNT(*) as games,
             COUNT(DISTINCT s.season) as seasons,
             {_STAT_SUM_COLS}

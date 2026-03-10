@@ -1,6 +1,24 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 54 — Lab Percentile Heat Coloring (COMPLETE)
+## Current Phase: Phase 55 — Player Headshots in Lab Table (COMPLETE)
+
+**Exit criterion MET:** Lab table displays 28px circular player headshots next to player names. nflverse headshot_url stored in players table and returned in all screener/profile API responses. Position-colored initials fallback for missing headshots (college/prospects). Headshots also in profile overlay (56px) and standalone player page (64px). Responsive (22px at 768px, hidden at 480px). Comic-strip aesthetic with chunky ink borders.
+
+### Phase 55 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend headshot_url storage | DONE | Column added to players table, nflverse adapter stores during sync, migration for existing DBs |
+| 2 | Backend API response | DONE | headshot_url in all 3 screener queries + all 3 profile queries |
+| 3 | Frontend headshot rendering | DONE | playerHeadshot() helper, onerror fallback initials, all universes |
+| 4 | Deploy + smoke test | DONE | All syntax clean, lazy loading, responsive |
+
+### Decisions Log
+- **Headshot in all universes**: NFL players get real headshots from nflverse CDN. College/prospects get position-colored initials fallback (no headshot URLs in college data). Consistent visual treatment across all modes.
+- **onerror fallback**: If headshot CDN fails, gracefully falls back to hidden img + visible initials span. No broken image icons.
+- **Hidden at 480px**: On very small screens, headshots take too much horizontal space in the already-cramped player name cell. Hidden entirely below 480px.
+
+## Previous Phase: Phase 54 — Lab Percentile Heat Coloring (COMPLETE)
 
 **Exit criterion MET:** Lab table cells color-coded by positional percentile rank via "Heat" toggle button. Per-position percentile computation (frontend-only). Elite (90th+) green-tinted, poor (<10th) red-tinted, average neutral. Inverse stats (turnovers, fumbles, INTs, etc.) correctly inverted. Toggle persists in URL (heat=1) and localStorage. Keyboard shortcut H. Warm-shifted rgba colors match Anthropic sand palette.
 

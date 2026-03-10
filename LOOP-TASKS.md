@@ -1,33 +1,33 @@
-# Razzle Loop — Phase 54 Task List
+# Razzle Loop — Phase 55 Task List
 
-> Auto-generated. Stat percentile heat coloring in Lab table — Bloomberg-grade visual data density.
+> Auto-generated. Player headshots in Lab table — Bloomberg-grade player identification with nflverse photos.
 
-**Current Phase**: 54 — Lab Percentile Heat Coloring
-**Exit Criterion**: Lab table cells are color-coded by positional percentile rank. Toggle between raw values and heat-colored view. Elite stats glow green-tinted, poor stats glow red-tinted, average stats neutral. Screenshots of the Lab with heat coloring look like a real Bloomberg terminal and are immediately readable on Reddit.
+**Current Phase**: 55 — Player Headshots in Lab Table
+**Exit Criterion**: Lab table displays small circular player headshots next to player names. Headshot URLs sourced from nflverse CSVs (headshot_url field already present in data, currently skipped). Graceful fallback for missing headshots (position-colored initials). Screenshots of the Lab with headshots look professional and are immediately recognizable on Reddit.
 
 ---
 
-## Task 1: Backend percentile calculation
+## Task 1: Backend — Add headshot_url to players table and sync
 **Status**: PASS
-**Notes**: Pivoted to frontend-only approach. Percentiles computed client-side from loaded rows — no API changes needed. Works with all existing filters and universes.
+**Notes**: Added headshot_url TEXT column to players table schema. nflverse adapter now stores headshot_url from CSV data during backfill. Migration in migrate_add_columns() adds column to existing DBs. Update logic backfills headshot for existing players.
 
-## Task 2: Frontend heat coloring in Lab table
+## Task 2: Backend — Include headshot_url in screener response
 **Status**: PASS
-**Notes**: computePercentiles() calculates per-position percentile ranks. Color scale: elite (90th+) green rgba, good (75-90) subtle green, neutral (40-60), below avg (10-25) subtle red, poor (<10th) red. Warm-shifted rgba tints match Anthropic sand palette. Toggle button "Heat" in toolbar with active state.
+**Notes**: Added p.headshot_url to all 3 screener SELECT queries (NFL, college, prospect) and all 3 player profile queries. headshot_url flows through to frontend in all API responses.
 
-## Task 3: Heat coloring polish and edge cases
+## Task 3: Frontend — Render headshots in Lab table
 **Status**: PASS
-**Notes**: Text columns (name, team, position, pos_rank, age) never colored. INVERSE_STATS set handles inverted coloring for turnovers, fumbles, interceptions, sacks, drop_rate, etc. Toggle persists in URL params (heat=1) and localStorage. Keyboard shortcut H added. Shortcut reference updated.
+**Notes**: playerHeadshot() helper in app.js renders 28px circular img with 2px ink border. onerror fallback shows position-colored circle with player initials. Applied to all 3 universe modes (NFL, college, prospects). Also added to player profile overlay (56px) and standalone player page (64px). Responsive: 22px at 768px, hidden at 480px.
 
 ## Task 4: Deploy + smoke test
 **Status**: PASS
-**Notes**: All syntax clean (node -c passes). Heat button visible in toolbar. Toggle on/off works. Color scale is subtle and warm-shifted. Works for all universes (NFL, college, prospects).
+**Notes**: All syntax checks pass (node -c on JS, py_compile on Python). CSS follows design guide (chunky 2px/3px ink borders, border-radius 50%, var(--bg-warm) background). Lazy loading on img tags for performance. Graceful onerror fallback.
 
 ---
 
 ## Loop State
 ```
-Current Phase: 54
+Current Phase: 55
 Current Task: 4
 Current Stage: COMPLETE
 Attempt: 1

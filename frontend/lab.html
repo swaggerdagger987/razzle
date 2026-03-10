@@ -393,6 +393,31 @@
     gap: 8px;
   }
 
+  .player-headshot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid var(--ink);
+    object-fit: cover;
+    flex-shrink: 0;
+    background: var(--bg-warm);
+  }
+
+  .player-headshot-fallback {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-family: var(--font-display);
+    font-size: 10px;
+    font-weight: 700;
+    color: white;
+  }
+
   .pos-badge {
     font-size: 10px;
     font-weight: 700;
@@ -544,6 +569,16 @@
     margin-bottom: 20px;
     padding-bottom: 16px;
     border-bottom: 3px solid var(--ink);
+  }
+
+  .profile-headshot {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 3px solid var(--ink);
+    object-fit: cover;
+    flex-shrink: 0;
+    background: var(--bg-warm);
   }
 
   .profile-name {
@@ -1292,6 +1327,8 @@
     .screener-table th.col-player,
     .screener-table td.col-player { min-width: 140px; }
     .player-name-cell { gap: 4px; }
+    .player-headshot, .player-headshot-fallback { width: 22px; height: 22px; }
+    .player-headshot-fallback { font-size: 8px; }
     .pos-badge { font-size: 8px; padding: 1px 4px; }
     .team-label { font-size: 9px; }
 
@@ -1381,6 +1418,7 @@
     .btn-primary { font-size: 10px; padding: 4px 10px; }
     .screener-table th.col-player,
     .screener-table td.col-player { min-width: 120px; }
+    .player-headshot, .player-headshot-fallback { display: none !important; }
 
     /* Chips — larger tap targets */
     .chip { padding: 6px 10px; font-size: 10px; min-height: 32px; }

@@ -128,6 +128,7 @@ def initialize_database(conn):
             weight INTEGER,
             college TEXT,
             jersey_number INTEGER,
+            headshot_url TEXT,
             updated_at TEXT
         );
 
@@ -378,11 +379,19 @@ def backfill_player(conn, row, gsis_map, name_map):
     team = (row.get("recent_team") or "").strip().upper()
     pos = (row.get("position") or row.get("position_group") or "").strip().upper()
 
+    headshot = row.get("headshot_url", "")
+
     conn.execute("""
         INSERT OR IGNORE INTO players (player_id, full_name, first_name, last_name,
-            search_name, position, team, gsis_id, updated_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    """, (player_id, name, first, last, normalize_name(name), pos, team, gsis, utc_now()))
+            search_name, position, team, gsis_id, headshot_url, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """, (player_id, name, first, last, normalize_name(name), pos, team, gsis, headshot, utc_now()))
+
+    # Update headshot_url if player already exists but headshot was missing
+    if headshot:
+        conn.execute("""
+            UPDATE players SET headshot_url = ? WHERE player_id = ? AND (headshot_url IS NULL OR headshot_url = '')
+        """, (headshot, player_id))
 
     gsis_map[gsis] = player_id
     name_map[(normalize_name(name), team, pos)] = player_id
@@ -1171,6 +1180,13 @@ def migrate_add_columns(conn):
         if col_name not in existing:
             conn.execute(f"ALTER TABLE player_week_stats ADD COLUMN {col_name} {col_type}")
             print(f"  Added column: {col_name}")
+
+    # Phase 55: Add headshot_url to players table
+    players_cols = {row[1] for row in conn.execute("PRAGMA table_info(players)").fetchall()}
+    if "headshot_url" not in players_cols:
+        conn.execute("ALTER TABLE players ADD COLUMN headshot_url TEXT")
+        print("  Added column: headshot_url to players")
+
     conn.commit()
 
 

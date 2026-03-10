@@ -42,6 +42,21 @@ function posClass(pos) {
   return (pos || "").toLowerCase();
 }
 
+// Position color map for headshot fallback initials
+var POS_COLOR_MAP = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+
+function playerHeadshot(player, pos) {
+  var url = player.headshot_url;
+  var size = 28;
+  var initials = ((player.full_name || player.player_name || "").split(" ").map(function(w) { return w[0] || ""; }).join("").substring(0, 2)).toUpperCase();
+  var bgColor = POS_COLOR_MAP[pos] || "#8a8a9e";
+  if (url) {
+    return '<img class="player-headshot" src="' + escapeAttr(url) + '" alt="" width="' + size + '" height="' + size + '" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">' +
+           '<span class="player-headshot-fallback" style="display:none;background:' + bgColor + ';">' + escapeHtml(initials) + '</span>';
+  }
+  return '<span class="player-headshot-fallback" style="background:' + bgColor + ';">' + escapeHtml(initials) + '</span>';
+}
+
 function computeClientDVS(ppg, age, position) {
   if (!ppg || !age) return null;
   var prodScore = Math.min(100, ppg * 4);

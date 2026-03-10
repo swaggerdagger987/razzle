@@ -98,6 +98,9 @@ function renderPlayerPage(data, container) {
   // Hero card
   html += `<div class="player-hero">`;
   html += `<div class="player-hero-top">`;
+  if (player.headshot_url) {
+    html += `<img class="player-hero-headshot" src="${esc(player.headshot_url)}" alt="" onerror="this.style.display='none';">`;
+  }
   html += `<div class="player-pos-badge" style="background:${posColor};">${pos}</div>`;
   html += `<div style="flex:1; min-width:0;">`;
   html += `<div class="player-name">${esc(player.full_name)}</div>`;

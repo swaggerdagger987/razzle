@@ -692,6 +692,7 @@ function renderTableBody() {
     if (state.universe === "college") {
       const cid = escapeAttr(player.player_id || "");
       html += `<td class="col-player"><div class="player-name-cell">`;
+      html += playerHeadshot(player, pos);
       html += `<span class="pos-badge ${posClass(pos)}">${escapeHtml(pos)}</span>`;
       html += `<a href="#" onclick="openCollegeProfile('${cid}'); return false;" style="color:var(--ink); text-decoration:none; border-bottom:1px dashed var(--pos-qb);">${escapeHtml(player.player_name)}</a>`;
       html += `<span class="team-label">${escapeHtml(player.team)}</span>`;
@@ -702,6 +703,7 @@ function renderTableBody() {
       const pPos = (player.position || "").toUpperCase();
       const pYear = player.draft_year || state.season;
       html += `<td class="col-player"><div class="player-name-cell">`;
+      html += playerHeadshot(player, pos);
       html += `<span class="pos-badge ${posClass(pos)}">${escapeHtml(pos)}</span>`;
       html += `<a href="#" onclick="openProspectProfile('${pName}', '${escapeAttr(pPos)}', ${pYear}); return false;" style="color:var(--ink); text-decoration:none; border-bottom:1px dashed var(--pos-qb);">${escapeHtml(player.player_name)}</a>`;
       html += `<span class="school-label">${escapeHtml(player.school)}</span>`;
@@ -709,6 +711,7 @@ function renderTableBody() {
     } else {
       const pid = escapeAttr(player.player_id || "");
       html += `<td class="col-player"><div class="player-name-cell">`;
+      html += playerHeadshot(player, pos);
       html += `<span class="pos-badge ${posClass(pos)}">${escapeHtml(pos)}</span>`;
       html += `<a href="/player/${encodeURIComponent(pid)}" onclick="event.preventDefault(); openPlayerProfile('${pid}');" style="color:var(--ink); text-decoration:none; border-bottom:1px dashed var(--ink-faint);">${escapeHtml(player.full_name)}</a>`;
       html += `<span class="team-label">${escapeHtml(player.team)}</span>`;
@@ -2622,6 +2625,9 @@ function renderProfile(data, container) {
 
   // Header
   html += `<div class="profile-header">`;
+  if (player.headshot_url) {
+    html += `<img class="profile-headshot" src="${escapeAttr(player.headshot_url)}" alt="" onerror="this.style.display='none';">`;
+  }
   html += `<span class="profile-pos-badge" style="background:${posColor};">${pos}</span>`;
   html += `<div>`;
   html += `<div class="profile-name">${player.full_name}</div>`;
