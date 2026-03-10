@@ -8953,7 +8953,7 @@
 
     function loadData() {
       var yearParam = panelState.year ? '&draft_year=' + panelState.year : '';
-      var posParam = panelState.position ? '&position=' + panelState.position : '';
+      var posParam = panelState.position ? '&position=' + encodeURIComponent(panelState.position) : '';
       var contentEl = el.querySelector('.dct-content');
       contentEl.innerHTML = '<div class="lp-loading">reviewing the tape...</div>';
       fetch('/api/draft-class-tracker?' + yearParam.replace(/^&/, '') + posParam)
@@ -9124,7 +9124,7 @@
       content.innerHTML = '<div class="lp-loading">running the numbers...</div>';
       var url = '/api/stat-correlations?season=' + panelState.season + '&position=' + encodeURIComponent(panelState.position);
       if (panelState.selectedCell) {
-        url += '&x_stat=' + panelState.selectedCell.x + '&y_stat=' + panelState.selectedCell.y;
+        url += '&x_stat=' + encodeURIComponent(panelState.selectedCell.x) + '&y_stat=' + encodeURIComponent(panelState.selectedCell.y);
       }
       fetch(url).then(function(r) {
         if (!r.ok) throw new Error('API error');
@@ -9681,7 +9681,7 @@
       if (!players || !players.length) return '<div class="lp-empty">no ' + (isPositive ? 'winning' : 'losing') + ' script players</div>';
       var h = '<table class="gs-table"><thead><tr>';
       h += '<th>#</th><th>Player</th><th>Team</th><th>GP</th>';
-      h += '<th>PPG</th><th>Avg Diff</th><th>GT%</th></tr></thead><tbody>';
+      h += '<th title="Fantasy Points Per Game (PPR)">PPG</th><th title="Average Score Differential — positive means team was winning">Avg Diff</th><th title="Garbage Time % — % of stats scored in garbage time">GT%</th></tr></thead><tbody>';
       players.forEach(function(p, i) {
         var posColor = POS_COLS[p.position] || '#8a7565';
         h += '<tr class="gs-row" data-pid="' + escapeAttr(p.player_id) + '">';

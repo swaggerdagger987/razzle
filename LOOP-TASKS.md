@@ -2,31 +2,22 @@
 
 ## Current State
 - Phase: 25 (QA + UX Audit — Auto-Generated Fixes)
-- All tasks PENDING
-- Stage: BUILD
-- Next: Task 1
+- All 2 tasks PASS
+- Stage: PHASE GATE
+- Next: Commit and push
 
 ## Phase 25: QA + UX Audit — Auto-Generated Fixes
-**Exit Criterion**: All HIGH and MEDIUM findings from QA+UX audit (Phases 20-24) resolved. powerrankings added to NFL_ONLY_PANELS. stat-correlations endpoint wrapped in try-except. URL encoding fixes for correlations and draft tracker. Tooltip title attributes added to new panel table headers. Game Script table mobile overflow fixed.
+**Exit Criterion**: All HIGH and MEDIUM findings from QA+UX audit (Phases 20-24) resolved.
 
 ### Task 1: Fix HIGH — NFL_ONLY_PANELS + stat-correlations error handling
-**Status**: PENDING
-**Attempts**: 0
-**Acceptance Criteria**:
-- 'powerrankings' added to NFL_ONLY_PANELS array in lab.js
-- /api/stat-correlations endpoint wrapped in try-except with JSONResponse error
-- Both fixes verified (no syntax errors)
+**Status**: PASS
+**Attempts**: 1
+**Notes**: powerrankings added to NFL_ONLY_PANELS. stat-correlations wrapped in try-except with JSONResponse error.
 
 ### Task 2: Fix HIGH + MEDIUM — URL encoding + tooltips + mobile overflow
-**Status**: PENDING
-**Attempts**: 0
-**Acceptance Criteria**:
-- encodeURIComponent() added to x_stat/y_stat in correlations panel
-- encodeURIComponent() added to position param in draft tracker panel
-- title attributes added to Game Script table headers (GT% = "Garbage Time %", Avg Diff = "Average Score Differential")
-- title attributes added to correlations panel abbreviations
-- overflow-x:auto wrapper added for Game Script tables on mobile
-- All changes verified (JS syntax clean)
+**Status**: PASS
+**Attempts**: 1
+**Notes**: encodeURIComponent on correlations x_stat/y_stat + draft tracker position. Title tooltips on Game Script headers (PPG, Avg Diff, GT%). overflow-x:auto on .gs-column for mobile.
 
 ---
 

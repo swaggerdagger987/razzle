@@ -1177,7 +1177,7 @@ function applyUniverseUI() {
     'garbagetime', 'matchups', 'stacks', 'redzone', 'streaks',
     'weeklymvp', 'playoffs', 'yoy', 'pace', 'tdregression',
     'airyards', 'dashboard', 'rosterbuilder', 'tradefinder',
-    'gamescript'
+    'gamescript', 'powerrankings'
   ];
   document.querySelectorAll('.lab-sidebar-item[data-panel]').forEach(item => {
     const panel = item.getAttribute('data-panel');

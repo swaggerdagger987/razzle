@@ -1,6 +1,17 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 24 — Game Script Analysis (COMPLETE)
+## Current Phase: Phase 25 — QA + UX Audit Fixes for Phases 20-24 (COMPLETE)
+
+**Exit Criterion MET**: All HIGH and MEDIUM findings from QA+UX audit resolved. powerrankings added to NFL_ONLY_PANELS. stat-correlations endpoint wrapped in try-except. URL encoding fixes for correlations x_stat/y_stat and draft tracker position params. Tooltip title attributes added to Game Script table headers (PPG, Avg Diff, GT%). Game Script table mobile overflow-x:auto added.
+
+### Phase 25 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Fix HIGH — NFL_ONLY_PANELS + stat-correlations error handling | DONE | powerrankings added, try-except wrapper with JSONResponse |
+| 2 | Fix HIGH+MEDIUM — URL encoding, tooltips, mobile overflow | DONE | encodeURIComponent on 3 params, title attrs on 3 headers, overflow-x:auto |
+
+## Previous Phase: Phase 24 — Game Script Analysis (COMPLETE)
 
 **Exit Criterion MET**: New Lab panel "Game Script" under Game Analysis category. Uses existing `/api/game-script` endpoint. Two-column layout: Winning Scripts (positive avg score differential) and Losing Scripts (negative). Ranked tables with PPG, score diff badges (green/red), garbage time % chips. Position filter tabs, season selector with available_seasons from backend. Position-colored dots (QB blue, RB teal, WR terracotta, TE purple). NFL-only message for college mode. Chunky 3px borders, sand bg, espresso ink, Space Mono data font per DESIGN.md.
 

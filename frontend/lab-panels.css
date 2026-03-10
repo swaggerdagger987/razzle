@@ -4511,7 +4511,7 @@
   grid-template-columns: 1fr 1fr;
   gap: 24px;
 }
-.gs-column { min-width: 0; }
+.gs-column { min-width: 0; overflow-x: auto; }
 .gs-column-header {
   display: flex;
   align-items: center;
