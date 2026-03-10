@@ -910,6 +910,7 @@ def sitemap_xml():
         ("/tradevalues.html", "0.8", "weekly"),
         ("/tradefinder.html", "0.8", "weekly"),
         ("/tools.html", "0.8", "weekly"),
+        ("/rosterbuilder.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1309,6 +1310,23 @@ def trade_finder(player_id: str = "", season: int = 0):
         return JSONResponse({"error": "Failed to fetch trade finder data"}, status_code=500)
 
 
+@app.post("/api/roster-grade")
+async def roster_grade(request: Request):
+    """Grade a hypothetical dynasty roster from a list of player IDs."""
+    try:
+        body = await request.json()
+        player_ids = body.get("player_ids", [])
+        season = body.get("season", None)
+        if not player_ids or not isinstance(player_ids, list):
+            return JSONResponse({"error": "player_ids array is required"}, status_code=400)
+        if len(player_ids) > 25:
+            return JSONResponse({"error": "Maximum 25 players allowed"}, status_code=400)
+        return live_data.fetch_roster_grade(player_ids=player_ids, season=season)
+    except Exception as e:
+        logger.error(f"roster-grade error: {e}")
+        return JSONResponse({"error": "Failed to grade roster"}, status_code=500)
+
+
 @app.get("/api/tools-hub")
 def tools_hub():
     """Return the static tools catalog organized by category."""
@@ -1386,6 +1404,7 @@ def tools_hub():
             "name": "Team & League",
             "icon": "\U0001f3c8",
             "tools": [
+                {"name": "Roster Builder", "desc": "Build a hypothetical roster and get it graded on value, VORP, age, depth", "url": "/rosterbuilder.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Team Rosters", "desc": "Full roster breakdown by position group with age badges", "url": "/team/KC", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "League Intel", "desc": "Connect Sleeper — see leagues, rosters, and manager profiles", "url": "/league-intel.html", "positions": []},
                 {"name": "The Lab", "desc": "Full Bloomberg screener — 100+ columns, filters, formulas", "url": "/lab.html", "positions": ["QB", "RB", "WR", "TE"]},

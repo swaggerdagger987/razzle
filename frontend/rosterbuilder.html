@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Roster Builder — Razzle</title>
+<meta property="og:title" content="Roster Builder — Razzle">
+<meta property="og:description" content="Build and grade a dynasty roster on razzle.lol — trade value, VORP, age balance, and depth analysis.">
+<meta property="og:site_name" content="razzle.lol">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Roster Builder — Razzle">
+<meta name="twitter:description" content="Build and grade a dynasty roster on razzle.lol">
+<meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
+<meta name="description" content="Dynasty roster builder — add players, get instant roster grades on trade value, VORP, age balance, and positional depth.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .rb-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+  }
+  .rb-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .rb-header h1 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: var(--ink);
+    margin: 0 0 4px;
+  }
+  .rb-header .rb-subtitle {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+  }
+
+  /* Search area */
+  .rb-search-area {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  .rb-search {
+    padding: 10px 14px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--bg-card);
+    width: 340px;
+    outline: none;
+  }
+  .rb-search:focus { box-shadow: 3px 3px 0 var(--ink); }
+  .rb-autocomplete {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 340px;
+    background: var(--bg-card);
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    box-shadow: 4px 4px 0 var(--ink);
+    max-height: 240px;
+    overflow-y: auto;
+    z-index: 100;
+    display: none;
+  }
+  .rb-ac-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--ink-faint);
+  }
+  .rb-ac-item:hover { background: var(--bg-warm); }
+  .rb-ac-item:last-child { border-bottom: none; }
+  .rb-ac-pos {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 8px;
+    border: 2px solid var(--ink);
+    color: #fff;
+  }
+  .rb-ac-pos.QB { background: var(--pos-qb); }
+  .rb-ac-pos.RB { background: var(--pos-rb); }
+  .rb-ac-pos.WR { background: var(--pos-wr); }
+  .rb-ac-pos.TE { background: var(--pos-te); }
+  .rb-ac-team { color: var(--ink-light); font-size: 11px; }
+
+  /* Layout: two columns */
+  .rb-layout {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 20px;
+    align-items: start;
+  }
+
+  /* Roster list (left) */
+  .rb-roster-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 16px;
+  }
+  .rb-roster-title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    color: var(--ink);
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .rb-slot-count {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-light);
+    background: var(--bg-warm);
+    padding: 3px 10px;
+    border-radius: 12px;
+    border: 2px solid var(--ink-faint);
+  }
+  .rb-roster-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .rb-player-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--ink-faint);
+    font-family: var(--font-mono);
+    font-size: 13px;
+  }
+  .rb-player-row:last-child { border-bottom: none; }
+  .rb-player-headshot {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--ink);
+    object-fit: cover;
+    background: var(--bg-warm);
+  }
+  .rb-player-name {
+    flex: 1;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .rb-player-team {
+    color: var(--ink-light);
+    font-size: 11px;
+  }
+  .rb-player-age {
+    color: var(--ink-light);
+    font-size: 11px;
+  }
+  .rb-player-tv {
+    font-weight: 700;
+    color: var(--orange);
+  }
+  .rb-player-vorp {
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 8px;
+    border: 2px solid var(--ink);
+    font-weight: 700;
+  }
+  .rb-player-vorp.positive { background: var(--green-light); color: var(--green); }
+  .rb-player-vorp.negative { background: var(--red-light); color: var(--red); }
+  .rb-remove-btn {
+    background: none;
+    border: none;
+    color: var(--red);
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .rb-remove-btn:hover { background: var(--red-light); }
+  .rb-empty-roster {
+    text-align: center;
+    padding: 30px 16px;
+    font-family: var(--font-hand);
+    font-size: 18px;
+    color: var(--ink-light);
+  }
+
+  /* Grade panel (right) */
+  .rb-grade-panel {
+    position: sticky;
+    top: 80px;
+  }
+  .rb-grade-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .rb-grade-label {
+    font-family: var(--font-hand);
+    font-size: 16px;
+    color: var(--ink-light);
+    margin-bottom: 4px;
+  }
+  .rb-grade-letter {
+    font-family: var(--font-display);
+    font-size: 72px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .rb-grade-score {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--ink-medium);
+    margin-bottom: 12px;
+  }
+  .rb-total-tv {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--ink);
+    background: var(--bg-warm);
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 2px solid var(--ink-faint);
+    display: inline-block;
+  }
+
+  /* Dimension bars */
+  .rb-dimensions {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  .rb-dim-title {
+    font-family: var(--font-display);
+    font-size: 14px;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .rb-dim-row {
+    margin-bottom: 10px;
+  }
+  .rb-dim-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-medium);
+    margin-bottom: 3px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .rb-dim-bar {
+    height: 14px;
+    background: var(--bg-warm);
+    border-radius: 7px;
+    border: 2px solid var(--ink);
+    overflow: hidden;
+  }
+  .rb-dim-fill {
+    height: 100%;
+    border-radius: 5px;
+    transition: width 0.4s ease;
+  }
+  .rb-dim-fill.tv { background: var(--orange); }
+  .rb-dim-fill.vorp { background: var(--green); }
+  .rb-dim-fill.age { background: var(--blue); }
+  .rb-dim-fill.depth { background: var(--purple); }
+
+  /* Position summary */
+  .rb-pos-summary {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 16px;
+  }
+  .rb-pos-title {
+    font-family: var(--font-display);
+    font-size: 14px;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+  .rb-pos-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .rb-pos-item {
+    padding: 8px 10px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    text-align: center;
+  }
+  .rb-pos-item.QB { border-top: 4px solid var(--pos-qb); }
+  .rb-pos-item.RB { border-top: 4px solid var(--pos-rb); }
+  .rb-pos-item.WR { border-top: 4px solid var(--pos-wr); }
+  .rb-pos-item.TE { border-top: 4px solid var(--pos-te); }
+  .rb-pos-item-label {
+    font-family: var(--font-display);
+    font-size: 13px;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+  .rb-pos-item-count {
+    font-family: var(--font-mono);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .rb-pos-item-meta {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-light);
+  }
+
+  /* Grade empty state */
+  .rb-grade-empty {
+    text-align: center;
+    padding: 40px 16px;
+    font-family: var(--font-hand);
+    font-size: 18px;
+    color: var(--ink-light);
+  }
+
+  /* Export + share */
+  .rb-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  .rb-actions button {
+    font-family: var(--font-display);
+    font-size: 13px;
+    padding: 8px 18px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--bg-card);
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .rb-actions button:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+
+  /* Watermark */
+  .rb-watermark {
+    position: fixed;
+    bottom: 10px;
+    right: 14px;
+    font-family: var(--font-hand);
+    font-size: 13px;
+    color: var(--ink-faint);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .rb-layout {
+      grid-template-columns: 1fr;
+    }
+    .rb-grade-panel { position: static; }
+    .rb-search { width: 260px; }
+  }
+  @media (max-width: 480px) {
+    .rb-header h1 { font-size: 26px; }
+    .rb-search { width: 100%; }
+    .rb-grade-letter { font-size: 56px; }
+    .rb-pos-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="/" class="logo">
+    <div class="logo-mark">&#x1F42F;</div>
+    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/lab.html">The Lab</a></li>
+    <li><a href="/tools.html">Tools</a></li>
+    <li><a href="/rankings.html">Rankings</a></li>
+    <li><a href="/leaders.html">Leaders</a></li>
+    <li><a href="/prospects.html">Prospects</a></li>
+    <li><a href="/scarcity.html">Scarcity</a></li>
+    <li><a href="/breakouts.html">Breakouts</a></li>
+    <li><a href="/buysell.html">Buy/Sell</a></li>
+    <li><a href="/aging.html">Aging</a></li>
+    <li><a href="/weekly.html">Weekly</a></li>
+    <li><a href="/targets.html">Targets</a></li>
+    <li><a href="/matchups.html">Matchups</a></li>
+    <li><a href="/usage.html">Usage</a></li>
+    <li><a href="/yoy.html">YoY</a></li>
+    <li><a href="/airyards.html">Air Yards</a></li>
+    <li><a href="/explorer.html">Explorer</a></li>
+    <li><a href="/redzone.html">Red Zone</a></li>
+    <li><a href="/efficiency.html">Efficiency</a></li>
+    <li><a href="/consistency.html">Consistency</a></li>
+    <li><a href="/schedule.html">Schedule</a></li>
+    <li><a href="/stocks.html">Stocks</a></li>
+    <li><a href="/opportunity.html">Opportunity</a></li>
+    <li><a href="/reportcard.html">Report Card</a></li>
+    <li><a href="/awards.html">Awards</a></li>
+    <li><a href="/vorp.html">VORP</a></li>
+    <li><a href="/tradevalues.html">Trade Values</a></li>
+    <li><a href="/tradefinder.html">Trade Finder</a></li>
+    <li><a href="/rosterbuilder.html" class="active">Roster Builder</a></li>
+    <li><a href="/team/KC">Teams</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
+    <li><a href="/agents.html">War Room</a></li>
+  </ul>
+</nav>
+
+<main class="rb-page" id="rb-content">
+  <div class="rb-header">
+    <h1>Roster Builder</h1>
+    <div class="rb-subtitle">build a roster, get it graded</div>
+  </div>
+
+  <div class="rb-search-area">
+    <input type="text" class="rb-search" id="rb-search" placeholder="search players to add..." autocomplete="off">
+    <div class="rb-autocomplete" id="rb-autocomplete"></div>
+  </div>
+
+  <div class="rb-layout">
+    <div>
+      <div class="rb-roster-card">
+        <div class="rb-roster-title">
+          <span>Your Roster</span>
+          <span class="rb-slot-count" id="slot-count">0 / 25</span>
+        </div>
+        <ul class="rb-roster-list" id="roster-list">
+          <li class="rb-empty-roster" id="roster-empty">add players to start building</li>
+        </ul>
+      </div>
+      <div class="rb-actions">
+        <button onclick="clearRoster()">Clear Roster</button>
+        <button onclick="exportPng()">Export PNG</button>
+        <button onclick="copyShareUrl()">Copy Share URL</button>
+      </div>
+    </div>
+
+    <div class="rb-grade-panel">
+      <div class="rb-grade-card" id="grade-card">
+        <div class="rb-grade-empty" id="grade-empty">add players to see your grade</div>
+        <div id="grade-content" style="display:none;">
+          <div class="rb-grade-label">roster grade</div>
+          <div class="rb-grade-letter" id="grade-letter">-</div>
+          <div class="rb-grade-score" id="grade-score">-</div>
+          <div class="rb-total-tv" id="total-tv">-</div>
+        </div>
+      </div>
+      <div class="rb-dimensions" id="dimensions-card" style="display:none;">
+        <div class="rb-dim-title">Breakdown</div>
+        <div id="dim-bars"></div>
+      </div>
+      <div class="rb-pos-summary" id="pos-summary-card" style="display:none;">
+        <div class="rb-pos-title">Position Groups</div>
+        <div class="rb-pos-grid" id="pos-grid"></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="rb-watermark">razzle.lol</div>
+
+<footer style="text-align:center; padding:24px 20px 32px; font-family:var(--font-hand); font-size:15px; color:var(--ink-light); border-top:2px dashed var(--ink-faint); margin-top:40px;">
+  <div style="margin-bottom:10px;">
+    <a href="/lab.html" style="color:var(--ink-light); text-decoration:none;">The Lab</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tools.html" style="color:var(--ink-light); text-decoration:none;">Tools</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/rankings.html" style="color:var(--ink-light); text-decoration:none;">Rankings</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/leaders.html" style="color:var(--ink-light); text-decoration:none;">Leaders</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/prospects.html" style="color:var(--ink-light); text-decoration:none;">Prospects</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/scarcity.html" style="color:var(--ink-light); text-decoration:none;">Scarcity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/breakouts.html" style="color:var(--ink-light); text-decoration:none;">Breakouts</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/buysell.html" style="color:var(--ink-light); text-decoration:none;">Buy/Sell</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/aging.html" style="color:var(--ink-light); text-decoration:none;">Aging</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/weekly.html" style="color:var(--ink-light); text-decoration:none;">Weekly</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/targets.html" style="color:var(--ink-light); text-decoration:none;">Targets</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/matchups.html" style="color:var(--ink-light); text-decoration:none;">Matchups</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/usage.html" style="color:var(--ink-light); text-decoration:none;">Usage</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/yoy.html" style="color:var(--ink-light); text-decoration:none;">YoY</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/airyards.html" style="color:var(--ink-light); text-decoration:none;">Air Yards</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/explorer.html" style="color:var(--ink-light); text-decoration:none;">Explorer</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/redzone.html" style="color:var(--ink-light); text-decoration:none;">Red Zone</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/efficiency.html" style="color:var(--ink-light); text-decoration:none;">Efficiency</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/consistency.html" style="color:var(--ink-light); text-decoration:none;">Consistency</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/schedule.html" style="color:var(--ink-light); text-decoration:none;">Schedule</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/stocks.html" style="color:var(--ink-light); text-decoration:none;">Stocks</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/opportunity.html" style="color:var(--ink-light); text-decoration:none;">Opportunity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/reportcard.html" style="color:var(--ink-light); text-decoration:none;">Report Card</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/awards.html" style="color:var(--ink-light); text-decoration:none;">Awards</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/vorp.html" style="color:var(--ink-light); text-decoration:none;">VORP</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tradevalues.html" style="color:var(--ink-light); text-decoration:none;">Trade Values</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tradefinder.html" style="color:var(--ink-light); text-decoration:none;">Trade Finder</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/rosterbuilder.html" style="color:var(--ink-light); text-decoration:none;">Roster Builder</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/team/KC" style="color:var(--ink-light); text-decoration:none;">Teams</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none;">League Intel</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/agents.html" style="color:var(--ink-light); text-decoration:none;">War Room</a>
+  </div>
+  razzle.lol — let's razzle dazzle em baby
+</footer>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script src="app.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function fmt(v, dec) {
+    if (v === null || v === undefined) return '-';
+    return Number(v).toFixed(dec === undefined ? 1 : dec);
+  }
+
+  var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+
+  var state = {
+    rosterIds: [],  // player IDs on roster
+    gradeData: null,
+    searchTimeout: null
+  };
+
+  function init() {
+    if (window.__razzleAnalytics) window.__razzleAnalytics('rosterbuilder');
+
+    // Load from URL params
+    var params = new URLSearchParams(window.location.search);
+    var ids = params.get('players');
+    if (ids) {
+      state.rosterIds = ids.split(',').filter(Boolean).slice(0, 25);
+      if (state.rosterIds.length > 0) fetchGrade();
+    }
+
+    // Search input
+    var searchInput = document.getElementById('rb-search');
+    searchInput.addEventListener('input', function() {
+      clearTimeout(state.searchTimeout);
+      var q = this.value.trim();
+      if (q.length < 2) {
+        document.getElementById('rb-autocomplete').style.display = 'none';
+        return;
+      }
+      state.searchTimeout = setTimeout(function() { searchPlayers(q); }, 200);
+    });
+
+    // Close autocomplete on outside click
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.rb-search-area')) {
+        document.getElementById('rb-autocomplete').style.display = 'none';
+      }
+    });
+  }
+
+  function searchPlayers(query) {
+    fetch('/api/players/quick-search?q=' + encodeURIComponent(query) + '&limit=8')
+      .then(function(r) { return r.ok ? r.json() : []; })
+      .then(function(players) {
+        var ac = document.getElementById('rb-autocomplete');
+        if (!players || players.length === 0) {
+          ac.style.display = 'none';
+          return;
+        }
+        var html = '';
+        players.forEach(function(p) {
+          // Skip if already on roster
+          if (state.rosterIds.indexOf(p.player_id) !== -1) return;
+          html += '<div class="rb-ac-item" data-pid="' + escapeHtml(p.player_id) + '">';
+          html += '<span class="rb-ac-pos ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span>';
+          html += '<span>' + escapeHtml(p.full_name || p.display_name || '') + '</span>';
+          html += '<span class="rb-ac-team">' + escapeHtml(p.team || '') + '</span>';
+          html += '</div>';
+        });
+        ac.innerHTML = html;
+        ac.style.display = html ? 'block' : 'none';
+
+        // Click handlers
+        ac.querySelectorAll('.rb-ac-item').forEach(function(item) {
+          item.addEventListener('click', function() {
+            var pid = this.getAttribute('data-pid');
+            addPlayer(pid);
+            ac.style.display = 'none';
+            document.getElementById('rb-search').value = '';
+          });
+        });
+      });
+  }
+
+  function addPlayer(playerId) {
+    if (state.rosterIds.length >= 25) return;
+    if (state.rosterIds.indexOf(playerId) !== -1) return;
+    state.rosterIds.push(playerId);
+    updateUrl();
+    fetchGrade();
+  }
+
+  function removePlayer(playerId) {
+    state.rosterIds = state.rosterIds.filter(function(id) { return id !== playerId; });
+    updateUrl();
+    if (state.rosterIds.length === 0) {
+      state.gradeData = null;
+      renderEmpty();
+    } else {
+      fetchGrade();
+    }
+  }
+
+  function updateUrl() {
+    var params = new URLSearchParams(window.location.search);
+    if (state.rosterIds.length > 0) {
+      params.set('players', state.rosterIds.join(','));
+    } else {
+      params.delete('players');
+    }
+    var newUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+    window.history.replaceState({}, '', newUrl);
+  }
+
+  function fetchGrade() {
+    if (state.rosterIds.length === 0) return;
+
+    fetch('/api/roster-grade', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ player_ids: state.rosterIds })
+    })
+    .then(function(r) {
+      if (!r.ok) throw new Error('Grade failed');
+      return r.json();
+    })
+    .then(function(data) {
+      if (data.error) {
+        renderEmpty();
+        return;
+      }
+      state.gradeData = data;
+      render();
+    })
+    .catch(function() {
+      renderEmpty();
+    });
+  }
+
+  function gradeColor(grade) {
+    if (!grade) return 'var(--ink-light)';
+    var g = grade.charAt(0);
+    if (g === 'A') return 'var(--green)';
+    if (g === 'B') return 'var(--blue)';
+    if (g === 'C') return 'var(--orange)';
+    if (g === 'D') return 'var(--red)';
+    return 'var(--red)';
+  }
+
+  function renderEmpty() {
+    document.getElementById('slot-count').textContent = state.rosterIds.length + ' / 25';
+    document.getElementById('roster-list').innerHTML = '<li class="rb-empty-roster">add players to start building</li>';
+    document.getElementById('grade-empty').style.display = 'block';
+    document.getElementById('grade-content').style.display = 'none';
+    document.getElementById('dimensions-card').style.display = 'none';
+    document.getElementById('pos-summary-card').style.display = 'none';
+  }
+
+  function render() {
+    var d = state.gradeData;
+    if (!d || !d.players) return renderEmpty();
+
+    // Slot count
+    document.getElementById('slot-count').textContent = d.player_count + ' / 25';
+
+    // Roster list
+    var html = '';
+    d.players.forEach(function(p) {
+      var vorpClass = p.vorp >= 0 ? 'positive' : 'negative';
+      html += '<li class="rb-player-row">';
+      html += '<img class="rb-player-headshot" src="' + escapeHtml(p.headshot_url || '') + '" alt="" onerror="this.style.display=\'none\'">';
+      html += '<span class="rb-ac-pos ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span>';
+      html += '<span class="rb-player-name">' + escapeHtml(p.full_name) + '</span>';
+      html += '<span class="rb-player-team">' + escapeHtml(p.team) + '</span>';
+      html += '<span class="rb-player-age">' + (p.age || '-') + '</span>';
+      html += '<span class="rb-player-tv">' + fmt(p.trade_value) + '</span>';
+      html += '<span class="rb-player-vorp ' + vorpClass + '">' + (p.vorp >= 0 ? '+' : '') + fmt(p.vorp) + '</span>';
+      html += '<button class="rb-remove-btn" data-pid="' + escapeHtml(p.player_id) + '" title="Remove">&times;</button>';
+      html += '</li>';
+    });
+    document.getElementById('roster-list').innerHTML = html;
+
+    // Remove button handlers
+    document.querySelectorAll('.rb-remove-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        removePlayer(this.getAttribute('data-pid'));
+      });
+    });
+
+    // Grade card
+    document.getElementById('grade-empty').style.display = 'none';
+    document.getElementById('grade-content').style.display = 'block';
+    document.getElementById('grade-letter').textContent = d.overall_grade;
+    document.getElementById('grade-letter').style.color = gradeColor(d.overall_grade);
+    document.getElementById('grade-score').textContent = d.overall_score + ' / 100';
+    document.getElementById('total-tv').textContent = 'Total Trade Value: ' + fmt(d.total_trade_value);
+
+    // Dimension bars
+    document.getElementById('dimensions-card').style.display = 'block';
+    var dims = d.dimensions || {};
+    var dimLabels = [
+      { key: 'trade_value', label: 'Trade Value', cls: 'tv' },
+      { key: 'vorp', label: 'VORP', cls: 'vorp' },
+      { key: 'age_balance', label: 'Age Balance', cls: 'age' },
+      { key: 'positional_depth', label: 'Positional Depth', cls: 'depth' }
+    ];
+    var dimHtml = '';
+    dimLabels.forEach(function(dim) {
+      var val = dims[dim.key] || 0;
+      dimHtml += '<div class="rb-dim-row">';
+      dimHtml += '<div class="rb-dim-label"><span>' + escapeHtml(dim.label) + '</span><span>' + fmt(val, 0) + '</span></div>';
+      dimHtml += '<div class="rb-dim-bar"><div class="rb-dim-fill ' + dim.cls + '" style="width:' + Math.min(100, val) + '%"></div></div>';
+      dimHtml += '</div>';
+    });
+    document.getElementById('dim-bars').innerHTML = dimHtml;
+
+    // Position summary
+    document.getElementById('pos-summary-card').style.display = 'block';
+    var posSummary = d.position_summary || {};
+    var posHtml = '';
+    ['QB', 'RB', 'WR', 'TE'].forEach(function(pos) {
+      var ps = posSummary[pos] || { count: 0, avg_trade_value: 0, total_vorp: 0 };
+      posHtml += '<div class="rb-pos-item ' + pos + '">';
+      posHtml += '<div class="rb-pos-item-label">' + escapeHtml(pos) + '</div>';
+      posHtml += '<div class="rb-pos-item-count">' + ps.count + '</div>';
+      posHtml += '<div class="rb-pos-item-meta">Avg TV: ' + fmt(ps.avg_trade_value) + '</div>';
+      posHtml += '<div class="rb-pos-item-meta">VORP: ' + (ps.total_vorp >= 0 ? '+' : '') + fmt(ps.total_vorp) + '</div>';
+      posHtml += '</div>';
+    });
+    document.getElementById('pos-grid').innerHTML = posHtml;
+  }
+
+  window.clearRoster = function() {
+    state.rosterIds = [];
+    state.gradeData = null;
+    updateUrl();
+    renderEmpty();
+  };
+
+  window.exportPng = function() {
+    var el = document.getElementById('rb-content');
+    if (typeof html2canvas === 'undefined') return;
+    html2canvas(el, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+      var ctx = canvas.getContext('2d');
+      ctx.font = '24px Caveat, cursive';
+      ctx.fillStyle = 'rgba(26,26,46,0.18)';
+      ctx.fillText('razzle.lol', canvas.width - 160, canvas.height - 20);
+      var link = document.createElement('a');
+      link.download = 'razzle-roster-grade.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+  };
+
+  window.copyShareUrl = function() {
+    var url = window.location.href;
+    navigator.clipboard.writeText(url).then(function() {
+      var btn = document.querySelector('.rb-actions button:last-child');
+      btn.textContent = 'Copied!';
+      setTimeout(function() { btn.textContent = 'Copy Share URL'; }, 1500);
+    });
+  };
+
+  init();
+})();
+</script>
+
+</body>
+</html>

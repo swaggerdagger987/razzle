@@ -1,6 +1,24 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 96 — Tools Hub (COMPLETE)
+## Current Phase: Phase 97 — Dynasty Roster Builder (COMPLETE)
+
+**Exit criterion MET:** /rosterbuilder.html page lets users build a hypothetical dynasty roster (up to 25 players) via autocomplete search. Live roster grade card shows letter grade (A+ to F) and composite score (0-100) based on 4 dimensions: trade value (35%), VORP (25%), age balance (20%), positional depth (20%). Visual dimension progress bars colored by metric. Position group summary grid (QB/RB/WR/TE with count, avg trade value, total VORP). Per-player rows with headshot, position badge, name, team, age, trade value, VORP badge. Total roster trade value displayed. Clear/Export PNG/Copy Share URL buttons. URL state (?players=id1,id2,...) for shareable roster links. POST /api/roster-grade endpoint accepts player_ids array, reuses compute_trade_value + VORP replacement thresholds. "Roster Builder" nav link added to all 35 HTML pages. Sitemap entry. Added to Tools Hub catalog. Design matches DESIGN.md.
+
+### Phase 97 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/roster-grade endpoint | DONE | fetch_roster_grade in live_data.py, 4 dimensions, grade thresholds |
+| 2 | Roster Builder page | DONE | Autocomplete, live grade, dimension bars, position grid, 14 escapeHtml, 58/58 balanced |
+| 3 | Nav links + sitemap + analytics | DONE | All 35 pages updated, sitemap entry, tools hub catalog |
+| 4 | Smoke test | DONE | Python + JS syntax clean, 35/35 nav links, 14/14 design checks |
+
+### Decisions Log
+- **Roster Builder as Phase 97**: After building the Tools Hub (Phase 96), the next high-value interactive tool is a roster builder. Dynasty managers constantly evaluate "how does my team look?" — this tool lets them build a roster and get an instant composite grade. Extremely screenshottable: "My dynasty team gets a B+." Combines trade value (Phase 93) and VORP (Phase 92) into a unified roster-level analysis.
+- **4-dimension grading**: Trade value (35% — are your players valuable?), VORP (25% — are they above replacement?), age balance (20% — is the roster age-diversified or top-heavy?), positional depth (20% — do you have the right position mix?). Weights prioritize asset value since dynasty is about long-term value accumulation.
+- **Static VORP thresholds**: Used approximate replacement PPG values (QB 14.5, RB 8.0, WR 8.5, TE 7.0) instead of computing from the full player universe. This avoids an expensive secondary query and gives consistent grades regardless of which players are in the roster.
+
+## Previous Phase: Phase 96 — Tools Hub (COMPLETE)
 
 **Exit criterion MET:** /tools.html page organizes all 30 analytical dashboards into 7 categorized sections (Rankings & Values, Player Discovery, Performance Analysis, Usage & Opportunity, Matchup & Schedule, Visualizations, Team & League). Each category: header with icon + name + tool count badge. Each tool card: name, 1-line description, position chips (QB/RB/WR/TE), category-colored top stripe, direct link to page. Search input filters tools by name/description in real-time. Category filter tabs (All + 7 categories). Empty state for no matches. Hover-lift on cards. PNG export with watermark. Responsive at 768px + 480px. /api/tools-hub endpoint returns static JSON catalog with 7 categories and 30 tools. "Tools" nav link added to all 34 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md.
 

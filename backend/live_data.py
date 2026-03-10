@@ -8416,3 +8416,166 @@ def fetch_trade_finder(player_id, season=None):
         }
     finally:
         conn.close()
+
+
+# ---------------------------------------------------------------------------
+# Roster Builder — Grade a hypothetical dynasty roster
+# ---------------------------------------------------------------------------
+
+def fetch_roster_grade(player_ids, season=None):
+    """Grade a set of player IDs as a dynasty roster.
+
+    Returns overall grade (A+ to F), dimension scores, and per-player details.
+    Dimensions: trade_value (avg), vorp (avg), age_balance, positional_depth.
+    """
+    if not player_ids:
+        return {"error": "No players provided", "overall_grade": "F", "overall_score": 0}
+
+    # Cap at 25 roster slots
+    player_ids = list(player_ids)[:25]
+
+    conn = get_conn()
+    try:
+        row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+        latest_season = season or (row[0] if row and row[0] else 2024)
+
+        placeholders = ",".join(["?"] * len(player_ids))
+        query = f"""
+            SELECT
+                p.player_id, p.full_name, p.position, p.team, p.age,
+                p.headshot_url,
+                SUM(s.fantasy_points_ppr) as total_ppr,
+                COUNT(DISTINCT s.week) as games
+            FROM players p
+            LEFT JOIN player_week_stats s
+                ON s.player_id = p.player_id AND s.season = ?
+            WHERE p.player_id IN ({placeholders})
+            GROUP BY p.player_id
+        """
+        params = [latest_season] + player_ids
+        rows = conn.execute(query, params).fetchall()
+
+        if not rows:
+            return {"error": "No players found", "overall_grade": "F", "overall_score": 0}
+
+        # Build player details
+        players = []
+        for r in rows:
+            games = r[7] or 0
+            total_ppr = r[6] or 0
+            ppg = round(total_ppr / games, 2) if games > 0 else 0.0
+            pos = r[2] or "WR"
+            age = r[4] or 25
+            tv = compute_trade_value(ppg, age, pos)
+
+            # Compute VORP using standard thresholds
+            repl_ppg = {
+                "QB": 14.5, "RB": 8.0, "WR": 8.5, "TE": 7.0
+            }.get(pos, 8.0)
+            vorp = round(ppg - repl_ppg, 2)
+
+            players.append({
+                "player_id": r[0],
+                "full_name": r[1] or "Unknown",
+                "position": pos,
+                "team": r[3] or "FA",
+                "age": age,
+                "headshot_url": r[5] or "",
+                "ppg": ppg,
+                "games": games,
+                "trade_value": tv,
+                "vorp": vorp,
+            })
+
+        # --- Dimension 1: Trade Value (avg of all players, scaled to 0-100) ---
+        avg_tv = sum(p["trade_value"] for p in players) / len(players)
+        # Good rosters avg ~45-55 trade value; scale so 50 = 75 score
+        tv_score = min(100, max(0, avg_tv * 1.5))
+
+        # --- Dimension 2: VORP (sum, more positive = better) ---
+        total_vorp = sum(p["vorp"] for p in players)
+        # Good rosters have ~30-60 total VORP; scale
+        vorp_score = min(100, max(0, 50 + total_vorp * 1.2))
+
+        # --- Dimension 3: Age Balance (penalize all-old or all-young) ---
+        ages = [p["age"] for p in players if p["age"]]
+        if ages:
+            avg_age = sum(ages) / len(ages)
+            # Ideal avg age is ~25-26 for dynasty
+            age_dev = abs(avg_age - 25.5)
+            age_score = max(0, 100 - age_dev * 12)
+            # Bonus for age diversity (std dev)
+            if len(ages) > 1:
+                import math
+                age_std = math.sqrt(sum((a - avg_age) ** 2 for a in ages) / len(ages))
+                # Some diversity is good (std ~3-4), too much or too little is bad
+                diversity_bonus = max(0, 15 - abs(age_std - 3.5) * 5)
+                age_score = min(100, age_score + diversity_bonus)
+        else:
+            age_score = 50
+
+        # --- Dimension 4: Positional Depth ---
+        pos_counts = {}
+        for p in players:
+            pos_counts[p["position"]] = pos_counts.get(p["position"], 0) + 1
+
+        # Ideal dynasty roster: 1-2 QB, 5-7 RB, 6-8 WR, 2-3 TE
+        ideal = {"QB": 2, "RB": 6, "WR": 7, "TE": 2}
+        depth_score = 100
+        for pos, ideal_count in ideal.items():
+            actual = pos_counts.get(pos, 0)
+            diff = abs(actual - ideal_count)
+            depth_score -= diff * 8  # -8 per player off from ideal
+        # Penalize missing positions heavily
+        for pos in ("QB", "RB", "WR", "TE"):
+            if pos_counts.get(pos, 0) == 0:
+                depth_score -= 15
+        depth_score = max(0, min(100, depth_score))
+
+        # --- Overall Score (weighted) ---
+        overall_score = round(
+            tv_score * 0.35 + vorp_score * 0.25 + age_score * 0.20 + depth_score * 0.20
+        )
+        overall_score = max(0, min(100, overall_score))
+
+        # Grade mapping
+        grade_thresholds = [
+            (95, "A+"), (90, "A"), (85, "A-"),
+            (80, "B+"), (75, "B"), (70, "B-"),
+            (65, "C+"), (60, "C"), (55, "C-"),
+            (50, "D+"), (45, "D"), (40, "D-"),
+        ]
+        overall_grade = "F"
+        for threshold, grade in grade_thresholds:
+            if overall_score >= threshold:
+                overall_grade = grade
+                break
+
+        # Position summary
+        position_summary = {}
+        for pos in ("QB", "RB", "WR", "TE"):
+            pos_players = [p for p in players if p["position"] == pos]
+            position_summary[pos] = {
+                "count": len(pos_players),
+                "avg_trade_value": round(sum(p["trade_value"] for p in pos_players) / len(pos_players), 1) if pos_players else 0,
+                "total_vorp": round(sum(p["vorp"] for p in pos_players), 1),
+            }
+
+        total_trade_value = round(sum(p["trade_value"] for p in players), 1)
+
+        return {
+            "overall_grade": overall_grade,
+            "overall_score": overall_score,
+            "total_trade_value": total_trade_value,
+            "player_count": len(players),
+            "dimensions": {
+                "trade_value": round(tv_score, 1),
+                "vorp": round(vorp_score, 1),
+                "age_balance": round(age_score, 1),
+                "positional_depth": round(depth_score, 1),
+            },
+            "position_summary": position_summary,
+            "players": sorted(players, key=lambda x: x["trade_value"], reverse=True),
+        }
+    finally:
+        conn.close()
