@@ -561,12 +561,18 @@
     return html;
   }
 
+  var GRADE_ORDER = {'A+':8,'A':7,'B+':6,'B':5,'C+':4,'C':3,'D':2,'F':1};
+
   function sortPlayers(players, col, dir) {
     return players.slice().sort(function(a, b) {
       var va = a[col], vb = b[col];
       if (va === null || va === undefined) va = -Infinity;
       if (vb === null || vb === undefined) vb = -Infinity;
-      if (typeof va === 'string') return dir * va.localeCompare(vb);
+      if (typeof va === 'string') {
+        var ga = GRADE_ORDER[va], gb = GRADE_ORDER[vb];
+        if (ga !== undefined && gb !== undefined) return dir * (gb - ga);
+        return dir * va.localeCompare(vb);
+      }
       return dir * (vb - va);
     });
   }

@@ -645,22 +645,25 @@
     var el = document.getElementById('aw-content');
     if (typeof html2canvas !== 'undefined') {
       html2canvas(el, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+        var ctx = canvas.getContext('2d');
+        ctx.font = '24px Caveat, cursive';
+        ctx.fillStyle = 'rgba(26,26,46,0.3)';
+        ctx.textAlign = 'right';
+        ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 16);
         var link = document.createElement('a');
         link.download = 'razzle-season-awards.png';
-        link.href = canvas.toDataURL();
+        link.href = canvas.toDataURL('image/png');
         link.click();
       });
     }
   });
 
   // Analytics
-  try {
-    fetch('/api/analytics/pageview', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ page: '/awards.html', referrer: document.referrer || '' })
-    });
-  } catch(e) {}
+  fetch('/api/analytics/pageview', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ page: '/awards.html', referrer: document.referrer || '' })
+  }).catch(function() {});
 
   // Initial load
   fetchData('', '');

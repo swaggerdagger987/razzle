@@ -563,12 +563,18 @@
     return html;
   }
 
+  var GRADE_ORDER = {'A+':8,'A':7,'B+':6,'B':5,'C+':4,'C':3,'D':2,'F':1};
+
   function sortPlayers(players, col, dir) {
     return players.slice().sort(function(a, b) {
       var va = a[col], vb = b[col];
       if (va === null || va === undefined) va = -Infinity;
       if (vb === null || vb === undefined) vb = -Infinity;
-      if (typeof va === 'string') return dir * va.localeCompare(vb);
+      if (typeof va === 'string') {
+        var ga = GRADE_ORDER[va], gb = GRADE_ORDER[vb];
+        if (ga !== undefined && gb !== undefined) return dir * (gb - ga);
+        return dir * va.localeCompare(vb);
+      }
       return dir * (vb - va);
     });
   }
@@ -696,6 +702,11 @@
     var el = document.getElementById('rc-content');
     if (!el || typeof html2canvas === 'undefined') return;
     html2canvas(el, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+      var ctx = canvas.getContext('2d');
+      ctx.font = '24px Caveat, cursive';
+      ctx.fillStyle = 'rgba(26,26,46,0.3)';
+      ctx.textAlign = 'right';
+      ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 16);
       var link = document.createElement('a');
       link.download = 'razzle-report-card.png';
       link.href = canvas.toDataURL('image/png');
@@ -707,7 +718,7 @@
   fetch('/api/analytics/pageview', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ page: '/reportcard.html' })
+    body: JSON.stringify({ page: '/reportcard.html', referrer: document.referrer || '' })
   }).catch(function() {});
 
   // Initial load

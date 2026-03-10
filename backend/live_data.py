@@ -7055,12 +7055,35 @@ def fetch_opportunity_share(season=None, position=None, limit=30):
                 "dominators": [],
             }
 
-        # Build team totals
+        # Build team totals from ALL positions (unfiltered) for correct opp_share
         team_totals = defaultdict(lambda: {
             "targets": 0, "carries": 0,
             "rec_yards": 0, "rec_tds": 0,
             "rush_yards": 0, "rush_tds": 0,
         })
+        tt_rows = conn.execute("""
+            SELECT p.team,
+                   COALESCE(SUM(s.targets), 0),
+                   COALESCE(SUM(s.carries), 0),
+                   COALESCE(SUM(s.receiving_yards), 0),
+                   COALESCE(SUM(s.receiving_tds), 0),
+                   COALESCE(SUM(s.rushing_yards), 0),
+                   COALESCE(SUM(s.rushing_tds), 0)
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE s.season = ?
+              AND p.position IN ('QB', 'RB', 'WR', 'TE')
+              AND p.fantasy_relevant = 1
+            GROUP BY p.team
+        """, [season]).fetchall()
+        for tr in tt_rows:
+            t = team_totals[tr[0] or "FA"]
+            t["targets"] = tr[1]
+            t["carries"] = tr[2]
+            t["rec_yards"] = tr[3]
+            t["rec_tds"] = tr[4]
+            t["rush_yards"] = tr[5]
+            t["rush_tds"] = tr[6]
 
         players = []
         for r in rows:
@@ -7073,14 +7096,6 @@ def fetch_opportunity_share(season=None, position=None, limit=30):
             rush_tds = r[11]
             total_pts = r[12]
             games = r[13]
-
-            t = team_totals[team]
-            t["targets"] += targets
-            t["carries"] += carries
-            t["rec_yards"] += rec_yards
-            t["rec_tds"] += rec_tds
-            t["rush_yards"] += rush_yards
-            t["rush_tds"] += rush_tds
 
             players.append({
                 "player_id": r[0],
@@ -7260,6 +7275,30 @@ def fetch_report_cards(season=None, position=None, limit=25):
             vals = [defense_ppg[t][pos] for t in defense_ppg if pos in defense_ppg[t]]
             league_avg[pos] = sum(vals) / len(vals) if vals else 0
 
+        # Build team totals from ALL positions (unfiltered) for correct opp_share
+        team_totals = defaultdict(lambda: {"targets": 0, "carries": 0, "rec_yards": 0, "rec_tds": 0, "rush_yards": 0})
+        tt_rows = conn.execute("""
+            SELECT p.team,
+                   COALESCE(SUM(s.targets), 0),
+                   COALESCE(SUM(s.carries), 0),
+                   COALESCE(SUM(s.receiving_yards), 0),
+                   COALESCE(SUM(s.receiving_tds), 0),
+                   COALESCE(SUM(s.rushing_yards), 0)
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE s.season = ?
+              AND p.position IN ('QB', 'RB', 'WR', 'TE')
+              AND p.fantasy_relevant = 1
+            GROUP BY p.team
+        """, [season]).fetchall()
+        for tr in tt_rows:
+            t = team_totals[tr[0] or "FA"]
+            t["targets"] = tr[1]
+            t["carries"] = tr[2]
+            t["rec_yards"] = tr[3]
+            t["rec_tds"] = tr[4]
+            t["rush_yards"] = tr[5]
+
         # Aggregate per player
         player_info = {}
         player_weeks = defaultdict(list)
@@ -7268,8 +7307,6 @@ def fetch_report_cards(season=None, position=None, limit=25):
             "rec_yards": 0, "rec_tds": 0, "rush_yards": 0,
         })
         player_sos = defaultdict(list)
-        # Track team totals for opp share
-        team_totals = defaultdict(lambda: {"targets": 0, "carries": 0, "rec_yards": 0, "rec_tds": 0, "rush_yards": 0})
 
         for r in rows:
             pid = r[0]
@@ -7301,14 +7338,6 @@ def fetch_report_cards(season=None, position=None, limit=25):
             d["rec_yards"] += rec_yards
             d["rec_tds"] += rec_tds
             d["rush_yards"] += rush_yards
-
-            team = r[3] or "FA"
-            t = team_totals[team]
-            t["targets"] += targets
-            t["carries"] += carries
-            t["rec_yards"] += rec_yards
-            t["rec_tds"] += rec_tds
-            t["rush_yards"] += rush_yards
 
             opp_allows = defense_ppg.get(opp, {}).get(pos, league_avg.get(pos, 0))
             player_sos[pid].append(opp_allows)
@@ -7575,10 +7604,33 @@ def fetch_season_awards(season=None, position=None):
             "rec_yards": 0, "rec_tds": 0, "rush_yards": 0,
         })
         player_sos = defaultdict(list)
+
+        # Build team totals from ALL positions (unfiltered) for correct opp_share
         team_totals = defaultdict(lambda: {
             "targets": 0, "carries": 0, "rec_yards": 0,
             "rec_tds": 0, "rush_yards": 0,
         })
+        tt_rows = conn.execute("""
+            SELECT p.team,
+                   COALESCE(SUM(s.targets), 0),
+                   COALESCE(SUM(s.carries), 0),
+                   COALESCE(SUM(s.receiving_yards), 0),
+                   COALESCE(SUM(s.receiving_tds), 0),
+                   COALESCE(SUM(s.rushing_yards), 0)
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE s.season = ?
+              AND p.position IN ('QB', 'RB', 'WR', 'TE')
+              AND p.fantasy_relevant = 1
+            GROUP BY p.team
+        """, [season]).fetchall()
+        for tr in tt_rows:
+            t = team_totals[tr[0] or "FA"]
+            t["targets"] = tr[1]
+            t["carries"] = tr[2]
+            t["rec_yards"] = tr[3]
+            t["rec_tds"] = tr[4]
+            t["rush_yards"] = tr[5]
 
         for r in rows:
             pid = r[0]
@@ -7610,14 +7662,6 @@ def fetch_season_awards(season=None, position=None):
             d["rec_yards"] += rec_yards
             d["rec_tds"] += rec_tds
             d["rush_yards"] += rush_yards
-
-            team = r[3] or "FA"
-            t = team_totals[team]
-            t["targets"] += targets
-            t["carries"] += carries
-            t["rec_yards"] += rec_yards
-            t["rec_tds"] += rec_tds
-            t["rush_yards"] += rush_yards
 
             opp_allows = defense_ppg.get(opp, {}).get(pos, league_avg.get(pos, 0))
             player_sos[pid].append(opp_allows)

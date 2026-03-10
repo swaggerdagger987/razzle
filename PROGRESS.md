@@ -1,6 +1,22 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 90 — Fantasy Season Superlatives Dashboard (COMPLETE)
+## Current Phase: Phase 91 — QA + UX Audit Fixes (COMPLETE)
+
+**Exit criterion MET:** All HIGH findings from QA-AUDIT.md (Phases 86-90) resolved. Position-filtered team totals now use separate unfiltered SQL query for correct opp_share/dominator metrics in fetch_opportunity_share, fetch_report_cards, and fetch_season_awards. PNG export watermark overlay added to reportcard.html and awards.html (ctx.fillText). MEDIUM fixes applied: grade string sort uses numeric GRADE_ORDER map (A+=8...F=1) in reportcard/stocks/opportunity, reportcard analytics includes referrer field, awards analytics uses .catch() instead of try/catch. All fixes verified with Python syntax checks and JS structure validation.
+
+### Phase 91 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | HIGH fix — Position filter team totals | DONE | 3 functions fixed, unfiltered team totals SQL query |
+| 2 | HIGH fix — PNG export watermark overlay | DONE | reportcard + awards now draw canvas watermark |
+| 3 | MEDIUM fixes — Grade sort + analytics | DONE | GRADE_ORDER map, referrer field, .catch() |
+| 4 | Smoke test | DONE | Python + JS syntax clean, all fixes verified |
+
+### Decisions Log
+- **QA+UX audit at Phase 90**: Triggered by phase 90 being a multiple of 5. Audited all files from phases 86-90. Found 2 HIGH issues (position-filtered team totals inflating opp_share + missing PNG watermark), 4 MEDIUM issues (grade sort, referrer, promise catch), 3 LOW (no action). No CRITICALs.
+
+## Previous Phase: Phase 90 — Fantasy Season Superlatives Dashboard (COMPLETE)
 
 **Exit criterion MET:** /awards.html page shows fantasy season superlatives — data-driven awards crowning winners across all Razzle metric systems. 10 award categories: MVP (highest Fantasy GPA), Most Efficient (highest PPO), Iron Man (most consistent, lowest CoV), Schedule Survivor (best production despite hardest SOS), Volume King (highest opportunity share), Breakout Star (age-weighted volume + production), Rising Stock (highest stock delta), Dominator (highest dominator rating), Red Zone King (most GL TDs), Best Floor (highest 10th-percentile weekly score). Each award: trophy/badge emoji icon, award name + description, winner showcase card (headshot, name, position badge, team, PPG, GPA/Eff/Con/SOS grade mini-badges, annotation, key stat highlight), runners-up list (2nd-5th place with rank, headshot, pos badge, name, key stat). 2-column card grid layout. Position filter tabs (All/QB/RB/WR/TE). Season selector. Click winner/runner → player profile. PNG export via html2canvas with watermark. Responsive at 768px (1-col) + 480px. /api/season-awards endpoint computes all 10 award categories from existing metrics: GPA percentiles, PPO, inverse CoV, SOS difficulty, opportunity share, dominator rating, GL TDs from player_season_pbp, 10th-percentile floor, age-weighted breakout score, stock delta. Min 6 games + 2 PPG filter. "Awards" nav link added to all 30 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors.
 

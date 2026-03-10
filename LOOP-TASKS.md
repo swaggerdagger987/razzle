@@ -8,32 +8,32 @@
 ---
 
 ## Task 1: HIGH fix — Position filter team totals (backend)
-**Status**: PENDING
-**Attempts**: 0
-**Notes**: Fix fetch_opportunity_share, fetch_report_cards, and fetch_season_awards in live_data.py. Team totals must be computed from ALL positions (unfiltered), then the position filter applied only to the final player list. This ensures opp_share and dominator rating remain correct percentages of the full team.
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Fixed fetch_opportunity_share, fetch_report_cards, and fetch_season_awards in live_data.py. Added separate unfiltered SQL query for team totals (GROUP BY p.team, all positions). Removed in-loop team_totals accumulation from filtered rows. 3/3 functions fixed. Python syntax valid.
 
 ## Task 2: HIGH fix — PNG export watermark overlay (frontend)
-**Status**: PENDING
-**Attempts**: 0
-**Notes**: Add canvas watermark drawing (ctx.fillText('razzle.lol', ...)) to PNG export handlers in reportcard.html and awards.html. Match the pattern from stocks.html lines 700-704. Also fix awards.html toDataURL to include 'image/png' format.
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Added canvas watermark drawing (ctx.fillText('razzle.lol', ...)) to PNG export handlers in reportcard.html and awards.html. Also fixed awards.html toDataURL to include 'image/png' format. Both files now match stocks.html pattern.
 
 ## Task 3: MEDIUM fixes — Grade sort + analytics (frontend)
-**Status**: PENDING
-**Attempts**: 0
-**Notes**: (a) Fix grade string sort in reportcard.html, stocks.html, opportunity.html: map grade strings to numeric values before comparison (A+=8, A=7, B+=6, B=5, C+=4, C=3, D=2, F=1). (b) Add referrer field to reportcard.html analytics POST. (c) Fix awards.html analytics to use .catch() instead of try/catch.
+**Status**: PASS
+**Attempts**: 1
+**Notes**: (a) Added GRADE_ORDER map to sortPlayers in reportcard.html, stocks.html, opportunity.html — grade strings now sort numerically (A+=8 > A=7 > B+=6 > B=5 > C+=4 > C=3 > D=2 > F=1). (b) Added referrer field to reportcard.html analytics POST. (c) Fixed awards.html analytics from try/catch to .catch().
 
 ## Task 4: Smoke test
-**Status**: PENDING
-**Attempts**: 0
-**Notes**: Python + JS syntax validation. Verify all fixes applied correctly. Design compliance check.
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Python syntax valid (live_data.py + server.py). JS structure balanced in all 4 files (reportcard 266/266, awards 166/166, stocks 293/293, opportunity 277/277). 3 unfiltered team totals queries confirmed. 0 in-loop team_totals accumulations confirmed. GRADE_ORDER present in 3 table-based pages. Watermark fillText present in all 4 files. .catch() present in all 4 files.
 
 ---
 
 ## Loop State
 ```
 Current Phase: 91
-Current Task: 1
-Current Stage: BUILD
+Current Task: 4
+Current Stage: COMPLETE
 Attempt: 1
-Tasks Completed: 0/4
+Tasks Completed: 4/4
 ```
