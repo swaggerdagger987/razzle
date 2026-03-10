@@ -5,7 +5,7 @@
 - Task: Migrate remaining panels
 - Stage: PLAN
 - Attempt: 1/3
-- Tasks Done: 8/10
+- Tasks Done: 9/10
 
 ## Phase 1: Navigation Surgery -- COMPLETE
 ### Task 1: Slim nav to 4 items on all pages
@@ -200,8 +200,8 @@
 **Accept when**: All remaining panels render natively. Zero iframes in lab.html.
 **Depends on**: Task 2
 **Size**: L
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task 10: Remove iframe fallbacks and clean up
 **Requirement**: Remove all iframe loading code from lab.js. Remove any iframe-specific CSS. Verify every panel loads, renders, and caches correctly. Test panel switching performance (should be <100ms for cached panels).
