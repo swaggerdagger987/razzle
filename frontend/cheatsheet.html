@@ -3,45 +3,45 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Scoring Format Comparison — Razzle</title>
-<meta property="og:title" content="Scoring Format Comparison — Razzle">
-<meta property="og:description" content="How PPR vs Standard scoring changes fantasy football rankings on razzle.lol">
+<title>Draft Cheat Sheet — Razzle</title>
+<meta property="og:title" content="Draft Cheat Sheet — Razzle">
+<meta property="og:description" content="Printable dynasty draft cheat sheet with rankings, tiers, and trade values on razzle.lol">
 <meta property="og:site_name" content="razzle.lol">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Scoring Format Comparison — Razzle">
-<meta name="twitter:description" content="How PPR vs Standard scoring changes fantasy football rankings on razzle.lol">
+<meta name="twitter:title" content="Draft Cheat Sheet — Razzle">
+<meta name="twitter:description" content="Printable dynasty draft cheat sheet on razzle.lol">
 <meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
-<meta name="description" content="Scoring format comparison — see how player rankings shift between PPR, Half-PPR, and Standard scoring on razzle.lol">
+<meta name="description" content="Fantasy draft cheat sheet — printable position rankings with tier breaks and trade values on razzle.lol">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="styles.css">
 <style>
-  .sc-page {
-    max-width: 1100px;
+  .cs-page {
+    max-width: 1200px;
     margin: 0 auto;
     padding: 24px 20px 60px;
   }
-  .sc-header {
+  .cs-header {
     text-align: center;
     margin-bottom: 20px;
   }
-  .sc-header h1 {
+  .cs-header h1 {
     font-family: var(--font-display);
     font-size: 32px;
     color: var(--ink);
     margin: 0 0 4px;
   }
-  .sc-header .sc-subtitle {
+  .cs-header .cs-subtitle {
     font-family: var(--font-hand);
     font-size: 20px;
     color: var(--ink-light);
   }
 
   /* Controls */
-  .sc-controls {
+  .cs-controls {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -49,12 +49,12 @@
     margin-bottom: 24px;
     flex-wrap: wrap;
   }
-  .sc-pos-tabs {
+  .cs-fmt-tabs {
     display: flex;
     gap: 6px;
   }
-  .sc-pos-tab {
-    padding: 5px 14px;
+  .cs-fmt-tab {
+    padding: 6px 16px;
     font-family: var(--font-display);
     font-size: 13px;
     border: 2px solid var(--ink);
@@ -64,16 +64,16 @@
     cursor: pointer;
     transition: all 0.15s;
   }
-  .sc-pos-tab:hover {
+  .cs-fmt-tab:hover {
     background: var(--bg-warm);
     transform: translate(-1px, -1px);
     box-shadow: 3px 3px 0 var(--ink);
   }
-  .sc-pos-tab.active {
+  .cs-fmt-tab.active {
     background: var(--ink);
     color: var(--bg-card);
   }
-  .sc-season-select {
+  .cs-season-select {
     padding: 5px 12px;
     font-family: var(--font-mono);
     font-size: 13px;
@@ -83,127 +83,89 @@
     cursor: pointer;
   }
 
-  /* Section */
-  .sc-section {
-    margin-bottom: 28px;
+  /* 4-column grid */
+  .cs-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    align-items: start;
   }
-  .sc-section-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 12px;
-    padding-bottom: 8px;
+
+  /* Position column */
+  .cs-col {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    overflow: hidden;
+  }
+  .cs-col-header {
+    padding: 10px 12px;
+    font-family: var(--font-display);
+    font-size: 16px;
+    color: #fff;
+    text-align: center;
+    font-weight: 700;
+  }
+  .cs-col-header.QB { background: var(--pos-qb); }
+  .cs-col-header.RB { background: var(--pos-rb); }
+  .cs-col-header.WR { background: var(--pos-wr); }
+  .cs-col-header.TE { background: var(--pos-te); }
+
+  /* Tier break */
+  .cs-tier-break {
+    padding: 4px 12px;
+    font-family: var(--font-display);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: var(--bg-warm);
+    color: var(--ink-medium);
+    border-top: 2px dashed var(--ink-faint);
     border-bottom: 2px dashed var(--ink-faint);
   }
-  .sc-section-icon {
-    font-size: 20px;
-  }
-  .sc-section-title {
-    font-family: var(--font-display);
-    font-size: 18px;
-    color: var(--ink);
-  }
-  .sc-section-note {
-    font-family: var(--font-hand);
-    font-size: 14px;
-    color: var(--ink-light);
-  }
 
-  /* Table */
-  .sc-table-wrap {
-    overflow-x: auto;
-  }
-  .sc-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: var(--font-mono);
-    font-size: 13px;
-  }
-  .sc-table th {
-    background: var(--bg-warm);
-    font-family: var(--font-display);
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    padding: 8px 10px;
-    text-align: left;
-    border-bottom: 3px solid var(--ink);
-    white-space: nowrap;
-    cursor: pointer;
-  }
-  .sc-table th:hover {
-    background: var(--ink-faint);
-  }
-  .sc-table td {
-    padding: 8px 10px;
+  /* Player row */
+  .cs-player {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
     border-bottom: 1px solid var(--ink-faint);
-    white-space: nowrap;
-  }
-  .sc-table tr:hover td {
-    background: var(--bg-warm);
-  }
-  .sc-table tr {
-    cursor: pointer;
-  }
-
-  /* Position badge */
-  .sc-pos-badge {
-    font-size: 10px;
-    font-weight: 700;
-    padding: 2px 7px;
-    border-radius: 10px;
-    border: 2px solid var(--ink);
-    color: #fff;
-    display: inline-block;
-  }
-  .sc-pos-badge.QB { background: var(--pos-qb); }
-  .sc-pos-badge.RB { background: var(--pos-rb); }
-  .sc-pos-badge.WR { background: var(--pos-wr); }
-  .sc-pos-badge.TE { background: var(--pos-te); }
-
-  /* Headshot */
-  .sc-headshot {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    border: 2px solid var(--ink);
-    object-fit: cover;
-    vertical-align: middle;
-    margin-right: 6px;
-    background: var(--bg-warm);
-  }
-
-  /* Rank shift badge */
-  .sc-rank-shift {
-    display: inline-block;
     font-family: var(--font-mono);
     font-size: 11px;
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+  .cs-player:hover { background: var(--bg-warm); }
+  .cs-player:last-child { border-bottom: none; }
+  .cs-rank {
     font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 10px;
-    border: 2px solid var(--ink);
-  }
-  .sc-rank-shift.up {
-    background: var(--green-light);
-    color: var(--green);
-  }
-  .sc-rank-shift.down {
-    background: var(--red-light);
-    color: var(--red);
-  }
-  .sc-rank-shift.neutral {
-    background: var(--bg-warm);
     color: var(--ink-light);
+    min-width: 18px;
+    text-align: right;
   }
-
-  /* PPG highlight */
-  .sc-ppg-best {
+  .cs-pname {
+    flex: 1;
+    font-weight: 600;
+    color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .cs-team {
+    color: var(--ink-light);
+    font-size: 10px;
+  }
+  .cs-ppg {
     font-weight: 700;
-    color: var(--green);
+    color: var(--orange);
+    min-width: 32px;
+    text-align: right;
   }
 
   /* Loading */
-  .sc-loading {
+  .cs-loading {
     text-align: center;
     padding: 60px 20px;
     font-family: var(--font-hand);
@@ -211,13 +173,14 @@
     color: var(--ink-light);
   }
 
-  /* Export */
-  .sc-export {
+  /* Actions */
+  .cs-actions {
     display: flex;
     justify-content: center;
-    margin-top: 16px;
+    gap: 10px;
+    margin-top: 20px;
   }
-  .sc-export button {
+  .cs-actions button {
     font-family: var(--font-display);
     font-size: 13px;
     padding: 8px 18px;
@@ -228,13 +191,13 @@
     cursor: pointer;
     transition: all 0.15s;
   }
-  .sc-export button:hover {
+  .cs-actions button:hover {
     transform: translate(-2px, -2px);
     box-shadow: 6px 6px 0 var(--ink);
   }
 
   /* Watermark */
-  .sc-watermark {
+  .cs-watermark {
     position: fixed;
     bottom: 10px;
     right: 14px;
@@ -245,13 +208,25 @@
     z-index: 1;
   }
 
+  /* Responsive */
   @media (max-width: 768px) {
-    .sc-table { font-size: 12px; }
-    .sc-table th, .sc-table td { padding: 6px 8px; }
+    .cs-grid { grid-template-columns: 1fr 1fr; }
   }
   @media (max-width: 480px) {
-    .sc-header h1 { font-size: 26px; }
-    .sc-controls { flex-direction: column; }
+    .cs-grid { grid-template-columns: 1fr; }
+    .cs-header h1 { font-size: 26px; }
+  }
+
+  /* Print */
+  @media print {
+    .topnav, footer, .cs-controls, .cs-actions, .cs-watermark { display: none !important; }
+    .cs-page { padding: 0; max-width: 100%; }
+    .cs-grid { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .cs-col { box-shadow: none; border-width: 2px; }
+    .cs-header { margin-bottom: 10px; }
+    .cs-header h1 { font-size: 24px; }
+    .cs-player { padding: 3px 6px; font-size: 10px; }
+    body { background: #fff; }
   }
 </style>
 </head>
@@ -292,57 +267,39 @@
     <li><a href="/tradevalues.html">Trade Values</a></li>
     <li><a href="/tradefinder.html">Trade Finder</a></li>
     <li><a href="/rosterbuilder.html">Roster Builder</a></li>
-    <li><a href="/scoring.html" class="active">Scoring</a></li>
-    <li><a href="/cheatsheet.html">Cheat Sheet</a></li>
+    <li><a href="/scoring.html">Scoring</a></li>
+    <li><a href="/cheatsheet.html" class="active">Cheat Sheet</a></li>
     <li><a href="/team/KC">Teams</a></li>
     <li><a href="/league-intel.html">League Intel</a></li>
     <li><a href="/agents.html">War Room</a></li>
   </ul>
 </nav>
 
-<main class="sc-page" id="sc-content">
-  <div class="sc-header">
-    <h1>Scoring Format Comparison</h1>
-    <div class="sc-subtitle">how PPR vs Standard changes the game</div>
+<main class="cs-page" id="cs-content">
+  <div class="cs-header">
+    <h1>Draft Cheat Sheet</h1>
+    <div class="cs-subtitle">print it, screenshot it, win your draft</div>
   </div>
 
-  <div class="sc-controls">
-    <div class="sc-pos-tabs" id="pos-tabs">
-      <button class="sc-pos-tab active" data-pos="">All</button>
-      <button class="sc-pos-tab" data-pos="QB">QB</button>
-      <button class="sc-pos-tab" data-pos="RB">RB</button>
-      <button class="sc-pos-tab" data-pos="WR">WR</button>
-      <button class="sc-pos-tab" data-pos="TE">TE</button>
+  <div class="cs-controls">
+    <div class="cs-fmt-tabs" id="fmt-tabs">
+      <button class="cs-fmt-tab active" data-fmt="ppr">PPR</button>
+      <button class="cs-fmt-tab" data-fmt="half">Half-PPR</button>
+      <button class="cs-fmt-tab" data-fmt="std">Standard</button>
     </div>
-    <select class="sc-season-select" id="season-select"></select>
+    <select class="cs-season-select" id="season-select"></select>
   </div>
 
-  <div class="sc-loading" id="sc-loading">pulling film...</div>
-  <div id="sc-container" style="display:none;">
-    <div class="sc-section" id="risers-section">
-      <div class="sc-section-header">
-        <span class="sc-section-icon">&#x2B06;&#xFE0F;</span>
-        <span class="sc-section-title">PPR Risers</span>
-        <span class="sc-section-note">rank higher in PPR than Standard</span>
-      </div>
-      <div class="sc-table-wrap" id="risers-table"></div>
-    </div>
-    <div class="sc-section" id="fallers-section">
-      <div class="sc-section-header">
-        <span class="sc-section-icon">&#x2B07;&#xFE0F;</span>
-        <span class="sc-section-title">PPR Fallers</span>
-        <span class="sc-section-note">rank lower in PPR than Standard</span>
-      </div>
-      <div class="sc-table-wrap" id="fallers-table"></div>
-    </div>
-  </div>
+  <div class="cs-loading" id="cs-loading">pulling film...</div>
+  <div class="cs-grid" id="cs-grid" style="display:none;"></div>
 
-  <div class="sc-export">
+  <div class="cs-actions">
+    <button onclick="window.print()">Print</button>
     <button onclick="exportPng()">Export PNG</button>
   </div>
 </main>
 
-<div class="sc-watermark">razzle.lol</div>
+<div class="cs-watermark">razzle.lol</div>
 
 <footer style="text-align:center; padding:24px 20px 32px; font-family:var(--font-hand); font-size:15px; color:var(--ink-light); border-top:2px dashed var(--ink-faint); margin-top:40px;">
   <div style="margin-bottom:10px;">
@@ -426,31 +383,31 @@
     return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  function fmt(v, dec) {
+  function fmt(v) {
     if (v === null || v === undefined) return '-';
-    return Number(v).toFixed(dec === undefined ? 1 : dec);
+    return Number(v).toFixed(1);
   }
+
+  var POS_ORDER = ['QB', 'RB', 'WR', 'TE'];
 
   var state = {
     season: 0,
-    position: '',
+    format: 'ppr',
     data: null
   };
 
   function init() {
-    if (window.__razzleAnalytics) window.__razzleAnalytics('scoring');
+    if (window.__razzleAnalytics) window.__razzleAnalytics('cheatsheet');
 
-    // Position tabs
-    document.querySelectorAll('.sc-pos-tab').forEach(function(tab) {
+    document.querySelectorAll('.cs-fmt-tab').forEach(function(tab) {
       tab.addEventListener('click', function() {
-        state.position = this.getAttribute('data-pos');
-        document.querySelectorAll('.sc-pos-tab').forEach(function(t) { t.classList.remove('active'); });
+        state.format = this.getAttribute('data-fmt');
+        document.querySelectorAll('.cs-fmt-tab').forEach(function(t) { t.classList.remove('active'); });
         this.classList.add('active');
         fetchData();
       });
     });
 
-    // Season select
     document.getElementById('season-select').addEventListener('change', function() {
       state.season = parseInt(this.value) || 0;
       fetchData();
@@ -460,12 +417,11 @@
   }
 
   function fetchData() {
-    document.getElementById('sc-loading').style.display = 'block';
-    document.getElementById('sc-container').style.display = 'none';
+    document.getElementById('cs-loading').style.display = 'block';
+    document.getElementById('cs-grid').style.display = 'none';
 
-    var url = '/api/scoring-comparison?';
-    if (state.season) url += 'season=' + state.season + '&';
-    if (state.position) url += 'position=' + state.position;
+    var url = '/api/cheat-sheet?format=' + state.format;
+    if (state.season) url += '&season=' + state.season;
 
     fetch(url)
       .then(function(r) {
@@ -474,8 +430,6 @@
       })
       .then(function(data) {
         state.data = data;
-
-        // Populate season selector
         var sel = document.getElementById('season-select');
         if (sel.options.length <= 1) {
           sel.innerHTML = '';
@@ -491,57 +445,46 @@
         render();
       })
       .catch(function() {
-        document.getElementById('sc-loading').textContent = 'failed to load — try refreshing';
+        document.getElementById('cs-loading').textContent = 'failed to load — try refreshing';
       });
   }
 
-  function buildTable(players) {
-    if (!players || players.length === 0) {
-      return '<div style="text-align:center; padding:20px; font-family:var(--font-hand); color:var(--ink-light);">no players in this category</div>';
-    }
+  function render() {
+    document.getElementById('cs-loading').style.display = 'none';
+    var grid = document.getElementById('cs-grid');
+    grid.style.display = 'grid';
 
-    var html = '<table class="sc-table">';
-    html += '<thead><tr>';
-    html += '<th>Pos</th><th>Player</th><th>Team</th>';
-    html += '<th>PPR PPG</th><th>Half PPG</th><th>Std PPG</th>';
-    html += '<th>PPR Rank</th><th>Std Rank</th><th>Shift</th>';
-    html += '</tr></thead><tbody>';
+    var positions = state.data.positions || {};
+    var html = '';
 
-    players.forEach(function(p) {
-      var shiftClass = p.rank_diff > 0 ? 'up' : (p.rank_diff < 0 ? 'down' : 'neutral');
-      var shiftText = p.rank_diff > 0 ? ('+' + p.rank_diff) : String(p.rank_diff);
+    POS_ORDER.forEach(function(pos) {
+      var players = positions[pos] || [];
+      html += '<div class="cs-col">';
+      html += '<div class="cs-col-header ' + pos + '">' + escapeHtml(pos) + ' (' + players.length + ')</div>';
 
-      html += '<tr onclick="window.location.href=\'/player.html?id=' + escapeHtml(p.player_id) + '\'">';
-      html += '<td><span class="sc-pos-badge ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span></td>';
-      html += '<td>';
-      html += '<img class="sc-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="" onerror="this.style.display=\'none\'">';
-      html += escapeHtml(p.full_name);
-      html += '</td>';
-      html += '<td>' + escapeHtml(p.team) + '</td>';
-      html += '<td>' + fmt(p.ppg_ppr) + '</td>';
-      html += '<td>' + fmt(p.ppg_half) + '</td>';
-      html += '<td>' + fmt(p.ppg_std) + '</td>';
-      html += '<td>' + p.rank_ppr + '</td>';
-      html += '<td>' + p.rank_std + '</td>';
-      html += '<td><span class="sc-rank-shift ' + shiftClass + '">' + escapeHtml(shiftText) + '</span></td>';
-      html += '</tr>';
+      var currentTier = '';
+      players.forEach(function(p) {
+        // Tier break
+        if (p.tier !== currentTier) {
+          currentTier = p.tier;
+          html += '<div class="cs-tier-break">' + escapeHtml(currentTier) + '</div>';
+        }
+        html += '<div class="cs-player" onclick="window.location.href=\'/player.html?id=' + escapeHtml(p.player_id) + '\'">';
+        html += '<span class="cs-rank">' + p.rank + '</span>';
+        html += '<span class="cs-pname">' + escapeHtml(p.full_name) + '</span>';
+        html += '<span class="cs-team">' + escapeHtml(p.team) + '</span>';
+        html += '<span class="cs-ppg">' + fmt(p.ppg) + '</span>';
+        html += '</div>';
+      });
+
+      html += '</div>';
     });
 
-    html += '</tbody></table>';
-    return html;
-  }
-
-  function render() {
-    document.getElementById('sc-loading').style.display = 'none';
-    document.getElementById('sc-container').style.display = 'block';
-
-    var d = state.data;
-    document.getElementById('risers-table').innerHTML = buildTable(d.risers);
-    document.getElementById('fallers-table').innerHTML = buildTable(d.fallers);
+    grid.innerHTML = html;
   }
 
   window.exportPng = function() {
-    var el = document.getElementById('sc-content');
+    var el = document.getElementById('cs-content');
     if (typeof html2canvas === 'undefined') return;
     html2canvas(el, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
       var ctx = canvas.getContext('2d');
@@ -549,7 +492,7 @@
       ctx.fillStyle = 'rgba(26,26,46,0.18)';
       ctx.fillText('razzle.lol', canvas.width - 160, canvas.height - 20);
       var link = document.createElement('a');
-      link.download = 'razzle-scoring-comparison.png';
+      link.download = 'razzle-cheat-sheet.png';
       link.href = canvas.toDataURL('image/png');
       link.click();
     });

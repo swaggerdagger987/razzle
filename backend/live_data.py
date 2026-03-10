@@ -8684,3 +8684,106 @@ def fetch_scoring_comparison(season=None, position=None, limit=40):
         }
     finally:
         conn.close()
+
+
+# ---------------------------------------------------------------------------
+# Fantasy Draft Cheat Sheet
+# ---------------------------------------------------------------------------
+
+_CHEAT_TIERS = [
+    (20.0, "Elite"),
+    (15.0, "Starter"),
+    (10.0, "Flex"),
+    (5.0, "Bench"),
+    (0.0, "Stash"),
+]
+
+
+def fetch_cheat_sheet(season=None, fmt="ppr"):
+    """Return a printable draft cheat sheet grouped by position with tier breaks."""
+    conn = get_conn()
+    try:
+        row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
+        available_seasons = [r[0] for r in row] if row else [2024]
+        if not season:
+            season = available_seasons[0] if available_seasons else 2024
+
+        # Select the right fantasy points column
+        pts_col = {
+            "ppr": "fantasy_points_ppr",
+            "half": "fantasy_points_half_ppr",
+            "std": "fantasy_points_ppr",  # fallback; compute std below
+        }.get(fmt, "fantasy_points_ppr")
+
+        use_std_calc = (fmt == "std")
+
+        query = f"""
+            SELECT
+                p.player_id, p.full_name, p.position, p.team, p.age,
+                SUM(s.{pts_col}) as total_pts,
+                SUM(s.receptions) as total_rec,
+                COUNT(DISTINCT s.week) as games
+            FROM players p
+            JOIN player_week_stats s
+                ON s.player_id = p.player_id AND s.season = ?
+            WHERE p.position IN ('QB','RB','WR','TE')
+              AND p.fantasy_relevant = 1
+            GROUP BY p.player_id
+            HAVING games >= 4 AND (total_pts / games) >= 2
+            ORDER BY total_pts DESC
+        """
+        rows = conn.execute(query, [season]).fetchall()
+
+        if not rows:
+            return {"season": season, "available_seasons": available_seasons, "format": fmt, "positions": {}}
+
+        # Build per-position lists
+        positions = {"QB": [], "RB": [], "WR": [], "TE": []}
+        for r in rows:
+            pos = r[2] or "WR"
+            if pos not in positions:
+                continue
+            games = r[7] or 1
+            total_pts = r[5] or 0
+            total_rec = r[6] or 0
+
+            # Standard = PPR points - receptions (1 point per rec in PPR)
+            if use_std_calc:
+                total_pts = total_pts - total_rec
+
+            ppg = round(total_pts / games, 2)
+            age = r[4] or 25
+            tv = compute_trade_value(ppg, age, pos)
+
+            # Assign tier
+            tier = "Stash"
+            for threshold, label in _CHEAT_TIERS:
+                if ppg >= threshold:
+                    tier = label
+                    break
+
+            positions[pos].append({
+                "player_id": r[0],
+                "full_name": r[1] or "Unknown",
+                "position": pos,
+                "team": r[3] or "FA",
+                "age": age,
+                "ppg": ppg,
+                "trade_value": tv,
+                "tier": tier,
+            })
+
+        # Sort each position by PPG desc, assign ranks
+        for pos in positions:
+            positions[pos].sort(key=lambda x: x["ppg"], reverse=True)
+            for i, p in enumerate(positions[pos]):
+                p["rank"] = i + 1
+
+        return {
+            "season": season,
+            "available_seasons": available_seasons,
+            "format": fmt,
+            "positions": positions,
+        }
+    finally:
+        conn.close()

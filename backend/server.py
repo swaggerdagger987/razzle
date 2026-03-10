@@ -912,6 +912,7 @@ def sitemap_xml():
         ("/tools.html", "0.8", "weekly"),
         ("/rosterbuilder.html", "0.8", "weekly"),
         ("/scoring.html", "0.8", "weekly"),
+        ("/cheatsheet.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1311,6 +1312,18 @@ def trade_finder(player_id: str = "", season: int = 0):
         return JSONResponse({"error": "Failed to fetch trade finder data"}, status_code=500)
 
 
+@app.get("/api/cheat-sheet")
+def cheat_sheet(season: int = 0, format: str = "ppr"):
+    """Return a draft cheat sheet grouped by position."""
+    try:
+        s = season if season > 0 else None
+        fmt = format if format in ("ppr", "half", "std") else "ppr"
+        return live_data.fetch_cheat_sheet(season=s, fmt=fmt)
+    except Exception as e:
+        logger.error(f"cheat-sheet error: {e}")
+        return JSONResponse({"error": "Failed to fetch cheat sheet"}, status_code=500)
+
+
 @app.get("/api/scoring-comparison")
 def scoring_comparison(season: int = 0, position: str = ""):
     """Compare player rankings across PPR, Half-PPR, and Standard scoring."""
@@ -1355,6 +1368,7 @@ def tools_hub():
                 {"name": "Stat Leaders", "desc": "Top performers across 10 statistical categories", "url": "/leaders.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Season Awards", "desc": "Data-driven fantasy superlatives — MVP, Iron Man, and more", "url": "/awards.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Report Card", "desc": "Composite Fantasy GPA grading efficiency, consistency, and more", "url": "/reportcard.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Draft Cheat Sheet", "desc": "Printable position rankings with tier breaks — PPR, Half, Standard", "url": "/cheatsheet.html", "positions": ["QB", "RB", "WR", "TE"]},
             ],
         },
         {

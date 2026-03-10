@@ -1,6 +1,23 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 98 — Scoring Format Comparison (COMPLETE)
+## Current Phase: Phase 99 — Fantasy Draft Cheat Sheet (COMPLETE)
+
+**Exit criterion MET:** /cheatsheet.html page shows a printable 4-column dynasty draft cheat sheet (QB/RB/WR/TE). Each column: position-colored header with player count, tier break dividers (Elite/Starter/Flex/Bench/Stash based on PPG thresholds), player rows with rank, name, team, PPG. Format selector tabs (PPR/Half-PPR/Standard). Season selector. Print-optimized CSS (@media print hides nav/footer/controls, adjusts sizing). PNG export with watermark. Responsive at 768px (2-col) + 480px (1-col). GET /api/cheat-sheet endpoint returns players grouped by position, sorted by PPG for selected format, with tier labels and trade values. Min 4 games + 2 PPG filter. "Cheat Sheet" nav link on all 37 HTML pages. Sitemap entry. Tools hub catalog entry. Design matches DESIGN.md.
+
+### Phase 99 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/cheat-sheet endpoint | DONE | fetch_cheat_sheet in live_data.py, 3 formats, 5 tiers |
+| 2 | Cheat Sheet page | DONE | 4-col grid, tier breaks, format tabs, print CSS, 6 escapeHtml, 23/23 balanced |
+| 3 | Nav links + sitemap + analytics | DONE | All 37 pages updated, sitemap entry, tools hub catalog |
+| 4 | Smoke test | DONE | Python + JS syntax clean, 37/37 nav links, design compliance |
+
+### Decisions Log
+- **Draft Cheat Sheet as Phase 99**: The most practical tool for draft season. Every fantasy player prints or screenshots a cheat sheet. The 4-column format (one per position) with tier breaks is the standard layout. Format selector (PPR/Half/Standard) adds unique value — most cheat sheets are PPR-only. Print CSS makes it genuinely usable as a printout.
+- **Tier thresholds**: Elite (20+ PPG), Starter (15+), Flex (10+), Bench (5+), Stash (<5). These are universal fantasy thresholds that work across all formats. Simple and intuitive — no complex percentile calculations needed.
+
+## Previous Phase: Phase 98 — Scoring Format Comparison (COMPLETE)
 
 **Exit criterion MET:** /scoring.html page shows how player rankings shift across PPR, Half-PPR, and Standard scoring. Two sections: PPR Risers (players who rank higher in PPR than Standard — reception-dependent players) and PPR Fallers (players who rank lower — rushing-heavy players). Each player row: position badge, headshot, name, team, 3 PPG columns (PPR/Half/Std), PPR rank, Std rank, rank shift badge (green up / red down with +/- number). Position filter tabs (All/QB/RB/WR/TE). Season selector. PNG export with watermark. Responsive at 768px + 480px. GET /api/scoring-comparison endpoint computes per-player PPG across all 3 formats, ranks independently, returns rank_diff (std_rank - ppr_rank). Min 6 games + 2 PPG filter. "Scoring" nav link on all 36 HTML pages. Sitemap entry. Tools hub catalog entry. Design matches DESIGN.md.
 

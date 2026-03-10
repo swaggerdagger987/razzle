@@ -1,37 +1,37 @@
-# Razzle Loop — Phase 98 Task List
+# Razzle Loop — Phase 99 Task List
 
-> Scoring Format Comparison — PPR vs Half-PPR vs Standard ranking shifts
+> Fantasy Draft Cheat Sheet — Printable dynasty draft reference
 
-**Current Phase**: 98 — Scoring Format Comparison
-**Exit Criterion**: /scoring.html page shows how player rankings shift across PPR, Half-PPR, and Standard scoring formats.
+**Current Phase**: 99 — Fantasy Draft Cheat Sheet
+**Exit Criterion**: /cheatsheet.html page shows a printable 4-column draft cheat sheet with tier breaks.
 
 ---
 
-## Task 1: Backend /api/scoring-comparison endpoint
+## Task 1: Backend /api/cheat-sheet endpoint
 **Status**: PASS
 **Attempts**: 1
-**Notes**: GET /api/scoring-comparison returns risers (rank higher in PPR than Standard) and fallers (rank lower in PPR). Each player: ppg_ppr, ppg_half, ppg_std, rank_ppr, rank_half, rank_std, rank_diff. Min 6 games + 2 PPG. Season + position params.
+**Notes**: GET /api/cheat-sheet returns players grouped by position (QB/RB/WR/TE), sorted by PPG for selected format (ppr/half/std). Tier labels (Elite/Starter/Flex/Bench/Stash) based on PPG thresholds. Trade value included. Min 4 games + 2 PPG.
 
-## Task 2: Scoring Format page (frontend/scoring.html)
+## Task 2: Cheat Sheet page (frontend/cheatsheet.html)
 **Status**: PASS
 **Attempts**: 1
-**Notes**: Two sections (PPR Risers + PPR Fallers), sortable tables, position badge, headshot, 3 PPG columns, rank shift badges (green up / red down), position filter tabs, season selector, PNG export with watermark. 8 escapeHtml, 22/22 braces balanced.
+**Notes**: 4-column grid (QB/RB/WR/TE), position-colored headers, tier break dividers, player rows with rank/name/team/PPG. Format tabs (PPR/Half/Std). Season selector. Print CSS (@media print). PNG export with watermark. 6 escapeHtml, 23/23 braces balanced. Responsive at 768px (2-col) + 480px (1-col).
 
 ## Task 3: Nav links + sitemap + analytics
 **Status**: PASS
 **Attempts**: 1
-**Notes**: "Scoring" nav link on all 36 pages (33/33 nav links consistent). Sitemap entry. Tools hub catalog entry under Performance Analysis. Analytics tracking.
+**Notes**: "Cheat Sheet" nav link on all 37 pages (34/34 nav links consistent). Sitemap entry. Tools hub catalog entry under Rankings & Values. Analytics tracking.
 
 ## Task 4: Smoke test
 **Status**: PASS
 **Attempts**: 1
-**Notes**: Python syntax valid. JS balanced. 36/36 pages have scoring link. Design compliance verified.
+**Notes**: Python syntax valid. JS balanced. 37/37 pages have cheatsheet link. Design compliance verified.
 
 ---
 
 ## Loop State
 ```
-Current Phase: 98
+Current Phase: 99
 Current Task: 4
 Current Stage: COMPLETE
 Attempt: 1
