@@ -170,6 +170,7 @@ async function handleLogin(e) {
     localStorage.setItem("razzle_user", JSON.stringify(data.user));
     if (!data.user.sleeper_username) { showSleeperPrompt(); } else { closeAuthModal(); }
     updateAuthUI(data.user);
+    migrateLocalFormulas();
   } catch (err) {
     errEl.textContent = "Connection error. Try again.";
   }
@@ -196,6 +197,7 @@ async function handleRegister(e) {
     localStorage.setItem("razzle_user", JSON.stringify(data.user));
     if (!data.user.sleeper_username) { showSleeperPrompt(); } else { closeAuthModal(); }
     updateAuthUI(data.user);
+    migrateLocalFormulas();
   } catch (err) {
     errEl.textContent = "Connection error. Try again.";
   }
@@ -310,6 +312,23 @@ async function linkSleeperToAccount(username) {
       updateAuthUI(data.user);
     }
   } catch (e) { /* silent fail */ }
+}
+
+function migrateLocalFormulas() {
+  var token = localStorage.getItem("razzle_token");
+  if (!token) return;
+  try {
+    var local = JSON.parse(localStorage.getItem("razzle_formulas") || "[]");
+    if (!local.length) return;
+    var formulas = local.map(function(f) {
+      return { name: f.name, weights: JSON.stringify(f.components || []) };
+    });
+    fetch(API_BASE + "/api/user/formulas/import", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+      body: JSON.stringify({ formulas: formulas })
+    }).catch(function() {});
+  } catch (e) { /* ignore */ }
 }
 
 // Auto-init auth on DOM ready

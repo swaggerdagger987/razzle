@@ -181,3 +181,78 @@ def link_sleeper(user_id: int, sleeper_username: str) -> dict:
     if not row:
         return {"error": "User not found", "status": 404}
     return {"user": _user_dict(row)}
+
+
+# ── User Formula CRUD ──────────────────────────────────────────────
+
+def get_user_formulas(user_id: int) -> dict:
+    conn = get_users_conn()
+    rows = conn.execute(
+        "SELECT id, name, weights, created_at, updated_at FROM user_formulas WHERE user_id = ? ORDER BY updated_at DESC",
+        (user_id,),
+    ).fetchall()
+    conn.close()
+    return {"formulas": [dict(r) for r in rows]}
+
+
+def save_user_formula(user_id: int, name: str, weights: str) -> dict:
+    if not name or not weights:
+        return {"error": "Name and weights required", "status": 400}
+    conn = get_users_conn()
+    existing = conn.execute(
+        "SELECT id FROM user_formulas WHERE user_id = ? AND name = ?",
+        (user_id, name),
+    ).fetchone()
+    if existing:
+        conn.execute(
+            "UPDATE user_formulas SET weights = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?",
+            (weights, existing["id"]),
+        )
+        formula_id = existing["id"]
+    else:
+        cursor = conn.execute(
+            "INSERT INTO user_formulas (user_id, name, weights) VALUES (?, ?, ?)",
+            (user_id, name, weights),
+        )
+        formula_id = cursor.lastrowid
+    conn.commit()
+    conn.close()
+    return {"status": "ok", "formula_id": formula_id}
+
+
+def delete_user_formula(user_id: int, formula_id: int) -> dict:
+    conn = get_users_conn()
+    row = conn.execute("SELECT user_id FROM user_formulas WHERE id = ?", (formula_id,)).fetchone()
+    if not row:
+        conn.close()
+        return {"error": "Formula not found", "status": 404}
+    if row["user_id"] != user_id:
+        conn.close()
+        return {"error": "Not your formula", "status": 403}
+    conn.execute("DELETE FROM user_formulas WHERE id = ?", (formula_id,))
+    conn.commit()
+    conn.close()
+    return {"status": "ok"}
+
+
+def import_formulas(user_id: int, formulas: list) -> dict:
+    conn = get_users_conn()
+    imported = 0
+    for f in formulas:
+        name = f.get("name", "")
+        weights = f.get("weights", "")
+        if not name or not weights:
+            continue
+        existing = conn.execute(
+            "SELECT id FROM user_formulas WHERE user_id = ? AND name = ?",
+            (user_id, name),
+        ).fetchone()
+        if not existing:
+            conn.execute(
+                "INSERT INTO user_formulas (user_id, name, weights) VALUES (?, ?, ?)",
+                (user_id, name, weights),
+            )
+            imported += 1
+    conn.commit()
+    conn.close()
+    return {"status": "ok", "imported": imported}

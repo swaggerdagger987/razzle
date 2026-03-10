@@ -260,6 +260,52 @@ async def auth_link_sleeper(request: Request):
 
 
 # ---------------------------------------------------------------------------
+# User formula endpoints (stored in users.db)
+# ---------------------------------------------------------------------------
+
+@app.get("/api/user/formulas")
+async def get_user_formulas(request: Request):
+    user = require_auth(request)
+    if not user:
+        return JSONResponse({"error": "Authentication required"}, status_code=401)
+    return auth_module.get_user_formulas(user["id"])
+
+
+@app.post("/api/user/formulas")
+async def save_user_formula(request: Request):
+    user = require_auth(request)
+    if not user:
+        return JSONResponse({"error": "Authentication required"}, status_code=401)
+    body = await request.json()
+    result = auth_module.save_user_formula(
+        user["id"], body.get("name", ""), body.get("weights", "")
+    )
+    if "error" in result:
+        return JSONResponse({"error": result["error"]}, status_code=result["status"])
+    return result
+
+
+@app.delete("/api/user/formulas/{formula_id}")
+async def delete_user_formula(formula_id: int, request: Request):
+    user = require_auth(request)
+    if not user:
+        return JSONResponse({"error": "Authentication required"}, status_code=401)
+    result = auth_module.delete_user_formula(user["id"], formula_id)
+    if "error" in result:
+        return JSONResponse({"error": result["error"]}, status_code=result["status"])
+    return result
+
+
+@app.post("/api/user/formulas/import")
+async def import_user_formulas(request: Request):
+    user = require_auth(request)
+    if not user:
+        return JSONResponse({"error": "Authentication required"}, status_code=401)
+    body = await request.json()
+    return auth_module.import_formulas(user["id"], body.get("formulas", []))
+
+
+# ---------------------------------------------------------------------------
 # Player endpoints
 # ---------------------------------------------------------------------------
 

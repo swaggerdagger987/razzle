@@ -60,6 +60,8 @@ function saveFormula() {
 
   // Save to localStorage
   localStorage.setItem("razzle_formulas", JSON.stringify(state.formulas));
+  // Sync to server if logged in
+  _syncFormulaToServer(name, components);
 
   // Register the column
   const key = `formula_${name.toLowerCase().replace(/[^a-z0-9]/g, "_")}`;
@@ -86,6 +88,7 @@ function saveFormula() {
 function deleteFormula(name) {
   state.formulas = state.formulas.filter(f => f.name !== name);
   localStorage.setItem("razzle_formulas", JSON.stringify(state.formulas));
+  _deleteFormulaFromServer(name);
 
   const key = `formula_${name.toLowerCase().replace(/[^a-z0-9]/g, "_")}`;
   delete COLUMNS[key];
@@ -125,4 +128,34 @@ function renderSavedFormulas() {
         </div>
       </div>`;
     }).join("");
+}
+
+// ── Server sync helpers ──────────────────────────────────────────
+function _syncFormulaToServer(name, components) {
+  var token = localStorage.getItem("razzle_token");
+  if (!token) return;
+  var weights = JSON.stringify(components);
+  fetch((typeof API_BASE !== "undefined" ? API_BASE : "") + "/api/user/formulas", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+    body: JSON.stringify({ name: name, weights: weights })
+  }).catch(function() {});
+}
+
+function _deleteFormulaFromServer(name) {
+  var token = localStorage.getItem("razzle_token");
+  if (!token) return;
+  // Need to find the formula ID from server — do a quick lookup
+  fetch((typeof API_BASE !== "undefined" ? API_BASE : "") + "/api/user/formulas", {
+    headers: { "Authorization": "Bearer " + token }
+  }).then(function(r) { return r.json(); }).then(function(data) {
+    var formulas = data.formulas || [];
+    var match = formulas.find(function(f) { return f.name === name; });
+    if (match) {
+      fetch((typeof API_BASE !== "undefined" ? API_BASE : "") + "/api/user/formulas/" + match.id, {
+        method: "DELETE",
+        headers: { "Authorization": "Bearer " + token }
+      }).catch(function() {});
+    }
+  }).catch(function() {});
 }

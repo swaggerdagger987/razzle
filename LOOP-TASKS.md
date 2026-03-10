@@ -58,7 +58,8 @@
 - require_plan() returns 403 for insufficient plan
 
 ## Task 5: Migrate user formulas from localStorage to database
-**Status**: PENDING
+**Status**: PASS
+**Result**: Added formula CRUD to auth.py (get_user_formulas, save_user_formula, delete_user_formula, import_formulas). Endpoints: GET/POST /api/user/formulas, DELETE /api/user/formulas/{id}, POST /api/user/formulas/import. All require auth (401 without token). Can't delete another user's formula (403). formulas.js syncs saves/deletes to server when logged in. On login/register, migrateLocalFormulas() auto-imports localStorage formulas to server. Non-logged-in users still use localStorage only.
 **Acceptance Criteria**:
 - Logged-in users' formulas stored in database
 - Formulas persist across devices when logged in
@@ -92,8 +93,8 @@
 ## Loop State
 ```
 Current Phase: 42
-Current Task: 5
+Current Task: 6
 Current Stage: BUILD
 Attempt: 1
-Tasks Completed: 4/7
+Tasks Completed: 5/7
 ```
