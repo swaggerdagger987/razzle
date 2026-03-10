@@ -2,8 +2,10 @@
 
 /* ===== Theme Toggle (Espresso Dark Mode) ===== */
 (function initTheme() {
-  var saved = localStorage.getItem("razzle_theme");
-  if (saved === "dark") document.documentElement.setAttribute("data-theme", "dark");
+  try {
+    var saved = localStorage.getItem("razzle_theme");
+    if (saved === "dark") document.documentElement.setAttribute("data-theme", "dark");
+  } catch (e) {}
 })();
 
 function toggleTheme() {
@@ -11,10 +13,10 @@ function toggleTheme() {
   var isDark = html.getAttribute("data-theme") === "dark";
   if (isDark) {
     html.removeAttribute("data-theme");
-    localStorage.setItem("razzle_theme", "light");
+    try { localStorage.setItem("razzle_theme", "light"); } catch (e) {}
   } else {
     html.setAttribute("data-theme", "dark");
-    localStorage.setItem("razzle_theme", "dark");
+    try { localStorage.setItem("razzle_theme", "dark"); } catch (e) {}
   }
 }
 

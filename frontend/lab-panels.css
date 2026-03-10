@@ -289,7 +289,7 @@
 .tl-tier-label.B { background: #e8a838; }
 .tl-tier-label.C { background: var(--pos-rb); }
 .tl-tier-label.D { background: var(--pos-qb); }
-.tl-tier-label.F { background: #888; }
+.tl-tier-label.F { background: var(--ink-light); }
 .tl-tier-players {
   flex: 1;
   display: flex;
@@ -414,7 +414,7 @@
 .tv-row:last-child { border-bottom: none; }
 .tv-rank { font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--ink-light); width: 32px; text-align: center; flex-shrink: 0; }
 .tv-rank.top1 { color: #b8860b; font-size: 16px; }
-.tv-rank.top2 { color: #888; font-size: 15px; }
+.tv-rank.top2 { color: var(--ink-light); font-size: 15px; }
 .tv-rank.top3 { color: #a0522d; font-size: 15px; }
 .tv-headshot { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--ink); object-fit: cover; flex-shrink: 0; background: var(--bg-warm); }
 .tv-player-info { min-width: 0; width: 140px; flex-shrink: 0; }
