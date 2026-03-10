@@ -1,6 +1,32 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 111 — TD Regression Dashboard (COMPLETE)
+## Current Phase: Phase 112 — Player Strengths & Weaknesses (COMPLETE)
+
+**Exit criterion MET:** /strengths.html lets users search any player and see their top 4 strengths and bottom 4 weaknesses based on position-relative percentile rankings. Player header card with overall grade (avg percentile). Strength/weakness cards with rank number, stat label, value, mini percentile bar, and letter grade badge. Full percentile breakdown with horizontal bars sorted by percentile (color-coded green/blue/yellow/orange/red). Player search autocomplete via quick-search API with keyboard navigation. Season selector, URL state (?player=ID&season=), PNG export with watermark. GET /api/player-strengths endpoint wraps fetch_player_percentiles, sorting percentiles to find top strengths and weaknesses, assigning A+ to F grades. 18 escapeHtml calls, 57/57 braces balanced. "Strengths" nav link on all 47 pages. Sitemap + tools hub entry under Player Discovery. Design matches DESIGN.md.
+
+### Phase 112 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/player-strengths endpoint | DONE | Wraps fetch_player_percentiles, sorts for top/bottom, adds grades |
+| 2 | Strengths & Weaknesses page | DONE | Two-column card layout, grade badges, percentile bars, 18 escapeHtml |
+| 3 | Nav links + sitemap + tools hub | DONE | All 47 pages updated, sitemap + tools hub |
+| 4 | Smoke test | DONE | Python OK, JS OK, 47/47 nav links |
+
+## Previous Phase: Phase 111 — TD Regression Dashboard (COMPLETE)
+
+**Exit criterion MET:** /regression.html shows touchdown regression candidates — players whose TD rate deviates from position average, with expected vs actual TDs, regression delta badges, TD rate badges colored by deviation from average, position avg rate chips, "Regression Up" (due for more TDs) and "Regression Down" (unsustainable TD rate) sections, sortable columns, position filter tabs, season selector, URL state (?season=&pos=), PNG export with watermark. GET /api/td-regression endpoint computes position-average TD rates from aggregate opportunity totals, expected TDs from opportunities x avg rate, regression delta. Min 6 games, 40+ opportunities. 10 escapeHtml calls, 259/259 braces balanced. "TD Regression" nav link on all 46 pages. Sitemap + tools hub entry under Player Discovery. Design matches DESIGN.md.
+
+### Phase 111 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/td-regression endpoint | DONE | fetch_td_regression, position avg TD rates, expected vs actual TDs |
+| 2 | TD Regression page | DONE | Two sections (up/down), delta badges, rate badges, rate chips, 10 escapeHtml |
+| 3 | Nav links + sitemap + tools hub | DONE | All 46 pages updated, sitemap + tools hub |
+| 4 | Smoke test | DONE | Python OK, JS OK, 46/46 nav links |
+
+## Previous Phase: Phase 110 — QA+UX Audit Fixes (Phases 106-109) (COMPLETE)
 
 **Exit criterion MET:** /regression.html shows touchdown regression candidates — players whose TD rate deviates from position average, with expected vs actual TDs, regression delta badges, TD rate badges colored by deviation from average, position avg rate chips, "Regression Up" (due for more TDs) and "Regression Down" (unsustainable TD rate) sections, sortable columns, position filter tabs, season selector, URL state (?season=&pos=), PNG export with watermark. GET /api/td-regression endpoint computes position-average TD rates from aggregate opportunity totals, expected TDs from opportunities × avg rate, regression delta. Min 6 games, 40+ opportunities. 10 escapeHtml calls, 259/259 braces balanced. "TD Regression" nav link on all 46 pages. Sitemap + tools hub entry under Player Discovery. Design matches DESIGN.md.
 

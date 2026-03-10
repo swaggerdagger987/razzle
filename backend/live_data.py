@@ -10020,3 +10020,108 @@ def fetch_player_strengths(player_id, season=None, top_n=4):
         "weaknesses": weaknesses,
         "all_percentiles": percentiles,
     }
+
+
+# ---------------------------------------------------------------------------
+# Fantasy Points Breakdown — where do a player's fantasy points come from
+# ---------------------------------------------------------------------------
+
+def fetch_points_breakdown(player_id, season=None):
+    """Return breakdown of fantasy point sources for a player."""
+    if not player_id:
+        return {"error": "player_id is required"}
+
+    conn = get_conn()
+    try:
+        row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
+        available_seasons = [r[0] for r in row] if row else [2024]
+        if not season:
+            season = available_seasons[0] if available_seasons else 2024
+
+        player = conn.execute(
+            "SELECT player_id, full_name, position, team, age FROM players WHERE player_id = ?",
+            (player_id,),
+        ).fetchone()
+        if not player:
+            return {"error": "Player not found"}
+
+        player_info = {
+            "player_id": player[0],
+            "full_name": player[1] or "Unknown",
+            "position": player[2] or "WR",
+            "team": player[3] or "FA",
+            "age": player[4] or 0,
+        }
+
+        stats = conn.execute("""
+            SELECT
+                SUM(passing_yards) as pass_yd,
+                SUM(passing_tds) as pass_td,
+                SUM(interceptions) as ints,
+                SUM(rushing_yards) as rush_yd,
+                SUM(rushing_tds) as rush_td,
+                SUM(receiving_yards) as rec_yd,
+                SUM(receiving_tds) as rec_td,
+                SUM(receptions) as rec,
+                SUM(fantasy_points_ppr) as total_ppr,
+                COUNT(DISTINCT week) as games,
+                SUM(turnovers) as turnovers
+            FROM player_week_stats
+            WHERE player_id = ? AND season = ?
+        """, (player_id, season)).fetchone()
+
+        if not stats or not stats[8]:
+            return {
+                "player": player_info,
+                "season": season,
+                "available_seasons": available_seasons,
+                "breakdown": [],
+                "total_points": 0,
+                "games": 0,
+            }
+
+        pass_yd = stats[0] or 0
+        pass_td = stats[1] or 0
+        ints = stats[2] or 0
+        rush_yd = stats[3] or 0
+        rush_td = stats[4] or 0
+        rec_yd = stats[5] or 0
+        rec_td = stats[6] or 0
+        rec = stats[7] or 0
+        total_ppr = stats[8] or 0
+        games = stats[9] or 1
+        turnovers = stats[10] or 0
+
+        # PPR scoring components
+        components = [
+            {"label": "Passing Yards", "points": round(pass_yd * 0.04, 1), "raw": pass_yd, "color": "#5b7fff"},
+            {"label": "Passing TDs", "points": round(pass_td * 4, 1), "raw": pass_td, "color": "#3a5abf"},
+            {"label": "Rushing Yards", "points": round(rush_yd * 0.1, 1), "raw": rush_yd, "color": "#2ec4b6"},
+            {"label": "Rushing TDs", "points": round(rush_td * 6, 1), "raw": rush_td, "color": "#1a9a8d"},
+            {"label": "Receiving Yards", "points": round(rec_yd * 0.1, 1), "raw": rec_yd, "color": "#d97757"},
+            {"label": "Receiving TDs", "points": round(rec_td * 6, 1), "raw": rec_td, "color": "#b85a3a"},
+            {"label": "Receptions (PPR)", "points": round(rec * 1.0, 1), "raw": rec, "color": "#8b5cf6"},
+        ]
+
+        # Only include non-zero components
+        breakdown = [c for c in components if c["points"] > 0]
+
+        # Add percentage
+        positive_total = sum(c["points"] for c in breakdown)
+        for c in breakdown:
+            c["pct"] = round(c["points"] / positive_total * 100, 1) if positive_total > 0 else 0
+
+        # Sort by points descending
+        breakdown.sort(key=lambda x: x["points"], reverse=True)
+
+        return {
+            "player": player_info,
+            "season": season,
+            "available_seasons": available_seasons,
+            "breakdown": breakdown,
+            "total_points": round(total_ppr, 1),
+            "ppg": round(total_ppr / games, 1),
+            "games": games,
+        }
+    finally:
+        conn.close()

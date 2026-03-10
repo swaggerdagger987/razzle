@@ -923,6 +923,7 @@ def sitemap_xml():
         ("/percentiles.html", "0.8", "weekly"),
         ("/regression.html", "0.8", "weekly"),
         ("/strengths.html", "0.8", "weekly"),
+        ("/breakdown.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1448,6 +1449,19 @@ def draft_class(year: int = 0, position: str = ""):
         return JSONResponse({"error": "Failed to fetch draft class"}, status_code=500)
 
 
+@app.get("/api/points-breakdown")
+def points_breakdown(player_id: str = "", season: int = 0):
+    """Return fantasy points breakdown by scoring component."""
+    if not player_id:
+        return JSONResponse({"error": "player_id is required"}, status_code=400)
+    try:
+        s = season if season > 0 else None
+        return live_data.fetch_points_breakdown(player_id=player_id, season=s)
+    except Exception as e:
+        logger.error(f"points-breakdown error: {e}")
+        return JSONResponse({"error": "Failed to fetch points breakdown"}, status_code=500)
+
+
 @app.get("/api/player-strengths")
 def player_strengths(player_id: str = "", season: int = 0):
     """Return a player's top strengths and weaknesses from percentile data."""
@@ -1522,6 +1536,7 @@ def tools_hub():
                 {"name": "Red Zone & Goal-Line", "desc": "Goal-line carries, targets, TDs, and TD dependency", "url": "/redzone.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Player Comparison", "desc": "Side-by-side stat comparison with radar charts and boom/bust rates", "url": "/compare.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Scoring Formats", "desc": "How PPR vs Half-PPR vs Standard changes rankings", "url": "/scoring.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Points Breakdown", "desc": "Where a player's fantasy points come from — donut chart by scoring category", "url": "/breakdown.html", "positions": ["QB", "RB", "WR", "TE"]},
             ],
         },
         {

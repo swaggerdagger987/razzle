@@ -1,17 +1,17 @@
-# Razzle Loop — Phase 112 Task List
+# Razzle Loop — Phase 113 Task List
 
-> Player Strengths & Weaknesses
+> Fantasy Points Breakdown
 
-**Current Phase**: 112 — Player Strengths & Weaknesses
-**Exit Criterion**: /strengths.html lets users search any player and see their top strengths and weaknesses based on position-relative percentile rankings, with visual strength/weakness cards, player search autocomplete, season selector, PNG export.
+**Current Phase**: 113 — Fantasy Points Breakdown
+**Exit Criterion**: /breakdown.html lets users search any player and see a canvas donut chart breaking down WHERE their fantasy points come from (rushing yards, rushing TDs, receiving yards, receiving TDs, passing yards, passing TDs, receptions), with percentage labels, season selector, PNG export.
 
 ---
 
-## Task 1: Backend /api/player-strengths endpoint
+## Task 1: Backend /api/points-breakdown endpoint
 **Status**: PENDING
 **Attempts**: 0
 
-## Task 2: Frontend strengths.html page
+## Task 2: Frontend breakdown.html page
 **Status**: PENDING
 **Attempts**: 0
 
@@ -27,7 +27,7 @@
 
 ## Loop State
 ```
-Current Phase: 112
+Current Phase: 113
 Current Task: 1
 Current Stage: BUILD
 Attempt: 1
