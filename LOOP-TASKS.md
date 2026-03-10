@@ -1,21 +1,21 @@
-# Razzle Loop — Phase 105 Task List
+# Razzle Loop — Phase 106 Task List
 
-> QA + UX Audit — Auto-Generated Fixes (Phases 101-104)
+> Career Stats Timeline — season-by-season player trajectory
 
-**Current Phase**: 105 — QA + UX Audit Fixes
-**Exit Criterion**: All HIGH and MEDIUM findings from QA-AUDIT.md (Phases 101-104) resolved.
+**Current Phase**: 106 — Career Stats Timeline
+**Exit Criterion**: /career.html shows a player's season-by-season stats (2020-2024) with canvas PPG chart, career highs, and dynasty trajectory analysis. GET /api/career-stats endpoint. Design matches DESIGN.md.
 
 ---
 
-## Task 1: HIGH fix — Auction value math (QA-1)
+## Task 1: Backend /api/career-stats endpoint
 **Status**: PASS
 **Attempts**: 1
 
-## Task 2: HIGH fix — Dashboard season selector (QA-2)
+## Task 2: Career Stats Timeline page (/career.html)
 **Status**: PASS
 **Attempts**: 1
 
-## Task 3: MEDIUM fixes — URL trailing &, scarcity label, tier desc, catch-all names, borders (QA-3-7)
+## Task 3: Nav links + sitemap + analytics
 **Status**: PASS
 **Attempts**: 1
 
@@ -27,7 +27,7 @@
 
 ## Loop State
 ```
-Current Phase: 105
+Current Phase: 106
 Current Task: 4
 Current Stage: COMPLETE
 Attempt: 1

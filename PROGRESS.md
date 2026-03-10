@@ -1,6 +1,19 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 105 — QA+UX Audit Fixes (Phases 101-104) (COMPLETE)
+## Current Phase: Phase 106 — Career Stats Timeline (COMPLETE)
+
+**Exit criterion MET:** /career.html shows season-by-season player stats (2020-2024) with canvas PPG trajectory chart, career highs badges, position-specific stat tables (QB/RB/WR/TE columns), trajectory analysis (rising/falling/stable), career totals row, player search autocomplete, URL state (?player=ID), PNG export with watermark. GET /api/career-stats endpoint returns player info, seasons array, career summary, career_highs. 31 escapeHtml calls, 183/183 braces balanced. "Career" nav link on all 42 pages. Sitemap + tools hub entry. Design matches DESIGN.md.
+
+### Phase 106 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/career-stats endpoint | DONE | fetch_career_stats, season-by-season aggregates, trajectory analysis |
+| 2 | Career Stats Timeline page | DONE | Canvas PPG chart, career highs, position-specific tables, 31 escapeHtml |
+| 3 | Nav links + sitemap + analytics | DONE | All 42 pages updated, sitemap + tools hub |
+| 4 | Smoke test | DONE | Python OK, JS OK, 42/42 nav links |
+
+## Previous Phase: Phase 105 — QA+UX Audit Fixes (Phases 101-104) (COMPLETE)
 
 **Exit criterion MET:** All HIGH and MEDIUM findings resolved. QA-1: Fixed auction math — use top N players' TV as denominator so a team's picks sum to budget. QA-2: Added available_seasons to dashboard endpoint + season selector dropdown. QA-3: Fixed trailing & in URL construction (tiers, archetypes). QA-4: Dashboard scarcity uses mid_player name instead of hardcoded #12. QA-5: Tier descriptions now rendered in tier label. QA-6: Catch-all archetypes renamed (Other RB/WR/TE). QA-7: Form control borders updated to 3px on auction/tiers/archetypes.
 

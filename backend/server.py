@@ -917,6 +917,7 @@ def sitemap_xml():
         ("/dashboard.html", "0.9", "weekly"),
         ("/tiers.html", "0.8", "weekly"),
         ("/archetypes.html", "0.8", "weekly"),
+        ("/career.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1405,6 +1406,18 @@ def dynasty_dashboard(season: int = 0):
         return JSONResponse({"error": "Failed to fetch dynasty dashboard"}, status_code=500)
 
 
+@app.get("/api/career-stats")
+def career_stats(player_id: str = ""):
+    """Return season-by-season career stats for a player."""
+    try:
+        if not player_id:
+            return JSONResponse({"error": "player_id is required"}, status_code=400)
+        return live_data.fetch_career_stats(player_id)
+    except Exception as e:
+        logger.error(f"career-stats error: {e}")
+        return JSONResponse({"error": "Failed to fetch career stats"}, status_code=500)
+
+
 @app.get("/api/tools-hub")
 def tools_hub():
     """Return the static tools catalog organized by category."""
@@ -1481,6 +1494,7 @@ def tools_hub():
                 {"name": "Stat Explorer", "desc": "Scatter plot — any stat vs. any stat with trendlines", "url": "/explorer.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Aging Curves", "desc": "PPG-by-age curves per position with player overlays", "url": "/aging.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Year-over-Year", "desc": "Cross-season stat deltas — risers and fallers", "url": "/yoy.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Career Timeline", "desc": "Season-by-season player trajectory with PPG chart and career highs", "url": "/career.html", "positions": ["QB", "RB", "WR", "TE"]},
             ],
         },
         {

@@ -9326,3 +9326,171 @@ def fetch_player_archetypes(season=None, position=None):
         }
     finally:
         conn.close()
+
+
+# ---------------------------------------------------------------------------
+# Career Stats Timeline — season-by-season player trajectory
+# ---------------------------------------------------------------------------
+
+def fetch_career_stats(player_id):
+    """Return season-by-season stats for a single player across all available seasons."""
+    if not player_id:
+        return {"error": "player_id is required"}
+
+    conn = get_conn()
+    try:
+        # Get player info
+        player = conn.execute(
+            "SELECT player_id, full_name, position, team, age "
+            "FROM players WHERE player_id = ?",
+            (player_id,),
+        ).fetchone()
+        if not player:
+            return {"error": "Player not found"}
+
+        pos = player[2] or "WR"
+        player_info = {
+            "player_id": player[0],
+            "full_name": player[1] or "Unknown",
+            "position": pos,
+            "team": player[3] or "FA",
+            "age": player[4] or 0,
+        }
+
+        # Get season-by-season aggregates
+        rows = conn.execute("""
+            SELECT
+                s.season,
+                COUNT(DISTINCT s.week) as games,
+                SUM(s.fantasy_points_ppr) as total_ppr,
+                SUM(s.fantasy_points_half_ppr) as total_hppr,
+                SUM(s.fantasy_points_std) as total_std,
+                SUM(s.receptions) as rec,
+                SUM(s.targets) as tgt,
+                SUM(s.receiving_yards) as rec_yd,
+                SUM(s.receiving_tds) as rec_td,
+                SUM(s.carries) as car,
+                SUM(s.rushing_yards) as rush_yd,
+                SUM(s.rushing_tds) as rush_td,
+                SUM(s.passing_yards) as pass_yd,
+                SUM(s.passing_tds) as pass_td,
+                SUM(s.interceptions) as ints,
+                SUM(s.completions) as completions,
+                SUM(s.attempts) as pass_att,
+                SUM(s.touchdowns) as total_td,
+                SUM(s.turnovers) as total_to,
+                SUM(s.receiving_yards_after_catch) as yac,
+                SUM(s.receiving_air_yards) as air_yd,
+                SUM(s.offense_snaps) as snaps
+            FROM player_week_stats s
+            WHERE s.player_id = ?
+            GROUP BY s.season
+            ORDER BY s.season
+        """, (player_id,)).fetchall()
+
+        if not rows:
+            return {"player": player_info, "seasons": [], "career": {}}
+
+        seasons = []
+        career_games = 0
+        career_ppr = 0.0
+        career_highs = {}
+
+        for r in rows:
+            g = r[1] or 1
+            total_ppr = r[2] or 0.0
+            ppg = round(total_ppr / g, 2) if g else 0
+            rec = r[5] or 0
+            tgt = r[6] or 0
+            rec_yd = r[7] or 0
+            rec_td = r[8] or 0
+            car = r[9] or 0
+            rush_yd = r[10] or 0
+            rush_td = r[11] or 0
+            pass_yd = r[12] or 0
+            pass_td = r[13] or 0
+            ints = r[14] or 0
+            completions = r[15] or 0
+            pass_att = r[16] or 0
+            total_td = r[17] or 0
+            total_to = r[18] or 0
+            yac = r[19] or 0
+            air_yd = r[20] or 0
+
+            season_data = {
+                "season": r[0],
+                "games": g,
+                "ppg": ppg,
+                "total_ppr": round(total_ppr, 1),
+                "rec": rec, "tgt": tgt,
+                "rec_yd": rec_yd, "rec_td": rec_td,
+                "car": car, "rush_yd": rush_yd, "rush_td": rush_td,
+                "pass_yd": pass_yd, "pass_td": pass_td, "ints": ints,
+                "completions": completions, "pass_att": pass_att,
+                "total_td": total_td, "total_to": total_to,
+                "yac": yac, "air_yd": air_yd,
+            }
+
+            # Per-game rates
+            season_data["rec_g"] = round(rec / g, 1)
+            season_data["tgt_g"] = round(tgt / g, 1)
+            season_data["rec_yd_g"] = round(rec_yd / g, 1)
+            season_data["car_g"] = round(car / g, 1)
+            season_data["rush_yd_g"] = round(rush_yd / g, 1)
+            season_data["pass_yd_g"] = round(pass_yd / g, 1)
+
+            # Derived
+            season_data["ypc"] = round(rush_yd / car, 1) if car > 0 else 0
+            season_data["catch_rate"] = round(rec / tgt * 100, 1) if tgt > 0 else 0
+            season_data["ypr"] = round(rec_yd / rec, 1) if rec > 0 else 0
+            season_data["comp_pct"] = round(completions / pass_att * 100, 1) if pass_att > 0 else 0
+            season_data["td_rate"] = round(total_td / max(1, car + tgt) * 100, 1) if (car + tgt) > 0 else 0
+
+            seasons.append(season_data)
+
+            career_games += g
+            career_ppr += total_ppr
+
+            # Track career highs
+            for key in ("ppg", "total_ppr", "rec_yd", "rush_yd", "pass_yd", "total_td"):
+                val = season_data[key]
+                if key not in career_highs or val > career_highs[key]["value"]:
+                    career_highs[key] = {"value": val, "season": r[0]}
+
+        # Career totals
+        career = {
+            "games": career_games,
+            "total_ppr": round(career_ppr, 1),
+            "ppg": round(career_ppr / career_games, 2) if career_games else 0,
+            "seasons_played": len(seasons),
+            "first_season": seasons[0]["season"],
+            "last_season": seasons[-1]["season"],
+        }
+
+        # Trajectory: compare last season PPG to first season PPG
+        if len(seasons) >= 2:
+            first_ppg = seasons[0]["ppg"]
+            last_ppg = seasons[-1]["ppg"]
+            if first_ppg > 0:
+                pct_change = round((last_ppg - first_ppg) / first_ppg * 100, 1)
+            else:
+                pct_change = 0
+            career["trajectory"] = "rising" if pct_change > 10 else ("falling" if pct_change < -10 else "stable")
+            career["trajectory_pct"] = pct_change
+        else:
+            career["trajectory"] = "new"
+            career["trajectory_pct"] = 0
+
+        # Peak season
+        peak = max(seasons, key=lambda s: s["ppg"])
+        career["peak_season"] = peak["season"]
+        career["peak_ppg"] = peak["ppg"]
+
+        return {
+            "player": player_info,
+            "seasons": seasons,
+            "career": career,
+            "career_highs": career_highs,
+        }
+    finally:
+        conn.close()

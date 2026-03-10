@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Career Stats Timeline — Razzle</title>
+<meta property="og:title" content="Career Stats Timeline — Razzle">
+<meta property="og:description" content="Season-by-season career trajectory with PPG charts and career highs on razzle.lol">
+<meta property="og:site_name" content="razzle.lol">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Career Stats Timeline — Razzle">
+<meta name="twitter:description" content="Season-by-season career trajectory with PPG charts and career highs on razzle.lol">
+<meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
+<meta name="description" content="Career stats timeline — season-by-season player trajectory with PPG chart and career highs on razzle.lol">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .car-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+  }
+
+  .car-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .car-header h1 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: var(--ink);
+    margin: 0 0 4px;
+  }
+  .car-header .car-subtitle {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+  }
+
+  /* Search */
+  .car-search-wrap {
+    max-width: 500px;
+    margin: 0 auto 28px;
+    position: relative;
+  }
+  .car-search {
+    width: 100%;
+    font-family: var(--font-mono);
+    font-size: 15px;
+    padding: 12px 16px;
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    background: var(--bg-card);
+    color: var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
+    box-sizing: border-box;
+  }
+  .car-search::placeholder { color: var(--ink-light); }
+
+  .car-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 0 0 10px 10px;
+    border-top: none;
+    max-height: 240px;
+    overflow-y: auto;
+    z-index: 100;
+    display: none;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .car-dropdown-item {
+    padding: 10px 14px;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--ink-faint);
+  }
+  .car-dropdown-item:last-child { border-bottom: none; }
+  .car-dropdown-item:hover, .car-dropdown-item.highlighted {
+    background: var(--bg-warm);
+  }
+  .car-dd-pos {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #fff;
+    min-width: 26px;
+    text-align: center;
+  }
+  .car-dd-pos.QB { background: var(--blue); }
+  .car-dd-pos.RB { background: var(--teal); }
+  .car-dd-pos.WR { background: var(--orange); }
+  .car-dd-pos.TE { background: var(--purple); }
+
+  /* Player info card */
+  .car-player-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    margin-bottom: 24px;
+  }
+  .car-player-info { flex: 1; }
+  .car-player-name {
+    font-family: var(--font-display);
+    font-size: 26px;
+    color: var(--ink);
+    margin: 0 0 4px;
+  }
+  .car-player-meta {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--ink-light);
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .car-pos-badge {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 6px;
+    color: #fff;
+  }
+  .car-pos-badge.QB { background: var(--blue); }
+  .car-pos-badge.RB { background: var(--teal); }
+  .car-pos-badge.WR { background: var(--orange); }
+  .car-pos-badge.TE { background: var(--purple); }
+
+  .car-trajectory-badge {
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 6px;
+    color: #fff;
+  }
+  .car-trajectory-badge.rising { background: var(--green); }
+  .car-trajectory-badge.falling { background: var(--red); }
+  .car-trajectory-badge.stable { background: var(--ink-light); }
+  .car-trajectory-badge.new { background: var(--blue); }
+
+  /* Career summary chips */
+  .car-summary-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .car-chip {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    padding: 12px 16px;
+    box-shadow: 4px 4px 0 var(--ink);
+    text-align: center;
+    flex: 1;
+    min-width: 120px;
+  }
+  .car-chip-label {
+    font-family: var(--font-display);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--ink-light);
+    margin-bottom: 4px;
+  }
+  .car-chip-value {
+    font-family: var(--font-mono);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .car-chip-sub {
+    font-family: var(--font-hand);
+    font-size: 13px;
+    color: var(--ink-light);
+    margin-top: 2px;
+  }
+
+  /* Chart */
+  .car-chart-wrap {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 16px;
+    margin-bottom: 24px;
+  }
+  .car-chart-title {
+    font-family: var(--font-display);
+    font-size: 16px;
+    color: var(--ink);
+    margin-bottom: 8px;
+    text-align: center;
+  }
+  .car-canvas {
+    width: 100%;
+    height: 220px;
+    display: block;
+  }
+
+  /* Career highs */
+  .car-highs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .car-high {
+    background: var(--bg-warm);
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    padding: 10px 14px;
+    box-shadow: 4px 4px 0 var(--ink);
+    text-align: center;
+    flex: 1;
+    min-width: 100px;
+  }
+  .car-high-label {
+    font-family: var(--font-display);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--ink-light);
+    margin-bottom: 2px;
+  }
+  .car-high-value {
+    font-family: var(--font-mono);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--orange);
+  }
+  .car-high-season {
+    font-family: var(--font-hand);
+    font-size: 12px;
+    color: var(--ink-light);
+  }
+
+  /* Season table */
+  .car-section-header {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 12px;
+    padding: 10px 14px;
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    box-shadow: 4px 4px 0 var(--ink);
+    background: var(--bg-warm);
+  }
+
+  .car-table-wrap {
+    overflow-x: auto;
+    margin-bottom: 24px;
+  }
+  .car-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .car-table th {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 10px 8px;
+    background: var(--bg-warm);
+    color: var(--ink);
+    border-bottom: 3px solid var(--ink);
+    white-space: nowrap;
+    text-align: right;
+  }
+  .car-table th:first-child { text-align: center; }
+  .car-table td {
+    padding: 8px;
+    border-bottom: 1px solid var(--ink-faint);
+    text-align: right;
+    vertical-align: middle;
+  }
+  .car-table td:first-child {
+    text-align: center;
+    font-weight: 700;
+  }
+  .car-table tbody tr:hover { background: var(--bg-warm); }
+  .car-table .career-row {
+    font-weight: 700;
+    background: var(--bg-warm);
+    border-top: 3px solid var(--ink);
+  }
+  .car-table .peak-cell {
+    color: var(--orange);
+    font-weight: 700;
+  }
+
+  /* Actions */
+  .car-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  /* Empty state */
+  .car-empty {
+    text-align: center;
+    padding: 80px 20px;
+    font-family: var(--font-hand);
+    font-size: 22px;
+    color: var(--ink-light);
+  }
+
+  /* Loading */
+  .car-loading {
+    text-align: center;
+    padding: 60px 20px;
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .car-player-card { flex-direction: column; text-align: center; gap: 12px; }
+    .car-player-meta { justify-content: center; }
+    .car-chip { min-width: 80px; }
+    .car-high { min-width: 70px; }
+    .car-header h1 { font-size: 26px; }
+  }
+  @media (max-width: 480px) {
+    .car-page { padding: 16px 12px 40px; }
+    .car-header h1 { font-size: 22px; }
+    .car-summary-row { gap: 8px; }
+    .car-chip { padding: 8px 10px; }
+    .car-chip-value { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="/" class="logo">
+    <div class="logo-mark">&#x1F42F;</div>
+    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/lab.html">The Lab</a></li>
+    <li><a href="/tools.html">Tools</a></li>
+    <li><a href="/rankings.html">Rankings</a></li>
+    <li><a href="/leaders.html">Leaders</a></li>
+    <li><a href="/prospects.html">Prospects</a></li>
+    <li><a href="/scarcity.html">Scarcity</a></li>
+    <li><a href="/breakouts.html">Breakouts</a></li>
+    <li><a href="/buysell.html">Buy/Sell</a></li>
+    <li><a href="/aging.html">Aging</a></li>
+    <li><a href="/weekly.html">Weekly</a></li>
+    <li><a href="/targets.html">Targets</a></li>
+    <li><a href="/matchups.html">Matchups</a></li>
+    <li><a href="/usage.html">Usage</a></li>
+    <li><a href="/yoy.html">YoY</a></li>
+    <li><a href="/airyards.html">Air Yards</a></li>
+    <li><a href="/explorer.html">Explorer</a></li>
+    <li><a href="/redzone.html">Red Zone</a></li>
+    <li><a href="/efficiency.html">Efficiency</a></li>
+    <li><a href="/consistency.html">Consistency</a></li>
+    <li><a href="/schedule.html">Schedule</a></li>
+    <li><a href="/stocks.html">Stocks</a></li>
+    <li><a href="/opportunity.html">Opportunity</a></li>
+    <li><a href="/reportcard.html">Report Card</a></li>
+    <li><a href="/awards.html">Awards</a></li>
+    <li><a href="/vorp.html">VORP</a></li>
+    <li><a href="/tradevalues.html">Trade Values</a></li>
+    <li><a href="/tradefinder.html">Trade Finder</a></li>
+    <li><a href="/rosterbuilder.html">Roster Builder</a></li>
+    <li><a href="/scoring.html">Scoring</a></li>
+    <li><a href="/cheatsheet.html">Cheat Sheet</a></li>
+    <li><a href="/auction.html">Auction</a></li>
+    <li><a href="/dashboard.html">Dashboard</a></li>
+    <li><a href="/tiers.html">Tiers</a></li>
+    <li><a href="/archetypes.html">Archetypes</a></li>
+    <li><a href="/career.html" class="active">Career</a></li>
+    <li><a href="/team/KC">Teams</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
+    <li><a href="/agents.html">War Room</a></li>
+  </ul>
+</nav>
+
+<main class="car-page" id="car-content">
+  <div class="car-header">
+    <h1>Career Stats Timeline</h1>
+    <div class="car-subtitle">season-by-season trajectory with career highs</div>
+  </div>
+
+  <div class="car-search-wrap">
+    <input type="text" class="car-search" id="player-search" placeholder="search for a player..." autocomplete="off" aria-label="Search for a player">
+    <div class="car-dropdown" id="search-dropdown"></div>
+  </div>
+
+  <div id="car-result"></div>
+
+  <div class="car-empty" id="car-empty">
+    search for a player to see their career timeline
+  </div>
+</main>
+
+<footer style="text-align:center; padding:24px 20px 32px; font-family:var(--font-hand); font-size:15px; color:var(--ink-light); border-top:2px dashed var(--ink-faint); margin-top:40px;">
+  <div style="margin-bottom:10px;">
+    <a href="/lab.html" style="color:var(--ink-light); text-decoration:none;">The Lab</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tools.html" style="color:var(--ink-light); text-decoration:none;">Tools</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/rankings.html" style="color:var(--ink-light); text-decoration:none;">Rankings</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/leaders.html" style="color:var(--ink-light); text-decoration:none;">Leaders</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/prospects.html" style="color:var(--ink-light); text-decoration:none;">Prospects</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/scarcity.html" style="color:var(--ink-light); text-decoration:none;">Scarcity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/breakouts.html" style="color:var(--ink-light); text-decoration:none;">Breakouts</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/buysell.html" style="color:var(--ink-light); text-decoration:none;">Buy/Sell</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/aging.html" style="color:var(--ink-light); text-decoration:none;">Aging</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/weekly.html" style="color:var(--ink-light); text-decoration:none;">Weekly</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/targets.html" style="color:var(--ink-light); text-decoration:none;">Targets</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/matchups.html" style="color:var(--ink-light); text-decoration:none;">Matchups</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/usage.html" style="color:var(--ink-light); text-decoration:none;">Usage</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/yoy.html" style="color:var(--ink-light); text-decoration:none;">YoY</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/airyards.html" style="color:var(--ink-light); text-decoration:none;">Air Yards</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/explorer.html" style="color:var(--ink-light); text-decoration:none;">Explorer</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/redzone.html" style="color:var(--ink-light); text-decoration:none;">Red Zone</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/efficiency.html" style="color:var(--ink-light); text-decoration:none;">Efficiency</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/consistency.html" style="color:var(--ink-light); text-decoration:none;">Consistency</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/schedule.html" style="color:var(--ink-light); text-decoration:none;">Schedule</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/stocks.html" style="color:var(--ink-light); text-decoration:none;">Stocks</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/opportunity.html" style="color:var(--ink-light); text-decoration:none;">Opportunity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/reportcard.html" style="color:var(--ink-light); text-decoration:none;">Report Card</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/awards.html" style="color:var(--ink-light); text-decoration:none;">Awards</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/vorp.html" style="color:var(--ink-light); text-decoration:none;">VORP</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tradevalues.html" style="color:var(--ink-light); text-decoration:none;">Trade Values</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tradefinder.html" style="color:var(--ink-light); text-decoration:none;">Trade Finder</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/rosterbuilder.html" style="color:var(--ink-light); text-decoration:none;">Roster Builder</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/scoring.html" style="color:var(--ink-light); text-decoration:none;">Scoring</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/cheatsheet.html" style="color:var(--ink-light); text-decoration:none;">Cheat Sheet</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/auction.html" style="color:var(--ink-light); text-decoration:none;">Auction</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/dashboard.html" style="color:var(--ink-light); text-decoration:none;">Dashboard</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tiers.html" style="color:var(--ink-light); text-decoration:none;">Tiers</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/archetypes.html" style="color:var(--ink-light); text-decoration:none;">Archetypes</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/career.html" style="color:var(--ink-light); text-decoration:none;">Career</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/team/KC" style="color:var(--ink-light); text-decoration:none;">Teams</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none;">League Intel</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/agents.html" style="color:var(--ink-light); text-decoration:none;">War Room</a>
+  </div>
+  razzle.lol — let's razzle dazzle em baby
+</footer>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script src="app.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+
+  var searchInput = document.getElementById('player-search');
+  var dropdown = document.getElementById('search-dropdown');
+  var resultEl = document.getElementById('car-result');
+  var emptyEl = document.getElementById('car-empty');
+  var searchTimer = null;
+  var highlightIdx = -1;
+  var dropdownItems = [];
+
+  // URL state
+  var params = new URLSearchParams(window.location.search);
+  var initialPlayer = params.get('player');
+
+  // Search autocomplete
+  searchInput.addEventListener('input', function() {
+    var q = searchInput.value.trim();
+    clearTimeout(searchTimer);
+    if (q.length < 2) { hideDropdown(); return; }
+    searchTimer = setTimeout(function() { doSearch(q); }, 250);
+  });
+
+  searchInput.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      highlightIdx = Math.min(highlightIdx + 1, dropdownItems.length - 1);
+      updateHighlight();
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      highlightIdx = Math.max(highlightIdx - 1, 0);
+      updateHighlight();
+    } else if (e.key === 'Enter' && highlightIdx >= 0 && dropdownItems[highlightIdx]) {
+      e.preventDefault();
+      selectPlayer(dropdownItems[highlightIdx]);
+    } else if (e.key === 'Escape') {
+      hideDropdown();
+    }
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!searchInput.contains(e.target) && !dropdown.contains(e.target)) {
+      hideDropdown();
+    }
+  });
+
+  function doSearch(q) {
+    fetch('/api/players/quick-search?q=' + encodeURIComponent(q) + '&limit=8')
+      .then(function(r) { if (!r.ok) throw new Error('search failed'); return r.json(); })
+      .then(function(data) {
+        var players = data.players || [];
+        if (players.length === 0) { hideDropdown(); return; }
+        dropdownItems = players;
+        highlightIdx = -1;
+        var html = '';
+        for (var i = 0; i < players.length; i++) {
+          var p = players[i];
+          html += '<div class="car-dropdown-item" data-idx="' + i + '">';
+          html += '<span class="car-dd-pos ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span>';
+          html += '<span>' + escapeHtml(p.full_name) + '</span>';
+          html += '<span style="color:var(--ink-light); font-size:12px;">' + escapeHtml(p.team) + '</span>';
+          html += '</div>';
+        }
+        dropdown.innerHTML = html;
+        dropdown.style.display = 'block';
+
+        var items = dropdown.querySelectorAll('.car-dropdown-item');
+        for (var j = 0; j < items.length; j++) {
+          (function(idx) {
+            items[idx].addEventListener('click', function() {
+              selectPlayer(dropdownItems[idx]);
+            });
+          })(j);
+        }
+      })
+      .catch(function() { hideDropdown(); });
+  }
+
+  function hideDropdown() {
+    dropdown.style.display = 'none';
+    dropdownItems = [];
+    highlightIdx = -1;
+  }
+
+  function updateHighlight() {
+    var items = dropdown.querySelectorAll('.car-dropdown-item');
+    for (var i = 0; i < items.length; i++) {
+      items[i].classList.toggle('highlighted', i === highlightIdx);
+    }
+  }
+
+  function selectPlayer(p) {
+    hideDropdown();
+    searchInput.value = p.full_name;
+    var url = new URL(window.location);
+    url.searchParams.set('player', p.player_id);
+    window.history.replaceState({}, '', url);
+    loadCareer(p.player_id);
+  }
+
+  function loadCareer(playerId) {
+    emptyEl.style.display = 'none';
+    resultEl.innerHTML = '<div class="car-loading">pulling film...</div>';
+
+    fetch('/api/career-stats?player_id=' + encodeURIComponent(playerId))
+      .then(function(r) { if (!r.ok) throw new Error('fetch failed'); return r.json(); })
+      .then(function(data) {
+        if (data.error) {
+          resultEl.innerHTML = '<div class="car-empty">' + escapeHtml(data.error) + '</div>';
+          return;
+        }
+        renderCareer(data);
+      })
+      .catch(function() {
+        resultEl.innerHTML = '<div class="car-empty">failed to load career stats</div>';
+      });
+  }
+
+  function renderCareer(data) {
+    var p = data.player;
+    var seasons = data.seasons || [];
+    var career = data.career || {};
+    var highs = data.career_highs || {};
+    var pos = p.position || 'WR';
+
+    if (seasons.length === 0) {
+      resultEl.innerHTML = '<div class="car-empty">no season data found for ' + escapeHtml(p.full_name) + '</div>';
+      return;
+    }
+
+    var html = '';
+
+    // Player card
+    var trajLabel = career.trajectory === 'rising' ? 'Rising (' + career.trajectory_pct + '%)' :
+                    career.trajectory === 'falling' ? 'Falling (' + career.trajectory_pct + '%)' :
+                    career.trajectory === 'new' ? 'Rookie' : 'Stable';
+    html += '<div class="car-player-card">';
+    html += '<div class="car-player-info">';
+    html += '<h2 class="car-player-name">' + escapeHtml(p.full_name) + '</h2>';
+    html += '<div class="car-player-meta">';
+    html += '<span class="car-pos-badge ' + escapeHtml(pos) + '">' + escapeHtml(pos) + '</span>';
+    html += '<span>' + escapeHtml(p.team) + '</span>';
+    if (p.age) html += '<span>Age ' + escapeHtml(String(Math.round(p.age))) + '</span>';
+    html += '<span class="car-trajectory-badge ' + escapeHtml(career.trajectory) + '">' + escapeHtml(trajLabel) + '</span>';
+    html += '</div></div></div>';
+
+    // Summary chips
+    html += '<div class="car-summary-row">';
+    html += '<div class="car-chip"><div class="car-chip-label">Career PPG</div><div class="car-chip-value">' + escapeHtml(String(career.ppg)) + '</div></div>';
+    html += '<div class="car-chip"><div class="car-chip-label">Total PPR</div><div class="car-chip-value">' + escapeHtml(String(career.total_ppr)) + '</div></div>';
+    html += '<div class="car-chip"><div class="car-chip-label">Games</div><div class="car-chip-value">' + escapeHtml(String(career.games)) + '</div></div>';
+    html += '<div class="car-chip"><div class="car-chip-label">Seasons</div><div class="car-chip-value">' + escapeHtml(String(career.seasons_played)) + '</div></div>';
+    html += '<div class="car-chip"><div class="car-chip-label">Peak PPG</div><div class="car-chip-value">' + escapeHtml(String(career.peak_ppg)) + '</div><div class="car-chip-sub">' + escapeHtml(String(career.peak_season)) + '</div></div>';
+    html += '</div>';
+
+    // Actions
+    html += '<div class="car-actions">';
+    html += '<button class="btn btn-primary" onclick="exportCareerPng()" aria-label="Export as PNG">Export PNG</button>';
+    html += '</div>';
+
+    // PPG Chart
+    html += '<div class="car-chart-wrap">';
+    html += '<div class="car-chart-title">PPG Trajectory</div>';
+    html += '<canvas class="car-canvas" id="ppg-chart"></canvas>';
+    html += '</div>';
+
+    // Career highs
+    var highKeys = [
+      { key: 'ppg', label: 'Best PPG' },
+      { key: 'total_ppr', label: 'Best Season PPR' },
+      { key: 'total_td', label: 'Most TDs' },
+    ];
+    if (pos === 'WR' || pos === 'TE') highKeys.push({ key: 'rec_yd', label: 'Most Rec Yds' });
+    if (pos === 'RB') highKeys.push({ key: 'rush_yd', label: 'Most Rush Yds' });
+    if (pos === 'QB') highKeys.push({ key: 'pass_yd', label: 'Most Pass Yds' });
+
+    html += '<div class="car-highs">';
+    for (var h = 0; h < highKeys.length; h++) {
+      var hk = highKeys[h];
+      var hv = highs[hk.key];
+      if (hv) {
+        html += '<div class="car-high">';
+        html += '<div class="car-high-label">' + escapeHtml(hk.label) + '</div>';
+        html += '<div class="car-high-value">' + escapeHtml(String(hv.value)) + '</div>';
+        html += '<div class="car-high-season">' + escapeHtml(String(hv.season)) + '</div>';
+        html += '</div>';
+      }
+    }
+    html += '</div>';
+
+    // Season-by-season table
+    html += '<div class="car-section-header">Season-by-Season Stats</div>';
+    html += '<div class="car-table-wrap"><table class="car-table"><thead><tr>';
+
+    // Columns depend on position
+    var cols;
+    if (pos === 'QB') {
+      cols = [
+        { key: 'season', label: 'Season' },
+        { key: 'games', label: 'G' },
+        { key: 'ppg', label: 'PPG' },
+        { key: 'total_ppr', label: 'PPR' },
+        { key: 'pass_yd', label: 'Pass Yd' },
+        { key: 'pass_td', label: 'Pass TD' },
+        { key: 'ints', label: 'INT' },
+        { key: 'comp_pct', label: 'Cmp%' },
+        { key: 'rush_yd', label: 'Rush Yd' },
+        { key: 'rush_td', label: 'Rush TD' },
+        { key: 'total_td', label: 'Tot TD' },
+      ];
+    } else if (pos === 'RB') {
+      cols = [
+        { key: 'season', label: 'Season' },
+        { key: 'games', label: 'G' },
+        { key: 'ppg', label: 'PPG' },
+        { key: 'total_ppr', label: 'PPR' },
+        { key: 'car', label: 'Car' },
+        { key: 'rush_yd', label: 'Rush Yd' },
+        { key: 'rush_td', label: 'Rush TD' },
+        { key: 'ypc', label: 'YPC' },
+        { key: 'rec', label: 'Rec' },
+        { key: 'tgt', label: 'Tgt' },
+        { key: 'rec_yd', label: 'Rec Yd' },
+        { key: 'catch_rate', label: 'Catch%' },
+        { key: 'total_td', label: 'Tot TD' },
+      ];
+    } else {
+      // WR / TE
+      cols = [
+        { key: 'season', label: 'Season' },
+        { key: 'games', label: 'G' },
+        { key: 'ppg', label: 'PPG' },
+        { key: 'total_ppr', label: 'PPR' },
+        { key: 'tgt', label: 'Tgt' },
+        { key: 'rec', label: 'Rec' },
+        { key: 'rec_yd', label: 'Rec Yd' },
+        { key: 'rec_td', label: 'Rec TD' },
+        { key: 'catch_rate', label: 'Catch%' },
+        { key: 'ypr', label: 'YPR' },
+        { key: 'yac', label: 'YAC' },
+        { key: 'total_td', label: 'Tot TD' },
+      ];
+    }
+
+    for (var c = 0; c < cols.length; c++) {
+      html += '<th>' + escapeHtml(cols[c].label) + '</th>';
+    }
+    html += '</tr></thead><tbody>';
+
+    // Find peak PPG season
+    var peakSeason = career.peak_season;
+
+    for (var s = 0; s < seasons.length; s++) {
+      var row = seasons[s];
+      var isPeak = row.season === peakSeason;
+      html += '<tr>';
+      for (var ci = 0; ci < cols.length; ci++) {
+        var val = row[cols[ci].key];
+        var cellClass = '';
+        if (isPeak && (cols[ci].key === 'ppg' || cols[ci].key === 'total_ppr')) cellClass = ' class="peak-cell"';
+        if (cols[ci].key === 'catch_rate' || cols[ci].key === 'comp_pct') {
+          html += '<td' + cellClass + '>' + escapeHtml(String(val)) + '%</td>';
+        } else {
+          html += '<td' + cellClass + '>' + escapeHtml(String(val)) + '</td>';
+        }
+      }
+      html += '</tr>';
+    }
+
+    // Career totals row
+    html += '<tr class="career-row">';
+    for (var ct = 0; ct < cols.length; ct++) {
+      var ck = cols[ct].key;
+      if (ck === 'season') {
+        html += '<td>Career</td>';
+      } else if (ck === 'games') {
+        html += '<td>' + escapeHtml(String(career.games)) + '</td>';
+      } else if (ck === 'ppg') {
+        html += '<td>' + escapeHtml(String(career.ppg)) + '</td>';
+      } else if (ck === 'total_ppr') {
+        html += '<td>' + escapeHtml(String(career.total_ppr)) + '</td>';
+      } else if (ck === 'catch_rate' || ck === 'comp_pct' || ck === 'ypc' || ck === 'ypr' || ck === 'td_rate') {
+        // Average rates across career
+        var sumVal = 0;
+        for (var si = 0; si < seasons.length; si++) sumVal += (seasons[si][ck] || 0);
+        html += '<td>' + escapeHtml(String(Math.round(sumVal / seasons.length * 10) / 10)) + (ck === 'catch_rate' || ck === 'comp_pct' ? '%' : '') + '</td>';
+      } else {
+        // Sum counting stats
+        var total = 0;
+        for (var si2 = 0; si2 < seasons.length; si2++) total += (seasons[si2][ck] || 0);
+        html += '<td>' + escapeHtml(String(Math.round(total))) + '</td>';
+      }
+    }
+    html += '</tr>';
+
+    html += '</tbody></table></div>';
+
+    // Watermark
+    html += '<div style="text-align:right; font-family:var(--font-hand); font-size:13px; color:var(--ink-faint); margin-top:8px;">razzle.lol</div>';
+
+    resultEl.innerHTML = html;
+
+    // Draw chart after DOM update
+    setTimeout(function() { drawPpgChart(seasons, pos); }, 50);
+  }
+
+  function drawPpgChart(seasons, pos) {
+    var canvas = document.getElementById('ppg-chart');
+    if (!canvas) return;
+
+    var dpr = window.devicePixelRatio || 1;
+    var rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    var ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    var w = rect.width;
+    var h = rect.height;
+
+    // Clear
+    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--bg-card').trim() || '#f7efe5';
+    ctx.fillRect(0, 0, w, h);
+
+    if (seasons.length === 0) return;
+
+    var pad = { top: 20, right: 30, bottom: 40, left: 50 };
+    var plotW = w - pad.left - pad.right;
+    var plotH = h - pad.top - pad.bottom;
+
+    var ppgs = seasons.map(function(s) { return s.ppg; });
+    var maxPpg = Math.max.apply(null, ppgs);
+    var minPpg = Math.min.apply(null, ppgs);
+    var range = maxPpg - minPpg || 1;
+    // Add 10% padding
+    var yMin = Math.max(0, minPpg - range * 0.1);
+    var yMax = maxPpg + range * 0.1;
+
+    function xPos(i) { return pad.left + (seasons.length === 1 ? plotW / 2 : i / (seasons.length - 1) * plotW); }
+    function yPos(val) { return pad.top + plotH - ((val - yMin) / (yMax - yMin)) * plotH; }
+
+    // Grid lines
+    ctx.strokeStyle = '#ddd';
+    ctx.lineWidth = 1;
+    var gridLines = 5;
+    for (var g = 0; g <= gridLines; g++) {
+      var gv = yMin + (yMax - yMin) * (g / gridLines);
+      var gy = yPos(gv);
+      ctx.beginPath();
+      ctx.moveTo(pad.left, gy);
+      ctx.lineTo(w - pad.right, gy);
+      ctx.stroke();
+      // Y-axis labels
+      ctx.fillStyle = '#999';
+      ctx.font = '11px "Space Mono", monospace';
+      ctx.textAlign = 'right';
+      ctx.fillText(gv.toFixed(1), pad.left - 6, gy + 4);
+    }
+
+    // X-axis labels
+    ctx.fillStyle = '#999';
+    ctx.font = '12px "Space Mono", monospace';
+    ctx.textAlign = 'center';
+    for (var xi = 0; xi < seasons.length; xi++) {
+      ctx.fillText(String(seasons[xi].season), xPos(xi), h - pad.bottom + 20);
+    }
+
+    // Line
+    var color = POS_COLORS[pos] || '#d97757';
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 3;
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    for (var li = 0; li < seasons.length; li++) {
+      var lx = xPos(li);
+      var ly = yPos(seasons[li].ppg);
+      if (li === 0) ctx.moveTo(lx, ly);
+      else ctx.lineTo(lx, ly);
+    }
+    ctx.stroke();
+
+    // Area fill
+    ctx.fillStyle = color.replace(')', ', 0.1)').replace('rgb', 'rgba');
+    if (color.indexOf('#') === 0) {
+      // Hex to rgba
+      var r = parseInt(color.slice(1, 3), 16);
+      var gr = parseInt(color.slice(3, 5), 16);
+      var b = parseInt(color.slice(5, 7), 16);
+      ctx.fillStyle = 'rgba(' + r + ',' + gr + ',' + b + ',0.1)';
+    }
+    ctx.beginPath();
+    ctx.moveTo(xPos(0), yPos(seasons[0].ppg));
+    for (var ai = 1; ai < seasons.length; ai++) {
+      ctx.lineTo(xPos(ai), yPos(seasons[ai].ppg));
+    }
+    ctx.lineTo(xPos(seasons.length - 1), pad.top + plotH);
+    ctx.lineTo(xPos(0), pad.top + plotH);
+    ctx.closePath();
+    ctx.fill();
+
+    // Dots + value labels
+    for (var di = 0; di < seasons.length; di++) {
+      var dx = xPos(di);
+      var dy = yPos(seasons[di].ppg);
+
+      // Dot
+      ctx.beginPath();
+      ctx.arc(dx, dy, 6, 0, Math.PI * 2);
+      ctx.fillStyle = color;
+      ctx.fill();
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Value label
+      ctx.fillStyle = '#333';
+      ctx.font = 'bold 12px "Space Mono", monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(seasons[di].ppg.toFixed(1), dx, dy - 12);
+    }
+
+    // Y-axis label
+    ctx.save();
+    ctx.translate(14, pad.top + plotH / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillStyle = '#999';
+    ctx.font = '11px "Space Mono", monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('PPG (PPR)', 0, 0);
+    ctx.restore();
+  }
+
+  // PNG export
+  window.exportCareerPng = function() {
+    var el = document.getElementById('car-content');
+    if (!el || typeof html2canvas === 'undefined') return;
+    html2canvas(el, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+      // Add watermark
+      var ctx = canvas.getContext('2d');
+      ctx.font = 'bold 20px "Space Mono", monospace';
+      ctx.fillStyle = 'rgba(0,0,0,0.15)';
+      ctx.textAlign = 'right';
+      ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 16);
+      var link = document.createElement('a');
+      link.download = 'razzle-career-timeline.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    });
+  };
+
+  // Analytics
+  if (typeof trackPage === 'function') trackPage('career');
+
+  // Load from URL
+  if (initialPlayer) {
+    loadCareer(initialPlayer);
+    // Try to populate search field
+    fetch('/api/players/quick-search?q=' + encodeURIComponent(initialPlayer) + '&limit=1')
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        if (d.players && d.players.length > 0) {
+          searchInput.value = d.players[0].full_name;
+        }
+      })
+      .catch(function() {});
+  }
+})();
+</script>
+</body>
+</html>
