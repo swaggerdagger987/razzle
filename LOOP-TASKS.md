@@ -2,10 +2,10 @@
 
 ## Current State
 - Phase: 4 (Inline Panel Migration)
-- Task: Create panel render infrastructure
+- Task: Migrate Rankings & Values panels
 - Stage: BUILD
 - Attempt: 1/3
-- Tasks Done: 1/10
+- Tasks Done: 2/10
 
 ## Phase 1: Navigation Surgery -- COMPLETE
 ### Task 1: Slim nav to 4 items on all pages
@@ -144,8 +144,8 @@
 **Accept when**: `switchPanel(name)` function works, URL state syncs, and at least the screener panel renders natively through the new system.
 **Depends on**: Task 1
 **Size**: M
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task 3: Migrate Rankings & Values panels
 **Requirement**: Convert these panels from iframe to native render: Dynasty Rankings, Tiers, Trade Values, VORP, Positional Advantage, Auction Values, Cheat Sheet. Port each page's fetch + render logic into lab.js as dedicated render functions.

@@ -2677,11 +2677,49 @@
 <script src="charts.js"></script>
 <script>fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({page:location.pathname})}).catch(function(){});</script>
 
-<!-- LAB SIDEBAR PANEL SWITCHING -->
+<!-- LAB PANEL SWITCHING + REGISTRY -->
 <script>
 (function() {
   var currentPanel = 'screener';
   var loadedFrames = {};
+  var labMain = document.getElementById('labMain');
+
+  // ─── Panel Registry ────────────────────────────────────────────
+  // Native panels register here. Unregistered panels fall back to iframe.
+  // Each entry: { render: fn(container), loaded: bool, container: Element|null }
+  var panelRegistry = {};
+
+  // Public API: register a native render function for a panel
+  window.registerPanel = function(name, renderFn) {
+    panelRegistry[name] = { render: renderFn, loaded: false, container: null };
+  };
+
+  // Public API: force a panel to re-render (e.g. after season change)
+  window.reloadPanel = function(name) {
+    var entry = panelRegistry[name];
+    if (!entry || !entry.loaded || !entry.container) return;
+    var contentEl = entry.container.querySelector('.lab-panel-content');
+    if (!contentEl) return; // screener and other static panels — skip
+    entry.loaded = false;
+    contentEl.innerHTML = '';
+    entry.render(contentEl);
+    entry.loaded = true;
+  };
+
+  // Public API: check if a panel is native (registered)
+  window.isPanelNative = function(name) {
+    return !!panelRegistry[name];
+  };
+
+  // Register the screener — it already exists in the DOM
+  registerPanel('screener', function() {
+    // No-op: panel-screener is statically rendered in lab.html
+  });
+  // Point its container to the existing DOM element
+  panelRegistry['screener'].container = document.getElementById('panel-screener');
+  panelRegistry['screener'].loaded = true;
+
+  // ─── Panel Labels & Categories ─────────────────────────────────
   var PANEL_LABELS = {
     screener: 'The Screener',
     rankings: 'Dynasty Rankings', tiers: 'Tiers', tradevalues: 'Trade Values',
@@ -2705,7 +2743,7 @@
     explorer: 'Explorer', targets: 'Target Distribution', team: 'Team Rosters'
   };
 
-  // Find the category for breadcrumb
+  // Map each panel to its sidebar category for breadcrumbs
   var PANEL_CATEGORIES = {};
   document.querySelectorAll('.lab-sidebar-category').forEach(function(cat) {
     var categoryName = cat.textContent.trim();
@@ -2718,10 +2756,22 @@
     }
   });
 
+  // ─── Panel URL map (for iframe fallback) ───────────────────────
+  // Extracted from sidebar onclick attributes so switchPanel doesn't need URL param
+  var PANEL_URLS = {};
+  document.querySelectorAll('.lab-sidebar-item[data-panel]').forEach(function(item) {
+    var onclickStr = item.getAttribute('onclick');
+    if (onclickStr) {
+      var urlMatch = onclickStr.match(/'(\/[^']+\.html)'/);
+      if (urlMatch) PANEL_URLS[item.dataset.panel] = urlMatch[1];
+    }
+  });
+
+  // ─── switchPanel ───────────────────────────────────────────────
   window.switchPanel = function(panelName, url) {
     if (panelName === currentPanel) return;
 
-    // Hide all panels
+    // Hide all visible panels (both native containers and iframe panel)
     document.querySelectorAll('.lab-panel').forEach(function(p) { p.style.display = 'none'; });
 
     // Update sidebar active state
@@ -2729,11 +2779,53 @@
       item.classList.toggle('active', item.dataset.panel === panelName);
     });
 
-    if (panelName === 'screener') {
-      // Show the inline screener
-      document.getElementById('panel-screener').style.display = '';
+    var entry = panelRegistry[panelName];
+
+    if (entry) {
+      // ── Native panel ──
+      // Create container on first access (except screener which is static)
+      if (!entry.container) {
+        var section = document.createElement('section');
+        section.className = 'lab-panel';
+        section.dataset.panel = panelName;
+        section.id = 'panel-' + panelName;
+
+        // Add breadcrumb header
+        var label = PANEL_LABELS[panelName] || panelName;
+        var cat = PANEL_CATEGORIES[panelName] || 'The Lab';
+        var header = document.createElement('div');
+        header.className = 'lab-panel-header';
+        header.innerHTML = '<span class="breadcrumb">' + escapeHtml('The Lab > ' + cat) + '</span>' +
+                           '<span>' + escapeHtml(label) + '</span>';
+        section.appendChild(header);
+
+        // Content area for the render function
+        var content = document.createElement('div');
+        content.className = 'lab-panel-content';
+        section.appendChild(content);
+
+        labMain.appendChild(section);
+        entry.container = section;
+      }
+
+      // Show the container
+      entry.container.style.display = '';
+
+      // Lazy-load: render on first access
+      if (!entry.loaded) {
+        var contentEl = entry.container.querySelector('.lab-panel-content') || entry.container;
+        // Show loading state
+        contentEl.innerHTML = '<div class="lab-panel-loading"><div class="loading-msg">pulling film...</div></div>';
+        try {
+          entry.render(contentEl);
+        } catch (err) {
+          contentEl.innerHTML = '<div class="lab-panel-loading"><div class="loading-msg" style="color:var(--red);">something broke... try refreshing</div></div>';
+          console.error('Panel render error (' + panelName + '):', err);
+        }
+        entry.loaded = true;
+      }
     } else {
-      // Show the iframe panel
+      // ── Iframe fallback (for panels not yet migrated) ──
       var iframePanel = document.getElementById('panel-iframe');
       iframePanel.style.display = '';
 
@@ -2743,25 +2835,24 @@
       document.getElementById('panelBreadcrumb').textContent = 'The Lab > ' + cat;
       document.getElementById('panelTitle').textContent = label;
 
-      // Load iframe if not already loaded with this URL
+      // Resolve URL: explicit param > PANEL_URLS map
+      var frameUrl = url || PANEL_URLS[panelName];
       var frame = document.getElementById('panelFrame');
-      if (url && loadedFrames[panelName] !== url) {
+      if (frameUrl && loadedFrames[panelName] !== frameUrl) {
         document.getElementById('panelLoading').style.display = '';
         frame.style.display = 'none';
-        frame.src = url;
-        loadedFrames[panelName] = url;
+        frame.src = frameUrl;
+        loadedFrames[panelName] = frameUrl;
 
         frame.onload = function() {
           document.getElementById('panelLoading').style.display = 'none';
           frame.style.display = '';
-          // Hide the nav and watermark inside the iframe to avoid duplicates
           try {
             var iframeDoc = frame.contentDocument || frame.contentWindow.document;
             var iframeNav = iframeDoc.querySelector('.topnav');
             if (iframeNav) iframeNav.style.display = 'none';
             var wm = iframeDoc.querySelector('.watermark');
             if (wm) wm.style.display = 'none';
-            // Auto-resize iframe to content height
             var resizeFrame = function() {
               try {
                 var h = iframeDoc.documentElement.scrollHeight;
@@ -2769,7 +2860,6 @@
               } catch(e) {}
             };
             resizeFrame();
-            // Re-check height after images/data load
             setTimeout(resizeFrame, 500);
             setTimeout(resizeFrame, 2000);
           } catch(e) { /* cross-origin, ignore */ }
@@ -2779,13 +2869,14 @@
 
     currentPanel = panelName;
 
-    // Update URL
+    // Update URL state
     var newUrl = panelName === 'screener'
       ? window.location.pathname
       : window.location.pathname + '?panel=' + panelName;
     history.pushState({ panel: panelName }, '', newUrl);
   };
 
+  // ─── Sidebar toggle ────────────────────────────────────────────
   window.toggleSidebar = function() {
     var sidebar = document.getElementById('labSidebar');
     sidebar.classList.toggle('collapsed');
@@ -2797,36 +2888,23 @@
     document.getElementById('labSidebar').classList.add('collapsed');
   }
 
-  // Handle URL state on load
+  // ─── URL state on load ─────────────────────────────────────────
   var params = new URLSearchParams(window.location.search);
   var initPanel = params.get('panel');
   if (initPanel && initPanel !== 'screener') {
-    // Find the sidebar item and get its URL
-    var sidebarItem = document.querySelector('.lab-sidebar-item[data-panel="' + initPanel + '"]');
-    if (sidebarItem) {
-      var onclickStr = sidebarItem.getAttribute('onclick');
-      var urlMatch = onclickStr && onclickStr.match(/'(\/[^']+\.html)'/);
-      if (urlMatch) {
-        switchPanel(initPanel, urlMatch[1]);
-      }
-    }
+    switchPanel(initPanel);
   }
 
   // Handle browser back/forward
   window.addEventListener('popstate', function(e) {
     if (e.state && e.state.panel) {
-      var sidebarItem = document.querySelector('.lab-sidebar-item[data-panel="' + e.state.panel + '"]');
-      if (sidebarItem) {
-        var onclickStr = sidebarItem.getAttribute('onclick');
-        var urlMatch = onclickStr && onclickStr.match(/'(\/[^']+\.html)'/);
-        switchPanel(e.state.panel, urlMatch ? urlMatch[1] : null);
-      }
+      switchPanel(e.state.panel);
     } else {
       switchPanel('screener');
     }
   });
 
-  // Mobile sidebar toggle
+  // ─── Mobile sidebar ────────────────────────────────────────────
   var mobileToggle = document.querySelector('.lab-menu-toggle');
   if (mobileToggle) {
     mobileToggle.addEventListener('click', function() {
@@ -2834,7 +2912,6 @@
     });
   }
 
-  // Close mobile sidebar when clicking outside
   document.addEventListener('click', function(e) {
     var sidebar = document.getElementById('labSidebar');
     if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && !e.target.closest('.lab-menu-toggle')) {
@@ -2842,7 +2919,6 @@
     }
   });
 
-  // Close mobile sidebar when panel is selected
   document.querySelectorAll('.lab-sidebar-item').forEach(function(item) {
     item.addEventListener('click', function() {
       if (window.innerWidth <= 768) {

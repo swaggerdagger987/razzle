@@ -8,6 +8,9 @@ Migrating all 62 iframe panels to native render functions in lab.js. Each panel 
 #### Task 1: Audit current iframe panels (DONE)
 Cataloged all 62 iframe panels across 10 categories with source files, API endpoints, and render complexity (8 S, 45 M, 9 L). Full audit in LOOP-TASKS.md.
 
+#### Task 2: Create panel render infrastructure (DONE)
+Built panel registry system in lab.html inline script. `registerPanel(name, renderFn)` registers native render functions. `switchPanel(name)` checks registry first — native panels get a `<section>` container created on first access with lazy-load rendering; unregistered panels fall back to iframe. Screener registered as first native panel. Added `reloadPanel(name)` for re-rendering and `isPanelNative(name)` for checking. URL state (`?panel=name`), browser back/forward, sidebar active state, breadcrumb headers all work. PANEL_URLS map extracted from sidebar onclick attributes for iframe fallback without explicit URL param. 47/47 braces balanced, 122/122 parens balanced.
+
 ### Previous Consolidation Phases (COMPLETE)
 
 #### Phase 1: Navigation Surgery
