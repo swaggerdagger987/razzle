@@ -4,6 +4,7 @@ server.py calls these functions; they return dicts ready for JSON.
 """
 
 import math
+import re
 import sqlite3
 import statistics
 import time as _time
@@ -568,12 +569,13 @@ def quick_search_players(query, limit=8):
     try:
         search_term = "%" + query.lower().replace(" ", "") + "%"
         rows = conn.execute("""
+            WITH ms AS (SELECT MAX(season) AS s FROM player_week_stats)
             SELECT p.player_id, p.full_name, p.position, p.team, p.headshot_url,
                    COALESCE(
                        (SELECT ROUND(SUM(s.fantasy_points_ppr) * 1.0 / COUNT(DISTINCT s.week), 1)
-                        FROM player_week_stats s
+                        FROM player_week_stats s, ms
                         WHERE s.player_id = p.player_id
-                          AND s.season = (SELECT MAX(season) FROM player_week_stats)),
+                          AND s.season = ms.s),
                        0) AS ppg
             FROM players p
             WHERE p.search_name LIKE ?
@@ -2374,7 +2376,6 @@ def fetch_college_player_profile(player_id):
         career = _enrich_college_derived([career])[0]
 
         # Normalize name: strip all non-alpha chars (matches adapter logic)
-        import re
         name_alpha = re.sub(r"[^a-z]", "", latest["player_name"].lower())
         name_nospace = latest["player_name"].lower().replace(" ", "")
 
@@ -4553,7 +4554,6 @@ def init_waitlist_table():
 
 
 def add_to_waitlist(email: str) -> dict:
-    import re
     email = email.strip().lower()
     if not re.match(r'^[^@\s]+@[^@\s]+\.[^@\s]+$', email):
         return {"status": "error", "message": "invalid email format"}
