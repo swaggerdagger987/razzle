@@ -1,7 +1,28 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 30 (Backend Cleanup: Fix Duplicate Routes + Shared Utils)
+- Phase: 31 (QA + UX Audit — Auto-Generated Fixes)
+- Stage: EXECUTING
+- Next: Task 1
+
+## Phase 31: QA + UX Audit — Auto-Generated Fixes
+**Exit Criterion**: All CRITICAL and HIGH findings from QA+UX audit resolved. MEDIUM findings addressed.
+
+### Task 1: Fix CRITICAL — Add nonlocal to all tools.py cached closures
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: Every `_query()` closure in tools.py that assigns to outer variables (season, draft_year, week, window) has `nonlocal` declarations. No `UnboundLocalError` at runtime.
+
+### Task 2: Fix HIGH — analytics.py metric_key typo + seasonOptions hardcoded years
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: `m.metric_key` changed to `m.stat_key` in analytics.py. `seasonOptions()` in lab-panels.js uses dynamic year computation instead of hardcoded 2025-2015.
+
+### Task 3: Fix MEDIUM — Aging curves label, NFL 0.0 em-dash, grouped LOW fixes
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: Aging curves label updated. NFL screener shows em-dash for zero counting stats. First-visit toast count updated. state.season initialized to null.
+
 ## Phase 30: Backend Cleanup: Fix Duplicate Routes + Shared Utils
 **Exit Criterion**: Duplicate routes for aging_curves and td_regression in server.py removed. normalize_name() extracted to shared utils.py. Push script optimized.
 

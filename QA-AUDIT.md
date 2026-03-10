@@ -1,69 +1,49 @@
-# QA + UX Audit — Phases 20-24
+# QA + UX Audit — Phases 26-30
 
 **Date**: 2026-03-10
-**Scope**: Phase 20 (QA fixes), Phase 21 (Turso migration), Phase 22 (Correlations), Phase 23 (Power Rankings), Phase 24 (Game Script)
-
----
+**Scope**: Phase 26 (Connection mgmt), Phase 27 (Module split), Phase 28 (Caching), Phase 29 (Data expansion), Phase 30 (Route fixes)
 
 ## QA FINDINGS
 
-### QA-1: HIGH — Missing 'powerrankings' in NFL_ONLY_PANELS
-- **File**: frontend/lab.js, line 1174
-- **Issue**: The `powerrankings` panel has `showNflOnlyMsg()` in lab-panels.js but is NOT listed in the `NFL_ONLY_PANELS` array. When a user switches to College mode, the Power Rankings sidebar item does not dim, misleading users into clicking it.
-- **Fix**: Add `'powerrankings'` to the NFL_ONLY_PANELS array.
+### CRITICAL-1: Missing `nonlocal` in ~25 tools.py cached functions
+**Severity**: CRITICAL
+**File**: `backend/live_data/tools.py` (~25 functions)
+**What's wrong**: Functions wrapped with `_cached()` define a `_query()` closure that reads then assigns `season` (e.g., `if not season: season = ...`). Python treats any assigned variable as local — reading before assignment causes `UnboundLocalError`. Every tools.py endpoint crashes with default params.
+**Fix**: Add `nonlocal season` (and `nonlocal draft_year`, `nonlocal week`, `nonlocal window`) at top of each `_query()`.
 
-### QA-2: HIGH — Missing try-except on /api/stat-correlations endpoint
-- **File**: backend/server.py, line 2017-2024
-- **Issue**: The stat-correlations endpoint has no try-except wrapper, unlike dynasty-power-rankings and game-script. Unhandled exceptions return raw 500 HTML instead of JSON error response.
-- **Fix**: Wrap in try-except returning `JSONResponse({"error": "..."}, status_code=500)`.
+### HIGH-1: Wrong column name `metric_key` in analytics.py SQL
+**Severity**: HIGH
+**File**: `backend/live_data/analytics.py` line 371
+**What's wrong**: SQL references `m.metric_key` but actual column is `m.stat_key`.
+**Fix**: Change `m.metric_key` to `m.stat_key`.
 
-### QA-3: MEDIUM — Missing encodeURIComponent on correlations x_stat/y_stat
-- **File**: frontend/lab-panels.js, correlations panel
-- **Issue**: When clicking a heat map cell, x_stat and y_stat are appended to the URL without `encodeURIComponent()`.
-- **Fix**: Wrap in `encodeURIComponent()`.
+### HIGH-2: `seasonOptions()` hardcodes 2025-2015 in 18 panels
+**Severity**: HIGH
+**File**: `frontend/lab-panels.js` line 5027
+**What's wrong**: Hardcoded year range doesn't adapt to available data.
+**Fix**: Compute dynamically or use `available_seasons` from API.
 
-### QA-4: MEDIUM — Missing encodeURIComponent on draft tracker position param
-- **File**: frontend/lab-panels.js, drafttracker panel
-- **Issue**: Position parameter in draft tracker API call is not URL-encoded.
-- **Fix**: Wrap in `encodeURIComponent()`.
+### MEDIUM-1: Aging Curves chart label says "2020-2024" (data is now 2015-2024)
+**Severity**: MEDIUM
+**File**: `frontend/lab.js` line 6082
+**Fix**: Update to dynamic or correct label.
 
-### QA-5: LOW — POS_COLS constant redefined locally in multiple panels
-- **File**: frontend/lab-panels.js
-- **Issue**: Position color map defined locally in powerrankings and gamescript panels (code duplication).
+### MEDIUM-2: NFL screener shows 0.0 instead of em-dash for zero counting stats
+**Severity**: MEDIUM
+**File**: `frontend/lab.js` lines 877-882
+**Fix**: Extend em-dash treatment to NFL zero counting stats.
 
----
+### LOW-1: First-visit toast says "62 tools" (actually ~70)
+**Severity**: LOW — `frontend/lab.js` line 587
 
-## UX FINDINGS
+### LOW-2: Error message tone inconsistency across panels
+**Severity**: LOW — panels use flat "failed to load" vs screener's playful "fumbled..."
 
-### UX-1: HIGH — Abbreviations lack tooltips in new panels
-- **Panels**: Game Script (GT%, Avg Diff), Correlations (r, Tgt, Rec), Draft Class Tracker (FPTS, AV)
-- **Issue**: Fantasy abbreviations have no hover tooltips. Users from r/DynastyFF may not know what GT% or AV means.
-- **Fix**: Add `title` attributes to table headers with full descriptions.
+### LOW-3: `state.season = 0` (falsy init) is fragile
+**Severity**: LOW — `frontend/lab.js` line 503
 
-### UX-2: MEDIUM — Game Script table mobile responsiveness
-- **Issue**: The `.gs-table` uses custom CSS. On small screens (480px), the two-column grid may cause issues.
-- **Fix**: Add `overflow-x: auto` wrapper around each `.gs-table`.
+### LOW-4: push_to_turso.py OFFSET pagination is O(n^2) for large tables
+**Severity**: LOW — `scripts/push_to_turso.py`
 
-### UX-3: LOW — Loading messages inconsistent across panels
-- **Issue**: Different panels use different loading flavor text. Variety is arguably brand personality.
-
-### UX-4: LOW — Sidebar collapsed icons not all intuitive
-- **Issue**: Some sidebar icons are abstract Unicode. Tooltips provide clarity on hover.
-
----
-
-## SUMMARY
-
-| ID | Severity | Type | Description |
-|----|----------|------|-------------|
-| QA-1 | HIGH | Logic | powerrankings missing from NFL_ONLY_PANELS |
-| QA-2 | HIGH | Error handling | stat-correlations endpoint missing try-except |
-| QA-3 | MEDIUM | URL encoding | correlations x_stat/y_stat not encoded |
-| QA-4 | MEDIUM | URL encoding | draft tracker position not encoded |
-| QA-5 | LOW | Code quality | POS_COLS duplicated across panels |
-| UX-1 | HIGH | Readability | Abbreviations lack tooltips in new panels |
-| UX-2 | MEDIUM | Mobile | Game Script table needs overflow wrapper |
-| UX-3 | LOW | Branding | Loading messages inconsistent |
-| UX-4 | LOW | Visual | Sidebar icons abstract |
-
-No CRITICAL findings. 3 HIGH and 3 MEDIUM fixes required. LOW items logged but not tasked.
+### LOW-5: Cache key for list params uses str(list) representation
+**Severity**: LOW — `backend/live_data/prospects.py` line 707
