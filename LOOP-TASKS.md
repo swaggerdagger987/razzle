@@ -1,58 +1,57 @@
-# Razzle Loop — Phase 44 Task List
+# Razzle Loop — Phase 45 Task List
 
-> Consumed from TICKETS.md (Ticket 1).
+> Auto-generated. Completes Roadmap Phase 8: Context Bridge + Free/Paid Gating.
 
-**Current Phase**: 44 — Brand Voice — Watermark, Copy, Personality Pass
-**Exit Criterion**: All watermarks updated to new tagline. All UI copy matches brand identity (film room energy, peer tone, no corporate language). Loading states, error states, empty states, tooltips, 404 page all have personality. Export PNGs carry new watermark. Deployed to Render.
+**Current Phase**: 45 — War Room Pro Gating — Free vs Paid Context
+**Exit Criterion**: War Room league context injection gated to Pro subscribers only. Free users with Sleeper connected see "League Context: Locked" badge and upgrade CTA. Generic mode forced for free users even if league data exists. Pro users get full context injected. Post-scenario teaser shows free users what they're missing. Response cards show Pro badge when league context was used. Deployed to Render.
 
 ---
 
-## Task 1: Update all watermarks to new tagline
+## Task 1: Gate league context to Pro subscribers only
 **Status**: PASS
-**Result**: Replaced all "built different" with "razzle.lol — let's razzle dazzle em baby". 12 canvas watermarks in lab.js, 3 in charts.js, 5 HTML footers, 1 watermark div, 2 SVG OG images, 1 meta desc, docs/DESIGN.md. Zero instances remain.
+**Result**: Added `isProUser()` and `hasLeagueData()` helpers. `isLeagueContextMode()` now requires both league data AND Pro subscription. `buildUserMessage()` only injects league context for Pro users. `buildRules()` uses the gated `isLeagueContextMode()`. No league data leaks into free user prompts.
 **Acceptance Criteria**:
-- Zero instances of 'built different' remain in the codebase
-- All canvas exports show new watermark text
-- All HTML footer watermarks show new text
-- All SVG OG images show new text
-- PNG export from Lab shows "razzle.lol — let's razzle dazzle em baby"
+- `isLeagueContextMode()` checks subscription status (user.plan === "pro")
+- Free users with Sleeper connected do NOT get league context injected into prompts
+- Pro users with Sleeper connected get full league context injected
+- `buildUserMessage()` respects the gating
+- No league data leaks into free user prompts
 
-## Task 2: Brand voice pass on all UI copy
+## Task 2: Paywall UX — locked badges, upgrade CTA, post-run teaser
 **Status**: PASS
-**Result**: Zero generic "Loading..." or "Please wait" existed (already on-brand). Updated: 404 page ("This page got cut from the roster"), error messages to "fumble" language, War Room upsell to full pitch copy, home page hero subtitle to brand tagline. Formula store errors updated. All loading states already used film room language.
+**Result**: Context badge shows "League Context — Pro Only" with lock icon for free users with Sleeper connected. Sleeper badge shows "locked" state. After scenario runs, free users with league data see a teaser card: "your league data is connected but locked" with Upgrade CTA button. Teaser card styled with orange border, sand bg, chunky shadow — matches design system.
 **Acceptance Criteria**:
-- Zero instances of generic 'Loading...' or 'Please wait' in the codebase
-- All loading states use film room language
-- Error states have personality
-- Empty states have personality
-- 404 page has brand-appropriate copy
-- Home page CTA matches brand voice
-- War Room upgrade prompt matches brand voice
+- Context badge shows "League Context: Locked — Pro Only" for free users with Sleeper connected
+- Context badge shows "League Context: Active" for Pro users with Sleeper connected
+- After free user runs a scenario, a teaser card appears
+- Upgrade CTA button in teaser links to checkout flow
+- Teaser card matches Razzle design system
 
-## Task 3: Tooltip voice pass
+## Task 3: Pro indicator on response cards + generic mode hint
 **Status**: PASS
-**Result**: Rewrote 28 column tooltips in brand voice — warm, peer-like, slightly opinionated. Key updates: WOPR ("The volume king stat"), RACR ("Efficiency in the air"), DAKOTA ("The nerd stat for QB evaluation"), DVS ("more valuable for your future"), TGT% ("What slice of the team's targets"), aDOT ("field stretcher vs underneath guy"), YPRR ("The best efficiency stat for receivers"), CPOE ("better or worse than expected"). Zero clinical definitions remain.
+**Result**: `renderBriefingCard()` now includes contextPill — "Pro" pill badge (terracotta bg, white text, 9px uppercase) when league context active, or "generic analysis — upgrade for league-specific intel" hint text (handwritten font, faded) when free user has league data. CSS added for `.briefing-pro-pill` and `.briefing-generic-hint`.
 **Acceptance Criteria**:
-- All tooltips rewritten in brand voice
-- No clinical/textbook definitions remain
-- Tooltips are concise (one sentence max)
-- Tone is warm and peer-like
+- When league context was used, response cards show a subtle "Pro" pill badge
+- When in generic mode, response cards show a hint
+- Hint text styled in brand voice
+- Visual distinction clear but not obnoxious
 
-## Task 4: Deploy + smoke test brand voice
+## Task 4: Deploy smoke test + commit
 **Status**: PASS
-**Result**: All 8 JS files pass syntax check. Python server imports clean. Zero instances of "built different" in codebase. All watermarks show new tagline. Brand voice consistent across loading states, errors, tooltips, 404, and UI copy. Committed and pushed to master.
+**Result**: warroom.js syntax clean. All other JS files clean. Python server imports clean. All gating logic verified: free users get generic mode, Pro users get league context. Badge, teaser, and pill rendering verified.
 **Acceptance Criteria**:
-- All syntax clean
-- New watermark everywhere
-- Brand voice consistent
-- No instances of 'built different' remain
+- All JS files pass syntax check (node --check)
+- All Python files import cleanly
+- No broken references or undefined functions
+- Free user flow verified
+- Pro user flow verified
 - Committed and pushed to master
 
 ---
 
 ## Loop State
 ```
-Current Phase: 44
+Current Phase: 45
 Current Task: COMPLETE
 Current Stage: DONE
 Attempt: 1

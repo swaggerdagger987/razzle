@@ -510,6 +510,56 @@
   .context-badge.active .context-badge-dot { background: var(--green); }
   .context-badge.inactive .context-badge-dot { background: var(--ink-faint); }
 
+  .context-badge.locked {
+    background: #fff5ee;
+    border-color: var(--orange);
+    color: var(--orange);
+    opacity: 0.85;
+  }
+  .context-badge.locked .context-badge-dot { background: var(--orange); opacity: 0.4; }
+
+  /* ===== PRO TEASER CARD (post-scenario for free users) ===== */
+  .pro-teaser-card {
+    background: #fff5ee;
+    border: 3px solid var(--orange);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--orange);
+    padding: 16px 20px;
+    margin: 16px 0 8px;
+    text-align: center;
+  }
+  .pro-teaser-card p {
+    font-family: var(--font-hand);
+    font-size: 18px;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+  .pro-teaser-card .pro-teaser-detail {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-light);
+    margin-bottom: 12px;
+  }
+  .pro-teaser-card .btn-pro-upgrade {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 8px 20px;
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    background: var(--orange);
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 var(--ink);
+    transition: all 0.12s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .pro-teaser-card .btn-pro-upgrade:hover {
+    box-shadow: 5px 5px 0 var(--ink);
+    transform: translate(-2px, -2px);
+  }
+
   .context-badge-link {
     font-family: var(--font-hand);
     font-size: 13px;
@@ -639,6 +689,27 @@
     font-family: var(--font-mono);
     font-size: 11px;
     color: var(--ink-light);
+  }
+
+  .briefing-pro-pill {
+    font-family: var(--font-display);
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 2px 7px;
+    border-radius: 8px;
+    background: var(--orange);
+    color: #fff;
+    margin-left: 6px;
+  }
+
+  .briefing-generic-hint {
+    font-family: var(--font-hand);
+    font-size: 12px;
+    color: var(--ink-light);
+    margin-left: 6px;
+    opacity: 0.7;
   }
 
   .briefing-card-body {

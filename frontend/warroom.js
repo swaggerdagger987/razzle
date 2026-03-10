@@ -1563,17 +1563,30 @@ function renderContextBadges() {
     );
   }
 
+  var pro = isProUser();
+  var hasLeague = hasLeagueData();
+
   if (leagueCtx && leagueCtx.username) {
     var detail = leagueCtx.username;
     if (leagueCtx.leagues && leagueCtx.leagues.length) {
       detail += ' (' + leagueCtx.leagues.length + ' league' + (leagueCtx.leagues.length > 1 ? 's' : '') + ')';
     }
-    badges.push(
-      '<span class="context-badge active">' +
-        '<span class="context-badge-dot"></span>' +
-        'Sleeper: ' + escapeHtml(detail) +
-      '</span>'
-    );
+    if (hasLeague && !pro) {
+      // Sleeper connected but not Pro — locked state
+      badges.push(
+        '<span class="context-badge locked">' +
+          '<span class="context-badge-dot"></span>' +
+          'Sleeper: ' + escapeHtml(detail) + ' \u2014 locked' +
+        '</span>'
+      );
+    } else {
+      badges.push(
+        '<span class="context-badge active">' +
+          '<span class="context-badge-dot"></span>' +
+          'Sleeper: ' + escapeHtml(detail) +
+        '</span>'
+      );
+    }
   } else {
     badges.push(
       '<span class="context-badge inactive">' +
@@ -1590,7 +1603,15 @@ function renderContextBadges() {
     badges.unshift(
       '<span class="context-badge active" style="border-color:var(--orange); background:var(--orange-light); color:var(--orange);">' +
         '<span class="context-badge-dot" style="background:var(--orange);"></span>' +
-        'League Context Mode' +
+        'League Context \u2014 Pro' +
+      '</span>'
+    );
+  } else if (hasLeague && !pro) {
+    // Has data but not Pro — locked
+    badges.unshift(
+      '<span class="context-badge locked" style="border-color:var(--orange);">' +
+        '<span class="context-badge-dot" style="background:var(--orange); opacity:0.4;"></span>' +
+        'League Context \u2014 Pro Only \uD83D\uDD12' +
       '</span>'
     );
   } else {
@@ -1712,9 +1733,21 @@ async function loadPersona(agentId) {
   return text;
 }
 
-function isLeagueContextMode() {
+function isProUser() {
+  try {
+    var user = JSON.parse(localStorage.getItem("razzle_user"));
+    return user && user.plan === "pro";
+  } catch (e) { return false; }
+}
+
+function hasLeagueData() {
   var leagueCtx = getLeagueContext();
   return leagueCtx && leagueCtx.roster && leagueCtx.roster.length > 0;
+}
+
+function isLeagueContextMode() {
+  // League context requires Pro subscription
+  return hasLeagueData() && isProUser();
 }
 
 function buildRules(agentDef) {
@@ -1850,10 +1883,12 @@ function buildUserMessage(scenario, agentDef, peerInsights) {
     parts.push(formatLabContext(labCtx));
   }
 
-  // Inject League context if available
-  var leagueCtx = getLeagueContext();
-  if (leagueCtx) {
-    parts.push(formatLeagueContext(leagueCtx));
+  // Inject League context only for Pro users
+  if (isProUser()) {
+    var leagueCtx = getLeagueContext();
+    if (leagueCtx) {
+      parts.push(formatLeagueContext(leagueCtx));
+    }
   }
 
   if (Array.isArray(peerInsights) && peerInsights.length) {
@@ -2163,11 +2198,20 @@ function renderBriefingCard(agentId, content, isError) {
   var collapsed = !isRazzle ? ' collapsed' : '';
   var toggleText = !isRazzle ? (collapsed ? '[expand]' : '[collapse]') : '';
 
+  // Pro badge or generic hint
+  var contextPill = '';
+  if (isLeagueContextMode()) {
+    contextPill = '<span class="briefing-pro-pill">Pro</span>';
+  } else if (hasLeagueData() && !isProUser()) {
+    contextPill = '<span class="briefing-generic-hint">generic analysis \u2014 upgrade for league-specific intel</span>';
+  }
+
   return '<div class="' + cardClass + collapsed + '" data-briefing-agent="' + agentId + '">' +
     '<div class="briefing-card-header" onclick="toggleBriefingCard(this)">' +
       '<span class="briefing-card-dot" style="background:' + agent.color + '"></span>' +
       '<span class="briefing-card-name">' + escapeHtml(agent.name) + '</span>' +
       '<span class="briefing-card-role">' + escapeHtml(agent.role) + '</span>' +
+      contextPill +
       '<span class="briefing-card-toggle">' + toggleText + '</span>' +
     '</div>' +
     '<div class="briefing-card-body">' + bodyHtml + '</div>' +
@@ -2225,6 +2269,15 @@ function renderAllBriefings(detail) {
       html += renderBriefingCard(id, detail.errors[id], true);
     }
   });
+
+  // Pro teaser for free users with league data connected
+  if (hasLeagueData() && !isProUser()) {
+    html += '<div class="pro-teaser-card">' +
+      '<p>your league data is connected but locked</p>' +
+      '<div class="pro-teaser-detail">this analysis would reference your actual roster, rivals, and league settings with Pro</div>' +
+      '<a class="btn-pro-upgrade" href="#" onclick="event.preventDefault(); if(typeof startCheckout===\'function\'){startCheckout(\'year\')}else if(typeof openAuthModal===\'function\'){openAuthModal();}">Upgrade to Pro \u2014 $240/year</a>' +
+    '</div>';
+  }
 
   host.innerHTML = html;
 }

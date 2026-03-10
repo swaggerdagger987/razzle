@@ -1,6 +1,24 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 44 — Brand Voice — Watermark, Copy, Personality Pass (COMPLETE)
+## Current Phase: Phase 45 — War Room Pro Gating — Free vs Paid Context (COMPLETE)
+
+**Exit criterion MET:** War Room league context injection gated to Pro subscribers only. `isLeagueContextMode()` now requires `isProUser()` (user.plan === "pro") AND `hasLeagueData()`. Free users with Sleeper connected see "League Context — Pro Only" locked badge, forced into generic mode. Pro users get full league context injected into agent prompts. Post-scenario teaser card for free users: "your league data is connected but locked" with Upgrade CTA. Briefing cards show "Pro" pill when league context active, or generic mode hint for free users. CSS for locked badges, pro pill, generic hint, and teaser card all follow design system.
+
+### Phase 45 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Gate league context to Pro subscribers | DONE | isProUser(), hasLeagueData(), isLeagueContextMode() gated, buildUserMessage() gated |
+| 2 | Paywall UX — locked badges, CTA, teaser | DONE | Locked badge, Pro Only label, post-run teaser card with checkout CTA |
+| 3 | Pro indicator on response cards | DONE | Pro pill badge, generic hint text on briefing cards |
+| 4 | Deploy + smoke test | DONE | All syntax clean, gating logic verified |
+
+### Decisions Log
+- **Client-side gating**: League context gating is enforced in the browser JS. Since LLM calls are browser-side (user's own API key), server-side enforcement isn't needed yet. Future: when Razzle hosts LLM calls for Pro users, server-side gating will be added.
+- **Three-state badge**: Mode badge now has three states: "League Context — Pro" (active/green), "League Context — Pro Only" (locked/orange), "Generic Mode" (inactive/gray). Clear visual hierarchy for the conversion funnel.
+- **Post-scenario teaser**: Only shown when user has league data but isn't Pro. Doesn't show for users without Sleeper connected (they see the existing upsell zone instead). Avoids double-prompting.
+
+## Previous Phase: Phase 44 — Brand Voice — Watermark, Copy, Personality Pass (COMPLETE)
 
 **Exit criterion MET:** All watermarks updated to "razzle.lol — let's razzle dazzle em baby". Zero instances of "built different" remain. All UI copy matches brand identity — film room energy, peer tone, no corporate language. Loading states use "pulling film...", "checking the tape...", "running the numbers...". Error states use "fumble" language. 404 page: "This page got cut from the roster." 28 column tooltips rewritten in warm, peer-like brand voice. Home page hero subtitle updated. War Room upsell copy on-brand. Export PNGs carry new watermark.
 
