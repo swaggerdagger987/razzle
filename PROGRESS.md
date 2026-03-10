@@ -1,6 +1,25 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 84 — Consistency Rankings Dashboard (COMPLETE)
+## Current Phase: Phase 85 — Strength of Schedule Dashboard (COMPLETE)
+
+**Exit criterion MET:** /schedule.html page shows strength of schedule analysis with two sections: "Schedule Suppressed" (players who faced the hardest schedules — buy targets with potentially suppressed stats) and "Schedule Inflated" (players who faced the easiest schedules — sell candidates with potentially inflated stats). For each player: position badge, headshot, name, team, actual PPG, SOS grade badge (A+ to F based on schedule difficulty percentile — A+ = hardest schedule), SOS Rank (1=hardest), Avg Opp PPG Allowed, Delta badge (green=hard schedule, red=easy schedule), GP, and Caveat annotation. Position filter tabs (All/QB/RB/WR/TE). Season selector. Sortable columns with sort state tracking per section. Click player row → player profile. PNG export via html2canvas with watermark. Responsive at 768px + 480px with hide-mobile columns. /api/strength-of-schedule endpoint computes defense PPG-allowed-by-position grid, then per-player average opponent PPG allowed across all weeks played, sos_delta = league_avg - avg_opp_ppg (positive = harder than average), grades by schedule difficulty percentile, splits into schedule_suppressed (hardest SOS) and schedule_inflated (easiest SOS). Min 6 games + 2 PPG filter. "Schedule" nav link added to all 26 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors.
+
+### Phase 85 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/strength-of-schedule endpoint | DONE | Defense PPG-allowed grid, per-player SOS, sos_delta, grades by percentile |
+| 2 | Strength of Schedule dashboard page | DONE | Two-section table, SOS grade badges, delta badges, sortable, responsive, PNG export |
+| 3 | Nav links + sitemap + analytics | DONE | All 26 pages updated, sitemap entry, pageview tracking |
+| 4 | Smoke test | DONE | Python + JS syntax clean, 26/26 nav links verified, XSS escaped, design compliance confirmed |
+
+### Decisions Log
+- **Strength of Schedule as Phase 85**: SOS is one of the most debated topics in fantasy football — "was he actually good or did he just have easy matchups?" By computing the average PPG-allowed-at-position by each player's actual opponents, we can quantify schedule difficulty and identify players whose stats were suppressed (buy low) or inflated (sell high). Highly screenshottable for r/DynastyFF ("these players produced despite the hardest schedules" / "these stats were schedule-inflated").
+- **sos_delta as primary metric**: The delta between league-average PPG-allowed and a player's actual opponent average makes cross-position comparison meaningful. A positive delta means harder-than-average schedule.
+- **Grade inverted (A+ = hardest schedule)**: A+ for hardest schedule faced rewards the players who overcame the most difficulty. This makes the "Schedule Suppressed" section feel like a badge of honor.
+- **Defense PPG-allowed as SOS basis**: Using actual fantasy points allowed by opponents (from player_week_stats grouped by opponent_team) is more accurate than generic team strength metrics because it's position-specific.
+
+## Previous Phase: Phase 84 — Consistency Rankings Dashboard (COMPLETE)
 
 **Exit criterion MET:** /consistency.html page shows fantasy consistency rankings with two sections: "Rock Solid" (lowest coefficient of variation, most consistent week-to-week scorers) and "Wild Cards" (highest coefficient of variation, most volatile scorers). Each player row shows: position badge, headshot, name, team, PPG, StdDev, CoV (coefficient of variation = StdDev/PPG), Floor (10th percentile weekly score), Ceiling (90th percentile weekly score), Range (Ceiling - Floor), consistency grade badge (A+ to F based on inverse CoV percentile — lower CoV = higher grade), GP, and Caveat annotation. Position filter tabs (All/QB/RB/WR/TE). Season selector. Sortable columns with sort state tracking per section. Click player row → player profile. PNG export via html2canvas with watermark. Responsive at 768px + 480px with hide-mobile columns. /api/consistency-rankings endpoint queries player_week_stats for weekly fantasy_points_ppr per player, computes mean/stddev/CoV/floor(10th pctile)/ceiling(90th pctile)/range, grades by inverse CoV percentile (A+ = most consistent >= 95th, F = least consistent < 25th), splits into rock_solid and wild_cards. Min 6 games + 2 PPG filter. "Consistency" nav link added to all 25 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors.
 

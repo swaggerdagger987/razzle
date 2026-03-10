@@ -6503,3 +6503,216 @@ def fetch_consistency_rankings(season=None, position=None, limit=30):
         }
     finally:
         conn.close()
+
+
+# ---------------------------------------------------------------------------
+# Strength of Schedule
+# ---------------------------------------------------------------------------
+
+_SOS_SUPPRESSED_ANNOTATIONS = [
+    "elite despite the gauntlet",
+    "schedule-proof stud",
+    "numbers held up vs the toughest",
+    "buy low window closing",
+    "did this vs killers every week",
+    "imagine this on a soft schedule",
+    "undervalued because of SOS",
+    "the real deal",
+    "proven against the best",
+    "schedule gets easier — watch out",
+]
+
+_SOS_INFLATED_ANNOTATIONS = [
+    "padded stats alert",
+    "soft schedule did the heavy lifting",
+    "sell high before reality hits",
+    "regression coming",
+    "cupcake schedule inflated these",
+    "numbers won't repeat",
+    "schedule-dependent production",
+    "beneficiary of easy matchups",
+    "don't trust these numbers",
+    "buyer beware",
+]
+
+
+def fetch_strength_of_schedule(season=None, position=None, limit=30):
+    """Compute per-player strength of schedule using opponent PPG-allowed-by-position.
+
+    For each player, look at every opponent they faced, compute the avg PPG that
+    defense allows at the player's position, then compare actual PPG to schedule
+    difficulty.  Split into schedule_suppressed (hardest SOS) and schedule_inflated
+    (easiest SOS).
+    """
+    conn = get_conn()
+    try:
+        row = conn.execute(
+            "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
+        ).fetchall()
+        available_seasons = [r[0] for r in row] if row else [2024]
+        if not season:
+            season = available_seasons[0] if available_seasons else 2024
+
+        # Step 1: Build defense PPG-allowed-by-position grid for this season
+        def_rows = conn.execute("""
+            SELECT s.opponent_team, p.position,
+                   COALESCE(SUM(s.fantasy_points_ppr), 0) as total_ppr,
+                   COUNT(DISTINCT s.week) as games
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE s.season = ?
+              AND p.position IN ('QB', 'RB', 'WR', 'TE')
+              AND s.opponent_team IS NOT NULL AND s.opponent_team != ''
+            GROUP BY s.opponent_team, p.position
+        """, [season]).fetchall()
+
+        # defense_ppg[team][position] = avg PPG allowed
+        defense_ppg = {}
+        for r in def_rows:
+            team, pos, total, games = r[0], r[1], r[2], r[3]
+            if games <= 0:
+                continue
+            if team not in defense_ppg:
+                defense_ppg[team] = {}
+            defense_ppg[team][pos] = round(total / games, 2)
+
+        # League average PPG allowed per position
+        league_avg = {}
+        for pos in ("QB", "RB", "WR", "TE"):
+            vals = [defense_ppg[t][pos] for t in defense_ppg if pos in defense_ppg[t]]
+            league_avg[pos] = sum(vals) / len(vals) if vals else 0
+
+        # Step 2: Get per-player weekly data (opponent per week)
+        pos_filter = ""
+        params = [season]
+        if position and position.upper() in FANTASY_POSITIONS:
+            pos_filter = "AND p.position = ?"
+            params.append(position.upper())
+
+        player_rows = conn.execute(f"""
+            SELECT s.player_id, p.display_name, p.position, p.headshot_url,
+                   s.opponent_team, s.fantasy_points_ppr, s.week,
+                   s.team
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE s.season = ?
+              AND p.position IN ('QB', 'RB', 'WR', 'TE')
+              AND s.opponent_team IS NOT NULL AND s.opponent_team != ''
+              {pos_filter}
+            ORDER BY s.player_id, s.week
+        """, params).fetchall()
+
+        if not player_rows:
+            return {
+                "season": season,
+                "available_seasons": available_seasons,
+                "schedule_suppressed": [],
+                "schedule_inflated": [],
+            }
+
+        # Step 3: Aggregate per player
+        from collections import defaultdict
+        player_agg = defaultdict(lambda: {
+            "opp_ppg_list": [], "total_pts": 0, "games": 0, "team": "",
+        })
+        player_info = {}
+
+        for r in player_rows:
+            pid = r[0]
+            name, pos, headshot, opp = r[1], r[2], r[3], r[4]
+            pts, week, team = r[5] or 0, r[6], r[7] or ""
+
+            if pid not in player_info:
+                player_info[pid] = {
+                    "player_id": pid,
+                    "name": name,
+                    "position": pos,
+                    "headshot_url": headshot,
+                }
+
+            opp_allows = defense_ppg.get(opp, {}).get(pos, league_avg.get(pos, 0))
+            d = player_agg[pid]
+            d["opp_ppg_list"].append(opp_allows)
+            d["total_pts"] += pts
+            d["games"] += 1
+            d["team"] = team  # last team seen
+
+        # Step 4: Compute metrics per player
+        players = []
+        for pid, d in player_agg.items():
+            games = d["games"]
+            if games < 6:
+                continue
+            ppg = round(d["total_pts"] / games, 1)
+            if ppg < 2:
+                continue
+
+            avg_opp_ppg = round(sum(d["opp_ppg_list"]) / len(d["opp_ppg_list"]), 1)
+            info = player_info[pid]
+            pos = info["position"]
+
+            # sos_delta: positive = harder schedule (opponents allow LESS than avg)
+            sos_delta = round(league_avg.get(pos, 0) - avg_opp_ppg, 1)
+
+            players.append({
+                "player_id": pid,
+                "name": info["name"],
+                "position": pos,
+                "headshot_url": info["headshot_url"],
+                "team": d["team"],
+                "ppg": ppg,
+                "avg_opp_ppg": avg_opp_ppg,
+                "sos_delta": sos_delta,
+                "games": games,
+            })
+
+        if not players:
+            return {
+                "season": season,
+                "available_seasons": available_seasons,
+                "schedule_suppressed": [],
+                "schedule_inflated": [],
+            }
+
+        # Step 5: Rank by schedule difficulty (sos_delta desc = hardest schedule)
+        players.sort(key=lambda x: x["sos_delta"], reverse=True)
+        for i, p in enumerate(players):
+            p["sos_rank"] = i + 1
+
+        # Grade by schedule difficulty percentile (A+ = hardest schedule)
+        total = len(players)
+        for i, p in enumerate(players):
+            percentile = ((total - 1 - i) / max(total - 1, 1)) * 100
+            if percentile >= 95:
+                p["grade"] = "A+"
+            elif percentile >= 85:
+                p["grade"] = "A"
+            elif percentile >= 70:
+                p["grade"] = "B"
+            elif percentile >= 45:
+                p["grade"] = "C"
+            elif percentile >= 25:
+                p["grade"] = "D"
+            else:
+                p["grade"] = "F"
+
+        # Schedule Suppressed: hardest schedule (highest sos_delta)
+        suppressed = [p for p in players if p["sos_delta"] > 0]
+        suppressed = sorted(suppressed, key=lambda x: x["sos_delta"], reverse=True)[:limit]
+        for i, p in enumerate(suppressed):
+            p["annotation"] = _SOS_SUPPRESSED_ANNOTATIONS[i % len(_SOS_SUPPRESSED_ANNOTATIONS)]
+
+        # Schedule Inflated: easiest schedule (most negative sos_delta)
+        inflated = [p for p in players if p["sos_delta"] < 0]
+        inflated = sorted(inflated, key=lambda x: x["sos_delta"])[:limit]
+        for i, p in enumerate(inflated):
+            p["annotation"] = _SOS_INFLATED_ANNOTATIONS[i % len(_SOS_INFLATED_ANNOTATIONS)]
+
+        return {
+            "season": season,
+            "available_seasons": available_seasons,
+            "schedule_suppressed": suppressed,
+            "schedule_inflated": inflated,
+        }
+    finally:
+        conn.close()
