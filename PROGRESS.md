@@ -1,6 +1,19 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 107 — Career Comparison (COMPLETE)
+## Current Phase: Phase 108 — Draft Class Tracker (COMPLETE)
+
+**Exit criterion MET:** /draftclass.html shows fantasy production by NFL draft class (2020-2025). Class-level summary chips (total players, avg PPG, hits, busts, hit rate). Round-by-round ROI canvas bar chart showing avg PPG per draft round. Sortable player table with pick number, name, position badge, drafted/current team, games, PPG, total PPR, and hit/bust verdict badges (HIT=15+ PPG, SOLID=10+, OK=5+, BUST=<5). Draft year selector, position filter tabs, URL state (?year=&pos=), PNG export. GET /api/draft-class endpoint joins draft_picks to player_week_stats via player name+position. 21 escapeHtml calls, 98/98 braces balanced. "Draft Class" nav link on all 44 pages. Sitemap + tools hub entry. Design matches DESIGN.md.
+
+### Phase 108 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/draft-class endpoint | DONE | fetch_draft_class, join draft_picks to stats, verdicts |
+| 2 | Draft Class Tracker page | DONE | Summary chips, round chart, sortable table, 21 escapeHtml |
+| 3 | Nav links + sitemap | DONE | All 44 pages updated, sitemap + tools hub |
+| 4 | Smoke test | DONE | Python OK, JS OK, 44/44 nav links |
+
+## Previous Phase: Phase 107 — Career Comparison (COMPLETE)
 
 **Exit criterion MET:** /career-compare.html lets users add 2-3 players via autocomplete search and see overlapping PPG career trajectory charts on a single canvas with position-colored lines, side-by-side career summary table (PPG, total PPR, games, seasons, peak, trajectory), season-by-season PPG comparison table with best values highlighted, PNG export with watermark, URL state (?p1=ID&p2=ID&p3=ID). Reuses /api/career-stats endpoint (no new backend). 21 escapeHtml calls, 145/145 braces balanced. "Career Compare" nav link on all 43 pages. Sitemap + tools hub entry. Design matches DESIGN.md.
 

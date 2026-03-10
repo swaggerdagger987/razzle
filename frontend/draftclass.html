@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Draft Class Tracker — Razzle</title>
+<meta property="og:title" content="Draft Class Tracker — Razzle">
+<meta property="og:description" content="Fantasy production by draft class — hits, busts, and round-by-round ROI on razzle.lol">
+<meta property="og:site_name" content="razzle.lol">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Draft Class Tracker — Razzle">
+<meta name="twitter:description" content="Fantasy production by draft class — hits, busts, and round-by-round ROI on razzle.lol">
+<meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
+<meta name="description" content="Draft class tracker — fantasy football production by draft class with hit/bust rates on razzle.lol">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .dc-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+  }
+
+  .dc-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .dc-header h1 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: var(--ink);
+    margin: 0 0 4px;
+  }
+  .dc-header .dc-subtitle {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+  }
+
+  /* Controls */
+  .dc-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .dc-select {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    padding: 7px 12px;
+    border: 3px solid var(--ink);
+    border-radius: 8px;
+    background: var(--bg-card);
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  .dc-pos-tabs {
+    display: flex;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .dc-pos-tab {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 6px 14px;
+    background: var(--bg-card);
+    color: var(--ink);
+    border: none;
+    border-right: 2px solid var(--ink);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .dc-pos-tab:last-child { border-right: none; }
+  .dc-pos-tab.active { background: var(--ink); color: var(--bg-card); }
+  .dc-pos-tab:hover:not(.active) { background: var(--bg-warm); }
+
+  /* Summary chips */
+  .dc-summary {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .dc-chip {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    padding: 12px 16px;
+    box-shadow: 4px 4px 0 var(--ink);
+    text-align: center;
+    flex: 1;
+    min-width: 110px;
+  }
+  .dc-chip-label {
+    font-family: var(--font-display);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--ink-light);
+    margin-bottom: 4px;
+  }
+  .dc-chip-value {
+    font-family: var(--font-mono);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .dc-chip-value.green { color: var(--green); }
+  .dc-chip-value.red { color: var(--red); }
+
+  /* Actions */
+  .dc-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  /* Round ROI chart */
+  .dc-chart-wrap {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 16px;
+    margin-bottom: 24px;
+  }
+  .dc-chart-title {
+    font-family: var(--font-display);
+    font-size: 16px;
+    color: var(--ink);
+    margin-bottom: 8px;
+    text-align: center;
+  }
+  .dc-canvas {
+    width: 100%;
+    height: 200px;
+    display: block;
+  }
+
+  /* Section headers */
+  .dc-section-header {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 12px;
+    padding: 10px 14px;
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    box-shadow: 4px 4px 0 var(--ink);
+    background: var(--bg-warm);
+  }
+
+  /* Table */
+  .dc-table-wrap {
+    overflow-x: auto;
+    margin-bottom: 24px;
+  }
+  .dc-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .dc-table th {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 10px 8px;
+    background: var(--bg-warm);
+    color: var(--ink);
+    border-bottom: 3px solid var(--ink);
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+  }
+  .dc-table th.sorted { color: var(--orange); }
+  .dc-table th .sort-arrow { font-size: 10px; margin-left: 2px; }
+  .dc-table th:hover { background: var(--bg); }
+  .dc-table td {
+    padding: 8px;
+    border-bottom: 1px solid var(--ink-faint);
+    text-align: center;
+    vertical-align: middle;
+  }
+  .dc-table td:nth-child(2) { text-align: left; }
+  .dc-table tbody tr {
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+  .dc-table tbody tr:hover { background: var(--bg-warm); }
+
+  /* Badges */
+  .dc-pos-badge {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 4px;
+    color: #fff;
+  }
+  .dc-pos-badge.QB { background: var(--blue); }
+  .dc-pos-badge.RB { background: var(--teal); }
+  .dc-pos-badge.WR { background: var(--orange); }
+  .dc-pos-badge.TE { background: var(--purple); }
+
+  .dc-verdict {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    color: #fff;
+  }
+  .dc-verdict.hit { background: var(--green); }
+  .dc-verdict.solid { background: var(--blue); }
+  .dc-verdict.ok { background: var(--ink-light); }
+  .dc-verdict.bust { background: var(--red); }
+  .dc-verdict.no_data { background: var(--ink-faint); color: var(--ink-light); }
+
+  /* Loading */
+  .dc-loading {
+    text-align: center;
+    padding: 60px 20px;
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .dc-header h1 { font-size: 26px; }
+    .dc-chip { min-width: 80px; }
+  }
+  @media (max-width: 480px) {
+    .dc-page { padding: 16px 12px 40px; }
+    .dc-header h1 { font-size: 22px; }
+    .dc-chip { padding: 8px 10px; }
+    .dc-chip-value { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="/" class="logo">
+    <div class="logo-mark">&#x1F42F;</div>
+    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/lab.html">The Lab</a></li>
+    <li><a href="/tools.html">Tools</a></li>
+    <li><a href="/rankings.html">Rankings</a></li>
+    <li><a href="/leaders.html">Leaders</a></li>
+    <li><a href="/prospects.html">Prospects</a></li>
+    <li><a href="/scarcity.html">Scarcity</a></li>
+    <li><a href="/breakouts.html">Breakouts</a></li>
+    <li><a href="/buysell.html">Buy/Sell</a></li>
+    <li><a href="/aging.html">Aging</a></li>
+    <li><a href="/weekly.html">Weekly</a></li>
+    <li><a href="/targets.html">Targets</a></li>
+    <li><a href="/matchups.html">Matchups</a></li>
+    <li><a href="/usage.html">Usage</a></li>
+    <li><a href="/yoy.html">YoY</a></li>
+    <li><a href="/airyards.html">Air Yards</a></li>
+    <li><a href="/explorer.html">Explorer</a></li>
+    <li><a href="/redzone.html">Red Zone</a></li>
+    <li><a href="/efficiency.html">Efficiency</a></li>
+    <li><a href="/consistency.html">Consistency</a></li>
+    <li><a href="/schedule.html">Schedule</a></li>
+    <li><a href="/stocks.html">Stocks</a></li>
+    <li><a href="/opportunity.html">Opportunity</a></li>
+    <li><a href="/reportcard.html">Report Card</a></li>
+    <li><a href="/awards.html">Awards</a></li>
+    <li><a href="/vorp.html">VORP</a></li>
+    <li><a href="/tradevalues.html">Trade Values</a></li>
+    <li><a href="/tradefinder.html">Trade Finder</a></li>
+    <li><a href="/rosterbuilder.html">Roster Builder</a></li>
+    <li><a href="/scoring.html">Scoring</a></li>
+    <li><a href="/cheatsheet.html">Cheat Sheet</a></li>
+    <li><a href="/auction.html">Auction</a></li>
+    <li><a href="/dashboard.html">Dashboard</a></li>
+    <li><a href="/tiers.html">Tiers</a></li>
+    <li><a href="/archetypes.html">Archetypes</a></li>
+    <li><a href="/career.html">Career</a></li>
+    <li><a href="/career-compare.html">Career Compare</a></li>
+    <li><a href="/draftclass.html" class="active">Draft Class</a></li>
+    <li><a href="/team/KC">Teams</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
+    <li><a href="/agents.html">War Room</a></li>
+  </ul>
+</nav>
+
+<main class="dc-page" id="dc-content">
+  <div class="dc-header">
+    <h1>Draft Class Tracker</h1>
+    <div class="dc-subtitle">fantasy production by draft class</div>
+  </div>
+
+  <div class="dc-controls">
+    <select class="dc-select" id="year-select" title="Draft Year" aria-label="Draft Year"></select>
+    <div class="dc-pos-tabs" id="pos-tabs">
+      <button class="dc-pos-tab active" data-pos="" aria-label="All positions">All</button>
+      <button class="dc-pos-tab" data-pos="QB" aria-label="Quarterbacks">QB</button>
+      <button class="dc-pos-tab" data-pos="RB" aria-label="Running Backs">RB</button>
+      <button class="dc-pos-tab" data-pos="WR" aria-label="Wide Receivers">WR</button>
+      <button class="dc-pos-tab" data-pos="TE" aria-label="Tight Ends">TE</button>
+    </div>
+  </div>
+
+  <div id="dc-body">
+    <div class="dc-loading">pulling film...</div>
+  </div>
+</main>
+
+<footer style="text-align:center; padding:24px 20px 32px; font-family:var(--font-hand); font-size:15px; color:var(--ink-light); border-top:2px dashed var(--ink-faint); margin-top:40px;">
+  <div style="margin-bottom:10px;">
+    <a href="/lab.html" style="color:var(--ink-light); text-decoration:none;">The Lab</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tools.html" style="color:var(--ink-light); text-decoration:none;">Tools</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/rankings.html" style="color:var(--ink-light); text-decoration:none;">Rankings</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/leaders.html" style="color:var(--ink-light); text-decoration:none;">Leaders</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/prospects.html" style="color:var(--ink-light); text-decoration:none;">Prospects</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/scarcity.html" style="color:var(--ink-light); text-decoration:none;">Scarcity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/breakouts.html" style="color:var(--ink-light); text-decoration:none;">Breakouts</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/buysell.html" style="color:var(--ink-light); text-decoration:none;">Buy/Sell</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/aging.html" style="color:var(--ink-light); text-decoration:none;">Aging</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/weekly.html" style="color:var(--ink-light); text-decoration:none;">Weekly</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/targets.html" style="color:var(--ink-light); text-decoration:none;">Targets</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/matchups.html" style="color:var(--ink-light); text-decoration:none;">Matchups</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/usage.html" style="color:var(--ink-light); text-decoration:none;">Usage</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/yoy.html" style="color:var(--ink-light); text-decoration:none;">YoY</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/airyards.html" style="color:var(--ink-light); text-decoration:none;">Air Yards</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/explorer.html" style="color:var(--ink-light); text-decoration:none;">Explorer</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/redzone.html" style="color:var(--ink-light); text-decoration:none;">Red Zone</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/efficiency.html" style="color:var(--ink-light); text-decoration:none;">Efficiency</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/consistency.html" style="color:var(--ink-light); text-decoration:none;">Consistency</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/schedule.html" style="color:var(--ink-light); text-decoration:none;">Schedule</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/stocks.html" style="color:var(--ink-light); text-decoration:none;">Stocks</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/opportunity.html" style="color:var(--ink-light); text-decoration:none;">Opportunity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/reportcard.html" style="color:var(--ink-light); text-decoration:none;">Report Card</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/awards.html" style="color:var(--ink-light); text-decoration:none;">Awards</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/vorp.html" style="color:var(--ink-light); text-decoration:none;">VORP</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tradevalues.html" style="color:var(--ink-light); text-decoration:none;">Trade Values</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tradefinder.html" style="color:var(--ink-light); text-decoration:none;">Trade Finder</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/rosterbuilder.html" style="color:var(--ink-light); text-decoration:none;">Roster Builder</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/scoring.html" style="color:var(--ink-light); text-decoration:none;">Scoring</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/cheatsheet.html" style="color:var(--ink-light); text-decoration:none;">Cheat Sheet</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/auction.html" style="color:var(--ink-light); text-decoration:none;">Auction</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/dashboard.html" style="color:var(--ink-light); text-decoration:none;">Dashboard</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tiers.html" style="color:var(--ink-light); text-decoration:none;">Tiers</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/archetypes.html" style="color:var(--ink-light); text-decoration:none;">Archetypes</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/career.html" style="color:var(--ink-light); text-decoration:none;">Career</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/career-compare.html" style="color:var(--ink-light); text-decoration:none;">Career Compare</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/draftclass.html" style="color:var(--ink-light); text-decoration:none;">Draft Class</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/team/KC" style="color:var(--ink-light); text-decoration:none;">Teams</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none;">League Intel</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/agents.html" style="color:var(--ink-light); text-decoration:none;">War Room</a>
+  </div>
+  razzle.lol — let's razzle dazzle em baby
+</footer>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script src="app.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  var state = { year: 0, position: '' };
+  var bodyEl = document.getElementById('dc-body');
+  var yearSelect = document.getElementById('year-select');
+  var data = null;
+  var sortKey = 'total_ppr';
+  var sortAsc = false;
+
+  // URL state
+  var params = new URLSearchParams(window.location.search);
+  if (params.get('year')) state.year = parseInt(params.get('year'), 10);
+  if (params.get('pos')) state.position = params.get('pos');
+
+  // Position tabs
+  var posTabs = document.querySelectorAll('.dc-pos-tab');
+  for (var i = 0; i < posTabs.length; i++) {
+    posTabs[i].addEventListener('click', function() {
+      for (var j = 0; j < posTabs.length; j++) posTabs[j].classList.remove('active');
+      this.classList.add('active');
+      state.position = this.getAttribute('data-pos');
+      updateUrl();
+      loadData();
+    });
+  }
+
+  // Set active pos tab from URL
+  if (state.position) {
+    for (var pt = 0; pt < posTabs.length; pt++) {
+      posTabs[pt].classList.toggle('active', posTabs[pt].getAttribute('data-pos') === state.position);
+    }
+  }
+
+  yearSelect.addEventListener('change', function() {
+    state.year = parseInt(yearSelect.value, 10);
+    updateUrl();
+    loadData();
+  });
+
+  function updateUrl() {
+    var url = new URL(window.location);
+    if (state.year) url.searchParams.set('year', state.year);
+    else url.searchParams.delete('year');
+    if (state.position) url.searchParams.set('pos', state.position);
+    else url.searchParams.delete('pos');
+    window.history.replaceState({}, '', url);
+  }
+
+  function loadData() {
+    bodyEl.innerHTML = '<div class="dc-loading">pulling film...</div>';
+    var url = '/api/draft-class';
+    var p = [];
+    if (state.year) p.push('year=' + state.year);
+    if (state.position) p.push('position=' + state.position);
+    if (p.length) url += '?' + p.join('&');
+
+    fetch(url)
+      .then(function(r) { if (!r.ok) throw new Error('fail'); return r.json(); })
+      .then(function(d) {
+        data = d;
+        // Populate year selector
+        if (d.available_classes && yearSelect.options.length <= 1) {
+          yearSelect.innerHTML = '';
+          for (var i = 0; i < d.available_classes.length; i++) {
+            var opt = document.createElement('option');
+            opt.value = d.available_classes[i];
+            opt.textContent = d.available_classes[i] + ' Class';
+            if (d.available_classes[i] === d.draft_year) opt.selected = true;
+            yearSelect.appendChild(opt);
+          }
+        }
+        state.year = d.draft_year;
+        renderData(d);
+      })
+      .catch(function() {
+        bodyEl.innerHTML = '<div class="dc-loading">failed to load draft class data</div>';
+      });
+  }
+
+  function renderData(d) {
+    var s = d.summary;
+    var html = '';
+
+    // Summary chips
+    html += '<div class="dc-summary">';
+    html += '<div class="dc-chip"><div class="dc-chip-label">Draft Class</div><div class="dc-chip-value">' + escapeHtml(String(s.draft_year)) + '</div></div>';
+    html += '<div class="dc-chip"><div class="dc-chip-label">Players</div><div class="dc-chip-value">' + escapeHtml(String(s.total_players)) + '</div></div>';
+    html += '<div class="dc-chip"><div class="dc-chip-label">Avg PPG</div><div class="dc-chip-value">' + escapeHtml(String(s.avg_ppg)) + '</div></div>';
+    html += '<div class="dc-chip"><div class="dc-chip-label">Hits (15+ PPG)</div><div class="dc-chip-value green">' + escapeHtml(String(s.hits)) + '</div></div>';
+    html += '<div class="dc-chip"><div class="dc-chip-label">Busts (&lt;5 PPG)</div><div class="dc-chip-value red">' + escapeHtml(String(s.busts)) + '</div></div>';
+    html += '<div class="dc-chip"><div class="dc-chip-label">Hit Rate</div><div class="dc-chip-value">' + escapeHtml(String(s.hit_rate)) + '%</div></div>';
+    html += '</div>';
+
+    // Actions
+    html += '<div class="dc-actions">';
+    html += '<button class="btn btn-primary" onclick="exportDcPng()" aria-label="Export as PNG">Export PNG</button>';
+    html += '</div>';
+
+    // Round ROI chart
+    if (d.rounds && d.rounds.length > 0) {
+      html += '<div class="dc-chart-wrap">';
+      html += '<div class="dc-chart-title">Average PPG by Round</div>';
+      html += '<canvas class="dc-canvas" id="dc-chart"></canvas>';
+      html += '</div>';
+    }
+
+    // Player table
+    html += '<div class="dc-section-header">' + escapeHtml(String(s.draft_year)) + ' Draft Class — Fantasy Producers</div>';
+    html += '<div class="dc-table-wrap"><table class="dc-table"><thead><tr>';
+    var cols = [
+      { key: 'pick', label: 'Pick' },
+      { key: 'name', label: 'Player' },
+      { key: 'position', label: 'Pos' },
+      { key: 'draft_team', label: 'Drafted' },
+      { key: 'current_team', label: 'Team' },
+      { key: 'games', label: 'G' },
+      { key: 'ppg', label: 'PPG' },
+      { key: 'total_ppr', label: 'Total PPR' },
+      { key: 'verdict', label: 'Verdict' },
+    ];
+    for (var ci = 0; ci < cols.length; ci++) {
+      var sorted = cols[ci].key === sortKey;
+      var arrow = sorted ? (sortAsc ? ' \u25B2' : ' \u25BC') : '';
+      html += '<th data-sort="' + cols[ci].key + '"' + (sorted ? ' class="sorted"' : '') + '>' + escapeHtml(cols[ci].label) + '<span class="sort-arrow">' + arrow + '</span></th>';
+    }
+    html += '</tr></thead><tbody>';
+
+    var players = sortPlayers(d.players);
+    for (var pi = 0; pi < players.length; pi++) {
+      var p = players[pi];
+      html += '<tr' + (p.player_id ? ' data-pid="' + escapeHtml(p.player_id) + '"' : '') + '>';
+      html += '<td>' + escapeHtml(String(p.round)) + '.' + escapeHtml(String(p.pick).padStart(2, '0')) + '</td>';
+      html += '<td style="text-align:left; font-weight:700;">' + escapeHtml(p.name) + '</td>';
+      html += '<td><span class="dc-pos-badge ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span></td>';
+      html += '<td>' + escapeHtml(p.draft_team) + '</td>';
+      html += '<td>' + escapeHtml(p.current_team) + '</td>';
+      html += '<td>' + escapeHtml(String(p.games)) + '</td>';
+      html += '<td>' + escapeHtml(String(p.ppg)) + '</td>';
+      html += '<td>' + escapeHtml(String(p.total_ppr)) + '</td>';
+      html += '<td><span class="dc-verdict ' + escapeHtml(p.verdict) + '">' + verdictLabel(p.verdict) + '</span></td>';
+      html += '</tr>';
+    }
+
+    html += '</tbody></table></div>';
+    html += '<div style="text-align:right; font-family:var(--font-hand); font-size:13px; color:var(--ink-faint); margin-top:8px;">razzle.lol</div>';
+
+    bodyEl.innerHTML = html;
+
+    // Bind sort
+    var ths = bodyEl.querySelectorAll('.dc-table th[data-sort]');
+    for (var ti = 0; ti < ths.length; ti++) {
+      ths[ti].addEventListener('click', function() {
+        var key = this.getAttribute('data-sort');
+        if (sortKey === key) sortAsc = !sortAsc;
+        else { sortKey = key; sortAsc = false; }
+        renderData(data);
+      });
+    }
+
+    // Bind row clicks
+    var rows = bodyEl.querySelectorAll('.dc-table tbody tr[data-pid]');
+    for (var ri = 0; ri < rows.length; ri++) {
+      rows[ri].addEventListener('click', function() {
+        var pid = this.getAttribute('data-pid');
+        if (pid) window.location.href = '/player/' + pid;
+      });
+    }
+
+    // Draw chart
+    setTimeout(function() { drawRoundChart(d.rounds); }, 50);
+  }
+
+  function verdictLabel(v) {
+    if (v === 'hit') return 'HIT';
+    if (v === 'solid') return 'SOLID';
+    if (v === 'ok') return 'OK';
+    if (v === 'bust') return 'BUST';
+    return 'N/A';
+  }
+
+  function sortPlayers(arr) {
+    var sorted = arr.slice();
+    sorted.sort(function(a, b) {
+      var va = a[sortKey];
+      var vb = b[sortKey];
+      if (typeof va === 'string') va = va.toLowerCase();
+      if (typeof vb === 'string') vb = vb.toLowerCase();
+      if (va < vb) return sortAsc ? -1 : 1;
+      if (va > vb) return sortAsc ? 1 : -1;
+      return 0;
+    });
+    return sorted;
+  }
+
+  function drawRoundChart(rounds) {
+    var canvas = document.getElementById('dc-chart');
+    if (!canvas || rounds.length === 0) return;
+
+    var dpr = window.devicePixelRatio || 1;
+    var rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    var ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    var w = rect.width;
+    var h = rect.height;
+
+    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--bg-card').trim() || '#f7efe5';
+    ctx.fillRect(0, 0, w, h);
+
+    var pad = { top: 20, right: 20, bottom: 35, left: 50 };
+    var plotW = w - pad.left - pad.right;
+    var plotH = h - pad.top - pad.bottom;
+
+    var maxPpg = 0;
+    for (var i = 0; i < rounds.length; i++) {
+      if (rounds[i].avg_ppg > maxPpg) maxPpg = rounds[i].avg_ppg;
+    }
+    maxPpg = maxPpg * 1.15 || 1;
+
+    var barW = Math.min(60, plotW / rounds.length * 0.7);
+    var gap = (plotW - barW * rounds.length) / (rounds.length + 1);
+
+    // Grid
+    ctx.strokeStyle = '#ddd';
+    ctx.lineWidth = 1;
+    for (var g = 0; g <= 4; g++) {
+      var gv = maxPpg * g / 4;
+      var gy = pad.top + plotH - (gv / maxPpg) * plotH;
+      ctx.beginPath();
+      ctx.moveTo(pad.left, gy);
+      ctx.lineTo(w - pad.right, gy);
+      ctx.stroke();
+      ctx.fillStyle = '#999';
+      ctx.font = '11px "Space Mono", monospace';
+      ctx.textAlign = 'right';
+      ctx.fillText(gv.toFixed(1), pad.left - 6, gy + 4);
+    }
+
+    // Bars
+    var colors = ['#d97757', '#5b7fff', '#2ec4b6', '#8b5cf6', '#e87422', '#d44040', '#999'];
+    for (var bi = 0; bi < rounds.length; bi++) {
+      var r = rounds[bi];
+      var barH = (r.avg_ppg / maxPpg) * plotH;
+      var bx = pad.left + gap + bi * (barW + gap);
+      var by = pad.top + plotH - barH;
+
+      ctx.fillStyle = colors[bi % colors.length];
+      ctx.beginPath();
+      ctx.roundRect(bx, by, barW, barH, [4, 4, 0, 0]);
+      ctx.fill();
+
+      // Value label
+      ctx.fillStyle = '#333';
+      ctx.font = 'bold 12px "Space Mono", monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(r.avg_ppg.toFixed(1), bx + barW / 2, by - 6);
+
+      // X label
+      ctx.fillStyle = '#666';
+      ctx.font = '12px "Space Mono", monospace';
+      ctx.fillText('R' + r.round, bx + barW / 2, h - pad.bottom + 16);
+    }
+  }
+
+  // PNG export
+  window.exportDcPng = function() {
+    var el = document.getElementById('dc-content');
+    if (!el || typeof html2canvas === 'undefined') return;
+    html2canvas(el, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+      var ctx = canvas.getContext('2d');
+      ctx.font = 'bold 20px "Space Mono", monospace';
+      ctx.fillStyle = 'rgba(0,0,0,0.15)';
+      ctx.textAlign = 'right';
+      ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 16);
+      var link = document.createElement('a');
+      link.download = 'razzle-draft-class.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    });
+  };
+
+  // Analytics
+  if (typeof trackPage === 'function') trackPage('draftclass');
+
+  loadData();
+})();
+</script>
+</body>
+</html>

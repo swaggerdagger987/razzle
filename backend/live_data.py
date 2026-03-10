@@ -9494,3 +9494,132 @@ def fetch_career_stats(player_id):
         }
     finally:
         conn.close()
+
+
+# ---------------------------------------------------------------------------
+# Draft Class Tracker — fantasy production by draft class
+# ---------------------------------------------------------------------------
+
+def fetch_draft_class(draft_year=None, position=None):
+    """Return fantasy production stats for players from a given draft class."""
+    conn = get_conn()
+    try:
+        available_classes = [
+            r[0] for r in conn.execute(
+                "SELECT DISTINCT season FROM draft_picks WHERE season >= 2020 ORDER BY season DESC"
+            ).fetchall()
+        ]
+
+        if not draft_year:
+            # Default to most recent class with stats data
+            draft_year = available_classes[0] if available_classes else 2024
+
+        pos_filter = ""
+        params = [draft_year]
+        if position and position.upper() in ("QB", "RB", "WR", "TE"):
+            pos_filter = "AND d.position = ?"
+            params.append(position.upper())
+
+        query = f"""
+            SELECT
+                d.player_name, d.position, d.round, d.pick, d.team as draft_team,
+                d.college,
+                p.player_id, p.team as current_team, p.age,
+                SUM(s.fantasy_points_ppr) as total_ppr,
+                COUNT(DISTINCT s.season) as seasons_played,
+                COUNT(DISTINCT s.week) as total_games
+            FROM draft_picks d
+            LEFT JOIN players p ON LOWER(p.full_name) = LOWER(d.player_name)
+                AND p.position = d.position
+            LEFT JOIN player_week_stats s ON s.player_id = p.player_id
+            WHERE d.season = ?
+              AND d.position IN ('QB', 'RB', 'WR', 'TE')
+              {pos_filter}
+            GROUP BY d.player_name, d.position, d.round, d.pick
+            ORDER BY total_ppr DESC
+        """
+        rows = conn.execute(query, params).fetchall()
+
+        players = []
+        round_totals = {}  # round -> {ppr, count, games}
+
+        for r in rows:
+            total_ppr = r[9] or 0
+            games = r[11] or 0
+            ppg = round(total_ppr / games, 2) if games > 0 else 0
+            rnd = r[2] or 0
+
+            player = {
+                "name": r[0] or "Unknown",
+                "position": r[1] or "",
+                "round": rnd,
+                "pick": r[3] or 0,
+                "draft_team": r[4] or "",
+                "college": r[5] or "",
+                "player_id": r[6] or "",
+                "current_team": r[7] or r[4] or "",
+                "age": r[8] or 0,
+                "total_ppr": round(total_ppr, 1),
+                "seasons_played": r[10] or 0,
+                "games": games,
+                "ppg": ppg,
+            }
+
+            # Hit/bust classification
+            if games == 0:
+                player["verdict"] = "no_data"
+            elif ppg >= 15:
+                player["verdict"] = "hit"
+            elif ppg >= 10:
+                player["verdict"] = "solid"
+            elif ppg >= 5:
+                player["verdict"] = "ok"
+            else:
+                player["verdict"] = "bust"
+
+            players.append(player)
+
+            if rnd not in round_totals:
+                round_totals[rnd] = {"ppr": 0, "count": 0, "games": 0}
+            round_totals[rnd]["ppr"] += total_ppr
+            round_totals[rnd]["count"] += 1
+            round_totals[rnd]["games"] += games
+
+        # Round summary
+        rounds = []
+        for rnd in sorted(round_totals.keys()):
+            rt = round_totals[rnd]
+            rounds.append({
+                "round": rnd,
+                "players": rt["count"],
+                "total_ppr": round(rt["ppr"], 1),
+                "avg_ppg": round(rt["ppr"] / rt["games"], 2) if rt["games"] > 0 else 0,
+                "total_games": rt["games"],
+            })
+
+        # Class summary
+        total_ppr_all = sum(p["total_ppr"] for p in players)
+        total_games_all = sum(p["games"] for p in players)
+        hits = sum(1 for p in players if p["verdict"] == "hit")
+        busts = sum(1 for p in players if p["verdict"] == "bust")
+
+        summary = {
+            "draft_year": draft_year,
+            "total_players": len(players),
+            "total_ppr": round(total_ppr_all, 1),
+            "avg_ppg": round(total_ppr_all / total_games_all, 2) if total_games_all > 0 else 0,
+            "hits": hits,
+            "busts": busts,
+            "hit_rate": round(hits / len(players) * 100, 1) if players else 0,
+        }
+
+        return {
+            "draft_year": draft_year,
+            "available_classes": available_classes,
+            "position": position or "ALL",
+            "summary": summary,
+            "rounds": rounds,
+            "players": players,
+        }
+    finally:
+        conn.close()

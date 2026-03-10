@@ -919,6 +919,7 @@ def sitemap_xml():
         ("/archetypes.html", "0.8", "weekly"),
         ("/career.html", "0.8", "weekly"),
         ("/career-compare.html", "0.8", "weekly"),
+        ("/draftclass.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1419,6 +1420,18 @@ def career_stats(player_id: str = ""):
         return JSONResponse({"error": "Failed to fetch career stats"}, status_code=500)
 
 
+@app.get("/api/draft-class")
+def draft_class(year: int = 0, position: str = ""):
+    """Return fantasy production stats for a draft class."""
+    try:
+        yr = year if year > 0 else None
+        pos = position if position else None
+        return live_data.fetch_draft_class(draft_year=yr, position=pos)
+    except Exception as e:
+        logger.error(f"draft-class error: {e}")
+        return JSONResponse({"error": "Failed to fetch draft class"}, status_code=500)
+
+
 @app.get("/api/tools-hub")
 def tools_hub():
     """Return the static tools catalog organized by category."""
@@ -1439,6 +1452,7 @@ def tools_hub():
                 {"name": "Dynasty Dashboard", "desc": "At-a-glance overview: risers, fallers, value picks, scarcity alerts", "url": "/dashboard.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Tier List", "desc": "S/A/B/C/D/F tier rankings based on composite trade value", "url": "/tiers.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Player Archetypes", "desc": "Statistical archetypes — Workhorse, Deep Threat, Dual-Threat, and more", "url": "/archetypes.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Draft Class Tracker", "desc": "Fantasy production by draft class — hits, busts, and round-by-round ROI", "url": "/draftclass.html", "positions": ["QB", "RB", "WR", "TE"]},
             ],
         },
         {
