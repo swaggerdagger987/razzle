@@ -1,8 +1,42 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 32 (Lab QA — Fix Data Loading, Year Bugs, and Reliability)
-## Phase 32: Lab QA — Fix Data Loading, Year Bugs, and Reliability
+- Phase: 33 (Backend Cleanup: Add Structured Logging)
+## Phase 33: Backend Cleanup: Add Structured Logging
+**Exit Criterion**: Replace bare `except Exception` blocks with proper logging using Python's `logging` module. Add request logging middleware (method, path, status, duration). Log all errors with stack traces. Structured JSON format for production. Console format for local dev. No silent failures anywhere in the backend.
+
+- Task 1: PENDING
+- Task 2: PENDING
+- Task 3: PENDING
+- Task 4: PENDING
+- Task 5: PENDING
+
+### Task 1: Create logging configuration module
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: `backend/logging_config.py` exists. Structured JSON format when `ENVIRONMENT=production`. Console format for local dev. All loggers use `logging.getLogger("razzle.xxx")` hierarchy. Called from server.py lifespan.
+
+### Task 2: Add request logging middleware
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: Every HTTP request logs method, path, status code, and duration in ms. Middleware added to server.py. Health check excluded from verbose logging.
+
+### Task 3: Add logging to all live_data modules
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: All 9 live_data submodules + core.py have `logger = logging.getLogger("razzle.live_data.xxx")`. All except blocks log with `logger.exception()` or `logger.error()`.
+
+### Task 4: Fix bare except blocks in server.py, billing.py, storage.py, db.py
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: Zero bare `except Exception` blocks that silently pass. All have `logger.error()` or `logger.exception()` with stack trace.
+
+### Task 5: Verify end-to-end
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: Server starts clean. Request middleware logs requests. Errors produce stack traces. No silent failures.
+
+## Phase 32: Lab QA — Fix Data Loading, Year Bugs, and Reliability (COMPLETE)
 **Exit Criterion**: Lab loads reliably. No hardcoded years. Season selectors correct. Error states don't wipe data. No race conditions. All universes load correctly.
 
 - Task 1: PASS
@@ -12,7 +46,6 @@
 - Task 5: PASS
 - Task 6: PASS
 - Stage: COMPLETE
-- Next: Phase transition
 
 ### Task 1: Fix all hardcoded years (CRITICAL)
 **Status**: PASS
