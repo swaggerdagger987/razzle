@@ -5,9 +5,9 @@ College football functions — cfb player stats, analytics, records, awards.
 import math
 
 from ..db import get_db
-from .core import _enrich_college_derived
+from .core import _cached, _CACHE_TTL_STABLE, _enrich_college_derived
 
-def fetch_college_players(
+def _fetch_college_players_uncached(
     search="",
     position="",
     positions="",
@@ -133,7 +133,11 @@ def fetch_college_players(
         return {"count": total, "season": season, "items": items}
 
 
-def fetch_college_player_profile(player_id):
+
+def fetch_college_players(search="", position="", positions="", team="", conference="", sort_key="total_yards", sort_dir="desc", limit=200, offset=0, season=0):
+    return _cached(f"fetch_college_players:{search}:{position}:{positions}:{team}:{conference}:{sort_key}:{sort_dir}:{limit}:{offset}:{season}", lambda: _fetch_college_players_uncached(search=search, position=position, positions=positions, team=team, conference=conference, sort_key=sort_key, sort_dir=sort_dir, limit=limit, offset=offset, season=season))
+
+def _fetch_college_player_profile_uncached(player_id):
     """Return a rich college player profile with all seasons + combine/draft data."""
     with get_db() as conn:
         # Get all seasons for this player
@@ -263,7 +267,11 @@ def fetch_college_player_profile(player_id):
         }
 
 
-def fetch_college_filter_options():
+
+def fetch_college_player_profile(player_id):
+    return _cached(f"fetch_college_player_profile:{player_id}", lambda: _fetch_college_player_profile_uncached(player_id=player_id))
+
+def _fetch_college_filter_options_uncached():
     """Return available filter values for the college screener."""
     with get_db() as conn:
 
@@ -306,6 +314,10 @@ _CFB_BREAKOUT_ANNOTATIONS = [
 ]
 
 
+
+def fetch_college_filter_options():
+    return _cached("fetch_college_filter_options", lambda: _fetch_college_filter_options_uncached())
+
 def _cfb_available_seasons(conn):
     """Return list of available college seasons, descending."""
     rows = conn.execute(
@@ -321,7 +333,7 @@ def _cfb_pos_filter(position, prefix="c"):
     return "", []
 
 
-def fetch_college_breakouts(season=None, position=None, limit=50):
+def _fetch_college_breakouts_uncached(season=None, position=None, limit=50):
     """College breakout candidates: high opportunity, lower production (gap = upside)."""
     with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
@@ -461,7 +473,11 @@ _CFB_VOLUME_ANNOTATIONS = [
 ]
 
 
-def fetch_college_efficiency(season=None, position=None, limit=30):
+
+def fetch_college_breakouts(season=None, position=None, limit=50):
+    return _cached(f"fetch_college_breakouts:{season}:{position}:{limit}", lambda: _fetch_college_breakouts_uncached(season=season, position=position, limit=limit))
+
+def _fetch_college_efficiency_uncached(season=None, position=None, limit=30):
     """College efficiency rankings: points per opportunity and volume leaders."""
     with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
@@ -584,7 +600,11 @@ _CFB_LEADER_CATEGORIES = [
 ]
 
 
-def fetch_college_leaders(season=None, position=None, limit=10):
+
+def fetch_college_efficiency(season=None, position=None, limit=30):
+    return _cached(f"fetch_college_efficiency:{season}:{position}:{limit}", lambda: _fetch_college_efficiency_uncached(season=season, position=position, limit=limit))
+
+def _fetch_college_leaders_uncached(season=None, position=None, limit=10):
     """Return top college players in each stat category."""
     limit = max(1, min(25, limit))
     with get_db() as conn:
@@ -664,7 +684,11 @@ def fetch_college_leaders(season=None, position=None, limit=10):
         }
 
 
-def fetch_college_trends(season=None, position=None, limit=30):
+
+def fetch_college_leaders(season=None, position=None, limit=10):
+    return _cached(f"fetch_college_leaders:{season}:{position}:{limit}", lambda: _fetch_college_leaders_uncached(season=season, position=position, limit=limit))
+
+def _fetch_college_trends_uncached(season=None, position=None, limit=30):
     """College year-over-year trends: players whose production rose or fell vs prior season."""
     with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
@@ -752,7 +776,11 @@ def fetch_college_trends(season=None, position=None, limit=30):
         }
 
 
-def fetch_college_rankings(season=None, position=None, limit=50):
+
+def fetch_college_trends(season=None, position=None, limit=30):
+    return _cached(f"fetch_college_trends:{season}:{position}:{limit}", lambda: _fetch_college_trends_uncached(season=season, position=position, limit=limit))
+
+def _fetch_college_rankings_uncached(season=None, position=None, limit=50):
     """College production rankings: top producers by approximate fantasy points."""
     with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
@@ -836,7 +864,11 @@ def fetch_college_rankings(season=None, position=None, limit=50):
         }
 
 
-def fetch_college_streaks(season=None, position=None, limit=25):
+
+def fetch_college_rankings(season=None, position=None, limit=50):
+    return _cached(f"fetch_college_rankings:{season}:{position}:{limit}", lambda: _fetch_college_rankings_uncached(season=season, position=position, limit=limit))
+
+def _fetch_college_streaks_uncached(season=None, position=None, limit=25):
     """College momentum: players with multi-season production growth or decline."""
     with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
@@ -943,7 +975,11 @@ _CFB_FALLING_ANNOTATIONS = [
 ]
 
 
-def fetch_college_stock_watch(season=None, position=None, limit=30):
+
+def fetch_college_streaks(season=None, position=None, limit=25):
+    return _cached(f"fetch_college_streaks:{season}:{position}:{limit}", lambda: _fetch_college_streaks_uncached(season=season, position=position, limit=limit))
+
+def _fetch_college_stock_watch_uncached(season=None, position=None, limit=30):
     """College stock watch: efficiency vs production gap.
     Uses per-game yards efficiency and YPC/YPR to identify over/undervalued."""
     with get_db() as conn:
@@ -1125,7 +1161,11 @@ _CFB_SCARCITY_ANNOTATIONS = {
 }
 
 
-def fetch_college_scarcity(season=None):
+
+def fetch_college_stock_watch(season=None, position=None, limit=30):
+    return _cached(f"fetch_college_stock_watch:{season}:{position}:{limit}", lambda: _fetch_college_stock_watch_uncached(season=season, position=position, limit=limit))
+
+def _fetch_college_scarcity_uncached(season=None):
     """College positional scarcity: PPG drop-off by position using approx fantasy points."""
     with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
@@ -1222,7 +1262,11 @@ def fetch_college_scarcity(season=None):
         }
 
 
-def fetch_college_consistency(season=None, position=None, limit=30):
+
+def fetch_college_scarcity(season=None):
+    return _cached(f"fetch_college_scarcity:{season}", lambda: _fetch_college_scarcity_uncached(season=season))
+
+def _fetch_college_consistency_uncached(season=None, position=None, limit=30):
     """College consistency: cross-season per-game stat variance for multi-year players."""
     import math as _math
 
@@ -1336,7 +1380,11 @@ def fetch_college_consistency(season=None, position=None, limit=30):
         }
 
 
-def fetch_college_workload(season=None, position=None, limit=50):
+
+def fetch_college_consistency(season=None, position=None, limit=30):
+    return _cached(f"fetch_college_consistency:{season}:{position}:{limit}", lambda: _fetch_college_consistency_uncached(season=season, position=position, limit=limit))
+
+def _fetch_college_workload_uncached(season=None, position=None, limit=50):
     """College workload monitor: touches/game, carries, targets (no snap data)."""
     with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
@@ -1423,7 +1471,11 @@ def fetch_college_workload(season=None, position=None, limit=50):
         }
 
 
-def fetch_college_dual_threat(season=None, position=None, limit=50):
+
+def fetch_college_workload(season=None, position=None, limit=50):
+    return _cached(f"fetch_college_workload:{season}:{position}:{limit}", lambda: _fetch_college_workload_uncached(season=season, position=position, limit=limit))
+
+def _fetch_college_dual_threat_uncached(season=None, position=None, limit=50):
     """College dual-threat index: rush + receiving versatility."""
     import math as _math
 
@@ -1509,7 +1561,11 @@ def fetch_college_dual_threat(season=None, position=None, limit=50):
         }
 
 
-def fetch_college_snap_efficiency(season=None, position=None, limit=50):
+
+def fetch_college_dual_threat(season=None, position=None, limit=50):
+    return _cached(f"fetch_college_dual_threat:{season}:{position}:{limit}", lambda: _fetch_college_dual_threat_uncached(season=season, position=position, limit=limit))
+
+def _fetch_college_snap_efficiency_uncached(season=None, position=None, limit=50):
     """College touch efficiency: fantasy points per touch (no snap data available)."""
     with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
@@ -1581,7 +1637,11 @@ def fetch_college_snap_efficiency(season=None, position=None, limit=50):
         }
 
 
-def fetch_college_aging_curves(position=None):
+
+def fetch_college_snap_efficiency(season=None, position=None, limit=50):
+    return _cached(f"fetch_college_snap_efficiency:{season}:{position}:{limit}", lambda: _fetch_college_snap_efficiency_uncached(season=season, position=position, limit=limit))
+
+def _fetch_college_aging_curves_uncached(position=None):
     """College production curves by experience year (1st through 5th+ season).
 
     Returns average total YPG at each college experience level, plus individual
@@ -1710,7 +1770,11 @@ def fetch_college_aging_curves(position=None):
 # ---------------------------------------------------------------------------
 
 
-def fetch_college_records(position=None, limit=10):
+
+def fetch_college_aging_curves(position=None):
+    return _cached(f"fetch_college_aging_curves:{position}", lambda: _fetch_college_aging_curves_uncached(position=position))
+
+def _fetch_college_records_uncached(position=None, limit=10):
     """College fantasy record book: single-season and career leaders."""
     with get_db() as conn:
         pos_filter = ""
@@ -1861,7 +1925,11 @@ def fetch_college_records(position=None, limit=10):
         }
 
 
-def fetch_college_season_recap(season=None):
+
+def fetch_college_records(position=None, limit=10):
+    return _cached(f"fetch_college_records:{position}:{limit}", lambda: _fetch_college_records_uncached(position=position, limit=limit))
+
+def _fetch_college_season_recap_uncached(season=None):
     """College season recap with MVP, position leaders, breakouts."""
     with get_db() as conn:
         cursor = conn.cursor()
@@ -2003,7 +2071,11 @@ def fetch_college_season_recap(season=None):
         }
 
 
-def fetch_college_season_awards(season=None, position=None):
+
+def fetch_college_season_recap(season=None):
+    return _cached(f"fetch_college_season_recap:{season}", lambda: _fetch_college_season_recap_uncached(season=season))
+
+def _fetch_college_season_awards_uncached(season=None, position=None):
     """College fantasy season superlatives — simplified awards using season-level data."""
     with get_db() as conn:
         cursor = conn.cursor()
@@ -2182,7 +2254,11 @@ def fetch_college_season_awards(season=None, position=None):
         }
 
 
-def fetch_college_stat_explorer(season=None, position=None, x_stat="total_ypg", y_stat="ppg"):
+
+def fetch_college_season_awards(season=None, position=None):
+    return _cached(f"fetch_college_season_awards:{season}:{position}", lambda: _fetch_college_season_awards_uncached(season=season, position=position))
+
+def _fetch_college_stat_explorer_uncached(season=None, position=None, x_stat="total_ypg", y_stat="ppg"):
     """College stat explorer — scatter plot with college-specific metrics."""
     COLLEGE_METRICS = {
         "ppg": "PPG", "total_ypg": "Total YPG", "rush_ypg": "Rush YPG",
@@ -2298,3 +2374,7 @@ def fetch_college_stat_explorer(season=None, position=None, x_stat="total_ypg", 
 # Waitlist
 # ---------------------------------------------------------------------------
 
+
+
+def fetch_college_stat_explorer(season=None, position=None, x_stat="total_ypg", y_stat="ppg"):
+    return _cached(f"fetch_college_stat_explorer:{season}:{position}:{x_stat}:{y_stat}", lambda: _fetch_college_stat_explorer_uncached(season=season, position=position, x_stat=x_stat, y_stat=y_stat))

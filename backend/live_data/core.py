@@ -13,13 +13,16 @@ import time as _time
 # ---------------------------------------------------------------------------
 
 _cache = {}
-_CACHE_TTL = 300  # 5 minutes
+_CACHE_TTL = 300  # 5 minutes default
+_CACHE_TTL_STABLE = 3600  # 60 minutes for stable/historical data
 
 
-def _cached(key, fn):
-    """Return cached result or compute and cache."""
+def _cached(key, fn, ttl=None):
+    """Return cached result or compute and cache. Optional ttl override."""
+    if ttl is None:
+        ttl = _CACHE_TTL
     now = _time.time()
-    if key in _cache and now - _cache[key]["t"] < _CACHE_TTL:
+    if key in _cache and now - _cache[key]["t"] < ttl:
         return _cache[key]["v"]
     result = fn()
     _cache[key] = {"t": now, "v": result}

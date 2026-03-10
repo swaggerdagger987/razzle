@@ -1,14 +1,42 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 27 (Backend Cleanup: Split live_data.py into Modules)
+- Phase: 28 (Backend Cleanup: Add Caching to Popular Endpoints)
 - Task 1: PASS
 - Task 2: PASS
 - Task 3: PASS
 - Task 4: PASS
-- Task 6: PASS
+- Task 5: PASS
 - Stage: COMPLETE
 - Next: Phase transition
+
+## Phase 28: Backend Cleanup: Add Caching to Popular Endpoints
+**Exit Criterion**: All frequently-hit read endpoints (dynasty rankings, trade values, tier lists, stat leaders, filter options, featured) use the existing TTL cache pattern. Cache TTL of 5 minutes for volatile data, 60 minutes for stable data. At least 30 endpoints cached. Cache invalidates correctly on universe/season change.
+
+### Task 1: Audit existing cache usage and identify all cacheable endpoints
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Found only 2 cached functions (fetch_featured, get_filter_options). Added TTL parameter to _cached() in core.py. _CACHE_TTL_STABLE=3600 for stable data.
+
+### Task 2: Add _cached() calls to analytics.py endpoints
+**Status**: PASS
+**Attempts**: 1
+**Notes**: All 14 functions cached. aging_curves + stat_explorer use 60-min TTL. Rest use 5-min default. Cache keys include all params.
+
+### Task 3: Add _cached() calls to dashboards.py endpoints
+**Status**: PASS
+**Attempts**: 1
+**Notes**: All 9 functions cached. stat_correlations uses 60-min TTL. Rest use 5-min default.
+
+### Task 4: Add _cached() calls to tools.py endpoints
+**Status**: PASS
+**Attempts**: 1
+**Notes**: 27 functions cached (fetch_featured already cached, _fetch_featured_uncached skipped). records/draft_class/draft_class_tracker/archetypes use 60-min TTL. Rest use 5-min default.
+
+### Task 5: Add _cached() to remaining uncached functions in players.py, dynasty.py, prospects.py, college.py
+**Status**: PASS
+**Attempts**: 1
+**Notes**: players.py (17 functions), dynasty.py (11 functions), prospects.py (8 functions), college.py (20 functions) all cached. 108 total cached endpoints across all modules. Write functions excluded. Python compiles clean. server.py imports clean.
 
 ## Phase 27: Backend Cleanup: Split live_data.py into Modules
 **Exit Criterion**: `live_data.py` is replaced by a `live_data/` package with logical submodules (e.g., `players.py`, `prospects.py`, `college.py`, `analytics.py`, `cache.py`, `storage.py`). All imports in `server.py` updated. No function lost, no endpoint broken. Each module under 3,000 lines.

@@ -8,7 +8,7 @@ import statistics
 from ..db import get_db
 
 from .core import (
-    _cached,
+    _cached, _CACHE_TTL_STABLE,
     FANTASY_POSITIONS, RATE_METRICS, _STAT_SUM_COLS,
     TEAM_ABBREV, ABBREV_TO_TEAM,
     _enrich_with_derived_stats, _enrich_with_epa_per_play,
@@ -20,15 +20,17 @@ from .core import (
 
 
 def db_stats():
-    with get_db() as conn:
-        players = conn.execute("SELECT COUNT(*) FROM players").fetchone()[0]
-        stats = conn.execute("SELECT COUNT(*) FROM player_week_stats").fetchone()[0]
-        seasons = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season").fetchall()
-        return {
-            "players": players,
-            "stat_rows": stats,
-            "seasons": [r[0] for r in seasons],
-        }
+    def _query():
+        with get_db() as conn:
+            players = conn.execute("SELECT COUNT(*) FROM players").fetchone()[0]
+            stats = conn.execute("SELECT COUNT(*) FROM player_week_stats").fetchone()[0]
+            seasons = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season").fetchall()
+            return {
+                "players": players,
+                "stat_rows": stats,
+                "seasons": [r[0] for r in seasons],
+            }
+    return _cached("db_stats", _query)
 
 
 def quick_search_players(query, limit=8):
@@ -36,25 +38,27 @@ def quick_search_players(query, limit=8):
     if not query or not query.strip():
         return []
     limit = max(1, min(limit, 20))
-    with get_db() as conn:
-        search_term = "%" + query.lower().replace(" ", "") + "%"
-        rows = conn.execute("""
-            WITH ms AS (SELECT MAX(season) AS s FROM player_week_stats)
-            SELECT p.player_id, p.full_name, p.position, p.team, p.headshot_url,
-                   COALESCE(
-                       (SELECT ROUND(SUM(s.fantasy_points_ppr) * 1.0 / COUNT(DISTINCT s.week), 1)
-                        FROM player_week_stats s, ms
-                        WHERE s.player_id = p.player_id
-                          AND s.season = ms.s),
-                       0) AS ppg
-            FROM players p
-            WHERE p.search_name LIKE ?
-              AND p.position IN ('QB', 'RB', 'WR', 'TE')
-              AND p.fantasy_relevant = 1
-            ORDER BY ppg DESC
-            LIMIT ?
-        """, (search_term, limit)).fetchall()
-        return [dict(r) for r in rows]
+    def _query():
+        with get_db() as conn:
+            search_term = "%" + query.lower().replace(" ", "") + "%"
+            rows = conn.execute("""
+                WITH ms AS (SELECT MAX(season) AS s FROM player_week_stats)
+                SELECT p.player_id, p.full_name, p.position, p.team, p.headshot_url,
+                       COALESCE(
+                           (SELECT ROUND(SUM(s.fantasy_points_ppr) * 1.0 / COUNT(DISTINCT s.week), 1)
+                            FROM player_week_stats s, ms
+                            WHERE s.player_id = p.player_id
+                              AND s.season = ms.s),
+                           0) AS ppg
+                FROM players p
+                WHERE p.search_name LIKE ?
+                  AND p.position IN ('QB', 'RB', 'WR', 'TE')
+                  AND p.fantasy_relevant = 1
+                ORDER BY ppg DESC
+                LIMIT ?
+            """, (search_term, limit)).fetchall()
+            return [dict(r) for r in rows]
+    return _cached(f"quick_search:{query}:{limit}", _query)
 
 
 def fetch_players(
@@ -68,119 +72,124 @@ def fetch_players(
     offset=0,
     season=0,
 ):
-    with get_db() as conn:
+    def _query():
+        with get_db() as conn:
 
-        # Determine season: 0 = latest, "career" = all seasons
-        career_mode = str(season).lower() == "career"
-        if not career_mode:
-            season = int(season) if season else 0
-            if not season:
-                row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-                season = row[0] if row and row[0] else 2024
+            # Determine season: 0 = latest, "career" = all seasons
+            _career_mode = str(season).lower() == "career"
+            _season = season
+            if not _career_mode:
+                _season = int(_season) if _season else 0
+                if not _season:
+                    row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+                    _season = row[0] if row and row[0] else 2024
 
-        # Build position filter
-        pos_list = []
-        if positions:
-            pos_list = [p.strip().upper() for p in positions.split(",") if p.strip()]
-        elif position:
-            pos_list = [position.strip().upper()]
+            # Build position filter
+            pos_list = []
+            if positions:
+                pos_list = [p.strip().upper() for p in positions.split(",") if p.strip()]
+            elif position:
+                pos_list = [position.strip().upper()]
 
-        # Allowed sort columns (prevent SQL injection)
-        safe_sorts = {
-            "fantasy_points_ppr", "fantasy_points_half_ppr", "fantasy_points_std",
-            "passing_yards", "passing_tds", "rushing_yards", "rushing_tds",
-            "receiving_yards", "receiving_tds", "receptions", "touchdowns",
-            "turnovers", "targets", "carries", "completions", "attempts",
-            "passing_air_yards", "receiving_air_yards", "receiving_yards_after_catch",
-            "passing_first_downs", "rushing_first_downs", "receiving_first_downs",
-            "sacks_taken", "sack_yards_lost", "rushing_fumbles",
-            "receiving_fumbles", "receiving_fumbles_lost",
-            "sack_fumbles", "sack_fumbles_lost", "fumbles", "fumbles_lost",
-            "offense_snaps", "offense_pct",
-            "full_name", "position", "team", "games", "seasons", "age",
-            "half_ppr_ppg", "cpoe", "epa_per_play",
-        }
-        if sort_key not in safe_sorts:
-            sort_key = "fantasy_points_ppr"
-        if sort_dir.lower() not in ("asc", "desc"):
-            sort_dir = "desc"
+            # Allowed sort columns (prevent SQL injection)
+            safe_sorts = {
+                "fantasy_points_ppr", "fantasy_points_half_ppr", "fantasy_points_std",
+                "passing_yards", "passing_tds", "rushing_yards", "rushing_tds",
+                "receiving_yards", "receiving_tds", "receptions", "touchdowns",
+                "turnovers", "targets", "carries", "completions", "attempts",
+                "passing_air_yards", "receiving_air_yards", "receiving_yards_after_catch",
+                "passing_first_downs", "rushing_first_downs", "receiving_first_downs",
+                "sacks_taken", "sack_yards_lost", "rushing_fumbles",
+                "receiving_fumbles", "receiving_fumbles_lost",
+                "sack_fumbles", "sack_fumbles_lost", "fumbles", "fumbles_lost",
+                "offense_snaps", "offense_pct",
+                "full_name", "position", "team", "games", "seasons", "age",
+                "half_ppr_ppg", "cpoe", "epa_per_play",
+            }
+            _sort_key = sort_key
+            if _sort_key not in safe_sorts:
+                _sort_key = "fantasy_points_ppr"
+            _sort_dir = sort_dir
+            if _sort_dir.lower() not in ("asc", "desc"):
+                _sort_dir = "desc"
 
-        where = []
-        params = []
+            where = []
+            params = []
 
-        if career_mode:
-            pass  # no season filter — aggregate all
-        else:
-            where.append("s.season = ?")
-            params.append(season)
+            if _career_mode:
+                pass  # no season filter — aggregate all
+            else:
+                where.append("s.season = ?")
+                params.append(_season)
 
-        if search:
-            where.append("p.search_name LIKE ?")
-            params.append(f"%{search.lower().replace(' ', '')}%")
+            if search:
+                where.append("p.search_name LIKE ?")
+                params.append(f"%{search.lower().replace(' ', '')}%")
 
-        if pos_list:
-            placeholders = ",".join("?" * len(pos_list))
-            where.append(f"p.position IN ({placeholders})")
-            params.extend(pos_list)
+            if pos_list:
+                placeholders = ",".join("?" * len(pos_list))
+                where.append(f"p.position IN ({placeholders})")
+                params.extend(pos_list)
 
-        if team:
-            where.append("p.team = ?")
-            params.append(team.strip().upper())
+            if team:
+                where.append("p.team = ?")
+                params.append(team.strip().upper())
 
-        where_clause = " AND ".join(where) if where else "1=1"
+            where_clause = " AND ".join(where) if where else "1=1"
 
-        # Handle sort expression
-        sort_expr = sort_key
-        if sort_key == "seasons":
-            sort_expr = "COUNT(DISTINCT s.season)"
-        elif sort_key == "games":
-            sort_expr = "COUNT(*)"
-        elif sort_key in ("full_name", "position", "team"):
-            sort_expr = f"p.{sort_key}"
-        elif sort_key in safe_sorts:
-            sort_expr = f"SUM(s.{sort_key})"
+            # Handle sort expression
+            sort_expr = _sort_key
+            if _sort_key == "seasons":
+                sort_expr = "COUNT(DISTINCT s.season)"
+            elif _sort_key == "games":
+                sort_expr = "COUNT(*)"
+            elif _sort_key in ("full_name", "position", "team"):
+                sort_expr = f"p.{_sort_key}"
+            elif _sort_key in safe_sorts:
+                sort_expr = f"SUM(s.{_sort_key})"
 
-        query = f"""
-            SELECT
-                p.player_id, p.full_name, p.position, p.team, p.age, p.college, p.headshot_url,
-                COUNT(*) as games,
-                COUNT(DISTINCT s.season) as seasons,
-                SUM(s.fantasy_points_half_ppr) as fantasy_points_half_ppr,
-                {_STAT_SUM_COLS}
-            FROM players p
-            JOIN player_week_stats s ON p.player_id = s.player_id
-            WHERE {where_clause}
-            GROUP BY p.player_id
-            ORDER BY {sort_expr} {sort_dir}
-            LIMIT ? OFFSET ?
-        """
-        params.extend([limit, offset])
+            query = f"""
+                SELECT
+                    p.player_id, p.full_name, p.position, p.team, p.age, p.college, p.headshot_url,
+                    COUNT(*) as games,
+                    COUNT(DISTINCT s.season) as seasons,
+                    SUM(s.fantasy_points_half_ppr) as fantasy_points_half_ppr,
+                    {_STAT_SUM_COLS}
+                FROM players p
+                JOIN player_week_stats s ON p.player_id = s.player_id
+                WHERE {where_clause}
+                GROUP BY p.player_id
+                ORDER BY {sort_expr} {_sort_dir}
+                LIMIT ? OFFSET ?
+            """
+            params.extend([limit, offset])
 
-        rows = conn.execute(query, params).fetchall()
+            rows = conn.execute(query, params).fetchall()
 
-        # Count total (for pagination)
-        count_query = f"""
-            SELECT COUNT(DISTINCT p.player_id)
-            FROM players p
-            JOIN player_week_stats s ON p.player_id = s.player_id
-            WHERE {where_clause}
-        """
-        total = conn.execute(count_query, params[:-2]).fetchone()[0]
+            # Count total (for pagination)
+            count_query = f"""
+                SELECT COUNT(DISTINCT p.player_id)
+                FROM players p
+                JOIN player_week_stats s ON p.player_id = s.player_id
+                WHERE {where_clause}
+            """
+            total = conn.execute(count_query, params[:-2]).fetchone()[0]
 
-        items = [dict(r) for r in rows]
-        _enrich_with_derived_stats(items)
-        _enrich_with_rate_metrics(conn, items, season=season, career_mode=career_mode)
-        _enrich_with_epa_per_play(items)
-        _enrich_with_breakout(conn, items, season=season, career_mode=career_mode)
-        _enrich_with_dynasty_value(items)
-        _enrich_with_team_shares(conn, items, season=season, career_mode=career_mode)
-        _enrich_with_pbp_stats(conn, items, season=season, career_mode=career_mode)
+            items = [dict(r) for r in rows]
+            _enrich_with_derived_stats(items)
+            _enrich_with_rate_metrics(conn, items, season=_season, career_mode=_career_mode)
+            _enrich_with_epa_per_play(items)
+            _enrich_with_breakout(conn, items, season=_season, career_mode=_career_mode)
+            _enrich_with_dynasty_value(items)
+            _enrich_with_team_shares(conn, items, season=_season, career_mode=_career_mode)
+            _enrich_with_pbp_stats(conn, items, season=_season, career_mode=_career_mode)
 
-        return {"count": total, "season": "career" if career_mode else season, "items": items}
+            return {"count": total, "season": "career" if _career_mode else _season, "items": items}
+    return _cached(f"fetch_players:{search}:{position}:{positions}:{team}:{sort_key}:{sort_dir}:{limit}:{offset}:{season}", _query)
 
 
-def fetch_screener(body):
-    """Complex multi-filter screener query (POST body)."""
+def _fetch_screener_uncached(body):
+    """Complex multi-filter screener query (POST body) — uncached implementation."""
     with get_db() as conn:
 
         search = body.get("search", "")
@@ -418,6 +427,13 @@ def fetch_screener(body):
         return {"count": total, "season": "career" if career_mode else season, "items": items}
 
 
+def fetch_screener(body):
+    """Complex multi-filter screener query (POST body)."""
+    import json as _json
+    _cache_key = f"fetch_screener:{_json.dumps(body, sort_keys=True, default=str)}"
+    return _cached(_cache_key, lambda: _fetch_screener_uncached(body))
+
+
 def get_filter_options():
     """Return available positions, teams, and stat columns for autocomplete."""
     def _query():
@@ -445,63 +461,67 @@ def get_filter_options():
 
 def fetch_player_weeks(player_id, season=0):
     """Return week-by-week stats for a single player."""
-    with get_db() as conn:
+    def _query():
+        with get_db() as conn:
 
-        if not season:
-            row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-            season = row[0] if row and row[0] else 2024
+            _season = season
+            if not _season:
+                row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+                _season = row[0] if row and row[0] else 2024
 
-        rows = conn.execute("""
-            SELECT s.*, p.full_name, p.position, p.team
-            FROM player_week_stats s
-            JOIN players p ON p.player_id = s.player_id
-            WHERE s.player_id = ? AND s.season = ?
-            ORDER BY s.week ASC
-        """, (player_id, season)).fetchall()
+            rows = conn.execute("""
+                SELECT s.*, p.full_name, p.position, p.team
+                FROM player_week_stats s
+                JOIN players p ON p.player_id = s.player_id
+                WHERE s.player_id = ? AND s.season = ?
+                ORDER BY s.week ASC
+            """, (player_id, _season)).fetchall()
 
-        player_info = conn.execute(
-            "SELECT player_id, full_name, position, team, age, college, headshot_url FROM players WHERE player_id = ?",
-            (player_id,)
-        ).fetchone()
+            player_info = conn.execute(
+                "SELECT player_id, full_name, position, team, age, college, headshot_url FROM players WHERE player_id = ?",
+                (player_id,)
+            ).fetchone()
 
-
-        return {
-            "player": dict(player_info) if player_info else {},
-            "season": season,
-            "weeks": [dict(r) for r in rows],
-        }
+            return {
+                "player": dict(player_info) if player_info else {},
+                "season": _season,
+                "weeks": [dict(r) for r in rows],
+            }
+    return _cached(f"player_weeks:{player_id}:{season}", _query)
 
 
 def fetch_player_seasons(player_id):
     """Return season-level aggregates for a single player (for trend charts)."""
-    with get_db() as conn:
+    def _query():
+        with get_db() as conn:
 
-        player_info = conn.execute(
-            "SELECT player_id, full_name, position, team, age, college, headshot_url FROM players WHERE player_id = ?",
-            (player_id,)
-        ).fetchone()
+            player_info = conn.execute(
+                "SELECT player_id, full_name, position, team, age, college, headshot_url FROM players WHERE player_id = ?",
+                (player_id,)
+            ).fetchone()
 
-        rows = conn.execute(f"""
-            SELECT
-                s.season,
-                COUNT(*) as games,
-                {_STAT_SUM_COLS}
-            FROM player_week_stats s
-            WHERE s.player_id = ?
-            GROUP BY s.season
-            ORDER BY s.season ASC
-        """, (player_id,)).fetchall()
+            rows = conn.execute(f"""
+                SELECT
+                    s.season,
+                    COUNT(*) as games,
+                    {_STAT_SUM_COLS}
+                FROM player_week_stats s
+                WHERE s.player_id = ?
+                GROUP BY s.season
+                ORDER BY s.season ASC
+            """, (player_id,)).fetchall()
 
-        seasons = [dict(r) for r in rows]
-        _enrich_with_derived_stats(seasons)
+            seasons = [dict(r) for r in rows]
+            _enrich_with_derived_stats(seasons)
 
-        return {
-            "player": dict(player_info) if player_info else {},
-            "seasons": seasons,
-        }
+            return {
+                "player": dict(player_info) if player_info else {},
+                "seasons": seasons,
+            }
+    return _cached(f"player_seasons:{player_id}", _query)
 
 
-def fetch_player_profile(player_id):
+def _fetch_player_profile_uncached(player_id):
     """Return a rich player profile: bio, season-by-season stats, combine/draft data."""
     with get_db() as conn:
 
@@ -589,7 +609,11 @@ def fetch_player_profile(player_id):
         }
 
 
-def fetch_players_compare(player_ids, season=0):
+
+def fetch_player_profile(player_id):
+    return _cached(f"fetch_player_profile:{player_id}", lambda: _fetch_player_profile_uncached(player_id=player_id))
+
+def _fetch_players_compare_uncached(player_ids, season=0):
     """Return season aggregates for multiple players (for comparison)."""
     with get_db() as conn:
 
@@ -629,7 +653,12 @@ def fetch_players_compare(player_ids, season=0):
         return {"season": "career" if career_mode else season, "players": players}
 
 
-def fetch_team_roster(team=None, season=None):
+
+def fetch_players_compare(player_ids, season=0):
+    _key = "fetch_players_compare:" + ":".join(sorted(player_ids)) + f":{season}"
+    return _cached(_key, lambda: _fetch_players_compare_uncached(player_ids=player_ids, season=season))
+
+def _fetch_team_roster_uncached(team=None, season=None):
     """Return all fantasy-relevant players for a team, grouped by position."""
     with get_db() as conn:
 
@@ -730,7 +759,11 @@ def fetch_team_roster(team=None, season=None):
         }
 
 
-def fetch_career_stats(player_id):
+
+def fetch_team_roster(team=None, season=None):
+    return _cached(f"fetch_team_roster:{team}:{season}", lambda: _fetch_team_roster_uncached(team=team, season=season))
+
+def _fetch_career_stats_uncached(player_id):
     """Return season-by-season stats for a single player across all available seasons."""
     if not player_id:
         return {"error": "player_id is required"}
@@ -891,7 +924,11 @@ def fetch_career_stats(player_id):
         }
 
 
-def fetch_player_percentiles(player_id, season=None):
+
+def fetch_career_stats(player_id):
+    return _cached(f"fetch_career_stats:{player_id}", lambda: _fetch_career_stats_uncached(player_id=player_id))
+
+def _fetch_player_percentiles_uncached(player_id, season=None):
     """Return percentile rankings for a player vs. their position group."""
     if not player_id:
         return {"error": "player_id is required"}
@@ -1069,7 +1106,11 @@ def fetch_player_percentiles(player_id, season=None):
         }
 
 
-def fetch_player_strengths(player_id, season=None, top_n=4):
+
+def fetch_player_percentiles(player_id, season=None):
+    return _cached(f"fetch_player_percentiles:{player_id}:{season}", lambda: _fetch_player_percentiles_uncached(player_id=player_id, season=season))
+
+def _fetch_player_strengths_uncached(player_id, season=None, top_n=4):
     """Return a player's top strengths and weaknesses from percentile data."""
     if not player_id:
         return {"error": "player_id is required"}
@@ -1129,7 +1170,11 @@ def fetch_player_strengths(player_id, season=None, top_n=4):
     }
 
 
-def fetch_points_breakdown(player_id, season=None):
+
+def fetch_player_strengths(player_id, season=None, top_n=4):
+    return _cached(f"fetch_player_strengths:{player_id}:{season}:{top_n}", lambda: _fetch_player_strengths_uncached(player_id=player_id, season=season, top_n=top_n))
+
+def _fetch_points_breakdown_uncached(player_id, season=None):
     """Return breakdown of fantasy point sources for a player."""
     if not player_id:
         return {"error": "player_id is required"}
@@ -1227,7 +1272,11 @@ def fetch_points_breakdown(player_id, season=None):
         }
 
 
-def fetch_game_log(player_id, season=None):
+
+def fetch_points_breakdown(player_id, season=None):
+    return _cached(f"fetch_points_breakdown:{player_id}:{season}", lambda: _fetch_points_breakdown_uncached(player_id=player_id, season=season))
+
+def _fetch_game_log_uncached(player_id, season=None):
     """Return week-by-week box score stats for a player in a given season."""
     with get_db() as conn:
         cursor = conn.cursor()
@@ -1309,7 +1358,11 @@ def fetch_game_log(player_id, season=None):
         }
 
 
-def fetch_compare_table(player_ids, season=None):
+
+def fetch_game_log(player_id, season=None):
+    return _cached(f"fetch_game_log:{player_id}:{season}", lambda: _fetch_game_log_uncached(player_id=player_id, season=season))
+
+def _fetch_compare_table_uncached(player_ids, season=None):
     """Return season stats for multiple players for side-by-side comparison."""
     if not player_ids:
         return {"error": "No player IDs provided"}
@@ -1379,7 +1432,12 @@ def fetch_compare_table(player_ids, season=None):
         }
 
 
-def fetch_player_boom_bust(player_id, season=0):
+
+def fetch_compare_table(player_ids, season=None):
+    _key = "fetch_compare_table:" + ":".join(sorted(player_ids)) + f":{season}"
+    return _cached(_key, lambda: _fetch_compare_table_uncached(player_ids=player_ids, season=season))
+
+def _fetch_player_boom_bust_uncached(player_id, season=0):
     """Analyze a player's weekly score distribution: boom/bust rates, consistency, percentiles."""
     with get_db() as conn:
 
@@ -1546,7 +1604,11 @@ def fetch_player_boom_bust(player_id, season=0):
         }
 
 
-def fetch_player_comps(player_id, limit=5, season=0):
+
+def fetch_player_boom_bust(player_id, season=0):
+    return _cached(f"fetch_player_boom_bust:{player_id}:{season}", lambda: _fetch_player_boom_bust_uncached(player_id=player_id, season=season))
+
+def _fetch_player_comps_uncached(player_id, limit=5, season=0):
     """Find the most statistically similar NFL players to a given player."""
     with get_db() as conn:
 
@@ -1667,3 +1729,7 @@ def fetch_player_comps(player_id, limit=5, season=0):
             "target_stats": target_stats,
             "season": season,
         }
+
+
+def fetch_player_comps(player_id, limit=5, season=0):
+    return _cached(f"fetch_player_comps:{player_id}:{limit}:{season}", lambda: _fetch_player_comps_uncached(player_id=player_id, limit=limit, season=season))

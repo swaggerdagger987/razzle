@@ -6,11 +6,12 @@ import math
 
 from ..db import get_db
 from .core import (
+    _cached, _CACHE_TTL_STABLE,
     TEAM_ABBREV,
     _name_variants, _enrich_prospects_with_college, _enrich_college_derived,
 )
 
-def fetch_prospects(
+def _fetch_prospects_uncached(
     search="",
     position="",
     positions="",
@@ -155,7 +156,21 @@ def fetch_prospects(
             items = items[offset:offset + limit]
 
         return {"count": total, "draft_year": draft_year, "items": items}
-def fetch_prospect_years():
+
+def fetch_prospects(
+    search="",
+    position="",
+    positions="",
+    school="",
+    sort_key="draft_pick",
+    sort_dir="asc",
+    limit=200,
+    offset=0,
+    draft_year=0,
+):
+    return _cached(f"fetch_prospects:{search}:{position}:{positions}:{school}:{sort_key}:{sort_dir}:{limit}:{offset}:{draft_year}", lambda: _fetch_prospects_uncached(search=search, position=position, positions=positions, school=school, sort_key=sort_key, sort_dir=sort_dir, limit=limit, offset=offset, draft_year=draft_year))
+
+def _fetch_prospect_years_uncached():
     """Return available draft years for the prospect screener."""
     with get_db() as conn:
         years = [r[0] for r in conn.execute(
@@ -171,7 +186,11 @@ def fetch_prospect_years():
         ).fetchall()]
 
         return {"years": years, "schools": schools, "positions": positions}
-def fetch_prospect_profile(name, position="", draft_year=0):
+
+def fetch_prospect_years():
+    return _cached("fetch_prospect_years", lambda: _fetch_prospect_years_uncached())
+
+def _fetch_prospect_profile_uncached(name, position="", draft_year=0):
     """Return a rich prospect profile with combine data and position-group percentiles."""
     with get_db() as conn:
 
@@ -275,6 +294,10 @@ def fetch_prospect_profile(name, position="", draft_year=0):
 
         return {"prospect": prospect, "percentiles": percentiles, "college": college}
 
+
+
+def fetch_prospect_profile(name, position="", draft_year=0):
+    return _cached(f"fetch_prospect_profile:{name}:{position}:{draft_year}", lambda: _fetch_prospect_profile_uncached(name=name, position=position, draft_year=draft_year))
 
 def _fetch_college_for_prospect(conn, prospect):
     """Cross-reference a prospect with cfb_player_season_stats via name matching."""
@@ -394,7 +417,7 @@ def _fetch_college_for_prospect(conn, prospect):
     }
 
 
-def fetch_prospect_comps(name, position="", draft_year=0, limit=5):
+def _fetch_prospect_comps_uncached(name, position="", draft_year=0, limit=5):
     """Find NFL players with the most similar combine athletic profiles."""
     with get_db() as conn:
 
@@ -551,7 +574,11 @@ def fetch_prospect_comps(name, position="", draft_year=0, limit=5):
         }
 
 
-def fetch_prospect_tiers(position, draft_year=0):
+
+def fetch_prospect_comps(name, position="", draft_year=0, limit=5):
+    return _cached(f"fetch_prospect_comps:{name}:{position}:{draft_year}:{limit}", lambda: _fetch_prospect_comps_uncached(name=name, position=position, draft_year=draft_year, limit=limit))
+
+def _fetch_prospect_tiers_uncached(position, draft_year=0):
     """Return prospects at a position grouped by athletic percentile tier."""
     with get_db() as conn:
 
@@ -648,7 +675,11 @@ def fetch_prospect_tiers(position, draft_year=0):
         return {"tiers": tiers, "draft_year": draft_year, "position": pos}
 
 
-def fetch_prospects_compare(names, draft_year=0):
+
+def fetch_prospect_tiers(position, draft_year=0):
+    return _cached(f"fetch_prospect_tiers:{position}:{draft_year}", lambda: _fetch_prospect_tiers_uncached(position=position, draft_year=draft_year), _CACHE_TTL_STABLE)
+
+def _fetch_prospects_compare_uncached(names, draft_year=0):
     """Return combine data + percentiles for multiple prospects (for comparison)."""
     with get_db() as conn:
 
@@ -671,7 +702,11 @@ def fetch_prospects_compare(names, draft_year=0):
         return {"draft_year": draft_year, "prospects": results}
 
 
-def fetch_prospect_scores(position="", draft_year=0):
+
+def fetch_prospects_compare(names, draft_year=0):
+    return _cached(f"fetch_prospects_compare:{names}:{draft_year}", lambda: _fetch_prospects_compare_uncached(names=names, draft_year=draft_year))
+
+def _fetch_prospect_scores_uncached(position="", draft_year=0):
     """Compute Razzle Prospect Score (RPS) for all prospects at a position.
 
     RPS = avg athletic percentile (60%) + draft capital value (30%) + size score (10%).
@@ -802,7 +837,11 @@ def fetch_prospect_scores(position="", draft_year=0):
         }
 
 
-def fetch_draft_class_analytics(position=""):
+
+def fetch_prospect_scores(position="", draft_year=0):
+    return _cached(f"fetch_prospect_scores:{position}:{draft_year}", lambda: _fetch_prospect_scores_uncached(position=position, draft_year=draft_year))
+
+def _fetch_draft_class_analytics_uncached(position=""):
     """Cross-year draft class strength analysis using RPS data.
 
     Returns per-year breakdown: count, avg RPS, tier distribution, top prospect, class grade.
@@ -879,3 +918,7 @@ def fetch_draft_class_analytics(position=""):
         "classes": classes,
         "position": position.upper() if position else "ALL",
     }
+
+
+def fetch_draft_class_analytics(position=""):
+    return _cached(f"fetch_draft_class_analytics:{position}", lambda: _fetch_draft_class_analytics_uncached(position=position), _CACHE_TTL_STABLE)

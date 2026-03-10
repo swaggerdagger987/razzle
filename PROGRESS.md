@@ -1,6 +1,20 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 27 — Backend Cleanup: Split live_data.py into Modules (COMPLETE)
+## Current Phase: Phase 28 — Backend Cleanup: Add Caching to Popular Endpoints (COMPLETE)
+
+**Exit Criterion MET**: 108 read-only endpoints cached with `_cached()`. TTL parameter added to `_cached()` function. 5-min default for volatile data, 60-min `_CACHE_TTL_STABLE` for historical/stable data (aging curves, records, draft classes, archetypes, correlations, stat explorer). Cache keys include all varying params (season, position, limit, etc.) so universe/season changes get fresh data. Write functions excluded. All files compile clean.
+
+### Phase 28 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Audit existing cache usage and identify cacheable endpoints | DONE | Only 2 pre-existing. Added TTL param to _cached(). _CACHE_TTL_STABLE=3600 |
+| 2 | Add caching to analytics.py endpoints | DONE | 14 functions cached, 2 with 60-min TTL |
+| 3 | Add caching to dashboards.py endpoints | DONE | 9 functions cached, 1 with 60-min TTL |
+| 4 | Add caching to tools.py endpoints | DONE | 27 functions cached, 4 with 60-min TTL |
+| 5 | Add caching to remaining submodules (players, dynasty, prospects, college) | DONE | 56 functions cached across 4 files. 108 total across all modules |
+
+## Previous Phase: Phase 27 — Backend Cleanup: Split live_data.py into Modules (COMPLETE)
 
 **Exit Criterion**: `live_data.py` is replaced by a `live_data/` package with logical submodules. All imports in `server.py` updated. No function lost, no endpoint broken. Each module under 3,000 lines.
 

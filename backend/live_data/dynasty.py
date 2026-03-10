@@ -10,6 +10,7 @@ from bisect import bisect_left, bisect_right
 
 from ..db import get_db
 from .core import (
+    _cached, _CACHE_TTL_STABLE,
     compute_trade_value, _production_value, _age_value, _scarcity_value,
     _pick_value, _assign_tier, _TIER_LABELS, _tv_tier, _TV_TIER_LABELS,
     _roster_grade, _competing_status,
@@ -20,7 +21,7 @@ from .core import (
 # Trade Value Model
 # ---------------------------------------------------------------------------
 
-def fetch_trade_values(player_ids):
+def _fetch_trade_values_uncached(player_ids):
     """Return trade values for a list of player IDs."""
     if not player_ids:
         return []
@@ -83,7 +84,12 @@ def fetch_trade_values(player_ids):
         return results
 
 
-def fetch_pick_values(year=2025, rounds=4, teams=12):
+
+def fetch_trade_values(player_ids):
+    _key = "fetch_trade_values:" + ":".join(sorted(str(x) for x in player_ids))
+    return _cached(_key, lambda: _fetch_trade_values_uncached(player_ids=player_ids))
+
+def _fetch_pick_values_uncached(year=2025, rounds=4, teams=12):
     """Return trade values for all dynasty draft picks."""
     picks = []
     for rd in range(1, rounds + 1):
@@ -101,7 +107,11 @@ def fetch_pick_values(year=2025, rounds=4, teams=12):
     return picks
 
 
-def fetch_roster_value(player_ids):
+
+def fetch_pick_values(year=2025, rounds=4, teams=12):
+    return _cached(f"fetch_pick_values:{year}:{rounds}:{teams}", lambda: _fetch_pick_values_uncached(year=year, rounds=rounds, teams=teams))
+
+def _fetch_roster_value_uncached(player_ids):
     """Compute roster-level dynasty value analysis."""
     players = fetch_trade_values(player_ids)
     if not players:
@@ -139,7 +149,12 @@ def fetch_roster_value(player_ids):
     }
 
 
-def fetch_dynasty_rankings(position=None, limit=200):
+
+def fetch_roster_value(player_ids):
+    _key = "fetch_roster_value:" + ":".join(sorted(str(x) for x in player_ids))
+    return _cached(_key, lambda: _fetch_roster_value_uncached(player_ids=player_ids))
+
+def _fetch_dynasty_rankings_uncached(position=None, limit=200):
     """Return top dynasty-relevant players ranked by dynasty value with tiers."""
     limit = max(1, min(300, limit))
     with get_db() as conn:
@@ -225,7 +240,11 @@ def fetch_dynasty_rankings(position=None, limit=200):
 # Trade Value Chart
 # ---------------------------------------------------------------------------
 
-def fetch_trade_value_chart(season=None, position=None, limit=150):
+
+def fetch_dynasty_rankings(position=None, limit=200):
+    return _cached(f"fetch_dynasty_rankings:{position}:{limit}", lambda: _fetch_dynasty_rankings_uncached(position=position, limit=limit))
+
+def _fetch_trade_value_chart_uncached(season=None, position=None, limit=150):
     """Return all fantasy-relevant players ranked by trade value with component breakdown."""
     limit = max(1, min(300, limit))
     with get_db() as conn:
@@ -316,7 +335,11 @@ def fetch_trade_value_chart(season=None, position=None, limit=150):
 # Trade Finder
 # ---------------------------------------------------------------------------
 
-def fetch_trade_finder(player_id, season=None):
+
+def fetch_trade_value_chart(season=None, position=None, limit=150):
+    return _cached(f"fetch_trade_value_chart:{season}:{position}:{limit}", lambda: _fetch_trade_value_chart_uncached(season=season, position=position, limit=limit))
+
+def _fetch_trade_finder_uncached(player_id, season=None):
     """Given a player, find equal-value trade targets plus buy-low/sell-high opportunities."""
 
     with get_db() as conn:
@@ -547,7 +570,11 @@ def fetch_trade_finder(player_id, season=None):
 # Roster Builder — Grade a hypothetical dynasty roster
 # ---------------------------------------------------------------------------
 
-def fetch_roster_grade(player_ids, season=None):
+
+def fetch_trade_finder(player_id, season=None):
+    return _cached(f"fetch_trade_finder:{player_id}:{season}", lambda: _fetch_trade_finder_uncached(player_id=player_id, season=season))
+
+def _fetch_roster_grade_uncached(player_ids, season=None):
     """Grade a set of player IDs as a dynasty roster.
 
     Returns overall grade (A+ to F), dimension scores, and per-player details.
@@ -706,7 +733,12 @@ def fetch_roster_grade(player_ids, season=None):
 # Auction Value Calculator
 # ---------------------------------------------------------------------------
 
-def fetch_auction_values(season=None, budget=200, roster_size=15):
+
+def fetch_roster_grade(player_ids, season=None):
+    _key = "fetch_roster_grade:" + ":".join(sorted(str(x) for x in player_ids)) + f":{season}"
+    return _cached(_key, lambda: _fetch_roster_grade_uncached(player_ids=player_ids, season=season))
+
+def _fetch_auction_values_uncached(season=None, budget=200, roster_size=15):
     """Convert trade values into auction dollar amounts for a given budget and roster size."""
     budget = max(50, min(500, budget))
     roster_size = max(8, min(25, roster_size))
@@ -815,7 +847,11 @@ def fetch_auction_values(season=None, budget=200, roster_size=15):
 # Dynasty Dashboard — At-a-Glance Overview
 # ---------------------------------------------------------------------------
 
-def fetch_dynasty_dashboard(season=None):
+
+def fetch_auction_values(season=None, budget=200, roster_size=15):
+    return _cached(f"fetch_auction_values:{season}:{budget}:{roster_size}", lambda: _fetch_auction_values_uncached(season=season, budget=budget, roster_size=roster_size))
+
+def _fetch_dynasty_dashboard_uncached(season=None):
     """Aggregated dynasty dashboard: risers, fallers, value picks, scarcity alerts."""
     with get_db() as conn:
         if not season:
@@ -957,7 +993,11 @@ _TIER_BREAKS = [
     (0, "F", "Cut Bait — minimal dynasty value"),
 ]
 
-def fetch_tier_list(season=None, position=None):
+
+def fetch_dynasty_dashboard(season=None):
+    return _cached(f"fetch_dynasty_dashboard:{season}", lambda: _fetch_dynasty_dashboard_uncached(season=season))
+
+def _fetch_tier_list_uncached(season=None, position=None):
     """Return players grouped into S/A/B/C/D/F tiers by trade value."""
     with get_db() as conn:
         if not season:
@@ -1042,7 +1082,11 @@ def fetch_tier_list(season=None, position=None):
 # Dynasty Power Rankings — Team-level dynasty value
 # ---------------------------------------------------------------------------
 
-def fetch_dynasty_power_rankings(season=None):
+
+def fetch_tier_list(season=None, position=None):
+    return _cached(f"fetch_tier_list:{season}:{position}", lambda: _fetch_tier_list_uncached(season=season, position=position))
+
+def _fetch_dynasty_power_rankings_uncached(season=None):
     """Rank all 32 NFL teams by total dynasty roster value (sum of player trade values)."""
     with get_db() as conn:
         if not season:
@@ -1142,3 +1186,7 @@ def fetch_dynasty_power_rankings(season=None):
             "league_average": avg_value,
             "total_teams": len(result_teams),
         }
+
+
+def fetch_dynasty_power_rankings(season=None):
+    return _cached(f"fetch_dynasty_power_rankings:{season}", lambda: _fetch_dynasty_power_rankings_uncached(season=season))
