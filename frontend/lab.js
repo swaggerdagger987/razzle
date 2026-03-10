@@ -7922,7 +7922,7 @@ function renderPlayerComps(data, container) {
   html += `</div>`;
 
   // Annotation
-  html += `<div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); margin-bottom:12px; padding-left:4px;">statistically similar production profiles based on per-game rates</div>`;
+  html += `<div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); margin-bottom:12px; padding-left:4px;">match% = cosine similarity on per-game stat profiles (8 position-specific metrics)</div>`;
 
   // Comp cards
   html += `<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:12px; margin-bottom:20px;">`;
@@ -8387,6 +8387,7 @@ function renderBoomBust(data, container) {
     { label: "Ceiling", value: ceiling_ppg.toFixed(1), sub: "90th pct" },
     { label: "Boom%", value: boom_rate.toFixed(0) + "%", sub: `${Math.round(boom_rate * games_played / 100)}/${games_played} wks` },
     { label: "Bust%", value: bust_rate.toFixed(0) + "%", sub: `${Math.round(bust_rate * games_played / 100)}/${games_played} wks` },
+    { label: "Score", value: consistency_score.toFixed(0), sub: `of 100` },
     { label: "Rank", value: `#${position_rank}`, sub: `of ${position_total} ${pos}s` },
   ];
 
@@ -8394,7 +8395,7 @@ function renderBoomBust(data, container) {
   for (const st of stats) {
     const cardColor = st.label === "Boom%" ? "var(--green)" :
                       st.label === "Bust%" ? "var(--red)" : posColor;
-    html += `<div style="background:var(--bg-card); border:2px solid var(--ink); border-radius:8px; box-shadow:3px 3px 0 var(--ink); padding:8px; text-align:center;">`;
+    html += `<div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:8px; box-shadow:4px 4px 0 var(--ink); padding:8px; text-align:center;">`;
     html += `<div style="font-family:var(--font-display); font-size:20px; font-weight:700; color:${cardColor};">${st.value}</div>`;
     html += `<div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-medium); text-transform:uppercase;">${st.label}</div>`;
     html += `<div style="font-family:var(--font-mono); font-size:9px; color:var(--ink-light);">${st.sub}</div>`;
