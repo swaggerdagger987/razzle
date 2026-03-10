@@ -940,6 +940,7 @@ def sitemap_xml():
         ("/advantage.html", "0.8", "weekly"),
         ("/tdregression.html", "0.8", "weekly"),
         ("/dualthreat.html", "0.8", "weekly"),
+        ("/snapefficiency.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1592,6 +1593,16 @@ def records(position: str = ""):
         return JSONResponse({"error": "Failed to fetch records"}, status_code=500)
 
 
+@app.get("/api/snap-efficiency")
+def snap_efficiency(season: int = None, position: str = None):
+    try:
+        pos = position.upper() if position else None
+        return live_data.fetch_snap_efficiency(season=season, position=pos)
+    except Exception as e:
+        logger.error(f"snap-efficiency error: {e}")
+        return JSONResponse({"error": "Failed to fetch snap efficiency"}, status_code=500)
+
+
 @app.get("/api/dual-threat")
 def dual_threat(season: int = None, position: str = None):
     try:
@@ -1723,6 +1734,7 @@ def tools_hub():
                 {"name": "Positional Advantage", "desc": "Biggest scoring edge over the positional average — league-winning edges", "url": "/advantage.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "TD Regression", "desc": "Expected vs actual TDs — find buy/sell candidates due for TD correction", "url": "/tdregression.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Dual-Threat Index", "desc": "Rush+rec versatility — who contributes in both dimensions?", "url": "/dualthreat.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Snap Efficiency", "desc": "Fantasy points per snap — who maximizes every snap they play?", "url": "/snapefficiency.html", "positions": ["QB", "RB", "WR", "TE"]},
             ],
         },
         {

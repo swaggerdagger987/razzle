@@ -1,6 +1,16 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 133 — Dual-Threat Index (COMPLETE)
+## Current Phase: Phase 134 — Snap Efficiency Dashboard (COMPLETE)
+
+**Exit criterion MET:** /snapefficiency.html ranks players by fantasy points per snap played. Efficiency badges (elite/high/mid/low) by pts_per_snap thresholds, bar visualization, PPG, snaps per game, total snaps, games played. Position filter tabs, season selector, PNG export with watermark. GET /api/snap-efficiency returns data. 10 escapeHtml calls, 59/59 braces balanced. "Snap Eff" nav link on all 65 pages. Sitemap + tools hub entry under Performance Analysis.
+
+### Phase 134 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend + frontend + nav + smoke test | DONE | fetch_snap_efficiency, PPR per snap, 10 escapeHtml, 65/65 nav |
+
+## Previous Phase: Phase 133 — Dual-Threat Index (COMPLETE)
 
 **Exit criterion MET:** /dualthreat.html ranks players by rush+rec versatility using geometric mean of rushing and receiving yards per game (rewards balanced production over one-dimensional volume). DTI score badges (elite/high/mid/low), rush/rec split bar visualization, yards per game breakdown, carries and receptions per game. Position filter tabs, season selector, PNG export with watermark. GET /api/dual-threat returns data. 11 escapeHtml calls, 61/61 braces balanced. "Dual-Threat" nav link on all 64 pages. Sitemap + tools hub entry under Performance Analysis.
 

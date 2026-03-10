@@ -1,9 +1,9 @@
-# Razzle Loop — Phase 133 Task List
+# Razzle Loop — Phase 134 Task List
 
-> Dual-Threat Index
+> Snap Efficiency Dashboard
 
-**Current Phase**: 133 — Dual-Threat Index
-**Exit Criterion**: /dualthreat.html ranks players by rush+rec versatility. DTI score, split bars, yards breakdown. Position filters, season selector, PNG export. GET /api/dual-threat returns data.
+**Current Phase**: 134 — Snap Efficiency Dashboard
+**Exit Criterion**: /snapefficiency.html ranks players by fantasy points per snap. Efficiency badges, bar viz. Position filters, season selector, PNG export. GET /api/snap-efficiency returns data.
 
 ---
 
@@ -15,7 +15,7 @@
 
 ## Loop State
 ```
-Current Phase: 133
+Current Phase: 134
 Current Task: 1
 Current Stage: COMPLETE
 Attempt: 1

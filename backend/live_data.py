@@ -11254,6 +11254,83 @@ def fetch_fpts_breakdown(season=None, position=None, limit=40):
         conn.close()
 
 
+def fetch_snap_efficiency(season=None, position=None, limit=50):
+    """Snap efficiency — fantasy points per snap played."""
+    conn = get_conn()
+    try:
+        cursor = conn.cursor()
+        if not season:
+            cursor.execute("SELECT MAX(season) FROM player_season_stats")
+            season = cursor.fetchone()[0] or 2025
+
+        pos_filter = ""
+        params = [season]
+        if position:
+            pos_filter = "AND p.position = ?"
+            params.append(position)
+
+        cursor.execute(f"""
+            SELECT p.gsis_id, p.full_name, p.position, p.team,
+                   s.offense_snaps, s.games,
+                   s.passing_yards, s.passing_tds, s.interceptions,
+                   s.rushing_yards, s.rushing_tds,
+                   s.receiving_yards, s.receiving_tds, s.receptions
+            FROM player_season_stats s
+            JOIN players p ON p.gsis_id = s.player_id
+            WHERE s.season = ? AND p.fantasy_relevant = 1
+            {pos_filter}
+            AND s.games >= 4
+            AND s.offense_snaps >= 50
+        """, params)
+
+        players = []
+        for r in cursor.fetchall():
+            pid, name, pos, team = r[0], r[1] or "Unknown", r[2] or "RB", r[3] or "FA"
+            snaps = r[4] or 0
+            games = r[5] or 1
+            pass_yd = r[6] or 0
+            pass_td = r[7] or 0
+            ints = r[8] or 0
+            rush_yd = r[9] or 0
+            rush_td = r[10] or 0
+            rec_yd = r[11] or 0
+            rec_td = r[12] or 0
+            recs = r[13] or 0
+
+            # PPR scoring
+            ppr = (pass_yd * 0.04 + pass_td * 4 - ints * 2 +
+                   rush_yd * 0.1 + rush_td * 6 +
+                   rec_yd * 0.1 + rec_td * 6 + recs * 1)
+
+            ppg = ppr / games
+            snaps_pg = snaps / games
+            pts_per_snap = ppr / snaps if snaps > 0 else 0
+
+            players.append({
+                "player_id": pid,
+                "name": name,
+                "position": pos,
+                "team": team,
+                "games": games,
+                "total_ppr": round(ppr, 1),
+                "ppg": round(ppg, 1),
+                "snaps": snaps,
+                "snaps_pg": round(snaps_pg, 1),
+                "pts_per_snap": round(pts_per_snap, 2),
+            })
+
+        players.sort(key=lambda x: x["pts_per_snap"], reverse=True)
+        players = players[:limit]
+
+        return {
+            "players": players,
+            "season": season,
+            "count": len(players),
+        }
+    finally:
+        conn.close()
+
+
 def fetch_handcuffs(season=None, limit=30):
     """
     Handcuff rankings — backup RBs ranked by value.
