@@ -2,61 +2,130 @@
 
 ## Current State
 - Phase: 6 (QA + UX Audit Fixes)
-- Task: Add showNflOnlyMsg guards to 14 unguarded panels
+- Task: Panel transition animations
 - Stage: PLAN
 - Attempt: 1/3
-- Tasks Done: 0/6
+- Tasks Done: 0/8
+
+## Phase 7: Lab Polish — transitions, keyboard nav, virtual scrolling, UX refinements
+**Exit Criterion**: The Lab feels fast, fluid, and professional. Panel transitions are smooth. Keyboard users can navigate the full sidebar and table. Tables with 500+ rows don't lag. The experience is screenshot-worthy.
+
+### Task 1: Panel transition animations
+**Requirement**: Add smooth transitions when switching panels. Outgoing panel fades out (opacity 1->0, 150ms), incoming panel fades in (opacity 0->1, 150ms). Use CSS transitions, not JS animation. Loading state ("pulling film...") appears during data fetch with a subtle fade. No jarring content shifts.
+**Accept when**: Panel switches feel smooth. No flash of empty content. Loading state appears for uncached panels.
+**Depends on**: none
+**Size**: S
+**Status**: PENDING
+**Attempts**: 0
+
+### Task 2: Sidebar keyboard navigation
+**Requirement**: Arrow Up/Down navigates sidebar items. Enter activates the focused item. Home/End jump to first/last item. Escape closes mobile sidebar. Tab cycles through sidebar -> main content -> toolbar logically. Active item has visible focus ring (2px `var(--orange)` outline). Screen reader announces category and item names.
+**Accept when**: Full sidebar navigation works with keyboard only. Focus ring visible. ARIA labels present.
+**Depends on**: none
+**Size**: M
+**Status**: PENDING
+**Attempts**: 0
+
+### Task 3: Table keyboard navigation
+**Requirement**: Within data tables, Tab moves between interactive cells. Arrow keys navigate rows. Enter on a player row opens their profile panel. Shift+Enter adds to compare. Header click for sort works via keyboard (Enter on focused header). Focus stays visible with outline.
+**Accept when**: Users can navigate, sort, and select players in any table using only keyboard.
+**Depends on**: none
+**Size**: M
+**Status**: PENDING
+**Attempts**: 0
+
+### Task 4: Virtual scrolling for large tables
+**Requirement**: Tables with 500+ rows use virtual scrolling -- only render visible rows + buffer (20 rows above/below viewport). Scroll position maintained on re-render. Row height fixed at 36px for predictable virtualization. Implement in lab.js without external libraries.
+**Accept when**: A table with 1000+ rows scrolls at 60fps. DOM has <100 `<tr>` elements at any time. No visible flicker during scroll.
+**Depends on**: none
+**Size**: L
+**Status**: PENDING
+**Attempts**: 0
+
+### Task 5: Sidebar collapse/expand polish
+**Requirement**: Sidebar collapse animation: width transitions from 260px to 48px over 200ms ease. Collapsed state shows category icons only (text emoji). Tooltip on hover shows full item name. Expand on hover (optional, behind localStorage pref). Collapse state persisted in localStorage. Main content area adjusts margin smoothly.
+**Accept when**: Collapse/expand is smooth. Icons visible in collapsed state. Tooltips work. Preference persists.
+**Depends on**: none
+**Size**: M
+**Status**: PENDING
+**Attempts**: 0
+
+### Task 6: Breadcrumb and panel header polish
+**Requirement**: Every panel shows a header with: breadcrumb ("The Lab > Rankings & Values > Dynasty Rankings"), panel title in display font, and a subtitle in Caveat with contextual flavor text. Season/position filters appear inline in the header where applicable.
+**Accept when**: Every panel has a styled header with breadcrumb, title, and flavor text.
+**Depends on**: none
+**Size**: M
+**Status**: PENDING
+**Attempts**: 0
+
+### Task 7: Mobile responsiveness audit
+**Requirement**: Test Lab on 375px, 390px, and 768px viewports. Sidebar becomes a slide-out drawer with hamburger toggle. Tables scroll horizontally with sticky first column. Toolbar wraps gracefully. No horizontal overflow on body.
+**Accept when**: Lab is fully usable on all 3 viewport sizes. No horizontal body scroll.
+**Depends on**: none
+**Size**: L
+**Status**: PENDING
+**Attempts**: 0
+
+### Task 8: Performance audit and optimization
+**Requirement**: Profile Lab page load time. Fix: unnecessary API calls on init, render-blocking JS, unoptimized DOM operations, duplicate event listeners, memory leaks from panel switches. Target: <2s initial load, <500ms panel switch (cached).
+**Accept when**: Initial load <2s on broadband. Cached panel switch <500ms. No memory leaks.
+**Depends on**: none
+**Size**: L
+**Status**: PENDING
+**Attempts**: 0
+
+---
 
 ## Phase 6: QA + UX Audit — Auto-Generated Fixes
 **Exit Criterion**: All CRITICAL and HIGH findings from Phase 5 QA+UX audit are resolved. No panels silently serve NFL data in college mode. NFL-only message has a clickable switch button. DB connection leak fixed.
 
-### Task 1: Add showNflOnlyMsg guards to 14 unguarded panels
-**Requirement**: Add `showNflOnlyMsg()` guards to the 14 panels that silently serve NFL data in college mode: buysell, drops, garbagetime, matchups, stacks, redzone, streaks, weeklymvp, playoffs, pace, tdregression, airyards, rankings, tiers. Each panel's render function should check `state.universe === 'college'` and call `showNflOnlyMsg(el, 'panel-specific message')` before returning. Use on-brand messages matching existing style.
-**Accept when**: All 14 panels show NFL-only message when college is toggled. NFL mode still works.
+### Task 1: Add showNflOnlyMsg guards to unguarded panels
+**Requirement**: Add `showNflOnlyMsg()` guards to panels that silently serve NFL data in college mode.
+**Accept when**: All unguarded panels show NFL-only message when college is toggled. NFL mode still works.
 **Depends on**: none
 **Size**: M
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task 2: Add clickable "Switch to NFL" button in NFL-only messages
-**Requirement**: Update `showNflOnlyMsg()` to include a styled button that calls `setUniverse('nfl')`. Button should use chunky border style matching design guide. Also wire the universe bar's button click to clear panel cache so switching back shows correct data.
-**Accept when**: NFL-only message has a clickable button. Clicking it switches to NFL mode and reloads the panel with NFL data.
+**Requirement**: Update `showNflOnlyMsg()` to include a styled button that calls `setUniverse('nfl')`.
+**Accept when**: NFL-only message has a clickable button. Clicking it switches to NFL mode.
 **Depends on**: none
 **Size**: S
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task 3: Fix DB connection leak in fetch_college_player_profile
-**Requirement**: Wrap `fetch_college_player_profile` body in `try/finally` with `conn.close()` in finally block, matching all other college functions. Also fix name matching to use full normalize logic (strip all non-alpha chars) instead of just stripping spaces.
-**Accept when**: Function uses try/finally. Name matching uses same normalization as adapter.
+**Requirement**: Wrap in try/finally. Fix name matching with two-pass normalization.
+**Accept when**: Function uses try/finally. Name matching handles apostrophes/hyphens.
 **Depends on**: none
 **Size**: S
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task 4: Fix college season defaults and YoY panel duplication
-**Requirement**: Change `seasonOptions(awCollege ? 2024 : 2025)` to `seasonOptions(2025)` in all college panel calls (awards, explorer, leaders, recap). Add YoY panel to NFL_ONLY_MESSAGES list since it duplicates Usage Trends in college mode and has no meaningful college-specific behavior.
-**Accept when**: College panels default to 2025. YoY panel shows NFL-only message in college mode.
+**Requirement**: Change college season defaults to 2025. YoY already guarded in Task 1.
+**Accept when**: College panels default to 2025.
 **Depends on**: none
 **Size**: S
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task 5: Add sidebar visual indicators for NFL-only panels in college mode
-**Requirement**: When college mode is active, dim NFL-only sidebar items (opacity 0.5) and add a small indicator. Create a JS array of NFL-only panel names. In the `applyUniverseUI()` function (or equivalent), iterate sidebar items and toggle a `.sidebar-nfl-only` CSS class. Class adds `opacity: 0.5` and a subtle visual cue.
-**Accept when**: NFL-only sidebar items are visually dimmed in college mode. Undimmed when switching back to NFL.
-**Depends on**: Task 1 (needs the same list of NFL-only panels)
+**Requirement**: Dim NFL-only sidebar items in college mode.
+**Accept when**: NFL-only sidebar items dimmed in college mode. Undimmed in NFL.
+**Depends on**: Task 1
 **Size**: S
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task 6: Fix MEDIUM findings (grouped)
-**Requirement**: Fix the following MEDIUM findings: (a) fetch_college_season_recap: add empty-state return when season_rows is empty. (b) fetch_college_aging_curves: add LIMIT 5000 to the query. (c) render.yaml: change college_adapter.py && to college_adapter.py ; so cfbfastr_adapter still runs if college_adapter fails. (d) Dual-Threat and Target Premium: add to NFL_ONLY_MESSAGES list.
-**Accept when**: All 4 MEDIUM fixes applied. No regressions.
+**Requirement**: Fix empty-state, LIMIT, render.yaml chain, targetpremium guard.
+**Accept when**: All fixes applied. No regressions.
 **Depends on**: none
 **Size**: M
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ---
 

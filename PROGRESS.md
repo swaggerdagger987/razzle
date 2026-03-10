@@ -1,19 +1,36 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 6 — QA + UX Audit Fixes
+## Current Phase: Phase 7 — Lab Polish
 
-**Exit Criterion**: All CRITICAL and HIGH findings from Phase 5 QA+UX audit resolved. No panels silently serve NFL data in college mode. NFL-only message has clickable switch button. DB connection leak fixed.
+**Exit Criterion**: The Lab feels fast, fluid, and professional. Panel transitions are smooth. Keyboard users can navigate the full sidebar and table. Tables with 500+ rows don't lag. The experience is screenshot-worthy.
+
+### Phase 7 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Panel transition animations | | |
+| 2 | Sidebar keyboard navigation | | |
+| 3 | Table keyboard navigation | | |
+| 4 | Virtual scrolling for large tables | | |
+| 5 | Sidebar collapse/expand polish | | |
+| 6 | Breadcrumb and panel header polish | | |
+| 7 | Mobile responsiveness audit | | |
+| 8 | Performance audit and optimization | | |
+
+## Previous Phase: Phase 6 — QA + UX Audit Fixes (COMPLETE)
+
+**Exit Criterion MET**: All CRITICAL and HIGH findings from Phase 5 QA+UX audit resolved. 16 panels got NFL-only guards. Clickable switch button added. DB connection leak fixed. Sidebar dims NFL-only panels in college mode. Season defaults fixed. MEDIUM findings addressed.
 
 ### Phase 6 Tasks
 
 | # | Task | Status | Notes |
 |---|------|--------|-------|
-| 1 | Add showNflOnlyMsg guards to 14 unguarded panels | | |
-| 2 | Add clickable "Switch to NFL" button in NFL-only messages | | |
-| 3 | Fix DB connection leak in fetch_college_player_profile | | |
-| 4 | Fix college season defaults and YoY panel duplication | | |
-| 5 | Add sidebar visual indicators for NFL-only panels | | |
-| 6 | Fix MEDIUM findings (grouped) | | |
+| 1 | Add showNflOnlyMsg guards to 16 unguarded panels | DONE | Guards on rankings, tiers, buysell, targetpremium, drops, garbagetime, matchups, stacks, redzone, streaks, weeklymvp, playoffs, yoy, pace, tdregression, airyards. 18 NFL_ONLY_MESSAGES entries. |
+| 2 | Add clickable "Switch to NFL" button in NFL-only messages | DONE | Chunky terracotta button in showNflOnlyMsg(), calls setUniverse('nfl'). |
+| 3 | Fix DB connection leak in fetch_college_player_profile | DONE | try/finally wrapper. Two-pass name matching. |
+| 4 | Fix college season defaults and YoY panel duplication | DONE | Changed 4 panels from 2024 to 2025 default. |
+| 5 | Add sidebar visual indicators for NFL-only panels | DONE | .sidebar-nfl-only class: opacity 0.4 (0.7 on hover). |
+| 6 | Fix MEDIUM findings (grouped) | DONE | season_recap empty-state, aging_curves subquery, render.yaml ;. |
 
 ## Previous Phase: Phase 5 — College Football Integration (COMPLETE)
 
