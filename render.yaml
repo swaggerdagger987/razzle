@@ -2,7 +2,10 @@ services:
   - type: web
     name: razzle-api
     runtime: python
-    buildCommand: pip install -r requirements.txt
+    buildCommand: |
+      pip install -r requirements.txt
+      mkdir -p data
+      curl -sL -H "Authorization: token $GH_TOKEN" -H "Accept: application/octet-stream" -o data/terminal.db "https://api.github.com/repos/swaggerdagger987/razzle/releases/assets/371079294"
     startCommand: uvicorn backend.server:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: PYTHON_VERSION
