@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Positional Scarcity — Razzle</title>
+<meta property="og:title" content="Positional Scarcity — Razzle">
+<meta property="og:description" content="Fantasy football positional scarcity analysis — PPG drop-off by position on razzle.lol">
+<meta property="og:site_name" content="razzle.lol">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Positional Scarcity — Razzle">
+<meta name="twitter:description" content="Fantasy football positional scarcity analysis — PPG drop-off by position on razzle.lol">
+<meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
+<meta name="description" content="Positional scarcity dashboard — see where the PPG cliff hits hardest on razzle.lol">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .scarcity-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+  }
+
+  .scarcity-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .scarcity-header h1 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: var(--ink);
+    margin: 0 0 4px;
+  }
+  .scarcity-header .scarcity-subtitle {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+  }
+
+  /* Controls row */
+  .scarcity-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .scarcity-season-select {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    padding: 7px 12px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--bg-card);
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  /* Actions */
+  .scarcity-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  /* Summary card row */
+  .scarcity-summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .scarcity-summary-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 14px;
+    text-align: center;
+    transition: all 0.15s;
+  }
+  .scarcity-summary-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+  .scarcity-summary-pos {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 700;
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 6px;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+  .scarcity-summary-pos.qb { background: var(--pos-qb); }
+  .scarcity-summary-pos.rb { background: var(--pos-rb); }
+  .scarcity-summary-pos.wr { background: var(--pos-wr); }
+  .scarcity-summary-pos.te { background: var(--pos-te); }
+
+  .scarcity-summary-dropoff {
+    font-family: var(--font-mono);
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .scarcity-summary-label {
+    font-family: var(--font-hand);
+    font-size: 16px;
+    color: var(--ink-light);
+    margin-top: 2px;
+  }
+  .scarcity-summary-range {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-light);
+    margin-top: 4px;
+  }
+
+  /* Position chart cards */
+  .scarcity-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .scarcity-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    overflow: hidden;
+    transition: all 0.15s;
+  }
+  .scarcity-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+
+  .scarcity-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-bottom: 2px dashed var(--ink-faint);
+  }
+  .scarcity-card-header.qb { background: var(--blue-light, #dde4f7); }
+  .scarcity-card-header.rb { background: var(--green-light, #d9efec); }
+  .scarcity-card-header.wr { background: var(--orange-light, #f7e4d8); }
+  .scarcity-card-header.te { background: var(--purple-light, #e5dcf7); }
+
+  .scarcity-card-title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .scarcity-card-annotation {
+    font-family: var(--font-hand);
+    font-size: 16px;
+    color: var(--ink-light);
+  }
+
+  /* Bar chart container */
+  .scarcity-chart {
+    padding: 12px 14px 8px;
+    position: relative;
+  }
+
+  .scarcity-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 3px;
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 2px 4px;
+    transition: background 0.1s;
+  }
+  .scarcity-bar-row:hover {
+    background: var(--bg-warm);
+  }
+
+  .scarcity-bar-rank {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--ink-light);
+    min-width: 22px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .scarcity-bar-name {
+    font-family: var(--font-display);
+    font-size: 12px;
+    color: var(--ink);
+    min-width: 100px;
+    max-width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 0;
+  }
+
+  .scarcity-bar-track {
+    flex: 1;
+    height: 18px;
+    background: var(--bg);
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--ink-faint);
+  }
+
+  .scarcity-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+  .scarcity-bar-fill.qb { background: var(--pos-qb); }
+  .scarcity-bar-fill.rb { background: var(--pos-rb); }
+  .scarcity-bar-fill.wr { background: var(--pos-wr); }
+  .scarcity-bar-fill.te { background: var(--pos-te); }
+
+  .scarcity-bar-ppg {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--ink);
+    min-width: 36px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* Tier break line */
+  .scarcity-tier-break {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 6px 0;
+    padding: 2px 4px;
+  }
+  .scarcity-tier-line {
+    flex: 1;
+    border-top: 2px dashed var(--ink-faint);
+  }
+  .scarcity-tier-label {
+    font-family: var(--font-hand);
+    font-size: 14px;
+    color: var(--ink-light);
+    white-space: nowrap;
+  }
+
+  /* Loading */
+  .scarcity-loading {
+    text-align: center;
+    padding: 60px 20px;
+    font-family: var(--font-hand);
+    font-size: 24px;
+    color: var(--ink-light);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .scarcity-summary { grid-template-columns: repeat(2, 1fr); }
+    .scarcity-grid { grid-template-columns: 1fr; }
+    .scarcity-bar-name { min-width: 70px; max-width: 70px; font-size: 11px; }
+  }
+  @media (max-width: 480px) {
+    .scarcity-summary { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .scarcity-header h1 { font-size: 24px; }
+    .scarcity-bar-name { min-width: 55px; max-width: 55px; }
+  }
+</style>
+</head>
+<body>
+<nav class="main-nav">
+  <div class="nav-brand"><a href="/" style="text-decoration:none; color:inherit;">razzle.lol</a></div>
+  <ul class="nav-links">
+    <li><a href="/lab.html">The Lab</a></li>
+    <li><a href="/rankings.html">Rankings</a></li>
+    <li><a href="/leaders.html">Leaders</a></li>
+    <li><a href="/prospects.html">Prospects</a></li>
+    <li><a href="/scarcity.html" class="active">Scarcity</a></li>
+    <li><a href="/team/KC">Teams</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
+    <li><a href="/agents.html">War Room</a></li>
+  </ul>
+</nav>
+
+<main class="scarcity-page" id="scarcity-content">
+  <div class="scarcity-header">
+    <h1>Positional Scarcity</h1>
+    <div class="scarcity-subtitle">where the cliff hits hardest</div>
+  </div>
+
+  <div class="scarcity-controls">
+    <select class="scarcity-season-select" id="season-select" title="Season"></select>
+  </div>
+
+  <div class="scarcity-actions">
+    <button class="btn-chunky" id="export-btn" title="Export as PNG">Export PNG</button>
+  </div>
+
+  <div id="scarcity-body">
+    <div class="scarcity-loading" id="scarcity-loading">running the numbers...</div>
+  </div>
+</main>
+
+<!-- Watermark -->
+<div style="position:fixed; bottom:10px; right:14px; font-family:var(--font-hand); font-size:14px; color:var(--ink-light); opacity:0.7; pointer-events:none; z-index:999;">razzle.lol</div>
+
+<!-- Footer -->
+<footer style="text-align:center; padding:24px 20px 32px; font-family:var(--font-hand); font-size:15px; color:var(--ink-light); border-top:2px dashed var(--ink-faint); margin-top:40px;">
+  <div style="margin-bottom:10px;">
+    <a href="/lab.html" style="color:var(--ink-light); text-decoration:none;">The Lab</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/rankings.html" style="color:var(--ink-light); text-decoration:none;">Rankings</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/leaders.html" style="color:var(--ink-light); text-decoration:none;">Leaders</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/prospects.html" style="color:var(--ink-light); text-decoration:none;">Prospects</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/scarcity.html" style="color:var(--ink-light); text-decoration:none;">Scarcity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/team/KC" style="color:var(--ink-light); text-decoration:none;">Teams</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none;">League Intel</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/agents.html" style="color:var(--ink-light); text-decoration:none;">War Room</a>
+  </div>
+  razzle.lol — let's razzle dazzle em baby
+</footer>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  const POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+  const POS_ANNOTATIONS = {
+    QB: 'signal callers',
+    RB: 'the backfield',
+    WR: 'route runners',
+    TE: 'the unicorns',
+  };
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  let currentData = null;
+
+  async function loadData(season) {
+    const loadingEl = document.getElementById('scarcity-loading');
+    const bodyEl = document.getElementById('scarcity-body');
+    if (loadingEl) loadingEl.style.display = 'block';
+
+    const url = season ? '/api/positional-scarcity?season=' + season : '/api/positional-scarcity';
+    try {
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error('API error');
+      currentData = await resp.json();
+      if (loadingEl) loadingEl.style.display = 'none';
+      renderData(currentData);
+      populateSeasons(currentData.available_seasons, currentData.season);
+    } catch (err) {
+      if (loadingEl) loadingEl.textContent = 'failed to load data...';
+    }
+  }
+
+  function populateSeasons(seasons, current) {
+    const sel = document.getElementById('season-select');
+    if (!sel || sel.options.length > 0) return;
+    seasons.forEach(function(s) {
+      const opt = document.createElement('option');
+      opt.value = s;
+      opt.textContent = s;
+      if (s === current) opt.selected = true;
+      sel.appendChild(opt);
+    });
+    sel.addEventListener('change', function() {
+      loadData(parseInt(sel.value));
+    });
+  }
+
+  function renderData(data) {
+    const bodyEl = document.getElementById('scarcity-body');
+    if (!bodyEl) return;
+
+    const positions = data.positions;
+    const ranking = data.scarcity_ranking || [];
+
+    // Summary cards
+    let summaryHtml = '<div class="scarcity-summary">';
+    ranking.forEach(function(r, i) {
+      const pos = r.position.toLowerCase();
+      const label = i === 0 ? 'most scarce' : i === ranking.length - 1 ? 'most replaceable' : 'drop-off';
+      summaryHtml += '<div class="scarcity-summary-card">' +
+        '<div class="scarcity-summary-pos ' + pos + '">' + escapeHtml(r.position) + '</div>' +
+        '<div class="scarcity-summary-dropoff">' + escapeHtml(String(r.drop_off)) + '</div>' +
+        '<div class="scarcity-summary-label">' + escapeHtml(label) + '</div>' +
+        '<div class="scarcity-summary-range">' + escapeHtml(String(r.top_ppg)) + ' &rarr; ' + escapeHtml(String(r.replacement_ppg)) + ' PPG</div>' +
+        '</div>';
+    });
+    summaryHtml += '</div>';
+
+    // Position chart cards
+    let chartsHtml = '<div class="scarcity-grid">';
+    ['QB', 'RB', 'WR', 'TE'].forEach(function(pos) {
+      const posData = positions[pos];
+      if (!posData) return;
+      const posLower = pos.toLowerCase();
+      const maxPpg = posData.top_ppg || 1;
+      const annotation = POS_ANNOTATIONS[pos] || '';
+
+      chartsHtml += '<div class="scarcity-card">' +
+        '<div class="scarcity-card-header ' + posLower + '">' +
+        '<div class="scarcity-card-title">' + escapeHtml(pos) + ' Drop-off</div>' +
+        '<div class="scarcity-card-annotation">' + escapeHtml(annotation) + '</div>' +
+        '</div>' +
+        '<div class="scarcity-chart">';
+
+      // Track which tier breaks to insert
+      const tierBreaks = posData.tier_breaks || [];
+      let nextBreakIdx = 0;
+
+      posData.players.forEach(function(p) {
+        // Check if we need to insert a tier break before this player
+        while (nextBreakIdx < tierBreaks.length && p.rank > tierBreaks[nextBreakIdx].end) {
+          var tb = tierBreaks[nextBreakIdx];
+          var tbLabel = tb.annotation || tb.label;
+          chartsHtml += '<div class="scarcity-tier-break">' +
+            '<div class="scarcity-tier-line"></div>' +
+            '<div class="scarcity-tier-label">' + escapeHtml(tbLabel) + '</div>' +
+            '<div class="scarcity-tier-line"></div>' +
+            '</div>';
+          nextBreakIdx++;
+        }
+
+        var pct = maxPpg > 0 ? (p.ppg / maxPpg) * 100 : 0;
+        chartsHtml += '<div class="scarcity-bar-row" data-pid="' + escapeHtml(p.player_id) + '" title="' + escapeHtml(p.name) + ' (' + escapeHtml(p.team) + ') — ' + p.ppg + ' PPG">' +
+          '<div class="scarcity-bar-rank">' + p.rank + '</div>' +
+          '<div class="scarcity-bar-name">' + escapeHtml(p.name) + '</div>' +
+          '<div class="scarcity-bar-track">' +
+          '<div class="scarcity-bar-fill ' + posLower + '" style="width:' + pct.toFixed(1) + '%"></div>' +
+          '</div>' +
+          '<div class="scarcity-bar-ppg">' + p.ppg + '</div>' +
+          '</div>';
+      });
+
+      // Any remaining tier breaks
+      while (nextBreakIdx < tierBreaks.length) {
+        var tb2 = tierBreaks[nextBreakIdx];
+        var tbLabel2 = tb2.annotation || tb2.label;
+        chartsHtml += '<div class="scarcity-tier-break">' +
+          '<div class="scarcity-tier-line"></div>' +
+          '<div class="scarcity-tier-label">' + escapeHtml(tbLabel2) + '</div>' +
+          '<div class="scarcity-tier-line"></div>' +
+          '</div>';
+        nextBreakIdx++;
+      }
+
+      chartsHtml += '</div></div>';
+    });
+    chartsHtml += '</div>';
+
+    bodyEl.innerHTML = summaryHtml + chartsHtml;
+
+    // Click handlers for player bars
+    bodyEl.querySelectorAll('.scarcity-bar-row[data-pid]').forEach(function(row) {
+      row.addEventListener('click', function() {
+        var pid = row.getAttribute('data-pid');
+        if (pid) window.location.href = '/player/' + encodeURIComponent(pid);
+      });
+    });
+  }
+
+  // Export PNG
+  document.getElementById('export-btn').addEventListener('click', function() {
+    var target = document.getElementById('scarcity-content');
+    if (!target || typeof html2canvas === 'undefined') return;
+    html2canvas(target, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+      // Add watermark
+      var ctx = canvas.getContext('2d');
+      ctx.font = '28px Caveat, cursive';
+      ctx.fillStyle = 'rgba(26,26,46,0.25)';
+      ctx.textAlign = 'right';
+      ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 16);
+      var a = document.createElement('a');
+      a.download = 'razzle-scarcity.png';
+      a.href = canvas.toDataURL('image/png');
+      a.click();
+    });
+  });
+
+  // Analytics
+  try {
+    fetch('/api/analytics/pageview', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ page: '/scarcity.html' }),
+    });
+  } catch(e) {}
+
+  // Quick search (Ctrl+K)
+  if (typeof window.initQuickSearch === 'function') window.initQuickSearch();
+
+  // Load
+  loadData();
+})();
+</script>
+<script src="app.js"></script>
+</body>
+</html>

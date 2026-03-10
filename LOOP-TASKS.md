@@ -1,34 +1,39 @@
-# Razzle Loop — Phase 67 Task List
+# Razzle Loop — Phase 68 Task List
 
-> Rookie Big Board — Prospect Rankings Page
+> Positional Scarcity Dashboard — PPG Drop-off by Position
 
-**Current Phase**: 67 — Rookie Big Board
-**Exit Criterion**: /prospects.html page shows all prospects ranked by RPS (Razzle Prospect Score), grouped into tiers (Elite/Premium/Solid/Raw). Each prospect card shows rank, position badge, school, draft capital (round/pick), combine measurables with percentile bars, and RPS score. Position filter tabs (All/QB/RB/WR/TE). Draft year selector. PNG export with watermark. Click prospect → prospect profile in Lab. Nav links on all pages. Design matches DESIGN.md.
+**Current Phase**: 68 — Positional Scarcity Dashboard
+**Exit Criterion**: /scarcity.html page shows PPG drop-off curves for each position (QB, RB, WR, TE) as stepped bar charts. Each position group rendered as a comic-strip card with position-colored bars showing PPG from rank 1 to rank N. Tier break lines at key thresholds (e.g., QB1-12, RB1-24, WR1-36, TE1-12) with Caveat annotations ("the cliff", "streaming territory"). Replacement level highlighted. Position scarcity summary card showing which positions have the steepest drop-off. Season selector dropdown. PNG export with watermark. Click player bar → player profile. "Scarcity" nav link added to all 12 HTML pages. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, position colors, Space Mono for data, display font headers, Caveat annotations.
 
 ---
 
-## Task 1: Build prospects.html with tiered prospect cards
+## Task 1: Backend /api/positional-scarcity endpoint
 **Status**: PASS
 **Attempts**: 1
-**Notes**: Created /frontend/prospects.html. Fetches /api/prospect-scores. Groups by RPS tiers: Elite (80+), Premium (60-79), Solid (40-59), Raw (<40). Each card: rank, position badge (colored), name, school, draft round/pick, combine percentile mini-bars (40yd, Vert, Broad, Bench, 3Cone, Shuttle) with color-coded fills, RPS score. Position filter tabs (All/QB/RB/WR/TE) with segmented control. Draft year selector dropdown via /api/prospect-options. PNG export with html2canvas + watermark. Loading state "scouting the board...". Click card → Lab prospect search.
+**Notes**: GET /api/positional-scarcity?season=N returns JSON. Groups by QB/RB/WR/TE, sorted by PPG desc, includes player_id, name, team, ppg, rank. Tier breaks at standard league thresholds (QB1-12, RB1-24, WR1-36, TE1-12). Scarcity scores (drop-off from #1 to replacement level). Annotations for tier breaks. Available seasons for dropdown.
 
-## Task 2: Nav links + sitemap + analytics
+## Task 2: Build scarcity.html with drop-off charts and tier breaks
 **Status**: PASS
 **Attempts**: 1
-**Notes**: Added "Prospects" link to nav and footer on all 11 HTML pages (10 existing + prospects.html itself). Added /prospects.html to sitemap.xml generator in server.py (priority 0.9, weekly). Analytics pageview tracking via inline fetch. OG tags set for title/description/image.
+**Notes**: DOM-based stepped bar charts with position-colored fills. Scarcity summary cards at top (ranked by drop-off). Position chart cards with bar rows (rank, name, bar, ppg). Tier break dividers with Caveat annotations. Season selector. PNG export via html2canvas with watermark. Click bar → player profile. Loading state "running the numbers...". Responsive at 768px and 480px. 14/14 design checks pass.
 
-## Task 3: Smoke test + verification
+## Task 3: Nav links + sitemap + analytics
 **Status**: PASS
 **Attempts**: 1
-**Notes**: JS syntax valid (2 script blocks). Python syntax valid (server.py). Design rules: 14/14 checks pass — 3px borders, 4px offset shadows, display/mono/hand fonts, card bg, ink colors, XSS protection (escapeHtml + escapeAttr), watermark, responsive 768px + 480px, all 4 position colors, analytics tracking. Nav link count: 20 occurrences across 11 files (nav + footer on 9 pages, nav-only on lab.html and 404.html).
+**Notes**: "Scarcity" link added to nav and footer on all 11 other HTML pages (9 with nav+footer, 2 with nav only). Sitemap entry added (priority 0.8, weekly). Analytics pageview tracking via inline fetch. OG tags set for title/description/image.
+
+## Task 4: Smoke test + verification
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Python syntax valid (server.py, live_data.py). JS syntax valid (1 script block). 14/14 design checks pass — 3px borders, 4px offset shadows, display/mono/hand fonts, card bg, ink colors, XSS protection (escapeHtml), watermark, responsive 768px + 480px, all 4 position colors, analytics tracking, hover lift, dashed dividers, html2canvas export. Nav: 118 occurrences of "scarcity" across 12 files.
 
 ---
 
 ## Loop State
 ```
-Current Phase: 67
-Current Task: 3
+Current Phase: 68
+Current Task: 4
 Current Stage: COMPLETE
 Attempt: 1
-Tasks Completed: 3/3
+Tasks Completed: 4/4
 ```

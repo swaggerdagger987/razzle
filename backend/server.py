@@ -884,6 +884,7 @@ def sitemap_xml():
         ("/rankings.html", "0.9", "weekly"),
         ("/leaders.html", "0.9", "weekly"),
         ("/prospects.html", "0.9", "weekly"),
+        ("/scarcity.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1007,6 +1008,17 @@ async def log_pageview(request: Request):
     page = body.get("page", "/")
     live_data.log_pageview(page)
     return {"status": "ok"}
+
+
+# ---------------------------------------------------------------------------
+# Positional Scarcity Dashboard
+# ---------------------------------------------------------------------------
+
+@app.get("/api/positional-scarcity")
+def positional_scarcity(season: int = 0):
+    """Return PPG drop-off data by position for scarcity analysis."""
+    s = season if season > 0 else None
+    return live_data.fetch_positional_scarcity(season=s)
 
 
 @app.get("/api/analytics/summary")

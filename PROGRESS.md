@@ -1,6 +1,25 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 67 — Rookie Big Board (COMPLETE)
+## Current Phase: Phase 68 — Positional Scarcity Dashboard (COMPLETE)
+
+**Exit criterion MET:** /scarcity.html page shows PPG drop-off curves for each position (QB, RB, WR, TE) as bar charts with position-colored fills. Scarcity summary cards at top ranked by drop-off (most scarce to most replaceable). Each position card shows player bars from rank 1 to rank N with tier break dividers and Caveat annotations ("the starter line", "the RB cliff", "the TE premium cliff"). Season selector dropdown. PNG export via html2canvas with watermark. Click bar → player profile. "Scarcity" nav link added to all 12 HTML pages (nav + footer). Sitemap updated. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, hand annotations, position colors.
+
+### Phase 68 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend positional-scarcity endpoint | DONE | GET /api/positional-scarcity, PPG by position, tier breaks, scarcity scores |
+| 2 | Scarcity page with drop-off charts | DONE | Bar charts, summary cards, tier breaks, responsive, PNG export |
+| 3 | Nav links + sitemap + analytics | DONE | All 12 pages updated, sitemap entry, pageview tracking |
+| 4 | Smoke test | DONE | Python + JS syntax clean, 14/14 design checks, XSS safe |
+
+### Decisions Log
+- **Positional Scarcity as Phase 68**: With draft season approaching, showing PPG drop-off by position is core dynasty analytics content. "How scarce is TE?" and "Where's the RB cliff?" are questions r/DynastyFF debates constantly. This makes those debates screenshottable.
+- **Bar charts over line charts**: Stepped bar charts with player names make it actionable — you can see exactly WHO is at each rank, not just a line. More information density, more screenshottable.
+- **Summary cards ranked by drop-off**: Leading with "most scarce" to "most replaceable" gives the headline insight immediately. No need to compare charts manually.
+- **Standard league thresholds**: QB1-12, RB1-24, WR1-36, TE1-12 maps to a 12-team league with standard roster construction. These are the thresholds dynasty players think in.
+
+## Previous Phase: Phase 67 — Rookie Big Board (COMPLETE)
 
 **Exit criterion MET:** /prospects.html page shows all prospects ranked by Razzle Prospect Score (RPS), grouped into 4 tiers (Elite 80+, Premium 60-79, Solid 40-59, Raw <40). Each prospect card shows rank, position badge (color-coded), name, school, draft round/pick chip, height/weight, and combine percentile mini-bars (40yd, Vert, Broad, Bench, 3Cone, Shuttle) with color-coded fills (green 80%+, blue 60%+, yellow 40%+, orange 20%+, red <20%). RPS score displayed prominently. Position filter tabs (All/QB/RB/WR/TE) with segmented control. Draft year selector dropdown. PNG export via html2canvas with watermark. Click card → Lab prospect search. "Prospects" nav link added to all 11 HTML pages (nav + footer). Sitemap updated. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, hand annotations, position colors.
 

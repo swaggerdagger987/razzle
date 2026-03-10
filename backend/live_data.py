@@ -4273,3 +4273,133 @@ def fetch_team_roster(team=None, season=None):
         "groups": groups,
         "total_players": sum(len(v) for v in groups.values()),
     }
+
+
+# ---------------------------------------------------------------------------
+# Positional Scarcity Dashboard
+# ---------------------------------------------------------------------------
+
+# Tier breaks: how many starters per position in a typical 12-team league
+_SCARCITY_TIERS = {
+    "QB": [
+        {"label": "QB1", "start": 1, "end": 12},
+        {"label": "QB2", "start": 13, "end": 24},
+        {"label": "Streamer", "start": 25, "end": 36},
+    ],
+    "RB": [
+        {"label": "RB1", "start": 1, "end": 12},
+        {"label": "RB2", "start": 13, "end": 24},
+        {"label": "Flex", "start": 25, "end": 36},
+        {"label": "Bench", "start": 37, "end": 48},
+    ],
+    "WR": [
+        {"label": "WR1", "start": 1, "end": 12},
+        {"label": "WR2", "start": 13, "end": 24},
+        {"label": "WR3", "start": 25, "end": 36},
+        {"label": "Flex", "start": 37, "end": 48},
+    ],
+    "TE": [
+        {"label": "TE1", "start": 1, "end": 12},
+        {"label": "Streamer", "start": 13, "end": 24},
+    ],
+}
+
+# Annotations for tier breaks (Caveat-style personality)
+_SCARCITY_ANNOTATIONS = {
+    "QB": {12: "the starter line", 24: "streaming territory"},
+    "RB": {12: "league winners", 24: "the RB cliff", 36: "flex or bust"},
+    "WR": {12: "alpha territory", 24: "WR2 floor", 36: "the depth drop"},
+    "TE": {12: "the TE premium cliff", 24: "waiver wire"},
+}
+
+
+def fetch_positional_scarcity(season=None):
+    """Return PPG drop-off data by position for scarcity analysis."""
+    conn = get_conn()
+
+    try:
+        # Determine season + available seasons
+        row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
+        available_seasons = [r[0] for r in row] if row else [2024]
+        if not season:
+            season = available_seasons[0] if available_seasons else 2024
+
+        positions_data = {}
+        for pos in ("QB", "RB", "WR", "TE"):
+            limit = 48 if pos in ("RB", "WR") else 36 if pos == "QB" else 24
+            query = """
+                SELECT
+                    p.player_id, p.full_name, p.position, p.team,
+                    p.headshot_url,
+                    COUNT(DISTINCT s.week) as games,
+                    CAST(SUM(s.fantasy_points_ppr) AS REAL) / COUNT(DISTINCT s.week) as ppg
+                FROM players p
+                JOIN player_week_stats s
+                    ON s.player_id = p.player_id AND s.season = ?
+                WHERE p.fantasy_relevant = 1
+                  AND p.position = ?
+                GROUP BY p.player_id
+                HAVING games >= 3
+                ORDER BY ppg DESC
+                LIMIT ?
+            """
+            rows = conn.execute(query, [season, pos, limit]).fetchall()
+
+            players = []
+            for i, r in enumerate(rows):
+                players.append({
+                    "rank": i + 1,
+                    "player_id": r[0],
+                    "name": r[1] or "Unknown",
+                    "team": r[3] or "",
+                    "headshot_url": r[4] or "",
+                    "games": r[5],
+                    "ppg": round(r[6], 1) if r[6] else 0,
+                })
+
+            # Compute scarcity metrics
+            top_ppg = players[0]["ppg"] if players else 0
+            replacement_rank = 12 if pos in ("QB", "TE") else 24
+            replacement_ppg = players[replacement_rank - 1]["ppg"] if len(players) >= replacement_rank else 0
+            drop_off = round(top_ppg - replacement_ppg, 1)
+
+            # PPG at tier break points
+            tier_breaks = []
+            for tb in _SCARCITY_TIERS.get(pos, []):
+                end_rank = tb["end"]
+                ppg_at_break = players[end_rank - 1]["ppg"] if len(players) >= end_rank else 0
+                annotation = _SCARCITY_ANNOTATIONS.get(pos, {}).get(end_rank, "")
+                tier_breaks.append({
+                    "label": tb["label"],
+                    "start": tb["start"],
+                    "end": end_rank,
+                    "ppg_at_break": ppg_at_break,
+                    "annotation": annotation,
+                })
+
+            positions_data[pos] = {
+                "players": players,
+                "top_ppg": top_ppg,
+                "replacement_ppg": replacement_ppg,
+                "replacement_rank": replacement_rank,
+                "drop_off": drop_off,
+                "tier_breaks": tier_breaks,
+            }
+
+        # Rank positions by scarcity (highest drop-off = most scarce)
+        scarcity_ranking = sorted(
+            [{"position": pos, "drop_off": d["drop_off"], "top_ppg": d["top_ppg"],
+              "replacement_ppg": d["replacement_ppg"]}
+             for pos, d in positions_data.items()],
+            key=lambda x: x["drop_off"],
+            reverse=True,
+        )
+
+        return {
+            "season": season,
+            "available_seasons": available_seasons,
+            "positions": positions_data,
+            "scarcity_ranking": scarcity_ranking,
+        }
+    finally:
+        conn.close()
