@@ -943,6 +943,7 @@ def sitemap_xml():
         ("/snapefficiency.html", "0.8", "weekly"),
         ("/garbagetime.html", "0.8", "weekly"),
         ("/seasonpace.html", "0.8", "weekly"),
+        ("/targetpremium.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1595,6 +1596,16 @@ def records(position: str = ""):
         return JSONResponse({"error": "Failed to fetch records"}, status_code=500)
 
 
+@app.get("/api/target-premium")
+def target_premium(season: int = None, position: str = None):
+    try:
+        pos = position.upper() if position else None
+        return live_data.fetch_target_premium(season=season, position=pos)
+    except Exception as e:
+        logger.error(f"target-premium error: {e}")
+        return JSONResponse({"error": "Failed to fetch target premium"}, status_code=500)
+
+
 @app.get("/api/season-pace")
 def season_pace(season: int = None, position: str = None):
     try:
@@ -1759,6 +1770,7 @@ def tools_hub():
                 {"name": "Snap Efficiency", "desc": "Fantasy points per snap — who maximizes every snap they play?", "url": "/snapefficiency.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Garbage Time", "desc": "Stat padders vs clean producers — who scores in garbage time?", "url": "/garbagetime.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Season Pace", "desc": "Projected season totals and milestone tracking based on per-game pace", "url": "/seasonpace.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Target Premium", "desc": "Target quality composite — aDOT, catch rate, YAC, yards per target", "url": "/targetpremium.html", "positions": ["WR", "RB", "TE"]},
             ],
         },
         {

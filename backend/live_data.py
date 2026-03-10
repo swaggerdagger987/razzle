@@ -12055,3 +12055,110 @@ def fetch_season_pace(season=None, position=None, limit=50):
         }
     finally:
         conn.close()
+
+
+def fetch_target_premium(season=None, position=None, limit=50):
+    """Target premium — target quality composite for pass catchers."""
+    conn = get_conn()
+    try:
+        cursor = conn.cursor()
+        if not season:
+            cursor.execute("SELECT MAX(season) FROM player_season_stats")
+            season = cursor.fetchone()[0] or 2025
+
+        pos_filter = "AND p.position IN ('WR','TE','RB')"
+        params = [season]
+        if position and position in ("WR", "TE", "RB"):
+            pos_filter = "AND p.position = ?"
+            params.append(position)
+
+        cursor.execute(f"""
+            SELECT p.gsis_id, p.full_name, p.position, p.team,
+                   s.targets, s.receptions, s.receiving_yards,
+                   s.receiving_air_yards, s.receiving_yards_after_catch,
+                   s.games
+            FROM player_season_stats s
+            JOIN players p ON p.gsis_id = s.player_id
+            WHERE s.season = ? AND p.fantasy_relevant = 1
+            {pos_filter}
+            AND s.games >= 4 AND s.targets >= 20
+        """, params)
+
+        all_adot = []
+        all_catch_rate = []
+        all_yac = []
+        all_ypt = []
+        rows = []
+
+        for r in cursor.fetchall():
+            pid, name, pos, team = r[0], r[1] or "Unknown", r[2] or "WR", r[3] or "FA"
+            targets = r[4] or 0
+            recs = r[5] or 0
+            rec_yd = r[6] or 0
+            air_yd = r[7] or 0
+            yac = r[8] or 0
+            games = r[9] or 1
+
+            if targets < 1:
+                continue
+
+            adot = air_yd / targets
+            catch_rate = recs / targets * 100
+            yac_per_rec = yac / recs if recs > 0 else 0
+            ypt = rec_yd / targets
+
+            all_adot.append(adot)
+            all_catch_rate.append(catch_rate)
+            all_yac.append(yac_per_rec)
+            all_ypt.append(ypt)
+
+            rows.append({
+                "player_id": pid, "name": name, "position": pos, "team": team,
+                "games": games, "targets": targets,
+                "targets_pg": round(targets / games, 1),
+                "adot": adot, "catch_rate": catch_rate,
+                "yac_per_rec": yac_per_rec, "ypt": ypt,
+            })
+
+        if not rows:
+            return {"players": [], "season": season, "count": 0}
+
+        # Compute percentiles for composite
+        def pct_rank(val, arr):
+            below = sum(1 for v in arr if v < val)
+            return below / len(arr) * 100 if arr else 50
+
+        players = []
+        for p in rows:
+            adot_pct = pct_rank(p["adot"], all_adot)
+            cr_pct = pct_rank(p["catch_rate"], all_catch_rate)
+            yac_pct = pct_rank(p["yac_per_rec"], all_yac)
+            ypt_pct = pct_rank(p["ypt"], all_ypt)
+
+            # Target Premium = 30% YPT + 25% catch rate + 25% YAC + 20% aDOT
+            premium = ypt_pct * 0.30 + cr_pct * 0.25 + yac_pct * 0.25 + adot_pct * 0.20
+
+            players.append({
+                "player_id": p["player_id"],
+                "name": p["name"],
+                "position": p["position"],
+                "team": p["team"],
+                "games": p["games"],
+                "premium": round(premium, 0),
+                "targets_pg": p["targets_pg"],
+                "adot": round(p["adot"], 1),
+                "catch_rate": round(p["catch_rate"], 1),
+                "yac_per_rec": round(p["yac_per_rec"], 1),
+                "ypt": round(p["ypt"], 1),
+            })
+
+        players.sort(key=lambda x: x["premium"], reverse=True)
+        players = players[:limit]
+
+        return {
+            "players": players,
+            "season": season,
+            "count": len(players),
+        }
+    finally:
+        conn.close()

@@ -1,6 +1,16 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 137 — Season Pace Tracker (COMPLETE)
+## Current Phase: Phase 138 — Target Premium (COMPLETE)
+
+**Exit criterion MET:** /targetpremium.html ranks pass catchers by target quality composite (30% Y/Tgt + 25% catch rate + 25% YAC/rec + 20% aDOT percentiles). Premium score badges (elite/high/mid/low), aDOT, catch rate, YAC per reception, yards per target, targets per game, bar visualization. WR/TE/RB filter tabs, season selector, PNG export with watermark. GET /api/target-premium returns data. 11 escapeHtml calls, 59/59 braces balanced. "Target Premium" nav link on all 68 pages. Sitemap + tools hub entry under Performance Analysis.
+
+### Phase 138 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend + frontend + nav + smoke test | DONE | fetch_target_premium, percentile composite, 11 escapeHtml, 68/68 nav |
+
+## Previous Phase: Phase 137 — Season Pace Tracker (COMPLETE)
 
 **Exit criterion MET:** /seasonpace.html projects season totals based on per-game pace and tracks milestone seasons. Shows players on pace for 1000/1500 yard, 4000/5000 pass yard, 10/30/40 TD, 100 rec, 500 rush yd (QB) milestones. Gold badges for elite milestones, silver for standard. Sorted by milestone count then PPG. Position filter tabs, season selector, PNG export with watermark. GET /api/season-pace returns data. 8 escapeHtml calls, 54/54 braces balanced. "Pace" nav link on all 67 pages. Sitemap + tools hub entry under Performance Analysis.
 
