@@ -10897,3 +10897,100 @@ def fetch_records(position=None, limit=10):
         }
     finally:
         conn.close()
+
+
+def fetch_waivers(season=None, position=None, window=4, limit=30):
+    """
+    Waiver wire targets — players with high recent PPG but low season PPG.
+    These are likely unrostered players who have been producing recently.
+    Compares recent window PPG vs full season PPG; big positive delta = waiver target.
+    """
+    conn = get_db()
+    try:
+        cursor = conn.cursor()
+
+        # Determine season
+        if not season:
+            cursor.execute("SELECT MAX(season) FROM player_week_stats")
+            season = cursor.fetchone()[0] or 2024
+
+        pos_filter = ""
+        params = [season]
+        if position:
+            pos_filter = "AND p.position = ?"
+            params.append(position)
+
+        # Get all weekly scores for eligible players this season
+        cursor.execute(f"""
+            SELECT p.player_id, p.full_name, p.position, p.team,
+                   s.week, s.fantasy_points_ppr
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE s.season = ? AND p.fantasy_relevant = 1
+              AND s.fantasy_points_ppr IS NOT NULL
+              {pos_filter}
+            ORDER BY p.player_id, s.week
+        """, params)
+
+        from collections import defaultdict
+        player_weeks = defaultdict(list)
+        player_info = {}
+        for r in cursor.fetchall():
+            pid = r[0]
+            player_weeks[pid].append({"week": r[4], "fpts": r[5] or 0})
+            if pid not in player_info:
+                player_info[pid] = {
+                    "player_id": pid,
+                    "name": r[1] or "Unknown",
+                    "position": r[2] or "RB",
+                    "team": r[3] or "FA",
+                }
+
+        targets = []
+        for pid, weeks in player_weeks.items():
+            if len(weeks) < window + 2:
+                continue
+
+            # Sort by week descending to get recent games
+            weeks.sort(key=lambda w: w["week"], reverse=True)
+            recent = weeks[:window]
+            all_scores = [w["fpts"] for w in weeks]
+
+            season_avg = sum(all_scores) / len(all_scores) if all_scores else 0
+            recent_avg = sum(w["fpts"] for w in recent) / len(recent) if recent else 0
+            delta = recent_avg - season_avg
+
+            # Only include players who are surging (recent >> season)
+            # and whose season avg is low (likely unrostered)
+            if delta < 2 or season_avg > 14:
+                continue
+
+            delta_pct = (delta / season_avg * 100) if season_avg > 0.5 else 0
+
+            info = player_info[pid]
+            recent_scores = [w["fpts"] for w in reversed(recent)]
+            targets.append({
+                "player_id": info["player_id"],
+                "name": info["name"],
+                "position": info["position"],
+                "team": info["team"],
+                "season_avg": round(season_avg, 1),
+                "recent_avg": round(recent_avg, 1),
+                "delta": round(delta, 1),
+                "delta_pct": round(delta_pct, 0),
+                "games": len(all_scores),
+                "recent_scores": [round(s, 1) for s in recent_scores],
+            })
+
+        # Sort by delta descending (biggest surge first)
+        targets.sort(key=lambda x: x["delta"], reverse=True)
+        targets = targets[:limit]
+
+        return {
+            "targets": targets,
+            "season": season,
+            "window": window,
+            "count": len(targets),
+        }
+    finally:
+        conn.close()

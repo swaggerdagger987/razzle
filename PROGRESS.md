@@ -1,6 +1,19 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 122 — Fantasy Record Book (COMPLETE)
+## Current Phase: Phase 123 — Waiver Wire Targets (COMPLETE)
+
+**Exit criterion MET:** /waivers.html shows waiver wire targets — players with high recent PPG but low season PPG (likely unrostered). Compares recent window avg vs full season avg; requires delta >= 2 PPG surge and season avg <= 14 PPG. Position filter tabs, window selector (3/4/5 games), season selector, PNG export with watermark. GET /api/waivers returns waiver targets sorted by surge delta. Ranked list with surge badges, mini sparklines, games played. 12 escapeHtml calls, 60/60 braces balanced. "Waivers" nav link on all 56 pages. Sitemap + tools hub entry under Player Discovery.
+
+### Phase 123 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/waivers endpoint | DONE | fetch_waivers, delta+season_avg filters |
+| 2 | Waiver Wire Targets page | DONE | Ranked table, sparklines, surge badges, 12 escapeHtml |
+| 3 | Nav links + sitemap + tools hub | DONE | All 56 pages updated |
+| 4 | Smoke test | DONE | Python OK, JS OK, 56/56 nav links |
+
+## Previous Phase: Phase 122 — Fantasy Record Book (COMPLETE)
 
 **Exit criterion MET:** /records.html shows all-time fantasy records across 2020-present data. Four record categories: Single-Game Records (highest PPR score in one week), Single-Season Records (highest season total), Career PPG Leaders (min 20 games), Most Career Points. Gold/silver/bronze rank styling for top 3. Position filter tabs, position-colored chips, season badges. PNG export with watermark. GET /api/records returns all four record categories. 19 escapeHtml calls, 55/55 braces balanced. "Records" nav link on all 55 pages. Sitemap + tools hub entry under Rankings & Values.
 

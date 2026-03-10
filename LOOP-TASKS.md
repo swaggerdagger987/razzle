@@ -1,25 +1,13 @@
-# Razzle Loop — Phase 122 Task List
+# Razzle Loop — Phase 123 Task List
 
-> Fantasy Record Book
+> Waiver Wire Targets
 
-**Current Phase**: 122 — Fantasy Record Book
-**Exit Criterion**: /records.html shows all-time fantasy records in 4 categories.
+**Current Phase**: 123 — Waiver Wire Targets
+**Exit Criterion**: /waivers.html shows waiver wire targets — players with high recent PPG but low season PPG (likely unrostered). Position filters, window selector, season selector, PNG export. GET /api/waivers returns waiver targets.
 
 ---
 
-## Task 1: Backend /api/records endpoint
-**Status**: PASS
-**Attempts**: 1
-
-## Task 2: Frontend /records.html page
-**Status**: PASS
-**Attempts**: 1
-
-## Task 3: Nav links + sitemap + tools hub
-**Status**: PASS
-**Attempts**: 1
-
-## Task 4: Smoke test + commit + push
+## Task 1: Backend + frontend + nav + smoke test
 **Status**: PASS
 **Attempts**: 1
 
@@ -27,9 +15,9 @@
 
 ## Loop State
 ```
-Current Phase: 122
-Current Task: 4
+Current Phase: 123
+Current Task: 1
 Current Stage: COMPLETE
 Attempt: 1
-Tasks Completed: 4/4
+Tasks Completed: 1/1
 ```

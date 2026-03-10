@@ -931,6 +931,7 @@ def sitemap_xml():
         ("/recap.html", "0.8", "weekly"),
         ("/comptable.html", "0.8", "weekly"),
         ("/records.html", "0.8", "weekly"),
+        ("/waivers.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1583,6 +1584,16 @@ def records(position: str = ""):
         return JSONResponse({"error": "Failed to fetch records"}, status_code=500)
 
 
+@app.get("/api/waivers")
+def waivers(season: int = None, position: str = None, window: int = 4):
+    try:
+        pos = position.upper() if position else None
+        return live_data.fetch_waivers(season=season, position=pos, window=window)
+    except Exception as e:
+        logger.error(f"waivers error: {e}")
+        return JSONResponse({"error": "Failed to fetch waiver targets"}, status_code=500)
+
+
 @app.get("/api/tools-hub")
 def tools_hub():
     """Return the static tools catalog organized by category."""
@@ -1621,6 +1632,7 @@ def tools_hub():
                 {"name": "TD Regression", "desc": "Players due for positive or negative touchdown regression", "url": "/regression.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Strengths & Weaknesses", "desc": "A player's top strengths and weaknesses by percentile ranking", "url": "/strengths.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Hot & Cold Streaks", "desc": "Who's on fire or ice cold over their last few games vs season average", "url": "/streaks.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Waiver Wire", "desc": "High recent PPG, low season PPG — likely unrostered and surging", "url": "/waivers.html", "positions": ["QB", "RB", "WR", "TE"]},
             ],
         },
         {

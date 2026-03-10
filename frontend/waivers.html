@@ -3,45 +3,45 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Hot & Cold Streaks — Razzle</title>
-<meta property="og:title" content="Hot & Cold Streaks — Razzle">
-<meta property="og:description" content="Identify players on hot or cold scoring streaks vs their season average on razzle.lol">
+<title>Waiver Wire Targets — Razzle</title>
+<meta property="og:title" content="Waiver Wire Targets — Razzle">
+<meta property="og:description" content="Find surging waiver wire targets — high recent PPG, low season PPG on razzle.lol">
 <meta property="og:site_name" content="razzle.lol">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Hot & Cold Streaks — Razzle">
-<meta name="twitter:description" content="Identify players on hot or cold scoring streaks vs their season average on razzle.lol">
+<meta name="twitter:title" content="Waiver Wire Targets — Razzle">
+<meta name="twitter:description" content="Find surging waiver wire targets — high recent PPG, low season PPG on razzle.lol">
 <meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
-<meta name="description" content="Hot and cold streak tracker — who's on fire and who's ice cold over their last few games on razzle.lol">
+<meta name="description" content="Waiver wire targets — players surging recently but low on the season, likely still on your wire on razzle.lol">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="styles.css">
 <style>
-  .str-page {
-    max-width: 1200px;
+  .ww-page {
+    max-width: 1100px;
     margin: 0 auto;
     padding: 24px 20px 60px;
   }
 
-  .str-header {
+  .ww-header {
     text-align: center;
     margin-bottom: 24px;
   }
-  .str-header h1 {
+  .ww-header h1 {
     font-family: var(--font-display);
     font-size: 32px;
     color: var(--ink);
     margin: 0 0 4px;
   }
-  .str-header .str-subtitle {
+  .ww-header .ww-subtitle {
     font-family: var(--font-hand);
     font-size: 20px;
     color: var(--ink-light);
   }
 
-  .str-controls {
+  .ww-controls {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -49,7 +49,7 @@
     margin-bottom: 24px;
     flex-wrap: wrap;
   }
-  .str-controls select {
+  .ww-controls select {
     font-family: var(--font-mono);
     font-size: 13px;
     padding: 6px 10px;
@@ -57,11 +57,11 @@
     border-radius: 4px;
     background: var(--card);
   }
-  .str-controls .pos-tabs {
+  .ww-controls .pos-tabs {
     display: flex;
     gap: 4px;
   }
-  .str-controls .pos-tab {
+  .ww-controls .pos-tab {
     font-family: var(--font-mono);
     font-size: 12px;
     padding: 5px 12px;
@@ -71,11 +71,11 @@
     cursor: pointer;
     font-weight: 700;
   }
-  .str-controls .pos-tab.active {
+  .ww-controls .pos-tab.active {
     background: var(--ink);
     color: var(--sand);
   }
-  .str-export {
+  .ww-export {
     font-family: var(--font-mono);
     font-size: 12px;
     padding: 5px 14px;
@@ -85,9 +85,9 @@
     cursor: pointer;
     font-weight: 700;
   }
-  .str-export:hover { background: var(--ink); color: var(--sand); }
+  .ww-export:hover { background: var(--ink); color: var(--sand); }
 
-  .str-loading {
+  .ww-loading {
     text-align: center;
     font-family: var(--font-hand);
     font-size: 18px;
@@ -95,40 +95,29 @@
     padding: 60px 0;
   }
 
-  /* Two-column layout */
-  .str-columns {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-  }
-  @media (max-width: 768px) {
-    .str-columns { grid-template-columns: 1fr; }
-  }
-
-  .str-section {
+  .ww-card {
     background: var(--card);
     border: 3px solid var(--ink);
     border-radius: 10px;
     box-shadow: 4px 4px 0 var(--ink);
     overflow: hidden;
   }
-  .str-section-header {
+  .ww-card-header {
     font-family: var(--font-display);
     font-size: 18px;
     padding: 10px 16px;
+    background: #166534;
     color: #fff;
   }
-  .str-section-header.hot { background: #166534; }
-  .str-section-header.cold { background: #991b1b; }
 
   /* Table */
-  .str-table {
+  .ww-table {
     width: 100%;
     border-collapse: collapse;
     font-family: var(--font-mono);
     font-size: 12px;
   }
-  .str-table th {
+  .ww-table th {
     background: var(--sand);
     padding: 6px 8px;
     text-align: right;
@@ -139,17 +128,17 @@
     user-select: none;
     white-space: nowrap;
   }
-  .str-table th:first-child, .str-table th:nth-child(2) { text-align: left; }
-  .str-table td {
+  .ww-table th:first-child, .ww-table th:nth-child(2) { text-align: left; }
+  .ww-table td {
     padding: 6px 8px;
     text-align: right;
     border-bottom: 1px solid var(--ink-faint);
   }
-  .str-table td:first-child, .str-table td:nth-child(2) { text-align: left; }
-  .str-table tbody tr:hover { background: rgba(217,119,87,0.08); }
+  .ww-table td:first-child, .ww-table td:nth-child(2) { text-align: left; }
+  .ww-table tbody tr:hover { background: rgba(217,119,87,0.08); }
 
   /* Badges */
-  .str-delta-badge {
+  .ww-delta-badge {
     font-family: var(--font-mono);
     font-size: 11px;
     font-weight: 700;
@@ -157,18 +146,11 @@
     border-radius: 3px;
     border: 1px solid;
     white-space: nowrap;
-  }
-  .str-delta-badge.hot {
     background: #dcfce7;
     color: #166534;
     border-color: #166534;
   }
-  .str-delta-badge.cold {
-    background: #fef2f2;
-    color: #991b1b;
-    border-color: #991b1b;
-  }
-  .str-pos-badge {
+  .ww-pos-badge {
     font-size: 10px;
     font-weight: 700;
     padding: 1px 5px;
@@ -177,25 +159,31 @@
     margin-left: 4px;
   }
 
-  /* Mini sparkline (recent scores) */
-  .str-recent {
+  /* Mini sparkline */
+  .ww-recent {
     display: flex;
     gap: 2px;
     align-items: flex-end;
     height: 20px;
   }
-  .str-recent-bar {
+  .ww-recent-bar {
     width: 8px;
     border-radius: 2px 2px 0 0;
     min-height: 2px;
   }
 
-  .str-empty {
+  .ww-empty {
     text-align: center;
     font-family: var(--font-hand);
     font-size: 15px;
     color: var(--ink-light);
     padding: 30px 16px;
+  }
+
+  .ww-rank {
+    font-weight: 700;
+    color: var(--ink-light);
+    font-size: 11px;
   }
 </style>
 </head>
@@ -252,22 +240,26 @@
     <li><a href="/weeklyleaders.html">Week Leaders</a></li>
     <li><a href="/pace.html">Pace</a></li>
     <li><a href="/gamelog.html">Game Log</a></li>
-    <li><a href="/streaks.html" class="active">Streaks</a></li>
+    <li><a href="/streaks.html">Streaks</a></li>
+    <li><a href="/recap.html">Recap</a></li>
+    <li><a href="/comptable.html">Compare Table</a></li>
+    <li><a href="/records.html">Records</a></li>
+    <li><a href="/waivers.html" class="active">Waivers</a></li>
     <li><a href="/team/KC">Teams</a></li>
     <li><a href="/league-intel.html">League Intel</a></li>
     <li><a href="/agents.html">War Room</a></li>
   </ul>
 </nav>
 
-<main class="str-page" id="strRoot">
-  <div class="str-header">
-    <h1>Hot & Cold Streaks</h1>
-    <div class="str-subtitle">who's on fire and who's ice cold</div>
+<main class="ww-page" id="wwRoot">
+  <div class="ww-header">
+    <h1>Waiver Wire Targets</h1>
+    <div class="ww-subtitle">surging lately but low on the season — probably still on your wire</div>
   </div>
 
-  <div class="str-controls">
-    <select id="strSeason" aria-label="Season"></select>
-    <select id="strWindow" aria-label="Window">
+  <div class="ww-controls">
+    <select id="wwSeason" aria-label="Season"></select>
+    <select id="wwWindow" aria-label="Window">
       <option value="3">Last 3 games</option>
       <option value="4" selected>Last 4 games</option>
       <option value="5">Last 5 games</option>
@@ -279,11 +271,11 @@
       <button class="pos-tab" data-pos="WR">WR</button>
       <button class="pos-tab" data-pos="TE">TE</button>
     </div>
-    <button class="str-export" id="strExport">Export PNG</button>
+    <button class="ww-export" id="wwExport">Export PNG</button>
   </div>
 
-  <div id="strContent">
-    <div class="str-loading">pulling film...</div>
+  <div id="wwContent">
+    <div class="ww-loading">pulling film...</div>
   </div>
 </main>
 
@@ -433,18 +425,18 @@
 
   /* ---- Fetch ---- */
   function load() {
-    var selSeason = document.getElementById('strSeason');
-    var selWindow = document.getElementById('strWindow');
+    var selSeason = document.getElementById('wwSeason');
+    var selWindow = document.getElementById('wwWindow');
     var season = selSeason.value || '';
     var win = selWindow.value || '4';
     var pos = currentPosition;
     writeURL(season, pos, win);
 
-    var url = '/api/streaks?window=' + encodeURIComponent(win);
+    var url = '/api/waivers?window=' + encodeURIComponent(win);
     if (season) url += '&season=' + encodeURIComponent(season);
     if (pos) url += '&position=' + encodeURIComponent(pos);
 
-    document.getElementById('strContent').innerHTML = '<div class="str-loading">pulling film...</div>';
+    document.getElementById('wwContent').innerHTML = '<div class="ww-loading">pulling film...</div>';
 
     fetch(url).then(function(r) {
       if (!r.ok) throw new Error('API error');
@@ -454,12 +446,12 @@
       populateSeasons(data.season);
       render(data);
     }).catch(function() {
-      document.getElementById('strContent').innerHTML = '<div class="str-loading">something went wrong — try again</div>';
+      document.getElementById('wwContent').innerHTML = '<div class="ww-loading">something went wrong — try again</div>';
     });
   }
 
   function populateSeasons(current) {
-    var sel = document.getElementById('strSeason');
+    var sel = document.getElementById('wwSeason');
     if (sel.options.length <= 1) {
       sel.innerHTML = '';
       for (var y = 2024; y >= 2020; y--) {
@@ -474,61 +466,48 @@
 
   /* ---- Render ---- */
   function render(data) {
-    var hot = data.hot || [];
-    var cold = data.cold || [];
+    var targets = data.targets || [];
 
-    var html = '<div class="str-columns">';
+    var html = '<div class="ww-card">';
+    html += '<div class="ww-card-header">Waiver Wire Targets (' + escapeHtml(String(data.count || 0)) + ')</div>';
 
-    // Hot section
-    html += '<div class="str-section">';
-    html += '<div class="str-section-header hot">On Fire</div>';
-    if (hot.length) {
-      html += renderTable(hot, 'hot');
+    if (targets.length) {
+      html += renderTable(targets);
     } else {
-      html += '<div class="str-empty">no hot streaks found</div>';
+      html += '<div class="ww-empty">no waiver targets found — try a different window or position</div>';
     }
-    html += '</div>';
-
-    // Cold section
-    html += '<div class="str-section">';
-    html += '<div class="str-section-header cold">Ice Cold</div>';
-    if (cold.length) {
-      html += renderTable(cold, 'cold');
-    } else {
-      html += '<div class="str-empty">no cold streaks found</div>';
-    }
-    html += '</div>';
 
     html += '</div>';
-    document.getElementById('strContent').innerHTML = html;
+    document.getElementById('wwContent').innerHTML = html;
   }
 
-  function renderTable(players, type) {
-    var html = '<table class="str-table"><thead><tr>';
-    html += '<th>Player</th><th>Pos</th><th>Szn Avg</th><th>Recent</th><th>Delta</th><th>Last ' + escapeHtml(String(currentData.window)) + '</th>';
+  function renderTable(players) {
+    var html = '<table class="ww-table"><thead><tr>';
+    html += '<th>#</th><th>Player</th><th>Pos</th><th>GP</th><th>Szn PPG</th><th>Recent PPG</th><th>Surge</th><th>Last ' + escapeHtml(String(currentData.window)) + '</th>';
     html += '</tr></thead><tbody>';
 
     for (var i = 0; i < players.length; i++) {
       var p = players[i];
       var posColor = POS_COLORS[p.position] || '#888';
-      var badgeClass = type === 'hot' ? 'hot' : 'cold';
       var sign = p.delta > 0 ? '+' : '';
 
       html += '<tr>';
+      html += '<td class="ww-rank">' + (i + 1) + '</td>';
       html += '<td>' + escapeHtml(p.name) + ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></td>';
-      html += '<td><span class="str-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
+      html += '<td><span class="ww-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
+      html += '<td>' + escapeHtml(String(p.games)) + '</td>';
       html += '<td>' + escapeHtml(String(fmt(p.season_avg))) + '</td>';
-      html += '<td>' + escapeHtml(String(fmt(p.recent_avg))) + '</td>';
-      html += '<td><span class="str-delta-badge ' + badgeClass + '">' + sign + escapeHtml(String(fmt(p.delta))) + ' (' + sign + escapeHtml(String(fmt(p.delta_pct, 0))) + '%)</span></td>';
+      html += '<td style="font-weight:700;color:#166534">' + escapeHtml(String(fmt(p.recent_avg))) + '</td>';
+      html += '<td><span class="ww-delta-badge">' + sign + escapeHtml(String(fmt(p.delta))) + ' (' + sign + escapeHtml(String(fmt(p.delta_pct, 0))) + '%)</span></td>';
 
       // Mini bar sparkline
       var scores = p.recent_scores || [];
       var maxScore = Math.max.apply(null, scores.concat([1]));
-      html += '<td><div class="str-recent">';
+      html += '<td><div class="ww-recent">';
       for (var j = 0; j < scores.length; j++) {
         var h = Math.max(2, Math.round((scores[j] / maxScore) * 20));
         var barColor = scores[j] >= p.season_avg ? '#2ec4b6' : '#d97757';
-        html += '<div class="str-recent-bar" style="height:' + h + 'px;background:' + barColor + '" title="Wk: ' + escapeHtml(String(fmt(scores[j]))) + '"></div>';
+        html += '<div class="ww-recent-bar" style="height:' + h + 'px;background:' + barColor + '" title="Wk: ' + escapeHtml(String(fmt(scores[j]))) + '"></div>';
       }
       html += '</div></td>';
       html += '</tr>';
@@ -548,12 +527,12 @@
     });
   });
 
-  document.getElementById('strSeason').addEventListener('change', load);
-  document.getElementById('strWindow').addEventListener('change', load);
+  document.getElementById('wwSeason').addEventListener('change', load);
+  document.getElementById('wwWindow').addEventListener('change', load);
 
   /* ---- PNG export ---- */
-  document.getElementById('strExport').addEventListener('click', function() {
-    var root = document.getElementById('strRoot');
+  document.getElementById('wwExport').addEventListener('click', function() {
+    var root = document.getElementById('wwRoot');
     if (typeof html2canvas === 'undefined') return;
     html2canvas(root, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
       var ctx = canvas.getContext('2d');
@@ -561,7 +540,7 @@
       ctx.fillStyle = 'rgba(0,0,0,0.12)';
       ctx.fillText('razzle.lol', canvas.width - 130, canvas.height - 16);
       var link = document.createElement('a');
-      link.download = 'razzle-streaks.png';
+      link.download = 'razzle-waivers.png';
       link.href = canvas.toDataURL();
       link.click();
     });
@@ -571,7 +550,7 @@
   fetch('/api/analytics/pageview', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ page: '/streaks.html', referrer: document.referrer || '' })
+    body: JSON.stringify({ page: '/waivers.html', referrer: document.referrer || '' })
   }).catch(function() {});
 
   /* ---- Init from URL ---- */
@@ -583,10 +562,10 @@
     });
   }
   if (init.window) {
-    document.getElementById('strWindow').value = init.window;
+    document.getElementById('wwWindow').value = init.window;
   }
   if (init.season) {
-    var sel = document.getElementById('strSeason');
+    var sel = document.getElementById('wwSeason');
     var opt = document.createElement('option');
     opt.value = init.season;
     opt.textContent = init.season;
