@@ -1,9 +1,9 @@
-# Razzle Loop — Phase 129 Task List
+# Razzle Loop — Phase 131 Task List
 
-> Stack Correlation Finder
+> Positional Advantage
 
-**Current Phase**: 129 — Stack Correlation Finder
-**Exit Criterion**: COMPLETE
+**Current Phase**: 131 — Positional Advantage
+**Exit Criterion**: /advantage.html shows players who provide the biggest scoring advantage over the positional average. Unlike VORP (vs replacement level), this shows value above the full positional average PPG. Helps identify league-winning positional edges. Season selector, position filters, PNG export. GET /api/positional-advantage returns data.
 
 ---
 
@@ -15,7 +15,7 @@
 
 ## Loop State
 ```
-Current Phase: 129
+Current Phase: 131
 Current Task: 1
 Current Stage: COMPLETE
 Attempt: 1

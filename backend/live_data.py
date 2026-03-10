@@ -11510,3 +11510,88 @@ def fetch_stacks(season=None, limit=30):
         }
     finally:
         conn.close()
+
+
+def fetch_positional_advantage(season=None, position=None, limit=40):
+    """
+    Positional advantage — players who provide the biggest scoring edge
+    over the positional average PPG. Distinct from VORP (replacement level).
+    """
+    conn = get_conn()
+    try:
+        cursor = conn.cursor()
+
+        if not season:
+            cursor.execute("SELECT MAX(season) FROM player_week_stats")
+            season = cursor.fetchone()[0] or 2024
+
+        pos_filter = ""
+        params = [season]
+        if position:
+            pos_filter = "AND p.position = ?"
+            params.append(position)
+
+        # Get all player season stats
+        cursor.execute(f"""
+            SELECT p.player_id, p.full_name, p.position, p.team,
+                   SUM(s.fantasy_points_ppr) as total_ppr,
+                   COUNT(DISTINCT s.week) as games
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE s.season = ? AND p.fantasy_relevant = 1
+              AND p.position IN ('QB', 'RB', 'WR', 'TE')
+              {pos_filter}
+            GROUP BY p.player_id
+            HAVING games >= 6
+            ORDER BY total_ppr DESC
+        """, params)
+
+        players_raw = []
+        pos_ppg_sums = {"QB": [], "RB": [], "WR": [], "TE": []}
+        for r in cursor.fetchall():
+            pos = r[2] or "RB"
+            games = r[5] or 1
+            ppg = (r[4] or 0) / games
+            players_raw.append({
+                "player_id": r[0],
+                "name": r[1] or "Unknown",
+                "position": pos,
+                "team": r[3] or "FA",
+                "total_ppr": round(r[4] or 0, 1),
+                "games": games,
+                "ppg": round(ppg, 1),
+            })
+            if pos in pos_ppg_sums:
+                pos_ppg_sums[pos].append(ppg)
+
+        # Compute positional averages
+        pos_avg = {}
+        for pos in ("QB", "RB", "WR", "TE"):
+            vals = pos_ppg_sums.get(pos, [])
+            pos_avg[pos] = sum(vals) / len(vals) if vals else 0
+
+        players = []
+        for p in players_raw:
+            avg = pos_avg.get(p["position"], 0)
+            advantage = p["ppg"] - avg
+            pct_above = (advantage / avg * 100) if avg > 0 else 0
+
+            players.append({
+                **p,
+                "pos_avg": round(avg, 1),
+                "advantage": round(advantage, 1),
+                "pct_above": round(pct_above, 0),
+            })
+
+        # Sort by advantage descending
+        players.sort(key=lambda x: x["advantage"], reverse=True)
+        players = players[:limit]
+
+        return {
+            "players": players,
+            "pos_averages": {k: round(v, 1) for k, v in pos_avg.items()},
+            "season": season,
+            "count": len(players),
+        }
+    finally:
+        conn.close()

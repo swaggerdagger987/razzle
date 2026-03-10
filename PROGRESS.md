@@ -1,6 +1,16 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 130 — QA+UX Audit for Phases 126-129 (COMPLETE)
+## Current Phase: Phase 131 — Positional Advantage (COMPLETE)
+
+**Exit criterion MET:** /advantage.html shows players who provide the biggest scoring advantage over the positional average PPG. Unlike VORP (vs replacement level), this shows value above the full positional average. Edge badges color-coded by magnitude (elite/strong/solid/modest/below avg), bar visualization, positional average chips at top. Position filter tabs, season selector, PNG export with watermark. GET /api/positional-advantage returns data. 12 escapeHtml calls, 65/65 braces balanced. "Advantage" nav link on all 62 pages. Sitemap + tools hub entry under Performance Analysis.
+
+### Phase 131 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend + frontend + nav + smoke test | DONE | fetch_positional_advantage, edge badges, bar viz, 12 escapeHtml, 62/62 nav |
+
+## Previous Phase: Phase 130 — QA+UX Audit for Phases 126-129 (COMPLETE)
 
 **Exit criterion MET:** QA+UX audit of FPTS Breakdown (126), Handcuff Rankings (127), Weekly MVP Grid (128), Stack Correlation Finder (129). 1 HIGH finding: `get_db()` → `get_conn()` in 12 backend functions from Phases 116-129. All 12 occurrences fixed. All 4 pages pass XSS, error handling, loading states, PNG export, analytics, design compliance. No other issues found.
 

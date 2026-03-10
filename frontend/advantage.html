@@ -3,194 +3,55 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Playoff Schedule Planner — Razzle</title>
-<meta property="og:title" content="Playoff Schedule Planner — Razzle">
-<meta property="og:description" content="Grade your players' playoff matchups by opponent difficulty on razzle.lol">
+<title>Positional Advantage — Razzle</title>
+<meta property="og:title" content="Positional Advantage — Razzle">
+<meta property="og:description" content="Players providing the biggest scoring edge over the positional average on razzle.lol">
 <meta property="og:site_name" content="razzle.lol">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Playoff Schedule Planner — Razzle">
-<meta name="twitter:description" content="Grade your players' playoff matchups by opponent difficulty on razzle.lol">
+<meta name="twitter:title" content="Positional Advantage — Razzle">
+<meta name="twitter:description" content="Players providing the biggest scoring edge over the positional average on razzle.lol">
 <meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
-<meta name="description" content="Playoff schedule planner — which players have the easiest path through fantasy playoffs on razzle.lol">
+<meta name="description" content="Positional advantage — who gives you the biggest edge over the average at their position on razzle.lol">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="styles.css">
 <style>
-  .po-page {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 24px 20px 60px;
-  }
+  .pa-page { max-width: 1100px; margin: 0 auto; padding: 24px 20px 60px; }
+  .pa-header { text-align: center; margin-bottom: 24px; }
+  .pa-header h1 { font-family: var(--font-display); font-size: 32px; color: var(--ink); margin: 0 0 4px; }
+  .pa-header .pa-subtitle { font-family: var(--font-hand); font-size: 20px; color: var(--ink-light); }
+  .pa-controls { display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+  .pa-controls select { font-family: var(--font-mono); font-size: 13px; padding: 6px 10px; border: 2px solid var(--ink); border-radius: 4px; background: var(--card); }
+  .pa-controls .pos-tabs { display: flex; gap: 4px; }
+  .pa-controls .pos-tab { font-family: var(--font-mono); font-size: 12px; padding: 5px 12px; border: 2px solid var(--ink); border-radius: 4px; background: var(--card); cursor: pointer; font-weight: 700; }
+  .pa-controls .pos-tab.active { background: var(--ink); color: var(--sand); }
+  .pa-export { font-family: var(--font-mono); font-size: 12px; padding: 5px 14px; border: 2px solid var(--ink); border-radius: 4px; background: var(--card); cursor: pointer; font-weight: 700; }
+  .pa-export:hover { background: var(--ink); color: var(--sand); }
+  .pa-loading { text-align: center; font-family: var(--font-hand); font-size: 18px; color: var(--ink-light); padding: 60px 0; }
 
-  .po-header {
-    text-align: center;
-    margin-bottom: 24px;
-  }
-  .po-header h1 {
-    font-family: var(--font-display);
-    font-size: 32px;
-    color: var(--ink);
-    margin: 0 0 4px;
-  }
-  .po-header .po-subtitle {
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-  }
+  .pa-avgs { display: flex; justify-content: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+  .pa-avg-chip { font-family: var(--font-mono); font-size: 11px; padding: 3px 10px; border: 2px solid var(--ink); border-radius: 4px; background: var(--card); }
+  .pa-avg-chip span { font-weight: 700; }
 
-  .po-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-  }
-  .po-controls select {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    padding: 6px 10px;
-    border: 2px solid var(--ink);
-    border-radius: 4px;
-    background: var(--card);
-  }
-  .po-controls .pos-tabs {
-    display: flex;
-    gap: 4px;
-  }
-  .po-controls .pos-tab {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    padding: 5px 12px;
-    border: 2px solid var(--ink);
-    border-radius: 4px;
-    background: var(--card);
-    cursor: pointer;
-    font-weight: 700;
-  }
-  .po-controls .pos-tab.active {
-    background: var(--ink);
-    color: var(--sand);
-  }
-  .po-export {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    padding: 5px 14px;
-    border: 2px solid var(--ink);
-    border-radius: 4px;
-    background: var(--card);
-    cursor: pointer;
-    font-weight: 700;
-  }
-  .po-export:hover { background: var(--ink); color: var(--sand); }
-
-  .po-loading {
-    text-align: center;
-    font-family: var(--font-hand);
-    font-size: 18px;
-    color: var(--ink-light);
-    padding: 60px 0;
-  }
-
-  .po-card {
-    background: var(--card);
-    border: 3px solid var(--ink);
-    border-radius: 10px;
-    box-shadow: 4px 4px 0 var(--ink);
-    overflow: hidden;
-  }
-  .po-card-header {
-    font-family: var(--font-display);
-    font-size: 18px;
-    padding: 10px 16px;
-    background: var(--ink);
-    color: var(--sand);
-  }
-
-  .po-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: var(--font-mono);
-    font-size: 12px;
-  }
-  .po-table th {
-    background: var(--sand);
-    padding: 6px 8px;
-    text-align: right;
-    font-size: 10px;
-    font-weight: 700;
-    border-bottom: 2px solid var(--ink-faint);
-    white-space: nowrap;
-  }
-  .po-table th:first-child, .po-table th:nth-child(2), .po-table th:nth-child(3) { text-align: left; }
-  .po-table td {
-    padding: 6px 8px;
-    text-align: right;
-    border-bottom: 1px solid var(--ink-faint);
-  }
-  .po-table td:first-child, .po-table td:nth-child(2), .po-table td:nth-child(3) { text-align: left; }
-  .po-table tbody tr:hover { background: rgba(217,119,87,0.08); }
-
-  .po-pos-badge {
-    font-size: 10px;
-    font-weight: 700;
-    padding: 1px 5px;
-    border-radius: 3px;
-    color: #fff;
-  }
-
-  .po-grade {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 700;
-    padding: 1px 6px;
-    border-radius: 3px;
-    border: 1px solid;
-    display: inline-block;
-    min-width: 20px;
-    text-align: center;
-  }
-  .po-grade-A, .po-grade-Aplus { background: #dcfce7; color: #166534; border-color: #166534; }
-  .po-grade-B, .po-grade-Bplus { background: #dbeafe; color: #1e40af; border-color: #1e40af; }
-  .po-grade-C { background: #fef9c3; color: #854d0e; border-color: #854d0e; }
-  .po-grade-D { background: #fed7aa; color: #9a3412; border-color: #9a3412; }
-  .po-grade-F { background: #fef2f2; color: #991b1b; border-color: #991b1b; }
-
-  .po-matchup {
-    display: inline-flex;
-    align-items: center;
-    gap: 3px;
-  }
-  .po-opp {
-    font-size: 10px;
-    color: var(--ink-light);
-  }
-
-  .po-rank {
-    font-weight: 700;
-    color: var(--ink-light);
-    font-size: 11px;
-  }
-
-  .po-sos-badge {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 4px;
-    border: 2px solid;
-  }
-
-  .po-empty {
-    text-align: center;
-    font-family: var(--font-hand);
-    font-size: 15px;
-    color: var(--ink-light);
-    padding: 30px 16px;
-  }
+  .pa-card { background: var(--card); border: 3px solid var(--ink); border-radius: 10px; box-shadow: 4px 4px 0 var(--ink); overflow: hidden; }
+  .pa-card-header { font-family: var(--font-display); font-size: 18px; padding: 10px 16px; background: var(--ink); color: var(--sand); }
+  .pa-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 12px; }
+  .pa-table th { background: var(--sand); padding: 6px 8px; text-align: right; font-size: 10px; font-weight: 700; border-bottom: 2px solid var(--ink-faint); white-space: nowrap; }
+  .pa-table th:first-child, .pa-table th:nth-child(2), .pa-table th:nth-child(3) { text-align: left; }
+  .pa-table td { padding: 6px 8px; text-align: right; border-bottom: 1px solid var(--ink-faint); }
+  .pa-table td:first-child, .pa-table td:nth-child(2), .pa-table td:nth-child(3) { text-align: left; }
+  .pa-table tbody tr:hover { background: rgba(217,119,87,0.08); }
+  .pa-rank { font-weight: 700; color: var(--ink-light); font-size: 11px; }
+  .pa-pos-badge { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 3px; color: #fff; }
+  .pa-adv-badge { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 3px; border: 1px solid; }
+  .pa-adv-pos { background: #dcfce7; color: #166534; border-color: #166534; }
+  .pa-adv-neg { background: #fef2f2; color: #991b1b; border-color: #991b1b; }
+  .pa-bar { display: inline-block; height: 10px; border-radius: 5px; vertical-align: middle; margin-left: 4px; }
+  .pa-empty { text-align: center; font-family: var(--font-hand); font-size: 15px; color: var(--ink-light); padding: 30px 16px; }
+  @media (max-width: 768px) { .pa-table { font-size: 11px; } }
 </style>
 </head>
 <body>
@@ -251,21 +112,26 @@
     <li><a href="/comptable.html">Compare Table</a></li>
     <li><a href="/records.html">Records</a></li>
     <li><a href="/waivers.html">Waivers</a></li>
-    <li><a href="/playoffs.html" class="active">Playoffs</a></li>
+    <li><a href="/playoffs.html">Playoffs</a></li>
+    <li><a href="/fptsbreakdown.html">FPTS Breakdown</a></li>
+    <li><a href="/handcuffs.html">Handcuffs</a></li>
+    <li><a href="/weeklymvp.html">Weekly MVP</a></li>
+    <li><a href="/stacks.html">Stacks</a></li>
+    <li><a href="/advantage.html" class="active">Advantage</a></li>
     <li><a href="/team/KC">Teams</a></li>
     <li><a href="/league-intel.html">League Intel</a></li>
     <li><a href="/agents.html">War Room</a></li>
   </ul>
 </nav>
 
-<main class="po-page" id="poRoot">
-  <div class="po-header">
-    <h1>Playoff Schedule Planner</h1>
-    <div class="po-subtitle">who has the easiest path through fantasy playoffs (wk 14-17)</div>
+<main class="pa-page" id="paRoot">
+  <div class="pa-header">
+    <h1>Positional Advantage</h1>
+    <div class="pa-subtitle">biggest scoring edge over the positional average</div>
   </div>
 
-  <div class="po-controls">
-    <select id="poSeason" aria-label="Season"></select>
+  <div class="pa-controls">
+    <select id="paSeason" aria-label="Season"></select>
     <div class="pos-tabs">
       <button class="pos-tab active" data-pos="">ALL</button>
       <button class="pos-tab" data-pos="QB">QB</button>
@@ -273,11 +139,13 @@
       <button class="pos-tab" data-pos="WR">WR</button>
       <button class="pos-tab" data-pos="TE">TE</button>
     </div>
-    <button class="po-export" id="poExport">Export PNG</button>
+    <button class="pa-export" id="paExport">Export PNG</button>
   </div>
 
-  <div id="poContent">
-    <div class="po-loading">pulling film...</div>
+  <div id="paAvgs"></div>
+
+  <div id="paContent">
+    <div class="pa-loading">pulling film...</div>
   </div>
 </main>
 
@@ -419,13 +287,8 @@
   }
 
   var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
-  var GRADE_COLORS = {
-    'A+': 'Aplus', 'A': 'A', 'B+': 'Bplus', 'B': 'B', 'C': 'C', 'D': 'D', 'F': 'F'
-  };
-
   var currentPosition = '';
 
-  /* ---- URL state ---- */
   function readURL() {
     var p = new URLSearchParams(window.location.search);
     return { season: p.get('season') || '', pos: p.get('pos') || '' };
@@ -438,32 +301,33 @@
     history.replaceState(null, '', qs ? '?' + qs : location.pathname);
   }
 
-  /* ---- Fetch ---- */
   function load() {
-    var selSeason = document.getElementById('poSeason');
+    var selSeason = document.getElementById('paSeason');
     var season = selSeason.value || '';
     var pos = currentPosition;
     writeURL(season, pos);
 
-    var url = '/api/playoff-schedule?';
+    var url = '/api/positional-advantage?';
     if (season) url += 'season=' + encodeURIComponent(season) + '&';
     if (pos) url += 'position=' + encodeURIComponent(pos) + '&';
 
-    document.getElementById('poContent').innerHTML = '<div class="po-loading">pulling film...</div>';
+    document.getElementById('paContent').innerHTML = '<div class="pa-loading">pulling film...</div>';
+    document.getElementById('paAvgs').innerHTML = '';
 
     fetch(url).then(function(r) {
       if (!r.ok) throw new Error('API error');
       return r.json();
     }).then(function(data) {
       populateSeasons(data.season);
+      renderAvgs(data.pos_averages);
       render(data);
     }).catch(function() {
-      document.getElementById('poContent').innerHTML = '<div class="po-loading">something went wrong — try again</div>';
+      document.getElementById('paContent').innerHTML = '<div class="pa-loading">something went wrong — try again</div>';
     });
   }
 
   function populateSeasons(current) {
-    var sel = document.getElementById('poSeason');
+    var sel = document.getElementById('paSeason');
     if (sel.options.length <= 1) {
       sel.innerHTML = '';
       for (var y = 2024; y >= 2020; y--) {
@@ -476,71 +340,60 @@
     }
   }
 
-  function gradeClass(grade) {
-    return 'po-grade-' + (GRADE_COLORS[grade] || grade);
+  function renderAvgs(avgs) {
+    if (!avgs) return;
+    var html = '<div class="pa-avgs">';
+    var positions = ['QB', 'RB', 'WR', 'TE'];
+    for (var i = 0; i < positions.length; i++) {
+      var pos = positions[i];
+      var color = POS_COLORS[pos] || '#888';
+      html += '<div class="pa-avg-chip"><span style="color:' + color + '">' + escapeHtml(pos) + '</span> avg: ' + escapeHtml(String(fmt(avgs[pos]))) + ' PPG</div>';
+    }
+    html += '</div>';
+    document.getElementById('paAvgs').innerHTML = html;
   }
 
-  /* ---- Render ---- */
   function render(data) {
     var players = data.players || [];
 
-    var html = '<div class="po-card">';
-    html += '<div class="po-card-header">Playoff Matchup Rankings — Wk 14-17 (' + escapeHtml(String(data.count || 0)) + ' players)</div>';
-
-    if (players.length) {
-      html += '<table class="po-table"><thead><tr>';
-      html += '<th>#</th><th>Player</th><th>Pos</th><th>PO PPG</th><th>SOS</th>';
-
-      // Dynamic week columns
-      var weekNums = [14, 15, 16, 17];
-      for (var w = 0; w < weekNums.length; w++) {
-        html += '<th>Wk ' + weekNums[w] + '</th>';
-      }
-      html += '</tr></thead><tbody>';
-
-      for (var i = 0; i < players.length; i++) {
-        var p = players[i];
-        var posColor = POS_COLORS[p.position] || '#888';
-
-        html += '<tr>';
-        html += '<td class="po-rank">' + (i + 1) + '</td>';
-        html += '<td>' + escapeHtml(p.name) + ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></td>';
-        html += '<td><span class="po-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
-        html += '<td style="font-weight:700">' + escapeHtml(String(fmt(p.playoff_ppg))) + '</td>';
-        html += '<td><span class="po-grade ' + gradeClass(p.sos_grade) + '">' + escapeHtml(p.sos_grade) + '</span></td>';
-
-        // Build week lookup
-        var weekMap = {};
-        for (var j = 0; j < p.weeks.length; j++) {
-          weekMap[p.weeks[j].week] = p.weeks[j];
-        }
-
-        for (var w = 0; w < weekNums.length; w++) {
-          var wk = weekMap[weekNums[w]];
-          if (wk) {
-            html += '<td><div class="po-matchup">';
-            html += '<span class="po-grade ' + gradeClass(wk.grade) + '">' + escapeHtml(wk.grade) + '</span>';
-            html += ' <span class="po-opp">vs ' + escapeHtml(wk.opponent) + '</span>';
-            html += ' <span style="font-size:10px;font-weight:700">' + escapeHtml(String(fmt(wk.fpts))) + '</span>';
-            html += '</div></td>';
-          } else {
-            html += '<td style="color:var(--ink-faint)">—</td>';
-          }
-        }
-
-        html += '</tr>';
-      }
-
-      html += '</tbody></table>';
-    } else {
-      html += '<div class="po-empty">no playoff data found for this season</div>';
+    if (!players.length) {
+      document.getElementById('paContent').innerHTML = '<div class="pa-card"><div class="pa-card-header">Positional Advantage</div><div class="pa-empty">no data found</div></div>';
+      return;
     }
 
-    html += '</div>';
-    document.getElementById('poContent').innerHTML = html;
+    var html = '<div class="pa-card">';
+    html += '<div class="pa-card-header">Positional Advantage (' + escapeHtml(String(data.count)) + ' players)</div>';
+    html += '<table class="pa-table"><thead><tr>';
+    html += '<th>#</th><th>Player</th><th>Pos</th><th>PPG</th><th>Pos Avg</th><th>Edge</th><th>% Above</th><th></th><th>GP</th>';
+    html += '</tr></thead><tbody>';
+
+    var maxAdv = Math.max.apply(null, players.map(function(p) { return Math.abs(p.advantage); }).concat([1]));
+
+    for (var i = 0; i < players.length; i++) {
+      var p = players[i];
+      var posColor = POS_COLORS[p.position] || '#888';
+      var sign = p.advantage > 0 ? '+' : '';
+      var badgeClass = p.advantage >= 0 ? 'pa-adv-pos' : 'pa-adv-neg';
+      var barWidth = Math.max(2, Math.round(Math.abs(p.advantage) / maxAdv * 80));
+      var barColor = p.advantage >= 0 ? '#2ec4b6' : '#d97757';
+
+      html += '<tr>';
+      html += '<td class="pa-rank">' + (i + 1) + '</td>';
+      html += '<td>' + escapeHtml(p.name) + ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></td>';
+      html += '<td><span class="pa-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
+      html += '<td style="font-weight:700">' + escapeHtml(String(fmt(p.ppg))) + '</td>';
+      html += '<td>' + escapeHtml(String(fmt(p.pos_avg))) + '</td>';
+      html += '<td><span class="pa-adv-badge ' + badgeClass + '">' + sign + escapeHtml(String(fmt(p.advantage))) + '</span></td>';
+      html += '<td>' + sign + escapeHtml(String(fmt(p.pct_above, 0))) + '%</td>';
+      html += '<td><div class="pa-bar" style="width:' + barWidth + 'px;background:' + barColor + '"></div></td>';
+      html += '<td>' + escapeHtml(String(p.games)) + '</td>';
+      html += '</tr>';
+    }
+
+    html += '</tbody></table></div>';
+    document.getElementById('paContent').innerHTML = html;
   }
 
-  /* ---- Position tabs ---- */
   document.querySelectorAll('.pos-tab').forEach(function(btn) {
     btn.addEventListener('click', function() {
       document.querySelectorAll('.pos-tab').forEach(function(b) { b.classList.remove('active'); });
@@ -550,11 +403,10 @@
     });
   });
 
-  document.getElementById('poSeason').addEventListener('change', load);
+  document.getElementById('paSeason').addEventListener('change', load);
 
-  /* ---- PNG export ---- */
-  document.getElementById('poExport').addEventListener('click', function() {
-    var root = document.getElementById('poRoot');
+  document.getElementById('paExport').addEventListener('click', function() {
+    var root = document.getElementById('paRoot');
     if (typeof html2canvas === 'undefined') return;
     html2canvas(root, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
       var ctx = canvas.getContext('2d');
@@ -562,20 +414,18 @@
       ctx.fillStyle = 'rgba(0,0,0,0.12)';
       ctx.fillText('razzle.lol', canvas.width - 130, canvas.height - 16);
       var link = document.createElement('a');
-      link.download = 'razzle-playoffs.png';
+      link.download = 'razzle-advantage.png';
       link.href = canvas.toDataURL();
       link.click();
     });
   });
 
-  /* ---- Analytics ---- */
   fetch('/api/analytics/pageview', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ page: '/playoffs.html', referrer: document.referrer || '' })
+    body: JSON.stringify({ page: '/advantage.html', referrer: document.referrer || '' })
   }).catch(function() {});
 
-  /* ---- Init from URL ---- */
   var init = readURL();
   if (init.pos) {
     currentPosition = init.pos;
@@ -584,7 +434,7 @@
     });
   }
   if (init.season) {
-    var sel = document.getElementById('poSeason');
+    var sel = document.getElementById('paSeason');
     var opt = document.createElement('option');
     opt.value = init.season;
     opt.textContent = init.season;

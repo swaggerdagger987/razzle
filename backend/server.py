@@ -937,6 +937,7 @@ def sitemap_xml():
         ("/handcuffs.html", "0.8", "weekly"),
         ("/weeklymvp.html", "0.8", "weekly"),
         ("/stacks.html", "0.8", "weekly"),
+        ("/advantage.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1589,6 +1590,16 @@ def records(position: str = ""):
         return JSONResponse({"error": "Failed to fetch records"}, status_code=500)
 
 
+@app.get("/api/positional-advantage")
+def positional_advantage(season: int = None, position: str = None):
+    try:
+        pos = position.upper() if position else None
+        return live_data.fetch_positional_advantage(season=season, position=pos)
+    except Exception as e:
+        logger.error(f"positional-advantage error: {e}")
+        return JSONResponse({"error": "Failed to fetch positional advantage"}, status_code=500)
+
+
 @app.get("/api/stacks")
 def stacks(season: int = None):
     try:
@@ -1687,6 +1698,7 @@ def tools_hub():
                 {"name": "Waiver Wire", "desc": "High recent PPG, low season PPG — likely unrostered and surging", "url": "/waivers.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Handcuff Rankings", "desc": "Most valuable backup RBs by team rushing volume and efficiency", "url": "/handcuffs.html", "positions": ["RB"]},
                 {"name": "Stack Finder", "desc": "QB-WR/TE scoring correlations — find the best same-team stacks", "url": "/stacks.html", "positions": ["QB", "WR", "TE"]},
+                {"name": "Positional Advantage", "desc": "Biggest scoring edge over the positional average — league-winning edges", "url": "/advantage.html", "positions": ["QB", "RB", "WR", "TE"]},
             ],
         },
         {
