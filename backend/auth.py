@@ -92,12 +92,18 @@ def _decode_token(token: str) -> dict:
 
 
 def _user_dict(row) -> dict:
-    return {
+    d = {
         "id": row["id"],
         "email": row["email"],
         "plan": row["plan"],
         "sleeper_username": row["sleeper_username"],
     }
+    # Include stripe_customer_id if column exists
+    try:
+        d["stripe_customer_id"] = row["stripe_customer_id"]
+    except (IndexError, KeyError):
+        pass
+    return d
 
 
 def register(email: str, password: str) -> dict:

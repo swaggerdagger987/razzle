@@ -17,6 +17,7 @@ import uvicorn
 
 from . import live_data
 from . import auth as auth_module
+from . import billing as billing_module
 
 logger = logging.getLogger("razzle")
 
@@ -122,6 +123,7 @@ def bootstrap_database():
 async def lifespan(app):
     bootstrap_database()
     auth_module.initialize_users_db()
+    billing_module.initialize_subscriptions_table()
     live_data.init_waitlist_table()
     live_data.init_formula_store_tables()
     live_data._init_analytics_table()
@@ -257,6 +259,41 @@ async def auth_link_sleeper(request: Request):
     if "error" in result:
         return JSONResponse({"error": result["error"]}, status_code=result["status"])
     return result
+
+
+# ---------------------------------------------------------------------------
+# Billing endpoints (Stripe)
+# ---------------------------------------------------------------------------
+
+@app.post("/api/billing/create-checkout")
+async def create_checkout(request: Request):
+    user = require_auth(request)
+    if not user:
+        return JSONResponse({"error": "Authentication required"}, status_code=401)
+    body = await request.json()
+    interval = body.get("interval", "year")  # "year" or "month"
+    result = billing_module.create_checkout_session(user, interval)
+    if "error" in result:
+        return JSONResponse({"error": result["error"]}, status_code=result.get("status", 400))
+    return result
+
+
+@app.post("/api/billing/webhook")
+async def billing_webhook(request: Request):
+    payload = await request.body()
+    sig_header = request.headers.get("stripe-signature", "")
+    result = billing_module.handle_webhook(payload, sig_header)
+    if "error" in result:
+        return JSONResponse({"error": result["error"]}, status_code=result.get("status", 400))
+    return result
+
+
+@app.get("/api/billing/status")
+async def billing_status(request: Request):
+    user = require_auth(request)
+    if not user:
+        return JSONResponse({"error": "Authentication required"}, status_code=401)
+    return billing_module.get_billing_status(user)
 
 
 # ---------------------------------------------------------------------------
