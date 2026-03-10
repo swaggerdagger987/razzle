@@ -2115,7 +2115,7 @@ def fetch_td_regression(season=None, position=None, limit=50):
             cursor.execute(f"""
                 SELECT p.gsis_id, p.full_name, p.position, p.team,
                        s.rushing_tds, s.receiving_tds, s.passing_tds,
-                       s.carries, s.targets, s.passing_attempts,
+                       s.carries, s.targets, s.attempts,
                        s.games
                 FROM player_season_stats s
                 JOIN players p ON p.gsis_id = s.player_id

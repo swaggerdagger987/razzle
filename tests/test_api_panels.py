@@ -21,7 +21,8 @@ def _assert_ok_or_handled_error(resp):
 
 def test_stat_leaders(client):
     resp = client.get("/api/stat-leaders")
-    _assert_ok_or_handled_error(resp)
+    assert resp.status_code == 200
+    assert isinstance(resp.json(), dict)
 
 
 def test_positional_scarcity(client):
@@ -152,7 +153,8 @@ def test_cheat_sheet(client):
 
 def test_td_regression(client):
     resp = client.get("/api/td-regression")
-    _assert_ok_or_handled_error(resp)
+    assert resp.status_code == 200
+    assert isinstance(resp.json(), dict)
 
 
 def test_streaks(client):
@@ -169,14 +171,17 @@ def test_game_script(client):
 
 def test_snap_efficiency(client):
     resp = client.get("/api/snap-efficiency")
-    _assert_ok_or_handled_error(resp)
+    assert resp.status_code == 200
+    assert isinstance(resp.json(), dict)
 
 
 def test_workload_monitor(client):
     resp = client.get("/api/workload-monitor")
-    _assert_ok_or_handled_error(resp)
+    assert resp.status_code == 200
+    assert isinstance(resp.json(), dict)
 
 
 def test_garbage_time(client):
     resp = client.get("/api/garbage-time")
-    _assert_ok_or_handled_error(resp)
+    assert resp.status_code == 200
+    assert isinstance(resp.json(), dict)
