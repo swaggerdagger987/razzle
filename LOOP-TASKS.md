@@ -13,8 +13,9 @@
 **Accept when**: Recent panel chips use escaped panel names. Sidebar init doesn't throw in private browsing. Search has aria-label.
 **Depends on**: none
 **Size**: S
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
+**Notes**: escapeHtml(p) in onclick. try-catch on sidebar collapsed init + toggle + search click localStorage. aria-label="Search tools" on input.
 
 ### Task 2: Fix HIGH — localStorage try-catch in lab.js and app.js
 **Requirement**: Wrap all unprotected localStorage.setItem and getItem calls in lab.js (saveWatchlist, setUniverse, saveCurrentView, deleteSavedView, saveCustomScoringConfigs, toggleHeatColors, saveMyRoster, first-visit hint) and app.js (getAuthHeaders) in try-catch blocks.

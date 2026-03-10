@@ -2257,7 +2257,7 @@
   <div class="lab-sidebar-inner">
 
     <div class="sidebar-search-wrap">
-      <input type="text" class="sidebar-search" id="sidebarSearch" placeholder="Search tools..." autocomplete="off" spellcheck="false">
+      <input type="text" class="sidebar-search" id="sidebarSearch" placeholder="Search tools..." autocomplete="off" spellcheck="false" aria-label="Search tools">
       <span class="sidebar-tool-count" id="sidebarToolCount"></span>
     </div>
 
@@ -3272,13 +3272,15 @@
   window.toggleSidebar = function() {
     var sidebar = document.getElementById('labSidebar');
     sidebar.classList.toggle('collapsed');
-    localStorage.setItem('razzle_sidebar_collapsed', sidebar.classList.contains('collapsed') ? '1' : '0');
+    try { localStorage.setItem('razzle_sidebar_collapsed', sidebar.classList.contains('collapsed') ? '1' : '0'); } catch(e) {}
   };
 
   // Restore sidebar state
-  if (localStorage.getItem('razzle_sidebar_collapsed') === '1') {
-    document.getElementById('labSidebar').classList.add('collapsed');
-  }
+  try {
+    if (localStorage.getItem('razzle_sidebar_collapsed') === '1') {
+      document.getElementById('labSidebar').classList.add('collapsed');
+    }
+  } catch(e) {}
 
   // ─── Sidebar keyboard navigation ─────────────────────────────
   (function() {
@@ -3378,7 +3380,7 @@
     wrapper.classList.add('has-items');
     container.innerHTML = display.map(function(p) {
       var label = PANEL_LABELS[p] || p;
-      return '<a class="sidebar-recent-chip" onclick="switchPanel(\'' + p + '\')">' + escapeHtml(label) + '</a>';
+      return '<a class="sidebar-recent-chip" onclick="switchPanel(\'' + escapeHtml(p) + '\')">' + escapeHtml(label) + '</a>';
     }).join('');
   }
 
@@ -3533,7 +3535,7 @@
     searchInput.addEventListener('click', function() {
       if (sidebar.classList.contains('collapsed')) {
         sidebar.classList.remove('collapsed');
-        localStorage.setItem('razzle_sidebar_collapsed', '0');
+        try { localStorage.setItem('razzle_sidebar_collapsed', '0'); } catch(e) {}
         setTimeout(function() { searchInput.focus(); }, 200);
       }
     });
