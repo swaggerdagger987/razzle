@@ -4403,3 +4403,182 @@ def fetch_positional_scarcity(season=None):
         }
     finally:
         conn.close()
+
+
+# ---------------------------------------------------------------------------
+# Breakout Candidate Finder — opportunity vs production gap
+# ---------------------------------------------------------------------------
+
+_BREAKOUT_ANNOTATIONS = [
+    "due for a leap",
+    "opportunity knocking",
+    "the gap is real",
+    "buy low window",
+    "volume is coming",
+    "efficiency waiting to click",
+    "usage spike incoming",
+    "sleeper alert",
+    "the arrow is up",
+    "market inefficiency",
+]
+
+
+def fetch_breakout_candidates(season=None, position=None, limit=50):
+    """Return players ranked by breakout potential (opportunity-production gap)."""
+    conn = get_conn()
+
+    try:
+        # Determine season + available seasons
+        row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
+        available_seasons = [r[0] for r in row] if row else [2024]
+        if not season:
+            season = available_seasons[0] if available_seasons else 2024
+
+        pos_filter = ""
+        params = [season]
+        if position and position.upper() in ("QB", "RB", "WR", "TE"):
+            pos_filter = "AND p.position = ?"
+            params.append(position.upper())
+
+        # Get all fantasy-relevant young players with their season stats
+        query = f"""
+            SELECT
+                p.player_id, p.full_name, p.position, p.team, p.age,
+                p.headshot_url,
+                SUM(s.fantasy_points_ppr) as total_ppr,
+                COUNT(DISTINCT s.week) as games,
+                AVG(s.offense_pct) as avg_snap_pct,
+                SUM(s.targets) as targets,
+                SUM(s.carries) as carries,
+                SUM(s.attempts) as attempts,
+                SUM(s.receiving_air_yards) as air_yards
+            FROM players p
+            JOIN player_week_stats s
+                ON s.player_id = p.player_id AND s.season = ?
+            WHERE p.position IN ('QB','RB','WR','TE')
+              AND p.fantasy_relevant = 1
+              AND p.age IS NOT NULL
+              AND p.age <= 27
+              {pos_filter}
+            GROUP BY p.player_id
+            HAVING games >= 6
+            ORDER BY total_ppr DESC
+        """
+        rows = conn.execute(query, params).fetchall()
+
+        if not rows:
+            return {
+                "season": season,
+                "available_seasons": available_seasons,
+                "candidates": [],
+                "total": 0,
+            }
+
+        # Build player list with raw stats
+        players = []
+        for r in rows:
+            games = r[7] or 1
+            ppg = round((r[6] or 0) / games, 2)
+            snap_pct = round(r[8] or 0, 1)
+            targets = r[9] or 0
+            carries = r[10] or 0
+            attempts = r[11] or 0
+            air_yards = r[12] or 0
+            players.append({
+                "player_id": r[0],
+                "name": r[1] or "Unknown",
+                "position": r[2] or "WR",
+                "team": r[3] or "FA",
+                "age": r[4],
+                "headshot_url": r[5] or "",
+                "ppg": ppg,
+                "games": games,
+                "snap_pct": snap_pct,
+                "targets_per_game": round(targets / games, 1),
+                "carries_per_game": round(carries / games, 1),
+                "attempts_per_game": round(attempts / games, 1),
+                "air_yards_per_game": round(air_yards / games, 1),
+            })
+
+        # Fetch target_share from player_week_metrics
+        pids = [p["player_id"] for p in players]
+        placeholders = ",".join("?" * len(pids))
+        ts_rows = conn.execute(f"""
+            SELECT player_id, AVG(stat_value) as avg_ts
+            FROM player_week_metrics
+            WHERE player_id IN ({placeholders})
+              AND season = ?
+              AND stat_key = 'target_share'
+            GROUP BY player_id
+        """, pids + [season]).fetchall()
+        ts_lookup = {r[0]: round(r[1] * 100, 1) if r[1] else 0 for r in ts_rows}
+        for p in players:
+            p["target_share"] = ts_lookup.get(p["player_id"], 0)
+
+        # Compute percentiles within each position group
+        by_pos = {}
+        for p in players:
+            pos = p["position"]
+            if pos not in by_pos:
+                by_pos[pos] = []
+            by_pos[pos].append(p)
+
+        for pos, pos_players in by_pos.items():
+            n = len(pos_players)
+            if n < 2:
+                for p in pos_players:
+                    p["opportunity_pct"] = 50
+                    p["production_pct"] = 50
+                    p["rbs_score"] = 0
+                continue
+
+            # Compute opportunity metric based on position
+            for p in pos_players:
+                if pos == "QB":
+                    p["_opp_raw"] = p["snap_pct"] * 0.5 + p["attempts_per_game"] * 1.5
+                elif pos == "RB":
+                    p["_opp_raw"] = p["snap_pct"] * 0.4 + p["carries_per_game"] * 2.0 + p["targets_per_game"] * 3.0
+                else:
+                    # WR/TE: snap% + target share + air yards
+                    p["_opp_raw"] = p["snap_pct"] * 0.3 + p["target_share"] * 2.0 + p["air_yards_per_game"] * 0.1
+
+            # Sort by opportunity and assign percentiles
+            opp_sorted = sorted(pos_players, key=lambda x: x["_opp_raw"])
+            for i, p in enumerate(opp_sorted):
+                p["opportunity_pct"] = round((i / (n - 1)) * 100) if n > 1 else 50
+
+            # Sort by PPG and assign production percentiles
+            ppg_sorted = sorted(pos_players, key=lambda x: x["ppg"])
+            for i, p in enumerate(ppg_sorted):
+                p["production_pct"] = round((i / (n - 1)) * 100) if n > 1 else 50
+
+            # Breakout Score = opportunity percentile - production percentile
+            # Positive gap = more opportunity than production = breakout candidate
+            for p in pos_players:
+                gap = p["opportunity_pct"] - p["production_pct"]
+                # Age bonus: younger = higher breakout potential
+                age_bonus = max(0, (28 - (p["age"] or 27)) * 2)
+                p["rbs_score"] = max(0, gap + age_bonus)
+                del p["_opp_raw"]
+
+        # Flatten, sort by RBS, take top N
+        all_players = []
+        for pos_players in by_pos.values():
+            all_players.extend(pos_players)
+
+        all_players.sort(key=lambda x: x["rbs_score"], reverse=True)
+        candidates = all_players[:limit]
+
+        # Add rank and annotation
+        for i, p in enumerate(candidates):
+            p["rank"] = i + 1
+            p["annotation"] = _BREAKOUT_ANNOTATIONS[i % len(_BREAKOUT_ANNOTATIONS)]
+
+        return {
+            "season": season,
+            "available_seasons": available_seasons,
+            "candidates": candidates,
+            "total": len(candidates),
+        }
+    finally:
+        conn.close()

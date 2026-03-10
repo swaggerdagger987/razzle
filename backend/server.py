@@ -885,6 +885,7 @@ def sitemap_xml():
         ("/leaders.html", "0.9", "weekly"),
         ("/prospects.html", "0.9", "weekly"),
         ("/scarcity.html", "0.8", "weekly"),
+        ("/breakouts.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1019,6 +1020,14 @@ def positional_scarcity(season: int = 0):
     """Return PPG drop-off data by position for scarcity analysis."""
     s = season if season > 0 else None
     return live_data.fetch_positional_scarcity(season=s)
+
+
+@app.get("/api/breakout-candidates")
+def breakout_candidates(season: int = 0, position: str = "", limit: int = 50):
+    """Return players ranked by breakout potential (opportunity-production gap)."""
+    s = season if season > 0 else None
+    pos = position.upper() if position else None
+    return live_data.fetch_breakout_candidates(season=s, position=pos, limit=max(1, min(limit, 100)))
 
 
 @app.get("/api/analytics/summary")

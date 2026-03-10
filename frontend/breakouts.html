@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Breakout Candidates — Razzle</title>
+<meta property="og:title" content="Breakout Candidates — Razzle">
+<meta property="og:description" content="Fantasy football breakout candidate finder — opportunity vs production gap analysis on razzle.lol">
+<meta property="og:site_name" content="razzle.lol">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Breakout Candidates — Razzle">
+<meta name="twitter:description" content="Fantasy football breakout candidate finder — opportunity vs production gap analysis on razzle.lol">
+<meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
+<meta name="description" content="Breakout candidate finder — players whose opportunity outpaces production on razzle.lol">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .breakouts-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+  }
+
+  .breakouts-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .breakouts-header h1 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: var(--ink);
+    margin: 0 0 4px;
+  }
+  .breakouts-header .breakouts-subtitle {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+  }
+
+  /* Controls row */
+  .breakouts-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .breakouts-season-select {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    padding: 7px 12px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--bg-card);
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  /* Position filter tabs */
+  .breakouts-pos-tabs {
+    display: flex;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .breakouts-pos-tab {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 6px 14px;
+    background: var(--bg-card);
+    color: var(--ink);
+    border: none;
+    border-right: 2px solid var(--ink);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .breakouts-pos-tab:last-child { border-right: none; }
+  .breakouts-pos-tab.active {
+    background: var(--ink);
+    color: var(--bg-card);
+  }
+  .breakouts-pos-tab:hover:not(.active) {
+    background: var(--bg-warm);
+  }
+
+  /* Actions */
+  .breakouts-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  /* Card grid */
+  .breakouts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 16px;
+  }
+
+  .breakout-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    overflow: hidden;
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+  .breakout-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+
+  .breakout-card-top {
+    height: 6px;
+  }
+  .breakout-card-top.qb { background: var(--pos-qb); }
+  .breakout-card-top.rb { background: var(--pos-rb); }
+  .breakout-card-top.wr { background: var(--pos-wr); }
+  .breakout-card-top.te { background: var(--pos-te); }
+
+  .breakout-card-body {
+    padding: 14px;
+  }
+
+  .breakout-card-row1 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .breakout-rank {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ink-light);
+    min-width: 28px;
+    text-align: center;
+  }
+
+  .breakout-headshot {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid var(--ink);
+    object-fit: cover;
+    flex-shrink: 0;
+    background: var(--bg-warm);
+  }
+
+  .breakout-info {
+    flex: 1;
+    min-width: 0;
+  }
+  .breakout-name {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .breakout-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 2px;
+  }
+  .breakout-pos-badge {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 1px 8px;
+    border-radius: 6px;
+    color: #fff;
+  }
+  .breakout-pos-badge.qb { background: var(--pos-qb); }
+  .breakout-pos-badge.rb { background: var(--pos-rb); }
+  .breakout-pos-badge.wr { background: var(--pos-wr); }
+  .breakout-pos-badge.te { background: var(--pos-te); }
+  .breakout-team {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-medium);
+  }
+  .breakout-age-badge {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 4px;
+    border: 1px solid;
+  }
+  .breakout-age-badge.young { background: #d9efec; color: #1a7a6d; border-color: #2ec4b6; }
+  .breakout-age-badge.prime { background: #f5eacc; color: #8a6d20; border-color: #ffc857; }
+  .breakout-age-badge.aging { background: #f2d5d8; color: #a83240; border-color: #e63946; }
+
+  .breakout-rbs {
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .breakout-rbs-score {
+    font-family: var(--font-mono);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--orange);
+  }
+  .breakout-rbs-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-light);
+    text-transform: uppercase;
+  }
+
+  /* Opportunity vs Production bars */
+  .breakout-bars {
+    margin-bottom: 10px;
+  }
+  .breakout-bar-group {
+    margin-bottom: 6px;
+  }
+  .breakout-bar-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-medium);
+    margin-bottom: 2px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .breakout-bar-track {
+    height: 14px;
+    background: var(--bg-warm);
+    border-radius: 4px;
+    border: 1px solid var(--ink-faint);
+    position: relative;
+    overflow: hidden;
+  }
+  .breakout-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s ease;
+  }
+  .breakout-bar-fill.opportunity {
+    background: var(--green);
+    opacity: 0.8;
+  }
+  .breakout-bar-fill.production {
+    background: var(--ink-light);
+    opacity: 0.6;
+  }
+
+  /* Gap indicator */
+  .breakout-gap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 8px;
+    padding: 4px 0;
+    border-top: 2px dashed var(--ink-faint);
+    border-bottom: 2px dashed var(--ink-faint);
+  }
+  .breakout-gap-arrow {
+    font-size: 16px;
+    color: var(--green);
+  }
+  .breakout-gap-text {
+    font-family: var(--font-hand);
+    font-size: 16px;
+    color: var(--ink-medium);
+  }
+
+  /* Stats row */
+  .breakout-stats {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .breakout-stat {
+    flex: 1;
+    min-width: 60px;
+    text-align: center;
+  }
+  .breakout-stat-val {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .breakout-stat-key {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-light);
+    text-transform: uppercase;
+  }
+
+  /* Loading */
+  .breakouts-loading {
+    text-align: center;
+    font-family: var(--font-hand);
+    font-size: 22px;
+    color: var(--ink-light);
+    padding: 60px 20px;
+  }
+
+  /* Empty state */
+  .breakouts-empty {
+    text-align: center;
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+    padding: 60px 20px;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .breakouts-grid {
+      grid-template-columns: 1fr;
+    }
+    .breakouts-header h1 { font-size: 26px; }
+  }
+  @media (max-width: 480px) {
+    .breakouts-page { padding: 16px 12px 40px; }
+    .breakouts-header h1 { font-size: 22px; }
+    .breakout-card-body { padding: 10px; }
+    .breakout-stats { gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="main-nav">
+  <div class="nav-brand"><a href="/" style="text-decoration:none; color:inherit;">razzle.lol</a></div>
+  <ul class="nav-links">
+    <li><a href="/lab.html">The Lab</a></li>
+    <li><a href="/rankings.html">Rankings</a></li>
+    <li><a href="/leaders.html">Leaders</a></li>
+    <li><a href="/prospects.html">Prospects</a></li>
+    <li><a href="/scarcity.html">Scarcity</a></li>
+    <li><a href="/breakouts.html" class="active">Breakouts</a></li>
+    <li><a href="/team/KC">Teams</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
+    <li><a href="/agents.html">War Room</a></li>
+  </ul>
+</nav>
+
+<main class="breakouts-page" id="breakouts-content">
+  <div class="breakouts-header">
+    <h1>Breakout Candidates</h1>
+    <div class="breakouts-subtitle">opportunity outpacing production</div>
+  </div>
+
+  <div class="breakouts-controls">
+    <div class="breakouts-pos-tabs" id="pos-tabs">
+      <button class="breakouts-pos-tab active" data-pos="">All</button>
+      <button class="breakouts-pos-tab" data-pos="QB">QB</button>
+      <button class="breakouts-pos-tab" data-pos="RB">RB</button>
+      <button class="breakouts-pos-tab" data-pos="WR">WR</button>
+      <button class="breakouts-pos-tab" data-pos="TE">TE</button>
+    </div>
+    <select class="breakouts-season-select" id="season-select" title="Season"></select>
+  </div>
+
+  <div class="breakouts-actions">
+    <button class="btn-chunky" id="export-btn" title="Export as PNG">Export PNG</button>
+  </div>
+
+  <div id="breakouts-body">
+    <div class="breakouts-loading" id="breakouts-loading">scouting the film...</div>
+  </div>
+</main>
+
+<!-- Watermark -->
+<div style="position:fixed; bottom:10px; right:14px; font-family:var(--font-hand); font-size:14px; color:var(--ink-light); opacity:0.7; pointer-events:none; z-index:999;">razzle.lol</div>
+
+<!-- Footer -->
+<footer style="text-align:center; padding:24px 20px 32px; font-family:var(--font-hand); font-size:15px; color:var(--ink-light); border-top:2px dashed var(--ink-faint); margin-top:40px;">
+  <div style="margin-bottom:10px;">
+    <a href="/lab.html" style="color:var(--ink-light); text-decoration:none;">The Lab</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/rankings.html" style="color:var(--ink-light); text-decoration:none;">Rankings</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/leaders.html" style="color:var(--ink-light); text-decoration:none;">Leaders</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/prospects.html" style="color:var(--ink-light); text-decoration:none;">Prospects</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/scarcity.html" style="color:var(--ink-light); text-decoration:none;">Scarcity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/breakouts.html" style="color:var(--ink-light); text-decoration:none;">Breakouts</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/team/KC" style="color:var(--ink-light); text-decoration:none;">Teams</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none;">League Intel</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/agents.html" style="color:var(--ink-light); text-decoration:none;">War Room</a>
+  </div>
+  razzle.lol — let's razzle dazzle em baby
+</footer>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  var currentData = null;
+  var currentPosition = '';
+
+  function ageClass(age) {
+    if (!age) return 'prime';
+    if (age <= 24) return 'young';
+    if (age <= 26) return 'prime';
+    return 'aging';
+  }
+
+  function ageLabel(age) {
+    if (!age) return '';
+    var cls = ageClass(age);
+    if (cls === 'young') return 'young';
+    if (cls === 'prime') return 'prime';
+    return 'aging';
+  }
+
+  function posStatLabel(pos) {
+    if (pos === 'QB') return 'ATT/G';
+    if (pos === 'RB') return 'CAR/G';
+    return 'TGT/G';
+  }
+
+  function posStatVal(p) {
+    if (p.position === 'QB') return p.attempts_per_game;
+    if (p.position === 'RB') return p.carries_per_game;
+    return p.targets_per_game;
+  }
+
+  async function loadData(season, position) {
+    var loadingEl = document.getElementById('breakouts-loading');
+    var bodyEl = document.getElementById('breakouts-body');
+
+    if (loadingEl) loadingEl.style.display = '';
+    bodyEl.innerHTML = '<div class="breakouts-loading">scouting the film...</div>';
+
+    var url = '/api/breakout-candidates?limit=50';
+    if (season) url += '&season=' + season;
+    if (position) url += '&position=' + position;
+
+    try {
+      var resp = await fetch(url);
+      var data = await resp.json();
+      currentData = data;
+
+      // Populate season selector
+      var sel = document.getElementById('season-select');
+      if (sel && data.available_seasons) {
+        var curSeason = season || data.season;
+        sel.innerHTML = '';
+        data.available_seasons.forEach(function(s) {
+          var opt = document.createElement('option');
+          opt.value = s;
+          opt.textContent = s;
+          if (s == curSeason) opt.selected = true;
+          sel.appendChild(opt);
+        });
+      }
+
+      renderCards(data, bodyEl);
+    } catch(e) {
+      bodyEl.innerHTML = '<div class="breakouts-empty">failed to load breakout data</div>';
+    }
+  }
+
+  function renderCards(data, bodyEl) {
+    var candidates = data.candidates || [];
+    if (!candidates.length) {
+      bodyEl.innerHTML = '<div class="breakouts-empty">no breakout candidates found for this filter</div>';
+      return;
+    }
+
+    var html = '<div class="breakouts-grid">';
+
+    candidates.forEach(function(p) {
+      var pos = (p.position || 'WR').toLowerCase();
+      var posColor = POS_COLORS[p.position] || '#d97757';
+      var ac = ageClass(p.age);
+      var al = ageLabel(p.age);
+      var gap = p.opportunity_pct - p.production_pct;
+
+      html += '<div class="breakout-card" data-pid="' + escapeHtml(p.player_id) + '">';
+      html += '<div class="breakout-card-top ' + pos + '"></div>';
+      html += '<div class="breakout-card-body">';
+
+      // Row 1: rank, headshot, info, RBS
+      html += '<div class="breakout-card-row1">';
+      html += '<div class="breakout-rank">' + p.rank + '</div>';
+      if (p.headshot_url) {
+        html += '<img class="breakout-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+      }
+      html += '<div class="breakout-info">';
+      html += '<div class="breakout-name">' + escapeHtml(p.name) + '</div>';
+      html += '<div class="breakout-meta">';
+      html += '<span class="breakout-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
+      html += '<span class="breakout-team">' + escapeHtml(p.team) + '</span>';
+      if (p.age) {
+        html += '<span class="breakout-age-badge ' + ac + '">' + al + ' ' + p.age + '</span>';
+      }
+      html += '</div></div>';
+      html += '<div class="breakout-rbs">';
+      html += '<div class="breakout-rbs-score">' + p.rbs_score + '</div>';
+      html += '<div class="breakout-rbs-label">RBS</div>';
+      html += '</div>';
+      html += '</div>';
+
+      // Opportunity vs Production bars
+      html += '<div class="breakout-bars">';
+      html += '<div class="breakout-bar-group">';
+      html += '<div class="breakout-bar-label"><span>Opportunity</span><span>' + p.opportunity_pct + '%</span></div>';
+      html += '<div class="breakout-bar-track"><div class="breakout-bar-fill opportunity" style="width:' + p.opportunity_pct + '%"></div></div>';
+      html += '</div>';
+      html += '<div class="breakout-bar-group">';
+      html += '<div class="breakout-bar-label"><span>Production</span><span>' + p.production_pct + '%</span></div>';
+      html += '<div class="breakout-bar-track"><div class="breakout-bar-fill production" style="width:' + p.production_pct + '%"></div></div>';
+      html += '</div>';
+      html += '</div>';
+
+      // Gap annotation
+      html += '<div class="breakout-gap">';
+      html += '<span class="breakout-gap-arrow">&#9650;</span>';
+      html += '<span class="breakout-gap-text">' + escapeHtml(p.annotation) + '</span>';
+      html += '</div>';
+
+      // Key stats
+      html += '<div class="breakout-stats">';
+      html += '<div class="breakout-stat"><div class="breakout-stat-val">' + p.ppg + '</div><div class="breakout-stat-key">PPG</div></div>';
+      html += '<div class="breakout-stat"><div class="breakout-stat-val">' + p.snap_pct + '%</div><div class="breakout-stat-key">Snap%</div></div>';
+      html += '<div class="breakout-stat"><div class="breakout-stat-val">' + posStatVal(p) + '</div><div class="breakout-stat-key">' + posStatLabel(p.position) + '</div></div>';
+      if (p.position !== 'QB' && p.position !== 'RB') {
+        html += '<div class="breakout-stat"><div class="breakout-stat-val">' + p.target_share + '%</div><div class="breakout-stat-key">TGT%</div></div>';
+      }
+      html += '<div class="breakout-stat"><div class="breakout-stat-val">' + p.games + '</div><div class="breakout-stat-key">Games</div></div>';
+      html += '</div>';
+
+      html += '</div></div>';
+    });
+
+    html += '</div>';
+    bodyEl.innerHTML = html;
+
+    // Click handlers
+    bodyEl.querySelectorAll('.breakout-card[data-pid]').forEach(function(card) {
+      card.addEventListener('click', function() {
+        var pid = card.getAttribute('data-pid');
+        if (pid) window.location.href = '/player/' + encodeURIComponent(pid);
+      });
+    });
+  }
+
+  // Position tab handlers
+  document.querySelectorAll('.breakouts-pos-tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.breakouts-pos-tab').forEach(function(t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      currentPosition = tab.getAttribute('data-pos') || '';
+      var season = document.getElementById('season-select').value;
+      loadData(season, currentPosition);
+    });
+  });
+
+  // Season change handler
+  document.getElementById('season-select').addEventListener('change', function() {
+    loadData(this.value, currentPosition);
+  });
+
+  // Export PNG
+  document.getElementById('export-btn').addEventListener('click', function() {
+    var target = document.getElementById('breakouts-content');
+    if (!target || typeof html2canvas === 'undefined') return;
+    html2canvas(target, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+      var ctx = canvas.getContext('2d');
+      ctx.font = '28px Caveat, cursive';
+      ctx.fillStyle = 'rgba(26,26,46,0.25)';
+      ctx.textAlign = 'right';
+      ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 16);
+      var a = document.createElement('a');
+      a.download = 'razzle-breakouts.png';
+      a.href = canvas.toDataURL('image/png');
+      a.click();
+    });
+  });
+
+  // Analytics
+  try {
+    fetch('/api/analytics/pageview', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ page: '/breakouts.html' }),
+    });
+  } catch(e) {}
+
+  // Quick search (Ctrl+K)
+  if (typeof window.initQuickSearch === 'function') window.initQuickSearch();
+
+  // Load
+  loadData();
+})();
+</script>
+<script src="app.js"></script>
+</body>
+</html>

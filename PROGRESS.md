@@ -1,6 +1,25 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 68 — Positional Scarcity Dashboard (COMPLETE)
+## Current Phase: Phase 69 — Breakout Candidate Finder (COMPLETE)
+
+**Exit criterion MET:** /breakouts.html page shows top breakout candidates ranked by Razzle Breakout Score (RBS) measuring the gap between opportunity metrics (snap%, target share, carries, air yards) and production (PPG). Each candidate rendered as a comic-strip card with position-colored top stripe, rank badge, headshot, name, position badge, team, age badge (young/prime/aging), RBS score, opportunity vs production horizontal bars, Caveat annotation, and key stats (PPG, snap%, position-specific usage, games). Position filter tabs (All/QB/RB/WR/TE). Season selector dropdown. PNG export via html2canvas with watermark. Click card → player profile. "Breakouts" nav link added to all 13 HTML pages (nav + footer). Sitemap updated. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, hand annotations, position colors.
+
+### Phase 69 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend breakout-candidates endpoint | DONE | GET /api/breakout-candidates, position-specific opportunity weighting, age bonus, RBS scoring |
+| 2 | Breakouts page with candidate cards | DONE | Opportunity vs production bars, annotations, responsive, PNG export |
+| 3 | Nav links + sitemap + analytics | DONE | All 13 pages updated, sitemap entry, pageview tracking |
+| 4 | Smoke test | DONE | Python + JS syntax clean, 14/14 design checks, XSS safe |
+
+### Decisions Log
+- **Breakout Score algorithm**: Opportunity percentile (within position) minus production percentile, plus age bonus. Position-specific opportunity weights: QB uses snap% + attempts/game, RB uses snap% + carries/game + targets/game, WR/TE uses snap% + target_share + air_yards/game. Bigger gap = more breakout potential.
+- **Age ≤27 cutoff**: Dynasty breakout candidates are young players who haven't peaked yet. 27 is the reasonable ceiling for "breakout" — older players with opportunity gaps are more likely declining, not breaking out.
+- **6+ games minimum**: Ensures enough sample size. Filters out injured players and late-season additions who would create noise.
+- **Visual: opportunity vs production bars**: Two horizontal bars make the "gap" immediately visible and screenshottable. Green for opportunity, gray for production — the space between them IS the story.
+
+## Previous Phase: Phase 68 — Positional Scarcity Dashboard (COMPLETE)
 
 **Exit criterion MET:** /scarcity.html page shows PPG drop-off curves for each position (QB, RB, WR, TE) as bar charts with position-colored fills. Scarcity summary cards at top ranked by drop-off (most scarce to most replaceable). Each position card shows player bars from rank 1 to rank N with tier break dividers and Caveat annotations ("the starter line", "the RB cliff", "the TE premium cliff"). Season selector dropdown. PNG export via html2canvas with watermark. Click bar → player profile. "Scarcity" nav link added to all 12 HTML pages (nav + footer). Sitemap updated. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, hand annotations, position colors.
 
