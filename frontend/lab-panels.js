@@ -4989,7 +4989,7 @@
 
   function seasonOptions(selected) {
     var html = '';
-    for (var y = 2025; y >= 2018; y--) {
+    for (var y = 2025; y >= 2015; y--) {
       html += '<option value="' + y + '"' + (y === (selected || 2025) ? ' selected' : '') + '>' + y + '</option>';
     }
     return html;
