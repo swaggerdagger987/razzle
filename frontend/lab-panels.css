@@ -2462,3 +2462,192 @@
   .str-table tbody td { padding: 4px 4px; font-size: 12px; }
   .wkl-week-label { font-size: 14px; }
 }
+
+/* ===== 30. USAGE TRENDS (ut-) ===== */
+.ut-section { margin-bottom: 24px; }
+.ut-section-title { font-family: var(--font-display); font-size: 18px; margin: 0 0 8px; padding: 4px 0; }
+.ut-risers-title { color: #16a34a; }
+.ut-fallers-title { color: #dc2626; }
+.ut-table-wrap { overflow-x: auto; }
+.ut-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 13px; }
+.ut-table thead th { text-align: left; padding: 8px 10px; font-size: 11px; text-transform: uppercase; color: var(--ink-light); border-bottom: 2px solid var(--ink); }
+.ut-table tbody tr { border-bottom: 1px solid var(--ink-faint); }
+.ut-table tbody tr:hover { background: rgba(217,119,87,0.07); }
+.ut-rank { width: 30px; text-align: center; color: var(--ink-light); }
+.ut-player-cell { display: flex; align-items: center; gap: 6px; padding: 6px 10px; min-width: 180px; }
+.ut-headshot { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--ink); object-fit: cover; }
+.ut-name { font-weight: 700; font-size: 13px; white-space: nowrap; }
+.ut-pos-badge { font-size: 10px; color: #fff; padding: 1px 5px; border-radius: 4px; font-weight: 700; }
+.ut-team { font-size: 10px; color: var(--ink-light); }
+.ut-num { text-align: right; padding: 6px 10px; font-variant-numeric: tabular-nums; }
+.ut-delta-up { color: #16a34a; font-weight: 700; }
+.ut-delta-down { color: #dc2626; font-weight: 700; }
+
+/* ===== 31. YEAR-OVER-YEAR (yy-) ===== */
+.yy-section { margin-bottom: 24px; }
+.yy-section-title { font-family: var(--font-display); font-size: 18px; margin: 0 0 8px; }
+.yy-risers-title { color: #16a34a; }
+.yy-fallers-title { color: #dc2626; }
+.yy-table-wrap { overflow-x: auto; }
+.yy-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 13px; }
+.yy-table thead th { text-align: left; padding: 8px 10px; font-size: 11px; text-transform: uppercase; color: var(--ink-light); border-bottom: 2px solid var(--ink); }
+.yy-table tbody tr { border-bottom: 1px solid var(--ink-faint); }
+.yy-table tbody tr:hover { background: rgba(217,119,87,0.07); }
+.yy-rank { width: 30px; text-align: center; color: var(--ink-light); }
+.yy-player-cell { display: flex; align-items: center; gap: 6px; padding: 6px 10px; min-width: 180px; }
+.yy-headshot { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--ink); object-fit: cover; }
+.yy-name { font-weight: 700; font-size: 13px; white-space: nowrap; }
+.yy-pos-badge { font-size: 10px; color: #fff; padding: 1px 5px; border-radius: 4px; font-weight: 700; }
+.yy-team { font-size: 10px; color: var(--ink-light); }
+.yy-num { text-align: right; padding: 6px 10px; font-variant-numeric: tabular-nums; }
+.yy-delta-badge { display: inline-block; padding: 2px 8px; border-radius: 6px; font-weight: 700; font-size: 12px; }
+.yy-delta-pos { background: #dcfce7; color: #166534; }
+.yy-delta-neg { background: #fee2e2; color: #991b1b; }
+.yy-chips { display: flex; flex-wrap: wrap; gap: 4px; padding: 4px 6px; }
+.yy-mini-chip { font-size: 10px; padding: 1px 5px; border-radius: 4px; font-weight: 600; white-space: nowrap; }
+.yy-chip-pos { background: #dcfce7; color: #166534; }
+.yy-chip-neg { background: #fee2e2; color: #991b1b; }
+
+/* ===== 32. AGING CURVES (ag-) ===== */
+.ag-chart-wrap {
+  background: var(--card); border: 3px solid var(--ink); border-radius: 10px;
+  box-shadow: 4px 4px 0 var(--ink); padding: 16px; margin-bottom: 16px; text-align: center;
+}
+.ag-chart-wrap canvas { max-width: 100%; height: auto; }
+.ag-summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.ag-card {
+  background: var(--card); border: 3px solid var(--ink); border-radius: 10px;
+  box-shadow: 4px 4px 0 var(--ink); padding: 16px; text-align: center;
+}
+.ag-card-label { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; color: var(--ink-light); margin-bottom: 4px; }
+.ag-card-value { font-family: var(--font-display); font-size: 28px; color: var(--ink); }
+
+/* ===== 33. PACE TRACKER (pt-) ===== */
+.pt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.pt-card {
+  background: var(--card); border: 3px solid var(--ink); border-radius: 10px;
+  box-shadow: 4px 4px 0 var(--ink); padding: 16px;
+}
+.pt-card-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+.pt-player-name { font-family: var(--font-display); font-size: 16px; }
+.pt-pos-badge { font-size: 10px; color: #fff; padding: 1px 5px; border-radius: 4px; font-weight: 700; }
+.pt-team { font-size: 11px; color: var(--ink-light); font-family: var(--font-mono); }
+.pt-stats { display: flex; flex-direction: column; gap: 8px; }
+.pt-stat-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.pt-stat-label { font-family: var(--font-mono); font-size: 11px; color: var(--ink-light); text-transform: uppercase; min-width: 70px; }
+.pt-stat-vals { font-family: var(--font-mono); font-size: 13px; font-weight: 700; min-width: 100px; }
+.pt-pace-bar-wrap { flex: 1; min-width: 60px; height: 8px; background: var(--ink-faint); border-radius: 4px; overflow: hidden; }
+.pt-pace-bar { height: 100%; border-radius: 4px; transition: width 0.3s; }
+.pt-pace-badge { font-size: 10px; padding: 1px 6px; border-radius: 4px; font-weight: 700; white-space: nowrap; }
+.pt-on-pace { background: #dcfce7; color: #166534; }
+.pt-off-pace { background: #f3f4f6; color: #6b7280; }
+
+/* ===== 34. SEASON PACE (spc-) ===== */
+.spc-card {
+  background: var(--card); border: 3px solid var(--ink); border-radius: 10px;
+  box-shadow: 4px 4px 0 var(--ink); padding: 20px;
+}
+.spc-title { font-family: var(--font-display); font-size: 20px; margin: 0 0 12px; }
+.spc-table-wrap { overflow-x: auto; }
+.spc-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 13px; }
+.spc-table thead th { text-align: left; padding: 8px 10px; font-size: 11px; text-transform: uppercase; color: var(--ink-light); border-bottom: 2px solid var(--ink); }
+.spc-table tbody tr { border-bottom: 1px solid var(--ink-faint); }
+.spc-table tbody tr:hover { background: rgba(217,119,87,0.07); }
+.spc-rank { width: 30px; text-align: center; color: var(--ink-light); }
+.spc-name { font-weight: 700; }
+.spc-team { font-size: 10px; color: var(--ink-light); }
+.spc-pos-badge { font-size: 10px; color: #fff; padding: 1px 5px; border-radius: 4px; font-weight: 700; }
+.spc-num { text-align: right; padding: 6px 10px; font-variant-numeric: tabular-nums; }
+.spc-milestones { display: flex; flex-wrap: wrap; gap: 4px; padding: 4px 6px; }
+.spc-milestone { font-size: 10px; padding: 2px 8px; border-radius: 6px; font-weight: 700; border: 2px solid; }
+.spc-gold { background: #fef3c7; color: #92400e; border-color: #d97706; }
+.spc-silver { background: #f3f4f6; color: #374151; border-color: #9ca3af; }
+
+/* ===== 35. TD REGRESSION (tdr-) ===== */
+.tdr-rates { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.tdr-rate-chip {
+  font-family: var(--font-mono); font-size: 12px; padding: 4px 10px;
+  background: var(--card); border: 2px solid var(--ink-faint); border-radius: 6px;
+}
+.tdr-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.tdr-col-header {
+  font-family: var(--font-display); font-size: 16px; padding: 8px 12px;
+  border-radius: 8px 8px 0 0; color: #fff; text-align: center;
+}
+.tdr-buy-header { background: #16a34a; }
+.tdr-sell-header { background: #dc2626; }
+.tdr-table-wrap { overflow-x: auto; }
+.tdr-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 12px; }
+.tdr-table thead th { text-align: left; padding: 6px 8px; font-size: 10px; text-transform: uppercase; color: var(--ink-light); border-bottom: 2px solid var(--ink); }
+.tdr-table tbody tr { border-bottom: 1px solid var(--ink-faint); }
+.tdr-table tbody tr:hover { background: rgba(217,119,87,0.07); }
+.tdr-rank { width: 24px; text-align: center; color: var(--ink-light); }
+.tdr-name { font-weight: 700; white-space: nowrap; }
+.tdr-team { font-size: 10px; color: var(--ink-light); }
+.tdr-pos-badge { font-size: 9px; color: #fff; padding: 1px 4px; border-radius: 3px; font-weight: 700; }
+.tdr-num { text-align: right; padding: 4px 8px; font-variant-numeric: tabular-nums; }
+.tdr-diff-badge { display: inline-block; padding: 1px 6px; border-radius: 4px; font-weight: 700; font-size: 11px; }
+.tdr-diff-pos { background: #dcfce7; color: #166534; }
+.tdr-diff-neg { background: #fee2e2; color: #991b1b; }
+.tdr-bar-wrap { width: 60px; height: 10px; background: var(--ink-faint); border-radius: 4px; overflow: hidden; }
+.tdr-bar { height: 100%; border-radius: 4px; }
+
+/* ===== 36. AIR YARDS (ay-) ===== */
+.ay-legend { display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
+.ay-legend-item { font-family: var(--font-mono); font-size: 12px; padding: 4px 10px; border-radius: 6px; font-weight: 600; }
+.ay-legend-buy { background: #dcfce7; color: #166534; }
+.ay-legend-sell { background: #fee2e2; color: #991b1b; }
+.ay-section { margin-bottom: 24px; }
+.ay-section-title { font-family: var(--font-display); font-size: 18px; margin: 0 0 8px; }
+.ay-buy-title { color: #16a34a; }
+.ay-sell-title { color: #dc2626; }
+.ay-table-wrap { overflow-x: auto; }
+.ay-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 12px; }
+.ay-table thead th { text-align: left; padding: 6px 8px; font-size: 10px; text-transform: uppercase; color: var(--ink-light); border-bottom: 2px solid var(--ink); white-space: nowrap; cursor: default; }
+.ay-table thead th.ay-sortable { cursor: pointer; }
+.ay-table thead th.ay-sortable:hover { color: var(--ink); }
+.ay-table tbody tr { border-bottom: 1px solid var(--ink-faint); }
+.ay-table tbody tr:hover { background: rgba(217,119,87,0.07); }
+.ay-player-cell { display: flex; align-items: center; gap: 5px; padding: 5px 8px; min-width: 160px; }
+.ay-headshot { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--ink); object-fit: cover; }
+.ay-name { font-weight: 700; font-size: 12px; white-space: nowrap; }
+.ay-pos-badge { font-size: 9px; color: #fff; padding: 1px 4px; border-radius: 3px; font-weight: 700; }
+.ay-team { font-size: 9px; color: var(--ink-light); }
+.ay-num { text-align: right; padding: 5px 8px; font-variant-numeric: tabular-nums; }
+.ay-regr-badge { display: inline-block; padding: 1px 6px; border-radius: 4px; font-weight: 700; font-size: 11px; }
+.ay-regr-buy { background: #dcfce7; color: #166534; }
+.ay-regr-sell { background: #fee2e2; color: #991b1b; }
+.ay-annotation { font-size: 11px; color: var(--ink-light); max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ===== TRENDS & PROJECTIONS RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .ut-table { font-size: 12px; }
+  .ut-player-cell { min-width: 140px; }
+  .ut-headshot { width: 24px; height: 24px; }
+  .yy-table { font-size: 12px; }
+  .yy-player-cell { min-width: 140px; }
+  .yy-headshot { width: 24px; height: 24px; }
+  .ag-summary { grid-template-columns: repeat(2, 1fr); }
+  .ag-card-value { font-size: 22px; }
+  .pt-grid { grid-template-columns: repeat(2, 1fr); }
+  .spc-table { font-size: 12px; }
+  .tdr-columns { grid-template-columns: 1fr; }
+  .tdr-table { font-size: 11px; }
+  .ay-table { font-size: 11px; }
+  .ay-player-cell { min-width: 130px; }
+  .ay-headshot { width: 24px; height: 24px; }
+}
+@media (max-width: 480px) {
+  .ut-player-cell { min-width: 120px; }
+  .ut-rank { display: none; }
+  .yy-player-cell { min-width: 120px; }
+  .yy-rank { display: none; }
+  .ag-summary { grid-template-columns: 1fr 1fr; }
+  .ag-card-value { font-size: 20px; }
+  .pt-grid { grid-template-columns: 1fr; }
+  .spc-milestones { gap: 2px; }
+  .spc-milestone { font-size: 9px; padding: 1px 5px; }
+  .tdr-rate-chip { font-size: 10px; padding: 2px 6px; }
+  .ay-player-cell { min-width: 110px; }
+  .ay-name { font-size: 11px; }
+}

@@ -3793,4 +3793,919 @@
     loadPO();
   }});
 
+  // ─── 30. USAGE TRENDS ──────────────────────────────────────
+  defs.push({ name: 'usage', render: function(el) {
+    var curPos = '';
+    var curWeeks = '5';
+
+    el.innerHTML =
+      '<div class="lp-page">' +
+        '<div class="lp-header"><h2>Usage Trends</h2>' +
+        '<div class="lp-subtitle">who\'s trending up and who\'s fading</div></div>' +
+        '<div class="lp-controls">' +
+          '<div class="lp-pos-tabs" id="ut-pos-tabs">' +
+            '<button class="lp-pos-tab active" data-pos="">ALL</button>' +
+            '<button class="lp-pos-tab" data-pos="QB">QB</button>' +
+            '<button class="lp-pos-tab" data-pos="RB">RB</button>' +
+            '<button class="lp-pos-tab" data-pos="WR">WR</button>' +
+            '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
+          '</div>' +
+          '<select class="lp-select" id="ut-weeks">' +
+            '<option value="3">3 weeks</option>' +
+            '<option value="5" selected>5 weeks</option>' +
+            '<option value="8">8 weeks</option>' +
+          '</select>' +
+        '</div>' +
+        '<div id="ut-body"><div class="lp-loading">pulling film on usage trends...</div></div>' +
+      '</div>';
+
+    function loadUT() {
+      var body = el.querySelector('#ut-body');
+      body.innerHTML = '<div class="lp-loading">pulling film on usage trends...</div>';
+      var url = '/api/usage-trends?weeks=' + curWeeks;
+      if (curPos) url += '&position=' + encodeURIComponent(curPos);
+
+      fetch(url).then(function(r) {
+        if (!r.ok) throw new Error('API error');
+        return r.json();
+      }).then(function(data) {
+        renderUT(data, body);
+      }).catch(function() {
+        body.innerHTML = '<div class="lp-error">could not load usage trends</div>';
+      });
+    }
+
+    function drawSparkline(canvas, scores, isRiser) {
+      var ctx = canvas.getContext('2d');
+      var w = canvas.width;
+      var h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+      if (!scores || scores.length < 2) return;
+      var min = Math.min.apply(null, scores);
+      var max = Math.max.apply(null, scores);
+      var range = max - min || 1;
+      var color = isRiser ? '#16a34a' : '#dc2626';
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      for (var i = 0; i < scores.length; i++) {
+        var x = (i / (scores.length - 1)) * (w - 4) + 2;
+        var y = h - 2 - ((scores[i] - min) / range) * (h - 4);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+      // dot on last point
+      var lastX = w - 2;
+      var lastY = h - 2 - ((scores[scores.length - 1] - min) / range) * (h - 4);
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(lastX, lastY, 2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function renderUT(data, body) {
+      var risers = data.risers || [];
+      var fallers = data.fallers || [];
+      if (!risers.length && !fallers.length) {
+        body.innerHTML = '<div class="lp-empty">no usage trend data available</div>';
+        return;
+      }
+      var html = '';
+      if (risers.length) {
+        html += '<div class="ut-section"><h3 class="ut-section-title ut-risers-title">Risers</h3>';
+        html += buildUTTable(risers, true);
+        html += '</div>';
+      }
+      if (fallers.length) {
+        html += '<div class="ut-section"><h3 class="ut-section-title ut-fallers-title">Fallers</h3>';
+        html += buildUTTable(fallers, false);
+        html += '</div>';
+      }
+      body.innerHTML = html;
+      // draw sparklines
+      var canvases = body.querySelectorAll('canvas[data-ut-spark]');
+      canvases.forEach(function(c) {
+        var scores = JSON.parse(c.getAttribute('data-ut-scores') || '[]');
+        var riser = c.getAttribute('data-ut-riser') === '1';
+        drawSparkline(c, scores, riser);
+      });
+    }
+
+    function buildUTTable(players, isRiser) {
+      var html = '<div class="ut-table-wrap"><table class="ut-table"><thead><tr>';
+      html += '<th>#</th><th>Player</th><th>PPG</th><th>Delta</th><th>Trend</th>';
+      html += '</tr></thead><tbody>';
+      players.forEach(function(p, i) {
+        var posColor = POS_COLORS[p.position] || '#888';
+        var delta = p.delta || 0;
+        var arrow = delta >= 0 ? '&#9650;' : '&#9660;';
+        var deltaClass = delta >= 0 ? 'ut-delta-up' : 'ut-delta-down';
+        var scoresJson = escapeHtml(JSON.stringify(p.weekly_scores || []));
+        html += '<tr>';
+        html += '<td class="ut-rank">' + (i + 1) + '</td>';
+        html += '<td class="ut-player-cell">';
+        if (p.headshot_url) html += '<img class="ut-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="" loading="lazy">';
+        html += '<span class="ut-name">' + escapeHtml(p.name) + '</span>';
+        html += '<span class="ut-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span>';
+        html += '<span class="ut-team">' + escapeHtml(p.team || '') + '</span>';
+        html += '</td>';
+        html += '<td class="ut-num">' + fmt(p.ppg) + '</td>';
+        html += '<td class="ut-num"><span class="' + deltaClass + '">' + arrow + ' ' + fmt(Math.abs(delta)) + '</span></td>';
+        html += '<td><canvas data-ut-spark data-ut-scores="' + scoresJson + '" data-ut-riser="' + (isRiser ? '1' : '0') + '" width="80" height="24"></canvas></td>';
+        html += '</tr>';
+      });
+      html += '</tbody></table></div>';
+      return html;
+    }
+
+    el.querySelector('#ut-pos-tabs').addEventListener('click', function(e) {
+      var tab = e.target.closest('.lp-pos-tab');
+      if (!tab) return;
+      el.querySelectorAll('#ut-pos-tabs .lp-pos-tab').forEach(function(t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      curPos = tab.getAttribute('data-pos') || '';
+      loadUT();
+    });
+    el.querySelector('#ut-weeks').addEventListener('change', function(e) {
+      curWeeks = e.target.value;
+      loadUT();
+    });
+    loadUT();
+  }});
+
+  // ─── 31. YEAR-OVER-YEAR ──────────────────────────────────────
+  defs.push({ name: 'yoy', render: function(el) {
+    var curPos = '';
+    var curS1 = '2024';
+    var curS2 = '2025';
+    var curMetric = 'ppg';
+
+    var metricLabels = {
+      ppg: 'PPG', targets_g: 'Tgt/G', rec_yd_g: 'Rec Yd/G',
+      rush_yd_g: 'Rush Yd/G', total_tds: 'TDs', snap_pct: 'Snap%'
+    };
+
+    el.innerHTML =
+      '<div class="lp-page">' +
+        '<div class="lp-header"><h2>Year-over-Year</h2>' +
+        '<div class="lp-subtitle">who improved and who regressed</div></div>' +
+        '<div class="lp-controls">' +
+          '<div class="lp-pos-tabs" id="yy-pos-tabs">' +
+            '<button class="lp-pos-tab active" data-pos="">ALL</button>' +
+            '<button class="lp-pos-tab" data-pos="QB">QB</button>' +
+            '<button class="lp-pos-tab" data-pos="RB">RB</button>' +
+            '<button class="lp-pos-tab" data-pos="WR">WR</button>' +
+            '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
+          '</div>' +
+          '<select class="lp-select" id="yy-s1">' +
+            '<option value="2022">2022</option>' +
+            '<option value="2023">2023</option>' +
+            '<option value="2024" selected>2024</option>' +
+            '<option value="2025">2025</option>' +
+          '</select>' +
+          '<span style="font-family:var(--font-mono);font-size:13px;color:var(--ink-light)">→</span>' +
+          '<select class="lp-select" id="yy-s2">' +
+            '<option value="2023">2023</option>' +
+            '<option value="2024">2024</option>' +
+            '<option value="2025" selected>2025</option>' +
+          '</select>' +
+          '<select class="lp-select" id="yy-metric">' +
+            '<option value="ppg">PPG</option>' +
+            '<option value="targets_g">Tgt/G</option>' +
+            '<option value="rec_yd_g">Rec Yd/G</option>' +
+            '<option value="rush_yd_g">Rush Yd/G</option>' +
+            '<option value="total_tds">TDs</option>' +
+            '<option value="snap_pct">Snap%</option>' +
+          '</select>' +
+        '</div>' +
+        '<div id="yy-body"><div class="lp-loading">pulling film on year-over-year...</div></div>' +
+      '</div>';
+
+    function loadYY() {
+      var body = el.querySelector('#yy-body');
+      body.innerHTML = '<div class="lp-loading">pulling film on year-over-year...</div>';
+      var url = '/api/year-over-year?season1=' + curS1 + '&season2=' + curS2 + '&metric=' + curMetric;
+      if (curPos) url += '&position=' + encodeURIComponent(curPos);
+
+      fetch(url).then(function(r) {
+        if (!r.ok) throw new Error('API error');
+        return r.json();
+      }).then(function(data) {
+        renderYY(data, body);
+      }).catch(function() {
+        body.innerHTML = '<div class="lp-error">could not load year-over-year data</div>';
+      });
+    }
+
+    function renderYY(data, body) {
+      var risers = data.risers || [];
+      var fallers = data.fallers || [];
+      if (!risers.length && !fallers.length) {
+        body.innerHTML = '<div class="lp-empty">no year-over-year data available</div>';
+        return;
+      }
+      var label = metricLabels[curMetric] || curMetric;
+      var html = '';
+      if (risers.length) {
+        html += '<div class="yy-section"><h3 class="yy-section-title yy-risers-title">Risers (' + escapeHtml(label) + ')</h3>';
+        html += buildYYTable(risers, true, label);
+        html += '</div>';
+      }
+      if (fallers.length) {
+        html += '<div class="yy-section"><h3 class="yy-section-title yy-fallers-title">Fallers (' + escapeHtml(label) + ')</h3>';
+        html += buildYYTable(fallers, false, label);
+        html += '</div>';
+      }
+      body.innerHTML = html;
+    }
+
+    function buildYYTable(players, isRiser, label) {
+      var html = '<div class="yy-table-wrap"><table class="yy-table"><thead><tr>';
+      html += '<th>#</th><th>Player</th><th>' + escapeHtml(curS1) + '</th><th>' + escapeHtml(curS2) + '</th><th>Delta</th><th class="hide-mobile">Other Metrics</th>';
+      html += '</tr></thead><tbody>';
+      players.forEach(function(p, i) {
+        var posColor = POS_COLORS[p.position] || '#888';
+        var delta = p.delta || 0;
+        var deltaClass = delta >= 0 ? 'yy-delta-pos' : 'yy-delta-neg';
+        var sign = delta >= 0 ? '+' : '';
+        html += '<tr>';
+        html += '<td class="yy-rank">' + (i + 1) + '</td>';
+        html += '<td class="yy-player-cell">';
+        if (p.headshot_url) html += '<img class="yy-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="" loading="lazy">';
+        html += '<span class="yy-name">' + escapeHtml(p.name) + '</span>';
+        html += '<span class="yy-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span>';
+        html += '<span class="yy-team">' + escapeHtml(p.team || '') + '</span>';
+        html += '</td>';
+        html += '<td class="yy-num">' + fmt(p.season1_value) + '</td>';
+        html += '<td class="yy-num">' + fmt(p.season2_value) + '</td>';
+        html += '<td class="yy-num"><span class="yy-delta-badge ' + deltaClass + '">' + sign + fmt(delta) + '</span></td>';
+        // mini chips for other metrics
+        html += '<td class="yy-chips hide-mobile">';
+        var otherMetrics = p.other_deltas || {};
+        var keys = Object.keys(otherMetrics);
+        keys.forEach(function(k) {
+          if (k === curMetric) return;
+          var val = otherMetrics[k];
+          var chipClass = val >= 0 ? 'yy-chip-pos' : 'yy-chip-neg';
+          var chipSign = val >= 0 ? '+' : '';
+          var chipLabel = metricLabels[k] || k;
+          html += '<span class="yy-mini-chip ' + chipClass + '">' + escapeHtml(chipLabel) + ' ' + chipSign + fmt(val) + '</span>';
+        });
+        html += '</td>';
+        html += '</tr>';
+      });
+      html += '</tbody></table></div>';
+      return html;
+    }
+
+    el.querySelector('#yy-pos-tabs').addEventListener('click', function(e) {
+      var tab = e.target.closest('.lp-pos-tab');
+      if (!tab) return;
+      el.querySelectorAll('#yy-pos-tabs .lp-pos-tab').forEach(function(t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      curPos = tab.getAttribute('data-pos') || '';
+      loadYY();
+    });
+    el.querySelector('#yy-s1').addEventListener('change', function(e) { curS1 = e.target.value; loadYY(); });
+    el.querySelector('#yy-s2').addEventListener('change', function(e) { curS2 = e.target.value; loadYY(); });
+    el.querySelector('#yy-metric').addEventListener('change', function(e) { curMetric = e.target.value; loadYY(); });
+    loadYY();
+  }});
+
+  // ─── 32. AGING CURVES ──────────────────────────────────────
+  defs.push({ name: 'aging', render: function(el) {
+    var curPos = 'QB';
+
+    el.innerHTML =
+      '<div class="lp-page">' +
+        '<div class="lp-header"><h2>Aging Curves</h2>' +
+        '<div class="lp-subtitle">when players peak and decline by position</div></div>' +
+        '<div class="lp-controls">' +
+          '<div class="lp-pos-tabs" id="ag-pos-tabs">' +
+            '<button class="lp-pos-tab active" data-pos="QB">QB</button>' +
+            '<button class="lp-pos-tab" data-pos="RB">RB</button>' +
+            '<button class="lp-pos-tab" data-pos="WR">WR</button>' +
+            '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
+          '</div>' +
+        '</div>' +
+        '<div id="ag-body"><div class="lp-loading">pulling film on aging curves...</div></div>' +
+      '</div>';
+
+    function loadAG() {
+      var body = el.querySelector('#ag-body');
+      body.innerHTML = '<div class="lp-loading">pulling film on aging curves...</div>';
+      var url = '/api/aging-curves?position=' + encodeURIComponent(curPos);
+
+      fetch(url).then(function(r) {
+        if (!r.ok) throw new Error('API error');
+        return r.json();
+      }).then(function(data) {
+        renderAG(data, body);
+      }).catch(function() {
+        body.innerHTML = '<div class="lp-error">could not load aging curves</div>';
+      });
+    }
+
+    function renderAG(data, body) {
+      var curve = data.curve || [];
+      var peak = data.peak || {};
+      if (!curve.length) {
+        body.innerHTML = '<div class="lp-empty">no aging curve data available</div>';
+        return;
+      }
+      var html = '<div class="ag-chart-wrap"><canvas id="ag-canvas" width="600" height="350"></canvas></div>';
+      html += '<div class="ag-summary">';
+      html += '<div class="ag-card"><div class="ag-card-label">Peak Age</div><div class="ag-card-value">' + (peak.age || '-') + '</div></div>';
+      html += '<div class="ag-card"><div class="ag-card-label">Peak PPG</div><div class="ag-card-value">' + fmt(peak.ppg) + '</div></div>';
+      html += '<div class="ag-card"><div class="ag-card-label">Decline Start</div><div class="ag-card-value">' + (data.decline_start || '-') + '</div></div>';
+      html += '<div class="ag-card"><div class="ag-card-label">Sample Size</div><div class="ag-card-value">' + (data.sample_size || '-') + '</div></div>';
+      html += '</div>';
+      body.innerHTML = html;
+
+      var canvas = el.querySelector('#ag-canvas');
+      drawAgingChart(canvas, curve, peak, data);
+    }
+
+    function drawAgingChart(canvas, curve, peak, data) {
+      var ctx = canvas.getContext('2d');
+      var W = canvas.width;
+      var H = canvas.height;
+      var pad = { top: 20, right: 20, bottom: 40, left: 50 };
+      var cw = W - pad.left - pad.right;
+      var ch = H - pad.top - pad.bottom;
+      var posColor = POS_COLORS[curPos] || '#888';
+
+      ctx.clearRect(0, 0, W, H);
+
+      // find ranges
+      var ages = curve.map(function(c) { return c.age; });
+      var ppgs = curve.map(function(c) { return c.ppg; });
+      var minAge = Math.min.apply(null, ages);
+      var maxAge = Math.max.apply(null, ages);
+      var maxPPG = Math.max.apply(null, ppgs) * 1.1;
+
+      function xPos(age) { return pad.left + ((age - minAge) / (maxAge - minAge)) * cw; }
+      function yPos(ppg) { return pad.top + ch - (ppg / maxPPG) * ch; }
+
+      // grid lines
+      ctx.strokeStyle = '#ddd';
+      ctx.lineWidth = 0.5;
+      for (var g = 0; g <= 5; g++) {
+        var gy = pad.top + (g / 5) * ch;
+        ctx.beginPath(); ctx.moveTo(pad.left, gy); ctx.lineTo(W - pad.right, gy); ctx.stroke();
+      }
+
+      // area fill
+      ctx.fillStyle = posColor;
+      ctx.globalAlpha = 0.15;
+      ctx.beginPath();
+      ctx.moveTo(xPos(curve[0].age), yPos(0));
+      curve.forEach(function(c) { ctx.lineTo(xPos(c.age), yPos(c.ppg)); });
+      ctx.lineTo(xPos(curve[curve.length - 1].age), yPos(0));
+      ctx.closePath();
+      ctx.fill();
+      ctx.globalAlpha = 1;
+
+      // line
+      ctx.strokeStyle = posColor;
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      curve.forEach(function(c, idx) {
+        var x = xPos(c.age); var y = yPos(c.ppg);
+        if (idx === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+
+      // dots
+      ctx.fillStyle = posColor;
+      curve.forEach(function(c) {
+        ctx.beginPath();
+        ctx.arc(xPos(c.age), yPos(c.ppg), 3, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      // peak marker
+      if (peak.age) {
+        var peakX = xPos(peak.age);
+        ctx.setLineDash([4, 4]);
+        ctx.strokeStyle = '#d97757';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(peakX, pad.top);
+        ctx.lineTo(peakX, pad.top + ch);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = '#d97757';
+        ctx.font = '11px Space Mono, monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText('Peak: ' + peak.age, peakX, pad.top - 4);
+      }
+
+      // X axis labels
+      ctx.fillStyle = '#666';
+      ctx.font = '10px Space Mono, monospace';
+      ctx.textAlign = 'center';
+      for (var a = minAge; a <= maxAge; a += 2) {
+        ctx.fillText(a.toString(), xPos(a), H - pad.bottom + 16);
+      }
+      ctx.textAlign = 'center';
+      ctx.fillText('Age', W / 2, H - 4);
+
+      // Y axis labels
+      ctx.textAlign = 'right';
+      for (var yg = 0; yg <= 5; yg++) {
+        var val = (maxPPG * (5 - yg) / 5);
+        ctx.fillText(fmt(val, 0), pad.left - 6, pad.top + (yg / 5) * ch + 4);
+      }
+      ctx.save();
+      ctx.translate(12, pad.top + ch / 2);
+      ctx.rotate(-Math.PI / 2);
+      ctx.textAlign = 'center';
+      ctx.fillText('PPG', 0, 0);
+      ctx.restore();
+    }
+
+    el.querySelector('#ag-pos-tabs').addEventListener('click', function(e) {
+      var tab = e.target.closest('.lp-pos-tab');
+      if (!tab) return;
+      el.querySelectorAll('#ag-pos-tabs .lp-pos-tab').forEach(function(t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      curPos = tab.getAttribute('data-pos') || 'QB';
+      loadAG();
+    });
+    loadAG();
+  }});
+
+  // ─── 33. PACE TRACKER ──────────────────────────────────────
+  defs.push({ name: 'pace', render: function(el) {
+    var curPos = '';
+    var curSeason = '2025';
+
+    el.innerHTML =
+      '<div class="lp-page">' +
+        '<div class="lp-header"><h2>Pace Tracker</h2>' +
+        '<div class="lp-subtitle">projected season totals based on current pace</div></div>' +
+        '<div class="lp-controls">' +
+          '<div class="lp-pos-tabs" id="pt-pos-tabs">' +
+            '<button class="lp-pos-tab active" data-pos="">ALL</button>' +
+            '<button class="lp-pos-tab" data-pos="QB">QB</button>' +
+            '<button class="lp-pos-tab" data-pos="RB">RB</button>' +
+            '<button class="lp-pos-tab" data-pos="WR">WR</button>' +
+            '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
+          '</div>' +
+          '<select class="lp-select" id="pt-season">' +
+            '<option value="2025" selected>2025</option>' +
+            '<option value="2024">2024</option>' +
+            '<option value="2023">2023</option>' +
+          '</select>' +
+        '</div>' +
+        '<div id="pt-body"><div class="lp-loading">pulling film on pace projections...</div></div>' +
+      '</div>';
+
+    function loadPT() {
+      var body = el.querySelector('#pt-body');
+      body.innerHTML = '<div class="lp-loading">pulling film on pace projections...</div>';
+      var url = '/api/pace-tracker?season=' + curSeason;
+      if (curPos) url += '&position=' + encodeURIComponent(curPos);
+
+      fetch(url).then(function(r) {
+        if (!r.ok) throw new Error('API error');
+        return r.json();
+      }).then(function(data) {
+        renderPT(data, body);
+      }).catch(function() {
+        body.innerHTML = '<div class="lp-error">could not load pace data</div>';
+      });
+    }
+
+    function renderPT(data, body) {
+      var players = data.players || [];
+      if (!players.length) {
+        body.innerHTML = '<div class="lp-empty">no pace data available</div>';
+        return;
+      }
+      var html = '<div class="pt-grid">';
+      players.forEach(function(p) {
+        var posColor = POS_COLORS[p.position] || '#888';
+        html += '<div class="pt-card">';
+        html += '<div class="pt-card-header">';
+        html += '<span class="pt-player-name">' + escapeHtml(p.name) + '</span>';
+        html += '<span class="pt-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span>';
+        html += '<span class="pt-team">' + escapeHtml(p.team || '') + '</span>';
+        html += '</div>';
+        html += '<div class="pt-stats">';
+        var stats = p.projections || [];
+        stats.forEach(function(s) {
+          var pct = s.milestone ? Math.min(100, (s.projected / s.milestone) * 100) : 0;
+          var onPace = pct >= 100;
+          html += '<div class="pt-stat-row">';
+          html += '<span class="pt-stat-label">' + escapeHtml(s.label || s.stat) + '</span>';
+          html += '<span class="pt-stat-vals">' + fmt(s.current, 0) + ' → ' + fmt(s.projected, 0) + '</span>';
+          if (s.milestone) {
+            html += '<div class="pt-pace-bar-wrap">';
+            html += '<div class="pt-pace-bar" style="width:' + Math.min(100, pct) + '%;background:' + posColor + '"></div>';
+            html += '</div>';
+            html += '<span class="pt-pace-badge ' + (onPace ? 'pt-on-pace' : 'pt-off-pace') + '">' + (onPace ? 'ON PACE' : 'OFF PACE') + '</span>';
+          }
+          html += '</div>';
+        });
+        html += '</div></div>';
+      });
+      html += '</div>';
+      body.innerHTML = html;
+    }
+
+    el.querySelector('#pt-pos-tabs').addEventListener('click', function(e) {
+      var tab = e.target.closest('.lp-pos-tab');
+      if (!tab) return;
+      el.querySelectorAll('#pt-pos-tabs .lp-pos-tab').forEach(function(t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      curPos = tab.getAttribute('data-pos') || '';
+      loadPT();
+    });
+    el.querySelector('#pt-season').addEventListener('change', function(e) { curSeason = e.target.value; loadPT(); });
+    loadPT();
+  }});
+
+  // ─── 34. SEASON PACE ──────────────────────────────────────
+  defs.push({ name: 'seasonpace', render: function(el) {
+    var curPos = '';
+    var curSeason = '2025';
+
+    el.innerHTML =
+      '<div class="lp-page">' +
+        '<div class="lp-header"><h2>Season Pace</h2>' +
+        '<div class="lp-subtitle">milestone watch — who\'s on track for big numbers</div></div>' +
+        '<div class="lp-controls">' +
+          '<div class="lp-pos-tabs" id="spc-pos-tabs">' +
+            '<button class="lp-pos-tab active" data-pos="">ALL</button>' +
+            '<button class="lp-pos-tab" data-pos="QB">QB</button>' +
+            '<button class="lp-pos-tab" data-pos="RB">RB</button>' +
+            '<button class="lp-pos-tab" data-pos="WR">WR</button>' +
+            '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
+          '</div>' +
+          '<select class="lp-select" id="spc-season">' +
+            '<option value="2025" selected>2025</option>' +
+            '<option value="2024">2024</option>' +
+            '<option value="2023">2023</option>' +
+          '</select>' +
+        '</div>' +
+        '<div id="spc-body"><div class="lp-loading">pulling film on season milestones...</div></div>' +
+      '</div>';
+
+    function loadSPC() {
+      var body = el.querySelector('#spc-body');
+      body.innerHTML = '<div class="lp-loading">pulling film on season milestones...</div>';
+      var url = '/api/season-pace?season=' + curSeason;
+      if (curPos) url += '&position=' + encodeURIComponent(curPos);
+
+      fetch(url).then(function(r) {
+        if (!r.ok) throw new Error('API error');
+        return r.json();
+      }).then(function(data) {
+        renderSPC(data, body);
+      }).catch(function() {
+        body.innerHTML = '<div class="lp-error">could not load season pace data</div>';
+      });
+    }
+
+    function renderSPC(data, body) {
+      var players = data.players || [];
+      if (!players.length) {
+        body.innerHTML = '<div class="lp-empty">no season pace data available</div>';
+        return;
+      }
+      var eliteMilestones = ['5000 pass yd', '40 pass TD', '1500 rush yd', '1500 rec yd',
+        '5000 Pass Yd', '40 Pass TD', '1500 Rush Yd', '1500 Rec Yd'];
+      var html = '<div class="spc-card"><h3 class="spc-title">Milestone Watch</h3>';
+      html += '<div class="spc-table-wrap"><table class="spc-table"><thead><tr>';
+      html += '<th>#</th><th>Player</th><th>Pos</th><th>GP</th><th>PPG</th><th>Milestones</th>';
+      html += '</tr></thead><tbody>';
+      players.forEach(function(p, i) {
+        var posColor = POS_COLORS[p.position] || '#888';
+        html += '<tr>';
+        html += '<td class="spc-rank">' + (i + 1) + '</td>';
+        html += '<td class="spc-name">' + escapeHtml(p.name) + ' <span class="spc-team">' + escapeHtml(p.team || '') + '</span></td>';
+        html += '<td><span class="spc-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
+        html += '<td class="spc-num">' + (p.games_played || '-') + '</td>';
+        html += '<td class="spc-num">' + fmt(p.ppg) + '</td>';
+        html += '<td class="spc-milestones">';
+        var milestones = p.milestones || [];
+        milestones.forEach(function(m) {
+          var label = m.label || m;
+          var isElite = false;
+          for (var e = 0; e < eliteMilestones.length; e++) {
+            if (label.toLowerCase().indexOf(eliteMilestones[e].toLowerCase()) !== -1) { isElite = true; break; }
+          }
+          html += '<span class="spc-milestone ' + (isElite ? 'spc-gold' : 'spc-silver') + '">' + escapeHtml(label) + '</span>';
+        });
+        html += '</td>';
+        html += '</tr>';
+      });
+      html += '</tbody></table></div></div>';
+      body.innerHTML = html;
+    }
+
+    el.querySelector('#spc-pos-tabs').addEventListener('click', function(e) {
+      var tab = e.target.closest('.lp-pos-tab');
+      if (!tab) return;
+      el.querySelectorAll('#spc-pos-tabs .lp-pos-tab').forEach(function(t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      curPos = tab.getAttribute('data-pos') || '';
+      loadSPC();
+    });
+    el.querySelector('#spc-season').addEventListener('change', function(e) { curSeason = e.target.value; loadSPC(); });
+    loadSPC();
+  }});
+
+  // ─── 35. TD REGRESSION ──────────────────────────────────────
+  defs.push({ name: 'tdregression', render: function(el) {
+    var curPos = '';
+    var curSeason = '2025';
+
+    el.innerHTML =
+      '<div class="lp-page">' +
+        '<div class="lp-header"><h2>TD Regression</h2>' +
+        '<div class="lp-subtitle">expected vs actual touchdowns — who\'s due for a correction</div></div>' +
+        '<div class="lp-controls">' +
+          '<div class="lp-pos-tabs" id="tdr-pos-tabs">' +
+            '<button class="lp-pos-tab active" data-pos="">ALL</button>' +
+            '<button class="lp-pos-tab" data-pos="QB">QB</button>' +
+            '<button class="lp-pos-tab" data-pos="RB">RB</button>' +
+            '<button class="lp-pos-tab" data-pos="WR">WR</button>' +
+            '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
+          '</div>' +
+          '<select class="lp-select" id="tdr-season">' +
+            '<option value="2025" selected>2025</option>' +
+            '<option value="2024">2024</option>' +
+            '<option value="2023">2023</option>' +
+          '</select>' +
+        '</div>' +
+        '<div id="tdr-body"><div class="lp-loading">pulling film on TD regression...</div></div>' +
+      '</div>';
+
+    function loadTDR() {
+      var body = el.querySelector('#tdr-body');
+      body.innerHTML = '<div class="lp-loading">pulling film on TD regression...</div>';
+      var url = '/api/td-regression?season=' + curSeason;
+      if (curPos) url += '&position=' + encodeURIComponent(curPos);
+
+      fetch(url).then(function(r) {
+        if (!r.ok) throw new Error('API error');
+        return r.json();
+      }).then(function(data) {
+        renderTDR(data, body);
+      }).catch(function() {
+        body.innerHTML = '<div class="lp-error">could not load TD regression data</div>';
+      });
+    }
+
+    function renderTDR(data, body) {
+      var buyLow = data.buy_low || [];
+      var sellHigh = data.sell_high || [];
+      var rates = data.position_rates || {};
+      if (!buyLow.length && !sellHigh.length) {
+        body.innerHTML = '<div class="lp-empty">no TD regression data available</div>';
+        return;
+      }
+
+      // find max diff for bar scaling
+      var allDiffs = buyLow.concat(sellHigh).map(function(p) { return Math.abs(p.diff || 0); });
+      var maxDiff = Math.max.apply(null, allDiffs) || 1;
+
+      var html = '';
+      // rate chips
+      var rateKeys = Object.keys(rates);
+      if (rateKeys.length) {
+        html += '<div class="tdr-rates">';
+        rateKeys.forEach(function(k) {
+          html += '<span class="tdr-rate-chip"><strong>' + escapeHtml(k) + '</strong> avg TD rate: ' + fmt(rates[k], 1) + '%</span>';
+        });
+        html += '</div>';
+      }
+
+      html += '<div class="tdr-columns">';
+      // buy low
+      if (buyLow.length) {
+        html += '<div class="tdr-col"><div class="tdr-col-header tdr-buy-header">Buy Low (Positive Regression)</div>';
+        html += buildTDRTable(buyLow, true, maxDiff);
+        html += '</div>';
+      }
+      // sell high
+      if (sellHigh.length) {
+        html += '<div class="tdr-col"><div class="tdr-col-header tdr-sell-header">Sell High (Negative Regression)</div>';
+        html += buildTDRTable(sellHigh, false, maxDiff);
+        html += '</div>';
+      }
+      html += '</div>';
+      body.innerHTML = html;
+    }
+
+    function buildTDRTable(players, isBuy, maxDiff) {
+      var html = '<div class="tdr-table-wrap"><table class="tdr-table"><thead><tr>';
+      html += '<th>#</th><th>Player</th><th>Pos</th><th>TD</th><th>xTD</th><th>Diff</th><th class="hide-mobile">TD%</th><th class="hide-mobile">Opp</th><th>Bar</th>';
+      html += '</tr></thead><tbody>';
+      players.forEach(function(p, i) {
+        var posColor = POS_COLORS[p.position] || '#888';
+        var diff = p.diff || 0;
+        var diffClass = diff >= 0 ? 'tdr-diff-pos' : 'tdr-diff-neg';
+        var sign = diff >= 0 ? '+' : '';
+        var barPct = Math.min(100, (Math.abs(diff) / maxDiff) * 100);
+        var barColor = isBuy ? '#16a34a' : '#dc2626';
+        html += '<tr>';
+        html += '<td class="tdr-rank">' + (i + 1) + '</td>';
+        html += '<td class="tdr-name">' + escapeHtml(p.name) + ' <span class="tdr-team">' + escapeHtml(p.team || '') + '</span></td>';
+        html += '<td><span class="tdr-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
+        html += '<td class="tdr-num">' + fmt(p.actual_tds, 0) + '</td>';
+        html += '<td class="tdr-num">' + fmt(p.expected_tds) + '</td>';
+        html += '<td class="tdr-num"><span class="tdr-diff-badge ' + diffClass + '">' + sign + fmt(diff) + '</span></td>';
+        html += '<td class="tdr-num hide-mobile">' + fmt(p.td_rate, 1) + '%</td>';
+        html += '<td class="tdr-num hide-mobile">' + fmt(p.opportunities, 0) + '</td>';
+        html += '<td><div class="tdr-bar-wrap"><div class="tdr-bar" style="width:' + barPct + '%;background:' + barColor + '"></div></div></td>';
+        html += '</tr>';
+      });
+      html += '</tbody></table></div>';
+      return html;
+    }
+
+    el.querySelector('#tdr-pos-tabs').addEventListener('click', function(e) {
+      var tab = e.target.closest('.lp-pos-tab');
+      if (!tab) return;
+      el.querySelectorAll('#tdr-pos-tabs .lp-pos-tab').forEach(function(t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      curPos = tab.getAttribute('data-pos') || '';
+      loadTDR();
+    });
+    el.querySelector('#tdr-season').addEventListener('change', function(e) { curSeason = e.target.value; loadTDR(); });
+    loadTDR();
+  }});
+
+  // ─── 36. AIR YARDS ──────────────────────────────────────
+  defs.push({ name: 'airyards', render: function(el) {
+    var curPos = '';
+    var curSeason = '2025';
+    var sortState = { buy_low: { col: 'regression_delta', asc: false }, sell_high: { col: 'regression_delta', asc: true } };
+
+    var colDefs = [
+      { key: 'name', label: 'Player', sortable: false, tip: '' },
+      { key: 'targets_g', label: 'Tgt/G', sortable: true, tip: 'Targets per game' },
+      { key: 'air_yards', label: 'AirYd', sortable: true, tip: 'Total air yards' },
+      { key: 'air_yards_g', label: 'AY/G', sortable: true, tip: 'Air yards per game' },
+      { key: 'adot', label: 'aDOT', sortable: true, tip: 'Average depth of target' },
+      { key: 'air_yard_pct', label: 'AY%', sortable: true, tip: 'Air yard share of team total' },
+      { key: 'wopr', label: 'WOPR', sortable: true, tip: 'Weighted Opportunity Rating' },
+      { key: 'racr', label: 'RACR', sortable: true, tip: 'Receiver Air Conversion Ratio' },
+      { key: 'ppg', label: 'PPG', sortable: true, tip: 'Fantasy points per game' },
+      { key: 'regression_delta', label: 'Regr', sortable: true, tip: 'Regression delta — positive = buy, negative = sell' },
+      { key: 'games_played', label: 'GP', sortable: true, tip: 'Games played' },
+      { key: 'annotation', label: 'Annotation', sortable: false, tip: 'Context note', mobile_hide: true }
+    ];
+
+    el.innerHTML =
+      '<div class="lp-page">' +
+        '<div class="lp-header"><h2>Air Yards</h2>' +
+        '<div class="lp-subtitle">air yard efficiency and regression indicators</div></div>' +
+        '<div class="lp-controls">' +
+          '<div class="lp-pos-tabs" id="ay-pos-tabs">' +
+            '<button class="lp-pos-tab active" data-pos="">All</button>' +
+            '<button class="lp-pos-tab" data-pos="WR">WR</button>' +
+            '<button class="lp-pos-tab" data-pos="RB">RB</button>' +
+            '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
+          '</div>' +
+          '<select class="lp-select" id="ay-season">' +
+            '<option value="2025" selected>2025</option>' +
+            '<option value="2024">2024</option>' +
+            '<option value="2023">2023</option>' +
+          '</select>' +
+        '</div>' +
+        '<div id="ay-body"><div class="lp-loading">pulling film on air yards...</div></div>' +
+      '</div>';
+
+    function loadAY() {
+      var body = el.querySelector('#ay-body');
+      body.innerHTML = '<div class="lp-loading">pulling film on air yards...</div>';
+      var url = '/api/air-yards?limit=25&season=' + curSeason;
+      if (curPos) url += '&position=' + encodeURIComponent(curPos);
+
+      fetch(url).then(function(r) {
+        if (!r.ok) throw new Error('API error');
+        return r.json();
+      }).then(function(data) {
+        renderAY(data, body);
+      }).catch(function() {
+        body.innerHTML = '<div class="lp-error">could not load air yards data</div>';
+      });
+    }
+
+    function sortPlayers(players, col, asc) {
+      return players.slice().sort(function(a, b) {
+        var va = a[col], vb = b[col];
+        if (va === null || va === undefined) va = -Infinity;
+        if (vb === null || vb === undefined) vb = -Infinity;
+        return asc ? va - vb : vb - va;
+      });
+    }
+
+    function renderAY(data, body) {
+      var buyLow = data.buy_low || [];
+      var sellHigh = data.sell_high || [];
+      if (!buyLow.length && !sellHigh.length) {
+        body.innerHTML = '<div class="lp-empty">no air yards data available</div>';
+        return;
+      }
+
+      var html = '<div class="ay-legend">' +
+        '<span class="ay-legend-item ay-legend-buy">Buy Low (underperforming air yards)</span>' +
+        '<span class="ay-legend-item ay-legend-sell">Sell High (overperforming air yards)</span>' +
+        '</div>';
+
+      if (buyLow.length) {
+        var sorted = sortPlayers(buyLow, sortState.buy_low.col, sortState.buy_low.asc);
+        html += '<div class="ay-section"><h3 class="ay-section-title ay-buy-title">Buy Low</h3>';
+        html += buildAYTable(sorted, 'buy_low');
+        html += '</div>';
+      }
+      if (sellHigh.length) {
+        var sorted2 = sortPlayers(sellHigh, sortState.sell_high.col, sortState.sell_high.asc);
+        html += '<div class="ay-section"><h3 class="ay-section-title ay-sell-title">Sell High</h3>';
+        html += buildAYTable(sorted2, 'sell_high');
+        html += '</div>';
+      }
+      body.innerHTML = html;
+
+      // attach sort handlers
+      body.querySelectorAll('th[data-ay-sort]').forEach(function(th) {
+        th.addEventListener('click', function() {
+          var section = th.getAttribute('data-ay-section');
+          var col = th.getAttribute('data-ay-sort');
+          if (sortState[section].col === col) {
+            sortState[section].asc = !sortState[section].asc;
+          } else {
+            sortState[section].col = col;
+            sortState[section].asc = false;
+          }
+          renderAY(data, body);
+        });
+      });
+    }
+
+    function buildAYTable(players, section) {
+      var ss = sortState[section];
+      var html = '<div class="ay-table-wrap"><table class="ay-table"><thead><tr>';
+      colDefs.forEach(function(c) {
+        var mobileClass = c.mobile_hide ? ' hide-mobile' : '';
+        var sortArrow = '';
+        if (c.sortable && ss.col === c.key) sortArrow = ss.asc ? ' &#9650;' : ' &#9660;';
+        var tip = c.tip ? ' title="' + escapeHtml(c.tip) + '"' : '';
+        if (c.sortable) {
+          html += '<th class="ay-sortable' + mobileClass + '" data-ay-sort="' + c.key + '" data-ay-section="' + section + '"' + tip + '>' + escapeHtml(c.label) + sortArrow + '</th>';
+        } else {
+          html += '<th' + tip + ' class="' + mobileClass + '">' + escapeHtml(c.label) + '</th>';
+        }
+      });
+      html += '</tr></thead><tbody>';
+      players.forEach(function(p) {
+        var posColor = POS_COLORS[p.position] || '#888';
+        var regrDelta = p.regression_delta || 0;
+        var regrClass = regrDelta >= 0 ? 'ay-regr-buy' : 'ay-regr-sell';
+        var regrSign = regrDelta >= 0 ? '+' : '';
+        html += '<tr>';
+        // player cell
+        html += '<td class="ay-player-cell">';
+        if (p.headshot_url) html += '<img class="ay-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="" loading="lazy">';
+        html += '<span class="ay-name">' + escapeHtml(p.name) + '</span>';
+        html += '<span class="ay-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span>';
+        html += '<span class="ay-team">' + escapeHtml(p.team || '') + '</span>';
+        html += '</td>';
+        html += '<td class="ay-num">' + fmt(p.targets_g) + '</td>';
+        html += '<td class="ay-num">' + fmt(p.air_yards, 0) + '</td>';
+        html += '<td class="ay-num">' + fmt(p.air_yards_g) + '</td>';
+        html += '<td class="ay-num">' + fmt(p.adot) + '</td>';
+        html += '<td class="ay-num">' + fmt(p.air_yard_pct) + '%</td>';
+        html += '<td class="ay-num">' + fmt(p.wopr, 2) + '</td>';
+        html += '<td class="ay-num">' + fmt(p.racr, 2) + '</td>';
+        html += '<td class="ay-num">' + fmt(p.ppg) + '</td>';
+        html += '<td class="ay-num"><span class="ay-regr-badge ' + regrClass + '">' + regrSign + fmt(regrDelta) + '</span></td>';
+        html += '<td class="ay-num">' + (p.games_played || '-') + '</td>';
+        html += '<td class="ay-annotation hide-mobile">' + escapeHtml(p.annotation || '') + '</td>';
+        html += '</tr>';
+      });
+      html += '</tbody></table></div>';
+      return html;
+    }
+
+    el.querySelector('#ay-pos-tabs').addEventListener('click', function(e) {
+      var tab = e.target.closest('.lp-pos-tab');
+      if (!tab) return;
+      el.querySelectorAll('#ay-pos-tabs .lp-pos-tab').forEach(function(t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      curPos = tab.getAttribute('data-pos') || '';
+      loadAY();
+    });
+    el.querySelector('#ay-season').addEventListener('change', function(e) { curSeason = e.target.value; loadAY(); });
+    loadAY();
+  }});
+
 })();

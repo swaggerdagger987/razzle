@@ -2,10 +2,10 @@
 
 ## Current State
 - Phase: 4 (Inline Panel Migration)
-- Task: Migrate Trends & Projections panels
-- Stage: BUILD
+- Task: Migrate Player Tools panels
+- Stage: PLAN
 - Attempt: 1/3
-- Tasks Done: 6/10
+- Tasks Done: 7/10
 
 ## Phase 1: Navigation Surgery -- COMPLETE
 ### Task 1: Slim nav to 4 items on all pages
@@ -184,8 +184,8 @@
 **Accept when**: All 7 panels render natively. Line charts and trend visualizations work.
 **Depends on**: Task 2
 **Size**: L
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task 8: Migrate Player Tools panels
 **Requirement**: Convert: Career Stats, Career Compare, Compare Table, Strengths, Report Card, FPTS Breakdown, Game Log, Scoring Breakdown. Player Profile remains search-activated.
