@@ -656,6 +656,129 @@ function renderTableHead() {
   thead.innerHTML = html;
 }
 
+// ─── Virtual scrolling ──────────────────────────────────────────
+const VSCROLL_ROW_HEIGHT = 36;
+const VSCROLL_BUFFER = 20;
+let _vscrollRows = [];   // Pre-computed HTML strings for each row
+let _vscrollRAF = null;  // requestAnimationFrame handle
+let _vscrollBound = false;
+
+function buildRowHTML(player, cols, heatOn, pctData) {
+  const pos = (player.position || "").toUpperCase();
+  const playKey = player.player_id || player.player_name;
+  const selected = state.selectedPlayers.some(p => p.player_id === playKey);
+  const starred = isOnWatchlist(playKey);
+  const pName = escapeAttr(player.full_name || player.player_name || "");
+  const pTeam = escapeAttr(player.team || player.school || "");
+  let html = '<tr tabindex="0" data-player-id="' + escapeAttr(playKey) + '" style="height:' + VSCROLL_ROW_HEIGHT + 'px;">';
+  html += `<td style="text-align:center; padding:7px 4px; cursor:pointer; font-size:16px;" onclick="toggleWatchlistPlayer('${escapeAttr(playKey)}', '${pName}', '${escapeAttr(pos)}', '${pTeam}', '${state.universe}')" title="${starred ? 'Remove from watchlist' : 'Add to watchlist'}">${starred ? '<span style="color:var(--orange);">&#9733;</span>' : '<span style="color:var(--ink-faint);">&#9734;</span>'}</td>`;
+  html += `<td style="text-align:center; padding:7px 6px;">
+    <input type="checkbox" ${selected ? "checked" : ""} onchange="togglePlayerSelect('${escapeAttr(player.player_id || player.player_name)}', this.checked)"
+      style="accent-color:${(state.universe === 'prospects' || state.universe === 'college') ? 'var(--pos-qb)' : 'var(--orange)'}; width:15px; height:15px; cursor:pointer;">
+  </td>`;
+
+  if (state.universe === "college") {
+    const cid = escapeAttr(player.player_id || "");
+    html += `<td class="col-player"><div class="player-name-cell">`;
+    html += playerHeadshot(player, pos);
+    html += `<span class="pos-badge ${posClass(pos)}">${escapeHtml(pos)}</span>`;
+    html += `<a href="#" onclick="openCollegeProfile('${cid}'); return false;" style="color:var(--ink); text-decoration:none; border-bottom:1px dashed var(--pos-qb);">${escapeHtml(player.player_name)}</a>`;
+    html += `<span class="team-label">${escapeHtml(player.team)}</span>`;
+    if (player.conference) html += `<span class="school-label" style="font-size:10px; color:var(--ink-light);">${escapeHtml(player.conference)}</span>`;
+    html += `</div></td>`;
+  } else if (state.universe === "prospects") {
+    const pn = escapeAttr(player.player_name || "");
+    const pPos = (player.position || "").toUpperCase();
+    const pYear = player.draft_year || state.season;
+    html += `<td class="col-player"><div class="player-name-cell">`;
+    html += playerHeadshot(player, pos);
+    html += `<span class="pos-badge ${posClass(pos)}">${escapeHtml(pos)}</span>`;
+    html += `<a href="#" onclick="openProspectProfile('${pn}', '${escapeAttr(pPos)}', ${pYear}); return false;" style="color:var(--ink); text-decoration:none; border-bottom:1px dashed var(--pos-qb);">${escapeHtml(player.player_name)}</a>`;
+    html += `<span class="school-label">${escapeHtml(player.school)}</span>`;
+    html += `</div></td>`;
+  } else {
+    const pid = escapeAttr(player.player_id || "");
+    html += `<td class="col-player"><div class="player-name-cell">`;
+    html += playerHeadshot(player, pos);
+    html += `<span class="pos-badge ${posClass(pos)}">${escapeHtml(pos)}</span>`;
+    html += `<a href="/player/${encodeURIComponent(pid)}" onclick="event.preventDefault(); openPlayerProfile('${pid}');" style="color:var(--ink); text-decoration:none; border-bottom:1px dashed var(--ink-faint);">${escapeHtml(player.full_name)}</a>`;
+    html += `<span class="team-label">${escapeHtml(player.team)}</span>`;
+    html += `</div></td>`;
+  }
+
+  const heatPcts = heatOn ? (pctData[playKey] || {}) : null;
+
+  for (const key of cols) {
+    const col = getColumnDef(key);
+    if (!col) continue;
+    let val = player[key];
+    const hBg = heatPcts && heatPcts[key] != null ? getHeatColor(heatPcts[key]) : "";
+    const hStyle = hBg ? ` style="background:${hBg};"` : "";
+    if ((state.universe === "prospects" || state.universe === "college") && !col.isText && (val === 0 || val === null || val === undefined)) {
+      html += `<td style="color:var(--ink-faint);">\u2014</td>`;
+      continue;
+    }
+    if (state.universe === "nfl" && isNonApplicableStat(pos, key, val)) {
+      html += `<td style="color:var(--ink-faint);">—</td>`;
+    } else if (col.isText) {
+      html += `<td>${val ? escapeHtml(val) : "—"}</td>`;
+    } else if (key === "dynasty_value" && val != null) {
+      const dvsColor = val >= 85 ? "var(--green)" : val >= 70 ? "var(--pos-qb)" : val >= 55 ? "var(--orange)" : "var(--ink-light)";
+      const dvsTier = val >= 85 ? "Elite" : val >= 70 ? "Star" : val >= 55 ? "Starter" : "";
+      html += `<td${hStyle}><span style="background:${dvsColor}; color:white; padding:1px 8px; border-radius:10px; border:2px solid var(--ink); font-size:11px; font-weight:700; white-space:nowrap;">${val.toFixed(1)}${dvsTier ? " " + dvsTier : ""}</span></td>`;
+    } else if (key === "age" && val != null) {
+      html += `<td style="font-weight:600;">${Math.round(val)}</td>`;
+    } else if (key === "breakout_pct" && val != null && val >= 50) {
+      html += `<td${hStyle}><span style="background:var(--green); color:white; padding:1px 6px; border-radius:10px; border:2px solid var(--ink); font-size:11px; font-weight:700;">+${val.toFixed(0)}%</span></td>`;
+    } else if (col.pct && val != null) {
+      html += `<td${hStyle}>${(val * 100).toFixed(col.decimals)}%</td>`;
+    } else {
+      html += `<td${hStyle}>${formatStat(val, col.decimals)}</td>`;
+    }
+  }
+  html += "</tr>";
+  return html;
+}
+
+function renderVisibleRows() {
+  const tbody = document.getElementById("tableBody");
+  const wrap = document.querySelector(".table-wrap");
+  if (!wrap || !tbody || !_vscrollRows.length) return;
+
+  const totalRows = _vscrollRows.length;
+  const scrollTop = wrap.scrollTop;
+  const viewHeight = wrap.clientHeight;
+  const colCount = getActiveColumns().length + 3; // +star +checkbox +player
+
+  // Calculate visible range
+  const startRow = Math.max(0, Math.floor(scrollTop / VSCROLL_ROW_HEIGHT) - VSCROLL_BUFFER);
+  const endRow = Math.min(totalRows, Math.ceil((scrollTop + viewHeight) / VSCROLL_ROW_HEIGHT) + VSCROLL_BUFFER);
+
+  // Build HTML with spacer rows
+  const topHeight = startRow * VSCROLL_ROW_HEIGHT;
+  const bottomHeight = (totalRows - endRow) * VSCROLL_ROW_HEIGHT;
+
+  let html = "";
+  if (topHeight > 0) {
+    html += '<tr style="height:' + topHeight + 'px;"><td colspan="' + colCount + '"></td></tr>';
+  }
+  for (let i = startRow; i < endRow; i++) {
+    html += _vscrollRows[i];
+  }
+  if (bottomHeight > 0) {
+    html += '<tr style="height:' + bottomHeight + 'px;"><td colspan="' + colCount + '"></td></tr>';
+  }
+  tbody.innerHTML = html;
+}
+
+function onTableScroll() {
+  if (_vscrollRAF) return;
+  _vscrollRAF = requestAnimationFrame(function() {
+    _vscrollRAF = null;
+    renderVisibleRows();
+  });
+}
+
 function renderTableBody() {
   const tbody = document.getElementById("tableBody");
   const cols = getActiveColumns();
@@ -666,96 +789,30 @@ function renderTableBody() {
     : "no players match these filters";
 
   if (!state.items.length) {
+    _vscrollRows = [];
     tbody.innerHTML = `<tr><td colspan="99" style="text-align:center; padding:40px; font-family: var(--font-hand); font-size: 22px; color: var(--ink-light);">${emptyMsg}</td></tr>`;
     return;
   }
 
-  // Percentile heat coloring
+  // Pre-compute all row HTML
   const heatOn = state.heatColors;
   const pctData = heatOn ? computePercentiles() : {};
-
-  let html = "";
+  _vscrollRows = [];
   for (const player of state.items) {
-    const pos = (player.position || "").toUpperCase();
-    const playKey = player.player_id || player.player_name;
-    const selected = state.selectedPlayers.some(p => p.player_id === playKey);
-    const starred = isOnWatchlist(playKey);
-    const pName = escapeAttr(player.full_name || player.player_name || "");
-    const pTeam = escapeAttr(player.team || player.school || "");
-    html += '<tr tabindex="0" data-player-id="' + escapeAttr(playKey) + '">';
-    html += `<td style="text-align:center; padding:7px 4px; cursor:pointer; font-size:16px;" onclick="toggleWatchlistPlayer('${escapeAttr(playKey)}', '${pName}', '${escapeAttr(pos)}', '${pTeam}', '${state.universe}')" title="${starred ? 'Remove from watchlist' : 'Add to watchlist'}">${starred ? '<span style="color:var(--orange);">&#9733;</span>' : '<span style="color:var(--ink-faint);">&#9734;</span>'}</td>`;
-    html += `<td style="text-align:center; padding:7px 6px;">
-      <input type="checkbox" ${selected ? "checked" : ""} onchange="togglePlayerSelect('${escapeAttr(player.player_id || player.player_name)}', this.checked)"
-        style="accent-color:${(state.universe === 'prospects' || state.universe === 'college') ? 'var(--pos-qb)' : 'var(--orange)'}; width:15px; height:15px; cursor:pointer;">
-    </td>`;
-
-    if (state.universe === "college") {
-      const cid = escapeAttr(player.player_id || "");
-      html += `<td class="col-player"><div class="player-name-cell">`;
-      html += playerHeadshot(player, pos);
-      html += `<span class="pos-badge ${posClass(pos)}">${escapeHtml(pos)}</span>`;
-      html += `<a href="#" onclick="openCollegeProfile('${cid}'); return false;" style="color:var(--ink); text-decoration:none; border-bottom:1px dashed var(--pos-qb);">${escapeHtml(player.player_name)}</a>`;
-      html += `<span class="team-label">${escapeHtml(player.team)}</span>`;
-      if (player.conference) html += `<span class="school-label" style="font-size:10px; color:var(--ink-light);">${escapeHtml(player.conference)}</span>`;
-      html += `</div></td>`;
-    } else if (state.universe === "prospects") {
-      const pName = escapeAttr(player.player_name || "");
-      const pPos = (player.position || "").toUpperCase();
-      const pYear = player.draft_year || state.season;
-      html += `<td class="col-player"><div class="player-name-cell">`;
-      html += playerHeadshot(player, pos);
-      html += `<span class="pos-badge ${posClass(pos)}">${escapeHtml(pos)}</span>`;
-      html += `<a href="#" onclick="openProspectProfile('${pName}', '${escapeAttr(pPos)}', ${pYear}); return false;" style="color:var(--ink); text-decoration:none; border-bottom:1px dashed var(--pos-qb);">${escapeHtml(player.player_name)}</a>`;
-      html += `<span class="school-label">${escapeHtml(player.school)}</span>`;
-      html += `</div></td>`;
-    } else {
-      const pid = escapeAttr(player.player_id || "");
-      html += `<td class="col-player"><div class="player-name-cell">`;
-      html += playerHeadshot(player, pos);
-      html += `<span class="pos-badge ${posClass(pos)}">${escapeHtml(pos)}</span>`;
-      html += `<a href="/player/${encodeURIComponent(pid)}" onclick="event.preventDefault(); openPlayerProfile('${pid}');" style="color:var(--ink); text-decoration:none; border-bottom:1px dashed var(--ink-faint);">${escapeHtml(player.full_name)}</a>`;
-      html += `<span class="team-label">${escapeHtml(player.team)}</span>`;
-      html += `</div></td>`;
-    }
-
-    // Heat color percentile data for this player
-    const heatPcts = heatOn ? (pctData[playKey] || {}) : null;
-
-    for (const key of cols) {
-      const col = getColumnDef(key);
-      if (!col) continue;
-      let val = player[key];
-      // Heat color background style
-      const hBg = heatPcts && heatPcts[key] != null ? getHeatColor(heatPcts[key]) : "";
-      const hStyle = hBg ? ` style="background:${hBg};"` : "";
-      // Show dash for zero stats in prospect/college mode (e.g., NFL career stats for undrafted prospects)
-      if ((state.universe === "prospects" || state.universe === "college") && !col.isText && (val === 0 || val === null || val === undefined)) {
-        html += `<td style="color:var(--ink-faint);">\u2014</td>`;
-        continue;
-      }
-      // Show dash for non-applicable stats (e.g., WR passing stats)
-      if (state.universe === "nfl" && isNonApplicableStat(pos, key, val)) {
-        html += `<td style="color:var(--ink-faint);">—</td>`;
-      } else if (col.isText) {
-        html += `<td>${val ? escapeHtml(val) : "—"}</td>`;
-      } else if (key === "dynasty_value" && val != null) {
-        const dvsColor = val >= 85 ? "var(--green)" : val >= 70 ? "var(--pos-qb)" : val >= 55 ? "var(--orange)" : "var(--ink-light)";
-        const dvsTier = val >= 85 ? "Elite" : val >= 70 ? "Star" : val >= 55 ? "Starter" : "";
-        html += `<td${hStyle}><span style="background:${dvsColor}; color:white; padding:1px 8px; border-radius:10px; border:2px solid var(--ink); font-size:11px; font-weight:700; white-space:nowrap;">${val.toFixed(1)}${dvsTier ? " " + dvsTier : ""}</span></td>`;
-      } else if (key === "age" && val != null) {
-        html += `<td style="font-weight:600;">${Math.round(val)}</td>`;
-      } else if (key === "breakout_pct" && val != null && val >= 50) {
-        html += `<td${hStyle}><span style="background:var(--green); color:white; padding:1px 6px; border-radius:10px; border:2px solid var(--ink); font-size:11px; font-weight:700;">+${val.toFixed(0)}%</span></td>`;
-      } else if (col.pct && val != null) {
-        // Rate stats come as decimals (0.32 = 32%), display as percentage
-        html += `<td${hStyle}>${(val * 100).toFixed(col.decimals)}%</td>`;
-      } else {
-        html += `<td${hStyle}>${formatStat(val, col.decimals)}</td>`;
-      }
-    }
-    html += "</tr>";
+    _vscrollRows.push(buildRowHTML(player, cols, heatOn, pctData));
   }
-  tbody.innerHTML = html;
+
+  // Bind scroll handler once
+  if (!_vscrollBound) {
+    const wrap = document.querySelector(".table-wrap");
+    if (wrap) {
+      wrap.addEventListener("scroll", onTableScroll, { passive: true });
+      _vscrollBound = true;
+    }
+  }
+
+  // Render visible rows
+  renderVisibleRows();
 }
 
 function renderProspectTable() {
