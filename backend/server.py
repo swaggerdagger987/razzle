@@ -927,6 +927,7 @@ def sitemap_xml():
         ("/weeklyleaders.html", "0.8", "weekly"),
         ("/pace.html", "0.8", "weekly"),
         ("/gamelog.html", "0.8", "weekly"),
+        ("/streaks.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1528,6 +1529,19 @@ def game_log(player_id: str = "", season: int = 0):
         return JSONResponse({"error": "Failed to fetch game log"}, status_code=500)
 
 
+@app.get("/api/streaks")
+def streaks(season: int = 0, position: str = "", window: int = 4):
+    """Return players on hot or cold scoring streaks."""
+    try:
+        s = season if season > 0 else None
+        pos = position if position else None
+        w = window if window > 0 else 4
+        return live_data.fetch_streaks(season=s, position=pos, window=w)
+    except Exception as e:
+        logger.error(f"streaks error: {e}")
+        return JSONResponse({"error": "Failed to fetch streaks"}, status_code=500)
+
+
 @app.get("/api/tools-hub")
 def tools_hub():
     """Return the static tools catalog organized by category."""
@@ -1564,6 +1578,7 @@ def tools_hub():
                 {"name": "Player Percentiles", "desc": "Position-relative percentile rankings across 8+ categories", "url": "/percentiles.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "TD Regression", "desc": "Players due for positive or negative touchdown regression", "url": "/regression.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Strengths & Weaknesses", "desc": "A player's top strengths and weaknesses by percentile ranking", "url": "/strengths.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Hot & Cold Streaks", "desc": "Who's on fire or ice cold over their last few games vs season average", "url": "/streaks.html", "positions": ["QB", "RB", "WR", "TE"]},
             ],
         },
         {

@@ -1,6 +1,19 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 117 — Game Log Viewer (COMPLETE)
+## Current Phase: Phase 118 — Hot & Cold Streaks (COMPLETE)
+
+**Exit criterion MET:** /streaks.html shows players on hot streaks (recent PPG significantly above season average) and cold streaks (recent PPG significantly below). Two-column layout with "On Fire" (green) and "Ice Cold" (red) sections. Mini bar sparklines showing recent game scores (green if above season avg, terracotta if below). Delta badges with absolute and percentage change. Streak window selector (3/4/5 games), position filter tabs, season selector, URL state (?season=&pos=&window=), PNG export with watermark. GET /api/streaks returns hot and cold player lists with recent scores. 10 escapeHtml calls, 68/68 braces balanced. "Streaks" nav link on all 52 pages. Sitemap + tools hub entry under Player Discovery.
+
+### Phase 118 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/streaks endpoint | DONE | fetch_streaks, hot/cold by PPG delta |
+| 2 | Streaks page | DONE | Two-column, sparklines, delta badges, 10 escapeHtml |
+| 3 | Nav links + sitemap + tools hub | DONE | All 52 pages updated |
+| 4 | Smoke test | DONE | Python OK, JS OK, 52/52 nav links |
+
+## Previous Phase: Phase 117 — Game Log Viewer (COMPLETE)
 
 **Exit criterion MET:** /gamelog.html lets users search any player and see week-by-week box score stats for any season. Position-specific column layouts (QB: pass stats + rush; RB: rush + receiving; WR/TE: receiving + rush). Sortable columns, season totals row, PPR color tiers (elite/great/ok/bad), player summary card with total points and PPG. Player search autocomplete with keyboard navigation, season selector, URL state (?player=ID&season=), PNG export with watermark. GET /api/game-log returns weekly stats with totals and available seasons. 15 escapeHtml calls, 120/120 braces balanced. "Game Log" nav link on all 51 pages. Sitemap + tools hub entry under Performance Analysis.
 

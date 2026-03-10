@@ -10449,3 +10449,91 @@ def fetch_game_log(player_id, season=None):
         }
     finally:
         conn.close()
+
+
+def fetch_streaks(season=None, position=None, window=4, limit=25):
+    """Identify players on hot or cold scoring streaks vs their season average."""
+    conn = get_db()
+    try:
+        cursor = conn.cursor()
+
+        if not season:
+            cursor.execute("SELECT MAX(season) FROM player_week_stats")
+            season = cursor.fetchone()[0] or 2024
+
+        window = max(2, min(8, window))
+
+        # Get all weekly scores for qualifying players
+        query = """
+            SELECT p.player_id, p.full_name, p.position, p.team,
+                   s.week, COALESCE(s.fantasy_points_ppr, 0) as fpts
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE s.season = ?
+              AND p.fantasy_relevant = 1
+        """
+        params = [season]
+        if position:
+            query += " AND p.position = ?"
+            params.append(position)
+        query += " ORDER BY p.player_id, s.week ASC"
+
+        cursor.execute(query, params)
+        rows = cursor.fetchall()
+
+        # Group by player
+        from collections import defaultdict
+        player_weeks = defaultdict(list)
+        player_info = {}
+        for r in rows:
+            pid = r[0]
+            if pid not in player_info:
+                player_info[pid] = {"name": r[1] or "Unknown", "position": r[2] or "RB", "team": r[3] or "FA"}
+            player_weeks[pid].append({"week": r[4], "fpts": round(r[5], 1)})
+
+        hot = []
+        cold = []
+
+        for pid, weeks in player_weeks.items():
+            if len(weeks) < window + 2:
+                continue
+
+            total_fpts = sum(w["fpts"] for w in weeks)
+            season_avg = total_fpts / len(weeks)
+            if season_avg < 2:
+                continue
+
+            recent = weeks[-window:]
+            recent_avg = sum(w["fpts"] for w in recent) / len(recent)
+            delta = recent_avg - season_avg
+            delta_pct = round((delta / season_avg) * 100, 1) if season_avg else 0
+
+            entry = {
+                "player_id": pid,
+                "name": player_info[pid]["name"],
+                "position": player_info[pid]["position"],
+                "team": player_info[pid]["team"],
+                "games": len(weeks),
+                "season_avg": round(season_avg, 1),
+                "recent_avg": round(recent_avg, 1),
+                "delta": round(delta, 1),
+                "delta_pct": delta_pct,
+                "recent_scores": [w["fpts"] for w in recent],
+            }
+
+            if delta >= 2:
+                hot.append(entry)
+            elif delta <= -2:
+                cold.append(entry)
+
+        hot.sort(key=lambda x: x["delta"], reverse=True)
+        cold.sort(key=lambda x: x["delta"])
+
+        return {
+            "season": season,
+            "window": window,
+            "hot": hot[:limit],
+            "cold": cold[:limit],
+        }
+    finally:
+        conn.close()

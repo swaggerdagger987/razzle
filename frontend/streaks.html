@@ -3,260 +3,199 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Dynasty Tier List — Razzle</title>
-<meta property="og:title" content="Dynasty Tier List — Razzle">
-<meta property="og:description" content="S/A/B/C/D/F dynasty tier rankings on razzle.lol">
+<title>Hot & Cold Streaks — Razzle</title>
+<meta property="og:title" content="Hot & Cold Streaks — Razzle">
+<meta property="og:description" content="Identify players on hot or cold scoring streaks vs their season average on razzle.lol">
 <meta property="og:site_name" content="razzle.lol">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Dynasty Tier List — Razzle">
-<meta name="twitter:description" content="S/A/B/C/D/F dynasty tier rankings on razzle.lol">
+<meta name="twitter:title" content="Hot & Cold Streaks — Razzle">
+<meta name="twitter:description" content="Identify players on hot or cold scoring streaks vs their season average on razzle.lol">
 <meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
-<meta name="description" content="Dynasty tier list — S/A/B/C/D/F player tiers based on composite trade value on razzle.lol">
+<meta name="description" content="Hot and cold streak tracker — who's on fire and who's ice cold over their last few games on razzle.lol">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="styles.css">
 <style>
-  .tl-page {
-    max-width: 1100px;
+  .str-page {
+    max-width: 1200px;
     margin: 0 auto;
     padding: 24px 20px 60px;
   }
-  .tl-header {
+
+  .str-header {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
   }
-  .tl-header h1 {
+  .str-header h1 {
     font-family: var(--font-display);
     font-size: 32px;
     color: var(--ink);
     margin: 0 0 4px;
   }
-  .tl-header .tl-subtitle {
+  .str-header .str-subtitle {
     font-family: var(--font-hand);
     font-size: 20px;
     color: var(--ink-light);
   }
-  .tl-meta {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--ink-light);
-    margin-top: 6px;
-  }
 
-  /* Controls */
-  .tl-controls {
+  .str-controls {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-  }
-  .tl-controls select {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    padding: 6px 10px;
-    border: 3px solid var(--ink);
-    border-radius: 6px;
-    background: var(--card);
-    color: var(--ink);
-  }
-  .tl-export-btn {
-    font-family: var(--font-display);
-    font-size: 13px;
-    padding: 6px 16px;
-    border: 2px solid var(--ink);
-    border-radius: 8px;
-    background: var(--card);
-    color: var(--ink);
-    cursor: pointer;
-    box-shadow: 2px 2px 0 var(--ink);
-  }
-  .tl-export-btn:hover { background: var(--terracotta); color: white; }
-
-  /* Position tabs */
-  .tl-pos-tabs {
-    display: flex;
-    justify-content: center;
-    gap: 6px;
+    gap: 16px;
     margin-bottom: 24px;
     flex-wrap: wrap;
   }
-  .tl-pos-tab {
+  .str-controls select {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    padding: 6px 10px;
+    border: 2px solid var(--ink);
+    border-radius: 4px;
+    background: var(--card);
+  }
+  .str-controls .pos-tabs {
+    display: flex;
+    gap: 4px;
+  }
+  .str-controls .pos-tab {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 5px 12px;
+    border: 2px solid var(--ink);
+    border-radius: 4px;
+    background: var(--card);
+    cursor: pointer;
+    font-weight: 700;
+  }
+  .str-controls .pos-tab.active {
+    background: var(--ink);
+    color: var(--sand);
+  }
+  .str-export {
     font-family: var(--font-mono);
     font-size: 12px;
     padding: 5px 14px;
     border: 2px solid var(--ink);
-    border-radius: 20px;
+    border-radius: 4px;
     background: var(--card);
-    color: var(--ink);
     cursor: pointer;
-    box-shadow: 2px 2px 0 var(--ink);
-    transition: transform 0.1s;
+    font-weight: 700;
   }
-  .tl-pos-tab:hover { transform: translateY(-1px); }
-  .tl-pos-tab.active {
-    background: var(--ink);
-    color: var(--card);
-  }
+  .str-export:hover { background: var(--ink); color: var(--sand); }
 
-  /* Tier rows */
-  .tl-tier {
-    display: flex;
-    align-items: stretch;
-    margin-bottom: 12px;
-    border: 3px solid var(--ink);
-    border-radius: 14px;
-    box-shadow: 4px 4px 0 var(--ink);
-    overflow: hidden;
-    background: var(--card);
-  }
-  .tl-tier-label {
-    min-width: 70px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 12px 8px;
-    border-right: 3px solid var(--ink);
-  }
-  .tl-tier-letter {
-    font-family: var(--font-display);
-    font-size: 36px;
-    line-height: 1;
-    color: white;
-    text-shadow: 2px 2px 0 rgba(0,0,0,0.2);
-  }
-  .tl-tier-count {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    color: rgba(255,255,255,0.8);
-    margin-top: 4px;
-  }
-
-  /* Tier colors */
-  .tl-tier-label.S { background: #d44040; }
-  .tl-tier-label.A { background: var(--terracotta); }
-  .tl-tier-label.B { background: #e8a838; }
-  .tl-tier-label.C { background: var(--rb); }
-  .tl-tier-label.D { background: var(--qb); }
-  .tl-tier-label.F { background: #888; }
-
-  /* Player chips in tier */
-  .tl-tier-players {
-    flex: 1;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    padding: 10px 12px;
-    align-items: center;
-    align-content: center;
-    min-height: 50px;
-  }
-
-  .tl-player-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 4px 10px 4px 4px;
-    border: 2px solid var(--ink);
-    border-radius: 20px;
-    background: var(--card);
-    font-family: var(--font-mono);
-    font-size: 12px;
-    white-space: nowrap;
-    box-shadow: 2px 2px 0 var(--ink-faint);
-    transition: transform 0.1s;
-  }
-  .tl-player-chip:hover {
-    transform: translateY(-1px);
-    box-shadow: 2px 3px 0 var(--ink-faint);
-  }
-
-  .tl-chip-pos {
-    display: inline-block;
-    font-family: var(--font-display);
-    font-size: 10px;
-    padding: 2px 6px;
-    border-radius: 10px;
-    color: white;
-  }
-  .tl-chip-pos.QB { background: var(--qb); }
-  .tl-chip-pos.RB { background: var(--rb); }
-  .tl-chip-pos.WR { background: var(--wr); }
-  .tl-chip-pos.TE { background: var(--te); }
-
-  .tl-chip-name { font-weight: 600; }
-  .tl-chip-tv {
-    font-size: 10px;
-    color: var(--ink-light);
-  }
-
-  .tl-empty-tier {
-    font-family: var(--font-hand);
-    font-size: 14px;
-    color: var(--ink-faint);
-    padding: 8px;
-  }
-
-  /* Tier description */
-  .tl-tier-desc {
-    font-family: var(--font-hand);
-    font-size: 12px;
-    color: rgba(255,255,255,0.7);
-    max-width: 60px;
-    text-align: center;
-    line-height: 1.2;
-  }
-
-  /* Loading */
-  .tl-loading {
+  .str-loading {
     text-align: center;
     font-family: var(--font-hand);
     font-size: 18px;
     color: var(--ink-light);
-    padding: 60px 20px;
-  }
-  .tl-error {
-    text-align: center;
-    font-family: var(--font-mono);
-    font-size: 14px;
-    color: #d44040;
-    padding: 40px 20px;
+    padding: 60px 0;
   }
 
-  /* Watermark */
-  .tl-watermark {
-    position: fixed;
-    bottom: 10px;
-    right: 14px;
-    font-family: var(--font-hand);
-    font-size: 14px;
-    color: rgba(0,0,0,0.15);
-    pointer-events: none;
-    z-index: 1;
+  /* Two-column layout */
+  .str-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
   }
-
   @media (max-width: 768px) {
-    .tl-tier { flex-direction: column; }
-    .tl-tier-label {
-      flex-direction: row;
-      min-width: auto;
-      border-right: none;
-      border-bottom: 3px solid var(--ink);
-      padding: 8px 16px;
-      gap: 8px;
-    }
-    .tl-tier-letter { font-size: 24px; }
-    .tl-tier-desc { max-width: none; }
-    .tl-header h1 { font-size: 26px; }
+    .str-columns { grid-template-columns: 1fr; }
   }
-  @media (max-width: 480px) {
-    .tl-page { padding: 16px 10px 40px; }
-    .tl-player-chip { font-size: 11px; }
+
+  .str-section {
+    background: var(--card);
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    box-shadow: 4px 4px 0 var(--ink);
+    overflow: hidden;
+  }
+  .str-section-header {
+    font-family: var(--font-display);
+    font-size: 18px;
+    padding: 10px 16px;
+    color: #fff;
+  }
+  .str-section-header.hot { background: #166534; }
+  .str-section-header.cold { background: #991b1b; }
+
+  /* Table */
+  .str-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+  .str-table th {
+    background: var(--sand);
+    padding: 6px 8px;
+    text-align: right;
+    font-size: 10px;
+    font-weight: 700;
+    border-bottom: 2px solid var(--ink-faint);
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+  }
+  .str-table th:first-child, .str-table th:nth-child(2) { text-align: left; }
+  .str-table td {
+    padding: 6px 8px;
+    text-align: right;
+    border-bottom: 1px solid var(--ink-faint);
+  }
+  .str-table td:first-child, .str-table td:nth-child(2) { text-align: left; }
+  .str-table tbody tr:hover { background: rgba(217,119,87,0.08); }
+
+  /* Badges */
+  .str-delta-badge {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid;
+    white-space: nowrap;
+  }
+  .str-delta-badge.hot {
+    background: #dcfce7;
+    color: #166534;
+    border-color: #166534;
+  }
+  .str-delta-badge.cold {
+    background: #fef2f2;
+    color: #991b1b;
+    border-color: #991b1b;
+  }
+  .str-pos-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: #fff;
+    margin-left: 4px;
+  }
+
+  /* Mini sparkline (recent scores) */
+  .str-recent {
+    display: flex;
+    gap: 2px;
+    align-items: flex-end;
+    height: 20px;
+  }
+  .str-recent-bar {
+    width: 8px;
+    border-radius: 2px 2px 0 0;
+    min-height: 2px;
+  }
+
+  .str-empty {
+    text-align: center;
+    font-family: var(--font-hand);
+    font-size: 15px;
+    color: var(--ink-light);
+    padding: 30px 16px;
   }
 </style>
 </head>
@@ -301,7 +240,7 @@
     <li><a href="/cheatsheet.html">Cheat Sheet</a></li>
     <li><a href="/auction.html">Auction</a></li>
     <li><a href="/dashboard.html">Dashboard</a></li>
-    <li><a href="/tiers.html" class="active">Tiers</a></li>
+    <li><a href="/tiers.html">Tiers</a></li>
     <li><a href="/archetypes.html">Archetypes</a></li>
     <li><a href="/career.html">Career</a></li>
     <li><a href="/career-compare.html">Career Compare</a></li>
@@ -313,39 +252,40 @@
     <li><a href="/weeklyleaders.html">Week Leaders</a></li>
     <li><a href="/pace.html">Pace</a></li>
     <li><a href="/gamelog.html">Game Log</a></li>
-    <li><a href="/streaks.html">Streaks</a></li>
+    <li><a href="/streaks.html" class="active">Streaks</a></li>
     <li><a href="/team/KC">Teams</a></li>
     <li><a href="/league-intel.html">League Intel</a></li>
     <li><a href="/agents.html">War Room</a></li>
   </ul>
 </nav>
 
-<main class="tl-page" id="tl-content">
-  <div class="tl-header">
-    <h1>Dynasty Tier List</h1>
-    <div class="tl-subtitle">who's untouchable and who's getting cut</div>
-    <div class="tl-meta" id="tl-meta"></div>
+<main class="str-page" id="strRoot">
+  <div class="str-header">
+    <h1>Hot & Cold Streaks</h1>
+    <div class="str-subtitle">who's on fire and who's ice cold</div>
   </div>
 
-  <div class="tl-controls">
-    <select id="season-select"></select>
-    <button class="tl-export-btn" id="export-btn">Export PNG</button>
+  <div class="str-controls">
+    <select id="strSeason" aria-label="Season"></select>
+    <select id="strWindow" aria-label="Window">
+      <option value="3">Last 3 games</option>
+      <option value="4" selected>Last 4 games</option>
+      <option value="5">Last 5 games</option>
+    </select>
+    <div class="pos-tabs">
+      <button class="pos-tab active" data-pos="">ALL</button>
+      <button class="pos-tab" data-pos="QB">QB</button>
+      <button class="pos-tab" data-pos="RB">RB</button>
+      <button class="pos-tab" data-pos="WR">WR</button>
+      <button class="pos-tab" data-pos="TE">TE</button>
+    </div>
+    <button class="str-export" id="strExport">Export PNG</button>
   </div>
 
-  <div class="tl-pos-tabs" id="pos-tabs">
-    <button class="tl-pos-tab active" data-pos="">All</button>
-    <button class="tl-pos-tab" data-pos="QB">QB</button>
-    <button class="tl-pos-tab" data-pos="RB">RB</button>
-    <button class="tl-pos-tab" data-pos="WR">WR</button>
-    <button class="tl-pos-tab" data-pos="TE">TE</button>
-  </div>
-
-  <div id="tl-tiers">
-    <div class="tl-loading">pulling film...</div>
+  <div id="strContent">
+    <div class="str-loading">pulling film...</div>
   </div>
 </main>
-
-<div class="tl-watermark">razzle.lol</div>
 
 <footer style="text-align:center; padding:24px 20px 32px; font-family:var(--font-hand); font-size:15px; color:var(--ink-light); border-top:2px dashed var(--ink-faint); margin-top:40px;">
   <div style="margin-bottom:10px;">
@@ -459,111 +399,194 @@
     return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  var state = { season: 0, position: '' };
-  var tiersEl = document.getElementById('tl-tiers');
-  var seasonSelect = document.getElementById('season-select');
-  var posTabs = document.getElementById('pos-tabs');
+  function fmt(v, dec) {
+    if (v === null || v === undefined) return '-';
+    return Number(v).toFixed(dec === undefined ? 1 : dec);
+  }
 
-  // Season select
-  seasonSelect.addEventListener('change', function() {
-    state.season = parseInt(this.value, 10) || 0;
-    fetchData();
-  });
+  var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
 
-  // Position tabs
-  posTabs.addEventListener('click', function(e) {
-    var tab = e.target.closest('.tl-pos-tab');
-    if (!tab) return;
-    posTabs.querySelectorAll('.tl-pos-tab').forEach(function(t) { t.classList.remove('active'); });
-    tab.classList.add('active');
-    state.position = tab.getAttribute('data-pos');
-    fetchData();
-  });
+  var currentPosition = '';
+  var currentData = null;
 
-  // Export
-  document.getElementById('export-btn').addEventListener('click', function() {
-    var el = document.getElementById('tl-content');
-    if (typeof html2canvas !== 'undefined') {
-      html2canvas(el, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
-        var ctx = canvas.getContext('2d');
-        ctx.font = '24px sans-serif';
-        ctx.fillStyle = 'rgba(0,0,0,0.12)';
-        ctx.fillText('razzle.lol', canvas.width - 160, canvas.height - 20);
-        var link = document.createElement('a');
-        link.download = 'razzle-tier-list.png';
-        link.href = canvas.toDataURL();
-        link.click();
-      });
-    }
-  });
+  /* ---- URL state ---- */
+  function readURL() {
+    var p = new URLSearchParams(window.location.search);
+    return { season: p.get('season') || '', pos: p.get('pos') || '', window: p.get('window') || '' };
+  }
+  function writeURL(season, pos, win) {
+    var p = new URLSearchParams();
+    if (season) p.set('season', season);
+    if (pos) p.set('pos', pos);
+    if (win && win !== '4') p.set('window', win);
+    var qs = p.toString();
+    history.replaceState(null, '', qs ? '?' + qs : location.pathname);
+  }
 
-  function fetchData() {
-    tiersEl.innerHTML = '<div class="tl-loading">pulling film...</div>';
-    var params = [];
-    if (state.season > 0) params.push('season=' + state.season);
-    if (state.position) params.push('position=' + state.position);
-    var url = '/api/tier-list' + (params.length ? '?' + params.join('&') : '');
+  /* ---- Fetch ---- */
+  function load() {
+    var selSeason = document.getElementById('strSeason');
+    var selWindow = document.getElementById('strWindow');
+    var season = selSeason.value || '';
+    var win = selWindow.value || '4';
+    var pos = currentPosition;
+    writeURL(season, pos, win);
 
-    fetch(url).then(function(resp) {
-      if (!resp.ok) throw new Error('HTTP ' + resp.status);
-      return resp.json();
+    var url = '/api/streaks?window=' + encodeURIComponent(win);
+    if (season) url += '&season=' + encodeURIComponent(season);
+    if (pos) url += '&position=' + encodeURIComponent(pos);
+
+    document.getElementById('strContent').innerHTML = '<div class="str-loading">pulling film...</div>';
+
+    fetch(url).then(function(r) {
+      if (!r.ok) throw new Error('API error');
+      return r.json();
     }).then(function(data) {
-      // Populate season selector
-      if (data.available_seasons && seasonSelect.options.length <= 1) {
-        seasonSelect.innerHTML = '';
-        data.available_seasons.forEach(function(s) {
-          var opt = document.createElement('option');
-          opt.value = s;
-          opt.textContent = s;
-          if (s === data.season) opt.selected = true;
-          seasonSelect.appendChild(opt);
-        });
-      }
-
-      document.getElementById('tl-meta').textContent = data.season + ' season \u00b7 ' + data.total_players + ' players \u00b7 ' + (data.position === 'ALL' ? 'all positions' : data.position);
-      renderTiers(data.tiers || []);
-    }).catch(function(err) {
-      tiersEl.innerHTML = '<div class="tl-error">failed to load tier list: ' + escapeHtml(err.message) + '</div>';
+      currentData = data;
+      populateSeasons(data.season);
+      render(data);
+    }).catch(function() {
+      document.getElementById('strContent').innerHTML = '<div class="str-loading">something went wrong — try again</div>';
     });
   }
 
-  function renderTiers(tiers) {
-    var html = '';
-    tiers.forEach(function(tier) {
-      html += '<div class="tl-tier">';
-      html += '<div class="tl-tier-label ' + escapeHtml(tier.tier) + '">';
-      html += '<div class="tl-tier-letter">' + escapeHtml(tier.tier) + '</div>';
-      html += '<div class="tl-tier-count">' + escapeHtml(String(tier.players.length)) + '</div>';
-      html += '<div class="tl-tier-desc">' + escapeHtml(tier.label || '') + '</div>';
-      html += '</div>';
-      html += '<div class="tl-tier-players">';
-      if (tier.players.length === 0) {
-        html += '<span class="tl-empty-tier">no players in this tier</span>';
-      } else {
-        tier.players.forEach(function(p) {
-          html += '<div class="tl-player-chip">';
-          html += '<span class="tl-chip-pos ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span>';
-          html += '<span class="tl-chip-name">' + escapeHtml(p.full_name) + '</span>';
-          html += '<span class="tl-chip-tv">' + escapeHtml(String(p.trade_value)) + '</span>';
-          html += '</div>';
-        });
+  function populateSeasons(current) {
+    var sel = document.getElementById('strSeason');
+    if (sel.options.length <= 1) {
+      sel.innerHTML = '';
+      for (var y = 2024; y >= 2020; y--) {
+        var opt = document.createElement('option');
+        opt.value = y;
+        opt.textContent = y;
+        if (y === current) opt.selected = true;
+        sel.appendChild(opt);
       }
-      html += '</div>';
-      html += '</div>';
+    }
+  }
+
+  /* ---- Render ---- */
+  function render(data) {
+    var hot = data.hot || [];
+    var cold = data.cold || [];
+
+    var html = '<div class="str-columns">';
+
+    // Hot section
+    html += '<div class="str-section">';
+    html += '<div class="str-section-header hot">On Fire</div>';
+    if (hot.length) {
+      html += renderTable(hot, 'hot');
+    } else {
+      html += '<div class="str-empty">no hot streaks found</div>';
+    }
+    html += '</div>';
+
+    // Cold section
+    html += '<div class="str-section">';
+    html += '<div class="str-section-header cold">Ice Cold</div>';
+    if (cold.length) {
+      html += renderTable(cold, 'cold');
+    } else {
+      html += '<div class="str-empty">no cold streaks found</div>';
+    }
+    html += '</div>';
+
+    html += '</div>';
+    document.getElementById('strContent').innerHTML = html;
+  }
+
+  function renderTable(players, type) {
+    var html = '<table class="str-table"><thead><tr>';
+    html += '<th>Player</th><th>Pos</th><th>Szn Avg</th><th>Recent</th><th>Delta</th><th>Last ' + escapeHtml(String(currentData.window)) + '</th>';
+    html += '</tr></thead><tbody>';
+
+    for (var i = 0; i < players.length; i++) {
+      var p = players[i];
+      var posColor = POS_COLORS[p.position] || '#888';
+      var badgeClass = type === 'hot' ? 'hot' : 'cold';
+      var sign = p.delta > 0 ? '+' : '';
+
+      html += '<tr>';
+      html += '<td>' + escapeHtml(p.name) + ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></td>';
+      html += '<td><span class="str-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
+      html += '<td>' + escapeHtml(String(fmt(p.season_avg))) + '</td>';
+      html += '<td>' + escapeHtml(String(fmt(p.recent_avg))) + '</td>';
+      html += '<td><span class="str-delta-badge ' + badgeClass + '">' + sign + escapeHtml(String(fmt(p.delta))) + ' (' + sign + escapeHtml(String(fmt(p.delta_pct, 0))) + '%)</span></td>';
+
+      // Mini bar sparkline
+      var scores = p.recent_scores || [];
+      var maxScore = Math.max.apply(null, scores.concat([1]));
+      html += '<td><div class="str-recent">';
+      for (var j = 0; j < scores.length; j++) {
+        var h = Math.max(2, Math.round((scores[j] / maxScore) * 20));
+        var barColor = scores[j] >= p.season_avg ? '#2ec4b6' : '#d97757';
+        html += '<div class="str-recent-bar" style="height:' + h + 'px;background:' + barColor + '" title="Wk: ' + escapeHtml(String(fmt(scores[j]))) + '"></div>';
+      }
+      html += '</div></td>';
+      html += '</tr>';
+    }
+
+    html += '</tbody></table>';
+    return html;
+  }
+
+  /* ---- Position tabs ---- */
+  document.querySelectorAll('.pos-tab').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.pos-tab').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      currentPosition = btn.getAttribute('data-pos') || '';
+      load();
     });
-    tiersEl.innerHTML = html;
+  });
+
+  document.getElementById('strSeason').addEventListener('change', load);
+  document.getElementById('strWindow').addEventListener('change', load);
+
+  /* ---- PNG export ---- */
+  document.getElementById('strExport').addEventListener('click', function() {
+    var root = document.getElementById('strRoot');
+    if (typeof html2canvas === 'undefined') return;
+    html2canvas(root, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+      var ctx = canvas.getContext('2d');
+      ctx.font = 'bold 16px Space Mono, monospace';
+      ctx.fillStyle = 'rgba(0,0,0,0.12)';
+      ctx.fillText('razzle.lol', canvas.width - 130, canvas.height - 16);
+      var link = document.createElement('a');
+      link.download = 'razzle-streaks.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    });
+  });
+
+  /* ---- Analytics ---- */
+  fetch('/api/analytics/pageview', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ page: '/streaks.html', referrer: document.referrer || '' })
+  }).catch(function() {});
+
+  /* ---- Init from URL ---- */
+  var init = readURL();
+  if (init.pos) {
+    currentPosition = init.pos;
+    document.querySelectorAll('.pos-tab').forEach(function(b) {
+      b.classList.toggle('active', (b.getAttribute('data-pos') || '') === init.pos);
+    });
+  }
+  if (init.window) {
+    document.getElementById('strWindow').value = init.window;
+  }
+  if (init.season) {
+    var sel = document.getElementById('strSeason');
+    var opt = document.createElement('option');
+    opt.value = init.season;
+    opt.textContent = init.season;
+    opt.selected = true;
+    sel.appendChild(opt);
   }
 
-  // Analytics
-  if (typeof fetch !== 'undefined') {
-    fetch('/api/analytics/pageview', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ page: 'tiers', referrer: document.referrer || '' })
-    }).catch(function() {});
-  }
-
-  fetchData();
+  load();
 })();
 </script>
 </body>

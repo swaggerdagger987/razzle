@@ -1,17 +1,17 @@
-# Razzle Loop — Phase 117 Task List
+# Razzle Loop — Phase 118 Task List
 
-> Game Log Viewer
+> Hot & Cold Streaks
 
-**Current Phase**: 117 — Game Log Viewer
-**Exit Criterion**: /gamelog.html shows week-by-week box score stats, sortable, totals row, player search, season selector, URL state, PNG export.
+**Current Phase**: 118 — Hot & Cold Streaks
+**Exit Criterion**: /streaks.html shows hot and cold streak players with sparklines and delta badges.
 
 ---
 
-## Task 1: Backend /api/game-log endpoint
+## Task 1: Backend /api/streaks endpoint
 **Status**: PASS
 **Attempts**: 1
 
-## Task 2: Frontend /gamelog.html page
+## Task 2: Frontend /streaks.html page
 **Status**: PASS
 **Attempts**: 1
 
@@ -27,7 +27,7 @@
 
 ## Loop State
 ```
-Current Phase: 117
+Current Phase: 118
 Current Task: 4
 Current Stage: COMPLETE
 Attempt: 1
