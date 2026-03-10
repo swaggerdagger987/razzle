@@ -1,44 +1,39 @@
-# Razzle Loop — Phase 61 Task List
+# Razzle Loop — Phase 62 Task List
 
-> QA + UX Audit — Auto-Generated Fixes (Phases 56-60)
+> Global Quick Search — Command Palette (Ctrl+K)
 
-**Current Phase**: 61 — QA + UX Audit Fixes
-**Exit Criterion**: All CRITICAL and HIGH findings from QA + UX audit of phases 56-60 are resolved.
+**Current Phase**: 62 — Global Quick Search
+**Exit Criterion**: User presses Ctrl+K (or Cmd+K on Mac) from any page → modal search overlay opens → type player name → results appear with position badges, team, PPG → arrow keys navigate → Enter opens player profile → Escape closes. Recently viewed players shown when input is empty. Works on all pages (index, lab, league-intel, agents).
 
 ---
 
-## Task 1: XSS patches in renderPlayerComps and loadPlayerComps
+## Task 1: Backend — lightweight player quick-search endpoint
 **Status**: PASS
 **Attempts**: 1
-**Notes**: All 6 unescaped player name locations wrapped with escapeHtml(). Error message in loadPlayerComps escaped. Verified via grep.
+**Notes**: GET /api/players/quick-search?q=&limit=8 in server.py. quick_search_players() in live_data.py — hits players table with indexed search_name LIKE, joins latest season PPG via subquery. Limit capped at 20. Returns empty array for empty query.
 
-## Task 2: Boom/Bust histogram legend + grade explanation
+## Task 2: Frontend — command palette HTML/CSS/JS component
 **Status**: PASS
 **Attempts**: 1
-**Notes**: Color-coded legend below histogram (green=boom, red=bust, position-color=normal with threshold values). Grade sticker labeled "Consistency" underneath.
+**Notes**: Full command palette injected via app.js into all pages. Modal with backdrop blur, sand bg card, 3px ink borders, 4px offset shadow. Input with display font, results with headshot/initials, position badge (color-coded), team, PPG in mono font. Caveat "quick search" label. Loading: "pulling film...". Empty: "no players found". CSS in styles.css.
 
-## Task 3: Roster Value grade and status explainers
+## Task 3: Keyboard shortcuts + navigation + recently viewed
 **Status**: PASS
 **Attempts**: 1
-**Notes**: Grade badge has "Roster Grade" label + tooltip explaining criteria. Status badge has "Window" label + tooltip explaining competing/retooling/rebuilding logic.
+**Notes**: Ctrl+K / Cmd+K toggles palette globally. Escape closes. Arrow Up/Down navigates with active highlighting (orange left border). Enter navigates to /player/{id}. Recently viewed stored in localStorage (max 8), shown when input empty. Debounced search (300ms). Click and mouseenter also work.
 
-## Task 4: Backend hardening — limit validation + dead import
+## Task 4: Deploy + smoke test
 **Status**: PASS
 **Attempts**: 1
-**Notes**: max(1, min(limit, 10)) guard on /comps endpoint. Removed redundant inline import math in _pick_value.
-
-## Task 5: Medium fixes — design borders + consistency score + comp annotation
-**Status**: PASS
-**Attempts**: 1
-**Notes**: Stat cards now 3px borders/4px shadows per design guide. Consistency score (0-100) added to stat cards. Comp annotation updated to explain cosine similarity methodology.
+**Notes**: Python and JS syntax verified. All 7 HTML pages include app.js and styles.css. Route order correct (quick-search before {player_id}). All referenced functions exist. Design matches DESIGN.md (chunky borders, sand bg, position colors, correct fonts, "pulling film..." loading).
 
 ---
 
 ## Loop State
 ```
-Current Phase: 61
-Current Task: 5
+Current Phase: 62
+Current Task: 4
 Current Stage: COMPLETE
 Attempt: 1
-Tasks Completed: 5/5
+Tasks Completed: 4/4
 ```

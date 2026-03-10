@@ -1,6 +1,24 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 61 — QA + UX Audit Fixes (COMPLETE)
+## Current Phase: Phase 62 — Global Quick Search (COMPLETE)
+
+**Exit criterion MET:** Ctrl+K / Cmd+K opens command palette from any page. Type-ahead search hits lightweight /api/players/quick-search endpoint (indexed search_name LIKE + latest season PPG). Results show player headshot/initials, position badge (color-coded), team, PPG in mono font. Arrow keys navigate, Enter opens player profile, Escape closes. Recently viewed players (max 8) stored in localStorage, shown when input empty. Debounced 300ms search. Works on all 7 pages via app.js injection. Design matches DESIGN.md: sand bg card, 3px ink borders, 4px offset shadow, Caveat annotation, "pulling film..." loading state.
+
+### Phase 62 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend quick-search endpoint | DONE | GET /api/players/quick-search, indexed LIKE + PPG subquery |
+| 2 | Command palette UI | DONE | Modal with backdrop blur, position badges, headshots |
+| 3 | Keyboard nav + recently viewed | DONE | Ctrl+K, arrows, Enter, Esc, localStorage recents |
+| 4 | Smoke test | DONE | Syntax clean, all pages include scripts, design verified |
+
+### Decisions Log
+- **Lightweight endpoint**: Created dedicated quick_search_players() instead of reusing heavy fetch_players(). Hits only players table + PPG subquery — no full stat aggregation. Much faster for type-ahead.
+- **Recently viewed in palette**: When input is empty, shows last 8 viewed players. Makes the palette immediately useful even without typing — power users can jump between players they're analyzing.
+- **All pages**: Palette injected via app.js which all 7 HTML pages include. One component, universal access.
+
+## Previous Phase: Phase 61 — QA + UX Audit Fixes (COMPLETE)
 
 **Exit criterion MET:** All CRITICAL and HIGH findings from QA+UX audit of phases 56-60 resolved. XSS patches: 6 unescaped player names + 1 error message in renderPlayerComps/loadPlayerComps wrapped with escapeHtml(). Boom/Bust: histogram legend added (green=boom, red=bust, position=normal), grade sticker labeled "Consistency", consistency score (0-100) added to stat cards. Roster Value: grade badge labeled "Roster Grade" with tooltip, status badge labeled "Window" with tooltip. Backend: negative limit guard on /comps, removed redundant import. Design: stat card borders fixed to 3px/4px per guide. Comp annotation updated to explain cosine similarity.
 

@@ -544,6 +544,30 @@ def db_stats():
     }
 
 
+def quick_search_players(query, limit=8):
+    """Lightweight player search for command palette — hits players table + latest PPG."""
+    if not query or not query.strip():
+        return []
+    limit = max(1, min(limit, 20))
+    conn = get_conn()
+    search_term = "%" + query.lower().replace(" ", "") + "%"
+    rows = conn.execute("""
+        SELECT p.player_id, p.full_name, p.position, p.team, p.headshot_url,
+               COALESCE(
+                   (SELECT ROUND(SUM(s.fantasy_points_ppr) * 1.0 / COUNT(DISTINCT s.week), 1)
+                    FROM player_week_stats s
+                    WHERE s.player_id = p.player_id
+                      AND s.season = (SELECT MAX(season) FROM player_week_stats)),
+                   0) AS ppg
+        FROM players p
+        WHERE p.search_name LIKE ?
+          AND p.position IN ('QB', 'RB', 'WR', 'TE')
+        ORDER BY ppg DESC
+        LIMIT ?
+    """, (search_term, limit)).fetchall()
+    return [dict(r) for r in rows]
+
+
 def fetch_players(
     search="",
     position="",

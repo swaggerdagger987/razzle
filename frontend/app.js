@@ -393,6 +393,225 @@ function migrateLocalFormulas() {
   } catch (e) { /* ignore */ }
 }
 
+/* ========== Command Palette (Ctrl+K Quick Search) ========== */
+var _cmdPaletteEl = null;
+var _cmdInputEl = null;
+var _cmdResultsEl = null;
+var _cmdActiveIdx = -1;
+var _cmdItems = [];
+var _cmdDebounce = null;
+
+function initCommandPalette() {
+  // Inject palette HTML into body
+  var html = '<div class="cmd-palette-backdrop" id="cmdPalette">' +
+    '<div class="cmd-palette">' +
+      '<div class="cmd-palette-label">quick search</div>' +
+      '<div class="cmd-palette-input-wrap">' +
+        '<input class="cmd-palette-input" id="cmdInput" type="text" placeholder="Search players... (Ctrl+K)" autocomplete="off" />' +
+      '</div>' +
+      '<div class="cmd-palette-results" id="cmdResults"></div>' +
+      '<div class="cmd-palette-hint">' +
+        '<span><kbd>&uarr;</kbd><kbd>&darr;</kbd> navigate</span>' +
+        '<span><kbd>Enter</kbd> open</span>' +
+        '<span><kbd>Esc</kbd> close</span>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+  document.body.insertAdjacentHTML("beforeend", html);
+
+  _cmdPaletteEl = document.getElementById("cmdPalette");
+  _cmdInputEl = document.getElementById("cmdInput");
+  _cmdResultsEl = document.getElementById("cmdResults");
+
+  // Close on backdrop click
+  _cmdPaletteEl.addEventListener("click", function(e) {
+    if (e.target === _cmdPaletteEl) closeCmdPalette();
+  });
+
+  // Input handler with debounce
+  _cmdInputEl.addEventListener("input", function() {
+    clearTimeout(_cmdDebounce);
+    var q = _cmdInputEl.value.trim();
+    if (!q) {
+      renderRecentlyViewed();
+      return;
+    }
+    _cmdResultsEl.innerHTML = '<div class="cmd-palette-status">pulling film...</div>';
+    _cmdDebounce = setTimeout(function() { cmdSearch(q); }, 300);
+  });
+
+  // Keyboard nav inside input
+  _cmdInputEl.addEventListener("keydown", function(e) {
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      cmdNavigate(1);
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      cmdNavigate(-1);
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      cmdSelect();
+    } else if (e.key === "Escape") {
+      closeCmdPalette();
+    }
+  });
+
+  // Global Ctrl+K / Cmd+K
+  document.addEventListener("keydown", function(e) {
+    if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+      e.preventDefault();
+      if (_cmdPaletteEl.classList.contains("open")) {
+        closeCmdPalette();
+      } else {
+        openCmdPalette();
+      }
+    }
+    if (e.key === "Escape" && _cmdPaletteEl.classList.contains("open")) {
+      closeCmdPalette();
+    }
+  });
+}
+
+function openCmdPalette() {
+  _cmdPaletteEl.classList.add("open");
+  _cmdInputEl.value = "";
+  _cmdActiveIdx = -1;
+  renderRecentlyViewed();
+  setTimeout(function() { _cmdInputEl.focus(); }, 50);
+}
+
+function closeCmdPalette() {
+  _cmdPaletteEl.classList.remove("open");
+  _cmdInputEl.value = "";
+  _cmdResultsEl.innerHTML = "";
+  _cmdActiveIdx = -1;
+  _cmdItems = [];
+}
+
+async function cmdSearch(query) {
+  try {
+    var data = await apiFetch("/api/players/quick-search?q=" + encodeURIComponent(query) + "&limit=8");
+    _cmdItems = data || [];
+    _cmdActiveIdx = _cmdItems.length > 0 ? 0 : -1;
+    renderCmdResults(_cmdItems, "Results");
+  } catch (e) {
+    _cmdResultsEl.innerHTML = '<div class="cmd-palette-status">search failed</div>';
+    _cmdItems = [];
+    _cmdActiveIdx = -1;
+  }
+}
+
+function renderCmdResults(items, sectionLabel) {
+  if (!items.length) {
+    _cmdResultsEl.innerHTML = '<div class="cmd-palette-status">no players found</div>';
+    return;
+  }
+  var html = '<div class="cmd-palette-section">' + escapeHtml(sectionLabel) + '</div>';
+  items.forEach(function(p, i) {
+    var pos = (p.position || "").toUpperCase();
+    var posLc = pos.toLowerCase();
+    var team = p.team || "FA";
+    var ppg = p.ppg != null ? Number(p.ppg).toFixed(1) : "—";
+    var activeClass = i === _cmdActiveIdx ? " active" : "";
+    html += '<div class="cmd-palette-item' + activeClass + '" data-idx="' + i + '">' +
+      playerHeadshot(p, pos) +
+      '<span class="cmd-palette-pos ' + posLc + '">' + escapeHtml(pos) + '</span>' +
+      '<div class="cmd-palette-item-info">' +
+        '<div class="cmd-palette-item-name">' + escapeHtml(p.full_name || p.player_name || "") + '</div>' +
+        '<div class="cmd-palette-item-meta">' + escapeHtml(team) + '</div>' +
+      '</div>' +
+      '<div class="cmd-palette-item-ppg">' + ppg + ' ppg</div>' +
+    '</div>';
+  });
+  _cmdResultsEl.innerHTML = html;
+
+  // Click handlers
+  var els = _cmdResultsEl.querySelectorAll(".cmd-palette-item");
+  els.forEach(function(el) {
+    el.addEventListener("click", function() {
+      _cmdActiveIdx = parseInt(el.dataset.idx);
+      cmdSelect();
+    });
+    el.addEventListener("mouseenter", function() {
+      _cmdActiveIdx = parseInt(el.dataset.idx);
+      updateCmdActive();
+    });
+  });
+}
+
+function cmdNavigate(dir) {
+  if (!_cmdItems.length) return;
+  _cmdActiveIdx += dir;
+  if (_cmdActiveIdx < 0) _cmdActiveIdx = _cmdItems.length - 1;
+  if (_cmdActiveIdx >= _cmdItems.length) _cmdActiveIdx = 0;
+  updateCmdActive();
+}
+
+function updateCmdActive() {
+  var els = _cmdResultsEl.querySelectorAll(".cmd-palette-item");
+  els.forEach(function(el, i) {
+    el.classList.toggle("active", i === _cmdActiveIdx);
+  });
+  // Scroll active into view
+  if (els[_cmdActiveIdx]) {
+    els[_cmdActiveIdx].scrollIntoView({ block: "nearest" });
+  }
+}
+
+function cmdSelect() {
+  if (_cmdActiveIdx < 0 || _cmdActiveIdx >= _cmdItems.length) return;
+  var player = _cmdItems[_cmdActiveIdx];
+  addToRecentlyViewed(player);
+  closeCmdPalette();
+  window.location.href = "/player/" + encodeURIComponent(player.player_id);
+}
+
+/* Recently Viewed — stored in localStorage */
+function getRecentlyViewed() {
+  try {
+    return JSON.parse(localStorage.getItem("razzle_recent_players") || "[]");
+  } catch (e) { return []; }
+}
+
+function addToRecentlyViewed(player) {
+  var recent = getRecentlyViewed();
+  // Remove if already in list
+  recent = recent.filter(function(p) { return p.player_id !== player.player_id; });
+  // Prepend
+  recent.unshift({
+    player_id: player.player_id,
+    full_name: player.full_name || player.player_name,
+    position: player.position,
+    team: player.team,
+    headshot_url: player.headshot_url,
+    ppg: player.ppg
+  });
+  // Cap at 8
+  if (recent.length > 8) recent = recent.slice(0, 8);
+  localStorage.setItem("razzle_recent_players", JSON.stringify(recent));
+}
+
+function renderRecentlyViewed() {
+  var recent = getRecentlyViewed();
+  _cmdItems = recent;
+  _cmdActiveIdx = recent.length > 0 ? 0 : -1;
+  if (!recent.length) {
+    _cmdResultsEl.innerHTML = '<div class="cmd-palette-status">start typing to search players</div>';
+    return;
+  }
+  renderCmdResults(recent, "Recently Viewed");
+}
+
+// Init palette on DOM ready
+function _initPalette() {
+  initCommandPalette();
+}
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", _initPalette);
+} else {
+  _initPalette();
+}
+
 // Auto-init auth on DOM ready
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", initAuth);

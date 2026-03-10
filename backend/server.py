@@ -421,6 +421,11 @@ def filter_options():
     return JSONResponse(content=data, headers={"Cache-Control": "public, max-age=300"})
 
 
+@app.get("/api/players/quick-search")
+def quick_search(q: str = "", limit: int = 8):
+    return live_data.quick_search_players(q, limit=limit)
+
+
 @app.get("/api/players/{player_id}/profile")
 def player_profile(player_id: str):
     return live_data.fetch_player_profile(player_id)
