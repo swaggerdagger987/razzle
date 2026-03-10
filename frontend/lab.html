@@ -171,6 +171,16 @@
     padding: 60px 20px;
   }
 
+  /* ===== COLLEGE MODE INDICATOR ===== */
+  .prospect-mode .lab-sidebar {
+    border-right-color: var(--blue);
+  }
+
+  .prospect-mode .lab-sidebar-item.active {
+    background: var(--blue-light);
+    border-left-color: var(--blue);
+  }
+
   /* ===== MOBILE SIDEBAR ===== */
   @media (max-width: 768px) {
     .lab-sidebar {
@@ -2744,14 +2754,24 @@
         frame.onload = function() {
           document.getElementById('panelLoading').style.display = 'none';
           frame.style.display = '';
-          // Hide the nav inside the iframe to avoid double nav
+          // Hide the nav and watermark inside the iframe to avoid duplicates
           try {
             var iframeDoc = frame.contentDocument || frame.contentWindow.document;
             var iframeNav = iframeDoc.querySelector('.topnav');
             if (iframeNav) iframeNav.style.display = 'none';
-            // Also hide watermark if present
             var wm = iframeDoc.querySelector('.watermark');
             if (wm) wm.style.display = 'none';
+            // Auto-resize iframe to content height
+            var resizeFrame = function() {
+              try {
+                var h = iframeDoc.documentElement.scrollHeight;
+                if (h > 200) frame.style.height = h + 'px';
+              } catch(e) {}
+            };
+            resizeFrame();
+            // Re-check height after images/data load
+            setTimeout(resizeFrame, 500);
+            setTimeout(resizeFrame, 2000);
           } catch(e) { /* cross-origin, ignore */ }
         };
       }
@@ -2813,6 +2833,23 @@
       document.getElementById('labSidebar').classList.toggle('open');
     });
   }
+
+  // Close mobile sidebar when clicking outside
+  document.addEventListener('click', function(e) {
+    var sidebar = document.getElementById('labSidebar');
+    if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && !e.target.closest('.lab-menu-toggle')) {
+      sidebar.classList.remove('open');
+    }
+  });
+
+  // Close mobile sidebar when panel is selected
+  document.querySelectorAll('.lab-sidebar-item').forEach(function(item) {
+    item.addEventListener('click', function() {
+      if (window.innerWidth <= 768) {
+        document.getElementById('labSidebar').classList.remove('open');
+      }
+    });
+  });
 })();
 </script>
 </body>

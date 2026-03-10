@@ -1,23 +1,31 @@
-# Razzle Loop — Phase 134 Task List
+# Razzle Consolidation -- Task Tracker
 
-> Snap Efficiency Dashboard
+## Current State
+- Phase: 2 (sidebar polish)
+- Task: Refine sidebar UX
+- Stage: BUILD
+- Attempt: 1/3
+- Tasks Done: 4/7
 
-**Current Phase**: 134 — Snap Efficiency Dashboard
-**Exit Criterion**: /snapefficiency.html ranks players by fantasy points per snap. Efficiency badges, bar viz. Position filters, season selector, PNG export. GET /api/snap-efficiency returns data.
-
----
-
-## Task 1: Backend + frontend + nav + smoke test
+## Phase 1: Navigation Surgery -- COMPLETE
+### Task 1: Slim nav to 4 items on all pages
+**Accept when**: All 72 HTML files have slim nav (Home, The Lab, War Room, Sign In + Ctrl+K hint)
 **Status**: PASS
-**Attempts**: 1
 
----
+## Phase 2: The Lab Sidebar -- COMPLETE (initial)
+### Task 1: Sidebar shell + panel infrastructure
+**Accept when**: lab.html has collapsible sidebar with all categories/tools. Panel switching works. URL state updates.
+**Status**: PASS
 
-## Loop State
-```
-Current Phase: 134
-Current Task: 1
-Current Stage: COMPLETE
-Attempt: 1
-Tasks Completed: 1/1
-```
+### Task 2: Smart redirects from standalone pages
+**Accept when**: All 63 standalone pages redirect to lab.html?panel=X when loaded directly, but NOT when in iframe
+**Status**: PASS
+
+## Phase 3: Season Expansion -- COMPLETE
+### Task 1: Expand data ranges to 2015+
+**Accept when**: nflverse and cfbfastR adapters + bootstrap default to 2015-present
+**Status**: PASS
+
+## Remaining Tasks
+- Phase 4: College integration (universe toggle across all panels)
+- Phase 5: Polish (transitions, keyboard nav, breadcrumbs)
