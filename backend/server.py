@@ -6,6 +6,7 @@ All data queries live in live_data.py.
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, Response
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -149,6 +150,7 @@ async def lifespan(app):
 
 app = FastAPI(title="Razzle API", version="0.1.0", lifespan=lifespan)
 
+app.add_middleware(GZipMiddleware, minimum_size=500)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["https://razzle.lol", "http://localhost:8000", "http://localhost:5173", "http://127.0.0.1:8000"],
@@ -184,7 +186,8 @@ def health():
 
 @app.get("/api/featured")
 def featured():
-    return live_data.fetch_featured()
+    data = live_data.fetch_featured()
+    return JSONResponse(content=data, headers={"Cache-Control": "public, max-age=300"})
 
 
 # ---------------------------------------------------------------------------
@@ -407,7 +410,8 @@ async def screener_query(request: Request):
 
 @app.get("/api/filter-options")
 def filter_options():
-    return live_data.get_filter_options()
+    data = live_data.get_filter_options()
+    return JSONResponse(content=data, headers={"Cache-Control": "public, max-age=300"})
 
 
 @app.get("/api/players/{player_id}/profile")

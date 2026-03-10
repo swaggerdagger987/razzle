@@ -5,9 +5,24 @@ server.py calls these functions; they return dicts ready for JSON.
 
 import math
 import sqlite3
+import time as _time
 from pathlib import Path
 
 DB_PATH = Path(__file__).parent.parent / "data" / "terminal.db"
+
+# Simple in-memory cache for stable endpoints (filter options, featured)
+_cache = {}
+_CACHE_TTL = 300  # 5 minutes
+
+
+def _cached(key, fn):
+    """Return cached result or compute and cache."""
+    now = _time.time()
+    if key in _cache and now - _cache[key]["t"] < _CACHE_TTL:
+        return _cache[key]["v"]
+    result = fn()
+    _cache[key] = {"t": now, "v": result}
+    return result
 
 FANTASY_POSITIONS = {"QB", "RB", "WR", "TE"}
 
@@ -893,31 +908,28 @@ def fetch_screener(body):
 
 def get_filter_options():
     """Return available positions, teams, and stat columns for autocomplete."""
-    conn = get_conn()
-
-    positions = [r[0] for r in conn.execute(
-        "SELECT DISTINCT position FROM players WHERE position IN ('QB','RB','WR','TE') ORDER BY position"
-    ).fetchall()]
-
-    teams = [r[0] for r in conn.execute(
-        "SELECT DISTINCT team FROM players WHERE team IS NOT NULL AND team != '' ORDER BY team"
-    ).fetchall()]
-
-    stat_keys = [r[0] for r in conn.execute(
-        "SELECT DISTINCT stat_key FROM player_week_metrics ORDER BY stat_key"
-    ).fetchall()]
-
-    seasons = [r[0] for r in conn.execute(
-        "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
-    ).fetchall()]
-
-    conn.close()
-    return {
-        "positions": positions,
-        "teams": teams,
-        "stat_keys": stat_keys,
-        "seasons": seasons,
-    }
+    def _query():
+        conn = get_conn()
+        positions = [r[0] for r in conn.execute(
+            "SELECT DISTINCT position FROM players WHERE position IN ('QB','RB','WR','TE') ORDER BY position"
+        ).fetchall()]
+        teams = [r[0] for r in conn.execute(
+            "SELECT DISTINCT team FROM players WHERE team IS NOT NULL AND team != '' ORDER BY team"
+        ).fetchall()]
+        stat_keys = [r[0] for r in conn.execute(
+            "SELECT DISTINCT stat_key FROM player_week_metrics ORDER BY stat_key"
+        ).fetchall()]
+        seasons = [r[0] for r in conn.execute(
+            "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
+        ).fetchall()]
+        conn.close()
+        return {
+            "positions": positions,
+            "teams": teams,
+            "stat_keys": stat_keys,
+            "seasons": seasons,
+        }
+    return _cached("filter_options", _query)
 
 
 def fetch_player_weeks(player_id, season=0):
@@ -3224,7 +3236,13 @@ def fetch_trade_values(player_ids):
 # ---------------------------------------------------------------------------
 
 def fetch_featured():
-    """Return 3 curated player lists for home page widgets."""
+    """Return 3 curated player lists for home page widgets (cached 5 min)."""
+    def _query():
+        return _fetch_featured_uncached()
+    return _cached("featured", _query)
+
+
+def _fetch_featured_uncached():
     conn = get_conn()
 
     # Get latest season

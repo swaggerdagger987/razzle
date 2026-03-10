@@ -186,6 +186,7 @@ def initialize_database(conn):
         );
 
         CREATE INDEX IF NOT EXISTS idx_pws_player_season ON player_week_stats(player_id, season, week);
+        CREATE INDEX IF NOT EXISTS idx_pws_season_player ON player_week_stats(season, player_id);
         CREATE INDEX IF NOT EXISTS idx_pws_fpts ON player_week_stats(fantasy_points_ppr);
 
         CREATE TABLE IF NOT EXISTS player_week_metrics (

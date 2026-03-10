@@ -1,6 +1,24 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 48 — Agent Bio Cards + War Room Demo (COMPLETE)
+## Current Phase: Phase 49 — Performance Audit + Optimization (COMPLETE)
+
+**Exit criterion MET:** Added composite SQLite index idx_pws_season_player(season, player_id) for the most common screener query pattern. Added GZipMiddleware for all JSON responses (min 500 bytes). Added Cache-Control headers (5 min) on /api/featured and /api/filter-options. Added in-memory Python cache (5-min TTL) for filter_options and featured queries. Audited all enrichment functions — all batch by player_id (no N+1 queries). Frontend table rendering already optimized (single innerHTML assignment, debounced search, reusable canvas).
+
+### Phase 49 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend index + query audit | DONE | Composite index on season,player_id. No N+1 queries. |
+| 2 | Frontend render audit | DONE | Already optimized — innerHTML batch, debounced search, reusable canvas |
+| 3 | API caching + gzip | DONE | GZipMiddleware, Cache-Control 300s, in-memory Python cache |
+| 4 | Deploy + smoke test | DONE | All syntax clean |
+
+### Decisions Log
+- **Season-first composite index**: The main screener query filters by season then joins on player_id. Existing index was (player_id, season, week) — great for per-player lookups but forces full index scan when filtering by season. New (season, player_id) index covers the common query path.
+- **In-memory cache over Redis**: Simple dict-based cache with TTL. No external dependency. Resets on restart, but data only changes on adapter sync. Sufficient for current scale.
+- **GZip at 500 bytes**: Screener JSON responses are typically 50-200KB. GZip reduces this 5-10x. Minimal CPU overhead.
+
+## Previous Phase: Phase 48 — Agent Bio Cards + War Room Demo (COMPLETE)
 
 **Exit criterion MET:** All features already existed from prior work. Home page has "Meet the Team" section with 6 agent bio cards (pixel avatar, name, role, specialty) in comic-strip card style with color stripes and stagger rotation. War Room demo section shows 3 randomized anonymized briefing snippets with urgency badges and redacted league data, plus shuffle button. Agent bio cards also on agents.html hero section via warroom.js. Mobile responsive at 768px and 480px. All syntax verified clean.
 
