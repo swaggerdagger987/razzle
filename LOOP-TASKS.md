@@ -31,8 +31,9 @@
 **Accept when**: Hovering jargon panel names in collapsed sidebar shows descriptive text, not just the name.
 **Depends on**: none
 **Size**: S
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Updated 11 tooltip texts: VORP, Snap Efficiency, Target Premium, Drop Rate, Garbage Time, Success Rate, TD Regression, Air Yards, Dual-Threat, Stacks, Positional Advantage. Each now shows brief descriptive text instead of repeating the panel name.
 
 ### Task 4: Fix HIGH — Rename duplicate/confusing panel names
 **Requirement**: Rename "FPTS Breakdown" to "Points Breakdown" in sidebar and PANEL_LABELS. Keep "Scoring Breakdown" (different panel — donut chart). Update sidebar tooltip for both to clarify the difference. Rename "Pace Tracker" to "Player Pace" to distinguish from "Season Pace".
