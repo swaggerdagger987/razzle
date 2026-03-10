@@ -935,6 +935,7 @@ def sitemap_xml():
         ("/playoffs.html", "0.8", "weekly"),
         ("/fptsbreakdown.html", "0.8", "weekly"),
         ("/handcuffs.html", "0.8", "weekly"),
+        ("/weeklymvp.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1587,6 +1588,15 @@ def records(position: str = ""):
         return JSONResponse({"error": "Failed to fetch records"}, status_code=500)
 
 
+@app.get("/api/weekly-mvp")
+def weekly_mvp(season: int = None):
+    try:
+        return live_data.fetch_weekly_mvp(season=season)
+    except Exception as e:
+        logger.error(f"weekly-mvp error: {e}")
+        return JSONResponse({"error": "Failed to fetch weekly MVP data"}, status_code=500)
+
+
 @app.get("/api/handcuffs")
 def handcuffs(season: int = None):
     try:
@@ -1708,6 +1718,7 @@ def tools_hub():
                 {"name": "Weekly Heatmap", "desc": "Player-by-week scoring grid with color-coded tiers", "url": "/weekly.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Weekly Leaders", "desc": "Top fantasy performers for any week — who went off", "url": "/weeklyleaders.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Season Recap", "desc": "Data-driven year in review — MVP, breakouts, busts, top weeks, and more", "url": "/recap.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Weekly MVP Grid", "desc": "The #1 scorer at each position every week — who owned the week", "url": "/weeklymvp.html", "positions": ["QB", "RB", "WR", "TE"]},
             ],
         },
         {

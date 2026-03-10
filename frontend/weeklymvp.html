@@ -3,248 +3,149 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Player Archetypes — Razzle</title>
-<meta property="og:title" content="Player Archetypes — Razzle">
-<meta property="og:description" content="Statistical player archetypes — Workhorse, Deep Threat, Dual-Threat on razzle.lol">
+<title>Weekly MVP Grid — Razzle</title>
+<meta property="og:title" content="Weekly MVP Grid — Razzle">
+<meta property="og:description" content="The #1 PPR scorer at each position every week of the season on razzle.lol">
 <meta property="og:site_name" content="razzle.lol">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Player Archetypes — Razzle">
-<meta name="twitter:description" content="Statistical player archetypes on razzle.lol">
+<meta name="twitter:title" content="Weekly MVP Grid — Razzle">
+<meta name="twitter:description" content="The #1 PPR scorer at each position every week of the season on razzle.lol">
 <meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
-<meta name="description" content="Fantasy player archetypes — Workhorse, Deep Threat, Alpha Target, Dual-Threat QB and more on razzle.lol">
+<meta name="description" content="Weekly MVP grid — who was the #1 scorer at each position every week on razzle.lol">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="styles.css">
 <style>
-  .ar-page {
-    max-width: 1100px;
+  .mv-page {
+    max-width: 1200px;
     margin: 0 auto;
     padding: 24px 20px 60px;
   }
-  .ar-header {
+  .mv-header {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
   }
-  .ar-header h1 {
+  .mv-header h1 {
     font-family: var(--font-display);
     font-size: 32px;
     color: var(--ink);
     margin: 0 0 4px;
   }
-  .ar-header .ar-subtitle {
+  .mv-header .mv-subtitle {
     font-family: var(--font-hand);
     font-size: 20px;
     color: var(--ink-light);
   }
-  .ar-meta {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--ink-light);
-    margin-top: 6px;
-  }
-
-  /* Controls */
-  .ar-controls {
+  .mv-controls {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-  }
-  .ar-controls select {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    padding: 6px 10px;
-    border: 3px solid var(--ink);
-    border-radius: 6px;
-    background: var(--card);
-    color: var(--ink);
-  }
-  .ar-export-btn {
-    font-family: var(--font-display);
-    font-size: 13px;
-    padding: 6px 16px;
-    border: 2px solid var(--ink);
-    border-radius: 8px;
-    background: var(--card);
-    color: var(--ink);
-    cursor: pointer;
-    box-shadow: 2px 2px 0 var(--ink);
-  }
-  .ar-export-btn:hover { background: var(--terracotta); color: white; }
-
-  /* Position tabs */
-  .ar-pos-tabs {
-    display: flex;
-    justify-content: center;
-    gap: 6px;
+    gap: 16px;
     margin-bottom: 24px;
     flex-wrap: wrap;
   }
-  .ar-pos-tab {
+  .mv-controls select {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    padding: 6px 10px;
+    border: 2px solid var(--ink);
+    border-radius: 4px;
+    background: var(--card);
+  }
+  .mv-export {
     font-family: var(--font-mono);
     font-size: 12px;
     padding: 5px 14px;
     border: 2px solid var(--ink);
-    border-radius: 20px;
+    border-radius: 4px;
     background: var(--card);
-    color: var(--ink);
     cursor: pointer;
-    box-shadow: 2px 2px 0 var(--ink);
-    transition: transform 0.1s;
+    font-weight: 700;
   }
-  .ar-pos-tab:hover { transform: translateY(-1px); }
-  .ar-pos-tab.active { background: var(--ink); color: var(--card); }
-
-  /* Archetype cards */
-  .ar-archetype {
+  .mv-export:hover { background: var(--ink); color: var(--sand); }
+  .mv-loading {
+    text-align: center;
+    font-family: var(--font-hand);
+    font-size: 18px;
+    color: var(--ink-light);
+    padding: 60px 0;
+  }
+  .mv-card {
     background: var(--card);
     border: 3px solid var(--ink);
-    border-radius: 14px;
+    border-radius: 10px;
     box-shadow: 4px 4px 0 var(--ink);
-    margin-bottom: 20px;
-    overflow: hidden;
+    overflow-x: auto;
   }
-  .ar-arch-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    border-bottom: 2px solid var(--ink);
-  }
-  .ar-arch-icon {
-    font-size: 24px;
-    min-width: 32px;
-    text-align: center;
-  }
-  .ar-arch-info { flex: 1; }
-  .ar-arch-name {
+  .mv-card-header {
     font-family: var(--font-display);
     font-size: 18px;
-    color: var(--ink);
+    padding: 10px 16px;
+    background: var(--ink);
+    color: var(--sand);
   }
-  .ar-arch-desc {
-    font-family: var(--font-hand);
-    font-size: 14px;
-    color: var(--ink-light);
-  }
-  .ar-arch-badge {
+  .mv-grid {
+    width: 100%;
+    border-collapse: collapse;
     font-family: var(--font-mono);
     font-size: 11px;
-    padding: 3px 10px;
-    border-radius: 12px;
-    border: 2px solid;
   }
-  .ar-arch-badge.QB { background: rgba(91,127,255,0.12); color: var(--qb); border-color: var(--qb); }
-  .ar-arch-badge.RB { background: rgba(46,196,182,0.12); color: var(--rb); border-color: var(--rb); }
-  .ar-arch-badge.WR { background: rgba(217,119,87,0.12); color: var(--wr); border-color: var(--wr); }
-  .ar-arch-badge.TE { background: rgba(139,92,246,0.12); color: var(--te); border-color: var(--te); }
-
-  .ar-arch-count {
-    font-family: var(--font-display);
-    font-size: 13px;
-    color: var(--ink-light);
+  .mv-grid th {
+    background: var(--sand);
+    padding: 6px 8px;
+    font-size: 10px;
+    font-weight: 700;
+    border-bottom: 2px solid var(--ink-faint);
+    text-align: center;
+    white-space: nowrap;
   }
-
-  /* Player grid inside archetype */
-  .ar-players {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 8px;
-    padding: 12px;
+  .mv-grid th:first-child { text-align: left; width: 50px; }
+  .mv-grid td {
+    padding: 4px 6px;
+    border-bottom: 1px solid var(--ink-faint);
+    text-align: center;
+    vertical-align: top;
   }
-  .ar-player-card {
+  .mv-grid td:first-child {
+    text-align: left;
+    font-weight: 700;
+    background: var(--sand);
+  }
+  .mv-grid tbody tr:hover { background: rgba(217,119,87,0.06); }
+  .mv-cell {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 8px;
-    padding: 8px 10px;
-    border: 2px solid var(--ink-faint);
-    border-radius: 10px;
-    transition: transform 0.1s, box-shadow 0.1s;
+    gap: 1px;
   }
-  .ar-player-card:hover {
-    transform: translateY(-1px);
-    box-shadow: 2px 3px 0 var(--ink-faint);
-    border-color: var(--ink);
-  }
-  .ar-player-name {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    font-weight: 600;
-    flex: 1;
+  .mv-cell-name {
+    font-size: 10px;
+    font-weight: 700;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    max-width: 100px;
   }
-  .ar-player-meta {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    color: var(--ink-light);
-  }
-  .ar-player-ppg {
-    font-family: var(--font-display);
-    font-size: 14px;
-    color: var(--terracotta);
-  }
-  .ar-player-stat {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    color: var(--ink-light);
-  }
-
-  /* Position badge small */
-  .ar-pos-sm {
-    display: inline-block;
-    font-family: var(--font-display);
+  .mv-cell-team {
     font-size: 9px;
-    padding: 1px 5px;
-    border-radius: 6px;
-    color: white;
-  }
-  .ar-pos-sm.QB { background: var(--qb); }
-  .ar-pos-sm.RB { background: var(--rb); }
-  .ar-pos-sm.WR { background: var(--wr); }
-  .ar-pos-sm.TE { background: var(--te); }
-
-  /* Loading */
-  .ar-loading {
-    text-align: center;
-    font-family: var(--font-hand);
-    font-size: 18px;
     color: var(--ink-light);
-    padding: 60px 20px;
   }
-  .ar-error {
+  .mv-cell-pts {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 1px 4px;
+    border-radius: 3px;
+    color: #fff;
+  }
+  .mv-empty {
     text-align: center;
-    font-family: var(--font-mono);
-    font-size: 14px;
-    color: #d44040;
-    padding: 40px 20px;
-  }
-
-  /* Watermark */
-  .ar-watermark {
-    position: fixed;
-    bottom: 10px;
-    right: 14px;
     font-family: var(--font-hand);
-    font-size: 14px;
-    color: rgba(0,0,0,0.15);
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  @media (max-width: 768px) {
-    .ar-players { grid-template-columns: 1fr 1fr; }
-    .ar-header h1 { font-size: 26px; }
-  }
-  @media (max-width: 480px) {
-    .ar-players { grid-template-columns: 1fr; }
-    .ar-page { padding: 16px 10px 40px; }
+    font-size: 15px;
+    color: var(--ink-light);
+    padding: 30px 16px;
   }
 </style>
 </head>
@@ -290,7 +191,7 @@
     <li><a href="/auction.html">Auction</a></li>
     <li><a href="/dashboard.html">Dashboard</a></li>
     <li><a href="/tiers.html">Tiers</a></li>
-    <li><a href="/archetypes.html" class="active">Archetypes</a></li>
+    <li><a href="/archetypes.html">Archetypes</a></li>
     <li><a href="/career.html">Career</a></li>
     <li><a href="/career-compare.html">Career Compare</a></li>
     <li><a href="/draftclass.html">Draft Class</a></li>
@@ -309,39 +210,28 @@
     <li><a href="/playoffs.html">Playoffs</a></li>
     <li><a href="/fptsbreakdown.html">FPTS Breakdown</a></li>
     <li><a href="/handcuffs.html">Handcuffs</a></li>
-    <li><a href="/weeklymvp.html">Weekly MVP</a></li>
+    <li><a href="/weeklymvp.html" class="active">Weekly MVP</a></li>
     <li><a href="/team/KC">Teams</a></li>
     <li><a href="/league-intel.html">League Intel</a></li>
     <li><a href="/agents.html">War Room</a></li>
   </ul>
 </nav>
 
-<main class="ar-page" id="ar-content">
-  <div class="ar-header">
-    <h1>Player Archetypes</h1>
-    <div class="ar-subtitle">what kind of player are they, really?</div>
-    <div class="ar-meta" id="ar-meta"></div>
+<main class="mv-page" id="mvRoot">
+  <div class="mv-header">
+    <h1>Weekly MVP Grid</h1>
+    <div class="mv-subtitle">the #1 scorer at each position every week</div>
   </div>
 
-  <div class="ar-controls">
-    <select id="season-select"></select>
-    <button class="ar-export-btn" id="export-btn">Export PNG</button>
+  <div class="mv-controls">
+    <select id="mvSeason" aria-label="Season"></select>
+    <button class="mv-export" id="mvExport">Export PNG</button>
   </div>
 
-  <div class="ar-pos-tabs" id="pos-tabs">
-    <button class="ar-pos-tab active" data-pos="">All</button>
-    <button class="ar-pos-tab" data-pos="QB">QB</button>
-    <button class="ar-pos-tab" data-pos="RB">RB</button>
-    <button class="ar-pos-tab" data-pos="WR">WR</button>
-    <button class="ar-pos-tab" data-pos="TE">TE</button>
-  </div>
-
-  <div id="ar-list">
-    <div class="ar-loading">pulling film...</div>
+  <div id="mvContent">
+    <div class="mv-loading">pulling film...</div>
   </div>
 </main>
-
-<div class="ar-watermark">razzle.lol</div>
 
 <footer style="text-align:center; padding:24px 20px 32px; font-family:var(--font-hand); font-size:15px; color:var(--ink-light); border-top:2px dashed var(--ink-faint); margin-top:40px;">
   <div style="margin-bottom:10px;">
@@ -471,128 +361,143 @@
     return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  var ICONS = {
-    workhorse: '&#x1F3CB;', pass_catcher: '&#x1F3C8;', efficient: '&#x26A1;',
-    td_vulture: '&#x1F3AF;', committee: '&#x1F465;',
-    alpha: '&#x1F451;', deep_threat: '&#x1F680;', possession: '&#x1F91D;',
-    yac_monster: '&#x1F4A8;', role_player: '&#x1F527;',
-    elite_receiver: '&#x2B50;', red_zone: '&#x1F3AF;', reliable: '&#x1F91D;',
-    blocking_te: '&#x1F6E1;',
-    elite_dual: '&#x1F525;', gunslinger: '&#x1F52B;', game_manager: '&#x1F4CB;',
-    rusher: '&#x1F3C3;', backup: '&#x1F4A4;',
-  };
+  function fmt(v, dec) {
+    if (v === null || v === undefined) return '-';
+    return Number(v).toFixed(dec === undefined ? 1 : dec);
+  }
 
-  var state = { season: 0, position: '' };
-  var listEl = document.getElementById('ar-list');
-  var seasonSelect = document.getElementById('season-select');
-  var posTabs = document.getElementById('pos-tabs');
+  var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+  var POSITIONS = ['QB', 'RB', 'WR', 'TE'];
 
-  seasonSelect.addEventListener('change', function() {
-    state.season = parseInt(this.value, 10) || 0;
-    fetchData();
-  });
+  /* ---- URL state ---- */
+  function readURL() {
+    var p = new URLSearchParams(window.location.search);
+    return { season: p.get('season') || '' };
+  }
+  function writeURL(season) {
+    var p = new URLSearchParams();
+    if (season) p.set('season', season);
+    var qs = p.toString();
+    history.replaceState(null, '', qs ? '?' + qs : location.pathname);
+  }
 
-  posTabs.addEventListener('click', function(e) {
-    var tab = e.target.closest('.ar-pos-tab');
-    if (!tab) return;
-    posTabs.querySelectorAll('.ar-pos-tab').forEach(function(t) { t.classList.remove('active'); });
-    tab.classList.add('active');
-    state.position = tab.getAttribute('data-pos');
-    fetchData();
-  });
+  /* ---- Fetch ---- */
+  function load() {
+    var selSeason = document.getElementById('mvSeason');
+    var season = selSeason.value || '';
+    writeURL(season);
 
-  document.getElementById('export-btn').addEventListener('click', function() {
-    var el = document.getElementById('ar-content');
-    if (typeof html2canvas !== 'undefined') {
-      html2canvas(el, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
-        var ctx = canvas.getContext('2d');
-        ctx.font = '24px sans-serif';
-        ctx.fillStyle = 'rgba(0,0,0,0.12)';
-        ctx.fillText('razzle.lol', canvas.width - 160, canvas.height - 20);
-        var link = document.createElement('a');
-        link.download = 'razzle-archetypes.png';
-        link.href = canvas.toDataURL();
-        link.click();
-      });
-    }
-  });
+    var url = '/api/weekly-mvp';
+    if (season) url += '?season=' + encodeURIComponent(season);
 
-  function fetchData() {
-    listEl.innerHTML = '<div class="ar-loading">pulling film...</div>';
-    var params = [];
-    if (state.season > 0) params.push('season=' + state.season);
-    if (state.position) params.push('position=' + state.position);
-    var url = '/api/player-archetypes' + (params.length ? '?' + params.join('&') : '');
+    document.getElementById('mvContent').innerHTML = '<div class="mv-loading">pulling film...</div>';
 
-    fetch(url).then(function(resp) {
-      if (!resp.ok) throw new Error('HTTP ' + resp.status);
-      return resp.json();
+    fetch(url).then(function(r) {
+      if (!r.ok) throw new Error('API error');
+      return r.json();
     }).then(function(data) {
-      if (data.available_seasons && seasonSelect.options.length <= 1) {
-        seasonSelect.innerHTML = '';
-        data.available_seasons.forEach(function(s) {
-          var opt = document.createElement('option');
-          opt.value = s;
-          opt.textContent = s;
-          if (s === data.season) opt.selected = true;
-          seasonSelect.appendChild(opt);
-        });
-      }
-      document.getElementById('ar-meta').textContent = data.season + ' season \u00b7 ' + data.total_players + ' players classified';
-      renderArchetypes(data.archetypes || []);
-    }).catch(function(err) {
-      listEl.innerHTML = '<div class="ar-error">failed to load archetypes: ' + escapeHtml(err.message) + '</div>';
+      populateSeasons(data.season);
+      render(data);
+    }).catch(function() {
+      document.getElementById('mvContent').innerHTML = '<div class="mv-loading">something went wrong — try again</div>';
     });
   }
 
-  function renderArchetypes(archetypes) {
-    if (archetypes.length === 0) {
-      listEl.innerHTML = '<div class="ar-loading">no archetypes found for this filter</div>';
+  function populateSeasons(current) {
+    var sel = document.getElementById('mvSeason');
+    if (sel.options.length <= 1) {
+      sel.innerHTML = '';
+      for (var y = 2024; y >= 2020; y--) {
+        var opt = document.createElement('option');
+        opt.value = y;
+        opt.textContent = y;
+        if (y === current) opt.selected = true;
+        sel.appendChild(opt);
+      }
+    }
+  }
+
+  /* ---- Render ---- */
+  function render(data) {
+    var weeks = data.weeks || [];
+
+    if (!weeks.length) {
+      document.getElementById('mvContent').innerHTML = '<div class="mv-card"><div class="mv-card-header">Weekly MVP Grid</div><div class="mv-empty">no data found</div></div>';
       return;
     }
-    var html = '';
-    archetypes.forEach(function(arch) {
-      html += '<div class="ar-archetype">';
-      html += '<div class="ar-arch-header">';
-      html += '<div class="ar-arch-icon">' + (ICONS[arch.id] || '&#x2B50;') + '</div>';
-      html += '<div class="ar-arch-info">';
-      html += '<div class="ar-arch-name">' + escapeHtml(arch.name) + '</div>';
-      html += '<div class="ar-arch-desc">' + escapeHtml(arch.desc) + '</div>';
-      html += '</div>';
-      html += '<span class="ar-arch-badge ' + escapeHtml(arch.position) + '">' + escapeHtml(arch.position) + '</span>';
-      html += '<span class="ar-arch-count">' + escapeHtml(String(arch.count)) + '</span>';
-      html += '</div>';
 
-      html += '<div class="ar-players">';
-      arch.players.forEach(function(p) {
-        html += '<div class="ar-player-card">';
-        html += '<span class="ar-pos-sm ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span>';
-        html += '<div style="flex:1;min-width:0;">';
-        html += '<div class="ar-player-name">' + escapeHtml(p.full_name) + '</div>';
-        html += '<div class="ar-player-meta">' + escapeHtml(p.team) + ' &middot; age ' + escapeHtml(String(p.age)) + '</div>';
-        html += '</div>';
-        html += '<div style="text-align:right;">';
-        html += '<div class="ar-player-ppg">' + escapeHtml(String(p.ppg)) + '</div>';
-        html += '<div class="ar-player-stat">' + escapeHtml(p.key_stat || '') + '</div>';
-        html += '</div>';
-        html += '</div>';
-      });
-      html += '</div>';
-      html += '</div>';
+    var html = '<div class="mv-card">';
+    html += '<div class="mv-card-header">Weekly MVP Grid — ' + escapeHtml(String(data.season)) + ' (' + escapeHtml(String(data.total_weeks)) + ' weeks)</div>';
+    html += '<table class="mv-grid"><thead><tr><th>Week</th>';
+    for (var p = 0; p < POSITIONS.length; p++) {
+      html += '<th>' + escapeHtml(POSITIONS[p]) + '</th>';
+    }
+    html += '</tr></thead><tbody>';
+
+    for (var i = 0; i < weeks.length; i++) {
+      var wk = weeks[i];
+      html += '<tr><td>Wk ' + escapeHtml(String(wk.week)) + '</td>';
+
+      for (var p = 0; p < POSITIONS.length; p++) {
+        var pos = POSITIONS[p];
+        var mvp = wk[pos];
+        var color = POS_COLORS[pos] || '#888';
+
+        if (mvp && mvp.name !== '-') {
+          html += '<td><div class="mv-cell">';
+          html += '<div class="mv-cell-name">' + escapeHtml(mvp.name) + '</div>';
+          html += '<div class="mv-cell-team">' + escapeHtml(mvp.team) + '</div>';
+          html += '<div class="mv-cell-pts" style="background:' + color + '">' + escapeHtml(String(fmt(mvp.fpts))) + '</div>';
+          html += '</div></td>';
+        } else {
+          html += '<td style="color:var(--ink-faint)">—</td>';
+        }
+      }
+
+      html += '</tr>';
+    }
+
+    html += '</tbody></table></div>';
+    document.getElementById('mvContent').innerHTML = html;
+  }
+
+  document.getElementById('mvSeason').addEventListener('change', load);
+
+  /* ---- PNG export ---- */
+  document.getElementById('mvExport').addEventListener('click', function() {
+    var root = document.getElementById('mvRoot');
+    if (typeof html2canvas === 'undefined') return;
+    html2canvas(root, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+      var ctx = canvas.getContext('2d');
+      ctx.font = 'bold 16px Space Mono, monospace';
+      ctx.fillStyle = 'rgba(0,0,0,0.12)';
+      ctx.fillText('razzle.lol', canvas.width - 130, canvas.height - 16);
+      var link = document.createElement('a');
+      link.download = 'razzle-weekly-mvp.png';
+      link.href = canvas.toDataURL();
+      link.click();
     });
-    listEl.innerHTML = html;
+  });
+
+  /* ---- Analytics ---- */
+  fetch('/api/analytics/pageview', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ page: '/weeklymvp.html', referrer: document.referrer || '' })
+  }).catch(function() {});
+
+  /* ---- Init from URL ---- */
+  var init = readURL();
+  if (init.season) {
+    var sel = document.getElementById('mvSeason');
+    var opt = document.createElement('option');
+    opt.value = init.season;
+    opt.textContent = init.season;
+    opt.selected = true;
+    sel.appendChild(opt);
   }
 
-  // Analytics
-  if (typeof fetch !== 'undefined') {
-    fetch('/api/analytics/pageview', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ page: 'archetypes', referrer: document.referrer || '' })
-    }).catch(function() {});
-  }
-
-  fetchData();
+  load();
 })();
 </script>
 </body>

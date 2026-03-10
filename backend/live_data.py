@@ -11346,3 +11346,56 @@ def fetch_handcuffs(season=None, limit=30):
         }
     finally:
         conn.close()
+
+
+def fetch_weekly_mvp(season=None):
+    """
+    Weekly MVP grid — the #1 PPR scorer at each position for every week.
+    Returns a grid: {weeks: [{week, QB: {name, fpts}, RB: ..., WR: ..., TE: ...}]}
+    """
+    conn = get_db()
+    try:
+        cursor = conn.cursor()
+
+        if not season:
+            cursor.execute("SELECT MAX(season) FROM player_week_stats")
+            season = cursor.fetchone()[0] or 2024
+
+        cursor.execute("""
+            SELECT s.week, p.position, p.full_name, p.team,
+                   s.fantasy_points_ppr, p.player_id
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE s.season = ? AND p.fantasy_relevant = 1
+              AND p.position IN ('QB', 'RB', 'WR', 'TE')
+              AND s.fantasy_points_ppr IS NOT NULL
+            ORDER BY s.week, p.position, s.fantasy_points_ppr DESC
+        """, [season])
+
+        from collections import defaultdict
+        # Group by week+position, keep top scorer
+        week_pos = defaultdict(lambda: defaultdict(lambda: None))
+        for r in cursor.fetchall():
+            week, pos = r[0], r[1]
+            if week_pos[week][pos] is None:
+                week_pos[week][pos] = {
+                    "name": r[2] or "Unknown",
+                    "team": r[3] or "FA",
+                    "fpts": round(r[4] or 0, 1),
+                    "player_id": r[5],
+                }
+
+        weeks = []
+        for wk in sorted(week_pos.keys()):
+            entry = {"week": wk}
+            for pos in ("QB", "RB", "WR", "TE"):
+                entry[pos] = week_pos[wk].get(pos) or {"name": "-", "team": "", "fpts": 0}
+            weeks.append(entry)
+
+        return {
+            "weeks": weeks,
+            "season": season,
+            "total_weeks": len(weeks),
+        }
+    finally:
+        conn.close()
