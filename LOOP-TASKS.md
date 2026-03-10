@@ -1,10 +1,54 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 9 (Lab Sidebar Intelligence) — COMPLETE
-- All 5 tasks PASS
-- Stage: PHASE GATE
-- Next: Phase 10 (multiple of 5 → QA+UX audit) or consume ticket
+- Phase: 10 (QA + UX Audit Fixes for Phases 5-9)
+- Stage: BUILD
+- Next: Task 1
+
+## Phase 10: QA + UX Audit — Auto-Generated Fixes
+**Exit Criterion**: All CRITICAL and HIGH findings from Phases 5-9 QA+UX audit are resolved. XSS patched. localStorage wrapped. Panel tooltips added. Duplicate naming clarified.
+
+### Task 1: Fix CRITICAL — XSS in recent panels + sidebar init localStorage
+**Requirement**: Escape panel name in onclick attribute of `_renderRecentPanels()`. Wrap sidebar collapsed init localStorage read in try-catch. Add aria-label to sidebar search input.
+**Accept when**: Recent panel chips use escaped panel names. Sidebar init doesn't throw in private browsing. Search has aria-label.
+**Depends on**: none
+**Size**: S
+**Status**: PENDING
+**Attempts**: 0
+
+### Task 2: Fix HIGH — localStorage try-catch in lab.js and app.js
+**Requirement**: Wrap all unprotected localStorage.setItem and getItem calls in lab.js (saveWatchlist, setUniverse, saveCurrentView, deleteSavedView, saveCustomScoringConfigs, toggleHeatColors, saveMyRoster, first-visit hint) and app.js (getAuthHeaders) in try-catch blocks.
+**Accept when**: All localStorage operations are wrapped. No uncaught exceptions in private browsing mode.
+**Depends on**: none
+**Size**: M
+**Status**: PENDING
+**Attempts**: 0
+
+### Task 3: Fix HIGH — Descriptive sidebar tooltips for jargon panels
+**Requirement**: Update sidebar tooltip content for panels with jargon names. Instead of repeating the panel name, show a brief description. Target panels: VORP ("Value over replacement player"), Snap Efficiency ("Fantasy points per snap"), Target Premium ("Target quality composite score"), Garbage Time ("Stat padders vs clean producers"), Drop Rate ("Pass drop rates by receiver"), Success Rate ("Positive play rate by player"), TD Regression ("Expected vs actual touchdowns"), Air Yards ("Target depth and air yard share"), Dual-Threat ("Rush + receiving versatility").
+**Accept when**: Hovering jargon panel names in collapsed sidebar shows descriptive text, not just the name.
+**Depends on**: none
+**Size**: S
+**Status**: PENDING
+**Attempts**: 0
+
+### Task 4: Fix HIGH — Rename duplicate/confusing panel names
+**Requirement**: Rename "FPTS Breakdown" to "Points Breakdown" in sidebar and PANEL_LABELS. Keep "Scoring Breakdown" (different panel — donut chart). Update sidebar tooltip for both to clarify the difference. Rename "Pace Tracker" to "Player Pace" to distinguish from "Season Pace".
+**Accept when**: No near-duplicate panel names. Both renamed panels work correctly. Breadcrumbs and headers updated.
+**Depends on**: none
+**Size**: S
+**Status**: PENDING
+**Attempts**: 0
+
+### Task 5: Fix MEDIUM findings (grouped)
+**Requirement**: (1) Add one-time first-visit toast: "62 tools in the sidebar. Press ? for shortcuts." with localStorage flag. (2) Increase category chevron size to 14px on mobile (768px breakpoint). (3) Add inline escapeHtml fallback in lab.html before first use.
+**Accept when**: First-time visitor sees toast once. Chevrons tappable on mobile. escapeHtml works even if app.js fails.
+**Depends on**: none
+**Size**: M
+**Status**: PENDING
+**Attempts**: 0
+
+---
 
 ## Phase 9: Lab Sidebar Intelligence — search, memory, category UX
 **Exit Criterion**: The Lab sidebar supports instant text search filtering, remembers the user's last panel across sessions, shows recently viewed panels for quick access, and allows category sections to collapse individually. A power user with 62 panels can find any tool in under 3 seconds.

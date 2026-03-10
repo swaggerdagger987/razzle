@@ -1,74 +1,93 @@
-# QA + UX Audit — Phase 5: College Football Integration
+# QA + UX Audit — Phases 5-9
 
 **Date**: 2026-03-10
-**Scope**: Phase 5 Tasks 1-8 (NFL/College universe toggle, college endpoints, panel wiring, season expansion)
+**Scope**: College Football Integration (P5), QA Fixes (P6), Lab Polish (P7), QA Audit (P8), Sidebar Intelligence (P9)
 
 ---
 
 ## QA FINDINGS
 
-### QA-1 — HIGH: DB connection leak in fetch_college_player_profile
-**File**: `backend/live_data.py`, lines 2319-2418
-**Issue**: Uses bare `conn.close()` without `try/finally`. If any query raises an exception, the connection leaks.
-**Fix**: Wrap function body in `try: ... finally: conn.close()`.
+### CRITICAL
 
-### QA-2 — HIGH: College panels default to season 2024 instead of latest available
-**File**: `frontend/lab-panels.js`, lines 6345, 6778, 7058, 7618
-**Issue**: `seasonOptions(awCollege ? 2024 : 2025)` hardcodes 2024 for college even though 2025 data exists.
-**Fix**: Change college default to 2025.
+**1. XSS in Recent Panels onclick attribute**
+- **File**: frontend/lab.html (in `_renderRecentPanels`)
+- **Issue**: Panel name `p` injected unescaped into onclick attribute. While panel names are internally controlled, this is defense-in-depth failure.
+- **Fix**: Use `escapeHtml(p)` in the onclick attribute value.
 
-### QA-3 — HIGH: Usage Trends and Year-over-Year both call same /api/college/trends
-**File**: `frontend/lab-panels.js`, lines ~3991 and ~4178
-**Issue**: Both panels hit `/api/college/trends` in college mode, rendering identical data. YoY hides its controls, becoming a duplicate.
-**Fix**: Add YoY to NFL_ONLY_MESSAGES or wire to dedicated endpoint.
+### HIGH
 
-### QA-4 — MEDIUM: Combine/draft name matching strips spaces only, not punctuation
-**File**: `backend/live_data.py`, lines 2374-2408
-**Issue**: `fetch_college_player_profile` uses `.replace(" ", "")` for name matching vs adapter's `normalize_name()` which strips all non-alpha.
+**2. localStorage calls missing try-catch in lab.js**
+- **File**: frontend/lab.js — 8 locations
+- **Issue**: localStorage.setItem calls in saveWatchlist, setUniverse, saveCurrentView, deleteSavedView, saveCustomScoringConfigs, toggleHeatColors, saveMyRoster lack try-catch. Private browsing or quota exceeded will throw.
+- **Fix**: Wrap all localStorage operations in try-catch.
 
-### QA-5 — MEDIUM: fetch_college_season_recap shows blank body for empty seasons
-**File**: `backend/live_data.py`, lines 4087-4121
-**Issue**: No early return for empty season_rows — panel renders blank with no empty-state message.
+**3. localStorage calls missing try-catch in app.js**
+- **File**: frontend/app.js (getAuthHeaders)
+- **Issue**: Reads localStorage without try-catch.
+- **Fix**: Add try-catch wrapper.
 
-### QA-6 — MEDIUM: fetch_college_aging_curves has no LIMIT on full table scan
-**File**: `backend/live_data.py`, lines 3798-3808
-**Issue**: Queries all 31K+ cfb rows with only `games >= 3` filter.
+**4. Sidebar collapsed init missing try-catch**
+- **File**: frontend/lab.html (sidebar init block)
+- **Issue**: `localStorage.getItem('razzle_sidebar_collapsed')` called without try-catch.
+- **Fix**: Wrap in try-catch.
 
-### QA-7 — LOW: .college-mode CSS in inline style in lab.html, not lab-panels.css
-### QA-8 — LOW: /api/college/streaks endpoint unreachable from frontend
-### QA-9 — LOW: f-string HAVING clause in fetch_college_leaders
-### QA-10 — LOW: render.yaml adapter chain uses && — one failure kills all college data
+### MEDIUM
+
+**5. No guard for escapeHtml availability**
+- **File**: frontend/lab.html
+- **Issue**: `escapeHtml()` used in inline script but defined in app.js. If app.js fails to load, inline scripts break.
+- **Fix**: Add inline fallback definition.
+
+### LOW
+
+**6. URL params not whitelisted**
+- **File**: frontend/lab.html
+- **Issue**: Universe param read from URL without strict whitelist.
+- **Fix**: Add explicit includes check.
 
 ---
 
 ## UX FINDINGS
 
-### UX-1 — CRITICAL: 12 panels silently serve NFL data in college mode
-**Panels**: buysell, drops, garbagetime, matchups, stacks, redzone, streaks, weeklymvp, playoffs, pace, tdregression, airyards
-**Issue**: No `showNflOnlyMsg` guard. User sees NFL data with no indication they're in wrong universe.
+### HIGH
 
-### UX-2 — CRITICAL: NFL-only panels have no clickable "switch to NFL" button
-**File**: `frontend/lab-panels.js`, showNflOnlyMsg function
-**Issue**: Message says "switch to NFL" as plain text. No interactive element.
+**1. Jargon panel names without descriptive tooltips**
+- **Panels**: VORP, Snap Efficiency, Target Premium, Garbage Time, Drop Rate, Success Rate, TD Regression
+- **Issue**: Fantasy football users won't understand these terms without context. Sidebar tooltips currently just repeat the panel name.
+- **Fix**: Add descriptive tooltip text explaining what each panel measures.
 
-### UX-3 — HIGH: Sidebar has no visual distinction between college-enabled and NFL-only panels
-**Issue**: All 60+ sidebar items look identical in college mode. No dimming or indicators.
+**2. Near-duplicate panel naming**
+- **Panels**: "Pace Tracker" vs "Season Pace", "FPTS Breakdown" vs "Scoring Breakdown"
+- **Issue**: Users can't tell these apart.
+- **Fix**: Rename "FPTS Breakdown" to "Points Breakdown". Keep Pace Tracker and Season Pace (different views: cards vs table).
 
-### UX-4 — HIGH: YoY panel silently degrades in college mode
-**Issue**: Drops all controls (season selectors, metric selector) without explanation. Same data as Usage Trends.
+**3. Mobile sidebar search lacks aria-label**
+- **File**: frontend/lab.html
+- **Issue**: In collapsed mode, search input has no aria-label.
+- **Fix**: Add `aria-label="Search tools"` to search input.
 
-### UX-5 — HIGH: Sidebar labels mismatch panel titles in college mode
-**Panels**: "Snap Efficiency" -> "Touch Efficiency", "Aging Curves" -> "College Experience Curves"
+### MEDIUM
 
-### UX-6 — HIGH: Rankings & Tiers silently serve NFL dynasty data in college mode
-**Panels**: rankings, tiers — no isCollege check, render NFL data without warning.
+**4. No first-time user hint**
+- **Issue**: New users see no guidance on the 62 panels. No onboarding tooltip.
+- **Fix**: Add one-time toast: "62 tools in the sidebar. Press ? for shortcuts."
 
-### UX-7 — MEDIUM: "school" vs "team" terminology inconsistent across college panels
-### UX-8 — MEDIUM: Conference abbreviations unexplained (CUSA, MWC, etc.)
-### UX-9 — MEDIUM: Dual-Threat and Target Premium have no college handling
+**5. Category chevrons small on mobile**
+- **Issue**: 10px chevron hard to tap on phones.
+- **Fix**: Increase to 14px on mobile breakpoint.
 
-### UX-10 — LOW: Universe bar label hidden on mobile
-### UX-11 — LOW: "Fantasy Only" toggle visible and confusing in college mode
-### UX-12 — LOW: Football emoji on NFL-only message is generic, not Razzle-branded
-### UX-13 — LOW: Game Log has no college gate — silently fails
-### UX-14 — LOW: Player Tools category (9 panels) has no college awareness
+### LOW
+
+**6. Keyboard shortcut discovery**
+- **Issue**: `?` shortcut exists but users must guess to press it.
+- **Fix**: Add subtle hint near tool count.
+
+---
+
+## CLEAN AREAS
+
+- CSS conflicts: None detected
+- Event listener leaks: None detected
+- Backend DB pattern: All get_db() correctly renamed to get_conn()
+- XSS in main innerHTML: Properly escaped
+- Panel render/switch: Working correctly
