@@ -1,12 +1,30 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 29 (Expand Data to 2015-2025 + Full College Stats)
+- Phase: 30 (Backend Cleanup: Fix Duplicate Routes + Shared Utils)
+## Phase 30: Backend Cleanup: Fix Duplicate Routes + Shared Utils
+**Exit Criterion**: Duplicate routes for aging_curves and td_regression in server.py removed. normalize_name() extracted to shared utils.py. Push script optimized.
+
 - Task 1: PASS
 - Task 2: PASS
 - Task 3: PASS
 - Stage: COMPLETE
-- Next: Phase transition
+- Next: Phase transition (QA+UX audit — Phase 30 is multiple of 5)
+
+### Task 1: Remove duplicate route definitions in server.py
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Removed old /api/aging-curves (no error handling) and duplicate /api/td-regression. Kept versions with try-except.
+
+### Task 2: Extract normalize_name() to shared utils.py
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Created adapters/utils.py. Updated nflverse_adapter.py and cfbfastr_adapter.py to import from utils.
+
+### Task 3: Optimize push_to_turso.py batch inserts
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Added BEGIN/COMMIT transaction wrapping per batch. Batch size increased from 500 to 1000.
 
 ## Phase 29: Expand Data to 2015-2025 + Full College Stats
 **Exit Criterion**: terminal.db contains NFL player data for ALL seasons 2015-2025. College football stats cover all available years. Database rebuilt locally. Upload to GitHub release.

@@ -682,11 +682,6 @@ def college_stat_explorer(season: int = None, position: str = "", x_stat: str = 
     return live_data.fetch_college_stat_explorer(season=season, position=position or None, x_stat=x_stat, y_stat=y_stat)
 
 
-@app.get("/api/aging-curves")
-def aging_curves(position: str = "WR"):
-    return live_data.fetch_aging_curves(position=position)
-
-
 @app.get("/api/heatmap")
 def heatmap(position: str = "WR", group: str = "production", season: int = None):
     return live_data.fetch_heatmap(position=position, group=group, season=season)
@@ -1807,16 +1802,6 @@ def dual_threat(season: int = None, position: str = None):
     except Exception as e:
         logger.error(f"dual-threat error: {e}")
         return JSONResponse({"error": "Failed to fetch dual-threat data"}, status_code=500)
-
-
-@app.get("/api/td-regression")
-def td_regression(season: int = None, position: str = None):
-    try:
-        pos = position.upper() if position else None
-        return live_data.fetch_td_regression(season=season, position=pos)
-    except Exception as e:
-        logger.error(f"td-regression error: {e}")
-        return JSONResponse({"error": "Failed to fetch TD regression"}, status_code=500)
 
 
 @app.get("/api/positional-advantage")

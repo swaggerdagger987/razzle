@@ -1,6 +1,18 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 29 — Expand Data to 2015-2025 + Full College Stats (COMPLETE)
+## Current Phase: Phase 30 — Backend Cleanup: Fix Duplicate Routes + Shared Utils (COMPLETE)
+
+**Exit Criterion MET**: Duplicate routes removed (aging-curves line 685, td-regression line 1812). normalize_name() extracted to adapters/utils.py, imported by both nflverse and cfbfastr adapters. push_to_turso.py optimized with transaction batching and increased batch size.
+
+### Phase 30 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Remove duplicate routes in server.py | DONE | Removed old aging-curves + duplicate td-regression |
+| 2 | Extract normalize_name() to utils.py | DONE | adapters/utils.py, imported by 2 adapters |
+| 3 | Optimize push_to_turso.py | DONE | Transaction wrapping, batch size 500→1000 |
+
+## Previous Phase: Phase 29 — Expand Data to 2015-2025 + Full College Stats (COMPLETE)
 
 **Exit Criterion MET**: terminal.db contains NFL data for 2015-2024 (54,479 player-week rows, up from 28,026). PBP data for 2015-2025 (6,666 rows, up from 615). CFB data 2015-2025 (31,039 rows, already complete). DB uploaded to GitHub release data-v1 (515 MB).
 

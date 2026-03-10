@@ -45,14 +45,7 @@ def safe_int(val):
     return int(f) if f is not None else None
 
 
-def normalize_name(name):
-    """Normalize name for matching: lowercase, strip suffixes, alpha only."""
-    if not name:
-        return ""
-    name = name.lower().strip()
-    name = re.sub(r"\s+(jr|sr|ii|iii|iv|v)\.?$", "", name)
-    name = re.sub(r"[^a-z]", "", name)
-    return name
+from adapters.utils import normalize_name  # noqa: E402
 
 
 def valid_id(val):
