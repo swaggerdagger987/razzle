@@ -6981,3 +6981,182 @@ def fetch_stock_watch(season=None, position=None, limit=30):
         }
     finally:
         conn.close()
+
+
+# ---------------------------------------------------------------------------
+# Opportunity Share & Dominator Rating
+# ---------------------------------------------------------------------------
+
+_ALPHA_ANNOTATIONS = [
+    "the bellcow", "volume king", "carries the load",
+    "target hog", "workload monster", "focal point",
+    "run-game anchor", "snap machine", "every-down back",
+    "route-tree monopoly",
+]
+
+_DOMINATOR_ANNOTATIONS = [
+    "receiving alpha", "production dominator", "stat magnet",
+    "yards vacuum", "TD machine", "target conversion king",
+    "yardage engine", "reception monster", "air-game anchor",
+    "route assassin",
+]
+
+
+def fetch_opportunity_share(season=None, position=None, limit=30):
+    """Return opportunity share leaders (alpha dogs) and dominator rating leaders.
+
+    Opportunity Share = (player targets + carries) / (team targets + carries) * 100
+    Dominator Rating = ((player rec yards / team rec yards) + (player rec TDs / team rec TDs)) / 2 * 100
+    For RB/QB: Rush Dominator = (player rush yards / team rush yards) * 100
+    """
+    from collections import defaultdict
+
+    conn = get_conn()
+    try:
+        row = conn.execute(
+            "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
+        ).fetchall()
+        available_seasons = [r[0] for r in row] if row else [2024]
+        if not season:
+            season = available_seasons[0] if available_seasons else 2024
+
+        pos_filter = ""
+        params = [season]
+        if position and position.upper() in FANTASY_POSITIONS:
+            pos_filter = "AND p.position = ?"
+            params.append(position.upper())
+
+        # Gather per-player season totals
+        rows = conn.execute(f"""
+            SELECT s.player_id, p.full_name, p.position, p.team,
+                   p.headshot_url, p.age,
+                   COALESCE(SUM(s.targets), 0) as total_targets,
+                   COALESCE(SUM(s.carries), 0) as total_carries,
+                   COALESCE(SUM(s.receiving_yards), 0) as total_rec_yards,
+                   COALESCE(SUM(s.receiving_tds), 0) as total_rec_tds,
+                   COALESCE(SUM(s.rushing_yards), 0) as total_rush_yards,
+                   COALESCE(SUM(s.rushing_tds), 0) as total_rush_tds,
+                   COALESCE(SUM(s.fantasy_points_ppr), 0) as total_pts,
+                   COUNT(DISTINCT s.week) as games
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE s.season = ?
+              AND p.position IN ('QB', 'RB', 'WR', 'TE')
+              AND p.fantasy_relevant = 1
+              {pos_filter}
+            GROUP BY s.player_id
+        """, params).fetchall()
+
+        if not rows:
+            return {
+                "season": season,
+                "available_seasons": available_seasons,
+                "alpha_dogs": [],
+                "dominators": [],
+            }
+
+        # Build team totals
+        team_totals = defaultdict(lambda: {
+            "targets": 0, "carries": 0,
+            "rec_yards": 0, "rec_tds": 0,
+            "rush_yards": 0, "rush_tds": 0,
+        })
+
+        players = []
+        for r in rows:
+            team = r[3] or "FA"
+            targets = r[6]
+            carries = r[7]
+            rec_yards = r[8]
+            rec_tds = r[9]
+            rush_yards = r[10]
+            rush_tds = r[11]
+            total_pts = r[12]
+            games = r[13]
+
+            t = team_totals[team]
+            t["targets"] += targets
+            t["carries"] += carries
+            t["rec_yards"] += rec_yards
+            t["rec_tds"] += rec_tds
+            t["rush_yards"] += rush_yards
+            t["rush_tds"] += rush_tds
+
+            players.append({
+                "player_id": r[0],
+                "name": r[1] or "Unknown",
+                "position": r[2] or "RB",
+                "team": team,
+                "headshot_url": r[4] or "",
+                "age": r[5],
+                "targets": targets,
+                "carries": carries,
+                "rec_yards": rec_yards,
+                "rec_tds": rec_tds,
+                "rush_yards": rush_yards,
+                "rush_tds": rush_tds,
+                "total_pts": total_pts,
+                "games": games,
+            })
+
+        # Compute opportunity share and dominator rating per player
+        for p in players:
+            team = p["team"]
+            t = team_totals[team]
+            games = p["games"]
+            ppg = round(p["total_pts"] / games, 2) if games > 0 else 0
+            p["ppg"] = ppg
+
+            total_opps = p["targets"] + p["carries"]
+            p["total_opps"] = total_opps
+            p["targets_per_game"] = round(p["targets"] / games, 1) if games > 0 else 0
+            p["carries_per_game"] = round(p["carries"] / games, 1) if games > 0 else 0
+
+            # Opportunity share
+            team_opps = t["targets"] + t["carries"]
+            p["opp_share"] = round(total_opps / team_opps * 100, 1) if team_opps > 0 else 0
+
+            # Dominator rating (WR/TE: receiving; RB/QB: rushing)
+            pos = p["position"]
+            if pos in ("WR", "TE"):
+                rec_yd_share = (p["rec_yards"] / t["rec_yards"] * 100) if t["rec_yards"] > 0 else 0
+                rec_td_share = (p["rec_tds"] / t["rec_tds"] * 100) if t["rec_tds"] > 0 else 0
+                p["dominator_rating"] = round((rec_yd_share + rec_td_share) / 2, 1)
+                p["rec_yd_share"] = round(rec_yd_share, 1)
+                p["rec_td_share"] = round(rec_td_share, 1)
+                p["rush_share"] = None
+            else:
+                rush_share = (p["rush_yards"] / t["rush_yards"] * 100) if t["rush_yards"] > 0 else 0
+                p["rush_share"] = round(rush_share, 1)
+                p["dominator_rating"] = round(rush_share, 1)
+                p["rec_yd_share"] = None
+                p["rec_td_share"] = None
+
+        # Filter: min 30 opportunities, min 4 games
+        filtered = [p for p in players if p["total_opps"] >= 30 and p["games"] >= 4]
+
+        # Alpha Dogs: highest opportunity share
+        alpha_dogs = sorted(filtered, key=lambda x: x["opp_share"], reverse=True)[:limit]
+        for i, p in enumerate(alpha_dogs):
+            p["annotation"] = _ALPHA_ANNOTATIONS[i % len(_ALPHA_ANNOTATIONS)]
+
+        # Dominators: highest dominator rating
+        dominators = sorted(filtered, key=lambda x: x["dominator_rating"], reverse=True)[:limit]
+        for i, p in enumerate(dominators):
+            p["annotation"] = _DOMINATOR_ANNOTATIONS[i % len(_DOMINATOR_ANNOTATIONS)]
+
+        # Clean up internal fields before returning
+        clean_keys = ["rec_yards", "rec_tds", "rush_yards", "rush_tds", "total_pts"]
+        for lst in (alpha_dogs, dominators):
+            for p in lst:
+                for k in clean_keys:
+                    p.pop(k, None)
+
+        return {
+            "season": season,
+            "available_seasons": available_seasons,
+            "alpha_dogs": alpha_dogs,
+            "dominators": dominators,
+        }
+    finally:
+        conn.close()

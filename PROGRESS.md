@@ -1,6 +1,25 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 87 — Dynasty Stock Watch Dashboard (COMPLETE)
+## Current Phase: Phase 88 — Opportunity Share & Dominator Rating Dashboard (COMPLETE)
+
+**Exit criterion MET:** /opportunity.html page shows opportunity share analysis with two sections: "Alpha Dogs" (highest opportunity share — targets+carries as % of team total, min 30 opps + 4 games) and "Dominator Rating Leaders" (highest dominator rating — receiving yards share + receiving TD share of team totals for WR/TE, rush yards share for RB/QB). Each player: position badge, headshot, name, team, Opp Share % (color-coded badge: green>=25%, blue>=18%, yellow>=12%, orange>=8%, red<8%), Dominator Rating badge (green>=30, blue>=20, yellow>=12, orange>=6, red<6), Targets/G, Carries/G, Total Opps, PPG, GP, Caveat annotation. Position filter tabs (All/QB/RB/WR/TE). Season selector. Sortable columns with sort state tracking per section. Click player row → player profile. PNG export via html2canvas with watermark. Responsive at 768px + 480px with hide-mobile columns. /api/opportunity-share endpoint computes per-player opportunity share (targets+carries / team total), dominator rating (WR/TE: avg of rec yd share + rec TD share; RB/QB: rush yd share), targets/g, carries/g, PPG. Min 30 opportunities + 4 games filter. "Opportunity" nav link added to all 28 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors.
+
+### Phase 88 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/opportunity-share endpoint | DONE | Opp share, dominator rating, alpha_dogs/dominators split |
+| 2 | Opportunity Share dashboard page | DONE | Two-section table, share/dom badges, 9 escapeHtml, 71/71 braces |
+| 3 | Nav links + sitemap + analytics | DONE | All 28 pages updated, sitemap entry, pageview tracking |
+| 4 | Smoke test | DONE | Python + JS syntax clean, 28/28 nav links, XSS escaped, design compliance |
+
+### Decisions Log
+- **Opportunity Share & Dominator Rating as Phase 88**: After building 16+ analytical dashboards, opportunity share and dominator rating fill a key gap. "Who owns the touches?" (opportunity share) and "Who owns the production?" (dominator rating) are two of the most predictive metrics in dynasty fantasy football. Opportunity share tells you volume — dominator rating tells you conversion. Together they answer whether a player is truly the alpha on their team. Highly screenshottable for r/DynastyFF ("these players dominate their team's workload" / "highest dominator ratings by position").
+- **Separate sections for volume vs production**: Alpha Dogs (opportunity share) rewards high-volume players who get the most touches regardless of efficiency. Dominator Rating Leaders rewards players who convert their opportunities into the largest share of team production. A player can be high in one but not the other — that's the insight.
+- **Position-specific dominator calculation**: WR/TE use receiving dominator (rec yards + rec TDs share). RB/QB use rush dominator (rush yards share). This makes cross-position comparison meaningful since RBs don't compete for receiving production the same way.
+- **Min 30 opps + 4 games**: 30 opportunities removes gadget players with 5 touches. 4 games ensures enough sample for meaningful team share calculation.
+
+## Previous Phase: Phase 87 — Dynasty Stock Watch Dashboard (COMPLETE)
 
 **Exit criterion MET:** /stocks.html page shows dynasty stock watch with two sections: "Rising Stocks" (players whose composite metrics exceed their PPG ranking — undervalued) and "Falling Stocks" (players whose PPG ranking exceeds their composite metrics — overvalued). For each player: position badge, headshot, name, team, Stock Score (0-100 color-coded badge: elite 80+ green, good 60-79 blue, avg 40-59 yellow, below 20-39 orange, poor <20 red), PPG, Efficiency grade, Consistency grade, SOS grade, Stock Delta, Age, GP, and Caveat annotation. Composite stock score = PPO percentile (25%) + inverse CoV percentile (25%) + SOS difficulty percentile (25%) + PPG percentile (25%). Position filter tabs (All/QB/RB/WR/TE). Season selector. Sortable columns with sort state tracking per section. Click player row → player profile. PNG export via html2canvas with watermark. Responsive at 768px + 480px with hide-mobile columns. /api/stock-watch endpoint computes per-player efficiency (PPO), consistency (CoV), SOS (avg opp PPG), and PPG, converts each to percentile, blends into 0-100 stock score, compares to PPG rank percentile, splits into rising (stock > PPG rank) and falling (stock < PPG rank). Min 6 games + 2 PPG + 50 opps filter. "Stocks" nav link added to all 27 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors.
 

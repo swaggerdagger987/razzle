@@ -903,6 +903,7 @@ def sitemap_xml():
         ("/consistency.html", "0.8", "weekly"),
         ("/schedule.html", "0.8", "weekly"),
         ("/stocks.html", "0.8", "weekly"),
+        ("/opportunity.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1219,6 +1220,19 @@ def stock_watch(season: int = 0, position: str = "", limit: int = 30):
     except Exception as e:
         logger.error(f"stock_watch error: {e}")
         return JSONResponse({"error": "Failed to fetch stock watch data"}, status_code=500)
+
+
+@app.get("/api/opportunity-share")
+def opportunity_share(season: int = 0, position: str = "", limit: int = 30):
+    """Return opportunity share leaders and dominator rating leaders."""
+    try:
+        s = season if season > 0 else None
+        pos = position.upper() if position else None
+        lim = max(1, min(limit, 50))
+        return live_data.fetch_opportunity_share(season=s, position=pos, limit=lim)
+    except Exception as e:
+        logger.error(f"opportunity_share error: {e}")
+        return JSONResponse({"error": "Failed to fetch opportunity share data"}, status_code=500)
 
 
 @app.get("/api/analytics/summary")

@@ -3,46 +3,46 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Red Zone &amp; Goal-Line — Razzle</title>
-<meta property="og:title" content="Red Zone & Goal-Line — Razzle">
-<meta property="og:description" content="Goal-line usage leaders and TD dependency analysis on razzle.lol">
+<title>Opportunity Share — Razzle</title>
+<meta property="og:title" content="Opportunity Share — Razzle">
+<meta property="og:description" content="Opportunity share and dominator rating analysis — who owns their team's touches and production on razzle.lol">
 <meta property="og:site_name" content="razzle.lol">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Red Zone & Goal-Line — Razzle">
-<meta name="twitter:description" content="Goal-line usage leaders and TD dependency analysis on razzle.lol">
+<meta name="twitter:title" content="Opportunity Share — Razzle">
+<meta name="twitter:description" content="Opportunity share and dominator rating analysis — who owns their team's touches and production on razzle.lol">
 <meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
-<meta name="description" content="Red zone and goal-line usage dashboard — who owns the goal line and who depends on TDs for fantasy value on razzle.lol">
+<meta name="description" content="Opportunity share and dominator rating dashboard — team touch dominance and production share on razzle.lol">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="styles.css">
 <style>
-  .rz-page {
+  .opp-page {
     max-width: 1200px;
     margin: 0 auto;
     padding: 24px 20px 60px;
   }
 
-  .rz-header {
+  .opp-header {
     text-align: center;
     margin-bottom: 24px;
   }
-  .rz-header h1 {
+  .opp-header h1 {
     font-family: var(--font-display);
     font-size: 32px;
     color: var(--ink);
     margin: 0 0 4px;
   }
-  .rz-header .rz-subtitle {
+  .opp-header .opp-subtitle {
     font-family: var(--font-hand);
     font-size: 20px;
     color: var(--ink-light);
   }
 
   /* Controls row */
-  .rz-controls {
+  .opp-controls {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -51,7 +51,7 @@
     flex-wrap: wrap;
   }
 
-  .rz-select {
+  .opp-select {
     font-family: var(--font-mono);
     font-size: 13px;
     padding: 7px 12px;
@@ -63,13 +63,13 @@
   }
 
   /* Position filter tabs */
-  .rz-pos-tabs {
+  .opp-pos-tabs {
     display: flex;
     border: 2px solid var(--ink);
     border-radius: 8px;
     overflow: hidden;
   }
-  .rz-pos-tab {
+  .opp-pos-tab {
     font-family: var(--font-display);
     font-size: 13px;
     font-weight: 700;
@@ -81,17 +81,17 @@
     cursor: pointer;
     transition: all 0.12s;
   }
-  .rz-pos-tab:last-child { border-right: none; }
-  .rz-pos-tab.active {
+  .opp-pos-tab:last-child { border-right: none; }
+  .opp-pos-tab.active {
     background: var(--ink);
     color: var(--bg-card);
   }
-  .rz-pos-tab:hover:not(.active) {
+  .opp-pos-tab:hover:not(.active) {
     background: var(--bg-warm);
   }
 
   /* Actions */
-  .rz-actions {
+  .opp-actions {
     display: flex;
     justify-content: center;
     gap: 10px;
@@ -99,8 +99,8 @@
   }
 
   /* Section headers */
-  .rz-section { margin-bottom: 32px; }
-  .rz-section-header {
+  .opp-section { margin-bottom: 32px; }
+  .opp-section-header {
     font-family: var(--font-display);
     font-size: 20px;
     font-weight: 700;
@@ -111,14 +111,12 @@
     border-radius: 10px;
     box-shadow: 4px 4px 0 var(--ink);
   }
-  .rz-section-header.dominators { background: var(--green-light); }
-  .rz-section-header.td-dependent { background: var(--orange-light); }
+  .opp-section-header.alpha { background: var(--green-light); }
+  .opp-section-header.dominator { background: var(--orange-light); }
   .section-icon { font-size: 20px; margin-right: 4px; }
-  .section-icon.dominators { color: var(--green); }
-  .section-icon.td-dependent { color: var(--orange); }
 
   /* Table styles */
-  .rz-table {
+  .opp-table {
     width: 100%;
     border-collapse: collapse;
     font-family: var(--font-mono);
@@ -129,7 +127,7 @@
     overflow: hidden;
     box-shadow: 4px 4px 0 var(--ink);
   }
-  .rz-table th {
+  .opp-table th {
     font-family: var(--font-display);
     font-size: 11px;
     font-weight: 700;
@@ -144,32 +142,32 @@
     user-select: none;
     position: relative;
   }
-  .rz-table th.center,
-  .rz-table td.center { text-align: center; }
-  .rz-table th.sorted { color: var(--orange); }
-  .rz-table th .sort-arrow { font-size: 10px; margin-left: 2px; }
-  .rz-table th:hover { background: var(--bg); }
-  .rz-table td {
+  .opp-table th.center,
+  .opp-table td.center { text-align: center; }
+  .opp-table th.sorted { color: var(--orange); }
+  .opp-table th .sort-arrow { font-size: 10px; margin-left: 2px; }
+  .opp-table th:hover { background: var(--bg); }
+  .opp-table td {
     padding: 8px;
     border-bottom: 1px solid var(--ink-faint);
     vertical-align: middle;
   }
-  .rz-table tbody tr {
+  .opp-table tbody tr {
     cursor: pointer;
     transition: background 0.1s;
   }
-  .rz-table tbody tr:hover {
+  .opp-table tbody tr:hover {
     background: var(--bg-warm);
   }
 
   /* Player cell */
-  .rz-player-cell {
+  .opp-player-cell {
     display: flex;
     align-items: center;
     gap: 8px;
     min-width: 160px;
   }
-  .rz-headshot {
+  .opp-headshot {
     width: 32px;
     height: 32px;
     border-radius: 50%;
@@ -178,8 +176,8 @@
     flex-shrink: 0;
     background: var(--bg-warm);
   }
-  .rz-player-info { min-width: 0; }
-  .rz-player-name {
+  .opp-player-info { min-width: 0; }
+  .opp-player-name {
     font-family: var(--font-display);
     font-size: 14px;
     font-weight: 700;
@@ -188,13 +186,13 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .rz-player-meta {
+  .opp-player-meta {
     display: flex;
     align-items: center;
     gap: 5px;
     margin-top: 1px;
   }
-  .rz-pos-badge {
+  .opp-pos-badge {
     font-family: var(--font-display);
     font-size: 10px;
     font-weight: 700;
@@ -202,46 +200,54 @@
     border-radius: 5px;
     color: #fff;
   }
-  .rz-pos-badge.qb { background: var(--pos-qb); }
-  .rz-pos-badge.rb { background: var(--pos-rb); }
-  .rz-pos-badge.wr { background: var(--pos-wr); }
-  .rz-pos-badge.te { background: var(--pos-te); }
-  .rz-team-label {
+  .opp-pos-badge.qb { background: var(--pos-qb); }
+  .opp-pos-badge.rb { background: var(--pos-rb); }
+  .opp-pos-badge.wr { background: var(--pos-wr); }
+  .opp-pos-badge.te { background: var(--pos-te); }
+  .opp-team-label {
     font-family: var(--font-mono);
     font-size: 11px;
     color: var(--ink-medium);
   }
 
-  /* GL TD Rate badge */
-  .rz-rate-badge {
+  /* Share badge */
+  .opp-share-badge {
     display: inline-block;
-    font-family: var(--font-mono);
-    font-size: 12px;
+    font-family: var(--font-display);
+    font-size: 13px;
     font-weight: 700;
     padding: 2px 8px;
     border-radius: 6px;
     border: 2px solid;
+    min-width: 40px;
+    text-align: center;
   }
-  .rz-rate-badge.high { background: var(--green-light); color: #1a7a6d; border-color: var(--green); }
-  .rz-rate-badge.mid { background: var(--yellow-light); color: #8a6d20; border-color: var(--yellow); }
-  .rz-rate-badge.low { background: var(--red-light); color: #a83240; border-color: var(--red); }
+  .opp-share-badge.elite { background: var(--green-light); color: #1a7a6d; border-color: var(--green); }
+  .opp-share-badge.good { background: var(--blue-light); color: #3a5abf; border-color: var(--blue); }
+  .opp-share-badge.avg { background: var(--yellow-light); color: #8a6d20; border-color: var(--yellow); }
+  .opp-share-badge.below { background: var(--orange-light); color: #a85a3a; border-color: var(--orange); }
+  .opp-share-badge.poor { background: var(--red-light); color: #a83240; border-color: var(--red); }
 
-  /* TD% badge */
-  .rz-tdpct-badge {
+  /* Dominator badge (reuse score badge style) */
+  .opp-dom-badge {
     display: inline-block;
-    font-family: var(--font-mono);
-    font-size: 12px;
+    font-family: var(--font-display);
+    font-size: 13px;
     font-weight: 700;
     padding: 2px 8px;
     border-radius: 6px;
     border: 2px solid;
+    min-width: 40px;
+    text-align: center;
   }
-  .rz-tdpct-badge.heavy { background: var(--red-light); color: #a83240; border-color: var(--red); }
-  .rz-tdpct-badge.moderate { background: var(--orange-light); color: #a85a3a; border-color: var(--orange); }
-  .rz-tdpct-badge.light { background: var(--green-light); color: #1a7a6d; border-color: var(--green); }
+  .opp-dom-badge.elite { background: var(--green-light); color: #1a7a6d; border-color: var(--green); }
+  .opp-dom-badge.good { background: var(--blue-light); color: #3a5abf; border-color: var(--blue); }
+  .opp-dom-badge.avg { background: var(--yellow-light); color: #8a6d20; border-color: var(--yellow); }
+  .opp-dom-badge.below { background: var(--orange-light); color: #a85a3a; border-color: var(--orange); }
+  .opp-dom-badge.poor { background: var(--red-light); color: #a83240; border-color: var(--red); }
 
   /* Annotation */
-  .rz-annotation {
+  .opp-annotation {
     font-family: var(--font-hand);
     font-size: 14px;
     color: var(--ink-light);
@@ -249,37 +255,37 @@
   }
 
   /* Loading / Empty / Error */
-  .rz-loading, .rz-empty {
+  .opp-loading, .opp-empty {
     text-align: center;
     padding: 60px 20px;
     font-family: var(--font-hand);
     font-size: 22px;
     color: var(--ink-light);
   }
-  .rz-error {
+  .opp-error {
     text-align: center;
     padding: 40px 20px;
     font-family: var(--font-hand);
     font-size: 20px;
     color: var(--red);
   }
-  .rz-error button {
+  .opp-error button {
     margin-top: 12px;
   }
 
   /* Responsive */
   @media (max-width: 768px) {
-    .rz-page { padding: 16px 10px 40px; }
-    .rz-header h1 { font-size: 26px; }
-    .rz-table { font-size: 12px; }
+    .opp-page { padding: 16px 10px 40px; }
+    .opp-header h1 { font-size: 26px; }
+    .opp-table { font-size: 12px; }
     .hide-mobile { display: none !important; }
-    .rz-player-cell { min-width: 120px; }
-    .rz-headshot { width: 28px; height: 28px; }
-    .rz-player-name { font-size: 12px; }
+    .opp-player-cell { min-width: 120px; }
+    .opp-headshot { width: 28px; height: 28px; }
+    .opp-player-name { font-size: 12px; }
   }
   @media (max-width: 480px) {
-    .rz-controls { gap: 8px; }
-    .rz-pos-tab { padding: 5px 10px; font-size: 12px; }
+    .opp-controls { gap: 8px; }
+    .opp-pos-tab { padding: 5px 10px; font-size: 12px; }
   }
 </style>
 </head>
@@ -307,41 +313,41 @@
     <li><a href="/yoy.html">YoY</a></li>
     <li><a href="/airyards.html">Air Yards</a></li>
     <li><a href="/explorer.html">Explorer</a></li>
-    <li><a href="/redzone.html" class="active">Red Zone</a></li>
+    <li><a href="/redzone.html">Red Zone</a></li>
     <li><a href="/efficiency.html">Efficiency</a></li>
     <li><a href="/consistency.html">Consistency</a></li>
     <li><a href="/schedule.html">Schedule</a></li>
     <li><a href="/stocks.html">Stocks</a></li>
-    <li><a href="/opportunity.html">Opportunity</a></li>
+    <li><a href="/opportunity.html" class="active">Opportunity</a></li>
     <li><a href="/team/KC">Teams</a></li>
     <li><a href="/league-intel.html">League Intel</a></li>
     <li><a href="/agents.html">War Room</a></li>
   </ul>
 </nav>
 
-<main class="rz-page" id="rz-content">
-  <div class="rz-header">
-    <h1>Red Zone &amp; Goal-Line</h1>
-    <div class="rz-subtitle">who owns the goal line, and who needs TDs to eat</div>
+<main class="opp-page" id="opp-content">
+  <div class="opp-header">
+    <h1>Opportunity Share</h1>
+    <div class="opp-subtitle">who owns the touches and the production</div>
   </div>
 
-  <div class="rz-controls">
-    <div class="rz-pos-tabs" id="pos-tabs">
-      <button class="rz-pos-tab active" data-pos="" aria-label="All positions">All</button>
-      <button class="rz-pos-tab" data-pos="QB" aria-label="Quarterbacks">QB</button>
-      <button class="rz-pos-tab" data-pos="RB" aria-label="Running Backs">RB</button>
-      <button class="rz-pos-tab" data-pos="WR" aria-label="Wide Receivers">WR</button>
-      <button class="rz-pos-tab" data-pos="TE" aria-label="Tight Ends">TE</button>
+  <div class="opp-controls">
+    <div class="opp-pos-tabs" id="pos-tabs">
+      <button class="opp-pos-tab active" data-pos="" aria-label="All positions">All</button>
+      <button class="opp-pos-tab" data-pos="QB" aria-label="Quarterbacks">QB</button>
+      <button class="opp-pos-tab" data-pos="RB" aria-label="Running Backs">RB</button>
+      <button class="opp-pos-tab" data-pos="WR" aria-label="Wide Receivers">WR</button>
+      <button class="opp-pos-tab" data-pos="TE" aria-label="Tight Ends">TE</button>
     </div>
-    <select class="rz-select" id="season-select" title="Season" aria-label="Season"></select>
+    <select class="opp-select" id="season-select" title="Season" aria-label="Season"></select>
   </div>
 
-  <div class="rz-actions">
+  <div class="opp-actions">
     <button class="btn-chunky" id="export-btn" title="Export as PNG">Export PNG</button>
   </div>
 
-  <div id="rz-body">
-    <div class="rz-loading" id="rz-loading">scouting the goal line...</div>
+  <div id="opp-body">
+    <div class="opp-loading" id="opp-loading">mapping the opportunity landscape...</div>
   </div>
 </main>
 
@@ -423,40 +429,54 @@
 
   // Sort state per section
   var sortState = {
-    dominators: { col: 'gl_opportunities', dir: -1 },
-    td_dependent: { col: 'td_pct_of_fantasy', dir: -1 }
+    alpha_dogs: { col: 'opp_share', dir: -1 },
+    dominators: { col: 'dominator_rating', dir: -1 }
   };
 
-  // Dominator columns
-  var DOM_COLUMNS = [
+  function shareClass(pct) {
+    if (pct >= 25) return 'elite';
+    if (pct >= 18) return 'good';
+    if (pct >= 12) return 'avg';
+    if (pct >= 8) return 'below';
+    return 'poor';
+  }
+
+  function domClass(rating) {
+    if (rating >= 30) return 'elite';
+    if (rating >= 20) return 'good';
+    if (rating >= 12) return 'avg';
+    if (rating >= 6) return 'below';
+    return 'poor';
+  }
+
+  // Alpha Dogs columns
+  var ALPHA_COLUMNS = [
     { key: 'name', label: 'Player', tip: '' },
-    { key: 'gl_opportunities', label: 'GL Opp', tip: 'Goal-line opportunities (carries + targets inside the 5-yard line)' },
-    { key: 'gl_carries', label: 'GL Car', tip: 'Goal-line carries (rushes inside the 5-yard line)' },
-    { key: 'gl_targets', label: 'GL Tgt', tip: 'Goal-line targets (targets inside the 5-yard line)', hide: true },
-    { key: 'gl_tds', label: 'GL TD', tip: 'Goal-line touchdowns' },
-    { key: 'gl_td_rate', label: 'GL TD%', tip: 'Goal-line TD conversion rate (GL TDs / GL Opportunities)' },
-    { key: 'total_tds', label: 'TDs', tip: 'Total touchdowns (rush + rec + pass)', hide: true },
+    { key: 'opp_share', label: 'Opp%', tip: 'Opportunity share — player targets + carries as % of team total' },
+    { key: 'dominator_rating', label: 'Dom', tip: 'Dominator rating — share of team receiving/rushing production' },
+    { key: 'targets_per_game', label: 'Tgt/G', tip: 'Targets per game' },
+    { key: 'carries_per_game', label: 'Car/G', tip: 'Carries per game' },
+    { key: 'total_opps', label: 'Opps', tip: 'Total opportunities (targets + carries)', hide: true },
     { key: 'ppg', label: 'PPG', tip: 'Fantasy points per game (PPR)' },
     { key: 'games', label: 'GP', hide: true, tip: 'Games played' },
     { key: 'annotation', label: '', hide: true, nosort: true, tip: '' }
   ];
 
-  // TD Dependent columns
-  var TDD_COLUMNS = [
+  // Dominator columns
+  var DOM_COLUMNS = [
     { key: 'name', label: 'Player', tip: '' },
-    { key: 'td_pct_of_fantasy', label: 'TD%', tip: 'Percentage of fantasy points that come from touchdowns — higher = more TD dependent' },
-    { key: 'total_tds', label: 'TDs', tip: 'Total touchdowns (rush + rec + pass)' },
-    { key: 'rush_tds', label: 'RuTD', tip: 'Rushing touchdowns', hide: true },
-    { key: 'rec_tds', label: 'ReTD', tip: 'Receiving touchdowns', hide: true },
+    { key: 'dominator_rating', label: 'Dom', tip: 'Dominator rating — share of team receiving/rushing production' },
+    { key: 'opp_share', label: 'Opp%', tip: 'Opportunity share — player targets + carries as % of team total' },
+    { key: 'rec_yd_share', label: 'RecYd%', tip: 'Receiving yards as % of team total (WR/TE)', hide: false },
+    { key: 'rec_td_share', label: 'RecTD%', tip: 'Receiving TDs as % of team total (WR/TE)', hide: false },
+    { key: 'targets_per_game', label: 'Tgt/G', tip: 'Targets per game', hide: true },
     { key: 'ppg', label: 'PPG', tip: 'Fantasy points per game (PPR)' },
-    { key: 'gl_tds', label: 'GL TD', tip: 'Goal-line touchdowns' },
-    { key: 'gl_opportunities', label: 'GL Opp', tip: 'Goal-line opportunities (carries + targets inside the 5)', hide: true },
     { key: 'games', label: 'GP', hide: true, tip: 'Games played' },
     { key: 'annotation', label: '', hide: true, nosort: true, tip: '' }
   ];
 
   function getColumns(section) {
-    return section === 'dominators' ? DOM_COLUMNS : TDD_COLUMNS;
+    return section === 'alpha_dogs' ? ALPHA_COLUMNS : DOM_COLUMNS;
   }
 
   function buildPlayerRow(p, section) {
@@ -472,33 +492,40 @@
 
       if (col.key === 'name') {
         html += '<td>';
-        html += '<div class="rz-player-cell">';
+        html += '<div class="opp-player-cell">';
         if (p.headshot_url) {
-          html += '<img class="rz-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+          html += '<img class="opp-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
         }
-        html += '<div class="rz-player-info">';
-        html += '<div class="rz-player-name">' + escapeHtml(p.name) + '</div>';
-        html += '<div class="rz-player-meta">';
-        html += '<span class="rz-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
-        html += '<span class="rz-team-label">' + escapeHtml(p.team) + '</span>';
+        html += '<div class="opp-player-info">';
+        html += '<div class="opp-player-name">' + escapeHtml(p.name) + '</div>';
+        html += '<div class="opp-player-meta">';
+        html += '<span class="opp-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
+        html += '<span class="opp-team-label">' + escapeHtml(p.team) + '</span>';
         html += '</div></div></div>';
         html += '</td>';
-      } else if (col.key === 'gl_td_rate') {
-        var rate = p.gl_td_rate || 0;
-        var rateClass = rate >= 50 ? 'high' : rate >= 25 ? 'mid' : 'low';
+      } else if (col.key === 'opp_share') {
+        var s = p.opp_share || 0;
         html += '<td class="' + classes.join(' ') + '">';
-        html += '<span class="rz-rate-badge ' + rateClass + '">' + fmt(rate, 1) + '%</span>';
+        html += '<span class="opp-share-badge ' + shareClass(s) + '">' + fmt(s) + '%</span>';
         html += '</td>';
-      } else if (col.key === 'td_pct_of_fantasy') {
-        var pct = p.td_pct_of_fantasy || 0;
-        var pctClass = pct >= 50 ? 'heavy' : pct >= 35 ? 'moderate' : 'light';
+      } else if (col.key === 'dominator_rating') {
+        var d = p.dominator_rating || 0;
         html += '<td class="' + classes.join(' ') + '">';
-        html += '<span class="rz-tdpct-badge ' + pctClass + '">' + fmt(pct, 1) + '%</span>';
+        html += '<span class="opp-dom-badge ' + domClass(d) + '">' + fmt(d) + '</span>';
         html += '</td>';
-      } else if (col.key === 'annotation') {
-        html += '<td class="' + classes.join(' ') + '"><span class="rz-annotation">' + escapeHtml(p.annotation || '') + '</span></td>';
+      } else if (col.key === 'rec_yd_share' || col.key === 'rec_td_share') {
+        var val = p[col.key];
+        html += '<td class="' + classes.join(' ') + '">';
+        if (val !== null && val !== undefined) {
+          html += fmt(val) + '%';
+        } else {
+          html += '<span style="color:var(--ink-light);">-</span>';
+        }
+        html += '</td>';
       } else if (col.key === 'ppg') {
-        html += '<td class="' + classes.join(' ') + '" style="font-weight:700;">' + fmt(p[col.key]) + '</td>';
+        html += '<td class="' + classes.join(' ') + '" style="font-weight:700;">' + fmt(p.ppg) + '</td>';
+      } else if (col.key === 'annotation') {
+        html += '<td class="' + classes.join(' ') + '"><span class="opp-annotation">' + escapeHtml(p.annotation || '') + '</span></td>';
       } else {
         var val = p[col.key];
         html += '<td class="' + classes.join(' ') + '">' + (val !== null && val !== undefined ? escapeHtml(String(val)) : '-') + '</td>';
@@ -540,28 +567,28 @@
 
   function buildTable(players, section) {
     if (!players || !players.length) {
-      var label = section === 'dominators' ? 'goal-line dominators' : 'TD-dependent players';
-      return '<div class="rz-empty">no ' + label + ' found for this filter</div>';
+      var label = section === 'alpha_dogs' ? 'alpha dogs' : 'dominator leaders';
+      return '<div class="opp-empty">no ' + label + ' found for this filter</div>';
     }
 
-    var isDom = section === 'dominators';
-    var icon = isDom ? '&#x1F3C8;' : '&#x1F4A5;';
-    var title = isDom ? 'Goal-Line Dominators' : 'TD Dependent';
-    var subtitle = isDom
-      ? 'most goal-line opportunities (carries + targets inside the 5)'
-      : 'highest % of fantasy points from touchdowns';
-    var headerClass = isDom ? 'dominators' : 'td-dependent';
+    var isAlpha = section === 'alpha_dogs';
+    var icon = isAlpha ? '&#x1F43A;' : '&#x1F451;';
+    var title = isAlpha ? 'Alpha Dogs' : 'Dominator Rating Leaders';
+    var subtitle = isAlpha
+      ? 'highest share of team touches (targets + carries)'
+      : 'highest share of team receiving/rushing production';
+    var headerClass = isAlpha ? 'alpha' : 'dominator';
 
     var state = sortState[section];
     var sorted = sortPlayers(players, state.col, state.dir);
 
-    var html = '<div class="rz-section">';
-    html += '<div class="rz-section-header ' + headerClass + '">';
-    html += '<span class="section-icon ' + headerClass + '">' + icon + '</span> ';
+    var html = '<div class="opp-section">';
+    html += '<div class="opp-section-header ' + headerClass + '">';
+    html += '<span class="section-icon">' + icon + '</span> ';
     html += title + ' <span style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); font-weight:400;">(' + players.length + ' players) — ' + subtitle + '</span>';
     html += '</div>';
 
-    html += '<table class="rz-table" data-section="' + section + '">';
+    html += '<table class="opp-table" data-section="' + section + '">';
     html += buildTableHeader(section);
     html += '<tbody>';
     sorted.forEach(function(p) {
@@ -574,16 +601,16 @@
 
   function render(data) {
     currentData = data;
-    var body = document.getElementById('rz-body');
+    var body = document.getElementById('opp-body');
 
-    if (!data || (!data.dominators.length && !data.td_dependent.length)) {
-      body.innerHTML = '<div class="rz-empty">no red zone data found for this selection</div>';
+    if (!data || (!data.alpha_dogs.length && !data.dominators.length)) {
+      body.innerHTML = '<div class="opp-empty">no opportunity share data found for this selection</div>';
       return;
     }
 
     var html = '';
+    html += buildTable(data.alpha_dogs, 'alpha_dogs');
     html += buildTable(data.dominators, 'dominators');
-    html += buildTable(data.td_dependent, 'td_dependent');
     body.innerHTML = html;
 
     // Attach sort listeners
@@ -611,12 +638,12 @@
   }
 
   function loadData() {
-    var body = document.getElementById('rz-body');
-    body.innerHTML = '<div class="rz-loading">scouting the goal line...</div>';
+    var body = document.getElementById('opp-body');
+    body.innerHTML = '<div class="opp-loading">mapping the opportunity landscape...</div>';
 
     var seasonSel = document.getElementById('season-select');
     var season = seasonSel.value || '';
-    var url = '/api/redzone-usage?limit=30';
+    var url = '/api/opportunity-share?limit=30';
     if (season) url += '&season=' + season;
     if (currentPosition) url += '&position=' + currentPosition;
 
@@ -637,15 +664,15 @@
       }
       render(data);
     }).catch(function(err) {
-      body.innerHTML = '<div class="rz-error">failed to load red zone data<br><button class="btn-chunky" onclick="location.reload()">retry</button></div>';
+      body.innerHTML = '<div class="opp-error">failed to load opportunity share data<br><button class="btn-chunky" onclick="location.reload()">retry</button></div>';
     });
   }
 
   // Position tab clicks
   document.getElementById('pos-tabs').addEventListener('click', function(e) {
-    var tab = e.target.closest('.rz-pos-tab');
+    var tab = e.target.closest('.opp-pos-tab');
     if (!tab) return;
-    document.querySelectorAll('.rz-pos-tab').forEach(function(t) { t.classList.remove('active'); });
+    document.querySelectorAll('.opp-pos-tab').forEach(function(t) { t.classList.remove('active'); });
     tab.classList.add('active');
     currentPosition = tab.getAttribute('data-pos') || '';
     loadData();
@@ -658,10 +685,9 @@
 
   // Export PNG
   document.getElementById('export-btn').addEventListener('click', function() {
-    var el = document.getElementById('rz-content');
+    var el = document.getElementById('opp-content');
     if (typeof html2canvas !== 'undefined') {
       html2canvas(el, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
-        // Add watermark
         var ctx = canvas.getContext('2d');
         ctx.font = '24px Caveat, cursive';
         ctx.fillStyle = 'rgba(26,26,46,0.3)';
@@ -669,7 +695,7 @@
         ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 16);
 
         var link = document.createElement('a');
-        link.download = 'razzle-redzone.png';
+        link.download = 'razzle-opportunity-share.png';
         link.href = canvas.toDataURL('image/png');
         link.click();
       });
@@ -680,7 +706,7 @@
   fetch('/api/analytics/pageview', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ page: '/redzone.html', referrer: document.referrer || '' })
+    body: JSON.stringify({ page: '/opportunity.html', referrer: document.referrer || '' })
   }).catch(function() {});
 
   // Initial load
