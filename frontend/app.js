@@ -243,13 +243,60 @@ function updateAuthUI(user) {
     var displayName = user.sleeper_username
       ? escapeHtml(user.sleeper_username)
       : escapeHtml(user.email.split("@")[0]);
+    var isPro = user.plan === "pro";
+    var badge = isPro
+      ? '<span class="nav-plan-badge nav-plan-pro">Pro</span>'
+      : '<span class="nav-plan-badge nav-plan-free">Free</span>';
+    var manageLink = isPro
+      ? '<a href="#" onclick="openManageSubscription(); return false;" class="nav-signout">Manage</a>'
+      : '';
     item.innerHTML =
       '<span class="nav-user">' +
+        badge +
         '<span class="nav-user-name">' + displayName + '</span>' +
+        manageLink +
         '<a href="#" onclick="signOut(); return false;" class="nav-signout">Sign Out</a>' +
       '</span>';
   } else {
     item.innerHTML = '<a href="#" onclick="openAuthModal(); return false;" id="navSignIn">Sign In</a>';
+  }
+}
+
+async function startCheckout(interval) {
+  var token = localStorage.getItem("razzle_token");
+  if (!token) { openAuthModal(); return; }
+  try {
+    var resp = await fetch(API_BASE + "/api/billing/create-checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+      body: JSON.stringify({ interval: interval || "year" })
+    });
+    var data = await resp.json();
+    if (data.checkout_url) {
+      window.location.href = data.checkout_url;
+    } else {
+      alert(data.error || "Could not start checkout");
+    }
+  } catch (e) {
+    alert("Connection error. Try again.");
+  }
+}
+
+async function openManageSubscription() {
+  var token = localStorage.getItem("razzle_token");
+  if (!token) return;
+  try {
+    var resp = await fetch(API_BASE + "/api/billing/status", {
+      headers: { "Authorization": "Bearer " + token }
+    });
+    var data = await resp.json();
+    if (data.portal_url) {
+      window.location.href = data.portal_url;
+    } else {
+      alert("Subscription management not available");
+    }
+  } catch (e) {
+    alert("Connection error");
   }
 }
 

@@ -714,9 +714,27 @@
 
     <div class="demo-cta">
       <p>this is what league context looks like</p>
-      <a href="#waitlist" class="btn-hero btn-hero-primary" style="background:var(--yellow); color:var(--ink);">Join the Waitlist</a>
     </div>
   </div>
+</div>
+
+<!-- PRICING -->
+<div style="text-align:center; padding:40px 24px; max-width:600px; margin:0 auto;">
+  <h2 style="font-family:var(--font-display); font-size:28px; margin-bottom:8px;">Razzle <span style="color:var(--orange);">Pro</span></h2>
+  <p style="font-family:var(--font-hand); font-size:22px; color:var(--ink-medium); margin-bottom:20px;">Full league context. Agent memory. Personalized briefings.</p>
+  <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-bottom:16px;">
+    <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:20px 28px; text-align:center;">
+      <div style="font-family:var(--font-display); font-size:28px; color:var(--orange);">$240<span style="font-size:14px; color:var(--ink-light);">/year</span></div>
+      <div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); margin-top:4px;">best value</div>
+      <button class="btn-chunky btn-primary" style="margin-top:12px; font-size:13px;" onclick="if(typeof startCheckout==='function'){startCheckout('year')}else{window.location='/agents.html'}">Get Started</button>
+    </div>
+    <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:20px 28px; text-align:center;">
+      <div style="font-family:var(--font-display); font-size:28px; color:var(--ink);">$20<span style="font-size:14px; color:var(--ink-light);">/month</span></div>
+      <div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); margin-top:4px;">flexible</div>
+      <button class="btn-chunky" style="margin-top:12px; font-size:13px;" onclick="if(typeof startCheckout==='function'){startCheckout('month')}else{window.location='/agents.html'}">Get Started</button>
+    </div>
+  </div>
+  <p style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">The Lab is free forever. Pro unlocks the War Room.</p>
 </div>
 
 <!-- WAITLIST -->

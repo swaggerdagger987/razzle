@@ -20,7 +20,8 @@
 - All Stripe keys read from environment variables (never hardcoded)
 
 ## Task 2: Frontend upgrade flow + billing UI
-**Status**: PENDING
+**Status**: PASS
+**Result**: Nav shows plan badge (Free gray / Pro terracotta) next to username. Pro users see "Manage" link that opens Stripe Customer Portal. War Room upsell "Upgrade to Pro" button calls startCheckout('year'). Home page has pricing section with $240/year and $20/month cards, both call startCheckout(). After Stripe redirect, checkAuth() refreshes user data to get updated plan. Design system followed (chunky borders, shadows, fonts).
 **Acceptance Criteria**:
 - Upgrade button on War Room redirects to Stripe Checkout
 - After payment, War Room content is fully accessible
@@ -44,8 +45,8 @@
 ## Loop State
 ```
 Current Phase: 43
-Current Task: 2
+Current Task: 3
 Current Stage: BUILD
 Attempt: 1
-Tasks Completed: 1/3
+Tasks Completed: 2/3
 ```

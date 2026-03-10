@@ -1627,10 +1627,10 @@ function renderContextBadges() {
         btn.onclick = null;
         hint.textContent = 'free preview — connect your leagues for full context';
       } else {
-        btn.textContent = 'Upgrade to Pro';
+        btn.textContent = 'Upgrade to Pro — $240/year';
         btn.href = '#';
-        btn.onclick = null;
-        hint.textContent = '$240/year — full league context, agent memory, personalized briefings';
+        btn.onclick = function(e) { e.preventDefault(); if (typeof startCheckout === 'function') startCheckout('year'); };
+        hint.textContent = 'full league context, agent memory, personalized briefings';
       }
     }
   }

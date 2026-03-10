@@ -139,6 +139,28 @@ body {
   font-weight: 700;
 }
 
+.nav-plan-badge {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1.5px solid;
+}
+
+.nav-plan-free {
+  color: var(--ink-light);
+  border-color: var(--ink-faint);
+  background: var(--bg);
+}
+
+.nav-plan-pro {
+  color: white;
+  border-color: var(--orange);
+  background: var(--orange);
+}
+
 .nav-signout {
   font-family: var(--font-mono) !important;
   font-size: 11px !important;
