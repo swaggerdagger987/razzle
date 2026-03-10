@@ -7886,7 +7886,7 @@ async function loadPlayerComps(playerId) {
   try {
     const data = await apiFetch(`/api/players/${playerId}/comps?limit=5`);
     if (data.error) {
-      section.innerHTML = `<div style="text-align:center; padding:30px; font-family:var(--font-hand); font-size:18px; color:var(--ink-light);">${data.error}</div>`;
+      section.innerHTML = `<div style="text-align:center; padding:30px; font-family:var(--font-hand); font-size:18px; color:var(--ink-light);">${escapeHtml(data.error)}</div>`;
       return;
     }
     _compData = data;
@@ -7934,8 +7934,8 @@ function renderPlayerComps(data, container) {
       html += `<span style="display:flex; width:36px; height:36px; border-radius:50%; border:2px solid var(--ink); background:${posColor}; color:white; font-family:var(--font-display); font-size:14px; align-items:center; justify-content:center;">${(comp.full_name || "").split(" ").map(n => n[0]).join("")}</span>`;
     }
     html += `<div style="flex:1; min-width:0;">`;
-    html += `<div style="font-family:var(--font-display); font-size:14px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${comp.full_name}</div>`;
-    html += `<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-medium);">${comp.team || "FA"} · ${comp.games}G · ${comp.ppg} PPG</div>`;
+    html += `<div style="font-family:var(--font-display); font-size:14px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(comp.full_name)}</div>`;
+    html += `<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-medium);">${escapeHtml(comp.team || "FA")} · ${comp.games}G · ${comp.ppg} PPG</div>`;
     html += `</div>`;
     html += `</div>`;
 
@@ -7964,10 +7964,10 @@ function renderPlayerComps(data, container) {
 
   // Mini radar overlay: target vs top comp
   const topComp = comps[0];
-  html += `<div class="profile-section-title" style="font-size:14px;">Stat Profile: ${player.full_name} vs ${topComp.full_name}</div>`;
+  html += `<div class="profile-section-title" style="font-size:14px;">Stat Profile: ${escapeHtml(player.full_name)} vs ${escapeHtml(topComp.full_name)}</div>`;
   html += `<div style="display:flex; gap:16px; align-items:center; margin-bottom:12px;">`;
-  html += `<div style="display:flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:12px;"><span style="width:12px; height:12px; background:${posColor}; opacity:0.5; border:2px solid var(--ink); display:inline-block;"></span> ${player.full_name}</div>`;
-  html += `<div style="display:flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:12px;"><span style="width:12px; height:12px; background:var(--ink); opacity:0.4; border:2px solid var(--ink); display:inline-block;"></span> ${topComp.full_name}</div>`;
+  html += `<div style="display:flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:12px;"><span style="width:12px; height:12px; background:${posColor}; opacity:0.5; border:2px solid var(--ink); display:inline-block;"></span> ${escapeHtml(player.full_name)}</div>`;
+  html += `<div style="display:flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:12px;"><span style="width:12px; height:12px; background:var(--ink); opacity:0.4; border:2px solid var(--ink); display:inline-block;"></span> ${escapeHtml(topComp.full_name)}</div>`;
   html += `</div>`;
   html += `<canvas id="compRadarCanvas" width="400" height="340" style="border:2px solid var(--ink); border-radius:8px; background:var(--bg); width:100%; max-width:400px; display:block; margin:0 auto;"></canvas>`;
 
@@ -7975,9 +7975,9 @@ function renderPlayerComps(data, container) {
   html += `<div class="profile-section-title" style="font-size:14px; margin-top:16px;">Full Stat Comparison</div>`;
   html += `<table class="profile-season-table"><thead><tr>`;
   html += `<th style="text-align:left;">Stat</th>`;
-  html += `<th>${player.full_name}</th>`;
+  html += `<th>${escapeHtml(player.full_name)}</th>`;
   for (const c of comps.slice(0, 3)) {
-    html += `<th>${c.full_name.split(" ").pop()}</th>`;
+    html += `<th>${escapeHtml(c.full_name.split(" ").pop())}</th>`;
   }
   html += `</tr></thead><tbody>`;
 
