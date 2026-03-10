@@ -7,73 +7,6 @@
 
 ---
 
-## Ticket: Inline Panel Migration
-
-**Phase Name**: Inline Panel Migration — iframe → native render
-**Exit Criterion**: Every Lab panel renders natively in lab.js with no iframes. Each panel has its own render function that fetches from the API and builds the DOM directly. Panel switching is instant (cached after first load). No page reloads.
-
-### Task 1: Audit current iframe panels
-**Requirement**: Identify every panel in lab.html that currently loads via iframe. List each one with its source HTML file, API endpoint, and render complexity (S/M/L).
-**Accept when**: A complete list exists in LOOP-TASKS.md with all iframe panels cataloged.
-**Depends on**: none
-**Size**: S
-
-### Task 2: Create panel render infrastructure
-**Requirement**: Build a panel registry and switching system in lab.js. Each panel gets: a `<section data-panel="name">` container, a render function, a loaded flag, and lazy-load on first click. URL updates with `?panel=name`. Browser back/forward works.
-**Accept when**: `switchPanel(name)` function works, URL state syncs, and at least the screener panel renders natively through the new system.
-**Depends on**: Task 1
-**Size**: M
-
-### Task 3: Migrate Rankings & Values panels
-**Requirement**: Convert these panels from iframe to native render: Dynasty Rankings, Tiers, Trade Values, VORP, Positional Advantage, Auction Values, Cheat Sheet. Port each page's fetch + render logic into lab.js as dedicated render functions.
-**Accept when**: All 7 panels render natively with correct data, sorting, filtering, and design system compliance. No iframes.
-**Depends on**: Task 2
-**Size**: L
-
-### Task 4: Migrate Discovery panels
-**Requirement**: Convert: Breakouts, Buy/Sell, Stock Watch, Waivers, Scarcity, Handcuffs. Port fetch + render logic.
-**Accept when**: All 6 panels render natively. Data matches standalone page output.
-**Depends on**: Task 2
-**Size**: L
-
-### Task 5: Migrate Performance panels
-**Requirement**: Convert: Efficiency, Consistency, Snap Efficiency, Workload Monitor, Dual-Threat, Target Premium, Drop Rate, Garbage Time.
-**Accept when**: All 8 panels render natively.
-**Depends on**: Task 2
-**Size**: L
-
-### Task 6: Migrate Game Analysis panels
-**Requirement**: Convert: Weekly Heatmap, Matchups, Stacks, Red Zone, Streaks, Weekly Leaders, Weekly MVP Grid, Playoffs.
-**Accept when**: All 8 panels render natively. Chart.js visualizations work within panel containers.
-**Depends on**: Task 2
-**Size**: L
-
-### Task 7: Migrate Trends & Projections panels
-**Requirement**: Convert: Usage Trends, Year-over-Year, Aging Curves, Pace Tracker, Season Pace, TD Regression, Air Yards.
-**Accept when**: All 7 panels render natively. Line charts and trend visualizations work.
-**Depends on**: Task 2
-**Size**: L
-
-### Task 8: Migrate Player Tools panels
-**Requirement**: Convert: Career Stats, Career Compare, Compare Table, Strengths, Report Card, FPTS Breakdown, Game Log, Scoring Breakdown. Player Profile remains search-activated.
-**Accept when**: All 8 panels render natively. Player search within panels works.
-**Depends on**: Task 2
-**Size**: L
-
-### Task 9: Migrate remaining panels
-**Requirement**: Convert: Prospects/Big Board, Draft Class, College Production, Percentiles, Roster Builder, Trade Finder, Scoring Comparison, Dashboard, League Intel, Schedule/SOS, Records, Season Recap, Awards, Stat Leaders, Explorer, Teams.
-**Accept when**: All remaining panels render natively. Zero iframes in lab.html.
-**Depends on**: Task 2
-**Size**: L
-
-### Task 10: Remove iframe fallbacks and clean up
-**Requirement**: Remove all iframe loading code from lab.js. Remove any iframe-specific CSS. Verify every panel loads, renders, and caches correctly. Test panel switching performance (should be <100ms for cached panels).
-**Accept when**: Zero iframes in lab.html. All 60+ panels work. No dead code from old iframe system.
-**Depends on**: Tasks 3-9
-**Size**: M
-
----
-
 ## Ticket: College Football Integration
 
 **Phase Name**: College Football Integration — NFL/College toggle across all panels
@@ -135,13 +68,13 @@
 **Exit Criterion**: The Lab feels fast, fluid, and professional. Panel transitions are smooth. Keyboard users can navigate the full sidebar and table. Tables with 500+ rows don't lag. The experience is screenshot-worthy.
 
 ### Task 1: Panel transition animations
-**Requirement**: Add smooth transitions when switching panels. Outgoing panel fades out (opacity 1→0, 150ms), incoming panel fades in (opacity 0→1, 150ms). Use CSS transitions, not JS animation. Loading state ("pulling film...") appears during data fetch with a subtle fade. No jarring content shifts.
+**Requirement**: Add smooth transitions when switching panels. Outgoing panel fades out (opacity 1->0, 150ms), incoming panel fades in (opacity 0->1, 150ms). Use CSS transitions, not JS animation. Loading state ("pulling film...") appears during data fetch with a subtle fade. No jarring content shifts.
 **Accept when**: Panel switches feel smooth. No flash of empty content. Loading state appears for uncached panels.
 **Depends on**: none
 **Size**: S
 
 ### Task 2: Sidebar keyboard navigation
-**Requirement**: Arrow Up/Down navigates sidebar items. Enter activates the focused item. Home/End jump to first/last item. Escape closes mobile sidebar. Tab cycles through sidebar → main content → toolbar logically. Active item has visible focus ring (2px `var(--orange)` outline). Screen reader announces category and item names.
+**Requirement**: Arrow Up/Down navigates sidebar items. Enter activates the focused item. Home/End jump to first/last item. Escape closes mobile sidebar. Tab cycles through sidebar -> main content -> toolbar logically. Active item has visible focus ring (2px `var(--orange)` outline). Screen reader announces category and item names.
 **Accept when**: Full sidebar navigation works with keyboard only. Focus ring visible. ARIA labels present.
 **Depends on**: none
 **Size**: M
@@ -153,7 +86,7 @@
 **Size**: M
 
 ### Task 4: Virtual scrolling for large tables
-**Requirement**: Tables with 500+ rows use virtual scrolling — only render visible rows + buffer (20 rows above/below viewport). Scroll position maintained on re-render. Row height fixed at 36px for predictable virtualization. Implement in lab.js without external libraries.
+**Requirement**: Tables with 500+ rows use virtual scrolling -- only render visible rows + buffer (20 rows above/below viewport). Scroll position maintained on re-render. Row height fixed at 36px for predictable virtualization. Implement in lab.js without external libraries.
 **Accept when**: A table with 1000+ rows scrolls at 60fps. DOM has <100 `<tr>` elements at any time. No visible flicker during scroll.
 **Depends on**: none
 **Size**: L
@@ -177,7 +110,7 @@
 **Size**: L
 
 ### Task 8: Performance audit and optimization
-**Requirement**: Profile Lab page load time. Identify and fix: unnecessary API calls on init, render-blocking JS, unoptimized DOM operations (innerHTML in loops → use documentFragment), duplicate event listeners, memory leaks from panel switches (clean up chart instances). Target: <2s initial load, <500ms panel switch (cached).
+**Requirement**: Profile Lab page load time. Identify and fix: unnecessary API calls on init, render-blocking JS, unoptimized DOM operations (innerHTML in loops -> use documentFragment), duplicate event listeners, memory leaks from panel switches (clean up chart instances). Target: <2s initial load, <500ms panel switch (cached).
 **Accept when**: Initial load <2s on broadband. Cached panel switch <500ms. No memory leaks on 50 consecutive panel switches. No console errors.
 **Depends on**: none
 **Size**: L

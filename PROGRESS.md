@@ -1,23 +1,26 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Consolidation — Lab Sidebar Architecture (IN PROGRESS)
+## Current Phase: Consolidation — Inline Panel Migration (IN PROGRESS)
 
-The Lab is now the single hub for all 60+ analytical tools. Major consolidation work completed:
+Migrating all 62 iframe panels to native render functions in lab.js. Each panel will fetch from its API and build DOM directly — no more iframes. Panel switching will be instant for cached panels.
 
-### Consolidation Phase 1: Navigation Surgery (COMPLETE)
-Replaced 67-link mega-nav with clean 4-item nav on all 72 HTML pages: Home | The Lab | War Room | Sign In. Added Ctrl+K search hint. Updated auth UI for new nav container.
+### Consolidation Phase 5: Inline Panel Migration
+#### Task 1: Audit current iframe panels (DONE)
+Cataloged all 62 iframe panels across 10 categories with source files, API endpoints, and render complexity (8 S, 45 M, 9 L). Full audit in LOOP-TASKS.md.
 
-### Consolidation Phase 2: Lab Sidebar (COMPLETE)
-Added collapsible left sidebar to lab.html with all 60+ tools organized into 10 categories:
-- Screener (default), Rankings & Values, Discovery, Performance, Game Analysis
-- Trends & Projections, Prospects & College, Player Tools, League Tools, Records & History, Teams
-Panel switching via iframe loading for standalone pages. URL state (?panel=X) with browser back/forward. Mobile hamburger drawer. Sidebar remembers collapsed state. College mode visual indicator.
+### Previous Consolidation Phases (COMPLETE)
 
-### Consolidation Phase 3: Smart Redirects (COMPLETE)
-63 standalone pages now redirect to lab.html?panel=X when loaded directly, preserving all bookmarks and shared URLs. Redirect skips when page is loaded in iframe (for sidebar panel loading).
+#### Phase 1: Navigation Surgery
+Replaced 67-link mega-nav with clean 4-item nav on all 72 HTML pages.
 
-### Consolidation Phase 4: Season Expansion (COMPLETE)
-Expanded data range from 2020-present to 2015-present for both nflverse (NFL) and cfbfastR (college) adapters and bootstrap. Season dropdown is already dynamic from DB.
+#### Phase 2: Lab Sidebar
+Added collapsible left sidebar to lab.html with all 60+ tools in 10 categories. Iframe panel switching, URL state, mobile drawer.
+
+#### Phase 3: Smart Redirects
+63 standalone pages redirect to lab.html?panel=X when loaded directly.
+
+#### Phase 4: Season Expansion
+Expanded data range to 2015-present for NFL and college.
 
 ### Decisions Log
 - **Iframe vs Inline panels**: Using iframe loading as initial approach for all 60+ panels. This gets the UX right immediately (sidebar + panel switching + URL state) while content can be gradually inlined. The redirect script uses `window.self===window.top` to only fire on direct access, not iframe loading.
