@@ -11252,3 +11252,97 @@ def fetch_fpts_breakdown(season=None, position=None, limit=40):
         }
     finally:
         conn.close()
+
+
+def fetch_handcuffs(season=None, limit=30):
+    """
+    Handcuff rankings — backup RBs ranked by value.
+    For each team, find the #1 RB (most carries) and #2 RB (handcuff).
+    Rank handcuffs by team rushing volume and their own efficiency/usage.
+    """
+    conn = get_db()
+    try:
+        cursor = conn.cursor()
+
+        if not season:
+            cursor.execute("SELECT MAX(season) FROM player_week_stats")
+            season = cursor.fetchone()[0] or 2024
+
+        cursor.execute("""
+            SELECT p.player_id, p.full_name, p.position, p.team,
+                   SUM(s.carries) as total_car,
+                   SUM(s.rushing_yards) as total_rush_yd,
+                   SUM(s.rushing_tds) as total_rush_td,
+                   SUM(s.targets) as total_tgt,
+                   SUM(s.receptions) as total_rec,
+                   SUM(s.fantasy_points_ppr) as total_ppr,
+                   COUNT(DISTINCT s.week) as games
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE s.season = ? AND p.fantasy_relevant = 1
+              AND p.position = 'RB'
+            GROUP BY p.player_id
+            HAVING games >= 3 AND total_car >= 10
+            ORDER BY p.team, total_car DESC
+        """, [season])
+
+        from collections import defaultdict
+        team_rbs = defaultdict(list)
+        for r in cursor.fetchall():
+            team_rbs[r[3] or "FA"].append({
+                "player_id": r[0],
+                "name": r[1] or "Unknown",
+                "team": r[3] or "FA",
+                "carries": r[4] or 0,
+                "rush_yd": r[5] or 0,
+                "rush_td": r[6] or 0,
+                "targets": r[7] or 0,
+                "receptions": r[8] or 0,
+                "total_ppr": round(r[9] or 0, 1),
+                "games": r[10] or 1,
+            })
+
+        handcuffs = []
+        for team, rbs in team_rbs.items():
+            if len(rbs) < 2:
+                continue
+            rbs.sort(key=lambda x: x["carries"], reverse=True)
+            starter = rbs[0]
+            hc = rbs[1]
+
+            team_rush_per_game = (starter["carries"] + hc["carries"]) / max(starter["games"], hc["games"], 1)
+            starter_car_per_game = starter["carries"] / max(starter["games"], 1)
+            hc_car_per_game = hc["carries"] / max(hc["games"], 1)
+            hc_ppg = hc["total_ppr"] / max(hc["games"], 1)
+            hc_ypc = hc["rush_yd"] / max(hc["carries"], 1)
+
+            hc_value = round(team_rush_per_game * (hc_ppg / max(starter_car_per_game, 1)) * 10, 1)
+
+            handcuffs.append({
+                "team": team,
+                "starter_name": starter["name"],
+                "starter_id": starter["player_id"],
+                "starter_car_g": round(starter_car_per_game, 1),
+                "starter_ppg": round(starter["total_ppr"] / max(starter["games"], 1), 1),
+                "handcuff_name": hc["name"],
+                "handcuff_id": hc["player_id"],
+                "hc_car_g": round(hc_car_per_game, 1),
+                "hc_ppg": round(hc_ppg, 1),
+                "hc_ypc": round(hc_ypc, 1),
+                "hc_games": hc["games"],
+                "hc_targets": hc["targets"],
+                "hc_receptions": hc["receptions"],
+                "team_rush_g": round(team_rush_per_game, 1),
+                "hc_value": hc_value,
+            })
+
+        handcuffs.sort(key=lambda x: x["hc_value"], reverse=True)
+        handcuffs = handcuffs[:limit]
+
+        return {
+            "handcuffs": handcuffs,
+            "season": season,
+            "count": len(handcuffs),
+        }
+    finally:
+        conn.close()

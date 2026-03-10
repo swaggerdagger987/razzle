@@ -934,6 +934,7 @@ def sitemap_xml():
         ("/waivers.html", "0.8", "weekly"),
         ("/playoffs.html", "0.8", "weekly"),
         ("/fptsbreakdown.html", "0.8", "weekly"),
+        ("/handcuffs.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1586,6 +1587,15 @@ def records(position: str = ""):
         return JSONResponse({"error": "Failed to fetch records"}, status_code=500)
 
 
+@app.get("/api/handcuffs")
+def handcuffs(season: int = None):
+    try:
+        return live_data.fetch_handcuffs(season=season)
+    except Exception as e:
+        logger.error(f"handcuffs error: {e}")
+        return JSONResponse({"error": "Failed to fetch handcuff rankings"}, status_code=500)
+
+
 @app.get("/api/fpts-breakdown")
 def fpts_breakdown(season: int = None, position: str = None):
     try:
@@ -1655,6 +1665,7 @@ def tools_hub():
                 {"name": "Strengths & Weaknesses", "desc": "A player's top strengths and weaknesses by percentile ranking", "url": "/strengths.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Hot & Cold Streaks", "desc": "Who's on fire or ice cold over their last few games vs season average", "url": "/streaks.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Waiver Wire", "desc": "High recent PPG, low season PPG — likely unrostered and surging", "url": "/waivers.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Handcuff Rankings", "desc": "Most valuable backup RBs by team rushing volume and efficiency", "url": "/handcuffs.html", "positions": ["RB"]},
             ],
         },
         {

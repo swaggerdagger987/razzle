@@ -3,255 +3,161 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Scoring Format Comparison — Razzle</title>
-<meta property="og:title" content="Scoring Format Comparison — Razzle">
-<meta property="og:description" content="How PPR vs Standard scoring changes fantasy football rankings on razzle.lol">
+<title>Handcuff Rankings — Razzle</title>
+<meta property="og:title" content="Handcuff Rankings — Razzle">
+<meta property="og:description" content="Most valuable backup RBs ranked by team rushing volume and efficiency on razzle.lol">
 <meta property="og:site_name" content="razzle.lol">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Scoring Format Comparison — Razzle">
-<meta name="twitter:description" content="How PPR vs Standard scoring changes fantasy football rankings on razzle.lol">
+<meta name="twitter:title" content="Handcuff Rankings — Razzle">
+<meta name="twitter:description" content="Most valuable backup RBs ranked by team rushing volume and efficiency on razzle.lol">
 <meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
-<meta name="description" content="Scoring format comparison — see how player rankings shift between PPR, Half-PPR, and Standard scoring on razzle.lol">
+<meta name="description" content="Handcuff rankings — which backup RBs are worth rostering based on team rushing volume on razzle.lol">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="styles.css">
 <style>
-  .sc-page {
+  .hc-page {
     max-width: 1100px;
     margin: 0 auto;
     padding: 24px 20px 60px;
   }
-  .sc-header {
+
+  .hc-header {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
   }
-  .sc-header h1 {
+  .hc-header h1 {
     font-family: var(--font-display);
     font-size: 32px;
     color: var(--ink);
     margin: 0 0 4px;
   }
-  .sc-header .sc-subtitle {
+  .hc-header .hc-subtitle {
     font-family: var(--font-hand);
     font-size: 20px;
     color: var(--ink-light);
   }
 
-  /* Controls */
-  .sc-controls {
+  .hc-controls {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 12px;
+    gap: 16px;
     margin-bottom: 24px;
     flex-wrap: wrap;
   }
-  .sc-pos-tabs {
-    display: flex;
-    gap: 6px;
-  }
-  .sc-pos-tab {
-    padding: 5px 14px;
-    font-family: var(--font-display);
-    font-size: 13px;
-    border: 2px solid var(--ink);
-    border-radius: 20px;
-    background: var(--bg-card);
-    color: var(--ink);
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .sc-pos-tab:hover {
-    background: var(--bg-warm);
-    transform: translate(-1px, -1px);
-    box-shadow: 3px 3px 0 var(--ink);
-  }
-  .sc-pos-tab.active {
-    background: var(--ink);
-    color: var(--bg-card);
-  }
-  .sc-season-select {
-    padding: 5px 12px;
+  .hc-controls select {
     font-family: var(--font-mono);
     font-size: 13px;
+    padding: 6px 10px;
     border: 2px solid var(--ink);
-    border-radius: 8px;
-    background: var(--bg-card);
+    border-radius: 4px;
+    background: var(--card);
+  }
+  .hc-export {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 5px 14px;
+    border: 2px solid var(--ink);
+    border-radius: 4px;
+    background: var(--card);
     cursor: pointer;
+    font-weight: 700;
+  }
+  .hc-export:hover { background: var(--ink); color: var(--sand); }
+
+  .hc-loading {
+    text-align: center;
+    font-family: var(--font-hand);
+    font-size: 18px;
+    color: var(--ink-light);
+    padding: 60px 0;
   }
 
-  /* Section */
-  .sc-section {
-    margin-bottom: 28px;
+  .hc-card {
+    background: var(--card);
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    box-shadow: 4px 4px 0 var(--ink);
+    overflow: hidden;
   }
-  .sc-section-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 12px;
-    padding-bottom: 8px;
-    border-bottom: 2px dashed var(--ink-faint);
-  }
-  .sc-section-icon {
-    font-size: 20px;
-  }
-  .sc-section-title {
+  .hc-card-header {
     font-family: var(--font-display);
     font-size: 18px;
-    color: var(--ink);
-  }
-  .sc-section-note {
-    font-family: var(--font-hand);
-    font-size: 14px;
-    color: var(--ink-light);
+    padding: 10px 16px;
+    background: #2ec4b6;
+    color: #fff;
   }
 
-  /* Table */
-  .sc-table-wrap {
-    overflow-x: auto;
-  }
-  .sc-table {
+  .hc-table {
     width: 100%;
     border-collapse: collapse;
     font-family: var(--font-mono);
-    font-size: 13px;
+    font-size: 12px;
   }
-  .sc-table th {
-    background: var(--bg-warm);
-    font-family: var(--font-display);
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    padding: 8px 10px;
-    text-align: left;
-    border-bottom: 3px solid var(--ink);
-    white-space: nowrap;
-    cursor: pointer;
-  }
-  .sc-table th:hover {
-    background: var(--ink-faint);
-  }
-  .sc-table td {
-    padding: 8px 10px;
-    border-bottom: 1px solid var(--ink-faint);
-    white-space: nowrap;
-  }
-  .sc-table tr:hover td {
-    background: var(--bg-warm);
-  }
-  .sc-table tr {
-    cursor: pointer;
-  }
-
-  /* Position badge */
-  .sc-pos-badge {
+  .hc-table th {
+    background: var(--sand);
+    padding: 6px 8px;
+    text-align: right;
     font-size: 10px;
     font-weight: 700;
-    padding: 2px 7px;
-    border-radius: 10px;
-    border: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink-faint);
+    white-space: nowrap;
+  }
+  .hc-table th:first-child, .hc-table th:nth-child(2), .hc-table th:nth-child(3) { text-align: left; }
+  .hc-table td {
+    padding: 6px 8px;
+    text-align: right;
+    border-bottom: 1px solid var(--ink-faint);
+  }
+  .hc-table td:first-child, .hc-table td:nth-child(2), .hc-table td:nth-child(3) { text-align: left; }
+  .hc-table tbody tr:hover { background: rgba(217,119,87,0.08); }
+
+  .hc-rank {
+    font-weight: 700;
+    color: var(--ink-light);
+    font-size: 11px;
+  }
+
+  .hc-team-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 3px;
+    background: #2ec4b6;
     color: #fff;
-    display: inline-block;
-  }
-  .sc-pos-badge.QB { background: var(--pos-qb); }
-  .sc-pos-badge.RB { background: var(--pos-rb); }
-  .sc-pos-badge.WR { background: var(--pos-wr); }
-  .sc-pos-badge.TE { background: var(--pos-te); }
-
-  /* Headshot */
-  .sc-headshot {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    border: 2px solid var(--ink);
-    object-fit: cover;
-    vertical-align: middle;
-    margin-right: 6px;
-    background: var(--bg-warm);
   }
 
-  /* Rank shift badge */
-  .sc-rank-shift {
-    display: inline-block;
+  .hc-value-badge {
     font-family: var(--font-mono);
     font-size: 11px;
     font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 10px;
-    border: 2px solid var(--ink);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid;
+    background: #dcfce7;
+    color: #166534;
+    border-color: #166534;
   }
-  .sc-rank-shift.up {
-    background: var(--green-light);
-    color: var(--green);
-  }
-  .sc-rank-shift.down {
-    background: var(--red-light);
-    color: var(--red);
-  }
-  .sc-rank-shift.neutral {
-    background: var(--bg-warm);
+
+  .hc-starter {
     color: var(--ink-light);
+    font-size: 11px;
   }
 
-  /* PPG highlight */
-  .sc-ppg-best {
-    font-weight: 700;
-    color: var(--green);
-  }
-
-  /* Loading */
-  .sc-loading {
+  .hc-empty {
     text-align: center;
-    padding: 60px 20px;
     font-family: var(--font-hand);
-    font-size: 22px;
+    font-size: 15px;
     color: var(--ink-light);
-  }
-
-  /* Export */
-  .sc-export {
-    display: flex;
-    justify-content: center;
-    margin-top: 16px;
-  }
-  .sc-export button {
-    font-family: var(--font-display);
-    font-size: 13px;
-    padding: 8px 18px;
-    border: 2px solid var(--ink);
-    border-radius: 8px;
-    background: var(--bg-card);
-    color: var(--ink);
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .sc-export button:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: 6px 6px 0 var(--ink);
-  }
-
-  /* Watermark */
-  .sc-watermark {
-    position: fixed;
-    bottom: 10px;
-    right: 14px;
-    font-family: var(--font-hand);
-    font-size: 13px;
-    color: var(--ink-faint);
-    pointer-events: none;
-    z-index: 1;
+    padding: 30px 16px;
   }
 
   @media (max-width: 768px) {
-    .sc-table { font-size: 12px; }
-    .sc-table th, .sc-table td { padding: 6px 8px; }
-  }
-  @media (max-width: 480px) {
-    .sc-header h1 { font-size: 26px; }
-    .sc-controls { flex-direction: column; }
+    .hc-table { font-size: 11px; }
   }
 </style>
 </head>
@@ -292,7 +198,7 @@
     <li><a href="/tradevalues.html">Trade Values</a></li>
     <li><a href="/tradefinder.html">Trade Finder</a></li>
     <li><a href="/rosterbuilder.html">Roster Builder</a></li>
-    <li><a href="/scoring.html" class="active">Scoring</a></li>
+    <li><a href="/scoring.html">Scoring</a></li>
     <li><a href="/cheatsheet.html">Cheat Sheet</a></li>
     <li><a href="/auction.html">Auction</a></li>
     <li><a href="/dashboard.html">Dashboard</a></li>
@@ -315,56 +221,28 @@
     <li><a href="/waivers.html">Waivers</a></li>
     <li><a href="/playoffs.html">Playoffs</a></li>
     <li><a href="/fptsbreakdown.html">FPTS Breakdown</a></li>
-    <li><a href="/handcuffs.html">Handcuffs</a></li>
+    <li><a href="/handcuffs.html" class="active">Handcuffs</a></li>
     <li><a href="/team/KC">Teams</a></li>
     <li><a href="/league-intel.html">League Intel</a></li>
     <li><a href="/agents.html">War Room</a></li>
   </ul>
 </nav>
 
-<main class="sc-page" id="sc-content">
-  <div class="sc-header">
-    <h1>Scoring Format Comparison</h1>
-    <div class="sc-subtitle">how PPR vs Standard changes the game</div>
+<main class="hc-page" id="hcRoot">
+  <div class="hc-header">
+    <h1>Handcuff Rankings</h1>
+    <div class="hc-subtitle">most valuable backup RBs by team rushing volume</div>
   </div>
 
-  <div class="sc-controls">
-    <div class="sc-pos-tabs" id="pos-tabs">
-      <button class="sc-pos-tab active" data-pos="">All</button>
-      <button class="sc-pos-tab" data-pos="QB">QB</button>
-      <button class="sc-pos-tab" data-pos="RB">RB</button>
-      <button class="sc-pos-tab" data-pos="WR">WR</button>
-      <button class="sc-pos-tab" data-pos="TE">TE</button>
-    </div>
-    <select class="sc-season-select" id="season-select"></select>
+  <div class="hc-controls">
+    <select id="hcSeason" aria-label="Season"></select>
+    <button class="hc-export" id="hcExport">Export PNG</button>
   </div>
 
-  <div class="sc-loading" id="sc-loading">pulling film...</div>
-  <div id="sc-container" style="display:none;">
-    <div class="sc-section" id="risers-section">
-      <div class="sc-section-header">
-        <span class="sc-section-icon">&#x2B06;&#xFE0F;</span>
-        <span class="sc-section-title">PPR Risers</span>
-        <span class="sc-section-note">rank higher in PPR than Standard</span>
-      </div>
-      <div class="sc-table-wrap" id="risers-table"></div>
-    </div>
-    <div class="sc-section" id="fallers-section">
-      <div class="sc-section-header">
-        <span class="sc-section-icon">&#x2B07;&#xFE0F;</span>
-        <span class="sc-section-title">PPR Fallers</span>
-        <span class="sc-section-note">rank lower in PPR than Standard</span>
-      </div>
-      <div class="sc-table-wrap" id="fallers-table"></div>
-    </div>
-  </div>
-
-  <div class="sc-export">
-    <button onclick="exportPng()">Export PNG</button>
+  <div id="hcContent">
+    <div class="hc-loading">pulling film...</div>
   </div>
 </main>
-
-<div class="sc-watermark">razzle.lol</div>
 
 <footer style="text-align:center; padding:24px 20px 32px; font-family:var(--font-hand); font-size:15px; color:var(--ink-light); border-top:2px dashed var(--ink-faint); margin-top:40px;">
   <div style="margin-bottom:10px;">
@@ -497,133 +375,129 @@
     return Number(v).toFixed(dec === undefined ? 1 : dec);
   }
 
-  var state = {
-    season: 0,
-    position: '',
-    data: null
-  };
-
-  function init() {
-    if (window.__razzleAnalytics) window.__razzleAnalytics('scoring');
-
-    // Position tabs
-    document.querySelectorAll('.sc-pos-tab').forEach(function(tab) {
-      tab.addEventListener('click', function() {
-        state.position = this.getAttribute('data-pos');
-        document.querySelectorAll('.sc-pos-tab').forEach(function(t) { t.classList.remove('active'); });
-        this.classList.add('active');
-        fetchData();
-      });
-    });
-
-    // Season select
-    document.getElementById('season-select').addEventListener('change', function() {
-      state.season = parseInt(this.value) || 0;
-      fetchData();
-    });
-
-    fetchData();
+  /* ---- URL state ---- */
+  function readURL() {
+    var p = new URLSearchParams(window.location.search);
+    return { season: p.get('season') || '' };
+  }
+  function writeURL(season) {
+    var p = new URLSearchParams();
+    if (season) p.set('season', season);
+    var qs = p.toString();
+    history.replaceState(null, '', qs ? '?' + qs : location.pathname);
   }
 
-  function fetchData() {
-    document.getElementById('sc-loading').style.display = 'block';
-    document.getElementById('sc-container').style.display = 'none';
+  /* ---- Fetch ---- */
+  function load() {
+    var selSeason = document.getElementById('hcSeason');
+    var season = selSeason.value || '';
+    writeURL(season);
 
-    var url = '/api/scoring-comparison?';
-    if (state.season) url += 'season=' + state.season + '&';
-    if (state.position) url += 'position=' + state.position;
+    var url = '/api/handcuffs';
+    if (season) url += '?season=' + encodeURIComponent(season);
 
-    fetch(url)
-      .then(function(r) {
-        if (!r.ok) throw new Error('Failed');
-        return r.json();
-      })
-      .then(function(data) {
-        state.data = data;
+    document.getElementById('hcContent').innerHTML = '<div class="hc-loading">pulling film...</div>';
 
-        // Populate season selector
-        var sel = document.getElementById('season-select');
-        if (sel.options.length <= 1) {
-          sel.innerHTML = '';
-          (data.available_seasons || []).forEach(function(s) {
-            var opt = document.createElement('option');
-            opt.value = s;
-            opt.textContent = s;
-            if (s === data.season) opt.selected = true;
-            sel.appendChild(opt);
-          });
-        }
-        state.season = data.season;
-        render();
-      })
-      .catch(function() {
-        document.getElementById('sc-loading').textContent = 'failed to load — try refreshing';
-      });
+    fetch(url).then(function(r) {
+      if (!r.ok) throw new Error('API error');
+      return r.json();
+    }).then(function(data) {
+      populateSeasons(data.season);
+      render(data);
+    }).catch(function() {
+      document.getElementById('hcContent').innerHTML = '<div class="hc-loading">something went wrong — try again</div>';
+    });
   }
 
-  function buildTable(players) {
-    if (!players || players.length === 0) {
-      return '<div style="text-align:center; padding:20px; font-family:var(--font-hand); color:var(--ink-light);">no players in this category</div>';
+  function populateSeasons(current) {
+    var sel = document.getElementById('hcSeason');
+    if (sel.options.length <= 1) {
+      sel.innerHTML = '';
+      for (var y = 2024; y >= 2020; y--) {
+        var opt = document.createElement('option');
+        opt.value = y;
+        opt.textContent = y;
+        if (y === current) opt.selected = true;
+        sel.appendChild(opt);
+      }
+    }
+  }
+
+  /* ---- Render ---- */
+  function render(data) {
+    var hcs = data.handcuffs || [];
+
+    if (!hcs.length) {
+      document.getElementById('hcContent').innerHTML = '<div class="hc-card"><div class="hc-card-header">Handcuff Rankings</div><div class="hc-empty">no handcuff data found</div></div>';
+      return;
     }
 
-    var html = '<table class="sc-table">';
-    html += '<thead><tr>';
-    html += '<th>Pos</th><th>Player</th><th>Team</th>';
-    html += '<th>PPR PPG</th><th>Half PPG</th><th>Std PPG</th>';
-    html += '<th>PPR Rank</th><th>Std Rank</th><th>Shift</th>';
+    var html = '<div class="hc-card">';
+    html += '<div class="hc-card-header">Handcuff Rankings (' + escapeHtml(String(data.count)) + ' teams)</div>';
+    html += '<table class="hc-table"><thead><tr>';
+    html += '<th>#</th><th>Team</th><th>Handcuff</th><th>HC PPG</th><th>HC Car/G</th><th>HC YPC</th><th>Value</th><th>Starter</th><th>Str PPG</th><th>Str Car/G</th><th>Team Rush/G</th>';
     html += '</tr></thead><tbody>';
 
-    players.forEach(function(p) {
-      var shiftClass = p.rank_diff > 0 ? 'up' : (p.rank_diff < 0 ? 'down' : 'neutral');
-      var shiftText = p.rank_diff > 0 ? ('+' + p.rank_diff) : String(p.rank_diff);
+    for (var i = 0; i < hcs.length; i++) {
+      var h = hcs[i];
 
-      html += '<tr onclick="window.location.href=\'/player.html?id=' + escapeHtml(p.player_id) + '\'">';
-      html += '<td><span class="sc-pos-badge ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span></td>';
-      html += '<td>';
-      html += '<img class="sc-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="" onerror="this.style.display=\'none\'">';
-      html += escapeHtml(p.full_name);
-      html += '</td>';
-      html += '<td>' + escapeHtml(p.team) + '</td>';
-      html += '<td>' + fmt(p.ppg_ppr) + '</td>';
-      html += '<td>' + fmt(p.ppg_half) + '</td>';
-      html += '<td>' + fmt(p.ppg_std) + '</td>';
-      html += '<td>' + escapeHtml(String(p.rank_ppr)) + '</td>';
-      html += '<td>' + escapeHtml(String(p.rank_std)) + '</td>';
-      html += '<td><span class="sc-rank-shift ' + shiftClass + '">' + escapeHtml(shiftText) + '</span></td>';
+      html += '<tr>';
+      html += '<td class="hc-rank">' + (i + 1) + '</td>';
+      html += '<td><span class="hc-team-badge">' + escapeHtml(h.team) + '</span></td>';
+      html += '<td style="font-weight:700">' + escapeHtml(h.handcuff_name) + '</td>';
+      html += '<td style="font-weight:700;color:#166534">' + escapeHtml(String(fmt(h.hc_ppg))) + '</td>';
+      html += '<td>' + escapeHtml(String(fmt(h.hc_car_g))) + '</td>';
+      html += '<td>' + escapeHtml(String(fmt(h.hc_ypc))) + '</td>';
+      html += '<td><span class="hc-value-badge">' + escapeHtml(String(fmt(h.hc_value))) + '</span></td>';
+      html += '<td class="hc-starter">' + escapeHtml(h.starter_name) + '</td>';
+      html += '<td class="hc-starter">' + escapeHtml(String(fmt(h.starter_ppg))) + '</td>';
+      html += '<td class="hc-starter">' + escapeHtml(String(fmt(h.starter_car_g))) + '</td>';
+      html += '<td>' + escapeHtml(String(fmt(h.team_rush_g))) + '</td>';
       html += '</tr>';
-    });
+    }
 
-    html += '</tbody></table>';
-    return html;
+    html += '</tbody></table></div>';
+    document.getElementById('hcContent').innerHTML = html;
   }
 
-  function render() {
-    document.getElementById('sc-loading').style.display = 'none';
-    document.getElementById('sc-container').style.display = 'block';
+  document.getElementById('hcSeason').addEventListener('change', load);
 
-    var d = state.data;
-    document.getElementById('risers-table').innerHTML = buildTable(d.risers);
-    document.getElementById('fallers-table').innerHTML = buildTable(d.fallers);
-  }
-
-  window.exportPng = function() {
-    var el = document.getElementById('sc-content');
+  /* ---- PNG export ---- */
+  document.getElementById('hcExport').addEventListener('click', function() {
+    var root = document.getElementById('hcRoot');
     if (typeof html2canvas === 'undefined') return;
-    html2canvas(el, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+    html2canvas(root, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
       var ctx = canvas.getContext('2d');
-      ctx.font = '24px Caveat, cursive';
-      ctx.fillStyle = 'rgba(26,26,46,0.18)';
-      ctx.fillText('razzle.lol', canvas.width - 160, canvas.height - 20);
+      ctx.font = 'bold 16px Space Mono, monospace';
+      ctx.fillStyle = 'rgba(0,0,0,0.12)';
+      ctx.fillText('razzle.lol', canvas.width - 130, canvas.height - 16);
       var link = document.createElement('a');
-      link.download = 'razzle-scoring-comparison.png';
-      link.href = canvas.toDataURL('image/png');
+      link.download = 'razzle-handcuffs.png';
+      link.href = canvas.toDataURL();
       link.click();
     });
-  };
+  });
 
-  init();
+  /* ---- Analytics ---- */
+  fetch('/api/analytics/pageview', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ page: '/handcuffs.html', referrer: document.referrer || '' })
+  }).catch(function() {});
+
+  /* ---- Init from URL ---- */
+  var init = readURL();
+  if (init.season) {
+    var sel = document.getElementById('hcSeason');
+    var opt = document.createElement('option');
+    opt.value = init.season;
+    opt.textContent = init.season;
+    opt.selected = true;
+    sel.appendChild(opt);
+  }
+
+  load();
 })();
 </script>
-
 </body>
 </html>

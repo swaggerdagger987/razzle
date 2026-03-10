@@ -1,9 +1,9 @@
-# Razzle Loop — Phase 126 Task List
+# Razzle Loop — Phase 127 Task List
 
-> Fantasy Points Breakdown
+> Handcuff Rankings
 
-**Current Phase**: 126 — Fantasy Points Breakdown
-**Exit Criterion**: /fptsbreakdown.html shows scoring breakdown with stacked bars. Position filters, season selector, PNG export. GET /api/fpts-breakdown returns component data.
+**Current Phase**: 127 — Handcuff Rankings
+**Exit Criterion**: COMPLETE
 
 ---
 
@@ -15,7 +15,7 @@
 
 ## Loop State
 ```
-Current Phase: 126
+Current Phase: 127
 Current Task: 1
 Current Stage: COMPLETE
 Attempt: 1

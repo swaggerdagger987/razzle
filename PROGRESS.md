@@ -1,6 +1,19 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 126 — Fantasy Points Breakdown (COMPLETE)
+## Current Phase: Phase 127 — Handcuff Rankings (COMPLETE)
+
+**Exit criterion MET:** /handcuffs.html ranks backup RBs by handcuff value. For each team, identifies the #1 RB (most carries) and #2 RB (handcuff). Ranks handcuffs by composite value score based on team rushing volume and handcuff efficiency/PPG. Shows starter info, handcuff stats (PPG, car/g, YPC), team rush/g, value score badge. Season selector, PNG export with watermark. GET /api/handcuffs returns ranked handcuff data. 12 escapeHtml calls, 48/48 braces balanced. "Handcuffs" nav link on all 59 pages. Sitemap + tools hub entry under Player Discovery.
+
+### Phase 127 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/handcuffs endpoint | DONE | fetch_handcuffs, team RB pairing |
+| 2 | Handcuff Rankings page | DONE | Table with starter/HC stats, value badge, 12 escapeHtml |
+| 3 | Nav links + sitemap + tools hub | DONE | All 59 pages updated |
+| 4 | Smoke test | DONE | Python OK, JS OK, 59/59 nav links |
+
+## Previous Phase: Phase 126 — Fantasy Points Breakdown (COMPLETE)
 
 **Exit criterion MET:** /fptsbreakdown.html shows scoring breakdown for all fantasy-relevant players. Stacked horizontal bars showing what percentage of PPR points come from: pass yards (blue), rush yards (teal), rec yards (terracotta), receptions (purple), TDs (red). Color legend, position filter tabs, season selector, PNG export with watermark. GET /api/fpts-breakdown returns component data. 16 escapeHtml calls, 69/69 braces balanced. "FPTS Breakdown" nav link on all 58 pages. Sitemap + tools hub entry under Performance Analysis.
 
