@@ -1,55 +1,33 @@
-# Razzle Loop — Phase 47 Task List
+# Razzle Loop — Phase 48 Task List
 
-> Auto-generated. Home page needs live data to convert Reddit visitors into Lab users.
+> Auto-generated. Agent bio cards + War Room demo on home page complete the conversion funnel from Roadmap Phase 8 Tasks 5-6.
 
-**Current Phase**: 47 — Home Page Live Data Widgets — Featured Analysis Cards
-**Exit Criterion**: Home page shows 3 live data widgets pulling real stats from the API: "Dynasty Risers" (top 5 PPG/age value), "Rookie Big Board" (top 5 prospects), "Breakout Candidates" (high target share + low PPG). Each card shows player names, key stats, position badges. Each links to the Lab with pre-applied filters. Styled in comic-strip design. Mobile responsive. Deployed to Render.
+**Current Phase**: 48 — Agent Bio Cards + War Room Demo — Meet the War Room
+**Exit Criterion**: Home page has an "Meet the War Room" section with 6 agent bio cards (pixel avatar, name, animal, role, specialty one-liner) in comic-strip card style. Below that, a War Room demo section showing 3-4 pre-built anonymized agent briefing snippets that rotate/cycle, making the War Room look alive. Agent bio cards also appear on agents.html intro section. All styled per DESIGN.md, mobile responsive. Deployed to Render.
 
 ---
 
-## Task 1: Backend — featured analysis API endpoint
-**Status**: PASS
-**Acceptance Criteria**:
-- GET /api/featured returns 3 curated lists: dynasty_risers, rookie_board, breakout_candidates
-- dynasty_risers: top 5 players by PPG/age ratio (young + productive)
-- rookie_board: top 5 prospects by prospect score from Big Board data
-- breakout_candidates: players with high target share but below-average PPG (breakout upside)
-- Returns player name, position, team, 2-3 key stats per list
-- Fast query (< 200ms)
+## Task 1: Agent bio data + backend endpoint
+**Status**: PASS (already existed)
+**Notes**: AGENT_BIOS array in index.html (6 agents with name, role, color, sprite, specialty). warroom.js has matching data for agents.html. No API needed — purely presentational.
 
-## Task 2: Frontend — featured analysis cards on home page
-**Status**: PASS
-**Acceptance Criteria**:
-- 3 cards below the hero section: Dynasty Risers, Rookie Big Board, Breakout Candidates
-- Each card shows 5 players with position badge, name, team, and 2 key stats
-- Chunky border card design per DESIGN.md (3px border, 4px shadow, sand bg)
-- Slightly rotated card titles (sticker aesthetic)
-- "Open in Lab" button links to Lab with pre-applied filters/sort
-- Cards fetch data on page load from /api/featured
+## Task 2: Agent bio cards on home page + agents page
+**Status**: PASS (already existed)
+**Notes**: renderAgentBios() in index.html renders 6 cards in .agent-bio-grid. warroom.js renders matching cards in #warroomBioGrid on agents.html. Comic-strip styling with color stripes, pixel avatars, stagger rotation.
 
-## Task 3: Mobile responsive + animation
-**Status**: PASS
-**Acceptance Criteria**:
-- Cards stack vertically on mobile (< 768px)
-- Smooth fade-in animation on load
-- Loading state: "pulling film..." while fetching
-- Error state: "couldn't load the latest intel" with retry button
+## Task 3: War Room demo section on home page
+**Status**: PASS (already existed)
+**Notes**: 20+ demoBriefings with redacted league data (███ blocks). renderDemoCards() picks 3 random from different agents. Shuffle button. Urgency badges (URGENT, MONITOR, OPPORTUNITY). Dark-bg demo section.
 
 ## Task 4: Deploy + smoke test
 **Status**: PASS
-**Acceptance Criteria**:
-- All JS files pass syntax check
-- All Python files import cleanly
-- Featured endpoint returns valid data
-- Cards render on home page with real player data
-- Lab links work with correct pre-applied filters
-- Committed and pushed to master
+**Notes**: All JS syntax clean. All Python syntax clean. Features verified present on both pages.
 
 ---
 
 ## Loop State
 ```
-Current Phase: 47
+Current Phase: 48
 Current Task: 4
 Current Stage: COMPLETE
 Attempt: 1

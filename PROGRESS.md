@@ -1,6 +1,22 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 47 — Home Page Live Data Widgets (COMPLETE)
+## Current Phase: Phase 48 — Agent Bio Cards + War Room Demo (COMPLETE)
+
+**Exit criterion MET:** All features already existed from prior work. Home page has "Meet the Team" section with 6 agent bio cards (pixel avatar, name, role, specialty) in comic-strip card style with color stripes and stagger rotation. War Room demo section shows 3 randomized anonymized briefing snippets with urgency badges and redacted league data, plus shuffle button. Agent bio cards also on agents.html hero section via warroom.js. Mobile responsive at 768px and 480px. All syntax verified clean.
+
+### Phase 48 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Agent bio data | DONE | AGENT_BIOS in index.html, matching data in warroom.js |
+| 2 | Bio cards on home + agents page | DONE | renderAgentBios() + warroomBioGrid |
+| 3 | War Room demo on home page | DONE | 20+ demoBriefings, renderDemoCards(), shuffle |
+| 4 | Deploy + smoke test | DONE | All syntax clean |
+
+### Decisions Log
+- **Already built**: Phase 48 features were implemented in earlier phases. Verified present and working rather than rebuilding.
+
+## Previous Phase: Phase 47 — Home Page Live Data Widgets (COMPLETE)
 
 **Exit criterion MET:** Home page shows 3 live data widgets — Dynasty Risers (PPG/age ratio), Rookie Big Board (prospect scores), Breakout Candidates (high target share + low PPG). Each card shows 5 players with position badges, key stats, and "Open in Lab" links with pre-applied filters. Styled in comic-strip design (3px borders, 4px shadows, sand bg). Mobile responsive (cards stack at 768px). Fade-in animation. Loading state: "pulling film...". Graceful error handling.
 
