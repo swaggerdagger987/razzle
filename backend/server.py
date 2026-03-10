@@ -11,6 +11,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, Response
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from pathlib import Path
+import html as _html
 import logging
 import re
 import time as _time
@@ -27,10 +28,16 @@ logger = logging.getLogger("razzle")
 _rate_buckets = defaultdict(list)  # ip -> [timestamps]
 _RATE_LIMIT = 10  # max attempts
 _RATE_WINDOW = 60  # per 60 seconds
+_RATE_MAX_IPS = 10000  # max tracked IPs to prevent memory leak
 
 def _check_rate_limit(ip: str) -> bool:
     """Return True if request is allowed, False if rate limited."""
     now = _time.time()
+    # Prune stale IPs if dict grows too large
+    if len(_rate_buckets) > _RATE_MAX_IPS:
+        stale = [k for k, v in _rate_buckets.items() if not v or now - v[-1] > _RATE_WINDOW]
+        for k in stale:
+            del _rate_buckets[k]
     bucket = _rate_buckets[ip]
     # Remove old entries
     _rate_buckets[ip] = [t for t in bucket if now - t < _RATE_WINDOW]
@@ -668,8 +675,11 @@ async def lab_with_og_tags(request: Request):
         og_desc += f", teams: {teams}"
     og_desc += ". Powered by razzle.lol"
 
+    # Escape for safe HTML attribute insertion
+    og_title = _html.escape(og_title, quote=True)
+    og_desc = _html.escape(og_desc, quote=True)
+
     # Replace static OG tags with dynamic ones
-    import re
     html = re.sub(
         r'<meta property="og:title" content="[^"]*">',
         f'<meta property="og:title" content="{og_title}">',
@@ -730,6 +740,9 @@ async def player_profile_page(player_id: str):
     except Exception:
         og_title = "Player Profile — Razzle"
         og_desc = "Fantasy football player profile on razzle.lol"
+
+    og_title = _html.escape(og_title, quote=True)
+    og_desc = _html.escape(og_desc, quote=True)
 
     html = re.sub(r'<meta property="og:title" content="[^"]*">', f'<meta property="og:title" content="{og_title}">', html)
     html = re.sub(r'<meta property="og:description" content="[^"]*">', f'<meta property="og:description" content="{og_desc}">', html)
@@ -797,6 +810,9 @@ async def compare_page(id1: str, id2: str):
     except Exception:
         og_title = "Player Comparison — Razzle"
         og_desc = "Head-to-head fantasy football player comparison on razzle.lol"
+
+    og_title = _html.escape(og_title, quote=True)
+    og_desc = _html.escape(og_desc, quote=True)
 
     html = re.sub(r'<meta property="og:title" content="[^"]*">', f'<meta property="og:title" content="{og_title}">', html)
     html = re.sub(r'<meta property="og:description" content="[^"]*">', f'<meta property="og:description" content="{og_desc}">', html)

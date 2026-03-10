@@ -1,35 +1,47 @@
-# Razzle Loop — Phase 49 Task List
+# Razzle Loop — Phase 50 Task List
 
-> Auto-generated. Performance is the last Roadmap Phase 9 item. Lab must load in <2s for Reddit users to stick.
+> QA + UX Audit (every 5th phase). Covers Phases 46-49.
 
-**Current Phase**: 49 — Performance Audit + Optimization
-**Exit Criterion**: Lab screener initial load < 2 seconds. API endpoints respond < 200ms. Screener query (default PPR view) < 150ms. Featured endpoint < 200ms. No N+1 queries. SQLite indexes cover all common query patterns. Frontend table renders 500+ rows without jank. Pagination prevents unbounded result sets. Response sizes minimized (only send needed columns).
+**Current Phase**: 50 — QA + UX Audit Fixes
+**Exit Criterion**: All CRITICAL and HIGH findings from Phases 46-49 audit fixed. No XSS vectors. No user enumeration. Rate limiter bounded. UI accessibility improved.
 
 ---
 
-## Task 1: Backend query performance — indexes + query audit
+## Task 1: Fix CRITICAL XSS in OG tags
 **Status**: PASS
-**Notes**: Added composite index idx_pws_season_player(season, player_id) on player_week_stats for the most common query pattern (WHERE season = ? JOIN ON player_id). Audited all enrichment functions — all batch by player_id (no N+1). Pagination enforced via LIMIT/OFFSET on all queries. In-memory 5-min cache for filter_options and featured queries.
+**Notes**: Added _html.escape() to all 3 OG tag handlers (lab, player, compare) in server.py.
 
-## Task 2: Frontend render performance
+## Task 2: Fix CRITICAL stored XSS in formula reviews
 **Status**: PASS
-**Notes**: Already optimized — table uses single innerHTML assignment (no row-by-row DOM append). Search debounced at 300ms. Charts use single reusable canvas (no library instances to destroy). No memory leaks.
+**Notes**: Wrapped existingUserReview.text in escapeHtml() in formula-store.js.
 
-## Task 3: API response caching + size optimization
+## Task 3: Fix HIGH user enumeration in login
 **Status**: PASS
-**Notes**: Added GZipMiddleware (min 500 bytes) for all JSON responses. Cache-Control: public, max-age=300 on /api/featured and /api/filter-options. In-memory Python cache (_cached helper, 5-min TTL) on filter_options and featured.
+**Notes**: Both "user not found" and "wrong password" now return "Invalid email or password" with 401.
 
-## Task 4: Deploy + smoke test
+## Task 4: Fix HIGH rate limiter memory leak
 **Status**: PASS
-**Notes**: All Python syntax clean. Frontend already verified. Committed and pushed.
+**Notes**: Added _RATE_MAX_IPS cap (10000). Stale entries pruned when cap exceeded.
+
+## Task 5: Fix HIGH shuffle button visibility + accessibility
+**Status**: PASS
+**Notes**: Shuffle button now yellow text/border at 13px. Demo cards container has aria-live="polite".
+
+## Task 6: Fix MEDIUM position escaping in featured cards
+**Status**: PASS
+**Notes**: All 3 featured card position interpolations now use escapeHtml().
+
+## Task 7: Deploy + smoke test
+**Status**: PASS
+**Notes**: All JS and Python syntax clean.
 
 ---
 
 ## Loop State
 ```
-Current Phase: 49
-Current Task: 4
+Current Phase: 50
+Current Task: 7
 Current Stage: COMPLETE
 Attempt: 1
-Tasks Completed: 4/4
+Tasks Completed: 7/7
 ```

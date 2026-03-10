@@ -145,11 +145,11 @@ def login(email: str, password: str) -> dict:
     row = conn.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
     if not row:
         conn.close()
-        return {"error": "User not found", "status": 404}
+        return {"error": "Invalid email or password", "status": 401}
 
     if not _verify_password(password, row["password_hash"]):
         conn.close()
-        return {"error": "Invalid password", "status": 401}
+        return {"error": "Invalid email or password", "status": 401}
 
     user = _user_dict(row)
     token = _create_token(user["id"], user["email"], user["plan"])

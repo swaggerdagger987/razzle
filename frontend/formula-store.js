@@ -500,7 +500,7 @@ function renderFormulaCard(formula, userReviews) {
         ` : ""}
         ${existingUserReview ? `
           <div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-medium); margin-top:4px;">
-            your review: "${existingUserReview.text}"
+            your review: "${escapeHtml(existingUserReview.text)}"
           </div>
         ` : ""}
       </div>

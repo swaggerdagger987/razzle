@@ -821,10 +821,10 @@
     <h2>This is a real manager's War Room.</h2>
     <p class="section-desc">Razzle and specialist agents with full league context. Personalized briefings, trade strategies, championship probability. This is what $240/year gets you.</p>
 
-    <div id="demoCards"></div>
+    <div id="demoCards" aria-live="polite"></div>
 
     <div style="text-align:center; margin-top:12px;">
-      <button class="btn-chunky" onclick="renderDemoCards()" style="border-color:var(--ink-medium); color:var(--ink-light); font-size:11px; background:transparent;">shuffle briefings</button>
+      <button class="btn-chunky" onclick="renderDemoCards()" style="border-color:var(--yellow); color:var(--yellow); font-size:13px; background:transparent;">shuffle briefings</button>
     </div>
 
     <div class="demo-cta">
@@ -1082,7 +1082,7 @@ function renderFeaturedCards(data) {
     data.dynasty_risers.forEach(function(p, i) {
       html += '<div class="featured-row">';
       html += '<span class="featured-rank">' + (i + 1) + '</span>';
-      html += '<span class="featured-pos" style="background:' + (POS_COLORS[p.position] || 'var(--ink)') + '">' + p.position + '</span>';
+      html += '<span class="featured-pos" style="background:' + (POS_COLORS[p.position] || 'var(--ink)') + '">' + escapeHtml(p.position) + '</span>';
       html += '<span class="featured-name">' + escapeHtml(p.name) + ' <span style="color:var(--ink-light); font-weight:400;">' + escapeHtml(p.team || '') + '</span></span>';
       html += '<span class="featured-stat">' + p.ppg + ' PPG</span>';
       html += '</div>';
@@ -1100,7 +1100,7 @@ function renderFeaturedCards(data) {
     data.rookie_board.forEach(function(p, i) {
       html += '<div class="featured-row">';
       html += '<span class="featured-rank">' + (i + 1) + '</span>';
-      html += '<span class="featured-pos" style="background:' + (POS_COLORS[p.position] || 'var(--ink)') + '">' + p.position + '</span>';
+      html += '<span class="featured-pos" style="background:' + (POS_COLORS[p.position] || 'var(--ink)') + '">' + escapeHtml(p.position) + '</span>';
       html += '<span class="featured-name">' + escapeHtml(p.name) + ' <span style="color:var(--ink-light); font-weight:400;">' + escapeHtml(p.school || '') + '</span></span>';
       html += '<span class="featured-stat">' + (p.pick ? 'Rd ' + p.round + ' Pick ' + p.pick : 'TBD') + '</span>';
       html += '</div>';
@@ -1118,7 +1118,7 @@ function renderFeaturedCards(data) {
     data.breakout_candidates.forEach(function(p, i) {
       html += '<div class="featured-row">';
       html += '<span class="featured-rank">' + (i + 1) + '</span>';
-      html += '<span class="featured-pos" style="background:' + (POS_COLORS[p.position] || 'var(--ink)') + '">' + p.position + '</span>';
+      html += '<span class="featured-pos" style="background:' + (POS_COLORS[p.position] || 'var(--ink)') + '">' + escapeHtml(p.position) + '</span>';
       html += '<span class="featured-name">' + escapeHtml(p.name) + ' <span style="color:var(--ink-light); font-weight:400;">' + escapeHtml(p.team || '') + '</span></span>';
       html += '<span class="featured-stat">' + p.tpg + ' T/G</span>';
       html += '</div>';

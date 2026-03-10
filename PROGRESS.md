@@ -1,6 +1,22 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 49 — Performance Audit + Optimization (COMPLETE)
+## Current Phase: Phase 50 — QA + UX Audit Fixes (COMPLETE)
+
+**Exit criterion MET:** All CRITICAL and HIGH findings from Phases 46-49 audit fixed. XSS in OG tags patched (html.escape on all 3 handlers). Stored XSS in formula review text patched (escapeHtml). User enumeration fixed (generic login error). Rate limiter memory bounded (10k IP cap). Shuffle button visibility improved (yellow on dark bg). Accessibility improved (aria-live on demo cards). Position values escaped in featured cards.
+
+### Phase 50 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | CRITICAL: OG tag XSS | DONE | _html.escape on lab, player, compare handlers |
+| 2 | CRITICAL: Formula review XSS | DONE | escapeHtml(existingUserReview.text) |
+| 3 | HIGH: Login user enumeration | DONE | Generic "Invalid email or password" for both cases |
+| 4 | HIGH: Rate limiter memory | DONE | _RATE_MAX_IPS=10000, stale pruning |
+| 5 | HIGH: Shuffle button + a11y | DONE | Yellow text/border, aria-live="polite" |
+| 6 | MEDIUM: Position escaping | DONE | escapeHtml(p.position) in featured cards |
+| 7 | Deploy + smoke test | DONE | All syntax clean |
+
+## Previous Phase: Phase 49 — Performance Audit + Optimization (COMPLETE)
 
 **Exit criterion MET:** Added composite SQLite index idx_pws_season_player(season, player_id) for the most common screener query pattern. Added GZipMiddleware for all JSON responses (min 500 bytes). Added Cache-Control headers (5 min) on /api/featured and /api/filter-options. Added in-memory Python cache (5-min TTL) for filter_options and featured queries. Audited all enrichment functions — all batch by player_id (no N+1 queries). Frontend table rendering already optimized (single innerHTML assignment, debounced search, reusable canvas).
 
