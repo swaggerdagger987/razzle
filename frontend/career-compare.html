@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Career Comparison — Razzle</title>
+<meta property="og:title" content="Career Comparison — Razzle">
+<meta property="og:description" content="Compare career trajectories of multiple players side by side on razzle.lol">
+<meta property="og:site_name" content="razzle.lol">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Career Comparison — Razzle">
+<meta name="twitter:description" content="Compare career trajectories of multiple players side by side on razzle.lol">
+<meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
+<meta name="description" content="Career comparison — overlay multiple player career trajectories with PPG charts on razzle.lol">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .cc-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+  }
+
+  .cc-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .cc-header h1 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: var(--ink);
+    margin: 0 0 4px;
+  }
+  .cc-header .cc-subtitle {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+  }
+
+  /* Player slots */
+  .cc-slots {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .cc-slot {
+    flex: 1;
+    min-width: 200px;
+    max-width: 340px;
+    position: relative;
+  }
+  .cc-slot-input {
+    width: 100%;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    padding: 10px 14px;
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    background: var(--bg-card);
+    color: var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
+    box-sizing: border-box;
+  }
+  .cc-slot-input::placeholder { color: var(--ink-light); }
+  .cc-slot-label {
+    font-family: var(--font-display);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--ink-light);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .cc-slot-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .cc-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 0 0 10px 10px;
+    border-top: none;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 100;
+    display: none;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .cc-dropdown-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-bottom: 1px solid var(--ink-faint);
+  }
+  .cc-dropdown-item:last-child { border-bottom: none; }
+  .cc-dropdown-item:hover { background: var(--bg-warm); }
+  .cc-dd-pos {
+    font-family: var(--font-display);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: #fff;
+  }
+  .cc-dd-pos.QB { background: var(--blue); }
+  .cc-dd-pos.RB { background: var(--teal); }
+  .cc-dd-pos.WR { background: var(--orange); }
+  .cc-dd-pos.TE { background: var(--purple); }
+
+  /* Selected player chip */
+  .cc-selected {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    box-shadow: 4px 4px 0 var(--ink);
+    font-family: var(--font-mono);
+    font-size: 14px;
+  }
+  .cc-selected .cc-remove {
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink-light);
+    margin-left: auto;
+    padding: 0 4px;
+  }
+  .cc-selected .cc-remove:hover { color: var(--red); }
+
+  /* Actions */
+  .cc-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  /* Chart */
+  .cc-chart-wrap {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 16px;
+    margin-bottom: 24px;
+  }
+  .cc-chart-title {
+    font-family: var(--font-display);
+    font-size: 16px;
+    color: var(--ink);
+    margin-bottom: 8px;
+    text-align: center;
+  }
+  .cc-canvas {
+    width: 100%;
+    height: 260px;
+    display: block;
+  }
+
+  /* Legend */
+  .cc-legend {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+  .cc-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--ink);
+  }
+  .cc-legend-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid var(--ink);
+  }
+
+  /* Comparison table */
+  .cc-section-header {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 12px;
+    padding: 10px 14px;
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    box-shadow: 4px 4px 0 var(--ink);
+    background: var(--bg-warm);
+  }
+
+  .cc-table-wrap {
+    overflow-x: auto;
+    margin-bottom: 24px;
+  }
+  .cc-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .cc-table th {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 10px 8px;
+    background: var(--bg-warm);
+    color: var(--ink);
+    border-bottom: 3px solid var(--ink);
+    white-space: nowrap;
+    text-align: center;
+  }
+  .cc-table td {
+    padding: 8px;
+    border-bottom: 1px solid var(--ink-faint);
+    text-align: center;
+    vertical-align: middle;
+  }
+  .cc-table td:first-child {
+    text-align: left;
+    font-weight: 700;
+  }
+  .cc-table tbody tr:hover { background: var(--bg-warm); }
+  .cc-table .best-cell { color: var(--orange); font-weight: 700; }
+
+  /* Empty state */
+  .cc-empty {
+    text-align: center;
+    padding: 60px 20px;
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+  }
+
+  /* Loading */
+  .cc-loading {
+    text-align: center;
+    padding: 40px 20px;
+    font-family: var(--font-hand);
+    font-size: 18px;
+    color: var(--ink-light);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .cc-slots { flex-direction: column; }
+    .cc-slot { max-width: 100%; }
+    .cc-header h1 { font-size: 26px; }
+  }
+  @media (max-width: 480px) {
+    .cc-page { padding: 16px 12px 40px; }
+    .cc-header h1 { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="/" class="logo">
+    <div class="logo-mark">&#x1F42F;</div>
+    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/lab.html">The Lab</a></li>
+    <li><a href="/tools.html">Tools</a></li>
+    <li><a href="/rankings.html">Rankings</a></li>
+    <li><a href="/leaders.html">Leaders</a></li>
+    <li><a href="/prospects.html">Prospects</a></li>
+    <li><a href="/scarcity.html">Scarcity</a></li>
+    <li><a href="/breakouts.html">Breakouts</a></li>
+    <li><a href="/buysell.html">Buy/Sell</a></li>
+    <li><a href="/aging.html">Aging</a></li>
+    <li><a href="/weekly.html">Weekly</a></li>
+    <li><a href="/targets.html">Targets</a></li>
+    <li><a href="/matchups.html">Matchups</a></li>
+    <li><a href="/usage.html">Usage</a></li>
+    <li><a href="/yoy.html">YoY</a></li>
+    <li><a href="/airyards.html">Air Yards</a></li>
+    <li><a href="/explorer.html">Explorer</a></li>
+    <li><a href="/redzone.html">Red Zone</a></li>
+    <li><a href="/efficiency.html">Efficiency</a></li>
+    <li><a href="/consistency.html">Consistency</a></li>
+    <li><a href="/schedule.html">Schedule</a></li>
+    <li><a href="/stocks.html">Stocks</a></li>
+    <li><a href="/opportunity.html">Opportunity</a></li>
+    <li><a href="/reportcard.html">Report Card</a></li>
+    <li><a href="/awards.html">Awards</a></li>
+    <li><a href="/vorp.html">VORP</a></li>
+    <li><a href="/tradevalues.html">Trade Values</a></li>
+    <li><a href="/tradefinder.html">Trade Finder</a></li>
+    <li><a href="/rosterbuilder.html">Roster Builder</a></li>
+    <li><a href="/scoring.html">Scoring</a></li>
+    <li><a href="/cheatsheet.html">Cheat Sheet</a></li>
+    <li><a href="/auction.html">Auction</a></li>
+    <li><a href="/dashboard.html">Dashboard</a></li>
+    <li><a href="/tiers.html">Tiers</a></li>
+    <li><a href="/archetypes.html">Archetypes</a></li>
+    <li><a href="/career.html">Career</a></li>
+    <li><a href="/career-compare.html" class="active">Career Compare</a></li>
+    <li><a href="/team/KC">Teams</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
+    <li><a href="/agents.html">War Room</a></li>
+  </ul>
+</nav>
+
+<main class="cc-page" id="cc-content">
+  <div class="cc-header">
+    <h1>Career Comparison</h1>
+    <div class="cc-subtitle">overlay career trajectories side by side</div>
+  </div>
+
+  <div class="cc-slots" id="cc-slots"></div>
+
+  <div class="cc-actions" id="cc-actions" style="display:none;">
+    <button class="btn btn-primary" onclick="exportComparePng()" aria-label="Export as PNG">Export PNG</button>
+  </div>
+
+  <div id="cc-result"></div>
+
+  <div class="cc-empty" id="cc-empty">
+    add 2-3 players above to compare their career arcs
+  </div>
+</main>
+
+<footer style="text-align:center; padding:24px 20px 32px; font-family:var(--font-hand); font-size:15px; color:var(--ink-light); border-top:2px dashed var(--ink-faint); margin-top:40px;">
+  <div style="margin-bottom:10px;">
+    <a href="/lab.html" style="color:var(--ink-light); text-decoration:none;">The Lab</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tools.html" style="color:var(--ink-light); text-decoration:none;">Tools</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/rankings.html" style="color:var(--ink-light); text-decoration:none;">Rankings</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/leaders.html" style="color:var(--ink-light); text-decoration:none;">Leaders</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/prospects.html" style="color:var(--ink-light); text-decoration:none;">Prospects</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/scarcity.html" style="color:var(--ink-light); text-decoration:none;">Scarcity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/breakouts.html" style="color:var(--ink-light); text-decoration:none;">Breakouts</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/buysell.html" style="color:var(--ink-light); text-decoration:none;">Buy/Sell</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/aging.html" style="color:var(--ink-light); text-decoration:none;">Aging</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/weekly.html" style="color:var(--ink-light); text-decoration:none;">Weekly</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/targets.html" style="color:var(--ink-light); text-decoration:none;">Targets</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/matchups.html" style="color:var(--ink-light); text-decoration:none;">Matchups</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/usage.html" style="color:var(--ink-light); text-decoration:none;">Usage</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/yoy.html" style="color:var(--ink-light); text-decoration:none;">YoY</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/airyards.html" style="color:var(--ink-light); text-decoration:none;">Air Yards</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/explorer.html" style="color:var(--ink-light); text-decoration:none;">Explorer</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/redzone.html" style="color:var(--ink-light); text-decoration:none;">Red Zone</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/efficiency.html" style="color:var(--ink-light); text-decoration:none;">Efficiency</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/consistency.html" style="color:var(--ink-light); text-decoration:none;">Consistency</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/schedule.html" style="color:var(--ink-light); text-decoration:none;">Schedule</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/stocks.html" style="color:var(--ink-light); text-decoration:none;">Stocks</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/opportunity.html" style="color:var(--ink-light); text-decoration:none;">Opportunity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/reportcard.html" style="color:var(--ink-light); text-decoration:none;">Report Card</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/awards.html" style="color:var(--ink-light); text-decoration:none;">Awards</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/vorp.html" style="color:var(--ink-light); text-decoration:none;">VORP</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tradevalues.html" style="color:var(--ink-light); text-decoration:none;">Trade Values</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tradefinder.html" style="color:var(--ink-light); text-decoration:none;">Trade Finder</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/rosterbuilder.html" style="color:var(--ink-light); text-decoration:none;">Roster Builder</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/scoring.html" style="color:var(--ink-light); text-decoration:none;">Scoring</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/cheatsheet.html" style="color:var(--ink-light); text-decoration:none;">Cheat Sheet</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/auction.html" style="color:var(--ink-light); text-decoration:none;">Auction</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/dashboard.html" style="color:var(--ink-light); text-decoration:none;">Dashboard</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tiers.html" style="color:var(--ink-light); text-decoration:none;">Tiers</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/archetypes.html" style="color:var(--ink-light); text-decoration:none;">Archetypes</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/career.html" style="color:var(--ink-light); text-decoration:none;">Career</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/career-compare.html" style="color:var(--ink-light); text-decoration:none;">Career Compare</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/team/KC" style="color:var(--ink-light); text-decoration:none;">Teams</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none;">League Intel</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/agents.html" style="color:var(--ink-light); text-decoration:none;">War Room</a>
+  </div>
+  razzle.lol — let's razzle dazzle em baby
+</footer>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script src="app.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  var SLOT_COLORS = ['#d97757', '#5b7fff', '#2ec4b6'];
+  var MAX_PLAYERS = 3;
+  var players = []; // {id, name, pos, team, data}
+  var slotsEl = document.getElementById('cc-slots');
+  var resultEl = document.getElementById('cc-result');
+  var emptyEl = document.getElementById('cc-empty');
+  var actionsEl = document.getElementById('cc-actions');
+
+  // URL state
+  var params = new URLSearchParams(window.location.search);
+
+  function init() {
+    renderSlots();
+    // Load from URL
+    var urlPlayers = [];
+    for (var i = 1; i <= MAX_PLAYERS; i++) {
+      var pid = params.get('p' + i);
+      if (pid) urlPlayers.push(pid);
+    }
+    if (urlPlayers.length > 0) {
+      loadFromUrl(urlPlayers);
+    }
+  }
+
+  function loadFromUrl(pids) {
+    var loaded = 0;
+    for (var i = 0; i < pids.length; i++) {
+      (function(idx, pid) {
+        fetch('/api/career-stats?player_id=' + encodeURIComponent(pid))
+          .then(function(r) { if (!r.ok) throw new Error('fail'); return r.json(); })
+          .then(function(data) {
+            if (data.error) return;
+            players.push({
+              id: pid,
+              name: data.player.full_name,
+              pos: data.player.position,
+              team: data.player.team,
+              data: data
+            });
+            loaded++;
+            if (loaded >= pids.length || loaded >= MAX_PLAYERS) {
+              renderSlots();
+              if (players.length >= 2) renderComparison();
+            }
+          })
+          .catch(function() { loaded++; });
+      })(i, pids[i]);
+    }
+  }
+
+  function renderSlots() {
+    var html = '';
+    for (var i = 0; i < MAX_PLAYERS; i++) {
+      var color = SLOT_COLORS[i];
+      var label = 'Player ' + (i + 1);
+      html += '<div class="cc-slot" data-slot="' + i + '">';
+      html += '<div class="cc-slot-label"><span class="cc-slot-dot" style="background:' + color + '"></span> ' + escapeHtml(label) + '</div>';
+      if (players[i]) {
+        var p = players[i];
+        html += '<div class="cc-selected" style="border-color:' + color + '">';
+        html += '<span class="cc-dd-pos ' + escapeHtml(p.pos) + '">' + escapeHtml(p.pos) + '</span>';
+        html += '<span>' + escapeHtml(p.name) + '</span>';
+        html += '<span style="color:var(--ink-light); font-size:12px;">' + escapeHtml(p.team) + '</span>';
+        html += '<span class="cc-remove" data-rm="' + i + '" title="Remove">&times;</span>';
+        html += '</div>';
+      } else {
+        html += '<input type="text" class="cc-slot-input" data-slot="' + i + '" placeholder="search player ' + (i + 1) + '..." autocomplete="off" aria-label="Search player ' + (i + 1) + '">';
+        html += '<div class="cc-dropdown" data-dd="' + i + '"></div>';
+      }
+      html += '</div>';
+    }
+    slotsEl.innerHTML = html;
+
+    // Bind events
+    var inputs = slotsEl.querySelectorAll('.cc-slot-input');
+    for (var j = 0; j < inputs.length; j++) {
+      bindSearch(inputs[j]);
+    }
+    var removes = slotsEl.querySelectorAll('.cc-remove');
+    for (var k = 0; k < removes.length; k++) {
+      (function(btn) {
+        btn.addEventListener('click', function() {
+          var idx = parseInt(btn.getAttribute('data-rm'), 10);
+          players.splice(idx, 1);
+          updateUrl();
+          renderSlots();
+          if (players.length >= 2) {
+            renderComparison();
+          } else {
+            resultEl.innerHTML = '';
+            emptyEl.style.display = '';
+            actionsEl.style.display = 'none';
+          }
+        });
+      })(removes[k]);
+    }
+  }
+
+  function bindSearch(input) {
+    var slot = parseInt(input.getAttribute('data-slot'), 10);
+    var dd = slotsEl.querySelector('[data-dd="' + slot + '"]');
+    var timer = null;
+
+    input.addEventListener('input', function() {
+      var q = input.value.trim();
+      clearTimeout(timer);
+      if (q.length < 2) { dd.style.display = 'none'; return; }
+      timer = setTimeout(function() {
+        fetch('/api/players/quick-search?q=' + encodeURIComponent(q) + '&limit=6')
+          .then(function(r) { if (!r.ok) throw new Error('fail'); return r.json(); })
+          .then(function(data) {
+            var list = data.players || [];
+            if (list.length === 0) { dd.style.display = 'none'; return; }
+            var html = '';
+            for (var i = 0; i < list.length; i++) {
+              var p = list[i];
+              // Skip already selected
+              var already = false;
+              for (var x = 0; x < players.length; x++) {
+                if (players[x].id === p.player_id) already = true;
+              }
+              if (already) continue;
+              html += '<div class="cc-dropdown-item" data-pid="' + escapeHtml(p.player_id) + '" data-name="' + escapeHtml(p.full_name) + '" data-pos="' + escapeHtml(p.position) + '" data-team="' + escapeHtml(p.team) + '">';
+              html += '<span class="cc-dd-pos ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span>';
+              html += '<span>' + escapeHtml(p.full_name) + '</span>';
+              html += '<span style="color:var(--ink-light); font-size:12px;">' + escapeHtml(p.team) + '</span>';
+              html += '</div>';
+            }
+            dd.innerHTML = html;
+            dd.style.display = html ? 'block' : 'none';
+            var items = dd.querySelectorAll('.cc-dropdown-item');
+            for (var j = 0; j < items.length; j++) {
+              items[j].addEventListener('click', function() {
+                var pid = this.getAttribute('data-pid');
+                var name = this.getAttribute('data-name');
+                var pos = this.getAttribute('data-pos');
+                var team = this.getAttribute('data-team');
+                dd.style.display = 'none';
+                addPlayer(pid, name, pos, team);
+              });
+            }
+          })
+          .catch(function() { dd.style.display = 'none'; });
+      }, 250);
+    });
+
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') dd.style.display = 'none';
+    });
+  }
+
+  function addPlayer(pid, name, pos, team) {
+    if (players.length >= MAX_PLAYERS) return;
+
+    // Show loading
+    emptyEl.style.display = 'none';
+    resultEl.innerHTML = '<div class="cc-loading">pulling film...</div>';
+
+    fetch('/api/career-stats?player_id=' + encodeURIComponent(pid))
+      .then(function(r) { if (!r.ok) throw new Error('fail'); return r.json(); })
+      .then(function(data) {
+        if (data.error) {
+          if (players.length < 2) {
+            resultEl.innerHTML = '';
+            emptyEl.style.display = '';
+          }
+          return;
+        }
+        players.push({ id: pid, name: name, pos: pos, team: team, data: data });
+        updateUrl();
+        renderSlots();
+        if (players.length >= 2) {
+          renderComparison();
+        } else {
+          resultEl.innerHTML = '';
+          emptyEl.style.display = '';
+        }
+      })
+      .catch(function() {
+        if (players.length < 2) {
+          resultEl.innerHTML = '';
+          emptyEl.style.display = '';
+        }
+      });
+  }
+
+  function updateUrl() {
+    var url = new URL(window.location);
+    for (var i = 1; i <= MAX_PLAYERS; i++) {
+      url.searchParams.delete('p' + i);
+    }
+    for (var j = 0; j < players.length; j++) {
+      url.searchParams.set('p' + (j + 1), players[j].id);
+    }
+    window.history.replaceState({}, '', url);
+  }
+
+  function renderComparison() {
+    emptyEl.style.display = 'none';
+    actionsEl.style.display = '';
+    var html = '';
+
+    // Chart
+    html += '<div class="cc-chart-wrap">';
+    html += '<div class="cc-chart-title">PPG Career Trajectory</div>';
+    html += '<canvas class="cc-canvas" id="cc-chart"></canvas>';
+    html += '<div class="cc-legend" id="cc-legend">';
+    for (var i = 0; i < players.length; i++) {
+      html += '<div class="cc-legend-item">';
+      html += '<div class="cc-legend-dot" style="background:' + SLOT_COLORS[i] + '"></div>';
+      html += escapeHtml(players[i].name);
+      html += '</div>';
+    }
+    html += '</div></div>';
+
+    // Summary comparison table
+    html += '<div class="cc-section-header">Career Summary</div>';
+    html += '<div class="cc-table-wrap"><table class="cc-table"><thead><tr>';
+    html += '<th>Metric</th>';
+    for (var p = 0; p < players.length; p++) {
+      html += '<th style="border-left:3px solid ' + SLOT_COLORS[p] + '">' + escapeHtml(players[p].name) + '</th>';
+    }
+    html += '</tr></thead><tbody>';
+
+    var metrics = [
+      { key: 'ppg', label: 'Career PPG', path: 'career' },
+      { key: 'total_ppr', label: 'Total PPR', path: 'career' },
+      { key: 'games', label: 'Games', path: 'career' },
+      { key: 'seasons_played', label: 'Seasons', path: 'career' },
+      { key: 'peak_ppg', label: 'Peak PPG', path: 'career' },
+      { key: 'peak_season', label: 'Peak Season', path: 'career' },
+      { key: 'trajectory', label: 'Trajectory', path: 'career' },
+    ];
+
+    for (var m = 0; m < metrics.length; m++) {
+      var met = metrics[m];
+      html += '<tr><td>' + escapeHtml(met.label) + '</td>';
+      var vals = [];
+      for (var pi = 0; pi < players.length; pi++) {
+        vals.push(players[pi].data[met.path][met.key]);
+      }
+      // Find best (highest for numeric)
+      var bestIdx = -1;
+      if (met.key !== 'trajectory' && met.key !== 'peak_season') {
+        var maxVal = -Infinity;
+        for (var vi = 0; vi < vals.length; vi++) {
+          if (typeof vals[vi] === 'number' && vals[vi] > maxVal) {
+            maxVal = vals[vi];
+            bestIdx = vi;
+          }
+        }
+      }
+      for (var ci = 0; ci < vals.length; ci++) {
+        var cellClass = ci === bestIdx ? ' class="best-cell"' : '';
+        var v = vals[ci];
+        if (met.key === 'trajectory') {
+          var trajPct = players[ci].data.career.trajectory_pct || 0;
+          v = String(v) + ' (' + trajPct + '%)';
+        }
+        html += '<td' + cellClass + ' style="border-left:3px solid ' + SLOT_COLORS[ci] + '">' + escapeHtml(String(v)) + '</td>';
+      }
+      html += '</tr>';
+    }
+    html += '</tbody></table></div>';
+
+    // Season-by-season comparison
+    html += '<div class="cc-section-header">Season-by-Season PPG</div>';
+    html += '<div class="cc-table-wrap"><table class="cc-table"><thead><tr>';
+    html += '<th>Season</th>';
+    for (var sh = 0; sh < players.length; sh++) {
+      html += '<th style="border-left:3px solid ' + SLOT_COLORS[sh] + '">' + escapeHtml(players[sh].name) + '</th>';
+    }
+    html += '</tr></thead><tbody>';
+
+    // Get all seasons across players
+    var allSeasons = {};
+    for (var si = 0; si < players.length; si++) {
+      var ss = players[si].data.seasons || [];
+      for (var sj = 0; sj < ss.length; sj++) {
+        allSeasons[ss[sj].season] = true;
+      }
+    }
+    var seasonList = Object.keys(allSeasons).sort();
+
+    for (var sl = 0; sl < seasonList.length; sl++) {
+      var yr = parseInt(seasonList[sl], 10);
+      html += '<tr><td>' + escapeHtml(String(yr)) + '</td>';
+      var rowVals = [];
+      for (var ri = 0; ri < players.length; ri++) {
+        var found = null;
+        var pss = players[ri].data.seasons || [];
+        for (var rj = 0; rj < pss.length; rj++) {
+          if (pss[rj].season === yr) { found = pss[rj]; break; }
+        }
+        rowVals.push(found ? found.ppg : null);
+      }
+      var bestPpg = -1;
+      var bestPpgIdx = -1;
+      for (var bi = 0; bi < rowVals.length; bi++) {
+        if (rowVals[bi] !== null && rowVals[bi] > bestPpg) {
+          bestPpg = rowVals[bi];
+          bestPpgIdx = bi;
+        }
+      }
+      for (var di = 0; di < rowVals.length; di++) {
+        var cls = di === bestPpgIdx ? ' class="best-cell"' : '';
+        var display = rowVals[di] !== null ? String(rowVals[di]) : '-';
+        html += '<td' + cls + ' style="border-left:3px solid ' + SLOT_COLORS[di] + '">' + escapeHtml(display) + '</td>';
+      }
+      html += '</tr>';
+    }
+    html += '</tbody></table></div>';
+
+    // Watermark
+    html += '<div style="text-align:right; font-family:var(--font-hand); font-size:13px; color:var(--ink-faint); margin-top:8px;">razzle.lol</div>';
+
+    resultEl.innerHTML = html;
+
+    setTimeout(function() { drawCompareChart(); }, 50);
+  }
+
+  function drawCompareChart() {
+    var canvas = document.getElementById('cc-chart');
+    if (!canvas) return;
+
+    var dpr = window.devicePixelRatio || 1;
+    var rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    var ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    var w = rect.width;
+    var h = rect.height;
+
+    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--bg-card').trim() || '#f7efe5';
+    ctx.fillRect(0, 0, w, h);
+
+    var pad = { top: 20, right: 30, bottom: 40, left: 50 };
+    var plotW = w - pad.left - pad.right;
+    var plotH = h - pad.top - pad.bottom;
+
+    // Get all seasons and PPG range
+    var allSeasons = {};
+    var globalMin = Infinity;
+    var globalMax = -Infinity;
+    for (var i = 0; i < players.length; i++) {
+      var ss = players[i].data.seasons || [];
+      for (var j = 0; j < ss.length; j++) {
+        allSeasons[ss[j].season] = true;
+        if (ss[j].ppg < globalMin) globalMin = ss[j].ppg;
+        if (ss[j].ppg > globalMax) globalMax = ss[j].ppg;
+      }
+    }
+    var seasonArr = Object.keys(allSeasons).map(Number).sort(function(a, b) { return a - b; });
+    if (seasonArr.length === 0) return;
+
+    var range = globalMax - globalMin || 1;
+    var yMin = Math.max(0, globalMin - range * 0.15);
+    var yMax = globalMax + range * 0.15;
+
+    function xPos(season) {
+      if (seasonArr.length === 1) return pad.left + plotW / 2;
+      var idx = seasonArr.indexOf(season);
+      return pad.left + (idx / (seasonArr.length - 1)) * plotW;
+    }
+    function yPos(val) {
+      return pad.top + plotH - ((val - yMin) / (yMax - yMin)) * plotH;
+    }
+
+    // Grid
+    ctx.strokeStyle = '#ddd';
+    ctx.lineWidth = 1;
+    var gridN = 5;
+    for (var g = 0; g <= gridN; g++) {
+      var gv = yMin + (yMax - yMin) * (g / gridN);
+      var gy = yPos(gv);
+      ctx.beginPath();
+      ctx.moveTo(pad.left, gy);
+      ctx.lineTo(w - pad.right, gy);
+      ctx.stroke();
+      ctx.fillStyle = '#999';
+      ctx.font = '11px "Space Mono", monospace';
+      ctx.textAlign = 'right';
+      ctx.fillText(gv.toFixed(1), pad.left - 6, gy + 4);
+    }
+
+    // X-axis
+    ctx.fillStyle = '#999';
+    ctx.font = '12px "Space Mono", monospace';
+    ctx.textAlign = 'center';
+    for (var xi = 0; xi < seasonArr.length; xi++) {
+      ctx.fillText(String(seasonArr[xi]), xPos(seasonArr[xi]), h - pad.bottom + 20);
+    }
+
+    // Draw each player's line
+    for (var pi = 0; pi < players.length; pi++) {
+      var color = SLOT_COLORS[pi];
+      var ss2 = players[pi].data.seasons || [];
+      if (ss2.length === 0) continue;
+
+      // Sort by season
+      var sorted = ss2.slice().sort(function(a, b) { return a.season - b.season; });
+
+      // Line
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 3;
+      ctx.lineJoin = 'round';
+      ctx.beginPath();
+      for (var li = 0; li < sorted.length; li++) {
+        var lx = xPos(sorted[li].season);
+        var ly = yPos(sorted[li].ppg);
+        if (li === 0) ctx.moveTo(lx, ly);
+        else ctx.lineTo(lx, ly);
+      }
+      ctx.stroke();
+
+      // Dots
+      for (var di = 0; di < sorted.length; di++) {
+        var dx = xPos(sorted[di].season);
+        var dy = yPos(sorted[di].ppg);
+        ctx.beginPath();
+        ctx.arc(dx, dy, 5, 0, Math.PI * 2);
+        ctx.fillStyle = color;
+        ctx.fill();
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Value label (offset to avoid overlap)
+        ctx.fillStyle = color;
+        ctx.font = 'bold 11px "Space Mono", monospace';
+        ctx.textAlign = 'center';
+        var yOff = pi === 0 ? -10 : (pi === 1 ? 16 : -18);
+        ctx.fillText(sorted[di].ppg.toFixed(1), dx, dy + yOff);
+      }
+    }
+
+    // Y-axis label
+    ctx.save();
+    ctx.translate(14, pad.top + plotH / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillStyle = '#999';
+    ctx.font = '11px "Space Mono", monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('PPG (PPR)', 0, 0);
+    ctx.restore();
+  }
+
+  // PNG export
+  window.exportComparePng = function() {
+    var el = document.getElementById('cc-content');
+    if (!el || typeof html2canvas === 'undefined') return;
+    html2canvas(el, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+      var ctx = canvas.getContext('2d');
+      ctx.font = 'bold 20px "Space Mono", monospace';
+      ctx.fillStyle = 'rgba(0,0,0,0.15)';
+      ctx.textAlign = 'right';
+      ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 16);
+      var link = document.createElement('a');
+      link.download = 'razzle-career-compare.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    });
+  };
+
+  // Close dropdowns on outside click
+  document.addEventListener('click', function(e) {
+    if (!slotsEl.contains(e.target)) {
+      var dds = slotsEl.querySelectorAll('.cc-dropdown');
+      for (var i = 0; i < dds.length; i++) dds[i].style.display = 'none';
+    }
+  });
+
+  // Analytics
+  if (typeof trackPage === 'function') trackPage('career-compare');
+
+  init();
+})();
+</script>
+</body>
+</html>

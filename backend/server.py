@@ -918,6 +918,7 @@ def sitemap_xml():
         ("/tiers.html", "0.8", "weekly"),
         ("/archetypes.html", "0.8", "weekly"),
         ("/career.html", "0.8", "weekly"),
+        ("/career-compare.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1495,6 +1496,7 @@ def tools_hub():
                 {"name": "Aging Curves", "desc": "PPG-by-age curves per position with player overlays", "url": "/aging.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Year-over-Year", "desc": "Cross-season stat deltas — risers and fallers", "url": "/yoy.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Career Timeline", "desc": "Season-by-season player trajectory with PPG chart and career highs", "url": "/career.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Career Compare", "desc": "Overlay career trajectories of 2-3 players side by side", "url": "/career-compare.html", "positions": ["QB", "RB", "WR", "TE"]},
             ],
         },
         {

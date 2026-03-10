@@ -1,6 +1,18 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 106 — Career Stats Timeline (COMPLETE)
+## Current Phase: Phase 107 — Career Comparison (COMPLETE)
+
+**Exit criterion MET:** /career-compare.html lets users add 2-3 players via autocomplete search and see overlapping PPG career trajectory charts on a single canvas with position-colored lines, side-by-side career summary table (PPG, total PPR, games, seasons, peak, trajectory), season-by-season PPG comparison table with best values highlighted, PNG export with watermark, URL state (?p1=ID&p2=ID&p3=ID). Reuses /api/career-stats endpoint (no new backend). 21 escapeHtml calls, 145/145 braces balanced. "Career Compare" nav link on all 43 pages. Sitemap + tools hub entry. Design matches DESIGN.md.
+
+### Phase 107 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Career Comparison page | DONE | Multi-player PPG overlay chart, summary + season tables, 21 escapeHtml |
+| 2 | Nav links + sitemap | DONE | All 43 pages updated, sitemap + tools hub |
+| 3 | Smoke test | DONE | Python OK, JS OK, 43/43 nav links |
+
+## Previous Phase: Phase 106 — Career Stats Timeline (COMPLETE)
 
 **Exit criterion MET:** /career.html shows season-by-season player stats (2020-2024) with canvas PPG trajectory chart, career highs badges, position-specific stat tables (QB/RB/WR/TE columns), trajectory analysis (rising/falling/stable), career totals row, player search autocomplete, URL state (?player=ID), PNG export with watermark. GET /api/career-stats endpoint returns player info, seasons array, career summary, career_highs. 31 escapeHtml calls, 183/183 braces balanced. "Career" nav link on all 42 pages. Sitemap + tools hub entry. Design matches DESIGN.md.
 
