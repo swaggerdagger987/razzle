@@ -1,33 +1,33 @@
-# Razzle Loop — Phase 51 Task List
+# Razzle Loop — Phase 52 Task List
 
-> Auto-generated. Behavioral profiles make the Diplomat agent more compelling for $240/yr.
+> Auto-generated. Agent memory makes the War Room feel alive across sessions — key paid differentiator.
 
-**Current Phase**: 51 — League Intel Manager Profiles — Transaction History Analysis
-**Exit Criterion**: When a user expands a league on League Intel, a "Manager Profiles" tab/section appears showing behavioral analysis of rival managers based on Sleeper transaction history. Each profile shows: manager name, trade tendencies (buyer/seller/hoarder), position biases (e.g., "stockpiles WRs"), FAAB aggressiveness, and a one-liner behavioral summary. Data comes from Sleeper `/league/{id}/transactions/{round}` API. Profiles saved to localStorage for War Room context bridge. Mobile responsive. Deployed to Render.
+**Current Phase**: 52 — War Room Agent Memory — Session History + Recall
+**Exit Criterion**: War Room persists agent briefing history across sessions. Memory injected into agent prompts. History panel with clear option. Mobile responsive.
 
 ---
 
-## Task 1: Fetch + parse Sleeper transactions
+## Task 1: Agent briefing history storage
 **Status**: PASS
-**Notes**: Fetches weeks 1-18 in parallel from /league/{id}/transactions/{week}. Parses trades, waivers, free agent moves. Tracks adds/drops by roster_id with position tagging.
+**Notes**: Saves to localStorage (razzle_warroom_memory). Max 20 entries, LIFO. Stores timestamp, scenario text, per-agent key findings. Hooks into razzle:all-agents-done event.
 
-## Task 2: Behavioral analysis engine
+## Task 2: History panel UI
 **Status**: PASS
-**Notes**: Per-manager analysis: trade tendency, position bias (stockpiles Xes), FAAB aggression (whale/spender/bargain hunter), activity level (hyperactive/set-and-forget), net buyer/seller. One-liner summary generated from traits.
+**Notes**: Memory button next to Run All Agents. Toggleable panel with past briefings, timestamps, agent names. Clear memory button.
 
-## Task 3: Manager profile cards UI
+## Task 3: Memory injection into agent prompts
 **Status**: PASS
-**Notes**: Profile grid (2-col, 1-col on mobile) with comic-strip cards. Color stripe by activity level. Shows name, record, behavioral summary, stats (trades, waivers, FAAB, total moves). "Scout rival managers" button triggers load. Saved to localStorage for War Room context bridge.
+**Notes**: getRelevantMemory() scores by keyword overlap. Top 3 injected as "WHAT THE WAR ROOM REMEMBERS" in buildUserMessage().
 
 ## Task 4: Deploy + smoke test
 **Status**: PASS
-**Notes**: All JS syntax clean. Cards render correctly. Mobile responsive at 768px.
+**Notes**: All JS syntax clean.
 
 ---
 
 ## Loop State
 ```
-Current Phase: 51
+Current Phase: 52
 Current Task: 4
 Current Stage: COMPLETE
 Attempt: 1

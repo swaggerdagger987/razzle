@@ -1359,6 +1359,7 @@
 
         <div class="scenario-actions">
           <button class="scenario-run-all" id="scenarioRunAll">Run All Agents</button>
+          <button class="btn-chunky" style="font-size:11px; padding:6px 12px; background:var(--bg-card);" onclick="toggleMemoryPanel()">Memory</button>
           <div class="scenario-agent-btns" id="scenarioAgentBtns"></div>
           <div class="scenario-status" id="scenarioStatus"></div>
         </div>
@@ -1388,6 +1389,12 @@
           <p class="pro-upsell-hint" id="proUpsellHint">free preview — full War Room Pro coming soon</p>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- MEMORY PANEL -->
+  <div class="briefing-zone" style="margin-bottom:0;">
+    <div id="memoryPanel" style="display:none; background:var(--bg-card); border:2px solid var(--ink); border-radius:10px; box-shadow:3px 3px 0 var(--ink); padding:12px 16px; margin-bottom:12px;">
     </div>
   </div>
 

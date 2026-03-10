@@ -1908,6 +1908,12 @@ function buildUserMessage(scenario, agentDef, peerInsights) {
     }
   }
 
+  // Inject War Room memory (past briefings) if available
+  var memoryEntries = getRelevantMemory(scenario, 3);
+  if (memoryEntries.length) {
+    parts.push(formatMemoryContext(memoryEntries));
+  }
+
   if (Array.isArray(peerInsights) && peerInsights.length) {
     parts.push('', 'Peer agent insights to synthesize:');
     peerInsights.forEach(function(p, i) {
@@ -2326,6 +2332,138 @@ window.addEventListener('razzle:agent-result', function(e) {
     host.appendChild(card);
   }
 });
+
+// ── WAR ROOM MEMORY ───────────────────────────────────────────────────
+
+var MEMORY_KEY = 'razzle_warroom_memory';
+var MEMORY_MAX = 20;
+
+function getWarRoomMemory() {
+  try {
+    return JSON.parse(localStorage.getItem(MEMORY_KEY)) || [];
+  } catch (e) { return []; }
+}
+
+function saveWarRoomMemory(scenario, detail) {
+  var memory = getWarRoomMemory();
+  var entry = {
+    ts: Date.now(),
+    scenario: scenario,
+    agents: []
+  };
+
+  // Extract key findings from each agent
+  if (detail.razzleSynthesis) {
+    var lines = detail.razzleSynthesis.split('\n').filter(function(l) { return l.trim(); });
+    entry.agents.push({ name: 'Razzle', finding: lines.slice(0, 2).join(' ').slice(0, 200) });
+  }
+  var ids = [1, 2, 3, 4, 5];
+  ids.forEach(function(id) {
+    if (detail.results && detail.results[id]) {
+      var lines = detail.results[id].split('\n').filter(function(l) { return l.trim(); });
+      entry.agents.push({ name: AGENT_DEFS[id].name, finding: lines.slice(0, 1).join(' ').slice(0, 150) });
+    }
+  });
+
+  memory.unshift(entry);
+  if (memory.length > MEMORY_MAX) memory = memory.slice(0, MEMORY_MAX);
+  try { localStorage.setItem(MEMORY_KEY, JSON.stringify(memory)); } catch (e) { /* quota */ }
+}
+
+function getRelevantMemory(scenario, maxItems) {
+  maxItems = maxItems || 3;
+  var memory = getWarRoomMemory();
+  if (!memory.length) return [];
+
+  // Extract keywords from scenario (words 4+ chars, lowercased)
+  var words = scenario.toLowerCase().replace(/[^a-z0-9 ]/g, '').split(/\s+/)
+    .filter(function(w) { return w.length >= 4; });
+  if (!words.length) return memory.slice(0, maxItems);
+
+  // Score each memory entry by keyword overlap
+  var scored = memory.map(function(m) {
+    var text = (m.scenario + ' ' + m.agents.map(function(a) { return a.finding; }).join(' ')).toLowerCase();
+    var score = 0;
+    words.forEach(function(w) { if (text.indexOf(w) >= 0) score++; });
+    return { entry: m, score: score };
+  });
+
+  // Return top matches that have any overlap, or most recent if no overlap
+  scored.sort(function(a, b) { return b.score - a.score || b.entry.ts - a.entry.ts; });
+  return scored.slice(0, maxItems).map(function(s) { return s.entry; });
+}
+
+function formatMemoryContext(entries) {
+  if (!entries.length) return '';
+  var lines = ['', '--- WHAT THE WAR ROOM REMEMBERS ---'];
+  entries.forEach(function(m) {
+    var ago = formatTimeAgo(m.ts);
+    lines.push('');
+    lines.push('Briefing from ' + ago + ': "' + m.scenario.slice(0, 100) + '"');
+    m.agents.forEach(function(a) {
+      lines.push('  ' + a.name + ': ' + a.finding);
+    });
+  });
+  lines.push('--- END MEMORY ---');
+  return lines.join('\n');
+}
+
+function formatTimeAgo(ts) {
+  var diff = Date.now() - ts;
+  var mins = Math.floor(diff / 60000);
+  if (mins < 60) return mins + ' min ago';
+  var hrs = Math.floor(mins / 60);
+  if (hrs < 24) return hrs + ' hours ago';
+  var days = Math.floor(hrs / 24);
+  return days + ' days ago';
+}
+
+// Hook into all-agents-done to save memory
+window.addEventListener('razzle:all-agents-done', function(e) {
+  var d = e.detail;
+  if (d.scenario && (d.razzleSynthesis || (d.results && Object.keys(d.results).length > 0))) {
+    saveWarRoomMemory(d.scenario, d);
+  }
+  renderMemoryPanel();
+});
+
+function renderMemoryPanel() {
+  var panel = document.getElementById('memoryPanel');
+  if (!panel) return;
+  var memory = getWarRoomMemory();
+  if (!memory.length) {
+    panel.innerHTML = '<div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); text-align:center; padding:16px;">no briefings recorded yet</div>';
+    return;
+  }
+  var html = '';
+  memory.forEach(function(m, i) {
+    var ago = formatTimeAgo(m.ts);
+    var agentSummary = m.agents.map(function(a) { return a.name; }).join(', ');
+    html += '<div style="padding:8px 0; border-bottom:1px dashed var(--ink-faint);">';
+    html += '<div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + ago + '</div>';
+    html += '<div style="font-family:var(--font-display); font-size:12px; margin:2px 0;">' + escapeHtml(m.scenario.slice(0, 80)) + (m.scenario.length > 80 ? '...' : '') + '</div>';
+    html += '<div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + agentSummary + '</div>';
+    html += '</div>';
+  });
+  html += '<div style="text-align:center; margin-top:8px;">';
+  html += '<button class="btn-chunky" style="font-size:10px; padding:3px 10px;" onclick="clearWarRoomMemory()">clear memory</button>';
+  html += '</div>';
+  panel.innerHTML = html;
+}
+
+function clearWarRoomMemory() {
+  localStorage.removeItem(MEMORY_KEY);
+  renderMemoryPanel();
+}
+
+function toggleMemoryPanel() {
+  var panel = document.getElementById('memoryPanel');
+  if (!panel) return;
+  panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+}
+
+// Initialize memory panel on load
+setTimeout(renderMemoryPanel, 500);
 
 // ── START ──────────────────────────────────────────────────────────────
 function waitAndStart() {

@@ -1,6 +1,19 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 51 — League Intel Manager Profiles (COMPLETE)
+## Current Phase: Phase 52 — War Room Agent Memory (COMPLETE)
+
+**Exit criterion MET:** War Room persists briefing history (max 20 entries) in localStorage. Memory button toggles history panel. Keyword-scored relevance matching injects top 3 past briefings as "WHAT THE WAR ROOM REMEMBERS" into agent prompts. Clear memory option available.
+
+### Phase 52 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Briefing history storage | DONE | localStorage, max 20, key findings extracted |
+| 2 | History panel UI | DONE | Toggle, timestamps, clear memory |
+| 3 | Memory injection | DONE | Keyword relevance scoring, top 3 |
+| 4 | Deploy + smoke test | DONE | All syntax clean |
+
+## Previous Phase: Phase 51 — League Intel Manager Profiles (COMPLETE)
 
 **Exit criterion MET:** League Intel page now has "Scout Rival Managers" button that fetches Sleeper transaction history (weeks 1-18) and generates behavioral profiles for rival managers. Each profile shows: manager name, record, behavioral summary (e.g., "active trader, stockpiles WRs, FAAB whale"), trade count, waiver count, FAAB spent, total moves. Profiles saved to localStorage for War Room context bridge. Comic-strip card design, mobile responsive.
 
