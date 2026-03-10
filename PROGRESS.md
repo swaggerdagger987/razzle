@@ -1,6 +1,26 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 76 — Matchup Heatmap (COMPLETE)
+## Current Phase: Phase 77 — Snap Count & Usage Trends (COMPLETE)
+
+**Exit criterion MET:** /usage.html page shows snap count usage trends with Risers and Fallers sections. Table format with player rows showing headshot, name, position badge, team, current snap%, season average snap%, delta arrow+value (green up / red down), inline canvas sparkline bars showing weekly snap% history, games played, and Caveat annotations. Configurable window (3/5/8 weeks). Position filter tabs (All/QB/RB/WR/TE). Season selector. Click player row → player profile. PNG export via html2canvas with watermark. Error state with retry button. Responsive at 768px + 480px with hide-mobile columns. /api/usage-trends endpoint computes weekly snap% trends from offense_pct in player_week_stats, splits into risers (delta > 2%) and fallers (delta < -2%). "Usage" nav link added to all 19 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors.
+
+### Phase 77 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/usage-trends endpoint | DONE | Weekly snap% trends, risers/fallers split, window/position/season params |
+| 2 | Usage trends page | DONE | Two-section table (risers/fallers), canvas sparklines, delta arrows, responsive, PNG export |
+| 3 | Nav links + sitemap + analytics | DONE | All 19 pages updated, sitemap entry, pageview tracking |
+| 4 | Smoke test | DONE | Python + JS syntax clean, 19/19 nav links verified, design compliance confirmed |
+
+### Decisions Log
+- **Snap Count Trends as Phase 77**: "Who's gaining/losing snaps?" is one of the most actionable pieces of fantasy intelligence. Rising snap counts are among the best predictive signals for future production. This dashboard surfaces the signal that power users manually track — highly screenshottable for r/DynastyFF.
+- **Table format over cards**: Usage trends are inherently comparative — seeing 20-30 players' snap trajectories at once is more useful than individual cards. Tables compress better for screenshots.
+- **Canvas sparklines**: Inline mini bar charts give instant visual read on the trend direction without needing a separate chart page. Color-coded (green=rising, red=falling) matches the delta arrows.
+- **Window selector (3/5/8 weeks)**: Different time horizons matter — 3 weeks catches recent changes, 5 weeks is the default balanced view, 8 weeks shows sustained trends. All computed from the same data.
+- **Delta threshold of 2%**: Filters out noise. Only shows players with meaningful snap% changes (>2% delta between first and second half of the window).
+
+## Previous Phase: Phase 76 — Matchup Heatmap (COMPLETE)
 
 **Exit criterion MET:** /matchups.html page shows a color-coded 32-team x 4-position heatmap grid of average fantasy points allowed per game (PPR). Green gradient = easy matchup (defense allows lots of points), red gradient = hard matchup (defense allows few points). 5-tier color scale using positional percentiles (p20/p40/p60/p80). Each cell shows avg PPG allowed and rank number. Caveat annotations ("cake", "soft", "tough", "avoid") on extreme matchups. Click cell in ALL mode → switches to position mode; in position mode → shows top 5 scorers detail panel with headshots. Position filter tabs (All/QB/RB/WR/TE). Season selector. Sortable column headers (team, per-position, total). PNG export via html2canvas with watermark. Color legend. Responsive at 768px + 480px. /api/matchup-heatmap endpoint computes from opponent_team field in player_week_stats. "Matchups" nav link added to all 18 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors.
 

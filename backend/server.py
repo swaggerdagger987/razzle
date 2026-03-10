@@ -894,6 +894,7 @@ def sitemap_xml():
         ("/weekly.html", "0.8", "weekly"),
         ("/targets.html", "0.8", "weekly"),
         ("/matchups.html", "0.8", "weekly"),
+        ("/usage.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1092,6 +1093,20 @@ def matchup_heatmap(season: int = 0, position: str = ""):
     except Exception as e:
         logger.error(f"matchup_heatmap error: {e}")
         return JSONResponse({"error": "Failed to fetch matchup heatmap"}, status_code=500)
+
+
+@app.get("/api/usage-trends")
+def usage_trends(season: int = 0, position: str = "", window: int = 5, limit: int = 30):
+    """Return snap count usage trends — risers and fallers."""
+    try:
+        s = season if season > 0 else None
+        pos = position.upper() if position else None
+        w = max(3, min(window, 18))
+        lim = max(1, min(limit, 50))
+        return live_data.fetch_usage_trends(season=s, position=pos, window=w, limit=lim)
+    except Exception as e:
+        logger.error(f"usage_trends error: {e}")
+        return JSONResponse({"error": "Failed to fetch usage trends"}, status_code=500)
 
 
 @app.get("/api/analytics/summary")

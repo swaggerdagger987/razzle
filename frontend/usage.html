@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Usage Trends — Razzle</title>
+<meta property="og:title" content="Usage Trends — Razzle">
+<meta property="og:description" content="Fantasy football snap count and usage trends — who's rising and falling on razzle.lol">
+<meta property="og:site_name" content="razzle.lol">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Usage Trends — Razzle">
+<meta name="twitter:description" content="Fantasy football snap count and usage trends — who's rising and falling on razzle.lol">
+<meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
+<meta name="description" content="Snap count usage trends — players gaining and losing snaps on razzle.lol">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .usage-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+  }
+
+  .usage-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .usage-header h1 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: var(--ink);
+    margin: 0 0 4px;
+  }
+  .usage-header .usage-subtitle {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+  }
+
+  /* Controls row */
+  .usage-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .usage-select {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    padding: 7px 12px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--bg-card);
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  /* Position filter tabs */
+  .usage-pos-tabs {
+    display: flex;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .usage-pos-tab {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 6px 14px;
+    background: var(--bg-card);
+    color: var(--ink);
+    border: none;
+    border-right: 2px solid var(--ink);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .usage-pos-tab:last-child { border-right: none; }
+  .usage-pos-tab.active {
+    background: var(--ink);
+    color: var(--bg-card);
+  }
+  .usage-pos-tab:hover:not(.active) {
+    background: var(--bg-warm);
+  }
+
+  /* Actions */
+  .usage-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  /* Section headers */
+  .usage-section-header {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .usage-section-header .section-arrow {
+    font-size: 20px;
+  }
+  .usage-section-header .section-arrow.up { color: var(--green); }
+  .usage-section-header .section-arrow.down { color: var(--red); }
+
+  .usage-section {
+    margin-bottom: 36px;
+  }
+
+  /* Player table */
+  .usage-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .usage-table th {
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--ink-medium);
+    background: var(--bg-warm);
+    padding: 8px 10px;
+    text-align: left;
+    border-bottom: 3px solid var(--ink);
+  }
+  .usage-table th.center { text-align: center; }
+  .usage-table td {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--ink);
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--ink-faint);
+    vertical-align: middle;
+  }
+  .usage-table tr:last-child td { border-bottom: none; }
+  .usage-table tr {
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+  .usage-table tbody tr:hover {
+    background: var(--bg-warm);
+  }
+
+  /* Player cell */
+  .usage-player-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .usage-headshot {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid var(--ink);
+    object-fit: cover;
+    flex-shrink: 0;
+    background: var(--bg-warm);
+  }
+  .usage-player-info {
+    min-width: 0;
+  }
+  .usage-player-name {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .usage-player-meta {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 1px;
+  }
+  .usage-pos-badge {
+    font-family: var(--font-display);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: #fff;
+  }
+  .usage-pos-badge.qb { background: var(--pos-qb); }
+  .usage-pos-badge.rb { background: var(--pos-rb); }
+  .usage-pos-badge.wr { background: var(--pos-wr); }
+  .usage-pos-badge.te { background: var(--pos-te); }
+  .usage-team-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-medium);
+  }
+
+  /* Delta cell */
+  .usage-delta {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+  .usage-delta.up { color: var(--green); }
+  .usage-delta.down { color: var(--red); }
+
+  /* Sparkline cell */
+  .usage-sparkline {
+    width: 160px;
+    height: 30px;
+    flex-shrink: 0;
+  }
+
+  /* Annotation */
+  .usage-annotation {
+    font-family: var(--font-hand);
+    font-size: 15px;
+    color: var(--ink-light);
+    font-style: italic;
+  }
+
+  /* Loading */
+  .usage-loading {
+    text-align: center;
+    font-family: var(--font-hand);
+    font-size: 22px;
+    color: var(--ink-light);
+    padding: 60px 20px;
+  }
+
+  /* Empty state */
+  .usage-empty {
+    text-align: center;
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+    padding: 60px 20px;
+  }
+
+  /* Error with retry */
+  .usage-error {
+    text-align: center;
+    padding: 60px 20px;
+  }
+  .usage-error-msg {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--red);
+    margin-bottom: 12px;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .usage-header h1 { font-size: 26px; }
+    .usage-sparkline { width: 100px; }
+    .usage-table th, .usage-table td { padding: 6px 6px; font-size: 12px; }
+    .usage-headshot { width: 28px; height: 28px; }
+    .usage-player-name { font-size: 12px; }
+  }
+  @media (max-width: 480px) {
+    .usage-page { padding: 16px 12px 40px; }
+    .usage-header h1 { font-size: 22px; }
+    .usage-sparkline { width: 70px; height: 24px; }
+    .usage-table th.hide-mobile, .usage-table td.hide-mobile { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="/" class="logo">
+    <div class="logo-mark">&#x1F42F;</div>
+    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/lab.html">The Lab</a></li>
+    <li><a href="/rankings.html">Rankings</a></li>
+    <li><a href="/leaders.html">Leaders</a></li>
+    <li><a href="/prospects.html">Prospects</a></li>
+    <li><a href="/scarcity.html">Scarcity</a></li>
+    <li><a href="/breakouts.html">Breakouts</a></li>
+    <li><a href="/buysell.html">Buy/Sell</a></li>
+    <li><a href="/aging.html">Aging</a></li>
+    <li><a href="/weekly.html">Weekly</a></li>
+    <li><a href="/targets.html">Targets</a></li>
+    <li><a href="/matchups.html">Matchups</a></li>
+    <li><a href="/usage.html" class="active">Usage</a></li>
+    <li><a href="/team/KC">Teams</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
+    <li><a href="/agents.html">War Room</a></li>
+  </ul>
+</nav>
+
+<main class="usage-page" id="usage-content">
+  <div class="usage-header">
+    <h1>Snap Count Trends</h1>
+    <div class="usage-subtitle">who's gaining and losing snaps week over week</div>
+  </div>
+
+  <div class="usage-controls">
+    <div class="usage-pos-tabs" id="pos-tabs">
+      <button class="usage-pos-tab active" data-pos="">All</button>
+      <button class="usage-pos-tab" data-pos="QB">QB</button>
+      <button class="usage-pos-tab" data-pos="RB">RB</button>
+      <button class="usage-pos-tab" data-pos="WR">WR</button>
+      <button class="usage-pos-tab" data-pos="TE">TE</button>
+    </div>
+    <select class="usage-select" id="window-select" title="Trend window" aria-label="Trend window">
+      <option value="3">Last 3 weeks</option>
+      <option value="5" selected>Last 5 weeks</option>
+      <option value="8">Last 8 weeks</option>
+    </select>
+    <select class="usage-select" id="season-select" title="Season" aria-label="Season"></select>
+  </div>
+
+  <div class="usage-actions">
+    <button class="btn-chunky" id="export-btn" title="Export as PNG">Export PNG</button>
+  </div>
+
+  <div id="usage-body">
+    <div class="usage-loading" id="usage-loading">tracking snap counts...</div>
+  </div>
+</main>
+
+<!-- Watermark -->
+<div style="position:fixed; bottom:10px; right:14px; font-family:var(--font-hand); font-size:14px; color:var(--ink-light); opacity:0.7; pointer-events:none; z-index:999;">razzle.lol</div>
+
+<!-- Footer -->
+<footer style="text-align:center; padding:24px 20px 32px; font-family:var(--font-hand); font-size:15px; color:var(--ink-light); border-top:2px dashed var(--ink-faint); margin-top:40px;">
+  <div style="margin-bottom:10px;">
+    <a href="/lab.html" style="color:var(--ink-light); text-decoration:none;">The Lab</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/rankings.html" style="color:var(--ink-light); text-decoration:none;">Rankings</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/leaders.html" style="color:var(--ink-light); text-decoration:none;">Leaders</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/prospects.html" style="color:var(--ink-light); text-decoration:none;">Prospects</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/scarcity.html" style="color:var(--ink-light); text-decoration:none;">Scarcity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/breakouts.html" style="color:var(--ink-light); text-decoration:none;">Breakouts</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/buysell.html" style="color:var(--ink-light); text-decoration:none;">Buy/Sell</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/aging.html" style="color:var(--ink-light); text-decoration:none;">Aging</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/weekly.html" style="color:var(--ink-light); text-decoration:none;">Weekly</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/targets.html" style="color:var(--ink-light); text-decoration:none;">Targets</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/matchups.html" style="color:var(--ink-light); text-decoration:none;">Matchups</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/usage.html" style="color:var(--ink-light); text-decoration:none;">Usage</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/team/KC" style="color:var(--ink-light); text-decoration:none;">Teams</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none;">League Intel</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/agents.html" style="color:var(--ink-light); text-decoration:none;">War Room</a>
+  </div>
+  razzle.lol — let's razzle dazzle em baby
+</footer>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  var currentPosition = '';
+  var currentWindow = 5;
+
+  function drawSparkline(canvas, weeks, trend) {
+    var ctx = canvas.getContext('2d');
+    var w = canvas.width;
+    var h = canvas.height;
+    var dpr = window.devicePixelRatio || 1;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    ctx.scale(dpr, dpr);
+
+    if (!weeks || !weeks.length) return;
+
+    var vals = weeks.map(function(wk) { return wk.snap_pct; });
+    var maxVal = Math.max.apply(null, vals.concat([100]));
+    var minVal = Math.min.apply(null, vals.concat([0]));
+    var range = maxVal - minVal || 1;
+
+    var barW = Math.max(4, Math.floor((w - 4) / vals.length) - 2);
+    var gap = 2;
+    var totalW = vals.length * (barW + gap) - gap;
+    var startX = Math.max(0, (w - totalW) / 2);
+
+    var barColor = trend === 'up' ? '#2ec4b6' : (trend === 'down' ? '#e63946' : '#8a8a9e');
+
+    for (var i = 0; i < vals.length; i++) {
+      var barH = Math.max(3, ((vals[i] - minVal) / range) * (h - 4));
+      var x = startX + i * (barW + gap);
+      var y = h - barH - 2;
+
+      // Lighter older bars, solid recent
+      var alpha = 0.4 + 0.6 * (i / (vals.length - 1 || 1));
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = barColor;
+      ctx.fillRect(x, y, barW, barH);
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function buildPlayerRow(p, idx) {
+    var pos = (p.position || 'WR').toLowerCase();
+    var deltaAbs = Math.abs(p.delta);
+    var arrow = p.trend === 'up' ? '&#9650;' : (p.trend === 'down' ? '&#9660;' : '&#9654;');
+    var deltaClass = p.trend === 'up' ? 'up' : (p.trend === 'down' ? 'down' : '');
+    var sign = p.trend === 'up' ? '+' : '';
+
+    var html = '<tr data-pid="' + escapeHtml(p.player_id) + '">';
+
+    // Player cell
+    html += '<td>';
+    html += '<div class="usage-player-cell">';
+    if (p.headshot_url) {
+      html += '<img class="usage-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+    }
+    html += '<div class="usage-player-info">';
+    html += '<div class="usage-player-name">' + escapeHtml(p.name) + '</div>';
+    html += '<div class="usage-player-meta">';
+    html += '<span class="usage-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
+    html += '<span class="usage-team-label">' + escapeHtml(p.team) + '</span>';
+    html += '</div></div></div>';
+    html += '</td>';
+
+    // Current snap%
+    html += '<td style="text-align:center; font-weight:700;">' + escapeHtml(String(p.current_snap_pct)) + '%</td>';
+
+    // Season avg
+    html += '<td class="hide-mobile" style="text-align:center;">' + escapeHtml(String(p.season_avg_snap_pct)) + '%</td>';
+
+    // Delta
+    html += '<td style="text-align:center;">';
+    html += '<span class="usage-delta ' + deltaClass + '">';
+    html += '<span>' + arrow + '</span> ' + sign + escapeHtml(String(p.delta)) + '%';
+    html += '</span>';
+    html += '</td>';
+
+    // Sparkline
+    html += '<td class="hide-mobile" style="text-align:center;"><canvas class="usage-sparkline" width="160" height="30" data-weeks=\'' + JSON.stringify(p.weeks) + '\' data-trend="' + escapeHtml(p.trend) + '"></canvas></td>';
+
+    // Games
+    html += '<td style="text-align:center;">' + escapeHtml(String(p.games)) + '</td>';
+
+    // Annotation
+    html += '<td class="hide-mobile"><span class="usage-annotation">' + escapeHtml(p.annotation) + '</span></td>';
+
+    html += '</tr>';
+    return html;
+  }
+
+  function buildTable(players, direction) {
+    if (!players || !players.length) {
+      return '<div class="usage-empty">no ' + direction + ' found for this filter</div>';
+    }
+
+    var arrowClass = direction === 'risers' ? 'up' : 'down';
+    var arrowIcon = direction === 'risers' ? '&#9650;' : '&#9660;';
+    var label = direction === 'risers' ? 'Risers' : 'Fallers';
+
+    var html = '<div class="usage-section">';
+    html += '<div class="usage-section-header">';
+    html += '<span class="section-arrow ' + arrowClass + '">' + arrowIcon + '</span> ';
+    html += label + ' <span style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); font-weight:400;">(' + players.length + ' players)</span>';
+    html += '</div>';
+
+    html += '<table class="usage-table">';
+    html += '<thead><tr>';
+    html += '<th>Player</th>';
+    html += '<th class="center">Snap%</th>';
+    html += '<th class="center hide-mobile">Avg</th>';
+    html += '<th class="center">Delta</th>';
+    html += '<th class="center hide-mobile">Trend</th>';
+    html += '<th class="center">GP</th>';
+    html += '<th class="hide-mobile"></th>';
+    html += '</tr></thead>';
+    html += '<tbody>';
+
+    players.forEach(function(p, i) {
+      html += buildPlayerRow(p, i);
+    });
+
+    html += '</tbody></table>';
+    html += '</div>';
+    return html;
+  }
+
+  function renderSparklines() {
+    document.querySelectorAll('.usage-sparkline[data-weeks]').forEach(function(canvas) {
+      try {
+        var weeks = JSON.parse(canvas.getAttribute('data-weeks'));
+        var trend = canvas.getAttribute('data-trend') || 'flat';
+        drawSparkline(canvas, weeks, trend);
+      } catch(e) {}
+    });
+  }
+
+  async function loadData(season, position, window) {
+    var bodyEl = document.getElementById('usage-body');
+    bodyEl.innerHTML = '<div class="usage-loading">tracking snap counts...</div>';
+
+    var url = '/api/usage-trends?window=' + (window || 5) + '&limit=30';
+    if (season) url += '&season=' + season;
+    if (position) url += '&position=' + position;
+
+    try {
+      var resp = await fetch(url);
+      if (!resp.ok) throw new Error('API error');
+      var data = await resp.json();
+
+      // Populate season selector
+      var sel = document.getElementById('season-select');
+      if (sel && data.available_seasons) {
+        var curSeason = season || data.season;
+        sel.innerHTML = '';
+        data.available_seasons.forEach(function(s) {
+          var opt = document.createElement('option');
+          opt.value = s;
+          opt.textContent = s;
+          if (s == curSeason) opt.selected = true;
+          sel.appendChild(opt);
+        });
+      }
+
+      var html = '';
+      html += buildTable(data.risers, 'risers');
+      html += buildTable(data.fallers, 'fallers');
+
+      if (!data.risers.length && !data.fallers.length) {
+        html = '<div class="usage-empty">no usage trend data available for this filter</div>';
+      }
+
+      bodyEl.innerHTML = html;
+      renderSparklines();
+
+      // Click handlers
+      bodyEl.querySelectorAll('tr[data-pid]').forEach(function(row) {
+        row.addEventListener('click', function() {
+          var pid = row.getAttribute('data-pid');
+          if (pid) window.location.href = '/player/' + encodeURIComponent(pid);
+        });
+      });
+    } catch(e) {
+      bodyEl.innerHTML = '<div class="usage-error"><div class="usage-error-msg">failed to load usage trends</div><button class="btn-chunky" onclick="location.reload()">Retry</button></div>';
+    }
+  }
+
+  // Position tab handlers
+  document.querySelectorAll('.usage-pos-tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.usage-pos-tab').forEach(function(t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      currentPosition = tab.getAttribute('data-pos') || '';
+      var season = document.getElementById('season-select').value;
+      loadData(season, currentPosition, currentWindow);
+    });
+  });
+
+  // Window change handler
+  document.getElementById('window-select').addEventListener('change', function() {
+    currentWindow = parseInt(this.value) || 5;
+    var season = document.getElementById('season-select').value;
+    loadData(season, currentPosition, currentWindow);
+  });
+
+  // Season change handler
+  document.getElementById('season-select').addEventListener('change', function() {
+    loadData(this.value, currentPosition, currentWindow);
+  });
+
+  // Export PNG
+  document.getElementById('export-btn').addEventListener('click', function() {
+    var target = document.getElementById('usage-content');
+    if (!target || typeof html2canvas === 'undefined') return;
+    html2canvas(target, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+      var ctx = canvas.getContext('2d');
+      ctx.font = '28px Caveat, cursive';
+      ctx.fillStyle = 'rgba(26,26,46,0.25)';
+      ctx.textAlign = 'right';
+      ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 16);
+      var a = document.createElement('a');
+      a.download = 'razzle-usage-trends.png';
+      a.href = canvas.toDataURL('image/png');
+      a.click();
+    });
+  });
+
+  // Analytics
+  try {
+    fetch('/api/analytics/pageview', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ page: '/usage.html' }),
+    });
+  } catch(e) {}
+
+  // Quick search (Ctrl+K)
+  if (typeof window.initQuickSearch === 'function') window.initQuickSearch();
+
+  // Load
+  loadData();
+})();
+</script>
+<script src="app.js"></script>
+</body>
+</html>

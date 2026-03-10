@@ -5358,3 +5358,172 @@ def fetch_matchup_heatmap(season=None, position=None):
         }
     finally:
         conn.close()
+
+
+# ---------------------------------------------------------------------------
+# Snap Count & Usage Trends — weekly snap% with risers/fallers
+# ---------------------------------------------------------------------------
+
+_USAGE_RISER_ANNOTATIONS = [
+    "usage spike",
+    "trending up",
+    "earning more snaps",
+    "role expanding",
+    "snap count climbing",
+    "getting the reps",
+    "opportunity rising",
+    "workload growing",
+]
+
+_USAGE_FALLER_ANNOTATIONS = [
+    "losing snaps",
+    "red flag",
+    "role shrinking",
+    "trending down",
+    "being phased out",
+    "snap count dropping",
+    "opportunity fading",
+    "workload declining",
+]
+
+
+def fetch_usage_trends(season=None, position=None, window=5, limit=30):
+    """Return players with weekly snap% trends, identifying risers and fallers."""
+    conn = get_conn()
+
+    try:
+        # Determine season + available seasons
+        row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
+        available_seasons = [r[0] for r in row] if row else [2024]
+        if not season:
+            season = available_seasons[0] if available_seasons else 2024
+
+        pos_filter = ""
+        params = [season]
+        if position and position.upper() in FANTASY_POSITIONS:
+            pos_filter = "AND p.position = ?"
+            params.append(position.upper())
+
+        # Get weekly snap% for all relevant players
+        query = f"""
+            SELECT
+                p.player_id, p.full_name, p.position, p.team, p.age,
+                p.headshot_url,
+                s.week,
+                s.offense_pct
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE s.season = ?
+              AND p.position IN ('QB','RB','WR','TE')
+              AND p.fantasy_relevant = 1
+              AND s.offense_pct IS NOT NULL
+              AND s.offense_pct > 0
+              {pos_filter}
+            ORDER BY p.player_id, s.week
+        """
+        rows = conn.execute(query, params).fetchall()
+
+        if not rows:
+            return {
+                "season": season,
+                "available_seasons": available_seasons,
+                "risers": [],
+                "fallers": [],
+                "window": window,
+            }
+
+        # Group by player
+        from collections import defaultdict
+        player_weeks = defaultdict(list)
+        player_info = {}
+
+        for r in rows:
+            pid = r[0]
+            if pid not in player_info:
+                player_info[pid] = {
+                    "player_id": pid,
+                    "name": r[1] or "Unknown",
+                    "position": r[2] or "WR",
+                    "team": r[3] or "FA",
+                    "age": r[4],
+                    "headshot_url": r[5] or "",
+                }
+            player_weeks[pid].append({
+                "week": r[6],
+                "snap_pct": round(r[7], 1) if r[7] else 0,
+            })
+
+        # Compute trends for each player
+        window = max(3, min(window, 18))
+        players_with_trends = []
+
+        for pid, weeks in player_weeks.items():
+            # Sort by week
+            weeks.sort(key=lambda w: w["week"])
+
+            # Need at least 3 games total
+            if len(weeks) < 3:
+                continue
+
+            # Get the latest N weeks (based on window)
+            recent = weeks[-window:] if len(weeks) >= window else weeks
+
+            if len(recent) < 2:
+                continue
+
+            # Build full week array (all weeks, not just window)
+            all_weeks_data = []
+            for w in weeks:
+                all_weeks_data.append({"week": w["week"], "snap_pct": w["snap_pct"]})
+
+            # Compute trend: compare first half avg vs second half avg of window
+            mid = len(recent) // 2
+            first_half = recent[:mid] if mid > 0 else recent[:1]
+            second_half = recent[mid:] if mid > 0 else recent[1:]
+
+            first_avg = sum(w["snap_pct"] for w in first_half) / len(first_half)
+            second_avg = sum(w["snap_pct"] for w in second_half) / len(second_half)
+            delta = round(second_avg - first_avg, 1)
+
+            current_snap = recent[-1]["snap_pct"]
+            season_avg = round(sum(w["snap_pct"] for w in weeks) / len(weeks), 1)
+
+            info = player_info[pid]
+            info["weeks"] = all_weeks_data
+            info["current_snap_pct"] = current_snap
+            info["season_avg_snap_pct"] = season_avg
+            info["delta"] = delta
+            info["games"] = len(weeks)
+            info["trend"] = "up" if delta > 0 else ("down" if delta < 0 else "flat")
+
+            players_with_trends.append(info)
+
+        # Split into risers (positive delta) and fallers (negative delta)
+        risers = sorted(
+            [p for p in players_with_trends if p["delta"] > 2],
+            key=lambda x: x["delta"],
+            reverse=True,
+        )[:limit]
+
+        fallers = sorted(
+            [p for p in players_with_trends if p["delta"] < -2],
+            key=lambda x: x["delta"],
+        )[:limit]
+
+        # Add annotations
+        import random as _rng
+        for i, p in enumerate(risers):
+            p["annotation"] = _USAGE_RISER_ANNOTATIONS[i % len(_USAGE_RISER_ANNOTATIONS)]
+
+        for i, p in enumerate(fallers):
+            p["annotation"] = _USAGE_FALLER_ANNOTATIONS[i % len(_USAGE_FALLER_ANNOTATIONS)]
+
+        return {
+            "season": season,
+            "available_seasons": available_seasons,
+            "risers": risers,
+            "fallers": fallers,
+            "window": window,
+        }
+    finally:
+        conn.close()
