@@ -1,6 +1,19 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 123 — Waiver Wire Targets (COMPLETE)
+## Current Phase: Phase 124 — Playoff Schedule Planner (COMPLETE)
+
+**Exit criterion MET:** /playoffs.html shows players ranked by strength of their playoff schedule (weeks 14-17). Uses defense PPG-allowed-by-position data to grade each playoff matchup (A/B/C/D/F). Per-week matchup cells show opponent, grade badge, and actual PPR score. Overall playoff SOS grade per player. Position filter tabs, season selector, PNG export with watermark. GET /api/playoff-schedule returns playoff matchup data. 10 escapeHtml calls, 71/71 braces balanced. "Playoffs" nav link on all 57 pages. Sitemap + tools hub entry under Matchup & Schedule.
+
+### Phase 124 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/playoff-schedule endpoint | DONE | fetch_playoff_schedule, def PPG grading |
+| 2 | Playoff Schedule Planner page | DONE | Week columns, grade badges, SOS grade, 10 escapeHtml |
+| 3 | Nav links + sitemap + tools hub | DONE | All 57 pages updated |
+| 4 | Smoke test | DONE | Python OK, JS OK, 57/57 nav links |
+
+## Previous Phase: Phase 123 — Waiver Wire Targets (COMPLETE)
 
 **Exit criterion MET:** /waivers.html shows waiver wire targets — players with high recent PPG but low season PPG (likely unrostered). Compares recent window avg vs full season avg; requires delta >= 2 PPG surge and season avg <= 14 PPG. Position filter tabs, window selector (3/4/5 games), season selector, PNG export with watermark. GET /api/waivers returns waiver targets sorted by surge delta. Ranked list with surge badges, mini sparklines, games played. 12 escapeHtml calls, 60/60 braces balanced. "Waivers" nav link on all 56 pages. Sitemap + tools hub entry under Player Discovery.
 

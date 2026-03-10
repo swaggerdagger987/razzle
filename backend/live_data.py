@@ -10994,3 +10994,161 @@ def fetch_waivers(season=None, position=None, window=4, limit=30):
         }
     finally:
         conn.close()
+
+
+def fetch_playoff_schedule(season=None, position=None, limit=40):
+    """
+    Playoff schedule planner — grades each player's playoff matchups (weeks 14-17).
+    Uses defense PPG-allowed-by-position to rate each week's difficulty.
+    Returns players ranked by playoff SOS (easiest first = best playoff schedule).
+    """
+    conn = get_db()
+    try:
+        cursor = conn.cursor()
+
+        if not season:
+            cursor.execute("SELECT MAX(season) FROM player_week_stats")
+            season = cursor.fetchone()[0] or 2024
+
+        # Build defense PPG-allowed-by-position for the season
+        cursor.execute("""
+            SELECT s.opponent_team, p.position,
+                   COALESCE(SUM(s.fantasy_points_ppr), 0) as total_ppr,
+                   COUNT(DISTINCT s.week) as games
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE s.season = ?
+              AND p.position IN ('QB', 'RB', 'WR', 'TE')
+              AND s.opponent_team IS NOT NULL AND s.opponent_team != ''
+            GROUP BY s.opponent_team, p.position
+        """, [season])
+
+        defense_ppg = {}
+        for r in cursor.fetchall():
+            team, pos, total, games = r[0], r[1], r[2], r[3]
+            if games <= 0:
+                continue
+            if team not in defense_ppg:
+                defense_ppg[team] = {}
+            defense_ppg[team][pos] = round(total / games, 2)
+
+        # League avg per position
+        league_avg = {}
+        for pos in ("QB", "RB", "WR", "TE"):
+            vals = [defense_ppg[t][pos] for t in defense_ppg if pos in defense_ppg.get(t, {})]
+            league_avg[pos] = sum(vals) / len(vals) if vals else 0
+
+        # Get player playoff week data (weeks 14-17)
+        pos_filter = ""
+        params = [season]
+        if position:
+            pos_filter = "AND p.position = ?"
+            params.append(position)
+
+        cursor.execute(f"""
+            SELECT s.player_id, p.full_name, p.position, p.team,
+                   s.opponent_team, s.fantasy_points_ppr, s.week
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE s.season = ?
+              AND p.position IN ('QB', 'RB', 'WR', 'TE')
+              AND p.fantasy_relevant = 1
+              AND s.week BETWEEN 14 AND 17
+              AND s.opponent_team IS NOT NULL AND s.opponent_team != ''
+              {pos_filter}
+            ORDER BY s.player_id, s.week
+        """, params)
+
+        from collections import defaultdict
+        players = defaultdict(lambda: {"weeks": [], "name": "", "position": "", "team": ""})
+
+        for r in cursor.fetchall():
+            pid = r[0]
+            players[pid]["name"] = r[1] or "Unknown"
+            players[pid]["position"] = r[2] or "RB"
+            players[pid]["team"] = r[3] or "FA"
+            players[pid]["weeks"].append({
+                "week": r[6],
+                "opponent": r[4],
+                "fpts": round(r[5] or 0, 1),
+            })
+
+        results = []
+        for pid, info in players.items():
+            if len(info["weeks"]) < 2:
+                continue
+
+            pos = info["position"]
+            la = league_avg.get(pos, 0)
+
+            week_details = []
+            opp_ppg_total = 0
+            for w in sorted(info["weeks"], key=lambda x: x["week"]):
+                opp = w["opponent"]
+                opp_ppg = defense_ppg.get(opp, {}).get(pos, la)
+                diff = opp_ppg - la
+                # Positive diff = defense allows more = easier matchup
+                if diff > 3:
+                    grade = "A"
+                elif diff > 1:
+                    grade = "B"
+                elif diff > -1:
+                    grade = "C"
+                elif diff > -3:
+                    grade = "D"
+                else:
+                    grade = "F"
+
+                week_details.append({
+                    "week": w["week"],
+                    "opponent": opp,
+                    "fpts": w["fpts"],
+                    "opp_ppg": round(opp_ppg, 1),
+                    "diff": round(diff, 1),
+                    "grade": grade,
+                })
+                opp_ppg_total += opp_ppg
+
+            avg_opp_ppg = opp_ppg_total / len(week_details) if week_details else 0
+            playoff_ppg = sum(w["fpts"] for w in week_details) / len(week_details) if week_details else 0
+            overall_diff = avg_opp_ppg - la
+
+            if overall_diff > 3:
+                sos_grade = "A+"
+            elif overall_diff > 2:
+                sos_grade = "A"
+            elif overall_diff > 1:
+                sos_grade = "B+"
+            elif overall_diff > 0:
+                sos_grade = "B"
+            elif overall_diff > -1:
+                sos_grade = "C"
+            elif overall_diff > -2:
+                sos_grade = "D"
+            else:
+                sos_grade = "F"
+
+            results.append({
+                "player_id": pid,
+                "name": info["name"],
+                "position": pos,
+                "team": info["team"],
+                "weeks": week_details,
+                "playoff_ppg": round(playoff_ppg, 1),
+                "avg_opp_ppg": round(avg_opp_ppg, 1),
+                "sos_diff": round(overall_diff, 1),
+                "sos_grade": sos_grade,
+                "games": len(week_details),
+            })
+
+        # Sort by avg_opp_ppg descending (easiest playoff schedule first)
+        results.sort(key=lambda x: x["avg_opp_ppg"], reverse=True)
+        results = results[:limit]
+
+        return {
+            "players": results,
+            "season": season,
+            "count": len(results),
+        }
+    finally:
+        conn.close()

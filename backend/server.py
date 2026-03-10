@@ -932,6 +932,7 @@ def sitemap_xml():
         ("/comptable.html", "0.8", "weekly"),
         ("/records.html", "0.8", "weekly"),
         ("/waivers.html", "0.8", "weekly"),
+        ("/playoffs.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1584,6 +1585,16 @@ def records(position: str = ""):
         return JSONResponse({"error": "Failed to fetch records"}, status_code=500)
 
 
+@app.get("/api/playoff-schedule")
+def playoff_schedule(season: int = None, position: str = None):
+    try:
+        pos = position.upper() if position else None
+        return live_data.fetch_playoff_schedule(season=season, position=pos)
+    except Exception as e:
+        logger.error(f"playoff-schedule error: {e}")
+        return JSONResponse({"error": "Failed to fetch playoff schedule"}, status_code=500)
+
+
 @app.get("/api/waivers")
 def waivers(season: int = None, position: str = None, window: int = 4):
     try:
@@ -1670,6 +1681,7 @@ def tools_hub():
             "tools": [
                 {"name": "Matchup Heatmap", "desc": "32-team defensive PPG allowed by position — find soft matchups", "url": "/matchups.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Strength of Schedule", "desc": "SOS grades, buy targets vs. sell candidates", "url": "/schedule.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Playoff Schedule", "desc": "Grade playoff matchups (wk 14-17) by opponent difficulty", "url": "/playoffs.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Weekly Heatmap", "desc": "Player-by-week scoring grid with color-coded tiers", "url": "/weekly.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Weekly Leaders", "desc": "Top fantasy performers for any week — who went off", "url": "/weeklyleaders.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Season Recap", "desc": "Data-driven year in review — MVP, breakouts, busts, top weeks, and more", "url": "/recap.html", "positions": ["QB", "RB", "WR", "TE"]},
