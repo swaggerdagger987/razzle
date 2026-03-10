@@ -891,6 +891,7 @@ def sitemap_xml():
         ("/breakouts.html", "0.8", "weekly"),
         ("/buysell.html", "0.8", "weekly"),
         ("/aging.html", "0.8", "weekly"),
+        ("/weekly.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1049,6 +1050,14 @@ def aging_curves(season: int = 0, position: str = ""):
     s = season if season > 0 else None
     pos = position.upper() if position else None
     return live_data.fetch_aging_curves(season=s, position=pos)
+
+
+@app.get("/api/weekly-heatmap")
+def weekly_heatmap(season: int = 0, position: str = "", limit: int = 40):
+    """Return weekly scoring heatmap — players × weeks with PPR scores."""
+    s = season if season > 0 else None
+    pos = position.upper() if position else None
+    return live_data.fetch_weekly_heatmap(season=s, position=pos, limit=max(1, min(limit, 50)))
 
 
 @app.get("/api/analytics/summary")

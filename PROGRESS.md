@@ -1,6 +1,26 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 72 — Aging Curves Dashboard (COMPLETE)
+## Current Phase: Phase 73 — Weekly Scoring Heatmap (COMPLETE)
+
+**Exit criterion MET:** /weekly.html page shows a color-coded grid of player weekly fantasy scores (rows = players, columns = weeks). Cells color-coded in 5 tiers from red (bad) to green (good) based on positional percentile thresholds. Position filter tabs (All/QB/RB/WR/TE). Season selector. Click player name → player profile. PNG export with watermark. Color legend (cold → hot). Bye weeks shown. Sticky player column. "Weekly" nav link added to all 16 HTML pages (nav + footer). Sitemap entry added. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors.
+
+### Phase 73 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/weekly-heatmap endpoint | DONE | Per-week PPR scores, positional percentile thresholds, season/position/limit params |
+| 2 | Weekly heatmap grid page | DONE | 5-tier color coding, sticky player col, bye weeks, hover highlight, responsive |
+| 3 | Nav links + sitemap + analytics | DONE | All 16 pages updated, sitemap entry, pageview tracking |
+| 4 | Smoke test | DONE | Python + JS syntax clean, 18/18 design checks, nav links verified |
+
+### Decisions Log
+- **Weekly Scoring Heatmap as Phase 73**: Weekly scoring grids are among the most screenshotted fantasy content on r/DynastyFF and r/fantasyfootball. "Look at X's consistency" or "see how Y boomed Weeks 10-14" drives engagement. Table-based heatmap is more information-dense than charts and perfect for Reddit screenshots.
+- **5-tier color scale**: Positional percentiles at p20/p40/p60/p80 create meaningful breaks. Red=bust, yellow=below avg, sand=average, light green=good, strong green=elite. Using positional thresholds means QB 18pts and RB 12pts both show as "good" relative to their position.
+- **Sticky player column**: With 18 weeks of data, horizontal scroll is inevitable. Sticky player names ensure the heatmap stays readable.
+- **Table over canvas**: Unlike aging curves, the heatmap is fundamentally tabular data. HTML tables give better accessibility, click targets, hover states, and responsive behavior than canvas.
+- **Bye week display**: Showing "bye" in faint text instead of blank cells prevents confusion about missing data vs. zero-score weeks.
+
+## Previous Phase: Phase 72 — Aging Curves Dashboard (COMPLETE)
 
 **Exit criterion MET:** /aging.html page shows position-specific aging curves (PPG by age) as canvas-drawn line charts with individual player dots plotted. Summary cards show peak age per position. Position filter tabs (All/QB/RB/WR/TE). Season selector. Click player dot → player profile. PNG export with watermark. Legend explaining curve vs dots. Canvas redraws on resize. "Aging" nav link added to all 15 HTML pages (nav + footer). Sitemap entry added. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors.
 

@@ -4986,3 +4986,123 @@ def fetch_aging_curves(season=None, position=None):
         }
     finally:
         conn.close()
+
+
+def fetch_weekly_heatmap(season=None, position=None, limit=40):
+    """Return weekly fantasy scores for top players in a grid format.
+
+    Returns player rows with per-week PPG values and positional percentile
+    thresholds for color coding.
+    """
+    conn = get_conn()
+    try:
+        # Determine available seasons
+        row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
+        available_seasons = [r[0] for r in row] if row else [2024]
+        if not season:
+            season = available_seasons[0] if available_seasons else 2024
+
+        positions = [position] if position and position in FANTASY_POSITIONS else list(FANTASY_POSITIONS)
+
+        # Get available weeks for this season
+        week_rows = conn.execute(
+            "SELECT DISTINCT week FROM player_week_stats WHERE season = ? ORDER BY week",
+            [season]
+        ).fetchall()
+        weeks = [r[0] for r in week_rows] if week_rows else []
+
+        # Collect all weekly scores for percentile thresholds (per position)
+        pos_thresholds = {}
+        for pos in positions:
+            scores_row = conn.execute("""
+                SELECT s.fantasy_points_ppr
+                FROM player_week_stats s
+                JOIN players p ON p.player_id = s.player_id
+                WHERE s.season = ? AND p.position = ?
+                  AND s.fantasy_points_ppr IS NOT NULL
+                  AND p.fantasy_relevant = 1
+                ORDER BY s.fantasy_points_ppr
+            """, [season, pos]).fetchall()
+            vals = [r[0] for r in scores_row if r[0] is not None]
+            if vals:
+                n = len(vals)
+                pos_thresholds[pos] = {
+                    "p20": vals[int(n * 0.2)] if n > 5 else 5,
+                    "p40": vals[int(n * 0.4)] if n > 5 else 10,
+                    "p60": vals[int(n * 0.6)] if n > 5 else 15,
+                    "p80": vals[int(n * 0.8)] if n > 5 else 20,
+                }
+            else:
+                pos_thresholds[pos] = {"p20": 5, "p40": 10, "p60": 15, "p80": 20}
+
+        # Get top players by total fantasy points, with weekly breakdown
+        pos_filter = ""
+        pos_params = [season]
+        if position and position in FANTASY_POSITIONS:
+            pos_filter = "AND p.position = ?"
+            pos_params.append(position)
+
+        top_players = conn.execute(f"""
+            SELECT
+                p.player_id, p.full_name, p.position, p.team, p.headshot_url,
+                COUNT(DISTINCT s.week) as games,
+                SUM(s.fantasy_points_ppr) as total_pts,
+                CAST(SUM(s.fantasy_points_ppr) AS REAL) / COUNT(DISTINCT s.week) as ppg
+            FROM players p
+            JOIN player_week_stats s ON s.player_id = p.player_id AND s.season = ?
+            WHERE p.fantasy_relevant = 1
+              AND s.fantasy_points_ppr IS NOT NULL
+              {pos_filter}
+            GROUP BY p.player_id
+            HAVING games >= 4
+            ORDER BY total_pts DESC
+            LIMIT ?
+        """, pos_params + [min(limit, 50)]).fetchall()
+
+        # Get weekly scores for these players
+        player_ids = [r[0] for r in top_players]
+        weekly_data = {}
+        if player_ids:
+            placeholders = ",".join("?" * len(player_ids))
+            week_rows_data = conn.execute(f"""
+                SELECT player_id, week, fantasy_points_ppr
+                FROM player_week_stats
+                WHERE season = ? AND player_id IN ({placeholders})
+                ORDER BY player_id, week
+            """, [season] + player_ids).fetchall()
+            for wr in week_rows_data:
+                pid = wr[0]
+                if pid not in weekly_data:
+                    weekly_data[pid] = {}
+                weekly_data[pid][wr[1]] = round(wr[2], 1) if wr[2] is not None else None
+
+        # Build output
+        players = []
+        for r in top_players:
+            pid = r[0]
+            pos = r[2] or "WR"
+            week_scores = {}
+            for w in weeks:
+                score = weekly_data.get(pid, {}).get(w)
+                week_scores[str(w)] = score
+            players.append({
+                "player_id": pid,
+                "name": r[1] or "Unknown",
+                "position": pos,
+                "team": r[3] or "",
+                "headshot_url": r[4] or "",
+                "games": r[5],
+                "total_pts": round(r[6], 1) if r[6] else 0,
+                "ppg": round(r[7], 1) if r[7] else 0,
+                "weeks": week_scores,
+            })
+
+        return {
+            "season": season,
+            "available_seasons": available_seasons,
+            "weeks": weeks,
+            "thresholds": pos_thresholds,
+            "players": players,
+        }
+    finally:
+        conn.close()
