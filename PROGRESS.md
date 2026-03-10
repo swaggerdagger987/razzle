@@ -1,6 +1,24 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 56 — QA + UX Audit Fixes (COMPLETE)
+## Current Phase: Phase 57 — Draft Pick Trade Calculator (COMPLETE)
+
+**Exit criterion MET:** Trade Analyzer now supports dynasty draft picks (2025-2027, rounds 1-4, picks 1-12) alongside players. Pick values follow exponential decay curve (1.01=88.0, 1.12=40.7, 2.01=38.0, 4.12=3.3) on same 0-100 scale as player values. Users can add picks via Year/Round/Pick dropdowns + "Add Pick" button on both trade sides. Visual pick value chart (canvas) shows full 48-pick decay curve with round-colored dots and selected-pick highlighting. Pick cards render with round-colored badges (Rd1=terracotta, Rd2=blue, Rd3=teal, Rd4=purple). PNG export handles picks. Comic-strip design throughout.
+
+### Phase 57 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Pick value model + API | DONE | Exponential decay, GET /api/trade/pick-values, 48 picks |
+| 2 | Frontend pick selector | DONE | Dropdowns + "Add Pick" on both sides, pick cards with round colors |
+| 3 | Visual pick value chart | DONE | Canvas curve, 48 dots, round colors, selected highlighting |
+| 4 | Deploy + smoke test | DONE | All syntax clean |
+
+### Decisions Log
+- **Exponential decay model**: V = 88 * e^(-0.07 * (pick-1)). Calibrated so 1.01 ≈ top-5 dynasty asset (88), late 4th ≈ dart throw (3.3). Same 0-100 scale as player trade values for direct comparison.
+- **Round colors match position colors**: Rd1=terracotta (WR), Rd2=blue (QB), Rd3=teal (RB), Rd4=purple (TE). Reuses existing design palette for consistency.
+- **Multi-year support**: Year dropdown allows 2025-2027. Pick values are identical across years (no future discount) — simplest version that works for dynasty rookie drafts.
+
+## Previous Phase: Phase 56 — QA + UX Audit Fixes (COMPLETE)
 
 **Exit criterion MET:** All CRITICAL and HIGH findings from Phases 51-55 audit resolved. XSS patched in league-intel.html (15 escapeHtml/escapeAttr calls). FILTER_COLUMN_MAP SQL column names fixed (pass_attempts→attempts, total_tds→touchdowns). Heat coloring: tooltip explains percentile scale, button hidden in non-NFL modes. Sleeper players endpoint cached. Design guide border violations fixed (1px→2px). formatTimeAgo "just now" for recent entries.
 

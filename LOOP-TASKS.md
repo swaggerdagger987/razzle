@@ -1,39 +1,35 @@
-# Razzle Loop — Phase 56 Task List
+# Razzle Loop — Phase 57 Task List
 
-> QA + UX Audit — Auto-Generated Fixes (Phases 51-55)
+> Draft Pick Trade Calculator — Dynasty draft pick values in the Trade Analyzer
 
-**Current Phase**: 56 — QA + UX Audit Fixes
-**Exit Criterion**: All CRITICAL and HIGH findings from the Phases 51-55 audit are resolved. XSS vulnerabilities patched. SQL column references fixed. Heat coloring has user-facing legend and proper universe handling.
+**Current Phase**: 57 — Draft Pick Trade Calculator
+**Exit Criterion**: Trade Analyzer supports dynasty draft picks (2025 1.01 through 4.12) alongside players. Pick values follow standard dynasty exponential decay curve. Users can evaluate pick-for-pick and pick-for-player trades. Visual pick value chart shows the full value curve. Comic-strip design with chunky borders and position colors.
 
 ---
 
-## Task 1: XSS patches — escape all Sleeper API data in league-intel.html
+## Task 1: Draft pick value model + backend endpoint
 **Status**: PASS
-**Notes**: All Sleeper API values (league.name, p.name, p.team, userId, pos, league_id) now wrapped in escapeHtml()/escapeAttr(). Applied to league cards, roster rendering, and position badges.
+**Notes**: Exponential decay model: A=88, k=0.070, 48 picks. GET /api/trade/pick-values returns all picks with values. 1.01=88.0, 1.12=40.7, 2.01=38.0, 4.12=3.3. Same 0-100 scale as player trade values.
 
-## Task 2: Fix FILTER_COLUMN_MAP column names in live_data.py
+## Task 2: Frontend pick selector in Trade Analyzer
 **Status**: PASS
-**Notes**: Changed pass_attempts to SUM(s.attempts) and total_tds to SUM(s.touchdowns) to match actual player_week_stats schema. No more runtime SQL errors on filter.
+**Notes**: Year/Round/Pick dropdowns + "Add Pick" button on both sides. Pick cards render with round-colored badges (Rd1=terracotta, Rd2=blue, Rd3=teal, Rd4=purple). Picks sum with players for verdict. PNG export handles picks. Value bar segments use round colors.
 
-## Task 3: Heat coloring legend and universe handling
+## Task 3: Visual pick value chart
 **Status**: PASS
-**Notes**: Heat button tooltip expanded to explain per-position percentile scale (green = elite 90th+, red = below avg 10th-). Heat button now hidden in college/prospect modes where numeric data is sparse. Press H shortcut also noted.
+**Notes**: Canvas-drawn exponential decay curve inside Trade Analyzer. 48 dots colored by round, connected by line. Selected picks highlighted with larger dots + labels. Grid lines, round labels at bottom. 3px ink border, sand background.
 
-## Task 4: MEDIUM fixes — Sleeper caching, borders, headshot fallback, formatTimeAgo
+## Task 4: Deploy + smoke test
 **Status**: PASS
-**Notes**: Sleeper /players/nfl cached in module variable via getSleeperPlayers(). .profile-stat border 1px->2px. .roster-pos border 1.5px->2px. formatTimeAgo returns "just now" for <60s entries.
-
-## Task 5: Deploy + smoke test
-**Status**: PASS
-**Notes**: All syntax checks pass (node -c, py_compile). 15 escapeHtml/escapeAttr calls in league-intel.html. FILTER_COLUMN_MAP matches DB schema. Heat button correctly hidden in non-NFL modes.
+**Notes**: node -c lab.js passes. py_compile passes on server.py and live_data.py. Pick values verified: 48 picks, reasonable dynasty values. All ID references match between HTML and JS.
 
 ---
 
 ## Loop State
 ```
-Current Phase: 56
-Current Task: 5
+Current Phase: 57
+Current Task: 4
 Current Stage: COMPLETE
 Attempt: 1
-Tasks Completed: 5/5
+Tasks Completed: 4/4
 ```

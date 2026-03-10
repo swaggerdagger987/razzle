@@ -1608,6 +1608,77 @@
     border-top: 2px dashed var(--ink-faint);
     text-align: center;
   }
+  .trade-pick-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .trade-pick-row select {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 4px 6px;
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+    background: var(--bg-card);
+    cursor: pointer;
+  }
+  .trade-pick-row .btn-chunky {
+    font-size: 11px;
+    padding: 4px 10px;
+  }
+  .trade-pick-card {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    background: var(--bg-card);
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    box-shadow: 2px 2px 0 var(--ink);
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
+  .trade-pick-card:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+  .trade-pick-card .pick-round-badge {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: bold;
+    color: #fff;
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--ink);
+  }
+  .trade-pick-card .pick-label {
+    font-family: var(--font-display);
+    font-size: 13px;
+    flex: 1;
+  }
+  .trade-pick-card .pick-value {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: bold;
+    min-width: 28px;
+    text-align: right;
+  }
+  .trade-pick-card .remove-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--ink-light);
+    padding: 0 2px;
+    line-height: 1;
+  }
+  .trade-pick-card .remove-btn:hover {
+    color: var(--red);
+  }
+  .trade-pick-chart-wrap {
+    margin-top: 16px;
+    border-top: 2px dashed var(--ink-faint);
+    padding-top: 16px;
+  }
 
   @media (max-width: 768px) {
     .trade-analyzer-sides {
@@ -2066,8 +2137,14 @@
           <input type="text" class="input-chunky" id="taSearchGive" placeholder="search player..." autocomplete="off">
           <div class="trade-autocomplete" id="taAutoGive"></div>
         </div>
+        <div class="trade-pick-row">
+          <select id="taPickYearGive"><option>2025</option><option>2026</option><option>2027</option></select>
+          <select id="taPickRdGive"><option value="1">Rd 1</option><option value="2">Rd 2</option><option value="3">Rd 3</option><option value="4">Rd 4</option></select>
+          <select id="taPickNumGive"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option></select>
+          <button class="btn-chunky" onclick="_taAddPick('give')">+ Pick</button>
+        </div>
         <div class="trade-player-list" id="taListGive">
-          <div class="trade-empty-hint">drop players here to trade away</div>
+          <div class="trade-empty-hint">add players or picks to trade away</div>
         </div>
         <div class="trade-side-total">
           <span style="font-family:var(--font-display); font-size:13px;">TOTAL</span>
@@ -2089,8 +2166,14 @@
           <input type="text" class="input-chunky" id="taSearchGet" placeholder="search player..." autocomplete="off">
           <div class="trade-autocomplete" id="taAutoGet"></div>
         </div>
+        <div class="trade-pick-row">
+          <select id="taPickYearGet"><option>2025</option><option>2026</option><option>2027</option></select>
+          <select id="taPickRdGet"><option value="1">Rd 1</option><option value="2">Rd 2</option><option value="3">Rd 3</option><option value="4">Rd 4</option></select>
+          <select id="taPickNumGet"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option></select>
+          <button class="btn-chunky" onclick="_taAddPick('get')">+ Pick</button>
+        </div>
         <div class="trade-player-list" id="taListGet">
-          <div class="trade-empty-hint">drop players here to acquire</div>
+          <div class="trade-empty-hint">add players or picks to acquire</div>
         </div>
         <div class="trade-side-total">
           <span style="font-family:var(--font-display); font-size:13px;">TOTAL</span>
@@ -2105,6 +2188,15 @@
       <div id="taVerdict"></div>
       <div id="taCommentary"></div>
       <button class="btn-primary" onclick="exportTradeAnalyzerPNG()" style="margin-top:14px; font-size:12px; padding:6px 18px;">Export PNG</button>
+    </div>
+
+    <!-- Pick Value Chart -->
+    <div class="trade-pick-chart-wrap">
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+        <span style="font-family:var(--font-display); font-size:14px;">Pick Value Curve</span>
+        <span style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light);">dynasty draft capital at a glance</span>
+      </div>
+      <canvas id="taPickChartCanvas" width="720" height="220" style="border:3px solid var(--ink); border-radius:8px; background:var(--bg); max-width:100%; display:block;"></canvas>
     </div>
   </div>
 </div>

@@ -6553,6 +6553,18 @@ function openTradeAnalyzer() {
   document.getElementById("tradeAnalyzerOverlay").classList.add("open");
   // Focus give search
   setTimeout(() => document.getElementById("taSearchGive").focus(), 100);
+  // Load pick value chart
+  _taLoadPickChart();
+}
+
+async function _taLoadPickChart() {
+  if (_taPickCache) { _taDrawPickChart(); return; }
+  const picks = await _taFetchPickValues(2025);
+  _taPickCache = { _year: 2025 };
+  for (const p of picks) {
+    _taPickCache[p.round + "_" + p.pick] = p;
+  }
+  _taDrawPickChart();
 }
 
 function closeTradeAnalyzer(e) {
@@ -6650,21 +6662,30 @@ function _taRenderSide(side) {
   document.getElementById(totalId).textContent = total;
 
   if (!arr.length) {
-    const hint = side === "give" ? "drop players here to trade away" : "drop players here to acquire";
+    const hint = side === "give" ? "add players or picks to trade away" : "add players or picks to acquire";
     container.innerHTML = '<div class="trade-empty-hint">' + hint + '</div>';
     return;
   }
 
   container.innerHTML = arr.map((p, i) => {
+    if (p._type === "pick") {
+      const rdColor = _PICK_ROUND_COLORS[p.round] || "#8a8a9e";
+      return '<div class="trade-pick-card" style="border-left:4px solid ' + rdColor + ';">'
+        + '<span class="pick-round-badge" style="background:' + rdColor + ';">RD' + p.round + '</span>'
+        + '<span class="pick-label">' + escapeHtml(p.pick_label) + '</span>'
+        + '<span class="pick-value">' + (p.trade_value || 0) + '</span>'
+        + '<button class="remove-btn" onclick="_taRemovePlayer(\'' + side + '\', ' + i + ')" title="Remove">\u00d7</button>'
+        + '</div>';
+    }
     const pc = posColors[p.position] || "#1a1a2e";
     return '<div class="trade-player-card" style="border-left:4px solid ' + pc + ';">'
       + '<span class="pos-badge" style="background:' + pc + ';">' + escapeHtml(p.position) + '</span>'
       + '<div class="player-info">'
       + '<div class="player-name">' + escapeHtml(p.full_name) + '</div>'
-      + '<div class="player-meta">' + escapeHtml(p.team || "FA") + (p.age ? ' · Age ' + p.age : '') + '</div>'
+      + '<div class="player-meta">' + escapeHtml(p.team || "FA") + (p.age ? ' \u00b7 Age ' + p.age : '') + '</div>'
       + '</div>'
       + '<span class="player-value">' + (p.trade_value || 0) + '</span>'
-      + '<button class="remove-btn" onclick="_taRemovePlayer(\'' + side + '\', ' + i + ')" title="Remove">×</button>'
+      + '<button class="remove-btn" onclick="_taRemovePlayer(\'' + side + '\', ' + i + ')" title="Remove">\u00d7</button>'
       + '</div>';
   }).join("");
 }
@@ -6687,18 +6708,15 @@ function _taUpdateVerdict() {
   const givePct = Math.round((giveTotal / maxVal) * 100);
   const getPct = Math.round((getTotal / maxVal) * 100);
 
-  // Build segmented bars from player values
-  let giveSegments = _taState.give.map(p => {
-    const pc = posColors[p.position] || "#8a8a9e";
+  // Build segmented bars from player/pick values
+  function _barSegment(p) {
+    const pc = p._type === "pick" ? (_PICK_ROUND_COLORS[p.round] || "#8a8a9e") : (posColors[p.position] || "#8a8a9e");
+    const label = p._type === "pick" ? p.pick_label : p.full_name;
     const w = maxVal > 0 ? ((p.trade_value || 0) / maxVal * 100) : 0;
-    return '<div style="width:' + w + '%; height:100%; background:' + pc + '; display:inline-block;" title="' + escapeAttr(p.full_name) + ': ' + p.trade_value + '"></div>';
-  }).join("");
-
-  let getSegments = _taState.get.map(p => {
-    const pc = posColors[p.position] || "#8a8a9e";
-    const w = maxVal > 0 ? ((p.trade_value || 0) / maxVal * 100) : 0;
-    return '<div style="width:' + w + '%; height:100%; background:' + pc + '; display:inline-block;" title="' + escapeAttr(p.full_name) + ': ' + p.trade_value + '"></div>';
-  }).join("");
+    return '<div style="width:' + w + '%; height:100%; background:' + pc + '; display:inline-block;" title="' + escapeAttr(label) + ': ' + p.trade_value + '"></div>';
+  }
+  let giveSegments = _taState.give.map(_barSegment).join("");
+  let getSegments = _taState.get.map(_barSegment).join("");
 
   const barsHtml = '<div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">'
     + '<div style="display:flex; align-items:center; gap:8px;">'
@@ -6843,12 +6861,13 @@ function exportTradeAnalyzerPNG() {
     ctx.textAlign = "right";
     ctx.fillText(String(total), x + sideW - 16, topY + 32);
 
-    // Player cards
+    // Player/Pick cards
     const cardY = topY + 52;
     const cardH = 44;
     for (let i = 0; i < Math.min(players.length, 7); i++) {
       const p = players[i];
-      const pc = posColors[p.position] || "#8a8a9e";
+      const isPick = p._type === "pick";
+      const pc = isPick ? (_PICK_ROUND_COLORS[p.round] || "#8a8a9e") : (posColors[p.position] || "#8a8a9e");
       const cy = cardY + i * (cardH + 4);
 
       // Row bg
@@ -6857,7 +6876,7 @@ function exportTradeAnalyzerPNG() {
         ctx.fillRect(x + 12, cy, sideW - 24, cardH);
       }
 
-      // Position badge
+      // Badge
       ctx.fillStyle = pc;
       ctx.beginPath();
       ctx.roundRect(x + 18, cy + 10, 36, 22, 3);
@@ -6868,18 +6887,22 @@ function exportTradeAnalyzerPNG() {
       ctx.fillStyle = "#fff";
       ctx.font = "bold 10px sans-serif";
       ctx.textAlign = "center";
-      ctx.fillText(p.position, x + 36, cy + 25);
+      ctx.fillText(isPick ? ("RD" + p.round) : p.position, x + 36, cy + 25);
 
       // Name
       ctx.textAlign = "left";
       ctx.fillStyle = "#1a1a2e";
       ctx.font = "bold 14px sans-serif";
-      ctx.fillText(p.full_name || "", x + 62, cy + 22);
+      ctx.fillText(isPick ? (p.pick_label || "") : (p.full_name || ""), x + 62, cy + 22);
 
-      // Team + age
+      // Sub-text
       ctx.fillStyle = "#8a8a9e";
       ctx.font = "11px monospace";
-      ctx.fillText((p.team || "FA") + (p.age ? " · " + p.age : ""), x + 62, cy + 37);
+      if (isPick) {
+        ctx.fillText("Pick " + p.pick + " of 12", x + 62, cy + 37);
+      } else {
+        ctx.fillText((p.team || "FA") + (p.age ? " \u00b7 " + p.age : ""), x + 62, cy + 37);
+      }
 
       // Value
       ctx.fillStyle = pc;
@@ -6920,11 +6943,13 @@ function exportTradeAnalyzerPNG() {
   ctx.roundRect(giveX, barY, sideW, 18, 4);
   ctx.fill();
   ctx.stroke();
+  function _pngBarColor(p) {
+    return p._type === "pick" ? (_PICK_ROUND_COLORS[p.round] || "#8a8a9e") : (posColors[p.position] || "#8a8a9e");
+  }
   let bx = giveX;
   for (const p of _taState.give) {
-    const pc = posColors[p.position] || "#8a8a9e";
     const w = ((p.trade_value || 0) / maxVal) * sideW;
-    ctx.fillStyle = pc;
+    ctx.fillStyle = _pngBarColor(p);
     ctx.fillRect(bx, barY, w, 18);
     bx += w;
   }
@@ -6937,9 +6962,8 @@ function exportTradeAnalyzerPNG() {
   ctx.stroke();
   bx = getX;
   for (const p of _taState.get) {
-    const pc = posColors[p.position] || "#8a8a9e";
     const w = ((p.trade_value || 0) / maxVal) * sideW;
-    ctx.fillStyle = pc;
+    ctx.fillStyle = _pngBarColor(p);
     ctx.fillRect(bx, barY, w, 18);
     bx += w;
   }
@@ -7028,6 +7052,160 @@ function exportTradeAnalyzerPNG() {
   link.download = "razzle-trade-" + Date.now() + ".png";
   link.href = canvas.toDataURL("image/png");
   link.click();
+}
+
+// ─── Draft Pick Support ──────────────────────────────────────────────
+
+const _PICK_ROUND_COLORS = { 1: "#d97757", 2: "#5b7fff", 3: "#2ec4b6", 4: "#8b5cf6" };
+let _taPickCache = null; // cached pick values from API
+
+async function _taFetchPickValues(year) {
+  try {
+    const resp = await apiFetch("/api/trade/pick-values?year=" + year);
+    return resp.picks || [];
+  } catch (err) {
+    console.error("Pick values fetch failed:", err);
+    return [];
+  }
+}
+
+async function _taAddPick(side) {
+  const yearSel = document.getElementById("taPickYear" + side.charAt(0).toUpperCase() + side.slice(1));
+  const rdSel = document.getElementById("taPickRd" + side.charAt(0).toUpperCase() + side.slice(1));
+  const numSel = document.getElementById("taPickNum" + side.charAt(0).toUpperCase() + side.slice(1));
+  const year = parseInt(yearSel.value);
+  const rd = parseInt(rdSel.value);
+  const pk = parseInt(numSel.value);
+  const pickId = year + "_" + rd + "_" + pk;
+
+  const arr = _taState[side];
+  if (arr.find(p => p._pickId === pickId)) return;
+
+  // Fetch pick values if not cached for this year
+  if (!_taPickCache || _taPickCache._year !== year) {
+    const picks = await _taFetchPickValues(year);
+    _taPickCache = { _year: year };
+    for (const p of picks) {
+      _taPickCache[p.round + "_" + p.pick] = p;
+    }
+  }
+
+  const pickData = _taPickCache[rd + "_" + pk];
+  if (!pickData) return;
+
+  arr.push({
+    _type: "pick",
+    _pickId: pickId,
+    pick_label: pickData.pick_label,
+    round: rd,
+    pick: pk,
+    overall: pickData.overall,
+    trade_value: pickData.trade_value,
+  });
+  _taRenderSide(side);
+  _taUpdateVerdict();
+  _taDrawPickChart();
+}
+
+function _taDrawPickChart() {
+  const canvas = document.getElementById("taPickChartCanvas");
+  if (!canvas || !_taPickCache) return;
+  const ctx = canvas.getContext("2d");
+  const W = canvas.width, H = canvas.height;
+
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = "#ede0cf";
+  ctx.fillRect(0, 0, W, H);
+
+  // Collect all picks (48 picks for 4 rounds x 12 teams)
+  const allPicks = [];
+  for (let rd = 1; rd <= 4; rd++) {
+    for (let pk = 1; pk <= 12; pk++) {
+      const key = rd + "_" + pk;
+      if (_taPickCache[key]) allPicks.push(_taPickCache[key]);
+    }
+  }
+  if (!allPicks.length) return;
+
+  const pad = { top: 24, bottom: 30, left: 44, right: 16 };
+  const plotW = W - pad.left - pad.right;
+  const plotH = H - pad.top - pad.bottom;
+  const maxVal = allPicks[0].trade_value;
+
+  // Grid lines
+  ctx.strokeStyle = "rgba(26,26,46,0.1)";
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 4; i++) {
+    const y = pad.top + (plotH * i / 4);
+    ctx.beginPath();
+    ctx.moveTo(pad.left, y);
+    ctx.lineTo(W - pad.right, y);
+    ctx.stroke();
+    ctx.fillStyle = "#8a8a9e";
+    ctx.font = "10px monospace";
+    ctx.textAlign = "right";
+    ctx.fillText(Math.round(maxVal * (1 - i / 4)), pad.left - 6, y + 4);
+  }
+
+  // Draw curve
+  ctx.beginPath();
+  ctx.strokeStyle = "#1a1a2e";
+  ctx.lineWidth = 2;
+  const selectedPicks = [];
+  for (const side of ["give", "get"]) {
+    for (const item of _taState[side]) {
+      if (item._type === "pick") selectedPicks.push(item);
+    }
+  }
+
+  for (let i = 0; i < allPicks.length; i++) {
+    const pk = allPicks[i];
+    const x = pad.left + (i / (allPicks.length - 1)) * plotW;
+    const y = pad.top + plotH * (1 - pk.trade_value / maxVal);
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+
+  // Dots for each pick
+  for (let i = 0; i < allPicks.length; i++) {
+    const pk = allPicks[i];
+    const x = pad.left + (i / (allPicks.length - 1)) * plotW;
+    const y = pad.top + plotH * (1 - pk.trade_value / maxVal);
+    const rdColor = _PICK_ROUND_COLORS[pk.round] || "#8a8a9e";
+    const isSelected = selectedPicks.some(s => s.overall === pk.overall);
+
+    ctx.fillStyle = rdColor;
+    ctx.beginPath();
+    ctx.arc(x, y, isSelected ? 6 : 3, 0, Math.PI * 2);
+    ctx.fill();
+    if (isSelected) {
+      ctx.strokeStyle = "#1a1a2e";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      // Label
+      ctx.fillStyle = "#1a1a2e";
+      ctx.font = "bold 10px monospace";
+      ctx.textAlign = "center";
+      ctx.fillText(pk.pick_label.split(" ")[1], x, y - 10);
+    }
+  }
+
+  // Round labels at bottom
+  ctx.font = "bold 10px sans-serif";
+  ctx.textAlign = "center";
+  for (let rd = 1; rd <= 4; rd++) {
+    const startIdx = (rd - 1) * 12;
+    const midIdx = startIdx + 5.5;
+    const x = pad.left + (midIdx / (allPicks.length - 1)) * plotW;
+    ctx.fillStyle = _PICK_ROUND_COLORS[rd];
+    ctx.fillText("RD " + rd, x, H - 8);
+  }
+
+  // Title
+  ctx.font = "bold 11px sans-serif";
+  ctx.fillStyle = "#1a1a2e";
+  ctx.textAlign = "left";
+  ctx.fillText("PICK VALUE CURVE", pad.left, 14);
 }
 
 // Initialize trade analyzer search inputs

@@ -888,6 +888,15 @@ def trade_values(player_ids: str = ""):
     return {"players": live_data.fetch_trade_values(ids)}
 
 
+@app.get("/api/trade/pick-values")
+def trade_pick_values(year: int = 2025, rounds: int = 4, teams: int = 12):
+    """Return dynasty draft pick trade values."""
+    year = max(2024, min(2030, year))
+    rounds = max(1, min(5, rounds))
+    teams = max(4, min(16, teams))
+    return {"picks": live_data.fetch_pick_values(year, rounds, teams)}
+
+
 # ---------------------------------------------------------------------------
 # Analytics (lightweight page views)
 # ---------------------------------------------------------------------------

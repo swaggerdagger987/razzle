@@ -3232,6 +3232,43 @@ def fetch_trade_values(player_ids):
 
 
 # ---------------------------------------------------------------------------
+# Draft Pick Trade Values
+# ---------------------------------------------------------------------------
+
+def _pick_value(overall_pick):
+    """Dynasty draft pick value on 0-100 scale using exponential decay.
+
+    1.01 (overall 1) ≈ 88, mid-1st ≈ 70, late-1st ≈ 55,
+    early-2nd ≈ 42, mid-3rd ≈ 15, late-4th ≈ 3.
+    """
+    # Exponential decay: V = A * e^(-k * (pick-1))
+    # Calibrated so pick 1 = 88, pick 12 = 55, pick 48 = 3
+    import math
+    A = 88.0
+    k = 0.070
+    val = A * math.exp(-k * (overall_pick - 1))
+    return round(max(1.0, val), 1)
+
+
+def fetch_pick_values(year=2025, rounds=4, teams=12):
+    """Return trade values for all dynasty draft picks."""
+    picks = []
+    for rd in range(1, rounds + 1):
+        for pk in range(1, teams + 1):
+            overall = (rd - 1) * teams + pk
+            label = f"{year} {rd}.{pk:02d}"
+            picks.append({
+                "pick_label": label,
+                "year": year,
+                "round": rd,
+                "pick": pk,
+                "overall": overall,
+                "trade_value": _pick_value(overall),
+            })
+    return picks
+
+
+# ---------------------------------------------------------------------------
 # Featured Analysis — curated lists for home page
 # ---------------------------------------------------------------------------
 
