@@ -3827,6 +3827,7 @@ def fetch_college_aging_curves(position=None):
             pos_where = "AND c.position IN ('QB','RB','WR','TE')"
 
         # For each player, rank their seasons chronologically to get experience year
+        # Only include players with >= 2 seasons (needed for curves)
         query = f"""
             SELECT c.player_id, c.player_name, c.position, c.team, c.conference,
                    c.season, c.games, c.total_yards, c.total_tds,
@@ -3835,6 +3836,11 @@ def fetch_college_aging_curves(position=None):
             FROM cfb_player_season_stats c
             WHERE c.games >= 3
               {pos_where}
+              AND c.player_id IN (
+                  SELECT player_id FROM cfb_player_season_stats
+                  WHERE games >= 3
+                  GROUP BY player_id HAVING COUNT(*) >= 2
+              )
             ORDER BY c.player_id, c.season
         """
         rows = conn.execute(query, pos_params).fetchall()
@@ -4116,6 +4122,19 @@ def fetch_college_season_recap(season=None):
         """, (season,))
         season_rows = cursor.fetchall()
 
+        if not season_rows:
+            return {
+                "season": season,
+                "available_seasons": available_seasons,
+                "overall_1": None,
+                "pos_leaders": {},
+                "top_yards": [],
+                "top_tds": [],
+                "breakouts": [],
+                "busts": [],
+                "empty": True,
+            }
+
         def player_dict(r, rank=None):
             games = r[5] or 1
             fpts = r[6] or 0
@@ -4132,7 +4151,7 @@ def fetch_college_season_recap(season=None):
             return d
 
         # 1. Overall MVP
-        overall_1 = player_dict(season_rows[0], 1) if season_rows else None
+        overall_1 = player_dict(season_rows[0], 1)
 
         # 2. Top per position
         pos_leaders = {}
