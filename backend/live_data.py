@@ -10537,3 +10537,172 @@ def fetch_streaks(season=None, position=None, window=4, limit=25):
         }
     finally:
         conn.close()
+
+
+def fetch_season_recap(season=None):
+    """Generate a data-driven season recap with key storylines."""
+    conn = get_db()
+    try:
+        cursor = conn.cursor()
+
+        if not season:
+            cursor.execute("SELECT MAX(season) FROM player_week_stats")
+            season = cursor.fetchone()[0] or 2024
+
+        # Available seasons
+        cursor.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC")
+        available_seasons = [r[0] for r in cursor.fetchall()]
+
+        # Season totals for qualifying players
+        cursor.execute("""
+            SELECT p.player_id, p.full_name, p.position, p.team,
+                   COUNT(DISTINCT s.week) as games,
+                   COALESCE(SUM(s.fantasy_points_ppr), 0) as total_fpts
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE s.season = ? AND p.fantasy_relevant = 1
+            GROUP BY p.player_id
+            HAVING games >= 6
+            ORDER BY total_fpts DESC
+        """, (season,))
+        season_rows = cursor.fetchall()
+
+        def player_dict(r, rank=None):
+            d = {
+                "player_id": r[0], "name": r[1] or "Unknown",
+                "position": r[2] or "RB", "team": r[3] or "FA",
+                "games": r[4], "total_fpts": round(r[5], 1),
+                "ppg": round(r[5] / r[4], 1) if r[4] else 0,
+            }
+            if rank is not None:
+                d["rank"] = rank
+            return d
+
+        # 1. Overall #1
+        overall_1 = player_dict(season_rows[0], 1) if season_rows else None
+
+        # 2. Top per position
+        pos_leaders = {}
+        for r in season_rows:
+            pos = r[2] or "RB"
+            if pos not in pos_leaders:
+                pos_leaders[pos] = player_dict(r, 1)
+
+        # 3. Highest single game
+        cursor.execute("""
+            SELECT p.player_id, p.full_name, p.position, p.team,
+                   s.week, s.fantasy_points_ppr
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE s.season = ? AND p.fantasy_relevant = 1
+            ORDER BY s.fantasy_points_ppr DESC
+            LIMIT 5
+        """, (season,))
+        top_weeks = []
+        for r in cursor.fetchall():
+            top_weeks.append({
+                "player_id": r[0], "name": r[1] or "Unknown",
+                "position": r[2] or "RB", "team": r[3] or "FA",
+                "week": r[4], "fpts": round(r[5] or 0, 1),
+            })
+
+        # 4. Most consistent (lowest CoV, min 8 games, min 5 PPG)
+        from collections import defaultdict
+        player_weeks = defaultdict(list)
+        for r in season_rows:
+            pid = r[0]
+            player_weeks[pid] = {"info": r, "scores": []}
+
+        cursor.execute("""
+            SELECT player_id, fantasy_points_ppr
+            FROM player_week_stats
+            WHERE season = ?
+            ORDER BY player_id, week
+        """, (season,))
+        for r in cursor.fetchall():
+            if r[0] in player_weeks:
+                player_weeks[r[0]]["scores"].append(r[1] or 0)
+
+        import math
+        consistent = []
+        volatile = []
+        for pid, data in player_weeks.items():
+            scores = data["scores"]
+            info = data["info"]
+            if len(scores) < 8:
+                continue
+            avg = sum(scores) / len(scores)
+            if avg < 5:
+                continue
+            variance = sum((s - avg) ** 2 for s in scores) / max(1, len(scores) - 1)
+            std = math.sqrt(variance)
+            cov = (std / avg) * 100 if avg else 999
+
+            entry = player_dict(info)
+            entry["cov"] = round(cov, 1)
+            entry["std"] = round(std, 1)
+            consistent.append(entry)
+            volatile.append(entry)
+
+        consistent.sort(key=lambda x: x["cov"])
+        volatile.sort(key=lambda x: x["cov"], reverse=True)
+
+        # 5. Biggest breakout (YoY PPG increase, prev season exists)
+        prev_season = season - 1
+        cursor.execute("""
+            SELECT p.player_id, p.full_name, p.position, p.team,
+                   COUNT(DISTINCT s.week) as games,
+                   COALESCE(SUM(s.fantasy_points_ppr), 0) as total_fpts
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE s.season = ? AND p.fantasy_relevant = 1
+            GROUP BY p.player_id
+            HAVING games >= 6
+        """, (prev_season,))
+        prev_data = {}
+        for r in cursor.fetchall():
+            prev_data[r[0]] = round(r[5] / r[4], 1) if r[4] else 0
+
+        breakouts = []
+        busts = []
+        for r in season_rows:
+            pid = r[0]
+            if pid not in prev_data:
+                continue
+            curr_ppg = round(r[5] / r[4], 1) if r[4] else 0
+            prev_ppg = prev_data[pid]
+            if prev_ppg < 3:
+                continue
+            delta = round(curr_ppg - prev_ppg, 1)
+            pct = round((delta / prev_ppg) * 100, 1) if prev_ppg else 0
+            entry = player_dict(r)
+            entry["prev_ppg"] = prev_ppg
+            entry["delta"] = delta
+            entry["delta_pct"] = pct
+            if delta >= 3:
+                breakouts.append(entry)
+            elif delta <= -3:
+                busts.append(entry)
+
+        breakouts.sort(key=lambda x: x["delta"], reverse=True)
+        busts.sort(key=lambda x: x["delta"])
+
+        # 6. Season stats summary
+        total_players = len(season_rows)
+        avg_ppg = round(sum(r[5] / r[4] for r in season_rows if r[4]) / total_players, 1) if total_players else 0
+
+        return {
+            "season": season,
+            "available_seasons": available_seasons,
+            "overall_1": overall_1,
+            "pos_leaders": pos_leaders,
+            "top_weeks": top_weeks[:5],
+            "most_consistent": consistent[:5],
+            "most_volatile": volatile[:5],
+            "breakouts": breakouts[:5],
+            "busts": busts[:5],
+            "total_players": total_players,
+            "avg_ppg": avg_ppg,
+        }
+    finally:
+        conn.close()

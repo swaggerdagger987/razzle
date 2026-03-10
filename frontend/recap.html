@@ -3,53 +3,51 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Hot & Cold Streaks — Razzle</title>
-<meta property="og:title" content="Hot & Cold Streaks — Razzle">
-<meta property="og:description" content="Identify players on hot or cold scoring streaks vs their season average on razzle.lol">
+<title>Season Recap — Razzle</title>
+<meta property="og:title" content="Season Recap — Razzle">
+<meta property="og:description" content="Data-driven fantasy football season recap — MVP, breakouts, busts, top weeks, and more on razzle.lol">
 <meta property="og:site_name" content="razzle.lol">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Hot & Cold Streaks — Razzle">
-<meta name="twitter:description" content="Identify players on hot or cold scoring streaks vs their season average on razzle.lol">
+<meta name="twitter:title" content="Season Recap — Razzle">
+<meta name="twitter:description" content="Data-driven fantasy football season recap — MVP, breakouts, busts, top weeks, and more on razzle.lol">
 <meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
-<meta name="description" content="Hot and cold streak tracker — who's on fire and who's ice cold over their last few games on razzle.lol">
+<meta name="description" content="Fantasy football season year in review — overall #1, biggest breakout, biggest bust, highest week, most consistent, and more on razzle.lol">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="styles.css">
 <style>
-  .str-page {
-    max-width: 1200px;
+  .rc-page {
+    max-width: 1100px;
     margin: 0 auto;
     padding: 24px 20px 60px;
   }
 
-  .str-header {
+  .rc-header {
     text-align: center;
     margin-bottom: 24px;
   }
-  .str-header h1 {
+  .rc-header h1 {
     font-family: var(--font-display);
     font-size: 32px;
     color: var(--ink);
     margin: 0 0 4px;
   }
-  .str-header .str-subtitle {
+  .rc-header .rc-subtitle {
     font-family: var(--font-hand);
     font-size: 20px;
     color: var(--ink-light);
   }
 
-  .str-controls {
+  .rc-controls {
     display: flex;
     justify-content: center;
-    align-items: center;
     gap: 16px;
     margin-bottom: 24px;
-    flex-wrap: wrap;
   }
-  .str-controls select {
+  .rc-controls select {
     font-family: var(--font-mono);
     font-size: 13px;
     padding: 6px 10px;
@@ -57,25 +55,7 @@
     border-radius: 4px;
     background: var(--card);
   }
-  .str-controls .pos-tabs {
-    display: flex;
-    gap: 4px;
-  }
-  .str-controls .pos-tab {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    padding: 5px 12px;
-    border: 2px solid var(--ink);
-    border-radius: 4px;
-    background: var(--card);
-    cursor: pointer;
-    font-weight: 700;
-  }
-  .str-controls .pos-tab.active {
-    background: var(--ink);
-    color: var(--sand);
-  }
-  .str-export {
+  .rc-export {
     font-family: var(--font-mono);
     font-size: 12px;
     padding: 5px 14px;
@@ -85,9 +65,9 @@
     cursor: pointer;
     font-weight: 700;
   }
-  .str-export:hover { background: var(--ink); color: var(--sand); }
+  .rc-export:hover { background: var(--ink); color: var(--sand); }
 
-  .str-loading {
+  .rc-loading {
     text-align: center;
     font-family: var(--font-hand);
     font-size: 18px;
@@ -95,107 +75,150 @@
     padding: 60px 0;
   }
 
-  /* Two-column layout */
-  .str-columns {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
+  /* MVP Hero */
+  .rc-mvp {
+    background: var(--card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 24px;
+    text-align: center;
+    margin-bottom: 24px;
   }
-  @media (max-width: 768px) {
-    .str-columns { grid-template-columns: 1fr; }
+  .rc-mvp-label {
+    font-family: var(--font-hand);
+    font-size: 16px;
+    color: var(--ink-light);
+    margin-bottom: 4px;
+  }
+  .rc-mvp-name {
+    font-family: var(--font-display);
+    font-size: 28px;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .rc-mvp-stats {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .rc-mvp-stat {
+    text-align: center;
+  }
+  .rc-mvp-val {
+    font-family: var(--font-mono);
+    font-size: 22px;
+    font-weight: 700;
+  }
+  .rc-mvp-lbl {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-light);
+    text-transform: uppercase;
   }
 
-  .str-section {
+  /* Position leaders */
+  .rc-pos-leaders {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 768px) {
+    .rc-pos-leaders { grid-template-columns: repeat(2, 1fr); }
+  }
+  .rc-pos-card {
+    background: var(--card);
+    border: 3px solid var(--ink);
+    border-radius: 8px;
+    box-shadow: 3px 3px 0 var(--ink);
+    padding: 12px;
+    text-align: center;
+  }
+  .rc-pos-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    color: #fff;
+    display: inline-block;
+    margin-bottom: 6px;
+    border: 2px solid var(--ink);
+  }
+  .rc-pos-name {
+    font-family: var(--font-display);
+    font-size: 16px;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+  .rc-pos-stat {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-light);
+  }
+
+  /* Sections grid */
+  .rc-sections {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 768px) {
+    .rc-sections { grid-template-columns: 1fr; }
+  }
+
+  .rc-section {
     background: var(--card);
     border: 3px solid var(--ink);
     border-radius: 10px;
     box-shadow: 4px 4px 0 var(--ink);
     overflow: hidden;
   }
-  .str-section-header {
+  .rc-section-header {
     font-family: var(--font-display);
-    font-size: 18px;
-    padding: 10px 16px;
-    color: #fff;
+    font-size: 16px;
+    padding: 8px 14px;
+    background: var(--ink);
+    color: var(--sand);
   }
-  .str-section-header.hot { background: #166534; }
-  .str-section-header.cold { background: #991b1b; }
 
-  /* Table */
-  .str-table {
-    width: 100%;
-    border-collapse: collapse;
+  .rc-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .rc-list li {
+    padding: 8px 14px;
     font-family: var(--font-mono);
     font-size: 12px;
-  }
-  .str-table th {
-    background: var(--sand);
-    padding: 6px 8px;
-    text-align: right;
-    font-size: 10px;
-    font-weight: 700;
-    border-bottom: 2px solid var(--ink-faint);
-    cursor: pointer;
-    user-select: none;
-    white-space: nowrap;
-  }
-  .str-table th:first-child, .str-table th:nth-child(2) { text-align: left; }
-  .str-table td {
-    padding: 6px 8px;
-    text-align: right;
     border-bottom: 1px solid var(--ink-faint);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
-  .str-table td:first-child, .str-table td:nth-child(2) { text-align: left; }
-  .str-table tbody tr:hover { background: rgba(217,119,87,0.08); }
+  .rc-list li:last-child { border-bottom: none; }
 
-  /* Badges */
-  .str-delta-badge {
-    font-family: var(--font-mono);
-    font-size: 11px;
+  .rc-badge {
+    font-size: 10px;
     font-weight: 700;
     padding: 1px 6px;
     border-radius: 3px;
     border: 1px solid;
-    white-space: nowrap;
   }
-  .str-delta-badge.hot {
-    background: #dcfce7;
-    color: #166534;
-    border-color: #166534;
-  }
-  .str-delta-badge.cold {
-    background: #fef2f2;
-    color: #991b1b;
-    border-color: #991b1b;
-  }
-  .str-pos-badge {
+  .rc-badge.green { background: #dcfce7; color: #166534; border-color: #166534; }
+  .rc-badge.red { background: #fef2f2; color: #991b1b; border-color: #991b1b; }
+  .rc-badge.blue { background: #dbeafe; color: #1e40af; border-color: #1e40af; }
+  .rc-badge.gold { background: #fef3c7; color: #92400e; border-color: #92400e; }
+
+  .rc-pos-chip {
     font-size: 10px;
     font-weight: 700;
     padding: 1px 5px;
     border-radius: 3px;
     color: #fff;
     margin-left: 4px;
-  }
-
-  /* Mini sparkline (recent scores) */
-  .str-recent {
-    display: flex;
-    gap: 2px;
-    align-items: flex-end;
-    height: 20px;
-  }
-  .str-recent-bar {
-    width: 8px;
-    border-radius: 2px 2px 0 0;
-    min-height: 2px;
-  }
-
-  .str-empty {
-    text-align: center;
-    font-family: var(--font-hand);
-    font-size: 15px;
-    color: var(--ink-light);
-    padding: 30px 16px;
   }
 </style>
 </head>
@@ -252,38 +275,27 @@
     <li><a href="/weeklyleaders.html">Week Leaders</a></li>
     <li><a href="/pace.html">Pace</a></li>
     <li><a href="/gamelog.html">Game Log</a></li>
-    <li><a href="/streaks.html" class="active">Streaks</a></li>
+    <li><a href="/streaks.html">Streaks</a></li>
+    <li><a href="/recap.html" class="active">Recap</a></li>
     <li><a href="/team/KC">Teams</a></li>
     <li><a href="/league-intel.html">League Intel</a></li>
     <li><a href="/agents.html">War Room</a></li>
   </ul>
 </nav>
 
-<main class="str-page" id="strRoot">
-  <div class="str-header">
-    <h1>Hot & Cold Streaks</h1>
-    <div class="str-subtitle">who's on fire and who's ice cold</div>
+<main class="rc-page" id="rcRoot">
+  <div class="rc-header">
+    <h1>Season Recap</h1>
+    <div class="rc-subtitle">the year in review, powered by data</div>
   </div>
 
-  <div class="str-controls">
-    <select id="strSeason" aria-label="Season"></select>
-    <select id="strWindow" aria-label="Window">
-      <option value="3">Last 3 games</option>
-      <option value="4" selected>Last 4 games</option>
-      <option value="5">Last 5 games</option>
-    </select>
-    <div class="pos-tabs">
-      <button class="pos-tab active" data-pos="">ALL</button>
-      <button class="pos-tab" data-pos="QB">QB</button>
-      <button class="pos-tab" data-pos="RB">RB</button>
-      <button class="pos-tab" data-pos="WR">WR</button>
-      <button class="pos-tab" data-pos="TE">TE</button>
-    </div>
-    <button class="str-export" id="strExport">Export PNG</button>
+  <div class="rc-controls">
+    <select id="rcSeason" aria-label="Season"></select>
+    <button class="rc-export" id="rcExport">Export PNG</button>
   </div>
 
-  <div id="strContent">
-    <div class="str-loading">pulling film...</div>
+  <div id="rcContent">
+    <div class="rc-loading">pulling film...</div>
   </div>
 </main>
 
@@ -408,146 +420,174 @@
 
   var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
 
-  var currentPosition = '';
-  var currentData = null;
-
   /* ---- URL state ---- */
   function readURL() {
     var p = new URLSearchParams(window.location.search);
-    return { season: p.get('season') || '', pos: p.get('pos') || '', window: p.get('window') || '' };
+    return { season: p.get('season') || '' };
   }
-  function writeURL(season, pos, win) {
+  function writeURL(season) {
     var p = new URLSearchParams();
     if (season) p.set('season', season);
-    if (pos) p.set('pos', pos);
-    if (win && win !== '4') p.set('window', win);
     var qs = p.toString();
     history.replaceState(null, '', qs ? '?' + qs : location.pathname);
   }
 
-  /* ---- Fetch ---- */
   function load() {
-    var selSeason = document.getElementById('strSeason');
-    var selWindow = document.getElementById('strWindow');
-    var season = selSeason.value || '';
-    var win = selWindow.value || '4';
-    var pos = currentPosition;
-    writeURL(season, pos, win);
+    var sel = document.getElementById('rcSeason');
+    var season = sel.value || '';
+    writeURL(season);
 
-    var url = '/api/streaks?window=' + encodeURIComponent(win);
-    if (season) url += '&season=' + encodeURIComponent(season);
-    if (pos) url += '&position=' + encodeURIComponent(pos);
+    var url = '/api/season-recap?';
+    if (season) url += 'season=' + encodeURIComponent(season);
 
-    document.getElementById('strContent').innerHTML = '<div class="str-loading">pulling film...</div>';
+    document.getElementById('rcContent').innerHTML = '<div class="rc-loading">pulling film...</div>';
 
     fetch(url).then(function(r) {
       if (!r.ok) throw new Error('API error');
       return r.json();
     }).then(function(data) {
-      currentData = data;
-      populateSeasons(data.season);
+      populateSeasons(data.available_seasons, data.season);
       render(data);
     }).catch(function() {
-      document.getElementById('strContent').innerHTML = '<div class="str-loading">something went wrong — try again</div>';
+      document.getElementById('rcContent').innerHTML = '<div class="rc-loading">something went wrong — try again</div>';
     });
   }
 
-  function populateSeasons(current) {
-    var sel = document.getElementById('strSeason');
+  function populateSeasons(seasons, current) {
+    var sel = document.getElementById('rcSeason');
     if (sel.options.length <= 1) {
       sel.innerHTML = '';
-      for (var y = 2024; y >= 2020; y--) {
+      (seasons || []).forEach(function(s) {
         var opt = document.createElement('option');
-        opt.value = y;
-        opt.textContent = y;
-        if (y === current) opt.selected = true;
+        opt.value = s;
+        opt.textContent = s;
+        if (s === current) opt.selected = true;
         sel.appendChild(opt);
-      }
+      });
     }
   }
 
-  /* ---- Render ---- */
+  function posChip(pos) {
+    var c = POS_COLORS[pos] || '#888';
+    return '<span class="rc-pos-chip" style="background:' + c + '">' + escapeHtml(pos) + '</span>';
+  }
+
   function render(data) {
-    var hot = data.hot || [];
-    var cold = data.cold || [];
+    var html = '';
 
-    var html = '<div class="str-columns">';
+    // MVP hero
+    var mvp = data.overall_1;
+    if (mvp) {
+      html += '<div class="rc-mvp">';
+      html += '<div class="rc-mvp-label">' + escapeHtml(String(data.season)) + ' Fantasy MVP</div>';
+      html += '<div class="rc-mvp-name">' + escapeHtml(mvp.name) + ' ' + posChip(mvp.position) + '</div>';
+      html += '<div class="rc-mvp-stats">';
+      html += '<div class="rc-mvp-stat"><div class="rc-mvp-val">' + escapeHtml(String(mvp.total_fpts)) + '</div><div class="rc-mvp-lbl">Total PPR</div></div>';
+      html += '<div class="rc-mvp-stat"><div class="rc-mvp-val">' + escapeHtml(String(mvp.ppg)) + '</div><div class="rc-mvp-lbl">PPG</div></div>';
+      html += '<div class="rc-mvp-stat"><div class="rc-mvp-val">' + escapeHtml(String(mvp.games)) + '</div><div class="rc-mvp-lbl">Games</div></div>';
+      html += '</div></div>';
+    }
 
-    // Hot section
-    html += '<div class="str-section">';
-    html += '<div class="str-section-header hot">On Fire</div>';
-    if (hot.length) {
-      html += renderTable(hot, 'hot');
-    } else {
-      html += '<div class="str-empty">no hot streaks found</div>';
+    // Position leaders
+    var posOrder = ['QB', 'RB', 'WR', 'TE'];
+    html += '<div class="rc-pos-leaders">';
+    for (var i = 0; i < posOrder.length; i++) {
+      var pos = posOrder[i];
+      var ldr = (data.pos_leaders || {})[pos];
+      var pc = POS_COLORS[pos] || '#888';
+      html += '<div class="rc-pos-card">';
+      html += '<div class="rc-pos-label" style="background:' + pc + '">' + escapeHtml(pos) + '1</div>';
+      if (ldr) {
+        html += '<div class="rc-pos-name">' + escapeHtml(ldr.name) + '</div>';
+        html += '<div class="rc-pos-stat">' + escapeHtml(String(ldr.total_fpts)) + ' pts / ' + escapeHtml(String(ldr.ppg)) + ' PPG</div>';
+      } else {
+        html += '<div class="rc-pos-stat">—</div>';
+      }
+      html += '</div>';
     }
     html += '</div>';
 
-    // Cold section
-    html += '<div class="str-section">';
-    html += '<div class="str-section-header cold">Ice Cold</div>';
-    if (cold.length) {
-      html += renderTable(cold, 'cold');
-    } else {
-      html += '<div class="str-empty">no cold streaks found</div>';
-    }
+    // Sections grid
+    html += '<div class="rc-sections">';
+
+    // Top single-game performances
+    html += '<div class="rc-section">';
+    html += '<div class="rc-section-header">Highest Single Game</div>';
+    html += renderList(data.top_weeks || [], function(p) {
+      return '<span>' + escapeHtml(p.name) + posChip(p.position) + '</span>' +
+        '<span><span class="rc-badge gold">Wk ' + escapeHtml(String(p.week)) + '</span> ' +
+        escapeHtml(String(fmt(p.fpts))) + ' pts</span>';
+    });
+    html += '</div>';
+
+    // Biggest breakouts
+    html += '<div class="rc-section">';
+    html += '<div class="rc-section-header">Biggest Breakouts</div>';
+    html += renderList(data.breakouts || [], function(p) {
+      return '<span>' + escapeHtml(p.name) + posChip(p.position) + '</span>' +
+        '<span><span class="rc-badge green">+' + escapeHtml(String(fmt(p.delta))) + ' PPG</span> ' +
+        escapeHtml(String(p.prev_ppg)) + ' → ' + escapeHtml(String(p.ppg)) + '</span>';
+    });
+    html += '</div>';
+
+    // Biggest busts
+    html += '<div class="rc-section">';
+    html += '<div class="rc-section-header">Biggest Busts</div>';
+    html += renderList(data.busts || [], function(p) {
+      return '<span>' + escapeHtml(p.name) + posChip(p.position) + '</span>' +
+        '<span><span class="rc-badge red">' + escapeHtml(String(fmt(p.delta))) + ' PPG</span> ' +
+        escapeHtml(String(p.prev_ppg)) + ' → ' + escapeHtml(String(p.ppg)) + '</span>';
+    });
+    html += '</div>';
+
+    // Most consistent
+    html += '<div class="rc-section">';
+    html += '<div class="rc-section-header">Most Consistent</div>';
+    html += renderList(data.most_consistent || [], function(p) {
+      return '<span>' + escapeHtml(p.name) + posChip(p.position) + '</span>' +
+        '<span><span class="rc-badge blue">CoV ' + escapeHtml(String(fmt(p.cov, 0))) + '%</span> ' +
+        escapeHtml(String(p.ppg)) + ' PPG</span>';
+    });
+    html += '</div>';
+
+    // Most volatile
+    html += '<div class="rc-section">';
+    html += '<div class="rc-section-header">Most Volatile</div>';
+    html += renderList(data.most_volatile || [], function(p) {
+      return '<span>' + escapeHtml(p.name) + posChip(p.position) + '</span>' +
+        '<span><span class="rc-badge red">CoV ' + escapeHtml(String(fmt(p.cov, 0))) + '%</span> ' +
+        escapeHtml(String(p.ppg)) + ' PPG</span>';
+    });
+    html += '</div>';
+
+    // Season stats
+    html += '<div class="rc-section">';
+    html += '<div class="rc-section-header">Season Stats</div>';
+    html += '<ul class="rc-list">';
+    html += '<li><span>Total Qualifying Players</span><span>' + escapeHtml(String(data.total_players)) + '</span></li>';
+    html += '<li><span>Average PPG</span><span>' + escapeHtml(String(data.avg_ppg)) + '</span></li>';
+    html += '</ul>';
     html += '</div>';
 
     html += '</div>';
-    document.getElementById('strContent').innerHTML = html;
+
+    document.getElementById('rcContent').innerHTML = html;
   }
 
-  function renderTable(players, type) {
-    var html = '<table class="str-table"><thead><tr>';
-    html += '<th>Player</th><th>Pos</th><th>Szn Avg</th><th>Recent</th><th>Delta</th><th>Last ' + escapeHtml(String(currentData.window)) + '</th>';
-    html += '</tr></thead><tbody>';
-
-    for (var i = 0; i < players.length; i++) {
-      var p = players[i];
-      var posColor = POS_COLORS[p.position] || '#888';
-      var badgeClass = type === 'hot' ? 'hot' : 'cold';
-      var sign = p.delta > 0 ? '+' : '';
-
-      html += '<tr>';
-      html += '<td>' + escapeHtml(p.name) + ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></td>';
-      html += '<td><span class="str-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
-      html += '<td>' + escapeHtml(String(fmt(p.season_avg))) + '</td>';
-      html += '<td>' + escapeHtml(String(fmt(p.recent_avg))) + '</td>';
-      html += '<td><span class="str-delta-badge ' + badgeClass + '">' + sign + escapeHtml(String(fmt(p.delta))) + ' (' + sign + escapeHtml(String(fmt(p.delta_pct, 0))) + '%)</span></td>';
-
-      // Mini bar sparkline
-      var scores = p.recent_scores || [];
-      var maxScore = Math.max.apply(null, scores.concat([1]));
-      html += '<td><div class="str-recent">';
-      for (var j = 0; j < scores.length; j++) {
-        var h = Math.max(2, Math.round((scores[j] / maxScore) * 20));
-        var barColor = scores[j] >= p.season_avg ? '#2ec4b6' : '#d97757';
-        html += '<div class="str-recent-bar" style="height:' + h + 'px;background:' + barColor + '" title="Wk: ' + escapeHtml(String(fmt(scores[j]))) + '"></div>';
-      }
-      html += '</div></td>';
-      html += '</tr>';
+  function renderList(items, fn) {
+    if (!items.length) return '<ul class="rc-list"><li>no data available</li></ul>';
+    var html = '<ul class="rc-list">';
+    for (var i = 0; i < items.length; i++) {
+      html += '<li>' + fn(items[i]) + '</li>';
     }
-
-    html += '</tbody></table>';
+    html += '</ul>';
     return html;
   }
 
-  /* ---- Position tabs ---- */
-  document.querySelectorAll('.pos-tab').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      document.querySelectorAll('.pos-tab').forEach(function(b) { b.classList.remove('active'); });
-      btn.classList.add('active');
-      currentPosition = btn.getAttribute('data-pos') || '';
-      load();
-    });
-  });
+  document.getElementById('rcSeason').addEventListener('change', load);
 
-  document.getElementById('strSeason').addEventListener('change', load);
-  document.getElementById('strWindow').addEventListener('change', load);
-
-  /* ---- PNG export ---- */
-  document.getElementById('strExport').addEventListener('click', function() {
-    var root = document.getElementById('strRoot');
+  document.getElementById('rcExport').addEventListener('click', function() {
+    var root = document.getElementById('rcRoot');
     if (typeof html2canvas === 'undefined') return;
     html2canvas(root, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
       var ctx = canvas.getContext('2d');
@@ -555,32 +595,21 @@
       ctx.fillStyle = 'rgba(0,0,0,0.12)';
       ctx.fillText('razzle.lol', canvas.width - 130, canvas.height - 16);
       var link = document.createElement('a');
-      link.download = 'razzle-streaks.png';
+      link.download = 'razzle-recap.png';
       link.href = canvas.toDataURL();
       link.click();
     });
   });
 
-  /* ---- Analytics ---- */
   fetch('/api/analytics/pageview', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ page: '/streaks.html', referrer: document.referrer || '' })
+    body: JSON.stringify({ page: '/recap.html', referrer: document.referrer || '' })
   }).catch(function() {});
 
-  /* ---- Init from URL ---- */
   var init = readURL();
-  if (init.pos) {
-    currentPosition = init.pos;
-    document.querySelectorAll('.pos-tab').forEach(function(b) {
-      b.classList.toggle('active', (b.getAttribute('data-pos') || '') === init.pos);
-    });
-  }
-  if (init.window) {
-    document.getElementById('strWindow').value = init.window;
-  }
   if (init.season) {
-    var sel = document.getElementById('strSeason');
+    var sel = document.getElementById('rcSeason');
     var opt = document.createElement('option');
     opt.value = init.season;
     opt.textContent = init.season;

@@ -1,6 +1,19 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 118 — Hot & Cold Streaks (COMPLETE)
+## Current Phase: Phase 119 — Season Recap (COMPLETE)
+
+**Exit criterion MET:** /recap.html shows data-driven season year-in-review. MVP hero card with overall #1 scorer's total PPR + PPG + games. Position leader cards (QB1/RB1/WR1/TE1) with totals. Six recap sections: Highest Single Game (top 5 weekly scores with week badge), Biggest Breakouts (YoY PPG increase with delta badge), Biggest Busts (YoY PPG decrease), Most Consistent (lowest CoV), Most Volatile (highest CoV), Season Stats (total players + avg PPG). Season selector, URL state (?season=), PNG export with watermark. GET /api/season-recap computes all recap data including YoY comparisons. 30 escapeHtml calls, 73/73 braces balanced. "Recap" nav link on all 53 pages. Sitemap + tools hub entry under Matchup & Schedule.
+
+### Phase 119 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/season-recap endpoint | DONE | fetch_season_recap with breakout/bust/consistency |
+| 2 | Season Recap page | DONE | MVP hero, pos leaders, 6 recap sections, 30 escapeHtml |
+| 3 | Nav links + sitemap + tools hub | DONE | All 53 pages updated |
+| 4 | Smoke test | DONE | Python OK, JS OK, 53/53 nav links |
+
+## Previous Phase: Phase 118 — Hot & Cold Streaks (COMPLETE)
 
 **Exit criterion MET:** /streaks.html shows players on hot streaks (recent PPG significantly above season average) and cold streaks (recent PPG significantly below). Two-column layout with "On Fire" (green) and "Ice Cold" (red) sections. Mini bar sparklines showing recent game scores (green if above season avg, terracotta if below). Delta badges with absolute and percentage change. Streak window selector (3/4/5 games), position filter tabs, season selector, URL state (?season=&pos=&window=), PNG export with watermark. GET /api/streaks returns hot and cold player lists with recent scores. 10 escapeHtml calls, 68/68 braces balanced. "Streaks" nav link on all 52 pages. Sitemap + tools hub entry under Player Discovery.
 

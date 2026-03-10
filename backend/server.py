@@ -928,6 +928,7 @@ def sitemap_xml():
         ("/pace.html", "0.8", "weekly"),
         ("/gamelog.html", "0.8", "weekly"),
         ("/streaks.html", "0.8", "weekly"),
+        ("/recap.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1542,6 +1543,17 @@ def streaks(season: int = 0, position: str = "", window: int = 4):
         return JSONResponse({"error": "Failed to fetch streaks"}, status_code=500)
 
 
+@app.get("/api/season-recap")
+def season_recap(season: int = 0):
+    """Return data-driven season recap with key storylines."""
+    try:
+        s = season if season > 0 else None
+        return live_data.fetch_season_recap(season=s)
+    except Exception as e:
+        logger.error(f"season-recap error: {e}")
+        return JSONResponse({"error": "Failed to fetch season recap"}, status_code=500)
+
+
 @app.get("/api/tools-hub")
 def tools_hub():
     """Return the static tools catalog organized by category."""
@@ -1617,6 +1629,7 @@ def tools_hub():
                 {"name": "Strength of Schedule", "desc": "SOS grades, buy targets vs. sell candidates", "url": "/schedule.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Weekly Heatmap", "desc": "Player-by-week scoring grid with color-coded tiers", "url": "/weekly.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Weekly Leaders", "desc": "Top fantasy performers for any week — who went off", "url": "/weeklyleaders.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Season Recap", "desc": "Data-driven year in review — MVP, breakouts, busts, top weeks, and more", "url": "/recap.html", "positions": ["QB", "RB", "WR", "TE"]},
             ],
         },
         {

@@ -1,17 +1,17 @@
-# Razzle Loop — Phase 118 Task List
+# Razzle Loop — Phase 119 Task List
 
-> Hot & Cold Streaks
+> Season Recap / Year in Review
 
-**Current Phase**: 118 — Hot & Cold Streaks
-**Exit Criterion**: /streaks.html shows hot and cold streak players with sparklines and delta badges.
+**Current Phase**: 119 — Season Recap
+**Exit Criterion**: /recap.html shows data-driven season recap with MVP, breakouts, busts, top weeks, consistency.
 
 ---
 
-## Task 1: Backend /api/streaks endpoint
+## Task 1: Backend /api/season-recap endpoint
 **Status**: PASS
 **Attempts**: 1
 
-## Task 2: Frontend /streaks.html page
+## Task 2: Frontend /recap.html page
 **Status**: PASS
 **Attempts**: 1
 
@@ -27,7 +27,7 @@
 
 ## Loop State
 ```
-Current Phase: 118
+Current Phase: 119
 Current Task: 4
 Current Stage: COMPLETE
 Attempt: 1
