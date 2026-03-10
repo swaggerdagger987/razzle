@@ -1,13 +1,13 @@
-# Razzle Loop — Phase 124 Task List
+# Razzle Loop — Phase 125 Task List
 
-> Playoff Schedule Planner
+> QA+UX Audit for Phases 121-124
 
-**Current Phase**: 124 — Playoff Schedule Planner
-**Exit Criterion**: /playoffs.html shows players ranked by strength of their playoff schedule (weeks 14-17). Uses defense PPG-allowed-by-position data to grade playoff matchups. Matchup difficulty badges per week, overall playoff SOS grade. Position filters, season selector, PNG export. GET /api/playoff-schedule returns playoff matchup data.
+**Current Phase**: 125 — QA+UX Audit
+**Exit Criterion**: Audit complete, all findings documented, fixes applied if needed.
 
 ---
 
-## Task 1: Backend + frontend + nav + smoke test
+## Task 1: QA+UX Audit
 **Status**: PASS
 **Attempts**: 1
 
@@ -15,7 +15,7 @@
 
 ## Loop State
 ```
-Current Phase: 124
+Current Phase: 125
 Current Task: 1
 Current Stage: COMPLETE
 Attempt: 1

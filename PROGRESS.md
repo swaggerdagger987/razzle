@@ -1,6 +1,10 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 124 — Playoff Schedule Planner (COMPLETE)
+## Current Phase: Phase 125 — QA+UX Audit for Phases 121-124 (COMPLETE)
+
+**Exit criterion MET:** QA+UX audit of Comparison Table (121), Record Book (122), Waiver Wire (123), Playoff Schedule (124). 0 HIGH, 0 MEDIUM, 3 LOW findings. All 4 pages pass XSS protection, error handling, loading states, PNG export, analytics, design compliance, and backend fantasy_relevant filter. No fixes needed — all LOW findings are acceptable behavior.
+
+## Previous Phase: Phase 124 — Playoff Schedule Planner (COMPLETE)
 
 **Exit criterion MET:** /playoffs.html shows players ranked by strength of their playoff schedule (weeks 14-17). Uses defense PPG-allowed-by-position data to grade each playoff matchup (A/B/C/D/F). Per-week matchup cells show opponent, grade badge, and actual PPR score. Overall playoff SOS grade per player. Position filter tabs, season selector, PNG export with watermark. GET /api/playoff-schedule returns playoff matchup data. 10 escapeHtml calls, 71/71 braces balanced. "Playoffs" nav link on all 57 pages. Sitemap + tools hub entry under Matchup & Schedule.
 
