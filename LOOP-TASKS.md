@@ -4,8 +4,9 @@
 - Phase: 27 (Backend Cleanup: Split live_data.py into Modules)
 - Task 1: PASS
 - Task 2: PASS
+- Task 3: PASS
 - Stage: EXECUTING
-- Next: Task 3
+- Next: Task 4
 
 ## Phase 27: Backend Cleanup: Split live_data.py into Modules
 **Exit Criterion**: `live_data.py` is replaced by a `live_data/` package with logical submodules (e.g., `players.py`, `prospects.py`, `college.py`, `analytics.py`, `cache.py`, `storage.py`). All imports in `server.py` updated. No function lost, no endpoint broken. Each module under 3,000 lines.
@@ -22,8 +23,9 @@
 **Acceptance**: `core.py` contains `_cached`, `_safe_div`, `_enrich_*` functions, `FANTASY_POSITIONS`, `RATE_METRICS`, `_STAT_SUM_COLS`, `TEAM_ABBREV`, `ABBREV_TO_TEAM`, `_DVS_AGE_CURVES`, `_age_multiplier`, `compute_trade_value`, `_age_value`, `_production_value`, `_scarcity_value`, `_pick_value`, `_efficiency_grade`, `_assign_tier`, `_tv_tier`, `_roster_grade`, `_competing_status`, `_build_stat_vector`, `_cosine_similarity`. `_monolith.py` updated to import from core. All files compile.
 
 ### Task 3: Extract players.py — NFL player CRUD functions
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
+**Notes**: `players.py` (1,669 lines) contains all 18 NFL player functions: db_stats, quick_search_players, fetch_players, fetch_screener, get_filter_options, fetch_player_weeks, fetch_player_seasons, fetch_player_profile, fetch_players_compare, fetch_team_roster, fetch_career_stats, fetch_player_percentiles, fetch_player_strengths, fetch_points_breakdown, fetch_game_log, fetch_compare_table, fetch_player_boom_bust, fetch_player_comps. `_monolith.py` imports all from players.py. Original definitions removed. Monolith reduced from 13,744 to 12,020 lines. All files compile clean. Full import chain verified.
 **Acceptance**: `players.py` contains `db_stats`, `quick_search_players`, `fetch_players`, `fetch_screener`, `get_filter_options`, `fetch_player_weeks`, `fetch_player_seasons`, `fetch_player_profile`, `fetch_players_compare`, `fetch_team_roster`, `fetch_career_stats`, `fetch_player_percentiles`, `fetch_player_strengths`, `fetch_points_breakdown`, `fetch_game_log`, `fetch_compare_table`, `fetch_player_boom_bust`, `fetch_player_comps`. `_monolith.py` updated. All files compile.
 
 ### Task 4: Extract prospects.py and college.py
