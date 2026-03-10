@@ -5,7 +5,7 @@
 - Task: Sidebar collapse/expand polish
 - Stage: PLAN
 - Attempt: 1/3
-- Tasks Done: 5/8
+- Tasks Done: 6/8
 
 ## Phase 7: Lab Polish — transitions, keyboard nav, virtual scrolling, UX refinements
 **Exit Criterion**: The Lab feels fast, fluid, and professional. Panel transitions are smooth. Keyboard users can navigate the full sidebar and table. Tables with 500+ rows don't lag. The experience is screenshot-worthy.
@@ -55,8 +55,8 @@
 **Accept when**: Every panel has a styled header with breadcrumb, title, and flavor text.
 **Depends on**: none
 **Size**: M
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task 7: Mobile responsiveness audit
 **Requirement**: Test Lab on 375px, 390px, and 768px viewports. Sidebar becomes a slide-out drawer with hamburger toggle. Tables scroll horizontally with sticky first column. Toolbar wraps gracefully. No horizontal overflow on body.

@@ -214,22 +214,31 @@
   }
 
   .lab-panel-header {
-    font-family: var(--font-display);
-    font-size: 22px;
-    font-weight: 700;
     padding: 16px 20px 10px;
     border-bottom: 2px dashed var(--ink-faint);
-    display: flex;
-    align-items: baseline;
-    gap: 10px;
   }
-
   .lab-panel-header .breadcrumb {
     font-family: var(--font-mono);
     font-size: 11px;
     color: var(--ink-light);
     text-transform: uppercase;
+    display: block;
+    margin-bottom: 4px;
   }
+  .lab-panel-header .panel-title {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+  }
+  .lab-panel-header .panel-flavor {
+    font-family: var(--font-hand);
+    font-size: 15px;
+    color: var(--ink-light);
+    margin-top: 2px;
+  }
+
+  /* Hide duplicate h2 inside panel content when breadcrumb header exists */
+  .lab-panel-content .lp-header h2 { display: none; }
 
   .lab-panel-frame {
     width: 100%;
@@ -2895,10 +2904,77 @@
     explorer: 'Explorer', targets: 'Target Distribution', team: 'Team Rosters'
   };
 
+  var PANEL_FLAVORS = {
+    screener: 'the Bloomberg terminal for fantasy football',
+    rankings: 'who\'s worth the most in your league',
+    tiers: 'S-tier or roster clogger? find out here',
+    tradevalues: 'every player\'s fantasy stock price',
+    vorp: 'how far above replacement are they really?',
+    advantage: 'which positions give you an edge?',
+    auction: 'turn trade values into draft-day dollars',
+    cheatsheet: 'your draft board, ready to print',
+    breakouts: 'the next league-winner is hiding here',
+    buysell: 'buy the dip, sell the peak',
+    stocks: 'rising and falling fantasy stocks',
+    waivers: 'the wire is where leagues are won',
+    scarcity: 'positional drop-off tells you where to invest',
+    handcuffs: 'insurance policies for your starters',
+    efficiency: 'who does the most with the least?',
+    consistency: 'floor kings and ceiling chasers',
+    snapefficiency: 'fantasy points per snap — who\'s efficient?',
+    workload: 'touches, snaps, and usage trends',
+    dualthreat: 'rush + receive = cheat code',
+    targetpremium: 'target quality over target quantity',
+    drops: 'butterfingers or bad luck?',
+    garbagetime: 'stat padders vs clean producers',
+    successrate: 'efficient plays, not just big plays',
+    weekly: 'every score, every week, one grid',
+    matchups: 'schedule advantages by position',
+    stacks: 'QB-WR correlation for lineup construction',
+    redzone: 'who gets the ball when it matters most?',
+    streaks: 'hot hands and cold stretches',
+    weeklyleaders: 'weekly position leaders at a glance',
+    weeklymvp: 'the MVP race, week by week',
+    playoffs: 'playoff schedule edges for your lineup',
+    usage: 'snap and touch trends over time',
+    yoy: 'who\'s improving? who\'s declining?',
+    aging: 'father time is undefeated... mostly',
+    pace: 'on pace for what? let\'s find out',
+    seasonpace: 'projected season totals from current pace',
+    tdregression: 'touchdowns lie — regression doesn\'t',
+    airyards: 'the air yards don\'t lie',
+    prospects: 'the next generation, ranked and rated',
+    draftclass: 'draft class deep dives',
+    percentiles: 'where do they rank among their peers?',
+    career: 'the full career picture',
+    'career-compare': 'side-by-side career timelines',
+    comptable: 'stat-for-stat comparison tables',
+    strengths: 'what they do best (and worst)',
+    reportcard: 'grades across every dimension',
+    fptsbreakdown: 'where do the fantasy points come from?',
+    gamelog: 'the game-by-game receipts',
+    archetypes: 'workhorse, speedster, or something else?',
+    breakdown: 'scoring category breakdown',
+    rosterbuilder: 'build your roster, get a grade',
+    tradefinder: 'find fair trade partners instantly',
+    scoring: 'PPR vs half vs standard — who moves?',
+    dashboard: 'your dynasty portfolio at a glance',
+    schedule: 'strength of schedule, visualized',
+    opportunity: 'volume is king — who gets the most?',
+    records: 'the fantasy record book',
+    recap: 'how the season unfolded',
+    awards: 'MVP, breakout star, and more',
+    leaders: 'season stat leaders with the crown',
+    explorer: 'scatter plots and custom stat exploration',
+    targets: 'who\'s getting fed on each team?',
+    team: 'full roster views by team'
+  };
+
   // Map each panel to its sidebar category for breadcrumbs
   var PANEL_CATEGORIES = {};
   document.querySelectorAll('.lab-sidebar-category').forEach(function(cat) {
-    var categoryName = cat.textContent.trim();
+    var catText = cat.querySelector('.cat-text');
+    var categoryName = catText ? catText.textContent.trim() : cat.textContent.trim();
     var next = cat.nextElementSibling;
     while (next && !next.classList.contains('lab-sidebar-category')) {
       if (next.dataset && next.dataset.panel) {
@@ -2937,13 +3013,15 @@
           section.dataset.panel = panelName;
           section.id = 'panel-' + panelName;
 
-          // Add breadcrumb header
+          // Add breadcrumb header with title + flavor text
           var label = PANEL_LABELS[panelName] || panelName;
           var cat = PANEL_CATEGORIES[panelName] || 'The Lab';
+          var flavor = PANEL_FLAVORS[panelName] || '';
           var header = document.createElement('div');
           header.className = 'lab-panel-header';
-          header.innerHTML = '<span class="breadcrumb">' + escapeHtml('The Lab > ' + cat) + '</span>' +
-                             '<span>' + escapeHtml(label) + '</span>';
+          header.innerHTML = '<span class="breadcrumb">' + escapeHtml('The Lab > ' + cat + ' > ' + label) + '</span>' +
+                             '<div class="panel-title">' + escapeHtml(label) + '</div>' +
+                             (flavor ? '<div class="panel-flavor">' + escapeHtml(flavor) + '</div>' : '');
           section.appendChild(header);
 
           // Content area for the render function
