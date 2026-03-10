@@ -15,6 +15,35 @@
 
   var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
 
+  // ─── NFL-Only Panel Messages ────────────────────────────────────
+  // Panels that don't apply to college show a friendly Caveat-font message
+  var NFL_ONLY_MESSAGES = {
+    tradevalues: 'college players don\'t have dynasty trade values... yet. switch to NFL to see who\'s worth what.',
+    rosterbuilder: 'roster building is an NFL thing — college rosters are the coach\'s problem. switch to NFL to build yours.',
+    waivers: 'no waiver wire in college — every recruit was a 5-star in someone\'s eyes. switch to NFL for waiver targets.',
+    tradefinder: 'can\'t trade college players (the NCAA frowns on that). switch to NFL to find trade matches.',
+    auction: 'auction values are for your fantasy draft, not the transfer portal. switch to NFL for draft-day dollars.',
+    cheatsheet: 'cheat sheets are for your draft board, not the college depth chart. switch to NFL for draft prep.',
+    dashboard: 'the dynasty dashboard tracks NFL assets — college players haven\'t declared yet. switch to NFL for the overview.',
+    handcuffs: 'handcuff insurance is an NFL strategy — in college, the backup just transfers. switch to NFL for handcuff pairs.'
+  };
+
+  function showNflOnlyMsg(el, panelName, title, subtitle) {
+    var isCollege = typeof state !== 'undefined' && state.universe === 'college';
+    if (!isCollege) return false;
+    var msg = NFL_ONLY_MESSAGES[panelName] || 'this panel is NFL only — switch back to see the data.';
+    el.innerHTML =
+      '<div class="lp-page">' +
+        '<div class="lp-header"><h2>' + (title || panelName) + '</h2>' +
+        (subtitle ? '<div class="lp-subtitle">' + subtitle + '</div>' : '') + '</div>' +
+        '<div class="lp-nfl-only">' +
+          '<div class="lp-nfl-only-icon">&#x1F3C8;</div>' +
+          '<div class="lp-nfl-only-text">' + msg + '</div>' +
+        '</div>' +
+      '</div>';
+    return true;
+  }
+
   // ─── 1. DYNASTY RANKINGS ──────────────────────────────────────
   defs.push({ name: 'rankings', render: function(el) {
     var state = { position: '', data: null };
@@ -207,6 +236,7 @@
 
   // ─── 3. TRADE VALUES ──────────────────────────────────────────
   defs.push({ name: 'tradevalues', render: function(el) {
+    if (showNflOnlyMsg(el, 'tradevalues', 'Trade Values', 'who\'s worth what in dynasty')) return;
     var currentPosition = '';
     var currentData = null;
     var searchQuery = '';
@@ -670,6 +700,7 @@
 
   // ─── 6. AUCTION VALUES ────────────────────────────────────────
   defs.push({ name: 'auction', render: function(el) {
+    if (showNflOnlyMsg(el, 'auction', 'Auction Values', 'trade values converted to draft-day dollars')) return;
     var state = { budget: 200, rosterSize: 15, season: 0, position: 'ALL', search: '', sortKey: 'auction_value', sortDir: -1, data: null };
     var seasonsLoaded = false;
 
@@ -820,6 +851,7 @@
 
   // ─── 7. CHEAT SHEET ───────────────────────────────────────────
   defs.push({ name: 'cheatsheet', render: function(el) {
+    if (showNflOnlyMsg(el, 'cheatsheet', 'Cheat Sheet', 'your draft day companion')) return;
     var state = { season: 0, format: 'ppr', data: null };
     var seasonsLoaded = false;
     var POS_ORDER = ['QB', 'RB', 'WR', 'TE'];
@@ -1404,6 +1436,7 @@
 
   // ===== WAIVERS =====
   defs.push({ name: 'waivers', render: function(el) {
+    if (showNflOnlyMsg(el, 'waivers', 'Waiver Wire Targets', 'surging lately but low on the season')) return;
     el.innerHTML = '<div class="lp-page">' +
       '<div class="lp-header"><h2>Waiver Wire Targets</h2>' +
       '<div class="lp-subtitle">surging lately but low on the season — probably still on your wire</div></div>' +
@@ -1616,6 +1649,7 @@
 
   // ===== HANDCUFFS =====
   defs.push({ name: 'handcuffs', render: function(el) {
+    if (showNflOnlyMsg(el, 'handcuffs', 'Handcuff Rankings', 'most valuable backup RBs by team rushing volume')) return;
     el.innerHTML = '<div class="lp-page">' +
       '<div class="lp-header"><h2>Handcuff Rankings</h2>' +
       '<div class="lp-subtitle">most valuable backup RBs by team rushing volume</div></div>' +
@@ -6382,6 +6416,7 @@
 
   // ─── DASHBOARD ───────────────────────────────────────────────
   defs.push({ name: 'dashboard', render: function(el) {
+    if (showNflOnlyMsg(el, 'dashboard', 'Dynasty Dashboard', 'at-a-glance dynasty overview')) return;
     var state = { season: 0 };
 
     el.innerHTML =
@@ -7869,6 +7904,7 @@
 
   // ─── ROSTER BUILDER ──────────────────────────────────────────
   defs.push({ name: 'rosterbuilder', render: function(el) {
+    if (showNflOnlyMsg(el, 'rosterbuilder', 'Roster Builder', 'build and grade your dynasty roster')) return;
     var rosterIds = [];
     var gradeData = null;
     var searchTimeout = null;
@@ -8677,6 +8713,7 @@
 
   // ─── TRADE FINDER ────────────────────────────────────────────
   defs.push({ name: 'tradefinder', render: function(el) {
+    if (showNflOnlyMsg(el, 'tradefinder', 'Trade Finder', 'find equal-value trade targets')) return;
     var currentData = null;
     var targetPosFilter = '';
     var seasonLoaded = false;

@@ -3503,3 +3503,24 @@
   .sc2-table th:nth-child(n+4), .sc2-table td:nth-child(n+4) { display: none; }
   .hide-mobile { display: none; }
 }
+
+/* ===== NFL-ONLY MESSAGE (college mode) ===== */
+.lp-nfl-only {
+  text-align: center;
+  padding: 80px 24px 60px;
+  max-width: 420px;
+  margin: 0 auto;
+}
+.lp-nfl-only-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  transform: rotate(-4deg);
+  display: inline-block;
+}
+.lp-nfl-only-text {
+  font-family: var(--font-hand, 'Caveat', cursive);
+  font-size: 22px;
+  line-height: 1.4;
+  color: var(--ink-light, #8a7565);
+  transform: rotate(-1deg);
+}

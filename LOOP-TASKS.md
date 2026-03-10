@@ -2,10 +2,10 @@
 
 ## Current State
 - Phase: 5 (College Football Integration)
-- Task: Add NFL-only messages for inapplicable panels
+- Task: College data season expansion verification
 - Stage: PLAN
 - Attempt: 1/3
-- Tasks Done: 6/8
+- Tasks Done: 7/8
 
 ## Phase 5: College Football Integration — NFL/College toggle across all panels
 **Exit Criterion**: Every applicable Lab panel supports an NFL/College universe toggle. College mode shifts to blue accent. College data covers 2015-present. Panels that don't apply to college show a friendly message.
@@ -63,8 +63,8 @@
 **Accept when**: All NFL-only panels show the message when college is toggled. Message matches Razzle design language.
 **Depends on**: Task 1
 **Size**: S
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task 8: College data season expansion verification
 **Requirement**: Verify college data covers 2015-present. Run cfbfastr_adapter with `--seasons 2015 2016 2017 2018 2019` if missing. Verify season selector in Lab shows 2015-2025 for college universe. Handle any years where sportsdataverse data is missing gracefully (skip, don't crash).
