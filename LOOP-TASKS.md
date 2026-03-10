@@ -1,43 +1,57 @@
-# Razzle Loop — Phase 46 Task List
+# Razzle Loop — Phase 47 Task List
 
-> QA + UX Audit — Auto-Generated Fixes (from Phases 41-45 audit)
+> Auto-generated. Home page needs live data to convert Reddit visitors into Lab users.
 
-**Current Phase**: 46 — QA + UX Audit Fixes
-**Exit Criterion**: All CRITICAL and HIGH findings from QA-AUDIT.md fixed. Formula store XSS patched. War Room API key messaging clear. Lab first-visit default preset active. Auth rate limiting added. "Coming Soon" copy updated. Deployed to Render.
+**Current Phase**: 47 — Home Page Live Data Widgets — Featured Analysis Cards
+**Exit Criterion**: Home page shows 3 live data widgets pulling real stats from the API: "Dynasty Risers" (top 5 PPG/age value), "Rookie Big Board" (top 5 prospects), "Breakout Candidates" (high target share + low PPG). Each card shows player names, key stats, position badges. Each links to the Lab with pre-applied filters. Styled in comic-strip design. Mobile responsive. Deployed to Render.
 
 ---
 
-## Task 1: Fix QA-C1 — Formula store XSS (escape name/creator in innerHTML)
+## Task 1: Backend — featured analysis API endpoint
 **Status**: PASS
-**Result**: Wrapped formula.name, formula.creator, and formula.description in escapeHtml() in formula-store.js. XSS via malicious formula names now renders as text.
+**Acceptance Criteria**:
+- GET /api/featured returns 3 curated lists: dynasty_risers, rookie_board, breakout_candidates
+- dynasty_risers: top 5 players by PPG/age ratio (young + productive)
+- rookie_board: top 5 prospects by prospect score from Big Board data
+- breakout_candidates: players with high target share but below-average PPG (breakout upside)
+- Returns player name, position, team, 2-3 key stats per list
+- Fast query (< 200ms)
 
-## Task 2: Fix UX-H1 + UX-H2 — War Room API key messaging
+## Task 2: Frontend — featured analysis cards on home page
 **Status**: PASS
-**Result**: Added apiKeyNotice div in agents.html with clear messaging ("API key needed", link to config panel, "Free at openrouter.ai"). "Run All Agents" button disabled when no key set. updateApiKeyNotice() called on init and after key saves.
+**Acceptance Criteria**:
+- 3 cards below the hero section: Dynasty Risers, Rookie Big Board, Breakout Candidates
+- Each card shows 5 players with position badge, name, team, and 2 key stats
+- Chunky border card design per DESIGN.md (3px border, 4px shadow, sand bg)
+- Slightly rotated card titles (sticker aesthetic)
+- "Open in Lab" button links to Lab with pre-applied filters/sort
+- Cards fetch data on page load from /api/featured
 
-## Task 3: Fix UX-H3 — Lab first-visit default preset
+## Task 3: Mobile responsive + animation
 **Status**: PASS
-**Result**: Default columns already set to PPR preset (confirmed line 367). Added first-visit toast: "showing PPR preset — try other views with the preset buttons above". Uses localStorage razzle_lab_visited flag. Toast auto-dismisses after 6s. CSS animation matches design system.
+**Acceptance Criteria**:
+- Cards stack vertically on mobile (< 768px)
+- Smooth fade-in animation on load
+- Loading state: "pulling film..." while fetching
+- Error state: "couldn't load the latest intel" with retry button
 
-## Task 4: Fix QA-H3 + QA-M3 + QA-M4 — Rate limiting, error messages, copy update
+## Task 4: Deploy + smoke test
 **Status**: PASS
-**Result**: In-memory rate limiter added to server.py (10 attempts per 60s per IP). Applied to /api/auth/register and /api/auth/login. auth.py generic exception returns "Registration failed" instead of str(e). Home page "Coming Soon" updated to "The War Room".
-
-## Task 5: Fix MEDIUM issues — null formula guard, zero display, prospect queries
-**Status**: PASS
-**Result**: Formula scoring null guards already existed (confirmed). Added zero-to-dash display for prospect/college mode in renderTableBody(). Draft year validated for range 2000-currentYear+2 in fetch_prospects().
-
-## Task 6: Deploy + smoke test all fixes
-**Status**: PASS
-**Result**: All JS files (warroom.js, lab.js, formula-store.js, app.js) pass syntax check. All Python modules (server, auth, billing, live_data) import cleanly. Committed and pushed.
+**Acceptance Criteria**:
+- All JS files pass syntax check
+- All Python files import cleanly
+- Featured endpoint returns valid data
+- Cards render on home page with real player data
+- Lab links work with correct pre-applied filters
+- Committed and pushed to master
 
 ---
 
 ## Loop State
 ```
-Current Phase: 46
-Current Task: COMPLETE
-Current Stage: DONE
+Current Phase: 47
+Current Task: 4
+Current Stage: COMPLETE
 Attempt: 1
-Tasks Completed: 6/6
+Tasks Completed: 4/4
 ```

@@ -182,6 +182,11 @@ def health():
     return {"status": "ok", "db": stats}
 
 
+@app.get("/api/featured")
+def featured():
+    return live_data.fetch_featured()
+
+
 # ---------------------------------------------------------------------------
 # Auth endpoints
 # ---------------------------------------------------------------------------

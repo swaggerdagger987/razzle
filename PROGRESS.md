@@ -1,6 +1,24 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 46 — QA + UX Audit Fixes (COMPLETE)
+## Current Phase: Phase 47 — Home Page Live Data Widgets (COMPLETE)
+
+**Exit criterion MET:** Home page shows 3 live data widgets — Dynasty Risers (PPG/age ratio), Rookie Big Board (prospect scores), Breakout Candidates (high target share + low PPG). Each card shows 5 players with position badges, key stats, and "Open in Lab" links with pre-applied filters. Styled in comic-strip design (3px borders, 4px shadows, sand bg). Mobile responsive (cards stack at 768px). Fade-in animation. Loading state: "pulling film...". Graceful error handling.
+
+### Phase 47 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/featured endpoint | DONE | fetch_featured() in live_data.py — 3 SQL queries for dynasty_risers, rookie_board, breakout_candidates |
+| 2 | Frontend featured cards | DONE | 3 cards below hero, position badges, key stats, "Open in Lab" links |
+| 3 | Mobile responsive + animation | DONE | Stack at 768px, fade-in, loading/error states |
+| 4 | Deploy + smoke test | DONE | All syntax clean, JS + Python verified |
+
+### Decisions Log
+- **Featured data source**: Used existing terminal.db tables — player_season_stats for dynasty risers and breakout candidates, big_board for rookie prospects. No new data sources needed.
+- **Lab link format**: Each card links to Lab with pre-applied universe, sort, and filter params via URL query string. Users land in the Lab with context already set.
+- **Graceful degradation**: Featured section hidden entirely if API fetch fails. No broken UI for first-time visitors.
+
+## Previous Phase: Phase 46 — QA + UX Audit Fixes (COMPLETE)
 
 **Exit criterion MET:** All critical and high findings from Phases 41-45 QA+UX audit fixed. Formula store XSS patched (escapeHtml on name/creator/description). War Room API key notice shown upfront with disabled Run button until key set. Lab first-visit toast guides new users to presets. Auth rate limiting (10/min/IP) on login/register. Generic error messages in auth.py. Home page "Coming Soon" updated. Prospect/college zero values show "—" instead of 0. Draft year range validated.
 

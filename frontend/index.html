@@ -157,6 +157,110 @@
     line-height: 1.6;
   }
 
+  /* ===== FEATURED / LIVE FROM THE LAB ===== */
+  .featured-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 20px;
+  }
+
+  .featured-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 14px;
+    box-shadow: 4px 4px 0 var(--ink);
+    overflow: hidden;
+    animation: featuredIn 0.4s ease-out both;
+  }
+  .featured-card:nth-child(1) { animation-delay: 0.1s; }
+  .featured-card:nth-child(2) { animation-delay: 0.2s; }
+  .featured-card:nth-child(3) { animation-delay: 0.3s; }
+
+  @keyframes featuredIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .featured-card-header {
+    padding: 14px 16px 10px;
+    border-bottom: 2px dashed var(--ink-faint);
+  }
+  .featured-card-header h3 {
+    font-family: var(--font-display);
+    font-size: 16px;
+    margin: 0;
+  }
+  .featured-card-header .featured-sub {
+    font-family: var(--font-hand);
+    font-size: 14px;
+    color: var(--ink-light);
+  }
+
+  .featured-card-body { padding: 10px 16px 14px; }
+
+  .featured-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--ink-faint);
+  }
+  .featured-row:last-child { border-bottom: none; }
+
+  .featured-rank {
+    font-family: var(--font-display);
+    font-size: 14px;
+    color: var(--ink-light);
+    width: 18px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .featured-pos {
+    font-family: var(--font-display);
+    font-size: 9px;
+    font-weight: 700;
+    color: white;
+    padding: 1px 5px;
+    border-radius: 4px;
+    border: 1.5px solid var(--ink);
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+
+  .featured-name {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .featured-stat {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-medium);
+    flex-shrink: 0;
+    text-align: right;
+  }
+
+  .featured-card-footer {
+    padding: 8px 16px 12px;
+    text-align: center;
+  }
+
+  .featured-card-footer a {
+    font-family: var(--font-hand);
+    font-size: 14px;
+    color: var(--orange);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--orange);
+  }
+
   /* ===== DRAFT SEASON SHOWCASE ===== */
   .draft-section {
     background: var(--blue-light);
@@ -530,6 +634,8 @@
     .mascot-row { flex-direction: column; text-align: center; }
     .mascot-visual { width: 100px; height: 100px; font-size: 52px; }
 
+    .featured-grid { grid-template-columns: 1fr; }
+
     .demo-section { padding: 32px 16px; }
     .demo-card { padding: 14px; font-size: 12px; }
     .agent-bio-grid { grid-template-columns: repeat(2, 1fr); }
@@ -689,6 +795,15 @@
         <span class="mascot-trait">your GM</span>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- LIVE FROM THE LAB -->
+<div class="section" id="featuredSection" style="display:none;">
+  <div class="section-label">Live from The Lab</div>
+  <h2>Real data. Real players. Right now.</h2>
+  <div id="featuredCards" class="featured-grid">
+    <div style="text-align:center; padding:32px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light); grid-column:1/-1;">pulling film...</div>
   </div>
 </div>
 
@@ -948,6 +1063,89 @@ async function submitWaitlist() {
     msgEl.style.color = 'var(--red)';
   }
 }
+
+// ── Featured / Live from The Lab ─────────────────────────────────
+const POS_COLORS = { QB: 'var(--pos-qb)', RB: 'var(--pos-rb)', WR: 'var(--pos-wr)', TE: 'var(--pos-te)' };
+
+function renderFeaturedCards(data) {
+  var container = document.getElementById('featuredCards');
+  var section = document.getElementById('featuredSection');
+  if (!container || !section) return;
+
+  var html = '';
+
+  // Dynasty Risers
+  if (data.dynasty_risers && data.dynasty_risers.length) {
+    html += '<div class="featured-card">';
+    html += '<div class="featured-card-header"><h3>Dynasty Risers</h3><div class="featured-sub">young + productive (' + (data.season || '') + ')</div></div>';
+    html += '<div class="featured-card-body">';
+    data.dynasty_risers.forEach(function(p, i) {
+      html += '<div class="featured-row">';
+      html += '<span class="featured-rank">' + (i + 1) + '</span>';
+      html += '<span class="featured-pos" style="background:' + (POS_COLORS[p.position] || 'var(--ink)') + '">' + p.position + '</span>';
+      html += '<span class="featured-name">' + escapeHtml(p.name) + ' <span style="color:var(--ink-light); font-weight:400;">' + escapeHtml(p.team || '') + '</span></span>';
+      html += '<span class="featured-stat">' + p.ppg + ' PPG</span>';
+      html += '</div>';
+    });
+    html += '</div>';
+    html += '<div class="featured-card-footer"><a href="/lab.html?sort=ppg&dir=desc">open in Lab &rarr;</a></div>';
+    html += '</div>';
+  }
+
+  // Rookie Big Board
+  if (data.rookie_board && data.rookie_board.length) {
+    html += '<div class="featured-card">';
+    html += '<div class="featured-card-header"><h3>Rookie Big Board</h3><div class="featured-sub">' + (data.draft_year || '2025') + ' class</div></div>';
+    html += '<div class="featured-card-body">';
+    data.rookie_board.forEach(function(p, i) {
+      html += '<div class="featured-row">';
+      html += '<span class="featured-rank">' + (i + 1) + '</span>';
+      html += '<span class="featured-pos" style="background:' + (POS_COLORS[p.position] || 'var(--ink)') + '">' + p.position + '</span>';
+      html += '<span class="featured-name">' + escapeHtml(p.name) + ' <span style="color:var(--ink-light); font-weight:400;">' + escapeHtml(p.school || '') + '</span></span>';
+      html += '<span class="featured-stat">' + (p.pick ? 'Rd ' + p.round + ' Pick ' + p.pick : 'TBD') + '</span>';
+      html += '</div>';
+    });
+    html += '</div>';
+    html += '<div class="featured-card-footer"><a href="/lab.html?u=prospects">open in Lab &rarr;</a></div>';
+    html += '</div>';
+  }
+
+  // Breakout Candidates
+  if (data.breakout_candidates && data.breakout_candidates.length) {
+    html += '<div class="featured-card">';
+    html += '<div class="featured-card-header"><h3>Breakout Candidates</h3><div class="featured-sub">high targets, room to grow</div></div>';
+    html += '<div class="featured-card-body">';
+    data.breakout_candidates.forEach(function(p, i) {
+      html += '<div class="featured-row">';
+      html += '<span class="featured-rank">' + (i + 1) + '</span>';
+      html += '<span class="featured-pos" style="background:' + (POS_COLORS[p.position] || 'var(--ink)') + '">' + p.position + '</span>';
+      html += '<span class="featured-name">' + escapeHtml(p.name) + ' <span style="color:var(--ink-light); font-weight:400;">' + escapeHtml(p.team || '') + '</span></span>';
+      html += '<span class="featured-stat">' + p.tpg + ' T/G</span>';
+      html += '</div>';
+    });
+    html += '</div>';
+    html += '<div class="featured-card-footer"><a href="/lab.html?pos=WR&sort=targets&dir=desc">open in Lab &rarr;</a></div>';
+    html += '</div>';
+  }
+
+  if (html) {
+    container.innerHTML = html;
+    section.style.display = '';
+  }
+}
+
+(async function loadFeatured() {
+  try {
+    var resp = await fetch('/api/featured');
+    if (!resp.ok) throw new Error('fetch failed');
+    var data = await resp.json();
+    renderFeaturedCards(data);
+  } catch (e) {
+    // Silently fail — featured section stays hidden
+    var section = document.getElementById('featuredSection');
+    if (section) section.style.display = 'none';
+  }
+})();
 </script>
 <script>fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({page:location.pathname})}).catch(function(){});</script>
 </body>

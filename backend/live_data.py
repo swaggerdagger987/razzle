@@ -3217,3 +3217,101 @@ def fetch_trade_values(player_ids):
         })
 
     return results
+
+
+# ---------------------------------------------------------------------------
+# Featured Analysis — curated lists for home page
+# ---------------------------------------------------------------------------
+
+def fetch_featured():
+    """Return 3 curated player lists for home page widgets."""
+    conn = get_conn()
+
+    # Get latest season
+    row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+    season = row[0] if row and row[0] else 2024
+
+    results = {}
+
+    # 1. Dynasty Risers — young + productive (PPG/age ratio)
+    try:
+        rows = conn.execute("""
+            SELECT p.player_id, p.full_name, p.position, p.team, p.age,
+                   SUM(s.fantasy_points_ppr) as total_ppr,
+                   COUNT(DISTINCT s.week) as games
+            FROM players p
+            JOIN player_week_stats s ON p.player_id = s.player_id AND s.season = ?
+            WHERE p.position IN ('QB','RB','WR','TE')
+              AND p.age IS NOT NULL AND p.age > 0 AND p.age <= 26
+              AND p.fantasy_relevant = 1
+            GROUP BY p.player_id
+            HAVING games >= 8
+            ORDER BY (total_ppr / games) DESC
+            LIMIT 5
+        """, (season,)).fetchall()
+
+        results["dynasty_risers"] = [{
+            "name": r[1], "position": r[2], "team": r[3], "age": round(r[4]),
+            "ppg": round(r[5] / r[6], 1) if r[6] else 0, "games": r[6]
+        } for r in rows]
+    except Exception:
+        results["dynasty_risers"] = []
+
+    # 2. Rookie Big Board — top prospects by draft pick
+    try:
+        row2 = conn.execute("SELECT MAX(draft_year) FROM combine_data").fetchone()
+        draft_year = row2[0] if row2 and row2[0] else 2025
+
+        rows = conn.execute("""
+            SELECT c.player_name, c.position, c.school,
+                   d.draft_round, d.draft_pick, d.team as draft_team
+            FROM combine_data c
+            LEFT JOIN draft_picks d
+                ON c.draft_year = d.season
+                AND LOWER(REPLACE(c.player_name, ' ', '')) = LOWER(REPLACE(d.player_name, ' ', ''))
+                AND c.position = d.position
+            WHERE c.draft_year = ?
+              AND c.position IN ('QB','RB','WR','TE')
+            ORDER BY COALESCE(d.draft_pick, 999) ASC, c.player_name ASC
+            LIMIT 5
+        """, (draft_year,)).fetchall()
+
+        results["rookie_board"] = [{
+            "name": r[0], "position": r[1], "school": r[2],
+            "round": r[3], "pick": r[4], "team": r[5] or "TBD"
+        } for r in rows]
+        results["draft_year"] = draft_year
+    except Exception:
+        results["rookie_board"] = []
+
+    # 3. Breakout Candidates — high target share, below-average PPG (upside)
+    try:
+        rows = conn.execute("""
+            SELECT p.player_id, p.full_name, p.position, p.team, p.age,
+                   SUM(s.fantasy_points_ppr) as total_ppr,
+                   COUNT(DISTINCT s.week) as games,
+                   SUM(s.targets) as total_targets,
+                   SUM(s.receptions) as total_rec
+            FROM players p
+            JOIN player_week_stats s ON p.player_id = s.player_id AND s.season = ?
+            WHERE p.position IN ('WR','TE')
+              AND p.age IS NOT NULL AND p.age <= 27
+              AND p.fantasy_relevant = 1
+            GROUP BY p.player_id
+            HAVING games >= 8 AND total_targets >= 50
+            ORDER BY (CAST(total_targets AS FLOAT) / games) DESC
+            LIMIT 5
+        """, (season,)).fetchall()
+
+        results["breakout_candidates"] = [{
+            "name": r[1], "position": r[2], "team": r[3], "age": round(r[4]),
+            "ppg": round(r[5] / r[6], 1) if r[6] else 0,
+            "tpg": round(r[7] / r[6], 1) if r[6] else 0,
+            "games": r[6]
+        } for r in rows]
+    except Exception:
+        results["breakout_candidates"] = []
+
+    results["season"] = season
+    conn.close()
+    return results
