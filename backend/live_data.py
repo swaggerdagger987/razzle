@@ -5697,3 +5697,159 @@ def fetch_year_over_year(season=None, position=None, metric="ppg", limit=25):
         }
     finally:
         conn.close()
+
+
+# ---------------------------------------------------------------------------
+# Air Yards Dashboard
+# ---------------------------------------------------------------------------
+
+_AIR_BUY_LOW_ANNOTATIONS = ["due for more", "regression coming", "breakout loading", "undervalued", "TD drought ending"]
+_AIR_SELL_HIGH_ANNOTATIONS = ["efficiency mirage", "TD luck", "volume mirage", "overperforming air yards", "regression risk"]
+
+
+def fetch_air_yards(season=None, position=None, limit=25):
+    """Air yards leaderboard with regression indicators (air yards rank vs PPG rank delta)."""
+    conn = get_conn()
+
+    try:
+        # Determine available seasons
+        row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
+        available_seasons = [r[0] for r in row] if row else [2024]
+
+        if not season:
+            season = available_seasons[0] if available_seasons else 2024
+
+        # Only pass catchers (no QB)
+        valid_pos = ("WR", "RB", "TE")
+        pos_filter = ""
+        params = [season]
+        if position and position.upper() in valid_pos:
+            pos_filter = "AND p.position = ?"
+            params.append(position.upper())
+        else:
+            pos_filter = "AND p.position IN ('WR','RB','TE')"
+
+        # Core stats query
+        rows = conn.execute(f"""
+            SELECT
+                p.player_id, p.full_name, p.position, p.team, p.age,
+                p.headshot_url,
+                COUNT(DISTINCT s.week) as games,
+                SUM(s.fantasy_points_ppr) as total_ppr,
+                SUM(s.targets) as total_targets,
+                SUM(s.receptions) as total_receptions,
+                SUM(s.receiving_yards) as total_rec_yards,
+                SUM(s.receiving_air_yards) as total_air_yards,
+                SUM(s.receiving_yards_after_catch) as total_yac
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE s.season = ?
+              {pos_filter}
+            GROUP BY p.player_id
+            HAVING COUNT(DISTINCT s.week) >= 4 AND SUM(s.targets) >= 10
+        """, params).fetchall()
+
+        if not rows:
+            return {
+                "season": season,
+                "available_seasons": available_seasons,
+                "buy_low": [],
+                "sell_high": [],
+            }
+
+        # Build player dicts with core stats
+        players = []
+        for r in rows:
+            games = r[6] or 1
+            targets = r[8] or 0
+            air_yards = r[11] or 0
+            rec_yards = r[10] or 0
+            adot = round(air_yards / targets, 1) if targets > 0 else 0
+            racr_val = round(rec_yards / air_yards, 2) if air_yards > 0 else 0
+            ppg = round((r[7] or 0) / games, 1)
+
+            players.append({
+                "player_id": r[0],
+                "name": r[1] or "Unknown",
+                "position": r[2] or "WR",
+                "team": r[3] or "FA",
+                "age": r[4],
+                "headshot_url": r[5] or "",
+                "games": games,
+                "ppg": ppg,
+                "targets": targets,
+                "targets_g": round(targets / games, 1),
+                "receptions": r[9] or 0,
+                "rec_yards": rec_yards,
+                "air_yards": air_yards,
+                "air_yards_g": round(air_yards / games, 1),
+                "yac": r[12] or 0,
+                "adot": adot,
+                "racr": racr_val,
+            })
+
+        # Enrich with rate metrics (air_yards_share, wopr)
+        rate_keys = ["air_yards_share", "wopr", "target_share"]
+        pid_list = [p["player_id"] for p in players]
+        placeholders = ",".join("?" * len(pid_list))
+        stat_ph = ",".join("?" * len(rate_keys))
+
+        rate_rows = conn.execute(f"""
+            SELECT m.player_id, m.stat_key, AVG(m.stat_value) as avg_val
+            FROM player_week_metrics m
+            WHERE m.player_id IN ({placeholders})
+              AND m.stat_key IN ({stat_ph})
+              AND m.season = ?
+            GROUP BY m.player_id, m.stat_key
+        """, pid_list + rate_keys + [season]).fetchall()
+
+        rate_lookup = {}
+        for rr in rate_rows:
+            if rr[0] not in rate_lookup:
+                rate_lookup[rr[0]] = {}
+            rate_lookup[rr[0]][rr[1]] = round(rr[2], 3) if rr[2] is not None else None
+
+        for p in players:
+            rm = rate_lookup.get(p["player_id"], {})
+            p["air_yards_share"] = rm.get("air_yards_share")
+            p["wopr"] = rm.get("wopr")
+            p["target_share"] = rm.get("target_share")
+
+        # Compute regression indicator: rank by air_yards desc vs rank by ppg desc
+        # High air yards rank + low PPG rank = buy low (positive regression)
+        sorted_by_air = sorted(players, key=lambda x: x["air_yards"], reverse=True)
+        sorted_by_ppg = sorted(players, key=lambda x: x["ppg"], reverse=True)
+
+        air_rank = {p["player_id"]: i + 1 for i, p in enumerate(sorted_by_air)}
+        ppg_rank = {p["player_id"]: i + 1 for i, p in enumerate(sorted_by_ppg)}
+
+        for p in players:
+            pid = p["player_id"]
+            p["air_rank"] = air_rank[pid]
+            p["ppg_rank"] = ppg_rank[pid]
+            # Positive delta = PPG rank worse than air yards rank = buy low
+            p["regression_delta"] = ppg_rank[pid] - air_rank[pid]
+
+        # Buy low: high air yards but underperforming (positive regression delta)
+        buy_low = sorted([p for p in players if p["regression_delta"] > 3],
+                         key=lambda x: x["regression_delta"], reverse=True)[:limit]
+
+        # Sell high: low air yards but overperforming (negative regression delta)
+        sell_high = sorted([p for p in players if p["regression_delta"] < -3],
+                           key=lambda x: x["regression_delta"])[:limit]
+
+        # Add annotations
+        for i, p in enumerate(buy_low):
+            p["annotation"] = _AIR_BUY_LOW_ANNOTATIONS[i % len(_AIR_BUY_LOW_ANNOTATIONS)]
+
+        for i, p in enumerate(sell_high):
+            p["annotation"] = _AIR_SELL_HIGH_ANNOTATIONS[i % len(_AIR_SELL_HIGH_ANNOTATIONS)]
+
+        return {
+            "season": season,
+            "available_seasons": available_seasons,
+            "buy_low": buy_low,
+            "sell_high": sell_high,
+        }
+    finally:
+        conn.close()

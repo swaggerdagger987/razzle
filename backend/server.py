@@ -896,6 +896,7 @@ def sitemap_xml():
         ("/matchups.html", "0.8", "weekly"),
         ("/usage.html", "0.8", "weekly"),
         ("/yoy.html", "0.8", "weekly"),
+        ("/airyards.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1122,6 +1123,19 @@ def year_over_year(season: int = 0, position: str = "", metric: str = "ppg", lim
     except Exception as e:
         logger.error(f"year_over_year error: {e}")
         return JSONResponse({"error": "Failed to fetch year-over-year data"}, status_code=500)
+
+
+@app.get("/api/air-yards")
+def air_yards(season: int = 0, position: str = "", limit: int = 25):
+    """Return air yards leaderboard with regression indicators."""
+    try:
+        s = season if season > 0 else None
+        pos = position.upper() if position else None
+        lim = max(1, min(limit, 50))
+        return live_data.fetch_air_yards(season=s, position=pos, limit=lim)
+    except Exception as e:
+        logger.error(f"air_yards error: {e}")
+        return JSONResponse({"error": "Failed to fetch air yards data"}, status_code=500)
 
 
 @app.get("/api/analytics/summary")

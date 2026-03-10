@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Air Yards — Razzle</title>
+<meta property="og:title" content="Air Yards — Razzle">
+<meta property="og:description" content="Fantasy football air yards dashboard — regression indicators and target depth on razzle.lol">
+<meta property="og:site_name" content="razzle.lol">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Air Yards — Razzle">
+<meta name="twitter:description" content="Fantasy football air yards dashboard — regression indicators and target depth on razzle.lol">
+<meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
+<meta name="description" content="Air yards dashboard — aDOT, RACR, WOPR, and regression indicators on razzle.lol">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .air-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+  }
+
+  .air-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .air-header h1 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: var(--ink);
+    margin: 0 0 4px;
+  }
+  .air-header .air-subtitle {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+  }
+
+  /* Controls row */
+  .air-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .air-select {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    padding: 7px 12px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--bg-card);
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  /* Position filter tabs */
+  .air-pos-tabs {
+    display: flex;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .air-pos-tab {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 6px 14px;
+    background: var(--bg-card);
+    color: var(--ink);
+    border: none;
+    border-right: 2px solid var(--ink);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .air-pos-tab:last-child { border-right: none; }
+  .air-pos-tab.active {
+    background: var(--ink);
+    color: var(--bg-card);
+  }
+  .air-pos-tab:hover:not(.active) {
+    background: var(--bg-warm);
+  }
+
+  /* Actions */
+  .air-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  /* Legend */
+  .air-legend {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-medium);
+  }
+  .air-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .air-legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    border: 1px solid var(--ink);
+  }
+
+  /* Section headers */
+  .air-section-header {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .air-section-header .section-icon {
+    font-size: 20px;
+  }
+  .air-section-header .section-icon.buy { color: var(--green); }
+  .air-section-header .section-icon.sell { color: var(--red); }
+
+  .air-section {
+    margin-bottom: 36px;
+  }
+
+  /* Player table */
+  .air-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .air-table th {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--ink-medium);
+    background: var(--bg-warm);
+    padding: 8px 8px;
+    text-align: left;
+    border-bottom: 3px solid var(--ink);
+    cursor: pointer;
+    white-space: nowrap;
+    user-select: none;
+  }
+  .air-table th:hover {
+    background: var(--ink-faint);
+  }
+  .air-table th.center { text-align: center; }
+  .air-table th .sort-arrow {
+    font-size: 10px;
+    margin-left: 2px;
+    opacity: 0.4;
+  }
+  .air-table th.sorted .sort-arrow {
+    opacity: 1;
+  }
+  .air-table td {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--ink);
+    padding: 7px 8px;
+    border-bottom: 1px solid var(--ink-faint);
+    vertical-align: middle;
+  }
+  .air-table tr:last-child td { border-bottom: none; }
+  .air-table tr {
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+  .air-table tbody tr:hover {
+    background: var(--bg-warm);
+  }
+
+  /* Player cell */
+  .air-player-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .air-headshot {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid var(--ink);
+    object-fit: cover;
+    flex-shrink: 0;
+    background: var(--bg-warm);
+  }
+  .air-player-info {
+    min-width: 0;
+  }
+  .air-player-name {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .air-player-meta {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 1px;
+  }
+  .air-pos-badge {
+    font-family: var(--font-display);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: #fff;
+  }
+  .air-pos-badge.wr { background: var(--pos-wr); }
+  .air-pos-badge.rb { background: var(--pos-rb); }
+  .air-pos-badge.te { background: var(--pos-te); }
+  .air-team-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-medium);
+  }
+
+  /* Regression badge */
+  .air-reg-badge {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 6px;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .air-reg-badge.buy { background: var(--green); }
+  .air-reg-badge.sell { background: var(--red); }
+
+  /* Annotation */
+  .air-annotation {
+    font-family: var(--font-hand);
+    font-size: 15px;
+    color: var(--ink-light);
+    font-style: italic;
+  }
+
+  /* Loading */
+  .air-loading {
+    text-align: center;
+    font-family: var(--font-hand);
+    font-size: 22px;
+    color: var(--ink-light);
+    padding: 60px 20px;
+  }
+
+  /* Empty state */
+  .air-empty {
+    text-align: center;
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+    padding: 60px 20px;
+  }
+
+  /* Error with retry */
+  .air-error {
+    text-align: center;
+    padding: 60px 20px;
+  }
+  .air-error-msg {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--red);
+    margin-bottom: 12px;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .air-header h1 { font-size: 26px; }
+    .air-table th, .air-table td { padding: 6px 5px; font-size: 12px; }
+    .air-headshot { width: 28px; height: 28px; }
+    .air-player-name { font-size: 12px; }
+  }
+  @media (max-width: 480px) {
+    .air-page { padding: 16px 12px 40px; }
+    .air-header h1 { font-size: 22px; }
+    .air-table th.hide-mobile, .air-table td.hide-mobile { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="/" class="logo">
+    <div class="logo-mark">&#x1F42F;</div>
+    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/lab.html">The Lab</a></li>
+    <li><a href="/rankings.html">Rankings</a></li>
+    <li><a href="/leaders.html">Leaders</a></li>
+    <li><a href="/prospects.html">Prospects</a></li>
+    <li><a href="/scarcity.html">Scarcity</a></li>
+    <li><a href="/breakouts.html">Breakouts</a></li>
+    <li><a href="/buysell.html">Buy/Sell</a></li>
+    <li><a href="/aging.html">Aging</a></li>
+    <li><a href="/weekly.html">Weekly</a></li>
+    <li><a href="/targets.html">Targets</a></li>
+    <li><a href="/matchups.html">Matchups</a></li>
+    <li><a href="/usage.html">Usage</a></li>
+    <li><a href="/yoy.html">YoY</a></li>
+    <li><a href="/airyards.html" class="active">Air Yards</a></li>
+    <li><a href="/team/KC">Teams</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
+    <li><a href="/agents.html">War Room</a></li>
+  </ul>
+</nav>
+
+<main class="air-page" id="air-content">
+  <div class="air-header">
+    <h1>Air Yards Dashboard</h1>
+    <div class="air-subtitle">target depth, efficiency, and regression indicators</div>
+  </div>
+
+  <div class="air-controls">
+    <div class="air-pos-tabs" id="pos-tabs">
+      <button class="air-pos-tab active" data-pos="" aria-label="All positions">All</button>
+      <button class="air-pos-tab" data-pos="WR" aria-label="Wide Receivers">WR</button>
+      <button class="air-pos-tab" data-pos="RB" aria-label="Running Backs">RB</button>
+      <button class="air-pos-tab" data-pos="TE" aria-label="Tight Ends">TE</button>
+    </div>
+    <select class="air-select" id="season-select" title="Season" aria-label="Season"></select>
+  </div>
+
+  <div class="air-legend">
+    <div class="air-legend-item">
+      <div class="air-legend-dot" style="background:var(--green);"></div>
+      <span>Buy Low (high air yards, low PPG)</span>
+    </div>
+    <div class="air-legend-item">
+      <div class="air-legend-dot" style="background:var(--red);"></div>
+      <span>Sell High (low air yards, high PPG)</span>
+    </div>
+  </div>
+
+  <div class="air-actions">
+    <button class="btn-chunky" id="export-btn" title="Export as PNG">Export PNG</button>
+  </div>
+
+  <div id="air-body">
+    <div class="air-loading" id="air-loading">analyzing air yards data...</div>
+  </div>
+</main>
+
+<!-- Watermark -->
+<div style="position:fixed; bottom:10px; right:14px; font-family:var(--font-hand); font-size:14px; color:var(--ink-light); opacity:0.7; pointer-events:none; z-index:999;">razzle.lol</div>
+
+<!-- Footer -->
+<footer style="text-align:center; padding:24px 20px 32px; font-family:var(--font-hand); font-size:15px; color:var(--ink-light); border-top:2px dashed var(--ink-faint); margin-top:40px;">
+  <div style="margin-bottom:10px;">
+    <a href="/lab.html" style="color:var(--ink-light); text-decoration:none;">The Lab</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/rankings.html" style="color:var(--ink-light); text-decoration:none;">Rankings</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/leaders.html" style="color:var(--ink-light); text-decoration:none;">Leaders</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/prospects.html" style="color:var(--ink-light); text-decoration:none;">Prospects</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/scarcity.html" style="color:var(--ink-light); text-decoration:none;">Scarcity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/breakouts.html" style="color:var(--ink-light); text-decoration:none;">Breakouts</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/buysell.html" style="color:var(--ink-light); text-decoration:none;">Buy/Sell</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/aging.html" style="color:var(--ink-light); text-decoration:none;">Aging</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/weekly.html" style="color:var(--ink-light); text-decoration:none;">Weekly</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/targets.html" style="color:var(--ink-light); text-decoration:none;">Targets</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/matchups.html" style="color:var(--ink-light); text-decoration:none;">Matchups</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/usage.html" style="color:var(--ink-light); text-decoration:none;">Usage</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/yoy.html" style="color:var(--ink-light); text-decoration:none;">YoY</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/airyards.html" style="color:var(--ink-light); text-decoration:none;">Air Yards</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/team/KC" style="color:var(--ink-light); text-decoration:none;">Teams</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none;">League Intel</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/agents.html" style="color:var(--ink-light); text-decoration:none;">War Room</a>
+  </div>
+  razzle.lol — let's razzle dazzle em baby
+</footer>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script src="app.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function fmt(v, dec) {
+    if (v === null || v === undefined) return '-';
+    return Number(v).toFixed(dec === undefined ? 1 : dec);
+  }
+
+  function pct(v) {
+    if (v === null || v === undefined) return '-';
+    return (Number(v) * 100).toFixed(1) + '%';
+  }
+
+  var currentPosition = '';
+  var currentData = null;
+
+  // Sort state per section
+  var sortState = { buy_low: { col: 'regression_delta', dir: -1 }, sell_high: { col: 'regression_delta', dir: 1 } };
+
+  function buildPlayerRow(p, section) {
+    var pos = (p.position || 'WR').toLowerCase();
+    var regClass = section === 'buy_low' ? 'buy' : 'sell';
+    var regLabel = section === 'buy_low' ? '+' + p.regression_delta : String(p.regression_delta);
+
+    var html = '<tr data-pid="' + escapeHtml(p.player_id) + '">';
+
+    // Player cell
+    html += '<td>';
+    html += '<div class="air-player-cell">';
+    if (p.headshot_url) {
+      html += '<img class="air-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+    }
+    html += '<div class="air-player-info">';
+    html += '<div class="air-player-name">' + escapeHtml(p.name) + '</div>';
+    html += '<div class="air-player-meta">';
+    html += '<span class="air-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
+    html += '<span class="air-team-label">' + escapeHtml(p.team) + '</span>';
+    html += '</div></div></div>';
+    html += '</td>';
+
+    // Targets/G
+    html += '<td style="text-align:center;">' + fmt(p.targets_g) + '</td>';
+
+    // Air Yards
+    html += '<td style="text-align:center; font-weight:700;">' + escapeHtml(String(p.air_yards)) + '</td>';
+
+    // Air Yds/G
+    html += '<td class="hide-mobile" style="text-align:center;">' + fmt(p.air_yards_g) + '</td>';
+
+    // aDOT
+    html += '<td style="text-align:center; font-weight:700;">' + fmt(p.adot) + '</td>';
+
+    // AirYd%
+    html += '<td class="hide-mobile" style="text-align:center;">' + pct(p.air_yards_share) + '</td>';
+
+    // WOPR
+    html += '<td class="hide-mobile" style="text-align:center;">' + fmt(p.wopr, 3) + '</td>';
+
+    // RACR
+    html += '<td style="text-align:center;">' + fmt(p.racr, 2) + '</td>';
+
+    // PPG
+    html += '<td style="text-align:center; font-weight:700;">' + fmt(p.ppg) + '</td>';
+
+    // Regression indicator
+    html += '<td style="text-align:center;">';
+    html += '<span class="air-reg-badge ' + regClass + '">' + regLabel + '</span>';
+    html += '</td>';
+
+    // GP
+    html += '<td class="hide-mobile" style="text-align:center;">' + escapeHtml(String(p.games)) + '</td>';
+
+    // Annotation
+    html += '<td class="hide-mobile"><span class="air-annotation">' + escapeHtml(p.annotation || '') + '</span></td>';
+
+    html += '</tr>';
+    return html;
+  }
+
+  var COLUMN_KEYS = [
+    { key: 'name', label: 'Player' },
+    { key: 'targets_g', label: 'Tgt/G' },
+    { key: 'air_yards', label: 'AirYd' },
+    { key: 'air_yards_g', label: 'AY/G', hide: true },
+    { key: 'adot', label: 'aDOT' },
+    { key: 'air_yards_share', label: 'AY%', hide: true },
+    { key: 'wopr', label: 'WOPR', hide: true },
+    { key: 'racr', label: 'RACR' },
+    { key: 'ppg', label: 'PPG' },
+    { key: 'regression_delta', label: 'Reg' },
+    { key: 'games', label: 'GP', hide: true },
+    { key: 'annotation', label: '', hide: true, nosort: true }
+  ];
+
+  function buildTableHeader(section) {
+    var state = sortState[section];
+    var html = '<thead><tr>';
+    COLUMN_KEYS.forEach(function(col) {
+      var classes = [];
+      if (col.key !== 'name') classes.push('center');
+      if (col.hide) classes.push('hide-mobile');
+      var sorted = state.col === col.key;
+      if (sorted) classes.push('sorted');
+      var arrow = sorted ? (state.dir === 1 ? ' &#9650;' : ' &#9660;') : '';
+      var sortAttr = col.nosort ? '' : ' data-sort="' + col.key + '" data-section="' + section + '"';
+      html += '<th class="' + classes.join(' ') + '"' + sortAttr + '>' + col.label + '<span class="sort-arrow">' + arrow + '</span></th>';
+    });
+    html += '</tr></thead>';
+    return html;
+  }
+
+  function sortPlayers(players, col, dir) {
+    return players.slice().sort(function(a, b) {
+      var va = a[col], vb = b[col];
+      if (va === null || va === undefined) va = -Infinity;
+      if (vb === null || vb === undefined) vb = -Infinity;
+      if (typeof va === 'string') return dir * va.localeCompare(vb);
+      return dir * (vb - va);
+    });
+  }
+
+  function buildTable(players, section) {
+    if (!players || !players.length) {
+      var label = section === 'buy_low' ? 'buy low candidates' : 'sell high candidates';
+      return '<div class="air-empty">no ' + label + ' found for this filter</div>';
+    }
+
+    var iconClass = section === 'buy_low' ? 'buy' : 'sell';
+    var icon = section === 'buy_low' ? '&#9650;' : '&#9660;';
+    var title = section === 'buy_low' ? 'Buy Low' : 'Sell High';
+    var subtitle = section === 'buy_low'
+      ? 'high air yards, underperforming in PPG — positive regression candidates'
+      : 'low air yards, overperforming in PPG — negative regression candidates';
+
+    var state = sortState[section];
+    var sorted = sortPlayers(players, state.col, state.dir);
+
+    var html = '<div class="air-section">';
+    html += '<div class="air-section-header">';
+    html += '<span class="section-icon ' + iconClass + '">' + icon + '</span> ';
+    html += title + ' <span style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); font-weight:400;">(' + players.length + ' players) — ' + subtitle + '</span>';
+    html += '</div>';
+
+    html += '<table class="air-table" data-section="' + section + '">';
+    html += buildTableHeader(section);
+    html += '<tbody>';
+
+    sorted.forEach(function(p) {
+      html += buildPlayerRow(p, section);
+    });
+
+    html += '</tbody></table>';
+    html += '</div>';
+    return html;
+  }
+
+  function render(data) {
+    currentData = data;
+    var body = document.getElementById('air-body');
+
+    if (!data || (!data.buy_low.length && !data.sell_high.length)) {
+      body.innerHTML = '<div class="air-empty">no air yards data found for this selection</div>';
+      return;
+    }
+
+    var html = '';
+    html += buildTable(data.buy_low, 'buy_low');
+    html += buildTable(data.sell_high, 'sell_high');
+    body.innerHTML = html;
+
+    // Attach sort listeners
+    body.querySelectorAll('th[data-sort]').forEach(function(th) {
+      th.addEventListener('click', function() {
+        var col = th.getAttribute('data-sort');
+        var sec = th.getAttribute('data-section');
+        if (sortState[sec].col === col) {
+          sortState[sec].dir *= -1;
+        } else {
+          sortState[sec].col = col;
+          sortState[sec].dir = -1;
+        }
+        render(currentData);
+      });
+    });
+
+    // Attach row click
+    body.querySelectorAll('tr[data-pid]').forEach(function(tr) {
+      tr.addEventListener('click', function() {
+        var pid = tr.getAttribute('data-pid');
+        if (pid) window.location.href = '/player/' + encodeURIComponent(pid);
+      });
+    });
+  }
+
+  function loadData() {
+    var body = document.getElementById('air-body');
+    body.innerHTML = '<div class="air-loading">analyzing air yards data...</div>';
+
+    var seasonSel = document.getElementById('season-select');
+    var season = seasonSel.value || '';
+    var url = '/api/air-yards?limit=25';
+    if (season) url += '&season=' + season;
+    if (currentPosition) url += '&position=' + currentPosition;
+
+    fetch(url).then(function(resp) {
+      if (!resp.ok) throw new Error('API error ' + resp.status);
+      return resp.json();
+    }).then(function(data) {
+      // Populate season selector if needed
+      if (data.available_seasons && !seasonSel.options.length) {
+        data.available_seasons.forEach(function(s) {
+          var opt = document.createElement('option');
+          opt.value = s;
+          opt.textContent = s;
+          if (s === data.season) opt.selected = true;
+          seasonSel.appendChild(opt);
+        });
+      }
+      render(data);
+    }).catch(function(err) {
+      body.innerHTML = '<div class="air-error"><div class="air-error-msg">failed to load air yards data</div><button class="btn-chunky" onclick="window.location.reload()">Retry</button></div>';
+    });
+  }
+
+  // Position tabs
+  document.getElementById('pos-tabs').addEventListener('click', function(e) {
+    var tab = e.target.closest('.air-pos-tab');
+    if (!tab) return;
+    document.querySelectorAll('.air-pos-tab').forEach(function(t) { t.classList.remove('active'); });
+    tab.classList.add('active');
+    currentPosition = tab.getAttribute('data-pos') || '';
+    loadData();
+  });
+
+  // Season select
+  document.getElementById('season-select').addEventListener('change', function() {
+    loadData();
+  });
+
+  // Export PNG
+  document.getElementById('export-btn').addEventListener('click', function() {
+    var el = document.getElementById('air-content');
+    if (typeof html2canvas === 'function') {
+      html2canvas(el, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+        var link = document.createElement('a');
+        link.download = 'razzle-air-yards.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      });
+    }
+  });
+
+  // Analytics
+  if (typeof trackPageview === 'function') trackPageview();
+
+  // Initial load
+  loadData();
+})();
+</script>
+</body>
+</html>

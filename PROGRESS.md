@@ -1,6 +1,25 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 78 — Year-over-Year Comparison (COMPLETE)
+## Current Phase: Phase 79 — Air Yards Dashboard (COMPLETE)
+
+**Exit criterion MET:** /airyards.html page shows an air yards analytics dashboard for pass catchers (WR/RB/TE). Two sections: "Buy Low" (high air yards rank, underperforming in PPG — positive regression candidates) and "Sell High" (low air yards rank, overperforming in PPG — negative regression candidates). Each player row shows: position badge, headshot, name, team, Tgt/G, total air yards, AY/G, aDOT, AirYd%, WOPR, RACR, PPG, regression delta badge (green=buy low, red=sell high), GP, and Caveat annotations. Position filter tabs (All/WR/RB/TE — no QB). Season selector. Sortable column headers with sort state tracking per section. Click player row → player profile. PNG export via html2canvas with watermark. Color legend for regression indicator. Error state with retry button. Responsive at 768px + 480px with hide-mobile columns. /api/air-yards endpoint queries player_week_stats for receiving_air_yards + targets, enriches with air_yards_share/wopr/target_share from player_week_metrics, computes aDOT and RACR, ranks by air yards vs PPG, and splits into buy_low (delta >3) and sell_high (delta <-3). Min 4 games + 10 targets filter. "Air Yards" nav link added to all 21 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors.
+
+### Phase 79 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/air-yards endpoint | DONE | Air yards + rate metrics query, regression delta ranking, buy_low/sell_high split |
+| 2 | Air Yards dashboard page | DONE | Two-section table (buy low/sell high), sortable columns, regression badges, responsive, PNG export |
+| 3 | Nav links + sitemap + analytics | DONE | All 21 pages updated (40 total refs), sitemap entry, pageview tracking |
+| 4 | Smoke test | DONE | Python + JS syntax clean, 21/21 nav links verified, design compliance confirmed |
+
+### Decisions Log
+- **Air Yards Dashboard as Phase 79**: Air yards are one of the most discussed advanced metrics in dynasty fantasy football. The gap between a player's air yards ranking and their PPG ranking is one of the most reliable regression indicators — a player with lots of air yards but low PPG is likely to improve (buy low), while a player with high PPG but low air yards is likely to regress (sell high). This is the kind of analysis that gets screenshotted and shared on r/DynastyFF ("these WRs are due for a breakout based on air yards").
+- **Regression delta as primary signal**: Rather than just showing raw air yards leaderboards (which users can already see in the Lab screener), the unique value is the regression indicator — the delta between air yards rank and PPG rank. This surfaces actionable insight that raw stats don't.
+- **No QB filter**: Air yards metrics for QBs (passing_air_yards) tell a different story than for receivers. This dashboard focuses specifically on pass catchers where air yards directly predict individual production. QBs have their own metrics (aDOT as a passer, CPOE, etc.).
+- **Min 10 targets filter**: Combined with 4-game minimum, this prevents noise from players with tiny sample sizes who happen to have extreme aDOT or RACR values.
+
+## Previous Phase: Phase 78 — Year-over-Year Comparison (COMPLETE)
 
 **Exit criterion MET:** /yoy.html page shows year-over-year stat comparisons between two adjacent seasons. Two sections: "Risers" (players who improved most) and "Fallers" (players who declined most). Each player row shows: position badge, headshot, name, team, previous season value, current season value, delta arrow+value (green up / red down), mini-deltas for other key metrics, games played (prev→curr), and Caveat annotations. Metric selector to sort by different delta categories (PPG, Targets/G, Rec Yards/G, Rush Yards/G, Total TDs, Snap%). Season pair selector (e.g., "2024 vs 2023"). Position filter tabs (All/QB/RB/WR/TE). Click player row → player profile. PNG export via html2canvas with watermark. Error state with retry button. Responsive at 768px + 480px with hide-mobile columns. /api/year-over-year endpoint computes per-game stats for two adjacent seasons per player, calculates deltas, returns risers (delta > 0.5) and fallers (delta < -0.5) sorted by chosen metric. Min 4 games per season filter. "YoY" nav link added to all 20 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors.
 
