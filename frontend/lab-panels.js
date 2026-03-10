@@ -5820,7 +5820,7 @@
 
     el.innerHTML =
       '<div class="lp-page">' +
-        '<div class="lp-header"><h2>FPTS Breakdown</h2>' +
+        '<div class="lp-header"><h2>Points Breakdown</h2>' +
         '<div class="lp-subtitle">where do fantasy points come from?</div></div>' +
         '<div class="lp-controls">' +
           posTabsHTML('fpb-pos-tabs', true) +

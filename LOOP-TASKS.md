@@ -40,8 +40,9 @@
 **Accept when**: No near-duplicate panel names. Both renamed panels work correctly. Breadcrumbs and headers updated.
 **Depends on**: none
 **Size**: S
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
+**Notes**: "FPTS Breakdown" → "Points Breakdown" (sidebar, PANEL_LABELS, lab-panels.js h2). Tooltip: "Fantasy points by scoring category". "Pace Tracker" → "Player Pace" (sidebar, PANEL_LABELS). Tooltip: "Projected season totals per player". Added descriptive tooltips for "Scoring Breakdown" ("Donut chart: scoring category %") and "Season Pace" ("Milestone watch: 1000yd, 10TD pace").
 
 ### Task 5: Fix MEDIUM findings (grouped)
 **Requirement**: (1) Add one-time first-visit toast: "62 tools in the sidebar. Press ? for shortcuts." with localStorage flag. (2) Increase category chevron size to 14px on mobile (768px breakpoint). (3) Add inline escapeHtml fallback in lab.html before first use.
