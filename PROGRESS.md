@@ -1,6 +1,20 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 65 — Team Roster Pages (COMPLETE)
+## Current Phase: Phase 66 — QA + UX Audit Fixes (COMPLETE)
+
+**Exit criterion MET:** All CRITICAL and HIGH findings from phases 61-65 QA audit resolved. fantasy_relevant column added to DB migration. SQL injection pattern replaced with parameterized queries. Connection leak fixed with try/finally and single connection. trackPageview standardized to inline fetch. DVS label and methodology note added to rankings page. Medium fixes: 2px borders on team.html badges, age badge terminology standardized (young/prime/aging), "Full Profile" link in Lab overlay, contextual back navigation in player.js, rate stats hidden on leaders.html "All" view.
+
+### Phase 66 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | CRITICAL: fantasy_relevant + SQL injection + connection leak | DONE | Migration added, parameterized queries, try/finally |
+| 2 | HIGH: trackPageview analytics | DONE | Inline fetch on team.html and leaders.html |
+| 3 | HIGH: Rankings DVS label | DONE | DVS suffix + methodology note in header |
+| 4 | MEDIUM fixes | DONE | Borders, age badges, overlay link, back nav, rate stats |
+| 5 | Smoke test | DONE | All 10 findings verified fixed, syntax clean |
+
+## Previous Phase: Phase 65 — Team Roster Pages (COMPLETE)
 
 **Exit criterion MET:** /team/{abbr} pages show full fantasy-relevant roster organized by position (QB, RB, WR, TE). Each position group rendered as a comic-strip card with position-colored header tint, display font title, Caveat annotation, and player rows. Player rows show rank, headshot/initials, name, age badge (green ≤25/yellow 26-28/red ≥29), and position-specific stats (PPG highlighted, yards, TDs, games) in mono font. Click player row → player profile. Team selector dropdown with all 32 NFL teams. Season selector dropdown. PNG export via html2canvas with watermark. Teams nav link added to all 10 HTML pages (nav + footer). Team name in player profile and Lab overlay links to /team/{abbr}. Sitemap includes all 32 team pages. OG tags dynamically set per team. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, position-colored light tint headers, Space Mono for data, display font for headers, Caveat for annotations.
 
