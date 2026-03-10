@@ -11595,3 +11595,109 @@ def fetch_positional_advantage(season=None, position=None, limit=40):
         }
     finally:
         conn.close()
+
+
+def fetch_td_regression(season=None, position=None, limit=50):
+    """TD regression candidates — expected vs actual TDs based on opportunity volume."""
+    conn = get_conn()
+    try:
+        cursor = conn.cursor()
+        if not season:
+            cursor.execute("SELECT MAX(season) FROM player_season_stats")
+            season = cursor.fetchone()[0] or 2025
+
+        pos_filter = ""
+        params = [season]
+        if position:
+            pos_filter = "AND p.position = ?"
+            params.append(position)
+
+        cursor.execute(f"""
+            SELECT p.gsis_id, p.full_name, p.position, p.team,
+                   s.rushing_tds, s.receiving_tds, s.passing_tds,
+                   s.carries, s.targets, s.passing_attempts,
+                   s.games
+            FROM player_season_stats s
+            JOIN players p ON p.gsis_id = s.player_id
+            WHERE s.season = ? AND p.fantasy_relevant = 1
+            {pos_filter}
+            AND s.games >= 4
+        """, params)
+
+        # Compute league-average TD rate per position
+        pos_opp_td = {"QB": [], "RB": [], "WR": [], "TE": []}
+        rows = []
+        for r in cursor.fetchall():
+            pid, name, pos, team = r[0], r[1] or "Unknown", r[2] or "RB", r[3] or "FA"
+            rush_td = r[4] or 0
+            rec_td = r[5] or 0
+            pass_td = r[6] or 0
+            carries = r[7] or 0
+            targets = r[8] or 0
+            pass_att = r[9] or 0
+            games = r[10] or 1
+
+            if pos == "QB":
+                opportunities = pass_att + carries
+                actual_tds = pass_td + rush_td
+            else:
+                opportunities = carries + targets
+                actual_tds = rush_td + rec_td
+
+            if opportunities < 20:
+                continue
+
+            td_rate = actual_tds / opportunities if opportunities > 0 else 0
+            rows.append({
+                "player_id": pid, "name": name, "position": pos, "team": team,
+                "actual_tds": actual_tds, "opportunities": opportunities,
+                "td_rate": td_rate, "games": games,
+                "tds_per_game": actual_tds / games,
+            })
+            if pos in pos_opp_td:
+                pos_opp_td[pos].append((opportunities, actual_tds))
+
+        # Expected TD rate = positional avg TD rate
+        pos_avg_td_rate = {}
+        for pos in ("QB", "RB", "WR", "TE"):
+            pairs = pos_opp_td.get(pos, [])
+            total_opp = sum(p[0] for p in pairs)
+            total_td = sum(p[1] for p in pairs)
+            pos_avg_td_rate[pos] = total_td / total_opp if total_opp > 0 else 0
+
+        players = []
+        for p in rows:
+            avg_rate = pos_avg_td_rate.get(p["position"], 0)
+            expected_tds = p["opportunities"] * avg_rate
+            td_diff = p["actual_tds"] - expected_tds
+            regression_pct = (td_diff / expected_tds * 100) if expected_tds > 0 else 0
+
+            players.append({
+                "player_id": p["player_id"],
+                "name": p["name"],
+                "position": p["position"],
+                "team": p["team"],
+                "games": p["games"],
+                "actual_tds": p["actual_tds"],
+                "expected_tds": round(expected_tds, 1),
+                "td_diff": round(td_diff, 1),
+                "regression_pct": round(regression_pct, 0),
+                "td_rate": round(p["td_rate"] * 100, 1),
+                "avg_td_rate": round(avg_rate * 100, 1),
+                "opportunities": p["opportunities"],
+                "tds_per_game": round(p["tds_per_game"], 1),
+            })
+
+        # Positive regression = actual < expected (buy candidates)
+        positive = sorted([p for p in players if p["td_diff"] < -0.5], key=lambda x: x["td_diff"])[:limit]
+        # Negative regression = actual > expected (sell candidates)
+        negative = sorted([p for p in players if p["td_diff"] > 0.5], key=lambda x: x["td_diff"], reverse=True)[:limit]
+
+        return {
+            "positive_regression": positive,
+            "negative_regression": negative,
+            "pos_avg_td_rates": {k: round(v * 100, 1) for k, v in pos_avg_td_rate.items()},
+            "season": season,
+        }
+    finally:
+        conn.close()

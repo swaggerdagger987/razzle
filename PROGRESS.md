@@ -1,6 +1,16 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 131 — Positional Advantage (COMPLETE)
+## Current Phase: Phase 132 — TD Regression Candidates (COMPLETE)
+
+**Exit criterion MET:** /tdregression.html shows TD regression candidates — expected vs actual TDs based on positional avg TD rate and opportunity volume. Buy low section (positive regression: actual TDs below expected) and sell high section (negative regression: actual TDs above expected). TD diff badges, TD rate %, opportunity count, bar visualization. Positional avg TD rate chips. Position filter tabs, season selector, PNG export with watermark. GET /api/td-regression returns data. 17 escapeHtml calls, 68/68 braces balanced. "TD Regression" nav link on all 63 pages. Sitemap + tools hub entry under Performance Analysis.
+
+### Phase 132 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend + frontend + nav + smoke test | DONE | fetch_td_regression, buy/sell sections, 17 escapeHtml, 63/63 nav |
+
+## Previous Phase: Phase 131 — Positional Advantage (COMPLETE)
 
 **Exit criterion MET:** /advantage.html shows players who provide the biggest scoring advantage over the positional average PPG. Unlike VORP (vs replacement level), this shows value above the full positional average. Edge badges color-coded by magnitude (elite/strong/solid/modest/below avg), bar visualization, positional average chips at top. Position filter tabs, season selector, PNG export with watermark. GET /api/positional-advantage returns data. 12 escapeHtml calls, 65/65 braces balanced. "Advantage" nav link on all 62 pages. Sitemap + tools hub entry under Performance Analysis.
 

@@ -1,9 +1,9 @@
-# Razzle Loop — Phase 131 Task List
+# Razzle Loop — Phase 132 Task List
 
-> Positional Advantage
+> TD Regression Candidates
 
-**Current Phase**: 131 — Positional Advantage
-**Exit Criterion**: /advantage.html shows players who provide the biggest scoring advantage over the positional average. Unlike VORP (vs replacement level), this shows value above the full positional average PPG. Helps identify league-winning positional edges. Season selector, position filters, PNG export. GET /api/positional-advantage returns data.
+**Current Phase**: 132 — TD Regression Candidates
+**Exit Criterion**: /tdregression.html shows expected vs actual TDs. Buy low (positive regression) and sell high (negative regression) sections. Position filters, season selector, PNG export. GET /api/td-regression returns data.
 
 ---
 
@@ -15,7 +15,7 @@
 
 ## Loop State
 ```
-Current Phase: 131
+Current Phase: 132
 Current Task: 1
 Current Stage: COMPLETE
 Attempt: 1
