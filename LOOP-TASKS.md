@@ -2,10 +2,10 @@
 
 ## Current State
 - Phase: 4 (Inline Panel Migration)
-- Task: Migrate Rankings & Values panels
+- Task: Migrate Game Analysis panels
 - Stage: BUILD
 - Attempt: 1/3
-- Tasks Done: 4/10
+- Tasks Done: 5/10
 
 ## Phase 1: Navigation Surgery -- COMPLETE
 ### Task 1: Slim nav to 4 items on all pages
@@ -168,8 +168,8 @@
 **Accept when**: All 8 panels render natively.
 **Depends on**: Task 2
 **Size**: L
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task 6: Migrate Game Analysis panels
 **Requirement**: Convert: Weekly Heatmap, Matchups, Stacks, Red Zone, Streaks, Weekly Leaders, Weekly MVP Grid, Playoffs.
