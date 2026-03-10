@@ -1235,6 +1235,19 @@ def opportunity_share(season: int = 0, position: str = "", limit: int = 30):
         return JSONResponse({"error": "Failed to fetch opportunity share data"}, status_code=500)
 
 
+@app.get("/api/report-cards")
+def report_cards(season: int = 0, position: str = "", limit: int = 25):
+    """Return player report cards with composite Fantasy GPA."""
+    try:
+        s = season if season > 0 else None
+        pos = position.upper() if position else None
+        lim = max(1, min(limit, 50))
+        return live_data.fetch_report_cards(season=s, position=pos, limit=lim)
+    except Exception as e:
+        logger.error(f"report_cards error: {e}")
+        return JSONResponse({"error": "Failed to fetch report card data"}, status_code=500)
+
+
 @app.get("/api/analytics/summary")
 def analytics_summary():
     return live_data.get_analytics_summary()

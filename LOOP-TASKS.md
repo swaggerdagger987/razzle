@@ -1,39 +1,39 @@
-# Razzle Loop — Phase 88 Task List
+# Razzle Loop — Phase 89 Task List
 
-> Opportunity Share & Dominator Rating Dashboard
+> Player Report Card — Composite Fantasy GPA
 
-**Current Phase**: 88 — Opportunity Share & Dominator Rating Dashboard
-**Exit Criterion**: /opportunity.html page shows opportunity share analysis with two sections: "Alpha Dogs" (highest opportunity share — targets+carries as % of team total, min 30 opps) and "Dominator Rating Leaders" (highest dominator rating — receiving yards share + receiving TD share of team totals, WR/TE only). Each player: position badge, headshot, name, team, Opp Share % (color-coded badge), Dominator Rating (0-100 badge, WR/TE) or Rush Share (RB/QB), Targets/G, Carries/G, Total Opps, PPG, GP, Caveat annotation. Position filter tabs. Season selector. Sortable columns. Row click to profile. PNG export with watermark. Responsive at 768px + 480px. Nav links on all 28 pages. Sitemap entry. Analytics tracking.
+**Current Phase**: 89 — Player Report Card Dashboard
+**Exit Criterion**: /reportcard.html page shows player report cards aggregating all Razzle grading systems into a composite "Fantasy GPA." Two sections: "Honor Roll" (highest composite GPA, top performers across all metrics) and "Needs Improvement" (lowest composite GPA among fantasy-relevant starters). Each player row: position badge, headshot, name, team, Fantasy GPA badge (A+ to F, color-coded), Efficiency grade, Consistency grade, SOS grade, Stock Score (0-100), Opp Share %, Dominator Rating, PPG, Age, GP, Caveat annotation. Composite GPA = weighted average of efficiency percentile (20%), consistency percentile (20%), SOS percentile (20%), stock score (20%), opportunity share percentile (20%). Position filter tabs (All/QB/RB/WR/TE). Season selector. Sortable columns with sort state tracking per section. Click player row → player profile. PNG export with watermark. Responsive at 768px + 480px. /api/report-cards endpoint computes all sub-grades and composite GPA. Min 6 games + 2 PPG + 50 opps filter. Nav links on all 29 pages. Sitemap entry. Analytics tracking. Design matches DESIGN.md.
 
 ---
 
-## Task 1: Backend /api/opportunity-share endpoint
+## Task 1: Backend /api/report-cards endpoint
 **Status**: PASS
 **Attempts**: 1
-**Notes**: GET /api/opportunity-share returns `alpha_dogs` and `dominators` arrays. Opportunity Share = (player targets + carries) / (team total targets + carries) * 100. Dominator Rating = ((player rec yards / team rec yards) + (player rec TDs / team rec TDs)) / 2 * 100 (WR/TE); Rush Share for RB/QB = player rush yards / team rush yards * 100. Min 30 opps + 4 games filter. Parameterized SQL. Fantasy_relevant filter. Python syntax valid.
+**Notes**: GET /api/report-cards returns `honor_roll` and `needs_improvement` arrays. Computes per-player: efficiency grade (PPO percentile), consistency grade (inverse CoV percentile), SOS grade (schedule difficulty percentile), stock score (0-100 composite), opportunity share percentile, dominator rating. Composite GPA = weighted avg of 5 percentiles (PPO 20%, inv CoV 20%, SOS 20%, PPG 20%, opp share 20%) → letter grade A+ to F with B+/C+ granularity. Min 6 games + 2 PPG + 50 opps. Parameterized SQL. Fantasy_relevant filter. Season parameter. Python syntax valid.
 
-## Task 2: Opportunity Share dashboard page (frontend)
-**Status**: PASS
-**Attempts**: 1
-**Notes**: /opportunity.html with two-section table layout. Alpha Dogs: Player, Opp Share % badge (green>=25%, blue>=18%, yellow>=12%, orange>=8%, red<8%), Dom Rating, Tgt/G, Car/G, Total Opps, PPG, GP, annotation. Dominators: Player, Dom Rating badge (green>=30, blue>=20, yellow>=12, orange>=6, red<6), Opp Share, RecYd%, RecTD%, Tgt/G, PPG, GP, annotation. Position tabs, season selector, sortable columns with sort state per section, row click to profile, PNG export with watermark. 9 escapeHtml calls. Responsive hide-mobile. 71/71 braces, 184/184 parens, 16/16 brackets.
+## Task 2: Report Card dashboard page (frontend)
+**Status**: PENDING
+**Attempts**: 0
+**Notes**: /reportcard.html with two-section layout. Honor Roll: top 25 by composite GPA. Needs Improvement: bottom 25. Each row: position badge, headshot, name, team, Fantasy GPA badge (green A+/A, blue B+/B, yellow C+/C, orange D+/D, red F), individual grade badges for Efficiency/Consistency/SOS, Stock Score badge, Opp Share %, Dom Rating, PPG, Age, GP, annotation. Position tabs, season selector, sortable columns, row click to profile, PNG export with watermark. escapeHtml on all dynamic content. Responsive hide-mobile columns.
 
 ## Task 3: Nav links + sitemap + analytics
-**Status**: PASS
-**Attempts**: 1
-**Notes**: "Opportunity" link added to nav + footer of all 28 HTML pages (28/28 verified). Sitemap entry added ("/opportunity.html", "0.8", "weekly"). Analytics pageview tracking via inline fetch to /api/analytics/pageview.
+**Status**: PENDING
+**Attempts**: 0
+**Notes**: "Report Card" link added to nav + footer of all 29 HTML pages. Sitemap entry. Analytics pageview tracking.
 
 ## Task 4: Smoke test + verification
-**Status**: PASS
-**Attempts**: 1
-**Notes**: Python syntax valid (server.py + live_data.py). JS structure valid (71/71 braces, 184/184 parens). 28/28 pages have Opportunity nav link. XSS: 9 escapeHtml calls covering all dynamic content. Sitemap entry present. Design compliance: 3px borders, 4px shadows, font-display headers, font-mono data, font-hand annotations, position colors, watermark present, analytics present.
+**Status**: PENDING
+**Attempts**: 0
+**Notes**: Python syntax check (server.py + live_data.py). JS brace/paren/bracket balance. Nav link count verification (29/29). XSS escapeHtml audit. Sitemap entry present. Design compliance check.
 
 ---
 
 ## Loop State
 ```
-Current Phase: 88
-Current Task: 4
-Current Stage: COMPLETE
+Current Phase: 89
+Current Task: 2
+Current Stage: BUILD
 Attempt: 1
-Tasks Completed: 4/4
+Tasks Completed: 1/4
 ```
