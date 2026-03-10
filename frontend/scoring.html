@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Scoring Format Comparison — Razzle</title>
+<meta property="og:title" content="Scoring Format Comparison — Razzle">
+<meta property="og:description" content="How PPR vs Standard scoring changes fantasy football rankings on razzle.lol">
+<meta property="og:site_name" content="razzle.lol">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Scoring Format Comparison — Razzle">
+<meta name="twitter:description" content="How PPR vs Standard scoring changes fantasy football rankings on razzle.lol">
+<meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
+<meta name="description" content="Scoring format comparison — see how player rankings shift between PPR, Half-PPR, and Standard scoring on razzle.lol">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .sc-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+  }
+  .sc-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .sc-header h1 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: var(--ink);
+    margin: 0 0 4px;
+  }
+  .sc-header .sc-subtitle {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+  }
+
+  /* Controls */
+  .sc-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .sc-pos-tabs {
+    display: flex;
+    gap: 6px;
+  }
+  .sc-pos-tab {
+    padding: 5px 14px;
+    font-family: var(--font-display);
+    font-size: 13px;
+    border: 2px solid var(--ink);
+    border-radius: 20px;
+    background: var(--bg-card);
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .sc-pos-tab:hover {
+    background: var(--bg-warm);
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+  .sc-pos-tab.active {
+    background: var(--ink);
+    color: var(--bg-card);
+  }
+  .sc-season-select {
+    padding: 5px 12px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--bg-card);
+    cursor: pointer;
+  }
+
+  /* Section */
+  .sc-section {
+    margin-bottom: 28px;
+  }
+  .sc-section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px dashed var(--ink-faint);
+  }
+  .sc-section-icon {
+    font-size: 20px;
+  }
+  .sc-section-title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    color: var(--ink);
+  }
+  .sc-section-note {
+    font-family: var(--font-hand);
+    font-size: 14px;
+    color: var(--ink-light);
+  }
+
+  /* Table */
+  .sc-table-wrap {
+    overflow-x: auto;
+  }
+  .sc-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-mono);
+    font-size: 13px;
+  }
+  .sc-table th {
+    background: var(--bg-warm);
+    font-family: var(--font-display);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 8px 10px;
+    text-align: left;
+    border-bottom: 3px solid var(--ink);
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .sc-table th:hover {
+    background: var(--ink-faint);
+  }
+  .sc-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--ink-faint);
+    white-space: nowrap;
+  }
+  .sc-table tr:hover td {
+    background: var(--bg-warm);
+  }
+  .sc-table tr {
+    cursor: pointer;
+  }
+
+  /* Position badge */
+  .sc-pos-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 10px;
+    border: 2px solid var(--ink);
+    color: #fff;
+    display: inline-block;
+  }
+  .sc-pos-badge.QB { background: var(--pos-qb); }
+  .sc-pos-badge.RB { background: var(--pos-rb); }
+  .sc-pos-badge.WR { background: var(--pos-wr); }
+  .sc-pos-badge.TE { background: var(--pos-te); }
+
+  /* Headshot */
+  .sc-headshot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid var(--ink);
+    object-fit: cover;
+    vertical-align: middle;
+    margin-right: 6px;
+    background: var(--bg-warm);
+  }
+
+  /* Rank shift badge */
+  .sc-rank-shift {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    border: 2px solid var(--ink);
+  }
+  .sc-rank-shift.up {
+    background: var(--green-light);
+    color: var(--green);
+  }
+  .sc-rank-shift.down {
+    background: var(--red-light);
+    color: var(--red);
+  }
+  .sc-rank-shift.neutral {
+    background: var(--bg-warm);
+    color: var(--ink-light);
+  }
+
+  /* PPG highlight */
+  .sc-ppg-best {
+    font-weight: 700;
+    color: var(--green);
+  }
+
+  /* Loading */
+  .sc-loading {
+    text-align: center;
+    padding: 60px 20px;
+    font-family: var(--font-hand);
+    font-size: 22px;
+    color: var(--ink-light);
+  }
+
+  /* Export */
+  .sc-export {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+  }
+  .sc-export button {
+    font-family: var(--font-display);
+    font-size: 13px;
+    padding: 8px 18px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--bg-card);
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .sc-export button:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+
+  /* Watermark */
+  .sc-watermark {
+    position: fixed;
+    bottom: 10px;
+    right: 14px;
+    font-family: var(--font-hand);
+    font-size: 13px;
+    color: var(--ink-faint);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  @media (max-width: 768px) {
+    .sc-table { font-size: 12px; }
+    .sc-table th, .sc-table td { padding: 6px 8px; }
+  }
+  @media (max-width: 480px) {
+    .sc-header h1 { font-size: 26px; }
+    .sc-controls { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="/" class="logo">
+    <div class="logo-mark">&#x1F42F;</div>
+    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/lab.html">The Lab</a></li>
+    <li><a href="/tools.html">Tools</a></li>
+    <li><a href="/rankings.html">Rankings</a></li>
+    <li><a href="/leaders.html">Leaders</a></li>
+    <li><a href="/prospects.html">Prospects</a></li>
+    <li><a href="/scarcity.html">Scarcity</a></li>
+    <li><a href="/breakouts.html">Breakouts</a></li>
+    <li><a href="/buysell.html">Buy/Sell</a></li>
+    <li><a href="/aging.html">Aging</a></li>
+    <li><a href="/weekly.html">Weekly</a></li>
+    <li><a href="/targets.html">Targets</a></li>
+    <li><a href="/matchups.html">Matchups</a></li>
+    <li><a href="/usage.html">Usage</a></li>
+    <li><a href="/yoy.html">YoY</a></li>
+    <li><a href="/airyards.html">Air Yards</a></li>
+    <li><a href="/explorer.html">Explorer</a></li>
+    <li><a href="/redzone.html">Red Zone</a></li>
+    <li><a href="/efficiency.html">Efficiency</a></li>
+    <li><a href="/consistency.html">Consistency</a></li>
+    <li><a href="/schedule.html">Schedule</a></li>
+    <li><a href="/stocks.html">Stocks</a></li>
+    <li><a href="/opportunity.html">Opportunity</a></li>
+    <li><a href="/reportcard.html">Report Card</a></li>
+    <li><a href="/awards.html">Awards</a></li>
+    <li><a href="/vorp.html">VORP</a></li>
+    <li><a href="/tradevalues.html">Trade Values</a></li>
+    <li><a href="/tradefinder.html">Trade Finder</a></li>
+    <li><a href="/rosterbuilder.html">Roster Builder</a></li>
+    <li><a href="/scoring.html" class="active">Scoring</a></li>
+    <li><a href="/team/KC">Teams</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
+    <li><a href="/agents.html">War Room</a></li>
+  </ul>
+</nav>
+
+<main class="sc-page" id="sc-content">
+  <div class="sc-header">
+    <h1>Scoring Format Comparison</h1>
+    <div class="sc-subtitle">how PPR vs Standard changes the game</div>
+  </div>
+
+  <div class="sc-controls">
+    <div class="sc-pos-tabs" id="pos-tabs">
+      <button class="sc-pos-tab active" data-pos="">All</button>
+      <button class="sc-pos-tab" data-pos="QB">QB</button>
+      <button class="sc-pos-tab" data-pos="RB">RB</button>
+      <button class="sc-pos-tab" data-pos="WR">WR</button>
+      <button class="sc-pos-tab" data-pos="TE">TE</button>
+    </div>
+    <select class="sc-season-select" id="season-select"></select>
+  </div>
+
+  <div class="sc-loading" id="sc-loading">pulling film...</div>
+  <div id="sc-container" style="display:none;">
+    <div class="sc-section" id="risers-section">
+      <div class="sc-section-header">
+        <span class="sc-section-icon">&#x2B06;&#xFE0F;</span>
+        <span class="sc-section-title">PPR Risers</span>
+        <span class="sc-section-note">rank higher in PPR than Standard</span>
+      </div>
+      <div class="sc-table-wrap" id="risers-table"></div>
+    </div>
+    <div class="sc-section" id="fallers-section">
+      <div class="sc-section-header">
+        <span class="sc-section-icon">&#x2B07;&#xFE0F;</span>
+        <span class="sc-section-title">PPR Fallers</span>
+        <span class="sc-section-note">rank lower in PPR than Standard</span>
+      </div>
+      <div class="sc-table-wrap" id="fallers-table"></div>
+    </div>
+  </div>
+
+  <div class="sc-export">
+    <button onclick="exportPng()">Export PNG</button>
+  </div>
+</main>
+
+<div class="sc-watermark">razzle.lol</div>
+
+<footer style="text-align:center; padding:24px 20px 32px; font-family:var(--font-hand); font-size:15px; color:var(--ink-light); border-top:2px dashed var(--ink-faint); margin-top:40px;">
+  <div style="margin-bottom:10px;">
+    <a href="/lab.html" style="color:var(--ink-light); text-decoration:none;">The Lab</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tools.html" style="color:var(--ink-light); text-decoration:none;">Tools</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/rankings.html" style="color:var(--ink-light); text-decoration:none;">Rankings</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/leaders.html" style="color:var(--ink-light); text-decoration:none;">Leaders</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/prospects.html" style="color:var(--ink-light); text-decoration:none;">Prospects</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/scarcity.html" style="color:var(--ink-light); text-decoration:none;">Scarcity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/breakouts.html" style="color:var(--ink-light); text-decoration:none;">Breakouts</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/buysell.html" style="color:var(--ink-light); text-decoration:none;">Buy/Sell</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/aging.html" style="color:var(--ink-light); text-decoration:none;">Aging</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/weekly.html" style="color:var(--ink-light); text-decoration:none;">Weekly</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/targets.html" style="color:var(--ink-light); text-decoration:none;">Targets</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/matchups.html" style="color:var(--ink-light); text-decoration:none;">Matchups</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/usage.html" style="color:var(--ink-light); text-decoration:none;">Usage</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/yoy.html" style="color:var(--ink-light); text-decoration:none;">YoY</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/airyards.html" style="color:var(--ink-light); text-decoration:none;">Air Yards</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/explorer.html" style="color:var(--ink-light); text-decoration:none;">Explorer</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/redzone.html" style="color:var(--ink-light); text-decoration:none;">Red Zone</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/efficiency.html" style="color:var(--ink-light); text-decoration:none;">Efficiency</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/consistency.html" style="color:var(--ink-light); text-decoration:none;">Consistency</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/schedule.html" style="color:var(--ink-light); text-decoration:none;">Schedule</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/stocks.html" style="color:var(--ink-light); text-decoration:none;">Stocks</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/opportunity.html" style="color:var(--ink-light); text-decoration:none;">Opportunity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/reportcard.html" style="color:var(--ink-light); text-decoration:none;">Report Card</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/awards.html" style="color:var(--ink-light); text-decoration:none;">Awards</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/vorp.html" style="color:var(--ink-light); text-decoration:none;">VORP</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tradevalues.html" style="color:var(--ink-light); text-decoration:none;">Trade Values</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tradefinder.html" style="color:var(--ink-light); text-decoration:none;">Trade Finder</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/rosterbuilder.html" style="color:var(--ink-light); text-decoration:none;">Roster Builder</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/scoring.html" style="color:var(--ink-light); text-decoration:none;">Scoring</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/team/KC" style="color:var(--ink-light); text-decoration:none;">Teams</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none;">League Intel</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/agents.html" style="color:var(--ink-light); text-decoration:none;">War Room</a>
+  </div>
+  razzle.lol — let's razzle dazzle em baby
+</footer>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script src="app.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function fmt(v, dec) {
+    if (v === null || v === undefined) return '-';
+    return Number(v).toFixed(dec === undefined ? 1 : dec);
+  }
+
+  var state = {
+    season: 0,
+    position: '',
+    data: null
+  };
+
+  function init() {
+    if (window.__razzleAnalytics) window.__razzleAnalytics('scoring');
+
+    // Position tabs
+    document.querySelectorAll('.sc-pos-tab').forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        state.position = this.getAttribute('data-pos');
+        document.querySelectorAll('.sc-pos-tab').forEach(function(t) { t.classList.remove('active'); });
+        this.classList.add('active');
+        fetchData();
+      });
+    });
+
+    // Season select
+    document.getElementById('season-select').addEventListener('change', function() {
+      state.season = parseInt(this.value) || 0;
+      fetchData();
+    });
+
+    fetchData();
+  }
+
+  function fetchData() {
+    document.getElementById('sc-loading').style.display = 'block';
+    document.getElementById('sc-container').style.display = 'none';
+
+    var url = '/api/scoring-comparison?';
+    if (state.season) url += 'season=' + state.season + '&';
+    if (state.position) url += 'position=' + state.position;
+
+    fetch(url)
+      .then(function(r) {
+        if (!r.ok) throw new Error('Failed');
+        return r.json();
+      })
+      .then(function(data) {
+        state.data = data;
+
+        // Populate season selector
+        var sel = document.getElementById('season-select');
+        if (sel.options.length <= 1) {
+          sel.innerHTML = '';
+          (data.available_seasons || []).forEach(function(s) {
+            var opt = document.createElement('option');
+            opt.value = s;
+            opt.textContent = s;
+            if (s === data.season) opt.selected = true;
+            sel.appendChild(opt);
+          });
+        }
+        state.season = data.season;
+        render();
+      })
+      .catch(function() {
+        document.getElementById('sc-loading').textContent = 'failed to load — try refreshing';
+      });
+  }
+
+  function buildTable(players) {
+    if (!players || players.length === 0) {
+      return '<div style="text-align:center; padding:20px; font-family:var(--font-hand); color:var(--ink-light);">no players in this category</div>';
+    }
+
+    var html = '<table class="sc-table">';
+    html += '<thead><tr>';
+    html += '<th>Pos</th><th>Player</th><th>Team</th>';
+    html += '<th>PPR PPG</th><th>Half PPG</th><th>Std PPG</th>';
+    html += '<th>PPR Rank</th><th>Std Rank</th><th>Shift</th>';
+    html += '</tr></thead><tbody>';
+
+    players.forEach(function(p) {
+      var shiftClass = p.rank_diff > 0 ? 'up' : (p.rank_diff < 0 ? 'down' : 'neutral');
+      var shiftText = p.rank_diff > 0 ? ('+' + p.rank_diff) : String(p.rank_diff);
+
+      html += '<tr onclick="window.location.href=\'/player.html?id=' + escapeHtml(p.player_id) + '\'">';
+      html += '<td><span class="sc-pos-badge ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span></td>';
+      html += '<td>';
+      html += '<img class="sc-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="" onerror="this.style.display=\'none\'">';
+      html += escapeHtml(p.full_name);
+      html += '</td>';
+      html += '<td>' + escapeHtml(p.team) + '</td>';
+      html += '<td>' + fmt(p.ppg_ppr) + '</td>';
+      html += '<td>' + fmt(p.ppg_half) + '</td>';
+      html += '<td>' + fmt(p.ppg_std) + '</td>';
+      html += '<td>' + p.rank_ppr + '</td>';
+      html += '<td>' + p.rank_std + '</td>';
+      html += '<td><span class="sc-rank-shift ' + shiftClass + '">' + escapeHtml(shiftText) + '</span></td>';
+      html += '</tr>';
+    });
+
+    html += '</tbody></table>';
+    return html;
+  }
+
+  function render() {
+    document.getElementById('sc-loading').style.display = 'none';
+    document.getElementById('sc-container').style.display = 'block';
+
+    var d = state.data;
+    document.getElementById('risers-table').innerHTML = buildTable(d.risers);
+    document.getElementById('fallers-table').innerHTML = buildTable(d.fallers);
+  }
+
+  window.exportPng = function() {
+    var el = document.getElementById('sc-content');
+    if (typeof html2canvas === 'undefined') return;
+    html2canvas(el, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+      var ctx = canvas.getContext('2d');
+      ctx.font = '24px Caveat, cursive';
+      ctx.fillStyle = 'rgba(26,26,46,0.18)';
+      ctx.fillText('razzle.lol', canvas.width - 160, canvas.height - 20);
+      var link = document.createElement('a');
+      link.download = 'razzle-scoring-comparison.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+  };
+
+  init();
+})();
+</script>
+
+</body>
+</html>

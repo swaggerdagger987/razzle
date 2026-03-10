@@ -1,37 +1,37 @@
-# Razzle Loop — Phase 97 Task List
+# Razzle Loop — Phase 98 Task List
 
-> Dynasty Roster Builder — Build and grade a hypothetical roster
+> Scoring Format Comparison — PPR vs Half-PPR vs Standard ranking shifts
 
-**Current Phase**: 97 — Dynasty Roster Builder
-**Exit Criterion**: /rosterbuilder.html page lets users add players via autocomplete search to build a hypothetical dynasty roster (up to 25 slots). Shows live roster grade (A+ to F) based on composite score (trade value, VORP, age balance, positional depth). Visual breakdown cards for each dimension. Position group summaries. Total roster trade value. PNG export with watermark.
+**Current Phase**: 98 — Scoring Format Comparison
+**Exit Criterion**: /scoring.html page shows how player rankings shift across PPR, Half-PPR, and Standard scoring formats.
 
 ---
 
-## Task 1: Backend /api/roster-grade endpoint
+## Task 1: Backend /api/scoring-comparison endpoint
 **Status**: PASS
 **Attempts**: 1
-**Notes**: POST /api/roster-grade accepts player_ids array, reuses compute_trade_value + VORP thresholds, returns overall_grade/score, 4 dimension scores (trade_value, vorp, age_balance, positional_depth), position_summary, per-player details. Grade thresholds A+ (95) to F (<40). fetch_roster_grade added to live_data.py.
+**Notes**: GET /api/scoring-comparison returns risers (rank higher in PPR than Standard) and fallers (rank lower in PPR). Each player: ppg_ppr, ppg_half, ppg_std, rank_ppr, rank_half, rank_std, rank_diff. Min 6 games + 2 PPG. Season + position params.
 
-## Task 2: Roster Builder page (frontend/rosterbuilder.html)
+## Task 2: Scoring Format page (frontend/scoring.html)
 **Status**: PASS
 **Attempts**: 1
-**Notes**: Player search autocomplete (quick-search API), add/remove players, live grade card (big letter grade + score), dimension progress bars (colored by metric), position group summary grid (QB/RB/WR/TE count + avg TV + VORP), per-player rows with headshot/pos/name/team/age/TV/VORP. Clear/Export/Share URL buttons. URL state (?players=id1,id2). 14 escapeHtml calls, 58/58 braces balanced.
+**Notes**: Two sections (PPR Risers + PPR Fallers), sortable tables, position badge, headshot, 3 PPG columns, rank shift badges (green up / red down), position filter tabs, season selector, PNG export with watermark. 8 escapeHtml, 22/22 braces balanced.
 
 ## Task 3: Nav links + sitemap + analytics
 **Status**: PASS
 **Attempts**: 1
-**Notes**: "Roster Builder" nav link added to all 35 HTML pages (nav + footer). 32/32 nav links consistent. Sitemap entry. Analytics tracking. Added to tools-hub catalog under Team & League.
+**Notes**: "Scoring" nav link on all 36 pages (33/33 nav links consistent). Sitemap entry. Tools hub catalog entry under Performance Analysis. Analytics tracking.
 
 ## Task 4: Smoke test
 **Status**: PASS
 **Attempts**: 1
-**Notes**: Python syntax valid. JS braces balanced (58/58). 14 escapeHtml. All 35 pages have /rosterbuilder.html link. 14/14 design checks pass. Hover-lift fixed on action buttons.
+**Notes**: Python syntax valid. JS balanced. 36/36 pages have scoring link. Design compliance verified.
 
 ---
 
 ## Loop State
 ```
-Current Phase: 97
+Current Phase: 98
 Current Task: 4
 Current Stage: COMPLETE
 Attempt: 1

@@ -8579,3 +8579,108 @@ def fetch_roster_grade(player_ids, season=None):
         }
     finally:
         conn.close()
+
+
+# ---------------------------------------------------------------------------
+# Scoring Format Comparison — PPR vs Half-PPR vs Standard
+# ---------------------------------------------------------------------------
+
+def fetch_scoring_comparison(season=None, position=None, limit=40):
+    """Compare player rankings across PPR, Half-PPR, and Standard scoring."""
+    conn = get_conn()
+    try:
+        row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
+        available_seasons = [r[0] for r in row] if row else [2024]
+        if not season:
+            season = available_seasons[0] if available_seasons else 2024
+
+        pos_filter = ""
+        params = [season]
+        if position and position.upper() in ("QB", "RB", "WR", "TE"):
+            pos_filter = "AND p.position = ?"
+            params.append(position.upper())
+
+        query = f"""
+            SELECT
+                p.player_id, p.full_name, p.position, p.team,
+                p.headshot_url,
+                SUM(s.fantasy_points_ppr) as total_ppr,
+                SUM(s.fantasy_points_half_ppr) as total_half,
+                SUM(COALESCE(s.fantasy_points_std, s.fantasy_points_ppr - s.receptions)) as total_std,
+                COUNT(DISTINCT s.week) as games
+            FROM players p
+            JOIN player_week_stats s
+                ON s.player_id = p.player_id AND s.season = ?
+            WHERE p.position IN ('QB','RB','WR','TE')
+              AND p.fantasy_relevant = 1
+              {pos_filter}
+            GROUP BY p.player_id
+            HAVING games >= 6 AND (total_ppr / games) >= 2
+            ORDER BY total_ppr DESC
+        """
+        rows = conn.execute(query, params).fetchall()
+
+        if not rows:
+            return {
+                "season": season,
+                "available_seasons": available_seasons,
+                "risers": [],
+                "fallers": [],
+            }
+
+        # Build player list
+        players = []
+        for r in rows:
+            games = r[8] or 1
+            total_ppr = r[5] or 0
+            total_half = r[6] or 0
+            total_std = r[7] or 0
+            players.append({
+                "player_id": r[0],
+                "full_name": r[1] or "Unknown",
+                "position": r[2] or "WR",
+                "team": r[3] or "FA",
+                "headshot_url": r[4] or "",
+                "ppg_ppr": round(total_ppr / games, 2),
+                "ppg_half": round(total_half / games, 2),
+                "ppg_std": round(total_std / games, 2),
+                "games": games,
+            })
+
+        # Compute ranks for each format
+        by_ppr = sorted(players, key=lambda x: x["ppg_ppr"], reverse=True)
+        by_half = sorted(players, key=lambda x: x["ppg_half"], reverse=True)
+        by_std = sorted(players, key=lambda x: x["ppg_std"], reverse=True)
+
+        ppr_ranks = {p["player_id"]: i + 1 for i, p in enumerate(by_ppr)}
+        half_ranks = {p["player_id"]: i + 1 for i, p in enumerate(by_half)}
+        std_ranks = {p["player_id"]: i + 1 for i, p in enumerate(by_std)}
+
+        for p in players:
+            pid = p["player_id"]
+            p["rank_ppr"] = ppr_ranks[pid]
+            p["rank_half"] = half_ranks[pid]
+            p["rank_std"] = std_ranks[pid]
+            # Positive rank_diff = player ranks HIGHER (better) in PPR than STD
+            p["rank_diff"] = std_ranks[pid] - ppr_ranks[pid]
+
+        # Split into risers (rank_diff > 0, helped by PPR) and fallers (rank_diff < 0, hurt by PPR)
+        risers = sorted(
+            [p for p in players if p["rank_diff"] > 0],
+            key=lambda x: x["rank_diff"],
+            reverse=True,
+        )[:limit]
+
+        fallers = sorted(
+            [p for p in players if p["rank_diff"] < 0],
+            key=lambda x: x["rank_diff"],
+        )[:limit]
+
+        return {
+            "season": season,
+            "available_seasons": available_seasons,
+            "risers": risers,
+            "fallers": fallers,
+        }
+    finally:
+        conn.close()

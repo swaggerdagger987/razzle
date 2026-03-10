@@ -911,6 +911,7 @@ def sitemap_xml():
         ("/tradefinder.html", "0.8", "weekly"),
         ("/tools.html", "0.8", "weekly"),
         ("/rosterbuilder.html", "0.8", "weekly"),
+        ("/scoring.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1310,6 +1311,18 @@ def trade_finder(player_id: str = "", season: int = 0):
         return JSONResponse({"error": "Failed to fetch trade finder data"}, status_code=500)
 
 
+@app.get("/api/scoring-comparison")
+def scoring_comparison(season: int = 0, position: str = ""):
+    """Compare player rankings across PPR, Half-PPR, and Standard scoring."""
+    try:
+        s = season if season > 0 else None
+        pos = position if position else None
+        return live_data.fetch_scoring_comparison(season=s, position=pos)
+    except Exception as e:
+        logger.error(f"scoring-comparison error: {e}")
+        return JSONResponse({"error": "Failed to fetch scoring comparison"}, status_code=500)
+
+
 @app.post("/api/roster-grade")
 async def roster_grade(request: Request):
     """Grade a hypothetical dynasty roster from a list of player IDs."""
@@ -1366,6 +1379,7 @@ def tools_hub():
                 {"name": "Air Yards", "desc": "aDOT, RACR, WOPR, and regression buy/sell indicators", "url": "/airyards.html", "positions": ["WR", "RB", "TE"]},
                 {"name": "Red Zone & Goal-Line", "desc": "Goal-line carries, targets, TDs, and TD dependency", "url": "/redzone.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Boom/Bust", "desc": "Weekly score distributions, boom rates, and consistency grades", "url": "/compare.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Scoring Formats", "desc": "How PPR vs Half-PPR vs Standard changes rankings", "url": "/scoring.html", "positions": ["QB", "RB", "WR", "TE"]},
             ],
         },
         {

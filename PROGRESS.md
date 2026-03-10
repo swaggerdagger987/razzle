@@ -1,6 +1,23 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 97 — Dynasty Roster Builder (COMPLETE)
+## Current Phase: Phase 98 — Scoring Format Comparison (COMPLETE)
+
+**Exit criterion MET:** /scoring.html page shows how player rankings shift across PPR, Half-PPR, and Standard scoring. Two sections: PPR Risers (players who rank higher in PPR than Standard — reception-dependent players) and PPR Fallers (players who rank lower — rushing-heavy players). Each player row: position badge, headshot, name, team, 3 PPG columns (PPR/Half/Std), PPR rank, Std rank, rank shift badge (green up / red down with +/- number). Position filter tabs (All/QB/RB/WR/TE). Season selector. PNG export with watermark. Responsive at 768px + 480px. GET /api/scoring-comparison endpoint computes per-player PPG across all 3 formats, ranks independently, returns rank_diff (std_rank - ppr_rank). Min 6 games + 2 PPG filter. "Scoring" nav link on all 36 HTML pages. Sitemap entry. Tools hub catalog entry. Design matches DESIGN.md.
+
+### Phase 98 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/scoring-comparison endpoint | DONE | fetch_scoring_comparison in live_data.py, 3-format PPG + ranks |
+| 2 | Scoring Format page | DONE | Risers/fallers tables, rank shift badges, 8 escapeHtml, 22/22 balanced |
+| 3 | Nav links + sitemap + analytics | DONE | All 36 pages updated, sitemap entry, tools hub catalog |
+| 4 | Smoke test | DONE | Python + JS syntax clean, 36/36 nav links, design compliance |
+
+### Decisions Log
+- **Scoring Format Comparison as Phase 98**: One of the most common questions in fantasy football is "how much does PPR vs Standard change rankings?" This page answers it visually. Extremely screenshottable: "These WRs gain 15+ ranks in PPR." Leverages existing 3-format scoring data already in player_week_stats. Natural complement to the trade values and VORP dashboards.
+- **Rank diff = std_rank - ppr_rank**: Positive means the player gains rank (is better) in PPR. This frames it as "PPR helps these players" vs "PPR hurts these players," which is intuitive.
+
+## Previous Phase: Phase 97 — Dynasty Roster Builder (COMPLETE)
 
 **Exit criterion MET:** /rosterbuilder.html page lets users build a hypothetical dynasty roster (up to 25 players) via autocomplete search. Live roster grade card shows letter grade (A+ to F) and composite score (0-100) based on 4 dimensions: trade value (35%), VORP (25%), age balance (20%), positional depth (20%). Visual dimension progress bars colored by metric. Position group summary grid (QB/RB/WR/TE with count, avg trade value, total VORP). Per-player rows with headshot, position badge, name, team, age, trade value, VORP badge. Total roster trade value displayed. Clear/Export PNG/Copy Share URL buttons. URL state (?players=id1,id2,...) for shareable roster links. POST /api/roster-grade endpoint accepts player_ids array, reuses compute_trade_value + VORP replacement thresholds. "Roster Builder" nav link added to all 35 HTML pages. Sitemap entry. Added to Tools Hub catalog. Design matches DESIGN.md.
 
