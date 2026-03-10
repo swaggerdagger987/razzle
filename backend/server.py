@@ -517,6 +517,14 @@ def draft_class_analytics(position: str = ""):
     return live_data.fetch_draft_class_analytics(position=position)
 
 
+@app.get("/api/draft-class-tracker")
+def draft_class_tracker(draft_year: int = 0, position: str = ""):
+    return live_data.fetch_draft_class_tracker(
+        draft_year=draft_year or None,
+        position=position or None,
+    )
+
+
 @app.get("/api/prospect-options")
 def prospect_options():
     return live_data.fetch_prospect_years()

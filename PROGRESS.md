@@ -1,6 +1,18 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 18 — Remove Prospects Section, Merge into College (COMPLETE)
+## Current Phase: Phase 19 — Draft Class Tracker (COMPLETE)
+
+**Exit Criterion MET**: New Lab panel shows historical NFL draft classes (2015-2025). Backend API /api/draft-class-tracker computes career fantasy PPG from draft_picks data, classifies picks as Stud/Hit/Average/Bust based on round+position expectations. Frontend panel has year selector, position filter tabs, round breakdown cards with hit-rate bars, position breakdown, and color-coded verdict badges. Sidebar entry under College category.
+
+### Phase 19 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend API — /api/draft-class-tracker | DONE | Career PPR PPG, hit/miss classification, round + position breakdown |
+| 2 | Frontend panel in Lab | DONE | Year selector, pos tabs, round cards, player table with verdict badges |
+| 3 | Sidebar entry and wire up | DONE | Under College category, auto-registered via _labPanelDefs |
+
+## Previous Phase: Phase 18 — Remove Prospects Section, Merge into College (COMPLETE)
 
 **Exit Criterion MET**: Prospects universe button removed. College mode now has sub-toggle: "Season Stats" (cfb data) and "Draft Prospects" (combine/draft data). All prospect logic routed through `isProspectView()` helper. Legacy URLs (?u=prospects) and localStorage values auto-migrate. Sidebar category renamed to "College". Prospect panels (Big Board, Mock Draft, Athletic Radar) remain functional under College category.
 

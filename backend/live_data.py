@@ -14589,3 +14589,171 @@ def fetch_game_script(season=None, position=None, limit=40):
         }
     finally:
         conn.close()
+
+
+# ---------------------------------------------------------------------------
+# Draft Class Tracker
+# ---------------------------------------------------------------------------
+
+def fetch_draft_class_tracker(draft_year=None, position=None):
+    """
+    Return drafted players from a given year with career fantasy production
+    and hit/miss classification.
+    """
+    conn = get_conn()
+    try:
+        # Available draft years
+        year_rows = conn.execute(
+            "SELECT DISTINCT season FROM draft_picks WHERE position IN ('QB','RB','WR','TE') ORDER BY season DESC"
+        ).fetchall()
+        available_years = [r[0] for r in year_rows] if year_rows else [2024]
+
+        if not draft_year:
+            draft_year = available_years[0] if available_years else 2024
+
+        # Fetch all skill position picks for this draft year
+        pos_filter = ""
+        params = [draft_year]
+        if position and position != "ALL":
+            pos_filter = " AND d.position = ?"
+            params.append(position)
+
+        rows = conn.execute(f"""
+            SELECT
+                d.player_name, d.position, d.round, d.pick, d.team AS draft_team,
+                d.college, d.age AS draft_age,
+                d.games AS career_games,
+                d.pass_yards, d.pass_tds, d.rush_yards, d.rush_tds,
+                d.receptions, d.rec_yards, d.rec_tds,
+                d.career_av, d.allpro, d.probowls, d.seasons_started
+            FROM draft_picks d
+            WHERE d.season = ? AND d.position IN ('QB','RB','WR','TE')
+            {pos_filter}
+            ORDER BY d.round, d.pick
+        """, params).fetchall()
+
+        players = []
+        round_stats = {}  # round -> {total, hits, busts}
+
+        for r in rows:
+            games = r["career_games"] or 0
+            # Compute career fantasy PPG (PPR)
+            pass_yds = r["pass_yards"] or 0
+            pass_tds = r["pass_tds"] or 0
+            rush_yds = r["rush_yards"] or 0
+            rush_tds = r["rush_tds"] or 0
+            recs = r["receptions"] or 0
+            rec_yds = r["rec_yards"] or 0
+            rec_tds = r["rec_tds"] or 0
+
+            career_fpts = (pass_yds * 0.04 + pass_tds * 4 +
+                          rush_yds * 0.1 + rush_tds * 6 +
+                          recs * 1.0 + rec_yds * 0.1 + rec_tds * 6)
+            career_ppg = round(career_fpts / games, 1) if games > 0 else 0.0
+
+            # Hit/miss classification based on position expectations
+            pos = r["position"]
+            rd = r["round"]
+
+            # Classification: Hit = exceeded expectations, Miss = below
+            if rd <= 2:
+                # Early picks: high bar
+                hit_threshold = {"QB": 14, "RB": 12, "WR": 10, "TE": 8}.get(pos, 10)
+            elif rd <= 4:
+                # Mid-round: moderate bar
+                hit_threshold = {"QB": 10, "RB": 8, "WR": 7, "TE": 5}.get(pos, 7)
+            else:
+                # Late round: low bar
+                hit_threshold = {"QB": 6, "RB": 5, "WR": 4, "TE": 3}.get(pos, 4)
+
+            if games < 16:
+                classification = "too_early" if (2026 - draft_year) <= 2 else "bust"
+            elif career_ppg >= hit_threshold * 1.3:
+                classification = "stud"
+            elif career_ppg >= hit_threshold:
+                classification = "hit"
+            elif career_ppg >= hit_threshold * 0.6:
+                classification = "average"
+            else:
+                classification = "bust"
+
+            # Track round stats
+            if rd not in round_stats:
+                round_stats[rd] = {"total": 0, "hits": 0, "busts": 0, "studs": 0}
+            round_stats[rd]["total"] += 1
+            if classification == "stud":
+                round_stats[rd]["studs"] += 1
+                round_stats[rd]["hits"] += 1
+            elif classification == "hit":
+                round_stats[rd]["hits"] += 1
+            elif classification == "bust":
+                round_stats[rd]["busts"] += 1
+
+            players.append({
+                "player_name": r["player_name"],
+                "position": pos,
+                "round": rd,
+                "pick": r["pick"],
+                "draft_team": r["draft_team"],
+                "college": r["college"],
+                "draft_age": r["draft_age"],
+                "career_games": games,
+                "career_ppg": career_ppg,
+                "career_fpts": round(career_fpts, 1),
+                "pass_yards": pass_yds,
+                "pass_tds": pass_tds,
+                "rush_yards": rush_yds,
+                "rush_tds": rush_tds,
+                "receptions": recs,
+                "rec_yards": rec_yds,
+                "rec_tds": rec_tds,
+                "career_av": r["career_av"] or 0,
+                "allpro": r["allpro"] or 0,
+                "probowls": r["probowls"] or 0,
+                "classification": classification,
+            })
+
+        # Position breakdown
+        pos_breakdown = {}
+        for p in players:
+            pos = p["position"]
+            if pos not in pos_breakdown:
+                pos_breakdown[pos] = {"total": 0, "studs": 0, "hits": 0, "busts": 0, "avg_ppg": 0, "ppg_sum": 0}
+            pos_breakdown[pos]["total"] += 1
+            pos_breakdown[pos]["ppg_sum"] += p["career_ppg"]
+            if p["classification"] == "stud":
+                pos_breakdown[pos]["studs"] += 1
+            elif p["classification"] == "hit":
+                pos_breakdown[pos]["hits"] += 1
+            elif p["classification"] == "bust":
+                pos_breakdown[pos]["busts"] += 1
+
+        for pos in pos_breakdown:
+            t = pos_breakdown[pos]["total"]
+            pos_breakdown[pos]["avg_ppg"] = round(pos_breakdown[pos]["ppg_sum"] / t, 1) if t > 0 else 0
+            del pos_breakdown[pos]["ppg_sum"]
+
+        # Round breakdown as sorted list
+        round_breakdown = []
+        for rd in sorted(round_stats.keys()):
+            rs = round_stats[rd]
+            hit_rate = round(rs["hits"] / rs["total"] * 100, 1) if rs["total"] > 0 else 0
+            round_breakdown.append({
+                "round": rd,
+                "total": rs["total"],
+                "studs": rs["studs"],
+                "hits": rs["hits"],
+                "busts": rs["busts"],
+                "hit_rate": hit_rate,
+            })
+
+        return {
+            "draft_year": draft_year,
+            "available_years": available_years,
+            "players": players,
+            "position_breakdown": pos_breakdown,
+            "round_breakdown": round_breakdown,
+            "total_picks": len(players),
+        }
+    finally:
+        conn.close()

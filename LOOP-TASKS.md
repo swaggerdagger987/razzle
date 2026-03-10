@@ -1,10 +1,30 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 18 (Remove Prospects Section — Merge into College)
-- All 4 tasks PASS
+- Phase: 19 (Draft Class Tracker)
+- All 3 tasks PASS
 - Stage: PHASE GATE
 - Next: Commit and push
+
+## Phase 19: Draft Class Tracker
+**Exit Criterion**: A Lab panel shows historical NFL draft classes (2015-2025). Select a draft year to see how that class performed in fantasy football. Shows top performers, bust rate by round, positional breakdown, and hit/miss classification. Screenshot-worthy for r/DynastyFF.
+
+### Task 1: Backend API — /api/draft-class-tracker
+**Status**: PASS
+**Attempts**: 1
+**Notes**: fetch_draft_class_tracker() in live_data.py. Uses draft_picks table. Computes career PPR fantasy PPG, hit/miss classification by round+position expectations. Returns players, round breakdown (hit rates), position breakdown (avg PPG, studs/busts).
+
+### Task 2: Frontend panel — Draft Class Tracker in Lab
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Panel in lab-panels.js. Year selector dropdown, position filter tabs, round breakdown cards with hit-rate bars, position breakdown with color-coded stats, sortable player table with verdict badges (Stud/Hit/Average/Bust/Too Early).
+
+### Task 3: Add sidebar entry and wire up
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Sidebar entry under College category. PANEL_LABELS, PANEL_FLAVORS entries added. Auto-registered via _labPanelDefs.
+
+---
 
 ## Phase 18: Remove Prospects Section — Merge into College Filter
 **Exit Criterion**: The standalone Prospects universe button is removed. Prospect data (combine metrics, athletic profiles, radar charts) is accessible as a sub-view within the College section. Users toggle between "Season Stats" and "Draft Prospects" within College mode. Mock Draft and Athletic Radar panels remain accessible.

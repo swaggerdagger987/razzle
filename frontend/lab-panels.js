@@ -8915,4 +8915,183 @@
     });
   }});
 
+
+  // ═══════════════════════════════════════════════════════════════
+  // DRAFT CLASS TRACKER
+  // ═══════════════════════════════════════════════════════════════
+  defs.push({ name: 'drafttracker', render: function(el) {
+    var panelState = { year: 0, position: '', data: null };
+    var CLASSIFICATION_COLORS = {
+      stud: '#2ec4b6',
+      hit: '#5b7fff',
+      average: '#d97757',
+      bust: '#d44040',
+      too_early: '#999'
+    };
+    var CLASSIFICATION_LABELS = {
+      stud: 'Stud',
+      hit: 'Hit',
+      average: 'Average',
+      bust: 'Bust',
+      too_early: 'Too Early'
+    };
+
+    el.innerHTML =
+      '<div class="lp-page">' +
+        '<div class="lp-header"><h2>Draft Class Tracker</h2>' +
+        '<div class="lp-subtitle">how did each draft class actually produce?</div></div>' +
+        '<div class="lp-controls">' +
+          '<select class="lp-select dct-year"><option value="">loading...</option></select>' +
+          posTabsHTML('dct-pos-tabs', true) +
+        '</div>' +
+        '<div class="dct-round-breakdown"></div>' +
+        '<div class="dct-pos-breakdown"></div>' +
+        '<div class="dct-content"><div class="lp-loading">reviewing the tape...</div></div>' +
+      '</div>';
+
+    function loadData() {
+      var yearParam = panelState.year ? '&draft_year=' + panelState.year : '';
+      var posParam = panelState.position ? '&position=' + panelState.position : '';
+      var contentEl = el.querySelector('.dct-content');
+      contentEl.innerHTML = '<div class="lp-loading">reviewing the tape...</div>';
+      fetch('/api/draft-class-tracker?' + yearParam.replace(/^&/, '') + posParam)
+        .then(function(r) { if (!r.ok) throw new Error('fail'); return r.json(); })
+        .then(function(data) {
+          panelState.data = data;
+          panelState.year = data.draft_year;
+          renderYearSelect(data.available_years);
+          renderRoundBreakdown(data.round_breakdown);
+          renderPosBreakdown(data.position_breakdown);
+          renderPlayerTable(data.players);
+        })
+        .catch(function() {
+          contentEl.innerHTML = '<div class="lp-loading" style="color:var(--red)">fumbled the draft class data...</div>';
+        });
+    }
+
+    function renderYearSelect(years) {
+      var sel = el.querySelector('.dct-year');
+      if (sel.options.length <= 1) {
+        sel.innerHTML = '';
+        years.forEach(function(y) {
+          var opt = document.createElement('option');
+          opt.value = y;
+          opt.textContent = y + ' Draft Class';
+          if (y === panelState.year) opt.selected = true;
+          sel.appendChild(opt);
+        });
+      }
+    }
+
+    function renderRoundBreakdown(rounds) {
+      var container = el.querySelector('.dct-round-breakdown');
+      if (!rounds || !rounds.length) { container.innerHTML = ''; return; }
+      var html = '<div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px;">';
+      rounds.forEach(function(rd) {
+        var hitPct = rd.hit_rate;
+        var barColor = hitPct >= 50 ? '#2ec4b6' : hitPct >= 30 ? '#d97757' : '#d44040';
+        html += '<div style="background:var(--card); border:2px solid var(--ink); border-radius:6px; padding:8px 12px; min-width:100px; text-align:center;">' +
+          '<div style="font-family:var(--font-display); font-size:14px; color:var(--ink);">Round ' + rd.round + '</div>' +
+          '<div style="margin:4px 0; height:6px; background:#eee; border-radius:3px;">' +
+            '<div style="height:100%; width:' + hitPct + '%; background:' + barColor + '; border-radius:3px;"></div>' +
+          '</div>' +
+          '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' +
+            rd.hits + '/' + rd.total + ' hits (' + hitPct + '%)' +
+          '</div>' +
+        '</div>';
+      });
+      html += '</div>';
+      container.innerHTML = html;
+    }
+
+    function renderPosBreakdown(positions) {
+      var container = el.querySelector('.dct-pos-breakdown');
+      if (!positions) { container.innerHTML = ''; return; }
+      var html = '<div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px;">';
+      var posOrder = ['QB', 'RB', 'WR', 'TE'];
+      posOrder.forEach(function(pos) {
+        var pd = positions[pos];
+        if (!pd) return;
+        var color = POS_COLORS[pos] || '#888';
+        html += '<div style="background:var(--card); border:2px solid var(--ink); border-radius:6px; padding:8px 12px; min-width:90px; text-align:center; border-left:4px solid ' + color + ';">' +
+          '<div style="font-family:var(--font-display); font-size:14px; color:' + color + ';">' + pos + '</div>' +
+          '<div style="font-family:var(--font-mono); font-size:12px;">' + pd.total + ' drafted</div>' +
+          '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' +
+            pd.avg_ppg + ' avg PPG' +
+          '</div>' +
+          '<div style="font-family:var(--font-mono); font-size:11px;">' +
+            '<span style="color:#2ec4b6;">' + pd.studs + ' studs</span> · ' +
+            '<span style="color:#d44040;">' + pd.busts + ' busts</span>' +
+          '</div>' +
+        '</div>';
+      });
+      html += '</div>';
+      container.innerHTML = html;
+    }
+
+    function renderPlayerTable(players) {
+      var contentEl = el.querySelector('.dct-content');
+      if (!players || !players.length) {
+        contentEl.innerHTML = '<div class="lp-loading">no skill players drafted this year...</div>';
+        return;
+      }
+
+      var html = '<div style="overflow-x:auto;">' +
+        '<table class="screener-table" style="width:100%; font-size:12px;">' +
+        '<thead><tr>' +
+          '<th style="text-align:left;">Player</th>' +
+          '<th>Pos</th>' +
+          '<th>Rd</th>' +
+          '<th>Pick</th>' +
+          '<th>Team</th>' +
+          '<th>College</th>' +
+          '<th>Games</th>' +
+          '<th>PPG</th>' +
+          '<th>Career FPTS</th>' +
+          '<th>Career AV</th>' +
+          '<th>Verdict</th>' +
+        '</tr></thead><tbody>';
+
+      players.forEach(function(p) {
+        var posColor = POS_COLORS[p.position] || '#888';
+        var verdictColor = CLASSIFICATION_COLORS[p.classification] || '#888';
+        var verdictLabel = CLASSIFICATION_LABELS[p.classification] || p.classification;
+
+        html += '<tr>' +
+          '<td style="text-align:left; font-weight:600;">' + escapeHtml(p.player_name) + '</td>' +
+          '<td><span style="background:' + posColor + '; color:white; padding:1px 6px; border-radius:3px; font-size:10px; font-weight:700;">' + p.position + '</span></td>' +
+          '<td>' + p.round + '</td>' +
+          '<td>' + p.pick + '</td>' +
+          '<td style="font-family:var(--font-mono); font-size:11px;">' + escapeHtml(p.draft_team || '') + '</td>' +
+          '<td style="font-family:var(--font-mono); font-size:11px;">' + escapeHtml(p.college || '') + '</td>' +
+          '<td>' + p.career_games + '</td>' +
+          '<td style="font-weight:700;">' + fmt(p.career_ppg) + '</td>' +
+          '<td>' + fmt(p.career_fpts, 0) + '</td>' +
+          '<td>' + p.career_av + '</td>' +
+          '<td><span style="background:' + verdictColor + '; color:white; padding:2px 8px; border-radius:4px; font-size:10px; font-weight:700; border:1px solid rgba(0,0,0,0.15);">' + verdictLabel + '</span></td>' +
+        '</tr>';
+      });
+
+      html += '</tbody></table></div>';
+      contentEl.innerHTML = html;
+    }
+
+    // Year selector
+    el.querySelector('.dct-year').addEventListener('change', function() {
+      panelState.year = parseInt(this.value);
+      loadData();
+    });
+
+    // Position tabs
+    el.querySelector('#dct-pos-tabs').addEventListener('click', function(e) {
+      if (!e.target.classList.contains('lp-pos-tab')) return;
+      el.querySelectorAll('#dct-pos-tabs .lp-pos-tab').forEach(function(t) { t.classList.remove('active'); });
+      e.target.classList.add('active');
+      panelState.position = e.target.dataset.pos || '';
+      loadData();
+    });
+
+    loadData();
+  }});
+
 })();
