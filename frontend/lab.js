@@ -8366,9 +8366,12 @@ function renderBoomBust(data, container) {
   // Grade badge + stat cards row
   html += `<div style="display:flex; gap:12px; align-items:flex-start; flex-wrap:wrap; margin-bottom:16px;">`;
 
-  // Grade sticker
-  html += `<div style="background:${gradeColor}; color:white; font-family:var(--font-display); font-size:36px; font-weight:700; width:72px; height:72px; display:flex; align-items:center; justify-content:center; border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); transform:rotate(-3deg); flex-shrink:0;">`;
+  // Grade sticker with label
+  html += `<div style="text-align:center; flex-shrink:0;">`;
+  html += `<div style="background:${gradeColor}; color:white; font-family:var(--font-display); font-size:36px; font-weight:700; width:72px; height:72px; display:flex; align-items:center; justify-content:center; border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); transform:rotate(-3deg);">`;
   html += grade;
+  html += `</div>`;
+  html += `<div style="font-family:var(--font-mono); font-size:9px; color:var(--ink-light); text-transform:uppercase; margin-top:4px;">Consistency</div>`;
   html += `</div>`;
 
   // Stat cards
@@ -8397,6 +8400,13 @@ function renderBoomBust(data, container) {
   // Histogram canvas
   html += `<div class="profile-chart-wrap">`;
   html += `<canvas id="boomBustHistogram" width="720" height="280" style="border:2px solid var(--ink); border-radius:8px; background:var(--bg); width:100%;"></canvas>`;
+  html += `</div>`;
+
+  // Histogram legend
+  html += `<div style="display:flex; gap:16px; justify-content:center; margin:8px 0; font-family:var(--font-mono); font-size:11px; color:var(--ink-medium);">`;
+  html += `<span style="display:flex; align-items:center; gap:4px;"><span style="width:12px; height:12px; background:var(--green); border:1.5px solid var(--ink); display:inline-block;"></span> Boom (${boom_threshold}+ pts)</span>`;
+  html += `<span style="display:flex; align-items:center; gap:4px;"><span style="width:12px; height:12px; background:${posColor}; border:1.5px solid var(--ink); display:inline-block;"></span> Normal</span>`;
+  html += `<span style="display:flex; align-items:center; gap:4px;"><span style="width:12px; height:12px; background:var(--red); border:1.5px solid var(--ink); display:inline-block;"></span> Bust (${bust_threshold} or below)</span>`;
   html += `</div>`;
 
   // Floor-ceiling range bar
