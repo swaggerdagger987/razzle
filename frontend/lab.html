@@ -3043,6 +3043,7 @@
 
 </div><!-- /lab-main -->
 
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <script src="app.js"></script>
 <script src="lab.js"></script>
 <script defer src="formulas.js"></script>
@@ -3272,6 +3273,7 @@
                                '<div class="panel-title">' + escapeHtml(label) + '</div>' +
                                '<div class="panel-actions">' +
                                  '<button class="btn-panel-action" onclick="exportPanelCSV(\'' + escapeAttr(panelName) + '\')" title="Export as CSV">CSV</button>' +
+                                 '<button class="btn-panel-action" onclick="screenshotPanel(\'' + escapeAttr(panelName) + '\')" title="Screenshot as PNG">PNG</button>' +
                                  '<button class="btn-panel-action" onclick="sharePanelURL(\'' + escapeAttr(panelName) + '\')" title="Copy share link">Share</button>' +
                                '</div>' +
                              '</div>' +

@@ -52,6 +52,43 @@ function _csvCell(val) {
   return val;
 }
 
+function screenshotPanel(panelName) {
+  if (typeof html2canvas === 'undefined') {
+    _showToast('screenshot library loading...');
+    return;
+  }
+  var panel = document.getElementById('panel-' + panelName);
+  if (!panel) return;
+  var content = panel.querySelector('.lab-panel-content');
+  if (!content) return;
+  _showToast('capturing...');
+  html2canvas(content, {
+    backgroundColor: '#ede0cf',
+    scale: 2,
+    useCORS: true,
+    logging: false
+  }).then(function(canvas) {
+    // Add watermark
+    var ctx = canvas.getContext('2d');
+    var wm = 'razzle.lol';
+    ctx.font = '600 28px Caveat, cursive';
+    ctx.fillStyle = 'rgba(45, 31, 20, 0.25)';
+    ctx.textAlign = 'right';
+    ctx.fillText(wm, canvas.width - 20, canvas.height - 16);
+    // Download
+    var link = document.createElement('a');
+    var date = new Date().toISOString().slice(0, 10);
+    link.download = 'razzle_' + panelName + '_' + date + '.png';
+    link.href = canvas.toDataURL('image/png');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    _showToast('screenshot saved');
+  }).catch(function() {
+    _showToast('screenshot failed');
+  });
+}
+
 function sharePanelURL(panelName) {
   var params = new URLSearchParams(window.location.search);
   params.set('panel', panelName);
