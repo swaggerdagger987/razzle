@@ -8855,17 +8855,18 @@ def fetch_auction_values(season=None, budget=200, roster_size=15):
         players.sort(key=lambda x: x["trade_value"], reverse=True)
 
         # Convert trade values to auction dollars
-        # Reserve $1 per roster spot for bench filler, allocate rest proportionally
+        # Top roster_size players should sum to approximately budget
         reserve = roster_size  # $1 per roster spot minimum
         allocatable = max(1, budget - reserve)
-        total_tv = sum(p["trade_value"] for p in players) or 1.0
+        # Use top N players' TV as denominator so a team's picks sum to budget
+        top_n_tv = sum(p["trade_value"] for p in players[:roster_size]) or 1.0
 
         for i, p in enumerate(players):
             p["rank"] = i + 1
             # Dollar value = proportional share of allocatable budget
-            raw_dollars = (p["trade_value"] / total_tv) * allocatable * roster_size
+            raw_dollars = (p["trade_value"] / top_n_tv) * allocatable
             # Cap at budget, floor at $1
-            p["auction_value"] = max(1, round(raw_dollars))
+            p["auction_value"] = max(1, min(budget, round(raw_dollars)))
             # Value tier
             if p["auction_value"] >= 40:
                 p["tier"] = "premium"
@@ -8912,6 +8913,12 @@ def fetch_dynasty_dashboard(season=None):
         if not season:
             row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
             season = row[0] if row and row[0] else 2024
+
+        available_seasons = [
+            r[0] for r in conn.execute(
+                "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
+            ).fetchall()
+        ]
 
         # Get all fantasy-relevant players with stats
         query = """
@@ -9018,6 +9025,7 @@ def fetch_dynasty_dashboard(season=None):
 
         return {
             "season": season,
+            "available_seasons": available_seasons,
             "total_players": len(players),
             "top5": top5,
             "risers": risers,
@@ -9141,7 +9149,7 @@ _RB_ARCHETYPES = [
      "test": lambda s: s.get("ypc", 0) >= 4.8 and s.get("carries_g", 0) >= 8},
     {"id": "td_vulture", "name": "TD Vulture", "desc": "Goal-line specialists who convert near the end zone",
      "test": lambda s: s.get("td_rate", 0) >= 0.05 and s.get("ppg", 0) >= 8},
-    {"id": "committee", "name": "Committee Back", "desc": "Solid contributors in a shared backfield",
+    {"id": "committee", "name": "Other RB", "desc": "Backs who don't fit a single archetype cleanly",
      "test": lambda s: True},
 ]
 
@@ -9154,7 +9162,7 @@ _WR_ARCHETYPES = [
      "test": lambda s: s.get("catch_rate", 0) >= 0.70 and s.get("rec_g", 0) >= 4},
     {"id": "yac_monster", "name": "YAC Monster", "desc": "Receivers who create after the catch",
      "test": lambda s: s.get("yac_g", 0) >= 25 and s.get("rec_g", 0) >= 3},
-    {"id": "role_player", "name": "Role Player", "desc": "Solid complementary receivers in the offense",
+    {"id": "role_player", "name": "Other WR", "desc": "Receivers who don't fit a single archetype cleanly",
      "test": lambda s: True},
 ]
 
@@ -9165,7 +9173,7 @@ _TE_ARCHETYPES = [
      "test": lambda s: s.get("td_rate", 0) >= 0.06 and s.get("rec_g", 0) >= 2},
     {"id": "reliable", "name": "Reliable Target", "desc": "Consistent catches with a safe floor",
      "test": lambda s: s.get("catch_rate", 0) >= 0.68 and s.get("rec_g", 0) >= 3},
-    {"id": "blocking_te", "name": "Blocking TE", "desc": "Run-game-first tight ends with limited pass involvement",
+    {"id": "blocking_te", "name": "Other TE", "desc": "Tight ends who don't fit a single archetype cleanly",
      "test": lambda s: True},
 ]
 

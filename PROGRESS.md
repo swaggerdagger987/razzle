@@ -1,6 +1,19 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 104 — Player Archetypes (COMPLETE)
+## Current Phase: Phase 105 — QA+UX Audit Fixes (Phases 101-104) (COMPLETE)
+
+**Exit criterion MET:** All HIGH and MEDIUM findings resolved. QA-1: Fixed auction math — use top N players' TV as denominator so a team's picks sum to budget. QA-2: Added available_seasons to dashboard endpoint + season selector dropdown. QA-3: Fixed trailing & in URL construction (tiers, archetypes). QA-4: Dashboard scarcity uses mid_player name instead of hardcoded #12. QA-5: Tier descriptions now rendered in tier label. QA-6: Catch-all archetypes renamed (Other RB/WR/TE). QA-7: Form control borders updated to 3px on auction/tiers/archetypes.
+
+### Phase 105 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | HIGH fix — auction math (QA-1) | DONE | top_n_tv denominator, cap at budget |
+| 2 | HIGH fix — dashboard season selector (QA-2) | DONE | available_seasons + select dropdown |
+| 3 | MEDIUM fixes (QA-3-7) | DONE | URL params, scarcity label, tier desc, archetype names, borders |
+| 4 | Smoke test | DONE | Python OK, braces balanced on all 4 pages |
+
+## Previous Phase: Phase 104 — Player Archetypes (COMPLETE)
 
 **Exit criterion MET:** /archetypes.html classifies players into statistical archetypes based on per-game stats. 18 archetype definitions across 4 positions (QB: Dual-Threat/Gunslinger/Game Manager/Rushing/Backup; RB: Workhorse/Pass-Catcher/Efficient/TD Vulture/Committee; WR: Alpha/Deep Threat/Possession/YAC Monster/Role Player; TE: Elite Receiving/Red Zone/Reliable/Blocking). Archetype cards with icon, name, description, position badge, player count, player grid with PPG and key stat. Position filter tabs. Season selector. PNG export. GET /api/player-archetypes endpoint. 14 escapeHtml, 72/72 braces. "Archetypes" nav link on all 41 pages. Sitemap + tools hub entry. Design matches DESIGN.md.
 

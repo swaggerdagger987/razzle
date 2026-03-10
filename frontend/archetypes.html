@@ -59,7 +59,7 @@
     font-family: var(--font-mono);
     font-size: 13px;
     padding: 6px 10px;
-    border: 2px solid var(--ink);
+    border: 3px solid var(--ink);
     border-radius: 6px;
     background: var(--card);
     color: var(--ink);
@@ -462,9 +462,10 @@
 
   function fetchData() {
     listEl.innerHTML = '<div class="ar-loading">pulling film...</div>';
-    var url = '/api/player-archetypes?';
-    if (state.season > 0) url += 'season=' + state.season + '&';
-    if (state.position) url += 'position=' + state.position;
+    var params = [];
+    if (state.season > 0) params.push('season=' + state.season);
+    if (state.position) params.push('position=' + state.position);
+    var url = '/api/player-archetypes' + (params.length ? '?' + params.join('&') : '');
 
     fetch(url).then(function(resp) {
       if (!resp.ok) throw new Error('HTTP ' + resp.status);

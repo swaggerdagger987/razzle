@@ -1,21 +1,21 @@
-# Razzle Loop — Phase 104 Task List
+# Razzle Loop — Phase 105 Task List
 
-> Player Archetypes — Statistical Cluster Analysis
+> QA + UX Audit — Auto-Generated Fixes (Phases 101-104)
 
-**Current Phase**: 104 — Player Archetypes
-**Exit Criterion**: /archetypes.html shows players grouped by statistical archetype. Position filters, archetype descriptions, player cards within each cluster. GET /api/player-archetypes endpoint. Design matches DESIGN.md.
+**Current Phase**: 105 — QA + UX Audit Fixes
+**Exit Criterion**: All HIGH and MEDIUM findings from QA-AUDIT.md (Phases 101-104) resolved.
 
 ---
 
-## Task 1: Backend /api/player-archetypes endpoint
+## Task 1: HIGH fix — Auction value math (QA-1)
 **Status**: PASS
 **Attempts**: 1
 
-## Task 2: Frontend archetypes.html page
+## Task 2: HIGH fix — Dashboard season selector (QA-2)
 **Status**: PASS
 **Attempts**: 1
 
-## Task 3: Nav links + sitemap + analytics
+## Task 3: MEDIUM fixes — URL trailing &, scarcity label, tier desc, catch-all names, borders (QA-3-7)
 **Status**: PASS
 **Attempts**: 1
 
@@ -27,7 +27,7 @@
 
 ## Loop State
 ```
-Current Phase: 104
+Current Phase: 105
 Current Task: 4
 Current Stage: COMPLETE
 Attempt: 1

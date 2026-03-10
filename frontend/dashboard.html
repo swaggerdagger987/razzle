@@ -374,7 +374,8 @@
     <div class="db-meta" id="db-meta"></div>
   </div>
 
-  <div class="db-export">
+  <div class="db-export" style="display:flex; justify-content:center; align-items:center; gap:12px;">
+    <select id="season-select" style="font-family:var(--font-mono); font-size:13px; padding:6px 10px; border:3px solid var(--ink); border-radius:6px; background:var(--card); color:var(--ink);"></select>
     <button class="db-export-btn" id="export-btn">Export PNG</button>
   </div>
 
@@ -485,12 +486,33 @@
 
   var grid = document.getElementById('db-grid');
 
+  var seasonSelect = document.getElementById('season-select');
+  var currentSeason = 0;
+
+  seasonSelect.addEventListener('change', function() {
+    currentSeason = parseInt(this.value, 10) || 0;
+    fetchDashboard();
+  });
+
   function fetchDashboard() {
     grid.innerHTML = '<div class="db-loading">pulling film...</div>';
-    fetch('/api/dynasty-dashboard').then(function(resp) {
+    var url = '/api/dynasty-dashboard';
+    if (currentSeason > 0) url += '?season=' + currentSeason;
+    fetch(url).then(function(resp) {
       if (!resp.ok) throw new Error('HTTP ' + resp.status);
       return resp.json();
     }).then(function(d) {
+      // Populate season selector
+      if (d.available_seasons && seasonSelect.options.length <= 1) {
+        seasonSelect.innerHTML = '';
+        d.available_seasons.forEach(function(s) {
+          var opt = document.createElement('option');
+          opt.value = s;
+          opt.textContent = s;
+          if (s === d.season) opt.selected = true;
+          seasonSelect.appendChild(opt);
+        });
+      }
       document.getElementById('db-meta').textContent = d.season + ' season \u00b7 ' + d.total_players + ' players tracked';
       renderTop5(d.top5 || []);
       renderTrends(d.trends || {});
@@ -610,7 +632,7 @@
       html += '<div class="db-scar-row">';
       html += '<span class="db-scar-pos ' + pos + '">' + pos + '</span>';
       html += '<div class="db-scar-bar-wrap"><div class="db-scar-bar ' + pos + '" style="width:' + pct + '%"></div></div>';
-      html += '<span class="db-scar-info">' + escapeHtml(s.top_player) + ' (' + escapeHtml(String(s.top_ppg)) + ') &rarr; #12 (' + escapeHtml(String(s.mid_ppg)) + ') = -' + escapeHtml(String(s.dropoff)) + '</span>';
+      html += '<span class="db-scar-info">' + escapeHtml(s.top_player) + ' (' + escapeHtml(String(s.top_ppg)) + ') &rarr; ' + escapeHtml(s.mid_player) + ' (' + escapeHtml(String(s.mid_ppg)) + ') = -' + escapeHtml(String(s.dropoff)) + '</span>';
       html += '</div>';
     });
     html += '</div>';
