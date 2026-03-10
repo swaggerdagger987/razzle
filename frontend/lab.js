@@ -439,6 +439,24 @@ const COLUMNS = {
   age:                 { label: "Age",     tip: "Player age (current)", group: "Dynasty", decimals: 0 },
 };
 
+// ─── Tier lock mapping (visual only, does not block access) ──────
+// Pro features: full historical data, career mode, roster grading, cloud sync
+// Elite features: exclusive advanced metrics, War Room AI
+const PRO_LOCKED_COLUMNS = new Set([
+  "seasons", "breakout_pct", "dominator_rating", "rush_share",
+  "snap_share", "yprr", "games_missed",
+]);
+const ELITE_LOCKED_COLUMNS = new Set([
+  "dakota", "cpoe", "epa_per_play", "pass_success_rate", "rush_success_rate",
+  "garbage_time_pct", "avg_score_differential", "drop_rate",
+]);
+
+function _getTierLockClass(key) {
+  if (ELITE_LOCKED_COLUMNS.has(key)) return "elite-locked";
+  if (PRO_LOCKED_COLUMNS.has(key)) return "pro-locked";
+  return "";
+}
+
 // ─── Presets ─────────────────────────────────────────────────────
 const PRESETS = {
   ppr: {
@@ -838,8 +856,11 @@ function renderTableHead() {
   for (const key of cols) {
     const col = getColumnDef(key);
     if (!col) continue;
-    const cls = state.sortKey === key ? `sort-${state.sortDir}` : "";
-    const tip = col.tip ? ` title="${col.tip}"` : "";
+    const sortCls = state.sortKey === key ? `sort-${state.sortDir}` : "";
+    const lockCls = _getTierLockClass(key);
+    const cls = [sortCls, lockCls].filter(Boolean).join(" ");
+    const tierLabel = lockCls === "elite-locked" ? " [Elite]" : lockCls === "pro-locked" ? " [Pro]" : "";
+    const tip = col.tip ? ` title="${col.tip}${tierLabel}"` : (tierLabel ? ` title="${col.label}${tierLabel}"` : "");
     let extra = "";
     if (key === "dynasty_value") {
       extra = ` <span class="dvs-info" onclick="event.stopPropagation(); toggleDVSInfo()" title="Click for DVS methodology" style="cursor:help; font-size:10px; opacity:0.6;">&#9432;</span>`;
@@ -1489,7 +1510,8 @@ function renderColumnPicker() {
     html += `<div class="column-group-title">${groupName}</div>`;
     for (const col of cols) {
       const checked = activeCols.includes(col.key) ? "checked" : "";
-      html += `<label class="column-option">
+      const lockCls = _getTierLockClass(col.key);
+      html += `<label class="column-option${lockCls ? ' ' + lockCls : ''}">
         <input type="checkbox" value="${col.key}" ${checked} onchange="toggleColumn('${col.key}', this.checked)">
         ${col.label}
       </label>`;

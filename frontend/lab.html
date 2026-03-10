@@ -1896,7 +1896,8 @@
     .toolbar-section { flex-shrink: 0; }
     .search-box { width: 140px; flex-shrink: 0; }
     .result-count { display: none; }
-    .toolbar .btn-chunky { flex-shrink: 0; white-space: nowrap; }
+    .toolbar .btn-chunky { flex-shrink: 0; white-space: nowrap; min-height: 36px; }
+    .toolbar .chip { min-height: 36px; display: inline-flex; align-items: center; }
 
     .filter-bar {
       padding: 6px 12px;
@@ -2041,10 +2042,14 @@
     /* Chips — larger tap targets */
     .chip { padding: 6px 10px; font-size: 10px; min-height: 32px; }
 
-    /* Filter bar — stack */
+    /* Filter bar — stack with touch-friendly targets */
     .filter-bar { gap: 6px; }
     .filter-group { width: 100%; }
     .team-chips { width: 100%; }
+    .filter-select-sm { min-height: 36px; font-size: 12px !important; }
+    .filter-input-sm { min-height: 36px; font-size: 12px !important; }
+    .add-filter-btn { min-height: 36px; padding: 6px 12px; }
+    .filter-tag { min-height: 32px; display: inline-flex; align-items: center; }
 
     /* Profile header — stack */
     .profile-header { flex-direction: column; gap: 8px; }
@@ -2052,6 +2057,60 @@
 
     /* Footer — center pagination */
     .footer-bar { flex-direction: column; align-items: center; text-align: center; }
+  }
+
+  /* ===== SMALL PHONE (375px) ===== */
+  @media (max-width: 375px) {
+    .toolbar {
+      padding: 4px 6px;
+      gap: 3px;
+    }
+    .search-box { width: 80px; font-size: 10px; padding: 4px 6px; }
+    .screener-table th.col-player,
+    .screener-table td.col-player { min-width: 100px; }
+    .screener-table th, .screener-table td { padding: 4px 6px; font-size: 10px; }
+    .screener-table th { font-size: 9px; }
+    .pos-badge { font-size: 7px; padding: 1px 3px; }
+    .team-label { font-size: 8px; }
+    .universe-bar { padding: 4px 8px; }
+    .universe-toggle { font-size: 10px; padding: 4px 10px; }
+    .college-view-btn { font-size: 9px; padding: 3px 8px; }
+    .college-sub-toggle { margin-left: 6px; padding-left: 6px; }
+    .filter-bar { padding: 4px 8px; gap: 4px; }
+    .filter-bar-label { font-size: 9px; }
+    .filter-tag { font-size: 9px; padding: 2px 6px; }
+    .add-filter-btn { font-size: 9px; padding: 2px 8px; }
+    .footer-bar { font-size: 9px; padding: 4px 8px; }
+    .watermark { font-size: 9px; bottom: 36px; right: 6px; }
+
+    /* Profile on small phone */
+    .profile-modal { padding: 10px; }
+    .profile-name { font-size: 18px; }
+    .profile-headshot { width: 40px; height: 40px; }
+    .profile-stat-value { font-size: 16px; }
+    .profile-stat-label { font-size: 9px; }
+    .profile-stat-box { min-width: 60px; padding: 8px 4px; }
+    .profile-section-title { font-size: 12px; }
+    .profile-season-table th { font-size: 9px; padding: 4px 6px; }
+    .profile-season-table td { font-size: 10px; padding: 4px 6px; }
+    .profile-combine { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+    .profile-combine-value { font-size: 16px; }
+    .profile-combine-label { font-size: 9px; }
+
+    /* Sidebar on small phone */
+    .lab-sidebar { width: 220px; }
+    .lab-sidebar-item { font-size: 11px; padding: 5px 12px 5px 16px; }
+    .lab-sidebar-category { font-size: 10px; padding: 10px 12px 4px; }
+
+    /* Modals tighter */
+    .filter-modal { padding: 12px; }
+    .filter-modal h3 { font-size: 16px; }
+    .column-picker { padding: 12px; }
+    .column-picker h3 { font-size: 16px; }
+
+    /* Store grid single column on smallest */
+    .store-grid { grid-template-columns: 1fr; gap: 10px; }
+    .store-modal { padding: 10px; }
   }
 
   /* ===== TRADE ANALYZER ===== */
@@ -2444,19 +2503,19 @@
     <a class="lab-sidebar-item" data-panel="drafttracker" data-icon="&#x1F4C5;" onclick="switchPanel('drafttracker')">Draft Class Tracker<span class="sidebar-tooltip">How each draft class performed in fantasy</span></a>
 
     <div class="lab-sidebar-category"><span class="cat-icon" style="display:none">&#x1F464;</span><span class="cat-text">Player Tools</span></div>
-    <a class="lab-sidebar-item" data-panel="career" data-icon="&#x1F4C4;" onclick="switchPanel('career')">Career Stats<span class="sidebar-tooltip">Career Stats</span></a>
-    <a class="lab-sidebar-item" data-panel="career-compare" data-icon="&#x2B0C;" onclick="switchPanel('career-compare')">Career Compare<span class="sidebar-tooltip">Career Compare</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="career" data-icon="&#x1F4C4;" onclick="switchPanel('career')">Career Stats<span class="sidebar-tooltip">Career Stats</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="career-compare" data-icon="&#x2B0C;" onclick="switchPanel('career-compare')">Career Compare<span class="sidebar-tooltip">Career Compare</span></a>
     <a class="lab-sidebar-item" data-panel="comptable" data-icon="&#x2263;" onclick="switchPanel('comptable')">Compare Table<span class="sidebar-tooltip">Compare Table</span></a>
     <a class="lab-sidebar-item" data-panel="strengths" data-icon="&#x1F4AA;" onclick="switchPanel('strengths')">Strengths<span class="sidebar-tooltip">Strengths</span></a>
     <a class="lab-sidebar-item" data-panel="reportcard" data-icon="&#x1F4DD;" onclick="switchPanel('reportcard')">Report Card<span class="sidebar-tooltip">Report Card</span></a>
     <a class="lab-sidebar-item" data-panel="fptsbreakdown" data-icon="&#x2211;" onclick="switchPanel('fptsbreakdown')">Points Breakdown<span class="sidebar-tooltip">Fantasy points by scoring category</span></a>
-    <a class="lab-sidebar-item" data-panel="gamelog" data-icon="&#x1F4D3;" onclick="switchPanel('gamelog')">Game Log<span class="sidebar-tooltip">Game Log</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="gamelog" data-icon="&#x1F4D3;" onclick="switchPanel('gamelog')">Game Log<span class="sidebar-tooltip">Game Log</span></a>
     <a class="lab-sidebar-item" data-panel="archetypes" data-icon="&#x2726;" onclick="switchPanel('archetypes')">Archetypes<span class="sidebar-tooltip">Archetypes</span></a>
     <a class="lab-sidebar-item" data-panel="breakdown" data-icon="&#x25E9;" onclick="switchPanel('breakdown')">Scoring Breakdown<span class="sidebar-tooltip">Donut chart: scoring category %</span></a>
 
     <div class="lab-sidebar-category"><span class="cat-icon" style="display:none">&#x1F6E0;</span><span class="cat-text">League Tools</span></div>
-    <a class="lab-sidebar-item" data-panel="rosterbuilder" data-icon="&#x1F4CB;" onclick="switchPanel('rosterbuilder')">Roster Builder<span class="sidebar-tooltip">Roster Builder</span></a>
-    <a class="lab-sidebar-item" data-panel="tradefinder" data-icon="&#x21C6;" onclick="switchPanel('tradefinder')">Trade Finder<span class="sidebar-tooltip">Trade Finder</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="rosterbuilder" data-icon="&#x1F4CB;" onclick="switchPanel('rosterbuilder')">Roster Builder<span class="sidebar-tooltip">Roster Builder</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="tradefinder" data-icon="&#x21C6;" onclick="switchPanel('tradefinder')">Trade Finder<span class="sidebar-tooltip">Trade Finder</span></a>
     <a class="lab-sidebar-item" data-panel="scoring" data-icon="&#x2116;" onclick="switchPanel('scoring')">Scoring Comparison<span class="sidebar-tooltip">Scoring Comparison</span></a>
     <a class="lab-sidebar-item" data-panel="dashboard" data-icon="&#x25A3;" onclick="switchPanel('dashboard')">Dashboard<span class="sidebar-tooltip">Dashboard</span></a>
     <a class="lab-sidebar-item" data-panel="schedule" data-icon="&#x1F4C5;" onclick="switchPanel('schedule')">Schedule / SOS<span class="sidebar-tooltip">Schedule / SOS</span></a>

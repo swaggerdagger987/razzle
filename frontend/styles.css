@@ -714,3 +714,79 @@ body {
   border-radius: 3px;
   padding: 1px 5px;
 }
+
+/* ===== TIER LOCK INDICATORS ===== */
+/* Visual-only lock icons for Pro and Elite features.
+   These do NOT block access — they signal tier membership.
+   The ::after pseudo adds the lock/diamond icon inline. */
+.pro-locked::after {
+  content: '\1F512';
+  font-size: 10px;
+  opacity: 0.45;
+  margin-left: 3px;
+  cursor: help;
+  vertical-align: middle;
+  transition: opacity 0.15s;
+}
+.pro-locked:hover::after {
+  opacity: 0.8;
+}
+
+.elite-locked::after {
+  content: '\1F48E';
+  font-size: 10px;
+  opacity: 0.45;
+  margin-left: 3px;
+  cursor: help;
+  vertical-align: middle;
+  transition: opacity 0.15s;
+}
+.elite-locked:hover::after {
+  opacity: 0.8;
+}
+
+/* Hide lock icons on very small screens to save space */
+@media (max-width: 480px) {
+  .pro-locked::after,
+  .elite-locked::after {
+    font-size: 8px;
+    margin-left: 2px;
+  }
+}
+@media (max-width: 375px) {
+  .screener-table th.pro-locked::after,
+  .screener-table th.elite-locked::after {
+    display: none;
+  }
+}
+
+/* ===== 375PX SMALL PHONE BREAKPOINT ===== */
+@media (max-width: 375px) {
+  .topnav {
+    padding: 4px 6px;
+  }
+  .logo-mark {
+    width: 28px;
+    height: 28px;
+    font-size: 16px;
+    border-radius: 8px;
+  }
+  .logo-text {
+    font-size: 13px;
+  }
+  .nav-links a {
+    font-size: 9px;
+    padding: 2px 5px;
+  }
+  .btn-chunky, .btn-primary {
+    font-size: 10px;
+    padding: 4px 7px;
+  }
+  .chip {
+    font-size: 9px;
+    padding: 4px 8px;
+  }
+  .nav-search-hint {
+    display: none;
+  }
+}

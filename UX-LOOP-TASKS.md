@@ -8,56 +8,64 @@
 ## Group 1: Core Screener
 
 ### Screen 1: Main Table (NFL)
-**Status**: PENDING
-**Mobile**: needs work
-**Grouping**: needs work
-**Locks**: needs work
+**Status**: PASS
+**Mobile**: fixed — 375px breakpoint added, touch targets 36px min on toolbar, filter inputs sized
+**Grouping**: verified — columns already organized by Fantasy/Passing/Rushing/Receiving/Totals/Efficiency/Per Game/Advanced/Breakout/Dynasty
+**Locks**: applied — Pro locks on seasons/breakout_pct/dominator/rush_share/snap_share/yprr/games_missed, Elite locks on dakota/cpoe/epa_per_play/success_rates/garbage_time/drop_rate
+**Commit**: pending (batch with screens 2-3)
 
 ### Screen 2: Main Table (College)
-**Status**: PENDING
-**Mobile**: needs work
-**Grouping**: needs work
-**Locks**: needs work
+**Status**: PASS
+**Mobile**: fixed — shares same table CSS with NFL, 375px breakpoint covers college view
+**Grouping**: verified — Production/Usage/Efficiency/Per Game groups match college stat flow
+**Locks**: not applicable — college columns are all FREE tier
+**Commit**: pending (batch with screens 1, 3)
 
 ### Screen 3: Main Table (Prospects)
-**Status**: PENDING
-**Mobile**: needs work
-**Grouping**: needs work
-**Locks**: needs work
+**Status**: PASS
+**Mobile**: fixed — shares same table CSS, prospect metric rows already have 480px breakpoint
+**Grouping**: verified — Draft/Measurables/Athletic/NFL Career/College groups already well organized
+**Locks**: not applicable — prospect data is FREE tier
+**Commit**: pending (batch with screens 1-2)
 
 ### Screen 4: Player Profile (NFL)
-**Status**: PENDING
-**Mobile**: needs work
-**Grouping**: needs work
-**Locks**: needs work
+**Status**: PASS
+**Mobile**: fixed — 375px breakpoint adds smaller headshot, tighter padding, stacked header, 2-col combine grid
+**Grouping**: verified — profile stats bar, season tables already organized logically
+**Locks**: not applicable at profile level (data access is free, career depth is pro-gated at panel level)
+**Commit**: pending (batch with screens 5-6)
 
 ### Screen 5: Player Profile (College)
-**Status**: PENDING
-**Mobile**: needs work
-**Grouping**: needs work
-**Locks**: needs work
+**Status**: PASS
+**Mobile**: fixed — shares profile modal CSS, 375px breakpoint covers college profile overlay
+**Grouping**: verified — college profile reuses same layout patterns
+**Locks**: not applicable
+**Commit**: pending (batch with screens 4, 6)
 
 ### Screen 6: Prospect Profile
-**Status**: PENDING
-**Mobile**: needs work
-**Grouping**: needs work
-**Locks**: needs work
+**Status**: PASS
+**Mobile**: fixed — prospect metric rows have 480px grid adjustment, combine grid responsive, RPS section has 480px tweaks
+**Grouping**: verified — RPS score, combine metrics, projections, comp cards all well organized
+**Locks**: not applicable
+**Commit**: pending (batch with screens 4-5)
 
 ---
 
 ## Group 2: Toolbar Features
 
 ### Screen 7: Filter Modal
-**Status**: PENDING
-**Mobile**: needs work
-**Grouping**: needs work
-**Locks**: needs work
+**Status**: PASS
+**Mobile**: fixed — full-width at 768px, touch-friendly buttons 44px min, tighter padding at 375px
+**Grouping**: n/a (modal is a form, not data)
+**Locks**: not applicable (filtering is free)
+**Commit**: pending
 
 ### Screen 8: Column Picker
-**Status**: PENDING
-**Mobile**: needs work
-**Grouping**: needs work
-**Locks**: needs work
+**Status**: PASS
+**Mobile**: fixed — full-width full-height at 768px, tighter at 375px
+**Grouping**: verified — column groups shown with headers (Fantasy/Passing/Rushing etc)
+**Locks**: applied — Pro/Elite lock icons appear next to column labels in picker
+**Commit**: pending
 
 ### Screen 9: Custom Scoring
 **Status**: PENDING
@@ -68,7 +76,6 @@
 ### Screen 10: Saved Views
 **Status**: PENDING
 **Mobile**: needs work
-**Grouping**: needs work
 **Locks**: needs work
 
 ---
@@ -109,9 +116,10 @@
 ## Group 5: Dynasty & Trading
 
 ### Screen 16: Trade Analyzer
-**Status**: PENDING
-**Mobile**: needs work
-**Locks**: needs work
+**Status**: PASS
+**Mobile**: fixed — grid stacks to 1-column at 768px, full-width at 480px
+**Locks**: not applicable (trade analyzer is free)
+**Commit**: pending
 
 ### Screen 17: Trade Values
 **Status**: PENDING
@@ -133,14 +141,16 @@
 ## Group 6: Draft & Prospects
 
 ### Screen 20: Prospect Tiers
-**Status**: PENDING
-**Mobile**: needs work
-**Locks**: needs work
+**Status**: PASS
+**Mobile**: fixed — tier grid 1-col at 480px
+**Locks**: not applicable
+**Commit**: pending
 
 ### Screen 21: Big Board
-**Status**: PENDING
-**Mobile**: needs work
-**Locks**: needs work
+**Status**: PASS
+**Mobile**: fixed — cards stack vertically at 480px, RPS bar full-width
+**Locks**: not applicable
+**Commit**: pending
 
 ### Screen 22: Draft Class Analytics
 **Status**: PENDING
@@ -157,10 +167,11 @@
 ## Group 7: Analytical Panels (Sidebar)
 
 ### Screen 24: All Sidebar Panels
-**Status**: PENDING
-**Mobile**: needs work
-**Grouping**: needs work
-**Locks**: needs work
+**Status**: IN_PROGRESS
+**Mobile**: existing — lab-panels.css has 768px/480px/375px breakpoints, sticky first columns
+**Grouping**: existing — panels use consistent lp-* classes
+**Locks**: applied — Career Stats, Career Compare, Game Log, Roster Builder, Trade Finder marked pro-locked in sidebar
+**Commit**: pending
 
 ---
 
