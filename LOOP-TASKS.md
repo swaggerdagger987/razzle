@@ -18,9 +18,9 @@
 **Notes**: /reportcard.html with two-section layout. Honor Roll (green header) and Needs Improvement (red header). Each row: position badge, headshot, name, team, GPA badge (A+ to F, 5-tier color), Eff/Con/SOS grade mini-badges, Stock Score badge, Opp%, Dom Rating, PPG, Age, GP, annotation. Position tabs, season selector, sortable columns with per-section state, row click to profile, PNG export with watermark. 11 escapeHtml calls. Braces/parens/brackets all balanced. Responsive hide-mobile. Design compliant: 3px borders, 4px shadows, font-display headers, font-mono data, font-hand annotations.
 
 ## Task 3: Nav links + sitemap + analytics
-**Status**: PENDING
-**Attempts**: 0
-**Notes**: "Report Card" link added to nav + footer of all 29 HTML pages. Sitemap entry. Analytics pageview tracking.
+**Status**: PASS
+**Attempts**: 1
+**Notes**: "Report Card" link added to nav + footer of all 29 HTML pages (29/29 verified). Sitemap entry added ("/reportcard.html", "0.8", "weekly"). Analytics pageview tracking via inline fetch to /api/analytics/pageview.
 
 ## Task 4: Smoke test + verification
 **Status**: PENDING
@@ -32,8 +32,8 @@
 ## Loop State
 ```
 Current Phase: 89
-Current Task: 3
-Current Stage: BUILD
+Current Task: 4
+Current Stage: TEST
 Attempt: 1
-Tasks Completed: 2/4
+Tasks Completed: 3/4
 ```

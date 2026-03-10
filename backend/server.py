@@ -904,6 +904,7 @@ def sitemap_xml():
         ("/schedule.html", "0.8", "weekly"),
         ("/stocks.html", "0.8", "weekly"),
         ("/opportunity.html", "0.8", "weekly"),
+        ("/reportcard.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
