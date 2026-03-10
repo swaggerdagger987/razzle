@@ -80,7 +80,8 @@
 - All user data survives a simulated rebuild of terminal.db
 
 ## Task 7: Deploy + smoke test auth system
-**Status**: PENDING
+**Status**: PASS
+**Result**: All 7 JS files pass syntax check (node -c). All Python modules import clean. Full auth smoke test passes: register, login, token verify, formula CRUD, duplicate rejection, wrong password rejection, bad token rejection. Lab search works without auth. users.db separate from terminal.db. Committed and pushed.
 **Acceptance Criteria**:
 - All syntax clean
 - Auth flow works end-to-end
@@ -95,7 +96,7 @@
 ```
 Current Phase: 42
 Current Task: 7
-Current Stage: BUILD
+Current Stage: COMPLETE
 Attempt: 1
-Tasks Completed: 6/7
+Tasks Completed: 7/7
 ```

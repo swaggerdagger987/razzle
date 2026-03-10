@@ -1,6 +1,28 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 41 — Stats Expansion — Play-by-Play Extractions (COMPLETE)
+## Current Phase: Phase 42 — Auth System — Registration, Login, JWT, Protected Endpoints (COMPLETE)
+
+**Exit criterion MET:** Users can register with email/password, log in, receive JWT token, and access protected endpoints. bcrypt hashing (12 rounds), JWT 7-day expiry, JWT_SECRET from env var. Frontend auth modal on all pages with Sign In/Register tabs, token in localStorage, auto-included Authorization headers. Sleeper username linkable to account with post-login prompt. Formula publish requires auth. War Room upsell is auth-aware. User formulas sync to server database. users.db separate from terminal.db.
+
+### Phase 42 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend auth endpoints + user table | DONE | auth.py + users.db, bcrypt, JWT, 4 endpoints |
+| 2 | Frontend login/register modal | DONE | Injected via app.js on all pages, Razzle design system |
+| 3 | Link Sleeper username | DONE | Post-login prompt, nav display, League Intel auto-connect |
+| 4 | Protect endpoints + plan gating | DONE | require_plan(), formula publish auth, War Room auth-aware CTA |
+| 5 | Migrate formulas to database | DONE | CRUD endpoints, server sync, auto-import on login |
+| 6 | Persistent users.db | DONE | Separate from terminal.db, created on startup |
+| 7 | Deploy + smoke test | DONE | All syntax clean, full auth flow verified |
+
+### Decisions Log
+- **Auth UI via JS injection**: Added auth functions to app.js, which injects Sign In button and modal into any page with a .topnav .nav-links. No per-page HTML changes needed for the auth UI itself.
+- **Error dict pattern**: auth.py returns error dicts instead of raising HTTPException, server.py checks for "error" key and converts to JSONResponse. Simpler testing.
+- **Sleeper prompt after login**: Shows Sleeper connect form in the auth modal after login/register if no sleeper_username linked. Skippable.
+- **Formula sync alongside localStorage**: Rather than replacing localStorage, server sync runs in parallel. Non-logged-in users keep using localStorage. Logged-in users get both (localStorage for instant load, server for cross-device).
+
+## Previous Phase: Phase 41 — Stats Expansion — Play-by-Play Extractions (COMPLETE)
 
 **Exit criterion MET:** Play-by-play data extracted from nflverse pbp CSVs via new sync_pbp_data() function. Single-pass extraction populates player_season_pbp table. Stats available: pass/rush success rate, scramble stats, garbage time %, game script, goal-line carries/targets/TDs, two-point conversions, return yards/TDs, intended air yards per target, drop rate, bye week, games missed. 18 new columns wired into Lab screener with tooltips and updated presets. RYOE columns in schema but NULL (nflverse pbp lacks expected rushing yards). Play-action stats NULL (nflverse 2024 lacks is_play_action column).
 
