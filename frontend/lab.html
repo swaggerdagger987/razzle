@@ -371,10 +371,62 @@
     display: block;
     margin-bottom: 4px;
   }
+  .lab-panel-header .panel-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
   .lab-panel-header .panel-title {
     font-family: var(--font-display);
     font-size: 22px;
     font-weight: 700;
+  }
+  .lab-panel-header .panel-actions {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .btn-panel-action {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border: 2px solid var(--ink);
+    border-radius: 4px;
+    background: var(--bg-card);
+    color: var(--ink);
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.1s;
+    white-space: nowrap;
+  }
+  .btn-panel-action:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+  .btn-panel-action:active {
+    transform: translate(0, 0);
+    box-shadow: none;
+  }
+  .razzle-toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--ink);
+    color: var(--bg-card);
+    font-family: var(--font-hand);
+    font-size: 18px;
+    padding: 10px 24px;
+    border-radius: 6px;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    pointer-events: none;
+  }
+  .razzle-toast-show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
   }
   .lab-panel-header .panel-flavor {
     font-family: var(--font-hand);
@@ -3216,7 +3268,13 @@
           var header = document.createElement('div');
           header.className = 'lab-panel-header';
           header.innerHTML = '<span class="breadcrumb">' + escapeHtml('The Lab > ' + cat + ' > ' + label) + '</span>' +
-                             '<div class="panel-title">' + escapeHtml(label) + '</div>' +
+                             '<div class="panel-title-row">' +
+                               '<div class="panel-title">' + escapeHtml(label) + '</div>' +
+                               '<div class="panel-actions">' +
+                                 '<button class="btn-panel-action" onclick="exportPanelCSV(\'' + escapeAttr(panelName) + '\')" title="Export as CSV">CSV</button>' +
+                                 '<button class="btn-panel-action" onclick="sharePanelURL(\'' + escapeAttr(panelName) + '\')" title="Copy share link">Share</button>' +
+                               '</div>' +
+                             '</div>' +
                              (flavor ? '<div class="panel-flavor">' + escapeHtml(flavor) + '</div>' : '');
           section.appendChild(header);
 

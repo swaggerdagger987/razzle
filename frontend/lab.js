@@ -1,6 +1,101 @@
 /* Razzle — The Lab (screener logic) */
 // escapeHtml and escapeAttr are in app.js (shared)
 
+// ─── Panel Actions (CSV export, Share URL) ─────────────────────
+
+function exportPanelCSV(panelName) {
+  var panel = document.getElementById('panel-' + panelName);
+  if (!panel) return;
+  var table = panel.querySelector('.lab-panel-content table');
+  if (!table) {
+    _showToast('no table data to export');
+    return;
+  }
+  var rows = [];
+  // Extract headers
+  var thEls = table.querySelectorAll('thead th');
+  if (thEls.length) {
+    var headers = [];
+    thEls.forEach(function(th) { headers.push(_csvCell(th.textContent.trim())); });
+    rows.push(headers.join(','));
+  }
+  // Extract body rows
+  table.querySelectorAll('tbody tr').forEach(function(tr) {
+    var cells = [];
+    tr.querySelectorAll('td').forEach(function(td) { cells.push(_csvCell(td.textContent.trim())); });
+    if (cells.length) rows.push(cells.join(','));
+  });
+  if (rows.length <= 1) {
+    _showToast('no data to export');
+    return;
+  }
+  var csv = rows.join('\n');
+  var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  var date = new Date().toISOString().slice(0, 10);
+  a.href = url;
+  a.download = 'razzle_' + panelName + '_' + date + '.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  _showToast('CSV exported');
+}
+
+function _csvCell(val) {
+  if (!val) return '""';
+  val = val.replace(/"/g, '""');
+  if (val.indexOf(',') !== -1 || val.indexOf('"') !== -1 || val.indexOf('\n') !== -1) {
+    return '"' + val + '"';
+  }
+  return val;
+}
+
+function sharePanelURL(panelName) {
+  var params = new URLSearchParams(window.location.search);
+  params.set('panel', panelName);
+  if (state.universe && state.universe !== 'nfl') params.set('universe', state.universe);
+  if (state.season) params.set('season', state.season);
+  if (state.position) params.set('pos', state.position);
+  var url = window.location.origin + window.location.pathname + '?' + params.toString();
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(function() {
+      _showToast('link copied — share it on Reddit');
+    }).catch(function() {
+      _fallbackCopy(url);
+    });
+  } else {
+    _fallbackCopy(url);
+  }
+}
+
+function _fallbackCopy(text) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.left = '-9999px';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); _showToast('link copied — share it on Reddit'); }
+  catch (e) { _showToast('could not copy link'); }
+  document.body.removeChild(ta);
+}
+
+function _showToast(msg) {
+  var existing = document.querySelector('.razzle-toast');
+  if (existing) existing.remove();
+  var toast = document.createElement('div');
+  toast.className = 'razzle-toast';
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  setTimeout(function() { toast.classList.add('razzle-toast-show'); }, 10);
+  setTimeout(function() {
+    toast.classList.remove('razzle-toast-show');
+    setTimeout(function() { toast.remove(); }, 300);
+  }, 2500);
+}
+
 // ─── Watchlist (localStorage, cached in memory) ────────────────
 let _watchlistCache = null;
 
