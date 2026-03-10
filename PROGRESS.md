@@ -1,6 +1,26 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 59 — Player Comp Finder (COMPLETE)
+## Current Phase: Phase 60 — Boom/Bust Analyzer (COMPLETE)
+
+**Exit criterion MET:** Users can analyze any player's weekly fantasy score distribution via "Boom/Bust" button in player profile. GET /api/players/{id}/boom-bust returns weekly scores, boom rate (% weeks above 1.5× position average), bust rate (% weeks below 0.5× position average), consistency score (inverse coefficient of variation, 0-100), median, floor (10th percentile), ceiling (90th percentile), position-specific thresholds, grade (A+ through F), and position consistency rank. Frontend renders grade badge (rotated sticker, color-coded), 6 stat cards (median, floor, ceiling, boom%, bust%, rank), canvas histogram with boom/bust threshold lines (green/red dashed), and floor-ceiling range bar. "Export Boom/Bust PNG" generates 800×700 canvas image with all visuals and watermark.
+
+### Phase 60 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend boom/bust endpoint | DONE | GET /api/players/{id}/boom-bust, consistency score, grade, percentiles, position rank |
+| 2 | Frontend boom/bust UI | DONE | Boom/Bust button, grade sticker, stat cards, loading state |
+| 3 | Visual histogram + volatility chart | DONE | Canvas histogram with boom/bust thresholds, range bar |
+| 4 | PNG export | DONE | 800×700 canvas PNG with all visuals, watermark |
+| 5 | Deploy + smoke test | DONE | All syntax clean, all references verified |
+
+### Decisions Log
+- **Boom/bust thresholds**: 1.5× and 0.5× position average PPG. Position-specific because QB PPG is different from RB PPG. A WR "boom" and a QB "boom" have different absolute thresholds.
+- **Consistency score**: Inverse coefficient of variation (100 - CV×100). Captures both low-variance (consistent) and high-mean (reliable) production. A player with stdev=3 and mean=15 scores higher than stdev=3 and mean=8.
+- **13-tier grade scale**: A+ through F matches the Roster Value Calculator's grading system for consistency across features.
+- **In profile overlay**: Like comps, boom/bust analysis lives inside the player profile overlay. Users stay in context.
+
+## Previous Phase: Phase 59 — Player Comp Finder (COMPLETE)
 
 **Exit criterion MET:** Users can find the top-5 most statistically similar NFL players via cosine similarity on position-specific per-game stat vectors. "Find Comps" button in player profile overlay triggers GET /api/players/{id}/comps. Results render as position-colored comp cards showing similarity % (color-coded: 95%+ green, 90%+ orange), headshot/initials, team, games, PPG, and top 3 matching stats. Mini radar chart overlays target vs top comp on key stats. Full stat comparison table shows target + top 3 comps. "Export Comps PNG" generates branded canvas image with comp cards, stat table, and watermark.
 

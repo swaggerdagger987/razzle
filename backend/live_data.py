@@ -5,6 +5,7 @@ server.py calls these functions; they return dicts ready for JSON.
 
 import math
 import sqlite3
+import statistics
 import time as _time
 from pathlib import Path
 
@@ -3609,7 +3610,6 @@ def fetch_player_boom_bust(player_id, season=0):
     bust_rate = round((bust_count / games) * 100, 1)
 
     # Stats
-    import statistics
     scores_sorted = sorted(scores)
     mean_ppg = round(statistics.mean(scores), 2)
     median_ppg = round(statistics.median(scores), 2)
