@@ -314,7 +314,7 @@
 
 <main class="usage-page" id="usage-content">
   <div class="usage-header">
-    <h1>Snap Count Trends</h1>
+    <h1>Usage Trends</h1>
     <div class="usage-subtitle">who's gaining and losing snaps week over week</div>
   </div>
 
@@ -389,6 +389,7 @@
 </footer>
 
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script src="app.js"></script>
 <script>
 (function() {
   'use strict';
@@ -511,7 +512,7 @@
     html += '<th>Player</th>';
     html += '<th class="center">Snap%</th>';
     html += '<th class="center hide-mobile">Avg</th>';
-    html += '<th class="center">Delta</th>';
+    html += '<th class="center" title="Change in snap% over selected window">Delta</th>';
     html += '<th class="center hide-mobile">Trend</th>';
     html += '<th class="center">GP</th>';
     html += '<th class="hide-mobile"></th>';
@@ -537,11 +538,11 @@
     });
   }
 
-  async function loadData(season, position, window) {
+  async function loadData(season, position, trendWindow) {
     var bodyEl = document.getElementById('usage-body');
     bodyEl.innerHTML = '<div class="usage-loading">tracking snap counts...</div>';
 
-    var url = '/api/usage-trends?window=' + (window || 5) + '&limit=30';
+    var url = '/api/usage-trends?window=' + (trendWindow || 5) + '&limit=30';
     if (season) url += '&season=' + season;
     if (position) url += '&position=' + position;
 
@@ -643,6 +644,5 @@
   loadData();
 })();
 </script>
-<script src="app.js"></script>
 </body>
 </html>

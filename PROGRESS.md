@@ -1,6 +1,20 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 80 — Stat Explorer (COMPLETE)
+## Current Phase: Phase 81 — QA + UX Audit Fixes (COMPLETE)
+
+**Exit criterion MET:** All CRITICAL and HIGH findings from phases 76-80 QA+UX audit resolved. usage.html `window` parameter shadow fixed (renamed to `trendWindow`). Analytics pageview tracking fixed on yoy/airyards/explorer (replaced nonexistent `trackPageview()` with inline fetch). app.js load order fixed in usage.html (moved before inline script). XSS in explorer.html tooltip escaped + formatted. Air yards column headers all have title tooltips (WOPR, RACR, aDOT, AY%, Regr explained). Explorer dot click opens in new tab, cursor changes to pointer on hover. Usage H1 renamed to "Usage Trends" to match nav. QB position badge CSS added to airyards.html. Explorer event listener leak fixed. Matchups legend swatch border 1px→2px. PNG export watermark added to yoy/airyards/explorer. Air yards subtitle clarifies "pass catchers (WR/RB/TE)". Explorer axis selects pre-populated with defaults. Usage Delta header has tooltip.
+
+### Phase 81 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | CRITICAL fixes | DONE | window shadow, Reg→Regr + tooltips |
+| 2 | HIGH QA fixes | DONE | analytics pageview, app.js order, XSS escape |
+| 3 | HIGH UX fixes | DONE | column tooltips, cursor/click behavior, H1 mismatch |
+| 4 | MEDIUM fixes | DONE | QB badge, listener leak, 1px border, watermarks, subtitle, placeholders, Delta tooltip |
+| 5 | Smoke test | DONE | Python + JS syntax clean, all fixes verified |
+
+## Previous Phase: Phase 80 — Stat Explorer (COMPLETE)
 
 **Exit criterion MET:** /explorer.html page shows an interactive scatter plot where users can select any two metrics for X and Y axes from dropdown menus (17 metrics: PPG, Targets/G, Rec/G, Rec Yards/G, Rush Yards/G, Carries/G, Air Yards/G, TDs, Age, Snap%, aDOT, Catch Rate, RACR, Target Share, Air Yards Share, WOPR, Games). Each dot is a player, color-coded by position (QB blue, RB teal, WR terracotta, TE purple). Hover tooltip shows player name, team, and both stat values. Click dot → player profile. Canvas-drawn scatter with axis labels, gridlines, nice tick values, and linear regression trendline (dashed terracotta). Position filter tabs (All/QB/RB/WR/TE). Season selector. Resize handler redraws on window resize. PNG export via html2canvas with watermark. Error state with retry button. /api/stat-explorer endpoint returns player data with any two requested stats. Min 4 games filter. Rate metrics (target_share, air_yards_share, wopr) enriched from player_week_metrics only when needed. "Explorer" nav link added to all 22 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations.
 

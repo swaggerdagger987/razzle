@@ -235,6 +235,7 @@
     border-radius: 4px;
     color: #fff;
   }
+  .air-pos-badge.qb { background: var(--pos-qb); }
   .air-pos-badge.wr { background: var(--pos-wr); }
   .air-pos-badge.rb { background: var(--pos-rb); }
   .air-pos-badge.te { background: var(--pos-te); }
@@ -344,7 +345,7 @@
 <main class="air-page" id="air-content">
   <div class="air-header">
     <h1>Air Yards Dashboard</h1>
-    <div class="air-subtitle">target depth, efficiency, and regression indicators</div>
+    <div class="air-subtitle">target depth, efficiency, and regression indicators for pass catchers (WR/RB/TE)</div>
   </div>
 
   <div class="air-controls">
@@ -510,18 +511,18 @@
   }
 
   var COLUMN_KEYS = [
-    { key: 'name', label: 'Player' },
-    { key: 'targets_g', label: 'Tgt/G' },
-    { key: 'air_yards', label: 'AirYd' },
-    { key: 'air_yards_g', label: 'AY/G', hide: true },
-    { key: 'adot', label: 'aDOT' },
-    { key: 'air_yards_share', label: 'AY%', hide: true },
-    { key: 'wopr', label: 'WOPR', hide: true },
-    { key: 'racr', label: 'RACR' },
-    { key: 'ppg', label: 'PPG' },
-    { key: 'regression_delta', label: 'Reg' },
-    { key: 'games', label: 'GP', hide: true },
-    { key: 'annotation', label: '', hide: true, nosort: true }
+    { key: 'name', label: 'Player', tip: '' },
+    { key: 'targets_g', label: 'Tgt/G', tip: 'Targets per game' },
+    { key: 'air_yards', label: 'AirYd', tip: 'Total air yards (yards the ball travels in the air on targets)' },
+    { key: 'air_yards_g', label: 'AY/G', hide: true, tip: 'Air yards per game' },
+    { key: 'adot', label: 'aDOT', tip: 'Average Depth of Target — how far downfield the player is targeted' },
+    { key: 'air_yards_share', label: 'AY%', hide: true, tip: 'Air Yards Share — % of team air yards' },
+    { key: 'wopr', label: 'WOPR', hide: true, tip: 'Weighted Opportunity Rating — combines target share + air yards share' },
+    { key: 'racr', label: 'RACR', tip: 'Receiver Air Conversion Ratio — receiving yards / air yards (efficiency)' },
+    { key: 'ppg', label: 'PPG', tip: 'Fantasy points per game (PPR)' },
+    { key: 'regression_delta', label: 'Regr', tip: 'Regression Delta — gap between air yards rank and PPG rank. Positive = buy low, negative = sell high' },
+    { key: 'games', label: 'GP', hide: true, tip: 'Games played' },
+    { key: 'annotation', label: '', hide: true, nosort: true, tip: '' }
   ];
 
   function buildTableHeader(section) {
@@ -535,7 +536,8 @@
       if (sorted) classes.push('sorted');
       var arrow = sorted ? (state.dir === 1 ? ' &#9650;' : ' &#9660;') : '';
       var sortAttr = col.nosort ? '' : ' data-sort="' + col.key + '" data-section="' + section + '"';
-      html += '<th class="' + classes.join(' ') + '"' + sortAttr + '>' + col.label + '<span class="sort-arrow">' + arrow + '</span></th>';
+      var tipAttr = col.tip ? ' title="' + escapeHtml(col.tip) + '"' : '';
+      html += '<th class="' + classes.join(' ') + '"' + sortAttr + tipAttr + '>' + col.label + '<span class="sort-arrow">' + arrow + '</span></th>';
     });
     html += '</tr></thead>';
     return html;
@@ -674,6 +676,11 @@
     var el = document.getElementById('air-content');
     if (typeof html2canvas === 'function') {
       html2canvas(el, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+        var ctx = canvas.getContext('2d');
+        ctx.font = '24px Caveat, cursive';
+        ctx.fillStyle = 'rgba(26, 26, 46, 0.3)';
+        ctx.textAlign = 'right';
+        ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 16);
         var link = document.createElement('a');
         link.download = 'razzle-air-yards.png';
         link.href = canvas.toDataURL('image/png');
@@ -683,7 +690,7 @@
   });
 
   // Analytics
-  if (typeof trackPageview === 'function') trackPageview();
+  try { fetch('/api/analytics/pageview', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ page: '/airyards.html', referrer: document.referrer || '' }) }); } catch(e) {}
 
   // Initial load
   loadData();

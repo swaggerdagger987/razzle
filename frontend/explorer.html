@@ -250,9 +250,9 @@
 
   <div class="explorer-controls">
     <span class="explorer-axis-label">X:</span>
-    <select class="explorer-select" id="x-select" aria-label="X axis stat"></select>
+    <select class="explorer-select" id="x-select" aria-label="X axis stat"><option value="targets_g">Targets/G</option></select>
     <span class="explorer-axis-label">Y:</span>
-    <select class="explorer-select" id="y-select" aria-label="Y axis stat"></select>
+    <select class="explorer-select" id="y-select" aria-label="Y axis stat"><option value="ppg">PPG</option></select>
     <div class="explorer-pos-tabs" id="pos-tabs">
       <button class="explorer-pos-tab active" data-pos="" aria-label="All positions">All</button>
       <button class="explorer-pos-tab" data-pos="QB" aria-label="Quarterbacks">QB</button>
@@ -526,7 +526,10 @@
       plotPoints.push({ px: px, py: py, x: p.x, y: p.y, player: p });
     });
 
-    // Hover handler
+    // Attach listeners once (remove old ones first to prevent leak)
+    chartCanvas.removeEventListener('mousemove', handleHover);
+    chartCanvas.removeEventListener('mouseleave', hideTooltip);
+    chartCanvas.removeEventListener('click', handleClick);
     chartCanvas.addEventListener('mousemove', handleHover);
     chartCanvas.addEventListener('mouseleave', hideTooltip);
     chartCanvas.addEventListener('click', handleClick);
@@ -552,6 +555,7 @@
 
     var tooltip = document.getElementById('tooltip');
     if (closest) {
+      chartCanvas.style.cursor = 'pointer';
       hoveredPlayer = closest.player;
       var p = closest.player;
       var xLabel = METRIC_LABELS[currentData.x_stat] || currentData.x_stat;
@@ -559,8 +563,8 @@
 
       tooltip.innerHTML = '<div class="tt-name">' + escapeHtml(p.name) + '</div>' +
         '<div class="tt-meta">' + escapeHtml(p.position) + ' — ' + escapeHtml(p.team) + '</div>' +
-        '<div class="tt-stat">' + escapeHtml(xLabel) + ': <b>' + p.x + '</b></div>' +
-        '<div class="tt-stat">' + escapeHtml(yLabel) + ': <b>' + p.y + '</b></div>';
+        '<div class="tt-stat">' + escapeHtml(xLabel) + ': <b>' + escapeHtml(String(Number(p.x).toFixed(1))) + '</b></div>' +
+        '<div class="tt-stat">' + escapeHtml(yLabel) + ': <b>' + escapeHtml(String(Number(p.y).toFixed(1))) + '</b></div>';
       tooltip.style.display = 'block';
 
       // Position tooltip
@@ -572,6 +576,7 @@
       tooltip.style.left = tipX + 'px';
       tooltip.style.top = tipY + 'px';
     } else {
+      chartCanvas.style.cursor = 'crosshair';
       hoveredPlayer = null;
       tooltip.style.display = 'none';
     }
@@ -581,11 +586,12 @@
     var tooltip = document.getElementById('tooltip');
     if (tooltip) tooltip.style.display = 'none';
     hoveredPlayer = null;
+    if (chartCanvas) chartCanvas.style.cursor = 'crosshair';
   }
 
   function handleClick() {
     if (hoveredPlayer && hoveredPlayer.player_id) {
-      window.location.href = '/player/' + encodeURIComponent(hoveredPlayer.player_id);
+      window.open('/player/' + encodeURIComponent(hoveredPlayer.player_id), '_blank');
     }
   }
 
@@ -674,6 +680,11 @@
     var el = document.getElementById('explorer-content');
     if (typeof html2canvas === 'function') {
       html2canvas(el, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+        var ctx = canvas.getContext('2d');
+        ctx.font = '24px Caveat, cursive';
+        ctx.fillStyle = 'rgba(26, 26, 46, 0.3)';
+        ctx.textAlign = 'right';
+        ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 16);
         var link = document.createElement('a');
         link.download = 'razzle-stat-explorer.png';
         link.href = canvas.toDataURL('image/png');
@@ -692,7 +703,7 @@
   });
 
   // Analytics
-  if (typeof trackPageview === 'function') trackPageview();
+  try { fetch('/api/analytics/pageview', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ page: '/explorer.html', referrer: document.referrer || '' }) }); } catch(e) {}
 
   // Initial load
   loadData();
