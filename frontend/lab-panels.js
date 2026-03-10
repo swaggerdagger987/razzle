@@ -41,7 +41,8 @@
     tdregression: 'TD regression uses NFL expected touchdown models. switch to NFL for buy/sell TD candidates.',
     airyards: 'air yards, aDOT, WOPR, and RACR come from NFL tracking data. switch to NFL for target efficiency.',
     yoy: 'year-over-year comparison uses NFL per-game deltas across seasons. switch to NFL for risers and fallers.',
-    targetpremium: 'target premium uses NFL receiving efficiency metrics. switch to NFL for target quality rankings.'
+    targetpremium: 'target premium uses NFL receiving efficiency metrics. switch to NFL for target quality rankings.',
+    powerrankings: 'dynasty power rankings are based on NFL roster trade values. switch to NFL to see which teams are loaded.'
   };
 
   function showNflOnlyMsg(el, panelName, title, subtitle) {
@@ -9384,6 +9385,253 @@
       e.target.classList.add('active');
       panelState.position = e.target.dataset.pos || '';
       panelState.selectedCell = null;
+      loadData();
+    });
+
+    loadData();
+  }});
+
+  // ─── DYNASTY POWER RANKINGS ──────────────────────────────────
+  defs.push({ name: 'powerrankings', render: function(el) {
+    if (showNflOnlyMsg(el, 'powerrankings', 'Dynasty Power Rankings', 'which NFL teams have the most fantasy-valuable rosters')) return;
+
+    var POS_COLS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+    var panelData = null;
+    var selectedTeam = null;
+
+    el.innerHTML =
+      '<div class="lp-page">' +
+        '<div class="lp-header"><h2>Dynasty Power Rankings</h2>' +
+        '<div class="lp-subtitle">which NFL teams have the most fantasy-valuable rosters?</div>' +
+        '<div class="lp-meta">total dynasty trade value summed across QB + RB + WR + TE</div></div>' +
+        '<div class="lp-controls">' +
+          '<select class="lp-select pr-season"></select>' +
+        '</div>' +
+        '<div class="pr-chart-wrap" style="margin:16px 0;">' +
+          '<canvas id="pr-canvas" width="800" height="900" style="width:100%;max-width:800px;border:3px solid var(--ink,#2d1f14);border-radius:6px;box-shadow:4px 4px 0 var(--ink,#2d1f14);background:var(--bg-card,#f7efe5);"></canvas>' +
+        '</div>' +
+        '<div class="pr-detail" id="pr-detail" style="display:none;"></div>' +
+        '<div class="pr-loading"><div class="lp-loading">pulling film on every roster...</div></div>' +
+      '</div>';
+
+    function loadData() {
+      var loadEl = el.querySelector('.pr-loading');
+      loadEl.style.display = '';
+      var seasonVal = el.querySelector('.pr-season').value;
+      var url = '/api/dynasty-power-rankings';
+      if (seasonVal && seasonVal !== '0') url += '?season=' + seasonVal;
+
+      fetch(url).then(function(r) {
+        if (!r.ok) throw new Error('API error');
+        return r.json();
+      }).then(function(data) {
+        panelData = data;
+        loadEl.style.display = 'none';
+
+        // Populate season selector
+        var sSel = el.querySelector('.pr-season');
+        if (data.available_seasons && sSel.options.length === 0) {
+          data.available_seasons.forEach(function(s) {
+            var opt = document.createElement('option');
+            opt.value = s; opt.textContent = s;
+            if (s === data.season) opt.selected = true;
+            sSel.appendChild(opt);
+          });
+        }
+
+        drawChart(data);
+      }).catch(function() {
+        loadEl.innerHTML = '<div class="lp-error">could not load power rankings</div>';
+      });
+    }
+
+    function drawChart(data) {
+      var canvas = el.querySelector('#pr-canvas');
+      if (!canvas) return;
+      var teams = data.teams || [];
+      if (!teams.length) return;
+
+      var dpr = window.devicePixelRatio || 1;
+      var rowH = 26;
+      var padTop = 50;
+      var padBottom = 20;
+      var padLeft = 60;
+      var padRight = 40;
+      var totalH = padTop + teams.length * rowH + padBottom;
+
+      canvas.style.height = totalH / dpr + 'px';
+      canvas.width = 800 * dpr;
+      canvas.height = totalH * dpr;
+
+      var ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+      var W = 800;
+
+      // Background
+      ctx.fillStyle = '#f7efe5';
+      ctx.fillRect(0, 0, W, totalH);
+
+      // Find max value for scaling
+      var maxVal = 0;
+      teams.forEach(function(t) { if (t.total_value > maxVal) maxVal = t.total_value; });
+      var barAreaW = W - padLeft - padRight;
+
+      // Title
+      ctx.fillStyle = '#2d1f14';
+      ctx.font = 'bold 16px "Space Mono", monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('Dynasty Roster Value by Team', W / 2, 22);
+      ctx.font = '11px "Space Mono", monospace';
+      ctx.fillStyle = '#8a7565';
+      ctx.fillText('league avg: ' + fmt(data.league_average) + ' total trade value', W / 2, 38);
+
+      // League average line
+      var avgX = padLeft + (data.league_average / maxVal) * barAreaW;
+      ctx.strokeStyle = '#d97757';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([4, 3]);
+      ctx.beginPath();
+      ctx.moveTo(avgX, padTop - 5);
+      ctx.lineTo(avgX, padTop + teams.length * rowH);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Draw bars
+      teams.forEach(function(t, i) {
+        var y = padTop + i * rowH;
+        var barH = rowH - 4;
+
+        // Rank + team label
+        ctx.fillStyle = '#2d1f14';
+        ctx.font = '11px "Space Mono", monospace';
+        ctx.textAlign = 'right';
+        ctx.fillText(t.rank + '. ' + t.team, padLeft - 6, y + barH / 2 + 4);
+
+        // Stacked bar: QB → RB → WR → TE
+        var segments = [
+          { key: 'qb_value', color: POS_COLS.QB },
+          { key: 'rb_value', color: POS_COLS.RB },
+          { key: 'wr_value', color: POS_COLS.WR },
+          { key: 'te_value', color: POS_COLS.TE }
+        ];
+        var x = padLeft;
+        segments.forEach(function(seg) {
+          var val = t[seg.key] || 0;
+          var segW = (val / maxVal) * barAreaW;
+          if (segW > 0.5) {
+            ctx.fillStyle = seg.color;
+            ctx.fillRect(x, y, segW, barH);
+            // Subtle right border between segments
+            ctx.fillStyle = 'rgba(255,255,255,0.3)';
+            ctx.fillRect(x + segW - 1, y, 1, barH);
+          }
+          x += segW;
+        });
+
+        // Total value label
+        ctx.fillStyle = '#2d1f14';
+        ctx.font = '10px "Space Mono", monospace';
+        ctx.textAlign = 'left';
+        ctx.fillText(fmt(t.total_value, 0), x + 4, y + barH / 2 + 4);
+
+        // Highlight selected
+        if (selectedTeam === t.team) {
+          ctx.strokeStyle = '#2d1f14';
+          ctx.lineWidth = 2;
+          ctx.strokeRect(padLeft, y, (t.total_value / maxVal) * barAreaW, barH);
+        }
+      });
+
+      // Legend
+      var legendX = padLeft;
+      var legendY = padTop - 14;
+      ctx.font = '9px "Space Mono", monospace';
+      ctx.textAlign = 'left';
+      ['QB', 'RB', 'WR', 'TE'].forEach(function(pos) {
+        ctx.fillStyle = POS_COLS[pos];
+        ctx.fillRect(legendX, legendY - 7, 10, 10);
+        ctx.fillStyle = '#2d1f14';
+        ctx.fillText(pos, legendX + 13, legendY + 2);
+        legendX += 45;
+      });
+    }
+
+    function showDetail(team) {
+      var detailEl = el.querySelector('#pr-detail');
+      if (!panelData || !panelData.teams) { detailEl.style.display = 'none'; return; }
+
+      var t = null;
+      panelData.teams.forEach(function(tm) { if (tm.team === team) t = tm; });
+      if (!t) { detailEl.style.display = 'none'; return; }
+
+      selectedTeam = team;
+      drawChart(panelData);
+
+      var html = '<div class="lp-card" style="border:3px solid var(--ink,#2d1f14);border-radius:8px;box-shadow:4px 4px 0 var(--ink,#2d1f14);padding:16px;margin-top:12px;background:var(--bg-card,#f7efe5);">';
+      html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">';
+      html += '<h3 style="margin:0;font-family:\'Luckiest Guy\',cursive;font-size:20px;color:var(--ink,#2d1f14);">' + escapeHtml(t.team) + ' — #' + t.rank + '</h3>';
+      html += '<span style="font-family:\'Space Mono\',monospace;font-size:14px;color:var(--ink-medium,#5c4a3d);">Total: ' + fmt(t.total_value, 0) + '</span>';
+      html += '</div>';
+
+      // Position breakdown chips
+      html += '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;">';
+      [{ label: 'QB', val: t.qb_value, col: POS_COLS.QB },
+       { label: 'RB', val: t.rb_value, col: POS_COLS.RB },
+       { label: 'WR', val: t.wr_value, col: POS_COLS.WR },
+       { label: 'TE', val: t.te_value, col: POS_COLS.TE }].forEach(function(g) {
+        var pct = t.total_value > 0 ? Math.round(g.val / t.total_value * 100) : 0;
+        html += '<div style="background:' + g.col + '22;border:2px solid ' + g.col + ';border-radius:6px;padding:6px 12px;font-family:\'Space Mono\',monospace;font-size:12px;">';
+        html += '<span style="font-weight:bold;color:' + g.col + ';">' + g.label + '</span> ';
+        html += '<span style="color:var(--ink,#2d1f14);">' + fmt(g.val, 0) + '</span> ';
+        html += '<span style="color:var(--ink-light,#8a7565);">(' + pct + '%)</span>';
+        html += '</div>';
+      });
+      html += '</div>';
+
+      // Top players
+      if (t.top_players && t.top_players.length) {
+        html += '<div style="font-family:\'Caveat\',cursive;font-size:15px;color:var(--ink-light,#8a7565);margin-bottom:6px;">top dynasty assets</div>';
+        html += '<table style="width:100%;border-collapse:collapse;font-family:\'Space Mono\',monospace;font-size:12px;">';
+        html += '<tr style="border-bottom:2px solid var(--ink-faint,#c4b5a5);">';
+        html += '<th style="text-align:left;padding:4px 6px;">Player</th>';
+        html += '<th style="text-align:center;padding:4px 6px;">Pos</th>';
+        html += '<th style="text-align:right;padding:4px 6px;">PPG</th>';
+        html += '<th style="text-align:right;padding:4px 6px;">Age</th>';
+        html += '<th style="text-align:right;padding:4px 6px;">Value</th></tr>';
+        t.top_players.forEach(function(p) {
+          var posColor = POS_COLS[p.position] || '#8a7565';
+          html += '<tr style="border-bottom:1px solid var(--ink-faint,#c4b5a5);">';
+          html += '<td style="padding:4px 6px;">' + escapeHtml(p.full_name) + '</td>';
+          html += '<td style="text-align:center;padding:4px 6px;color:' + posColor + ';font-weight:bold;">' + escapeHtml(p.position) + '</td>';
+          html += '<td style="text-align:right;padding:4px 6px;">' + fmt(p.ppg) + '</td>';
+          html += '<td style="text-align:right;padding:4px 6px;">' + (p.age || '-') + '</td>';
+          html += '<td style="text-align:right;padding:4px 6px;font-weight:bold;">' + fmt(p.trade_value) + '</td></tr>';
+        });
+        html += '</table>';
+      }
+      html += '</div>';
+      detailEl.innerHTML = html;
+      detailEl.style.display = '';
+    }
+
+    // Click handler on canvas
+    el.querySelector('#pr-canvas').addEventListener('click', function(e) {
+      if (!panelData || !panelData.teams) return;
+      var canvas = this;
+      var rect = canvas.getBoundingClientRect();
+      var scaleY = canvas.height / (window.devicePixelRatio || 1) / rect.height;
+      var clickY = (e.clientY - rect.top) * scaleY;
+      var padTop = 50;
+      var rowH = 26;
+      var idx = Math.floor((clickY - padTop) / rowH);
+      if (idx >= 0 && idx < panelData.teams.length) {
+        showDetail(panelData.teams[idx].team);
+      }
+    });
+
+    el.querySelector('.pr-season').addEventListener('change', function() {
+      selectedTeam = null;
+      el.querySelector('#pr-detail').style.display = 'none';
       loadData();
     });
 

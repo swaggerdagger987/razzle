@@ -1,6 +1,18 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 22 — Stat Correlation Matrix (COMPLETE)
+## Current Phase: Phase 23 — Dynasty Power Rankings (COMPLETE)
+
+**Exit Criterion MET**: New Lab panel "Power Rankings" under Teams category. Backend `/api/dynasty-power-rankings` sums dynasty trade values per NFL team, breaks down by position group (QB/RB/WR/TE), ranks all 32 teams. Canvas-drawn stacked horizontal bar chart with position-colored segments. Click team for detail card with position breakdown chips and top 3 player table. Season selector. League average dashed line. NFL-only message for college mode. Chunky borders, sand bg, espresso ink per DESIGN.md.
+
+### Phase 23 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend API — /api/dynasty-power-rankings | DONE | 32 teams, position breakdowns, top 3 players per team, season filter |
+| 2 | Frontend Lab panel — stacked bar chart + detail | DONE | Canvas chart, position-colored bars, click-to-detail, legend, avg line |
+| 3 | Wire up + test end-to-end | DONE | Sidebar under Teams, JS syntax clean, no XSS, NFL-only message |
+
+## Previous Phase: Phase 22 — Stat Correlation Matrix (COMPLETE)
 
 **Exit Criterion MET**: New Lab panel "Correlations" under Performance category. Backend `/api/stat-correlations` computes Pearson correlations across 13 fantasy stats (PPG, Tgt/G, Rec/G, Rec Yd/G, Car/G, Rush Yd/G, Pass Yd/G, TD/G, Catch%, YPC, YPR, Snap%, TD Rate). Canvas heat map with red/blue diverging color scale. Click any cell → scatter plot with position-colored dots and trendline. "Top Predictors of Fantasy PPG" bar chart. Position filter tabs (ALL/QB/RB/WR/TE) and season selector. 1915 player-seasons sample. Chunky borders, sand bg, espresso ink per DESIGN.md.
 

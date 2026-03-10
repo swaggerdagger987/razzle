@@ -2024,6 +2024,16 @@ def stat_correlations(season: int = 0, position: str = "", x_stat: str = "", y_s
     return live_data.fetch_stat_correlations(season=s, position=pos, x_stat=xs, y_stat=ys)
 
 
+@app.get("/api/dynasty-power-rankings")
+def dynasty_power_rankings(season: int = 0):
+    try:
+        s = season if season > 0 else None
+        return live_data.fetch_dynasty_power_rankings(season=s)
+    except Exception as e:
+        logger.error(f"dynasty-power-rankings error: {e}")
+        return JSONResponse({"error": "Failed to fetch dynasty power rankings"}, status_code=500)
+
+
 # ---------------------------------------------------------------------------
 # Serve frontend as static files (catch-all for SPA-like behavior)
 # ---------------------------------------------------------------------------

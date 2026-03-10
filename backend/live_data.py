@@ -14896,3 +14896,108 @@ def fetch_stat_correlations(season=None, position=None, x_stat=None, y_stat=None
         }
     finally:
         conn.close()
+
+
+def fetch_dynasty_power_rankings(season=None):
+    """Rank all 32 NFL teams by total dynasty roster value (sum of player trade values)."""
+    conn = get_conn()
+    try:
+        if not season:
+            row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+            season = row[0] if row and row[0] else 2024
+
+        available_seasons = [
+            r[0] for r in conn.execute(
+                "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
+            ).fetchall()
+        ]
+
+        # Get all fantasy-relevant players with PPG for trade value calc
+        rows = conn.execute("""
+            SELECT
+                p.player_id, p.full_name, p.position, p.team, p.age,
+                SUM(s.fantasy_points_ppr) as total_ppr,
+                COUNT(DISTINCT s.week) as games
+            FROM players p
+            JOIN player_week_stats s
+                ON s.player_id = p.player_id AND s.season = ?
+            WHERE p.position IN ('QB','RB','WR','TE')
+              AND p.team IS NOT NULL AND p.team != '' AND p.team != 'FA'
+            GROUP BY p.player_id
+            HAVING games >= 4 AND (total_ppr / games) >= 2.0
+            ORDER BY total_ppr DESC
+        """, [season]).fetchall()
+
+        # Build per-team data
+        teams = {}
+        for r in rows:
+            pid, name, pos, team, age, total_ppr, games = r
+            if not team:
+                continue
+            ppg = round(total_ppr / games, 2) if games > 0 else 0.0
+            tv = compute_trade_value(ppg, age, pos)
+
+            if team not in teams:
+                teams[team] = {"team": team, "qb": [], "rb": [], "wr": [], "te": [],
+                               "total_value": 0, "players": []}
+
+            player_obj = {
+                "player_id": pid,
+                "full_name": name or "Unknown",
+                "position": pos or "WR",
+                "age": age,
+                "ppg": ppg,
+                "trade_value": tv,
+            }
+            teams[team]["players"].append(player_obj)
+            teams[team]["total_value"] += tv
+            group_key = (pos or "WR").lower()
+            if group_key in teams[team]:
+                teams[team][group_key].append(player_obj)
+
+        # Compute positional group values and top players per team
+        result_teams = []
+        for t_key, t_data in teams.items():
+            qb_val = round(sum(p["trade_value"] for p in t_data["qb"]), 1)
+            rb_val = round(sum(p["trade_value"] for p in t_data["rb"]), 1)
+            wr_val = round(sum(p["trade_value"] for p in t_data["wr"]), 1)
+            te_val = round(sum(p["trade_value"] for p in t_data["te"]), 1)
+            total = round(qb_val + rb_val + wr_val + te_val, 1)
+
+            # Top 3 players by trade value
+            top3 = sorted(t_data["players"], key=lambda x: x["trade_value"], reverse=True)[:3]
+
+            result_teams.append({
+                "team": t_key,
+                "total_value": total,
+                "qb_value": qb_val,
+                "rb_value": rb_val,
+                "wr_value": wr_val,
+                "te_value": te_val,
+                "player_count": len(t_data["players"]),
+                "top_players": [{
+                    "player_id": p["player_id"],
+                    "full_name": p["full_name"],
+                    "position": p["position"],
+                    "trade_value": p["trade_value"],
+                    "ppg": p["ppg"],
+                    "age": p["age"],
+                } for p in top3],
+            })
+
+        result_teams.sort(key=lambda x: x["total_value"], reverse=True)
+        for i, t in enumerate(result_teams):
+            t["rank"] = i + 1
+
+        # Compute league average for comparison
+        avg_value = round(sum(t["total_value"] for t in result_teams) / max(len(result_teams), 1), 1)
+
+        return {
+            "season": season,
+            "available_seasons": available_seasons,
+            "teams": result_teams,
+            "league_average": avg_value,
+            "total_teams": len(result_teams),
+        }
+    finally:
+        conn.close()

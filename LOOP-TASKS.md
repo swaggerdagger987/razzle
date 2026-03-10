@@ -1,85 +1,58 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 22 (Stat Correlation Matrix)
+- Phase: 23 (Dynasty Power Rankings)
 - All 3 tasks PASS
 - Stage: PHASE GATE
 - Next: Commit and push
 
-## Phase 22: Stat Correlation Matrix
-**Exit Criterion**: New Lab panel "Correlations" shows a heat map grid of Pearson correlations between key fantasy stats (PPG, targets/g, carries/g, rec yd/g, rush yd/g, catch rate, YPC, TD rate, snap%, target share). Position and season filters. Click any cell to see a scatter plot of that stat pair. "Top Predictors" section shows which stats correlate most with fantasy PPG for each position. Canvas-drawn heat map with red (positive) / blue (negative) color scale. Razzle comic-strip design (chunky borders, sand bg, espresso ink).
+## Phase 23: Dynasty Power Rankings
+**Exit Criterion**: New Lab panel "Power Rankings" in the Teams category. Backend `/api/dynasty-power-rankings` sums dynasty trade values per NFL team, breaks down by position group (QB/RB/WR/TE), and ranks all 32 teams. Frontend panel shows ranked stacked horizontal bar chart (position-colored segments), click team for roster detail card. Season selector. Canvas-drawn bars. Razzle comic-strip design (chunky borders, sand bg, espresso ink).
 
-### Task 1: Backend API — /api/stat-correlations
+### Task 1: Backend API — /api/dynasty-power-rankings
 **Status**: PASS
 **Attempts**: 1
 **Acceptance Criteria**:
-- Endpoint returns correlation matrix for configurable stat list, filtered by position and season
-- Pearson correlation computed for all stat pairs
-- Returns top_predictors (stats most correlated with PPG) sorted by |r|
-- Returns scatter data for any requested stat pair
-- Min 30 player-seasons required for a valid correlation
-**Notes**: 13 stats, 1915 player-seasons (all), 785 for WR. Top predictor: TD/G (r=0.765). Scatter data works with position-colored dots.
+- Endpoint returns all 32 teams ranked by total dynasty roster value
+- Dynasty value computed from trade-value-chart logic (production 50% + age 30% + scarcity 20%)
+- Breakdown by position group: QB, RB, WR, TE values per team
+- Returns top 3 players per team with individual values
+- Season filter parameter
+- Min 30 teams returned
+**Notes**: 32 teams returned. NO #1 (976.2), CHI last (573.4). League avg 779.6. Position breakdowns and top 3 players per team working.
 
-### Task 2: Frontend Lab panel — heat map + scatter + top predictors
+### Task 2: Frontend Lab panel — stacked bar chart + team cards
 **Status**: PASS
 **Attempts**: 1
 **Acceptance Criteria**:
-- Canvas-drawn heat map grid with stat labels on axes
-- Red/blue diverging color scale (-1 to +1)
-- Click cell → scatter plot appears below with player dots (position-colored)
-- Position filter tabs (ALL, QB, RB, WR, TE)
+- Canvas-drawn horizontal stacked bar chart, all 32 teams ranked
+- Position-colored segments (QB blue, RB teal, WR terracotta, TE purple)
+- Click team → detail card shows top players with individual values
 - Season selector dropdown
-- "Top Predictors of PPG" section with bar chart
 - Follows DESIGN.md: sand bg, chunky 3px borders, espresso ink, Space Mono for data
-- Registered in sidebar under "Performance" category
-**Notes**:
+- Registered in sidebar under "Teams" category
+**Notes**: Canvas chart with DPR-aware rendering, stacked bars with position colors, legend, league average dashed line. Detail card with position breakdown chips and top player table.
 
 ### Task 3: Wire up, test end-to-end
 **Status**: PASS
 **Attempts**: 1
 **Acceptance Criteria**:
 - Panel loads without JS errors
-- Heat map renders with real data
-- Click-to-scatter works
-- Position filter changes data
+- Bar chart renders with real data from API
+- Click-to-detail works
+- Position colors match DESIGN.md
 - No XSS, no unescaped user data
-- Panel appears in sidebar
-**Notes**:
+- Panel appears in sidebar under Teams
+- NFL-only message shows for college mode
+**Notes**: JS syntax clean. Server imports clean. All escapeHtml/escapeAttr on user data. Canvas text safe via fillText. NFL-only message registered. Sidebar entry added.
 
 ---
+
+## Phase 22: Stat Correlation Matrix -- COMPLETE
+**Status**: All 3 tasks PASS
 
 ## Phase 21: Migrate Database from Local SQLite to Turso (Edge SQLite) -- COMPLETE
 **Status**: All 5 tasks PASS
-
-## Phase 21 (Detail): Migrate Database from Local SQLite to Turso (Edge SQLite)
-**Exit Criterion**: All database reads/writes use Turso (libSQL) instead of local `data/terminal.db`. App reads `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN` from environment variables. Falls back to local SQLite if env vars are missing (for local dev). The `render.yaml` build command no longer runs adapter scripts to rebuild data on every deploy — data lives in Turso permanently. Add `libsql-experimental` to `requirements.txt`. Push the existing local `terminal.db` data up to Turso as a one-time migration step. All existing endpoints, panels, and queries work identically after the switch.
-
-### Task 1: Add libsql-experimental to requirements.txt + create backend/db.py connection module
-**Status**: PASS
-**Attempts**: 1
-**Notes**: Added `libsql-experimental>=0.0.68` to requirements.txt. Created `backend/db.py` with `get_conn()` that reads `TURSO_DATABASE_URL` + `TURSO_AUTH_TOKEN` env vars, uses libsql when available, falls back to local sqlite3. Single source of truth for DB connections.
-
-### Task 2: Swap get_conn() in live_data.py to use backend/db.py
-**Status**: PASS
-**Attempts**: 1
-**Notes**: `live_data.py` now imports `get_conn` and `DB_PATH` from `backend.db`. Removed old `get_conn()` definition and `DB_PATH` constant. All 100+ call sites unchanged. Verified with `get_filter_options()` query.
-
-### Task 3: Swap get_connection() in all 3 adapters to use Turso-aware connection
-**Status**: PASS
-**Attempts**: 1
-**Notes**: All 3 adapters (nflverse, college, cfbfastr) now try importing `get_conn` from `backend.db` via sys.path, falling back to direct sqlite3 if import fails. PRAGMA settings preserved. Verified all 3 adapters connect successfully.
-
-### Task 4: Create scripts/push_to_turso.py migration script
-**Status**: PASS
-**Attempts**: 1
-**Notes**: Script reads local terminal.db, recreates all tables + indexes in Turso, batch-inserts data (500 rows/batch). Handles ~1M row player_week_metrics table with progress reporting. Idempotent (IF NOT EXISTS, INSERT OR REPLACE).
-
-### Task 5: Update render.yaml — remove adapter rebuild from build command
-**Status**: PASS
-**Attempts**: 1
-**Notes**: buildCommand now just `pip install -r requirements.txt`. No adapter scripts. Data lives in Turso permanently. Bootstrap function in server.py still checks count and skips when data is present.
-
----
 
 ## Phase 20: QA + UX Audit — Auto-Generated Fixes -- COMPLETE
 **Status**: All 2 tasks PASS
