@@ -1,6 +1,20 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 13 — Dynasty Rookie Mock Draft (COMPLETE)
+## Current Phase: Phase 14 — Prospect Athletic Radar (COMPLETE)
+
+**Exit Criterion MET**: Users can select any prospect and see their combine athletic profile as a canvas spider chart with position-relative percentiles (40, Bench, Vert, Broad, Cone, Shuttle). Compare 2 prospects overlaid on the same chart. Percentile bars with raw values. Athletic grade badges. Search and position filter. Screenshot-ready card layout.
+
+### Phase 14 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Canvas spider chart with 6 combine metrics | DONE | HiDPI rendering, position-relative percentiles, grid rings, axis labels |
+| 2 | Prospect comparison overlay (2 players) | DONE | Terracotta + blue overlaid polygons, player tags with remove buttons |
+| 3 | Percentile bars + athletic grade | DONE | Bars per metric, color-coded percentile ranks, grade cards with score |
+| 4 | Screenshot-optimized card layout | DONE | Chunky border card, responsive grid, clean vertical flow |
+| 5 | Search + position filter | DONE | Name/school search, position tabs, 40-item list, click to select |
+
+## Previous Phase: Phase 13 — Dynasty Rookie Mock Draft (COMPLETE)
 
 **Exit Criterion MET**: Users can run a simulated dynasty rookie draft in the Lab. Configure league size (8/10/12/14), rounds (3/4/5), draft position, and snake/linear order. CPU teams pick best available by RPS. Position-colored draft board grid. Recap card with pick grades (Steal/Value/Fair/Reach) and overall draft grade. Screenshot and Draft Again buttons.
 

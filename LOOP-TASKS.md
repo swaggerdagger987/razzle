@@ -1,40 +1,43 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 13 (Dynasty Rookie Mock Draft) — COMPLETE
+- Phase: 14 (Prospect Athletic Radar) — COMPLETE
 - All 5 tasks PASS
 - Stage: PHASE GATE
-- Next: Generate Phase 14 or consume ticket
+- Next: Generate Phase 15 (QA + UX Audit since 15 is multiple of 5)
 
-## Phase 13: Dynasty Rookie Mock Draft
-**Exit Criterion**: A user can run a simulated dynasty rookie draft in the Lab. They configure league size (8/10/12/14) and their draft position, then pick round by round while the AI fills other picks from the Big Board (RPS rankings). The completed draft board is a position-color-coded grid that's screenshotable. A r/DynastyFF user would screenshot their mock results and share them.
+## Phase 14: Prospect Athletic Radar
+**Exit Criterion**: A user can select any prospect and see their combine athletic profile as a spider/radar chart with position-relative percentiles. Compare up to 2 prospects on the same chart. Percentile bars show raw values and percentile rank per metric. Athletic grade badge (Elite/Above Avg/Average/Below Avg/Poor). Search and position filter for prospect selection. Screenshot-ready card layout.
 
-### Task 1: Mock Draft panel UI + configuration
+### Task 1: Prospect Radar panel with canvas spider chart
 **Status**: PASS
 **Attempts**: 1
-**Notes**: Panel added to Lab sidebar under Prospects & College. Config card with league size (8/10/12/14), rounds (3/4/5), pick position, snake/linear toggle. Chunky border styling. Start Draft button with terracotta accent.
+**Notes**: Canvas spider chart with 6 axes (40, Bench, Vert, Broad, Cone, Shuttle). HiDPI rendering. Position-relative percentiles plotted as polygon. Grid rings, axis labels, dots at vertices.
 
-### Task 2: Draft engine + auto-pick logic
+### Task 2: Prospect comparison overlay (2 players on same chart)
 **Status**: PASS
 **Attempts**: 1
-**Notes**: buildPickOrder() supports snake/linear. CPU picks best available by RPS. makePick(), undoLastUserPick(), runCPUPicks() all functional. State machine: config → started → finished.
+**Notes**: Select up to 2 prospects. Each gets a different color (terracotta + blue). Overlaid semi-transparent polygons. Player tags with remove buttons. Click to toggle selection.
 
-### Task 3: User pick interface (Best Available + click to draft)
+### Task 3: Percentile bars + athletic grade badge
 **Status**: PASS
 **Attempts**: 1
-**Notes**: Best Available table (top 20) with Rank, Name, Pos, School, RPS, Tier. Draft button per row + double-click to draft. Undo button. "On the Clock" banner with pulse animation.
+**Notes**: Horizontal percentile bars per metric with raw value and percentile rank. Color-coded: elite (80+), good (60+), avg (40+), below. Athletic grade card: score + label (Elite/Above Avg/Average/Below Avg/Poor) + position + school + RPS.
 
-### Task 4: Draft board grid visualization
+### Task 4: Screenshot-optimized card layout
 **Status**: PASS
 **Attempts**: 1
-**Notes**: Rounds x Teams grid table. Position-colored cells (tints + left border). User column highlighted with terracotta. Current pick cell has pulsing outline. Sticky round/corner headers. Responsive with horizontal scroll.
+**Notes**: Chart card with 3px chunky border + 4px offset shadow. Clean card layout: player tags on top, canvas in middle, percentile bars below, grade cards at bottom. Responsive grid layout.
 
-### Task 5: Draft recap card with grades
+### Task 5: Search + position filter for prospect selection
 **Status**: PASS
 **Attempts**: 1
-**Notes**: Recap shows after all rounds. Pick grades: Steal (8+ later), Value (3+), Fair (within 3), Reach (earlier). Overall grade A+ to F. Screenshot button reuses screenshotPanel(). Draft Again resets to config. Expandable full board view.
+**Notes**: Search input filters by name/school. Position tabs (ALL/QB/RB/WR/TE) with active state. Prospect list (max 40 shown) with rank, pos badge, name, school, RPS. Click to select. Selected rows highlighted orange.
 
 ---
+
+## Phase 13: Dynasty Rookie Mock Draft — COMPLETE
+**Status**: All 5 tasks PASS
 
 ## Phase 12: Panel Export & Shareability — COMPLETE
 **Status**: All 5 tasks PASS

@@ -4075,3 +4075,352 @@
     padding: 4px 2px;
   }
 }
+
+/* ===================================================================
+   PROSPECT ATHLETIC RADAR PANEL
+   =================================================================== */
+
+.pr-layout {
+  padding: 12px;
+}
+
+/* Controls */
+.pr-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.pr-search-wrap {
+  flex: 1;
+  min-width: 200px;
+}
+.pr-search {
+  width: 100%;
+  padding: 8px 12px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  background: var(--bg-card);
+  border: 2px solid var(--ink);
+  color: var(--ink);
+}
+.pr-search:focus {
+  outline: none;
+  border-color: var(--orange);
+}
+.pr-pos-tabs {
+  display: flex;
+  gap: 4px;
+}
+.pr-pos-tab {
+  padding: 6px 14px;
+  font-family: var(--font-display);
+  font-size: 12px;
+  background: var(--bg);
+  border: 2px solid var(--ink-faint);
+  color: var(--ink-light);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.pr-pos-tab:hover {
+  background: var(--bg-warm);
+}
+.pr-pos-tab.active {
+  background: var(--ink);
+  color: var(--bg-card);
+  border-color: var(--ink);
+}
+
+/* Main layout: chart + list side by side */
+.pr-main {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 20px;
+  align-items: start;
+}
+
+/* Chart Card */
+.pr-chart-card {
+  background: var(--bg-card);
+  border: 3px solid var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+  padding: 20px;
+  min-height: 300px;
+}
+.pr-chart-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+}
+.pr-chart-inner {
+  text-align: center;
+}
+
+/* Player Tags */
+.pr-chart-players {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.pr-player-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: var(--bg);
+  border: 2px solid;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+.pr-tag-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.pr-tag-name {
+  font-weight: 600;
+  color: var(--ink);
+}
+.pr-tag-pos {
+  font-size: 10px;
+  font-weight: 700;
+}
+.pr-tag-remove {
+  background: none;
+  border: none;
+  color: var(--ink-light);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0 2px;
+  line-height: 1;
+}
+.pr-tag-remove:hover {
+  color: var(--red);
+}
+.pr-add-compare {
+  font-style: italic;
+}
+
+/* Percentile Bars */
+.pr-pct-bars {
+  margin-top: 16px;
+  text-align: left;
+}
+.pr-pct-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.pr-pct-label {
+  font-family: var(--font-display);
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  width: 50px;
+  text-align: right;
+  flex-shrink: 0;
+}
+.pr-pct-col {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.pr-pct-bar-wrap {
+  flex: 1;
+  height: 8px;
+  background: var(--bg-warm);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.pr-pct-bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+.pr-pct-val {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-medium);
+  min-width: 48px;
+  text-align: right;
+}
+.pr-pct-num {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  min-width: 32px;
+  text-align: right;
+}
+.pr-pct-elite { color: #d97757; }
+.pr-pct-good { color: #2ec4b6; }
+.pr-pct-avg { color: #5b7fff; }
+.pr-pct-below { color: #8a7565; }
+
+/* Athletic Grade Cards */
+.pr-grades {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+.pr-grade-card {
+  padding: 12px 20px;
+  border: 2px solid;
+  background: var(--bg);
+  text-align: center;
+  min-width: 160px;
+}
+.pr-grade-name {
+  font-family: var(--font-display);
+  font-size: 14px;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.pr-grade-score {
+  font-family: var(--font-mono);
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+.pr-grade-label {
+  font-family: var(--font-display);
+  font-size: 12px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.pr-grade-detail {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-light);
+}
+
+/* Prospect List */
+.pr-list {
+  border: 2px solid var(--ink);
+  background: var(--bg-card);
+  max-height: 700px;
+  overflow-y: auto;
+}
+.pr-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: var(--bg-warm);
+  border-bottom: 2px solid var(--ink);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.pr-list-title {
+  font-family: var(--font-display);
+  font-size: 14px;
+  color: var(--ink);
+}
+.pr-list-count {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-light);
+}
+.pr-prospect-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--ink-faint);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.pr-prospect-row:hover {
+  background: var(--bg-warm);
+}
+.pr-prospect-row.pr-selected {
+  background: var(--orange-light);
+}
+.pr-prospect-rank {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-light);
+  min-width: 24px;
+  text-align: right;
+}
+.pr-prospect-pos {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 99px;
+  font-family: var(--font-display);
+  font-size: 9px;
+  font-weight: 700;
+  color: white;
+}
+.pr-prospect-name {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pr-prospect-school {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-light);
+  max-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pr-prospect-rps {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink);
+  min-width: 30px;
+  text-align: right;
+}
+.pr-sel-badge {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 700;
+  color: white;
+  text-align: center;
+  line-height: 18px;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .pr-main {
+    grid-template-columns: 1fr;
+  }
+  .pr-chart-card {
+    order: 1;
+  }
+  .pr-list {
+    order: 0;
+    max-height: 300px;
+  }
+  .pr-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+@media (max-width: 480px) {
+  .pr-pct-val {
+    display: none;
+  }
+}
