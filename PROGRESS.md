@@ -1,6 +1,25 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 63 — Dynasty Rankings Board (COMPLETE)
+## Current Phase: Phase 64 — Stat Leaders Dashboard (COMPLETE)
+
+**Exit criterion MET:** /leaders.html page shows top 10 players in 10 key fantasy stat categories (PPG, Passing Yards, Passing TDs, Rushing Yards, Rushing TDs, Receiving Yards, Receiving TDs, Receptions, Target Share, Yards Per Carry). Each category rendered as a comic-strip card with category name (display font), Caveat annotation, and top 10 list. Gold/silver/bronze circular rank badges for top 3 with ink borders and offset shadows. Player rows show headshot/initials, name, position badge (color-coded), team, stat value in mono font. Click row → player profile. Position filter tabs (All/QB/RB/WR/TE) with position-specific category filtering. Season selector dropdown. PNG export via html2canvas with watermark. Leaders nav link added to all 9 HTML pages. Sitemap updated. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, position colors, Space Mono for data, display font for headers, Caveat for annotations.
+
+### Phase 64 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend stat leaders endpoint | DONE | GET /api/stat-leaders, 10 categories, position-specific filtering |
+| 2 | Leaders page with category cards | DONE | Responsive grid, gold/silver/bronze badges, hover lift |
+| 3 | Filters + season + PNG + nav | DONE | Segmented tabs, season dropdown, html2canvas export, all pages updated |
+| 4 | Smoke test | DONE | Python + JS syntax clean, design verified, XSS safe, sitemap updated |
+
+### Decisions Log
+- **10 categories**: PPG (all positions), then position-specific passing/rushing/receiving stats + target share + yards per carry. When filtering by position, only relevant categories shown (e.g., QB filter hides receiving stats).
+- **Gold/silver/bronze badges**: Top 3 get circular badges with distinct colors (gold #ffc857, silver #c5c5d0, bronze #d97757/terracotta). Makes the top 3 visually pop — instant screenshotability.
+- **Caveat annotations**: Each category gets a personality annotation ("slinging it", "red zone royalty", "efficiency kings") — adds the comic-strip character without cluttering data.
+- **Separate from Rankings**: Rankings = dynasty trade value tiers. Leaders = raw stat performance. Different user intent, both screenshottable.
+
+## Previous Phase: Phase 63 — Dynasty Rankings Board (COMPLETE)
 
 **Exit criterion MET:** /rankings.html page shows top 200 dynasty-relevant players ranked by dynasty value (0-100), grouped into 8 visual tiers (Tier 1: Elite through Tier 8: Deep Stash). Each player card shows position badge (color-coded), team, age badge (green/yellow/red), dynasty value score, and PPG. Position filter tabs (All/QB/RB/WR/TE) with chunky segmented control. PNG export via html2canvas with watermark. Rankings nav link added to all 8 HTML pages (nav + footer). Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, rotated tier badge stickers, position colors, Space Mono for data, display font for headers, Caveat for annotations.
 

@@ -3486,6 +3486,189 @@ def fetch_dynasty_rankings(position=None, limit=200):
 
 
 # ---------------------------------------------------------------------------
+# Stat Leaders — top performers by category
+# ---------------------------------------------------------------------------
+
+# Category definitions: (key, display_label, sql_expr, is_rate, positions)
+# is_rate = True means we average per game instead of sum
+# positions = None means all, otherwise tuple of positions where this stat is relevant
+_LEADER_CATEGORIES = [
+    ("ppg", "Fantasy PPG", "SUM(s.fantasy_points_ppr)", False, None),
+    ("passing_yards", "Passing Yards", "SUM(s.passing_yards)", False, ("QB",)),
+    ("passing_tds", "Passing TDs", "SUM(s.passing_tds)", False, ("QB",)),
+    ("rushing_yards", "Rushing Yards", "SUM(s.rushing_yards)", False, ("QB", "RB", "WR")),
+    ("rushing_tds", "Rushing TDs", "SUM(s.rushing_tds)", False, ("QB", "RB", "WR")),
+    ("receiving_yards", "Receiving Yards", "SUM(s.receiving_yards)", False, ("RB", "WR", "TE")),
+    ("receiving_tds", "Receiving TDs", "SUM(s.receiving_tds)", False, ("RB", "WR", "TE")),
+    ("receptions", "Receptions", "SUM(s.receptions)", False, ("RB", "WR", "TE")),
+    ("target_share", "Target Share %", None, True, ("RB", "WR", "TE")),
+    ("yards_per_carry", "Yards Per Carry", None, True, ("QB", "RB")),
+]
+
+
+def fetch_stat_leaders(season=None, position=None, limit=10):
+    """Return top players in each stat category for the given season."""
+    limit = max(1, min(25, limit))
+    conn = get_conn()
+
+    # Determine season
+    if not season:
+        row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+        season = row[0] if row and row[0] else 2024
+
+    pos_upper = position.strip().upper() if position else None
+    if pos_upper and pos_upper not in ("QB", "RB", "WR", "TE"):
+        pos_upper = None
+
+    categories = []
+
+    for key, label, sql_expr, is_rate, positions in _LEADER_CATEGORIES:
+        # Skip categories not relevant to the selected position
+        if pos_upper and positions and pos_upper not in positions:
+            continue
+
+        # Build position filter
+        if pos_upper:
+            pos_where = f"AND p.position = '{pos_upper}'"
+        elif positions:
+            pos_list = ",".join(f"'{p}'" for p in positions)
+            pos_where = f"AND p.position IN ({pos_list})"
+        else:
+            pos_where = "AND p.position IN ('QB','RB','WR','TE')"
+
+        if key == "target_share":
+            # target_share is a rate metric from player_week_metrics
+            query = f"""
+                SELECT
+                    p.player_id, p.full_name, p.position, p.team,
+                    p.headshot_url,
+                    COUNT(DISTINCT s.week) as games,
+                    AVG(m.value) as stat_value
+                FROM players p
+                JOIN player_week_stats s
+                    ON s.player_id = p.player_id AND s.season = ?
+                JOIN player_week_metrics m
+                    ON m.player_id = p.player_id AND m.season = ? AND m.week = s.week
+                    AND m.metric_key = 'target_share'
+                WHERE p.fantasy_relevant = 1
+                  {pos_where}
+                GROUP BY p.player_id
+                HAVING games >= 3 AND stat_value IS NOT NULL
+                ORDER BY stat_value DESC
+                LIMIT ?
+            """
+            rows = conn.execute(query, [season, season, limit]).fetchall()
+        elif key == "yards_per_carry":
+            # Derived rate: rushing_yards / carries
+            query = f"""
+                SELECT
+                    p.player_id, p.full_name, p.position, p.team,
+                    p.headshot_url,
+                    COUNT(DISTINCT s.week) as games,
+                    CASE WHEN SUM(s.carries) > 0
+                         THEN CAST(SUM(s.rushing_yards) AS REAL) / SUM(s.carries)
+                         ELSE 0 END as stat_value
+                FROM players p
+                JOIN player_week_stats s
+                    ON s.player_id = p.player_id AND s.season = ?
+                WHERE p.fantasy_relevant = 1
+                  {pos_where}
+                GROUP BY p.player_id
+                HAVING games >= 3 AND SUM(s.carries) >= 30
+                ORDER BY stat_value DESC
+                LIMIT ?
+            """
+            rows = conn.execute(query, [season, limit]).fetchall()
+        elif key == "ppg":
+            # PPG = total fantasy points / games
+            query = f"""
+                SELECT
+                    p.player_id, p.full_name, p.position, p.team,
+                    p.headshot_url,
+                    COUNT(DISTINCT s.week) as games,
+                    CAST(SUM(s.fantasy_points_ppr) AS REAL) / COUNT(DISTINCT s.week) as stat_value
+                FROM players p
+                JOIN player_week_stats s
+                    ON s.player_id = p.player_id AND s.season = ?
+                WHERE p.fantasy_relevant = 1
+                  {pos_where}
+                GROUP BY p.player_id
+                HAVING games >= 3
+                ORDER BY stat_value DESC
+                LIMIT ?
+            """
+            rows = conn.execute(query, [season, limit]).fetchall()
+        else:
+            # Standard SUM stat
+            query = f"""
+                SELECT
+                    p.player_id, p.full_name, p.position, p.team,
+                    p.headshot_url,
+                    COUNT(DISTINCT s.week) as games,
+                    {sql_expr} as stat_value
+                FROM players p
+                JOIN player_week_stats s
+                    ON s.player_id = p.player_id AND s.season = ?
+                WHERE p.fantasy_relevant = 1
+                  {pos_where}
+                GROUP BY p.player_id
+                HAVING games >= 3
+                ORDER BY stat_value DESC
+                LIMIT ?
+            """
+            rows = conn.execute(query, [season, limit]).fetchall()
+
+        leaders = []
+        for r in rows:
+            val = r["stat_value"]
+            if val is None:
+                continue
+            # Format: rate stats get 1 decimal, target_share gets %, integers stay int
+            if key == "target_share":
+                display_val = round(val * 100, 1) if val < 1 else round(val, 1)
+                display_str = f"{display_val}%"
+            elif key in ("ppg", "yards_per_carry"):
+                display_val = round(val, 1)
+                display_str = str(display_val)
+            else:
+                display_val = int(round(val))
+                display_str = str(display_val)
+
+            leaders.append({
+                "player_id": r["player_id"],
+                "full_name": r["full_name"] or "Unknown",
+                "position": r["position"] or "WR",
+                "team": r["team"] or "FA",
+                "headshot_url": r["headshot_url"] or "",
+                "stat_value": display_val,
+                "stat_display": display_str,
+                "games": r["games"],
+            })
+
+        categories.append({
+            "key": key,
+            "label": label,
+            "leaders": leaders,
+        })
+
+    conn.close()
+
+    # Get available seasons for dropdown
+    conn2 = get_conn()
+    season_rows = conn2.execute(
+        "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
+    ).fetchall()
+    conn2.close()
+    seasons = [r["season"] for r in season_rows]
+
+    return {
+        "categories": categories,
+        "season": season,
+        "seasons": seasons,
+    }
+
+
+# ---------------------------------------------------------------------------
 # Featured Analysis — curated lists for home page
 # ---------------------------------------------------------------------------
 

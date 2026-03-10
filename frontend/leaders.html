@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Stat Leaders — Razzle</title>
+<meta property="og:title" content="Stat Leaders — Razzle">
+<meta property="og:description" content="Fantasy football stat leaders and leaderboards on razzle.lol">
+<meta property="og:site_name" content="razzle.lol">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Stat Leaders — Razzle">
+<meta name="twitter:description" content="Fantasy football stat leaders and leaderboards on razzle.lol">
+<meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
+<meta name="description" content="Fantasy football stat leaders — top performers by category on razzle.lol">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .leaders-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+  }
+
+  .leaders-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .leaders-header h1 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: var(--ink);
+    margin: 0 0 4px;
+  }
+  .leaders-header .leaders-subtitle {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+  }
+
+  /* Controls row */
+  .leaders-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  /* Position filter tabs */
+  .leaders-filters {
+    display: flex;
+    gap: 0;
+  }
+  .leaders-filter-btn {
+    font-family: var(--font-display);
+    font-size: 14px;
+    padding: 8px 18px;
+    border: 2px solid var(--ink);
+    background: var(--bg-card);
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .leaders-filter-btn:first-child { border-radius: 8px 0 0 8px; }
+  .leaders-filter-btn:last-child { border-radius: 0 8px 8px 0; }
+  .leaders-filter-btn:not(:first-child) { border-left: none; }
+  .leaders-filter-btn:hover { background: var(--bg-warm); }
+  .leaders-filter-btn.active {
+    background: var(--ink);
+    color: var(--bg-card);
+  }
+  .leaders-filter-btn.active.pos-qb { background: var(--pos-qb); border-color: var(--pos-qb); }
+  .leaders-filter-btn.active.pos-rb { background: var(--pos-rb); border-color: var(--pos-rb); }
+  .leaders-filter-btn.active.pos-wr { background: var(--pos-wr); border-color: var(--pos-wr); }
+  .leaders-filter-btn.active.pos-te { background: var(--pos-te); border-color: var(--pos-te); }
+
+  /* Season selector */
+  .leaders-season-select {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    padding: 7px 12px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--bg-card);
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  /* Actions */
+  .leaders-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  /* Category card grid */
+  .leaders-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 16px;
+  }
+
+  /* Category card */
+  .leaders-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    overflow: hidden;
+    transition: all 0.15s;
+  }
+  .leaders-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+
+  .leaders-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-bottom: 2px dashed var(--ink-faint);
+    background: var(--bg-warm);
+  }
+  .leaders-card-title {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .leaders-card-annotation {
+    font-family: var(--font-hand);
+    font-size: 16px;
+    color: var(--ink-light);
+  }
+
+  /* Leader rows */
+  .leaders-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .leaders-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border-bottom: 1px solid var(--ink-faint);
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+  .leaders-row:last-child { border-bottom: none; }
+  .leaders-row:hover { background: var(--bg-warm); }
+
+  /* Rank badge */
+  .leaders-rank {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 700;
+    min-width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .leaders-rank.gold {
+    background: #ffc857;
+    color: var(--ink);
+    border: 2px solid var(--ink);
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+  .leaders-rank.silver {
+    background: #c5c5d0;
+    color: var(--ink);
+    border: 2px solid var(--ink);
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+  .leaders-rank.bronze {
+    background: #d97757;
+    color: #fff;
+    border: 2px solid var(--ink);
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+  .leaders-rank.normal {
+    color: var(--ink-light);
+  }
+
+  /* Player headshot in row */
+  .leaders-row .player-headshot,
+  .leaders-row .player-headshot-fallback {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .leaders-row .player-headshot {
+    border: 2px solid var(--ink);
+    object-fit: cover;
+  }
+  .leaders-row .player-headshot-fallback {
+    background: var(--bg-warm);
+    border: 2px solid var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  /* Player info */
+  .leaders-player-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .leaders-player-name {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .leaders-pos-badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .leaders-pos-badge.qb { background: var(--pos-qb); }
+  .leaders-pos-badge.rb { background: var(--pos-rb); }
+  .leaders-pos-badge.wr { background: var(--pos-wr); }
+  .leaders-pos-badge.te { background: var(--pos-te); }
+  .leaders-team {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-light);
+    flex-shrink: 0;
+  }
+
+  /* Stat value */
+  .leaders-stat-value {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+    flex-shrink: 0;
+    text-align: right;
+    min-width: 50px;
+  }
+
+  /* Loading */
+  .leaders-loading {
+    text-align: center;
+    padding: 60px 20px;
+    font-family: var(--font-hand);
+    font-size: 22px;
+    color: var(--ink-light);
+  }
+
+  /* Empty */
+  .leaders-empty {
+    text-align: center;
+    padding: 40px 20px;
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .leaders-grid { grid-template-columns: 1fr; }
+    .leaders-header h1 { font-size: 24px; }
+    .leaders-filter-btn { padding: 6px 12px; font-size: 12px; }
+    .leaders-controls { gap: 10px; }
+  }
+  @media (max-width: 480px) {
+    .leaders-row { padding: 5px 10px; gap: 6px; }
+    .leaders-player-name { font-size: 12px; }
+    .leaders-stat-value { font-size: 12px; min-width: 40px; }
+    .leaders-rank { min-width: 24px; height: 24px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="topnav">
+  <a href="/" class="logo">
+    <div class="logo-mark">&#x1F42F;</div>
+    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/lab.html">The Lab</a></li>
+    <li><a href="/rankings.html">Rankings</a></li>
+    <li><a href="/leaders.html" class="active">Leaders</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
+    <li><a href="/agents.html">War Room</a></li>
+  </ul>
+</nav>
+
+<div class="leaders-page" id="leadersPage">
+  <div class="leaders-header">
+    <h1>Stat Leaders</h1>
+    <div class="leaders-subtitle">who's putting up the numbers</div>
+  </div>
+
+  <div class="leaders-controls">
+    <div class="leaders-filters" id="leadersFilters">
+      <button class="leaders-filter-btn active" data-pos="">All</button>
+      <button class="leaders-filter-btn pos-qb" data-pos="QB">QB</button>
+      <button class="leaders-filter-btn pos-rb" data-pos="RB">RB</button>
+      <button class="leaders-filter-btn pos-wr" data-pos="WR">WR</button>
+      <button class="leaders-filter-btn pos-te" data-pos="TE">TE</button>
+    </div>
+    <select class="leaders-season-select" id="leadersSeason">
+      <option value="">Loading...</option>
+    </select>
+  </div>
+
+  <div class="leaders-actions">
+    <button class="btn-chunky" id="leadersExportBtn" title="Export as PNG">Export PNG</button>
+  </div>
+
+  <div id="leadersContent">
+    <div class="leaders-loading">pulling film on the leaders...</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div style="text-align:center; padding:24px 20px 40px; font-family:var(--font-mono); font-size:12px; color:var(--ink-light);">
+  <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-bottom:8px;">
+    <a href="/" style="color:var(--ink-light); text-decoration:none;">Home</a>
+    <a href="/lab.html" style="color:var(--ink-light); text-decoration:none;">The Lab</a>
+    <a href="/rankings.html" style="color:var(--ink-light); text-decoration:none;">Rankings</a>
+    <a href="/leaders.html" style="color:var(--ink-light); text-decoration:none;">Leaders</a>
+    <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none;">League Intel</a>
+    <a href="/agents.html" style="color:var(--ink-light); text-decoration:none;">War Room</a>
+  </div>
+  <p><a href="/" style="color:var(--orange); text-decoration:none;">razzle.lol</a> — let's razzle dazzle em baby</p>
+</div>
+
+<div class="watermark">razzle.lol</div>
+
+<script src="app.js"></script>
+<script>
+(function() {
+  var state = { position: "", season: 0, data: null, loading: false };
+
+  var content = document.getElementById("leadersContent");
+  var seasonSelect = document.getElementById("leadersSeason");
+
+  // Category annotations (Caveat personality)
+  var annotations = {
+    ppg: "the whole package",
+    passing_yards: "slinging it",
+    passing_tds: "finding the end zone",
+    rushing_yards: "ground game kings",
+    rushing_tds: "punching it in",
+    receiving_yards: "racking up yardage",
+    receiving_tds: "red zone royalty",
+    receptions: "the target hogs",
+    target_share: "eating all the targets",
+    yards_per_carry: "efficiency kings"
+  };
+
+  // ---- Fetch leaders ----
+  async function loadLeaders() {
+    state.loading = true;
+    content.innerHTML = '<div class="leaders-loading">pulling film on the leaders...</div>';
+
+    try {
+      var url = "/api/stat-leaders?limit=10";
+      if (state.position) url += "&position=" + encodeURIComponent(state.position);
+      if (state.season) url += "&season=" + state.season;
+      var data = await apiFetch(url);
+      state.data = data;
+      state.loading = false;
+
+      // Populate season dropdown if first load
+      if (data.seasons && seasonSelect.options.length <= 1) {
+        seasonSelect.innerHTML = "";
+        for (var i = 0; i < data.seasons.length; i++) {
+          var opt = document.createElement("option");
+          opt.value = data.seasons[i];
+          opt.textContent = data.seasons[i] + " season";
+          if (data.seasons[i] === data.season) opt.selected = true;
+          seasonSelect.appendChild(opt);
+        }
+      }
+
+      renderCategories(data.categories || []);
+    } catch (err) {
+      state.loading = false;
+      content.innerHTML = '<div class="leaders-empty">could not load stat leaders</div>';
+    }
+  }
+
+  // ---- Render category cards ----
+  function renderCategories(categories) {
+    if (!categories.length) {
+      content.innerHTML = '<div class="leaders-empty">no stat leaders found</div>';
+      return;
+    }
+
+    var html = '<div class="leaders-grid">';
+
+    for (var c = 0; c < categories.length; c++) {
+      var cat = categories[c];
+      var annotation = annotations[cat.key] || "";
+
+      html += '<div class="leaders-card">';
+      html += '<div class="leaders-card-header">';
+      html += '<span class="leaders-card-title">' + escapeHtml(cat.label) + '</span>';
+      if (annotation) {
+        html += '<span class="leaders-card-annotation">' + escapeHtml(annotation) + '</span>';
+      }
+      html += '</div>';
+
+      html += '<ul class="leaders-list">';
+
+      for (var i = 0; i < cat.leaders.length; i++) {
+        var p = cat.leaders[i];
+        var rank = i + 1;
+        var rankClass = rank === 1 ? "gold" : rank === 2 ? "silver" : rank === 3 ? "bronze" : "normal";
+        var posLower = (p.position || "wr").toLowerCase();
+
+        // Headshot or fallback initials
+        var imgHtml;
+        if (p.headshot_url) {
+          imgHtml = '<img class="player-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">';
+          imgHtml += '<span class="player-headshot-fallback" style="display:none">' + escapeHtml((p.full_name || "?").substring(0, 2).toUpperCase()) + '</span>';
+        } else {
+          imgHtml = '<span class="player-headshot-fallback">' + escapeHtml((p.full_name || "?").substring(0, 2).toUpperCase()) + '</span>';
+        }
+
+        html += '<li class="leaders-row" data-pid="' + escapeAttr(p.player_id) + '">';
+        html += '<span class="leaders-rank ' + rankClass + '">' + rank + '</span>';
+        html += imgHtml;
+        html += '<div class="leaders-player-info">';
+        html += '<span class="leaders-player-name">' + escapeHtml(p.full_name) + '</span>';
+        html += '<span class="leaders-pos-badge ' + posLower + '">' + escapeHtml(p.position) + '</span>';
+        html += '<span class="leaders-team">' + escapeHtml(p.team) + '</span>';
+        html += '</div>';
+        html += '<span class="leaders-stat-value">' + escapeHtml(p.stat_display) + '</span>';
+        html += '</li>';
+      }
+
+      html += '</ul>';
+      html += '</div>';
+    }
+
+    html += '</div>';
+    content.innerHTML = html;
+
+    // Click to open player profile
+    content.querySelectorAll(".leaders-row[data-pid]").forEach(function(row) {
+      row.addEventListener("click", function() {
+        var pid = this.getAttribute("data-pid");
+        if (pid) window.location.href = "/player/" + encodeURIComponent(pid);
+      });
+    });
+  }
+
+  // ---- Position filter ----
+  document.getElementById("leadersFilters").addEventListener("click", function(e) {
+    var btn = e.target.closest(".leaders-filter-btn");
+    if (!btn) return;
+    this.querySelectorAll(".leaders-filter-btn").forEach(function(b) { b.classList.remove("active"); });
+    btn.classList.add("active");
+    state.position = btn.getAttribute("data-pos") || "";
+    loadLeaders();
+  });
+
+  // ---- Season selector ----
+  seasonSelect.addEventListener("change", function() {
+    state.season = parseInt(this.value, 10) || 0;
+    loadLeaders();
+  });
+
+  // ---- PNG export ----
+  document.getElementById("leadersExportBtn").addEventListener("click", function() {
+    var page = document.getElementById("leadersPage");
+    if (!page) return;
+    if (!window.html2canvas) {
+      var s = document.createElement("script");
+      s.src = "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js";
+      s.onload = function() { doExport(page); };
+      document.head.appendChild(s);
+    } else {
+      doExport(page);
+    }
+  });
+
+  function doExport(el) {
+    html2canvas(el, { backgroundColor: "#ede0cf", scale: 2, useCORS: true }).then(function(canvas) {
+      // Add watermark
+      var ctx = canvas.getContext("2d");
+      ctx.font = "bold 18px 'Space Mono', monospace";
+      ctx.fillStyle = "rgba(26,26,46,0.25)";
+      ctx.textAlign = "right";
+      ctx.fillText("razzle.lol", canvas.width - 24, canvas.height - 18);
+
+      var link = document.createElement("a");
+      link.download = "razzle-stat-leaders.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    });
+  }
+
+  // ---- Track pageview ----
+  if (typeof trackPageview === "function") trackPageview("/leaders.html");
+
+  // ---- Initial load ----
+  loadLeaders();
+})();
+</script>
+</body>
+</html>

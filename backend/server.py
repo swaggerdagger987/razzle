@@ -851,6 +851,8 @@ def sitemap_xml():
     pages = [
         ("", "1.0", "weekly"),
         ("/lab.html", "1.0", "daily"),
+        ("/rankings.html", "0.9", "weekly"),
+        ("/leaders.html", "0.9", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -934,6 +936,15 @@ def dynasty_rankings(position: str = "", limit: int = 200):
     pos = position.strip().upper() if position else None
     limit = max(1, min(300, limit))
     return live_data.fetch_dynasty_rankings(position=pos, limit=limit)
+
+
+@app.get("/api/stat-leaders")
+def stat_leaders(season: int = 0, position: str = "", limit: int = 10):
+    """Return top players in each key fantasy stat category."""
+    s = season if season > 0 else None
+    pos = position.strip().upper() if position else None
+    limit = max(1, min(25, limit))
+    return live_data.fetch_stat_leaders(season=s, position=pos, limit=limit)
 
 
 # ---------------------------------------------------------------------------
