@@ -1,7 +1,7 @@
-# QA + UX Audit — Phases 51-55
+# QA + UX Audit — Phases 56-60
 
-**Date**: 2026-03-09
-**Scope**: Phase 51 (Manager Profiles), Phase 52 (Agent Memory), Phase 53 (Reddit Launch Prep), Phase 54 (Heat Coloring), Phase 55 (Player Headshots)
+**Audit Date**: 2026-03-09
+**Phases Covered**: 56 (QA+UX fixes), 57 (Draft Pick Trade Calculator), 58 (Roster Value Calculator), 59 (Player Comp Finder), 60 (Boom/Bust Analyzer)
 
 ---
 
@@ -9,75 +9,85 @@
 
 ### CRITICAL
 
-**QA-1: XSS via unescaped Sleeper API data in league-intel.html**
-- **File**: `frontend/league-intel.html`, lines 441, 443, 529, 535, 538-540
-- **What**: Sleeper API data (league.name, p.name, p.team, userId, pos) injected into innerHTML without `escapeHtml()`. league_id and userId interpolated into onclick attribute without `escapeAttr()`.
-- **Risk**: A malicious Sleeper league name or compromised API response injects arbitrary HTML/JS.
-- **Fix**: Wrap all Sleeper-sourced values in `escapeHtml()` for innerHTML and `escapeAttr()` for attributes.
+**QA-1: XSS — Unescaped player names in renderPlayerComps (6 locations)**
+- **File**: `frontend/lab.js` lines ~7937, 7967, 7969, 7970, 7978, 7980
+- **Issue**: `comp.full_name` and `player.full_name` interpolated directly into HTML without `escapeHtml()`. The boom/bust code correctly escapes, but the comps code does not.
+- **Fix**: Wrap all 6 occurrences with `escapeHtml()`.
+
+**QA-2: XSS — Unescaped error message in loadPlayerComps**
+- **File**: `frontend/lab.js` line ~7889
+- **Issue**: `data.error` from API inserted directly into innerHTML. The boom/bust loader correctly uses `escapeHtml()`, but the comps loader does not.
+- **Fix**: Change `${data.error}` to `${escapeHtml(data.error)}`.
 
 ### HIGH
 
-**QA-2: FILTER_COLUMN_MAP references non-existent DB columns**
-- **File**: `backend/live_data.py`, lines 788-789, 799
-- **What**: `pass_attempts` and `total_tds` in FILTER_COLUMN_MAP reference columns that don't exist in player_week_stats (actual columns are `attempts` and `touchdowns`). Filtering by these keys causes runtime SQL errors (500 response).
-- **Fix**: Change to `"pass_attempts": "SUM(s.attempts)"` and `"total_tds": "SUM(s.touchdowns)"`.
+**QA-3: Missing negative limit validation on /api/players/{id}/comps**
+- **File**: `backend/server.py` line 442
+- **Issue**: `limit=min(limit, 10)` doesn't guard against negative values. `min(-5, 10) = -5` causes Python `[:−5]` slice to return unexpected results.
+- **Fix**: Change to `limit=max(1, min(limit, 10))`.
+
+**QA-4: Redundant inline `import math` in _pick_value**
+- **File**: `backend/live_data.py` line ~3247
+- **Issue**: `import math` inside `_pick_value()` is redundant — `math` is already imported at module top.
+- **Fix**: Remove the inline `import math`.
 
 ### MEDIUM
 
-**QA-3: Sleeper players endpoint (~1MB) re-fetched on every league card expand**
-- **File**: `frontend/league-intel.html`, lines 492-496
-- **What**: `/players/nfl` returns ~1MB of JSON, fetched fresh every time `toggleLeague` is called. Never cached.
-- **Fix**: Cache in a module-level variable after first fetch.
-
-**QA-4: 18 concurrent Sleeper transaction requests per manager profile load**
-- **File**: `frontend/league-intel.html`, lines 620-631
-- **What**: Fires 18 simultaneous requests to Sleeper API for weeks 1-18. Aggressive for Sleeper's infrastructure.
-- **Fix**: Batch requests (6 at a time) or cache results in localStorage.
-
-**QA-5: 1px borders on league-intel stat badges violate design guide**
-- **File**: `frontend/league-intel.html`, lines 261-265, 167
-- **What**: `.profile-stat` uses `border: 1px solid var(--ink-faint)`, `.roster-pos` uses `border: 1.5px`. Design guide says no thin 1px borders on primary elements.
-- **Fix**: Change to `border: 2px solid var(--ink-faint)`.
+**QA-5: Design system violation — stat card borders in boom/bust**
+- **File**: `frontend/lab.js` line ~8388
+- **Issue**: Boom/bust stat cards use `border:2px` / `box-shadow:3px 3px 0` instead of design spec `border:3px` / `box-shadow:4px 4px 0`.
+- **Fix**: Update border and shadow values.
 
 ### LOW
 
-**QA-6: formatTimeAgo shows "0 min ago" for recent entries**
-- **File**: `frontend/warroom.js`, lines 2412-2418
-- **What**: Entries less than 60 seconds old show "0 min ago" instead of "just now".
-- **Fix**: Add check `if (mins < 1) return 'just now';`.
-
-**QA-7: Duplicate esc() function in player.js**
-- **File**: `frontend/player.js`, lines 773-777
-- **What**: Local `esc()` duplicates `escapeHtml()` from app.js. Maintenance risk.
-
-**QA-8: Dead group variable assignment in league-intel.html**
-- **File**: `frontend/league-intel.html`, line 522
-- **What**: `group` variable assigned but never read.
+**QA-6: Consistency rank fallback edge case**
+- **File**: `backend/live_data.py` — fetch_player_boom_bust
+- **Issue**: If player's CSV parsing fails, `position_rank` stays at default 1. Edge case, not a crash.
 
 ---
 
 ## UX FINDINGS
 
+### CRITICAL
+
+**UX-1: Boom/Bust histogram has no legend**
+- **Feature**: Boom/Bust Analyzer (Phase 60)
+- **Issue**: Bars colored green/red/position-color with no legend. Users must infer meaning from threshold lines alone.
+- **Fix**: Add legend box: "Green = Boom week | Red = Bust week | [Color] = Normal"
+
 ### HIGH
 
-**UX-1: Heat coloring has no legend or visual key**
-- When a user toggles Heat (H shortcut), cells turn green/red but there's no indicator explaining what the colors mean. A user seeing this for the first time has no context. A small legend or tooltip on the Heat button ("per-position percentile: green = elite, red = below average") would eliminate confusion.
+**UX-2: Boom/Bust grade badge unexplained**
+- **Feature**: Boom/Bust Analyzer (Phase 60)
+- **Issue**: Letter grade shown without explaining it measures consistency (inverse coefficient of variation).
+- **Fix**: Add subtitle: "Consistency Grade — week-to-week scoring stability"
 
-**UX-2: Heat button stays visible and active in college/prospect mode where results are sparse**
-- The Heat toggle works in all universes but college/prospect data has few numeric columns, making heat coloring mostly invisible. The button should either be hidden in non-NFL modes or show a tooltip noting limited data.
+**UX-3: Roster Value grade and status unexplained**
+- **Feature**: Roster Value Calculator (Phase 58)
+- **Issue**: Grade (A+ to F) and status (COMPETING/RETOOLING/REBUILDING) shown without criteria explanation.
+- **Fix**: Add brief tooltips or explainer text for grade and status criteria.
 
 ### MEDIUM
 
-**UX-3: No visual feedback when headshot fails to load (brief flash)**
-- When a headshot image fails to load, there's a brief flash of the broken-image placeholder before onerror fires. Setting a CSS background on the img element would make the transition seamless.
+**UX-4: Consistency score computed but not displayed**
+- **Feature**: Boom/Bust Analyzer (Phase 60)
+- **Issue**: Backend returns `consistency_score` (0-100) but UI only shows letter grade. Number would help cross-player comparison.
+- **Fix**: Add consistency score to stat cards row.
 
-**UX-4: Default Lab table column set may be too dense for first-time visitors**
-- A new user sees many columns on first load. Headshots help identify players but column density can overwhelm.
+**UX-5: Comp similarity % lacks methodology note**
+- **Feature**: Player Comp Finder (Phase 59)
+- **Issue**: "95% match" is prominent but unexplained. Users don't know it's cosine similarity on per-game stats.
+- **Fix**: Add Caveat annotation: "match = per-game stat profile similarity"
+
+**UX-6: Boom/bust definition placement**
+- **Feature**: Boom/Bust Analyzer (Phase 60)
+- **Issue**: Threshold definition in Caveat font reads as margin note rather than critical info.
+- **Fix**: Include thresholds in histogram legend for redundancy.
 
 ### LOW
 
-**UX-5: College/prospect initials headshots could confuse users who expect photos**
-- College players show position-colored initials. Consistent but no explanation for why NFL has photos and college doesn't.
+**UX-7: No season switcher for comps** — Nice-to-have, not blocking core flow.
+**UX-8: Trade Analyzer pick value chart may require scroll** — Minor friction.
 
 ---
 
@@ -85,14 +95,11 @@
 
 | Priority | Finding | Action |
 |----------|---------|--------|
-| CRITICAL | QA-1 | Escape all Sleeper API data in league-intel.html |
-| HIGH | QA-2 | Fix FILTER_COLUMN_MAP column names in live_data.py |
-| HIGH | UX-1 | Add heat coloring legend/tooltip |
-| HIGH | UX-2 | Disable/hide Heat in non-NFL modes or add tooltip |
-| MEDIUM | QA-3 | Cache Sleeper players response |
-| MEDIUM | QA-4 | Batch Sleeper transaction requests |
-| MEDIUM | QA-5 | Fix 1px borders in league-intel.html |
-| MEDIUM | UX-3 | Add CSS fallback background on headshot img |
-| LOW | QA-6 | Fix formatTimeAgo "0 min ago" |
-| LOW | QA-7, QA-8 | Dead code cleanup (grouped) |
-| LOW | UX-4, UX-5 | Polish notes (logged, not tasked) |
+| CRITICAL | QA-1, QA-2 | Escape all player names + error messages in renderPlayerComps/loadPlayerComps |
+| CRITICAL | UX-1 | Add histogram legend to Boom/Bust |
+| HIGH | QA-3 | Add negative limit guard on /comps endpoint |
+| HIGH | QA-4 | Remove redundant inline `import math` |
+| HIGH | UX-2 | Add grade explanation to Boom/Bust |
+| HIGH | UX-3 | Add grade/status explanation to Roster Value |
+| MEDIUM | QA-5, UX-4, UX-5, UX-6 | Grouped: design fix + consistency score display + comp annotation + definition redundancy |
+| LOW | QA-6, UX-7, UX-8 | Logged, not tasked |
