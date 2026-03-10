@@ -1,12 +1,57 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 21 (Migrate Database from Local SQLite to Turso)
-- All 5 tasks PASS
+- Phase: 22 (Stat Correlation Matrix)
+- All 3 tasks PASS
 - Stage: PHASE GATE
 - Next: Commit and push
 
-## Phase 21: Migrate Database from Local SQLite to Turso (Edge SQLite)
+## Phase 22: Stat Correlation Matrix
+**Exit Criterion**: New Lab panel "Correlations" shows a heat map grid of Pearson correlations between key fantasy stats (PPG, targets/g, carries/g, rec yd/g, rush yd/g, catch rate, YPC, TD rate, snap%, target share). Position and season filters. Click any cell to see a scatter plot of that stat pair. "Top Predictors" section shows which stats correlate most with fantasy PPG for each position. Canvas-drawn heat map with red (positive) / blue (negative) color scale. Razzle comic-strip design (chunky borders, sand bg, espresso ink).
+
+### Task 1: Backend API — /api/stat-correlations
+**Status**: PASS
+**Attempts**: 1
+**Acceptance Criteria**:
+- Endpoint returns correlation matrix for configurable stat list, filtered by position and season
+- Pearson correlation computed for all stat pairs
+- Returns top_predictors (stats most correlated with PPG) sorted by |r|
+- Returns scatter data for any requested stat pair
+- Min 30 player-seasons required for a valid correlation
+**Notes**: 13 stats, 1915 player-seasons (all), 785 for WR. Top predictor: TD/G (r=0.765). Scatter data works with position-colored dots.
+
+### Task 2: Frontend Lab panel — heat map + scatter + top predictors
+**Status**: PASS
+**Attempts**: 1
+**Acceptance Criteria**:
+- Canvas-drawn heat map grid with stat labels on axes
+- Red/blue diverging color scale (-1 to +1)
+- Click cell → scatter plot appears below with player dots (position-colored)
+- Position filter tabs (ALL, QB, RB, WR, TE)
+- Season selector dropdown
+- "Top Predictors of PPG" section with bar chart
+- Follows DESIGN.md: sand bg, chunky 3px borders, espresso ink, Space Mono for data
+- Registered in sidebar under "Performance" category
+**Notes**:
+
+### Task 3: Wire up, test end-to-end
+**Status**: PASS
+**Attempts**: 1
+**Acceptance Criteria**:
+- Panel loads without JS errors
+- Heat map renders with real data
+- Click-to-scatter works
+- Position filter changes data
+- No XSS, no unescaped user data
+- Panel appears in sidebar
+**Notes**:
+
+---
+
+## Phase 21: Migrate Database from Local SQLite to Turso (Edge SQLite) -- COMPLETE
+**Status**: All 5 tasks PASS
+
+## Phase 21 (Detail): Migrate Database from Local SQLite to Turso (Edge SQLite)
 **Exit Criterion**: All database reads/writes use Turso (libSQL) instead of local `data/terminal.db`. App reads `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN` from environment variables. Falls back to local SQLite if env vars are missing (for local dev). The `render.yaml` build command no longer runs adapter scripts to rebuild data on every deploy — data lives in Turso permanently. Add `libsql-experimental` to `requirements.txt`. Push the existing local `terminal.db` data up to Turso as a one-time migration step. All existing endpoints, panels, and queries work identically after the switch.
 
 ### Task 1: Add libsql-experimental to requirements.txt + create backend/db.py connection module

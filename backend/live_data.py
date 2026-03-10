@@ -14751,3 +14751,148 @@ def fetch_draft_class_tracker(draft_year=None, position=None):
         }
     finally:
         conn.close()
+
+
+# ---------------------------------------------------------------------------
+# Stat Correlation Matrix
+# ---------------------------------------------------------------------------
+
+_CORR_STATS = {
+    "ppg": ("SUM(s.fantasy_points_ppr) / COUNT(DISTINCT s.week)", "PPG"),
+    "tgt_g": ("SUM(s.targets) / COUNT(DISTINCT s.week)", "Tgt/G"),
+    "rec_g": ("SUM(s.receptions) / COUNT(DISTINCT s.week)", "Rec/G"),
+    "rec_yd_g": ("SUM(s.receiving_yards) / COUNT(DISTINCT s.week)", "Rec Yd/G"),
+    "car_g": ("SUM(s.carries) / COUNT(DISTINCT s.week)", "Car/G"),
+    "rush_yd_g": ("SUM(s.rushing_yards) / COUNT(DISTINCT s.week)", "Rush Yd/G"),
+    "pass_yd_g": ("SUM(s.passing_yards) / COUNT(DISTINCT s.week)", "Pass Yd/G"),
+    "td_g": ("SUM(s.touchdowns) / COUNT(DISTINCT s.week)", "TD/G"),
+    "catch_rate": ("CASE WHEN SUM(s.targets) > 0 THEN SUM(s.receptions) * 100.0 / SUM(s.targets) ELSE NULL END", "Catch%"),
+    "ypc": ("CASE WHEN SUM(s.carries) > 0 THEN SUM(s.rushing_yards) * 1.0 / SUM(s.carries) ELSE NULL END", "YPC"),
+    "ypr": ("CASE WHEN SUM(s.receptions) > 0 THEN SUM(s.receiving_yards) * 1.0 / SUM(s.receptions) ELSE NULL END", "YPR"),
+    "snap_pct": ("AVG(s.offense_pct)", "Snap%"),
+    "td_rate": ("CASE WHEN (SUM(s.carries) + SUM(s.targets)) > 0 THEN SUM(s.touchdowns) * 100.0 / (SUM(s.carries) + SUM(s.targets)) ELSE NULL END", "TD Rate"),
+}
+
+
+def fetch_stat_correlations(season=None, position=None, x_stat=None, y_stat=None):
+    """Compute Pearson correlations between fantasy stat pairs."""
+    conn = get_conn()
+    try:
+        # Build the season filter
+        where = ["p.position IN ('QB','RB','WR','TE')"]
+        params = []
+        if season:
+            where.append("s.season = ?")
+            params.append(int(season))
+        if position and position.upper() in FANTASY_POSITIONS:
+            where.append("p.position = ?")
+            params.append(position.upper())
+
+        where_clause = " AND ".join(where)
+
+        # Build SELECT for all stats
+        select_parts = []
+        stat_keys = list(_CORR_STATS.keys())
+        for key in stat_keys:
+            expr = _CORR_STATS[key][0]
+            select_parts.append(f"({expr}) as {key}")
+
+        query = f"""
+            SELECT p.player_id, p.full_name, p.position,
+                   {', '.join(select_parts)}
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE {where_clause}
+              AND s.season_type = 'regular'
+            GROUP BY s.player_id, s.season
+            HAVING COUNT(DISTINCT s.week) >= 6
+        """
+        rows = conn.execute(query, params).fetchall()
+
+        if len(rows) < 30:
+            return {"error": "Not enough data for correlations", "count": len(rows)}
+
+        # Extract stat arrays (skip NULLs)
+        stat_arrays = {k: [] for k in stat_keys}
+        player_data = []
+        for row in rows:
+            pid, name, pos = row[0], row[1], row[2]
+            vals = {}
+            for i, key in enumerate(stat_keys):
+                vals[key] = row[3 + i]
+            player_data.append({"pid": pid, "name": name, "pos": pos, "vals": vals})
+            for key in stat_keys:
+                stat_arrays[key].append(vals[key])
+
+        # Pearson correlation
+        def pearson(xs, ys):
+            pairs = [(x, y) for x, y in zip(xs, ys) if x is not None and y is not None]
+            n = len(pairs)
+            if n < 10:
+                return None
+            mx = sum(p[0] for p in pairs) / n
+            my = sum(p[1] for p in pairs) / n
+            sx = math.sqrt(sum((p[0] - mx) ** 2 for p in pairs))
+            sy = math.sqrt(sum((p[1] - my) ** 2 for p in pairs))
+            if sx == 0 or sy == 0:
+                return None
+            cov = sum((p[0] - mx) * (p[1] - my) for p in pairs)
+            return round(cov / (sx * sy), 3)
+
+        # Build correlation matrix
+        matrix = {}
+        for i, k1 in enumerate(stat_keys):
+            matrix[k1] = {}
+            for j, k2 in enumerate(stat_keys):
+                if i == j:
+                    matrix[k1][k2] = 1.0
+                elif j < i and k2 in matrix and k1 in matrix[k2]:
+                    matrix[k1][k2] = matrix[k2][k1]
+                else:
+                    matrix[k1][k2] = pearson(stat_arrays[k1], stat_arrays[k2])
+
+        # Top predictors of PPG
+        ppg_corrs = []
+        for key in stat_keys:
+            if key == "ppg":
+                continue
+            r = matrix["ppg"].get(key)
+            if r is not None:
+                ppg_corrs.append({"stat": key, "label": _CORR_STATS[key][1], "r": r, "abs_r": abs(r)})
+        ppg_corrs.sort(key=lambda x: x["abs_r"], reverse=True)
+
+        # Scatter data for specific pair
+        scatter = None
+        if x_stat and y_stat and x_stat in _CORR_STATS and y_stat in _CORR_STATS:
+            scatter = []
+            for pd in player_data:
+                xv = pd["vals"].get(x_stat)
+                yv = pd["vals"].get(y_stat)
+                if xv is not None and yv is not None:
+                    scatter.append({
+                        "name": pd["name"],
+                        "pos": pd["pos"],
+                        "x": round(xv, 2) if xv else 0,
+                        "y": round(yv, 2) if yv else 0,
+                    })
+
+        # Stat labels
+        labels = {k: v[1] for k, v in _CORR_STATS.items()}
+
+        # Available seasons
+        avail = conn.execute(
+            "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
+        ).fetchall()
+        available_seasons = [r[0] for r in avail]
+
+        return {
+            "stat_keys": stat_keys,
+            "labels": labels,
+            "matrix": matrix,
+            "top_predictors": ppg_corrs,
+            "scatter": scatter,
+            "sample_size": len(rows),
+            "available_seasons": available_seasons,
+        }
+    finally:
+        conn.close()

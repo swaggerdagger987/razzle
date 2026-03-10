@@ -1,6 +1,18 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 21 — Migrate Database from Local SQLite to Turso (COMPLETE)
+## Current Phase: Phase 22 — Stat Correlation Matrix (COMPLETE)
+
+**Exit Criterion MET**: New Lab panel "Correlations" under Performance category. Backend `/api/stat-correlations` computes Pearson correlations across 13 fantasy stats (PPG, Tgt/G, Rec/G, Rec Yd/G, Car/G, Rush Yd/G, Pass Yd/G, TD/G, Catch%, YPC, YPR, Snap%, TD Rate). Canvas heat map with red/blue diverging color scale. Click any cell → scatter plot with position-colored dots and trendline. "Top Predictors of Fantasy PPG" bar chart. Position filter tabs (ALL/QB/RB/WR/TE) and season selector. 1915 player-seasons sample. Chunky borders, sand bg, espresso ink per DESIGN.md.
+
+### Phase 22 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend API — /api/stat-correlations | DONE | 13 stats, Pearson r, position/season filters, scatter data, top predictors |
+| 2 | Frontend Lab panel — heat map + scatter | DONE | Canvas heat map, click-to-scatter, trendline, predictor bars |
+| 3 | Wire up + test end-to-end | DONE | Sidebar in Performance, JS syntax clean, no XSS, route registered |
+
+## Previous Phase: Phase 21 — Migrate Database from Local SQLite to Turso (COMPLETE)
 
 **Exit Criterion MET**: All database reads/writes use Turso (libSQL) via `backend/db.py` connection module. `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN` env vars control production connection. Falls back to local SQLite when env vars are missing. `render.yaml` no longer runs adapter scripts on deploy. Migration script at `scripts/push_to_turso.py` handles one-time data upload. All endpoints verified working with local fallback.
 

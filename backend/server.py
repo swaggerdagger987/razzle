@@ -2011,6 +2011,20 @@ def tools_hub():
 
 
 # ---------------------------------------------------------------------------
+# Stat Correlation Matrix
+# ---------------------------------------------------------------------------
+
+@app.get("/api/stat-correlations")
+def stat_correlations(season: int = 0, position: str = "", x_stat: str = "", y_stat: str = ""):
+    """Return Pearson correlation matrix between fantasy stats."""
+    s = season if season > 0 else None
+    pos = position.strip().upper() if position else None
+    xs = x_stat.strip() if x_stat else None
+    ys = y_stat.strip() if y_stat else None
+    return live_data.fetch_stat_correlations(season=s, position=pos, x_stat=xs, y_stat=ys)
+
+
+# ---------------------------------------------------------------------------
 # Serve frontend as static files (catch-all for SPA-like behavior)
 # ---------------------------------------------------------------------------
 

@@ -9094,4 +9094,300 @@
     loadData();
   }});
 
+  // =========================================================================
+  // CORRELATIONS — Stat Correlation Matrix
+  // =========================================================================
+  defs.push({ name: 'correlations', render: function(el) {
+    var panelState = { season: 0, position: '', selectedCell: null };
+
+    el.innerHTML =
+      '<div class="lp-page">' +
+        '<div class="lp-header"><h2>Stat Correlation Matrix</h2>' +
+        '<div class="lp-subtitle">which stats actually predict fantasy points?</div></div>' +
+        '<div class="lp-controls">' +
+          '<select class="corr-season lp-select" style="margin-right:8px"><option value="0">All Seasons</option></select>' +
+          '<div class="lp-pos-tabs" id="corr-pos-tabs">' +
+            '<button class="lp-pos-tab active" data-pos="">ALL</button>' +
+            '<button class="lp-pos-tab" data-pos="QB">QB</button>' +
+            '<button class="lp-pos-tab" data-pos="RB">RB</button>' +
+            '<button class="lp-pos-tab" data-pos="WR">WR</button>' +
+            '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
+          '</div>' +
+        '</div>' +
+        '<div id="corr-content"><div class="lp-loading">running the numbers...</div></div>' +
+      '</div>';
+
+    function loadData() {
+      var content = el.querySelector('#corr-content');
+      content.innerHTML = '<div class="lp-loading">running the numbers...</div>';
+      var url = '/api/stat-correlations?season=' + panelState.season + '&position=' + encodeURIComponent(panelState.position);
+      if (panelState.selectedCell) {
+        url += '&x_stat=' + panelState.selectedCell.x + '&y_stat=' + panelState.selectedCell.y;
+      }
+      fetch(url).then(function(r) {
+        if (!r.ok) throw new Error('API error');
+        return r.json();
+      }).then(function(data) {
+        if (data.error) {
+          content.innerHTML = '<div class="lp-error">' + escapeHtml(data.error) + '</div>';
+          return;
+        }
+        renderCorrelations(data, content);
+        // Populate season selector
+        var sel = el.querySelector('.corr-season');
+        if (sel.options.length <= 1 && data.available_seasons) {
+          data.available_seasons.forEach(function(s) {
+            var opt = document.createElement('option');
+            opt.value = s; opt.textContent = s;
+            sel.appendChild(opt);
+          });
+        }
+      }).catch(function() {
+        content.innerHTML = '<div class="lp-error">could not load correlations</div>';
+      });
+    }
+
+    function corrColor(r) {
+      if (r === null || r === undefined) return '#f7efe5';
+      var abs = Math.min(Math.abs(r), 1);
+      var intensity = Math.round(abs * 200);
+      if (r > 0) return 'rgb(' + (255 - intensity * 0.3) + ',' + (240 - intensity * 0.7) + ',' + (240 - intensity * 0.9) + ')';
+      return 'rgb(' + (240 - intensity * 0.9) + ',' + (240 - intensity * 0.7) + ',' + (255 - intensity * 0.3) + ')';
+    }
+
+    function renderCorrelations(data, content) {
+      var keys = data.stat_keys || [];
+      var labels = data.labels || {};
+      var matrix = data.matrix || {};
+      var predictors = data.top_predictors || [];
+
+      var html = '';
+
+      // Top predictors of PPG
+      html += '<div class="corr-section">';
+      html += '<h3 class="corr-section-title">Top Predictors of Fantasy PPG</h3>';
+      html += '<div class="corr-predictors">';
+      predictors.forEach(function(p) {
+        var pct = Math.round(Math.abs(p.r) * 100);
+        var color = p.r > 0 ? '#2ec4b6' : '#e63946';
+        html += '<div class="corr-pred-row">' +
+          '<span class="corr-pred-label">' + escapeHtml(p.label) + '</span>' +
+          '<div class="corr-pred-bar-bg">' +
+            '<div class="corr-pred-bar" style="width:' + pct + '%;background:' + color + '"></div>' +
+          '</div>' +
+          '<span class="corr-pred-val" style="color:' + color + '">' + (p.r > 0 ? '+' : '') + p.r.toFixed(2) + '</span>' +
+        '</div>';
+      });
+      html += '</div></div>';
+
+      // Heat map (canvas)
+      var cellSize = 52;
+      var labelW = 70;
+      var canvasW = labelW + keys.length * cellSize + 10;
+      var canvasH = labelW + keys.length * cellSize + 10;
+      html += '<div class="corr-section">';
+      html += '<h3 class="corr-section-title">Correlation Matrix</h3>';
+      html += '<div class="corr-hint" style="font-family:var(--font-hand,Caveat,cursive);font-size:18px;color:var(--ink-light,#8a7565);margin-bottom:8px">click a cell to see the scatter plot</div>';
+      html += '<div class="corr-heatmap-wrap" style="overflow-x:auto">';
+      html += '<canvas id="corr-heatmap" width="' + canvasW + '" height="' + canvasH + '" style="cursor:pointer"></canvas>';
+      html += '</div></div>';
+
+      // Scatter plot placeholder
+      html += '<div class="corr-section" id="corr-scatter-section" style="display:none">';
+      html += '<h3 class="corr-section-title" id="corr-scatter-title">Scatter Plot</h3>';
+      html += '<div class="corr-scatter-wrap"><canvas id="corr-scatter" width="600" height="400"></canvas></div>';
+      html += '</div>';
+
+      // Sample size
+      html += '<div class="corr-sample" style="text-align:center;font-family:var(--font-mono,monospace);font-size:11px;color:var(--ink-light,#8a7565);margin-top:12px">n = ' + (data.sample_size || 0) + ' player-seasons</div>';
+
+      content.innerHTML = html;
+
+      // Draw heat map
+      var canvas = el.querySelector('#corr-heatmap');
+      if (!canvas) return;
+      var ctx = canvas.getContext('2d');
+      var dpr = window.devicePixelRatio || 1;
+      canvas.width = canvasW * dpr;
+      canvas.height = canvasH * dpr;
+      canvas.style.width = canvasW + 'px';
+      canvas.style.height = canvasH + 'px';
+      ctx.scale(dpr, dpr);
+
+      // Draw cells
+      keys.forEach(function(k1, i) {
+        keys.forEach(function(k2, j) {
+          var r = matrix[k1] ? matrix[k1][k2] : null;
+          var x = labelW + j * cellSize;
+          var y = labelW + i * cellSize;
+          ctx.fillStyle = corrColor(r);
+          ctx.fillRect(x, y, cellSize - 2, cellSize - 2);
+          ctx.strokeStyle = '#ede0cf';
+          ctx.lineWidth = 2;
+          ctx.strokeRect(x, y, cellSize - 2, cellSize - 2);
+          // Value text
+          if (r !== null && r !== undefined) {
+            ctx.fillStyle = Math.abs(r) > 0.5 ? '#fff' : '#2d1f14';
+            ctx.font = 'bold 11px "Space Mono", monospace';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(r.toFixed(2), x + (cellSize - 2) / 2, y + (cellSize - 2) / 2);
+          }
+        });
+      });
+
+      // Row labels (left)
+      ctx.fillStyle = '#2d1f14';
+      ctx.font = 'bold 11px "Space Mono", monospace';
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+      keys.forEach(function(k, i) {
+        ctx.fillText(labels[k] || k, labelW - 6, labelW + i * cellSize + (cellSize - 2) / 2);
+      });
+
+      // Column labels (top, rotated)
+      keys.forEach(function(k, j) {
+        ctx.save();
+        ctx.translate(labelW + j * cellSize + (cellSize - 2) / 2, labelW - 6);
+        ctx.rotate(-Math.PI / 4);
+        ctx.fillStyle = '#2d1f14';
+        ctx.font = 'bold 11px "Space Mono", monospace';
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(labels[k] || k, 0, 0);
+        ctx.restore();
+      });
+
+      // Click handler for heat map cells
+      canvas.addEventListener('click', function(e) {
+        var rect = canvas.getBoundingClientRect();
+        var mx = (e.clientX - rect.left);
+        var my = (e.clientY - rect.top);
+        var col = Math.floor((mx - labelW) / cellSize);
+        var row = Math.floor((my - labelW) / cellSize);
+        if (col >= 0 && col < keys.length && row >= 0 && row < keys.length && col !== row) {
+          panelState.selectedCell = { x: keys[col], y: keys[row] };
+          loadData();
+        }
+      });
+
+      // Scatter plot if data present
+      if (data.scatter && data.scatter.length > 0 && panelState.selectedCell) {
+        var scatterSection = el.querySelector('#corr-scatter-section');
+        scatterSection.style.display = 'block';
+        var xKey = panelState.selectedCell.x;
+        var yKey = panelState.selectedCell.y;
+        var xLabel = labels[xKey] || xKey;
+        var yLabel = labels[yKey] || yKey;
+        var r = matrix[yKey] ? matrix[yKey][xKey] : null;
+        el.querySelector('#corr-scatter-title').textContent = xLabel + ' vs ' + yLabel + (r !== null ? ' (r = ' + r.toFixed(2) + ')' : '');
+
+        var sc = el.querySelector('#corr-scatter');
+        var sctx = sc.getContext('2d');
+        var sW = 600, sH = 400;
+        sc.width = sW * dpr;
+        sc.height = sH * dpr;
+        sc.style.width = sW + 'px';
+        sc.style.height = sH + 'px';
+        sctx.scale(dpr, dpr);
+
+        var pad = { t: 30, r: 30, b: 40, l: 55 };
+        var cw = sW - pad.l - pad.r, ch = sH - pad.t - pad.b;
+        var pts = data.scatter;
+        var xMin = Infinity, xMax = -Infinity, yMin = Infinity, yMax = -Infinity;
+        pts.forEach(function(p) {
+          if (p.x < xMin) xMin = p.x; if (p.x > xMax) xMax = p.x;
+          if (p.y < yMin) yMin = p.y; if (p.y > yMax) yMax = p.y;
+        });
+        var xRange = xMax - xMin || 1;
+        var yRange = yMax - yMin || 1;
+        xMin -= xRange * 0.05; xMax += xRange * 0.05;
+        yMin -= yRange * 0.05; yMax += yRange * 0.05;
+        xRange = xMax - xMin; yRange = yMax - yMin;
+
+        // Grid
+        sctx.strokeStyle = '#e5d5c3'; sctx.lineWidth = 1;
+        for (var g = 0; g <= 4; g++) {
+          var gy = pad.t + ch - (g / 4) * ch;
+          sctx.beginPath(); sctx.moveTo(pad.l, gy); sctx.lineTo(pad.l + cw, gy); sctx.stroke();
+          sctx.fillStyle = '#8a7565'; sctx.font = '10px "Space Mono", monospace'; sctx.textAlign = 'right';
+          sctx.fillText(fmt(yMin + (g / 4) * yRange), pad.l - 5, gy + 3);
+        }
+        for (var g = 0; g <= 4; g++) {
+          var gx = pad.l + (g / 4) * cw;
+          sctx.beginPath(); sctx.moveTo(gx, pad.t); sctx.lineTo(gx, pad.t + ch); sctx.stroke();
+          sctx.fillStyle = '#8a7565'; sctx.font = '10px "Space Mono", monospace'; sctx.textAlign = 'center';
+          sctx.fillText(fmt(xMin + (g / 4) * xRange), gx, pad.t + ch + 16);
+        }
+
+        // Dots
+        pts.forEach(function(p) {
+          var px = pad.l + ((p.x - xMin) / xRange) * cw;
+          var py = pad.t + ch - ((p.y - yMin) / yRange) * ch;
+          var color = POS_COLORS[p.pos] || '#8a7565';
+          sctx.beginPath();
+          sctx.arc(px, py, 4, 0, Math.PI * 2);
+          sctx.fillStyle = color + 'cc';
+          sctx.fill();
+          sctx.strokeStyle = color;
+          sctx.lineWidth = 1;
+          sctx.stroke();
+        });
+
+        // Axis labels
+        sctx.fillStyle = '#2d1f14'; sctx.font = 'bold 12px "Space Mono", monospace';
+        sctx.textAlign = 'center';
+        sctx.fillText(xLabel, pad.l + cw / 2, sH - 5);
+        sctx.save();
+        sctx.translate(14, pad.t + ch / 2);
+        sctx.rotate(-Math.PI / 2);
+        sctx.fillText(yLabel, 0, 0);
+        sctx.restore();
+
+        // Trendline
+        if (pts.length > 5) {
+          var sx = 0, sy = 0, sxy = 0, sx2 = 0, n = pts.length;
+          pts.forEach(function(p) { sx += p.x; sy += p.y; sxy += p.x * p.y; sx2 += p.x * p.x; });
+          var slope = (n * sxy - sx * sy) / (n * sx2 - sx * sx);
+          var intercept = (sy - slope * sx) / n;
+          if (isFinite(slope) && isFinite(intercept)) {
+            var x1 = xMin, y1 = slope * x1 + intercept;
+            var x2 = xMax, y2 = slope * x2 + intercept;
+            var px1 = pad.l + ((x1 - xMin) / xRange) * cw;
+            var py1 = pad.t + ch - ((y1 - yMin) / yRange) * ch;
+            var px2 = pad.l + ((x2 - xMin) / xRange) * cw;
+            var py2 = pad.t + ch - ((y2 - yMin) / yRange) * ch;
+            sctx.beginPath();
+            sctx.moveTo(px1, py1);
+            sctx.lineTo(px2, py2);
+            sctx.strokeStyle = '#d97757';
+            sctx.lineWidth = 2;
+            sctx.setLineDash([6, 4]);
+            sctx.stroke();
+            sctx.setLineDash([]);
+          }
+        }
+      }
+    }
+
+    // Season selector
+    el.querySelector('.corr-season').addEventListener('change', function() {
+      panelState.season = parseInt(this.value) || 0;
+      panelState.selectedCell = null;
+      loadData();
+    });
+
+    // Position tabs
+    el.querySelector('#corr-pos-tabs').addEventListener('click', function(e) {
+      if (!e.target.classList.contains('lp-pos-tab')) return;
+      el.querySelectorAll('#corr-pos-tabs .lp-pos-tab').forEach(function(t) { t.classList.remove('active'); });
+      e.target.classList.add('active');
+      panelState.position = e.target.dataset.pos || '';
+      panelState.selectedCell = null;
+      loadData();
+    });
+
+    loadData();
+  }});
+
 })();
