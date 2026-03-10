@@ -1,8 +1,30 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 34 (Backend Hardening: Production Config + Smoke Tests)
-## Phase 34: Backend Hardening: Production Config + Smoke Tests
+- Phase: 35 (QA + UX Audit — Fixes for Phases 31-34)
+## Phase 35: QA + UX Audit — Fixes for Phases 31-34
+**Exit Criterion**: All HIGH findings from QA audit resolved. MEDIUM findings addressed where practical.
+
+- Task 1: PENDING
+- Task 2: PENDING
+- Task 3: PENDING
+
+### Task 1: Fix HIGH — server.py error handlers need stack traces
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: All `logger.error(f"... error: {e}")` in server.py replaced with `logger.exception()`. Stack traces visible in production logs.
+
+### Task 2: Fix HIGH — trade_pick_values hardcoded year default + LOW OG tag default
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: trade_pick_values endpoint uses dynamic default. OG tag default season uses _current_nfl_season.
+
+### Task 3: Fix MEDIUM — redundant defaultdict imports in tools.py
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: Local `from collections import defaultdict` removed from tools.py closures. Global import used instead.
+
+## Phase 34: Backend Hardening: Production Config + Smoke Tests (COMPLETE)
 **Exit Criterion**: render.yaml sets ENVIRONMENT=production. pytest installed. Smoke tests cover all API endpoints (health, players, filter-options, featured, and at least 15 panel endpoints). Tests run clean with local DB.
 
 - Task 1: PASS

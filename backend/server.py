@@ -1192,7 +1192,7 @@ def stat_leaders(season: int = 0, position: str = "", limit: int = 10):
     try:
         return live_data.fetch_stat_leaders(season=s, position=pos, limit=limit)
     except Exception as e:
-        logger.error(f"stat-leaders error: {e}")
+        logger.exception("stat-leaders error")
         return JSONResponse({"error": "Failed to fetch stat leaders"}, status_code=500)
 
 
@@ -1255,7 +1255,7 @@ def aging_curves(season: int = 0, position: str = ""):
         pos = position.upper() if position else None
         return live_data.fetch_aging_curves(season=s, position=pos)
     except Exception as e:
-        logger.error(f"aging_curves error: {e}")
+        logger.exception("aging_curves error")
         return JSONResponse({"error": "Failed to fetch aging curves"}, status_code=500)
 
 
@@ -1267,7 +1267,7 @@ def weekly_heatmap(season: int = 0, position: str = "", limit: int = 40):
         pos = position.upper() if position else None
         return live_data.fetch_weekly_heatmap(season=s, position=pos, limit=max(1, min(limit, 50)))
     except Exception as e:
-        logger.error(f"weekly_heatmap error: {e}")
+        logger.exception("weekly_heatmap error")
         return JSONResponse({"error": "Failed to fetch weekly heatmap"}, status_code=500)
 
 
@@ -1279,7 +1279,7 @@ def target_distribution(season: int = 0, team: str = ""):
         t = team.upper() if team else None
         return live_data.fetch_target_distribution(season=s, team=t)
     except Exception as e:
-        logger.error(f"target_distribution error: {e}")
+        logger.exception("target_distribution error")
         return JSONResponse({"error": "Failed to fetch target distribution"}, status_code=500)
 
 
@@ -1291,7 +1291,7 @@ def matchup_heatmap(season: int = 0, position: str = ""):
         pos = position.upper() if position else None
         return live_data.fetch_matchup_heatmap(season=s, position=pos)
     except Exception as e:
-        logger.error(f"matchup_heatmap error: {e}")
+        logger.exception("matchup_heatmap error")
         return JSONResponse({"error": "Failed to fetch matchup heatmap"}, status_code=500)
 
 
@@ -1305,7 +1305,7 @@ def usage_trends(season: int = 0, position: str = "", window: int = 5, limit: in
         lim = max(1, min(limit, 50))
         return live_data.fetch_usage_trends(season=s, position=pos, window=w, limit=lim)
     except Exception as e:
-        logger.error(f"usage_trends error: {e}")
+        logger.exception("usage_trends error")
         return JSONResponse({"error": "Failed to fetch usage trends"}, status_code=500)
 
 
@@ -1319,7 +1319,7 @@ def year_over_year(season: int = 0, position: str = "", metric: str = "ppg", lim
         lim = max(1, min(limit, 50))
         return live_data.fetch_year_over_year(season=s, position=pos, metric=m, limit=lim)
     except Exception as e:
-        logger.error(f"year_over_year error: {e}")
+        logger.exception("year_over_year error")
         return JSONResponse({"error": "Failed to fetch year-over-year data"}, status_code=500)
 
 
@@ -1331,7 +1331,7 @@ def stat_explorer(season: int = 0, position: str = "", x_stat: str = "targets_g"
         pos = position.upper() if position else None
         return live_data.fetch_stat_explorer(season=s, position=pos, x_stat=x_stat, y_stat=y_stat)
     except Exception as e:
-        logger.error(f"stat_explorer error: {e}")
+        logger.exception("stat_explorer error")
         return JSONResponse({"error": "Failed to fetch explorer data"}, status_code=500)
 
 
@@ -1344,7 +1344,7 @@ def air_yards(season: int = 0, position: str = "", limit: int = 25):
         lim = max(1, min(limit, 50))
         return live_data.fetch_air_yards(season=s, position=pos, limit=lim)
     except Exception as e:
-        logger.error(f"air_yards error: {e}")
+        logger.exception("air_yards error")
         return JSONResponse({"error": "Failed to fetch air yards data"}, status_code=500)
 
 
@@ -1357,7 +1357,7 @@ def redzone_usage(season: int = 0, position: str = "", limit: int = 30):
         lim = max(1, min(limit, 50))
         return live_data.fetch_redzone_usage(season=s, position=pos, limit=lim)
     except Exception as e:
-        logger.error(f"redzone_usage error: {e}")
+        logger.exception("redzone_usage error")
         return JSONResponse({"error": "Failed to fetch red zone data"}, status_code=500)
 
 
@@ -1370,7 +1370,7 @@ def efficiency_rankings(season: int = 0, position: str = "", limit: int = 30):
         lim = max(1, min(limit, 50))
         return live_data.fetch_efficiency_rankings(season=s, position=pos, limit=lim)
     except Exception as e:
-        logger.error(f"efficiency_rankings error: {e}")
+        logger.exception("efficiency_rankings error")
         return JSONResponse({"error": "Failed to fetch efficiency data"}, status_code=500)
 
 
@@ -1383,7 +1383,7 @@ def consistency_rankings(season: int = 0, position: str = "", limit: int = 30):
         lim = max(1, min(limit, 50))
         return live_data.fetch_consistency_rankings(season=s, position=pos, limit=lim)
     except Exception as e:
-        logger.error(f"consistency_rankings error: {e}")
+        logger.exception("consistency_rankings error")
         return JSONResponse({"error": "Failed to fetch consistency data"}, status_code=500)
 
 
@@ -1396,7 +1396,7 @@ def strength_of_schedule(season: int = 0, position: str = "", limit: int = 30):
         lim = max(1, min(limit, 50))
         return live_data.fetch_strength_of_schedule(season=s, position=pos, limit=lim)
     except Exception as e:
-        logger.error(f"strength_of_schedule error: {e}")
+        logger.exception("strength_of_schedule error")
         return JSONResponse({"error": "Failed to fetch strength of schedule data"}, status_code=500)
 
 
@@ -1409,7 +1409,7 @@ def stock_watch(season: int = 0, position: str = "", limit: int = 30):
         lim = max(1, min(limit, 50))
         return live_data.fetch_stock_watch(season=s, position=pos, limit=lim)
     except Exception as e:
-        logger.error(f"stock_watch error: {e}")
+        logger.exception("stock_watch error")
         return JSONResponse({"error": "Failed to fetch stock watch data"}, status_code=500)
 
 
@@ -1422,7 +1422,7 @@ def opportunity_share(season: int = 0, position: str = "", limit: int = 30):
         lim = max(1, min(limit, 50))
         return live_data.fetch_opportunity_share(season=s, position=pos, limit=lim)
     except Exception as e:
-        logger.error(f"opportunity_share error: {e}")
+        logger.exception("opportunity_share error")
         return JSONResponse({"error": "Failed to fetch opportunity share data"}, status_code=500)
 
 
@@ -1435,7 +1435,7 @@ def report_cards(season: int = 0, position: str = "", limit: int = 25):
         lim = max(1, min(limit, 50))
         return live_data.fetch_report_cards(season=s, position=pos, limit=lim)
     except Exception as e:
-        logger.error(f"report_cards error: {e}")
+        logger.exception("report_cards error")
         return JSONResponse({"error": "Failed to fetch report card data"}, status_code=500)
 
 
@@ -1447,7 +1447,7 @@ def season_awards(season: int = 0, position: str = ""):
         pos = position.upper() if position else None
         return live_data.fetch_season_awards(season=s, position=pos)
     except Exception as e:
-        logger.error(f"season_awards error: {e}")
+        logger.exception("season_awards error")
         return JSONResponse({"error": "Failed to fetch season awards data"}, status_code=500)
 
 
@@ -1459,7 +1459,7 @@ def vorp(season: int = 0, position: str = "", limit: int = 30):
         pos = position.upper() if position else None
         return live_data.fetch_vorp(season=s, position=pos, limit=limit)
     except Exception as e:
-        logger.error(f"vorp error: {e}")
+        logger.exception("vorp error")
         return JSONResponse({"error": "Failed to fetch VORP data"}, status_code=500)
 
 
@@ -1477,7 +1477,7 @@ def trade_value_chart(season: int = 0, position: str = "", limit: int = 150):
         pos = position.upper() if position else None
         return live_data.fetch_trade_value_chart(season=s, position=pos, limit=limit)
     except Exception as e:
-        logger.error(f"trade-value-chart error: {e}")
+        logger.exception("trade-value-chart error")
         return JSONResponse({"error": "Failed to fetch trade value chart"}, status_code=500)
 
 
@@ -1490,7 +1490,7 @@ def trade_finder(player_id: str = "", season: int = 0):
         s = season if season > 0 else None
         return live_data.fetch_trade_finder(player_id=player_id, season=s)
     except Exception as e:
-        logger.error(f"trade-finder error: {e}")
+        logger.exception("trade-finder error")
         return JSONResponse({"error": "Failed to fetch trade finder data"}, status_code=500)
 
 
@@ -1502,7 +1502,7 @@ def cheat_sheet(season: int = 0, format: str = "ppr"):
         fmt = format if format in ("ppr", "half", "std") else "ppr"
         return live_data.fetch_cheat_sheet(season=s, fmt=fmt)
     except Exception as e:
-        logger.error(f"cheat-sheet error: {e}")
+        logger.exception("cheat-sheet error")
         return JSONResponse({"error": "Failed to fetch cheat sheet"}, status_code=500)
 
 
@@ -1514,7 +1514,7 @@ def scoring_comparison(season: int = 0, position: str = ""):
         pos = position if position else None
         return live_data.fetch_scoring_comparison(season=s, position=pos)
     except Exception as e:
-        logger.error(f"scoring-comparison error: {e}")
+        logger.exception("scoring-comparison error")
         return JSONResponse({"error": "Failed to fetch scoring comparison"}, status_code=500)
 
 
@@ -1533,7 +1533,7 @@ async def roster_grade(request: Request):
             return JSONResponse({"error": "No valid player IDs provided"}, status_code=400)
         return live_data.fetch_roster_grade(player_ids=player_ids, season=season)
     except Exception as e:
-        logger.error(f"roster-grade error: {e}")
+        logger.exception("roster-grade error")
         return JSONResponse({"error": "Failed to grade roster"}, status_code=500)
 
 
@@ -1544,7 +1544,7 @@ def auction_values(season: int = 0, budget: int = 200, roster_size: int = 15):
         s = season if season > 0 else None
         return live_data.fetch_auction_values(season=s, budget=budget, roster_size=roster_size)
     except Exception as e:
-        logger.error(f"auction-values error: {e}")
+        logger.exception("auction-values error")
         return JSONResponse({"error": "Failed to fetch auction values"}, status_code=500)
 
 
@@ -1556,7 +1556,7 @@ def tier_list(season: int = 0, position: str = ""):
         pos = position if position else None
         return live_data.fetch_tier_list(season=s, position=pos)
     except Exception as e:
-        logger.error(f"tier-list error: {e}")
+        logger.exception("tier-list error")
         return JSONResponse({"error": "Failed to fetch tier list"}, status_code=500)
 
 
@@ -1568,7 +1568,7 @@ def player_archetypes(season: int = 0, position: str = ""):
         pos = position if position else None
         return live_data.fetch_player_archetypes(season=s, position=pos)
     except Exception as e:
-        logger.error(f"player-archetypes error: {e}")
+        logger.exception("player-archetypes error")
         return JSONResponse({"error": "Failed to fetch player archetypes"}, status_code=500)
 
 
@@ -1579,7 +1579,7 @@ def dynasty_dashboard(season: int = 0):
         s = season if season > 0 else None
         return live_data.fetch_dynasty_dashboard(season=s)
     except Exception as e:
-        logger.error(f"dynasty-dashboard error: {e}")
+        logger.exception("dynasty-dashboard error")
         return JSONResponse({"error": "Failed to fetch dynasty dashboard"}, status_code=500)
 
 
@@ -1591,7 +1591,7 @@ def career_stats(player_id: str = ""):
             return JSONResponse({"error": "player_id is required"}, status_code=400)
         return live_data.fetch_career_stats(player_id)
     except Exception as e:
-        logger.error(f"career-stats error: {e}")
+        logger.exception("career-stats error")
         return JSONResponse({"error": "Failed to fetch career stats"}, status_code=500)
 
 
@@ -1604,7 +1604,7 @@ def player_percentiles(player_id: str = "", season: int = 0):
         s = season if season > 0 else None
         return live_data.fetch_player_percentiles(player_id, season=s)
     except Exception as e:
-        logger.error(f"player-percentiles error: {e}")
+        logger.exception("player-percentiles error")
         return JSONResponse({"error": "Failed to fetch player percentiles"}, status_code=500)
 
 
@@ -1616,7 +1616,7 @@ def draft_class(year: int = 0, position: str = ""):
         pos = position if position else None
         return live_data.fetch_draft_class(draft_year=yr, position=pos)
     except Exception as e:
-        logger.error(f"draft-class error: {e}")
+        logger.exception("draft-class error")
         return JSONResponse({"error": "Failed to fetch draft class"}, status_code=500)
 
 
@@ -1629,7 +1629,7 @@ def weekly_leaders(season: int = 0, week: int = 0, position: str = ""):
         pos = position if position else None
         return live_data.fetch_weekly_leaders(season=s, week=w, position=pos)
     except Exception as e:
-        logger.error(f"weekly-leaders error: {e}")
+        logger.exception("weekly-leaders error")
         return JSONResponse({"error": "Failed to fetch weekly leaders"}, status_code=500)
 
 
@@ -1642,7 +1642,7 @@ def points_breakdown(player_id: str = "", season: int = 0):
         s = season if season > 0 else None
         return live_data.fetch_points_breakdown(player_id=player_id, season=s)
     except Exception as e:
-        logger.error(f"points-breakdown error: {e}")
+        logger.exception("points-breakdown error")
         return JSONResponse({"error": "Failed to fetch points breakdown"}, status_code=500)
 
 
@@ -1655,7 +1655,7 @@ def player_strengths(player_id: str = "", season: int = 0):
         s = season if season > 0 else None
         return live_data.fetch_player_strengths(player_id=player_id, season=s)
     except Exception as e:
-        logger.error(f"player-strengths error: {e}")
+        logger.exception("player-strengths error")
         return JSONResponse({"error": "Failed to fetch player strengths"}, status_code=500)
 
 
@@ -1667,7 +1667,7 @@ def td_regression(season: int = 0, position: str = ""):
         pos = position if position else None
         return live_data.fetch_td_regression(season=s, position=pos)
     except Exception as e:
-        logger.error(f"td-regression error: {e}")
+        logger.exception("td-regression error")
         return JSONResponse({"error": "Failed to fetch TD regression"}, status_code=500)
 
 
@@ -1679,7 +1679,7 @@ def pace_tracker(season: int = 0, position: str = ""):
         pos = position if position else None
         return live_data.fetch_pace_tracker(season=s, position=pos)
     except Exception as e:
-        logger.error(f"pace-tracker error: {e}")
+        logger.exception("pace-tracker error")
         return JSONResponse({"error": "Failed to fetch pace tracker"}, status_code=500)
 
 
@@ -1692,7 +1692,7 @@ def game_log(player_id: str = "", season: int = 0):
         s = season if season > 0 else None
         return live_data.fetch_game_log(player_id=player_id, season=s)
     except Exception as e:
-        logger.error(f"game-log error: {e}")
+        logger.exception("game-log error")
         return JSONResponse({"error": "Failed to fetch game log"}, status_code=500)
 
 
@@ -1705,7 +1705,7 @@ def streaks(season: int = 0, position: str = "", window: int = 4):
         w = window if window > 0 else 4
         return live_data.fetch_streaks(season=s, position=pos, window=w)
     except Exception as e:
-        logger.error(f"streaks error: {e}")
+        logger.exception("streaks error")
         return JSONResponse({"error": "Failed to fetch streaks"}, status_code=500)
 
 
@@ -1716,7 +1716,7 @@ def season_recap(season: int = 0):
         s = season if season > 0 else None
         return live_data.fetch_season_recap(season=s)
     except Exception as e:
-        logger.error(f"season-recap error: {e}")
+        logger.exception("season-recap error")
         return JSONResponse({"error": "Failed to fetch season recap"}, status_code=500)
 
 
@@ -1732,7 +1732,7 @@ def compare_table(players: str = "", season: int = 0):
         s = season if season > 0 else None
         return live_data.fetch_compare_table(player_ids=pids, season=s)
     except Exception as e:
-        logger.error(f"compare-table error: {e}")
+        logger.exception("compare-table error")
         return JSONResponse({"error": "Failed to fetch comparison data"}, status_code=500)
 
 
@@ -1743,7 +1743,7 @@ def records(position: str = ""):
         pos = position if position else None
         return live_data.fetch_records(position=pos)
     except Exception as e:
-        logger.error(f"records error: {e}")
+        logger.exception("records error")
         return JSONResponse({"error": "Failed to fetch records"}, status_code=500)
 
 
@@ -1753,7 +1753,7 @@ def workload_monitor(season: int = None, position: str = None):
         pos = position.upper() if position else None
         return live_data.fetch_workload_monitor(season=season, position=pos)
     except Exception as e:
-        logger.error(f"workload-monitor error: {e}")
+        logger.exception("workload-monitor error")
         return JSONResponse({"error": "Failed to fetch workload data"}, status_code=500)
 
 
@@ -1763,7 +1763,7 @@ def drop_rate(season: int = None, position: str = None):
         pos = position.upper() if position else None
         return live_data.fetch_drop_rate(season=season, position=pos)
     except Exception as e:
-        logger.error(f"drop-rate error: {e}")
+        logger.exception("drop-rate error")
         return JSONResponse({"error": "Failed to fetch drop rate data"}, status_code=500)
 
 
@@ -1773,7 +1773,7 @@ def success_rate(season: int = None, position: str = None):
         pos = position.upper() if position else None
         return live_data.fetch_success_rate(season=season, position=pos)
     except Exception as e:
-        logger.error(f"success-rate error: {e}")
+        logger.exception("success-rate error")
         return JSONResponse({"error": "Failed to fetch success rate data"}, status_code=500)
 
 
@@ -1783,7 +1783,7 @@ def game_script(season: int = None, position: str = None):
         pos = position.upper() if position else None
         return live_data.fetch_game_script(season=season, position=pos)
     except Exception as e:
-        logger.error(f"game-script error: {e}")
+        logger.exception("game-script error")
         return JSONResponse({"error": "Failed to fetch game script data"}, status_code=500)
 
 
@@ -1793,7 +1793,7 @@ def target_premium(season: int = None, position: str = None):
         pos = position.upper() if position else None
         return live_data.fetch_target_premium(season=season, position=pos)
     except Exception as e:
-        logger.error(f"target-premium error: {e}")
+        logger.exception("target-premium error")
         return JSONResponse({"error": "Failed to fetch target premium"}, status_code=500)
 
 
@@ -1803,7 +1803,7 @@ def season_pace(season: int = None, position: str = None):
         pos = position.upper() if position else None
         return live_data.fetch_season_pace(season=season, position=pos)
     except Exception as e:
-        logger.error(f"season-pace error: {e}")
+        logger.exception("season-pace error")
         return JSONResponse({"error": "Failed to fetch season pace"}, status_code=500)
 
 
@@ -1813,7 +1813,7 @@ def garbage_time(season: int = None, position: str = None):
         pos = position.upper() if position else None
         return live_data.fetch_garbage_time(season=season, position=pos)
     except Exception as e:
-        logger.error(f"garbage-time error: {e}")
+        logger.exception("garbage-time error")
         return JSONResponse({"error": "Failed to fetch garbage time data"}, status_code=500)
 
 
@@ -1823,7 +1823,7 @@ def snap_efficiency(season: int = None, position: str = None):
         pos = position.upper() if position else None
         return live_data.fetch_snap_efficiency(season=season, position=pos)
     except Exception as e:
-        logger.error(f"snap-efficiency error: {e}")
+        logger.exception("snap-efficiency error")
         return JSONResponse({"error": "Failed to fetch snap efficiency"}, status_code=500)
 
 
@@ -1833,7 +1833,7 @@ def dual_threat(season: int = None, position: str = None):
         pos = position.upper() if position else None
         return live_data.fetch_dual_threat(season=season, position=pos)
     except Exception as e:
-        logger.error(f"dual-threat error: {e}")
+        logger.exception("dual-threat error")
         return JSONResponse({"error": "Failed to fetch dual-threat data"}, status_code=500)
 
 
@@ -1843,7 +1843,7 @@ def positional_advantage(season: int = None, position: str = None):
         pos = position.upper() if position else None
         return live_data.fetch_positional_advantage(season=season, position=pos)
     except Exception as e:
-        logger.error(f"positional-advantage error: {e}")
+        logger.exception("positional-advantage error")
         return JSONResponse({"error": "Failed to fetch positional advantage"}, status_code=500)
 
 
@@ -1852,7 +1852,7 @@ def stacks(season: int = None):
     try:
         return live_data.fetch_stacks(season=season)
     except Exception as e:
-        logger.error(f"stacks error: {e}")
+        logger.exception("stacks error")
         return JSONResponse({"error": "Failed to fetch stack correlations"}, status_code=500)
 
 
@@ -1861,7 +1861,7 @@ def weekly_mvp(season: int = None):
     try:
         return live_data.fetch_weekly_mvp(season=season)
     except Exception as e:
-        logger.error(f"weekly-mvp error: {e}")
+        logger.exception("weekly-mvp error")
         return JSONResponse({"error": "Failed to fetch weekly MVP data"}, status_code=500)
 
 
@@ -1870,7 +1870,7 @@ def handcuffs(season: int = None):
     try:
         return live_data.fetch_handcuffs(season=season)
     except Exception as e:
-        logger.error(f"handcuffs error: {e}")
+        logger.exception("handcuffs error")
         return JSONResponse({"error": "Failed to fetch handcuff rankings"}, status_code=500)
 
 
@@ -1880,7 +1880,7 @@ def fpts_breakdown(season: int = None, position: str = None):
         pos = position.upper() if position else None
         return live_data.fetch_fpts_breakdown(season=season, position=pos)
     except Exception as e:
-        logger.error(f"fpts-breakdown error: {e}")
+        logger.exception("fpts-breakdown error")
         return JSONResponse({"error": "Failed to fetch scoring breakdown"}, status_code=500)
 
 
@@ -1890,7 +1890,7 @@ def playoff_schedule(season: int = None, position: str = None):
         pos = position.upper() if position else None
         return live_data.fetch_playoff_schedule(season=season, position=pos)
     except Exception as e:
-        logger.error(f"playoff-schedule error: {e}")
+        logger.exception("playoff-schedule error")
         return JSONResponse({"error": "Failed to fetch playoff schedule"}, status_code=500)
 
 
@@ -1900,7 +1900,7 @@ def waivers(season: int = None, position: str = None, window: int = 4):
         pos = position.upper() if position else None
         return live_data.fetch_waivers(season=season, position=pos, window=window)
     except Exception as e:
-        logger.error(f"waivers error: {e}")
+        logger.exception("waivers error")
         return JSONResponse({"error": "Failed to fetch waiver targets"}, status_code=500)
 
 
@@ -2046,7 +2046,7 @@ def stat_correlations(season: int = 0, position: str = "", x_stat: str = "", y_s
         ys = y_stat.strip() if y_stat else None
         return live_data.fetch_stat_correlations(season=s, position=pos, x_stat=xs, y_stat=ys)
     except Exception as e:
-        logger.error(f"stat-correlations error: {e}")
+        logger.exception("stat-correlations error")
         return JSONResponse({"error": "Failed to fetch stat correlations"}, status_code=500)
 
 
@@ -2056,7 +2056,7 @@ def dynasty_power_rankings(season: int = 0):
         s = season if season > 0 else None
         return live_data.fetch_dynasty_power_rankings(season=s)
     except Exception as e:
-        logger.error(f"dynasty-power-rankings error: {e}")
+        logger.exception("dynasty-power-rankings error")
         return JSONResponse({"error": "Failed to fetch dynasty power rankings"}, status_code=500)
 
 
