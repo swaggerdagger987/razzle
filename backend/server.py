@@ -439,7 +439,7 @@ def player_seasons(player_id: str):
 
 @app.get("/api/players/{player_id}/comps")
 def player_comps(player_id: str, limit: int = 5, season: int = 0):
-    return live_data.fetch_player_comps(player_id, limit=min(limit, 10), season=season)
+    return live_data.fetch_player_comps(player_id, limit=max(1, min(limit, 10)), season=season)
 
 
 @app.get("/api/players/{player_id}/boom-bust")

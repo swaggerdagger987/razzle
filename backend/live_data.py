@@ -3244,7 +3244,6 @@ def _pick_value(overall_pick):
     """
     # Exponential decay: V = A * e^(-k * (pick-1))
     # Calibrated so pick 1 = 88, pick 12 = 55, pick 48 = 3
-    import math
     A = 88.0
     k = 0.070
     val = A * math.exp(-k * (overall_pick - 1))
