@@ -1,53 +1,57 @@
-# Razzle Loop — Phase 43 Task List
+# Razzle Loop — Phase 44 Task List
 
 > Consumed from TICKETS.md (Ticket 1).
 
-**Current Phase**: 43 — Stripe Integration — Subscriptions and Payment
-**Exit Criterion**: Users can subscribe to Razzle Pro ($240/year or $20/month) via Stripe Checkout. Successful payment updates user plan to 'pro' in users.db. Webhook handles subscription events (created, cancelled, payment failed). Pro users see full War Room content. Cancelled users downgrade to free. Deployed to Render.
+**Current Phase**: 44 — Brand Voice — Watermark, Copy, Personality Pass
+**Exit Criterion**: All watermarks updated to new tagline. All UI copy matches brand identity (film room energy, peer tone, no corporate language). Loading states, error states, empty states, tooltips, 404 page all have personality. Export PNGs carry new watermark. Deployed to Render.
 
 ---
 
-## Task 1: Backend Stripe endpoints + webhook
+## Task 1: Update all watermarks to new tagline
 **Status**: PASS
-**Result**: Created backend/billing.py with full Stripe integration. Endpoints: POST /api/billing/create-checkout (auth required, yearly/monthly), POST /api/billing/webhook (signature verified), GET /api/billing/status (auth required, returns plan + portal URL). Webhook handles checkout.session.completed (upgrade to pro), customer.subscription.deleted (downgrade to free), invoice.payment_failed (flag user). Subscriptions table in users.db. stripe_customer_id on users table. All keys from env vars (STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, STRIPE_PRICE_YEARLY, STRIPE_PRICE_MONTHLY). Added stripe>=7.0.0 to requirements.txt.
+**Result**: Replaced all "built different" with "razzle.lol — let's razzle dazzle em baby". 12 canvas watermarks in lab.js, 3 in charts.js, 5 HTML footers, 1 watermark div, 2 SVG OG images, 1 meta desc, docs/DESIGN.md. Zero instances remain.
 **Acceptance Criteria**:
-- POST /api/billing/create-checkout returns a Stripe Checkout URL
-- Checkout session includes yearly and monthly price options
-- Webhook correctly handles checkout.session.completed (upgrades to pro)
-- Webhook correctly handles subscription.deleted (downgrades to free)
-- GET /api/billing/status returns current plan info
-- Stripe Customer Portal URL works for managing subscription
-- All Stripe keys read from environment variables (never hardcoded)
+- Zero instances of 'built different' remain in the codebase
+- All canvas exports show new watermark text
+- All HTML footer watermarks show new text
+- All SVG OG images show new text
+- PNG export from Lab shows "razzle.lol — let's razzle dazzle em baby"
 
-## Task 2: Frontend upgrade flow + billing UI
-**Status**: PASS
-**Result**: Nav shows plan badge (Free gray / Pro terracotta) next to username. Pro users see "Manage" link that opens Stripe Customer Portal. War Room upsell "Upgrade to Pro" button calls startCheckout('year'). Home page has pricing section with $240/year and $20/month cards, both call startCheckout(). After Stripe redirect, checkAuth() refreshes user data to get updated plan. Design system followed (chunky borders, shadows, fonts).
+## Task 2: Brand voice pass on all UI copy
+**Status**: PENDING
 **Acceptance Criteria**:
-- Upgrade button on War Room redirects to Stripe Checkout
-- After payment, War Room content is fully accessible
-- Manage Subscription link opens Stripe Customer Portal
-- Plan badge shows in nav (Free vs Pro)
-- Pricing CTA on home page
-- Design system followed
+- Zero instances of generic 'Loading...' or 'Please wait' in the codebase
+- All loading states use film room language
+- Error states have personality
+- Empty states have personality
+- 404 page has brand-appropriate copy
+- Home page CTA matches brand voice
+- War Room upgrade prompt matches brand voice
 
-## Task 3: Deploy + smoke test Stripe integration
-**Status**: PASS
-**Result**: All 8 JS files pass syntax check. All 4 Python modules import clean (stripe installed). Full billing smoke test: free user status, checkout requires Stripe key (503), webhook requires secret (503), direct plan upgrade reflects in user dict, token check returns correct plan. Plan gating verified. Committed and pushed.
+## Task 3: Tooltip voice pass
+**Status**: PENDING
+**Acceptance Criteria**:
+- All tooltips rewritten in brand voice
+- No clinical/textbook definitions remain
+- Tooltips are concise (one sentence max)
+- Tone is warm and peer-like
+
+## Task 4: Deploy + smoke test brand voice
+**Status**: PENDING
 **Acceptance Criteria**:
 - All syntax clean
-- All Python imports clean (stripe in requirements.txt)
-- Stripe checkout flow works (test mode)
-- Webhook processes events correctly
-- Plan gating works (pro vs free)
+- New watermark everywhere
+- Brand voice consistent
+- No instances of 'built different' remain
 - Committed and pushed to master
 
 ---
 
 ## Loop State
 ```
-Current Phase: 43
-Current Task: 3
-Current Stage: COMPLETE
+Current Phase: 44
+Current Task: 2
+Current Stage: BUILD
 Attempt: 1
-Tasks Completed: 3/3
+Tasks Completed: 1/4
 ```

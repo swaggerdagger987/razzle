@@ -1901,7 +1901,7 @@ function exportImage() {
   ctx.fillStyle = "#1a1a2e";
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
-  ctx.fillText("built different — razzle.lol", W / 2, wmY);
+  ctx.fillText("razzle.lol — let's razzle dazzle em baby", W / 2, wmY);
   ctx.globalAlpha = 1.0;
 
   // Razzle logo mark
@@ -2211,7 +2211,7 @@ function renderRankingsPNG(players, posLabel, sortLabel) {
   ctx.font = "16px 'Caveat', cursive";
   ctx.fillStyle = "rgba(217, 119, 87, 0.5)";
   ctx.textAlign = "right";
-  ctx.fillText("built different — razzle.lol", W - 20, H - 16);
+  ctx.fillText("razzle.lol — let's razzle dazzle em baby", W - 20, H - 16);
 
   // Download
   const posFile = posLabel.toLowerCase().replace(/\s+/g, "-");
@@ -2948,7 +2948,7 @@ function exportProfileImage() {
   ctx.fillStyle = "#1a1a2e";
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
-  ctx.fillText("built different — razzle.lol", W / 2, wmY);
+  ctx.fillText("razzle.lol — let's razzle dazzle em baby", W / 2, wmY);
   ctx.globalAlpha = 1.0;
 
   const safeName = name.replace(/[^a-zA-Z0-9]/g, "-").toLowerCase();
@@ -3840,7 +3840,7 @@ function exportProspectImage() {
   ctx.fillStyle = "#1a1a2e";
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
-  ctx.fillText("built different — razzle.lol", W / 2, y + 10);
+  ctx.fillText("razzle.lol — let's razzle dazzle em baby", W / 2, y + 10);
   ctx.globalAlpha = 1.0;
 
   const safeName = name.replace(/[^a-zA-Z0-9]/g, "-").toLowerCase();
@@ -4085,7 +4085,7 @@ function exportTierImage() {
   ctx.fillStyle = "#1a1a2e";
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
-  ctx.fillText("built different — razzle.lol", W / 2, y + 10);
+  ctx.fillText("razzle.lol — let's razzle dazzle em baby", W / 2, y + 10);
   ctx.globalAlpha = 1.0;
 
   const link = document.createElement("a");
@@ -4459,7 +4459,7 @@ function exportBigBoardImage() {
   ctx.fillStyle = "#1a1a2e";
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
-  ctx.fillText("built different — razzle.lol", W / 2, y + 8);
+  ctx.fillText("razzle.lol — let's razzle dazzle em baby", W / 2, y + 8);
   ctx.globalAlpha = 1.0;
 
   const link = document.createElement("a");
@@ -4886,7 +4886,7 @@ function exportClassAnalyticsImage() {
   ctx.fillStyle = "#1a1a2e";
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
-  ctx.fillText("built different — razzle.lol", W / 2, y + 8);
+  ctx.fillText("razzle.lol — let's razzle dazzle em baby", W / 2, y + 8);
   ctx.globalAlpha = 1.0;
 
   const link = document.createElement("a");
@@ -5297,7 +5297,7 @@ function exportTradeValuesPNG() {
   ctx.fillStyle = "#1a1a2e";
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
-  ctx.fillText("built different — razzle.lol", W / 2, y + 8);
+  ctx.fillText("razzle.lol — let's razzle dazzle em baby", W / 2, y + 8);
   ctx.globalAlpha = 1.0;
 
   const link = document.createElement("a");
@@ -5630,7 +5630,7 @@ function exportAgingCurvesPNG() {
   ctx.fillStyle = "#1a1a2e";
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
-  ctx.fillText("built different — razzle.lol", W / 2, H - 10);
+  ctx.fillText("razzle.lol — let's razzle dazzle em baby", W / 2, H - 10);
   ctx.globalAlpha = 1.0;
 
   const link = document.createElement("a");
@@ -5922,7 +5922,7 @@ function exportHeatMapPNG() {
   ctx.fillStyle = "#1a1a2e";
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
-  ctx.fillText("built different — razzle.lol", W / 2, H - 4);
+  ctx.fillText("razzle.lol — let's razzle dazzle em baby", W / 2, H - 4);
   ctx.globalAlpha = 1.0;
 
   const link = document.createElement("a");
@@ -6241,7 +6241,7 @@ function exportTierBoardPNG() {
   ctx.fillStyle = "#8a8a9e";
   ctx.font = "14px 'Caveat', cursive";
   ctx.textAlign = "right";
-  ctx.fillText("built different — razzle.lol", W - 20, totalH - 14);
+  ctx.fillText("razzle.lol — let's razzle dazzle em baby", W - 20, totalH - 14);
 
   // Download
   var link = document.createElement("a");
@@ -6863,7 +6863,7 @@ function exportTradeAnalyzerPNG() {
   ctx.fillStyle = "#1a1a2e";
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "right";
-  ctx.fillText("built different — razzle.lol", W - 20, H - 16);
+  ctx.fillText("razzle.lol — let's razzle dazzle em baby", W - 20, H - 16);
   ctx.globalAlpha = 1.0;
 
   const link = document.createElement("a");

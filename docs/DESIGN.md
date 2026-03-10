@@ -148,7 +148,7 @@ War Room flips to dark mode (`--bg-ink`). Playful chrome steps aside. Contrast i
 - Assumes you're smart enough to be here
 - Dry wit in margins (Caveat), never in headlines
 - Loading: "pulling film..." not "Loading..."
-- Watermark: "built different — razzle.lol"
+- Watermark: "razzle.lol — let's razzle dazzle em baby"
 
 ---
 

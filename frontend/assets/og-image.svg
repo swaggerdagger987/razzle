@@ -48,7 +48,7 @@
   <text x="708" y="496" font-family="'Space Mono', monospace" font-size="13" font-weight="700" fill="#8b5cf6">TE</text>
 
   <!-- Bottom tagline -->
-  <text x="600" y="555" text-anchor="middle" font-family="'Space Mono', monospace" font-size="14" fill="#8a8a9e">built different — razzle.lol</text>
+  <text x="600" y="555" text-anchor="middle" font-family="'Space Mono', monospace" font-size="14" fill="#8a8a9e">razzle.lol — let's razzle dazzle em baby</text>
 
   <!-- Decorative corner badges (sticker aesthetic) -->
   <g transform="translate(100, 120) rotate(-3)">
