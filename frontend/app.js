@@ -171,6 +171,25 @@ function _injectAuthModal() {
 }
 
 function _injectNavAuthButton() {
+  // New nav structure: use #nav-auth container
+  var authContainer = document.getElementById("nav-auth");
+  if (authContainer) {
+    // nav-auth already has Sign In button from HTML; just add navAuthItem span for dynamic updates
+    var span = document.createElement("span");
+    span.id = "navAuthItem";
+    // Replace the static Sign In link
+    var existingBtn = authContainer.querySelector(".btn-chunky.btn-sm");
+    if (existingBtn) {
+      existingBtn.setAttribute("onclick", "openAuthModal(); return false;");
+      existingBtn.id = "navSignIn";
+      span.appendChild(existingBtn);
+    } else {
+      span.innerHTML = '<a href="#" onclick="openAuthModal(); return false;" id="navSignIn" class="btn-chunky btn-sm">Sign In</a>';
+    }
+    authContainer.appendChild(span);
+    return;
+  }
+  // Fallback for old nav structure
   var nav = document.querySelector(".topnav .nav-links");
   if (!nav) return;
   var li = document.createElement("li");
@@ -314,7 +333,7 @@ function updateAuthUI(user) {
         '<a href="#" onclick="signOut(); return false;" class="nav-signout">Sign Out</a>' +
       '</span>';
   } else {
-    item.innerHTML = '<a href="#" onclick="openAuthModal(); return false;" id="navSignIn">Sign In</a>';
+    item.innerHTML = '<a href="#" onclick="openAuthModal(); return false;" id="navSignIn" class="btn-chunky btn-sm">Sign In</a>';
   }
 }
 

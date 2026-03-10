@@ -148,6 +148,46 @@ body {
   box-shadow: 2px 2px 0 var(--ink);
 }
 
+/* ===== NAV AUTH & SEARCH HINT ===== */
+.nav-auth {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-sm {
+  font-size: 11px !important;
+  padding: 4px 10px !important;
+}
+
+.nav-search-hint {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-light);
+  padding: 3px 8px;
+  border: 2px solid var(--ink-faint);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.12s;
+  white-space: nowrap;
+}
+
+.nav-search-hint:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+  background: var(--bg-card);
+}
+
+.nav-search-hint kbd {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  background: var(--bg-warm);
+  border: 1px solid var(--ink-faint);
+  border-radius: 3px;
+  padding: 0 4px;
+  margin-right: 4px;
+}
+
 /* ===== AUTH UI ===== */
 .nav-user {
   display: flex;

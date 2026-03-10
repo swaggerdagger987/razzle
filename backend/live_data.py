@@ -12423,3 +12423,75 @@ def fetch_success_rate(season=None, position=None, limit=50):
         }
     finally:
         conn.close()
+
+
+def fetch_game_script(season=None, position=None, limit=40):
+    """Show how game script (avg score diff) correlates with fantasy production."""
+    conn = get_conn()
+    try:
+        if not season:
+            cur = conn.execute("SELECT MAX(season) FROM player_season_pbp")
+            season = cur.fetchone()[0] or 2024
+
+        pos_filter = ""
+        params = [season]
+        if position:
+            pos_filter = "AND p.position = ?"
+            params.append(position)
+
+        rows = conn.execute(f"""
+            SELECT p.player_id, p.full_name, p.position, p.team,
+                   pb.avg_score_differential, pb.garbage_time_pct,
+                   SUM(w.fantasy_points_ppr) as total_ppr,
+                   COUNT(DISTINCT w.week) as games
+            FROM player_season_pbp pb
+            JOIN players p ON p.player_id = pb.player_id
+            JOIN player_week_stats w ON w.player_id = pb.player_id AND w.season = pb.season
+                AND w.season_type = 'REG'
+            WHERE pb.season = ?
+              AND p.position IN ('QB','RB','WR','TE')
+              AND p.fantasy_relevant = 1
+              AND pb.avg_score_differential IS NOT NULL
+              {pos_filter}
+            GROUP BY p.player_id
+            HAVING games >= 4 AND total_ppr > 0
+        """, params).fetchall()
+
+        positive_script = []
+        negative_script = []
+
+        for r in rows:
+            pid, name, pos, team, avg_diff, gt_pct, total_ppr, games = r
+            ppg = total_ppr / games if games > 0 else 0
+            if ppg < 5:
+                continue
+
+            gt_pct = gt_pct or 0
+
+            entry = {
+                "player_id": pid,
+                "name": name,
+                "position": pos,
+                "team": team,
+                "games": games,
+                "ppg": round(ppg, 1),
+                "avg_diff": round(avg_diff, 1),
+                "gt_pct": round(gt_pct * 100 if gt_pct < 1 else gt_pct, 1),
+            }
+
+            if avg_diff > 0:
+                positive_script.append(entry)
+            else:
+                negative_script.append(entry)
+
+        positive_script.sort(key=lambda x: x["ppg"], reverse=True)
+        negative_script.sort(key=lambda x: x["ppg"], reverse=True)
+
+        return {
+            "positive_script": positive_script[:limit],
+            "negative_script": negative_script[:limit],
+            "season": season,
+            "count": len(positive_script) + len(negative_script),
+        }
+    finally:
+        conn.close()
