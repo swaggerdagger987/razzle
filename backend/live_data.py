@@ -5527,3 +5527,173 @@ def fetch_usage_trends(season=None, position=None, window=5, limit=30):
         }
     finally:
         conn.close()
+
+
+# ── Year-over-Year Comparison ─────────────────────────────────────────────
+
+_YOY_RISER_ANNOTATIONS = [
+    "breakout year", "big leap", "leveled up", "new tier",
+    "took a step", "major glow-up", "ascending", "on the rise",
+]
+_YOY_FALLER_ANNOTATIONS = [
+    "falling off", "regression", "step back", "lost a step",
+    "trending down", "declining", "red flag", "worrying drop",
+]
+
+
+def fetch_year_over_year(season=None, position=None, metric="ppg", limit=25):
+    """Compare per-game stats between two adjacent seasons for each player."""
+    conn = get_conn()
+
+    try:
+        # Determine available seasons
+        row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
+        available_seasons = [r[0] for r in row] if row else [2024]
+
+        if not season:
+            season = available_seasons[0] if available_seasons else 2024
+
+        prev_season = season - 1
+        if prev_season not in available_seasons:
+            return {
+                "season": season,
+                "prev_season": prev_season,
+                "available_seasons": available_seasons,
+                "risers": [],
+                "fallers": [],
+                "metric": metric,
+                "error": f"No data for {prev_season}",
+            }
+
+        pos_filter = ""
+        params_curr = [season]
+        params_prev = [prev_season]
+        if position and position.upper() in FANTASY_POSITIONS:
+            pos_filter = "AND p.position = ?"
+            params_curr.append(position.upper())
+            params_prev.append(position.upper())
+
+        # Query per-game stats for both seasons
+        query_tmpl = f"""
+            SELECT
+                p.player_id, p.full_name, p.position, p.team, p.age,
+                p.headshot_url,
+                COUNT(DISTINCT s.week) as games,
+                SUM(s.fantasy_points_ppr) as total_ppr,
+                SUM(s.targets) as total_targets,
+                SUM(s.receptions) as total_receptions,
+                SUM(s.receiving_yards) as total_rec_yards,
+                SUM(s.rushing_yards) as total_rush_yards,
+                SUM(s.touchdowns) as total_tds,
+                SUM(s.carries) as total_carries,
+                AVG(s.offense_pct) as avg_snap_pct
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE s.season = ?
+              AND p.position IN ('QB','RB','WR','TE')
+              {pos_filter}
+            GROUP BY p.player_id
+            HAVING COUNT(DISTINCT s.week) >= 4
+        """
+
+        curr_rows = conn.execute(query_tmpl, params_curr).fetchall()
+        prev_rows = conn.execute(query_tmpl, params_prev).fetchall()
+
+        if not curr_rows or not prev_rows:
+            return {
+                "season": season,
+                "prev_season": prev_season,
+                "available_seasons": available_seasons,
+                "risers": [],
+                "fallers": [],
+                "metric": metric,
+            }
+
+        # Build lookup for previous season
+        prev_lookup = {}
+        for r in prev_rows:
+            pid = r[0]
+            games = r[6] or 1
+            prev_lookup[pid] = {
+                "games": games,
+                "ppg": round((r[7] or 0) / games, 1),
+                "tgt_g": round((r[8] or 0) / games, 1),
+                "rec_g": round((r[9] or 0) / games, 1),
+                "rec_yd_g": round((r[10] or 0) / games, 1),
+                "rush_yd_g": round((r[11] or 0) / games, 1),
+                "td_total": r[12] or 0,
+                "carries_g": round((r[13] or 0) / games, 1),
+                "snap_pct": round(r[14] or 0, 1),
+            }
+
+        # Build current season data and compute deltas
+        players = []
+        for r in curr_rows:
+            pid = r[0]
+            if pid not in prev_lookup:
+                continue
+
+            games = r[6] or 1
+            curr = {
+                "ppg": round((r[7] or 0) / games, 1),
+                "tgt_g": round((r[8] or 0) / games, 1),
+                "rec_g": round((r[9] or 0) / games, 1),
+                "rec_yd_g": round((r[10] or 0) / games, 1),
+                "rush_yd_g": round((r[11] or 0) / games, 1),
+                "td_total": r[12] or 0,
+                "carries_g": round((r[13] or 0) / games, 1),
+                "snap_pct": round(r[14] or 0, 1),
+            }
+
+            prev = prev_lookup[pid]
+
+            # Compute deltas
+            deltas = {}
+            for k in curr:
+                deltas[k] = round(curr[k] - prev[k], 1)
+
+            players.append({
+                "player_id": pid,
+                "name": r[1] or "Unknown",
+                "position": r[2] or "WR",
+                "team": r[3] or "FA",
+                "age": r[4],
+                "headshot_url": r[5] or "",
+                "curr_games": games,
+                "prev_games": prev["games"],
+                "curr": curr,
+                "prev": prev,
+                "deltas": deltas,
+            })
+
+        # Sort by chosen metric delta
+        metric_key = metric if metric in ("ppg", "tgt_g", "rec_yd_g", "rush_yd_g", "td_total", "snap_pct") else "ppg"
+
+        risers = sorted(
+            [p for p in players if p["deltas"][metric_key] > 0.5],
+            key=lambda x: x["deltas"][metric_key],
+            reverse=True,
+        )[:limit]
+
+        fallers = sorted(
+            [p for p in players if p["deltas"][metric_key] < -0.5],
+            key=lambda x: x["deltas"][metric_key],
+        )[:limit]
+
+        # Add annotations
+        for i, p in enumerate(risers):
+            p["annotation"] = _YOY_RISER_ANNOTATIONS[i % len(_YOY_RISER_ANNOTATIONS)]
+
+        for i, p in enumerate(fallers):
+            p["annotation"] = _YOY_FALLER_ANNOTATIONS[i % len(_YOY_FALLER_ANNOTATIONS)]
+
+        return {
+            "season": season,
+            "prev_season": prev_season,
+            "available_seasons": available_seasons,
+            "risers": risers,
+            "fallers": fallers,
+            "metric": metric_key,
+        }
+    finally:
+        conn.close()

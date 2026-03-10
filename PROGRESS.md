@@ -1,6 +1,25 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 77 — Snap Count & Usage Trends (COMPLETE)
+## Current Phase: Phase 78 — Year-over-Year Comparison (COMPLETE)
+
+**Exit criterion MET:** /yoy.html page shows year-over-year stat comparisons between two adjacent seasons. Two sections: "Risers" (players who improved most) and "Fallers" (players who declined most). Each player row shows: position badge, headshot, name, team, previous season value, current season value, delta arrow+value (green up / red down), mini-deltas for other key metrics, games played (prev→curr), and Caveat annotations. Metric selector to sort by different delta categories (PPG, Targets/G, Rec Yards/G, Rush Yards/G, Total TDs, Snap%). Season pair selector (e.g., "2024 vs 2023"). Position filter tabs (All/QB/RB/WR/TE). Click player row → player profile. PNG export via html2canvas with watermark. Error state with retry button. Responsive at 768px + 480px with hide-mobile columns. /api/year-over-year endpoint computes per-game stats for two adjacent seasons per player, calculates deltas, returns risers (delta > 0.5) and fallers (delta < -0.5) sorted by chosen metric. Min 4 games per season filter. "YoY" nav link added to all 20 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors.
+
+### Phase 78 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/year-over-year endpoint | DONE | Per-game stats for two seasons, deltas for 6 metrics, risers/fallers split |
+| 2 | Year-over-year page | DONE | Two-section table (risers/fallers), metric selector, mini-deltas, responsive, PNG export |
+| 3 | Nav links + sitemap + analytics | DONE | All 20 pages updated, sitemap entry, pageview tracking |
+| 4 | Smoke test | DONE | Python + JS syntax clean, 20/20 nav links verified, design compliance confirmed |
+
+### Decisions Log
+- **Year-over-Year as Phase 78**: "Who improved and who fell off?" is one of the most common dynasty trade evaluation questions. Year-over-year stat deltas contextualize whether a player is ascending or declining — critical for buy-low/sell-high decisions. Highly screenshottable for r/DynastyFF ("biggest YoY risers heading into 2025").
+- **Multi-metric selector**: Different metrics tell different stories. PPG delta is the headline, but target/game delta reveals opportunity changes, yard/game delta shows efficiency shifts, and snap% delta shows coaching trust. Letting users toggle between these creates multiple screenshot angles.
+- **Mini-deltas for secondary metrics**: Showing all metric deltas in the same row (compactly) gives full context at a glance without needing to switch views. The primary metric is large, others are small inline chips.
+- **Min 4 games filter**: Prevents small-sample noise. A player with 2 games inflated by one boom week shouldn't show as a "breakout year."
+
+## Previous Phase: Phase 77 — Snap Count & Usage Trends (COMPLETE)
 
 **Exit criterion MET:** /usage.html page shows snap count usage trends with Risers and Fallers sections. Table format with player rows showing headshot, name, position badge, team, current snap%, season average snap%, delta arrow+value (green up / red down), inline canvas sparkline bars showing weekly snap% history, games played, and Caveat annotations. Configurable window (3/5/8 weeks). Position filter tabs (All/QB/RB/WR/TE). Season selector. Click player row → player profile. PNG export via html2canvas with watermark. Error state with retry button. Responsive at 768px + 480px with hide-mobile columns. /api/usage-trends endpoint computes weekly snap% trends from offense_pct in player_week_stats, splits into risers (delta > 2%) and fallers (delta < -2%). "Usage" nav link added to all 19 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors.
 

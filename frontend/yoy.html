@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Year-over-Year — Razzle</title>
+<meta property="og:title" content="Year-over-Year — Razzle">
+<meta property="og:description" content="Fantasy football year-over-year stat comparison — who improved and who declined on razzle.lol">
+<meta property="og:site_name" content="razzle.lol">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Year-over-Year — Razzle">
+<meta name="twitter:description" content="Fantasy football year-over-year stat comparison — who improved and who declined on razzle.lol">
+<meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
+<meta name="description" content="Year-over-year fantasy football stat changes — risers and fallers on razzle.lol">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .yoy-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+  }
+
+  .yoy-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .yoy-header h1 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: var(--ink);
+    margin: 0 0 4px;
+  }
+  .yoy-header .yoy-subtitle {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+  }
+
+  /* Controls row */
+  .yoy-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .yoy-select {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    padding: 7px 12px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--bg-card);
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  /* Position filter tabs */
+  .yoy-pos-tabs {
+    display: flex;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .yoy-pos-tab {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 6px 14px;
+    background: var(--bg-card);
+    color: var(--ink);
+    border: none;
+    border-right: 2px solid var(--ink);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .yoy-pos-tab:last-child { border-right: none; }
+  .yoy-pos-tab.active {
+    background: var(--ink);
+    color: var(--bg-card);
+  }
+  .yoy-pos-tab:hover:not(.active) {
+    background: var(--bg-warm);
+  }
+
+  /* Actions */
+  .yoy-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  /* Section headers */
+  .yoy-section-header {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .yoy-section-header .section-arrow {
+    font-size: 20px;
+  }
+  .yoy-section-header .section-arrow.up { color: var(--green); }
+  .yoy-section-header .section-arrow.down { color: var(--red); }
+
+  .yoy-section {
+    margin-bottom: 36px;
+  }
+
+  /* Player table */
+  .yoy-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .yoy-table th {
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--ink-medium);
+    background: var(--bg-warm);
+    padding: 8px 10px;
+    text-align: left;
+    border-bottom: 3px solid var(--ink);
+  }
+  .yoy-table th.center { text-align: center; }
+  .yoy-table th.right { text-align: right; }
+  .yoy-table td {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--ink);
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--ink-faint);
+    vertical-align: middle;
+  }
+  .yoy-table tr:last-child td { border-bottom: none; }
+  .yoy-table tr {
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+  .yoy-table tbody tr:hover {
+    background: var(--bg-warm);
+  }
+
+  /* Player cell */
+  .yoy-player-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .yoy-headshot {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid var(--ink);
+    object-fit: cover;
+    flex-shrink: 0;
+    background: var(--bg-warm);
+  }
+  .yoy-player-info {
+    min-width: 0;
+  }
+  .yoy-player-name {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .yoy-player-meta {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 1px;
+  }
+  .yoy-pos-badge {
+    font-family: var(--font-display);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: #fff;
+  }
+  .yoy-pos-badge.qb { background: var(--pos-qb); }
+  .yoy-pos-badge.rb { background: var(--pos-rb); }
+  .yoy-pos-badge.wr { background: var(--pos-wr); }
+  .yoy-pos-badge.te { background: var(--pos-te); }
+  .yoy-team-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-medium);
+  }
+
+  /* Stat cells */
+  .yoy-stat-prev {
+    color: var(--ink-light);
+    font-size: 12px;
+  }
+  .yoy-stat-curr {
+    font-weight: 700;
+  }
+
+  /* Delta cell */
+  .yoy-delta {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+  .yoy-delta.up { color: var(--green); }
+  .yoy-delta.down { color: var(--red); }
+
+  /* Mini delta bars for secondary metrics */
+  .yoy-mini-deltas {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .yoy-mini-delta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+  .yoy-mini-delta .label {
+    color: var(--ink-light);
+    font-size: 10px;
+    text-transform: uppercase;
+  }
+  .yoy-mini-delta.up { color: var(--green); }
+  .yoy-mini-delta.down { color: var(--red); }
+  .yoy-mini-delta.flat { color: var(--ink-light); }
+
+  /* Annotation */
+  .yoy-annotation {
+    font-family: var(--font-hand);
+    font-size: 15px;
+    color: var(--ink-light);
+    font-style: italic;
+  }
+
+  /* Loading */
+  .yoy-loading {
+    text-align: center;
+    font-family: var(--font-hand);
+    font-size: 22px;
+    color: var(--ink-light);
+    padding: 60px 20px;
+  }
+
+  /* Empty state */
+  .yoy-empty {
+    text-align: center;
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+    padding: 60px 20px;
+  }
+
+  /* Error with retry */
+  .yoy-error {
+    text-align: center;
+    padding: 60px 20px;
+  }
+  .yoy-error-msg {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--red);
+    margin-bottom: 12px;
+  }
+
+  /* Season pair label */
+  .yoy-pair-label {
+    font-family: var(--font-display);
+    font-size: 14px;
+    color: var(--ink-medium);
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .yoy-header h1 { font-size: 26px; }
+    .yoy-table th, .yoy-table td { padding: 6px 6px; font-size: 12px; }
+    .yoy-headshot { width: 28px; height: 28px; }
+    .yoy-player-name { font-size: 12px; }
+  }
+  @media (max-width: 480px) {
+    .yoy-page { padding: 16px 12px 40px; }
+    .yoy-header h1 { font-size: 22px; }
+    .yoy-table th.hide-mobile, .yoy-table td.hide-mobile { display: none; }
+    .yoy-mini-deltas { gap: 4px; }
+    .yoy-mini-delta { font-size: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="/" class="logo">
+    <div class="logo-mark">&#x1F42F;</div>
+    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/lab.html">The Lab</a></li>
+    <li><a href="/rankings.html">Rankings</a></li>
+    <li><a href="/leaders.html">Leaders</a></li>
+    <li><a href="/prospects.html">Prospects</a></li>
+    <li><a href="/scarcity.html">Scarcity</a></li>
+    <li><a href="/breakouts.html">Breakouts</a></li>
+    <li><a href="/buysell.html">Buy/Sell</a></li>
+    <li><a href="/aging.html">Aging</a></li>
+    <li><a href="/weekly.html">Weekly</a></li>
+    <li><a href="/targets.html">Targets</a></li>
+    <li><a href="/matchups.html">Matchups</a></li>
+    <li><a href="/usage.html">Usage</a></li>
+    <li><a href="/yoy.html" class="active">YoY</a></li>
+    <li><a href="/team/KC">Teams</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
+    <li><a href="/agents.html">War Room</a></li>
+  </ul>
+</nav>
+
+<main class="yoy-page" id="yoy-content">
+  <div class="yoy-header">
+    <h1>Year-over-Year</h1>
+    <div class="yoy-subtitle">who improved and who fell off between seasons</div>
+  </div>
+
+  <div class="yoy-controls">
+    <div class="yoy-pos-tabs" id="pos-tabs">
+      <button class="yoy-pos-tab active" data-pos="" aria-label="All positions">All</button>
+      <button class="yoy-pos-tab" data-pos="QB" aria-label="Quarterbacks">QB</button>
+      <button class="yoy-pos-tab" data-pos="RB" aria-label="Running backs">RB</button>
+      <button class="yoy-pos-tab" data-pos="WR" aria-label="Wide receivers">WR</button>
+      <button class="yoy-pos-tab" data-pos="TE" aria-label="Tight ends">TE</button>
+    </div>
+    <select class="yoy-select" id="metric-select" title="Sort metric" aria-label="Sort metric">
+      <option value="ppg" selected>PPG Delta</option>
+      <option value="tgt_g">Targets/G Delta</option>
+      <option value="rec_yd_g">Rec Yards/G Delta</option>
+      <option value="rush_yd_g">Rush Yards/G Delta</option>
+      <option value="td_total">Total TDs Delta</option>
+      <option value="snap_pct">Snap% Delta</option>
+    </select>
+    <select class="yoy-select" id="season-select" title="Season" aria-label="Season"></select>
+  </div>
+
+  <div class="yoy-actions">
+    <button class="btn-chunky" id="export-btn" title="Export as PNG">Export PNG</button>
+  </div>
+
+  <div id="yoy-body">
+    <div class="yoy-loading" id="yoy-loading">comparing seasons...</div>
+  </div>
+</main>
+
+<!-- Watermark -->
+<div style="position:fixed; bottom:10px; right:14px; font-family:var(--font-hand); font-size:14px; color:var(--ink-light); opacity:0.7; pointer-events:none; z-index:999;">razzle.lol</div>
+
+<!-- Footer -->
+<footer style="text-align:center; padding:24px 20px 32px; font-family:var(--font-hand); font-size:15px; color:var(--ink-light); border-top:2px dashed var(--ink-faint); margin-top:40px;">
+  <div style="margin-bottom:10px;">
+    <a href="/lab.html" style="color:var(--ink-light); text-decoration:none;">The Lab</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/rankings.html" style="color:var(--ink-light); text-decoration:none;">Rankings</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/leaders.html" style="color:var(--ink-light); text-decoration:none;">Leaders</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/prospects.html" style="color:var(--ink-light); text-decoration:none;">Prospects</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/scarcity.html" style="color:var(--ink-light); text-decoration:none;">Scarcity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/breakouts.html" style="color:var(--ink-light); text-decoration:none;">Breakouts</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/buysell.html" style="color:var(--ink-light); text-decoration:none;">Buy/Sell</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/aging.html" style="color:var(--ink-light); text-decoration:none;">Aging</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/weekly.html" style="color:var(--ink-light); text-decoration:none;">Weekly</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/targets.html" style="color:var(--ink-light); text-decoration:none;">Targets</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/matchups.html" style="color:var(--ink-light); text-decoration:none;">Matchups</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/usage.html" style="color:var(--ink-light); text-decoration:none;">Usage</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/yoy.html" style="color:var(--ink-light); text-decoration:none;">YoY</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/team/KC" style="color:var(--ink-light); text-decoration:none;">Teams</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none;">League Intel</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/agents.html" style="color:var(--ink-light); text-decoration:none;">War Room</a>
+  </div>
+  razzle.lol — let's razzle dazzle em baby
+</footer>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script src="app.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  var METRIC_LABELS = {
+    ppg: 'PPG',
+    tgt_g: 'Tgt/G',
+    rec_yd_g: 'RecYd/G',
+    rush_yd_g: 'RushYd/G',
+    td_total: 'TDs',
+    snap_pct: 'Snap%'
+  };
+
+  var MINI_METRICS = ['ppg', 'tgt_g', 'rec_yd_g', 'rush_yd_g', 'td_total', 'snap_pct'];
+
+  var currentPosition = '';
+  var currentMetric = 'ppg';
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function formatDelta(val) {
+    if (val > 0) return '+' + val;
+    return String(val);
+  }
+
+  function deltaClass(val) {
+    if (val > 0.5) return 'up';
+    if (val < -0.5) return 'down';
+    return 'flat';
+  }
+
+  function buildPlayerRow(p, metricKey) {
+    var pos = (p.position || 'WR').toLowerCase();
+    var mainDelta = p.deltas[metricKey];
+    var arrow = mainDelta > 0 ? '&#9650;' : (mainDelta < 0 ? '&#9660;' : '&#9654;');
+    var mainClass = deltaClass(mainDelta);
+
+    var html = '<tr data-pid="' + escapeHtml(p.player_id) + '">';
+
+    // Player cell
+    html += '<td>';
+    html += '<div class="yoy-player-cell">';
+    if (p.headshot_url) {
+      html += '<img class="yoy-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+    }
+    html += '<div class="yoy-player-info">';
+    html += '<div class="yoy-player-name">' + escapeHtml(p.name) + '</div>';
+    html += '<div class="yoy-player-meta">';
+    html += '<span class="yoy-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
+    html += '<span class="yoy-team-label">' + escapeHtml(p.team) + '</span>';
+    html += '</div></div></div>';
+    html += '</td>';
+
+    // Previous season value
+    html += '<td class="yoy-stat-prev hide-mobile">' + p.prev[metricKey] + '</td>';
+
+    // Current season value
+    html += '<td class="yoy-stat-curr">' + p.curr[metricKey] + '</td>';
+
+    // Main delta
+    html += '<td><div class="yoy-delta ' + mainClass + '">';
+    html += '<span>' + arrow + '</span> ' + formatDelta(mainDelta);
+    html += '</div></td>';
+
+    // Mini deltas for other metrics
+    html += '<td class="hide-mobile"><div class="yoy-mini-deltas">';
+    for (var i = 0; i < MINI_METRICS.length; i++) {
+      var mk = MINI_METRICS[i];
+      if (mk === metricKey) continue;
+      var dv = p.deltas[mk];
+      var dc = deltaClass(dv);
+      html += '<span class="yoy-mini-delta ' + dc + '">';
+      html += '<span class="label">' + METRIC_LABELS[mk] + '</span> ';
+      html += formatDelta(dv);
+      html += '</span>';
+    }
+    html += '</div></td>';
+
+    // Games
+    html += '<td class="hide-mobile" style="text-align:center; font-size:12px; color:var(--ink-light);">';
+    html += p.prev_games + '&rarr;' + p.curr_games;
+    html += '</td>';
+
+    // Annotation
+    html += '<td class="hide-mobile"><span class="yoy-annotation">' + escapeHtml(p.annotation || '') + '</span></td>';
+
+    html += '</tr>';
+    return html;
+  }
+
+  function buildSection(title, arrowClass, players, metricKey, prevSeason, currSeason) {
+    if (!players || !players.length) return '';
+
+    var metricLabel = METRIC_LABELS[metricKey] || 'PPG';
+
+    var html = '<div class="yoy-section">';
+    html += '<div class="yoy-section-header">';
+    html += '<span class="section-arrow ' + arrowClass + '">' + (arrowClass === 'up' ? '&#9650;' : '&#9660;') + '</span>';
+    html += title;
+    html += '</div>';
+
+    html += '<table class="yoy-table">';
+    html += '<thead><tr>';
+    html += '<th>Player</th>';
+    html += '<th class="hide-mobile">' + prevSeason + ' ' + metricLabel + '</th>';
+    html += '<th>' + currSeason + ' ' + metricLabel + '</th>';
+    html += '<th>Delta</th>';
+    html += '<th class="hide-mobile">Other Changes</th>';
+    html += '<th class="hide-mobile center">GP</th>';
+    html += '<th class="hide-mobile"></th>';
+    html += '</tr></thead><tbody>';
+
+    for (var i = 0; i < players.length; i++) {
+      html += buildPlayerRow(players[i], metricKey);
+    }
+
+    html += '</tbody></table></div>';
+    return html;
+  }
+
+  function render(data) {
+    var body = document.getElementById('yoy-body');
+    if (!data) {
+      body.innerHTML = '<div class="yoy-error"><div class="yoy-error-msg">couldn\'t load the data...</div><button class="btn-chunky" onclick="location.reload()">Retry</button></div>';
+      return;
+    }
+
+    if (data.error) {
+      body.innerHTML = '<div class="yoy-empty">' + escapeHtml(data.error) + '</div>';
+      return;
+    }
+
+    if ((!data.risers || !data.risers.length) && (!data.fallers || !data.fallers.length)) {
+      body.innerHTML = '<div class="yoy-empty">no year-over-year data for these filters</div>';
+      return;
+    }
+
+    var prevSeason = data.prev_season || (data.season - 1);
+    var currSeason = data.season;
+    var metricKey = data.metric || 'ppg';
+
+    var html = '<div class="yoy-pair-label">' + prevSeason + ' &rarr; ' + currSeason + '</div>';
+    html += buildSection('Risers', 'up', data.risers, metricKey, prevSeason, currSeason);
+    html += buildSection('Fallers', 'down', data.fallers, metricKey, prevSeason, currSeason);
+
+    body.innerHTML = html;
+
+    // Attach click handlers for player rows
+    var rows = body.querySelectorAll('tr[data-pid]');
+    for (var i = 0; i < rows.length; i++) {
+      rows[i].addEventListener('click', function() {
+        var pid = this.getAttribute('data-pid');
+        if (pid) window.location.href = '/player/' + encodeURIComponent(pid);
+      });
+    }
+  }
+
+  function loadData() {
+    var body = document.getElementById('yoy-body');
+    body.innerHTML = '<div class="yoy-loading">comparing seasons...</div>';
+
+    var seasonEl = document.getElementById('season-select');
+    var season = seasonEl.value || '';
+
+    var url = '/api/year-over-year?metric=' + encodeURIComponent(currentMetric);
+    if (season) url += '&season=' + encodeURIComponent(season);
+    if (currentPosition) url += '&position=' + encodeURIComponent(currentPosition);
+
+    fetch(url)
+      .then(function(resp) {
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        return resp.json();
+      })
+      .then(function(data) {
+        // Populate season dropdown
+        if (data.available_seasons && data.available_seasons.length) {
+          var opts = '';
+          for (var i = 0; i < data.available_seasons.length; i++) {
+            var s = data.available_seasons[i];
+            opts += '<option value="' + s + '"' + (s === data.season ? ' selected' : '') + '>' + s + ' vs ' + (s - 1) + '</option>';
+          }
+          seasonEl.innerHTML = opts;
+        }
+        render(data);
+      })
+      .catch(function() {
+        body.innerHTML = '<div class="yoy-error"><div class="yoy-error-msg">something went wrong pulling the data...</div><button class="btn-chunky" onclick="location.reload()">Retry</button></div>';
+      });
+  }
+
+  // Position tabs
+  var posTabs = document.querySelectorAll('.yoy-pos-tab');
+  for (var i = 0; i < posTabs.length; i++) {
+    posTabs[i].addEventListener('click', function() {
+      for (var j = 0; j < posTabs.length; j++) posTabs[j].classList.remove('active');
+      this.classList.add('active');
+      currentPosition = this.getAttribute('data-pos') || '';
+      loadData();
+    });
+  }
+
+  // Metric selector
+  document.getElementById('metric-select').addEventListener('change', function() {
+    currentMetric = this.value || 'ppg';
+    loadData();
+  });
+
+  // Season selector
+  document.getElementById('season-select').addEventListener('change', function() {
+    loadData();
+  });
+
+  // Export PNG
+  document.getElementById('export-btn').addEventListener('click', function() {
+    var el = document.getElementById('yoy-content');
+    if (typeof html2canvas === 'function') {
+      html2canvas(el, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+        var link = document.createElement('a');
+        link.download = 'razzle-yoy.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      });
+    }
+  });
+
+  // Analytics
+  if (typeof trackPageview === 'function') trackPageview();
+
+  // Initial load
+  loadData();
+})();
+</script>
+</body>
+</html>

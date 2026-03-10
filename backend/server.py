@@ -895,6 +895,7 @@ def sitemap_xml():
         ("/targets.html", "0.8", "weekly"),
         ("/matchups.html", "0.8", "weekly"),
         ("/usage.html", "0.8", "weekly"),
+        ("/yoy.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1107,6 +1108,20 @@ def usage_trends(season: int = 0, position: str = "", window: int = 5, limit: in
     except Exception as e:
         logger.error(f"usage_trends error: {e}")
         return JSONResponse({"error": "Failed to fetch usage trends"}, status_code=500)
+
+
+@app.get("/api/year-over-year")
+def year_over_year(season: int = 0, position: str = "", metric: str = "ppg", limit: int = 25):
+    """Return year-over-year stat comparison — risers and fallers."""
+    try:
+        s = season if season > 0 else None
+        pos = position.upper() if position else None
+        m = metric if metric in ("ppg", "tgt_g", "rec_yd_g", "rush_yd_g", "td_total", "snap_pct") else "ppg"
+        lim = max(1, min(limit, 50))
+        return live_data.fetch_year_over_year(season=s, position=pos, metric=m, limit=lim)
+    except Exception as e:
+        logger.error(f"year_over_year error: {e}")
+        return JSONResponse({"error": "Failed to fetch year-over-year data"}, status_code=500)
 
 
 @app.get("/api/analytics/summary")
