@@ -3524,3 +3524,20 @@
   color: var(--ink-light, #8a7565);
   transform: rotate(-1deg);
 }
+.lp-nfl-only-btn {
+  margin-top: 20px;
+  padding: 10px 28px;
+  font-family: var(--font-data, 'Space Mono', monospace);
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--orange, #d97757);
+  border: 3px solid var(--ink, #2c2420);
+  box-shadow: 4px 4px 0 var(--ink, #2c2420);
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.lp-nfl-only-btn:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--ink, #2c2420);
+}

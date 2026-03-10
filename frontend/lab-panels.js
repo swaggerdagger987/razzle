@@ -55,6 +55,7 @@
         '<div class="lp-nfl-only">' +
           '<div class="lp-nfl-only-icon">&#x1F3C8;</div>' +
           '<div class="lp-nfl-only-text">' + msg + '</div>' +
+          '<button class="lp-nfl-only-btn" onclick="setUniverse(\'nfl\')">Switch to NFL</button>' +
         '</div>' +
       '</div>';
     return true;
