@@ -25,7 +25,23 @@
     auction: 'auction values are for your fantasy draft, not the transfer portal. switch to NFL for draft-day dollars.',
     cheatsheet: 'cheat sheets are for your draft board, not the college depth chart. switch to NFL for draft prep.',
     dashboard: 'the dynasty dashboard tracks NFL assets — college players haven\'t declared yet. switch to NFL for the overview.',
-    handcuffs: 'handcuff insurance is an NFL strategy — in college, the backup just transfers. switch to NFL for handcuff pairs.'
+    handcuffs: 'handcuff insurance is an NFL strategy — in college, the backup just transfers. switch to NFL for handcuff pairs.',
+    rankings: 'dynasty rankings are for NFL players with pro contracts. switch to NFL to see who\'s worth rostering.',
+    tiers: 'dynasty tiers are based on NFL trade values — college players aren\'t on the board yet. switch to NFL for tier rankings.',
+    buysell: 'buy low / sell high is based on NFL dynasty value mismatches. switch to NFL to find deals.',
+    drops: 'drop rate tracking uses NFL play-by-play data — college doesn\'t track drops the same way. switch to NFL.',
+    garbagetime: 'garbage time detection uses NFL game scripts and scoring margins. switch to NFL for stat-padder alerts.',
+    matchups: 'matchup heatmaps track NFL defensive rankings by position. switch to NFL for schedule advantages.',
+    stacks: 'QB-WR stacking uses NFL play-by-play correlation data. switch to NFL for stack targets.',
+    redzone: 'red zone and goal-line usage comes from NFL play-by-play tracking. switch to NFL for TD vultures.',
+    streaks: 'hot/cold streaks track weekly NFL performance runs. switch to NFL for momentum plays.',
+    weeklymvp: 'weekly MVP tracking is an NFL regular season feature. switch to NFL for week-by-week standouts.',
+    playoffs: 'playoff matchup planning is for NFL fantasy playoffs (weeks 14-17). switch to NFL for schedule edges.',
+    pace: 'pace projections extrapolate from NFL weekly game logs. switch to NFL for season-long projections.',
+    tdregression: 'TD regression uses NFL expected touchdown models. switch to NFL for buy/sell TD candidates.',
+    airyards: 'air yards, aDOT, WOPR, and RACR come from NFL tracking data. switch to NFL for target efficiency.',
+    yoy: 'year-over-year comparison uses NFL per-game deltas across seasons. switch to NFL for risers and fallers.',
+    targetpremium: 'target premium uses NFL receiving efficiency metrics. switch to NFL for target quality rankings.'
   };
 
   function showNflOnlyMsg(el, panelName, title, subtitle) {
@@ -46,6 +62,7 @@
 
   // ─── 1. DYNASTY RANKINGS ──────────────────────────────────────
   defs.push({ name: 'rankings', render: function(el) {
+    if (showNflOnlyMsg(el, 'rankings', 'Dynasty Rankings', 'who\'s worth the most in your league')) return;
     var state = { position: '', data: null };
 
     el.innerHTML =
@@ -141,6 +158,7 @@
 
   // ─── 2. TIERS ─────────────────────────────────────────────────
   defs.push({ name: 'tiers', render: function(el) {
+    if (showNflOnlyMsg(el, 'tiers', 'Dynasty Tiers', 'S-tier to F-tier dynasty assets')) return;
     var state = { season: 0, position: '' };
 
     el.innerHTML =
@@ -1086,6 +1104,7 @@
 
   // ===== BUY / SELL =====
   defs.push({ name: 'buysell', render: function(el) {
+    if (showNflOnlyMsg(el, 'buysell', 'Buy Low / Sell High', 'find mispriced dynasty assets')) return;
     el.innerHTML = '<div class="lp-page">' +
       '<div class="lp-header"><h2>Buy Low / Sell High</h2>' +
       '<div class="lp-subtitle">efficiency vs dynasty ranking — who\'s mispriced?</div></div>' +
@@ -2470,6 +2489,7 @@
 
   // ===== 6. TARGET PREMIUM =====
   defs.push({ name: 'targetpremium', render: function(el) {
+    if (showNflOnlyMsg(el, 'targetpremium', 'Target Premium', 'target quality composite')) return;
     el.innerHTML = '<div class="lp-page">' +
       '<div class="lp-header"><h2>Target Premium</h2>' +
       '<div class="lp-subtitle">target quality composite — who gets the best looks?</div></div>' +
@@ -2559,6 +2579,7 @@
 
   // ===== 7. DROP RATE =====
   defs.push({ name: 'drops', render: function(el) {
+    if (showNflOnlyMsg(el, 'drops', 'Drop Rate', 'sure hands vs butterfingers')) return;
     el.innerHTML = '<div class="lp-page">' +
       '<div class="lp-header"><h2>Drop Rate</h2>' +
       '<div class="lp-subtitle">sure hands vs butterfingers</div></div>' +
@@ -2665,6 +2686,7 @@
 
   // ===== 8. GARBAGE TIME =====
   defs.push({ name: 'garbagetime', render: function(el) {
+    if (showNflOnlyMsg(el, 'garbagetime', 'Garbage Time Detector', 'stat padders vs clean producers')) return;
     el.innerHTML = '<div class="lp-page">' +
       '<div class="lp-header"><h2>Garbage Time Detector</h2>' +
       '<div class="lp-subtitle">stat padders vs clean producers — who inflates in blowouts?</div></div>' +
@@ -2940,6 +2962,7 @@
 
   // ===== MATCHUP HEATMAP =====
   defs.push({ name: 'matchups', render: function(el) {
+    if (showNflOnlyMsg(el, 'matchups', 'Matchup Heatmap', 'defensive PPG allowed by position')) return;
     var curPos = 'ALL';
     var sortCol = null;
     var sortAsc = true;
@@ -3163,6 +3186,7 @@
 
   // ===== STACK CORRELATION FINDER =====
   defs.push({ name: 'stacks', render: function(el) {
+    if (showNflOnlyMsg(el, 'stacks', 'QB-WR Stacks', 'correlation-based stack targets')) return;
     var seasonsPopulated = false;
 
     el.innerHTML =
@@ -3249,6 +3273,7 @@
 
   // ===== RED ZONE & GOAL-LINE =====
   defs.push({ name: 'redzone', render: function(el) {
+    if (showNflOnlyMsg(el, 'redzone', 'Red Zone & Goal-Line', 'TD vultures and goal-line dominators')) return;
     var curPos = '';
     var seasonsPopulated = false;
     var currentData = null;
@@ -3457,6 +3482,7 @@
 
   // ===== HOT & COLD STREAKS =====
   defs.push({ name: 'streaks', render: function(el) {
+    if (showNflOnlyMsg(el, 'streaks', 'Hot / Cold Streaks', 'weekly performance momentum')) return;
     var curPos = '';
     var seasonsPopulated = false;
     var currentData = null;
@@ -3764,6 +3790,7 @@
 
   // ===== WEEKLY MVP GRID =====
   defs.push({ name: 'weeklymvp', render: function(el) {
+    if (showNflOnlyMsg(el, 'weeklymvp', 'Weekly MVP Grid', 'position MVPs by week')) return;
     var seasonsPopulated = false;
     var POSITIONS = ['QB', 'RB', 'WR', 'TE'];
 
@@ -3843,6 +3870,7 @@
 
   // ===== PLAYOFF SCHEDULE PLANNER =====
   defs.push({ name: 'playoffs', render: function(el) {
+    if (showNflOnlyMsg(el, 'playoffs', 'Playoff Schedule Planner', 'weeks 14-17 matchup edges')) return;
     var curPos = '';
     var seasonsPopulated = false;
 
@@ -4122,6 +4150,7 @@
 
   // ─── 31. YEAR-OVER-YEAR ──────────────────────────────────────
   defs.push({ name: 'yoy', render: function(el) {
+    if (showNflOnlyMsg(el, 'yoy', 'Year-over-Year', 'cross-season stat deltas')) return;
     var yyCollege = typeof state !== 'undefined' && state.universe === 'college';
     var curPos = '';
     var curS1 = '2024';
@@ -4462,6 +4491,7 @@
 
   // ─── 33. PACE TRACKER ──────────────────────────────────────
   defs.push({ name: 'pace', render: function(el) {
+    if (showNflOnlyMsg(el, 'pace', 'Season Pace Tracker', 'projected season totals from weekly game logs')) return;
     var curPos = '';
     var curSeason = '2025';
 
@@ -4644,6 +4674,7 @@
 
   // ─── 35. TD REGRESSION ──────────────────────────────────────
   defs.push({ name: 'tdregression', render: function(el) {
+    if (showNflOnlyMsg(el, 'tdregression', 'TD Regression', 'expected vs actual touchdowns')) return;
     var curPos = '';
     var curSeason = '2025';
 
@@ -4766,6 +4797,7 @@
 
   // ─── 36. AIR YARDS ──────────────────────────────────────
   defs.push({ name: 'airyards', render: function(el) {
+    if (showNflOnlyMsg(el, 'airyards', 'Air Yards', 'aDOT, WOPR, RACR — target efficiency')) return;
     var curPos = '';
     var curSeason = '2025';
     var sortState = { buy_low: { col: 'regression_delta', asc: false }, sell_high: { col: 'regression_delta', asc: true } };
