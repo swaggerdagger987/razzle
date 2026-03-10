@@ -1,6 +1,20 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 11 — QA + UX Audit Fixes for Phases 6-10 (COMPLETE)
+## Current Phase: Phase 12 — Panel Export & Shareability (IN PROGRESS)
+
+**Exit Criterion**: Every table-based Lab panel has CSV export and screenshot buttons. Favorite panels. Methodology tooltips. Share URL with copy. A user can find, understand, screenshot, and share a panel in under 60 seconds.
+
+### Phase 12 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | CSV export button for all table-based panels | TODO | |
+| 2 | Panel screenshot button (PNG with watermark) | TODO | |
+| 3 | Favorite panels with star icon in sidebar | TODO | |
+| 4 | Panel methodology tooltips | TODO | |
+| 5 | Share URL button with copy-to-clipboard | TODO | |
+
+## Previous Phase: Phase 11 — QA + UX Audit Fixes for Phases 6-10 (COMPLETE)
 
 **Exit Criterion MET**: All CRITICAL and HIGH findings from Phases 6-10 QA+UX audit resolved. Connection leak patched. XSS escaped. localStorage wrapped. Cold grays replaced with warm browns.
 
