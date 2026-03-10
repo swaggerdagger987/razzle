@@ -11909,7 +11909,6 @@ def fetch_dual_threat(season=None, position=None, limit=50):
 
             # Dual-threat index: geometric mean of rush and rec yards/game
             # Rewards balance — 100 rush + 100 rec >> 200 rush + 0 rec
-            import math
             rush_component = max(rush_yd_pg, 0.1)
             rec_component = max(rec_yd_pg, 0.1)
             dti = math.sqrt(rush_component * rec_component)
