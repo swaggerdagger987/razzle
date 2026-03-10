@@ -1,6 +1,19 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 52 — War Room Agent Memory (COMPLETE)
+## Current Phase: Phase 53 — Reddit Launch Prep (COMPLETE)
+
+**Exit criterion MET:** Featured card "Open in Lab" links enhanced with rich preset URLs (dynasty_value sort, receiving columns, min_gp filters). All preset URL system verified working. Reddit title generator comprehensive.
+
+### Phase 53 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Enhanced featured card links | DONE | Rich Lab URLs |
+| 2 | Preset URL verification | DONE | All params work |
+| 3 | Reddit title generator | DONE | Already good |
+| 4 | Deploy + smoke test | DONE | All syntax clean |
+
+## Previous Phase: Phase 52 — War Room Agent Memory (COMPLETE)
 
 **Exit criterion MET:** War Room persists briefing history (max 20 entries) in localStorage. Memory button toggles history panel. Keyword-scored relevance matching injects top 3 past briefings as "WHAT THE WAR ROOM REMEMBERS" into agent prompts. Clear memory option available.
 

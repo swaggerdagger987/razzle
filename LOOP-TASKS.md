@@ -1,33 +1,33 @@
-# Razzle Loop — Phase 52 Task List
+# Razzle Loop — Phase 53 Task List
 
-> Auto-generated. Agent memory makes the War Room feel alive across sessions — key paid differentiator.
+> Auto-generated. Reddit launch prep — richer preset URLs for content marketing.
 
-**Current Phase**: 52 — War Room Agent Memory — Session History + Recall
-**Exit Criterion**: War Room persists agent briefing history across sessions. Memory injected into agent prompts. History panel with clear option. Mobile responsive.
+**Current Phase**: 53 — Reddit Launch Prep — Shareable Preset URLs
+**Exit Criterion**: Featured cards on home page link to rich Lab preset URLs with specific columns, sort, and filters. Each link creates a screenshot-worthy view on first load.
 
 ---
 
-## Task 1: Agent briefing history storage
+## Task 1: Enhanced featured card Lab links
 **Status**: PASS
-**Notes**: Saves to localStorage (razzle_warroom_memory). Max 20 entries, LIFO. Stores timestamp, scenario text, per-agent key findings. Hooks into razzle:all-agents-done event.
+**Notes**: Dynasty Risers links to dynasty_value sort with dynasty-specific columns. Breakout Candidates links to WR targets sort with receiving-specific columns and min_gp=8. Rookie Big Board already links to prospects universe.
 
-## Task 2: History panel UI
+## Task 2: Verify preset URL system
 **Status**: PASS
-**Notes**: Memory button next to Run All Agents. Toggleable panel with past briefings, timestamps, agent names. Clear memory button.
+**Notes**: URL params (u, pos, sort, dir, min_gp, cols, season, filters) all load correctly. Lab presets (PPR, Dynasty, Efficiency, etc.) already comprehensive.
 
-## Task 3: Memory injection into agent prompts
+## Task 3: Reddit title generator verification
 **Status**: PASS
-**Notes**: getRelevantMemory() scores by keyword overlap. Top 3 injected as "WHAT THE WAR ROOM REMEMBERS" in buildUserMessage().
+**Notes**: generateRedditTitle() already produces good titles for all universes and preset types.
 
 ## Task 4: Deploy + smoke test
 **Status**: PASS
-**Notes**: All JS syntax clean.
+**Notes**: All syntax clean. Featured card links verified.
 
 ---
 
 ## Loop State
 ```
-Current Phase: 52
+Current Phase: 53
 Current Task: 4
 Current Stage: COMPLETE
 Attempt: 1
