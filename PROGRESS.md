@@ -1,6 +1,19 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 112 — Player Strengths & Weaknesses (COMPLETE)
+## Current Phase: Phase 113 — Fantasy Points Breakdown (COMPLETE)
+
+**Exit criterion MET:** /breakdown.html lets users search any player and see a canvas donut chart breaking down where their PPR fantasy points come from (passing yards, passing TDs, rushing yards, rushing TDs, receiving yards, receiving TDs, receptions). Color-coded donut slices with percentage labels, legend with point values, detail cards with raw stat counts. Player search autocomplete, season selector, URL state (?player=ID&season=), PNG export with watermark. GET /api/points-breakdown endpoint computes PPR scoring components (0.04/yd pass, 4/TD pass, 0.1/yd rush/rec, 6/TD, 1/rec). 16 escapeHtml calls, 54/54 braces balanced. "Breakdown" nav link on all 48 pages. Sitemap + tools hub entry under Performance Analysis. Design matches DESIGN.md.
+
+### Phase 113 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/points-breakdown endpoint | DONE | fetch_points_breakdown, PPR scoring components |
+| 2 | Points Breakdown page | DONE | Canvas donut, legend, detail cards, 16 escapeHtml |
+| 3 | Nav links + sitemap + tools hub | DONE | All 48 pages updated, sitemap + tools hub |
+| 4 | Smoke test | DONE | Python OK, JS OK, 48/48 nav links |
+
+## Previous Phase: Phase 112 — Player Strengths & Weaknesses (COMPLETE)
 
 **Exit criterion MET:** /strengths.html lets users search any player and see their top 4 strengths and bottom 4 weaknesses based on position-relative percentile rankings. Player header card with overall grade (avg percentile). Strength/weakness cards with rank number, stat label, value, mini percentile bar, and letter grade badge. Full percentile breakdown with horizontal bars sorted by percentile (color-coded green/blue/yellow/orange/red). Player search autocomplete via quick-search API with keyboard navigation. Season selector, URL state (?player=ID&season=), PNG export with watermark. GET /api/player-strengths endpoint wraps fetch_player_percentiles, sorting percentiles to find top strengths and weaknesses, assigning A+ to F grades. 18 escapeHtml calls, 57/57 braces balanced. "Strengths" nav link on all 47 pages. Sitemap + tools hub entry under Player Discovery. Design matches DESIGN.md.
 

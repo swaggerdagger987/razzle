@@ -924,6 +924,7 @@ def sitemap_xml():
         ("/regression.html", "0.8", "weekly"),
         ("/strengths.html", "0.8", "weekly"),
         ("/breakdown.html", "0.8", "weekly"),
+        ("/weeklyleaders.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1449,6 +1450,19 @@ def draft_class(year: int = 0, position: str = ""):
         return JSONResponse({"error": "Failed to fetch draft class"}, status_code=500)
 
 
+@app.get("/api/weekly-leaders")
+def weekly_leaders(season: int = 0, week: int = 0, position: str = ""):
+    """Return top fantasy performers for a given week."""
+    try:
+        s = season if season > 0 else None
+        w = week if week > 0 else None
+        pos = position if position else None
+        return live_data.fetch_weekly_leaders(season=s, week=w, position=pos)
+    except Exception as e:
+        logger.error(f"weekly-leaders error: {e}")
+        return JSONResponse({"error": "Failed to fetch weekly leaders"}, status_code=500)
+
+
 @app.get("/api/points-breakdown")
 def points_breakdown(player_id: str = "", season: int = 0):
     """Return fantasy points breakdown by scoring component."""
@@ -1558,6 +1572,7 @@ def tools_hub():
                 {"name": "Matchup Heatmap", "desc": "32-team defensive PPG allowed by position — find soft matchups", "url": "/matchups.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Strength of Schedule", "desc": "SOS grades, buy targets vs. sell candidates", "url": "/schedule.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Weekly Heatmap", "desc": "Player-by-week scoring grid with color-coded tiers", "url": "/weekly.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Weekly Leaders", "desc": "Top fantasy performers for any week — who went off", "url": "/weeklyleaders.html", "positions": ["QB", "RB", "WR", "TE"]},
             ],
         },
         {

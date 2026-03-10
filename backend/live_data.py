@@ -10125,3 +10125,85 @@ def fetch_points_breakdown(player_id, season=None):
         }
     finally:
         conn.close()
+
+
+# ---------------------------------------------------------------------------
+# Weekly Leaders — top fantasy performers per week
+# ---------------------------------------------------------------------------
+
+def fetch_weekly_leaders(season=None, week=None, position=None, limit=25):
+    """Return top fantasy performers for a given week."""
+    conn = get_conn()
+
+    try:
+        # Available seasons
+        row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
+        available_seasons = [r[0] for r in row] if row else [2024]
+        if not season:
+            season = available_seasons[0] if available_seasons else 2024
+
+        # Available weeks for this season
+        wk_rows = conn.execute(
+            "SELECT DISTINCT week FROM player_week_stats WHERE season = ? ORDER BY week",
+            (season,)
+        ).fetchall()
+        available_weeks = [r[0] for r in wk_rows] if wk_rows else list(range(1, 19))
+        if not week:
+            week = available_weeks[-1] if available_weeks else 1
+
+        pos_filter = ""
+        params = [season, week]
+        if position and position.upper() in ("QB", "RB", "WR", "TE"):
+            pos_filter = "AND p.position = ?"
+            params.append(position.upper())
+
+        query = f"""
+            SELECT
+                p.player_id, p.full_name, p.position, p.team,
+                s.fantasy_points_ppr,
+                s.passing_yards, s.passing_tds, s.interceptions,
+                s.rushing_yards, s.rushing_tds, s.carries,
+                s.receiving_yards, s.receiving_tds, s.receptions, s.targets
+            FROM players p
+            JOIN player_week_stats s
+                ON s.player_id = p.player_id AND s.season = ? AND s.week = ?
+            WHERE p.position IN ('QB','RB','WR','TE')
+              {pos_filter}
+            ORDER BY s.fantasy_points_ppr DESC
+            LIMIT ?
+        """
+        params.append(limit)
+        rows = conn.execute(query, params).fetchall()
+
+        leaders = []
+        for i, r in enumerate(rows):
+            pos = r[2] or "RB"
+            fpts = r[4] or 0
+            leaders.append({
+                "rank": i + 1,
+                "player_id": r[0],
+                "name": r[1] or "Unknown",
+                "position": pos,
+                "team": r[3] or "FA",
+                "fantasy_points": round(fpts, 1),
+                "pass_yd": r[5] or 0,
+                "pass_td": r[6] or 0,
+                "ints": r[7] or 0,
+                "rush_yd": r[8] or 0,
+                "rush_td": r[9] or 0,
+                "carries": r[10] or 0,
+                "rec_yd": r[11] or 0,
+                "rec_td": r[12] or 0,
+                "rec": r[13] or 0,
+                "tgt": r[14] or 0,
+            })
+
+        return {
+            "season": season,
+            "week": week,
+            "available_seasons": available_seasons,
+            "available_weeks": available_weeks,
+            "leaders": leaders,
+        }
+    finally:
+        conn.close()

@@ -1,17 +1,17 @@
-# Razzle Loop — Phase 113 Task List
+# Razzle Loop — Phase 114 Task List
 
-> Fantasy Points Breakdown
+> Weekly Leaders Dashboard
 
-**Current Phase**: 113 — Fantasy Points Breakdown
-**Exit Criterion**: /breakdown.html lets users search any player and see a canvas donut chart breaking down WHERE their fantasy points come from (rushing yards, rushing TDs, receiving yards, receiving TDs, passing yards, passing TDs, receptions), with percentage labels, season selector, PNG export.
+**Current Phase**: 114 — Weekly Leaders Dashboard
+**Exit Criterion**: /weeklyleaders.html shows top fantasy performers for a selected week, with position tabs, sortable table, season/week selectors, PNG export.
 
 ---
 
-## Task 1: Backend /api/points-breakdown endpoint
+## Task 1: Backend /api/weekly-leaders endpoint
 **Status**: PENDING
 **Attempts**: 0
 
-## Task 2: Frontend breakdown.html page
+## Task 2: Frontend weeklyleaders.html page
 **Status**: PENDING
 **Attempts**: 0
 
@@ -27,7 +27,7 @@
 
 ## Loop State
 ```
-Current Phase: 113
+Current Phase: 114
 Current Task: 1
 Current Stage: BUILD
 Attempt: 1
