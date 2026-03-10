@@ -8506,7 +8506,6 @@ def fetch_roster_grade(player_ids, season=None):
             age_score = max(0, 100 - age_dev * 12)
             # Bonus for age diversity (std dev)
             if len(ages) > 1:
-                import math
                 age_std = math.sqrt(sum((a - avg_age) ** 2 for a in ages) / len(ages))
                 # Some diversity is good (std ~3-4), too much or too little is bad
                 diversity_bonus = max(0, 15 - abs(age_std - 3.5) * 5)
@@ -8606,7 +8605,7 @@ def fetch_scoring_comparison(season=None, position=None, limit=40):
                 p.headshot_url,
                 SUM(s.fantasy_points_ppr) as total_ppr,
                 SUM(s.fantasy_points_half_ppr) as total_half,
-                SUM(COALESCE(s.fantasy_points_std, s.fantasy_points_ppr - s.receptions)) as total_std,
+                SUM(s.receptions) as total_rec,
                 COUNT(DISTINCT s.week) as games
             FROM players p
             JOIN player_week_stats s
@@ -8628,13 +8627,14 @@ def fetch_scoring_comparison(season=None, position=None, limit=40):
                 "fallers": [],
             }
 
-        # Build player list
+        # Build player list — standard = PPR - receptions (consistent with cheat sheet)
         players = []
         for r in rows:
             games = r[8] or 1
             total_ppr = r[5] or 0
             total_half = r[6] or 0
-            total_std = r[7] or 0
+            total_rec = r[7] or 0
+            total_std = total_ppr - total_rec
             players.append({
                 "player_id": r[0],
                 "full_name": r[1] or "Unknown",
@@ -8773,9 +8773,10 @@ def fetch_cheat_sheet(season=None, fmt="ppr"):
                 "tier": tier,
             })
 
-        # Sort each position by PPG desc, assign ranks
+        # Sort each position by PPG desc, limit to top 40, assign ranks
         for pos in positions:
             positions[pos].sort(key=lambda x: x["ppg"], reverse=True)
+            positions[pos] = positions[pos][:40]
             for i, p in enumerate(positions[pos]):
                 p["rank"] = i + 1
 

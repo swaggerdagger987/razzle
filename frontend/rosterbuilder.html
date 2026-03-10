@@ -743,7 +743,7 @@
       html += '<span class="rb-ac-pos ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span>';
       html += '<span class="rb-player-name">' + escapeHtml(p.full_name) + '</span>';
       html += '<span class="rb-player-team">' + escapeHtml(p.team) + '</span>';
-      html += '<span class="rb-player-age">' + (p.age || '-') + '</span>';
+      html += '<span class="rb-player-age">' + escapeHtml(String(p.age || '-')) + '</span>';
       html += '<span class="rb-player-tv">' + fmt(p.trade_value) + '</span>';
       html += '<span class="rb-player-vorp ' + vorpClass + '">' + (p.vorp >= 0 ? '+' : '') + fmt(p.vorp) + '</span>';
       html += '<button class="rb-remove-btn" data-pid="' + escapeHtml(p.player_id) + '" title="Remove">&times;</button>';
@@ -770,16 +770,16 @@
     document.getElementById('dimensions-card').style.display = 'block';
     var dims = d.dimensions || {};
     var dimLabels = [
-      { key: 'trade_value', label: 'Trade Value', cls: 'tv' },
-      { key: 'vorp', label: 'VORP', cls: 'vorp' },
-      { key: 'age_balance', label: 'Age Balance', cls: 'age' },
-      { key: 'positional_depth', label: 'Positional Depth', cls: 'depth' }
+      { key: 'trade_value', label: 'Trade Value', cls: 'tv', tip: 'Composite dynasty value of your roster based on production, age, and scarcity' },
+      { key: 'vorp', label: 'VORP', cls: 'vorp', tip: 'Value Over Replacement — how much your players score above replacement level' },
+      { key: 'age_balance', label: 'Age Balance', cls: 'age', tip: 'Mix of prime-age players with a healthy age spread for long-term sustainability' },
+      { key: 'positional_depth', label: 'Positional Depth', cls: 'depth', tip: 'Coverage across QB, RB, WR, and TE — penalizes rosters missing key positions' }
     ];
     var dimHtml = '';
     dimLabels.forEach(function(dim) {
       var val = dims[dim.key] || 0;
       dimHtml += '<div class="rb-dim-row">';
-      dimHtml += '<div class="rb-dim-label"><span>' + escapeHtml(dim.label) + '</span><span>' + fmt(val, 0) + '</span></div>';
+      dimHtml += '<div class="rb-dim-label" title="' + escapeHtml(dim.tip) + '"><span>' + escapeHtml(dim.label) + '</span><span>' + fmt(val, 0) + '</span></div>';
       dimHtml += '<div class="rb-dim-bar"><div class="rb-dim-fill ' + dim.cls + '" style="width:' + Math.min(100, val) + '%"></div></div>';
       dimHtml += '</div>';
     });

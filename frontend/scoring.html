@@ -521,8 +521,8 @@
       html += '<td>' + fmt(p.ppg_ppr) + '</td>';
       html += '<td>' + fmt(p.ppg_half) + '</td>';
       html += '<td>' + fmt(p.ppg_std) + '</td>';
-      html += '<td>' + p.rank_ppr + '</td>';
-      html += '<td>' + p.rank_std + '</td>';
+      html += '<td>' + escapeHtml(String(p.rank_ppr)) + '</td>';
+      html += '<td>' + escapeHtml(String(p.rank_std)) + '</td>';
       html += '<td><span class="sc-rank-shift ' + shiftClass + '">' + escapeHtml(shiftText) + '</span></td>';
       html += '</tr>';
     });

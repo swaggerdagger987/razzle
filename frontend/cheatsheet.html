@@ -470,7 +470,7 @@
           html += '<div class="cs-tier-break">' + escapeHtml(currentTier) + '</div>';
         }
         html += '<div class="cs-player" onclick="window.location.href=\'/player.html?id=' + escapeHtml(p.player_id) + '\'">';
-        html += '<span class="cs-rank">' + p.rank + '</span>';
+        html += '<span class="cs-rank">' + escapeHtml(String(p.rank)) + '</span>';
         html += '<span class="cs-pname">' + escapeHtml(p.full_name) + '</span>';
         html += '<span class="cs-team">' + escapeHtml(p.team) + '</span>';
         html += '<span class="cs-ppg">' + fmt(p.ppg) + '</span>';

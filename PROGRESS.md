@@ -1,6 +1,21 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 99 — Fantasy Draft Cheat Sheet (COMPLETE)
+## Current Phase: Phase 100 — QA+UX Audit Fixes (Phases 96-99) (COMPLETE)
+
+**Exit criterion MET:** All HIGH and MEDIUM findings from QA-AUDIT.md resolved. QA-1: roster-grade player_ids deduplicated + type-validated. QA-2: standard scoring formula consistent (Python subtraction in both scoring-comparison and cheat-sheet). QA-3/4/5: escapeHtml on numeric values (rank_ppr, rank_std, age, rank). QA-6: tools-hub Cache-Control header. QA-7: Boom/Bust→Player Comparison rename. QA-8: removed redundant import math. QA-9: cheat sheet limited to top 40 per position. UX-2: dimension bar tooltips on roster builder.
+
+### Phase 100 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | HIGH fix — roster-grade player_ids dedup (QA-1) | DONE | dict.fromkeys dedup + str validation + [:25] |
+| 2 | HIGH fix — consistent standard scoring (QA-2) | DONE | Both use Python total_ppr - total_rec |
+| 3 | MEDIUM fixes — escapeHtml (QA-3,4,5) | DONE | rank_ppr, rank_std, age, rank wrapped |
+| 4 | MEDIUM fix — Cache-Control (QA-6) | DONE | JSONResponse + Cache-Control: public, max-age=3600 |
+| 5 | LOW grouped fixes (QA-7,8,9,UX-2) | DONE | Rename, remove import, top-40 limit, tooltips |
+| 6 | Smoke test | DONE | Python syntax OK, JS braces balanced |
+
+## Previous Phase: Phase 99 — Fantasy Draft Cheat Sheet (COMPLETE)
 
 **Exit criterion MET:** /cheatsheet.html page shows a printable 4-column dynasty draft cheat sheet (QB/RB/WR/TE). Each column: position-colored header with player count, tier break dividers (Elite/Starter/Flex/Bench/Stash based on PPG thresholds), player rows with rank, name, team, PPG. Format selector tabs (PPR/Half-PPR/Standard). Season selector. Print-optimized CSS (@media print hides nav/footer/controls, adjusts sizing). PNG export with watermark. Responsive at 768px (2-col) + 480px (1-col). GET /api/cheat-sheet endpoint returns players grouped by position, sorted by PPG for selected format, with tier labels and trade values. Min 4 games + 2 PPG filter. "Cheat Sheet" nav link on all 37 HTML pages. Sitemap entry. Tools hub catalog entry. Design matches DESIGN.md.
 

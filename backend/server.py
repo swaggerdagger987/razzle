@@ -1341,12 +1341,14 @@ async def roster_grade(request: Request):
     """Grade a hypothetical dynasty roster from a list of player IDs."""
     try:
         body = await request.json()
-        player_ids = body.get("player_ids", [])
+        raw_ids = body.get("player_ids", [])
         season = body.get("season", None)
-        if not player_ids or not isinstance(player_ids, list):
+        if not raw_ids or not isinstance(raw_ids, list):
             return JSONResponse({"error": "player_ids array is required"}, status_code=400)
-        if len(player_ids) > 25:
-            return JSONResponse({"error": "Maximum 25 players allowed"}, status_code=400)
+        # Validate strings, deduplicate, cap at 25
+        player_ids = list(dict.fromkeys(str(pid) for pid in raw_ids if isinstance(pid, str) and pid))[:25]
+        if not player_ids:
+            return JSONResponse({"error": "No valid player IDs provided"}, status_code=400)
         return live_data.fetch_roster_grade(player_ids=player_ids, season=season)
     except Exception as e:
         logger.error(f"roster-grade error: {e}")
@@ -1392,7 +1394,7 @@ def tools_hub():
                 {"name": "Consistency", "desc": "Coefficient of variation, floor, ceiling, and scoring range", "url": "/consistency.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Air Yards", "desc": "aDOT, RACR, WOPR, and regression buy/sell indicators", "url": "/airyards.html", "positions": ["WR", "RB", "TE"]},
                 {"name": "Red Zone & Goal-Line", "desc": "Goal-line carries, targets, TDs, and TD dependency", "url": "/redzone.html", "positions": ["QB", "RB", "WR", "TE"]},
-                {"name": "Boom/Bust", "desc": "Weekly score distributions, boom rates, and consistency grades", "url": "/compare.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Player Comparison", "desc": "Side-by-side stat comparison with radar charts and boom/bust rates", "url": "/compare.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Scoring Formats", "desc": "How PPR vs Half-PPR vs Standard changes rankings", "url": "/scoring.html", "positions": ["QB", "RB", "WR", "TE"]},
             ],
         },
@@ -1440,7 +1442,10 @@ def tools_hub():
         },
     ]
     total_tools = sum(len(c["tools"]) for c in categories)
-    return {"categories": categories, "total_tools": total_tools}
+    return JSONResponse(
+        content={"categories": categories, "total_tools": total_tools},
+        headers={"Cache-Control": "public, max-age=3600"},
+    )
 
 
 # ---------------------------------------------------------------------------
