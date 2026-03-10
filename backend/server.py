@@ -920,6 +920,7 @@ def sitemap_xml():
         ("/career.html", "0.8", "weekly"),
         ("/career-compare.html", "0.8", "weekly"),
         ("/draftclass.html", "0.8", "weekly"),
+        ("/percentiles.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1420,6 +1421,19 @@ def career_stats(player_id: str = ""):
         return JSONResponse({"error": "Failed to fetch career stats"}, status_code=500)
 
 
+@app.get("/api/player-percentiles")
+def player_percentiles(player_id: str = "", season: int = 0):
+    """Return percentile rankings for a player vs. position group."""
+    try:
+        if not player_id:
+            return JSONResponse({"error": "player_id is required"}, status_code=400)
+        s = season if season > 0 else None
+        return live_data.fetch_player_percentiles(player_id, season=s)
+    except Exception as e:
+        logger.error(f"player-percentiles error: {e}")
+        return JSONResponse({"error": "Failed to fetch player percentiles"}, status_code=500)
+
+
 @app.get("/api/draft-class")
 def draft_class(year: int = 0, position: str = ""):
     """Return fantasy production stats for a draft class."""
@@ -1465,6 +1479,7 @@ def tools_hub():
                 {"name": "Stock Watch", "desc": "Rising and falling dynasty stocks by composite metrics", "url": "/stocks.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Breakout Candidates", "desc": "Opportunity vs. production gap — who's due for a leap", "url": "/breakouts.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Rookie Big Board", "desc": "Prospect tiers with RPS scoring and percentile bars", "url": "/prospects.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Player Percentiles", "desc": "Position-relative percentile rankings across 8+ categories", "url": "/percentiles.html", "positions": ["QB", "RB", "WR", "TE"]},
             ],
         },
         {

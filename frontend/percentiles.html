@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Player Percentiles — Razzle</title>
+<meta property="og:title" content="Player Percentiles — Razzle">
+<meta property="og:description" content="Position-relative percentile rankings across 8+ stat categories on razzle.lol">
+<meta property="og:site_name" content="razzle.lol">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Player Percentiles — Razzle">
+<meta name="twitter:description" content="Position-relative percentile rankings across 8+ stat categories on razzle.lol">
+<meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
+<meta name="description" content="Player percentile rankings — position-relative stat percentiles across PPG, yards, touchdowns, efficiency on razzle.lol">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .pct-page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+  }
+
+  .pct-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .pct-header h1 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: var(--ink);
+    margin: 0 0 4px;
+  }
+  .pct-header .pct-subtitle {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+  }
+
+  /* Search */
+  .pct-search-wrap {
+    max-width: 500px;
+    margin: 0 auto 20px;
+    position: relative;
+  }
+  .pct-search {
+    width: 100%;
+    font-family: var(--font-mono);
+    font-size: 15px;
+    padding: 12px 16px;
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    background: var(--bg-card);
+    color: var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
+    box-sizing: border-box;
+  }
+  .pct-search::placeholder { color: var(--ink-light); }
+  .pct-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 0 0 10px 10px;
+    border-top: none;
+    max-height: 240px;
+    overflow-y: auto;
+    z-index: 100;
+    display: none;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .pct-dropdown-item {
+    padding: 10px 14px;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--ink-faint);
+  }
+  .pct-dropdown-item:last-child { border-bottom: none; }
+  .pct-dropdown-item:hover { background: var(--bg-warm); }
+  .pct-dd-pos {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #fff;
+    min-width: 26px;
+    text-align: center;
+  }
+  .pct-dd-pos.QB { background: var(--blue); }
+  .pct-dd-pos.RB { background: var(--teal); }
+  .pct-dd-pos.WR { background: var(--orange); }
+  .pct-dd-pos.TE { background: var(--purple); }
+
+  /* Season selector */
+  .pct-controls {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .pct-select {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    padding: 7px 12px;
+    border: 3px solid var(--ink);
+    border-radius: 8px;
+    background: var(--bg-card);
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  /* Player card */
+  .pct-player-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    margin-bottom: 24px;
+  }
+  .pct-player-name {
+    font-family: var(--font-display);
+    font-size: 24px;
+    color: var(--ink);
+    margin: 0 0 2px;
+  }
+  .pct-player-meta {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--ink-light);
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .pct-pos-badge {
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 6px;
+    color: #fff;
+  }
+  .pct-pos-badge.QB { background: var(--blue); }
+  .pct-pos-badge.RB { background: var(--teal); }
+  .pct-pos-badge.WR { background: var(--orange); }
+  .pct-pos-badge.TE { background: var(--purple); }
+
+  .pct-pool {
+    font-family: var(--font-hand);
+    font-size: 14px;
+    color: var(--ink-light);
+    text-align: center;
+    margin-bottom: 16px;
+  }
+
+  /* Percentile bars */
+  .pct-bars {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+  .pct-bar-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 14px;
+    gap: 12px;
+  }
+  .pct-bar-row:last-child { margin-bottom: 0; }
+  .pct-bar-label {
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink);
+    min-width: 100px;
+    text-align: right;
+  }
+  .pct-bar-track {
+    flex: 1;
+    height: 28px;
+    background: var(--bg-warm);
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+  }
+  .pct-bar-fill {
+    height: 100%;
+    border-radius: 4px 0 0 4px;
+    transition: width 0.6s ease-out;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 8px;
+    min-width: 30px;
+  }
+  .pct-bar-pctile {
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  }
+  .pct-bar-value {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-light);
+    min-width: 55px;
+    text-align: left;
+  }
+
+  /* Actions */
+  .pct-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  /* Empty state */
+  .pct-empty {
+    text-align: center;
+    padding: 80px 20px;
+    font-family: var(--font-hand);
+    font-size: 22px;
+    color: var(--ink-light);
+  }
+
+  .pct-loading {
+    text-align: center;
+    padding: 60px 20px;
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+  }
+
+  @media (max-width: 768px) {
+    .pct-header h1 { font-size: 26px; }
+    .pct-bar-label { min-width: 70px; font-size: 11px; }
+    .pct-player-card { flex-direction: column; text-align: center; }
+    .pct-player-meta { justify-content: center; }
+  }
+  @media (max-width: 480px) {
+    .pct-page { padding: 16px 12px 40px; }
+    .pct-header h1 { font-size: 22px; }
+    .pct-bar-label { min-width: 55px; font-size: 10px; }
+    .pct-bar-track { height: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="/" class="logo">
+    <div class="logo-mark">&#x1F42F;</div>
+    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/lab.html">The Lab</a></li>
+    <li><a href="/tools.html">Tools</a></li>
+    <li><a href="/rankings.html">Rankings</a></li>
+    <li><a href="/leaders.html">Leaders</a></li>
+    <li><a href="/prospects.html">Prospects</a></li>
+    <li><a href="/scarcity.html">Scarcity</a></li>
+    <li><a href="/breakouts.html">Breakouts</a></li>
+    <li><a href="/buysell.html">Buy/Sell</a></li>
+    <li><a href="/aging.html">Aging</a></li>
+    <li><a href="/weekly.html">Weekly</a></li>
+    <li><a href="/targets.html">Targets</a></li>
+    <li><a href="/matchups.html">Matchups</a></li>
+    <li><a href="/usage.html">Usage</a></li>
+    <li><a href="/yoy.html">YoY</a></li>
+    <li><a href="/airyards.html">Air Yards</a></li>
+    <li><a href="/explorer.html">Explorer</a></li>
+    <li><a href="/redzone.html">Red Zone</a></li>
+    <li><a href="/efficiency.html">Efficiency</a></li>
+    <li><a href="/consistency.html">Consistency</a></li>
+    <li><a href="/schedule.html">Schedule</a></li>
+    <li><a href="/stocks.html">Stocks</a></li>
+    <li><a href="/opportunity.html">Opportunity</a></li>
+    <li><a href="/reportcard.html">Report Card</a></li>
+    <li><a href="/awards.html">Awards</a></li>
+    <li><a href="/vorp.html">VORP</a></li>
+    <li><a href="/tradevalues.html">Trade Values</a></li>
+    <li><a href="/tradefinder.html">Trade Finder</a></li>
+    <li><a href="/rosterbuilder.html">Roster Builder</a></li>
+    <li><a href="/scoring.html">Scoring</a></li>
+    <li><a href="/cheatsheet.html">Cheat Sheet</a></li>
+    <li><a href="/auction.html">Auction</a></li>
+    <li><a href="/dashboard.html">Dashboard</a></li>
+    <li><a href="/tiers.html">Tiers</a></li>
+    <li><a href="/archetypes.html">Archetypes</a></li>
+    <li><a href="/career.html">Career</a></li>
+    <li><a href="/career-compare.html">Career Compare</a></li>
+    <li><a href="/draftclass.html">Draft Class</a></li>
+    <li><a href="/percentiles.html" class="active">Percentiles</a></li>
+    <li><a href="/team/KC">Teams</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
+    <li><a href="/agents.html">War Room</a></li>
+  </ul>
+</nav>
+
+<main class="pct-page" id="pct-content">
+  <div class="pct-header">
+    <h1>Player Percentiles</h1>
+    <div class="pct-subtitle">position-relative stat rankings</div>
+  </div>
+
+  <div class="pct-search-wrap">
+    <input type="text" class="pct-search" id="player-search" placeholder="search for a player..." autocomplete="off" aria-label="Search for a player">
+    <div class="pct-dropdown" id="search-dropdown"></div>
+  </div>
+
+  <div class="pct-controls" id="pct-controls" style="display:none;">
+    <select class="pct-select" id="season-select" title="Season" aria-label="Season"></select>
+  </div>
+
+  <div id="pct-result"></div>
+
+  <div class="pct-empty" id="pct-empty">
+    search for a player to see their percentile rankings
+  </div>
+</main>
+
+<footer style="text-align:center; padding:24px 20px 32px; font-family:var(--font-hand); font-size:15px; color:var(--ink-light); border-top:2px dashed var(--ink-faint); margin-top:40px;">
+  <div style="margin-bottom:10px;">
+    <a href="/lab.html" style="color:var(--ink-light); text-decoration:none;">The Lab</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tools.html" style="color:var(--ink-light); text-decoration:none;">Tools</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/rankings.html" style="color:var(--ink-light); text-decoration:none;">Rankings</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/leaders.html" style="color:var(--ink-light); text-decoration:none;">Leaders</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/prospects.html" style="color:var(--ink-light); text-decoration:none;">Prospects</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/scarcity.html" style="color:var(--ink-light); text-decoration:none;">Scarcity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/breakouts.html" style="color:var(--ink-light); text-decoration:none;">Breakouts</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/buysell.html" style="color:var(--ink-light); text-decoration:none;">Buy/Sell</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/aging.html" style="color:var(--ink-light); text-decoration:none;">Aging</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/weekly.html" style="color:var(--ink-light); text-decoration:none;">Weekly</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/targets.html" style="color:var(--ink-light); text-decoration:none;">Targets</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/matchups.html" style="color:var(--ink-light); text-decoration:none;">Matchups</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/usage.html" style="color:var(--ink-light); text-decoration:none;">Usage</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/yoy.html" style="color:var(--ink-light); text-decoration:none;">YoY</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/airyards.html" style="color:var(--ink-light); text-decoration:none;">Air Yards</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/explorer.html" style="color:var(--ink-light); text-decoration:none;">Explorer</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/redzone.html" style="color:var(--ink-light); text-decoration:none;">Red Zone</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/efficiency.html" style="color:var(--ink-light); text-decoration:none;">Efficiency</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/consistency.html" style="color:var(--ink-light); text-decoration:none;">Consistency</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/schedule.html" style="color:var(--ink-light); text-decoration:none;">Schedule</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/stocks.html" style="color:var(--ink-light); text-decoration:none;">Stocks</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/opportunity.html" style="color:var(--ink-light); text-decoration:none;">Opportunity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/reportcard.html" style="color:var(--ink-light); text-decoration:none;">Report Card</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/awards.html" style="color:var(--ink-light); text-decoration:none;">Awards</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/vorp.html" style="color:var(--ink-light); text-decoration:none;">VORP</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tradevalues.html" style="color:var(--ink-light); text-decoration:none;">Trade Values</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tradefinder.html" style="color:var(--ink-light); text-decoration:none;">Trade Finder</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/rosterbuilder.html" style="color:var(--ink-light); text-decoration:none;">Roster Builder</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/scoring.html" style="color:var(--ink-light); text-decoration:none;">Scoring</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/cheatsheet.html" style="color:var(--ink-light); text-decoration:none;">Cheat Sheet</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/auction.html" style="color:var(--ink-light); text-decoration:none;">Auction</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/dashboard.html" style="color:var(--ink-light); text-decoration:none;">Dashboard</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tiers.html" style="color:var(--ink-light); text-decoration:none;">Tiers</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/archetypes.html" style="color:var(--ink-light); text-decoration:none;">Archetypes</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/career.html" style="color:var(--ink-light); text-decoration:none;">Career</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/career-compare.html" style="color:var(--ink-light); text-decoration:none;">Career Compare</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/draftclass.html" style="color:var(--ink-light); text-decoration:none;">Draft Class</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/percentiles.html" style="color:var(--ink-light); text-decoration:none;">Percentiles</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/team/KC" style="color:var(--ink-light); text-decoration:none;">Teams</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none;">League Intel</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/agents.html" style="color:var(--ink-light); text-decoration:none;">War Room</a>
+  </div>
+  razzle.lol — let's razzle dazzle em baby
+</footer>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script src="app.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+
+  var searchInput = document.getElementById('player-search');
+  var dropdown = document.getElementById('search-dropdown');
+  var resultEl = document.getElementById('pct-result');
+  var emptyEl = document.getElementById('pct-empty');
+  var controlsEl = document.getElementById('pct-controls');
+  var seasonSelect = document.getElementById('season-select');
+  var searchTimer = null;
+  var currentPlayerId = null;
+
+  var params = new URLSearchParams(window.location.search);
+  var initialPlayer = params.get('player');
+  var initialSeason = params.get('season') ? parseInt(params.get('season'), 10) : 0;
+
+  // Search autocomplete
+  searchInput.addEventListener('input', function() {
+    var q = searchInput.value.trim();
+    clearTimeout(searchTimer);
+    if (q.length < 2) { dropdown.style.display = 'none'; return; }
+    searchTimer = setTimeout(function() {
+      fetch('/api/players/quick-search?q=' + encodeURIComponent(q) + '&limit=8')
+        .then(function(r) { if (!r.ok) throw new Error('fail'); return r.json(); })
+        .then(function(data) {
+          var players = data.players || [];
+          if (players.length === 0) { dropdown.style.display = 'none'; return; }
+          var html = '';
+          for (var i = 0; i < players.length; i++) {
+            var p = players[i];
+            html += '<div class="pct-dropdown-item" data-pid="' + escapeHtml(p.player_id) + '" data-name="' + escapeHtml(p.full_name) + '">';
+            html += '<span class="pct-dd-pos ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span>';
+            html += '<span>' + escapeHtml(p.full_name) + '</span>';
+            html += '<span style="color:var(--ink-light); font-size:12px;">' + escapeHtml(p.team) + '</span>';
+            html += '</div>';
+          }
+          dropdown.innerHTML = html;
+          dropdown.style.display = 'block';
+          var items = dropdown.querySelectorAll('.pct-dropdown-item');
+          for (var j = 0; j < items.length; j++) {
+            items[j].addEventListener('click', function() {
+              var pid = this.getAttribute('data-pid');
+              var name = this.getAttribute('data-name');
+              dropdown.style.display = 'none';
+              searchInput.value = name;
+              currentPlayerId = pid;
+              var url = new URL(window.location);
+              url.searchParams.set('player', pid);
+              window.history.replaceState({}, '', url);
+              loadPercentiles(pid);
+            });
+          }
+        })
+        .catch(function() { dropdown.style.display = 'none'; });
+    }, 250);
+  });
+
+  searchInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') dropdown.style.display = 'none';
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!searchInput.contains(e.target) && !dropdown.contains(e.target)) {
+      dropdown.style.display = 'none';
+    }
+  });
+
+  seasonSelect.addEventListener('change', function() {
+    if (currentPlayerId) {
+      var url = new URL(window.location);
+      url.searchParams.set('season', seasonSelect.value);
+      window.history.replaceState({}, '', url);
+      loadPercentiles(currentPlayerId, parseInt(seasonSelect.value, 10));
+    }
+  });
+
+  function loadPercentiles(playerId, season) {
+    emptyEl.style.display = 'none';
+    resultEl.innerHTML = '<div class="pct-loading">pulling film...</div>';
+
+    var url = '/api/player-percentiles?player_id=' + encodeURIComponent(playerId);
+    if (season) url += '&season=' + season;
+
+    fetch(url)
+      .then(function(r) { if (!r.ok) throw new Error('fail'); return r.json(); })
+      .then(function(data) {
+        if (data.error) {
+          resultEl.innerHTML = '<div class="pct-empty">' + escapeHtml(data.error) + '</div>';
+          return;
+        }
+        // Populate season selector
+        if (data.available_seasons) {
+          seasonSelect.innerHTML = '';
+          for (var i = 0; i < data.available_seasons.length; i++) {
+            var opt = document.createElement('option');
+            opt.value = data.available_seasons[i];
+            opt.textContent = data.available_seasons[i];
+            if (data.available_seasons[i] === data.season) opt.selected = true;
+            seasonSelect.appendChild(opt);
+          }
+          controlsEl.style.display = '';
+        }
+        renderPercentiles(data);
+      })
+      .catch(function() {
+        resultEl.innerHTML = '<div class="pct-empty">failed to load percentiles</div>';
+      });
+  }
+
+  function barColor(pctile) {
+    if (pctile >= 90) return '#2ec4b6';
+    if (pctile >= 75) return '#5b7fff';
+    if (pctile >= 50) return '#d97757';
+    if (pctile >= 25) return '#e87422';
+    return '#d44040';
+  }
+
+  function renderPercentiles(data) {
+    var p = data.player;
+    var pos = p.position || 'WR';
+    var pcts = data.percentiles || [];
+
+    if (pcts.length === 0) {
+      resultEl.innerHTML = '<div class="pct-empty">no percentile data for ' + escapeHtml(p.full_name) + ' in ' + escapeHtml(String(data.season)) + '</div>';
+      return;
+    }
+
+    var html = '';
+
+    // Player card
+    html += '<div class="pct-player-card">';
+    html += '<div>';
+    html += '<h2 class="pct-player-name">' + escapeHtml(p.full_name) + '</h2>';
+    html += '<div class="pct-player-meta">';
+    html += '<span class="pct-pos-badge ' + escapeHtml(pos) + '">' + escapeHtml(pos) + '</span>';
+    html += '<span>' + escapeHtml(p.team) + '</span>';
+    if (p.age) html += '<span>Age ' + escapeHtml(String(Math.round(p.age))) + '</span>';
+    html += '<span>' + escapeHtml(String(data.season)) + ' Season</span>';
+    html += '</div></div></div>';
+
+    html += '<div class="pct-pool">vs. ' + escapeHtml(String(data.position_pool)) + ' ' + escapeHtml(pos) + 's with 4+ games</div>';
+
+    // Actions
+    html += '<div class="pct-actions">';
+    html += '<button class="btn btn-primary" onclick="exportPctPng()" aria-label="Export as PNG">Export PNG</button>';
+    html += '</div>';
+
+    // Percentile bars
+    html += '<div class="pct-bars">';
+    for (var i = 0; i < pcts.length; i++) {
+      var m = pcts[i];
+      var color = barColor(m.percentile);
+      var widthPct = Math.max(5, m.percentile);
+      html += '<div class="pct-bar-row">';
+      html += '<div class="pct-bar-label">' + escapeHtml(m.label) + '</div>';
+      html += '<div class="pct-bar-track">';
+      html += '<div class="pct-bar-fill" style="width:' + widthPct + '%; background:' + color + ';">';
+      html += '<span class="pct-bar-pctile">' + escapeHtml(String(m.percentile)) + '</span>';
+      html += '</div></div>';
+      html += '<div class="pct-bar-value">' + escapeHtml(String(m.value)) + '</div>';
+      html += '</div>';
+    }
+    html += '</div>';
+
+    // Average percentile
+    var avgPct = 0;
+    for (var j = 0; j < pcts.length; j++) avgPct += pcts[j].percentile;
+    avgPct = Math.round(avgPct / pcts.length);
+    html += '<div style="text-align:center; margin-bottom:16px;">';
+    html += '<span style="font-family:var(--font-display); font-size:14px; color:var(--ink-light);">Average Percentile: </span>';
+    html += '<span style="font-family:var(--font-mono); font-size:18px; font-weight:700; color:' + barColor(avgPct) + ';">' + escapeHtml(String(avgPct)) + 'th</span>';
+    html += '</div>';
+
+    // Watermark
+    html += '<div style="text-align:right; font-family:var(--font-hand); font-size:13px; color:var(--ink-faint); margin-top:8px;">razzle.lol</div>';
+
+    resultEl.innerHTML = html;
+  }
+
+  // PNG export
+  window.exportPctPng = function() {
+    var el = document.getElementById('pct-content');
+    if (!el || typeof html2canvas === 'undefined') return;
+    html2canvas(el, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+      var ctx = canvas.getContext('2d');
+      ctx.font = 'bold 20px "Space Mono", monospace';
+      ctx.fillStyle = 'rgba(0,0,0,0.15)';
+      ctx.textAlign = 'right';
+      ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 16);
+      var link = document.createElement('a');
+      link.download = 'razzle-percentiles.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    });
+  };
+
+  // Analytics
+  if (typeof trackPage === 'function') trackPage('percentiles');
+
+  // Load from URL
+  if (initialPlayer) {
+    currentPlayerId = initialPlayer;
+    loadPercentiles(initialPlayer, initialSeason || undefined);
+    fetch('/api/players/quick-search?q=' + encodeURIComponent(initialPlayer) + '&limit=1')
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        if (d.players && d.players.length > 0) searchInput.value = d.players[0].full_name;
+      })
+      .catch(function() {});
+  }
+})();
+</script>
+</body>
+</html>

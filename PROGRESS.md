@@ -1,6 +1,19 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 108 — Draft Class Tracker (COMPLETE)
+## Current Phase: Phase 109 — Player Percentiles (COMPLETE)
+
+**Exit criterion MET:** /percentiles.html lets users search for any player and see position-relative percentile rankings across 8 stat categories with color-coded horizontal bars. Position-specific metrics (QB: pass yd/g, comp%, rush yd/g, etc.; RB: rush yd/g, ypc, rec/g, etc.; WR/TE: rec/g, tgt/g, rec yd/g, ypr, catch%, etc.). Bar colors scale from green (90th+) through blue/orange to red (<25th). Average percentile summary. Season selector, URL state (?player=ID&season=), PNG export with watermark. GET /api/player-percentiles endpoint computes percentiles vs. same-position players with 4+ games. 22 escapeHtml calls, 86/86 braces balanced. "Percentiles" nav link on all 45 pages. Sitemap + tools hub entry. Design matches DESIGN.md.
+
+### Phase 109 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/player-percentiles endpoint | DONE | fetch_player_percentiles, position-relative, 8 metrics |
+| 2 | Player Percentiles page | DONE | Percentile bars, color coding, season selector, 22 escapeHtml |
+| 3 | Nav links + sitemap | DONE | All 45 pages updated, sitemap + tools hub |
+| 4 | Smoke test | DONE | Python OK, JS OK, 45/45 nav links |
+
+## Previous Phase: Phase 108 — Draft Class Tracker (COMPLETE)
 
 **Exit criterion MET:** /draftclass.html shows fantasy production by NFL draft class (2020-2025). Class-level summary chips (total players, avg PPG, hits, busts, hit rate). Round-by-round ROI canvas bar chart showing avg PPG per draft round. Sortable player table with pick number, name, position badge, drafted/current team, games, PPG, total PPR, and hit/bust verdict badges (HIT=15+ PPG, SOLID=10+, OK=5+, BUST=<5). Draft year selector, position filter tabs, URL state (?year=&pos=), PNG export. GET /api/draft-class endpoint joins draft_picks to player_week_stats via player name+position. 21 escapeHtml calls, 98/98 braces balanced. "Draft Class" nav link on all 44 pages. Sitemap + tools hub entry. Design matches DESIGN.md.
 

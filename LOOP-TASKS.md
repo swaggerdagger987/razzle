@@ -1,17 +1,17 @@
-# Razzle Loop — Phase 108 Task List
+# Razzle Loop — Phase 109 Task List
 
-> Draft Class Tracker — fantasy production by draft class
+> Player Percentiles — percentile rankings across 8+ categories
 
-**Current Phase**: 108 — Draft Class Tracker
-**Exit Criterion**: /draftclass.html shows fantasy production by draft class (2020-2024), with class-level summaries, top producers per class, round-by-round ROI. GET /api/draft-class endpoint. Design matches DESIGN.md.
+**Current Phase**: 109 — Player Percentiles
+**Exit Criterion**: /percentiles.html lets users search a player and see percentile bars across 8+ stat categories. Position-relative percentiles. GET /api/player-percentiles endpoint. Design matches DESIGN.md.
 
 ---
 
-## Task 1: Backend /api/draft-class endpoint
+## Task 1: Backend /api/player-percentiles endpoint
 **Status**: PASS
 **Attempts**: 1
 
-## Task 2: Draft Class Tracker page (/draftclass.html)
+## Task 2: Player Percentiles page (/percentiles.html)
 **Status**: PASS
 **Attempts**: 1
 
@@ -27,7 +27,7 @@
 
 ## Loop State
 ```
-Current Phase: 108
+Current Phase: 109
 Current Task: 4
 Current Stage: COMPLETE
 Attempt: 1

@@ -9623,3 +9623,188 @@ def fetch_draft_class(draft_year=None, position=None):
         }
     finally:
         conn.close()
+
+
+# ---------------------------------------------------------------------------
+# Player Percentiles — position-relative percentile rankings
+# ---------------------------------------------------------------------------
+
+def fetch_player_percentiles(player_id, season=None):
+    """Return percentile rankings for a player vs. their position group."""
+    if not player_id:
+        return {"error": "player_id is required"}
+
+    conn = get_conn()
+    try:
+        if not season:
+            row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+            season = row[0] if row and row[0] else 2024
+
+        available_seasons = [
+            r[0] for r in conn.execute(
+                "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
+            ).fetchall()
+        ]
+
+        # Get player info
+        player = conn.execute(
+            "SELECT player_id, full_name, position, team, age "
+            "FROM players WHERE player_id = ?",
+            (player_id,),
+        ).fetchone()
+        if not player:
+            return {"error": "Player not found"}
+
+        pos = player[2] or "WR"
+        player_info = {
+            "player_id": player[0],
+            "full_name": player[1] or "Unknown",
+            "position": pos,
+            "team": player[3] or "FA",
+            "age": player[4] or 0,
+        }
+
+        # Define metrics by position
+        if pos == "QB":
+            metrics = [
+                ("ppg", "PPG"),
+                ("pass_yd_g", "Pass Yd/G"),
+                ("pass_td_g", "Pass TD/G"),
+                ("comp_pct", "Comp%"),
+                ("rush_yd_g", "Rush Yd/G"),
+                ("td_g", "Total TD/G"),
+                ("int_rate", "INT Rate (inv)"),
+                ("fpts_total", "Total Points"),
+            ]
+        elif pos == "RB":
+            metrics = [
+                ("ppg", "PPG"),
+                ("rush_yd_g", "Rush Yd/G"),
+                ("ypc", "YPC"),
+                ("rush_td_g", "Rush TD/G"),
+                ("rec_g", "Rec/G"),
+                ("tgt_g", "Tgt/G"),
+                ("rec_yd_g", "Rec Yd/G"),
+                ("fpts_total", "Total Points"),
+            ]
+        else:
+            # WR / TE
+            metrics = [
+                ("ppg", "PPG"),
+                ("rec_g", "Rec/G"),
+                ("tgt_g", "Tgt/G"),
+                ("rec_yd_g", "Rec Yd/G"),
+                ("rec_td_g", "Rec TD/G"),
+                ("ypr", "Yards/Rec"),
+                ("catch_rate", "Catch%"),
+                ("fpts_total", "Total Points"),
+            ]
+
+        # Get all players at same position for season
+        rows = conn.execute("""
+            SELECT
+                s.player_id,
+                SUM(s.fantasy_points_ppr) as total_ppr,
+                COUNT(DISTINCT s.week) as games,
+                SUM(s.receptions) as rec,
+                SUM(s.targets) as tgt,
+                SUM(s.receiving_yards) as rec_yd,
+                SUM(s.receiving_tds) as rec_td,
+                SUM(s.carries) as car,
+                SUM(s.rushing_yards) as rush_yd,
+                SUM(s.rushing_tds) as rush_td,
+                SUM(s.passing_yards) as pass_yd,
+                SUM(s.passing_tds) as pass_td,
+                SUM(s.interceptions) as ints,
+                SUM(s.completions) as completions,
+                SUM(s.attempts) as pass_att,
+                SUM(s.touchdowns) as total_td
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE s.season = ? AND p.position = ?
+            GROUP BY s.player_id
+            HAVING games >= 4 AND (total_ppr / games) >= 2.0
+        """, (season, pos)).fetchall()
+
+        if not rows:
+            return {"player": player_info, "season": season, "percentiles": [],
+                    "available_seasons": available_seasons}
+
+        # Build stat arrays for all players
+        all_stats = {}
+        target_stats = None
+
+        for r in rows:
+            pid = r[0]
+            g = r[2] or 1
+            total_ppr = r[1] or 0
+            rec = r[3] or 0
+            tgt = r[4] or 0
+            rec_yd = r[5] or 0
+            rec_td = r[6] or 0
+            car = r[7] or 0
+            rush_yd = r[8] or 0
+            rush_td = r[9] or 0
+            pass_yd = r[10] or 0
+            pass_td = r[11] or 0
+            ints = r[12] or 0
+            completions = r[13] or 0
+            pass_att = r[14] or 0
+            total_td = r[15] or 0
+
+            stats = {
+                "ppg": total_ppr / g,
+                "rec_g": rec / g,
+                "tgt_g": tgt / g,
+                "rec_yd_g": rec_yd / g,
+                "rec_td_g": rec_td / g,
+                "rush_yd_g": rush_yd / g,
+                "rush_td_g": rush_td / g,
+                "ypc": rush_yd / car if car > 0 else 0,
+                "ypr": rec_yd / rec if rec > 0 else 0,
+                "catch_rate": rec / tgt * 100 if tgt > 0 else 0,
+                "pass_yd_g": pass_yd / g,
+                "pass_td_g": pass_td / g,
+                "comp_pct": completions / pass_att * 100 if pass_att > 0 else 0,
+                "td_g": total_td / g,
+                "int_rate": 100 - (ints / pass_att * 100 if pass_att > 0 else 0),  # Inverted
+                "fpts_total": total_ppr,
+            }
+            all_stats[pid] = stats
+            if pid == player_id:
+                target_stats = stats
+
+        if not target_stats:
+            return {"player": player_info, "season": season, "percentiles": [],
+                    "available_seasons": available_seasons,
+                    "error": "Player has no stats for this season"}
+
+        # Compute percentiles
+        n_players = len(all_stats)
+        percentiles = []
+
+        for metric_key, metric_label in metrics:
+            # Get all values for this metric
+            values = sorted(all_stats[pid][metric_key] for pid in all_stats)
+            player_val = target_stats[metric_key]
+
+            # Percentile = % of players below this value
+            below = sum(1 for v in values if v < player_val)
+            pctile = round(below / n_players * 100)
+
+            percentiles.append({
+                "key": metric_key,
+                "label": metric_label,
+                "value": round(player_val, 2),
+                "percentile": pctile,
+            })
+
+        return {
+            "player": player_info,
+            "season": season,
+            "available_seasons": available_seasons,
+            "position_pool": n_players,
+            "percentiles": percentiles,
+        }
+    finally:
+        conn.close()
