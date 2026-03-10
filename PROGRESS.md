@@ -1,6 +1,17 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 19 — Draft Class Tracker (COMPLETE)
+## Current Phase: Phase 20 — QA + UX Audit Fixes for Phases 16-19 (COMPLETE)
+
+**Exit Criterion MET**: All HIGH and MEDIUM findings from QA+UX audit resolved. Variable shadowing fixed (`isProspect` → `prospectMode` in applyUniverseUI). Year calculation deduplicated (moved before try/catch). Prospect page title now uses `state.draftYear`. cv URL param validated against allowed values.
+
+### Phase 20 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Fix HIGH — Variable shadowing + year calc | DONE | Renamed var, shared year calc across try/catch |
+| 2 | Fix MEDIUM — Prospect title + cv validation | DONE | state.draftYear, validated cv param |
+
+## Previous Phase: Phase 19 — Draft Class Tracker (COMPLETE)
 
 **Exit Criterion MET**: New Lab panel shows historical NFL draft classes (2015-2025). Backend API /api/draft-class-tracker computes career fantasy PPG from draft_picks data, classifies picks as Stud/Hit/Average/Bust based on round+position expectations. Frontend panel has year selector, position filter tabs, round breakdown cards with hit-rate bars, position breakdown, and color-coded verdict badges. Sidebar entry under College category.
 

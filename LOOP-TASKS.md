@@ -1,10 +1,25 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 19 (Draft Class Tracker)
-- All 3 tasks PASS
+- Phase: 20 (QA + UX Audit Fixes for Phases 16-19)
+- All 2 tasks PASS
 - Stage: PHASE GATE
 - Next: Commit and push
+
+## Phase 20: QA + UX Audit — Auto-Generated Fixes
+**Exit Criterion**: All HIGH and MEDIUM findings from QA+UX audit of Phases 16-19 are resolved. Variable shadowing fixed, year calculation deduplicated, prospect page title corrected, cv URL param validated.
+
+### Task 1: Fix HIGH — Variable shadowing + duplicate year calc
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Renamed `isProspect` to `prospectMode` in applyUniverseUI(). Moved `_curYear`/`_nflYear` before try/catch, catch block now uses shared `_nflYear`.
+
+### Task 2: Fix MEDIUM — Wrong state var in prospect title + cv validation
+**Status**: PASS
+**Attempts**: 1
+**Notes**: generateRedditTitle() now uses `state.draftYear || new Date().getFullYear()`. cv URL param validated against "stats"/"prospects" only.
+
+---
 
 ## Phase 19: Draft Class Tracker
 **Exit Criterion**: A Lab panel shows historical NFL draft classes (2015-2025). Select a draft year to see how that class performed in fantasy football. Shows top performers, bust rate by round, positional breakdown, and hit/miss classification. Screenshot-worthy for r/DynastyFF.

@@ -541,6 +541,10 @@ function isProspectView() {
 (async function init() {
   loadStateFromURL();
 
+  // Dynamic year fallbacks (shared by try + catch)
+  const _curYear = new Date().getFullYear();
+  const _nflYear = new Date().getMonth() >= 7 ? _curYear : _curYear - 1;
+
   // Load NFL, prospect, and college options in parallel
   try {
     const [nflOpts, prospectOpts, collegeOpts] = await Promise.all([
@@ -548,9 +552,6 @@ function isProspectView() {
       apiFetch("/api/prospect-options").catch(() => ({ years: [], schools: [], positions: [] })),
       apiFetch("/api/college/filter-options").catch(() => ({ seasons: [], teams: [], conferences: [], positions: [] })),
     ]);
-
-    const _curYear = new Date().getFullYear();
-    const _nflYear = new Date().getMonth() >= 7 ? _curYear : _curYear - 1;
 
     state.seasons = nflOpts.seasons || [_nflYear];
     if (!state.season && state.season !== "career") state.season = state.seasons[0] || _nflYear;
@@ -566,8 +567,7 @@ function isProspectView() {
     populateTeamFilter();
   } catch (e) {
     console.error("Failed to load filter options:", e);
-    const _fb = new Date().getMonth() >= 7 ? new Date().getFullYear() : new Date().getFullYear() - 1;
-    state.season = _fb;
+    state.season = _nflYear;
   }
 
   // Sync team/minGP UI from URL state
@@ -1095,19 +1095,19 @@ function setCollegeView(view) {
 }
 
 function applyUniverseUI() {
-  const isProspect = isProspectView();
+  const prospectMode = isProspectView();
   const isCollege = state.universe === "college";
   const isNFL = state.universe === "nfl";
 
   // Toggle body classes for blue accent
-  document.body.classList.toggle("prospect-mode", isProspect);
-  document.body.classList.toggle("college-mode", isCollege && !isProspect);
+  document.body.classList.toggle("prospect-mode", prospectMode);
+  document.body.classList.toggle("college-mode", isCollege && !prospectMode);
 
   // Update universe bar label
   const uLabel = document.getElementById("universeLabel");
   if (uLabel) {
     uLabel.textContent = isCollege
-      ? (isProspect ? "college — draft prospects" : "college universe")
+      ? (prospectMode ? "college — draft prospects" : "college universe")
       : "NFL universe";
   }
 
@@ -1121,12 +1121,12 @@ function applyUniverseUI() {
     subToggle.style.display = isCollege ? "flex" : "none";
     const statsBtn = document.getElementById("collegeViewStats");
     const prospectsBtn = document.getElementById("collegeViewProspects");
-    if (statsBtn) statsBtn.classList.toggle("active", !isProspect);
-    if (prospectsBtn) prospectsBtn.classList.toggle("active", isProspect);
+    if (statsBtn) statsBtn.classList.toggle("active", !prospectMode);
+    if (prospectsBtn) prospectsBtn.classList.toggle("active", prospectMode);
   }
 
   // Search placeholder
-  document.getElementById("searchInput").placeholder = isProspect
+  document.getElementById("searchInput").placeholder = prospectMode
     ? "search prospects..." : isCollege ? "search college players..." : "search players...";
 
   // Hide formula button in non-NFL modes
@@ -1554,7 +1554,10 @@ function loadStateFromURL() {
       state.universe = uParam;
     }
   }
-  if (params.has("cv")) state.collegeView = params.get("cv");
+  if (params.has("cv")) {
+    const cv = params.get("cv");
+    if (cv === "stats" || cv === "prospects") state.collegeView = cv;
+  }
   if (params.has("pos")) state.position = params.get("pos");
   if (params.has("q")) state.search = params.get("q");
   if (params.has("sort")) state.sortKey = params.get("sort");
@@ -1659,7 +1662,7 @@ function generateRedditTitle() {
   const posFilter = state.position ? state.position.toUpperCase() : "";
 
   if (isProspectView()) {
-    const year = state.season || "2025";
+    const year = state.draftYear || new Date().getFullYear();
     if (posFilter) return `${year} ${posFilter} Prospect Class — ${preset} View | Razzle`;
     return `${year} Draft Prospect ${preset} Rankings | Razzle`;
   }
