@@ -211,6 +211,31 @@
   .lab-sidebar.collapsed .sidebar-recent {
     display: none !important;
   }
+  .sidebar-favorites {
+    padding: 6px 10px 8px;
+    border-bottom: 1px dashed var(--ink-faint);
+    display: none;
+  }
+  .sidebar-favorites.has-items {
+    display: block;
+  }
+  .lab-sidebar.collapsed .sidebar-favorites {
+    display: none !important;
+  }
+  .sidebar-fav-star {
+    float: right;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--ink-faint);
+    transition: color 0.15s;
+    margin-left: 4px;
+  }
+  .sidebar-fav-star:hover {
+    color: var(--yellow);
+  }
+  .sidebar-fav-star.favorited {
+    color: var(--yellow);
+  }
 
   /* ===== TOOL COUNT BADGE ===== */
   .sidebar-tool-count {
@@ -2316,6 +2341,11 @@
       <span class="sidebar-tool-count" id="sidebarToolCount"></span>
     </div>
 
+    <div class="sidebar-favorites" id="sidebarFavorites">
+      <div class="sidebar-recent-label">Favorites</div>
+      <div class="sidebar-recent-chips" id="sidebarFavChips"></div>
+    </div>
+
     <div class="sidebar-recent" id="sidebarRecent">
       <div class="sidebar-recent-label">Recent</div>
       <div class="sidebar-recent-chips" id="sidebarRecentChips"></div>
@@ -3458,6 +3488,92 @@
 
   // Initial render of recent panels
   _renderRecentPanels();
+
+  // ─── Favorite panels ──────────────────────────────────────────
+  var FAV_KEY = 'razzle_favorite_panels';
+  var FAV_MAX = 10;
+
+  function _getFavorites() {
+    try {
+      var raw = localStorage.getItem(FAV_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch(e) { return []; }
+  }
+
+  function _saveFavorites(favs) {
+    try { localStorage.setItem(FAV_KEY, JSON.stringify(favs)); } catch(e) {}
+  }
+
+  function toggleFavorite(panelName) {
+    var favs = _getFavorites();
+    var idx = favs.indexOf(panelName);
+    if (idx !== -1) {
+      favs.splice(idx, 1);
+    } else {
+      if (favs.length >= FAV_MAX) {
+        _showToast('max ' + FAV_MAX + ' favorites');
+        return;
+      }
+      favs.push(panelName);
+    }
+    _saveFavorites(favs);
+    _renderFavorites();
+    _renderFavStars();
+  }
+  // Expose globally for onclick
+  window.toggleFavorite = toggleFavorite;
+
+  function _renderFavorites() {
+    var container = document.getElementById('sidebarFavChips');
+    var wrapper = document.getElementById('sidebarFavorites');
+    if (!container || !wrapper) return;
+    var favs = _getFavorites();
+    if (favs.length === 0) {
+      wrapper.classList.remove('has-items');
+      container.innerHTML = '';
+      return;
+    }
+    wrapper.classList.add('has-items');
+    container.innerHTML = favs.map(function(p) {
+      var label = PANEL_LABELS[p] || p;
+      return '<a class="sidebar-recent-chip" onclick="switchPanel(\'' + escapeHtml(p) + '\')">' + escapeHtml(label) + '</a>';
+    }).join('');
+  }
+
+  function _renderFavStars() {
+    var favs = _getFavorites();
+    document.querySelectorAll('.sidebar-fav-star').forEach(function(star) {
+      var panel = star.getAttribute('data-panel');
+      if (favs.indexOf(panel) !== -1) {
+        star.classList.add('favorited');
+        star.textContent = '\u2605';
+      } else {
+        star.classList.remove('favorited');
+        star.textContent = '\u2606';
+      }
+    });
+  }
+
+  // Inject star icons into sidebar items
+  (function _injectFavStars() {
+    var favs = _getFavorites();
+    document.querySelectorAll('.lab-sidebar-item').forEach(function(item) {
+      var panel = item.getAttribute('data-panel');
+      if (!panel) return;
+      var star = document.createElement('span');
+      star.className = 'sidebar-fav-star' + (favs.indexOf(panel) !== -1 ? ' favorited' : '');
+      star.setAttribute('data-panel', panel);
+      star.textContent = favs.indexOf(panel) !== -1 ? '\u2605' : '\u2606';
+      star.addEventListener('click', function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        toggleFavorite(panel);
+      });
+      item.appendChild(star);
+    });
+  })();
+
+  _renderFavorites();
 
   // Set tool count badge
   (function() {
