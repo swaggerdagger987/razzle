@@ -1,6 +1,6 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 27 — Backend Cleanup: Split live_data.py into Modules (IN PROGRESS)
+## Current Phase: Phase 27 — Backend Cleanup: Split live_data.py into Modules (COMPLETE)
 
 **Exit Criterion**: `live_data.py` is replaced by a `live_data/` package with logical submodules. All imports in `server.py` updated. No function lost, no endpoint broken. Each module under 3,000 lines.
 
@@ -13,7 +13,7 @@
 | 3 | Extract players.py — NFL player CRUD functions | DONE | 1,669 lines, 18 functions (db_stats through fetch_player_comps), monolith reduced to 12,020 lines |
 | 4 | Extract prospects.py and college.py | DONE | prospects.py (881 lines, 9 functions), college.py (2,300 lines, 20 functions + 9 constants), monolith reduced to 8,883 lines |
 | 5 | Extract dynasty.py and storage.py | DONE | dynasty.py (1,144 lines, 11 functions), storage.py (339 lines, 11 functions), monolith reduced to 7,464 lines |
-| 6 | Extract analytics.py and tools.py, delete monolith | PENDING | |
+| 6 | Extract analytics.py, dashboards.py, tools.py, delete monolith | DONE | analytics.py (2,252 lines, 14 funcs), dashboards.py (2,011 lines, 9 funcs), tools.py (2,926 lines, 29 funcs), monolith deleted, __init__.py explicit re-exports (131 total), 2 dead duplicates dropped |
 
 ## Previous Phase: Phase 26 — Backend Cleanup: Connection Management (COMPLETE)
 

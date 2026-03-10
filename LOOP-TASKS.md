@@ -6,8 +6,9 @@
 - Task 2: PASS
 - Task 3: PASS
 - Task 4: PASS
-- Stage: EXECUTING
-- Next: Task 6
+- Task 6: PASS
+- Stage: COMPLETE
+- Next: Phase transition
 
 ## Phase 27: Backend Cleanup: Split live_data.py into Modules
 **Exit Criterion**: `live_data.py` is replaced by a `live_data/` package with logical submodules (e.g., `players.py`, `prospects.py`, `college.py`, `analytics.py`, `cache.py`, `storage.py`). All imports in `server.py` updated. No function lost, no endpoint broken. Each module under 3,000 lines.
@@ -41,9 +42,10 @@
 **Notes**: `dynasty.py` (1,144 lines) contains 11 functions: fetch_trade_values, fetch_pick_values, fetch_roster_value, fetch_dynasty_rankings, fetch_trade_value_chart, fetch_trade_finder, fetch_roster_grade, fetch_auction_values, fetch_dynasty_dashboard, fetch_tier_list, fetch_dynasty_power_rankings. Plus _TIER_BREAKS constant. `storage.py` (339 lines) contains 11 functions: init_waitlist_table, add_to_waitlist, init_formula_store_tables, _seed_formula_store, publish_formula, fetch_formula_store, get_formula_detail, rate_formula, _init_analytics_table, log_pageview, get_analytics_summary. Monolith reduced from 8,883 to 7,464 lines. All files compile clean. Full import chain verified.
 **Acceptance**: `dynasty.py` contains dynasty rankings, trade values, trade finder, trade value chart, dynasty dashboard, tier list, power rankings, roster value/grade, pick values, auction values. `storage.py` contains formula store, waitlist, analytics logging functions + init functions. `_monolith.py` updated. All files compile.
 
-### Task 6: Extract analytics.py and tools.py — remaining functions, delete monolith
-**Status**: PENDING
-**Attempts**: 0
+### Task 6: Extract analytics.py, dashboards.py, and tools.py — remaining functions, delete monolith
+**Status**: PASS
+**Attempts**: 1
+**Notes**: `analytics.py` (2,252 lines, 14 functions: heatmap, stat_leaders, scarcity, breakouts, buy_sell, stat_explorer, aging_curves, weekly_heatmap, target_distribution, matchup_heatmap, usage_trends, yoy, air_yards, redzone). `dashboards.py` (2,011 lines, 9 functions: efficiency, consistency, SOS, stock_watch, opportunity, report_cards, season_awards, vorp, stat_correlations). `tools.py` (2,926 lines, 29 functions: featured, scoring_comparison, cheat_sheet, archetypes, draft_class, weekly_leaders, pace_tracker, streaks, season_recap, records, waivers, playoff_schedule, fpts_breakdown, garbage_time, snap_efficiency, handcuffs, weekly_mvp, stacks, positional_advantage, td_regression, dual_threat, season_pace, target_premium, workload_monitor, drop_rate, success_rate, game_script, draft_class_tracker). `_monolith.py` deleted. `__init__.py` updated with explicit re-exports from all 9 submodules (131 total exports). Two dead duplicate definitions dropped (old fetch_aging_curves, old fetch_td_regression). All modules under 3,000 lines. Python compiles clean. server.py imports clean.
 **Acceptance**: All remaining functions split between `analytics.py` (analytical dashboards) and `tools.py` (utility endpoints). `_monolith.py` deleted. `__init__.py` updated with explicit re-exports from all submodules. `server.py` unchanged (still uses `live_data.func()`). Every function accounted for. Each module under 3,000 lines. Python compiles clean.
 
 ---
