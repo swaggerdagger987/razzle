@@ -3161,6 +3161,9 @@
 
     currentPanel = panelName;
 
+    // Save last panel to localStorage for session memory
+    try { localStorage.setItem('razzle_last_panel', panelName); } catch(e) {}
+
     // Update URL state (include universe if not NFL)
     var urlParams = new URLSearchParams();
     if (panelName !== 'screener') urlParams.set('panel', panelName);
@@ -3320,6 +3323,10 @@
   }
 
   var initPanel = params.get('panel');
+  if (!initPanel) {
+    // Restore last-visited panel from localStorage
+    try { initPanel = localStorage.getItem('razzle_last_panel'); } catch(e) {}
+  }
   if (initPanel && initPanel !== 'screener') {
     switchPanel(initPanel);
   }

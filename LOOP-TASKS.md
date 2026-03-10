@@ -22,8 +22,9 @@
 **Accept when**: Visit Breakouts panel → close tab → reopen Lab → lands on Breakouts. Visit with ?panel=stocks → lands on Stock Watch (URL overrides). Clear localStorage → defaults to screener.
 **Depends on**: none
 **Size**: S
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Saves `razzle_last_panel` to localStorage on every switchPanel call. On init, checks URL ?panel= first (priority), then falls back to localStorage. No saved panel → screener default.
 
 ### Task 3: Recently viewed panels strip
 **Requirement**: Add a "Recent" section at the top of the sidebar (below search, above first category). Shows the last 5 unique panels visited as compact clickable chips. Stored in localStorage as ordered array. Updates on every panel switch. Clicking a recent chip switches to that panel. Styled as small pill badges with panel name. Hidden when sidebar is collapsed. Doesn't show the currently active panel in the list.
