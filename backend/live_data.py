@@ -7453,3 +7453,439 @@ def fetch_report_cards(season=None, position=None, limit=25):
         }
     finally:
         conn.close()
+
+
+_AWARD_ANNOTATIONS = {
+    "mvp": "the total package",
+    "most_efficient": "every touch counts",
+    "iron_man": "set it and forget it",
+    "schedule_survivor": "earned every point",
+    "volume_king": "feed me the rock",
+    "breakout_star": "remember the name",
+    "rising_stock": "buy window closing",
+    "dominator": "alpha of the pack",
+    "redzone_king": "money in the paint",
+    "best_floor": "the safest bet",
+}
+
+
+def fetch_season_awards(season=None, position=None):
+    """Fantasy Season Superlatives — data-driven awards across all metric systems.
+
+    Awards: MVP (highest GPA), Most Efficient (PPO), Iron Man (lowest CoV),
+    Schedule Survivor (PPG x SOS difficulty), Volume King (opp share),
+    Breakout Star (age-weighted opp share), Rising Stock (stock delta),
+    Dominator (dominator rating), Red Zone King (GL TDs), Best Floor (10th pctile).
+    """
+    import math
+    from collections import defaultdict
+
+    conn = get_conn()
+    try:
+        row = conn.execute(
+            "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
+        ).fetchall()
+        available_seasons = [r[0] for r in row] if row else [2024]
+        if not season:
+            season = available_seasons[0] if available_seasons else 2024
+
+        pos_filter = ""
+        params = [season]
+        if position and position.upper() in FANTASY_POSITIONS:
+            pos_filter = "AND p.position = ?"
+            params.append(position.upper())
+
+        # Gather weekly data per player
+        rows = conn.execute(f"""
+            SELECT s.player_id, p.full_name, p.position, p.team,
+                   p.headshot_url, p.age,
+                   s.fantasy_points_ppr, s.targets, s.carries,
+                   s.receiving_yards, s.receiving_tds,
+                   s.rushing_yards,
+                   s.opponent_team, s.week
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE s.season = ?
+              AND p.position IN ('QB', 'RB', 'WR', 'TE')
+              AND p.fantasy_relevant = 1
+              AND s.opponent_team IS NOT NULL AND s.opponent_team != ''
+              {pos_filter}
+            ORDER BY s.player_id, s.week
+        """, params).fetchall()
+
+        if not rows:
+            return {
+                "season": season,
+                "available_seasons": available_seasons,
+                "awards": [],
+            }
+
+        # Build defense PPG-allowed grid for SOS
+        def_rows = conn.execute("""
+            SELECT s.opponent_team, p.position,
+                   COALESCE(SUM(s.fantasy_points_ppr), 0) as total_ppr,
+                   COUNT(DISTINCT s.week) as games
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE s.season = ?
+              AND p.position IN ('QB', 'RB', 'WR', 'TE')
+              AND s.opponent_team IS NOT NULL AND s.opponent_team != ''
+            GROUP BY s.opponent_team, p.position
+        """, [season]).fetchall()
+
+        defense_ppg = {}
+        for r in def_rows:
+            team, pos, total, games = r[0], r[1], r[2], r[3]
+            if games <= 0:
+                continue
+            if team not in defense_ppg:
+                defense_ppg[team] = {}
+            defense_ppg[team][pos] = round(total / games, 2)
+
+        league_avg = {}
+        for pos in ("QB", "RB", "WR", "TE"):
+            vals = [defense_ppg[t][pos] for t in defense_ppg if pos in defense_ppg[t]]
+            league_avg[pos] = sum(vals) / len(vals) if vals else 0
+
+        # Goal-line stats from PBP table
+        table_check = conn.execute(
+            "SELECT name FROM sqlite_master WHERE type='table' AND name='player_season_pbp'"
+        ).fetchone()
+        gl_lookup = {}
+        if table_check:
+            pids = list(set(r[0] for r in rows))
+            placeholders = ",".join("?" * len(pids))
+            gl_rows = conn.execute(f"""
+                SELECT player_id, gl_carries, gl_targets, gl_tds
+                FROM player_season_pbp
+                WHERE player_id IN ({placeholders}) AND season = ?
+            """, pids + [season]).fetchall()
+            for gr in gl_rows:
+                gl_lookup[gr[0]] = {
+                    "gl_carries": gr[1] or 0,
+                    "gl_targets": gr[2] or 0,
+                    "gl_tds": gr[3] or 0,
+                }
+
+        # Aggregate per player
+        player_info = {}
+        player_weeks = defaultdict(list)
+        player_opps = defaultdict(lambda: {
+            "targets": 0, "carries": 0, "total_pts": 0, "games": 0,
+            "rec_yards": 0, "rec_tds": 0, "rush_yards": 0,
+        })
+        player_sos = defaultdict(list)
+        team_totals = defaultdict(lambda: {
+            "targets": 0, "carries": 0, "rec_yards": 0,
+            "rec_tds": 0, "rush_yards": 0,
+        })
+
+        for r in rows:
+            pid = r[0]
+            if pid not in player_info:
+                player_info[pid] = {
+                    "player_id": pid,
+                    "name": r[1] or "Unknown",
+                    "position": r[2] or "RB",
+                    "team": r[3] or "FA",
+                    "headshot_url": r[4] or "",
+                    "age": r[5],
+                }
+
+            pts = r[6] or 0
+            targets = r[7] or 0
+            carries = r[8] or 0
+            rec_yards = r[9] or 0
+            rec_tds = r[10] or 0
+            rush_yards = r[11] or 0
+            opp = r[12] or ""
+            pos = r[2] or "RB"
+
+            player_weeks[pid].append(pts)
+            d = player_opps[pid]
+            d["targets"] += targets
+            d["carries"] += carries
+            d["total_pts"] += pts
+            d["games"] += 1
+            d["rec_yards"] += rec_yards
+            d["rec_tds"] += rec_tds
+            d["rush_yards"] += rush_yards
+
+            team = r[3] or "FA"
+            t = team_totals[team]
+            t["targets"] += targets
+            t["carries"] += carries
+            t["rec_yards"] += rec_yards
+            t["rec_tds"] += rec_tds
+            t["rush_yards"] += rush_yards
+
+            opp_allows = defense_ppg.get(opp, {}).get(pos, league_avg.get(pos, 0))
+            player_sos[pid].append(opp_allows)
+
+        # Compute metrics per player (min 6 games, 2 PPG)
+        players = []
+        for pid, weeks in player_weeks.items():
+            n = len(weeks)
+            if n < 6:
+                continue
+            info = player_info[pid]
+            opps_d = player_opps[pid]
+            total_pts = opps_d["total_pts"]
+            games = opps_d["games"]
+            ppg = round(total_pts / games, 2) if games > 0 else 0
+            if ppg < 2:
+                continue
+
+            opportunities = opps_d["targets"] + opps_d["carries"]
+
+            # Efficiency: PPO
+            ppo = round(total_pts / opportunities, 2) if opportunities > 0 else 0
+
+            # Consistency: CoV (Bessel's correction)
+            mean = sum(weeks) / n
+            variance = sum((w - mean) ** 2 for w in weeks) / (n - 1) if n > 1 else 0
+            stddev = math.sqrt(variance)
+            cov = round(stddev / mean, 3) if mean > 0 else 999
+
+            # Floor: 10th percentile weekly score
+            sorted_weeks = sorted(weeks)
+            floor_idx = max(0, int(n * 0.1))
+            floor_val = round(sorted_weeks[floor_idx], 1)
+
+            # SOS
+            sos_list = player_sos[pid]
+            avg_opp_ppg = sum(sos_list) / len(sos_list) if sos_list else 0
+            pos = info["position"]
+            sos_delta = round(league_avg.get(pos, 0) - avg_opp_ppg, 1)
+
+            # Opportunity share
+            team = info["team"]
+            tt = team_totals[team]
+            team_opps = tt["targets"] + tt["carries"]
+            opp_share = round(opportunities / team_opps * 100, 1) if team_opps > 0 else 0
+
+            # Dominator rating
+            if pos in ("WR", "TE"):
+                rec_yd_share = (opps_d["rec_yards"] / tt["rec_yards"] * 100) if tt["rec_yards"] > 0 else 0
+                rec_td_share = (opps_d["rec_tds"] / tt["rec_tds"] * 100) if tt["rec_tds"] > 0 else 0
+                dom_rating = round((rec_yd_share + rec_td_share) / 2, 1)
+            else:
+                dom_rating = round((opps_d["rush_yards"] / tt["rush_yards"] * 100), 1) if tt["rush_yards"] > 0 else 0
+
+            # Goal-line TDs
+            gl = gl_lookup.get(pid, {"gl_carries": 0, "gl_targets": 0, "gl_tds": 0})
+
+            # Age for breakout scoring
+            age = info["age"] or 26
+
+            players.append({
+                **info,
+                "ppg": ppg,
+                "games": games,
+                "ppo": ppo,
+                "cov": cov,
+                "floor": floor_val,
+                "sos_delta": sos_delta,
+                "opp_share": opp_share,
+                "dom_rating": dom_rating,
+                "gl_tds": gl["gl_tds"],
+                "opportunities": opportunities,
+                "age": age,
+            })
+
+        if not players:
+            return {
+                "season": season,
+                "available_seasons": available_seasons,
+                "awards": [],
+            }
+
+        # Compute percentiles
+        n_total = len(players)
+        ppg_sorted = sorted([p["ppg"] for p in players])
+        ppo_sorted = sorted([p["ppo"] for p in players])
+        cov_vals = sorted([p["cov"] for p in players])
+        sos_sorted = sorted([p["sos_delta"] for p in players])
+        opp_sorted = sorted([p["opp_share"] for p in players])
+
+        def pct_rank(val, sorted_vals):
+            rank = sum(1 for v in sorted_vals if v < val)
+            return round(rank / n_total * 100, 1) if n_total > 0 else 50
+
+        def grade_from_percentile(pct):
+            if pct >= 95:
+                return "A+"
+            elif pct >= 85:
+                return "A"
+            elif pct >= 75:
+                return "B+"
+            elif pct >= 65:
+                return "B"
+            elif pct >= 50:
+                return "C+"
+            elif pct >= 35:
+                return "C"
+            elif pct >= 25:
+                return "D"
+            return "F"
+
+        for p in players:
+            ppg_pct = pct_rank(p["ppg"], ppg_sorted)
+            ppo_pct = pct_rank(p["ppo"], ppo_sorted)
+            cov_pct = round(sum(1 for v in cov_vals if v > p["cov"]) / n_total * 100, 1) if n_total > 0 else 50
+            sos_pct = pct_rank(p["sos_delta"], sos_sorted)
+            opp_pct = pct_rank(p["opp_share"], opp_sorted)
+
+            # Composite GPA
+            gpa_pct = round(ppo_pct * 0.20 + cov_pct * 0.20 + sos_pct * 0.20 + ppg_pct * 0.20 + opp_pct * 0.20)
+            p["gpa_pct"] = gpa_pct
+            p["gpa_grade"] = grade_from_percentile(gpa_pct)
+
+            # Stock score
+            stock_score = round(ppo_pct * 0.25 + cov_pct * 0.25 + sos_pct * 0.25 + ppg_pct * 0.25)
+            p["stock_score"] = stock_score
+
+            # Stock delta (stock composite vs PPG rank — positive = undervalued)
+            p["stock_delta"] = round(stock_score - ppg_pct, 1)
+
+            # Schedule survivor score: PPG x SOS difficulty (harder schedule + high production)
+            p["survivor_score"] = round(ppg_pct * 0.5 + sos_pct * 0.5, 1)
+
+            # Breakout score: age-weighted opportunity (younger + high volume = breakout)
+            age_bonus = max(0, min(30, 30 - (p["age"] - 21))) / 30 * 100  # 21yo=100, 31yo=0
+            p["breakout_score"] = round(opp_pct * 0.5 + age_bonus * 0.3 + ppg_pct * 0.2, 1)
+
+            p["efficiency_grade"] = grade_from_percentile(ppo_pct)
+            p["consistency_grade"] = grade_from_percentile(cov_pct)
+            p["sos_grade"] = grade_from_percentile(sos_pct)
+
+        # Build award categories
+        award_defs = [
+            {
+                "key": "mvp",
+                "name": "MVP",
+                "description": "Highest composite Fantasy GPA",
+                "sort_key": "gpa_pct",
+                "stat_label": "GPA",
+                "stat_fn": lambda p: p["gpa_grade"],
+            },
+            {
+                "key": "most_efficient",
+                "name": "Most Efficient",
+                "description": "Highest fantasy points per opportunity",
+                "sort_key": "ppo",
+                "stat_label": "PPO",
+                "stat_fn": lambda p: str(p["ppo"]),
+            },
+            {
+                "key": "iron_man",
+                "name": "Iron Man",
+                "description": "Most consistent weekly scorer",
+                "sort_key": "cov",
+                "stat_label": "CoV%",
+                "stat_fn": lambda p: str(round(p["cov"] * 100, 1)) + "%",
+                "reverse": False,
+            },
+            {
+                "key": "schedule_survivor",
+                "name": "Schedule Survivor",
+                "description": "Best production despite toughest schedule",
+                "sort_key": "survivor_score",
+                "stat_label": "Score",
+                "stat_fn": lambda p: str(p["survivor_score"]),
+            },
+            {
+                "key": "volume_king",
+                "name": "Volume King",
+                "description": "Highest opportunity share on team",
+                "sort_key": "opp_share",
+                "stat_label": "Opp%",
+                "stat_fn": lambda p: str(p["opp_share"]) + "%",
+            },
+            {
+                "key": "breakout_star",
+                "name": "Breakout Star",
+                "description": "Young player with highest volume + production",
+                "sort_key": "breakout_score",
+                "stat_label": "Score",
+                "stat_fn": lambda p: str(p["breakout_score"]),
+            },
+            {
+                "key": "rising_stock",
+                "name": "Rising Stock",
+                "description": "Most undervalued — metrics exceed PPG rank",
+                "sort_key": "stock_delta",
+                "stat_label": "Delta",
+                "stat_fn": lambda p: ("+" + str(p["stock_delta"])) if p["stock_delta"] > 0 else str(p["stock_delta"]),
+            },
+            {
+                "key": "dominator",
+                "name": "Dominator",
+                "description": "Highest share of team production",
+                "sort_key": "dom_rating",
+                "stat_label": "Dom%",
+                "stat_fn": lambda p: str(p["dom_rating"]) + "%",
+            },
+            {
+                "key": "redzone_king",
+                "name": "Red Zone King",
+                "description": "Most goal-line touchdowns",
+                "sort_key": "gl_tds",
+                "stat_label": "GL TDs",
+                "stat_fn": lambda p: str(p["gl_tds"]),
+            },
+            {
+                "key": "best_floor",
+                "name": "Best Floor",
+                "description": "Highest 10th-percentile weekly score",
+                "sort_key": "floor",
+                "stat_label": "Floor",
+                "stat_fn": lambda p: str(p["floor"]),
+            },
+        ]
+
+        awards = []
+        for ad in award_defs:
+            reverse = ad.get("reverse", True)
+            sorted_players = sorted(players, key=lambda x: x[ad["sort_key"]], reverse=reverse)
+            top5 = sorted_players[:5]
+            if not top5:
+                continue
+
+            stat_fn = ad["stat_fn"]
+
+            def make_card(p, sfn=stat_fn):
+                return {
+                    "player_id": p["player_id"],
+                    "name": p["name"],
+                    "position": p["position"],
+                    "team": p["team"],
+                    "headshot_url": p["headshot_url"],
+                    "age": p["age"],
+                    "ppg": p["ppg"],
+                    "games": p["games"],
+                    "key_stat": sfn(p),
+                    "gpa_grade": p["gpa_grade"],
+                    "efficiency_grade": p["efficiency_grade"],
+                    "consistency_grade": p["consistency_grade"],
+                    "sos_grade": p["sos_grade"],
+                    "stock_score": p["stock_score"],
+                }
+
+            awards.append({
+                "key": ad["key"],
+                "name": ad["name"],
+                "description": ad["description"],
+                "stat_label": ad["stat_label"],
+                "annotation": _AWARD_ANNOTATIONS.get(ad["key"], ""),
+                "winner": make_card(top5[0]),
+                "runners_up": [make_card(p) for p in top5[1:]],
+            })
+
+        return {
+            "season": season,
+            "available_seasons": available_seasons,
+            "awards": awards,
+        }
+    finally:
+        conn.close()

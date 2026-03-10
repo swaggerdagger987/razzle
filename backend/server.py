@@ -905,6 +905,7 @@ def sitemap_xml():
         ("/stocks.html", "0.8", "weekly"),
         ("/opportunity.html", "0.8", "weekly"),
         ("/reportcard.html", "0.8", "weekly"),
+        ("/awards.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1247,6 +1248,18 @@ def report_cards(season: int = 0, position: str = "", limit: int = 25):
     except Exception as e:
         logger.error(f"report_cards error: {e}")
         return JSONResponse({"error": "Failed to fetch report card data"}, status_code=500)
+
+
+@app.get("/api/season-awards")
+def season_awards(season: int = 0, position: str = ""):
+    """Return fantasy season superlatives / awards."""
+    try:
+        s = season if season > 0 else None
+        pos = position.upper() if position else None
+        return live_data.fetch_season_awards(season=s, position=pos)
+    except Exception as e:
+        logger.error(f"season_awards error: {e}")
+        return JSONResponse({"error": "Failed to fetch season awards data"}, status_code=500)
 
 
 @app.get("/api/analytics/summary")

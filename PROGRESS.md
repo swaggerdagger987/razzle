@@ -1,6 +1,25 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 89 — Player Report Card Dashboard (COMPLETE)
+## Current Phase: Phase 90 — Fantasy Season Superlatives Dashboard (COMPLETE)
+
+**Exit criterion MET:** /awards.html page shows fantasy season superlatives — data-driven awards crowning winners across all Razzle metric systems. 10 award categories: MVP (highest Fantasy GPA), Most Efficient (highest PPO), Iron Man (most consistent, lowest CoV), Schedule Survivor (best production despite hardest SOS), Volume King (highest opportunity share), Breakout Star (age-weighted volume + production), Rising Stock (highest stock delta), Dominator (highest dominator rating), Red Zone King (most GL TDs), Best Floor (highest 10th-percentile weekly score). Each award: trophy/badge emoji icon, award name + description, winner showcase card (headshot, name, position badge, team, PPG, GPA/Eff/Con/SOS grade mini-badges, annotation, key stat highlight), runners-up list (2nd-5th place with rank, headshot, pos badge, name, key stat). 2-column card grid layout. Position filter tabs (All/QB/RB/WR/TE). Season selector. Click winner/runner → player profile. PNG export via html2canvas with watermark. Responsive at 768px (1-col) + 480px. /api/season-awards endpoint computes all 10 award categories from existing metrics: GPA percentiles, PPO, inverse CoV, SOS difficulty, opportunity share, dominator rating, GL TDs from player_season_pbp, 10th-percentile floor, age-weighted breakout score, stock delta. Min 6 games + 2 PPG filter. "Awards" nav link added to all 30 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors.
+
+### Phase 90 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/season-awards endpoint | DONE | 10 award categories, winner + 4 runners-up each, composite metrics |
+| 2 | Season Superlatives dashboard page | DONE | 2-col card grid, trophy icons, grade badges, 21 escapeHtml, 163/163 balanced |
+| 3 | Nav links + sitemap + analytics | DONE | All 30 pages updated, sitemap entry, pageview tracking |
+| 4 | Smoke test | DONE | Python + JS syntax clean, 30/30 nav links, XSS escaped, design compliance |
+
+### Decisions Log
+- **Season Superlatives as Phase 90**: After building 20+ individual metric dashboards and a composite Report Card (Phase 89), the natural next step is a "Fantasy Awards" page that crowns winners across all metric systems. This is the most screenshottable format for r/DynastyFF — "The 2024 Razzle Fantasy Awards" with trophy cards for MVP, Most Efficient, Iron Man, etc. Each award is a self-contained Reddit post. The card grid layout is visually distinct from the table-heavy dashboards, providing variety.
+- **10 award categories**: Covers all major metric systems built across phases 82-89 (efficiency, consistency, SOS, opportunity share, dominator rating, stock score, breakout, red zone, floor). Each award uses a different primary sort key, ensuring different winners across categories — no single player sweeps everything.
+- **Age-weighted breakout score**: Breakout Star uses 50% opportunity share percentile + 30% age bonus (younger = higher) + 20% PPG percentile. This naturally favors young, high-volume producers — exactly the breakout profile dynasty managers care about.
+- **Schedule Survivor score**: 50% PPG percentile + 50% SOS difficulty percentile. This rewards players who produced at a high level despite facing the toughest defenses — the most "earned" production.
+
+## Previous Phase: Phase 89 — Player Report Card Dashboard (COMPLETE)
 
 **Exit criterion MET:** /reportcard.html page shows player report cards aggregating all Razzle grading systems into a composite "Fantasy GPA." Two sections: "Honor Roll" (highest composite GPA, top performers across all metrics) and "Needs Improvement" (lowest composite GPA among fantasy-relevant starters). Each player row: position badge, headshot, name, team, Fantasy GPA badge (A+ to F, 5-tier color-coded with B+/C+ granularity), Efficiency grade, Consistency grade, SOS grade, Stock Score (0-100), Opp Share %, Dominator Rating, PPG, Age, GP, Caveat annotation. Composite GPA = weighted average of efficiency percentile (20%), consistency percentile (20%), SOS percentile (20%), PPG percentile (20%), opportunity share percentile (20%). Position filter tabs (All/QB/RB/WR/TE). Season selector. Sortable columns with sort state tracking per section. Click player row → player profile. PNG export via html2canvas with watermark. Responsive at 768px + 480px with hide-mobile columns. /api/report-cards endpoint computes per-player efficiency (PPO), consistency (inv CoV), SOS difficulty, PPG, opportunity share, dominator rating, blends into composite GPA percentile → letter grade. Min 6 games + 2 PPG + 50 opps filter. "Report Card" nav link added to all 29 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors.
 
