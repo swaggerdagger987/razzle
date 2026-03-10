@@ -1,6 +1,16 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 135 — QA+UX Audit for Phases 131-134 (COMPLETE)
+## Current Phase: Phase 136 — Garbage Time Detector (COMPLETE)
+
+**Exit criterion MET:** /garbagetime.html identifies stat padders (high garbage time %) vs clean producers (low garbage time % + solid PPG). GT% badges, avg score differential, bar visualization. Position filter tabs, season selector, PNG export with watermark. GET /api/garbage-time returns data. 12 escapeHtml calls, 65/65 braces balanced. "Garbage Time" nav link on all 66 pages. Sitemap + tools hub entry under Performance Analysis.
+
+### Phase 136 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend + frontend + nav + smoke test | DONE | fetch_garbage_time, padders/clean split, 12 escapeHtml, 66/66 nav |
+
+## Previous Phase: Phase 135 — QA+UX Audit for Phases 131-134 (COMPLETE)
 
 **Exit criterion MET:** QA+UX audit of Positional Advantage (131), TD Regression (132), Dual-Threat Index (133), Snap Efficiency (134). 0 findings — clean audit. All 4 pages pass XSS, error handling, loading states, PNG export, analytics, design compliance, responsive design, URL state, backend data quality checks.
 

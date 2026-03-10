@@ -941,6 +941,7 @@ def sitemap_xml():
         ("/tdregression.html", "0.8", "weekly"),
         ("/dualthreat.html", "0.8", "weekly"),
         ("/snapefficiency.html", "0.8", "weekly"),
+        ("/garbagetime.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1593,6 +1594,16 @@ def records(position: str = ""):
         return JSONResponse({"error": "Failed to fetch records"}, status_code=500)
 
 
+@app.get("/api/garbage-time")
+def garbage_time(season: int = None, position: str = None):
+    try:
+        pos = position.upper() if position else None
+        return live_data.fetch_garbage_time(season=season, position=pos)
+    except Exception as e:
+        logger.error(f"garbage-time error: {e}")
+        return JSONResponse({"error": "Failed to fetch garbage time data"}, status_code=500)
+
+
 @app.get("/api/snap-efficiency")
 def snap_efficiency(season: int = None, position: str = None):
     try:
@@ -1735,6 +1746,7 @@ def tools_hub():
                 {"name": "TD Regression", "desc": "Expected vs actual TDs — find buy/sell candidates due for TD correction", "url": "/tdregression.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Dual-Threat Index", "desc": "Rush+rec versatility — who contributes in both dimensions?", "url": "/dualthreat.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Snap Efficiency", "desc": "Fantasy points per snap — who maximizes every snap they play?", "url": "/snapefficiency.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Garbage Time", "desc": "Stat padders vs clean producers — who scores in garbage time?", "url": "/garbagetime.html", "positions": ["QB", "RB", "WR", "TE"]},
             ],
         },
         {

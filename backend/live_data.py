@@ -11254,6 +11254,85 @@ def fetch_fpts_breakdown(season=None, position=None, limit=40):
         conn.close()
 
 
+def fetch_garbage_time(season=None, position=None, limit=40):
+    """Garbage time detector — identifies stat padders with high garbage-time scoring %."""
+    conn = get_conn()
+    try:
+        cursor = conn.cursor()
+        if not season:
+            cursor.execute("SELECT MAX(season) FROM player_season_stats")
+            season = cursor.fetchone()[0] or 2025
+
+        pos_filter = ""
+        params = [season]
+        if position:
+            pos_filter = "AND p.position = ?"
+            params.append(position)
+
+        cursor.execute(f"""
+            SELECT p.gsis_id, p.full_name, p.position, p.team,
+                   s.games,
+                   s.passing_yards, s.passing_tds, s.interceptions,
+                   s.rushing_yards, s.rushing_tds,
+                   s.receiving_yards, s.receiving_tds, s.receptions,
+                   pbp.garbage_time_pct, pbp.avg_score_differential
+            FROM player_season_stats s
+            JOIN players p ON p.gsis_id = s.player_id
+            LEFT JOIN player_season_pbp pbp ON pbp.player_id = s.player_id AND pbp.season = s.season
+            WHERE s.season = ? AND p.fantasy_relevant = 1
+            {pos_filter}
+            AND s.games >= 4
+        """, params)
+
+        players = []
+        for r in cursor.fetchall():
+            pid, name, pos, team = r[0], r[1] or "Unknown", r[2] or "RB", r[3] or "FA"
+            games = r[4] or 1
+            pass_yd = r[5] or 0
+            pass_td = r[6] or 0
+            ints = r[7] or 0
+            rush_yd = r[8] or 0
+            rush_td = r[9] or 0
+            rec_yd = r[10] or 0
+            rec_td = r[11] or 0
+            recs = r[12] or 0
+            gt_pct = r[13]
+            avg_diff = r[14]
+
+            if gt_pct is None:
+                continue
+
+            ppr = (pass_yd * 0.04 + pass_td * 4 - ints * 2 +
+                   rush_yd * 0.1 + rush_td * 6 +
+                   rec_yd * 0.1 + rec_td * 6 + recs * 1)
+            ppg = ppr / games
+
+            players.append({
+                "player_id": pid,
+                "name": name,
+                "position": pos,
+                "team": team,
+                "games": games,
+                "ppg": round(ppg, 1),
+                "garbage_time_pct": round(gt_pct, 1),
+                "avg_score_diff": round(avg_diff, 1) if avg_diff is not None else 0,
+            })
+
+        # Split into stat padders (high GT%) and clean producers (low GT%)
+        stat_padders = sorted([p for p in players if p["garbage_time_pct"] >= 15],
+                              key=lambda x: x["garbage_time_pct"], reverse=True)[:limit]
+        clean_producers = sorted([p for p in players if p["garbage_time_pct"] <= 5 and p["ppg"] >= 8],
+                                 key=lambda x: x["ppg"], reverse=True)[:limit]
+
+        return {
+            "stat_padders": stat_padders,
+            "clean_producers": clean_producers,
+            "season": season,
+        }
+    finally:
+        conn.close()
+
+
 def fetch_snap_efficiency(season=None, position=None, limit=50):
     """Snap efficiency — fantasy points per snap played."""
     conn = get_conn()
