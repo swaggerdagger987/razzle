@@ -13,9 +13,9 @@
 **Notes**: GET /api/report-cards returns `honor_roll` and `needs_improvement` arrays. Computes per-player: efficiency grade (PPO percentile), consistency grade (inverse CoV percentile), SOS grade (schedule difficulty percentile), stock score (0-100 composite), opportunity share percentile, dominator rating. Composite GPA = weighted avg of 5 percentiles (PPO 20%, inv CoV 20%, SOS 20%, PPG 20%, opp share 20%) → letter grade A+ to F with B+/C+ granularity. Min 6 games + 2 PPG + 50 opps. Parameterized SQL. Fantasy_relevant filter. Season parameter. Python syntax valid.
 
 ## Task 2: Report Card dashboard page (frontend)
-**Status**: PENDING
-**Attempts**: 0
-**Notes**: /reportcard.html with two-section layout. Honor Roll: top 25 by composite GPA. Needs Improvement: bottom 25. Each row: position badge, headshot, name, team, Fantasy GPA badge (green A+/A, blue B+/B, yellow C+/C, orange D+/D, red F), individual grade badges for Efficiency/Consistency/SOS, Stock Score badge, Opp Share %, Dom Rating, PPG, Age, GP, annotation. Position tabs, season selector, sortable columns, row click to profile, PNG export with watermark. escapeHtml on all dynamic content. Responsive hide-mobile columns.
+**Status**: PASS
+**Attempts**: 1
+**Notes**: /reportcard.html with two-section layout. Honor Roll (green header) and Needs Improvement (red header). Each row: position badge, headshot, name, team, GPA badge (A+ to F, 5-tier color), Eff/Con/SOS grade mini-badges, Stock Score badge, Opp%, Dom Rating, PPG, Age, GP, annotation. Position tabs, season selector, sortable columns with per-section state, row click to profile, PNG export with watermark. 11 escapeHtml calls. Braces/parens/brackets all balanced. Responsive hide-mobile. Design compliant: 3px borders, 4px shadows, font-display headers, font-mono data, font-hand annotations.
 
 ## Task 3: Nav links + sitemap + analytics
 **Status**: PENDING
@@ -32,8 +32,8 @@
 ## Loop State
 ```
 Current Phase: 89
-Current Task: 2
+Current Task: 3
 Current Stage: BUILD
 Attempt: 1
-Tasks Completed: 1/4
+Tasks Completed: 2/4
 ```
