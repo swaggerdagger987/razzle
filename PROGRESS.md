@@ -1,6 +1,20 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 10 — QA + UX Audit Fixes (COMPLETE)
+## Current Phase: Phase 11 — QA + UX Audit Fixes for Phases 6-10 (IN PROGRESS)
+
+**Exit Criterion**: All CRITICAL and HIGH findings from Phases 6-10 QA+UX audit resolved. Connection leak patched. XSS escaped. localStorage wrapped. Cold grays replaced.
+
+### Phase 11 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Fix CRITICAL — Connection leak in quick_search_players | TODO | |
+| 2 | Fix HIGH — XSS via unescaped err.message (7 instances) | TODO | |
+| 3 | Fix HIGH — Unprotected localStorage in app.js | TODO | |
+| 4 | Fix HIGH — Cold gray #888 design violation | TODO | |
+| 5 | Fix MEDIUM findings (badge borders, import re, CTE) | TODO | |
+
+## Previous Phase: Phase 10 — QA + UX Audit Fixes (COMPLETE)
 
 **Exit Criterion MET**: All CRITICAL and HIGH findings from Phases 5-9 QA+UX audit resolved. XSS patched, localStorage wrapped, jargon tooltips added, duplicate names clarified.
 
