@@ -903,7 +903,7 @@ def fetch_streaks(season=None, position=None, window=4, limit=25):
             rows = cursor.fetchall()
 
             # Group by player
-            from collections import defaultdict
+
             player_weeks = defaultdict(list)
             player_info = {}
             for r in rows:
@@ -1028,7 +1028,7 @@ def fetch_season_recap(season=None):
                 })
 
             # 4. Most consistent (lowest CoV, min 8 games, min 5 PPG)
-            from collections import defaultdict
+
             player_weeks = defaultdict(list)
             for r in season_rows:
                 pid = r[0]
@@ -1276,7 +1276,7 @@ def fetch_waivers(season=None, position=None, window=4, limit=30):
                 ORDER BY p.player_id, s.week
             """, params)
 
-            from collections import defaultdict
+
             player_weeks = defaultdict(list)
             player_info = {}
             for r in cursor.fetchall():
@@ -1403,7 +1403,7 @@ def fetch_playoff_schedule(season=None, position=None, limit=40):
                 ORDER BY s.player_id, s.week
             """, params)
 
-            from collections import defaultdict
+
             players = defaultdict(lambda: {"weeks": [], "name": "", "position": "", "team": ""})
 
             for r in cursor.fetchall():
@@ -1786,7 +1786,7 @@ def fetch_handcuffs(season=None, limit=30):
                 ORDER BY p.team, total_car DESC
             """, [season])
 
-            from collections import defaultdict
+
             team_rbs = defaultdict(list)
             for r in cursor.fetchall():
                 team_rbs[r[3] or "FA"].append({
@@ -1872,7 +1872,7 @@ def fetch_weekly_mvp(season=None):
                 ORDER BY s.week, p.position, s.fantasy_points_ppr DESC
             """, [season])
 
-            from collections import defaultdict
+
             # Group by week+position, keep top scorer
             week_pos = defaultdict(lambda: defaultdict(lambda: None))
             for r in cursor.fetchall():
@@ -1927,7 +1927,7 @@ def fetch_stacks(season=None, limit=30):
                 ORDER BY p.player_id, s.week
             """, [season])
 
-            from collections import defaultdict
+
             player_weeks = defaultdict(dict)
             player_info = {}
             for r in cursor.fetchall():
