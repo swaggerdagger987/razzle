@@ -82,6 +82,21 @@ TEAM_ABBREV = {
     "ST. LOUIS RAMS": "LAR", "SAN DIEGO CHARGERS": "LAC",
 }
 
+# Reverse mapping: abbreviation → full team name (current names only)
+ABBREV_TO_TEAM = {
+    "ARI": "Arizona Cardinals", "ATL": "Atlanta Falcons", "BAL": "Baltimore Ravens",
+    "BUF": "Buffalo Bills", "CAR": "Carolina Panthers", "CHI": "Chicago Bears",
+    "CIN": "Cincinnati Bengals", "CLE": "Cleveland Browns", "DAL": "Dallas Cowboys",
+    "DEN": "Denver Broncos", "DET": "Detroit Lions", "GB": "Green Bay Packers",
+    "HOU": "Houston Texans", "IND": "Indianapolis Colts", "JAX": "Jacksonville Jaguars",
+    "KC": "Kansas City Chiefs", "LV": "Las Vegas Raiders", "LAC": "Los Angeles Chargers",
+    "LAR": "Los Angeles Rams", "MIA": "Miami Dolphins", "MIN": "Minnesota Vikings",
+    "NE": "New England Patriots", "NO": "New Orleans Saints", "NYG": "New York Giants",
+    "NYJ": "New York Jets", "PHI": "Philadelphia Eagles", "PIT": "Pittsburgh Steelers",
+    "SF": "San Francisco 49ers", "SEA": "Seattle Seahawks", "TB": "Tampa Bay Buccaneers",
+    "TEN": "Tennessee Titans", "WAS": "Washington Commanders",
+}
+
 
 def get_conn():
     conn = sqlite3.connect(str(DB_PATH), timeout=30)
@@ -4153,4 +4168,110 @@ def fetch_player_comps(player_id, limit=5, season=0):
         "stat_labels": {k: _COMP_STAT_LABELS.get(k, k) for k in stat_keys},
         "target_stats": target_stats,
         "season": season,
+    }
+
+
+# ---------------------------------------------------------------------------
+# Team Roster
+# ---------------------------------------------------------------------------
+
+def fetch_team_roster(team=None, season=None):
+    """Return all fantasy-relevant players for a team, grouped by position."""
+    conn = get_conn()
+
+    # Determine season
+    if not season:
+        row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+        season = row[0] if row and row[0] else 2024
+
+    # Get available seasons
+    season_rows = conn.execute(
+        "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
+    ).fetchall()
+    available_seasons = [r[0] for r in season_rows]
+
+    # Get available teams for the selected season
+    team_rows = conn.execute("""
+        SELECT DISTINCT p.team FROM players p
+        JOIN player_week_stats s ON s.player_id = p.player_id AND s.season = ?
+        WHERE p.position IN ('QB','RB','WR','TE')
+          AND p.team IS NOT NULL AND p.team != ''
+        ORDER BY p.team
+    """, [season]).fetchall()
+    available_teams = [r[0] for r in team_rows]
+
+    if not team or team.upper() not in available_teams:
+        # Default to first available team alphabetically
+        team = available_teams[0] if available_teams else "KC"
+
+    team = team.upper()
+
+    query = """
+        SELECT
+            p.player_id, p.full_name, p.position, p.team, p.age,
+            p.headshot_url,
+            SUM(s.fantasy_points_ppr) as total_ppr,
+            COUNT(DISTINCT s.week) as games,
+            SUM(s.passing_yards) as passing_yards,
+            SUM(s.passing_tds) as passing_tds,
+            SUM(s.rushing_yards) as rushing_yards,
+            SUM(s.rushing_tds) as rushing_tds,
+            SUM(s.receiving_yards) as receiving_yards,
+            SUM(s.receiving_tds) as receiving_tds,
+            SUM(s.receptions) as receptions,
+            SUM(s.targets) as targets,
+            SUM(s.carries) as carries
+        FROM players p
+        JOIN player_week_stats s
+            ON s.player_id = p.player_id AND s.season = ?
+        WHERE p.team = ?
+          AND p.position IN ('QB','RB','WR','TE')
+        GROUP BY p.player_id
+        ORDER BY total_ppr DESC
+    """
+    rows = conn.execute(query, [season, team]).fetchall()
+    conn.close()
+
+    groups = {"QB": [], "RB": [], "WR": [], "TE": []}
+    for r in rows:
+        pid = r[0]
+        pos = r[2] or "WR"
+        games = r[7] or 0
+        total_ppr = r[6] or 0
+        ppg = round(total_ppr / games, 1) if games > 0 else 0.0
+
+        player = {
+            "player_id": pid,
+            "full_name": r[1] or "Unknown",
+            "position": pos,
+            "team": r[3] or team,
+            "age": r[4],
+            "headshot_url": r[5] or "",
+            "ppg": ppg,
+            "games": games,
+            "total_ppr": round(total_ppr, 1),
+            "passing_yards": r[8] or 0,
+            "passing_tds": r[9] or 0,
+            "rushing_yards": r[10] or 0,
+            "rushing_tds": r[11] or 0,
+            "receiving_yards": r[12] or 0,
+            "receiving_tds": r[13] or 0,
+            "receptions": r[14] or 0,
+            "targets": r[15] or 0,
+            "carries": r[16] or 0,
+        }
+
+        if pos in groups:
+            groups[pos].append(player)
+
+    team_full = ABBREV_TO_TEAM.get(team, team)
+
+    return {
+        "team": team,
+        "team_full_name": team_full,
+        "season": season,
+        "available_seasons": available_seasons,
+        "available_teams": [{"abbr": t, "name": ABBREV_TO_TEAM.get(t, t)} for t in available_teams],
+        "groups": groups,
+        "total_players": sum(len(v) for v in groups.values()),
     }

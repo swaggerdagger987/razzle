@@ -839,6 +839,36 @@ async def compare_page(id1: str, id2: str):
 
 
 # ---------------------------------------------------------------------------
+# Dynamic OG tags for team roster pages
+# ---------------------------------------------------------------------------
+
+@app.get("/team/{abbr}")
+async def team_page(abbr: str):
+    """Serve team.html with dynamic OG meta tags for the team."""
+    team_file = FRONTEND_DIR / "team.html"
+    if not team_file.exists():
+        return HTMLResponse("Not found", status_code=404)
+
+    html = team_file.read_text(encoding="utf-8")
+
+    abbr_upper = abbr.strip().upper()
+    team_name = live_data.ABBREV_TO_TEAM.get(abbr_upper, abbr_upper)
+    og_title = _html.escape(f"{team_name} Roster — Razzle", quote=True)
+    og_desc = _html.escape(
+        f"{team_name} fantasy football roster breakdown. Depth chart, stats, PPG on razzle.lol",
+        quote=True,
+    )
+
+    html = re.sub(r'<meta property="og:title" content="[^"]*">', f'<meta property="og:title" content="{og_title}">', html)
+    html = re.sub(r'<meta property="og:description" content="[^"]*">', f'<meta property="og:description" content="{og_desc}">', html)
+    html = re.sub(r'<meta name="twitter:title" content="[^"]*">', f'<meta name="twitter:title" content="{og_title}">', html)
+    html = re.sub(r'<meta name="twitter:description" content="[^"]*">', f'<meta name="twitter:description" content="{og_desc}">', html)
+    html = re.sub(r'<title>[^<]*</title>', f'<title>{og_title}</title>', html)
+
+    return HTMLResponse(content=html)
+
+
+# ---------------------------------------------------------------------------
 # Sitemap + robots.txt
 # ---------------------------------------------------------------------------
 
@@ -945,6 +975,18 @@ def stat_leaders(season: int = 0, position: str = "", limit: int = 10):
     pos = position.strip().upper() if position else None
     limit = max(1, min(25, limit))
     return live_data.fetch_stat_leaders(season=s, position=pos, limit=limit)
+
+
+# ---------------------------------------------------------------------------
+# Team Roster Pages
+# ---------------------------------------------------------------------------
+
+@app.get("/api/team-roster")
+def team_roster(team: str = "", season: int = 0):
+    """Return all fantasy-relevant players for a team grouped by position."""
+    t = team.strip().upper() if team else None
+    s = season if season > 0 else None
+    return live_data.fetch_team_roster(team=t, season=s)
 
 
 # ---------------------------------------------------------------------------
