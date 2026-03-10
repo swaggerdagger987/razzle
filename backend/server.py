@@ -907,6 +907,7 @@ def sitemap_xml():
         ("/reportcard.html", "0.8", "weekly"),
         ("/awards.html", "0.8", "weekly"),
         ("/vorp.html", "0.8", "weekly"),
+        ("/tradevalues.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1278,6 +1279,19 @@ def vorp(season: int = 0, position: str = "", limit: int = 30):
 @app.get("/api/analytics/summary")
 def analytics_summary():
     return live_data.get_analytics_summary()
+
+
+@app.get("/api/trade-value-chart")
+def trade_value_chart(season: int = 0, position: str = "", limit: int = 150):
+    """Return all fantasy-relevant players ranked by dynasty trade value."""
+    try:
+        limit = max(1, min(300, limit))
+        s = season if season > 0 else None
+        pos = position.upper() if position else None
+        return live_data.fetch_trade_value_chart(season=s, position=pos, limit=limit)
+    except Exception as e:
+        logger.error(f"trade-value-chart error: {e}")
+        return JSONResponse({"error": "Failed to fetch trade value chart"}, status_code=500)
 
 
 # ---------------------------------------------------------------------------

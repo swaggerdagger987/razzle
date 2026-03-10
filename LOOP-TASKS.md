@@ -1,37 +1,37 @@
-# Razzle Loop — Phase 92 Task List
+# Razzle Loop — Phase 93 Task List
 
-> Value Over Replacement Player (VORP) Dashboard
+> Dynasty Trade Value Chart
 
-**Current Phase**: 92 — VORP Dashboard
-**Exit Criterion**: /vorp.html page shows VORP analysis with two sections: "League Winners" (highest VORP — PPG above position replacement level, cross-position ranking) and "Replacement Level" (lowest VORP among fantasy-relevant starters — replaceable players). Each player: position badge, headshot, name, team, VORP value (color-coded badge: elite >=6 green, starter >=3 blue, flex >=1 yellow, fringe >=0 orange, replacement <0 red), PPG, Replacement PPG for position, VORP Rank, Position Rank, GP, Caveat annotation. Replacement thresholds: QB12, RB24, WR36, TE12 (standard 12-team league). Position filter tabs (All/QB/RB/WR/TE). Season selector. Sortable columns with sort state tracking per section. Click player row → player profile. PNG export via html2canvas with watermark. Responsive at 768px + 480px with hide-mobile columns. /api/vorp endpoint computes per-player VORP (PPG minus position replacement-level PPG), splits into league_winners (VORP > 0, sorted desc) and replacement_level (VORP <= 0 or bottom 25, sorted asc). Min 6 games + 2 PPG filter. "VORP" nav link added to all 31 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors.
+**Current Phase**: 93 — Dynasty Trade Value Chart
+**Exit Criterion**: /tradevalues.html page shows a dynasty trade value chart ranking ALL fantasy-relevant players by composite trade value (production 50% + age 30% + positional scarcity 20%). Visual horizontal bar chart with position-colored bars (QB blue, RB teal, WR terracotta, TE purple), grouped into 8 dynasty tiers (Elite/Blue Chip/Premium/Solid/Promising/Depth/Roster Clogger/Cut Bait). Player search/filter at top. Position filter tabs (All/QB/RB/WR/TE). Season selector. Each player row: rank number, position badge, headshot, name, team, age, trade value (0-100), value bar (width proportional to value, position-colored), PPG, tier badge, value component breakdown tooltip (production/age/scarcity scores). Click player row → player profile. PNG export via html2canvas with watermark. Responsive at 768px + 480px. /api/trade-value-chart endpoint returns all fantasy-relevant players with trade values, components, tiers, sorted by value desc. Min 4 games + 2 PPG filter. "Trade Values" nav link added to all 32 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors.
 
 ---
 
-## Task 1: Backend /api/vorp endpoint
+## Task 1: Backend /api/trade-value-chart endpoint
 **Status**: PASS
 **Attempts**: 1
-**Notes**: fetch_vorp in live_data.py. Computes replacement-level PPG per position (QB12/RB24/WR36/TE12), VORP = PPG - replacement PPG, splits into league_winners (VORP > 0) and replacement_level (bottom 25). Min 6 games + 2 PPG. Server endpoint at /api/vorp with season/position/limit params. Python syntax valid.
+**Notes**: fetch_trade_value_chart in live_data.py. Composite trade value (production 50% + age 30% + scarcity 20%), component breakdown (production_score, age_score, scarcity_score), 8-tier assignment (_tv_tier), min 4 games + 2 PPG. Server endpoint at /api/trade-value-chart with season/position/limit params. Python syntax valid.
 
-## Task 2: VORP Dashboard page (frontend)
+## Task 2: Trade Value Chart page (frontend)
 **Status**: PASS
 **Attempts**: 1
-**Notes**: /vorp.html with two-section table layout. VORP badge tiers (elite/starter/flex/fringe/replacement). Replacement threshold chips showing QB12/RB24/WR36/TE12 PPG. Position tabs, season select, sortable columns, click→profile, PNG export with canvas watermark. 10 escapeHtml calls. JS braces balanced 61/61. Design compliant.
+**Notes**: /tradevalues.html with horizontal bar chart layout. Position-colored bars (QB blue, RB teal, WR terracotta, TE purple). 8 tier groups with tier headers. Rank numbers with gold/silver/bronze top-3 accents. Player search input. Component breakdown in tooltip. Methodology chips showing weight breakdown. 13 escapeHtml calls. JS braces balanced 37/37. Design compliant.
 
 ## Task 3: Nav links + sitemap + analytics
 **Status**: PASS
 **Attempts**: 1
-**Notes**: VORP nav link added to all 31 pages (nav + footer where applicable). Sitemap entry added. Analytics pageview POST in vorp.html with referrer.
+**Notes**: Trade Values nav link added to all 32 pages (nav + footer). Sitemap entry added. Analytics pageview POST in tradevalues.html with referrer.
 
 ## Task 4: Smoke test
 **Status**: PASS
 **Attempts**: 1
-**Notes**: Python syntax valid (live_data.py + server.py). JS braces balanced 61/61. 31/31 pages have VORP nav link. 10 escapeHtml calls for XSS. Design compliance: sand bg, chunky 3px borders, 4px shadows, display font headers, mono data, Caveat annotations, position colors.
+**Notes**: Python syntax valid (live_data.py + server.py). JS braces balanced 37/37. 32/32 pages have Trade Values nav link. 13 escapeHtml calls for XSS. Design compliance: sand bg, chunky 3px borders, 4px shadows, display font headers, mono data, hand annotations, position colors, responsive 768+480, watermark, analytics.
 
 ---
 
 ## Loop State
 ```
-Current Phase: 92
+Current Phase: 93
 Current Task: 4
 Current Stage: COMPLETE
 Attempt: 1

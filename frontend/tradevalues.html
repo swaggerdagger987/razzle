@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Dynasty Trade Value Chart — Razzle</title>
+<meta property="og:title" content="Dynasty Trade Value Chart — Razzle">
+<meta property="og:description" content="Dynasty trade values — every player ranked by composite value on razzle.lol">
+<meta property="og:site_name" content="razzle.lol">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Dynasty Trade Value Chart — Razzle">
+<meta name="twitter:description" content="Dynasty trade values — every player ranked by composite value on razzle.lol">
+<meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
+<meta name="description" content="Dynasty trade value chart — composite player rankings by production, age, and positional scarcity on razzle.lol">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .tv-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+  }
+
+  .tv-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .tv-header h1 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: var(--ink);
+    margin: 0 0 4px;
+  }
+  .tv-header .tv-subtitle {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+  }
+
+  /* Controls */
+  .tv-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .tv-select {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    padding: 7px 12px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--bg-card);
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  .tv-search {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    padding: 7px 12px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--bg-card);
+    color: var(--ink);
+    width: 200px;
+  }
+  .tv-search::placeholder { color: var(--ink-light); }
+
+  /* Position filter tabs */
+  .tv-pos-tabs {
+    display: flex;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .tv-pos-tab {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 6px 14px;
+    background: var(--bg-card);
+    color: var(--ink);
+    border: none;
+    border-right: 2px solid var(--ink);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .tv-pos-tab:last-child { border-right: none; }
+  .tv-pos-tab.active {
+    background: var(--ink);
+    color: var(--bg-card);
+  }
+  .tv-pos-tab:hover:not(.active) {
+    background: var(--bg-warm);
+  }
+
+  /* Actions */
+  .tv-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  /* Methodology chips */
+  .tv-methodology {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .tv-method-chip {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 4px 10px;
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+    background: var(--bg-card);
+    color: var(--ink-medium);
+  }
+  .tv-method-chip .method-label {
+    font-family: var(--font-display);
+    font-weight: 700;
+    margin-right: 4px;
+  }
+
+  /* Chart container */
+  .tv-chart-wrap {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    box-shadow: 4px 4px 0 var(--ink);
+    overflow: hidden;
+    margin-bottom: 32px;
+  }
+
+  /* Tier section header */
+  .tv-tier-header {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+    padding: 10px 14px;
+    background: var(--bg-warm);
+    border-bottom: 3px solid var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tv-tier-header:not(:first-child) {
+    border-top: 3px solid var(--ink);
+  }
+  .tv-tier-num {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+    width: 26px;
+    height: 26px;
+    line-height: 26px;
+    text-align: center;
+    border-radius: 50%;
+    border: 2px solid var(--ink);
+    flex-shrink: 0;
+  }
+  .tv-tier-num.t1 { background: #ffd700; color: var(--ink); }
+  .tv-tier-num.t2 { background: var(--blue-light); color: var(--blue); }
+  .tv-tier-num.t3 { background: var(--green-light); color: #1a7a6d; }
+  .tv-tier-num.t4 { background: var(--orange-light); color: #a85a3a; }
+  .tv-tier-num.t5 { background: var(--purple-light); color: var(--purple); }
+  .tv-tier-num.t6 { background: var(--bg); color: var(--ink-medium); }
+  .tv-tier-num.t7 { background: var(--red-light); color: #a83240; }
+  .tv-tier-num.t8 { background: var(--ink-faint); color: var(--ink-medium); }
+  .tv-tier-label {
+    font-family: var(--font-hand);
+    font-size: 15px;
+    color: var(--ink-light);
+    margin-left: 4px;
+  }
+  .tv-tier-count {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-light);
+    margin-left: auto;
+  }
+
+  /* Player row */
+  .tv-row {
+    display: flex;
+    align-items: center;
+    padding: 6px 14px;
+    border-bottom: 1px solid var(--ink-faint);
+    cursor: pointer;
+    transition: background 0.1s;
+    gap: 10px;
+    min-height: 44px;
+  }
+  .tv-row:hover { background: var(--bg-warm); }
+  .tv-row:last-child { border-bottom: none; }
+
+  .tv-rank {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink-light);
+    width: 32px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .tv-rank.top1 { color: #b8860b; font-size: 16px; }
+  .tv-rank.top2 { color: #888; font-size: 15px; }
+  .tv-rank.top3 { color: #a0522d; font-size: 15px; }
+
+  .tv-headshot {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--ink);
+    object-fit: cover;
+    flex-shrink: 0;
+    background: var(--bg-warm);
+  }
+
+  .tv-player-info {
+    min-width: 0;
+    width: 140px;
+    flex-shrink: 0;
+  }
+  .tv-player-name {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .tv-player-meta {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 1px;
+  }
+  .tv-pos-badge {
+    font-family: var(--font-display);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 5px;
+    color: #fff;
+  }
+  .tv-pos-badge.qb { background: var(--pos-qb); }
+  .tv-pos-badge.rb { background: var(--pos-rb); }
+  .tv-pos-badge.wr { background: var(--pos-wr); }
+  .tv-pos-badge.te { background: var(--pos-te); }
+  .tv-team-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-medium);
+  }
+  .tv-age {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-light);
+  }
+
+  /* Value bar area */
+  .tv-bar-area {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tv-bar-track {
+    flex: 1;
+    height: 22px;
+    background: var(--bg);
+    border: 2px solid var(--ink-faint);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+  }
+  .tv-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.4s ease;
+  }
+  .tv-bar-fill.qb { background: var(--pos-qb); }
+  .tv-bar-fill.rb { background: var(--pos-rb); }
+  .tv-bar-fill.wr { background: var(--pos-wr); }
+  .tv-bar-fill.te { background: var(--pos-te); }
+
+  .tv-value {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+    width: 36px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* Stats area */
+  .tv-stats {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .tv-stat {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-medium);
+    text-align: center;
+    width: 48px;
+  }
+  .tv-stat-label {
+    font-size: 9px;
+    color: var(--ink-light);
+    text-transform: uppercase;
+  }
+
+  /* Tier badge (small) */
+  .tv-tier-badge {
+    font-family: var(--font-display);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 5px;
+    border: 2px solid;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .tv-tier-badge.t1 { background: #ffeeba; color: #856404; border-color: #ffc107; }
+  .tv-tier-badge.t2 { background: var(--blue-light); color: #3a5abf; border-color: var(--blue); }
+  .tv-tier-badge.t3 { background: var(--green-light); color: #1a7a6d; border-color: var(--green); }
+  .tv-tier-badge.t4 { background: var(--orange-light); color: #a85a3a; border-color: var(--orange); }
+  .tv-tier-badge.t5 { background: var(--purple-light); color: #6b3fc7; border-color: var(--purple); }
+  .tv-tier-badge.t6 { background: var(--bg); color: var(--ink-medium); border-color: var(--ink-faint); }
+  .tv-tier-badge.t7 { background: var(--red-light); color: #a83240; border-color: var(--red); }
+  .tv-tier-badge.t8 { background: var(--ink-faint); color: var(--ink-medium); border-color: var(--ink-light); }
+
+  /* Component tooltip */
+  .tv-row[title] { position: relative; }
+
+  /* Loading / Empty / Error */
+  .tv-loading, .tv-empty {
+    text-align: center;
+    padding: 60px 20px;
+    font-family: var(--font-hand);
+    font-size: 22px;
+    color: var(--ink-light);
+  }
+  .tv-error {
+    text-align: center;
+    padding: 40px 20px;
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--red);
+  }
+  .tv-error button { margin-top: 12px; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .tv-page { padding: 16px 10px 40px; }
+    .tv-header h1 { font-size: 26px; }
+    .tv-player-info { width: 100px; }
+    .tv-player-name { font-size: 12px; }
+    .tv-headshot { width: 28px; height: 28px; }
+    .tv-stats { display: none; }
+    .tv-rank { width: 24px; font-size: 12px; }
+    .tv-search { width: 140px; }
+  }
+  @media (max-width: 480px) {
+    .tv-controls { gap: 8px; }
+    .tv-pos-tab { padding: 5px 10px; font-size: 12px; }
+    .tv-methodology { display: none; }
+    .tv-tier-badge { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="/" class="logo">
+    <div class="logo-mark">&#x1F42F;</div>
+    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/lab.html">The Lab</a></li>
+    <li><a href="/rankings.html">Rankings</a></li>
+    <li><a href="/leaders.html">Leaders</a></li>
+    <li><a href="/prospects.html">Prospects</a></li>
+    <li><a href="/scarcity.html">Scarcity</a></li>
+    <li><a href="/breakouts.html">Breakouts</a></li>
+    <li><a href="/buysell.html">Buy/Sell</a></li>
+    <li><a href="/aging.html">Aging</a></li>
+    <li><a href="/weekly.html">Weekly</a></li>
+    <li><a href="/targets.html">Targets</a></li>
+    <li><a href="/matchups.html">Matchups</a></li>
+    <li><a href="/usage.html">Usage</a></li>
+    <li><a href="/yoy.html">YoY</a></li>
+    <li><a href="/airyards.html">Air Yards</a></li>
+    <li><a href="/explorer.html">Explorer</a></li>
+    <li><a href="/redzone.html">Red Zone</a></li>
+    <li><a href="/efficiency.html">Efficiency</a></li>
+    <li><a href="/consistency.html">Consistency</a></li>
+    <li><a href="/schedule.html">Schedule</a></li>
+    <li><a href="/stocks.html">Stocks</a></li>
+    <li><a href="/opportunity.html">Opportunity</a></li>
+    <li><a href="/reportcard.html">Report Card</a></li>
+    <li><a href="/awards.html">Awards</a></li>
+    <li><a href="/vorp.html">VORP</a></li>
+    <li><a href="/tradevalues.html" class="active">Trade Values</a></li>
+    <li><a href="/team/KC">Teams</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
+    <li><a href="/agents.html">War Room</a></li>
+  </ul>
+</nav>
+
+<main class="tv-page" id="tv-content">
+  <div class="tv-header">
+    <h1>Dynasty Trade Value Chart</h1>
+    <div class="tv-subtitle">every player's dynasty worth at a glance</div>
+  </div>
+
+  <div class="tv-controls">
+    <div class="tv-pos-tabs" id="pos-tabs">
+      <button class="tv-pos-tab active" data-pos="" aria-label="All positions">All</button>
+      <button class="tv-pos-tab" data-pos="QB" aria-label="Quarterbacks">QB</button>
+      <button class="tv-pos-tab" data-pos="RB" aria-label="Running Backs">RB</button>
+      <button class="tv-pos-tab" data-pos="WR" aria-label="Wide Receivers">WR</button>
+      <button class="tv-pos-tab" data-pos="TE" aria-label="Tight Ends">TE</button>
+    </div>
+    <select class="tv-select" id="season-select" title="Season" aria-label="Season"></select>
+    <input class="tv-search" type="text" id="player-search" placeholder="search player..." aria-label="Search players">
+  </div>
+
+  <div class="tv-methodology">
+    <div class="tv-method-chip"><span class="method-label">Production:</span> 50%</div>
+    <div class="tv-method-chip"><span class="method-label">Age Curve:</span> 30%</div>
+    <div class="tv-method-chip"><span class="method-label">Pos Scarcity:</span> 20%</div>
+  </div>
+
+  <div class="tv-actions">
+    <button class="btn-chunky" id="export-btn" title="Export as PNG">Export PNG</button>
+  </div>
+
+  <div id="tv-body">
+    <div class="tv-loading" id="tv-loading">calculating trade values...</div>
+  </div>
+</main>
+
+<!-- Watermark -->
+<div style="position:fixed; bottom:10px; right:14px; font-family:var(--font-hand); font-size:14px; color:var(--ink-light); opacity:0.7; pointer-events:none; z-index:999;">razzle.lol</div>
+
+<!-- Footer -->
+<footer style="text-align:center; padding:24px 20px 32px; font-family:var(--font-hand); font-size:15px; color:var(--ink-light); border-top:2px dashed var(--ink-faint); margin-top:40px;">
+  <div style="margin-bottom:10px;">
+    <a href="/lab.html" style="color:var(--ink-light); text-decoration:none;">The Lab</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/rankings.html" style="color:var(--ink-light); text-decoration:none;">Rankings</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/leaders.html" style="color:var(--ink-light); text-decoration:none;">Leaders</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/prospects.html" style="color:var(--ink-light); text-decoration:none;">Prospects</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/scarcity.html" style="color:var(--ink-light); text-decoration:none;">Scarcity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/breakouts.html" style="color:var(--ink-light); text-decoration:none;">Breakouts</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/buysell.html" style="color:var(--ink-light); text-decoration:none;">Buy/Sell</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/aging.html" style="color:var(--ink-light); text-decoration:none;">Aging</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/weekly.html" style="color:var(--ink-light); text-decoration:none;">Weekly</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/targets.html" style="color:var(--ink-light); text-decoration:none;">Targets</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/matchups.html" style="color:var(--ink-light); text-decoration:none;">Matchups</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/usage.html" style="color:var(--ink-light); text-decoration:none;">Usage</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/yoy.html" style="color:var(--ink-light); text-decoration:none;">YoY</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/airyards.html" style="color:var(--ink-light); text-decoration:none;">Air Yards</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/explorer.html" style="color:var(--ink-light); text-decoration:none;">Explorer</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/redzone.html" style="color:var(--ink-light); text-decoration:none;">Red Zone</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/efficiency.html" style="color:var(--ink-light); text-decoration:none;">Efficiency</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/consistency.html" style="color:var(--ink-light); text-decoration:none;">Consistency</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/schedule.html" style="color:var(--ink-light); text-decoration:none;">Schedule</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/stocks.html" style="color:var(--ink-light); text-decoration:none;">Stocks</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/opportunity.html" style="color:var(--ink-light); text-decoration:none;">Opportunity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/reportcard.html" style="color:var(--ink-light); text-decoration:none;">Report Card</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/awards.html" style="color:var(--ink-light); text-decoration:none;">Awards</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/vorp.html" style="color:var(--ink-light); text-decoration:none;">VORP</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tradevalues.html" style="color:var(--ink-light); text-decoration:none;">Trade Values</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/team/KC" style="color:var(--ink-light); text-decoration:none;">Teams</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none;">League Intel</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/agents.html" style="color:var(--ink-light); text-decoration:none;">War Room</a>
+  </div>
+  razzle.lol — let's razzle dazzle em baby
+</footer>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script src="app.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function fmt(v, dec) {
+    if (v === null || v === undefined) return '-';
+    return Number(v).toFixed(dec === undefined ? 1 : dec);
+  }
+
+  var currentPosition = '';
+  var currentData = null;
+  var searchQuery = '';
+
+  var TIER_LABELS = {
+    1: 'Elite', 2: 'Blue Chip', 3: 'Premium', 4: 'Solid',
+    5: 'Promising', 6: 'Depth', 7: 'Roster Clogger', 8: 'Cut Bait'
+  };
+
+  function filterBySearch(players) {
+    if (!searchQuery) return players;
+    var q = searchQuery.toLowerCase();
+    return players.filter(function(p) {
+      return (p.full_name || '').toLowerCase().indexOf(q) !== -1 ||
+             (p.team || '').toLowerCase().indexOf(q) !== -1;
+    });
+  }
+
+  function buildPlayerRow(p) {
+    var pos = (p.position || 'RB').toLowerCase();
+    var pct = Math.max(0, Math.min(100, p.trade_value));
+    var rankClass = '';
+    if (p.rank === 1) rankClass = ' top1';
+    else if (p.rank === 2) rankClass = ' top2';
+    else if (p.rank === 3) rankClass = ' top3';
+
+    var tooltip = 'Production: ' + fmt(p.production_score) + '/100 | Age: ' + fmt(p.age_score) + '/100 | Scarcity: ' + fmt(p.scarcity_score) + '/100';
+
+    var html = '<div class="tv-row" data-pid="' + escapeHtml(p.player_id) + '" title="' + escapeHtml(tooltip) + '">';
+
+    // Rank
+    html += '<div class="tv-rank' + rankClass + '">' + escapeHtml(String(p.rank)) + '</div>';
+
+    // Headshot
+    if (p.headshot_url) {
+      html += '<img class="tv-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+    } else {
+      html += '<div class="tv-headshot"></div>';
+    }
+
+    // Player info
+    html += '<div class="tv-player-info">';
+    html += '<div class="tv-player-name">' + escapeHtml(p.full_name) + '</div>';
+    html += '<div class="tv-player-meta">';
+    html += '<span class="tv-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
+    html += '<span class="tv-team-label">' + escapeHtml(p.team) + '</span>';
+    if (p.age) html += '<span class="tv-age">age ' + escapeHtml(String(p.age)) + '</span>';
+    html += '</div></div>';
+
+    // Value bar
+    html += '<div class="tv-bar-area">';
+    html += '<div class="tv-bar-track"><div class="tv-bar-fill ' + pos + '" style="width:' + pct + '%"></div></div>';
+    html += '<div class="tv-value">' + fmt(p.trade_value) + '</div>';
+    html += '</div>';
+
+    // Stats
+    html += '<div class="tv-stats">';
+    html += '<div class="tv-stat"><div>' + fmt(p.ppg) + '</div><div class="tv-stat-label">PPG</div></div>';
+    html += '<div class="tv-stat"><div>' + escapeHtml(String(p.games || '-')) + '</div><div class="tv-stat-label">GP</div></div>';
+    html += '</div>';
+
+    // Tier badge
+    html += '<span class="tv-tier-badge t' + p.tier + '">' + escapeHtml(p.tier_label) + '</span>';
+
+    html += '</div>';
+    return html;
+  }
+
+  function render(data) {
+    currentData = data;
+    var body = document.getElementById('tv-body');
+
+    var players = filterBySearch(data.players || []);
+
+    if (!players.length) {
+      body.innerHTML = '<div class="tv-empty">' + (searchQuery ? 'no players match "' + escapeHtml(searchQuery) + '"' : 'no trade value data found') + '</div>';
+      return;
+    }
+
+    // Group by tier
+    var tierGroups = {};
+    players.forEach(function(p) {
+      var t = p.tier;
+      if (!tierGroups[t]) tierGroups[t] = [];
+      tierGroups[t].push(p);
+    });
+
+    var html = '<div class="tv-chart-wrap">';
+    var tierKeys = Object.keys(tierGroups).map(Number).sort(function(a, b) { return a - b; });
+
+    tierKeys.forEach(function(t) {
+      var group = tierGroups[t];
+      var label = TIER_LABELS[t] || 'Tier ' + t;
+      html += '<div class="tv-tier-header">';
+      html += '<span class="tv-tier-num t' + t + '">' + t + '</span>';
+      html += escapeHtml(label);
+      html += '<span class="tv-tier-label">tier ' + t + ' of 8</span>';
+      html += '<span class="tv-tier-count">' + group.length + ' player' + (group.length !== 1 ? 's' : '') + '</span>';
+      html += '</div>';
+
+      group.forEach(function(p) {
+        html += buildPlayerRow(p);
+      });
+    });
+
+    html += '</div>';
+    body.innerHTML = html;
+
+    // Click handlers
+    body.querySelectorAll('.tv-row[data-pid]').forEach(function(row) {
+      row.addEventListener('click', function() {
+        var pid = row.getAttribute('data-pid');
+        if (pid) window.location.href = '/player/' + encodeURIComponent(pid);
+      });
+    });
+  }
+
+  function loadData() {
+    var body = document.getElementById('tv-body');
+    body.innerHTML = '<div class="tv-loading">calculating trade values...</div>';
+
+    var seasonSel = document.getElementById('season-select');
+    var season = seasonSel.value || '';
+    var url = '/api/trade-value-chart?limit=150';
+    if (season) url += '&season=' + season;
+    if (currentPosition) url += '&position=' + currentPosition;
+
+    fetch(url).then(function(resp) {
+      if (!resp.ok) throw new Error('API error ' + resp.status);
+      return resp.json();
+    }).then(function(data) {
+      var seasonSel = document.getElementById('season-select');
+      if (seasonSel.options.length === 0 && data.available_seasons) {
+        data.available_seasons.forEach(function(s) {
+          var opt = document.createElement('option');
+          opt.value = s;
+          opt.textContent = s;
+          seasonSel.appendChild(opt);
+        });
+        seasonSel.value = data.season;
+      }
+      render(data);
+    }).catch(function() {
+      body.innerHTML = '<div class="tv-error">failed to load trade value data<br><button class="btn-chunky" onclick="location.reload()">retry</button></div>';
+    });
+  }
+
+  // Position tab clicks
+  document.getElementById('pos-tabs').addEventListener('click', function(e) {
+    var tab = e.target.closest('.tv-pos-tab');
+    if (!tab) return;
+    document.querySelectorAll('.tv-pos-tab').forEach(function(t) { t.classList.remove('active'); });
+    tab.classList.add('active');
+    currentPosition = tab.getAttribute('data-pos') || '';
+    loadData();
+  });
+
+  // Season change
+  document.getElementById('season-select').addEventListener('change', function() {
+    loadData();
+  });
+
+  // Search
+  var searchTimer;
+  document.getElementById('player-search').addEventListener('input', function() {
+    clearTimeout(searchTimer);
+    var self = this;
+    searchTimer = setTimeout(function() {
+      searchQuery = self.value.trim();
+      if (currentData) render(currentData);
+    }, 200);
+  });
+
+  // Export PNG
+  document.getElementById('export-btn').addEventListener('click', function() {
+    var el = document.getElementById('tv-content');
+    if (typeof html2canvas !== 'undefined') {
+      html2canvas(el, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+        var ctx = canvas.getContext('2d');
+        ctx.font = '24px Caveat, cursive';
+        ctx.fillStyle = 'rgba(26,26,46,0.3)';
+        ctx.textAlign = 'right';
+        ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 16);
+
+        var link = document.createElement('a');
+        link.download = 'razzle-trade-values.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      });
+    }
+  });
+
+  // Analytics pageview
+  fetch('/api/analytics/pageview', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ page: '/tradevalues.html', referrer: document.referrer || '' })
+  }).catch(function() {});
+
+  // Initial load
+  loadData();
+})();
+</script>
+</body>
+</html>

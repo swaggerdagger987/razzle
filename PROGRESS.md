@@ -1,6 +1,24 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 92 — Value Over Replacement Player (VORP) Dashboard (COMPLETE)
+## Current Phase: Phase 93 — Dynasty Trade Value Chart (COMPLETE)
+
+**Exit criterion MET:** /tradevalues.html page shows a dynasty trade value chart ranking all fantasy-relevant players by composite trade value (production 50% + age curve 30% + positional scarcity 20%). Visual horizontal bar chart with position-colored bars (QB blue, RB teal, WR terracotta, TE purple), grouped into 8 dynasty tiers (Elite/Blue Chip/Premium/Solid/Promising/Depth/Roster Clogger/Cut Bait). Each player row: rank number (top-3 gold/silver/bronze), position badge, headshot, name, team, age, trade value bar (width proportional to 0-100 score, position-colored), PPG, GP, tier badge. Component breakdown in tooltip (production/age/scarcity scores). Methodology chips showing weight breakdown. Player search input for filtering. Position filter tabs (All/QB/RB/WR/TE). Season selector. Click player row → player profile. PNG export via html2canvas with watermark. Responsive at 768px + 480px. /api/trade-value-chart endpoint computes trade values using compute_trade_value (production + age + scarcity), assigns 8-tier labels, returns component breakdown. Min 4 games + 2 PPG filter. "Trade Values" nav link added to all 32 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md.
+
+### Phase 93 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/trade-value-chart endpoint | DONE | fetch_trade_value_chart in live_data.py, composite value + component breakdown + 8-tier assignment |
+| 2 | Trade Value Chart page | DONE | Horizontal bar chart, position-colored bars, tier groups, search, 13 escapeHtml, 37/37 balanced |
+| 3 | Nav links + sitemap + analytics | DONE | All 32 pages updated, sitemap entry, pageview tracking |
+| 4 | Smoke test | DONE | Python + JS syntax clean, 32/32 nav links, XSS escaped, design compliance |
+
+### Decisions Log
+- **Dynasty Trade Value Chart as Phase 93**: After 20+ individual metric dashboards and composite views (report card, awards, VORP), a visual trade value chart fills the most-requested gap in dynasty fantasy football. KeepTradeCut and Fantasy Calc trade value charts are the #1 most referenced resource in r/DynastyFF. Razzle's version uses our own composite model (production + age curve + positional scarcity) and displays values as a horizontal bar chart — visually distinct from our table-heavy dashboards and extremely screenshottable. The bar chart format makes cross-position value comparison intuitive at a glance.
+- **8-tier grouping**: Tiers segment the chart into meaningful groups (Elite through Cut Bait) so users can quickly find their tier. More granular than the 5-tier VORP badges but aligned with common dynasty tier structures.
+- **Search + filter**: Added player search input because trade value charts are primarily used as lookup tools ("what's Player X worth?"). Search filters client-side from the loaded data for instant results.
+
+## Previous Phase: Phase 92 — Value Over Replacement Player (VORP) Dashboard (COMPLETE)
 
 **Exit criterion MET:** /vorp.html page shows VORP analysis with two sections: "League Winners" (highest VORP — PPG above position replacement level, cross-position ranking) and "Replacement Level" (near/below replacement level — waiver-wire caliber players). Each player: position badge, headshot, name, team, VORP value badge (elite >=6 green, starter >=3 blue, flex >=1 yellow, fringe >=0 orange, replacement <0 red), PPG, Replacement PPG, Position Rank, GP, Caveat annotation. Replacement threshold chips showing QB12/RB24/WR36/TE12 PPG baselines. Position filter tabs (All/QB/RB/WR/TE). Season selector. Sortable columns with sort state per section. Click row → player profile. PNG export via html2canvas with watermark. Responsive at 768px + 480px. /api/vorp endpoint computes VORP = player PPG - position replacement PPG (QB12/RB24/WR36/TE12). Min 6 games + 2 PPG filter. "VORP" nav link added to all 31 HTML pages. Sitemap entry. Analytics tracking. Design matches DESIGN.md.
 

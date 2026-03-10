@@ -8056,3 +8056,127 @@ def fetch_vorp(season=None, position=None, limit=30):
         }
     finally:
         conn.close()
+
+
+# ---------------------------------------------------------------------------
+# Trade Value Chart — all players ranked by dynasty trade value
+# ---------------------------------------------------------------------------
+
+_TV_TIER_LABELS = {
+    1: "Elite",
+    2: "Blue Chip",
+    3: "Premium",
+    4: "Solid",
+    5: "Promising",
+    6: "Depth",
+    7: "Roster Clogger",
+    8: "Cut Bait",
+}
+
+
+def _tv_tier(value):
+    """Assign trade-value tier 1-8."""
+    if value >= 90:
+        return 1
+    if value >= 78:
+        return 2
+    if value >= 66:
+        return 3
+    if value >= 54:
+        return 4
+    if value >= 42:
+        return 5
+    if value >= 30:
+        return 6
+    if value >= 18:
+        return 7
+    return 8
+
+
+def fetch_trade_value_chart(season=None, position=None, limit=150):
+    """Return all fantasy-relevant players ranked by trade value with component breakdown."""
+    limit = max(1, min(300, limit))
+    conn = get_conn()
+    try:
+        if not season:
+            row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+            season = row[0] if row and row[0] else 2024
+
+        available_seasons = [
+            r[0] for r in conn.execute(
+                "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
+            ).fetchall()
+        ]
+
+        pos_filter = ""
+        params = [season]
+        if position and position.upper() in ("QB", "RB", "WR", "TE"):
+            pos_filter = "AND p.position = ?"
+            params.append(position.upper())
+
+        query = f"""
+            SELECT
+                p.player_id, p.full_name, p.position, p.team, p.age,
+                p.headshot_url,
+                SUM(s.fantasy_points_ppr) as total_ppr,
+                COUNT(DISTINCT s.week) as games
+            FROM players p
+            JOIN player_week_stats s
+                ON s.player_id = p.player_id AND s.season = ?
+            WHERE p.position IN ('QB','RB','WR','TE')
+              {pos_filter}
+            GROUP BY p.player_id
+            HAVING games >= 4 AND (total_ppr / games) >= 2.0
+            ORDER BY total_ppr DESC
+        """
+        rows = conn.execute(query, params).fetchall()
+
+        results = []
+        for r in rows:
+            pid = r[0]
+            name = r[1] or "Unknown"
+            pos = r[2] or "WR"
+            team = r[3] or "FA"
+            age = r[4]
+            headshot = r[5] or ""
+            total_ppr = r[6] or 0
+            games = r[7] or 0
+            ppg = round(total_ppr / games, 2) if games > 0 else 0.0
+
+            prod_score = round(_production_value(ppg, pos), 1)
+            age_score = round(_age_value(age, pos), 1)
+            scarcity_score = round(_scarcity_value(pos), 1)
+            tv = compute_trade_value(ppg, age, pos)
+            tier = _tv_tier(tv)
+
+            results.append({
+                "player_id": pid,
+                "full_name": name,
+                "position": pos,
+                "team": team,
+                "age": age,
+                "headshot_url": headshot,
+                "ppg": ppg,
+                "games": games,
+                "trade_value": tv,
+                "production_score": prod_score,
+                "age_score": age_score,
+                "scarcity_score": scarcity_score,
+                "tier": tier,
+                "tier_label": _TV_TIER_LABELS[tier],
+            })
+
+        results.sort(key=lambda x: x["trade_value"], reverse=True)
+        results = results[:limit]
+
+        for i, p in enumerate(results):
+            p["rank"] = i + 1
+
+        return {
+            "season": season,
+            "available_seasons": available_seasons,
+            "players": results,
+            "total": len(results),
+        }
+    finally:
+        conn.close()
