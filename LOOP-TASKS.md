@@ -35,7 +35,8 @@
 - Modal matches Razzle design system
 
 ## Task 3: Link Sleeper username to account
-**Status**: PENDING
+**Status**: PASS
+**Result**: After login/register, users without a linked Sleeper username see a prompt in the auth modal to connect. linkSleeperToAccount() calls POST /api/auth/link-sleeper. Connected username shown in nav instead of email prefix. League Intel page auto-connects using account-linked Sleeper username. Connecting on League Intel page also links to account if logged in.
 **Acceptance Criteria**:
 - POST /api/auth/link-sleeper validates username against Sleeper API
 - Invalid Sleeper username returns 400
@@ -90,8 +91,8 @@
 ## Loop State
 ```
 Current Phase: 42
-Current Task: 3
+Current Task: 4
 Current Stage: BUILD
 Attempt: 1
-Tasks Completed: 2/7
+Tasks Completed: 3/7
 ```

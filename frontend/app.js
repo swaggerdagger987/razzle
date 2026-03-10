@@ -168,7 +168,7 @@ async function handleLogin(e) {
     if (!resp.ok) { errEl.textContent = data.error || data.detail || "Login failed"; return; }
     localStorage.setItem("razzle_token", data.token);
     localStorage.setItem("razzle_user", JSON.stringify(data.user));
-    closeAuthModal();
+    if (!data.user.sleeper_username) { showSleeperPrompt(); } else { closeAuthModal(); }
     updateAuthUI(data.user);
   } catch (err) {
     errEl.textContent = "Connection error. Try again.";
@@ -194,7 +194,7 @@ async function handleRegister(e) {
     if (!resp.ok) { errEl.textContent = data.error || data.detail || "Registration failed"; return; }
     localStorage.setItem("razzle_token", data.token);
     localStorage.setItem("razzle_user", JSON.stringify(data.user));
-    closeAuthModal();
+    if (!data.user.sleeper_username) { showSleeperPrompt(); } else { closeAuthModal(); }
     updateAuthUI(data.user);
   } catch (err) {
     errEl.textContent = "Connection error. Try again.";
@@ -238,7 +238,9 @@ function updateAuthUI(user) {
   var item = document.getElementById("navAuthItem");
   if (!item) return;
   if (user) {
-    var displayName = escapeHtml(user.email.split("@")[0]);
+    var displayName = user.sleeper_username
+      ? escapeHtml(user.sleeper_username)
+      : escapeHtml(user.email.split("@")[0]);
     item.innerHTML =
       '<span class="nav-user">' +
         '<span class="nav-user-name">' + displayName + '</span>' +
@@ -247,6 +249,67 @@ function updateAuthUI(user) {
   } else {
     item.innerHTML = '<a href="#" onclick="openAuthModal(); return false;" id="navSignIn">Sign In</a>';
   }
+}
+
+function showSleeperPrompt() {
+  var modal = document.getElementById("authModal");
+  if (!modal) return;
+  var inner = modal.querySelector(".auth-modal");
+  if (!inner) return;
+  inner.innerHTML =
+    '<button class="auth-modal-close" onclick="closeAuthModal()">&times;</button>' +
+    '<div style="text-align:center; margin-bottom:16px;">' +
+      '<div style="font-size:40px;">🐯</div>' +
+      '<h3 style="font-family:var(--font-display); font-size:18px; margin-top:8px;">Connect Your Sleeper</h3>' +
+      '<p style="font-family:var(--font-hand); font-size:16px; color:var(--ink-medium); margin-top:4px;">link your Sleeper username for league context</p>' +
+    '</div>' +
+    '<form onsubmit="handleSleeperLink(event)" style="display:flex; flex-direction:column; gap:10px;">' +
+      '<input type="text" id="sleeperLinkInput" placeholder="Sleeper username" style="font-family:var(--font-mono); font-size:14px; padding:10px 14px; border:2px solid var(--ink); border-radius:8px; background:white;">' +
+      '<div id="sleeperLinkError" style="font-family:var(--font-mono); font-size:12px; color:var(--red); min-height:16px;"></div>' +
+      '<button type="submit" class="btn-chunky btn-primary auth-submit">Connect</button>' +
+      '<a href="#" onclick="closeAuthModal(); return false;" style="text-align:center; font-family:var(--font-mono); font-size:12px; color:var(--ink-light);">skip for now</a>' +
+    '</form>';
+}
+
+async function handleSleeperLink(e) {
+  e.preventDefault();
+  var username = document.getElementById("sleeperLinkInput").value.trim();
+  var errEl = document.getElementById("sleeperLinkError");
+  if (!username) { errEl.textContent = "Enter a username"; return; }
+  errEl.textContent = "";
+  try {
+    var token = localStorage.getItem("razzle_token");
+    var resp = await fetch(API_BASE + "/api/auth/link-sleeper", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+      body: JSON.stringify({ sleeper_username: username })
+    });
+    var data = await resp.json();
+    if (!resp.ok) { errEl.textContent = data.error || "Invalid username"; return; }
+    localStorage.setItem("razzle_user", JSON.stringify(data.user));
+    localStorage.setItem("razzle_sleeper_user", username);
+    updateAuthUI(data.user);
+    closeAuthModal();
+  } catch (err) {
+    errEl.textContent = "Connection error";
+  }
+}
+
+async function linkSleeperToAccount(username) {
+  var token = localStorage.getItem("razzle_token");
+  if (!token) return;
+  try {
+    var resp = await fetch(API_BASE + "/api/auth/link-sleeper", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+      body: JSON.stringify({ sleeper_username: username })
+    });
+    if (resp.ok) {
+      var data = await resp.json();
+      localStorage.setItem("razzle_user", JSON.stringify(data.user));
+      updateAuthUI(data.user);
+    }
+  } catch (e) { /* silent fail */ }
 }
 
 // Auto-init auth on DOM ready

@@ -264,11 +264,16 @@
 <script>
 const SLEEPER_API = "https://api.sleeper.app/v1";
 
-// Check for saved connection
-const savedUser = localStorage.getItem("razzle_sleeper_user");
-if (savedUser) {
-  showLeagues(savedUser);
-}
+// Check for saved connection (prefer account-linked, fallback to localStorage)
+(function() {
+  var user = null;
+  try { user = JSON.parse(localStorage.getItem("razzle_user")); } catch(e) {}
+  var sleeperUser = (user && user.sleeper_username) || localStorage.getItem("razzle_sleeper_user");
+  if (sleeperUser) {
+    if (!localStorage.getItem("razzle_sleeper_user")) localStorage.setItem("razzle_sleeper_user", sleeperUser);
+    showLeagues(sleeperUser);
+  }
+})();
 
 async function connectSleeper() {
   const username = document.getElementById("sleeperUsername").value.trim();
@@ -285,6 +290,8 @@ async function connectSleeper() {
 
     localStorage.setItem("razzle_sleeper_user", username);
     localStorage.setItem("razzle_sleeper_user_id", user.user_id);
+    // Link to account if logged in
+    if (typeof linkSleeperToAccount === "function") linkSleeperToAccount(username);
     showLeagues(username);
   } catch (e) {
     document.getElementById("connectError").textContent = "couldn't find that username on Sleeper";
