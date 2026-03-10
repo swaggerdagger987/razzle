@@ -5,8 +5,9 @@
 - Task 1: PASS
 - Task 2: PASS
 - Task 3: PASS
+- Task 4: PASS
 - Stage: EXECUTING
-- Next: Task 4
+- Next: Task 5
 
 ## Phase 27: Backend Cleanup: Split live_data.py into Modules
 **Exit Criterion**: `live_data.py` is replaced by a `live_data/` package with logical submodules (e.g., `players.py`, `prospects.py`, `college.py`, `analytics.py`, `cache.py`, `storage.py`). All imports in `server.py` updated. No function lost, no endpoint broken. Each module under 3,000 lines.
@@ -29,8 +30,9 @@
 **Acceptance**: `players.py` contains `db_stats`, `quick_search_players`, `fetch_players`, `fetch_screener`, `get_filter_options`, `fetch_player_weeks`, `fetch_player_seasons`, `fetch_player_profile`, `fetch_players_compare`, `fetch_team_roster`, `fetch_career_stats`, `fetch_player_percentiles`, `fetch_player_strengths`, `fetch_points_breakdown`, `fetch_game_log`, `fetch_compare_table`, `fetch_player_boom_bust`, `fetch_player_comps`. `_monolith.py` updated. All files compile.
 
 ### Task 4: Extract prospects.py and college.py
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
+**Notes**: `prospects.py` (881 lines) contains 9 functions: fetch_prospects, fetch_prospect_years, fetch_prospect_profile, _fetch_college_for_prospect, fetch_prospect_comps, fetch_prospect_tiers, fetch_prospects_compare, fetch_prospect_scores, fetch_draft_class_analytics. `college.py` (2,300 lines) contains 20 functions: fetch_college_players, fetch_college_player_profile, fetch_college_filter_options, fetch_college_breakouts, fetch_college_efficiency, fetch_college_leaders, fetch_college_trends, fetch_college_rankings, fetch_college_streaks, fetch_college_stock_watch, fetch_college_scarcity, fetch_college_consistency, fetch_college_workload, fetch_college_dual_threat, fetch_college_snap_efficiency, fetch_college_aging_curves, fetch_college_records, fetch_college_season_recap, fetch_college_season_awards, fetch_college_stat_explorer. Plus 9 module-level constants (_CFB_*). Monolith reduced from 12,020 to 8,883 lines. All files compile clean. Full import chain verified.
 **Acceptance**: `prospects.py` contains all `fetch_prospect*` + `fetch_draft_class*` + prospect helpers. `college.py` contains all `fetch_college_*` functions + college helpers. `_monolith.py` updated. All files compile.
 
 ### Task 5: Extract dynasty.py and storage.py

@@ -11,7 +11,7 @@
 | 1 | Create package structure and proxy __init__.py | DONE | git mv live_data.py → live_data/_monolith.py, __init__.py re-exports via wildcard, 132 functions, server imports clean |
 | 2 | Extract core.py — shared helpers, constants, enrichment | DONE | 985 lines, all shared helpers/constants/enrich functions/trade value/grading/comp finder extracted, _monolith imports from core |
 | 3 | Extract players.py — NFL player CRUD functions | DONE | 1,669 lines, 18 functions (db_stats through fetch_player_comps), monolith reduced to 12,020 lines |
-| 4 | Extract prospects.py and college.py | PENDING | |
+| 4 | Extract prospects.py and college.py | DONE | prospects.py (881 lines, 9 functions), college.py (2,300 lines, 20 functions + 9 constants), monolith reduced to 8,883 lines |
 | 5 | Extract dynasty.py and storage.py | PENDING | |
 | 6 | Extract analytics.py and tools.py, delete monolith | PENDING | |
 
