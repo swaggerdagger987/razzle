@@ -3533,6 +3533,177 @@ def _cosine_similarity(a, b):
     return round(dot / (mag_a * mag_b) * 100, 1)
 
 
+def fetch_player_boom_bust(player_id, season=0):
+    """Analyze a player's weekly score distribution: boom/bust rates, consistency, percentiles."""
+    conn = get_conn()
+
+    # Get player info
+    player = conn.execute(
+        "SELECT player_id, full_name, position, team, age, headshot_url FROM players WHERE player_id = ?",
+        (player_id,)
+    ).fetchone()
+
+    if not player:
+        conn.close()
+        return {"error": "Player not found"}
+
+    player = dict(player)
+    pos = (player.get("position") or "").upper()
+
+    # Determine season
+    if not season:
+        row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+        season = row[0] if row and row[0] else 2024
+
+    # Get weekly fantasy scores for the player
+    weeks = conn.execute("""
+        SELECT week, fantasy_points_ppr
+        FROM player_week_stats
+        WHERE player_id = ? AND season = ?
+        ORDER BY week
+    """, (player_id, season)).fetchall()
+
+    if len(weeks) < 4:
+        conn.close()
+        return {"error": "Not enough games (need 4+)", "player": player}
+
+    weekly_scores = [{"week": w[0], "score": round(w[1] or 0, 2)} for w in weeks]
+    scores = [w[1] or 0 for w in weeks]
+
+    # Get position average PPG for boom/bust thresholds
+    pos_avg_row = conn.execute("""
+        SELECT AVG(ppg) FROM (
+            SELECT SUM(s.fantasy_points_ppr) / COUNT(*) as ppg
+            FROM player_week_stats s
+            JOIN players p ON s.player_id = p.player_id
+            WHERE p.position = ? AND s.season = ?
+            GROUP BY s.player_id
+            HAVING COUNT(*) >= 4
+        )
+    """, (pos, season)).fetchone()
+    pos_avg_ppg = round(pos_avg_row[0], 2) if pos_avg_row and pos_avg_row[0] else 10.0
+
+    # Position rank by consistency among same-position players
+    all_pos_players = conn.execute("""
+        SELECT s.player_id,
+               AVG(s.fantasy_points_ppr) as avg_ppg,
+               GROUP_CONCAT(s.fantasy_points_ppr) as scores_csv
+        FROM player_week_stats s
+        JOIN players p ON s.player_id = p.player_id
+        WHERE p.position = ? AND s.season = ?
+        GROUP BY s.player_id
+        HAVING COUNT(*) >= 4
+    """, (pos, season)).fetchall()
+
+    conn.close()
+
+    # Boom/bust thresholds: 1.5× and 0.5× position average
+    boom_threshold = round(pos_avg_ppg * 1.5, 2)
+    bust_threshold = round(pos_avg_ppg * 0.5, 2)
+
+    # Calculate rates
+    games = len(scores)
+    boom_count = sum(1 for s in scores if s >= boom_threshold)
+    bust_count = sum(1 for s in scores if s <= bust_threshold)
+    boom_rate = round((boom_count / games) * 100, 1)
+    bust_rate = round((bust_count / games) * 100, 1)
+
+    # Stats
+    import statistics
+    scores_sorted = sorted(scores)
+    mean_ppg = round(statistics.mean(scores), 2)
+    median_ppg = round(statistics.median(scores), 2)
+    stdev = round(statistics.stdev(scores), 2) if len(scores) > 1 else 0
+
+    # Percentiles (floor=10th, ceiling=90th)
+    def percentile(data, pct):
+        idx = (pct / 100) * (len(data) - 1)
+        lower = int(idx)
+        upper = min(lower + 1, len(data) - 1)
+        frac = idx - lower
+        return round(data[lower] + frac * (data[upper] - data[lower]), 2)
+
+    floor_ppg = percentile(scores_sorted, 10)
+    ceiling_ppg = percentile(scores_sorted, 90)
+
+    # Consistency score: inverse coefficient of variation, scaled 0-100
+    # CV = stdev / mean. Lower CV = more consistent. Score = max(0, 100 - CV*100)
+    if mean_ppg > 0:
+        cv = stdev / mean_ppg
+        consistency_score = round(max(0, min(100, 100 - cv * 100)), 1)
+    else:
+        consistency_score = 0
+
+    # Grade based on consistency score
+    grade_thresholds = [
+        (90, "A+"), (85, "A"), (80, "A-"),
+        (75, "B+"), (70, "B"), (65, "B-"),
+        (60, "C+"), (55, "C"), (50, "C-"),
+        (45, "D+"), (40, "D"), (35, "D-"),
+        (0, "F"),
+    ]
+    grade = "F"
+    for threshold, g in grade_thresholds:
+        if consistency_score >= threshold:
+            grade = g
+            break
+
+    # Position rank by consistency
+    consistency_ranks = []
+    for row in all_pos_players:
+        pid = row[0]
+        csv_str = row[2]
+        if not csv_str:
+            continue
+        try:
+            p_scores = [float(x) for x in csv_str.split(",")]
+        except (ValueError, TypeError):
+            continue
+        if len(p_scores) < 2:
+            continue
+        p_mean = statistics.mean(p_scores)
+        p_stdev = statistics.stdev(p_scores)
+        p_cv = p_stdev / p_mean if p_mean > 0 else 999
+        p_cons = max(0, min(100, 100 - p_cv * 100))
+        consistency_ranks.append((pid, p_cons))
+
+    consistency_ranks.sort(key=lambda x: -x[1])
+    position_rank = 1
+    total_ranked = len(consistency_ranks)
+    for i, (pid, _) in enumerate(consistency_ranks):
+        if pid == player_id:
+            position_rank = i + 1
+            break
+
+    return {
+        "player": {
+            "player_id": player["player_id"],
+            "full_name": player["full_name"],
+            "position": pos,
+            "team": player.get("team") or "FA",
+            "age": player.get("age"),
+            "headshot_url": player.get("headshot_url"),
+        },
+        "season": season,
+        "games_played": games,
+        "weekly_scores": weekly_scores,
+        "mean_ppg": mean_ppg,
+        "median_ppg": median_ppg,
+        "floor_ppg": floor_ppg,
+        "ceiling_ppg": ceiling_ppg,
+        "stdev": stdev,
+        "boom_rate": boom_rate,
+        "bust_rate": bust_rate,
+        "boom_threshold": boom_threshold,
+        "bust_threshold": bust_threshold,
+        "position_avg_ppg": pos_avg_ppg,
+        "consistency_score": consistency_score,
+        "grade": grade,
+        "position_rank": position_rank,
+        "position_total": total_ranked,
+    }
+
+
 def fetch_player_comps(player_id, limit=5, season=0):
     """Find the most statistically similar NFL players to a given player."""
     conn = get_conn()

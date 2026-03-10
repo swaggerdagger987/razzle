@@ -442,6 +442,11 @@ def player_comps(player_id: str, limit: int = 5, season: int = 0):
     return live_data.fetch_player_comps(player_id, limit=min(limit, 10), season=season)
 
 
+@app.get("/api/players/{player_id}/boom-bust")
+def player_boom_bust(player_id: str, season: int = 0):
+    return live_data.fetch_player_boom_bust(player_id, season=season)
+
+
 @app.get("/api/players/compare")
 def players_compare(ids: str = "", season: str = "0"):
     player_ids = [p.strip() for p in ids.split(",") if p.strip()]
