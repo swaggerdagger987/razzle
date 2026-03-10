@@ -4879,3 +4879,110 @@ def fetch_buy_sell_candidates(season=None, position=None, limit=15):
         }
     finally:
         conn.close()
+
+
+# ---------------------------------------------------------------------------
+# Aging Curves — PPG by age per position
+# ---------------------------------------------------------------------------
+
+def fetch_aging_curves(season=None, position=None):
+    """Return aging curve data: average PPG by age for each position,
+    plus individual player data points for the selected season."""
+    conn = get_conn()
+    try:
+        # Determine available seasons
+        row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
+        available_seasons = [r[0] for r in row] if row else [2024]
+        if not season:
+            season = available_seasons[0] if available_seasons else 2024
+
+        positions = [position] if position and position in ("QB", "RB", "WR", "TE") else ["QB", "RB", "WR", "TE"]
+        latest_season = available_seasons[0] if available_seasons else 2024
+        result = {}
+
+        for pos in positions:
+            # Aggregate curve: average PPG by age across ALL seasons
+            # Age at time of season = current_age - (latest_season - that_season)
+            curve_query = """
+                SELECT player_age, ROUND(AVG(ppg), 1) as avg_ppg, COUNT(*) as sample_size
+                FROM (
+                    SELECT
+                        p.player_id,
+                        s.season,
+                        p.age - (? - s.season) as player_age,
+                        CAST(SUM(s.fantasy_points_ppr) AS REAL) / COUNT(DISTINCT s.week) as ppg
+                    FROM players p
+                    JOIN player_week_stats s ON s.player_id = p.player_id
+                    WHERE p.position = ?
+                      AND p.fantasy_relevant = 1
+                      AND p.age IS NOT NULL
+                    GROUP BY p.player_id, s.season
+                    HAVING COUNT(DISTINCT s.week) >= 6
+                ) sub
+                WHERE player_age BETWEEN 20 AND 40
+                GROUP BY player_age
+                HAVING sample_size >= 3
+                ORDER BY player_age
+            """
+            curve_rows = conn.execute(curve_query, [latest_season, pos]).fetchall()
+
+            curve_points = []
+            for cr in curve_rows:
+                curve_points.append({
+                    "age": cr[0],
+                    "ppg": cr[1],
+                    "sample_size": cr[2],
+                })
+
+            # Individual players for the selected season
+            players_query = """
+                SELECT
+                    p.player_id, p.full_name, p.team, p.age, p.headshot_url,
+                    COUNT(DISTINCT s.week) as games,
+                    CAST(SUM(s.fantasy_points_ppr) AS REAL) / COUNT(DISTINCT s.week) as ppg
+                FROM players p
+                JOIN player_week_stats s ON s.player_id = p.player_id AND s.season = ?
+                WHERE p.position = ?
+                  AND p.fantasy_relevant = 1
+                  AND p.age IS NOT NULL
+                GROUP BY p.player_id
+                HAVING games >= 6
+                ORDER BY ppg DESC
+                LIMIT 500
+            """
+            player_rows = conn.execute(players_query, [season, pos]).fetchall()
+
+            players = []
+            for pr in player_rows:
+                players.append({
+                    "player_id": pr[0],
+                    "name": pr[1] or "Unknown",
+                    "team": pr[2] or "",
+                    "age": pr[3],
+                    "headshot_url": pr[4] or "",
+                    "games": pr[5],
+                    "ppg": round(pr[6], 1) if pr[6] else 0,
+                })
+
+            # Peak age from curve
+            peak_age = None
+            peak_ppg = 0
+            for cp in curve_points:
+                if cp["ppg"] > peak_ppg:
+                    peak_ppg = cp["ppg"]
+                    peak_age = cp["age"]
+
+            result[pos] = {
+                "curve": curve_points,
+                "players": players,
+                "peak_age": peak_age,
+                "peak_ppg": peak_ppg,
+            }
+
+        return {
+            "season": season,
+            "available_seasons": available_seasons,
+            "positions": result,
+        }
+    finally:
+        conn.close()

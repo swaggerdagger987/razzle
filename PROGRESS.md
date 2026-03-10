@@ -1,6 +1,26 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 71 — QA + UX Audit Fixes (COMPLETE)
+## Current Phase: Phase 72 — Aging Curves Dashboard (COMPLETE)
+
+**Exit criterion MET:** /aging.html page shows position-specific aging curves (PPG by age) as canvas-drawn line charts with individual player dots plotted. Summary cards show peak age per position. Position filter tabs (All/QB/RB/WR/TE). Season selector. Click player dot → player profile. PNG export with watermark. Legend explaining curve vs dots. Canvas redraws on resize. "Aging" nav link added to all 15 HTML pages (nav + footer). Sitemap entry added. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors.
+
+### Phase 72 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/aging-curves endpoint | DONE | Aggregate PPG-by-age curves + individual player dots, season/position params |
+| 2 | Canvas aging curve charts | DONE | Filled area, curve line, player dots, peak marker, tooltips, click→profile |
+| 3 | Nav links + sitemap + analytics | DONE | All 15 pages updated, sitemap entry, pageview tracking |
+| 4 | Smoke test | DONE | Python + JS syntax clean, 18/18 design checks, nav links verified |
+
+### Decisions Log
+- **Aging Curves as Phase 72**: Dynasty managers constantly debate when players peak and decline. Aging curve visualizations are among the most screenshotted content on r/DynastyFF. Making them interactive with real data and individual player dots makes them far more useful than static images.
+- **Multi-season aggregate curve**: The curve averages PPG by age across ALL available seasons (2020+) for statistical robustness. Individual dots show the selected season only. This gives the curve real shape with enough sample size while showing current players.
+- **Age adjustment**: Player ages in the DB are current age. For historical seasons, we subtract (latest_season - that_season) to estimate their age at the time. Not perfect (birthday timing) but close enough for curve shape.
+- **Canvas rendering**: Canvas gives pixel-perfect control over the chart aesthetic — filled area under curve, dashed peak marker, semi-transparent dots — matching the comic-strip style better than any chart library.
+- **Min 6 games filter**: Prevents small-sample noise from distorting the curve and individual dots.
+
+## Previous Phase: Phase 71 — QA + UX Audit Fixes (COMPLETE)
 
 **Exit criterion MET:** All CRITICAL and HIGH findings from phases 66-70 QA+UX audit resolved. Nav class fixed on scarcity/breakouts/buysell (main-nav → topnav with tiger logo). Connection leak fixed in fetch_prospect_scores (try/finally). XSS fixed: all numeric API values escaped in breakouts/buysell/scarcity innerHTML. Prospect click improved with position filter param. RBS/RPS tooltips added. Age badges standardized (young ≤24, prime 25-27, aging 28+). Scarcity summary labels improved (PPG units, ranked scarcity labels). Breakouts vs Buy/Sell subtitles clarified. Medium: LIMIT 500 on SQL queries, position validation on prospect-scores, aria-labels on season selects.
 

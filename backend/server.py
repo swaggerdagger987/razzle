@@ -890,6 +890,7 @@ def sitemap_xml():
         ("/scarcity.html", "0.8", "weekly"),
         ("/breakouts.html", "0.8", "weekly"),
         ("/buysell.html", "0.8", "weekly"),
+        ("/aging.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1040,6 +1041,14 @@ def buy_sell_candidates(season: int = 0, position: str = "", limit: int = 15):
     s = season if season > 0 else None
     pos = position.upper() if position else None
     return live_data.fetch_buy_sell_candidates(season=s, position=pos, limit=max(1, min(limit, 30)))
+
+
+@app.get("/api/aging-curves")
+def aging_curves(season: int = 0, position: str = ""):
+    """Return aging curve data — average PPG by age per position with player dots."""
+    s = season if season > 0 else None
+    pos = position.upper() if position else None
+    return live_data.fetch_aging_curves(season=s, position=pos)
 
 
 @app.get("/api/analytics/summary")

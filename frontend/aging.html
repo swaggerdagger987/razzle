@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Aging Curves — Razzle</title>
+<meta property="og:title" content="Aging Curves — Razzle">
+<meta property="og:description" content="Fantasy football aging curves — when do players peak and decline? razzle.lol">
+<meta property="og:site_name" content="razzle.lol">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Aging Curves — Razzle">
+<meta name="twitter:description" content="Fantasy football aging curves — when do players peak and decline? razzle.lol">
+<meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
+<meta name="description" content="Aging curves dashboard — see when fantasy players peak and decline by position on razzle.lol">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .aging-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+  }
+
+  .aging-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .aging-header h1 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: var(--ink);
+    margin: 0 0 4px;
+  }
+  .aging-header .aging-subtitle {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+  }
+
+  /* Controls */
+  .aging-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .aging-pos-tabs {
+    display: flex;
+    gap: 6px;
+  }
+  .aging-pos-tab {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--bg-card);
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .aging-pos-tab:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+  .aging-pos-tab.active {
+    background: var(--ink);
+    color: var(--bg-card);
+  }
+
+  .aging-season-select {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    padding: 7px 12px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--bg-card);
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  /* Actions */
+  .aging-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  /* Summary cards */
+  .aging-summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .aging-summary-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 14px;
+    text-align: center;
+    transition: all 0.15s;
+  }
+  .aging-summary-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+  .aging-summary-pos {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 700;
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 6px;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+  .aging-summary-pos.qb { background: var(--pos-qb); }
+  .aging-summary-pos.rb { background: var(--pos-rb); }
+  .aging-summary-pos.wr { background: var(--pos-wr); }
+  .aging-summary-pos.te { background: var(--pos-te); }
+  .aging-summary-peak {
+    font-family: var(--font-mono);
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .aging-summary-label {
+    font-family: var(--font-hand);
+    font-size: 16px;
+    color: var(--ink-light);
+    margin-top: 2px;
+  }
+  .aging-summary-ppg {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-light);
+    margin-top: 4px;
+  }
+
+  /* Chart cards */
+  .aging-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .aging-grid.single {
+    grid-template-columns: 1fr;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .aging-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    overflow: hidden;
+    transition: all 0.15s;
+  }
+  .aging-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+  .aging-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-bottom: 2px dashed var(--ink-faint);
+  }
+  .aging-card-header.qb { background: var(--blue-light, #dde4f7); }
+  .aging-card-header.rb { background: var(--green-light, #d9efec); }
+  .aging-card-header.wr { background: var(--orange-light, #f7e4d8); }
+  .aging-card-header.te { background: var(--purple-light, #e5dcf7); }
+  .aging-card-title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .aging-card-annotation {
+    font-family: var(--font-hand);
+    font-size: 16px;
+    color: var(--ink-light);
+  }
+
+  .aging-chart-wrap {
+    padding: 12px 8px 8px;
+    position: relative;
+  }
+  .aging-chart-wrap canvas {
+    display: block;
+    width: 100%;
+    cursor: crosshair;
+  }
+
+  /* Tooltip */
+  .aging-tooltip {
+    display: none;
+    position: absolute;
+    background: var(--bg-card);
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    box-shadow: 3px 3px 0 var(--ink);
+    padding: 8px 12px;
+    pointer-events: none;
+    z-index: 10;
+    max-width: 200px;
+  }
+  .aging-tooltip-name {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .aging-tooltip-detail {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-medium);
+    margin-top: 2px;
+  }
+
+  /* Loading */
+  .aging-loading {
+    text-align: center;
+    padding: 60px 20px;
+    font-family: var(--font-hand);
+    font-size: 24px;
+    color: var(--ink-light);
+  }
+
+  /* Legend */
+  .aging-legend {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .aging-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-medium);
+  }
+  .aging-legend-line {
+    width: 24px;
+    height: 3px;
+    border-radius: 2px;
+  }
+  .aging-legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1.5px solid var(--ink);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .aging-summary { grid-template-columns: repeat(2, 1fr); }
+    .aging-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 480px) {
+    .aging-summary { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .aging-header h1 { font-size: 24px; }
+    .aging-pos-tab { padding: 5px 10px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <a href="/" class="logo">
+    <div class="logo-mark">&#x1F42F;</div>
+    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/lab.html">The Lab</a></li>
+    <li><a href="/rankings.html">Rankings</a></li>
+    <li><a href="/leaders.html">Leaders</a></li>
+    <li><a href="/prospects.html">Prospects</a></li>
+    <li><a href="/scarcity.html">Scarcity</a></li>
+    <li><a href="/breakouts.html">Breakouts</a></li>
+    <li><a href="/buysell.html">Buy/Sell</a></li>
+    <li><a href="/aging.html" class="active">Aging</a></li>
+    <li><a href="/team/KC">Teams</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
+    <li><a href="/agents.html">War Room</a></li>
+  </ul>
+</nav>
+
+<main class="aging-page" id="aging-content">
+  <div class="aging-header">
+    <h1>Aging Curves</h1>
+    <div class="aging-subtitle">when do they peak? when do they fall off?</div>
+  </div>
+
+  <div class="aging-controls">
+    <div class="aging-pos-tabs">
+      <button class="aging-pos-tab active" data-pos="ALL">All</button>
+      <button class="aging-pos-tab" data-pos="QB">QB</button>
+      <button class="aging-pos-tab" data-pos="RB">RB</button>
+      <button class="aging-pos-tab" data-pos="WR">WR</button>
+      <button class="aging-pos-tab" data-pos="TE">TE</button>
+    </div>
+    <select class="aging-season-select" id="season-select" title="Season" aria-label="Season"></select>
+  </div>
+
+  <div class="aging-actions">
+    <button class="btn-chunky" id="export-btn" title="Export as PNG">Export PNG</button>
+  </div>
+
+  <div id="aging-body">
+    <div class="aging-loading" id="aging-loading">studying the tape...</div>
+  </div>
+</main>
+
+<!-- Watermark -->
+<div style="position:fixed; bottom:10px; right:14px; font-family:var(--font-hand); font-size:14px; color:var(--ink-light); opacity:0.7; pointer-events:none; z-index:999;">razzle.lol</div>
+
+<!-- Footer -->
+<footer style="text-align:center; padding:24px 20px 32px; font-family:var(--font-hand); font-size:15px; color:var(--ink-light); border-top:2px dashed var(--ink-faint); margin-top:40px;">
+  <div style="margin-bottom:10px;">
+    <a href="/lab.html" style="color:var(--ink-light); text-decoration:none;">The Lab</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/rankings.html" style="color:var(--ink-light); text-decoration:none;">Rankings</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/leaders.html" style="color:var(--ink-light); text-decoration:none;">Leaders</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/prospects.html" style="color:var(--ink-light); text-decoration:none;">Prospects</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/scarcity.html" style="color:var(--ink-light); text-decoration:none;">Scarcity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/breakouts.html" style="color:var(--ink-light); text-decoration:none;">Breakouts</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/buysell.html" style="color:var(--ink-light); text-decoration:none;">Buy/Sell</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/aging.html" style="color:var(--ink-light); text-decoration:none;">Aging</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/team/KC" style="color:var(--ink-light); text-decoration:none;">Teams</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none;">League Intel</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/agents.html" style="color:var(--ink-light); text-decoration:none;">War Room</a>
+  </div>
+  razzle.lol — let's razzle dazzle em baby
+</footer>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+  var POS_LIGHT = { QB: '#dde4f7', RB: '#d9efec', WR: '#f7e4d8', TE: '#e5dcf7' };
+  var POS_ANNOTATIONS = {
+    QB: 'the long window',
+    RB: 'father time comes fast',
+    WR: 'the sweet spot',
+    TE: 'late bloomers',
+  };
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  var currentData = null;
+  var activePos = 'ALL';
+
+  // --- Canvas chart drawing ---
+  function drawAgingChart(canvas, curveData, playersData, pos) {
+    var dpr = window.devicePixelRatio || 1;
+    var rect = canvas.parentElement.getBoundingClientRect();
+    var w = rect.width - 16;
+    var h = Math.min(320, w * 0.6);
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+
+    var ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    ctx.clearRect(0, 0, w, h);
+
+    var color = POS_COLORS[pos] || '#d97757';
+    var lightColor = POS_LIGHT[pos] || '#f7e4d8';
+
+    // Chart margins
+    var ml = 44, mr = 16, mt = 16, mb = 36;
+    var cw = w - ml - mr;
+    var ch = h - mt - mb;
+
+    if (!curveData || curveData.length === 0) {
+      ctx.font = '16px Caveat, cursive';
+      ctx.fillStyle = '#8a8a9e';
+      ctx.textAlign = 'center';
+      ctx.fillText('not enough data...', w / 2, h / 2);
+      return;
+    }
+
+    // Determine axis ranges
+    var minAge = curveData[0].age;
+    var maxAge = curveData[curveData.length - 1].age;
+    var maxPpg = 0;
+    curveData.forEach(function(p) { if (p.ppg > maxPpg) maxPpg = p.ppg; });
+    playersData.forEach(function(p) { if (p.ppg > maxPpg) maxPpg = p.ppg; });
+    maxPpg = Math.ceil(maxPpg / 5) * 5 + 2;
+
+    function xScale(age) { return ml + ((age - minAge) / (maxAge - minAge)) * cw; }
+    function yScale(ppg) { return mt + ch - (ppg / maxPpg) * ch; }
+
+    // Grid lines
+    ctx.strokeStyle = '#e0d6c8';
+    ctx.lineWidth = 1;
+    var yTicks = 5;
+    for (var i = 0; i <= yTicks; i++) {
+      var yVal = (maxPpg / yTicks) * i;
+      var yy = yScale(yVal);
+      ctx.beginPath();
+      ctx.moveTo(ml, yy);
+      ctx.lineTo(w - mr, yy);
+      ctx.stroke();
+      // Y-axis label
+      ctx.font = '11px "Space Mono", monospace';
+      ctx.fillStyle = '#8a8a9e';
+      ctx.textAlign = 'right';
+      ctx.fillText(yVal.toFixed(0), ml - 6, yy + 4);
+    }
+
+    // X-axis labels
+    ctx.textAlign = 'center';
+    for (var age = minAge; age <= maxAge; age++) {
+      var xx = xScale(age);
+      ctx.font = '11px "Space Mono", monospace';
+      ctx.fillStyle = '#8a8a9e';
+      ctx.fillText(String(age), xx, h - mb + 18);
+      // Tick mark
+      ctx.beginPath();
+      ctx.moveTo(xx, mt + ch);
+      ctx.lineTo(xx, mt + ch + 4);
+      ctx.strokeStyle = '#c5c5d0';
+      ctx.stroke();
+    }
+
+    // Axis labels
+    ctx.font = '11px "Space Mono", monospace';
+    ctx.fillStyle = '#8a8a9e';
+    ctx.textAlign = 'center';
+    ctx.fillText('Age', ml + cw / 2, h - 2);
+    ctx.save();
+    ctx.translate(12, mt + ch / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillText('PPG (PPR)', 0, 0);
+    ctx.restore();
+
+    // Fill area under curve
+    ctx.beginPath();
+    ctx.moveTo(xScale(curveData[0].age), yScale(0));
+    curveData.forEach(function(p) {
+      ctx.lineTo(xScale(p.age), yScale(p.ppg));
+    });
+    ctx.lineTo(xScale(curveData[curveData.length - 1].age), yScale(0));
+    ctx.closePath();
+    ctx.fillStyle = lightColor;
+    ctx.globalAlpha = 0.5;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    // Draw curve line
+    ctx.beginPath();
+    ctx.moveTo(xScale(curveData[0].age), yScale(curveData[0].ppg));
+    for (var ci = 1; ci < curveData.length; ci++) {
+      ctx.lineTo(xScale(curveData[ci].age), yScale(curveData[ci].ppg));
+    }
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 3;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    ctx.stroke();
+
+    // Peak marker
+    var peakPoint = null;
+    var peakPpgVal = 0;
+    curveData.forEach(function(p) {
+      if (p.ppg > peakPpgVal) { peakPpgVal = p.ppg; peakPoint = p; }
+    });
+    if (peakPoint) {
+      var px = xScale(peakPoint.age);
+      var py = yScale(peakPoint.ppg);
+      // Dashed vertical line from peak to x-axis
+      ctx.setLineDash([4, 3]);
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(px, py);
+      ctx.lineTo(px, mt + ch);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      // Peak label
+      ctx.font = '14px Caveat, cursive';
+      ctx.fillStyle = color;
+      ctx.textAlign = 'center';
+      ctx.fillText('peak: age ' + peakPoint.age, px, py - 10);
+    }
+
+    // Player dots
+    var dotPositions = [];
+    playersData.forEach(function(p) {
+      if (p.age < minAge || p.age > maxAge) return;
+      var dx = xScale(p.age) + (Math.random() - 0.5) * 8;
+      var dy = yScale(p.ppg);
+      dotPositions.push({ x: dx, y: dy, player: p });
+
+      ctx.beginPath();
+      ctx.arc(dx, dy, 4.5, 0, Math.PI * 2);
+      ctx.fillStyle = color;
+      ctx.globalAlpha = 0.5;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+      ctx.strokeStyle = '#1a1a2e';
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+    });
+
+    // Label top 3 players
+    var topPlayers = playersData.slice(0, 3);
+    topPlayers.forEach(function(p) {
+      if (p.age < minAge || p.age > maxAge) return;
+      var lx = xScale(p.age);
+      var ly = yScale(p.ppg);
+      ctx.font = '11px "Space Mono", monospace';
+      ctx.fillStyle = '#1a1a2e';
+      ctx.textAlign = 'center';
+      var nameShort = p.name.length > 12 ? p.name.substring(0, 11) + '.' : p.name;
+      ctx.fillText(escapeHtml(nameShort).replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"'), lx, ly - 8);
+    });
+
+    // Store dot positions on canvas for hover/click
+    canvas._dotPositions = dotPositions;
+  }
+
+  // --- Tooltip + click handling ---
+  function setupCanvasInteraction(canvas, tooltipEl, pos) {
+    canvas.addEventListener('mousemove', function(e) {
+      var rect = canvas.getBoundingClientRect();
+      var mx = e.clientX - rect.left;
+      var my = e.clientY - rect.top;
+      var dots = canvas._dotPositions || [];
+      var hit = null;
+      for (var i = 0; i < dots.length; i++) {
+        var dx = mx - dots[i].x;
+        var dy = my - dots[i].y;
+        if (dx * dx + dy * dy < 64) { hit = dots[i]; break; }
+      }
+      if (hit) {
+        tooltipEl.style.display = 'block';
+        tooltipEl.style.left = (hit.x + 12) + 'px';
+        tooltipEl.style.top = (hit.y - 10) + 'px';
+        tooltipEl.querySelector('.aging-tooltip-name').textContent = hit.player.name;
+        tooltipEl.querySelector('.aging-tooltip-detail').textContent =
+          'Age ' + hit.player.age + ' | ' + hit.player.ppg + ' PPG | ' + (hit.player.team || '');
+        canvas.style.cursor = 'pointer';
+      } else {
+        tooltipEl.style.display = 'none';
+        canvas.style.cursor = 'crosshair';
+      }
+    });
+
+    canvas.addEventListener('mouseleave', function() {
+      tooltipEl.style.display = 'none';
+    });
+
+    canvas.addEventListener('click', function(e) {
+      var rect = canvas.getBoundingClientRect();
+      var mx = e.clientX - rect.left;
+      var my = e.clientY - rect.top;
+      var dots = canvas._dotPositions || [];
+      for (var i = 0; i < dots.length; i++) {
+        var dx = mx - dots[i].x;
+        var dy = my - dots[i].y;
+        if (dx * dx + dy * dy < 64) {
+          window.location.href = '/player/' + encodeURIComponent(dots[i].player.player_id);
+          return;
+        }
+      }
+    });
+  }
+
+  // --- Render ---
+  function renderData(data) {
+    var bodyEl = document.getElementById('aging-body');
+    if (!bodyEl) return;
+
+    var positions = data.positions;
+    var posKeys = activePos === 'ALL' ? ['QB', 'RB', 'WR', 'TE'] : [activePos];
+
+    // Summary cards (always show all 4)
+    var summaryHtml = '<div class="aging-summary">';
+    ['QB', 'RB', 'WR', 'TE'].forEach(function(pos) {
+      var pd = positions[pos];
+      if (!pd) return;
+      var posLower = pos.toLowerCase();
+      summaryHtml += '<div class="aging-summary-card">' +
+        '<div class="aging-summary-pos ' + posLower + '">' + escapeHtml(pos) + '</div>' +
+        '<div class="aging-summary-peak">Age ' + (pd.peak_age !== null ? escapeHtml(String(pd.peak_age)) : '?') + '</div>' +
+        '<div class="aging-summary-label">peak season</div>' +
+        '<div class="aging-summary-ppg">' + (pd.peak_ppg ? escapeHtml(String(pd.peak_ppg)) + ' PPG avg' : '') + '</div>' +
+        '</div>';
+    });
+    summaryHtml += '</div>';
+
+    // Legend
+    var legendHtml = '<div class="aging-legend">' +
+      '<div class="aging-legend-item"><div class="aging-legend-line" style="background:#999;"></div>avg PPG curve (all seasons)</div>' +
+      '<div class="aging-legend-item"><div class="aging-legend-dot" style="background:rgba(100,100,100,0.5);"></div>individual players (selected season)</div>' +
+      '</div>';
+
+    // Chart cards
+    var gridClass = posKeys.length === 1 ? 'aging-grid single' : 'aging-grid';
+    var chartsHtml = '<div class="' + gridClass + '">';
+    posKeys.forEach(function(pos) {
+      var posLower = pos.toLowerCase();
+      var annotation = POS_ANNOTATIONS[pos] || '';
+      chartsHtml += '<div class="aging-card">' +
+        '<div class="aging-card-header ' + posLower + '">' +
+        '<div class="aging-card-title">' + escapeHtml(pos) + ' Aging Curve</div>' +
+        '<div class="aging-card-annotation">' + escapeHtml(annotation) + '</div>' +
+        '</div>' +
+        '<div class="aging-chart-wrap">' +
+        '<canvas id="chart-' + posLower + '"></canvas>' +
+        '<div class="aging-tooltip" id="tooltip-' + posLower + '">' +
+        '<div class="aging-tooltip-name"></div>' +
+        '<div class="aging-tooltip-detail"></div>' +
+        '</div>' +
+        '</div>' +
+        '</div>';
+    });
+    chartsHtml += '</div>';
+
+    bodyEl.innerHTML = summaryHtml + legendHtml + chartsHtml;
+
+    // Draw canvases after DOM update
+    requestAnimationFrame(function() {
+      posKeys.forEach(function(pos) {
+        var posLower = pos.toLowerCase();
+        var canvas = document.getElementById('chart-' + posLower);
+        var tooltip = document.getElementById('tooltip-' + posLower);
+        var pd = positions[pos];
+        if (!canvas || !pd) return;
+        drawAgingChart(canvas, pd.curve, pd.players, pos);
+        setupCanvasInteraction(canvas, tooltip, pos);
+      });
+    });
+  }
+
+  // --- Data loading ---
+  async function loadData(season) {
+    var loadingEl = document.getElementById('aging-loading');
+    var bodyEl = document.getElementById('aging-body');
+    if (loadingEl) loadingEl.style.display = 'block';
+
+    var url = season ? '/api/aging-curves?season=' + season : '/api/aging-curves';
+    try {
+      var resp = await fetch(url);
+      if (!resp.ok) throw new Error('API error');
+      currentData = await resp.json();
+      if (loadingEl) loadingEl.style.display = 'none';
+      renderData(currentData);
+      populateSeasons(currentData.available_seasons, currentData.season);
+    } catch (err) {
+      if (loadingEl) loadingEl.textContent = 'failed to load data...';
+    }
+  }
+
+  function populateSeasons(seasons, current) {
+    var sel = document.getElementById('season-select');
+    if (!sel || sel.options.length > 0) return;
+    seasons.forEach(function(s) {
+      var opt = document.createElement('option');
+      opt.value = s;
+      opt.textContent = s;
+      if (s === current) opt.selected = true;
+      sel.appendChild(opt);
+    });
+    sel.addEventListener('change', function() {
+      loadData(parseInt(sel.value));
+    });
+  }
+
+  // Position tab clicks
+  document.querySelectorAll('.aging-pos-tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.aging-pos-tab').forEach(function(t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      activePos = tab.getAttribute('data-pos');
+      if (currentData) renderData(currentData);
+    });
+  });
+
+  // Export PNG
+  document.getElementById('export-btn').addEventListener('click', function() {
+    var target = document.getElementById('aging-content');
+    if (!target || typeof html2canvas === 'undefined') return;
+    html2canvas(target, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+      var ctx = canvas.getContext('2d');
+      ctx.font = '28px Caveat, cursive';
+      ctx.fillStyle = 'rgba(26,26,46,0.25)';
+      ctx.textAlign = 'right';
+      ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 16);
+      var a = document.createElement('a');
+      a.download = 'razzle-aging-curves.png';
+      a.href = canvas.toDataURL('image/png');
+      a.click();
+    });
+  });
+
+  // Resize redraw
+  var resizeTimer;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function() {
+      if (currentData) renderData(currentData);
+    }, 200);
+  });
+
+  // Analytics
+  try {
+    fetch('/api/analytics/pageview', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ page: '/aging.html' }),
+    });
+  } catch(e) {}
+
+  // Quick search
+  if (typeof window.initQuickSearch === 'function') window.initQuickSearch();
+
+  // Load
+  loadData();
+})();
+</script>
+<script src="app.js"></script>
+</body>
+</html>
