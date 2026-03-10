@@ -1,25 +1,38 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 25 (QA + UX Audit — Auto-Generated Fixes)
-- All 2 tasks PASS
+- Phase: 26 (Backend Cleanup: Connection Management)
+- All 4 tasks PASS
 - Stage: PHASE GATE
 - Next: Commit and push
 
-## Phase 25: QA + UX Audit — Auto-Generated Fixes
-**Exit Criterion**: All HIGH and MEDIUM findings from QA+UX audit (Phases 20-24) resolved.
+## Phase 26: Backend Cleanup: Connection Management
+**Exit Criterion**: Every `get_conn()` call in the codebase uses a context manager or `try/finally` pattern so connections are always closed, even on errors. Create a shared context manager helper in `db.py`. Refactor all call sites in `live_data.py`, `server.py`, and adapters. Zero leaked connections under any error path.
 
-### Task 1: Fix HIGH — NFL_ONLY_PANELS + stat-correlations error handling
+### Task 1: Add context manager helper to db.py
 **Status**: PASS
 **Attempts**: 1
-**Notes**: powerrankings added to NFL_ONLY_PANELS. stat-correlations wrapped in try-except with JSONResponse error.
+**Notes**: `get_db()` context manager using `@contextmanager` decorator. Yields connection, closes in finally block.
 
-### Task 2: Fix HIGH + MEDIUM — URL encoding + tooltips + mobile overflow
+### Task 2: Refactor all get_conn() calls in live_data.py to use context manager
 **Status**: PASS
 **Attempts**: 1
-**Notes**: encodeURIComponent on correlations x_stat/y_stat + draft tracker position. Title tooltips on Game Script headers (PPG, Avg Diff, GT%). overflow-x:auto on .gs-column for mobile.
+**Notes**: All 117 `conn = get_conn()` calls replaced with `with get_db() as conn:`. 82 try/finally patterns collapsed into with blocks. 35 bare patterns wrapped in with blocks. Zero bare get_conn() or conn.close() remain. Special case: fetch_draft_class_analytics closes connection early before calling other functions.
+
+### Task 3: Refactor adapter connection patterns
+**Status**: PASS
+**Attempts**: 1
+**Notes**: All 3 adapters (nflverse, college, cfbfastr) main() functions wrapped in try/finally. server.py bootstrap wrapped in try/finally with proper connection cleanup for all 3 connection objects (conn, cconn, fconn).
+
+### Task 4: Verify server starts and endpoints work
+**Status**: PASS
+**Attempts**: 1
+**Notes**: All 6 modified files compile clean. Imports succeed. Context manager tested with live DB query (1238 players). Zero leaked connections.
 
 ---
+
+## Phase 25: QA + UX Audit — Auto-Generated Fixes -- COMPLETE
+**Status**: All 2 tasks PASS
 
 ## Phase 24: Game Script Analysis -- COMPLETE
 **Status**: All 2 tasks PASS

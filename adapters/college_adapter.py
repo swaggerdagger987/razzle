@@ -388,23 +388,25 @@ def main():
 
     print(f"Razzle college adapter -- syncing years: {years or 'ALL'}")
     conn = get_connection()
-    initialize_tables(conn)
+    try:
+        initialize_tables(conn)
 
-    combine_count = process_combine(conn, year_set)
-    draft_count = process_draft_picks(conn, year_set)
+        combine_count = process_combine(conn, year_set)
+        draft_count = process_draft_picks(conn, year_set)
 
-    # Update sync state
-    conn.execute("""
-        INSERT OR REPLACE INTO sync_state (key, value, updated_at)
-        VALUES ('last_college_sync', ?, ?)
-    """, (json.dumps({"years": years, "combine": combine_count, "draft_picks": draft_count}), utc_now()))
-    conn.commit()
+        # Update sync state
+        conn.execute("""
+            INSERT OR REPLACE INTO sync_state (key, value, updated_at)
+            VALUES ('last_college_sync', ?, ?)
+        """, (json.dumps({"years": years, "combine": combine_count, "draft_picks": draft_count}), utc_now()))
+        conn.commit()
 
-    # Summary
-    combine_total = conn.execute("SELECT COUNT(*) FROM combine_data").fetchone()[0]
-    draft_total = conn.execute("SELECT COUNT(*) FROM draft_picks").fetchone()[0]
-    print(f"\nDone. {combine_total} combine entries, {draft_total} draft picks in terminal.db")
-    conn.close()
+        # Summary
+        combine_total = conn.execute("SELECT COUNT(*) FROM combine_data").fetchone()[0]
+        draft_total = conn.execute("SELECT COUNT(*) FROM draft_picks").fetchone()[0]
+        print(f"\nDone. {combine_total} combine entries, {draft_total} draft picks in terminal.db")
+    finally:
+        conn.close()
 
 
 if __name__ == "__main__":

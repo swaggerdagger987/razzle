@@ -62,54 +62,59 @@ def bootstrap_database():
     )
 
     conn = get_connection()
-    initialize_database(conn)
-    migrate_add_columns(conn)
-
-    # Check if we already have data
     try:
-        count = conn.execute("SELECT COUNT(*) FROM players").fetchone()[0]
-    except Exception:
-        count = 0
+        initialize_database(conn)
+        migrate_add_columns(conn)
 
-    if count < 50:
-        logger.info("Database empty — bootstrapping nflverse data...")
-        seasons = list(range(2015, current_nfl_season() + 1))
-        for s in seasons:
+        # Check if we already have data
+        try:
+            count = conn.execute("SELECT COUNT(*) FROM players").fetchone()[0]
+        except Exception:
+            count = 0
+
+        if count < 50:
+            logger.info("Database empty — bootstrapping nflverse data...")
+            seasons = list(range(2015, current_nfl_season() + 1))
+            for s in seasons:
+                try:
+                    process_season(conn, s)
+                    logger.info(f"  Season {s} synced")
+                except Exception as e:
+                    logger.warning(f"  Season {s} failed: {e}")
+
+            # Snap counts
+            logger.info("Syncing snap counts...")
             try:
-                process_season(conn, s)
-                logger.info(f"  Season {s} synced")
+                sync_snap_counts(conn, sorted(seasons))
+                logger.info("  Snap count sync complete")
             except Exception as e:
-                logger.warning(f"  Season {s} failed: {e}")
+                logger.warning(f"  Snap count sync failed: {e}")
 
-        # Snap counts
-        logger.info("Syncing snap counts...")
-        try:
-            sync_snap_counts(conn, sorted(seasons))
-            logger.info("  Snap count sync complete")
-        except Exception as e:
-            logger.warning(f"  Snap count sync failed: {e}")
-
-        # Enrich players with age/demographics from roster CSVs
-        logger.info("Enriching players with roster demographics...")
-        try:
-            # Sync all years to catch retired/cut players, newest last (overwrites with latest)
-            sync_rosters(conn, sorted(seasons))
-            logger.info("  Roster enrichment complete")
-        except Exception as e:
-            logger.warning(f"  Roster enrichment failed: {e}")
+            # Enrich players with age/demographics from roster CSVs
+            logger.info("Enriching players with roster demographics...")
+            try:
+                sync_rosters(conn, sorted(seasons))
+                logger.info("  Roster enrichment complete")
+            except Exception as e:
+                logger.warning(f"  Roster enrichment failed: {e}")
+        else:
+            logger.info(f"Database has {count} players — skipping bootstrap")
+    finally:
         conn.close()
 
+    if count < 50:
         # College/prospect data
         logger.info("Bootstrapping college/prospect data...")
         cconn = college_conn()
-        college_init_tables(cconn)
         try:
+            college_init_tables(cconn)
             process_combine(cconn)
             process_draft_picks(cconn)
             logger.info("  College data synced")
         except Exception as e:
             logger.warning(f"  College data failed: {e}")
-        cconn.close()
+        finally:
+            cconn.close()
 
         # cfbfastR college production stats
         logger.info("Bootstrapping cfbfastR college production stats...")
@@ -121,27 +126,26 @@ def bootstrap_database():
                 refine_positions_from_combine,
             )
             fconn = cfb_conn()
-            cfb_init_tables(fconn)
-            for s in range(2015, current_nfl_season() + 1):
-                try:
-                    csv_text = fetch_season_csv(s)
-                    if csv_text:
-                        results = aggregate_season(csv_text, s)
-                        upsert_stats(fconn, results)
-                        logger.info(f"  cfbfastR {s}: {len(results)} players")
-                except Exception as e:
-                    logger.warning(f"  cfbfastR {s} failed: {e}")
             try:
-                refine_positions_from_combine(fconn)
-            except Exception:
-                pass
-            fconn.close()
-            logger.info("  cfbfastR data synced")
+                cfb_init_tables(fconn)
+                for s in range(2015, current_nfl_season() + 1):
+                    try:
+                        csv_text = fetch_season_csv(s)
+                        if csv_text:
+                            results = aggregate_season(csv_text, s)
+                            upsert_stats(fconn, results)
+                            logger.info(f"  cfbfastR {s}: {len(results)} players")
+                    except Exception as e:
+                        logger.warning(f"  cfbfastR {s} failed: {e}")
+                try:
+                    refine_positions_from_combine(fconn)
+                except Exception:
+                    pass
+                logger.info("  cfbfastR data synced")
+            finally:
+                fconn.close()
         except Exception as e:
             logger.warning(f"  cfbfastR bootstrap failed: {e}")
-    else:
-        logger.info(f"Database has {count} players — skipping bootstrap")
-        conn.close()
 
 
 @asynccontextmanager

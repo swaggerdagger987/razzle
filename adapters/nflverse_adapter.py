@@ -1231,47 +1231,49 @@ def main():
 
     print(f"Razzle nflverse adapter — syncing seasons: {seasons}")
     conn = get_connection()
-    initialize_database(conn)
+    try:
+        initialize_database(conn)
 
-    # Migrate existing DB to add new columns (idempotent)
-    print("Checking for schema migrations...")
-    migrate_add_columns(conn)
-    migrate_pbp_columns(conn)
+        # Migrate existing DB to add new columns (idempotent)
+        print("Checking for schema migrations...")
+        migrate_add_columns(conn)
+        migrate_pbp_columns(conn)
 
-    total = 0
-    for season in seasons:
-        total += process_season(conn, season)
+        total = 0
+        for season in seasons:
+            total += process_season(conn, season)
 
-    # Enrich with snap counts
-    print(f"\nSyncing snap counts...")
-    sync_snap_counts(conn, sorted(seasons))
+        # Enrich with snap counts
+        print(f"\nSyncing snap counts...")
+        sync_snap_counts(conn, sorted(seasons))
 
-    # Extract play-by-play advanced stats
-    print(f"\nExtracting play-by-play stats...")
-    sync_pbp_data(conn, sorted(seasons))
+        # Extract play-by-play advanced stats
+        print(f"\nExtracting play-by-play stats...")
+        sync_pbp_data(conn, sorted(seasons))
 
-    # Bye weeks and injuries
-    print(f"\nSyncing bye weeks and injuries...")
-    sync_bye_weeks(conn, sorted(seasons))
-    sync_injuries(conn, sorted(seasons))
+        # Bye weeks and injuries
+        print(f"\nSyncing bye weeks and injuries...")
+        sync_bye_weeks(conn, sorted(seasons))
+        sync_injuries(conn, sorted(seasons))
 
-    # Enrich players with age/demographics from roster CSVs
-    print(f"\nEnriching players with roster demographics...")
-    sync_rosters(conn, sorted(seasons))
+        # Enrich players with age/demographics from roster CSVs
+        print(f"\nEnriching players with roster demographics...")
+        sync_rosters(conn, sorted(seasons))
 
-    # Update sync state
-    conn.execute("""
-        INSERT OR REPLACE INTO sync_state (key, value, updated_at)
-        VALUES ('last_nflverse_sync', ?, ?)
-    """, (json.dumps({"seasons": seasons, "total_rows": total}), utc_now()))
-    conn.commit()
+        # Update sync state
+        conn.execute("""
+            INSERT OR REPLACE INTO sync_state (key, value, updated_at)
+            VALUES ('last_nflverse_sync', ?, ?)
+        """, (json.dumps({"seasons": seasons, "total_rows": total}), utc_now()))
+        conn.commit()
 
-    # Quick summary
-    player_count = conn.execute("SELECT COUNT(*) FROM players").fetchone()[0]
-    stat_count = conn.execute("SELECT COUNT(*) FROM player_week_stats").fetchone()[0]
-    age_count = conn.execute("SELECT COUNT(*) FROM players WHERE age IS NOT NULL").fetchone()[0]
-    print(f"\nDone. {player_count} players ({age_count} with age), {stat_count} stat rows in terminal.db")
-    conn.close()
+        # Quick summary
+        player_count = conn.execute("SELECT COUNT(*) FROM players").fetchone()[0]
+        stat_count = conn.execute("SELECT COUNT(*) FROM player_week_stats").fetchone()[0]
+        age_count = conn.execute("SELECT COUNT(*) FROM players WHERE age IS NOT NULL").fetchone()[0]
+        print(f"\nDone. {player_count} players ({age_count} with age), {stat_count} stat rows in terminal.db")
+    finally:
+        conn.close()
 
 
 if __name__ == "__main__":

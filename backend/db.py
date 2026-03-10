@@ -8,6 +8,7 @@ to local SQLite for local development.
 
 import os
 import sqlite3
+from contextlib import contextmanager
 from pathlib import Path
 
 DB_PATH = Path(__file__).parent.parent / "data" / "terminal.db"
@@ -39,6 +40,16 @@ def get_conn():
     conn = sqlite3.connect(str(DB_PATH), timeout=30)
     conn.row_factory = sqlite3.Row
     return conn
+
+
+@contextmanager
+def get_db():
+    """Context manager for database connections. Always closes on exit."""
+    conn = get_conn()
+    try:
+        yield conn
+    finally:
+        conn.close()
 
 
 def get_write_conn():

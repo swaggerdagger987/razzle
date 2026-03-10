@@ -1,6 +1,19 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 25 — QA + UX Audit Fixes for Phases 20-24 (COMPLETE)
+## Current Phase: Phase 26 — Backend Cleanup: Connection Management (COMPLETE)
+
+**Exit Criterion MET**: Every `get_conn()` call uses a context manager (`with get_db() as conn:`) or `try/finally` pattern. Added `get_db()` context manager to `backend/db.py`. Refactored all 117 call sites in `live_data.py` (82 try/finally patterns collapsed into `with` blocks, 35 bare patterns wrapped). All 3 adapters and `server.py` bootstrap wrapped in `try/finally`. Zero leaked connections under any error path. All files compile clean, imports verified.
+
+### Phase 26 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Add context manager helper to db.py | DONE | `get_db()` using `@contextmanager`, yields conn, closes in finally |
+| 2 | Refactor 117 get_conn() calls in live_data.py | DONE | 82 try/finally → with, 35 bare → with, 0 bare get_conn() remain |
+| 3 | Refactor adapter + server.py connections | DONE | 3 adapters + server.py bootstrap wrapped in try/finally |
+| 4 | Verify compilation and imports | DONE | All 6 files compile, imports succeed, context manager tested |
+
+## Previous Phase: Phase 25 — QA + UX Audit Fixes for Phases 20-24 (COMPLETE)
 
 **Exit Criterion MET**: All HIGH and MEDIUM findings from QA+UX audit resolved. powerrankings added to NFL_ONLY_PANELS. stat-correlations endpoint wrapped in try-except. URL encoding fixes for correlations x_stat/y_stat and draft tracker position params. Tooltip title attributes added to Game Script table headers (PPG, Avg Diff, GT%). Game Script table mobile overflow-x:auto added.
 

@@ -10,7 +10,7 @@ import statistics
 import time as _time
 from pathlib import Path
 
-from .db import get_conn, DB_PATH
+from .db import get_conn, get_db, DB_PATH
 
 # Simple in-memory cache for stable endpoints (filter options, featured)
 _cache = {}
@@ -542,16 +542,15 @@ def _enrich_with_team_shares(conn, items, season=None, career_mode=False):
 
 
 def db_stats():
-    conn = get_conn()
-    players = conn.execute("SELECT COUNT(*) FROM players").fetchone()[0]
-    stats = conn.execute("SELECT COUNT(*) FROM player_week_stats").fetchone()[0]
-    seasons = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season").fetchall()
-    conn.close()
-    return {
-        "players": players,
-        "stat_rows": stats,
-        "seasons": [r[0] for r in seasons],
-    }
+    with get_db() as conn:
+        players = conn.execute("SELECT COUNT(*) FROM players").fetchone()[0]
+        stats = conn.execute("SELECT COUNT(*) FROM player_week_stats").fetchone()[0]
+        seasons = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season").fetchall()
+        return {
+            "players": players,
+            "stat_rows": stats,
+            "seasons": [r[0] for r in seasons],
+        }
 
 
 def quick_search_players(query, limit=8):
@@ -559,8 +558,7 @@ def quick_search_players(query, limit=8):
     if not query or not query.strip():
         return []
     limit = max(1, min(limit, 20))
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         search_term = "%" + query.lower().replace(" ", "") + "%"
         rows = conn.execute("""
             WITH ms AS (SELECT MAX(season) AS s FROM player_week_stats)
@@ -579,8 +577,6 @@ def quick_search_players(query, limit=8):
             LIMIT ?
         """, (search_term, limit)).fetchall()
         return [dict(r) for r in rows]
-    finally:
-        conn.close()
 
 
 def fetch_players(
@@ -594,442 +590,437 @@ def fetch_players(
     offset=0,
     season=0,
 ):
-    conn = get_conn()
+    with get_db() as conn:
 
-    # Determine season: 0 = latest, "career" = all seasons
-    career_mode = str(season).lower() == "career"
-    if not career_mode:
-        season = int(season) if season else 0
-        if not season:
-            row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-            season = row[0] if row and row[0] else 2024
+        # Determine season: 0 = latest, "career" = all seasons
+        career_mode = str(season).lower() == "career"
+        if not career_mode:
+            season = int(season) if season else 0
+            if not season:
+                row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+                season = row[0] if row and row[0] else 2024
 
-    # Build position filter
-    pos_list = []
-    if positions:
-        pos_list = [p.strip().upper() for p in positions.split(",") if p.strip()]
-    elif position:
-        pos_list = [position.strip().upper()]
+        # Build position filter
+        pos_list = []
+        if positions:
+            pos_list = [p.strip().upper() for p in positions.split(",") if p.strip()]
+        elif position:
+            pos_list = [position.strip().upper()]
 
-    # Allowed sort columns (prevent SQL injection)
-    safe_sorts = {
-        "fantasy_points_ppr", "fantasy_points_half_ppr", "fantasy_points_std",
-        "passing_yards", "passing_tds", "rushing_yards", "rushing_tds",
-        "receiving_yards", "receiving_tds", "receptions", "touchdowns",
-        "turnovers", "targets", "carries", "completions", "attempts",
-        "passing_air_yards", "receiving_air_yards", "receiving_yards_after_catch",
-        "passing_first_downs", "rushing_first_downs", "receiving_first_downs",
-        "sacks_taken", "sack_yards_lost", "rushing_fumbles",
-        "receiving_fumbles", "receiving_fumbles_lost",
-        "sack_fumbles", "sack_fumbles_lost", "fumbles", "fumbles_lost",
-        "offense_snaps", "offense_pct",
-        "full_name", "position", "team", "games", "seasons", "age",
-        "half_ppr_ppg", "cpoe", "epa_per_play",
-    }
-    if sort_key not in safe_sorts:
-        sort_key = "fantasy_points_ppr"
-    if sort_dir.lower() not in ("asc", "desc"):
-        sort_dir = "desc"
+        # Allowed sort columns (prevent SQL injection)
+        safe_sorts = {
+            "fantasy_points_ppr", "fantasy_points_half_ppr", "fantasy_points_std",
+            "passing_yards", "passing_tds", "rushing_yards", "rushing_tds",
+            "receiving_yards", "receiving_tds", "receptions", "touchdowns",
+            "turnovers", "targets", "carries", "completions", "attempts",
+            "passing_air_yards", "receiving_air_yards", "receiving_yards_after_catch",
+            "passing_first_downs", "rushing_first_downs", "receiving_first_downs",
+            "sacks_taken", "sack_yards_lost", "rushing_fumbles",
+            "receiving_fumbles", "receiving_fumbles_lost",
+            "sack_fumbles", "sack_fumbles_lost", "fumbles", "fumbles_lost",
+            "offense_snaps", "offense_pct",
+            "full_name", "position", "team", "games", "seasons", "age",
+            "half_ppr_ppg", "cpoe", "epa_per_play",
+        }
+        if sort_key not in safe_sorts:
+            sort_key = "fantasy_points_ppr"
+        if sort_dir.lower() not in ("asc", "desc"):
+            sort_dir = "desc"
 
-    where = []
-    params = []
+        where = []
+        params = []
 
-    if career_mode:
-        pass  # no season filter — aggregate all
-    else:
-        where.append("s.season = ?")
-        params.append(season)
+        if career_mode:
+            pass  # no season filter — aggregate all
+        else:
+            where.append("s.season = ?")
+            params.append(season)
 
-    if search:
-        where.append("p.search_name LIKE ?")
-        params.append(f"%{search.lower().replace(' ', '')}%")
+        if search:
+            where.append("p.search_name LIKE ?")
+            params.append(f"%{search.lower().replace(' ', '')}%")
 
-    if pos_list:
-        placeholders = ",".join("?" * len(pos_list))
-        where.append(f"p.position IN ({placeholders})")
-        params.extend(pos_list)
+        if pos_list:
+            placeholders = ",".join("?" * len(pos_list))
+            where.append(f"p.position IN ({placeholders})")
+            params.extend(pos_list)
 
-    if team:
-        where.append("p.team = ?")
-        params.append(team.strip().upper())
+        if team:
+            where.append("p.team = ?")
+            params.append(team.strip().upper())
 
-    where_clause = " AND ".join(where) if where else "1=1"
+        where_clause = " AND ".join(where) if where else "1=1"
 
-    # Handle sort expression
-    sort_expr = sort_key
-    if sort_key == "seasons":
-        sort_expr = "COUNT(DISTINCT s.season)"
-    elif sort_key == "games":
-        sort_expr = "COUNT(*)"
-    elif sort_key in ("full_name", "position", "team"):
-        sort_expr = f"p.{sort_key}"
-    elif sort_key in safe_sorts:
-        sort_expr = f"SUM(s.{sort_key})"
+        # Handle sort expression
+        sort_expr = sort_key
+        if sort_key == "seasons":
+            sort_expr = "COUNT(DISTINCT s.season)"
+        elif sort_key == "games":
+            sort_expr = "COUNT(*)"
+        elif sort_key in ("full_name", "position", "team"):
+            sort_expr = f"p.{sort_key}"
+        elif sort_key in safe_sorts:
+            sort_expr = f"SUM(s.{sort_key})"
 
-    query = f"""
-        SELECT
-            p.player_id, p.full_name, p.position, p.team, p.age, p.college, p.headshot_url,
-            COUNT(*) as games,
-            COUNT(DISTINCT s.season) as seasons,
-            SUM(s.fantasy_points_half_ppr) as fantasy_points_half_ppr,
-            {_STAT_SUM_COLS}
-        FROM players p
-        JOIN player_week_stats s ON p.player_id = s.player_id
-        WHERE {where_clause}
-        GROUP BY p.player_id
-        ORDER BY {sort_expr} {sort_dir}
-        LIMIT ? OFFSET ?
-    """
-    params.extend([limit, offset])
+        query = f"""
+            SELECT
+                p.player_id, p.full_name, p.position, p.team, p.age, p.college, p.headshot_url,
+                COUNT(*) as games,
+                COUNT(DISTINCT s.season) as seasons,
+                SUM(s.fantasy_points_half_ppr) as fantasy_points_half_ppr,
+                {_STAT_SUM_COLS}
+            FROM players p
+            JOIN player_week_stats s ON p.player_id = s.player_id
+            WHERE {where_clause}
+            GROUP BY p.player_id
+            ORDER BY {sort_expr} {sort_dir}
+            LIMIT ? OFFSET ?
+        """
+        params.extend([limit, offset])
 
-    rows = conn.execute(query, params).fetchall()
+        rows = conn.execute(query, params).fetchall()
 
-    # Count total (for pagination)
-    count_query = f"""
-        SELECT COUNT(DISTINCT p.player_id)
-        FROM players p
-        JOIN player_week_stats s ON p.player_id = s.player_id
-        WHERE {where_clause}
-    """
-    total = conn.execute(count_query, params[:-2]).fetchone()[0]
+        # Count total (for pagination)
+        count_query = f"""
+            SELECT COUNT(DISTINCT p.player_id)
+            FROM players p
+            JOIN player_week_stats s ON p.player_id = s.player_id
+            WHERE {where_clause}
+        """
+        total = conn.execute(count_query, params[:-2]).fetchone()[0]
 
-    items = [dict(r) for r in rows]
-    _enrich_with_derived_stats(items)
-    _enrich_with_rate_metrics(conn, items, season=season, career_mode=career_mode)
-    _enrich_with_epa_per_play(items)
-    _enrich_with_breakout(conn, items, season=season, career_mode=career_mode)
-    _enrich_with_dynasty_value(items)
-    _enrich_with_team_shares(conn, items, season=season, career_mode=career_mode)
-    _enrich_with_pbp_stats(conn, items, season=season, career_mode=career_mode)
+        items = [dict(r) for r in rows]
+        _enrich_with_derived_stats(items)
+        _enrich_with_rate_metrics(conn, items, season=season, career_mode=career_mode)
+        _enrich_with_epa_per_play(items)
+        _enrich_with_breakout(conn, items, season=season, career_mode=career_mode)
+        _enrich_with_dynasty_value(items)
+        _enrich_with_team_shares(conn, items, season=season, career_mode=career_mode)
+        _enrich_with_pbp_stats(conn, items, season=season, career_mode=career_mode)
 
-    conn.close()
-    return {"count": total, "season": "career" if career_mode else season, "items": items}
+        return {"count": total, "season": "career" if career_mode else season, "items": items}
 
 
 def fetch_screener(body):
     """Complex multi-filter screener query (POST body)."""
-    conn = get_conn()
+    with get_db() as conn:
 
-    search = body.get("search", "")
-    position = body.get("position", "")
-    positions = body.get("positions", [])
-    team = body.get("team", "")
-    season = body.get("season", 0)
-    sort_key = body.get("sort_key", "fantasy_points_ppr")
-    sort_dir = body.get("sort_direction", "desc")
-    limit = min(body.get("limit", 200), 1000)
-    offset = body.get("offset", 0)
-    filters = body.get("filters", [])
-    relevance = body.get("relevance", "fantasy")
+        search = body.get("search", "")
+        position = body.get("position", "")
+        positions = body.get("positions", [])
+        team = body.get("team", "")
+        season = body.get("season", 0)
+        sort_key = body.get("sort_key", "fantasy_points_ppr")
+        sort_dir = body.get("sort_direction", "desc")
+        limit = min(body.get("limit", 200), 1000)
+        offset = body.get("offset", 0)
+        filters = body.get("filters", [])
+        relevance = body.get("relevance", "fantasy")
 
-    # Determine season: 0 = latest, "career" = all seasons
-    career_mode = str(season).lower() == "career"
-    if not career_mode:
-        season = int(season) if season else 0
-        if not season:
-            row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-            season = row[0] if row and row[0] else 2024
+        # Determine season: 0 = latest, "career" = all seasons
+        career_mode = str(season).lower() == "career"
+        if not career_mode:
+            season = int(season) if season else 0
+            if not season:
+                row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+                season = row[0] if row and row[0] else 2024
 
-    # Position list
-    pos_list = []
-    if positions:
-        pos_list = [p.strip().upper() for p in positions]
-    elif position:
-        pos_list = [position.strip().upper()]
+        # Position list
+        pos_list = []
+        if positions:
+            pos_list = [p.strip().upper() for p in positions]
+        elif position:
+            pos_list = [position.strip().upper()]
 
-    # For fantasy relevance, default to fantasy positions
-    if relevance == "fantasy" and not pos_list:
-        pos_list = list(FANTASY_POSITIONS)
+        # For fantasy relevance, default to fantasy positions
+        if relevance == "fantasy" and not pos_list:
+            pos_list = list(FANTASY_POSITIONS)
 
-    where = []
-    params = []
+        where = []
+        params = []
 
-    if career_mode:
-        pass  # no season filter
-    else:
-        where.append("s.season = ?")
-        params.append(season)
+        if career_mode:
+            pass  # no season filter
+        else:
+            where.append("s.season = ?")
+            params.append(season)
 
-    if search:
-        where.append("p.search_name LIKE ?")
-        params.append(f"%{search.lower().replace(' ', '')}%")
+        if search:
+            where.append("p.search_name LIKE ?")
+            params.append(f"%{search.lower().replace(' ', '')}%")
 
-    if pos_list:
-        placeholders = ",".join("?" * len(pos_list))
-        where.append(f"p.position IN ({placeholders})")
-        params.extend(pos_list)
+        if pos_list:
+            placeholders = ",".join("?" * len(pos_list))
+            where.append(f"p.position IN ({placeholders})")
+            params.extend(pos_list)
 
-    # Support multi-team filtering: comma-separated or list
-    teams_param = body.get("teams", [])
-    if teams_param and isinstance(teams_param, list) and len(teams_param) > 0:
-        team_list = [t.strip().upper() for t in teams_param if t.strip()]
-        if team_list:
-            placeholders_t = ",".join("?" * len(team_list))
-            where.append(f"p.team IN ({placeholders_t})")
-            params.extend(team_list)
-    elif team:
-        where.append("p.team = ?")
-        params.append(team.strip().upper())
+        # Support multi-team filtering: comma-separated or list
+        teams_param = body.get("teams", [])
+        if teams_param and isinstance(teams_param, list) and len(teams_param) > 0:
+            team_list = [t.strip().upper() for t in teams_param if t.strip()]
+            if team_list:
+                placeholders_t = ",".join("?" * len(team_list))
+                where.append(f"p.team IN ({placeholders_t})")
+                params.extend(team_list)
+        elif team:
+            where.append("p.team = ?")
+            params.append(team.strip().upper())
 
-    # Support minimum games played filter (HAVING clause added later)
-    min_gp = body.get("min_gp", 0)
+        # Support minimum games played filter (HAVING clause added later)
+        min_gp = body.get("min_gp", 0)
 
-    where_clause = " AND ".join(where) if where else "1=1"
+        where_clause = " AND ".join(where) if where else "1=1"
 
-    # Safe sort — includes derived and rate metrics (computed post-query)
-    safe_sorts = {
-        "fantasy_points_ppr", "fantasy_points_half_ppr", "fantasy_points_std",
-        "passing_yards", "passing_tds", "rushing_yards", "rushing_tds",
-        "receiving_yards", "receiving_tds", "receptions", "touchdowns",
-        "turnovers", "targets", "carries", "games", "ppg", "seasons",
-        "full_name", "position", "team",
-        # Phase 29: new aggregate stats
-        "passing_first_downs", "rushing_first_downs", "receiving_first_downs",
-        "sacks_taken", "sack_yards_lost", "rushing_fumbles",
-        "receiving_fumbles", "receiving_fumbles_lost",
-        "sack_fumbles", "sack_fumbles_lost", "fumbles", "fumbles_lost",
-        "offense_snaps", "offense_pct",
-        # Derived metrics (computed in Python, sorted client-side)
-        "yards_per_carry", "yards_per_rec", "yards_per_target", "catch_rate",
-        "comp_pct", "yards_per_att", "rec_per_game", "targets_per_game",
-        "rush_ypg", "rec_ypg", "pass_ypg", "adot", "snap_share",
-        # Rate metrics from player_week_metrics
-        "target_share", "air_yards_share", "wopr", "racr",
-        "passing_epa", "receiving_epa", "rushing_epa", "dakota", "cpoe",
-        # Derived post-enrichment
-        "half_ppr_ppg", "epa_per_play",
-        # Dynasty value
-        "dynasty_value", "age",
-    }
-    if sort_key not in safe_sorts:
-        sort_key = "fantasy_points_ppr"
-    if sort_dir.lower() not in ("asc", "desc"):
-        sort_dir = "desc"
+        # Safe sort — includes derived and rate metrics (computed post-query)
+        safe_sorts = {
+            "fantasy_points_ppr", "fantasy_points_half_ppr", "fantasy_points_std",
+            "passing_yards", "passing_tds", "rushing_yards", "rushing_tds",
+            "receiving_yards", "receiving_tds", "receptions", "touchdowns",
+            "turnovers", "targets", "carries", "games", "ppg", "seasons",
+            "full_name", "position", "team",
+            # Phase 29: new aggregate stats
+            "passing_first_downs", "rushing_first_downs", "receiving_first_downs",
+            "sacks_taken", "sack_yards_lost", "rushing_fumbles",
+            "receiving_fumbles", "receiving_fumbles_lost",
+            "sack_fumbles", "sack_fumbles_lost", "fumbles", "fumbles_lost",
+            "offense_snaps", "offense_pct",
+            # Derived metrics (computed in Python, sorted client-side)
+            "yards_per_carry", "yards_per_rec", "yards_per_target", "catch_rate",
+            "comp_pct", "yards_per_att", "rec_per_game", "targets_per_game",
+            "rush_ypg", "rec_ypg", "pass_ypg", "adot", "snap_share",
+            # Rate metrics from player_week_metrics
+            "target_share", "air_yards_share", "wopr", "racr",
+            "passing_epa", "receiving_epa", "rushing_epa", "dakota", "cpoe",
+            # Derived post-enrichment
+            "half_ppr_ppg", "epa_per_play",
+            # Dynasty value
+            "dynasty_value", "age",
+        }
+        if sort_key not in safe_sorts:
+            sort_key = "fantasy_points_ppr"
+        if sort_dir.lower() not in ("asc", "desc"):
+            sort_dir = "desc"
 
-    # Columns that can be filtered via SQL HAVING (not derived/rate metrics)
-    sql_filterable = {
-        "fantasy_points_ppr", "fantasy_points_half_ppr", "fantasy_points_std",
-        "passing_yards", "passing_tds", "rushing_yards", "rushing_tds",
-        "receiving_yards", "receiving_tds", "receptions", "touchdowns",
-        "turnovers", "targets", "carries", "games", "ppg", "seasons",
-        "passing_first_downs", "rushing_first_downs", "receiving_first_downs",
-        "sacks_taken", "sack_yards_lost", "fumbles", "fumbles_lost",
-        "offense_snaps",
-    }
+        # Columns that can be filtered via SQL HAVING (not derived/rate metrics)
+        sql_filterable = {
+            "fantasy_points_ppr", "fantasy_points_half_ppr", "fantasy_points_std",
+            "passing_yards", "passing_tds", "rushing_yards", "rushing_tds",
+            "receiving_yards", "receiving_tds", "receptions", "touchdowns",
+            "turnovers", "targets", "carries", "games", "ppg", "seasons",
+            "passing_first_downs", "rushing_first_downs", "receiving_first_downs",
+            "sacks_taken", "sack_yards_lost", "fumbles", "fumbles_lost",
+            "offense_snaps",
+        }
 
-    # Build having clause for advanced filters
-    # Explicit mapping from filter key to SQL expression (no f-string interpolation)
-    FILTER_COLUMN_MAP = {
-        "ppg": "(SUM(s.fantasy_points_ppr) / MAX(1, COUNT(*)))",
-        "games": "COUNT(*)",
-        "seasons": "COUNT(DISTINCT s.season)",
-        "fantasy_points_ppr": "SUM(s.fantasy_points_ppr)",
-        "completions": "SUM(s.completions)",
-        "pass_attempts": "SUM(s.attempts)",
-        "passing_yards": "SUM(s.passing_yards)",
-        "passing_tds": "SUM(s.passing_tds)",
-        "interceptions": "SUM(s.interceptions)",
-        "carries": "SUM(s.carries)",
-        "rushing_yards": "SUM(s.rushing_yards)",
-        "rushing_tds": "SUM(s.rushing_tds)",
-        "targets": "SUM(s.targets)",
-        "receptions": "SUM(s.receptions)",
-        "receiving_yards": "SUM(s.receiving_yards)",
-        "receiving_tds": "SUM(s.receiving_tds)",
-        "total_tds": "SUM(s.touchdowns)",
-        "turnovers": "SUM(s.turnovers)",
-        "sacks_taken": "SUM(s.sacks_taken)",
-        "sack_yards_lost": "SUM(s.sack_yards_lost)",
-        "fumbles": "SUM(s.fumbles)",
-        "fumbles_lost": "SUM(s.fumbles_lost)",
-        "offense_snaps": "SUM(s.offense_snaps)",
-    }
+        # Build having clause for advanced filters
+        # Explicit mapping from filter key to SQL expression (no f-string interpolation)
+        FILTER_COLUMN_MAP = {
+            "ppg": "(SUM(s.fantasy_points_ppr) / MAX(1, COUNT(*)))",
+            "games": "COUNT(*)",
+            "seasons": "COUNT(DISTINCT s.season)",
+            "fantasy_points_ppr": "SUM(s.fantasy_points_ppr)",
+            "completions": "SUM(s.completions)",
+            "pass_attempts": "SUM(s.attempts)",
+            "passing_yards": "SUM(s.passing_yards)",
+            "passing_tds": "SUM(s.passing_tds)",
+            "interceptions": "SUM(s.interceptions)",
+            "carries": "SUM(s.carries)",
+            "rushing_yards": "SUM(s.rushing_yards)",
+            "rushing_tds": "SUM(s.rushing_tds)",
+            "targets": "SUM(s.targets)",
+            "receptions": "SUM(s.receptions)",
+            "receiving_yards": "SUM(s.receiving_yards)",
+            "receiving_tds": "SUM(s.receiving_tds)",
+            "total_tds": "SUM(s.touchdowns)",
+            "turnovers": "SUM(s.turnovers)",
+            "sacks_taken": "SUM(s.sacks_taken)",
+            "sack_yards_lost": "SUM(s.sack_yards_lost)",
+            "fumbles": "SUM(s.fumbles)",
+            "fumbles_lost": "SUM(s.fumbles_lost)",
+            "offense_snaps": "SUM(s.offense_snaps)",
+        }
 
-    having = []
-    ops = {"gt": ">", "gte": ">=", "lt": "<", "lte": "<=", "eq": "=", "neq": "!="}
-    for f in filters:
-        key = f.get("key", "")
-        op = ops.get(f.get("op", ""), None)
-        val = f.get("value")
-        if not key or not op or val is None:
-            continue
-        sql_expr = FILTER_COLUMN_MAP.get(key)
-        if sql_expr:
-            having.append(f"{sql_expr} {op} ?")
-            params.append(float(val))
+        having = []
+        ops = {"gt": ">", "gte": ">=", "lt": "<", "lte": "<=", "eq": "=", "neq": "!="}
+        for f in filters:
+            key = f.get("key", "")
+            op = ops.get(f.get("op", ""), None)
+            val = f.get("value")
+            if not key or not op or val is None:
+                continue
+            sql_expr = FILTER_COLUMN_MAP.get(key)
+            if sql_expr:
+                having.append(f"{sql_expr} {op} ?")
+                params.append(float(val))
 
-    # Add minimum games played filter
-    if min_gp and int(min_gp) > 0:
-        having.append("COUNT(*) >= ?")
-        params.append(int(min_gp))
+        # Add minimum games played filter
+        if min_gp and int(min_gp) > 0:
+            having.append("COUNT(*) >= ?")
+            params.append(int(min_gp))
 
-    having_clause = ""
-    if having:
-        having_clause = "HAVING " + " AND ".join(having)
+        having_clause = ""
+        if having:
+            having_clause = "HAVING " + " AND ".join(having)
 
-    # Derived/rate metrics are computed post-query — sort by PPR in SQL, re-sort in Python
-    sql_sortable = {
-        "fantasy_points_ppr", "fantasy_points_half_ppr", "fantasy_points_std",
-        "passing_yards", "passing_tds", "rushing_yards", "rushing_tds",
-        "receiving_yards", "receiving_tds", "receptions", "touchdowns",
-        "turnovers", "targets", "carries",
-        "passing_first_downs", "rushing_first_downs", "receiving_first_downs",
-        "sacks_taken", "sack_yards_lost", "fumbles", "fumbles_lost",
-        "offense_snaps",
-    }
-    python_sort = sort_key not in sql_sortable and sort_key not in ("ppg", "games", "seasons", "full_name", "position", "team", "age")
+        # Derived/rate metrics are computed post-query — sort by PPR in SQL, re-sort in Python
+        sql_sortable = {
+            "fantasy_points_ppr", "fantasy_points_half_ppr", "fantasy_points_std",
+            "passing_yards", "passing_tds", "rushing_yards", "rushing_tds",
+            "receiving_yards", "receiving_tds", "receptions", "touchdowns",
+            "turnovers", "targets", "carries",
+            "passing_first_downs", "rushing_first_downs", "receiving_first_downs",
+            "sacks_taken", "sack_yards_lost", "fumbles", "fumbles_lost",
+            "offense_snaps",
+        }
+        python_sort = sort_key not in sql_sortable and sort_key not in ("ppg", "games", "seasons", "full_name", "position", "team", "age")
 
-    # Handle sort expression
-    effective_sort = sort_key if not python_sort else "fantasy_points_ppr"
-    order_expr = effective_sort
-    if effective_sort == "ppg":
-        order_expr = "(SUM(s.fantasy_points_ppr) / MAX(1, COUNT(*)))"
-    elif effective_sort == "age":
-        order_expr = "p.age"
-    elif effective_sort == "games":
-        order_expr = "COUNT(*)"
-    elif effective_sort == "seasons":
-        order_expr = "COUNT(DISTINCT s.season)"
-    elif effective_sort in ("full_name", "position", "team"):
-        order_expr = f"p.{effective_sort}"
-    else:
-        order_expr = f"SUM(s.{effective_sort})"
+        # Handle sort expression
+        effective_sort = sort_key if not python_sort else "fantasy_points_ppr"
+        order_expr = effective_sort
+        if effective_sort == "ppg":
+            order_expr = "(SUM(s.fantasy_points_ppr) / MAX(1, COUNT(*)))"
+        elif effective_sort == "age":
+            order_expr = "p.age"
+        elif effective_sort == "games":
+            order_expr = "COUNT(*)"
+        elif effective_sort == "seasons":
+            order_expr = "COUNT(DISTINCT s.season)"
+        elif effective_sort in ("full_name", "position", "team"):
+            order_expr = f"p.{effective_sort}"
+        else:
+            order_expr = f"SUM(s.{effective_sort})"
 
-    query = f"""
-        SELECT
-            p.player_id, p.full_name, p.position, p.team, p.age, p.college, p.headshot_url,
-            COUNT(*) as games,
-            COUNT(DISTINCT s.season) as seasons,
-            SUM(s.fantasy_points_half_ppr) as fantasy_points_half_ppr,
-            {_STAT_SUM_COLS}
-        FROM players p
-        JOIN player_week_stats s ON p.player_id = s.player_id
-        WHERE {where_clause}
-        GROUP BY p.player_id
-        {having_clause}
-        ORDER BY {order_expr} {sort_dir}
-        LIMIT ? OFFSET ?
-    """
-    params.extend([limit, offset])
-
-    rows = conn.execute(query, params).fetchall()
-
-    # Count
-    count_query = f"""
-        SELECT COUNT(*) FROM (
-            SELECT p.player_id
+        query = f"""
+            SELECT
+                p.player_id, p.full_name, p.position, p.team, p.age, p.college, p.headshot_url,
+                COUNT(*) as games,
+                COUNT(DISTINCT s.season) as seasons,
+                SUM(s.fantasy_points_half_ppr) as fantasy_points_half_ppr,
+                {_STAT_SUM_COLS}
             FROM players p
             JOIN player_week_stats s ON p.player_id = s.player_id
             WHERE {where_clause}
             GROUP BY p.player_id
             {having_clause}
-        )
-    """
-    count_params = params[:-2]  # exclude limit/offset
-    total = conn.execute(count_query, count_params).fetchone()[0]
+            ORDER BY {order_expr} {sort_dir}
+            LIMIT ? OFFSET ?
+        """
+        params.extend([limit, offset])
 
-    items = [dict(r) for r in rows]
-    _enrich_with_derived_stats(items)
-    _enrich_with_rate_metrics(conn, items, season=season, career_mode=career_mode)
-    _enrich_with_epa_per_play(items)
-    _enrich_with_breakout(conn, items, season=season, career_mode=career_mode)
-    _enrich_with_dynasty_value(items)
-    _enrich_with_team_shares(conn, items, season=season, career_mode=career_mode)
-    _enrich_with_pbp_stats(conn, items, season=season, career_mode=career_mode)
+        rows = conn.execute(query, params).fetchall()
 
-    # Re-sort in Python if sorting by a derived/rate metric
-    if python_sort:
-        reverse = sort_dir.lower() == "desc"
-        items.sort(key=lambda x: x.get(sort_key) or 0, reverse=reverse)
+        # Count
+        count_query = f"""
+            SELECT COUNT(*) FROM (
+                SELECT p.player_id
+                FROM players p
+                JOIN player_week_stats s ON p.player_id = s.player_id
+                WHERE {where_clause}
+                GROUP BY p.player_id
+                {having_clause}
+            )
+        """
+        count_params = params[:-2]  # exclude limit/offset
+        total = conn.execute(count_query, count_params).fetchone()[0]
 
-    conn.close()
-    return {"count": total, "season": "career" if career_mode else season, "items": items}
+        items = [dict(r) for r in rows]
+        _enrich_with_derived_stats(items)
+        _enrich_with_rate_metrics(conn, items, season=season, career_mode=career_mode)
+        _enrich_with_epa_per_play(items)
+        _enrich_with_breakout(conn, items, season=season, career_mode=career_mode)
+        _enrich_with_dynasty_value(items)
+        _enrich_with_team_shares(conn, items, season=season, career_mode=career_mode)
+        _enrich_with_pbp_stats(conn, items, season=season, career_mode=career_mode)
+
+        # Re-sort in Python if sorting by a derived/rate metric
+        if python_sort:
+            reverse = sort_dir.lower() == "desc"
+            items.sort(key=lambda x: x.get(sort_key) or 0, reverse=reverse)
+
+        return {"count": total, "season": "career" if career_mode else season, "items": items}
 
 
 def get_filter_options():
     """Return available positions, teams, and stat columns for autocomplete."""
     def _query():
-        conn = get_conn()
-        positions = [r[0] for r in conn.execute(
-            "SELECT DISTINCT position FROM players WHERE position IN ('QB','RB','WR','TE') ORDER BY position"
-        ).fetchall()]
-        teams = [r[0] for r in conn.execute(
-            "SELECT DISTINCT team FROM players WHERE team IS NOT NULL AND team != '' ORDER BY team"
-        ).fetchall()]
-        stat_keys = [r[0] for r in conn.execute(
-            "SELECT DISTINCT stat_key FROM player_week_metrics ORDER BY stat_key"
-        ).fetchall()]
-        seasons = [r[0] for r in conn.execute(
-            "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
-        ).fetchall()]
-        conn.close()
-        return {
-            "positions": positions,
-            "teams": teams,
-            "stat_keys": stat_keys,
-            "seasons": seasons,
-        }
+        with get_db() as conn:
+            positions = [r[0] for r in conn.execute(
+                "SELECT DISTINCT position FROM players WHERE position IN ('QB','RB','WR','TE') ORDER BY position"
+            ).fetchall()]
+            teams = [r[0] for r in conn.execute(
+                "SELECT DISTINCT team FROM players WHERE team IS NOT NULL AND team != '' ORDER BY team"
+            ).fetchall()]
+            stat_keys = [r[0] for r in conn.execute(
+                "SELECT DISTINCT stat_key FROM player_week_metrics ORDER BY stat_key"
+            ).fetchall()]
+            seasons = [r[0] for r in conn.execute(
+                "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
+            ).fetchall()]
+            return {
+                "positions": positions,
+                "teams": teams,
+                "stat_keys": stat_keys,
+                "seasons": seasons,
+            }
     return _cached("filter_options", _query)
 
 
 def fetch_player_weeks(player_id, season=0):
     """Return week-by-week stats for a single player."""
-    conn = get_conn()
+    with get_db() as conn:
 
-    if not season:
-        row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-        season = row[0] if row and row[0] else 2024
+        if not season:
+            row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+            season = row[0] if row and row[0] else 2024
 
-    rows = conn.execute("""
-        SELECT s.*, p.full_name, p.position, p.team
-        FROM player_week_stats s
-        JOIN players p ON p.player_id = s.player_id
-        WHERE s.player_id = ? AND s.season = ?
-        ORDER BY s.week ASC
-    """, (player_id, season)).fetchall()
+        rows = conn.execute("""
+            SELECT s.*, p.full_name, p.position, p.team
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE s.player_id = ? AND s.season = ?
+            ORDER BY s.week ASC
+        """, (player_id, season)).fetchall()
 
-    player_info = conn.execute(
-        "SELECT player_id, full_name, position, team, age, college, headshot_url FROM players WHERE player_id = ?",
-        (player_id,)
-    ).fetchone()
+        player_info = conn.execute(
+            "SELECT player_id, full_name, position, team, age, college, headshot_url FROM players WHERE player_id = ?",
+            (player_id,)
+        ).fetchone()
 
-    conn.close()
 
-    return {
-        "player": dict(player_info) if player_info else {},
-        "season": season,
-        "weeks": [dict(r) for r in rows],
-    }
+        return {
+            "player": dict(player_info) if player_info else {},
+            "season": season,
+            "weeks": [dict(r) for r in rows],
+        }
 
 
 def fetch_player_seasons(player_id):
     """Return season-level aggregates for a single player (for trend charts)."""
-    conn = get_conn()
+    with get_db() as conn:
 
-    player_info = conn.execute(
-        "SELECT player_id, full_name, position, team, age, college, headshot_url FROM players WHERE player_id = ?",
-        (player_id,)
-    ).fetchone()
+        player_info = conn.execute(
+            "SELECT player_id, full_name, position, team, age, college, headshot_url FROM players WHERE player_id = ?",
+            (player_id,)
+        ).fetchone()
 
-    rows = conn.execute(f"""
-        SELECT
-            s.season,
-            COUNT(*) as games,
-            {_STAT_SUM_COLS}
-        FROM player_week_stats s
-        WHERE s.player_id = ?
-        GROUP BY s.season
-        ORDER BY s.season ASC
-    """, (player_id,)).fetchall()
+        rows = conn.execute(f"""
+            SELECT
+                s.season,
+                COUNT(*) as games,
+                {_STAT_SUM_COLS}
+            FROM player_week_stats s
+            WHERE s.player_id = ?
+            GROUP BY s.season
+            ORDER BY s.season ASC
+        """, (player_id,)).fetchall()
 
-    seasons = [dict(r) for r in rows]
-    _enrich_with_derived_stats(seasons)
+        seasons = [dict(r) for r in rows]
+        _enrich_with_derived_stats(seasons)
 
-    conn.close()
-    return {
-        "player": dict(player_info) if player_info else {},
-        "seasons": seasons,
-    }
+        return {
+            "player": dict(player_info) if player_info else {},
+            "seasons": seasons,
+        }
 
 
 def fetch_prospects(
@@ -1045,139 +1036,138 @@ def fetch_prospects(
 ):
     """Return prospect data from combine + draft picks, joined."""
     import datetime as _dt
-    conn = get_conn()
+    with get_db() as conn:
 
-    _cur_year = _dt.datetime.now().year
-    if not draft_year or draft_year < 2000 or draft_year > _cur_year + 2:
-        row = conn.execute("SELECT MAX(draft_year) FROM combine_data").fetchone()
-        draft_year = row[0] if row and row[0] else 2025
+        _cur_year = _dt.datetime.now().year
+        if not draft_year or draft_year < 2000 or draft_year > _cur_year + 2:
+            row = conn.execute("SELECT MAX(draft_year) FROM combine_data").fetchone()
+            draft_year = row[0] if row and row[0] else 2025
 
-    # Position list
-    pos_list = []
-    if positions:
-        pos_list = [p.strip().upper() for p in positions.split(",") if p.strip()]
-    elif position:
-        pos_list = [position.strip().upper()]
+        # Position list
+        pos_list = []
+        if positions:
+            pos_list = [p.strip().upper() for p in positions.split(",") if p.strip()]
+        elif position:
+            pos_list = [position.strip().upper()]
 
-    where = ["c.draft_year = ?"]
-    params = [draft_year]
+        where = ["c.draft_year = ?"]
+        params = [draft_year]
 
-    if search:
-        search_clean = search.lower().replace(" ", "")
-        where.append("LOWER(REPLACE(c.player_name, ' ', '')) LIKE ?")
-        params.append(f"%{search_clean}%")
+        if search:
+            search_clean = search.lower().replace(" ", "")
+            where.append("LOWER(REPLACE(c.player_name, ' ', '')) LIKE ?")
+            params.append(f"%{search_clean}%")
 
-    if pos_list:
-        placeholders = ",".join("?" * len(pos_list))
-        where.append(f"c.position IN ({placeholders})")
-        params.extend(pos_list)
+        if pos_list:
+            placeholders = ",".join("?" * len(pos_list))
+            where.append(f"c.position IN ({placeholders})")
+            params.extend(pos_list)
 
-    if school:
-        where.append("(c.school LIKE ? OR d.college LIKE ?)")
-        params.extend([f"%{school}%", f"%{school}%"])
+        if school:
+            where.append("(c.school LIKE ? OR d.college LIKE ?)")
+            params.extend([f"%{school}%", f"%{school}%"])
 
-    where_clause = " AND ".join(where)
+        where_clause = " AND ".join(where)
 
-    # Safe sort columns
-    safe_sorts = {
-        "player_name": "c.player_name",
-        "position": "c.position",
-        "school": "c.school",
-        "draft_pick": "c.draft_pick",
-        "draft_round": "c.draft_round",
-        "draft_team": "c.draft_team",
-        "height_inches": "c.height_inches",
-        "weight": "c.weight",
-        "forty": "c.forty",
-        "bench": "c.bench",
-        "vertical": "c.vertical",
-        "broad_jump": "c.broad_jump",
-        "cone": "c.cone",
-        "shuttle": "c.shuttle",
-        "career_av": "d.career_av",
-        "games": "d.games",
-    }
-    # College sort keys use Python re-sort (derived from batch enrichment)
-    college_sort_keys = {
-        "college_games", "college_pass_yards", "college_pass_tds",
-        "college_rush_yards", "college_rush_tds", "college_carries",
-        "college_rec_yards", "college_rec_tds", "college_receptions",
-        "college_targets", "college_total_tds", "college_total_yards",
-        "college_ypc", "college_cmp_pct", "college_ypr", "college_ypg",
-    }
-    python_resort = sort_key in college_sort_keys
-    order_expr = safe_sorts.get(sort_key, "c.draft_pick")
-    if sort_dir.lower() not in ("asc", "desc"):
-        sort_dir = "asc"
+        # Safe sort columns
+        safe_sorts = {
+            "player_name": "c.player_name",
+            "position": "c.position",
+            "school": "c.school",
+            "draft_pick": "c.draft_pick",
+            "draft_round": "c.draft_round",
+            "draft_team": "c.draft_team",
+            "height_inches": "c.height_inches",
+            "weight": "c.weight",
+            "forty": "c.forty",
+            "bench": "c.bench",
+            "vertical": "c.vertical",
+            "broad_jump": "c.broad_jump",
+            "cone": "c.cone",
+            "shuttle": "c.shuttle",
+            "career_av": "d.career_av",
+            "games": "d.games",
+        }
+        # College sort keys use Python re-sort (derived from batch enrichment)
+        college_sort_keys = {
+            "college_games", "college_pass_yards", "college_pass_tds",
+            "college_rush_yards", "college_rush_tds", "college_carries",
+            "college_rec_yards", "college_rec_tds", "college_receptions",
+            "college_targets", "college_total_tds", "college_total_yards",
+            "college_ypc", "college_cmp_pct", "college_ypr", "college_ypg",
+        }
+        python_resort = sort_key in college_sort_keys
+        order_expr = safe_sorts.get(sort_key, "c.draft_pick")
+        if sort_dir.lower() not in ("asc", "desc"):
+            sort_dir = "asc"
 
-    # NULLS LAST for numeric sorts
-    nulls_clause = ""
-    if sort_key in ("forty", "bench", "vertical", "broad_jump", "cone", "shuttle",
-                     "draft_pick", "draft_round", "height_inches", "weight",
-                     "career_av", "games"):
-        if sort_dir.lower() == "asc":
-            nulls_clause = f"CASE WHEN {order_expr} IS NULL THEN 1 ELSE 0 END,"
+        # NULLS LAST for numeric sorts
+        nulls_clause = ""
+        if sort_key in ("forty", "bench", "vertical", "broad_jump", "cone", "shuttle",
+                         "draft_pick", "draft_round", "height_inches", "weight",
+                         "career_av", "games"):
+            if sort_dir.lower() == "asc":
+                nulls_clause = f"CASE WHEN {order_expr} IS NULL THEN 1 ELSE 0 END,"
+            else:
+                nulls_clause = f"CASE WHEN {order_expr} IS NULL THEN 1 ELSE 0 END,"
+
+        select_cols = """
+                c.player_name, c.position, c.school, c.draft_year,
+                c.draft_team, c.draft_round, c.draft_pick,
+                c.height_inches, c.weight,
+                c.forty, c.bench, c.vertical, c.broad_jump, c.cone, c.shuttle,
+                c.pfr_id, c.cfb_id,
+                d.career_av, d.draft_av, d.games as nfl_games,
+                d.allpro, d.probowls, d.seasons_started,
+                d.pass_yards as nfl_pass_yards, d.pass_tds as nfl_pass_tds,
+                d.rush_yards as nfl_rush_yards, d.rush_tds as nfl_rush_tds,
+                d.rec_yards as nfl_rec_yards, d.rec_tds as nfl_rec_tds,
+                d.receptions as nfl_receptions
+        """
+        from_clause = """
+            FROM combine_data c
+            LEFT JOIN draft_picks d
+                ON c.draft_year = d.season
+                AND LOWER(REPLACE(c.player_name, ' ', '')) = LOWER(REPLACE(d.player_name, ' ', ''))
+                AND c.position = d.position
+            WHERE {where_clause}
+        """.format(where_clause=where_clause)
+
+        # Count
+        total = conn.execute(f"SELECT COUNT(*) {from_clause}", params).fetchone()[0]
+
+        if python_resort:
+            # Fetch all for Python re-sort after college enrichment
+            query = f"SELECT {select_cols} {from_clause} ORDER BY c.player_name ASC"
+            rows = conn.execute(query, params).fetchall()
         else:
-            nulls_clause = f"CASE WHEN {order_expr} IS NULL THEN 1 ELSE 0 END,"
+            query = f"SELECT {select_cols} {from_clause} ORDER BY {nulls_clause} {order_expr} {sort_dir} LIMIT ? OFFSET ?"
+            rows = conn.execute(query, params + [limit, offset]).fetchall()
 
-    select_cols = """
-            c.player_name, c.position, c.school, c.draft_year,
-            c.draft_team, c.draft_round, c.draft_pick,
-            c.height_inches, c.weight,
-            c.forty, c.bench, c.vertical, c.broad_jump, c.cone, c.shuttle,
-            c.pfr_id, c.cfb_id,
-            d.career_av, d.draft_av, d.games as nfl_games,
-            d.allpro, d.probowls, d.seasons_started,
-            d.pass_yards as nfl_pass_yards, d.pass_tds as nfl_pass_tds,
-            d.rush_yards as nfl_rush_yards, d.rush_tds as nfl_rush_tds,
-            d.rec_yards as nfl_rec_yards, d.rec_tds as nfl_rec_tds,
-            d.receptions as nfl_receptions
-    """
-    from_clause = """
-        FROM combine_data c
-        LEFT JOIN draft_picks d
-            ON c.draft_year = d.season
-            AND LOWER(REPLACE(c.player_name, ' ', '')) = LOWER(REPLACE(d.player_name, ' ', ''))
-            AND c.position = d.position
-        WHERE {where_clause}
-    """.format(where_clause=where_clause)
+        items = []
+        for r in rows:
+            item = dict(r)
+            # Compute height display string
+            ht = item.get("height_inches")
+            if ht:
+                item["height_display"] = f"{ht // 12}'{ht % 12}\""
+            else:
+                item["height_display"] = None
+            # Abbreviate team name
+            dt = (item.get("draft_team") or "").upper()
+            item["draft_team"] = TEAM_ABBREV.get(dt, dt[:3] if dt else None)
+            items.append(item)
 
-    # Count
-    total = conn.execute(f"SELECT COUNT(*) {from_clause}", params).fetchone()[0]
+        # Enrich with college production stats (batch cross-reference)
+        _enrich_prospects_with_college(conn, items)
 
-    if python_resort:
-        # Fetch all for Python re-sort after college enrichment
-        query = f"SELECT {select_cols} {from_clause} ORDER BY c.player_name ASC"
-        rows = conn.execute(query, params).fetchall()
-    else:
-        query = f"SELECT {select_cols} {from_clause} ORDER BY {nulls_clause} {order_expr} {sort_dir} LIMIT ? OFFSET ?"
-        rows = conn.execute(query, params + [limit, offset]).fetchall()
+        # Python re-sort for college-derived columns
+        if python_resort:
+            reverse = sort_dir.lower() == "desc"
+            items.sort(key=lambda x: (x.get(sort_key) is None, -(x.get(sort_key) or 0) if reverse else (x.get(sort_key) or 0)))
+            items = items[offset:offset + limit]
 
-    items = []
-    for r in rows:
-        item = dict(r)
-        # Compute height display string
-        ht = item.get("height_inches")
-        if ht:
-            item["height_display"] = f"{ht // 12}'{ht % 12}\""
-        else:
-            item["height_display"] = None
-        # Abbreviate team name
-        dt = (item.get("draft_team") or "").upper()
-        item["draft_team"] = TEAM_ABBREV.get(dt, dt[:3] if dt else None)
-        items.append(item)
-
-    # Enrich with college production stats (batch cross-reference)
-    _enrich_prospects_with_college(conn, items)
-
-    # Python re-sort for college-derived columns
-    if python_resort:
-        reverse = sort_dir.lower() == "desc"
-        items.sort(key=lambda x: (x.get(sort_key) is None, -(x.get(sort_key) or 0) if reverse else (x.get(sort_key) or 0)))
-        items = items[offset:offset + limit]
-
-    conn.close()
-    return {"count": total, "draft_year": draft_year, "items": items}
+        return {"count": total, "draft_year": draft_year, "items": items}
 
 
 # Common nickname → full name mapping for college-prospect matching
@@ -1289,218 +1279,213 @@ def _enrich_prospects_with_college(conn, items):
 
 def fetch_prospect_years():
     """Return available draft years for the prospect screener."""
-    conn = get_conn()
-    years = [r[0] for r in conn.execute(
-        "SELECT DISTINCT draft_year FROM combine_data ORDER BY draft_year DESC"
-    ).fetchall()]
+    with get_db() as conn:
+        years = [r[0] for r in conn.execute(
+            "SELECT DISTINCT draft_year FROM combine_data ORDER BY draft_year DESC"
+        ).fetchall()]
 
-    schools = [r[0] for r in conn.execute(
-        "SELECT DISTINCT school FROM combine_data WHERE school IS NOT NULL AND school != '' ORDER BY school"
-    ).fetchall()]
+        schools = [r[0] for r in conn.execute(
+            "SELECT DISTINCT school FROM combine_data WHERE school IS NOT NULL AND school != '' ORDER BY school"
+        ).fetchall()]
 
-    positions = [r[0] for r in conn.execute(
-        "SELECT DISTINCT position FROM combine_data ORDER BY position"
-    ).fetchall()]
+        positions = [r[0] for r in conn.execute(
+            "SELECT DISTINCT position FROM combine_data ORDER BY position"
+        ).fetchall()]
 
-    conn.close()
-    return {"years": years, "schools": schools, "positions": positions}
+        return {"years": years, "schools": schools, "positions": positions}
 
 
 def fetch_player_profile(player_id):
     """Return a rich player profile: bio, season-by-season stats, combine/draft data."""
-    conn = get_conn()
+    with get_db() as conn:
 
-    # Player bio
-    player_info = conn.execute(
-        "SELECT player_id, full_name, position, team, age, college, headshot_url FROM players WHERE player_id = ?",
-        (player_id,)
-    ).fetchone()
+        # Player bio
+        player_info = conn.execute(
+            "SELECT player_id, full_name, position, team, age, college, headshot_url FROM players WHERE player_id = ?",
+            (player_id,)
+        ).fetchone()
 
-    if not player_info:
-        conn.close()
-        return {"player": {}, "seasons": [], "combine": None}
+        if not player_info:
+            return {"player": {}, "seasons": [], "combine": None}
 
-    player = dict(player_info)
+        player = dict(player_info)
 
-    # Season-by-season aggregates
-    rows = conn.execute(f"""
-        SELECT
-            s.season,
-            COUNT(*) as games,
-            {_STAT_SUM_COLS}
-        FROM player_week_stats s
-        WHERE s.player_id = ?
-        GROUP BY s.season
-        ORDER BY s.season ASC
-    """, (player_id,)).fetchall()
+        # Season-by-season aggregates
+        rows = conn.execute(f"""
+            SELECT
+                s.season,
+                COUNT(*) as games,
+                {_STAT_SUM_COLS}
+            FROM player_week_stats s
+            WHERE s.player_id = ?
+            GROUP BY s.season
+            ORDER BY s.season ASC
+        """, (player_id,)).fetchall()
 
-    seasons = [dict(r) for r in rows]
-    _enrich_with_derived_stats(seasons)
+        seasons = [dict(r) for r in rows]
+        _enrich_with_derived_stats(seasons)
 
-    # Enrich each season with rate metrics
-    for season_row in seasons:
-        items_for_rate = [{"player_id": player_id, **season_row}]
-        _enrich_with_rate_metrics(conn, items_for_rate, season=season_row["season"])
-        for metric in RATE_METRICS:
-            season_row[metric] = items_for_rate[0].get(metric)
+        # Enrich each season with rate metrics
+        for season_row in seasons:
+            items_for_rate = [{"player_id": player_id, **season_row}]
+            _enrich_with_rate_metrics(conn, items_for_rate, season=season_row["season"])
+            for metric in RATE_METRICS:
+                season_row[metric] = items_for_rate[0].get(metric)
 
-    # Career totals
-    career = {}
-    if seasons:
-        for key in ["games", "fantasy_points_ppr", "fantasy_points_std",
-                     "passing_yards", "passing_tds", "rushing_yards", "rushing_tds",
-                     "receiving_yards", "receiving_tds", "receptions", "touchdowns",
-                     "turnovers", "targets", "carries", "completions", "attempts",
-                     "passing_air_yards", "receiving_air_yards", "receiving_yards_after_catch",
-                     "passing_first_downs", "rushing_first_downs", "receiving_first_downs",
-                     "sacks_taken", "sack_yards_lost", "fumbles", "fumbles_lost",
-                     "offense_snaps"]:
-            career[key] = sum(s.get(key) or 0 for s in seasons)
-        career["seasons"] = len(seasons)
-        _enrich_with_derived_stats([career])
+        # Career totals
+        career = {}
+        if seasons:
+            for key in ["games", "fantasy_points_ppr", "fantasy_points_std",
+                         "passing_yards", "passing_tds", "rushing_yards", "rushing_tds",
+                         "receiving_yards", "receiving_tds", "receptions", "touchdowns",
+                         "turnovers", "targets", "carries", "completions", "attempts",
+                         "passing_air_yards", "receiving_air_yards", "receiving_yards_after_catch",
+                         "passing_first_downs", "rushing_first_downs", "receiving_first_downs",
+                         "sacks_taken", "sack_yards_lost", "fumbles", "fumbles_lost",
+                         "offense_snaps"]:
+                career[key] = sum(s.get(key) or 0 for s in seasons)
+            career["seasons"] = len(seasons)
+            _enrich_with_derived_stats([career])
 
-    # Combine/draft data (match by name + position)
-    combine = None
-    name = player.get("full_name", "")
-    pos = player.get("position", "")
-    if name and pos:
+        # Combine/draft data (match by name + position)
+        combine = None
+        name = player.get("full_name", "")
+        pos = player.get("position", "")
+        if name and pos:
+            search_name = name.lower().replace(" ", "")
+            combine_row = conn.execute("""
+                SELECT c.*, d.career_av, d.draft_av, d.allpro, d.probowls, d.seasons_started
+                FROM combine_data c
+                LEFT JOIN draft_picks d
+                    ON c.draft_year = d.season
+                    AND LOWER(REPLACE(c.player_name, ' ', '')) = LOWER(REPLACE(d.player_name, ' ', ''))
+                    AND c.position = d.position
+                WHERE LOWER(REPLACE(c.player_name, ' ', '')) = ?
+                    AND c.position = ?
+                ORDER BY c.draft_year DESC
+                LIMIT 1
+            """, (search_name, pos)).fetchone()
+
+            if combine_row:
+                c = dict(combine_row)
+                ht = c.get("height_inches")
+                if ht:
+                    c["height_display"] = f"{ht // 12}'{ht % 12}\""
+                dt = (c.get("draft_team") or "").upper()
+                c["draft_team"] = TEAM_ABBREV.get(dt, dt[:3] if dt else None)
+                combine = c
+
+        return {
+            "player": player,
+            "seasons": seasons,
+            "career": career,
+            "combine": combine,
+        }
+
+
+def fetch_prospect_profile(name, position="", draft_year=0):
+    """Return a rich prospect profile with combine data and position-group percentiles."""
+    with get_db() as conn:
+
+        if not draft_year:
+            row = conn.execute("SELECT MAX(draft_year) FROM combine_data").fetchone()
+            draft_year = row[0] if row and row[0] else 2025
+
         search_name = name.lower().replace(" ", "")
-        combine_row = conn.execute("""
-            SELECT c.*, d.career_av, d.draft_av, d.allpro, d.probowls, d.seasons_started
+
+        # Build WHERE clause
+        where = "LOWER(REPLACE(c.player_name, ' ', '')) = ?"
+        params = [search_name]
+        if position:
+            where += " AND c.position = ?"
+            params.append(position.upper())
+
+        # Get this prospect's data
+        prospect_row = conn.execute(f"""
+            SELECT
+                c.player_name, c.position, c.school, c.draft_year,
+                c.draft_team, c.draft_round, c.draft_pick,
+                c.height_inches, c.weight,
+                c.forty, c.bench, c.vertical, c.broad_jump, c.cone, c.shuttle,
+                c.pfr_id, c.cfb_id,
+                d.career_av, d.draft_av, d.games as nfl_games,
+                d.allpro, d.probowls, d.seasons_started,
+                d.pass_yards as nfl_pass_yards, d.pass_tds as nfl_pass_tds,
+                d.rush_yards as nfl_rush_yards, d.rush_tds as nfl_rush_tds,
+                d.rec_yards as nfl_rec_yards, d.rec_tds as nfl_rec_tds,
+                d.receptions as nfl_receptions
             FROM combine_data c
             LEFT JOIN draft_picks d
                 ON c.draft_year = d.season
                 AND LOWER(REPLACE(c.player_name, ' ', '')) = LOWER(REPLACE(d.player_name, ' ', ''))
                 AND c.position = d.position
-            WHERE LOWER(REPLACE(c.player_name, ' ', '')) = ?
-                AND c.position = ?
+            WHERE {where}
             ORDER BY c.draft_year DESC
             LIMIT 1
-        """, (search_name, pos)).fetchone()
+        """, params).fetchone()
 
-        if combine_row:
-            c = dict(combine_row)
-            ht = c.get("height_inches")
-            if ht:
-                c["height_display"] = f"{ht // 12}'{ht % 12}\""
-            dt = (c.get("draft_team") or "").upper()
-            c["draft_team"] = TEAM_ABBREV.get(dt, dt[:3] if dt else None)
-            combine = c
+        if not prospect_row:
+            return {"prospect": None, "percentiles": {}}
 
-    conn.close()
-    return {
-        "player": player,
-        "seasons": seasons,
-        "career": career,
-        "combine": combine,
-    }
+        prospect = dict(prospect_row)
 
-
-def fetch_prospect_profile(name, position="", draft_year=0):
-    """Return a rich prospect profile with combine data and position-group percentiles."""
-    conn = get_conn()
-
-    if not draft_year:
-        row = conn.execute("SELECT MAX(draft_year) FROM combine_data").fetchone()
-        draft_year = row[0] if row and row[0] else 2025
-
-    search_name = name.lower().replace(" ", "")
-
-    # Build WHERE clause
-    where = "LOWER(REPLACE(c.player_name, ' ', '')) = ?"
-    params = [search_name]
-    if position:
-        where += " AND c.position = ?"
-        params.append(position.upper())
-
-    # Get this prospect's data
-    prospect_row = conn.execute(f"""
-        SELECT
-            c.player_name, c.position, c.school, c.draft_year,
-            c.draft_team, c.draft_round, c.draft_pick,
-            c.height_inches, c.weight,
-            c.forty, c.bench, c.vertical, c.broad_jump, c.cone, c.shuttle,
-            c.pfr_id, c.cfb_id,
-            d.career_av, d.draft_av, d.games as nfl_games,
-            d.allpro, d.probowls, d.seasons_started,
-            d.pass_yards as nfl_pass_yards, d.pass_tds as nfl_pass_tds,
-            d.rush_yards as nfl_rush_yards, d.rush_tds as nfl_rush_tds,
-            d.rec_yards as nfl_rec_yards, d.rec_tds as nfl_rec_tds,
-            d.receptions as nfl_receptions
-        FROM combine_data c
-        LEFT JOIN draft_picks d
-            ON c.draft_year = d.season
-            AND LOWER(REPLACE(c.player_name, ' ', '')) = LOWER(REPLACE(d.player_name, ' ', ''))
-            AND c.position = d.position
-        WHERE {where}
-        ORDER BY c.draft_year DESC
-        LIMIT 1
-    """, params).fetchone()
-
-    if not prospect_row:
-        conn.close()
-        return {"prospect": None, "percentiles": {}}
-
-    prospect = dict(prospect_row)
-
-    # Format height display
-    ht = prospect.get("height_inches")
-    if ht:
-        prospect["height_display"] = f"{ht // 12}'{ht % 12}\""
-    else:
-        prospect["height_display"] = None
-
-    # Abbreviate team name
-    dt = (prospect.get("draft_team") or "").upper()
-    prospect["draft_team"] = TEAM_ABBREV.get(dt, dt[:3] if dt else None)
-
-    # Compute position-group percentiles for combine metrics
-    pos = prospect["position"]
-    combine_metrics = {
-        "forty": "lower",       # lower is better
-        "bench": "higher",
-        "vertical": "higher",
-        "broad_jump": "higher",
-        "cone": "lower",        # lower is better
-        "shuttle": "lower",     # lower is better
-        "height_inches": "higher",
-        "weight": "higher",
-    }
-
-    # Batch percentile computation: single query for all 8 metrics
-    metric_cols = ", ".join(combine_metrics.keys())
-    all_rows = conn.execute(
-        f"SELECT {metric_cols} FROM combine_data WHERE position = ?", (pos,)
-    ).fetchall()
-    metric_names = list(combine_metrics.keys())
-
-    percentiles = {}
-    for i, metric in enumerate(metric_names):
-        val = prospect.get(metric)
-        if val is None:
-            percentiles[metric] = None
-            continue
-
-        all_vals = [r[i] for r in all_rows if r[i] is not None]
-        if not all_vals:
-            percentiles[metric] = None
-            continue
-
-        direction = combine_metrics[metric]
-        if direction == "lower":
-            # For time-based metrics, lower is better → percentile = % of players slower than you
-            pct = sum(1 for v in all_vals if v > val) / len(all_vals) * 100
+        # Format height display
+        ht = prospect.get("height_inches")
+        if ht:
+            prospect["height_display"] = f"{ht // 12}'{ht % 12}\""
         else:
-            # For distance/reps metrics, higher is better → percentile = % of players below you
-            pct = sum(1 for v in all_vals if v < val) / len(all_vals) * 100
+            prospect["height_display"] = None
 
-        percentiles[metric] = round(pct, 1)
+        # Abbreviate team name
+        dt = (prospect.get("draft_team") or "").upper()
+        prospect["draft_team"] = TEAM_ABBREV.get(dt, dt[:3] if dt else None)
 
-    # ── College production cross-reference ──────────────────────────
-    college = _fetch_college_for_prospect(conn, prospect)
+        # Compute position-group percentiles for combine metrics
+        pos = prospect["position"]
+        combine_metrics = {
+            "forty": "lower",       # lower is better
+            "bench": "higher",
+            "vertical": "higher",
+            "broad_jump": "higher",
+            "cone": "lower",        # lower is better
+            "shuttle": "lower",     # lower is better
+            "height_inches": "higher",
+            "weight": "higher",
+        }
 
-    conn.close()
-    return {"prospect": prospect, "percentiles": percentiles, "college": college}
+        # Batch percentile computation: single query for all 8 metrics
+        metric_cols = ", ".join(combine_metrics.keys())
+        all_rows = conn.execute(
+            f"SELECT {metric_cols} FROM combine_data WHERE position = ?", (pos,)
+        ).fetchall()
+        metric_names = list(combine_metrics.keys())
+
+        percentiles = {}
+        for i, metric in enumerate(metric_names):
+            val = prospect.get(metric)
+            if val is None:
+                percentiles[metric] = None
+                continue
+
+            all_vals = [r[i] for r in all_rows if r[i] is not None]
+            if not all_vals:
+                percentiles[metric] = None
+                continue
+
+            direction = combine_metrics[metric]
+            if direction == "lower":
+                # For time-based metrics, lower is better → percentile = % of players slower than you
+                pct = sum(1 for v in all_vals if v > val) / len(all_vals) * 100
+            else:
+                # For distance/reps metrics, higher is better → percentile = % of players below you
+                pct = sum(1 for v in all_vals if v < val) / len(all_vals) * 100
+
+            percentiles[metric] = round(pct, 1)
+
+        # ── College production cross-reference ──────────────────────────
+        college = _fetch_college_for_prospect(conn, prospect)
+
+        return {"prospect": prospect, "percentiles": percentiles, "college": college}
 
 
 def _fetch_college_for_prospect(conn, prospect):
@@ -1623,222 +1608,54 @@ def _fetch_college_for_prospect(conn, prospect):
 
 def fetch_prospect_comps(name, position="", draft_year=0, limit=5):
     """Find NFL players with the most similar combine athletic profiles."""
-    conn = get_conn()
+    with get_db() as conn:
 
-    if not draft_year:
-        row = conn.execute("SELECT MAX(draft_year) FROM combine_data").fetchone()
-        draft_year = row[0] if row and row[0] else 2025
+        if not draft_year:
+            row = conn.execute("SELECT MAX(draft_year) FROM combine_data").fetchone()
+            draft_year = row[0] if row and row[0] else 2025
 
-    search_name = name.lower().replace(" ", "")
+        search_name = name.lower().replace(" ", "")
 
-    # Get the target prospect's combine data
-    where = "LOWER(REPLACE(player_name, ' ', '')) = ?"
-    params = [search_name]
-    if position:
-        where += " AND position = ?"
-        params.append(position.upper())
+        # Get the target prospect's combine data
+        where = "LOWER(REPLACE(player_name, ' ', '')) = ?"
+        params = [search_name]
+        if position:
+            where += " AND position = ?"
+            params.append(position.upper())
 
-    target = conn.execute(f"""
-        SELECT player_name, position, draft_year,
-               forty, bench, vertical, broad_jump, cone, shuttle
-        FROM combine_data
-        WHERE {where}
-        ORDER BY draft_year DESC LIMIT 1
-    """, params).fetchone()
+        target = conn.execute(f"""
+            SELECT player_name, position, draft_year,
+                   forty, bench, vertical, broad_jump, cone, shuttle
+            FROM combine_data
+            WHERE {where}
+            ORDER BY draft_year DESC LIMIT 1
+        """, params).fetchone()
 
-    if not target:
-        conn.close()
-        return {"comps": [], "prospect_name": name}
+        if not target:
+            return {"comps": [], "prospect_name": name}
 
-    target = dict(target)
-    pos = target["position"]
+        target = dict(target)
+        pos = target["position"]
 
-    # Combine metrics with direction for percentile computation
-    metric_keys = ["forty", "bench", "vertical", "broad_jump", "cone", "shuttle"]
-    metric_dirs = {"forty": "lower", "bench": "higher", "vertical": "higher",
-                   "broad_jump": "higher", "cone": "lower", "shuttle": "lower"}
+        # Combine metrics with direction for percentile computation
+        metric_keys = ["forty", "bench", "vertical", "broad_jump", "cone", "shuttle"]
+        metric_dirs = {"forty": "lower", "bench": "higher", "vertical": "higher",
+                       "broad_jump": "higher", "cone": "lower", "shuttle": "lower"}
 
-    # Get position-group stats for percentile normalization
-    pos_stats = {}
-    for mk in metric_keys:
-        rows = conn.execute(
-            f"SELECT {mk} FROM combine_data WHERE position = ? AND {mk} IS NOT NULL", (pos,)
-        ).fetchall()
-        vals = sorted([r[0] for r in rows])
-        if vals:
-            pos_stats[mk] = vals
-
-    # Compute target's percentiles
-    target_pcts = {}
-    for mk in metric_keys:
-        val = target.get(mk)
-        if val is None or mk not in pos_stats:
-            continue
-        all_vals = pos_stats[mk]
-        if metric_dirs[mk] == "lower":
-            pct = sum(1 for v in all_vals if v > val) / len(all_vals) * 100
-        else:
-            pct = sum(1 for v in all_vals if v < val) / len(all_vals) * 100
-        target_pcts[mk] = pct
-
-    if len(target_pcts) < 2:
-        conn.close()
-        return {"comps": [], "prospect_name": target["player_name"]}
-
-    # Get all other players at same position (excluding target) with draft pick data
-    others = conn.execute("""
-        SELECT c.player_name, c.position, c.draft_year, c.school,
-               c.draft_team, c.draft_round, c.draft_pick,
-               c.forty, c.bench, c.vertical, c.broad_jump, c.cone, c.shuttle,
-               d.career_av, d.games as nfl_games,
-               d.pass_yards as nfl_pass_yards, d.pass_tds as nfl_pass_tds,
-               d.rush_yards as nfl_rush_yards, d.rush_tds as nfl_rush_tds,
-               d.rec_yards as nfl_rec_yards, d.rec_tds as nfl_rec_tds,
-               d.receptions as nfl_receptions, d.allpro, d.probowls
-        FROM combine_data c
-        LEFT JOIN draft_picks d
-            ON c.draft_year = d.season
-            AND LOWER(REPLACE(c.player_name, ' ', '')) = LOWER(REPLACE(d.player_name, ' ', ''))
-            AND c.position = d.position
-        WHERE c.position = ?
-          AND LOWER(REPLACE(c.player_name, ' ', '')) != ?
-    """, (pos, search_name)).fetchall()
-
-    # Compute similarity for each candidate
-    comps = []
-    for row in others:
-        other = dict(row)
-
-        # Compute this player's percentiles on shared metrics
-        shared_metrics = []
-        other_pcts = {}
+        # Get position-group stats for percentile normalization
+        pos_stats = {}
         for mk in metric_keys:
-            oval = other.get(mk)
-            if oval is None or mk not in target_pcts or mk not in pos_stats:
-                continue
-            all_vals = pos_stats[mk]
-            if metric_dirs[mk] == "lower":
-                pct = sum(1 for v in all_vals if v > oval) / len(all_vals) * 100
-            else:
-                pct = sum(1 for v in all_vals if v < oval) / len(all_vals) * 100
-            other_pcts[mk] = pct
-            shared_metrics.append(mk)
+            rows = conn.execute(
+                f"SELECT {mk} FROM combine_data WHERE position = ? AND {mk} IS NOT NULL", (pos,)
+            ).fetchall()
+            vals = sorted([r[0] for r in rows])
+            if vals:
+                pos_stats[mk] = vals
 
-        if len(shared_metrics) < 2:
-            continue
-
-        # Euclidean distance on shared percentiles (normalized to 0-100 scale)
-        dist_sq = sum((target_pcts[mk] - other_pcts[mk]) ** 2 for mk in shared_metrics)
-        max_dist = math.sqrt(len(shared_metrics) * 100 ** 2)
-        dist = math.sqrt(dist_sq)
-
-        # Convert distance to similarity score (0-100, higher = more similar)
-        similarity = round(max(0, (1 - dist / max_dist) * 100), 1)
-
-        # Abbreviate team
-        dt = (other.get("draft_team") or "").upper()
-        other["draft_team"] = TEAM_ABBREV.get(dt, dt[:3] if dt else None)
-
-        comps.append({
-            "player_name": other["player_name"],
-            "position": other["position"],
-            "draft_year": other["draft_year"],
-            "school": other.get("school"),
-            "draft_team": other.get("draft_team"),
-            "draft_round": other.get("draft_round"),
-            "draft_pick": other.get("draft_pick"),
-            "nfl_games": other.get("nfl_games"),
-            "career_av": other.get("career_av"),
-            "nfl_pass_yards": other.get("nfl_pass_yards"),
-            "nfl_pass_tds": other.get("nfl_pass_tds"),
-            "nfl_rush_yards": other.get("nfl_rush_yards"),
-            "nfl_rush_tds": other.get("nfl_rush_tds"),
-            "nfl_rec_yards": other.get("nfl_rec_yards"),
-            "nfl_rec_tds": other.get("nfl_rec_tds"),
-            "nfl_receptions": other.get("nfl_receptions"),
-            "allpro": other.get("allpro"),
-            "probowls": other.get("probowls"),
-            "similarity": similarity,
-            "shared_metrics": len(shared_metrics),
-            "percentiles": {mk: round(other_pcts[mk], 1) for mk in shared_metrics},
-        })
-
-    # Sort by similarity descending, but boost players with NFL careers
-    # Players with NFL games get priority at similar similarity levels
-    for c in comps:
-        nfl_bonus = min(5, (c.get("nfl_games") or 0) / 10)  # up to 5 pts for 50+ games
-        c["_sort_score"] = c["similarity"] + nfl_bonus
-    comps.sort(key=lambda c: c["_sort_score"], reverse=True)
-    for c in comps:
-        del c["_sort_score"]
-    comps = comps[:limit]
-
-    conn.close()
-    return {
-        "comps": comps,
-        "prospect_name": target["player_name"],
-        "prospect_percentiles": {mk: round(v, 1) for mk, v in target_pcts.items()},
-    }
-
-
-def fetch_prospect_tiers(position, draft_year=0):
-    """Return prospects at a position grouped by athletic percentile tier."""
-    conn = get_conn()
-
-    if not draft_year:
-        row = conn.execute("SELECT MAX(draft_year) FROM combine_data").fetchone()
-        draft_year = row[0] if row and row[0] else 2025
-
-    if not position:
-        conn.close()
-        return {"tiers": {}, "draft_year": draft_year, "position": position}
-
-    pos = position.upper()
-
-    # Get all prospects at this position for this draft year
-    rows = conn.execute("""
-        SELECT c.player_name, c.position, c.school, c.draft_year,
-               c.draft_team, c.draft_round, c.draft_pick,
-               c.height_inches, c.weight,
-               c.forty, c.bench, c.vertical, c.broad_jump, c.cone, c.shuttle
-        FROM combine_data c
-        WHERE c.position = ? AND c.draft_year = ?
-    """, (pos, draft_year)).fetchall()
-
-    if not rows:
-        conn.close()
-        return {"tiers": {}, "draft_year": draft_year, "position": pos}
-
-    # Get position-group stats for percentile computation
-    metric_keys = ["forty", "bench", "vertical", "broad_jump", "cone", "shuttle"]
-    metric_dirs = {"forty": "lower", "bench": "higher", "vertical": "higher",
-                   "broad_jump": "higher", "cone": "lower", "shuttle": "lower"}
-
-    pos_stats = {}
-    for mk in metric_keys:
-        all_rows = conn.execute(
-            f"SELECT {mk} FROM combine_data WHERE position = ? AND {mk} IS NOT NULL", (pos,)
-        ).fetchall()
-        vals = [r[0] for r in all_rows]
-        if vals:
-            pos_stats[mk] = vals
-
-    prospects = []
-    for row in rows:
-        p = dict(row)
-
-        # Abbreviate team
-        dt = (p.get("draft_team") or "").upper()
-        p["draft_team"] = TEAM_ABBREV.get(dt, dt[:3] if dt else None)
-
-        # Height display
-        ht = p.get("height_inches")
-        p["height_display"] = f"{ht // 12}'{ht % 12}\"" if ht else None
-
-        # Compute percentiles
-        pcts = {}
+        # Compute target's percentiles
+        target_pcts = {}
         for mk in metric_keys:
-            val = p.get(mk)
+            val = target.get(mk)
             if val is None or mk not in pos_stats:
                 continue
             all_vals = pos_stats[mk]
@@ -1846,64 +1663,224 @@ def fetch_prospect_tiers(position, draft_year=0):
                 pct = sum(1 for v in all_vals if v > val) / len(all_vals) * 100
             else:
                 pct = sum(1 for v in all_vals if v < val) / len(all_vals) * 100
-            pcts[mk] = round(pct, 1)
+            target_pcts[mk] = pct
 
-        p["percentiles"] = pcts
+        if len(target_pcts) < 2:
+            return {"comps": [], "prospect_name": target["player_name"]}
 
-        # Average athletic percentile (across available metrics)
-        if pcts:
-            p["avg_percentile"] = round(sum(pcts.values()) / len(pcts), 1)
-        else:
-            p["avg_percentile"] = None
+        # Get all other players at same position (excluding target) with draft pick data
+        others = conn.execute("""
+            SELECT c.player_name, c.position, c.draft_year, c.school,
+                   c.draft_team, c.draft_round, c.draft_pick,
+                   c.forty, c.bench, c.vertical, c.broad_jump, c.cone, c.shuttle,
+                   d.career_av, d.games as nfl_games,
+                   d.pass_yards as nfl_pass_yards, d.pass_tds as nfl_pass_tds,
+                   d.rush_yards as nfl_rush_yards, d.rush_tds as nfl_rush_tds,
+                   d.rec_yards as nfl_rec_yards, d.rec_tds as nfl_rec_tds,
+                   d.receptions as nfl_receptions, d.allpro, d.probowls
+            FROM combine_data c
+            LEFT JOIN draft_picks d
+                ON c.draft_year = d.season
+                AND LOWER(REPLACE(c.player_name, ' ', '')) = LOWER(REPLACE(d.player_name, ' ', ''))
+                AND c.position = d.position
+            WHERE c.position = ?
+              AND LOWER(REPLACE(c.player_name, ' ', '')) != ?
+        """, (pos, search_name)).fetchall()
 
-        prospects.append(p)
+        # Compute similarity for each candidate
+        comps = []
+        for row in others:
+            other = dict(row)
 
-    # Group into tiers
-    tiers = {"elite": [], "above_avg": [], "average": [], "below_avg": [], "no_data": []}
-    for p in prospects:
-        avg = p["avg_percentile"]
-        if avg is None:
-            tiers["no_data"].append(p)
-        elif avg >= 80:
-            tiers["elite"].append(p)
-        elif avg >= 60:
-            tiers["above_avg"].append(p)
-        elif avg >= 40:
-            tiers["average"].append(p)
-        else:
-            tiers["below_avg"].append(p)
+            # Compute this player's percentiles on shared metrics
+            shared_metrics = []
+            other_pcts = {}
+            for mk in metric_keys:
+                oval = other.get(mk)
+                if oval is None or mk not in target_pcts or mk not in pos_stats:
+                    continue
+                all_vals = pos_stats[mk]
+                if metric_dirs[mk] == "lower":
+                    pct = sum(1 for v in all_vals if v > oval) / len(all_vals) * 100
+                else:
+                    pct = sum(1 for v in all_vals if v < oval) / len(all_vals) * 100
+                other_pcts[mk] = pct
+                shared_metrics.append(mk)
 
-    # Sort within tiers by avg_percentile descending
-    for tier in tiers.values():
-        tier.sort(key=lambda x: x.get("avg_percentile") or 0, reverse=True)
+            if len(shared_metrics) < 2:
+                continue
 
-    conn.close()
-    return {"tiers": tiers, "draft_year": draft_year, "position": pos}
+            # Euclidean distance on shared percentiles (normalized to 0-100 scale)
+            dist_sq = sum((target_pcts[mk] - other_pcts[mk]) ** 2 for mk in shared_metrics)
+            max_dist = math.sqrt(len(shared_metrics) * 100 ** 2)
+            dist = math.sqrt(dist_sq)
+
+            # Convert distance to similarity score (0-100, higher = more similar)
+            similarity = round(max(0, (1 - dist / max_dist) * 100), 1)
+
+            # Abbreviate team
+            dt = (other.get("draft_team") or "").upper()
+            other["draft_team"] = TEAM_ABBREV.get(dt, dt[:3] if dt else None)
+
+            comps.append({
+                "player_name": other["player_name"],
+                "position": other["position"],
+                "draft_year": other["draft_year"],
+                "school": other.get("school"),
+                "draft_team": other.get("draft_team"),
+                "draft_round": other.get("draft_round"),
+                "draft_pick": other.get("draft_pick"),
+                "nfl_games": other.get("nfl_games"),
+                "career_av": other.get("career_av"),
+                "nfl_pass_yards": other.get("nfl_pass_yards"),
+                "nfl_pass_tds": other.get("nfl_pass_tds"),
+                "nfl_rush_yards": other.get("nfl_rush_yards"),
+                "nfl_rush_tds": other.get("nfl_rush_tds"),
+                "nfl_rec_yards": other.get("nfl_rec_yards"),
+                "nfl_rec_tds": other.get("nfl_rec_tds"),
+                "nfl_receptions": other.get("nfl_receptions"),
+                "allpro": other.get("allpro"),
+                "probowls": other.get("probowls"),
+                "similarity": similarity,
+                "shared_metrics": len(shared_metrics),
+                "percentiles": {mk: round(other_pcts[mk], 1) for mk in shared_metrics},
+            })
+
+        # Sort by similarity descending, but boost players with NFL careers
+        # Players with NFL games get priority at similar similarity levels
+        for c in comps:
+            nfl_bonus = min(5, (c.get("nfl_games") or 0) / 10)  # up to 5 pts for 50+ games
+            c["_sort_score"] = c["similarity"] + nfl_bonus
+        comps.sort(key=lambda c: c["_sort_score"], reverse=True)
+        for c in comps:
+            del c["_sort_score"]
+        comps = comps[:limit]
+
+        return {
+            "comps": comps,
+            "prospect_name": target["player_name"],
+            "prospect_percentiles": {mk: round(v, 1) for mk, v in target_pcts.items()},
+        }
+
+
+def fetch_prospect_tiers(position, draft_year=0):
+    """Return prospects at a position grouped by athletic percentile tier."""
+    with get_db() as conn:
+
+        if not draft_year:
+            row = conn.execute("SELECT MAX(draft_year) FROM combine_data").fetchone()
+            draft_year = row[0] if row and row[0] else 2025
+
+        if not position:
+            return {"tiers": {}, "draft_year": draft_year, "position": position}
+
+        pos = position.upper()
+
+        # Get all prospects at this position for this draft year
+        rows = conn.execute("""
+            SELECT c.player_name, c.position, c.school, c.draft_year,
+                   c.draft_team, c.draft_round, c.draft_pick,
+                   c.height_inches, c.weight,
+                   c.forty, c.bench, c.vertical, c.broad_jump, c.cone, c.shuttle
+            FROM combine_data c
+            WHERE c.position = ? AND c.draft_year = ?
+        """, (pos, draft_year)).fetchall()
+
+        if not rows:
+            return {"tiers": {}, "draft_year": draft_year, "position": pos}
+
+        # Get position-group stats for percentile computation
+        metric_keys = ["forty", "bench", "vertical", "broad_jump", "cone", "shuttle"]
+        metric_dirs = {"forty": "lower", "bench": "higher", "vertical": "higher",
+                       "broad_jump": "higher", "cone": "lower", "shuttle": "lower"}
+
+        pos_stats = {}
+        for mk in metric_keys:
+            all_rows = conn.execute(
+                f"SELECT {mk} FROM combine_data WHERE position = ? AND {mk} IS NOT NULL", (pos,)
+            ).fetchall()
+            vals = [r[0] for r in all_rows]
+            if vals:
+                pos_stats[mk] = vals
+
+        prospects = []
+        for row in rows:
+            p = dict(row)
+
+            # Abbreviate team
+            dt = (p.get("draft_team") or "").upper()
+            p["draft_team"] = TEAM_ABBREV.get(dt, dt[:3] if dt else None)
+
+            # Height display
+            ht = p.get("height_inches")
+            p["height_display"] = f"{ht // 12}'{ht % 12}\"" if ht else None
+
+            # Compute percentiles
+            pcts = {}
+            for mk in metric_keys:
+                val = p.get(mk)
+                if val is None or mk not in pos_stats:
+                    continue
+                all_vals = pos_stats[mk]
+                if metric_dirs[mk] == "lower":
+                    pct = sum(1 for v in all_vals if v > val) / len(all_vals) * 100
+                else:
+                    pct = sum(1 for v in all_vals if v < val) / len(all_vals) * 100
+                pcts[mk] = round(pct, 1)
+
+            p["percentiles"] = pcts
+
+            # Average athletic percentile (across available metrics)
+            if pcts:
+                p["avg_percentile"] = round(sum(pcts.values()) / len(pcts), 1)
+            else:
+                p["avg_percentile"] = None
+
+            prospects.append(p)
+
+        # Group into tiers
+        tiers = {"elite": [], "above_avg": [], "average": [], "below_avg": [], "no_data": []}
+        for p in prospects:
+            avg = p["avg_percentile"]
+            if avg is None:
+                tiers["no_data"].append(p)
+            elif avg >= 80:
+                tiers["elite"].append(p)
+            elif avg >= 60:
+                tiers["above_avg"].append(p)
+            elif avg >= 40:
+                tiers["average"].append(p)
+            else:
+                tiers["below_avg"].append(p)
+
+        # Sort within tiers by avg_percentile descending
+        for tier in tiers.values():
+            tier.sort(key=lambda x: x.get("avg_percentile") or 0, reverse=True)
+
+        return {"tiers": tiers, "draft_year": draft_year, "position": pos}
 
 
 def fetch_prospects_compare(names, draft_year=0):
     """Return combine data + percentiles for multiple prospects (for comparison)."""
-    conn = get_conn()
+    with get_db() as conn:
 
-    if not draft_year:
-        row = conn.execute("SELECT MAX(draft_year) FROM combine_data").fetchone()
-        draft_year = row[0] if row and row[0] else 2025
+        if not draft_year:
+            row = conn.execute("SELECT MAX(draft_year) FROM combine_data").fetchone()
+            draft_year = row[0] if row and row[0] else 2025
 
-    if not names:
-        conn.close()
-        return {"draft_year": draft_year, "prospects": []}
+        if not names:
+            return {"draft_year": draft_year, "prospects": []}
 
-    results = []
-    for name in names[:5]:  # max 5
-        profile = fetch_prospect_profile(name, draft_year=draft_year)
-        if profile.get("prospect"):
-            results.append({
-                "prospect": profile["prospect"],
-                "percentiles": profile["percentiles"],
-            })
+        results = []
+        for name in names[:5]:  # max 5
+            profile = fetch_prospect_profile(name, draft_year=draft_year)
+            if profile.get("prospect"):
+                results.append({
+                    "prospect": profile["prospect"],
+                    "percentiles": profile["percentiles"],
+                })
 
-    conn.close()
-    return {"draft_year": draft_year, "prospects": results}
+        return {"draft_year": draft_year, "prospects": results}
 
 
 def fetch_prospect_scores(position="", draft_year=0):
@@ -1911,9 +1888,7 @@ def fetch_prospect_scores(position="", draft_year=0):
 
     RPS = avg athletic percentile (60%) + draft capital value (30%) + size score (10%).
     """
-    conn = get_conn()
-
-    try:
+    with get_db() as conn:
         if not draft_year:
             row = conn.execute("SELECT MAX(draft_year) FROM combine_data").fetchone()
             draft_year = row[0] if row and row[0] else 2025
@@ -2037,8 +2012,6 @@ def fetch_prospect_scores(position="", draft_year=0):
             "draft_year": draft_year,
             "position": position.upper() if position else "ALL",
         }
-    finally:
-        conn.close()
 
 
 def fetch_draft_class_analytics(position=""):
@@ -2046,20 +2019,16 @@ def fetch_draft_class_analytics(position=""):
 
     Returns per-year breakdown: count, avg RPS, tier distribution, top prospect, class grade.
     """
-    conn = get_conn()
-
-    # Get all available draft years
-    years = [r[0] for r in conn.execute(
-        "SELECT DISTINCT draft_year FROM combine_data ORDER BY draft_year ASC"
-    ).fetchall()]
+    with get_db() as conn:
+        # Get all available draft years
+        years = [r[0] for r in conn.execute(
+            "SELECT DISTINCT draft_year FROM combine_data ORDER BY draft_year ASC"
+        ).fetchall()]
 
     if not years:
-        conn.close()
         return {"classes": [], "position": position.upper() if position else "ALL"}
 
     # For each year, get RPS data via fetch_prospect_scores (reuse existing logic)
-    conn.close()  # close before calling other functions
-
     classes = []
     for year in years:
         data = fetch_prospect_scores(position=position, draft_year=year)
@@ -2126,44 +2095,42 @@ def fetch_draft_class_analytics(position=""):
 
 def fetch_players_compare(player_ids, season=0):
     """Return season aggregates for multiple players (for comparison)."""
-    conn = get_conn()
+    with get_db() as conn:
 
-    career_mode = str(season).lower() == "career"
-    if not career_mode:
-        season = int(season) if season else 0
-        if not season:
-            row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-            season = row[0] if row and row[0] else 2024
+        career_mode = str(season).lower() == "career"
+        if not career_mode:
+            season = int(season) if season else 0
+            if not season:
+                row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+                season = row[0] if row and row[0] else 2024
 
-    if not player_ids:
-        conn.close()
-        return {"season": "career" if career_mode else season, "players": []}
+        if not player_ids:
+            return {"season": "career" if career_mode else season, "players": []}
 
-    placeholders = ",".join("?" * len(player_ids))
-    season_filter = "" if career_mode else "AND s.season = ?"
-    query_params = list(player_ids) if career_mode else list(player_ids) + [season]
+        placeholders = ",".join("?" * len(player_ids))
+        season_filter = "" if career_mode else "AND s.season = ?"
+        query_params = list(player_ids) if career_mode else list(player_ids) + [season]
 
-    rows = conn.execute(f"""
-        SELECT
-            p.player_id, p.full_name, p.position, p.team, p.age, p.college, p.headshot_url,
-            COUNT(*) as games,
-            COUNT(DISTINCT s.season) as seasons,
-            {_STAT_SUM_COLS}
-        FROM players p
-        JOIN player_week_stats s ON p.player_id = s.player_id
-        WHERE p.player_id IN ({placeholders}) {season_filter}
-        GROUP BY p.player_id
-    """, query_params).fetchall()
+        rows = conn.execute(f"""
+            SELECT
+                p.player_id, p.full_name, p.position, p.team, p.age, p.college, p.headshot_url,
+                COUNT(*) as games,
+                COUNT(DISTINCT s.season) as seasons,
+                {_STAT_SUM_COLS}
+            FROM players p
+            JOIN player_week_stats s ON p.player_id = s.player_id
+            WHERE p.player_id IN ({placeholders}) {season_filter}
+            GROUP BY p.player_id
+        """, query_params).fetchall()
 
-    players = []
-    for r in rows:
-        item = dict(r)
-        g = item["games"] or 1
-        item["ppg"] = round((item["fantasy_points_ppr"] or 0) / g, 1)
-        players.append(item)
+        players = []
+        for r in rows:
+            item = dict(r)
+            g = item["games"] or 1
+            item["ppg"] = round((item["fantasy_points_ppr"] or 0) / g, 1)
+            players.append(item)
 
-    conn.close()
-    return {"season": "career" if career_mode else season, "players": players}
+        return {"season": "career" if career_mode else season, "players": players}
 
 
 # ---------------------------------------------------------------------------
@@ -2201,124 +2168,122 @@ def fetch_college_players(
     season=0,
 ):
     """Return paginated college player stats from cfb_player_season_stats."""
-    conn = get_conn()
+    with get_db() as conn:
 
-    # Default to latest season
-    if not season:
-        row = conn.execute("SELECT MAX(season) FROM cfb_player_season_stats").fetchone()
-        season = row[0] if row and row[0] else 2024
+        # Default to latest season
+        if not season:
+            row = conn.execute("SELECT MAX(season) FROM cfb_player_season_stats").fetchone()
+            season = row[0] if row and row[0] else 2024
 
-    # Position list
-    pos_list = []
-    if positions:
-        pos_list = [p.strip().upper() for p in positions.split(",") if p.strip()]
-    elif position:
-        pos_list = [position.strip().upper()]
+        # Position list
+        pos_list = []
+        if positions:
+            pos_list = [p.strip().upper() for p in positions.split(",") if p.strip()]
+        elif position:
+            pos_list = [position.strip().upper()]
 
-    where = ["c.season = ?"]
-    params = [season]
+        where = ["c.season = ?"]
+        params = [season]
 
-    if search:
-        search_clean = search.lower().replace(" ", "")
-        where.append("LOWER(REPLACE(c.player_name, ' ', '')) LIKE ?")
-        params.append(f"%{search_clean}%")
+        if search:
+            search_clean = search.lower().replace(" ", "")
+            where.append("LOWER(REPLACE(c.player_name, ' ', '')) LIKE ?")
+            params.append(f"%{search_clean}%")
 
-    if pos_list:
-        placeholders = ",".join("?" * len(pos_list))
-        where.append(f"c.position IN ({placeholders})")
-        params.extend(pos_list)
+        if pos_list:
+            placeholders = ",".join("?" * len(pos_list))
+            where.append(f"c.position IN ({placeholders})")
+            params.extend(pos_list)
 
-    if team:
-        where.append("c.team LIKE ?")
-        params.append(f"%{team}%")
+        if team:
+            where.append("c.team LIKE ?")
+            params.append(f"%{team}%")
 
-    if conference:
-        where.append("c.conference LIKE ?")
-        params.append(f"%{conference}%")
+        if conference:
+            where.append("c.conference LIKE ?")
+            params.append(f"%{conference}%")
 
-    where_clause = " AND ".join(where)
+        where_clause = " AND ".join(where)
 
-    # Safe sort columns
-    safe_sorts = {
-        "player_name": "c.player_name",
-        "position": "c.position",
-        "team": "c.team",
-        "conference": "c.conference",
-        "games": "c.games",
-        "completions": "c.completions",
-        "pass_attempts": "c.pass_attempts",
-        "pass_yards": "c.pass_yards",
-        "pass_tds": "c.pass_tds",
-        "ints_thrown": "c.ints_thrown",
-        "carries": "c.carries",
-        "rush_yards": "c.rush_yards",
-        "rush_tds": "c.rush_tds",
-        "receptions": "c.receptions",
-        "targets": "c.targets",
-        "rec_yards": "c.rec_yards",
-        "rec_tds": "c.rec_tds",
-        "fumbles": "c.fumbles",
-        "total_tds": "c.total_tds",
-        "total_yards": "c.total_yards",
-    }
-    # Derived sorts handled in Python
-    derived_sorts = {"completion_pct", "yards_per_carry", "yards_per_rec",
-                     "yards_per_target", "catch_rate", "yards_per_att",
-                     "pass_ypg", "rush_ypg", "rec_ypg", "total_ypg", "tds_per_game"}
+        # Safe sort columns
+        safe_sorts = {
+            "player_name": "c.player_name",
+            "position": "c.position",
+            "team": "c.team",
+            "conference": "c.conference",
+            "games": "c.games",
+            "completions": "c.completions",
+            "pass_attempts": "c.pass_attempts",
+            "pass_yards": "c.pass_yards",
+            "pass_tds": "c.pass_tds",
+            "ints_thrown": "c.ints_thrown",
+            "carries": "c.carries",
+            "rush_yards": "c.rush_yards",
+            "rush_tds": "c.rush_tds",
+            "receptions": "c.receptions",
+            "targets": "c.targets",
+            "rec_yards": "c.rec_yards",
+            "rec_tds": "c.rec_tds",
+            "fumbles": "c.fumbles",
+            "total_tds": "c.total_tds",
+            "total_yards": "c.total_yards",
+        }
+        # Derived sorts handled in Python
+        derived_sorts = {"completion_pct", "yards_per_carry", "yards_per_rec",
+                         "yards_per_target", "catch_rate", "yards_per_att",
+                         "pass_ypg", "rush_ypg", "rec_ypg", "total_ypg", "tds_per_game"}
 
-    is_derived_sort = sort_key in derived_sorts
-    order_expr = safe_sorts.get(sort_key, "c.total_yards")
-    if sort_dir.lower() not in ("asc", "desc"):
-        sort_dir = "desc"
+        is_derived_sort = sort_key in derived_sorts
+        order_expr = safe_sorts.get(sort_key, "c.total_yards")
+        if sort_dir.lower() not in ("asc", "desc"):
+            sort_dir = "desc"
 
-    # NULLS LAST
-    nulls_clause = ""
-    if not is_derived_sort and sort_key not in ("player_name", "position", "team", "conference"):
-        nulls_clause = f"CASE WHEN {order_expr} IS NULL THEN 1 ELSE 0 END,"
+        # NULLS LAST
+        nulls_clause = ""
+        if not is_derived_sort and sort_key not in ("player_name", "position", "team", "conference"):
+            nulls_clause = f"CASE WHEN {order_expr} IS NULL THEN 1 ELSE 0 END,"
 
-    # For derived sorts, fetch extra rows and sort in Python
-    fetch_limit = limit * 3 if is_derived_sort else limit
-    fetch_offset = 0 if is_derived_sort else offset
+        # For derived sorts, fetch extra rows and sort in Python
+        fetch_limit = limit * 3 if is_derived_sort else limit
+        fetch_offset = 0 if is_derived_sort else offset
 
-    query = f"""
-        SELECT
-            c.player_id, c.player_name, c.position, c.team, c.conference, c.season,
-            c.games, c.completions, c.pass_attempts, c.pass_yards, c.pass_tds,
-            c.ints_thrown, c.sacks_taken, c.carries, c.rush_yards, c.rush_tds,
-            c.receptions, c.targets, c.rec_yards, c.rec_tds,
-            c.fumbles, c.total_tds, c.total_yards
-        FROM cfb_player_season_stats c
-        WHERE {where_clause}
-        ORDER BY {nulls_clause} {order_expr} {sort_dir}
-        LIMIT ? OFFSET ?
-    """
-    params.extend([fetch_limit, fetch_offset])
+        query = f"""
+            SELECT
+                c.player_id, c.player_name, c.position, c.team, c.conference, c.season,
+                c.games, c.completions, c.pass_attempts, c.pass_yards, c.pass_tds,
+                c.ints_thrown, c.sacks_taken, c.carries, c.rush_yards, c.rush_tds,
+                c.receptions, c.targets, c.rec_yards, c.rec_tds,
+                c.fumbles, c.total_tds, c.total_yards
+            FROM cfb_player_season_stats c
+            WHERE {where_clause}
+            ORDER BY {nulls_clause} {order_expr} {sort_dir}
+            LIMIT ? OFFSET ?
+        """
+        params.extend([fetch_limit, fetch_offset])
 
-    rows = conn.execute(query, params).fetchall()
+        rows = conn.execute(query, params).fetchall()
 
-    # Count
-    count_params = params[:-2]
-    total = conn.execute(f"""
-        SELECT COUNT(*) FROM cfb_player_season_stats c WHERE {where_clause}
-    """, count_params).fetchone()[0]
+        # Count
+        count_params = params[:-2]
+        total = conn.execute(f"""
+            SELECT COUNT(*) FROM cfb_player_season_stats c WHERE {where_clause}
+        """, count_params).fetchone()[0]
 
-    items = [dict(r) for r in rows]
-    items = _enrich_college_derived(items)
+        items = [dict(r) for r in rows]
+        items = _enrich_college_derived(items)
 
-    # Python re-sort for derived metrics
-    if is_derived_sort:
-        reverse = sort_dir.lower() == "desc"
-        items.sort(key=lambda x: (x.get(sort_key) is None, -(x.get(sort_key) or 0) if reverse else (x.get(sort_key) or 0)))
-        items = items[offset:offset + limit]
+        # Python re-sort for derived metrics
+        if is_derived_sort:
+            reverse = sort_dir.lower() == "desc"
+            items.sort(key=lambda x: (x.get(sort_key) is None, -(x.get(sort_key) or 0) if reverse else (x.get(sort_key) or 0)))
+            items = items[offset:offset + limit]
 
-    conn.close()
-    return {"count": total, "season": season, "items": items}
+        return {"count": total, "season": season, "items": items}
 
 
 def fetch_college_player_profile(player_id):
     """Return a rich college player profile with all seasons + combine/draft data."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         # Get all seasons for this player
         seasons = conn.execute("""
             SELECT player_id, player_name, position, team, conference, season,
@@ -2444,32 +2409,29 @@ def fetch_college_player_profile(player_id):
             "combine": combine,
             "draft": draft,
         }
-    finally:
-        conn.close()
 
 
 def fetch_college_filter_options():
     """Return available filter values for the college screener."""
-    conn = get_conn()
+    with get_db() as conn:
 
-    seasons = [r[0] for r in conn.execute(
-        "SELECT DISTINCT season FROM cfb_player_season_stats ORDER BY season DESC"
-    ).fetchall()]
+        seasons = [r[0] for r in conn.execute(
+            "SELECT DISTINCT season FROM cfb_player_season_stats ORDER BY season DESC"
+        ).fetchall()]
 
-    teams = [r[0] for r in conn.execute(
-        "SELECT DISTINCT team FROM cfb_player_season_stats WHERE team IS NOT NULL AND team != '' ORDER BY team"
-    ).fetchall()]
+        teams = [r[0] for r in conn.execute(
+            "SELECT DISTINCT team FROM cfb_player_season_stats WHERE team IS NOT NULL AND team != '' ORDER BY team"
+        ).fetchall()]
 
-    conferences = [r[0] for r in conn.execute(
-        "SELECT DISTINCT conference FROM cfb_player_season_stats WHERE conference IS NOT NULL AND conference != '' ORDER BY conference"
-    ).fetchall()]
+        conferences = [r[0] for r in conn.execute(
+            "SELECT DISTINCT conference FROM cfb_player_season_stats WHERE conference IS NOT NULL AND conference != '' ORDER BY conference"
+        ).fetchall()]
 
-    positions = [r[0] for r in conn.execute(
-        "SELECT DISTINCT position FROM cfb_player_season_stats WHERE position IN ('QB','RB','WR','TE','FB','ATH') ORDER BY position"
-    ).fetchall()]
+        positions = [r[0] for r in conn.execute(
+            "SELECT DISTINCT position FROM cfb_player_season_stats WHERE position IN ('QB','RB','WR','TE','FB','ATH') ORDER BY position"
+        ).fetchall()]
 
-    conn.close()
-    return {"seasons": seasons, "teams": teams, "conferences": conferences, "positions": positions}
+        return {"seasons": seasons, "teams": teams, "conferences": conferences, "positions": positions}
 
 
 # ---------------------------------------------------------------------------
@@ -2509,8 +2471,7 @@ def _cfb_pos_filter(position, prefix="c"):
 
 def fetch_college_breakouts(season=None, position=None, limit=50):
     """College breakout candidates: high opportunity, lower production (gap = upside)."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
         if not season:
             season = available_seasons[0] if available_seasons else 2024
@@ -2631,8 +2592,6 @@ def fetch_college_breakouts(season=None, position=None, limit=50):
             "candidates": candidates,
             "total": len(candidates),
         }
-    finally:
-        conn.close()
 
 
 _CFB_EFFICIENCY_ANNOTATIONS = [
@@ -2652,8 +2611,7 @@ _CFB_VOLUME_ANNOTATIONS = [
 
 def fetch_college_efficiency(season=None, position=None, limit=30):
     """College efficiency rankings: points per opportunity and volume leaders."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
         if not season:
             season = available_seasons[0] if available_seasons else 2024
@@ -2755,8 +2713,6 @@ def fetch_college_efficiency(season=None, position=None, limit=30):
             "most_efficient": most_efficient,
             "volume_kings": volume_kings,
         }
-    finally:
-        conn.close()
 
 
 # College stat leader categories: (key, label, sql_expr, min_threshold_col, min_threshold_val, positions)
@@ -2779,8 +2735,7 @@ _CFB_LEADER_CATEGORIES = [
 def fetch_college_leaders(season=None, position=None, limit=10):
     """Return top college players in each stat category."""
     limit = max(1, min(25, limit))
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
         if not season:
             season = available_seasons[0] if available_seasons else 2024
@@ -2855,14 +2810,11 @@ def fetch_college_leaders(season=None, position=None, limit=10):
             "season": season,
             "available_seasons": available_seasons,
         }
-    finally:
-        conn.close()
 
 
 def fetch_college_trends(season=None, position=None, limit=30):
     """College year-over-year trends: players whose production rose or fell vs prior season."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
         if not season:
             season = available_seasons[0] if available_seasons else 2024
@@ -2946,14 +2898,11 @@ def fetch_college_trends(season=None, position=None, limit=30):
             "risers": risers[:limit],
             "fallers": fallers[:limit],
         }
-    finally:
-        conn.close()
 
 
 def fetch_college_rankings(season=None, position=None, limit=50):
     """College production rankings: top producers by approximate fantasy points."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
         if not season:
             season = available_seasons[0] if available_seasons else 2024
@@ -3033,14 +2982,11 @@ def fetch_college_rankings(season=None, position=None, limit=50):
             "players": players[:limit],
             "total": n,
         }
-    finally:
-        conn.close()
 
 
 def fetch_college_streaks(season=None, position=None, limit=25):
     """College momentum: players with multi-season production growth or decline."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
         if not season:
             season = available_seasons[0] if available_seasons else 2024
@@ -3124,8 +3070,6 @@ def fetch_college_streaks(season=None, position=None, limit=25):
             "hot": hot[:limit],
             "cold": cold[:limit],
         }
-    finally:
-        conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -3150,8 +3094,7 @@ _CFB_FALLING_ANNOTATIONS = [
 def fetch_college_stock_watch(season=None, position=None, limit=30):
     """College stock watch: efficiency vs production gap.
     Uses per-game yards efficiency and YPC/YPR to identify over/undervalued."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
         if not season:
             season = available_seasons[0] if available_seasons else 2024
@@ -3293,8 +3236,6 @@ def fetch_college_stock_watch(season=None, position=None, limit=30):
             "rising": rising,
             "falling": falling,
         }
-    finally:
-        conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -3334,8 +3275,7 @@ _CFB_SCARCITY_ANNOTATIONS = {
 
 def fetch_college_scarcity(season=None):
     """College positional scarcity: PPG drop-off by position using approx fantasy points."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
         if not season:
             season = available_seasons[0] if available_seasons else 2024
@@ -3428,16 +3368,13 @@ def fetch_college_scarcity(season=None):
             "positions": positions_data,
             "scarcity_ranking": scarcity_ranking,
         }
-    finally:
-        conn.close()
 
 
 def fetch_college_consistency(season=None, position=None, limit=30):
     """College consistency: cross-season per-game stat variance for multi-year players."""
     import math as _math
 
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
         if not season:
             season = available_seasons[0] if available_seasons else 2024
@@ -3545,14 +3482,11 @@ def fetch_college_consistency(season=None, position=None, limit=30):
             "rock_solid": rock_solid,
             "wild_cards": wild_cards,
         }
-    finally:
-        conn.close()
 
 
 def fetch_college_workload(season=None, position=None, limit=50):
     """College workload monitor: touches/game, carries, targets (no snap data)."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
         if not season:
             season = available_seasons[0] if available_seasons else 2024
@@ -3635,16 +3569,13 @@ def fetch_college_workload(season=None, position=None, limit=50):
             "available_seasons": available_seasons,
             "count": len(players),
         }
-    finally:
-        conn.close()
 
 
 def fetch_college_dual_threat(season=None, position=None, limit=50):
     """College dual-threat index: rush + receiving versatility."""
     import math as _math
 
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
         if not season:
             season = available_seasons[0] if available_seasons else 2024
@@ -3724,14 +3655,11 @@ def fetch_college_dual_threat(season=None, position=None, limit=50):
             "available_seasons": available_seasons,
             "count": len(players),
         }
-    finally:
-        conn.close()
 
 
 def fetch_college_snap_efficiency(season=None, position=None, limit=50):
     """College touch efficiency: fantasy points per touch (no snap data available)."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
         if not season:
             season = available_seasons[0] if available_seasons else 2024
@@ -3799,8 +3727,6 @@ def fetch_college_snap_efficiency(season=None, position=None, limit=50):
             "available_seasons": available_seasons,
             "count": len(players),
         }
-    finally:
-        conn.close()
 
 
 def fetch_college_aging_curves(position=None):
@@ -3809,8 +3735,7 @@ def fetch_college_aging_curves(position=None):
     Returns average total YPG at each college experience level, plus individual
     player arcs for the top producers.
     """
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
         pos_upper = position.strip().upper() if position else None
         if pos_upper and pos_upper not in _CFB_POSITIONS:
@@ -3926,8 +3851,6 @@ def fetch_college_aging_curves(position=None):
             "x_label": "Experience Year",
             "y_label": "Total YPG",
         }
-    finally:
-        conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -3937,8 +3860,7 @@ def fetch_college_aging_curves(position=None):
 
 def fetch_college_records(position=None, limit=10):
     """College fantasy record book: single-season and career leaders."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         pos_filter = ""
         params_base = []
         if position and position.upper() in ("QB", "RB", "WR", "TE", "ATH", "FB"):
@@ -4085,14 +4007,11 @@ def fetch_college_records(position=None, limit=10):
             "career_fpts": career_fpts,
             "career_yards": career_yards,
         }
-    finally:
-        conn.close()
 
 
 def fetch_college_season_recap(season=None):
     """College season recap with MVP, position leaders, breakouts."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         cursor = conn.cursor()
 
         if not season:
@@ -4230,14 +4149,11 @@ def fetch_college_season_recap(season=None):
             "breakouts": breakouts[:5],
             "busts": busts[:5],
         }
-    finally:
-        conn.close()
 
 
 def fetch_college_season_awards(season=None, position=None):
     """College fantasy season superlatives — simplified awards using season-level data."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         cursor = conn.cursor()
 
         cursor.execute("SELECT DISTINCT season FROM cfb_player_season_stats ORDER BY season DESC")
@@ -4412,8 +4328,6 @@ def fetch_college_season_awards(season=None, position=None):
             "available_seasons": available_seasons,
             "awards": awards,
         }
-    finally:
-        conn.close()
 
 
 def fetch_college_stat_explorer(season=None, position=None, x_stat="total_ypg", y_stat="ppg"):
@@ -4427,8 +4341,7 @@ def fetch_college_stat_explorer(season=None, position=None, x_stat="total_ypg", 
         "games": "Games", "opportunities_g": "Opps/G",
     }
 
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         cursor = conn.cursor()
 
         cursor.execute("SELECT DISTINCT season FROM cfb_player_season_stats ORDER BY season DESC")
@@ -4527,8 +4440,6 @@ def fetch_college_stat_explorer(season=None, position=None, x_stat="total_ypg", 
             "players": players,
             "metrics": COLLEGE_METRICS,
         }
-    finally:
-        conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -4536,30 +4447,28 @@ def fetch_college_stat_explorer(season=None, position=None, x_stat="total_ypg", 
 # ---------------------------------------------------------------------------
 
 def init_waitlist_table():
-    conn = get_conn()
-    conn.execute("""
-        CREATE TABLE IF NOT EXISTS waitlist (
-            email TEXT UNIQUE NOT NULL,
-            created_at TEXT NOT NULL DEFAULT (datetime('now'))
-        )
-    """)
-    conn.commit()
-    conn.close()
+    with get_db() as conn:
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS waitlist (
+                email TEXT UNIQUE NOT NULL,
+                created_at TEXT NOT NULL DEFAULT (datetime('now'))
+            )
+        """)
+        conn.commit()
 
 
 def add_to_waitlist(email: str) -> dict:
     email = email.strip().lower()
     if not re.match(r'^[^@\s]+@[^@\s]+\.[^@\s]+$', email):
         return {"status": "error", "message": "invalid email format"}
-    conn = get_conn()
-    try:
-        conn.execute("INSERT INTO waitlist (email) VALUES (?)", (email,))
-        conn.commit()
-        result = {"status": "ok"}
-    except sqlite3.IntegrityError:
-        result = {"status": "duplicate"}
-    conn.close()
-    return result
+    with get_db() as conn:
+        try:
+            conn.execute("INSERT INTO waitlist (email) VALUES (?)", (email,))
+            conn.commit()
+            result = {"status": "ok"}
+        except sqlite3.IntegrityError:
+            result = {"status": "duplicate"}
+        return result
 
 
 # ---------------------------------------------------------------------------
@@ -4579,115 +4488,114 @@ def fetch_aging_curves(position="WR"):
     if position not in FANTASY_POSITIONS:
         position = "WR"
 
-    conn = get_conn()
+    with get_db() as conn:
 
-    # --- Baseline: average PPG per age bucket for this position ---
-    # Each player-season = one data point: (age_at_season, ppg_that_season)
-    # We compute age at each season from birth_date or the stored age column
-    # Since we store current age, we back-compute: age_at_season = current_age - (latest_season - season)
-    latest_season_row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-    latest_season = latest_season_row[0] if latest_season_row and latest_season_row[0] else 2024
+        # --- Baseline: average PPG per age bucket for this position ---
+        # Each player-season = one data point: (age_at_season, ppg_that_season)
+        # We compute age at each season from birth_date or the stored age column
+        # Since we store current age, we back-compute: age_at_season = current_age - (latest_season - season)
+        latest_season_row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+        latest_season = latest_season_row[0] if latest_season_row and latest_season_row[0] else 2024
 
-    rows = conn.execute("""
-        SELECT
-            p.player_id,
-            p.full_name,
-            p.team,
-            p.position,
-            p.age,
-            s.season,
-            COUNT(DISTINCT s.week) as games,
-            SUM(s.fantasy_points_ppr) as total_ppr
-        FROM player_week_stats s
-        JOIN players p ON p.player_id = s.player_id
-        WHERE p.position = ?
-          AND p.age IS NOT NULL
-          AND s.fantasy_points_ppr IS NOT NULL
-        GROUP BY p.player_id, s.season
-        HAVING games >= 4
-        ORDER BY total_ppr DESC
-    """, (position,)).fetchall()
+        rows = conn.execute("""
+            SELECT
+                p.player_id,
+                p.full_name,
+                p.team,
+                p.position,
+                p.age,
+                s.season,
+                COUNT(DISTINCT s.week) as games,
+                SUM(s.fantasy_points_ppr) as total_ppr
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE p.position = ?
+              AND p.age IS NOT NULL
+              AND s.fantasy_points_ppr IS NOT NULL
+            GROUP BY p.player_id, s.season
+            HAVING games >= 4
+            ORDER BY total_ppr DESC
+        """, (position,)).fetchall()
 
-    # Compute age-at-season for each player-season
-    # age_at_season = current_age - (latest_season - season)
-    baseline_buckets = {}  # age -> [ppg_values]
-    player_arcs = {}  # player_id -> {name, team, points: [{age, ppg, season}]}
+        # Compute age-at-season for each player-season
+        # age_at_season = current_age - (latest_season - season)
+        baseline_buckets = {}  # age -> [ppg_values]
+        player_arcs = {}  # player_id -> {name, team, points: [{age, ppg, season}]}
 
-    for r in rows:
-        player_id = r[0]
-        name = r[1]
-        team = r[2]
-        pos = r[3]
-        current_age = r[4]
-        season = r[5]
-        games = r[6]
-        total_ppr = r[7] or 0
+        for r in rows:
+            player_id = r[0]
+            name = r[1]
+            team = r[2]
+            pos = r[3]
+            current_age = r[4]
+            season = r[5]
+            games = r[6]
+            total_ppr = r[7] or 0
 
-        age_at_season = round(current_age - (latest_season - season))
-        if age_at_season < 19 or age_at_season > 42:
-            continue
+            age_at_season = round(current_age - (latest_season - season))
+            if age_at_season < 19 or age_at_season > 42:
+                continue
 
-        ppg = round(total_ppr / max(games, 1), 1)
+            ppg = round(total_ppr / max(games, 1), 1)
 
-        # Add to baseline
-        if age_at_season not in baseline_buckets:
-            baseline_buckets[age_at_season] = []
-        baseline_buckets[age_at_season].append(ppg)
+            # Add to baseline
+            if age_at_season not in baseline_buckets:
+                baseline_buckets[age_at_season] = []
+            baseline_buckets[age_at_season].append(ppg)
 
-        # Add to player arc
-        if player_id not in player_arcs:
-            player_arcs[player_id] = {
-                "name": name,
-                "team": team,
-                "position": pos,
-                "career_ppg": 0,
-                "total_ppr": 0,
-                "total_games": 0,
-                "points": [],
-            }
-        player_arcs[player_id]["points"].append({
-            "age": age_at_season,
-            "ppg": ppg,
-            "season": season,
-        })
-        player_arcs[player_id]["total_ppr"] += total_ppr
-        player_arcs[player_id]["total_games"] += games
+            # Add to player arc
+            if player_id not in player_arcs:
+                player_arcs[player_id] = {
+                    "name": name,
+                    "team": team,
+                    "position": pos,
+                    "career_ppg": 0,
+                    "total_ppr": 0,
+                    "total_games": 0,
+                    "points": [],
+                }
+            player_arcs[player_id]["points"].append({
+                "age": age_at_season,
+                "ppg": ppg,
+                "season": season,
+            })
+            player_arcs[player_id]["total_ppr"] += total_ppr
+            player_arcs[player_id]["total_games"] += games
 
-    # Build baseline (min 5 player-seasons per age bucket)
-    baseline = []
-    for age in sorted(baseline_buckets.keys()):
-        values = baseline_buckets[age]
-        if len(values) >= 5:
-            baseline.append({
-                "age": age,
-                "avg_ppg": round(sum(values) / len(values), 1),
-                "count": len(values),
+        # Build baseline (min 5 player-seasons per age bucket)
+        baseline = []
+        for age in sorted(baseline_buckets.keys()):
+            values = baseline_buckets[age]
+            if len(values) >= 5:
+                baseline.append({
+                    "age": age,
+                    "avg_ppg": round(sum(values) / len(values), 1),
+                    "count": len(values),
+                })
+
+        # Pick top 10 players by career PPG (min 2 seasons)
+        for pid, arc in player_arcs.items():
+            arc["career_ppg"] = round(arc["total_ppr"] / max(arc["total_games"], 1), 1)
+            arc["points"].sort(key=lambda x: x["age"])
+
+        top_players = sorted(
+            [arc for arc in player_arcs.values() if len(arc["points"]) >= 2],
+            key=lambda x: x["career_ppg"],
+            reverse=True,
+        )[:10]
+
+        # Clean up output
+        players_out = []
+        for arc in top_players:
+            players_out.append({
+                "name": arc["name"],
+                "team": arc["team"],
+                "position": arc["position"],
+                "career_ppg": arc["career_ppg"],
+                "points": arc["points"],
             })
 
-    # Pick top 10 players by career PPG (min 2 seasons)
-    for pid, arc in player_arcs.items():
-        arc["career_ppg"] = round(arc["total_ppr"] / max(arc["total_games"], 1), 1)
-        arc["points"].sort(key=lambda x: x["age"])
-
-    top_players = sorted(
-        [arc for arc in player_arcs.values() if len(arc["points"]) >= 2],
-        key=lambda x: x["career_ppg"],
-        reverse=True,
-    )[:10]
-
-    # Clean up output
-    players_out = []
-    for arc in top_players:
-        players_out.append({
-            "name": arc["name"],
-            "team": arc["team"],
-            "position": arc["position"],
-            "career_ppg": arc["career_ppg"],
-            "points": arc["points"],
-        })
-
-    conn.close()
-    return {"baseline": baseline, "players": players_out}
+        return {"baseline": baseline, "players": players_out}
 
 
 # ---------------------------------------------------------------------------
@@ -4826,109 +4734,107 @@ def fetch_heatmap(position="WR", group="production", season=None):
     stat_labels = {s[0]: s[1] for s in stat_defs}
     higher_is_better = {s[0]: s[2] for s in stat_defs}
 
-    conn = get_conn()
+    with get_db() as conn:
 
-    # Determine season
-    if not season:
-        row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-        season = row[0] if row and row[0] else 2024
+        # Determine season
+        if not season:
+            row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+            season = row[0] if row and row[0] else 2024
 
-    # Fetch all players at this position with aggregated season stats
-    rows = conn.execute(f"""
-        SELECT
-            p.player_id,
-            p.full_name,
-            p.team,
-            p.position,
-            COUNT(DISTINCT s.week) as games,
-            {_STAT_SUM_COLS}
-        FROM players p
-        JOIN player_week_stats s ON p.player_id = s.player_id
-        WHERE p.position = ?
-          AND s.season = ?
-          AND s.fantasy_points_ppr IS NOT NULL
-        GROUP BY p.player_id
-        HAVING games >= 4
-        ORDER BY fantasy_points_ppr DESC
-    """, (position, season)).fetchall()
+        # Fetch all players at this position with aggregated season stats
+        rows = conn.execute(f"""
+            SELECT
+                p.player_id,
+                p.full_name,
+                p.team,
+                p.position,
+                COUNT(DISTINCT s.week) as games,
+                {_STAT_SUM_COLS}
+            FROM players p
+            JOIN player_week_stats s ON p.player_id = s.player_id
+            WHERE p.position = ?
+              AND s.season = ?
+              AND s.fantasy_points_ppr IS NOT NULL
+            GROUP BY p.player_id
+            HAVING games >= 4
+            ORDER BY fantasy_points_ppr DESC
+        """, (position, season)).fetchall()
 
-    if not rows:
-        conn.close()
-        return {"players": [], "stat_keys": stat_keys, "stat_labels": stat_labels, "higher_is_better": higher_is_better}
+        if not rows:
+            return {"players": [], "stat_keys": stat_keys, "stat_labels": stat_labels, "higher_is_better": higher_is_better}
 
-    # Build player dicts with derived stats
-    all_players = []
-    for r in rows:
-        d = dict(r)
-        games = d["games"] or 1
-        ppr = d.get("fantasy_points_ppr") or 0
-        d["ppg"] = round(ppr / games, 1)
-        d["comp_pct"] = _safe_div((d.get("completions") or 0) * 100, d.get("attempts"), 1)
-        d["yards_per_attempt"] = _safe_div(d.get("passing_yards") or 0, d.get("attempts"), 1)
-        d["td_rate"] = _safe_div((d.get("passing_tds") or 0) * 100, d.get("attempts"), 1)
-        d["int_rate"] = _safe_div((d.get("turnovers") or 0) * 100, d.get("attempts"), 1)
-        d["yards_per_carry"] = _safe_div(d.get("rushing_yards") or 0, d.get("carries"), 1)
-        d["yards_per_reception"] = _safe_div(d.get("receiving_yards") or 0, d.get("receptions"), 1)
-        d["yards_per_target"] = _safe_div(d.get("receiving_yards") or 0, d.get("targets"), 1)
-        d["catch_rate"] = _safe_div((d.get("receptions") or 0) * 100, d.get("targets"), 1)
-        d["snap_pct"] = None  # will be filled from rate metrics
-        all_players.append(d)
+        # Build player dicts with derived stats
+        all_players = []
+        for r in rows:
+            d = dict(r)
+            games = d["games"] or 1
+            ppr = d.get("fantasy_points_ppr") or 0
+            d["ppg"] = round(ppr / games, 1)
+            d["comp_pct"] = _safe_div((d.get("completions") or 0) * 100, d.get("attempts"), 1)
+            d["yards_per_attempt"] = _safe_div(d.get("passing_yards") or 0, d.get("attempts"), 1)
+            d["td_rate"] = _safe_div((d.get("passing_tds") or 0) * 100, d.get("attempts"), 1)
+            d["int_rate"] = _safe_div((d.get("turnovers") or 0) * 100, d.get("attempts"), 1)
+            d["yards_per_carry"] = _safe_div(d.get("rushing_yards") or 0, d.get("carries"), 1)
+            d["yards_per_reception"] = _safe_div(d.get("receiving_yards") or 0, d.get("receptions"), 1)
+            d["yards_per_target"] = _safe_div(d.get("receiving_yards") or 0, d.get("targets"), 1)
+            d["catch_rate"] = _safe_div((d.get("receptions") or 0) * 100, d.get("targets"), 1)
+            d["snap_pct"] = None  # will be filled from rate metrics
+            all_players.append(d)
 
-    # Enrich with rate metrics from player_week_metrics
-    _enrich_with_rate_metrics(conn, all_players, season=season)
+        # Enrich with rate metrics from player_week_metrics
+        _enrich_with_rate_metrics(conn, all_players, season=season)
 
-    conn.close()
 
-    # Compute percentiles within position group for each stat
-    # First, collect all values for each stat (exclude None)
-    stat_values = {key: [] for key in stat_keys}
-    for p in all_players:
+        # Compute percentiles within position group for each stat
+        # First, collect all values for each stat (exclude None)
+        stat_values = {key: [] for key in stat_keys}
+        for p in all_players:
+            for key in stat_keys:
+                val = p.get(key)
+                if val is not None:
+                    stat_values[key].append(val)
+
+        # Sort values for percentile computation
         for key in stat_keys:
-            val = p.get(key)
-            if val is not None:
-                stat_values[key].append(val)
+            stat_values[key].sort()
 
-    # Sort values for percentile computation
-    for key in stat_keys:
-        stat_values[key].sort()
+        def percentile_of(val, sorted_vals):
+            """Compute percentile rank of val within sorted_vals."""
+            if not sorted_vals or val is None:
+                return None
+            n = len(sorted_vals)
+            count_below = sum(1 for v in sorted_vals if v < val)
+            count_equal = sum(1 for v in sorted_vals if v == val)
+            pct = round((count_below + count_equal * 0.5) / n * 100, 1)
+            return pct
 
-    def percentile_of(val, sorted_vals):
-        """Compute percentile rank of val within sorted_vals."""
-        if not sorted_vals or val is None:
-            return None
-        n = len(sorted_vals)
-        count_below = sum(1 for v in sorted_vals if v < val)
-        count_equal = sum(1 for v in sorted_vals if v == val)
-        pct = round((count_below + count_equal * 0.5) / n * 100, 1)
-        return pct
+        # Build top 25 output (already sorted by PPR desc)
+        top_25 = all_players[:25]
+        players_out = []
+        for p in top_25:
+            stats = {}
+            for key in stat_keys:
+                val = p.get(key)
+                pct = percentile_of(val, stat_values[key])
+                # For "lower is better" stats, invert the percentile
+                if pct is not None and not higher_is_better.get(key, True):
+                    pct = round(100 - pct, 1)
+                stats[key] = {
+                    "value": val,
+                    "percentile": pct,
+                }
+            players_out.append({
+                "name": p.get("full_name") or p.get("player_name") or "Unknown",
+                "team": p.get("team") or "",
+                "stats": stats,
+            })
 
-    # Build top 25 output (already sorted by PPR desc)
-    top_25 = all_players[:25]
-    players_out = []
-    for p in top_25:
-        stats = {}
-        for key in stat_keys:
-            val = p.get(key)
-            pct = percentile_of(val, stat_values[key])
-            # For "lower is better" stats, invert the percentile
-            if pct is not None and not higher_is_better.get(key, True):
-                pct = round(100 - pct, 1)
-            stats[key] = {
-                "value": val,
-                "percentile": pct,
-            }
-        players_out.append({
-            "name": p.get("full_name") or p.get("player_name") or "Unknown",
-            "team": p.get("team") or "",
-            "stats": stats,
-        })
-
-    return {
-        "players": players_out,
-        "stat_keys": stat_keys,
-        "stat_labels": stat_labels,
-        "higher_is_better": higher_is_better,
-    }
+        return {
+            "players": players_out,
+            "stat_keys": stat_keys,
+            "stat_labels": stat_labels,
+            "higher_is_better": higher_is_better,
+        }
 
 
 # ---------------------------------------------------------------------------
@@ -4936,38 +4842,37 @@ def fetch_heatmap(position="WR", group="production", season=None):
 # ---------------------------------------------------------------------------
 
 def init_formula_store_tables():
-    conn = get_conn()
-    conn.execute("""
-        CREATE TABLE IF NOT EXISTS formula_store (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            description TEXT NOT NULL DEFAULT '',
-            position_tags TEXT NOT NULL DEFAULT '[]',
-            stat_weights TEXT NOT NULL DEFAULT '{}',
-            creator_name TEXT NOT NULL DEFAULT 'anonymous',
-            created_at TEXT NOT NULL DEFAULT (datetime('now')),
-            rating_sum REAL NOT NULL DEFAULT 0,
-            rating_count INTEGER NOT NULL DEFAULT 0
-        )
-    """)
-    conn.execute("""
-        CREATE TABLE IF NOT EXISTS formula_ratings (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            formula_id INTEGER NOT NULL,
-            rating INTEGER NOT NULL CHECK(rating >= 1 AND rating <= 5),
-            review TEXT NOT NULL DEFAULT '',
-            created_at TEXT NOT NULL DEFAULT (datetime('now')),
-            FOREIGN KEY (formula_id) REFERENCES formula_store(id)
-        )
-    """)
-    conn.commit()
+    with get_db() as conn:
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS formula_store (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                description TEXT NOT NULL DEFAULT '',
+                position_tags TEXT NOT NULL DEFAULT '[]',
+                stat_weights TEXT NOT NULL DEFAULT '{}',
+                creator_name TEXT NOT NULL DEFAULT 'anonymous',
+                created_at TEXT NOT NULL DEFAULT (datetime('now')),
+                rating_sum REAL NOT NULL DEFAULT 0,
+                rating_count INTEGER NOT NULL DEFAULT 0
+            )
+        """)
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS formula_ratings (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                formula_id INTEGER NOT NULL,
+                rating INTEGER NOT NULL CHECK(rating >= 1 AND rating <= 5),
+                review TEXT NOT NULL DEFAULT '',
+                created_at TEXT NOT NULL DEFAULT (datetime('now')),
+                FOREIGN KEY (formula_id) REFERENCES formula_store(id)
+            )
+        """)
+        conn.commit()
 
-    # Seed formulas if table is empty
-    count = conn.execute("SELECT COUNT(*) FROM formula_store").fetchone()[0]
-    if count == 0:
-        _seed_formula_store(conn)
+        # Seed formulas if table is empty
+        count = conn.execute("SELECT COUNT(*) FROM formula_store").fetchone()[0]
+        if count == 0:
+            _seed_formula_store(conn)
 
-    conn.close()
 
 
 def _seed_formula_store(conn):
@@ -5069,127 +4974,122 @@ def _seed_formula_store(conn):
 def publish_formula(name: str, description: str, position_tags: list,
                     stat_weights: dict, creator_name: str) -> dict:
     import json
-    conn = get_conn()
-    try:
-        cur = conn.execute(
-            """INSERT INTO formula_store (name, description, position_tags, stat_weights, creator_name)
-               VALUES (?, ?, ?, ?, ?)""",
-            (name.strip(), description.strip(),
-             json.dumps(position_tags), json.dumps(stat_weights),
-             creator_name.strip() or "anonymous"),
-        )
-        conn.commit()
-        formula_id = cur.lastrowid
-        result = {"status": "ok", "id": formula_id}
-    except Exception as e:
-        result = {"status": "error", "message": str(e)}
-    conn.close()
-    return result
+    with get_db() as conn:
+        try:
+            cur = conn.execute(
+                """INSERT INTO formula_store (name, description, position_tags, stat_weights, creator_name)
+                   VALUES (?, ?, ?, ?, ?)""",
+                (name.strip(), description.strip(),
+                 json.dumps(position_tags), json.dumps(stat_weights),
+                 creator_name.strip() or "anonymous"),
+            )
+            conn.commit()
+            formula_id = cur.lastrowid
+            result = {"status": "ok", "id": formula_id}
+        except Exception as e:
+            result = {"status": "error", "message": str(e)}
+        return result
 
 
 def fetch_formula_store(position: str = "", sort: str = "newest",
                         search: str = "", limit: int = 50, offset: int = 0) -> dict:
     import json
-    conn = get_conn()
+    with get_db() as conn:
 
-    where_parts = []
-    params = []
+        where_parts = []
+        params = []
 
-    if position and position.upper() != "ALL":
-        where_parts.append("position_tags LIKE ?")
-        params.append(f'%"{position.upper()}"%')
+        if position and position.upper() != "ALL":
+            where_parts.append("position_tags LIKE ?")
+            params.append(f'%"{position.upper()}"%')
 
-    if search:
-        where_parts.append("name LIKE ?")
-        params.append(f"%{search}%")
+        if search:
+            where_parts.append("name LIKE ?")
+            params.append(f"%{search}%")
 
-    where_sql = ("WHERE " + " AND ".join(where_parts)) if where_parts else ""
+        where_sql = ("WHERE " + " AND ".join(where_parts)) if where_parts else ""
 
-    sort_map = {
-        "newest": "created_at DESC",
-        "rating": "CASE WHEN rating_count > 0 THEN rating_sum / rating_count ELSE 0 END DESC",
-        "popular": "rating_count DESC",
-    }
-    order_sql = sort_map.get(sort, "created_at DESC")
+        sort_map = {
+            "newest": "created_at DESC",
+            "rating": "CASE WHEN rating_count > 0 THEN rating_sum / rating_count ELSE 0 END DESC",
+            "popular": "rating_count DESC",
+        }
+        order_sql = sort_map.get(sort, "created_at DESC")
 
-    rows = conn.execute(f"""
-        SELECT id, name, description, position_tags, creator_name, created_at,
-               rating_sum, rating_count
-        FROM formula_store
-        {where_sql}
-        ORDER BY {order_sql}
-        LIMIT ? OFFSET ?
-    """, params + [limit, offset]).fetchall()
+        rows = conn.execute(f"""
+            SELECT id, name, description, position_tags, creator_name, created_at,
+                   rating_sum, rating_count
+            FROM formula_store
+            {where_sql}
+            ORDER BY {order_sql}
+            LIMIT ? OFFSET ?
+        """, params + [limit, offset]).fetchall()
 
-    count_row = conn.execute(f"SELECT COUNT(*) FROM formula_store {where_sql}", params).fetchone()
-    total = count_row[0] if count_row else 0
-    conn.close()
+        count_row = conn.execute(f"SELECT COUNT(*) FROM formula_store {where_sql}", params).fetchone()
+        total = count_row[0] if count_row else 0
 
-    formulas = []
-    for r in rows:
-        avg_rating = round(r[6] / r[7], 1) if r[7] > 0 else 0
-        formulas.append({
-            "id": r[0],
-            "name": r[1],
-            "description": r[2],
-            "position_tags": json.loads(r[3]) if r[3] else [],
-            "creator_name": r[4],
-            "created_at": r[5],
-            "avg_rating": avg_rating,
-            "rating_count": r[7],
-        })
+        formulas = []
+        for r in rows:
+            avg_rating = round(r[6] / r[7], 1) if r[7] > 0 else 0
+            formulas.append({
+                "id": r[0],
+                "name": r[1],
+                "description": r[2],
+                "position_tags": json.loads(r[3]) if r[3] else [],
+                "creator_name": r[4],
+                "created_at": r[5],
+                "avg_rating": avg_rating,
+                "rating_count": r[7],
+            })
 
-    return {"formulas": formulas, "total": total}
+        return {"formulas": formulas, "total": total}
 
 
 def get_formula_detail(formula_id: int) -> dict:
     import json
-    conn = get_conn()
-    row = conn.execute(
-        "SELECT id, name, description, position_tags, stat_weights, creator_name, created_at, rating_sum, rating_count FROM formula_store WHERE id = ?",
-        (formula_id,),
-    ).fetchone()
-    conn.close()
+    with get_db() as conn:
+        row = conn.execute(
+            "SELECT id, name, description, position_tags, stat_weights, creator_name, created_at, rating_sum, rating_count FROM formula_store WHERE id = ?",
+            (formula_id,),
+        ).fetchone()
 
-    if not row:
-        return {"status": "not_found"}
+        if not row:
+            return {"status": "not_found"}
 
-    avg_rating = round(row[7] / row[8], 1) if row[8] > 0 else 0
-    return {
-        "id": row[0],
-        "name": row[1],
-        "description": row[2],
-        "position_tags": json.loads(row[3]) if row[3] else [],
-        "stat_weights": json.loads(row[4]) if row[4] else {},
-        "creator_name": row[5],
-        "created_at": row[6],
-        "avg_rating": avg_rating,
-        "rating_count": row[8],
-    }
+        avg_rating = round(row[7] / row[8], 1) if row[8] > 0 else 0
+        return {
+            "id": row[0],
+            "name": row[1],
+            "description": row[2],
+            "position_tags": json.loads(row[3]) if row[3] else [],
+            "stat_weights": json.loads(row[4]) if row[4] else {},
+            "creator_name": row[5],
+            "created_at": row[6],
+            "avg_rating": avg_rating,
+            "rating_count": row[8],
+        }
 
 
 def rate_formula(formula_id: int, rating: int, review: str = "") -> dict:
     if rating < 1 or rating > 5:
         return {"status": "error", "message": "rating must be 1-5"}
 
-    conn = get_conn()
-    # Check formula exists
-    exists = conn.execute("SELECT id FROM formula_store WHERE id = ?", (formula_id,)).fetchone()
-    if not exists:
-        conn.close()
-        return {"status": "not_found"}
+    with get_db() as conn:
+        # Check formula exists
+        exists = conn.execute("SELECT id FROM formula_store WHERE id = ?", (formula_id,)).fetchone()
+        if not exists:
+            return {"status": "not_found"}
 
-    conn.execute(
-        "INSERT INTO formula_ratings (formula_id, rating, review) VALUES (?, ?, ?)",
-        (formula_id, rating, review.strip()),
-    )
-    conn.execute(
-        "UPDATE formula_store SET rating_sum = rating_sum + ?, rating_count = rating_count + 1 WHERE id = ?",
-        (rating, formula_id),
-    )
-    conn.commit()
-    conn.close()
-    return {"status": "ok"}
+        conn.execute(
+            "INSERT INTO formula_ratings (formula_id, rating, review) VALUES (?, ?, ?)",
+            (formula_id, rating, review.strip()),
+        )
+        conn.execute(
+            "UPDATE formula_store SET rating_sum = rating_sum + ?, rating_count = rating_count + 1 WHERE id = ?",
+            (rating, formula_id),
+        )
+        conn.commit()
+        return {"status": "ok"}
 
 
 # ---------------------------------------------------------------------------
@@ -5197,44 +5097,41 @@ def rate_formula(formula_id: int, rating: int, review: str = "") -> dict:
 # ---------------------------------------------------------------------------
 
 def _init_analytics_table():
-    conn = get_conn()
-    conn.execute("""
-        CREATE TABLE IF NOT EXISTS pageviews (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            page TEXT NOT NULL,
-            created_at TEXT NOT NULL DEFAULT (datetime('now'))
-        )
-    """)
-    conn.commit()
-    conn.close()
+    with get_db() as conn:
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS pageviews (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                page TEXT NOT NULL,
+                created_at TEXT NOT NULL DEFAULT (datetime('now'))
+            )
+        """)
+        conn.commit()
 
 
 def log_pageview(page: str):
     try:
-        conn = get_conn()
-        conn.execute("INSERT INTO pageviews (page) VALUES (?)", (page[:200],))
-        conn.commit()
-        conn.close()
+        with get_db() as conn:
+            conn.execute("INSERT INTO pageviews (page) VALUES (?)", (page[:200],))
+            conn.commit()
     except Exception:
         pass
 
 
 def get_analytics_summary() -> dict:
     try:
-        conn = get_conn()
-        total = conn.execute("SELECT COUNT(*) FROM pageviews").fetchone()[0]
-        by_page = conn.execute(
-            "SELECT page, COUNT(*) as views FROM pageviews GROUP BY page ORDER BY views DESC LIMIT 20"
-        ).fetchall()
-        by_day = conn.execute(
-            "SELECT DATE(created_at) as day, COUNT(*) as views FROM pageviews GROUP BY day ORDER BY day DESC LIMIT 30"
-        ).fetchall()
-        conn.close()
-        return {
-            "total": total,
-            "by_page": [{"page": r[0], "views": r[1]} for r in by_page],
-            "by_day": [{"day": r[0], "views": r[1]} for r in by_day],
-        }
+        with get_db() as conn:
+            total = conn.execute("SELECT COUNT(*) FROM pageviews").fetchone()[0]
+            by_page = conn.execute(
+                "SELECT page, COUNT(*) as views FROM pageviews GROUP BY page ORDER BY views DESC LIMIT 20"
+            ).fetchall()
+            by_day = conn.execute(
+                "SELECT DATE(created_at) as day, COUNT(*) as views FROM pageviews GROUP BY day ORDER BY day DESC LIMIT 30"
+            ).fetchall()
+            return {
+                "total": total,
+                "by_page": [{"page": r[0], "views": r[1]} for r in by_page],
+                "by_day": [{"day": r[0], "views": r[1]} for r in by_day],
+            }
     except Exception:
         return {"total": 0, "by_page": [], "by_day": []}
 
@@ -5302,63 +5199,62 @@ def fetch_trade_values(player_ids):
     if not player_ids:
         return []
 
-    conn = get_conn()
+    with get_db() as conn:
 
-    # Get latest season
-    row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-    latest_season = row[0] if row and row[0] else 2024
+        # Get latest season
+        row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+        latest_season = row[0] if row and row[0] else 2024
 
-    placeholders = ",".join(["?"] * len(player_ids))
+        placeholders = ",".join(["?"] * len(player_ids))
 
-    # Fetch player bio + season PPR PPG
-    query = f"""
-        SELECT
-            p.player_id, p.full_name, p.position, p.team, p.age,
-            SUM(s.fantasy_points_ppr) as total_ppr,
-            COUNT(DISTINCT s.week) as games
-        FROM players p
-        LEFT JOIN player_week_stats s
-            ON s.player_id = p.player_id AND s.season = ?
-        WHERE p.player_id IN ({placeholders})
-        GROUP BY p.player_id
-    """
-    params = [latest_season] + list(player_ids)
-    rows = conn.execute(query, params).fetchall()
-    conn.close()
+        # Fetch player bio + season PPR PPG
+        query = f"""
+            SELECT
+                p.player_id, p.full_name, p.position, p.team, p.age,
+                SUM(s.fantasy_points_ppr) as total_ppr,
+                COUNT(DISTINCT s.week) as games
+            FROM players p
+            LEFT JOIN player_week_stats s
+                ON s.player_id = p.player_id AND s.season = ?
+            WHERE p.player_id IN ({placeholders})
+            GROUP BY p.player_id
+        """
+        params = [latest_season] + list(player_ids)
+        rows = conn.execute(query, params).fetchall()
 
-    results = []
-    for r in rows:
-        pid = r[0]
-        name = r[1] or "Unknown"
-        pos = r[2] or "WR"
-        team = r[3] or "FA"
-        age = r[4]
-        total_ppr = r[5] or 0
-        games = r[6] or 0
-        ppg = round(total_ppr / games, 2) if games > 0 else 0.0
+        results = []
+        for r in rows:
+            pid = r[0]
+            name = r[1] or "Unknown"
+            pos = r[2] or "WR"
+            team = r[3] or "FA"
+            age = r[4]
+            total_ppr = r[5] or 0
+            games = r[6] or 0
+            ppg = round(total_ppr / games, 2) if games > 0 else 0.0
 
-        prod_score = round(_production_value(ppg, pos), 1)
-        age_score = round(_age_value(age, pos), 1)
-        scarcity_score = round(_scarcity_value(pos), 1)
-        trade_value = compute_trade_value(ppg, age, pos)
+            prod_score = round(_production_value(ppg, pos), 1)
+            age_score = round(_age_value(age, pos), 1)
+            scarcity_score = round(_scarcity_value(pos), 1)
+            trade_value = compute_trade_value(ppg, age, pos)
 
-        results.append({
-            "player_id": pid,
-            "full_name": name,
-            "position": pos,
-            "team": team,
-            "age": age,
-            "ppg": ppg,
-            "games": games,
-            "trade_value": trade_value,
-            "components": {
-                "production": prod_score,
-                "age": age_score,
-                "scarcity": scarcity_score,
-            },
-        })
+            results.append({
+                "player_id": pid,
+                "full_name": name,
+                "position": pos,
+                "team": team,
+                "age": age,
+                "ppg": ppg,
+                "games": games,
+                "trade_value": trade_value,
+                "components": {
+                    "production": prod_score,
+                    "age": age_score,
+                    "scarcity": scarcity_score,
+                },
+            })
 
-    return results
+        return results
 
 
 # ---------------------------------------------------------------------------
@@ -5510,84 +5406,83 @@ def _assign_tier(value):
 def fetch_dynasty_rankings(position=None, limit=200):
     """Return top dynasty-relevant players ranked by dynasty value with tiers."""
     limit = max(1, min(300, limit))
-    conn = get_conn()
+    with get_db() as conn:
 
-    # Get latest season
-    row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-    latest_season = row[0] if row and row[0] else 2024
+        # Get latest season
+        row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+        latest_season = row[0] if row and row[0] else 2024
 
-    pos_filter = ""
-    params = [latest_season]
-    if position and position.upper() in ("QB", "RB", "WR", "TE"):
-        pos_filter = "AND p.position = ?"
-        params.append(position.upper())
+        pos_filter = ""
+        params = [latest_season]
+        if position and position.upper() in ("QB", "RB", "WR", "TE"):
+            pos_filter = "AND p.position = ?"
+            params.append(position.upper())
 
-    query = f"""
-        SELECT
-            p.player_id, p.full_name, p.position, p.team, p.age,
-            p.headshot_url,
-            SUM(s.fantasy_points_ppr) as total_ppr,
-            COUNT(DISTINCT s.week) as games
-        FROM players p
-        JOIN player_week_stats s
-            ON s.player_id = p.player_id AND s.season = ?
-        WHERE p.position IN ('QB','RB','WR','TE')
-          AND p.fantasy_relevant = 1
-          {pos_filter}
-        GROUP BY p.player_id
-        HAVING games >= 3
-        ORDER BY total_ppr DESC
-    """
-    rows = conn.execute(query, params).fetchall()
-    conn.close()
+        query = f"""
+            SELECT
+                p.player_id, p.full_name, p.position, p.team, p.age,
+                p.headshot_url,
+                SUM(s.fantasy_points_ppr) as total_ppr,
+                COUNT(DISTINCT s.week) as games
+            FROM players p
+            JOIN player_week_stats s
+                ON s.player_id = p.player_id AND s.season = ?
+            WHERE p.position IN ('QB','RB','WR','TE')
+              AND p.fantasy_relevant = 1
+              {pos_filter}
+            GROUP BY p.player_id
+            HAVING games >= 3
+            ORDER BY total_ppr DESC
+        """
+        rows = conn.execute(query, params).fetchall()
 
-    results = []
-    for r in rows:
-        pid = r[0]
-        name = r[1] or "Unknown"
-        pos = r[2] or "WR"
-        team = r[3] or "FA"
-        age = r[4]
-        headshot = r[5] or ""
-        total_ppr = r[6] or 0
-        games = r[7] or 0
-        ppg = round(total_ppr / games, 2) if games > 0 else 0.0
+        results = []
+        for r in rows:
+            pid = r[0]
+            name = r[1] or "Unknown"
+            pos = r[2] or "WR"
+            team = r[3] or "FA"
+            age = r[4]
+            headshot = r[5] or ""
+            total_ppr = r[6] or 0
+            games = r[7] or 0
+            ppg = round(total_ppr / games, 2) if games > 0 else 0.0
 
-        trade_value = compute_trade_value(ppg, age, pos)
-        tier = _assign_tier(trade_value)
+            trade_value = compute_trade_value(ppg, age, pos)
+            tier = _assign_tier(trade_value)
 
-        results.append({
-            "player_id": pid,
-            "full_name": name,
-            "position": pos,
-            "team": team,
-            "age": age,
-            "headshot_url": headshot,
-            "ppg": ppg,
-            "games": games,
-            "dynasty_value": trade_value,
-            "tier": tier,
-            "tier_label": _TIER_LABELS[tier],
-        })
+            results.append({
+                "player_id": pid,
+                "full_name": name,
+                "position": pos,
+                "team": team,
+                "age": age,
+                "headshot_url": headshot,
+                "ppg": ppg,
+                "games": games,
+                "dynasty_value": trade_value,
+                "tier": tier,
+                "tier_label": _TIER_LABELS[tier],
+            })
 
-    # Sort by dynasty value descending
-    results.sort(key=lambda x: x["dynasty_value"], reverse=True)
-    results = results[:limit]
+        # Sort by dynasty value descending
+        results.sort(key=lambda x: x["dynasty_value"], reverse=True)
+        results = results[:limit]
 
-    # Group by tier for convenience
-    tiers = {}
-    for p in results:
-        t = p["tier"]
-        if t not in tiers:
-            tiers[t] = {"tier": t, "label": _TIER_LABELS[t], "players": []}
-        tiers[t]["players"].append(p)
+        # Group by tier for convenience
+        tiers = {}
+        for p in results:
+            t = p["tier"]
+            if t not in tiers:
+                tiers[t] = {"tier": t, "label": _TIER_LABELS[t], "players": []}
+            tiers[t]["players"].append(p)
 
-    return {
-        "players": results,
-        "tiers": [tiers[t] for t in sorted(tiers.keys())],
-        "total": len(results),
-        "season": latest_season,
-    }
+        return {
+            "players": results,
+            "tiers": [tiers[t] for t in sorted(tiers.keys())],
+            "total": len(results),
+            "season": latest_season,
+        }
 
 
 # ---------------------------------------------------------------------------
@@ -5614,9 +5509,7 @@ _LEADER_CATEGORIES = [
 def fetch_stat_leaders(season=None, position=None, limit=10):
     """Return top players in each stat category for the given season."""
     limit = max(1, min(25, limit))
-    conn = get_conn()
-
-    try:
+    with get_db() as conn:
         # Determine season
         if not season:
             row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
@@ -5761,8 +5654,6 @@ def fetch_stat_leaders(season=None, position=None, limit=10):
             "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
         ).fetchall()
         seasons = [r["season"] for r in season_rows]
-    finally:
-        conn.close()
 
     return {
         "categories": categories,
@@ -5783,96 +5674,95 @@ def fetch_featured():
 
 
 def _fetch_featured_uncached():
-    conn = get_conn()
+    with get_db() as conn:
 
-    # Get latest season
-    row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-    season = row[0] if row and row[0] else 2024
+        # Get latest season
+        row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+        season = row[0] if row and row[0] else 2024
 
-    results = {}
+        results = {}
 
-    # 1. Dynasty Risers — young + productive (PPG/age ratio)
-    try:
-        rows = conn.execute("""
-            SELECT p.player_id, p.full_name, p.position, p.team, p.age,
-                   SUM(s.fantasy_points_ppr) as total_ppr,
-                   COUNT(DISTINCT s.week) as games
-            FROM players p
-            JOIN player_week_stats s ON p.player_id = s.player_id AND s.season = ?
-            WHERE p.position IN ('QB','RB','WR','TE')
-              AND p.age IS NOT NULL AND p.age > 0 AND p.age <= 26
-              AND p.fantasy_relevant = 1
-            GROUP BY p.player_id
-            HAVING games >= 8
-            ORDER BY (total_ppr / games) DESC
-            LIMIT 5
-        """, (season,)).fetchall()
+        # 1. Dynasty Risers — young + productive (PPG/age ratio)
+        try:
+            rows = conn.execute("""
+                SELECT p.player_id, p.full_name, p.position, p.team, p.age,
+                       SUM(s.fantasy_points_ppr) as total_ppr,
+                       COUNT(DISTINCT s.week) as games
+                FROM players p
+                JOIN player_week_stats s ON p.player_id = s.player_id AND s.season = ?
+                WHERE p.position IN ('QB','RB','WR','TE')
+                  AND p.age IS NOT NULL AND p.age > 0 AND p.age <= 26
+                  AND p.fantasy_relevant = 1
+                GROUP BY p.player_id
+                HAVING games >= 8
+                ORDER BY (total_ppr / games) DESC
+                LIMIT 5
+            """, (season,)).fetchall()
 
-        results["dynasty_risers"] = [{
-            "name": r[1], "position": r[2], "team": r[3], "age": round(r[4]),
-            "ppg": round(r[5] / r[6], 1) if r[6] else 0, "games": r[6]
-        } for r in rows]
-    except Exception:
-        results["dynasty_risers"] = []
+            results["dynasty_risers"] = [{
+                "name": r[1], "position": r[2], "team": r[3], "age": round(r[4]),
+                "ppg": round(r[5] / r[6], 1) if r[6] else 0, "games": r[6]
+            } for r in rows]
+        except Exception:
+            results["dynasty_risers"] = []
 
-    # 2. Rookie Big Board — top prospects by draft pick
-    try:
-        row2 = conn.execute("SELECT MAX(draft_year) FROM combine_data").fetchone()
-        draft_year = row2[0] if row2 and row2[0] else 2025
+        # 2. Rookie Big Board — top prospects by draft pick
+        try:
+            row2 = conn.execute("SELECT MAX(draft_year) FROM combine_data").fetchone()
+            draft_year = row2[0] if row2 and row2[0] else 2025
 
-        rows = conn.execute("""
-            SELECT c.player_name, c.position, c.school,
-                   d.draft_round, d.draft_pick, d.team as draft_team
-            FROM combine_data c
-            LEFT JOIN draft_picks d
-                ON c.draft_year = d.season
-                AND LOWER(REPLACE(c.player_name, ' ', '')) = LOWER(REPLACE(d.player_name, ' ', ''))
-                AND c.position = d.position
-            WHERE c.draft_year = ?
-              AND c.position IN ('QB','RB','WR','TE')
-            ORDER BY COALESCE(d.draft_pick, 999) ASC, c.player_name ASC
-            LIMIT 5
-        """, (draft_year,)).fetchall()
+            rows = conn.execute("""
+                SELECT c.player_name, c.position, c.school,
+                       d.draft_round, d.draft_pick, d.team as draft_team
+                FROM combine_data c
+                LEFT JOIN draft_picks d
+                    ON c.draft_year = d.season
+                    AND LOWER(REPLACE(c.player_name, ' ', '')) = LOWER(REPLACE(d.player_name, ' ', ''))
+                    AND c.position = d.position
+                WHERE c.draft_year = ?
+                  AND c.position IN ('QB','RB','WR','TE')
+                ORDER BY COALESCE(d.draft_pick, 999) ASC, c.player_name ASC
+                LIMIT 5
+            """, (draft_year,)).fetchall()
 
-        results["rookie_board"] = [{
-            "name": r[0], "position": r[1], "school": r[2],
-            "round": r[3], "pick": r[4], "team": r[5] or "TBD"
-        } for r in rows]
-        results["draft_year"] = draft_year
-    except Exception:
-        results["rookie_board"] = []
+            results["rookie_board"] = [{
+                "name": r[0], "position": r[1], "school": r[2],
+                "round": r[3], "pick": r[4], "team": r[5] or "TBD"
+            } for r in rows]
+            results["draft_year"] = draft_year
+        except Exception:
+            results["rookie_board"] = []
 
-    # 3. Breakout Candidates — high target share, below-average PPG (upside)
-    try:
-        rows = conn.execute("""
-            SELECT p.player_id, p.full_name, p.position, p.team, p.age,
-                   SUM(s.fantasy_points_ppr) as total_ppr,
-                   COUNT(DISTINCT s.week) as games,
-                   SUM(s.targets) as total_targets,
-                   SUM(s.receptions) as total_rec
-            FROM players p
-            JOIN player_week_stats s ON p.player_id = s.player_id AND s.season = ?
-            WHERE p.position IN ('WR','TE')
-              AND p.age IS NOT NULL AND p.age <= 27
-              AND p.fantasy_relevant = 1
-            GROUP BY p.player_id
-            HAVING games >= 8 AND total_targets >= 50
-            ORDER BY (CAST(total_targets AS FLOAT) / games) DESC
-            LIMIT 5
-        """, (season,)).fetchall()
+        # 3. Breakout Candidates — high target share, below-average PPG (upside)
+        try:
+            rows = conn.execute("""
+                SELECT p.player_id, p.full_name, p.position, p.team, p.age,
+                       SUM(s.fantasy_points_ppr) as total_ppr,
+                       COUNT(DISTINCT s.week) as games,
+                       SUM(s.targets) as total_targets,
+                       SUM(s.receptions) as total_rec
+                FROM players p
+                JOIN player_week_stats s ON p.player_id = s.player_id AND s.season = ?
+                WHERE p.position IN ('WR','TE')
+                  AND p.age IS NOT NULL AND p.age <= 27
+                  AND p.fantasy_relevant = 1
+                GROUP BY p.player_id
+                HAVING games >= 8 AND total_targets >= 50
+                ORDER BY (CAST(total_targets AS FLOAT) / games) DESC
+                LIMIT 5
+            """, (season,)).fetchall()
 
-        results["breakout_candidates"] = [{
-            "name": r[1], "position": r[2], "team": r[3], "age": round(r[4]),
-            "ppg": round(r[5] / r[6], 1) if r[6] else 0,
-            "tpg": round(r[7] / r[6], 1) if r[6] else 0,
-            "games": r[6]
-        } for r in rows]
-    except Exception:
-        results["breakout_candidates"] = []
+            results["breakout_candidates"] = [{
+                "name": r[1], "position": r[2], "team": r[3], "age": round(r[4]),
+                "ppg": round(r[5] / r[6], 1) if r[6] else 0,
+                "tpg": round(r[7] / r[6], 1) if r[6] else 0,
+                "games": r[6]
+            } for r in rows]
+        except Exception:
+            results["breakout_candidates"] = []
 
-    results["season"] = season
-    conn.close()
-    return results
+        results["season"] = season
+        return results
 
 
 # ---------------------------------------------------------------------------
@@ -5964,299 +5854,292 @@ def _cosine_similarity(a, b):
 
 def fetch_player_boom_bust(player_id, season=0):
     """Analyze a player's weekly score distribution: boom/bust rates, consistency, percentiles."""
-    conn = get_conn()
+    with get_db() as conn:
 
-    # Get player info
-    player = conn.execute(
-        "SELECT player_id, full_name, position, team, age, headshot_url FROM players WHERE player_id = ?",
-        (player_id,)
-    ).fetchone()
+        # Get player info
+        player = conn.execute(
+            "SELECT player_id, full_name, position, team, age, headshot_url FROM players WHERE player_id = ?",
+            (player_id,)
+        ).fetchone()
 
-    if not player:
-        conn.close()
-        return {"error": "Player not found"}
+        if not player:
+            return {"error": "Player not found"}
 
-    player = dict(player)
-    pos = (player.get("position") or "").upper()
+        player = dict(player)
+        pos = (player.get("position") or "").upper()
 
-    # Determine season
-    if not season:
-        row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-        season = row[0] if row and row[0] else 2024
+        # Determine season
+        if not season:
+            row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+            season = row[0] if row and row[0] else 2024
 
-    # Get weekly fantasy scores for the player
-    weeks = conn.execute("""
-        SELECT week, fantasy_points_ppr
-        FROM player_week_stats
-        WHERE player_id = ? AND season = ?
-        ORDER BY week
-    """, (player_id, season)).fetchall()
+        # Get weekly fantasy scores for the player
+        weeks = conn.execute("""
+            SELECT week, fantasy_points_ppr
+            FROM player_week_stats
+            WHERE player_id = ? AND season = ?
+            ORDER BY week
+        """, (player_id, season)).fetchall()
 
-    if len(weeks) < 4:
-        conn.close()
-        return {"error": "Not enough games (need 4+)", "player": player}
+        if len(weeks) < 4:
+            return {"error": "Not enough games (need 4+)", "player": player}
 
-    weekly_scores = [{"week": w[0], "score": round(w[1] or 0, 2)} for w in weeks]
-    scores = [w[1] or 0 for w in weeks]
+        weekly_scores = [{"week": w[0], "score": round(w[1] or 0, 2)} for w in weeks]
+        scores = [w[1] or 0 for w in weeks]
 
-    # Get position average PPG for boom/bust thresholds
-    pos_avg_row = conn.execute("""
-        SELECT AVG(ppg) FROM (
-            SELECT SUM(s.fantasy_points_ppr) / COUNT(*) as ppg
+        # Get position average PPG for boom/bust thresholds
+        pos_avg_row = conn.execute("""
+            SELECT AVG(ppg) FROM (
+                SELECT SUM(s.fantasy_points_ppr) / COUNT(*) as ppg
+                FROM player_week_stats s
+                JOIN players p ON s.player_id = p.player_id
+                WHERE p.position = ? AND s.season = ?
+                GROUP BY s.player_id
+                HAVING COUNT(*) >= 4
+            )
+        """, (pos, season)).fetchone()
+        pos_avg_ppg = round(pos_avg_row[0], 2) if pos_avg_row and pos_avg_row[0] else 10.0
+
+        # Position rank by consistency among same-position players
+        all_pos_players = conn.execute("""
+            SELECT s.player_id,
+                   AVG(s.fantasy_points_ppr) as avg_ppg,
+                   GROUP_CONCAT(s.fantasy_points_ppr) as scores_csv
             FROM player_week_stats s
             JOIN players p ON s.player_id = p.player_id
             WHERE p.position = ? AND s.season = ?
             GROUP BY s.player_id
             HAVING COUNT(*) >= 4
-        )
-    """, (pos, season)).fetchone()
-    pos_avg_ppg = round(pos_avg_row[0], 2) if pos_avg_row and pos_avg_row[0] else 10.0
+        """, (pos, season)).fetchall()
 
-    # Position rank by consistency among same-position players
-    all_pos_players = conn.execute("""
-        SELECT s.player_id,
-               AVG(s.fantasy_points_ppr) as avg_ppg,
-               GROUP_CONCAT(s.fantasy_points_ppr) as scores_csv
-        FROM player_week_stats s
-        JOIN players p ON s.player_id = p.player_id
-        WHERE p.position = ? AND s.season = ?
-        GROUP BY s.player_id
-        HAVING COUNT(*) >= 4
-    """, (pos, season)).fetchall()
 
-    conn.close()
+        # Boom/bust thresholds: 1.5× and 0.5× position average
+        boom_threshold = round(pos_avg_ppg * 1.5, 2)
+        bust_threshold = round(pos_avg_ppg * 0.5, 2)
 
-    # Boom/bust thresholds: 1.5× and 0.5× position average
-    boom_threshold = round(pos_avg_ppg * 1.5, 2)
-    bust_threshold = round(pos_avg_ppg * 0.5, 2)
+        # Calculate rates
+        games = len(scores)
+        boom_count = sum(1 for s in scores if s >= boom_threshold)
+        bust_count = sum(1 for s in scores if s <= bust_threshold)
+        boom_rate = round((boom_count / games) * 100, 1)
+        bust_rate = round((bust_count / games) * 100, 1)
 
-    # Calculate rates
-    games = len(scores)
-    boom_count = sum(1 for s in scores if s >= boom_threshold)
-    bust_count = sum(1 for s in scores if s <= bust_threshold)
-    boom_rate = round((boom_count / games) * 100, 1)
-    bust_rate = round((bust_count / games) * 100, 1)
+        # Stats
+        scores_sorted = sorted(scores)
+        mean_ppg = round(statistics.mean(scores), 2)
+        median_ppg = round(statistics.median(scores), 2)
+        stdev = round(statistics.stdev(scores), 2) if len(scores) > 1 else 0
 
-    # Stats
-    scores_sorted = sorted(scores)
-    mean_ppg = round(statistics.mean(scores), 2)
-    median_ppg = round(statistics.median(scores), 2)
-    stdev = round(statistics.stdev(scores), 2) if len(scores) > 1 else 0
+        # Percentiles (floor=10th, ceiling=90th)
+        def percentile(data, pct):
+            idx = (pct / 100) * (len(data) - 1)
+            lower = int(idx)
+            upper = min(lower + 1, len(data) - 1)
+            frac = idx - lower
+            return round(data[lower] + frac * (data[upper] - data[lower]), 2)
 
-    # Percentiles (floor=10th, ceiling=90th)
-    def percentile(data, pct):
-        idx = (pct / 100) * (len(data) - 1)
-        lower = int(idx)
-        upper = min(lower + 1, len(data) - 1)
-        frac = idx - lower
-        return round(data[lower] + frac * (data[upper] - data[lower]), 2)
+        floor_ppg = percentile(scores_sorted, 10)
+        ceiling_ppg = percentile(scores_sorted, 90)
 
-    floor_ppg = percentile(scores_sorted, 10)
-    ceiling_ppg = percentile(scores_sorted, 90)
+        # Consistency score: inverse coefficient of variation, scaled 0-100
+        # CV = stdev / mean. Lower CV = more consistent. Score = max(0, 100 - CV*100)
+        if mean_ppg > 0:
+            cv = stdev / mean_ppg
+            consistency_score = round(max(0, min(100, 100 - cv * 100)), 1)
+        else:
+            consistency_score = 0
 
-    # Consistency score: inverse coefficient of variation, scaled 0-100
-    # CV = stdev / mean. Lower CV = more consistent. Score = max(0, 100 - CV*100)
-    if mean_ppg > 0:
-        cv = stdev / mean_ppg
-        consistency_score = round(max(0, min(100, 100 - cv * 100)), 1)
-    else:
-        consistency_score = 0
+        # Grade based on consistency score
+        grade_thresholds = [
+            (90, "A+"), (85, "A"), (80, "A-"),
+            (75, "B+"), (70, "B"), (65, "B-"),
+            (60, "C+"), (55, "C"), (50, "C-"),
+            (45, "D+"), (40, "D"), (35, "D-"),
+            (0, "F"),
+        ]
+        grade = "F"
+        for threshold, g in grade_thresholds:
+            if consistency_score >= threshold:
+                grade = g
+                break
 
-    # Grade based on consistency score
-    grade_thresholds = [
-        (90, "A+"), (85, "A"), (80, "A-"),
-        (75, "B+"), (70, "B"), (65, "B-"),
-        (60, "C+"), (55, "C"), (50, "C-"),
-        (45, "D+"), (40, "D"), (35, "D-"),
-        (0, "F"),
-    ]
-    grade = "F"
-    for threshold, g in grade_thresholds:
-        if consistency_score >= threshold:
-            grade = g
-            break
+        # Position rank by consistency
+        consistency_ranks = []
+        for row in all_pos_players:
+            pid = row[0]
+            csv_str = row[2]
+            if not csv_str:
+                continue
+            try:
+                p_scores = [float(x) for x in csv_str.split(",")]
+            except (ValueError, TypeError):
+                continue
+            if len(p_scores) < 2:
+                continue
+            p_mean = statistics.mean(p_scores)
+            p_stdev = statistics.stdev(p_scores)
+            p_cv = p_stdev / p_mean if p_mean > 0 else 999
+            p_cons = max(0, min(100, 100 - p_cv * 100))
+            consistency_ranks.append((pid, p_cons))
 
-    # Position rank by consistency
-    consistency_ranks = []
-    for row in all_pos_players:
-        pid = row[0]
-        csv_str = row[2]
-        if not csv_str:
-            continue
-        try:
-            p_scores = [float(x) for x in csv_str.split(",")]
-        except (ValueError, TypeError):
-            continue
-        if len(p_scores) < 2:
-            continue
-        p_mean = statistics.mean(p_scores)
-        p_stdev = statistics.stdev(p_scores)
-        p_cv = p_stdev / p_mean if p_mean > 0 else 999
-        p_cons = max(0, min(100, 100 - p_cv * 100))
-        consistency_ranks.append((pid, p_cons))
+        consistency_ranks.sort(key=lambda x: -x[1])
+        position_rank = 1
+        total_ranked = len(consistency_ranks)
+        for i, (pid, _) in enumerate(consistency_ranks):
+            if pid == player_id:
+                position_rank = i + 1
+                break
 
-    consistency_ranks.sort(key=lambda x: -x[1])
-    position_rank = 1
-    total_ranked = len(consistency_ranks)
-    for i, (pid, _) in enumerate(consistency_ranks):
-        if pid == player_id:
-            position_rank = i + 1
-            break
-
-    return {
-        "player": {
-            "player_id": player["player_id"],
-            "full_name": player["full_name"],
-            "position": pos,
-            "team": player.get("team") or "FA",
-            "age": player.get("age"),
-            "headshot_url": player.get("headshot_url"),
-        },
-        "season": season,
-        "games_played": games,
-        "weekly_scores": weekly_scores,
-        "mean_ppg": mean_ppg,
-        "median_ppg": median_ppg,
-        "floor_ppg": floor_ppg,
-        "ceiling_ppg": ceiling_ppg,
-        "stdev": stdev,
-        "boom_rate": boom_rate,
-        "bust_rate": bust_rate,
-        "boom_threshold": boom_threshold,
-        "bust_threshold": bust_threshold,
-        "position_avg_ppg": pos_avg_ppg,
-        "consistency_score": consistency_score,
-        "grade": grade,
-        "position_rank": position_rank,
-        "position_total": total_ranked,
-    }
+        return {
+            "player": {
+                "player_id": player["player_id"],
+                "full_name": player["full_name"],
+                "position": pos,
+                "team": player.get("team") or "FA",
+                "age": player.get("age"),
+                "headshot_url": player.get("headshot_url"),
+            },
+            "season": season,
+            "games_played": games,
+            "weekly_scores": weekly_scores,
+            "mean_ppg": mean_ppg,
+            "median_ppg": median_ppg,
+            "floor_ppg": floor_ppg,
+            "ceiling_ppg": ceiling_ppg,
+            "stdev": stdev,
+            "boom_rate": boom_rate,
+            "bust_rate": bust_rate,
+            "boom_threshold": boom_threshold,
+            "bust_threshold": bust_threshold,
+            "position_avg_ppg": pos_avg_ppg,
+            "consistency_score": consistency_score,
+            "grade": grade,
+            "position_rank": position_rank,
+            "position_total": total_ranked,
+        }
 
 
 def fetch_player_comps(player_id, limit=5, season=0):
     """Find the most statistically similar NFL players to a given player."""
-    conn = get_conn()
+    with get_db() as conn:
 
-    # Get target player info
-    player = conn.execute(
-        "SELECT player_id, full_name, position, team, age, headshot_url FROM players WHERE player_id = ?",
-        (player_id,)
-    ).fetchone()
+        # Get target player info
+        player = conn.execute(
+            "SELECT player_id, full_name, position, team, age, headshot_url FROM players WHERE player_id = ?",
+            (player_id,)
+        ).fetchone()
 
-    if not player:
-        conn.close()
-        return {"error": "Player not found", "comps": []}
+        if not player:
+            return {"error": "Player not found", "comps": []}
 
-    player = dict(player)
-    pos = (player.get("position") or "").upper()
-    if pos not in _COMP_STATS:
-        conn.close()
-        return {"error": f"Comps not available for position {pos}", "comps": []}
+        player = dict(player)
+        pos = (player.get("position") or "").upper()
+        if pos not in _COMP_STATS:
+            return {"error": f"Comps not available for position {pos}", "comps": []}
 
-    stat_keys = _COMP_STATS[pos]
+        stat_keys = _COMP_STATS[pos]
 
-    # Determine season filter
-    if not season:
-        row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-        season = row[0] if row and row[0] else 2024
+        # Determine season filter
+        if not season:
+            row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+            season = row[0] if row and row[0] else 2024
 
-    # Get target player's season stats
-    target_row = conn.execute(f"""
-        SELECT p.player_id, p.full_name, p.position, p.team, p.age, p.headshot_url,
-               COUNT(*) as games,
-               {_STAT_SUM_COLS}
-        FROM player_week_stats s
-        JOIN players p ON s.player_id = p.player_id
-        WHERE s.player_id = ? AND s.season = ?
-        GROUP BY s.player_id
-        HAVING games >= 4
-    """, (player_id, season)).fetchone()
+        # Get target player's season stats
+        target_row = conn.execute(f"""
+            SELECT p.player_id, p.full_name, p.position, p.team, p.age, p.headshot_url,
+                   COUNT(*) as games,
+                   {_STAT_SUM_COLS}
+            FROM player_week_stats s
+            JOIN players p ON s.player_id = p.player_id
+            WHERE s.player_id = ? AND s.season = ?
+            GROUP BY s.player_id
+            HAVING games >= 4
+        """, (player_id, season)).fetchone()
 
-    if not target_row:
-        conn.close()
-        return {"error": "Not enough games in season", "comps": [], "player": player}
+        if not target_row:
+            return {"error": "Not enough games in season", "comps": [], "player": player}
 
-    target = dict(target_row)
-    target_vec = _build_stat_vector(target, stat_keys)
+        target = dict(target_row)
+        target_vec = _build_stat_vector(target, stat_keys)
 
-    # Get all same-position players (excluding target) with enough games
-    all_rows = conn.execute(f"""
-        SELECT p.player_id, p.full_name, p.position, p.team, p.age, p.headshot_url,
-               COUNT(*) as games,
-               {_STAT_SUM_COLS}
-        FROM player_week_stats s
-        JOIN players p ON s.player_id = p.player_id
-        WHERE p.position = ? AND s.player_id != ? AND s.season = ?
-        GROUP BY s.player_id
-        HAVING games >= 4
-    """, (pos, player_id, season)).fetchall()
+        # Get all same-position players (excluding target) with enough games
+        all_rows = conn.execute(f"""
+            SELECT p.player_id, p.full_name, p.position, p.team, p.age, p.headshot_url,
+                   COUNT(*) as games,
+                   {_STAT_SUM_COLS}
+            FROM player_week_stats s
+            JOIN players p ON s.player_id = p.player_id
+            WHERE p.position = ? AND s.player_id != ? AND s.season = ?
+            GROUP BY s.player_id
+            HAVING games >= 4
+        """, (pos, player_id, season)).fetchall()
 
-    # Compute similarity for each candidate
-    candidates = []
-    for row in all_rows:
-        r = dict(row)
-        vec = _build_stat_vector(r, stat_keys)
-        sim = _cosine_similarity(target_vec, vec)
-        # Find top matching stats (smallest absolute difference when normalized)
-        matching = []
-        for i, key in enumerate(stat_keys):
-            tv = target_vec[i]
-            cv = vec[i]
-            max_val = max(abs(tv), abs(cv), 0.001)
-            diff_pct = abs(tv - cv) / max_val
-            matching.append((key, diff_pct, tv, cv))
-        matching.sort(key=lambda x: x[1])
-        top_matches = [{"stat": m[0], "label": _COMP_STAT_LABELS.get(m[0], m[0]),
-                        "target_val": round(m[2], 1), "comp_val": round(m[3], 1)}
-                       for m in matching[:3]]
+        # Compute similarity for each candidate
+        candidates = []
+        for row in all_rows:
+            r = dict(row)
+            vec = _build_stat_vector(r, stat_keys)
+            sim = _cosine_similarity(target_vec, vec)
+            # Find top matching stats (smallest absolute difference when normalized)
+            matching = []
+            for i, key in enumerate(stat_keys):
+                tv = target_vec[i]
+                cv = vec[i]
+                max_val = max(abs(tv), abs(cv), 0.001)
+                diff_pct = abs(tv - cv) / max_val
+                matching.append((key, diff_pct, tv, cv))
+            matching.sort(key=lambda x: x[1])
+            top_matches = [{"stat": m[0], "label": _COMP_STAT_LABELS.get(m[0], m[0]),
+                            "target_val": round(m[2], 1), "comp_val": round(m[3], 1)}
+                           for m in matching[:3]]
 
-        # All stat values for comparison table + radar
-        all_stats = {stat_keys[i]: round(vec[i], 1) for i in range(len(stat_keys))}
+            # All stat values for comparison table + radar
+            all_stats = {stat_keys[i]: round(vec[i], 1) for i in range(len(stat_keys))}
 
-        candidates.append({
-            "player_id": r["player_id"],
-            "full_name": r["full_name"],
-            "position": r["position"],
-            "team": r["team"],
-            "age": r.get("age"),
-            "headshot_url": r.get("headshot_url"),
-            "similarity": sim,
-            "matching_stats": top_matches,
-            "all_stats": all_stats,
-            "games": r["games"],
-            "ppg": round((r.get("fantasy_points_ppr") or 0) / (r["games"] or 1), 1),
-        })
+            candidates.append({
+                "player_id": r["player_id"],
+                "full_name": r["full_name"],
+                "position": r["position"],
+                "team": r["team"],
+                "age": r.get("age"),
+                "headshot_url": r.get("headshot_url"),
+                "similarity": sim,
+                "matching_stats": top_matches,
+                "all_stats": all_stats,
+                "games": r["games"],
+                "ppg": round((r.get("fantasy_points_ppr") or 0) / (r["games"] or 1), 1),
+            })
 
-    # Sort by similarity descending
-    candidates.sort(key=lambda x: x["similarity"], reverse=True)
-    top = candidates[:limit]
+        # Sort by similarity descending
+        candidates.sort(key=lambda x: x["similarity"], reverse=True)
+        top = candidates[:limit]
 
-    # Build target stat values for comparison
-    target_stats = {}
-    for key in stat_keys:
-        idx = stat_keys.index(key)
-        target_stats[key] = {
-            "label": _COMP_STAT_LABELS.get(key, key),
-            "value": round(target_vec[idx], 1)
+        # Build target stat values for comparison
+        target_stats = {}
+        for key in stat_keys:
+            idx = stat_keys.index(key)
+            target_stats[key] = {
+                "label": _COMP_STAT_LABELS.get(key, key),
+                "value": round(target_vec[idx], 1)
+            }
+
+        return {
+            "player": {
+                "player_id": target["player_id"],
+                "full_name": target["full_name"],
+                "position": target["position"],
+                "team": target["team"],
+                "age": target.get("age"),
+                "headshot_url": target.get("headshot_url"),
+                "games": target["games"],
+                "ppg": round((target.get("fantasy_points_ppr") or 0) / (target["games"] or 1), 1),
+            },
+            "comps": top,
+            "stat_keys": stat_keys,
+            "stat_labels": {k: _COMP_STAT_LABELS.get(k, k) for k in stat_keys},
+            "target_stats": target_stats,
+            "season": season,
         }
-
-    conn.close()
-    return {
-        "player": {
-            "player_id": target["player_id"],
-            "full_name": target["full_name"],
-            "position": target["position"],
-            "team": target["team"],
-            "age": target.get("age"),
-            "headshot_url": target.get("headshot_url"),
-            "games": target["games"],
-            "ppg": round((target.get("fantasy_points_ppr") or 0) / (target["games"] or 1), 1),
-        },
-        "comps": top,
-        "stat_keys": stat_keys,
-        "stat_labels": {k: _COMP_STAT_LABELS.get(k, k) for k in stat_keys},
-        "target_stats": target_stats,
-        "season": season,
-    }
 
 
 # ---------------------------------------------------------------------------
@@ -6265,104 +6148,103 @@ def fetch_player_comps(player_id, limit=5, season=0):
 
 def fetch_team_roster(team=None, season=None):
     """Return all fantasy-relevant players for a team, grouped by position."""
-    conn = get_conn()
+    with get_db() as conn:
 
-    # Determine season
-    if not season:
-        row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-        season = row[0] if row and row[0] else 2024
+        # Determine season
+        if not season:
+            row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+            season = row[0] if row and row[0] else 2024
 
-    # Get available seasons
-    season_rows = conn.execute(
-        "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
-    ).fetchall()
-    available_seasons = [r[0] for r in season_rows]
+        # Get available seasons
+        season_rows = conn.execute(
+            "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
+        ).fetchall()
+        available_seasons = [r[0] for r in season_rows]
 
-    # Get available teams for the selected season
-    team_rows = conn.execute("""
-        SELECT DISTINCT p.team FROM players p
-        JOIN player_week_stats s ON s.player_id = p.player_id AND s.season = ?
-        WHERE p.position IN ('QB','RB','WR','TE')
-          AND p.team IS NOT NULL AND p.team != ''
-        ORDER BY p.team
-    """, [season]).fetchall()
-    available_teams = [r[0] for r in team_rows]
+        # Get available teams for the selected season
+        team_rows = conn.execute("""
+            SELECT DISTINCT p.team FROM players p
+            JOIN player_week_stats s ON s.player_id = p.player_id AND s.season = ?
+            WHERE p.position IN ('QB','RB','WR','TE')
+              AND p.team IS NOT NULL AND p.team != ''
+            ORDER BY p.team
+        """, [season]).fetchall()
+        available_teams = [r[0] for r in team_rows]
 
-    if not team or team.upper() not in available_teams:
-        # Default to first available team alphabetically
-        team = available_teams[0] if available_teams else "KC"
+        if not team or team.upper() not in available_teams:
+            # Default to first available team alphabetically
+            team = available_teams[0] if available_teams else "KC"
 
-    team = team.upper()
+        team = team.upper()
 
-    query = """
-        SELECT
-            p.player_id, p.full_name, p.position, p.team, p.age,
-            p.headshot_url,
-            SUM(s.fantasy_points_ppr) as total_ppr,
-            COUNT(DISTINCT s.week) as games,
-            SUM(s.passing_yards) as passing_yards,
-            SUM(s.passing_tds) as passing_tds,
-            SUM(s.rushing_yards) as rushing_yards,
-            SUM(s.rushing_tds) as rushing_tds,
-            SUM(s.receiving_yards) as receiving_yards,
-            SUM(s.receiving_tds) as receiving_tds,
-            SUM(s.receptions) as receptions,
-            SUM(s.targets) as targets,
-            SUM(s.carries) as carries
-        FROM players p
-        JOIN player_week_stats s
-            ON s.player_id = p.player_id AND s.season = ?
-        WHERE p.team = ?
-          AND p.position IN ('QB','RB','WR','TE')
-        GROUP BY p.player_id
-        ORDER BY total_ppr DESC
-    """
-    rows = conn.execute(query, [season, team]).fetchall()
-    conn.close()
+        query = """
+            SELECT
+                p.player_id, p.full_name, p.position, p.team, p.age,
+                p.headshot_url,
+                SUM(s.fantasy_points_ppr) as total_ppr,
+                COUNT(DISTINCT s.week) as games,
+                SUM(s.passing_yards) as passing_yards,
+                SUM(s.passing_tds) as passing_tds,
+                SUM(s.rushing_yards) as rushing_yards,
+                SUM(s.rushing_tds) as rushing_tds,
+                SUM(s.receiving_yards) as receiving_yards,
+                SUM(s.receiving_tds) as receiving_tds,
+                SUM(s.receptions) as receptions,
+                SUM(s.targets) as targets,
+                SUM(s.carries) as carries
+            FROM players p
+            JOIN player_week_stats s
+                ON s.player_id = p.player_id AND s.season = ?
+            WHERE p.team = ?
+              AND p.position IN ('QB','RB','WR','TE')
+            GROUP BY p.player_id
+            ORDER BY total_ppr DESC
+        """
+        rows = conn.execute(query, [season, team]).fetchall()
 
-    groups = {"QB": [], "RB": [], "WR": [], "TE": []}
-    for r in rows:
-        pid = r[0]
-        pos = r[2] or "WR"
-        games = r[7] or 0
-        total_ppr = r[6] or 0
-        ppg = round(total_ppr / games, 1) if games > 0 else 0.0
+        groups = {"QB": [], "RB": [], "WR": [], "TE": []}
+        for r in rows:
+            pid = r[0]
+            pos = r[2] or "WR"
+            games = r[7] or 0
+            total_ppr = r[6] or 0
+            ppg = round(total_ppr / games, 1) if games > 0 else 0.0
 
-        player = {
-            "player_id": pid,
-            "full_name": r[1] or "Unknown",
-            "position": pos,
-            "team": r[3] or team,
-            "age": r[4],
-            "headshot_url": r[5] or "",
-            "ppg": ppg,
-            "games": games,
-            "total_ppr": round(total_ppr, 1),
-            "passing_yards": r[8] or 0,
-            "passing_tds": r[9] or 0,
-            "rushing_yards": r[10] or 0,
-            "rushing_tds": r[11] or 0,
-            "receiving_yards": r[12] or 0,
-            "receiving_tds": r[13] or 0,
-            "receptions": r[14] or 0,
-            "targets": r[15] or 0,
-            "carries": r[16] or 0,
+            player = {
+                "player_id": pid,
+                "full_name": r[1] or "Unknown",
+                "position": pos,
+                "team": r[3] or team,
+                "age": r[4],
+                "headshot_url": r[5] or "",
+                "ppg": ppg,
+                "games": games,
+                "total_ppr": round(total_ppr, 1),
+                "passing_yards": r[8] or 0,
+                "passing_tds": r[9] or 0,
+                "rushing_yards": r[10] or 0,
+                "rushing_tds": r[11] or 0,
+                "receiving_yards": r[12] or 0,
+                "receiving_tds": r[13] or 0,
+                "receptions": r[14] or 0,
+                "targets": r[15] or 0,
+                "carries": r[16] or 0,
+            }
+
+            if pos in groups:
+                groups[pos].append(player)
+
+        team_full = ABBREV_TO_TEAM.get(team, team)
+
+        return {
+            "team": team,
+            "team_full_name": team_full,
+            "season": season,
+            "available_seasons": available_seasons,
+            "available_teams": [{"abbr": t, "name": ABBREV_TO_TEAM.get(t, t)} for t in available_teams],
+            "groups": groups,
+            "total_players": sum(len(v) for v in groups.values()),
         }
-
-        if pos in groups:
-            groups[pos].append(player)
-
-    team_full = ABBREV_TO_TEAM.get(team, team)
-
-    return {
-        "team": team,
-        "team_full_name": team_full,
-        "season": season,
-        "available_seasons": available_seasons,
-        "available_teams": [{"abbr": t, "name": ABBREV_TO_TEAM.get(t, t)} for t in available_teams],
-        "groups": groups,
-        "total_players": sum(len(v) for v in groups.values()),
-    }
 
 
 # ---------------------------------------------------------------------------
@@ -6405,9 +6287,7 @@ _SCARCITY_ANNOTATIONS = {
 
 def fetch_positional_scarcity(season=None):
     """Return PPG drop-off data by position for scarcity analysis."""
-    conn = get_conn()
-
-    try:
+    with get_db() as conn:
         # Determine season + available seasons
         row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
         available_seasons = [r[0] for r in row] if row else [2024]
@@ -6491,8 +6371,6 @@ def fetch_positional_scarcity(season=None):
             "positions": positions_data,
             "scarcity_ranking": scarcity_ranking,
         }
-    finally:
-        conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -6515,9 +6393,7 @@ _BREAKOUT_ANNOTATIONS = [
 
 def fetch_breakout_candidates(season=None, position=None, limit=50):
     """Return players ranked by breakout potential (opportunity-production gap)."""
-    conn = get_conn()
-
-    try:
+    with get_db() as conn:
         # Determine season + available seasons
         row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
         available_seasons = [r[0] for r in row] if row else [2024]
@@ -6671,8 +6547,6 @@ def fetch_breakout_candidates(season=None, position=None, limit=50):
             "candidates": candidates,
             "total": len(candidates),
         }
-    finally:
-        conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -6747,9 +6621,7 @@ def _efficiency_grade(pct):
 
 def fetch_buy_sell_candidates(season=None, position=None, limit=15):
     """Return players split into buy-low and sell-high based on efficiency vs dynasty rank."""
-    conn = get_conn()
-
-    try:
+    with get_db() as conn:
         # Determine season + available seasons
         row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
         available_seasons = [r[0] for r in row] if row else [2024]
@@ -6966,8 +6838,6 @@ def fetch_buy_sell_candidates(season=None, position=None, limit=15):
             "buy_low": buy_low,
             "sell_high": sell_high,
         }
-    finally:
-        conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -6988,9 +6858,7 @@ EXPLORER_METRICS = sorted(_EXPLORER_CORE | _EXPLORER_RATE)
 
 def fetch_stat_explorer(season=None, position=None, x_stat="targets_g", y_stat="ppg"):
     """Return player data for scatter plot with two user-chosen stats."""
-    conn = get_conn()
-
-    try:
+    with get_db() as conn:
         row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
         available_seasons = [r[0] for r in row] if row else [2024]
 
@@ -7127,8 +6995,6 @@ def fetch_stat_explorer(season=None, position=None, x_stat="targets_g", y_stat="
             "players": result,
             "metrics": EXPLORER_METRICS,
         }
-    finally:
-        conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -7138,8 +7004,7 @@ def fetch_stat_explorer(season=None, position=None, x_stat="targets_g", y_stat="
 def fetch_aging_curves(season=None, position=None):
     """Return aging curve data: average PPG by age for each position,
     plus individual player data points for the selected season."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         # Determine available seasons
         row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
         available_seasons = [r[0] for r in row] if row else [2024]
@@ -7234,8 +7099,6 @@ def fetch_aging_curves(season=None, position=None):
             "available_seasons": available_seasons,
             "positions": result,
         }
-    finally:
-        conn.close()
 
 
 def fetch_weekly_heatmap(season=None, position=None, limit=40):
@@ -7244,8 +7107,7 @@ def fetch_weekly_heatmap(season=None, position=None, limit=40):
     Returns player rows with per-week PPG values and positional percentile
     thresholds for color coding.
     """
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         # Determine available seasons
         row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
         available_seasons = [r[0] for r in row] if row else [2024]
@@ -7354,8 +7216,6 @@ def fetch_weekly_heatmap(season=None, position=None, limit=40):
             "thresholds": pos_thresholds,
             "players": players,
         }
-    finally:
-        conn.close()
 
 
 def fetch_target_distribution(season=None, team=None):
@@ -7364,8 +7224,7 @@ def fetch_target_distribution(season=None, team=None):
     For each team, returns players sorted by targets (or carries for RB-heavy),
     with their share of team totals.
     """
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
         available_seasons = [r[0] for r in row] if row else [2024]
         if not season:
@@ -7451,8 +7310,6 @@ def fetch_target_distribution(season=None, team=None):
             "available_seasons": available_seasons,
             "teams": teams_out,
         }
-    finally:
-        conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -7465,8 +7322,7 @@ def fetch_matchup_heatmap(season=None, position=None):
     Computes from opponent_team in player_week_stats: group all player scores
     by opponent_team and position to find how many PPR points each defense allows.
     """
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
         available_seasons = [r[0] for r in row] if row else [2024]
         if not season:
@@ -7606,8 +7462,6 @@ def fetch_matchup_heatmap(season=None, position=None):
             "averages": pos_averages,
             "detail": detail,
         }
-    finally:
-        conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -7639,9 +7493,7 @@ _USAGE_FALLER_ANNOTATIONS = [
 
 def fetch_usage_trends(season=None, position=None, window=5, limit=30):
     """Return players with weekly snap% trends, identifying risers and fallers."""
-    conn = get_conn()
-
-    try:
+    with get_db() as conn:
         # Determine season + available seasons
         row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
         available_seasons = [r[0] for r in row] if row else [2024]
@@ -7775,8 +7627,6 @@ def fetch_usage_trends(season=None, position=None, window=5, limit=30):
             "fallers": fallers,
             "window": window,
         }
-    finally:
-        conn.close()
 
 
 # ── Year-over-Year Comparison ─────────────────────────────────────────────
@@ -7793,9 +7643,7 @@ _YOY_FALLER_ANNOTATIONS = [
 
 def fetch_year_over_year(season=None, position=None, metric="ppg", limit=25):
     """Compare per-game stats between two adjacent seasons for each player."""
-    conn = get_conn()
-
-    try:
+    with get_db() as conn:
         # Determine available seasons
         row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
         available_seasons = [r[0] for r in row] if row else [2024]
@@ -7945,8 +7793,6 @@ def fetch_year_over_year(season=None, position=None, metric="ppg", limit=25):
             "fallers": fallers,
             "metric": metric_key,
         }
-    finally:
-        conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -7959,9 +7805,7 @@ _AIR_SELL_HIGH_ANNOTATIONS = ["efficiency mirage", "TD luck", "volume mirage", "
 
 def fetch_air_yards(season=None, position=None, limit=25):
     """Air yards leaderboard with regression indicators (air yards rank vs PPG rank delta)."""
-    conn = get_conn()
-
-    try:
+    with get_db() as conn:
         # Determine available seasons
         row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
         available_seasons = [r[0] for r in row] if row else [2024]
@@ -8101,8 +7945,6 @@ def fetch_air_yards(season=None, position=None, limit=25):
             "buy_low": buy_low,
             "sell_high": sell_high,
         }
-    finally:
-        conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -8122,9 +7964,7 @@ _TD_DEPENDENT_ANNOTATIONS = [
 
 def fetch_redzone_usage(season=None, position=None, limit=30):
     """Return goal-line usage leaders and TD-dependent players."""
-    conn = get_conn()
-
-    try:
+    with get_db() as conn:
         # Determine season + available seasons
         row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
         available_seasons = [r[0] for r in row] if row else [2024]
@@ -8254,8 +8094,6 @@ def fetch_redzone_usage(season=None, position=None, limit=30):
             "dominators": dominators,
             "td_dependent": td_dependent,
         }
-    finally:
-        conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -8291,9 +8129,7 @@ _VOLUME_ANNOTATIONS = [
 
 def fetch_efficiency_rankings(season=None, position=None, limit=30):
     """Return efficiency rankings: most efficient and volume kings."""
-    conn = get_conn()
-
-    try:
+    with get_db() as conn:
         # Determine season + available seasons
         row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
         available_seasons = [r[0] for r in row] if row else [2024]
@@ -8431,8 +8267,6 @@ def fetch_efficiency_rankings(season=None, position=None, limit=30):
             "most_efficient": most_efficient,
             "volume_kings": volume_kings,
         }
-    finally:
-        conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -8460,9 +8294,7 @@ def fetch_consistency_rankings(season=None, position=None, limit=30):
     """Return consistency rankings: rock solid (low CoV) and wild cards (high CoV)."""
     import math
 
-    conn = get_conn()
-
-    try:
+    with get_db() as conn:
         # Determine season + available seasons
         row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
         available_seasons = [r[0] for r in row] if row else [2024]
@@ -8590,8 +8422,6 @@ def fetch_consistency_rankings(season=None, position=None, limit=30):
             "rock_solid": rock_solid,
             "wild_cards": wild_cards,
         }
-    finally:
-        conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -8633,8 +8463,7 @@ def fetch_strength_of_schedule(season=None, position=None, limit=30):
     difficulty.  Split into schedule_suppressed (hardest SOS) and schedule_inflated
     (easiest SOS).
     """
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         row = conn.execute(
             "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
         ).fetchall()
@@ -8804,8 +8633,6 @@ def fetch_strength_of_schedule(season=None, position=None, limit=30):
             "schedule_suppressed": suppressed,
             "schedule_inflated": inflated,
         }
-    finally:
-        conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -8846,8 +8673,7 @@ def fetch_stock_watch(season=None, position=None, limit=30):
     import math
     from collections import defaultdict
 
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         row = conn.execute(
             "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
         ).fetchall()
@@ -9068,8 +8894,6 @@ def fetch_stock_watch(season=None, position=None, limit=30):
             "rising": rising,
             "falling": falling,
         }
-    finally:
-        conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -9100,8 +8924,7 @@ def fetch_opportunity_share(season=None, position=None, limit=30):
     """
     from collections import defaultdict
 
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         row = conn.execute(
             "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
         ).fetchall()
@@ -9262,8 +9085,6 @@ def fetch_opportunity_share(season=None, position=None, limit=30):
             "alpha_dogs": alpha_dogs,
             "dominators": dominators,
         }
-    finally:
-        conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -9296,8 +9117,7 @@ def fetch_report_cards(season=None, position=None, limit=25):
     import math
     from collections import defaultdict
 
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         row = conn.execute(
             "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
         ).fetchall()
@@ -9569,8 +9389,6 @@ def fetch_report_cards(season=None, position=None, limit=25):
             "honor_roll": honor_roll,
             "needs_improvement": needs_improvement,
         }
-    finally:
-        conn.close()
 
 
 _AWARD_ANNOTATIONS = {
@@ -9598,8 +9416,7 @@ def fetch_season_awards(season=None, position=None):
     import math
     from collections import defaultdict
 
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         row = conn.execute(
             "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
         ).fetchall()
@@ -10020,8 +9837,6 @@ def fetch_season_awards(season=None, position=None):
             "available_seasons": available_seasons,
             "awards": awards,
         }
-    finally:
-        conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -10040,9 +9855,7 @@ _REPLACEMENT_RANKS = {"QB": 12, "RB": 24, "WR": 36, "TE": 12}
 
 def fetch_vorp(season=None, position=None, limit=30):
     """Return VORP rankings: league winners and replacement-level players."""
-    conn = get_conn()
-
-    try:
+    with get_db() as conn:
         # Determine season + available seasons
         row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
         available_seasons = [r[0] for r in row] if row else [2024]
@@ -10145,8 +9958,6 @@ def fetch_vorp(season=None, position=None, limit=30):
             "league_winners": league_winners,
             "replacement_level": replacement_level,
         }
-    finally:
-        conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -10187,8 +9998,7 @@ def _tv_tier(value):
 def fetch_trade_value_chart(season=None, position=None, limit=150):
     """Return all fantasy-relevant players ranked by trade value with component breakdown."""
     limit = max(1, min(300, limit))
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         if not season:
             row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
             season = row[0] if row and row[0] else 2024
@@ -10270,8 +10080,6 @@ def fetch_trade_value_chart(season=None, position=None, limit=150):
             "players": results,
             "total": len(results),
         }
-    finally:
-        conn.close()
 
 
 def fetch_trade_finder(player_id, season=None):
@@ -10279,8 +10087,7 @@ def fetch_trade_finder(player_id, season=None):
     import math
     from collections import defaultdict
 
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         if not season:
             row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
             season = row[0] if row and row[0] else 2024
@@ -10503,8 +10310,6 @@ def fetch_trade_finder(player_id, season=None):
             "buy_low": buy_low[:15],
             "sell_high": sell_high[:15],
         }
-    finally:
-        conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -10523,8 +10328,7 @@ def fetch_roster_grade(player_ids, season=None):
     # Cap at 25 roster slots
     player_ids = list(player_ids)[:25]
 
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
         latest_season = season or (row[0] if row and row[0] else 2024)
 
@@ -10665,8 +10469,6 @@ def fetch_roster_grade(player_ids, season=None):
             "position_summary": position_summary,
             "players": sorted(players, key=lambda x: x["trade_value"], reverse=True),
         }
-    finally:
-        conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -10675,8 +10477,7 @@ def fetch_roster_grade(player_ids, season=None):
 
 def fetch_scoring_comparison(season=None, position=None, limit=40):
     """Compare player rankings across PPR, Half-PPR, and Standard scoring."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
         available_seasons = [r[0] for r in row] if row else [2024]
         if not season:
@@ -10771,8 +10572,6 @@ def fetch_scoring_comparison(season=None, position=None, limit=40):
             "risers": risers,
             "fallers": fallers,
         }
-    finally:
-        conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -10790,8 +10589,7 @@ _CHEAT_TIERS = [
 
 def fetch_cheat_sheet(season=None, fmt="ppr"):
     """Return a printable draft cheat sheet grouped by position with tier breaks."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
         available_seasons = [r[0] for r in row] if row else [2024]
         if not season:
@@ -10875,8 +10673,6 @@ def fetch_cheat_sheet(season=None, fmt="ppr"):
             "format": fmt,
             "positions": positions,
         }
-    finally:
-        conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -10887,8 +10683,7 @@ def fetch_auction_values(season=None, budget=200, roster_size=15):
     """Convert trade values into auction dollar amounts for a given budget and roster size."""
     budget = max(50, min(500, budget))
     roster_size = max(8, min(25, roster_size))
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         if not season:
             row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
             season = row[0] if row and row[0] else 2024
@@ -10987,8 +10782,6 @@ def fetch_auction_values(season=None, budget=200, roster_size=15):
             "players": players[:200],
             "position_totals": pos_totals,
         }
-    finally:
-        conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -10997,8 +10790,7 @@ def fetch_auction_values(season=None, budget=200, roster_size=15):
 
 def fetch_dynasty_dashboard(season=None):
     """Aggregated dynasty dashboard: risers, fallers, value picks, scarcity alerts."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         if not season:
             row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
             season = row[0] if row and row[0] else 2024
@@ -11123,8 +10915,6 @@ def fetch_dynasty_dashboard(season=None):
             "position_scarcity": pos_scarcity,
             "trends": trends,
         }
-    finally:
-        conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -11142,8 +10932,7 @@ _TIER_BREAKS = [
 
 def fetch_tier_list(season=None, position=None):
     """Return players grouped into S/A/B/C/D/F tiers by trade value."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         if not season:
             row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
             season = row[0] if row and row[0] else 2024
@@ -11220,8 +11009,6 @@ def fetch_tier_list(season=None, position=None):
             "total_players": total,
             "tiers": result_tiers,
         }
-    finally:
-        conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -11282,8 +11069,7 @@ _QB_ARCHETYPES = [
 
 def fetch_player_archetypes(season=None, position=None):
     """Classify players into statistical archetypes based on per-game stats."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         if not season:
             row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
             season = row[0] if row and row[0] else 2024
@@ -11413,8 +11199,6 @@ def fetch_player_archetypes(season=None, position=None):
             "total_players": total,
             "archetypes": result_archetypes,
         }
-    finally:
-        conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -11426,8 +11210,7 @@ def fetch_career_stats(player_id):
     if not player_id:
         return {"error": "player_id is required"}
 
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         # Get player info
         player = conn.execute(
             "SELECT player_id, full_name, position, team, age "
@@ -11581,8 +11364,6 @@ def fetch_career_stats(player_id):
             "career": career,
             "career_highs": career_highs,
         }
-    finally:
-        conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -11591,8 +11372,7 @@ def fetch_career_stats(player_id):
 
 def fetch_draft_class(draft_year=None, position=None):
     """Return fantasy production stats for players from a given draft class."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         available_classes = [
             r[0] for r in conn.execute(
                 "SELECT DISTINCT season FROM draft_picks WHERE season >= 2020 ORDER BY season DESC"
@@ -11712,8 +11492,6 @@ def fetch_draft_class(draft_year=None, position=None):
             "rounds": rounds,
             "players": players,
         }
-    finally:
-        conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -11725,8 +11503,7 @@ def fetch_player_percentiles(player_id, season=None):
     if not player_id:
         return {"error": "player_id is required"}
 
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         if not season:
             row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
             season = row[0] if row and row[0] else 2024
@@ -11897,8 +11674,6 @@ def fetch_player_percentiles(player_id, season=None):
             "position_pool": n_players,
             "percentiles": percentiles,
         }
-    finally:
-        conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -11907,9 +11682,7 @@ def fetch_player_percentiles(player_id, season=None):
 
 def fetch_td_regression(season=None, position=None, limit=30):
     """Return players whose TD rate deviates most from position average."""
-    conn = get_conn()
-
-    try:
+    with get_db() as conn:
         row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
         available_seasons = [r[0] for r in row] if row else [2024]
         if not season:
@@ -12044,8 +11817,6 @@ def fetch_td_regression(season=None, position=None, limit=30):
             "regression_up": regression_up,
             "regression_down": regression_down,
         }
-    finally:
-        conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -12121,8 +11892,7 @@ def fetch_points_breakdown(player_id, season=None):
     if not player_id:
         return {"error": "player_id is required"}
 
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
         available_seasons = [r[0] for r in row] if row else [2024]
         if not season:
@@ -12213,8 +11983,6 @@ def fetch_points_breakdown(player_id, season=None):
             "ppg": round(total_ppr / games, 1),
             "games": games,
         }
-    finally:
-        conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -12223,9 +11991,7 @@ def fetch_points_breakdown(player_id, season=None):
 
 def fetch_weekly_leaders(season=None, week=None, position=None, limit=25):
     """Return top fantasy performers for a given week."""
-    conn = get_conn()
-
-    try:
+    with get_db() as conn:
         # Available seasons
         row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
         available_seasons = [r[0] for r in row] if row else [2024]
@@ -12295,14 +12061,11 @@ def fetch_weekly_leaders(season=None, week=None, position=None, limit=25):
             "available_weeks": available_weeks,
             "leaders": leaders,
         }
-    finally:
-        conn.close()
 
 
 def fetch_pace_tracker(season=None, position=None, limit=50):
     """Project per-game stats to 17-game season and track milestone progress."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         cursor = conn.cursor()
 
         if not season:
@@ -12451,14 +12214,11 @@ def fetch_pace_tracker(season=None, position=None, limit=50):
             "total_weeks": total_weeks,
             "players": players,
         }
-    finally:
-        conn.close()
 
 
 def fetch_game_log(player_id, season=None):
     """Return week-by-week box score stats for a player in a given season."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         cursor = conn.cursor()
 
         # Get player info
@@ -12536,14 +12296,11 @@ def fetch_game_log(player_id, season=None):
             "weeks": weeks,
             "totals": totals,
         }
-    finally:
-        conn.close()
 
 
 def fetch_streaks(season=None, position=None, window=4, limit=25):
     """Identify players on hot or cold scoring streaks vs their season average."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         cursor = conn.cursor()
 
         if not season:
@@ -12624,14 +12381,11 @@ def fetch_streaks(season=None, position=None, window=4, limit=25):
             "hot": hot[:limit],
             "cold": cold[:limit],
         }
-    finally:
-        conn.close()
 
 
 def fetch_season_recap(season=None):
     """Generate a data-driven season recap with key storylines."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         cursor = conn.cursor()
 
         if not season:
@@ -12793,8 +12547,6 @@ def fetch_season_recap(season=None):
             "total_players": total_players,
             "avg_ppg": avg_ppg,
         }
-    finally:
-        conn.close()
 
 
 def fetch_compare_table(player_ids, season=None):
@@ -12802,8 +12554,7 @@ def fetch_compare_table(player_ids, season=None):
     if not player_ids:
         return {"error": "No player IDs provided"}
 
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         cursor = conn.cursor()
 
         if not season:
@@ -12866,14 +12617,11 @@ def fetch_compare_table(player_ids, season=None):
             "available_seasons": available_seasons,
             "players": players,
         }
-    finally:
-        conn.close()
 
 
 def fetch_records(position=None, limit=10):
     """Return all-time fantasy records: single-game, single-season, career PPG."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         cursor = conn.cursor()
 
         pos_filter = ""
@@ -12983,8 +12731,6 @@ def fetch_records(position=None, limit=10):
             "career_ppg": career_ppg,
             "career_total": career_total,
         }
-    finally:
-        conn.close()
 
 
 def fetch_waivers(season=None, position=None, window=4, limit=30):
@@ -12993,8 +12739,7 @@ def fetch_waivers(season=None, position=None, window=4, limit=30):
     These are likely unrostered players who have been producing recently.
     Compares recent window PPG vs full season PPG; big positive delta = waiver target.
     """
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         cursor = conn.cursor()
 
         # Determine season
@@ -13080,8 +12825,6 @@ def fetch_waivers(season=None, position=None, window=4, limit=30):
             "window": window,
             "count": len(targets),
         }
-    finally:
-        conn.close()
 
 
 def fetch_playoff_schedule(season=None, position=None, limit=40):
@@ -13090,8 +12833,7 @@ def fetch_playoff_schedule(season=None, position=None, limit=40):
     Uses defense PPG-allowed-by-position to rate each week's difficulty.
     Returns players ranked by playoff SOS (easiest first = best playoff schedule).
     """
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         cursor = conn.cursor()
 
         if not season:
@@ -13238,8 +12980,6 @@ def fetch_playoff_schedule(season=None, position=None, limit=40):
             "season": season,
             "count": len(results),
         }
-    finally:
-        conn.close()
 
 
 def fetch_fpts_breakdown(season=None, position=None, limit=40):
@@ -13249,8 +12989,7 @@ def fetch_fpts_breakdown(season=None, position=None, limit=40):
     PPR scoring: 0.04 per pass yd, 0.1 per rush/rec yd, 1 per reception,
                  4 per pass TD, 6 per rush/rec TD, -2 per INT.
     """
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         cursor = conn.cursor()
 
         if not season:
@@ -13338,14 +13077,11 @@ def fetch_fpts_breakdown(season=None, position=None, limit=40):
             "season": season,
             "count": len(players),
         }
-    finally:
-        conn.close()
 
 
 def fetch_garbage_time(season=None, position=None, limit=40):
     """Garbage time detector — identifies stat padders with high garbage-time scoring %."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         cursor = conn.cursor()
         if not season:
             cursor.execute("SELECT MAX(season) FROM player_season_stats")
@@ -13417,14 +13153,11 @@ def fetch_garbage_time(season=None, position=None, limit=40):
             "clean_producers": clean_producers,
             "season": season,
         }
-    finally:
-        conn.close()
 
 
 def fetch_snap_efficiency(season=None, position=None, limit=50):
     """Snap efficiency — fantasy points per snap played."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         cursor = conn.cursor()
         if not season:
             cursor.execute("SELECT MAX(season) FROM player_season_stats")
@@ -13494,8 +13227,6 @@ def fetch_snap_efficiency(season=None, position=None, limit=50):
             "season": season,
             "count": len(players),
         }
-    finally:
-        conn.close()
 
 
 def fetch_handcuffs(season=None, limit=30):
@@ -13504,8 +13235,7 @@ def fetch_handcuffs(season=None, limit=30):
     For each team, find the #1 RB (most carries) and #2 RB (handcuff).
     Rank handcuffs by team rushing volume and their own efficiency/usage.
     """
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         cursor = conn.cursor()
 
         if not season:
@@ -13588,8 +13318,6 @@ def fetch_handcuffs(season=None, limit=30):
             "season": season,
             "count": len(handcuffs),
         }
-    finally:
-        conn.close()
 
 
 def fetch_weekly_mvp(season=None):
@@ -13597,8 +13325,7 @@ def fetch_weekly_mvp(season=None):
     Weekly MVP grid — the #1 PPR scorer at each position for every week.
     Returns a grid: {weeks: [{week, QB: {name, fpts}, RB: ..., WR: ..., TE: ...}]}
     """
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         cursor = conn.cursor()
 
         if not season:
@@ -13641,8 +13368,6 @@ def fetch_weekly_mvp(season=None):
             "season": season,
             "total_weeks": len(weeks),
         }
-    finally:
-        conn.close()
 
 
 def fetch_stacks(season=None, limit=30):
@@ -13651,8 +13376,7 @@ def fetch_stacks(season=None, limit=30):
     Computes Pearson correlation between QB weekly scores and their pass
     catchers' weekly scores (same team). Best stacks = highest correlation.
     """
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         cursor = conn.cursor()
 
         if not season:
@@ -13752,8 +13476,6 @@ def fetch_stacks(season=None, limit=30):
             "season": season,
             "count": len(stacks),
         }
-    finally:
-        conn.close()
 
 
 def fetch_positional_advantage(season=None, position=None, limit=40):
@@ -13761,8 +13483,7 @@ def fetch_positional_advantage(season=None, position=None, limit=40):
     Positional advantage — players who provide the biggest scoring edge
     over the positional average PPG. Distinct from VORP (replacement level).
     """
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         cursor = conn.cursor()
 
         if not season:
@@ -13837,14 +13558,11 @@ def fetch_positional_advantage(season=None, position=None, limit=40):
             "season": season,
             "count": len(players),
         }
-    finally:
-        conn.close()
 
 
 def fetch_td_regression(season=None, position=None, limit=50):
     """TD regression candidates — expected vs actual TDs based on opportunity volume."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         cursor = conn.cursor()
         if not season:
             cursor.execute("SELECT MAX(season) FROM player_season_stats")
@@ -13943,14 +13661,11 @@ def fetch_td_regression(season=None, position=None, limit=50):
             "pos_avg_td_rates": {k: round(v * 100, 1) for k, v in pos_avg_td_rate.items()},
             "season": season,
         }
-    finally:
-        conn.close()
 
 
 def fetch_dual_threat(season=None, position=None, limit=50):
     """Dual-threat index — players who contribute in both rushing and receiving."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         cursor = conn.cursor()
         if not season:
             cursor.execute("SELECT MAX(season) FROM player_season_stats")
@@ -14032,14 +13747,11 @@ def fetch_dual_threat(season=None, position=None, limit=50):
             "season": season,
             "count": len(players),
         }
-    finally:
-        conn.close()
 
 
 def fetch_season_pace(season=None, position=None, limit=50):
     """Season pace tracker — projects season totals and milestone tracking."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         cursor = conn.cursor()
         if not season:
             cursor.execute("SELECT MAX(season) FROM player_season_stats")
@@ -14140,14 +13852,11 @@ def fetch_season_pace(season=None, position=None, limit=50):
             "full_season_games": full_season,
             "count": len(players),
         }
-    finally:
-        conn.close()
 
 
 def fetch_target_premium(season=None, position=None, limit=50):
     """Target premium — target quality composite for pass catchers."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         cursor = conn.cursor()
         if not season:
             cursor.execute("SELECT MAX(season) FROM player_season_stats")
@@ -14247,14 +13956,11 @@ def fetch_target_premium(season=None, position=None, limit=50):
             "season": season,
             "count": len(players),
         }
-    finally:
-        conn.close()
 
 
 def fetch_workload_monitor(season=None, position=None, limit=50):
     """Workload monitor — snap counts, touches/game, heavy usage flags."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         cursor = conn.cursor()
         if not season:
             cursor.execute("SELECT MAX(season) FROM player_season_stats")
@@ -14336,14 +14042,11 @@ def fetch_workload_monitor(season=None, position=None, limit=50):
             "season": season,
             "count": len(players),
         }
-    finally:
-        conn.close()
 
 
 def fetch_drop_rate(season=None, position=None, limit=50):
     """Rank pass catchers by drop rate — sure hands vs butterfingers."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         if not season:
             cur = conn.execute("SELECT MAX(season) FROM player_season_pbp")
             season = cur.fetchone()[0] or 2024
@@ -14418,14 +14121,11 @@ def fetch_drop_rate(season=None, position=None, limit=50):
             "season": season,
             "count": len(sure_hands) + len(butterfingers),
         }
-    finally:
-        conn.close()
 
 
 def fetch_success_rate(season=None, position=None, limit=50):
     """Rank players by rush/pass success rate from PBP data."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         if not season:
             cur = conn.execute("SELECT MAX(season) FROM player_season_pbp")
             season = cur.fetchone()[0] or 2024
@@ -14509,14 +14209,11 @@ def fetch_success_rate(season=None, position=None, limit=50):
             "season": season,
             "count": len(players),
         }
-    finally:
-        conn.close()
 
 
 def fetch_game_script(season=None, position=None, limit=40):
     """Show how game script (avg score diff) correlates with fantasy production."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         row = conn.execute("SELECT DISTINCT season FROM player_season_pbp ORDER BY season DESC").fetchall()
         available_seasons = [r[0] for r in row] if row else [2024]
         if not season:
@@ -14583,8 +14280,6 @@ def fetch_game_script(season=None, position=None, limit=40):
             "available_seasons": available_seasons,
             "count": len(positive_script) + len(negative_script),
         }
-    finally:
-        conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -14596,8 +14291,7 @@ def fetch_draft_class_tracker(draft_year=None, position=None):
     Return drafted players from a given year with career fantasy production
     and hit/miss classification.
     """
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         # Available draft years
         year_rows = conn.execute(
             "SELECT DISTINCT season FROM draft_picks WHERE position IN ('QB','RB','WR','TE') ORDER BY season DESC"
@@ -14751,8 +14445,6 @@ def fetch_draft_class_tracker(draft_year=None, position=None):
             "round_breakdown": round_breakdown,
             "total_picks": len(players),
         }
-    finally:
-        conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -14778,8 +14470,7 @@ _CORR_STATS = {
 
 def fetch_stat_correlations(season=None, position=None, x_stat=None, y_stat=None):
     """Compute Pearson correlations between fantasy stat pairs."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         # Build the season filter
         where = ["p.position IN ('QB','RB','WR','TE')"]
         params = []
@@ -14896,14 +14587,11 @@ def fetch_stat_correlations(season=None, position=None, x_stat=None, y_stat=None
             "sample_size": len(rows),
             "available_seasons": available_seasons,
         }
-    finally:
-        conn.close()
 
 
 def fetch_dynasty_power_rankings(season=None):
     """Rank all 32 NFL teams by total dynasty roster value (sum of player trade values)."""
-    conn = get_conn()
-    try:
+    with get_db() as conn:
         if not season:
             row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
             season = row[0] if row and row[0] else 2024
@@ -15001,5 +14689,3 @@ def fetch_dynasty_power_rankings(season=None):
             "league_average": avg_value,
             "total_teams": len(result_teams),
         }
-    finally:
-        conn.close()

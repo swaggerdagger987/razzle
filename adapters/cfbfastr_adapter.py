@@ -512,56 +512,57 @@ def main():
 
     print(f"Razzle cfbfastR adapter -- syncing seasons: {seasons}")
     conn = get_connection()
-    initialize_tables(conn)
-
-    total_players = 0
-    for season in seasons:
-        csv_text = fetch_season_csv(season)
-        if csv_text is None:
-            print(f"  Skipping {season} (download failed).")
-            continue
-
-        results = aggregate_season(csv_text, season)
-        upsert_stats(conn, results)
-        total_players += len(results)
-        print(f"  {season}: {len(results)} players written.")
-
-    # Refine positions using combine/draft data if available
     try:
-        refine_positions_from_combine(conn)
-    except Exception as e:
-        print(f"  Position refinement skipped: {e}")
+        initialize_tables(conn)
 
-    # Update sync state
-    conn.execute("""
-        CREATE TABLE IF NOT EXISTS sync_state (
-            key TEXT PRIMARY KEY,
-            value TEXT,
-            updated_at TEXT
-        )
-    """)
-    conn.execute("""
-        INSERT OR REPLACE INTO sync_state (key, value, updated_at)
-        VALUES ('last_cfbfastr_sync', ?, ?)
-    """, (json.dumps({"seasons": seasons, "total_players": total_players}), utc_now()))
-    conn.commit()
+        total_players = 0
+        for season in seasons:
+            csv_text = fetch_season_csv(season)
+            if csv_text is None:
+                print(f"  Skipping {season} (download failed).")
+                continue
 
-    # Summary
-    total = conn.execute("SELECT COUNT(*) FROM cfb_player_season_stats").fetchone()[0]
-    seasons_in_db = conn.execute("SELECT DISTINCT season FROM cfb_player_season_stats ORDER BY season").fetchall()
-    season_list = [r[0] for r in seasons_in_db]
-    pos_counts = conn.execute("""
-        SELECT position, COUNT(DISTINCT player_id) FROM cfb_player_season_stats
-        GROUP BY position ORDER BY COUNT(DISTINCT player_id) DESC
-    """).fetchall()
+            results = aggregate_season(csv_text, season)
+            upsert_stats(conn, results)
+            total_players += len(results)
+            print(f"  {season}: {len(results)} players written.")
 
-    print(f"\nDone. {total} player-season rows in cfb_player_season_stats.")
-    print(f"Seasons: {season_list}")
-    print("Position breakdown:")
-    for row in pos_counts:
-        print(f"  {row[0]}: {row[1]} unique players")
+        # Refine positions using combine/draft data if available
+        try:
+            refine_positions_from_combine(conn)
+        except Exception as e:
+            print(f"  Position refinement skipped: {e}")
 
-    conn.close()
+        # Update sync state
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS sync_state (
+                key TEXT PRIMARY KEY,
+                value TEXT,
+                updated_at TEXT
+            )
+        """)
+        conn.execute("""
+            INSERT OR REPLACE INTO sync_state (key, value, updated_at)
+            VALUES ('last_cfbfastr_sync', ?, ?)
+        """, (json.dumps({"seasons": seasons, "total_players": total_players}), utc_now()))
+        conn.commit()
+
+        # Summary
+        total = conn.execute("SELECT COUNT(*) FROM cfb_player_season_stats").fetchone()[0]
+        seasons_in_db = conn.execute("SELECT DISTINCT season FROM cfb_player_season_stats ORDER BY season").fetchall()
+        season_list = [r[0] for r in seasons_in_db]
+        pos_counts = conn.execute("""
+            SELECT position, COUNT(DISTINCT player_id) FROM cfb_player_season_stats
+            GROUP BY position ORDER BY COUNT(DISTINCT player_id) DESC
+        """).fetchall()
+
+        print(f"\nDone. {total} player-season rows in cfb_player_season_stats.")
+        print(f"Seasons: {season_list}")
+        print("Position breakdown:")
+        for row in pos_counts:
+            print(f"  {row[0]}: {row[1]} unique players")
+    finally:
+        conn.close()
 
 
 if __name__ == "__main__":
