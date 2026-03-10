@@ -21,11 +21,189 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="styles.css">
 <style>
+  /* ===== LAB SIDEBAR ===== */
+  .lab-sidebar {
+    position: fixed;
+    left: 0;
+    top: 56px;
+    bottom: 0;
+    width: 240px;
+    background: var(--bg-card);
+    border-right: 3px solid var(--ink);
+    overflow-y: auto;
+    z-index: 50;
+    transition: width 0.2s ease;
+    scrollbar-width: thin;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .lab-sidebar.collapsed {
+    width: 48px;
+  }
+
+  .lab-sidebar.collapsed .lab-sidebar-inner {
+    display: none;
+  }
+
+  .lab-sidebar.collapsed .lab-sidebar-toggle span {
+    transform: rotate(180deg);
+  }
+
+  .lab-sidebar-inner {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 60px;
+  }
+
+  .lab-sidebar-category {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-light);
+    padding: 14px 16px 5px;
+    position: sticky;
+    top: 0;
+    background: var(--bg-card);
+    z-index: 1;
+    border-bottom: 1px dashed var(--ink-faint);
+  }
+
+  .lab-sidebar-item {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 6px 16px 6px 22px;
+    cursor: pointer;
+    border-left: 4px solid transparent;
+    transition: all 0.1s;
+    color: var(--ink-medium);
+    display: block;
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .lab-sidebar-item:hover {
+    background: var(--bg-warm);
+    color: var(--ink);
+    border-left-color: var(--ink-faint);
+  }
+
+  .lab-sidebar-item.active {
+    background: var(--orange-light);
+    color: var(--ink);
+    border-left-color: var(--orange);
+    font-weight: 700;
+  }
+
+  .lab-sidebar-toggle {
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+    background: var(--bg-warm);
+    border: none;
+    border-top: 3px solid var(--ink);
+    cursor: pointer;
+    font-family: var(--font-display);
+    font-size: 16px;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.12s;
+  }
+
+  .lab-sidebar-toggle:hover {
+    background: var(--bg-card);
+  }
+
+  .lab-sidebar-toggle span {
+    display: inline-block;
+    transition: transform 0.2s;
+  }
+
+  /* ===== LAB MAIN ===== */
+  .lab-main {
+    margin-left: 240px;
+    min-height: calc(100vh - 56px);
+    transition: margin-left 0.2s ease;
+  }
+
+  .lab-sidebar.collapsed ~ .lab-main {
+    margin-left: 48px;
+  }
+
+  /* ===== LAB PANELS ===== */
+  .lab-panel {
+    min-height: calc(100vh - 56px);
+  }
+
+  .lab-panel-header {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    padding: 16px 20px 10px;
+    border-bottom: 2px dashed var(--ink-faint);
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  .lab-panel-header .breadcrumb {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-light);
+    text-transform: uppercase;
+  }
+
+  .lab-panel-frame {
+    width: 100%;
+    border: none;
+    min-height: calc(100vh - 120px);
+  }
+
+  .lab-panel-loading {
+    text-align: center;
+    padding: 60px 20px;
+  }
+
+  /* ===== MOBILE SIDEBAR ===== */
+  @media (max-width: 768px) {
+    .lab-sidebar {
+      transform: translateX(-100%);
+      width: 260px;
+      box-shadow: none;
+    }
+    .lab-sidebar.open {
+      transform: translateX(0);
+      box-shadow: 8px 0 24px rgba(15, 15, 26, 0.15);
+    }
+    .lab-main {
+      margin-left: 0;
+    }
+    .lab-sidebar.collapsed ~ .lab-main {
+      margin-left: 0;
+    }
+    .lab-menu-toggle {
+      display: flex;
+    }
+  }
+
+  @media (min-width: 769px) {
+    .lab-menu-toggle {
+      display: none;
+    }
+  }
+
   /* ===== LAB LAYOUT ===== */
   .lab-container {
     display: flex;
     flex-direction: column;
-    height: calc(100vh - 56px);
+    min-height: calc(100vh - 56px);
   }
 
   /* ===== TOOLBAR ===== */
@@ -1730,6 +1908,7 @@
 
 <!-- NAV -->
 <nav class="topnav">
+  <button class="lab-menu-toggle btn-chunky" onclick="document.getElementById('labSidebar').classList.toggle('open')" aria-label="Toggle sidebar" style="font-size:18px; padding:4px 10px; line-height:1;">&#9776;</button>
   <a href="/" class="logo">
     <div class="logo-mark">🐯</div>
     <div class="logo-text">Razzle<span class="accent">.lol</span></div>
@@ -1744,6 +1923,108 @@
     <a href="#" class="btn-chunky btn-sm" onclick="document.getElementById('auth-modal')?.classList.add('open'); return false;">Sign In</a>
   </div>
 </nav>
+
+<!-- SIDEBAR -->
+<aside class="lab-sidebar" id="labSidebar">
+  <div class="lab-sidebar-inner">
+
+    <div class="lab-sidebar-category">Screener</div>
+    <a class="lab-sidebar-item active" data-panel="screener" onclick="switchPanel('screener')">The Screener</a>
+
+    <div class="lab-sidebar-category">Rankings &amp; Values</div>
+    <a class="lab-sidebar-item" data-panel="rankings" onclick="switchPanel('rankings','/rankings.html')">Dynasty Rankings</a>
+    <a class="lab-sidebar-item" data-panel="tiers" onclick="switchPanel('tiers','/tiers.html')">Tiers</a>
+    <a class="lab-sidebar-item" data-panel="tradevalues" onclick="switchPanel('tradevalues','/tradevalues.html')">Trade Values</a>
+    <a class="lab-sidebar-item" data-panel="vorp" onclick="switchPanel('vorp','/vorp.html')">VORP</a>
+    <a class="lab-sidebar-item" data-panel="advantage" onclick="switchPanel('advantage','/advantage.html')">Positional Advantage</a>
+    <a class="lab-sidebar-item" data-panel="auction" onclick="switchPanel('auction','/auction.html')">Auction Values</a>
+    <a class="lab-sidebar-item" data-panel="cheatsheet" onclick="switchPanel('cheatsheet','/cheatsheet.html')">Cheat Sheet</a>
+
+    <div class="lab-sidebar-category">Discovery</div>
+    <a class="lab-sidebar-item" data-panel="breakouts" onclick="switchPanel('breakouts','/breakouts.html')">Breakouts</a>
+    <a class="lab-sidebar-item" data-panel="buysell" onclick="switchPanel('buysell','/buysell.html')">Buy / Sell</a>
+    <a class="lab-sidebar-item" data-panel="stocks" onclick="switchPanel('stocks','/stocks.html')">Stock Watch</a>
+    <a class="lab-sidebar-item" data-panel="waivers" onclick="switchPanel('waivers','/waivers.html')">Waivers</a>
+    <a class="lab-sidebar-item" data-panel="scarcity" onclick="switchPanel('scarcity','/scarcity.html')">Scarcity</a>
+    <a class="lab-sidebar-item" data-panel="handcuffs" onclick="switchPanel('handcuffs','/handcuffs.html')">Handcuffs</a>
+
+    <div class="lab-sidebar-category">Performance</div>
+    <a class="lab-sidebar-item" data-panel="efficiency" onclick="switchPanel('efficiency','/efficiency.html')">Efficiency</a>
+    <a class="lab-sidebar-item" data-panel="consistency" onclick="switchPanel('consistency','/consistency.html')">Consistency</a>
+    <a class="lab-sidebar-item" data-panel="snapefficiency" onclick="switchPanel('snapefficiency','/snapefficiency.html')">Snap Efficiency</a>
+    <a class="lab-sidebar-item" data-panel="workload" onclick="switchPanel('workload','/workload.html')">Workload Monitor</a>
+    <a class="lab-sidebar-item" data-panel="dualthreat" onclick="switchPanel('dualthreat','/dualthreat.html')">Dual-Threat</a>
+    <a class="lab-sidebar-item" data-panel="targetpremium" onclick="switchPanel('targetpremium','/targetpremium.html')">Target Premium</a>
+    <a class="lab-sidebar-item" data-panel="drops" onclick="switchPanel('drops','/drops.html')">Drop Rate</a>
+    <a class="lab-sidebar-item" data-panel="garbagetime" onclick="switchPanel('garbagetime','/garbagetime.html')">Garbage Time</a>
+    <a class="lab-sidebar-item" data-panel="successrate" onclick="switchPanel('successrate','/successrate.html')">Success Rate</a>
+
+    <div class="lab-sidebar-category">Game Analysis</div>
+    <a class="lab-sidebar-item" data-panel="weekly" onclick="switchPanel('weekly','/weekly.html')">Weekly Heatmap</a>
+    <a class="lab-sidebar-item" data-panel="matchups" onclick="switchPanel('matchups','/matchups.html')">Matchups</a>
+    <a class="lab-sidebar-item" data-panel="stacks" onclick="switchPanel('stacks','/stacks.html')">Stacks</a>
+    <a class="lab-sidebar-item" data-panel="redzone" onclick="switchPanel('redzone','/redzone.html')">Red Zone</a>
+    <a class="lab-sidebar-item" data-panel="streaks" onclick="switchPanel('streaks','/streaks.html')">Streaks</a>
+    <a class="lab-sidebar-item" data-panel="weeklyleaders" onclick="switchPanel('weeklyleaders','/weeklyleaders.html')">Weekly Leaders</a>
+    <a class="lab-sidebar-item" data-panel="weeklymvp" onclick="switchPanel('weeklymvp','/weeklymvp.html')">Weekly MVP Grid</a>
+    <a class="lab-sidebar-item" data-panel="playoffs" onclick="switchPanel('playoffs','/playoffs.html')">Playoffs</a>
+
+    <div class="lab-sidebar-category">Trends &amp; Projections</div>
+    <a class="lab-sidebar-item" data-panel="usage" onclick="switchPanel('usage','/usage.html')">Usage Trends</a>
+    <a class="lab-sidebar-item" data-panel="yoy" onclick="switchPanel('yoy','/yoy.html')">Year-over-Year</a>
+    <a class="lab-sidebar-item" data-panel="aging" onclick="switchPanel('aging','/aging.html')">Aging Curves</a>
+    <a class="lab-sidebar-item" data-panel="pace" onclick="switchPanel('pace','/pace.html')">Pace Tracker</a>
+    <a class="lab-sidebar-item" data-panel="seasonpace" onclick="switchPanel('seasonpace','/seasonpace.html')">Season Pace</a>
+    <a class="lab-sidebar-item" data-panel="tdregression" onclick="switchPanel('tdregression','/tdregression.html')">TD Regression</a>
+    <a class="lab-sidebar-item" data-panel="airyards" onclick="switchPanel('airyards','/airyards.html')">Air Yards</a>
+
+    <div class="lab-sidebar-category">Prospects &amp; College</div>
+    <a class="lab-sidebar-item" data-panel="prospects" onclick="switchPanel('prospects','/prospects.html')">Big Board</a>
+    <a class="lab-sidebar-item" data-panel="draftclass" onclick="switchPanel('draftclass','/draftclass.html')">Draft Class Analytics</a>
+    <a class="lab-sidebar-item" data-panel="percentiles" onclick="switchPanel('percentiles','/percentiles.html')">Percentiles</a>
+
+    <div class="lab-sidebar-category">Player Tools</div>
+    <a class="lab-sidebar-item" data-panel="career" onclick="switchPanel('career','/career.html')">Career Stats</a>
+    <a class="lab-sidebar-item" data-panel="career-compare" onclick="switchPanel('career-compare','/career-compare.html')">Career Compare</a>
+    <a class="lab-sidebar-item" data-panel="comptable" onclick="switchPanel('comptable','/comptable.html')">Compare Table</a>
+    <a class="lab-sidebar-item" data-panel="strengths" onclick="switchPanel('strengths','/strengths.html')">Strengths</a>
+    <a class="lab-sidebar-item" data-panel="reportcard" onclick="switchPanel('reportcard','/reportcard.html')">Report Card</a>
+    <a class="lab-sidebar-item" data-panel="fptsbreakdown" onclick="switchPanel('fptsbreakdown','/fptsbreakdown.html')">FPTS Breakdown</a>
+    <a class="lab-sidebar-item" data-panel="gamelog" onclick="switchPanel('gamelog','/gamelog.html')">Game Log</a>
+    <a class="lab-sidebar-item" data-panel="archetypes" onclick="switchPanel('archetypes','/archetypes.html')">Archetypes</a>
+    <a class="lab-sidebar-item" data-panel="breakdown" onclick="switchPanel('breakdown','/breakdown.html')">Scoring Breakdown</a>
+
+    <div class="lab-sidebar-category">League Tools</div>
+    <a class="lab-sidebar-item" data-panel="rosterbuilder" onclick="switchPanel('rosterbuilder','/rosterbuilder.html')">Roster Builder</a>
+    <a class="lab-sidebar-item" data-panel="tradefinder" onclick="switchPanel('tradefinder','/tradefinder.html')">Trade Finder</a>
+    <a class="lab-sidebar-item" data-panel="scoring" onclick="switchPanel('scoring','/scoring.html')">Scoring Comparison</a>
+    <a class="lab-sidebar-item" data-panel="dashboard" onclick="switchPanel('dashboard','/dashboard.html')">Dashboard</a>
+    <a class="lab-sidebar-item" data-panel="schedule" onclick="switchPanel('schedule','/schedule.html')">Schedule / SOS</a>
+    <a class="lab-sidebar-item" data-panel="opportunity" onclick="switchPanel('opportunity','/opportunity.html')">Opportunity Share</a>
+
+    <div class="lab-sidebar-category">Records &amp; History</div>
+    <a class="lab-sidebar-item" data-panel="records" onclick="switchPanel('records','/records.html')">Records</a>
+    <a class="lab-sidebar-item" data-panel="recap" onclick="switchPanel('recap','/recap.html')">Season Recap</a>
+    <a class="lab-sidebar-item" data-panel="awards" onclick="switchPanel('awards','/awards.html')">Awards</a>
+    <a class="lab-sidebar-item" data-panel="leaders" onclick="switchPanel('leaders','/leaders.html')">Stat Leaders</a>
+    <a class="lab-sidebar-item" data-panel="explorer" onclick="switchPanel('explorer','/explorer.html')">Explorer</a>
+
+    <div class="lab-sidebar-category">Teams</div>
+    <a class="lab-sidebar-item" data-panel="targets" onclick="switchPanel('targets','/targets.html')">Target Distribution</a>
+    <a class="lab-sidebar-item" data-panel="team" onclick="switchPanel('team','/team.html')">Team Rosters</a>
+
+  </div>
+
+  <button class="lab-sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" title="Toggle sidebar">
+    <span id="sidebarToggleIcon">&laquo;</span>
+  </button>
+</aside>
+
+<!-- LAB MAIN -->
+<div class="lab-main" id="labMain">
+
+<!-- PANEL: SCREENER (default) -->
+<div class="lab-panel" id="panel-screener">
 
 <!-- TOOLBAR -->
 <div class="lab-container">
@@ -2363,11 +2644,176 @@
   </div>
 </div>
 
+</div><!-- /panel-screener -->
+
+<!-- PANEL: IFRAME (for standalone pages loaded in sidebar) -->
+<div class="lab-panel" id="panel-iframe" style="display:none;">
+  <div class="lab-panel-header">
+    <span class="breadcrumb" id="panelBreadcrumb">The Lab</span>
+    <span id="panelTitle">Tool</span>
+  </div>
+  <div class="lab-panel-loading" id="panelLoading" style="display:none;">
+    <div class="loading-msg">pulling film...</div>
+  </div>
+  <iframe id="panelFrame" class="lab-panel-frame" src="about:blank" frameborder="0"></iframe>
+</div>
+
+</div><!-- /lab-main -->
+
 <script src="app.js"></script>
 <script src="lab.js"></script>
 <script src="formulas.js"></script>
 <script src="formula-store.js"></script>
 <script src="charts.js"></script>
 <script>fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({page:location.pathname})}).catch(function(){});</script>
+
+<!-- LAB SIDEBAR PANEL SWITCHING -->
+<script>
+(function() {
+  var currentPanel = 'screener';
+  var loadedFrames = {};
+  var PANEL_LABELS = {
+    screener: 'The Screener',
+    rankings: 'Dynasty Rankings', tiers: 'Tiers', tradevalues: 'Trade Values',
+    vorp: 'VORP', advantage: 'Positional Advantage', auction: 'Auction Values', cheatsheet: 'Cheat Sheet',
+    breakouts: 'Breakouts', buysell: 'Buy / Sell', stocks: 'Stock Watch', waivers: 'Waivers',
+    scarcity: 'Scarcity', handcuffs: 'Handcuffs',
+    efficiency: 'Efficiency', consistency: 'Consistency', snapefficiency: 'Snap Efficiency',
+    workload: 'Workload Monitor', dualthreat: 'Dual-Threat', targetpremium: 'Target Premium',
+    drops: 'Drop Rate', garbagetime: 'Garbage Time', successrate: 'Success Rate',
+    weekly: 'Weekly Heatmap', matchups: 'Matchups', stacks: 'Stacks', redzone: 'Red Zone',
+    streaks: 'Streaks', weeklyleaders: 'Weekly Leaders', weeklymvp: 'Weekly MVP Grid', playoffs: 'Playoffs',
+    usage: 'Usage Trends', yoy: 'Year-over-Year', aging: 'Aging Curves', pace: 'Pace Tracker',
+    seasonpace: 'Season Pace', tdregression: 'TD Regression', airyards: 'Air Yards',
+    prospects: 'Big Board', draftclass: 'Draft Class Analytics', percentiles: 'Percentiles',
+    career: 'Career Stats', 'career-compare': 'Career Compare', comptable: 'Compare Table',
+    strengths: 'Strengths', reportcard: 'Report Card', fptsbreakdown: 'FPTS Breakdown',
+    gamelog: 'Game Log', archetypes: 'Archetypes', breakdown: 'Scoring Breakdown',
+    rosterbuilder: 'Roster Builder', tradefinder: 'Trade Finder', scoring: 'Scoring Comparison',
+    dashboard: 'Dashboard', schedule: 'Schedule / SOS', opportunity: 'Opportunity Share',
+    records: 'Records', recap: 'Season Recap', awards: 'Awards', leaders: 'Stat Leaders',
+    explorer: 'Explorer', targets: 'Target Distribution', team: 'Team Rosters'
+  };
+
+  // Find the category for breadcrumb
+  var PANEL_CATEGORIES = {};
+  document.querySelectorAll('.lab-sidebar-category').forEach(function(cat) {
+    var categoryName = cat.textContent.trim();
+    var next = cat.nextElementSibling;
+    while (next && !next.classList.contains('lab-sidebar-category')) {
+      if (next.dataset && next.dataset.panel) {
+        PANEL_CATEGORIES[next.dataset.panel] = categoryName;
+      }
+      next = next.nextElementSibling;
+    }
+  });
+
+  window.switchPanel = function(panelName, url) {
+    if (panelName === currentPanel) return;
+
+    // Hide all panels
+    document.querySelectorAll('.lab-panel').forEach(function(p) { p.style.display = 'none'; });
+
+    // Update sidebar active state
+    document.querySelectorAll('.lab-sidebar-item').forEach(function(item) {
+      item.classList.toggle('active', item.dataset.panel === panelName);
+    });
+
+    if (panelName === 'screener') {
+      // Show the inline screener
+      document.getElementById('panel-screener').style.display = '';
+    } else {
+      // Show the iframe panel
+      var iframePanel = document.getElementById('panel-iframe');
+      iframePanel.style.display = '';
+
+      // Update header
+      var label = PANEL_LABELS[panelName] || panelName;
+      var cat = PANEL_CATEGORIES[panelName] || 'The Lab';
+      document.getElementById('panelBreadcrumb').textContent = 'The Lab > ' + cat;
+      document.getElementById('panelTitle').textContent = label;
+
+      // Load iframe if not already loaded with this URL
+      var frame = document.getElementById('panelFrame');
+      if (url && loadedFrames[panelName] !== url) {
+        document.getElementById('panelLoading').style.display = '';
+        frame.style.display = 'none';
+        frame.src = url;
+        loadedFrames[panelName] = url;
+
+        frame.onload = function() {
+          document.getElementById('panelLoading').style.display = 'none';
+          frame.style.display = '';
+          // Hide the nav inside the iframe to avoid double nav
+          try {
+            var iframeDoc = frame.contentDocument || frame.contentWindow.document;
+            var iframeNav = iframeDoc.querySelector('.topnav');
+            if (iframeNav) iframeNav.style.display = 'none';
+            // Also hide watermark if present
+            var wm = iframeDoc.querySelector('.watermark');
+            if (wm) wm.style.display = 'none';
+          } catch(e) { /* cross-origin, ignore */ }
+        };
+      }
+    }
+
+    currentPanel = panelName;
+
+    // Update URL
+    var newUrl = panelName === 'screener'
+      ? window.location.pathname
+      : window.location.pathname + '?panel=' + panelName;
+    history.pushState({ panel: panelName }, '', newUrl);
+  };
+
+  window.toggleSidebar = function() {
+    var sidebar = document.getElementById('labSidebar');
+    sidebar.classList.toggle('collapsed');
+    localStorage.setItem('razzle_sidebar_collapsed', sidebar.classList.contains('collapsed') ? '1' : '0');
+  };
+
+  // Restore sidebar state
+  if (localStorage.getItem('razzle_sidebar_collapsed') === '1') {
+    document.getElementById('labSidebar').classList.add('collapsed');
+  }
+
+  // Handle URL state on load
+  var params = new URLSearchParams(window.location.search);
+  var initPanel = params.get('panel');
+  if (initPanel && initPanel !== 'screener') {
+    // Find the sidebar item and get its URL
+    var sidebarItem = document.querySelector('.lab-sidebar-item[data-panel="' + initPanel + '"]');
+    if (sidebarItem) {
+      var onclickStr = sidebarItem.getAttribute('onclick');
+      var urlMatch = onclickStr && onclickStr.match(/'(\/[^']+\.html)'/);
+      if (urlMatch) {
+        switchPanel(initPanel, urlMatch[1]);
+      }
+    }
+  }
+
+  // Handle browser back/forward
+  window.addEventListener('popstate', function(e) {
+    if (e.state && e.state.panel) {
+      var sidebarItem = document.querySelector('.lab-sidebar-item[data-panel="' + e.state.panel + '"]');
+      if (sidebarItem) {
+        var onclickStr = sidebarItem.getAttribute('onclick');
+        var urlMatch = onclickStr && onclickStr.match(/'(\/[^']+\.html)'/);
+        switchPanel(e.state.panel, urlMatch ? urlMatch[1] : null);
+      }
+    } else {
+      switchPanel('screener');
+    }
+  });
+
+  // Mobile sidebar toggle
+  var mobileToggle = document.querySelector('.lab-menu-toggle');
+  if (mobileToggle) {
+    mobileToggle.addEventListener('click', function() {
+      document.getElementById('labSidebar').classList.toggle('open');
+    });
+  }
+})();
+</script>
 </body>
 </html>
