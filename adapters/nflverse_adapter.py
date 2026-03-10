@@ -1187,6 +1187,12 @@ def migrate_add_columns(conn):
         conn.execute("ALTER TABLE players ADD COLUMN headshot_url TEXT")
         print("  Added column: headshot_url to players")
 
+    # Phase 66: Add fantasy_relevant to players table (default 1 for all)
+    if "fantasy_relevant" not in players_cols:
+        conn.execute("ALTER TABLE players ADD COLUMN fantasy_relevant INTEGER DEFAULT 1")
+        conn.execute("UPDATE players SET fantasy_relevant = 1 WHERE fantasy_relevant IS NULL")
+        print("  Added column: fantasy_relevant to players")
+
     conn.commit()
 
 
