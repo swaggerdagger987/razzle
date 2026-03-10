@@ -13,8 +13,8 @@
 **Notes**: (Q1) Check if fantasy_relevant column exists in nflverse_adapter.py schema. If not, either add it to migrate_add_columns or remove the filter from all queries in live_data.py. (Q2) Replace f-string position filter in fetch_stat_leaders with parameterized queries. (Q3) Fix connection leak: combine double connection into single session with try/finally. (Q5) Move seasons query before conn.close().
 
 ## Task 2: HIGH — Fix trackPageview + analytics standardization
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 **Notes**: (Q4) Replace trackPageview calls in team.html and leaders.html with inline fetch pattern matching rankings.html. Or define trackPageview in app.js. Ensure all new pages (team, leaders, rankings) consistently track pageviews.
 
 ## Task 3: HIGH — Rankings DVS label + methodology explainer

@@ -527,12 +527,10 @@
     });
   }
 
-  // ---- Track pageview ----
-  if (typeof trackPageview === "function") trackPageview("/leaders.html");
-
   // ---- Initial load ----
   loadLeaders();
 })();
 </script>
+<script>fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({page:location.pathname})}).catch(function(){});</script>
 </body>
 </html>

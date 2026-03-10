@@ -581,12 +581,10 @@
     });
   }
 
-  // ---- Track pageview ----
-  if (typeof trackPageview === "function") trackPageview("/team");
-
   // ---- Initial load ----
   loadTeam();
 })();
 </script>
+<script>fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({page:location.pathname})}).catch(function(){});</script>
 </body>
 </html>
