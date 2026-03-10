@@ -897,6 +897,18 @@ def trade_pick_values(year: int = 2025, rounds: int = 4, teams: int = 12):
     return {"picks": live_data.fetch_pick_values(year, rounds, teams)}
 
 
+@app.post("/api/roster-value")
+async def roster_value(request: Request):
+    """Calculate dynasty roster value analysis."""
+    body = await request.json()
+    player_ids = body.get("player_ids", [])
+    if not isinstance(player_ids, list):
+        return {"error": "player_ids must be a list"}
+    # Limit to 60 players max (full dynasty roster)
+    player_ids = player_ids[:60]
+    return live_data.fetch_roster_value(player_ids)
+
+
 # ---------------------------------------------------------------------------
 # Analytics (lightweight page views)
 # ---------------------------------------------------------------------------

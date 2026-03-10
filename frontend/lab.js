@@ -7214,6 +7214,653 @@ function _taDrawPickChart() {
   _taSetupSearch("get");
 })();
 
+// ─── My Roster — Dynasty Roster Value Calculator ──────────────────────
+
+var _rosterCache = null;
+function getMyRoster() {
+  if (_rosterCache !== null) return _rosterCache;
+  try { _rosterCache = JSON.parse(localStorage.getItem("razzle_my_roster")) || []; }
+  catch { _rosterCache = []; }
+  return _rosterCache;
+}
+function saveMyRoster(list) {
+  _rosterCache = list;
+  localStorage.setItem("razzle_my_roster", JSON.stringify(list));
+}
+function addToRoster(playerId, name, position, team) {
+  var list = getMyRoster();
+  if (list.find(function(p) { return p.player_id === playerId; })) return;
+  list.push({ player_id: playerId, name: name, position: position, team: team });
+  saveMyRoster(list);
+}
+function removeFromRoster(playerId) {
+  var list = getMyRoster().filter(function(p) { return p.player_id !== playerId; });
+  saveMyRoster(list);
+}
+
+var _rosterReport = null; // cached API response
+
+function openMyRoster() {
+  var overlay = document.getElementById("rosterOverlay");
+  if (!overlay) {
+    overlay = document.createElement("div");
+    overlay.id = "rosterOverlay";
+    overlay.className = "filter-modal-overlay";
+    overlay.onclick = function(e) { if (e.target === overlay) overlay.classList.remove("open"); };
+    document.body.appendChild(overlay);
+  }
+  _rosterReport = null;
+  renderMyRosterPanel();
+  overlay.classList.add("open");
+}
+
+function closeMyRoster(e) {
+  if (e && e.target !== e.currentTarget) return;
+  var overlay = document.getElementById("rosterOverlay");
+  if (overlay) overlay.classList.remove("open");
+}
+
+var _rosterSearchTimer = null;
+function rosterSearchInput(val) {
+  clearTimeout(_rosterSearchTimer);
+  _rosterSearchTimer = setTimeout(function() { rosterSearchPlayers(val); }, 250);
+}
+
+async function rosterSearchPlayers(query) {
+  var results = document.getElementById("rosterSearchResults");
+  if (!results) return;
+  if (!query || query.length < 2) { results.innerHTML = ""; return; }
+  try {
+    var data = await apiFetch("/api/players?search=" + encodeURIComponent(query) + "&limit=8");
+    var players = data.players || data || [];
+    var roster = getMyRoster();
+    var html = "";
+    players.forEach(function(p) {
+      var pid = p.player_id || p.gsis_id || "";
+      var inRoster = roster.find(function(r) { return r.player_id === pid; });
+      if (inRoster) return;
+      var pos = p.position || "??";
+      html += '<div style="display:flex; align-items:center; gap:6px; padding:4px 8px; cursor:pointer; border-radius:4px; margin-bottom:2px; background:var(--bg);" onclick="addToRoster(\'' + escapeAttr(pid) + '\',\'' + escapeAttr(p.full_name || p.name || "") + '\',\'' + escapeAttr(pos) + '\',\'' + escapeAttr(p.team || "FA") + '\'); rosterSearchPlayers(\'' + escapeAttr(query) + '\'); renderMyRosterPanel();">';
+      html += '<span class="pos-badge pos-' + pos.toLowerCase() + '" style="font-size:9px; padding:1px 5px;">' + escapeHtml(pos) + '</span>';
+      html += '<span style="font-family:var(--font-display); font-size:12px;">' + escapeHtml(p.full_name || p.name || "") + '</span>';
+      html += '<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + escapeHtml(p.team || "FA") + '</span>';
+      html += '<span style="font-family:var(--font-hand); font-size:12px; color:var(--green); margin-left:auto;">+ add</span>';
+      html += '</div>';
+    });
+    if (players.length === 0) html = '<div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-faint); padding:8px;">no matches</div>';
+    results.innerHTML = html;
+  } catch (err) {
+    results.innerHTML = '<div style="color:var(--red); font-size:12px;">search failed</div>';
+  }
+}
+
+async function calculateRosterValue() {
+  var list = getMyRoster();
+  if (list.length === 0) return;
+  var ids = list.map(function(p) { return p.player_id; });
+  var reportArea = document.getElementById("rosterReportArea");
+  if (reportArea) reportArea.innerHTML = '<div style="text-align:center; padding:30px; font-family:var(--font-hand); font-size:20px; color:var(--orange);">pulling film on your roster...</div>';
+  try {
+    var data = await apiFetch("/api/roster-value", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ player_ids: ids })
+    });
+    _rosterReport = data;
+    renderRosterReport();
+  } catch (err) {
+    if (reportArea) reportArea.innerHTML = '<div style="color:var(--red); padding:20px; text-align:center;">failed to calculate roster value</div>';
+  }
+}
+
+function renderMyRosterPanel() {
+  var overlay = document.getElementById("rosterOverlay");
+  if (!overlay) return;
+  var list = getMyRoster();
+  var posColors = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
+
+  var html = '<div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:700px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">';
+  // Header
+  html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">';
+  html += '<h3 style="font-family:var(--font-display); font-size:22px; margin:0;">My Roster <span style="color:var(--green);">(' + list.length + ')</span></h3>';
+  html += '<div style="display:flex; gap:6px;">';
+  if (list.length > 0) {
+    html += '<button class="btn-primary" onclick="calculateRosterValue()">Calculate Value</button>';
+  }
+  html += '<button class="btn-chunky" onclick="closeMyRoster(event)">Close</button>';
+  html += '</div></div>';
+
+  // Search
+  html += '<div style="margin-bottom:14px;">';
+  html += '<input type="text" placeholder="search players to add..." style="width:100%; padding:8px 12px; border:2px solid var(--ink); border-radius:8px; font-family:var(--font-mono); font-size:13px; background:var(--bg); box-sizing:border-box;" oninput="rosterSearchInput(this.value)" />';
+  html += '<div id="rosterSearchResults" style="max-height:200px; overflow-y:auto; margin-top:4px;"></div>';
+  html += '</div>';
+
+  if (list.length === 0) {
+    html += '<p style="font-family:var(--font-hand); font-size:20px; color:var(--ink-light); text-align:center; padding:30px 0;">add players to see your dynasty roster value</p>';
+    html += '</div>';
+    overlay.innerHTML = html;
+    return;
+  }
+
+  // Roster list grouped by position
+  var groups = { QB: [], RB: [], WR: [], TE: [], OTHER: [] };
+  list.forEach(function(p) {
+    var g = groups[p.position] ? p.position : "OTHER";
+    groups[g].push(p);
+  });
+
+  ["QB", "RB", "WR", "TE", "OTHER"].forEach(function(pos) {
+    if (groups[pos].length === 0) return;
+    var pc = posColors[pos] || "var(--ink-light)";
+    html += '<div style="margin-bottom:10px;">';
+    html += '<div style="font-family:var(--font-display); font-size:13px; color:' + pc + '; margin-bottom:4px; border-bottom:2px dashed var(--ink-faint); padding-bottom:3px;">' + pos + ' (' + groups[pos].length + ')</div>';
+    groups[pos].forEach(function(p) {
+      html += '<div style="display:flex; align-items:center; gap:6px; padding:4px 8px; border-radius:6px; margin-bottom:2px; background:var(--bg);">';
+      html += '<span class="pos-badge pos-' + p.position.toLowerCase() + '" style="font-size:9px; padding:1px 5px;">' + escapeHtml(p.position) + '</span>';
+      html += '<span style="font-family:var(--font-display); font-size:12px; flex:1;">' + escapeHtml(p.name) + '</span>';
+      html += '<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + escapeHtml(p.team) + '</span>';
+      html += '<button class="btn-chunky" style="font-size:10px; padding:2px 6px; color:var(--red);" onclick="removeFromRoster(\'' + escapeAttr(p.player_id) + '\'); renderMyRosterPanel();" title="Remove">&#10005;</button>';
+      html += '</div>';
+    });
+    html += '</div>';
+  });
+
+  // Report area
+  html += '<div id="rosterReportArea"></div>';
+
+  // If we have a cached report, render it
+  html += '</div>';
+  overlay.innerHTML = html;
+
+  if (_rosterReport) {
+    renderRosterReport();
+  }
+}
+
+// ─── Roster Report Rendering ──────────────────────────────────────────
+
+var _GRADE_COLORS = {
+  "A+": "#2ec4b6", "A": "#2ec4b6", "A-": "#2ec4b6",
+  "B+": "#5b7fff", "B": "#5b7fff", "B-": "#5b7fff",
+  "C+": "#d97757", "C": "#d97757", "C-": "#d97757",
+  "D+": "#e63946", "D": "#e63946", "D-": "#e63946",
+  "F": "#e63946"
+};
+var _STATUS_COLORS = { "competing": "#2ec4b6", "retooling": "#d97757", "rebuilding": "#e63946" };
+var _POS_HEX = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+
+function renderRosterReport() {
+  var area = document.getElementById("rosterReportArea");
+  if (!area || !_rosterReport) return;
+
+  var r = _rosterReport;
+  var gc = _GRADE_COLORS[r.grade] || "#d97757";
+  var sc = _STATUS_COLORS[r.competing_status] || "#d97757";
+
+  var html = '<div style="margin-top:16px; border-top:3px solid var(--ink); padding-top:16px;">';
+
+  // Summary row: grade + total value + status
+  html += '<div style="display:flex; align-items:center; gap:16px; margin-bottom:16px; flex-wrap:wrap;">';
+  // Grade badge
+  html += '<div style="background:' + gc + '; color:white; font-family:var(--font-display); font-size:32px; padding:8px 16px; border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); transform:rotate(-3deg); min-width:60px; text-align:center;">' + escapeHtml(r.grade) + '</div>';
+  // Stats
+  html += '<div style="flex:1;">';
+  html += '<div style="font-family:var(--font-display); font-size:24px;">' + r.total_value + ' <span style="font-size:14px; color:var(--ink-light);">total value</span></div>';
+  html += '<div style="font-family:var(--font-mono); font-size:13px; color:var(--ink-light);">avg age: ' + r.average_age + '</div>';
+  html += '</div>';
+  // Status badge
+  html += '<div style="background:' + sc + '; color:white; font-family:var(--font-display); font-size:14px; padding:6px 14px; border:2px solid var(--ink); border-radius:8px; box-shadow:3px 3px 0 var(--ink); transform:rotate(2deg); text-transform:uppercase;">' + escapeHtml(r.competing_status) + '</div>';
+  html += '</div>';
+
+  // Charts row
+  html += '<div style="display:flex; gap:16px; flex-wrap:wrap; margin-bottom:16px;">';
+  // Pie chart
+  html += '<div style="flex:1; min-width:220px;">';
+  html += '<div style="font-family:var(--font-display); font-size:13px; margin-bottom:6px;">Positional Breakdown</div>';
+  html += '<canvas id="rosterPieChart" width="240" height="200" style="border:3px solid var(--ink); border-radius:10px; background:var(--bg); box-shadow:3px 3px 0 var(--ink);"></canvas>';
+  html += '</div>';
+  // Age scatter
+  html += '<div style="flex:1; min-width:220px;">';
+  html += '<div style="font-family:var(--font-display); font-size:13px; margin-bottom:6px;">Age vs Value</div>';
+  html += '<canvas id="rosterAgeChart" width="280" height="200" style="border:3px solid var(--ink); border-radius:10px; background:var(--bg); box-shadow:3px 3px 0 var(--ink);"></canvas>';
+  html += '</div>';
+  html += '</div>';
+
+  // Player values table
+  html += '<div style="font-family:var(--font-display); font-size:13px; margin-bottom:6px;">Player Values</div>';
+  html += '<div style="max-height:200px; overflow-y:auto; border:2px solid var(--ink); border-radius:8px;">';
+  var sortedPlayers = (r.players || []).slice().sort(function(a, b) { return b.trade_value - a.trade_value; });
+  sortedPlayers.forEach(function(p, i) {
+    var bg = i % 2 === 0 ? "var(--bg)" : "var(--bg-card)";
+    html += '<div style="display:flex; align-items:center; gap:6px; padding:4px 8px; background:' + bg + '; font-size:12px;">';
+    html += '<span style="font-family:var(--font-mono); color:var(--ink-faint); width:20px;">' + (i + 1) + '</span>';
+    html += '<span class="pos-badge pos-' + (p.position || "wr").toLowerCase() + '" style="font-size:9px; padding:1px 5px;">' + escapeHtml(p.position) + '</span>';
+    html += '<span style="font-family:var(--font-display); flex:1;">' + escapeHtml(p.full_name) + '</span>';
+    html += '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + escapeHtml(p.team) + '</span>';
+    // Value bar
+    var pct = Math.min(100, p.trade_value);
+    var pc = _POS_HEX[p.position] || "#d97757";
+    html += '<div style="width:80px; height:14px; background:var(--ink-faint); border-radius:4px; overflow:hidden; border:1px solid var(--ink);">';
+    html += '<div style="width:' + pct + '%; height:100%; background:' + pc + ';"></div>';
+    html += '</div>';
+    html += '<span style="font-family:var(--font-mono); font-size:12px; font-weight:bold; width:32px; text-align:right;">' + p.trade_value + '</span>';
+    html += '</div>';
+  });
+  html += '</div>';
+
+  // Export button
+  html += '<div style="text-align:center; margin-top:16px;">';
+  html += '<button class="btn-primary" onclick="exportRosterTeamCard()" style="font-size:14px; padding:10px 24px;">Export Team Card</button>';
+  html += '</div>';
+
+  html += '</div>';
+  area.innerHTML = html;
+
+  // Draw charts
+  setTimeout(function() {
+    drawRosterPieChart();
+    drawRosterAgeChart();
+  }, 50);
+}
+
+// ─── Pie Chart ────────────────────────────────────────────────────────
+
+function drawRosterPieChart() {
+  var canvas = document.getElementById("rosterPieChart");
+  if (!canvas || !_rosterReport) return;
+  var ctx = canvas.getContext("2d");
+  var W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  var totals = _rosterReport.positional_totals || {};
+  var total = _rosterReport.total_value || 1;
+  var posOrder = ["QB", "RB", "WR", "TE"];
+  var slices = [];
+  posOrder.forEach(function(pos) {
+    if (totals[pos]) slices.push({ pos: pos, val: totals[pos], pct: totals[pos] / total });
+  });
+  // Add "Other" for non-standard positions
+  var otherVal = total - slices.reduce(function(s, sl) { return s + sl.val; }, 0);
+  if (otherVal > 0.5) slices.push({ pos: "Other", val: otherVal, pct: otherVal / total });
+
+  var cx = 100, cy = H / 2, radius = 70;
+  var startAngle = -Math.PI / 2;
+
+  slices.forEach(function(sl) {
+    var endAngle = startAngle + sl.pct * Math.PI * 2;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, radius, startAngle, endAngle);
+    ctx.closePath();
+    ctx.fillStyle = _POS_HEX[sl.pos] || "#888";
+    ctx.fill();
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    startAngle = endAngle;
+  });
+
+  // Legend
+  var ly = 20;
+  slices.forEach(function(sl) {
+    ctx.fillStyle = _POS_HEX[sl.pos] || "#888";
+    ctx.fillRect(W - 65, ly, 12, 12);
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 1;
+    ctx.strokeRect(W - 65, ly, 12, 12);
+    ctx.fillStyle = "#1a1a2e";
+    ctx.font = "bold 11px sans-serif";
+    ctx.textAlign = "left";
+    ctx.fillText(sl.pos + " " + Math.round(sl.pct * 100) + "%", W - 48, ly + 10);
+    ly += 20;
+  });
+}
+
+// ─── Age vs Value Scatter ─────────────────────────────────────────────
+
+function drawRosterAgeChart() {
+  var canvas = document.getElementById("rosterAgeChart");
+  if (!canvas || !_rosterReport) return;
+  var ctx = canvas.getContext("2d");
+  var W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  var players = _rosterReport.players || [];
+  if (players.length === 0) return;
+
+  var pad = { top: 20, right: 15, bottom: 30, left: 35 };
+  var plotW = W - pad.left - pad.right;
+  var plotH = H - pad.top - pad.bottom;
+
+  // Determine ranges
+  var ages = players.map(function(p) { return p.age || 22; });
+  var minAge = Math.floor(Math.min.apply(null, ages)) - 1;
+  var maxAge = Math.ceil(Math.max.apply(null, ages)) + 1;
+  var maxVal = 100;
+
+  function xPos(age) { return pad.left + ((age - minAge) / (maxAge - minAge)) * plotW; }
+  function yPos(val) { return pad.top + plotH - (val / maxVal) * plotH; }
+
+  // Grid
+  ctx.strokeStyle = "#d5c5b0";
+  ctx.lineWidth = 1;
+  for (var a = Math.ceil(minAge); a <= maxAge; a += 2) {
+    var gx = xPos(a);
+    ctx.beginPath(); ctx.moveTo(gx, pad.top); ctx.lineTo(gx, H - pad.bottom); ctx.stroke();
+    ctx.fillStyle = "#1a1a2e";
+    ctx.font = "10px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText(a, gx, H - pad.bottom + 14);
+  }
+  for (var v = 0; v <= 100; v += 25) {
+    var gy = yPos(v);
+    ctx.beginPath(); ctx.moveTo(pad.left, gy); ctx.lineTo(W - pad.right, gy); ctx.stroke();
+    ctx.fillStyle = "#1a1a2e";
+    ctx.font = "10px sans-serif";
+    ctx.textAlign = "right";
+    ctx.fillText(v, pad.left - 4, gy + 3);
+  }
+
+  // Axis labels
+  ctx.fillStyle = "#1a1a2e";
+  ctx.font = "bold 10px sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText("AGE", pad.left + plotW / 2, H - 2);
+  ctx.save();
+  ctx.translate(10, pad.top + plotH / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillText("VALUE", 0, 0);
+  ctx.restore();
+
+  // Plot dots
+  players.forEach(function(p) {
+    var age = p.age || 22;
+    var val = p.trade_value || 0;
+    var x = xPos(age);
+    var y = yPos(val);
+    ctx.beginPath();
+    ctx.arc(x, y, 5, 0, Math.PI * 2);
+    ctx.fillStyle = _POS_HEX[p.position] || "#d97757";
+    ctx.fill();
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Name label for top players
+    if (val >= 40 || players.length <= 10) {
+      ctx.fillStyle = "#1a1a2e";
+      ctx.font = "9px sans-serif";
+      ctx.textAlign = "center";
+      var lastName = (p.full_name || "").split(" ").slice(-1)[0];
+      ctx.fillText(lastName, x, y - 8);
+    }
+  });
+}
+
+// ─── Team Card PNG Export ─────────────────────────────────────────────
+
+function exportRosterTeamCard() {
+  if (!_rosterReport) return;
+  var r = _rosterReport;
+  var sortedPlayers = (r.players || []).slice().sort(function(a, b) { return b.trade_value - a.trade_value; });
+
+  var W = 600;
+  var HEADER_H = 80;
+  var SUMMARY_H = 80;
+  var CHART_AREA_H = 200;
+  var ROW_H = 24;
+  var PLAYER_TABLE_H = Math.min(sortedPlayers.length, 30) * ROW_H + 30;
+  var FOOTER_H = 36;
+  var H = HEADER_H + SUMMARY_H + CHART_AREA_H + PLAYER_TABLE_H + FOOTER_H + 40;
+
+  var canvas = document.createElement("canvas");
+  canvas.width = W;
+  canvas.height = H;
+  var ctx = canvas.getContext("2d");
+
+  // Sand background
+  ctx.fillStyle = "#ede0cf";
+  ctx.fillRect(0, 0, W, H);
+
+  // Border
+  ctx.strokeStyle = "#1a1a2e";
+  ctx.lineWidth = 4;
+  ctx.strokeRect(2, 2, W - 4, H - 4);
+
+  // Header
+  ctx.fillStyle = "#1a1a2e";
+  ctx.font = "bold 28px 'Luckiest Guy', sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText("MY DYNASTY ROSTER", W / 2, 44);
+  ctx.font = "16px 'Caveat', cursive";
+  ctx.fillStyle = "#666";
+  ctx.fillText("razzle.lol team card", W / 2, 68);
+
+  var y = HEADER_H;
+
+  // Grade badge
+  var gc = _GRADE_COLORS[r.grade] || "#d97757";
+  ctx.fillStyle = gc;
+  _roundRect(ctx, 30, y + 5, 70, 55, 10);
+  ctx.fill();
+  ctx.strokeStyle = "#1a1a2e";
+  ctx.lineWidth = 3;
+  _roundRect(ctx, 30, y + 5, 70, 55, 10);
+  ctx.stroke();
+  ctx.fillStyle = "white";
+  ctx.font = "bold 32px sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText(r.grade, 65, y + 42);
+
+  // Total value
+  ctx.fillStyle = "#1a1a2e";
+  ctx.font = "bold 26px sans-serif";
+  ctx.textAlign = "left";
+  ctx.fillText(r.total_value + " pts", 120, y + 30);
+  ctx.font = "14px sans-serif";
+  ctx.fillStyle = "#666";
+  ctx.fillText("total dynasty value  |  avg age: " + r.average_age, 120, y + 50);
+
+  // Status badge
+  var sc = _STATUS_COLORS[r.competing_status] || "#d97757";
+  var statusText = (r.competing_status || "").toUpperCase();
+  ctx.fillStyle = sc;
+  var sw = ctx.measureText(statusText).width + 24;
+  _roundRect(ctx, W - sw - 30, y + 12, sw, 30, 8);
+  ctx.fill();
+  ctx.strokeStyle = "#1a1a2e";
+  ctx.lineWidth = 2;
+  _roundRect(ctx, W - sw - 30, y + 12, sw, 30, 8);
+  ctx.stroke();
+  ctx.fillStyle = "white";
+  ctx.font = "bold 14px sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText(statusText, W - sw / 2 - 30, y + 32);
+
+  y += SUMMARY_H;
+
+  // Positional pie chart (left half)
+  var totals = r.positional_totals || {};
+  var total = r.total_value || 1;
+  var posOrder = ["QB", "RB", "WR", "TE"];
+  var slices = [];
+  posOrder.forEach(function(pos) {
+    if (totals[pos]) slices.push({ pos: pos, val: totals[pos], pct: totals[pos] / total });
+  });
+  var otherVal = total - slices.reduce(function(s, sl) { return s + sl.val; }, 0);
+  if (otherVal > 0.5) slices.push({ pos: "Other", val: otherVal, pct: otherVal / total });
+
+  var pieCx = 120, pieCy = y + 90, pieR = 65;
+  var startAngle = -Math.PI / 2;
+  slices.forEach(function(sl) {
+    var endAngle = startAngle + sl.pct * Math.PI * 2;
+    ctx.beginPath();
+    ctx.moveTo(pieCx, pieCy);
+    ctx.arc(pieCx, pieCy, pieR, startAngle, endAngle);
+    ctx.closePath();
+    ctx.fillStyle = _POS_HEX[sl.pos] || "#888";
+    ctx.fill();
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    startAngle = endAngle;
+  });
+
+  // Pie legend
+  var ly = y + 20;
+  ctx.textAlign = "left";
+  slices.forEach(function(sl) {
+    ctx.fillStyle = _POS_HEX[sl.pos] || "#888";
+    ctx.fillRect(210, ly, 14, 14);
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 1;
+    ctx.strokeRect(210, ly, 14, 14);
+    ctx.fillStyle = "#1a1a2e";
+    ctx.font = "bold 12px sans-serif";
+    ctx.fillText(sl.pos + ": " + Math.round(sl.val) + " (" + Math.round(sl.pct * 100) + "%)", 230, ly + 12);
+    ly += 22;
+  });
+
+  // Age scatter (right half)
+  var scatterX = 320, scatterY = y + 10, scatterW = 250, scatterH = 170;
+  ctx.fillStyle = "#f7efe5";
+  _roundRect(ctx, scatterX, scatterY, scatterW, scatterH, 8);
+  ctx.fill();
+  ctx.strokeStyle = "#1a1a2e";
+  ctx.lineWidth = 2;
+  _roundRect(ctx, scatterX, scatterY, scatterW, scatterH, 8);
+  ctx.stroke();
+
+  var sPad = { top: 20, right: 10, bottom: 25, left: 30 };
+  var sPlotW = scatterW - sPad.left - sPad.right;
+  var sPlotH = scatterH - sPad.top - sPad.bottom;
+  var playerData = r.players || [];
+  var ages = playerData.map(function(p) { return p.age || 22; });
+  var sMinAge = ages.length ? Math.floor(Math.min.apply(null, ages)) - 1 : 20;
+  var sMaxAge = ages.length ? Math.ceil(Math.max.apply(null, ages)) + 1 : 35;
+
+  function sxPos(age) { return scatterX + sPad.left + ((age - sMinAge) / (sMaxAge - sMinAge)) * sPlotW; }
+  function syPos(val) { return scatterY + sPad.top + sPlotH - (val / 100) * sPlotH; }
+
+  // Grid
+  ctx.strokeStyle = "#d5c5b0";
+  ctx.lineWidth = 1;
+  for (var a = Math.ceil(sMinAge); a <= sMaxAge; a += 2) {
+    ctx.beginPath(); ctx.moveTo(sxPos(a), scatterY + sPad.top); ctx.lineTo(sxPos(a), scatterY + scatterH - sPad.bottom); ctx.stroke();
+    ctx.fillStyle = "#666"; ctx.font = "9px sans-serif"; ctx.textAlign = "center";
+    ctx.fillText(a, sxPos(a), scatterY + scatterH - sPad.bottom + 12);
+  }
+  ctx.fillStyle = "#1a1a2e"; ctx.font = "bold 9px sans-serif"; ctx.textAlign = "center";
+  ctx.fillText("AGE", scatterX + sPad.left + sPlotW / 2, scatterY + scatterH - 2);
+
+  // Dots
+  playerData.forEach(function(p) {
+    var ax = sxPos(p.age || 22);
+    var ay = syPos(p.trade_value || 0);
+    ctx.beginPath();
+    ctx.arc(ax, ay, 4, 0, Math.PI * 2);
+    ctx.fillStyle = _POS_HEX[p.position] || "#d97757";
+    ctx.fill();
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  });
+
+  // Title
+  ctx.fillStyle = "#1a1a2e"; ctx.font = "bold 10px sans-serif"; ctx.textAlign = "left";
+  ctx.fillText("AGE vs VALUE", scatterX + sPad.left, scatterY + 14);
+
+  y += CHART_AREA_H;
+
+  // Player values table
+  ctx.fillStyle = "#1a1a2e";
+  ctx.font = "bold 12px sans-serif";
+  ctx.textAlign = "left";
+  ctx.fillText("PLAYER VALUES", 30, y + 16);
+  y += 26;
+
+  sortedPlayers.slice(0, 30).forEach(function(p, i) {
+    var rowY = y + i * ROW_H;
+    ctx.fillStyle = i % 2 === 0 ? "#f7efe5" : "#ede0cf";
+    ctx.fillRect(30, rowY, W - 60, ROW_H);
+
+    // Rank
+    ctx.fillStyle = "#999";
+    ctx.font = "10px sans-serif";
+    ctx.textAlign = "right";
+    ctx.fillText((i + 1) + ".", 50, rowY + 16);
+
+    // Pos badge
+    ctx.fillStyle = _POS_HEX[p.position] || "#d97757";
+    _roundRect(ctx, 56, rowY + 4, 26, 16, 4);
+    ctx.fill();
+    ctx.fillStyle = "white";
+    ctx.font = "bold 9px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText(p.position, 69, rowY + 15);
+
+    // Name
+    ctx.fillStyle = "#1a1a2e";
+    ctx.font = "bold 12px sans-serif";
+    ctx.textAlign = "left";
+    ctx.fillText(p.full_name || "", 90, rowY + 16);
+
+    // Team
+    ctx.fillStyle = "#999";
+    ctx.font = "10px sans-serif";
+    ctx.textAlign = "left";
+    var nameW = ctx.measureText(p.full_name || "").width;
+    ctx.fillText(p.team || "", 94 + nameW, rowY + 16);
+
+    // Value bar
+    var barX = W - 160, barW = 80, barH = 12;
+    ctx.fillStyle = "#d5c5b0";
+    _roundRect(ctx, barX, rowY + 6, barW, barH, 3);
+    ctx.fill();
+    var pct = Math.min(100, p.trade_value) / 100;
+    ctx.fillStyle = _POS_HEX[p.position] || "#d97757";
+    _roundRect(ctx, barX, rowY + 6, barW * pct, barH, 3);
+    ctx.fill();
+
+    // Value number
+    ctx.fillStyle = "#1a1a2e";
+    ctx.font = "bold 12px sans-serif";
+    ctx.textAlign = "right";
+    ctx.fillText(p.trade_value, W - 36, rowY + 16);
+  });
+
+  y += PLAYER_TABLE_H;
+
+  // Watermark
+  ctx.fillStyle = "#1a1a2e";
+  ctx.font = "bold 14px 'Luckiest Guy', sans-serif";
+  ctx.textAlign = "right";
+  ctx.globalAlpha = 0.3;
+  ctx.fillText("razzle.lol", W - 20, H - 12);
+  ctx.globalAlpha = 1.0;
+
+  // Download
+  var link = document.createElement("a");
+  link.download = "razzle-team-card.png";
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+}
+
+function _roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
 // Keyboard hint strip (appended to toolbar area)
 (function addKeyboardHint() {
   const toolbar = document.querySelector(".toolbar");

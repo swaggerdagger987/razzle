@@ -3269,6 +3269,80 @@ def fetch_pick_values(year=2025, rounds=4, teams=12):
 
 
 # ---------------------------------------------------------------------------
+# Roster Value Calculator
+# ---------------------------------------------------------------------------
+
+# Benchmark total roster values for grading (based on typical 12-team dynasty)
+_GRADE_THRESHOLDS = [
+    (600, "A+"), (520, "A"), (460, "A-"),
+    (400, "B+"), (350, "B"), (300, "B-"),
+    (250, "C+"), (210, "C"), (170, "C-"),
+    (130, "D+"), (100, "D"), (70, "D-"),
+]
+
+
+def _roster_grade(total_value):
+    """Letter grade based on total roster trade value."""
+    for threshold, grade in _GRADE_THRESHOLDS:
+        if total_value >= threshold:
+            return grade
+    return "F"
+
+
+def _competing_status(avg_age, total_value):
+    """Determine roster window: competing, retooling, or rebuilding."""
+    if total_value >= 350 and avg_age <= 27.5:
+        return "competing"
+    if total_value >= 300 and avg_age <= 28.5:
+        return "competing"
+    if total_value >= 250 and avg_age <= 26.5:
+        return "competing"
+    if total_value < 200:
+        return "rebuilding"
+    if avg_age > 28.5:
+        return "rebuilding"
+    return "retooling"
+
+
+def fetch_roster_value(player_ids):
+    """Compute roster-level dynasty value analysis."""
+    players = fetch_trade_values(player_ids)
+    if not players:
+        return {
+            "players": [],
+            "total_value": 0,
+            "positional_totals": {},
+            "average_age": 0,
+            "grade": "F",
+            "competing_status": "rebuilding",
+        }
+
+    total_value = sum(p["trade_value"] for p in players)
+
+    pos_totals = {}
+    pos_counts = {}
+    ages = []
+    for p in players:
+        pos = p["position"]
+        pos_totals[pos] = pos_totals.get(pos, 0) + p["trade_value"]
+        pos_counts[pos] = pos_counts.get(pos, 0) + 1
+        if p["age"]:
+            ages.append(p["age"])
+
+    avg_age = round(sum(ages) / len(ages), 1) if ages else 0
+
+    return {
+        "players": players,
+        "total_value": round(total_value, 1),
+        "positional_totals": pos_totals,
+        "positional_counts": pos_counts,
+        "average_age": avg_age,
+        "grade": _roster_grade(total_value),
+        "competing_status": _competing_status(avg_age, total_value),
+    }
+
+
+# ---------------------------------------------------------------------------
 # Featured Analysis — curated lists for home page
 # ---------------------------------------------------------------------------
 

@@ -1,6 +1,25 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 57 — Draft Pick Trade Calculator (COMPLETE)
+## Current Phase: Phase 58 — Roster Value Calculator + Team Card (COMPLETE)
+
+**Exit criterion MET:** Users can build a dynasty roster via "My Roster" button in Lab toolbar. Search to add players (localStorage persistence). "Calculate Value" sends player IDs to POST /api/roster-value which returns trade values, positional breakdown, average age, letter grade (A+ through F), and competing status (competing/retooling/rebuilding). Visual report shows: grade badge (comic-strip rotated sticker), positional pie chart (QB/RB/WR/TE), age vs value scatter plot, and ranked player values table. "Export Team Card" generates branded PNG with all visuals, player table, and razzle.lol watermark.
+
+### Phase 58 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend roster-value endpoint | DONE | POST /api/roster-value, grade A+ to F, competing status |
+| 2 | Frontend My Roster panel | DONE | Search + add + remove, localStorage, grouped by position |
+| 3 | Visual roster report | DONE | Pie chart, age scatter, grade badge, player values table |
+| 4 | PNG export team card | DONE | Canvas PNG, watermark, pie + scatter + player table |
+| 5 | Deploy + smoke test | DONE | All syntax clean |
+
+### Decisions Log
+- **Grading scale**: Based on total roster trade value with 12 thresholds (A+ = 600+, F = <70). Benchmarked against typical 12-team dynasty league where a good roster might have 10-15 players at 30-50 value each.
+- **Competing status heuristic**: Uses combination of total value and average age. Young + valuable = competing. Old or low value = rebuilding. Everything else = retooling.
+- **Reused trade value model**: Leverages existing fetch_trade_values() for individual player values, keeping the system consistent with Trade Analyzer.
+
+## Previous Phase: Phase 57 — Draft Pick Trade Calculator (COMPLETE)
 
 **Exit criterion MET:** Trade Analyzer now supports dynasty draft picks (2025-2027, rounds 1-4, picks 1-12) alongside players. Pick values follow exponential decay curve (1.01=88.0, 1.12=40.7, 2.01=38.0, 4.12=3.3) on same 0-100 scale as player values. Users can add picks via Year/Round/Pick dropdowns + "Add Pick" button on both trade sides. Visual pick value chart (canvas) shows full 48-pick decay curve with round-colored dots and selected-pick highlighting. Pick cards render with round-colored badges (Rd1=terracotta, Rd2=blue, Rd3=teal, Rd4=purple). PNG export handles picks. Comic-strip design throughout.
 
