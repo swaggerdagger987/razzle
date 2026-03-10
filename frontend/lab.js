@@ -2651,7 +2651,10 @@ function renderProfile(data, container) {
     html += `<span class="breakout-badge">BREAKOUT +${breakoutInfo.pct}% (${breakoutInfo.season})</span>`;
   }
   html += `</div>`;
-  html += `<button class="btn-primary" onclick="exportProfileImage()" style="margin-left:auto; font-size:11px; padding:6px 14px;">Export PNG</button>`;
+  html += `<div style="margin-left:auto; display:flex; gap:8px;">`;
+  html += `<button class="btn-chunky" onclick="loadPlayerComps('${player.player_id}')" style="font-size:11px; padding:6px 14px; border-color:var(--orange);">Find Comps</button>`;
+  html += `<button class="btn-primary" onclick="exportProfileImage()" style="font-size:11px; padding:6px 14px;">Export PNG</button>`;
+  html += `</div>`;
   html += `</div>`;
 
   // Career headline stats bar
@@ -2730,6 +2733,9 @@ function renderProfile(data, container) {
     html += `<canvas id="profileArcCanvas" width="720" height="240" style="border:2px solid var(--ink); border-radius:8px; background:var(--bg); width:100%;"></canvas>`;
     html += `</div>`;
   }
+
+  // Comps section placeholder
+  html += `<div id="profileCompsSection"></div>`;
 
   container.innerHTML = html;
 
@@ -7860,6 +7866,448 @@ function _roundRect(ctx, x, y, w, h, r) {
   ctx.quadraticCurveTo(x, y, x + r, y);
   ctx.closePath();
 }
+
+// ---------------------------------------------------------------------------
+// Player Comp Finder
+// ---------------------------------------------------------------------------
+
+let _compData = null; // Store for PNG export
+
+async function loadPlayerComps(playerId) {
+  const section = document.getElementById("profileCompsSection");
+  if (!section) return;
+
+  section.innerHTML = `<div style="text-align:center; padding:30px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">scouting the film for similar players...</div>`;
+
+  try {
+    const data = await apiFetch(`/api/players/${playerId}/comps?limit=5`);
+    if (data.error) {
+      section.innerHTML = `<div style="text-align:center; padding:30px; font-family:var(--font-hand); font-size:18px; color:var(--ink-light);">${data.error}</div>`;
+      return;
+    }
+    _compData = data;
+    renderPlayerComps(data, section);
+  } catch (err) {
+    section.innerHTML = `<div style="text-align:center; padding:30px; font-family:var(--font-hand); font-size:18px; color:var(--red);">fumbled the comp search... ${err.message}</div>`;
+  }
+}
+
+function renderPlayerComps(data, container) {
+  const { player, comps, stat_keys, stat_labels, target_stats, season } = data;
+  if (!comps || comps.length === 0) {
+    container.innerHTML = `<div style="text-align:center; padding:30px; font-family:var(--font-hand); font-size:18px; color:var(--ink-light);">no similar players found on the tape</div>`;
+    return;
+  }
+
+  const pos = (player.position || "").toUpperCase();
+  const posColors = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
+  const posColor = posColors[pos] || "var(--ink)";
+
+  let html = "";
+
+  // Section header
+  html += `<div class="profile-section-title" style="display:flex; align-items:center; justify-content:space-between;">`;
+  html += `<span>Player Comps — ${season} Season</span>`;
+  html += `<button class="btn-chunky" onclick="exportCompsImage()" style="font-size:10px; padding:4px 10px;">Export Comps PNG</button>`;
+  html += `</div>`;
+
+  // Annotation
+  html += `<div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); margin-bottom:12px; padding-left:4px;">statistically similar production profiles based on per-game rates</div>`;
+
+  // Comp cards
+  html += `<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:12px; margin-bottom:20px;">`;
+
+  for (const comp of comps) {
+    const simColor = comp.similarity >= 95 ? "var(--green)" : comp.similarity >= 90 ? "var(--orange)" : "var(--ink-medium)";
+    html += `<div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:10px; box-shadow:4px 4px 0 var(--ink); padding:14px; cursor:pointer; transition:transform 0.15s, box-shadow 0.15s;" onmouseover="this.style.transform='translate(-2px,-2px)';this.style.boxShadow='6px 6px 0 var(--ink)'" onmouseout="this.style.transform='';this.style.boxShadow='4px 4px 0 var(--ink)'" onclick="openPlayerProfile('${comp.player_id}')">`;
+
+    // Headshot + name
+    html += `<div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">`;
+    if (comp.headshot_url) {
+      html += `<img src="${escapeAttr(comp.headshot_url)}" style="width:36px; height:36px; border-radius:50%; border:2px solid var(--ink); object-fit:cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">`;
+      html += `<span style="display:none; width:36px; height:36px; border-radius:50%; border:2px solid var(--ink); background:${posColor}; color:white; font-family:var(--font-display); font-size:14px; align-items:center; justify-content:center;">${(comp.full_name || "").split(" ").map(n => n[0]).join("")}</span>`;
+    } else {
+      html += `<span style="display:flex; width:36px; height:36px; border-radius:50%; border:2px solid var(--ink); background:${posColor}; color:white; font-family:var(--font-display); font-size:14px; align-items:center; justify-content:center;">${(comp.full_name || "").split(" ").map(n => n[0]).join("")}</span>`;
+    }
+    html += `<div style="flex:1; min-width:0;">`;
+    html += `<div style="font-family:var(--font-display); font-size:14px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${comp.full_name}</div>`;
+    html += `<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-medium);">${comp.team || "FA"} · ${comp.games}G · ${comp.ppg} PPG</div>`;
+    html += `</div>`;
+    html += `</div>`;
+
+    // Similarity score
+    html += `<div style="text-align:center; margin:8px 0;">`;
+    html += `<span style="font-family:var(--font-display); font-size:28px; font-weight:700; color:${simColor};">${comp.similarity}%</span>`;
+    html += `<div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); text-transform:uppercase;">match</div>`;
+    html += `</div>`;
+
+    // Top matching stats
+    if (comp.matching_stats && comp.matching_stats.length > 0) {
+      html += `<div style="border-top:2px dashed var(--ink-faint); padding-top:8px;">`;
+      for (const ms of comp.matching_stats) {
+        html += `<div style="display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:11px; padding:2px 0;">`;
+        html += `<span style="color:var(--ink-light);">${ms.label}</span>`;
+        html += `<span style="color:var(--ink);">${ms.comp_val}</span>`;
+        html += `</div>`;
+      }
+      html += `</div>`;
+    }
+
+    html += `</div>`;
+  }
+
+  html += `</div>`;
+
+  // Mini radar overlay: target vs top comp
+  const topComp = comps[0];
+  html += `<div class="profile-section-title" style="font-size:14px;">Stat Profile: ${player.full_name} vs ${topComp.full_name}</div>`;
+  html += `<div style="display:flex; gap:16px; align-items:center; margin-bottom:12px;">`;
+  html += `<div style="display:flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:12px;"><span style="width:12px; height:12px; background:${posColor}; opacity:0.5; border:2px solid var(--ink); display:inline-block;"></span> ${player.full_name}</div>`;
+  html += `<div style="display:flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:12px;"><span style="width:12px; height:12px; background:var(--ink); opacity:0.4; border:2px solid var(--ink); display:inline-block;"></span> ${topComp.full_name}</div>`;
+  html += `</div>`;
+  html += `<canvas id="compRadarCanvas" width="400" height="340" style="border:2px solid var(--ink); border-radius:8px; background:var(--bg); width:100%; max-width:400px; display:block; margin:0 auto;"></canvas>`;
+
+  // Stat comparison table
+  html += `<div class="profile-section-title" style="font-size:14px; margin-top:16px;">Full Stat Comparison</div>`;
+  html += `<table class="profile-season-table"><thead><tr>`;
+  html += `<th style="text-align:left;">Stat</th>`;
+  html += `<th>${player.full_name}</th>`;
+  for (const c of comps.slice(0, 3)) {
+    html += `<th>${c.full_name.split(" ").pop()}</th>`;
+  }
+  html += `</tr></thead><tbody>`;
+
+  // Build stat vectors for table
+  for (const key of stat_keys) {
+    const label = stat_labels[key] || key;
+    const targetVal = target_stats[key] ? target_stats[key].value : "—";
+    html += `<tr><td style="text-align:left; font-weight:600;">${label}</td>`;
+    html += `<td style="font-weight:700; color:${posColor};">${targetVal}</td>`;
+    for (const c of comps.slice(0, 3)) {
+      const val = c.all_stats && c.all_stats[key] != null ? c.all_stats[key] : "—";
+      html += `<td>${val}</td>`;
+    }
+    html += `</tr>`;
+  }
+  html += `</tbody></table>`;
+
+  container.innerHTML = html;
+
+  // Draw radar chart
+  requestAnimationFrame(() => drawCompRadar(data));
+}
+
+
+function drawCompRadar(data) {
+  const canvas = document.getElementById("compRadarCanvas");
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  const { player, comps, stat_keys, stat_labels, target_stats } = data;
+  if (!comps || comps.length === 0) return;
+
+  const topComp = comps[0];
+  const pos = (player.position || "").toUpperCase();
+  const posColorMap = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  const posColor = posColorMap[pos] || "#d97757";
+
+  const W = canvas.width;
+  const H = canvas.height;
+  const cx = W / 2;
+  const cy = H / 2 + 10;
+  const R = Math.min(W, H) * 0.35;
+
+  ctx.clearRect(0, 0, W, H);
+
+  // Use 5-6 stats for radar
+  const radarKeys = stat_keys.slice(0, Math.min(6, stat_keys.length));
+  const n = radarKeys.length;
+  const angleStep = (2 * Math.PI) / n;
+
+  // Find max values across all comps for normalization
+  const maxVals = {};
+  for (const key of radarKeys) {
+    const tv = target_stats[key] ? target_stats[key].value : 0;
+    let mv = Math.abs(tv);
+    for (const c of comps) {
+      const cv = c.all_stats && c.all_stats[key] != null ? Math.abs(c.all_stats[key]) : 0;
+      if (cv > mv) mv = cv;
+    }
+    maxVals[key] = mv || 1;
+  }
+
+  // Draw grid circles
+  ctx.strokeStyle = "#c5c5d0";
+  ctx.lineWidth = 1;
+  for (let ring = 1; ring <= 4; ring++) {
+    const r = (R / 4) * ring;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+    ctx.stroke();
+  }
+
+  // Draw axes + labels
+  ctx.strokeStyle = "#c5c5d0";
+  ctx.fillStyle = "#1a1a2e";
+  ctx.font = "bold 11px 'Space Mono', monospace";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+
+  for (let i = 0; i < n; i++) {
+    const angle = -Math.PI / 2 + i * angleStep;
+    const x = cx + R * Math.cos(angle);
+    const y = cy + R * Math.sin(angle);
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(x, y);
+    ctx.stroke();
+
+    // Label
+    const lx = cx + (R + 20) * Math.cos(angle);
+    const ly = cy + (R + 20) * Math.sin(angle);
+    const label = stat_labels[radarKeys[i]] || radarKeys[i];
+    ctx.fillText(label, lx, ly);
+  }
+
+  // Helper to draw polygon
+  function drawPoly(values, fillColor, strokeColor, alpha) {
+    ctx.beginPath();
+    for (let i = 0; i < n; i++) {
+      const angle = -Math.PI / 2 + i * angleStep;
+      const val = values[i] / maxVals[radarKeys[i]];
+      const r = Math.max(0, Math.min(1, val)) * R;
+      const x = cx + r * Math.cos(angle);
+      const y = cy + r * Math.sin(angle);
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = fillColor;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+    ctx.strokeStyle = strokeColor;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
+
+  // Target player polygon
+  const targetVals = radarKeys.map(k => target_stats[k] ? target_stats[k].value : 0);
+
+  // Top comp polygon
+  const compVals = radarKeys.map(k => {
+    const m = (topComp.matching_stats || []).find(ms => ms.stat === k);
+    return m ? m.comp_val : 0;
+  });
+
+  // Use all_stats from backend for full comp values
+  const compFullVals = radarKeys.map(k => {
+    if (topComp.all_stats && topComp.all_stats[k] != null) return topComp.all_stats[k];
+    return 0;
+  });
+
+  drawPoly(compFullVals, "#1a1a2e", "#1a1a2e", 0.15);
+  drawPoly(targetVals, posColor, posColor, 0.3);
+
+  // Dots on target polygon
+  ctx.fillStyle = posColor;
+  for (let i = 0; i < n; i++) {
+    const angle = -Math.PI / 2 + i * angleStep;
+    const val = targetVals[i] / maxVals[radarKeys[i]];
+    const r = Math.max(0, Math.min(1, val)) * R;
+    const x = cx + r * Math.cos(angle);
+    const y = cy + r * Math.sin(angle);
+    ctx.beginPath();
+    ctx.arc(x, y, 4, 0, 2 * Math.PI);
+    ctx.fill();
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+  }
+}
+
+
+function exportCompsImage() {
+  if (!_compData || !_compData.comps || _compData.comps.length === 0) return;
+
+  const { player, comps, stat_keys, stat_labels, target_stats, season } = _compData;
+  const pos = (player.position || "").toUpperCase();
+  const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  const pColor = posColors[pos] || "#1a1a2e";
+
+  const padX = 30, padY = 30;
+  const W = 800;
+  const cardH = 90;
+  const cardGap = 12;
+  const compsToShow = comps.slice(0, 5);
+  const cardsH = compsToShow.length * (cardH + cardGap);
+  const tableRowH = 24;
+  const tableH = 28 + stat_keys.length * tableRowH;
+  const H = padY + 70 + cardsH + 20 + tableH + 50 + padY;
+
+  const canvas = document.createElement("canvas");
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext("2d");
+
+  // Background
+  ctx.fillStyle = "#f7efe5";
+  ctx.fillRect(0, 0, W, H);
+
+  // Header
+  ctx.fillStyle = "#1a1a2e";
+  ctx.font = "bold 24px sans-serif";
+  ctx.textAlign = "left";
+  ctx.fillText(`PLAYER COMPS — ${player.full_name}`, padX, padY + 28);
+
+  // Subtitle
+  ctx.fillStyle = "#8a8a9e";
+  ctx.font = "12px monospace";
+  ctx.fillText(`${pos} · ${player.team || "FA"} · ${season} Season · ${player.ppg} PPR PPG`, padX, padY + 48);
+
+  // Position badge
+  ctx.fillStyle = pColor;
+  const badgeX = W - padX - 60;
+  ctx.fillRect(badgeX, padY + 10, 50, 30);
+  ctx.strokeStyle = "#1a1a2e";
+  ctx.lineWidth = 2;
+  ctx.strokeRect(badgeX, padY + 10, 50, 30);
+  ctx.fillStyle = "#fff";
+  ctx.font = "bold 14px sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText(pos, badgeX + 25, padY + 30);
+
+  // Comp cards
+  let y = padY + 70;
+  ctx.textAlign = "left";
+
+  for (let i = 0; i < compsToShow.length; i++) {
+    const c = compsToShow[i];
+    const cardY = y + i * (cardH + cardGap);
+
+    // Card background
+    ctx.fillStyle = "#f7efe5";
+    ctx.fillRect(padX, cardY, W - padX * 2, cardH);
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 3;
+    ctx.strokeRect(padX, cardY, W - padX * 2, cardH);
+    // Shadow
+    ctx.fillStyle = "#1a1a2e";
+    ctx.fillRect(padX + 4, cardY + 4, W - padX * 2, cardH);
+    // Redraw card on top
+    ctx.fillStyle = "#f7efe5";
+    ctx.fillRect(padX, cardY, W - padX * 2, cardH);
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 3;
+    ctx.strokeRect(padX, cardY, W - padX * 2, cardH);
+
+    // Rank badge
+    ctx.fillStyle = pColor;
+    ctx.fillRect(padX + 10, cardY + 10, 30, 30);
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(padX + 10, cardY + 10, 30, 30);
+    ctx.fillStyle = "#fff";
+    ctx.font = "bold 16px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText(`#${i + 1}`, padX + 25, cardY + 30);
+
+    // Name + team
+    ctx.textAlign = "left";
+    ctx.fillStyle = "#1a1a2e";
+    ctx.font = "bold 18px sans-serif";
+    ctx.fillText(c.full_name, padX + 52, cardY + 28);
+    ctx.fillStyle = "#8a8a9e";
+    ctx.font = "11px monospace";
+    ctx.fillText(`${c.team || "FA"} · ${c.games}G · ${c.ppg} PPG`, padX + 52, cardY + 46);
+
+    // Similarity score
+    const simColor = c.similarity >= 95 ? "#2ec4b6" : c.similarity >= 90 ? "#d97757" : "#4a4a5e";
+    ctx.fillStyle = simColor;
+    ctx.font = "bold 28px sans-serif";
+    ctx.textAlign = "right";
+    ctx.fillText(`${c.similarity}%`, W - padX - 16, cardY + 35);
+    ctx.fillStyle = "#8a8a9e";
+    ctx.font = "bold 10px monospace";
+    ctx.fillText("MATCH", W - padX - 16, cardY + 50);
+
+    // Top matching stats
+    ctx.textAlign = "left";
+    ctx.font = "11px monospace";
+    const matchX = padX + 320;
+    if (c.matching_stats) {
+      for (let j = 0; j < Math.min(3, c.matching_stats.length); j++) {
+        const ms = c.matching_stats[j];
+        ctx.fillStyle = "#8a8a9e";
+        ctx.fillText(ms.label + ":", matchX + j * 110, cardY + 72);
+        ctx.fillStyle = "#1a1a2e";
+        ctx.fillText(String(ms.comp_val), matchX + j * 110 + 55, cardY + 72);
+      }
+    }
+  }
+
+  // Stat table
+  const tableY = y + compsToShow.length * (cardH + cardGap) + 20;
+  const colW = (W - padX * 2) / (2 + Math.min(3, compsToShow.length));
+
+  // Table header
+  ctx.fillStyle = "#e5d5c3";
+  ctx.fillRect(padX, tableY, W - padX * 2, 28);
+  ctx.strokeStyle = "#1a1a2e";
+  ctx.lineWidth = 2;
+  ctx.strokeRect(padX, tableY, W - padX * 2, 28);
+  ctx.fillStyle = "#1a1a2e";
+  ctx.font = "bold 11px monospace";
+  ctx.textAlign = "left";
+  ctx.fillText("Stat", padX + 8, tableY + 18);
+  ctx.fillText(player.full_name.split(" ").pop(), padX + colW + 8, tableY + 18);
+  for (let i = 0; i < Math.min(3, compsToShow.length); i++) {
+    ctx.fillText(compsToShow[i].full_name.split(" ").pop(), padX + colW * (i + 2) + 8, tableY + 18);
+  }
+
+  // Table rows
+  for (let r = 0; r < stat_keys.length; r++) {
+    const rowY = tableY + 28 + r * tableRowH;
+    ctx.fillStyle = r % 2 === 0 ? "#f7efe5" : "#ede0cf";
+    ctx.fillRect(padX, rowY, W - padX * 2, tableRowH);
+
+    ctx.fillStyle = "#1a1a2e";
+    ctx.font = "bold 11px monospace";
+    ctx.textAlign = "left";
+    ctx.fillText(stat_labels[stat_keys[r]] || stat_keys[r], padX + 8, rowY + 16);
+
+    ctx.font = "11px monospace";
+    ctx.fillStyle = pColor;
+    const tv = target_stats[stat_keys[r]] ? target_stats[stat_keys[r]].value : "—";
+    ctx.fillText(String(tv), padX + colW + 8, rowY + 16);
+
+    ctx.fillStyle = "#1a1a2e";
+    for (let i = 0; i < Math.min(3, compsToShow.length); i++) {
+      const val = compsToShow[i].all_stats && compsToShow[i].all_stats[stat_keys[r]] != null
+        ? compsToShow[i].all_stats[stat_keys[r]] : "—";
+      ctx.fillText(String(val), padX + colW * (i + 2) + 8, rowY + 16);
+    }
+  }
+
+  // Table border
+  ctx.strokeStyle = "#1a1a2e";
+  ctx.lineWidth = 2;
+  ctx.strokeRect(padX, tableY, W - padX * 2, 28 + stat_keys.length * tableRowH);
+
+  // Watermark
+  const wmY = H - padY - 10;
+  ctx.fillStyle = "#8a8a9e";
+  ctx.font = "italic 14px sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText("razzle.lol — let's razzle dazzle em baby", W / 2, wmY);
+
+  // Download
+  const link = document.createElement("a");
+  const safeName = player.full_name.replace(/[^a-zA-Z0-9]/g, "-").toLowerCase();
+  link.download = `razzle-comps-${safeName}.png`;
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+}
+
 
 // Keyboard hint strip (appended to toolbar area)
 (function addKeyboardHint() {

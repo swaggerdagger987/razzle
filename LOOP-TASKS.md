@@ -1,37 +1,37 @@
-# Razzle Loop — Phase 58 Task List
+# Razzle Loop — Phase 59 Task List
 
-> Roster Value Calculator + Team Card — Dynasty roster valuation and shareable team card
+> Player Comp Finder — Find statistically similar players across NFL universes
 
-**Current Phase**: 58 — Roster Value Calculator + Team Card
-**Exit Criterion**: Users can build a roster by searching and adding players (reusing Lab search), see total dynasty trade value with positional breakdown (pie chart), age vs. value scatter plot, a competing/rebuilding grade, and export the whole thing as a branded PNG "team card." Accessible from Lab nav. Comic-strip design with chunky borders, sand bg, position colors.
+**Current Phase**: 59 — Player Comp Finder
+**Exit Criterion**: Users can find the top-5 most statistically similar players to any selected player via cosine similarity on normalized stat profiles. Accessible from player profile overlay ("Find Comps" button). Results show similarity percentage, matching stat categories, mini radar overlay, and position-colored cards. Exportable as branded PNG. Comic-strip design with chunky borders, sand bg, position colors.
 
 ---
 
-## Task 1: Backend roster-value endpoint
+## Task 1: Backend similarity endpoint
 **Status**: PASS
-**Notes**: POST /api/roster-value accepts { player_ids: [...] }. Returns per-player trade values, positional_totals, positional_counts, average_age, grade (A+ through F), competing_status (competing/retooling/rebuilding). Reuses fetch_trade_values. Max 60 players.
+**Notes**: GET /api/players/{player_id}/comps?limit=5&season=0 returns top-N similar players. Cosine similarity on position-specific per-game stat vectors (8 stats per position). Returns similarity_score (0-100), matching_stats (top 3 closest), all_stats (full vector), player data. Position-specific vectors: QB (pass ypg, td/g, comp%, y/a, rush ypg, rush td/g, to/g, ppg), RB (rush ypg, y/c, rush td/g, rec ypg, rec/g, tgt/g, ppg, td%), WR/TE (rec ypg, rec/g, y/r, tgt/g, rec td/g, catch%, ppg, td%). Min 4 games filter.
 
-## Task 2: Frontend My Roster panel with player search
+## Task 2: Frontend comp finder UI in player profile
 **Status**: PASS
-**Notes**: "My Roster" button (green border) in Lab toolbar opens filter-modal overlay. Search input with 250ms debounce searches /api/players. Click to add players (localStorage razzle_my_roster). Roster grouped by position with remove buttons. "Calculate Value" button triggers API call.
+**Notes**: "Find Comps" button (chunky, terracotta border) in profile header next to Export PNG. Loading state: "scouting the film for similar players..." Results render as position-colored cards with headshot/initials, name, team, games, PPG, similarity % (large, bold, color-coded: 95%+ green, 90%+ orange, else gray), top 3 matching stat categories. Cards have 3px ink border, offset shadow, hover lift. Click card opens that player's profile.
 
-## Task 3: Visual roster report (pie chart, age scatter, grade)
+## Task 3: Visual comp report with mini radar overlay
 **Status**: PASS
-**Notes**: Grade badge (A+ through F) with position-colored background, rotated comic-strip style. Competing/retooling/rebuilding status badge. Pie chart shows QB/RB/WR/TE value breakdown with legend. Age vs Value scatter plot with position-colored dots and name labels for high-value players. Player values table with position badges, value bars, sorted by value.
+**Notes**: Radar chart overlays target player (position-colored fill) vs top comp (dark fill) on 5-6 key stats. Auto-normalized to max values across all comps. Grid circles + axis labels. Full stat comparison table below: target player highlighted in position color, top 3 comps shown. Caveat font annotation explains statistical basis.
 
-## Task 4: PNG export of team card
+## Task 4: PNG export of comp report
 **Status**: PASS
-**Notes**: Canvas-rendered PNG: header "MY DYNASTY ROSTER", grade badge, total value, status badge, positional pie chart, age scatter, player table (up to 30 players), razzle.lol watermark. Downloads as razzle-team-card.png.
+**Notes**: "Export Comps PNG" button generates canvas-rendered PNG: header "PLAYER COMPS — [Name]", position badge, subtitle with team/season/PPG, 5 comp cards with rank badges + similarity %, stat comparison table, razzle.lol watermark. Downloads as razzle-comps-[name].png.
 
 ## Task 5: Deploy + smoke test
 **Status**: PASS
-**Notes**: node -c lab.js passes. py_compile passes on server.py and live_data.py. All function references from HTML to JS verified. All backend endpoints exist.
+**Notes**: node -c lab.js passes. py_compile passes on server.py and live_data.py. All function references verified (loadPlayerComps, renderPlayerComps, drawCompRadar, exportCompsImage). Backend endpoint exists at /api/players/{id}/comps.
 
 ---
 
 ## Loop State
 ```
-Current Phase: 58
+Current Phase: 59
 Current Task: 5
 Current Stage: COMPLETE
 Attempt: 1

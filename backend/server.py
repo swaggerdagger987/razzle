@@ -437,6 +437,11 @@ def player_seasons(player_id: str):
     return live_data.fetch_player_seasons(player_id)
 
 
+@app.get("/api/players/{player_id}/comps")
+def player_comps(player_id: str, limit: int = 5, season: int = 0):
+    return live_data.fetch_player_comps(player_id, limit=min(limit, 10), season=season)
+
+
 @app.get("/api/players/compare")
 def players_compare(ids: str = "", season: str = "0"):
     player_ids = [p.strip() for p in ids.split(",") if p.strip()]

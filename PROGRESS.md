@@ -1,6 +1,26 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 58 — Roster Value Calculator + Team Card (COMPLETE)
+## Current Phase: Phase 59 — Player Comp Finder (COMPLETE)
+
+**Exit criterion MET:** Users can find the top-5 most statistically similar NFL players via cosine similarity on position-specific per-game stat vectors. "Find Comps" button in player profile overlay triggers GET /api/players/{id}/comps. Results render as position-colored comp cards showing similarity % (color-coded: 95%+ green, 90%+ orange), headshot/initials, team, games, PPG, and top 3 matching stats. Mini radar chart overlays target vs top comp on key stats. Full stat comparison table shows target + top 3 comps. "Export Comps PNG" generates branded canvas image with comp cards, stat table, and watermark.
+
+### Phase 59 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend similarity endpoint | DONE | GET /api/players/{id}/comps, cosine similarity, position-specific vectors |
+| 2 | Frontend comp finder UI | DONE | Find Comps button, comp cards, similarity %, matching stats |
+| 3 | Visual comp report | DONE | Radar overlay, stat comparison table, Caveat annotation |
+| 4 | PNG export | DONE | Canvas PNG with comp cards, stat table, watermark |
+| 5 | Deploy + smoke test | DONE | All syntax clean, all references verified |
+
+### Decisions Log
+- **Position-specific stat vectors**: QB uses passing stats (ypg, td/g, comp%, y/a) + rushing + PPG. RB uses rushing + receiving + PPG + td rate. WR/TE use receiving stats + catch rate + PPG + td rate. 8 stats per position ensures meaningful comparisons within position groups.
+- **Cosine similarity over Euclidean**: Cosine similarity captures production profile shape regardless of volume magnitude (a young player with fewer games but similar per-game rates will match veteran profiles).
+- **Min 4 games filter**: Prevents tiny-sample comps from noise. Balances catching emerging players vs statistical reliability.
+- **Comp in profile overlay**: Adding comps inside the existing profile overlay (not a new page) keeps the flow tight — user views a player, clicks "Find Comps", sees results without leaving context.
+
+## Previous Phase: Phase 58 — Roster Value Calculator + Team Card (COMPLETE)
 
 **Exit criterion MET:** Users can build a dynasty roster via "My Roster" button in Lab toolbar. Search to add players (localStorage persistence). "Calculate Value" sends player IDs to POST /api/roster-value which returns trade values, positional breakdown, average age, letter grade (A+ through F), and competing status (competing/retooling/rebuilding). Visual report shows: grade badge (comic-strip rotated sticker), positional pie chart (QB/RB/WR/TE), age vs value scatter plot, and ranked player values table. "Export Team Card" generates branded PNG with all visuals, player table, and razzle.lol watermark.
 

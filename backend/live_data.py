@@ -3444,3 +3444,217 @@ def _fetch_featured_uncached():
     results["season"] = season
     conn.close()
     return results
+
+
+# ---------------------------------------------------------------------------
+# Player Comp Finder — cosine similarity on production profiles
+# ---------------------------------------------------------------------------
+
+# Position-specific stat vectors for similarity comparison (per-game rates)
+_COMP_STATS = {
+    "QB": ["pass_ypg", "passing_tds_pg", "comp_pct", "yards_per_att", "rushing_yards_pg", "rushing_tds_pg", "turnovers_pg", "ppg"],
+    "RB": ["rush_ypg", "yards_per_carry", "rushing_tds_pg", "rec_ypg", "receptions_pg", "targets_pg", "ppg", "td_rate"],
+    "WR": ["rec_ypg", "receptions_pg", "yards_per_rec", "targets_pg", "receiving_tds_pg", "catch_rate", "ppg", "td_rate"],
+    "TE": ["rec_ypg", "receptions_pg", "yards_per_rec", "targets_pg", "receiving_tds_pg", "catch_rate", "ppg", "td_rate"],
+}
+
+_COMP_STAT_LABELS = {
+    "pass_ypg": "Pass YPG", "passing_tds_pg": "Pass TD/G", "comp_pct": "Comp%",
+    "yards_per_att": "Y/A", "rushing_yards_pg": "Rush YPG", "rushing_tds_pg": "Rush TD/G",
+    "turnovers_pg": "TO/G", "ppg": "PPR PPG", "rush_ypg": "Rush YPG",
+    "yards_per_carry": "Y/C", "rec_ypg": "Rec YPG", "receptions_pg": "Rec/G",
+    "yards_per_rec": "Y/R", "targets_pg": "Tgt/G", "receiving_tds_pg": "Rec TD/G",
+    "catch_rate": "Catch%", "td_rate": "TD%",
+}
+
+
+def _build_stat_vector(row, stat_keys):
+    """Build a stat vector from a player row dict. Returns list of floats."""
+    g = row.get("games") or 1
+    vals = []
+    for key in stat_keys:
+        if key == "ppg":
+            vals.append((row.get("fantasy_points_ppr") or 0) / g)
+        elif key == "pass_ypg":
+            vals.append((row.get("passing_yards") or 0) / g)
+        elif key == "passing_tds_pg":
+            vals.append((row.get("passing_tds") or 0) / g)
+        elif key == "comp_pct":
+            att = row.get("attempts") or 0
+            comp = row.get("completions") or 0
+            vals.append((comp / att * 100) if att > 0 else 0)
+        elif key == "yards_per_att":
+            att = row.get("attempts") or 0
+            vals.append((row.get("passing_yards") or 0) / att if att > 0 else 0)
+        elif key == "rushing_yards_pg":
+            vals.append((row.get("rushing_yards") or 0) / g)
+        elif key == "rushing_tds_pg":
+            vals.append((row.get("rushing_tds") or 0) / g)
+        elif key == "turnovers_pg":
+            vals.append((row.get("turnovers") or 0) / g)
+        elif key == "rush_ypg":
+            vals.append((row.get("rushing_yards") or 0) / g)
+        elif key == "yards_per_carry":
+            car = row.get("carries") or 0
+            vals.append((row.get("rushing_yards") or 0) / car if car > 0 else 0)
+        elif key == "rec_ypg":
+            vals.append((row.get("receiving_yards") or 0) / g)
+        elif key == "receptions_pg":
+            vals.append((row.get("receptions") or 0) / g)
+        elif key == "yards_per_rec":
+            rec = row.get("receptions") or 0
+            vals.append((row.get("receiving_yards") or 0) / rec if rec > 0 else 0)
+        elif key == "targets_pg":
+            vals.append((row.get("targets") or 0) / g)
+        elif key == "receiving_tds_pg":
+            vals.append((row.get("receiving_tds") or 0) / g)
+        elif key == "catch_rate":
+            tgt = row.get("targets") or 0
+            rec = row.get("receptions") or 0
+            vals.append((rec / tgt * 100) if tgt > 0 else 0)
+        elif key == "td_rate":
+            car = row.get("carries") or 0
+            tgt = row.get("targets") or 0
+            tds = row.get("touchdowns") or 0
+            opps = car + tgt
+            vals.append((tds / opps * 100) if opps > 0 else 0)
+        else:
+            vals.append(0)
+    return vals
+
+
+def _cosine_similarity(a, b):
+    """Cosine similarity between two vectors, returns 0-100 score."""
+    dot = sum(x * y for x, y in zip(a, b))
+    mag_a = math.sqrt(sum(x * x for x in a))
+    mag_b = math.sqrt(sum(x * x for x in b))
+    if mag_a == 0 or mag_b == 0:
+        return 0
+    return round(dot / (mag_a * mag_b) * 100, 1)
+
+
+def fetch_player_comps(player_id, limit=5, season=0):
+    """Find the most statistically similar NFL players to a given player."""
+    conn = get_conn()
+
+    # Get target player info
+    player = conn.execute(
+        "SELECT player_id, full_name, position, team, age, headshot_url FROM players WHERE player_id = ?",
+        (player_id,)
+    ).fetchone()
+
+    if not player:
+        conn.close()
+        return {"error": "Player not found", "comps": []}
+
+    player = dict(player)
+    pos = (player.get("position") or "").upper()
+    if pos not in _COMP_STATS:
+        conn.close()
+        return {"error": f"Comps not available for position {pos}", "comps": []}
+
+    stat_keys = _COMP_STATS[pos]
+
+    # Determine season filter
+    if not season:
+        row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+        season = row[0] if row and row[0] else 2024
+
+    # Get target player's season stats
+    target_row = conn.execute(f"""
+        SELECT p.player_id, p.full_name, p.position, p.team, p.age, p.headshot_url,
+               COUNT(*) as games,
+               {_STAT_SUM_COLS}
+        FROM player_week_stats s
+        JOIN players p ON s.player_id = p.player_id
+        WHERE s.player_id = ? AND s.season = ?
+        GROUP BY s.player_id
+        HAVING games >= 4
+    """, (player_id, season)).fetchone()
+
+    if not target_row:
+        conn.close()
+        return {"error": "Not enough games in season", "comps": [], "player": player}
+
+    target = dict(target_row)
+    target_vec = _build_stat_vector(target, stat_keys)
+
+    # Get all same-position players (excluding target) with enough games
+    all_rows = conn.execute(f"""
+        SELECT p.player_id, p.full_name, p.position, p.team, p.age, p.headshot_url,
+               COUNT(*) as games,
+               {_STAT_SUM_COLS}
+        FROM player_week_stats s
+        JOIN players p ON s.player_id = p.player_id
+        WHERE p.position = ? AND s.player_id != ? AND s.season = ?
+        GROUP BY s.player_id
+        HAVING games >= 4
+    """, (pos, player_id, season)).fetchall()
+
+    # Compute similarity for each candidate
+    candidates = []
+    for row in all_rows:
+        r = dict(row)
+        vec = _build_stat_vector(r, stat_keys)
+        sim = _cosine_similarity(target_vec, vec)
+        # Find top matching stats (smallest absolute difference when normalized)
+        matching = []
+        for i, key in enumerate(stat_keys):
+            tv = target_vec[i]
+            cv = vec[i]
+            max_val = max(abs(tv), abs(cv), 0.001)
+            diff_pct = abs(tv - cv) / max_val
+            matching.append((key, diff_pct, tv, cv))
+        matching.sort(key=lambda x: x[1])
+        top_matches = [{"stat": m[0], "label": _COMP_STAT_LABELS.get(m[0], m[0]),
+                        "target_val": round(m[2], 1), "comp_val": round(m[3], 1)}
+                       for m in matching[:3]]
+
+        # All stat values for comparison table + radar
+        all_stats = {stat_keys[i]: round(vec[i], 1) for i in range(len(stat_keys))}
+
+        candidates.append({
+            "player_id": r["player_id"],
+            "full_name": r["full_name"],
+            "position": r["position"],
+            "team": r["team"],
+            "age": r.get("age"),
+            "headshot_url": r.get("headshot_url"),
+            "similarity": sim,
+            "matching_stats": top_matches,
+            "all_stats": all_stats,
+            "games": r["games"],
+            "ppg": round((r.get("fantasy_points_ppr") or 0) / (r["games"] or 1), 1),
+        })
+
+    # Sort by similarity descending
+    candidates.sort(key=lambda x: x["similarity"], reverse=True)
+    top = candidates[:limit]
+
+    # Build target stat values for comparison
+    target_stats = {}
+    for key in stat_keys:
+        idx = stat_keys.index(key)
+        target_stats[key] = {
+            "label": _COMP_STAT_LABELS.get(key, key),
+            "value": round(target_vec[idx], 1)
+        }
+
+    conn.close()
+    return {
+        "player": {
+            "player_id": target["player_id"],
+            "full_name": target["full_name"],
+            "position": target["position"],
+            "team": target["team"],
+            "age": target.get("age"),
+            "headshot_url": target.get("headshot_url"),
+            "games": target["games"],
+            "ppg": round((target.get("fantasy_points_ppr") or 0) / (target["games"] or 1), 1),
+        },
+        "comps": top,
+        "stat_keys": stat_keys,
+        "stat_labels": {k: _COMP_STAT_LABELS.get(k, k) for k in stat_keys},
+        "target_stats": target_stats,
+        "season": season,
+    }
