@@ -1,102 +1,65 @@
-# QA + UX Audit — Phases 86-90
+# QA + UX Audit — Phases 91-94
 
-**Audit date:** 2026-03-10
-**Phases covered:** 86 (QA fixes), 87 (Stock Watch), 88 (Opportunity Share), 89 (Report Card), 90 (Season Awards)
+**Date**: 2026-03-10
+**Scope**: Phase 91 (QA fixes), Phase 92 (VORP), Phase 93 (Trade Value Chart), Phase 94 (Trade Finder)
 
 ---
 
 ## QA FINDINGS
 
-### HIGH #1: Position filter inflates opportunity share / dominator rating
+### QA-1: MEDIUM — Missing fantasy_relevant filter in trade value + trade finder queries
+**File**: `backend/live_data.py`, lines 8126 and 8203
+**What's wrong**: `fetch_trade_value_chart` and `fetch_trade_finder` don't filter on `p.fantasy_relevant = 1`, unlike every other dashboard endpoint (VORP, stock watch, opportunity share, etc.). This means non-fantasy-relevant players (special teamers, backup QBs with minimal stats) can appear in trade value rankings and trade target results if they meet the 4-game / 2-PPG threshold.
+**Fix**: Add `AND p.fantasy_relevant = 1` to the WHERE clause in both functions' SQL queries.
 
-**Files:** `backend/live_data.py` — `fetch_opportunity_share` (line 7030), `fetch_report_cards` (line 7211), `fetch_season_awards` (line 7505)
+### QA-2: MEDIUM — Inefficient percentile_rank in fetch_trade_finder (O(n^2))
+**File**: `backend/live_data.py`, lines 8305-8312
+**What's wrong**: `percentile_rank()` sorts the entire values dict on every call. It's called 3 times per player (PPO, CoV, PPG), so for N players this is O(3N * N log N). With ~200 fantasy-relevant players this is negligible, but the pattern is wasteful. Pre-sorting once would be cleaner.
+**Fix**: Pre-sort each metric's values once before the loop, then use bisect for O(log N) per lookup.
 
-**What's wrong:** When a position filter is active (e.g., position=WR), the SQL query only fetches that position's players. Team totals are then built from those filtered results. This means opp_share = player_opps / WR-only-team-opps instead of / all-positions-team-opps. A WR with 15% of the full team's touches appears as 45% when only WR touches are counted. The metric definition ("targets + carries as % of team total") becomes meaningless under position filter.
+### QA-3: MEDIUM — Trade finder stock scoring uses 3-factor model vs stock watch's 4-factor
+**File**: `backend/live_data.py`, line 8321
+**What's wrong**: Trade finder computes stock score as `PPO * 0.33 + CoV * 0.33 + PPG * 0.34` (3 factors, no SOS), while the real stock watch endpoint (line 6951) uses `PPO * 0.25 + CoV * 0.25 + SOS * 0.25 + PPG * 0.25` (4 factors including SOS). This means the stock_trend arrows in the trade finder won't match the stock watch page's rising/falling classifications.
+**Fix**: Either add SOS computation to trade finder's stock scoring (matching the 4-factor model), or document the discrepancy. The 4-factor model is more accurate but requires the defense PPG-allowed grid query.
 
-**Fix:** Run a separate unfiltered query for team totals, or compute team totals before applying the position filter. Apply position filter only to the final player list, not the team aggregation.
+### QA-4: LOW — Duplicate players possible in trade finder results
+**File**: `backend/live_data.py`, lines 8349-8358
+**What's wrong**: A player can appear in both `equal_targets` AND `buy_low` (or `sell_high`) if they're within the +/- 8 value range AND have the right stock trend AND are within the +/- 15 extended range. This creates duplicates across sections.
+**Fix**: Exclude equal-value players from buy_low/sell_high, or deduplicate by preferring the more specific section.
 
-### HIGH #2: PNG export missing canvas watermark overlay in reportcard.html and awards.html
-
-**Files:** `frontend/reportcard.html` (export handler), `frontend/awards.html` (export handler)
-
-**What's wrong:** The PNG export downloads the raw html2canvas output without drawing the "razzle.lol" watermark text on the canvas. Compare with stocks.html (line 700-704) and opportunity.html (line 698-701) which correctly draw `ctx.fillText('razzle.lol', ...)` after capture. Exported PNGs from report card and awards pages lack the watermark — violates the sharing engine requirement that every export carries the brand.
-
-**Fix:** Add watermark drawing after html2canvas resolves:
-```javascript
-var ctx = canvas.getContext('2d');
-ctx.font = '24px Caveat, cursive';
-ctx.fillStyle = 'rgba(26,26,46,0.3)';
-ctx.textAlign = 'right';
-ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 16);
-```
-
----
-
-## MEDIUM FINDINGS
-
-### MEDIUM #1: Grade string sort produces incorrect order
-
-**Files:** `frontend/reportcard.html` (line 566-573), `frontend/stocks.html`, `frontend/opportunity.html`
-
-**What's wrong:** When user clicks a grade column header (GPA, Eff, Con, SOS), the sort function uses `localeCompare` for strings. This produces alphabetical order: A, A+, B, B+, C, C+, D, F — which is wrong (A+ should rank above A, B+ above B). Default sort is on numeric `gpa_pct` which works correctly, so this only triggers on manual grade column clicks.
-
-**Fix:** Map grade strings to numeric values before sorting: `{A+: 8, A: 7, B+: 6, B: 5, C+: 4, C: 3, D: 2, F: 1}`.
-
-### MEDIUM #2: Missing referrer field in reportcard.html analytics POST
-
-**File:** `frontend/reportcard.html` (line 710)
-
-**What's wrong:** The analytics POST body is `{ page: '/reportcard.html' }` without the `referrer` field. All other pages include `referrer: document.referrer || ''`. Referrer data is lost for report card pageviews.
-
-**Fix:** Add `referrer: document.referrer || ''` to the JSON body.
-
-### MEDIUM #3: Uncaught promise rejection in awards.html analytics
-
-**File:** `frontend/awards.html` (line 657-663)
-
-**What's wrong:** The analytics fetch is wrapped in `try/catch` instead of `.catch()`. `try/catch` doesn't catch async promise rejections. If the network is down, the promise rejection is unhandled.
-
-**Fix:** Replace `try { fetch(...) } catch(e) {}` with `fetch(...).catch(function() {})`.
-
----
-
-## LOW FINDINGS
-
-### LOW #1: awards.html `canvas.toDataURL()` missing explicit format
-
-**File:** `frontend/awards.html` (line 650)
-
-**What's wrong:** `canvas.toDataURL()` called without MIME type. Other pages use `canvas.toDataURL('image/png')` explicitly. Functionally equivalent but inconsistent.
-
-### LOW #2: Var redeclaration in opportunity.html
-
-**File:** `frontend/opportunity.html` (lines 523, 536)
-
-**What's wrong:** `var val` declared twice in the same function scope. Functional due to JS hoisting but poor hygiene.
+### QA-5: LOW — VORP endpoint returns `name` field instead of `full_name`
+**File**: `backend/live_data.py`, line 7998
+**What's wrong**: `fetch_vorp` uses `"name"` as the key for player name, while every other endpoint uses `"full_name"`. The frontend (vorp.html line 493) reads `p.name`, so it works, but it's inconsistent with the rest of the API.
+**Fix**: Change key to `full_name` in fetch_vorp and update vorp.html to match.
 
 ---
 
 ## UX FINDINGS
 
-### UX — MEDIUM #1: Award cards missing drill-down links to source dashboards
+### UX-1: HIGH — Trade Finder has no helpful error when player not in trade value pool
+**Context**: If a user searches for a player who doesn't meet the 4-game / 2-PPG threshold (injured player, late-season pickup, rookie who played 3 games), the API returns `{"error": "Player not found"}`. The frontend shows a generic error message.
+**Impact**: Dynasty managers frequently trade injured or low-game players. The error message doesn't explain WHY the player wasn't found — the user might think the tool is broken.
+**Fix**: Show a specific message: "Player hasn't played enough games (min 4) or doesn't meet the 2 PPG threshold for trade values." Consider showing the player's basic info even without trade data.
 
-**File:** `frontend/awards.html`
+### UX-2: MEDIUM — 34 nav links is getting unwieldy
+**Context**: The topnav now has 34 links. On desktop this wraps heavily; on mobile it's a very long scrollable list.
+**Impact**: Navigation is getting harder to use as dashboards accumulate. Users can't easily find what they want.
+**Fix**: Log as future structural improvement. Not actionable in a single fix task — needs nav redesign.
 
-**What's wrong:** Each award card could link to the relevant deep-dive dashboard (MVP -> Report Card, Most Efficient -> Efficiency, Iron Man -> Consistency, etc.). Currently there's no way to "drill down" from an award to the full ranking. A dynasty FF power user seeing "MVP: Player X" would want to see the full ranking.
+### UX-3: LOW — Trade Finder empty states for Buy Low / Sell High lack context
+**Context**: If the selected player has no buy-low or sell-high targets, the sections show "no targets found" without explanation.
+**Fix**: Add contextual empty-state messages explaining why no targets are available.
 
-### UX — LOW #1: Season selector empty until first API response
-
-**File:** `frontend/awards.html`, `frontend/reportcard.html`
-
-**What's wrong:** The season dropdown is empty on initial page load until the API returns. There's a brief flash of an empty select element. Minor polish issue.
+### UX-4: LOW — VORP "Replacement Level" section count doesn't adapt to position filter
+**Context**: The replacement_level section always shows bottom 25 players regardless of position filter, which becomes redundant when viewing a single position.
+**Fix**: Adjust count based on position filter.
 
 ---
 
 ## SUMMARY
 
-| Severity | QA | UX | Total |
-|----------|----|----|-------|
-| CRITICAL | 0 | 0 | 0 |
-| HIGH | 2 | 0 | 2 |
-| MEDIUM | 3 | 1 | 4 |
-| LOW | 2 | 1 | 3 |
+| Category | CRITICAL | HIGH | MEDIUM | LOW |
+|----------|----------|------|--------|-----|
+| QA       | 0        | 0    | 3      | 2   |
+| UX       | 0        | 1    | 1      | 2   |
+| **Total** | **0**   | **1** | **4** | **4** |

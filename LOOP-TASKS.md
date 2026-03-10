@@ -1,39 +1,49 @@
-# Razzle Loop — Phase 94 Task List
+# Razzle Loop — Phase 95 Task List
 
-> Trade Finder — Value-Matched Trade Targets
+> QA + UX Audit — Auto-Generated Fixes (Phases 91-94)
 
-**Current Phase**: 94 — Trade Finder
-**Exit Criterion**: /tradefinder.html page lets user search for any player, shows their trade value + tier, and displays three sections: "Equal Value Targets" (within +/- 8 trade value points), "Buy Low Targets" (higher value but falling stock — positive value differential with negative stock delta), and "Sell High Targets" (lower value but rising stock — negative value differential with positive stock delta). Each target row: position badge, headshot, name, team, age, trade value bar (position-colored), value differential chip (+/- points), stock trend arrow (up/down/flat), tier badge, PPG. Position filter tabs on targets (All/QB/RB/WR/TE). Selected player card at top with full stats. Click any target → player profile. PNG export via html2canvas with watermark. Responsive at 768px + 480px. /api/trade-finder endpoint accepts player_id, returns selected player data + equal/buy-low/sell-high target lists. "Trade Finder" nav link added to all 33 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md.
+**Current Phase**: 95 — QA + UX Audit Fixes
+**Exit Criterion**: All HIGH and MEDIUM findings from QA-AUDIT.md (Phases 91-94) resolved. Trade value chart + trade finder queries filter on fantasy_relevant. Trade finder percentile computation pre-sorted. Trade finder stock scoring matches stock watch 4-factor model or documented. Trade finder "player not found" error provides helpful context message. Verified with syntax checks and structural validation.
 
 ---
 
-## Task 1: Backend /api/trade-finder endpoint
-**Status**: PASS
-**Attempts**: 1
-**Notes**: fetch_trade_finder in live_data.py. Combines trade value data (compute_trade_value) with stock scoring (PPO/CoV/PPG percentiles). Returns selected_player + equal_targets (within +/-8 TV points) + buy_low (higher value, falling stock) + sell_high (lower value, rising stock). Server endpoint at /api/trade-finder with player_id + season params. Python syntax valid.
+## Task 1: HIGH fix — Trade Finder helpful error for missing players (UX-1)
+**Status**: PENDING
+**Attempts**: 0
+**Notes**: Show specific "min 4 games / 2 PPG" message when player not in trade pool. Consider showing basic player info even without trade data.
 
-## Task 2: Trade Finder page (frontend)
-**Status**: PASS
-**Attempts**: 1
-**Notes**: /tradefinder.html with player search autocomplete (quick-search API), selected player card (headshot, value, PPG, GP, stock score), 3 target sections (Equal Value / Buy Low / Sell High), position filter tabs on targets, value diff chips, stock trend arrows, tier badges, value bars. 23 escapeHtml calls. JS braces balanced 60/60. PNG export with watermark. Responsive at 768px + 480px. URL state (?player=ID). Design compliant.
+## Task 2: MEDIUM fix — Add fantasy_relevant filter to trade value + trade finder (QA-1)
+**Status**: PENDING
+**Attempts**: 0
+**Notes**: Add `AND p.fantasy_relevant = 1` to fetch_trade_value_chart and fetch_trade_finder SQL queries.
 
-## Task 3: Nav links + sitemap + analytics
-**Status**: PASS
-**Attempts**: 1
-**Notes**: Trade Finder nav link added to all 33 pages (nav + footer). Sitemap entry added. Analytics pageview POST in tradefinder.html with referrer.
+## Task 3: MEDIUM fix — Pre-sort percentile_rank in trade finder (QA-2)
+**Status**: PENDING
+**Attempts**: 0
+**Notes**: Pre-sort PPO/CoV/PPG values once, use bisect for O(log N) lookups instead of re-sorting per player.
 
-## Task 4: Smoke test
-**Status**: PASS
-**Attempts**: 1
-**Notes**: Python syntax valid (live_data.py + server.py). JS braces balanced 60/60. 33/33 pages have Trade Finder nav link. 23 escapeHtml calls for XSS. Design compliance: sand bg, chunky 3px borders, 4px shadows, display font headers, mono data, hand annotations, position colors, responsive 768+480, watermark, analytics.
+## Task 4: MEDIUM fix — Align trade finder stock scoring with 4-factor model (QA-3)
+**Status**: PENDING
+**Attempts**: 0
+**Notes**: Either add SOS computation to trade finder or document the 3-factor simplification. 4-factor preferred for consistency with /stocks.html.
+
+## Task 5: MEDIUM grouped — LOW findings (QA-4, QA-5, UX-3, UX-4)
+**Status**: PENDING
+**Attempts**: 0
+**Notes**: Deduplicate trade finder results across sections. VORP `name` → `full_name` consistency. Trade finder contextual empty-state messages. VORP replacement section count adaptive to position filter.
+
+## Task 6: Smoke test
+**Status**: PENDING
+**Attempts**: 0
+**Notes**:
 
 ---
 
 ## Loop State
 ```
-Current Phase: 94
-Current Task: 4
-Current Stage: COMPLETE
+Current Phase: 95
+Current Task: 1
+Current Stage: BUILD
 Attempt: 1
-Tasks Completed: 4/4
+Tasks Completed: 0/6
 ```
