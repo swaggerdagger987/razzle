@@ -192,8 +192,8 @@ const COLUMNS = {
   pos_rank:            { label: "Pos Rank", tip: "Positional Rank — rank within position by current sort", group: "Fantasy", decimals: 0, isText: true, derived: true },
 
   // Core fantasy
-  fantasy_points_ppr:  { label: "PPR",     tip: "PPR Fantasy Points — full PPR scoring total (superflex: QBs typically score 1.5-2x more)", group: "Fantasy", decimals: 1 },
-  ppg:                 { label: "PPG",      tip: "Points Per Game — PPR points per game played", group: "Fantasy", decimals: 1 },
+  fantasy_points_ppr:  { label: "PPR",     tip: "PPR points — the scoring format fantasy lives and dies by", group: "Fantasy", decimals: 1 },
+  ppg:                 { label: "PPG",      tip: "PPR points per game. The great equalizer.", group: "Fantasy", decimals: 1 },
   fantasy_points_std:  { label: "Standard", tip: "Standard Fantasy Points — non-PPR scoring total", group: "Fantasy", decimals: 1 },
   fantasy_points_half_ppr: { label: "Half-PPR", tip: "Half-PPR Fantasy Points — 0.5 PPR scoring total", group: "Fantasy", decimals: 1 },
   half_ppr_ppg:        { label: "HPPR/G",   tip: "Half-PPR Per Game — half-PPR points per game", group: "Fantasy", decimals: 1, derived: true },
@@ -227,7 +227,7 @@ const COLUMNS = {
   receiving_air_yards: { label: "Rec Air",   tip: "Receiving Air Yards — intended air yards on targets", group: "Receiving", decimals: 0 },
   receiving_yards_after_catch: { label: "YAC", tip: "Yards After Catch — yards gained after reception", group: "Receiving", decimals: 0 },
   receiving_first_downs: { label: "Rec 1st", tip: "Receiving First Downs", group: "Receiving", decimals: 0 },
-  adot:                { label: "aDOT",      tip: "Average Depth of Target — mean air yards per target", group: "Receiving", decimals: 1, derived: true },
+  adot:                { label: "aDOT",      tip: "How deep the average target is. High = field stretcher. Low = underneath guy.", group: "Receiving", decimals: 1, derived: true },
 
   // Totals
   touchdowns:          { label: "TD",        tip: "Total Touchdowns — all scoring TDs", group: "Totals", decimals: 0 },
@@ -236,18 +236,18 @@ const COLUMNS = {
   fumbles_lost:        { label: "FUM Lost",  tip: "Fumbles Lost — fumbles recovered by opponent", group: "Totals", decimals: 0 },
 
   // Efficiency (derived from aggregates — sort only, no SQL filter)
-  yards_per_carry:     { label: "Y/CAR",    tip: "Yards Per Carry — rushing yards / carries", group: "Efficiency", decimals: 1, derived: true },
+  yards_per_carry:     { label: "Y/CAR",    tip: "Yards per carry. Simple but tells you a lot.", group: "Efficiency", decimals: 1, derived: true },
   yards_per_rec:       { label: "Y/REC",    tip: "Yards Per Reception — receiving yards / receptions", group: "Efficiency", decimals: 1, derived: true },
   yards_per_target:    { label: "Y/TGT",    tip: "Yards Per Target — receiving yards / targets", group: "Efficiency", decimals: 1, derived: true },
-  catch_rate:          { label: "Catch%",   tip: "Catch Rate — receptions / targets as percentage", group: "Efficiency", decimals: 1, derived: true },
+  catch_rate:          { label: "Catch%",   tip: "How often he catches what's thrown his way.", group: "Efficiency", decimals: 1, derived: true },
   comp_pct:            { label: "CMP%",     tip: "Completion Percentage — completions / attempts", group: "Efficiency", decimals: 1, derived: true },
   yards_per_att:       { label: "Y/ATT",    tip: "Yards Per Attempt — passing yards / attempts", group: "Efficiency", decimals: 1, derived: true },
-  passer_rating:       { label: "Rating",   tip: "Passer Rating — NFL passer rating formula (0-158.3)", group: "Efficiency", decimals: 1, derived: true },
+  passer_rating:       { label: "Rating",   tip: "The NFL's official QB formula. 158.3 is perfect. Good luck.", group: "Efficiency", decimals: 1, derived: true },
   ay_per_att:          { label: "AY/A",     tip: "Adjusted Yards Per Attempt — (pass yds + 20\u00d7TD - 45\u00d7INT) / ATT", group: "Efficiency", decimals: 1, derived: true },
   td_rate:             { label: "TD%",      tip: "TD Rate — touchdowns / (carries + targets) as percentage", group: "Efficiency", decimals: 1, derived: true },
   fumble_rate:         { label: "FUM%",     tip: "Fumble Rate — fumbles lost / (carries + receptions) as percentage", group: "Efficiency", decimals: 1, derived: true },
-  snap_share:          { label: "Snap%",    tip: "Snap Share — percentage of offensive snaps played", group: "Efficiency", decimals: 1, derived: true },
-  yprr:                { label: "YPRR*",    tip: "Yards Per Route Run (estimated — assumes 85% route participation from snap counts)", group: "Efficiency", decimals: 2, derived: true },
+  snap_share:          { label: "Snap%",    tip: "How much time he spends on the field. More snaps = more opportunity.", group: "Efficiency", decimals: 1, derived: true },
+  yprr:                { label: "YPRR*",    tip: "Yards earned per route run. The best efficiency stat for receivers. (*estimated from snap counts)", group: "Efficiency", decimals: 2, derived: true },
 
   // Per-game averages (derived — sort only)
   rec_per_game:        { label: "REC/G",    tip: "Receptions Per Game", group: "Per Game", decimals: 1, derived: true },
@@ -258,33 +258,33 @@ const COLUMNS = {
   wopr_per_game:       { label: "WOPR/G",    tip: "WOPR Per Game — weighted opportunity rating per game played", group: "Per Game", decimals: 3, derived: true },
 
   // Advanced (from nflverse rate stats — sort only)
-  target_share:        { label: "TGT%",     tip: "Target Share — percentage of team total targets", group: "Advanced", decimals: 1, pct: true, derived: true },
-  air_yards_share:     { label: "AirYd%",   tip: "Team Air Yard Share — percentage of team total air yards", group: "Advanced", decimals: 1, pct: true, derived: true },
-  wopr:                { label: "WOPR",     tip: "Weighted Opportunity Rating — target share \u00d7 1.5 + air yard share \u00d7 0.7", group: "Advanced", decimals: 3, derived: true },
-  racr:                { label: "RACR",     tip: "Receiver Air Conversion Ratio — receiving yards \u00f7 air yards", group: "Advanced", decimals: 2, derived: true },
+  target_share:        { label: "TGT%",     tip: "What slice of the team's targets this player eats.", group: "Advanced", decimals: 1, pct: true, derived: true },
+  air_yards_share:     { label: "AirYd%",   tip: "Share of the team's air yards. How much of the passing game flows through him.", group: "Advanced", decimals: 1, pct: true, derived: true },
+  wopr:                { label: "WOPR",     tip: "How much of the passing game runs through this player. The volume king stat.", group: "Advanced", decimals: 3, derived: true },
+  racr:                { label: "RACR",     tip: "Yards gained per air yard thrown his way. Efficiency in the air.", group: "Advanced", decimals: 2, derived: true },
   passing_epa:         { label: "Pass EPA", tip: "Passing EPA — expected points added per game (passing)", group: "Advanced", decimals: 1, derived: true },
   receiving_epa:       { label: "Rec EPA",  tip: "Receiving EPA — expected points added per game (receiving)", group: "Advanced", decimals: 1, derived: true },
   rushing_epa:         { label: "Rush EPA", tip: "Rushing EPA — expected points added per game (rushing)", group: "Advanced", decimals: 1, derived: true },
-  dakota:              { label: "DAKOTA",   tip: "Adjusted EPA + CPOE composite (nflfastR)", group: "Advanced", decimals: 3, derived: true },
-  cpoe:                { label: "CPOE",     tip: "Completion Percentage Over Expected — actual CMP% minus expected CMP%", group: "Advanced", decimals: 1, derived: true },
-  epa_per_play:        { label: "EPA/Play", tip: "EPA Per Play — total EPA divided by total plays", group: "Advanced", decimals: 3, derived: true },
+  dakota:              { label: "DAKOTA",   tip: "EPA + completion magic combined. The nerd stat for QB evaluation.", group: "Advanced", decimals: 3, derived: true },
+  cpoe:                { label: "CPOE",     tip: "How much better (or worse) than expected this QB completes passes.", group: "Advanced", decimals: 1, derived: true },
+  epa_per_play:        { label: "EPA/Play", tip: "Points added per play. The ultimate efficiency number.", group: "Advanced", decimals: 3, derived: true },
 
   // Breakout detection
-  breakout_pct:        { label: "BRK%",    tip: "Breakout Percentage — max year-over-year PPR increase", group: "Breakout", decimals: 1, derived: true },
+  breakout_pct:        { label: "BRK%",    tip: "Biggest single-year leap in PPR points. Late bloomers show up here.", group: "Breakout", decimals: 1, derived: true },
 
   // Play-by-play derived (from player_season_pbp)
-  pass_success_rate:   { label: "Pass Succ%", tip: "Pass Success Rate — percentage of pass plays with EPA > 0", group: "Advanced", decimals: 3, derived: true },
-  rush_success_rate:   { label: "Rush Succ%", tip: "Rush Success Rate — percentage of rush plays with EPA > 0", group: "Advanced", decimals: 3, derived: true },
-  avg_score_differential: { label: "Game Script", tip: "Avg Score Differential — mean point margin at snap (positive = winning)", group: "Advanced", decimals: 1, derived: true },
-  garbage_time_pct:    { label: "Garb%",    tip: "Garbage Time % — percentage of plays in blowout situations", group: "Advanced", decimals: 3, derived: true },
+  pass_success_rate:   { label: "Pass Succ%", tip: "How often passing plays gain expected value. The efficient passer check.", group: "Advanced", decimals: 3, derived: true },
+  rush_success_rate:   { label: "Rush Succ%", tip: "How often rush plays gain expected value. Quality over quantity.", group: "Advanced", decimals: 3, derived: true },
+  avg_score_differential: { label: "Game Script", tip: "Average game script. Positive = playing with the lead. Affects play calling.", group: "Advanced", decimals: 1, derived: true },
+  garbage_time_pct:    { label: "Garb%",    tip: "Plays in blowouts. High = stat padding. Buyer beware.", group: "Advanced", decimals: 3, derived: true },
   scramble_attempts:   { label: "Scram Att", tip: "Scramble Attempts — QB scramble plays (classified as runs)", group: "Passing", decimals: 0, derived: true },
   scramble_yards:      { label: "Scram Yds", tip: "Scramble Yards — yards gained on QB scrambles", group: "Passing", decimals: 0, derived: true },
   scramble_tds:        { label: "Scram TD",  tip: "Scramble Touchdowns", group: "Passing", decimals: 0, derived: true },
-  gl_carries:          { label: "GL Carries", tip: "Goal-Line Carries — rushing attempts inside the 5-yard line", group: "Rushing", decimals: 0, derived: true },
-  gl_targets:          { label: "GL Targets", tip: "Goal-Line Targets — pass targets inside the 5-yard line", group: "Receiving", decimals: 0, derived: true },
-  gl_tds:              { label: "GL TD",     tip: "Goal-Line TDs — touchdowns scored inside the 5-yard line", group: "Rushing", decimals: 0, derived: true },
-  intended_air_yards_per_target: { label: "IAY/TGT", tip: "Intended Air Yards Per Target — avg depth of all targets (not just catches)", group: "Receiving", decimals: 1, derived: true },
-  drop_rate:           { label: "Drop%",    tip: "Drop Rate — estimated drops / targets (incomplete short-medium non-INT passes)", group: "Receiving", decimals: 3, derived: true },
+  gl_carries:          { label: "GL Carries", tip: "Carries inside the 5. The money zone for RBs.", group: "Rushing", decimals: 0, derived: true },
+  gl_targets:          { label: "GL Targets", tip: "Targets inside the 5. Red zone trust.", group: "Receiving", decimals: 0, derived: true },
+  gl_tds:              { label: "GL TD",     tip: "TDs inside the 5. Cashing in where it counts.", group: "Rushing", decimals: 0, derived: true },
+  intended_air_yards_per_target: { label: "IAY/TGT", tip: "How deep they're throwing to him on all targets. The real aDOT.", group: "Receiving", decimals: 1, derived: true },
+  drop_rate:           { label: "Drop%",    tip: "Estimated drops per target. Stone hands or reliable? (*estimated)", group: "Receiving", decimals: 3, derived: true },
   return_yards:        { label: "Ret Yds",  tip: "Return Yards — kickoff + punt return yards", group: "General", decimals: 0, derived: true },
   return_tds:          { label: "Ret TD",   tip: "Return Touchdowns — kickoff + punt return TDs", group: "General", decimals: 0, derived: true },
   two_point_conversions: { label: "2PT",    tip: "Two-Point Conversions — successful two-point conversion plays", group: "General", decimals: 0, derived: true },
@@ -292,11 +292,11 @@ const COLUMNS = {
   games_missed:        { label: "Missed",   tip: "Games Missed — weeks with Out/IR/Doubtful designation", group: "General", decimals: 0, derived: true },
 
   // Team shares (derived from team aggregates — sort only)
-  dominator_rating:    { label: "DOM",     tip: "Dominator Rating — share of team receiving production (WR/TE only)", group: "Dynasty", decimals: 1, pct: true, derived: true },
-  rush_share:          { label: "Rush%",   tip: "Rush Share — percentage of team carries (RB/QB only)", group: "Efficiency", decimals: 1, derived: true },
+  dominator_rating:    { label: "DOM",     tip: "How much of the offense he owns. High = alpha receiver.", group: "Dynasty", decimals: 1, pct: true, derived: true },
+  rush_share:          { label: "Rush%",   tip: "What percentage of the team's carries he gets. Bellcow indicator.", group: "Efficiency", decimals: 1, derived: true },
 
   // Dynasty value
-  dynasty_value:       { label: "DVS",     tip: "Dynasty Value Score — age-adjusted PPR value for dynasty leagues", group: "Dynasty", decimals: 1, derived: true },
+  dynasty_value:       { label: "DVS",     tip: "Dynasty value adjusted for age. Higher = more valuable for your future.", group: "Dynasty", decimals: 1, derived: true },
   age:                 { label: "Age",     tip: "Player age (current)", group: "Dynasty", decimals: 0 },
 };
 

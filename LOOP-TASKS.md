@@ -30,7 +30,8 @@
 - War Room upgrade prompt matches brand voice
 
 ## Task 3: Tooltip voice pass
-**Status**: PENDING
+**Status**: PASS
+**Result**: Rewrote 28 column tooltips in brand voice — warm, peer-like, slightly opinionated. Key updates: WOPR ("The volume king stat"), RACR ("Efficiency in the air"), DAKOTA ("The nerd stat for QB evaluation"), DVS ("more valuable for your future"), TGT% ("What slice of the team's targets"), aDOT ("field stretcher vs underneath guy"), YPRR ("The best efficiency stat for receivers"), CPOE ("better or worse than expected"). Zero clinical definitions remain.
 **Acceptance Criteria**:
 - All tooltips rewritten in brand voice
 - No clinical/textbook definitions remain
@@ -51,8 +52,8 @@
 ## Loop State
 ```
 Current Phase: 44
-Current Task: 3
+Current Task: 4
 Current Stage: BUILD
 Attempt: 1
-Tasks Completed: 2/4
+Tasks Completed: 3/4
 ```
