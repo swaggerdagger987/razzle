@@ -3,45 +3,45 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Hot & Cold Streaks — Razzle</title>
-<meta property="og:title" content="Hot & Cold Streaks — Razzle">
-<meta property="og:description" content="Identify players on hot or cold scoring streaks vs their season average on razzle.lol">
+<title>Scoring Breakdown — Razzle</title>
+<meta property="og:title" content="Scoring Breakdown — Razzle">
+<meta property="og:description" content="See how players accumulate PPR points — rush yards, rec yards, pass yards, receptions, TDs on razzle.lol">
 <meta property="og:site_name" content="razzle.lol">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Hot & Cold Streaks — Razzle">
-<meta name="twitter:description" content="Identify players on hot or cold scoring streaks vs their season average on razzle.lol">
+<meta name="twitter:title" content="Scoring Breakdown — Razzle">
+<meta name="twitter:description" content="See how players accumulate PPR points — rush yards, rec yards, pass yards, receptions, TDs on razzle.lol">
 <meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
-<meta name="description" content="Hot and cold streak tracker — who's on fire and who's ice cold over their last few games on razzle.lol">
+<meta name="description" content="Fantasy scoring breakdown — stacked bar visualization of where each player's PPR points come from on razzle.lol">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="styles.css">
 <style>
-  .str-page {
-    max-width: 1200px;
+  .fb-page {
+    max-width: 1100px;
     margin: 0 auto;
     padding: 24px 20px 60px;
   }
 
-  .str-header {
+  .fb-header {
     text-align: center;
     margin-bottom: 24px;
   }
-  .str-header h1 {
+  .fb-header h1 {
     font-family: var(--font-display);
     font-size: 32px;
     color: var(--ink);
     margin: 0 0 4px;
   }
-  .str-header .str-subtitle {
+  .fb-header .fb-subtitle {
     font-family: var(--font-hand);
     font-size: 20px;
     color: var(--ink-light);
   }
 
-  .str-controls {
+  .fb-controls {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -49,7 +49,7 @@
     margin-bottom: 24px;
     flex-wrap: wrap;
   }
-  .str-controls select {
+  .fb-controls select {
     font-family: var(--font-mono);
     font-size: 13px;
     padding: 6px 10px;
@@ -57,11 +57,11 @@
     border-radius: 4px;
     background: var(--card);
   }
-  .str-controls .pos-tabs {
+  .fb-controls .pos-tabs {
     display: flex;
     gap: 4px;
   }
-  .str-controls .pos-tab {
+  .fb-controls .pos-tab {
     font-family: var(--font-mono);
     font-size: 12px;
     padding: 5px 12px;
@@ -71,11 +71,11 @@
     cursor: pointer;
     font-weight: 700;
   }
-  .str-controls .pos-tab.active {
+  .fb-controls .pos-tab.active {
     background: var(--ink);
     color: var(--sand);
   }
-  .str-export {
+  .fb-export {
     font-family: var(--font-mono);
     font-size: 12px;
     padding: 5px 14px;
@@ -85,9 +85,9 @@
     cursor: pointer;
     font-weight: 700;
   }
-  .str-export:hover { background: var(--ink); color: var(--sand); }
+  .fb-export:hover { background: var(--ink); color: var(--sand); }
 
-  .str-loading {
+  .fb-loading {
     text-align: center;
     font-family: var(--font-hand);
     font-size: 18px;
@@ -95,107 +95,128 @@
     padding: 60px 0;
   }
 
-  /* Two-column layout */
-  .str-columns {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-  }
-  @media (max-width: 768px) {
-    .str-columns { grid-template-columns: 1fr; }
-  }
-
-  .str-section {
+  .fb-card {
     background: var(--card);
     border: 3px solid var(--ink);
     border-radius: 10px;
     box-shadow: 4px 4px 0 var(--ink);
     overflow: hidden;
   }
-  .str-section-header {
+  .fb-card-header {
     font-family: var(--font-display);
     font-size: 18px;
     padding: 10px 16px;
-    color: #fff;
+    background: var(--ink);
+    color: var(--sand);
   }
-  .str-section-header.hot { background: #166534; }
-  .str-section-header.cold { background: #991b1b; }
 
-  /* Table */
-  .str-table {
-    width: 100%;
-    border-collapse: collapse;
+  .fb-legend {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .fb-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
     font-family: var(--font-mono);
-    font-size: 12px;
+    font-size: 11px;
   }
-  .str-table th {
-    background: var(--sand);
-    padding: 6px 8px;
-    text-align: right;
-    font-size: 10px;
-    font-weight: 700;
-    border-bottom: 2px solid var(--ink-faint);
-    cursor: pointer;
-    user-select: none;
-    white-space: nowrap;
+  .fb-legend-swatch {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    border: 1px solid var(--ink-faint);
   }
-  .str-table th:first-child, .str-table th:nth-child(2) { text-align: left; }
-  .str-table td {
-    padding: 6px 8px;
-    text-align: right;
-    border-bottom: 1px solid var(--ink-faint);
-  }
-  .str-table td:first-child, .str-table td:nth-child(2) { text-align: left; }
-  .str-table tbody tr:hover { background: rgba(217,119,87,0.08); }
 
-  /* Badges */
-  .str-delta-badge {
+  /* Player row */
+  .fb-row {
+    display: flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-bottom: 1px solid var(--ink-faint);
+    gap: 8px;
+  }
+  .fb-row:hover { background: rgba(217,119,87,0.08); }
+
+  .fb-rank {
     font-family: var(--font-mono);
     font-size: 11px;
     font-weight: 700;
-    padding: 1px 6px;
-    border-radius: 3px;
-    border: 1px solid;
+    color: var(--ink-light);
+    width: 24px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .fb-name {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    width: 160px;
+    flex-shrink: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .str-delta-badge.hot {
-    background: #dcfce7;
-    color: #166534;
-    border-color: #166534;
-  }
-  .str-delta-badge.cold {
-    background: #fef2f2;
-    color: #991b1b;
-    border-color: #991b1b;
-  }
-  .str-pos-badge {
+  .fb-pos-badge {
     font-size: 10px;
     font-weight: 700;
     padding: 1px 5px;
     border-radius: 3px;
     color: #fff;
-    margin-left: 4px;
+    flex-shrink: 0;
   }
-
-  /* Mini sparkline (recent scores) */
-  .str-recent {
-    display: flex;
-    gap: 2px;
-    align-items: flex-end;
+  .fb-ppg {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    width: 40px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .fb-bar-container {
+    flex: 1;
     height: 20px;
+    display: flex;
+    border-radius: 3px;
+    overflow: hidden;
+    border: 1px solid var(--ink-faint);
+    min-width: 200px;
   }
-  .str-recent-bar {
-    width: 8px;
-    border-radius: 2px 2px 0 0;
-    min-height: 2px;
+  .fb-bar-segment {
+    height: 100%;
+    position: relative;
+    transition: width 0.3s ease;
+  }
+  .fb-bar-segment:hover {
+    opacity: 0.85;
+  }
+  .fb-bar-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+    pointer-events: none;
+    text-shadow: 0 0 2px rgba(0,0,0,0.5);
   }
 
-  .str-empty {
+  .fb-empty {
     text-align: center;
     font-family: var(--font-hand);
     font-size: 15px;
     color: var(--ink-light);
     padding: 30px 16px;
+  }
+
+  @media (max-width: 768px) {
+    .fb-name { width: 100px; font-size: 11px; }
+    .fb-bar-container { min-width: 120px; }
   }
 </style>
 </head>
@@ -252,26 +273,27 @@
     <li><a href="/weeklyleaders.html">Week Leaders</a></li>
     <li><a href="/pace.html">Pace</a></li>
     <li><a href="/gamelog.html">Game Log</a></li>
-    <li><a href="/streaks.html" class="active">Streaks</a></li>
+    <li><a href="/streaks.html">Streaks</a></li>
+    <li><a href="/recap.html">Recap</a></li>
+    <li><a href="/comptable.html">Compare Table</a></li>
+    <li><a href="/records.html">Records</a></li>
+    <li><a href="/waivers.html">Waivers</a></li>
+    <li><a href="/playoffs.html">Playoffs</a></li>
+    <li><a href="/fptsbreakdown.html" class="active">FPTS Breakdown</a></li>
     <li><a href="/team/KC">Teams</a></li>
     <li><a href="/league-intel.html">League Intel</a></li>
     <li><a href="/agents.html">War Room</a></li>
   </ul>
 </nav>
 
-<main class="str-page" id="strRoot">
-  <div class="str-header">
-    <h1>Hot & Cold Streaks</h1>
-    <div class="str-subtitle">who's on fire and who's ice cold</div>
+<main class="fb-page" id="fbRoot">
+  <div class="fb-header">
+    <h1>Scoring Breakdown</h1>
+    <div class="fb-subtitle">where do the fantasy points come from</div>
   </div>
 
-  <div class="str-controls">
-    <select id="strSeason" aria-label="Season"></select>
-    <select id="strWindow" aria-label="Window">
-      <option value="3">Last 3 games</option>
-      <option value="4" selected>Last 4 games</option>
-      <option value="5">Last 5 games</option>
-    </select>
+  <div class="fb-controls">
+    <select id="fbSeason" aria-label="Season"></select>
     <div class="pos-tabs">
       <button class="pos-tab active" data-pos="">ALL</button>
       <button class="pos-tab" data-pos="QB">QB</button>
@@ -279,11 +301,19 @@
       <button class="pos-tab" data-pos="WR">WR</button>
       <button class="pos-tab" data-pos="TE">TE</button>
     </div>
-    <button class="str-export" id="strExport">Export PNG</button>
+    <button class="fb-export" id="fbExport">Export PNG</button>
   </div>
 
-  <div id="strContent">
-    <div class="str-loading">pulling film...</div>
+  <div class="fb-legend">
+    <div class="fb-legend-item"><div class="fb-legend-swatch" style="background:#5b7fff"></div>Pass Yds</div>
+    <div class="fb-legend-item"><div class="fb-legend-swatch" style="background:#2ec4b6"></div>Rush Yds</div>
+    <div class="fb-legend-item"><div class="fb-legend-swatch" style="background:#d97757"></div>Rec Yds</div>
+    <div class="fb-legend-item"><div class="fb-legend-swatch" style="background:#8b5cf6"></div>Receptions</div>
+    <div class="fb-legend-item"><div class="fb-legend-swatch" style="background:#e74c3c"></div>TDs</div>
+  </div>
+
+  <div id="fbContent">
+    <div class="fb-loading">pulling film...</div>
   </div>
 </main>
 
@@ -417,53 +447,55 @@
   }
 
   var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+  var COMP_COLORS = {
+    pass_yd: '#5b7fff',
+    rush_yd: '#2ec4b6',
+    rec_yd: '#d97757',
+    rec: '#8b5cf6',
+    td: '#e74c3c'
+  };
 
   var currentPosition = '';
-  var currentData = null;
 
   /* ---- URL state ---- */
   function readURL() {
     var p = new URLSearchParams(window.location.search);
-    return { season: p.get('season') || '', pos: p.get('pos') || '', window: p.get('window') || '' };
+    return { season: p.get('season') || '', pos: p.get('pos') || '' };
   }
-  function writeURL(season, pos, win) {
+  function writeURL(season, pos) {
     var p = new URLSearchParams();
     if (season) p.set('season', season);
     if (pos) p.set('pos', pos);
-    if (win && win !== '4') p.set('window', win);
     var qs = p.toString();
     history.replaceState(null, '', qs ? '?' + qs : location.pathname);
   }
 
   /* ---- Fetch ---- */
   function load() {
-    var selSeason = document.getElementById('strSeason');
-    var selWindow = document.getElementById('strWindow');
+    var selSeason = document.getElementById('fbSeason');
     var season = selSeason.value || '';
-    var win = selWindow.value || '4';
     var pos = currentPosition;
-    writeURL(season, pos, win);
+    writeURL(season, pos);
 
-    var url = '/api/streaks?window=' + encodeURIComponent(win);
-    if (season) url += '&season=' + encodeURIComponent(season);
-    if (pos) url += '&position=' + encodeURIComponent(pos);
+    var url = '/api/fpts-breakdown?';
+    if (season) url += 'season=' + encodeURIComponent(season) + '&';
+    if (pos) url += 'position=' + encodeURIComponent(pos) + '&';
 
-    document.getElementById('strContent').innerHTML = '<div class="str-loading">pulling film...</div>';
+    document.getElementById('fbContent').innerHTML = '<div class="fb-loading">pulling film...</div>';
 
     fetch(url).then(function(r) {
       if (!r.ok) throw new Error('API error');
       return r.json();
     }).then(function(data) {
-      currentData = data;
       populateSeasons(data.season);
       render(data);
     }).catch(function() {
-      document.getElementById('strContent').innerHTML = '<div class="str-loading">something went wrong — try again</div>';
+      document.getElementById('fbContent').innerHTML = '<div class="fb-loading">something went wrong — try again</div>';
     });
   }
 
   function populateSeasons(current) {
-    var sel = document.getElementById('strSeason');
+    var sel = document.getElementById('fbSeason');
     if (sel.options.length <= 1) {
       sel.innerHTML = '';
       for (var y = 2024; y >= 2020; y--) {
@@ -478,68 +510,53 @@
 
   /* ---- Render ---- */
   function render(data) {
-    var hot = data.hot || [];
-    var cold = data.cold || [];
+    var players = data.players || [];
 
-    var html = '<div class="str-columns">';
-
-    // Hot section
-    html += '<div class="str-section">';
-    html += '<div class="str-section-header hot">On Fire</div>';
-    if (hot.length) {
-      html += renderTable(hot, 'hot');
-    } else {
-      html += '<div class="str-empty">no hot streaks found</div>';
+    if (!players.length) {
+      document.getElementById('fbContent').innerHTML = '<div class="fb-card"><div class="fb-card-header">Scoring Breakdown</div><div class="fb-empty">no data found for this selection</div></div>';
+      return;
     }
-    html += '</div>';
 
-    // Cold section
-    html += '<div class="str-section">';
-    html += '<div class="str-section-header cold">Ice Cold</div>';
-    if (cold.length) {
-      html += renderTable(cold, 'cold');
-    } else {
-      html += '<div class="str-empty">no cold streaks found</div>';
-    }
-    html += '</div>';
-
-    html += '</div>';
-    document.getElementById('strContent').innerHTML = html;
-  }
-
-  function renderTable(players, type) {
-    var html = '<table class="str-table"><thead><tr>';
-    html += '<th>Player</th><th>Pos</th><th>Szn Avg</th><th>Recent</th><th>Delta</th><th>Last ' + escapeHtml(String(currentData.window)) + '</th>';
-    html += '</tr></thead><tbody>';
+    var html = '<div class="fb-card">';
+    html += '<div class="fb-card-header">PPR Scoring Components (' + escapeHtml(String(data.count)) + ' players)</div>';
 
     for (var i = 0; i < players.length; i++) {
       var p = players[i];
       var posColor = POS_COLORS[p.position] || '#888';
-      var badgeClass = type === 'hot' ? 'hot' : 'cold';
-      var sign = p.delta > 0 ? '+' : '';
 
-      html += '<tr>';
-      html += '<td>' + escapeHtml(p.name) + ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></td>';
-      html += '<td><span class="str-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
-      html += '<td>' + escapeHtml(String(fmt(p.season_avg))) + '</td>';
-      html += '<td>' + escapeHtml(String(fmt(p.recent_avg))) + '</td>';
-      html += '<td><span class="str-delta-badge ' + badgeClass + '">' + sign + escapeHtml(String(fmt(p.delta))) + ' (' + sign + escapeHtml(String(fmt(p.delta_pct, 0))) + '%)</span></td>';
+      html += '<div class="fb-row">';
+      html += '<div class="fb-rank">' + (i + 1) + '</div>';
+      html += '<div class="fb-name">' + escapeHtml(p.name) + ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></div>';
+      html += '<div class="fb-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</div>';
+      html += '<div class="fb-ppg">' + escapeHtml(String(fmt(p.ppg))) + '</div>';
 
-      // Mini bar sparkline
-      var scores = p.recent_scores || [];
-      var maxScore = Math.max.apply(null, scores.concat([1]));
-      html += '<td><div class="str-recent">';
-      for (var j = 0; j < scores.length; j++) {
-        var h = Math.max(2, Math.round((scores[j] / maxScore) * 20));
-        var barColor = scores[j] >= p.season_avg ? '#2ec4b6' : '#d97757';
-        html += '<div class="str-recent-bar" style="height:' + h + 'px;background:' + barColor + '" title="Wk: ' + escapeHtml(String(fmt(scores[j]))) + '"></div>';
+      // Stacked bar
+      html += '<div class="fb-bar-container">';
+
+      var segments = [
+        { pct: p.pass_yd_pct, color: COMP_COLORS.pass_yd, label: 'Pass ' + escapeHtml(String(fmt(p.pass_yd_pct, 0))) + '%', title: 'Pass Yds: ' + escapeHtml(String(fmt(p.pass_yd_pts))) + ' pts' },
+        { pct: p.rush_yd_pct, color: COMP_COLORS.rush_yd, label: 'Rush ' + escapeHtml(String(fmt(p.rush_yd_pct, 0))) + '%', title: 'Rush Yds: ' + escapeHtml(String(fmt(p.rush_yd_pts))) + ' pts' },
+        { pct: p.rec_yd_pct, color: COMP_COLORS.rec_yd, label: 'Rec ' + escapeHtml(String(fmt(p.rec_yd_pct, 0))) + '%', title: 'Rec Yds: ' + escapeHtml(String(fmt(p.rec_yd_pts))) + ' pts' },
+        { pct: p.rec_pct, color: COMP_COLORS.rec, label: 'PPR ' + escapeHtml(String(fmt(p.rec_pct, 0))) + '%', title: 'Receptions: ' + escapeHtml(String(fmt(p.rec_pts))) + ' pts' },
+        { pct: p.td_pct, color: COMP_COLORS.td, label: 'TD ' + escapeHtml(String(fmt(p.td_pct, 0))) + '%', title: 'TDs: ' + escapeHtml(String(fmt(p.td_pts))) + ' pts' }
+      ];
+
+      for (var j = 0; j < segments.length; j++) {
+        var seg = segments[j];
+        if (seg.pct <= 0) continue;
+        html += '<div class="fb-bar-segment" style="width:' + seg.pct + '%;background:' + seg.color + '" title="' + seg.title + '">';
+        if (seg.pct >= 10) {
+          html += '<span class="fb-bar-label">' + seg.label + '</span>';
+        }
+        html += '</div>';
       }
-      html += '</div></td>';
-      html += '</tr>';
+
+      html += '</div>';
+      html += '</div>';
     }
 
-    html += '</tbody></table>';
-    return html;
+    html += '</div>';
+    document.getElementById('fbContent').innerHTML = html;
   }
 
   /* ---- Position tabs ---- */
@@ -552,12 +569,11 @@
     });
   });
 
-  document.getElementById('strSeason').addEventListener('change', load);
-  document.getElementById('strWindow').addEventListener('change', load);
+  document.getElementById('fbSeason').addEventListener('change', load);
 
   /* ---- PNG export ---- */
-  document.getElementById('strExport').addEventListener('click', function() {
-    var root = document.getElementById('strRoot');
+  document.getElementById('fbExport').addEventListener('click', function() {
+    var root = document.getElementById('fbRoot');
     if (typeof html2canvas === 'undefined') return;
     html2canvas(root, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
       var ctx = canvas.getContext('2d');
@@ -565,7 +581,7 @@
       ctx.fillStyle = 'rgba(0,0,0,0.12)';
       ctx.fillText('razzle.lol', canvas.width - 130, canvas.height - 16);
       var link = document.createElement('a');
-      link.download = 'razzle-streaks.png';
+      link.download = 'razzle-fpts-breakdown.png';
       link.href = canvas.toDataURL();
       link.click();
     });
@@ -575,7 +591,7 @@
   fetch('/api/analytics/pageview', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ page: '/streaks.html', referrer: document.referrer || '' })
+    body: JSON.stringify({ page: '/fptsbreakdown.html', referrer: document.referrer || '' })
   }).catch(function() {});
 
   /* ---- Init from URL ---- */
@@ -586,11 +602,8 @@
       b.classList.toggle('active', (b.getAttribute('data-pos') || '') === init.pos);
     });
   }
-  if (init.window) {
-    document.getElementById('strWindow').value = init.window;
-  }
   if (init.season) {
-    var sel = document.getElementById('strSeason');
+    var sel = document.getElementById('fbSeason');
     var opt = document.createElement('option');
     opt.value = init.season;
     opt.textContent = init.season;

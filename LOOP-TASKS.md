@@ -1,13 +1,13 @@
-# Razzle Loop — Phase 125 Task List
+# Razzle Loop — Phase 126 Task List
 
-> QA+UX Audit for Phases 121-124
+> Fantasy Points Breakdown
 
-**Current Phase**: 125 — QA+UX Audit
-**Exit Criterion**: Audit complete, all findings documented, fixes applied if needed.
+**Current Phase**: 126 — Fantasy Points Breakdown
+**Exit Criterion**: /fptsbreakdown.html shows scoring breakdown with stacked bars. Position filters, season selector, PNG export. GET /api/fpts-breakdown returns component data.
 
 ---
 
-## Task 1: QA+UX Audit
+## Task 1: Backend + frontend + nav + smoke test
 **Status**: PASS
 **Attempts**: 1
 
@@ -15,7 +15,7 @@
 
 ## Loop State
 ```
-Current Phase: 125
+Current Phase: 126
 Current Task: 1
 Current Stage: COMPLETE
 Attempt: 1

@@ -933,6 +933,7 @@ def sitemap_xml():
         ("/records.html", "0.8", "weekly"),
         ("/waivers.html", "0.8", "weekly"),
         ("/playoffs.html", "0.8", "weekly"),
+        ("/fptsbreakdown.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1585,6 +1586,16 @@ def records(position: str = ""):
         return JSONResponse({"error": "Failed to fetch records"}, status_code=500)
 
 
+@app.get("/api/fpts-breakdown")
+def fpts_breakdown(season: int = None, position: str = None):
+    try:
+        pos = position.upper() if position else None
+        return live_data.fetch_fpts_breakdown(season=season, position=pos)
+    except Exception as e:
+        logger.error(f"fpts-breakdown error: {e}")
+        return JSONResponse({"error": "Failed to fetch scoring breakdown"}, status_code=500)
+
+
 @app.get("/api/playoff-schedule")
 def playoff_schedule(season: int = None, position: str = None):
     try:
@@ -1661,6 +1672,7 @@ def tools_hub():
                 {"name": "Points Breakdown", "desc": "Where a player's fantasy points come from — donut chart by scoring category", "url": "/breakdown.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Pace & Milestones", "desc": "17-game pace projections and milestone tracking — who's on pace for 1,000 yards?", "url": "/pace.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Game Log", "desc": "Week-by-week box score stats for any player — the full season tape", "url": "/gamelog.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Scoring Breakdown", "desc": "How players accumulate PPR points — rush/rec/pass yards, receptions, TDs", "url": "/fptsbreakdown.html", "positions": ["QB", "RB", "WR", "TE"]},
             ],
         },
         {

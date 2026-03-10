@@ -1,6 +1,19 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 125 — QA+UX Audit for Phases 121-124 (COMPLETE)
+## Current Phase: Phase 126 — Fantasy Points Breakdown (COMPLETE)
+
+**Exit criterion MET:** /fptsbreakdown.html shows scoring breakdown for all fantasy-relevant players. Stacked horizontal bars showing what percentage of PPR points come from: pass yards (blue), rush yards (teal), rec yards (terracotta), receptions (purple), TDs (red). Color legend, position filter tabs, season selector, PNG export with watermark. GET /api/fpts-breakdown returns component data. 16 escapeHtml calls, 69/69 braces balanced. "FPTS Breakdown" nav link on all 58 pages. Sitemap + tools hub entry under Performance Analysis.
+
+### Phase 126 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/fpts-breakdown endpoint | DONE | fetch_fpts_breakdown, PPR component math |
+| 2 | Scoring Breakdown page | DONE | Stacked bars, legend, 16 escapeHtml |
+| 3 | Nav links + sitemap + tools hub | DONE | All 58 pages updated |
+| 4 | Smoke test | DONE | Python OK, JS OK, 58/58 nav links |
+
+## Previous Phase: Phase 125 — QA+UX Audit for Phases 121-124 (COMPLETE)
 
 **Exit criterion MET:** QA+UX audit of Comparison Table (121), Record Book (122), Waiver Wire (123), Playoff Schedule (124). 0 HIGH, 0 MEDIUM, 3 LOW findings. All 4 pages pass XSS protection, error handling, loading states, PNG export, analytics, design compliance, and backend fantasy_relevant filter. No fixes needed — all LOW findings are acceptable behavior.
 

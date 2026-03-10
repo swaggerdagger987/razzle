@@ -11152,3 +11152,103 @@ def fetch_playoff_schedule(season=None, position=None, limit=40):
         }
     finally:
         conn.close()
+
+
+def fetch_fpts_breakdown(season=None, position=None, limit=40):
+    """
+    Fantasy points breakdown — how each player accumulates their PPR points.
+    Breaks down total PPR into: rush yards, rec yards, pass yards, receptions, TDs.
+    PPR scoring: 0.04 per pass yd, 0.1 per rush/rec yd, 1 per reception,
+                 4 per pass TD, 6 per rush/rec TD, -2 per INT.
+    """
+    conn = get_db()
+    try:
+        cursor = conn.cursor()
+
+        if not season:
+            cursor.execute("SELECT MAX(season) FROM player_week_stats")
+            season = cursor.fetchone()[0] or 2024
+
+        pos_filter = ""
+        params = [season]
+        if position:
+            pos_filter = "AND p.position = ?"
+            params.append(position)
+
+        cursor.execute(f"""
+            SELECT p.player_id, p.full_name, p.position, p.team,
+                   SUM(s.passing_yards) as pass_yd,
+                   SUM(s.rushing_yards) as rush_yd,
+                   SUM(s.receiving_yards) as rec_yd,
+                   SUM(s.receptions) as rec,
+                   SUM(s.passing_tds) as pass_td,
+                   SUM(s.rushing_tds) as rush_td,
+                   SUM(s.receiving_tds) as rec_td,
+                   SUM(s.interceptions) as ints,
+                   SUM(s.fantasy_points_ppr) as total_ppr,
+                   COUNT(DISTINCT s.week) as games
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE s.season = ? AND p.fantasy_relevant = 1
+              AND p.position IN ('QB', 'RB', 'WR', 'TE')
+              {pos_filter}
+            GROUP BY p.player_id
+            HAVING games >= 4 AND total_ppr > 20
+            ORDER BY total_ppr DESC
+            LIMIT ?
+        """, params + [limit])
+
+        players = []
+        for r in cursor.fetchall():
+            pass_yd = r[4] or 0
+            rush_yd = r[5] or 0
+            rec_yd = r[6] or 0
+            rec = r[7] or 0
+            pass_td = r[8] or 0
+            rush_td = r[9] or 0
+            rec_td = r[10] or 0
+            ints = r[11] or 0
+            total_ppr = r[12] or 0
+            games = r[13] or 1
+
+            # PPR component breakdown
+            pass_yd_pts = pass_yd * 0.04
+            rush_yd_pts = rush_yd * 0.1
+            rec_yd_pts = rec_yd * 0.1
+            rec_pts = rec * 1.0
+            td_pts = pass_td * 4 + (rush_td + rec_td) * 6
+            int_pts = ints * -2
+
+            # Calculate percentages of total (excluding negative INT)
+            positive_total = pass_yd_pts + rush_yd_pts + rec_yd_pts + rec_pts + td_pts
+            if positive_total <= 0:
+                continue
+
+            players.append({
+                "player_id": r[0],
+                "name": r[1] or "Unknown",
+                "position": r[2] or "RB",
+                "team": r[3] or "FA",
+                "games": games,
+                "total_ppr": round(total_ppr, 1),
+                "ppg": round(total_ppr / games, 1),
+                "pass_yd_pts": round(pass_yd_pts, 1),
+                "rush_yd_pts": round(rush_yd_pts, 1),
+                "rec_yd_pts": round(rec_yd_pts, 1),
+                "rec_pts": round(rec_pts, 1),
+                "td_pts": round(td_pts, 1),
+                "int_pts": round(int_pts, 1),
+                "pass_yd_pct": round(pass_yd_pts / positive_total * 100, 0),
+                "rush_yd_pct": round(rush_yd_pts / positive_total * 100, 0),
+                "rec_yd_pct": round(rec_yd_pts / positive_total * 100, 0),
+                "rec_pct": round(rec_pts / positive_total * 100, 0),
+                "td_pct": round(td_pts / positive_total * 100, 0),
+            })
+
+        return {
+            "players": players,
+            "season": season,
+            "count": len(players),
+        }
+    finally:
+        conn.close()
