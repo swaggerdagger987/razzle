@@ -1664,6 +1664,34 @@
     .pos-badge { font-size: 8px; padding: 1px 4px; }
     .team-label { font-size: 9px; }
 
+    /* Sticky first column (player name) on mobile */
+    .screener-table th:first-child,
+    .screener-table td:first-child {
+      position: sticky;
+      left: 0;
+      z-index: 2;
+      background: var(--bg-warm);
+    }
+    .screener-table thead th:first-child { z-index: 3; }
+
+    /* Panel content tables in lab-panels */
+    .lp-table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .lp-table th:first-child,
+    .lp-table td:first-child {
+      position: sticky;
+      left: 0;
+      z-index: 2;
+      background: var(--bg-warm);
+    }
+
+    /* Breadcrumb header mobile sizing */
+    .lab-panel-header { padding: 12px 14px 8px; }
+    .lab-panel-header .panel-title { font-size: 18px; }
+    .lab-panel-header .panel-flavor { font-size: 13px; }
+
     .footer-bar {
       padding: 6px 12px;
       font-size: 10px;

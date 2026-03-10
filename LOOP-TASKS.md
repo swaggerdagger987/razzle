@@ -5,7 +5,7 @@
 - Task: Sidebar collapse/expand polish
 - Stage: PLAN
 - Attempt: 1/3
-- Tasks Done: 6/8
+- Tasks Done: 7/8
 
 ## Phase 7: Lab Polish — transitions, keyboard nav, virtual scrolling, UX refinements
 **Exit Criterion**: The Lab feels fast, fluid, and professional. Panel transitions are smooth. Keyboard users can navigate the full sidebar and table. Tables with 500+ rows don't lag. The experience is screenshot-worthy.
@@ -63,8 +63,8 @@
 **Accept when**: Lab is fully usable on all 3 viewport sizes. No horizontal body scroll.
 **Depends on**: none
 **Size**: L
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task 8: Performance audit and optimization
 **Requirement**: Profile Lab page load time. Fix: unnecessary API calls on init, render-blocking JS, unoptimized DOM operations, duplicate event listeners, memory leaks from panel switches. Target: <2s initial load, <500ms panel switch (cached).
