@@ -425,7 +425,7 @@
     { key: 'ppg', label: 'PPG', tip: 'Fantasy points per game (PPR)' },
     { key: 'grade', label: 'Grade', tip: 'Consistency grade based on CoV percentile (A+ = most consistent top 5%, F = most volatile bottom 25%)' },
     { key: 'stddev', label: 'StdDev', tip: 'Standard deviation of weekly fantasy scores — lower = more consistent' },
-    { key: 'cov', label: 'CoV', tip: 'Coefficient of variation (StdDev / PPG) — lower = more predictable' },
+    { key: 'cov', label: 'CoV%', tip: 'Coefficient of variation as % (StdDev / PPG × 100) — lower = more predictable' },
     { key: 'floor', label: 'Floor', tip: '10th percentile weekly score — your worst-case week' },
     { key: 'ceiling', label: 'Ceiling', tip: '90th percentile weekly score — your best-case week', hide: true },
     { key: 'range', label: 'Range', tip: 'Ceiling minus Floor — the weekly scoring spread', hide: true },
@@ -439,7 +439,7 @@
     { key: 'ppg', label: 'PPG', tip: 'Fantasy points per game (PPR)' },
     { key: 'grade', label: 'Grade', tip: 'Consistency grade based on CoV percentile (A+ = most consistent, F = most volatile)' },
     { key: 'stddev', label: 'StdDev', tip: 'Standard deviation of weekly fantasy scores — higher = more volatile' },
-    { key: 'cov', label: 'CoV', tip: 'Coefficient of variation (StdDev / PPG) — higher = less predictable' },
+    { key: 'cov', label: 'CoV%', tip: 'Coefficient of variation as % (StdDev / PPG × 100) — higher = less predictable' },
     { key: 'floor', label: 'Floor', tip: '10th percentile weekly score — your worst-case week' },
     { key: 'ceiling', label: 'Ceiling', tip: '90th percentile weekly score — your best-case week' },
     { key: 'range', label: 'Range', tip: 'Ceiling minus Floor — the weekly scoring spread', hide: true },
@@ -485,7 +485,7 @@
       } else if (col.key === 'stddev') {
         html += '<td class="' + classes.join(' ') + '">' + fmt(p.stddev) + '</td>';
       } else if (col.key === 'cov') {
-        html += '<td class="' + classes.join(' ') + '" style="font-weight:700;">' + fmt(p.cov, 3) + '</td>';
+        html += '<td class="' + classes.join(' ') + '" style="font-weight:700;">' + fmt(p.cov * 100, 1) + '%</td>';
       } else if (col.key === 'floor') {
         html += '<td class="' + classes.join(' ') + '" style="color:var(--green);">' + fmt(p.floor) + '</td>';
       } else if (col.key === 'ceiling') {

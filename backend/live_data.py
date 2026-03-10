@@ -6283,7 +6283,7 @@ def fetch_efficiency_rankings(season=None, position=None, limit=30):
             ppo = round(total_ppr / opportunities, 2) if opportunities > 0 else 0
             ypt = round(total_yards / touches, 2) if touches > 0 else 0
             catch_rate = round(receptions / targets * 100, 1) if targets > 0 else 0
-            yac_per_rec = round((rec_yards - air_yards) / receptions, 2) if receptions > 0 else 0
+            yac_per_rec = round(max(0, (rec_yards - air_yards)) / receptions, 2) if receptions > 0 else 0
             td_rate = round(total_tds / touches * 100, 1) if touches > 0 else 0
 
             players.append({
@@ -6439,7 +6439,7 @@ def fetch_consistency_rankings(season=None, position=None, limit=30):
             if mean < 2:
                 continue  # Skip very low scorers (irrelevant)
 
-            variance = sum((w - mean) ** 2 for w in weeks) / n
+            variance = sum((w - mean) ** 2 for w in weeks) / (n - 1)
             stddev = math.sqrt(variance)
             cov = round(stddev / mean, 3) if mean > 0 else 0
 
@@ -6590,13 +6590,14 @@ def fetch_strength_of_schedule(season=None, position=None, limit=30):
             params.append(position.upper())
 
         player_rows = conn.execute(f"""
-            SELECT s.player_id, p.display_name, p.position, p.headshot_url,
+            SELECT s.player_id, p.full_name, p.position, p.headshot_url,
                    s.opponent_team, s.fantasy_points_ppr, s.week,
                    s.team
             FROM player_week_stats s
             JOIN players p ON p.player_id = s.player_id
             WHERE s.season = ?
               AND p.position IN ('QB', 'RB', 'WR', 'TE')
+              AND p.fantasy_relevant = 1
               AND s.opponent_team IS NOT NULL AND s.opponent_team != ''
               {pos_filter}
             ORDER BY s.player_id, s.week

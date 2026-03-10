@@ -1,17 +1,17 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 86 — QA + UX Audit Fixes (IN PROGRESS)
+## Current Phase: Phase 86 — QA + UX Audit Fixes (COMPLETE)
 
-**Exit criterion**: All HIGH findings from QA-AUDIT.md (Phases 81-85) resolved. SOS endpoint uses `full_name` instead of `display_name`. SOS endpoint includes `fantasy_relevant = 1` filter. MEDIUM fixes applied: efficiency YAC/Rec clamped to non-negative, consistency uses sample variance, efficiency column header renamed, consistency CoV displayed as percentage.
+**Exit criterion MET:** All HIGH findings from QA-AUDIT.md (Phases 81-85) resolved. SOS endpoint uses `full_name` instead of `display_name`. SOS endpoint includes `fantasy_relevant = 1` filter. MEDIUM fixes applied: efficiency YAC/Rec clamped to non-negative, consistency uses sample variance (Bessel's correction), efficiency column header "Y/Tch" renamed to "YPT", consistency CoV displayed as percentage (CoV%). All fixes verified with Python syntax checks and JS structure validation.
 
 ### Phase 86 Tasks
 
 | # | Task | Status | Notes |
 |---|------|--------|-------|
-| 1 | HIGH fixes — SOS backend data issues | PENDING | display_name→full_name, fantasy_relevant filter |
-| 2 | MEDIUM fixes — Backend computation | PENDING | YAC clamp, Bessel's correction |
-| 3 | MEDIUM fixes — Frontend labels | PENDING | Y/Tch→YPT, CoV as percentage |
-| 4 | Smoke test | PENDING | Syntax + fix verification |
+| 1 | HIGH fixes — SOS backend data issues | DONE | display_name→full_name, fantasy_relevant filter added |
+| 2 | MEDIUM fixes — Backend computation | DONE | YAC clamp max(0,...), Bessel's correction (n-1) |
+| 3 | MEDIUM fixes — Frontend labels | DONE | Y/Tch→YPT, CoV→CoV% with ×100 display |
+| 4 | Smoke test | DONE | Python + JS syntax clean, all fixes verified |
 
 ### Decisions Log
 - **QA+UX audit at Phase 85**: Triggered by phase 85 being a multiple of 5. Audited all files from phases 81-85. Found 2 HIGH backend issues (SOS name field + missing filter), 6 MEDIUM issues (computation + display), 5 LOW (no action needed). No CRITICALs — Phase 81 QA fixes resolved all prior CRITICALs effectively.
