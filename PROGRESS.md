@@ -5,6 +5,9 @@
 Migrating all 62 iframe panels to native render functions in lab.js. Each panel will fetch from its API and build DOM directly — no more iframes. Panel switching will be instant for cached panels.
 
 ### Consolidation Phase 5: Inline Panel Migration
+#### Task 6: Migrate Game Analysis panels (DONE)
+Converted 8 iframe panels to native render: Weekly Heatmap, Matchups, Stacks, Red Zone, Streaks, Weekly Leaders, Weekly MVP Grid, Playoffs. Appended to `lab-panels.js` (~1175 lines added) and `lab-panels.css` (~540 lines added). Weekly Heatmap: player×week heat grid with 5-tier colors, sortable columns, sticky player col. Matchups: 32-team defense grid with percentile heat colors, detail panel on cell click. Stacks: QB+WR/TE correlation table with corr badges. Red Zone: two-section sortable (dominators+td_dependent) with GL rate badges. Streaks: two-column hot/cold with sparkline bars. Weekly Leaders: sortable table with week nav, rank medals. Weekly MVP: position×week grid. Playoffs: matchup grade table (wk 14-17).
+
 #### Task 1: Audit current iframe panels (DONE)
 Cataloged all 62 iframe panels across 10 categories with source files, API endpoints, and render complexity (8 S, 45 M, 9 L). Full audit in LOOP-TASKS.md.
 

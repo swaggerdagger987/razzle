@@ -2618,4 +2618,1179 @@
     loadGT();
   }});
 
+  // ===== WEEKLY SCORING HEATMAP =====
+  defs.push({ name: 'weekly', render: function(el) {
+    var HEAT_COLORS = [
+      { bg: '#f2d5d8', text: '#8b2030' },
+      { bg: '#f5eacc', text: '#7a6020' },
+      { bg: '#f7efe5', text: '#5c4a3d' },
+      { bg: '#d9efec', text: '#1a6b60' },
+      { bg: '#b8e6d8', text: '#0d5040' }
+    ];
+
+    function getHeatColor(score, thresholds) {
+      if (score === null || score === undefined) return null;
+      if (score <= thresholds.p20) return HEAT_COLORS[0];
+      if (score <= thresholds.p40) return HEAT_COLORS[1];
+      if (score <= thresholds.p60) return HEAT_COLORS[2];
+      if (score <= thresholds.p80) return HEAT_COLORS[3];
+      return HEAT_COLORS[4];
+    }
+
+    var curPos = 'ALL';
+    var sortCol = 'total';
+    var sortDir = -1;
+    var currentData = null;
+    var seasonsPopulated = false;
+
+    el.innerHTML =
+      '<div class="lp-page">' +
+        '<div class="lp-header"><h2>Weekly Scoring Heatmap</h2>' +
+        '<div class="lp-subtitle">every week, every player, at a glance</div></div>' +
+        '<div class="lp-controls">' +
+          '<div class="lp-pos-tabs" id="wh-pos-tabs">' +
+            '<button class="lp-pos-tab active" data-pos="ALL">All</button>' +
+            '<button class="lp-pos-tab" data-pos="QB">QB</button>' +
+            '<button class="lp-pos-tab" data-pos="RB">RB</button>' +
+            '<button class="lp-pos-tab" data-pos="WR">WR</button>' +
+            '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
+          '</div>' +
+          '<select class="lp-select" id="wh-season" aria-label="Season"></select>' +
+        '</div>' +
+        '<div id="wh-body"><div class="lp-loading">pulling film...</div></div>' +
+      '</div>';
+
+    function loadWH() {
+      var body = el.querySelector('#wh-body');
+      body.innerHTML = '<div class="lp-loading">pulling film...</div>';
+      var season = el.querySelector('#wh-season').value || '';
+      var posParam = curPos === 'ALL' ? '' : curPos;
+      var url = '/api/weekly-heatmap?limit=40';
+      if (season) url += '&season=' + season;
+      if (posParam) url += '&position=' + posParam;
+
+      fetch(url).then(function(r) {
+        if (!r.ok) throw new Error('API error');
+        return r.json();
+      }).then(function(data) {
+        currentData = data;
+        if (!seasonsPopulated && data.available_seasons) {
+          var sel = el.querySelector('#wh-season');
+          data.available_seasons.forEach(function(s) {
+            var o = document.createElement('option');
+            o.value = s; o.textContent = s;
+            if (s === data.season) o.selected = true;
+            sel.appendChild(o);
+          });
+          seasonsPopulated = true;
+        }
+        renderWH(data);
+      }).catch(function() {
+        body.innerHTML = '<div class="lp-empty">failed to load weekly heatmap</div>';
+      });
+    }
+
+    function renderWH(data) {
+      var body = el.querySelector('#wh-body');
+      if (!data.players || !data.players.length) {
+        body.innerHTML = '<div class="lp-empty">no data for this selection</div>';
+        return;
+      }
+
+      var weeks = data.weeks || [];
+      var thresholds = data.thresholds || {};
+
+      var sorted = data.players.slice();
+      sorted.sort(function(a, b) {
+        var va, vb;
+        if (sortCol === 'total') { va = a.total_pts || 0; vb = b.total_pts || 0; }
+        else if (sortCol === 'ppg') { va = a.ppg || 0; vb = b.ppg || 0; }
+        else { va = a.weeks[String(sortCol)]; vb = b.weeks[String(sortCol)]; va = va == null ? -999 : va; vb = vb == null ? -999 : vb; }
+        return (va - vb) * sortDir;
+      });
+
+      var arrow = sortDir === -1 ? ' \u25BC' : ' \u25B2';
+      var html = '<div class="wh-container"><table class="wh-table"><thead><tr>';
+      html += '<th class="wh-player-col" data-sort="total">Player' + (sortCol === 'total' ? arrow : '') + '</th>';
+      weeks.forEach(function(w) {
+        html += '<th data-sort="' + w + '">W' + w + (sortCol === w ? arrow : '') + '</th>';
+      });
+      html += '<th>GP</th>';
+      html += '<th data-sort="ppg">PPG' + (sortCol === 'ppg' ? arrow : '') + '</th>';
+      html += '</tr></thead><tbody>';
+
+      sorted.forEach(function(p, idx) {
+        var pos = p.position || 'WR';
+        var posColor = POS_COLORS[pos] || '#d97757';
+        var t = thresholds[pos] || thresholds['WR'] || { p20: 5, p40: 10, p60: 15, p80: 20 };
+
+        html += '<tr>';
+        html += '<td class="wh-player-cell"><div class="wh-player-inner" data-pid="' + escapeAttr(p.player_id) + '">';
+        html += '<span class="wh-rank">' + (idx + 1) + '</span>';
+        html += '<span class="wh-pos-dot" style="background:' + posColor + '"></span>';
+        html += '<span>' + escapeHtml(p.name) + '</span>';
+        html += '<span class="wh-team">' + escapeHtml(p.team) + '</span>';
+        html += '</div></td>';
+
+        weeks.forEach(function(w) {
+          var score = p.weeks[String(w)];
+          if (score === null || score === undefined) {
+            html += '<td class="wh-bye">bye</td>';
+          } else {
+            var hc = getHeatColor(score, t);
+            html += '<td class="wh-score-cell" style="background:' + hc.bg + '; color:' + hc.text + ';" title="' + escapeAttr(p.name) + ' Week ' + w + ': ' + score.toFixed(1) + ' pts">';
+            html += score.toFixed(1) + '</td>';
+          }
+        });
+
+        html += '<td class="wh-ppg-cell" style="color:var(--ink-light)">' + p.games + '</td>';
+        var ppgColor = getHeatColor(p.ppg, t);
+        html += '<td class="wh-ppg-cell wh-score-cell" style="background:' + (ppgColor ? ppgColor.bg : '') + '; color:' + (ppgColor ? ppgColor.text : '') + ';">' + p.ppg.toFixed(1) + '</td>';
+        html += '</tr>';
+      });
+
+      html += '</tbody></table></div>';
+
+      var legendPos = curPos !== 'ALL' ? curPos : 'WR';
+      var lt = thresholds[legendPos] || { p20: 5, p40: 10, p60: 15, p80: 20 };
+      html += '<div class="wh-legend"><span>&lt;' + lt.p20.toFixed(0) + '</span><div class="wh-legend-bar">';
+      HEAT_COLORS.forEach(function(hc) { html += '<div class="wh-legend-cell" style="background:' + hc.bg + '"></div>'; });
+      html += '</div><span>' + lt.p80.toFixed(0) + '+</span></div>';
+      html += '<div class="wh-legend-note">PPR points (' + legendPos + ' thresholds) — click column headers to sort</div>';
+
+      body.innerHTML = html;
+
+      body.querySelectorAll('th[data-sort]').forEach(function(th) {
+        th.addEventListener('click', function() {
+          var col = th.getAttribute('data-sort');
+          var numCol = parseInt(col, 10);
+          col = isNaN(numCol) ? col : numCol;
+          if (sortCol === col) sortDir *= -1;
+          else { sortCol = col; sortDir = -1; }
+          renderWH(currentData);
+        });
+      });
+
+      body.querySelectorAll('.wh-player-inner').forEach(function(pi) {
+        pi.addEventListener('click', function() {
+          var pid = pi.getAttribute('data-pid');
+          if (pid) window.location.href = '/player/' + encodeURIComponent(pid);
+        });
+      });
+    }
+
+    el.querySelector('#wh-pos-tabs').addEventListener('click', function(e) {
+      var tab = e.target.closest('.lp-pos-tab');
+      if (!tab) return;
+      el.querySelectorAll('#wh-pos-tabs .lp-pos-tab').forEach(function(t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      curPos = tab.getAttribute('data-pos') || 'ALL';
+      loadWH();
+    });
+    el.querySelector('#wh-season').addEventListener('change', loadWH);
+    loadWH();
+  }});
+
+  // ===== MATCHUP HEATMAP =====
+  defs.push({ name: 'matchups', render: function(el) {
+    var curPos = 'ALL';
+    var sortCol = null;
+    var sortAsc = true;
+    var currentData = null;
+    var seasonsPopulated = false;
+
+    el.innerHTML =
+      '<div class="lp-page">' +
+        '<div class="lp-header"><h2>Matchup Heatmap</h2>' +
+        '<div class="lp-subtitle">which defenses give up the bag</div></div>' +
+        '<div class="lp-controls">' +
+          '<div class="lp-pos-tabs" id="mh-pos-tabs">' +
+            '<button class="lp-pos-tab active" data-pos="ALL">All</button>' +
+            '<button class="lp-pos-tab" data-pos="QB">QB</button>' +
+            '<button class="lp-pos-tab" data-pos="RB">RB</button>' +
+            '<button class="lp-pos-tab" data-pos="WR">WR</button>' +
+            '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
+          '</div>' +
+          '<select class="lp-select" id="mh-season" aria-label="Season"></select>' +
+        '</div>' +
+        '<div class="mh-legend">' +
+          '<div class="mh-legend-item"><div class="mh-legend-swatch" style="background:#2ec4b6;"></div> Easy</div>' +
+          '<div class="mh-legend-item"><div class="mh-legend-swatch" style="background:#d9efec;"></div> Soft</div>' +
+          '<div class="mh-legend-item"><div class="mh-legend-swatch" style="background:#f7efe5;"></div> Average</div>' +
+          '<div class="mh-legend-item"><div class="mh-legend-swatch" style="background:#f2d5d8;"></div> Tough</div>' +
+          '<div class="mh-legend-item"><div class="mh-legend-swatch" style="background:#e63946;"></div> Hard</div>' +
+        '</div>' +
+        '<div id="mh-body"><div class="lp-loading">pulling film on every defense...</div></div>' +
+        '<div id="mh-detail" class="mh-detail"></div>' +
+      '</div>';
+
+    function getHeatColor(ppg, allValues) {
+      if (!allValues || !allValues.length) return '#f7efe5';
+      var s = allValues.slice().sort(function(a, b) { return a - b; });
+      var p20 = s[Math.floor(s.length * 0.2)] || 0;
+      var p40 = s[Math.floor(s.length * 0.4)] || 0;
+      var p60 = s[Math.floor(s.length * 0.6)] || 0;
+      var p80 = s[Math.floor(s.length * 0.8)] || 0;
+      if (ppg >= p80) return '#2ec4b6';
+      if (ppg >= p60) return '#d9efec';
+      if (ppg >= p40) return '#f7efe5';
+      if (ppg >= p20) return '#f2d5d8';
+      return '#e63946';
+    }
+
+    function getAnnotation(rank, total) {
+      if (rank <= 3) return 'cake';
+      if (rank <= 6) return 'soft';
+      if (rank >= total - 2) return 'avoid';
+      if (rank >= total - 5) return 'tough';
+      return '';
+    }
+
+    function loadMH() {
+      var body = el.querySelector('#mh-body');
+      body.innerHTML = '<div class="lp-loading">pulling film on every defense...</div>';
+      el.querySelector('#mh-detail').classList.remove('visible');
+      var season = el.querySelector('#mh-season').value || '';
+      var posParam = curPos === 'ALL' ? '' : curPos;
+      var url = '/api/matchup-heatmap?season=' + season;
+      if (posParam) url += '&position=' + posParam;
+
+      fetch(url).then(function(r) {
+        if (!r.ok) throw new Error('API error');
+        return r.json();
+      }).then(function(data) {
+        currentData = data;
+        if (!seasonsPopulated && data.available_seasons) {
+          var sel = el.querySelector('#mh-season');
+          data.available_seasons.forEach(function(s) {
+            var o = document.createElement('option');
+            o.value = s; o.textContent = s;
+            if (s == data.season) o.selected = true;
+            sel.appendChild(o);
+          });
+          seasonsPopulated = true;
+        }
+        renderMH(data);
+      }).catch(function() {
+        body.innerHTML = '<div class="lp-empty">could not pull defensive data</div>';
+      });
+    }
+
+    function renderMH(data) {
+      var body = el.querySelector('#mh-body');
+      if (!data.teams || !data.teams.length) {
+        body.innerHTML = '<div class="lp-empty">no matchup data available</div>';
+        return;
+      }
+
+      var positions = curPos === 'ALL' ? ['QB', 'RB', 'WR', 'TE'] : [curPos];
+      var teams = data.teams;
+
+      var posValues = {};
+      positions.forEach(function(pos) {
+        posValues[pos] = [];
+        teams.forEach(function(t) {
+          var v = (t.positions[pos] || {}).avg_ppg || 0;
+          if (v > 0) posValues[pos].push(v);
+        });
+      });
+
+      if (sortCol) {
+        teams = teams.slice().sort(function(a, b) {
+          var va, vb;
+          if (sortCol === 'team') { va = a.team; vb = b.team; return sortAsc ? va.localeCompare(vb) : vb.localeCompare(va); }
+          else if (sortCol === 'total') { va = a.total_avg; vb = b.total_avg; }
+          else { va = (a.positions[sortCol] || {}).avg_ppg || 0; vb = (b.positions[sortCol] || {}).avg_ppg || 0; }
+          return sortAsc ? va - vb : vb - va;
+        });
+      }
+
+      var totalTeams = teams.length;
+      var html = '<div class="mh-table-wrap"><table class="mh-table"><thead><tr>';
+      html += '<th class="mh-team-col' + (sortCol === 'team' ? ' sorted' : '') + '" data-sort="team">Team <span class="mh-sort-arrow">' + (sortCol === 'team' ? (sortAsc ? '\u25B2' : '\u25BC') : '\u25B2') + '</span></th>';
+
+      positions.forEach(function(pos) {
+        var cls = sortCol === pos ? ' sorted' : '';
+        var ar = sortCol === pos ? (sortAsc ? '\u25B2' : '\u25BC') : '\u25BC';
+        html += '<th class="' + cls + '" data-sort="' + pos + '" style="color:' + POS_COLORS[pos] + ';">' + pos + ' PPG <span class="mh-sort-arrow">' + ar + '</span></th>';
+      });
+
+      if (positions.length > 1) {
+        var cls = sortCol === 'total' ? ' sorted' : '';
+        var ar = sortCol === 'total' ? (sortAsc ? '\u25B2' : '\u25BC') : '\u25BC';
+        html += '<th class="' + cls + '" data-sort="total">Total <span class="mh-sort-arrow">' + ar + '</span></th>';
+      }
+      html += '</tr></thead><tbody>';
+
+      teams.forEach(function(t) {
+        html += '<tr>';
+        html += '<td class="mh-team-cell">' + escapeHtml(t.team) + '<span style="font-family:var(--font-mono);font-size:11px;color:var(--ink-light);margin-left:6px;">' + t.games + 'G</span></td>';
+
+        positions.forEach(function(pos) {
+          var d = t.positions[pos] || {};
+          var ppg = d.avg_ppg || 0;
+          var rank = d.rank || 0;
+          var bg = getHeatColor(ppg, posValues[pos]);
+          var textColor = (bg === '#e63946' || bg === '#2ec4b6') ? '#fff' : 'var(--ink)';
+          var annotation = getAnnotation(rank, totalTeams);
+
+          html += '<td style="background:' + bg + ';color:' + textColor + ';" data-team="' + escapeAttr(t.team) + '" data-pos="' + pos + '">';
+          html += '<div class="mh-heat-cell"><span class="mh-heat-ppg">' + ppg.toFixed(1) + '</span><span class="mh-heat-rank">#' + rank + '</span></div>';
+          if (annotation) html += '<span class="mh-annotation">' + annotation + '</span>';
+          html += '</td>';
+        });
+
+        if (positions.length > 1) html += '<td style="font-weight:700;">' + t.total_avg.toFixed(1) + '</td>';
+        html += '</tr>';
+      });
+
+      html += '</tbody></table></div>';
+      body.innerHTML = html;
+
+      body.querySelectorAll('.mh-table thead th[data-sort]').forEach(function(th) {
+        th.addEventListener('click', function() {
+          var col = this.getAttribute('data-sort');
+          if (sortCol === col) sortAsc = !sortAsc;
+          else { sortCol = col; sortAsc = col === 'team'; }
+          renderMH(currentData);
+        });
+      });
+
+      body.querySelectorAll('.mh-table tbody td[data-team]').forEach(function(td) {
+        td.addEventListener('click', function() {
+          var team = this.getAttribute('data-team');
+          var pos = this.getAttribute('data-pos');
+          showMHDetail(team, pos);
+        });
+      });
+    }
+
+    function showMHDetail(team, pos) {
+      var panel = el.querySelector('#mh-detail');
+      if (currentData.detail && currentData.detail[team]) {
+        var players = currentData.detail[team];
+        var html = '<h3>Top scorers vs ' + escapeHtml(team) + ' (' + pos + ')</h3>';
+        html += '<div class="mh-detail-players">';
+        players.forEach(function(p) {
+          var posColor = POS_COLORS[p.position] || '#8a7565';
+          var img = p.headshot_url ? '<img src="' + escapeAttr(p.headshot_url) + '" alt="" onerror="this.style.display=\'none\'">' : '';
+          html += '<div class="mh-detail-player" data-pid="' + escapeAttr(p.player_id) + '">';
+          html += img;
+          html += '<div><div class="mh-detail-name">' + escapeHtml(p.name) + '</div>';
+          html += '<div class="mh-detail-stats">' + p.games_vs + 'G vs ' + escapeHtml(team) + ' — ' + p.total_ppr + ' pts (' + p.ppg_vs + ' PPG)</div></div>';
+          html += '<span class="mh-detail-pos" style="background:' + posColor + ';">' + escapeHtml(p.position) + '</span>';
+          html += '</div>';
+        });
+        html += '</div>';
+        panel.innerHTML = html;
+        panel.classList.add('visible');
+        panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+        panel.querySelectorAll('.mh-detail-player[data-pid]').forEach(function(dp) {
+          dp.addEventListener('click', function() {
+            window.location.href = '/player/' + encodeURIComponent(dp.getAttribute('data-pid'));
+          });
+        });
+      } else {
+        el.querySelectorAll('#mh-pos-tabs .lp-pos-tab').forEach(function(t) { t.classList.remove('active'); });
+        var target = el.querySelector('#mh-pos-tabs .lp-pos-tab[data-pos="' + pos + '"]');
+        if (target) target.classList.add('active');
+        curPos = pos;
+        sortCol = null;
+        loadMH();
+      }
+    }
+
+    el.querySelector('#mh-pos-tabs').addEventListener('click', function(e) {
+      var tab = e.target.closest('.lp-pos-tab');
+      if (!tab) return;
+      el.querySelectorAll('#mh-pos-tabs .lp-pos-tab').forEach(function(t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      curPos = tab.getAttribute('data-pos') || 'ALL';
+      sortCol = null; sortAsc = true;
+      loadMH();
+    });
+    el.querySelector('#mh-season').addEventListener('change', function() { sortCol = null; loadMH(); });
+    loadMH();
+  }});
+
+  // ===== STACK CORRELATION FINDER =====
+  defs.push({ name: 'stacks', render: function(el) {
+    var seasonsPopulated = false;
+
+    el.innerHTML =
+      '<div class="lp-page">' +
+        '<div class="lp-header"><h2>Stack Correlation Finder</h2>' +
+        '<div class="lp-subtitle">QB + pass catcher combos that boom together</div></div>' +
+        '<div class="lp-controls">' +
+          '<select class="lp-select" id="sk-season" aria-label="Season"></select>' +
+        '</div>' +
+        '<div id="sk-body"><div class="lp-loading">pulling film...</div></div>' +
+      '</div>';
+
+    function corrClass(c) {
+      if (c >= 0.6) return 'sk-corr-high';
+      if (c >= 0.3) return 'sk-corr-mid';
+      if (c >= 0) return 'sk-corr-low';
+      return 'sk-corr-neg';
+    }
+
+    function loadSK() {
+      var body = el.querySelector('#sk-body');
+      body.innerHTML = '<div class="lp-loading">pulling film...</div>';
+      var season = el.querySelector('#sk-season').value || '';
+      var url = '/api/stacks';
+      if (season) url += '?season=' + encodeURIComponent(season);
+
+      fetch(url).then(function(r) {
+        if (!r.ok) throw new Error('API error');
+        return r.json();
+      }).then(function(data) {
+        if (!seasonsPopulated) {
+          var sel = el.querySelector('#sk-season');
+          for (var y = new Date().getFullYear(); y >= 2020; y--) {
+            var o = document.createElement('option');
+            o.value = y; o.textContent = y;
+            if (y === data.season) o.selected = true;
+            sel.appendChild(o);
+          }
+          seasonsPopulated = true;
+        }
+        renderSK(data);
+      }).catch(function() {
+        body.innerHTML = '<div class="lp-empty">failed to load stack data</div>';
+      });
+    }
+
+    function renderSK(data) {
+      var body = el.querySelector('#sk-body');
+      var stacks = data.stacks || [];
+      if (!stacks.length) { body.innerHTML = '<div class="sk-card"><div class="sk-card-header">Stack Finder</div><div class="sk-empty">no correlation data found</div></div>'; return; }
+
+      var html = '<div class="sk-card">';
+      html += '<div class="sk-card-header">Best QB + WR/TE Stacks (' + escapeHtml(String(data.count)) + ' pairs)</div>';
+      html += '<table class="sk-table"><thead><tr>';
+      html += '<th>#</th><th>Team</th><th>QB</th><th>Receiver</th><th>Pos</th><th>Corr</th><th></th><th>QB PPG</th><th>Rec PPG</th><th>Combo</th><th class="hide-mobile">GP</th>';
+      html += '</tr></thead><tbody>';
+
+      for (var i = 0; i < stacks.length; i++) {
+        var s = stacks[i];
+        var posColor = POS_COLORS[s.receiver_pos] || '#888';
+        var barWidth = Math.max(0, Math.min(100, Math.round(s.correlation * 100)));
+
+        html += '<tr>';
+        html += '<td class="sk-rank">' + (i + 1) + '</td>';
+        html += '<td><span class="sk-team-badge">' + escapeHtml(s.team) + '</span></td>';
+        html += '<td style="font-weight:700">' + escapeHtml(s.qb_name) + '</td>';
+        html += '<td style="font-weight:700">' + escapeHtml(s.receiver_name) + '</td>';
+        html += '<td><span class="sk-pos-badge" style="background:' + posColor + '">' + escapeHtml(s.receiver_pos) + '</span></td>';
+        html += '<td><span class="sk-corr-badge ' + corrClass(s.correlation) + '">' + fmt(s.correlation, 3) + '</span></td>';
+        html += '<td><div class="sk-corr-bar" style="width:' + barWidth + 'px"></div></td>';
+        html += '<td>' + fmt(s.qb_ppg) + '</td>';
+        html += '<td>' + fmt(s.receiver_ppg) + '</td>';
+        html += '<td style="font-weight:700">' + fmt(s.combined_ppg) + '</td>';
+        html += '<td class="hide-mobile">' + escapeHtml(String(s.common_games)) + '</td>';
+        html += '</tr>';
+      }
+      html += '</tbody></table></div>';
+      body.innerHTML = html;
+    }
+
+    el.querySelector('#sk-season').addEventListener('change', loadSK);
+    loadSK();
+  }});
+
+  // ===== RED ZONE & GOAL-LINE =====
+  defs.push({ name: 'redzone', render: function(el) {
+    var curPos = '';
+    var seasonsPopulated = false;
+    var currentData = null;
+    var sortState = {
+      dominators: { col: 'gl_opportunities', dir: -1 },
+      td_dependent: { col: 'td_pct_of_fantasy', dir: -1 }
+    };
+
+    var DOM_COLUMNS = [
+      { key: 'name', label: 'Player' },
+      { key: 'gl_opportunities', label: 'GL Opp', tip: 'Goal-line opportunities' },
+      { key: 'gl_carries', label: 'GL Car', tip: 'Goal-line carries' },
+      { key: 'gl_targets', label: 'GL Tgt', tip: 'Goal-line targets', hide: true },
+      { key: 'gl_tds', label: 'GL TD', tip: 'Goal-line touchdowns' },
+      { key: 'gl_td_rate', label: 'GL TD%', tip: 'GL TD conversion rate' },
+      { key: 'total_tds', label: 'TDs', hide: true },
+      { key: 'ppg', label: 'PPG' },
+      { key: 'games', label: 'GP', hide: true }
+    ];
+
+    var TDD_COLUMNS = [
+      { key: 'name', label: 'Player' },
+      { key: 'td_pct_of_fantasy', label: 'TD%', tip: 'Pct of fantasy pts from TDs' },
+      { key: 'total_tds', label: 'TDs' },
+      { key: 'rush_tds', label: 'RuTD', hide: true },
+      { key: 'rec_tds', label: 'ReTD', hide: true },
+      { key: 'ppg', label: 'PPG' },
+      { key: 'gl_tds', label: 'GL TD' },
+      { key: 'gl_opportunities', label: 'GL Opp', hide: true },
+      { key: 'games', label: 'GP', hide: true }
+    ];
+
+    el.innerHTML =
+      '<div class="lp-page">' +
+        '<div class="lp-header"><h2>Red Zone &amp; Goal-Line</h2>' +
+        '<div class="lp-subtitle">who owns the goal line, and who needs TDs to eat</div></div>' +
+        '<div class="lp-controls">' +
+          '<div class="lp-pos-tabs" id="rz-pos-tabs">' +
+            '<button class="lp-pos-tab active" data-pos="">All</button>' +
+            '<button class="lp-pos-tab" data-pos="QB">QB</button>' +
+            '<button class="lp-pos-tab" data-pos="RB">RB</button>' +
+            '<button class="lp-pos-tab" data-pos="WR">WR</button>' +
+            '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
+          '</div>' +
+          '<select class="lp-select" id="rz-season" aria-label="Season"></select>' +
+        '</div>' +
+        '<div id="rz-body"><div class="lp-loading">scouting the goal line...</div></div>' +
+      '</div>';
+
+    function getCols(section) { return section === 'dominators' ? DOM_COLUMNS : TDD_COLUMNS; }
+
+    function buildRow(p, section) {
+      var pos = (p.position || 'RB').toLowerCase();
+      var cols = getCols(section);
+      var html = '<tr data-pid="' + escapeAttr(p.player_id) + '">';
+
+      cols.forEach(function(col) {
+        var classes = [];
+        if (col.key !== 'name') classes.push('center');
+        if (col.hide) classes.push('hide-mobile');
+
+        if (col.key === 'name') {
+          html += '<td><div class="rz-player-cell">';
+          if (p.headshot_url) html += '<img class="rz-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+          html += '<div class="rz-player-info"><div class="rz-player-name">' + escapeHtml(p.name) + '</div>';
+          html += '<div class="rz-player-meta"><span class="rz-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
+          html += '<span class="rz-team-label">' + escapeHtml(p.team) + '</span></div></div></div></td>';
+        } else if (col.key === 'gl_td_rate') {
+          var rate = p.gl_td_rate || 0;
+          var rc = rate >= 50 ? 'high' : rate >= 25 ? 'mid' : 'low';
+          html += '<td class="' + classes.join(' ') + '"><span class="rz-rate-badge ' + rc + '">' + fmt(rate, 1) + '%</span></td>';
+        } else if (col.key === 'td_pct_of_fantasy') {
+          var pct = p.td_pct_of_fantasy || 0;
+          var pc = pct >= 50 ? 'heavy' : pct >= 35 ? 'moderate' : 'light';
+          html += '<td class="' + classes.join(' ') + '"><span class="rz-tdpct-badge ' + pc + '">' + fmt(pct, 1) + '%</span></td>';
+        } else if (col.key === 'ppg') {
+          html += '<td class="' + classes.join(' ') + '" style="font-weight:700;">' + fmt(p[col.key]) + '</td>';
+        } else {
+          var val = p[col.key];
+          html += '<td class="' + classes.join(' ') + '">' + (val != null ? escapeHtml(String(val)) : '-') + '</td>';
+        }
+      });
+      html += '</tr>';
+      return html;
+    }
+
+    function buildHeader(section) {
+      var st = sortState[section];
+      var cols = getCols(section);
+      var html = '<thead><tr>';
+      cols.forEach(function(col) {
+        var classes = [];
+        if (col.key !== 'name') classes.push('center');
+        if (col.hide) classes.push('hide-mobile');
+        var sorted = st.col === col.key;
+        if (sorted) classes.push('sorted');
+        var arrow = sorted ? (st.dir === 1 ? ' &#9650;' : ' &#9660;') : '';
+        var tipAttr = col.tip ? ' title="' + escapeAttr(col.tip) + '"' : '';
+        html += '<th class="' + classes.join(' ') + '" data-sort="' + col.key + '" data-section="' + section + '"' + tipAttr + '>' + col.label + '<span class="sort-arrow">' + arrow + '</span></th>';
+      });
+      html += '</tr></thead>';
+      return html;
+    }
+
+    function sortPlayers(players, col, dir) {
+      return players.slice().sort(function(a, b) {
+        var va = a[col], vb = b[col];
+        if (va == null) va = -Infinity;
+        if (vb == null) vb = -Infinity;
+        if (typeof va === 'string') return dir * va.localeCompare(vb);
+        return dir * (vb - va);
+      });
+    }
+
+    function buildSection(players, section) {
+      if (!players || !players.length) {
+        var label = section === 'dominators' ? 'goal-line dominators' : 'TD-dependent players';
+        return '<div class="rz-empty">no ' + label + ' found</div>';
+      }
+      var isDom = section === 'dominators';
+      var icon = isDom ? '&#x1F3C8;' : '&#x1F4A5;';
+      var title = isDom ? 'Goal-Line Dominators' : 'TD Dependent';
+      var subtitle = isDom ? 'most goal-line opportunities' : 'highest % of fantasy from TDs';
+      var headerClass = isDom ? 'dominators' : 'td-dependent';
+
+      var st = sortState[section];
+      var sorted = sortPlayers(players, st.col, st.dir);
+
+      var html = '<div class="rz-section">';
+      html += '<div class="rz-section-header ' + headerClass + '"><span class="section-icon">' + icon + '</span> ' + title + ' <span style="font-family:var(--font-hand);font-size:14px;color:var(--ink-light);font-weight:400">(' + players.length + ') — ' + subtitle + '</span></div>';
+      html += '<table class="rz-table" data-section="' + section + '">';
+      html += buildHeader(section);
+      html += '<tbody>';
+      sorted.forEach(function(p) { html += buildRow(p, section); });
+      html += '</tbody></table></div>';
+      return html;
+    }
+
+    function renderRZ(data) {
+      currentData = data;
+      var body = el.querySelector('#rz-body');
+      if (!data || (!data.dominators.length && !data.td_dependent.length)) {
+        body.innerHTML = '<div class="rz-empty">no red zone data found</div>';
+        return;
+      }
+      var html = buildSection(data.dominators, 'dominators');
+      html += buildSection(data.td_dependent, 'td_dependent');
+      body.innerHTML = html;
+
+      body.querySelectorAll('th[data-sort]').forEach(function(th) {
+        th.addEventListener('click', function() {
+          var col = th.getAttribute('data-sort');
+          var sec = th.getAttribute('data-section');
+          if (sortState[sec].col === col) sortState[sec].dir *= -1;
+          else { sortState[sec].col = col; sortState[sec].dir = -1; }
+          renderRZ(currentData);
+        });
+      });
+
+      body.querySelectorAll('tr[data-pid]').forEach(function(tr) {
+        tr.addEventListener('click', function() {
+          window.location.href = '/player/' + encodeURIComponent(tr.getAttribute('data-pid'));
+        });
+      });
+    }
+
+    function loadRZ() {
+      var body = el.querySelector('#rz-body');
+      body.innerHTML = '<div class="lp-loading">scouting the goal line...</div>';
+      var season = el.querySelector('#rz-season').value || '';
+      var url = '/api/redzone-usage?limit=30';
+      if (season) url += '&season=' + season;
+      if (curPos) url += '&position=' + curPos;
+
+      fetch(url).then(function(r) {
+        if (!r.ok) throw new Error('API error');
+        return r.json();
+      }).then(function(data) {
+        if (!seasonsPopulated && data.available_seasons) {
+          var sel = el.querySelector('#rz-season');
+          data.available_seasons.forEach(function(s) {
+            var o = document.createElement('option');
+            o.value = s; o.textContent = s;
+            sel.appendChild(o);
+          });
+          sel.value = data.season;
+          seasonsPopulated = true;
+        }
+        renderRZ(data);
+      }).catch(function() {
+        body.innerHTML = '<div class="lp-empty">failed to load red zone data</div>';
+      });
+    }
+
+    el.querySelector('#rz-pos-tabs').addEventListener('click', function(e) {
+      var tab = e.target.closest('.lp-pos-tab');
+      if (!tab) return;
+      el.querySelectorAll('#rz-pos-tabs .lp-pos-tab').forEach(function(t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      curPos = tab.getAttribute('data-pos') || '';
+      loadRZ();
+    });
+    el.querySelector('#rz-season').addEventListener('change', loadRZ);
+    loadRZ();
+  }});
+
+  // ===== HOT & COLD STREAKS =====
+  defs.push({ name: 'streaks', render: function(el) {
+    var curPos = '';
+    var seasonsPopulated = false;
+    var currentData = null;
+
+    el.innerHTML =
+      '<div class="lp-page">' +
+        '<div class="lp-header"><h2>Hot &amp; Cold Streaks</h2>' +
+        '<div class="lp-subtitle">who\'s heating up and who\'s ice cold</div></div>' +
+        '<div class="lp-controls">' +
+          '<div class="lp-pos-tabs" id="str-pos-tabs">' +
+            '<button class="lp-pos-tab active" data-pos="">All</button>' +
+            '<button class="lp-pos-tab" data-pos="QB">QB</button>' +
+            '<button class="lp-pos-tab" data-pos="RB">RB</button>' +
+            '<button class="lp-pos-tab" data-pos="WR">WR</button>' +
+            '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
+          '</div>' +
+          '<select class="lp-select" id="str-season" aria-label="Season"></select>' +
+          '<select class="lp-select" id="str-window" aria-label="Window">' +
+            '<option value="3">3 weeks</option>' +
+            '<option value="4" selected>4 weeks</option>' +
+            '<option value="5">5 weeks</option>' +
+          '</select>' +
+        '</div>' +
+        '<div id="str-body"><div class="lp-loading">pulling film...</div></div>' +
+      '</div>';
+
+    function loadSTR() {
+      var body = el.querySelector('#str-body');
+      body.innerHTML = '<div class="lp-loading">pulling film...</div>';
+      var season = el.querySelector('#str-season').value || '';
+      var win = el.querySelector('#str-window').value || '4';
+      var url = '/api/streaks?window=' + encodeURIComponent(win);
+      if (season) url += '&season=' + encodeURIComponent(season);
+      if (curPos) url += '&position=' + encodeURIComponent(curPos);
+
+      fetch(url).then(function(r) {
+        if (!r.ok) throw new Error('API error');
+        return r.json();
+      }).then(function(data) {
+        currentData = data;
+        if (!seasonsPopulated) {
+          var sel = el.querySelector('#str-season');
+          for (var y = new Date().getFullYear(); y >= 2020; y--) {
+            var o = document.createElement('option');
+            o.value = y; o.textContent = y;
+            if (y === data.season) o.selected = true;
+            sel.appendChild(o);
+          }
+          seasonsPopulated = true;
+        }
+        renderSTR(data);
+      }).catch(function() {
+        body.innerHTML = '<div class="lp-empty">failed to load streaks data</div>';
+      });
+    }
+
+    function renderTable(players, type) {
+      var winLabel = currentData ? currentData.window : 4;
+      var html = '<table class="str-table"><thead><tr>';
+      html += '<th>Player</th><th>Pos</th><th>Szn Avg</th><th>Recent</th><th>Delta</th><th>Last ' + escapeHtml(String(winLabel)) + '</th>';
+      html += '</tr></thead><tbody>';
+
+      for (var i = 0; i < players.length; i++) {
+        var p = players[i];
+        var posColor = POS_COLORS[p.position] || '#888';
+        var badgeClass = type === 'hot' ? 'hot' : 'cold';
+        var sign = p.delta > 0 ? '+' : '';
+
+        html += '<tr>';
+        html += '<td>' + escapeHtml(p.name) + ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></td>';
+        html += '<td><span class="str-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
+        html += '<td>' + fmt(p.season_avg) + '</td>';
+        html += '<td>' + fmt(p.recent_avg) + '</td>';
+        html += '<td><span class="str-delta-badge ' + badgeClass + '">' + sign + fmt(p.delta) + ' (' + sign + fmt(p.delta_pct, 0) + '%)</span></td>';
+
+        var scores = p.recent_scores || [];
+        var maxScore = Math.max.apply(null, scores.concat([1]));
+        html += '<td><div class="str-recent">';
+        for (var j = 0; j < scores.length; j++) {
+          var h = Math.max(2, Math.round((scores[j] / maxScore) * 20));
+          var barColor = scores[j] >= p.season_avg ? '#2ec4b6' : '#d97757';
+          html += '<div class="str-recent-bar" style="height:' + h + 'px;background:' + barColor + '"></div>';
+        }
+        html += '</div></td></tr>';
+      }
+      html += '</tbody></table>';
+      return html;
+    }
+
+    function renderSTR(data) {
+      var body = el.querySelector('#str-body');
+      var hot = data.hot || [];
+      var cold = data.cold || [];
+
+      var html = '<div class="str-columns">';
+      html += '<div class="str-section"><div class="str-section-header hot">On Fire</div>';
+      html += hot.length ? renderTable(hot, 'hot') : '<div class="str-empty">no hot streaks found</div>';
+      html += '</div>';
+      html += '<div class="str-section"><div class="str-section-header cold">Ice Cold</div>';
+      html += cold.length ? renderTable(cold, 'cold') : '<div class="str-empty">no cold streaks found</div>';
+      html += '</div></div>';
+      body.innerHTML = html;
+    }
+
+    el.querySelector('#str-pos-tabs').addEventListener('click', function(e) {
+      var tab = e.target.closest('.lp-pos-tab');
+      if (!tab) return;
+      el.querySelectorAll('#str-pos-tabs .lp-pos-tab').forEach(function(t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      curPos = tab.getAttribute('data-pos') || '';
+      loadSTR();
+    });
+    el.querySelector('#str-season').addEventListener('change', loadSTR);
+    el.querySelector('#str-window').addEventListener('change', loadSTR);
+    loadSTR();
+  }});
+
+  // ===== WEEKLY LEADERS =====
+  defs.push({ name: 'weeklyleaders', render: function(el) {
+    var curPos = '';
+    var currentWeek = 0;
+    var availableWeeks = [];
+    var currentData = null;
+    var seasonsPopulated = false;
+    var sortState = { col: 'fantasy_points', dir: -1 };
+
+    el.innerHTML =
+      '<div class="lp-page">' +
+        '<div class="lp-header"><h2>Weekly Leaders</h2>' +
+        '<div class="lp-subtitle">who went off this week</div></div>' +
+        '<div class="lp-controls">' +
+          '<select class="lp-select" id="wkl-season" aria-label="Season"></select>' +
+          '<div class="wkl-week-nav">' +
+            '<button class="wkl-week-btn" id="wkl-prev" aria-label="Previous week">&larr;</button>' +
+            '<div class="wkl-week-label" id="wkl-week-label">Week 1</div>' +
+            '<button class="wkl-week-btn" id="wkl-next" aria-label="Next week">&rarr;</button>' +
+          '</div>' +
+          '<div class="lp-pos-tabs" id="wkl-pos-tabs">' +
+            '<button class="lp-pos-tab active" data-pos="">All</button>' +
+            '<button class="lp-pos-tab" data-pos="QB">QB</button>' +
+            '<button class="lp-pos-tab" data-pos="RB">RB</button>' +
+            '<button class="lp-pos-tab" data-pos="WR">WR</button>' +
+            '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
+          '</div>' +
+        '</div>' +
+        '<div id="wkl-body"><div class="lp-loading">pulling film...</div></div>' +
+      '</div>';
+
+    function updateWeekUI() {
+      el.querySelector('#wkl-week-label').textContent = 'Week ' + currentWeek;
+      var idx = availableWeeks.indexOf(currentWeek);
+      el.querySelector('#wkl-prev').disabled = idx <= 0;
+      el.querySelector('#wkl-next').disabled = idx >= availableWeeks.length - 1;
+    }
+
+    function loadWKL() {
+      var body = el.querySelector('#wkl-body');
+      body.innerHTML = '<div class="lp-loading">pulling film...</div>';
+      var season = el.querySelector('#wkl-season').value || '';
+      var url = '/api/weekly-leaders?';
+      if (season) url += 'season=' + encodeURIComponent(season) + '&';
+      if (currentWeek) url += 'week=' + encodeURIComponent(currentWeek) + '&';
+      if (curPos) url += 'position=' + encodeURIComponent(curPos);
+
+      fetch(url).then(function(r) {
+        if (!r.ok) throw new Error('API error');
+        return r.json();
+      }).then(function(data) {
+        currentData = data;
+        currentWeek = data.week;
+        availableWeeks = data.available_weeks || [];
+        if (!seasonsPopulated && data.available_seasons) {
+          var sel = el.querySelector('#wkl-season');
+          data.available_seasons.forEach(function(s) {
+            var o = document.createElement('option');
+            o.value = s; o.textContent = s;
+            if (String(s) === String(data.season)) o.selected = true;
+            sel.appendChild(o);
+          });
+          seasonsPopulated = true;
+        }
+        updateWeekUI();
+        renderWKL(data);
+      }).catch(function() {
+        body.innerHTML = '<div class="lp-empty">failed to load weekly leaders</div>';
+      });
+    }
+
+    function renderWKL(data) {
+      var body = el.querySelector('#wkl-body');
+      var leaders = data.leaders || [];
+      if (!leaders.length) { body.innerHTML = '<div class="lp-empty">no data for this week</div>'; return; }
+
+      var sorted = leaders.slice().sort(function(a, b) {
+        var va = a[sortState.col], vb = b[sortState.col];
+        if (typeof va === 'string') return sortState.dir * va.localeCompare(vb);
+        return sortState.dir * ((va || 0) - (vb || 0));
+      });
+      sorted.forEach(function(p, i) { p._rank = i + 1; });
+
+      var cols = [
+        { key: '_rank', label: '#', cls: 'center' },
+        { key: 'name', label: 'Player', cls: '' },
+        { key: 'fantasy_points', label: 'PPR', cls: 'center' },
+        { key: 'pass_yd', label: 'Pass Yd', cls: 'center hide-mobile' },
+        { key: 'pass_td', label: 'Pass TD', cls: 'center hide-mobile' },
+        { key: 'rush_yd', label: 'Rush Yd', cls: 'center' },
+        { key: 'rush_td', label: 'Rush TD', cls: 'center hide-mobile' },
+        { key: 'rec', label: 'Rec', cls: 'center' },
+        { key: 'rec_yd', label: 'Rec Yd', cls: 'center' },
+        { key: 'rec_td', label: 'Rec TD', cls: 'center hide-mobile' },
+        { key: 'tgt', label: 'Tgt', cls: 'center hide-mobile' }
+      ];
+
+      var html = '<table class="wkl-table"><thead><tr>';
+      cols.forEach(function(col) {
+        var arrow = '';
+        var scls = '';
+        if (sortState.col === col.key) {
+          arrow = '<span class="sort-arrow">' + (sortState.dir > 0 ? '&#9650;' : '&#9660;') + '</span>';
+          scls = ' sorted';
+        }
+        html += '<th data-col="' + escapeAttr(col.key) + '" class="' + col.cls + scls + '">' + col.label + arrow + '</th>';
+      });
+      html += '</tr></thead><tbody>';
+
+      sorted.forEach(function(p) {
+        html += '<tr data-pid="' + escapeAttr(p.player_id) + '">';
+        var rankCls = p._rank === 1 ? 'top1' : p._rank === 2 ? 'top2' : p._rank === 3 ? 'top3' : '';
+        html += '<td class="center"><span class="wkl-rank ' + rankCls + '">' + p._rank + '</span></td>';
+
+        html += '<td><div class="wkl-player-cell"><div class="wkl-player-info">';
+        html += '<div class="wkl-player-name">' + escapeHtml(p.name) + '</div>';
+        html += '<div class="wkl-player-meta"><span class="wkl-pos-badge ' + (p.position || '').toLowerCase() + '">' + escapeHtml(p.position) + '</span>';
+        html += '<span class="wkl-team-label">' + escapeHtml(p.team) + '</span></div></div></div></td>';
+
+        var pts = p.fantasy_points || 0;
+        var ptsCls = pts >= 30 ? 'elite' : pts >= 20 ? 'great' : 'good';
+        html += '<td class="center"><span class="wkl-pts ' + ptsCls + '">' + fmt(pts, 1) + '</span></td>';
+
+        html += '<td class="center hide-mobile">' + (p.pass_yd || '-') + '</td>';
+        html += '<td class="center hide-mobile">' + (p.pass_td || '-') + '</td>';
+        html += '<td class="center">' + (p.rush_yd || '-') + '</td>';
+        html += '<td class="center hide-mobile">' + (p.rush_td || '-') + '</td>';
+        html += '<td class="center">' + (p.rec || '-') + '</td>';
+        html += '<td class="center">' + (p.rec_yd || '-') + '</td>';
+        html += '<td class="center hide-mobile">' + (p.rec_td || '-') + '</td>';
+        html += '<td class="center hide-mobile">' + (p.tgt || '-') + '</td>';
+        html += '</tr>';
+      });
+
+      html += '</tbody></table>';
+      body.innerHTML = html;
+
+      body.querySelectorAll('th[data-col]').forEach(function(th) {
+        th.addEventListener('click', function() {
+          var col = th.getAttribute('data-col');
+          if (sortState.col === col) sortState.dir *= -1;
+          else { sortState.col = col; sortState.dir = col === 'name' ? 1 : -1; }
+          renderWKL(currentData);
+        });
+      });
+
+      body.querySelectorAll('tr[data-pid]').forEach(function(tr) {
+        tr.addEventListener('click', function() {
+          window.location.href = '/player/' + encodeURIComponent(tr.getAttribute('data-pid'));
+        });
+      });
+    }
+
+    el.querySelector('#wkl-pos-tabs').addEventListener('click', function(e) {
+      var tab = e.target.closest('.lp-pos-tab');
+      if (!tab) return;
+      el.querySelectorAll('#wkl-pos-tabs .lp-pos-tab').forEach(function(t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      curPos = tab.getAttribute('data-pos') || '';
+      loadWKL();
+    });
+    el.querySelector('#wkl-season').addEventListener('change', function() { currentWeek = 0; loadWKL(); });
+    el.querySelector('#wkl-prev').addEventListener('click', function() {
+      var idx = availableWeeks.indexOf(currentWeek);
+      if (idx > 0) { currentWeek = availableWeeks[idx - 1]; loadWKL(); }
+    });
+    el.querySelector('#wkl-next').addEventListener('click', function() {
+      var idx = availableWeeks.indexOf(currentWeek);
+      if (idx < availableWeeks.length - 1) { currentWeek = availableWeeks[idx + 1]; loadWKL(); }
+    });
+    loadWKL();
+  }});
+
+  // ===== WEEKLY MVP GRID =====
+  defs.push({ name: 'weeklymvp', render: function(el) {
+    var seasonsPopulated = false;
+    var POSITIONS = ['QB', 'RB', 'WR', 'TE'];
+
+    el.innerHTML =
+      '<div class="lp-page">' +
+        '<div class="lp-header"><h2>Weekly MVP Grid</h2>' +
+        '<div class="lp-subtitle">who was the #1 scorer each week by position</div></div>' +
+        '<div class="lp-controls">' +
+          '<select class="lp-select" id="mv-season" aria-label="Season"></select>' +
+        '</div>' +
+        '<div id="mv-body"><div class="lp-loading">pulling film...</div></div>' +
+      '</div>';
+
+    function loadMV() {
+      var body = el.querySelector('#mv-body');
+      body.innerHTML = '<div class="lp-loading">pulling film...</div>';
+      var season = el.querySelector('#mv-season').value || '';
+      var url = '/api/weekly-mvp';
+      if (season) url += '?season=' + encodeURIComponent(season);
+
+      fetch(url).then(function(r) {
+        if (!r.ok) throw new Error('API error');
+        return r.json();
+      }).then(function(data) {
+        if (!seasonsPopulated) {
+          var sel = el.querySelector('#mv-season');
+          for (var y = new Date().getFullYear(); y >= 2020; y--) {
+            var o = document.createElement('option');
+            o.value = y; o.textContent = y;
+            if (y === data.season) o.selected = true;
+            sel.appendChild(o);
+          }
+          seasonsPopulated = true;
+        }
+        renderMV(data);
+      }).catch(function() {
+        body.innerHTML = '<div class="lp-empty">failed to load weekly MVP data</div>';
+      });
+    }
+
+    function renderMV(data) {
+      var body = el.querySelector('#mv-body');
+      var weeks = data.weeks || [];
+      if (!weeks.length) { body.innerHTML = '<div class="mv-empty">no data found</div>'; return; }
+
+      var html = '<div class="mv-card">';
+      html += '<div class="mv-card-header">Weekly MVP Grid — ' + escapeHtml(String(data.season)) + ' (' + escapeHtml(String(data.total_weeks)) + ' weeks)</div>';
+      html += '<table class="mv-grid"><thead><tr><th>Week</th>';
+      POSITIONS.forEach(function(pos) { html += '<th>' + pos + '</th>'; });
+      html += '</tr></thead><tbody>';
+
+      weeks.forEach(function(wk) {
+        html += '<tr><td>Wk ' + escapeHtml(String(wk.week)) + '</td>';
+        POSITIONS.forEach(function(pos) {
+          var mvp = wk[pos];
+          var color = POS_COLORS[pos] || '#888';
+          if (mvp && mvp.name !== '-') {
+            html += '<td><div class="mv-cell">';
+            html += '<div class="mv-cell-name">' + escapeHtml(mvp.name) + '</div>';
+            html += '<div class="mv-cell-team">' + escapeHtml(mvp.team) + '</div>';
+            html += '<div class="mv-cell-pts" style="background:' + color + '">' + fmt(mvp.fpts) + '</div>';
+            html += '</div></td>';
+          } else {
+            html += '<td style="color:var(--ink-faint)">--</td>';
+          }
+        });
+        html += '</tr>';
+      });
+
+      html += '</tbody></table></div>';
+      body.innerHTML = html;
+    }
+
+    el.querySelector('#mv-season').addEventListener('change', loadMV);
+    loadMV();
+  }});
+
+  // ===== PLAYOFF SCHEDULE PLANNER =====
+  defs.push({ name: 'playoffs', render: function(el) {
+    var curPos = '';
+    var seasonsPopulated = false;
+
+    var GRADE_COLORS = {
+      'A+': 'Aplus', 'A': 'A', 'B+': 'Bplus', 'B': 'B', 'C': 'C', 'D': 'D', 'F': 'F'
+    };
+
+    el.innerHTML =
+      '<div class="lp-page">' +
+        '<div class="lp-header"><h2>Playoff Schedule Planner</h2>' +
+        '<div class="lp-subtitle">who has the easiest path to a championship</div></div>' +
+        '<div class="lp-controls">' +
+          '<div class="lp-pos-tabs" id="po-pos-tabs">' +
+            '<button class="lp-pos-tab active" data-pos="">All</button>' +
+            '<button class="lp-pos-tab" data-pos="QB">QB</button>' +
+            '<button class="lp-pos-tab" data-pos="RB">RB</button>' +
+            '<button class="lp-pos-tab" data-pos="WR">WR</button>' +
+            '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
+          '</div>' +
+          '<select class="lp-select" id="po-season" aria-label="Season"></select>' +
+        '</div>' +
+        '<div id="po-body"><div class="lp-loading">pulling film...</div></div>' +
+      '</div>';
+
+    function gradeClass(grade) {
+      return 'po-grade-' + (GRADE_COLORS[grade] || grade);
+    }
+
+    function loadPO() {
+      var body = el.querySelector('#po-body');
+      body.innerHTML = '<div class="lp-loading">pulling film...</div>';
+      var season = el.querySelector('#po-season').value || '';
+      var url = '/api/playoff-schedule?';
+      if (season) url += 'season=' + encodeURIComponent(season) + '&';
+      if (curPos) url += 'position=' + encodeURIComponent(curPos) + '&';
+
+      fetch(url).then(function(r) {
+        if (!r.ok) throw new Error('API error');
+        return r.json();
+      }).then(function(data) {
+        if (!seasonsPopulated) {
+          var sel = el.querySelector('#po-season');
+          for (var y = new Date().getFullYear(); y >= 2020; y--) {
+            var o = document.createElement('option');
+            o.value = y; o.textContent = y;
+            if (y === data.season) o.selected = true;
+            sel.appendChild(o);
+          }
+          seasonsPopulated = true;
+        }
+        renderPO(data);
+      }).catch(function() {
+        body.innerHTML = '<div class="lp-empty">failed to load playoff schedule</div>';
+      });
+    }
+
+    function renderPO(data) {
+      var body = el.querySelector('#po-body');
+      var players = data.players || [];
+      if (!players.length) { body.innerHTML = '<div class="po-empty">no playoff data found</div>'; return; }
+
+      var html = '<div class="po-card">';
+      html += '<div class="po-card-header">Playoff Matchup Rankings — Wk 14-17 (' + escapeHtml(String(data.count || 0)) + ' players)</div>';
+      html += '<table class="po-table"><thead><tr>';
+      html += '<th>#</th><th>Player</th><th>Pos</th><th>PO PPG</th><th>SOS</th>';
+      var weekNums = [14, 15, 16, 17];
+      weekNums.forEach(function(w) { html += '<th>Wk ' + w + '</th>'; });
+      html += '</tr></thead><tbody>';
+
+      players.forEach(function(p, i) {
+        var posColor = POS_COLORS[p.position] || '#888';
+        html += '<tr>';
+        html += '<td class="po-rank">' + (i + 1) + '</td>';
+        html += '<td>' + escapeHtml(p.name) + ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></td>';
+        html += '<td><span class="po-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
+        html += '<td style="font-weight:700">' + fmt(p.playoff_ppg) + '</td>';
+        html += '<td><span class="po-grade ' + gradeClass(p.sos_grade) + '">' + escapeHtml(p.sos_grade) + '</span></td>';
+
+        var weekMap = {};
+        (p.weeks || []).forEach(function(w) { weekMap[w.week] = w; });
+
+        weekNums.forEach(function(wn) {
+          var wk = weekMap[wn];
+          if (wk) {
+            html += '<td><div class="po-matchup">';
+            html += '<span class="po-grade ' + gradeClass(wk.grade) + '">' + escapeHtml(wk.grade) + '</span>';
+            html += ' <span class="po-opp">vs ' + escapeHtml(wk.opponent) + '</span>';
+            html += ' <span style="font-size:10px;font-weight:700">' + fmt(wk.fpts) + '</span>';
+            html += '</div></td>';
+          } else {
+            html += '<td style="color:var(--ink-faint)">--</td>';
+          }
+        });
+        html += '</tr>';
+      });
+
+      html += '</tbody></table></div>';
+      body.innerHTML = html;
+    }
+
+    el.querySelector('#po-pos-tabs').addEventListener('click', function(e) {
+      var tab = e.target.closest('.lp-pos-tab');
+      if (!tab) return;
+      el.querySelectorAll('#po-pos-tabs .lp-pos-tab').forEach(function(t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      curPos = tab.getAttribute('data-pos') || '';
+      loadPO();
+    });
+    el.querySelector('#po-season').addEventListener('change', loadPO);
+    loadPO();
+  }});
+
 })();
