@@ -1,39 +1,44 @@
-# Razzle Loop — Phase 65 Task List
+# Razzle Loop — Phase 66 Task List
 
-> Team Roster Pages — Visual Roster Breakdown by Team
+> QA + UX Audit — Auto-Generated Fixes (Phases 61-65)
 
-**Current Phase**: 65 — Team Roster Pages
-**Exit Criterion**: /team/{abbr} pages show full fantasy-relevant roster organized by position (QB, RB, WR, TE). Each position group rendered as a comic-strip card with player rows showing headshot/initials, name, position badge (color-coded), age badge (green/yellow/red), key stats (PPG, games, yards, TDs) in mono font. Team header with team name in display font and Caveat annotation. Team selector dropdown to switch between all 32 NFL teams. Click player row → navigate to /player/{id}. Team links added to player profile pages and screener team column. Nav link "Teams" on all pages. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, position colors, Space Mono for data, display font for headers, Caveat for annotations.
+**Current Phase**: 66 — QA + UX Audit Fixes
+**Exit Criterion**: All CRITICAL and HIGH findings from QA-AUDIT.md resolved. fantasy_relevant column issue fixed. SQL injection pattern in fetch_stat_leaders replaced with parameterized queries. Connection leak fixed. trackPageview standardized. DVS label and methodology added to rankings page. Medium fixes applied.
 
 ---
 
-## Task 1: Backend — team roster endpoint
-**Status**: PASS
-**Attempts**: 1
-**Notes**: GET /api/team-roster?team={abbr}&season= in server.py. fetch_team_roster() in live_data.py — queries players table joined with season stats. Returns players grouped by position (QB/RB/WR/TE) with key stats (PPG, games, total yards, TDs, age). Available teams list for dropdown. Available seasons for selector.
+## Task 1: CRITICAL — Fix fantasy_relevant column + SQL injection + connection leak
+**Status**: PENDING
+**Attempts**: 0
+**Notes**: (Q1) Check if fantasy_relevant column exists in nflverse_adapter.py schema. If not, either add it to migrate_add_columns or remove the filter from all queries in live_data.py. (Q2) Replace f-string position filter in fetch_stat_leaders with parameterized queries. (Q3) Fix connection leak: combine double connection into single session with try/finally. (Q5) Move seasons query before conn.close().
 
-## Task 2: Frontend — team.html page with position group cards
-**Status**: PASS
-**Attempts**: 1
-**Notes**: Full page with position group cards (QB, RB, WR, TE sections). Each card: position name in display font with position color top stripe, Caveat annotation, player rows with headshot/initials fallback, name, age badge (green ≤25, yellow 26-28, red ≥29), key stats in mono font. Cards have 3px ink borders, 4px offset shadows. Click player row → navigate to /player/{id}. Team selector dropdown + season selector. Team header with team name. Sand bg, card bg, all fonts correct per DESIGN.md.
+## Task 2: HIGH — Fix trackPageview + analytics standardization
+**Status**: PENDING
+**Attempts**: 0
+**Notes**: (Q4) Replace trackPageview calls in team.html and leaders.html with inline fetch pattern matching rankings.html. Or define trackPageview in app.js. Ensure all new pages (team, leaders, rankings) consistently track pageviews.
 
-## Task 3: Nav links + team links from profiles + sitemap
-**Status**: PASS
-**Attempts**: 1
-**Notes**: "Teams" nav link added to all HTML pages. Team column in Lab screener links to /team/{abbr}. Player profile pages show team name as clickable link to team page. Sitemap updated. URL routing handles /team/{abbr} pattern.
+## Task 3: HIGH — Rankings DVS label + methodology explainer
+**Status**: PENDING
+**Attempts**: 0
+**Notes**: (U1, U3) Add "DVS" text label next to dynasty value number on rankings.html player cards. Add one-line methodology note near page header: "ranked by Dynasty Value Score (production x age curve)." Make the number meaningful for Reddit screenshots.
 
-## Task 4: Smoke test + verification
-**Status**: PASS
-**Attempts**: 1
-**Notes**: Python syntax valid (py_compile both files). JS syntax valid (Function constructor check on team.html, player.js, lab.js). All 10 HTML pages have Teams nav link in nav + footer. Design matches DESIGN.md (3px borders, 4px shadows, position-colored headers with light tints, correct fonts, sand bg, Caveat annotations, hover lift). XSS safe (escapeHtml/escapeAttr on all player data). Route order clean (/team/{abbr} before static mount). Sitemap includes all 32 team pages. Player profile and Lab overlay team names link to /team/{abbr}.
+## Task 4: MEDIUM fixes — design borders, age badge consistency, profile overlay link, contextual back nav
+**Status**: PENDING
+**Attempts**: 0
+**Notes**: (Q6) Change team.html age badge and group count borders from 1px to 2px. (U4) Standardize PPG label across team.html, rankings.html, player.js. (U5) Standardize age badge terminology to "Young/Prime/Aging" on both team.html and rankings.html. (U6) Add "View full profile" link in Lab profile overlay. (U7) Make player.js back link contextual based on referrer. (U8) Hide rate stat categories on leaders.html when "All" position filter is active.
+
+## Task 5: Smoke test + verification
+**Status**: PENDING
+**Attempts**: 0
+**Notes**: Python syntax valid. JS syntax valid. All fixes verified against QA-AUDIT.md findings. No regressions.
 
 ---
 
 ## Loop State
 ```
-Current Phase: 65
-Current Task: 4
-Current Stage: COMPLETE
+Current Phase: 66
+Current Task: 1
+Current Stage: BUILD
 Attempt: 1
-Tasks Completed: 4/4
+Tasks Completed: 0/5
 ```

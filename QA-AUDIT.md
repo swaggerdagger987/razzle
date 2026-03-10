@@ -1,7 +1,7 @@
-# QA + UX Audit — Phases 56-60
+# QA + UX Audit — Phases 61-65
 
-**Audit Date**: 2026-03-09
-**Phases Covered**: 56 (QA+UX fixes), 57 (Draft Pick Trade Calculator), 58 (Roster Value Calculator), 59 (Player Comp Finder), 60 (Boom/Bust Analyzer)
+**Date**: 2026-03-10
+**Audited Phases**: 61 (QA+UX fixes), 62 (Quick Search), 63 (Dynasty Rankings), 64 (Stat Leaders), 65 (Team Roster Pages)
 
 ---
 
@@ -9,97 +9,93 @@
 
 ### CRITICAL
 
-**QA-1: XSS — Unescaped player names in renderPlayerComps (6 locations)**
-- **File**: `frontend/lab.js` lines ~7937, 7967, 7969, 7970, 7978, 7980
-- **Issue**: `comp.full_name` and `player.full_name` interpolated directly into HTML without `escapeHtml()`. The boom/bust code correctly escapes, but the comps code does not.
-- **Fix**: Wrap all 6 occurrences with `escapeHtml()`.
+**Q1. `fantasy_relevant` column may not exist in DB schema**
+- File: `backend/live_data.py` lines 3445, 3568, 3589, 3608, 3627
+- Queries in `fetch_dynasty_rankings`, `fetch_stat_leaders`, and `_fetch_featured_uncached` filter on `p.fantasy_relevant = 1`. This column may not exist in a fresh deploy (Render builds DB from scratch). If missing, these endpoints return zero players.
+- Fix: Add `fantasy_relevant` to `migrate_add_columns` in nflverse_adapter.py, OR remove the filter and rely on `position IN ('QB','RB','WR','TE')` which accomplishes the same goal.
 
-**QA-2: XSS — Unescaped error message in loadPlayerComps**
-- **File**: `frontend/lab.js` line ~7889
-- **Issue**: `data.error` from API inserted directly into innerHTML. The boom/bust loader correctly uses `escapeHtml()`, but the comps loader does not.
-- **Fix**: Change `${data.error}` to `${escapeHtml(data.error)}`.
+**Q2. SQL injection pattern in `fetch_stat_leaders` position filter**
+- File: `backend/live_data.py` line 3547
+- Position filter built via f-string: `pos_where = f"AND p.position = '{pos_upper}'"`. While validated to QB/RB/WR/TE, the f-string pattern is fragile.
+- Fix: Use parameterized queries with `?` placeholders.
 
-### HIGH
-
-**QA-3: Missing negative limit validation on /api/players/{id}/comps**
-- **File**: `backend/server.py` line 442
-- **Issue**: `limit=min(limit, 10)` doesn't guard against negative values. `min(-5, 10) = -5` causes Python `[:−5]` slice to return unexpected results.
-- **Fix**: Change to `limit=max(1, min(limit, 10))`.
-
-**QA-4: Redundant inline `import math` in _pick_value**
-- **File**: `backend/live_data.py` line ~3247
-- **Issue**: `import math` inside `_pick_value()` is redundant — `math` is already imported at module top.
-- **Fix**: Remove the inline `import math`.
-
-### MEDIUM
-
-**QA-5: Design system violation — stat card borders in boom/bust**
-- **File**: `frontend/lab.js` line ~8388
-- **Issue**: Boom/bust stat cards use `border:2px` / `box-shadow:3px 3px 0` instead of design spec `border:3px` / `box-shadow:4px 4px 0`.
-- **Fix**: Update border and shadow values.
-
-### LOW
-
-**QA-6: Consistency rank fallback edge case**
-- **File**: `backend/live_data.py` — fetch_player_boom_bust
-- **Issue**: If player's CSV parsing fails, `position_rank` stays at default 1. Edge case, not a crash.
-
----
-
-## UX FINDINGS
-
-### CRITICAL
-
-**UX-1: Boom/Bust histogram has no legend**
-- **Feature**: Boom/Bust Analyzer (Phase 60)
-- **Issue**: Bars colored green/red/position-color with no legend. Users must infer meaning from threshold lines alone.
-- **Fix**: Add legend box: "Green = Boom week | Red = Bust week | [Color] = Normal"
+**Q3. Connection leak in `fetch_stat_leaders`**
+- File: `backend/live_data.py` lines 3527, 3672
+- Opens `conn` at 3527, closes at 3669, then opens `conn2` at 3672 for seasons. No try/finally. If exception occurs, connection leaks.
+- Fix: Use try/finally or combine into single connection session.
 
 ### HIGH
 
-**UX-2: Boom/Bust grade badge unexplained**
-- **Feature**: Boom/Bust Analyzer (Phase 60)
-- **Issue**: Letter grade shown without explaining it measures consistency (inverse coefficient of variation).
-- **Fix**: Add subtitle: "Consistency Grade — week-to-week scoring stability"
+**Q4. `trackPageview` function undefined on team.html and leaders.html**
+- File: `frontend/team.html` line 585, `frontend/leaders.html` line 531
+- Both call `trackPageview()` which doesn't exist. Rankings.html uses inline fetch instead (different approach). Pageviews silently not tracked.
+- Fix: Standardize on inline fetch pattern (like rankings.html) or define `trackPageview` in app.js.
 
-**UX-3: Roster Value grade and status unexplained**
-- **Feature**: Roster Value Calculator (Phase 58)
-- **Issue**: Grade (A+ to F) and status (COMPETING/RETOOLING/REBUILDING) shown without criteria explanation.
-- **Fix**: Add brief tooltips or explainer text for grade and status criteria.
+**Q5. Double DB connection in `fetch_stat_leaders`**
+- File: `backend/live_data.py` lines 3527 + 3672
+- Opens second connection just for seasons query after closing first. Wasteful.
+- Fix: Move seasons query before `conn.close()`.
+
+**U1. Dynasty value number on rankings.html has no label**
+- A bold number appears next to each player with zero explanation. Reddit viewers can't understand what the number means from a screenshot alone.
+- Fix: Add "DVS" label next to the value. Add one-line methodology note in page header.
+
+**U3. Rankings page lacks DVS methodology explainer**
+- "DVS" is a Razzle-specific metric no fantasy player has encountered. Rankings page has no explanation.
+- Fix: Add info badge or tooltip explaining "Dynasty Value Score = production x age curve."
 
 ### MEDIUM
 
-**UX-4: Consistency score computed but not displayed**
-- **Feature**: Boom/Bust Analyzer (Phase 60)
-- **Issue**: Backend returns `consistency_score` (0-100) but UI only shows letter grade. Number would help cross-player comparison.
-- **Fix**: Add consistency score to stat cards row.
+**Q6. Internal divider borders could be chunkier**
+- File: `frontend/team.html` lines 121, 199
+- Age badge and group count use `1px solid` borders. Design guide says 2px minimum for small elements.
+- Fix: Change to `2px solid` on badges.
 
-**UX-5: Comp similarity % lacks methodology note**
-- **Feature**: Player Comp Finder (Phase 59)
-- **Issue**: "95% match" is prominent but unexplained. Users don't know it's cosine similarity on per-game stats.
-- **Fix**: Add Caveat annotation: "match = per-game stat profile similarity"
+**Q7. Rankings PNG export silent failure**
+- File: `frontend/rankings.html` lines 442-453
+- If html2canvas CDN fails to load, nothing happens. No error feedback.
+- Fix: Add `onerror` handler on script element.
 
-**UX-6: Boom/bust definition placement**
-- **Feature**: Boom/Bust Analyzer (Phase 60)
-- **Issue**: Threshold definition in Caveat font reads as margin note rather than critical info.
-- **Fix**: Include thresholds in histogram legend for redundancy.
+**U4. "PPG" vs "PPR/G" inconsistency across pages**
+- Team page uses "PPG", player profile uses "PPR/G", rankings uses "ppg" lowercase. Confusing.
+- Fix: Standardize on "PPG" everywhere with tooltip "PPR Points Per Game."
+
+**U5. Age badge terminology differs between pages**
+- Team page: "young/mid/old". Rankings page: "young/prime/aging". Same thresholds, different words.
+- Fix: Standardize on "Young / Prime / Aging" everywhere.
+
+**U6. Profile overlay lacks "Open full profile" link**
+- Lab overlay shows player data but no link to standalone /player/{id} page.
+- Fix: Add "View full profile" button that opens /player/{id}.
+
+**U7. Back navigation is hardcoded to "Back to The Lab"**
+- Clicking a player from rankings/leaders/team pages leads to profile with "Back to The Lab" link regardless of origin.
+- Fix: Make back link contextual based on referrer.
+
+**U8. Leaders "All" view shows rate stats that only apply to specific positions**
+- Target_share and yards_per_carry appear in "All" view but only make sense for specific positions.
+- Fix: Hide rate stats when "All" is selected, show them only with position filters.
 
 ### LOW
 
-**UX-7: No season switcher for comps** — Nice-to-have, not blocking core flow.
-**UX-8: Trade Analyzer pick value chart may require scroll** — Minor friction.
+**Q10. Analytics tracking inconsistent across pages**
+- Rankings.html uses inline fetch, team.html/leaders.html use undefined `trackPageview`.
+
+**Q11. Team/season selector borders use 2px instead of 3px**
+- Minor design inconsistency; 2px is acceptable for form elements.
+
+**U10. Error messages lack retry button**
+**U11. First-visit Lab toast only shows for 6 seconds**
+**U12. "CAV" column label is cryptic**
 
 ---
 
-## ACTION ITEMS
+## Summary
 
-| Priority | Finding | Action |
-|----------|---------|--------|
-| CRITICAL | QA-1, QA-2 | Escape all player names + error messages in renderPlayerComps/loadPlayerComps |
-| CRITICAL | UX-1 | Add histogram legend to Boom/Bust |
-| HIGH | QA-3 | Add negative limit guard on /comps endpoint |
-| HIGH | QA-4 | Remove redundant inline `import math` |
-| HIGH | UX-2 | Add grade explanation to Boom/Bust |
-| HIGH | UX-3 | Add grade/status explanation to Roster Value |
-| MEDIUM | QA-5, UX-4, UX-5, UX-6 | Grouped: design fix + consistency score display + comp annotation + definition redundancy |
-| LOW | QA-6, UX-7, UX-8 | Logged, not tasked |
+| Severity | QA | UX | Total |
+|----------|----|----|-------|
+| CRITICAL | 3 | 0 | 3 |
+| HIGH | 2 | 2 | 4 |
+| MEDIUM | 2 | 5 | 7 |
+| LOW | 2 | 3 | 5 |
+| **Total** | **9** | **10** | **19** |
