@@ -6167,3 +6167,180 @@ def fetch_redzone_usage(season=None, position=None, limit=30):
         }
     finally:
         conn.close()
+
+
+# ---------------------------------------------------------------------------
+# Phase 83: Efficiency Rankings
+# ---------------------------------------------------------------------------
+
+_EFFICIENCY_ANNOTATIONS = [
+    "does more with less",
+    "ruthlessly efficient",
+    "every touch counts",
+    "the definition of productive",
+    "maximum output, minimum waste",
+    "quality over quantity",
+    "the efficient engine",
+    "always moving the chains",
+    "no wasted motion",
+    "elite touch efficiency",
+]
+
+_VOLUME_ANNOTATIONS = [
+    "the workhorse",
+    "bellcow workload",
+    "carries the offense",
+    "volume is king",
+    "opportunity monster",
+    "the focal point",
+    "featured weapon",
+    "snap-eating machine",
+    "the engine room",
+    "fed early and often",
+]
+
+
+def fetch_efficiency_rankings(season=None, position=None, limit=30):
+    """Return efficiency rankings: most efficient and volume kings."""
+    conn = get_conn()
+
+    try:
+        # Determine season + available seasons
+        row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
+        available_seasons = [r[0] for r in row] if row else [2024]
+        if not season:
+            season = available_seasons[0] if available_seasons else 2024
+
+        pos_filter = ""
+        params = [season]
+        if position and position.upper() in ("QB", "RB", "WR", "TE"):
+            pos_filter = "AND p.position = ?"
+            params.append(position.upper())
+
+        query = f"""
+            SELECT
+                p.player_id, p.full_name, p.position, p.team,
+                p.headshot_url,
+                SUM(s.fantasy_points_ppr) as total_ppr,
+                COUNT(DISTINCT s.week) as games,
+                SUM(s.targets) as targets,
+                SUM(s.carries) as carries,
+                SUM(s.receptions) as receptions,
+                SUM(s.receiving_yards) as receiving_yards,
+                SUM(s.rushing_yards) as rushing_yards,
+                SUM(s.receiving_air_yards) as receiving_air_yards,
+                SUM(s.receiving_tds) as rec_tds,
+                SUM(s.rushing_tds) as rush_tds,
+                SUM(s.passing_tds) as pass_tds
+            FROM players p
+            JOIN player_week_stats s
+                ON s.player_id = p.player_id AND s.season = ?
+            WHERE p.position IN ('QB','RB','WR','TE')
+              AND p.fantasy_relevant = 1
+              {pos_filter}
+            GROUP BY p.player_id
+            HAVING games >= 4
+            ORDER BY total_ppr DESC
+            LIMIT 500
+        """
+        rows = conn.execute(query, params).fetchall()
+
+        if not rows:
+            return {
+                "season": season,
+                "available_seasons": available_seasons,
+                "most_efficient": [],
+                "volume_kings": [],
+            }
+
+        players = []
+        for r in rows:
+            pid = r[0]
+            games = r[6] or 1
+            total_ppr = r[5] or 0
+            targets = r[7] or 0
+            carries = r[8] or 0
+            receptions = r[9] or 0
+            rec_yards = r[10] or 0
+            rush_yards = r[11] or 0
+            air_yards = r[12] or 0
+            rec_tds = r[13] or 0
+            rush_tds = r[14] or 0
+            pass_tds = r[15] or 0
+            pos = r[2] or "RB"
+
+            # Opportunities = targets + carries (for QBs: attempts/carries)
+            opportunities = targets + carries
+            touches = receptions + carries
+            total_yards = rec_yards + rush_yards
+            total_tds = rec_tds + rush_tds + pass_tds
+
+            # Skip players with too few opportunities
+            if opportunities < 50:
+                continue
+
+            ppg = round(total_ppr / games, 2)
+            ppo = round(total_ppr / opportunities, 2) if opportunities > 0 else 0
+            ypt = round(total_yards / touches, 2) if touches > 0 else 0
+            catch_rate = round(receptions / targets * 100, 1) if targets > 0 else 0
+            yac_per_rec = round((rec_yards - air_yards) / receptions, 2) if receptions > 0 else 0
+            td_rate = round(total_tds / touches * 100, 1) if touches > 0 else 0
+
+            players.append({
+                "player_id": pid,
+                "name": r[1] or "Unknown",
+                "position": pos,
+                "team": r[3] or "FA",
+                "headshot_url": r[4] or "",
+                "ppg": ppg,
+                "games": games,
+                "opportunities": opportunities,
+                "touches": touches,
+                "ppo": ppo,
+                "yards_per_touch": ypt,
+                "catch_rate": catch_rate,
+                "yac_per_rec": yac_per_rec,
+                "td_rate": td_rate,
+                "total_tds": total_tds,
+            })
+
+        # Compute PPO percentile for efficiency grade
+        ppo_values = sorted([p["ppo"] for p in players])
+        n = len(ppo_values)
+        for p in players:
+            if n == 0:
+                p["grade"] = "C"
+                continue
+            rank = sum(1 for v in ppo_values if v < p["ppo"])
+            percentile = rank / n * 100
+            if percentile >= 95:
+                p["grade"] = "A+"
+            elif percentile >= 85:
+                p["grade"] = "A"
+            elif percentile >= 70:
+                p["grade"] = "B"
+            elif percentile >= 45:
+                p["grade"] = "C"
+            elif percentile >= 25:
+                p["grade"] = "D"
+            else:
+                p["grade"] = "F"
+
+        # Most Efficient: highest PPO
+        most_efficient = sorted(players, key=lambda x: x["ppo"], reverse=True)[:limit]
+        for i, p in enumerate(most_efficient):
+            p["annotation"] = _EFFICIENCY_ANNOTATIONS[i % len(_EFFICIENCY_ANNOTATIONS)]
+
+        # Volume Kings: most opportunities (with grade for context)
+        volume_kings = sorted(players, key=lambda x: x["opportunities"], reverse=True)[:limit]
+        for i, p in enumerate(volume_kings):
+            p["annotation"] = _VOLUME_ANNOTATIONS[i % len(_VOLUME_ANNOTATIONS)]
+
+        return {
+            "season": season,
+            "available_seasons": available_seasons,
+            "most_efficient": most_efficient,
+            "volume_kings": volume_kings,
+        }
+    finally:
+        conn.close()

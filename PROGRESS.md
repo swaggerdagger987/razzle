@@ -1,6 +1,25 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 82 — Red Zone & Goal-Line Dashboard (COMPLETE)
+## Current Phase: Phase 83 — Fantasy Efficiency Dashboard (COMPLETE)
+
+**Exit criterion MET:** /efficiency.html page shows fantasy efficiency rankings with two sections: "Most Efficient" (highest fantasy points per opportunity, min 50 opportunities) and "Volume Kings" (most total opportunities with efficiency grade). Each player row shows: position badge, headshot, name, team, PPO (fantasy points per opportunity), Yards/Touch, Catch Rate, YAC/Rec, TD Rate per Touch, total opportunities, fantasy PPG, GP, efficiency grade badge (A+ to F based on PPO percentile, color-coded: A+/A green, B blue, C yellow, D orange, F red). Position filter tabs (All/QB/RB/WR/TE). Season selector. Sortable columns with sort state tracking per section. Click player row → player profile. PNG export via html2canvas with watermark. Responsive at 768px + 480px with hide-mobile columns. /api/efficiency-rankings endpoint queries player_week_stats for targets/carries/receptions/yards/air yards/TDs/fantasy points, computes PPO/YPT/catch rate/YAC per rec/TD rate, grades by PPO percentile, splits into most_efficient and volume_kings. Min 4 games + 50 opportunities filter. "Efficiency" nav link added to all 24 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors.
+
+### Phase 83 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/efficiency-rankings endpoint | DONE | PPO, YPT, catch rate, YAC/rec, TD rate, grade by percentile |
+| 2 | Efficiency dashboard page | DONE | Two-section table, grade badges, sortable, responsive, PNG export |
+| 3 | Nav links + sitemap + analytics | DONE | All 24 pages updated, sitemap entry, pageview tracking |
+| 4 | Smoke test | DONE | Python + JS syntax clean, 24/24 nav links verified, XSS escaped, design compliance confirmed |
+
+### Decisions Log
+- **Fantasy Efficiency as Phase 83**: Efficiency metrics (fantasy points per opportunity, yards per touch) are the core analytical lens that separates casuals from dynasty power users. "Who does more with less?" is one of the most debated questions in dynasty circles. The two-section approach (Most Efficient = quality, Volume Kings = quantity) gives both sides of the coin. Highly screenshottable for r/DynastyFF ("most efficient fantasy players by PPO" / "these players get all the opportunities").
+- **PPO as primary metric**: Fantasy Points per Opportunity (targets + carries) is the cleanest efficiency metric because it accounts for both passing and rushing volume. Unlike yards per touch, PPO includes TD value and PPR bonus, making it directly comparable across positions.
+- **Efficiency grades A+ to F**: Percentile-based grading makes efficiency immediately understandable without needing to know what a "good PPO" is. The letter grade is instantly recognizable — A+ jumps off the page.
+- **50 opportunity minimum**: Prevents small-sample noise from backup players with 2 catches for 80 yards appearing as "most efficient." 50 opportunities ensures meaningful sample size for efficiency evaluation.
+
+## Previous Phase: Phase 82 — Red Zone & Goal-Line Dashboard (COMPLETE)
 
 **Exit criterion MET:** /redzone.html page shows goal-line usage leaders with two sections: "Goal-Line Dominators" (most GL opportunities, min 3) and "TD Dependent" (highest TD% of fantasy scoring, min 2 TDs). Dominators table shows: player (headshot, name, pos badge, team), GL Opp, GL Carries, GL Targets, GL TDs, GL TD% (color-coded badge: green>=50%, yellow>=25%, red<25%), total TDs, PPG, GP, Caveat annotations. TD Dependent table shows: player, TD% of fantasy points (color-coded badge: red>=50% heavy, orange>=35% moderate, green<35% light), total TDs, Rush TDs, Rec TDs, PPG, GL TDs, GL Opp, GP, Caveat annotations. Position filter tabs (All/QB/RB/WR/TE). Season selector. Sortable columns with sort state tracking per section. Click player row → player profile. PNG export via html2canvas with watermark. Responsive at 768px + 480px with hide-mobile columns. /api/redzone-usage endpoint queries player_week_stats for fantasy points + TDs + games, joins player_season_pbp for gl_carries/gl_targets/gl_tds, computes gl_td_rate and td_pct_of_fantasy. Min 4 games filter. "Red Zone" nav link added to all 23 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors.
 

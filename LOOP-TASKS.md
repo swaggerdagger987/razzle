@@ -1,37 +1,37 @@
-# Razzle Loop — Phase 82 Task List
+# Razzle Loop — Phase 83 Task List
 
-> Red Zone & Goal-Line Dashboard
+> Fantasy Efficiency Dashboard
 
-**Current Phase**: 82 — Red Zone & Goal-Line Dashboard
-**Exit Criterion**: /redzone.html page shows goal-line usage leaders with two sections: "Goal-Line Dominators" (most GL opportunities) and "TD Dependent" (highest TD% of fantasy scoring). Each player row shows: position badge, headshot, name, team, GL carries, GL targets, GL TDs, GL TD rate, total TDs, fantasy PPG, TD% of fantasy points, GP. Position filter tabs (All/QB/RB/WR/TE). Season selector. Sortable columns. Click player row → player profile. PNG export with watermark. Responsive at 768px + 480px. /api/redzone-usage endpoint returns data from player_season_pbp + player_week_stats. "Red Zone" nav link added to all 23 HTML pages. Sitemap entry. Analytics tracking. Design matches DESIGN.md.
+**Current Phase**: 83 — Fantasy Efficiency Dashboard
+**Exit Criterion**: /efficiency.html page shows fantasy efficiency rankings with two sections: "Most Efficient" (highest fantasy points per opportunity, min 50 opportunities) and "Volume Kings" (most total opportunities with efficiency grade). Each player row shows: position badge, headshot, name, team, PPO (fantasy points per opportunity), Yards/Touch, Catch Rate (WR/RB/TE), YAC/Rec (WR/TE), TD Rate per Touch, total opportunities (targets + carries), fantasy PPG, GP, efficiency grade badge (A+ to F based on PPO percentile). Position filter tabs (All/QB/RB/WR/TE). Season selector. Sortable columns with sort state tracking per section. Click player row → player profile. PNG export via html2canvas with watermark. Responsive at 768px + 480px with hide-mobile columns. /api/efficiency-rankings endpoint queries player_week_stats for touches/targets/carries/yards/TDs/fantasy points, computes PPO/YPT/catch rate/YAC per rec/TD rate, grades by PPO percentile, splits into most_efficient (top PPO) and volume_kings (top opportunities). Min 4 games + 50 opportunities filter. "Efficiency" nav link added to all 24 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors.
 
 ---
 
-## Task 1: Backend /api/redzone-usage endpoint
+## Task 1: Backend /api/efficiency-rankings endpoint
 **Status**: PASS
 **Attempts**: 1
-**Notes**: GET /api/redzone-usage returns `dominators` (sorted by gl_opportunities, min 3 GL opps) and `td_dependent` (sorted by td_pct_of_fantasy, min 2 TDs). Queries player_week_stats for fantasy points + TDs + games, joins player_season_pbp for gl_carries/gl_targets/gl_tds. Computes gl_td_rate, td_pct_of_fantasy. Season + position params. Parameterized SQL, position whitelist.
+**Notes**: GET /api/efficiency-rankings returns `most_efficient` (sorted by PPO desc) and `volume_kings` (sorted by opportunities desc). Queries player_week_stats for fantasy points, targets, carries, receptions, yards, air yards, TDs. Computes PPO, yards per touch, catch rate, YAC per reception, TD rate per touch. Grades by PPO percentile (A+ >= 95th, A >= 85th, B >= 70th, C >= 45th, D >= 25th, F < 25th). Season + position params. Parameterized SQL, position whitelist. Min 4 games + 50 opportunities.
 
-## Task 2: Red Zone dashboard page (frontend)
+## Task 2: Efficiency dashboard page (frontend)
 **Status**: PASS
 **Attempts**: 1
-**Notes**: /redzone.html with two-section table layout. Dominators table: Player, GL Opp, GL Car, GL Tgt, GL TD, GL TD%, TDs, PPG, GP, annotation. TD Dependent table: Player, TD%, TDs, RuTD, ReTD, PPG, GL TD, GL Opp, GP, annotation. GL TD% badge (green/yellow/red by rate). TD% badge (red=heavy, orange=moderate, green=light). Position tabs, season selector, sortable columns, row click → profile, PNG export with watermark. Responsive hide-mobile columns. Caveat annotations.
+**Notes**: /efficiency.html with two-section table layout. Most Efficient: Player, PPO, Grade, Y/Tch, Catch%, YAC/R, TD%, Opps, PPG, GP, annotation. Volume Kings: Player, Opps, Touches, PPO, Grade, Y/Tch, TD%, PPG, TDs, GP, annotation. Grade badges color-coded (A+/A green, B blue, C yellow, D orange, F red). Position tabs, season selector, sortable columns, row click → profile, PNG export with watermark. Responsive hide-mobile columns. Caveat annotations. 10 escapeHtml calls for XSS.
 
 ## Task 3: Nav links + sitemap + analytics
 **Status**: PASS
 **Attempts**: 1
-**Notes**: "Red Zone" link added to nav + footer of all 23 HTML pages (23/23 verified). Sitemap entry added ("/redzone.html", "0.8", "weekly"). Analytics pageview tracking via inline fetch to /api/analytics/pageview.
+**Notes**: "Efficiency" link added to nav + footer of all 24 HTML pages (24/24 verified). Sitemap entry added ("/efficiency.html", "0.8", "weekly"). Analytics pageview tracking via inline fetch to /api/analytics/pageview.
 
 ## Task 4: Smoke test + verification
 **Status**: PASS
 **Attempts**: 1
-**Notes**: Python syntax valid (server.py + live_data.py). JS syntax valid (redzone.html). 23/23 pages have Red Zone nav link. XSS: 9 escapeHtml calls covering all dynamic content. SQL: parameterized queries, position whitelist. Design compliance: 3px borders (3), 4px shadows (2), display font (6), mono font (5), hand font (7), position colors present.
+**Notes**: Python syntax valid (server.py + live_data.py). JS syntax valid (efficiency.html). 24/24 pages have Efficiency nav link. XSS: 10 escapeHtml calls covering all dynamic content. SQL: parameterized queries, position whitelist. Design compliance: 3px borders, 4px shadows, display font, mono font, hand font, position colors (26 design rule references).
 
 ---
 
 ## Loop State
 ```
-Current Phase: 82
+Current Phase: 83
 Current Task: 4
 Current Stage: COMPLETE
 Attempt: 1
