@@ -531,21 +531,25 @@ const state = {
       apiFetch("/api/college/filter-options").catch(() => ({ seasons: [], teams: [], conferences: [], positions: [] })),
     ]);
 
-    state.seasons = nflOpts.seasons || [2024];
-    if (!state.season && state.season !== "career") state.season = state.seasons[0] || 2024;
+    const _curYear = new Date().getFullYear();
+    const _nflYear = new Date().getMonth() >= 7 ? _curYear : _curYear - 1;
 
-    state.draftYears = prospectOpts.years || [2025];
-    if (!state.draftYear) state.draftYear = state.draftYears[0] || 2025;
+    state.seasons = nflOpts.seasons || [_nflYear];
+    if (!state.season && state.season !== "career") state.season = state.seasons[0] || _nflYear;
 
-    state.collegeSeasons = collegeOpts.seasons || [2024];
-    if (!state.collegeSeason) state.collegeSeason = state.collegeSeasons[0] || 2024;
+    state.draftYears = prospectOpts.years || [_curYear];
+    if (!state.draftYear) state.draftYear = state.draftYears[0] || _curYear;
+
+    state.collegeSeasons = collegeOpts.seasons || [_nflYear];
+    if (!state.collegeSeason) state.collegeSeason = state.collegeSeasons[0] || _nflYear;
 
     populateSeasonSelect();
     populateFilterStatSelect();
     populateTeamFilter();
   } catch (e) {
     console.error("Failed to load filter options:", e);
-    state.season = 2024;
+    const _fb = new Date().getMonth() >= 7 ? new Date().getFullYear() : new Date().getFullYear() - 1;
+    state.season = _fb;
   }
 
   // Sync team/minGP UI from URL state
@@ -1578,7 +1582,7 @@ function copyRedditTitle() {
 
 function generateRedditTitle() {
   const preset = getCurrentPresetName();
-  const season = state.season === "career" ? "Career" : (state.season || "2024");
+  const season = state.season === "career" ? "Career" : (state.season || "Latest");
   const posFilter = state.position ? state.position.toUpperCase() : "";
 
   if (state.universe === "prospects") {
@@ -2522,7 +2526,7 @@ function renderRankingsPNG(players, posLabel, sortLabel) {
   // Subtitle (sort + season)
   ctx.font = "14px 'Caveat', cursive";
   ctx.fillStyle = "rgba(26,26,46,0.5)";
-  const seasonText = state.season === "career" ? "career" : state.season || "2024";
+  const seasonText = state.season === "career" ? "career" : state.season || "Latest";
   ctx.fillText(`ranked by ${sortLabel} — ${seasonText} season`, W / 2, padY + 46);
 
   // Content area
@@ -5636,7 +5640,7 @@ function exportTradeValuesPNG() {
   // Subtitle
   ctx.font = "16px 'Caveat', cursive";
   ctx.fillStyle = "rgba(26,26,46,0.5)";
-  const seasonText = state.season === "career" ? "career" : state.season || "2024";
+  const seasonText = state.season === "career" ? "career" : state.season || "Latest";
   ctx.fillText("dynasty trade currency — " + seasonText + " season", W / 2, padY + 48);
 
   let y = padY + titleH;

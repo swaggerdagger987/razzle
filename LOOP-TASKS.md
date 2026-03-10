@@ -1,70 +1,68 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 16 (Rename War Room → Situation Room) — COMPLETE
-- All 5 tasks PASS
+- Phase: 17 (Expand Data to 2015-2025)
+- All 4 tasks PASS
 - Stage: PHASE GATE
 - Next: Commit and push
 
-## Phase 16: Rename War Room → Situation Room
-**Exit Criterion**: All references to "War Room" are renamed to "Situation Room" across the codebase — page titles, nav links, display names, CLAUDE.md, design docs, and any UI copy. The agents.html filename stays but the user-facing name is "Situation Room" everywhere.
+## Phase 17: Expand Data to 2015-2025 (NFL + College)
+**Exit Criterion**: Both NFL and college data adapters fetch and load seasons 2015 through 2025 into terminal.db. The Lab's year/season filters reflect all available years. All screener queries, panels, and charts work correctly across the full 2015-2025 range. Currently only 2024 data is loaded — this must cover all 11 seasons.
 
-### Task 1: Rename War Room → Situation Room in all standalone HTML nav/footer links (~68 pages)
+### Task 1: Update NFL adapter default seasons to 2015-current
 **Status**: PASS
 **Attempts**: 1
-**Notes**: Bulk sed replacement across all 72 frontend HTML files. Nav links and footer links all updated.
+**Notes**: Changed `main()` default from `[current_nfl_season()]` to `list(range(2015, current_nfl_season() + 1))`. CLI `--seasons` override still works.
 
-### Task 2: Rename War Room → Situation Room in agents.html (the main page)
+### Task 2: Update render.yaml build command to include 2025 season
 **Status**: PASS
 **Attempts**: 1
-**Notes**: Title, meta tags, h1, nav, canvas label, pro upsell text, footer all updated. File stays agents.html.
+**Notes**: Added 2025 to NFL adapter seasons list in render.yaml buildCommand. College adapter already had 2025.
 
-### Task 3: Rename War Room → Situation Room in index.html (home page)
+### Task 3: Fix hardcoded 2024 season fallbacks in frontend
 **Status**: PASS
 **Attempts**: 1
-**Notes**: Nav, hero section ("Six Minds. One Situation Room."), pricing copy, email waitlist, footer, JS comments all updated.
+**Notes**: lab.js fallbacks now use dynamic `_nflYear` (month >= 7 ? year : year - 1). index.html college link stripped of hardcoded `&season=2024`. Display-only `|| "2024"` replaced with `|| "Latest"`.
 
-### Task 4: Rename War Room → Situation Room in warroom.js, lab.html, lab.js
+### Task 4: Verify standalone pages use dynamic season data from API
 **Status**: PASS
 **Attempts**: 1
-**Notes**: warroom.js palette comment, memory injection comment, API header, bio cards comment. lab.html nav link. lab.js had no occurrences.
-
-### Task 5: Rename War Room → Situation Room in docs and config (CLAUDE.md, DESIGN.md, ROADMAP.md, NORTH_STAR.md, agent-personas/*.md)
-**Status**: PASS
-**Attempts**: 1
-**Notes**: All docs, both ROADMAP.md files, CLAUDE.md, and all 6 agent persona files updated.
+**Notes**: All 37+ standalone HTML pages confirmed using dynamic `data.available_seasons` from API endpoints. No hardcoded season values in any standalone page. Backend `get_filter_options` and `fetch_college_filter_options` query `DISTINCT season` from DB.
 
 ---
 
-## Phase 15: QA + UX Audit for Phases 11-14 — COMPLETE
+## Phase 16: Rename War Room -> Situation Room -- COMPLETE
+**Status**: All 5 tasks PASS
+
+## Phase 15: QA + UX Audit for Phases 11-14 -- COMPLETE
 **Status**: All 2 tasks PASS
 
-## Phase 14: Prospect Athletic Radar — COMPLETE
+## Phase 14: Prospect Athletic Radar -- COMPLETE
 **Status**: All 5 tasks PASS
 
-## Phase 13: Dynasty Rookie Mock Draft — COMPLETE
+## Phase 13: Dynasty Rookie Mock Draft -- COMPLETE
 **Status**: All 5 tasks PASS
 
-## Phase 12: Panel Export & Shareability — COMPLETE
+## Phase 12: Panel Export & Shareability -- COMPLETE
 **Status**: All 5 tasks PASS
 
-## Phase 11: QA + UX Audit — Auto-Generated Fixes — COMPLETE
+## Phase 11: QA + UX Audit -- Auto-Generated Fixes -- COMPLETE
 **Status**: All 5 tasks PASS
 
-## Phase 10: QA + UX Audit — Auto-Generated Fixes — COMPLETE
+## Phase 10: QA + UX Audit -- Auto-Generated Fixes -- COMPLETE
 **Status**: All 5 tasks PASS
 
-## Phase 9: Lab Sidebar Intelligence — COMPLETE
+## Phase 9: Lab Sidebar Intelligence -- COMPLETE
 **Status**: All 5 tasks PASS
 
-## Phase 8: QA + UX Audit for Phase 7 — COMPLETE
+## Phase 8: QA + UX Audit for Phase 7 -- COMPLETE
 **Status**: All 3 tasks PASS
 
-## Phase 7: Lab Polish — COMPLETE
+## Phase 7: Lab Polish -- COMPLETE
 **Status**: All 8 tasks PASS
 
-## Phase 6: QA + UX Audit — Auto-Generated Fixes — COMPLETE
+## Phase 6: QA + UX Audit -- Auto-Generated Fixes -- COMPLETE
 **Status**: All 6 tasks PASS
 
-## Phase 5: College Football Integration — COMPLETE
+## Phase 5: College Football Integration -- COMPLETE
 **Status**: All 8 tasks PASS

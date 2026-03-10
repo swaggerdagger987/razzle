@@ -1215,7 +1215,8 @@ def current_nfl_season():
 
 
 def main():
-    seasons = [current_nfl_season()]
+    # Default: 2015 through current season (expanded for deeper historical analysis)
+    seasons = list(range(2015, current_nfl_season() + 1))
 
     if len(sys.argv) > 1 and sys.argv[1] == "--seasons":
         seasons = [int(s) for s in sys.argv[2:]]

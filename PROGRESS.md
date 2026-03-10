@@ -1,6 +1,19 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 16 — Rename War Room → Situation Room (COMPLETE)
+## Current Phase: Phase 17 — Expand Data to 2015-2025 (COMPLETE)
+
+**Exit Criterion MET**: NFL adapter defaults to 2015-current season (11 seasons). render.yaml build command includes 2025 for NFL. College adapter already covered 2015-2025. Frontend season fallbacks made dynamic (no hardcoded 2024). All 37+ standalone pages confirmed using dynamic API-driven season selectors. Lab filter options query DISTINCT seasons from DB.
+
+### Phase 17 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Update NFL adapter default seasons to 2015-current | DONE | `main()` defaults to `range(2015, current_nfl_season() + 1)` |
+| 2 | Update render.yaml build command to include 2025 | DONE | Added 2025 to NFL seasons list |
+| 3 | Fix hardcoded 2024 season fallbacks in frontend | DONE | Dynamic `_nflYear` fallback, removed hardcoded college link |
+| 4 | Verify standalone pages use dynamic season data | DONE | All 37+ pages use `data.available_seasons` from API |
+
+## Previous Phase: Phase 16 — Rename War Room → Situation Room (COMPLETE)
 
 **Exit Criterion MET**: All references to "War Room" renamed to "Situation Room" across 72 HTML files, warroom.js, lab.js, CLAUDE.md, DESIGN.md, ROADMAP.md (x2), NORTH_STAR.md, and 6 agent-persona files. agents.html filename preserved. Zero remaining "War Room" references in active code.
 
