@@ -1,76 +1,52 @@
-# QA + UX Audit — Phases 76-80
+# QA + UX Audit — Phases 81-85
 
-**Date**: 2026-03-10
-**Scope**: matchups.html, usage.html, yoy.html, airyards.html, explorer.html + backend endpoints
-**Pages audited**: 5 pages (Matchup Heatmap, Snap Count Trends, Year-over-Year, Air Yards, Stat Explorer)
+**Audit Date**: 2026-03-10
+**Phases Covered**: 81 (QA fixes), 82 (Red Zone), 83 (Efficiency), 84 (Consistency), 85 (Strength of Schedule)
+**Files Audited**: redzone.html, efficiency.html, consistency.html, schedule.html, server.py (lines 1158-1207), live_data.py (lines 6034-6718)
 
 ---
 
 ## QA FINDINGS
 
-### CRITICAL
-
-1. **usage.html: `window` parameter shadows global `window` object** — Line 540: `loadData(season, position, window)` shadows the browser's `window` object. Player row click handlers using `window.location.href` throw TypeError. **Fix**: Rename parameter to `trendWindow`.
-
 ### HIGH
 
-2. **yoy.html, airyards.html, explorer.html: Analytics pageview never fires** — All three call `trackPageview()` which doesn't exist. matchups.html and usage.html use the working inline `fetch('/api/analytics/pageview', ...)` pattern. **Fix**: Replace with inline fetch pattern.
+1. **SOS endpoint uses `display_name` instead of `full_name`** — `backend/live_data.py` line 6593: `fetch_strength_of_schedule` selects `p.display_name` while all other phase 82-84 endpoints use `p.full_name`. SOS page shows abbreviated names (e.g., "J.Smith") while other pages show full names ("John Smith"). **Fix**: Change `p.display_name` to `p.full_name`.
 
-3. **usage.html: app.js loaded AFTER inline script** — Line 646 loads app.js after the inline script block runs. `initQuickSearch()` call silently fails. **Fix**: Move `<script src="app.js">` before inline script.
-
-4. **explorer.html: XSS via unescaped `p.x` and `p.y` in tooltip** — Lines 562-563 render API values directly via innerHTML without escaping. **Fix**: Wrap with `escapeHtml(String(p.x))` and `escapeHtml(String(p.y))`.
+2. **SOS endpoint missing `fantasy_relevant = 1` filter** — `backend/live_data.py` line 6598: The SOS player query doesn't include `AND p.fantasy_relevant = 1`, unlike redzone (line 6065), efficiency (line 6239), and consistency (line 6399). Could include inactive/irrelevant players. **Fix**: Add `AND p.fantasy_relevant = 1` to the WHERE clause.
 
 ### MEDIUM
 
-5. **airyards.html: Missing QB position badge CSS** — WR/RB/TE badge colors defined but not QB. **Fix**: Add `.air-pos-badge.qb { background: var(--pos-qb); }`.
+3. **Efficiency YAC/Rec can display negative values** — `backend/live_data.py` line 6286: `(rec_yards - air_yards) / receptions` can produce negative values when air yards exceeds actual receiving yards. Creates confusing negative YAC values in the UI. **Fix**: Clamp to `max(0, ...)`.
 
-6. **explorer.html: Event listener accumulation (memory leak)** — Every `drawChart()` call adds new event listeners without removing previous ones. **Fix**: Remove old listeners before adding new, or add once with closure.
+4. **Consistency uses population variance instead of sample variance** — `backend/live_data.py` line 6442: `/ n` instead of `/ (n - 1)` (Bessel's correction). For 6-game samples, underestimates true variance by ~17%. **Fix**: Change to `/ (n - 1)`.
 
-7. **matchups.html: 1px border on legend swatches violates design guide** — Design guide: "NO thin 1px borders." **Fix**: Change to `2px solid var(--ink)`.
+5. **Efficiency "Y/Tch" column header cryptic** — `frontend/efficiency.html` line 427: "Y/Tch" abbreviation is unclear to casual fantasy players. Tooltip exists but screenshots lose tooltips. **Fix**: Rename label to "Yd/Tch" or "YPT".
 
-8. **airyards.html, matchups.html: Season selector only populates once** — If first API call fails, selector stays empty. **Fix**: Always repopulate or handle error case.
-
-9. **yoy.html, airyards.html, explorer.html: PNG export missing watermark** — Unlike matchups/usage, these 3 pages export without "razzle.lol" branding. **Fix**: Add canvas watermark after html2canvas capture.
+6. **Consistency CoV displayed as raw decimal (0.342) instead of percentage** — `frontend/consistency.html` line 488: CoV as "0.342" doesn't immediately communicate meaning. "34.2%" would be more intuitive. **Fix**: Multiply by 100 and display with 1 decimal + "%" suffix.
 
 ### LOW
 
-10. **explorer.html: Tooltip shows raw unformatted values** — Should format with `toFixed(1)`.
-11. **explorer.html: Click-while-not-hovering results in silent no-op** — `hoveredPlayer` may be null between hover and click.
-12. **server.py: No validation of x_stat/y_stat at server layer** — Live_data.py validates, but defense-in-depth gap. Add allowlist in server.py.
+7. **Position tab borders use 2px instead of 3px** — All 4 new pages: Tab container borders use `2px solid var(--ink)` while DESIGN.md specifies 3px for borders. Arguably appropriate for smaller UI elements — no action needed.
+
+8. **No "Home" link in page footers** — All 4 new pages: Footer nav links start with "The Lab" but don't include Home. Users can use the logo. Minor inconsistency.
+
+9. **Imports inside function bodies** — `import math` and `from collections import defaultdict` inside consistency and SOS functions. Works but unconventional. No functional impact.
 
 ---
 
 ## UX FINDINGS
 
-### CRITICAL
-
-1. **airyards.html: "Reg" column header is unreadable** — The primary insight (regression delta) labeled "Reg" with no tooltip. Users cannot determine what this number means.
-
-### HIGH
-
-2. **airyards.html: Multiple unexplained abbreviations** — "WOPR", "RACR", "aDOT", "AY%", "Reg" — no tooltips anywhere. Advanced analytics page is inaccessible without prior knowledge.
-
-3. **explorer.html: Clicking dot navigates away without warning** — Cursor is `crosshair` not `pointer`, and clicking accidentally leaves the page. Users lose axis selection.
-
-4. **usage.html: "Usage" nav vs "Snap Count Trends" H1 naming mismatch** — Sets wrong expectations.
-
 ### MEDIUM
 
-5. **Navigation: "YoY" is jargon** — Many users won't recognize the abbreviation.
-6. **explorer.html: No player labels on outlier dots** — Must hover every dot to identify players.
-7. **usage.html: "Delta" column doesn't specify window context** — Should include window size.
-8. **yoy.html: Mobile hides too many columns** — Delta lacks context without previous season value.
-9. **airyards.html: No explanation for missing QB tab** — Users may think it's a bug.
-10. **matchups.html: Click behavior in ALL mode is disorienting** — Silently switches position view.
-11. **explorer.html: X/Y dropdowns start empty** — No placeholder or default options before API loads.
+1. **Consistency CoV number lacks intuitive meaning** — A casual dynasty user seeing "CoV: 0.342" won't know if that's good or bad without context. The grade badge helps, but the raw number is opaque. Displaying as "34.2%" with color tinting would add immediate comprehension.
+
+2. **Efficiency Catch Rate shows 0% for pure rushers** — `frontend/efficiency.html` line 490: When a player has 0 targets, catch rate displays as "-", which is correct. But the column still appears for RBs who are primarily rushers, adding visual noise.
 
 ### LOW
 
-12. **matchups.html: "Total" column header is vague** — Should be "Avg PPG Allowed".
-13. **matchups.html: "cake"/"avoid" annotations undocumented** — Slang without legend.
-14. **explorer.html: No correlation coefficient shown** — Trendline without R-squared.
-15. **usage.html: Empty annotation column header** — `<th>` with no text.
-16. **Cross-page: Watermark CSS implementation varies** — Different approaches (class vs inline).
+3. **Default sort arrow direction could confuse** — Consistency rock_solid sorts ascending CoV (▲), which is correct (lowest = best) but ▲ usually implies "highest first" in other tables. No action needed — behavior is correct.
+
+4. **Schedule page "cupcake" annotation may be unclear to non-US users** — "cupcake schedule" is US sports slang. The meaning is clear from context. No action needed.
 
 ---
 
@@ -78,8 +54,10 @@
 
 | Severity | QA | UX | Total |
 |----------|----|----|-------|
-| CRITICAL | 1  | 1  | 2     |
-| HIGH     | 3  | 3  | 6     |
-| MEDIUM   | 5  | 7  | 12    |
-| LOW      | 3  | 5  | 8     |
-| **Total**| **12** | **16** | **28** |
+| CRITICAL | 0  | 0  | 0     |
+| HIGH     | 2  | 0  | 2     |
+| MEDIUM   | 4  | 2  | 6     |
+| LOW      | 3  | 2  | 5     |
+| **Total**| **9** | **4** | **13** |
+
+All previous Phase 76-80 CRITICAL/HIGH issues were resolved in Phase 81. No new CRITICALs found. Two HIGH backend data issues need fixing (SOS name field + missing filter).

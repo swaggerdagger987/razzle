@@ -1,6 +1,22 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 85 — Strength of Schedule Dashboard (COMPLETE)
+## Current Phase: Phase 86 — QA + UX Audit Fixes (IN PROGRESS)
+
+**Exit criterion**: All HIGH findings from QA-AUDIT.md (Phases 81-85) resolved. SOS endpoint uses `full_name` instead of `display_name`. SOS endpoint includes `fantasy_relevant = 1` filter. MEDIUM fixes applied: efficiency YAC/Rec clamped to non-negative, consistency uses sample variance, efficiency column header renamed, consistency CoV displayed as percentage.
+
+### Phase 86 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | HIGH fixes — SOS backend data issues | PENDING | display_name→full_name, fantasy_relevant filter |
+| 2 | MEDIUM fixes — Backend computation | PENDING | YAC clamp, Bessel's correction |
+| 3 | MEDIUM fixes — Frontend labels | PENDING | Y/Tch→YPT, CoV as percentage |
+| 4 | Smoke test | PENDING | Syntax + fix verification |
+
+### Decisions Log
+- **QA+UX audit at Phase 85**: Triggered by phase 85 being a multiple of 5. Audited all files from phases 81-85. Found 2 HIGH backend issues (SOS name field + missing filter), 6 MEDIUM issues (computation + display), 5 LOW (no action needed). No CRITICALs — Phase 81 QA fixes resolved all prior CRITICALs effectively.
+
+## Previous Phase: Phase 85 — Strength of Schedule Dashboard (COMPLETE)
 
 **Exit criterion MET:** /schedule.html page shows strength of schedule analysis with two sections: "Schedule Suppressed" (players who faced the hardest schedules — buy targets with potentially suppressed stats) and "Schedule Inflated" (players who faced the easiest schedules — sell candidates with potentially inflated stats). For each player: position badge, headshot, name, team, actual PPG, SOS grade badge (A+ to F based on schedule difficulty percentile — A+ = hardest schedule), SOS Rank (1=hardest), Avg Opp PPG Allowed, Delta badge (green=hard schedule, red=easy schedule), GP, and Caveat annotation. Position filter tabs (All/QB/RB/WR/TE). Season selector. Sortable columns with sort state tracking per section. Click player row → player profile. PNG export via html2canvas with watermark. Responsive at 768px + 480px with hide-mobile columns. /api/strength-of-schedule endpoint computes defense PPG-allowed-by-position grid, then per-player average opponent PPG allowed across all weeks played, sos_delta = league_avg - avg_opp_ppg (positive = harder than average), grades by schedule difficulty percentile, splits into schedule_suppressed (hardest SOS) and schedule_inflated (easiest SOS). Min 6 games + 2 PPG filter. "Schedule" nav link added to all 26 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors.
 
