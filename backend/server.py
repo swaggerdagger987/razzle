@@ -21,8 +21,9 @@ from collections import defaultdict
 from . import live_data
 from . import auth as auth_module
 from . import billing as billing_module
+from .logging_config import setup_logging
 
-logger = logging.getLogger("razzle")
+logger = logging.getLogger("razzle.server")
 
 # Simple in-memory rate limiter for auth endpoints
 _rate_buckets = defaultdict(list)  # ip -> [timestamps]
@@ -150,6 +151,7 @@ def bootstrap_database():
 
 @asynccontextmanager
 async def lifespan(app):
+    setup_logging()
     bootstrap_database()
     auth_module.initialize_users_db()
     billing_module.initialize_subscriptions_table()
@@ -170,6 +172,29 @@ app.add_middleware(
 )
 
 FRONTEND_DIR = Path(__file__).parent.parent / "frontend"
+
+_req_logger = logging.getLogger("razzle.requests")
+
+@app.middleware("http")
+async def request_logging_middleware(request: Request, call_next):
+    """Log every HTTP request with method, path, status, and duration."""
+    path = request.url.path
+    method = request.method
+    start = _time.time()
+    try:
+        response = await call_next(request)
+    except Exception:
+        duration_ms = round((_time.time() - start) * 1000)
+        _req_logger.exception("500 %s %s (%dms)", method, path, duration_ms)
+        raise
+    duration_ms = round((_time.time() - start) * 1000)
+    status = response.status_code
+    # Skip noisy health checks at DEBUG level
+    if path == "/api/health":
+        _req_logger.debug("%d %s %s (%dms)", status, method, path, duration_ms)
+    else:
+        _req_logger.info("%d %s %s (%dms)", status, method, path, duration_ms)
+    return response
 
 
 # ---------------------------------------------------------------------------
