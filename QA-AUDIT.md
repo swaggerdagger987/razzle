@@ -1,83 +1,98 @@
-# QA + UX Audit — Phases 46-49
+# QA + UX Audit — Phases 51-55
 
-**Audit Date**: 2026-03-09
-**Scope**: All files changed in Phases 46-49 (QA fixes, home page widgets, bio cards, performance)
-**Files Audited**: backend/{auth,server,live_data}.py, adapters/nflverse_adapter.py, frontend/{index,formula-store,lab,warroom,agents}.{html,js}
+**Date**: 2026-03-09
+**Scope**: Phase 51 (Manager Profiles), Phase 52 (Agent Memory), Phase 53 (Reddit Launch Prep), Phase 54 (Heat Coloring), Phase 55 (Player Headshots)
 
 ---
 
 ## QA FINDINGS
 
-### CRITICAL-1: XSS in dynamic OG tags — FIXED
-**File**: backend/server.py (lab, player, compare OG handlers)
-**Issue**: Player names and URL params interpolated into meta tag content without escaping. A name containing `"` could break out of the attribute.
-**Fix**: Added `_html.escape(og_title, quote=True)` and `_html.escape(og_desc, quote=True)` before all OG tag substitutions in lab, player profile, and compare handlers.
+### CRITICAL
 
-### CRITICAL-2: Stored XSS in formula review text — FIXED
-**File**: frontend/formula-store.js:503
-**Issue**: `existingUserReview.text` inserted into innerHTML without escaping while adjacent fields used `escapeHtml()`.
-**Fix**: Wrapped in `escapeHtml(existingUserReview.text)`.
+**QA-1: XSS via unescaped Sleeper API data in league-intel.html**
+- **File**: `frontend/league-intel.html`, lines 441, 443, 529, 535, 538-540
+- **What**: Sleeper API data (league.name, p.name, p.team, userId, pos) injected into innerHTML without `escapeHtml()`. league_id and userId interpolated into onclick attribute without `escapeAttr()`.
+- **Risk**: A malicious Sleeper league name or compromised API response injects arbitrary HTML/JS.
+- **Fix**: Wrap all Sleeper-sourced values in `escapeHtml()` for innerHTML and `escapeAttr()` for attributes.
 
-### HIGH-1: User enumeration via login errors — FIXED
-**File**: backend/auth.py:146-152
-**Issue**: Different error messages for "user not found" (404) vs "invalid password" (401).
-**Fix**: Both now return `"Invalid email or password"` with 401 status.
+### HIGH
 
-### HIGH-2: Rate limiter memory leak — FIXED
-**File**: backend/server.py:27-41
-**Issue**: `_rate_buckets` dict grows without bound from unique IPs that never return.
-**Fix**: Added `_RATE_MAX_IPS = 10000` cap. When exceeded, stale entries (older than window) are pruned.
+**QA-2: FILTER_COLUMN_MAP references non-existent DB columns**
+- **File**: `backend/live_data.py`, lines 788-789, 799
+- **What**: `pass_attempts` and `total_tds` in FILTER_COLUMN_MAP reference columns that don't exist in player_week_stats (actual columns are `attempts` and `touchdowns`). Filtering by these keys causes runtime SQL errors (500 response).
+- **Fix**: Change to `"pass_attempts": "SUM(s.attempts)"` and `"total_tds": "SUM(s.touchdowns)"`.
 
-### HIGH-3: Unauthenticated formula rating — DEFERRED
-**File**: backend/server.py:607
-**Issue**: POST /api/formulas/{id}/rate has no auth check. Vote stuffing possible.
-**Note**: Low impact pre-launch. Will address when auth is required for community features.
+### MEDIUM
 
-### MEDIUM-1: Position not escaped in featured cards — FIXED
-**File**: frontend/index.html:1085,1103,1121
-**Issue**: `p.position` interpolated without `escapeHtml()` in featured card rows.
-**Fix**: All three instances now use `escapeHtml(p.position)`.
+**QA-3: Sleeper players endpoint (~1MB) re-fetched on every league card expand**
+- **File**: `frontend/league-intel.html`, lines 492-496
+- **What**: `/players/nfl` returns ~1MB of JSON, fetched fresh every time `toggleLeague` is called. Never cached.
+- **Fix**: Cache in a module-level variable after first fetch.
 
-### MEDIUM-2: No input length validation on formula publishing — DEFERRED
-**Issue**: Name, description, creator_name have no max length.
-**Note**: Low risk pre-launch. Will add validation when community features go live.
+**QA-4: 18 concurrent Sleeper transaction requests per manager profile load**
+- **File**: `frontend/league-intel.html`, lines 620-631
+- **What**: Fires 18 simultaneous requests to Sleeper API for weeks 1-18. Aggressive for Sleeper's infrastructure.
+- **Fix**: Batch requests (6 at a time) or cache results in localStorage.
 
-### MEDIUM-3: _cached() has no max size — ACCEPTED
-**Issue**: Cache dict is unbounded. Only 2 keys currently used.
-**Note**: Acceptable for current usage. The function is only called for filter_options and featured.
+**QA-5: 1px borders on league-intel stat badges violate design guide**
+- **File**: `frontend/league-intel.html`, lines 261-265, 167
+- **What**: `.profile-stat` uses `border: 1px solid var(--ink-faint)`, `.roster-pos` uses `border: 1.5px`. Design guide says no thin 1px borders on primary elements.
+- **Fix**: Change to `border: 2px solid var(--ink-faint)`.
+
+### LOW
+
+**QA-6: formatTimeAgo shows "0 min ago" for recent entries**
+- **File**: `frontend/warroom.js`, lines 2412-2418
+- **What**: Entries less than 60 seconds old show "0 min ago" instead of "just now".
+- **Fix**: Add check `if (mins < 1) return 'just now';`.
+
+**QA-7: Duplicate esc() function in player.js**
+- **File**: `frontend/player.js`, lines 773-777
+- **What**: Local `esc()` duplicates `escapeHtml()` from app.js. Maintenance risk.
+
+**QA-8: Dead group variable assignment in league-intel.html**
+- **File**: `frontend/league-intel.html`, line 522
+- **What**: `group` variable assigned but never read.
 
 ---
 
 ## UX FINDINGS
 
-### HIGH-1: Shuffle button nearly invisible — FIXED
-**File**: frontend/index.html:827
-**Issue**: Ghost button with `color:var(--ink-light)` on dark bg at 11px — nearly invisible.
-**Fix**: Changed to `color:var(--yellow)`, `border-color:var(--yellow)`, `font-size:13px`.
+### HIGH
 
-### HIGH-2: Demo section accessibility — FIXED
-**File**: frontend/index.html:824
-**Issue**: No aria-live region on demo cards. Screen readers not notified on shuffle.
-**Fix**: Added `aria-live="polite"` to `#demoCards` container.
+**UX-1: Heat coloring has no legend or visual key**
+- When a user toggles Heat (H shortcut), cells turn green/red but there's no indicator explaining what the colors mean. A user seeing this for the first time has no context. A small legend or tooltip on the Heat button ("per-position percentile: green = elite, red = below average") would eliminate confusion.
 
-### HIGH-3: Featured cards buried below static content — DEFERRED
-**Issue**: Featured cards (live data) sit below static marketing sections.
-**Note**: Home page layout is a product decision. Current order (hero → features → mascot → live data → bios → demo → pricing) builds progressively. Will evaluate after Reddit launch metrics.
+**UX-2: Heat button stays visible and active in college/prospect mode where results are sparse**
+- The Heat toggle works in all universes but college/prospect data has few numeric columns, making heat coloring mostly invisible. The button should either be hidden in non-NFL modes or show a tooltip noting limited data.
 
-### HIGH-4: Pricing button dead-end — ACCEPTED
-**Issue**: "Get Started" falls back to /agents.html if startCheckout not defined.
-**Note**: Stripe checkout IS wired (Phase 43). The fallback only triggers if billing.js fails to load.
+### MEDIUM
 
-### MEDIUM-1 through MEDIUM-10: Various UX polish items — DEFERRED
-**Note**: Featured card link styling, toast mobile text, API key UX, pricing card mobile width, config panel mobile positioning. All logged for future polish phases.
+**UX-3: No visual feedback when headshot fails to load (brief flash)**
+- When a headshot image fails to load, there's a brief flash of the broken-image placeholder before onerror fires. Setting a CSS background on the img element would make the transition seamless.
+
+**UX-4: Default Lab table column set may be too dense for first-time visitors**
+- A new user sees many columns on first load. Headshots help identify players but column density can overwhelm.
+
+### LOW
+
+**UX-5: College/prospect initials headshots could confuse users who expect photos**
+- College players show position-colored initials. Consistent but no explanation for why NFL has photos and college doesn't.
 
 ---
 
-## Summary
+## ACTION ITEMS
 
-| Severity | Found | Fixed | Deferred |
-|----------|-------|-------|----------|
-| CRITICAL | 2 | 2 | 0 |
-| HIGH | 3 QA + 4 UX | 4 | 3 |
-| MEDIUM | 3 QA + 10 UX | 1 | 12 |
-| LOW | 3 QA + 6 UX | 0 | 9 |
+| Priority | Finding | Action |
+|----------|---------|--------|
+| CRITICAL | QA-1 | Escape all Sleeper API data in league-intel.html |
+| HIGH | QA-2 | Fix FILTER_COLUMN_MAP column names in live_data.py |
+| HIGH | UX-1 | Add heat coloring legend/tooltip |
+| HIGH | UX-2 | Disable/hide Heat in non-NFL modes or add tooltip |
+| MEDIUM | QA-3 | Cache Sleeper players response |
+| MEDIUM | QA-4 | Batch Sleeper transaction requests |
+| MEDIUM | QA-5 | Fix 1px borders in league-intel.html |
+| MEDIUM | UX-3 | Add CSS fallback background on headshot img |
+| LOW | QA-6 | Fix formatTimeAgo "0 min ago" |
+| LOW | QA-7, QA-8 | Dead code cleanup (grouped) |
+| LOW | UX-4, UX-5 | Polish notes (logged, not tasked) |
