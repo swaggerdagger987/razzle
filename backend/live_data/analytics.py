@@ -366,7 +366,7 @@ def fetch_stat_leaders(season=None, position=None, limit=10):
                             p.player_id, p.full_name, p.position, p.team,
                             p.headshot_url,
                             COUNT(DISTINCT s.week) as games,
-                            AVG(m.value) as stat_value
+                            AVG(m.stat_value) as stat_value
                         FROM players p
                         JOIN player_week_stats s
                             ON s.player_id = p.player_id AND s.season = ?
