@@ -1,6 +1,18 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 109 — Player Percentiles (COMPLETE)
+## Current Phase: Phase 110 — QA+UX Audit Fixes (Phases 106-109) (COMPLETE)
+
+**Exit criterion MET:** All HIGH and MEDIUM findings resolved. QA-1: Career row rate stats now computed from weighted counting-stat totals (rec/tgt, completions/att, rush_yd/car) instead of simple season averages. QA-2: Draft class position tab borders 2px to 3px. QA-3: Percentile bar track border 2px to 3px. QA-4: Career compare legend dot border 2px to 3px. QA-5: Draft class player join now strips Jr./III/II suffixes for better name matching.
+
+### Phase 110 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | HIGH fix — career row rate stats (QA-1) | DONE | Weighted from counting stat totals |
+| 2 | MEDIUM fixes (QA-2-5) | DONE | 3px borders, suffix-stripped name join |
+| 3 | Smoke test | DONE | Python OK, braces OK |
+
+## Previous Phase: Phase 109 — Player Percentiles (COMPLETE)
 
 **Exit criterion MET:** /percentiles.html lets users search for any player and see position-relative percentile rankings across 8 stat categories with color-coded horizontal bars. Position-specific metrics (QB: pass yd/g, comp%, rush yd/g, etc.; RB: rush yd/g, ypc, rec/g, etc.; WR/TE: rec/g, tgt/g, rec yd/g, ypr, catch%, etc.). Bar colors scale from green (90th+) through blue/orange to red (<25th). Average percentile summary. Season selector, URL state (?player=ID&season=), PNG export with watermark. GET /api/player-percentiles endpoint computes percentiles vs. same-position players with 4+ games. 22 escapeHtml calls, 86/86 braces balanced. "Percentiles" nav link on all 45 pages. Sitemap + tools hub entry. Design matches DESIGN.md.
 

@@ -813,10 +813,18 @@
       } else if (ck === 'total_ppr') {
         html += '<td>' + escapeHtml(String(career.total_ppr)) + '</td>';
       } else if (ck === 'catch_rate' || ck === 'comp_pct' || ck === 'ypc' || ck === 'ypr' || ck === 'td_rate') {
-        // Average rates across career
-        var sumVal = 0;
-        for (var si = 0; si < seasons.length; si++) sumVal += (seasons[si][ck] || 0);
-        html += '<td>' + escapeHtml(String(Math.round(sumVal / seasons.length * 10) / 10)) + (ck === 'catch_rate' || ck === 'comp_pct' ? '%' : '') + '</td>';
+        // Weighted career rates from counting stat totals
+        var num = 0, den = 0;
+        for (var si = 0; si < seasons.length; si++) {
+          var ss = seasons[si];
+          if (ck === 'catch_rate') { num += (ss.rec || 0); den += (ss.tgt || 0); }
+          else if (ck === 'comp_pct') { num += (ss.completions || 0); den += (ss.pass_att || 0); }
+          else if (ck === 'ypc') { num += (ss.rush_yd || 0); den += (ss.car || 0); }
+          else if (ck === 'ypr') { num += (ss.rec_yd || 0); den += (ss.rec || 0); }
+          else if (ck === 'td_rate') { num += (ss.total_td || 0); den += ((ss.car || 0) + (ss.tgt || 0)); }
+        }
+        var rateVal = den > 0 ? Math.round(num / den * (ck === 'catch_rate' || ck === 'comp_pct' || ck === 'td_rate' ? 1000 : 10)) / (ck === 'catch_rate' || ck === 'comp_pct' || ck === 'td_rate' ? 10 : 1) : 0;
+        html += '<td>' + escapeHtml(String(rateVal)) + (ck === 'catch_rate' || ck === 'comp_pct' ? '%' : '') + '</td>';
       } else {
         // Sum counting stats
         var total = 0;

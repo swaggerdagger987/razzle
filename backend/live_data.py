@@ -9529,8 +9529,10 @@ def fetch_draft_class(draft_year=None, position=None):
                 COUNT(DISTINCT s.season) as seasons_played,
                 COUNT(DISTINCT s.week) as total_games
             FROM draft_picks d
-            LEFT JOIN players p ON LOWER(p.full_name) = LOWER(d.player_name)
-                AND p.position = d.position
+            LEFT JOIN players p ON p.position = d.position
+                AND (LOWER(p.full_name) = LOWER(d.player_name)
+                     OR LOWER(REPLACE(REPLACE(REPLACE(p.full_name, ' Jr.', ''), ' III', ''), ' II', ''))
+                        = LOWER(REPLACE(REPLACE(REPLACE(d.player_name, ' Jr.', ''), ' III', ''), ' II', '')))
             LEFT JOIN player_week_stats s ON s.player_id = p.player_id
             WHERE d.season = ?
               AND d.position IN ('QB', 'RB', 'WR', 'TE')
