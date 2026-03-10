@@ -1,6 +1,16 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 136 — Garbage Time Detector (COMPLETE)
+## Current Phase: Phase 137 — Season Pace Tracker (COMPLETE)
+
+**Exit criterion MET:** /seasonpace.html projects season totals based on per-game pace and tracks milestone seasons. Shows players on pace for 1000/1500 yard, 4000/5000 pass yard, 10/30/40 TD, 100 rec, 500 rush yd (QB) milestones. Gold badges for elite milestones, silver for standard. Sorted by milestone count then PPG. Position filter tabs, season selector, PNG export with watermark. GET /api/season-pace returns data. 8 escapeHtml calls, 54/54 braces balanced. "Pace" nav link on all 67 pages. Sitemap + tools hub entry under Performance Analysis.
+
+### Phase 137 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend + frontend + nav + smoke test | DONE | fetch_season_pace, milestone badges, 8 escapeHtml, 67/67 nav |
+
+## Previous Phase: Phase 136 — Garbage Time Detector (COMPLETE)
 
 **Exit criterion MET:** /garbagetime.html identifies stat padders (high garbage time %) vs clean producers (low garbage time % + solid PPG). GT% badges, avg score differential, bar visualization. Position filter tabs, season selector, PNG export with watermark. GET /api/garbage-time returns data. 12 escapeHtml calls, 65/65 braces balanced. "Garbage Time" nav link on all 66 pages. Sitemap + tools hub entry under Performance Analysis.
 

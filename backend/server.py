@@ -942,6 +942,7 @@ def sitemap_xml():
         ("/dualthreat.html", "0.8", "weekly"),
         ("/snapefficiency.html", "0.8", "weekly"),
         ("/garbagetime.html", "0.8", "weekly"),
+        ("/seasonpace.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1594,6 +1595,16 @@ def records(position: str = ""):
         return JSONResponse({"error": "Failed to fetch records"}, status_code=500)
 
 
+@app.get("/api/season-pace")
+def season_pace(season: int = None, position: str = None):
+    try:
+        pos = position.upper() if position else None
+        return live_data.fetch_season_pace(season=season, position=pos)
+    except Exception as e:
+        logger.error(f"season-pace error: {e}")
+        return JSONResponse({"error": "Failed to fetch season pace"}, status_code=500)
+
+
 @app.get("/api/garbage-time")
 def garbage_time(season: int = None, position: str = None):
     try:
@@ -1747,6 +1758,7 @@ def tools_hub():
                 {"name": "Dual-Threat Index", "desc": "Rush+rec versatility — who contributes in both dimensions?", "url": "/dualthreat.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Snap Efficiency", "desc": "Fantasy points per snap — who maximizes every snap they play?", "url": "/snapefficiency.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Garbage Time", "desc": "Stat padders vs clean producers — who scores in garbage time?", "url": "/garbagetime.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Season Pace", "desc": "Projected season totals and milestone tracking based on per-game pace", "url": "/seasonpace.html", "positions": ["QB", "RB", "WR", "TE"]},
             ],
         },
         {

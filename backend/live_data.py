@@ -11947,3 +11947,111 @@ def fetch_dual_threat(season=None, position=None, limit=50):
         }
     finally:
         conn.close()
+
+
+def fetch_season_pace(season=None, position=None, limit=50):
+    """Season pace tracker — projects season totals and milestone tracking."""
+    conn = get_conn()
+    try:
+        cursor = conn.cursor()
+        if not season:
+            cursor.execute("SELECT MAX(season) FROM player_season_stats")
+            season = cursor.fetchone()[0] or 2025
+
+        pos_filter = ""
+        params = [season]
+        if position:
+            pos_filter = "AND p.position = ?"
+            params.append(position)
+
+        cursor.execute(f"""
+            SELECT p.gsis_id, p.full_name, p.position, p.team,
+                   s.games, s.passing_yards, s.passing_tds,
+                   s.rushing_yards, s.rushing_tds,
+                   s.receiving_yards, s.receiving_tds, s.receptions,
+                   s.carries, s.targets
+            FROM player_season_stats s
+            JOIN players p ON p.gsis_id = s.player_id
+            WHERE s.season = ? AND p.fantasy_relevant = 1
+            {pos_filter}
+            AND s.games >= 3
+        """, params)
+
+        full_season = 17
+        players = []
+        for r in cursor.fetchall():
+            pid, name, pos, team = r[0], r[1] or "Unknown", r[2] or "RB", r[3] or "FA"
+            games = r[4] or 1
+            pass_yd = r[5] or 0
+            pass_td = r[6] or 0
+            rush_yd = r[7] or 0
+            rush_td = r[8] or 0
+            rec_yd = r[9] or 0
+            rec_td = r[10] or 0
+            recs = r[11] or 0
+            carries = r[12] or 0
+            targets = r[13] or 0
+
+            pace_factor = full_season / games
+
+            # Projected season totals
+            proj = {
+                "pass_yd": round(pass_yd * pace_factor),
+                "pass_td": round(pass_td * pace_factor, 1),
+                "rush_yd": round(rush_yd * pace_factor),
+                "rush_td": round(rush_td * pace_factor, 1),
+                "rec_yd": round(rec_yd * pace_factor),
+                "rec_td": round(rec_td * pace_factor, 1),
+                "recs": round(recs * pace_factor),
+            }
+
+            # Check milestones
+            milestones = []
+            if pos == "QB":
+                if proj["pass_yd"] >= 4000: milestones.append("4000 pass yd")
+                if proj["pass_yd"] >= 5000: milestones.append("5000 pass yd")
+                if proj["pass_td"] >= 30: milestones.append("30 pass TD")
+                if proj["pass_td"] >= 40: milestones.append("40 pass TD")
+                if proj["rush_yd"] >= 500: milestones.append("500 rush yd")
+            if pos in ("RB", "WR", "TE", "QB"):
+                if proj["rush_yd"] >= 1000: milestones.append("1000 rush yd")
+                if proj["rush_yd"] >= 1500: milestones.append("1500 rush yd")
+                if proj["rush_td"] >= 10: milestones.append("10 rush TD")
+            if pos in ("WR", "TE", "RB"):
+                if proj["rec_yd"] >= 1000: milestones.append("1000 rec yd")
+                if proj["rec_yd"] >= 1500: milestones.append("1500 rec yd")
+                if proj["rec_td"] >= 10: milestones.append("10 rec TD")
+                if proj["recs"] >= 100: milestones.append("100 rec")
+
+            if not milestones:
+                continue
+
+            # PPR for sorting
+            ppr = (pass_yd * 0.04 + pass_td * 4 +
+                   rush_yd * 0.1 + rush_td * 6 +
+                   rec_yd * 0.1 + rec_td * 6 + recs * 1)
+            ppg = ppr / games
+
+            players.append({
+                "player_id": pid,
+                "name": name,
+                "position": pos,
+                "team": team,
+                "games": games,
+                "ppg": round(ppg, 1),
+                "projected": proj,
+                "milestones": milestones,
+                "milestone_count": len(milestones),
+            })
+
+        players.sort(key=lambda x: (-x["milestone_count"], -x["ppg"]))
+        players = players[:limit]
+
+        return {
+            "players": players,
+            "season": season,
+            "full_season_games": full_season,
+            "count": len(players),
+        }
+    finally:
+        conn.close()
