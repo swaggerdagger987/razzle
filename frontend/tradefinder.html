@@ -659,7 +659,24 @@
       return resp.json();
     }).then(function(data) {
       if (data.error) {
-        body.innerHTML = '<div class="tf-error">' + escapeHtml(data.error) + '</div>';
+        if (data.error === 'not_enough_data' && data.message) {
+          var pos = (data.position || '').toLowerCase();
+          var errHtml = '<div class="tf-selected-card" style="justify-content:center;">';
+          if (data.headshot_url) {
+            errHtml += '<img class="tf-sel-headshot" src="' + escapeHtml(data.headshot_url) + '" alt="" onerror="this.style.display=\'none\'">';
+          }
+          errHtml += '<div class="tf-sel-info">';
+          errHtml += '<div class="tf-sel-name">' + escapeHtml(data.player_name || '') + '</div>';
+          errHtml += '<div class="tf-sel-meta">';
+          if (data.position) errHtml += '<span class="pos-badge ' + pos + '">' + escapeHtml(data.position) + '</span>';
+          if (data.team) errHtml += '<span>' + escapeHtml(data.team) + '</span>';
+          errHtml += '</div>';
+          errHtml += '<div style="margin-top:8px; font-family:var(--font-hand); font-size:16px; color:var(--ink-light);">' + escapeHtml(data.message) + '</div>';
+          errHtml += '</div></div>';
+          body.innerHTML = errHtml;
+        } else {
+          body.innerHTML = '<div class="tf-error">' + escapeHtml(data.message || data.error) + '</div>';
+        }
         return;
       }
 
@@ -711,7 +728,11 @@
 
   function buildTargetTable(targets, sectionId) {
     if (!targets.length) {
-      return '<div class="tf-empty">no targets found' + (targetPosFilter ? ' for ' + escapeHtml(targetPosFilter) : '') + '</div>';
+      var emptyMsg = 'no targets found';
+      if (sectionId === 'buylow') emptyMsg = 'no falling-stock players near this value range';
+      else if (sectionId === 'sellhigh') emptyMsg = 'no rising-stock players near this value range';
+      if (targetPosFilter) emptyMsg += ' for ' + escapeHtml(targetPosFilter);
+      return '<div class="tf-empty">' + emptyMsg + '</div>';
     }
 
     var html = '<div class="tf-table-wrap"><table class="tf-table">';

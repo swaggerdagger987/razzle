@@ -464,7 +464,7 @@
   }
 
   var COLUMNS = [
-    { key: 'name', label: 'Player', tip: '' },
+    { key: 'full_name', label: 'Player', tip: '' },
     { key: 'vorp', label: 'VORP', tip: 'Value Over Replacement — PPG above replacement level for position' },
     { key: 'ppg', label: 'PPG', tip: 'Fantasy points per game (PPR)' },
     { key: 'replacement_ppg', label: 'Repl PPG', tip: 'Replacement-level PPG for this position (QB12/RB24/WR36/TE12)' },
@@ -483,14 +483,14 @@
       if (col.key !== 'name') classes.push('center');
       if (col.hide) classes.push('hide-mobile');
 
-      if (col.key === 'name') {
+      if (col.key === 'full_name') {
         html += '<td>';
         html += '<div class="vorp-player-cell">';
         if (p.headshot_url) {
           html += '<img class="vorp-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
         }
         html += '<div class="vorp-player-info">';
-        html += '<div class="vorp-player-name">' + escapeHtml(p.name) + '</div>';
+        html += '<div class="vorp-player-name">' + escapeHtml(p.full_name) + '</div>';
         html += '<div class="vorp-player-meta">';
         html += '<span class="vorp-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
         html += '<span class="vorp-team-label">' + escapeHtml(p.team) + '</span>';

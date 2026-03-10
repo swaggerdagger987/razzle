@@ -1,6 +1,24 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 94 — Trade Finder (COMPLETE)
+## Current Phase: Phase 95 — QA + UX Audit Fixes (COMPLETE)
+
+**Exit criterion MET:** All HIGH and MEDIUM findings from QA-AUDIT.md (Phases 91-94) resolved. Trade finder shows helpful error with player info when player doesn't qualify (min 4 games / 2 PPG). fantasy_relevant filter added to fetch_trade_value_chart and fetch_trade_finder SQL queries. Trade finder percentile computation uses pre-sorted arrays with bisect (O(n log n) vs O(n^2)). Trade finder 3-factor stock scoring documented (excludes SOS for performance). Trade finder buy_low/sell_high deduplicated from equal_targets. VORP `name` → `full_name` field consistency across backend + frontend. Trade finder contextual empty-state messages for buy-low/sell-high. VORP replacement section adapts count to position filter (10 vs 25).
+
+### Phase 95 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | HIGH fix — Trade Finder helpful error | DONE | Structured error with player info + explanation |
+| 2 | MEDIUM fix — fantasy_relevant filter | DONE | Both trade value + finder queries updated |
+| 3 | MEDIUM fix — Pre-sort percentile_rank | DONE | bisect_left/bisect_right, pct_rank + pct_rank_inv |
+| 4 | MEDIUM fix — Stock scoring documented | DONE | 3-factor simplification with inline comment |
+| 5 | MEDIUM grouped — LOW fixes | DONE | Dedup, VORP full_name, empty states, adaptive count |
+| 6 | Smoke test | DONE | Python + JS syntax clean, all fixes verified |
+
+### Decisions Log
+- **QA+UX audit at Phase 95**: Triggered by phase 95 being a multiple of 5. Audited phases 91-94. Found 1 HIGH (trade finder error UX), 4 MEDIUM (fantasy_relevant filter, O(n^2) percentile, stock model mismatch, nav bloat), 4 LOW (dedup, field name, empty states, replacement count). No CRITICALs. Nav bloat (UX-2) logged for future structural redesign.
+
+## Previous Phase: Phase 94 — Trade Finder (COMPLETE)
 
 **Exit criterion MET:** /tradefinder.html page lets user search for any player via autocomplete (quick-search API), shows selected player card (headshot, position badge, team, age, trade value, PPG, GP, stock score, tier badge, stock trend arrow), and displays three target sections: "Equal Value Targets" (within +/- 8 trade value points, sorted by closest match), "Buy Low Targets" (higher value but falling stock — buy the dip), and "Sell High Targets" (lower value but rising stock — sell into strength). Each target row: player cell (headshot + name), position badge, team, age, value bar (position-colored, width proportional), trade value number, value differential chip (+/- with green/red/neutral colors), stock trend arrow (rising green / falling red / stable grey), PPG, tier badge. Position filter tabs on targets (All/QB/RB/WR/TE). URL state (?player=ID&season=). Click any target → player profile. PNG export via html2canvas with watermark. Responsive at 768px + 480px. /api/trade-finder endpoint accepts player_id + season, combines trade value model (production 50% + age 30% + scarcity 20%) with stock scoring (PPO/CoV/PPG percentiles), returns selected_player + equal_targets + buy_low + sell_high lists. Min 4 games + 2 PPG filter. "Trade Finder" nav link added to all 33 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md.
 

@@ -7995,7 +7995,7 @@ def fetch_vorp(season=None, position=None, limit=30):
             ppg = round(total_ppr / games, 2)
             all_players.append({
                 "player_id": r[0],
-                "name": r[1] or "Unknown",
+                "full_name": r[1] or "Unknown",
                 "position": r[2] or "RB",
                 "team": r[3] or "FA",
                 "headshot_url": r[4] or "",
@@ -8038,14 +8038,16 @@ def fetch_vorp(season=None, position=None, limit=30):
         if position and position.upper() in ("QB", "RB", "WR", "TE"):
             all_players = [p for p in all_players if p["position"] == position.upper()]
 
-        # Split into league winners (VORP > 0) and replacement level (bottom 25)
+        # Split into league winners (VORP > 0) and replacement level
         sorted_by_vorp = sorted(all_players, key=lambda x: x["vorp"], reverse=True)
 
         league_winners = [p for p in sorted_by_vorp if p["vorp"] > 0][:limit]
+        # Adaptive replacement count: fewer when filtering single position
+        repl_count = 10 if (position and position.upper() in ("QB", "RB", "WR", "TE")) else 25
         replacement_level = sorted(
-            sorted_by_vorp[-25:] if len(sorted_by_vorp) > 25 else sorted_by_vorp,
+            sorted_by_vorp[-repl_count:] if len(sorted_by_vorp) > repl_count else sorted_by_vorp,
             key=lambda x: x["vorp"],
-        )[:25]
+        )[:repl_count]
 
         return {
             "season": season,
@@ -8124,6 +8126,7 @@ def fetch_trade_value_chart(season=None, position=None, limit=150):
             JOIN player_week_stats s
                 ON s.player_id = p.player_id AND s.season = ?
             WHERE p.position IN ('QB','RB','WR','TE')
+              AND p.fantasy_relevant = 1
               {pos_filter}
             GROUP BY p.player_id
             HAVING games >= 4 AND (total_ppr / games) >= 2.0
@@ -8210,6 +8213,7 @@ def fetch_trade_finder(player_id, season=None):
             JOIN player_week_stats s
                 ON s.player_id = p.player_id AND s.season = ?
             WHERE p.position IN ('QB','RB','WR','TE')
+              AND p.fantasy_relevant = 1
             GROUP BY p.player_id
             HAVING games >= 4 AND (total_ppr / games) >= 2.0
             ORDER BY total_ppr DESC
@@ -8259,7 +8263,32 @@ def fetch_trade_finder(player_id, season=None):
                 selected = dict(p)
 
         if not selected:
-            return {"error": "Player not found", "season": season, "available_seasons": available_seasons}
+            # Look up basic player info for a helpful error message
+            basic = conn.execute("""
+                SELECT p.player_id, p.full_name, p.position, p.team, p.headshot_url,
+                       COALESCE(SUM(s.fantasy_points_ppr), 0) as total,
+                       COUNT(DISTINCT s.week) as gp
+                FROM players p
+                LEFT JOIN player_week_stats s ON s.player_id = p.player_id AND s.season = ?
+                WHERE p.player_id = ?
+                GROUP BY p.player_id
+            """, [season, player_id]).fetchone()
+            if basic and basic[1]:
+                gp = basic[6] or 0
+                ppg = round(basic[5] / gp, 1) if gp > 0 else 0
+                return {
+                    "error": "not_enough_data",
+                    "message": f"{basic[1]} doesn't qualify — needs 4+ games and 2+ PPG (has {gp} GP, {ppg} PPG)",
+                    "player_name": basic[1],
+                    "position": basic[2],
+                    "team": basic[3],
+                    "headshot_url": basic[4] or "",
+                    "games": gp,
+                    "ppg": ppg,
+                    "season": season,
+                    "available_seasons": available_seasons,
+                }
+            return {"error": "Player not found in database", "season": season, "available_seasons": available_seasons}
 
         # Compute stock scores for all players (simplified — PPO/CoV/SOS/PPG percentiles)
         weekly_rows = conn.execute("""
@@ -8301,23 +8330,36 @@ def fetch_trade_finder(player_id, season=None):
             cov_vals[pid] = cov
             ppg_vals[pid] = p["ppg"]
 
-        # Percentile ranking
-        def percentile_rank(vals_dict, pid, invert=False):
-            vals = sorted(vals_dict.values(), reverse=not invert)
-            total = len(vals)
+        # Pre-sort for efficient percentile ranking
+        from bisect import bisect_left, bisect_right
+        ppo_sorted = sorted(ppo_vals.values())
+        cov_sorted = sorted(cov_vals.values())  # ascending — lower CoV is better
+        ppg_sorted = sorted(ppg_vals.values())
+        n_players = len(all_players)
+
+        def pct_rank(sorted_asc, value, total):
+            """Percentile: fraction of values below this value."""
             if total == 0:
                 return 50
-            v = vals_dict.get(pid, 0)
-            below = sum(1 for x in vals if (x < v if not invert else x > v))
-            return round(below / total * 100)
+            return round(bisect_left(sorted_asc, value) / total * 100)
+
+        def pct_rank_inv(sorted_asc, value, total):
+            """Inverted percentile: fraction of values above this value (lower = better)."""
+            if total == 0:
+                return 50
+            above = total - bisect_right(sorted_asc, value)
+            return round(above / total * 100)
 
         # Assign stock data to all players
         player_map = {}
         for p in all_players:
             pid = p["player_id"]
-            ppo_pct = percentile_rank(ppo_vals, pid)
-            cov_pct = percentile_rank(cov_vals, pid, invert=True)
-            ppg_pct = percentile_rank(ppg_vals, pid)
+            ppo_pct = pct_rank(ppo_sorted, ppo_vals.get(pid, 0), n_players)
+            cov_pct = pct_rank_inv(cov_sorted, cov_vals.get(pid, 999), n_players)
+            ppg_pct = pct_rank(ppg_sorted, ppg_vals.get(pid, 0), n_players)
+            # Stock score: 3-factor simplified model (excludes SOS to avoid heavy
+            # defense grid query). Stock watch uses 4-factor with SOS at 25% each.
+            # Here we weight PPO/CoV/PPG at ~33% each — directionally similar.
             stock_score = round(ppo_pct * 0.33 + cov_pct * 0.33 + ppg_pct * 0.34)
             stock_delta = stock_score - round(ppg_pct)
             p["stock_score"] = stock_score
@@ -8347,15 +8389,16 @@ def fetch_trade_finder(player_id, season=None):
             p_copy["value_diff"] = diff
 
             # Equal value: within +/- VALUE_RANGE
-            if abs(diff) <= VALUE_RANGE:
+            is_equal = abs(diff) <= VALUE_RANGE
+            if is_equal:
                 equal_targets.append(p_copy)
 
-            # Buy low: higher trade value but falling stock (you get more value)
-            if diff > 0 and diff <= 15 and p.get("stock_trend") == "falling":
+            # Buy low: higher trade value but falling stock — exclude equal-value dupes
+            if not is_equal and diff > 0 and diff <= 15 and p.get("stock_trend") == "falling":
                 buy_low.append(p_copy)
 
-            # Sell high: lower trade value but rising stock (they're overperforming)
-            if diff < 0 and diff >= -15 and p.get("stock_trend") == "rising":
+            # Sell high: lower trade value but rising stock — exclude equal-value dupes
+            if not is_equal and diff < 0 and diff >= -15 and p.get("stock_trend") == "rising":
                 sell_high.append(p_copy)
 
         # Sort
