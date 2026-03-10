@@ -3546,10 +3546,10 @@
 @media (max-width: 768px) {
   /* All panel content stays within viewport */
   .lab-panel-content { overflow-x: hidden; max-width: 100vw; }
-  .lp-page { max-width: 100%; overflow-x: hidden; }
+  .lp-page { max-width: 100%; }
 
-  /* All panel tables scroll horizontally */
-  .lp-page table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  /* Panel table containers scroll horizontally — wrap tables, don't change display */
+  .lp-page { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
   /* Sticky first column for all panel tables */
   .lp-page table th:first-child,

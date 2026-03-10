@@ -1,10 +1,42 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 7 (Lab Polish) — COMPLETE
-- All 8 tasks PASS
-- Stage: PHASE GATE
-- Next: Generate Phase 8 or consume ticket
+- Phase: 8 (QA + UX Audit for Phase 7)
+- Task: 1
+- Stage: BUILD
+- Attempt: 1/3
+- Tasks Done: 3/3
+
+## Phase 8: QA + UX Audit for Phase 7 (Lab Polish)
+**Exit Criterion**: All Phase 7 features verified working — sidebar collapse/expand, breadcrumbs, mobile responsiveness, performance. No regressions in existing Lab functionality.
+
+### Task 1: Verify sidebar collapse/expand and breadcrumbs
+**Requirement**: Test sidebar collapse at desktop width: icons visible, tooltips on hover, localStorage persistence. Breadcrumbs show correct category path. Flavor text renders in Caveat font. No duplicate headers.
+**Accept when**: Collapse/expand smooth. Icons render. Tooltips appear. Breadcrumbs correct for 5+ panels.
+**Depends on**: none
+**Size**: M
+**Status**: PASS
+**Attempts**: 1
+**Fixes**: Added base `.sidebar-tooltip { display: none }` rule (was visible in expanded state). Fixed duplicate category icon (Trends used same as Performance).
+
+### Task 2: Verify mobile responsiveness
+**Requirement**: Audit CSS for sticky first columns, panel content overflow, drawer sidebar. Verify no conflicting rules.
+**Accept when**: CSS audit clean. No conflicting sticky/overflow rules.
+**Depends on**: none
+**Size**: S
+**Status**: PASS
+**Attempts**: 1
+**Fixes**: Removed `display: block` on tables (broke sticky columns). Changed `.lp-page` to `overflow-x: auto` instead. Resolved conflicting overflow-x rules.
+
+### Task 3: Verify performance optimizations
+**Requirement**: Check defer scripts don't break load order. Verify percentile binary search produces correct results. Confirm panel cache invalidation works.
+**Accept when**: Scripts load correctly with defer. Percentile computation verified. Cache invalidation tested.
+**Depends on**: none
+**Size**: S
+**Status**: PASS
+**Attempts**: 1
+
+---
 
 ## Phase 7: Lab Polish — transitions, keyboard nav, virtual scrolling, UX refinements
 **Exit Criterion**: The Lab feels fast, fluid, and professional. Panel transitions are smooth. Keyboard users can navigate the full sidebar and table. Tables with 500+ rows don't lag. The experience is screenshot-worthy.
