@@ -1,6 +1,24 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 93 — Dynasty Trade Value Chart (COMPLETE)
+## Current Phase: Phase 94 — Trade Finder (COMPLETE)
+
+**Exit criterion MET:** /tradefinder.html page lets user search for any player via autocomplete (quick-search API), shows selected player card (headshot, position badge, team, age, trade value, PPG, GP, stock score, tier badge, stock trend arrow), and displays three target sections: "Equal Value Targets" (within +/- 8 trade value points, sorted by closest match), "Buy Low Targets" (higher value but falling stock — buy the dip), and "Sell High Targets" (lower value but rising stock — sell into strength). Each target row: player cell (headshot + name), position badge, team, age, value bar (position-colored, width proportional), trade value number, value differential chip (+/- with green/red/neutral colors), stock trend arrow (rising green / falling red / stable grey), PPG, tier badge. Position filter tabs on targets (All/QB/RB/WR/TE). URL state (?player=ID&season=). Click any target → player profile. PNG export via html2canvas with watermark. Responsive at 768px + 480px. /api/trade-finder endpoint accepts player_id + season, combines trade value model (production 50% + age 30% + scarcity 20%) with stock scoring (PPO/CoV/PPG percentiles), returns selected_player + equal_targets + buy_low + sell_high lists. Min 4 games + 2 PPG filter. "Trade Finder" nav link added to all 33 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md.
+
+### Phase 94 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/trade-finder endpoint | DONE | fetch_trade_finder in live_data.py, trade value + stock scoring, equal/buy-low/sell-high split |
+| 2 | Trade Finder page | DONE | Player search autocomplete, selected card, 3 target tables, 23 escapeHtml, 60/60 balanced |
+| 3 | Nav links + sitemap + analytics | DONE | All 33 pages updated, sitemap entry, pageview tracking |
+| 4 | Smoke test | DONE | Python + JS syntax clean, 33/33 nav links, XSS escaped, design compliance |
+
+### Decisions Log
+- **Trade Finder as Phase 94**: After building the trade value chart (Phase 93), the natural next tool is a trade target finder — the most common use case for dynasty trade value data is "who can I trade for?" This combines trade values with stock watch data (Phase 87) to surface not just equal-value targets but also buy-low opportunities (higher value + falling stock) and sell-high candidates (lower value + rising stock). Extremely screenshottable: "Put in Saquon Barkley → here are your trade targets." The search-first UX pattern is a departure from the table-heavy dashboards, providing variety.
+- **Stock scoring integration**: Rather than just matching on trade value alone, the Trade Finder adds a stock score dimension (PPO + CoV + PPG percentiles) to identify momentum-based opportunities. Players with falling stocks at higher trade values are buy-low targets (the market hasn't caught up to the decline). Players with rising stocks at lower trade values are sell-high targets (the market hasn't caught up to the surge).
+- **+/- 8 trade value range for equal targets**: Wide enough to show meaningful options across positions, narrow enough that trades feel fair. The differential chip shows the exact gap.
+
+## Previous Phase: Phase 93 — Dynasty Trade Value Chart (COMPLETE)
 
 **Exit criterion MET:** /tradevalues.html page shows a dynasty trade value chart ranking all fantasy-relevant players by composite trade value (production 50% + age curve 30% + positional scarcity 20%). Visual horizontal bar chart with position-colored bars (QB blue, RB teal, WR terracotta, TE purple), grouped into 8 dynasty tiers (Elite/Blue Chip/Premium/Solid/Promising/Depth/Roster Clogger/Cut Bait). Each player row: rank number (top-3 gold/silver/bronze), position badge, headshot, name, team, age, trade value bar (width proportional to 0-100 score, position-colored), PPG, GP, tier badge. Component breakdown in tooltip (production/age/scarcity scores). Methodology chips showing weight breakdown. Player search input for filtering. Position filter tabs (All/QB/RB/WR/TE). Season selector. Click player row → player profile. PNG export via html2canvas with watermark. Responsive at 768px + 480px. /api/trade-value-chart endpoint computes trade values using compute_trade_value (production + age + scarcity), assigns 8-tier labels, returns component breakdown. Min 4 games + 2 PPG filter. "Trade Values" nav link added to all 32 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md.
 

@@ -908,6 +908,7 @@ def sitemap_xml():
         ("/awards.html", "0.8", "weekly"),
         ("/vorp.html", "0.8", "weekly"),
         ("/tradevalues.html", "0.8", "weekly"),
+        ("/tradefinder.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1292,6 +1293,19 @@ def trade_value_chart(season: int = 0, position: str = "", limit: int = 150):
     except Exception as e:
         logger.error(f"trade-value-chart error: {e}")
         return JSONResponse({"error": "Failed to fetch trade value chart"}, status_code=500)
+
+
+@app.get("/api/trade-finder")
+def trade_finder(player_id: str = "", season: int = 0):
+    """Find value-matched trade targets for a given player."""
+    if not player_id:
+        return JSONResponse({"error": "player_id is required"}, status_code=400)
+    try:
+        s = season if season > 0 else None
+        return live_data.fetch_trade_finder(player_id=player_id, season=s)
+    except Exception as e:
+        logger.error(f"trade-finder error: {e}")
+        return JSONResponse({"error": "Failed to fetch trade finder data"}, status_code=500)
 
 
 # ---------------------------------------------------------------------------

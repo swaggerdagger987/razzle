@@ -1,37 +1,37 @@
-# Razzle Loop — Phase 93 Task List
+# Razzle Loop — Phase 94 Task List
 
-> Dynasty Trade Value Chart
+> Trade Finder — Value-Matched Trade Targets
 
-**Current Phase**: 93 — Dynasty Trade Value Chart
-**Exit Criterion**: /tradevalues.html page shows a dynasty trade value chart ranking ALL fantasy-relevant players by composite trade value (production 50% + age 30% + positional scarcity 20%). Visual horizontal bar chart with position-colored bars (QB blue, RB teal, WR terracotta, TE purple), grouped into 8 dynasty tiers (Elite/Blue Chip/Premium/Solid/Promising/Depth/Roster Clogger/Cut Bait). Player search/filter at top. Position filter tabs (All/QB/RB/WR/TE). Season selector. Each player row: rank number, position badge, headshot, name, team, age, trade value (0-100), value bar (width proportional to value, position-colored), PPG, tier badge, value component breakdown tooltip (production/age/scarcity scores). Click player row → player profile. PNG export via html2canvas with watermark. Responsive at 768px + 480px. /api/trade-value-chart endpoint returns all fantasy-relevant players with trade values, components, tiers, sorted by value desc. Min 4 games + 2 PPG filter. "Trade Values" nav link added to all 32 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md: sand bg, chunky 3px borders, 4px offset shadows, display font headers, mono data, Caveat annotations, position colors.
+**Current Phase**: 94 — Trade Finder
+**Exit Criterion**: /tradefinder.html page lets user search for any player, shows their trade value + tier, and displays three sections: "Equal Value Targets" (within +/- 8 trade value points), "Buy Low Targets" (higher value but falling stock — positive value differential with negative stock delta), and "Sell High Targets" (lower value but rising stock — negative value differential with positive stock delta). Each target row: position badge, headshot, name, team, age, trade value bar (position-colored), value differential chip (+/- points), stock trend arrow (up/down/flat), tier badge, PPG. Position filter tabs on targets (All/QB/RB/WR/TE). Selected player card at top with full stats. Click any target → player profile. PNG export via html2canvas with watermark. Responsive at 768px + 480px. /api/trade-finder endpoint accepts player_id, returns selected player data + equal/buy-low/sell-high target lists. "Trade Finder" nav link added to all 33 HTML pages (nav + footer). Sitemap entry. Analytics tracking. Design matches DESIGN.md.
 
 ---
 
-## Task 1: Backend /api/trade-value-chart endpoint
+## Task 1: Backend /api/trade-finder endpoint
 **Status**: PASS
 **Attempts**: 1
-**Notes**: fetch_trade_value_chart in live_data.py. Composite trade value (production 50% + age 30% + scarcity 20%), component breakdown (production_score, age_score, scarcity_score), 8-tier assignment (_tv_tier), min 4 games + 2 PPG. Server endpoint at /api/trade-value-chart with season/position/limit params. Python syntax valid.
+**Notes**: fetch_trade_finder in live_data.py. Combines trade value data (compute_trade_value) with stock scoring (PPO/CoV/PPG percentiles). Returns selected_player + equal_targets (within +/-8 TV points) + buy_low (higher value, falling stock) + sell_high (lower value, rising stock). Server endpoint at /api/trade-finder with player_id + season params. Python syntax valid.
 
-## Task 2: Trade Value Chart page (frontend)
+## Task 2: Trade Finder page (frontend)
 **Status**: PASS
 **Attempts**: 1
-**Notes**: /tradevalues.html with horizontal bar chart layout. Position-colored bars (QB blue, RB teal, WR terracotta, TE purple). 8 tier groups with tier headers. Rank numbers with gold/silver/bronze top-3 accents. Player search input. Component breakdown in tooltip. Methodology chips showing weight breakdown. 13 escapeHtml calls. JS braces balanced 37/37. Design compliant.
+**Notes**: /tradefinder.html with player search autocomplete (quick-search API), selected player card (headshot, value, PPG, GP, stock score), 3 target sections (Equal Value / Buy Low / Sell High), position filter tabs on targets, value diff chips, stock trend arrows, tier badges, value bars. 23 escapeHtml calls. JS braces balanced 60/60. PNG export with watermark. Responsive at 768px + 480px. URL state (?player=ID). Design compliant.
 
 ## Task 3: Nav links + sitemap + analytics
 **Status**: PASS
 **Attempts**: 1
-**Notes**: Trade Values nav link added to all 32 pages (nav + footer). Sitemap entry added. Analytics pageview POST in tradevalues.html with referrer.
+**Notes**: Trade Finder nav link added to all 33 pages (nav + footer). Sitemap entry added. Analytics pageview POST in tradefinder.html with referrer.
 
 ## Task 4: Smoke test
 **Status**: PASS
 **Attempts**: 1
-**Notes**: Python syntax valid (live_data.py + server.py). JS braces balanced 37/37. 32/32 pages have Trade Values nav link. 13 escapeHtml calls for XSS. Design compliance: sand bg, chunky 3px borders, 4px shadows, display font headers, mono data, hand annotations, position colors, responsive 768+480, watermark, analytics.
+**Notes**: Python syntax valid (live_data.py + server.py). JS braces balanced 60/60. 33/33 pages have Trade Finder nav link. 23 escapeHtml calls for XSS. Design compliance: sand bg, chunky 3px borders, 4px shadows, display font headers, mono data, hand annotations, position colors, responsive 768+480, watermark, analytics.
 
 ---
 
 ## Loop State
 ```
-Current Phase: 93
+Current Phase: 94
 Current Task: 4
 Current Stage: COMPLETE
 Attempt: 1

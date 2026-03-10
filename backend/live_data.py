@@ -8180,3 +8180,196 @@ def fetch_trade_value_chart(season=None, position=None, limit=150):
         }
     finally:
         conn.close()
+
+
+def fetch_trade_finder(player_id, season=None):
+    """Given a player, find equal-value trade targets plus buy-low/sell-high opportunities."""
+    import math
+    from collections import defaultdict
+
+    conn = get_conn()
+    try:
+        if not season:
+            row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+            season = row[0] if row and row[0] else 2024
+
+        available_seasons = [
+            r[0] for r in conn.execute(
+                "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
+            ).fetchall()
+        ]
+
+        # Get all fantasy-relevant players with trade values
+        rows = conn.execute("""
+            SELECT
+                p.player_id, p.full_name, p.position, p.team, p.age,
+                p.headshot_url,
+                SUM(s.fantasy_points_ppr) as total_ppr,
+                COUNT(DISTINCT s.week) as games
+            FROM players p
+            JOIN player_week_stats s
+                ON s.player_id = p.player_id AND s.season = ?
+            WHERE p.position IN ('QB','RB','WR','TE')
+            GROUP BY p.player_id
+            HAVING games >= 4 AND (total_ppr / games) >= 2.0
+            ORDER BY total_ppr DESC
+        """, [season]).fetchall()
+
+        if not rows:
+            return {"error": "No data available", "season": season, "available_seasons": available_seasons}
+
+        # Build player map with trade values
+        all_players = []
+        selected = None
+        for r in rows:
+            pid = r[0]
+            name = r[1] or "Unknown"
+            pos = r[2] or "WR"
+            team = r[3] or "FA"
+            age = r[4]
+            headshot = r[5] or ""
+            total_ppr = r[6] or 0
+            games = r[7] or 0
+            ppg = round(total_ppr / games, 2) if games > 0 else 0.0
+
+            tv = compute_trade_value(ppg, age, pos)
+            tier = _tv_tier(tv)
+            prod_score = round(_production_value(ppg, pos), 1)
+            age_score = round(_age_value(age, pos), 1)
+            scarcity_score = round(_scarcity_value(pos), 1)
+
+            p = {
+                "player_id": pid,
+                "full_name": name,
+                "position": pos,
+                "team": team,
+                "age": age,
+                "headshot_url": headshot,
+                "ppg": ppg,
+                "games": games,
+                "trade_value": tv,
+                "production_score": prod_score,
+                "age_score": age_score,
+                "scarcity_score": scarcity_score,
+                "tier": tier,
+                "tier_label": _TV_TIER_LABELS[tier],
+            }
+            all_players.append(p)
+            if pid == player_id:
+                selected = dict(p)
+
+        if not selected:
+            return {"error": "Player not found", "season": season, "available_seasons": available_seasons}
+
+        # Compute stock scores for all players (simplified — PPO/CoV/SOS/PPG percentiles)
+        weekly_rows = conn.execute("""
+            SELECT s.player_id, s.fantasy_points_ppr, s.targets, s.carries
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE s.season = ?
+              AND p.position IN ('QB','RB','WR','TE')
+            ORDER BY s.player_id
+        """, [season]).fetchall()
+
+        weekly_data = defaultdict(list)
+        opp_data = defaultdict(lambda: {"total_ppr": 0, "opps": 0})
+        for wr in weekly_rows:
+            wpid, wppg, wtgt, wcar = wr[0], wr[1] or 0, wr[2] or 0, wr[3] or 0
+            weekly_data[wpid].append(wppg)
+            opp_data[wpid]["total_ppr"] += wppg
+            opp_data[wpid]["opps"] += wtgt + wcar
+
+        # Build PPO and CoV for stock scoring
+        ppo_vals = {}
+        cov_vals = {}
+        ppg_vals = {}
+        for p in all_players:
+            pid = p["player_id"]
+            weeks = weekly_data.get(pid, [])
+            opps = opp_data.get(pid, {}).get("opps", 0)
+            total = opp_data.get(pid, {}).get("total_ppr", 0)
+            ppo = round(total / opps, 2) if opps > 0 else 0
+            ppo_vals[pid] = ppo
+
+            if len(weeks) >= 3:
+                mean = sum(weeks) / len(weeks)
+                variance = sum((x - mean) ** 2 for x in weeks) / max(1, len(weeks) - 1)
+                std = math.sqrt(variance)
+                cov = (std / mean * 100) if mean > 0 else 999
+            else:
+                cov = 999
+            cov_vals[pid] = cov
+            ppg_vals[pid] = p["ppg"]
+
+        # Percentile ranking
+        def percentile_rank(vals_dict, pid, invert=False):
+            vals = sorted(vals_dict.values(), reverse=not invert)
+            total = len(vals)
+            if total == 0:
+                return 50
+            v = vals_dict.get(pid, 0)
+            below = sum(1 for x in vals if (x < v if not invert else x > v))
+            return round(below / total * 100)
+
+        # Assign stock data to all players
+        player_map = {}
+        for p in all_players:
+            pid = p["player_id"]
+            ppo_pct = percentile_rank(ppo_vals, pid)
+            cov_pct = percentile_rank(cov_vals, pid, invert=True)
+            ppg_pct = percentile_rank(ppg_vals, pid)
+            stock_score = round(ppo_pct * 0.33 + cov_pct * 0.33 + ppg_pct * 0.34)
+            stock_delta = stock_score - round(ppg_pct)
+            p["stock_score"] = stock_score
+            p["stock_delta"] = stock_delta
+            if stock_delta > 5:
+                p["stock_trend"] = "rising"
+            elif stock_delta < -5:
+                p["stock_trend"] = "falling"
+            else:
+                p["stock_trend"] = "stable"
+            player_map[pid] = p
+
+        sel_tv = selected["trade_value"]
+        selected_full = player_map.get(player_id, selected)
+
+        # Find targets
+        VALUE_RANGE = 8  # +/- points for equal value
+        equal_targets = []
+        buy_low = []
+        sell_high = []
+
+        for p in all_players:
+            if p["player_id"] == player_id:
+                continue
+            diff = round(p["trade_value"] - sel_tv, 1)
+            p_copy = dict(p)
+            p_copy["value_diff"] = diff
+
+            # Equal value: within +/- VALUE_RANGE
+            if abs(diff) <= VALUE_RANGE:
+                equal_targets.append(p_copy)
+
+            # Buy low: higher trade value but falling stock (you get more value)
+            if diff > 0 and diff <= 15 and p.get("stock_trend") == "falling":
+                buy_low.append(p_copy)
+
+            # Sell high: lower trade value but rising stock (they're overperforming)
+            if diff < 0 and diff >= -15 and p.get("stock_trend") == "rising":
+                sell_high.append(p_copy)
+
+        # Sort
+        equal_targets.sort(key=lambda x: abs(x["value_diff"]))
+        buy_low.sort(key=lambda x: x["stock_delta"])  # most negative delta first
+        sell_high.sort(key=lambda x: x["stock_delta"], reverse=True)  # most positive delta first
+
+        return {
+            "season": season,
+            "available_seasons": available_seasons,
+            "selected_player": selected_full,
+            "equal_targets": equal_targets[:25],
+            "buy_low": buy_low[:15],
+            "sell_high": sell_high[:15],
+        }
+    finally:
+        conn.close()

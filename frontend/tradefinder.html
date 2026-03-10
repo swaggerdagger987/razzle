@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Trade Finder — Razzle</title>
+<meta property="og:title" content="Trade Finder — Razzle">
+<meta property="og:description" content="Find value-matched trade targets for any dynasty player on razzle.lol">
+<meta property="og:site_name" content="razzle.lol">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Trade Finder — Razzle">
+<meta name="twitter:description" content="Find value-matched trade targets for any dynasty player on razzle.lol">
+<meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
+<meta name="description" content="Trade finder — search for a player, get value-matched trade targets with buy-low and sell-high opportunities on razzle.lol">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .tf-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+  }
+
+  .tf-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .tf-header h1 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: var(--ink);
+    margin: 0 0 4px;
+  }
+  .tf-header .tf-subtitle {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+  }
+
+  /* Search area */
+  .tf-search-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .tf-search-wrap {
+    position: relative;
+    width: 340px;
+  }
+  .tf-search-input {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    padding: 10px 14px;
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    background: var(--bg-card);
+    color: var(--ink);
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .tf-search-input::placeholder { color: var(--ink-light); }
+  .tf-search-input:focus {
+    outline: none;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .tf-autocomplete {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    max-height: 280px;
+    overflow-y: auto;
+    z-index: 100;
+    display: none;
+  }
+  .tf-ac-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--ink);
+    border-bottom: 1px solid var(--ink-faint);
+  }
+  .tf-ac-item:last-child { border-bottom: none; }
+  .tf-ac-item:hover { background: var(--bg-warm); }
+  .tf-ac-img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--ink);
+    object-fit: cover;
+  }
+  .tf-ac-name { font-weight: 700; }
+  .tf-ac-meta { color: var(--ink-light); font-size: 12px; }
+
+  .tf-season-select {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    padding: 9px 12px;
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    background: var(--bg-card);
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  /* Selected player card */
+  .tf-selected-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 20px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .tf-sel-headshot {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: 3px solid var(--ink);
+    object-fit: cover;
+  }
+  .tf-sel-info { flex: 1; min-width: 180px; }
+  .tf-sel-name {
+    font-family: var(--font-display);
+    font-size: 24px;
+    color: var(--ink);
+    margin: 0 0 4px;
+  }
+  .tf-sel-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--ink-medium);
+  }
+  .tf-sel-stats {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .tf-sel-stat {
+    text-align: center;
+    min-width: 60px;
+  }
+  .tf-sel-stat-val {
+    font-family: var(--font-display);
+    font-size: 22px;
+    color: var(--ink);
+  }
+  .tf-sel-stat-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-light);
+    text-transform: uppercase;
+  }
+
+  /* Position badge */
+  .pos-badge {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 6px;
+    border: 2px solid var(--ink);
+    color: white;
+  }
+  .pos-badge.qb { background: var(--pos-qb); }
+  .pos-badge.rb { background: var(--pos-rb); }
+  .pos-badge.wr { background: var(--pos-wr); }
+  .pos-badge.te { background: var(--pos-te); }
+
+  /* Tier badge */
+  .tier-badge {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 6px;
+    border: 2px solid var(--ink);
+    color: white;
+  }
+  .tier-badge.t1 { background: #2ec4b6; }
+  .tier-badge.t2 { background: #5b7fff; }
+  .tier-badge.t3 { background: #8b5cf6; }
+  .tier-badge.t4 { background: #d97757; }
+  .tier-badge.t5 { background: #ffc857; color: var(--ink); }
+  .tier-badge.t6 { background: #8a8a9e; }
+  .tier-badge.t7 { background: #c5c5d0; color: var(--ink); }
+  .tier-badge.t8 { background: #e63946; }
+
+  /* Value diff chip */
+  .val-diff {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 6px;
+    border: 2px solid var(--ink);
+  }
+  .val-diff.positive { background: var(--green-light); color: #0d7a6f; }
+  .val-diff.negative { background: var(--red-light); color: #c1121f; }
+  .val-diff.neutral { background: var(--bg-warm); color: var(--ink-medium); }
+
+  /* Stock trend arrow */
+  .stock-arrow {
+    display: inline-block;
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .stock-arrow.rising { color: #2ec4b6; }
+  .stock-arrow.falling { color: #e63946; }
+  .stock-arrow.stable { color: var(--ink-light); }
+
+  /* Position filter tabs */
+  .tf-pos-tabs {
+    display: flex;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .tf-pos-tab {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 6px 14px;
+    background: var(--bg-card);
+    color: var(--ink);
+    border: none;
+    border-right: 2px solid var(--ink);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .tf-pos-tab:last-child { border-right: none; }
+  .tf-pos-tab.active {
+    background: var(--ink);
+    color: var(--bg-card);
+  }
+  .tf-pos-tab:hover:not(.active) {
+    background: var(--bg-warm);
+  }
+
+  /* Target controls */
+  .tf-target-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  /* Actions */
+  .tf-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  /* Section headers */
+  .tf-section {
+    margin-bottom: 28px;
+  }
+  .tf-section-header {
+    font-family: var(--font-display);
+    font-size: 20px;
+    color: var(--ink);
+    margin: 0 0 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tf-section-desc {
+    font-family: var(--font-hand);
+    font-size: 16px;
+    color: var(--ink-light);
+    margin-bottom: 12px;
+  }
+  .tf-section-count {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-light);
+    background: var(--bg-warm);
+    padding: 2px 8px;
+    border-radius: 6px;
+  }
+
+  /* Target table */
+  .tf-table-wrap {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    box-shadow: 4px 4px 0 var(--ink);
+    overflow: hidden;
+  }
+  .tf-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .tf-table th {
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--ink-medium);
+    background: var(--bg-warm);
+    padding: 10px 10px;
+    text-align: left;
+    border-bottom: 3px solid var(--ink);
+    white-space: nowrap;
+  }
+  .tf-table td {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--ink);
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--ink-faint);
+    white-space: nowrap;
+  }
+  .tf-table tr:last-child td { border-bottom: none; }
+  .tf-table tr:hover td { background: var(--bg-warm); }
+  .tf-table tr { cursor: pointer; }
+
+  .tf-player-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tf-row-img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid var(--ink);
+    object-fit: cover;
+  }
+  .tf-row-name {
+    font-weight: 700;
+    font-family: var(--font-display);
+    font-size: 14px;
+  }
+
+  /* Value bar */
+  .tf-bar-track {
+    width: 80px;
+    height: 12px;
+    background: var(--bg-warm);
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .tf-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+  }
+  .tf-bar-fill.qb { background: var(--pos-qb); }
+  .tf-bar-fill.rb { background: var(--pos-rb); }
+  .tf-bar-fill.wr { background: var(--pos-wr); }
+  .tf-bar-fill.te { background: var(--pos-te); }
+
+  /* Empty / loading states */
+  .tf-loading, .tf-empty, .tf-error {
+    font-family: var(--font-hand);
+    font-size: 18px;
+    color: var(--ink-light);
+    text-align: center;
+    padding: 40px 20px;
+  }
+  .tf-prompt {
+    text-align: center;
+    padding: 60px 20px;
+  }
+  .tf-prompt-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+  }
+  .tf-prompt-text {
+    font-family: var(--font-hand);
+    font-size: 22px;
+    color: var(--ink-light);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .tf-header h1 { font-size: 26px; }
+    .tf-search-wrap { width: 100%; }
+    .tf-selected-card { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .tf-sel-headshot { width: 56px; height: 56px; }
+    .tf-sel-name { font-size: 20px; }
+    .tf-table th, .tf-table td { padding: 6px 6px; font-size: 12px; }
+    .tf-bar-track { width: 50px; }
+    .tf-target-controls { flex-direction: column; align-items: stretch; }
+    .hide-mobile { display: none; }
+  }
+  @media (max-width: 480px) {
+    .tf-page { padding: 16px 12px 40px; }
+    .tf-header h1 { font-size: 22px; }
+    .tf-sel-stats { gap: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="/" class="logo">
+    <div class="logo-mark">&#x1F42F;</div>
+    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/lab.html">The Lab</a></li>
+    <li><a href="/rankings.html">Rankings</a></li>
+    <li><a href="/leaders.html">Leaders</a></li>
+    <li><a href="/prospects.html">Prospects</a></li>
+    <li><a href="/scarcity.html">Scarcity</a></li>
+    <li><a href="/breakouts.html">Breakouts</a></li>
+    <li><a href="/buysell.html">Buy/Sell</a></li>
+    <li><a href="/aging.html">Aging</a></li>
+    <li><a href="/weekly.html">Weekly</a></li>
+    <li><a href="/targets.html">Targets</a></li>
+    <li><a href="/matchups.html">Matchups</a></li>
+    <li><a href="/usage.html">Usage</a></li>
+    <li><a href="/yoy.html">YoY</a></li>
+    <li><a href="/airyards.html">Air Yards</a></li>
+    <li><a href="/explorer.html">Explorer</a></li>
+    <li><a href="/redzone.html">Red Zone</a></li>
+    <li><a href="/efficiency.html">Efficiency</a></li>
+    <li><a href="/consistency.html">Consistency</a></li>
+    <li><a href="/schedule.html">Schedule</a></li>
+    <li><a href="/stocks.html">Stocks</a></li>
+    <li><a href="/opportunity.html">Opportunity</a></li>
+    <li><a href="/reportcard.html">Report Card</a></li>
+    <li><a href="/awards.html">Awards</a></li>
+    <li><a href="/vorp.html">VORP</a></li>
+    <li><a href="/tradevalues.html">Trade Values</a></li>
+    <li><a href="/tradefinder.html" class="active">Trade Finder</a></li>
+    <li><a href="/team/KC">Teams</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
+    <li><a href="/agents.html">War Room</a></li>
+  </ul>
+</nav>
+
+<main class="tf-page" id="tf-content">
+  <div class="tf-header">
+    <h1>Trade Finder</h1>
+    <div class="tf-subtitle">search a player, find your trade targets</div>
+  </div>
+
+  <div class="tf-search-area">
+    <div class="tf-search-wrap">
+      <input class="tf-search-input" type="text" id="player-search" placeholder="type a player name..." aria-label="Search for a player" autocomplete="off">
+      <div class="tf-autocomplete" id="autocomplete"></div>
+    </div>
+    <select class="tf-season-select" id="season-select" title="Season" aria-label="Season"></select>
+  </div>
+
+  <div class="tf-actions">
+    <button class="btn-chunky" id="export-btn" title="Export as PNG" style="display:none;">Export PNG</button>
+  </div>
+
+  <div id="tf-body">
+    <div class="tf-prompt">
+      <div class="tf-prompt-icon">&#x1F50D;</div>
+      <div class="tf-prompt-text">search for a player to find trade targets</div>
+    </div>
+  </div>
+</main>
+
+<!-- Watermark -->
+<div style="position:fixed; bottom:10px; right:14px; font-family:var(--font-hand); font-size:14px; color:var(--ink-light); opacity:0.7; pointer-events:none; z-index:999;">razzle.lol</div>
+
+<!-- Footer -->
+<footer style="text-align:center; padding:24px 20px 32px; font-family:var(--font-hand); font-size:15px; color:var(--ink-light); border-top:2px dashed var(--ink-faint); margin-top:40px;">
+  <div style="margin-bottom:10px;">
+    <a href="/lab.html" style="color:var(--ink-light); text-decoration:none;">The Lab</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/rankings.html" style="color:var(--ink-light); text-decoration:none;">Rankings</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/leaders.html" style="color:var(--ink-light); text-decoration:none;">Leaders</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/prospects.html" style="color:var(--ink-light); text-decoration:none;">Prospects</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/scarcity.html" style="color:var(--ink-light); text-decoration:none;">Scarcity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/breakouts.html" style="color:var(--ink-light); text-decoration:none;">Breakouts</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/buysell.html" style="color:var(--ink-light); text-decoration:none;">Buy/Sell</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/aging.html" style="color:var(--ink-light); text-decoration:none;">Aging</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/weekly.html" style="color:var(--ink-light); text-decoration:none;">Weekly</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/targets.html" style="color:var(--ink-light); text-decoration:none;">Targets</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/matchups.html" style="color:var(--ink-light); text-decoration:none;">Matchups</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/usage.html" style="color:var(--ink-light); text-decoration:none;">Usage</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/yoy.html" style="color:var(--ink-light); text-decoration:none;">YoY</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/airyards.html" style="color:var(--ink-light); text-decoration:none;">Air Yards</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/explorer.html" style="color:var(--ink-light); text-decoration:none;">Explorer</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/redzone.html" style="color:var(--ink-light); text-decoration:none;">Red Zone</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/efficiency.html" style="color:var(--ink-light); text-decoration:none;">Efficiency</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/consistency.html" style="color:var(--ink-light); text-decoration:none;">Consistency</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/schedule.html" style="color:var(--ink-light); text-decoration:none;">Schedule</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/stocks.html" style="color:var(--ink-light); text-decoration:none;">Stocks</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/opportunity.html" style="color:var(--ink-light); text-decoration:none;">Opportunity</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/reportcard.html" style="color:var(--ink-light); text-decoration:none;">Report Card</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/awards.html" style="color:var(--ink-light); text-decoration:none;">Awards</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/vorp.html" style="color:var(--ink-light); text-decoration:none;">VORP</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tradevalues.html" style="color:var(--ink-light); text-decoration:none;">Trade Values</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/tradefinder.html" style="color:var(--ink-light); text-decoration:none;">Trade Finder</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/team/KC" style="color:var(--ink-light); text-decoration:none;">Teams</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none;">League Intel</a>
+    <span style="margin:0 8px;">|</span>
+    <a href="/agents.html" style="color:var(--ink-light); text-decoration:none;">War Room</a>
+  </div>
+  razzle.lol — let's razzle dazzle em baby
+</footer>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script src="app.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function fmt(v, dec) {
+    if (v === null || v === undefined) return '-';
+    return Number(v).toFixed(dec === undefined ? 1 : dec);
+  }
+
+  var TIER_LABELS = {
+    1: 'Elite', 2: 'Blue Chip', 3: 'Premium', 4: 'Solid',
+    5: 'Promising', 6: 'Depth', 7: 'Roster Clogger', 8: 'Cut Bait'
+  };
+
+  var currentData = null;
+  var targetPosFilter = '';
+  var seasonLoaded = false;
+  var searchTimer = null;
+  var acVisible = false;
+
+  // --- Player quick-search for autocomplete ---
+  function searchPlayers(query) {
+    if (!query || query.length < 2) {
+      hideAutocomplete();
+      return;
+    }
+    fetch('/api/players/quick-search?q=' + encodeURIComponent(query) + '&limit=8')
+      .then(function(resp) {
+        if (!resp.ok) throw new Error('API error');
+        return resp.json();
+      })
+      .then(function(data) {
+        var players = data.players || data || [];
+        showAutocomplete(players);
+      })
+      .catch(function() { hideAutocomplete(); });
+  }
+
+  function showAutocomplete(players) {
+    var ac = document.getElementById('autocomplete');
+    if (!players.length) { hideAutocomplete(); return; }
+
+    var html = '';
+    players.forEach(function(p) {
+      var pos = (p.position || '').toLowerCase();
+      html += '<div class="tf-ac-item" data-pid="' + escapeHtml(p.player_id) + '">';
+      if (p.headshot_url) {
+        html += '<img class="tf-ac-img" src="' + escapeHtml(p.headshot_url) + '" alt="" onerror="this.style.display=\'none\'">';
+      }
+      html += '<div>';
+      html += '<div class="tf-ac-name">' + escapeHtml(p.full_name || p.display_name || '') + '</div>';
+      html += '<div class="tf-ac-meta"><span class="pos-badge ' + pos + '">' + escapeHtml(p.position || '') + '</span> ' + escapeHtml(p.team || '') + '</div>';
+      html += '</div></div>';
+    });
+
+    ac.innerHTML = html;
+    ac.style.display = 'block';
+    acVisible = true;
+
+    ac.querySelectorAll('.tf-ac-item').forEach(function(item) {
+      item.addEventListener('click', function() {
+        var pid = item.getAttribute('data-pid');
+        selectPlayer(pid);
+      });
+    });
+  }
+
+  function hideAutocomplete() {
+    var ac = document.getElementById('autocomplete');
+    ac.style.display = 'none';
+    acVisible = false;
+  }
+
+  function selectPlayer(playerId) {
+    hideAutocomplete();
+    document.getElementById('player-search').value = '';
+    loadTradeTargets(playerId);
+  }
+
+  // --- Load trade targets for a player ---
+  function loadTradeTargets(playerId) {
+    var body = document.getElementById('tf-body');
+    body.innerHTML = '<div class="tf-loading">scouting trade targets...</div>';
+    document.getElementById('export-btn').style.display = 'none';
+
+    var seasonSel = document.getElementById('season-select');
+    var season = seasonSel.value || '';
+    var url = '/api/trade-finder?player_id=' + encodeURIComponent(playerId);
+    if (season) url += '&season=' + season;
+
+    fetch(url).then(function(resp) {
+      if (!resp.ok) throw new Error('API error ' + resp.status);
+      return resp.json();
+    }).then(function(data) {
+      if (data.error) {
+        body.innerHTML = '<div class="tf-error">' + escapeHtml(data.error) + '</div>';
+        return;
+      }
+
+      // Populate season selector once
+      if (!seasonLoaded && data.available_seasons) {
+        var seasonSel = document.getElementById('season-select');
+        data.available_seasons.forEach(function(s) {
+          var opt = document.createElement('option');
+          opt.value = s;
+          opt.textContent = s;
+          seasonSel.appendChild(opt);
+        });
+        seasonSel.value = data.season;
+        seasonLoaded = true;
+      }
+
+      currentData = data;
+      targetPosFilter = '';
+      render(data);
+      document.getElementById('export-btn').style.display = '';
+
+      // Update URL state
+      var newUrl = window.location.pathname + '?player=' + encodeURIComponent(playerId);
+      if (season) newUrl += '&season=' + season;
+      history.replaceState(null, '', newUrl);
+    }).catch(function() {
+      body.innerHTML = '<div class="tf-error">failed to find trade targets<br><button class="btn-chunky" onclick="location.reload()">retry</button></div>';
+    });
+  }
+
+  function filterTargets(targets) {
+    if (!targetPosFilter) return targets;
+    return targets.filter(function(p) {
+      return p.position === targetPosFilter;
+    });
+  }
+
+  function stockArrow(trend) {
+    if (trend === 'rising') return '<span class="stock-arrow rising" title="Rising stock">&#9650;</span>';
+    if (trend === 'falling') return '<span class="stock-arrow falling" title="Falling stock">&#9660;</span>';
+    return '<span class="stock-arrow stable" title="Stable">&#9644;</span>';
+  }
+
+  function valDiffChip(diff) {
+    var sign = diff > 0 ? '+' : '';
+    var cls = diff > 2 ? 'positive' : (diff < -2 ? 'negative' : 'neutral');
+    return '<span class="val-diff ' + cls + '">' + sign + fmt(diff) + '</span>';
+  }
+
+  function buildTargetTable(targets, sectionId) {
+    if (!targets.length) {
+      return '<div class="tf-empty">no targets found' + (targetPosFilter ? ' for ' + escapeHtml(targetPosFilter) : '') + '</div>';
+    }
+
+    var html = '<div class="tf-table-wrap"><table class="tf-table">';
+    html += '<thead><tr>';
+    html += '<th>Player</th>';
+    html += '<th>Pos</th>';
+    html += '<th>Team</th>';
+    html += '<th class="hide-mobile">Age</th>';
+    html += '<th>Value</th>';
+    html += '<th>Diff</th>';
+    html += '<th>Stock</th>';
+    html += '<th class="hide-mobile">PPG</th>';
+    html += '<th class="hide-mobile">Tier</th>';
+    html += '</tr></thead><tbody>';
+
+    targets.forEach(function(p) {
+      var pos = (p.position || 'RB').toLowerCase();
+      var pct = Math.max(0, Math.min(100, p.trade_value));
+
+      html += '<tr data-pid="' + escapeHtml(p.player_id) + '">';
+
+      // Player
+      html += '<td><div class="tf-player-cell">';
+      if (p.headshot_url) {
+        html += '<img class="tf-row-img" src="' + escapeHtml(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+      }
+      html += '<span class="tf-row-name">' + escapeHtml(p.full_name) + '</span>';
+      html += '</div></td>';
+
+      // Position
+      html += '<td><span class="pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span></td>';
+
+      // Team
+      html += '<td>' + escapeHtml(p.team) + '</td>';
+
+      // Age
+      html += '<td class="hide-mobile">' + (p.age ? escapeHtml(String(p.age)) : '-') + '</td>';
+
+      // Value bar
+      html += '<td><div class="tf-bar-track"><div class="tf-bar-fill ' + pos + '" style="width:' + pct + '%"></div></div> ' + fmt(p.trade_value) + '</td>';
+
+      // Diff
+      html += '<td>' + valDiffChip(p.value_diff) + '</td>';
+
+      // Stock trend
+      html += '<td>' + stockArrow(p.stock_trend || 'stable') + '</td>';
+
+      // PPG
+      html += '<td class="hide-mobile">' + fmt(p.ppg) + '</td>';
+
+      // Tier
+      html += '<td class="hide-mobile"><span class="tier-badge t' + p.tier + '">' + escapeHtml(p.tier_label) + '</span></td>';
+
+      html += '</tr>';
+    });
+
+    html += '</tbody></table></div>';
+    return html;
+  }
+
+  function render(data) {
+    var body = document.getElementById('tf-body');
+    var sel = data.selected_player;
+    if (!sel) {
+      body.innerHTML = '<div class="tf-error">player data not available</div>';
+      return;
+    }
+
+    var pos = (sel.position || 'RB').toLowerCase();
+    var html = '';
+
+    // Selected player card
+    html += '<div class="tf-selected-card">';
+    if (sel.headshot_url) {
+      html += '<img class="tf-sel-headshot" src="' + escapeHtml(sel.headshot_url) + '" alt="" onerror="this.style.display=\'none\'">';
+    }
+    html += '<div class="tf-sel-info">';
+    html += '<div class="tf-sel-name">' + escapeHtml(sel.full_name) + '</div>';
+    html += '<div class="tf-sel-meta">';
+    html += '<span class="pos-badge ' + pos + '">' + escapeHtml(sel.position) + '</span>';
+    html += '<span>' + escapeHtml(sel.team) + '</span>';
+    if (sel.age) html += '<span>age ' + escapeHtml(String(sel.age)) + '</span>';
+    html += '<span class="tier-badge t' + sel.tier + '">' + escapeHtml(sel.tier_label) + '</span>';
+    html += stockArrow(sel.stock_trend || 'stable');
+    html += '</div></div>';
+    html += '<div class="tf-sel-stats">';
+    html += '<div class="tf-sel-stat"><div class="tf-sel-stat-val">' + fmt(sel.trade_value) + '</div><div class="tf-sel-stat-label">Trade Value</div></div>';
+    html += '<div class="tf-sel-stat"><div class="tf-sel-stat-val">' + fmt(sel.ppg) + '</div><div class="tf-sel-stat-label">PPG</div></div>';
+    html += '<div class="tf-sel-stat"><div class="tf-sel-stat-val">' + escapeHtml(String(sel.games || '-')) + '</div><div class="tf-sel-stat-label">GP</div></div>';
+    html += '<div class="tf-sel-stat"><div class="tf-sel-stat-val">' + (sel.stock_score !== undefined ? escapeHtml(String(sel.stock_score)) : '-') + '</div><div class="tf-sel-stat-label">Stock</div></div>';
+    html += '</div></div>';
+
+    // Position filter tabs
+    html += '<div class="tf-target-controls">';
+    html += '<div class="tf-pos-tabs" id="target-pos-tabs">';
+    html += '<button class="tf-pos-tab' + (!targetPosFilter ? ' active' : '') + '" data-pos="">All</button>';
+    html += '<button class="tf-pos-tab' + (targetPosFilter === 'QB' ? ' active' : '') + '" data-pos="QB">QB</button>';
+    html += '<button class="tf-pos-tab' + (targetPosFilter === 'RB' ? ' active' : '') + '" data-pos="RB">RB</button>';
+    html += '<button class="tf-pos-tab' + (targetPosFilter === 'WR' ? ' active' : '') + '" data-pos="WR">WR</button>';
+    html += '<button class="tf-pos-tab' + (targetPosFilter === 'TE' ? ' active' : '') + '" data-pos="TE">TE</button>';
+    html += '</div></div>';
+
+    // Equal value section
+    var equalFiltered = filterTargets(data.equal_targets || []);
+    html += '<div class="tf-section">';
+    html += '<div class="tf-section-header">Equal Value Targets <span class="tf-section-count">' + equalFiltered.length + '</span></div>';
+    html += '<div class="tf-section-desc">players with similar dynasty trade value</div>';
+    html += buildTargetTable(equalFiltered, 'equal');
+    html += '</div>';
+
+    // Buy low section
+    var buyFiltered = filterTargets(data.buy_low || []);
+    html += '<div class="tf-section">';
+    html += '<div class="tf-section-header">Buy Low Targets <span class="tf-section-count">' + buyFiltered.length + '</span></div>';
+    html += '<div class="tf-section-desc">higher value but falling stock — buy the dip</div>';
+    html += buildTargetTable(buyFiltered, 'buylow');
+    html += '</div>';
+
+    // Sell high section
+    var sellFiltered = filterTargets(data.sell_high || []);
+    html += '<div class="tf-section">';
+    html += '<div class="tf-section-header">Sell High Targets <span class="tf-section-count">' + sellFiltered.length + '</span></div>';
+    html += '<div class="tf-section-desc">lower value but rising stock — sell into strength</div>';
+    html += buildTargetTable(sellFiltered, 'sellhigh');
+    html += '</div>';
+
+    body.innerHTML = html;
+
+    // Click handlers for target rows
+    body.querySelectorAll('tr[data-pid]').forEach(function(row) {
+      row.addEventListener('click', function() {
+        var pid = row.getAttribute('data-pid');
+        if (pid) window.location.href = '/player/' + encodeURIComponent(pid);
+      });
+    });
+
+    // Position filter tab clicks
+    var tabs = document.getElementById('target-pos-tabs');
+    if (tabs) {
+      tabs.addEventListener('click', function(e) {
+        var tab = e.target.closest('.tf-pos-tab');
+        if (!tab) return;
+        tabs.querySelectorAll('.tf-pos-tab').forEach(function(t) { t.classList.remove('active'); });
+        tab.classList.add('active');
+        targetPosFilter = tab.getAttribute('data-pos') || '';
+        render(currentData);
+      });
+    }
+  }
+
+  // --- Search input ---
+  var searchInput = document.getElementById('player-search');
+  searchInput.addEventListener('input', function() {
+    clearTimeout(searchTimer);
+    var q = searchInput.value.trim();
+    searchTimer = setTimeout(function() {
+      searchPlayers(q);
+    }, 250);
+  });
+
+  // Hide autocomplete on outside click
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.tf-search-wrap')) {
+      hideAutocomplete();
+    }
+  });
+
+  // Season change re-fetches
+  document.getElementById('season-select').addEventListener('change', function() {
+    if (currentData && currentData.selected_player) {
+      loadTradeTargets(currentData.selected_player.player_id);
+    }
+  });
+
+  // Export PNG
+  document.getElementById('export-btn').addEventListener('click', function() {
+    var el = document.getElementById('tf-content');
+    if (typeof html2canvas !== 'undefined') {
+      html2canvas(el, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+        var ctx = canvas.getContext('2d');
+        ctx.font = '24px Caveat, cursive';
+        ctx.fillStyle = 'rgba(26,26,46,0.3)';
+        ctx.textAlign = 'right';
+        ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 16);
+
+        var link = document.createElement('a');
+        link.download = 'razzle-trade-finder.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      });
+    }
+  });
+
+  // Analytics pageview
+  fetch('/api/analytics/pageview', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ page: '/tradefinder.html', referrer: document.referrer || '' })
+  }).catch(function() {});
+
+  // Check URL for player param
+  var params = new URLSearchParams(window.location.search);
+  var urlPlayer = params.get('player');
+  if (urlPlayer) {
+    loadTradeTargets(urlPlayer);
+  }
+
+  // Pre-populate season selector from trade-value-chart
+  fetch('/api/trade-value-chart?limit=1').then(function(resp) {
+    if (!resp.ok) return;
+    return resp.json();
+  }).then(function(data) {
+    if (!seasonLoaded && data && data.available_seasons) {
+      var seasonSel = document.getElementById('season-select');
+      data.available_seasons.forEach(function(s) {
+        var opt = document.createElement('option');
+        opt.value = s;
+        opt.textContent = s;
+        seasonSel.appendChild(opt);
+      });
+      if (data.season) seasonSel.value = data.season;
+      seasonLoaded = true;
+    }
+  }).catch(function() {});
+})();
+</script>
+</body>
+</html>
