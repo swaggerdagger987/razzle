@@ -826,7 +826,7 @@ async function openCompare() {
   if (state.selectedPlayers.length < 2) return;
   document.getElementById("compareOverlay").classList.add("open");
 
-  if (state.universe === "prospects") {
+  if (typeof isProspectView === "function" && isProspectView()) {
     const names = state.selectedPlayers.map(p => p.player_name || p.full_name).join(",");
     try {
       const data = await apiFetch(`/api/prospects/compare?names=${encodeURIComponent(names)}&draft_year=${state.season}`);

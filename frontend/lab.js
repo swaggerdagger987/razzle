@@ -99,6 +99,7 @@ function sharePanelURL(panelName) {
   var params = new URLSearchParams(window.location.search);
   params.set('panel', panelName);
   if (state.universe && state.universe !== 'nfl') params.set('universe', state.universe);
+  if (state.universe === 'college' && state.collegeView === 'prospects') params.set('cv', 'prospects');
   if (state.season) params.set('season', state.season);
   if (state.position) params.set('pos', state.position);
   var url = window.location.origin + window.location.pathname + '?' + params.toString();
@@ -490,7 +491,13 @@ const PRESETS = {
 
 // ─── State ───────────────────────────────────────────────────────
 const state = {
-  universe: (function() { try { return localStorage.getItem('razzle_universe'); } catch(e) { return null; } })() || "nfl", // "nfl", "prospects", or "college"
+  universe: (function() {
+    try {
+      var u = localStorage.getItem('razzle_universe');
+      if (u === 'prospects') return 'college'; // legacy: merged into college
+      return u;
+    } catch(e) { return null; }
+  })() || "nfl", // "nfl" or "college"
   position: "ALL",
   search: "",
   season: 0,
@@ -509,15 +516,26 @@ const state = {
   selectedPlayers: [], // for compare/charts [{player_id, full_name, position, team}]
   heatColors: false, // percentile heat coloring toggle
   formulas: [], // user custom formulas [{name, components: [{stat, weight}]}]
-  // Prospect-specific state
+  // College-specific state (includes prospect sub-view)
+  collegeView: (function() {
+    try {
+      var u = localStorage.getItem('razzle_universe');
+      if (u === 'prospects') return 'prospects'; // legacy migration
+      return localStorage.getItem('razzle_college_view') || 'stats';
+    } catch(e) { return 'stats'; }
+  })(), // "stats" or "prospects"
   draftYear: 0,
   draftYears: [],
   prospectColumns: [...PROSPECT_PRESETS.combine.columns],
-  // College-specific state
   collegeSeason: 0,
   collegeSeasons: [],
   collegeColumns: [...COLLEGE_PRESETS.production.columns],
 };
+
+// Helper: is the user viewing prospect data (within college universe)?
+function isProspectView() {
+  return state.universe === "college" && state.collegeView === "prospects";
+}
 
 // ─── Init ────────────────────────────────────────────────────────
 (async function init() {
@@ -595,7 +613,7 @@ const state = {
 
 // ─── Data fetching ───────────────────────────────────────────────
 async function fetchAndRender() {
-  if (state.universe === "prospects") {
+  if (isProspectView()) {
     return fetchAndRenderProspects();
   }
   if (state.universe === "college") {
@@ -739,7 +757,7 @@ async function fetchAndRenderCollege() {
 
 // ─── Table rendering ─────────────────────────────────────────────
 function renderTable() {
-  if (state.universe === "prospects") {
+  if (isProspectView()) {
     renderProspectTable();
   } else if (state.universe === "college") {
     renderCollegeTable();
@@ -754,13 +772,13 @@ function renderCollegeTable() {
 }
 
 function getActiveColumns() {
-  if (state.universe === "prospects") return state.prospectColumns;
+  if (isProspectView()) return state.prospectColumns;
   if (state.universe === "college") return state.collegeColumns;
   return state.visibleColumns;
 }
 
 function getColumnDef(key) {
-  if (state.universe === "prospects") return PROSPECT_COLUMNS[key];
+  if (isProspectView()) return PROSPECT_COLUMNS[key];
   if (state.universe === "college") return COLLEGE_COLUMNS[key];
   return COLUMNS[key];
 }
@@ -774,7 +792,7 @@ function renderTableHead() {
   const thead = document.getElementById("tableHead");
   const cols = getActiveColumns();
 
-  const nameKey = (state.universe === "prospects" || state.universe === "college") ? "player_name" : "full_name";
+  const nameKey = (isProspectView() || state.universe === "college") ? "player_name" : "full_name";
   let html = '<tr><th style="width:28px; text-align:center; padding:8px 4px;" title="Watchlist">&#9733;</th><th style="width:30px; text-align:center; padding:8px 6px;">&#9744;</th>';
   html += `<th class="col-player" onclick="sortBy('${nameKey}')">Player`;
   if (state.sortKey === "full_name" || state.sortKey === "player_name") {
@@ -816,7 +834,7 @@ function buildRowHTML(player, cols, heatOn, pctData) {
   html += `<td style="text-align:center; padding:7px 4px; cursor:pointer; font-size:16px;" onclick="toggleWatchlistPlayer('${escapeAttr(playKey)}', '${pName}', '${escapeAttr(pos)}', '${pTeam}', '${state.universe}')" title="${starred ? 'Remove from watchlist' : 'Add to watchlist'}">${starred ? '<span style="color:var(--orange);">&#9733;</span>' : '<span style="color:var(--ink-faint);">&#9734;</span>'}</td>`;
   html += `<td style="text-align:center; padding:7px 6px;">
     <input type="checkbox" ${selected ? "checked" : ""} onchange="togglePlayerSelect('${escapeAttr(player.player_id || player.player_name)}', this.checked)"
-      style="accent-color:${(state.universe === 'prospects' || state.universe === 'college') ? 'var(--pos-qb)' : 'var(--orange)'}; width:15px; height:15px; cursor:pointer;">
+      style="accent-color:${state.universe === 'college' ? 'var(--pos-qb)' : 'var(--orange)'}; width:15px; height:15px; cursor:pointer;">
   </td>`;
 
   if (state.universe === "college") {
@@ -828,7 +846,7 @@ function buildRowHTML(player, cols, heatOn, pctData) {
     html += `<span class="team-label">${escapeHtml(player.team)}</span>`;
     if (player.conference) html += `<span class="school-label" style="font-size:10px; color:var(--ink-light);">${escapeHtml(player.conference)}</span>`;
     html += `</div></td>`;
-  } else if (state.universe === "prospects") {
+  } else if (isProspectView()) {
     const pn = escapeAttr(player.player_name || "");
     const pPos = (player.position || "").toUpperCase();
     const pYear = player.draft_year || state.season;
@@ -856,7 +874,7 @@ function buildRowHTML(player, cols, heatOn, pctData) {
     let val = player[key];
     const hBg = heatPcts && heatPcts[key] != null ? getHeatColor(heatPcts[key]) : "";
     const hStyle = hBg ? ` style="background:${hBg};"` : "";
-    if ((state.universe === "prospects" || state.universe === "college") && !col.isText && (val === 0 || val === null || val === undefined)) {
+    if ((isProspectView() || state.universe === "college") && !col.isText && (val === 0 || val === null || val === undefined)) {
       html += `<td style="color:var(--ink-faint);">\u2014</td>`;
       continue;
     }
@@ -924,7 +942,7 @@ function onTableScroll() {
 function renderTableBody() {
   const tbody = document.getElementById("tableBody");
   const cols = getActiveColumns();
-  const emptyMsg = state.universe === "prospects"
+  const emptyMsg = isProspectView()
     ? "no prospects match these filters"
     : state.universe === "college"
     ? "no college players match these filters"
@@ -1010,7 +1028,12 @@ function renderProspectTable() {
 
 // ─── Universe toggle ─────────────────────────────────────────────
 function setUniverse(u) {
-  if (state.universe === u) return;
+  // Map legacy "prospects" universe to college + prospects sub-view
+  if (u === "prospects") {
+    u = "college";
+    state.collegeView = "prospects";
+  }
+  if (state.universe === u && u !== "college") return;
   state.universe = u;
   try { localStorage.setItem('razzle_universe', u); } catch(e) {}
   state.offset = 0;
@@ -1019,7 +1042,7 @@ function setUniverse(u) {
   state.selectedPlayers = [];
   document.getElementById("searchInput").value = "";
 
-  if (u === "prospects") {
+  if (isProspectView()) {
     state.sortKey = "draft_pick";
     state.sortDir = "asc";
   } else if (u === "college") {
@@ -1042,25 +1065,65 @@ function setUniverse(u) {
   if (window._invalidatePanelCaches) window._invalidatePanelCaches();
 }
 
+function setCollegeView(view) {
+  if (state.collegeView === view) return;
+  state.collegeView = view;
+  try { localStorage.setItem('razzle_college_view', view); } catch(e) {}
+  state.offset = 0;
+  state.search = "";
+  state.filters = [];
+  state.selectedPlayers = [];
+  document.getElementById("searchInput").value = "";
+
+  if (view === "prospects") {
+    state.sortKey = "draft_pick";
+    state.sortDir = "asc";
+  } else {
+    state.sortKey = "total_yards";
+    state.sortDir = "desc";
+  }
+
+  applyUniverseUI();
+  populateSeasonSelect();
+  populateFilterStatSelect();
+  renderColumnPicker();
+  renderPresets();
+  renderActiveFilters();
+  fetchAndRender();
+
+  if (window._invalidatePanelCaches) window._invalidatePanelCaches();
+}
+
 function applyUniverseUI() {
-  const isProspect = state.universe === "prospects";
+  const isProspect = isProspectView();
   const isCollege = state.universe === "college";
   const isNFL = state.universe === "nfl";
 
   // Toggle body classes for blue accent
   document.body.classList.toggle("prospect-mode", isProspect);
-  document.body.classList.toggle("college-mode", isCollege);
+  document.body.classList.toggle("college-mode", isCollege && !isProspect);
 
   // Update universe bar label
   const uLabel = document.getElementById("universeLabel");
   if (uLabel) {
-    uLabel.textContent = isCollege ? "college universe" : isProspect ? "prospect universe" : "NFL universe";
+    uLabel.textContent = isCollege
+      ? (isProspect ? "college — draft prospects" : "college universe")
+      : "NFL universe";
   }
 
-  // Toggle buttons
+  // Toggle universe buttons (only NFL and College now)
   document.getElementById("universeNFL").classList.toggle("active", isNFL);
-  document.getElementById("universeProspects").classList.toggle("active", isProspect);
   document.getElementById("universeCollege").classList.toggle("active", isCollege);
+
+  // Toggle college sub-view buttons
+  const subToggle = document.getElementById("collegeSubToggle");
+  if (subToggle) {
+    subToggle.style.display = isCollege ? "flex" : "none";
+    const statsBtn = document.getElementById("collegeViewStats");
+    const prospectsBtn = document.getElementById("collegeViewProspects");
+    if (statsBtn) statsBtn.classList.toggle("active", !isProspect);
+    if (prospectsBtn) prospectsBtn.classList.toggle("active", isProspect);
+  }
 
   // Search placeholder
   document.getElementById("searchInput").placeholder = isProspect
@@ -1124,7 +1187,7 @@ function applyUniverseUI() {
 // ─── Sort ────────────────────────────────────────────────────────
 function sortBy(key) {
   // Normalize player name sort key per universe
-  if (key === "full_name" && (state.universe === "prospects" || state.universe === "college")) key = "player_name";
+  if (key === "full_name" && (isProspectView() || state.universe === "college")) key = "player_name";
   if (key === "player_name" && state.universe === "nfl") key = "full_name";
 
   if (state.sortKey === key) {
@@ -1164,7 +1227,7 @@ function toggleRelevance() {
 function populateSeasonSelect() {
   const sel = document.getElementById("seasonSelect");
 
-  if (state.universe === "prospects") {
+  if (isProspectView()) {
     sel.innerHTML = state.draftYears.map(y =>
       `<option value="${y}" ${y === state.draftYear ? "selected" : ""}>${y} Draft</option>`
     ).join("");
@@ -1217,14 +1280,14 @@ function nextPage() {
 
 function updateResultCount() {
   const el = document.getElementById("resultCount");
-  const label = state.universe === "prospects" ? "prospects" : state.universe === "college" ? "college players" : "players";
+  const label = isProspectView() ? "prospects" : state.universe === "college" ? "college players" : "players";
   el.innerHTML = `<strong>${state.totalCount}</strong> ${label}`;
 }
 
 // ─── Filters ─────────────────────────────────────────────────────
 function populateFilterStatSelect() {
   const sel = document.getElementById("filterStat");
-  const colDefs = state.universe === "prospects" ? PROSPECT_COLUMNS : state.universe === "college" ? COLLEGE_COLUMNS : COLUMNS;
+  const colDefs = isProspectView() ? PROSPECT_COLUMNS : state.universe === "college" ? COLLEGE_COLUMNS : COLUMNS;
   const keys = Object.keys(colDefs).filter(k => !colDefs[k].isText && !colDefs[k].derived);
   sel.innerHTML = keys.map(k => {
     const col = colDefs[k];
@@ -1368,7 +1431,7 @@ function closeColumnPicker(e) {
 
 function renderColumnPicker() {
   const container = document.getElementById("columnGroups");
-  const colDefs = state.universe === "prospects" ? PROSPECT_COLUMNS : state.universe === "college" ? COLLEGE_COLUMNS : COLUMNS;
+  const colDefs = isProspectView() ? PROSPECT_COLUMNS : state.universe === "college" ? COLLEGE_COLUMNS : COLUMNS;
   const activeCols = getActiveColumns();
 
   const groups = {};
@@ -1394,8 +1457,8 @@ function renderColumnPicker() {
 }
 
 function toggleColumn(key, checked) {
-  const colArray = state.universe === "prospects" ? "prospectColumns" : state.universe === "college" ? "collegeColumns" : "visibleColumns";
-  const colDefs = state.universe === "prospects" ? PROSPECT_COLUMNS : state.universe === "college" ? COLLEGE_COLUMNS : COLUMNS;
+  const colArray = isProspectView() ? "prospectColumns" : state.universe === "college" ? "collegeColumns" : "visibleColumns";
+  const colDefs = isProspectView() ? PROSPECT_COLUMNS : state.universe === "college" ? COLLEGE_COLUMNS : COLUMNS;
 
   if (checked && !state[colArray].includes(key)) {
     const allKeys = Object.keys(colDefs);
@@ -1415,18 +1478,18 @@ function toggleColumn(key, checked) {
 
 function renderPresets() {
   const container = document.getElementById("presetBar");
-  const presets = state.universe === "prospects" ? PROSPECT_PRESETS : state.universe === "college" ? COLLEGE_PRESETS : PRESETS;
+  const presets = isProspectView() ? PROSPECT_PRESETS : state.universe === "college" ? COLLEGE_PRESETS : PRESETS;
   container.innerHTML = Object.entries(presets).map(([key, preset]) =>
     `<button class="btn-chunky" onclick="applyPreset('${key}')">${preset.label}</button>`
   ).join("");
 }
 
 function applyPreset(key) {
-  const presets = state.universe === "prospects" ? PROSPECT_PRESETS : state.universe === "college" ? COLLEGE_PRESETS : PRESETS;
+  const presets = isProspectView() ? PROSPECT_PRESETS : state.universe === "college" ? COLLEGE_PRESETS : PRESETS;
   const preset = presets[key];
   if (!preset) return;
 
-  if (state.universe === "prospects") {
+  if (isProspectView()) {
     state.prospectColumns = [...preset.columns];
   } else if (state.universe === "college") {
     state.collegeColumns = [...preset.columns];
@@ -1443,6 +1506,7 @@ function saveStateToURL() {
   const params = new URLSearchParams();
 
   if (state.universe !== "nfl") params.set("u", state.universe);
+  if (state.universe === "college" && state.collegeView === "prospects") params.set("cv", "prospects");
   if (state.position !== "ALL") params.set("pos", state.position);
   if (state.search) params.set("q", state.search);
   if (state.sortDir !== "desc") params.set("dir", state.sortDir);
@@ -1452,7 +1516,7 @@ function saveStateToURL() {
   if (state.minGP > 0) params.set("min_gp", state.minGP);
   if (state.heatColors) params.set("heat", "1");
 
-  if (state.universe === "prospects") {
+  if (isProspectView()) {
     if (state.draftYear) params.set("draft_year", state.draftYear);
     if (state.sortKey !== "draft_pick") params.set("sort", state.sortKey);
     const defaultCols = PROSPECT_PRESETS.combine.columns.join(",");
@@ -1481,7 +1545,16 @@ function saveStateToURL() {
 function loadStateFromURL() {
   const params = new URLSearchParams(window.location.search);
 
-  if (params.has("u")) state.universe = params.get("u");
+  if (params.has("u")) {
+    const uParam = params.get("u");
+    if (uParam === "prospects") {
+      state.universe = "college";
+      state.collegeView = "prospects";
+    } else {
+      state.universe = uParam;
+    }
+  }
+  if (params.has("cv")) state.collegeView = params.get("cv");
   if (params.has("pos")) state.position = params.get("pos");
   if (params.has("q")) state.search = params.get("q");
   if (params.has("sort")) state.sortKey = params.get("sort");
@@ -1503,7 +1576,7 @@ function loadStateFromURL() {
     state.heatColors = (function() { try { return localStorage.getItem("razzle_heat_colors") === "1"; } catch(e) { return false; } })();
   }
 
-  if (state.universe === "prospects") {
+  if (isProspectView()) {
     if (params.has("draft_year")) state.draftYear = parseInt(params.get("draft_year"));
     if (!params.has("sort")) state.sortKey = "draft_pick";
     if (!params.has("dir")) state.sortDir = "asc";
@@ -1585,7 +1658,7 @@ function generateRedditTitle() {
   const season = state.season === "career" ? "Career" : (state.season || "Latest");
   const posFilter = state.position ? state.position.toUpperCase() : "";
 
-  if (state.universe === "prospects") {
+  if (isProspectView()) {
     const year = state.season || "2025";
     if (posFilter) return `${year} ${posFilter} Prospect Class — ${preset} View | Razzle`;
     return `${year} Draft Prospect ${preset} Rankings | Razzle`;
@@ -1632,14 +1705,15 @@ function saveCurrentView() {
     name,
     createdAt: new Date().toISOString(),
     universe: state.universe,
+    collegeView: state.collegeView,
     position: state.position,
     search: state.search,
-    season: state.universe === "college" ? state.collegeSeason : state.universe === "prospects" ? state.draftYear : state.season,
+    season: isProspectView() ? state.draftYear : state.universe === "college" ? state.collegeSeason : state.season,
     relevance: state.relevance,
     sortKey: state.sortKey,
     sortDir: state.sortDir,
     filters: [...state.filters],
-    columns: state.universe === "prospects" ? [...state.prospectColumns] : state.universe === "college" ? [...state.collegeColumns] : [...state.visibleColumns],
+    columns: isProspectView() ? [...state.prospectColumns] : state.universe === "college" ? [...state.collegeColumns] : [...state.visibleColumns],
   };
 
   const views = getSavedViews();
@@ -1655,8 +1729,9 @@ function loadSavedView(id) {
   const view = views.find(v => v.id === id);
   if (!view) return;
 
-  // Apply state
-  state.universe = view.universe || "nfl";
+  // Apply state (map legacy "prospects" universe to college + prospects sub-view)
+  state.universe = (view.universe === "prospects") ? "college" : (view.universe || "nfl");
+  state.collegeView = (view.universe === "prospects" || view.collegeView === "prospects") ? "prospects" : "stats";
   state.position = view.position || "ALL";
   state.search = view.search || "";
   state.sortKey = view.sortKey || "fantasy_points_ppr";
@@ -1664,7 +1739,7 @@ function loadSavedView(id) {
   state.filters = view.filters ? [...view.filters] : [];
   state.relevance = view.relevance || "fantasy";
 
-  if (view.universe === "prospects") {
+  if (isProspectView()) {
     if (view.season) state.draftYear = view.season;
     state.prospectColumns = view.columns ? [...view.columns] : [...PROSPECT_PRESETS.combine.columns];
   } else if (view.universe === "college") {
@@ -1740,7 +1815,7 @@ function renderSavedViewsList() {
 function togglePlayerSelect(playerId, checked) {
   if (checked) {
     if (state.selectedPlayers.length >= 5) return; // max 5
-    if (state.universe === "prospects") {
+    if (isProspectView()) {
       const player = state.items.find(p => (p.player_id || p.player_name) === playerId);
       if (player && !state.selectedPlayers.some(p => p.player_id === playerId)) {
         state.selectedPlayers.push({
@@ -1817,9 +1892,9 @@ function saveLabContext() {
 }
 
 function getCurrentPresetName() {
-  const presets = state.universe === "prospects" ? PROSPECT_PRESETS : state.universe === "college" ? COLLEGE_PRESETS : PRESETS;
+  const presets = isProspectView() ? PROSPECT_PRESETS : state.universe === "college" ? COLLEGE_PRESETS : PRESETS;
   for (const [name, preset] of Object.entries(presets)) {
-    const cols = state.universe === "prospects" ? state.prospectColumns : state.universe === "college" ? state.collegeColumns : state.visibleColumns;
+    const cols = isProspectView() ? state.prospectColumns : state.universe === "college" ? state.collegeColumns : state.visibleColumns;
     if (JSON.stringify(preset.columns) === JSON.stringify(cols)) return preset.label;
   }
   return "Custom";
@@ -2345,7 +2420,7 @@ function exportCSV() {
 
   // Determine column definitions and visible columns based on universe
   let colDefs, visCols;
-  if (state.universe === "prospects") {
+  if (isProspectView()) {
     colDefs = PROSPECT_COLUMNS;
     visCols = state.prospectColumns;
   } else if (state.universe === "college") {
@@ -2366,7 +2441,7 @@ function exportCSV() {
   lines.push("# razzle.lol — Fantasy Football Bloomberg Terminal");
   lines.push("# " + state.universe.toUpperCase() + " | " + state.position + " | " +
     (state.universe === "college" ? state.collegeSeason :
-     state.universe === "prospects" ? state.draftYear : state.season));
+     isProspectView() ? state.draftYear : state.season));
 
   // Header row
   const nameCol = "Player";
@@ -2390,7 +2465,7 @@ function exportCSV() {
   const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8;" });
   const link = document.createElement("a");
   const season = state.universe === "college" ? state.collegeSeason :
-                 state.universe === "prospects" ? state.draftYear : state.season;
+                 isProspectView() ? state.draftYear : state.season;
   link.download = `razzle-${state.universe}-${state.position.toLowerCase()}-${season}.csv`;
   link.href = URL.createObjectURL(blob);
   link.click();

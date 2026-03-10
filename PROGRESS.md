@@ -1,6 +1,19 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 17 — Expand Data to 2015-2025 (COMPLETE)
+## Current Phase: Phase 18 — Remove Prospects Section, Merge into College (COMPLETE)
+
+**Exit Criterion MET**: Prospects universe button removed. College mode now has sub-toggle: "Season Stats" (cfb data) and "Draft Prospects" (combine/draft data). All prospect logic routed through `isProspectView()` helper. Legacy URLs (?u=prospects) and localStorage values auto-migrate. Sidebar category renamed to "College". Prospect panels (Big Board, Mock Draft, Athletic Radar) remain functional under College category.
+
+### Phase 18 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Replace 3-way universe toggle with 2-way + College sub-view | DONE | NFL + College buttons. Sub-toggle for Season Stats / Draft Prospects |
+| 2 | Route prospect logic through College universe | DONE | isProspectView() helper, all 30+ references updated |
+| 3 | Move prospect panels to College sidebar category | DONE | Category renamed from "Prospects & College" to "College" |
+| 4 | Clean up dead references | DONE | prospects.html redirect, index.html links, charts.js, saved views |
+
+## Previous Phase: Phase 17 — Expand Data to 2015-2025 (COMPLETE)
 
 **Exit Criterion MET**: NFL adapter defaults to 2015-current season (11 seasons). render.yaml build command includes 2025 for NFL. College adapter already covered 2015-2025. Frontend season fallbacks made dynamic (no hardcoded 2024). All 37+ standalone pages confirmed using dynamic API-driven season selectors. Lab filter options query DISTINCT seasons from DB.
 

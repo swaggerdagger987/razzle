@@ -1035,11 +1035,7 @@
     gap: 6px;
   }
 
-  body.college-mode .universe-bar {
-    background: var(--blue-light);
-    border-bottom-color: var(--blue);
-  }
-
+  body.college-mode .universe-bar,
   body.prospect-mode .universe-bar {
     background: var(--blue-light);
     border-bottom-color: var(--blue);
@@ -1059,17 +1055,38 @@
     box-shadow: 2px 2px 0 var(--ink);
   }
 
-  /* ===== PROSPECT/COLLEGE MODE ===== */
+  /* ===== COLLEGE SUB-TOGGLE ===== */
+  .college-sub-toggle {
+    display: flex;
+    gap: 4px;
+    margin-left: 12px;
+    padding-left: 12px;
+    border-left: 2px solid var(--ink-light);
+  }
+
+  .college-view-btn {
+    font-size: 11px;
+    padding: 4px 10px;
+    border: 2px solid var(--ink);
+    background: var(--card);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .college-view-btn.active {
+    background: var(--pos-qb);
+    color: white;
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+
+  /* ===== COLLEGE MODE ===== */
+  body.college-mode .toolbar,
   body.prospect-mode .toolbar {
     border-bottom-color: var(--pos-qb);
   }
 
-  body.college-mode .toolbar {
-    border-bottom-color: var(--pos-qb);
-  }
-
-  body.prospect-mode .universe-toggle.active,
-  body.college-mode .universe-toggle.active {
+  body.college-mode .universe-toggle.active,
+  body.prospect-mode .universe-toggle.active {
     background: var(--pos-qb);
   }
 
@@ -2416,7 +2433,7 @@
     <a class="lab-sidebar-item" data-panel="tdregression" data-icon="&#x2248;" onclick="switchPanel('tdregression')">TD Regression<span class="sidebar-tooltip">Expected vs actual touchdowns</span></a>
     <a class="lab-sidebar-item" data-panel="airyards" data-icon="&#x2708;" onclick="switchPanel('airyards')">Air Yards<span class="sidebar-tooltip">Target depth and air yard share</span></a>
 
-    <div class="lab-sidebar-category"><span class="cat-icon" style="display:none">&#x1F393;</span><span class="cat-text">Prospects &amp; College</span></div>
+    <div class="lab-sidebar-category"><span class="cat-icon" style="display:none">&#x1F393;</span><span class="cat-text">College</span></div>
     <a class="lab-sidebar-item" data-panel="prospects" data-icon="&#x2606;" onclick="switchPanel('prospects')">Big Board<span class="sidebar-tooltip">Big Board</span></a>
     <a class="lab-sidebar-item" data-panel="draftclass" data-icon="&#x1F4CB;" onclick="switchPanel('draftclass')">Draft Class Analytics<span class="sidebar-tooltip">Draft Class Analytics</span></a>
     <a class="lab-sidebar-item" data-panel="percentiles" data-icon="%" onclick="switchPanel('percentiles')">Percentiles<span class="sidebar-tooltip">Percentiles</span></a>
@@ -2467,8 +2484,11 @@
 <div class="universe-bar" id="universeBar">
   <div class="universe-bar-inner">
     <button class="btn-chunky universe-toggle active" id="universeNFL" onclick="setUniverse('nfl')">NFL</button>
-    <button class="btn-chunky universe-toggle" id="universeProspects" onclick="setUniverse('prospects')">Prospects</button>
     <button class="btn-chunky universe-toggle" id="universeCollege" onclick="setUniverse('college')">College</button>
+  </div>
+  <div class="college-sub-toggle" id="collegeSubToggle" style="display:none;">
+    <button class="btn-chunky college-view-btn active" id="collegeViewStats" onclick="setCollegeView('stats')">Season Stats</button>
+    <button class="btn-chunky college-view-btn" id="collegeViewProspects" onclick="setCollegeView('prospects')">Draft Prospects</button>
   </div>
   <span class="universe-bar-label" id="universeLabel" style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light);">NFL universe</span>
 </div>
