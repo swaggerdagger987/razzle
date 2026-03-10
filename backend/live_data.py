@@ -3402,6 +3402,377 @@ def fetch_college_scarcity(season=None):
         conn.close()
 
 
+def fetch_college_consistency(season=None, position=None, limit=30):
+    """College consistency: cross-season per-game stat variance for multi-year players."""
+    import math as _math
+
+    conn = get_conn()
+    try:
+        available_seasons = _cfb_available_seasons(conn)
+        if not season:
+            season = available_seasons[0] if available_seasons else 2024
+
+        pos_sql, pos_params = _cfb_pos_filter(position)
+
+        # Get all seasons for players who played in the requested season
+        query = f"""
+            SELECT c.player_id, c.player_name, c.position, c.team, c.conference,
+                   c.season, c.games,
+                   c.carries, c.rush_yards, c.rush_tds,
+                   c.receptions, c.rec_yards, c.rec_tds,
+                   c.pass_yards, c.pass_tds, c.total_yards, c.total_tds
+            FROM cfb_player_season_stats c
+            WHERE c.player_id IN (
+                SELECT player_id FROM cfb_player_season_stats
+                WHERE season = ? AND games >= 4
+                  AND position IN ('QB','RB','WR','TE','ATH')
+                  {pos_sql}
+            )
+            AND c.games >= 4
+            AND c.position IN ('QB','RB','WR','TE','ATH')
+            ORDER BY c.player_id, c.season
+        """
+        rows = conn.execute(query, [season] + pos_params).fetchall()
+        if not rows:
+            return {"season": season, "available_seasons": available_seasons,
+                    "rock_solid": [], "wild_cards": []}
+
+        from collections import defaultdict
+        player_seasons = defaultdict(list)
+        player_info = {}
+        for r in rows:
+            d = dict(r)
+            pid = d["player_id"]
+            g = d["games"] or 1
+            rec = d["receptions"] or 0
+            rush_yd = d["rush_yards"] or 0
+            rec_yd = d["rec_yards"] or 0
+            total_tds = d["total_tds"] or 0
+            pass_yd = d["pass_yards"] or 0
+            pass_tds = d["pass_tds"] or 0
+            fpts = (rush_yd + rec_yd) * 0.1 + total_tds * 6 + rec * 1.0 + pass_yd * 0.04 + pass_tds * 4
+            ppg = fpts / g
+            player_seasons[pid].append({"season": d["season"], "ppg": round(ppg, 2), "games": g})
+            if d["season"] == season:
+                player_info[pid] = {
+                    "player_id": pid,
+                    "name": d["player_name"] or "Unknown",
+                    "position": d["position"] or "ATH",
+                    "team": d["team"] or "",
+                    "conference": d["conference"] or "",
+                }
+
+        players = []
+        for pid, seasons_data in player_seasons.items():
+            if pid not in player_info:
+                continue
+            ppg_values = [s["ppg"] for s in seasons_data]
+            n = len(ppg_values)
+            total_games = sum(s["games"] for s in seasons_data)
+            mean = sum(ppg_values) / n
+            if mean < 2:
+                continue
+
+            if n >= 2:
+                variance = sum((v - mean) ** 2 for v in ppg_values) / (n - 1)
+                stddev = _math.sqrt(variance)
+            else:
+                stddev = 0.0
+            cov = round(stddev / mean, 3) if mean > 0 else 0
+
+            sorted_ppg = sorted(ppg_values)
+            floor_val = sorted_ppg[0]
+            ceil_val = sorted_ppg[-1]
+
+            players.append({
+                **player_info[pid],
+                "ppg": round(mean, 2),
+                "stddev": round(stddev, 2),
+                "cov": cov,
+                "floor": floor_val,
+                "ceiling": ceil_val,
+                "range": round(ceil_val - floor_val, 1),
+                "games": total_games,
+                "seasons": n,
+            })
+
+        cov_values = sorted([p["cov"] for p in players])
+        total = len(cov_values)
+        for p in players:
+            if total == 0:
+                p["grade"] = "C"
+                continue
+            rank = sum(1 for v in cov_values if v > p["cov"])
+            percentile = rank / total * 100
+            p["grade"] = _efficiency_grade(percentile)
+
+        rock_solid = sorted(players, key=lambda x: x["cov"])[:limit]
+        wild_cards = sorted(players, key=lambda x: x["cov"], reverse=True)[:limit]
+
+        return {
+            "season": season,
+            "available_seasons": available_seasons,
+            "rock_solid": rock_solid,
+            "wild_cards": wild_cards,
+        }
+    finally:
+        conn.close()
+
+
+def fetch_college_workload(season=None, position=None, limit=50):
+    """College workload monitor: touches/game, carries, targets (no snap data)."""
+    conn = get_conn()
+    try:
+        available_seasons = _cfb_available_seasons(conn)
+        if not season:
+            season = available_seasons[0] if available_seasons else 2024
+
+        pos_sql, pos_params = _cfb_pos_filter(position)
+
+        query = f"""
+            SELECT c.player_id, c.player_name, c.position, c.team, c.conference,
+                   c.games, c.carries, c.rush_yards, c.rush_tds,
+                   c.targets, c.receptions, c.rec_yards, c.rec_tds,
+                   c.pass_attempts, c.pass_yards, c.pass_tds,
+                   c.total_yards, c.total_tds
+            FROM cfb_player_season_stats c
+            WHERE c.season = ?
+              AND c.position IN ('QB','RB','WR','TE','ATH')
+              AND c.games >= 4
+              {pos_sql}
+            ORDER BY c.total_yards DESC
+            LIMIT 500
+        """
+        rows = conn.execute(query, [season] + pos_params).fetchall()
+        if not rows:
+            return {"players": [], "season": season, "available_seasons": available_seasons, "count": 0}
+
+        players = []
+        for r in rows:
+            d = dict(r)
+            g = d["games"] or 1
+            carries = d["carries"] or 0
+            targets = d["targets"] or 0
+            recs = d["receptions"] or 0
+            rush_yd = d["rush_yards"] or 0
+            rec_yd = d["rec_yards"] or 0
+
+            touches = carries + recs
+            touches_pg = touches / g
+            carries_pg = carries / g
+            targets_pg = targets / g
+            total_yd_pg = (rush_yd + rec_yd) / g
+
+            if touches_pg < 3:
+                continue
+
+            flags = []
+            pos = d["position"] or "ATH"
+            if pos in ("RB",) and touches_pg >= 18:
+                flags.append("bell cow")
+            if pos in ("RB",) and touches_pg >= 22:
+                flags.append("extreme volume")
+            if pos in ("WR", "TE") and targets_pg >= 8:
+                flags.append("target monster")
+            if touches_pg >= 20:
+                flags.append("workhorse")
+
+            workload_score = touches_pg * 4 + total_yd_pg * 0.1
+
+            players.append({
+                "player_id": d["player_id"],
+                "name": d["player_name"] or "Unknown",
+                "position": pos,
+                "team": d["team"] or "",
+                "conference": d["conference"] or "",
+                "games": g,
+                "touches_pg": round(touches_pg, 1),
+                "carries_pg": round(carries_pg, 1),
+                "targets_pg": round(targets_pg, 1),
+                "total_yd_pg": round(total_yd_pg, 1),
+                "workload": round(workload_score, 0),
+                "snaps_pg": None,
+                "snap_pct": None,
+                "flags": flags,
+            })
+
+        players.sort(key=lambda x: x["workload"], reverse=True)
+        players = players[:limit]
+
+        return {
+            "players": players,
+            "season": season,
+            "available_seasons": available_seasons,
+            "count": len(players),
+        }
+    finally:
+        conn.close()
+
+
+def fetch_college_dual_threat(season=None, position=None, limit=50):
+    """College dual-threat index: rush + receiving versatility."""
+    import math as _math
+
+    conn = get_conn()
+    try:
+        available_seasons = _cfb_available_seasons(conn)
+        if not season:
+            season = available_seasons[0] if available_seasons else 2024
+
+        pos_sql, pos_params = _cfb_pos_filter(position)
+
+        query = f"""
+            SELECT c.player_id, c.player_name, c.position, c.team, c.conference,
+                   c.games, c.carries, c.rush_yards, c.rush_tds,
+                   c.receptions, c.rec_yards, c.rec_tds,
+                   c.total_yards, c.total_tds
+            FROM cfb_player_season_stats c
+            WHERE c.season = ?
+              AND c.position IN ('QB','RB','WR','TE','ATH')
+              AND c.games >= 4
+              {pos_sql}
+            ORDER BY c.total_yards DESC
+            LIMIT 500
+        """
+        rows = conn.execute(query, [season] + pos_params).fetchall()
+        if not rows:
+            return {"players": [], "season": season, "available_seasons": available_seasons, "count": 0}
+
+        players = []
+        for r in rows:
+            d = dict(r)
+            g = d["games"] or 1
+            rush_yd = d["rush_yards"] or 0
+            rec_yd = d["rec_yards"] or 0
+            carries = d["carries"] or 0
+            recs = d["receptions"] or 0
+            rush_td = d["rush_tds"] or 0
+            rec_td = d["rec_tds"] or 0
+
+            if rush_yd < 50 and rec_yd < 50:
+                continue
+
+            rush_yd_pg = rush_yd / g
+            rec_yd_pg = rec_yd / g
+            total_yd_pg = rush_yd_pg + rec_yd_pg
+            carries_pg = carries / g
+            rec_pg = recs / g
+
+            rush_comp = max(rush_yd_pg, 0.1)
+            rec_comp = max(rec_yd_pg, 0.1)
+            dti = _math.sqrt(rush_comp * rec_comp)
+
+            total = rush_yd + rec_yd
+            rush_pct = (rush_yd / total * 100) if total > 0 else 50
+            rec_pct = 100 - rush_pct
+
+            players.append({
+                "player_id": d["player_id"],
+                "name": d["player_name"] or "Unknown",
+                "position": d["position"] or "ATH",
+                "team": d["team"] or "",
+                "conference": d["conference"] or "",
+                "games": g,
+                "dti": round(dti, 1),
+                "rush_yd_pg": round(rush_yd_pg, 1),
+                "rec_yd_pg": round(rec_yd_pg, 1),
+                "total_yd_pg": round(total_yd_pg, 1),
+                "carries_pg": round(carries_pg, 1),
+                "rec_pg": round(rec_pg, 1),
+                "rush_td": rush_td,
+                "rec_td": rec_td,
+                "rush_pct": round(rush_pct, 0),
+                "rec_pct": round(rec_pct, 0),
+            })
+
+        players.sort(key=lambda x: x["dti"], reverse=True)
+        players = players[:limit]
+
+        return {
+            "players": players,
+            "season": season,
+            "available_seasons": available_seasons,
+            "count": len(players),
+        }
+    finally:
+        conn.close()
+
+
+def fetch_college_snap_efficiency(season=None, position=None, limit=50):
+    """College touch efficiency: fantasy points per touch (no snap data available)."""
+    conn = get_conn()
+    try:
+        available_seasons = _cfb_available_seasons(conn)
+        if not season:
+            season = available_seasons[0] if available_seasons else 2024
+
+        pos_sql, pos_params = _cfb_pos_filter(position)
+
+        query = f"""
+            SELECT c.player_id, c.player_name, c.position, c.team, c.conference,
+                   c.games, c.carries, c.rush_yards, c.rush_tds,
+                   c.receptions, c.targets, c.rec_yards, c.rec_tds,
+                   c.pass_yards, c.pass_tds, c.total_yards, c.total_tds
+            FROM cfb_player_season_stats c
+            WHERE c.season = ?
+              AND c.position IN ('QB','RB','WR','TE','ATH')
+              AND c.games >= 4
+              {pos_sql}
+            ORDER BY c.total_yards DESC
+            LIMIT 500
+        """
+        rows = conn.execute(query, [season] + pos_params).fetchall()
+        if not rows:
+            return {"players": [], "season": season, "available_seasons": available_seasons, "count": 0}
+
+        players = []
+        for r in rows:
+            d = dict(r)
+            g = d["games"] or 1
+            carries = d["carries"] or 0
+            recs = d["receptions"] or 0
+            rush_yd = d["rush_yards"] or 0
+            rec_yd = d["rec_yards"] or 0
+            total_tds = d["total_tds"] or 0
+            pass_yd = d["pass_yards"] or 0
+            pass_tds = d["pass_tds"] or 0
+
+            touches = carries + recs
+            if touches < 20:
+                continue
+
+            fpts = (rush_yd + rec_yd) * 0.1 + total_tds * 6 + recs * 1.0 + pass_yd * 0.04 + pass_tds * 4
+            ppg = fpts / g
+            touches_pg = touches / g
+            pts_per_touch = fpts / touches if touches > 0 else 0
+
+            players.append({
+                "player_id": d["player_id"],
+                "name": d["player_name"] or "Unknown",
+                "position": d["position"] or "ATH",
+                "team": d["team"] or "",
+                "conference": d["conference"] or "",
+                "games": g,
+                "total_ppr": round(fpts, 1),
+                "ppg": round(ppg, 1),
+                "snaps": touches,
+                "snaps_pg": round(touches_pg, 1),
+                "pts_per_snap": round(pts_per_touch, 2),
+            })
+
+        players.sort(key=lambda x: x["pts_per_snap"], reverse=True)
+        players = players[:limit]
+
+        return {
+            "players": players,
+            "season": season,
+            "available_seasons": available_seasons,
+            "count": len(players),
+        }
+    finally:
+        conn.close()
+
+
 # ---------------------------------------------------------------------------
 # Waitlist
 # ---------------------------------------------------------------------------

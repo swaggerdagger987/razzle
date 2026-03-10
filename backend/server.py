@@ -617,6 +617,34 @@ def college_scarcity(season: int = None):
     return live_data.fetch_college_scarcity(season=season)
 
 
+@app.get("/api/college/consistency")
+def college_consistency(season: int = None, position: str = "", limit: int = 30):
+    return live_data.fetch_college_consistency(
+        season=season, position=position or None, limit=limit,
+    )
+
+
+@app.get("/api/college/workload")
+def college_workload(season: int = None, position: str = "", limit: int = 50):
+    return live_data.fetch_college_workload(
+        season=season, position=position or None, limit=limit,
+    )
+
+
+@app.get("/api/college/dual-threat")
+def college_dual_threat(season: int = None, position: str = "", limit: int = 50):
+    return live_data.fetch_college_dual_threat(
+        season=season, position=position or None, limit=limit,
+    )
+
+
+@app.get("/api/college/snap-efficiency")
+def college_snap_efficiency(season: int = None, position: str = "", limit: int = 50):
+    return live_data.fetch_college_snap_efficiency(
+        season=season, position=position or None, limit=limit,
+    )
+
+
 @app.get("/api/aging-curves")
 def aging_curves(position: str = "WR"):
     return live_data.fetch_aging_curves(position=position)

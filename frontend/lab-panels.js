@@ -1690,9 +1690,12 @@
 
   // ===== 1. EFFICIENCY =====
   defs.push({ name: 'efficiency', render: function(el) {
+    var effCollege = typeof state !== 'undefined' && state.universe === 'college';
+    var effTitle = effCollege ? 'College Efficiency' : 'Fantasy Efficiency';
+    var effSub = effCollege ? 'who does more with less in college football' : 'who does more with less, and who gets fed the most';
     el.innerHTML = '<div class="lp-page">' +
-      '<div class="lp-header"><h2>Fantasy Efficiency</h2>' +
-      '<div class="lp-subtitle">who does more with less, and who gets fed the most</div></div>' +
+      '<div class="lp-header"><h2>' + effTitle + '</h2>' +
+      '<div class="lp-subtitle">' + effSub + '</div></div>' +
       '<div class="lp-controls">' +
       '<div class="lp-pos-tabs" id="eff-pos-tabs">' +
       '<button class="lp-pos-tab active" data-pos="">All</button>' +
@@ -1761,11 +1764,14 @@
         if (c.key !== 'name') cls.push('center');
         if (c.hide) cls.push('hide-mobile');
         if (c.key === 'name') {
+          var isCollegeEff = typeof state !== 'undefined' && state.universe === 'college';
           h += '<td><div class="eff-player-cell">';
           if (p.headshot_url) h += '<img class="eff-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
           h += '<div class="eff-player-info"><div class="eff-player-name">' + escapeHtml(p.name) + '</div>';
           h += '<div class="eff-player-meta"><span class="eff-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
-          h += '<span class="eff-team-label">' + escapeHtml(p.team) + '</span></div></div></div></td>';
+          h += '<span class="eff-team-label">' + escapeHtml(p.team) + '</span>';
+          if (isCollegeEff && p.conference) h += '<span class="eff-team-label" style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
+          h += '</div></div></div></td>';
         } else if (c.key === 'grade') {
           var g = p.grade || 'C';
           h += '<td class="' + cls.join(' ') + '"><span class="eff-grade-badge ' + gradeClass(g) + '">' + escapeHtml(g) + '</span></td>';
@@ -1851,8 +1857,11 @@
     function loadEFF() {
       var body = el.querySelector('#eff-body');
       body.innerHTML = '<div class="lp-loading">running the numbers...</div>';
-      var season = el.querySelector('#eff-season').value;
-      var url = '/api/efficiency-rankings?limit=30';
+      var sel = el.querySelector('#eff-season');
+      if (sel && sel.options.length === 0) seasonsPopulated = false;
+      var season = sel.value;
+      var isCollege = typeof state !== 'undefined' && state.universe === 'college';
+      var url = isCollege ? '/api/college/efficiency?limit=30' : '/api/efficiency-rankings?limit=30';
       if (season) url += '&season=' + season;
       if (curPos) url += '&position=' + curPos;
 
@@ -1888,9 +1897,12 @@
 
   // ===== 2. CONSISTENCY =====
   defs.push({ name: 'consistency', render: function(el) {
+    var conCollege = typeof state !== 'undefined' && state.universe === 'college';
+    var conTitle = conCollege ? 'College Consistency' : 'Consistency Rankings';
+    var conSub = conCollege ? 'cross-season per-game consistency — who produces year after year?' : 'the safest floors and the wildest swings, week to week';
     el.innerHTML = '<div class="lp-page">' +
-      '<div class="lp-header"><h2>Consistency Rankings</h2>' +
-      '<div class="lp-subtitle">the safest floors and the wildest swings, week to week</div></div>' +
+      '<div class="lp-header"><h2>' + conTitle + '</h2>' +
+      '<div class="lp-subtitle">' + conSub + '</div></div>' +
       '<div class="lp-controls">' +
       '<div class="lp-pos-tabs" id="con-pos-tabs">' +
       '<button class="lp-pos-tab active" data-pos="">All</button>' +
@@ -1957,11 +1969,14 @@
         if (c.key !== 'name') cls.push('center');
         if (c.hide) cls.push('hide-mobile');
         if (c.key === 'name') {
+          var isCollegeCon = typeof state !== 'undefined' && state.universe === 'college';
           h += '<td><div class="con-player-cell">';
           if (p.headshot_url) h += '<img class="con-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
           h += '<div class="con-player-info"><div class="con-player-name">' + escapeHtml(p.name) + '</div>';
           h += '<div class="con-player-meta"><span class="con-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
-          h += '<span class="con-team-label">' + escapeHtml(p.team) + '</span></div></div></div></td>';
+          h += '<span class="con-team-label">' + escapeHtml(p.team) + '</span>';
+          if (isCollegeCon && p.conference) h += '<span class="con-team-label" style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
+          h += '</div></div></div></td>';
         } else if (c.key === 'grade') {
           var g = p.grade || 'C';
           h += '<td class="' + cls.join(' ') + '"><span class="con-grade-badge ' + gradeClass(g) + '">' + escapeHtml(g) + '</span></td>';
@@ -2046,8 +2061,11 @@
     function loadCON() {
       var body = el.querySelector('#con-body');
       body.innerHTML = '<div class="lp-loading">checking the tape...</div>';
-      var season = el.querySelector('#con-season').value;
-      var url = '/api/consistency-rankings?limit=30';
+      var sel = el.querySelector('#con-season');
+      if (sel && sel.options.length === 0) seasonsPopulated = false;
+      var season = sel.value;
+      var isCollege = typeof state !== 'undefined' && state.universe === 'college';
+      var url = isCollege ? '/api/college/consistency?limit=30' : '/api/consistency-rankings?limit=30';
       if (season) url += '&season=' + season;
       if (curPos) url += '&position=' + curPos;
 
@@ -2083,9 +2101,12 @@
 
   // ===== 3. SNAP EFFICIENCY =====
   defs.push({ name: 'snapefficiency', render: function(el) {
+    var seCollege = typeof state !== 'undefined' && state.universe === 'college';
+    var seTitle = seCollege ? 'College Touch Efficiency' : 'Snap Efficiency';
+    var seSub = seCollege ? 'fantasy points per touch — who maximizes every opportunity?' : 'fantasy points per snap — who maximizes every snap they play?';
     el.innerHTML = '<div class="lp-page">' +
-      '<div class="lp-header"><h2>Snap Efficiency</h2>' +
-      '<div class="lp-subtitle">fantasy points per snap — who maximizes every snap they play?</div></div>' +
+      '<div class="lp-header"><h2>' + seTitle + '</h2>' +
+      '<div class="lp-subtitle">' + seSub + '</div></div>' +
       '<div class="lp-controls">' +
       '<div class="lp-pos-tabs" id="se-pos-tabs">' +
       '<button class="lp-pos-tab active" data-pos="">All</button>' +
@@ -2112,11 +2133,14 @@
     function loadSE() {
       var body = el.querySelector('#se-body');
       body.innerHTML = '<div class="lp-loading">pulling film...</div>';
-      var season = el.querySelector('#se-season').value;
-      var url = '/api/snap-efficiency';
+      var sel = el.querySelector('#se-season');
+      if (sel && sel.options.length === 0) seasonsPopulated = false;
+      var season = sel.value;
+      var isCollege = typeof state !== 'undefined' && state.universe === 'college';
+      var url = isCollege ? '/api/college/snap-efficiency' : '/api/snap-efficiency';
       if (season) url += '?season=' + season;
-      else url += '?season=' + new Date().getFullYear();
-      if (curPos) url += '&position=' + curPos;
+      else if (!isCollege) url += '?season=' + new Date().getFullYear();
+      if (curPos) url += (url.indexOf('?') > -1 ? '&' : '?') + 'position=' + curPos;
 
       fetch(url).then(function(r) {
         if (!r.ok) throw new Error('API error');
@@ -2124,28 +2148,43 @@
       }).then(function(data) {
         if (!seasonsPopulated) {
           var sel = el.querySelector('#se-season');
-          for (var y = new Date().getFullYear(); y >= 2020; y--) {
-            var o = document.createElement('option');
-            o.value = y; o.textContent = y;
-            if (data.season && y == data.season) o.selected = true;
-            sel.appendChild(o);
+          if (isCollege && data.available_seasons) {
+            data.available_seasons.forEach(function(s) {
+              var o = document.createElement('option');
+              o.value = s; o.textContent = s;
+              if (s == data.season) o.selected = true;
+              sel.appendChild(o);
+            });
+          } else {
+            for (var y = new Date().getFullYear(); y >= 2020; y--) {
+              var o = document.createElement('option');
+              o.value = y; o.textContent = y;
+              if (data.season && y == data.season) o.selected = true;
+              sel.appendChild(o);
+            }
           }
           seasonsPopulated = true;
         }
         var players = data.players || [];
-        if (!players.length) { body.innerHTML = '<div class="lp-empty">no snap efficiency data found</div>'; return; }
+        if (!players.length) { body.innerHTML = '<div class="lp-empty">no ' + (isCollege ? 'touch' : 'snap') + ' efficiency data found</div>'; return; }
 
+        var ptsLabel = isCollege ? 'Pts/Tch' : 'Pts/Snap';
+        var volLabel = isCollege ? 'Tch/G' : 'Snaps/G';
+        var totLabel = isCollege ? 'Touches' : 'Snaps';
+        var headerTitle = isCollege ? 'Points Per Touch Rankings' : 'Points Per Snap Rankings';
         var maxPPS = Math.max.apply(null, players.map(function(p) { return p.pts_per_snap; }));
-        var html = '<div class="se-card"><div class="se-card-header">Points Per Snap Rankings</div>';
-        html += '<table class="se-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Pts/Snap</th><th>PPG</th><th>Snaps/G</th><th>Snaps</th><th>GP</th><th></th></tr></thead><tbody>';
+        var html = '<div class="se-card"><div class="se-card-header">' + headerTitle + '</div>';
+        html += '<table class="se-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>' + ptsLabel + '</th><th>PPG</th><th>' + volLabel + '</th><th>' + totLabel + '</th><th>GP</th><th></th></tr></thead><tbody>';
         for (var i = 0; i < players.length; i++) {
           var p = players[i];
           var posColor = POS_COLORS[p.position] || '#333';
           var cls = effClass(p.pts_per_snap);
           var barPct = maxPPS > 0 ? p.pts_per_snap / maxPPS * 100 : 0;
+          var teamLabel = escapeHtml(p.team);
+          if (isCollege && p.conference) teamLabel += ' <span style="font-size:9px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
           html += '<tr>';
           html += '<td class="se-rank">' + (i + 1) + '</td>';
-          html += '<td>' + escapeHtml(p.name) + ' <span style="color:var(--ink-light);font-size:10px">' + escapeHtml(p.team) + '</span></td>';
+          html += '<td>' + escapeHtml(p.name) + ' <span style="color:var(--ink-light);font-size:10px">' + teamLabel + '</span></td>';
           html += '<td><span class="se-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
           html += '<td><span class="se-eff-badge ' + cls + '">' + fmt(p.pts_per_snap, 3) + '</span></td>';
           html += '<td>' + fmt(p.ppg) + '</td>';
@@ -2174,9 +2213,12 @@
 
   // ===== 4. WORKLOAD =====
   defs.push({ name: 'workload', render: function(el) {
+    var wlCollege = typeof state !== 'undefined' && state.universe === 'college';
+    var wlTitle = wlCollege ? 'College Workload Monitor' : 'Workload Monitor';
+    var wlSub = wlCollege ? 'who\'s carrying the heaviest load in college football?' : 'who\'s carrying the heaviest load?';
     el.innerHTML = '<div class="lp-page">' +
-      '<div class="lp-header"><h2>Workload Monitor</h2>' +
-      '<div class="lp-subtitle">who\'s carrying the heaviest load?</div></div>' +
+      '<div class="lp-header"><h2>' + wlTitle + '</h2>' +
+      '<div class="lp-subtitle">' + wlSub + '</div></div>' +
       '<div class="lp-controls">' +
       '<div class="lp-pos-tabs" id="wl-pos-tabs">' +
       '<button class="lp-pos-tab active" data-pos="">All</button>' +
@@ -2202,11 +2244,14 @@
     function loadWL() {
       var body = el.querySelector('#wl-body');
       body.innerHTML = '<div class="lp-loading">pulling film...</div>';
-      var season = el.querySelector('#wl-season').value;
-      var url = '/api/workload-monitor';
+      var sel = el.querySelector('#wl-season');
+      if (sel && sel.options.length === 0) seasonsPopulated = false;
+      var season = sel.value;
+      var isCollege = typeof state !== 'undefined' && state.universe === 'college';
+      var url = isCollege ? '/api/college/workload' : '/api/workload-monitor';
       if (season) url += '?season=' + season;
-      else url += '?season=' + new Date().getFullYear();
-      if (curPos) url += '&position=' + curPos;
+      else if (!isCollege) url += '?season=' + new Date().getFullYear();
+      if (curPos) url += (url.indexOf('?') > -1 ? '&' : '?') + 'position=' + curPos;
 
       fetch(url).then(function(r) {
         if (!r.ok) throw new Error('API error');
@@ -2214,11 +2259,20 @@
       }).then(function(data) {
         if (!seasonsPopulated) {
           var sel = el.querySelector('#wl-season');
-          for (var y = new Date().getFullYear(); y >= 2020; y--) {
-            var o = document.createElement('option');
-            o.value = y; o.textContent = y;
-            if (data.season && y == data.season) o.selected = true;
-            sel.appendChild(o);
+          if (isCollege && data.available_seasons) {
+            data.available_seasons.forEach(function(s) {
+              var o = document.createElement('option');
+              o.value = s; o.textContent = s;
+              if (s == data.season) o.selected = true;
+              sel.appendChild(o);
+            });
+          } else {
+            for (var y = new Date().getFullYear(); y >= 2020; y--) {
+              var o = document.createElement('option');
+              o.value = y; o.textContent = y;
+              if (data.season && y == data.season) o.selected = true;
+              sel.appendChild(o);
+            }
           }
           seasonsPopulated = true;
         }
@@ -2226,23 +2280,30 @@
         if (!players.length) { body.innerHTML = '<div class="lp-empty">no workload data found</div>'; return; }
 
         var maxWL = Math.max.apply(null, players.map(function(p) { return p.workload; }));
+        var showSnaps = !isCollege;
         var html = '<div class="wl-card"><div class="wl-card-header">Workload Rankings</div>';
-        html += '<table class="wl-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Load</th><th>Tch/G</th><th>Snp/G</th><th>Snp%</th><th>Car/G</th><th>Tgt/G</th><th>Flags</th><th></th></tr></thead><tbody>';
+        html += '<table class="wl-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Load</th><th>Tch/G</th>';
+        if (showSnaps) html += '<th>Snp/G</th><th>Snp%</th>';
+        html += '<th>Car/G</th><th>Tgt/G</th><th>Flags</th><th></th></tr></thead><tbody>';
         for (var i = 0; i < players.length; i++) {
           var p = players[i];
           var posColor = POS_COLORS[p.position] || '#333';
           var cls = scoreClass(p.workload);
           var barPct = maxWL > 0 ? p.workload / maxWL * 100 : 0;
           var flagsHtml = (p.flags || []).map(function(f) { return '<span class="wl-flag">' + escapeHtml(f) + '</span>'; }).join('');
-          var snapPct = p.snap_pct != null ? escapeHtml(String(p.snap_pct)) + '%' : '-';
+          var teamLabel = escapeHtml(p.team);
+          if (isCollege && p.conference) teamLabel += ' <span style="font-size:9px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
           html += '<tr>';
           html += '<td class="wl-rank">' + (i + 1) + '</td>';
-          html += '<td>' + escapeHtml(p.name) + ' <span style="color:var(--ink-light);font-size:10px">' + escapeHtml(p.team) + '</span></td>';
+          html += '<td>' + escapeHtml(p.name) + ' <span style="color:var(--ink-light);font-size:10px">' + teamLabel + '</span></td>';
           html += '<td><span class="wl-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
           html += '<td><span class="wl-score-badge ' + cls + '">' + escapeHtml(String(p.workload)) + '</span></td>';
           html += '<td>' + fmt(p.touches_pg) + '</td>';
-          html += '<td>' + fmt(p.snaps_pg) + '</td>';
-          html += '<td>' + snapPct + '</td>';
+          if (showSnaps) {
+            html += '<td>' + (p.snaps_pg != null ? fmt(p.snaps_pg) : '-') + '</td>';
+            var snapPct = p.snap_pct != null ? escapeHtml(String(p.snap_pct)) + '%' : '-';
+            html += '<td>' + snapPct + '</td>';
+          }
           html += '<td>' + fmt(p.carries_pg) + '</td>';
           html += '<td>' + fmt(p.targets_pg) + '</td>';
           html += '<td style="text-align:left">' + flagsHtml + '</td>';
@@ -2268,9 +2329,12 @@
 
   // ===== 5. DUAL-THREAT =====
   defs.push({ name: 'dualthreat', render: function(el) {
+    var dtCollege = typeof state !== 'undefined' && state.universe === 'college';
+    var dtTitle = dtCollege ? 'College Dual-Threat Index' : 'Dual-Threat Index';
+    var dtSub = dtCollege ? 'rush + rec versatility in college football' : 'rush + rec versatility — who contributes in both dimensions?';
     el.innerHTML = '<div class="lp-page">' +
-      '<div class="lp-header"><h2>Dual-Threat Index</h2>' +
-      '<div class="lp-subtitle">rush + rec versatility — who contributes in both dimensions?</div></div>' +
+      '<div class="lp-header"><h2>' + dtTitle + '</h2>' +
+      '<div class="lp-subtitle">' + dtSub + '</div></div>' +
       '<div class="lp-controls">' +
       '<div class="lp-pos-tabs" id="dt-pos-tabs">' +
       '<button class="lp-pos-tab active" data-pos="">All</button>' +
@@ -2297,11 +2361,14 @@
     function loadDT() {
       var body = el.querySelector('#dt-body');
       body.innerHTML = '<div class="lp-loading">pulling film...</div>';
-      var season = el.querySelector('#dt-season').value;
-      var url = '/api/dual-threat';
+      var sel = el.querySelector('#dt-season');
+      if (sel && sel.options.length === 0) seasonsPopulated = false;
+      var season = sel.value;
+      var isCollege = typeof state !== 'undefined' && state.universe === 'college';
+      var url = isCollege ? '/api/college/dual-threat' : '/api/dual-threat';
       if (season) url += '?season=' + season;
-      else url += '?season=' + new Date().getFullYear();
-      if (curPos) url += '&position=' + curPos;
+      else if (!isCollege) url += '?season=' + new Date().getFullYear();
+      if (curPos) url += (url.indexOf('?') > -1 ? '&' : '?') + 'position=' + curPos;
 
       fetch(url).then(function(r) {
         if (!r.ok) throw new Error('API error');
@@ -2309,11 +2376,20 @@
       }).then(function(data) {
         if (!seasonsPopulated) {
           var sel = el.querySelector('#dt-season');
-          for (var y = new Date().getFullYear(); y >= 2020; y--) {
-            var o = document.createElement('option');
-            o.value = y; o.textContent = y;
-            if (data.season && y == data.season) o.selected = true;
-            sel.appendChild(o);
+          if (isCollege && data.available_seasons) {
+            data.available_seasons.forEach(function(s) {
+              var o = document.createElement('option');
+              o.value = s; o.textContent = s;
+              if (s == data.season) o.selected = true;
+              sel.appendChild(o);
+            });
+          } else {
+            for (var y = new Date().getFullYear(); y >= 2020; y--) {
+              var o = document.createElement('option');
+              o.value = y; o.textContent = y;
+              if (data.season && y == data.season) o.selected = true;
+              sel.appendChild(o);
+            }
           }
           seasonsPopulated = true;
         }
@@ -2326,9 +2402,11 @@
           var p = players[i];
           var posColor = POS_COLORS[p.position] || '#333';
           var cls = dtiClass(p.dti);
+          var teamLabel = escapeHtml(p.team);
+          if (isCollege && p.conference) teamLabel += ' <span style="font-size:9px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
           html += '<tr>';
           html += '<td class="dt-rank">' + (i + 1) + '</td>';
-          html += '<td>' + escapeHtml(p.name) + ' <span style="color:var(--ink-light);font-size:10px">' + escapeHtml(p.team) + '</span></td>';
+          html += '<td>' + escapeHtml(p.name) + ' <span style="color:var(--ink-light);font-size:10px">' + teamLabel + '</span></td>';
           html += '<td><span class="dt-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
           html += '<td><span class="dt-dti-badge ' + cls + '">' + escapeHtml(String(p.dti)) + '</span></td>';
           html += '<td>' + fmt(p.rush_yd_pg) + '</td>';
