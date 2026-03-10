@@ -1,6 +1,20 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 55 — Player Headshots in Lab Table (COMPLETE)
+## Current Phase: Phase 56 — QA + UX Audit Fixes (COMPLETE)
+
+**Exit criterion MET:** All CRITICAL and HIGH findings from Phases 51-55 audit resolved. XSS patched in league-intel.html (15 escapeHtml/escapeAttr calls). FILTER_COLUMN_MAP SQL column names fixed (pass_attempts→attempts, total_tds→touchdowns). Heat coloring: tooltip explains percentile scale, button hidden in non-NFL modes. Sleeper players endpoint cached. Design guide border violations fixed (1px→2px). formatTimeAgo "just now" for recent entries.
+
+### Phase 56 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | XSS patches | DONE | All Sleeper API data escaped in league-intel.html |
+| 2 | FILTER_COLUMN_MAP fix | DONE | pass_attempts→attempts, total_tds→touchdowns |
+| 3 | Heat coloring UX | DONE | Tooltip, hidden in non-NFL modes |
+| 4 | MEDIUM fixes | DONE | Sleeper cache, borders, formatTimeAgo |
+| 5 | Deploy + smoke test | DONE | All syntax clean |
+
+## Previous Phase: Phase 55 — Player Headshots in Lab Table (COMPLETE)
 
 **Exit criterion MET:** Lab table displays 28px circular player headshots next to player names. nflverse headshot_url stored in players table and returned in all screener/profile API responses. Position-colored initials fallback for missing headshots (college/prospects). Headshots also in profile overlay (56px) and standalone player page (64px). Responsive (22px at 768px, hidden at 480px). Comic-strip aesthetic with chunky ink borders.
 

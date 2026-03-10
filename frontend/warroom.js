@@ -2411,6 +2411,7 @@ function formatMemoryContext(entries) {
 function formatTimeAgo(ts) {
   var diff = Date.now() - ts;
   var mins = Math.floor(diff / 60000);
+  if (mins < 1) return 'just now';
   if (mins < 60) return mins + ' min ago';
   var hrs = Math.floor(mins / 60);
   if (hrs < 24) return hrs + ' hours ago';

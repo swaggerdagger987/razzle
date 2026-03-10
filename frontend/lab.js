@@ -1264,10 +1264,18 @@ function loadStateFromURL() {
     btn.classList.add("active");
   }
 
-  // Sync heat colors button
-  if (state.heatColors) {
-    const hcBtn = document.getElementById("heatColorsBtn");
-    if (hcBtn) { hcBtn.classList.add("active"); hcBtn.style.borderColor = "var(--green)"; }
+  // Sync heat colors button — hide in non-NFL modes (sparse numeric data)
+  const hcBtn = document.getElementById("heatColorsBtn");
+  if (hcBtn) {
+    const isNFL = state.universe === "nfl";
+    hcBtn.style.display = isNFL ? "" : "none";
+    if (state.heatColors && isNFL) {
+      hcBtn.classList.add("active");
+      hcBtn.style.borderColor = "var(--green)";
+    } else {
+      hcBtn.classList.remove("active");
+      hcBtn.style.borderColor = "";
+    }
   }
 
   renderActiveFilters();

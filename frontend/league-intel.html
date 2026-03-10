@@ -163,7 +163,7 @@
     font-weight: 700;
     padding: 1px 5px;
     border-radius: 3px;
-    border: 1.5px solid var(--ink);
+    border: 2px solid var(--ink);
     color: white;
     font-family: var(--font-display);
     min-width: 24px;
@@ -259,7 +259,7 @@
     font-family: var(--font-mono);
     font-size: 10px;
     padding: 2px 6px;
-    border: 1px solid var(--ink-faint);
+    border: 2px solid var(--ink-faint);
     border-radius: 4px;
     background: var(--bg-warm);
   }
@@ -438,17 +438,17 @@ async function loadLeagues(userId) {
         : "Redraft";
 
       html += `
-        <div class="league-card" onclick="toggleLeague(this, '${league.league_id}', '${userId}')">
+        <div class="league-card" onclick="toggleLeague(this, '${escapeAttr(league.league_id)}', '${escapeAttr(userId)}')">
           <div class="league-header">
-            <span class="league-name">${league.name}</span>
+            <span class="league-name">${escapeHtml(league.name)}</span>
             <div class="league-meta">
-              <span>${totalRosters}-team</span>
-              <span>${scoringType}</span>
-              <span>${leagueType}</span>
-              <span>${season}</span>
+              <span>${escapeHtml(String(totalRosters))}-team</span>
+              <span>${escapeHtml(scoringType)}</span>
+              <span>${escapeHtml(leagueType)}</span>
+              <span>${escapeHtml(String(season))}</span>
             </div>
           </div>
-          <div class="league-roster" id="roster-${league.league_id}">
+          <div class="league-roster" id="roster-${escapeAttr(league.league_id)}">
             <div class="loading-intel" style="font-size:18px; padding:16px;">checking the tape...</div>
           </div>
         </div>`;
@@ -479,25 +479,34 @@ async function loadLeagues(userId) {
   }
 }
 
+// Cache Sleeper players data (~1MB) — fetch once, reuse across leagues
+let _sleeperPlayersCache = null;
+
+async function getSleeperPlayers() {
+  if (_sleeperPlayersCache) return _sleeperPlayersCache;
+  const resp = await fetch(`${SLEEPER_API}/players/nfl`);
+  _sleeperPlayersCache = await resp.json();
+  return _sleeperPlayersCache;
+}
+
 async function toggleLeague(card, leagueId, userId) {
   card.classList.toggle("expanded");
-  const rosterDiv = document.getElementById(`roster-${leagueId}`);
+  const rosterDiv = document.getElementById(`roster-${escapeAttr(leagueId)}`);
 
   // Only load once
   if (rosterDiv.dataset.loaded) return;
   rosterDiv.dataset.loaded = "true";
 
   try {
-    // Fetch rosters and users
-    const [rostersResp, usersResp, playersResp] = await Promise.all([
+    // Fetch rosters, users, and players (cached)
+    const [rostersResp, usersResp, allPlayers] = await Promise.all([
       fetch(`${SLEEPER_API}/league/${leagueId}/rosters`),
       fetch(`${SLEEPER_API}/league/${leagueId}/users`),
-      fetch(`${SLEEPER_API}/players/nfl`),
+      getSleeperPlayers(),
     ]);
 
     const rosters = await rostersResp.json();
     const users = await usersResp.json();
-    const allPlayers = await playersResp.json();
 
     // Map user_id to display name
     const userMap = {};
@@ -526,18 +535,18 @@ async function toggleLeague(card, leagueId, userId) {
     }
 
     let html = `<div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); margin-bottom:12px;">
-      ${userMap[userId] || "your"} roster — ${myRoster.players?.length || 0} players
+      ${escapeHtml(userMap[userId] || "your")} roster — ${myRoster.players?.length || 0} players
     </div>`;
 
     for (const [pos, players] of Object.entries(posGroups)) {
       if (!players.length) continue;
       html += `<div class="roster-section">
-        <div class="roster-section-title">${pos} (${players.length})</div>`;
+        <div class="roster-section-title">${escapeHtml(pos)} (${players.length})</div>`;
       for (const p of players) {
         html += `<div class="roster-player">
-          <span class="roster-pos ${pos.toLowerCase()}">${pos}</span>
-          <span>${p.name}</span>
-          <span style="color:var(--ink-light); font-size:10px;">${p.team}</span>
+          <span class="roster-pos ${escapeAttr(pos.toLowerCase())}">${escapeHtml(pos)}</span>
+          <span>${escapeHtml(p.name)}</span>
+          <span style="color:var(--ink-light); font-size:10px;">${escapeHtml(p.team)}</span>
         </div>`;
       }
       html += `</div>`;
