@@ -1,6 +1,19 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 116 — Season Pace & Milestone Tracker (COMPLETE)
+## Current Phase: Phase 117 — Game Log Viewer (COMPLETE)
+
+**Exit criterion MET:** /gamelog.html lets users search any player and see week-by-week box score stats for any season. Position-specific column layouts (QB: pass stats + rush; RB: rush + receiving; WR/TE: receiving + rush). Sortable columns, season totals row, PPR color tiers (elite/great/ok/bad), player summary card with total points and PPG. Player search autocomplete with keyboard navigation, season selector, URL state (?player=ID&season=), PNG export with watermark. GET /api/game-log returns weekly stats with totals and available seasons. 15 escapeHtml calls, 120/120 braces balanced. "Game Log" nav link on all 51 pages. Sitemap + tools hub entry under Performance Analysis.
+
+### Phase 117 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/game-log endpoint | DONE | fetch_game_log, per-week box score stats |
+| 2 | Game Log page | DONE | Position-specific columns, sortable, totals row, 15 escapeHtml |
+| 3 | Nav links + sitemap + tools hub | DONE | All 51 pages updated |
+| 4 | Smoke test | DONE | Python OK, JS OK, 51/51 nav links |
+
+## Previous Phase: Phase 116 — Season Pace & Milestone Tracker (COMPLETE)
 
 **Exit criterion MET:** /pace.html projects per-game stats to full 17-game season, tracks progress toward position-specific milestones (QB: 4000/4500 pass yd, 30/40 pass TD, 500 rush yd; RB: 1000/1500 rush yd, 10 rush TD, 50 rec, 500 rec yd; WR: 1000/1500 rec yd, 100 rec, 10 rec TD, 150 tgt; TE: 800/1000 rec yd, 70 rec, 8 rec TD, 100 tgt). Progress bars with ON PACE/OFF PACE badges, pace-needed-per-game calculation, projected 17-game totals, position-specific stat chips. Position filter tabs, season selector, URL state (?season=&pos=), PNG export with watermark. GET /api/pace-tracker returns projections and milestone tracking. 22 escapeHtml calls, 79/79 braces balanced. "Pace" nav link on all 50 pages. Sitemap + tools hub entry under Performance Analysis.
 

@@ -926,6 +926,7 @@ def sitemap_xml():
         ("/breakdown.html", "0.8", "weekly"),
         ("/weeklyleaders.html", "0.8", "weekly"),
         ("/pace.html", "0.8", "weekly"),
+        ("/gamelog.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1514,6 +1515,19 @@ def pace_tracker(season: int = 0, position: str = ""):
         return JSONResponse({"error": "Failed to fetch pace tracker"}, status_code=500)
 
 
+@app.get("/api/game-log")
+def game_log(player_id: str = "", season: int = 0):
+    """Return week-by-week box score stats for a player."""
+    if not player_id:
+        return JSONResponse({"error": "player_id is required"}, status_code=400)
+    try:
+        s = season if season > 0 else None
+        return live_data.fetch_game_log(player_id=player_id, season=s)
+    except Exception as e:
+        logger.error(f"game-log error: {e}")
+        return JSONResponse({"error": "Failed to fetch game log"}, status_code=500)
+
+
 @app.get("/api/tools-hub")
 def tools_hub():
     """Return the static tools catalog organized by category."""
@@ -1565,6 +1579,7 @@ def tools_hub():
                 {"name": "Scoring Formats", "desc": "How PPR vs Half-PPR vs Standard changes rankings", "url": "/scoring.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Points Breakdown", "desc": "Where a player's fantasy points come from — donut chart by scoring category", "url": "/breakdown.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Pace & Milestones", "desc": "17-game pace projections and milestone tracking — who's on pace for 1,000 yards?", "url": "/pace.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Game Log", "desc": "Week-by-week box score stats for any player — the full season tape", "url": "/gamelog.html", "positions": ["QB", "RB", "WR", "TE"]},
             ],
         },
         {

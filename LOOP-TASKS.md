@@ -1,17 +1,17 @@
-# Razzle Loop — Phase 116 Task List
+# Razzle Loop — Phase 117 Task List
 
-> Season Pace & Milestone Tracker
+> Game Log Viewer
 
-**Current Phase**: 116 — Season Pace & Milestone Tracker
-**Exit Criterion**: /pace.html projects per-game stats to 17-game season, tracks milestone progress, position filter tabs, season selector, URL state, PNG export. GET /api/pace-tracker returns projections and milestone tracking.
+**Current Phase**: 117 — Game Log Viewer
+**Exit Criterion**: /gamelog.html shows week-by-week box score stats, sortable, totals row, player search, season selector, URL state, PNG export.
 
 ---
 
-## Task 1: Backend /api/pace-tracker endpoint
+## Task 1: Backend /api/game-log endpoint
 **Status**: PASS
 **Attempts**: 1
 
-## Task 2: Frontend /pace.html page
+## Task 2: Frontend /gamelog.html page
 **Status**: PASS
 **Attempts**: 1
 
@@ -27,7 +27,7 @@
 
 ## Loop State
 ```
-Current Phase: 116
+Current Phase: 117
 Current Task: 4
 Current Stage: COMPLETE
 Attempt: 1

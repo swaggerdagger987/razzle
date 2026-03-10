@@ -10364,3 +10364,88 @@ def fetch_pace_tracker(season=None, position=None, limit=50):
         }
     finally:
         conn.close()
+
+
+def fetch_game_log(player_id, season=None):
+    """Return week-by-week box score stats for a player in a given season."""
+    conn = get_db()
+    try:
+        cursor = conn.cursor()
+
+        # Get player info
+        cursor.execute("SELECT player_id, full_name, position, team FROM players WHERE player_id = ?", (player_id,))
+        player = cursor.fetchone()
+        if not player:
+            return {"error": "Player not found"}
+
+        if not season:
+            cursor.execute("SELECT MAX(season) FROM player_week_stats WHERE player_id = ?", (player_id,))
+            row = cursor.fetchone()
+            season = row[0] if row and row[0] else 2024
+
+        # Available seasons for this player
+        cursor.execute("SELECT DISTINCT season FROM player_week_stats WHERE player_id = ? ORDER BY season DESC", (player_id,))
+        available_seasons = [r[0] for r in cursor.fetchall()]
+
+        # Get weekly stats
+        cursor.execute("""
+            SELECT week, fantasy_points_ppr,
+                   COALESCE(pass_yards, 0), COALESCE(pass_td, 0), COALESCE(interceptions, 0),
+                   COALESCE(pass_attempts, 0), COALESCE(completions, 0),
+                   COALESCE(rush_yards, 0), COALESCE(rush_td, 0), COALESCE(carries, 0),
+                   COALESCE(rec_yards, 0), COALESCE(rec_td, 0), COALESCE(receptions, 0),
+                   COALESCE(targets, 0)
+            FROM player_week_stats
+            WHERE player_id = ? AND season = ?
+            ORDER BY week ASC
+        """, (player_id, season))
+        rows = cursor.fetchall()
+
+        weeks = []
+        totals = {"fpts": 0, "pass_yd": 0, "pass_td": 0, "ints": 0, "pass_att": 0, "cmp": 0,
+                  "rush_yd": 0, "rush_td": 0, "car": 0, "rec_yd": 0, "rec_td": 0, "rec": 0, "tgt": 0}
+
+        for r in rows:
+            fpts = round(r[1] or 0, 1)
+            week_data = {
+                "week": r[0],
+                "fpts": fpts,
+                "pass_yd": r[2], "pass_td": r[3], "ints": r[4],
+                "pass_att": r[5], "cmp": r[6],
+                "rush_yd": r[7], "rush_td": r[8], "car": r[9],
+                "rec_yd": r[10], "rec_td": r[11], "rec": r[12], "tgt": r[13],
+            }
+            weeks.append(week_data)
+
+            totals["fpts"] += fpts
+            totals["pass_yd"] += r[2]
+            totals["pass_td"] += r[3]
+            totals["ints"] += r[4]
+            totals["pass_att"] += r[5]
+            totals["cmp"] += r[6]
+            totals["rush_yd"] += r[7]
+            totals["rush_td"] += r[8]
+            totals["car"] += r[9]
+            totals["rec_yd"] += r[10]
+            totals["rec_td"] += r[11]
+            totals["rec"] += r[12]
+            totals["tgt"] += r[13]
+
+        totals["fpts"] = round(totals["fpts"], 1)
+        games = len(weeks)
+        ppg = round(totals["fpts"] / games, 1) if games else 0
+
+        return {
+            "player_id": player[0],
+            "name": player[1] or "Unknown",
+            "position": player[2] or "RB",
+            "team": player[3] or "FA",
+            "season": season,
+            "available_seasons": available_seasons,
+            "games": games,
+            "ppg": ppg,
+            "weeks": weeks,
+            "totals": totals,
+        }
+    finally:
+        conn.close()
