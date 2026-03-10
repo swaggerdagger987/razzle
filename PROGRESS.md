@@ -1,6 +1,19 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 103 — Dynasty Tier List (COMPLETE)
+## Current Phase: Phase 104 — Player Archetypes (COMPLETE)
+
+**Exit criterion MET:** /archetypes.html classifies players into statistical archetypes based on per-game stats. 18 archetype definitions across 4 positions (QB: Dual-Threat/Gunslinger/Game Manager/Rushing/Backup; RB: Workhorse/Pass-Catcher/Efficient/TD Vulture/Committee; WR: Alpha/Deep Threat/Possession/YAC Monster/Role Player; TE: Elite Receiving/Red Zone/Reliable/Blocking). Archetype cards with icon, name, description, position badge, player count, player grid with PPG and key stat. Position filter tabs. Season selector. PNG export. GET /api/player-archetypes endpoint. 14 escapeHtml, 72/72 braces. "Archetypes" nav link on all 41 pages. Sitemap + tools hub entry. Design matches DESIGN.md.
+
+### Phase 104 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/player-archetypes endpoint | DONE | 18 archetypes, stat-threshold classification |
+| 2 | Archetypes page | DONE | Archetype cards, player grids, icons, 14 escapeHtml |
+| 3 | Nav links + sitemap + analytics | DONE | All 41 pages, sitemap + tools hub |
+| 4 | Smoke test | DONE | Python OK, JS OK, 41/41 nav links |
+
+## Previous Phase: Phase 103 — Dynasty Tier List (COMPLETE)
 
 **Exit criterion MET:** /tiers.html page shows players grouped into 6 visual tiers (S/A/B/C/D/F) based on composite trade value. Each tier is a color-coded horizontal row (S=red, A=terracotta, B=gold, C=teal, D=blue, F=gray) with tier letter on the left and player chips inside. Chips show position badge, name, and trade value. Position filter tabs (All/QB/RB/WR/TE). Season selector. PNG export with watermark. Responsive at 768px (tiers stack vertically) + 480px. GET /api/tier-list endpoint with season/position params returns players grouped by tier with descriptions. Tier breaks: S(80+), A(65+), B(50+), C(35+), D(20+), F(<20). 9 escapeHtml calls, 73/73 braces balanced. "Tiers" nav link on all 40 HTML pages. Sitemap entry. Tools hub catalog entry. Design matches DESIGN.md.
 

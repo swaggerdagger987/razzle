@@ -3,43 +3,43 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Dynasty Tier List — Razzle</title>
-<meta property="og:title" content="Dynasty Tier List — Razzle">
-<meta property="og:description" content="S/A/B/C/D/F dynasty tier rankings on razzle.lol">
+<title>Player Archetypes — Razzle</title>
+<meta property="og:title" content="Player Archetypes — Razzle">
+<meta property="og:description" content="Statistical player archetypes — Workhorse, Deep Threat, Dual-Threat on razzle.lol">
 <meta property="og:site_name" content="razzle.lol">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Dynasty Tier List — Razzle">
-<meta name="twitter:description" content="S/A/B/C/D/F dynasty tier rankings on razzle.lol">
+<meta name="twitter:title" content="Player Archetypes — Razzle">
+<meta name="twitter:description" content="Statistical player archetypes on razzle.lol">
 <meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
-<meta name="description" content="Dynasty tier list — S/A/B/C/D/F player tiers based on composite trade value on razzle.lol">
+<meta name="description" content="Fantasy player archetypes — Workhorse, Deep Threat, Alpha Target, Dual-Threat QB and more on razzle.lol">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="styles.css">
 <style>
-  .tl-page {
+  .ar-page {
     max-width: 1100px;
     margin: 0 auto;
     padding: 24px 20px 60px;
   }
-  .tl-header {
+  .ar-header {
     text-align: center;
     margin-bottom: 20px;
   }
-  .tl-header h1 {
+  .ar-header h1 {
     font-family: var(--font-display);
     font-size: 32px;
     color: var(--ink);
     margin: 0 0 4px;
   }
-  .tl-header .tl-subtitle {
+  .ar-header .ar-subtitle {
     font-family: var(--font-hand);
     font-size: 20px;
     color: var(--ink-light);
   }
-  .tl-meta {
+  .ar-meta {
     font-family: var(--font-mono);
     font-size: 11px;
     color: var(--ink-light);
@@ -47,7 +47,7 @@
   }
 
   /* Controls */
-  .tl-controls {
+  .ar-controls {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -55,7 +55,7 @@
     margin-bottom: 20px;
     flex-wrap: wrap;
   }
-  .tl-controls select {
+  .ar-controls select {
     font-family: var(--font-mono);
     font-size: 13px;
     padding: 6px 10px;
@@ -64,7 +64,7 @@
     background: var(--card);
     color: var(--ink);
   }
-  .tl-export-btn {
+  .ar-export-btn {
     font-family: var(--font-display);
     font-size: 13px;
     padding: 6px 16px;
@@ -75,17 +75,17 @@
     cursor: pointer;
     box-shadow: 2px 2px 0 var(--ink);
   }
-  .tl-export-btn:hover { background: var(--terracotta); color: white; }
+  .ar-export-btn:hover { background: var(--terracotta); color: white; }
 
   /* Position tabs */
-  .tl-pos-tabs {
+  .ar-pos-tabs {
     display: flex;
     justify-content: center;
     gap: 6px;
     margin-bottom: 24px;
     flex-wrap: wrap;
   }
-  .tl-pos-tab {
+  .ar-pos-tab {
     font-family: var(--font-mono);
     font-size: 12px;
     padding: 5px 14px;
@@ -97,130 +97,128 @@
     box-shadow: 2px 2px 0 var(--ink);
     transition: transform 0.1s;
   }
-  .tl-pos-tab:hover { transform: translateY(-1px); }
-  .tl-pos-tab.active {
-    background: var(--ink);
-    color: var(--card);
-  }
+  .ar-pos-tab:hover { transform: translateY(-1px); }
+  .ar-pos-tab.active { background: var(--ink); color: var(--card); }
 
-  /* Tier rows */
-  .tl-tier {
-    display: flex;
-    align-items: stretch;
-    margin-bottom: 12px;
+  /* Archetype cards */
+  .ar-archetype {
+    background: var(--card);
     border: 3px solid var(--ink);
     border-radius: 14px;
     box-shadow: 4px 4px 0 var(--ink);
+    margin-bottom: 20px;
     overflow: hidden;
-    background: var(--card);
   }
-  .tl-tier-label {
-    min-width: 70px;
+  .ar-arch-header {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 12px 8px;
-    border-right: 3px solid var(--ink);
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 2px solid var(--ink);
   }
-  .tl-tier-letter {
+  .ar-arch-icon {
+    font-size: 24px;
+    min-width: 32px;
+    text-align: center;
+  }
+  .ar-arch-info { flex: 1; }
+  .ar-arch-name {
     font-family: var(--font-display);
-    font-size: 36px;
-    line-height: 1;
-    color: white;
-    text-shadow: 2px 2px 0 rgba(0,0,0,0.2);
+    font-size: 18px;
+    color: var(--ink);
   }
-  .tl-tier-count {
+  .ar-arch-desc {
+    font-family: var(--font-hand);
+    font-size: 14px;
+    color: var(--ink-light);
+  }
+  .ar-arch-badge {
     font-family: var(--font-mono);
-    font-size: 10px;
-    color: rgba(255,255,255,0.8);
-    margin-top: 4px;
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 12px;
+    border: 2px solid;
+  }
+  .ar-arch-badge.QB { background: rgba(91,127,255,0.12); color: var(--qb); border-color: var(--qb); }
+  .ar-arch-badge.RB { background: rgba(46,196,182,0.12); color: var(--rb); border-color: var(--rb); }
+  .ar-arch-badge.WR { background: rgba(217,119,87,0.12); color: var(--wr); border-color: var(--wr); }
+  .ar-arch-badge.TE { background: rgba(139,92,246,0.12); color: var(--te); border-color: var(--te); }
+
+  .ar-arch-count {
+    font-family: var(--font-display);
+    font-size: 13px;
+    color: var(--ink-light);
   }
 
-  /* Tier colors */
-  .tl-tier-label.S { background: #d44040; }
-  .tl-tier-label.A { background: var(--terracotta); }
-  .tl-tier-label.B { background: #e8a838; }
-  .tl-tier-label.C { background: var(--rb); }
-  .tl-tier-label.D { background: var(--qb); }
-  .tl-tier-label.F { background: #888; }
-
-  /* Player chips in tier */
-  .tl-tier-players {
-    flex: 1;
+  /* Player grid inside archetype */
+  .ar-players {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 8px;
+    padding: 12px;
+  }
+  .ar-player-card {
     display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    padding: 10px 12px;
     align-items: center;
-    align-content: center;
-    min-height: 50px;
+    gap: 8px;
+    padding: 8px 10px;
+    border: 2px solid var(--ink-faint);
+    border-radius: 10px;
+    transition: transform 0.1s, box-shadow 0.1s;
   }
-
-  .tl-player-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 4px 10px 4px 4px;
-    border: 2px solid var(--ink);
-    border-radius: 20px;
-    background: var(--card);
-    font-family: var(--font-mono);
-    font-size: 12px;
-    white-space: nowrap;
-    box-shadow: 2px 2px 0 var(--ink-faint);
-    transition: transform 0.1s;
-  }
-  .tl-player-chip:hover {
+  .ar-player-card:hover {
     transform: translateY(-1px);
     box-shadow: 2px 3px 0 var(--ink-faint);
+    border-color: var(--ink);
   }
-
-  .tl-chip-pos {
-    display: inline-block;
-    font-family: var(--font-display);
+  .ar-player-name {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 600;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .ar-player-meta {
+    font-family: var(--font-mono);
     font-size: 10px;
-    padding: 2px 6px;
-    border-radius: 10px;
-    color: white;
+    color: var(--ink-light);
   }
-  .tl-chip-pos.QB { background: var(--qb); }
-  .tl-chip-pos.RB { background: var(--rb); }
-  .tl-chip-pos.WR { background: var(--wr); }
-  .tl-chip-pos.TE { background: var(--te); }
-
-  .tl-chip-name { font-weight: 600; }
-  .tl-chip-tv {
+  .ar-player-ppg {
+    font-family: var(--font-display);
+    font-size: 14px;
+    color: var(--terracotta);
+  }
+  .ar-player-stat {
+    font-family: var(--font-mono);
     font-size: 10px;
     color: var(--ink-light);
   }
 
-  .tl-empty-tier {
-    font-family: var(--font-hand);
-    font-size: 14px;
-    color: var(--ink-faint);
-    padding: 8px;
+  /* Position badge small */
+  .ar-pos-sm {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-size: 9px;
+    padding: 1px 5px;
+    border-radius: 6px;
+    color: white;
   }
-
-  /* Tier description */
-  .tl-tier-desc {
-    font-family: var(--font-hand);
-    font-size: 12px;
-    color: rgba(255,255,255,0.7);
-    max-width: 60px;
-    text-align: center;
-    line-height: 1.2;
-  }
+  .ar-pos-sm.QB { background: var(--qb); }
+  .ar-pos-sm.RB { background: var(--rb); }
+  .ar-pos-sm.WR { background: var(--wr); }
+  .ar-pos-sm.TE { background: var(--te); }
 
   /* Loading */
-  .tl-loading {
+  .ar-loading {
     text-align: center;
     font-family: var(--font-hand);
     font-size: 18px;
     color: var(--ink-light);
     padding: 60px 20px;
   }
-  .tl-error {
+  .ar-error {
     text-align: center;
     font-family: var(--font-mono);
     font-size: 14px;
@@ -229,7 +227,7 @@
   }
 
   /* Watermark */
-  .tl-watermark {
+  .ar-watermark {
     position: fixed;
     bottom: 10px;
     right: 14px;
@@ -241,22 +239,12 @@
   }
 
   @media (max-width: 768px) {
-    .tl-tier { flex-direction: column; }
-    .tl-tier-label {
-      flex-direction: row;
-      min-width: auto;
-      border-right: none;
-      border-bottom: 3px solid var(--ink);
-      padding: 8px 16px;
-      gap: 8px;
-    }
-    .tl-tier-letter { font-size: 24px; }
-    .tl-tier-desc { max-width: none; }
-    .tl-header h1 { font-size: 26px; }
+    .ar-players { grid-template-columns: 1fr 1fr; }
+    .ar-header h1 { font-size: 26px; }
   }
   @media (max-width: 480px) {
-    .tl-page { padding: 16px 10px 40px; }
-    .tl-player-chip { font-size: 11px; }
+    .ar-players { grid-template-columns: 1fr; }
+    .ar-page { padding: 16px 10px 40px; }
   }
 </style>
 </head>
@@ -301,40 +289,40 @@
     <li><a href="/cheatsheet.html">Cheat Sheet</a></li>
     <li><a href="/auction.html">Auction</a></li>
     <li><a href="/dashboard.html">Dashboard</a></li>
-    <li><a href="/tiers.html" class="active">Tiers</a></li>
-    <li><a href="/archetypes.html">Archetypes</a></li>
+    <li><a href="/tiers.html">Tiers</a></li>
+    <li><a href="/archetypes.html" class="active">Archetypes</a></li>
     <li><a href="/team/KC">Teams</a></li>
     <li><a href="/league-intel.html">League Intel</a></li>
     <li><a href="/agents.html">War Room</a></li>
   </ul>
 </nav>
 
-<main class="tl-page" id="tl-content">
-  <div class="tl-header">
-    <h1>Dynasty Tier List</h1>
-    <div class="tl-subtitle">who's untouchable and who's getting cut</div>
-    <div class="tl-meta" id="tl-meta"></div>
+<main class="ar-page" id="ar-content">
+  <div class="ar-header">
+    <h1>Player Archetypes</h1>
+    <div class="ar-subtitle">what kind of player are they, really?</div>
+    <div class="ar-meta" id="ar-meta"></div>
   </div>
 
-  <div class="tl-controls">
+  <div class="ar-controls">
     <select id="season-select"></select>
-    <button class="tl-export-btn" id="export-btn">Export PNG</button>
+    <button class="ar-export-btn" id="export-btn">Export PNG</button>
   </div>
 
-  <div class="tl-pos-tabs" id="pos-tabs">
-    <button class="tl-pos-tab active" data-pos="">All</button>
-    <button class="tl-pos-tab" data-pos="QB">QB</button>
-    <button class="tl-pos-tab" data-pos="RB">RB</button>
-    <button class="tl-pos-tab" data-pos="WR">WR</button>
-    <button class="tl-pos-tab" data-pos="TE">TE</button>
+  <div class="ar-pos-tabs" id="pos-tabs">
+    <button class="ar-pos-tab active" data-pos="">All</button>
+    <button class="ar-pos-tab" data-pos="QB">QB</button>
+    <button class="ar-pos-tab" data-pos="RB">RB</button>
+    <button class="ar-pos-tab" data-pos="WR">WR</button>
+    <button class="ar-pos-tab" data-pos="TE">TE</button>
   </div>
 
-  <div id="tl-tiers">
-    <div class="tl-loading">pulling film...</div>
+  <div id="ar-list">
+    <div class="ar-loading">pulling film...</div>
   </div>
 </main>
 
-<div class="tl-watermark">razzle.lol</div>
+<div class="ar-watermark">razzle.lol</div>
 
 <footer style="text-align:center; padding:24px 20px 32px; font-family:var(--font-hand); font-size:15px; color:var(--ink-light); border-top:2px dashed var(--ink-faint); margin-top:40px;">
   <div style="margin-bottom:10px;">
@@ -426,30 +414,38 @@
     return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
+  var ICONS = {
+    workhorse: '&#x1F3CB;', pass_catcher: '&#x1F3C8;', efficient: '&#x26A1;',
+    td_vulture: '&#x1F3AF;', committee: '&#x1F465;',
+    alpha: '&#x1F451;', deep_threat: '&#x1F680;', possession: '&#x1F91D;',
+    yac_monster: '&#x1F4A8;', role_player: '&#x1F527;',
+    elite_receiver: '&#x2B50;', red_zone: '&#x1F3AF;', reliable: '&#x1F91D;',
+    blocking_te: '&#x1F6E1;',
+    elite_dual: '&#x1F525;', gunslinger: '&#x1F52B;', game_manager: '&#x1F4CB;',
+    rusher: '&#x1F3C3;', backup: '&#x1F4A4;',
+  };
+
   var state = { season: 0, position: '' };
-  var tiersEl = document.getElementById('tl-tiers');
+  var listEl = document.getElementById('ar-list');
   var seasonSelect = document.getElementById('season-select');
   var posTabs = document.getElementById('pos-tabs');
 
-  // Season select
   seasonSelect.addEventListener('change', function() {
     state.season = parseInt(this.value, 10) || 0;
     fetchData();
   });
 
-  // Position tabs
   posTabs.addEventListener('click', function(e) {
-    var tab = e.target.closest('.tl-pos-tab');
+    var tab = e.target.closest('.ar-pos-tab');
     if (!tab) return;
-    posTabs.querySelectorAll('.tl-pos-tab').forEach(function(t) { t.classList.remove('active'); });
+    posTabs.querySelectorAll('.ar-pos-tab').forEach(function(t) { t.classList.remove('active'); });
     tab.classList.add('active');
     state.position = tab.getAttribute('data-pos');
     fetchData();
   });
 
-  // Export
   document.getElementById('export-btn').addEventListener('click', function() {
-    var el = document.getElementById('tl-content');
+    var el = document.getElementById('ar-content');
     if (typeof html2canvas !== 'undefined') {
       html2canvas(el, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
         var ctx = canvas.getContext('2d');
@@ -457,7 +453,7 @@
         ctx.fillStyle = 'rgba(0,0,0,0.12)';
         ctx.fillText('razzle.lol', canvas.width - 160, canvas.height - 20);
         var link = document.createElement('a');
-        link.download = 'razzle-tier-list.png';
+        link.download = 'razzle-archetypes.png';
         link.href = canvas.toDataURL();
         link.click();
       });
@@ -465,8 +461,8 @@
   });
 
   function fetchData() {
-    tiersEl.innerHTML = '<div class="tl-loading">pulling film...</div>';
-    var url = '/api/tier-list?';
+    listEl.innerHTML = '<div class="ar-loading">pulling film...</div>';
+    var url = '/api/player-archetypes?';
     if (state.season > 0) url += 'season=' + state.season + '&';
     if (state.position) url += 'position=' + state.position;
 
@@ -474,7 +470,6 @@
       if (!resp.ok) throw new Error('HTTP ' + resp.status);
       return resp.json();
     }).then(function(data) {
-      // Populate season selector
       if (data.available_seasons && seasonSelect.options.length <= 1) {
         seasonSelect.innerHTML = '';
         data.available_seasons.forEach(function(s) {
@@ -485,38 +480,49 @@
           seasonSelect.appendChild(opt);
         });
       }
-
-      document.getElementById('tl-meta').textContent = data.season + ' season \u00b7 ' + data.total_players + ' players \u00b7 ' + (data.position === 'ALL' ? 'all positions' : data.position);
-      renderTiers(data.tiers || []);
+      document.getElementById('ar-meta').textContent = data.season + ' season \u00b7 ' + data.total_players + ' players classified';
+      renderArchetypes(data.archetypes || []);
     }).catch(function(err) {
-      tiersEl.innerHTML = '<div class="tl-error">failed to load tier list: ' + escapeHtml(err.message) + '</div>';
+      listEl.innerHTML = '<div class="ar-error">failed to load archetypes: ' + escapeHtml(err.message) + '</div>';
     });
   }
 
-  function renderTiers(tiers) {
+  function renderArchetypes(archetypes) {
+    if (archetypes.length === 0) {
+      listEl.innerHTML = '<div class="ar-loading">no archetypes found for this filter</div>';
+      return;
+    }
     var html = '';
-    tiers.forEach(function(tier) {
-      html += '<div class="tl-tier">';
-      html += '<div class="tl-tier-label ' + escapeHtml(tier.tier) + '">';
-      html += '<div class="tl-tier-letter">' + escapeHtml(tier.tier) + '</div>';
-      html += '<div class="tl-tier-count">' + escapeHtml(String(tier.players.length)) + '</div>';
+    archetypes.forEach(function(arch) {
+      html += '<div class="ar-archetype">';
+      html += '<div class="ar-arch-header">';
+      html += '<div class="ar-arch-icon">' + (ICONS[arch.id] || '&#x2B50;') + '</div>';
+      html += '<div class="ar-arch-info">';
+      html += '<div class="ar-arch-name">' + escapeHtml(arch.name) + '</div>';
+      html += '<div class="ar-arch-desc">' + escapeHtml(arch.desc) + '</div>';
       html += '</div>';
-      html += '<div class="tl-tier-players">';
-      if (tier.players.length === 0) {
-        html += '<span class="tl-empty-tier">no players in this tier</span>';
-      } else {
-        tier.players.forEach(function(p) {
-          html += '<div class="tl-player-chip">';
-          html += '<span class="tl-chip-pos ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span>';
-          html += '<span class="tl-chip-name">' + escapeHtml(p.full_name) + '</span>';
-          html += '<span class="tl-chip-tv">' + escapeHtml(String(p.trade_value)) + '</span>';
-          html += '</div>';
-        });
-      }
+      html += '<span class="ar-arch-badge ' + escapeHtml(arch.position) + '">' + escapeHtml(arch.position) + '</span>';
+      html += '<span class="ar-arch-count">' + escapeHtml(String(arch.count)) + '</span>';
+      html += '</div>';
+
+      html += '<div class="ar-players">';
+      arch.players.forEach(function(p) {
+        html += '<div class="ar-player-card">';
+        html += '<span class="ar-pos-sm ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span>';
+        html += '<div style="flex:1;min-width:0;">';
+        html += '<div class="ar-player-name">' + escapeHtml(p.full_name) + '</div>';
+        html += '<div class="ar-player-meta">' + escapeHtml(p.team) + ' &middot; age ' + escapeHtml(String(p.age)) + '</div>';
+        html += '</div>';
+        html += '<div style="text-align:right;">';
+        html += '<div class="ar-player-ppg">' + escapeHtml(String(p.ppg)) + '</div>';
+        html += '<div class="ar-player-stat">' + escapeHtml(p.key_stat || '') + '</div>';
+        html += '</div>';
+        html += '</div>';
+      });
       html += '</div>';
       html += '</div>';
     });
-    tiersEl.innerHTML = html;
+    listEl.innerHTML = html;
   }
 
   // Analytics
@@ -524,7 +530,7 @@
     fetch('/api/analytics/pageview', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ page: 'tiers', referrer: document.referrer || '' })
+      body: JSON.stringify({ page: 'archetypes', referrer: document.referrer || '' })
     }).catch(function() {});
   }
 

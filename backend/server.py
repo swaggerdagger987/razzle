@@ -916,6 +916,7 @@ def sitemap_xml():
         ("/auction.html", "0.8", "weekly"),
         ("/dashboard.html", "0.9", "weekly"),
         ("/tiers.html", "0.8", "weekly"),
+        ("/archetypes.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1381,6 +1382,18 @@ def tier_list(season: int = 0, position: str = ""):
         return JSONResponse({"error": "Failed to fetch tier list"}, status_code=500)
 
 
+@app.get("/api/player-archetypes")
+def player_archetypes(season: int = 0, position: str = ""):
+    """Classify players into statistical archetypes."""
+    try:
+        s = season if season > 0 else None
+        pos = position if position else None
+        return live_data.fetch_player_archetypes(season=s, position=pos)
+    except Exception as e:
+        logger.error(f"player-archetypes error: {e}")
+        return JSONResponse({"error": "Failed to fetch player archetypes"}, status_code=500)
+
+
 @app.get("/api/dynasty-dashboard")
 def dynasty_dashboard(season: int = 0):
     """Aggregated dynasty dashboard with risers, fallers, value picks, and scarcity."""
@@ -1411,6 +1424,7 @@ def tools_hub():
                 {"name": "Auction Values", "desc": "Trade values converted to auction dollars for any budget", "url": "/auction.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Dynasty Dashboard", "desc": "At-a-glance overview: risers, fallers, value picks, scarcity alerts", "url": "/dashboard.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Tier List", "desc": "S/A/B/C/D/F tier rankings based on composite trade value", "url": "/tiers.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Player Archetypes", "desc": "Statistical archetypes — Workhorse, Deep Threat, Dual-Threat, and more", "url": "/archetypes.html", "positions": ["QB", "RB", "WR", "TE"]},
             ],
         },
         {

@@ -1,17 +1,17 @@
-# Razzle Loop — Phase 103 Task List
+# Razzle Loop — Phase 104 Task List
 
-> Dynasty Tier List — Visual Tier Rankings
+> Player Archetypes — Statistical Cluster Analysis
 
-**Current Phase**: 103 — Dynasty Tier List
-**Exit Criterion**: /tiers.html page shows players grouped into visual tiers (S/A/B/C/D/F) based on trade value. Position filters, color-coded tier rows, PNG export. GET /api/tier-list endpoint. Design matches DESIGN.md.
+**Current Phase**: 104 — Player Archetypes
+**Exit Criterion**: /archetypes.html shows players grouped by statistical archetype. Position filters, archetype descriptions, player cards within each cluster. GET /api/player-archetypes endpoint. Design matches DESIGN.md.
 
 ---
 
-## Task 1: Backend /api/tier-list endpoint
+## Task 1: Backend /api/player-archetypes endpoint
 **Status**: PASS
 **Attempts**: 1
 
-## Task 2: Frontend tiers.html page
+## Task 2: Frontend archetypes.html page
 **Status**: PASS
 **Attempts**: 1
 
@@ -27,7 +27,7 @@
 
 ## Loop State
 ```
-Current Phase: 103
+Current Phase: 104
 Current Task: 4
 Current Stage: COMPLETE
 Attempt: 1

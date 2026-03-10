@@ -9125,3 +9125,196 @@ def fetch_tier_list(season=None, position=None):
         }
     finally:
         conn.close()
+
+
+# ---------------------------------------------------------------------------
+# Player Archetypes — Statistical Cluster Analysis
+# ---------------------------------------------------------------------------
+
+# Position-specific archetype definitions with stat-based classification
+_RB_ARCHETYPES = [
+    {"id": "workhorse", "name": "Workhorse", "desc": "High-volume bell-cow backs who dominate touches",
+     "test": lambda s: s.get("carries_g", 0) >= 14 and s.get("ppg", 0) >= 12},
+    {"id": "pass_catcher", "name": "Pass-Catching Back", "desc": "Receiving-focused RBs who thrive in PPR",
+     "test": lambda s: s.get("targets_g", 0) >= 4 and s.get("rec_g", 0) >= 3},
+    {"id": "efficient", "name": "Efficient Runner", "desc": "High yards-per-carry backs who maximize opportunities",
+     "test": lambda s: s.get("ypc", 0) >= 4.8 and s.get("carries_g", 0) >= 8},
+    {"id": "td_vulture", "name": "TD Vulture", "desc": "Goal-line specialists who convert near the end zone",
+     "test": lambda s: s.get("td_rate", 0) >= 0.05 and s.get("ppg", 0) >= 8},
+    {"id": "committee", "name": "Committee Back", "desc": "Solid contributors in a shared backfield",
+     "test": lambda s: True},
+]
+
+_WR_ARCHETYPES = [
+    {"id": "alpha", "name": "Alpha Target", "desc": "High-volume primary receivers who dominate targets",
+     "test": lambda s: s.get("targets_g", 0) >= 8 and s.get("ppg", 0) >= 14},
+    {"id": "deep_threat", "name": "Deep Threat", "desc": "Big-play specialists with high yards per reception",
+     "test": lambda s: s.get("ypr", 0) >= 14 and s.get("rec_yd_g", 0) >= 50},
+    {"id": "possession", "name": "Possession Receiver", "desc": "High-catch-rate chain movers with reliable hands",
+     "test": lambda s: s.get("catch_rate", 0) >= 0.70 and s.get("rec_g", 0) >= 4},
+    {"id": "yac_monster", "name": "YAC Monster", "desc": "Receivers who create after the catch",
+     "test": lambda s: s.get("yac_g", 0) >= 25 and s.get("rec_g", 0) >= 3},
+    {"id": "role_player", "name": "Role Player", "desc": "Solid complementary receivers in the offense",
+     "test": lambda s: True},
+]
+
+_TE_ARCHETYPES = [
+    {"id": "elite_receiver", "name": "Elite Receiving TE", "desc": "Top-tier pass-catching tight ends",
+     "test": lambda s: s.get("targets_g", 0) >= 6 and s.get("ppg", 0) >= 10},
+    {"id": "red_zone", "name": "Red Zone Weapon", "desc": "TDs come in bunches for these big targets",
+     "test": lambda s: s.get("td_rate", 0) >= 0.06 and s.get("rec_g", 0) >= 2},
+    {"id": "reliable", "name": "Reliable Target", "desc": "Consistent catches with a safe floor",
+     "test": lambda s: s.get("catch_rate", 0) >= 0.68 and s.get("rec_g", 0) >= 3},
+    {"id": "blocking_te", "name": "Blocking TE", "desc": "Run-game-first tight ends with limited pass involvement",
+     "test": lambda s: True},
+]
+
+_QB_ARCHETYPES = [
+    {"id": "elite_dual", "name": "Elite Dual-Threat", "desc": "Top passers who also hurt you with their legs",
+     "test": lambda s: s.get("ppg", 0) >= 20 and s.get("rush_yd_g", 0) >= 20},
+    {"id": "gunslinger", "name": "Gunslinger", "desc": "Pure pocket passers with volume and touchdowns",
+     "test": lambda s: s.get("pass_yd_g", 0) >= 250 and s.get("ppg", 0) >= 18},
+    {"id": "game_manager", "name": "Game Manager", "desc": "Efficient passers who limit turnovers",
+     "test": lambda s: s.get("ppg", 0) >= 14 and s.get("pass_yd_g", 0) >= 200},
+    {"id": "rusher", "name": "Rushing QB", "desc": "Legs-first quarterbacks with rushing upside",
+     "test": lambda s: s.get("rush_yd_g", 0) >= 25},
+    {"id": "backup", "name": "Backup/Streamer", "desc": "Serviceable starters with streaming appeal",
+     "test": lambda s: True},
+]
+
+
+def fetch_player_archetypes(season=None, position=None):
+    """Classify players into statistical archetypes based on per-game stats."""
+    conn = get_conn()
+    try:
+        if not season:
+            row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+            season = row[0] if row and row[0] else 2024
+
+        available_seasons = [
+            r[0] for r in conn.execute(
+                "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
+            ).fetchall()
+        ]
+
+        pos_filter = ""
+        params = [season]
+        if position and position.upper() in ("QB", "RB", "WR", "TE"):
+            pos_filter = "AND p.position = ?"
+            params.append(position.upper())
+
+        query = f"""
+            SELECT
+                p.player_id, p.full_name, p.position, p.team, p.age,
+                p.headshot_url,
+                SUM(s.fantasy_points_ppr) as total_ppr,
+                COUNT(DISTINCT s.week) as games,
+                SUM(s.receptions) as total_rec,
+                SUM(s.targets) as total_tgt,
+                SUM(s.receiving_yards) as total_rec_yd,
+                SUM(s.receiving_tds) as total_rec_td,
+                SUM(s.carries) as total_car,
+                SUM(s.rushing_yards) as total_rush_yd,
+                SUM(s.rushing_tds) as total_rush_td,
+                SUM(s.passing_yards) as total_pass_yd,
+                SUM(s.passing_tds) as total_pass_td,
+                SUM(s.receiving_yards_after_catch) as total_yac
+            FROM players p
+            JOIN player_week_stats s
+                ON s.player_id = p.player_id AND s.season = ?
+            WHERE p.position IN ('QB','RB','WR','TE')
+              AND p.fantasy_relevant = 1
+              {pos_filter}
+            GROUP BY p.player_id
+            HAVING games >= 4 AND (total_ppr / games) >= 2.0
+            ORDER BY total_ppr DESC
+        """
+        rows = conn.execute(query, params).fetchall()
+
+        # Build per-game stats for classification
+        players_by_pos = {"QB": [], "RB": [], "WR": [], "TE": []}
+        for r in rows:
+            pos = r[2] or "WR"
+            if pos not in players_by_pos:
+                continue
+            g = r[7] or 1
+            total_touches = (r[12] or 0) + (r[8] or 0)
+            total_tds = (r[11] or 0) + (r[14] or 0)
+            stats = {
+                "ppg": round((r[6] or 0) / g, 2),
+                "rec_g": round((r[8] or 0) / g, 2),
+                "targets_g": round((r[9] or 0) / g, 2),
+                "rec_yd_g": round((r[10] or 0) / g, 2),
+                "carries_g": round((r[12] or 0) / g, 2),
+                "rush_yd_g": round((r[13] or 0) / g, 2),
+                "pass_yd_g": round((r[15] or 0) / g, 2),
+                "ypc": round((r[13] or 0) / max(1, r[12] or 1), 2),
+                "ypr": round((r[10] or 0) / max(1, r[8] or 1), 2),
+                "catch_rate": round((r[8] or 0) / max(1, r[9] or 1), 3),
+                "td_rate": round(total_tds / max(1, total_touches), 4),
+                "yac_g": round((r[17] or 0) / g, 2),
+            }
+
+            players_by_pos[pos].append({
+                "player_id": r[0],
+                "full_name": r[1] or "Unknown",
+                "position": pos,
+                "team": r[3] or "FA",
+                "age": r[4] or 25,
+                "headshot_url": r[5] or "",
+                "ppg": stats["ppg"],
+                "games": g,
+                "stats": stats,
+            })
+
+        # Classify players into archetypes
+        archetype_map = {"QB": _QB_ARCHETYPES, "RB": _RB_ARCHETYPES, "WR": _WR_ARCHETYPES, "TE": _TE_ARCHETYPES}
+        result_archetypes = []
+
+        positions_to_process = [position.upper()] if position and position.upper() in archetype_map else ["QB", "RB", "WR", "TE"]
+
+        for pos in positions_to_process:
+            archetypes = archetype_map[pos]
+            classified = {a["id"]: [] for a in archetypes}
+            assigned = set()
+
+            for arch in archetypes:
+                for p in players_by_pos.get(pos, []):
+                    if p["player_id"] in assigned:
+                        continue
+                    if arch["test"](p["stats"]):
+                        player_out = {k: v for k, v in p.items() if k != "stats"}
+                        # Add key stat for display
+                        if pos == "QB":
+                            player_out["key_stat"] = str(round(p["stats"]["pass_yd_g"])) + " pass yd/g"
+                        elif pos == "RB":
+                            player_out["key_stat"] = str(round(p["stats"]["carries_g"], 1)) + " car/g"
+                        elif pos == "WR":
+                            player_out["key_stat"] = str(round(p["stats"]["targets_g"], 1)) + " tgt/g"
+                        elif pos == "TE":
+                            player_out["key_stat"] = str(round(p["stats"]["targets_g"], 1)) + " tgt/g"
+                        classified[arch["id"]].append(player_out)
+                        assigned.add(p["player_id"])
+
+            for arch in archetypes:
+                if classified[arch["id"]]:
+                    result_archetypes.append({
+                        "id": arch["id"],
+                        "name": arch["name"],
+                        "desc": arch["desc"],
+                        "position": pos,
+                        "count": len(classified[arch["id"]]),
+                        "players": classified[arch["id"]],
+                    })
+
+        total = sum(a["count"] for a in result_archetypes)
+
+        return {
+            "season": season,
+            "available_seasons": available_seasons,
+            "position": position or "ALL",
+            "total_players": total,
+            "archetypes": result_archetypes,
+        }
+    finally:
+        conn.close()
