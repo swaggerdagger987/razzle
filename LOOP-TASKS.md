@@ -31,8 +31,9 @@
 **Accept when**: Visit 6+ panels → Recent section shows last 5 (excluding current). Click a chip → switches panel. Persists across page refreshes. Chips styled as compact pills matching design guide.
 **Depends on**: none
 **Size**: M
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Recent section with "Recent" label and pill chips. `razzle_recent_panels` localStorage array (max 5+1). Excludes current panel from display. Chips styled with bg-warm, ink-faint border, rounded, hover shows orange-light. Hidden in collapsed sidebar.
 
 ### Task 4: Individual category collapse/expand
 **Requirement**: Clicking a category header in the sidebar toggles visibility of its items. Collapsed category shows a small chevron (▸) that rotates to (▾) when expanded. All categories start expanded by default. Collapse state saved per-category in localStorage. Category headers remain visible when collapsed — only child items hide. Works with sidebar search (search results override collapse state — matching items always show).

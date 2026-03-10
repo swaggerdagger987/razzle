@@ -160,6 +160,50 @@
     display: none !important;
   }
 
+  /* ===== RECENT PANELS ===== */
+  .sidebar-recent {
+    padding: 6px 10px 8px;
+    border-bottom: 1px dashed var(--ink-faint);
+    display: none;
+  }
+  .sidebar-recent.has-items {
+    display: block;
+  }
+  .sidebar-recent-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+  }
+  .sidebar-recent-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .sidebar-recent-chip {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    padding: 2px 8px;
+    background: var(--bg-warm);
+    color: var(--ink-medium);
+    border: 1px solid var(--ink-faint);
+    border-radius: 10px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.1s;
+    text-decoration: none;
+  }
+  .sidebar-recent-chip:hover {
+    background: var(--orange-light);
+    border-color: var(--orange);
+    color: var(--ink);
+  }
+  .lab-sidebar.collapsed .sidebar-recent {
+    display: none !important;
+  }
+
   .lab-sidebar-category {
     font-family: var(--font-display);
     font-size: 11px;
@@ -2175,6 +2219,11 @@
       <input type="text" class="sidebar-search" id="sidebarSearch" placeholder="Search tools..." autocomplete="off" spellcheck="false">
     </div>
 
+    <div class="sidebar-recent" id="sidebarRecent">
+      <div class="sidebar-recent-label">Recent</div>
+      <div class="sidebar-recent-chips" id="sidebarRecentChips"></div>
+    </div>
+
     <div class="lab-sidebar-category"><span class="cat-icon" style="display:none">&#x1F50D;</span><span class="cat-text">Screener</span></div>
     <a class="lab-sidebar-item active" data-panel="screener" data-icon="&#x25C9;" onclick="switchPanel('screener')">The Screener<span class="sidebar-tooltip">The Screener</span></a>
 
@@ -3164,6 +3213,9 @@
     // Save last panel to localStorage for session memory
     try { localStorage.setItem('razzle_last_panel', panelName); } catch(e) {}
 
+    // Update recently viewed panels
+    _updateRecentPanels(panelName);
+
     // Update URL state (include universe if not NFL)
     var urlParams = new URLSearchParams();
     if (panelName !== 'screener') urlParams.set('panel', panelName);
@@ -3242,6 +3294,54 @@
       }
     });
   })();
+
+  // ─── Recently viewed panels ─────────────────────────────────────
+  var RECENT_MAX = 5;
+  var RECENT_KEY = 'razzle_recent_panels';
+
+  function _getRecentPanels() {
+    try {
+      var raw = localStorage.getItem(RECENT_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch(e) { return []; }
+  }
+
+  function _updateRecentPanels(panelName) {
+    var recents = _getRecentPanels();
+    // Remove if already in list
+    recents = recents.filter(function(p) { return p !== panelName; });
+    // Add to front
+    recents.unshift(panelName);
+    // Trim to max
+    if (recents.length > RECENT_MAX + 1) recents = recents.slice(0, RECENT_MAX + 1);
+    try { localStorage.setItem(RECENT_KEY, JSON.stringify(recents)); } catch(e) {}
+    _renderRecentPanels();
+  }
+
+  function _renderRecentPanels() {
+    var container = document.getElementById('sidebarRecentChips');
+    var wrapper = document.getElementById('sidebarRecent');
+    if (!container || !wrapper) return;
+
+    var recents = _getRecentPanels();
+    // Exclude current panel from display
+    var display = recents.filter(function(p) { return p !== currentPanel; }).slice(0, RECENT_MAX);
+
+    if (display.length === 0) {
+      wrapper.classList.remove('has-items');
+      container.innerHTML = '';
+      return;
+    }
+
+    wrapper.classList.add('has-items');
+    container.innerHTML = display.map(function(p) {
+      var label = PANEL_LABELS[p] || p;
+      return '<a class="sidebar-recent-chip" onclick="switchPanel(\'' + p + '\')">' + escapeHtml(label) + '</a>';
+    }).join('');
+  }
+
+  // Initial render of recent panels
+  _renderRecentPanels();
 
   // ─── Sidebar search filter ──────────────────────────────────────
   (function() {
