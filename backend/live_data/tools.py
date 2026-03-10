@@ -11,7 +11,7 @@ import math
 from collections import defaultdict
 
 from ..db import get_db
-from .core import _cached, _CACHE_TTL_STABLE, compute_trade_value
+from .core import _cached, _CACHE_TTL_STABLE, _current_nfl_season, _current_draft_year, compute_trade_value
 
 def fetch_featured():
     """Return 3 curated player lists for home page widgets (cached 5 min)."""
@@ -25,7 +25,7 @@ def _fetch_featured_uncached():
 
         # Get latest season
         row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-        season = row[0] if row and row[0] else 2024
+        season = row[0] if row and row[0] else _current_nfl_season()
 
         results = {}
 
@@ -56,7 +56,7 @@ def _fetch_featured_uncached():
         # 2. Rookie Big Board — top prospects by draft pick
         try:
             row2 = conn.execute("SELECT MAX(draft_year) FROM combine_data").fetchone()
-            draft_year = row2[0] if row2 and row2[0] else 2025
+            draft_year = row2[0] if row2 and row2[0] else _current_draft_year()
 
             rows = conn.execute("""
                 SELECT c.player_name, c.position, c.school,
@@ -118,9 +118,9 @@ def fetch_scoring_comparison(season=None, position=None, limit=40):
         nonlocal season
         with get_db() as conn:
             row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
-            available_seasons = [r[0] for r in row] if row else [2024]
+            available_seasons = [r[0] for r in row] if row else [_current_nfl_season()]
             if not season:
-                season = available_seasons[0] if available_seasons else 2024
+                season = available_seasons[0] if available_seasons else _current_nfl_season()
 
             pos_filter = ""
             params = [season]
@@ -233,9 +233,9 @@ def fetch_cheat_sheet(season=None, fmt="ppr"):
         nonlocal season
         with get_db() as conn:
             row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
-            available_seasons = [r[0] for r in row] if row else [2024]
+            available_seasons = [r[0] for r in row] if row else [_current_nfl_season()]
             if not season:
-                season = available_seasons[0] if available_seasons else 2024
+                season = available_seasons[0] if available_seasons else _current_nfl_season()
 
             # Select the right fantasy points column
             pts_col = {
@@ -380,7 +380,7 @@ def fetch_player_archetypes(season=None, position=None):
         with get_db() as conn:
             if not season:
                 row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-                season = row[0] if row and row[0] else 2024
+                season = row[0] if row and row[0] else _current_nfl_season()
 
             available_seasons = [
                 r[0] for r in conn.execute(
@@ -521,7 +521,7 @@ def fetch_draft_class(draft_year=None, position=None):
 
             if not draft_year:
                 # Default to most recent class with stats data
-                draft_year = available_classes[0] if available_classes else 2024
+                draft_year = available_classes[0] if available_classes else _current_nfl_season()
 
             pos_filter = ""
             params = [draft_year]
@@ -641,9 +641,9 @@ def fetch_weekly_leaders(season=None, week=None, position=None, limit=25):
         with get_db() as conn:
             # Available seasons
             row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
-            available_seasons = [r[0] for r in row] if row else [2024]
+            available_seasons = [r[0] for r in row] if row else [_current_nfl_season()]
             if not season:
-                season = available_seasons[0] if available_seasons else 2024
+                season = available_seasons[0] if available_seasons else _current_nfl_season()
 
             # Available weeks for this season
             wk_rows = conn.execute(
@@ -720,7 +720,7 @@ def fetch_pace_tracker(season=None, position=None, limit=50):
 
             if not season:
                 cursor.execute("SELECT MAX(season) FROM player_week_stats")
-                season = cursor.fetchone()[0] or 2024
+                season = cursor.fetchone()[0] or _current_nfl_season()
 
             query = """
                 SELECT p.player_id, p.full_name, p.position, p.team,
@@ -874,7 +874,7 @@ def fetch_streaks(season=None, position=None, window=4, limit=25):
 
             if not season:
                 cursor.execute("SELECT MAX(season) FROM player_week_stats")
-                season = cursor.fetchone()[0] or 2024
+                season = cursor.fetchone()[0] or _current_nfl_season()
 
             window = max(2, min(8, window))
 
@@ -962,7 +962,7 @@ def fetch_season_recap(season=None):
 
             if not season:
                 cursor.execute("SELECT MAX(season) FROM player_week_stats")
-                season = cursor.fetchone()[0] or 2024
+                season = cursor.fetchone()[0] or _current_nfl_season()
 
             # Available seasons
             cursor.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC")
@@ -1250,7 +1250,7 @@ def fetch_waivers(season=None, position=None, window=4, limit=30):
             # Determine season
             if not season:
                 cursor.execute("SELECT MAX(season) FROM player_week_stats")
-                season = cursor.fetchone()[0] or 2024
+                season = cursor.fetchone()[0] or _current_nfl_season()
 
             pos_filter = ""
             params = [season]
@@ -1346,7 +1346,7 @@ def fetch_playoff_schedule(season=None, position=None, limit=40):
 
             if not season:
                 cursor.execute("SELECT MAX(season) FROM player_week_stats")
-                season = cursor.fetchone()[0] or 2024
+                season = cursor.fetchone()[0] or _current_nfl_season()
 
             # Build defense PPG-allowed-by-position for the season
             cursor.execute("""
@@ -1505,7 +1505,7 @@ def fetch_fpts_breakdown(season=None, position=None, limit=40):
 
             if not season:
                 cursor.execute("SELECT MAX(season) FROM player_week_stats")
-                season = cursor.fetchone()[0] or 2024
+                season = cursor.fetchone()[0] or _current_nfl_season()
 
             pos_filter = ""
             params = [season]
@@ -1599,7 +1599,7 @@ def fetch_garbage_time(season=None, position=None, limit=40):
             cursor = conn.cursor()
             if not season:
                 cursor.execute("SELECT MAX(season) FROM player_season_stats")
-                season = cursor.fetchone()[0] or 2025
+                season = cursor.fetchone()[0] or _current_nfl_season()
 
             pos_filter = ""
             params = [season]
@@ -1678,7 +1678,7 @@ def fetch_snap_efficiency(season=None, position=None, limit=50):
             cursor = conn.cursor()
             if not season:
                 cursor.execute("SELECT MAX(season) FROM player_season_stats")
-                season = cursor.fetchone()[0] or 2025
+                season = cursor.fetchone()[0] or _current_nfl_season()
 
             pos_filter = ""
             params = [season]
@@ -1760,7 +1760,7 @@ def fetch_handcuffs(season=None, limit=30):
 
             if not season:
                 cursor.execute("SELECT MAX(season) FROM player_week_stats")
-                season = cursor.fetchone()[0] or 2024
+                season = cursor.fetchone()[0] or _current_nfl_season()
 
             cursor.execute("""
                 SELECT p.player_id, p.full_name, p.position, p.team,
@@ -1853,7 +1853,7 @@ def fetch_weekly_mvp(season=None):
 
             if not season:
                 cursor.execute("SELECT MAX(season) FROM player_week_stats")
-                season = cursor.fetchone()[0] or 2024
+                season = cursor.fetchone()[0] or _current_nfl_season()
 
             cursor.execute("""
                 SELECT s.week, p.position, p.full_name, p.team,
@@ -1907,7 +1907,7 @@ def fetch_stacks(season=None, limit=30):
 
             if not season:
                 cursor.execute("SELECT MAX(season) FROM player_week_stats")
-                season = cursor.fetchone()[0] or 2024
+                season = cursor.fetchone()[0] or _current_nfl_season()
 
             # Get all weekly scores for QBs and WR/TEs
             cursor.execute("""
@@ -2017,7 +2017,7 @@ def fetch_positional_advantage(season=None, position=None, limit=40):
 
             if not season:
                 cursor.execute("SELECT MAX(season) FROM player_week_stats")
-                season = cursor.fetchone()[0] or 2024
+                season = cursor.fetchone()[0] or _current_nfl_season()
 
             pos_filter = ""
             params = [season]
@@ -2098,7 +2098,7 @@ def fetch_td_regression(season=None, position=None, limit=50):
             cursor = conn.cursor()
             if not season:
                 cursor.execute("SELECT MAX(season) FROM player_season_stats")
-                season = cursor.fetchone()[0] or 2025
+                season = cursor.fetchone()[0] or _current_nfl_season()
 
             pos_filter = ""
             params = [season]
@@ -2204,7 +2204,7 @@ def fetch_dual_threat(season=None, position=None, limit=50):
             cursor = conn.cursor()
             if not season:
                 cursor.execute("SELECT MAX(season) FROM player_season_stats")
-                season = cursor.fetchone()[0] or 2025
+                season = cursor.fetchone()[0] or _current_nfl_season()
 
             pos_filter = ""
             params = [season]
@@ -2293,7 +2293,7 @@ def fetch_season_pace(season=None, position=None, limit=50):
             cursor = conn.cursor()
             if not season:
                 cursor.execute("SELECT MAX(season) FROM player_season_stats")
-                season = cursor.fetchone()[0] or 2025
+                season = cursor.fetchone()[0] or _current_nfl_season()
 
             pos_filter = ""
             params = [season]
@@ -2401,7 +2401,7 @@ def fetch_target_premium(season=None, position=None, limit=50):
             cursor = conn.cursor()
             if not season:
                 cursor.execute("SELECT MAX(season) FROM player_season_stats")
-                season = cursor.fetchone()[0] or 2025
+                season = cursor.fetchone()[0] or _current_nfl_season()
 
             pos_filter = "AND p.position IN ('WR','TE','RB')"
             params = [season]
@@ -2508,7 +2508,7 @@ def fetch_workload_monitor(season=None, position=None, limit=50):
             cursor = conn.cursor()
             if not season:
                 cursor.execute("SELECT MAX(season) FROM player_season_stats")
-                season = cursor.fetchone()[0] or 2025
+                season = cursor.fetchone()[0] or _current_nfl_season()
 
             pos_filter = ""
             params = [season]
@@ -2596,7 +2596,7 @@ def fetch_drop_rate(season=None, position=None, limit=50):
         with get_db() as conn:
             if not season:
                 cur = conn.execute("SELECT MAX(season) FROM player_season_pbp")
-                season = cur.fetchone()[0] or 2024
+                season = cur.fetchone()[0] or _current_nfl_season()
 
             pos_filter = ""
             params = [season]
@@ -2678,7 +2678,7 @@ def fetch_success_rate(season=None, position=None, limit=50):
         with get_db() as conn:
             if not season:
                 cur = conn.execute("SELECT MAX(season) FROM player_season_pbp")
-                season = cur.fetchone()[0] or 2024
+                season = cur.fetchone()[0] or _current_nfl_season()
 
             pos_filter = ""
             params = [season]
@@ -2768,9 +2768,9 @@ def fetch_game_script(season=None, position=None, limit=40):
         nonlocal season
         with get_db() as conn:
             row = conn.execute("SELECT DISTINCT season FROM player_season_pbp ORDER BY season DESC").fetchall()
-            available_seasons = [r[0] for r in row] if row else [2024]
+            available_seasons = [r[0] for r in row] if row else [_current_nfl_season()]
             if not season:
-                season = available_seasons[0] if available_seasons else 2024
+                season = available_seasons[0] if available_seasons else _current_nfl_season()
 
             pos_filter = ""
             params = [season]
@@ -2852,10 +2852,10 @@ def fetch_draft_class_tracker(draft_year=None, position=None):
             year_rows = conn.execute(
                 "SELECT DISTINCT season FROM draft_picks WHERE position IN ('QB','RB','WR','TE') ORDER BY season DESC"
             ).fetchall()
-            available_years = [r[0] for r in year_rows] if year_rows else [2024]
+            available_years = [r[0] for r in year_rows] if year_rows else [_current_draft_year()]
 
             if not draft_year:
-                draft_year = available_years[0] if available_years else 2024
+                draft_year = available_years[0] if available_years else _current_draft_year()
 
             # Fetch all skill position picks for this draft year
             pos_filter = ""
@@ -2913,7 +2913,7 @@ def fetch_draft_class_tracker(draft_year=None, position=None):
                     hit_threshold = {"QB": 6, "RB": 5, "WR": 4, "TE": 3}.get(pos, 4)
 
                 if games < 16:
-                    classification = "too_early" if (2026 - draft_year) <= 2 else "bust"
+                    classification = "too_early" if (_current_draft_year() - draft_year) <= 2 else "bust"
                 elif career_ppg >= hit_threshold * 1.3:
                     classification = "stud"
                 elif career_ppg >= hit_threshold:

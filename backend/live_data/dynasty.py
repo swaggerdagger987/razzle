@@ -11,6 +11,7 @@ from bisect import bisect_left, bisect_right
 from ..db import get_db
 from .core import (
     _cached, _CACHE_TTL_STABLE,
+    _current_nfl_season, _current_draft_year,
     compute_trade_value, _production_value, _age_value, _scarcity_value,
     _pick_value, _assign_tier, _TIER_LABELS, _tv_tier, _TV_TIER_LABELS,
     _roster_grade, _competing_status,
@@ -30,7 +31,7 @@ def _fetch_trade_values_uncached(player_ids):
 
         # Get latest season
         row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-        latest_season = row[0] if row and row[0] else 2024
+        latest_season = row[0] if row and row[0] else _current_nfl_season()
 
         placeholders = ",".join(["?"] * len(player_ids))
 
@@ -89,8 +90,10 @@ def fetch_trade_values(player_ids):
     _key = "fetch_trade_values:" + ":".join(sorted(str(x) for x in player_ids))
     return _cached(_key, lambda: _fetch_trade_values_uncached(player_ids=player_ids))
 
-def _fetch_pick_values_uncached(year=2025, rounds=4, teams=12):
+def _fetch_pick_values_uncached(year=None, rounds=4, teams=12):
     """Return trade values for all dynasty draft picks."""
+    if year is None:
+        year = _current_draft_year()
     picks = []
     for rd in range(1, rounds + 1):
         for pk in range(1, teams + 1):
@@ -108,7 +111,9 @@ def _fetch_pick_values_uncached(year=2025, rounds=4, teams=12):
 
 
 
-def fetch_pick_values(year=2025, rounds=4, teams=12):
+def fetch_pick_values(year=None, rounds=4, teams=12):
+    if year is None:
+        year = _current_draft_year()
     return _cached(f"fetch_pick_values:{year}:{rounds}:{teams}", lambda: _fetch_pick_values_uncached(year=year, rounds=rounds, teams=teams))
 
 def _fetch_roster_value_uncached(player_ids):
@@ -161,7 +166,7 @@ def _fetch_dynasty_rankings_uncached(position=None, limit=200):
 
         # Get latest season
         row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-        latest_season = row[0] if row and row[0] else 2024
+        latest_season = row[0] if row and row[0] else _current_nfl_season()
 
         pos_filter = ""
         params = [latest_season]
@@ -250,7 +255,7 @@ def _fetch_trade_value_chart_uncached(season=None, position=None, limit=150):
     with get_db() as conn:
         if not season:
             row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-            season = row[0] if row and row[0] else 2024
+            season = row[0] if row and row[0] else _current_nfl_season()
 
         available_seasons = [
             r[0] for r in conn.execute(
@@ -345,7 +350,7 @@ def _fetch_trade_finder_uncached(player_id, season=None):
     with get_db() as conn:
         if not season:
             row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-            season = row[0] if row and row[0] else 2024
+            season = row[0] if row and row[0] else _current_nfl_season()
 
         available_seasons = [
             r[0] for r in conn.execute(
@@ -588,7 +593,7 @@ def _fetch_roster_grade_uncached(player_ids, season=None):
 
     with get_db() as conn:
         row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-        latest_season = season or (row[0] if row and row[0] else 2024)
+        latest_season = season or (row[0] if row and row[0] else _current_nfl_season())
 
         placeholders = ",".join(["?"] * len(player_ids))
         query = f"""
@@ -745,7 +750,7 @@ def _fetch_auction_values_uncached(season=None, budget=200, roster_size=15):
     with get_db() as conn:
         if not season:
             row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-            season = row[0] if row and row[0] else 2024
+            season = row[0] if row and row[0] else _current_nfl_season()
 
         available_seasons = [
             r[0] for r in conn.execute(
@@ -856,7 +861,7 @@ def _fetch_dynasty_dashboard_uncached(season=None):
     with get_db() as conn:
         if not season:
             row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-            season = row[0] if row and row[0] else 2024
+            season = row[0] if row and row[0] else _current_nfl_season()
 
         available_seasons = [
             r[0] for r in conn.execute(
@@ -1002,7 +1007,7 @@ def _fetch_tier_list_uncached(season=None, position=None):
     with get_db() as conn:
         if not season:
             row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-            season = row[0] if row and row[0] else 2024
+            season = row[0] if row and row[0] else _current_nfl_season()
 
         available_seasons = [
             r[0] for r in conn.execute(
@@ -1091,7 +1096,7 @@ def _fetch_dynasty_power_rankings_uncached(season=None):
     with get_db() as conn:
         if not season:
             row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-            season = row[0] if row and row[0] else 2024
+            season = row[0] if row and row[0] else _current_nfl_season()
 
         available_seasons = [
             r[0] for r in conn.execute(

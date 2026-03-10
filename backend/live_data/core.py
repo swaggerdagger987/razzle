@@ -7,6 +7,18 @@ enrichment functions that need a connection receive it as a parameter.
 
 import math
 import time as _time
+from datetime import datetime as _datetime
+
+
+def _current_nfl_season():
+    """Return the current NFL season year (rolls over in August)."""
+    now = _datetime.now()
+    return now.year if now.month >= 8 else now.year - 1
+
+
+def _current_draft_year():
+    """Return the current draft year (same as calendar year)."""
+    return _datetime.now().year
 
 # ---------------------------------------------------------------------------
 # In-memory cache
@@ -516,7 +528,7 @@ def _enrich_with_team_shares(conn, items, season=None, career_mode=False):
         s = int(season) if season else 0
         if not s:
             row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-            s = row[0] if row and row[0] else 2024
+            s = row[0] if row and row[0] else _current_nfl_season()
         team_query = f"""
             SELECT p.team,
                    SUM(s.receiving_yards) as team_rec_yds,

@@ -7,7 +7,7 @@ import math
 from collections import defaultdict
 
 from ..db import get_db
-from .core import FANTASY_POSITIONS, _cached, _CACHE_TTL_STABLE
+from .core import FANTASY_POSITIONS, _cached, _CACHE_TTL_STABLE, _current_nfl_season
 
 _EFFICIENCY_ANNOTATIONS = [
     "does more with less",
@@ -42,8 +42,8 @@ def fetch_efficiency_rankings(season=None, position=None, limit=30):
         with get_db() as conn:
             # Determine season + available seasons
             row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
-            available_seasons = [r[0] for r in row] if row else [2024]
-            _season = season if season else (available_seasons[0] if available_seasons else 2024)
+            available_seasons = [r[0] for r in row] if row else [_current_nfl_season()]
+            _season = season if season else (available_seasons[0] if available_seasons else _current_nfl_season())
 
             pos_filter = ""
             params = [_season]
@@ -209,8 +209,8 @@ def fetch_consistency_rankings(season=None, position=None, limit=30):
         with get_db() as conn:
             # Determine season + available seasons
             row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
-            available_seasons = [r[0] for r in row] if row else [2024]
-            _season = season if season else (available_seasons[0] if available_seasons else 2024)
+            available_seasons = [r[0] for r in row] if row else [_current_nfl_season()]
+            _season = season if season else (available_seasons[0] if available_seasons else _current_nfl_season())
 
             pos_filter = ""
             params = [_season]
@@ -381,8 +381,8 @@ def fetch_strength_of_schedule(season=None, position=None, limit=30):
             row = conn.execute(
                 "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
             ).fetchall()
-            available_seasons = [r[0] for r in row] if row else [2024]
-            _season = season if season else (available_seasons[0] if available_seasons else 2024)
+            available_seasons = [r[0] for r in row] if row else [_current_nfl_season()]
+            _season = season if season else (available_seasons[0] if available_seasons else _current_nfl_season())
 
             # Step 1: Build defense PPG-allowed-by-position grid for this season
             def_rows = conn.execute("""
@@ -593,8 +593,8 @@ def fetch_stock_watch(season=None, position=None, limit=30):
             row = conn.execute(
                 "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
             ).fetchall()
-            available_seasons = [r[0] for r in row] if row else [2024]
-            _season = season if season else (available_seasons[0] if available_seasons else 2024)
+            available_seasons = [r[0] for r in row] if row else [_current_nfl_season()]
+            _season = season if season else (available_seasons[0] if available_seasons else _current_nfl_season())
 
             pos_filter = ""
             params = [_season]
@@ -846,8 +846,8 @@ def fetch_opportunity_share(season=None, position=None, limit=30):
             row = conn.execute(
                 "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
             ).fetchall()
-            available_seasons = [r[0] for r in row] if row else [2024]
-            _season = season if season else (available_seasons[0] if available_seasons else 2024)
+            available_seasons = [r[0] for r in row] if row else [_current_nfl_season()]
+            _season = season if season else (available_seasons[0] if available_seasons else _current_nfl_season())
 
             pos_filter = ""
             params = [_season]
@@ -1041,8 +1041,8 @@ def fetch_report_cards(season=None, position=None, limit=25):
             row = conn.execute(
                 "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
             ).fetchall()
-            available_seasons = [r[0] for r in row] if row else [2024]
-            _season = season if season else (available_seasons[0] if available_seasons else 2024)
+            available_seasons = [r[0] for r in row] if row else [_current_nfl_season()]
+            _season = season if season else (available_seasons[0] if available_seasons else _current_nfl_season())
 
             pos_filter = ""
             params = [_season]
@@ -1342,8 +1342,8 @@ def fetch_season_awards(season=None, position=None):
             row = conn.execute(
                 "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
             ).fetchall()
-            available_seasons = [r[0] for r in row] if row else [2024]
-            _season = season if season else (available_seasons[0] if available_seasons else 2024)
+            available_seasons = [r[0] for r in row] if row else [_current_nfl_season()]
+            _season = season if season else (available_seasons[0] if available_seasons else _current_nfl_season())
 
             pos_filter = ""
             params = [_season]
@@ -1782,8 +1782,8 @@ def fetch_vorp(season=None, position=None, limit=30):
         with get_db() as conn:
             # Determine season + available seasons
             row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
-            available_seasons = [r[0] for r in row] if row else [2024]
-            _season = season if season else (available_seasons[0] if available_seasons else 2024)
+            available_seasons = [r[0] for r in row] if row else [_current_nfl_season()]
+            _season = season if season else (available_seasons[0] if available_seasons else _current_nfl_season())
 
             # Fetch all fantasy-relevant players (no position filter yet — need all for replacement calc)
             query = """

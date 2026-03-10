@@ -6,6 +6,8 @@
 (function() {
   'use strict';
 
+  var _latestSeason = (function() { var n = new Date(); return n.getMonth() >= 7 ? n.getFullYear() : n.getFullYear() - 1; })();
+
   var defs = window._labPanelDefs = window._labPanelDefs || [];
 
   function fmt(v, dec) {
@@ -643,7 +645,7 @@
         if (!seasonsLoaded) {
           seasonsLoaded = true;
           seasonSel.innerHTML = '';
-          for (var y = 2024; y >= 2020; y--) {
+          for (var y = _latestSeason; y >= 2015; y--) {
             var opt = document.createElement('option');
             opt.value = y; opt.textContent = y;
             if (y === data.season) opt.selected = true;
@@ -1498,7 +1500,7 @@
         if (!seasonsPopulated) {
           var sel = el.querySelector('#ww-season');
           sel.innerHTML = '';
-          for (var y = 2024; y >= 2020; y--) {
+          for (var y = _latestSeason; y >= 2015; y--) {
             var o = document.createElement('option');
             o.value = y; o.textContent = y;
             if (y === data.season) o.selected = true;
@@ -1694,7 +1696,7 @@
         if (!seasonsPopulated) {
           var sel = el.querySelector('#hc-season');
           sel.innerHTML = '';
-          for (var y = 2024; y >= 2020; y--) {
+          for (var y = _latestSeason; y >= 2015; y--) {
             var o = document.createElement('option');
             o.value = y; o.textContent = y;
             if (y === data.season) o.selected = true;
@@ -4156,8 +4158,8 @@
     if (showNflOnlyMsg(el, 'yoy', 'Year-over-Year', 'cross-season stat deltas')) return;
     var yyCollege = typeof state !== 'undefined' && state.universe === 'college';
     var curPos = '';
-    var curS1 = '2024';
-    var curS2 = '2025';
+    var curS1 = String(_latestSeason - 1);
+    var curS2 = String(_latestSeason);
     var curMetric = 'ppg';
 
     var metricLabels = {
@@ -4178,18 +4180,9 @@
             '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
           '</div>' +
           (yyCollege ? '' :
-          '<select class="lp-select" id="yy-s1">' +
-            '<option value="2022">2022</option>' +
-            '<option value="2023">2023</option>' +
-            '<option value="2024" selected>2024</option>' +
-            '<option value="2025">2025</option>' +
-          '</select>' +
+          '<select class="lp-select" id="yy-s1">' + seasonOptions(_latestSeason - 1) + '</select>' +
           '<span style="font-family:var(--font-mono);font-size:13px;color:var(--ink-light)">→</span>' +
-          '<select class="lp-select" id="yy-s2">' +
-            '<option value="2023">2023</option>' +
-            '<option value="2024">2024</option>' +
-            '<option value="2025" selected>2025</option>' +
-          '</select>' +
+          '<select class="lp-select" id="yy-s2">' + seasonOptions() + '</select>' +
           '<select class="lp-select" id="yy-metric">' +
             '<option value="ppg">PPG</option>' +
             '<option value="targets_g">Tgt/G</option>' +
@@ -4496,7 +4489,7 @@
   defs.push({ name: 'pace', render: function(el) {
     if (showNflOnlyMsg(el, 'pace', 'Season Pace Tracker', 'projected season totals from weekly game logs')) return;
     var curPos = '';
-    var curSeason = '2025';
+    var curSeason = String(_latestSeason);
 
     el.innerHTML =
       '<div class="lp-page">' +
@@ -4510,11 +4503,7 @@
             '<button class="lp-pos-tab" data-pos="WR">WR</button>' +
             '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
           '</div>' +
-          '<select class="lp-select" id="pt-season">' +
-            '<option value="2025" selected>2025</option>' +
-            '<option value="2024">2024</option>' +
-            '<option value="2023">2023</option>' +
-          '</select>' +
+          '<select class="lp-select" id="pt-season">' + seasonOptions() + '</select>' +
         '</div>' +
         '<div id="pt-body"><div class="lp-loading">pulling film on pace projections...</div></div>' +
       '</div>';
@@ -4587,7 +4576,7 @@
   // ─── 34. SEASON PACE ──────────────────────────────────────
   defs.push({ name: 'seasonpace', render: function(el) {
     var curPos = '';
-    var curSeason = '2025';
+    var curSeason = String(_latestSeason);
 
     el.innerHTML =
       '<div class="lp-page">' +
@@ -4601,11 +4590,7 @@
             '<button class="lp-pos-tab" data-pos="WR">WR</button>' +
             '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
           '</div>' +
-          '<select class="lp-select" id="spc-season">' +
-            '<option value="2025" selected>2025</option>' +
-            '<option value="2024">2024</option>' +
-            '<option value="2023">2023</option>' +
-          '</select>' +
+          '<select class="lp-select" id="spc-season">' + seasonOptions() + '</select>' +
         '</div>' +
         '<div id="spc-body"><div class="lp-loading">pulling film on season milestones...</div></div>' +
       '</div>';
@@ -4679,7 +4664,7 @@
   defs.push({ name: 'tdregression', render: function(el) {
     if (showNflOnlyMsg(el, 'tdregression', 'TD Regression', 'expected vs actual touchdowns')) return;
     var curPos = '';
-    var curSeason = '2025';
+    var curSeason = String(_latestSeason);
 
     el.innerHTML =
       '<div class="lp-page">' +
@@ -4693,11 +4678,7 @@
             '<button class="lp-pos-tab" data-pos="WR">WR</button>' +
             '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
           '</div>' +
-          '<select class="lp-select" id="tdr-season">' +
-            '<option value="2025" selected>2025</option>' +
-            '<option value="2024">2024</option>' +
-            '<option value="2023">2023</option>' +
-          '</select>' +
+          '<select class="lp-select" id="tdr-season">' + seasonOptions() + '</select>' +
         '</div>' +
         '<div id="tdr-body"><div class="lp-loading">pulling film on TD regression...</div></div>' +
       '</div>';
@@ -4802,7 +4783,7 @@
   defs.push({ name: 'airyards', render: function(el) {
     if (showNflOnlyMsg(el, 'airyards', 'Air Yards', 'aDOT, WOPR, RACR — target efficiency')) return;
     var curPos = '';
-    var curSeason = '2025';
+    var curSeason = String(_latestSeason);
     var sortState = { buy_low: { col: 'regression_delta', asc: false }, sell_high: { col: 'regression_delta', asc: true } };
 
     var colDefs = [
@@ -4831,11 +4812,7 @@
             '<button class="lp-pos-tab" data-pos="RB">RB</button>' +
             '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
           '</div>' +
-          '<select class="lp-select" id="ay-season">' +
-            '<option value="2025" selected>2025</option>' +
-            '<option value="2024">2024</option>' +
-            '<option value="2023">2023</option>' +
-          '</select>' +
+          '<select class="lp-select" id="ay-season">' + seasonOptions() + '</select>' +
         '</div>' +
         '<div id="ay-body"><div class="lp-loading">pulling film on air yards...</div></div>' +
       '</div>';
@@ -5404,7 +5381,7 @@
   // ─── 39. COMPARE TABLE ──────────────────────────────────────────
   defs.push({ name: 'comptable', render: function(el) {
     var selectedPlayers = []; // {player_id, full_name, position, team}
-    var curSeason = 2025;
+    var curSeason = _latestSeason;
     var sortCol = 'ppg';
     var sortAsc = false;
     var INVERSE = { interceptions: true, int: true };
@@ -5435,7 +5412,7 @@
         '<div class="lp-subtitle">side-by-side stats for 2-8 players</div></div>' +
         '<div class="lp-controls">' +
           searchWrapHTML('cmt-', 'add player...') +
-          '<select class="lp-select" id="cmt-season">' + seasonOptions(2025) + '</select>' +
+          '<select class="lp-select" id="cmt-season">' + seasonOptions() + '</select>' +
           '<button class="lp-pos-tab" id="cmt-compare-btn" style="background:var(--accent);color:#fff;">Compare</button>' +
         '</div>' +
         '<div id="cmt-chips" class="cmt-chips"></div>' +
@@ -5549,7 +5526,7 @@
 
   // ─── 40. STRENGTHS & WEAKNESSES ─────────────────────────────────
   defs.push({ name: 'strengths', render: function(el) {
-    var curSeason = 2025;
+    var curSeason = _latestSeason;
 
     el.innerHTML =
       '<div class="lp-page">' +
@@ -5557,7 +5534,7 @@
         '<div class="lp-subtitle">what they do best and where they fall short</div></div>' +
         '<div class="lp-controls">' +
           searchWrapHTML('sw2-', 'search player...') +
-          '<select class="lp-select" id="sw2-season">' + seasonOptions(2025) + '</select>' +
+          '<select class="lp-select" id="sw2-season">' + seasonOptions() + '</select>' +
         '</div>' +
         '<div id="sw2-content"><div class="lp-empty">search for a player to see their profile</div></div>' +
       '</div>';
@@ -5664,7 +5641,7 @@
   // ─── 41. REPORT CARD ────────────────────────────────────────────
   defs.push({ name: 'reportcard', render: function(el) {
     var curPos = '';
-    var curSeason = 2025;
+    var curSeason = _latestSeason;
     var honorSort = { col: 'gpa', asc: false };
     var needsSort = { col: 'gpa', asc: true };
     var lastData = null;
@@ -5677,7 +5654,7 @@
         '<div class="lp-subtitle">fantasy GPA — the full picture</div></div>' +
         '<div class="lp-controls">' +
           posTabsHTML('rpc-pos-tabs', true) +
-          '<select class="lp-select" id="rpc-season">' + seasonOptions(2025) + '</select>' +
+          '<select class="lp-select" id="rpc-season">' + seasonOptions() + '</select>' +
         '</div>' +
         '<div id="rpc-content"><div class="lp-loading">pulling film on report cards...</div></div>' +
       '</div>';
@@ -5818,7 +5795,7 @@
   // ─── 42. FPTS BREAKDOWN ─────────────────────────────────────────
   defs.push({ name: 'fptsbreakdown', render: function(el) {
     var curPos = '';
-    var curSeason = 2025;
+    var curSeason = _latestSeason;
     var compColors = { pass_yd: '#5b7fff', rush_yd: '#2ec4b6', rec_yd: '#d97757', rec: '#8b5cf6', td: '#e74c3c' };
     var compLabels = { pass_yd: 'Pass Yd', rush_yd: 'Rush Yd', rec_yd: 'Rec Yd', rec: 'Receptions', td: 'Touchdowns' };
 
@@ -5828,7 +5805,7 @@
         '<div class="lp-subtitle">where do fantasy points come from?</div></div>' +
         '<div class="lp-controls">' +
           posTabsHTML('fpb-pos-tabs', true) +
-          '<select class="lp-select" id="fpb-season">' + seasonOptions(2025) + '</select>' +
+          '<select class="lp-select" id="fpb-season">' + seasonOptions() + '</select>' +
         '</div>' +
         '<div id="fpb-content"><div class="lp-loading">pulling film...</div></div>' +
       '</div>';
@@ -5910,7 +5887,7 @@
 
   // ─── 43. GAME LOG ───────────────────────────────────────────────
   defs.push({ name: 'gamelog', render: function(el) {
-    var curSeason = 2025;
+    var curSeason = _latestSeason;
     var curPlayer = null;
     var sortCol = 'week';
     var sortAsc = true;
@@ -5921,7 +5898,7 @@
         '<div class="lp-subtitle">week-by-week performance</div></div>' +
         '<div class="lp-controls">' +
           searchWrapHTML('glo-', 'search player...') +
-          '<select class="lp-select" id="glo-season">' + seasonOptions(2025) + '</select>' +
+          '<select class="lp-select" id="glo-season">' + seasonOptions() + '</select>' +
         '</div>' +
         '<div id="glo-content"><div class="lp-empty">search for a player to view game log</div></div>' +
       '</div>';
@@ -6056,7 +6033,7 @@
   // ─── 44. PLAYER ARCHETYPES ──────────────────────────────────────
   defs.push({ name: 'archetypes', render: function(el) {
     var curPos = '';
-    var curSeason = 2025;
+    var curSeason = _latestSeason;
     var iconMap = {
       workhorse: '\u{1F3CB}', alpha_target: '\u{1F451}', deep_threat: '\u{1F680}', slot_machine: '\u{1F3B0}',
       dual_threat: '\u26A1', pocket_passer: '\u{1F3AF}', mobile_qb: '\u{1F3C3}', receiving_back: '\u{1F3C8}',
@@ -6071,7 +6048,7 @@
         '<div class="lp-subtitle">how players are built to score</div></div>' +
         '<div class="lp-controls">' +
           posTabsHTML('arc-pos-tabs', true) +
-          '<select class="lp-select" id="arc-season">' + seasonOptions(2025) + '</select>' +
+          '<select class="lp-select" id="arc-season">' + seasonOptions() + '</select>' +
         '</div>' +
         '<div id="arc-content"><div class="lp-loading">pulling film...</div></div>' +
       '</div>';
@@ -6147,7 +6124,7 @@
 
   // ─── 45. POINTS BREAKDOWN (DONUT) ──────────────────────────────
   defs.push({ name: 'breakdown', render: function(el) {
-    var curSeason = 2025;
+    var curSeason = _latestSeason;
 
     el.innerHTML =
       '<div class="lp-page">' +
@@ -6155,7 +6132,7 @@
         '<div class="lp-subtitle">where do their points come from?</div></div>' +
         '<div class="lp-controls">' +
           searchWrapHTML('pbd-', 'search player...') +
-          '<select class="lp-select" id="pbd-season">' + seasonOptions(2025) + '</select>' +
+          '<select class="lp-select" id="pbd-season">' + seasonOptions() + '</select>' +
         '</div>' +
         '<div id="pbd-content"><div class="lp-empty">search for a player to see scoring breakdown</div></div>' +
       '</div>';
@@ -6379,7 +6356,7 @@
         '<div class="lp-header"><h2>' + (awCollege ? 'College Superlatives' : 'Season Superlatives') + '</h2>' +
         '<div class="lp-subtitle">' + (awCollege ? 'the college hardware that matters' : 'the hardware that matters') + '</div></div>' +
         '<div class="lp-controls">' +
-          '<select class="lp-select aw2-season">' + seasonOptions(2025) + '</select>' +
+          '<select class="lp-select aw2-season">' + seasonOptions() + '</select>' +
           posTabsHTML('aw2-pos-tabs', true) +
         '</div>' +
         '<div class="aw2-content"><div class="lp-loading">tallying the votes...</div></div>' +
@@ -6462,7 +6439,7 @@
         '<div class="lp-subtitle">at-a-glance overview</div>' +
         '<div class="lp-meta db2-meta"></div></div>' +
         '<div class="lp-controls">' +
-          '<select class="lp-select db2-season">' + seasonOptions(2025) + '</select>' +
+          '<select class="lp-select db2-season">' + seasonOptions() + '</select>' +
         '</div>' +
         '<div class="db2-top5"></div>' +
         '<div class="db2-trends"></div>' +
@@ -6812,7 +6789,7 @@
         '<div class="lp-controls">' +
           '<label style="font-family:var(--font-mono);font-size:12px;">X: <select class="lp-select exp-x-select">' + metricOpts + '</select></label>' +
           '<label style="font-family:var(--font-mono);font-size:12px;">Y: <select class="lp-select exp-y-select">' + yOpts + '</select></label>' +
-          '<select class="lp-select exp-season">' + seasonOptions(2025) + '</select>' +
+          '<select class="lp-select exp-season">' + seasonOptions() + '</select>' +
           posTabsHTML('exp-pos-tabs', true) +
         '</div>' +
         '<div class="exp-body"><div class="lp-loading">crunching numbers...</div></div>' +
@@ -7092,7 +7069,7 @@
         '<div class="lp-header"><h2>' + (ldCollege ? 'College Stat Leaders' : 'Stat Leaders') + '</h2>' +
         '<div class="lp-subtitle">' + (ldCollege ? 'who\'s leading the pack in college football' : 'who\'s leading the pack') + '</div></div>' +
         '<div class="lp-controls">' +
-          '<select class="lp-select ld2-season">' + seasonOptions(2025) + '</select>' +
+          '<select class="lp-select ld2-season">' + seasonOptions() + '</select>' +
           posTabsHTML('ld2-pos-tabs', true) +
         '</div>' +
         '<div class="ld2-content"><div class="lp-loading">pulling film on the leaders...</div></div>' +
@@ -7236,7 +7213,7 @@
         '<div class="lp-header"><h2>Opportunity Share</h2>' +
         '<div class="lp-subtitle">who\'s eating the most touches</div></div>' +
         '<div class="lp-controls">' +
-          '<select class="lp-select opp2-season">' + seasonOptions(2025) + '</select>' +
+          '<select class="lp-select opp2-season">' + seasonOptions() + '</select>' +
           posTabsHTML('opp2-pos-tabs', true) +
         '</div>' +
         '<div class="opp2-content"><div class="lp-loading">mapping the opportunity landscape...</div></div>' +
@@ -7389,7 +7366,7 @@
         '<div class="lp-subtitle">how they stack up against the position</div></div>' +
         '<div class="lp-controls">' +
           searchWrapHTML('pct2-', 'search a player...') +
-          '<select class="lp-select pct2-season" style="display:none">' + seasonOptions(2025) + '</select>' +
+          '<select class="lp-select pct2-season" style="display:none">' + seasonOptions() + '</select>' +
         '</div>' +
         '<div class="pct2-result"><div class="lp-empty">search for a player to see their percentile rankings</div></div>' +
       '</div>';
@@ -7652,7 +7629,7 @@
         '<div class="lp-header"><h2>' + (rcCollege ? 'College Season Recap' : 'Season Recap') + '</h2>' +
         '<div class="lp-subtitle">' + (rcCollege ? 'the college season in review' : 'the season in review') + '</div></div>' +
         '<div class="lp-controls">' +
-          '<select class="lp-select rc2-season">' + seasonOptions(2025) + '</select>' +
+          '<select class="lp-select rc2-season">' + seasonOptions() + '</select>' +
         '</div>' +
         '<div class="rc2-content"><div class="lp-loading">pulling film...</div></div>' +
       '</div>';
@@ -8147,7 +8124,7 @@
         '<div class="lp-header"><h2>Strength of Schedule</h2>' +
         '<div class="lp-subtitle">who had it easy and who didn\'t</div></div>' +
         '<div class="lp-controls">' +
-          '<select class="lp-select sos2-season">' + seasonOptions(2025) + '</select>' +
+          '<select class="lp-select sos2-season">' + seasonOptions() + '</select>' +
           posTabsHTML('sos2-pos-tabs', true) +
         '</div>' +
         '<div class="sos2-content"><div class="lp-loading">scouting the schedule...</div></div>' +
@@ -8291,7 +8268,7 @@
         '<div class="lp-header"><h2>Scoring Format Comparison</h2>' +
         '<div class="lp-subtitle">PPR vs Half vs Standard rank shifts</div></div>' +
         '<div class="lp-controls">' +
-          '<select class="lp-select sc2-season">' + seasonOptions(2025) + '</select>' +
+          '<select class="lp-select sc2-season">' + seasonOptions() + '</select>' +
           posTabsHTML('sc2-pos-tabs', true) +
         '</div>' +
         '<div class="sc2-content"><div class="lp-loading">comparing scoring formats...</div></div>' +
@@ -8393,7 +8370,7 @@
         '<div class="lp-header"><h2>Success Rate</h2>' +
         '<div class="lp-subtitle">who converts when it matters</div></div>' +
         '<div class="lp-controls">' +
-          '<select class="lp-select sr2-season">' + seasonOptions(2025) + '</select>' +
+          '<select class="lp-select sr2-season">' + seasonOptions() + '</select>' +
           posTabsHTML('sr2-pos-tabs', true) +
         '</div>' +
         '<div class="sr2-content"><div class="lp-loading">pulling film...</div></div>' +
@@ -8645,7 +8622,7 @@
         '<div class="lp-subtitle tm-subtitle">scouting the depth chart</div></div>' +
         '<div class="lp-controls">' +
           '<select class="lp-select tm-team"><option value="">Select a team</option></select>' +
-          '<select class="lp-select tm-season">' + seasonOptions(2025) + '</select>' +
+          '<select class="lp-select tm-season">' + seasonOptions() + '</select>' +
         '</div>' +
         '<div class="tm-content"><div class="lp-loading">pulling film on the roster...</div></div>' +
       '</div>';

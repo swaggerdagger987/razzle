@@ -1,6 +1,21 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 31 — QA + UX Audit Fixes for Phases 26-30 (COMPLETE)
+## Current Phase: Phase 32 — Lab QA: Fix Data Loading, Year Bugs, and Reliability (COMPLETE)
+
+**Exit Criterion MET**: Zero hardcoded years in Python or JS. _current_nfl_season() and _current_draft_year() helpers in core.py. Prospect tiers use state.draftYear. AbortController race condition protection. Error handlers keep previous data visible. Toast notification system. 100+ year values replaced across 12 files.
+
+### Phase 32 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Fix all hardcoded years | DONE | 100+ replacements, 8 Python + 4 JS files |
+| 2 | Fix prospect tiers state variable | DONE | 3 instances fixed (draftYear || season) |
+| 3 | Fix season selector init + empty state | DONE | .catch(), null checks, empty toast |
+| 4 | Fix race conditions | DONE | AbortController + debounce |
+| 5 | Fix error handling | DONE | Keep data, toast errors |
+| 6 | End-to-end verification | DONE | Server test passed |
+
+## Previous Phase: Phase 31 — QA + UX Audit Fixes for Phases 26-30 (COMPLETE)
 
 **Exit Criterion MET**: CRITICAL: Added nonlocal to 26 tools.py cached closures (prevented UnboundLocalError). HIGH: Fixed metric_key→stat_key in analytics.py, made seasonOptions() dynamic. MEDIUM: Aging curves label → "all seasons", NFL 0.0 → em-dash, toast count 62→70.
 

@@ -9,6 +9,7 @@ from ..db import get_db
 
 from .core import (
     _cached, _CACHE_TTL_STABLE,
+    _current_nfl_season,
     FANTASY_POSITIONS, RATE_METRICS, _STAT_SUM_COLS,
     TEAM_ABBREV, ABBREV_TO_TEAM,
     _enrich_with_derived_stats, _enrich_with_epa_per_play,
@@ -82,7 +83,7 @@ def fetch_players(
                 _season = int(_season) if _season else 0
                 if not _season:
                     row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-                    _season = row[0] if row and row[0] else 2024
+                    _season = row[0] if row and row[0] else _current_nfl_season()
 
             # Build position filter
             pos_list = []
@@ -210,7 +211,7 @@ def _fetch_screener_uncached(body):
             season = int(season) if season else 0
             if not season:
                 row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-                season = row[0] if row and row[0] else 2024
+                season = row[0] if row and row[0] else _current_nfl_season()
 
         # Position list
         pos_list = []
@@ -467,7 +468,7 @@ def fetch_player_weeks(player_id, season=0):
             _season = season
             if not _season:
                 row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-                _season = row[0] if row and row[0] else 2024
+                _season = row[0] if row and row[0] else _current_nfl_season()
 
             rows = conn.execute("""
                 SELECT s.*, p.full_name, p.position, p.team
@@ -622,7 +623,7 @@ def _fetch_players_compare_uncached(player_ids, season=0):
             season = int(season) if season else 0
             if not season:
                 row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-                season = row[0] if row and row[0] else 2024
+                season = row[0] if row and row[0] else _current_nfl_season()
 
         if not player_ids:
             return {"season": "career" if career_mode else season, "players": []}
@@ -665,7 +666,7 @@ def _fetch_team_roster_uncached(team=None, season=None):
         # Determine season
         if not season:
             row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-            season = row[0] if row and row[0] else 2024
+            season = row[0] if row and row[0] else _current_nfl_season()
 
         # Get available seasons
         season_rows = conn.execute(
@@ -936,7 +937,7 @@ def _fetch_player_percentiles_uncached(player_id, season=None):
     with get_db() as conn:
         if not season:
             row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-            season = row[0] if row and row[0] else 2024
+            season = row[0] if row and row[0] else _current_nfl_season()
 
         available_seasons = [
             r[0] for r in conn.execute(
@@ -1181,9 +1182,9 @@ def _fetch_points_breakdown_uncached(player_id, season=None):
 
     with get_db() as conn:
         row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
-        available_seasons = [r[0] for r in row] if row else [2024]
+        available_seasons = [r[0] for r in row] if row else [_current_nfl_season()]
         if not season:
-            season = available_seasons[0] if available_seasons else 2024
+            season = available_seasons[0] if available_seasons else _current_nfl_season()
 
         player = conn.execute(
             "SELECT player_id, full_name, position, team, age FROM players WHERE player_id = ?",
@@ -1290,7 +1291,7 @@ def _fetch_game_log_uncached(player_id, season=None):
         if not season:
             cursor.execute("SELECT MAX(season) FROM player_week_stats WHERE player_id = ?", (player_id,))
             row = cursor.fetchone()
-            season = row[0] if row and row[0] else 2024
+            season = row[0] if row and row[0] else _current_nfl_season()
 
         # Available seasons for this player
         cursor.execute("SELECT DISTINCT season FROM player_week_stats WHERE player_id = ? ORDER BY season DESC", (player_id,))
@@ -1372,7 +1373,7 @@ def _fetch_compare_table_uncached(player_ids, season=None):
 
         if not season:
             cursor.execute("SELECT MAX(season) FROM player_week_stats")
-            season = cursor.fetchone()[0] or 2024
+            season = cursor.fetchone()[0] or _current_nfl_season()
 
         placeholders = ",".join("?" for _ in player_ids)
         cursor.execute(f"""
@@ -1456,7 +1457,7 @@ def _fetch_player_boom_bust_uncached(player_id, season=0):
         # Determine season
         if not season:
             row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-            season = row[0] if row and row[0] else 2024
+            season = row[0] if row and row[0] else _current_nfl_season()
 
         # Get weekly fantasy scores for the player
         weeks = conn.execute("""
@@ -1631,7 +1632,7 @@ def _fetch_player_comps_uncached(player_id, limit=5, season=0):
         # Determine season filter
         if not season:
             row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-            season = row[0] if row and row[0] else 2024
+            season = row[0] if row and row[0] else _current_nfl_season()
 
         # Get target player's season stats
         target_row = conn.execute(f"""

@@ -5,7 +5,7 @@ College football functions — cfb player stats, analytics, records, awards.
 import math
 
 from ..db import get_db
-from .core import _cached, _CACHE_TTL_STABLE, _enrich_college_derived
+from .core import _cached, _CACHE_TTL_STABLE, _current_nfl_season, _enrich_college_derived
 
 def _fetch_college_players_uncached(
     search="",
@@ -25,7 +25,7 @@ def _fetch_college_players_uncached(
         # Default to latest season
         if not season:
             row = conn.execute("SELECT MAX(season) FROM cfb_player_season_stats").fetchone()
-            season = row[0] if row and row[0] else 2024
+            season = row[0] if row and row[0] else _current_nfl_season()
 
         # Position list
         pos_list = []
@@ -323,7 +323,7 @@ def _cfb_available_seasons(conn):
     rows = conn.execute(
         "SELECT DISTINCT season FROM cfb_player_season_stats ORDER BY season DESC"
     ).fetchall()
-    return [r[0] for r in rows] if rows else [2024]
+    return [r[0] for r in rows] if rows else [_current_nfl_season()]
 
 
 def _cfb_pos_filter(position, prefix="c"):
@@ -338,7 +338,7 @@ def _fetch_college_breakouts_uncached(season=None, position=None, limit=50):
     with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
         if not season:
-            season = available_seasons[0] if available_seasons else 2024
+            season = available_seasons[0] if available_seasons else _current_nfl_season()
 
         pos_sql, pos_params = _cfb_pos_filter(position)
 
@@ -482,7 +482,7 @@ def _fetch_college_efficiency_uncached(season=None, position=None, limit=30):
     with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
         if not season:
-            season = available_seasons[0] if available_seasons else 2024
+            season = available_seasons[0] if available_seasons else _current_nfl_season()
 
         pos_sql, pos_params = _cfb_pos_filter(position)
 
@@ -610,7 +610,7 @@ def _fetch_college_leaders_uncached(season=None, position=None, limit=10):
     with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
         if not season:
-            season = available_seasons[0] if available_seasons else 2024
+            season = available_seasons[0] if available_seasons else _current_nfl_season()
 
         pos_upper = position.strip().upper() if position else None
         if pos_upper and pos_upper not in _CFB_POSITIONS:
@@ -693,7 +693,7 @@ def _fetch_college_trends_uncached(season=None, position=None, limit=30):
     with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
         if not season:
-            season = available_seasons[0] if available_seasons else 2024
+            season = available_seasons[0] if available_seasons else _current_nfl_season()
 
         prior_season = season - 1
         if prior_season not in available_seasons:
@@ -785,7 +785,7 @@ def _fetch_college_rankings_uncached(season=None, position=None, limit=50):
     with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
         if not season:
-            season = available_seasons[0] if available_seasons else 2024
+            season = available_seasons[0] if available_seasons else _current_nfl_season()
 
         pos_sql, pos_params = _cfb_pos_filter(position)
 
@@ -873,7 +873,7 @@ def _fetch_college_streaks_uncached(season=None, position=None, limit=25):
     with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
         if not season:
-            season = available_seasons[0] if available_seasons else 2024
+            season = available_seasons[0] if available_seasons else _current_nfl_season()
 
         pos_sql, pos_params = _cfb_pos_filter(position, "c")
 
@@ -985,7 +985,7 @@ def _fetch_college_stock_watch_uncached(season=None, position=None, limit=30):
     with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
         if not season:
-            season = available_seasons[0] if available_seasons else 2024
+            season = available_seasons[0] if available_seasons else _current_nfl_season()
 
         pos_sql, pos_params = _cfb_pos_filter(position)
 
@@ -1170,7 +1170,7 @@ def _fetch_college_scarcity_uncached(season=None):
     with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
         if not season:
-            season = available_seasons[0] if available_seasons else 2024
+            season = available_seasons[0] if available_seasons else _current_nfl_season()
 
         positions_data = {}
         for pos in ("QB", "RB", "WR", "TE"):
@@ -1273,7 +1273,7 @@ def _fetch_college_consistency_uncached(season=None, position=None, limit=30):
     with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
         if not season:
-            season = available_seasons[0] if available_seasons else 2024
+            season = available_seasons[0] if available_seasons else _current_nfl_season()
 
         pos_sql, pos_params = _cfb_pos_filter(position)
 
@@ -1389,7 +1389,7 @@ def _fetch_college_workload_uncached(season=None, position=None, limit=50):
     with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
         if not season:
-            season = available_seasons[0] if available_seasons else 2024
+            season = available_seasons[0] if available_seasons else _current_nfl_season()
 
         pos_sql, pos_params = _cfb_pos_filter(position)
 
@@ -1482,7 +1482,7 @@ def _fetch_college_dual_threat_uncached(season=None, position=None, limit=50):
     with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
         if not season:
-            season = available_seasons[0] if available_seasons else 2024
+            season = available_seasons[0] if available_seasons else _current_nfl_season()
 
         pos_sql, pos_params = _cfb_pos_filter(position)
 
@@ -1570,7 +1570,7 @@ def _fetch_college_snap_efficiency_uncached(season=None, position=None, limit=50
     with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
         if not season:
-            season = available_seasons[0] if available_seasons else 2024
+            season = available_seasons[0] if available_seasons else _current_nfl_season()
 
         pos_sql, pos_params = _cfb_pos_filter(position)
 
@@ -1937,7 +1937,7 @@ def _fetch_college_season_recap_uncached(season=None):
         if not season:
             cursor.execute("SELECT MAX(season) FROM cfb_player_season_stats")
             row = cursor.fetchone()
-            season = row[0] if row else 2024
+            season = row[0] if row else _current_nfl_season()
 
         cursor.execute("SELECT DISTINCT season FROM cfb_player_season_stats ORDER BY season DESC")
         available_seasons = [r[0] for r in cursor.fetchall()]
@@ -2083,7 +2083,7 @@ def _fetch_college_season_awards_uncached(season=None, position=None):
         cursor.execute("SELECT DISTINCT season FROM cfb_player_season_stats ORDER BY season DESC")
         available_seasons = [r[0] for r in cursor.fetchall()]
         if not season:
-            season = available_seasons[0] if available_seasons else 2024
+            season = available_seasons[0] if available_seasons else _current_nfl_season()
 
         pos_filter = ""
         params = [season]
@@ -2275,7 +2275,7 @@ def _fetch_college_stat_explorer_uncached(season=None, position=None, x_stat="to
         cursor.execute("SELECT DISTINCT season FROM cfb_player_season_stats ORDER BY season DESC")
         available_seasons = [r[0] for r in cursor.fetchall()]
         if not season:
-            season = available_seasons[0] if available_seasons else 2024
+            season = available_seasons[0] if available_seasons else _current_nfl_season()
 
         if x_stat not in COLLEGE_METRICS:
             x_stat = "total_ypg"

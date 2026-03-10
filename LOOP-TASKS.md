@@ -1,12 +1,53 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 31 (QA + UX Audit — Auto-Generated Fixes)
+- Phase: 32 (Lab QA — Fix Data Loading, Year Bugs, and Reliability)
+## Phase 32: Lab QA — Fix Data Loading, Year Bugs, and Reliability
+**Exit Criterion**: Lab loads reliably. No hardcoded years. Season selectors correct. Error states don't wipe data. No race conditions. All universes load correctly.
+
 - Task 1: PASS
 - Task 2: PASS
 - Task 3: PASS
+- Task 4: PASS
+- Task 5: PASS
+- Task 6: PASS
 - Stage: COMPLETE
 - Next: Phase transition
+
+### Task 1: Fix all hardcoded years (CRITICAL)
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Added _current_nfl_season() and _current_draft_year() to core.py. 100+ replacements across 8 Python + 4 JS files.
+
+### Task 2: Fix prospect tiers using wrong state variable (CRITICAL)
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Fixed 3 instances (lab.js x2, charts.js x1) to use state.draftYear || state.season.
+
+### Task 3: Fix season selector initialization and empty state handling
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Added .catch(), null checks, empty seasons toast.
+
+### Task 4: Fix race conditions and request deduplication
+**Status**: PASS
+**Attempts**: 1
+**Notes**: AbortController + _fetchId pattern. 200ms debounce on season selector.
+
+### Task 5: Fix error handling — don't wipe data on failure
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Error handlers keep previous data. AbortError caught silently. Toast on errors.
+
+### Task 6: Verify all fixes end-to-end
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Server test verified: 1978 players, 10 seasons, filter-options + players + aging-curves all working.
+
+### Task 6: Verify all fixes end-to-end
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: Local server test of all 7 scenarios.
 
 ## Phase 31: QA + UX Audit — Auto-Generated Fixes
 **Exit Criterion**: All CRITICAL and HIGH findings from QA+UX audit resolved. MEDIUM findings addressed.

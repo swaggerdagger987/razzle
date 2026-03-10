@@ -829,7 +829,7 @@ async function openCompare() {
   if (typeof isProspectView === "function" && isProspectView()) {
     const names = state.selectedPlayers.map(p => p.player_name || p.full_name).join(",");
     try {
-      const data = await apiFetch(`/api/prospects/compare?names=${encodeURIComponent(names)}&draft_year=${state.season}`);
+      const data = await apiFetch(`/api/prospects/compare?names=${encodeURIComponent(names)}&draft_year=${state.draftYear || state.season}`);
       renderProspectCompareTable(data.prospects);
       drawProspectCompareSpider(data.prospects);
     } catch (e) {

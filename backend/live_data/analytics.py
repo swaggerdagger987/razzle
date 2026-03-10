@@ -17,6 +17,7 @@ from .core import (
     _STAT_SUM_COLS,
     _cached,
     _CACHE_TTL_STABLE,
+    _current_nfl_season,
     _enrich_with_rate_metrics,
     _efficiency_grade,
     compute_trade_value,
@@ -201,7 +202,7 @@ def fetch_heatmap(position="WR", group="production", season=None):
             # Determine season
             if not season:
                 row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-                season = row[0] if row and row[0] else 2024
+                season = row[0] if row and row[0] else _current_nfl_season()
 
             # Fetch all players at this position with aggregated season stats
             rows = conn.execute(f"""
@@ -334,7 +335,7 @@ def fetch_stat_leaders(season=None, position=None, limit=10):
             # Determine season
             if not season:
                 row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-                season = row[0] if row and row[0] else 2024
+                season = row[0] if row and row[0] else _current_nfl_season()
 
             categories = []
 
@@ -488,9 +489,9 @@ def fetch_positional_scarcity(season=None):
         with get_db() as conn:
             # Determine season + available seasons
             row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
-            available_seasons = [r[0] for r in row] if row else [2024]
+            available_seasons = [r[0] for r in row] if row else [_current_nfl_season()]
             if not season:
-                season = available_seasons[0] if available_seasons else 2024
+                season = available_seasons[0] if available_seasons else _current_nfl_season()
 
             positions_data = {}
             for pos in ("QB", "RB", "WR", "TE"):
@@ -598,9 +599,9 @@ def fetch_breakout_candidates(season=None, position=None, limit=50):
         with get_db() as conn:
             # Determine season + available seasons
             row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
-            available_seasons = [r[0] for r in row] if row else [2024]
+            available_seasons = [r[0] for r in row] if row else [_current_nfl_season()]
             if not season:
-                season = available_seasons[0] if available_seasons else 2024
+                season = available_seasons[0] if available_seasons else _current_nfl_season()
 
             pos_filter = ""
             params = [season]
@@ -801,9 +802,9 @@ def fetch_buy_sell_candidates(season=None, position=None, limit=15):
         with get_db() as conn:
             # Determine season + available seasons
             row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
-            available_seasons = [r[0] for r in row] if row else [2024]
+            available_seasons = [r[0] for r in row] if row else [_current_nfl_season()]
             if not season:
-                season = available_seasons[0] if available_seasons else 2024
+                season = available_seasons[0] if available_seasons else _current_nfl_season()
 
             pos_filter = ""
             params = [season]
@@ -1047,10 +1048,10 @@ def fetch_stat_explorer(season=None, position=None, x_stat="targets_g", y_stat="
         nonlocal season
         with get_db() as conn:
             row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
-            available_seasons = [r[0] for r in row] if row else [2024]
+            available_seasons = [r[0] for r in row] if row else [_current_nfl_season()]
 
             if not season:
-                season = available_seasons[0] if available_seasons else 2024
+                season = available_seasons[0] if available_seasons else _current_nfl_season()
 
             pos_filter = ""
             params = [season]
@@ -1192,12 +1193,12 @@ def fetch_aging_curves(season=None, position=None):
         with get_db() as conn:
             # Determine available seasons
             row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
-            available_seasons = [r[0] for r in row] if row else [2024]
+            available_seasons = [r[0] for r in row] if row else [_current_nfl_season()]
             if not season:
-                season = available_seasons[0] if available_seasons else 2024
+                season = available_seasons[0] if available_seasons else _current_nfl_season()
 
             positions = [position] if position and position in FANTASY_POSITIONS else list(FANTASY_POSITIONS)
-            latest_season = available_seasons[0] if available_seasons else 2024
+            latest_season = available_seasons[0] if available_seasons else _current_nfl_season()
             result = {}
 
             for pos in positions:
@@ -1299,9 +1300,9 @@ def fetch_weekly_heatmap(season=None, position=None, limit=40):
         with get_db() as conn:
             # Determine available seasons
             row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
-            available_seasons = [r[0] for r in row] if row else [2024]
+            available_seasons = [r[0] for r in row] if row else [_current_nfl_season()]
             if not season:
-                season = available_seasons[0] if available_seasons else 2024
+                season = available_seasons[0] if available_seasons else _current_nfl_season()
 
             positions = [position] if position and position in FANTASY_POSITIONS else list(FANTASY_POSITIONS)
 
@@ -1419,9 +1420,9 @@ def fetch_target_distribution(season=None, team=None):
         nonlocal season
         with get_db() as conn:
             row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
-            available_seasons = [r[0] for r in row] if row else [2024]
+            available_seasons = [r[0] for r in row] if row else [_current_nfl_season()]
             if not season:
-                season = available_seasons[0] if available_seasons else 2024
+                season = available_seasons[0] if available_seasons else _current_nfl_season()
 
             teams_filter = ""
             params = [season]
@@ -1521,9 +1522,9 @@ def fetch_matchup_heatmap(season=None, position=None):
         nonlocal season
         with get_db() as conn:
             row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
-            available_seasons = [r[0] for r in row] if row else [2024]
+            available_seasons = [r[0] for r in row] if row else [_current_nfl_season()]
             if not season:
-                season = available_seasons[0] if available_seasons else 2024
+                season = available_seasons[0] if available_seasons else _current_nfl_season()
 
             pos_filter = ""
             params = [season]
@@ -1699,9 +1700,9 @@ def fetch_usage_trends(season=None, position=None, window=5, limit=30):
         with get_db() as conn:
             # Determine season + available seasons
             row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
-            available_seasons = [r[0] for r in row] if row else [2024]
+            available_seasons = [r[0] for r in row] if row else [_current_nfl_season()]
             if not season:
-                season = available_seasons[0] if available_seasons else 2024
+                season = available_seasons[0] if available_seasons else _current_nfl_season()
 
             pos_filter = ""
             params = [season]
@@ -1850,10 +1851,10 @@ def fetch_year_over_year(season=None, position=None, metric="ppg", limit=25):
         with get_db() as conn:
             # Determine available seasons
             row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
-            available_seasons = [r[0] for r in row] if row else [2024]
+            available_seasons = [r[0] for r in row] if row else [_current_nfl_season()]
 
             if not season:
-                season = available_seasons[0] if available_seasons else 2024
+                season = available_seasons[0] if available_seasons else _current_nfl_season()
 
             prev_season = season - 1
             if prev_season not in available_seasons:
@@ -2016,10 +2017,10 @@ def fetch_air_yards(season=None, position=None, limit=25):
         with get_db() as conn:
             # Determine available seasons
             row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
-            available_seasons = [r[0] for r in row] if row else [2024]
+            available_seasons = [r[0] for r in row] if row else [_current_nfl_season()]
 
             if not season:
-                season = available_seasons[0] if available_seasons else 2024
+                season = available_seasons[0] if available_seasons else _current_nfl_season()
 
             # Only pass catchers (no QB)
             valid_pos = ("WR", "RB", "TE")
@@ -2179,9 +2180,9 @@ def fetch_redzone_usage(season=None, position=None, limit=30):
         with get_db() as conn:
             # Determine season + available seasons
             row = conn.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC").fetchall()
-            available_seasons = [r[0] for r in row] if row else [2024]
+            available_seasons = [r[0] for r in row] if row else [_current_nfl_season()]
             if not season:
-                season = available_seasons[0] if available_seasons else 2024
+                season = available_seasons[0] if available_seasons else _current_nfl_season()
 
             pos_filter = ""
             params = [season]

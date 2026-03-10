@@ -548,13 +548,24 @@ function isProspectView() {
   // Load NFL, prospect, and college options in parallel
   try {
     const [nflOpts, prospectOpts, collegeOpts] = await Promise.all([
-      apiFetch("/api/filter-options"),
+      apiFetch("/api/filter-options").catch(function(err) {
+        console.error("Failed to load NFL filter options:", err);
+        var labContent = document.getElementById("labContent") || document.querySelector(".lab-main");
+        if (labContent) {
+          labContent.innerHTML = '<div style="text-align:center;padding:40px;font-family:Space Mono,monospace;color:#d97757;font-size:15px;border:3px solid #2d1f14;background:#f7efe5;border-radius:8px;margin:24px;">failed to load filter options — check your connection and reload</div>';
+        }
+        return { seasons: [], teams: [], positions: [] };
+      }),
       apiFetch("/api/prospect-options").catch(() => ({ years: [], schools: [], positions: [] })),
       apiFetch("/api/college/filter-options").catch(() => ({ seasons: [], teams: [], conferences: [], positions: [] })),
     ]);
 
     state.seasons = nflOpts.seasons || [_nflYear];
-    if (!state.season && state.season !== "career") state.season = state.seasons[0] || _nflYear;
+    if (state.season == null && state.season !== "career") state.season = state.seasons[0] || _nflYear;
+
+    if (state.seasons.length === 0) {
+      _showToast("No seasons found — data may not be loaded yet");
+    }
 
     state.draftYears = prospectOpts.years || [_curYear];
     if (!state.draftYear) state.draftYear = state.draftYears[0] || _curYear;
@@ -612,17 +623,26 @@ function isProspectView() {
 })();
 
 // ─── Data fetching ───────────────────────────────────────────────
+// ─── Request deduplication ────────────────────────────────────────
+let _fetchController = null;
+let _fetchId = 0;
+
 async function fetchAndRender() {
+  if (_fetchController) _fetchController.abort();
+  _fetchController = new AbortController();
+  const myId = ++_fetchId;
+  const signal = _fetchController.signal;
+
   if (isProspectView()) {
-    return fetchAndRenderProspects();
+    return fetchAndRenderProspects(signal, myId);
   }
   if (state.universe === "college") {
-    return fetchAndRenderCollege();
+    return fetchAndRenderCollege(signal, myId);
   }
-  return fetchAndRenderNFL();
+  return fetchAndRenderNFL(signal, myId);
 }
 
-async function fetchAndRenderNFL() {
+async function fetchAndRenderNFL(signal, myId) {
   const loading = document.getElementById("loadingMsg");
   const tbody = document.getElementById("tableBody");
   loading.style.display = "block";
@@ -648,11 +668,15 @@ async function fetchAndRenderNFL() {
   };
 
   try {
-    const data = await apiFetch("/api/screener/query", {
+    const fetchOpts = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
-    });
+    };
+    if (signal) fetchOpts.signal = signal;
+    const data = await apiFetch("/api/screener/query", fetchOpts);
+
+    if (myId !== _fetchId) return; // stale response
 
     state.items = data.items || [];
     state.totalCount = data.count || 0;
@@ -667,15 +691,16 @@ async function fetchAndRenderNFL() {
     updateResultCount();
     saveStateToURL();
   } catch (e) {
+    if (e.name === 'AbortError') return;
     loading.textContent = "fumbled the data fetch...";
-    state.items = [];
-    state.totalCount = 0;
+    console.error('Screener fetch error:', e);
+    _showToast('fumbled the data fetch... try again');
+    // Don't clear state.items — keep previous data visible
     updateResultCount();
-    console.error(e);
   }
 }
 
-async function fetchAndRenderProspects() {
+async function fetchAndRenderProspects(signal, myId) {
   const loading = document.getElementById("loadingMsg");
   const tbody = document.getElementById("tableBody");
   loading.style.display = "block";
@@ -695,7 +720,11 @@ async function fetchAndRenderProspects() {
   });
 
   try {
-    const data = await apiFetch(`/api/prospects?${params}`);
+    const fetchOpts = {};
+    if (signal) fetchOpts.signal = signal;
+    const data = await apiFetch(`/api/prospects?${params}`, fetchOpts);
+
+    if (myId !== _fetchId) return; // stale response
 
     state.items = data.items || [];
     state.totalCount = data.count || 0;
@@ -707,15 +736,16 @@ async function fetchAndRenderProspects() {
     updateResultCount();
     saveStateToURL();
   } catch (e) {
+    if (e.name === 'AbortError') return;
     loading.textContent = "fumbled the prospect fetch...";
-    state.items = [];
-    state.totalCount = 0;
+    console.error('Prospect fetch error:', e);
+    _showToast('fumbled the prospect fetch... try again');
+    // Don't clear state.items — keep previous data visible
     updateResultCount();
-    console.error(e);
   }
 }
 
-async function fetchAndRenderCollege() {
+async function fetchAndRenderCollege(signal, myId) {
   const loading = document.getElementById("loadingMsg");
   const tbody = document.getElementById("tableBody");
   loading.style.display = "block";
@@ -735,7 +765,11 @@ async function fetchAndRenderCollege() {
   });
 
   try {
-    const data = await apiFetch(`/api/college/players?${params}`);
+    const fetchOpts = {};
+    if (signal) fetchOpts.signal = signal;
+    const data = await apiFetch(`/api/college/players?${params}`, fetchOpts);
+
+    if (myId !== _fetchId) return; // stale response
 
     state.items = data.items || [];
     state.totalCount = data.count || 0;
@@ -747,11 +781,12 @@ async function fetchAndRenderCollege() {
     updateResultCount();
     saveStateToURL();
   } catch (e) {
+    if (e.name === 'AbortError') return;
     loading.textContent = "fumbled the college data fetch...";
-    state.items = [];
-    state.totalCount = 0;
+    console.error('College fetch error:', e);
+    _showToast('fumbled the college data fetch... try again');
+    // Don't clear state.items — keep previous data visible
     updateResultCount();
-    console.error(e);
   }
 }
 
@@ -1227,6 +1262,8 @@ function toggleRelevance() {
 }
 
 // ─── Season select ───────────────────────────────────────────────
+let _seasonDebounce = null;
+
 function populateSeasonSelect() {
   const sel = document.getElementById("seasonSelect");
 
@@ -1237,7 +1274,8 @@ function populateSeasonSelect() {
     sel.onchange = (e) => {
       state.draftYear = parseInt(e.target.value);
       state.offset = 0;
-      fetchAndRender();
+      clearTimeout(_seasonDebounce);
+      _seasonDebounce = setTimeout(() => fetchAndRender(), 200);
     };
   } else if (state.universe === "college") {
     sel.innerHTML = state.collegeSeasons.map(s =>
@@ -1246,7 +1284,8 @@ function populateSeasonSelect() {
     sel.onchange = (e) => {
       state.collegeSeason = parseInt(e.target.value);
       state.offset = 0;
-      fetchAndRender();
+      clearTimeout(_seasonDebounce);
+      _seasonDebounce = setTimeout(() => fetchAndRender(), 200);
     };
   } else {
     let html = `<option value="career" ${state.season === "career" ? "selected" : ""}>Career</option>`;
@@ -1257,7 +1296,8 @@ function populateSeasonSelect() {
     sel.onchange = (e) => {
       state.season = e.target.value === "career" ? "career" : parseInt(e.target.value);
       state.offset = 0;
-      fetchAndRender();
+      clearTimeout(_seasonDebounce);
+      _seasonDebounce = setTimeout(() => fetchAndRender(), 200);
     };
   }
 }
@@ -4404,7 +4444,7 @@ async function loadTierData(position) {
   });
 
   try {
-    const data = await apiFetch(`/api/prospect-tiers?position=${position}&draft_year=${state.season}`);
+    const data = await apiFetch(`/api/prospect-tiers?position=${position}&draft_year=${state.draftYear || state.season}`);
     renderTierView(data, contentEl);
   } catch (err) {
     contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the tier data... ${escapeHtml(err.message)}</div>`;
@@ -4646,7 +4686,7 @@ async function loadBigBoard(position) {
 
   try {
     const posParam = position === "ALL" ? "" : position;
-    const data = await apiFetch(`/api/prospect-scores?position=${posParam}&draft_year=${state.season}`);
+    const data = await apiFetch(`/api/prospect-scores?position=${posParam}&draft_year=${state.draftYear || state.season}`);
     currentBBData = data;
     renderBigBoard(data, contentEl);
   } catch (err) {
@@ -6927,8 +6967,9 @@ function openTradeAnalyzer() {
 
 async function _taLoadPickChart() {
   if (_taPickCache) { _taDrawPickChart(); return; }
-  const picks = await _taFetchPickValues(2025);
-  _taPickCache = { _year: 2025 };
+  const _draftYear = new Date().getFullYear();
+  const picks = await _taFetchPickValues(_draftYear);
+  _taPickCache = { _year: _draftYear };
   for (const p of picks) {
     _taPickCache[p.round + "_" + p.pick] = p;
   }

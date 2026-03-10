@@ -7,6 +7,7 @@ import math
 from ..db import get_db
 from .core import (
     _cached, _CACHE_TTL_STABLE,
+    _current_draft_year,
     TEAM_ABBREV,
     _name_variants, _enrich_prospects_with_college, _enrich_college_derived,
 )
@@ -29,7 +30,7 @@ def _fetch_prospects_uncached(
         _cur_year = _dt.datetime.now().year
         if not draft_year or draft_year < 2000 or draft_year > _cur_year + 2:
             row = conn.execute("SELECT MAX(draft_year) FROM combine_data").fetchone()
-            draft_year = row[0] if row and row[0] else 2025
+            draft_year = row[0] if row and row[0] else _current_draft_year()
 
         # Position list
         pos_list = []
@@ -196,7 +197,7 @@ def _fetch_prospect_profile_uncached(name, position="", draft_year=0):
 
         if not draft_year:
             row = conn.execute("SELECT MAX(draft_year) FROM combine_data").fetchone()
-            draft_year = row[0] if row and row[0] else 2025
+            draft_year = row[0] if row and row[0] else _current_draft_year()
 
         search_name = name.lower().replace(" ", "")
 
@@ -423,7 +424,7 @@ def _fetch_prospect_comps_uncached(name, position="", draft_year=0, limit=5):
 
         if not draft_year:
             row = conn.execute("SELECT MAX(draft_year) FROM combine_data").fetchone()
-            draft_year = row[0] if row and row[0] else 2025
+            draft_year = row[0] if row and row[0] else _current_draft_year()
 
         search_name = name.lower().replace(" ", "")
 
@@ -584,7 +585,7 @@ def _fetch_prospect_tiers_uncached(position, draft_year=0):
 
         if not draft_year:
             row = conn.execute("SELECT MAX(draft_year) FROM combine_data").fetchone()
-            draft_year = row[0] if row and row[0] else 2025
+            draft_year = row[0] if row and row[0] else _current_draft_year()
 
         if not position:
             return {"tiers": {}, "draft_year": draft_year, "position": position}
@@ -685,7 +686,7 @@ def _fetch_prospects_compare_uncached(names, draft_year=0):
 
         if not draft_year:
             row = conn.execute("SELECT MAX(draft_year) FROM combine_data").fetchone()
-            draft_year = row[0] if row and row[0] else 2025
+            draft_year = row[0] if row and row[0] else _current_draft_year()
 
         if not names:
             return {"draft_year": draft_year, "prospects": []}
@@ -714,7 +715,7 @@ def _fetch_prospect_scores_uncached(position="", draft_year=0):
     with get_db() as conn:
         if not draft_year:
             row = conn.execute("SELECT MAX(draft_year) FROM combine_data").fetchone()
-            draft_year = row[0] if row and row[0] else 2025
+            draft_year = row[0] if row and row[0] else _current_draft_year()
 
         pos_filter = "AND c.position = ?" if position else ""
         params = [draft_year] + ([position.upper()] if position else [])
