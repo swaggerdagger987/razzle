@@ -9028,3 +9028,100 @@ def fetch_dynasty_dashboard(season=None):
         }
     finally:
         conn.close()
+
+
+# ---------------------------------------------------------------------------
+# Dynasty Tier List
+# ---------------------------------------------------------------------------
+
+_TIER_BREAKS = [
+    (80, "S", "Elite — untouchable dynasty cornerstones"),
+    (65, "A", "Blue Chip — premium assets with staying power"),
+    (50, "B", "Solid — reliable starters with upside"),
+    (35, "C", "Flex — startable but replaceable"),
+    (20, "D", "Depth — roster filler with some value"),
+    (0, "F", "Cut Bait — minimal dynasty value"),
+]
+
+def fetch_tier_list(season=None, position=None):
+    """Return players grouped into S/A/B/C/D/F tiers by trade value."""
+    conn = get_conn()
+    try:
+        if not season:
+            row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+            season = row[0] if row and row[0] else 2024
+
+        available_seasons = [
+            r[0] for r in conn.execute(
+                "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
+            ).fetchall()
+        ]
+
+        pos_filter = ""
+        params = [season]
+        if position and position.upper() in ("QB", "RB", "WR", "TE"):
+            pos_filter = "AND p.position = ?"
+            params.append(position.upper())
+
+        query = f"""
+            SELECT
+                p.player_id, p.full_name, p.position, p.team, p.age,
+                p.headshot_url,
+                SUM(s.fantasy_points_ppr) as total_ppr,
+                COUNT(DISTINCT s.week) as games
+            FROM players p
+            JOIN player_week_stats s
+                ON s.player_id = p.player_id AND s.season = ?
+            WHERE p.position IN ('QB','RB','WR','TE')
+              AND p.fantasy_relevant = 1
+              {pos_filter}
+            GROUP BY p.player_id
+            HAVING games >= 4 AND (total_ppr / games) >= 2.0
+            ORDER BY total_ppr DESC
+        """
+        rows = conn.execute(query, params).fetchall()
+
+        tiers = {t[1]: {"tier": t[1], "label": t[2], "min_tv": t[0], "players": []} for t in _TIER_BREAKS}
+        tier_order = [t[1] for t in _TIER_BREAKS]
+
+        for r in rows:
+            pos = r[2] or "WR"
+            games = r[7] or 1
+            ppg = round((r[6] or 0) / games, 2)
+            age = r[4] or 25
+            tv = compute_trade_value(ppg, age, pos)
+
+            tier_key = "F"
+            for threshold, key, _ in _TIER_BREAKS:
+                if tv >= threshold:
+                    tier_key = key
+                    break
+
+            tiers[tier_key]["players"].append({
+                "player_id": r[0],
+                "full_name": r[1] or "Unknown",
+                "position": pos,
+                "team": r[3] or "FA",
+                "age": age,
+                "headshot_url": r[5] or "",
+                "ppg": ppg,
+                "trade_value": tv,
+            })
+
+        for t in tier_order:
+            tiers[t]["players"].sort(key=lambda x: x["trade_value"], reverse=True)
+            for i, p in enumerate(tiers[t]["players"]):
+                p["tier_rank"] = i + 1
+
+        result_tiers = [tiers[t] for t in tier_order]
+        total = sum(len(t["players"]) for t in result_tiers)
+
+        return {
+            "season": season,
+            "available_seasons": available_seasons,
+            "position": position or "ALL",
+            "total_players": total,
+            "tiers": result_tiers,
+        }
+    finally:
+        conn.close()

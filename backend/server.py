@@ -915,6 +915,7 @@ def sitemap_xml():
         ("/cheatsheet.html", "0.8", "weekly"),
         ("/auction.html", "0.8", "weekly"),
         ("/dashboard.html", "0.9", "weekly"),
+        ("/tiers.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1368,6 +1369,18 @@ def auction_values(season: int = 0, budget: int = 200, roster_size: int = 15):
         return JSONResponse({"error": "Failed to fetch auction values"}, status_code=500)
 
 
+@app.get("/api/tier-list")
+def tier_list(season: int = 0, position: str = ""):
+    """Return players grouped into S/A/B/C/D/F tiers by trade value."""
+    try:
+        s = season if season > 0 else None
+        pos = position if position else None
+        return live_data.fetch_tier_list(season=s, position=pos)
+    except Exception as e:
+        logger.error(f"tier-list error: {e}")
+        return JSONResponse({"error": "Failed to fetch tier list"}, status_code=500)
+
+
 @app.get("/api/dynasty-dashboard")
 def dynasty_dashboard(season: int = 0):
     """Aggregated dynasty dashboard with risers, fallers, value picks, and scarcity."""
@@ -1397,6 +1410,7 @@ def tools_hub():
                 {"name": "Draft Cheat Sheet", "desc": "Printable position rankings with tier breaks — PPR, Half, Standard", "url": "/cheatsheet.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Auction Values", "desc": "Trade values converted to auction dollars for any budget", "url": "/auction.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Dynasty Dashboard", "desc": "At-a-glance overview: risers, fallers, value picks, scarcity alerts", "url": "/dashboard.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Tier List", "desc": "S/A/B/C/D/F tier rankings based on composite trade value", "url": "/tiers.html", "positions": ["QB", "RB", "WR", "TE"]},
             ],
         },
         {

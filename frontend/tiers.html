@@ -3,230 +3,260 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Draft Cheat Sheet — Razzle</title>
-<meta property="og:title" content="Draft Cheat Sheet — Razzle">
-<meta property="og:description" content="Printable dynasty draft cheat sheet with rankings, tiers, and trade values on razzle.lol">
+<title>Dynasty Tier List — Razzle</title>
+<meta property="og:title" content="Dynasty Tier List — Razzle">
+<meta property="og:description" content="S/A/B/C/D/F dynasty tier rankings on razzle.lol">
 <meta property="og:site_name" content="razzle.lol">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Draft Cheat Sheet — Razzle">
-<meta name="twitter:description" content="Printable dynasty draft cheat sheet on razzle.lol">
+<meta name="twitter:title" content="Dynasty Tier List — Razzle">
+<meta name="twitter:description" content="S/A/B/C/D/F dynasty tier rankings on razzle.lol">
 <meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
-<meta name="description" content="Fantasy draft cheat sheet — printable position rankings with tier breaks and trade values on razzle.lol">
+<meta name="description" content="Dynasty tier list — S/A/B/C/D/F player tiers based on composite trade value on razzle.lol">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="styles.css">
 <style>
-  .cs-page {
-    max-width: 1200px;
+  .tl-page {
+    max-width: 1100px;
     margin: 0 auto;
     padding: 24px 20px 60px;
   }
-  .cs-header {
+  .tl-header {
     text-align: center;
     margin-bottom: 20px;
   }
-  .cs-header h1 {
+  .tl-header h1 {
     font-family: var(--font-display);
     font-size: 32px;
     color: var(--ink);
     margin: 0 0 4px;
   }
-  .cs-header .cs-subtitle {
+  .tl-header .tl-subtitle {
     font-family: var(--font-hand);
     font-size: 20px;
     color: var(--ink-light);
   }
+  .tl-meta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-light);
+    margin-top: 6px;
+  }
 
   /* Controls */
-  .cs-controls {
+  .tl-controls {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .tl-controls select {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    padding: 6px 10px;
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+    background: var(--card);
+    color: var(--ink);
+  }
+  .tl-export-btn {
+    font-family: var(--font-display);
+    font-size: 13px;
+    padding: 6px 16px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--card);
+    color: var(--ink);
+    cursor: pointer;
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+  .tl-export-btn:hover { background: var(--terracotta); color: white; }
+
+  /* Position tabs */
+  .tl-pos-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
     margin-bottom: 24px;
     flex-wrap: wrap;
   }
-  .cs-fmt-tabs {
-    display: flex;
-    gap: 6px;
-  }
-  .cs-fmt-tab {
-    padding: 6px 16px;
-    font-family: var(--font-display);
-    font-size: 13px;
+  .tl-pos-tab {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 5px 14px;
     border: 2px solid var(--ink);
     border-radius: 20px;
-    background: var(--bg-card);
+    background: var(--card);
     color: var(--ink);
     cursor: pointer;
-    transition: all 0.15s;
+    box-shadow: 2px 2px 0 var(--ink);
+    transition: transform 0.1s;
   }
-  .cs-fmt-tab:hover {
-    background: var(--bg-warm);
-    transform: translate(-1px, -1px);
-    box-shadow: 3px 3px 0 var(--ink);
-  }
-  .cs-fmt-tab.active {
+  .tl-pos-tab:hover { transform: translateY(-1px); }
+  .tl-pos-tab.active {
     background: var(--ink);
-    color: var(--bg-card);
-  }
-  .cs-season-select {
-    padding: 5px 12px;
-    font-family: var(--font-mono);
-    font-size: 13px;
-    border: 2px solid var(--ink);
-    border-radius: 8px;
-    background: var(--bg-card);
-    cursor: pointer;
+    color: var(--card);
   }
 
-  /* 4-column grid */
-  .cs-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
-    align-items: start;
-  }
-
-  /* Position column */
-  .cs-col {
-    background: var(--bg-card);
+  /* Tier rows */
+  .tl-tier {
+    display: flex;
+    align-items: stretch;
+    margin-bottom: 12px;
     border: 3px solid var(--ink);
-    border-radius: 12px;
+    border-radius: 14px;
     box-shadow: 4px 4px 0 var(--ink);
     overflow: hidden;
+    background: var(--card);
   }
-  .cs-col-header {
-    padding: 10px 12px;
-    font-family: var(--font-display);
-    font-size: 16px;
-    color: #fff;
-    text-align: center;
-    font-weight: 700;
-  }
-  .cs-col-header.QB { background: var(--pos-qb); }
-  .cs-col-header.RB { background: var(--pos-rb); }
-  .cs-col-header.WR { background: var(--pos-wr); }
-  .cs-col-header.TE { background: var(--pos-te); }
-
-  /* Tier break */
-  .cs-tier-break {
-    padding: 4px 12px;
-    font-family: var(--font-display);
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    background: var(--bg-warm);
-    color: var(--ink-medium);
-    border-top: 2px dashed var(--ink-faint);
-    border-bottom: 2px dashed var(--ink-faint);
-  }
-
-  /* Player row */
-  .cs-player {
+  .tl-tier-label {
+    min-width: 70px;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 6px;
-    padding: 5px 10px;
-    border-bottom: 1px solid var(--ink-faint);
+    justify-content: center;
+    padding: 12px 8px;
+    border-right: 3px solid var(--ink);
+  }
+  .tl-tier-letter {
+    font-family: var(--font-display);
+    font-size: 36px;
+    line-height: 1;
+    color: white;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.2);
+  }
+  .tl-tier-count {
     font-family: var(--font-mono);
-    font-size: 11px;
-    cursor: pointer;
-    transition: background 0.1s;
-  }
-  .cs-player:hover { background: var(--bg-warm); }
-  .cs-player:last-child { border-bottom: none; }
-  .cs-rank {
-    font-weight: 700;
-    color: var(--ink-light);
-    min-width: 18px;
-    text-align: right;
-  }
-  .cs-pname {
-    flex: 1;
-    font-weight: 600;
-    color: var(--ink);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .cs-team {
-    color: var(--ink-light);
     font-size: 10px;
+    color: rgba(255,255,255,0.8);
+    margin-top: 4px;
   }
-  .cs-ppg {
-    font-weight: 700;
-    color: var(--orange);
-    min-width: 32px;
-    text-align: right;
+
+  /* Tier colors */
+  .tl-tier-label.S { background: #d44040; }
+  .tl-tier-label.A { background: var(--terracotta); }
+  .tl-tier-label.B { background: #e8a838; }
+  .tl-tier-label.C { background: var(--rb); }
+  .tl-tier-label.D { background: var(--qb); }
+  .tl-tier-label.F { background: #888; }
+
+  /* Player chips in tier */
+  .tl-tier-players {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 10px 12px;
+    align-items: center;
+    align-content: center;
+    min-height: 50px;
+  }
+
+  .tl-player-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px 4px 4px;
+    border: 2px solid var(--ink);
+    border-radius: 20px;
+    background: var(--card);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    white-space: nowrap;
+    box-shadow: 2px 2px 0 var(--ink-faint);
+    transition: transform 0.1s;
+  }
+  .tl-player-chip:hover {
+    transform: translateY(-1px);
+    box-shadow: 2px 3px 0 var(--ink-faint);
+  }
+
+  .tl-chip-pos {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    color: white;
+  }
+  .tl-chip-pos.QB { background: var(--qb); }
+  .tl-chip-pos.RB { background: var(--rb); }
+  .tl-chip-pos.WR { background: var(--wr); }
+  .tl-chip-pos.TE { background: var(--te); }
+
+  .tl-chip-name { font-weight: 600; }
+  .tl-chip-tv {
+    font-size: 10px;
+    color: var(--ink-light);
+  }
+
+  .tl-empty-tier {
+    font-family: var(--font-hand);
+    font-size: 14px;
+    color: var(--ink-faint);
+    padding: 8px;
+  }
+
+  /* Tier description */
+  .tl-tier-desc {
+    font-family: var(--font-hand);
+    font-size: 12px;
+    color: rgba(255,255,255,0.7);
+    max-width: 60px;
+    text-align: center;
+    line-height: 1.2;
   }
 
   /* Loading */
-  .cs-loading {
+  .tl-loading {
     text-align: center;
-    padding: 60px 20px;
     font-family: var(--font-hand);
-    font-size: 22px;
+    font-size: 18px;
     color: var(--ink-light);
+    padding: 60px 20px;
   }
-
-  /* Actions */
-  .cs-actions {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 20px;
-  }
-  .cs-actions button {
-    font-family: var(--font-display);
-    font-size: 13px;
-    padding: 8px 18px;
-    border: 2px solid var(--ink);
-    border-radius: 8px;
-    background: var(--bg-card);
-    color: var(--ink);
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .cs-actions button:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: 6px 6px 0 var(--ink);
+  .tl-error {
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: #d44040;
+    padding: 40px 20px;
   }
 
   /* Watermark */
-  .cs-watermark {
+  .tl-watermark {
     position: fixed;
     bottom: 10px;
     right: 14px;
     font-family: var(--font-hand);
-    font-size: 13px;
-    color: var(--ink-faint);
+    font-size: 14px;
+    color: rgba(0,0,0,0.15);
     pointer-events: none;
     z-index: 1;
   }
 
-  /* Responsive */
   @media (max-width: 768px) {
-    .cs-grid { grid-template-columns: 1fr 1fr; }
+    .tl-tier { flex-direction: column; }
+    .tl-tier-label {
+      flex-direction: row;
+      min-width: auto;
+      border-right: none;
+      border-bottom: 3px solid var(--ink);
+      padding: 8px 16px;
+      gap: 8px;
+    }
+    .tl-tier-letter { font-size: 24px; }
+    .tl-tier-desc { max-width: none; }
+    .tl-header h1 { font-size: 26px; }
   }
   @media (max-width: 480px) {
-    .cs-grid { grid-template-columns: 1fr; }
-    .cs-header h1 { font-size: 26px; }
-  }
-
-  /* Print */
-  @media print {
-    .topnav, footer, .cs-controls, .cs-actions, .cs-watermark { display: none !important; }
-    .cs-page { padding: 0; max-width: 100%; }
-    .cs-grid { grid-template-columns: repeat(4, 1fr); gap: 8px; }
-    .cs-col { box-shadow: none; border-width: 2px; }
-    .cs-header { margin-bottom: 10px; }
-    .cs-header h1 { font-size: 24px; }
-    .cs-player { padding: 3px 6px; font-size: 10px; }
-    body { background: #fff; }
+    .tl-page { padding: 16px 10px 40px; }
+    .tl-player-chip { font-size: 11px; }
   }
 </style>
 </head>
@@ -268,41 +298,42 @@
     <li><a href="/tradefinder.html">Trade Finder</a></li>
     <li><a href="/rosterbuilder.html">Roster Builder</a></li>
     <li><a href="/scoring.html">Scoring</a></li>
-    <li><a href="/cheatsheet.html" class="active">Cheat Sheet</a></li>
+    <li><a href="/cheatsheet.html">Cheat Sheet</a></li>
     <li><a href="/auction.html">Auction</a></li>
     <li><a href="/dashboard.html">Dashboard</a></li>
-    <li><a href="/tiers.html">Tiers</a></li>
+    <li><a href="/tiers.html" class="active">Tiers</a></li>
     <li><a href="/team/KC">Teams</a></li>
     <li><a href="/league-intel.html">League Intel</a></li>
     <li><a href="/agents.html">War Room</a></li>
   </ul>
 </nav>
 
-<main class="cs-page" id="cs-content">
-  <div class="cs-header">
-    <h1>Draft Cheat Sheet</h1>
-    <div class="cs-subtitle">print it, screenshot it, win your draft</div>
+<main class="tl-page" id="tl-content">
+  <div class="tl-header">
+    <h1>Dynasty Tier List</h1>
+    <div class="tl-subtitle">who's untouchable and who's getting cut</div>
+    <div class="tl-meta" id="tl-meta"></div>
   </div>
 
-  <div class="cs-controls">
-    <div class="cs-fmt-tabs" id="fmt-tabs">
-      <button class="cs-fmt-tab active" data-fmt="ppr">PPR</button>
-      <button class="cs-fmt-tab" data-fmt="half">Half-PPR</button>
-      <button class="cs-fmt-tab" data-fmt="std">Standard</button>
-    </div>
-    <select class="cs-season-select" id="season-select"></select>
+  <div class="tl-controls">
+    <select id="season-select"></select>
+    <button class="tl-export-btn" id="export-btn">Export PNG</button>
   </div>
 
-  <div class="cs-loading" id="cs-loading">pulling film...</div>
-  <div class="cs-grid" id="cs-grid" style="display:none;"></div>
+  <div class="tl-pos-tabs" id="pos-tabs">
+    <button class="tl-pos-tab active" data-pos="">All</button>
+    <button class="tl-pos-tab" data-pos="QB">QB</button>
+    <button class="tl-pos-tab" data-pos="RB">RB</button>
+    <button class="tl-pos-tab" data-pos="WR">WR</button>
+    <button class="tl-pos-tab" data-pos="TE">TE</button>
+  </div>
 
-  <div class="cs-actions">
-    <button onclick="window.print()">Print</button>
-    <button onclick="exportPng()">Export PNG</button>
+  <div id="tl-tiers">
+    <div class="tl-loading">pulling film...</div>
   </div>
 </main>
 
-<div class="cs-watermark">razzle.lol</div>
+<div class="tl-watermark">razzle.lol</div>
 
 <footer style="text-align:center; padding:24px 20px 32px; font-family:var(--font-hand); font-size:15px; color:var(--ink-light); border-top:2px dashed var(--ink-faint); margin-top:40px;">
   <div style="margin-bottom:10px;">
@@ -392,124 +423,110 @@
     return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  function fmt(v) {
-    if (v === null || v === undefined) return '-';
-    return Number(v).toFixed(1);
-  }
+  var state = { season: 0, position: '' };
+  var tiersEl = document.getElementById('tl-tiers');
+  var seasonSelect = document.getElementById('season-select');
+  var posTabs = document.getElementById('pos-tabs');
 
-  var POS_ORDER = ['QB', 'RB', 'WR', 'TE'];
-
-  var state = {
-    season: 0,
-    format: 'ppr',
-    data: null
-  };
-
-  function init() {
-    if (window.__razzleAnalytics) window.__razzleAnalytics('cheatsheet');
-
-    document.querySelectorAll('.cs-fmt-tab').forEach(function(tab) {
-      tab.addEventListener('click', function() {
-        state.format = this.getAttribute('data-fmt');
-        document.querySelectorAll('.cs-fmt-tab').forEach(function(t) { t.classList.remove('active'); });
-        this.classList.add('active');
-        fetchData();
-      });
-    });
-
-    document.getElementById('season-select').addEventListener('change', function() {
-      state.season = parseInt(this.value) || 0;
-      fetchData();
-    });
-
+  // Season select
+  seasonSelect.addEventListener('change', function() {
+    state.season = parseInt(this.value, 10) || 0;
     fetchData();
-  }
+  });
+
+  // Position tabs
+  posTabs.addEventListener('click', function(e) {
+    var tab = e.target.closest('.tl-pos-tab');
+    if (!tab) return;
+    posTabs.querySelectorAll('.tl-pos-tab').forEach(function(t) { t.classList.remove('active'); });
+    tab.classList.add('active');
+    state.position = tab.getAttribute('data-pos');
+    fetchData();
+  });
+
+  // Export
+  document.getElementById('export-btn').addEventListener('click', function() {
+    var el = document.getElementById('tl-content');
+    if (typeof html2canvas !== 'undefined') {
+      html2canvas(el, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+        var ctx = canvas.getContext('2d');
+        ctx.font = '24px sans-serif';
+        ctx.fillStyle = 'rgba(0,0,0,0.12)';
+        ctx.fillText('razzle.lol', canvas.width - 160, canvas.height - 20);
+        var link = document.createElement('a');
+        link.download = 'razzle-tier-list.png';
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    }
+  });
 
   function fetchData() {
-    document.getElementById('cs-loading').style.display = 'block';
-    document.getElementById('cs-grid').style.display = 'none';
+    tiersEl.innerHTML = '<div class="tl-loading">pulling film...</div>';
+    var url = '/api/tier-list?';
+    if (state.season > 0) url += 'season=' + state.season + '&';
+    if (state.position) url += 'position=' + state.position;
 
-    var url = '/api/cheat-sheet?format=' + state.format;
-    if (state.season) url += '&season=' + state.season;
+    fetch(url).then(function(resp) {
+      if (!resp.ok) throw new Error('HTTP ' + resp.status);
+      return resp.json();
+    }).then(function(data) {
+      // Populate season selector
+      if (data.available_seasons && seasonSelect.options.length <= 1) {
+        seasonSelect.innerHTML = '';
+        data.available_seasons.forEach(function(s) {
+          var opt = document.createElement('option');
+          opt.value = s;
+          opt.textContent = s;
+          if (s === data.season) opt.selected = true;
+          seasonSelect.appendChild(opt);
+        });
+      }
 
-    fetch(url)
-      .then(function(r) {
-        if (!r.ok) throw new Error('Failed');
-        return r.json();
-      })
-      .then(function(data) {
-        state.data = data;
-        var sel = document.getElementById('season-select');
-        if (sel.options.length <= 1) {
-          sel.innerHTML = '';
-          (data.available_seasons || []).forEach(function(s) {
-            var opt = document.createElement('option');
-            opt.value = s;
-            opt.textContent = s;
-            if (s === data.season) opt.selected = true;
-            sel.appendChild(opt);
-          });
-        }
-        state.season = data.season;
-        render();
-      })
-      .catch(function() {
-        document.getElementById('cs-loading').textContent = 'failed to load — try refreshing';
-      });
+      document.getElementById('tl-meta').textContent = data.season + ' season \u00b7 ' + data.total_players + ' players \u00b7 ' + (data.position === 'ALL' ? 'all positions' : data.position);
+      renderTiers(data.tiers || []);
+    }).catch(function(err) {
+      tiersEl.innerHTML = '<div class="tl-error">failed to load tier list: ' + escapeHtml(err.message) + '</div>';
+    });
   }
 
-  function render() {
-    document.getElementById('cs-loading').style.display = 'none';
-    var grid = document.getElementById('cs-grid');
-    grid.style.display = 'grid';
-
-    var positions = state.data.positions || {};
+  function renderTiers(tiers) {
     var html = '';
-
-    POS_ORDER.forEach(function(pos) {
-      var players = positions[pos] || [];
-      html += '<div class="cs-col">';
-      html += '<div class="cs-col-header ' + pos + '">' + escapeHtml(pos) + ' (' + players.length + ')</div>';
-
-      var currentTier = '';
-      players.forEach(function(p) {
-        // Tier break
-        if (p.tier !== currentTier) {
-          currentTier = p.tier;
-          html += '<div class="cs-tier-break">' + escapeHtml(currentTier) + '</div>';
-        }
-        html += '<div class="cs-player" onclick="window.location.href=\'/player.html?id=' + escapeHtml(p.player_id) + '\'">';
-        html += '<span class="cs-rank">' + escapeHtml(String(p.rank)) + '</span>';
-        html += '<span class="cs-pname">' + escapeHtml(p.full_name) + '</span>';
-        html += '<span class="cs-team">' + escapeHtml(p.team) + '</span>';
-        html += '<span class="cs-ppg">' + fmt(p.ppg) + '</span>';
-        html += '</div>';
-      });
-
+    tiers.forEach(function(tier) {
+      html += '<div class="tl-tier">';
+      html += '<div class="tl-tier-label ' + escapeHtml(tier.tier) + '">';
+      html += '<div class="tl-tier-letter">' + escapeHtml(tier.tier) + '</div>';
+      html += '<div class="tl-tier-count">' + escapeHtml(String(tier.players.length)) + '</div>';
+      html += '</div>';
+      html += '<div class="tl-tier-players">';
+      if (tier.players.length === 0) {
+        html += '<span class="tl-empty-tier">no players in this tier</span>';
+      } else {
+        tier.players.forEach(function(p) {
+          html += '<div class="tl-player-chip">';
+          html += '<span class="tl-chip-pos ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span>';
+          html += '<span class="tl-chip-name">' + escapeHtml(p.full_name) + '</span>';
+          html += '<span class="tl-chip-tv">' + escapeHtml(String(p.trade_value)) + '</span>';
+          html += '</div>';
+        });
+      }
+      html += '</div>';
       html += '</div>';
     });
-
-    grid.innerHTML = html;
+    tiersEl.innerHTML = html;
   }
 
-  window.exportPng = function() {
-    var el = document.getElementById('cs-content');
-    if (typeof html2canvas === 'undefined') return;
-    html2canvas(el, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
-      var ctx = canvas.getContext('2d');
-      ctx.font = '24px Caveat, cursive';
-      ctx.fillStyle = 'rgba(26,26,46,0.18)';
-      ctx.fillText('razzle.lol', canvas.width - 160, canvas.height - 20);
-      var link = document.createElement('a');
-      link.download = 'razzle-cheat-sheet.png';
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-    });
-  };
+  // Analytics
+  if (typeof fetch !== 'undefined') {
+    fetch('/api/analytics/pageview', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ page: 'tiers', referrer: document.referrer || '' })
+    }).catch(function() {});
+  }
 
-  init();
+  fetchData();
 })();
 </script>
-
 </body>
 </html>

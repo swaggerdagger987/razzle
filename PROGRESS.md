@@ -1,6 +1,23 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 102 — Dynasty Dashboard (COMPLETE)
+## Current Phase: Phase 103 — Dynasty Tier List (COMPLETE)
+
+**Exit criterion MET:** /tiers.html page shows players grouped into 6 visual tiers (S/A/B/C/D/F) based on composite trade value. Each tier is a color-coded horizontal row (S=red, A=terracotta, B=gold, C=teal, D=blue, F=gray) with tier letter on the left and player chips inside. Chips show position badge, name, and trade value. Position filter tabs (All/QB/RB/WR/TE). Season selector. PNG export with watermark. Responsive at 768px (tiers stack vertically) + 480px. GET /api/tier-list endpoint with season/position params returns players grouped by tier with descriptions. Tier breaks: S(80+), A(65+), B(50+), C(35+), D(20+), F(<20). 9 escapeHtml calls, 73/73 braces balanced. "Tiers" nav link on all 40 HTML pages. Sitemap entry. Tools hub catalog entry. Design matches DESIGN.md.
+
+### Phase 103 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/tier-list endpoint | DONE | fetch_tier_list, 6 tiers by TV thresholds |
+| 2 | Tier List page | DONE | Horizontal tier rows, player chips, pos filters, 9 escapeHtml |
+| 3 | Nav links + sitemap + analytics | DONE | All 40 pages updated, sitemap + tools hub |
+| 4 | Smoke test | DONE | Python syntax OK, JS braces balanced, 40/40 nav links |
+
+### Decisions Log
+- **Tier List as Phase 103**: Tier lists are the single most screenshotted format on r/DynastyFF. Every dynasty content creator makes tier lists. Ours is auto-generated from trade values, so it updates with data. The S/A/B/C/D/F format is universally understood and instantly shareable. Player chips inside tiers make it visually scannable.
+- **Tier thresholds**: S(80+) = truly elite (maybe 3-5 players), A(65+) = blue chips, B(50+) = solid starters, C(35+) = flex plays, D(20+) = depth, F(<20) = cut candidates. These thresholds create a natural distribution that matches how dynasty players think about tiers.
+
+## Previous Phase: Phase 102 — Dynasty Dashboard (COMPLETE)
 
 **Exit criterion MET:** /dashboard.html shows a single-page dynasty overview aggregating key insights. Top 5 overall players with trade value cards. Position trend cards (avg PPG, player count, avg age, avg TV per position). Four-panel grid: Rising Stocks (trade value >> PPG rank), Falling Stocks (PPG rank >> trade value), Value Picks (young + high TV + strong PPG), and Quick Links to key tools. Position Scarcity section with drop-off bars showing PPG cliff from #1 to #12 per position. PNG export with watermark. GET /api/dynasty-dashboard endpoint returns risers, fallers, value_picks, position_scarcity, trends, top5. 26 escapeHtml calls, 103/103 braces balanced. "Dashboard" nav link on all 39 HTML pages. Sitemap entry. Tools hub catalog entry. Design matches DESIGN.md.
 
