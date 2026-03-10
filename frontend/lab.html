@@ -101,6 +101,65 @@
     padding-bottom: 60px;
   }
 
+  /* ===== SIDEBAR SEARCH ===== */
+  .sidebar-search-wrap {
+    padding: 10px 10px 6px;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: var(--bg-card);
+    border-bottom: 1px dashed var(--ink-faint);
+  }
+  .sidebar-search {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 6px 10px 6px 28px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    border: 2px solid var(--ink-faint);
+    border-radius: 4px;
+    background: var(--bg);
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .sidebar-search:focus {
+    border-color: var(--orange);
+  }
+  .sidebar-search::placeholder {
+    color: var(--ink-light);
+  }
+  .sidebar-search-wrap::before {
+    content: "\1F50D";
+    position: absolute;
+    left: 18px;
+    top: 17px;
+    font-size: 12px;
+    pointer-events: none;
+    z-index: 3;
+  }
+  .lab-sidebar.collapsed .sidebar-search-wrap {
+    padding: 8px 4px;
+    border-bottom: none;
+  }
+  .lab-sidebar.collapsed .sidebar-search {
+    width: 40px;
+    padding: 6px 4px;
+    text-indent: -9999px;
+    cursor: pointer;
+    text-align: center;
+  }
+  .lab-sidebar.collapsed .sidebar-search-wrap::before {
+    left: 16px;
+    top: 15px;
+  }
+  .lab-sidebar-item.search-hidden {
+    display: none !important;
+  }
+  .lab-sidebar-category.search-hidden {
+    display: none !important;
+  }
+
   .lab-sidebar-category {
     font-family: var(--font-display);
     font-size: 11px;
@@ -2112,6 +2171,10 @@
 <aside class="lab-sidebar" id="labSidebar" role="navigation" aria-label="Lab panels">
   <div class="lab-sidebar-inner">
 
+    <div class="sidebar-search-wrap">
+      <input type="text" class="sidebar-search" id="sidebarSearch" placeholder="Search tools..." autocomplete="off" spellcheck="false">
+    </div>
+
     <div class="lab-sidebar-category"><span class="cat-icon" style="display:none">&#x1F50D;</span><span class="cat-text">Screener</span></div>
     <a class="lab-sidebar-item active" data-panel="screener" data-icon="&#x25C9;" onclick="switchPanel('screener')">The Screener<span class="sidebar-tooltip">The Screener</span></a>
 
@@ -3173,6 +3236,72 @@
             sidebar.classList.add('collapsed');
           }
           break;
+      }
+    });
+  })();
+
+  // ─── Sidebar search filter ──────────────────────────────────────
+  (function() {
+    var searchInput = document.getElementById('sidebarSearch');
+    if (!searchInput) return;
+    var sidebar = document.getElementById('labSidebar');
+
+    searchInput.addEventListener('input', function() {
+      var q = this.value.trim().toLowerCase();
+      var items = sidebar.querySelectorAll('.lab-sidebar-item');
+      var cats = sidebar.querySelectorAll('.lab-sidebar-category');
+
+      if (!q) {
+        // Restore all items
+        items.forEach(function(item) { item.classList.remove('search-hidden'); });
+        cats.forEach(function(cat) { cat.classList.remove('search-hidden'); });
+        return;
+      }
+
+      // Hide all items first, then show matches
+      items.forEach(function(item) {
+        var text = item.textContent.toLowerCase();
+        var panel = (item.dataset.panel || '').toLowerCase();
+        if (text.indexOf(q) !== -1 || panel.indexOf(q) !== -1) {
+          item.classList.remove('search-hidden');
+        } else {
+          item.classList.add('search-hidden');
+        }
+      });
+
+      // Show category if it has any visible child items
+      cats.forEach(function(cat) {
+        var next = cat.nextElementSibling;
+        var hasVisible = false;
+        while (next && !next.classList.contains('lab-sidebar-category')) {
+          if (next.classList.contains('lab-sidebar-item') && !next.classList.contains('search-hidden')) {
+            hasVisible = true;
+          }
+          next = next.nextElementSibling;
+        }
+        if (hasVisible) {
+          cat.classList.remove('search-hidden');
+        } else {
+          cat.classList.add('search-hidden');
+        }
+      });
+    });
+
+    // Click search icon in collapsed mode → expand sidebar and focus
+    searchInput.addEventListener('click', function() {
+      if (sidebar.classList.contains('collapsed')) {
+        sidebar.classList.remove('collapsed');
+        localStorage.setItem('razzle_sidebar_collapsed', '0');
+        setTimeout(function() { searchInput.focus(); }, 200);
+      }
+    });
+
+    // Escape clears search
+    searchInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        this.value = '';
+        this.dispatchEvent(new Event('input'));
+        this.blur();
       }
     });
   })();
