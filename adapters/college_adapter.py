@@ -69,9 +69,17 @@ def parse_height_inches(ht_str):
 # ---------------------------------------------------------------------------
 
 def get_connection():
-    DB_PATH.parent.mkdir(parents=True, exist_ok=True)
-    conn = sqlite3.connect(str(DB_PATH), timeout=60)
-    conn.row_factory = sqlite3.Row
+    # Use Turso-aware connection when available (production)
+    try:
+        _root = str(Path(__file__).parent.parent)
+        if _root not in sys.path:
+            sys.path.insert(0, _root)
+        from backend.db import get_conn as _get_conn
+        conn = _get_conn()
+    except ImportError:
+        DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+        conn = sqlite3.connect(str(DB_PATH), timeout=60)
+        conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA journal_mode=WAL")
     conn.execute("PRAGMA synchronous=NORMAL")
     return conn

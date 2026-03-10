@@ -10,7 +10,7 @@ import statistics
 import time as _time
 from pathlib import Path
 
-DB_PATH = Path(__file__).parent.parent / "data" / "terminal.db"
+from .db import get_conn, DB_PATH
 
 # Simple in-memory cache for stable endpoints (filter options, featured)
 _cache = {}
@@ -97,12 +97,6 @@ ABBREV_TO_TEAM = {
     "SF": "San Francisco 49ers", "SEA": "Seattle Seahawks", "TB": "Tampa Bay Buccaneers",
     "TEN": "Tennessee Titans", "WAS": "Washington Commanders",
 }
-
-
-def get_conn():
-    conn = sqlite3.connect(str(DB_PATH), timeout=30)
-    conn.row_factory = sqlite3.Row
-    return conn
 
 
 def _safe_div(a, b, decimals=1):

@@ -1,6 +1,20 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 20 — QA + UX Audit Fixes for Phases 16-19 (COMPLETE)
+## Current Phase: Phase 21 — Migrate Database from Local SQLite to Turso (COMPLETE)
+
+**Exit Criterion MET**: All database reads/writes use Turso (libSQL) via `backend/db.py` connection module. `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN` env vars control production connection. Falls back to local SQLite when env vars are missing. `render.yaml` no longer runs adapter scripts on deploy. Migration script at `scripts/push_to_turso.py` handles one-time data upload. All endpoints verified working with local fallback.
+
+### Phase 21 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Add libsql-experimental + create backend/db.py | DONE | Turso/local fallback, single connection source |
+| 2 | Swap get_conn() in live_data.py | DONE | Import from backend.db, removed old definition |
+| 3 | Swap get_connection() in 3 adapters | DONE | sys.path import with sqlite3 fallback |
+| 4 | Create push_to_turso.py migration script | DONE | Batch insert, idempotent, progress reporting |
+| 5 | Update render.yaml | DONE | Removed adapter rebuild from buildCommand |
+
+## Previous Phase: Phase 20 — QA + UX Audit Fixes for Phases 16-19 (COMPLETE)
 
 **Exit Criterion MET**: All HIGH and MEDIUM findings from QA+UX audit resolved. Variable shadowing fixed (`isProspect` → `prospectMode` in applyUniverseUI). Year calculation deduplicated (moved before try/catch). Prospect page title now uses `state.draftYear`. cv URL param validated against allowed values.
 

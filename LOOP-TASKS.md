@@ -1,98 +1,52 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 20 (QA + UX Audit Fixes for Phases 16-19)
-- All 2 tasks PASS
+- Phase: 21 (Migrate Database from Local SQLite to Turso)
+- All 5 tasks PASS
 - Stage: PHASE GATE
 - Next: Commit and push
 
-## Phase 20: QA + UX Audit — Auto-Generated Fixes
-**Exit Criterion**: All HIGH and MEDIUM findings from QA+UX audit of Phases 16-19 are resolved. Variable shadowing fixed, year calculation deduplicated, prospect page title corrected, cv URL param validated.
+## Phase 21: Migrate Database from Local SQLite to Turso (Edge SQLite)
+**Exit Criterion**: All database reads/writes use Turso (libSQL) instead of local `data/terminal.db`. App reads `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN` from environment variables. Falls back to local SQLite if env vars are missing (for local dev). The `render.yaml` build command no longer runs adapter scripts to rebuild data on every deploy — data lives in Turso permanently. Add `libsql-experimental` to `requirements.txt`. Push the existing local `terminal.db` data up to Turso as a one-time migration step. All existing endpoints, panels, and queries work identically after the switch.
 
-### Task 1: Fix HIGH — Variable shadowing + duplicate year calc
+### Task 1: Add libsql-experimental to requirements.txt + create backend/db.py connection module
 **Status**: PASS
 **Attempts**: 1
-**Notes**: Renamed `isProspect` to `prospectMode` in applyUniverseUI(). Moved `_curYear`/`_nflYear` before try/catch, catch block now uses shared `_nflYear`.
+**Notes**: Added `libsql-experimental>=0.0.68` to requirements.txt. Created `backend/db.py` with `get_conn()` that reads `TURSO_DATABASE_URL` + `TURSO_AUTH_TOKEN` env vars, uses libsql when available, falls back to local sqlite3. Single source of truth for DB connections.
 
-### Task 2: Fix MEDIUM — Wrong state var in prospect title + cv validation
+### Task 2: Swap get_conn() in live_data.py to use backend/db.py
 **Status**: PASS
 **Attempts**: 1
-**Notes**: generateRedditTitle() now uses `state.draftYear || new Date().getFullYear()`. cv URL param validated against "stats"/"prospects" only.
+**Notes**: `live_data.py` now imports `get_conn` and `DB_PATH` from `backend.db`. Removed old `get_conn()` definition and `DB_PATH` constant. All 100+ call sites unchanged. Verified with `get_filter_options()` query.
+
+### Task 3: Swap get_connection() in all 3 adapters to use Turso-aware connection
+**Status**: PASS
+**Attempts**: 1
+**Notes**: All 3 adapters (nflverse, college, cfbfastr) now try importing `get_conn` from `backend.db` via sys.path, falling back to direct sqlite3 if import fails. PRAGMA settings preserved. Verified all 3 adapters connect successfully.
+
+### Task 4: Create scripts/push_to_turso.py migration script
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Script reads local terminal.db, recreates all tables + indexes in Turso, batch-inserts data (500 rows/batch). Handles ~1M row player_week_metrics table with progress reporting. Idempotent (IF NOT EXISTS, INSERT OR REPLACE).
+
+### Task 5: Update render.yaml — remove adapter rebuild from build command
+**Status**: PASS
+**Attempts**: 1
+**Notes**: buildCommand now just `pip install -r requirements.txt`. No adapter scripts. Data lives in Turso permanently. Bootstrap function in server.py still checks count and skips when data is present.
 
 ---
 
-## Phase 19: Draft Class Tracker
-**Exit Criterion**: A Lab panel shows historical NFL draft classes (2015-2025). Select a draft year to see how that class performed in fantasy football. Shows top performers, bust rate by round, positional breakdown, and hit/miss classification. Screenshot-worthy for r/DynastyFF.
+## Phase 20: QA + UX Audit — Auto-Generated Fixes -- COMPLETE
+**Status**: All 2 tasks PASS
 
-### Task 1: Backend API — /api/draft-class-tracker
-**Status**: PASS
-**Attempts**: 1
-**Notes**: fetch_draft_class_tracker() in live_data.py. Uses draft_picks table. Computes career PPR fantasy PPG, hit/miss classification by round+position expectations. Returns players, round breakdown (hit rates), position breakdown (avg PPG, studs/busts).
+## Phase 19: Draft Class Tracker -- COMPLETE
+**Status**: All 3 tasks PASS
 
-### Task 2: Frontend panel — Draft Class Tracker in Lab
-**Status**: PASS
-**Attempts**: 1
-**Notes**: Panel in lab-panels.js. Year selector dropdown, position filter tabs, round breakdown cards with hit-rate bars, position breakdown with color-coded stats, sortable player table with verdict badges (Stud/Hit/Average/Bust/Too Early).
-
-### Task 3: Add sidebar entry and wire up
-**Status**: PASS
-**Attempts**: 1
-**Notes**: Sidebar entry under College category. PANEL_LABELS, PANEL_FLAVORS entries added. Auto-registered via _labPanelDefs.
-
----
-
-## Phase 18: Remove Prospects Section — Merge into College Filter
-**Exit Criterion**: The standalone Prospects universe button is removed. Prospect data (combine metrics, athletic profiles, radar charts) is accessible as a sub-view within the College section. Users toggle between "Season Stats" and "Draft Prospects" within College mode. Mock Draft and Athletic Radar panels remain accessible.
-
-### Task 1: Replace 3-way universe toggle with 2-way + College sub-view
-**Status**: PASS
-**Attempts**: 1
-**Notes**: Removed Prospects button. Added College sub-toggle (Season Stats / Draft Prospects). CSS for .college-sub-toggle and .college-view-btn. setCollegeView() function added.
-
-### Task 2: Route prospect logic through College universe
-**Status**: PASS
-**Attempts**: 1
-**Notes**: Added isProspectView() helper. Replaced all state.universe==="prospects" checks with isProspectView(). setUniverse maps legacy "prospects" to college+prospects sub-view. URL state uses cv=prospects param.
-
-### Task 3: Move prospect panels to College sidebar category
-**Status**: PASS
-**Attempts**: 1
-**Notes**: Renamed sidebar category from "Prospects & College" to "College". Panels (Big Board, Mock Draft, Athletic Radar) are self-contained with own API calls — no universe dependency.
-
-### Task 4: Remove prospects.html and clean up dead references
-**Status**: PASS
-**Attempts**: 1
-**Notes**: Updated prospects.html redirect to use ?u=college&cv=prospects. Updated 4 index.html links. Fixed charts.js, saved views, and checkbox accent-color references. All legacy "prospects" universe handled.
-
----
+## Phase 18: Remove Prospects Section — Merge into College Filter -- COMPLETE
+**Status**: All 4 tasks PASS
 
 ## Phase 17: Expand Data to 2015-2025 -- COMPLETE
 **Status**: All 4 tasks PASS
-
-## Phase 16: Rename War Room -> Situation Room -- COMPLETE
-**Exit Criterion**: Both NFL and college data adapters fetch and load seasons 2015 through 2025 into terminal.db. The Lab's year/season filters reflect all available years. All screener queries, panels, and charts work correctly across the full 2015-2025 range. Currently only 2024 data is loaded — this must cover all 11 seasons.
-
-### Task 1: Update NFL adapter default seasons to 2015-current
-**Status**: PASS
-**Attempts**: 1
-**Notes**: Changed `main()` default from `[current_nfl_season()]` to `list(range(2015, current_nfl_season() + 1))`. CLI `--seasons` override still works.
-
-### Task 2: Update render.yaml build command to include 2025 season
-**Status**: PASS
-**Attempts**: 1
-**Notes**: Added 2025 to NFL adapter seasons list in render.yaml buildCommand. College adapter already had 2025.
-
-### Task 3: Fix hardcoded 2024 season fallbacks in frontend
-**Status**: PASS
-**Attempts**: 1
-**Notes**: lab.js fallbacks now use dynamic `_nflYear` (month >= 7 ? year : year - 1). index.html college link stripped of hardcoded `&season=2024`. Display-only `|| "2024"` replaced with `|| "Latest"`.
-
-### Task 4: Verify standalone pages use dynamic season data from API
-**Status**: PASS
-**Attempts**: 1
-**Notes**: All 37+ standalone HTML pages confirmed using dynamic `data.available_seasons` from API endpoints. No hardcoded season values in any standalone page. Backend `get_filter_options` and `fetch_college_filter_options` query `DISTINCT season` from DB.
-
----
 
 ## Phase 16: Rename War Room -> Situation Room -- COMPLETE
 **Status**: All 5 tasks PASS

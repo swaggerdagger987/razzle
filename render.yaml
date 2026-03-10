@@ -2,7 +2,7 @@ services:
   - type: web
     name: razzle-api
     runtime: python
-    buildCommand: pip install -r requirements.txt && mkdir -p data && python adapters/nflverse_adapter.py --seasons 2015 2016 2017 2018 2019 2020 2021 2022 2023 2024 2025 && python adapters/college_adapter.py; python adapters/cfbfastr_adapter.py --seasons 2015 2016 2017 2018 2019 2020 2021 2022 2023 2024 2025 && ls -la data/
+    buildCommand: pip install -r requirements.txt
     startCommand: uvicorn backend.server:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: PYTHON_VERSION
