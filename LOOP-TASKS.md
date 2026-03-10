@@ -5,24 +5,26 @@
 ## Phase 36: Fix Missing player_season_stats Table + stat_value Bug
 **Exit Criterion**: player_season_stats table created as aggregation from player_week_stats during bootstrap. m.value bug fixed in analytics.py. All affected endpoints return 200. Smoke tests pass.
 
-- Task 1: PENDING
-- Task 2: PENDING
-- Task 3: PENDING
+- Task 1: PASS
+- Task 2: PASS
+- Task 3: PASS
+- Stage: COMPLETE
+- Next: Phase transition
 
 ### Task 1: Create player_season_stats table in bootstrap
-**Status**: PENDING
-**Attempts**: 0
-**Acceptance**: player_season_stats created with all needed columns. Populated from player_week_stats aggregation.
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Materialized aggregate from player_week_stats. 6,098 rows, 22 columns including offense_snaps/pct. Created in server lifespan if missing.
 
 ### Task 2: Fix m.value -> m.stat_value in analytics.py
-**Status**: PENDING
-**Attempts**: 0
-**Acceptance**: fetch_stat_leaders query uses correct column name.
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Single line fix in fetch_stat_leaders query (analytics.py line 369).
 
 ### Task 3: Verify affected endpoints return 200
-**Status**: PENDING
-**Attempts**: 0
-**Acceptance**: td-regression, snap-efficiency, workload-monitor, garbage-time, stat-leaders all return 200. Smoke tests updated.
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Also fixed s.passing_attempts -> s.attempts in td_regression. 5 smoke tests tightened from 500-tolerant to 200-required. All 34 tests pass.
 
 ## Phase 35: QA + UX Audit — Fixes for Phases 31-34 (COMPLETE)
 **Exit Criterion**: All HIGH findings from QA audit resolved. MEDIUM findings addressed where practical.

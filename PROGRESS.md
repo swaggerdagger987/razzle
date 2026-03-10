@@ -1,6 +1,18 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 35 — QA + UX Audit Fixes for Phases 31-34 (COMPLETE)
+## Current Phase: Phase 36 — Fix Missing player_season_stats Table + stat_value Bug (COMPLETE)
+
+**Exit Criterion MET**: player_season_stats table created as aggregate (6,098 rows). m.value -> m.stat_value fixed in stat_leaders. s.passing_attempts -> s.attempts fixed in td_regression. All 34 smoke tests pass with 200 status.
+
+### Phase 36 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Create player_season_stats table | DONE | 6,098 rows, auto-created during lifespan |
+| 2 | Fix m.value -> m.stat_value | DONE | analytics.py line 369 |
+| 3 | Verify endpoints + tighten tests | DONE | Also fixed passing_attempts column |
+
+## Previous Phase: Phase 35 — QA + UX Audit Fixes for Phases 31-34 (COMPLETE)
 
 **Exit Criterion MET**: 2 HIGH + 1 MEDIUM findings fixed. 58 error handlers upgraded to logger.exception() for stack traces. Hardcoded year in trade_pick_values and OG tag defaults replaced with dynamic helpers. 7 redundant imports removed.
 
