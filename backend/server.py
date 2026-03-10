@@ -605,6 +605,18 @@ def college_streaks(season: int = None, position: str = "", limit: int = 25):
     )
 
 
+@app.get("/api/college/stock-watch")
+def college_stock_watch(season: int = None, position: str = "", limit: int = 30):
+    return live_data.fetch_college_stock_watch(
+        season=season, position=position or None, limit=limit,
+    )
+
+
+@app.get("/api/college/scarcity")
+def college_scarcity(season: int = None):
+    return live_data.fetch_college_scarcity(season=season)
+
+
 @app.get("/api/aging-curves")
 def aging_curves(position: str = "WR"):
     return live_data.fetch_aging_curves(position=position)

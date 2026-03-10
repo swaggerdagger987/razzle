@@ -922,9 +922,12 @@
 
   // ===== BREAKOUTS =====
   defs.push({ name: 'breakouts', render: function(el) {
+    var boCollege = typeof state !== 'undefined' && state.universe === 'college';
+    var boTitle = boCollege ? 'College Breakout Candidates' : 'Breakout Candidates';
+    var boSub = boCollege ? 'high-usage college players with room for production growth' : 'opportunity outpacing production — volume-based, not efficiency';
     el.innerHTML = '<div class="lp-page">' +
-      '<div class="lp-header"><h2>Breakout Candidates</h2>' +
-      '<div class="lp-subtitle">opportunity outpacing production — volume-based, not efficiency</div></div>' +
+      '<div class="lp-header"><h2>' + boTitle + '</h2>' +
+      '<div class="lp-subtitle">' + boSub + '</div></div>' +
       '<div class="lp-controls">' +
       '<div class="lp-pos-tabs" id="bo-pos-tabs">' +
       '<button class="lp-pos-tab active" data-pos="">All</button>' +
@@ -963,8 +966,11 @@
     function loadBO() {
       var body = el.querySelector('#bo-body');
       body.innerHTML = '<div class="lp-loading">scouting the film...</div>';
-      var season = el.querySelector('#bo-season').value;
-      var url = '/api/breakout-candidates?limit=50';
+      var sel = el.querySelector('#bo-season');
+      if (sel && sel.options.length === 0) seasonsPopulated = false;
+      var season = sel.value;
+      var isCollege = typeof state !== 'undefined' && state.universe === 'college';
+      var url = isCollege ? '/api/college/breakouts?limit=50' : '/api/breakout-candidates?limit=50';
       if (season) url += '&season=' + season;
       if (curPos) url += '&position=' + curPos;
 
@@ -986,6 +992,7 @@
         candidates.forEach(function(p) {
           var pos = (p.position || 'WR').toLowerCase();
           var ac = ageClass(p.age);
+          var rbsVal = p.rbs_score != null ? p.rbs_score : (p.breakout_score != null ? p.breakout_score : 0);
           html += '<div class="breakout-card" data-pid="' + escapeAttr(p.player_id) + '">';
           html += '<div class="breakout-card-top ' + pos + '"></div><div class="breakout-card-body">';
           html += '<div class="breakout-card-row1">';
@@ -993,11 +1000,16 @@
           if (p.headshot_url) html += '<img class="breakout-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
           html += '<div class="breakout-info"><div class="breakout-name">' + escapeHtml(p.name) + '</div>';
           html += '<div class="breakout-meta"><span class="breakout-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
-          html += '<span class="breakout-team">' + escapeHtml(p.team) + '</span>';
+          if (isCollege && p.conference) {
+            html += '<span class="breakout-team">' + escapeHtml(p.team) + '</span>';
+            html += '<span class="breakout-team" style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
+          } else {
+            html += '<span class="breakout-team">' + escapeHtml(p.team) + '</span>';
+          }
           if (p.age) html += '<span class="breakout-age-badge ' + ac + '">' + ac + ' ' + p.age + '</span>';
           html += '</div></div>';
-          html += '<div class="breakout-rbs"><div class="breakout-rbs-score">' + escapeHtml(String(p.rbs_score)) + '</div>';
-          html += '<div class="breakout-rbs-label">RBS</div></div></div>';
+          html += '<div class="breakout-rbs"><div class="breakout-rbs-score">' + escapeHtml(String(rbsVal)) + '</div>';
+          html += '<div class="breakout-rbs-label">' + (isCollege ? 'BKO' : 'RBS') + '</div></div></div>';
           html += '<div class="breakout-bars">';
           html += '<div class="breakout-bar-group"><div class="breakout-bar-label"><span>Opportunity</span><span>' + escapeHtml(String(p.opportunity_pct)) + '%</span></div>';
           html += '<div class="breakout-bar-track"><div class="breakout-bar-fill opportunity" style="width:' + parseFloat(p.opportunity_pct) + '%"></div></div></div>';
@@ -1005,10 +1017,15 @@
           html += '<div class="breakout-bar-track"><div class="breakout-bar-fill production" style="width:' + parseFloat(p.production_pct) + '%"></div></div></div></div>';
           html += '<div class="breakout-gap"><span class="breakout-gap-arrow">&#9650;</span><span class="breakout-gap-text">' + escapeHtml(p.annotation) + '</span></div>';
           html += '<div class="breakout-stats">';
-          html += '<div class="breakout-stat"><div class="breakout-stat-val">' + escapeHtml(String(p.ppg)) + '</div><div class="breakout-stat-key">PPG</div></div>';
-          html += '<div class="breakout-stat"><div class="breakout-stat-val">' + escapeHtml(String(p.snap_pct)) + '%</div><div class="breakout-stat-key">Snap%</div></div>';
+          if (isCollege) {
+            html += '<div class="breakout-stat"><div class="breakout-stat-val">' + escapeHtml(String(p.yards_per_game || 0)) + '</div><div class="breakout-stat-key">YD/G</div></div>';
+            html += '<div class="breakout-stat"><div class="breakout-stat-val">' + escapeHtml(String(p.tds_per_game || 0)) + '</div><div class="breakout-stat-key">TD/G</div></div>';
+          } else {
+            html += '<div class="breakout-stat"><div class="breakout-stat-val">' + escapeHtml(String(p.ppg)) + '</div><div class="breakout-stat-key">PPG</div></div>';
+            html += '<div class="breakout-stat"><div class="breakout-stat-val">' + escapeHtml(String(p.snap_pct)) + '%</div><div class="breakout-stat-key">Snap%</div></div>';
+          }
           html += '<div class="breakout-stat"><div class="breakout-stat-val">' + escapeHtml(String(posStatVal(p))) + '</div><div class="breakout-stat-key">' + posStatLabel(p.position) + '</div></div>';
-          if (p.position !== 'QB' && p.position !== 'RB') html += '<div class="breakout-stat"><div class="breakout-stat-val">' + escapeHtml(String(p.target_share)) + '%</div><div class="breakout-stat-key">TGT%</div></div>';
+          if (!isCollege && p.position !== 'QB' && p.position !== 'RB') html += '<div class="breakout-stat"><div class="breakout-stat-val">' + escapeHtml(String(p.target_share)) + '%</div><div class="breakout-stat-key">TGT%</div></div>';
           html += '<div class="breakout-stat"><div class="breakout-stat-val">' + escapeHtml(String(p.games)) + '</div><div class="breakout-stat-key">Games</div></div>';
           html += '</div></div></div>';
         });
@@ -1186,9 +1203,12 @@
 
   // ===== STOCK WATCH =====
   defs.push({ name: 'stocks', render: function(el) {
+    var stkCollege = typeof state !== 'undefined' && state.universe === 'college';
+    var stkTitle = stkCollege ? 'College Stock Watch' : 'Dynasty Stock Watch';
+    var stkSub = stkCollege ? 'efficiency vs production rankings across college football' : 'composite valuations from efficiency, consistency, and schedule';
     el.innerHTML = '<div class="lp-page">' +
-      '<div class="lp-header"><h2>Dynasty Stock Watch</h2>' +
-      '<div class="lp-subtitle">composite valuations from efficiency, consistency, and schedule</div></div>' +
+      '<div class="lp-header"><h2>' + stkTitle + '</h2>' +
+      '<div class="lp-subtitle">' + stkSub + '</div></div>' +
       '<div class="lp-controls">' +
       '<div class="lp-pos-tabs" id="stk-pos-tabs">' +
       '<button class="lp-pos-tab active" data-pos="">All</button>' +
@@ -1230,13 +1250,14 @@
       return 'poor';
     }
 
+    var stkIsCollege = typeof state !== 'undefined' && state.universe === 'college';
     var COLS = [
       { key: 'name', label: 'Player' },
       { key: 'stock_score', label: 'Score' },
       { key: 'ppg', label: 'PPG' },
       { key: 'efficiency_grade', label: 'Eff' },
-      { key: 'consistency_grade', label: 'Con' },
-      { key: 'sos_grade', label: 'SOS' },
+      { key: 'consistency_grade', label: stkIsCollege ? 'YPT' : 'Con' },
+      { key: 'sos_grade', label: stkIsCollege ? 'Prod' : 'SOS' },
       { key: 'stock_delta', label: 'Delta', hide: true },
       { key: 'age', label: 'Age', hide: true },
       { key: 'games', label: 'GP', hide: true }
@@ -1244,6 +1265,7 @@
 
     function buildRow(p) {
       var pos = (p.position || 'RB').toLowerCase();
+      var isCollege = typeof state !== 'undefined' && state.universe === 'college';
       var h = '<tr data-pid="' + escapeAttr(p.player_id) + '">';
       COLS.forEach(function(c) {
         var cls = [];
@@ -1254,7 +1276,9 @@
           if (p.headshot_url) h += '<img class="stk-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
           h += '<div class="stk-player-info"><div class="stk-player-name">' + escapeHtml(p.name) + '</div>';
           h += '<div class="stk-player-meta"><span class="stk-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
-          h += '<span class="stk-team-label">' + escapeHtml(p.team) + '</span></div></div></div></td>';
+          h += '<span class="stk-team-label">' + escapeHtml(p.team) + '</span>';
+          if (isCollege && p.conference) h += '<span class="stk-team-label" style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
+          h += '</div></div></div></td>';
         } else if (c.key === 'stock_score') {
           h += '<td class="' + cls.join(' ') + '"><span class="stk-score-badge ' + scoreClass(p.stock_score || 0) + '">' + escapeHtml(String(p.stock_score || 0)) + '</span></td>';
         } else if (c.key === 'ppg') {
@@ -1343,8 +1367,11 @@
     function loadSTK() {
       var body = el.querySelector('#stk-body');
       body.innerHTML = '<div class="lp-loading">crunching the composite...</div>';
-      var season = el.querySelector('#stk-season').value;
-      var url = '/api/stock-watch?limit=30';
+      var sel = el.querySelector('#stk-season');
+      if (sel && sel.options.length === 0) seasonsPopulated = false;
+      var season = sel.value;
+      var isCollege = typeof state !== 'undefined' && state.universe === 'college';
+      var url = isCollege ? '/api/college/stock-watch?limit=30' : '/api/stock-watch?limit=30';
       if (season) url += '&season=' + season;
       if (curPos) url += '&position=' + curPos;
 
@@ -1476,9 +1503,12 @@
 
   // ===== SCARCITY =====
   defs.push({ name: 'scarcity', render: function(el) {
+    var scCollege = typeof state !== 'undefined' && state.universe === 'college';
+    var scTitle = scCollege ? 'College Positional Scarcity' : 'Positional Scarcity';
+    var scSub = scCollege ? 'production drop-off by position across college football' : 'where the cliff hits hardest';
     el.innerHTML = '<div class="lp-page">' +
-      '<div class="lp-header"><h2>Positional Scarcity</h2>' +
-      '<div class="lp-subtitle">where the cliff hits hardest</div></div>' +
+      '<div class="lp-header"><h2>' + scTitle + '</h2>' +
+      '<div class="lp-subtitle">' + scSub + '</div></div>' +
       '<div class="lp-controls">' +
       '<select class="lp-select" id="sc-season" aria-label="Season"></select>' +
       '</div>' +
@@ -1491,8 +1521,12 @@
     function loadSC() {
       var body = el.querySelector('#sc-body');
       body.innerHTML = '<div class="lp-loading">running the numbers...</div>';
-      var season = el.querySelector('#sc-season').value;
-      var url = season ? '/api/positional-scarcity?season=' + season : '/api/positional-scarcity';
+      var sel = el.querySelector('#sc-season');
+      if (sel && sel.options.length === 0) seasonsPopulated = false;
+      var season = sel.value;
+      var isCollege = typeof state !== 'undefined' && state.universe === 'college';
+      var baseUrl = isCollege ? '/api/college/scarcity' : '/api/positional-scarcity';
+      var url = season ? baseUrl + '?season=' + season : baseUrl;
 
       fetch(url).then(function(r) { if (!r.ok) throw new Error('API error'); return r.json(); }).then(function(data) {
         if (!seasonsPopulated && data.available_seasons) {
@@ -1547,9 +1581,10 @@
               nextBreakIdx++;
             }
             var pct = maxPpg > 0 ? (p.ppg / maxPpg) * 100 : 0;
-            html += '<div class="scarcity-bar-row" data-pid="' + escapeAttr(p.player_id) + '" title="' + escapeAttr(p.name + ' (' + p.team + ') — ' + p.ppg + ' PPG') + '">';
+            var scTeamLabel = isCollege && p.conference ? p.team + ' · ' + p.conference : p.team;
+            html += '<div class="scarcity-bar-row" data-pid="' + escapeAttr(p.player_id) + '" title="' + escapeAttr(p.name + ' (' + scTeamLabel + ') — ' + p.ppg + ' PPG') + '">';
             html += '<div class="scarcity-bar-rank">' + escapeHtml(String(p.rank)) + '</div>';
-            html += '<div class="scarcity-bar-name">' + escapeHtml(p.name) + '</div>';
+            html += '<div class="scarcity-bar-name">' + escapeHtml(p.name) + (isCollege ? '<span style="font-size:10px;color:var(--ink-light);margin-left:4px">' + escapeHtml(p.team || '') + '</span>' : '') + '</div>';
             html += '<div class="scarcity-bar-track"><div class="scarcity-bar-fill ' + pl + '" style="width:' + pct.toFixed(1) + '%"></div></div>';
             html += '<div class="scarcity-bar-ppg">' + escapeHtml(String(p.ppg)) + '</div></div>';
           });

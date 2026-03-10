@@ -2,10 +2,10 @@
 
 ## Current State
 - Phase: 5 (College Football Integration)
-- Task: Wire college toggle into Discovery panels
+- Task: Wire college toggle into Performance panels
 - Stage: PLAN
 - Attempt: 1/3
-- Tasks Done: 2/8
+- Tasks Done: 3/8
 
 ## Phase 5: College Football Integration — NFL/College toggle across all panels
 **Exit Criterion**: Every applicable Lab panel supports an NFL/College universe toggle. College mode shifts to blue accent. College data covers 2015-present. Panels that don't apply to college show a friendly message.
@@ -31,8 +31,8 @@
 **Accept when**: All 3 panels render college data correctly when toggled. NFL data still works.
 **Depends on**: Tasks 1, 2
 **Size**: M
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task 4: Wire college toggle into Performance panels
 **Requirement**: Efficiency, Consistency, Workload, Dual-Threat, Snap Efficiency panels support college toggle. College stats use per-game and per-play metrics from cfb data.

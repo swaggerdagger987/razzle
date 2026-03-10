@@ -3099,6 +3099,310 @@ def fetch_college_streaks(season=None, position=None, limit=25):
 
 
 # ---------------------------------------------------------------------------
+# College Stock Watch
+# ---------------------------------------------------------------------------
+
+_CFB_RISING_ANNOTATIONS = [
+    "under the radar", "breakout incoming", "hidden gem",
+    "efficiency darling", "undervalued producer", "sleeper alert",
+    "doing more with less", "quiet dominance", "sneaky good",
+    "watch this one",
+]
+
+_CFB_FALLING_ANNOTATIONS = [
+    "regression candidate", "volume-inflated", "overrated production",
+    "declining trajectory", "diminishing returns", "fading fast",
+    "inefficient usage", "past the peak", "stat padding",
+    "buyer beware",
+]
+
+
+def fetch_college_stock_watch(season=None, position=None, limit=30):
+    """College stock watch: efficiency vs production gap.
+    Uses per-game yards efficiency and YPC/YPR to identify over/undervalued."""
+    conn = get_conn()
+    try:
+        available_seasons = _cfb_available_seasons(conn)
+        if not season:
+            season = available_seasons[0] if available_seasons else 2024
+
+        pos_sql, pos_params = _cfb_pos_filter(position)
+
+        query = f"""
+            SELECT
+                c.player_id, c.player_name, c.position, c.team, c.conference,
+                c.season, c.games,
+                c.carries, c.rush_yards, c.rush_tds,
+                c.targets, c.receptions, c.rec_yards, c.rec_tds,
+                c.pass_attempts, c.completions, c.pass_yards, c.pass_tds,
+                c.total_yards, c.total_tds
+            FROM cfb_player_season_stats c
+            WHERE c.season = ?
+              AND c.position IN ('QB','RB','WR','TE','ATH')
+              AND c.games >= 4
+              {pos_sql}
+            ORDER BY c.total_yards DESC
+            LIMIT 500
+        """
+        rows = conn.execute(query, [season] + pos_params).fetchall()
+
+        if not rows:
+            return {
+                "season": season,
+                "available_seasons": available_seasons,
+                "rising": [],
+                "falling": [],
+            }
+
+        players = []
+        for r in rows:
+            d = dict(r)
+            g = d["games"] or 1
+            rush_yd = d["rush_yards"] or 0
+            rec_yd = d["rec_yards"] or 0
+            pass_yd = d["pass_yards"] or 0
+            receptions = d["receptions"] or 0
+            carries = d["carries"] or 0
+            total_tds = d["total_tds"] or 0
+            pass_tds = d["pass_tds"] or 0
+            targets = d["targets"] or 0
+
+            # Approximate fantasy points
+            fpts = (rush_yd + rec_yd) * 0.1 + total_tds * 6 + receptions * 1.0 + pass_yd * 0.04 + pass_tds * 4
+            ppg = round(fpts / g, 1)
+            if ppg < 2:
+                continue
+
+            # Efficiency: points per opportunity
+            opportunities = carries + targets + (d["pass_attempts"] or 0)
+            ppo = round(fpts / opportunities, 2) if opportunities > 20 else None
+
+            # Yards per touch
+            touches = carries + receptions
+            ypt = round((rush_yd + rec_yd) / touches, 1) if touches > 10 else None
+
+            players.append({
+                "player_id": d["player_id"],
+                "name": d["player_name"] or "Unknown",
+                "position": d["position"] or "ATH",
+                "team": d["team"] or "",
+                "conference": d["conference"] or "",
+                "games": g,
+                "ppg": ppg,
+                "ppo": ppo,
+                "ypt": ypt,
+            })
+
+        if not players:
+            return {
+                "season": season,
+                "available_seasons": available_seasons,
+                "rising": [],
+                "falling": [],
+            }
+
+        # Percentile rankings
+        ppg_sorted = sorted([p["ppg"] for p in players])
+        n_total = len(ppg_sorted)
+        ppo_vals = sorted([p["ppo"] for p in players if p["ppo"] is not None])
+        n_ppo = len(ppo_vals)
+        ypt_vals = sorted([p["ypt"] for p in players if p["ypt"] is not None])
+        n_ypt = len(ypt_vals)
+
+        def pct_rank(val, sorted_vals, count):
+            if count == 0:
+                return 50
+            rank = sum(1 for v in sorted_vals if v < val)
+            return round(rank / count * 100, 1)
+
+        def grade_from_pct(pct):
+            if pct >= 95:
+                return "A+"
+            elif pct >= 85:
+                return "A"
+            elif pct >= 70:
+                return "B+"
+            elif pct >= 55:
+                return "B"
+            elif pct >= 40:
+                return "C"
+            elif pct >= 25:
+                return "D"
+            return "F"
+
+        for p in players:
+            ppg_pct = pct_rank(p["ppg"], ppg_sorted, n_total)
+            ppo_pct = pct_rank(p["ppo"], ppo_vals, n_ppo) if p["ppo"] is not None else 50
+            ypt_pct = pct_rank(p["ypt"], ypt_vals, n_ypt) if p["ypt"] is not None else 50
+
+            # Stock score: efficiency-weighted (no SOS/consistency for college)
+            stock_score = round(ppo_pct * 0.35 + ypt_pct * 0.30 + ppg_pct * 0.35)
+            p["stock_score"] = stock_score
+            p["efficiency_grade"] = grade_from_pct(ppo_pct)
+            p["consistency_grade"] = grade_from_pct(ypt_pct)
+            p["sos_grade"] = grade_from_pct(ppg_pct)
+            p["stock_delta"] = stock_score - round(ppg_pct)
+
+        rising = sorted(
+            [p for p in players if p["stock_delta"] > 0],
+            key=lambda x: x["stock_delta"], reverse=True,
+        )[:limit]
+        for i, p in enumerate(rising):
+            p["annotation"] = _CFB_RISING_ANNOTATIONS[i % len(_CFB_RISING_ANNOTATIONS)]
+
+        falling = sorted(
+            [p for p in players if p["stock_delta"] < 0],
+            key=lambda x: x["stock_delta"],
+        )[:limit]
+        for i, p in enumerate(falling):
+            p["annotation"] = _CFB_FALLING_ANNOTATIONS[i % len(_CFB_FALLING_ANNOTATIONS)]
+
+        return {
+            "season": season,
+            "available_seasons": available_seasons,
+            "rising": rising,
+            "falling": falling,
+        }
+    finally:
+        conn.close()
+
+
+# ---------------------------------------------------------------------------
+# College Positional Scarcity
+# ---------------------------------------------------------------------------
+
+_CFB_SCARCITY_TIERS = {
+    "QB": [
+        {"label": "Elite", "start": 1, "end": 5},
+        {"label": "Starter", "start": 6, "end": 15},
+        {"label": "Depth", "start": 16, "end": 30},
+    ],
+    "RB": [
+        {"label": "Bellcow", "start": 1, "end": 8},
+        {"label": "Committee", "start": 9, "end": 20},
+        {"label": "Depth", "start": 21, "end": 40},
+    ],
+    "WR": [
+        {"label": "Alpha", "start": 1, "end": 10},
+        {"label": "Starter", "start": 11, "end": 25},
+        {"label": "Depth", "start": 26, "end": 40},
+    ],
+    "TE": [
+        {"label": "Unicorn", "start": 1, "end": 5},
+        {"label": "Starter", "start": 6, "end": 12},
+        {"label": "Depth", "start": 13, "end": 20},
+    ],
+}
+
+_CFB_SCARCITY_ANNOTATIONS = {
+    "QB": {5: "elite tier ends", 15: "starter cutoff"},
+    "RB": {8: "bellcow tier ends", 20: "committee cutoff"},
+    "WR": {10: "alpha tier ends", 25: "starter cutoff"},
+    "TE": {5: "unicorn tier ends", 12: "starter cutoff"},
+}
+
+
+def fetch_college_scarcity(season=None):
+    """College positional scarcity: PPG drop-off by position using approx fantasy points."""
+    conn = get_conn()
+    try:
+        available_seasons = _cfb_available_seasons(conn)
+        if not season:
+            season = available_seasons[0] if available_seasons else 2024
+
+        positions_data = {}
+        for pos in ("QB", "RB", "WR", "TE"):
+            pos_limit = 40 if pos in ("RB", "WR") else 30 if pos == "QB" else 20
+            query = """
+                SELECT
+                    c.player_id, c.player_name, c.position, c.team, c.conference,
+                    c.games,
+                    c.carries, c.rush_yards, c.rush_tds,
+                    c.targets, c.receptions, c.rec_yards, c.rec_tds,
+                    c.pass_attempts, c.pass_yards, c.pass_tds,
+                    c.total_yards, c.total_tds
+                FROM cfb_player_season_stats c
+                WHERE c.season = ?
+                  AND c.position = ?
+                  AND c.games >= 4
+                ORDER BY c.total_yards DESC
+                LIMIT ?
+            """
+            rows = conn.execute(query, [season, pos, pos_limit * 3]).fetchall()
+
+            players = []
+            for r in rows:
+                d = dict(r)
+                g = d["games"] or 1
+                rush_yd = d["rush_yards"] or 0
+                rec_yd = d["rec_yards"] or 0
+                pass_yd = d["pass_yards"] or 0
+                receptions = d["receptions"] or 0
+                total_tds = d["total_tds"] or 0
+                pass_tds = d["pass_tds"] or 0
+
+                fpts = (rush_yd + rec_yd) * 0.1 + total_tds * 6 + receptions * 1.0 + pass_yd * 0.04 + pass_tds * 4
+                ppg = round(fpts / g, 1)
+                players.append({
+                    "player_id": d["player_id"],
+                    "name": d["player_name"] or "Unknown",
+                    "team": d["team"] or "",
+                    "conference": d["conference"] or "",
+                    "games": g,
+                    "ppg": ppg,
+                })
+
+            players.sort(key=lambda x: x["ppg"], reverse=True)
+            players = players[:pos_limit]
+            for i, p in enumerate(players):
+                p["rank"] = i + 1
+
+            top_ppg = players[0]["ppg"] if players else 0
+            rep_rank = 10 if pos in ("QB", "TE") else 20
+            rep_ppg = players[rep_rank - 1]["ppg"] if len(players) >= rep_rank else 0
+            drop_off = round(top_ppg - rep_ppg, 1)
+
+            tier_breaks = []
+            for tb in _CFB_SCARCITY_TIERS.get(pos, []):
+                end_rank = tb["end"]
+                ppg_at = players[end_rank - 1]["ppg"] if len(players) >= end_rank else 0
+                annotation = _CFB_SCARCITY_ANNOTATIONS.get(pos, {}).get(end_rank, "")
+                tier_breaks.append({
+                    "label": tb["label"],
+                    "start": tb["start"],
+                    "end": end_rank,
+                    "ppg_at_break": ppg_at,
+                    "annotation": annotation,
+                })
+
+            positions_data[pos] = {
+                "players": players,
+                "top_ppg": top_ppg,
+                "replacement_ppg": rep_ppg,
+                "replacement_rank": rep_rank,
+                "drop_off": drop_off,
+                "tier_breaks": tier_breaks,
+            }
+
+        scarcity_ranking = sorted(
+            [{"position": pos, "drop_off": d["drop_off"], "top_ppg": d["top_ppg"],
+              "replacement_ppg": d["replacement_ppg"]}
+             for pos, d in positions_data.items()],
+            key=lambda x: x["drop_off"],
+            reverse=True,
+        )
+
+        return {
+            "season": season,
+            "available_seasons": available_seasons,
+            "positions": positions_data,
+            "scarcity_ranking": scarcity_ranking,
+        }
+    finally:
+        conn.close()
+
+
+# ---------------------------------------------------------------------------
 # Waitlist
 # ---------------------------------------------------------------------------
 
