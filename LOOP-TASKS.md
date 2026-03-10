@@ -8,13 +8,13 @@
 ---
 
 ## Task 1: Backend — team roster endpoint
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 **Notes**: GET /api/team-roster?team={abbr}&season= in server.py. fetch_team_roster() in live_data.py — queries players table joined with season stats. Returns players grouped by position (QB/RB/WR/TE) with key stats (PPG, games, total yards, TDs, age). Available teams list for dropdown. Available seasons for selector.
 
 ## Task 2: Frontend — team.html page with position group cards
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 **Notes**: Full page with position group cards (QB, RB, WR, TE sections). Each card: position name in display font with position color top stripe, Caveat annotation, player rows with headshot/initials fallback, name, age badge (green ≤25, yellow 26-28, red ≥29), key stats in mono font. Cards have 3px ink borders, 4px offset shadows. Click player row → navigate to /player/{id}. Team selector dropdown + season selector. Team header with team name. Sand bg, card bg, all fonts correct per DESIGN.md.
 
 ## Task 3: Nav links + team links from profiles + sitemap
