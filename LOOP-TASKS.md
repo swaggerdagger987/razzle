@@ -40,8 +40,9 @@
 **Accept when**: Click "Performance" header → items hide, chevron rotates. Click again → items show. State persists across refreshes. Search overrides collapse (searching "eff" shows Efficiency even if Performance is collapsed).
 **Depends on**: Task 1 (search override logic)
 **Size**: M
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
+**Notes**: JS-injected chevron (▾) on each category header with CSS rotation on collapse. `razzle_cat_collapsed` localStorage object with per-category keys. `.cat-hidden` class on items. Search override: `_overrideCatForSearch()` removes cat-hidden from search-matched items. `_restoreCatCollapseState()` restores on search clear. Chevrons hidden in fully-collapsed sidebar.
 
 ### Task 5: Tool count and sidebar polish
 **Requirement**: Show a small "62 tools" badge in the sidebar header area (near the collapse toggle). Count is dynamic based on actual sidebar items. Add subtle separator line between Recent section and first category. Ensure search input, recent strip, and category collapse all work together without layout shifts or visual glitches.

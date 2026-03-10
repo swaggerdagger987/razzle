@@ -91,6 +91,9 @@
     display: block;
   }
 
+  .lab-sidebar.collapsed .cat-chevron {
+    display: none;
+  }
   .lab-sidebar.collapsed .lab-sidebar-toggle span {
     transform: rotate(180deg);
   }
@@ -217,6 +220,23 @@
     background: var(--bg-card);
     z-index: 1;
     border-bottom: 1px dashed var(--ink-faint);
+    cursor: pointer;
+    user-select: none;
+  }
+  .lab-sidebar-category .cat-chevron {
+    float: right;
+    font-size: 10px;
+    transition: transform 0.15s;
+    margin-top: 1px;
+  }
+  .lab-sidebar-category.cat-collapsed .cat-chevron {
+    transform: rotate(-90deg);
+  }
+  .lab-sidebar-category.cat-collapsed ~ .lab-sidebar-item {
+    /* Items after a collapsed category hide until next category */
+  }
+  .lab-sidebar-item.cat-hidden {
+    display: none;
   }
 
   .lab-sidebar-item {
@@ -3343,6 +3363,90 @@
   // Initial render of recent panels
   _renderRecentPanels();
 
+  // ─── Category collapse/expand ─────────────────────────────────
+  (function() {
+    var sidebar = document.getElementById('labSidebar');
+    if (!sidebar) return;
+    var cats = sidebar.querySelectorAll('.lab-sidebar-category');
+    var CAT_COLLAPSE_KEY = 'razzle_cat_collapsed';
+
+    function getSavedState() {
+      try {
+        var raw = localStorage.getItem(CAT_COLLAPSE_KEY);
+        return raw ? JSON.parse(raw) : {};
+      } catch(e) { return {}; }
+    }
+
+    function saveState(state) {
+      try { localStorage.setItem(CAT_COLLAPSE_KEY, JSON.stringify(state)); } catch(e) {}
+    }
+
+    function getCatItems(cat) {
+      var items = [];
+      var next = cat.nextElementSibling;
+      while (next && !next.classList.contains('lab-sidebar-category')) {
+        if (next.classList.contains('lab-sidebar-item')) items.push(next);
+        next = next.nextElementSibling;
+      }
+      return items;
+    }
+
+    function applyCatState(cat, collapsed) {
+      var items = getCatItems(cat);
+      if (collapsed) {
+        cat.classList.add('cat-collapsed');
+        items.forEach(function(item) { item.classList.add('cat-hidden'); });
+      } else {
+        cat.classList.remove('cat-collapsed');
+        items.forEach(function(item) { item.classList.remove('cat-hidden'); });
+      }
+    }
+
+    var saved = getSavedState();
+
+    cats.forEach(function(cat, idx) {
+      // Add chevron
+      var chevron = document.createElement('span');
+      chevron.className = 'cat-chevron';
+      chevron.textContent = '\u25BE'; // ▾
+      cat.appendChild(chevron);
+
+      // Restore saved state
+      var catKey = 'cat_' + idx;
+      if (saved[catKey]) applyCatState(cat, true);
+
+      // Click handler
+      cat.addEventListener('click', function() {
+        var isCollapsed = cat.classList.contains('cat-collapsed');
+        applyCatState(cat, !isCollapsed);
+        var s = getSavedState();
+        if (!isCollapsed) {
+          s[catKey] = true;
+        } else {
+          delete s[catKey];
+        }
+        saveState(s);
+      });
+    });
+
+    // Expose for search override
+    window._restoreCatCollapseState = function() {
+      var s = getSavedState();
+      cats.forEach(function(cat, idx) {
+        if (s['cat_' + idx]) applyCatState(cat, true);
+        else applyCatState(cat, false);
+      });
+    };
+
+    window._overrideCatForSearch = function() {
+      sidebar.querySelectorAll('.lab-sidebar-item').forEach(function(item) {
+        if (!item.classList.contains('search-hidden')) {
+          item.classList.remove('cat-hidden');
+        }
+      });
+    };
+  })();
+
   // ─── Sidebar search filter ──────────────────────────────────────
   (function() {
     var searchInput = document.getElementById('sidebarSearch');
@@ -3358,6 +3462,8 @@
         // Restore all items
         items.forEach(function(item) { item.classList.remove('search-hidden'); });
         cats.forEach(function(cat) { cat.classList.remove('search-hidden'); });
+        // Restore category collapse state
+        if (typeof _restoreCatCollapseState === 'function') _restoreCatCollapseState();
         return;
       }
 
@@ -3388,6 +3494,9 @@
           cat.classList.add('search-hidden');
         }
       });
+
+      // Override category collapse — show matching items regardless
+      if (typeof _overrideCatForSearch === 'function') _overrideCatForSearch();
     });
 
     // Click search icon in collapsed mode → expand sidebar and focus
