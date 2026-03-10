@@ -20,6 +20,7 @@
 <link rel="canonical" href="https://razzle.lol/lab.html">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="lab-panels.css">
 <style>
   /* ===== LAB SIDEBAR ===== */
   .lab-sidebar {
@@ -2675,6 +2676,7 @@
 <script src="formulas.js"></script>
 <script src="formula-store.js"></script>
 <script src="charts.js"></script>
+<script src="lab-panels.js"></script>
 <script>fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({page:location.pathname})}).catch(function(){});</script>
 
 <!-- LAB PANEL SWITCHING + REGISTRY -->
@@ -2718,6 +2720,13 @@
   // Point its container to the existing DOM element
   panelRegistry['screener'].container = document.getElementById('panel-screener');
   panelRegistry['screener'].loaded = true;
+
+  // Register native panels from lab-panels.js (loaded before this script)
+  if (window._labPanelDefs) {
+    window._labPanelDefs.forEach(function(def) {
+      registerPanel(def.name, def.render);
+    });
+  }
 
   // ─── Panel Labels & Categories ─────────────────────────────────
   var PANEL_LABELS = {

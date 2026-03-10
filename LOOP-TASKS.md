@@ -5,7 +5,7 @@
 - Task: Migrate Rankings & Values panels
 - Stage: BUILD
 - Attempt: 1/3
-- Tasks Done: 2/10
+- Tasks Done: 3/10
 
 ## Phase 1: Navigation Surgery -- COMPLETE
 ### Task 1: Slim nav to 4 items on all pages
@@ -152,8 +152,8 @@
 **Accept when**: All 7 panels render natively with correct data, sorting, filtering, and design system compliance. No iframes.
 **Depends on**: Task 2
 **Size**: L
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task 4: Migrate Discovery panels
 **Requirement**: Convert: Breakouts, Buy/Sell, Stock Watch, Waivers, Scarcity, Handcuffs. Port fetch + render logic.
