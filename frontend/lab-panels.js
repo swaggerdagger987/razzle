@@ -6375,7 +6375,7 @@
         '<div class="lp-header"><h2>' + (awCollege ? 'College Superlatives' : 'Season Superlatives') + '</h2>' +
         '<div class="lp-subtitle">' + (awCollege ? 'the college hardware that matters' : 'the hardware that matters') + '</div></div>' +
         '<div class="lp-controls">' +
-          '<select class="lp-select aw2-season">' + seasonOptions(awCollege ? 2024 : 2025) + '</select>' +
+          '<select class="lp-select aw2-season">' + seasonOptions(2025) + '</select>' +
           posTabsHTML('aw2-pos-tabs', true) +
         '</div>' +
         '<div class="aw2-content"><div class="lp-loading">tallying the votes...</div></div>' +
@@ -6808,7 +6808,7 @@
         '<div class="lp-controls">' +
           '<label style="font-family:var(--font-mono);font-size:12px;">X: <select class="lp-select exp-x-select">' + metricOpts + '</select></label>' +
           '<label style="font-family:var(--font-mono);font-size:12px;">Y: <select class="lp-select exp-y-select">' + yOpts + '</select></label>' +
-          '<select class="lp-select exp-season">' + seasonOptions(expCollege ? 2024 : 2025) + '</select>' +
+          '<select class="lp-select exp-season">' + seasonOptions(2025) + '</select>' +
           posTabsHTML('exp-pos-tabs', true) +
         '</div>' +
         '<div class="exp-body"><div class="lp-loading">crunching numbers...</div></div>' +
@@ -7088,7 +7088,7 @@
         '<div class="lp-header"><h2>' + (ldCollege ? 'College Stat Leaders' : 'Stat Leaders') + '</h2>' +
         '<div class="lp-subtitle">' + (ldCollege ? 'who\'s leading the pack in college football' : 'who\'s leading the pack') + '</div></div>' +
         '<div class="lp-controls">' +
-          '<select class="lp-select ld2-season">' + seasonOptions(ldCollege ? 2024 : 2025) + '</select>' +
+          '<select class="lp-select ld2-season">' + seasonOptions(2025) + '</select>' +
           posTabsHTML('ld2-pos-tabs', true) +
         '</div>' +
         '<div class="ld2-content"><div class="lp-loading">pulling film on the leaders...</div></div>' +
@@ -7648,7 +7648,7 @@
         '<div class="lp-header"><h2>' + (rcCollege ? 'College Season Recap' : 'Season Recap') + '</h2>' +
         '<div class="lp-subtitle">' + (rcCollege ? 'the college season in review' : 'the season in review') + '</div></div>' +
         '<div class="lp-controls">' +
-          '<select class="lp-select rc2-season">' + seasonOptions(rcCollege ? 2024 : 2025) + '</select>' +
+          '<select class="lp-select rc2-season">' + seasonOptions(2025) + '</select>' +
         '</div>' +
         '<div class="rc2-content"><div class="lp-loading">pulling film...</div></div>' +
       '</div>';
