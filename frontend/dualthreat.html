@@ -3,66 +3,60 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>TD Regression — Razzle</title>
-<meta property="og:title" content="TD Regression — Razzle">
-<meta property="og:description" content="Expected vs actual TDs — find buy and sell candidates due for TD correction on razzle.lol">
+<title>Dual-Threat Index — Razzle</title>
+<meta property="og:title" content="Dual-Threat Index — Razzle">
+<meta property="og:description" content="Rush + rec versatility rankings — who contributes in both dimensions on razzle.lol">
 <meta property="og:site_name" content="razzle.lol">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="TD Regression — Razzle">
-<meta name="twitter:description" content="Expected vs actual TDs — find buy and sell candidates due for TD correction on razzle.lol">
+<meta name="twitter:title" content="Dual-Threat Index — Razzle">
+<meta name="twitter:description" content="Rush + rec versatility rankings — who contributes in both dimensions on razzle.lol">
 <meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
-<meta name="description" content="TD regression candidates — expected vs actual touchdowns based on opportunity volume on razzle.lol">
+<meta name="description" content="Dual-threat index — rush and receiving versatility rankings on razzle.lol">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="styles.css">
 <style>
-  .tdr-page { max-width: 1100px; margin: 0 auto; padding: 24px 20px 60px; }
-  .tdr-header { text-align: center; margin-bottom: 24px; }
-  .tdr-header h1 { font-family: var(--font-display); font-size: 32px; color: var(--ink); margin: 0 0 4px; }
-  .tdr-header .tdr-subtitle { font-family: var(--font-hand); font-size: 20px; color: var(--ink-light); }
-  .tdr-controls { display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
-  .tdr-controls select { font-family: var(--font-mono); font-size: 13px; padding: 6px 10px; border: 2px solid var(--ink); border-radius: 4px; background: var(--card); }
-  .tdr-controls .pos-tabs { display: flex; gap: 4px; }
-  .tdr-controls .pos-tab { font-family: var(--font-mono); font-size: 12px; padding: 5px 12px; border: 2px solid var(--ink); border-radius: 4px; background: var(--card); cursor: pointer; font-weight: 700; }
-  .tdr-controls .pos-tab.active { background: var(--ink); color: var(--sand); }
-  .tdr-export { font-family: var(--font-mono); font-size: 12px; padding: 5px 14px; border: 2px solid var(--ink); border-radius: 4px; background: var(--card); cursor: pointer; font-weight: 700; }
-  .tdr-export:hover { background: var(--ink); color: var(--sand); }
-  .tdr-loading { text-align: center; font-family: var(--font-hand); font-size: 18px; color: var(--ink-light); padding: 60px 0; }
+  .dt-page { max-width: 1100px; margin: 0 auto; padding: 24px 20px 60px; }
+  .dt-header { text-align: center; margin-bottom: 24px; }
+  .dt-header h1 { font-family: var(--font-display); font-size: 32px; color: var(--ink); margin: 0 0 4px; }
+  .dt-header .dt-subtitle { font-family: var(--font-hand); font-size: 20px; color: var(--ink-light); }
+  .dt-controls { display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+  .dt-controls select { font-family: var(--font-mono); font-size: 13px; padding: 6px 10px; border: 2px solid var(--ink); border-radius: 4px; background: var(--card); }
+  .dt-controls .pos-tabs { display: flex; gap: 4px; }
+  .dt-controls .pos-tab { font-family: var(--font-mono); font-size: 12px; padding: 5px 12px; border: 2px solid var(--ink); border-radius: 4px; background: var(--card); cursor: pointer; font-weight: 700; }
+  .dt-controls .pos-tab.active { background: var(--ink); color: var(--sand); }
+  .dt-export { font-family: var(--font-mono); font-size: 12px; padding: 5px 14px; border: 2px solid var(--ink); border-radius: 4px; background: var(--card); cursor: pointer; font-weight: 700; }
+  .dt-export:hover { background: var(--ink); color: var(--sand); }
+  .dt-loading { text-align: center; font-family: var(--font-hand); font-size: 18px; color: var(--ink-light); padding: 60px 0; }
 
-  .tdr-rates { display: flex; justify-content: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
-  .tdr-rate-chip { font-family: var(--font-mono); font-size: 11px; padding: 3px 10px; border: 2px solid var(--ink); border-radius: 4px; background: var(--card); }
-  .tdr-rate-chip span { font-weight: 700; }
-
-  .tdr-sections { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-  .tdr-card { background: var(--card); border: 3px solid var(--ink); border-radius: 10px; box-shadow: 4px 4px 0 var(--ink); overflow: hidden; }
-  .tdr-card-header { font-family: var(--font-display); font-size: 18px; padding: 10px 16px; color: var(--sand); }
-  .tdr-card-header.positive { background: #166534; }
-  .tdr-card-header.negative { background: #991b1b; }
-  .tdr-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 12px; }
-  .tdr-table th { background: var(--sand); padding: 6px 8px; text-align: right; font-size: 10px; font-weight: 700; border-bottom: 2px solid var(--ink-faint); white-space: nowrap; }
-  .tdr-table th:first-child, .tdr-table th:nth-child(2), .tdr-table th:nth-child(3) { text-align: left; }
-  .tdr-table td { padding: 6px 8px; text-align: right; border-bottom: 1px solid var(--ink-faint); }
-  .tdr-table td:first-child, .tdr-table td:nth-child(2), .tdr-table td:nth-child(3) { text-align: left; }
-  .tdr-table tbody tr:hover { background: rgba(217,119,87,0.08); }
-  .tdr-rank { font-weight: 700; color: var(--ink-light); font-size: 11px; }
-  .tdr-pos-badge { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 3px; color: #fff; }
-  .tdr-diff-badge { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 3px; border: 1px solid; }
-  .tdr-diff-pos { background: #dcfce7; color: #166534; border-color: #166534; }
-  .tdr-diff-neg { background: #fef2f2; color: #991b1b; border-color: #991b1b; }
-  .tdr-bar-cell { width: 80px; }
-  .tdr-bar { height: 12px; border-radius: 2px; min-width: 2px; }
-  .tdr-bar.green { background: #2ec4b6; }
-  .tdr-bar.red { background: #d97757; }
-  .tdr-empty { text-align: center; padding: 40px 16px; font-family: var(--font-hand); font-size: 16px; color: var(--ink-light); }
+  .dt-card { background: var(--card); border: 3px solid var(--ink); border-radius: 10px; box-shadow: 4px 4px 0 var(--ink); overflow: hidden; }
+  .dt-card-header { font-family: var(--font-display); font-size: 18px; padding: 10px 16px; background: var(--ink); color: var(--sand); }
+  .dt-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 12px; }
+  .dt-table th { background: var(--sand); padding: 6px 8px; text-align: right; font-size: 10px; font-weight: 700; border-bottom: 2px solid var(--ink-faint); white-space: nowrap; }
+  .dt-table th:first-child, .dt-table th:nth-child(2), .dt-table th:nth-child(3) { text-align: left; }
+  .dt-table td { padding: 6px 8px; text-align: right; border-bottom: 1px solid var(--ink-faint); }
+  .dt-table td:first-child, .dt-table td:nth-child(2), .dt-table td:nth-child(3) { text-align: left; }
+  .dt-table tbody tr:hover { background: rgba(217,119,87,0.08); }
+  .dt-rank { font-weight: 700; color: var(--ink-light); font-size: 11px; }
+  .dt-pos-badge { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 3px; color: #fff; }
+  .dt-dti-badge { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 3px; border: 1px solid; }
+  .dt-dti-elite { background: #dbeafe; color: #1e40af; border-color: #1e40af; }
+  .dt-dti-high { background: #dcfce7; color: #166534; border-color: #166534; }
+  .dt-dti-mid { background: #fef9c3; color: #854d0e; border-color: #854d0e; }
+  .dt-dti-low { background: #fee2e2; color: #991b1b; border-color: #991b1b; }
+  .dt-split-bar { display: flex; height: 14px; border-radius: 3px; overflow: hidden; border: 1px solid var(--ink-faint); }
+  .dt-split-rush { background: #2ec4b6; }
+  .dt-split-rec { background: #d97757; }
+  .dt-split-cell { width: 100px; }
+  .dt-empty { text-align: center; padding: 40px 16px; font-family: var(--font-hand); font-size: 16px; color: var(--ink-light); }
 
   @media (max-width: 768px) {
-    .tdr-sections { grid-template-columns: 1fr; }
-    .tdr-page { padding: 16px 12px 40px; }
-    .tdr-header h1 { font-size: 24px; }
-    .tdr-bar-cell { width: 50px; }
+    .dt-page { padding: 16px 12px 40px; }
+    .dt-header h1 { font-size: 24px; }
+    .dt-split-cell { width: 60px; }
   }
 </style>
 </head>
@@ -119,14 +113,14 @@
   </ul>
 </nav>
 
-<div class="tdr-page" id="tdr-container">
-  <div class="tdr-header">
-    <h1>TD Regression</h1>
-    <div class="tdr-subtitle">expected vs actual touchdowns — who's due for a correction?</div>
+<div class="dt-page" id="dt-container">
+  <div class="dt-header">
+    <h1>Dual-Threat Index</h1>
+    <div class="dt-subtitle">rush + rec versatility — who contributes in both dimensions?</div>
   </div>
 
-  <div class="tdr-controls">
-    <select id="tdr-season" aria-label="Season selector"></select>
+  <div class="dt-controls">
+    <select id="dt-season" aria-label="Season selector"></select>
     <div class="pos-tabs">
       <button class="pos-tab active" data-pos="">ALL</button>
       <button class="pos-tab" data-pos="QB">QB</button>
@@ -134,12 +128,16 @@
       <button class="pos-tab" data-pos="WR">WR</button>
       <button class="pos-tab" data-pos="TE">TE</button>
     </div>
-    <button class="tdr-export" onclick="exportPNG()">Export PNG</button>
+    <button class="dt-export" onclick="exportPNG()">Export PNG</button>
   </div>
 
-  <div class="tdr-rates" id="tdr-rates"></div>
-  <div id="tdr-loading" class="tdr-loading">pulling film...</div>
-  <div class="tdr-sections" id="tdr-sections" style="display:none;"></div>
+  <div id="dt-loading" class="dt-loading">pulling film...</div>
+  <div id="dt-content" style="display:none;">
+    <div class="dt-card">
+      <div class="dt-card-header">Dual-Threat Rankings</div>
+      <div id="dt-table-wrap"></div>
+    </div>
+  </div>
 </div>
 
 <footer style="text-align:center; padding:32px 16px; font-family:var(--font-hand); font-size:15px; color:var(--ink-light);">
@@ -233,7 +231,7 @@ const POS_COLORS = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" 
 let state = { season: null, position: "", data: null };
 
 function initSeasons() {
-  const sel = document.getElementById("tdr-season");
+  const sel = document.getElementById("dt-season");
   const now = new Date().getFullYear();
   for (let y = now; y >= 2020; y--) {
     const opt = document.createElement("option");
@@ -271,9 +269,9 @@ document.querySelectorAll(".pos-tab").forEach(tab => {
 });
 
 async function loadData() {
-  document.getElementById("tdr-loading").style.display = "";
-  document.getElementById("tdr-sections").style.display = "none";
-  let url = "/api/td-regression?season=" + state.season;
+  document.getElementById("dt-loading").style.display = "";
+  document.getElementById("dt-content").style.display = "none";
+  let url = "/api/dual-threat?season=" + state.season;
   if (state.position) url += "&position=" + state.position;
   try {
     const resp = await fetch(url);
@@ -281,82 +279,68 @@ async function loadData() {
     state.data = await resp.json();
     render();
   } catch (e) {
-    document.getElementById("tdr-loading").textContent = "failed to load TD regression data";
+    document.getElementById("dt-loading").textContent = "failed to load dual-threat data";
   }
+}
+
+function dtiClass(dti) {
+  if (dti >= 40) return "dt-dti-elite";
+  if (dti >= 25) return "dt-dti-high";
+  if (dti >= 15) return "dt-dti-mid";
+  return "dt-dti-low";
 }
 
 function render() {
-  document.getElementById("tdr-loading").style.display = "none";
-  document.getElementById("tdr-sections").style.display = "";
-  const d = state.data;
+  document.getElementById("dt-loading").style.display = "none";
+  document.getElementById("dt-content").style.display = "";
+  const players = state.data.players || [];
+  const wrap = document.getElementById("dt-table-wrap");
 
-  // Rate chips
-  const ratesEl = document.getElementById("tdr-rates");
-  ratesEl.innerHTML = "";
-  if (d.pos_avg_td_rates) {
-    for (const [pos, rate] of Object.entries(d.pos_avg_td_rates)) {
-      ratesEl.innerHTML += '<div class="tdr-rate-chip"><span style="color:' + escapeHtml(POS_COLORS[pos] || "#333") + '">' + escapeHtml(pos) + '</span> avg TD rate: ' + escapeHtml(String(rate)) + '%</div>';
-    }
-  }
-
-  const sections = document.getElementById("tdr-sections");
-  sections.innerHTML = "";
-
-  // Positive regression (buy low) — actual < expected
-  sections.innerHTML += buildCard("Buy Low — Positive TD Regression", "positive", d.positive_regression || [], true);
-  // Negative regression (sell high) — actual > expected
-  sections.innerHTML += buildCard("Sell High — Negative TD Regression", "negative", d.negative_regression || [], false);
-}
-
-function buildCard(title, cls, players, isPositive) {
   if (players.length === 0) {
-    return '<div class="tdr-card"><div class="tdr-card-header ' + escapeHtml(cls) + '">' + escapeHtml(title) + '</div><div class="tdr-empty">no regression candidates found for this filter</div></div>';
+    wrap.innerHTML = '<div class="dt-empty">no dual-threat players found for this filter</div>';
+    return;
   }
 
-  const maxDiff = Math.max(...players.map(p => Math.abs(p.td_diff)));
-  let html = '<div class="tdr-card"><div class="tdr-card-header ' + escapeHtml(cls) + '">' + escapeHtml(title) + '</div>';
-  html += '<table class="tdr-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>TD</th><th>xTD</th><th>Diff</th><th>TD%</th><th>Opp</th><th></th></tr></thead><tbody>';
+  let html = '<table class="dt-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>DTI</th><th>Rush/G</th><th>Rec/G</th><th>Tot/G</th><th>Car/G</th><th>Rec/G</th><th>Split</th></tr></thead><tbody>';
 
   players.forEach((p, i) => {
     const posColor = POS_COLORS[p.position] || "#333";
-    const diffCls = isPositive ? "tdr-diff-pos" : "tdr-diff-neg";
-    const diffSign = p.td_diff > 0 ? "+" : "";
-    const barPct = maxDiff > 0 ? Math.abs(p.td_diff) / maxDiff * 100 : 0;
-    const barCls = isPositive ? "green" : "red";
+    const cls = dtiClass(p.dti);
 
     html += '<tr>';
-    html += '<td class="tdr-rank">' + (i + 1) + '</td>';
+    html += '<td class="dt-rank">' + (i + 1) + '</td>';
     html += '<td>' + escapeHtml(p.name) + ' <span style="color:var(--ink-light);font-size:10px;">' + escapeHtml(p.team) + '</span></td>';
-    html += '<td><span class="tdr-pos-badge" style="background:' + escapeHtml(posColor) + '">' + escapeHtml(p.position) + '</span></td>';
-    html += '<td>' + escapeHtml(String(p.actual_tds)) + '</td>';
-    html += '<td>' + escapeHtml(String(p.expected_tds)) + '</td>';
-    html += '<td><span class="tdr-diff-badge ' + diffCls + '">' + escapeHtml(diffSign + String(p.td_diff)) + '</span></td>';
-    html += '<td>' + escapeHtml(String(p.td_rate)) + '%</td>';
-    html += '<td>' + escapeHtml(String(p.opportunities)) + '</td>';
-    html += '<td class="tdr-bar-cell"><div class="tdr-bar ' + barCls + '" style="width:' + barPct + '%"></div></td>';
+    html += '<td><span class="dt-pos-badge" style="background:' + escapeHtml(posColor) + '">' + escapeHtml(p.position) + '</span></td>';
+    html += '<td><span class="dt-dti-badge ' + cls + '">' + escapeHtml(String(p.dti)) + '</span></td>';
+    html += '<td>' + escapeHtml(String(p.rush_yd_pg)) + '</td>';
+    html += '<td>' + escapeHtml(String(p.rec_yd_pg)) + '</td>';
+    html += '<td style="font-weight:700">' + escapeHtml(String(p.total_yd_pg)) + '</td>';
+    html += '<td>' + escapeHtml(String(p.carries_pg)) + '</td>';
+    html += '<td>' + escapeHtml(String(p.rec_pg)) + '</td>';
+    html += '<td class="dt-split-cell"><div class="dt-split-bar"><div class="dt-split-rush" style="width:' + p.rush_pct + '%"></div><div class="dt-split-rec" style="width:' + p.rec_pct + '%"></div></div></td>';
     html += '</tr>';
   });
 
-  html += '</tbody></table></div>';
-  return html;
+  html += '</tbody></table>';
+  wrap.innerHTML = html;
 }
 
 function exportPNG() {
-  const el = document.getElementById("tdr-container");
+  const el = document.getElementById("dt-container");
   html2canvas(el, { backgroundColor: "#ede0cf", scale: 2 }).then(canvas => {
     const ctx = canvas.getContext("2d");
     ctx.font = "bold 28px 'Space Mono', monospace";
     ctx.fillStyle = "rgba(0,0,0,0.13)";
     ctx.fillText("razzle.lol", canvas.width - 220, canvas.height - 20);
     const link = document.createElement("a");
-    link.download = "razzle-td-regression.png";
+    link.download = "razzle-dual-threat.png";
     link.href = canvas.toDataURL();
     link.click();
   });
 }
 
 // Analytics
-fetch("/api/analytics/pageview", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ page: "/tdregression.html", referrer: document.referrer }) }).catch(() => {});
+fetch("/api/analytics/pageview", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ page: "/dualthreat.html", referrer: document.referrer }) }).catch(() => {});
 
 initSeasons();
 loadData();

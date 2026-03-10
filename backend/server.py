@@ -939,6 +939,7 @@ def sitemap_xml():
         ("/stacks.html", "0.8", "weekly"),
         ("/advantage.html", "0.8", "weekly"),
         ("/tdregression.html", "0.8", "weekly"),
+        ("/dualthreat.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1591,6 +1592,16 @@ def records(position: str = ""):
         return JSONResponse({"error": "Failed to fetch records"}, status_code=500)
 
 
+@app.get("/api/dual-threat")
+def dual_threat(season: int = None, position: str = None):
+    try:
+        pos = position.upper() if position else None
+        return live_data.fetch_dual_threat(season=season, position=pos)
+    except Exception as e:
+        logger.error(f"dual-threat error: {e}")
+        return JSONResponse({"error": "Failed to fetch dual-threat data"}, status_code=500)
+
+
 @app.get("/api/td-regression")
 def td_regression(season: int = None, position: str = None):
     try:
@@ -1711,6 +1722,7 @@ def tools_hub():
                 {"name": "Stack Finder", "desc": "QB-WR/TE scoring correlations — find the best same-team stacks", "url": "/stacks.html", "positions": ["QB", "WR", "TE"]},
                 {"name": "Positional Advantage", "desc": "Biggest scoring edge over the positional average — league-winning edges", "url": "/advantage.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "TD Regression", "desc": "Expected vs actual TDs — find buy/sell candidates due for TD correction", "url": "/tdregression.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Dual-Threat Index", "desc": "Rush+rec versatility — who contributes in both dimensions?", "url": "/dualthreat.html", "positions": ["QB", "RB", "WR", "TE"]},
             ],
         },
         {

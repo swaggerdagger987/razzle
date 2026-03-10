@@ -1,6 +1,16 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 132 — TD Regression Candidates (COMPLETE)
+## Current Phase: Phase 133 — Dual-Threat Index (COMPLETE)
+
+**Exit criterion MET:** /dualthreat.html ranks players by rush+rec versatility using geometric mean of rushing and receiving yards per game (rewards balanced production over one-dimensional volume). DTI score badges (elite/high/mid/low), rush/rec split bar visualization, yards per game breakdown, carries and receptions per game. Position filter tabs, season selector, PNG export with watermark. GET /api/dual-threat returns data. 11 escapeHtml calls, 61/61 braces balanced. "Dual-Threat" nav link on all 64 pages. Sitemap + tools hub entry under Performance Analysis.
+
+### Phase 133 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend + frontend + nav + smoke test | DONE | fetch_dual_threat, geometric mean DTI, split bars, 11 escapeHtml, 64/64 nav |
+
+## Previous Phase: Phase 132 — TD Regression Candidates (COMPLETE)
 
 **Exit criterion MET:** /tdregression.html shows TD regression candidates — expected vs actual TDs based on positional avg TD rate and opportunity volume. Buy low section (positive regression: actual TDs below expected) and sell high section (negative regression: actual TDs above expected). TD diff badges, TD rate %, opportunity count, bar visualization. Positional avg TD rate chips. Position filter tabs, season selector, PNG export with watermark. GET /api/td-regression returns data. 17 escapeHtml calls, 68/68 braces balanced. "TD Regression" nav link on all 63 pages. Sitemap + tools hub entry under Performance Analysis.
 

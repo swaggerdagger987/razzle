@@ -11701,3 +11701,93 @@ def fetch_td_regression(season=None, position=None, limit=50):
         }
     finally:
         conn.close()
+
+
+def fetch_dual_threat(season=None, position=None, limit=50):
+    """Dual-threat index — players who contribute in both rushing and receiving."""
+    conn = get_conn()
+    try:
+        cursor = conn.cursor()
+        if not season:
+            cursor.execute("SELECT MAX(season) FROM player_season_stats")
+            season = cursor.fetchone()[0] or 2025
+
+        pos_filter = ""
+        params = [season]
+        if position:
+            pos_filter = "AND p.position = ?"
+            params.append(position)
+
+        cursor.execute(f"""
+            SELECT p.gsis_id, p.full_name, p.position, p.team,
+                   s.rushing_yards, s.receiving_yards, s.carries, s.receptions,
+                   s.targets, s.rushing_tds, s.receiving_tds, s.games
+            FROM player_season_stats s
+            JOIN players p ON p.gsis_id = s.player_id
+            WHERE s.season = ? AND p.fantasy_relevant = 1
+            {pos_filter}
+            AND s.games >= 4
+        """, params)
+
+        players = []
+        for r in cursor.fetchall():
+            pid, name, pos, team = r[0], r[1] or "Unknown", r[2] or "RB", r[3] or "FA"
+            rush_yd = r[4] or 0
+            rec_yd = r[5] or 0
+            carries = r[6] or 0
+            receptions = r[7] or 0
+            targets = r[8] or 0
+            rush_td = r[9] or 0
+            rec_td = r[10] or 0
+            games = r[11] or 1
+
+            # Need contributions in both dimensions
+            if rush_yd < 50 and rec_yd < 50:
+                continue
+
+            rush_yd_pg = rush_yd / games
+            rec_yd_pg = rec_yd / games
+            total_yd_pg = rush_yd_pg + rec_yd_pg
+            carries_pg = carries / games
+            rec_pg = receptions / games
+
+            # Dual-threat index: geometric mean of rush and rec yards/game
+            # Rewards balance — 100 rush + 100 rec >> 200 rush + 0 rec
+            import math
+            rush_component = max(rush_yd_pg, 0.1)
+            rec_component = max(rec_yd_pg, 0.1)
+            dti = math.sqrt(rush_component * rec_component)
+
+            # Rush/rec split (0.5 = perfectly balanced)
+            total = rush_yd + rec_yd
+            rush_pct = (rush_yd / total * 100) if total > 0 else 50
+            rec_pct = 100 - rush_pct
+
+            players.append({
+                "player_id": pid,
+                "name": name,
+                "position": pos,
+                "team": team,
+                "games": games,
+                "dti": round(dti, 1),
+                "rush_yd_pg": round(rush_yd_pg, 1),
+                "rec_yd_pg": round(rec_yd_pg, 1),
+                "total_yd_pg": round(total_yd_pg, 1),
+                "carries_pg": round(carries_pg, 1),
+                "rec_pg": round(rec_pg, 1),
+                "rush_td": rush_td,
+                "rec_td": rec_td,
+                "rush_pct": round(rush_pct, 0),
+                "rec_pct": round(rec_pct, 0),
+            })
+
+        players.sort(key=lambda x: x["dti"], reverse=True)
+        players = players[:limit]
+
+        return {
+            "players": players,
+            "season": season,
+            "count": len(players),
+        }
+    finally:
+        conn.close()
