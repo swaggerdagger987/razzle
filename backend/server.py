@@ -929,6 +929,7 @@ def sitemap_xml():
         ("/gamelog.html", "0.8", "weekly"),
         ("/streaks.html", "0.8", "weekly"),
         ("/recap.html", "0.8", "weekly"),
+        ("/comptable.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
     ]
@@ -1554,6 +1555,22 @@ def season_recap(season: int = 0):
         return JSONResponse({"error": "Failed to fetch season recap"}, status_code=500)
 
 
+@app.get("/api/compare-table")
+def compare_table(players: str = "", season: int = 0):
+    """Return season stats for multiple players for comparison table."""
+    if not players:
+        return JSONResponse({"error": "players parameter is required (comma-separated IDs)"}, status_code=400)
+    pids = [p.strip() for p in players.split(",") if p.strip()]
+    if len(pids) < 2 or len(pids) > 8:
+        return JSONResponse({"error": "Provide 2-8 player IDs"}, status_code=400)
+    try:
+        s = season if season > 0 else None
+        return live_data.fetch_compare_table(player_ids=pids, season=s)
+    except Exception as e:
+        logger.error(f"compare-table error: {e}")
+        return JSONResponse({"error": "Failed to fetch comparison data"}, status_code=500)
+
+
 @app.get("/api/tools-hub")
 def tools_hub():
     """Return the static tools catalog organized by category."""
@@ -1603,6 +1620,7 @@ def tools_hub():
                 {"name": "Air Yards", "desc": "aDOT, RACR, WOPR, and regression buy/sell indicators", "url": "/airyards.html", "positions": ["WR", "RB", "TE"]},
                 {"name": "Red Zone & Goal-Line", "desc": "Goal-line carries, targets, TDs, and TD dependency", "url": "/redzone.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Player Comparison", "desc": "Side-by-side stat comparison with radar charts and boom/bust rates", "url": "/compare.html", "positions": ["QB", "RB", "WR", "TE"]},
+                {"name": "Comparison Table", "desc": "Add 3-8 players and compare in a sortable stat grid", "url": "/comptable.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Scoring Formats", "desc": "How PPR vs Half-PPR vs Standard changes rankings", "url": "/scoring.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Points Breakdown", "desc": "Where a player's fantasy points come from — donut chart by scoring category", "url": "/breakdown.html", "positions": ["QB", "RB", "WR", "TE"]},
                 {"name": "Pace & Milestones", "desc": "17-game pace projections and milestone tracking — who's on pace for 1,000 yards?", "url": "/pace.html", "positions": ["QB", "RB", "WR", "TE"]},

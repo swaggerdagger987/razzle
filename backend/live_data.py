@@ -10707,3 +10707,76 @@ def fetch_season_recap(season=None):
         }
     finally:
         conn.close()
+
+
+def fetch_compare_table(player_ids, season=None):
+    """Return season stats for multiple players for side-by-side comparison."""
+    if not player_ids:
+        return {"error": "No player IDs provided"}
+
+    conn = get_db()
+    try:
+        cursor = conn.cursor()
+
+        if not season:
+            cursor.execute("SELECT MAX(season) FROM player_week_stats")
+            season = cursor.fetchone()[0] or 2024
+
+        placeholders = ",".join("?" for _ in player_ids)
+        cursor.execute(f"""
+            SELECT p.player_id, p.full_name, p.position, p.team,
+                   COUNT(DISTINCT s.week) as games,
+                   COALESCE(SUM(s.fantasy_points_ppr), 0) as total_fpts,
+                   COALESCE(SUM(s.pass_yards), 0) as pass_yd,
+                   COALESCE(SUM(s.pass_td), 0) as pass_td,
+                   COALESCE(SUM(s.interceptions), 0) as ints,
+                   COALESCE(SUM(s.completions), 0) as cmp,
+                   COALESCE(SUM(s.pass_attempts), 0) as pass_att,
+                   COALESCE(SUM(s.rush_yards), 0) as rush_yd,
+                   COALESCE(SUM(s.rush_td), 0) as rush_td,
+                   COALESCE(SUM(s.carries), 0) as car,
+                   COALESCE(SUM(s.rec_yards), 0) as rec_yd,
+                   COALESCE(SUM(s.rec_td), 0) as rec_td,
+                   COALESCE(SUM(s.receptions), 0) as rec,
+                   COALESCE(SUM(s.targets), 0) as tgt
+            FROM player_week_stats s
+            JOIN players p ON p.player_id = s.player_id
+            WHERE s.season = ?
+              AND p.player_id IN ({placeholders})
+              AND p.fantasy_relevant = 1
+            GROUP BY p.player_id
+        """, [season] + list(player_ids))
+        rows = cursor.fetchall()
+
+        # Available seasons
+        cursor.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC")
+        available_seasons = [r[0] for r in cursor.fetchall()]
+
+        players = []
+        for r in rows:
+            games = r[4] or 1
+            total_fpts = r[5] or 0
+            players.append({
+                "player_id": r[0],
+                "name": r[1] or "Unknown",
+                "position": r[2] or "RB",
+                "team": r[3] or "FA",
+                "games": r[4],
+                "total_fpts": round(total_fpts, 1),
+                "ppg": round(total_fpts / games, 1),
+                "pass_yd": r[6], "pass_td": r[7], "ints": r[8],
+                "cmp": r[9], "pass_att": r[10],
+                "rush_yd": r[11], "rush_td": r[12], "car": r[13],
+                "rec_yd": r[14], "rec_td": r[15], "rec": r[16], "tgt": r[17],
+                "yd_per_car": round(r[11] / r[13], 1) if r[13] else 0,
+                "yd_per_rec": round(r[14] / r[16], 1) if r[16] else 0,
+                "catch_rate": round((r[16] / r[17]) * 100, 1) if r[17] else 0,
+            })
+
+        return {
+            "season": season,
+            "available_seasons": available_seasons,
+            "players": players,
+        }
+    finally:
+        conn.close()

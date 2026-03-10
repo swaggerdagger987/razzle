@@ -3,51 +3,54 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Game Log — Razzle</title>
-<meta property="og:title" content="Game Log — Razzle">
-<meta property="og:description" content="Week-by-week fantasy box scores for every player on razzle.lol">
+<title>Comparison Table — Razzle</title>
+<meta property="og:title" content="Comparison Table — Razzle">
+<meta property="og:description" content="Compare 3-8 fantasy players side by side in a sortable stat grid on razzle.lol">
 <meta property="og:site_name" content="razzle.lol">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Game Log — Razzle">
-<meta name="twitter:description" content="Week-by-week fantasy box scores for every player on razzle.lol">
+<meta name="twitter:title" content="Comparison Table — Razzle">
+<meta name="twitter:description" content="Compare 3-8 fantasy players side by side in a sortable stat grid on razzle.lol">
 <meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
-<meta name="description" content="Game log viewer — week-by-week box score stats for any fantasy-relevant player on razzle.lol">
+<meta name="description" content="Multi-player comparison table — add 3-8 players and compare stats in a sortable grid on razzle.lol">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="styles.css">
 <style>
-  .gl-page {
-    max-width: 1100px;
+  .ct-page {
+    max-width: 1200px;
     margin: 0 auto;
     padding: 24px 20px 60px;
   }
 
-  .gl-header {
+  .ct-header {
     text-align: center;
     margin-bottom: 24px;
   }
-  .gl-header h1 {
+  .ct-header h1 {
     font-family: var(--font-display);
     font-size: 32px;
     color: var(--ink);
     margin: 0 0 4px;
   }
-  .gl-header .gl-subtitle {
+  .ct-header .ct-subtitle {
     font-family: var(--font-hand);
     font-size: 20px;
     color: var(--ink-light);
   }
 
-  /* Search */
-  .gl-search-wrap {
-    max-width: 400px;
-    margin: 0 auto 24px;
-    position: relative;
+  /* Search + selected players */
+  .ct-search-area {
+    max-width: 500px;
+    margin: 0 auto 20px;
   }
-  .gl-search {
+  .ct-search-wrap {
+    position: relative;
+    margin-bottom: 12px;
+  }
+  .ct-search {
     width: 100%;
     font-family: var(--font-mono);
     font-size: 14px;
@@ -57,8 +60,8 @@
     background: var(--card);
     box-sizing: border-box;
   }
-  .gl-search::placeholder { color: var(--ink-light); }
-  .gl-ac-list {
+  .ct-search::placeholder { color: var(--ink-light); }
+  .ct-ac-list {
     position: absolute;
     top: 100%;
     left: 0;
@@ -71,7 +74,7 @@
     z-index: 100;
     display: none;
   }
-  .gl-ac-item {
+  .ct-ac-item {
     padding: 8px 12px;
     font-family: var(--font-mono);
     font-size: 13px;
@@ -79,24 +82,43 @@
     display: flex;
     justify-content: space-between;
   }
-  .gl-ac-item:hover, .gl-ac-item.highlighted {
+  .ct-ac-item:hover, .ct-ac-item.highlighted {
     background: var(--sand);
   }
-  .gl-ac-pos {
-    font-weight: 700;
-    font-size: 11px;
-  }
 
-  /* Controls row */
-  .gl-controls {
+  .ct-selected {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .ct-chip {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 4px 10px;
+    border: 2px solid var(--ink);
+    border-radius: 4px;
+    background: var(--card);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .ct-chip-x {
+    cursor: pointer;
+    font-weight: 700;
+    color: var(--ink-light);
+    font-size: 14px;
+  }
+  .ct-chip-x:hover { color: #991b1b; }
+
+  /* Controls */
+  .ct-controls {
     display: flex;
     justify-content: center;
-    align-items: center;
     gap: 16px;
     margin-bottom: 20px;
     flex-wrap: wrap;
   }
-  .gl-controls select {
+  .ct-controls select {
     font-family: var(--font-mono);
     font-size: 13px;
     padding: 6px 10px;
@@ -104,7 +126,7 @@
     border-radius: 4px;
     background: var(--card);
   }
-  .gl-export {
+  .ct-btn {
     font-family: var(--font-mono);
     font-size: 12px;
     padding: 5px 14px;
@@ -114,78 +136,32 @@
     cursor: pointer;
     font-weight: 700;
   }
-  .gl-export:hover { background: var(--ink); color: var(--sand); }
+  .ct-btn:hover { background: var(--ink); color: var(--sand); }
+  .ct-btn.primary { background: var(--terracotta); color: #fff; border-color: var(--ink); }
+  .ct-btn.primary:hover { background: #b85a3a; }
 
-  /* Player card */
-  .gl-player-card {
-    background: var(--card);
-    border: 3px solid var(--ink);
-    border-radius: 10px;
-    box-shadow: 4px 4px 0 var(--ink);
-    padding: 16px 20px;
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-  .gl-player-name {
-    font-family: var(--font-display);
-    font-size: 22px;
-    color: var(--ink);
-  }
-  .gl-pos-badge {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    font-weight: 700;
-    padding: 2px 10px;
-    border-radius: 4px;
-    color: #fff;
-    border: 2px solid var(--ink);
-    margin-left: 8px;
-  }
-  .gl-team {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    color: var(--ink-light);
-    margin-left: 8px;
-  }
-  .gl-summary-stats {
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-  .gl-summary-stat {
+  .ct-loading {
     text-align: center;
-  }
-  .gl-summary-val {
-    font-family: var(--font-mono);
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--ink);
-  }
-  .gl-summary-label {
-    font-family: var(--font-mono);
-    font-size: 10px;
+    font-family: var(--font-hand);
+    font-size: 18px;
     color: var(--ink-light);
-    text-transform: uppercase;
+    padding: 60px 0;
   }
 
   /* Table */
-  .gl-table-wrap {
+  .ct-table-wrap {
     overflow-x: auto;
     border: 3px solid var(--ink);
     border-radius: 10px;
     box-shadow: 4px 4px 0 var(--ink);
   }
-  .gl-table {
+  .ct-table {
     width: 100%;
     border-collapse: collapse;
     font-family: var(--font-mono);
     font-size: 13px;
   }
-  .gl-table th {
+  .ct-table th {
     background: var(--ink);
     color: var(--sand);
     padding: 8px 10px;
@@ -196,43 +172,32 @@
     white-space: nowrap;
     user-select: none;
   }
-  .gl-table th:first-child { text-align: center; }
-  .gl-table th:hover { background: #3a3a3a; }
-  .gl-table td {
+  .ct-table th:first-child { text-align: left; }
+  .ct-table th:hover { background: #3a3a3a; }
+  .ct-table td {
     padding: 7px 10px;
     text-align: right;
     border-bottom: 1px solid var(--ink-faint);
   }
-  .gl-table td:first-child { text-align: center; font-weight: 700; }
-  .gl-table tr:last-child td { border-bottom: none; }
-  .gl-table tbody tr:hover { background: rgba(217,119,87,0.08); }
+  .ct-table td:first-child { text-align: left; font-weight: 700; }
+  .ct-table tr:last-child td { border-bottom: none; }
+  .ct-table tbody tr:hover { background: rgba(217,119,87,0.08); }
 
-  /* Totals row */
-  .gl-table .totals-row td {
+  /* Best value highlighting */
+  .ct-best { color: #166534; font-weight: 700; }
+
+  .ct-pos-badge {
+    font-size: 10px;
     font-weight: 700;
-    background: var(--sand);
-    border-top: 3px solid var(--ink);
-  }
-
-  /* PPR color tiers */
-  .fpts-elite { color: #166534; font-weight: 700; }
-  .fpts-great { color: #1e40af; font-weight: 700; }
-  .fpts-ok { }
-  .fpts-bad { color: #991b1b; }
-
-  /* Loading / empty */
-  .gl-loading {
-    text-align: center;
-    font-family: var(--font-hand);
-    font-size: 18px;
-    color: var(--ink-light);
-    padding: 60px 0;
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: #fff;
+    margin-left: 4px;
   }
 
   @media (max-width: 768px) {
-    .gl-header h1 { font-size: 26px; }
-    .gl-player-card { flex-direction: column; align-items: flex-start; }
-    .gl-table { font-size: 11px; }
+    .ct-header h1 { font-size: 26px; }
+    .ct-table { font-size: 11px; }
   }
 </style>
 </head>
@@ -288,26 +253,39 @@
     <li><a href="/breakdown.html">Breakdown</a></li>
     <li><a href="/weeklyleaders.html">Week Leaders</a></li>
     <li><a href="/pace.html">Pace</a></li>
-    <li><a href="/gamelog.html" class="active">Game Log</a></li>
+    <li><a href="/gamelog.html">Game Log</a></li>
+    <li><a href="/streaks.html">Streaks</a></li>
+    <li><a href="/recap.html">Recap</a></li>
+    <li><a href="/comptable.html" class="active">Compare Table</a></li>
     <li><a href="/team/KC">Teams</a></li>
     <li><a href="/league-intel.html">League Intel</a></li>
     <li><a href="/agents.html">War Room</a></li>
   </ul>
 </nav>
 
-<main class="gl-page" id="glRoot">
-  <div class="gl-header">
-    <h1>Game Log</h1>
-    <div class="gl-subtitle">the full season tape, week by week</div>
+<main class="ct-page" id="ctRoot">
+  <div class="ct-header">
+    <h1>Comparison Table</h1>
+    <div class="ct-subtitle">stack em up, see who wins</div>
   </div>
 
-  <div class="gl-search-wrap">
-    <input type="text" class="gl-search" id="glSearch" placeholder="search for a player..." autocomplete="off" aria-label="Player search">
-    <div class="gl-ac-list" id="glAcList"></div>
+  <div class="ct-search-area">
+    <div class="ct-search-wrap">
+      <input type="text" class="ct-search" id="ctSearch" placeholder="add players to compare (2-8)..." autocomplete="off" aria-label="Add player">
+      <div class="ct-ac-list" id="ctAcList"></div>
+    </div>
+    <div class="ct-selected" id="ctSelected"></div>
   </div>
 
-  <div id="glContent">
-    <div class="gl-loading">search for a player to see their game log</div>
+  <div class="ct-controls" id="ctControls" style="display:none;">
+    <select id="ctSeason" aria-label="Season"></select>
+    <button class="ct-btn primary" id="ctCompare">Compare</button>
+    <button class="ct-btn" id="ctClear">Clear All</button>
+    <button class="ct-btn" id="ctExport">Export PNG</button>
+  </div>
+
+  <div id="ctContent">
+    <div class="ct-loading">add 2+ players above, then hit compare</div>
   </div>
 </main>
 
@@ -428,29 +406,53 @@
   }
 
   var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+  var INVERSE_STATS = { ints: true };
 
-  var currentPlayerId = '';
+  var selectedPlayers = []; // [{id, name, position, team}]
   var currentData = null;
-  var sortCol = 'week';
-  var sortDir = 1;
+  var sortCol = 'ppg';
+  var sortDir = -1;
   var acIdx = -1;
 
   /* ---- URL state ---- */
   function readURL() {
     var p = new URLSearchParams(window.location.search);
-    return { player: p.get('player') || '', season: p.get('season') || '' };
+    return { players: p.get('players') || '', season: p.get('season') || '' };
   }
-  function writeURL(pid, season) {
+  function writeURL() {
     var p = new URLSearchParams();
-    if (pid) p.set('player', pid);
-    if (season) p.set('season', season);
+    if (selectedPlayers.length) p.set('players', selectedPlayers.map(function(s) { return s.id; }).join(','));
+    var sel = document.getElementById('ctSeason');
+    if (sel.value) p.set('season', sel.value);
     var qs = p.toString();
     history.replaceState(null, '', qs ? '?' + qs : location.pathname);
   }
 
+  /* ---- Selected players chips ---- */
+  function renderChips() {
+    var html = '';
+    for (var i = 0; i < selectedPlayers.length; i++) {
+      var p = selectedPlayers[i];
+      var pc = POS_COLORS[p.position] || '#888';
+      html += '<div class="ct-chip"><span class="ct-pos-badge" style="background:' + pc + '">' +
+        escapeHtml(p.position) + '</span> ' + escapeHtml(p.name) +
+        ' <span class="ct-chip-x" data-idx="' + i + '">x</span></div>';
+    }
+    document.getElementById('ctSelected').innerHTML = html;
+    document.getElementById('ctControls').style.display = selectedPlayers.length >= 2 ? 'flex' : 'none';
+
+    document.querySelectorAll('.ct-chip-x').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        selectedPlayers.splice(parseInt(btn.getAttribute('data-idx')), 1);
+        renderChips();
+        writeURL();
+      });
+    });
+  }
+
   /* ---- Autocomplete ---- */
-  var searchInput = document.getElementById('glSearch');
-  var acList = document.getElementById('glAcList');
+  var searchInput = document.getElementById('ctSearch');
+  var acList = document.getElementById('ctAcList');
   var acTimer = null;
 
   searchInput.addEventListener('input', function() {
@@ -465,25 +467,27 @@
           if (!players.length) { acList.style.display = 'none'; return; }
           acIdx = -1;
           acList.innerHTML = players.map(function(p, i) {
-            var posColor = POS_COLORS[p.position] || '#888';
-            return '<div class="gl-ac-item" data-id="' + escapeHtml(p.player_id) + '" data-idx="' + i + '">' +
-              '<span>' + escapeHtml(p.name) + ' <span class="gl-ac-pos" style="color:' + posColor + '">' + escapeHtml(p.position) + '</span></span>' +
+            var pc = POS_COLORS[p.position] || '#888';
+            var already = selectedPlayers.some(function(s) { return s.id === p.player_id; });
+            return '<div class="ct-ac-item' + (already ? ' style="opacity:0.4"' : '') +
+              '" data-id="' + escapeHtml(p.player_id) + '" data-name="' + escapeHtml(p.name) +
+              '" data-pos="' + escapeHtml(p.position) + '" data-team="' + escapeHtml(p.team) +
+              '" data-idx="' + i + '">' +
+              '<span>' + escapeHtml(p.name) + ' <span style="color:' + pc + ';font-weight:700;font-size:11px">' +
+              escapeHtml(p.position) + '</span></span>' +
               '<span style="color:var(--ink-light)">' + escapeHtml(p.team) + '</span></div>';
           }).join('');
           acList.style.display = 'block';
 
-          acList.querySelectorAll('.gl-ac-item').forEach(function(item) {
-            item.addEventListener('click', function() {
-              selectPlayer(item.getAttribute('data-id'));
-              acList.style.display = 'none';
-            });
+          acList.querySelectorAll('.ct-ac-item').forEach(function(item) {
+            item.addEventListener('click', function() { addPlayer(item); });
           });
         });
     }, 200);
   });
 
   searchInput.addEventListener('keydown', function(e) {
-    var items = acList.querySelectorAll('.gl-ac-item');
+    var items = acList.querySelectorAll('.ct-ac-item');
     if (!items.length || acList.style.display === 'none') return;
     if (e.key === 'ArrowDown') {
       e.preventDefault();
@@ -495,201 +499,221 @@
       items.forEach(function(it, i) { it.classList.toggle('highlighted', i === acIdx); });
     } else if (e.key === 'Enter' && acIdx >= 0) {
       e.preventDefault();
-      selectPlayer(items[acIdx].getAttribute('data-id'));
+      addPlayer(items[acIdx]);
       acList.style.display = 'none';
     }
   });
 
   document.addEventListener('click', function(e) {
-    if (!e.target.closest('.gl-search-wrap')) acList.style.display = 'none';
+    if (!e.target.closest('.ct-search-wrap')) acList.style.display = 'none';
   });
 
-  function selectPlayer(pid) {
-    currentPlayerId = pid;
+  function addPlayer(el) {
+    var id = el.getAttribute('data-id');
+    if (selectedPlayers.length >= 8) return;
+    if (selectedPlayers.some(function(s) { return s.id === id; })) return;
+    selectedPlayers.push({
+      id: id,
+      name: el.getAttribute('data-name'),
+      position: el.getAttribute('data-pos'),
+      team: el.getAttribute('data-team'),
+    });
     searchInput.value = '';
-    loadGameLog(pid);
+    acList.style.display = 'none';
+    renderChips();
+    writeURL();
   }
 
-  /* ---- Load ---- */
-  function loadGameLog(pid, season) {
-    var url = '/api/game-log?player_id=' + encodeURIComponent(pid);
+  /* ---- Compare ---- */
+  function doCompare() {
+    if (selectedPlayers.length < 2) return;
+    var ids = selectedPlayers.map(function(s) { return s.id; }).join(',');
+    var sel = document.getElementById('ctSeason');
+    var season = sel.value || '';
+    writeURL();
+
+    var url = '/api/compare-table?players=' + encodeURIComponent(ids);
     if (season) url += '&season=' + encodeURIComponent(season);
 
-    writeURL(pid, season || '');
-    document.getElementById('glContent').innerHTML = '<div class="gl-loading">pulling film...</div>';
+    document.getElementById('ctContent').innerHTML = '<div class="ct-loading">pulling film...</div>';
 
     fetch(url).then(function(r) {
       if (!r.ok) throw new Error('API error');
       return r.json();
     }).then(function(data) {
       if (data.error) {
-        document.getElementById('glContent').innerHTML = '<div class="gl-loading">' + escapeHtml(data.error) + '</div>';
+        document.getElementById('ctContent').innerHTML = '<div class="ct-loading">' + escapeHtml(data.error) + '</div>';
         return;
       }
       currentData = data;
-      sortCol = 'week';
-      sortDir = 1;
+      populateSeasons(data.available_seasons, data.season);
       render(data);
     }).catch(function() {
-      document.getElementById('glContent').innerHTML = '<div class="gl-loading">something went wrong — try again</div>';
+      document.getElementById('ctContent').innerHTML = '<div class="ct-loading">something went wrong — try again</div>';
     });
   }
 
-  /* ---- Render ---- */
-  function render(data) {
-    var posColor = POS_COLORS[data.position] || '#888';
-    var weeks = (data.weeks || []).slice();
+  function populateSeasons(seasons, current) {
+    var sel = document.getElementById('ctSeason');
+    if (sel.options.length <= 1) {
+      sel.innerHTML = '';
+      (seasons || []).forEach(function(s) {
+        var opt = document.createElement('option');
+        opt.value = s;
+        opt.textContent = s;
+        if (s === current) opt.selected = true;
+        sel.appendChild(opt);
+      });
+    }
+  }
 
-    // Sort
-    weeks.sort(function(a, b) {
+  /* ---- Render table ---- */
+  function render(data) {
+    var players = (data.players || []).slice();
+
+    players.sort(function(a, b) {
       var av = a[sortCol] || 0, bv = b[sortCol] || 0;
       return (av - bv) * sortDir;
     });
 
-    var html = '';
-
-    // Controls
-    html += '<div class="gl-controls">';
-    html += '<select id="glSeason" aria-label="Season">';
-    (data.available_seasons || []).forEach(function(s) {
-      html += '<option value="' + s + '"' + (s === data.season ? ' selected' : '') + '>' + s + '</option>';
-    });
-    html += '</select>';
-    html += '<button class="gl-export" id="glExport">Export PNG</button>';
-    html += '</div>';
-
-    // Player card
-    html += '<div class="gl-player-card">';
-    html += '<div>';
-    html += '<span class="gl-player-name">' + escapeHtml(data.name) + '</span>';
-    html += '<span class="gl-pos-badge" style="background:' + posColor + '">' + escapeHtml(data.position) + '</span>';
-    html += '<span class="gl-team">' + escapeHtml(data.team) + '</span>';
-    html += '</div>';
-    html += '<div class="gl-summary-stats">';
-    html += '<div class="gl-summary-stat"><div class="gl-summary-val">' + escapeHtml(String(data.games)) + '</div><div class="gl-summary-label">Games</div></div>';
-    html += '<div class="gl-summary-stat"><div class="gl-summary-val">' + escapeHtml(String(data.totals.fpts)) + '</div><div class="gl-summary-label">Total Pts</div></div>';
-    html += '<div class="gl-summary-stat"><div class="gl-summary-val">' + escapeHtml(String(data.ppg)) + '</div><div class="gl-summary-label">PPG</div></div>';
-    html += '</div>';
-    html += '</div>';
-
-    // Table columns based on position
+    // Determine columns (show all relevant stats)
     var cols = [
-      { key: 'week', label: 'Wk', align: 'center' },
-      { key: 'fpts', label: 'PPR' },
+      { key: 'name', label: 'Player', type: 'text' },
+      { key: 'games', label: 'G' },
+      { key: 'total_fpts', label: 'Total' },
+      { key: 'ppg', label: 'PPG' },
+      { key: 'pass_yd', label: 'Pass Yd' },
+      { key: 'pass_td', label: 'Pass TD' },
+      { key: 'ints', label: 'INT' },
+      { key: 'rush_yd', label: 'Rush Yd' },
+      { key: 'rush_td', label: 'Rush TD' },
+      { key: 'car', label: 'Car' },
+      { key: 'rec', label: 'Rec' },
+      { key: 'rec_yd', label: 'Rec Yd' },
+      { key: 'rec_td', label: 'Rec TD' },
+      { key: 'tgt', label: 'Tgt' },
+      { key: 'yd_per_car', label: 'Y/Car' },
+      { key: 'yd_per_rec', label: 'Y/Rec' },
+      { key: 'catch_rate', label: 'Catch%' },
     ];
 
-    if (data.position === 'QB') {
-      cols.push({ key: 'cmp', label: 'Cmp' });
-      cols.push({ key: 'pass_att', label: 'Att' });
-      cols.push({ key: 'pass_yd', label: 'Pass Yd' });
-      cols.push({ key: 'pass_td', label: 'Pass TD' });
-      cols.push({ key: 'ints', label: 'INT' });
-      cols.push({ key: 'car', label: 'Car' });
-      cols.push({ key: 'rush_yd', label: 'Rush Yd' });
-      cols.push({ key: 'rush_td', label: 'Rush TD' });
-    } else if (data.position === 'RB') {
-      cols.push({ key: 'car', label: 'Car' });
-      cols.push({ key: 'rush_yd', label: 'Rush Yd' });
-      cols.push({ key: 'rush_td', label: 'Rush TD' });
-      cols.push({ key: 'tgt', label: 'Tgt' });
-      cols.push({ key: 'rec', label: 'Rec' });
-      cols.push({ key: 'rec_yd', label: 'Rec Yd' });
-      cols.push({ key: 'rec_td', label: 'Rec TD' });
-    } else {
-      cols.push({ key: 'tgt', label: 'Tgt' });
-      cols.push({ key: 'rec', label: 'Rec' });
-      cols.push({ key: 'rec_yd', label: 'Rec Yd' });
-      cols.push({ key: 'rec_td', label: 'Rec TD' });
-      cols.push({ key: 'car', label: 'Car' });
-      cols.push({ key: 'rush_yd', label: 'Rush Yd' });
-      cols.push({ key: 'rush_td', label: 'Rush TD' });
-    }
+    // Find best value per column for highlighting
+    var best = {};
+    cols.forEach(function(c) {
+      if (c.type === 'text') return;
+      var vals = players.map(function(p) { return p[c.key] || 0; });
+      best[c.key] = INVERSE_STATS[c.key] ? Math.min.apply(null, vals) : Math.max.apply(null, vals);
+    });
 
-    html += '<div class="gl-table-wrap"><table class="gl-table">';
-    html += '<thead><tr>';
-    for (var c = 0; c < cols.length; c++) {
-      var arrow = sortCol === cols[c].key ? (sortDir === 1 ? ' ▲' : ' ▼') : '';
-      html += '<th data-col="' + cols[c].key + '">' + escapeHtml(cols[c].label) + arrow + '</th>';
+    var html = '<div class="ct-table-wrap"><table class="ct-table"><thead><tr>';
+    for (var ci = 0; ci < cols.length; ci++) {
+      var arrow = sortCol === cols[ci].key ? (sortDir === 1 ? ' ▲' : ' ▼') : '';
+      html += '<th data-col="' + cols[ci].key + '">' + escapeHtml(cols[ci].label) + arrow + '</th>';
     }
-    html += '</tr></thead>';
+    html += '</tr></thead><tbody>';
 
-    html += '<tbody>';
-    for (var i = 0; i < weeks.length; i++) {
-      var w = weeks[i];
-      var fptsClass = w.fpts >= 30 ? 'fpts-elite' : w.fpts >= 20 ? 'fpts-great' : w.fpts >= 10 ? 'fpts-ok' : 'fpts-bad';
+    for (var i = 0; i < players.length; i++) {
+      var p = players[i];
+      var pc = POS_COLORS[p.position] || '#888';
       html += '<tr>';
-      for (var ci = 0; ci < cols.length; ci++) {
-        var val = w[cols[ci].key];
-        var cls = cols[ci].key === 'fpts' ? fptsClass : '';
-        html += '<td class="' + cls + '">' + escapeHtml(String(val !== null && val !== undefined ? val : 0)) + '</td>';
+      for (var j = 0; j < cols.length; j++) {
+        var c = cols[j];
+        if (c.type === 'text') {
+          html += '<td>' + escapeHtml(p.name) + ' <span class="ct-pos-badge" style="background:' + pc + '">' +
+            escapeHtml(p.position) + '</span> <span style="color:var(--ink-light);font-size:10px">' +
+            escapeHtml(p.team) + '</span></td>';
+        } else {
+          var val = p[c.key] || 0;
+          var isBest = players.length > 1 && val === best[c.key] && val > 0;
+          html += '<td class="' + (isBest ? 'ct-best' : '') + '">' + escapeHtml(String(val)) + '</td>';
+        }
       }
       html += '</tr>';
     }
 
-    // Totals row
-    html += '<tr class="totals-row">';
-    for (var ti = 0; ti < cols.length; ti++) {
-      if (cols[ti].key === 'week') {
-        html += '<td>TOT</td>';
-      } else {
-        var tval = data.totals[cols[ti].key] || 0;
-        html += '<td>' + escapeHtml(String(tval)) + '</td>';
-      }
-    }
-    html += '</tr>';
-
     html += '</tbody></table></div>';
+    document.getElementById('ctContent').innerHTML = html;
 
-    document.getElementById('glContent').innerHTML = html;
-
-    // Season selector event
-    document.getElementById('glSeason').addEventListener('change', function() {
-      loadGameLog(currentPlayerId, this.value);
-    });
-
-    // Sort event
-    document.querySelectorAll('.gl-table th').forEach(function(th) {
+    // Sort events
+    document.querySelectorAll('.ct-table th').forEach(function(th) {
       th.addEventListener('click', function() {
         var col = th.getAttribute('data-col');
+        if (col === 'name') return;
         if (sortCol === col) {
           sortDir *= -1;
         } else {
           sortCol = col;
-          sortDir = col === 'week' ? 1 : -1;
+          sortDir = -1;
         }
         render(currentData);
       });
     });
-
-    // Export
-    document.getElementById('glExport').addEventListener('click', function() {
-      var root = document.getElementById('glRoot');
-      if (typeof html2canvas === 'undefined') return;
-      html2canvas(root, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
-        var ctx = canvas.getContext('2d');
-        ctx.font = 'bold 16px Space Mono, monospace';
-        ctx.fillStyle = 'rgba(0,0,0,0.12)';
-        ctx.fillText('razzle.lol', canvas.width - 130, canvas.height - 16);
-        var link = document.createElement('a');
-        link.download = 'razzle-gamelog.png';
-        link.href = canvas.toDataURL();
-        link.click();
-      });
-    });
   }
+
+  /* ---- Events ---- */
+  document.getElementById('ctCompare').addEventListener('click', doCompare);
+  document.getElementById('ctSeason').addEventListener('change', function() {
+    if (currentData) doCompare();
+  });
+  document.getElementById('ctClear').addEventListener('click', function() {
+    selectedPlayers = [];
+    currentData = null;
+    renderChips();
+    document.getElementById('ctContent').innerHTML = '<div class="ct-loading">add 2+ players above, then hit compare</div>';
+    writeURL();
+  });
+
+  document.getElementById('ctExport').addEventListener('click', function() {
+    var root = document.getElementById('ctRoot');
+    if (typeof html2canvas === 'undefined') return;
+    html2canvas(root, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+      var ctx = canvas.getContext('2d');
+      ctx.font = 'bold 16px Space Mono, monospace';
+      ctx.fillStyle = 'rgba(0,0,0,0.12)';
+      ctx.fillText('razzle.lol', canvas.width - 130, canvas.height - 16);
+      var link = document.createElement('a');
+      link.download = 'razzle-compare.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    });
+  });
 
   /* ---- Analytics ---- */
   fetch('/api/analytics/pageview', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ page: '/gamelog.html', referrer: document.referrer || '' })
+    body: JSON.stringify({ page: '/comptable.html', referrer: document.referrer || '' })
   }).catch(function() {});
 
   /* ---- Init from URL ---- */
   var init = readURL();
-  if (init.player) {
-    currentPlayerId = init.player;
-    loadGameLog(init.player, init.season || undefined);
+  if (init.season) {
+    var sel = document.getElementById('ctSeason');
+    var opt = document.createElement('option');
+    opt.value = init.season;
+    opt.textContent = init.season;
+    opt.selected = true;
+    sel.appendChild(opt);
+  }
+  if (init.players) {
+    var pids = init.players.split(',');
+    // Fetch names for these IDs
+    var loaded = 0;
+    pids.forEach(function(pid) {
+      fetch('/api/players/quick-search?q=' + encodeURIComponent(pid) + '&limit=1')
+        .then(function(r) { return r.ok ? r.json() : { players: [] }; })
+        .then(function(data) {
+          var p = (data.players || [])[0];
+          if (p) {
+            selectedPlayers.push({ id: p.player_id, name: p.name, position: p.position, team: p.team });
+          }
+          loaded++;
+          if (loaded === pids.length) {
+            renderChips();
+            if (selectedPlayers.length >= 2) doCompare();
+          }
+        });
+    });
   }
 })();
 </script>

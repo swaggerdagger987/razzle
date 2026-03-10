@@ -1,17 +1,25 @@
-# Razzle Loop — Phase 120 Task List
+# Razzle Loop — Phase 121 Task List
 
-> QA + UX Audit — Auto-Generated Fixes (Phases 116-119)
+> Multi-Player Comparison Table
 
-**Current Phase**: 120 — QA + UX Audit Fixes
-**Exit Criterion**: All HIGH and MEDIUM findings from QA-AUDIT.md (Phases 116-119) resolved.
+**Current Phase**: 121 — Multi-Player Comparison Table
+**Exit Criterion**: /comptable.html — multi-player sortable stat grid with best-value highlighting.
 
 ---
 
-## Task 1: MEDIUM fix — Quick-search fantasy_relevant filter (QA-1)
+## Task 1: Backend /api/compare-table endpoint
 **Status**: PASS
 **Attempts**: 1
 
-## Task 2: Smoke test + commit + push
+## Task 2: Frontend /comptable.html page
+**Status**: PASS
+**Attempts**: 1
+
+## Task 3: Nav links + sitemap + tools hub
+**Status**: PASS
+**Attempts**: 1
+
+## Task 4: Smoke test + commit + push
 **Status**: PASS
 **Attempts**: 1
 
@@ -19,9 +27,9 @@
 
 ## Loop State
 ```
-Current Phase: 120
-Current Task: 2
+Current Phase: 121
+Current Task: 4
 Current Stage: COMPLETE
 Attempt: 1
-Tasks Completed: 2/2
+Tasks Completed: 4/4
 ```

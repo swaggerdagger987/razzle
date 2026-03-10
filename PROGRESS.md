@@ -1,6 +1,19 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 120 — QA+UX Audit Fixes for Phases 116-119 (COMPLETE)
+## Current Phase: Phase 121 — Multi-Player Comparison Table (COMPLETE)
+
+**Exit criterion MET:** /comptable.html lets users add 2-8 players via search autocomplete and compare them in a sortable stat table. All box score stats shown (pass yd, rush yd, rec yd, TDs, targets, carries, catch rate, yards per carry/reception). Best-value highlighting (green bold) for the highest stat in each column. Player chip management (add/remove), season selector, URL state (?players=ID1,ID2,ID3&season=), PNG export with watermark. GET /api/compare-table returns full season stats for multiple players. 16 escapeHtml calls, 128/128 braces balanced. "Compare Table" nav link on all 54 pages. Sitemap + tools hub entry under Performance Analysis.
+
+### Phase 121 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/compare-table endpoint | DONE | fetch_compare_table, multi-player stats |
+| 2 | Comparison Table page | DONE | Player chips, sortable grid, best-value highlighting, 16 escapeHtml |
+| 3 | Nav links + sitemap + tools hub | DONE | All 54 pages updated |
+| 4 | Smoke test | DONE | Python OK, JS OK, 54/54 nav links |
+
+## Previous Phase: Phase 120 — QA+UX Audit Fixes for Phases 116-119 (COMPLETE)
 
 **Exit criterion MET:** All HIGH and MEDIUM findings resolved. QA-1 (MEDIUM): Added fantasy_relevant = 1 filter to quick_search_players in live_data.py. 3 LOW findings (QA-2, QA-3, QA-4) triaged as no-action-needed. All 4 new pages pass security, design, and functionality checks.
 
