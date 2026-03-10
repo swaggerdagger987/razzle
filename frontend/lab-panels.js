@@ -968,7 +968,7 @@
       if (season) url += '&season=' + season;
       if (curPos) url += '&position=' + curPos;
 
-      fetch(url).then(function(r) { return r.json(); }).then(function(data) {
+      fetch(url).then(function(r) { if (!r.ok) throw new Error('API error'); return r.json(); }).then(function(data) {
         if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#bo-season');
           data.available_seasons.forEach(function(s) {
@@ -1140,7 +1140,7 @@
       if (season) url += '&season=' + season;
       if (curPos) url += '&position=' + curPos;
 
-      fetch(url).then(function(r) { return r.json(); }).then(function(data) {
+      fetch(url).then(function(r) { if (!r.ok) throw new Error('API error'); return r.json(); }).then(function(data) {
         if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#bs-season');
           data.available_seasons.forEach(function(s) {
@@ -1213,11 +1213,12 @@
     var GRADE_ORDER = {'A+':8,'A':7,'B+':6,'B':5,'C+':4,'C':3,'D':2,'F':1};
 
     function gradeClass(grade) {
-      if (grade === 'A+') return 'grade-aplus';
-      if (grade === 'A') return 'grade-a';
-      if (grade === 'B') return 'grade-b';
-      if (grade === 'C') return 'grade-c';
-      if (grade === 'D') return 'grade-d';
+      if (!grade) return 'grade-f';
+      var g = grade.charAt(0);
+      if (g === 'A') return grade === 'A+' ? 'grade-aplus' : 'grade-a';
+      if (g === 'B') return 'grade-b';
+      if (g === 'C') return 'grade-c';
+      if (g === 'D') return 'grade-d';
       return 'grade-f';
     }
 
@@ -1347,7 +1348,7 @@
       if (season) url += '&season=' + season;
       if (curPos) url += '&position=' + curPos;
 
-      fetch(url).then(function(r) { return r.json(); }).then(function(data) {
+      fetch(url).then(function(r) { if (!r.ok) throw new Error('API error'); return r.json(); }).then(function(data) {
         if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#stk-season');
           data.available_seasons.forEach(function(s) {
@@ -1411,7 +1412,7 @@
       if (season) url += '&season=' + encodeURIComponent(season);
       if (curPos) url += '&position=' + encodeURIComponent(curPos);
 
-      fetch(url).then(function(r) { return r.json(); }).then(function(data) {
+      fetch(url).then(function(r) { if (!r.ok) throw new Error('API error'); return r.json(); }).then(function(data) {
         if (!seasonsPopulated) {
           var sel = el.querySelector('#ww-season');
           sel.innerHTML = '';
@@ -1493,7 +1494,7 @@
       var season = el.querySelector('#sc-season').value;
       var url = season ? '/api/positional-scarcity?season=' + season : '/api/positional-scarcity';
 
-      fetch(url).then(function(r) { return r.json(); }).then(function(data) {
+      fetch(url).then(function(r) { if (!r.ok) throw new Error('API error'); return r.json(); }).then(function(data) {
         if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#sc-season');
           data.available_seasons.forEach(function(s) {
@@ -1598,7 +1599,7 @@
       var url = '/api/handcuffs';
       if (season) url += '?season=' + encodeURIComponent(season);
 
-      fetch(url).then(function(r) { return r.json(); }).then(function(data) {
+      fetch(url).then(function(r) { if (!r.ok) throw new Error('API error'); return r.json(); }).then(function(data) {
         if (!seasonsPopulated) {
           var sel = el.querySelector('#hc-season');
           sel.innerHTML = '';
@@ -1679,11 +1680,12 @@
     };
 
     function gradeClass(grade) {
-      if (grade === 'A+') return 'grade-aplus';
-      if (grade === 'A') return 'grade-a';
-      if (grade === 'B') return 'grade-b';
-      if (grade === 'C') return 'grade-c';
-      if (grade === 'D') return 'grade-d';
+      if (!grade) return 'grade-f';
+      var g = grade.charAt(0);
+      if (g === 'A') return grade === 'A+' ? 'grade-aplus' : 'grade-a';
+      if (g === 'B') return 'grade-b';
+      if (g === 'C') return 'grade-c';
+      if (g === 'D') return 'grade-d';
       return 'grade-f';
     }
 
@@ -1876,11 +1878,12 @@
     };
 
     function gradeClass(grade) {
-      if (grade === 'A+') return 'grade-aplus';
-      if (grade === 'A') return 'grade-a';
-      if (grade === 'B') return 'grade-b';
-      if (grade === 'C') return 'grade-c';
-      if (grade === 'D') return 'grade-d';
+      if (!grade) return 'grade-f';
+      var g = grade.charAt(0);
+      if (g === 'A') return grade === 'A+' ? 'grade-aplus' : 'grade-a';
+      if (g === 'B') return 'grade-b';
+      if (g === 'C') return 'grade-c';
+      if (g === 'D') return 'grade-d';
       return 'grade-f';
     }
 
