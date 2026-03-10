@@ -1,6 +1,20 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 60 — Boom/Bust Analyzer (COMPLETE)
+## Current Phase: Phase 61 — QA + UX Audit Fixes (COMPLETE)
+
+**Exit criterion MET:** All CRITICAL and HIGH findings from QA+UX audit of phases 56-60 resolved. XSS patches: 6 unescaped player names + 1 error message in renderPlayerComps/loadPlayerComps wrapped with escapeHtml(). Boom/Bust: histogram legend added (green=boom, red=bust, position=normal), grade sticker labeled "Consistency", consistency score (0-100) added to stat cards. Roster Value: grade badge labeled "Roster Grade" with tooltip, status badge labeled "Window" with tooltip. Backend: negative limit guard on /comps, removed redundant import. Design: stat card borders fixed to 3px/4px per guide. Comp annotation updated to explain cosine similarity.
+
+### Phase 61 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | XSS patches in comps | DONE | 7 escapeHtml() wraps added |
+| 2 | Histogram legend + grade label | DONE | Color legend, "Consistency" label |
+| 3 | Roster Value explainers | DONE | Tooltips + labels on grade/status |
+| 4 | Backend hardening | DONE | Limit validation, dead import removed |
+| 5 | Medium fixes | DONE | 3px borders, consistency score, comp annotation |
+
+## Previous Phase: Phase 60 — Boom/Bust Analyzer (COMPLETE)
 
 **Exit criterion MET:** Users can analyze any player's weekly fantasy score distribution via "Boom/Bust" button in player profile. GET /api/players/{id}/boom-bust returns weekly scores, boom rate (% weeks above 1.5× position average), bust rate (% weeks below 0.5× position average), consistency score (inverse coefficient of variation, 0-100), median, floor (10th percentile), ceiling (90th percentile), position-specific thresholds, grade (A+ through F), and position consistency rank. Frontend renders grade badge (rotated sticker, color-coded), 6 stat cards (median, floor, ceiling, boom%, bust%, rank), canvas histogram with boom/bust threshold lines (green/red dashed), and floor-ceiling range bar. "Export Boom/Bust PNG" generates 800×700 canvas image with all visuals and watermark.
 
