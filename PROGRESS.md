@@ -1,6 +1,24 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 7 — Lab Polish (COMPLETE)
+## Current Phase: Phase 9 — Lab Sidebar Intelligence (COMPLETE)
+
+**Exit Criterion**: The Lab sidebar supports instant text search filtering, remembers the user's last panel across sessions, shows recently viewed panels for quick access, and allows category sections to collapse individually. A power user with 62 panels can find any tool in under 3 seconds.
+
+### Phase 9 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Sidebar search input | DONE | Search input at top of sidebar with magnifying glass icon. Filters items + categories in real-time. Escape clears. Collapsed mode click expands sidebar. |
+| 2 | Last-visited panel persistence | DONE | `razzle_last_panel` in localStorage. Restores on page load (URL param takes priority). |
+| 3 | Recently viewed panels strip | DONE | "Recent" section with pill chips below search. Last 5 unique panels (excluding current). Stored in localStorage. Hidden in collapsed mode. |
+| 4 | Individual category collapse/expand | DONE | Chevron on category headers. Per-category localStorage persistence. Search overrides collapse state. |
+| 5 | Tool count and sidebar polish | DONE | Dynamic "62 tools" badge inline with search. All features work together. No layout shifts. |
+
+## Previous Phase: Phase 8 — QA + UX Audit for Phase 7 (COMPLETE)
+
+**Exit Criterion MET**: All Phase 7 features verified working. Sidebar tooltip visibility fix, mobile table layout fix.
+
+## Previous Phase: Phase 7 — Lab Polish (COMPLETE)
 
 **Exit Criterion**: The Lab feels fast, fluid, and professional. Panel transitions are smooth. Keyboard users can navigate the full sidebar and table. Tables with 500+ rows don't lag. The experience is screenshot-worthy.
 
