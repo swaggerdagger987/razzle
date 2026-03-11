@@ -532,16 +532,6 @@
     margin-bottom: 16px;
   }
 
-  .waitlist-form {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-  }
-
-  .waitlist-form input {
-    width: 260px;
-  }
-
   /* ===== AGENT BIO CARDS ===== */
   .agent-bio-grid {
     display: grid;
@@ -641,8 +631,6 @@
     .agent-bio-grid { grid-template-columns: repeat(2, 1fr); }
 
     .waitlist { padding: 28px 16px; }
-    .waitlist-form { flex-direction: column; align-items: center; }
-    .waitlist-form input { width: 100%; max-width: 300px; }
   }
 
   @media (max-width: 480px) {
@@ -683,7 +671,7 @@
   <div class="hero-sub">The terminal is free. The agents know your league. razzle.lol</div>
   <div class="hero-cta">
     <a href="/lab.html" class="btn-hero btn-hero-primary">Open The Lab</a>
-    <a href="#waitlist" class="btn-hero btn-hero-secondary">Join Waitlist</a>
+    <a href="/agents.html" class="btn-hero btn-hero-secondary">Situation Room</a>
   </div>
 </div>
 
@@ -1196,38 +1184,6 @@ function renderAgentBios() {
   }).join('');
 }
 renderAgentBios();
-
-async function submitWaitlist() {
-  const email = document.getElementById('waitlistEmail').value.trim();
-  const msgEl = document.getElementById('waitlistMsg');
-  if (!email || !email.includes('@')) {
-    msgEl.textContent = 'need a real email, chief';
-    msgEl.style.color = 'var(--red)';
-    return;
-  }
-  try {
-    const res = await fetch('/api/waitlist', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email }),
-    });
-    const data = await res.json();
-    if (data.status === 'ok') {
-      msgEl.textContent = "you're on the list. Razzle will find you.";
-      msgEl.style.color = 'var(--green)';
-      document.getElementById('waitlistEmail').value = '';
-    } else if (data.status === 'duplicate') {
-      msgEl.textContent = "already on the list. patience, grasshopper.";
-      msgEl.style.color = 'var(--orange)';
-    } else {
-      msgEl.textContent = data.message || 'fumbled that one. try again.';
-      msgEl.style.color = 'var(--red)';
-    }
-  } catch (err) {
-    msgEl.textContent = 'network error. try again.';
-    msgEl.style.color = 'var(--red)';
-  }
-}
 
 // ── Featured / Live from The Lab ─────────────────────────────────
 const POS_COLORS = { QB: 'var(--pos-qb)', RB: 'var(--pos-rb)', WR: 'var(--pos-wr)', TE: 'var(--pos-te)' };
