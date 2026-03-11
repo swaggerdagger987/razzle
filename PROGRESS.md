@@ -1,5 +1,18 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 42 — UX Consistency & Features (COMPLETE)
+
+**Exit Criterion MET**: VORP has player search. Dynasty Rankings/Trade Values/VORP/Tiers share consistent layout (pos tabs → season → search). Trade Values has adjustable formula weights. Dynasty Rankings shows historical value progression.
+
+### Phase 42 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | VORP search bar | DONE | Added searchQuery, filterBySearch(), lp-search input matching Trade Values pattern |
+| 2 | Standardize panel layouts | DONE | Search added to Rankings + Tiers. Season selector added to Rankings. Controls order standardized. Dynasty rankings backend gets season param + available_seasons |
+| 3 | Trade Values adjustable weights | DONE | 3 range sliders (Production/Age/Scarcity). Client-side recalculation from component scores. Auto-normalize weights. Reset button. Tier reassignment |
+| 4 | Historical dynasty valuations | DONE | /api/dynasty-history endpoint. Rankings/History toggle. Per-season trade values with color-coded cells + inline SVG sparklines |
+
 ## Previous Phase: Phase 41 — QA + UX Audit Fixes for Phases 36-40 (COMPLETE)
 
 **Exit Criterion MET**: All CRITICAL and HIGH findings fixed. Pace tracker SQL column names corrected (projections now return real data). XSS in prospect radar fixed (escapeHtml→escapeAttr). 8+ panel backends now return available_seasons. Redundant imports removed. 1px borders fixed to 2px. 34 smoke tests pass.
