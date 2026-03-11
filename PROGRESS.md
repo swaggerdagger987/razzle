@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 127 — Filter Column Indicators + Quick-Filter (COMPLETE)
+
+**Exit Criterion MET**: Column headers with active filters show orange dot indicator with hover tooltip showing filter criteria. Right-click column context menu includes Top 10, Top 25, Above Avg, Below Avg quick-filter options. Duplicate filter check. Toast with correct op symbol. Shortcut modal updated. 34 tests pass.
+
+### Phase 127 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Filter indicators + quick-filter | DONE | _getColumnFilterInfo(), .col-filter-dot CSS, _applyQuickFilter() with 4 modes, column context menu extended, duplicate check, toast |
+
 ## Previous Phase: Phase 126 — Pin Comparison Diff Mode (COMPLETE)
 
 **Exit Criterion MET**: When 2+ players pinned, I key or Diff toolbar button toggles diff mode. All numeric cells show green/red deltas vs first pinned player. INVERSE_STATS respected (lower = better shown as green). Banner shows baseline player name with OFF button. Auto-disables when pins cleared or reduced below 2. URL state (?diff=1) for shareable diff views. Shortcut modal updated. 34 tests pass.

@@ -1343,6 +1343,11 @@ function renderTableHead() {
     if (key === "dynasty_value") {
       extra = ` <span class="dvs-info" onclick="event.stopPropagation(); toggleDVSInfo()" title="Click for DVS methodology" style="cursor:help; font-size:10px; opacity:0.6;">&#9432;</span>`;
     }
+    // Filter indicator dot
+    var filterInfo = _getColumnFilterInfo(key);
+    if (filterInfo) {
+      extra += ` <span class="col-filter-dot" title="Filtered: ${escapeAttr(filterInfo)}">&#9679;</span>`;
+    }
     var cw = state.columnWidths[key];
     var cwStyle = cw ? `width:${cw}px; min-width:${cw}px; max-width:${cw}px;` : "";
     var dragAttr = ' draggable="true" ondragstart="_colDragStart(event)" ondragover="_colDragOver(event)" ondrop="_colDrop(event)" ondragend="_colDragEnd(event)"';
@@ -2211,11 +2216,18 @@ function _ctxMenuAction(action) {
         var menu = document.createElement("div");
         menu.id = "screenerContextMenu";
         menu.className = "screener-context-menu";
-        var statsOption = (col && !col.isText && !col.isSparkline && !col.isNotes) ?
+        var isNumeric = (col && !col.isText && !col.isSparkline && !col.isNotes);
+        var statsOption = isNumeric ?
           '<div class="ctx-sep"></div><div class="ctx-item" data-action="col-stats" data-col="' + escapeAttr(colKey) + '"><span class="ctx-icon">&#9776;</span>Column Stats</div>' : '';
+        var quickFilterOpts = isNumeric ?
+          '<div class="ctx-sep"></div>' +
+          '<div class="ctx-item" data-action="qf-top10" data-col="' + escapeAttr(colKey) + '"><span class="ctx-icon">&#9650;</span>Top 10</div>' +
+          '<div class="ctx-item" data-action="qf-top25" data-col="' + escapeAttr(colKey) + '"><span class="ctx-icon">&#9650;</span>Top 25</div>' +
+          '<div class="ctx-item" data-action="qf-above" data-col="' + escapeAttr(colKey) + '"><span class="ctx-icon">&#9654;</span>Above Average</div>' +
+          '<div class="ctx-item" data-action="qf-below" data-col="' + escapeAttr(colKey) + '"><span class="ctx-icon">&#9664;</span>Below Average</div>' : '';
         menu.innerHTML = '<div class="ctx-item" data-action="hide-col" data-col="' + escapeAttr(colKey) + '"><span class="ctx-icon">&#128584;</span>Hide "' + escapeHtml(colLabel) + '"</div>' +
           '<div class="ctx-item" data-action="sort-asc" data-col="' + escapeAttr(colKey) + '"><span class="ctx-icon">&#8593;</span>Sort Ascending</div>' +
-          '<div class="ctx-item" data-action="sort-desc" data-col="' + escapeAttr(colKey) + '"><span class="ctx-icon">&#8595;</span>Sort Descending</div>' + statsOption;
+          '<div class="ctx-item" data-action="sort-desc" data-col="' + escapeAttr(colKey) + '"><span class="ctx-icon">&#8595;</span>Sort Descending</div>' + quickFilterOpts + statsOption;
         menu.addEventListener("click", function(ev) {
           var item = ev.target.closest(".ctx-item");
           if (!item) return;
@@ -2231,6 +2243,14 @@ function _ctxMenuAction(action) {
             state.sortKey = ck; state.sortDir = "desc"; state.sortKey2 = ""; state.sortDir2 = "desc"; state.offset = 0; fetchAndRender();
           } else if (act === "col-stats") {
             showColumnStatsPopover(ck, th);
+          } else if (act === "qf-top10") {
+            _applyQuickFilter(ck, "top10");
+          } else if (act === "qf-top25") {
+            _applyQuickFilter(ck, "top25");
+          } else if (act === "qf-above") {
+            _applyQuickFilter(ck, "above_avg");
+          } else if (act === "qf-below") {
+            _applyQuickFilter(ck, "below_avg");
           }
         });
         document.body.appendChild(menu);
@@ -2788,6 +2808,56 @@ function renderActiveFilters() {
       badge.textContent = count;
     } else if (badge) { badge.remove(); }
   }
+}
+
+// Get active filter descriptions for a column key
+function _getColumnFilterInfo(colKey) {
+  var opLabels = { gte: "\u2265", lte: "\u2264", gt: ">", lt: "<", eq: "=" };
+  var matches = state.filters.filter(function(f) { return f.key === colKey; });
+  if (!matches.length) return null;
+  return matches.map(function(f) {
+    var col = getColumnDef(f.key);
+    var label = col ? col.label : f.key;
+    return label + " " + (opLabels[f.op] || f.op) + " " + f.value;
+  }).join(", ");
+}
+
+// Apply a quick-filter on a column (Top N, Above/Below Avg)
+function _applyQuickFilter(colKey, mode) {
+  var vals = [];
+  for (var i = 0; i < state.items.length; i++) {
+    var v = parseFloat(state.items[i][colKey]);
+    if (!isNaN(v)) vals.push(v);
+  }
+  if (!vals.length) { _showToast("no data for quick filter"); return; }
+  vals.sort(function(a, b) { return b - a; });
+  var col = getColumnDef(colKey);
+  var label = col ? col.label : colKey;
+  var threshold, op, desc;
+  if (mode === "top10") {
+    threshold = vals[Math.min(9, vals.length - 1)];
+    op = "gte"; desc = "Top 10";
+  } else if (mode === "top25") {
+    threshold = vals[Math.min(24, vals.length - 1)];
+    op = "gte"; desc = "Top 25";
+  } else if (mode === "above_avg") {
+    threshold = vals.reduce(function(a, b) { return a + b; }, 0) / vals.length;
+    threshold = Math.round(threshold * 100) / 100;
+    op = "gte"; desc = "Above Avg";
+  } else if (mode === "below_avg") {
+    threshold = vals.reduce(function(a, b) { return a + b; }, 0) / vals.length;
+    threshold = Math.round(threshold * 100) / 100;
+    op = "lte"; desc = "Below Avg";
+  } else { return; }
+  // Check for duplicate filter
+  var dup = state.filters.some(function(f) { return f.key === colKey && f.op === op && f.value === threshold; });
+  if (dup) { _showToast("filter already active"); return; }
+  state.filters.push({ key: colKey, op: op, value: threshold });
+  state.offset = 0;
+  renderActiveFilters();
+  fetchAndRender();
+  var opSymbol = op === "lte" ? "\u2264" : "\u2265";
+  _showToast("quick filter: " + label + " " + desc + " (" + opSymbol + " " + threshold + ")");
 }
 
 function resetAllFilters() {
@@ -9839,6 +9909,7 @@ function toggleShortcutRef() {
           ${shortcutRow("Shift+click", "Column header → secondary sort")}
           ${shortcutRow("Dbl-click", "Column header → quick filter")}
           ${shortcutRow("Dbl-click", "Stat cell → add filter from value")}
+          ${shortcutRow("Right-click", "Column header → quick filter (Top 10/25/Avg)")}
           ${shortcutRow("← →", "Previous / next page")}
           ${shortcutRow("J / K", "Navigate rows down / up")}
           ${shortcutRow("Enter", "Open focused player profile")}
