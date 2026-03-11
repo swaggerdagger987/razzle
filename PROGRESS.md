@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 66 — QA + UX Audit Fixes for Phases 62-65 (COMPLETE)
+
+**Exit Criterion MET**: Clean audit. 1 MEDIUM finding fixed (Compare button disabled for <2 selected). No CRITICAL or HIGH issues.
+
+### Phase 66 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Compare button disabled state | DONE | bulkCompareBtn disabled + opacity 0.5 when count < 2 |
+
 ## Previous Phase: Phase 65 — Screener Bulk Action Bar (COMPLETE)
 
 **Exit Criterion MET**: Selecting 2+ players shows a sticky bottom action bar with count, names, Compare/Chart/Clear buttons. Animated slideUp. clearSelection() deselects all. Works in all modes.

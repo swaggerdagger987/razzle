@@ -1,44 +1,37 @@
-# QA + UX Audit — Phases 56-60
+# QA + UX Audit — Phases 62-65
 
-**Scope**: Phases 56-60 (Density Toggle, Column Group Headers, Stats Summary Bar, Row Highlighting, Context Menu)
+**Scope**: Phases 62-65 (Status Bar, Column Stats Tooltip, Quick Column Add, Bulk Action Bar)
 **Files reviewed**: frontend/lab.js, frontend/lab.html
 
 ---
 
 ## QA FINDINGS
 
-### HIGH-1: Context menu XSS/crash with apostrophe names
-**File**: frontend/lab.js (context menu builder, ~line 1700-1730)
-**Issue**: `escapeAttr()` converts `'` to `&#39;`, but when used in `onclick` attribute strings like `onclick="fn('O&#39;Brien')"`, the browser HTML-decodes first (giving `fn('O'Brien')`) then executes as JS — breaking the string literal. Affects players like D'Andre Swift, Ja'Marr Chase.
-**Fix**: Use a JS-safe escape function for values embedded in onclick handlers, or switch to data attributes + event delegation.
+### MEDIUM-1: Bulk action bar Compare button enabled with 1 player (FIXED)
+**File**: frontend/lab.html, frontend/lab.js (updateSelectionUI)
+**Issue**: Compare button was clickable with only 1 player selected. Compare needs 2+.
+**Fix**: Added disabled state + opacity 0.5 when count < 2. FIXED in this audit.
 
-### HIGH-2: navigator.clipboard.writeText without error handling
-**File**: frontend/lab.js (context menu "Copy Name" action)
-**Issue**: `navigator.clipboard.writeText()` can throw if: (a) page is served over HTTP (not HTTPS), (b) clipboard permission denied, (c) focus is lost. No try/catch wrapping — will show uncaught promise rejection.
-**Fix**: Wrap in try/catch or use a fallback (toast with "copy failed").
+### LOW-1: Column header stats computed on every render
+**File**: frontend/lab.js (renderTableHead)
+**Issue**: Min/avg/max stats for each column are recomputed every time renderTableHead is called. With 100 items and ~20 columns, this is ~2000 parseFloat calls per render. Negligible performance impact at current scale.
 
-### HIGH-3: Context menu separator missing in college mode
-**File**: frontend/lab.js (context menu builder)
-**Issue**: The separator (`{ sep: true }`) is inside the `if (state.universe === "nfl")` block, so college/prospect mode has no visual break between Watchlist and Toggle Highlight.
-**Fix**: Move separator outside the NFL conditional or add one unconditionally before utility actions.
+### LOW-2: "+" column spacer adds 32px to each row
+**File**: frontend/lab.js (buildRowHTML)
+**Issue**: Each data row has an empty `<td style="width:32px;">` spacer for the "+" column button. Adds DOM weight. Acceptable trade-off for proper column alignment.
 
 ---
 
 ## UX FINDINGS
 
-### MEDIUM-U1: Summary bar shows "avg" without scope context
-**Issue**: The summary bar shows "avg" label for each column but doesn't indicate it's the average of the currently displayed page (up to 100 rows), not the full dataset.
-**Fix**: Change label to "page avg" or add tooltip explaining scope.
+### LOW-U1: Status bar information density
+**Issue**: Status bar shows "1-100 of 342 players · PPG ↓ · 2025 · WR" — information-dense but well-formatted with middot separators. No action needed.
 
-### MEDIUM-U2: No way to clear all row highlights
-**Issue**: Users can highlight rows by clicking but there's no shortcut to clear all highlights at once.
-**Fix**: Add Escape key or context menu option to clear all highlights.
+### LOW-U2: "+" column button same size in dense mode
+**Issue**: The "+" button is 32px wide in both normal and dense mode. Could be smaller in dense mode but low priority.
 
-### LOW-U1: "A" shortcut for Summary bar not mnemonic
-**Issue**: "A" doesn't intuitively map to "Summary". Already documented in shortcut reference.
+---
 
-### LOW-U2: Row highlights lost on data refresh
-**Issue**: Expected behavior but may surprise users. Low priority.
+## SUMMARY
 
-### LOW-U3: Five display toggle buttons may feel cluttered
-**Issue**: Heat, Tiers, Dense, Groups, Summary — five consecutive toggle buttons. Toolbar has 15+ visible buttons total.
+Clean audit. 1 MEDIUM finding (fixed inline). No CRITICAL or HIGH issues. Code quality is solid across Phases 62-65.

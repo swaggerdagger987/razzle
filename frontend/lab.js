@@ -2794,6 +2794,8 @@ function updateSelectionUI() {
       bar.style.display = "";
       document.getElementById("bulkCount").textContent = count + " selected";
       document.getElementById("bulkNames").textContent = state.selectedPlayers.map(p => p.full_name || p.player_name || "").join(", ");
+      var cmpBtn = document.getElementById("bulkCompareBtn");
+      if (cmpBtn) { cmpBtn.disabled = count < 2; cmpBtn.style.opacity = count < 2 ? "0.5" : "1"; }
     } else {
       bar.style.display = "none";
     }
