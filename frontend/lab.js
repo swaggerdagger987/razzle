@@ -2217,6 +2217,26 @@ function updateResultCount() {
   parts.push(sortText);
   if (seasonLabel) parts.push(String(seasonLabel));
   if (state.position !== "ALL") parts.push(state.position);
+
+  // Position breakdown badges (only when ALL positions shown and items exist)
+  if (state.position === "ALL" && state.items.length > 0) {
+    var posCounts = {};
+    for (var i = 0; i < state.items.length; i++) {
+      var p = (state.items[i].position || "").toUpperCase();
+      if (p) posCounts[p] = (posCounts[p] || 0) + 1;
+    }
+    var posColors = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
+    var posOrder = ["QB", "RB", "WR", "TE"];
+    var badges = [];
+    for (var j = 0; j < posOrder.length; j++) {
+      var pp = posOrder[j];
+      if (posCounts[pp]) {
+        badges.push('<span style="font-size:10px; font-weight:700; color:' + posColors[pp] + ';">' + pp + ':' + posCounts[pp] + '</span>');
+      }
+    }
+    if (badges.length > 1) parts.push(badges.join(" "));
+  }
+
   el.innerHTML = parts.join(" · ");
 }
 

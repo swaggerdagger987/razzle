@@ -1,15 +1,15 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 89 (Reset All Filters Button)
-## Phase 89: Reset All Filters — Auto-Generated
-**Exit Criterion**: "Reset All ×" button appears in active filters area when any filters/search/teams/minGP/tags active. Clears all filters, resets UI controls, re-fetches. Toast feedback.
+- Phase: 90 (Position Breakdown Badges in Result Count)
+## Phase 90: Position Breakdown Badges — Auto-Generated
+**Exit Criterion**: When "ALL" positions shown, result count line includes position-colored breakdown badges (QB:12 RB:45 WR:62 TE:18). Only shows when 2+ positions present. Uses position colors from design guide.
 
 - Task 1: PASS
 - Stage: COMPLETE
 - Next: Phase gate
 
-### Task 1: Implement reset all filters button
+### Task 1: Add position breakdown badges to result count
 **Status**: PASS
 **Attempts**: 1
-**Result**: Added resetAllFilters() function. "Reset All ×" dark pill appears in activeFilters container when any filters, search, teams, minGP, or tagFilter active. Clears all state, resets all UI controls (search input, team select, GP input, smart filter select, tag filter button). Toast "all filters cleared". 34 tests pass.
+**Result**: In updateResultCount(), when position=ALL and items exist, counts per-position in current page items. Renders mini position-colored badges (QB blue, RB teal, WR terracotta, TE purple) in the result info line. Only shows when 2+ positions have counts. 34 tests pass.

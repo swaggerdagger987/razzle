@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 90 — Position Breakdown Badges (COMPLETE)
+
+**Exit Criterion MET**: Result count shows position-colored breakdown badges (QB:12 RB:45 WR:62 TE:18) when ALL positions shown.
+
+### Phase 90 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Position breakdown badges | DONE | Per-position counts in updateResultCount(), position-colored spans |
+
 ## Previous Phase: Phase 89 — Reset All Filters Button (COMPLETE)
 
 **Exit Criterion MET**: "Reset All ×" dark pill appears in active filters when any filters/search/teams/minGP/tags active. One click clears everything.
