@@ -1,5 +1,24 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 159 — Platform: BYOK Cloud Sync Frontend Integration (COMPLETE)
+
+**Exit Criterion MET**: Frontend config panel in agents.html now supports encrypted cloud storage for BYOK API keys. Two new buttons added next to "Apply to All": "Save to Cloud" (encrypts and stores the current key server-side via POST /api/user/api-keys) and "Load from Cloud" (retrieves decrypted key via GET /api/user/api-keys/openrouter/decrypt and applies to all 6 agents). Both buttons check auth status and Pro+ tier before attempting operations, showing user-friendly messages ("sign in first", "Pro+ required for cloud storage"). Status hint updates during operations: "encrypting...", "saved to cloud (encrypted)", "loading...", "loaded from cloud". IIFE pattern keeps cloud sync code encapsulated. JS syntax verified clean via node --check, HTML div/button tags balanced.
+
+### Phase 159 Tasks (Platform Loop)
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Cloud Key Sync UI + JS | PASS | Save/Load buttons, auth/plan checks, fetch integration, status hints |
+| 2 | QA + Syntax Verification | PASS | JS syntax clean, HTML balanced |
+
+### Decisions Log
+- Used IIFE pattern for cloud sync code to avoid polluting global scope while still accessing loadAgentConfig/saveAgentConfig from the outer scope.
+- Only "openrouter" provider synced for now since that's the default and most common provider. Per-provider sync can be added later if users request it.
+- "Save to Cloud" reads from the current agent config (agent 0's key), falling back to the shared key input. This covers both cases: key already applied via "Apply to All", or key just typed but not yet applied.
+- Status hint text keeps the same casual Razzle voice ("stored locally", "saved to cloud (encrypted)", "no key found").
+
+---
+
 ## Previous Phase: Phase 158 — Platform: Security Headers + BYOK Server-Side Storage + Production Hardening (COMPLETE)
 
 **Exit Criterion MET**: Full security hardening pass for production readiness. (1) HTTP security headers middleware added to server.py: X-Content-Type-Options: nosniff, X-Frame-Options: DENY, X-XSS-Protection: 0, Referrer-Policy: strict-origin-when-cross-origin, Strict-Transport-Security with 1-year max-age, Permissions-Policy restricting camera/mic/geo/usb, Content-Security-Policy allowing Razzle assets + Google Fonts + OpenRouter/Anthropic/OpenAI APIs + Stripe + Sleeper. All 8 headers verified on every API response. (2) BYOK API key server-side encrypted storage: Fernet symmetric encryption using ENCRYPTION_KEY env var (falls back to JWT_SECRET). New user_api_keys table with encrypted_key BLOB column. 4 new endpoints: GET /api/user/api-keys (list metadata, never values), POST /api/user/api-keys (save encrypted), GET /api/user/api-keys/{provider}/decrypt (retrieve for LLM calls), DELETE /api/user/api-keys/{provider}. All endpoints require auth + Pro+ tier. Invalid provider names rejected. Key length validation. Keys never appear in logs or error responses. Encryption roundtrip verified. (3) render.yaml updated: ENCRYPTION_KEY documented, RAZZLE_LLM_* vars documented, all promotional pricing env vars documented, numInstances and autoDeploy set. (4) Rate limiting hardened: new _check_sensitive_rate limiter (5 requests/60s) applied to billing checkout and BYOK key save endpoints. Retry-After headers added to all 429 responses across auth (60s), sensitive (60s), and daily quota (3600s) limiters. (5) cryptography>=41.0.0 added to requirements.txt. .env.example updated with ENCRYPTION_KEY and corrected LLM env var names.

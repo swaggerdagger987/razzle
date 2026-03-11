@@ -1545,9 +1545,11 @@
         <div class="config-section">
           <label class="config-label">API Key (all agents)</label>
           <input class="config-input" id="cfgSharedKey" type="password" autocomplete="off" placeholder="sk-or-v1-...">
-          <div style="display:flex;gap:6px;align-items:center;">
+          <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
             <button class="config-btn config-btn-primary" id="cfgApplyKey">Apply to All</button>
-            <span class="config-hint">stored locally</span>
+            <button class="config-btn" id="cfgSaveCloud" title="Encrypt and save to your Razzle account (Pro+)">Save to Cloud</button>
+            <button class="config-btn" id="cfgLoadCloud" title="Load key from your Razzle account">Load from Cloud</button>
+            <span class="config-hint" id="cfgStorageHint">stored locally</span>
           </div>
         </div>
 

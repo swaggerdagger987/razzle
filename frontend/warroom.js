@@ -1467,6 +1467,99 @@ function setupConfigPanel() {
 
 setupConfigPanel();
 
+// ── BYOK CLOUD KEY SYNC (encrypted server-side storage) ──────────────
+(function setupCloudKeySync() {
+  var saveBtn = document.getElementById('cfgSaveCloud');
+  var loadBtn = document.getElementById('cfgLoadCloud');
+  var hintEl = document.getElementById('cfgStorageHint');
+  var sharedKeyInput = document.getElementById('cfgSharedKey');
+  if (!saveBtn || !loadBtn) return;
+
+  function getAuthToken() {
+    try {
+      var u = JSON.parse(localStorage.getItem('razzle_user') || 'null');
+      return (u && u.token) ? u.token : null;
+    } catch (_) { return null; }
+  }
+
+  function isPro() {
+    try {
+      var u = JSON.parse(localStorage.getItem('razzle_user') || 'null');
+      if (!u) return false;
+      var p = u.plan || u.effective_plan || 'free';
+      return p === 'pro' || p === 'elite' || p === 'pro_lifetime' || p === 'elite_lifetime';
+    } catch (_) { return false; }
+  }
+
+  function updateHint(msg) {
+    if (hintEl) hintEl.textContent = msg;
+  }
+
+  // Save current key to server (encrypted)
+  saveBtn.addEventListener('click', async function() {
+    var token = getAuthToken();
+    if (!token) { updateHint('sign in first'); return; }
+    if (!isPro()) { updateHint('Pro+ required for cloud storage'); return; }
+
+    // Get the current shared key from config
+    var cfg = loadAgentConfig();
+    var key = (cfg['0'] && cfg['0'].apiKey) ? cfg['0'].apiKey : '';
+    if (!key && sharedKeyInput) key = sharedKeyInput.value.trim();
+    if (!key) { updateHint('enter a key first'); return; }
+
+    updateHint('encrypting...');
+    try {
+      var resp = await fetch('/api/user/api-keys', {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ provider: 'openrouter', api_key: key, label: 'Situation Room' })
+      });
+      var data = await resp.json();
+      if (resp.ok) {
+        updateHint('saved to cloud (encrypted)');
+      } else {
+        updateHint(data.error || 'save failed');
+      }
+    } catch (e) {
+      updateHint('network error');
+    }
+  });
+
+  // Load key from server
+  loadBtn.addEventListener('click', async function() {
+    var token = getAuthToken();
+    if (!token) { updateHint('sign in first'); return; }
+    if (!isPro()) { updateHint('Pro+ required'); return; }
+
+    updateHint('loading...');
+    try {
+      var resp = await fetch('/api/user/api-keys/openrouter/decrypt', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      var data = await resp.json();
+      if (resp.ok && data.api_key) {
+        // Apply to all agents
+        var cfg = loadAgentConfig();
+        AGENT_DEFS.forEach(function(a) {
+          var existing = cfg[String(a.id)] || {};
+          cfg[String(a.id)] = Object.assign({}, existing, { apiKey: data.api_key });
+        });
+        saveAgentConfig(cfg);
+        // Update UI
+        var rows = document.querySelectorAll('#cfgAgentKeys .config-agent-key');
+        rows.forEach(function(inp) { inp.value = data.api_key; });
+        if (sharedKeyInput) sharedKeyInput.value = '';
+        updateHint('loaded from cloud');
+        if (typeof updateApiKeyNotice === 'function') updateApiKeyNotice();
+      } else {
+        updateHint(data.error || 'no key found');
+      }
+    } catch (e) {
+      updateHint('network error');
+    }
+  });
+})();
+
 // ── SCENARIO INPUT PANEL ──────────────────────────────────────────────
 const SCENARIO_EXAMPLES = [
   "Bijan Robinson questionable with knee injury before my playoff game",
