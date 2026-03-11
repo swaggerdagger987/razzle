@@ -1,5 +1,17 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 44 — Shareability & Player Comps (COMPLETE)
+
+**Exit Criterion MET**: Dynasty History has PNG export with watermark. Trade Values custom weights persist in URL params (shareable). Dynasty History supports comparing 2-5 selected players via search.
+
+### Phase 44 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Dynasty History PNG export | DONE | html2canvas, 2x scale, razzle.lol watermark |
+| 2 | Trade Values weight URL state | DONE | wp/wa/ws params, history.replaceState, defaults clean URL |
+| 3 | Dynasty History player comparison | DONE | Compare search bar, quick-search API, max 5 players, clear button |
+
 ## Previous Phase: Phase 43 — Mobile & Polish — New Features (COMPLETE)
 
 **Exit Criterion MET**: Dynasty History table scrolls horizontally on mobile. Weight sliders stack vertically at 768px. View toggle buttons are 44px touch targets. Search bars have 44px height on mobile. No layout breaks at 375px.
