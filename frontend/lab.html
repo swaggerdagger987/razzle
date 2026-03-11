@@ -3069,6 +3069,7 @@
 <div class="column-picker-overlay" id="columnPickerOverlay" onclick="closeColumnPicker(event)">
   <div class="column-picker" onclick="event.stopPropagation()">
     <h3>Columns</h3>
+    <input type="text" id="columnPickerSearch" placeholder="Search columns..." oninput="filterColumnPicker(this.value)" style="width:100%; padding:8px 12px; margin-bottom:10px; font-family:var(--font-data); font-size:13px; border:3px solid var(--ink); border-radius:8px; background:var(--bg-sand); box-sizing:border-box;">
     <div class="preset-bar" id="presetBar"></div>
     <div id="columnGroups"></div>
     <div style="margin-top: 16px; display: flex; gap: 8px; justify-content: flex-end;">

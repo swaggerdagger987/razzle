@@ -2273,6 +2273,8 @@ function setMinGP(val) {
 // ─── Column picker ───────────────────────────────────────────────
 function openColumnPicker() {
   document.getElementById("columnPickerOverlay").classList.add("open");
+  const searchInput = document.getElementById("columnPickerSearch");
+  if (searchInput) { searchInput.value = ""; filterColumnPicker(""); }
 }
 
 function closeColumnPicker(e) {
@@ -2308,6 +2310,21 @@ function renderColumnPicker() {
     html += `</div>`;
   }
   container.innerHTML = html;
+}
+
+function filterColumnPicker(query) {
+  const q = (query || "").toLowerCase().trim();
+  const labels = document.querySelectorAll("#columnGroups .column-option");
+  const groups = document.querySelectorAll("#columnGroups .column-group");
+  labels.forEach(function(label) {
+    const text = label.textContent.toLowerCase();
+    label.style.display = q && !text.includes(q) ? "none" : "";
+  });
+  // Hide empty groups
+  groups.forEach(function(group) {
+    const visible = group.querySelectorAll('.column-option:not([style*="display: none"])');
+    group.style.display = visible.length === 0 ? "none" : "";
+  });
 }
 
 function toggleColumn(key, checked) {

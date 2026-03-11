@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 79 — Screener Column Picker Search (COMPLETE)
+
+**Exit Criterion MET**: Search input at top of column picker filters columns by name. Empty groups hidden. Search cleared on open.
+
+### Phase 79 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Column picker search filter | DONE | filterColumnPicker(), chunky search input, group hide logic, clear on open |
+
 ## Previous Phase: Phase 78 — Screener Zebra Striping (COMPLETE)
 
 **Exit Criterion MET**: Alternating row backgrounds — every odd row has 2.5% ink tint. Based on data index, stable during virtual scroll. Always on.
