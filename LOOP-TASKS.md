@@ -8,9 +8,9 @@
 - Task 1: PASS
 - Task 2: PASS
 - Task 3: PASS
-- Task 4: PENDING
-- Stage: IN PROGRESS
-- Next: Task 4
+- Task 4: PASS
+- Stage: COMPLETE
+- Next: Phase gate
 
 ### Task 1: Add player search to VORP panel
 **Status**: PASS
@@ -31,9 +31,10 @@
 **Result**: Replaced static methodology chips with 3 range sliders (Production, Age Curve, Pos Scarcity). Client-side recalculation using component scores (production_score, age_score, scarcity_score) from API. Weights auto-normalize. Tier reassignment on the fly. Reset button restores 50/30/20 defaults. CSS for sliders follows design guide.
 
 ### Task 4: Add historical dynasty valuations
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 **Acceptance**: Dynasty Rankings panel has a historical view showing value progression per player across seasons.
+**Result**: Added /api/dynasty-history endpoint returning trade value progression across all seasons for top players. Added Rankings/History toggle to Dynasty Rankings panel. History view shows table with per-season trade values (color-coded), inline SVG sparklines for trend visualization. Position filter and search work in both views.
 
 ## Phase 41: QA + UX Audit — Auto-Generated Fixes (COMPLETE)
 **Exit Criterion**: All CRITICAL and HIGH QA findings fixed. MEDIUM findings addressed. Pace tracker returns real stat projections. XSS in prospect radar fixed. Remaining 5 panels get available_seasons.

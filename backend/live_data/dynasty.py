@@ -259,6 +259,105 @@ def _fetch_dynasty_rankings_uncached(season=None, position=None, limit=200):
 def fetch_dynasty_rankings(season=None, position=None, limit=200):
     return _cached(f"fetch_dynasty_rankings:{season}:{position}:{limit}", lambda: _fetch_dynasty_rankings_uncached(season=season, position=position, limit=limit))
 
+
+def _fetch_dynasty_history_uncached(position=None, limit=20):
+    """Return dynasty value progression for top players across all seasons."""
+    limit = max(1, min(50, limit))
+    with get_db() as conn:
+        available_seasons = [r[0] for r in conn.execute(
+            "SELECT DISTINCT season FROM player_week_stats ORDER BY season ASC"
+        ).fetchall()]
+
+        if not available_seasons:
+            return {"players": [], "seasons": []}
+
+        latest = available_seasons[-1]
+
+        # Get top players from latest season
+        pos_filter = ""
+        params = [latest]
+        if position and position.upper() in ("QB", "RB", "WR", "TE"):
+            pos_filter = "AND p.position = ?"
+            params.append(position.upper())
+
+        top_query = f"""
+            SELECT p.player_id, p.full_name, p.position, p.team, p.headshot_url,
+                   SUM(s.fantasy_points_ppr) / COUNT(DISTINCT s.week) as ppg
+            FROM players p
+            JOIN player_week_stats s ON s.player_id = p.player_id AND s.season = ?
+            WHERE p.position IN ('QB','RB','WR','TE')
+              AND p.fantasy_relevant = 1
+              {pos_filter}
+            GROUP BY p.player_id
+            HAVING COUNT(DISTINCT s.week) >= 3
+            ORDER BY ppg DESC
+            LIMIT ?
+        """
+        params.append(limit)
+        top_players = conn.execute(top_query, params).fetchall()
+
+        player_ids = [r[0] for r in top_players]
+        if not player_ids:
+            return {"players": [], "seasons": available_seasons}
+
+        player_info = {}
+        for r in top_players:
+            player_info[r[0]] = {
+                "player_id": r[0], "full_name": r[1], "position": r[2],
+                "team": r[3], "headshot_url": r[4] or "",
+            }
+
+        # Get PPG per season for each player
+        placeholders = ",".join(["?"] * len(player_ids))
+        history_query = f"""
+            SELECT s.player_id, s.season,
+                   SUM(s.fantasy_points_ppr) / COUNT(DISTINCT s.week) as ppg,
+                   COUNT(DISTINCT s.week) as games
+            FROM player_week_stats s
+            WHERE s.player_id IN ({placeholders})
+            GROUP BY s.player_id, s.season
+            HAVING games >= 3
+            ORDER BY s.season ASC
+        """
+        rows = conn.execute(history_query, player_ids).fetchall()
+
+        # Build per-player history
+        player_history = {}
+        for r in rows:
+            pid, season, ppg, games = r[0], r[1], r[2] or 0, r[3] or 0
+            if pid not in player_history:
+                player_history[pid] = {}
+            age_in_season = None
+            info = player_info.get(pid, {})
+            pos = info.get("position", "WR")
+            tv = compute_trade_value(round(ppg, 2), age_in_season, pos)
+            player_history[pid][season] = {
+                "season": season, "ppg": round(ppg, 2),
+                "games": games, "trade_value": tv
+            }
+
+        results = []
+        for pid in player_ids:
+            info = player_info[pid]
+            seasons_data = []
+            for s in available_seasons:
+                if s in player_history.get(pid, {}):
+                    seasons_data.append(player_history[pid][s])
+                else:
+                    seasons_data.append(None)
+            info["history"] = seasons_data
+            results.append(info)
+
+        return {
+            "players": results,
+            "seasons": available_seasons,
+        }
+
+
+def fetch_dynasty_history(position=None, limit=20):
+    return _cached(f"fetch_dynasty_history:{position}:{limit}", lambda: _fetch_dynasty_history_uncached(position=position, limit=limit))
+
+
 def _fetch_trade_value_chart_uncached(season=None, position=None, limit=150):
     """Return all fantasy-relevant players ranked by trade value with component breakdown."""
     limit = max(1, min(300, limit))

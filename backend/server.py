@@ -1241,6 +1241,14 @@ def dynasty_rankings(season: int = 0, position: str = "", limit: int = 200):
     return live_data.fetch_dynasty_rankings(season=season or None, position=pos, limit=limit)
 
 
+@app.get("/api/dynasty-history")
+def dynasty_history(position: str = "", limit: int = 20):
+    """Return dynasty value progression for top players across all seasons."""
+    pos = position.strip().upper() if position else None
+    limit = max(1, min(50, limit))
+    return live_data.fetch_dynasty_history(position=pos, limit=limit)
+
+
 @app.get("/api/stat-leaders")
 def stat_leaders(season: int = 0, position: str = "", limit: int = 10):
     """Return top players in each key fantasy stat category."""

@@ -262,6 +262,85 @@
 .rankings-value { font-family: var(--font-mono); font-size: 16px; font-weight: 700; color: var(--ink); }
 .rankings-ppg { font-family: var(--font-mono); font-size: 11px; color: var(--ink-light); }
 
+/* ===== VIEW TOGGLE ===== */
+.lp-view-toggle {
+  display: flex;
+  gap: 0;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.lp-view-btn {
+  font-family: var(--font-display);
+  font-size: 12px;
+  padding: 4px 12px;
+  border: none;
+  background: var(--bg-card);
+  cursor: pointer;
+  color: var(--ink-medium);
+}
+.lp-view-btn:not(:last-child) { border-right: 2px solid var(--ink); }
+.lp-view-btn.active { background: var(--accent); color: #fff; font-weight: 700; }
+.lp-view-btn:hover:not(.active) { background: var(--bg-main); }
+
+/* ===== DYNASTY HISTORY TABLE ===== */
+.dh-wrap {
+  background: var(--bg-card);
+  border: 3px solid var(--ink);
+  border-radius: 10px;
+  box-shadow: 4px 4px 0 var(--ink);
+  overflow-x: auto;
+}
+.dh-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+.dh-table th {
+  font-family: var(--font-display);
+  font-size: 11px;
+  text-transform: uppercase;
+  padding: 8px 6px;
+  border-bottom: 3px solid var(--ink);
+  background: var(--bg-main);
+  color: var(--ink-medium);
+  position: sticky;
+  top: 0;
+  white-space: nowrap;
+}
+.dh-table td { padding: 6px; border-bottom: 2px dashed var(--border-light); }
+.dh-table tr:hover { background: rgba(217, 119, 87, 0.06); }
+.dh-table tr[data-pid] { cursor: pointer; }
+.dh-player-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 160px;
+}
+.dh-headshot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--ink);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.dh-name { font-family: var(--font-display); font-size: 13px; font-weight: 700; }
+.dh-team { font-size: 10px; color: var(--ink-light); }
+.dh-val {
+  display: inline-block;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+}
+.dh-val.elite { background: var(--green-light); color: #1a7a6e; }
+.dh-val.solid { background: var(--yellow-light); color: #8a6e1a; }
+.dh-val.low { background: var(--orange-light, #fde8d8); color: var(--accent); }
+.dh-val.rep { background: var(--red-light); color: #a82d3a; }
+.dh-val.empty { color: var(--ink-light); background: none; }
+
 /* ===== TIERS PANEL ===== */
 .tl-tier {
   display: flex;

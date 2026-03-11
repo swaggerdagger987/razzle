@@ -91,6 +91,7 @@ from .dynasty import (  # noqa: F401
     fetch_pick_values,
     fetch_roster_value,
     fetch_dynasty_rankings,
+    fetch_dynasty_history,
     fetch_trade_value_chart,
     fetch_trade_finder,
     fetch_roster_grade,

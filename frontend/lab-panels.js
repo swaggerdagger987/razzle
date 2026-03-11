@@ -68,7 +68,7 @@
   // ─── 1. DYNASTY RANKINGS ──────────────────────────────────────
   defs.push({ name: 'rankings', render: function(el) {
     if (showNflOnlyMsg(el, 'rankings', 'Dynasty Rankings', 'who\'s worth the most in your league')) return;
-    var state = { position: '', data: null };
+    var state = { position: '', data: null, view: 'rankings', historyData: null };
     var searchQuery = '';
     var seasonsLoaded = false;
 
@@ -87,6 +87,10 @@
           '</div>' +
           '<select class="lp-select" id="lp-rankings-season"></select>' +
           '<input class="lp-search" type="text" id="lp-rankings-search" placeholder="search player...">' +
+          '<div class="lp-view-toggle" id="lp-rankings-view">' +
+            '<button class="lp-view-btn active" data-view="rankings">Rankings</button>' +
+            '<button class="lp-view-btn" data-view="history">History</button>' +
+          '</div>' +
         '</div>' +
         '<div id="lp-rankings-content"><div class="lp-loading">pulling film on dynasty values...</div></div>' +
       '</div>';
@@ -129,6 +133,92 @@
         renderTiers(data.tiers || [], content);
       }).catch(function() {
         content.innerHTML = '<div class="lp-error">could not load rankings</div>';
+      });
+    }
+
+    function loadHistory() {
+      var content = el.querySelector('#lp-rankings-content');
+      content.innerHTML = '<div class="lp-loading">pulling historical film...</div>';
+
+      var url = '/api/dynasty-history?limit=20';
+      if (state.position) url += '&position=' + encodeURIComponent(state.position);
+
+      fetch(url).then(function(r) {
+        if (!r.ok) throw new Error('API error');
+        return r.json();
+      }).then(function(data) {
+        state.historyData = data;
+        renderHistory(data, content);
+      }).catch(function() {
+        content.innerHTML = '<div class="lp-error">could not load history</div>';
+      });
+    }
+
+    function renderHistory(data, content) {
+      var players = filterBySearch(data.players || []);
+      var seasons = data.seasons || [];
+      if (!players.length || !seasons.length) {
+        content.innerHTML = '<div class="lp-empty">' + (searchQuery ? 'no players match "' + escapeHtml(searchQuery) + '"' : 'no history data') + '</div>';
+        return;
+      }
+
+      var html = '<div class="dh-wrap">';
+      html += '<table class="dh-table"><thead><tr>';
+      html += '<th>Player</th>';
+      seasons.forEach(function(s) { html += '<th class="center">' + s + '</th>'; });
+      html += '<th class="center">Trend</th>';
+      html += '</tr></thead><tbody>';
+
+      players.forEach(function(p) {
+        var posLc = (p.position || '').toLowerCase();
+        html += '<tr data-pid="' + escapeAttr(p.player_id) + '">';
+        html += '<td><div class="dh-player-cell">';
+        if (p.headshot_url) html += '<img class="dh-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+        html += '<div><div class="dh-name">' + escapeHtml(p.full_name) + '</div>';
+        html += '<span class="rankings-pos-badge ' + posLc + '">' + escapeHtml(p.position) + '</span>';
+        html += ' <span class="dh-team">' + escapeHtml(p.team) + '</span></div></div></td>';
+
+        var vals = [];
+        p.history.forEach(function(h, idx) {
+          if (h) {
+            var tv = h.trade_value;
+            vals.push(tv);
+            var cls = tv >= 80 ? 'elite' : tv >= 50 ? 'solid' : tv >= 20 ? 'low' : 'rep';
+            html += '<td class="center"><span class="dh-val ' + cls + '">' + fmt(tv) + '</span></td>';
+          } else {
+            html += '<td class="center"><span class="dh-val empty">-</span></td>';
+          }
+        });
+
+        // Mini sparkline via inline SVG
+        html += '<td class="center">';
+        if (vals.length >= 2) {
+          var w = 60, h2 = 24;
+          var mn = Math.min.apply(null, vals), mx = Math.max.apply(null, vals);
+          var rng = mx - mn || 1;
+          var pts = [];
+          for (var vi = 0; vi < vals.length; vi++) {
+            var x = (vi / (vals.length - 1)) * w;
+            var y = h2 - ((vals[vi] - mn) / rng) * (h2 - 4) - 2;
+            pts.push(x.toFixed(1) + ',' + y.toFixed(1));
+          }
+          var trend = vals[vals.length - 1] - vals[0];
+          var color = trend >= 0 ? 'var(--teal)' : 'var(--accent)';
+          html += '<svg width="' + w + '" height="' + h2 + '" style="vertical-align:middle">';
+          html += '<polyline points="' + pts.join(' ') + '" fill="none" stroke="' + color + '" stroke-width="2"/>';
+          html += '</svg>';
+        }
+        html += '</td></tr>';
+      });
+
+      html += '</tbody></table></div>';
+      content.innerHTML = html;
+
+      content.querySelectorAll('tr[data-pid]').forEach(function(tr) {
+        tr.addEventListener('click', function() {
+          var pid = tr.getAttribute('data-pid');
+          if (pid) window.location.href = '/player/' + encodeURIComponent(pid);
+        });
       });
     }
 
@@ -184,18 +274,41 @@
       });
     }
 
+    function switchView(view) {
+      state.view = view;
+      el.querySelectorAll('#lp-rankings-view .lp-view-btn').forEach(function(b) { b.classList.remove('active'); });
+      el.querySelector('#lp-rankings-view .lp-view-btn[data-view="' + view + '"]').classList.add('active');
+      // Hide season selector in history mode (shows all seasons)
+      seasonSel.style.display = view === 'history' ? 'none' : '';
+      if (view === 'history') {
+        loadHistory();
+      } else {
+        loadRankings();
+      }
+    }
+
     el.querySelector('#lp-rankings-filters').addEventListener('click', function(e) {
       var btn = e.target.closest('.lp-pos-tab');
-      if (!btn) return;
-      el.querySelectorAll('#lp-rankings-filters .lp-pos-tab').forEach(function(b) { b.classList.remove('active'); });
-      btn.classList.add('active');
-      state.position = btn.getAttribute('data-pos') || '';
-      loadRankings();
+      if (btn) {
+        el.querySelectorAll('#lp-rankings-filters .lp-pos-tab').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        state.position = btn.getAttribute('data-pos') || '';
+        if (state.view === 'history') loadHistory();
+        else loadRankings();
+      }
+    });
+    el.querySelector('#lp-rankings-view').addEventListener('click', function(e) {
+      var btn = e.target.closest('.lp-view-btn');
+      if (btn) switchView(btn.getAttribute('data-view'));
     });
     seasonSel.addEventListener('change', function() { loadRankings(); });
     el.querySelector('#lp-rankings-search').addEventListener('input', function(e) {
       searchQuery = e.target.value.trim();
-      if (state.data) renderTiers(state.data.tiers || [], el.querySelector('#lp-rankings-content'));
+      if (state.view === 'history' && state.historyData) {
+        renderHistory(state.historyData, el.querySelector('#lp-rankings-content'));
+      } else if (state.data) {
+        renderTiers(state.data.tiers || [], el.querySelector('#lp-rankings-content'));
+      }
     });
 
     loadRankings();
