@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 89 — Reset All Filters Button (COMPLETE)
+
+**Exit Criterion MET**: "Reset All ×" dark pill appears in active filters when any filters/search/teams/minGP/tags active. One click clears everything.
+
+### Phase 89 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Reset all filters button | DONE | resetAllFilters(), dark pill in activeFilters, clears all state + UI controls, toast |
+
 ## Previous Phase: Phase 88 — Sticky Frozen Columns (COMPLETE)
 
 **Exit Criterion MET**: All utility columns (star, checkbox, pin, rank) and player column frozen on horizontal scroll with calculated left offsets. College/prospect mode adjusts. Mobile fallback to player-only freeze.

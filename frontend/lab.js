@@ -2289,7 +2289,38 @@ function renderActiveFilters() {
     return `<span class="filter-tag">${label} ${opLabels[f.op] || f.op} ${f.value} <span class="remove" onclick="removeFilter(${i})">×</span></span>`;
   }).join(" ");
 
+  // "Reset All" button when any filters, search, teams, or minGP are active
+  const hasActive = state.filters.length > 0 || state.search || state.teams.length > 0 || state.minGP > 0 || state.tagFilter;
+  if (hasActive) {
+    html += ` <span class="filter-tag" style="background:var(--ink); color:var(--bg); cursor:pointer; font-weight:700;" onclick="resetAllFilters()" title="Clear all filters, search, and teams">Reset All ×</span>`;
+  }
+
   container.innerHTML = html;
+}
+
+function resetAllFilters() {
+  state.filters = [];
+  state.search = "";
+  state.teams = [];
+  state.minGP = 0;
+  state.tagFilter = false;
+  state.offset = 0;
+
+  // Reset UI controls
+  document.getElementById("searchInput").value = "";
+  var teamSel = document.getElementById("teamFilter");
+  if (teamSel) teamSel.value = "";
+  var gpInp = document.getElementById("minGPInput");
+  if (gpInp) gpInp.value = "";
+  var sfSel = document.getElementById("smartFilterSelect");
+  if (sfSel) sfSel.value = "";
+  var tagBtn = document.getElementById("tagFilterBtn");
+  if (tagBtn) tagBtn.classList.remove("active");
+
+  renderActiveFilters();
+  renderTeamChips();
+  fetchAndRender();
+  _showToast("all filters cleared");
 }
 
 function clearTeamFilter() {
