@@ -492,6 +492,14 @@ async def screener_query(request: Request):
     return live_data.fetch_screener(body)
 
 
+@app.post("/api/screener/sparklines")
+async def screener_sparklines(request: Request):
+    body = await request.json()
+    player_ids = body.get("player_ids", [])
+    season = body.get("season", 0)
+    return live_data.fetch_screener_sparklines(player_ids, season)
+
+
 @app.get("/api/filter-options")
 def filter_options():
     data = live_data.get_filter_options()

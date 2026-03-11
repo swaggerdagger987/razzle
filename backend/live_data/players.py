@@ -463,6 +463,42 @@ def get_filter_options():
     return _cached("filter_options", _query)
 
 
+def fetch_screener_sparklines(player_ids, season=0):
+    """Batch-fetch weekly fantasy_points_ppr for up to 200 players (for inline sparklines)."""
+    if not player_ids:
+        return {"sparklines": {}}
+    # Clamp to 200
+    ids = player_ids[:200]
+    def _query():
+        with get_db() as conn:
+            _season = season
+            if not _season:
+                row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+                _season = row[0] if row and row[0] else _current_nfl_season()
+            placeholders = ",".join("?" for _ in ids)
+            rows = conn.execute(f"""
+                SELECT player_id, week, fantasy_points_ppr
+                FROM player_week_stats
+                WHERE player_id IN ({placeholders}) AND season = ?
+                ORDER BY player_id, week ASC
+            """, ids + [_season]).fetchall()
+            sparklines = {}
+            for r in rows:
+                pid = r["player_id"]
+                pts = r["fantasy_points_ppr"]
+                if pid not in sparklines:
+                    sparklines[pid] = []
+                sparklines[pid].append(round(pts, 1) if pts is not None else 0)
+            # Ensure all requested IDs appear (empty array if no data)
+            for pid in ids:
+                if pid not in sparklines:
+                    sparklines[pid] = []
+            return {"sparklines": sparklines, "season": _season}
+    import json as _json
+    _ck = f"sparklines:{_json.dumps(sorted(ids))}:{season}"
+    return _cached(_ck, _query)
+
+
 def fetch_player_weeks(player_id, season=0):
     """Return week-by-week stats for a single player."""
     def _query():

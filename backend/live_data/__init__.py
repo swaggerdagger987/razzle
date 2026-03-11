@@ -32,6 +32,7 @@ from .players import (  # noqa: F401
     fetch_compare_table,
     fetch_player_boom_bust,
     fetch_player_comps,
+    fetch_screener_sparklines,
 )
 
 # --- prospects ---

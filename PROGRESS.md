@@ -1,5 +1,16 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 48 — Screener Sparkline Column (COMPLETE)
+
+**Exit Criterion MET**: Screener table has a toggleable "Trend" column showing inline SVG sparklines of weekly fantasy points (PPR) for each player. Sparklines color-coded green (trending up) or terracotta (trending down). Backend batch endpoint returns weekly scoring arrays efficiently. Column visible by default in PPR and Dynasty presets.
+
+### Phase 48 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend /api/screener/sparklines endpoint | DONE | Batch SQL query, up to 200 players, _cached helper, POST route |
+| 2 | Frontend inline SVG sparkline column | DONE | 72x22px polyline, green/terracotta trend color, async load with AbortController, virtual scroll compatible |
+
 ## Previous Phase: Phase 47 — Data Quality & Design System Hardening (COMPLETE)
 
 **Exit Criterion MET**: Half-PPR fallback computation works for all seasons. All 46 hardcoded gray colors across 18 frontend files replaced with design system CSS variables.

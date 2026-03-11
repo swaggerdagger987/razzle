@@ -437,6 +437,9 @@ const COLUMNS = {
   // Dynasty value
   dynasty_value:       { label: "DVS",     tip: "Dynasty value adjusted for age. Higher = more valuable for your future.", group: "Dynasty", decimals: 1, derived: true },
   age:                 { label: "Age",     tip: "Player age (current)", group: "Dynasty", decimals: 0 },
+
+  // Sparkline trend
+  trend:               { label: "Trend",   tip: "Weekly fantasy points trend — sparkline showing scoring arc across the season", group: "Fantasy", decimals: 0, derived: true, isSparkline: true },
 };
 
 // ─── Tier lock mapping (visual only, does not block access) ──────
@@ -461,7 +464,7 @@ function _getTierLockClass(key) {
 const PRESETS = {
   ppr: {
     label: "PPR",
-    columns: ["pos_rank", "fantasy_points_ppr", "ppg", "games", "passing_yards", "passing_tds",
+    columns: ["pos_rank", "trend", "fantasy_points_ppr", "ppg", "games", "passing_yards", "passing_tds",
               "rushing_yards", "rushing_tds", "receptions", "receiving_yards", "receiving_tds",
               "targets", "touchdowns"],
   },
@@ -485,7 +488,7 @@ const PRESETS = {
   },
   dynasty: {
     label: "Dynasty",
-    columns: ["dynasty_value", "age", "fantasy_points_ppr", "ppg", "games", "seasons", "breakout_pct",
+    columns: ["dynasty_value", "age", "trend", "fantasy_points_ppr", "ppg", "games", "seasons", "breakout_pct",
               "dominator_rating", "receiving_yards", "receiving_tds", "rushing_yards", "rushing_tds", "touchdowns"],
   },
   dynasty_rankings: {
@@ -839,6 +842,10 @@ function getColumnDef(key) {
 function renderNFLTable() {
   renderTableHead();
   renderTableBody();
+  // Load sparklines async (non-blocking)
+  if (getActiveColumns().includes("trend")) {
+    loadScreenerSparklines();
+  }
 }
 
 function renderTableHead() {
@@ -865,7 +872,11 @@ function renderTableHead() {
     if (key === "dynasty_value") {
       extra = ` <span class="dvs-info" onclick="event.stopPropagation(); toggleDVSInfo()" title="Click for DVS methodology" style="cursor:help; font-size:10px; opacity:0.6;">&#9432;</span>`;
     }
-    html += `<th class="${cls}"${tip} tabindex="0" onclick="sortBy('${key}')" onkeydown="if(event.key==='Enter'){sortBy('${key}');event.preventDefault();}">${col.label}${extra}</th>`;
+    if (col.isSparkline) {
+      html += `<th${tip} style="width:80px; text-align:center;">${col.label}</th>`;
+    } else {
+      html += `<th class="${cls}"${tip} tabindex="0" onclick="sortBy('${key}')" onkeydown="if(event.key==='Enter'){sortBy('${key}');event.preventDefault();}">${col.label}${extra}</th>`;
+    }
   }
 
   html += "</tr>";
@@ -928,6 +939,12 @@ function buildRowHTML(player, cols, heatOn, pctData) {
     const col = getColumnDef(key);
     if (!col) continue;
     let val = player[key];
+    // Sparkline column: render placeholder cell for async fill
+    if (col.isSparkline) {
+      const sid = player.player_id || player.player_name || "";
+      html += `<td class="sparkline-cell" data-sparkline-pid="${escapeAttr(sid)}"><span class="sparkline-placeholder"></span></td>`;
+      continue;
+    }
     const hBg = heatPcts && heatPcts[key] != null ? getHeatColor(heatPcts[key]) : "";
     const hStyle = hBg ? ` style="background:${hBg};"` : "";
     if ((isProspectView() || state.universe === "college") && !col.isText && (val === 0 || val === null || val === undefined)) {
@@ -987,6 +1004,10 @@ function renderVisibleRows() {
     html += '<tr style="height:' + bottomHeight + 'px;"><td colspan="' + colCount + '"></td></tr>';
   }
   tbody.innerHTML = html;
+  // Re-inject sparklines for newly visible rows
+  if (getActiveColumns().includes("trend") && Object.keys(_sparklineCache).length > 1) {
+    injectSparklines();
+  }
 }
 
 function onTableScroll() {
@@ -1031,6 +1052,98 @@ function renderTableBody() {
 
   // Render visible rows
   renderVisibleRows();
+}
+
+// ─── Sparkline loading (async, non-blocking) ──────────────────
+let _sparklineCache = {};  // pid -> [pts...]
+let _sparklineAbort = null;
+
+function loadScreenerSparklines() {
+  // Collect player IDs from current items
+  const ids = state.items
+    .map(p => p.player_id)
+    .filter(Boolean)
+    .slice(0, 200);
+  if (!ids.length) return;
+
+  // Cancel previous in-flight request
+  if (_sparklineAbort) _sparklineAbort.abort();
+  _sparklineAbort = new AbortController();
+
+  // Check which IDs are already cached for this season
+  const season = state.season || 0;
+  const cacheKey = `${season}`;
+  if (_sparklineCache._season !== cacheKey) {
+    _sparklineCache = { _season: cacheKey };
+  }
+  const needed = ids.filter(id => !(id in _sparklineCache));
+
+  if (!needed.length) {
+    // All cached, just inject
+    injectSparklines();
+    return;
+  }
+
+  fetch(API_BASE + "/api/screener/sparklines", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ player_ids: needed, season: season || 0 }),
+    signal: _sparklineAbort.signal,
+  })
+    .then(r => r.ok ? r.json() : Promise.reject(new Error("sparkline fetch failed")))
+    .then(data => {
+      const sp = data.sparklines || {};
+      for (const pid in sp) _sparklineCache[pid] = sp[pid];
+      injectSparklines();
+    })
+    .catch(err => {
+      if (err.name !== "AbortError") {
+        // Silent fail — sparklines are cosmetic
+      }
+    });
+}
+
+function injectSparklines() {
+  const cells = document.querySelectorAll(".sparkline-cell[data-sparkline-pid]");
+  for (const cell of cells) {
+    const pid = cell.getAttribute("data-sparkline-pid");
+    const pts = _sparklineCache[pid];
+    if (!pts || !pts.length) {
+      cell.innerHTML = '<span style="color:var(--ink-faint); font-size:10px;">—</span>';
+      continue;
+    }
+    cell.innerHTML = buildSparklineSVG(pts);
+  }
+}
+
+function buildSparklineSVG(pts) {
+  const w = 72, h = 22, pad = 2;
+  const max = Math.max(...pts, 1);
+  const min = Math.min(...pts, 0);
+  const range = max - min || 1;
+  const step = (w - pad * 2) / Math.max(pts.length - 1, 1);
+
+  const points = pts.map((v, i) => {
+    const x = pad + i * step;
+    const y = pad + (1 - (v - min) / range) * (h - pad * 2);
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(" ");
+
+  // Trend: compare average of last 4 weeks vs first 4 weeks
+  const last4 = pts.slice(-4);
+  const first4 = pts.slice(0, 4);
+  const avgLast = last4.reduce((a, b) => a + b, 0) / last4.length;
+  const avgFirst = first4.reduce((a, b) => a + b, 0) / first4.length;
+  const color = avgLast >= avgFirst ? "var(--green)" : "var(--orange)";
+
+  // End dot
+  const lastX = (pad + (pts.length - 1) * step).toFixed(1);
+  const lastY = (pad + (1 - (pts[pts.length - 1] - min) / range) * (h - pad * 2)).toFixed(1);
+
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" style="display:block;">` +
+    `<polyline points="${points}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>` +
+    `<circle cx="${lastX}" cy="${lastY}" r="2" fill="${color}"/>` +
+    `</svg>`;
 }
 
 function renderProspectTable() {
