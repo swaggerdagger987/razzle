@@ -1,16 +1,16 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 59 (Screener Row Highlighting)
-## Phase 59: Screener Row Highlighting
-**Exit Criterion**: Clicking a row in the screener table toggles a persistent orange highlight on that row for easier reading across wide tables. Highlights survive scrolling but reset on data refresh. Click on interactive elements (links, checkboxes, pins, tags) does not trigger highlight. Orange tint background with left border accent.
+- Phase: 60 (Screener Context Menu)
+## Phase 60: Screener Context Menu
+**Exit Criterion**: Right-clicking a player row in the screener shows a context menu with quick actions: View Profile, Add/Remove from Compare, Add/Remove from Watchlist, Pin/Unpin (NFL only), Toggle Highlight, Copy Name. Menu styled per DESIGN.md (chunky border, box-shadow, sand bg). Viewport-clamped positioning. Dismisses on click elsewhere.
 
 - Task 1: PASS
 - Stage: COMPLETE
-- Next: Phase gate
+- Next: QA + UX audit (Phase 60 is multiple of 5)
 
-### Task 1: Row click-to-highlight with CSS toggle
+### Task 1: Context menu with quick actions
 **Status**: PASS
 **Attempts**: 1
-**Acceptance**: Click on row toggles .row-highlighted class. Orange tint (15% mix) on all cells. Left border accent on player column. Does not fire on links, checkboxes, inputs, pin cells, tag/note popups. Event delegation on tableBody. Works in all modes.
-**Result**: Added CSS for .row-highlighted (color-mix orange 15%), event delegation click handler on tableBody with interactive element filtering, classList.toggle.
+**Acceptance**: Right-click on tbody row shows menu. Menu has 6 actions for NFL (profile, compare, watchlist, pin, highlight, copy name) and 4 for college (compare, watchlist, highlight, copy name). Icons for each action. Dynamic labels based on current state (pinned/unpinned, starred/unstarred, selected/unselected). Menu dismissed on click elsewhere. Viewport-clamped. DESIGN.md styled (3px border, box-shadow, border-radius).
+**Result**: Added hideContextMenu(), contextmenu event listener on screenerTable, .screener-context-menu CSS, dynamic menu items based on player state and universe mode.

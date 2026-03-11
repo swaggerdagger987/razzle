@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 60 — Screener Context Menu (COMPLETE)
+
+**Exit Criterion MET**: Right-clicking a player row shows a context menu with quick actions (View Profile, Compare, Watchlist, Pin, Highlight, Copy Name). DESIGN.md styled. Viewport-clamped. Dismissed on click elsewhere. Dynamic labels based on player state.
+
+### Phase 60 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Context menu with quick actions | DONE | contextmenu event, hideContextMenu(), .screener-context-menu CSS, 6 NFL actions, 4 college actions, viewport clamping |
+
 ## Previous Phase: Phase 59 — Screener Row Highlighting (COMPLETE)
 
 **Exit Criterion MET**: Clicking a row in the screener table toggles a persistent orange highlight on that row. Orange tint (15% color-mix) on all cells plus left border accent on player column. Click on interactive elements (links, checkboxes, inputs, pin cells, tag/note popups) does not trigger highlight. Event delegation on tableBody. Works in all modes.

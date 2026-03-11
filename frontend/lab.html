@@ -945,6 +945,42 @@
     font-size: 10px;
   }
 
+  /* ─── Context menu ─── */
+  .screener-context-menu {
+    position: fixed;
+    z-index: 1000;
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 8px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 6px 0;
+    min-width: 180px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+  .screener-context-menu .ctx-item {
+    padding: 6px 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .screener-context-menu .ctx-item:hover {
+    background: var(--orange-light);
+  }
+  .screener-context-menu .ctx-sep {
+    height: 1px;
+    background: var(--ink-faint);
+    margin: 4px 8px;
+  }
+  .screener-context-menu .ctx-icon {
+    width: 16px;
+    text-align: center;
+    font-size: 13px;
+  }
+
   /* ─── Row highlighting ─── */
   .screener-table tbody tr.row-highlighted td {
     background: color-mix(in srgb, var(--orange) 15%, transparent) !important;

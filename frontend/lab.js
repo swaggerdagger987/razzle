@@ -1662,6 +1662,87 @@ function renderProspectTable() {
   });
 })();
 
+// ─── Context menu ────────────────────────────────────────────────
+function hideContextMenu() {
+  var menu = document.getElementById("screenerContextMenu");
+  if (menu) menu.remove();
+}
+
+(function() {
+  var table = document.getElementById("screenerTable");
+  if (!table) return;
+
+  document.addEventListener("click", hideContextMenu);
+  document.addEventListener("contextmenu", function(e) {
+    if (!e.target.closest("#screenerTable tbody")) hideContextMenu();
+  });
+
+  table.addEventListener("contextmenu", function(e) {
+    var tr = e.target.closest("tbody tr");
+    if (!tr) return;
+    e.preventDefault();
+    hideContextMenu();
+
+    var playerId = tr.dataset.playerId;
+    if (!playerId) return;
+
+    // Find player data
+    var player = state.items.find(function(p) { return (p.player_id || p.player_name) === playerId; });
+    if (!player) return;
+
+    var pName = player.full_name || player.player_name || "";
+    var pos = (player.position || "").toUpperCase();
+    var team = player.team || player.school || "";
+
+    var menu = document.createElement("div");
+    menu.id = "screenerContextMenu";
+    menu.className = "screener-context-menu";
+
+    var items = [];
+    // View profile
+    if (state.universe === "nfl") {
+      items.push({ icon: "👤", label: "View Profile", action: "openPlayerProfile('" + escapeAttr(playerId) + "')" });
+    }
+    // Compare
+    var isSelected = state.selectedPlayers.some(function(p) { return p.player_id === playerId; });
+    items.push({ icon: isSelected ? "☑" : "☐", label: isSelected ? "Remove from Compare" : "Add to Compare", action: "togglePlayerSelect('" + escapeAttr(playerId) + "', " + !isSelected + "); hideContextMenu()" });
+    // Watchlist
+    var starred = isOnWatchlist(playerId);
+    items.push({ icon: starred ? "★" : "☆", label: starred ? "Remove from Watchlist" : "Add to Watchlist", action: "toggleWatchlistPlayer('" + escapeAttr(playerId) + "', '" + escapeAttr(pName) + "', '" + escapeAttr(pos) + "', '" + escapeAttr(team) + "', '" + state.universe + "'); hideContextMenu()" });
+
+    if (state.universe === "nfl") {
+      // Pin
+      var pinned = isPlayerPinned(playerId);
+      items.push({ icon: "📌", label: pinned ? "Unpin Player" : "Pin to Top", action: "togglePinPlayer('" + escapeAttr(playerId) + "'); hideContextMenu()" });
+      // Separator + highlight
+      items.push({ sep: true });
+    }
+    // Highlight
+    items.push({ icon: "🖍", label: "Toggle Highlight", action: "(function(){ var r=document.querySelector('tr[data-player-id=\"" + escapeAttr(playerId) + "\"]'); if(r) r.classList.toggle('row-highlighted'); hideContextMenu(); })()" });
+    // Copy name
+    items.push({ icon: "📋", label: "Copy Name", action: "navigator.clipboard.writeText('" + escapeAttr(pName) + "'); _showToast('copied'); hideContextMenu()" });
+
+    var html = "";
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].sep) {
+        html += '<div class="ctx-sep"></div>';
+      } else {
+        html += '<div class="ctx-item" onclick="' + items[i].action + '"><span class="ctx-icon">' + items[i].icon + '</span>' + escapeHtml(items[i].label) + '</div>';
+      }
+    }
+    menu.innerHTML = html;
+    document.body.appendChild(menu);
+
+    // Position: keep within viewport
+    var x = e.clientX, y = e.clientY;
+    var mw = menu.offsetWidth, mh = menu.offsetHeight;
+    if (x + mw > window.innerWidth) x = window.innerWidth - mw - 8;
+    if (y + mh > window.innerHeight) y = window.innerHeight - mh - 8;
+    menu.style.left = x + "px";
+    menu.style.top = y + "px";
+  });
+})();
+
 // ─── Universe toggle ─────────────────────────────────────────────
 function setUniverse(u) {
   // Map legacy "prospects" universe to college + prospects sub-view
