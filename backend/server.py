@@ -443,7 +443,7 @@ def require_auth(request: Request) -> dict:
     return result["user"]
 
 
-_PLAN_HIERARCHY = {"free": 0, "pro": 1, "elite": 2}
+_PLAN_HIERARCHY = {"free": 0, "pro": 1, "pro_lifetime": 1, "elite": 2, "elite_lifetime": 2}
 
 def require_plan(request: Request, plan: str = "pro"):
     """Verify auth + plan tier. Elite users can access Pro features.
@@ -573,6 +573,12 @@ async def validate_promo(request: Request):
     if not code:
         return JSONResponse({"valid": False, "error": "No code provided"}, status_code=400)
     return billing_module.validate_promo_code(code)
+
+
+@app.get("/api/billing/promotions")
+async def billing_promotions():
+    """Get early adopter / lifetime deal availability. Public endpoint (no auth)."""
+    return billing_module.get_early_adopter_status()
 
 
 # ---------------------------------------------------------------------------

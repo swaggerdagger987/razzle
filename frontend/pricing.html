@@ -150,6 +150,20 @@
     <a href="#" onclick="openManageSubscription(); return false;" class="btn-chunky" style="font-size:13px; padding:6px 16px;">Manage Subscription</a>
   </div>
 
+  <!-- Trial banner (visible to non-authenticated users) -->
+  <div id="trialBanner" style="display:none; background:var(--orange-light, #f7e4d8); border:3px solid var(--orange); border-radius:10px; box-shadow:4px 4px 0 var(--ink); padding:16px 24px; margin-bottom:24px; text-align:center;">
+    <div style="font-family:var(--font-display); font-size:20px; color:var(--ink); margin-bottom:4px;">Try Pro Free for 7 Days</div>
+    <div style="font-family:var(--font-mono); font-size:13px; color:var(--ink-medium);">No credit card required. Full Pro access including AI agents, league context, and cloud sync.</div>
+    <a href="#" onclick="if(typeof openAuthModal==='function')openAuthModal(); return false;" class="btn-primary" style="margin-top:12px; display:inline-block; padding:10px 28px; font-size:14px;">Create Free Account</a>
+  </div>
+
+  <!-- Trial active banner (visible to users currently on trial) -->
+  <div id="trialActiveBanner" style="display:none; background:var(--orange-light, #f7e4d8); border:3px solid var(--orange); border-radius:10px; box-shadow:4px 4px 0 var(--ink); padding:16px 24px; margin-bottom:24px; text-align:center;">
+    <div style="font-family:var(--font-display); font-size:18px; color:var(--ink); margin-bottom:4px;">Your Pro Trial is Active</div>
+    <div id="trialCountdown" style="font-family:var(--font-mono); font-size:13px; color:var(--ink-medium);"></div>
+    <div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); margin-top:4px;">subscribe now to keep your Pro access when the trial ends</div>
+  </div>
+
   <div class="pricing-hero">
     <h1>Pick Your <span>Plan</span></h1>
     <p>The Lab is free forever. Pro and Elite unlock the full war machine.</p>
@@ -292,7 +306,7 @@
 
       <div style="border-bottom:2px dashed var(--ink-faint); padding:16px 0;">
         <div style="font-family:var(--font-display); font-size:14px; color:var(--ink); margin-bottom:6px;">Is there a free trial?</div>
-        <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7;">Yes. Every paid plan includes a 7-day free trial. Your card is charged after the trial ends. Cancel anytime before that and you won't be charged.</div>
+        <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7;">Yes. Every new account gets 7 days of full Pro access automatically. No credit card required. Just sign up and you're in. After 7 days, you can subscribe to keep Pro or continue using The Lab for free.</div>
       </div>
 
       <div style="border-bottom:2px dashed var(--ink-faint); padding:16px 0;">
@@ -307,7 +321,7 @@
 
       <div style="border-bottom:2px dashed var(--ink-faint); padding:16px 0;">
         <div style="font-family:var(--font-display); font-size:14px; color:var(--ink); margin-bottom:6px;">What happens when my trial ends?</div>
-        <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7;">Your plan converts to a paid subscription at the rate you chose (monthly or yearly). If you cancel during the trial, you drop back to the free tier. Your formulas and saved views stay — nothing is lost.</div>
+        <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7;">You drop back to the free tier. Your formulas, saved views, and watchlist all stay — nothing is lost. Subscribe any time to get Pro or Elite access back.</div>
       </div>
 
       <div style="border-bottom:2px dashed var(--ink-faint); padding:16px 0;">
@@ -326,6 +340,17 @@
       </div>
 
     </div>
+  </div>
+
+  <!-- Early Adopter / Lifetime Deals (rendered dynamically) -->
+  <div id="promotionsSection" style="display:none; margin-top:32px; padding:20px 0; border-top:2px dashed var(--ink-faint);">
+    <h2 style="font-family:var(--font-display); font-size:20px; text-align:center; margin:0 0 16px;">Launch Specials</h2>
+    <div id="promotionsGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; max-width:680px; margin:0 auto;"></div>
+  </div>
+
+  <!-- Discounts mention -->
+  <div style="text-align:center; margin-top:24px; font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">
+    Student/Military: 50% off any plan (contact us). League discount: 10+ members from the same Sleeper league get 15% off each.
   </div>
 
   <!-- Manage link for existing subscribers -->
@@ -474,10 +499,31 @@
     if (fb) fb.textContent = '';
   }
 
-  // Check if already subscribed and show banner
+  // Check if already subscribed and show appropriate banners
   function checkSubscription() {
     try {
-      var user = JSON.parse(localStorage.getItem('razzle_user') || '{}');
+      var user = JSON.parse(localStorage.getItem('razzle_user') || 'null');
+      var trialBanner = document.getElementById('trialBanner');
+      var trialActiveBanner = document.getElementById('trialActiveBanner');
+      var trialCountdown = document.getElementById('trialCountdown');
+
+      if (!user) {
+        // Not logged in — show trial CTA
+        if (trialBanner) trialBanner.style.display = 'block';
+        return;
+      }
+
+      // Check if on active trial
+      if (user.trial_active && user.plan_source === 'trial') {
+        if (trialActiveBanner) trialActiveBanner.style.display = 'block';
+        if (trialCountdown) {
+          var days = user.trial_days_remaining || 0;
+          trialCountdown.textContent = days + ' day' + (days !== 1 ? 's' : '') + ' remaining on your free trial';
+        }
+        return;
+      }
+
+      // Check if on paid plan
       if (user.plan && user.plan !== 'free') {
         var banner = document.getElementById('subscribedBanner');
         var planName = document.getElementById('currentPlanName');
@@ -487,9 +533,90 @@
     } catch (e) {}
   }
 
+  // Load promotional pricing
+  async function loadPromotions() {
+    try {
+      var resp = await fetch((typeof API_BASE !== 'undefined' ? API_BASE : '') + '/api/billing/promotions');
+      if (!resp.ok) return;
+      var data = await resp.json();
+      var cards = [];
+
+      // Early adopter cards
+      var ea = data.early_adopter;
+      if (ea && ea.enabled) {
+        if (ea.pro.available) {
+          cards.push(
+            '<div style="background:var(--bg-card); border:3px solid var(--orange); border-radius:10px; box-shadow:3px 3px 0 var(--ink); padding:16px 20px; text-align:center;">' +
+              '<div style="font-family:var(--font-display); font-size:14px; margin-bottom:4px;">Early Adopter Pro</div>' +
+              '<div style="font-family:var(--font-display); font-size:28px; color:var(--orange);">' + ea.pro.price + '</div>' +
+              '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + ea.pro.savings + ' — ' + ea.pro.remaining + ' of ' + ea.pro.limit + ' spots left</div>' +
+              '<button class="btn-primary" style="margin-top:12px; width:100%;" onclick="handleCheckout(\'ea_pro\')">Claim Early Adopter</button>' +
+            '</div>'
+          );
+        }
+        if (ea.elite.available) {
+          cards.push(
+            '<div style="background:var(--bg-card); border:3px solid var(--purple, #8b5cf6); border-radius:10px; box-shadow:3px 3px 0 var(--ink); padding:16px 20px; text-align:center;">' +
+              '<div style="font-family:var(--font-display); font-size:14px; margin-bottom:4px;">Early Adopter Elite</div>' +
+              '<div style="font-family:var(--font-display); font-size:28px; color:var(--purple, #8b5cf6);">' + ea.elite.price + '</div>' +
+              '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + ea.elite.savings + ' — ' + ea.elite.remaining + ' of ' + ea.elite.limit + ' spots left</div>' +
+              '<button class="btn-primary" style="margin-top:12px; width:100%;" onclick="handleCheckout(\'ea_elite\')">Claim Early Adopter</button>' +
+            '</div>'
+          );
+        }
+      }
+
+      // Lifetime cards
+      var lt = data.lifetime;
+      if (lt && lt.enabled && lt.available) {
+        cards.push(
+          '<div style="background:var(--bg-card); border:3px solid var(--green, #2ec4b6); border-radius:10px; box-shadow:3px 3px 0 var(--ink); padding:16px 20px; text-align:center;">' +
+            '<div style="font-family:var(--font-display); font-size:14px; margin-bottom:4px;">Lifetime Pro</div>' +
+            '<div style="font-family:var(--font-display); font-size:28px; color:var(--green, #2ec4b6);">' + lt.pro_price + '</div>' +
+            '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">one-time — ' + lt.remaining + ' of ' + lt.limit + ' lifetime spots left</div>' +
+            '<button class="btn-primary" style="margin-top:12px; width:100%;" onclick="handleCheckout(\'lifetime_pro\')">Go Lifetime</button>' +
+          '</div>'
+        );
+        cards.push(
+          '<div style="background:var(--bg-card); border:3px solid var(--purple, #8b5cf6); border-radius:10px; box-shadow:3px 3px 0 var(--ink); padding:16px 20px; text-align:center;">' +
+            '<div style="font-family:var(--font-display); font-size:14px; margin-bottom:4px;">Lifetime Elite</div>' +
+            '<div style="font-family:var(--font-display); font-size:28px; color:var(--purple, #8b5cf6);">' + lt.elite_price + '</div>' +
+            '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">one-time — ' + lt.remaining + ' of ' + lt.limit + ' lifetime spots left</div>' +
+            '<button class="btn-primary" style="margin-top:12px; width:100%;" onclick="handleCheckout(\'lifetime_elite\')">Go Lifetime</button>' +
+          '</div>'
+        );
+      }
+
+      if (cards.length > 0) {
+        document.getElementById('promotionsSection').style.display = 'block';
+        document.getElementById('promotionsGrid').innerHTML = cards.join('');
+      }
+    } catch (e) {
+      // Promotions are optional — silently fail
+    }
+  }
+
+  // Update handleCheckout to support ea_ and lifetime_ prefixes
+  var _origHandleCheckout = handleCheckout;
+  handleCheckout = function(plan) {
+    var token = localStorage.getItem('razzle_token');
+    if (!token) {
+      if (typeof openAuthModal === 'function') openAuthModal();
+      return;
+    }
+    // For ea_ and lifetime_ plans, pass directly as interval
+    if (plan.startsWith('ea_') || plan.startsWith('lifetime_')) {
+      var interval = plan.startsWith('ea_') ? plan + '_year' : plan;
+      if (typeof startCheckout === 'function') startCheckout(interval);
+      return;
+    }
+    _origHandleCheckout(plan);
+  };
+
   // Init — default to yearly per pricing strategy
   checkSubscription();
   updatePricingUI();
+  loadPromotions();
 </script>
 </body>
 </html>

@@ -237,6 +237,18 @@ body {
   background: var(--orange);
 }
 
+.nav-plan-trial {
+  color: var(--orange);
+  border-color: var(--orange);
+  background: transparent;
+  animation: trial-pulse 3s ease-in-out infinite;
+}
+
+@keyframes trial-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
 .nav-plan-elite {
   color: white;
   border-color: var(--purple);

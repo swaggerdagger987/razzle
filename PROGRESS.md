@@ -1,5 +1,26 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 151 — Platform: No-Credit-Card Trial + Promotional Pricing Infrastructure (COMPLETE)
+
+**Exit Criterion MET**: Complete promotional pricing infrastructure shipped. (1) No-credit-card 7-day Pro trial: new users auto-get Pro access on registration via trial_start/trial_end/trial_used columns in users table. Effective plan computed dynamically in _user_dict() — JWT tokens carry "pro" plan during trial, require_plan() middleware grants Pro access. Trial reverts to free after 7 days. One trial per account enforced via trial_used flag checked in billing._user_had_trial(). Frontend shows "Trial Xd" nav badge with pulse animation and countdown in dropdown. (2) Early adopter rates: get_subscriber_counts() tracks pro/elite/lifetime totals. get_early_adopter_status() returns availability with remaining slots. EA pricing uses dedicated Stripe price IDs via env vars, gated by EA_ENABLED flag. Pricing page dynamically renders EA cards when enabled. (3) Lifetime deals: one-time Stripe payment mode (not subscription). Plans "pro_lifetime"/"elite_lifetime" in _PLAN_HIERARCHY at same level as regular tiers. _handle_subscription_deleted() skips lifetime users. LIFETIME_ENABLED env var controls availability. (4) Pricing page: trial banners for logged-out and trial-active users, loadPromotions() fetches /api/billing/promotions and renders EA + lifetime cards, handleCheckout() override routes ea_/lifetime_ plans correctly. (5) All 8 QA tests pass, 6 acceptance criteria verified.
+
+### Phase 151 Tasks (Platform Loop)
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | No-Credit-Card Free Trial (7-Day Pro Access) | DONE | Backend trial logic + frontend badges/CTAs |
+| 2 | Early Adopter Rate Tracking | DONE | Subscriber counting + env var gating + pricing page cards |
+| 3 | Lifetime Deal Infrastructure | DONE | One-time Stripe payment + plan protection + env var flag |
+| 4 | Pricing Page Polish | DONE | Trial banners + promotions section + FAQ updates |
+| 5 | QA + Integration Verification | DONE | 8/8 automated tests pass, all 6 acceptance criteria verified |
+
+### Decisions Log
+- Trial is database-driven, not Stripe-driven — no credit card needed at all
+- Effective plan computed in _user_dict() so it works with both JWT tokens and direct user lookups
+- Early adopter and lifetime deals behind env var flags for controlled rollout
+- Lifetime plans use "pro_lifetime"/"elite_lifetime" to distinguish from subscription plans
+- _handle_subscription_deleted protects lifetime users from accidental downgrade
+
 ## Previous Phase: Phase 150 — Platform: Site-Wide Footer Modernization (COMPLETE)
 
 **Exit Criterion MET**: Footer consistency achieved across all 72 non-special HTML files. Phase 149 modernized the footer on index.html only (5-column responsive CSS grid with categorized links). Phase 150 extended this to every remaining page: agents.html (old warroom-footer replaced), league-intel.html (old div footer replaced), pricing.html and about.html (had no footer — new footer added), and all 65+ Lab panel pages (old pipe-separated `<footer>` elements replaced). Python script `scripts/update_footers.py` handled the bulk update. 7 files needed secondary cleanup due to dual-footer insertion. Final verification: 72/72 files have the modern grid footer, zero old pipe-separated links remain, all files structurally intact (closing tags, app.js script).
@@ -4207,3 +4228,4 @@ _None currently._
 | 2026-03-11 | Multi-season Sleeper history as Phase 135 | Multi-season league history crawling via previous_league_id chain is essential for the Historian agent and behavioral profiling. Paid users get up to 5 seasons of transaction data aggregated into enhanced manager profiles with panic indicators, positional bias consistency, win/loss correlation, FAAB trends, and per-season breakdowns. This data feeds directly into agent prompts via the context bridge, creating the "ChatGPT can't do this" moat for league-contextualized answers. Free users get single-season only, making the upgrade gap visceral. |
 | 2026-03-11 | Agent memory engine as Phase 136 | Server-side agent memory is the highest-impact Elite differentiator. localStorage memory (20 entries) works for all users. Elite gets cloud-synced memory (100 entries) with league_id tagging, keyword search, and time-decay relevance scoring. This creates massive switching cost — the longer you use Razzle, the smarter your agents get. Memory panel shows cloud-sync status with badges. buildUserMessage injects memory with league context so agents say "last time you asked about [Player] in [League], we recommended..." |
 | 2026-03-11 | Landing page conversion polish as Phase 137 | Auto-rotating demo briefings create the illusion of a live War Room — agents are visibly "working" with 8-second rotation and smooth fade transitions. Personalized CTA adapts to user state: paid users see "Enter the Situation Room," free users with Sleeper see their actual player name in the CTA, unconnected users get "Connect Sleeper." Feature comparison table on agents.html pricing section makes the Free/Pro/Elite gap visceral with checkmarks, X marks, and orange-highlighted key differentiators. These three changes target the highest-leverage conversion points in the funnel. |
+| 2026-03-11 | No-CC trial + promotional pricing as Phase 151 | No-credit-card 7-day Pro trial on registration removes the biggest conversion barrier — users experience Pro features immediately. Trial tracked in users table (trial_start, trial_end, trial_used), effective plan computed dynamically in _user_dict() so JWT and middleware always see correct tier. Early adopter rates (Pro $59.99/yr first 500, Elite $99.99/yr first 200) with env-var feature flag and subscriber counting. Lifetime deals (Pro $249.99, Elite $399.99 one-time) use Stripe payment mode instead of subscription, with plan protection against subscription-delete webhooks. Pricing page dynamically loads promotions from /api/billing/promotions endpoint and renders EA/lifetime cards when enabled. All features gated behind env-var flags for controlled rollout. |

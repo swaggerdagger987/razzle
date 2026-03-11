@@ -56,15 +56,16 @@ function getUserPlan() {
   } catch (e) { return "free"; }
 }
 
-/** Returns true if user is on Pro or Elite plan. */
+/** Returns true if user is on Pro or Elite plan (includes lifetime and trial). */
 function isPaidUser() {
   var p = getUserPlan();
-  return p === "pro" || p === "elite";
+  return p === "pro" || p === "elite" || p === "pro_lifetime" || p === "elite_lifetime";
 }
 
-/** Returns true if user is on Elite plan. */
+/** Returns true if user is on Elite plan (includes lifetime). */
 function isEliteUser_global() {
-  return getUserPlan() === "elite";
+  var p = getUserPlan();
+  return p === "elite" || p === "elite_lifetime";
 }
 
 /**
@@ -486,23 +487,32 @@ function updateAuthUI(user) {
     var displayName = user.sleeper_username
       ? escapeHtml(user.sleeper_username)
       : escapeHtml(user.email.split("@")[0]);
-    var isPaid = user.plan === "pro" || user.plan === "elite";
+    var isPaid = user.plan === "pro" || user.plan === "elite" || user.plan === "pro_lifetime" || user.plan === "elite_lifetime";
+    var isTrial = user.trial_active && user.plan_source === "trial";
     var badge;
-    if (user.plan === "elite") {
-      badge = '<span class="nav-plan-badge nav-plan-elite">Elite</span>';
+    if (user.plan === "elite" || user.plan === "elite_lifetime") {
+      badge = '<span class="nav-plan-badge nav-plan-elite">Elite' + (user.plan === "elite_lifetime" ? ' ∞' : '') + '</span>';
+    } else if (isTrial) {
+      var daysLeft = user.trial_days_remaining || 0;
+      badge = '<span class="nav-plan-badge nav-plan-trial">Trial ' + daysLeft + 'd</span>';
     } else if (user.plan === "pro") {
-      badge = '<span class="nav-plan-badge nav-plan-pro">Pro</span>';
+      badge = '<span class="nav-plan-badge nav-plan-pro">Pro' + (user.plan === "pro_lifetime" ? ' ∞' : '') + '</span>';
     } else {
       badge = '<span class="nav-plan-badge nav-plan-free">Free</span>';
     }
 
     // Dropdown menu items
     var dropdownItems = '';
+    if (isTrial) {
+      dropdownItems += '<div class="nav-dropdown-item" style="font-size:10px; color:var(--orange); cursor:default;">Pro trial: ' + (user.trial_days_remaining || 0) + ' days remaining</div>';
+    }
     if (user.sleeper_username) {
       dropdownItems += '<div class="nav-dropdown-item" style="font-size:10px; color:var(--ink-light); cursor:default;">sleeper: ' + escapeHtml(user.sleeper_username) + '</div>';
     }
-    if (isPaid) {
+    if (isPaid && !isTrial) {
       dropdownItems += '<a href="#" onclick="openManageSubscription(); return false;" class="nav-dropdown-item">Manage Subscription</a>';
+    } else if (isTrial) {
+      dropdownItems += '<a href="/pricing.html" class="nav-dropdown-item" style="color:var(--orange);">Keep Pro — Subscribe</a>';
     } else {
       dropdownItems += '<a href="/pricing.html" class="nav-dropdown-item" style="color:var(--orange);">Upgrade to Pro</a>';
     }

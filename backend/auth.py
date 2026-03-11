@@ -29,6 +29,9 @@ JWT_EXPIRY_DAYS = 7
 
 EMAIL_REGEX = re.compile(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
 
+# No-credit-card trial — new users get 7 days of Pro access on registration
+TRIAL_DURATION_DAYS = 7
+
 # Common passwords (top ~200 most used) — reject these outright
 _COMMON_PASSWORDS = frozenset([
     "password", "123456", "12345678", "qwerty", "abc123", "monkey", "1234567",
@@ -122,6 +125,19 @@ def initialize_users_db():
             CREATE INDEX IF NOT EXISTS idx_briefings_user_week ON weekly_briefings(user_id, week_label);
         """)
         conn.commit()
+
+        # Migration: add trial columns to users table
+        for col, default in [
+            ("trial_start", "NULL"),
+            ("trial_end", "NULL"),
+            ("trial_used", "0"),
+        ]:
+            try:
+                conn.execute(f"ALTER TABLE users ADD COLUMN {col} DEFAULT {default}")
+                conn.commit()
+            except Exception:
+                pass  # Column already exists
+
     logger.info("Users database initialized")
 
 
@@ -160,6 +176,38 @@ def _user_dict(row) -> dict:
         d["stripe_customer_id"] = row["stripe_customer_id"]
     except (IndexError, KeyError):
         pass
+
+    # Trial info
+    trial_end_str = None
+    try:
+        trial_end_str = row["trial_end"]
+    except (IndexError, KeyError):
+        pass
+
+    trial_active = False
+    trial_days_remaining = 0
+    if trial_end_str and d["plan"] == "free":
+        try:
+            trial_end = datetime.fromisoformat(trial_end_str.replace("Z", "+00:00"))
+            now = datetime.now(timezone.utc)
+            if trial_end > now:
+                trial_active = True
+                trial_days_remaining = max(0, (trial_end - now).days)
+        except (ValueError, TypeError):
+            pass
+
+    d["trial_active"] = trial_active
+    d["trial_days_remaining"] = trial_days_remaining
+    if trial_end_str:
+        d["trial_end"] = trial_end_str
+
+    # Effective plan: if trial is active and user has no paid plan, they get Pro
+    if trial_active and d["plan"] == "free":
+        d["plan"] = "pro"
+        d["plan_source"] = "trial"
+    else:
+        d["plan_source"] = "subscription" if d["plan"] != "free" else "free"
+
     return d
 
 
@@ -192,14 +240,24 @@ def register(email: str, password: str) -> dict:
                 return {"error": "Email already registered", "status": 409}
 
             password_hash = _hash_password(password)
+            now = datetime.now(timezone.utc)
+            trial_start = now.isoformat()
+            trial_end = (now + timedelta(days=TRIAL_DURATION_DAYS)).isoformat()
             cursor = conn.execute(
-                "INSERT INTO users (email, password_hash) VALUES (?, ?)",
-                (email, password_hash),
+                "INSERT INTO users (email, password_hash, trial_start, trial_end, trial_used) VALUES (?, ?, ?, ?, 1)",
+                (email, password_hash, trial_start, trial_end),
             )
             conn.commit()
             user_id = cursor.lastrowid
-            user = {"id": user_id, "email": email, "plan": "free", "sleeper_username": None}
-            token = _create_token(user_id, email, "free")
+            # Build user dict with trial active — effective plan will be "pro"
+            user = {
+                "id": user_id, "email": email, "plan": "pro",
+                "sleeper_username": None, "trial_active": True,
+                "trial_days_remaining": TRIAL_DURATION_DAYS,
+                "trial_end": trial_end, "plan_source": "trial",
+            }
+            # Token carries "pro" plan during trial for middleware compatibility
+            token = _create_token(user_id, email, "pro")
             return {"token": token, "user": user}
     except Exception as e:
         logger.error(f"Registration error: {type(e).__name__}: {e}")
@@ -218,6 +276,7 @@ def login(email: str, password: str) -> dict:
             return {"error": "Invalid email or password", "status": 401}
 
         user = _user_dict(row)
+        # Token uses effective plan (includes trial upgrade to pro)
         token = _create_token(user["id"], user["email"], user["plan"])
         return {"token": token, "user": user}
 

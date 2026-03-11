@@ -24,6 +24,20 @@ STRIPE_PRICE_PRO_YEARLY = os.environ.get("STRIPE_PRICE_PRO_YEARLY", "")
 STRIPE_PRICE_ELITE_MONTHLY = os.environ.get("STRIPE_PRICE_ELITE_MONTHLY", "")
 STRIPE_PRICE_ELITE_YEARLY = os.environ.get("STRIPE_PRICE_ELITE_YEARLY", "")
 
+# Early adopter pricing — discounted rates for first N subscribers
+STRIPE_PRICE_EA_PRO_YEARLY = os.environ.get("STRIPE_PRICE_EA_PRO_YEARLY", "")     # $59.99/yr (25% off)
+STRIPE_PRICE_EA_ELITE_YEARLY = os.environ.get("STRIPE_PRICE_EA_ELITE_YEARLY", "")  # $99.99/yr (33% off)
+EA_PRO_LIMIT = int(os.environ.get("EA_PRO_LIMIT", "500"))    # First 500 Pro subscribers
+EA_ELITE_LIMIT = int(os.environ.get("EA_ELITE_LIMIT", "200"))  # First 200 Elite subscribers
+# Feature flag — set to "1" to enable early adopter pricing
+EA_ENABLED = os.environ.get("EA_ENABLED", "0") == "1"
+
+# Lifetime deal pricing — one-time payment
+STRIPE_PRICE_LIFETIME_PRO = os.environ.get("STRIPE_PRICE_LIFETIME_PRO", "")      # $249.99
+STRIPE_PRICE_LIFETIME_ELITE = os.environ.get("STRIPE_PRICE_LIFETIME_ELITE", "")  # $399.99
+LIFETIME_LIMIT = int(os.environ.get("LIFETIME_LIMIT", "100"))  # First 100 only
+LIFETIME_ENABLED = os.environ.get("LIFETIME_ENABLED", "0") == "1"
+
 # Legacy fallback (single-tier) — maps to Pro
 STRIPE_PRICE_YEARLY = os.environ.get("STRIPE_PRICE_YEARLY", "") or STRIPE_PRICE_PRO_YEARLY
 STRIPE_PRICE_MONTHLY = os.environ.get("STRIPE_PRICE_MONTHLY", "") or STRIPE_PRICE_PRO_MONTHLY
@@ -34,6 +48,12 @@ _PRICE_MAP = {
     "pro_year": STRIPE_PRICE_PRO_YEARLY,
     "elite_month": STRIPE_PRICE_ELITE_MONTHLY,
     "elite_year": STRIPE_PRICE_ELITE_YEARLY,
+    # Early adopter (annual only)
+    "ea_pro_year": STRIPE_PRICE_EA_PRO_YEARLY,
+    "ea_elite_year": STRIPE_PRICE_EA_ELITE_YEARLY,
+    # Lifetime (one-time)
+    "lifetime_pro": STRIPE_PRICE_LIFETIME_PRO,
+    "lifetime_elite": STRIPE_PRICE_LIFETIME_ELITE,
     # Legacy identifiers
     "month": STRIPE_PRICE_MONTHLY,
     "year": STRIPE_PRICE_YEARLY,
@@ -84,7 +104,67 @@ def initialize_subscriptions_table():
         except Exception:
             logger.debug("trial_end column already exists or migration failed", exc_info=True)
         conn.commit()
+        # Add plan_type column for lifetime tracking
+        try:
+            conn.execute("ALTER TABLE subscriptions ADD COLUMN plan_type TEXT DEFAULT 'subscription'")
+        except Exception:
+            pass  # Already exists
+        conn.commit()
     logger.info("Subscriptions table initialized")
+
+
+def get_subscriber_counts() -> dict:
+    """Count current active subscribers by tier. Used for early adopter / lifetime caps."""
+    with auth_module.get_users_db() as conn:
+        pro_count = conn.execute(
+            "SELECT COUNT(*) FROM users WHERE plan IN ('pro', 'pro_lifetime')"
+        ).fetchone()[0]
+        elite_count = conn.execute(
+            "SELECT COUNT(*) FROM users WHERE plan IN ('elite', 'elite_lifetime')"
+        ).fetchone()[0]
+        lifetime_count = conn.execute(
+            "SELECT COUNT(*) FROM users WHERE plan IN ('pro_lifetime', 'elite_lifetime')"
+        ).fetchone()[0]
+        return {
+            "pro_total": pro_count,
+            "elite_total": elite_count,
+            "lifetime_total": lifetime_count,
+        }
+
+
+def get_early_adopter_status() -> dict:
+    """Return early adopter pricing availability and remaining slots."""
+    counts = get_subscriber_counts()
+    return {
+        "early_adopter": {
+            "enabled": EA_ENABLED,
+            "pro": {
+                "limit": EA_PRO_LIMIT,
+                "used": counts["pro_total"],
+                "remaining": max(0, EA_PRO_LIMIT - counts["pro_total"]),
+                "available": EA_ENABLED and counts["pro_total"] < EA_PRO_LIMIT,
+                "price": "$59.99/yr",
+                "savings": "25% off",
+            },
+            "elite": {
+                "limit": EA_ELITE_LIMIT,
+                "used": counts["elite_total"],
+                "remaining": max(0, EA_ELITE_LIMIT - counts["elite_total"]),
+                "available": EA_ENABLED and counts["elite_total"] < EA_ELITE_LIMIT,
+                "price": "$99.99/yr",
+                "savings": "33% off",
+            },
+        },
+        "lifetime": {
+            "enabled": LIFETIME_ENABLED,
+            "limit": LIFETIME_LIMIT,
+            "used": counts["lifetime_total"],
+            "remaining": max(0, LIFETIME_LIMIT - counts["lifetime_total"]),
+            "available": LIFETIME_ENABLED and counts["lifetime_total"] < LIFETIME_LIMIT,
+            "pro_price": "$249.99",
+            "elite_price": "$399.99",
+        },
+    }
 
 
 # Promo codes — validated server-side, applied as Stripe coupon
@@ -98,13 +178,27 @@ _TRIAL_DAYS = 7
 
 
 def _user_had_trial(user_id: int) -> bool:
-    """Check if user has ever had a trial (prevent re-trial abuse)."""
+    """Check if user has ever had a trial (prevent re-trial abuse).
+    Checks both the subscriptions table (Stripe trial) and users table (no-CC trial)."""
     with auth_module.get_users_db() as conn:
+        # Check Stripe subscription trial
         row = conn.execute(
             "SELECT trial_used FROM subscriptions WHERE user_id = ? AND trial_used = 1 LIMIT 1",
             (user_id,),
         ).fetchone()
-        return bool(row)
+        if row:
+            return True
+        # Check no-CC registration trial (users.trial_used column)
+        try:
+            user_row = conn.execute(
+                "SELECT trial_used FROM users WHERE id = ? AND trial_used = 1 LIMIT 1",
+                (user_id,),
+            ).fetchone()
+            if user_row:
+                return True
+        except Exception:
+            pass  # Column might not exist yet
+        return False
 
 
 def validate_promo_code(code: str) -> dict:
@@ -130,21 +224,47 @@ def create_checkout_session(user: dict, interval: str = "year", promo_code: str 
     """Create a Stripe Checkout Session for the user.
 
     interval can be: pro_month, pro_year, elite_month, elite_year,
+    ea_pro_year, ea_elite_year (early adopter),
+    lifetime_pro, lifetime_elite (one-time),
     or legacy: month, year (maps to Pro).
     promo_code: optional promo code for discount.
     """
     if not STRIPE_SECRET_KEY:
         return {"error": "Stripe not configured", "status": 503}
 
+    is_lifetime = interval.startswith("lifetime_")
+    is_early_adopter = interval.startswith("ea_")
+
+    # Validate early adopter availability
+    if is_early_adopter:
+        if not EA_ENABLED:
+            return {"error": "Early adopter pricing is not currently active", "status": 400}
+        counts = get_subscriber_counts()
+        if "elite" in interval and counts["elite_total"] >= EA_ELITE_LIMIT:
+            return {"error": "Early adopter Elite spots are full", "status": 400}
+        if "pro" in interval and "elite" not in interval and counts["pro_total"] >= EA_PRO_LIMIT:
+            return {"error": "Early adopter Pro spots are full", "status": 400}
+
+    # Validate lifetime availability
+    if is_lifetime:
+        if not LIFETIME_ENABLED:
+            return {"error": "Lifetime deals are not currently active", "status": 400}
+        counts = get_subscriber_counts()
+        if counts["lifetime_total"] >= LIFETIME_LIMIT:
+            return {"error": "Lifetime deal spots are full", "status": 400}
+
     price_id = _PRICE_MAP.get(interval, "")
     if not price_id:
         return {"error": f"Stripe price ID for '{interval}' not configured", "status": 503}
 
     # Determine plan tier for metadata
-    plan_tier = "elite" if interval.startswith("elite") else "pro"
+    if "elite" in interval:
+        plan_tier = "elite_lifetime" if is_lifetime else "elite"
+    else:
+        plan_tier = "pro_lifetime" if is_lifetime else "pro"
 
-    # Check trial eligibility (only for new subscribers)
-    trial_eligible = not _user_had_trial(user["id"])
+    # Check trial eligibility (only for regular subscriptions, not lifetime/EA)
+    trial_eligible = not is_lifetime and not is_early_adopter and not _user_had_trial(user["id"])
     trial_days = _TRIAL_DAYS if trial_eligible else None
 
     # Validate promo code if provided
@@ -159,25 +279,36 @@ def create_checkout_session(user: dict, interval: str = "year", promo_code: str 
         # Get or create Stripe customer
         customer_id = _get_or_create_customer(user)
 
-        # Build subscription_data
-        sub_data = {"metadata": {"plan_tier": plan_tier}}
-        if trial_days:
-            sub_data["trial_period_days"] = trial_days
+        if is_lifetime:
+            # Lifetime deals use one-time payment mode
+            session_kwargs = {
+                "customer": customer_id,
+                "payment_method_types": ["card"],
+                "line_items": [{"price": price_id, "quantity": 1}],
+                "mode": "payment",
+                "success_url": SUCCESS_URL,
+                "cancel_url": CANCEL_URL,
+                "metadata": {"user_id": str(user["id"]), "plan_tier": plan_tier},
+            }
+        else:
+            # Subscription mode (regular, early adopter)
+            sub_data = {"metadata": {"plan_tier": plan_tier}}
+            if trial_days:
+                sub_data["trial_period_days"] = trial_days
 
-        # Build session kwargs
-        session_kwargs = {
-            "customer": customer_id,
-            "payment_method_types": ["card"],
-            "line_items": [{"price": price_id, "quantity": 1}],
-            "mode": "subscription",
-            "success_url": SUCCESS_URL,
-            "cancel_url": CANCEL_URL,
-            "metadata": {"user_id": str(user["id"]), "plan_tier": plan_tier},
-            "subscription_data": sub_data,
-        }
+            session_kwargs = {
+                "customer": customer_id,
+                "payment_method_types": ["card"],
+                "line_items": [{"price": price_id, "quantity": 1}],
+                "mode": "subscription",
+                "success_url": SUCCESS_URL,
+                "cancel_url": CANCEL_URL,
+                "metadata": {"user_id": str(user["id"]), "plan_tier": plan_tier},
+                "subscription_data": sub_data,
+            }
 
-        # Apply coupon if promo code valid
-        if coupon_id:
+        # Apply coupon if promo code valid (not for lifetime)
+        if coupon_id and not is_lifetime:
             session_kwargs["discounts"] = [{"coupon": coupon_id}]
 
         session = stripe.checkout.Session.create(**session_kwargs)
@@ -245,7 +376,7 @@ def _handle_checkout_completed(session):
     plan_tier = metadata.get("plan_tier", "pro")  # default to pro for legacy
 
     # Validate plan tier
-    if plan_tier not in ("pro", "elite"):
+    if plan_tier not in ("pro", "elite", "pro_lifetime", "elite_lifetime"):
         plan_tier = "pro"
 
     if not user_id:
@@ -298,12 +429,16 @@ def _handle_checkout_completed(session):
 
 
 def _handle_subscription_deleted(subscription):
-    """Downgrade user to free when subscription cancelled."""
+    """Downgrade user to free when subscription cancelled. Skips lifetime users."""
     customer_id = subscription.get("customer")
 
     with auth_module.get_users_db() as conn:
-        row = conn.execute("SELECT id FROM users WHERE stripe_customer_id = ?", (customer_id,)).fetchone()
+        row = conn.execute("SELECT id, plan FROM users WHERE stripe_customer_id = ?", (customer_id,)).fetchone()
         if row:
+            # Never downgrade lifetime plans
+            if row["plan"] in ("pro_lifetime", "elite_lifetime"):
+                logger.info(f"User {row['id']} has lifetime plan — skipping downgrade")
+                return
             conn.execute("UPDATE users SET plan = 'free' WHERE id = ?", (row["id"],))
             conn.execute("""
                 UPDATE subscriptions SET plan = 'free', status = 'cancelled', updated_at = CURRENT_TIMESTAMP

@@ -1657,19 +1657,19 @@ function renderContextBadges() {
     var hint = document.getElementById('proUpsellHint');
     if (btn && hint) {
       if (!user) {
-        btn.textContent = 'Sign In to Get Started';
+        btn.textContent = 'Start Free 7-Day Trial';
         btn.href = '#';
         btn.onclick = function(e) { e.preventDefault(); if (typeof openAuthModal === 'function') openAuthModal(); };
-        hint.textContent = 'free preview — sign in then connect Sleeper';
+        hint.textContent = 'no credit card required — full Pro access for 7 days';
       } else if (!user.sleeper_username) {
         btn.textContent = 'Connect Sleeper to Unlock';
         btn.href = '/league-intel.html';
         btn.onclick = null;
-        hint.textContent = 'free preview — connect your leagues for full context';
+        hint.textContent = 'connect your leagues for full league context';
       } else {
-        btn.textContent = 'Upgrade to Pro — from $9.99/mo';
-        btn.href = '#';
-        btn.onclick = function(e) { e.preventDefault(); if (typeof startCheckout === 'function') startCheckout('year'); };
+        btn.textContent = 'Upgrade to Pro — from $6.67/mo';
+        btn.href = '/pricing.html';
+        btn.onclick = null;
         hint.textContent = 'full league context, agent memory, personalized briefings';
       }
     }
@@ -1755,14 +1755,16 @@ async function loadPersona(agentId) {
 function isProUser() {
   try {
     var user = JSON.parse(localStorage.getItem("razzle_user"));
-    return user && (user.plan === "pro" || user.plan === "elite");
+    var p = user && user.plan;
+    return p === "pro" || p === "elite" || p === "pro_lifetime" || p === "elite_lifetime";
   } catch (e) { return false; }
 }
 
 function isEliteUser() {
   try {
     var user = JSON.parse(localStorage.getItem("razzle_user"));
-    return user && user.plan === "elite";
+    var p = user && user.plan;
+    return p === "elite" || p === "elite_lifetime";
   } catch (e) { return false; }
 }
 
