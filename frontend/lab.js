@@ -146,13 +146,13 @@ function _resetLoadingSkeleton(el) {
   if (!el.querySelector('.skeleton-table')) el.innerHTML = _skeletonHTML;
 }
 function _setLoadingError(el, msg) {
-  el.innerHTML = '<div style="text-align:center; font-family:var(--font-hand); font-size:22px; color:var(--ink-light); padding:40px 20px;">' + msg + '</div>';
+  el.innerHTML = '<div style="text-align:center; font-family:var(--font-hand); font-size:22px; color:var(--ink-light); padding:40px 20px;">' + escapeHtml(msg) + '</div>';
 }
 function _highlightSearch(escaped) {
   if (!state.search) return escaped;
   var q = escapeHtml(state.search);
   var re = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
-  return escaped.replace(re, '<mark style="background:rgba(217,119,87,0.25); padding:0 1px; border-radius:2px;">$1</mark>');
+  return escaped.replace(re, '<mark class="search-hl">$1</mark>');
 }
 
 // ─── Watchlist (localStorage, cached in memory) ────────────────

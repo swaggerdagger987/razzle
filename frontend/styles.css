@@ -447,6 +447,14 @@ body {
   100% { background-position: -200% 0; }
 }
 
+/* ===== SEARCH HIGHLIGHT ===== */
+.search-hl {
+  background: rgba(217, 119, 87, 0.25);
+  padding: 0 1px;
+  border-radius: 2px;
+  color: inherit;
+}
+
 /* ===== ERROR STATE ===== */
 .error-msg {
   font-family: var(--font-hand);

@@ -1,5 +1,16 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 100 — QA + UX Audit Fixes for Phases 97-99 (COMPLETE)
+
+**Exit Criterion MET**: 1 HIGH (_setLoadingError escaping) and 1 MEDIUM (search highlight CSS class) fixed. 0 CRITICAL.
+
+### Phase 100 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | _setLoadingError msg escaping | DONE | Wrapped in escapeHtml() |
+| 2 | Search highlight CSS class | DONE | Inline styles → .search-hl class in styles.css |
+
 ## Previous Phase: Phase 99 — Search Text Highlight (COMPLETE)
 
 **Exit Criterion MET**: Matching search text highlighted in player names with terracotta-tinted <mark>. 34 tests pass.

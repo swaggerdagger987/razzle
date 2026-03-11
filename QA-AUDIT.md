@@ -1,8 +1,8 @@
-# QA + UX Audit — Phases 92-95
+# QA + UX Audit — Phases 97-99
 
 **Audit Date**: 2026-03-11
-**Scope**: Phases 92-95 (Quick preset select, Visual mode cycle, Quick compare strip, Reddit table copy)
-**Files Audited**: frontend/lab.js, frontend/lab.html
+**Scope**: Phases 97-99 (Loading skeleton, Empty state, Search highlight)
+**Files Audited**: frontend/lab.js, frontend/styles.css
 
 ---
 
@@ -12,24 +12,21 @@
 
 ### HIGH
 
-1. **Pipe character escaping in Reddit table** (`frontend/lab.js`)
-   - Original: Player names/values with pipe chars would corrupt markdown table formatting.
-   - **Fixed in this audit**: Added `escPipe()` helper to escape `|` chars in all table cell values.
+1. **_setLoadingError msg not escaped** (`frontend/lab.js`)
+   - Original: `msg` parameter inserted directly into innerHTML without escaping.
+   - **Fixed in this audit**: Wrapped in `escapeHtml(msg)`.
 
 ### MEDIUM
 
-2. **Quick compare stats not universe-aware** (`frontend/lab.js`)
-   - Original: Hardcoded NFL stats (ppg, fantasy_points_ppr) that don't exist in college data.
-   - **Fixed in this audit**: Stats array now checks `state.universe === "college"` and uses college-appropriate stats (total_yards, total_tds, rec_yards, etc.).
-
-3. **Visual mode cycle fires in college mode** (`frontend/lab.js`)
-   - Original: V key cycles visual modes even when heat/percentile buttons are hidden in college mode, causing state/UI desync.
-   - **Fixed in this audit**: Added guard `if (state.universe !== "nfl") return` with toast feedback.
+2. **Search highlight using inline styles instead of CSS class** (`frontend/lab.js`)
+   - Original: `<mark style="background:rgba(217,119,87,0.25)...">` hardcoded inline.
+   - **Fixed in this audit**: Changed to `<mark class="search-hl">` with CSS rule in styles.css.
 
 ### LOW
 
-4. Quick compare strip lacks aria-label for screen readers. Not a functional issue.
-5. Reddit table copy fallback toast doesn't include row count (minor inconsistency).
+3. Skeleton cache (`_skeletonHTML`) is set once and never invalidated. Current design is correct — skeleton structure is static and doesn't change with column visibility. Not a bug.
+4. Empty state onclick handler uses inline `onclick="resetAllFilters()"`. Acceptable for a single hardcoded call to a known function.
+5. Skeleton shimmer animation uses `background-position` — works in all modern browsers. No fix needed.
 
 ---
 
@@ -41,17 +38,17 @@
 
 ### LOW
 
-1. Preset select works correctly in all universes (NFL/College/Prospect) — populates with appropriate presets.
-2. Quick compare strip green highlighting is clear and position colors are accurate.
-3. Reddit table button styled with orange border — matches export action theme.
+1. Skeleton rows provide good loading feedback — 6 rows with varying widths feel organic.
+2. Empty state tiger emoji and reset-filters link are clear and helpful.
+3. Search highlight terracotta tint matches the accent color and is subtle enough to not distract.
 
 ---
 
 ## SUMMARY
 
 - **CRITICAL**: 0
-- **HIGH**: 1 (pipe escaping — fixed)
-- **MEDIUM**: 2 (college stats + visual mode guard — both fixed)
-- **LOW**: 4
+- **HIGH**: 1 (msg escaping — fixed)
+- **MEDIUM**: 1 (inline styles → CSS class — fixed)
+- **LOW**: 5
 
-Overall: One data corruption bug (pipe chars in Reddit table) and two college-mode issues found and fixed. All phases 92-95 functional requirements met.
+Overall: One XSS hardening fix and one style consistency fix. All phases 97-99 functional requirements met.
