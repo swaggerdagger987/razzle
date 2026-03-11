@@ -1,37 +1,46 @@
-# QA + UX Audit — Phases 62-65
+# QA + UX Audit — Phases 66-70
 
-**Scope**: Phases 62-65 (Status Bar, Column Stats Tooltip, Quick Column Add, Bulk Action Bar)
-**Files reviewed**: frontend/lab.js, frontend/lab.html
-
----
+**Date**: 2026-03-11
+**Scope**: Phases 67-70 (Sort column highlight, Row rank, Rows per page, PNG export enhancement, Scroll-to-top + header shadow)
+**Files**: frontend/lab.html, frontend/lab.js
 
 ## QA FINDINGS
 
-### MEDIUM-1: Bulk action bar Compare button enabled with 1 player (FIXED)
-**File**: frontend/lab.html, frontend/lab.js (updateSelectionUI)
-**Issue**: Compare button was clickable with only 1 player selected. Compare needs 2+.
-**Fix**: Added disabled state + opacity 0.5 when count < 2. FIXED in this audit.
+### CRITICAL: None
 
-### LOW-1: Column header stats computed on every render
-**File**: frontend/lab.js (renderTableHead)
-**Issue**: Min/avg/max stats for each column are recomputed every time renderTableHead is called. With 100 items and ~20 columns, this is ~2000 parseFloat calls per render. Negligible performance impact at current scale.
+### HIGH: None
 
-### LOW-2: "+" column spacer adds 32px to each row
-**File**: frontend/lab.js (buildRowHTML)
-**Issue**: Each data row has an empty `<td style="width:32px;">` spacer for the "+" column button. Adds DOM weight. Acceptable trade-off for proper column alignment.
+### MEDIUM
 
----
+1. **ColCount mismatch in renderVisibleRows and renderPinnedRows**
+   - File: frontend/lab.js, colCount calculations in renderVisibleRows spacer and renderPinnedRows separator
+   - Issue: colCount calculation uses `+ 4 +` but should be `+ 5 +` to account for rank column added in Phase 67. insertTierBreakRows was correctly updated but these two were missed.
+   - Impact: Spacer rows may have wrong colspan causing slight horizontal misalignment.
+   - Fix: Change `+ 4 +` to `+ 5 +` in both locations.
+
+2. **Page size selector default `selected` attribute hardcoded to 100**
+   - File: frontend/lab.html, pageSizeSelect option element
+   - Issue: `<option value="100" selected>` always shows 100 selected on initial HTML parse even if localStorage has 50. Only syncs after first fetch completes.
+   - Impact: Cosmetic — wrong value shown for ~1 second on load.
+   - Fix: Remove `selected` attribute, let renderPagination() handle it on first call.
+
+### LOW
+
+3. **Header shadow uses rgba(0,0,0) instead of espresso brown** — should be rgba(45,31,20,0.08)
+4. **Scroll-to-top button uses border-radius: 50%** — not matching chunky aesthetic, should use border-radius: 8px
+5. **Scroll-to-top button missing aria-label** — has title but not aria-label
+6. **Scroll threshold 200px is a magic number** — minor, works fine
+7. **Scroll-to-top onclick inline lacks null check** — minor defensive coding
 
 ## UX FINDINGS
 
-### LOW-U1: Status bar information density
-**Issue**: Status bar shows "1-100 of 342 players · PPG ↓ · 2025 · WR" — information-dense but well-formatted with middot separators. No action needed.
+### CRITICAL: None
 
-### LOW-U2: "+" column button same size in dense mode
-**Issue**: The "+" button is 32px wide in both normal and dense mode. Could be smaller in dense mode but low priority.
+### HIGH: None
 
----
+### MEDIUM: None
 
-## SUMMARY
+### LOW
 
-Clean audit. 1 MEDIUM finding (fixed inline). No CRITICAL or HIGH issues. Code quality is solid across Phases 62-65.
+1. **Rank column on narrow screens** — 36px rank column adds width; on mobile the table already horizontally scrolls so no functional issue.
+2. **Page size dropdown label** — dropdown has title="Rows per page" but no visible label; minor discoverability issue.

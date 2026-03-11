@@ -1,5 +1,16 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 71 — QA + UX Audit Fixes for Phases 66-70 (COMPLETE)
+
+**Exit Criterion MET**: 2 MEDIUM findings fixed (colCount mismatch in spacer/separator rows, page size selector default). 5 LOW findings fixed (shadow color, button border-radius, aria-label, null check).
+
+### Phase 71 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Fix colCount mismatch | DONE | +4 to +5 in renderVisibleRows and renderPinnedRows |
+| 2 | Page size selector + LOWs | DONE | Removed selected attr, espresso shadow, 8px border-radius, aria-label, null check |
+
 ## Previous Phase: Phase 70 — Screener Scroll-to-Top + Header Shadow (COMPLETE)
 
 **Exit Criterion MET**: Thead shadow on scroll (box-shadow 0 4px 8px rgba 8%). Scroll-to-top circle button at scrollTop > 200. Both in RAF-throttled scroll handler.

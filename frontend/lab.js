@@ -1353,7 +1353,7 @@ function renderVisibleRows() {
   const totalRows = _vscrollRows.length;
   const scrollTop = wrap.scrollTop;
   const viewHeight = wrap.clientHeight;
-  const colCount = getActiveColumns().length + 4 + (state.universe === "nfl" ? 1 : 0); // +star +checkbox +player (+pin if NFL) (+add column btn)
+  const colCount = getActiveColumns().length + 5 + (state.universe === "nfl" ? 1 : 0); // +star +checkbox +rank +player (+pin if NFL) (+add column btn)
 
   // Calculate visible range
   const startRow = Math.max(0, Math.floor(scrollTop / getVScrollRowHeight()) - VSCROLL_BUFFER);
@@ -2769,7 +2769,7 @@ function renderPinnedRows() {
   }
 
   // Add a separator row at end
-  const colCount = cols.length + 4 + (state.universe === "nfl" ? 1 : 0); // +star +checkbox +player (+pin if NFL) (+add column btn)
+  const colCount = cols.length + 5 + (state.universe === "nfl" ? 1 : 0); // +star +checkbox +rank +player (+pin if NFL) (+add column btn)
   html += `<tr class="pinned-separator"><td colspan="${colCount}"></td></tr>`;
 
   pinnedBody.innerHTML = html;

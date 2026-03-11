@@ -831,7 +831,7 @@
     z-index: 10;
   }
   .screener-table thead.thead-shadow th {
-    box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 8px rgba(45,31,20,0.08);
   }
 
   .screener-table th {
@@ -1350,7 +1350,7 @@
     width: 36px;
     height: 36px;
     border: 3px solid var(--ink);
-    border-radius: 50%;
+    border-radius: 8px;
     background: var(--bg-card);
     box-shadow: 3px 3px 0 var(--ink);
     cursor: pointer;
@@ -2992,7 +2992,7 @@
 
   <!-- TABLE -->
   <div class="table-wrap">
-    <button class="scroll-top-btn" id="scrollTopBtn" style="display:none;" onclick="document.querySelector('.table-wrap').scrollTo({top:0, behavior:'smooth'})" title="Scroll to top">&#9650;</button>
+    <button class="scroll-top-btn" id="scrollTopBtn" style="display:none;" onclick="var w=document.querySelector('.table-wrap'); if(w) w.scrollTo({top:0, behavior:'smooth'})" title="Scroll to top" aria-label="Scroll to top">&#9650;</button>
     <table class="screener-table" id="screenerTable">
       <thead id="tableHead"></thead>
       <tbody id="pinnedBody" style="display:none;"></tbody>
@@ -3031,7 +3031,7 @@
       <select class="select-chunky" id="pageSizeSelect" onchange="changePageSize(this.value)" style="font-size:11px; padding:4px 6px; margin-left:8px;" title="Rows per page">
         <option value="25">25</option>
         <option value="50">50</option>
-        <option value="100" selected>100</option>
+        <option value="100">100</option>
         <option value="200">200</option>
       </select>
     </div>
