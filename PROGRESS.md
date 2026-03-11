@@ -1,5 +1,25 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 139 — Platform: Saved Views Cloud Sync + Auth UX Polish (COMPLETE)
+
+**Exit Criterion MET**: Saved views cloud sync for Pro/Elite users — backend endpoints (GET /api/user/views, POST /api/user/views/sync) with auth + plan gating, frontend merge logic, cloud badge, upgrade hint. Stripe checkout return detection polls for plan upgrade and dispatches razzle-plan-changed event that refreshes all gated features (season selector, formula limit, cloud sync triggers) without page reload. Nav auth dropdown with chunky Razzle styling: plan badge (Free/Pro/Elite), email, Manage/Upgrade link, Sign Out. Elite plan badge styled in purple.
+
+### Phase 139 Tasks (Platform Loop)
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Saved Views Cloud Sync | DONE | get_saved_views/sync_saved_views in auth.py, endpoints in server.py, syncSavedViewsFromCloud() in lab.js, cloud badge |
+| 2 | Auth-Triggered Feature Unlock | DONE | _detectCheckoutReturn() polls for plan change, razzle-plan-changed custom event, listener refreshes all gates |
+| 3 | Nav Auth Dropdown Polish | DONE | Account dropdown with plan badge, email, Manage/Upgrade, Sign Out. Elite badge purple. Chunky Razzle styling |
+
+### Decisions Log
+- Checkout return detection polls /api/auth/me every 2s up to 10 times (20s max) for Stripe webhook to propagate
+- Plan-changed event is a CustomEvent — any page can listen and react without coupling
+- Nav dropdown uses position:absolute below trigger, closes on outside click
+- Free users see "Upgrade to Pro" link in orange in the dropdown — subtle but persistent conversion nudge
+- Saved views sync uses full replacement strategy (delete all + re-insert) to avoid conflict resolution complexity
+- Views capped at 20 per user on both frontend and backend
+
 ## Previous Phase: Phase 138 — Platform: Bureau Activity Feed + Formula Cloud Sync (COMPLETE)
 
 **Exit Criterion MET**: Bureau of Intelligence league-intel.html now shows a competitor activity feed (last 25 transactions) auto-loading when a league card is expanded. Transactions show manager name, type badge (trade/waiver/FA), position-colored player adds/drops, FAAB bid amounts, and relative timestamps. Trades show both sides with arrow layout. Activity feed data saved to localStorage razzle_league_context.recentActivity for agent context bridge. Agent prompts in warroom.js now include RECENT LEAGUE ACTIVITY section with last 10 transactions for paid users. Formula cloud sync implemented: Pro/Elite users get formulas fetched from server on Lab page load, merged with localStorage (server wins on conflict), pushed back to server. Cloud-synced badge shown for paid users, upgrade hint for free users.

@@ -224,6 +224,105 @@ body {
   background: var(--orange);
 }
 
+.nav-plan-elite {
+  color: white;
+  border-color: var(--purple);
+  background: var(--purple);
+}
+
+/* Nav user dropdown */
+.nav-user-dropdown {
+  position: relative;
+}
+
+.nav-user-trigger {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  background: none;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: all 0.12s;
+  color: var(--ink);
+}
+
+.nav-user-trigger:hover {
+  border-color: var(--ink-faint);
+  background: var(--bg-card);
+}
+
+.nav-user-caret {
+  font-size: 10px;
+  color: var(--ink-light);
+  transition: transform 0.12s;
+}
+
+.nav-user-dropdown.open .nav-user-caret {
+  transform: rotate(180deg);
+}
+
+.nav-dropdown-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 4px);
+  min-width: 200px;
+  background: var(--bg-card);
+  border: 3px solid var(--ink);
+  border-radius: 10px;
+  box-shadow: 4px 4px 0 var(--ink);
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.nav-user-dropdown.open .nav-dropdown-menu {
+  display: block;
+}
+
+.nav-dropdown-header {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-light);
+  padding: 8px 12px 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nav-dropdown-item {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 12px;
+  color: var(--ink);
+  padding: 8px 12px;
+  text-decoration: none;
+  transition: background 0.1s;
+  cursor: pointer;
+}
+
+.nav-dropdown-item:hover {
+  background: var(--bg-warm);
+}
+
+.nav-dropdown-divider {
+  height: 0;
+  border-top: 2px dashed var(--ink-faint);
+  margin: 4px 8px;
+}
+
+.nav-dropdown-signout {
+  color: var(--red) !important;
+}
+
+.nav-dropdown-signout:hover {
+  background: var(--red-light) !important;
+}
+
+/* Legacy nav-signout (kept for backwards compat) */
 .nav-signout {
   font-family: var(--font-mono) !important;
   font-size: 11px !important;

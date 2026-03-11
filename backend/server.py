@@ -755,6 +755,30 @@ async def clear_agent_memory(request: Request, league_id: str = None):
 
 
 # ---------------------------------------------------------------------------
+# Saved Views endpoints (Pro+ cloud sync)
+# ---------------------------------------------------------------------------
+
+@app.get("/api/user/views")
+async def get_saved_views(request: Request):
+    user, err = require_plan(request, "pro")
+    if err:
+        return err
+    return auth_module.get_saved_views(user["id"])
+
+
+@app.post("/api/user/views/sync")
+async def sync_saved_views(request: Request):
+    user, err = require_plan(request, "pro")
+    if err:
+        return err
+    body = await request.json()
+    views = body.get("views", [])
+    if not isinstance(views, list):
+        return JSONResponse({"error": "views must be a list"}, status_code=400)
+    return auth_module.sync_saved_views(user["id"], views)
+
+
+# ---------------------------------------------------------------------------
 # Player endpoints
 # ---------------------------------------------------------------------------
 

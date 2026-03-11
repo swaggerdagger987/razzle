@@ -3796,6 +3796,7 @@ function saveCurrentView() {
   nameInput.value = "";
   populateSavedViewSelect();
   renderSavedViewsList();
+  _pushViewsAfterChange();
   _showToast("view saved: " + name);
 }
 
@@ -3883,7 +3884,120 @@ function deleteSavedView(id) {
   try { localStorage.setItem("razzle_saved_views", JSON.stringify(views)); } catch(e) {}
   populateSavedViewSelect();
   renderSavedViewsList();
+  _pushViewsAfterChange();
   _showToast("view deleted");
+}
+
+// ── Saved Views Cloud Sync (Pro+ feature) ────────────────────────
+
+function syncSavedViewsFromCloud() {
+  var token = localStorage.getItem("razzle_token");
+  if (!token) return;
+  if (typeof isPaidUser === "function" && !isPaidUser()) {
+    _showViewsSyncHint(false);
+    return;
+  }
+
+  var base = (typeof API_BASE !== "undefined" ? API_BASE : "");
+  fetch(base + "/api/user/views", {
+    headers: { "Authorization": "Bearer " + token }
+  }).then(function(r) {
+    if (!r.ok) throw new Error("fetch failed");
+    return r.json();
+  }).then(function(data) {
+    var serverViews = (data.views || []);
+    if (!serverViews.length) {
+      // No server views — push local to server
+      _pushAllViewsToServer(token, base);
+      _showViewsSyncHint(true);
+      return;
+    }
+
+    // Parse server views
+    var parsedServer = [];
+    for (var i = 0; i < serverViews.length; i++) {
+      try {
+        var vd = typeof serverViews[i].data === "string" ? JSON.parse(serverViews[i].data) : serverViews[i].data;
+        parsedServer.push(vd);
+      } catch (e) { /* skip malformed */ }
+    }
+
+    // Merge: server wins on name conflict
+    var localViews = getSavedViews();
+    var mergedMap = {};
+    for (var li = 0; li < localViews.length; li++) {
+      mergedMap[localViews[li].name || localViews[li].id] = localViews[li];
+    }
+    for (var si = 0; si < parsedServer.length; si++) {
+      mergedMap[parsedServer[si].name || parsedServer[si].id] = parsedServer[si];
+    }
+
+    var merged = [];
+    for (var key in mergedMap) {
+      merged.push(mergedMap[key]);
+    }
+
+    // Sort by createdAt descending
+    merged.sort(function(a, b) {
+      return (b.createdAt || "").localeCompare(a.createdAt || "");
+    });
+
+    // Cap at 20
+    merged = merged.slice(0, 20);
+
+    // Update localStorage
+    try { localStorage.setItem("razzle_saved_views", JSON.stringify(merged)); } catch(e) {}
+
+    // Push merged back to server
+    _pushAllViewsToServer(token, base);
+
+    // Re-render
+    populateSavedViewSelect();
+    renderSavedViewsList();
+    _showViewsSyncHint(true);
+  }).catch(function() {
+    _showViewsSyncHint(true);
+  });
+}
+
+function _pushAllViewsToServer(token, base) {
+  var views = getSavedViews();
+  if (!views.length) return;
+  fetch(base + "/api/user/views/sync", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+    body: JSON.stringify({ views: views })
+  }).catch(function() {});
+}
+
+function _pushViewsAfterChange() {
+  var token = localStorage.getItem("razzle_token");
+  if (!token) return;
+  if (typeof isPaidUser === "function" && !isPaidUser()) return;
+  var base = (typeof API_BASE !== "undefined" ? API_BASE : "");
+  _pushAllViewsToServer(token, base);
+}
+
+function _showViewsSyncHint(isPaid) {
+  var container = document.getElementById("savedViewsList");
+  if (!container) return;
+  var existing = document.getElementById("viewsSyncBadge");
+  if (existing) existing.remove();
+
+  var badge = document.createElement("div");
+  badge.id = "viewsSyncBadge";
+  badge.style.cssText = "font-family:var(--font-mono); font-size:9px; margin-bottom:6px; display:inline-block; padding:2px 8px; border-radius:4px;";
+
+  if (isPaid) {
+    badge.style.color = "var(--pos-qb)";
+    badge.style.border = "1px solid var(--pos-qb)";
+    badge.textContent = "cloud-synced";
+  } else {
+    badge.style.color = "var(--ink-light)";
+    badge.style.border = "1px dashed var(--ink-faint)";
+    badge.textContent = "upgrade to sync views across devices";
+  }
+  container.insertBefore(badge, container.firstChild);
 }
 
 function renderSavedViewsList() {
@@ -4993,10 +5107,13 @@ function computePosRanks() {
 // Load formulas and custom scoring on startup
 loadFormulas();
 loadCustomScoringColumns();
-// Cloud sync formulas (Pro+ users — runs silently after page load)
+// Cloud sync formulas and saved views (Pro+ users — runs silently after page load)
 if (typeof syncFormulasFromCloud === "function") {
   setTimeout(syncFormulasFromCloud, 1500);
 }
+setTimeout(function() {
+  if (typeof syncSavedViewsFromCloud === "function") syncSavedViewsFromCloud();
+}, 2000);
 
 // ─── Image export ────────────────────────────────────────────────
 function exportImage() {

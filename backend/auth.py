@@ -365,6 +365,63 @@ def delete_agent_memory(user_id: int, memory_id: int) -> dict:
         return {"status": "ok"}
 
 
+def get_saved_views(user_id: int) -> dict:
+    """Retrieve all saved views for a user."""
+    with get_users_db() as conn:
+        # Ensure table exists
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS user_saved_views (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                view_data TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users(id)
+            )
+        """)
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_saved_views_user ON user_saved_views(user_id)")
+        conn.commit()
+
+        rows = conn.execute(
+            "SELECT id, view_data, created_at FROM user_saved_views WHERE user_id = ? ORDER BY created_at DESC",
+            (user_id,),
+        ).fetchall()
+        return {"views": [{"id": r[0], "data": r[1], "created_at": r[2]} for r in rows]}
+
+
+def sync_saved_views(user_id: int, views: list) -> dict:
+    """Sync saved views from client. Idempotent — replaces all views for user."""
+    import json
+    with get_users_db() as conn:
+        # Ensure table exists
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS user_saved_views (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                view_data TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users(id)
+            )
+        """)
+
+        # Delete existing views for user, then re-insert
+        conn.execute("DELETE FROM user_saved_views WHERE user_id = ?", (user_id,))
+        count = 0
+        for v in views[:20]:  # max 20 views
+            try:
+                view_data = json.dumps(v) if isinstance(v, dict) else str(v)
+                conn.execute(
+                    "INSERT INTO user_saved_views (user_id, view_data) VALUES (?, ?)",
+                    (user_id, view_data),
+                )
+                count += 1
+            except Exception:
+                continue
+        conn.commit()
+        return {"status": "ok", "synced": count}
+
+
 def clear_agent_memories(user_id: int, league_id: str = None) -> dict:
     """Clear all memories for a user (optionally scoped to a league)."""
     with get_users_db() as conn:

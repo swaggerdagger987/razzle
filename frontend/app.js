@@ -201,6 +201,61 @@ function initAuth() {
   _injectAuthModal();
   _injectNavAuthButton();
   checkAuth();
+  _detectCheckoutReturn();
+}
+
+/**
+ * Detect Stripe checkout return (?session_id= in URL).
+ * Poll for plan upgrade, then dispatch 'razzle-plan-changed' event.
+ */
+function _detectCheckoutReturn() {
+  var params = new URLSearchParams(window.location.search);
+  var sessionId = params.get("session_id");
+  if (!sessionId) return;
+
+  // Clean URL
+  var cleanUrl = window.location.pathname + window.location.hash;
+  window.history.replaceState({}, "", cleanUrl);
+
+  // Show upgrade toast
+  if (typeof _showToast === "function") {
+    _showToast("processing your subscription...");
+  }
+
+  var token = localStorage.getItem("razzle_token");
+  if (!token) return;
+
+  var attempts = 0;
+  var maxAttempts = 10;
+  var pollInterval = 2000;
+
+  function pollForPlanChange() {
+    attempts++;
+    fetch(API_BASE + "/api/auth/me", {
+      headers: { "Authorization": "Bearer " + token }
+    }).then(function(r) { return r.json(); }).then(function(data) {
+      if (data.user && data.user.plan !== "free") {
+        // Plan updated — save and dispatch event
+        localStorage.setItem("razzle_user", JSON.stringify(data.user));
+        updateAuthUI(data.user);
+        window.dispatchEvent(new CustomEvent("razzle-plan-changed", { detail: data.user }));
+        if (typeof _showToast === "function") {
+          _showToast("welcome to Razzle " + data.user.plan.charAt(0).toUpperCase() + data.user.plan.slice(1) + ".");
+        }
+      } else if (attempts < maxAttempts) {
+        setTimeout(pollForPlanChange, pollInterval);
+      } else {
+        // Give up — webhook may be delayed
+        if (typeof _showToast === "function") {
+          _showToast("subscription processing. features will unlock shortly.");
+        }
+      }
+    }).catch(function() {
+      if (attempts < maxAttempts) setTimeout(pollForPlanChange, pollInterval);
+    });
+  }
+
+  setTimeout(pollForPlanChange, 1000);
 }
 
 function _injectAuthModal() {
@@ -393,16 +448,38 @@ function updateAuthUI(user) {
     } else {
       badge = '<span class="nav-plan-badge nav-plan-free">Free</span>';
     }
-    var manageLink = isPaid
-      ? '<a href="#" onclick="openManageSubscription(); return false;" class="nav-signout">Manage</a>'
-      : '';
+
+    // Dropdown menu items
+    var dropdownItems = '';
+    if (user.sleeper_username) {
+      dropdownItems += '<div class="nav-dropdown-item" style="font-size:10px; color:var(--ink-light); cursor:default;">sleeper: ' + escapeHtml(user.sleeper_username) + '</div>';
+    }
+    if (isPaid) {
+      dropdownItems += '<a href="#" onclick="openManageSubscription(); return false;" class="nav-dropdown-item">Manage Subscription</a>';
+    } else {
+      dropdownItems += '<a href="/agents.html#pricing" class="nav-dropdown-item" style="color:var(--orange);">Upgrade to Pro</a>';
+    }
+    dropdownItems += '<div class="nav-dropdown-divider"></div>';
+    dropdownItems += '<a href="#" onclick="signOut(); return false;" class="nav-dropdown-item nav-dropdown-signout">Sign Out</a>';
+
     item.innerHTML =
-      '<span class="nav-user">' +
-        badge +
-        '<span class="nav-user-name">' + displayName + '</span>' +
-        manageLink +
-        '<a href="#" onclick="signOut(); return false;" class="nav-signout">Sign Out</a>' +
-      '</span>';
+      '<div class="nav-user-dropdown">' +
+        '<button class="nav-user-trigger" onclick="this.parentElement.classList.toggle(\'open\')">' +
+          badge +
+          '<span class="nav-user-name">' + displayName + '</span>' +
+          '<span class="nav-user-caret">&#9662;</span>' +
+        '</button>' +
+        '<div class="nav-dropdown-menu">' +
+          '<div class="nav-dropdown-header">' + escapeHtml(user.email) + '</div>' +
+          dropdownItems +
+        '</div>' +
+      '</div>';
+
+    // Close dropdown on outside click
+    document.addEventListener("click", function _closeDropdown(e) {
+      var dd = item.querySelector(".nav-user-dropdown");
+      if (dd && !dd.contains(e.target)) dd.classList.remove("open");
+    });
   } else {
     item.innerHTML = '<a href="#" onclick="openAuthModal(); return false;" id="navSignIn" class="btn-chunky btn-sm">Sign In</a>';
   }
@@ -786,3 +863,25 @@ if (document.readyState === "loading") {
 } else {
   initAuth();
 }
+
+// Listen for plan changes (after checkout or login) to refresh gated features
+window.addEventListener("razzle-plan-changed", function(e) {
+  var user = e.detail;
+  if (!user) return;
+
+  // Re-populate season selector if on Lab page (unlock all seasons)
+  if (typeof populateSeasonSelect === "function") populateSeasonSelect();
+
+  // Re-render formula builder (remove limit)
+  if (typeof renderSavedFormulas === "function") renderSavedFormulas();
+
+  // Re-render column picker (no change needed, but ensures consistency)
+  if (typeof renderColumnPicker === "function") renderColumnPicker();
+
+  // Trigger cloud sync now that user is paid
+  if (typeof syncFormulasFromCloud === "function") syncFormulasFromCloud();
+  if (typeof syncSavedViewsFromCloud === "function") syncSavedViewsFromCloud();
+
+  // Update Situation Room gating (hide upsell, enable full features)
+  if (typeof refreshPlanGating === "function") refreshPlanGating();
+});
