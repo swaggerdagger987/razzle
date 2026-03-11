@@ -1,15 +1,15 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 94 (Quick Compare Strip)
-## Phase 94: Quick Compare Strip — Auto-Generated
-**Exit Criterion**: When exactly 2 players selected, bulk action bar shows inline stat comparison (PPG, GP, FPts, RecYd, RshYd, TD, Tgt, Rec). Winner highlighted in green. Player names in position colors.
+- Phase: 95 (Copy as Reddit Table)
+## Phase 95: Copy as Reddit Table — Auto-Generated
+**Exit Criterion**: "Copy as Reddit Table" button in Share modal exports pipe-delimited markdown table format ready for Reddit posts. Capped at 50 rows. Clipboard copy with toast.
 
 - Task 1: PASS
 - Stage: COMPLETE
 - Next: Phase gate
 
-### Task 1: Implement quick compare strip
+### Task 1: Add copy as Reddit table format
 **Status**: PASS
 **Attempts**: 1
-**Result**: Added quickCompareStrip div in bulkActionBar. renderQuickCompare() shows 8 key stats side-by-side when 2 players selected. Winner values in green bold. Player names in position colors. Hides names span, shows strip. 34 tests pass.
+**Result**: copyTableAsReddit() generates pipe-delimited markdown with --- separator row. Max 50 rows for Reddit. Button added to Share modal export section. Toast shows row count. 34 tests pass.

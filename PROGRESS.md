@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 95 — Copy as Reddit Table (COMPLETE)
+
+**Exit Criterion MET**: "Copy as Reddit Table" button in Share modal. Pipe-delimited markdown table, 50 row cap.
+
+### Phase 95 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Reddit table copy | DONE | copyTableAsReddit(), pipe-delimited markdown, 50 row cap, Share modal button |
+
 ## Previous Phase: Phase 94 — Quick Compare Strip (COMPLETE)
 
 **Exit Criterion MET**: Inline stat comparison in bulk bar when 2 players selected. 8 key stats, winner in green.

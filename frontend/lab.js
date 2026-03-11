@@ -4269,6 +4269,43 @@ function copyTableToClipboard() {
   }
 }
 
+function copyTableAsReddit() {
+  if (!state.items.length) { _showToast("no data to copy"); return; }
+  var colDefs, visCols;
+  if (isProspectView()) { colDefs = PROSPECT_COLUMNS; visCols = state.prospectColumns; }
+  else if (state.universe === "college") { colDefs = COLLEGE_COLUMNS; visCols = state.collegeColumns; }
+  else { colDefs = COLUMNS; visCols = state.visibleColumns; }
+  visCols = visCols.filter(function(k) { return colDefs[k] && !colDefs[k].isSparkline && !colDefs[k].isNotes; });
+
+  var headers = ["#", "Player", "POS", "Team"].concat(visCols.map(function(k) { return colDefs[k].label; }));
+  var sep = headers.map(function() { return "---"; });
+  var lines = [headers.join(" | "), sep.join(" | ")];
+
+  var max = Math.min(state.items.length, 50); // Reddit table cap
+  for (var i = 0; i < max; i++) {
+    var p = state.items[i];
+    var name = p.full_name || p.player_name || "";
+    var pos = p.position || "";
+    var team = p.team || p.school || "";
+    var rank = state.offset + i + 1;
+    var vals = visCols.map(function(k) {
+      var col = colDefs[k]; var v = p[k];
+      if (v == null || v === "") return "";
+      if (col.pct) return ((v * 100).toFixed(col.decimals)) + "%";
+      if (col.decimals != null) return Number(v).toFixed(col.decimals);
+      return v;
+    });
+    lines.push([rank, name, pos, team].concat(vals).join(" | "));
+  }
+
+  var md = lines.join("\n");
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(md).then(function() { _showToast("reddit table copied (" + max + " rows)"); }).catch(function() { _fallbackCopy(md); _showToast("reddit table copied"); });
+  } else {
+    _fallbackCopy(md); _showToast("reddit table copied");
+  }
+}
+
 // ─── Rankings Export ───────────────────────────────────────────────
 
 const _rankState = { position: "ALL", count: 10, sortBy: "dynasty_value" };
