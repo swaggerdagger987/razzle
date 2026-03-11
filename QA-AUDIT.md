@@ -1,68 +1,84 @@
-# QA + UX Audit — Phases 111-115
+# QA + UX Audit — Phases 116-119
 
-**Audit Date**: 2026-03-11
-**Scope**: Phases 111-115 (QA fixes, Column resize, Onboarding toast, Column reorder, Saved views)
-**Files Audited**: frontend/lab.js, frontend/lab.html
+**Date**: 2026-03-11
+**Scope**: QA audit fixes, CSV export, export UX polish, column stat tooltips
+**Files**: frontend/lab.html, frontend/lab.js
 
 ---
 
 ## QA FINDINGS
 
-### CRITICAL: None
+### CRITICAL
+
+**C1: Dead code — duplicate saved views implementation**
+- File: `frontend/lab.js`, lines 2964-3097
+- Old saved views functions are completely overridden by new implementation at lines 3455-3578. Dead code adds confusion and maintenance risk.
+- Fix: Delete lines 2964-3097.
+
+**C2: XSS in saved view name display**
+- File: `frontend/lab.js`, line 3572
+- `v.name` interpolated into HTML without escaping.
+- Fix: Use `escapeHtml(v.name)`.
+
+**C3: XSS in saved view onclick handlers**
+- File: `frontend/lab.js`, lines 3571, 3575
+- `v.id` interpolated into onclick attributes without escaping.
+- Fix: Use `escapeAttr(v.id)`.
 
 ### HIGH
 
-1. **Saved view load doesn't update universe UI** (`frontend/lab.js:loadSavedView`)
-   - When loading a saved view that changes the universe (e.g., NFL → college), `loadSavedView()` sets `state.universe` but does NOT call `applyUniverseUI()`, `populateSeasonSelect()`, `populateFilterStatSelect()`, `renderColumnPicker()`, `renderPresets()`, `populatePresetSelect()`, or `renderActiveFilters()`. The toolbar, position tabs, season dropdown, and body classes remain stale. The table renders correctly but the UI is broken.
-   - **Fix**: Call the same UI update functions that `setUniverse()` calls after state restore.
+**H1: New saveCurrentView missing visual state fields**
+- File: `frontend/lab.js`, lines 3465-3481
+- Missing: columnWidths, heatColors, percentileMode, dataBars, density. Phase 116 fixed this in old code but new code doesn't have it.
+- Fix: Add fields to save and restore.
 
-2. **Saved views missing state fields** (`frontend/lab.js:saveCurrentView`)
-   - `saveCurrentView()` does not save: `sortKey2`, `sortDir2` (multi-sort), `heatColors`, `percentileMode`, `dataBars`, `density`, `columnWidths`. A user who configures multi-sort and visual modes then saves a view will lose those settings on load.
-   - **Fix**: Include all missing state fields in the saved view object.
+**H2: Invalid CSS variables**
+- File: `frontend/lab.html`, line 3215
+- `var(--bg-sand)` and `var(--font-data)` don't exist. Should be `var(--bg)` and `var(--font-mono)`.
+
+**H3: 1px borders on DVS legend badges**
+- File: `frontend/lab.html`, lines 3148-3151
+- Violates DESIGN.md chunky border rule.
+- Fix: Change to `border:2px solid`.
+
+**H4: No max view limit in new saved views**
+- File: `frontend/lab.js`, line 3483
+- Old code capped at 20 views, new code has no limit.
+- Fix: Add limit check.
 
 ### MEDIUM
 
-3. **Column resize only applies to `<th>` elements** (`frontend/lab.js:_onColResizeMove`)
-   - The resize handler queries `th[data-col="key"]` to update widths, but `<td>` cells don't have `data-col`. With `width: max-content` on the table, `<th>` min/max-width constraints should propagate to columns, but content wider than the set width may overflow. Should be tested with long stat values.
+**M1: Missing toast feedback in new saved views**
+- No toast for save/load/delete operations in new implementation.
+- Fix: Add `_showToast()` calls.
 
-4. **Onboarding toast timer leaks** (`frontend/lab.js:init`)
-   - The 3s delay and 8s auto-dismiss timers are set but never stored. If the user navigates away before they fire, the toast appends to a stale DOM. Not harmful but technically a leak.
+**M2: Missing confirm on delete**
+- New `deleteSavedView` deletes immediately without confirmation.
+- Fix: Add `confirm()` check.
+
+**M3: Gradient in heatmap legend**
+- File: `frontend/lab.html`, line 3696
+- `linear-gradient` violates DESIGN.md no-gradient rule.
+- Fix: Replace with stepped color blocks.
 
 ### LOW
 
-5. **Column drag `draggable="true"` may interfere with text selection in headers** — Minor UX impact since headers are short labels.
-
-6. **Saved view name prompt uses native `prompt()`** — Functional but not in Razzle design language. Could use a styled modal in the future.
+**L1: Missing aria-label on CSV button** (lab.html:3078)
+**L2: Date format missing year in saved views** (lab.js:3567)
 
 ---
 
 ## UX FINDINGS
 
-### CRITICAL: None
+### First 30 Seconds Test
+- PASS: Position tabs and search provide clear entry points. Onboarding toast guides to shortcuts.
 
-### HIGH: None
+### Readability Pass
+- PASS: Column tooltips explain abbreviations. Power-user audience handles stat jargon well.
+- LOW: "Views..." dropdown placeholder could be "Saved Views..."
 
-### MEDIUM
+### Flow Tests
+- All 3 core flows pass end-to-end.
 
-1. **Save button not obvious** (toolbar)
-   - The "Save" button next to "Views..." dropdown has no visual differentiation from other toolbar buttons. A new user wouldn't know it saves the current view. Consider adding a small bookmark/save icon or tooltip.
-
-2. **No confirmation before deleting a saved view** (`_openViewManager`)
-   - Clicking "Delete" immediately removes the view with only a toast notification. For views a user has carefully configured, accidental deletion could be frustrating. Consider a simple confirm() or undo toast.
-
-### LOW
-
-3. **Onboarding toast positioning may overlap bulk action bar** — Toast is bottom-right (32px), bulk bar is bottom-center. Unlikely overlap but possible on narrow screens.
-
-4. **Column resize cursor sometimes persists** — If mouseup fires outside the browser window, `_onColResizeEnd` may not trigger. The `document.mouseup` handler should catch this, but edge cases exist with iframe boundaries.
-
----
-
-## SUMMARY
-
-- **CRITICAL**: 0
-- **HIGH**: 2 (saved view universe UI + missing state fields)
-- **MEDIUM**: 4 (resize <td>, timer leak, save button, delete confirm)
-- **LOW**: 4 (drag text select, native prompt, toast overlap, cursor persist)
-
-Code quality is solid but saved views need work on state completeness and universe switching.
+### Visual Noise Check
+- Default view is clean. Heat coloring lacks legend but tooltip on H button explains it.
