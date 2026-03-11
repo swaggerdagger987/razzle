@@ -1,8 +1,35 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 42 (UX Consistency & Features — Priority 3)
-## Phase 42: UX Consistency & Features — Priority 3
+- Phase: 43 (Mobile & Polish — New Features)
+## Phase 43: Mobile & Polish — New Features
+**Exit Criterion**: Dynasty History table scrolls horizontally on mobile. Trade Values weight sliders stack vertically at 768px. View toggle buttons are touch-friendly. New CSS for history/weights has no layout breaks at 375px. Search bars on Rankings/Tiers/VORP work at mobile widths.
+
+- Task 1: PASS
+- Task 2: PASS
+- Task 3: PASS
+- Stage: COMPLETE
+- Next: Phase gate
+
+### Task 1: Mobile responsive — Dynasty History table + view toggle
+**Status**: PASS
+**Attempts**: 1
+**Acceptance**: Dynasty History table (.dh-table) scrolls horizontally at 375px. View toggle buttons (.lp-view-toggle) are at least 44px touch targets. No horizontal overflow at 768px.
+**Result**: Added 768px breakpoint: dh-wrap overflow-x:auto, dh-table compact padding/font, dh-headshot/name shrunk, view toggle 44px min-height touch targets.
+
+### Task 2: Mobile responsive — Trade Values weight sliders
+**Status**: PASS
+**Attempts**: 1
+**Acceptance**: Weight sliders (.tv-weight-slider) stack vertically at 768px. Labels and range inputs don't overflow. Reset button accessible on mobile.
+**Result**: 768px: tv-methodology flex-direction:column, sliders wrap, range inputs 100% width + 44px height. 480px: keep sliders visible (override old display:none), compact labels.
+
+### Task 3: Mobile responsive — search bars on Rankings, Tiers, VORP
+**Status**: PASS
+**Attempts**: 1
+**Acceptance**: Search inputs on Rankings, Tiers, VORP panels wrap properly at 375px. Controls row doesn't overflow. Inputs are at least 44px height for touch.
+**Result**: 768px: .lp-search min-height:44px, font-size:14px. Controls already flex-wrap:wrap so they stack naturally.
+
+## Phase 42: UX Consistency & Features — Priority 3 (COMPLETE)
 **Exit Criterion**: VORP has player search. Dynasty Rankings/Trade Values/VORP/Tiers share consistent layout. Trade Values has adjustable formula weights. Dynasty Rankings shows historical value progression.
 
 - Task 1: PASS

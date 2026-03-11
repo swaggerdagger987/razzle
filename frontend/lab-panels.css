@@ -815,6 +815,20 @@
   .av-summary { grid-template-columns: repeat(2, 1fr); }
   .cs-grid { grid-template-columns: 1fr 1fr; }
   .hide-mobile { display: none !important; }
+  /* Dynasty History mobile */
+  .dh-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .dh-table th, .dh-table td { padding: 4px; font-size: 11px; white-space: nowrap; }
+  .dh-player-cell { min-width: 140px; }
+  .dh-headshot { width: 24px; height: 24px; }
+  .dh-name { font-size: 12px; }
+  /* View toggle touch targets */
+  .lp-view-btn { min-height: 44px; min-width: 44px; padding: 8px 14px; font-size: 13px; }
+  /* Weight sliders stack */
+  .tv-methodology { flex-direction: column; align-items: stretch; gap: 8px; }
+  .tv-weight-slider { flex-wrap: wrap; }
+  .tv-weight-slider input[type="range"] { width: 100%; min-height: 44px; }
+  /* Search bars */
+  .lp-search { min-height: 44px; font-size: 14px; }
 }
 @media (max-width: 480px) {
   .lp-page { padding: 16px 10px 40px; }
@@ -823,7 +837,9 @@
   .rankings-name { font-size: 13px; }
   .rankings-value { font-size: 14px; }
   .tv-tier-badge { display: none; }
-  .tv-methodology { display: none; }
+  .tv-methodology { display: flex; flex-direction: column; }
+  .tv-weight-slider label { min-width: 100px; font-size: 12px; }
+  .tv-weight-slider input[type="range"] { width: 100%; }
   .av-summary { grid-template-columns: 1fr; }
   .cs-grid { grid-template-columns: 1fr; }
 }
