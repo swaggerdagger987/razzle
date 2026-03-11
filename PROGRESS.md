@@ -1,5 +1,17 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 143 — Platform: Conversion Funnel Finalization (COMPLETE)
+
+**Exit Criterion MET**: Landing page pricing CTAs updated to default to yearly plans (pro_year/elite_year) per pricing strategy. Button text changed to "Start Free Trial" to emphasize trial. Fallback links updated from /agents.html to /pricing.html. "See full feature comparison" link added. Global toast system: _showToast function moved to app.js and .razzle-toast CSS moved to styles.css so toasts work on all pages (pricing, agents, etc). Pricing page plan-prefixed checkout fixed (pro_year, elite_month, etc).
+
+### Phase 143 Tasks (Platform Loop)
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Landing page yearly defaults | DONE | CTAs use pro_year/elite_year, "Start Free Trial" text |
+| 2 | Global toast system | DONE | _showToast in app.js, CSS in styles.css |
+| 3 | Pricing page checkout fix | DONE | Plan prefix passed correctly, yearly default on init |
+
 ## Previous Phase: Phase 142 — Platform: Pricing Page + Conversion Funnel Polish (COMPLETE)
 
 **Exit Criterion MET**: Dedicated pricing.html page created with full Razzle design system: two-tier card layout (Pro $9.99/mo | $79.99/yr, Elite $19.99/mo | $149.99/yr), monthly/yearly toggle with save badges, promo code input with validation, feature comparison matrix, "Already subscribed" banner for existing users, Stripe checkout integration. refreshPlanGating() function implemented in app.js — refreshes all tier-gated UI (seasons, formulas, query limits, formula store, watchlist sync, nav badge) on plan change. All upgrade CTAs audited: links to /agents.html#pricing updated to /pricing.html, warroom upgrade links updated to route to pricing.html for unauthenticated users. Pricing page added to sitemap.
