@@ -822,7 +822,7 @@
   <div class="demo-inner">
     <div class="section-label">The Situation Room</div>
     <h2>This is a real manager's Situation Room.</h2>
-    <p class="section-desc">Razzle and specialist agents with full league context. Personalized briefings, trade strategies, championship probability. This is what $240/year gets you.</p>
+    <p class="section-desc">Razzle and specialist agents with full league context. Personalized briefings, trade strategies, championship probability.</p>
 
     <div id="demoCards" aria-live="polite"></div>
 
@@ -837,28 +837,52 @@
 </div>
 
 <!-- PRICING -->
-<div style="text-align:center; padding:40px 24px; max-width:600px; margin:0 auto;">
-  <h2 style="font-family:var(--font-display); font-size:28px; margin-bottom:8px;">Razzle <span style="color:var(--orange);">Pro</span></h2>
-  <p style="font-family:var(--font-hand); font-size:22px; color:var(--ink-medium); margin-bottom:20px;">Full league context. Agent memory. Personalized briefings.</p>
-  <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-bottom:16px;">
-    <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:20px 28px; text-align:center;">
-      <div style="font-family:var(--font-display); font-size:28px; color:var(--orange);">$240<span style="font-size:14px; color:var(--ink-light);">/year</span></div>
-      <div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); margin-top:4px;">best value</div>
-      <button class="btn-chunky btn-primary" style="margin-top:12px; font-size:13px;" onclick="if(typeof startCheckout==='function'){startCheckout('year')}else{window.location='/agents.html'}">Get Started</button>
+<div style="text-align:center; padding:48px 24px; max-width:900px; margin:0 auto;">
+  <h2 style="font-family:var(--font-display); font-size:28px; margin-bottom:8px;">Unlock the <span style="color:var(--orange);">Situation Room</span></h2>
+  <p style="font-family:var(--font-hand); font-size:22px; color:var(--ink-medium); margin-bottom:24px;">The Lab is free forever. The agents work for subscribers.</p>
+  <div style="display:flex; gap:20px; justify-content:center; flex-wrap:wrap; margin-bottom:16px;">
+
+    <!-- PRO -->
+    <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:24px 28px; text-align:center; min-width:240px; max-width:320px; flex:1;">
+      <div style="font-family:var(--font-display); font-size:20px; margin-bottom:4px;">Pro</div>
+      <div style="font-family:var(--font-display); font-size:32px; color:var(--orange);">$9.99<span style="font-size:14px; color:var(--ink-light);">/mo</span></div>
+      <div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); margin-top:2px;">or $79.99/year (save 33%)</div>
+      <ul style="text-align:left; font-family:var(--font-mono); font-size:12px; margin:16px 0; padding-left:18px; line-height:1.8; color:var(--ink-medium);">
+        <li>6 specialist AI agents (BYOK)</li>
+        <li>20 AI queries/day</li>
+        <li>League-contextualized analysis</li>
+        <li>Full historical data (2015+)</li>
+        <li>Unlimited formulas + Formula Store</li>
+        <li>CSV export</li>
+      </ul>
+      <button class="btn-chunky btn-primary" style="font-size:13px; width:100%;" onclick="if(typeof startCheckout==='function'){startCheckout('pro_month')}else{window.location='/agents.html'}">Get Pro</button>
     </div>
-    <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:20px 28px; text-align:center;">
-      <div style="font-family:var(--font-display); font-size:28px; color:var(--ink);">$20<span style="font-size:14px; color:var(--ink-light);">/month</span></div>
-      <div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); margin-top:4px;">flexible</div>
-      <button class="btn-chunky" style="margin-top:12px; font-size:13px;" onclick="if(typeof startCheckout==='function'){startCheckout('month')}else{window.location='/agents.html'}">Get Started</button>
+
+    <!-- ELITE -->
+    <div style="background:var(--bg-card); border:3px solid var(--orange); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:24px 28px; text-align:center; min-width:240px; max-width:320px; flex:1; position:relative;">
+      <div style="position:absolute; top:-12px; left:50%; transform:translateX(-50%) rotate(-2deg); background:var(--orange); color:white; font-family:var(--font-display); font-size:11px; padding:3px 14px; border-radius:20px; border:2px solid var(--ink); box-shadow:2px 2px 0 var(--ink);">best value</div>
+      <div style="font-family:var(--font-display); font-size:20px; margin-bottom:4px;">Elite</div>
+      <div style="font-family:var(--font-display); font-size:32px; color:var(--orange);">$19.99<span style="font-size:14px; color:var(--ink-light);">/mo</span></div>
+      <div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); margin-top:2px;">or $149.99/year (save 37%)</div>
+      <ul style="text-align:left; font-family:var(--font-mono); font-size:12px; margin:16px 0; padding-left:18px; line-height:1.8; color:var(--ink-medium);">
+        <li>Everything in Pro, plus:</li>
+        <li style="color:var(--orange); font-weight:700;">AI included (no API key needed)</li>
+        <li>Unlimited AI queries</li>
+        <li>Agent memory (multi-season)</li>
+        <li>Weekly Razzle briefings</li>
+        <li>Priority data refresh</li>
+      </ul>
+      <button class="btn-chunky btn-primary" style="font-size:13px; width:100%;" onclick="if(typeof startCheckout==='function'){startCheckout('elite_month')}else{window.location='/agents.html'}">Get Elite</button>
     </div>
+
   </div>
-  <p style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">The Lab is free forever. Pro unlocks the Situation Room.</p>
+  <p style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">The Lab is free forever. 7-day free trial on all paid plans.</p>
 </div>
 
 <!-- WAITLIST -->
 <div class="waitlist" id="waitlist">
   <h2>Get notified when The Situation Room opens</h2>
-  <p>personalized agent intelligence, $240/year, your league context</p>
+  <p>personalized agent intelligence, your league context, starting at $9.99/mo</p>
   <div class="waitlist-form">
     <input type="email" class="input-chunky" id="waitlistEmail" placeholder="your@email.com">
     <button class="btn-primary" onclick="submitWaitlist()">Notify Me</button>
@@ -1031,23 +1055,23 @@ const demoBriefings = [
   { agent: '🐻 Diplomat', urgency: 'monitor', text: 'League power rankings shifted. <r>████████</r> moved from 4th to 1st after adding <r>██████</r>. Your path to the championship now runs through them. Exploitable weakness: <r>██</r> depth.' },
 
   // QUANT — projections, valuations, probability
-  { agent: '📊 Quant', urgency: 'monitor', text: 'Championship probability update: you\'re at <r>██</r>% (up from <r>██</r>% last week). Optimal path: win <r>██</r> of next <r>██</r>, secure the <r>██</r> seed. Key risk: Week <r>██</r> bye stack.' },
-  { agent: '📊 Quant', urgency: 'opportunity', text: '<r>██████</r>\'s dynasty value model shows <r>██████████</r> is undervalued by <r>██</r>% relative to production. Buy window closes after Week <r>██</r> when the market corrects.' },
-  { agent: '📊 Quant', urgency: 'monitor', text: 'Roster optimization: swapping <r>██████</r> into flex over <r>██████</r> adds <r>██</r> projected points this week. Season-long, <r>██████</r> has a <r>██</r>% higher floor but <r>██</r>% lower ceiling.' },
-  { agent: '📊 Quant', urgency: 'urgent', text: 'Simulation ran <r>████</r> season outcomes. Trading <r>██████</r> for <r>██████</r> + <r>██████</r> increases your title odds from <r>██</r>% to <r>██</r>%. This is a clear accept.' },
-  { agent: '📊 Quant', urgency: 'monitor', text: 'Bye week risk: Weeks <r>██</r>-<r>██</r> you lose <r>██</r> starters. Projected shortfall: <r>██</r> points. Recommend acquiring a <r>██</r> before Week <r>██</r> to cover.' },
+  { agent: '🦊 Quant', urgency: 'monitor', text: 'Championship probability update: you\'re at <r>██</r>% (up from <r>██</r>% last week). Optimal path: win <r>██</r> of next <r>██</r>, secure the <r>██</r> seed. Key risk: Week <r>██</r> bye stack.' },
+  { agent: '🦊 Quant', urgency: 'opportunity', text: '<r>██████</r>\'s dynasty value model shows <r>██████████</r> is undervalued by <r>██</r>% relative to production. Buy window closes after Week <r>██</r> when the market corrects.' },
+  { agent: '🦊 Quant', urgency: 'monitor', text: 'Roster optimization: swapping <r>██████</r> into flex over <r>██████</r> adds <r>██</r> projected points this week. Season-long, <r>██████</r> has a <r>██</r>% higher floor but <r>██</r>% lower ceiling.' },
+  { agent: '🦊 Quant', urgency: 'urgent', text: 'Simulation ran <r>████</r> season outcomes. Trading <r>██████</r> for <r>██████</r> + <r>██████</r> increases your title odds from <r>██</r>% to <r>██</r>%. This is a clear accept.' },
+  { agent: '🦊 Quant', urgency: 'monitor', text: 'Bye week risk: Weeks <r>██</r>-<r>██</r> you lose <r>██</r> starters. Projected shortfall: <r>██</r> points. Recommend acquiring a <r>██</r> before Week <r>██</r> to cover.' },
 
   // MEDICAL — injury intel
-  { agent: '🏥 Medical', urgency: 'urgent', text: '<r>██████████</r> (your <r>██</r>1) has a Grade <r>█</r> <r>████████</r> strain. Historical recovery: <r>██</r>-<r>██</r> weeks. Return projection: Week <r>██</r>. Activate <r>██████████</r> from IR stash.' },
-  { agent: '🏥 Medical', urgency: 'monitor', text: '<r>██████████</r> returned to practice but was limited. Snap count likely capped at <r>██</r>-<r>██</r>% this week. Downgrade from locked starter to flex consideration. Full return Week <r>██</r>.' },
-  { agent: '🏥 Medical', urgency: 'opportunity', text: '<r>██████████</r>\'s <r>████████</r> injury is being overreacted to. Recovery timeline is <r>██</r> days, not <r>██</r> weeks. Buy in dynasty at <r>██</r>% below market — price rebounds by Week <r>██</r>.' },
-  { agent: '🏥 Medical', urgency: 'urgent', text: 'Monitoring <r>██████████</r>: missed 2 practices this week with "<r>████████</r>." Historical data shows <r>██</r>% chance he sits. Pivot to <r>██████████</r> if inactive — decision by <r>████████</r> kickoff.' },
+  { agent: '🦉 Medical', urgency: 'urgent', text: '<r>██████████</r> (your <r>██</r>1) has a Grade <r>█</r> <r>████████</r> strain. Historical recovery: <r>██</r>-<r>██</r> weeks. Return projection: Week <r>██</r>. Activate <r>██████████</r> from IR stash.' },
+  { agent: '🦉 Medical', urgency: 'monitor', text: '<r>██████████</r> returned to practice but was limited. Snap count likely capped at <r>██</r>-<r>██</r>% this week. Downgrade from locked starter to flex consideration. Full return Week <r>██</r>.' },
+  { agent: '🦉 Medical', urgency: 'opportunity', text: '<r>██████████</r>\'s <r>████████</r> injury is being overreacted to. Recovery timeline is <r>██</r> days, not <r>██</r> weeks. Buy in dynasty at <r>██</r>% below market — price rebounds by Week <r>██</r>.' },
+  { agent: '🦉 Medical', urgency: 'urgent', text: 'Monitoring <r>██████████</r>: missed 2 practices this week with "<r>████████</r>." Historical data shows <r>██</r>% chance he sits. Pivot to <r>██████████</r> if inactive — decision by <r>████████</r> kickoff.' },
 
   // HISTORIAN — patterns, precedents
-  { agent: '📚 Historian', urgency: 'monitor', text: '<r>████████</r> has made <r>██</r> trades in <r>██</r> seasons. Pattern: they sell after Week <r>██</r> every year, buy before playoffs. Current window: they\'re <r>██</r> days from their typical sell point.' },
-  { agent: '📚 Historian', urgency: 'opportunity', text: 'Draft ROI analysis: <r>████████</r> overdrafts <r>██</r>s by an average of <r>██</r> picks. In your upcoming rookie draft, they\'ll reach — let value fall to you at pick <r>██</r>.' },
-  { agent: '📚 Historian', urgency: 'monitor', text: 'League trend: teams that started <r>██</r>-<r>██</r> in your league have made the playoffs <r>██</r>% of the time over <r>██</r> seasons. You\'re <r>██</r>-<r>██</r>. <r>████████████████</r>.' },
-  { agent: '📚 Historian', urgency: 'opportunity', text: 'This week\'s matchup history: you\'re <r>██</r>-<r>██</r> all-time vs <r>████████</r>. They roster-construct for floor (<r>██</r>% of starts are high-floor plays). You win with ceiling — start <r>██████</r> over <r>██████</r>.' },
+  { agent: '🐘 Historian', urgency: 'monitor', text: '<r>████████</r> has made <r>██</r> trades in <r>██</r> seasons. Pattern: they sell after Week <r>██</r> every year, buy before playoffs. Current window: they\'re <r>██</r> days from their typical sell point.' },
+  { agent: '🐘 Historian', urgency: 'opportunity', text: 'Draft ROI analysis: <r>████████</r> overdrafts <r>██</r>s by an average of <r>██</r> picks. In your upcoming rookie draft, they\'ll reach — let value fall to you at pick <r>██</r>.' },
+  { agent: '🐘 Historian', urgency: 'monitor', text: 'League trend: teams that started <r>██</r>-<r>██</r> in your league have made the playoffs <r>██</r>% of the time over <r>██</r> seasons. You\'re <r>██</r>-<r>██</r>. <r>████████████████</r>.' },
+  { agent: '🐘 Historian', urgency: 'opportunity', text: 'This week\'s matchup history: you\'re <r>██</r>-<r>██</r> all-time vs <r>████████</r>. They roster-construct for floor (<r>██</r>% of starts are high-floor plays). You win with ceiling — start <r>██████</r> over <r>██████</r>.' },
 
   // --- ADDITIONAL BRIEFINGS (expanding to 55+) ---
 
@@ -1069,21 +1093,21 @@ const demoBriefings = [
   { agent: '🐻 Diplomat', urgency: 'monitor', text: 'Leaguemate behavior shift: <r>████████</r> changed their team name and avatar — historically correlates with increased trade activity (<r>██</r>% of the time). They may be rebuilding. Target their stars.' },
 
   // QUANT — more analytics
-  { agent: '📊 Quant', urgency: 'urgent', text: 'Start/sit alert: <r>██████████</r> vs <r>███</r> defense projects <r>██</r> points (floor <r>██</r>, ceiling <r>██</r>). Meanwhile <r>██████████</r> vs <r>███</r> projects <r>██</r> (floor <r>██</r>, ceiling <r>██</r>). Go ceiling: start <r>██████████</r>.' },
-  { agent: '📊 Quant', urgency: 'monitor', text: 'Expected points model: your <r>██</r> slot is bleeding <r>██</r> points per week vs. league average. Fixing this one position raises title odds from <r>██</r>% to <r>██</r>%. Top targets: <r>██████████</r>, <r>██████████</r>.' },
-  { agent: '📊 Quant', urgency: 'opportunity', text: 'Value over replacement: <r>██████████</r> is the <r>██</r><r>██</r> highest VOR player available on waivers. That\'s a <r>██</r>-point weekly edge. In <r>████</r> simulations, adding him wins you <r>██</r> more games ROS.' },
+  { agent: '🦊 Quant', urgency: 'urgent', text: 'Start/sit alert: <r>██████████</r> vs <r>███</r> defense projects <r>██</r> points (floor <r>██</r>, ceiling <r>██</r>). Meanwhile <r>██████████</r> vs <r>███</r> projects <r>██</r> (floor <r>██</r>, ceiling <r>██</r>). Go ceiling: start <r>██████████</r>.' },
+  { agent: '🦊 Quant', urgency: 'monitor', text: 'Expected points model: your <r>██</r> slot is bleeding <r>██</r> points per week vs. league average. Fixing this one position raises title odds from <r>██</r>% to <r>██</r>%. Top targets: <r>██████████</r>, <r>██████████</r>.' },
+  { agent: '🦊 Quant', urgency: 'opportunity', text: 'Value over replacement: <r>██████████</r> is the <r>██</r><r>██</r> highest VOR player available on waivers. That\'s a <r>██</r>-point weekly edge. In <r>████</r> simulations, adding him wins you <r>██</r> more games ROS.' },
 
   // MEDICAL — more injury intel
-  { agent: '🏥 Medical', urgency: 'urgent', text: '<r>██████████</r> is playing through a <r>████████</r> injury that\'s not on the official report. Practice film shows compensating mechanics. Sell-high window: <r>██</r> days before the market adjusts.' },
-  { agent: '🏥 Medical', urgency: 'monitor', text: 'Injury prone flag: <r>██████████</r> has missed <r>██</r> games over <r>██</r> seasons with <r>████████</r> issues. Current workload (<r>██</r> touches/game) correlates with <r>██</r>% re-injury risk by Week <r>██</r>.' },
-  { agent: '🏥 Medical', urgency: 'opportunity', text: '<r>██████████</r> cleared concussion protocol faster than expected. Market is still pricing in a <r>██</r>-week absence. Reality: he plays this week at <r>██</r>% snap share. Buy the dip.' },
-  { agent: '🏥 Medical', urgency: 'monitor', text: 'Soft tissue watch list: <r>██████████</r>, <r>██████████</r>, and <r>██████████</r> all logged limited practices this week. None are on your roster, but <r>████</r> owns two of them. Their lineup may be weakened.' },
+  { agent: '🦉 Medical', urgency: 'urgent', text: '<r>██████████</r> is playing through a <r>████████</r> injury that\'s not on the official report. Practice film shows compensating mechanics. Sell-high window: <r>██</r> days before the market adjusts.' },
+  { agent: '🦉 Medical', urgency: 'monitor', text: 'Injury prone flag: <r>██████████</r> has missed <r>██</r> games over <r>██</r> seasons with <r>████████</r> issues. Current workload (<r>██</r> touches/game) correlates with <r>██</r>% re-injury risk by Week <r>██</r>.' },
+  { agent: '🦉 Medical', urgency: 'opportunity', text: '<r>██████████</r> cleared concussion protocol faster than expected. Market is still pricing in a <r>██</r>-week absence. Reality: he plays this week at <r>██</r>% snap share. Buy the dip.' },
+  { agent: '🦉 Medical', urgency: 'monitor', text: 'Soft tissue watch list: <r>██████████</r>, <r>██████████</r>, and <r>██████████</r> all logged limited practices this week. None are on your roster, but <r>████</r> owns two of them. Their lineup may be weakened.' },
 
   // HISTORIAN — more pattern recognition
-  { agent: '📚 Historian', urgency: 'opportunity', text: 'Historical comp: <r>██████████</r>\'s Year <r>██</r> profile matches <r>██████████</r>\'s breakout season at <r>██</r>% similarity. That comp finished as the <r>██</r><r>██</r> overall. Buy in dynasty.' },
-  { agent: '📚 Historian', urgency: 'monitor', text: 'FAAB spending audit: you\'ve spent $<r>██</r> of $<r>███</r> through Week <r>██</r>. League average is $<r>██</r>. You have a budget advantage for the playoff push — deploy <r>██</r>% of remaining on impact adds.' },
-  { agent: '📚 Historian', urgency: 'urgent', text: 'Precedent alert: the last <r>██</r> times <r>████████</r> fell below .<r>███</r> win rate at this point in the season, they fire-sold within <r>██</r> days. Watch for <r>██████████</r> hitting the trade block.' },
-  { agent: '📚 Historian', urgency: 'opportunity', text: 'Coaching carousel impact: <r>██████████</r>\'s new OC <r>██████████</r> historically boosts <r>██</r> production by <r>██</r>% in Year 1. The market hasn\'t priced this in yet. <r>██████████</r> is a buy.' },
+  { agent: '🐘 Historian', urgency: 'opportunity', text: 'Historical comp: <r>██████████</r>\'s Year <r>██</r> profile matches <r>██████████</r>\'s breakout season at <r>██</r>% similarity. That comp finished as the <r>██</r><r>██</r> overall. Buy in dynasty.' },
+  { agent: '🐘 Historian', urgency: 'monitor', text: 'FAAB spending audit: you\'ve spent $<r>██</r> of $<r>███</r> through Week <r>██</r>. League average is $<r>██</r>. You have a budget advantage for the playoff push — deploy <r>██</r>% of remaining on impact adds.' },
+  { agent: '🐘 Historian', urgency: 'urgent', text: 'Precedent alert: the last <r>██</r> times <r>████████</r> fell below .<r>███</r> win rate at this point in the season, they fire-sold within <r>██</r> days. Watch for <r>██████████</r> hitting the trade block.' },
+  { agent: '🐘 Historian', urgency: 'opportunity', text: 'Coaching carousel impact: <r>██████████</r>\'s new OC <r>██████████</r> historically boosts <r>██</r> production by <r>██</r>% in Year 1. The market hasn\'t priced this in yet. <r>██████████</r> is a buy.' },
 ];
 
 function renderDemoCards() {
@@ -1116,17 +1140,17 @@ renderDemoCards();
 
 // Agent bio cards
 const AGENT_BIOS = [
-  { name: 'Razzle', role: 'Chief of Staff', color: '#d97757', sprite: 'char_0',
+  { name: 'Razzle', animal: 'Bengal Tiger', emoji: '🐯', role: 'Chief of Staff', color: '#d97757', sprite: 'char_0',
     specialty: 'synthesizes all intel, resolves conflicts, delivers the final call' },
-  { name: 'Medical', role: 'Medical Analyst', color: '#5b7fff', sprite: 'char_1',
+  { name: 'Medical', animal: 'Owl', emoji: '🦉', role: 'Medical Analyst', color: '#5b7fff', sprite: 'char_1',
     specialty: 'injury timelines, return-to-play risk, practice report tracking' },
-  { name: 'Scout', role: 'Scout', color: '#2ec4b6', sprite: 'char_2',
+  { name: 'Scout', animal: 'Eagle', emoji: '🦅', role: 'Scout', color: '#2ec4b6', sprite: 'char_2',
     specialty: 'breakout detection, usage trends, waiver wire targets' },
-  { name: 'Diplomat', role: 'Diplomat', color: '#8b5cf6', sprite: 'char_3',
+  { name: 'Diplomat', animal: 'Bear', emoji: '🐻', role: 'Diplomat', color: '#8b5cf6', sprite: 'char_3',
     specialty: 'trade strategy, FAAB intel, leaguemate behavioral profiling' },
-  { name: 'Quant', role: 'Quant', color: '#e87422', sprite: 'char_4',
+  { name: 'Quant', animal: 'Fox', emoji: '🦊', role: 'Quant', color: '#e87422', sprite: 'char_4',
     specialty: 'valuations, championship probability, optimal roster paths' },
-  { name: 'Historian', role: 'Historian', color: '#d44040', sprite: 'char_5',
+  { name: 'Historian', animal: 'Elephant', emoji: '🐘', role: 'Historian', color: '#d44040', sprite: 'char_5',
     specialty: 'league precedents, multi-season patterns, draft ROI analysis' },
 ];
 
@@ -1142,8 +1166,8 @@ function renderAgentBios() {
       <div class="agent-bio-content">
         <div class="agent-bio-avatar" style="background-image:url('assets/characters/${a.sprite}.png'); background-position:0 0; background-size:224px 96px;"></div>
         <div class="agent-bio-info">
-          <div class="agent-bio-name" style="color:${a.color}">${a.name}</div>
-          <div class="agent-bio-role">${a.role}</div>
+          <div class="agent-bio-name" style="color:${a.color}">${a.emoji} ${a.name}</div>
+          <div class="agent-bio-role">${a.role} <span style="font-family:var(--font-hand); font-size:12px; color:var(--ink-light);">(${a.animal})</span></div>
           <div class="agent-bio-specialty">${a.specialty}</div>
         </div>
       </div>

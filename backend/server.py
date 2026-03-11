@@ -263,8 +263,43 @@ async def custom_http_exception_handler(request: Request, exc: StarletteHTTPExce
 
 @app.get("/api/health")
 def health():
-    stats = live_data.db_stats()
-    return {"status": "ok", "db": stats}
+    checks = {}
+    overall = "ok"
+
+    # Check 1: terminal.db (main data)
+    t0 = _time.time()
+    try:
+        stats = live_data.db_stats()
+        checks["terminal_db"] = {
+            "status": "ok",
+            "players": stats.get("players", 0),
+            "stat_rows": stats.get("stat_rows", 0),
+            "seasons": stats.get("seasons", []),
+            "query_ms": round((_time.time() - t0) * 1000, 1),
+        }
+    except Exception as e:
+        checks["terminal_db"] = {"status": "error", "error": str(e)}
+        overall = "degraded"
+
+    # Check 2: users.db (auth/billing)
+    t1 = _time.time()
+    try:
+        with auth_module.get_users_db() as conn:
+            user_count = conn.execute("SELECT COUNT(*) FROM users").fetchone()[0]
+            checks["users_db"] = {
+                "status": "ok",
+                "users": user_count,
+                "query_ms": round((_time.time() - t1) * 1000, 1),
+            }
+    except Exception as e:
+        checks["users_db"] = {"status": "error", "error": str(e)}
+        overall = "degraded"
+
+    status_code = 200 if overall == "ok" else 503
+    return JSONResponse(
+        {"status": overall, "checks": checks},
+        status_code=status_code,
+    )
 
 
 @app.get("/api/featured")

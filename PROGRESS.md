@@ -1,5 +1,25 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 132 — Platform: Pricing + Agent Branding + Health Check (COMPLETE)
+
+**Exit Criterion MET**: Landing page and Situation Room pricing updated from single-tier $240/yr to two-tier Pro ($9.99/mo / $79.99/yr) and Elite ($19.99/mo / $149.99/yr) per Pricing Strategy. Agent emojis and animal names updated across landing page demo briefings, bio cards, agents.html badges, and warroom.js bio grid (Medical=Owl, Quant=Fox, Historian=Elephant). Health check deepened to verify terminal.db + users.db connectivity with query execution time. All $240/year references eliminated from frontend.
+
+### Phase 132 Tasks (Platform Loop)
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Fix landing page pricing to two-tier Pro/Elite | DONE | Two pricing cards with correct prices, feature lists, "best value" badge on Elite |
+| 2 | Update agent emojis across landing page demo | DONE | Medical: hospital->owl, Quant: chart->fox, Historian: books->elephant |
+| 3 | Update agents.html badges and bio grid | DONE | Hero badges and warroom.js bio cards use correct animal emojis/names |
+| 4 | Deepen health check endpoint | DONE | /api/health checks terminal.db + users.db, returns query_ms, 503 on failure |
+| 5 | Add pricing section to agents.html | DONE | Two-tier Pro/Elite pricing cards at bottom of Situation Room page |
+
+### Decisions Log
+- All old $240/yr and $20/mo pricing references replaced across 3 files (index.html, agents.html, warroom.js)
+- Pricing section on agents.html placed in sand-colored zone between dark Situation Room content and footer
+- "Upgrade to Pro" buttons in warroom.js updated to "from $9.99/mo"
+- Health check returns structured JSON with per-database status and timing
+
 ## Previous Phase: Phase 131 — Platform: Backend Hardening + Agent Persona Depth (COMPLETE)
 
 **Exit Criterion MET**: Connection management fixed in auth.py and billing.py (context managers). All 6 agent personas deepened to 12 use cases each with data contracts, cross-agent triggers, failure modes, and free vs paid divergence.

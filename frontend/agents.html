@@ -1260,9 +1260,9 @@
     <span class="agent-badge">🐯 Razzle</span>
     <span class="agent-badge">🦅 Scout</span>
     <span class="agent-badge">🐻 Diplomat</span>
-    <span class="agent-badge">📊 Quant</span>
-    <span class="agent-badge">🏥 Medical</span>
-    <span class="agent-badge">📚 Historian</span>
+    <span class="agent-badge">🦊 Quant</span>
+    <span class="agent-badge">🦉 Medical</span>
+    <span class="agent-badge">🐘 Historian</span>
   </div>
   <div class="warroom-bio-grid" id="warroomBioGrid"></div>
 </div>
@@ -1387,7 +1387,7 @@
           <div class="pro-preview-line blurred">Championship odds shift from <span class="redacted">██</span>% to <span class="redacted">██</span>% with this move.</div>
         </div>
         <div class="pro-upsell-cta" id="proUpsellCta">
-          <p class="pro-upsell-text">Razzle knows every manager in your league. What they panic-buy, when they sell low, who they overpay. $240/year.</p>
+          <p class="pro-upsell-text">Razzle knows every manager in your league. What they panic-buy, when they sell low, who they overpay. Pro starts at $9.99/mo.</p>
           <a href="/league-intel.html" class="pro-upsell-btn" id="proUpsellBtn">Connect Sleeper to Unlock</a>
           <p class="pro-upsell-hint" id="proUpsellHint">free preview — full Situation Room Pro coming soon</p>
         </div>
@@ -1404,6 +1404,57 @@
   <!-- BRIEFING CARDS (rendered by JS after agents respond) -->
   <div class="briefing-zone">
     <div id="briefingCards"></div>
+  </div>
+</div>
+
+<!-- SITUATION ROOM PRICING -->
+<div style="background:var(--bg-sand, #ede0cf); border-top:3px solid var(--ink); padding:48px 24px; text-align:center;">
+  <div style="max-width:900px; margin:0 auto;">
+    <h2 style="font-family:var(--font-display); font-size:28px; margin-bottom:4px;">Unlock the full <span style="color:var(--orange);">Situation Room</span></h2>
+    <p style="font-family:var(--font-hand); font-size:20px; color:var(--ink-medium); margin-bottom:24px;">Generic mode is free. League context changes everything.</p>
+
+    <div style="display:flex; gap:20px; justify-content:center; flex-wrap:wrap; margin-bottom:16px;">
+      <!-- PRO -->
+      <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:24px 24px; text-align:left; min-width:220px; max-width:300px; flex:1;">
+        <div style="text-align:center; margin-bottom:12px;">
+          <div style="font-family:var(--font-display); font-size:18px;">Pro</div>
+          <div style="font-family:var(--font-display); font-size:28px; color:var(--orange);">$9.99<span style="font-size:13px; color:var(--ink-light);">/mo</span></div>
+          <div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">or $79.99/year</div>
+        </div>
+        <ul style="font-family:var(--font-mono); font-size:11px; padding-left:16px; line-height:1.9; color:var(--ink-medium); margin-bottom:16px;">
+          <li>All 6 agents with league context</li>
+          <li>Bring your own API key (BYOK)</li>
+          <li>20 AI queries per day</li>
+          <li>Full historical data (2015+)</li>
+          <li>CSV export + Formula Store</li>
+        </ul>
+        <div style="text-align:center;">
+          <button class="btn-chunky btn-primary" style="font-size:12px; width:100%;" onclick="if(typeof startCheckout==='function'){startCheckout('pro_month')}else{document.getElementById('auth-modal')?.classList.add('open')}">Get Pro</button>
+        </div>
+      </div>
+
+      <!-- ELITE -->
+      <div style="background:var(--bg-card); border:3px solid var(--orange); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:24px 24px; text-align:left; min-width:220px; max-width:300px; flex:1; position:relative;">
+        <div style="position:absolute; top:-11px; left:50%; transform:translateX(-50%) rotate(-2deg); background:var(--orange); color:white; font-family:var(--font-display); font-size:10px; padding:2px 12px; border-radius:20px; border:2px solid var(--ink); box-shadow:2px 2px 0 var(--ink);">recommended</div>
+        <div style="text-align:center; margin-bottom:12px;">
+          <div style="font-family:var(--font-display); font-size:18px;">Elite</div>
+          <div style="font-family:var(--font-display); font-size:28px; color:var(--orange);">$19.99<span style="font-size:13px; color:var(--ink-light);">/mo</span></div>
+          <div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">or $149.99/year</div>
+        </div>
+        <ul style="font-family:var(--font-mono); font-size:11px; padding-left:16px; line-height:1.9; color:var(--ink-medium); margin-bottom:16px;">
+          <li>Everything in Pro, plus:</li>
+          <li style="color:var(--orange); font-weight:700;">AI included (no API key needed)</li>
+          <li>Unlimited AI queries</li>
+          <li>Agent memory (multi-season)</li>
+          <li>Weekly personalized briefings</li>
+        </ul>
+        <div style="text-align:center;">
+          <button class="btn-chunky btn-primary" style="font-size:12px; width:100%;" onclick="if(typeof startCheckout==='function'){startCheckout('elite_month')}else{document.getElementById('auth-modal')?.classList.add('open')}">Get Elite</button>
+        </div>
+      </div>
+    </div>
+
+    <p style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">7-day free trial. The Lab stays free forever.</p>
   </div>
 </div>
 

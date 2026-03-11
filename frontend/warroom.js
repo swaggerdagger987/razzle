@@ -1665,7 +1665,7 @@ function renderContextBadges() {
         btn.onclick = null;
         hint.textContent = 'free preview — connect your leagues for full context';
       } else {
-        btn.textContent = 'Upgrade to Pro — $240/year';
+        btn.textContent = 'Upgrade to Pro — from $9.99/mo';
         btn.href = '#';
         btn.onclick = function(e) { e.preventDefault(); if (typeof startCheckout === 'function') startCheckout('year'); };
         hint.textContent = 'full league context, agent memory, personalized briefings';
@@ -2127,17 +2127,17 @@ setupScenarioPanel();
   if (!grid) return;
 
   var BIOS = [
-    { name: 'Razzle', role: 'Chief of Staff', color: '#d97757', sprite: 'char_0',
+    { name: 'Razzle', animal: 'Bengal Tiger', emoji: '\uD83D\uDC2F', role: 'Chief of Staff', color: '#d97757', sprite: 'char_0',
       specialty: 'synthesizes all intel, delivers the final call' },
-    { name: 'Medical', role: 'Medical Analyst', color: '#5b7fff', sprite: 'char_1',
+    { name: 'Medical', animal: 'Owl', emoji: '\uD83E\uDD89', role: 'Medical Analyst', color: '#5b7fff', sprite: 'char_1',
       specialty: 'injury timelines, return-to-play risk' },
-    { name: 'Scout', role: 'Scout', color: '#2ec4b6', sprite: 'char_2',
+    { name: 'Scout', animal: 'Eagle', emoji: '\uD83E\uDD85', role: 'Scout', color: '#2ec4b6', sprite: 'char_2',
       specialty: 'breakout detection, usage trends' },
-    { name: 'Diplomat', role: 'Diplomat', color: '#8b5cf6', sprite: 'char_3',
+    { name: 'Diplomat', animal: 'Bear', emoji: '\uD83D\uDC3B', role: 'Diplomat', color: '#8b5cf6', sprite: 'char_3',
       specialty: 'trade strategy, leaguemate profiling' },
-    { name: 'Quant', role: 'Quant', color: '#e87422', sprite: 'char_4',
+    { name: 'Quant', animal: 'Fox', emoji: '\uD83E\uDD8A', role: 'Quant', color: '#e87422', sprite: 'char_4',
       specialty: 'valuations, championship probability' },
-    { name: 'Historian', role: 'Historian', color: '#d44040', sprite: 'char_5',
+    { name: 'Historian', animal: 'Elephant', emoji: '\uD83D\uDC18', role: 'Historian', color: '#d44040', sprite: 'char_5',
       specialty: 'league precedents, pattern recognition' },
   ];
 
@@ -2147,8 +2147,8 @@ setupScenarioPanel();
       '<div class="warroom-bio-body">' +
         '<div class="warroom-bio-avatar" style="background-image:url(\'assets/characters/' + a.sprite + '.png\'); background-position:0 0; background-size:224px 96px;"></div>' +
         '<div>' +
-          '<div class="warroom-bio-name" style="color:' + a.color + '">' + a.name + '</div>' +
-          '<div class="warroom-bio-role">' + a.role + '</div>' +
+          '<div class="warroom-bio-name" style="color:' + a.color + '">' + a.emoji + ' ' + a.name + '</div>' +
+          '<div class="warroom-bio-role">' + a.role + ' <span style="font-family:var(--font-hand,Caveat,cursive); font-size:12px; opacity:0.7;">(' + a.animal + ')</span></div>' +
           '<div class="warroom-bio-specialty">' + a.specialty + '</div>' +
         '</div>' +
       '</div>' +
@@ -2298,7 +2298,7 @@ function renderAllBriefings(detail) {
     html += '<div class="pro-teaser-card">' +
       '<p>your league data is connected but locked</p>' +
       '<div class="pro-teaser-detail">this analysis would reference your actual roster, rivals, and league settings with Pro</div>' +
-      '<a class="btn-pro-upgrade" href="#" onclick="event.preventDefault(); if(typeof startCheckout===\'function\'){startCheckout(\'year\')}else if(typeof openAuthModal===\'function\'){openAuthModal();}">Upgrade to Pro \u2014 $240/year</a>' +
+      '<a class="btn-pro-upgrade" href="#" onclick="event.preventDefault(); if(typeof startCheckout===\'function\'){startCheckout(\'year\')}else if(typeof openAuthModal===\'function\'){openAuthModal();}">Upgrade to Pro \u2014 from $9.99/mo</a>' +
     '</div>';
   }
 

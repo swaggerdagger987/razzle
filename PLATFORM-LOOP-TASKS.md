@@ -1,59 +1,51 @@
-# Platform Loop — Phase 131 Task List
+# Platform Loop — Phase 132 Task List
 
 ## Status
-Current Phase: 131 (Backend Hardening + Agent Persona Depth)
+Current Phase: 132 (Pricing + Agent Branding + Health Check)
 Current Task: COMPLETE
 Current Stage: PHASE GATE
 Attempt: -
-Tasks Completed: 6/6
-Loop Iterations: 6
+Tasks Completed: 5/5
+Loop Iterations: 5
 
 ---
 
-## Task 1: Fix connection management in auth.py
-**Requirement**: "Replace all manual conn = get_conn() / conn.close() with context managers" (Backend Audit Priority Fix #1)
-**Accept when**: All 10 get_users_conn() calls in auth.py use a context manager. Zero manual conn.close() in auth.py.
-**Depends on**: none
-**Size**: S
-**Primary role**: BACKEND
-**Status**: PASS
-
-## Task 2: Fix connection management in billing.py
-**Requirement**: "Replace all manual conn = get_conn() / conn.close() with context managers" (Backend Audit Priority Fix #1)
-**Accept when**: All 7 get_users_conn() calls in billing.py use a context manager. Zero manual conn.close() in billing.py.
-**Depends on**: Task 1 (shared get_users_db context manager)
-**Size**: S
-**Primary role**: BACKEND
-**Status**: PASS
-
-## Task 3: Fix connection management in server.py
-**Requirement**: "Replace all manual conn = get_conn() / conn.close() with context managers" (Backend Audit Priority Fix #1)
-**Accept when**: Zero manual get_conn()/conn.close() in server.py (use get_db() or get_users_db() context managers).
-**Depends on**: Task 1
-**Size**: S
-**Primary role**: BACKEND
-**Status**: PASS (already in try/finally blocks — adapter connections)
-
-## Task 4: Remove duplicate route definitions in server.py
-**Requirement**: "Delete the duplicate aging_curves and td_regression routes" (Backend Audit Priority Fix #4)
-**Accept when**: Only one definition of aging_curves and one of td_regression in server.py. Server starts without errors.
-**Depends on**: none
-**Size**: S
-**Primary role**: BACKEND
-**Status**: PASS (already resolved — only one of each exists)
-
-## Task 5: Deepen Razzle agent persona (10+ use cases)
-**Requirement**: "10+ concrete use cases, data contract, output schema, free vs paid divergence, cross-agent triggers, failure modes" (Agent Persona File Standards)
-**Accept when**: razzle.md has 10+ use cases with user asks/agent does/output/free vs paid sections, plus data contract, cross-agent triggers, and failure modes.
+## Task 1: Fix landing page pricing to two-tier Pro/Elite
+**Requirement**: "Tier 1 ('Pro') at $9.99/month ($79.99/year)... Tier 2 ('Elite') at $19.99/month ($149.99/year)" (Pricing Strategy)
+**Accept when**: Landing page shows two pricing cards (Pro and Elite) with correct prices. Demo section and waitlist text updated. No references to $240/yr or $20/mo remain.
 **Depends on**: none
 **Size**: M
-**Primary role**: DESIGN
-**Status**: PASS (12 use cases, 126 lines, full depth standard met)
+**Primary role**: FRONTEND
+**Status**: PASS
 
-## Task 6: Deepen all 5 specialist agent personas (10+ use cases each)
-**Requirement**: "10+ concrete use cases, data contract, output schema, free vs paid divergence, cross-agent triggers, failure modes" (Agent Persona File Standards)
-**Accept when**: All 5 specialist persona files (scout, medical, diplomat, quant, historian) meet the full depth standard.
+## Task 2: Update agent emojis and animal names across landing page and demo
+**Requirement**: "Scout=Eagle, Medical=Owl, Diplomat=Bear, Quant=Fox, Historian=Elephant" (Phase 131 Decisions Log)
+**Accept when**: Landing page demo briefings use correct animal emojis. Agent bio cards show correct animal names. No generic emojis (hospital, chart, books) remain for agents.
 **Depends on**: none
-**Size**: L
-**Primary role**: DESIGN
-**Status**: PASS (all 5 specialists: 12 use cases each, 128-133 lines, full depth standard met)
+**Size**: S
+**Primary role**: FRONTEND
+**Status**: PASS
+
+## Task 3: Update Situation Room (agents.html) agent names and colors
+**Requirement**: Agent persona files define names and animals. Bio grid and hero badges should match.
+**Accept when**: agents.html hero badges, bio grid, and warroom.js AGENTS array all use correct animal names and emojis matching persona files.
+**Depends on**: none
+**Size**: S
+**Primary role**: FRONTEND
+**Status**: PASS
+
+## Task 4: Deepen health check endpoint
+**Requirement**: "Health check: verify Turso + users.db + query execution time" (Backend Audit)
+**Accept when**: GET /api/health returns status of main DB (terminal.db) connectivity, users.db connectivity, and query execution time in milliseconds. Returns 503 if any check fails.
+**Depends on**: none
+**Size**: S
+**Primary role**: BACKEND
+**Status**: PASS
+
+## Task 5: Add pricing page / section to agents.html with upgrade CTA
+**Requirement**: "Paywall UI gating... Free users see generic, paid content teased but gated" (Phase 8 ROADMAP) and "Upgrade CTAs feel like invitations, not roadblocks" (System Prompt)
+**Accept when**: agents.html has a visible pricing/upgrade section matching the two-tier Pro/Elite structure from Pricing Strategy, with feature comparison relevant to Situation Room.
+**Depends on**: Task 1
+**Size**: M
+**Primary role**: FRONTEND
+**Status**: PASS
