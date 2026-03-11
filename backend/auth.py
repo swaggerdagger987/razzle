@@ -3,6 +3,8 @@ Razzle auth module — user registration, login, JWT tokens.
 Uses a separate users.db to persist across terminal.db rebuilds.
 """
 
+import base64
+import hashlib
 import os
 import re
 import secrets
@@ -14,6 +16,7 @@ from pathlib import Path
 
 import bcrypt
 import jwt
+from cryptography.fernet import Fernet
 
 logger = logging.getLogger("razzle.auth")
 
@@ -847,3 +850,143 @@ def clear_agent_memories(user_id: int, league_id: str = None) -> dict:
             )
         conn.commit()
         return {"status": "ok"}
+
+
+# ---------------------------------------------------------------------------
+# BYOK API Key Management (encrypted at rest, never logged)
+# ---------------------------------------------------------------------------
+
+# Derive a Fernet key from ENCRYPTION_KEY env var (or JWT_SECRET as fallback).
+# Fernet requires a 32-byte URL-safe base64-encoded key.
+_ENCRYPTION_KEY_RAW = os.environ.get("ENCRYPTION_KEY") or JWT_SECRET
+_FERNET_KEY = base64.urlsafe_b64encode(
+    hashlib.sha256(_ENCRYPTION_KEY_RAW.encode("utf-8")).digest()
+)
+_fernet = Fernet(_FERNET_KEY)
+
+# Valid provider names (prevent arbitrary key storage)
+VALID_PROVIDERS = frozenset(["openrouter", "anthropic", "openai", "custom"])
+
+
+def _ensure_api_keys_table(conn):
+    """Create the user_api_keys table if it doesn't exist."""
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS user_api_keys (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            provider TEXT NOT NULL,
+            encrypted_key BLOB NOT NULL,
+            label TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE(user_id, provider),
+            FOREIGN KEY (user_id) REFERENCES users(id)
+        )
+    """)
+    conn.execute(
+        "CREATE INDEX IF NOT EXISTS idx_api_keys_user ON user_api_keys(user_id)"
+    )
+
+
+def _encrypt_key(plaintext: str) -> bytes:
+    """Encrypt an API key. Returns encrypted bytes. Never log the plaintext."""
+    return _fernet.encrypt(plaintext.encode("utf-8"))
+
+
+def _decrypt_key(encrypted: bytes) -> str:
+    """Decrypt an API key. Returns plaintext string. Never log the result."""
+    return _fernet.decrypt(encrypted).decode("utf-8")
+
+
+def save_api_key(user_id: int, provider: str, api_key: str, label: str = None) -> dict:
+    """Store an encrypted API key for a user. Overwrites existing key for the provider."""
+    if provider not in VALID_PROVIDERS:
+        return {"error": f"Invalid provider. Must be one of: {', '.join(sorted(VALID_PROVIDERS))}"}
+
+    if not api_key or len(api_key) < 10:
+        return {"error": "API key too short"}
+
+    if len(api_key) > 500:
+        return {"error": "API key too long"}
+
+    encrypted = _encrypt_key(api_key)
+
+    with get_users_db() as conn:
+        _ensure_api_keys_table(conn)
+        # Upsert: delete existing, insert new
+        conn.execute(
+            "DELETE FROM user_api_keys WHERE user_id = ? AND provider = ?",
+            (user_id, provider),
+        )
+        conn.execute(
+            """INSERT INTO user_api_keys (user_id, provider, encrypted_key, label, updated_at)
+               VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)""",
+            (user_id, provider, encrypted, label or provider),
+        )
+        conn.commit()
+
+    # Log the save event but NEVER the key value
+    logger.info("API key saved for user %d, provider %s", user_id, provider)
+    return {"status": "ok", "provider": provider}
+
+
+def get_api_keys(user_id: int) -> list:
+    """List stored API keys for a user. Returns provider names and labels, NEVER key values."""
+    with get_users_db() as conn:
+        _ensure_api_keys_table(conn)
+        rows = conn.execute(
+            """SELECT provider, label, created_at, updated_at
+               FROM user_api_keys WHERE user_id = ?
+               ORDER BY provider""",
+            (user_id,),
+        ).fetchall()
+        return [
+            {
+                "provider": r["provider"],
+                "label": r["label"],
+                "created_at": r["created_at"],
+                "updated_at": r["updated_at"],
+                "has_key": True,
+            }
+            for r in rows
+        ]
+
+
+def get_api_key_decrypted(user_id: int, provider: str) -> str:
+    """Retrieve and decrypt an API key. Returns the plaintext key or None.
+    SECURITY: This function returns sensitive data. Never log its output.
+    Only call this when the key is needed for an LLM API call."""
+    if provider not in VALID_PROVIDERS:
+        return None
+
+    with get_users_db() as conn:
+        _ensure_api_keys_table(conn)
+        row = conn.execute(
+            "SELECT encrypted_key FROM user_api_keys WHERE user_id = ? AND provider = ?",
+            (user_id, provider),
+        ).fetchone()
+        if not row:
+            return None
+        try:
+            return _decrypt_key(row["encrypted_key"])
+        except Exception:
+            logger.error("Failed to decrypt API key for user %d, provider %s", user_id, provider)
+            return None
+
+
+def delete_api_key(user_id: int, provider: str) -> dict:
+    """Delete a stored API key for a user."""
+    if provider not in VALID_PROVIDERS:
+        return {"error": "Invalid provider"}
+
+    with get_users_db() as conn:
+        _ensure_api_keys_table(conn)
+        result = conn.execute(
+            "DELETE FROM user_api_keys WHERE user_id = ? AND provider = ?",
+            (user_id, provider),
+        )
+        conn.commit()
+        if result.rowcount > 0:
+            logger.info("API key deleted for user %d, provider %s", user_id, provider)
+            return {"status": "ok", "provider": provider}
+        return {"status": "not_found", "provider": provider}

@@ -3,6 +3,8 @@ services:
     name: razzle-api
     runtime: python
     healthCheckPath: /api/health
+    numInstances: 1
+    autoDeploy: true
     buildCommand: |
       pip install -r requirements.txt
       mkdir -p data
@@ -16,15 +18,26 @@ services:
         value: "3.11.0"
       - key: ENVIRONMENT
         value: "production"
-      # Required env vars (set in Render dashboard, not here):
-      # JWT_SECRET           - Secret key for JWT signing (random hex string)
-      # STRIPE_SECRET_KEY    - Stripe API secret key
-      # STRIPE_WEBHOOK_SECRET - Stripe webhook signing secret
-      # STRIPE_PRICE_PRO_MONTHLY   - Stripe price ID for Pro monthly
-      # STRIPE_PRICE_PRO_YEARLY    - Stripe price ID for Pro yearly
-      # STRIPE_PRICE_ELITE_MONTHLY - Stripe price ID for Elite monthly
-      # STRIPE_PRICE_ELITE_YEARLY  - Stripe price ID for Elite yearly
+      # Required secrets (set in Render dashboard, NOT committed to code):
+      # JWT_SECRET              - Secret key for JWT signing (random 64+ hex string)
+      # ENCRYPTION_KEY          - Key for encrypting BYOK API keys at rest (random 64+ hex string)
+      # STRIPE_SECRET_KEY       - Stripe API secret key (sk_live_...)
+      # STRIPE_WEBHOOK_SECRET   - Stripe webhook signing secret (whsec_...)
+      # STRIPE_PRICE_PRO_MONTHLY   - Stripe price ID for Pro monthly (price_...)
+      # STRIPE_PRICE_PRO_YEARLY    - Stripe price ID for Pro yearly (price_...)
+      # STRIPE_PRICE_ELITE_MONTHLY - Stripe price ID for Elite monthly (price_...)
+      # STRIPE_PRICE_ELITE_YEARLY  - Stripe price ID for Elite yearly (price_...)
       # STRIPE_COUPON_RAZZLE       - Stripe coupon ID for RAZZLE promo code
-      # GH_TOKEN             - GitHub token for DB download from releases
-      # RAZZLE_BASE_URL      - Base URL for billing redirects (default: https://razzle.lol)
-      # ANTHROPIC_API_KEY    - Anthropic API key for Elite AI-included mode (optional)
+      # GH_TOKEN                - GitHub token for DB download from releases
+      # RAZZLE_BASE_URL         - Base URL for billing redirects (default: https://razzle.lol)
+      # RAZZLE_LLM_API_KEY     - OpenRouter API key for Elite AI-included mode (optional)
+      # RAZZLE_LLM_BASE_URL    - LLM provider base URL (optional, defaults to OpenRouter)
+      # RAZZLE_LLM_MODEL       - LLM model ID (optional, defaults to anthropic/claude-3.5-haiku)
+      #
+      # Optional promotional pricing:
+      # EA_ENABLED              - Enable early adopter pricing ("true" to enable)
+      # LIFETIME_ENABLED        - Enable lifetime deals ("true" to enable)
+      # STRIPE_PRICE_EA_PRO_YEARLY     - Early adopter Pro yearly price ID
+      # STRIPE_PRICE_EA_ELITE_YEARLY   - Early adopter Elite yearly price ID
+      # STRIPE_PRICE_LIFETIME_PRO      - Lifetime Pro price ID
+      # STRIPE_PRICE_LIFETIME_ELITE    - Lifetime Elite price ID

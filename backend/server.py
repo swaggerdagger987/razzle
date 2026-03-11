@@ -50,6 +50,27 @@ def _check_rate_limit(ip: str) -> bool:
     return True
 
 
+# Broader rate limiter for billing + API key management (5 requests / 60 seconds per IP)
+_sensitive_rate_buckets = defaultdict(list)
+_SENSITIVE_RATE_LIMIT = 5
+_SENSITIVE_RATE_WINDOW = 60
+
+def _check_sensitive_rate(ip: str) -> bool:
+    """Rate limit for sensitive mutation endpoints (billing, API key management)."""
+    now = _time.time()
+    if len(_sensitive_rate_buckets) > _RATE_MAX_IPS:
+        stale = [k for k, v in _sensitive_rate_buckets.items()
+                 if not v or now - v[-1] > _SENSITIVE_RATE_WINDOW]
+        for k in stale:
+            del _sensitive_rate_buckets[k]
+    bucket = _sensitive_rate_buckets[ip]
+    _sensitive_rate_buckets[ip] = [t for t in bucket if now - t < _SENSITIVE_RATE_WINDOW]
+    if len(_sensitive_rate_buckets[ip]) >= _SENSITIVE_RATE_LIMIT:
+        return False
+    _sensitive_rate_buckets[ip].append(now)
+    return True
+
+
 def bootstrap_database():
     """Sync nflverse + college data if the DB is empty or missing."""
     import sys, os
@@ -290,6 +311,55 @@ async def request_logging_middleware(request: Request, call_next):
 
 
 # ---------------------------------------------------------------------------
+# Security Headers middleware
+# ---------------------------------------------------------------------------
+
+@app.middleware("http")
+async def security_headers_middleware(request: Request, call_next):
+    """Add security headers to every response."""
+    response = await call_next(request)
+
+    # Prevent MIME-type sniffing
+    response.headers["X-Content-Type-Options"] = "nosniff"
+
+    # Prevent clickjacking — DENY for API, SAMEORIGIN for HTML pages
+    response.headers["X-Frame-Options"] = "DENY"
+
+    # Modern best practice: disable legacy XSS filter (rely on CSP instead)
+    response.headers["X-XSS-Protection"] = "0"
+
+    # Control referrer information leakage
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+
+    # HSTS — enforce HTTPS for 1 year, include subdomains
+    response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+
+    # Restrict unnecessary browser features
+    response.headers["Permissions-Policy"] = (
+        "camera=(), microphone=(), geolocation=(), payment=(self), "
+        "usb=(), magnetometer=(), gyroscope=(), accelerometer=()"
+    )
+
+    # Content Security Policy — allow Razzle assets, Google Fonts, OpenRouter, Stripe
+    response.headers["Content-Security-Policy"] = (
+        "default-src 'self'; "
+        "script-src 'self' 'unsafe-inline' https://js.stripe.com https://pagead2.googlesyndication.com; "
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+        "font-src 'self' https://fonts.gstatic.com; "
+        "img-src 'self' data: blob: https:; "
+        "connect-src 'self' https://openrouter.ai https://api.anthropic.com https://api.openai.com "
+        "https://api.sleeper.app https://api.stripe.com https://*.sleeper.app; "
+        "frame-src https://js.stripe.com; "
+        "object-src 'none'; "
+        "base-uri 'self'; "
+        "form-action 'self' https://checkout.stripe.com; "
+        "upgrade-insecure-requests"
+    )
+
+    return response
+
+
+# ---------------------------------------------------------------------------
 # Cache-Control middleware for read-only API endpoints
 # ---------------------------------------------------------------------------
 
@@ -463,7 +533,7 @@ def require_plan(request: Request, plan: str = "pro"):
 async def auth_register(request: Request):
     ip = request.client.host if request.client else "unknown"
     if not _check_rate_limit(ip):
-        return JSONResponse({"error": "Too many attempts. Try again in a minute."}, status_code=429)
+        return JSONResponse({"error": "Too many attempts. Try again in a minute."}, status_code=429, headers={"Retry-After": "60"})
     body = await request.json()
     email = body.get("email", "")
     password = body.get("password", "")
@@ -477,7 +547,7 @@ async def auth_register(request: Request):
 async def auth_login(request: Request):
     ip = request.client.host if request.client else "unknown"
     if not _check_rate_limit(ip):
-        return JSONResponse({"error": "Too many attempts. Try again in a minute."}, status_code=429)
+        return JSONResponse({"error": "Too many attempts. Try again in a minute."}, status_code=429, headers={"Retry-After": "60"})
     body = await request.json()
     email = body.get("email", "")
     password = body.get("password", "")
@@ -535,6 +605,13 @@ async def auth_link_sleeper(request: Request):
 
 @app.post("/api/billing/create-checkout")
 async def create_checkout(request: Request):
+    ip = request.client.host if request.client else "unknown"
+    if not _check_sensitive_rate(ip):
+        return JSONResponse(
+            {"error": "Too many checkout attempts. Try again in a minute."},
+            status_code=429,
+            headers={"Retry-After": "60"},
+        )
     user = require_auth(request)
     if not user:
         return JSONResponse({"error": "Authentication required"}, status_code=401)
@@ -632,7 +709,7 @@ async def track_query(request: Request):
             "limit": quota["limit"],
             "remaining": 0,
             "plan": plan,
-        }, status_code=429)
+        }, status_code=429, headers={"Retry-After": "3600"})
 
     # Record the query
     auth_module.record_query(user_id=user_id, ip_address=ip)
@@ -745,6 +822,92 @@ async def llm_chat(request: Request):
             {"error": "Something went wrong. Try again."},
             status_code=500,
         )
+
+
+# ---------------------------------------------------------------------------
+# BYOK API Key Management (encrypted server-side storage)
+# ---------------------------------------------------------------------------
+
+@app.get("/api/user/api-keys")
+async def get_api_keys(request: Request):
+    """List stored API keys for the authenticated user. Returns metadata only, NEVER key values."""
+    user = require_auth(request)
+    if not user:
+        return JSONResponse({"error": "Authentication required"}, status_code=401)
+    # Require Pro+ (BYOK is a Pro feature)
+    _, err = require_plan(request, "pro")
+    if err:
+        return err
+    return auth_module.get_api_keys(user["id"])
+
+
+@app.post("/api/user/api-keys")
+async def save_api_key(request: Request):
+    """Store an encrypted API key. Requires Pro+ tier."""
+    ip = request.client.host if request.client else "unknown"
+    if not _check_sensitive_rate(ip):
+        return JSONResponse(
+            {"error": "Too many requests. Try again in a minute."},
+            status_code=429,
+            headers={"Retry-After": "60"},
+        )
+    user = require_auth(request)
+    if not user:
+        return JSONResponse({"error": "Authentication required"}, status_code=401)
+    _, err = require_plan(request, "pro")
+    if err:
+        return err
+
+    try:
+        body = await request.json()
+    except Exception:
+        return JSONResponse({"error": "Invalid request body"}, status_code=400)
+
+    provider = body.get("provider", "").strip().lower()
+    api_key = body.get("api_key", "").strip()
+    label = body.get("label", "").strip()
+
+    if not provider or not api_key:
+        return JSONResponse({"error": "provider and api_key are required"}, status_code=400)
+
+    result = auth_module.save_api_key(user["id"], provider, api_key, label or None)
+    if "error" in result:
+        return JSONResponse(result, status_code=400)
+    return result
+
+
+@app.get("/api/user/api-keys/{provider}/decrypt")
+async def get_decrypted_key(provider: str, request: Request):
+    """Retrieve a decrypted API key for LLM calls. Pro+ only.
+    SECURITY: Returns the actual key value. Only used by the frontend for BYOK LLM calls.
+    The key travels over HTTPS and is used immediately — never stored in logs or error messages."""
+    user = require_auth(request)
+    if not user:
+        return JSONResponse({"error": "Authentication required"}, status_code=401)
+    _, err = require_plan(request, "pro")
+    if err:
+        return err
+
+    key = auth_module.get_api_key_decrypted(user["id"], provider.strip().lower())
+    if key is None:
+        return JSONResponse({"error": "No key found for this provider"}, status_code=404)
+    return {"provider": provider, "api_key": key}
+
+
+@app.delete("/api/user/api-keys/{provider}")
+async def delete_api_key(provider: str, request: Request):
+    """Delete a stored API key."""
+    user = require_auth(request)
+    if not user:
+        return JSONResponse({"error": "Authentication required"}, status_code=401)
+    _, err = require_plan(request, "pro")
+    if err:
+        return err
+
+    result = auth_module.delete_api_key(user["id"], provider.strip().lower())
+    if "error" in result:
+        return JSONResponse(result, status_code=400)
+    return result
 
 
 # ---------------------------------------------------------------------------

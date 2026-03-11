@@ -1,41 +1,57 @@
-# Platform Loop — Phase 157 Task List
+# Platform Loop — Phase 158 Task List
 
 ## Status
-Current Phase: 157 (Situation Room — "What Can I Ask?" Format Reference Panel)
-Current Task: 2
+Current Phase: 158 (Security Headers + BYOK Server-Side Storage + Production Hardening)
+Current Task: COMPLETE
 Current Stage: COMPLETE
 Attempt: 1/3
-Tasks Completed: 2/2
-Loop Iterations: 2
+Tasks Completed: 5/5
+Loop Iterations: 5
 
 ---
 
 ## Phase Rationale
 
-The system prompt mandates: "Razzle serves ALL fantasy formats. Dynasty, redraft, keeper, best ball, superflex, 2QB, IDP, DFS -- every format." The agent personas have 10+ use cases each across multiple formats, but users visiting the Situation Room have no idea what types of questions they can ask. The example chips show 6 generic scenarios, but there's no format-organized reference.
-
-Adding a collapsible "What can I ask?" panel below the scenario examples gives users:
-1. Immediate understanding of what the agents can do
-2. Format-organized question suggestions (Redraft, Dynasty, Keeper/Best Ball, Universal)
-3. One-click population of the scenario input from any suggestion
-4. Confidence to ask real questions about their specific format
-
-This is a conversion accelerator -- users who understand what they can ask are more likely to configure an API key and run their first query.
+All Roadmap phases 0-9 are complete (157 phases shipped). The product has auth, billing, Stripe, agents, pixel canvas, tier gating, and the full Lab. Before launch, the system prompt mandates: "BYOK keys encrypted at rest, never logged" and "Every input is malicious. Every secret leaks. Every webhook is spoofed." Currently BYOK keys were stored only in browser localStorage (not encrypted, not server-side). Additionally, no HTTP security headers (CSP, HSTS, X-Frame-Options) were set, and the render.yaml lacked full env var documentation.
 
 ---
 
-## Task 1: Format-Organized Question Reference Panel
-**Requirement**: "Every agent must be deep enough that a user thinks 'I can't believe this thing just did that for me'" + agents must be "format-aware, not format-locked."
-**Accept when**: (1) Collapsible `<details>` panel below scenario examples. (2) 4 columns: Redraft, Dynasty, Keeper/Best Ball, Universal. (3) 4-5 questions per column. (4) Clicking any question populates scenario input and closes panel. (5) Styled with Razzle design system. (6) Responsive on mobile.
+## Task 1: HTTP Security Headers Middleware
+**Requirement**: "Every input is malicious. Every secret leaks." — Security Engineer role mandate.
+**Accept when**: Security headers on every response.
+**Depends on**: none
+**Size**: M
+**Primary role**: SECURITY
+**Status**: PASS — 8 security headers verified on API responses (X-Content-Type-Options, X-Frame-Options, X-XSS-Protection, Referrer-Policy, Strict-Transport-Security, Permissions-Policy, Content-Security-Policy, X-Request-ID)
+
+## Task 2: BYOK API Key Server-Side Encrypted Storage
+**Requirement**: "BYOK keys encrypted at rest, never logged, never include in error messages"
+**Accept when**: Encrypted key CRUD works end-to-end.
+**Depends on**: none
+**Size**: L
+**Primary role**: SECURITY / BACKEND
+**Status**: PASS — Fernet encryption, 4 endpoints (GET/POST/GET-decrypt/DELETE), roundtrip verified, invalid provider rejected, too-short key rejected, unauthenticated access rejected, Pro+ tier gating enforced
+
+## Task 3: Render Production Configuration
+**Requirement**: Backend Audit: render.yaml should document required env vars and have health check.
+**Accept when**: render.yaml complete with all env vars documented.
 **Depends on**: none
 **Size**: S
-**Primary role**: FRONTEND
-**Status**: PASS — details/summary, 4-column grid, 19 clickable questions, auto-close on click, responsive CSS
+**Primary role**: BACKEND
+**Status**: PASS — healthCheckPath, numInstances, autoDeploy, ENCRYPTION_KEY, RAZZLE_LLM_* vars, all promotional pricing vars documented
 
-## Task 2: QA + Syntax Verification
-**Requirement**: No errors, page serves correctly.
-**Accept when**: (1) agents.html inline JS passes. (2) Page serves 200. (3) HTML structure balanced.
+## Task 4: Rate Limiting Hardening
+**Requirement**: "Rate limiter prevents brute force"
+**Accept when**: Billing + BYOK endpoints rate limited, Retry-After headers present.
 **Depends on**: Task 1
 **Size**: S
+**Primary role**: SECURITY
+**Status**: PASS — _check_sensitive_rate (5/60s) on billing checkout and BYOK save. Retry-After headers on all 429 responses (auth: 60s, sensitive: 60s, daily quota: 3600s).
+
+## Task 5: QA + Security Verification
+**Requirement**: All security changes verified end-to-end.
+**Accept when**: Server starts, all headers present, BYOK works, rate limits fire.
+**Depends on**: Tasks 1-4
+**Size**: S
 **Primary role**: QA
-**Status**: PASS — JS syntax OK, page serves 200, details tag properly balanced
+**Status**: PASS — Server imports OK, 8 security headers on all responses, BYOK CRUD verified (save/list/decrypt/delete), encryption roundtrip confirmed, auth rejection on unauthenticated requests, rate limiting fires at threshold, Retry-After headers present, no secrets in error responses, all Python files compile clean, all 5 main HTML pages serve 200.

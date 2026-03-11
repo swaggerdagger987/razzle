@@ -1,5 +1,29 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 158 — Platform: Security Headers + BYOK Server-Side Storage + Production Hardening (COMPLETE)
+
+**Exit Criterion MET**: Full security hardening pass for production readiness. (1) HTTP security headers middleware added to server.py: X-Content-Type-Options: nosniff, X-Frame-Options: DENY, X-XSS-Protection: 0, Referrer-Policy: strict-origin-when-cross-origin, Strict-Transport-Security with 1-year max-age, Permissions-Policy restricting camera/mic/geo/usb, Content-Security-Policy allowing Razzle assets + Google Fonts + OpenRouter/Anthropic/OpenAI APIs + Stripe + Sleeper. All 8 headers verified on every API response. (2) BYOK API key server-side encrypted storage: Fernet symmetric encryption using ENCRYPTION_KEY env var (falls back to JWT_SECRET). New user_api_keys table with encrypted_key BLOB column. 4 new endpoints: GET /api/user/api-keys (list metadata, never values), POST /api/user/api-keys (save encrypted), GET /api/user/api-keys/{provider}/decrypt (retrieve for LLM calls), DELETE /api/user/api-keys/{provider}. All endpoints require auth + Pro+ tier. Invalid provider names rejected. Key length validation. Keys never appear in logs or error responses. Encryption roundtrip verified. (3) render.yaml updated: ENCRYPTION_KEY documented, RAZZLE_LLM_* vars documented, all promotional pricing env vars documented, numInstances and autoDeploy set. (4) Rate limiting hardened: new _check_sensitive_rate limiter (5 requests/60s) applied to billing checkout and BYOK key save endpoints. Retry-After headers added to all 429 responses across auth (60s), sensitive (60s), and daily quota (3600s) limiters. (5) cryptography>=41.0.0 added to requirements.txt. .env.example updated with ENCRYPTION_KEY and corrected LLM env var names.
+
+### Phase 158 Tasks (Platform Loop)
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | HTTP Security Headers Middleware | PASS | 8 headers on every response, CSP allows required external resources |
+| 2 | BYOK Server-Side Encrypted Storage | PASS | Fernet encryption, 4 CRUD endpoints, Pro+ gated, validation |
+| 3 | Render Production Configuration | PASS | Env var docs, health check, numInstances, autoDeploy |
+| 4 | Rate Limiting Hardening | PASS | Sensitive rate limiter, Retry-After headers on all 429s |
+| 5 | QA + Security Verification | PASS | Server imports, headers verified, BYOK CRUD tested, rate limits fire |
+
+### Decisions Log
+- Fernet encryption chosen over AES-GCM because it provides authenticated encryption with a simpler API and is the standard Python approach via the cryptography library.
+- ENCRYPTION_KEY falls back to JWT_SECRET to avoid breaking existing deployments that haven't set the new env var.
+- BYOK decrypt endpoint exists so the frontend can retrieve the key for client-side LLM calls (key travels over HTTPS). Server-side proxy is the alternative for Elite users.
+- Valid provider names restricted to openrouter/anthropic/openai/custom to prevent arbitrary key storage.
+- Sensitive rate limiter shares buckets across billing + BYOK endpoints (same IP, same limit) to prevent switching between endpoints to bypass limits.
+- CSP includes pagead2.googlesyndication.com for future AdSense integration, and api.sleeper.app for Bureau of Intelligence.
+
+---
+
 ## Previous Phase: Phase 157 — Platform: Situation Room — "What Can I Ask?" Format Reference Panel (COMPLETE)
 
 **Exit Criterion MET**: The Situation Room scenario input now includes a collapsible "what can I ask?" reference panel organized by fantasy format. Uses native `<details>/<summary>` for zero-JS expand/collapse. 4-column responsive grid: Redraft (5 questions), Dynasty (5 questions), Keeper/Best Ball (4 questions), Universal (5 questions). Clicking any question populates the scenario textarea and auto-closes the panel. Styled with Razzle design system: orange column labels, mono font, hover state fills orange. Responsive: 2-column at 640px, 1-column at 400px. Triangle indicator rotates on open. Questions sourced directly from agent persona use cases to ensure agents can actually handle them well.
