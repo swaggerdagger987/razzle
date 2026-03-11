@@ -1215,7 +1215,7 @@ function renderTableHead() {
     } else if (col.isNotes) {
       html += `<th${tip} style="width:120px; min-width:80px;">${col.label}</th>`;
     } else {
-      html += `<th class="${cls}"${tip} tabindex="0" onclick="sortBy('${key}')" onkeydown="if(event.key==='Enter'){sortBy('${key}');event.preventDefault();}">${col.label}${extra}</th>`;
+      html += `<th class="${cls}"${tip} tabindex="0" onclick="sortBy('${key}')" ondblclick="openFilterForColumn('${key}')" onkeydown="if(event.key==='Enter'){sortBy('${key}');event.preventDefault();}">${col.label}${extra}</th>`;
     }
   }
 
@@ -2116,6 +2116,16 @@ function openFilterModal() {
   document.getElementById("filterModalOverlay").classList.add("open");
   document.getElementById("filterValue").value = "";
   document.getElementById("filterValue").focus();
+}
+
+function openFilterForColumn(key) {
+  const sel = document.getElementById("filterStat");
+  if (!sel) return;
+  // Check if this key exists in the filter stat dropdown
+  const opt = sel.querySelector('option[value="' + CSS.escape(key) + '"]');
+  if (!opt) return; // not a filterable stat (text columns, sparklines, etc.)
+  sel.value = key;
+  openFilterModal();
 }
 
 function closeFilterModal(e) {
@@ -8173,6 +8183,7 @@ function toggleShortcutRef() {
           ${shortcutRow("A", "Stats summary bar")}
           ${shortcutRow("N", "Toggle notes column")}
           ${shortcutRow("P", "Clear pinned players")}
+          ${shortcutRow("Dbl-click", "Column header → quick filter")}
           ${shortcutRow("?", "This reference")}
         </tbody>
       </table>

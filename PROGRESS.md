@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 72 — Screener Double-Click Column Header to Filter (COMPLETE)
+
+**Exit Criterion MET**: Double-clicking a numeric column header opens filter modal with that stat pre-selected. Single click still sorts. Works in all modes.
+
+### Phase 72 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Double-click column header filter | DONE | ondblclick on th, openFilterForColumn(), shortcut ref updated |
+
 ## Previous Phase: Phase 71 — QA + UX Audit Fixes for Phases 66-70 (COMPLETE)
 
 **Exit Criterion MET**: 2 MEDIUM findings fixed (colCount mismatch in spacer/separator rows, page size selector default). 5 LOW findings fixed (shadow color, button border-radius, aria-label, null check).
