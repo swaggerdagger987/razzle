@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 46 — Player Profile Dynasty Value Sparkline (COMPLETE)
+
+**Exit Criterion MET**: Player profile modal shows dynasty value sparkline with season-by-season values, start/end points, and trend delta.
+
+### Phase 46 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Dynasty value sparkline | DONE | SVG polyline sparkline, async load from /api/dynasty-history, teal/terracotta coloring, delta arrow |
+
 ## Previous Phase: Phase 45 — QA + UX Audit Fixes for Phases 41-44 (COMPLETE)
 
 **Exit Criterion MET**: All HIGH and MEDIUM findings fixed. Class name escaping corrected. API parameter normalization consistent.
