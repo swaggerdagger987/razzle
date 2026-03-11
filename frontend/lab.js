@@ -2788,15 +2788,25 @@ function togglePlayerSelect(playerId, checked) {
 
 function updateSelectionUI() {
   const count = state.selectedPlayers.length;
-  const resultEl = document.getElementById("resultCount");
-  if (count > 0) {
-    resultEl.innerHTML = `<strong>${state.totalCount}</strong> players &nbsp;|&nbsp; <strong>${count}</strong> selected
-      <button class="btn-primary" style="margin-left:8px; padding:3px 10px; font-size:11px;" onclick="openCompare()">Compare</button>`;
-  } else {
-    updateResultCount();
+  const bar = document.getElementById("bulkActionBar");
+  if (bar) {
+    if (count > 0) {
+      bar.style.display = "";
+      document.getElementById("bulkCount").textContent = count + " selected";
+      document.getElementById("bulkNames").textContent = state.selectedPlayers.map(p => p.full_name || p.player_name || "").join(", ");
+    } else {
+      bar.style.display = "none";
+    }
   }
+  updateResultCount();
   // Persist Lab context for Situation Room agent bridge
   saveLabContext();
+}
+
+function clearSelection() {
+  state.selectedPlayers = [];
+  updateSelectionUI();
+  renderTable();
 }
 
 function saveLabContext() {

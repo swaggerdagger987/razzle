@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 65 — Screener Bulk Action Bar (COMPLETE)
+
+**Exit Criterion MET**: Selecting 2+ players shows a sticky bottom action bar with count, names, Compare/Chart/Clear buttons. Animated slideUp. clearSelection() deselects all. Works in all modes.
+
+### Phase 65 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Bulk action bar with quick actions | DONE | .bulk-action-bar CSS, HTML element, updateSelectionUI() show/hide, clearSelection(), slideUp animation |
+
 ## Previous Phase: Phase 64 — Screener Quick Column Add Button (COMPLETE)
 
 **Exit Criterion MET**: "+" button at end of column header row opens column picker. Spacer columns in group header, summary bar, data rows. All colCount references updated.

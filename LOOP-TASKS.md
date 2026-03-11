@@ -1,16 +1,16 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 64 (Screener Quick Column Add Button)
-## Phase 64: Screener Quick Column Add Button
-**Exit Criterion**: A "+" button appears at the end of the column header row. Clicking it opens the column picker. Group header row and summary bar have matching spacer column. All row types (data, pinned, tier breaks, virtual scroll spacers) account for the extra column.
+- Phase: 65 (Screener Bulk Action Bar)
+## Phase 65: Screener Bulk Action Bar
+**Exit Criterion**: When 2+ players are selected via checkboxes, a sticky action bar appears at the bottom showing selected count, player names, and quick action buttons (Compare, Chart, Clear). Bar slides up with animation. Hidden when no players selected. Clear button deselects all.
 
 - Task 1: PASS
 - Stage: COMPLETE
-- Next: Phase gate
+- Next: QA + UX audit (Phase 65 is multiple of 5)
 
-### Task 1: Quick column add button with full column alignment
+### Task 1: Bulk action bar with compare/chart/clear buttons
 **Status**: PASS
 **Attempts**: 1
-**Acceptance**: "+" th at end of header row opens column picker. Group header row has spacer th. Summary bar tfoot has spacer td. Data rows have spacer td. Pinned separator, tier breaks, and virtual scroll spacer colCount all incremented by 1.
-**Result**: Added "+" th to renderTableHead, spacer th to buildGroupHeaderRow, spacer td to buildRowHTML and renderSummaryBar. Updated colCount in renderVisibleRows, renderPinnedRows, insertTierBreakRows.
+**Acceptance**: Selecting 2+ players shows sticky bottom bar. Count in Caveat font. Player names truncated with ellipsis. Compare, Chart, Clear buttons. Animation slideUp. clearSelection() deselects all and re-renders. Works in all modes.
+**Result**: Added .bulk-action-bar CSS (sticky bottom, slideUp animation), HTML element with buttons, updated updateSelectionUI() to show/hide bar, added clearSelection() function.

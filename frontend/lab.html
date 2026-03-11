@@ -945,6 +945,43 @@
     font-size: 10px;
   }
 
+  /* ─── Bulk action bar ─── */
+  .bulk-action-bar {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    background: var(--bg-card);
+    border-top: 3px solid var(--ink);
+    box-shadow: 0 -4px 0 var(--ink);
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    animation: slideUp 0.15s ease-out;
+  }
+  @keyframes slideUp {
+    from { transform: translateY(100%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  .bulk-action-bar .bulk-count {
+    font-family: var(--font-hand);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--orange);
+  }
+  .bulk-action-bar .bulk-names {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--ink-light);
+    font-size: 11px;
+  }
+
   /* ─── Context menu ─── */
   .screener-context-menu {
     position: fixed;
@@ -2940,6 +2977,15 @@
       <span><span style="background:var(--green); color:white; padding:0 4px; border-radius:4px; border:1px solid var(--ink); font-weight:700;">+50%</span> Breakout</span>
       <span style="color:var(--ink-faint);">&#8212; = not applicable for position</span>
     </div>
+  </div>
+
+  <!-- BULK ACTION BAR -->
+  <div class="bulk-action-bar" id="bulkActionBar" style="display:none;">
+    <span class="bulk-count" id="bulkCount"></span>
+    <span class="bulk-names" id="bulkNames"></span>
+    <button class="btn-chunky" onclick="openCompare()" style="border-color:var(--orange);">Compare</button>
+    <button class="btn-chunky" onclick="openChartPanel()">Chart</button>
+    <button class="btn-chunky" onclick="clearSelection()" style="border-color:var(--ink-light);">Clear</button>
   </div>
 
   <!-- WATERMARK -->
