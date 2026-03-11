@@ -14,11 +14,17 @@
 | 4 | Deepen health check endpoint | DONE | /api/health checks terminal.db + users.db, returns query_ms, 503 on failure |
 | 5 | Add pricing section to agents.html | DONE | Two-tier Pro/Elite pricing cards at bottom of Situation Room page |
 
+| 6 | Two-tier Stripe billing backend | DONE | 4 price IDs (pro_month/year, elite_month/year), plan_tier in checkout metadata, webhook stores correct tier |
+| 7 | Plan hierarchy in require_plan() | DONE | Elite users can access Pro features via _PLAN_HIERARCHY levels |
+| 8 | isEliteUser() in warroom.js | DONE | Frontend recognizes elite plan, upsell zone hidden for both Pro and Elite |
+
 ### Decisions Log
 - All old $240/yr and $20/mo pricing references replaced across 3 files (index.html, agents.html, warroom.js)
 - Pricing section on agents.html placed in sand-colored zone between dark Situation Room content and footer
 - "Upgrade to Pro" buttons in warroom.js updated to "from $9.99/mo"
 - Health check returns structured JSON with per-database status and timing
+- Billing module now supports 4 Stripe price IDs via env vars (STRIPE_PRICE_PRO_MONTHLY, STRIPE_PRICE_PRO_YEARLY, STRIPE_PRICE_ELITE_MONTHLY, STRIPE_PRICE_ELITE_YEARLY) with legacy fallback
+- Plan hierarchy: free(0) < pro(1) < elite(2) -- Elite users get all Pro features automatically
 
 ## Previous Phase: Phase 131 — Platform: Backend Hardening + Agent Persona Depth (COMPLETE)
 

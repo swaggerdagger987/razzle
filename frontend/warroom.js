@@ -1647,9 +1647,9 @@ function renderContextBadges() {
   if (upsellZone) {
     var user = null;
     try { user = JSON.parse(localStorage.getItem("razzle_user")); } catch(e) {}
-    var isPro = user && user.plan === "pro";
-    // Hide upsell if in league mode OR pro user
-    upsellZone.style.display = (leagueMode || isPro) ? 'none' : 'block';
+    var isPaid = user && (user.plan === "pro" || user.plan === "elite");
+    // Hide upsell if in league mode OR paid user
+    upsellZone.style.display = (leagueMode || isPaid) ? 'none' : 'block';
     // Update CTA based on auth state
     var btn = document.getElementById('proUpsellBtn');
     var hint = document.getElementById('proUpsellHint');
@@ -1753,7 +1753,14 @@ async function loadPersona(agentId) {
 function isProUser() {
   try {
     var user = JSON.parse(localStorage.getItem("razzle_user"));
-    return user && user.plan === "pro";
+    return user && (user.plan === "pro" || user.plan === "elite");
+  } catch (e) { return false; }
+}
+
+function isEliteUser() {
+  try {
+    var user = JSON.parse(localStorage.getItem("razzle_user"));
+    return user && user.plan === "elite";
   } catch (e) { return false; }
 }
 

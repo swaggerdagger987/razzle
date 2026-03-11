@@ -17,9 +17,27 @@ logger = logging.getLogger("razzle.billing")
 STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY", "")
 STRIPE_WEBHOOK_SECRET = os.environ.get("STRIPE_WEBHOOK_SECRET", "")
 
-# Price IDs — set in env or use defaults (must be created in Stripe dashboard)
-STRIPE_PRICE_YEARLY = os.environ.get("STRIPE_PRICE_YEARLY", "")
-STRIPE_PRICE_MONTHLY = os.environ.get("STRIPE_PRICE_MONTHLY", "")
+# Price IDs — set in env (must be created in Stripe dashboard)
+# Two-tier pricing: Pro ($9.99/mo, $79.99/yr) and Elite ($19.99/mo, $149.99/yr)
+STRIPE_PRICE_PRO_MONTHLY = os.environ.get("STRIPE_PRICE_PRO_MONTHLY", "")
+STRIPE_PRICE_PRO_YEARLY = os.environ.get("STRIPE_PRICE_PRO_YEARLY", "")
+STRIPE_PRICE_ELITE_MONTHLY = os.environ.get("STRIPE_PRICE_ELITE_MONTHLY", "")
+STRIPE_PRICE_ELITE_YEARLY = os.environ.get("STRIPE_PRICE_ELITE_YEARLY", "")
+
+# Legacy fallback (single-tier) — maps to Pro
+STRIPE_PRICE_YEARLY = os.environ.get("STRIPE_PRICE_YEARLY", "") or STRIPE_PRICE_PRO_YEARLY
+STRIPE_PRICE_MONTHLY = os.environ.get("STRIPE_PRICE_MONTHLY", "") or STRIPE_PRICE_PRO_MONTHLY
+
+# Map plan identifiers to Stripe price IDs
+_PRICE_MAP = {
+    "pro_month": STRIPE_PRICE_PRO_MONTHLY,
+    "pro_year": STRIPE_PRICE_PRO_YEARLY,
+    "elite_month": STRIPE_PRICE_ELITE_MONTHLY,
+    "elite_year": STRIPE_PRICE_ELITE_YEARLY,
+    # Legacy identifiers
+    "month": STRIPE_PRICE_MONTHLY,
+    "year": STRIPE_PRICE_YEARLY,
+}
 
 if STRIPE_SECRET_KEY:
     stripe.api_key = STRIPE_SECRET_KEY
@@ -59,13 +77,20 @@ def initialize_subscriptions_table():
 
 
 def create_checkout_session(user: dict, interval: str = "year") -> dict:
-    """Create a Stripe Checkout Session for the user."""
+    """Create a Stripe Checkout Session for the user.
+
+    interval can be: pro_month, pro_year, elite_month, elite_year,
+    or legacy: month, year (maps to Pro).
+    """
     if not STRIPE_SECRET_KEY:
         return {"error": "Stripe not configured", "status": 503}
 
-    price_id = STRIPE_PRICE_YEARLY if interval == "year" else STRIPE_PRICE_MONTHLY
+    price_id = _PRICE_MAP.get(interval, "")
     if not price_id:
-        return {"error": f"Stripe price ID for {interval} not configured", "status": 503}
+        return {"error": f"Stripe price ID for '{interval}' not configured", "status": 503}
+
+    # Determine plan tier for metadata
+    plan_tier = "elite" if interval.startswith("elite") else "pro"
 
     try:
         # Get or create Stripe customer
@@ -78,7 +103,8 @@ def create_checkout_session(user: dict, interval: str = "year") -> dict:
             mode="subscription",
             success_url=SUCCESS_URL,
             cancel_url=CANCEL_URL,
-            metadata={"user_id": str(user["id"])},
+            metadata={"user_id": str(user["id"]), "plan_tier": plan_tier},
+            subscription_data={"metadata": {"plan_tier": plan_tier}},
         )
         return {"checkout_url": session.url, "session_id": session.id}
     except stripe.error.StripeError as e:
@@ -132,10 +158,16 @@ def handle_webhook(payload: bytes, sig_header: str) -> dict:
 
 
 def _handle_checkout_completed(session):
-    """Upgrade user to pro after successful checkout."""
+    """Upgrade user to pro or elite after successful checkout."""
     customer_id = session.get("customer")
     subscription_id = session.get("subscription")
-    user_id = session.get("metadata", {}).get("user_id")
+    metadata = session.get("metadata", {})
+    user_id = metadata.get("user_id")
+    plan_tier = metadata.get("plan_tier", "pro")  # default to pro for legacy
+
+    # Validate plan tier
+    if plan_tier not in ("pro", "elite"):
+        plan_tier = "pro"
 
     if not user_id:
         # Try to find user by customer_id
@@ -149,7 +181,7 @@ def _handle_checkout_completed(session):
 
     with auth_module.get_users_db() as conn:
         # Update user plan
-        conn.execute("UPDATE users SET plan = 'pro' WHERE id = ?", (int(user_id),))
+        conn.execute("UPDATE users SET plan = ? WHERE id = ?", (plan_tier, int(user_id)))
 
         # Upsert subscription record
         existing = conn.execute(
@@ -159,17 +191,17 @@ def _handle_checkout_completed(session):
             conn.execute("""
                 UPDATE subscriptions SET
                     stripe_customer_id = ?, stripe_subscription_id = ?,
-                    plan = 'pro', status = 'active', updated_at = CURRENT_TIMESTAMP
+                    plan = ?, status = 'active', updated_at = CURRENT_TIMESTAMP
                 WHERE user_id = ?
-            """, (customer_id, subscription_id, int(user_id)))
+            """, (customer_id, subscription_id, plan_tier, int(user_id)))
         else:
             conn.execute("""
                 INSERT INTO subscriptions (user_id, stripe_customer_id, stripe_subscription_id, plan, status)
-                VALUES (?, ?, ?, 'pro', 'active')
-            """, (int(user_id), customer_id, subscription_id))
+                VALUES (?, ?, ?, ?, 'active')
+            """, (int(user_id), customer_id, subscription_id, plan_tier))
 
         conn.commit()
-    logger.info(f"User {user_id} upgraded to pro (subscription {subscription_id})")
+    logger.info(f"User {user_id} upgraded to {plan_tier} (subscription {subscription_id})")
 
 
 def _handle_subscription_deleted(subscription):

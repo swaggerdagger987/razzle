@@ -331,12 +331,18 @@ def require_auth(request: Request) -> dict:
     return result["user"]
 
 
+_PLAN_HIERARCHY = {"free": 0, "pro": 1, "elite": 2}
+
 def require_plan(request: Request, plan: str = "pro"):
-    """Verify auth + plan. Returns (user, error_response). If error_response is not None, return it."""
+    """Verify auth + plan tier. Elite users can access Pro features.
+    Returns (user, error_response). If error_response is not None, return it."""
     user = require_auth(request)
     if not user:
         return None, JSONResponse({"error": "Authentication required"}, status_code=401)
-    if user.get("plan", "free") != plan and plan != "free":
+    user_plan = user.get("plan", "free")
+    user_level = _PLAN_HIERARCHY.get(user_plan, 0)
+    required_level = _PLAN_HIERARCHY.get(plan, 0)
+    if user_level < required_level:
         return user, JSONResponse({"error": f"Requires {plan} plan"}, status_code=403)
     return user, None
 
