@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 117 — CSV Export (COMPLETE)
+
+**Exit Criterion MET**: CSV button in toolbar downloads current view as CSV. Filename includes position, season, and date. 34 tests pass.
+
+### Phase 117 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | CSV export button | DONE | btn-chunky in toolbar, exportCSV(), date in filename |
+
 ## Previous Phase: Phase 116 — QA + UX Audit Fixes for Phases 111-115 (COMPLETE)
 
 **Exit Criterion MET**: 2 HIGH (saved view universe UI + missing state) + MEDIUM findings fixed. 34 tests pass.

@@ -4716,7 +4716,8 @@ function exportCSV() {
   const link = document.createElement("a");
   const season = state.universe === "college" ? state.collegeSeason :
                  isProspectView() ? state.draftYear : state.season;
-  link.download = `razzle-${state.universe}-${state.position.toLowerCase()}-${season}.csv`;
+  const today = new Date().toISOString().slice(0, 10);
+  link.download = `razzle-export-${state.position.toLowerCase()}-${season}-${today}.csv`;
   link.href = URL.createObjectURL(blob);
   link.click();
   URL.revokeObjectURL(link.href);
