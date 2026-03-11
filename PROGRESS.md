@@ -31,6 +31,7 @@
 - Elite users can run agents without BYOK key -- server proxies to OpenRouter with server-side API key
 - Server-side rate limit: 100 queries/day per Elite user (defense against abuse)
 - Frontend executeAgent() auto-detects Elite mode and routes to server proxy when no BYOK key set
+- CSV export gated behind Pro+ plan in both exportCSV() and exportPanelCSV()
 
 ## Previous Phase: Phase 131 — Platform: Backend Hardening + Agent Persona Depth (COMPLETE)
 

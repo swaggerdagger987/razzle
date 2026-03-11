@@ -4,6 +4,17 @@
 // ─── Panel Actions (CSV export, Share URL) ─────────────────────
 
 function exportPanelCSV(panelName) {
+  // Pro+ gating
+  try {
+    var user = JSON.parse(localStorage.getItem("razzle_user"));
+    if (!user || (user.plan !== "pro" && user.plan !== "elite")) {
+      _showToast("CSV export requires Pro. Upgrade at razzle.lol");
+      return;
+    }
+  } catch (e) {
+    _showToast("Sign in to export CSV");
+    return;
+  }
   var panel = document.getElementById('panel-' + panelName);
   if (!panel) return;
   var table = panel.querySelector('.lab-panel-content table');
@@ -5156,6 +5167,18 @@ function exportImage() {
 
 function exportCSV() {
   if (!state.items.length) return;
+
+  // Pro+ gating: CSV export requires Pro or Elite plan
+  try {
+    var user = JSON.parse(localStorage.getItem("razzle_user"));
+    if (!user || (user.plan !== "pro" && user.plan !== "elite")) {
+      _showToast("CSV export requires Pro. Upgrade at razzle.lol");
+      return;
+    }
+  } catch (e) {
+    _showToast("Sign in to export CSV");
+    return;
+  }
 
   // Determine column definitions and visible columns based on universe
   let colDefs, visCols;
