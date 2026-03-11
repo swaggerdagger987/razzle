@@ -1,5 +1,25 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 146 — Platform: Weekly Briefings + Priority Data Refresh + Accessibility (COMPLETE)
+
+**Exit Criterion MET**: Four features shipped. (1) Weekly Razzle Briefing infrastructure: `weekly_briefings` table in users.db with user_id, league_id, week_label, summary, urgency/monitor/opportunity items (JSON), and agent highlights. Three API endpoints: `GET /api/briefings/latest`, `GET /api/briefings/history`, `POST /api/briefings/save` — all Elite-only via require_plan("elite"). Upsert logic prevents duplicate briefings for same user+week+league. (2) Weekly Briefing UI: Elite users see a yellow-bordered briefing panel in agents.html with latest briefing rendered (urgency tiers, agent highlights, timestamps), "Generate New Briefing" button that auto-populates the scenario runner with a weekly briefing prompt and saves the result via API, and "History" toggle showing past briefings. Non-Elite users see a blurred teaser with "Unlock with Elite" CTA. (3) Priority Data Refresh: `POST /api/data/refresh` endpoint (Elite-only) that returns the user's Sleeper username so the client can trigger a fresh Sleeper API pull. (4) Accessibility: `.sr-only` CSS class for screen-reader-only content, `aria-hidden="true"` on blurred paywall content, `aria-label` on upgrade CTAs, `focus-visible` outline styles on `.btn-chunky`, `.btn-primary`, and `.btn-pro-upgrade` for keyboard navigation.
+
+### Phase 146 Tasks (Platform Loop)
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Weekly Briefing Backend | DONE | weekly_briefings table, 3 API endpoints, Elite-only gating |
+| 2 | Weekly Briefing UI | DONE | Elite panel with generate/history, non-Elite teaser with blur+CTA |
+| 3 | Priority Data Refresh | DONE | POST /api/data/refresh, Elite-only, returns Sleeper username |
+| 4 | Accessibility Audit | DONE | sr-only class, aria-hidden, aria-labels, focus-visible styles |
+
+### Decisions Log
+- Weekly briefing generation happens client-side via the existing agent orchestrator, then saves to backend — no server-side LLM calls needed
+- Briefing save uses upsert (DELETE + INSERT for same user/week/league) to prevent duplicates
+- Priority data refresh returns username for client-side Sleeper API pull — Sleeper data always fetched client-side
+- sr-only class uses standard WCAG-compliant hidden-but-accessible pattern
+- focus-visible (not :focus) avoids showing outlines on mouse clicks while supporting keyboard nav
+
 ## Previous Phase: Phase 145 — Platform: Format-Aware Agents + Backend Hardening (COMPLETE)
 
 **Exit Criterion MET**: Five improvements shipped. (1) Format-aware league context: warroom.js now detects league format (redraft/dynasty/keeper/best ball/superflex) from Sleeper settings via new detectLeagueFormat() and buildFormatInstructions() functions. Format-specific instructions injected into every agent prompt — redraft agents focus on this-season value, dynasty agents think multi-year, keeper agents calculate surplus value, best ball agents optimize for ceiling, superflex agents inflate QB valuations. When no league is connected, defaults to 0.5 PPR redraft. (2) All 6 agent persona files updated with "Format-Aware Logic" sections covering redraft, dynasty, keeper, best ball, superflex, TE premium, and FAAB-specific reasoning. (3) SQLite connection pooling: db.py now maintains a thread-safe pool of up to 5 reusable connections with checkout/checkin pattern, stale connection detection, and rollback on return. get_write_conn() bypasses the pool for long-running adapter writes. pool_stats() exposed in health check. (4) Structured logging with request IDs: middleware generates X-Request-ID per request (or propagates from client header), includes it in all log entries and response headers for end-to-end tracing. JSONFormatter updated to serialize request_id. (5) tools_hub inline JSON (~120 lines) extracted to backend/config/tools_hub.json, endpoint reads from file. League-intel.html enriched league metadata with superflex detection, TE premium, waiver type, taxi slots, reserve slots, trade deadline, draft rounds, best ball flag, and scoring details.

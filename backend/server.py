@@ -840,6 +840,89 @@ async def clear_agent_memory(request: Request, league_id: str = None):
 
 
 # ---------------------------------------------------------------------------
+# Weekly Briefings endpoints (Elite tier)
+# ---------------------------------------------------------------------------
+
+@app.get("/api/briefings/latest")
+async def get_latest_briefing(request: Request, league_id: str = None):
+    """Get the most recent weekly briefing for the authenticated Elite user."""
+    user, err = require_plan(request, "elite")
+    if err:
+        return err
+    briefing = auth_module.get_latest_briefing(user["id"], league_id=league_id)
+    if not briefing:
+        return JSONResponse({"briefing": None, "message": "No briefings yet. Generate one from the Situation Room."})
+    return JSONResponse({"briefing": briefing})
+
+
+@app.get("/api/briefings/history")
+async def get_briefing_history(request: Request, limit: int = 10):
+    """Get briefing history for the authenticated Elite user."""
+    user, err = require_plan(request, "elite")
+    if err:
+        return err
+    history = auth_module.get_briefing_history(user["id"], limit=min(limit, 50))
+    return JSONResponse({"briefings": history, "count": len(history)})
+
+
+@app.post("/api/briefings/save")
+async def save_weekly_briefing(request: Request):
+    """Save a weekly briefing generated client-side by the agent orchestrator."""
+    user, err = require_plan(request, "elite")
+    if err:
+        return err
+    try:
+        body = await request.json()
+    except Exception:
+        return JSONResponse({"error": "Invalid JSON body"}, status_code=400)
+
+    week_label = body.get("week_label", "")
+    summary = body.get("summary", "")
+    if not week_label or not summary:
+        return JSONResponse({"error": "week_label and summary are required"}, status_code=400)
+
+    import json as _json
+    result = auth_module.save_weekly_briefing(
+        user_id=user["id"],
+        league_id=body.get("league_id", ""),
+        league_name=body.get("league_name", ""),
+        week_label=week_label,
+        summary=summary,
+        urgency_items=_json.dumps(body.get("urgency_items", [])),
+        monitor_items=_json.dumps(body.get("monitor_items", [])),
+        opportunity_items=_json.dumps(body.get("opportunity_items", [])),
+        agent_highlights=_json.dumps(body.get("agent_highlights", [])),
+    )
+    return JSONResponse(result)
+
+
+# ---------------------------------------------------------------------------
+# Priority Data Refresh (Elite tier)
+# ---------------------------------------------------------------------------
+
+@app.post("/api/data/refresh")
+async def priority_data_refresh(request: Request):
+    """Trigger a priority data refresh for Elite users.
+    Re-fetches the latest Sleeper league data for their connected username."""
+    user, err = require_plan(request, "elite")
+    if err:
+        return err
+    sleeper_username = user.get("sleeper_username")
+    if not sleeper_username:
+        return JSONResponse(
+            {"error": "No Sleeper username linked. Connect your account in League Intel first."},
+            status_code=400,
+        )
+    # Return the username so the client can trigger a fresh Sleeper API pull
+    # (Sleeper data is fetched client-side from their public API)
+    return JSONResponse({
+        "status": "ready",
+        "sleeper_username": sleeper_username,
+        "message": "Priority refresh authorized. Client should re-fetch Sleeper data now.",
+    })
+
+
+# ---------------------------------------------------------------------------
 # Saved Views endpoints (Pro+ cloud sync)
 # ---------------------------------------------------------------------------
 

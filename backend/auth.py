@@ -87,6 +87,24 @@ def initialize_users_db():
 
             CREATE INDEX IF NOT EXISTS idx_agent_memory_user ON agent_memory(user_id);
             CREATE INDEX IF NOT EXISTS idx_agent_memory_league ON agent_memory(user_id, league_id);
+
+            CREATE TABLE IF NOT EXISTS weekly_briefings (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                league_id TEXT,
+                league_name TEXT,
+                week_label TEXT NOT NULL,
+                summary TEXT NOT NULL,
+                urgency_items TEXT,
+                monitor_items TEXT,
+                opportunity_items TEXT,
+                agent_highlights TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users(id)
+            );
+
+            CREATE INDEX IF NOT EXISTS idx_briefings_user ON weekly_briefings(user_id);
+            CREATE INDEX IF NOT EXISTS idx_briefings_user_week ON weekly_briefings(user_id, week_label);
         """)
         conn.commit()
     logger.info("Users database initialized")
@@ -607,6 +625,119 @@ def record_query(user_id: int = None, ip_address: str = None) -> dict:
 
         conn.commit()
         return {"recorded": True, "count": count}
+
+
+# ---------------------------------------------------------------------------
+# Weekly Briefings (Elite tier)
+# ---------------------------------------------------------------------------
+
+def save_weekly_briefing(user_id: int, league_id: str, league_name: str,
+                         week_label: str, summary: str,
+                         urgency_items: str = "[]",
+                         monitor_items: str = "[]",
+                         opportunity_items: str = "[]",
+                         agent_highlights: str = "[]") -> dict:
+    """Save a weekly briefing for an Elite user."""
+    with get_users_db() as conn:
+        # Ensure table exists (migration safety)
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS weekly_briefings (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                league_id TEXT,
+                league_name TEXT,
+                week_label TEXT NOT NULL,
+                summary TEXT NOT NULL,
+                urgency_items TEXT,
+                monitor_items TEXT,
+                opportunity_items TEXT,
+                agent_highlights TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users(id)
+            )
+        """)
+        # Upsert: replace if same user+week+league already exists
+        conn.execute(
+            "DELETE FROM weekly_briefings WHERE user_id = ? AND week_label = ? AND league_id = ?",
+            (user_id, week_label, league_id or ""),
+        )
+        conn.execute(
+            """INSERT INTO weekly_briefings
+               (user_id, league_id, league_name, week_label, summary,
+                urgency_items, monitor_items, opportunity_items, agent_highlights)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+            (user_id, league_id or "", league_name or "", week_label, summary,
+             urgency_items, monitor_items, opportunity_items, agent_highlights),
+        )
+        conn.commit()
+        return {"saved": True, "week_label": week_label}
+
+
+def get_latest_briefing(user_id: int, league_id: str = None) -> dict:
+    """Get the most recent weekly briefing for a user (optionally filtered by league)."""
+    with get_users_db() as conn:
+        # Ensure table exists
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS weekly_briefings (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                league_id TEXT,
+                league_name TEXT,
+                week_label TEXT NOT NULL,
+                summary TEXT NOT NULL,
+                urgency_items TEXT,
+                monitor_items TEXT,
+                opportunity_items TEXT,
+                agent_highlights TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users(id)
+            )
+        """)
+        if league_id:
+            row = conn.execute(
+                """SELECT * FROM weekly_briefings
+                   WHERE user_id = ? AND league_id = ?
+                   ORDER BY created_at DESC LIMIT 1""",
+                (user_id, league_id),
+            ).fetchone()
+        else:
+            row = conn.execute(
+                """SELECT * FROM weekly_briefings
+                   WHERE user_id = ?
+                   ORDER BY created_at DESC LIMIT 1""",
+                (user_id,),
+            ).fetchone()
+        if not row:
+            return None
+        return dict(row)
+
+
+def get_briefing_history(user_id: int, limit: int = 10) -> list:
+    """Get recent briefing history for a user."""
+    with get_users_db() as conn:
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS weekly_briefings (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                league_id TEXT,
+                league_name TEXT,
+                week_label TEXT NOT NULL,
+                summary TEXT NOT NULL,
+                urgency_items TEXT,
+                monitor_items TEXT,
+                opportunity_items TEXT,
+                agent_highlights TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users(id)
+            )
+        """)
+        rows = conn.execute(
+            """SELECT * FROM weekly_briefings
+               WHERE user_id = ?
+               ORDER BY created_at DESC LIMIT ?""",
+            (user_id, min(limit, 50)),
+        ).fetchall()
+        return [dict(r) for r in rows]
 
 
 def clear_agent_memories(user_id: int, league_id: str = None) -> dict:

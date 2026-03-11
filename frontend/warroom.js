@@ -2721,7 +2721,7 @@ function renderAllBriefings(detail) {
     html += '<div class="pro-teaser-card">' +
       '<p>your league data is connected but locked</p>' +
       '<div class="pro-teaser-detail">this analysis would reference your actual roster, rivals, and league settings with Pro</div>' +
-      '<a class="btn-pro-upgrade" href="/pricing.html" onclick="event.preventDefault(); if(localStorage.getItem(\'razzle_token\')&&typeof startCheckout===\'function\'){startCheckout(\'year\')}else{window.location.href=\'/pricing.html\';}">Upgrade to Pro \u2014 from $9.99/mo</a>' +
+      '<a class="btn-pro-upgrade" href="/pricing.html" aria-label="Upgrade to Pro plan for league-contextualized AI agents" onclick="event.preventDefault(); if(localStorage.getItem(\'razzle_token\')&&typeof startCheckout===\'function\'){startCheckout(\'year\')}else{window.location.href=\'/pricing.html\';}">Upgrade to Pro \u2014 from $9.99/mo</a>' +
     '</div>';
   }
 
@@ -3065,6 +3065,240 @@ function toggleMemoryPanel() {
 
 // Initialize memory panel on load
 setTimeout(renderMemoryPanel, 500);
+
+// ── WEEKLY BRIEFING PANEL ─────────────────────────────────────────────
+
+function initWeeklyBriefingPanel() {
+  var eliteSection = document.getElementById('weeklyBriefingSection');
+  var teaserSection = document.getElementById('weeklyBriefingTeaser');
+  if (!eliteSection || !teaserSection) return;
+
+  if (isEliteUser()) {
+    eliteSection.style.display = 'block';
+    teaserSection.style.display = 'none';
+    loadLatestBriefing();
+  } else {
+    eliteSection.style.display = 'none';
+    teaserSection.style.display = 'block';
+  }
+}
+
+function loadLatestBriefing() {
+  var token = localStorage.getItem('razzle_token');
+  if (!token) return;
+  var body = document.getElementById('weeklyBriefingBody');
+  var weekLabel = document.getElementById('briefingWeekLabel');
+
+  fetch(
+    (typeof API_BASE !== 'undefined' ? API_BASE : '') + '/api/briefings/latest',
+    { headers: { 'Authorization': 'Bearer ' + token } }
+  )
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (!data.briefing) {
+      body.innerHTML = '<div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); text-align:center; padding:16px;">no briefings yet — hit "Generate New Briefing" to get your first one</div>';
+      return;
+    }
+    var b = data.briefing;
+    if (weekLabel) weekLabel.textContent = b.week_label || '';
+    renderBriefingContent(body, b);
+  })
+  .catch(function() {
+    body.innerHTML = '<div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); text-align:center; padding:12px;">could not load briefing</div>';
+  });
+}
+
+function renderBriefingContent(container, briefing) {
+  var html = '';
+  // Summary
+  html += '<div style="font-family:var(--font-mono); font-size:13px; line-height:1.6; color:var(--ink); margin-bottom:12px;">' + escapeHtml(briefing.summary) + '</div>';
+
+  // Urgency items
+  var urgents = safeParse(briefing.urgency_items);
+  if (urgents.length) {
+    html += '<div style="margin-bottom:8px;"><span style="font-family:var(--font-display); font-size:12px; color:var(--red); text-transform:uppercase;">Urgent</span>';
+    urgents.forEach(function(item) {
+      html += '<div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); margin:2px 0 2px 8px;">- ' + escapeHtml(item) + '</div>';
+    });
+    html += '</div>';
+  }
+
+  // Monitor items
+  var monitors = safeParse(briefing.monitor_items);
+  if (monitors.length) {
+    html += '<div style="margin-bottom:8px;"><span style="font-family:var(--font-display); font-size:12px; color:var(--yellow); text-transform:uppercase;">Monitor</span>';
+    monitors.forEach(function(item) {
+      html += '<div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); margin:2px 0 2px 8px;">- ' + escapeHtml(item) + '</div>';
+    });
+    html += '</div>';
+  }
+
+  // Opportunity items
+  var opps = safeParse(briefing.opportunity_items);
+  if (opps.length) {
+    html += '<div style="margin-bottom:8px;"><span style="font-family:var(--font-display); font-size:12px; color:var(--green); text-transform:uppercase;">Opportunity</span>';
+    opps.forEach(function(item) {
+      html += '<div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); margin:2px 0 2px 8px;">- ' + escapeHtml(item) + '</div>';
+    });
+    html += '</div>';
+  }
+
+  // Agent highlights
+  var highlights = safeParse(briefing.agent_highlights);
+  if (highlights.length) {
+    html += '<div style="border-top:2px dashed var(--ink-faint); padding-top:8px; margin-top:8px;">';
+    html += '<div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; color:var(--ink-light); margin-bottom:4px;">Agent Highlights</div>';
+    highlights.forEach(function(h) {
+      html += '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-medium); margin:3px 0;">';
+      html += '<strong style="color:var(--orange);">' + escapeHtml(h.agent || '') + ':</strong> ' + escapeHtml(h.finding || h.text || '') + '</div>';
+    });
+    html += '</div>';
+  }
+
+  // Timestamp
+  if (briefing.created_at) {
+    html += '<div style="font-family:var(--font-hand); font-size:12px; color:var(--ink-light); text-align:right; margin-top:8px;">generated ' + briefing.created_at + '</div>';
+  }
+
+  container.innerHTML = html;
+}
+
+function safeParse(val) {
+  if (Array.isArray(val)) return val;
+  if (!val || val === '[]') return [];
+  try { return JSON.parse(val); } catch (e) { return []; }
+}
+
+function generateWeeklyBriefing() {
+  // Use the scenario runner to generate a weekly briefing via Razzle
+  var scenario = 'Generate my weekly fantasy football briefing. Cover: injury updates affecting my roster, waiver wire priorities, trade opportunities, championship odds update, and the single most important action I should take this week. Organize by urgency tier (URGENT, MONITOR, OPPORTUNITY).';
+  var input = document.getElementById('scenarioInput');
+  if (input) {
+    input.value = scenario;
+    // Trigger the run
+    var runBtn = document.getElementById('scenarioRunAll');
+    if (runBtn && !runBtn.disabled) {
+      runBtn.click();
+      // Listen for completion to save as briefing
+      window._savingBriefing = true;
+    }
+  }
+}
+
+// Hook into agent completion to save briefing when generating weekly
+window.addEventListener('razzle:all-agents-done', function(e) {
+  if (!window._savingBriefing) return;
+  window._savingBriefing = false;
+
+  var d = e.detail;
+  if (!d.razzleSynthesis) return;
+
+  var token = localStorage.getItem('razzle_token');
+  if (!token || !isEliteUser()) return;
+
+  // Determine week label
+  var now = new Date();
+  var weekNum = getISOWeek(now);
+  var weekLabel = now.getFullYear() + '-W' + String(weekNum).padStart(2, '0');
+
+  // Extract structured data from Razzle synthesis
+  var leagueCtx = getLeagueContext() || {};
+  var lg = (leagueCtx.leagues && leagueCtx.leagues[0]) || {};
+
+  var briefingData = {
+    week_label: weekLabel,
+    league_id: lg.id || '',
+    league_name: lg.name || '',
+    summary: d.razzleSynthesis.slice(0, 5000),
+    urgency_items: [],
+    monitor_items: [],
+    opportunity_items: [],
+    agent_highlights: [],
+  };
+
+  // Extract agent highlights
+  if (d.results) {
+    Object.keys(d.results).forEach(function(key) {
+      var result = d.results[key];
+      if (result && result.text) {
+        briefingData.agent_highlights.push({
+          agent: result.name || key,
+          finding: result.text.slice(0, 500),
+        });
+      }
+    });
+  }
+
+  // Save to backend
+  fetch(
+    (typeof API_BASE !== 'undefined' ? API_BASE : '') + '/api/briefings/save',
+    {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+      body: JSON.stringify(briefingData),
+    }
+  )
+  .then(function() { loadLatestBriefing(); })
+  .catch(function() { /* silent fail */ });
+});
+
+function getISOWeek(date) {
+  var d = new Date(date.valueOf());
+  d.setDate(d.getDate() + 3 - ((d.getDay() + 6) % 7));
+  var yearStart = new Date(d.getFullYear(), 0, 4);
+  return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+}
+
+function toggleBriefingHistory() {
+  var panel = document.getElementById('briefingHistoryPanel');
+  if (!panel) return;
+  if (panel.style.display !== 'none') {
+    panel.style.display = 'none';
+    return;
+  }
+  panel.style.display = 'block';
+  panel.innerHTML = '<div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); text-align:center; padding:8px;">loading history...</div>';
+
+  var token = localStorage.getItem('razzle_token');
+  if (!token) return;
+
+  fetch(
+    (typeof API_BASE !== 'undefined' ? API_BASE : '') + '/api/briefings/history?limit=5',
+    { headers: { 'Authorization': 'Bearer ' + token } }
+  )
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (!data.briefings || !data.briefings.length) {
+      panel.innerHTML = '<div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); text-align:center; padding:8px;">no briefing history</div>';
+      return;
+    }
+    var html = '';
+    data.briefings.forEach(function(b) {
+      var leagueTag = b.league_name ? ' [' + escapeHtml(b.league_name) + ']' : '';
+      html += '<div style="padding:6px 0; border-bottom:1px dashed var(--ink-faint); cursor:pointer;" onclick="loadBriefingById(' + b.id + ')">';
+      html += '<div style="font-family:var(--font-display); font-size:12px;">' + escapeHtml(b.week_label) + leagueTag + '</div>';
+      html += '<div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + escapeHtml(b.summary.slice(0, 80)) + '...</div>';
+      html += '</div>';
+    });
+    panel.innerHTML = html;
+  })
+  .catch(function() {
+    panel.innerHTML = '<div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); text-align:center; padding:8px;">failed to load</div>';
+  });
+}
+
+function loadBriefingById(id) {
+  // For now, just reload latest — a specific briefing fetch could be added later
+  loadLatestBriefing();
+}
+
+// Initialize briefing panel on page load
+setTimeout(initWeeklyBriefingPanel, 600);
+
+// Re-initialize on plan change
+window.addEventListener('razzle-plan-changed', function() {
+  setTimeout(initWeeklyBriefingPanel, 200);
+});
 
 // ── START ──────────────────────────────────────────────────────────────
 function waitAndStart() {

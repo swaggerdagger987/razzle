@@ -1335,6 +1335,50 @@
     <span>30 x 22 tile grid | 32px tiles</span>
   </div>
 
+  <!-- WEEKLY BRIEFING PANEL (Elite only) -->
+  <div class="scenario-section" id="weeklyBriefingSection" style="display:none;">
+    <div class="scenario-card" style="border-color:var(--yellow); box-shadow:4px 4px 0 var(--yellow);">
+      <div class="scenario-header" style="background:var(--yellow); color:var(--ink);">
+        <span class="scenario-header-icon">📰</span>
+        Weekly Razzle Briefing
+        <span style="font-family:var(--font-hand); font-size:14px; margin-left:auto; color:var(--ink-medium);" id="briefingWeekLabel"></span>
+      </div>
+      <div class="scenario-body" id="weeklyBriefingBody">
+        <div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); text-align:center; padding:16px;">
+          loading your briefing...
+        </div>
+      </div>
+      <div style="display:flex; gap:8px; justify-content:center; padding:8px 0;">
+        <button class="btn-chunky" style="font-size:11px; padding:5px 12px;" onclick="generateWeeklyBriefing()">Generate New Briefing</button>
+        <button class="btn-chunky" style="font-size:11px; padding:5px 12px; background:var(--bg-card);" onclick="toggleBriefingHistory()">History</button>
+      </div>
+      <div id="briefingHistoryPanel" style="display:none; padding:8px 0; border-top:2px dashed var(--ink-faint);"></div>
+    </div>
+  </div>
+
+  <!-- WEEKLY BRIEFING TEASER (non-Elite) -->
+  <div class="scenario-section" id="weeklyBriefingTeaser" style="display:none;">
+    <div class="scenario-card" style="position:relative; overflow:hidden;">
+      <div class="scenario-header" style="background:var(--yellow); color:var(--ink);">
+        <span class="scenario-header-icon">📰</span>
+        Weekly Razzle Briefing
+      </div>
+      <div class="scenario-body" style="filter:blur(3px); pointer-events:none; user-select:none;" aria-hidden="true">
+        <div style="font-family:var(--font-display); font-size:14px; margin-bottom:8px; color:var(--orange);">URGENT</div>
+        <div style="font-family:var(--font-mono); font-size:12px; line-height:1.6; color:var(--ink-medium);">
+          Your WR1 has a grade 2 hamstring strain. Medical estimates 2-3 weeks. Scout identified 2 waiver targets to replace production. Diplomat recommends trading your QB2 to the 2-6 manager who historically overpays after back-to-back losses. Championship odds shift from 14% to 11% without action — but rise to 18% if you execute all three recommendations...
+        </div>
+      </div>
+      <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(247,239,229,0.8);">
+        <div style="text-align:center;">
+          <div style="font-family:var(--font-display); font-size:18px; color:var(--ink); margin-bottom:6px;">Weekly Briefings</div>
+          <div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-medium); margin-bottom:12px;">personalized intelligence, delivered weekly</div>
+          <a href="/pricing.html" class="btn-primary" style="font-size:13px; padding:8px 20px; text-decoration:none;" aria-label="Unlock weekly briefings with Elite plan">Unlock with Elite</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- SCENARIO INPUT PANEL -->
   <div class="scenario-section">
     <div class="scenario-card">

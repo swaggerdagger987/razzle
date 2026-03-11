@@ -490,7 +490,8 @@ function renderFormulaCard(formula, userReviews) {
   const descriptionHtml = paid
     ? `<p style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); margin:10px 0; line-height:1.4;">${escapeHtml(formula.description)}</p>`
     : `<p style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); margin:10px 0; line-height:1.4; position:relative;">
-        <span style="filter:blur(3px); user-select:none; pointer-events:none;">${escapeHtml(formula.description)}</span>
+        <span style="filter:blur(3px); user-select:none; pointer-events:none;" aria-hidden="true">${escapeHtml(formula.description)}</span>
+        <span class="sr-only">Formula description hidden — upgrade to Pro to view</span>
        </p>`;
 
   // Actions section: full for paid, upgrade CTA for free
