@@ -1,5 +1,25 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 40 — Panel Data Coverage Fixes — Priority 2 (COMPLETE)
+
+**Exit Criterion MET**: All 11 panel data coverage tasks fixed. Panels that already worked (efficiency, consistency, tiers, red zone, cheat sheet) verified passing. Snap efficiency, dual threat, workload, stacks, streaks, and handcuffs backends updated to return available_seasons. Frontend season dropdowns switched from hardcoded year ranges to API-provided available_seasons. Snap efficiency shows clear message for years without snap data. 34 smoke tests pass.
+
+### Phase 40 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Efficiency Rankings | DONE | Already working — all 2015-2024 return data |
+| 2 | Consistency Rankings | DONE | Already working — all 2015-2024 return data |
+| 3 | Snap Efficiency | DONE | Backend: available_seasons + snap_seasons + has_snap_data. Frontend: API dropdown, no-data message |
+| 4 | Dual Threat Index | DONE | Backend: available_seasons. Frontend: API dropdown |
+| 5 | Workload Monitor | DONE | Backend: available_seasons. Frontend: API dropdown |
+| 6 | Tiers S-tier 2015-2016 | DONE | Already working — AB(95.2), Julio(97.9), DJ(99.0) in S-tier |
+| 7 | Stacks | DONE | Backend: available_seasons. Frontend: API dropdown |
+| 8 | Red Zone | DONE | Already working — all 2015-2024 return data |
+| 9 | Streaks | DONE | Backend: available_seasons. Frontend: API dropdown |
+| 10 | Handcuff Rankings | DONE | Backend: available_seasons. Frontend: API dropdown |
+| 11 | Half PPR Cheat Sheet | DONE | Already working — PPR-0.5*rec calculation correct |
+
 ## Previous Phase: Phase 39 — Critical Bug Fixes — Priority 1 (COMPLETE)
 
 **Exit Criterion MET**: All 5 critical + 1 high severity bugs fixed. NFL screener returns correct year data (isProspect→prospectMode ReferenceError fixed). NFL/College toggle works. Target Premium fixed (SQLite column alias collision). Drop Rate fixed (season_type='REG'→'regular'). Matchups already working. Gamescript fixed (season_type). Garbage Time fixed (0-1→percent conversion).

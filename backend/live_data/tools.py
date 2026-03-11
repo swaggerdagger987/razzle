@@ -881,9 +881,11 @@ def fetch_streaks(season=None, position=None, window=4, limit=25):
         with get_db() as conn:
             cursor = conn.cursor()
 
+            available_seasons = [r[0] for r in cursor.execute(
+                "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
+            ).fetchall()]
             if not season:
-                cursor.execute("SELECT MAX(season) FROM player_week_stats")
-                season = cursor.fetchone()[0] or _current_nfl_season()
+                season = available_seasons[0] if available_seasons else _current_nfl_season()
 
             window = max(2, min(8, window))
 
@@ -955,6 +957,7 @@ def fetch_streaks(season=None, position=None, window=4, limit=25):
 
             return {
                 "season": season,
+                "available_seasons": available_seasons,
                 "window": window,
                 "hot": hot[:limit],
                 "cold": cold[:limit],
@@ -1688,9 +1691,19 @@ def fetch_snap_efficiency(season=None, position=None, limit=50):
         nonlocal season
         with get_db() as conn:
             cursor = conn.cursor()
+
+            # Get all seasons and find which have snap data
+            all_seasons = [r[0] for r in cursor.execute(
+                "SELECT DISTINCT season FROM player_season_stats ORDER BY season DESC"
+            ).fetchall()]
+            snap_seasons = [r[0] for r in cursor.execute(
+                "SELECT DISTINCT season FROM player_season_stats WHERE offense_snaps > 0 ORDER BY season DESC"
+            ).fetchall()]
+
             if not season:
-                cursor.execute("SELECT MAX(season) FROM player_season_stats")
-                season = cursor.fetchone()[0] or _current_nfl_season()
+                season = snap_seasons[0] if snap_seasons else (all_seasons[0] if all_seasons else _current_nfl_season())
+
+            has_snap_data = season in snap_seasons
 
             pos_filter = ""
             params = [season]
@@ -1754,6 +1767,9 @@ def fetch_snap_efficiency(season=None, position=None, limit=50):
             return {
                 "players": players,
                 "season": season,
+                "available_seasons": all_seasons,
+                "snap_seasons": snap_seasons,
+                "has_snap_data": has_snap_data,
                 "count": len(players),
             }
     return _cached(f"snap_efficiency:{season}:{position}:{limit}", _query)
@@ -1770,9 +1786,11 @@ def fetch_handcuffs(season=None, limit=30):
         with get_db() as conn:
             cursor = conn.cursor()
 
+            available_seasons = [r[0] for r in cursor.execute(
+                "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
+            ).fetchall()]
             if not season:
-                cursor.execute("SELECT MAX(season) FROM player_week_stats")
-                season = cursor.fetchone()[0] or _current_nfl_season()
+                season = available_seasons[0] if available_seasons else _current_nfl_season()
 
             cursor.execute("""
                 SELECT p.player_id, p.full_name, p.position, p.team,
@@ -1848,6 +1866,7 @@ def fetch_handcuffs(season=None, limit=30):
             return {
                 "handcuffs": handcuffs,
                 "season": season,
+                "available_seasons": available_seasons,
                 "count": len(handcuffs),
             }
     return _cached(f"handcuffs:{season}:{limit}", _query)
@@ -1917,9 +1936,11 @@ def fetch_stacks(season=None, limit=30):
         with get_db() as conn:
             cursor = conn.cursor()
 
+            available_seasons = [r[0] for r in cursor.execute(
+                "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
+            ).fetchall()]
             if not season:
-                cursor.execute("SELECT MAX(season) FROM player_week_stats")
-                season = cursor.fetchone()[0] or _current_nfl_season()
+                season = available_seasons[0] if available_seasons else _current_nfl_season()
 
             # Get all weekly scores for QBs and WR/TEs
             cursor.execute("""
@@ -2012,6 +2033,7 @@ def fetch_stacks(season=None, limit=30):
             return {
                 "stacks": stacks,
                 "season": season,
+                "available_seasons": available_seasons,
                 "count": len(stacks),
             }
     return _cached(f"stacks:{season}:{limit}", _query)
@@ -2214,9 +2236,11 @@ def fetch_dual_threat(season=None, position=None, limit=50):
         nonlocal season
         with get_db() as conn:
             cursor = conn.cursor()
+            available_seasons = [r[0] for r in cursor.execute(
+                "SELECT DISTINCT season FROM player_season_stats ORDER BY season DESC"
+            ).fetchall()]
             if not season:
-                cursor.execute("SELECT MAX(season) FROM player_season_stats")
-                season = cursor.fetchone()[0] or _current_nfl_season()
+                season = available_seasons[0] if available_seasons else _current_nfl_season()
 
             pos_filter = ""
             params = [season]
@@ -2292,6 +2316,7 @@ def fetch_dual_threat(season=None, position=None, limit=50):
             return {
                 "players": players,
                 "season": season,
+                "available_seasons": available_seasons,
                 "count": len(players),
             }
     return _cached(f"dual_threat:{season}:{position}:{limit}", _query)
@@ -2522,9 +2547,11 @@ def fetch_workload_monitor(season=None, position=None, limit=50):
         nonlocal season
         with get_db() as conn:
             cursor = conn.cursor()
+            available_seasons = [r[0] for r in cursor.execute(
+                "SELECT DISTINCT season FROM player_season_stats ORDER BY season DESC"
+            ).fetchall()]
             if not season:
-                cursor.execute("SELECT MAX(season) FROM player_season_stats")
-                season = cursor.fetchone()[0] or _current_nfl_season()
+                season = available_seasons[0] if available_seasons else _current_nfl_season()
 
             pos_filter = ""
             params = [season]
@@ -2600,6 +2627,7 @@ def fetch_workload_monitor(season=None, position=None, limit=50):
             return {
                 "players": players,
                 "season": season,
+                "available_seasons": available_seasons,
                 "count": len(players),
             }
     return _cached(f"workload_monitor:{season}:{position}:{limit}", _query)

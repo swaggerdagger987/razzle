@@ -665,7 +665,7 @@
       if (!avgs) return;
       var html = '<div class="pa-avgs">';
       ['QB', 'RB', 'WR', 'TE'].forEach(function(pos) {
-        var color = POS_COLORS[pos] || '#888';
+        var color = POS_COLORS[pos] || '#8a7565';
         html += '<div class="pa-avg-chip"><span style="color:' + color + '">' + escapeHtml(pos) + '</span> avg: ' + fmt(avgs[pos]) + ' PPG</div>';
       });
       html += '</div>';
@@ -688,7 +688,7 @@
       var maxAdv = Math.max.apply(null, players.map(function(p) { return Math.abs(p.advantage); }).concat([1]));
       for (var i = 0; i < players.length; i++) {
         var p = players[i];
-        var posColor = POS_COLORS[p.position] || '#888';
+        var posColor = POS_COLORS[p.position] || '#8a7565';
         var sign = p.advantage > 0 ? '+' : '';
         var badgeClass = p.advantage >= 0 ? 'pa-adv-pos' : 'pa-adv-neg';
         var barWidth = Math.max(2, Math.round(Math.abs(p.advantage) / maxAdv * 80));
@@ -1520,7 +1520,7 @@
         html += '</tr></thead><tbody>';
         for (var i = 0; i < targets.length; i++) {
           var p = targets[i];
-          var posColor = POS_COLORS[p.position] || '#888';
+          var posColor = POS_COLORS[p.position] || '#8a7565';
           var sign = p.delta > 0 ? '+' : '';
           html += '<tr>';
           html += '<td class="ww-rank">' + (i + 1) + '</td>';
@@ -1693,15 +1693,15 @@
       if (season) url += '?season=' + encodeURIComponent(season);
 
       fetch(url).then(function(r) { if (!r.ok) throw new Error('API error'); return r.json(); }).then(function(data) {
-        if (!seasonsPopulated) {
+        if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#hc-season');
           sel.innerHTML = '';
-          for (var y = _latestSeason; y >= 2015; y--) {
+          data.available_seasons.forEach(function(s) {
             var o = document.createElement('option');
-            o.value = y; o.textContent = y;
-            if (y === data.season) o.selected = true;
+            o.value = s; o.textContent = s;
+            if (s === data.season) o.selected = true;
             sel.appendChild(o);
-          }
+          });
           seasonsPopulated = true;
         }
 
@@ -2197,31 +2197,28 @@
       var isCollege = typeof state !== 'undefined' && state.universe === 'college';
       var url = isCollege ? '/api/college/snap-efficiency' : '/api/snap-efficiency';
       if (season) url += '?season=' + season;
-      else if (!isCollege) url += '?season=' + new Date().getFullYear();
       if (curPos) url += (url.indexOf('?') > -1 ? '&' : '?') + 'position=' + curPos;
 
       fetch(url).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
-        if (!seasonsPopulated) {
+        if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#se-season');
-          if (isCollege && data.available_seasons) {
-            data.available_seasons.forEach(function(s) {
-              var o = document.createElement('option');
-              o.value = s; o.textContent = s;
-              if (s == data.season) o.selected = true;
-              sel.appendChild(o);
-            });
-          } else {
-            for (var y = new Date().getFullYear(); y >= 2020; y--) {
-              var o = document.createElement('option');
-              o.value = y; o.textContent = y;
-              if (data.season && y == data.season) o.selected = true;
-              sel.appendChild(o);
-            }
-          }
+          var snapSeasons = data.snap_seasons || [];
+          data.available_seasons.forEach(function(s) {
+            var o = document.createElement('option');
+            o.value = s;
+            var hasSnaps = isCollege || snapSeasons.indexOf(s) > -1;
+            o.textContent = s + (hasSnaps ? '' : ' (no snap data)');
+            if (s == data.season) o.selected = true;
+            sel.appendChild(o);
+          });
           seasonsPopulated = true;
+        }
+        if (!isCollege && data.has_snap_data === false) {
+          body.innerHTML = '<div class="lp-empty">snap data not available for ' + escapeHtml(String(data.season)) + ' — snap counts require NFL tracking data which may not be available for all seasons</div>';
+          return;
         }
         var players = data.players || [];
         if (!players.length) { body.innerHTML = '<div class="lp-empty">no ' + (isCollege ? 'touch' : 'snap') + ' efficiency data found</div>'; return; }
@@ -2235,7 +2232,7 @@
         html += '<table class="se-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>' + ptsLabel + '</th><th>PPG</th><th>' + volLabel + '</th><th>' + totLabel + '</th><th>GP</th><th></th></tr></thead><tbody>';
         for (var i = 0; i < players.length; i++) {
           var p = players[i];
-          var posColor = POS_COLORS[p.position] || '#333';
+          var posColor = POS_COLORS[p.position] || '#2d1f14';
           var cls = effClass(p.pts_per_snap);
           var barPct = maxPPS > 0 ? p.pts_per_snap / maxPPS * 100 : 0;
           var teamLabel = escapeHtml(p.team);
@@ -2308,30 +2305,20 @@
       var isCollege = typeof state !== 'undefined' && state.universe === 'college';
       var url = isCollege ? '/api/college/workload' : '/api/workload-monitor';
       if (season) url += '?season=' + season;
-      else if (!isCollege) url += '?season=' + new Date().getFullYear();
       if (curPos) url += (url.indexOf('?') > -1 ? '&' : '?') + 'position=' + curPos;
 
       fetch(url).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
-        if (!seasonsPopulated) {
+        if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#wl-season');
-          if (isCollege && data.available_seasons) {
-            data.available_seasons.forEach(function(s) {
-              var o = document.createElement('option');
-              o.value = s; o.textContent = s;
-              if (s == data.season) o.selected = true;
-              sel.appendChild(o);
-            });
-          } else {
-            for (var y = new Date().getFullYear(); y >= 2020; y--) {
-              var o = document.createElement('option');
-              o.value = y; o.textContent = y;
-              if (data.season && y == data.season) o.selected = true;
-              sel.appendChild(o);
-            }
-          }
+          data.available_seasons.forEach(function(s) {
+            var o = document.createElement('option');
+            o.value = s; o.textContent = s;
+            if (s == data.season) o.selected = true;
+            sel.appendChild(o);
+          });
           seasonsPopulated = true;
         }
         var players = data.players || [];
@@ -2345,7 +2332,7 @@
         html += '<th>Car/G</th><th>Tgt/G</th><th>Flags</th><th></th></tr></thead><tbody>';
         for (var i = 0; i < players.length; i++) {
           var p = players[i];
-          var posColor = POS_COLORS[p.position] || '#333';
+          var posColor = POS_COLORS[p.position] || '#2d1f14';
           var cls = scoreClass(p.workload);
           var barPct = maxWL > 0 ? p.workload / maxWL * 100 : 0;
           var flagsHtml = (p.flags || []).map(function(f) { return '<span class="wl-flag">' + escapeHtml(f) + '</span>'; }).join('');
@@ -2425,30 +2412,20 @@
       var isCollege = typeof state !== 'undefined' && state.universe === 'college';
       var url = isCollege ? '/api/college/dual-threat' : '/api/dual-threat';
       if (season) url += '?season=' + season;
-      else if (!isCollege) url += '?season=' + new Date().getFullYear();
       if (curPos) url += (url.indexOf('?') > -1 ? '&' : '?') + 'position=' + curPos;
 
       fetch(url).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
-        if (!seasonsPopulated) {
+        if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#dt-season');
-          if (isCollege && data.available_seasons) {
-            data.available_seasons.forEach(function(s) {
-              var o = document.createElement('option');
-              o.value = s; o.textContent = s;
-              if (s == data.season) o.selected = true;
-              sel.appendChild(o);
-            });
-          } else {
-            for (var y = new Date().getFullYear(); y >= 2020; y--) {
-              var o = document.createElement('option');
-              o.value = y; o.textContent = y;
-              if (data.season && y == data.season) o.selected = true;
-              sel.appendChild(o);
-            }
-          }
+          data.available_seasons.forEach(function(s) {
+            var o = document.createElement('option');
+            o.value = s; o.textContent = s;
+            if (s == data.season) o.selected = true;
+            sel.appendChild(o);
+          });
           seasonsPopulated = true;
         }
         var players = data.players || [];
@@ -2458,7 +2435,7 @@
         html += '<table class="dt-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>DTI</th><th>Rush/G</th><th>Rec/G</th><th>Tot/G</th><th>Car/G</th><th>Rec/G</th><th>Split</th></tr></thead><tbody>';
         for (var i = 0; i < players.length; i++) {
           var p = players[i];
-          var posColor = POS_COLORS[p.position] || '#333';
+          var posColor = POS_COLORS[p.position] || '#2d1f14';
           var cls = dtiClass(p.dti);
           var teamLabel = escapeHtml(p.team);
           if (isCollege && p.conference) teamLabel += ' <span style="font-size:9px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
@@ -2550,7 +2527,7 @@
         html += '<table class="tp-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Premium</th><th>Tgt/G</th><th>aDOT</th><th>Catch%</th><th>YAC/R</th><th>Y/Tgt</th><th></th></tr></thead><tbody>';
         for (var i = 0; i < players.length; i++) {
           var p = players[i];
-          var posColor = POS_COLORS[p.position] || '#333';
+          var posColor = POS_COLORS[p.position] || '#2d1f14';
           var cls = premiumClass(p.premium);
           html += '<tr>';
           html += '<td class="tp-rank">' + (i + 1) + '</td>';
@@ -2623,7 +2600,7 @@
       var html = '<table class="dr-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Drop%</th><th>Drops</th><th>Tgt</th><th>Catch%</th><th>YAC/R</th><th></th></tr></thead><tbody>';
       for (var i = 0; i < players.length; i++) {
         var p = players[i];
-        var posColor = POS_COLORS[p.position] || '#333';
+        var posColor = POS_COLORS[p.position] || '#2d1f14';
         var barPct = maxDrops > 0 ? p.drops / maxDrops * 100 : 0;
         var cls = rateClass(p.drop_rate, isGood);
         html += '<tr>';
@@ -2726,7 +2703,7 @@
       html += '<table class="gt-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>GT%</th><th>PPG</th><th>Avg Diff</th><th></th></tr></thead><tbody>';
       for (var i = 0; i < players.length; i++) {
         var p = players[i];
-        var posColor = POS_COLORS[p.position] || '#333';
+        var posColor = POS_COLORS[p.position] || '#2d1f14';
         var pCls = pctClass(p.garbage_time_pct);
         var barVal = isPadders ? p.garbage_time_pct : p.ppg;
         var barPct = maxVal > 0 ? barVal / maxVal * 100 : 0;
@@ -3222,14 +3199,14 @@
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
-        if (!seasonsPopulated) {
+        if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#sk-season');
-          for (var y = new Date().getFullYear(); y >= 2020; y--) {
+          data.available_seasons.forEach(function(s) {
             var o = document.createElement('option');
-            o.value = y; o.textContent = y;
-            if (y === data.season) o.selected = true;
+            o.value = s; o.textContent = s;
+            if (s === data.season) o.selected = true;
             sel.appendChild(o);
-          }
+          });
           seasonsPopulated = true;
         }
         renderSK(data);
@@ -3251,7 +3228,7 @@
 
       for (var i = 0; i < stacks.length; i++) {
         var s = stacks[i];
-        var posColor = POS_COLORS[s.receiver_pos] || '#888';
+        var posColor = POS_COLORS[s.receiver_pos] || '#8a7565';
         var barWidth = Math.max(0, Math.min(100, Math.round(s.correlation * 100)));
 
         html += '<tr>';
@@ -3528,14 +3505,14 @@
         return r.json();
       }).then(function(data) {
         currentData = data;
-        if (!seasonsPopulated) {
+        if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#str-season');
-          for (var y = new Date().getFullYear(); y >= 2020; y--) {
+          data.available_seasons.forEach(function(s) {
             var o = document.createElement('option');
-            o.value = y; o.textContent = y;
-            if (y === data.season) o.selected = true;
+            o.value = s; o.textContent = s;
+            if (s === data.season) o.selected = true;
             sel.appendChild(o);
-          }
+          });
           seasonsPopulated = true;
         }
         renderSTR(data);
@@ -3552,7 +3529,7 @@
 
       for (var i = 0; i < players.length; i++) {
         var p = players[i];
-        var posColor = POS_COLORS[p.position] || '#888';
+        var posColor = POS_COLORS[p.position] || '#8a7565';
         var badgeClass = type === 'hot' ? 'hot' : 'cold';
         var sign = p.delta > 0 ? '+' : '';
 
@@ -3851,7 +3828,7 @@
         html += '<tr><td>Wk ' + escapeHtml(String(wk.week)) + '</td>';
         POSITIONS.forEach(function(pos) {
           var mvp = wk[pos];
-          var color = POS_COLORS[pos] || '#888';
+          var color = POS_COLORS[pos] || '#8a7565';
           if (mvp && mvp.name !== '-') {
             html += '<td><div class="mv-cell">';
             html += '<div class="mv-cell-name">' + escapeHtml(mvp.name) + '</div>';
@@ -3946,7 +3923,7 @@
       html += '</tr></thead><tbody>';
 
       players.forEach(function(p, i) {
-        var posColor = POS_COLORS[p.position] || '#888';
+        var posColor = POS_COLORS[p.position] || '#8a7565';
         html += '<tr>';
         html += '<td class="po-rank">' + (i + 1) + '</td>';
         html += '<td>' + escapeHtml(p.name) + ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></td>';
@@ -4106,7 +4083,7 @@
       }
       html += '</tr></thead><tbody>';
       players.forEach(function(p, i) {
-        var posColor = POS_COLORS[p.position] || '#888';
+        var posColor = POS_COLORS[p.position] || '#8a7565';
         var delta = isCollege ? (p.delta_ypg || 0) : (p.delta || 0);
         var arrow = delta >= 0 ? '&#9650;' : '&#9660;';
         var deltaClass = delta >= 0 ? 'ut-delta-up' : 'ut-delta-down';
@@ -4249,7 +4226,7 @@
       }
       html += '</tr></thead><tbody>';
       players.forEach(function(p, i) {
-        var posColor = POS_COLORS[p.position] || '#888';
+        var posColor = POS_COLORS[p.position] || '#8a7565';
         var delta = isCollege ? (p.delta_ypg || 0) : (p.delta || 0);
         var deltaClass = delta >= 0 ? 'yy-delta-pos' : 'yy-delta-neg';
         var sign = delta >= 0 ? '+' : '';
@@ -4378,7 +4355,7 @@
       var pad = { top: 20, right: 20, bottom: 40, left: 50 };
       var cw = W - pad.left - pad.right;
       var ch = H - pad.top - pad.bottom;
-      var posColor = POS_COLORS[curPos] || '#888';
+      var posColor = POS_COLORS[curPos] || '#8a7565';
 
       ctx.clearRect(0, 0, W, H);
 
@@ -4532,7 +4509,7 @@
       }
       var html = '<div class="pt-grid">';
       players.forEach(function(p) {
-        var posColor = POS_COLORS[p.position] || '#888';
+        var posColor = POS_COLORS[p.position] || '#8a7565';
         html += '<div class="pt-card">';
         html += '<div class="pt-card-header">';
         html += '<span class="pt-player-name">' + escapeHtml(p.name) + '</span>';
@@ -4624,7 +4601,7 @@
       html += '<th>#</th><th>Player</th><th>Pos</th><th>GP</th><th>PPG</th><th>Milestones</th>';
       html += '</tr></thead><tbody>';
       players.forEach(function(p, i) {
-        var posColor = POS_COLORS[p.position] || '#888';
+        var posColor = POS_COLORS[p.position] || '#8a7565';
         html += '<tr>';
         html += '<td class="spc-rank">' + (i + 1) + '</td>';
         html += '<td class="spc-name">' + escapeHtml(p.name) + ' <span class="spc-team">' + escapeHtml(p.team || '') + '</span></td>';
@@ -4745,7 +4722,7 @@
       html += '<th>#</th><th>Player</th><th>Pos</th><th>TD</th><th>xTD</th><th>Diff</th><th class="hide-mobile">TD%</th><th class="hide-mobile">Opp</th><th>Bar</th>';
       html += '</tr></thead><tbody>';
       players.forEach(function(p, i) {
-        var posColor = POS_COLORS[p.position] || '#888';
+        var posColor = POS_COLORS[p.position] || '#8a7565';
         var diff = p.diff || 0;
         var diffClass = diff >= 0 ? 'tdr-diff-pos' : 'tdr-diff-neg';
         var sign = diff >= 0 ? '+' : '';
@@ -4901,7 +4878,7 @@
       });
       html += '</tr></thead><tbody>';
       players.forEach(function(p) {
-        var posColor = POS_COLORS[p.position] || '#888';
+        var posColor = POS_COLORS[p.position] || '#8a7565';
         var regrDelta = p.regression_delta || 0;
         var regrClass = regrDelta >= 0 ? 'ay-regr-buy' : 'ay-regr-sell';
         var regrSign = regrDelta >= 0 ? '+' : '';
@@ -4963,7 +4940,7 @@
           if (!players.length) { list.innerHTML = '<div class="' + prefix + 'search-empty">no players found</div>'; list.style.display = 'block'; return; }
           var html = '';
           players.forEach(function(p) {
-            var posColor = POS_COLORS[p.position] || '#888';
+            var posColor = POS_COLORS[p.position] || '#8a7565';
             html += '<div class="' + prefix + 'search-item" data-id="' + escapeAttr(p.player_id) + '" data-name="' + escapeAttr(p.full_name || p.name) + '" data-pos="' + escapeAttr(p.position) + '" data-team="' + escapeAttr(p.team) + '">';
             html += '<span class="' + prefix + 'search-pos" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span>';
             html += '<span class="' + prefix + 'search-name">' + escapeHtml(p.full_name || p.name) + '</span>';
@@ -5051,7 +5028,7 @@
       var p = data.player || data;
       var seasons = data.seasons || [];
       var pos = p.position || '';
-      var posColor = POS_COLORS[pos] || '#888';
+      var posColor = POS_COLORS[pos] || '#8a7565';
       var careerPPG = 0, totalPts = 0, totalGP = 0, peakPPG = 0;
       seasons.forEach(function(s) {
         totalPts += (s.total_points || s.fantasy_points || 0);
@@ -5431,7 +5408,7 @@
       var chipsEl = el.querySelector('#cmt-chips');
       var html = '';
       selectedPlayers.forEach(function(p, i) {
-        var posColor = POS_COLORS[p.position] || '#888';
+        var posColor = POS_COLORS[p.position] || '#8a7565';
         html += '<span class="cmt-chip" style="border-color:' + posColor + '"><span class="cmt-chip-pos" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span>' + escapeHtml(p.full_name) + '<button class="cmt-chip-rm" data-idx="' + i + '">&times;</button></span>';
       });
       chipsEl.innerHTML = html;
@@ -5495,7 +5472,7 @@
         html += '<tr>';
         cols.forEach(function(c) {
           if (c.key === 'name') {
-            var posColor = POS_COLORS[p.position] || '#888';
+            var posColor = POS_COLORS[p.position] || '#8a7565';
             html += '<td class="cmt-player-cell">';
             if (p.headshot_url) html += '<img class="cmt-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
             html += '<span>' + escapeHtml(p.full_name || p.name || '') + '</span>';
@@ -5579,7 +5556,7 @@
       var weaknesses = data.weaknesses || [];
       var all = data.all_stats || (strengths.concat(weaknesses));
       var pos = p.position || '';
-      var posColor = POS_COLORS[pos] || '#888';
+      var posColor = POS_COLORS[pos] || '#8a7565';
       var overallGrade = data.overall_grade || p.grade || '-';
 
       var html = '<div class="sw2-player-card">';
@@ -5749,7 +5726,7 @@
       });
       html += '</tr></thead><tbody>';
       sorted.forEach(function(p) {
-        var posColor = POS_COLORS[p.position] || '#888';
+        var posColor = POS_COLORS[p.position] || '#8a7565';
         html += '<tr>';
         // Player cell
         html += '<td class="rpc-player-cell">';
@@ -5837,7 +5814,7 @@
 
       html += '<div class="fpb-card">';
       players.forEach(function(p, i) {
-        var posColor = POS_COLORS[p.position] || '#888';
+        var posColor = POS_COLORS[p.position] || '#8a7565';
         var total = (p.pass_yd_pts || 0) + (p.rush_yd_pts || 0) + (p.rec_yd_pts || 0) + (p.rec_pts || 0) + (p.td_pts || 0);
         if (total <= 0) total = p.ppg || 1;
 
@@ -5934,7 +5911,7 @@
       var p = data.player || curPlayer;
       var games = data.games || data.weeks || [];
       var pos = p.position || curPlayer.position || '';
-      var posColor = POS_COLORS[pos] || '#888';
+      var posColor = POS_COLORS[pos] || '#8a7565';
       var totalPts = 0, gp = games.length;
       games.forEach(function(g) { totalPts += (g.fantasy_points || g.fpts || 0); });
 
@@ -6081,7 +6058,7 @@
       var html = '<div class="arc-grid">';
       archetypes.forEach(function(arch) {
         var archPlayers = arch.players || [];
-        var posColor = POS_COLORS[arch.position] || '#888';
+        var posColor = POS_COLORS[arch.position] || '#8a7565';
         html += '<div class="arc-card">';
         html += '<div class="arc-card-header">';
         html += '<span class="arc-icon">' + getIcon(arch.name || arch.archetype) + '</span>';
@@ -6161,7 +6138,7 @@
       var p = data.player || playerInfo || {};
       var components = data.components || data.breakdown || [];
       var pos = p.position || playerInfo.position || '';
-      var posColor = POS_COLORS[pos] || '#888';
+      var posColor = POS_COLORS[pos] || '#8a7565';
       var gp = p.games || p.games_played || 1;
       var totalPts = p.total_points || p.fantasy_points || 0;
       var ppg = gp > 0 ? totalPts / gp : (p.ppg || 0);
@@ -7635,7 +7612,7 @@
       '</div>';
 
     function posChip(pos) {
-      var c = POS_COLORS[pos] || '#888';
+      var c = POS_COLORS[pos] || '#8a7565';
       return '<span class="rc2-pos-chip" style="background:' + c + '">' + escapeHtml(pos) + '</span>';
     }
 
@@ -7690,7 +7667,7 @@
       html += '<div class="rc2-pos-leaders">';
       ['QB', 'RB', 'WR', 'TE'].forEach(function(pos) {
         var ldr = (data.pos_leaders || {})[pos];
-        var pc = POS_COLORS[pos] || '#888';
+        var pc = POS_COLORS[pos] || '#8a7565';
         html += '<div class="rc2-pos-card"><div class="rc2-pos-label" style="background:' + pc + '">' + pos + '1</div>';
         if (ldr) {
           html += '<div class="rc2-pos-name">' + escapeHtml(ldr.name) + '</div>';
@@ -7771,7 +7748,7 @@
     var currentPosition = '';
 
     function posChip(pos) {
-      var c = POS_COLORS[pos] || '#888';
+      var c = POS_COLORS[pos] || '#8a7565';
       return '<span class="rec-pos-chip" style="background:' + c + '">' + escapeHtml(pos) + '</span>';
     }
     function rankClass(i) {
@@ -8409,7 +8386,7 @@
       html += '</tr></thead><tbody>';
 
       players.forEach(function(p, i) {
-        var posColor = POS_COLORS[p.position] || '#333';
+        var posColor = POS_COLORS[p.position] || '#2d1f14';
         var cls = rateClass(p.success_rate);
         var barPct = maxSR > 0 ? p.success_rate / maxSR * 100 : 0;
         var ypc = p.ypc != null ? escapeHtml(String(p.ypc)) : '-';
@@ -8993,7 +8970,7 @@
       posOrder.forEach(function(pos) {
         var pd = positions[pos];
         if (!pd) return;
-        var color = POS_COLORS[pos] || '#888';
+        var color = POS_COLORS[pos] || '#8a7565';
         html += '<div style="background:var(--bg-card); border:2px solid var(--ink); border-radius:6px; padding:8px 12px; min-width:90px; text-align:center; border-left:4px solid ' + color + ';">' +
           '<div style="font-family:var(--font-display); font-size:14px; color:' + color + ';">' + pos + '</div>' +
           '<div style="font-family:var(--font-mono); font-size:12px;">' + pd.total + ' drafted</div>' +
@@ -9034,8 +9011,8 @@
         '</tr></thead><tbody>';
 
       players.forEach(function(p) {
-        var posColor = POS_COLORS[p.position] || '#888';
-        var verdictColor = CLASSIFICATION_COLORS[p.classification] || '#888';
+        var posColor = POS_COLORS[p.position] || '#8a7565';
+        var verdictColor = CLASSIFICATION_COLORS[p.classification] || '#8a7565';
         var verdictLabel = CLASSIFICATION_LABELS[p.classification] || p.classification;
 
         html += '<tr>' +
