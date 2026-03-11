@@ -2208,6 +2208,11 @@ function _ctxMenuAction(action) {
     // Dedup: skip if exact filter already exists
     var dup = state.filters.some(function(f) { return f.key === colKey && f.op === op && f.value === val; });
     if (dup) { _showToast("filter already exists"); return; }
+    // Check filter limit for free users
+    if (typeof checkFeatureGate === "function") {
+      var gate = checkFeatureGate("filters", state.filters.length);
+      if (!gate.allowed) { _showToast(gate.message); return; }
+    }
     state.filters.push({ key: colKey, op: op, value: val });
     state.offset = 0;
     renderActiveFilters();
@@ -2612,6 +2617,9 @@ let _seasonDebounce = null;
 
 function populateSeasonSelect() {
   const sel = document.getElementById("seasonSelect");
+  const allowed = typeof getAllowedSeasons === "function"
+    ? getAllowedSeasons(state.seasons)
+    : state.seasons;
 
   if (isProspectView()) {
     sel.innerHTML = state.draftYears.map(y =>
@@ -2635,12 +2643,19 @@ function populateSeasonSelect() {
     };
   } else {
     let html = `<option value="career" ${state.season === "career" ? "selected" : ""}>Career</option>`;
-    html += state.seasons.map(s =>
-      `<option value="${s}" ${s === state.season ? "selected" : ""}>${s}</option>`
-    ).join("");
+    html += state.seasons.map(s => {
+      const locked = allowed.indexOf(s) === -1;
+      return `<option value="${s}" ${s === state.season ? "selected" : ""} ${locked ? "disabled" : ""}>${s}${locked ? " \uD83D\uDD12" : ""}</option>`;
+    }).join("");
+    // Add upgrade hint if some seasons are locked
+    if (allowed.length < state.seasons.length) {
+      html += `<option value="_upgrade" disabled style="color:var(--orange);">Unlock all seasons with Pro</option>`;
+    }
     sel.innerHTML = html;
     sel.onchange = (e) => {
-      state.season = e.target.value === "career" ? "career" : parseInt(e.target.value);
+      var val = e.target.value;
+      if (val === "_upgrade") { sel.value = state.season; return; }
+      state.season = val === "career" ? "career" : parseInt(val);
       state.offset = 0;
       clearTimeout(_seasonDebounce);
       _seasonDebounce = setTimeout(() => fetchAndRender(), 200);
@@ -2775,6 +2790,15 @@ function addFilter() {
   const value = parseFloat(document.getElementById("filterValue").value);
   if (isNaN(value)) return;
 
+  // Check filter limit for free users (3 max)
+  if (typeof checkFeatureGate === "function") {
+    const gate = checkFeatureGate("filters", state.filters.length);
+    if (!gate.allowed) {
+      _showToast(gate.message);
+      return;
+    }
+  }
+
   state.filters.push({ key, op, value });
   state.offset = 0;
   closeFilterModal();
@@ -2868,6 +2892,11 @@ function _applyQuickFilter(colKey, mode) {
   // Check for duplicate filter
   var dup = state.filters.some(function(f) { return f.key === colKey && f.op === op && f.value === threshold; });
   if (dup) { _showToast("filter already active"); return; }
+  // Check filter limit for free users
+  if (typeof checkFeatureGate === "function") {
+    var gate = checkFeatureGate("filters", state.filters.length);
+    if (!gate.allowed) { _showToast(gate.message); return; }
+  }
   state.filters.push({ key: colKey, op: op, value: threshold });
   state.offset = 0;
   renderActiveFilters();

@@ -43,6 +43,68 @@ if (document.readyState === "loading") {
   _injectThemeToggle();
 }
 
+/* ===== Tier Gating Helpers ===== */
+
+/**
+ * Get the current user's plan: "free", "pro", or "elite".
+ * Returns "free" if not logged in.
+ */
+function getUserPlan() {
+  try {
+    var u = JSON.parse(localStorage.getItem("razzle_user") || "null");
+    return (u && u.plan) ? u.plan : "free";
+  } catch (e) { return "free"; }
+}
+
+/** Returns true if user is on Pro or Elite plan. */
+function isPaidUser() {
+  var p = getUserPlan();
+  return p === "pro" || p === "elite";
+}
+
+/** Returns true if user is on Elite plan. */
+function isEliteUser_global() {
+  return getUserPlan() === "elite";
+}
+
+/**
+ * Get the allowed season range for the current user.
+ * Free: current season + 2 prior (3 total).
+ * Pro/Elite: all seasons from 2015.
+ */
+function getAllowedSeasons(allSeasons) {
+  if (isPaidUser()) return allSeasons;
+  // Free: latest 3 seasons only
+  var sorted = allSeasons.slice().sort(function(a, b) { return b - a; });
+  return sorted.slice(0, 3);
+}
+
+/**
+ * Check if a feature is gated for the current user.
+ * Returns { allowed: bool, limit: number|null, message: string }
+ */
+function checkFeatureGate(feature, currentCount) {
+  var plan = getUserPlan();
+  var gates = {
+    formulas: { free: 3, pro: Infinity, elite: Infinity },
+    filters: { free: 3, pro: Infinity, elite: Infinity },
+    compare: { free: 2, pro: 4, elite: 4 },
+  };
+  var gate = gates[feature];
+  if (!gate) return { allowed: true, limit: null, message: "" };
+  var limit = gate[plan] || gate.free;
+  if (currentCount >= limit) {
+    return {
+      allowed: false,
+      limit: limit,
+      message: plan === "free"
+        ? "Free plan limit (" + limit + "). Upgrade to Pro for unlimited."
+        : "Plan limit reached (" + limit + ")."
+    };
+  }
+  return { allowed: true, limit: limit, message: "" };
+}
+
 function escapeHtml(str) {
   if (!str) return "";
   var d = document.createElement("div");

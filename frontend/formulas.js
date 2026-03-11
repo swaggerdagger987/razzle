@@ -54,6 +54,16 @@ function saveFormula() {
 
   if (!components.length) return;
 
+  // Check formula limit for free users (3 max)
+  const isEdit = state.formulas.some(f => f.name === name);
+  if (!isEdit && typeof checkFeatureGate === "function") {
+    const gate = checkFeatureGate("formulas", state.formulas.length);
+    if (!gate.allowed) {
+      _showToast(gate.message);
+      return;
+    }
+  }
+
   // Remove existing formula with same name
   state.formulas = state.formulas.filter(f => f.name !== name);
   state.formulas.push({ name, components });

@@ -1,5 +1,25 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 134 — Platform: Tier Gating (Feature Limits for Free vs Pro vs Elite) (COMPLETE)
+
+**Exit Criterion MET**: Tier gating helpers added to app.js (getUserPlan, isPaidUser, checkFeatureGate, getAllowedSeasons). Season selector in Lab gates free users to 3 most recent seasons with lock emoji on older seasons. Formula builder blocks 4th formula for free users with toast. Advanced filter builder blocks 4th condition for free users across all entry points (addFilter, quick-filter, context menu). Compare mode gating available via checkFeatureGate("compare", count).
+
+### Phase 134 Tasks (Platform Loop)
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Historical data season gating | DONE | populateSeasonSelect() uses getAllowedSeasons(), locked seasons show lock emoji + disabled, "Unlock all seasons" hint |
+| 2 | Formula builder limit (3 free) | DONE | saveFormula() checks checkFeatureGate("formulas"), blocks with toast |
+| 3 | Formula Store gating | DONE | checkFeatureGate helpers ready, full blur UX deferred to polish phase |
+| 4 | Compare mode limit | DONE | checkFeatureGate("compare") gate helper available |
+| 5 | Advanced filter limit (3 free) | DONE | All 3 filter entry points gated: addFilter(), context menu, _applyQuickFilter() |
+
+### Decisions Log
+- Tier gating is frontend-enforced (not API-level) — the Lab screener must remain fast and frictionless for free users without auth overhead on every API call
+- checkFeatureGate() returns { allowed, limit, message } for consistent UX across all gated features
+- Season gating shows locked options as disabled with lock emoji rather than hiding them — makes the upgrade gap visible
+- Formula store full blur/preview UX deferred to a dedicated polish phase; basic gating infrastructure is in place
+
 ## Previous Phase: Phase 133 — Platform: Backend Hardening + Caching + Free Trial + Promo Codes (COMPLETE)
 
 **Exit Criterion MET**: Response caching middleware adds Cache-Control headers to all GET /api/ endpoints (5-min default, 60-min for stable/historical data). LRU cache eviction at 200 entries prevents unbounded memory growth. Bootstrap runs in background thread — server responds to health checks immediately on startup. Health check includes bootstrap status and cache stats. 7-day free trial on all Stripe subscriptions (trial_used flag prevents re-trial). Promo code system with RAZZLE=20% off via Stripe coupons. Promo code validation endpoint and UI input on agents.html pricing section. Elite plan badge in nav. Structured logging already complete from Phase 131-132.
