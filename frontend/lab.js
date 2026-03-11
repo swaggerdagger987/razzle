@@ -849,6 +849,88 @@ function isProspectView() {
   return state.universe === "college" && state.collegeView === "prospects";
 }
 
+// ─── Undo / Redo History ──────────────────────────────────────────
+const _history = { stack: [], index: -1, maxSize: 30, _skipNext: false };
+
+function _captureState() {
+  return JSON.stringify({
+    position: state.position, season: state.season, universe: state.universe,
+    relevance: state.relevance, search: state.search,
+    sortKey: state.sortKey, sortDir: state.sortDir,
+    sortKey2: state.sortKey2, sortDir2: state.sortDir2,
+    filters: state.filters, teams: state.teams, minGP: state.minGP,
+    visibleColumns: state.visibleColumns,
+    collegeView: state.collegeView, draftYear: state.draftYear,
+    collegeSeason: state.collegeSeason,
+    collegeColumns: state.collegeColumns,
+    prospectColumns: state.prospectColumns,
+  });
+}
+
+function _pushHistory() {
+  if (_history._skipNext) { _history._skipNext = false; return; }
+  const snap = _captureState();
+  // Don't push if identical to current
+  if (_history.index >= 0 && _history.stack[_history.index] === snap) return;
+  // Truncate any redo entries ahead of current index
+  _history.stack = _history.stack.slice(0, _history.index + 1);
+  _history.stack.push(snap);
+  if (_history.stack.length > _history.maxSize) _history.stack.shift();
+  _history.index = _history.stack.length - 1;
+  _syncUndoRedoButtons();
+}
+
+function _restoreState(snap) {
+  const s = JSON.parse(snap);
+  state.position = s.position; state.season = s.season; state.universe = s.universe;
+  state.relevance = s.relevance; state.search = s.search;
+  state.sortKey = s.sortKey; state.sortDir = s.sortDir;
+  state.sortKey2 = s.sortKey2 || ""; state.sortDir2 = s.sortDir2 || "desc";
+  state.filters = s.filters || []; state.teams = s.teams || []; state.minGP = s.minGP || 0;
+  state.visibleColumns = s.visibleColumns || [];
+  state.collegeView = s.collegeView || "stats";
+  state.draftYear = s.draftYear || 0; state.collegeSeason = s.collegeSeason || 0;
+  state.collegeColumns = s.collegeColumns || [];
+  state.prospectColumns = s.prospectColumns || [];
+  state.offset = 0;
+  // Sync UI controls
+  const searchInput = document.getElementById("searchInput");
+  if (searchInput) searchInput.value = state.search || "";
+  renderTeamChips();
+  const minGPInput = document.getElementById("minGPInput");
+  if (minGPInput) minGPInput.value = state.minGP || "";
+  renderActiveFilters();
+  populateFilterStatSelect();
+}
+
+function undoState() {
+  if (_history.index <= 0) return;
+  _history.index--;
+  _history._skipNext = true;
+  _restoreState(_history.stack[_history.index]);
+  _syncUndoRedoButtons();
+  fetchAndRender();
+  const left = _history.index;
+  _showToast("undo" + (left > 0 ? " (" + left + " left)" : ""));
+}
+
+function redoState() {
+  if (_history.index >= _history.stack.length - 1) return;
+  _history.index++;
+  _history._skipNext = true;
+  _restoreState(_history.stack[_history.index]);
+  _syncUndoRedoButtons();
+  fetchAndRender();
+  _showToast("redo");
+}
+
+function _syncUndoRedoButtons() {
+  const undoBtn = document.getElementById("undoBtn");
+  const redoBtn = document.getElementById("redoBtn");
+  if (undoBtn) undoBtn.disabled = _history.index <= 0;
+  if (redoBtn) redoBtn.disabled = _history.index >= _history.stack.length - 1;
+}
+
 // ─── Init ────────────────────────────────────────────────────────
 (async function init() {
   loadStateFromURL();
@@ -959,6 +1041,7 @@ let _fetchController = null;
 let _fetchId = 0;
 
 async function fetchAndRender() {
+  _pushHistory();
   if (_fetchController) _fetchController.abort();
   _fetchController = new AbortController();
   const myId = ++_fetchId;
@@ -9140,6 +9223,14 @@ document.addEventListener("keydown", function(e) {
     }
   }
 
+  // Ctrl+Z / Ctrl+Y: undo/redo (works even when input focused, but not for native text undo)
+  if ((e.ctrlKey || e.metaKey) && e.key === "z" && !e.shiftKey) {
+    if (!isInputFocused()) { e.preventDefault(); undoState(); return; }
+  }
+  if ((e.ctrlKey || e.metaKey) && (e.key === "y" || ((e.key === "z" || e.key === "Z") && e.shiftKey))) {
+    if (!isInputFocused()) { e.preventDefault(); redoState(); return; }
+  }
+
   // Don't intercept when typing in inputs
   if (isInputFocused()) return;
 
@@ -9354,6 +9445,8 @@ function toggleShortcutRef() {
           ${shortcutRow("← →", "Previous / next page")}
           ${shortcutRow("J / K", "Navigate rows down / up")}
           ${shortcutRow("Enter", "Open focused player profile")}
+          ${shortcutRow("Ctrl+Z", "Undo last state change")}
+          ${shortcutRow("Ctrl+Y", "Redo state change")}
           ${shortcutRow("?", "This reference")}
         </tbody>
       </table>

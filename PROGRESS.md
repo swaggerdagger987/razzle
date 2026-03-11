@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 121 — Undo/Redo State History (COMPLETE)
+
+**Exit Criterion MET**: Ctrl+Z/Ctrl+Y undo/redo screener state changes. Toolbar buttons with disabled state. Max 30 snapshots. Toast feedback. 34 tests pass.
+
+### Phase 121 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Undo/Redo system | DONE | History stack, _captureState/_restoreState, Ctrl+Z/Y, toolbar buttons, shortcuts modal |
+
 ## Previous Phase: Phase 120 — QA + UX Audit Fixes for Phases 116-119 (COMPLETE)
 
 **Exit Criterion MET**: 3 CRITICAL + 4 HIGH + MEDIUM findings fixed. 34 tests pass.
