@@ -1,7 +1,25 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 46 (Player Profile — Dynasty Value Sparkline)
+- Phase: 47 (Data Quality & Design System Hardening)
+## Phase 47: Data Quality & Design System Hardening
+**Exit Criterion**: Half-PPR fallback computation works for all seasons (no NULL half-PPR values). All hardcoded gray colors (#888, #999, #666, #aaa) in frontend files replaced with CSS variable var(--ink-light) for design system compliance.
+
+- Task 1: PENDING
+- Task 2: PENDING
+- Stage: BUILD
+- Next: Task 1
+
+### Task 1: Commit half-PPR fallback + initial color variable fixes
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: Backend computes half-PPR as fallback (PPR - 0.5*receptions) when fantasy_points_half_ppr is NULL. Three frontend files use var(--ink-light) instead of #888/#999. All changes committed.
+
+### Task 2: Replace remaining hardcoded grays across frontend with CSS variables
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: All hardcoded gray color values (#888, #999, #666, #aaa, #bbb, #ccc) in frontend HTML/JS files replaced with var(--ink-light) or appropriate design system variable. warroom.js pixel canvas colors excluded. Zero hardcoded grays remain in non-canvas code.
+
 ## Phase 46: Player Profile — Dynasty Value Sparkline
 **Exit Criterion**: Player profile modal shows a dynasty trade value sparkline with season-by-season values.
 

@@ -157,7 +157,7 @@ def fetch_players(
                     p.player_id, p.full_name, p.position, p.team, p.age, p.college, p.headshot_url,
                     COUNT(*) as games,
                     COUNT(DISTINCT s.season) as seasons,
-                    SUM(s.fantasy_points_half_ppr) as fantasy_points_half_ppr,
+                    COALESCE(SUM(s.fantasy_points_half_ppr), SUM(s.fantasy_points_ppr) - 0.5 * SUM(s.receptions)) as fantasy_points_half_ppr,
                     {_STAT_SUM_COLS}
                 FROM players p
                 JOIN player_week_stats s ON p.player_id = s.player_id
@@ -386,7 +386,7 @@ def _fetch_screener_uncached(body):
                 p.player_id, p.full_name, p.position, p.team, p.age, p.college, p.headshot_url,
                 COUNT(*) as games,
                 COUNT(DISTINCT s.season) as seasons,
-                SUM(s.fantasy_points_half_ppr) as fantasy_points_half_ppr,
+                COALESCE(SUM(s.fantasy_points_half_ppr), SUM(s.fantasy_points_ppr) - 0.5 * SUM(s.receptions)) as fantasy_points_half_ppr,
                 {_STAT_SUM_COLS}
             FROM players p
             JOIN player_week_stats s ON p.player_id = s.player_id
@@ -797,7 +797,7 @@ def _fetch_career_stats_uncached(player_id):
                 s.season,
                 COUNT(DISTINCT s.week) as games,
                 SUM(s.fantasy_points_ppr) as total_ppr,
-                SUM(s.fantasy_points_half_ppr) as total_hppr,
+                COALESCE(SUM(s.fantasy_points_half_ppr), SUM(s.fantasy_points_ppr) - 0.5 * SUM(s.receptions)) as total_hppr,
                 SUM(s.fantasy_points_std) as total_std,
                 SUM(s.receptions) as rec,
                 SUM(s.targets) as tgt,

@@ -158,8 +158,11 @@ def _enrich_with_derived_stats(items):
             item["adot"] = _safe_div(item.get("passing_air_yards") or 0, item.get("attempts") or 0)
         else:
             item["adot"] = _safe_div(item.get("receiving_air_yards") or 0, item.get("targets") or 0)
-        # Half-PPR per game
-        item["half_ppr_ppg"] = _safe_div(item.get("fantasy_points_half_ppr") or 0, g)
+        # Half-PPR per game (fallback: compute from PPR - 0.5*rec if column is NULL)
+        hppr = item.get("fantasy_points_half_ppr")
+        if not hppr and item.get("fantasy_points_ppr"):
+            hppr = (item.get("fantasy_points_ppr") or 0) - 0.5 * (item.get("receptions") or 0)
+        item["half_ppr_ppg"] = _safe_div(hppr or 0, g)
         # Snap share (already averaged in SQL, just round)
         snap_pct = item.get("offense_pct")
         item["snap_share"] = round(snap_pct, 1) if snap_pct else None
