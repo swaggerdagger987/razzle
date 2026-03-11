@@ -1,5 +1,25 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 148 — Platform: Cross-Agent Intelligence + Attribution (COMPLETE)
+
+**Exit Criterion MET**: Three features shipped plus verification. (1) Cross-agent trigger system in warroom.js: after runAllAgents completes, specialist outputs are scanned for 6 trigger patterns (injury_handcuff Medical->Scout, injury_trade Medical->Diplomat, low_odds_rebuild Quant->Diplomat, breakout_faab Scout->Diplomat, breakout_value Scout->Quant, panic_pattern Historian->Diplomat). Triggered follow-up agents run automatically with context from the source agent's output. Results render as "Follow-Up Intelligence" cards with cross-reference badges. Capped at 3 concurrent follow-ups to control LLM costs. (2) About/attribution page (about.html): data source cards for nflverse (MIT, NFL stats), sportsdataverse/cfbfastR (MIT, college stats), and Sleeper API (read-only league data). Privacy section, technology section, contact section. Linked from landing page footer. Added to sitemap. (3) Landing page demo verification: 55 briefings already exist across all 6 agents, exceeding the 50-60 target. (4) Agent persona verification: all 6 personas have 12 use cases each with format-aware logic covering redraft, dynasty, keeper, best ball, superflex, TE premium, and FAAB.
+
+### Phase 148 Tasks (Platform Loop)
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Cross-Agent Trigger System | DONE | 6 trigger patterns, 3 max concurrent, follow-up intelligence cards |
+| 2 | Landing Page Demo Expansion | DONE | Already 55 briefings (pre-existing) |
+| 3 | About/Attribution Page | DONE | about.html with data source credits, privacy, contact |
+| 4 | Agent Persona Depth Verification | DONE | All 6 personas pass 10+ use case requirement (pre-existing) |
+
+### Decisions Log
+- Cross-agent triggers capped at 3 concurrent follow-ups to prevent runaway LLM costs (6 trigger patterns but max 3 fire per scenario)
+- Trigger patterns use regex on specialist output text — simple, client-side, no additional API calls for detection
+- Follow-up prompts include source agent's finding for context ("Medical flagged X, your task: evaluate Y")
+- about.html mentions NBA v. Motorola precedent for legal clarity on public domain stats
+- Attribution footer on landing page updated to link to about.html
+
 ## Previous Phase: Phase 147 — Platform: Pre-Launch Hardening + Security Polish (COMPLETE)
 
 **Exit Criterion MET**: Five hardening improvements shipped. (1) Password strength hardening: minimum 8 characters (up from 6), requires at least one letter and one number, rejects ~60 common passwords including fantasy-specific terms (football1, dynasty, razzle). _validate_password() function with specific error messages. Frontend validation updated to match. (2) Auth edge case hardening: billing SUCCESS_URL/CANCEL_URL now use RAZZLE_BASE_URL env var with razzle.lol fallback, import_formulas refactored from N+1 loop to batch insert using executemany() with pre-fetched existing names set. (3) Cache coverage verified: 120 _cached() calls across all live_data modules + Cache-Control middleware on all GET /api/ endpoints (5min default, 60min for stable data, no-store for auth/billing). Already production-grade. (4) Render deployment hardening: healthCheckPath added to render.yaml, all required env vars documented in render.yaml comments, .env.example file created with all 12 required environment variables. (5) Error boundary polish: LLM error messages now use Razzle personality ("agent took too long" instead of "timeout"), specific HTTP status handling (401=bad key, 429=rate limited, 500=provider down), Stripe checkout errors use toast system instead of alert(), "all specialists failed" replaced with "the room hit a wall."

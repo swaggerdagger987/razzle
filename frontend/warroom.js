@@ -2541,9 +2541,165 @@ async function runAllAgents(scenario) {
   setScenarioStatus(statusMsg, razzleSynthesis ? 'done' : 'error');
   setScenarioButtonsDisabled(false);
 
+  // ── CROSS-AGENT TRIGGERS ──────────────────────────────────────────────
+  // Scan specialist outputs for trigger signals and auto-invoke follow-ups
+  var followUps = detectCrossAgentTriggers(results, scenario);
+  var followUpResults = {};
+
+  if (followUps.length > 0 && (hasKey || elite)) {
+    setScenarioStatus('cross-referencing intelligence... (' + followUps.length + ' trigger' + (followUps.length > 1 ? 's' : '') + ')', 'running');
+
+    var followUpPromises = followUps.map(function(trigger) {
+      return (async function() {
+        var s = getAgentSettings(trigger.targetAgentId);
+        if (!s.apiKey && !elite) return;
+        try {
+          var followUpScenario = trigger.prompt;
+          var result = await executeAgent(trigger.targetAgentId, followUpScenario);
+          followUpResults[trigger.key] = {
+            targetAgentId: trigger.targetAgentId,
+            sourceAgentId: trigger.sourceAgentId,
+            triggerType: trigger.type,
+            triggerLabel: trigger.label,
+            result: result
+          };
+        } catch (err) {
+          // Silent fail for follow-ups — they're bonus intelligence
+        }
+      })();
+    });
+
+    await Promise.all(followUpPromises);
+  }
+
   window.dispatchEvent(new CustomEvent('razzle:all-agents-done', {
-    detail: { scenario: scenario, results: results, errors: errors, razzleSynthesis: razzleSynthesis }
+    detail: {
+      scenario: scenario,
+      results: results,
+      errors: errors,
+      razzleSynthesis: razzleSynthesis,
+      followUps: followUpResults
+    }
   }));
+}
+
+// ── CROSS-AGENT TRIGGER DETECTION ───────────────────────────────────────
+// Scans specialist outputs for signal patterns that should invoke follow-up agents.
+// Returns array of { key, type, label, sourceAgentId, targetAgentId, prompt }
+
+var TRIGGER_PATTERNS = [
+  {
+    type: 'injury_handcuff',
+    label: 'injury detected — evaluating replacements',
+    sourceAgent: 1, // Medical
+    targetAgent: 2, // Scout
+    patterns: [/\b(out|doubtful|questionable|injured|ACL|MCL|concussion|hamstring|ankle|knee|fracture|torn|surgery|IR)\b/i],
+    buildPrompt: function(sourceText, originalScenario) {
+      return 'FOLLOW-UP from Medical analysis. The Medical analyst flagged an injury in this scenario:\n\n' +
+        'Original scenario: ' + originalScenario + '\n\n' +
+        'Medical finding: ' + sourceText.slice(0, 500) + '\n\n' +
+        'Your task: Evaluate the backup/handcuff options. Who steps into the role? What is their snap share trend? Are there waiver wire alternatives? Rank the replacement options by opportunity quality.';
+    }
+  },
+  {
+    type: 'injury_trade',
+    label: 'injury detected — identifying trade targets',
+    sourceAgent: 1, // Medical
+    targetAgent: 3, // Diplomat
+    patterns: [/\b(out\s+\d+|missed?\s+\d+|weeks?\s+out|season.ending|IR|surgery|long.term)\b/i],
+    buildPrompt: function(sourceText, originalScenario) {
+      return 'FOLLOW-UP from Medical analysis. A significant injury was flagged:\n\n' +
+        'Original scenario: ' + originalScenario + '\n\n' +
+        'Medical finding: ' + sourceText.slice(0, 500) + '\n\n' +
+        'Your task: Identify trade targets to fill the gap. Which managers in the league have depth at this position? Who might be willing to trade? Propose specific trade frameworks.';
+    }
+  },
+  {
+    type: 'low_odds_rebuild',
+    label: 'low championship odds — evaluating rebuild path',
+    sourceAgent: 4, // Quant
+    targetAgent: 3, // Diplomat
+    patterns: [/championship\s+(odds?|probability)\s*[:\s]?\s*(\d{1,2}(\.\d+)?)\s*%/i, /\b(below|under)\s+(15|10|5)\s*%/i, /\b(rebuild|rebuilding|teardown|tanking|sell)\b/i],
+    buildPrompt: function(sourceText, originalScenario) {
+      return 'FOLLOW-UP from Quant analysis. Championship odds are low or rebuild was recommended:\n\n' +
+        'Original scenario: ' + originalScenario + '\n\n' +
+        'Quant finding: ' + sourceText.slice(0, 500) + '\n\n' +
+        'Your task: Map out the rebuild trade strategy. Who are the sell candidates? Which contenders in the league would overpay? What draft picks should be targeted? Propose a 3-move teardown sequence.';
+    }
+  },
+  {
+    type: 'breakout_faab',
+    label: 'breakout detected — FAAB bid strategy',
+    sourceAgent: 2, // Scout
+    targetAgent: 3, // Diplomat
+    patterns: [/\b(breakout|emerging|trending up|snap.share.increas|target.share.ris|waiver.wire|free.agent|pick.up|add)\b/i],
+    buildPrompt: function(sourceText, originalScenario) {
+      return 'FOLLOW-UP from Scout analysis. A breakout or waiver opportunity was identified:\n\n' +
+        'Original scenario: ' + originalScenario + '\n\n' +
+        'Scout finding: ' + sourceText.slice(0, 500) + '\n\n' +
+        'Your task: Recommend a FAAB bid strategy. How much should the GM bid? Who else in the league needs this player? What is the competitive bidding landscape? If rolling waivers, should priority be burned here?';
+    }
+  },
+  {
+    type: 'breakout_value',
+    label: 'breakout detected — running valuation',
+    sourceAgent: 2, // Scout
+    targetAgent: 4, // Quant
+    patterns: [/\b(breakout|buy.low|buy low|undervalued|emerging|ascending)\b/i],
+    buildPrompt: function(sourceText, originalScenario) {
+      return 'FOLLOW-UP from Scout analysis. A breakout or undervalued player was flagged:\n\n' +
+        'Original scenario: ' + originalScenario + '\n\n' +
+        'Scout finding: ' + sourceText.slice(0, 500) + '\n\n' +
+        'Your task: Run a valuation analysis. What is this player worth right now vs. where they could be? What is the buy window? Calculate the value gap between current market price and projected production.';
+    }
+  },
+  {
+    type: 'panic_pattern',
+    label: 'panic pattern detected — preparing counter-strategy',
+    sourceAgent: 5, // Historian
+    targetAgent: 3, // Diplomat
+    patterns: [/\b(panic|desperate|fire.sale|losing streak|overreact|emotional|tilt|frustrated)\b/i],
+    buildPrompt: function(sourceText, originalScenario) {
+      return 'FOLLOW-UP from Historian analysis. A manager panic pattern was detected:\n\n' +
+        'Original scenario: ' + originalScenario + '\n\n' +
+        'Historian finding: ' + sourceText.slice(0, 500) + '\n\n' +
+        'Your task: Prepare a counter-strategy to exploit this panic window. What players might they sell cheap? What offers should the GM make? Timing recommendations for when to approach.';
+    }
+  }
+];
+
+function detectCrossAgentTriggers(results, originalScenario) {
+  var triggers = [];
+  var seen = {}; // prevent duplicate target agent invocations for same trigger type
+
+  TRIGGER_PATTERNS.forEach(function(pattern) {
+    var sourceText = results[pattern.sourceAgent];
+    if (!sourceText) return;
+
+    var matched = pattern.patterns.some(function(regex) {
+      return regex.test(sourceText);
+    });
+
+    if (matched) {
+      var key = pattern.type + '_' + pattern.targetAgent;
+      if (seen[key]) return; // only one follow-up per target per type
+      seen[key] = true;
+
+      // Cap at 3 total follow-ups to control LLM costs
+      if (triggers.length >= 3) return;
+
+      triggers.push({
+        key: key,
+        type: pattern.type,
+        label: pattern.label,
+        sourceAgentId: pattern.sourceAgent,
+        targetAgentId: pattern.targetAgent,
+        prompt: pattern.buildPrompt(sourceText, originalScenario)
+      });
+    }
+  });
+
+  return triggers;
 }
 
 setupScenarioPanel();
@@ -2687,6 +2843,26 @@ function renderLoadingCard(agentId) {
   '</div>';
 }
 
+function renderFollowUpCard(followUp) {
+  var targetAgent = AGENT_DEFS[followUp.targetAgentId];
+  var sourceAgent = AGENT_DEFS[followUp.sourceAgentId];
+  if (!targetAgent || !sourceAgent) return '';
+
+  var bodyHtml = markdownToHtml(followUp.result);
+
+  return '<div class="briefing-card followup-card collapsed" data-followup-type="' + followUp.triggerType + '">' +
+    '<div class="briefing-card-header" onclick="toggleBriefingCard(this)">' +
+      '<span class="briefing-card-dot" style="background:' + targetAgent.color + '"></span>' +
+      '<span class="briefing-card-name">' + escapeHtml(targetAgent.name) + '</span>' +
+      '<span class="briefing-card-role">' + escapeHtml(targetAgent.role) + '</span>' +
+      '<span class="followup-trigger-badge">' + escapeHtml(followUp.triggerLabel) + '</span>' +
+      '<span class="followup-source-tag">triggered by ' + escapeHtml(sourceAgent.name) + '</span>' +
+      '<span class="briefing-card-toggle">[expand]</span>' +
+    '</div>' +
+    '<div class="briefing-card-body">' + bodyHtml + '</div>' +
+  '</div>';
+}
+
 window.toggleBriefingCard = function(header) {
   var card = header.closest('.briefing-card');
   if (!card) return;
@@ -2719,6 +2895,21 @@ function renderAllBriefings(detail) {
       html += renderBriefingCard(id, detail.errors[id], true);
     }
   });
+
+  // Follow-up intelligence cards (cross-agent triggers)
+  if (detail.followUps && Object.keys(detail.followUps).length > 0) {
+    html += '<div class="followup-section">' +
+      '<div class="followup-section-header">' +
+        '<span class="followup-section-icon">&#128279;</span> ' +
+        '<span class="followup-section-title">Follow-Up Intelligence</span>' +
+        '<span class="followup-section-sub">auto-triggered by specialist findings</span>' +
+      '</div>';
+    Object.keys(detail.followUps).forEach(function(key) {
+      var fu = detail.followUps[key];
+      html += renderFollowUpCard(fu);
+    });
+    html += '</div>';
+  }
 
   // Pro teaser for free users with league data connected
   if (hasLeagueData() && !isProUser()) {

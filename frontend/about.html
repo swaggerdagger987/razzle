@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>About — Razzle</title>
+<meta property="og:title" content="About — Razzle">
+<meta property="og:description" content="About Razzle. Data sources, attribution, privacy, and contact info.">
+<meta property="og:site_name" content="razzle.lol">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://razzle.lol/about.html">
+<meta property="og:image" content="https://razzle.lol/assets/og-image.png">
+<meta name="description" content="About Razzle. Data sources, attribution, privacy, and contact info for the fantasy football Bloomberg terminal.">
+<link rel="canonical" href="https://razzle.lol/about.html">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .about-page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 48px 24px 60px;
+  }
+
+  .about-hero {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .about-hero-mascot {
+    font-size: 56px;
+    filter: drop-shadow(3px 3px 0 rgba(0,0,0,0.15));
+    transform: rotate(-3deg);
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+
+  .about-hero h1 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    letter-spacing: -1px;
+    margin-bottom: 6px;
+  }
+
+  .about-hero h1 span { color: var(--orange); }
+
+  .about-hero-sub {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-medium);
+  }
+
+  .about-section {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 24px 28px;
+    margin-bottom: 24px;
+  }
+
+  .about-section h2 {
+    font-family: var(--font-display);
+    font-size: 18px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px dashed var(--ink-faint);
+  }
+
+  .about-section p,
+  .about-section li {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--ink-medium);
+    line-height: 1.7;
+    margin-bottom: 10px;
+  }
+
+  .about-section ul {
+    padding-left: 20px;
+    margin: 8px 0 16px;
+  }
+
+  .about-section li {
+    margin-bottom: 6px;
+  }
+
+  .about-section a {
+    color: var(--orange);
+    text-decoration: none;
+    font-weight: 700;
+  }
+
+  .about-section a:hover {
+    text-decoration: underline;
+  }
+
+  .data-source-card {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 12px 0;
+    border-bottom: 1px dashed var(--ink-faint);
+  }
+
+  .data-source-card:last-child {
+    border-bottom: none;
+  }
+
+  .data-source-badge {
+    font-family: var(--font-display);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border: 2px solid var(--ink);
+    border-radius: 16px;
+    background: var(--bg-warm);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .data-source-info {
+    flex: 1;
+  }
+
+  .data-source-name {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 3px;
+  }
+
+  .data-source-desc {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-light);
+    line-height: 1.5;
+  }
+
+  .annotation {
+    font-family: var(--font-hand);
+    font-size: 16px;
+    color: var(--ink-light);
+    margin-top: 6px;
+  }
+
+  .about-footer {
+    text-align: center;
+    padding: 20px;
+    font-family: var(--font-hand);
+    font-size: 18px;
+    color: var(--ink-light);
+  }
+
+  .about-footer a {
+    color: var(--orange);
+    text-decoration: none;
+    font-weight: 700;
+  }
+
+  @media (max-width: 768px) {
+    .about-page { padding: 32px 16px 40px; }
+    .about-section { padding: 18px 16px; }
+    .about-hero h1 { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="about-page">
+
+  <div class="about-hero">
+    <div class="about-hero-mascot">&#x1F42F;</div>
+    <h1>About <span>Razzle</span></h1>
+    <div class="about-hero-sub">the fine print, if you're into that sort of thing</div>
+  </div>
+
+  <!-- DATA SOURCES -->
+  <div class="about-section">
+    <h2>Data Sources &amp; Attribution</h2>
+    <p>Razzle is built on open data and open-source tools. We believe in giving credit where it's due.</p>
+
+    <div class="data-source-card">
+      <span class="data-source-badge">NFL Stats</span>
+      <div class="data-source-info">
+        <div class="data-source-name"><a href="https://github.com/nflverse" target="_blank" rel="noopener">nflverse</a></div>
+        <div class="data-source-desc">
+          NFL play-by-play data, weekly player stats, roster data, snap counts, combine metrics, and draft picks.
+          Data provided by nflverse under the MIT License. The underlying NFL statistics are public domain facts
+          per <em>NBA v. Motorola, 105 F.3d 841 (2d Cir. 1997)</em>.
+        </div>
+      </div>
+    </div>
+
+    <div class="data-source-card">
+      <span class="data-source-badge">College</span>
+      <div class="data-source-info">
+        <div class="data-source-name"><a href="https://github.com/sportsdataverse" target="_blank" rel="noopener">sportsdataverse / cfbfastR</a></div>
+        <div class="data-source-desc">
+          College football play-by-play data, player stats, and season aggregates.
+          Data provided by sportsdataverse under the MIT License.
+        </div>
+      </div>
+    </div>
+
+    <div class="data-source-card">
+      <span class="data-source-badge">Leagues</span>
+      <div class="data-source-info">
+        <div class="data-source-name"><a href="https://docs.sleeper.com" target="_blank" rel="noopener">Sleeper API</a></div>
+        <div class="data-source-desc">
+          League structure, rosters, standings, transactions, and draft data for connected Sleeper leagues.
+          Accessed via Sleeper's public read-only API.
+        </div>
+      </div>
+    </div>
+
+    <div class="annotation">all raw stats are public domain facts. our derived analytics (DVS, VORP, trade values, breakout detection, agent intelligence) are original work.</div>
+  </div>
+
+  <!-- WHAT WE BUILD -->
+  <div class="about-section">
+    <h2>What Razzle Is</h2>
+    <p>Razzle is a fantasy football research terminal. Free data screener with 100+ stat columns, 60+ analytical panels, custom formulas, and shareable views. Plus AI agents that actually know your league.</p>
+    <ul>
+      <li><strong>The Lab</strong> (free) -- Bloomberg-style data screener for NFL and college stats</li>
+      <li><strong>The Bureau of Intelligence</strong> (free with Sleeper) -- live league data, competitor activity, manager profiling</li>
+      <li><strong>The Situation Room</strong> (paid) -- six AI agents with full league context, personalized briefings, cross-agent intelligence</li>
+    </ul>
+    <div class="annotation">a Sunday comic strip that happens to run a Bloomberg terminal</div>
+  </div>
+
+  <!-- PRIVACY -->
+  <div class="about-section">
+    <h2>Privacy</h2>
+    <ul>
+      <li>We store your email and a bcrypt-hashed password. We never store raw passwords.</li>
+      <li>Sleeper data is fetched client-side via Sleeper's public API. We do not store your Sleeper credentials.</li>
+      <li>BYOK API keys are encrypted at rest and never logged, never included in error messages, never shared.</li>
+      <li>Elite AI queries route through our server-side proxy. We do not log prompt content or agent responses.</li>
+      <li>We use basic pageview analytics (page, timestamp, referrer). No fingerprinting, no ad tracking.</li>
+      <li>We do not sell your data to anyone. Ever.</li>
+    </ul>
+  </div>
+
+  <!-- OPEN SOURCE -->
+  <div class="about-section">
+    <h2>Technology</h2>
+    <p>Razzle is built with vanilla HTML, CSS, and JavaScript. No React. No Vue. No npm. The backend is Python FastAPI with SQLite. The pixel Situation Room uses the Canvas API. Charts are hand-rolled Canvas renders.</p>
+    <p>Fonts: <a href="https://fonts.google.com/specimen/Luckiest+Guy" target="_blank" rel="noopener">Luckiest Guy</a>, <a href="https://fonts.google.com/specimen/Space+Mono" target="_blank" rel="noopener">Space Mono</a>, <a href="https://fonts.google.com/specimen/Caveat" target="_blank" rel="noopener">Caveat</a>. All served via Google Fonts.</p>
+    <div class="annotation">zero dependencies, full control, maximum speed</div>
+  </div>
+
+  <!-- CONTACT -->
+  <div class="about-section">
+    <h2>Contact</h2>
+    <p>Found a bug? Have a feature request? Want to discuss a trade your league won't stop arguing about?</p>
+    <ul>
+      <li>Reddit: look for Razzle on <a href="https://reddit.com/r/DynastyFF" target="_blank" rel="noopener">r/DynastyFF</a> and <a href="https://reddit.com/r/fantasyfootball" target="_blank" rel="noopener">r/fantasyfootball</a></li>
+      <li>Domain: <a href="https://razzle.lol">razzle.lol</a></li>
+    </ul>
+  </div>
+
+  <div class="about-footer">
+    <a href="/">razzle.lol</a> -- let's razzle dazzle em baby
+  </div>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
