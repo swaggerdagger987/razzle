@@ -1,5 +1,24 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 150 — Platform: Site-Wide Footer Modernization (COMPLETE)
+
+**Exit Criterion MET**: Footer consistency achieved across all 72 non-special HTML files. Phase 149 modernized the footer on index.html only (5-column responsive CSS grid with categorized links). Phase 150 extended this to every remaining page: agents.html (old warroom-footer replaced), league-intel.html (old div footer replaced), pricing.html and about.html (had no footer — new footer added), and all 65+ Lab panel pages (old pipe-separated `<footer>` elements replaced). Python script `scripts/update_footers.py` handled the bulk update. 7 files needed secondary cleanup due to dual-footer insertion. Final verification: 72/72 files have the modern grid footer, zero old pipe-separated links remain, all files structurally intact (closing tags, app.js script).
+
+### Phase 150 Tasks (Platform Loop)
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Core pages footer (agents, league-intel, pricing, about) | DONE | 4 core pages modernized, pricing+about got footers for the first time |
+| 2 | Bulk Lab panel footer update (65+ files) | DONE | scripts/update_footers.py, 71 files in one pass, 7 needed secondary cleanup |
+| 3 | Verification | DONE | 72/72 files verified, zero old footers, all structural integrity checks pass |
+
+### Decisions Log
+- Used Python script for bulk update rather than manual editing — 69+ files would be error-prone by hand
+- Footer HTML is identical to index.html's grid footer (5 columns: Razzle, Dynasty, Weekly, Analytics, Tools)
+- Attribution line preserved: "powered by nflverse + sportsdataverse | made for Reddit | attribution & privacy"
+- lab.html and 404.html excluded from update (lab.html has its own panel-based footer, 404.html is a special page)
+- Script kept for future use if new pages are added
+
 ## Previous Phase: Phase 149 — Platform: Pre-Launch Polish — Navigation, Copy, and Conversion Funnel (COMPLETE)
 
 **Exit Criterion MET**: Six polish tasks shipped. (1) Outdated copy fixed: "Draft Season 2025" updated to "Draft Season 2026" on landing page, Rookie Big Board fallback year updated. Waitlist section (obsolete — Situation Room is live) replaced with dual-CTA "The Situation Room is live" section linking to agents.html and lab.html. (2) Navigation consistency: League Intel nav link added to all 74 HTML pages between The Lab and Situation Room, matching the North Star's 4-page architecture (home, lab, bureau, agents). League-intel.html updated with correct active class. Pricing link added to index.html footer. (3) Pricing page FAQ: 8-question FAQ section added below feature matrix covering BYOK, free trial, cancellation, Sleeper requirement, trial expiry, API key compatibility, format support, and free tier commitment. Razzle design system styling. (4) "Coming soon" copy removed from agents.html — replaced with accurate "upgrade to Pro for league-contextualized intelligence" hint for free users. (5) Footer modernization: massive wall of ~120 pipe-separated links reorganized into 5-column responsive CSS grid (Razzle, Dynasty, Weekly, Analytics, Tools) with orange category headers and clean link layout. (6) Sitemap verified complete: all 70 static HTML pages present including pricing.html, about.html, league-intel.html.
