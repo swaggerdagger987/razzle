@@ -911,6 +911,41 @@
   .leader-gold { color: #ffc857; }
   .leader-silver { color: #c4b5a5; }
   .leader-bronze { color: #d97757; }
+
+  /* ─── Column Stats Popover ─── */
+  .colstats-popover {
+    position: fixed; z-index: 10001;
+    background: var(--bg-card); border: 3px solid var(--ink);
+    box-shadow: 4px 4px 0 var(--ink); border-radius: 6px;
+    padding: 12px 16px; min-width: 200px; max-width: 260px;
+    font-family: var(--font-mono); font-size: 12px;
+  }
+  .colstats-title {
+    font-family: var(--font-display); font-size: 14px; font-weight: 700;
+    color: var(--orange); margin-bottom: 8px;
+    border-bottom: 2px dashed var(--ink-faint); padding-bottom: 6px;
+  }
+  .colstats-grid {
+    display: grid; grid-template-columns: auto 1fr; gap: 2px 12px;
+    margin-bottom: 10px;
+  }
+  .colstats-label { color: var(--ink-light); font-size: 11px; }
+  .colstats-val { text-align: right; font-weight: 600; color: var(--ink); }
+  .colstats-hist-section { border-top: 2px dashed var(--ink-faint); padding-top: 8px; }
+  .colstats-hist-title {
+    font-family: var(--font-hand); font-size: 14px; color: var(--ink-light); margin-bottom: 4px;
+  }
+  .colstats-hist {
+    display: flex; align-items: flex-end; gap: 3px; height: 40px;
+  }
+  .colstats-bar {
+    flex: 1; background: var(--orange); border-radius: 2px 2px 0 0;
+    min-height: 2px; border: 1px solid var(--ink);
+  }
+  .colstats-hist-labels {
+    display: flex; justify-content: space-between;
+    font-size: 9px; color: var(--ink-light); margin-top: 2px;
+  }
   .screener-table .col-rank { width: 36px; text-align: center; font-size: 11px; color: var(--ink-light); font-weight: 600; padding: 7px 2px; white-space: nowrap; }
 
   /* ─── Frozen utility columns (star, checkbox, pin, rank, player) ─── */

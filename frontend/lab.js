@@ -2157,9 +2157,11 @@ function _ctxMenuAction(action) {
         var menu = document.createElement("div");
         menu.id = "screenerContextMenu";
         menu.className = "screener-context-menu";
-        menu.innerHTML = '<div class="ctx-item" data-action="hide-col" data-col="' + escapeAttr(colKey) + '"><span class="ctx-icon">🙈</span>Hide "' + escapeHtml(colLabel) + '"</div>' +
-          '<div class="ctx-item" data-action="sort-asc" data-col="' + escapeAttr(colKey) + '"><span class="ctx-icon">↑</span>Sort Ascending</div>' +
-          '<div class="ctx-item" data-action="sort-desc" data-col="' + escapeAttr(colKey) + '"><span class="ctx-icon">↓</span>Sort Descending</div>';
+        var statsOption = (col && !col.isText && !col.isSparkline && !col.isNotes) ?
+          '<div class="ctx-sep"></div><div class="ctx-item" data-action="col-stats" data-col="' + escapeAttr(colKey) + '"><span class="ctx-icon">&#9776;</span>Column Stats</div>' : '';
+        menu.innerHTML = '<div class="ctx-item" data-action="hide-col" data-col="' + escapeAttr(colKey) + '"><span class="ctx-icon">&#128584;</span>Hide "' + escapeHtml(colLabel) + '"</div>' +
+          '<div class="ctx-item" data-action="sort-asc" data-col="' + escapeAttr(colKey) + '"><span class="ctx-icon">&#8593;</span>Sort Ascending</div>' +
+          '<div class="ctx-item" data-action="sort-desc" data-col="' + escapeAttr(colKey) + '"><span class="ctx-icon">&#8595;</span>Sort Descending</div>' + statsOption;
         menu.addEventListener("click", function(ev) {
           var item = ev.target.closest(".ctx-item");
           if (!item) return;
@@ -2173,6 +2175,8 @@ function _ctxMenuAction(action) {
             state.sortKey = ck; state.sortDir = "asc"; state.sortKey2 = ""; state.sortDir2 = "desc"; state.offset = 0; fetchAndRender();
           } else if (act === "sort-desc") {
             state.sortKey = ck; state.sortDir = "desc"; state.sortKey2 = ""; state.sortDir2 = "desc"; state.offset = 0; fetchAndRender();
+          } else if (act === "col-stats") {
+            showColumnStatsPopover(ck, th);
           }
         });
         document.body.appendChild(menu);
@@ -2915,6 +2919,111 @@ function filterColumnPicker(query) {
     const visible = group.querySelectorAll('.column-option:not([style*="display: none"])');
     group.style.display = visible.length === 0 ? "none" : "";
   });
+}
+
+// ─── Column Stats Popover ─────────────────────────────────────
+function showColumnStatsPopover(colKey, anchorEl) {
+  dismissColumnStatsPopover();
+  var col = getColumnDef(colKey);
+  if (!col || col.isText || col.isSparkline || col.isNotes) return;
+
+  // Collect values from current items
+  var vals = [];
+  for (var i = 0; i < state.items.length; i++) {
+    var v = parseFloat(state.items[i][colKey]);
+    if (!isNaN(v)) vals.push(v);
+  }
+  if (vals.length < 2) { _showToast("not enough data for stats"); return; }
+
+  vals.sort(function(a, b) { return a - b; });
+  var n = vals.length;
+  var sum = vals.reduce(function(a, b) { return a + b; }, 0);
+  var mean = sum / n;
+  var median = n % 2 === 0 ? (vals[n / 2 - 1] + vals[n / 2]) / 2 : vals[Math.floor(n / 2)];
+  var min = vals[0];
+  var max = vals[n - 1];
+  var variance = vals.reduce(function(s, v) { return s + (v - mean) * (v - mean); }, 0) / n;
+  var stddev = Math.sqrt(variance);
+  var dec = col.decimals != null ? col.decimals : 1;
+  var fmtPct = col.pct;
+
+  function fmt(v) {
+    if (fmtPct) return (v * 100).toFixed(dec) + "%";
+    return v.toFixed(dec);
+  }
+
+  // Build 5-bar histogram
+  var range = max - min;
+  var buckets = [0, 0, 0, 0, 0];
+  if (range > 0) {
+    for (var j = 0; j < vals.length; j++) {
+      var bi = Math.min(4, Math.floor(((vals[j] - min) / range) * 5));
+      buckets[bi]++;
+    }
+  } else {
+    buckets[2] = vals.length;
+  }
+  var maxBucket = Math.max.apply(null, buckets);
+  var histHTML = '<div class="colstats-hist">';
+  for (var b = 0; b < 5; b++) {
+    var pct = maxBucket > 0 ? (buckets[b] / maxBucket * 100) : 0;
+    histHTML += '<div class="colstats-bar" style="height:' + Math.max(2, pct) + '%" title="' + buckets[b] + ' players"></div>';
+  }
+  histHTML += '</div>';
+  histHTML += '<div class="colstats-hist-labels"><span>' + fmt(min) + '</span><span>' + fmt(max) + '</span></div>';
+
+  // Build popover
+  var pop = document.createElement("div");
+  pop.id = "colStatsPopover";
+  pop.className = "colstats-popover";
+  pop.innerHTML = '<div class="colstats-title">' + escapeHtml(col.label) + '</div>' +
+    '<div class="colstats-grid">' +
+    '<span class="colstats-label">Min</span><span class="colstats-val">' + fmt(min) + '</span>' +
+    '<span class="colstats-label">Max</span><span class="colstats-val">' + fmt(max) + '</span>' +
+    '<span class="colstats-label">Mean</span><span class="colstats-val">' + fmt(mean) + '</span>' +
+    '<span class="colstats-label">Median</span><span class="colstats-val">' + fmt(median) + '</span>' +
+    '<span class="colstats-label">Std Dev</span><span class="colstats-val">' + fmt(stddev) + '</span>' +
+    '<span class="colstats-label">Count</span><span class="colstats-val">' + n + '</span>' +
+    '</div>' +
+    '<div class="colstats-hist-section"><div class="colstats-hist-title">Distribution</div>' + histHTML + '</div>';
+
+  document.body.appendChild(pop);
+
+  // Position below the header cell
+  var rect = anchorEl.getBoundingClientRect();
+  var pw = pop.offsetWidth;
+  var ph = pop.offsetHeight;
+  var left = rect.left + rect.width / 2 - pw / 2;
+  var top = rect.bottom + 4;
+  if (left + pw > window.innerWidth - 8) left = window.innerWidth - pw - 8;
+  if (left < 8) left = 8;
+  if (top + ph > window.innerHeight - 8) top = rect.top - ph - 4;
+  pop.style.left = left + "px";
+  pop.style.top = top + "px";
+
+  // Dismiss on outside click
+  setTimeout(function() {
+    document.addEventListener("click", _colStatsOutsideClick, true);
+    document.addEventListener("keydown", _colStatsEscDismiss, true);
+  }, 0);
+}
+
+function _colStatsOutsideClick(e) {
+  var pop = document.getElementById("colStatsPopover");
+  if (pop && !pop.contains(e.target)) {
+    dismissColumnStatsPopover();
+  }
+}
+
+function _colStatsEscDismiss(e) {
+  if (e.key === "Escape") dismissColumnStatsPopover();
+}
+
+function dismissColumnStatsPopover() {
+  var pop = document.getElementById("colStatsPopover");
+  if (pop) pop.remove();
+  document.removeEventListener("click", _colStatsOutsideClick, true);
+  document.removeEventListener("keydown", _colStatsEscDismiss, true);
 }
 
 // ─── Smart filter presets ──────────────────────────────────────

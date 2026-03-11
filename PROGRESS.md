@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 123 — Column Stats Popover (COMPLETE)
+
+**Exit Criterion MET**: Right-click column header → "Column Stats" shows min/max/mean/median/stddev/count + 5-bar histogram. Escape/click dismiss. 34 tests pass.
+
+### Phase 123 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Column stats popover | DONE | showColumnStatsPopover(), context menu option, histogram, popover styling |
+
 ## Previous Phase: Phase 122 — Stat Leader Indicators (COMPLETE)
 
 **Exit Criterion MET**: Top 3 values per numeric stat column get gold/silver/bronze dots. INVERSE_STATS reversed. L key toggle. Toolbar button. localStorage persist. Disabled during percentile mode. V cycle includes leaders. 34 tests pass.
