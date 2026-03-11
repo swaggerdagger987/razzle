@@ -2302,6 +2302,9 @@ async function runSingleAgent(agentId, scenario) {
     return;
   }
 
+  // Dismiss first-run demo if showing
+  window.dispatchEvent(new CustomEvent('razzle:agents-starting'));
+
   initAgentStatusTracker([agentId]);
   setAgentStatus(agentId, 'running');
   setScenarioStatus('running ' + agent.name + '...', 'running');
@@ -2463,6 +2466,9 @@ async function runAllAgents(scenario) {
     setScenarioStatus('set an API key in Config first', 'error');
     return;
   }
+
+  // Dismiss first-run demo if showing
+  window.dispatchEvent(new CustomEvent('razzle:agents-starting'));
 
   // Initialize per-agent status tracker (specialists first, then Razzle)
   initAgentStatusTracker([1, 2, 3, 4, 5, 0]);
@@ -3509,6 +3515,194 @@ function loadBriefingById(id) {
   // For now, just reload latest — a specific briefing fetch could be added later
   loadLatestBriefing();
 }
+
+// ── FIRST-RUN DEMO BRIEFING ───────────────────────────────────────────
+// Shows pre-rendered sample briefing cards when user first visits agents.html.
+// Demonstrates what agent output looks like before they configure anything.
+// Dismissed permanently via localStorage flag, or automatically on first real query.
+
+var DEMO_SCENARIO = 'Should I start Jayden Daniels or Jalen Hurts this week?';
+
+var DEMO_BRIEFINGS = {
+  razzle: '## URGENT: Start Jayden Daniels\n\n' +
+    'After reviewing all specialist input, the verdict is clear: **Daniels is the start this week.**\n\n' +
+    '### Conflict Resolution\n' +
+    '- Quant projects Daniels at **22.4 pts** vs Hurts at **18.1 pts** in your scoring format\n' +
+    '- Medical confirms Hurts\u2019 ankle is a real concern \u2014 limited practice reps, history of re-aggravation\n' +
+    '- Scout flags Daniels\u2019 rushing upside: 7.2 designed runs/game, 3rd among QBs\n\n' +
+    '### GM Decision Needed\n' +
+    '- **Start Daniels** with high confidence (floor 15, ceiling 30+)\n' +
+    '- Hurts is a MONITOR \u2014 if he\u2019s full-go by Sunday, he\u2019s still a fringe QB1 but the ankle caps ceiling\n\n' +
+    '*<span style="color:var(--ink-light);font-size:11px;">With league context, this analysis would reference your specific matchup, opponent\u2019s projected score, and whether you need floor or ceiling this week.</span>*',
+
+  medical: '### Injury Assessment: Jalen Hurts\n\n' +
+    '**Injury**: Right ankle sprain (Grade 1-2)\n' +
+    '**Status**: Limited \u2014 practiced Thursday, questionable\n\n' +
+    '**Mechanism**: Non-contact plant-foot aggravation during scramble drill. This is concerning because it mirrors the Week 8 injury from last season.\n\n' +
+    '**Return-to-Play Analysis**:\n' +
+    '- Historically, QBs with ankle sprains who practice limited on Thursday start 78% of the time\n' +
+    '- However, re-aggravation rate within 3 weeks is 31% for this injury type\n' +
+    '- Hurts specifically has a pattern of playing through injuries but with reduced rushing volume (4.1 rush att/game when healthy vs 2.3 when managing ankle)\n\n' +
+    '**Risk Rating**: ELEVATED \u2014 likely to play but with capped upside\n\n' +
+    '*<span style="color:var(--ink-light);font-size:11px;">With league context: would factor in your IR slot availability and whether ??? is available on your bench.</span>*',
+
+  scout: '### Usage Trend: Jayden Daniels\n\n' +
+    '**Breakout Signal**: STRONG\n\n' +
+    'Daniels\u2019 rushing usage has been elite:\n' +
+    '- 7.2 designed runs/game (3rd among QBs)\n' +
+    '- 41.3 rushing yards/game (2nd among QBs)\n' +
+    '- 4 rushing TDs in last 6 games\n' +
+    '- Target share to pass-catchers is climbing: 68% \u2192 72% \u2192 76% over last 3 weeks\n\n' +
+    '**Matchup Grade**: A-\n' +
+    '- Opponent allows 22.8 fantasy points to QBs (6th most)\n' +
+    '- Weak at containing mobile QBs: 5.1 YPC allowed to rushing QBs\n\n' +
+    '**Waiver Note**: If Daniels is somehow on your wire, he\u2019s a top-3 add this week.\n\n' +
+    '*<span style="color:var(--ink-light);font-size:11px;">With league context: would check if Daniels is on your roster or ??? , and surface waiver competition from ???.</span>*',
+
+  diplomat: '### Leverage Assessment\n\n' +
+    '**Trade Window**: If you own both QBs, this is a sell-high moment for Hurts.\n\n' +
+    'Hurts\u2019 name value still exceeds his ROS production projection. Managers in QB-needy situations will overpay.\n\n' +
+    '**Recommended Approach**:\n' +
+    '- Target managers with streaming QBs or injured starters\n' +
+    '- Hurts\u2019 perceived value: QB3-5 range\n' +
+    '- Actual ROS value with ankle concern: QB8-10\n' +
+    '- That gap is your profit margin\n\n' +
+    '**FAAB Note**: If Daniels is a waiver add, expect competition. Recommended bid: 18-22% of remaining budget.\n\n' +
+    '*<span style="color:var(--ink-light);font-size:11px;">With league context: would identify the 2-3 managers in your league most desperate for a QB and recommend specific counter-offers.</span>*',
+
+  quant: '### Projection Comparison\n\n' +
+    '| Metric | Daniels | Hurts |\n' +
+    '|--------|---------|-------|\n' +
+    '| Projected | **22.4** | 18.1 |\n' +
+    '| Floor | 15.2 | 11.8 |\n' +
+    '| Ceiling | 31.0 | 28.5 |\n\n' +
+    '**Win Probability Impact**: Starting Daniels over Hurts increases your projected points by **4.3** this week.\n\n' +
+    '**Confidence**: 72% \u2014 Daniels is the statistically better start in all three scenarios (floor, median, ceiling).\n\n' +
+    '**ROS Outlook**: Daniels finishes as a top-5 QB if usage holds. Hurts\u2019 ankle makes him a top-8 with downside risk to top-12.\n\n' +
+    '*<span style="color:var(--ink-light);font-size:11px;">With league context: would calculate exact win probability for your matchup and championship odds impact.</span>*',
+
+  historian: '### Pattern Recognition\n\n' +
+    '**Historical Precedent**: QBs returning from ankle injuries\n\n' +
+    '- In the last 5 seasons, QBs listed as "questionable" with ankle injuries who started averaged **14.2 fantasy points** vs their season average of **19.8** \u2014 a 28% decline\n' +
+    '- The decline is almost entirely from reduced rushing: -38% rushing yards, -45% rushing attempts\n' +
+    '- Passing production stays relatively stable (-8%) because the ankle affects mobility, not arm strength\n\n' +
+    '**Daniels Comparison**: Daniels\u2019 profile (age 24, dual-threat, high rushing floor) matches Lamar Jackson\u2019s 2022 trajectory. Jackson finished QB2 in that stretch.\n\n' +
+    '**League Precedent**: In similar start/sit decisions between a healthy dual-threat and an injured elite QB, the healthy option has outscored the injured one 71% of the time.\n\n' +
+    '*<span style="color:var(--ink-light);font-size:11px;">With league context: would search your league\u2019s multi-season history for similar decisions and outcomes.</span>*'
+};
+
+function showFirstRunDemo() {
+  // Only show if: (1) not dismissed, (2) no previous queries run, (3) briefing zone is empty
+  if (localStorage.getItem('razzle_demo_dismissed')) return;
+  var host = document.getElementById('briefingCards');
+  if (!host || host.children.length > 0) return;
+
+  var html = '';
+
+  // Demo header
+  html += '<div class="demo-briefing-header" id="demoBriefingHeader">' +
+    '<div class="demo-briefing-scenario">' +
+      '<span class="demo-briefing-badge">sample briefing</span>' +
+      '<span class="demo-briefing-question">' + escapeHtml(DEMO_SCENARIO) + '</span>' +
+    '</div>' +
+    '<div class="demo-briefing-hint">this is what agent output looks like. run your own scenario above.</div>' +
+    '<button class="demo-briefing-dismiss" onclick="dismissFirstRunDemo()">dismiss</button>' +
+  '</div>';
+
+  // Razzle synthesis (expanded)
+  html += renderDemoCard(0, DEMO_BRIEFINGS.razzle, false);
+
+  // Specialists (collapsed)
+  html += renderDemoCard(1, DEMO_BRIEFINGS.medical, true);
+  html += renderDemoCard(2, DEMO_BRIEFINGS.scout, true);
+  html += renderDemoCard(3, DEMO_BRIEFINGS.diplomat, true);
+  html += renderDemoCard(4, DEMO_BRIEFINGS.quant, true);
+  html += renderDemoCard(5, DEMO_BRIEFINGS.historian, true);
+
+  // Follow-up demo (shows cross-agent trigger)
+  html += '<div class="followup-section">' +
+    '<div class="followup-section-header">' +
+      '<span class="followup-section-icon">&#128279;</span> ' +
+      '<span class="followup-section-title">Follow-Up Intelligence</span>' +
+      '<span class="followup-section-sub">auto-triggered by Medical\u2019s injury flag</span>' +
+    '</div>' +
+    '<div class="briefing-card followup-card collapsed demo-card" data-followup-type="injury-handcuff">' +
+      '<div class="briefing-card-header" onclick="toggleBriefingCard(this)">' +
+        '<span class="briefing-card-dot" style="background:#2ec4b6"></span>' +
+        '<span class="briefing-card-name">Scout</span>' +
+        '<span class="briefing-card-role">Scout</span>' +
+        '<span class="followup-trigger-badge">injury-handcuff</span>' +
+        '<span class="followup-source-tag">triggered by Medical</span>' +
+        '<span class="demo-card-badge">demo</span>' +
+        '<span class="briefing-card-toggle">[expand]</span>' +
+      '</div>' +
+      '<div class="briefing-card-body">' +
+        markdownToHtml('### Handcuff Assessment: Hurts Backup\n\n' +
+          'If Hurts sits or exits early, **Kenny Pickett** takes over.\n\n' +
+          '- Pickett has zero rushing upside (1.2 rush att/game in relief)\n' +
+          '- Pass game shifts to short routes: TE and slot see +18% target share increase\n' +
+          '- If you\u2019re starting any Eagles pass-catchers, factor in Pickett risk\n\n' +
+          '*This follow-up was auto-triggered because Medical flagged an elevated injury risk.*') +
+      '</div>' +
+    '</div>' +
+  '</div>';
+
+  // Upgrade CTA at bottom
+  html += '<div class="demo-briefing-cta">' +
+    '<p>imagine this analysis with <strong>your roster</strong>, <strong>your opponents</strong>, and <strong>your league\u2019s scoring</strong>.</p>' +
+    '<a href="/pricing.html" class="btn-chunky btn-primary" style="font-size:13px;">Start Free 7-Day Trial</a>' +
+    '<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); display:block; margin-top:6px;">no credit card required</span>' +
+  '</div>';
+
+  host.innerHTML = html;
+}
+
+function renderDemoCard(agentId, content, collapsed) {
+  var agent = AGENT_DEFS[agentId];
+  if (!agent) return '';
+
+  var isRazzle = agentId === 0;
+  var cardClass = 'briefing-card demo-card' + (isRazzle ? ' razzle-card' : '') + (collapsed ? ' collapsed' : '');
+
+  var bodyHtml = markdownToHtml(content);
+  if (isRazzle) {
+    bodyHtml = '<span class="urgency-badge urgent">urgent</span>\n' + bodyHtml;
+  }
+
+  var toggleText = collapsed ? '[expand]' : '[collapse]';
+
+  return '<div class="' + cardClass + '" data-briefing-agent="' + agentId + '">' +
+    '<div class="briefing-card-header" onclick="toggleBriefingCard(this)">' +
+      '<span class="briefing-card-dot" style="background:' + agent.color + '"></span>' +
+      '<span class="briefing-card-name">' + escapeHtml(agent.name) + '</span>' +
+      '<span class="briefing-card-role">' + escapeHtml(agent.role) + '</span>' +
+      '<span class="demo-card-badge">demo</span>' +
+      '<span class="briefing-card-toggle">' + toggleText + '</span>' +
+    '</div>' +
+    '<div class="briefing-card-body">' + bodyHtml + '</div>' +
+  '</div>';
+}
+
+window.dismissFirstRunDemo = function() {
+  localStorage.setItem('razzle_demo_dismissed', '1');
+  var host = document.getElementById('briefingCards');
+  if (host) host.innerHTML = '';
+};
+
+// Auto-dismiss demo when a real query starts
+window.addEventListener('razzle:agents-starting', function() {
+  localStorage.setItem('razzle_demo_dismissed', '1');
+  var header = document.getElementById('demoBriefingHeader');
+  if (header) header.remove();
+  // Remove all demo cards
+  var demoCards = document.querySelectorAll('.demo-card');
+  demoCards.forEach(function(c) { c.remove(); });
+  var demoCta = document.querySelector('.demo-briefing-cta');
+  if (demoCta) demoCta.remove();
+});
+
+// Show demo after a short delay to let the page settle
+setTimeout(showFirstRunDemo, 800);
 
 // Initialize briefing panel on page load
 setTimeout(initWeeklyBriefingPanel, 600);

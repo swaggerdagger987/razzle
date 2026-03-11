@@ -862,6 +862,115 @@
     .briefing-card-name { font-size: 12px; }
   }
 
+  /* ===== FIRST-RUN DEMO BRIEFING ===== */
+  .demo-briefing-header {
+    background: var(--bg-card);
+    border: 2px dashed var(--orange);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .demo-briefing-scenario {
+    flex: 1;
+    min-width: 200px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .demo-briefing-badge {
+    font-family: var(--font-display);
+    font-size: 10px;
+    text-transform: uppercase;
+    color: white;
+    background: var(--orange);
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1.5px solid var(--ink);
+    white-space: nowrap;
+    transform: rotate(-1deg);
+    display: inline-block;
+  }
+
+  .demo-briefing-question {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--ink);
+    font-style: italic;
+  }
+
+  .demo-briefing-hint {
+    font-family: var(--font-hand);
+    font-size: 13px;
+    color: var(--ink-light);
+  }
+
+  .demo-briefing-dismiss {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-light);
+    background: transparent;
+    border: 1.5px solid var(--ink-faint);
+    border-radius: 4px;
+    padding: 3px 10px;
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+
+  .demo-briefing-dismiss:hover {
+    color: var(--ink);
+    border-color: var(--ink);
+  }
+
+  .demo-card-badge {
+    font-family: var(--font-display);
+    font-size: 9px;
+    text-transform: uppercase;
+    color: var(--orange);
+    border: 1.5px solid var(--orange);
+    padding: 1px 6px;
+    border-radius: 3px;
+    margin-left: auto;
+    margin-right: 4px;
+    letter-spacing: 0.5px;
+  }
+
+  .demo-card {
+    opacity: 0.92;
+  }
+
+  .demo-card:hover {
+    opacity: 1;
+  }
+
+  .demo-briefing-cta {
+    text-align: center;
+    padding: 24px 16px;
+    margin-top: 12px;
+    background: var(--bg-card);
+    border: 2px dashed var(--orange);
+    border-radius: 10px;
+  }
+
+  .demo-briefing-cta p {
+    font-family: var(--font-hand);
+    font-size: 18px;
+    color: var(--ink-medium);
+    margin: 0 0 12px;
+  }
+
+  @media (max-width: 768px) {
+    .demo-briefing-header { padding: 10px 12px; }
+    .demo-briefing-question { font-size: 12px; }
+    .demo-briefing-hint { font-size: 12px; }
+    .demo-briefing-cta p { font-size: 16px; }
+  }
+
   /* ===== PRO UPSELL ===== */
   .pro-upsell-card {
     background: var(--bg-card);

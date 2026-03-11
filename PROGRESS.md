@@ -1,5 +1,25 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 156 — Platform: Situation Room — First-Run Demo Briefing (COMPLETE)
+
+**Exit Criterion MET**: The Situation Room (agents.html) now shows pre-rendered sample briefing cards when a user first visits, before they configure an API key or run any queries. The demo uses the exact same briefing card styling as real agent output, creating an immediate "aha moment" that demonstrates the product's value. Content: (1) Razzle synthesis card with URGENT urgency badge, expanded by default, showing conflict resolution between specialists and a clear GM decision. (2) Five specialist cards (Medical, Scout, Diplomat, Quant, Historian) collapsed by default, each with realistic analysis for a "Daniels vs Hurts" start/sit scenario. (3) Cross-agent follow-up section showing Scout auto-triggered by Medical's injury flag (handcuff assessment). (4) Every card has a "demo" badge and italicized free-vs-paid hints showing what league context would add (e.g., "With league context: would identify the 2-3 managers most desperate for a QB"). (5) Conversion CTA at bottom: "imagine this analysis with your roster, your opponents, and your league's scoring" with a 7-day trial button. (6) Demo auto-dismisses when a real query starts (via razzle:agents-starting event) or when user clicks "dismiss." Dismissal persisted in localStorage. All JS syntax verified.
+
+### Phase 156 Tasks (Platform Loop)
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | First-Run Demo Briefing Cards | DONE | DEMO_BRIEFINGS, showFirstRunDemo(), renderDemoCard(), auto-dismiss |
+| 2 | QA + Syntax Verification | DONE | warroom.js + agents.html JS pass syntax checks, pages serve 200 |
+
+### Decisions Log
+- Demo scenario chosen: "Should I start Jayden Daniels or Jalen Hurts this week?" -- a universal start/sit dilemma that works for any format and demonstrates all 6 agents working together.
+- Each specialist card includes an italicized free-vs-paid hint at the bottom showing what league context would add (e.g., "would check if Daniels is on your roster or ???"). The ??? redaction creates curiosity about what paid mode reveals.
+- Cross-agent follow-up included in demo to showcase the trigger system (Medical flags injury -> Scout evaluates handcuff). This is a differentiator from ChatGPT.
+- Demo auto-dismisses on first real query via custom event dispatch, preventing stale demo cards from mixing with real output.
+- localStorage key 'razzle_demo_dismissed' persists dismissal so the demo doesn't reappear on subsequent visits.
+
+---
+
 ## Previous Phase: Phase 155 — Platform: Landing Page — Mini Pixel Canvas War Room Preview (COMPLETE)
 
 **Exit Criterion MET**: Landing page now features a live animated mini pixel canvas in the War Room demo section. The canvas (480x160, dark background #121a2e) shows 6 colored agent dots (matching actual agent colors: Razzle=#d97757, Scout=#5b7fff, Medical=#2ec4b6, Diplomat=#8b5cf6, Quant=#f59e0b, Historian=#10b981) moving around a simplified War Room with desk furniture, monitor glows (green pulse), a turf strategy table, and intermittent activity bubbles showing redacted symbols (???, !!!, ..., $, %). Scanline effect adds CRT monitor aesthetic. IntersectionObserver ensures animation only starts when the canvas scrolls into view. All JS syntax verified via node --check (4 executable blocks pass). Page serves 200.

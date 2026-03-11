@@ -1,7 +1,7 @@
-# Platform Loop — Phase 155 Task List
+# Platform Loop — Phase 156 Task List
 
 ## Status
-Current Phase: 155 (Landing Page — Mini Pixel Canvas War Room Preview)
+Current Phase: 156 (Situation Room — First-Run Demo Briefing)
 Current Task: 2
 Current Stage: COMPLETE
 Attempt: 1/3
@@ -12,25 +12,31 @@ Loop Iterations: 2
 
 ## Phase Rationale
 
-The North Star specifies for the landing page:
-> "Agents visibly working but content redacted" — the War Room demo on the landing page should show agents working with outputs redacted.
+The North Star conversion funnel requires: "User hits a decision point -> generic agent answer is fine, but league-contextualized answer from the Situation Room is clearly better -> converts."
 
-The landing page already has the 55-permutation demo briefing system with redacted `<r>` tags. But it lacked a visual pixel canvas preview showing the agents moving around the War Room. This creates the "alive" feeling that hooks users before they even scroll to the demo briefings.
+When a user first visits agents.html, they see the pixel canvas and an empty briefing zone with a scenario input. Without an API key configured, they have no idea what agent output looks like. The first-run demo briefing shows pre-rendered sample briefing cards (identical styling to real output) that demonstrate:
+1. What each agent's output looks like
+2. The Razzle synthesis with urgency tier
+3. Cross-agent follow-up triggers
+4. The free vs paid gap (each card has italicized hints showing what league context would add)
+5. A conversion CTA at the bottom
+
+This creates the "aha moment" before the user even configures anything.
 
 ---
 
-## Task 1: Mini Pixel Canvas Preview
-**Requirement**: "Agents visibly working but content redacted" from North Star landing page demo spec.
-**Accept when**: (1) Canvas element in the War Room demo section of index.html. (2) 6 colored agent dots matching actual agent colors. (3) Furniture/desk rectangles creating a room feel. (4) Activity bubbles with redacted symbols (???, !!!, ...). (5) Scanline effect and monitor glow. (6) IntersectionObserver for performance. (7) Dark background matching Situation Room dark mode.
+## Task 1: First-Run Demo Briefing Cards
+**Requirement**: "User sees Situation Room demo -> curiosity builds" + "generic vs league-contextualized gap is obvious" from North Star.
+**Accept when**: (1) Pre-rendered sample briefing cards appear in briefing zone on first visit. (2) Razzle synthesis card expanded, 5 specialist cards collapsed. (3) Cross-agent follow-up section visible. (4) Demo badge on each card. (5) Free vs paid hints on each card. (6) Conversion CTA at bottom. (7) Dismissed via localStorage, auto-clears on first real query.
 **Depends on**: none
 **Size**: M
 **Primary role**: FRONTEND
-**Status**: PASS — Canvas with 6 agents, furniture, monitor glow, activity bubbles, scanline effect, IntersectionObserver
+**Status**: PASS — DEMO_BRIEFINGS object, showFirstRunDemo(), renderDemoCard(), dismissFirstRunDemo(), razzle:agents-starting event dispatch
 
 ## Task 2: QA + Syntax Verification
-**Requirement**: No JS errors, page still serves correctly.
-**Accept when**: (1) All inline JS blocks pass node --check. (2) Page serves 200. (3) No regressions.
+**Requirement**: No JS errors, pages serve correctly.
+**Accept when**: (1) warroom.js passes node --check. (2) agents.html inline JS passes. (3) Both pages serve 200.
 **Depends on**: Task 1
 **Size**: S
 **Primary role**: QA
-**Status**: PASS — 4 executable JS blocks pass syntax check, page serves 200
+**Status**: PASS — warroom.js syntax OK, agents.html JS OK, both pages serve 200
