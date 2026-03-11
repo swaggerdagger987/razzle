@@ -2754,7 +2754,12 @@ function populateSeasonSelect() {
       _seasonDebounce = setTimeout(() => fetchAndRender(), 200);
     };
   } else {
-    let html = `<option value="career" ${state.season === "career" ? "selected" : ""}>Career</option>`;
+    // Career mode: Pro/Elite only per pricing strategy
+    var isPaid = typeof isPaidUser === "function" ? isPaidUser() : false;
+    var careerLocked = !isPaid;
+    let html = careerLocked
+      ? `<option value="career" disabled>Career \uD83D\uDD12</option>`
+      : `<option value="career" ${state.season === "career" ? "selected" : ""}>Career</option>`;
     html += state.seasons.map(s => {
       const locked = allowed.indexOf(s) === -1;
       return `<option value="${s}" ${s === state.season ? "selected" : ""} ${locked ? "disabled" : ""}>${s}${locked ? " \uD83D\uDD12" : ""}</option>`;
@@ -2762,6 +2767,10 @@ function populateSeasonSelect() {
     // Add upgrade hint if some seasons are locked
     if (allowed.length < state.seasons.length) {
       html += `<option value="_upgrade" disabled style="color:var(--orange);">Unlock all seasons with Pro</option>`;
+    }
+    // Force free users out of career mode
+    if (careerLocked && state.season === "career") {
+      state.season = allowed[0] || state.seasons[0] || _nflYear;
     }
     sel.innerHTML = html;
     sel.onchange = (e) => {

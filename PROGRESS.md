@@ -1,5 +1,24 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 144 — Platform: Career Mode + Roster Grading Tier Gating (COMPLETE)
+
+**Exit Criterion MET**: Career mode in Lab screener gated behind Pro+ plan per pricing strategy ("Career mode: Current only for Free, ALL for Pro/Elite"). Free users see "Career" option disabled with lock icon, forced back to allowed season if they had career mode from a shared URL. Roster grading API endpoint (`POST /api/roster-grade`) now requires Pro+ auth via `require_plan("pro")`. Frontend roster builder and lab-panels roster grading handle 401/403 gracefully with upgrade prompt linking to /pricing.html.
+
+### Phase 144 Tasks (Platform Loop)
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Career Mode Tier Gating | DONE | Lock icon for free users, force reset from career if free |
+| 2 | Roster Grading API Gating | DONE | require_plan("pro") on POST /api/roster-grade |
+| 3 | Roster Builder Frontend Gate | DONE | Auth headers added, 401/403 shows upgrade prompt |
+| 4 | Lab Panels Roster Grade Gate | DONE | Auth headers, upgrade prompt in panel |
+
+### Decisions Log
+- Career mode option shows as disabled with lock emoji for free users (consistent with locked seasons)
+- If a free user loads a shared URL with career mode, they're silently downgraded to the latest allowed season
+- Roster builder page itself remains accessible (free users can still add players), only the grading API is gated
+- Lab panels roster grading falls back to "Roster Grading requires Pro" inline message
+
 ## Previous Phase: Phase 143 — Platform: Conversion Funnel Finalization (COMPLETE)
 
 **Exit Criterion MET**: Landing page pricing CTAs updated to default to yearly plans (pro_year/elite_year) per pricing strategy. Button text changed to "Start Free Trial" to emphasize trial. Fallback links updated from /agents.html to /pricing.html. "See full feature comparison" link added. Global toast system: _showToast function moved to app.js and .razzle-toast CSS moved to styles.css so toasts work on all pages (pricing, agents, etc). Pricing page plan-prefixed checkout fixed (pro_year, elite_month, etc).

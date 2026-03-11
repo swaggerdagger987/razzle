@@ -8342,14 +8342,26 @@
 
     function fetchGrade() {
       if (!rosterIds.length) return;
+      var headers = { 'Content-Type': 'application/json' };
+      var token = localStorage.getItem('razzle_token');
+      if (token) headers['Authorization'] = 'Bearer ' + token;
       fetch('/api/roster-grade', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: headers,
         body: JSON.stringify({ player_ids: rosterIds })
       }).then(function(r) {
+        if (r.status === 401 || r.status === 403) {
+          el.querySelector('.rbld-grade-empty').style.display = 'block';
+          el.querySelector('.rbld-grade-content').style.display = 'none';
+          el.querySelector('.rbld-grade-empty').innerHTML =
+            '<div style="font-family:var(--font-display); font-size:14px;">Roster Grading requires Pro</div>' +
+            '<a href="/pricing.html" style="font-family:var(--font-mono); font-size:11px; color:var(--orange);">Upgrade &rarr;</a>';
+          return null;
+        }
         if (!r.ok) throw new Error('fail');
         return r.json();
       }).then(function(data) {
+        if (!data) return;
         if (data.error) { renderEmpty(); return; }
         gradeData = data;
         render();

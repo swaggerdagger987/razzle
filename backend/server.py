@@ -2005,7 +2005,10 @@ def scoring_comparison(season: int = 0, position: str = ""):
 
 @app.post("/api/roster-grade")
 async def roster_grade(request: Request):
-    """Grade a hypothetical dynasty roster from a list of player IDs."""
+    """Grade a hypothetical dynasty roster from a list of player IDs. Pro+ only."""
+    user, err = require_plan(request, "pro")
+    if err:
+        return err
     try:
         body = await request.json()
         raw_ids = body.get("player_ids", [])
