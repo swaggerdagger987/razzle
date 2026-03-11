@@ -2331,11 +2331,18 @@ function renderPagination() {
 function prevPage() {
   state.offset = Math.max(0, state.offset - state.limit);
   fetchAndRender();
+  _scrollTableTop();
 }
 
 function nextPage() {
   state.offset += state.limit;
   fetchAndRender();
+  _scrollTableTop();
+}
+
+function _scrollTableTop() {
+  var wrap = document.getElementById("tableWrap");
+  if (wrap) wrap.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function changePageSize(val) {

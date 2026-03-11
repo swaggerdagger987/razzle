@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 109 — Smooth Scroll on Page Change (COMPLETE)
+
+**Exit Criterion MET**: Table smoothly scrolls to top on page navigation. 34 tests pass.
+
+### Phase 109 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Smooth scroll to top | DONE | _scrollTableTop() with behavior:"smooth" |
+
 ## Previous Phase: Phase 108 — Auto-Restore Last Screener State (COMPLETE)
 
 **Exit Criterion MET**: Lab restores last state from localStorage. Auto-saves on every change. URL params override. 34 tests pass.
