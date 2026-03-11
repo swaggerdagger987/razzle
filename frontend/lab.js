@@ -798,6 +798,7 @@ const state = {
   seasons: [],
   selectedPlayers: [], // for compare/charts [{player_id, full_name, position, team}]
   heatColors: false, // percentile heat coloring toggle
+  dataBars: (function() { try { return localStorage.getItem("razzle_data_bars") === "1"; } catch(e) { return false; } })(), // inline data bars toggle
   density: (function() { try { return localStorage.getItem("razzle_density") === "1"; } catch(e) { return false; } })(), // compact density mode
   tierBreaks: (function() { try { return localStorage.getItem("razzle_tier_breaks") === "1"; } catch(e) { return false; } })(), // tier break dividers
   groupHeaders: (function() { try { return localStorage.getItem("razzle_group_headers") !== "0"; } catch(e) { return true; } })(), // column group headers (on by default)
@@ -1233,7 +1234,7 @@ let _vscrollRows = [];   // Pre-computed HTML strings for each row
 let _vscrollRAF = null;  // requestAnimationFrame handle
 let _vscrollBound = false;
 
-function buildRowHTML(player, cols, heatOn, pctData, rowIdx) {
+function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn) {
   const pos = (player.position || "").toUpperCase();
   const playKey = player.player_id || player.player_name;
   const selected = state.selectedPlayers.some(p => p.player_id === playKey);
@@ -1313,8 +1314,19 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx) {
     }
     const hBg = heatPcts && heatPcts[key] != null ? getHeatColor(heatPcts[key]) : "";
     const isSortCol = key === state.sortKey;
-    const sc = isSortCol && !hBg ? "sort-col" : "";
-    const hStyle = hBg ? ` style="background:${hBg};"` : "";
+    const sc = isSortCol && !hBg && !barsOn ? "sort-col" : "";
+    // Data bar gradient (takes precedence over heat bg when active)
+    let cellStyle = "";
+    if (barsOn && val != null && typeof val === "number") {
+      const bw = getBarWidth(key, val);
+      if (bw > 0) {
+        const barColor = INVERSE_STATS.has(key) ? "rgba(230,57,70,0.13)" : "rgba(217,119,87,0.18)";
+        cellStyle = `background:linear-gradient(90deg, ${barColor} ${bw}%, transparent ${bw}%);`;
+      }
+    } else if (hBg) {
+      cellStyle = `background:${hBg};`;
+    }
+    const hStyle = cellStyle ? ` style="${cellStyle}"` : "";
     const scAttr = sc ? ` class="${sc}"` : "";
     if ((isProspectView() || state.universe === "college") && !col.isText && (val === 0 || val === null || val === undefined)) {
       html += `<td${scAttr} style="color:var(--ink-faint);">\u2014</td>`;
@@ -1414,9 +1426,11 @@ function renderTableBody() {
   // Pre-compute all row HTML
   const heatOn = state.heatColors;
   const pctData = heatOn ? computePercentiles() : {};
+  const barsOn = state.dataBars;
+  if (barsOn) computeBarMaxes();
   _vscrollRows = [];
   for (let i = 0; i < state.items.length; i++) {
-    _vscrollRows.push(buildRowHTML(state.items[i], cols, heatOn, pctData, i));
+    _vscrollRows.push(buildRowHTML(state.items[i], cols, heatOn, pctData, i, barsOn));
   }
 
   // Insert tier break divider rows if enabled (NFL only)
@@ -2343,6 +2357,7 @@ function saveStateToURL() {
   if (state.teams.length) params.set("teams", state.teams.join(","));
   if (state.minGP > 0) params.set("min_gp", state.minGP);
   if (state.heatColors) params.set("heat", "1");
+  if (state.dataBars) params.set("bars", "1");
   if (state.tierBreaks) params.set("tiers", "1");
   if (state.density) params.set("dense", "1");
   if (!state.groupHeaders) params.set("groups", "0");
@@ -2412,6 +2427,9 @@ function loadStateFromURL() {
     // Fall back to localStorage preference
     state.heatColors = (function() { try { return localStorage.getItem("razzle_heat_colors") === "1"; } catch(e) { return false; } })();
   }
+  if (params.has("bars")) {
+    state.dataBars = params.get("bars") === "1";
+  }
   if (params.has("tiers")) {
     state.tierBreaks = params.get("tiers") === "1";
   }
@@ -2473,6 +2491,18 @@ function loadStateFromURL() {
     } else {
       hcBtn.classList.remove("active");
       hcBtn.style.borderColor = "";
+    }
+  }
+
+  // Sync data bars button
+  const dbBtn = document.getElementById("dataBarsBtn");
+  if (dbBtn) {
+    if (state.dataBars) {
+      dbBtn.classList.add("active");
+      dbBtn.style.borderColor = "var(--orange)";
+    } else {
+      dbBtn.classList.remove("active");
+      dbBtn.style.borderColor = "";
     }
   }
 
@@ -2764,12 +2794,14 @@ function renderPinnedRows() {
   const cols = getActiveColumns();
   const heatOn = state.heatColors;
   const pctData = heatOn ? computePercentiles() : {};
+  const barsOn = state.dataBars;
+  if (barsOn) computeBarMaxes();
   let html = "";
 
   for (const pid of state.pinnedPlayers) {
     const player = state.items.find(p => p.player_id === pid);
     if (!player) continue;
-    html += buildRowHTML(player, cols, heatOn, pctData);
+    html += buildRowHTML(player, cols, heatOn, pctData, null, barsOn);
   }
 
   if (!html) {
@@ -3212,6 +3244,67 @@ function toggleHeatColors() {
   _percentileCache = null; // force recompute
   renderTable();
   saveStateToURL();
+}
+
+// ─── Inline data bars ────────────────────────────────────────────
+let _barMaxCache = null;
+let _barMaxCacheKey = "";
+
+function computeBarMaxes() {
+  const items = state.items;
+  if (!items.length) return {};
+  const cols = getActiveColumns();
+  const cacheKey = items.length + "|" + (items[0].player_id || "") + "|" + (items[items.length - 1].player_id || "") + "|" + cols.join(",");
+  if (_barMaxCacheKey === cacheKey && _barMaxCache) return _barMaxCache;
+
+  const result = {}; // col_key -> { max, min }
+  for (const key of cols) {
+    const col = getColumnDef(key);
+    if (!col || col.isText || col.isSparkline || col.isNotes || key === "pos_rank" || key === "age") continue;
+    let max = -Infinity, min = Infinity;
+    for (const p of items) {
+      const v = p[key];
+      if (v == null || v === "" || typeof v !== "number") continue;
+      if (v > max) max = v;
+      if (v < min) min = v;
+    }
+    if (max > min && max !== -Infinity) {
+      result[key] = { max, min: Math.min(0, min) }; // anchor bars at 0
+    }
+  }
+  _barMaxCache = result;
+  _barMaxCacheKey = cacheKey;
+  return result;
+}
+
+function getBarWidth(key, val) {
+  if (val == null || typeof val !== "number") return 0;
+  const bm = _barMaxCache && _barMaxCache[key];
+  if (!bm) return 0;
+  const range = bm.max - bm.min;
+  if (range <= 0) return 0;
+  const inverted = INVERSE_STATS.has(key);
+  let pct;
+  if (inverted) {
+    pct = ((bm.max - val) / range) * 100;
+  } else {
+    pct = ((val - bm.min) / range) * 100;
+  }
+  return Math.max(0, Math.min(100, pct));
+}
+
+function toggleDataBars() {
+  state.dataBars = !state.dataBars;
+  try { localStorage.setItem("razzle_data_bars", state.dataBars ? "1" : "0"); } catch(e) {}
+  const btn = document.getElementById("dataBarsBtn");
+  if (btn) {
+    btn.classList.toggle("active", state.dataBars);
+    btn.style.borderColor = state.dataBars ? "var(--orange)" : "";
+  }
+  _barMaxCache = null;
+  renderTable();
+  saveStateToURL();
+  _showToast(state.dataBars ? "data bars on" : "data bars off");
 }
 
 // ─── Tier break dividers ─────────────────────────────────────────
@@ -8116,6 +8209,12 @@ document.addEventListener("keydown", function(e) {
     return;
   }
 
+  // B: toggle data bars
+  if (e.key === "b" || e.key === "B") {
+    toggleDataBars();
+    return;
+  }
+
   // S: saved views
   if (e.key === "s" || e.key === "S") {
     openSavedViews();
@@ -8227,6 +8326,7 @@ function toggleShortcutRef() {
           ${shortcutRow("W", "Watchlist")}
           ${shortcutRow("X", "Share / export")}
           ${shortcutRow("H", "Heat colors (percentiles)")}
+          ${shortcutRow("B", "Inline data bars")}
           ${shortcutRow("T", "Tier break dividers")}
           ${shortcutRow("D", "Compact density mode")}
           ${shortcutRow("G", "Column group headers")}

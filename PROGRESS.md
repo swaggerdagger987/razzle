@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 74 — Screener Inline Data Bars (COMPLETE)
+
+**Exit Criterion MET**: B key toggles inline data bars in all numeric cells. CSS linear-gradient backgrounds show relative value per column. Terracotta for normal stats, red tint for inverse stats (turnovers/fumbles). Toolbar button, localStorage, URL state. Works in all modes.
+
+### Phase 74 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Inline data bars with B toggle | DONE | computeBarMaxes(), getBarWidth(), linear-gradient in buildRowHTML, B shortcut, Bars button, localStorage+URL |
+
 ## Previous Phase: Phase 73 — Screener Copy Table to Clipboard (COMPLETE)
 
 **Exit Criterion MET**: Copy to Clipboard button in share modal copies current table as TSV (tab-separated). Includes rank, headers, formatted stats. Pastes into Sheets/Excel.
