@@ -2994,6 +2994,7 @@ function saveCurrentView() {
     name: name,
     universe: state.universe, collegeView: state.collegeView,
     position: state.position, sortKey: state.sortKey, sortDir: state.sortDir,
+    sortKey2: state.sortKey2, sortDir2: state.sortDir2,
     season: state.season, collegeSeason: state.collegeSeason, draftYear: state.draftYear,
     relevance: state.relevance, limit: state.limit,
     visibleColumns: state.visibleColumns.slice(),
@@ -3001,7 +3002,10 @@ function saveCurrentView() {
     prospectColumns: state.prospectColumns.slice(),
     filters: JSON.parse(JSON.stringify(state.filters)),
     teams: state.teams.slice(),
-    minGP: state.minGP
+    minGP: state.minGP,
+    heatColors: state.heatColors, percentileMode: state.percentileMode,
+    dataBars: state.dataBars, density: state.density,
+    columnWidths: JSON.parse(JSON.stringify(state.columnWidths))
   });
   _saveSavedViews(views);
   populateSavedViewSelect();
@@ -3035,7 +3039,23 @@ function loadSavedView(idx) {
   if (v.filters) state.filters = v.filters;
   if (v.teams) state.teams = v.teams;
   if (v.minGP !== undefined) state.minGP = v.minGP;
+  if (v.sortKey2 !== undefined) state.sortKey2 = v.sortKey2;
+  if (v.sortDir2 !== undefined) state.sortDir2 = v.sortDir2;
+  if (v.heatColors !== undefined) state.heatColors = v.heatColors;
+  if (v.percentileMode !== undefined) state.percentileMode = v.percentileMode;
+  if (v.dataBars !== undefined) state.dataBars = v.dataBars;
+  if (v.density !== undefined) state.density = v.density;
+  if (v.columnWidths) state.columnWidths = v.columnWidths;
   state.offset = 0;
+  // Update all UI to match restored state
+  applyUniverseUI();
+  populateSeasonSelect();
+  populateFilterStatSelect();
+  renderColumnPicker();
+  renderPresets();
+  populatePresetSelect();
+  populateSavedViewSelect();
+  renderActiveFilters();
   saveStateToURL();
   fetchAndRender();
   var sel = document.getElementById("savedViewSelect");
@@ -3066,6 +3086,7 @@ function _openViewManager() {
 function deleteSavedView(idx) {
   var views = _getSavedViews();
   var name = views[idx] ? views[idx].name : "";
+  if (!confirm('Delete view "' + name + '"?')) return;
   views.splice(idx, 1);
   _saveSavedViews(views);
   populateSavedViewSelect();
