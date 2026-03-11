@@ -934,6 +934,22 @@ function isProspectView() {
   });
 
   document.getElementById("searchInput").value = state.search;
+
+  // Onboarding toast for first-time visitors
+  try {
+    if (!localStorage.getItem("razzle_shortcuts_shown")) {
+      setTimeout(function() {
+        var t = document.createElement("div");
+        t.className = "razzle-onboarding-toast";
+        t.innerHTML = 'Press <kbd>?</kbd> for keyboard shortcuts';
+        t.onclick = function() { t.classList.remove("razzle-onboarding-show"); setTimeout(function() { t.remove(); }, 300); };
+        document.body.appendChild(t);
+        setTimeout(function() { t.classList.add("razzle-onboarding-show"); }, 10);
+        setTimeout(function() { t.classList.remove("razzle-onboarding-show"); setTimeout(function() { t.remove(); }, 300); }, 8000);
+        localStorage.setItem("razzle_shortcuts_shown", "1");
+      }, 3000);
+    }
+  } catch(e) {}
 })();
 
 // ─── Data fetching ───────────────────────────────────────────────

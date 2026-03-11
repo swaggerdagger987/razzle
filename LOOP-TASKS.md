@@ -1,15 +1,15 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 112 (Column Resize by Drag)
-## Phase 112: Column Resize by Drag
-**Exit Criterion**: Users can drag the right edge of column headers to resize columns. Resize cursor appears on hover. Column widths persist in state. Sticky columns (rank/player) maintain their left offsets. 34 tests pass.
+- Phase: 113 (Keyboard Shortcut Onboarding Toast)
+## Phase 113: Keyboard Shortcut Onboarding Toast
+**Exit Criterion**: First-time Lab visitors see a dismissible toast "Press ? for keyboard shortcuts" after 3 seconds. Toast dismissed on click or after 8 seconds. Remembered via localStorage so it only shows once. 34 tests pass.
 
 - Task 1: PASS
 - Stage: COMPLETE
 - Next: Phase gate
 
-### Task 1: Implement column drag resize
+### Task 1: Implement onboarding toast
 **Status**: PASS
 **Attempts**: 1
-**Result**: (1) 5px resize handle div at right edge of each data column header with col-resize cursor. (2) Drag smoothly resizes column (min 40px). (3) Widths stored in state.columnWidths and persisted to localStorage (razzle_col_widths). (4) Sticky frozen columns (star/select/pin/rank/player) have no resize handles — fixed widths preserved. (5) Handle mousedown uses stopPropagation to prevent sort/filter triggers. (6) Double-click handle resets column to auto width. (7) Hover shows terracotta highlight on handle. (8) No syntax errors. 34 tests pass.
+**Result**: (1) Toast appears 3s after first Lab visit with "Press ? for keyboard shortcuts". (2) Razzle design: sand bg-card, 3px ink border, 4px offset shadow, terracotta kbd badge. (3) Fades in/out with CSS transitions. (4) Auto-dismisses after 8s or on click. (5) localStorage razzle_shortcuts_shown prevents repeat. (6) Bottom-right positioning avoids bulk bar conflict. 34 tests pass.

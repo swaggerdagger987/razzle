@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 113 — Keyboard Shortcut Onboarding Toast (COMPLETE)
+
+**Exit Criterion MET**: First-time toast with "Press ? for keyboard shortcuts" at 3s delay. Auto-dismiss 8s. Click dismiss. localStorage prevents repeat. 34 tests pass.
+
+### Phase 113 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Onboarding toast | DONE | 3s delay, 8s auto-dismiss, terracotta kbd badge, bottom-right |
+
 ## Previous Phase: Phase 112 — Column Resize by Drag (COMPLETE)
 
 **Exit Criterion MET**: Drag right edge of data column headers to resize. Widths persist in localStorage. Sticky columns unaffected. Double-click resets. 34 tests pass.

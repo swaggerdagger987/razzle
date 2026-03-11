@@ -468,6 +468,36 @@
     opacity: 1;
     transform: translateX(-50%) translateY(0);
   }
+  .razzle-onboarding-toast {
+    position: fixed;
+    bottom: 32px;
+    right: 24px;
+    background: var(--bg-card);
+    color: var(--ink);
+    font-family: var(--font-data);
+    font-size: 13px;
+    padding: 10px 18px;
+    border: 3px solid var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
+    border-radius: 4px;
+    z-index: 9999;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s, transform 0.3s;
+  }
+  .razzle-onboarding-toast kbd {
+    background: var(--orange);
+    color: #fff;
+    padding: 2px 7px;
+    border-radius: 3px;
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .razzle-onboarding-show {
+    opacity: 1;
+    transform: translateY(0);
+  }
   .lab-panel-header .panel-flavor {
     font-family: var(--font-hand);
     font-size: 15px;
