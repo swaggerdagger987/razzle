@@ -798,6 +798,7 @@ const state = {
   seasons: [],
   selectedPlayers: [], // for compare/charts [{player_id, full_name, position, team}]
   heatColors: false, // percentile heat coloring toggle
+  tierBreaks: (function() { try { return localStorage.getItem("razzle_tier_breaks") === "1"; } catch(e) { return false; } })(), // tier break dividers
   tagFilter: false, // show only tagged players
   pinnedPlayers: (function() {
     try { return JSON.parse(localStorage.getItem('razzle_pinned_players')) || []; }
@@ -1339,6 +1340,11 @@ function renderTableBody() {
   _vscrollRows = [];
   for (const player of state.items) {
     _vscrollRows.push(buildRowHTML(player, cols, heatOn, pctData));
+  }
+
+  // Insert tier break divider rows if enabled (NFL only)
+  if (state.tierBreaks && state.universe === "nfl") {
+    _vscrollRows = insertTierBreakRows(_vscrollRows, cols);
   }
 
   // Bind scroll handler once
@@ -2098,6 +2104,7 @@ function saveStateToURL() {
   if (state.teams.length) params.set("teams", state.teams.join(","));
   if (state.minGP > 0) params.set("min_gp", state.minGP);
   if (state.heatColors) params.set("heat", "1");
+  if (state.tierBreaks) params.set("tiers", "1");
   if (state.tagFilter) params.set("tagged", "1");
   if (state.pinnedPlayers.length) params.set("pins", state.pinnedPlayers.join(","));
 
@@ -2163,6 +2170,9 @@ function loadStateFromURL() {
     // Fall back to localStorage preference
     state.heatColors = (function() { try { return localStorage.getItem("razzle_heat_colors") === "1"; } catch(e) { return false; } })();
   }
+  if (params.has("tiers")) {
+    state.tierBreaks = params.get("tiers") === "1";
+  }
   if (params.has("tagged")) {
     state.tagFilter = params.get("tagged") === "1";
   }
@@ -2212,6 +2222,20 @@ function loadStateFromURL() {
     } else {
       hcBtn.classList.remove("active");
       hcBtn.style.borderColor = "";
+    }
+  }
+
+  // Sync tier breaks button — hide in non-NFL modes
+  const tbBtn = document.getElementById("tierBreaksBtn");
+  if (tbBtn) {
+    const isNFL = state.universe === "nfl";
+    tbBtn.style.display = isNFL ? "" : "none";
+    if (state.tierBreaks && isNFL) {
+      tbBtn.classList.add("active");
+      tbBtn.style.borderColor = "var(--orange)";
+    } else {
+      tbBtn.classList.remove("active");
+      tbBtn.style.borderColor = "";
     }
   }
 
@@ -2885,6 +2909,49 @@ function toggleHeatColors() {
     btn.style.borderColor = state.heatColors ? "var(--green)" : "";
   }
   _percentileCache = null; // force recompute
+  renderTable();
+  saveStateToURL();
+}
+
+// ─── Tier break dividers ─────────────────────────────────────────
+const TIER_BREAK_SIZES = [5, 12, 24, 36]; // cumulative breakpoints: Tier 1 = top 5, Tier 2 = 6-12, etc.
+
+function insertTierBreakRows(rows, cols) {
+  if (!rows.length) return rows;
+  const colCount = cols.length + 3 + (state.universe === "nfl" ? 1 : 0); // star + checkbox + player + pin
+  const result = [];
+  let tierIdx = 0;
+  const tierLabels = ["Tier 1 — Elite", "Tier 2 — Starters", "Tier 3 — Flex", "Tier 4 — Bench", "Tier 5 — Deep"];
+
+  for (let i = 0; i < rows.length; i++) {
+    // Insert tier break before this row if we've hit a breakpoint
+    if (tierIdx < TIER_BREAK_SIZES.length && i === TIER_BREAK_SIZES[tierIdx]) {
+      const label = tierLabels[tierIdx + 1] || ("Tier " + (tierIdx + 2));
+      result.push(buildTierBreakRow(label, colCount));
+      tierIdx++;
+    }
+    result.push(rows[i]);
+  }
+  return result;
+}
+
+function buildTierBreakRow(label, colCount) {
+  return `<tr class="tier-break-row" style="height:${VSCROLL_ROW_HEIGHT}px; background:var(--bg-warm); border-top:3px solid var(--orange); pointer-events:none;">
+    <td colspan="${colCount}" style="padding:4px 16px; font-family:var(--font-hand); font-size:16px; color:var(--orange); letter-spacing:0.5px; border-left:4px solid var(--orange);">
+      ${label}
+    </td>
+  </tr>`;
+}
+
+function toggleTierBreaks() {
+  if (state.universe !== "nfl") return;
+  state.tierBreaks = !state.tierBreaks;
+  try { localStorage.setItem("razzle_tier_breaks", state.tierBreaks ? "1" : "0"); } catch(e) {}
+  const btn = document.getElementById("tierBreaksBtn");
+  if (btn) {
+    btn.classList.toggle("active", state.tierBreaks);
+    btn.style.borderColor = state.tierBreaks ? "var(--orange)" : "";
+  }
   renderTable();
   saveStateToURL();
 }
@@ -7595,6 +7662,12 @@ document.addEventListener("keydown", function(e) {
     return;
   }
 
+  // T: toggle tier breaks
+  if (e.key === "t" || e.key === "T") {
+    toggleTierBreaks();
+    return;
+  }
+
   // N: toggle notes column
   if (e.key === "n" || e.key === "N") {
     toggleColumn("notes", !state.visibleColumns.includes("notes"));
@@ -7640,6 +7713,7 @@ function toggleShortcutRef() {
           ${shortcutRow("W", "Watchlist")}
           ${shortcutRow("X", "Share / export")}
           ${shortcutRow("H", "Heat colors (percentiles)")}
+          ${shortcutRow("T", "Tier break dividers")}
           ${shortcutRow("N", "Toggle notes column")}
           ${shortcutRow("P", "Clear pinned players")}
           ${shortcutRow("?", "This reference")}

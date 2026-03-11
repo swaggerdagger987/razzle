@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 54 — Screener Tier Breaks (COMPLETE)
+
+**Exit Criterion MET**: NFL screener shows visual tier break dividers between player groups when toggled on. Tier 1 (Elite, top 5), Tier 2 (Starters, 6-12), Tier 3 (Flex, 13-24), Tier 4 (Bench, 25-36), Tier 5 (Deep, 37+). T key toggles on/off. Toolbar button with active state. State persists in localStorage. URL serialization (?tiers=1). Hidden in college/prospect modes. Pinned rows excluded.
+
+### Phase 54 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Tier break dividers with toggle and persistence | DONE | TIER_BREAK_SIZES [5,12,24,36], Caveat font labels, terracotta left border, T shortcut, tierBreaksBtn, URL ?tiers=1 |
+
 ## Previous Phase: Phase 53 — Screener Player Pins (COMPLETE)
 
 **Exit Criterion MET**: Users can pin up to 5 players in the NFL screener to a sticky section at the top of the table. Pinned rows stay visible while scrolling. Pin icon in each row (orange when pinned, faint when not). Pins persist in localStorage. Pins serialize to URL for sharing. P key clears all pins. Pin column header shows count and click-to-clear. Hidden in college/prospect modes.
