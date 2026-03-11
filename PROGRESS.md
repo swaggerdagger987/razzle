@@ -1,5 +1,17 @@
 # Razzle — Progress Tracker
 
+## Current Phase: Phase 116 — QA + UX Audit Fixes for Phases 111-115
+
+**Exit Criterion**: 2 HIGH (saved view universe + missing state) + MEDIUM findings fixed.
+
+### Phase 116 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Saved view universe UI | TODO | Call applyUniverseUI() etc. on load |
+| 2 | Missing state in saved views | TODO | sortKey2, visual modes, columnWidths |
+| 3 | MEDIUM fixes | TODO | Save button title, delete confirmation |
+
 ## Previous Phase: Phase 115 — Saved Views (COMPLETE)
 
 **Exit Criterion MET**: Save/load/delete named screener views via dropdown. Max 20 views. localStorage persist. 34 tests pass.

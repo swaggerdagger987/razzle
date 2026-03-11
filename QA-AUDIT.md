@@ -1,7 +1,7 @@
-# QA + UX Audit — Phases 106-110
+# QA + UX Audit — Phases 111-115
 
 **Audit Date**: 2026-03-11
-**Scope**: Phases 106-110 (Bulk bar badges, J/K navigation, Auto-restore, Smooth scroll, QA fixes)
+**Scope**: Phases 111-115 (QA fixes, Column resize, Onboarding toast, Column reorder, Saved views)
 **Files Audited**: frontend/lab.js, frontend/lab.html
 
 ---
@@ -12,24 +12,27 @@
 
 ### HIGH
 
-1. **Enter key missing preventDefault when opening profile** (`frontend/lab.js:9078-9083`)
-   - When a row is focused and Enter is pressed, `openPlayerProfile()` fires but `e.preventDefault()` is not called. If a button or link elsewhere on the page has native focus, the Enter event could trigger both the profile open AND the native element's click. Should call `e.preventDefault()` when actually opening a profile.
+1. **Saved view load doesn't update universe UI** (`frontend/lab.js:loadSavedView`)
+   - When loading a saved view that changes the universe (e.g., NFL → college), `loadSavedView()` sets `state.universe` but does NOT call `applyUniverseUI()`, `populateSeasonSelect()`, `populateFilterStatSelect()`, `renderColumnPicker()`, `renderPresets()`, `populatePresetSelect()`, or `renderActiveFilters()`. The toolbar, position tabs, season dropdown, and body classes remain stale. The table renders correctly but the UI is broken.
+   - **Fix**: Call the same UI update functions that `setUniverse()` calls after state restore.
+
+2. **Saved views missing state fields** (`frontend/lab.js:saveCurrentView`)
+   - `saveCurrentView()` does not save: `sortKey2`, `sortDir2` (multi-sort), `heatColors`, `percentileMode`, `dataBars`, `density`, `columnWidths`. A user who configures multi-sort and visual modes then saves a view will lose those settings on load.
+   - **Fix**: Include all missing state fields in the saved view object.
 
 ### MEDIUM
 
-2. **Row focus ring too thin for design system** (`frontend/lab.html:1095-1098`)
-   - `box-shadow: inset 0 0 0 1.5px var(--pos-qb)` uses 1.5px — design guide specifies 3px solid borders. The focus ring should be 2px minimum for consistency and accessibility visibility.
+3. **Column resize only applies to `<th>` elements** (`frontend/lab.js:_onColResizeMove`)
+   - The resize handler queries `th[data-col="key"]` to update widths, but `<td>` cells don't have `data-col`. With `width: max-content` on the table, `<th>` min/max-width constraints should propagate to columns, but content wider than the set width may overflow. Should be tested with long stat values.
 
-3. **Auto-restore doesn't persist active filters** (`frontend/lab.js:2868-2879`)
-   - `razzle_last_state` saves universe, columns, sort, season, position, limit — but does NOT save `state.filters` (active screener filters). A returning user gets their column layout back but loses any custom filters they had applied. Filters are arguably the most important state to restore.
+4. **Onboarding toast timer leaks** (`frontend/lab.js:init`)
+   - The 3s delay and 8s auto-dismiss timers are set but never stored. If the user navigates away before they fire, the toast appends to a stale DOM. Not harmful but technically a leak.
 
 ### LOW
 
-4. **Rapid pagination queues multiple smooth scrolls** (`frontend/lab.js:2332-2340`)
-   - Fast arrow key presses queue multiple `_scrollTableTop()` calls via requestAnimationFrame. Each scroll animation fights the previous one. Not harmful but produces jittery animation. Could debounce or use `scrollTo({behavior: "instant"})` for rapid presses.
+5. **Column drag `draggable="true"` may interfere with text selection in headers** — Minor UX impact since headers are short labels.
 
-5. **J/K querySelectorAll on every keypress** (`frontend/lab.js:9064`)
-   - `tbody.querySelectorAll("tr[data-player-id]")` runs a DOM query on every J/K press. For <200 rows this is negligible, but could cache the NodeList after render if optimization is ever needed.
+6. **Saved view name prompt uses native `prompt()`** — Functional but not in Razzle design language. Could use a styled modal in the future.
 
 ---
 
@@ -41,27 +44,25 @@
 
 ### MEDIUM
 
-1. **No discoverability hint for keyboard navigation** (general UX)
-   - J/K row navigation, Enter to open profile, and arrow key pagination are powerful features but completely invisible. A first-time user has no way to discover these without pressing `?`. Consider a subtle "Tip: press ? for keyboard shortcuts" hint that appears once and can be dismissed. This would increase feature adoption significantly among power users.
+1. **Save button not obvious** (toolbar)
+   - The "Save" button next to "Views..." dropdown has no visual differentiation from other toolbar buttons. A new user wouldn't know it saves the current view. Consider adding a small bookmark/save icon or tooltip.
 
-2. **Auto-restore filter gap** (relates to QA finding #3)
-   - When a user returns to the Lab, columns and sort are restored but filters are not. This creates a confusing state where the table looks like their last session but shows different data. Either restore filters too, or don't restore at all — the partial restore is worse than no restore for user mental model.
+2. **No confirmation before deleting a saved view** (`_openViewManager`)
+   - Clicking "Delete" immediately removes the view with only a toast notification. For views a user has carefully configured, accidental deletion could be frustrating. Consider a simple confirm() or undo toast.
 
 ### LOW
 
-3. **Position badge spacing in bulk bar** (`frontend/lab.js:3434`)
-   - Uses `&nbsp;` between "selected" text and position badges. This is adequate but could use a CSS gap for more consistent spacing across browsers.
+3. **Onboarding toast positioning may overlap bulk action bar** — Toast is bottom-right (32px), bulk bar is bottom-center. Unlikely overlap but possible on narrow screens.
 
-4. **Focus ring color always blue regardless of position** (`frontend/lab.html:1096`)
-   - The row focus ring always uses `var(--pos-qb)` (blue) even when filtering by RB/WR/TE. Could match position filter color, but current behavior is acceptable since blue reads as "selection" universally.
+4. **Column resize cursor sometimes persists** — If mouseup fires outside the browser window, `_onColResizeEnd` may not trigger. The `document.mouseup` handler should catch this, but edge cases exist with iframe boundaries.
 
 ---
 
 ## SUMMARY
 
 - **CRITICAL**: 0
-- **HIGH**: 1 (Enter preventDefault)
-- **MEDIUM**: 4 (focus ring thickness, filter restore gap, discoverability, UX filter gap)
-- **LOW**: 4 (scroll debounce, DOM query cache, badge spacing, focus color)
+- **HIGH**: 2 (saved view universe UI + missing state fields)
+- **MEDIUM**: 4 (resize <td>, timer leak, save button, delete confirm)
+- **LOW**: 4 (drag text select, native prompt, toast overlap, cursor persist)
 
-Previous audit (Phase 110) fixed 2 HIGH issues (column validation + scroll timing). This audit finds 1 new HIGH and 4 MEDIUM items. Code quality is solid overall.
+Code quality is solid but saved views need work on state completeness and universe switching.
