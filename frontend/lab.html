@@ -945,6 +945,48 @@
     font-size: 10px;
   }
 
+  /* ─── Stats summary bar (tfoot) ─── */
+  .screener-table tfoot td {
+    background: var(--bg-warm);
+    border-top: 3px solid var(--ink);
+    padding: 4px 14px;
+    text-align: right;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--ink-light);
+    white-space: nowrap;
+    position: sticky;
+    bottom: 0;
+    z-index: 6;
+  }
+  .screener-table tfoot td.col-player {
+    text-align: left;
+    position: sticky;
+    left: 0;
+    z-index: 7;
+    background: var(--bg-warm);
+    border-right: 3px solid var(--ink);
+    font-family: var(--font-hand);
+    font-size: 13px;
+    color: var(--ink);
+  }
+  .screener-table tfoot .summary-label {
+    font-family: var(--font-hand);
+    font-size: 10px;
+    color: var(--ink-faint);
+    display: block;
+    line-height: 1;
+  }
+  .screener-table tfoot .summary-val {
+    font-family: var(--font-mono);
+    color: var(--ink);
+  }
+  body.dense-mode .screener-table tfoot td {
+    padding: 2px 8px;
+    font-size: 9px;
+  }
+
   /* ─── Column group headers ─── */
   .screener-table .group-header-row th {
     background: var(--bg);
@@ -2809,6 +2851,7 @@
     <button class="btn-chunky" id="tierBreaksBtn" onclick="toggleTierBreaks()" title="Show tier break dividers in the table. Press T to toggle.">Tiers</button>
     <button class="btn-chunky" id="densityBtn" onclick="toggleDensity()" title="Compact table mode — more rows, less padding. Press D to toggle.">Dense</button>
     <button class="btn-chunky" id="groupHeadersBtn" onclick="toggleGroupHeaders()" title="Show column category groups above headers. Press G to toggle.">Groups</button>
+    <button class="btn-chunky" id="summaryBarBtn" onclick="toggleSummaryBar()" title="Show average stats summary row at bottom. Press A to toggle.">Summary</button>
 
     <span class="result-count" id="resultCount"></span>
   </div>
@@ -2842,6 +2885,7 @@
       <thead id="tableHead"></thead>
       <tbody id="pinnedBody" style="display:none;"></tbody>
       <tbody id="tableBody"></tbody>
+      <tfoot id="tableFoot" style="display:none;"></tfoot>
     </table>
     <div class="loading-msg" id="loadingMsg">pulling film...</div>
     <div style="display:flex; gap:14px; flex-wrap:wrap; padding:6px 12px; font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">

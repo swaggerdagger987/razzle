@@ -801,6 +801,7 @@ const state = {
   density: (function() { try { return localStorage.getItem("razzle_density") === "1"; } catch(e) { return false; } })(), // compact density mode
   tierBreaks: (function() { try { return localStorage.getItem("razzle_tier_breaks") === "1"; } catch(e) { return false; } })(), // tier break dividers
   groupHeaders: (function() { try { return localStorage.getItem("razzle_group_headers") !== "0"; } catch(e) { return true; } })(), // column group headers (on by default)
+  summaryBar: (function() { try { return localStorage.getItem("razzle_summary_bar") === "1"; } catch(e) { return false; } })(), // stats summary bar (off by default)
   tagFilter: false, // show only tagged players
   pinnedPlayers: (function() {
     try { return JSON.parse(localStorage.getItem('razzle_pinned_players')) || []; }
@@ -1101,6 +1102,7 @@ function renderTable() {
 function renderCollegeTable() {
   renderTableHead();
   renderTableBody();
+  renderSummaryBar();
 }
 
 function getActiveColumns() {
@@ -1119,6 +1121,7 @@ function renderNFLTable() {
   renderTableHead();
   renderTableBody();
   renderPinnedRows();
+  renderSummaryBar();
   // Load sparklines async (non-blocking)
   if (getActiveColumns().includes("trend")) {
     loadScreenerSparklines();
@@ -1595,6 +1598,7 @@ function onPlayerNameLeave() {
 function renderProspectTable() {
   renderTableHead();
   renderTableBody();
+  renderSummaryBar();
 }
 
 // ─── Table keyboard navigation ──────────────────────────────────
@@ -2146,6 +2150,7 @@ function saveStateToURL() {
   if (state.tierBreaks) params.set("tiers", "1");
   if (state.density) params.set("dense", "1");
   if (!state.groupHeaders) params.set("groups", "0");
+  if (state.summaryBar) params.set("summary", "1");
   if (state.tagFilter) params.set("tagged", "1");
   if (state.pinnedPlayers.length) params.set("pins", state.pinnedPlayers.join(","));
 
@@ -2219,6 +2224,9 @@ function loadStateFromURL() {
   }
   if (params.has("groups")) {
     state.groupHeaders = params.get("groups") !== "0";
+  }
+  if (params.has("summary")) {
+    state.summaryBar = params.get("summary") === "1";
   }
   if (params.has("tagged")) {
     state.tagFilter = params.get("tagged") === "1";
@@ -2309,6 +2317,18 @@ function loadStateFromURL() {
     } else {
       grpBtn.classList.remove("active");
       grpBtn.style.borderColor = "";
+    }
+  }
+
+  // Sync summary bar button
+  const sumBtn = document.getElementById("summaryBarBtn");
+  if (sumBtn) {
+    if (state.summaryBar) {
+      sumBtn.classList.add("active");
+      sumBtn.style.borderColor = "var(--blue)";
+    } else {
+      sumBtn.classList.remove("active");
+      sumBtn.style.borderColor = "";
     }
   }
 
@@ -3054,6 +3074,59 @@ function toggleGroupHeaders() {
   }
   renderTableHead();
   saveStateToURL();
+}
+
+// ─── Stats summary bar ───────────────────────────────────────────
+function toggleSummaryBar() {
+  state.summaryBar = !state.summaryBar;
+  try { localStorage.setItem("razzle_summary_bar", state.summaryBar ? "1" : "0"); } catch(e) {}
+  const btn = document.getElementById("summaryBarBtn");
+  if (btn) {
+    btn.classList.toggle("active", state.summaryBar);
+    btn.style.borderColor = state.summaryBar ? "var(--blue)" : "";
+  }
+  renderSummaryBar();
+  saveStateToURL();
+}
+
+function renderSummaryBar() {
+  const tfoot = document.getElementById("tableFoot");
+  if (!tfoot) return;
+  if (!state.summaryBar || !state.items.length) {
+    tfoot.style.display = "none";
+    return;
+  }
+  tfoot.style.display = "";
+  const cols = getActiveColumns();
+  const items = state.items;
+  const n = items.length;
+
+  const utilCols = state.universe === "nfl" ? 3 : 2;
+  let html = '<tr>';
+  html += `<td class="col-player" colspan="${utilCols + 1}" style="font-family:var(--font-hand); font-size:13px;">${n} players</td>`;
+
+  for (const key of cols) {
+    const col = getColumnDef(key);
+    if (!col || col.isText || col.isSparkline || col.isNotes) {
+      html += '<td></td>';
+      continue;
+    }
+    // Collect numeric values
+    const vals = [];
+    for (const p of items) {
+      const v = parseFloat(p[key]);
+      if (!isNaN(v)) vals.push(v);
+    }
+    if (!vals.length) {
+      html += '<td></td>';
+      continue;
+    }
+    const avg = vals.reduce((a, b) => a + b, 0) / vals.length;
+    const dec = col.decimals != null ? col.decimals : 1;
+    html += `<td><span class="summary-label">avg</span><span class="summary-val">${avg.toFixed(dec)}</span></td>`;
+  }
+  html += '</tr>';
+  tfoot.innerHTML = html;
 }
 
 // ─── Positional rank computation ─────────────────────────────────
@@ -7780,6 +7853,12 @@ document.addEventListener("keydown", function(e) {
     return;
   }
 
+  // A: toggle stats summary bar
+  if (e.key === "a" || e.key === "A") {
+    toggleSummaryBar();
+    return;
+  }
+
   // N: toggle notes column
   if (e.key === "n" || e.key === "N") {
     toggleColumn("notes", !state.visibleColumns.includes("notes"));
@@ -7828,6 +7907,7 @@ function toggleShortcutRef() {
           ${shortcutRow("T", "Tier break dividers")}
           ${shortcutRow("D", "Compact density mode")}
           ${shortcutRow("G", "Column group headers")}
+          ${shortcutRow("A", "Stats summary bar")}
           ${shortcutRow("N", "Toggle notes column")}
           ${shortcutRow("P", "Clear pinned players")}
           ${shortcutRow("?", "This reference")}

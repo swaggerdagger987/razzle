@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 58 — Screener Stats Summary Bar (COMPLETE)
+
+**Exit Criterion MET**: Screener table has a sticky footer row showing average values for each visible numeric column. A key toggles on/off. Toolbar "Summary" button with blue active state. Off by default. State persists in localStorage (razzle_summary_bar). URL serialization (?summary=1). Works in NFL, college, and prospect modes. Player count shown. Dense mode support.
+
+### Phase 58 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Stats summary bar with toggle and persistence | DONE | renderSummaryBar(), state.summaryBar, toggleSummaryBar(), A shortcut, Summary btn, ?summary=1 URL, tfoot CSS, sticky bottom, avg computation |
+
 ## Previous Phase: Phase 57 — Screener Column Group Headers (COMPLETE)
 
 **Exit Criterion MET**: Screener table shows a spanning group header row above column headers, displaying category names (Fantasy, Passing, Rushing, Receiving, Efficiency, etc.) that span their member columns. G key toggles on/off. Toolbar "Groups" button with blue active state. On by default. State persists in localStorage (razzle_group_headers). URL serialization (?groups=0 when off). Works in NFL, college, and prospect modes. Hidden when fewer than 2 distinct groups visible. Dense mode support.
