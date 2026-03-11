@@ -1868,6 +1868,10 @@ function getLeagueContext() {
       ctx.roster = parsed.roster;
       ctx.record = parsed.record;
       ctx.rivals = parsed.rivals;
+      // Enhanced multi-season data (from Bureau of Intelligence)
+      ctx.managerProfiles = parsed.managerProfiles || null;
+      ctx.historyDepth = parsed.historyDepth || 1;
+      ctx.historySeasons = parsed.historySeasons || [];
     }
     return ctx;
   } catch (e) { return null; }
@@ -1876,6 +1880,9 @@ function getLeagueContext() {
 function formatLeagueContext(ctx) {
   var lines = ['', '--- WHAT LEAGUE INTEL KNOWS ---'];
   lines.push('Sleeper user: ' + ctx.username);
+  if (ctx.historyDepth > 1) {
+    lines.push('Intel depth: ' + ctx.historyDepth + ' seasons of data (' + (ctx.historySeasons || []).join(', ') + ')');
+  }
   if (ctx.leagues && ctx.leagues.length) {
     ctx.leagues.forEach(function(lg) {
       lines.push('League: ' + lg.name + ' (' + lg.type + ', ' + lg.scoring + ', ' + lg.teams + '-team, ' + lg.season + ')');
@@ -1896,6 +1903,54 @@ function formatLeagueContext(ctx) {
       lines.push('  - ' + r.manager + ' (' + r.wins + '-' + r.losses + '): ' + r.topPlayers.slice(0, 4).join(', '));
     });
   }
+
+  // Enhanced manager behavioral profiles (multi-season)
+  if (ctx.managerProfiles && ctx.managerProfiles.length) {
+    lines.push('');
+    lines.push('--- MANAGER BEHAVIORAL PROFILES ---');
+    ctx.managerProfiles.forEach(function(mp) {
+      var header = mp.name + ' (' + mp.record + ')';
+      if (mp.seasonsTracked > 1) {
+        header += ' [' + mp.seasonsTracked + ' seasons tracked, all-time: ' + (mp.allTimeRecord || mp.record) + ']';
+      }
+      lines.push(header);
+      lines.push('  Behavioral summary: ' + mp.summary);
+      lines.push('  Stats: ' + mp.trades + ' trades, ' + mp.waivers + ' waivers, $' + mp.faab + ' FAAB spent');
+
+      // Per-season breakdown (paid multi-season)
+      if (mp.seasonsTracked > 1 && mp.movesBySeason) {
+        var seasonBreakdown = [];
+        var sKeys = Object.keys(mp.movesBySeason).sort();
+        for (var sk = 0; sk < sKeys.length; sk++) {
+          var sy = sKeys[sk];
+          var detail = sy + ': ' + mp.movesBySeason[sy] + ' moves';
+          if (mp.tradesBySeason && mp.tradesBySeason[sy]) detail += ', ' + mp.tradesBySeason[sy] + ' trades';
+          if (mp.faabBySeason && mp.faabBySeason[sy]) detail += ', $' + mp.faabBySeason[sy] + ' FAAB';
+          if (mp.recordBySeason && mp.recordBySeason[sy]) {
+            detail += ' (' + mp.recordBySeason[sy].wins + '-' + mp.recordBySeason[sy].losses + ')';
+          }
+          seasonBreakdown.push(detail);
+        }
+        lines.push('  Season history: ' + seasonBreakdown.join(' | '));
+      }
+
+      // Positional bias
+      if (mp.posAdds) {
+        var posList = [];
+        for (var pos in mp.posAdds) {
+          if (pos !== '?') posList.push(pos + ':' + mp.posAdds[pos]);
+        }
+        if (posList.length) lines.push('  Position adds: ' + posList.join(', '));
+      }
+
+      // Panic indicator
+      if (mp.panicWeeks > 0) {
+        lines.push('  Panic indicator: ' + mp.panicWeeks + ' burst weeks (3+ moves in single week)');
+      }
+    });
+    lines.push('--- END MANAGER PROFILES ---');
+  }
+
   lines.push('--- END LEAGUE CONTEXT ---');
   return lines.join('\n');
 }

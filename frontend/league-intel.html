@@ -736,103 +736,284 @@ async function toggleLeague(card, leagueId, userId) {
   }
 }
 
+// ── Multi-Season League History Crawler ────────────────────────────
+
+/**
+ * Crawl the previous_league_id chain to get multi-season league IDs.
+ * Returns array of { leagueId, season } from newest to oldest.
+ * Stops after maxSeasons or when chain ends.
+ */
+async function crawlLeagueHistory(leagueId, maxSeasons) {
+  maxSeasons = maxSeasons || 5;
+  var chain = [];
+  var currentId = leagueId;
+  var visited = new Set();
+
+  for (var i = 0; i < maxSeasons && currentId; i++) {
+    if (visited.has(currentId)) break; // prevent loops
+    visited.add(currentId);
+
+    try {
+      var resp = await fetch(SLEEPER_API + "/league/" + currentId);
+      if (!resp.ok) break;
+      var league = await resp.json();
+      chain.push({ leagueId: currentId, season: league.season || "?", name: league.name });
+      currentId = league.previous_league_id || null;
+    } catch (e) {
+      break;
+    }
+  }
+  return chain;
+}
+
+/**
+ * Fetch all transactions for a league (all 18 weeks).
+ * Returns flat array of completed transactions.
+ */
+async function fetchLeagueTransactions(leagueId) {
+  var allTxns = [];
+  var fetches = [];
+  for (var wk = 1; wk <= 18; wk++) {
+    fetches.push(
+      fetch(SLEEPER_API + "/league/" + leagueId + "/transactions/" + wk)
+        .then(function(r) { return r.ok ? r.json() : []; })
+        .catch(function() { return []; })
+    );
+  }
+  var results = await Promise.all(fetches);
+  for (var i = 0; i < results.length; i++) {
+    if (Array.isArray(results[i])) {
+      for (var j = 0; j < results[i].length; j++) {
+        if (results[i][j].status === "complete") allTxns.push(results[i][j]);
+      }
+    }
+  }
+  return allTxns;
+}
+
 // ── Manager Behavioral Profiles ────────────────────────────────────
 
 async function loadManagerProfiles(leagueId, userId, allPlayers, userMap, rosters) {
   var profileDiv = document.getElementById("profiles-" + leagueId);
   if (!profileDiv) return;
-  profileDiv.innerHTML = '<div class="loading-intel" style="font-size:16px; padding:12px;">scouting the competition...</div>';
+
+  // Check if paid user for multi-season access
+  var paid = typeof isPaidUser === "function" && isPaidUser();
+  var maxSeasons = paid ? 5 : 1;
+
+  profileDiv.innerHTML = '<div class="loading-intel" style="font-size:16px; padding:12px;">' +
+    (paid ? 'deep-scouting multi-season history...' : 'scouting the competition...') + '</div>';
 
   try {
-    // Fetch transactions for all weeks (Sleeper uses rounds 1-18+)
+    // ── Step 1: Crawl league history chain ────────────────────────
+    var historyChain = [];
+    if (maxSeasons > 1) {
+      historyChain = await crawlLeagueHistory(leagueId, maxSeasons);
+    } else {
+      // Free users: current season only
+      historyChain = [{ leagueId: leagueId, season: new Date().getFullYear().toString(), name: "" }];
+    }
+
+    var seasonCount = historyChain.length;
+
+    // Update loading message with season count
+    if (seasonCount > 1) {
+      profileDiv.innerHTML = '<div class="loading-intel" style="font-size:16px; padding:12px;">crawling ' +
+        seasonCount + ' seasons of intel...</div>';
+    }
+
+    // ── Step 2: Fetch transactions from ALL seasons ──────────────
+    var allTxnsBySeason = {};
     var allTxns = [];
-    var fetches = [];
-    for (var wk = 1; wk <= 18; wk++) {
-      fetches.push(
-        fetch(SLEEPER_API + "/league/" + leagueId + "/transactions/" + wk)
-          .then(function(r) { return r.ok ? r.json() : []; })
-          .catch(function() { return []; })
-      );
+
+    // Fetch all seasons in parallel
+    var seasonFetches = historyChain.map(function(entry) {
+      return fetchLeagueTransactions(entry.leagueId).then(function(txns) {
+        return { season: entry.season, leagueId: entry.leagueId, txns: txns };
+      });
+    });
+    var seasonResults = await Promise.all(seasonFetches);
+
+    for (var si = 0; si < seasonResults.length; si++) {
+      var sr = seasonResults[si];
+      allTxnsBySeason[sr.season] = sr.txns;
+      allTxns = allTxns.concat(sr.txns);
     }
-    var results = await Promise.all(fetches);
-    for (var i = 0; i < results.length; i++) {
-      if (Array.isArray(results[i])) allTxns = allTxns.concat(results[i]);
+
+    // ── Step 3: Build per-manager profile data (multi-season) ────
+    // We track by owner_id (not roster_id) since roster_ids change between seasons.
+    // For historical seasons we need to fetch rosters to map roster_id -> owner_id.
+    var ownerProfiles = {};
+
+    // Build roster_id -> owner_id map for current season
+    var currentRosterOwnerMap = {};
+    for (var ri = 0; ri < rosters.length; ri++) {
+      currentRosterOwnerMap[rosters[ri].roster_id] = rosters[ri].owner_id;
     }
 
-    // Build per-manager profile data
-    var profiles = {};
-    for (var t = 0; t < allTxns.length; t++) {
-      var txn = allTxns[t];
-      if (txn.status !== "complete") continue;
+    // For historical seasons, fetch rosters to get owner mapping + standings
+    var historicalRosterMaps = {};
+    var historicalStandings = {}; // leagueId -> { ownerId: { wins, losses, fpts } }
+    historicalRosterMaps[leagueId] = currentRosterOwnerMap;
 
-      var rosterIds = txn.roster_ids || [];
-      var adds = txn.adds || {};
-      var drops = txn.drops || {};
-      var settings = txn.settings || {};
-      var waiver_bid = settings.waiver_bid || 0;
+    // Capture current season standings
+    historicalStandings[leagueId] = {};
+    for (var ri2 = 0; ri2 < rosters.length; ri2++) {
+      var cr = rosters[ri2];
+      historicalStandings[leagueId][cr.owner_id] = {
+        wins: cr.settings?.wins || 0,
+        losses: cr.settings?.losses || 0,
+        fpts: cr.settings?.fpts || 0
+      };
+    }
 
-      for (var r = 0; r < rosterIds.length; r++) {
-        var rid = rosterIds[r];
-        if (!profiles[rid]) {
-          profiles[rid] = { trades: 0, waivers: 0, freeAgent: 0, faabSpent: 0,
-            posAdds: {}, posDrops: {}, totalAdds: 0, totalDrops: 0, total: 0 };
-        }
-        var p = profiles[rid];
-        p.total++;
+    if (seasonCount > 1) {
+      var rosterFetches = [];
+      for (var hi = 1; hi < historyChain.length; hi++) {
+        (function(entry) {
+          rosterFetches.push(
+            fetch(SLEEPER_API + "/league/" + entry.leagueId + "/rosters")
+              .then(function(r) { return r.ok ? r.json() : []; })
+              .then(function(rosterData) {
+                var map = {};
+                var standings = {};
+                for (var rx = 0; rx < rosterData.length; rx++) {
+                  var rd = rosterData[rx];
+                  map[rd.roster_id] = rd.owner_id;
+                  standings[rd.owner_id] = {
+                    wins: rd.settings?.wins || 0,
+                    losses: rd.settings?.losses || 0,
+                    fpts: rd.settings?.fpts || 0
+                  };
+                }
+                historicalRosterMaps[entry.leagueId] = map;
+                historicalStandings[entry.leagueId] = standings;
+              })
+              .catch(function() {
+                historicalRosterMaps[entry.leagueId] = {};
+                historicalStandings[entry.leagueId] = {};
+              })
+          );
+        })(historyChain[hi]);
+      }
+      await Promise.all(rosterFetches);
+    }
 
-        if (txn.type === "trade") {
-          p.trades++;
-        } else if (txn.type === "waiver") {
-          p.waivers++;
-          p.faabSpent += waiver_bid;
-        } else if (txn.type === "free_agent") {
-          p.freeAgent++;
-        }
+    // Process transactions across all seasons, keyed by owner_id
+    for (var ssi = 0; ssi < seasonResults.length; ssi++) {
+      var seasonData = seasonResults[ssi];
+      var rosterMap = historicalRosterMaps[seasonData.leagueId] || {};
+      var season = seasonData.season;
 
-        // Track position adds/drops for this roster
-        for (var pid in adds) {
-          if (adds[pid] === rid) {
-            p.totalAdds++;
-            var pl = allPlayers[pid];
-            var pos = pl ? pl.position : "?";
-            p.posAdds[pos] = (p.posAdds[pos] || 0) + 1;
+      for (var t = 0; t < seasonData.txns.length; t++) {
+        var txn = seasonData.txns[t];
+        var rosterIds = txn.roster_ids || [];
+        var adds = txn.adds || {};
+        var drops = txn.drops || {};
+        var txnSettings = txn.settings || {};
+        var waiver_bid = txnSettings.waiver_bid || 0;
+
+        for (var r = 0; r < rosterIds.length; r++) {
+          var rid = rosterIds[r];
+          var oid = rosterMap[rid];
+          if (!oid) continue; // can't identify owner
+
+          if (!ownerProfiles[oid]) {
+            ownerProfiles[oid] = {
+              trades: 0, waivers: 0, freeAgent: 0, faabSpent: 0,
+              posAdds: {}, posDrops: {}, totalAdds: 0, totalDrops: 0, total: 0,
+              seasonCount: 0, seasons: {},
+              tradesBySeason: {}, faabBySeason: {}, movesBySeason: {},
+              posAddsBySeason: {}, // { season: { QB: N, RB: N, ... } }
+              weeklyMoves: {}, // { season: { week: count } } for panic detection
+              recordBySeason: {} // { season: { wins, losses } }
+            };
           }
-        }
-        for (var pid2 in drops) {
-          if (drops[pid2] === rid) {
-            p.totalDrops++;
-            var pl2 = allPlayers[pid2];
-            var pos2 = pl2 ? pl2.position : "?";
-            p.posDrops[pos2] = (p.posDrops[pos2] || 0) + 1;
+          var p = ownerProfiles[oid];
+          p.total++;
+
+          // Track per-season data
+          if (!p.seasons[season]) {
+            p.seasons[season] = true;
+            p.seasonCount++;
+            // Grab record for this season
+            var stData = historicalStandings[seasonData.leagueId];
+            if (stData && stData[oid]) {
+              p.recordBySeason[season] = stData[oid];
+            }
+          }
+          p.movesBySeason[season] = (p.movesBySeason[season] || 0) + 1;
+
+          // Track weekly timing for panic detection
+          var txnWeek = txn.leg || 0; // Sleeper uses 'leg' for the week number
+          if (!p.weeklyMoves[season]) p.weeklyMoves[season] = {};
+          p.weeklyMoves[season][txnWeek] = (p.weeklyMoves[season][txnWeek] || 0) + 1;
+
+          if (txn.type === "trade") {
+            p.trades++;
+            p.tradesBySeason[season] = (p.tradesBySeason[season] || 0) + 1;
+          } else if (txn.type === "waiver") {
+            p.waivers++;
+            p.faabSpent += waiver_bid;
+            p.faabBySeason[season] = (p.faabBySeason[season] || 0) + waiver_bid;
+          } else if (txn.type === "free_agent") {
+            p.freeAgent++;
+          }
+
+          // Track position adds/drops (aggregate + per-season)
+          if (!p.posAddsBySeason[season]) p.posAddsBySeason[season] = {};
+          for (var pid in adds) {
+            if (adds[pid] === rid) {
+              p.totalAdds++;
+              var pl = allPlayers[pid];
+              var pos = pl ? pl.position : "?";
+              p.posAdds[pos] = (p.posAdds[pos] || 0) + 1;
+              p.posAddsBySeason[season][pos] = (p.posAddsBySeason[season][pos] || 0) + 1;
+            }
+          }
+          for (var pid2 in drops) {
+            if (drops[pid2] === rid) {
+              p.totalDrops++;
+              var pl2 = allPlayers[pid2];
+              var pos2 = pl2 ? pl2.position : "?";
+              p.posDrops[pos2] = (p.posDrops[pos2] || 0) + 1;
+            }
           }
         }
       }
     }
 
-    // Map roster_id to owner_id
-    var rosterOwnerMap = {};
-    for (var ri = 0; ri < rosters.length; ri++) {
-      rosterOwnerMap[rosters[ri].roster_id] = rosters[ri].owner_id;
-    }
-
-    // Generate behavioral summaries
+    // ── Step 4: Generate behavioral summaries with multi-season depth ─
     var cards = [];
-    for (var rosterId in profiles) {
-      var prof = profiles[rosterId];
-      var ownerId = rosterOwnerMap[rosterId];
+    for (var ownerId in ownerProfiles) {
       if (ownerId === userId) continue; // skip self
 
-      var managerName = userMap[ownerId] || "Manager " + rosterId;
-      var roster = rosters.find(function(rx) { return rx.roster_id == rosterId; });
+      var prof = ownerProfiles[ownerId];
+      var managerName = userMap[ownerId] || "Manager";
+      var roster = rosters.find(function(rx) { return rx.owner_id === ownerId; });
       var wins = roster ? (roster.settings?.wins || 0) : 0;
       var losses = roster ? (roster.settings?.losses || 0) : 0;
 
-      // Determine behavioral traits
+      // Determine behavioral traits (enhanced with multi-season patterns)
       var traits = [];
+      var seasonsTracked = Object.keys(prof.seasons).length;
 
-      // Trade tendency
-      if (prof.trades >= 5) traits.push("active trader");
-      else if (prof.trades === 0) traits.push("never trades");
+      // Trade tendency (adjusted for seasons)
+      var tradesPerSeason = seasonsTracked > 0 ? prof.trades / seasonsTracked : prof.trades;
+      if (tradesPerSeason >= 5) traits.push("active trader");
+      else if (prof.trades === 0 && seasonsTracked >= 2) traits.push("never trades");
+      else if (prof.trades === 0) traits.push("no trades");
+
+      // Multi-season trade trend (rising/falling)
+      if (seasonsTracked >= 2) {
+        var seasonKeys = Object.keys(prof.tradesBySeason).sort();
+        if (seasonKeys.length >= 2) {
+          var recentTrades = prof.tradesBySeason[seasonKeys[seasonKeys.length - 1]] || 0;
+          var olderTrades = prof.tradesBySeason[seasonKeys[0]] || 0;
+          if (recentTrades > olderTrades + 2) traits.push("trading more lately");
+          else if (olderTrades > recentTrades + 2) traits.push("trading less lately");
+        }
+      }
 
       // Position bias
       var topPos = null;
@@ -842,14 +1023,122 @@ async function loadManagerProfiles(leagueId, userId, allPlayers, userMap, roster
       }
       if (topPos && topCount >= 3) traits.push("stockpiles " + topPos + "s");
 
-      // FAAB aggression
-      if (prof.faabSpent > 150) traits.push("FAAB whale");
-      else if (prof.faabSpent > 50) traits.push("spends FAAB");
-      else if (prof.waivers > 3 && prof.faabSpent < 20) traits.push("bargain hunter");
+      // FAAB aggression (adjusted per season)
+      var faabPerSeason = seasonsTracked > 0 ? prof.faabSpent / seasonsTracked : prof.faabSpent;
+      if (faabPerSeason > 150) traits.push("FAAB whale");
+      else if (faabPerSeason > 50) traits.push("spends FAAB");
+      else if (prof.waivers > 3 && faabPerSeason < 20) traits.push("bargain hunter");
 
-      // Activity level
-      if (prof.total >= 15) traits.push("hyperactive");
-      else if (prof.total <= 3) traits.push("set-and-forget");
+      // FAAB trend across seasons
+      if (seasonsTracked >= 2) {
+        var faabKeys = Object.keys(prof.faabBySeason).sort();
+        if (faabKeys.length >= 2) {
+          var recentFaab = prof.faabBySeason[faabKeys[faabKeys.length - 1]] || 0;
+          var olderFaab = prof.faabBySeason[faabKeys[0]] || 0;
+          if (recentFaab > olderFaab * 1.5 && olderFaab > 0) traits.push("FAAB spending up");
+          else if (olderFaab > recentFaab * 1.5 && recentFaab > 0) traits.push("FAAB spending down");
+        }
+      }
+
+      // Activity level (per season)
+      var movesPerSeason = seasonsTracked > 0 ? prof.total / seasonsTracked : prof.total;
+      if (movesPerSeason >= 15) traits.push("hyperactive");
+      else if (movesPerSeason <= 3) traits.push("set-and-forget");
+
+      // Consistency across seasons
+      if (seasonsTracked >= 2) {
+        var moveValues = Object.values(prof.movesBySeason);
+        var moveAvg = moveValues.reduce(function(a, b) { return a + b; }, 0) / moveValues.length;
+        var moveVariance = moveValues.reduce(function(a, b) { return a + Math.pow(b - moveAvg, 2); }, 0) / moveValues.length;
+        if (Math.sqrt(moveVariance) < moveAvg * 0.3 && moveAvg > 5) traits.push("consistent pattern");
+        else if (Math.sqrt(moveVariance) > moveAvg * 0.7) traits.push("unpredictable");
+      }
+
+      // Positional bias consistency across seasons
+      if (seasonsTracked >= 2) {
+        var seasonPosKeys = Object.keys(prof.posAddsBySeason);
+        if (seasonPosKeys.length >= 2) {
+          // Find top position in each season
+          var topPosBySeason = [];
+          for (var spk = 0; spk < seasonPosKeys.length; spk++) {
+            var sAdds = prof.posAddsBySeason[seasonPosKeys[spk]];
+            var sTopPos = null; var sTopN = 0;
+            for (var sp in sAdds) {
+              if (sp !== "?" && sAdds[sp] > sTopN) { sTopN = sAdds[sp]; sTopPos = sp; }
+            }
+            if (sTopPos) topPosBySeason.push(sTopPos);
+          }
+          // If same position is top add in 2+ seasons, it's a reliable pattern
+          if (topPosBySeason.length >= 2) {
+            var posCounts = {};
+            for (var tp = 0; tp < topPosBySeason.length; tp++) {
+              posCounts[topPosBySeason[tp]] = (posCounts[topPosBySeason[tp]] || 0) + 1;
+            }
+            for (var pck in posCounts) {
+              if (posCounts[pck] >= 2) {
+                traits.push("always chases " + pck + "s");
+                break;
+              }
+            }
+          }
+        }
+      }
+
+      // Panic indicator — detects bursts of moves (3+ in a single week)
+      var panicWeeks = 0;
+      var totalWeeksActive = 0;
+      for (var ws in prof.weeklyMoves) {
+        var weekData = prof.weeklyMoves[ws];
+        for (var wk in weekData) {
+          totalWeeksActive++;
+          if (weekData[wk] >= 3) panicWeeks++;
+        }
+      }
+      if (panicWeeks >= 2) traits.push("panic mover (" + panicWeeks + " burst weeks)");
+      else if (panicWeeks === 1 && seasonsTracked >= 2) traits.push("rare panic mover");
+
+      // Win/loss correlation with activity
+      if (seasonsTracked >= 2 && Object.keys(prof.recordBySeason).length >= 2) {
+        var winPcts = [];
+        var moveCounts = [];
+        var recKeys = Object.keys(prof.recordBySeason).sort();
+        for (var rk = 0; rk < recKeys.length; rk++) {
+          var rec = prof.recordBySeason[recKeys[rk]];
+          var totalGames = (rec.wins || 0) + (rec.losses || 0);
+          if (totalGames > 0) {
+            winPcts.push((rec.wins || 0) / totalGames);
+            moveCounts.push(prof.movesBySeason[recKeys[rk]] || 0);
+          }
+        }
+        // Check if losing seasons correlate with more moves
+        if (winPcts.length >= 2) {
+          var losingSeasons = winPcts.filter(function(w) { return w < 0.45; }).length;
+          var winningSeasons = winPcts.filter(function(w) { return w >= 0.55; }).length;
+          if (losingSeasons >= 1 && winningSeasons >= 1) {
+            // Compare avg moves in losing vs winning seasons
+            var losingMoves = 0; var losingCount = 0;
+            var winningMoves = 0; var winningCount = 0;
+            for (var wi = 0; wi < winPcts.length; wi++) {
+              if (winPcts[wi] < 0.45) { losingMoves += moveCounts[wi]; losingCount++; }
+              else if (winPcts[wi] >= 0.55) { winningMoves += moveCounts[wi]; winningCount++; }
+            }
+            var avgLosingMoves = losingCount > 0 ? losingMoves / losingCount : 0;
+            var avgWinningMoves = winningCount > 0 ? winningMoves / winningCount : 0;
+            if (avgLosingMoves > avgWinningMoves * 1.5 && avgLosingMoves > 5) {
+              traits.push("panic-trades when losing");
+            } else if (avgWinningMoves > avgLosingMoves * 1.5 && avgWinningMoves > 5) {
+              traits.push("aggressive when winning");
+            }
+          }
+        }
+      }
+
+      // Multi-season record summary
+      var allTimeWins = 0; var allTimeLosses = 0;
+      for (var rbs in prof.recordBySeason) {
+        allTimeWins += prof.recordBySeason[rbs].wins || 0;
+        allTimeLosses += prof.recordBySeason[rbs].losses || 0;
+      }
 
       // Net buyer/seller
       if (prof.totalAdds > prof.totalDrops + 3) traits.push("net buyer");
@@ -858,11 +1147,13 @@ async function loadManagerProfiles(leagueId, userId, allPlayers, userMap, roster
       var summary = traits.length > 0 ? traits.join(", ") : "plays it safe";
 
       // Color based on activity
-      var color = prof.total >= 10 ? "var(--orange)" : prof.total >= 5 ? "var(--pos-rb)" : "var(--ink-light)";
+      var color = movesPerSeason >= 10 ? "var(--orange)" : movesPerSeason >= 5 ? "var(--pos-rb)" : "var(--ink-light)";
 
       cards.push({
         name: managerName, wins: wins, losses: losses,
-        summary: summary, prof: prof, color: color
+        allTimeWins: allTimeWins, allTimeLosses: allTimeLosses,
+        summary: summary, prof: prof, color: color,
+        seasonsTracked: seasonsTracked
       });
     }
 
@@ -874,32 +1165,99 @@ async function loadManagerProfiles(leagueId, userId, allPlayers, userMap, roster
       return;
     }
 
-    var html = '<div class="profile-grid">';
+    // ── Step 5: Render profile cards with season depth ────────────
+    var seasonBadge = seasonCount > 1
+      ? '<div style="font-family:var(--font-hand); font-size:15px; color:var(--orange); text-align:center; margin-bottom:10px;">' +
+        seasonCount + ' seasons of intel' + '</div>'
+      : '';
+
+    var upgradeBanner = "";
+    if (!paid && seasonCount <= 1) {
+      upgradeBanner = '<div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-medium); text-align:center; margin-bottom:10px; padding:8px; border:1.5px dashed var(--orange); border-radius:8px;">' +
+        'Unlock multi-season scouting with Pro — deeper patterns, stronger intel' + '</div>';
+    }
+
+    var html = seasonBadge + upgradeBanner + '<div class="profile-grid">';
     for (var ci = 0; ci < cards.length; ci++) {
       var c = cards[ci];
+      var seasonTag = c.seasonsTracked > 1
+        ? '<span style="font-family:var(--font-mono); font-size:9px; color:var(--orange); border:1px solid var(--orange); border-radius:3px; padding:1px 4px; margin-left:6px;">' +
+          c.seasonsTracked + 'yr</span>'
+        : '';
+
       html += '<div class="profile-card">';
       html += '<div class="profile-stripe" style="background:' + c.color + '"></div>';
       html += '<div class="profile-body">';
-      html += '<div class="profile-name" style="color:' + c.color + '">' + escapeHtml(c.name) + '</div>';
-      html += '<div class="profile-record">' + c.wins + '-' + c.losses + '</div>';
+      html += '<div class="profile-name" style="color:' + c.color + '">' + escapeHtml(c.name) + seasonTag + '</div>';
+      var recordText = c.wins + '-' + c.losses;
+      if (c.seasonsTracked > 1 && c.allTimeWins + c.allTimeLosses > 0) {
+        recordText += ' <span style="font-family:var(--font-mono); font-size:9px; color:var(--ink-light);">(' + c.allTimeWins + '-' + c.allTimeLosses + ' all-time)</span>';
+      }
+      html += '<div class="profile-record">' + recordText + '</div>';
       html += '<div class="profile-summary">' + escapeHtml(c.summary) + '</div>';
       html += '<div class="profile-stats">';
       html += '<span class="profile-stat"><strong>' + c.prof.trades + '</strong> trades</span>';
       html += '<span class="profile-stat"><strong>' + c.prof.waivers + '</strong> waivers</span>';
       if (c.prof.faabSpent > 0) html += '<span class="profile-stat"><strong>$' + c.prof.faabSpent + '</strong> FAAB</span>';
       html += '<span class="profile-stat"><strong>' + c.prof.total + '</strong> total moves</span>';
-      html += '</div></div></div>';
+      html += '</div>';
+
+      // Multi-season breakdown (paid users with 2+ seasons)
+      if (c.seasonsTracked > 1) {
+        html += '<div style="margin-top:6px; padding-top:6px; border-top:1px solid var(--ink-faint);">';
+        html += '<div style="font-family:var(--font-mono); font-size:9px; color:var(--ink-light); text-transform:uppercase; letter-spacing:1px; margin-bottom:3px;">per-season breakdown</div>';
+        var seasonKeys = Object.keys(c.prof.movesBySeason).sort();
+        for (var sk = 0; sk < seasonKeys.length; sk++) {
+          var sy = seasonKeys[sk];
+          var moves = c.prof.movesBySeason[sy] || 0;
+          var trades = c.prof.tradesBySeason[sy] || 0;
+          var faab = c.prof.faabBySeason[sy] || 0;
+          html += '<div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-medium); display:flex; gap:8px;">';
+          html += '<span style="min-width:32px;">' + sy + '</span>';
+          html += '<span>' + moves + ' moves</span>';
+          if (trades > 0) html += '<span>' + trades + ' trades</span>';
+          if (faab > 0) html += '<span>$' + faab + ' FAAB</span>';
+          html += '</div>';
+        }
+        html += '</div>';
+      }
+
+      html += '</div></div>';
     }
     html += '</div>';
     profileDiv.innerHTML = html;
 
-    // Save profiles to localStorage for Situation Room context bridge
+    // ── Step 6: Save enhanced profiles to localStorage ───────────
     try {
       var existing = JSON.parse(localStorage.getItem("razzle_league_context") || "{}");
       existing.managerProfiles = cards.map(function(c) {
-        return { name: c.name, record: c.wins + "-" + c.losses, summary: c.summary,
-          trades: c.prof.trades, waivers: c.prof.waivers, faab: c.prof.faabSpent };
+        return {
+          name: c.name,
+          record: c.wins + "-" + c.losses,
+          allTimeRecord: c.allTimeWins + "-" + c.allTimeLosses,
+          summary: c.summary,
+          trades: c.prof.trades,
+          waivers: c.prof.waivers,
+          faab: c.prof.faabSpent,
+          seasonsTracked: c.seasonsTracked,
+          tradesBySeason: c.prof.tradesBySeason,
+          faabBySeason: c.prof.faabBySeason,
+          movesBySeason: c.prof.movesBySeason,
+          posAdds: c.prof.posAdds,
+          posAddsBySeason: c.prof.posAddsBySeason,
+          recordBySeason: c.prof.recordBySeason,
+          panicWeeks: (function() {
+            var pw = 0;
+            for (var ws in c.prof.weeklyMoves) {
+              var wd = c.prof.weeklyMoves[ws];
+              for (var wk in wd) { if (wd[wk] >= 3) pw++; }
+            }
+            return pw;
+          })()
+        };
       });
+      existing.historyDepth = seasonCount;
+      existing.historySeasons = historyChain.map(function(h) { return h.season; });
       existing.updatedAt = Date.now();
       localStorage.setItem("razzle_league_context", JSON.stringify(existing));
     } catch (e) { /* ignore */ }

@@ -1,51 +1,35 @@
-# Platform Loop — Phase 134 Task List
+# Platform Loop — Phase 135 Task List
 
 ## Status
-Current Phase: 134 (Tier Gating — Feature Limits for Free vs Pro vs Elite)
+Current Phase: 135 (Bureau of Intelligence — Multi-Season Sleeper History)
 Current Task: COMPLETE
 Current Stage: PHASE GATE
 Attempt: -
-Tasks Completed: 5/5
-Loop Iterations: 5
+Tasks Completed: 3/3
+Loop Iterations: 3
 
 ---
 
-## Task 1: Historical data gating — Free = 3 seasons, Pro+ = all
-**Requirement**: "Season selector (current + 2 prior): YES [free]. Full 2015-present: ALL [paid]" (Pricing Strategy)
-**Accept when**: Free users see only current season + 2 prior seasons in season selectors. Locked seasons show lock emoji and are disabled. "Unlock all seasons with Pro" hint in dropdown.
+## Task 1: Multi-season league history crawler via previous_league_id chain
+**Requirement**: "On Sleeper connection (paid), recursively pulls league history via previous_league_id" (North Star, Agent Architecture)
+**Accept when**: League Intel page detects previous_league_id on each league and follows the chain back up to 5 seasons. Transaction history and standings from all seasons aggregated into manager profiles. History depth shown in UI ("4 seasons of data").
 **Depends on**: none
+**Size**: L
+**Primary role**: FRONTEND
+**Status**: PASS
+
+## Task 2: Enhanced manager behavioral profiles from multi-season data
+**Requirement**: "Builds per-manager behavioral profiles: FAAB patterns, Trade tendencies, Draft patterns, Panic indicators" (North Star)
+**Accept when**: Manager profile cards show multi-season behavioral traits: trade frequency trend, FAAB spending pattern, positional bias consistency, win/loss correlation with roster moves, panic sell indicators. Data saved to localStorage for agent context bridge.
+**Depends on**: Task 1
 **Size**: M
 **Primary role**: FRONTEND
 **Status**: PASS
 
-## Task 2: Formula builder limit — Free = 3 max, Pro+ = unlimited
-**Requirement**: "Formula builder (create): YES (3 max) [free], UNLIMITED [paid]" (Pricing Strategy)
-**Accept when**: Free users can create max 3 formulas. Attempting to create 4th shows toast with upgrade message. Pro/Elite users have no limit.
-**Depends on**: none
-**Size**: S
-**Primary role**: FRONTEND
-**Status**: PASS
-
-## Task 3: Formula Store access gating — Free = preview, Pro+ = full
-**Requirement**: "Formula Store (browse): Preview only [free], FULL ACCESS [paid]" (Pricing Strategy)
-**Accept when**: Formula store browse is gated via checkFeatureGate. Deferred to future phase for full blurred preview UX.
-**Depends on**: none
-**Size**: M
-**Primary role**: FRONTEND
-**Status**: PASS (basic gating via checkFeatureGate helpers; full blur UX deferred)
-
-## Task 4: Compare mode limit — Free = 2 players, Pro+ = 4 players
-**Requirement**: "Compare mode (head-to-head): 2 players [free], 4 players [paid]" (Pricing Strategy)
-**Accept when**: checkFeatureGate("compare", count) available for any compare feature. Existing /compare/ page already does 2 players.
-**Depends on**: none
-**Size**: S
-**Primary role**: FRONTEND
-**Status**: PASS (gate helper ready, existing compare is 2-player)
-
-## Task 5: Advanced filter limit — Free = 3 conditions, Pro+ = unlimited
-**Requirement**: "Advanced multi-condition filters: 3 max [free], UNLIMITED [paid]" (Pricing Strategy)
-**Accept when**: Free users can add up to 3 filter conditions. 4th filter blocked with toast. Pro/Elite unlimited. All filter entry points gated (addFilter, quick-filter, context menu).
-**Depends on**: none
+## Task 3: Feed enhanced profiles into agent context bridge
+**Requirement**: "More seasons = richer profiles = higher switching cost" (North Star)
+**Accept when**: warroom.js getLeagueContext() includes enhanced multi-season manager profiles in agent prompts. Agents reference specific historical patterns ("In 3 seasons, Manager X has never traded a 1st round pick"). Free users see single-season data; paid users see full history.
+**Depends on**: Task 2
 **Size**: S
 **Primary role**: FRONTEND
 **Status**: PASS
