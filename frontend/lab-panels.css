@@ -4093,6 +4093,15 @@
   margin-bottom: 16px;
   flex-wrap: wrap;
 }
+.pr-year-select {
+  padding: 8px 12px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  background: var(--bg-card);
+  border: 2px solid var(--ink);
+  color: var(--ink);
+  cursor: pointer;
+}
 .pr-search-wrap {
   flex: 1;
   min-width: 200px;

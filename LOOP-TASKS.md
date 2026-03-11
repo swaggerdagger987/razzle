@@ -6,10 +6,10 @@
 **Exit Criterion**: proradar panel renders canvas spider charts of combine percentiles (forty, bench, vertical, broad_jump, cone, shuttle) for any prospect. Select up to 3 prospects to overlay. Position + draft year filters. /api/athletic-radar endpoint returns all prospects with pre-computed percentiles. Sidebar item works end-to-end.
 
 - Task 1: PASS
-- Task 2: PENDING
+- Task 2: PASS
 - Task 3: PENDING
 - Stage: IN PROGRESS
-- Next: Task 2
+- Next: Task 3
 
 ### Task 1: Create /api/athletic-radar backend endpoint
 **Status**: PASS
@@ -17,8 +17,8 @@
 **Acceptance**: GET /api/athletic-radar?position=WR&draft_year=2025 returns JSON with prospects array, each having combine raw values + position percentiles for 6 athletic metrics. Cached with _cached helper. Returns 200 with valid data.
 
 ### Task 2: Add proradar panel to lab-panels.js
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 **Acceptance**: Panel renders a canvas spider/radar chart with 6 axes (40yd, Bench, Vertical, Broad Jump, Cone, Shuttle). Player search/select to add up to 3 prospects as overlays with position-colored lines. Position tabs + draft year dropdown. Follows DESIGN.md (sand bg, chunky borders, terracotta accent). No frameworks.
 
 ### Task 3: End-to-end verification

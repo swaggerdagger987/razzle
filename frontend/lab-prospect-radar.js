@@ -7,7 +7,7 @@
 
   var defs = window._labPanelDefs = window._labPanelDefs || [];
   var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
-  var CHART_COLORS = ['#d97757', '#5b7fff', '#2ec4b6', '#8b5cf6'];
+  var CHART_COLORS = ['#d97757', '#5b7fff', '#2ec4b6'];
 
   var METRICS = [
     { key: 'forty', label: '40-Yard', unit: 's', dir: 'lower', short: '40' },
@@ -27,34 +27,54 @@
 
   // ─── Panel state ───────────────────────────────────────────────
   var panelState = {
-    prospects: [],
-    selected: [null, null],  // up to 2 prospects for comparison
+    selected: [null, null, null],  // up to 3 prospects for comparison
     allProspects: [],
     posFilter: '',
+    draftYear: 0,
+    availableYears: [],
     searchTerm: ''
   };
 
-  // ─── Register panel ────────────────────────────────────────────
-  defs.push({ name: 'proradar', render: function(el) {
-    // Reset state on each render to avoid stale data
-    panelState.selected = [null, null];
-    panelState.allProspects = [];
-    panelState.prospects = [];
-    panelState.posFilter = '';
-    panelState.searchTerm = '';
-
+  // ─── Fetch data ──────────────────────────────────────────────
+  function loadData(el, year) {
     el.innerHTML = '<div class="lab-panel-loading"><div class="loading-msg">measuring wingspans...</div></div>';
 
-    fetch('/api/prospect-scores?position=')
+    var url = '/api/athletic-radar?position=';
+    if (year) url += '&draft_year=' + year;
+
+    fetch(url)
       .then(function(r) { if (!r.ok) throw new Error('API error'); return r.json(); })
       .then(function(data) {
         panelState.allProspects = data.prospects || [];
-        panelState.prospects = panelState.allProspects;
-        renderPanel(el);
+        panelState.draftYear = data.draft_year || 0;
+        // Fetch available years for dropdown
+        if (!panelState.availableYears.length) {
+          fetch('/api/prospect-options')
+            .then(function(r) { return r.ok ? r.json() : { years: [] }; })
+            .then(function(opts) {
+              panelState.availableYears = opts.years || [];
+              renderPanel(el);
+            })
+            .catch(function() { renderPanel(el); });
+        } else {
+          renderPanel(el);
+        }
       })
       .catch(function(err) {
         el.innerHTML = '<div class="lab-panel-loading"><div class="loading-msg" style="color:var(--red);">failed to load prospects: ' + escapeHtml(err.message) + '</div></div>';
       });
+  }
+
+  // ─── Register panel ────────────────────────────────────────────
+  defs.push({ name: 'proradar', render: function(el) {
+    panelState.selected = [null, null, null];
+    panelState.allProspects = [];
+    panelState.posFilter = '';
+    panelState.searchTerm = '';
+    panelState.draftYear = 0;
+    panelState.availableYears = [];
+
+    loadData(el, 0);
   }});
 
   // ─── Main render ───────────────────────────────────────────────
@@ -66,6 +86,14 @@
     html += '<div class="pr-search-wrap">';
     html += '<input type="text" class="pr-search" id="prSearch" placeholder="Search prospects..." value="' + escapeHtml(panelState.searchTerm) + '">';
     html += '</div>';
+
+    // Draft year dropdown
+    html += '<select class="pr-year-select" id="prYearSelect">';
+    panelState.availableYears.forEach(function(y) {
+      html += '<option value="' + y + '"' + (y === panelState.draftYear ? ' selected' : '') + '>' + y + '</option>';
+    });
+    html += '</select>';
+
     html += '<div class="pr-pos-tabs">';
     html += '<button class="pr-pos-tab' + (!panelState.posFilter ? ' active' : '') + '" data-pos="">ALL</button>';
     ['QB', 'RB', 'WR', 'TE'].forEach(function(pos) {
@@ -123,20 +151,21 @@
     var list = getFilteredProspects();
     var html = '<div class="pr-list-rows">';
 
-    list.slice(0, 40).forEach(function(p) {
+    list.slice(0, 50).forEach(function(p, idx) {
       var posColor = POS_COLORS[p.position] || 'var(--ink)';
-      var isSelected = (panelState.selected[0] && panelState.selected[0].player_name === p.player_name) ||
-                       (panelState.selected[1] && panelState.selected[1].player_name === p.player_name);
       var selIdx = -1;
-      if (panelState.selected[0] && panelState.selected[0].player_name === p.player_name) selIdx = 0;
-      if (panelState.selected[1] && panelState.selected[1].player_name === p.player_name) selIdx = 1;
+      for (var s = 0; s < 3; s++) {
+        if (panelState.selected[s] && panelState.selected[s].player_name === p.player_name) { selIdx = s; break; }
+      }
+      var isSelected = selIdx >= 0;
+      var avgPct = p.avg_percentile != null ? p.avg_percentile.toFixed(1) : '-';
 
       html += '<div class="pr-prospect-row' + (isSelected ? ' pr-selected' : '') + '" data-name="' + escapeHtml(p.player_name) + '">';
-      html += '<span class="pr-prospect-rank">' + p.rank + '</span>';
+      html += '<span class="pr-prospect-rank">' + (idx + 1) + '</span>';
       html += '<span class="pr-prospect-pos" style="background:' + posColor + ';">' + escapeHtml(p.position) + '</span>';
       html += '<span class="pr-prospect-name">' + escapeHtml(p.player_name) + '</span>';
       html += '<span class="pr-prospect-school">' + escapeHtml(p.school || '') + '</span>';
-      html += '<span class="pr-prospect-rps">' + (p.rps || 0).toFixed(1) + '</span>';
+      html += '<span class="pr-prospect-rps">' + avgPct + '</span>';
       if (selIdx >= 0) {
         html += '<span class="pr-sel-badge" style="background:' + CHART_COLORS[selIdx] + ';">' + (selIdx + 1) + '</span>';
       }
@@ -153,31 +182,23 @@
 
   // ─── Chart Card ────────────────────────────────────────────────
   function renderChartCard() {
-    var p1 = panelState.selected[0];
-    var p2 = panelState.selected[1];
+    var players = panelState.selected.filter(Boolean);
 
     var html = '<div class="pr-chart-inner">';
 
     // Player tags
     html += '<div class="pr-chart-players">';
-    if (p1) {
-      html += '<div class="pr-player-tag" style="border-color:' + CHART_COLORS[0] + ';">';
-      html += '<span class="pr-tag-dot" style="background:' + CHART_COLORS[0] + ';"></span>';
-      html += '<span class="pr-tag-name">' + escapeHtml(p1.player_name) + '</span>';
-      html += '<span class="pr-tag-pos" style="color:' + (POS_COLORS[p1.position] || 'var(--ink)') + ';">' + p1.position + '</span>';
-      html += '<button class="pr-tag-remove" aria-label="Remove player" data-idx="0">\u00D7</button>';
+    players.forEach(function(p, i) {
+      html += '<div class="pr-player-tag" style="border-color:' + CHART_COLORS[i] + ';">';
+      html += '<span class="pr-tag-dot" style="background:' + CHART_COLORS[i] + ';"></span>';
+      html += '<span class="pr-tag-name">' + escapeHtml(p.player_name) + '</span>';
+      html += '<span class="pr-tag-pos" style="color:' + (POS_COLORS[p.position] || 'var(--ink)') + ';">' + p.position + '</span>';
+      html += '<button class="pr-tag-remove" aria-label="Remove player" data-idx="' + i + '">\u00D7</button>';
       html += '</div>';
-    }
-    if (p2) {
-      html += '<div class="pr-player-tag" style="border-color:' + CHART_COLORS[1] + ';">';
-      html += '<span class="pr-tag-dot" style="background:' + CHART_COLORS[1] + ';"></span>';
-      html += '<span class="pr-tag-name">' + escapeHtml(p2.player_name) + '</span>';
-      html += '<span class="pr-tag-pos" style="color:' + (POS_COLORS[p2.position] || 'var(--ink)') + ';">' + p2.position + '</span>';
-      html += '<button class="pr-tag-remove" aria-label="Remove player" data-idx="1">\u00D7</button>';
-      html += '</div>';
-    }
-    if (!p2 && p1) {
-      html += '<div class="pr-add-compare" style="font-family:var(--font-hand);color:var(--ink-light);font-size:14px;">click another prospect to compare</div>';
+    });
+    var emptySlots = 3 - players.length;
+    if (emptySlots > 0 && players.length > 0) {
+      html += '<div class="pr-add-compare" style="font-family:var(--font-hand);color:var(--ink-light);font-size:14px;">click ' + (emptySlots === 1 ? 'one more' : 'up to ' + emptySlots + ' more') + ' to compare</div>';
     }
     html += '</div>';
 
@@ -186,12 +207,11 @@
 
     // Percentile bars
     html += '<div class="pr-pct-bars">';
-    var players = [p1, p2].filter(Boolean);
     METRICS.forEach(function(m) {
       html += '<div class="pr-pct-row">';
       html += '<span class="pr-pct-label">' + m.short + '</span>';
       players.forEach(function(p, i) {
-        var pct = (p.percentiles && p.percentiles[m.key]) || 0;
+        var pct = (p.percentiles && p.percentiles[m.key] != null) ? p.percentiles[m.key] : 0;
         var val = parseFloat(p[m.key]);
         var valStr = !isNaN(val) ? (m.dir === 'lower' ? val.toFixed(2) : Math.round(val)) : '-';
         var barColor = CHART_COLORS[i];
@@ -208,29 +228,27 @@
     });
     html += '</div>';
 
-    // Athletic grade
-    if (p1) {
-      html += '<div class="pr-grades">';
-      players.forEach(function(p, i) {
-        var avg = p.athletic_avg;
-        var gradeText = 'N/A';
-        var gradeColor = 'var(--ink-light)';
-        if (avg != null) {
-          if (avg >= 85) { gradeText = 'Elite'; gradeColor = '#d97757'; }
-          else if (avg >= 70) { gradeText = 'Above Avg'; gradeColor = '#2ec4b6'; }
-          else if (avg >= 50) { gradeText = 'Average'; gradeColor = '#5b7fff'; }
-          else if (avg >= 30) { gradeText = 'Below Avg'; gradeColor = '#8b5cf6'; }
-          else { gradeText = 'Poor'; gradeColor = '#e63946'; }
-        }
-        html += '<div class="pr-grade-card" style="border-color:' + CHART_COLORS[i] + ';">';
-        html += '<div class="pr-grade-name">' + escapeHtml(p.player_name) + '</div>';
-        html += '<div class="pr-grade-score" style="color:' + gradeColor + ';">' + (avg != null ? avg.toFixed(1) : '-') + '</div>';
-        html += '<div class="pr-grade-label" style="color:' + gradeColor + ';">' + gradeText + ' Athlete</div>';
-        html += '<div class="pr-grade-detail">' + escapeHtml(p.position) + ' \u2022 ' + escapeHtml(p.school || '') + ' \u2022 RPS ' + (p.rps || 0).toFixed(1) + '</div>';
-        html += '</div>';
-      });
+    // Athletic grade cards
+    html += '<div class="pr-grades">';
+    players.forEach(function(p, i) {
+      var avg = p.avg_percentile;
+      var gradeText = 'N/A';
+      var gradeColor = 'var(--ink-light)';
+      if (avg != null) {
+        if (avg >= 85) { gradeText = 'Elite'; gradeColor = '#d97757'; }
+        else if (avg >= 70) { gradeText = 'Above Avg'; gradeColor = '#2ec4b6'; }
+        else if (avg >= 50) { gradeText = 'Average'; gradeColor = '#5b7fff'; }
+        else if (avg >= 30) { gradeText = 'Below Avg'; gradeColor = '#8b5cf6'; }
+        else { gradeText = 'Poor'; gradeColor = '#e63946'; }
+      }
+      html += '<div class="pr-grade-card" style="border-color:' + CHART_COLORS[i] + ';">';
+      html += '<div class="pr-grade-name">' + escapeHtml(p.player_name) + '</div>';
+      html += '<div class="pr-grade-score" style="color:' + gradeColor + ';">' + (avg != null ? avg.toFixed(1) : '-') + '</div>';
+      html += '<div class="pr-grade-label" style="color:' + gradeColor + ';">' + gradeText + ' Athlete</div>';
+      html += '<div class="pr-grade-detail">' + escapeHtml(p.position) + ' \u2022 ' + escapeHtml(p.school || '') + '</div>';
       html += '</div>';
-    }
+    });
+    html += '</div>';
 
     html += '</div>';
     return html;
@@ -274,6 +292,16 @@
       ctx.stroke();
     }
 
+    // Ring percentile labels
+    ctx.fillStyle = '#8a7565';
+    ctx.font = '10px "Space Mono", monospace';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'bottom';
+    for (var rl = 1; rl <= 4; rl++) {
+      var rr = (R * rl) / 4;
+      ctx.fillText((rl * 25) + '%', cx + 3, cy - rr - 2);
+    }
+
     // Draw axes and labels
     ctx.fillStyle = '#2d1f14';
     ctx.font = 'bold 12px "Space Mono", monospace';
@@ -300,14 +328,14 @@
     }
 
     // Draw player polygons
-    var players = [panelState.selected[0], panelState.selected[1]].filter(Boolean);
+    var players = panelState.selected.filter(Boolean);
     players.forEach(function(p, pIdx) {
       var color = CHART_COLORS[pIdx];
       ctx.beginPath();
       for (var k = 0; k <= n; k++) {
         var ki = k % n;
         var angle3 = ki * angleStep - Math.PI / 2;
-        var pct = (p.percentiles && p.percentiles[METRICS[ki].key]) || 0;
+        var pct = (p.percentiles && p.percentiles[METRICS[ki].key] != null) ? p.percentiles[METRICS[ki].key] : 0;
         var val = (pct / 100) * R;
         var px = cx + val * Math.cos(angle3);
         var py = cy + val * Math.sin(angle3);
@@ -316,7 +344,7 @@
       ctx.closePath();
 
       // Fill
-      ctx.globalAlpha = 0.15;
+      ctx.globalAlpha = 0.12;
       ctx.fillStyle = color;
       ctx.fill();
       ctx.globalAlpha = 1;
@@ -329,7 +357,7 @@
       // Dots
       for (var d = 0; d < n; d++) {
         var angle4 = d * angleStep - Math.PI / 2;
-        var dpct = (p.percentiles && p.percentiles[METRICS[d].key]) || 0;
+        var dpct = (p.percentiles && p.percentiles[METRICS[d].key] != null) ? p.percentiles[METRICS[d].key] : 0;
         var dval = (dpct / 100) * R;
         var dx = cx + dval * Math.cos(angle4);
         var dy = cy + dval * Math.sin(angle4);
@@ -351,12 +379,19 @@
     if (searchInput) {
       searchInput.addEventListener('input', function() {
         panelState.searchTerm = this.value;
-        var listEl = el.querySelector('.pr-list');
-        if (listEl) {
-          listEl.querySelector('.pr-list-rows').outerHTML = renderProspectList();
-          listEl.querySelector('.pr-list-count').textContent = getFilteredProspects().length + ' found';
-          bindRowClicks(el);
-        }
+        refreshList(el);
+      });
+    }
+
+    // Draft year dropdown
+    var yearSelect = el.querySelector('#prYearSelect');
+    if (yearSelect) {
+      yearSelect.addEventListener('change', function() {
+        var yr = parseInt(this.value) || 0;
+        panelState.selected = [null, null, null];
+        panelState.searchTerm = '';
+        panelState.posFilter = '';
+        loadData(el, yr);
       });
     }
 
@@ -366,12 +401,7 @@
         el.querySelectorAll('.pr-pos-tab').forEach(function(t) { t.classList.remove('active'); });
         tab.classList.add('active');
         panelState.posFilter = tab.dataset.pos;
-        var listEl = el.querySelector('.pr-list');
-        if (listEl) {
-          listEl.querySelector('.pr-list-rows').outerHTML = renderProspectList();
-          listEl.querySelector('.pr-list-count').textContent = getFilteredProspects().length + ' found';
-          bindRowClicks(el);
-        }
+        refreshList(el);
       });
     });
 
@@ -379,24 +409,36 @@
     bindRowClicks(el);
 
     // Remove tags
-    el.querySelectorAll('.pr-tag-remove').forEach(function(btn) {
-      btn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        var idx = parseInt(btn.dataset.idx);
-        panelState.selected[idx] = null;
-        // Shift second to first if first removed
-        if (idx === 0 && panelState.selected[1]) {
-          panelState.selected[0] = panelState.selected[1];
-          panelState.selected[1] = null;
-        }
-        updateChart(el);
-      });
-    });
+    bindRemoveButtons(el);
 
     // Draw radar if we have a selection
     if (panelState.selected[0]) {
       setTimeout(drawRadar, 50);
     }
+  }
+
+  function refreshList(el) {
+    var listEl = el.querySelector('.pr-list');
+    if (listEl) {
+      var rowsContainer = listEl.querySelector('.pr-list-rows');
+      if (rowsContainer) rowsContainer.outerHTML = renderProspectList();
+      var countEl = listEl.querySelector('.pr-list-count');
+      if (countEl) countEl.textContent = getFilteredProspects().length + ' found';
+      bindRowClicks(el);
+    }
+  }
+
+  function bindRemoveButtons(el) {
+    el.querySelectorAll('.pr-tag-remove').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var idx = parseInt(btn.dataset.idx);
+        // Remove and compact the array
+        panelState.selected.splice(idx, 1);
+        panelState.selected.push(null);
+        updateChart(el);
+      });
+    });
   }
 
   function bindRowClicks(el) {
@@ -406,19 +448,28 @@
         var prospect = panelState.allProspects.find(function(p) { return p.player_name === name; });
         if (!prospect) return;
 
-        // If this prospect is already selected, deselect
-        if (panelState.selected[0] && panelState.selected[0].player_name === name) {
-          panelState.selected[0] = panelState.selected[1];
-          panelState.selected[1] = null;
-        } else if (panelState.selected[1] && panelState.selected[1].player_name === name) {
-          panelState.selected[1] = null;
-        } else if (!panelState.selected[0]) {
-          panelState.selected[0] = prospect;
-        } else if (!panelState.selected[1]) {
-          panelState.selected[1] = prospect;
+        // If already selected, deselect
+        var existIdx = -1;
+        for (var s = 0; s < 3; s++) {
+          if (panelState.selected[s] && panelState.selected[s].player_name === name) { existIdx = s; break; }
+        }
+        if (existIdx >= 0) {
+          panelState.selected.splice(existIdx, 1);
+          panelState.selected.push(null);
         } else {
-          // Both slots full — replace second
-          panelState.selected[1] = prospect;
+          // Find first empty slot
+          var placed = false;
+          for (var s2 = 0; s2 < 3; s2++) {
+            if (!panelState.selected[s2]) {
+              panelState.selected[s2] = prospect;
+              placed = true;
+              break;
+            }
+          }
+          if (!placed) {
+            // All 3 full — replace last
+            panelState.selected[2] = prospect;
+          }
         }
 
         updateChart(el);
@@ -437,26 +488,11 @@
       }
     }
 
-    // Re-render list (to update selection indicators)
-    var listEl = el.querySelector('.pr-list');
-    if (listEl) {
-      listEl.querySelector('.pr-list-rows').outerHTML = renderProspectList();
-      bindRowClicks(el);
-    }
+    // Re-render list (update selection indicators)
+    refreshList(el);
 
-    // Bind remove buttons
-    el.querySelectorAll('.pr-tag-remove').forEach(function(btn) {
-      btn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        var idx = parseInt(btn.dataset.idx);
-        panelState.selected[idx] = null;
-        if (idx === 0 && panelState.selected[1]) {
-          panelState.selected[0] = panelState.selected[1];
-          panelState.selected[1] = null;
-        }
-        updateChart(el);
-      });
-    });
+    // Bind remove buttons on new chart card
+    bindRemoveButtons(el);
 
     // Draw radar
     if (panelState.selected[0]) {
