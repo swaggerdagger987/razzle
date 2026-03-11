@@ -827,12 +827,48 @@
     <div id="demoCards" aria-live="polite"></div>
 
     <div style="text-align:center; margin-top:12px;">
-      <button class="btn-chunky" onclick="renderDemoCards()" style="border-color:var(--yellow); color:var(--yellow); font-size:13px; background:transparent;">shuffle briefings</button>
+      <button class="btn-chunky" onclick="rotateDemoCards(); stopDemoRotation(); startDemoRotation();" style="border-color:var(--yellow); color:var(--yellow); font-size:13px; background:transparent;">shuffle briefings</button>
     </div>
 
-    <div class="demo-cta">
+    <div class="demo-cta" id="demoCta">
       <p>this is what league context looks like</p>
+      <p style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); margin-top:4px;">connect your Sleeper leagues to get your own Situation Room</p>
     </div>
+    <script>
+    // Personalize CTA if Sleeper is connected
+    (function() {
+      var sleeperUser = localStorage.getItem('razzle_sleeper_user');
+      var razzleUser = null;
+      try { razzleUser = JSON.parse(localStorage.getItem('razzle_user')); } catch(e) {}
+      var cta = document.getElementById('demoCta');
+      if (!cta) return;
+
+      if (sleeperUser && razzleUser && (razzleUser.plan === 'pro' || razzleUser.plan === 'elite')) {
+        // Paid user with Sleeper connected — direct to Situation Room
+        cta.innerHTML = '<p>your Situation Room is ready</p>' +
+          '<a href="/agents.html" class="btn-chunky" style="font-size:14px; padding:8px 20px; margin-top:8px; display:inline-block; text-decoration:none;">Enter the Situation Room</a>';
+      } else if (sleeperUser) {
+        // Sleeper connected but free — show upgrade nudge
+        var leagueCtx = null;
+        try { leagueCtx = JSON.parse(localStorage.getItem('razzle_league_context') || '{}'); } catch(e) {}
+        var playerName = '';
+        if (leagueCtx && leagueCtx.roster && leagueCtx.roster.length > 0) {
+          playerName = leagueCtx.roster[0].name || '';
+        }
+        var personalMsg = playerName
+          ? 'the agents would tell you about <strong>' + playerName + '</strong> and your whole roster'
+          : 'the agents would analyze your entire roster and your rivals';
+        cta.innerHTML = '<p>' + personalMsg + '</p>' +
+          '<p style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); margin-top:4px;">upgrade to Pro to unlock league-contextualized intelligence</p>' +
+          '<a href="/agents.html#pricing" class="btn-chunky" style="font-size:13px; padding:6px 16px; margin-top:8px; display:inline-block; text-decoration:none; background:var(--orange); color:white; border-color:var(--orange);">Upgrade to Pro</a>';
+      } else {
+        // No Sleeper — encourage connection
+        cta.innerHTML = '<p>this is a real manager\'s Situation Room</p>' +
+          '<p style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); margin-top:4px;">connect your Sleeper leagues to get yours</p>' +
+          '<a href="/league-intel.html" class="btn-chunky" style="font-size:13px; padding:6px 16px; margin-top:8px; display:inline-block; text-decoration:none;">Connect Sleeper</a>';
+      }
+    })();
+    </script>
   </div>
 </div>
 
@@ -1110,11 +1146,11 @@ const demoBriefings = [
   { agent: '🐘 Historian', urgency: 'opportunity', text: 'Coaching carousel impact: <r>██████████</r>\'s new OC <r>██████████</r> historically boosts <r>██</r> production by <r>██</r>% in Year 1. The market hasn\'t priced this in yet. <r>██████████</r> is a buy.' },
 ];
 
-function renderDemoCards() {
-  const container = document.getElementById('demoCards');
-  // Shuffle and pick 3
+var _demoRotationTimer = null;
+var _demoTransitioning = false;
+
+function _pickDemoCards() {
   const shuffled = demoBriefings.slice().sort(() => Math.random() - 0.5);
-  // Pick 3 from different agents when possible
   const seen = new Set();
   const picks = [];
   for (const b of shuffled) {
@@ -1124,10 +1160,12 @@ function renderDemoCards() {
       seen.add(b.agent);
     }
   }
-  // Ensure we have 3
   while (picks.length < 3) picks.push(shuffled[picks.length]);
+  return picks;
+}
 
-  container.innerHTML = picks.map(b => {
+function _renderDemoCardsContent(picks) {
+  return picks.map(b => {
     const text = b.text.replace(/<r>/g, '<span class="redacted">').replace(/<\/r>/g, '</span>');
     return `<div class="demo-card">
       <div class="agent-name">${b.agent} <span class="urgency urgency-${b.urgency}">${b.urgency}</span></div>
@@ -1136,7 +1174,51 @@ function renderDemoCards() {
   }).join('');
 }
 
+function renderDemoCards() {
+  const container = document.getElementById('demoCards');
+  if (!container) return;
+  container.innerHTML = _renderDemoCardsContent(_pickDemoCards());
+}
+
+function rotateDemoCards() {
+  if (_demoTransitioning) return;
+  const container = document.getElementById('demoCards');
+  if (!container) return;
+
+  _demoTransitioning = true;
+
+  // Fade out
+  container.style.transition = 'opacity 0.4s ease';
+  container.style.opacity = '0';
+
+  setTimeout(function() {
+    container.innerHTML = _renderDemoCardsContent(_pickDemoCards());
+    // Fade in
+    container.style.opacity = '1';
+    _demoTransitioning = false;
+  }, 450);
+}
+
+function startDemoRotation() {
+  if (_demoRotationTimer) clearInterval(_demoRotationTimer);
+  _demoRotationTimer = setInterval(rotateDemoCards, 8000);
+}
+
+function stopDemoRotation() {
+  if (_demoRotationTimer) { clearInterval(_demoRotationTimer); _demoRotationTimer = null; }
+}
+
 renderDemoCards();
+startDemoRotation();
+
+// Pause rotation when user hovers over demo cards
+(function() {
+  var dc = document.getElementById('demoCards');
+  if (dc) {
+    dc.addEventListener('mouseenter', stopDemoRotation);
+    dc.addEventListener('mouseleave', startDemoRotation);
+  }
+})();
 
 // Agent bio cards
 const AGENT_BIOS = [

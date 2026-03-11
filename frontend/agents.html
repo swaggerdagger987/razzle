@@ -1467,6 +1467,82 @@
       <button class="btn-chunky" style="font-size:11px; padding:5px 12px;" onclick="if(typeof validatePromoCode==='function')validatePromoCode()">Apply</button>
     </div>
     <div id="promoCodeFeedback" style="font-family:var(--font-mono); font-size:11px; min-height:16px;"></div>
+
+    <!-- Feature Comparison Table -->
+    <div style="margin-top:32px; overflow-x:auto;">
+      <table style="width:100%; max-width:700px; margin:0 auto; border-collapse:collapse; font-family:var(--font-mono); font-size:11px; border:3px solid var(--ink); border-radius:8px; overflow:hidden; box-shadow:4px 4px 0 var(--ink);">
+        <thead>
+          <tr style="background:var(--ink); color:var(--bg-sand);">
+            <th style="padding:10px 12px; text-align:left; font-family:var(--font-display); font-size:13px; font-weight:400;">Feature</th>
+            <th style="padding:10px 12px; text-align:center; font-family:var(--font-display); font-size:13px; font-weight:400;">Free</th>
+            <th style="padding:10px 12px; text-align:center; font-family:var(--font-display); font-size:13px; font-weight:400; color:var(--orange);">Pro</th>
+            <th style="padding:10px 12px; text-align:center; font-family:var(--font-display); font-size:13px; font-weight:400; color:var(--orange);">Elite</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background:var(--bg-card);">
+            <td style="padding:8px 12px; border-bottom:1px solid var(--ink-faint);">The Lab (screener)</td>
+            <td style="padding:8px 12px; border-bottom:1px solid var(--ink-faint); text-align:center; color:var(--green); font-weight:700;">full</td>
+            <td style="padding:8px 12px; border-bottom:1px solid var(--ink-faint); text-align:center; color:var(--green); font-weight:700;">full</td>
+            <td style="padding:8px 12px; border-bottom:1px solid var(--ink-faint); text-align:center; color:var(--green); font-weight:700;">full</td>
+          </tr>
+          <tr>
+            <td style="padding:8px 12px; border-bottom:1px solid var(--ink-faint);">Generic AI queries</td>
+            <td style="padding:8px 12px; border-bottom:1px solid var(--ink-faint); text-align:center;">5/day</td>
+            <td style="padding:8px 12px; border-bottom:1px solid var(--ink-faint); text-align:center;">20/day</td>
+            <td style="padding:8px 12px; border-bottom:1px solid var(--ink-faint); text-align:center; font-weight:700;">unlimited</td>
+          </tr>
+          <tr style="background:var(--bg-card);">
+            <td style="padding:8px 12px; border-bottom:1px solid var(--ink-faint); color:var(--orange); font-weight:700;">League-contextualized AI</td>
+            <td style="padding:8px 12px; border-bottom:1px solid var(--ink-faint); text-align:center; color:var(--red);">&#x2717;</td>
+            <td style="padding:8px 12px; border-bottom:1px solid var(--ink-faint); text-align:center; color:var(--green); font-weight:700;">&#x2713; (BYOK)</td>
+            <td style="padding:8px 12px; border-bottom:1px solid var(--ink-faint); text-align:center; color:var(--green); font-weight:700;">&#x2713; (included)</td>
+          </tr>
+          <tr>
+            <td style="padding:8px 12px; border-bottom:1px solid var(--ink-faint); color:var(--orange); font-weight:700;">Agent memory</td>
+            <td style="padding:8px 12px; border-bottom:1px solid var(--ink-faint); text-align:center; color:var(--red);">&#x2717;</td>
+            <td style="padding:8px 12px; border-bottom:1px solid var(--ink-faint); text-align:center; color:var(--red);">&#x2717;</td>
+            <td style="padding:8px 12px; border-bottom:1px solid var(--ink-faint); text-align:center; color:var(--green); font-weight:700;">&#x2713; cloud-synced</td>
+          </tr>
+          <tr style="background:var(--bg-card);">
+            <td style="padding:8px 12px; border-bottom:1px solid var(--ink-faint);">Manager behavioral profiles</td>
+            <td style="padding:8px 12px; border-bottom:1px solid var(--ink-faint); text-align:center;">1 season</td>
+            <td style="padding:8px 12px; border-bottom:1px solid var(--ink-faint); text-align:center; font-weight:700;">5 seasons</td>
+            <td style="padding:8px 12px; border-bottom:1px solid var(--ink-faint); text-align:center; font-weight:700;">5 seasons</td>
+          </tr>
+          <tr>
+            <td style="padding:8px 12px; border-bottom:1px solid var(--ink-faint);">Historical data</td>
+            <td style="padding:8px 12px; border-bottom:1px solid var(--ink-faint); text-align:center;">3 seasons</td>
+            <td style="padding:8px 12px; border-bottom:1px solid var(--ink-faint); text-align:center; font-weight:700;">all (2015+)</td>
+            <td style="padding:8px 12px; border-bottom:1px solid var(--ink-faint); text-align:center; font-weight:700;">all (2015+)</td>
+          </tr>
+          <tr style="background:var(--bg-card);">
+            <td style="padding:8px 12px; border-bottom:1px solid var(--ink-faint);">Custom formulas</td>
+            <td style="padding:8px 12px; border-bottom:1px solid var(--ink-faint); text-align:center;">3 max</td>
+            <td style="padding:8px 12px; border-bottom:1px solid var(--ink-faint); text-align:center; font-weight:700;">unlimited</td>
+            <td style="padding:8px 12px; border-bottom:1px solid var(--ink-faint); text-align:center; font-weight:700;">unlimited</td>
+          </tr>
+          <tr>
+            <td style="padding:8px 12px; border-bottom:1px solid var(--ink-faint);">CSV export</td>
+            <td style="padding:8px 12px; border-bottom:1px solid var(--ink-faint); text-align:center; color:var(--red);">&#x2717;</td>
+            <td style="padding:8px 12px; border-bottom:1px solid var(--ink-faint); text-align:center; color:var(--green); font-weight:700;">&#x2713;</td>
+            <td style="padding:8px 12px; border-bottom:1px solid var(--ink-faint); text-align:center; color:var(--green); font-weight:700;">&#x2713;</td>
+          </tr>
+          <tr style="background:var(--bg-card);">
+            <td style="padding:8px 12px; border-bottom:1px solid var(--ink-faint);">Compare mode</td>
+            <td style="padding:8px 12px; border-bottom:1px solid var(--ink-faint); text-align:center;">2 players</td>
+            <td style="padding:8px 12px; border-bottom:1px solid var(--ink-faint); text-align:center; font-weight:700;">4 players</td>
+            <td style="padding:8px 12px; border-bottom:1px solid var(--ink-faint); text-align:center; font-weight:700;">4 players</td>
+          </tr>
+          <tr>
+            <td style="padding:8px 12px;">Formula Store</td>
+            <td style="padding:8px 12px; text-align:center;">preview</td>
+            <td style="padding:8px 12px; text-align:center; color:var(--green); font-weight:700;">full</td>
+            <td style="padding:8px 12px; text-align:center; color:var(--green); font-weight:700;">full</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 

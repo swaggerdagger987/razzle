@@ -1,7 +1,7 @@
-# Platform Loop — Phase 136 Task List
+# Platform Loop — Phase 137 Task List
 
 ## Status
-Current Phase: 136 (Agent Memory Engine — Server-Side Persistence for Elite)
+Current Phase: 137 (Landing Page Conversion Polish)
 Current Task: COMPLETE
 Current Stage: PHASE GATE
 Attempt: -
@@ -10,26 +10,26 @@ Loop Iterations: 3
 
 ---
 
-## Task 1: Backend API for agent memory storage
-**Requirement**: "Agent memory gets more valuable every season — switching cost increases over time" (North Star). "Agent memory: NO / NO / YES" (Pricing Strategy — Elite tier only).
-**Accept when**: POST /api/user/memory saves a memory entry (scenario + agent findings) tied to user_id. GET /api/user/memory retrieves memories with optional keyword search. DELETE /api/user/memory/:id deletes a single entry. Auth required (JWT). Tier check: only Elite users can write. Memory entries stored in users.db with timestamp, scenario text, agent findings JSON, and optional league_id.
+## Task 1: Auto-rotating Situation Room demo on landing page
+**Requirement**: "Agents visibly working but content redacted. Rotates on each visit." (North Star, Phase 8)
+**Accept when**: Demo briefing cards auto-rotate every 8 seconds with a smooth fade transition. Each rotation shows 3 cards from different agents. A subtle "agents are briefing..." animation plays during transitions. The demo feels alive, not static. A manual "shuffle" button also exists.
 **Depends on**: none
-**Size**: M
-**Primary role**: BACKEND
-**Status**: PASS
-
-## Task 2: Frontend memory sync for Elite users
-**Requirement**: "Agent memory (multi-season, per-league, Elite tier)" (Roadmap Phase 9)
-**Accept when**: warroom.js saveWarRoomMemory() POSTs to server when user is Elite. getWarRoomMemory() fetches from server when Elite (merges with localStorage). Memory panel shows server-synced entries with cloud icon. Non-Elite users continue using localStorage only (no degradation). Memory count bumped from 20 (localStorage) to 100 (server) for Elite.
-**Depends on**: Task 1
-**Size**: M
+**Size**: S
 **Primary role**: FRONTEND
 **Status**: PASS
 
-## Task 3: Memory relevance and context enrichment
-**Requirement**: "More seasons = richer profiles = higher switching cost" (North Star)
-**Accept when**: getRelevantMemory() uses improved keyword matching that considers league context (which league the memory was recorded for). formatMemoryContext() includes league name and season. Older memories get lower relevance scores (time decay). Memory entries include league_id so agents can reference "your history in [League Name]". Free trial prompt shows "Agent memory available with Elite plan."
-**Depends on**: Task 2
+## Task 2: "See what they'd say about YOUR roster" conversion CTA
+**Requirement**: "See what [Agent Name] thinks about YOUR roster — personalized conversion hooks" (Design rules, paywall design)
+**Accept when**: Below the rotating demo cards, a personalized CTA appears: "This is a real manager's Situation Room. Connect Sleeper to get yours." If Sleeper is already connected but user is free, CTA becomes "[Agent] would tell you about [YOUR PLAYER from their roster] — upgrade to unlock." CTA links to auth modal or Sleeper connection flow.
+**Depends on**: Task 1
 **Size**: S
+**Primary role**: FRONTEND
+**Status**: PASS
+
+## Task 3: Feature comparison table on pricing section
+**Requirement**: "The difference is obvious and compelling" (Phase 8 exit criterion)
+**Accept when**: The agents.html pricing section includes a clear feature comparison table showing Free vs Pro vs Elite with checkmarks/X marks. Table is styled in Razzle design (chunky borders, position colors). Key differentiators are visually highlighted: league context, agent memory, weekly briefings, FAAB intel. Table feels like an invitation, not a wall.
+**Depends on**: none
+**Size**: M
 **Primary role**: FRONTEND
 **Status**: PASS
