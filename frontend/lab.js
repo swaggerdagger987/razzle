@@ -8412,6 +8412,16 @@ document.addEventListener("keydown", function(e) {
     }
     return;
   }
+
+  // ArrowLeft / ArrowRight: page navigation
+  if (e.key === "ArrowLeft") {
+    if (state.offset > 0) { prevPage(); _showToast("previous page"); }
+    return;
+  }
+  if (e.key === "ArrowRight") {
+    if (state.offset + state.limit < state.totalCount) { nextPage(); _showToast("next page"); }
+    return;
+  }
 });
 
 // Shortcut reference overlay
@@ -8454,6 +8464,7 @@ function toggleShortcutRef() {
           ${shortcutRow("P", "Clear pinned players")}
           ${shortcutRow("Dbl-click", "Column header → quick filter")}
           ${shortcutRow("Dbl-click", "Stat cell → copy value")}
+          ${shortcutRow("← →", "Previous / next page")}
           ${shortcutRow("?", "This reference")}
         </tbody>
       </table>

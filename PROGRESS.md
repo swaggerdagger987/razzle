@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 83 — Screener Keyboard Page Navigation (COMPLETE)
+
+**Exit Criterion MET**: Left/Right arrow keys navigate pages. Bounds-checked. Toast feedback. Shortcut reference updated.
+
+### Phase 83 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Arrow key page navigation | DONE | ArrowLeft/ArrowRight in keydown, bounds check, toast, shortcut ref |
+
 ## Previous Phase: Phase 82 — Screener Select All Checkbox (COMPLETE)
 
 **Exit Criterion MET**: Checkbox in header selects/deselects all visible players (max 5). Reflects current state. Bulk action bar updates.
