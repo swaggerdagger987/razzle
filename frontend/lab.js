@@ -1259,12 +1259,13 @@ function renderTableHead() {
     }
     var cw = state.columnWidths[key];
     var cwStyle = cw ? `width:${cw}px; min-width:${cw}px; max-width:${cw}px;` : "";
+    var dragAttr = ' draggable="true" ondragstart="_colDragStart(event)" ondragover="_colDragOver(event)" ondrop="_colDrop(event)" ondragend="_colDragEnd(event)"';
     if (col.isSparkline) {
-      html += `<th${tip} data-col="${key}" style="${cwStyle || 'width:80px;'} text-align:center;">${col.label}<div class="col-resize-handle" data-col="${key}"></div></th>`;
+      html += `<th${tip} data-col="${key}"${dragAttr} style="${cwStyle || 'width:80px;'} text-align:center;">${col.label}<div class="col-resize-handle" data-col="${key}"></div></th>`;
     } else if (col.isNotes) {
-      html += `<th${tip} data-col="${key}" style="${cwStyle || 'width:120px; min-width:80px;'}">${col.label}<div class="col-resize-handle" data-col="${key}"></div></th>`;
+      html += `<th${tip} data-col="${key}"${dragAttr} style="${cwStyle || 'width:120px; min-width:80px;'}">${col.label}<div class="col-resize-handle" data-col="${key}"></div></th>`;
     } else {
-      html += `<th class="${cls}"${tip} data-col="${key}" style="${cwStyle}" tabindex="0" onclick="sortBy('${key}', event)" ondblclick="openFilterForColumn('${key}')" onkeydown="if(event.key==='Enter'){sortBy('${key}');event.preventDefault();}">${col.label}${extra}<div class="col-resize-handle" data-col="${key}"></div></th>`;
+      html += `<th class="${cls}"${tip} data-col="${key}"${dragAttr} style="${cwStyle}" tabindex="0" onclick="sortBy('${key}', event)" ondblclick="openFilterForColumn('${key}')" onkeydown="if(event.key==='Enter'){sortBy('${key}');event.preventDefault();}">${col.label}${extra}<div class="col-resize-handle" data-col="${key}"></div></th>`;
     }
   }
 
@@ -1338,6 +1339,67 @@ function _onColResizeEnd() {
   document.body.style.cursor = "";
   document.body.style.userSelect = "";
   try { localStorage.setItem("razzle_col_widths", JSON.stringify(state.columnWidths)); } catch(e) {}
+}
+
+// ─── Column drag reorder ─────────────────────────────────────────
+var _colDragKey = null;
+
+function _colDragStart(e) {
+  // Don't start drag from resize handle
+  if (e.target.classList.contains("col-resize-handle")) { e.preventDefault(); return; }
+  var th = e.target.closest("th[data-col]");
+  if (!th) return;
+  _colDragKey = th.dataset.col;
+  e.dataTransfer.effectAllowed = "move";
+  e.dataTransfer.setData("text/plain", _colDragKey);
+  th.classList.add("col-dragging");
+}
+
+function _colDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = "move";
+  var th = e.target.closest("th[data-col]");
+  if (th && th.dataset.col !== _colDragKey) {
+    // Remove previous drop targets
+    var prev = document.querySelectorAll(".col-drag-over");
+    for (var i = 0; i < prev.length; i++) prev[i].classList.remove("col-drag-over");
+    th.classList.add("col-drag-over");
+  }
+}
+
+function _colDrop(e) {
+  e.preventDefault();
+  var th = e.target.closest("th[data-col]");
+  if (!th || !_colDragKey || th.dataset.col === _colDragKey) return;
+  var targetKey = th.dataset.col;
+  var cols = _getActiveColumnArray();
+  var fromIdx = cols.indexOf(_colDragKey);
+  var toIdx = cols.indexOf(targetKey);
+  if (fromIdx === -1 || toIdx === -1) return;
+  cols.splice(fromIdx, 1);
+  cols.splice(toIdx, 0, _colDragKey);
+  _setActiveColumnArray(cols);
+  renderTableHead();
+  renderTableBody();
+  saveStateToURL();
+}
+
+function _colDragEnd(e) {
+  _colDragKey = null;
+  var els = document.querySelectorAll(".col-dragging, .col-drag-over");
+  for (var i = 0; i < els.length; i++) els[i].classList.remove("col-dragging", "col-drag-over");
+}
+
+function _getActiveColumnArray() {
+  if (isProspectView()) return state.prospectColumns;
+  if (state.universe === "college") return state.collegeColumns;
+  return state.visibleColumns;
+}
+
+function _setActiveColumnArray(arr) {
+  if (isProspectView()) { state.prospectColumns = arr; return; }
+  if (state.universe === "college") { state.collegeColumns = arr; return; }
+  state.visibleColumns = arr;
 }
 
 // ─── Virtual scrolling ──────────────────────────────────────────

@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 114 — Column Reorder by Drag (COMPLETE)
+
+**Exit Criterion MET**: HTML5 drag-and-drop on data column headers. Reorder updates column arrays and re-renders. Frozen columns not draggable. 34 tests pass.
+
+### Phase 114 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Column drag reorder | DONE | dragstart/over/drop/end handlers, opacity+border feedback |
+
 ## Previous Phase: Phase 113 — Keyboard Shortcut Onboarding Toast (COMPLETE)
 
 **Exit Criterion MET**: First-time toast with "Press ? for keyboard shortcuts" at 3s delay. Auto-dismiss 8s. Click dismiss. localStorage prevents repeat. 34 tests pass.

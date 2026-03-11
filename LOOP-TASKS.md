@@ -1,15 +1,15 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 113 (Keyboard Shortcut Onboarding Toast)
-## Phase 113: Keyboard Shortcut Onboarding Toast
-**Exit Criterion**: First-time Lab visitors see a dismissible toast "Press ? for keyboard shortcuts" after 3 seconds. Toast dismissed on click or after 8 seconds. Remembered via localStorage so it only shows once. 34 tests pass.
+- Phase: 114 (Column Reorder by Drag)
+## Phase 114: Column Reorder by Drag
+**Exit Criterion**: Users can drag data column headers to reorder columns. Drag ghost follows mouse. Column order persists in state. Frozen columns (star/select/pin/rank/player) are not draggable. 34 tests pass.
 
 - Task 1: PASS
 - Stage: COMPLETE
 - Next: Phase gate
 
-### Task 1: Implement onboarding toast
+### Task 1: Implement column drag reorder
 **Status**: PASS
 **Attempts**: 1
-**Result**: (1) Toast appears 3s after first Lab visit with "Press ? for keyboard shortcuts". (2) Razzle design: sand bg-card, 3px ink border, 4px offset shadow, terracotta kbd badge. (3) Fades in/out with CSS transitions. (4) Auto-dismisses after 8s or on click. (5) localStorage razzle_shortcuts_shown prevents repeat. (6) Bottom-right positioning avoids bulk bar conflict. 34 tests pass.
+**Result**: (1) HTML5 drag-and-drop on data column headers. (2) Dragging column shows 0.4 opacity on source, terracotta left border on drop target. (3) Frozen columns have no draggable attr. (4) Reorder updates visibleColumns/collegeColumns/prospectColumns and re-renders head+body. (5) Resize handle mousedown blocked from initiating drag. (6) State saved via saveStateToURL() (localStorage persist). 34 tests pass.
