@@ -1,33 +1,15 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 111 (QA + UX Audit — Auto-Generated Fixes)
-## Phase 111: QA + UX Audit — Auto-Generated Fixes
-**Exit Criterion**: 1 HIGH (Enter preventDefault) fixed. Focus ring thickened to 2px. Filter restore added to auto-save/restore. All MEDIUM findings resolved.
+- Phase: 112 (Column Resize by Drag)
+## Phase 112: Column Resize by Drag
+**Exit Criterion**: Users can drag the right edge of column headers to resize columns. Resize cursor appears on hover. Column widths persist in state. Sticky columns (rank/player) maintain their left offsets. 34 tests pass.
 
 - Task 1: PASS
-- Task 2: PASS
-- Task 3: PASS
-- Task 4: PASS
 - Stage: COMPLETE
 - Next: Phase gate
 
-### Task 1: Add preventDefault to Enter key profile open
+### Task 1: Implement column drag resize
 **Status**: PASS
 **Attempts**: 1
-**Result**: Added e.preventDefault() before openPlayerProfile() call. Only fires when a focused row exists and universe is NFL. 34 tests pass.
-
-### Task 2: Thicken row focus ring to 2px
-**Status**: PASS
-**Attempts**: 1
-**Result**: Changed box-shadow from 1.5px to 2px inset. Consistent with design system chunky borders.
-
-### Task 3: Add filters to auto-save/restore state
-**Status**: PASS
-**Attempts**: 1
-**Result**: state.filters now saved in razzle_last_state localStorage. On restore, filters validated with same sanitization as URL param parsing (string key/op, numeric value). Filter UI reflects restored filters. URL params still override.
-
-### Task 4: LOW findings — grouped polish
-**Status**: PASS
-**Attempts**: 1
-**Result**: Replaced &nbsp; with CSS margin-left:6px span wrapper for position badges in bulk bar. Consistent cross-browser spacing.
+**Result**: (1) 5px resize handle div at right edge of each data column header with col-resize cursor. (2) Drag smoothly resizes column (min 40px). (3) Widths stored in state.columnWidths and persisted to localStorage (razzle_col_widths). (4) Sticky frozen columns (star/select/pin/rank/player) have no resize handles — fixed widths preserved. (5) Handle mousedown uses stopPropagation to prevent sort/filter triggers. (6) Double-click handle resets column to auto width. (7) Hover shows terracotta highlight on handle. (8) No syntax errors. 34 tests pass.

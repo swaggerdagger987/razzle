@@ -826,6 +826,7 @@ const state = {
     try { return JSON.parse(localStorage.getItem('razzle_pinned_players')) || []; }
     catch(e) { return []; }
   })(), // pinned player IDs for sticky comparison rows
+  columnWidths: (function() { try { return JSON.parse(localStorage.getItem('razzle_col_widths')) || {}; } catch(e) { return {}; } })(), // user-resized column widths {key: px}
   formulas: [], // user custom formulas [{name, components: [{stat, weight}]}]
   // College-specific state (includes prospect sub-view)
   collegeView: (function() {
@@ -1240,12 +1241,14 @@ function renderTableHead() {
     if (key === "dynasty_value") {
       extra = ` <span class="dvs-info" onclick="event.stopPropagation(); toggleDVSInfo()" title="Click for DVS methodology" style="cursor:help; font-size:10px; opacity:0.6;">&#9432;</span>`;
     }
+    var cw = state.columnWidths[key];
+    var cwStyle = cw ? `width:${cw}px; min-width:${cw}px; max-width:${cw}px;` : "";
     if (col.isSparkline) {
-      html += `<th${tip} style="width:80px; text-align:center;">${col.label}</th>`;
+      html += `<th${tip} data-col="${key}" style="${cwStyle || 'width:80px;'} text-align:center;">${col.label}<div class="col-resize-handle" data-col="${key}"></div></th>`;
     } else if (col.isNotes) {
-      html += `<th${tip} style="width:120px; min-width:80px;">${col.label}</th>`;
+      html += `<th${tip} data-col="${key}" style="${cwStyle || 'width:120px; min-width:80px;'}">${col.label}<div class="col-resize-handle" data-col="${key}"></div></th>`;
     } else {
-      html += `<th class="${cls}"${tip} tabindex="0" onclick="sortBy('${key}', event)" ondblclick="openFilterForColumn('${key}')" onkeydown="if(event.key==='Enter'){sortBy('${key}');event.preventDefault();}">${col.label}${extra}</th>`;
+      html += `<th class="${cls}"${tip} data-col="${key}" style="${cwStyle}" tabindex="0" onclick="sortBy('${key}', event)" ondblclick="openFilterForColumn('${key}')" onkeydown="if(event.key==='Enter'){sortBy('${key}');event.preventDefault();}">${col.label}${extra}<div class="col-resize-handle" data-col="${key}"></div></th>`;
     }
   }
 
@@ -1254,6 +1257,71 @@ function renderTableHead() {
 
   html += "</tr>";
   thead.innerHTML = html;
+  _initColResizeHandles();
+}
+
+// ─── Column drag resize ──────────────────────────────────────────
+var _colResize = { active: false, key: null, startX: 0, startW: 0 };
+
+function _initColResizeHandles() {
+  var handles = document.querySelectorAll(".col-resize-handle");
+  for (var i = 0; i < handles.length; i++) {
+    handles[i].addEventListener("mousedown", _onColResizeStart);
+    handles[i].addEventListener("dblclick", _onColResizeReset);
+  }
+}
+
+function _onColResizeReset(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  var key = e.target.dataset.col;
+  delete state.columnWidths[key];
+  var ths = document.querySelectorAll('th[data-col="' + key + '"]');
+  for (var i = 0; i < ths.length; i++) {
+    ths[i].style.width = "";
+    ths[i].style.minWidth = "";
+    ths[i].style.maxWidth = "";
+  }
+  try { localStorage.setItem("razzle_col_widths", JSON.stringify(state.columnWidths)); } catch(e) {}
+}
+
+function _onColResizeStart(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  var key = e.target.dataset.col;
+  var th = e.target.parentElement;
+  _colResize.active = true;
+  _colResize.key = key;
+  _colResize.startX = e.clientX;
+  _colResize.startW = th.offsetWidth;
+  document.addEventListener("mousemove", _onColResizeMove);
+  document.addEventListener("mouseup", _onColResizeEnd);
+  document.body.style.cursor = "col-resize";
+  document.body.style.userSelect = "none";
+}
+
+function _onColResizeMove(e) {
+  if (!_colResize.active) return;
+  var delta = e.clientX - _colResize.startX;
+  var newW = Math.max(40, _colResize.startW + delta);
+  state.columnWidths[_colResize.key] = newW;
+  // Apply to all cells in this column
+  var ths = document.querySelectorAll('th[data-col="' + _colResize.key + '"]');
+  for (var i = 0; i < ths.length; i++) {
+    ths[i].style.width = newW + "px";
+    ths[i].style.minWidth = newW + "px";
+    ths[i].style.maxWidth = newW + "px";
+  }
+}
+
+function _onColResizeEnd() {
+  if (!_colResize.active) return;
+  _colResize.active = false;
+  document.removeEventListener("mousemove", _onColResizeMove);
+  document.removeEventListener("mouseup", _onColResizeEnd);
+  document.body.style.cursor = "";
+  document.body.style.userSelect = "";
+  try { localStorage.setItem("razzle_col_widths", JSON.stringify(state.columnWidths)); } catch(e) {}
 }
 
 // ─── Virtual scrolling ──────────────────────────────────────────

@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 112 — Column Resize by Drag (COMPLETE)
+
+**Exit Criterion MET**: Drag right edge of data column headers to resize. Widths persist in localStorage. Sticky columns unaffected. Double-click resets. 34 tests pass.
+
+### Phase 112 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Column drag resize | DONE | 5px resize handle, min 40px, localStorage persist, dblclick reset |
+
 ## Previous Phase: Phase 111 — QA + UX Audit Fixes for Phases 106-110 (COMPLETE)
 
 **Exit Criterion MET**: 1 HIGH (Enter preventDefault) + 3 MEDIUM (focus ring, filter restore, badge spacing) fixed. 34 tests pass.

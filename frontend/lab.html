@@ -913,6 +913,24 @@
     border-right: 3px solid var(--ink);
   }
 
+  /* ─── Column resize handle ─── */
+  .screener-table th {
+    position: relative;
+  }
+  .col-resize-handle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 5px;
+    height: 100%;
+    cursor: col-resize;
+    z-index: 2;
+  }
+  .col-resize-handle:hover {
+    background: var(--orange);
+    opacity: 0.4;
+  }
+
   .screener-table tbody tr {
     height: 36px;
   }
