@@ -1,49 +1,44 @@
-# QA + UX Audit — Phases 51-54
+# QA + UX Audit — Phases 56-60
 
-**Date**: 2026-03-10
-**Scope**: Phase 51 (Tags), Phase 52 (Notes), Phase 53 (Pins), Phase 54 (Tier Breaks)
+**Scope**: Phases 56-60 (Density Toggle, Column Group Headers, Stats Summary Bar, Row Highlighting, Context Menu)
+**Files reviewed**: frontend/lab.js, frontend/lab.html
 
 ---
 
 ## QA FINDINGS
 
-### CRITICAL
+### HIGH-1: Context menu XSS/crash with apostrophe names
+**File**: frontend/lab.js (context menu builder, ~line 1700-1730)
+**Issue**: `escapeAttr()` converts `'` to `&#39;`, but when used in `onclick` attribute strings like `onclick="fn('O&#39;Brien')"`, the browser HTML-decodes first (giving `fn('O'Brien')`) then executes as JS — breaking the string literal. Affects players like D'Andre Swift, Ja'Marr Chase.
+**Fix**: Use a JS-safe escape function for values embedded in onclick handlers, or switch to data attributes + event delegation.
 
-**1. Pinned rows separator colspan missing pin column**
-- **File**: `frontend/lab.js:2493`
-- **Issue**: `cols.length + 3` didn't account for pin column in NFL mode.
-- **Status**: FIXED in this audit.
+### HIGH-2: navigator.clipboard.writeText without error handling
+**File**: frontend/lab.js (context menu "Copy Name" action)
+**Issue**: `navigator.clipboard.writeText()` can throw if: (a) page is served over HTTP (not HTTPS), (b) clipboard permission denied, (c) focus is lost. No try/catch wrapping — will show uncaught promise rejection.
+**Fix**: Wrap in try/catch or use a fallback (toast with "copy failed").
 
-### HIGH
-
-**2. Tag picker border 1.5px violates design system**
-- **File**: `frontend/styles.css:913`
-- **Issue**: `.tag-picker-option.active` used `border: 1.5px solid`. DESIGN.md requires 2px. No border reserved in default state causing layout shift.
-- **Status**: FIXED in this audit. Changed to `2px solid transparent` default + `2px solid var(--tag-color)` active.
-
-### MEDIUM
-
-**3. Tag picker buttons lack focus indicator**
-- **File**: `frontend/styles.css:892`
-- **Issue**: No `:focus` style for keyboard accessibility.
-
-**4. Tier break Tier 1 has no visible label**
-- **File**: `frontend/lab.js:2928`
-- **Issue**: Top rows (Tier 1) have no label divider; only Tier 2+ breaks shown. Implicitly correct but may confuse in screenshots.
-
-### LOW
-
-**5. `tierLabels[0]` declared but unused**
-**6. Tier break `pointer-events:none` prevents text selection**
-**7. Toolbar density approaching 15+ buttons (future: consider grouping)**
-**8. P key clears pins without toast confirmation**
+### HIGH-3: Context menu separator missing in college mode
+**File**: frontend/lab.js (context menu builder)
+**Issue**: The separator (`{ sep: true }`) is inside the `if (state.universe === "nfl")` block, so college/prospect mode has no visual break between Watchlist and Toggle Highlight.
+**Fix**: Move separator outside the NFL conditional or add one unconditionally before utility actions.
 
 ---
 
 ## UX FINDINGS
 
-- First 30 seconds: Clean. New features are opt-in, progressive disclosure works well.
-- Readability: All labels use fantasy-standard terminology (BUY/SELL/WATCH/TARGET/AVOID, Elite/Starters/Flex/Bench/Deep).
-- Flow tests: All 3 core flows work end-to-end with new features. No dead ends.
-- Visual noise: Default view is clean. Tags/Notes/Pins/Tiers all require intentional activation.
-- No CRITICAL or HIGH UX issues found.
+### MEDIUM-U1: Summary bar shows "avg" without scope context
+**Issue**: The summary bar shows "avg" label for each column but doesn't indicate it's the average of the currently displayed page (up to 100 rows), not the full dataset.
+**Fix**: Change label to "page avg" or add tooltip explaining scope.
+
+### MEDIUM-U2: No way to clear all row highlights
+**Issue**: Users can highlight rows by clicking but there's no shortcut to clear all highlights at once.
+**Fix**: Add Escape key or context menu option to clear all highlights.
+
+### LOW-U1: "A" shortcut for Summary bar not mnemonic
+**Issue**: "A" doesn't intuitively map to "Summary". Already documented in shortcut reference.
+
+### LOW-U2: Row highlights lost on data refresh
+**Issue**: Expected behavior but may surprise users. Low priority.
+
+### LOW-U3: Five display toggle buttons may feel cluttered
+**Issue**: Heat, Tiers, Dense, Groups, Summary — five consecutive toggle buttons. Toolbar has 15+ visible buttons total.
