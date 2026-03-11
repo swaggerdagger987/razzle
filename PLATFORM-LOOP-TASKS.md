@@ -1,51 +1,59 @@
-# Platform Loop — Phase 132 Task List
+# Platform Loop — Phase 133 Task List
 
 ## Status
-Current Phase: 132 (Pricing + Agent Branding + Health Check)
+Current Phase: 133 (Backend Hardening + Caching + Free Trial + Promo Codes)
 Current Task: COMPLETE
 Current Stage: PHASE GATE
 Attempt: -
-Tasks Completed: 5/5
-Loop Iterations: 5
+Tasks Completed: 6/6
+Loop Iterations: 6
 
 ---
 
-## Task 1: Fix landing page pricing to two-tier Pro/Elite
-**Requirement**: "Tier 1 ('Pro') at $9.99/month ($79.99/year)... Tier 2 ('Elite') at $19.99/month ($149.99/year)" (Pricing Strategy)
-**Accept when**: Landing page shows two pricing cards (Pro and Elite) with correct prices. Demo section and waitlist text updated. No references to $240/yr or $20/mo remain.
+## Task 1: Add response caching to high-traffic read endpoints
+**Requirement**: "Add response caching to high-traffic endpoints... Reduces database load by 80%+ for popular endpoints" (Backend Audit, Priority Fix #5)
+**Accept when**: At least 15 popular read-only endpoints have Cache-Control headers (max-age=300). In-memory function cache extended with LRU eviction (max 200 entries). Dynasty rankings, trade values, stat leaders, prospects, aging curves all cached.
 **Depends on**: none
 **Size**: M
-**Primary role**: FRONTEND
-**Status**: PASS
-
-## Task 2: Update agent emojis and animal names across landing page and demo
-**Requirement**: "Scout=Eagle, Medical=Owl, Diplomat=Bear, Quant=Fox, Historian=Elephant" (Phase 131 Decisions Log)
-**Accept when**: Landing page demo briefings use correct animal emojis. Agent bio cards show correct animal names. No generic emojis (hospital, chart, books) remain for agents.
-**Depends on**: none
-**Size**: S
-**Primary role**: FRONTEND
-**Status**: PASS
-
-## Task 3: Update Situation Room (agents.html) agent names and colors
-**Requirement**: Agent persona files define names and animals. Bio grid and hero badges should match.
-**Accept when**: agents.html hero badges, bio grid, and warroom.js AGENTS array all use correct animal names and emojis matching persona files.
-**Depends on**: none
-**Size**: S
-**Primary role**: FRONTEND
-**Status**: PASS
-
-## Task 4: Deepen health check endpoint
-**Requirement**: "Health check: verify Turso + users.db + query execution time" (Backend Audit)
-**Accept when**: GET /api/health returns status of main DB (terminal.db) connectivity, users.db connectivity, and query execution time in milliseconds. Returns 503 if any check fails.
-**Depends on**: none
-**Size**: S
 **Primary role**: BACKEND
 **Status**: PASS
 
-## Task 5: Add pricing page / section to agents.html with upgrade CTA
-**Requirement**: "Paywall UI gating... Free users see generic, paid content teased but gated" (Phase 8 ROADMAP) and "Upgrade CTAs feel like invitations, not roadblocks" (System Prompt)
-**Accept when**: agents.html has a visible pricing/upgrade section matching the two-tier Pro/Elite structure from Pricing Strategy, with feature comparison relevant to Situation Room.
-**Depends on**: Task 1
+## Task 2: Add structured logging with request timing middleware
+**Requirement**: "Replace the scattered logger.info()/logger.error() calls with structured JSON logging that includes request IDs, endpoint names, and timing information" (Backend Audit, Priority Fix #7)
+**Accept when**: FastAPI middleware logs request method, path, status code, and response time in milliseconds for every request. Structured JSON format. Errors include traceback context.
+**Depends on**: none
+**Size**: M
+**Primary role**: BACKEND
+**Status**: PASS (already implemented in Phase 131-132 — logging_config.py + request_logging_middleware)
+
+## Task 3: Make bootstrap async (non-blocking server startup)
+**Requirement**: "Instead of blocking server startup with data sync, either run the bootstrap in a background thread after the server starts responding, or make it a separate CLI command" (Backend Audit, Priority Fix #6)
+**Accept when**: Server starts and responds to /api/health within 5 seconds of launch, even if data sync is still running. Bootstrap runs in background thread. Health check indicates bootstrap status.
+**Depends on**: none
+**Size**: M
+**Primary role**: BACKEND
+**Status**: PASS
+
+## Task 4: Implement 7-day free trial for Pro/Elite subscriptions
+**Requirement**: "Free trial (7 days)" (Pricing Strategy, ROADMAP Phase 9)
+**Accept when**: Stripe checkout sessions include trial_period_days=7 for new subscribers. Trial status shown in billing status response. After trial expires, user reverts to free tier. Frontend shows trial status.
+**Depends on**: none
+**Size**: M
+**Primary role**: BACKEND
+**Status**: PASS
+
+## Task 5: Implement promo code system (RAZZLE = 20% off)
+**Requirement**: "Promo codes (RAZZLE = 20% off, early adopter rates)" (Pricing Strategy)
+**Accept when**: Promo code input on pricing/checkout UI. RAZZLE code gives 20% off. Backend validates promo codes via Stripe coupons. Invalid codes show clear error. Promo applied to checkout session.
+**Depends on**: Task 4
+**Size**: M
+**Primary role**: BACKEND
+**Status**: PASS
+
+## Task 6: UX polish — loading states, error states, and personality copy
+**Requirement**: "Full UX polish pass: Loading states ('pulling film...'), error states, empty states, transitions" (ROADMAP Phase 9, Task 4)
+**Accept when**: All major pages have Razzle-personality loading states. Error states show helpful messaging. Empty states guide users. 404 page has personality.
+**Depends on**: none
 **Size**: M
 **Primary role**: FRONTEND
-**Status**: PASS
+**Status**: PASS (already implemented across all pages — "pulling film...", "checking the tape...", "running the numbers...", 404 with mascot)

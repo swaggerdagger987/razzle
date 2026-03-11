@@ -322,11 +322,16 @@ function updateAuthUI(user) {
     var displayName = user.sleeper_username
       ? escapeHtml(user.sleeper_username)
       : escapeHtml(user.email.split("@")[0]);
-    var isPro = user.plan === "pro";
-    var badge = isPro
-      ? '<span class="nav-plan-badge nav-plan-pro">Pro</span>'
-      : '<span class="nav-plan-badge nav-plan-free">Free</span>';
-    var manageLink = isPro
+    var isPaid = user.plan === "pro" || user.plan === "elite";
+    var badge;
+    if (user.plan === "elite") {
+      badge = '<span class="nav-plan-badge nav-plan-elite">Elite</span>';
+    } else if (user.plan === "pro") {
+      badge = '<span class="nav-plan-badge nav-plan-pro">Pro</span>';
+    } else {
+      badge = '<span class="nav-plan-badge nav-plan-free">Free</span>';
+    }
+    var manageLink = isPaid
       ? '<a href="#" onclick="openManageSubscription(); return false;" class="nav-signout">Manage</a>'
       : '';
     item.innerHTML =
@@ -344,11 +349,19 @@ function updateAuthUI(user) {
 async function startCheckout(interval) {
   var token = localStorage.getItem("razzle_token");
   if (!token) { openAuthModal(); return; }
+
+  // Check for promo code input on page
+  var promoInput = document.getElementById("promoCodeInput");
+  var promoCode = promoInput ? promoInput.value.trim() : "";
+
   try {
+    var body = { interval: interval || "year" };
+    if (promoCode) body.promo_code = promoCode;
+
     var resp = await fetch(API_BASE + "/api/billing/create-checkout", {
       method: "POST",
       headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
-      body: JSON.stringify({ interval: interval || "year" })
+      body: JSON.stringify(body)
     });
     var data = await resp.json();
     if (data.checkout_url) {
@@ -358,6 +371,35 @@ async function startCheckout(interval) {
     }
   } catch (e) {
     alert("network fumble. try again.");
+  }
+}
+
+async function validatePromoCode() {
+  var input = document.getElementById("promoCodeInput");
+  var feedback = document.getElementById("promoCodeFeedback");
+  if (!input || !feedback) return;
+  var code = input.value.trim();
+  if (!code) { feedback.textContent = ""; return; }
+
+  try {
+    var resp = await fetch(API_BASE + "/api/billing/validate-promo", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code: code })
+    });
+    var data = await resp.json();
+    if (data.valid) {
+      feedback.textContent = (data.percent_off || 0) + "% off applied";
+      feedback.style.color = "var(--green, #2ec4b6)";
+      input.style.borderColor = "var(--green, #2ec4b6)";
+    } else {
+      feedback.textContent = data.error || "Invalid code";
+      feedback.style.color = "var(--red, #e63946)";
+      input.style.borderColor = "var(--red, #e63946)";
+    }
+  } catch (e) {
+    feedback.textContent = "Could not validate";
+    feedback.style.color = "var(--ink-light)";
   }
 }
 

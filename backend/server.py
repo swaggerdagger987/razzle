@@ -197,16 +197,39 @@ def _ensure_season_stats_table():
         logger.info(f"  player_season_stats: {count} rows")
 
 
+import threading
+
+# Track bootstrap status for health check
+_bootstrap_status = {"done": False, "running": False, "error": None}
+
+
+def _background_bootstrap():
+    """Run heavy data bootstrap in a background thread so the server starts fast."""
+    _bootstrap_status["running"] = True
+    try:
+        bootstrap_database()
+        _ensure_season_stats_table()
+        _bootstrap_status["done"] = True
+        logger.info("Background bootstrap complete")
+    except Exception as e:
+        _bootstrap_status["error"] = str(e)
+        logger.exception("Background bootstrap failed")
+    finally:
+        _bootstrap_status["running"] = False
+
+
 @asynccontextmanager
 async def lifespan(app):
     setup_logging()
-    bootstrap_database()
-    _ensure_season_stats_table()
+    # Essential tables first (fast, < 100ms) — server can respond immediately
     auth_module.initialize_users_db()
     billing_module.initialize_subscriptions_table()
     live_data.init_waitlist_table()
     live_data.init_formula_store_tables()
     live_data._init_analytics_table()
+    # Heavy data sync in background thread (may take minutes on cold start)
+    t = threading.Thread(target=_background_bootstrap, daemon=True)
+    t.start()
     yield
 
 
@@ -243,6 +266,56 @@ async def request_logging_middleware(request: Request, call_next):
         _req_logger.debug("%d %s %s (%dms)", status, method, path, duration_ms)
     else:
         _req_logger.info("%d %s %s (%dms)", status, method, path, duration_ms)
+    return response
+
+
+# ---------------------------------------------------------------------------
+# Cache-Control middleware for read-only API endpoints
+# ---------------------------------------------------------------------------
+
+# Paths that should NEVER be cached (auth, billing, user-specific, writes)
+_NO_CACHE_PREFIXES = (
+    "/api/health", "/api/auth/", "/api/billing/", "/api/user/",
+    "/api/llm/", "/api/analytics/", "/api/waitlist",
+)
+# Stable data endpoints get longer cache (60 min) — historical data that rarely changes
+_STABLE_CACHE_PATHS = (
+    "/api/aging-curves", "/api/college/aging-curves", "/api/college/records",
+    "/api/draft-class", "/api/prospect-scores", "/api/prospect-tiers",
+    "/api/prospect-comps", "/api/athletic-radar", "/api/trade/pick-values",
+    "/api/records", "/api/career-stats", "/api/college/season-recap",
+    "/api/college/season-awards", "/api/season-recap", "/api/season-awards",
+)
+
+
+@app.middleware("http")
+async def cache_control_middleware(request: Request, call_next):
+    """Add Cache-Control headers to GET API responses for cacheable endpoints."""
+    response = await call_next(request)
+    path = request.url.path
+    method = request.method
+
+    # Only cache successful GET requests to /api/ paths
+    if method != "GET" or not path.startswith("/api/") or response.status_code >= 400:
+        return response
+
+    # Skip if response already has Cache-Control (set explicitly by endpoint)
+    existing_cc = response.headers.get("cache-control")
+    if existing_cc:
+        return response
+
+    # Never cache auth, billing, user-specific endpoints
+    if any(path.startswith(p) for p in _NO_CACHE_PREFIXES):
+        response.headers["Cache-Control"] = "no-store"
+        return response
+
+    # Stable/historical data: 60 min cache
+    if any(path.startswith(p) for p in _STABLE_CACHE_PATHS):
+        response.headers["Cache-Control"] = "public, max-age=3600"
+        return response
+
+    # All other GET /api/ endpoints: 5 min cache
+    response.headers["Cache-Control"] = "public, max-age=300"
     return response
 
 
@@ -296,6 +369,19 @@ def health():
     except Exception as e:
         checks["users_db"] = {"status": "error", "error": str(e)}
         overall = "degraded"
+
+    # Check 3: bootstrap status
+    checks["bootstrap"] = {
+        "done": _bootstrap_status["done"],
+        "running": _bootstrap_status["running"],
+    }
+    if _bootstrap_status["error"]:
+        checks["bootstrap"]["error"] = _bootstrap_status["error"]
+        overall = "degraded"
+
+    # Check 4: cache stats
+    from .live_data.core import cache_stats
+    checks["cache"] = cache_stats()
 
     status_code = 200 if overall == "ok" else 503
     return JSONResponse(
@@ -430,7 +516,8 @@ async def create_checkout(request: Request):
         return JSONResponse({"error": "Authentication required"}, status_code=401)
     body = await request.json()
     interval = body.get("interval", "year")  # "year" or "month"
-    result = billing_module.create_checkout_session(user, interval)
+    promo_code = body.get("promo_code", "")
+    result = billing_module.create_checkout_session(user, interval, promo_code=promo_code)
     if "error" in result:
         return JSONResponse({"error": result["error"]}, status_code=result.get("status", 400))
     return result
@@ -452,6 +539,16 @@ async def billing_status(request: Request):
     if not user:
         return JSONResponse({"error": "Authentication required"}, status_code=401)
     return billing_module.get_billing_status(user)
+
+
+@app.post("/api/billing/validate-promo")
+async def validate_promo(request: Request):
+    """Validate a promo code before checkout."""
+    body = await request.json()
+    code = body.get("code", "")
+    if not code:
+        return JSONResponse({"valid": False, "error": "No code provided"}, status_code=400)
+    return billing_module.validate_promo_code(code)
 
 
 # ---------------------------------------------------------------------------

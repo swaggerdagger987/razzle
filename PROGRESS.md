@@ -1,5 +1,30 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 133 — Platform: Backend Hardening + Caching + Free Trial + Promo Codes (COMPLETE)
+
+**Exit Criterion MET**: Response caching middleware adds Cache-Control headers to all GET /api/ endpoints (5-min default, 60-min for stable/historical data). LRU cache eviction at 200 entries prevents unbounded memory growth. Bootstrap runs in background thread — server responds to health checks immediately on startup. Health check includes bootstrap status and cache stats. 7-day free trial on all Stripe subscriptions (trial_used flag prevents re-trial). Promo code system with RAZZLE=20% off via Stripe coupons. Promo code validation endpoint and UI input on agents.html pricing section. Elite plan badge in nav. Structured logging already complete from Phase 131-132.
+
+### Phase 133 Tasks (Platform Loop)
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Response caching middleware | DONE | Cache-Control on all GET /api/ endpoints, _NO_CACHE_PREFIXES for auth/billing, _STABLE_CACHE_PATHS for historical data (3600s) |
+| 2 | Structured logging | DONE | Already implemented (logging_config.py + request_logging_middleware from Phase 131-132) |
+| 3 | Async bootstrap | DONE | _background_bootstrap() in daemon thread, _bootstrap_status tracked in health check |
+| 4 | 7-day free trial | DONE | trial_period_days=7 in Stripe checkout, trial_used column prevents re-trial, billing status returns trial_active/trial_end/trial_days_remaining |
+| 5 | Promo codes | DONE | RAZZLE=20% off via STRIPE_COUPON_RAZZLE env var, validate-promo endpoint, promoCodeInput UI on agents.html |
+| 6 | UX polish audit | DONE | Already implemented — "pulling film..." loading states across all pages, personality 404, error states |
+
+### Decisions Log
+- Cache middleware uses path-matching (not per-endpoint decorators) for maintainability — new endpoints get caching automatically
+- LRU eviction: when cache hits 200 entries, evict expired first, then least-recently-accessed with 20-slot buffer
+- Bootstrap thread is daemon=True — won't block server shutdown
+- Trial: trial_used flag in subscriptions table persists across subscription cancellation/recreation
+- Promo code stored in Stripe coupon ID (STRIPE_COUPON_RAZZLE env var) — must create coupon in Stripe dashboard
+- Nav badge updated to show Elite/Pro/Free correctly
+- startCheckout() in app.js reads promoCodeInput value and sends to backend
+- validatePromoCode() provides real-time feedback before checkout
+
 ## Previous Phase: Phase 132 — Platform: Pricing + Agent Branding + Health Check (COMPLETE)
 
 **Exit Criterion MET**: Landing page and Situation Room pricing updated from single-tier $240/yr to two-tier Pro ($9.99/mo / $79.99/yr) and Elite ($19.99/mo / $149.99/yr) per Pricing Strategy. Agent emojis and animal names updated across landing page demo briefings, bio cards, agents.html badges, and warroom.js bio grid (Medical=Owl, Quant=Fox, Historian=Elephant). Health check deepened to verify terminal.db + users.db connectivity with query execution time. All $240/year references eliminated from frontend.

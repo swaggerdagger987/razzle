@@ -1457,7 +1457,16 @@
       </div>
     </div>
 
-    <p style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">7-day free trial. The Lab stays free forever.</p>
+    <p style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); margin-bottom:12px;">7-day free trial on all plans. Cancel anytime. The Lab stays free forever.</p>
+
+    <!-- Promo code input -->
+    <div style="display:inline-flex; align-items:center; gap:8px; margin-bottom:8px;">
+      <input type="text" id="promoCodeInput" placeholder="promo code" maxlength="20"
+        style="font-family:var(--font-mono); font-size:11px; padding:6px 12px; border:2px solid var(--ink-faint); border-radius:8px; background:var(--bg-card); width:140px; text-transform:uppercase; text-align:center;"
+        oninput="this.value=this.value.toUpperCase()">
+      <button class="btn-chunky" style="font-size:11px; padding:5px 12px;" onclick="if(typeof validatePromoCode==='function')validatePromoCode()">Apply</button>
+    </div>
+    <div id="promoCodeFeedback" style="font-family:var(--font-mono); font-size:11px; min-height:16px;"></div>
   </div>
 </div>
 

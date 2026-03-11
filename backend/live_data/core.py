@@ -30,18 +30,46 @@ def _current_draft_year():
 _cache = {}
 _CACHE_TTL = 300  # 5 minutes default
 _CACHE_TTL_STABLE = 3600  # 60 minutes for stable/historical data
+_CACHE_MAX_SIZE = 200  # LRU eviction threshold
 
 
 def _cached(key, fn, ttl=None):
-    """Return cached result or compute and cache. Optional ttl override."""
+    """Return cached result or compute and cache. LRU eviction at _CACHE_MAX_SIZE."""
     if ttl is None:
         ttl = _CACHE_TTL
     now = _time.time()
     if key in _cache and now - _cache[key]["t"] < ttl:
+        # Touch the entry (move to end for LRU ordering)
+        _cache[key]["a"] = now  # last access time
         return _cache[key]["v"]
+    # Evict stale entries first, then LRU if still over limit
+    if len(_cache) >= _CACHE_MAX_SIZE:
+        _cache_evict(now)
     result = fn()
-    _cache[key] = {"t": now, "v": result}
+    _cache[key] = {"t": now, "v": result, "a": now}
     return result
+
+
+def _cache_evict(now):
+    """Evict expired entries, then least-recently-accessed if still over limit."""
+    # Phase 1: remove expired entries
+    expired = [k for k, v in _cache.items() if now - v["t"] >= v.get("ttl", _CACHE_TTL_STABLE)]
+    for k in expired:
+        del _cache[k]
+    # Phase 2: if still over limit, remove least-recently-accessed
+    if len(_cache) >= _CACHE_MAX_SIZE:
+        by_access = sorted(_cache.items(), key=lambda x: x[1].get("a", 0))
+        remove_count = len(_cache) - _CACHE_MAX_SIZE + 20  # free 20 extra slots
+        for k, _ in by_access[:remove_count]:
+            del _cache[k]
+
+
+def cache_stats():
+    """Return cache diagnostics for health check."""
+    now = _time.time()
+    total = len(_cache)
+    active = sum(1 for v in _cache.values() if now - v["t"] < v.get("ttl", _CACHE_TTL))
+    return {"total_entries": total, "active_entries": active, "max_size": _CACHE_MAX_SIZE}
 
 
 # ---------------------------------------------------------------------------
