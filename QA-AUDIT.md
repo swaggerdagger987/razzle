@@ -1,8 +1,10 @@
-# QA + UX Audit — Phases 66-70
+# QA + UX Audit — Phases 71-75
 
-**Date**: 2026-03-11
-**Scope**: Phases 67-70 (Sort column highlight, Row rank, Rows per page, PNG export enhancement, Scroll-to-top + header shadow)
-**Files**: frontend/lab.html, frontend/lab.js
+**Audit Date**: 2026-03-11
+**Scope**: Phases 71-75 (QA fixes 66-70, double-click filter, copy to clipboard, inline data bars, percentile display mode)
+**Files Audited**: frontend/lab.js, frontend/lab.html
+
+---
 
 ## QA FINDINGS
 
@@ -12,25 +14,17 @@
 
 ### MEDIUM
 
-1. **ColCount mismatch in renderVisibleRows and renderPinnedRows**
-   - File: frontend/lab.js, colCount calculations in renderVisibleRows spacer and renderPinnedRows separator
-   - Issue: colCount calculation uses `+ 4 +` but should be `+ 5 +` to account for rank column added in Phase 67. insertTierBreakRows was correctly updated but these two were missed.
-   - Impact: Spacer rows may have wrong colspan causing slight horizontal misalignment.
-   - Fix: Change `+ 4 +` to `+ 5 +` in both locations.
-
-2. **Page size selector default `selected` attribute hardcoded to 100**
-   - File: frontend/lab.html, pageSizeSelect option element
-   - Issue: `<option value="100" selected>` always shows 100 selected on initial HTML parse even if localStorage has 50. Only syncs after first fetch completes.
-   - Impact: Cosmetic — wrong value shown for ~1 second on load.
-   - Fix: Remove `selected` attribute, let renderPagination() handle it on first call.
+1. **Copy to clipboard lacks textarea fallback** (`frontend/lab.js`, `copyTableToClipboard`)
+   - The function uses `navigator.clipboard.writeText()` which requires HTTPS. If clipboard API is unavailable (HTTP localhost, older browsers), it falls to try/catch with a toast error.
+   - **Fix**: Add the existing `_fallbackCopy()` pattern (textarea fallback) as a secondary approach, like `sharePanelURL` already does.
 
 ### LOW
 
-3. **Header shadow uses rgba(0,0,0) instead of espresso brown** — should be rgba(45,31,20,0.08)
-4. **Scroll-to-top button uses border-radius: 50%** — not matching chunky aesthetic, should use border-radius: 8px
-5. **Scroll-to-top button missing aria-label** — has title but not aria-label
-6. **Scroll threshold 200px is a magic number** — minor, works fine
-7. **Scroll-to-top onclick inline lacks null check** — minor defensive coding
+2. `.pctl-val` class has no CSS rules — semantic class with no stylesheet rule. All styling is inline. Not a bug.
+3. Percentile mode R shortcut works in college mode (button hidden). Harmless — computePercentiles() handles sparse data. Same pattern as heat colors.
+4. Double-click column header fires sort + filter. Standard browser behavior, harmless.
+
+---
 
 ## UX FINDINGS
 
@@ -38,9 +32,23 @@
 
 ### HIGH: None
 
-### MEDIUM: None
+### MEDIUM
+
+1. **Toolbar has 7 visualization toggles** (Heat, Pctl, Bars, Tiers, Dense, Groups, Summary). Dense for first-time users but acceptable for power-user audience. No action needed.
 
 ### LOW
 
-1. **Rank column on narrow screens** — 36px rank column adds width; on mobile the table already horizontally scrolls so no functional issue.
-2. **Page size dropdown label** — dropdown has title="Rows per page" but no visible label; minor discoverability issue.
+2. "Pctl" button abbreviation may not be obvious. Tooltip explains it. Consistent with other labels.
+3. Percentile mode + Heat colors show overlapping percentile info. Both useful together — number + color.
+4. Copy to clipboard always exports raw values (not percentiles). Correct behavior.
+
+---
+
+## SUMMARY
+
+- **CRITICAL**: 0
+- **HIGH**: 0
+- **MEDIUM**: 2 (1 QA actionable, 1 UX no action needed)
+- **LOW**: 6
+
+Overall: Clean. One fix needed (clipboard fallback).
