@@ -3057,6 +3057,10 @@
     <select class="select-chunky" id="presetSelect" onchange="applyPresetFromToolbar(this.value)" title="Quick column preset">
       <option value="">Preset...</option>
     </select>
+    <select class="select-chunky" id="savedViewSelect" onchange="loadSavedView(this.value)" title="Saved views" style="max-width:140px;">
+      <option value="">Views...</option>
+    </select>
+    <button class="btn-chunky" onclick="saveCurrentView()" title="Save current view" style="padding:6px 8px; font-size:13px;">Save</button>
     <button class="btn-chunky" onclick="openColumnPicker()">Columns</button>
     <button class="btn-chunky" id="formulaBtn" onclick="openFormulaBuilder()">Formulas</button>
     <button class="btn-chunky" onclick="openCustomScoring()">Custom Scoring</button>

@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 115 — Saved Views (COMPLETE)
+
+**Exit Criterion MET**: Save/load/delete named screener views via dropdown. Max 20 views. localStorage persist. 34 tests pass.
+
+### Phase 115 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Saved views | DONE | Save button, Views dropdown, Manage modal with delete, max 20 |
+
 ## Previous Phase: Phase 114 — Column Reorder by Drag (COMPLETE)
 
 **Exit Criterion MET**: HTML5 drag-and-drop on data column headers. Reorder updates column arrays and re-renders. Frozen columns not draggable. 34 tests pass.
