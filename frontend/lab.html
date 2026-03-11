@@ -862,13 +862,39 @@
   .screener-table td.sort2-col { background: rgba(217, 119, 87, 0.025); }
   .screener-table .col-rank { width: 36px; text-align: center; font-size: 11px; color: var(--ink-light); font-weight: 600; padding: 7px 2px; white-space: nowrap; }
 
+  /* ─── Frozen utility columns (star, checkbox, pin, rank, player) ─── */
+  .screener-table .col-star,
+  .screener-table .col-select,
+  .screener-table .col-pin,
+  .screener-table .col-rank,
+  .screener-table .col-player {
+    position: sticky;
+    z-index: 5;
+    background: var(--bg);
+  }
+  .screener-table thead .col-star,
+  .screener-table thead .col-select,
+  .screener-table thead .col-pin,
+  .screener-table thead .col-rank,
+  .screener-table thead .col-player {
+    z-index: 11;
+    background: var(--bg-warm);
+  }
+  /* NFL layout: star(0) + check(28) + pin(58) + rank(86) + player(122) */
+  .screener-table .col-star   { left: 0; }
+  .screener-table .col-select { left: 28px; }
+  .screener-table .col-pin    { left: 58px; }
+  .screener-table .col-rank   { left: 86px; }
+  .screener-table .col-player { left: 122px; }
+  /* College/prospect layout: no pin column — rank shifts left */
+  body.college-mode .screener-table .col-rank,
+  body.prospect-mode .screener-table .col-rank { left: 58px; }
+  body.college-mode .screener-table .col-player,
+  body.prospect-mode .screener-table .col-player { left: 94px; }
+
   .screener-table th.col-player {
     text-align: left;
-    position: sticky;
-    left: 0;
-    z-index: 11;
     min-width: 200px;
-    background: var(--bg-warm);
     border-right: 3px solid var(--ink);
   }
 
@@ -887,11 +913,22 @@
   .screener-table tbody tr:nth-child(even) td {
     background: rgba(0,0,0,0.02);
   }
+  .screener-table tbody tr:nth-child(even) td.col-star,
+  .screener-table tbody tr:nth-child(even) td.col-select,
+  .screener-table tbody tr:nth-child(even) td.col-pin,
+  .screener-table tbody tr:nth-child(even) td.col-rank,
   .screener-table tbody tr:nth-child(even) td.col-player {
     background: color-mix(in srgb, var(--bg) 97%, var(--ink));
   }
 
   .screener-table tr:hover td {
+    background: var(--orange-light);
+  }
+  .screener-table tr:hover td.col-star,
+  .screener-table tr:hover td.col-select,
+  .screener-table tr:hover td.col-pin,
+  .screener-table tr:hover td.col-rank,
+  .screener-table tr:hover td.col-player {
     background: var(--orange-light);
   }
   .screener-table tr:focus {
@@ -912,10 +949,6 @@
 
   .screener-table td.col-player {
     text-align: left;
-    position: sticky;
-    left: 0;
-    z-index: 5;
-    background: var(--bg);
     border-right: 3px solid var(--ink);
     font-family: var(--font-display);
     font-size: 13px;
@@ -1032,8 +1065,14 @@
   .screener-table tbody tr.row-highlighted td {
     background: color-mix(in srgb, var(--orange) 15%, transparent) !important;
   }
+  .screener-table tbody tr.row-highlighted td.col-star,
+  .screener-table tbody tr.row-highlighted td.col-select,
+  .screener-table tbody tr.row-highlighted td.col-pin,
+  .screener-table tbody tr.row-highlighted td.col-rank,
   .screener-table tbody tr.row-highlighted td.col-player {
     background: color-mix(in srgb, var(--orange) 15%, var(--bg)) !important;
+  }
+  .screener-table tbody tr.row-highlighted td.col-player {
     border-left: 3px solid var(--orange);
   }
 
@@ -1054,8 +1093,7 @@
   }
   .screener-table tfoot td.col-player {
     text-align: left;
-    position: sticky;
-    left: 0;
+    left: 0 !important;
     z-index: 7;
     background: var(--bg-warm);
     border-right: 3px solid var(--ink);
@@ -2271,21 +2309,17 @@
     .screener-table th { font-size: 10px; }
     .screener-table th.col-player,
     .screener-table td.col-player { min-width: 140px; }
+    /* On mobile, unfreeze utility cols — only freeze player name */
+    .screener-table .col-star,
+    .screener-table .col-select,
+    .screener-table .col-pin,
+    .screener-table .col-rank { position: static; }
+    .screener-table .col-player { left: 0 !important; }
     .player-name-cell { gap: 4px; }
     .player-headshot, .player-headshot-fallback { width: 22px; height: 22px; }
     .player-headshot-fallback { font-size: 8px; }
     .pos-badge { font-size: 8px; padding: 1px 4px; }
     .team-label { font-size: 9px; }
-
-    /* Sticky first column (player name) on mobile */
-    .screener-table th:first-child,
-    .screener-table td:first-child {
-      position: sticky;
-      left: 0;
-      z-index: 2;
-      background: var(--bg-warm);
-    }
-    .screener-table thead th:first-child { z-index: 3; }
 
     /* Panel content tables in lab-panels */
     .lp-table-wrap {

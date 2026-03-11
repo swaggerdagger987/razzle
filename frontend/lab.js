@@ -1179,12 +1179,12 @@ function renderTableHead() {
   let html = buildGroupHeaderRow(cols);
 
   const allSelected = state.items.length > 0 && state.items.every(p => state.selectedPlayers.some(s => s.player_id === (p.player_id || p.player_name)));
-  html += '<tr><th style="width:28px; text-align:center; padding:8px 4px;" title="Watchlist">&#9733;</th>';
-  html += `<th style="width:30px; text-align:center; padding:8px 6px;" title="Select all / none"><input type="checkbox" ${allSelected ? "checked" : ""} onchange="toggleSelectAll(this.checked)" style="accent-color:var(--orange); width:15px; height:15px; cursor:pointer;"></th>`;
+  html += '<tr><th class="col-star" style="width:28px; text-align:center; padding:8px 4px;" title="Watchlist">&#9733;</th>';
+  html += `<th class="col-select" style="width:30px; text-align:center; padding:8px 6px;" title="Select all / none"><input type="checkbox" ${allSelected ? "checked" : ""} onchange="toggleSelectAll(this.checked)" style="accent-color:var(--orange); width:15px; height:15px; cursor:pointer;"></th>`;
   if (state.universe === "nfl") {
     const pinCount = state.pinnedPlayers.length;
     const pinTitle = pinCount > 0 ? `${pinCount} pinned — click to clear` : "Pin players to top";
-    html += `<th style="width:28px; text-align:center; padding:8px 2px; cursor:${pinCount ? 'pointer' : 'default'}; font-size:12px;" title="${pinTitle}"${pinCount ? ' onclick="clearAllPins()"' : ''}>&#128204;${pinCount ? '<span style="font-size:9px; color:var(--orange); font-weight:700;"> ' + pinCount + '</span>' : ''}</th>`;
+    html += `<th class="col-pin" style="width:28px; text-align:center; padding:8px 2px; cursor:${pinCount ? 'pointer' : 'default'}; font-size:12px;" title="${pinTitle}"${pinCount ? ' onclick="clearAllPins()"' : ''}>&#128204;${pinCount ? '<span style="font-size:9px; color:var(--orange); font-weight:700;"> ' + pinCount + '</span>' : ''}</th>`;
   }
   html += '<th class="col-rank" title="Overall rank by current sort">#</th>';
   html += `<th class="col-player" onclick="sortBy('${nameKey}', event)">Player`;
@@ -1254,8 +1254,8 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode) {
   const posStripeColor = pos === "QB" ? "var(--pos-qb)" : pos === "RB" ? "var(--pos-rb)" : pos === "WR" ? "var(--pos-wr)" : pos === "TE" ? "var(--pos-te)" : "var(--ink-faint)";
   const zebraBg = (rowIdx != null && rowIdx % 2 === 1) ? " background:rgba(45,31,20,0.025);" : "";
   let html = '<tr tabindex="0" data-player-id="' + escapeAttr(playKey) + '" style="height:' + getVScrollRowHeight() + 'px; border-left:3px solid ' + posStripeColor + ';' + zebraBg + '">';
-  html += `<td style="text-align:center; padding:7px 4px; cursor:pointer; font-size:16px;" onclick="toggleWatchlistPlayer('${escapeAttr(playKey)}', '${pName}', '${escapeAttr(pos)}', '${pTeam}', '${state.universe}')" title="${starred ? 'Remove from watchlist' : 'Add to watchlist'}">${starred ? '<span style="color:var(--orange);">&#9733;</span>' : '<span style="color:var(--ink-faint);">&#9734;</span>'}</td>`;
-  html += `<td style="text-align:center; padding:7px 6px;">
+  html += `<td class="col-star" style="text-align:center; padding:7px 4px; cursor:pointer; font-size:16px;" onclick="toggleWatchlistPlayer('${escapeAttr(playKey)}', '${pName}', '${escapeAttr(pos)}', '${pTeam}', '${state.universe}')" title="${starred ? 'Remove from watchlist' : 'Add to watchlist'}">${starred ? '<span style="color:var(--orange);">&#9733;</span>' : '<span style="color:var(--ink-faint);">&#9734;</span>'}</td>`;
+  html += `<td class="col-select" style="text-align:center; padding:7px 6px;">
     <input type="checkbox" ${selected ? "checked" : ""} onchange="togglePlayerSelect('${escapeAttr(player.player_id || player.player_name)}', this.checked)"
       style="accent-color:${state.universe === 'college' ? 'var(--pos-qb)' : 'var(--orange)'}; width:15px; height:15px; cursor:pointer;">
   </td>`;
@@ -1263,7 +1263,7 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode) {
   // Pin icon (NFL only)
   if (state.universe === "nfl") {
     const pinned = isPlayerPinned(playKey);
-    html += `<td class="pin-cell" style="text-align:center; padding:7px 2px; cursor:pointer; font-size:13px;" onclick="event.stopPropagation(); togglePinPlayer('${escapeAttr(playKey)}')" title="${pinned ? 'Unpin player' : 'Pin to top'}">${pinned ? '<span style="color:var(--orange);">&#128204;</span>' : '<span class="pin-icon-faint">&#128204;</span>'}</td>`;
+    html += `<td class="pin-cell col-pin" style="text-align:center; padding:7px 2px; cursor:pointer; font-size:13px;" onclick="event.stopPropagation(); togglePinPlayer('${escapeAttr(playKey)}')" title="${pinned ? 'Unpin player' : 'Pin to top'}">${pinned ? '<span style="color:var(--orange);">&#128204;</span>' : '<span class="pin-icon-faint">&#128204;</span>'}</td>`;
   }
 
   // Rank column

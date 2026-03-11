@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 88 — Sticky Frozen Columns (COMPLETE)
+
+**Exit Criterion MET**: All utility columns (star, checkbox, pin, rank) and player column frozen on horizontal scroll with calculated left offsets. College/prospect mode adjusts. Mobile fallback to player-only freeze.
+
+### Phase 88 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Sticky frozen columns | DONE | CSS classes col-star/col-select/col-pin, position:sticky, left offsets, mobile override |
+
 ## Previous Phase: Phase 87 — Multi-Sort (Shift+Click Secondary Sort) (COMPLETE)
 
 **Exit Criterion MET**: Shift+click column header sets secondary sort as client-side tiebreaker. Sort indicators, URL state, saved views, result count all updated.

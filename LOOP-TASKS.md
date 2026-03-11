@@ -1,15 +1,15 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 87 (Multi-Sort — Shift+Click Secondary Sort)
-## Phase 87: Multi-Sort — Auto-Generated
-**Exit Criterion**: Shift+click column header sets secondary sort. Client-side stable tiebreaker sort. Secondary sort indicator in header (△2/▽2). URL state (sort2/dir2). Shortcut reference updated.
+- Phase: 88 (Sticky Frozen Columns on Horizontal Scroll)
+## Phase 88: Sticky Frozen Columns — Auto-Generated
+**Exit Criterion**: Star, checkbox, pin, rank, and player columns frozen on horizontal scroll. Proper left offsets per column. College/prospect mode adjusts for missing pin column. Mobile fallback (only player column frozen). Even-row, hover, and highlighted backgrounds preserved for frozen cells.
 
 - Task 1: PASS
 - Stage: COMPLETE
 - Next: Phase gate
 
-### Task 1: Implement multi-sort with shift+click
+### Task 1: Implement sticky frozen columns
 **Status**: PASS
 **Attempts**: 1
-**Result**: Added state.sortKey2/sortDir2. sortBy() detects event.shiftKey for secondary sort. applySecondarySort() stable-sorts items by secondary key as tiebreaker. CSS classes sort2-asc/sort2-desc/sort2-col for header and cell highlighting. URL params sort2/dir2. Saved views store secondary sort. Result count shows both sort columns. Shortcut reference updated. 34 tests pass.
+**Result**: Added CSS classes col-star, col-select, col-pin to utility column th/td elements. All frozen columns get position:sticky with calculated left offsets (NFL: 0/28/58/86/122px, college: 0/28/58/94px). Even-row, hover, and highlighted backgrounds updated for all frozen cells. tfoot col-player left:0!important for colspan'd summary cell. Mobile 768px: utility cols unfrozen, only player col stays at left:0. 34 tests pass.
