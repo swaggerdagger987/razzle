@@ -289,7 +289,7 @@
 <script src="app.js"></script>
 <script>
   // Pricing page logic
-  var _pricingInterval = 'month';
+  var _pricingInterval = 'year'; // Default to yearly per pricing strategy
 
   var PRICES = {
     pro:   { month: '$9.99',  year: '$79.99',  monthlyEquiv: '$6.67',  save: '33%' },
@@ -345,9 +345,10 @@
       }
       return;
     }
-    // startCheckout from app.js expects interval
+    // Build interval string: pro_month, pro_year, elite_month, elite_year
+    var interval = plan + '_' + _pricingInterval;
     if (typeof startCheckout === 'function') {
-      startCheckout(_pricingInterval === 'year' ? 'year' : 'month');
+      startCheckout(interval);
     }
   }
 
@@ -369,8 +370,9 @@
     } catch (e) {}
   }
 
-  // Init
+  // Init — default to yearly per pricing strategy
   checkSubscription();
+  updatePricingUI();
 </script>
 </body>
 </html>
