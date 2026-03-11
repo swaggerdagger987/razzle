@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 75 — Screener Percentile Display Mode (COMPLETE)
+
+**Exit Criterion MET**: R key toggles percentile display mode. All numeric cells show position-percentile rank (0-99) with % superscript instead of raw values. Raw value in tooltip. Color-coded (green 90th+, blue 75th+, red 10th-, gray 25th-). Age/games/dynasty_value excluded. Pctl toolbar button, localStorage, URL state. NFL mode only. Works with heat colors and data bars.
+
+### Phase 75 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Percentile display mode with R toggle | DONE | percentileMode state, R shortcut, Pctl button (blue active border), pctl-val cells with sup %, color-coded, title tooltip, computePercentiles() reuse, localStorage+URL |
+
 ## Previous Phase: Phase 74 — Screener Inline Data Bars (COMPLETE)
 
 **Exit Criterion MET**: B key toggles inline data bars in all numeric cells. CSS linear-gradient backgrounds show relative value per column. Terracotta for normal stats, red tint for inverse stats (turnovers/fumbles). Toolbar button, localStorage, URL state. Works in all modes.

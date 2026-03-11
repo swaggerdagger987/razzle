@@ -798,6 +798,7 @@ const state = {
   seasons: [],
   selectedPlayers: [], // for compare/charts [{player_id, full_name, position, team}]
   heatColors: false, // percentile heat coloring toggle
+  percentileMode: (function() { try { return localStorage.getItem("razzle_percentile_mode") === "1"; } catch(e) { return false; } })(), // show percentile values instead of raw
   dataBars: (function() { try { return localStorage.getItem("razzle_data_bars") === "1"; } catch(e) { return false; } })(), // inline data bars toggle
   density: (function() { try { return localStorage.getItem("razzle_density") === "1"; } catch(e) { return false; } })(), // compact density mode
   tierBreaks: (function() { try { return localStorage.getItem("razzle_tier_breaks") === "1"; } catch(e) { return false; } })(), // tier break dividers
@@ -1234,7 +1235,7 @@ let _vscrollRows = [];   // Pre-computed HTML strings for each row
 let _vscrollRAF = null;  // requestAnimationFrame handle
 let _vscrollBound = false;
 
-function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn) {
+function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode) {
   const pos = (player.position || "").toUpperCase();
   const playKey = player.player_id || player.player_name;
   const selected = state.selectedPlayers.some(p => p.player_id === playKey);
@@ -1290,6 +1291,7 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn) {
   }
 
   const heatPcts = heatOn ? (pctData[playKey] || {}) : null;
+  const pctPcts = pctMode ? (pctData[playKey] || {}) : null;
 
   for (const key of cols) {
     const col = getColumnDef(key);
@@ -1338,6 +1340,13 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn) {
       html += `<td${scAttr} style="color:var(--ink-faint);">—</td>`;
     } else if (col.isText) {
       html += `<td${scAttr}>${val ? escapeHtml(val) : "—"}</td>`;
+    } else if (pctPcts && pctPcts[key] != null && key !== "age" && key !== "games" && key !== "dynasty_value") {
+      // Percentile display mode: show position percentile instead of raw value
+      const pv = Math.round(pctPcts[key]);
+      const pctColor = pv >= 90 ? "var(--green)" : pv >= 75 ? "var(--pos-qb)" : pv <= 10 ? "var(--red)" : pv <= 25 ? "var(--ink-light)" : "";
+      const pctFw = pv >= 75 || pv <= 25 ? "font-weight:700;" : "";
+      const pctSty = (pctColor || pctFw) ? ` style="${pctColor ? "color:" + pctColor + ";" : ""}${pctFw}"` : "";
+      html += `<td${scAttr}${hStyle}><span class="pctl-val"${pctSty} title="${formatStat(val, col.decimals != null ? col.decimals : 1)}">${pv}<sup style="font-size:8px; opacity:0.6;">%</sup></span></td>`;
     } else if (key === "dynasty_value" && val != null) {
       const dvsColor = val >= 85 ? "var(--green)" : val >= 70 ? "var(--pos-qb)" : val >= 55 ? "var(--orange)" : "var(--ink-light)";
       const dvsTier = val >= 85 ? "Elite" : val >= 70 ? "Star" : val >= 55 ? "Starter" : "";
@@ -1425,12 +1434,13 @@ function renderTableBody() {
 
   // Pre-compute all row HTML
   const heatOn = state.heatColors;
-  const pctData = heatOn ? computePercentiles() : {};
+  const pctMode = state.percentileMode;
+  const pctData = (heatOn || pctMode) ? computePercentiles() : {};
   const barsOn = state.dataBars;
   if (barsOn) computeBarMaxes();
   _vscrollRows = [];
   for (let i = 0; i < state.items.length; i++) {
-    _vscrollRows.push(buildRowHTML(state.items[i], cols, heatOn, pctData, i, barsOn));
+    _vscrollRows.push(buildRowHTML(state.items[i], cols, heatOn, pctData, i, barsOn, pctMode));
   }
 
   // Insert tier break divider rows if enabled (NFL only)
@@ -2357,6 +2367,7 @@ function saveStateToURL() {
   if (state.teams.length) params.set("teams", state.teams.join(","));
   if (state.minGP > 0) params.set("min_gp", state.minGP);
   if (state.heatColors) params.set("heat", "1");
+  if (state.percentileMode) params.set("pctl", "1");
   if (state.dataBars) params.set("bars", "1");
   if (state.tierBreaks) params.set("tiers", "1");
   if (state.density) params.set("dense", "1");
@@ -2427,6 +2438,9 @@ function loadStateFromURL() {
     // Fall back to localStorage preference
     state.heatColors = (function() { try { return localStorage.getItem("razzle_heat_colors") === "1"; } catch(e) { return false; } })();
   }
+  if (params.has("pctl")) {
+    state.percentileMode = params.get("pctl") === "1";
+  }
   if (params.has("bars")) {
     state.dataBars = params.get("bars") === "1";
   }
@@ -2491,6 +2505,20 @@ function loadStateFromURL() {
     } else {
       hcBtn.classList.remove("active");
       hcBtn.style.borderColor = "";
+    }
+  }
+
+  // Sync percentile mode button
+  const pmBtn = document.getElementById("percentileModeBtn");
+  if (pmBtn) {
+    const isNFL = state.universe === "nfl";
+    pmBtn.style.display = isNFL ? "" : "none";
+    if (state.percentileMode && isNFL) {
+      pmBtn.classList.add("active");
+      pmBtn.style.borderColor = "var(--pos-qb)";
+    } else {
+      pmBtn.classList.remove("active");
+      pmBtn.style.borderColor = "";
     }
   }
 
@@ -2793,7 +2821,8 @@ function renderPinnedRows() {
 
   const cols = getActiveColumns();
   const heatOn = state.heatColors;
-  const pctData = heatOn ? computePercentiles() : {};
+  const pctMode = state.percentileMode;
+  const pctData = (heatOn || pctMode) ? computePercentiles() : {};
   const barsOn = state.dataBars;
   if (barsOn) computeBarMaxes();
   let html = "";
@@ -2801,7 +2830,7 @@ function renderPinnedRows() {
   for (const pid of state.pinnedPlayers) {
     const player = state.items.find(p => p.player_id === pid);
     if (!player) continue;
-    html += buildRowHTML(player, cols, heatOn, pctData, null, barsOn);
+    html += buildRowHTML(player, cols, heatOn, pctData, null, barsOn, pctMode);
   }
 
   if (!html) {
@@ -3244,6 +3273,20 @@ function toggleHeatColors() {
   _percentileCache = null; // force recompute
   renderTable();
   saveStateToURL();
+}
+
+function togglePercentileMode() {
+  state.percentileMode = !state.percentileMode;
+  try { localStorage.setItem("razzle_percentile_mode", state.percentileMode ? "1" : "0"); } catch(e) {}
+  const btn = document.getElementById("percentileModeBtn");
+  if (btn) {
+    btn.classList.toggle("active", state.percentileMode);
+    btn.style.borderColor = state.percentileMode ? "var(--pos-qb)" : "";
+  }
+  _percentileCache = null; // force recompute
+  renderTable();
+  saveStateToURL();
+  _showToast(state.percentileMode ? "percentile mode on — values show position rank %" : "percentile mode off — raw values");
 }
 
 // ─── Inline data bars ────────────────────────────────────────────
@@ -8287,6 +8330,12 @@ document.addEventListener("keydown", function(e) {
     return;
   }
 
+  // R: toggle percentile display mode
+  if (e.key === "r" || e.key === "R") {
+    togglePercentileMode();
+    return;
+  }
+
   // P: clear all pinned players
   if (e.key === "p" || e.key === "P") {
     if (state.pinnedPlayers.length > 0) {
@@ -8326,6 +8375,7 @@ function toggleShortcutRef() {
           ${shortcutRow("W", "Watchlist")}
           ${shortcutRow("X", "Share / export")}
           ${shortcutRow("H", "Heat colors (percentiles)")}
+          ${shortcutRow("R", "Percentile display mode")}
           ${shortcutRow("B", "Inline data bars")}
           ${shortcutRow("T", "Tier break dividers")}
           ${shortcutRow("D", "Compact density mode")}
