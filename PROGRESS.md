@@ -1,5 +1,23 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 140 — Platform: QA + Integration Audit for Phases 138-139 (COMPLETE)
+
+**Exit Criterion MET**: All new JS functions verified callable with proper script loading order. Activity feed handles edge cases (empty transactions, missing player data, null adds/drops, $0 FAAB, various timestamps). Backend saved views endpoints validated: rejects non-list payloads, caps at 20 views, returns correct counts, handles empty user. Guard added to sync_saved_views for non-list input validation.
+
+### Phase 140 Tasks (Platform Loop)
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | JS function availability check | DONE | All functions have typeof guards or are loaded before use |
+| 2 | Activity feed edge cases | DONE | Empty state, null safety on adds/drops, FAAB=$0 hidden, player fallback to ID |
+| 3 | Backend endpoint validation | DONE | Auth required, plan gated, 20-view cap, non-list rejection |
+| 4 | Fix issues | DONE | Added isinstance guard to sync_saved_views |
+
+### Decisions Log
+- Script loading verified: app.js loads first (no defer), lab.js loads second (no defer), formulas.js has defer but cloud sync calls use setTimeout + typeof guard
+- Pre-existing 1-paren imbalance in lab.js confirmed not from Platform Loop code
+- sync_saved_views now rejects non-list input at both API and function level (defense in depth)
+
 ## Previous Phase: Phase 139 — Platform: Saved Views Cloud Sync + Auth UX Polish (COMPLETE)
 
 **Exit Criterion MET**: Saved views cloud sync for Pro/Elite users — backend endpoints (GET /api/user/views, POST /api/user/views/sync) with auth + plan gating, frontend merge logic, cloud badge, upgrade hint. Stripe checkout return detection polls for plan upgrade and dispatches razzle-plan-changed event that refreshes all gated features (season selector, formula limit, cloud sync triggers) without page reload. Nav auth dropdown with chunky Razzle styling: plan badge (Free/Pro/Elite), email, Manage/Upgrade link, Sign Out. Elite plan badge styled in purple.

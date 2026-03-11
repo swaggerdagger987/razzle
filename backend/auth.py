@@ -392,6 +392,8 @@ def get_saved_views(user_id: int) -> dict:
 def sync_saved_views(user_id: int, views: list) -> dict:
     """Sync saved views from client. Idempotent — replaces all views for user."""
     import json
+    if not isinstance(views, list):
+        return {"error": "views must be a list", "status": 400}
     with get_users_db() as conn:
         # Ensure table exists
         conn.execute("""
