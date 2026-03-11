@@ -1282,9 +1282,13 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode) {
     html += `<td class="pin-cell col-pin" style="text-align:center; padding:7px 2px; cursor:pointer; font-size:13px;" onclick="event.stopPropagation(); togglePinPlayer('${escapeAttr(playKey)}')" title="${pinned ? 'Unpin player' : 'Pin to top'}">${pinned ? '<span style="color:var(--orange);">&#128204;</span>' : '<span class="pin-icon-faint">&#128204;</span>'}</td>`;
   }
 
-  // Rank column
+  // Rank column (with expand arrow for NFL)
   const rank = (rowIdx != null) ? (state.offset + rowIdx + 1) : "";
-  html += `<td class="col-rank">${rank}</td>`;
+  if (state.universe === "nfl" && player.player_id) {
+    html += `<td class="col-rank" style="cursor:pointer;" onclick="event.stopPropagation(); toggleRowExpand('${escapeAttr(player.player_id)}', this)" title="Click to expand weekly stats"><span class="row-expand-arrow" style="font-size:8px; margin-right:2px;">&#9654;</span>${rank}</td>`;
+  } else {
+    html += `<td class="col-rank">${rank}</td>`;
+  }
 
   if (state.universe === "college") {
     const cid = escapeAttr(player.player_id || "");
@@ -1777,6 +1781,82 @@ function renderProspectTable() {
     e.preventDefault();
   });
 })();
+
+// ─── Row expand (weekly breakdown) ───────────────────────────────
+var _expandedRows = {};  // playerId → true
+
+async function toggleRowExpand(playerId, tdEl) {
+  var tr = tdEl.closest("tr");
+  if (!tr) return;
+  var existing = tr.nextElementSibling;
+  if (existing && existing.classList.contains("expand-row")) {
+    existing.remove();
+    delete _expandedRows[playerId];
+    var arrow = tdEl.querySelector(".row-expand-arrow");
+    if (arrow) arrow.innerHTML = "&#9654;";
+    return;
+  }
+  // Expand: fetch weekly data
+  var arrow = tdEl.querySelector(".row-expand-arrow");
+  if (arrow) arrow.innerHTML = "&#9660;";
+  _expandedRows[playerId] = true;
+  var expandTr = document.createElement("tr");
+  expandTr.className = "expand-row";
+  var cols = getActiveColumns();
+  var totalCols = cols.length + 5; // star, select, pin, rank, player
+  expandTr.innerHTML = '<td colspan="' + totalCols + '" style="padding:0; background:var(--bg-warm, rgba(45,31,20,0.04));"><div class="expand-content" style="padding:8px 12px 8px 130px; font-family:var(--font-mono); font-size:11px; color:var(--ink-medium);">loading weeks...</div></td>';
+  tr.after(expandTr);
+
+  try {
+    var season = state.season === "career" ? 0 : (state.season || 0);
+    var data = await apiFetch("/api/players/" + encodeURIComponent(playerId) + "/weeks?season=" + season);
+    if (!_expandedRows[playerId]) return; // collapsed before response
+    var weeks = data.weeks || data || [];
+    if (!Array.isArray(weeks) || weeks.length === 0) {
+      expandTr.querySelector(".expand-content").textContent = "no weekly data available";
+      return;
+    }
+    // Build mini table
+    var html = '<table style="width:100%; border-collapse:collapse; font-family:var(--font-mono); font-size:11px;">';
+    html += '<tr style="border-bottom:1px solid var(--ink-faint);">';
+    html += '<th style="padding:3px 6px; text-align:left; font-size:10px; color:var(--ink-light);">Wk</th>';
+    html += '<th style="padding:3px 6px; text-align:left; font-size:10px; color:var(--ink-light);">Opp</th>';
+    html += '<th style="padding:3px 6px; text-align:right; font-size:10px; color:var(--ink-light);">FPts</th>';
+    html += '<th style="padding:3px 6px; text-align:right; font-size:10px; color:var(--ink-light);">Pass</th>';
+    html += '<th style="padding:3px 6px; text-align:right; font-size:10px; color:var(--ink-light);">PTD</th>';
+    html += '<th style="padding:3px 6px; text-align:right; font-size:10px; color:var(--ink-light);">Rush</th>';
+    html += '<th style="padding:3px 6px; text-align:right; font-size:10px; color:var(--ink-light);">RTD</th>';
+    html += '<th style="padding:3px 6px; text-align:right; font-size:10px; color:var(--ink-light);">Rec</th>';
+    html += '<th style="padding:3px 6px; text-align:right; font-size:10px; color:var(--ink-light);">RecYd</th>';
+    html += '<th style="padding:3px 6px; text-align:right; font-size:10px; color:var(--ink-light);">RcTD</th>';
+    html += '<th style="padding:3px 6px; text-align:right; font-size:10px; color:var(--ink-light);">Tgt</th>';
+    html += '</tr>';
+    for (var w of weeks) {
+      var fpts = parseFloat(w.fantasy_points_ppr || w.fantasy_points || 0).toFixed(1);
+      var fptsColor = fpts >= 20 ? 'color:var(--green); font-weight:700;' : fpts < 5 ? 'color:var(--red);' : '';
+      html += '<tr style="border-bottom:1px solid rgba(0,0,0,0.04);">';
+      html += '<td style="padding:2px 6px;">' + (w.week || "") + '</td>';
+      html += '<td style="padding:2px 6px;">' + escapeHtml(w.opponent || w.recent_team || "") + '</td>';
+      html += '<td style="padding:2px 6px; text-align:right; ' + fptsColor + '">' + fpts + '</td>';
+      html += '<td style="padding:2px 6px; text-align:right;">' + (w.passing_yards || 0) + '</td>';
+      html += '<td style="padding:2px 6px; text-align:right;">' + (w.passing_tds || 0) + '</td>';
+      html += '<td style="padding:2px 6px; text-align:right;">' + (w.rushing_yards || 0) + '</td>';
+      html += '<td style="padding:2px 6px; text-align:right;">' + (w.rushing_tds || 0) + '</td>';
+      html += '<td style="padding:2px 6px; text-align:right;">' + (w.receptions || 0) + '</td>';
+      html += '<td style="padding:2px 6px; text-align:right;">' + (w.receiving_yards || 0) + '</td>';
+      html += '<td style="padding:2px 6px; text-align:right;">' + (w.receiving_tds || 0) + '</td>';
+      html += '<td style="padding:2px 6px; text-align:right;">' + (w.targets || 0) + '</td>';
+      html += '</tr>';
+    }
+    html += '</table>';
+    expandTr.querySelector(".expand-content").innerHTML = html;
+  } catch (err) {
+    console.error("Weekly expand error:", err);
+    if (_expandedRows[playerId]) {
+      expandTr.querySelector(".expand-content").textContent = "failed to load weekly data";
+    }
+  }
+}
 
 // ─── Context menu ────────────────────────────────────────────────
 var _ctxMenuData = null; // Stores {playerId, pName, pos, team} for current menu

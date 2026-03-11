@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 101 — Row Expand Weekly Breakdown (COMPLETE)
+
+**Exit Criterion MET**: Click rank # to expand weekly stats inline. Fetches /api/players/{id}/weeks. Color-coded FPts. NFL only. 34 tests pass.
+
+### Phase 101 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Row expand weekly breakdown | DONE | toggleRowExpand(), mini table with 11 stat columns, _expandedRows tracking |
+
 ## Previous Phase: Phase 100 — QA + UX Audit Fixes for Phases 97-99 (COMPLETE)
 
 **Exit Criterion MET**: 1 HIGH (_setLoadingError escaping) and 1 MEDIUM (search highlight CSS class) fixed. 0 CRITICAL.
