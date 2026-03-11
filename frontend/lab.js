@@ -2172,6 +2172,9 @@ function _ctxMenuAction(action) {
     if (isNaN(val)) return;
     // Create filter: >= for normal stats, <= for inverse stats
     var op = INVERSE_STATS.has(colKey) ? "lte" : "gte";
+    // Dedup: skip if exact filter already exists
+    var dup = state.filters.some(function(f) { return f.key === colKey && f.op === op && f.value === val; });
+    if (dup) { _showToast("filter already exists"); return; }
     state.filters.push({ key: colKey, op: op, value: val });
     state.offset = 0;
     renderActiveFilters();
@@ -3015,7 +3018,8 @@ function showColumnStatsPopover(colKey, anchorEl) {
   var pop = document.createElement("div");
   pop.id = "colStatsPopover";
   pop.className = "colstats-popover";
-  pop.innerHTML = '<div class="colstats-title">' + escapeHtml(col.label) + '</div>' +
+  var posCtx = state.position !== "ALL" ? state.position : "All Positions";
+  pop.innerHTML = '<div class="colstats-title">' + escapeHtml(col.label) + ' <span style="font-size:10px; color:var(--ink-light); font-weight:400;">(' + escapeHtml(posCtx) + ')</span></div>' +
     '<div class="colstats-grid">' +
     '<span class="colstats-label">Min</span><span class="colstats-val">' + fmt(min) + '</span>' +
     '<span class="colstats-label">Max</span><span class="colstats-val">' + fmt(max) + '</span>' +
@@ -3040,10 +3044,12 @@ function showColumnStatsPopover(colKey, anchorEl) {
   pop.style.left = left + "px";
   pop.style.top = top + "px";
 
-  // Dismiss on outside click
+  // Dismiss on outside click, Escape, or scroll
   setTimeout(function() {
     document.addEventListener("click", _colStatsOutsideClick, true);
     document.addEventListener("keydown", _colStatsEscDismiss, true);
+    var wrap = document.querySelector(".table-wrap");
+    if (wrap) wrap.addEventListener("scroll", _colStatsScrollDismiss, { passive: true });
   }, 0);
 }
 
@@ -3055,7 +3061,14 @@ function _colStatsOutsideClick(e) {
 }
 
 function _colStatsEscDismiss(e) {
-  if (e.key === "Escape") dismissColumnStatsPopover();
+  if (e.key === "Escape") {
+    e.stopPropagation();
+    dismissColumnStatsPopover();
+  }
+}
+
+function _colStatsScrollDismiss() {
+  dismissColumnStatsPopover();
 }
 
 function dismissColumnStatsPopover() {
@@ -3063,6 +3076,8 @@ function dismissColumnStatsPopover() {
   if (pop) pop.remove();
   document.removeEventListener("click", _colStatsOutsideClick, true);
   document.removeEventListener("keydown", _colStatsEscDismiss, true);
+  var wrap = document.querySelector(".table-wrap");
+  if (wrap) wrap.removeEventListener("scroll", _colStatsScrollDismiss);
 }
 
 // ─── Smart filter presets ──────────────────────────────────────
@@ -4446,7 +4461,7 @@ function computeLeaderRanks() {
   // Cache key based on item count + first/last player IDs
   var items = state.items;
   if (!items.length) return {};
-  var cacheKey = items.length + ":" + (items[0].player_id || "") + ":" + (items[items.length - 1].player_id || "");
+  var cacheKey = items.length + ":" + (items[0].player_id || "") + ":" + (items[items.length - 1].player_id || "") + ":" + state.sortKey + ":" + state.season;
   if (_leaderRanksCache && _leaderRanksCacheKey === cacheKey) return _leaderRanksCache;
 
   var cols = getActiveColumns();
@@ -9698,7 +9713,7 @@ function toggleShortcutRef() {
           ${shortcutRow("P", "Clear pinned players")}
           ${shortcutRow("Shift+click", "Column header → secondary sort")}
           ${shortcutRow("Dbl-click", "Column header → quick filter")}
-          ${shortcutRow("Dbl-click", "Stat cell → copy value")}
+          ${shortcutRow("Dbl-click", "Stat cell → add filter from value")}
           ${shortcutRow("← →", "Previous / next page")}
           ${shortcutRow("J / K", "Navigate rows down / up")}
           ${shortcutRow("Enter", "Open focused player profile")}

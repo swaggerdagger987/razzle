@@ -1,5 +1,16 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 125 — QA + UX Audit Fixes for Phases 121-124 (COMPLETE)
+
+**Exit Criterion MET**: 2 HIGH + MEDIUM fixes resolved. 34 tests pass.
+
+### Phase 125 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | HIGH fixes | DONE | Popover scroll dismiss, Escape stopPropagation |
+| 2 | MEDIUM fixes | DONE | Filter dedup, cache key, Top 3 rename, shortcuts hint, position context |
+
 ## Previous Phase: Phase 124 — Interactive Data Cells (COMPLETE)
 
 **Exit Criterion MET**: Position breakdown badges clickable. Double-click stat cell creates filter. 34 tests pass.
