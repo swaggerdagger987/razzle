@@ -2490,7 +2490,7 @@ function renderPinnedRows() {
   }
 
   // Add a separator row at end
-  const colCount = cols.length + 3; // +star +checkbox +player
+  const colCount = cols.length + 3 + (state.universe === "nfl" ? 1 : 0); // +star +checkbox +player (+pin if NFL)
   html += `<tr class="pinned-separator"><td colspan="${colCount}"></td></tr>`;
 
   pinnedBody.innerHTML = html;

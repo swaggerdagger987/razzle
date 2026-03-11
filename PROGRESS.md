@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 55 — QA + UX Audit Fixes for Phases 51-54 (COMPLETE)
+
+**Exit Criterion MET**: All CRITICAL and HIGH findings fixed. Pinned rows separator colspan corrected to include pin column in NFL mode. Tag picker borders changed from 1.5px to 2px per DESIGN.md, with transparent border on default state to prevent layout shift.
+
+### Phase 55 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Fix CRITICAL + HIGH findings | DONE | colspan +1 for pin col, tag-picker-option 2px solid transparent / 2px solid var(--tag-color) |
+
 ## Previous Phase: Phase 54 — Screener Tier Breaks (COMPLETE)
 
 **Exit Criterion MET**: NFL screener shows visual tier break dividers between player groups when toggled on. Tier 1 (Elite, top 5), Tier 2 (Starters, 6-12), Tier 3 (Flex, 13-24), Tier 4 (Bench, 25-36), Tier 5 (Deep, 37+). T key toggles on/off. Toolbar button with active state. State persists in localStorage. URL serialization (?tiers=1). Hidden in college/prospect modes. Pinned rows excluded.
