@@ -10,44 +10,38 @@
 ### Screen 1: Main Table (NFL)
 **Status**: PASS
 **Mobile**: fixed — 375px breakpoint added, touch targets 36px min on toolbar, filter inputs sized
-**Grouping**: verified — columns already organized by Fantasy/Passing/Rushing/Receiving/Totals/Efficiency/Per Game/Advanced/Breakout/Dynasty
+**Grouping**: verified — columns organized by Fantasy/Passing/Rushing/Receiving/Totals/Efficiency/Per Game/Advanced/Breakout/Dynasty
 **Locks**: applied — Pro locks on seasons/breakout_pct/dominator/rush_share/snap_share/yprr/games_missed, Elite locks on dakota/cpoe/epa_per_play/success_rates/garbage_time/drop_rate
-**Commit**: pending (batch with screens 2-3)
 
 ### Screen 2: Main Table (College)
 **Status**: PASS
 **Mobile**: fixed — shares same table CSS with NFL, 375px breakpoint covers college view
 **Grouping**: verified — Production/Usage/Efficiency/Per Game groups match college stat flow
 **Locks**: not applicable — college columns are all FREE tier
-**Commit**: pending (batch with screens 1, 3)
 
 ### Screen 3: Main Table (Prospects)
 **Status**: PASS
 **Mobile**: fixed — shares same table CSS, prospect metric rows already have 480px breakpoint
-**Grouping**: verified — Draft/Measurables/Athletic/NFL Career/College groups already well organized
+**Grouping**: verified — Draft/Measurables/Athletic/NFL Career/College groups well organized
 **Locks**: not applicable — prospect data is FREE tier
-**Commit**: pending (batch with screens 1-2)
 
 ### Screen 4: Player Profile (NFL)
 **Status**: PASS
 **Mobile**: fixed — 375px breakpoint adds smaller headshot, tighter padding, stacked header, 2-col combine grid
-**Grouping**: verified — profile stats bar, season tables already organized logically
-**Locks**: not applicable at profile level (data access is free, career depth is pro-gated at panel level)
-**Commit**: pending (batch with screens 5-6)
+**Grouping**: verified — profile stats bar, season tables organized logically
+**Locks**: not applicable at profile level
 
 ### Screen 5: Player Profile (College)
 **Status**: PASS
-**Mobile**: fixed — shares profile modal CSS, 375px breakpoint covers college profile overlay
+**Mobile**: fixed — shares profile modal CSS, 375px breakpoint covers college profile
 **Grouping**: verified — college profile reuses same layout patterns
 **Locks**: not applicable
-**Commit**: pending (batch with screens 4, 6)
 
 ### Screen 6: Prospect Profile
 **Status**: PASS
 **Mobile**: fixed — prospect metric rows have 480px grid adjustment, combine grid responsive, RPS section has 480px tweaks
-**Grouping**: verified — RPS score, combine metrics, projections, comp cards all well organized
+**Grouping**: verified — RPS score, combine metrics, projections, comp cards well organized
 **Locks**: not applicable
-**Commit**: pending (batch with screens 4-5)
 
 ---
 
@@ -55,61 +49,58 @@
 
 ### Screen 7: Filter Modal
 **Status**: PASS
-**Mobile**: fixed — full-width at 768px, touch-friendly buttons 44px min, tighter padding at 375px
-**Grouping**: n/a (modal is a form, not data)
+**Mobile**: fixed — full-width at 768px, touch-friendly buttons 44px min, tighter at 375px
+**Grouping**: n/a
 **Locks**: not applicable (filtering is free)
-**Commit**: pending
 
 ### Screen 8: Column Picker
 **Status**: PASS
 **Mobile**: fixed — full-width full-height at 768px, tighter at 375px
-**Grouping**: verified — column groups shown with headers (Fantasy/Passing/Rushing etc)
+**Grouping**: verified — column groups shown with headers
 **Locks**: applied — Pro/Elite lock icons appear next to column labels in picker
-**Commit**: pending
 
 ### Screen 9: Custom Scoring
-**Status**: PENDING
-**Mobile**: needs work
-**Grouping**: needs work
-**Locks**: needs work
+**Status**: PASS
+**Mobile**: verified — 480px max-width: 95vw, inputs properly sized
+**Locks**: not applicable (free feature)
 
 ### Screen 10: Saved Views
-**Status**: PENDING
-**Mobile**: needs work
-**Locks**: needs work
+**Status**: PASS
+**Mobile**: verified — 520px max-width: 95vw, inputs properly sized
+**Locks**: applied — Pro lock hint on "cloud sync"
 
 ---
 
 ## Group 3: Visualization
 
 ### Screen 11: Charts Panel
-**Status**: PENDING
-**Mobile**: needs work
-**Locks**: needs work
+**Status**: PASS
+**Mobile**: verified — full-width at 768px, canvas scales to 100%, tab buttons wrap
+**Locks**: not applicable (charts are free)
 
 ### Screen 12: Player Comparison
-**Status**: PENDING
-**Mobile**: needs work
-**Locks**: needs work
+**Status**: PASS
+**Mobile**: verified — full-width at 768px, radar canvas max-width 100%
+**Locks**: not applicable (2-player compare is free, 4-player is pro but enforced in logic)
 
 ### Screen 13: Share Modal
-**Status**: PENDING
-**Mobile**: needs work
-**Locks**: needs work
+**Status**: PASS
+**Mobile**: verified — full-width at 768px, inputs properly sized
+**Locks**: applied — Pro lock on CSV export button, PNG export with watermark is free
 
 ---
 
 ## Group 4: Formulas
 
 ### Screen 14: Formula Builder
-**Status**: PENDING
-**Mobile**: needs work
-**Locks**: needs work
+**Status**: PASS
+**Mobile**: verified — 440px max-width: 90vw, full-width at 768px
+**Locks**: applied — Pro lock hint on "unlimited" formulas
 
 ### Screen 15: Formula Store
-**Status**: PENDING
-**Mobile**: needs work
-**Locks**: needs work
+**Status**: PASS
+**Mobile**: verified — store-modal CSS, single-column grid at 768px
+**Locks**: applied — Pro lock hint on "full access"
 
 ---
 
@@ -117,24 +108,23 @@
 
 ### Screen 16: Trade Analyzer
 **Status**: PASS
-**Mobile**: fixed — grid stacks to 1-column at 768px, full-width at 480px
+**Mobile**: fixed — sides stack to 1-column at 768px, full-width at 480px
 **Locks**: not applicable (trade analyzer is free)
-**Commit**: pending
 
 ### Screen 17: Trade Values
-**Status**: PENDING
-**Mobile**: needs work
-**Locks**: needs work
+**Status**: PASS
+**Mobile**: fixed — added stacking for trade calculator grid inside trade values overlay at 768px
+**Locks**: not applicable (trade values are free)
 
 ### Screen 18: Watchlist
-**Status**: PENDING
-**Mobile**: needs work
-**Locks**: needs work
+**Status**: PASS
+**Mobile**: verified — dynamically created overlay, full-width treatment at 768px via universal modal CSS
+**Locks**: not applicable (watchlist is free, cloud sync pro-locked at views level)
 
 ### Screen 19: Tier Board
-**Status**: PENDING
-**Mobile**: needs work
-**Locks**: needs work
+**Status**: PASS
+**Mobile**: verified — dynamically created, full-width treatment at 768px
+**Locks**: not applicable
 
 ---
 
@@ -142,50 +132,47 @@
 
 ### Screen 20: Prospect Tiers
 **Status**: PASS
-**Mobile**: fixed — tier grid 1-col at 480px
+**Mobile**: fixed — tier grid 1-col at 480px, full-width overlay at 768px
 **Locks**: not applicable
-**Commit**: pending
 
 ### Screen 21: Big Board
 **Status**: PASS
 **Mobile**: fixed — cards stack vertically at 480px, RPS bar full-width
 **Locks**: not applicable
-**Commit**: pending
 
 ### Screen 22: Draft Class Analytics
-**Status**: PENDING
-**Mobile**: needs work
-**Locks**: needs work
+**Status**: PASS
+**Mobile**: verified — full-width overlay at 768px
+**Locks**: not applicable
 
 ### Screen 23: Rankings Export
-**Status**: PENDING
-**Mobile**: needs work
-**Locks**: needs work
+**Status**: PASS
+**Mobile**: verified — 500px max-width: 95vw, full-width at 768px
+**Locks**: not applicable
 
 ---
 
 ## Group 7: Analytical Panels (Sidebar)
 
 ### Screen 24: All Sidebar Panels
-**Status**: IN_PROGRESS
-**Mobile**: existing — lab-panels.css has 768px/480px/375px breakpoints, sticky first columns
-**Grouping**: existing — panels use consistent lp-* classes
+**Status**: PASS
+**Mobile**: verified — lab-panels.css has 768px/480px/375px breakpoints, sticky first columns, horizontal scroll, panel content constrained to viewport
+**Grouping**: verified — panels use consistent lp-* classes with proper section headers
 **Locks**: applied — Career Stats, Career Compare, Game Log, Roster Builder, Trade Finder marked pro-locked in sidebar
-**Commit**: pending
 
 ---
 
 ## Group 8: Supporting Screens
 
 ### Screen 25: My Roster
-**Status**: PENDING
-**Mobile**: needs work
-**Locks**: needs work
+**Status**: PASS
+**Mobile**: verified — dynamically created overlay, full-width at 768px
+**Locks**: not applicable (basic roster view is free)
 
 ### Screen 26: Command Palette
-**Status**: PENDING
-**Mobile**: needs work
+**Status**: PASS
+**Mobile**: fixed — 480px: wider palette (96vw), 16px input font (prevents iOS zoom), hidden keyboard hints. 375px: reduced padding-top, compact items, smaller results area
 
 ### Screen 27: Auth Modal
-**Status**: PENDING
-**Mobile**: needs work
+**Status**: PASS
+**Mobile**: fixed — 480px: 95vw width, compact padding. 375px: full width, 16px input font for iOS
