@@ -3829,13 +3829,17 @@ function copyTableToClipboard() {
   }
 
   const tsv = lines.join("\n");
-  try {
-    navigator.clipboard.writeText(tsv).then(function() {
-      var btn = document.getElementById("clipboardCopyBtn");
-      if (btn) { btn.textContent = "Copied!"; setTimeout(function() { btn.textContent = "Copy to Clipboard"; }, 1500); }
-      _showToast(state.items.length + " rows copied");
-    }).catch(function() { _showToast("copy failed"); });
-  } catch(e) { _showToast("copy failed"); }
+  function onCopySuccess() {
+    var btn = document.getElementById("clipboardCopyBtn");
+    if (btn) { btn.textContent = "Copied!"; setTimeout(function() { btn.textContent = "Copy to Clipboard"; }, 1500); }
+    _showToast(state.items.length + " rows copied");
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(tsv).then(onCopySuccess).catch(function() { _fallbackCopy(tsv); onCopySuccess(); });
+  } else {
+    _fallbackCopy(tsv);
+    onCopySuccess();
+  }
 }
 
 // ─── Rankings Export ───────────────────────────────────────────────

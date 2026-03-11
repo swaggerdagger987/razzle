@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 76 — QA + UX Audit Fixes for Phases 71-75 (COMPLETE)
+
+**Exit Criterion MET**: 1 MEDIUM QA finding fixed (clipboard fallback). 0 CRITICAL/HIGH issues. Clean audit overall.
+
+### Phase 76 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Copy to clipboard fallback | DONE | navigator.clipboard check + _fallbackCopy() textarea fallback, shared onCopySuccess() |
+
 ## Previous Phase: Phase 75 — Screener Percentile Display Mode (COMPLETE)
 
 **Exit Criterion MET**: R key toggles percentile display mode. All numeric cells show position-percentile rank (0-99) with % superscript instead of raw values. Raw value in tooltip. Color-coded (green 90th+, blue 75th+, red 10th-, gray 25th-). Age/games/dynasty_value excluded. Pctl toolbar button, localStorage, URL state. NFL mode only. Works with heat colors and data bars.
