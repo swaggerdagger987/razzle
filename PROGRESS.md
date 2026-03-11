@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 59 — Screener Row Highlighting (COMPLETE)
+
+**Exit Criterion MET**: Clicking a row in the screener table toggles a persistent orange highlight on that row. Orange tint (15% color-mix) on all cells plus left border accent on player column. Click on interactive elements (links, checkboxes, inputs, pin cells, tag/note popups) does not trigger highlight. Event delegation on tableBody. Works in all modes.
+
+### Phase 59 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Row click-to-highlight with CSS toggle | DONE | .row-highlighted class, color-mix orange 15%, event delegation, interactive element filtering |
+
 ## Previous Phase: Phase 58 — Screener Stats Summary Bar (COMPLETE)
 
 **Exit Criterion MET**: Screener table has a sticky footer row showing average values for each visible numeric column. A key toggles on/off. Toolbar "Summary" button with blue active state. Off by default. State persists in localStorage (razzle_summary_bar). URL serialization (?summary=1). Works in NFL, college, and prospect modes. Player count shown. Dense mode support.

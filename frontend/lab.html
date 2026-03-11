@@ -945,6 +945,15 @@
     font-size: 10px;
   }
 
+  /* ─── Row highlighting ─── */
+  .screener-table tbody tr.row-highlighted td {
+    background: color-mix(in srgb, var(--orange) 15%, transparent) !important;
+  }
+  .screener-table tbody tr.row-highlighted td.col-player {
+    background: color-mix(in srgb, var(--orange) 15%, var(--bg)) !important;
+    border-left: 3px solid var(--orange);
+  }
+
   /* ─── Stats summary bar (tfoot) ─── */
   .screener-table tfoot td {
     background: var(--bg-warm);

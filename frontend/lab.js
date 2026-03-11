@@ -1647,6 +1647,21 @@ function renderProspectTable() {
   });
 })();
 
+// ─── Row highlight on click ──────────────────────────────────────
+(function() {
+  var tbody = document.getElementById("tableBody");
+  if (!tbody) return;
+  tbody.addEventListener("click", function(e) {
+    // Skip clicks on interactive elements
+    var tag = e.target.tagName;
+    if (tag === "A" || tag === "INPUT" || tag === "BUTTON" || tag === "SELECT") return;
+    if (e.target.closest("a, input, button, .pin-cell, .tag-picker-popup, .note-editor-popup")) return;
+    var tr = e.target.closest("tr");
+    if (!tr) return;
+    tr.classList.toggle("row-highlighted");
+  });
+})();
+
 // ─── Universe toggle ─────────────────────────────────────────────
 function setUniverse(u) {
   // Map legacy "prospects" universe to college + prospects sub-view
