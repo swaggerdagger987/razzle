@@ -901,6 +901,7 @@ function isProspectView() {
   applyUniverseUI();
   renderColumnPicker();
   renderPresets();
+  populatePresetSelect();
   updateWatchlistBadge();
   updateTagFilterBadge();
   await fetchAndRender();
@@ -1900,6 +1901,7 @@ function setUniverse(u) {
   populateFilterStatSelect();
   renderColumnPicker();
   renderPresets();
+  populatePresetSelect();
   renderActiveFilters();
   fetchAndRender();
 
@@ -1932,6 +1934,7 @@ function setCollegeView(view) {
   populateFilterStatSelect();
   renderColumnPicker();
   renderPresets();
+  populatePresetSelect();
   renderActiveFilters();
   fetchAndRender();
 
@@ -2613,6 +2616,28 @@ function applyPreset(key) {
   renderColumnPicker();
   renderTable();
   saveStateToURL();
+  _showToast("preset: " + preset.label);
+}
+
+function applyPresetFromToolbar(key) {
+  if (!key) return;
+  applyPreset(key);
+  // Reset select to placeholder
+  var sel = document.getElementById("presetSelect");
+  if (sel) sel.value = "";
+}
+
+function populatePresetSelect() {
+  var sel = document.getElementById("presetSelect");
+  if (!sel) return;
+  var presets = isProspectView() ? PROSPECT_PRESETS : state.universe === "college" ? COLLEGE_PRESETS : PRESETS;
+  var html = '<option value="">Preset...</option>';
+  for (var key in presets) {
+    if (presets.hasOwnProperty(key)) {
+      html += '<option value="' + key + '">' + presets[key].label + '</option>';
+    }
+  }
+  sel.innerHTML = html;
 }
 
 // ─── URL state ───────────────────────────────────────────────────

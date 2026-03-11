@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 92 — Quick Preset Select in Toolbar (COMPLETE)
+
+**Exit Criterion MET**: Column preset dropdown in toolbar. Universe-aware presets. One-click switching with toast.
+
+### Phase 92 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Preset select dropdown | DONE | select#presetSelect, populatePresetSelect(), applyPresetFromToolbar() |
+
 ## Previous Phase: Phase 91 — QA + UX Audit Fixes for Phases 87-90 (COMPLETE)
 
 **Exit Criterion MET**: 2 MEDIUM findings fixed (XSS filter escape + position badge guard). 1 LOW fixed (sort2 tint). 0 CRITICAL/HIGH.

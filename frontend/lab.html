@@ -2977,6 +2977,9 @@
 
     <div class="toolbar-divider"></div>
 
+    <select class="select-chunky" id="presetSelect" onchange="applyPresetFromToolbar(this.value)" title="Quick column preset">
+      <option value="">Preset...</option>
+    </select>
     <button class="btn-chunky" onclick="openColumnPicker()">Columns</button>
     <button class="btn-chunky" id="formulaBtn" onclick="openFormulaBuilder()">Formulas</button>
     <button class="btn-chunky" onclick="openCustomScoring()">Custom Scoring</button>
