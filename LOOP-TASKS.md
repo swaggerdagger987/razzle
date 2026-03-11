@@ -1,8 +1,38 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 41 (QA + UX Audit — Auto-Generated Fixes)
-## Phase 41: QA + UX Audit — Auto-Generated Fixes
+- Phase: 42 (UX Consistency & Features — Priority 3)
+## Phase 42: UX Consistency & Features — Priority 3
+**Exit Criterion**: VORP has player search. Dynasty Rankings/Trade Values/VORP/Tiers share consistent layout. Trade Values has adjustable formula weights. Dynasty Rankings shows historical value progression.
+
+- Task 1: PENDING
+- Task 2: PENDING
+- Task 3: PENDING
+- Task 4: PENDING
+- Stage: IN PROGRESS
+- Next: Task 1
+
+### Task 1: Add player search to VORP panel
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: VORP panel has a search bar matching Trade Values design pattern.
+
+### Task 2: Standardize all ranking/value panel layouts
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: Dynasty Rankings, Trade Values, VORP, Tiers all share: (1) position filter chips at top, (2) search bar, (3) sortable table with consistent column widths, (4) same card/container styling.
+
+### Task 3: Add adjustable formula to Trade Values
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: User can adjust at least 3 formula weights and see trade values update in real time.
+
+### Task 4: Add historical dynasty valuations
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: Dynasty Rankings panel has a historical view showing value progression per player across seasons.
+
+## Phase 41: QA + UX Audit — Auto-Generated Fixes (COMPLETE)
 **Exit Criterion**: All CRITICAL and HIGH QA findings fixed. MEDIUM findings addressed. Pace tracker returns real stat projections. XSS in prospect radar fixed. Remaining 5 panels get available_seasons.
 
 - Task 1: PASS
