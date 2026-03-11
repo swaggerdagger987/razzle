@@ -413,7 +413,38 @@ body {
   font-size: 24px;
   color: var(--ink-medium);
   text-align: center;
-  padding: 60px 20px;
+  padding: 30px 20px;
+}
+.skeleton-table {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.skeleton-row {
+  display: flex;
+  gap: 10px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-light, rgba(0,0,0,0.06));
+}
+.skeleton-row.skeleton-header {
+  border-bottom: 2px solid var(--border-light, rgba(0,0,0,0.1));
+}
+.skeleton-cell {
+  height: 16px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, rgba(0,0,0,0.06) 25%, rgba(0,0,0,0.02) 50%, rgba(0,0,0,0.06) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+}
+.skeleton-header .skeleton-cell {
+  height: 12px;
+  opacity: 0.6;
+}
+.skeleton-row:nth-child(odd) .skeleton-cell {
+  animation-delay: 0.15s;
+}
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
 /* ===== ERROR STATE ===== */

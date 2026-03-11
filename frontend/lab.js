@@ -140,6 +140,15 @@ function _showToast(msg) {
   }, 2500);
 }
 
+var _skeletonHTML = '';
+function _resetLoadingSkeleton(el) {
+  if (!_skeletonHTML) _skeletonHTML = el.innerHTML;
+  if (!el.querySelector('.skeleton-table')) el.innerHTML = _skeletonHTML;
+}
+function _setLoadingError(el, msg) {
+  el.innerHTML = '<div style="text-align:center; font-family:var(--font-hand); font-size:22px; color:var(--ink-light); padding:40px 20px;">' + msg + '</div>';
+}
+
 // ─── Watchlist (localStorage, cached in memory) ────────────────
 let _watchlistCache = null;
 
@@ -944,7 +953,7 @@ async function fetchAndRenderNFL(signal, myId) {
   const loading = document.getElementById("loadingMsg");
   const tbody = document.getElementById("tableBody");
   loading.style.display = "block";
-  loading.textContent = "pulling film...";
+  _resetLoadingSkeleton(loading);
   tbody.innerHTML = "";
 
   const positions = state.position === "ALL"
@@ -996,7 +1005,7 @@ async function fetchAndRenderNFL(signal, myId) {
     saveStateToURL();
   } catch (e) {
     if (e.name === 'AbortError') return;
-    loading.textContent = "fumbled the data fetch...";
+    _setLoadingError(loading, "fumbled the data fetch...");
     console.error('Screener fetch error:', e);
     _showToast('fumbled the data fetch... try again');
     // Don't clear state.items — keep previous data visible
@@ -1008,7 +1017,7 @@ async function fetchAndRenderProspects(signal, myId) {
   const loading = document.getElementById("loadingMsg");
   const tbody = document.getElementById("tableBody");
   loading.style.display = "block";
-  loading.textContent = "scouting prospects...";
+  _resetLoadingSkeleton(loading);
   tbody.innerHTML = "";
 
   const positions = state.position === "ALL" ? "" : state.position;
@@ -1042,7 +1051,7 @@ async function fetchAndRenderProspects(signal, myId) {
     saveStateToURL();
   } catch (e) {
     if (e.name === 'AbortError') return;
-    loading.textContent = "fumbled the prospect fetch...";
+    _setLoadingError(loading, "fumbled the prospect fetch...");
     console.error('Prospect fetch error:', e);
     _showToast('fumbled the prospect fetch... try again');
     // Don't clear state.items — keep previous data visible
@@ -1054,7 +1063,7 @@ async function fetchAndRenderCollege(signal, myId) {
   const loading = document.getElementById("loadingMsg");
   const tbody = document.getElementById("tableBody");
   loading.style.display = "block";
-  loading.textContent = "pulling college film...";
+  _resetLoadingSkeleton(loading);
   tbody.innerHTML = "";
 
   const positions = state.position === "ALL" ? "" : state.position;
@@ -1088,7 +1097,7 @@ async function fetchAndRenderCollege(signal, myId) {
     saveStateToURL();
   } catch (e) {
     if (e.name === 'AbortError') return;
-    loading.textContent = "fumbled the college data fetch...";
+    _setLoadingError(loading, "fumbled the college data fetch...");
     console.error('College fetch error:', e);
     _showToast('fumbled the college data fetch... try again');
     // Don't clear state.items — keep previous data visible

@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 97 — Loading Skeleton Animation (COMPLETE)
+
+**Exit Criterion MET**: Skeleton shimmer rows during data loading. Error states show fallback text. 34 tests pass.
+
+### Phase 97 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Skeleton shimmer animation | DONE | 6-row skeleton table in lab.html, CSS shimmer keyframes in styles.css, _resetLoadingSkeleton()/_setLoadingError() helpers in lab.js |
+
 ## Previous Phase: Phase 96 — QA + UX Audit Fixes for Phases 92-95 (COMPLETE)
 
 **Exit Criterion MET**: 1 HIGH (pipe escaping) and 2 MEDIUM (college stats + visual mode guard) fixed. 0 CRITICAL.
