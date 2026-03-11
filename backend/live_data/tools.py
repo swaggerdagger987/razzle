@@ -1654,6 +1654,9 @@ def fetch_garbage_time(season=None, position=None, limit=40):
                        rec_yd * 0.1 + rec_td * 6 + recs * 1)
                 ppg = ppr / games
 
+                # Convert 0-1 range to percentage
+                gt_pct_display = gt_pct * 100 if gt_pct <= 1 else gt_pct
+
                 players.append({
                     "player_id": pid,
                     "name": name,
@@ -1661,7 +1664,7 @@ def fetch_garbage_time(season=None, position=None, limit=40):
                     "team": team,
                     "games": games,
                     "ppg": round(ppg, 1),
-                    "garbage_time_pct": round(gt_pct, 1),
+                    "garbage_time_pct": round(gt_pct_display, 1),
                     "avg_score_diff": round(avg_diff, 1) if avg_diff is not None else 0,
                 })
 
@@ -2620,22 +2623,22 @@ def fetch_drop_rate(season=None, position=None, limit=50):
             rows = conn.execute(f"""
                 SELECT p.player_id, p.full_name, p.position, p.team,
                        pb.drops, pb.drop_rate,
-                       SUM(w.targets) as targets,
-                       SUM(w.receptions) as receptions,
-                       SUM(w.receiving_yards) as rec_yds,
-                       SUM(w.receiving_yards_after_catch) as yac,
-                       COUNT(DISTINCT w.week) as games
+                       SUM(w.targets) as tot_targets,
+                       SUM(w.receptions) as tot_recs,
+                       SUM(w.receiving_yards) as tot_rec_yds,
+                       SUM(w.receiving_yards_after_catch) as tot_yac,
+                       COUNT(DISTINCT w.week) as gp
                 FROM player_season_pbp pb
                 JOIN players p ON p.player_id = pb.player_id
                 JOIN player_week_stats w ON w.player_id = pb.player_id AND w.season = pb.season
-                    AND w.season_type = 'REG'
+                    AND w.season_type = 'regular'
                 WHERE pb.season = ?
                   AND p.position IN ('WR','TE','RB')
                   AND p.fantasy_relevant = 1
                   AND pb.drops IS NOT NULL
                   {pos_filter}
                 GROUP BY p.player_id
-                HAVING targets >= 20
+                HAVING tot_targets >= 20
             """, params).fetchall()
 
             sure_hands = []
@@ -2713,7 +2716,7 @@ def fetch_success_rate(season=None, position=None, limit=50):
                 FROM player_season_pbp pb
                 JOIN players p ON p.player_id = pb.player_id
                 JOIN player_week_stats w ON w.player_id = pb.player_id AND w.season = pb.season
-                    AND w.season_type = 'REG'
+                    AND w.season_type = 'regular'
                 WHERE pb.season = ?
                   AND p.position IN ('QB','RB','WR','TE')
                   AND p.fantasy_relevant = 1
@@ -2794,19 +2797,19 @@ def fetch_game_script(season=None, position=None, limit=40):
             rows = conn.execute(f"""
                 SELECT p.player_id, p.full_name, p.position, p.team,
                        pb.avg_score_differential, pb.garbage_time_pct,
-                       SUM(w.fantasy_points_ppr) as total_ppr,
-                       COUNT(DISTINCT w.week) as games
+                       SUM(w.fantasy_points_ppr) as tot_ppr,
+                       COUNT(DISTINCT w.week) as gp
                 FROM player_season_pbp pb
                 JOIN players p ON p.player_id = pb.player_id
                 JOIN player_week_stats w ON w.player_id = pb.player_id AND w.season = pb.season
-                    AND w.season_type = 'REG'
+                    AND w.season_type = 'regular'
                 WHERE pb.season = ?
                   AND p.position IN ('QB','RB','WR','TE')
                   AND p.fantasy_relevant = 1
                   AND pb.avg_score_differential IS NOT NULL
                   {pos_filter}
                 GROUP BY p.player_id
-                HAVING games >= 4 AND total_ppr > 0
+                HAVING gp >= 4 AND tot_ppr > 0
             """, params).fetchall()
 
             positive_script = []

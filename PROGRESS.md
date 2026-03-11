@@ -1,6 +1,22 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 38 — Athletic Radar — Prospect Combine Spider Charts (COMPLETE)
+## Previous Phase: Phase 39 — Critical Bug Fixes — Priority 1 (COMPLETE)
+
+**Exit Criterion MET**: All 5 critical + 1 high severity bugs fixed. NFL screener returns correct year data (isProspect→prospectMode ReferenceError fixed). NFL/College toggle works. Target Premium fixed (SQLite column alias collision). Drop Rate fixed (season_type='REG'→'regular'). Matchups already working. Gamescript fixed (season_type). Garbage Time fixed (0-1→percent conversion).
+
+### Phase 39 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Fix NFL screener year filter | DONE | isProspect→prospectMode (5 refs), !state.season init |
+| 2 | Fix NFL/College toggle | DONE | Same root cause — ReferenceError in applyUniverseUI() |
+| 3 | Fix Target Premium | DONE | Column alias collision in SQLite HAVING, switched to player_week_stats |
+| 4 | Fix Drop Rate | DONE | season_type='REG'→'regular', alias collision |
+| 5 | Fix Matchups | DONE | Already working (32 teams returned) |
+| 6 | Fix Gamescript | DONE | season_type='REG'→'regular', alias collision |
+| 7 | Fix Garbage Time | DONE | gt_pct 0-1 range → *100 for percent display/thresholds |
+
+## Previous Phase: Phase 38 — Athletic Radar — Prospect Combine Spider Charts (COMPLETE)
 
 **Exit Criterion MET**: proradar panel renders canvas spider charts of combine percentiles for any prospect. Up to 3 prospects overlay with terracotta/blue/teal colors. Position tabs + draft year dropdown. /api/athletic-radar endpoint returns all prospects with pre-computed percentiles. Sidebar item works end-to-end. 34 smoke tests pass.
 
