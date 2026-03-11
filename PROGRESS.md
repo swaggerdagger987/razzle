@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 78 — Screener Zebra Striping (COMPLETE)
+
+**Exit Criterion MET**: Alternating row backgrounds — every odd row has 2.5% ink tint. Based on data index, stable during virtual scroll. Always on.
+
+### Phase 78 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Zebra striping | DONE | zebraBg in buildRowHTML, rgba(45,31,20,0.025) on odd rows, index-based |
+
 ## Previous Phase: Phase 77 — Screener Row Position Stripe (COMPLETE)
 
 **Exit Criterion MET**: Every data row has a 3px left border in position color (QB blue, RB teal, WR terracotta, TE purple). Always visible, makes ALL-position view instantly scannable.
