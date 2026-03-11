@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 93 — Visual Mode Cycle Shortcut (COMPLETE)
+
+**Exit Criterion MET**: V key cycles off → heat → percentile → bars → off. Buttons synced. localStorage persisted.
+
+### Phase 93 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Visual mode cycle | DONE | cycleVisualMode(), V key shortcut, button sync, shortcut ref |
+
 ## Previous Phase: Phase 92 — Quick Preset Select in Toolbar (COMPLETE)
 
 **Exit Criterion MET**: Column preset dropdown in toolbar. Universe-aware presets. One-click switching with toast.

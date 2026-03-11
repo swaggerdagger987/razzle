@@ -3677,6 +3677,44 @@ function toggleDataBars() {
   _showToast(state.dataBars ? "data bars on" : "data bars off");
 }
 
+function cycleVisualMode() {
+  // Cycle: off → heat → percentile → bars → off
+  var h = state.heatColors, p = state.percentileMode, b = state.dataBars;
+  // Determine current mode and advance
+  if (!h && !p && !b) {
+    // off → heat
+    state.heatColors = true; state.percentileMode = false; state.dataBars = false;
+    _showToast("visual: heat colors");
+  } else if (h && !p && !b) {
+    // heat → percentile
+    state.heatColors = false; state.percentileMode = true; state.dataBars = false;
+    _showToast("visual: percentile mode");
+  } else if (!h && p && !b) {
+    // percentile → bars
+    state.heatColors = false; state.percentileMode = false; state.dataBars = true;
+    _showToast("visual: data bars");
+  } else {
+    // anything else → off
+    state.heatColors = false; state.percentileMode = false; state.dataBars = false;
+    _showToast("visual: off");
+  }
+  // Sync buttons
+  var hBtn = document.getElementById("heatColorsBtn");
+  if (hBtn) { hBtn.classList.toggle("active", state.heatColors); hBtn.style.borderColor = state.heatColors ? "var(--green)" : ""; }
+  var pBtn = document.getElementById("percentileModeBtn");
+  if (pBtn) { pBtn.classList.toggle("active", state.percentileMode); pBtn.style.borderColor = state.percentileMode ? "var(--pos-qb)" : ""; }
+  var bBtn = document.getElementById("dataBarsBtn");
+  if (bBtn) { bBtn.classList.toggle("active", state.dataBars); bBtn.style.borderColor = state.dataBars ? "var(--orange)" : ""; }
+  // Persist
+  try { localStorage.setItem("razzle_heat_colors", state.heatColors ? "1" : "0"); } catch(e) {}
+  try { localStorage.setItem("razzle_percentile_mode", state.percentileMode ? "1" : "0"); } catch(e) {}
+  try { localStorage.setItem("razzle_data_bars", state.dataBars ? "1" : "0"); } catch(e) {}
+  _percentileCache = null;
+  _barMaxCache = null;
+  renderTable();
+  saveStateToURL();
+}
+
 // ─── Tier break dividers ─────────────────────────────────────────
 const TIER_BREAK_SIZES = [5, 12, 24, 36]; // cumulative breakpoints: Tier 1 = top 5, Tier 2 = 6-12, etc.
 
@@ -8675,6 +8713,12 @@ document.addEventListener("keydown", function(e) {
     return;
   }
 
+  // V: cycle visual modes (off → heat → percentile → bars → off)
+  if (e.key === "v" || e.key === "V") {
+    cycleVisualMode();
+    return;
+  }
+
   // ArrowLeft / ArrowRight: page navigation
   if (e.key === "ArrowLeft") {
     if (state.offset > 0) { prevPage(); _showToast("previous page"); }
@@ -8717,6 +8761,7 @@ function toggleShortcutRef() {
           ${shortcutRow("X", "Share / export")}
           ${shortcutRow("H", "Heat colors (percentiles)")}
           ${shortcutRow("R", "Percentile display mode")}
+          ${shortcutRow("V", "Cycle visual mode (heat → pctl → bars)")}
           ${shortcutRow("B", "Inline data bars")}
           ${shortcutRow("T", "Tier break dividers")}
           ${shortcutRow("D", "Compact density mode")}
