@@ -787,7 +787,7 @@ const state = {
   relevance: "fantasy",
   sortKey: "fantasy_points_ppr",
   sortDir: "desc",
-  limit: 100,
+  limit: (function() { try { var v = parseInt(localStorage.getItem("razzle_page_size")); return [25,50,100,200].includes(v) ? v : 100; } catch(e) { return 100; } })(),
   offset: 0,
   filters: [],
   teams: [],    // selected team abbreviations for team filter
@@ -2051,6 +2051,8 @@ function renderPagination() {
   document.getElementById("pageInfo").textContent = `${page} / ${totalPages}`;
   document.getElementById("prevBtn").disabled = state.offset === 0;
   document.getElementById("nextBtn").disabled = state.offset + state.limit >= state.totalCount;
+  const sel = document.getElementById("pageSizeSelect");
+  if (sel) sel.value = String(state.limit);
 }
 
 function prevPage() {
@@ -2060,6 +2062,15 @@ function prevPage() {
 
 function nextPage() {
   state.offset += state.limit;
+  fetchAndRender();
+}
+
+function changePageSize(val) {
+  const size = parseInt(val);
+  if (![25, 50, 100, 200].includes(size)) return;
+  state.limit = size;
+  state.offset = 0;
+  try { localStorage.setItem("razzle_page_size", String(size)); } catch(e) {}
   fetchAndRender();
 }
 

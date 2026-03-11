@@ -3001,6 +3001,12 @@
       <button class="btn-chunky" id="prevBtn" onclick="prevPage()">← prev</button>
       <span id="pageInfo"></span>
       <button class="btn-chunky" id="nextBtn" onclick="nextPage()">next →</button>
+      <select class="select-chunky" id="pageSizeSelect" onchange="changePageSize(this.value)" style="font-size:11px; padding:4px 6px; margin-left:8px;" title="Rows per page">
+        <option value="25">25</option>
+        <option value="50">50</option>
+        <option value="100" selected>100</option>
+        <option value="200">200</option>
+      </select>
     </div>
     <span id="dataSource" style="font-family: var(--font-hand); font-size: 16px; color: var(--ink-light);">
       powered by nflverse

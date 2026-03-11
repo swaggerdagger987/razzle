@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 68 — Screener Rows Per Page Selector (COMPLETE)
+
+**Exit Criterion MET**: Dropdown near pagination lets users choose 25/50/100/200 rows per page. Persists in localStorage. Resets to page 1 on change. Works in all modes.
+
+### Phase 68 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Rows per page selector | DONE | select-chunky dropdown, localStorage persistence (razzle_page_size), renderPagination sync |
+
 ## Previous Phase: Phase 67 — Screener Sort Column Highlight + Row Rank (COMPLETE)
 
 **Exit Criterion MET**: Sorted column has subtle terracotta background tint on all data cells. Row rank # column shows overall rank adjusting for pagination. Works in NFL, college, and prospect modes.
