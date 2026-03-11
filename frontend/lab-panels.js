@@ -644,15 +644,15 @@
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
-        if (!seasonsLoaded) {
+        if (!seasonsLoaded && data.available_seasons) {
           seasonsLoaded = true;
           seasonSel.innerHTML = '';
-          for (var y = _latestSeason; y >= 2015; y--) {
+          data.available_seasons.forEach(function(s) {
             var opt = document.createElement('option');
-            opt.value = y; opt.textContent = y;
-            if (y === data.season) opt.selected = true;
+            opt.value = s; opt.textContent = s;
+            if (s === data.season) opt.selected = true;
             seasonSel.appendChild(opt);
-          }
+          });
         }
         renderAvgs(data.pos_averages);
         renderPA(data);
@@ -1497,15 +1497,15 @@
       if (curPos) url += '&position=' + encodeURIComponent(curPos);
 
       fetch(url).then(function(r) { if (!r.ok) throw new Error('API error'); return r.json(); }).then(function(data) {
-        if (!seasonsPopulated) {
+        if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#ww-season');
           sel.innerHTML = '';
-          for (var y = _latestSeason; y >= 2015; y--) {
+          data.available_seasons.forEach(function(s) {
             var o = document.createElement('option');
-            o.value = y; o.textContent = y;
-            if (y === data.season) o.selected = true;
+            o.value = s; o.textContent = s;
+            if (s === data.season) o.selected = true;
             sel.appendChild(o);
-          }
+          });
           seasonsPopulated = true;
         }
         var targets = data.targets || [];
@@ -2510,14 +2510,14 @@
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
-        if (!seasonsPopulated) {
+        if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#tp-season');
-          for (var y = new Date().getFullYear(); y >= 2020; y--) {
+          data.available_seasons.forEach(function(s) {
             var o = document.createElement('option');
-            o.value = y; o.textContent = y;
-            if (data.season && y == data.season) o.selected = true;
+            o.value = s; o.textContent = s;
+            if (s == data.season) o.selected = true;
             sel.appendChild(o);
-          }
+          });
           seasonsPopulated = true;
         }
         var players = data.players || [];
@@ -2632,14 +2632,14 @@
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
-        if (!seasonsPopulated) {
+        if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#dr-season');
-          for (var y = new Date().getFullYear(); y >= 2020; y--) {
+          data.available_seasons.forEach(function(s) {
             var o = document.createElement('option');
-            o.value = y; o.textContent = y;
-            if (data.season && y == data.season) o.selected = true;
+            o.value = s; o.textContent = s;
+            if (s == data.season) o.selected = true;
             sel.appendChild(o);
-          }
+          });
           seasonsPopulated = true;
         }
         var sure = data.sure_hands || [];
@@ -2735,14 +2735,14 @@
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
-        if (!seasonsPopulated) {
+        if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#gt-season');
-          for (var y = new Date().getFullYear(); y >= 2020; y--) {
+          data.available_seasons.forEach(function(s) {
             var o = document.createElement('option');
-            o.value = y; o.textContent = y;
-            if (data.season && y == data.season) o.selected = true;
+            o.value = s; o.textContent = s;
+            if (s == data.season) o.selected = true;
             sel.appendChild(o);
-          }
+          });
           seasonsPopulated = true;
         }
         var padders = data.stat_padders || [];
@@ -3797,14 +3797,14 @@
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
-        if (!seasonsPopulated) {
+        if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#mv-season');
-          for (var y = new Date().getFullYear(); y >= 2020; y--) {
+          data.available_seasons.forEach(function(s) {
             var o = document.createElement('option');
-            o.value = y; o.textContent = y;
-            if (y === data.season) o.selected = true;
+            o.value = s; o.textContent = s;
+            if (s === data.season) o.selected = true;
             sel.appendChild(o);
-          }
+          });
           seasonsPopulated = true;
         }
         renderMV(data);
@@ -3893,14 +3893,14 @@
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
-        if (!seasonsPopulated) {
+        if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#po-season');
-          for (var y = new Date().getFullYear(); y >= 2020; y--) {
+          data.available_seasons.forEach(function(s) {
             var o = document.createElement('option');
-            o.value = y; o.textContent = y;
-            if (y === data.season) o.selected = true;
+            o.value = s; o.textContent = s;
+            if (s === data.season) o.selected = true;
             sel.appendChild(o);
-          }
+          });
           seasonsPopulated = true;
         }
         renderPO(data);

@@ -84,7 +84,7 @@
     // ─── Controls bar ────────────────────────────────────────────
     html += '<div class="pr-controls">';
     html += '<div class="pr-search-wrap">';
-    html += '<input type="text" class="pr-search" id="prSearch" placeholder="Search prospects..." value="' + escapeHtml(panelState.searchTerm) + '">';
+    html += '<input type="text" class="pr-search" id="prSearch" placeholder="Search prospects..." value="' + escapeAttr(panelState.searchTerm) + '">';
     html += '</div>';
 
     // Draft year dropdown
@@ -160,7 +160,7 @@
       var isSelected = selIdx >= 0;
       var avgPct = p.avg_percentile != null ? p.avg_percentile.toFixed(1) : '-';
 
-      html += '<div class="pr-prospect-row' + (isSelected ? ' pr-selected' : '') + '" data-name="' + escapeHtml(p.player_name) + '">';
+      html += '<div class="pr-prospect-row' + (isSelected ? ' pr-selected' : '') + '" data-name="' + escapeAttr(p.player_name) + '">';
       html += '<span class="pr-prospect-rank">' + (idx + 1) + '</span>';
       html += '<span class="pr-prospect-pos" style="background:' + posColor + ';">' + escapeHtml(p.position) + '</span>';
       html += '<span class="pr-prospect-name">' + escapeHtml(p.player_name) + '</span>';

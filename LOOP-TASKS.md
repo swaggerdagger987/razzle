@@ -5,32 +5,36 @@
 ## Phase 41: QA + UX Audit — Auto-Generated Fixes
 **Exit Criterion**: All CRITICAL and HIGH QA findings fixed. MEDIUM findings addressed. Pace tracker returns real stat projections. XSS in prospect radar fixed. Remaining 5 panels get available_seasons.
 
-- Task 1: PENDING
-- Task 2: PENDING
-- Task 3: PENDING
-- Task 4: PENDING
-- Stage: IN PROGRESS
-- Next: Task 1
+- Task 1: PASS
+- Task 2: PASS
+- Task 3: PASS
+- Task 4: PASS
+- Stage: COMPLETE
+- Next: Phase gate
 
 ### Task 1: Fix pace tracker SQL column names (CRITICAL)
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 **Acceptance**: `/api/season-pace` returns non-zero projected pass yards, rush yards, rec yards for qualifying players. All column names match player_week_stats schema.
+**Result**: Fixed 6 column names: pass_yards→passing_yards, pass_td→passing_tds, rush_yards→rushing_yards, rush_td→rushing_tds, rec_yards→receiving_yards, rec_td→receiving_tds. Lamar now projects 4117 pass yd / 926 rush yd. Also added available_seasons.
 
 ### Task 2: Fix XSS in prospect radar — escapeHtml to escapeAttr (HIGH)
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 **Acceptance**: `data-name` and `value` attributes in lab-prospect-radar.js use `escapeAttr` not `escapeHtml`. No attribute injection possible.
+**Result**: Fixed data-name (line 163) and search input value (line 87) to use escapeAttr.
 
-### Task 3: Add available_seasons to remaining 5 panels (MEDIUM)
-**Status**: PENDING
-**Attempts**: 0
+### Task 3: Add available_seasons to remaining panels (MEDIUM)
+**Status**: PASS
+**Attempts**: 1
 **Acceptance**: Target Premium, Season Pace, Season Recap, TD Regression, Positional Advantage backends return `available_seasons`. Frontend dropdowns populate from API data, not hardcoded years.
+**Result**: Added available_seasons to 8 more backend functions (positional_advantage, td_regression, target_premium, garbage_time, weekly_mvp, drop_rate, waivers, pace_tracker). Fixed 8 frontend dropdowns from hardcoded year ranges to API data.
 
 ### Task 4: Remove redundant import math + fix 1px borders (MEDIUM+LOW grouped)
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 **Acceptance**: No `import math` inside functions in tools.py. 1px borders in styles.css kbd elements changed to 2px.
+**Result**: Removed 2 redundant `import math` at lines 1056 and 1991. Fixed 2 kbd border styles from 1px to 2px in styles.css.
 
 ## Phase 40: Panel Data Coverage Fixes — Priority 2 (COMPLETE)
 **Exit Criterion**: Panels that work but have limited date ranges are fixed to cover all available seasons. Snap-dependent panels show clear message for pre-2020 years. Tiers show S-tier for 2015-2016 elites. Half PPR cheat sheet recalculates.

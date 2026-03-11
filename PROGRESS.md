@@ -1,5 +1,18 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 41 — QA + UX Audit Fixes for Phases 36-40 (COMPLETE)
+
+**Exit Criterion MET**: All CRITICAL and HIGH findings fixed. Pace tracker SQL column names corrected (projections now return real data). XSS in prospect radar fixed (escapeHtml→escapeAttr). 8+ panel backends now return available_seasons. Redundant imports removed. 1px borders fixed to 2px. 34 smoke tests pass.
+
+### Phase 41 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Fix pace tracker SQL columns | DONE | 6 column names fixed: pass_yards→passing_yards, etc. Lamar projects 4117 pass yd |
+| 2 | Fix XSS in prospect radar | DONE | data-name + search value use escapeAttr now |
+| 3 | Add available_seasons to 8+ panels | DONE | positional_advantage, td_regression, target_premium, garbage_time, weekly_mvp, drop_rate, waivers, pace_tracker + their frontend dropdowns |
+| 4 | Remove redundant imports + fix 1px | DONE | 2 import math removed, 2 kbd borders 1px→2px |
+
 ## Previous Phase: Phase 40 — Panel Data Coverage Fixes — Priority 2 (COMPLETE)
 
 **Exit Criterion MET**: All 11 panel data coverage tasks fixed. Panels that already worked (efficiency, consistency, tiers, red zone, cheat sheet) verified passing. Snap efficiency, dual threat, workload, stacks, streaks, and handcuffs backends updated to return available_seasons. Frontend season dropdowns switched from hardcoded year ranges to API-provided available_seasons. Snap efficiency shows clear message for years without snap data. 34 smoke tests pass.

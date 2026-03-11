@@ -727,19 +727,21 @@ def fetch_pace_tracker(season=None, position=None, limit=50):
         with get_db() as conn:
             cursor = conn.cursor()
 
+            available_seasons = [r[0] for r in cursor.execute(
+                "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
+            ).fetchall()]
             if not season:
-                cursor.execute("SELECT MAX(season) FROM player_week_stats")
-                season = cursor.fetchone()[0] or _current_nfl_season()
+                season = available_seasons[0] if available_seasons else _current_nfl_season()
 
             query = """
                 SELECT p.player_id, p.full_name, p.position, p.team,
                        COUNT(DISTINCT s.week) as games,
-                       COALESCE(SUM(s.pass_yards), 0) as total_pass_yd,
-                       COALESCE(SUM(s.pass_td), 0) as total_pass_td,
-                       COALESCE(SUM(s.rush_yards), 0) as total_rush_yd,
-                       COALESCE(SUM(s.rush_td), 0) as total_rush_td,
-                       COALESCE(SUM(s.rec_yards), 0) as total_rec_yd,
-                       COALESCE(SUM(s.rec_td), 0) as total_rec_td,
+                       COALESCE(SUM(s.passing_yards), 0) as total_pass_yd,
+                       COALESCE(SUM(s.passing_tds), 0) as total_pass_td,
+                       COALESCE(SUM(s.rushing_yards), 0) as total_rush_yd,
+                       COALESCE(SUM(s.rushing_tds), 0) as total_rush_td,
+                       COALESCE(SUM(s.receiving_yards), 0) as total_rec_yd,
+                       COALESCE(SUM(s.receiving_tds), 0) as total_rec_td,
                        COALESCE(SUM(s.receptions), 0) as total_rec,
                        COALESCE(SUM(s.targets), 0) as total_tgt,
                        COALESCE(SUM(s.carries), 0) as total_car,
@@ -870,6 +872,7 @@ def fetch_pace_tracker(season=None, position=None, limit=50):
 
             return {
                 "season": season,
+                "available_seasons": available_seasons,
                 "total_weeks": total_weeks,
                 "players": players,
             }
@@ -1050,7 +1053,6 @@ def fetch_season_recap(season=None):
                 if r[0] in player_weeks:
                     player_weeks[r[0]]["scores"].append(r[1] or 0)
 
-            import math
             consistent = []
             volatile = []
             for pid, data in player_weeks.items():
@@ -1259,10 +1261,11 @@ def fetch_waivers(season=None, position=None, window=4, limit=30):
         with get_db() as conn:
             cursor = conn.cursor()
 
-            # Determine season
+            available_seasons = [r[0] for r in cursor.execute(
+                "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
+            ).fetchall()]
             if not season:
-                cursor.execute("SELECT MAX(season) FROM player_week_stats")
-                season = cursor.fetchone()[0] or _current_nfl_season()
+                season = available_seasons[0] if available_seasons else _current_nfl_season()
 
             pos_filter = ""
             params = [season]
@@ -1339,6 +1342,7 @@ def fetch_waivers(season=None, position=None, window=4, limit=30):
             return {
                 "targets": targets,
                 "season": season,
+                "available_seasons": available_seasons,
                 "window": window,
                 "count": len(targets),
             }
@@ -1609,9 +1613,11 @@ def fetch_garbage_time(season=None, position=None, limit=40):
         nonlocal season
         with get_db() as conn:
             cursor = conn.cursor()
+            available_seasons = [r[0] for r in cursor.execute(
+                "SELECT DISTINCT season FROM player_season_stats ORDER BY season DESC"
+            ).fetchall()]
             if not season:
-                cursor.execute("SELECT MAX(season) FROM player_season_stats")
-                season = cursor.fetchone()[0] or _current_nfl_season()
+                season = available_seasons[0] if available_seasons else _current_nfl_season()
 
             pos_filter = ""
             params = [season]
@@ -1681,6 +1687,7 @@ def fetch_garbage_time(season=None, position=None, limit=40):
                 "stat_padders": stat_padders,
                 "clean_producers": clean_producers,
                 "season": season,
+                "available_seasons": available_seasons,
             }
     return _cached(f"garbage_time:{season}:{position}:{limit}", _query)
 
@@ -1882,9 +1889,11 @@ def fetch_weekly_mvp(season=None):
         with get_db() as conn:
             cursor = conn.cursor()
 
+            available_seasons = [r[0] for r in cursor.execute(
+                "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
+            ).fetchall()]
             if not season:
-                cursor.execute("SELECT MAX(season) FROM player_week_stats")
-                season = cursor.fetchone()[0] or _current_nfl_season()
+                season = available_seasons[0] if available_seasons else _current_nfl_season()
 
             cursor.execute("""
                 SELECT s.week, p.position, p.full_name, p.team,
@@ -1920,6 +1929,7 @@ def fetch_weekly_mvp(season=None):
             return {
                 "weeks": weeks,
                 "season": season,
+                "available_seasons": available_seasons,
                 "total_weeks": len(weeks),
             }
     return _cached(f"weekly_mvp:{season}", _query)
@@ -1977,7 +1987,6 @@ def fetch_stacks(season=None, limit=30):
                 elif info["position"] in ("WR", "TE"):
                     team_receivers[info["team"]].append(pid)
 
-            import math
             stacks = []
             for team in team_qbs:
                 if team not in team_receivers:
@@ -2049,9 +2058,11 @@ def fetch_positional_advantage(season=None, position=None, limit=40):
         with get_db() as conn:
             cursor = conn.cursor()
 
+            available_seasons = [r[0] for r in cursor.execute(
+                "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
+            ).fetchall()]
             if not season:
-                cursor.execute("SELECT MAX(season) FROM player_week_stats")
-                season = cursor.fetchone()[0] or _current_nfl_season()
+                season = available_seasons[0] if available_seasons else _current_nfl_season()
 
             pos_filter = ""
             params = [season]
@@ -2119,6 +2130,7 @@ def fetch_positional_advantage(season=None, position=None, limit=40):
                 "players": players,
                 "pos_averages": {k: round(v, 1) for k, v in pos_avg.items()},
                 "season": season,
+                "available_seasons": available_seasons,
                 "count": len(players),
             }
     return _cached(f"positional_advantage:{season}:{position}:{limit}", _query)
@@ -2130,9 +2142,11 @@ def fetch_td_regression(season=None, position=None, limit=50):
         nonlocal season
         with get_db() as conn:
             cursor = conn.cursor()
+            available_seasons = [r[0] for r in cursor.execute(
+                "SELECT DISTINCT season FROM player_season_stats ORDER BY season DESC"
+            ).fetchall()]
             if not season:
-                cursor.execute("SELECT MAX(season) FROM player_season_stats")
-                season = cursor.fetchone()[0] or _current_nfl_season()
+                season = available_seasons[0] if available_seasons else _current_nfl_season()
 
             pos_filter = ""
             params = [season]
@@ -2226,6 +2240,7 @@ def fetch_td_regression(season=None, position=None, limit=50):
                 "negative_regression": negative,
                 "pos_avg_td_rates": {k: round(v * 100, 1) for k, v in pos_avg_td_rate.items()},
                 "season": season,
+                "available_seasons": available_seasons,
             }
     return _cached(f"td_regression:{season}:{position}:{limit}", _query)
 
@@ -2436,9 +2451,11 @@ def fetch_target_premium(season=None, position=None, limit=50):
         nonlocal season
         with get_db() as conn:
             cursor = conn.cursor()
+            available_seasons = [r[0] for r in cursor.execute(
+                "SELECT DISTINCT season FROM player_season_stats ORDER BY season DESC"
+            ).fetchall()]
             if not season:
-                cursor.execute("SELECT MAX(season) FROM player_season_stats")
-                season = cursor.fetchone()[0] or _current_nfl_season()
+                season = available_seasons[0] if available_seasons else _current_nfl_season()
 
             pos_filter = "AND p.position IN ('WR','TE','RB')"
             params = [season]
@@ -2536,6 +2553,7 @@ def fetch_target_premium(season=None, position=None, limit=50):
             return {
                 "players": players,
                 "season": season,
+                "available_seasons": available_seasons,
                 "count": len(players),
             }
     return _cached(f"target_premium:{season}:{position}:{limit}", _query)
@@ -2638,9 +2656,11 @@ def fetch_drop_rate(season=None, position=None, limit=50):
     def _query():
         nonlocal season
         with get_db() as conn:
+            available_seasons = [r[0] for r in conn.execute(
+                "SELECT DISTINCT season FROM player_season_pbp ORDER BY season DESC"
+            ).fetchall()]
             if not season:
-                cur = conn.execute("SELECT MAX(season) FROM player_season_pbp")
-                season = cur.fetchone()[0] or _current_nfl_season()
+                season = available_seasons[0] if available_seasons else _current_nfl_season()
 
             pos_filter = ""
             params = [season]
@@ -2710,6 +2730,7 @@ def fetch_drop_rate(season=None, position=None, limit=50):
                 "sure_hands": sure_hands[:limit],
                 "butterfingers": butterfingers[:limit],
                 "season": season,
+                "available_seasons": available_seasons,
                 "count": len(sure_hands) + len(butterfingers),
             }
     return _cached(f"drop_rate:{season}:{position}:{limit}", _query)

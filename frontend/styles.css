@@ -182,7 +182,7 @@ body {
   font-family: var(--font-mono);
   font-size: 10px;
   background: var(--bg-warm);
-  border: 1px solid var(--ink-faint);
+  border: 2px solid var(--ink-faint);
   border-radius: 3px;
   padding: 0 4px;
   margin-right: 4px;
@@ -728,7 +728,7 @@ body {
   font-family: var(--font-mono);
   font-size: 11px;
   background: var(--bg-warm);
-  border: 1px solid var(--ink-faint);
+  border: 2px solid var(--ink-faint);
   border-radius: 3px;
   padding: 1px 5px;
 }
