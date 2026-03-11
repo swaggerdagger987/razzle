@@ -1173,7 +1173,9 @@ function renderTableHead() {
   // Group header row
   let html = buildGroupHeaderRow(cols);
 
-  html += '<tr><th style="width:28px; text-align:center; padding:8px 4px;" title="Watchlist">&#9733;</th><th style="width:30px; text-align:center; padding:8px 6px;">&#9744;</th>';
+  const allSelected = state.items.length > 0 && state.items.every(p => state.selectedPlayers.some(s => s.player_id === (p.player_id || p.player_name)));
+  html += '<tr><th style="width:28px; text-align:center; padding:8px 4px;" title="Watchlist">&#9733;</th>';
+  html += `<th style="width:30px; text-align:center; padding:8px 6px;" title="Select all / none"><input type="checkbox" ${allSelected ? "checked" : ""} onchange="toggleSelectAll(this.checked)" style="accent-color:var(--orange); width:15px; height:15px; cursor:pointer;"></th>`;
   if (state.universe === "nfl") {
     const pinCount = state.pinnedPlayers.length;
     const pinTitle = pinCount > 0 ? `${pinCount} pinned — click to clear` : "Pin players to top";
@@ -2893,6 +2895,29 @@ function renderPinnedRows() {
 }
 
 // ─── Player selection (for compare/charts) ───────────────────────
+function toggleSelectAll(checked) {
+  if (checked) {
+    // Select all visible players (up to 5)
+    state.selectedPlayers = [];
+    const max = Math.min(state.items.length, 5);
+    for (let i = 0; i < max; i++) {
+      const p = state.items[i];
+      const pid = p.player_id || p.player_name;
+      state.selectedPlayers.push({
+        player_id: pid,
+        full_name: p.full_name || p.player_name,
+        player_name: p.player_name,
+        position: p.position,
+        team: p.team || p.school || "",
+      });
+    }
+  } else {
+    state.selectedPlayers = [];
+  }
+  updateSelectionUI();
+  renderTable();
+}
+
 function togglePlayerSelect(playerId, checked) {
   if (checked) {
     if (state.selectedPlayers.length >= 5) return; // max 5

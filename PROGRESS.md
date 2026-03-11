@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 82 — Screener Select All Checkbox (COMPLETE)
+
+**Exit Criterion MET**: Checkbox in header selects/deselects all visible players (max 5). Reflects current state. Bulk action bar updates.
+
+### Phase 82 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Select all checkbox | DONE | allSelected state, toggleSelectAll(), max 5, header checkbox input |
+
 ## Previous Phase: Phase 81 — QA + UX Audit Fixes for Phases 76-80 (COMPLETE)
 
 **Exit Criterion MET**: 1 MEDIUM finding fixed (column picker search auto-focus). 0 CRITICAL/HIGH issues.

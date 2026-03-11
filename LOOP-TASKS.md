@@ -1,15 +1,15 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 81 (QA + UX Audit Fixes for Phases 76-80)
-## Phase 81: QA + UX Audit — Auto-Generated Fixes
-**Exit Criterion**: Column picker search auto-focuses on open.
+- Phase: 82 (Screener Select All Checkbox)
+## Phase 82: Screener Select All Checkbox
+**Exit Criterion**: Checkbox in header row selects/deselects all visible players (max 5). Checked state reflects current selection. Triggers bulk action bar update.
 
 - Task 1: PASS
 - Stage: COMPLETE
 - Next: Phase gate
 
-### Task 1: Column picker search auto-focus
+### Task 1: Select all checkbox in header
 **Status**: PASS
 **Attempts**: 1
-**Result**: Added setTimeout focus() call after clearing search value in openColumnPicker(). 50ms delay ensures DOM is ready. 34 tests pass.
+**Result**: Replaced static &#9744; symbol with actual checkbox input in header. allSelected computed from state. toggleSelectAll() selects first 5 visible players or clears all. Triggers updateSelectionUI() and renderTable(). 34 tests pass.
