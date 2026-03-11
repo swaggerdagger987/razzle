@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 81 — QA + UX Audit Fixes for Phases 76-80 (COMPLETE)
+
+**Exit Criterion MET**: 1 MEDIUM finding fixed (column picker search auto-focus). 0 CRITICAL/HIGH issues.
+
+### Phase 81 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Column picker search auto-focus | DONE | setTimeout focus() in openColumnPicker(), 50ms delay |
+
 ## Previous Phase: Phase 80 — Screener Cell Double-Click to Copy (COMPLETE)
 
 **Exit Criterion MET**: Double-click any stat cell to copy its value. Toast confirms. Clipboard API with _fallbackCopy() fallback. Shortcut reference updated.

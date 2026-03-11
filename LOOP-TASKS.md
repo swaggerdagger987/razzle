@@ -1,15 +1,15 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 80 (Screener Cell Double-Click to Copy)
-## Phase 80: Screener Cell Double-Click to Copy
-**Exit Criterion**: Double-click any stat cell to copy its value to clipboard. Toast shows "copied: [value]". Skips non-stat cells (player, rank, notes, sparklines, checkboxes). Uses _fallbackCopy() for non-HTTPS. Shortcut reference updated.
+- Phase: 81 (QA + UX Audit Fixes for Phases 76-80)
+## Phase 81: QA + UX Audit — Auto-Generated Fixes
+**Exit Criterion**: Column picker search auto-focuses on open.
 
 - Task 1: PASS
 - Stage: COMPLETE
-- Next: Phase gate → QA+UX audit (phase 80 is multiple of 5)
+- Next: Phase gate
 
-### Task 1: Double-click cell to copy value
+### Task 1: Column picker search auto-focus
 **Status**: PASS
 **Attempts**: 1
-**Result**: Added dblclick event listener on tbody via event delegation. Identifies stat cells by excluding col-player, col-rank, notes-cell, sparkline-cell, pin-cell, and input-containing cells. Copies textContent via clipboard API with _fallbackCopy() fallback. Toast feedback. Shortcut reference updated. 34 tests pass.
+**Result**: Added setTimeout focus() call after clearing search value in openColumnPicker(). 50ms delay ensures DOM is ready. 34 tests pass.

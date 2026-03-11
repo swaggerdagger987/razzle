@@ -2295,7 +2295,7 @@ function setMinGP(val) {
 function openColumnPicker() {
   document.getElementById("columnPickerOverlay").classList.add("open");
   const searchInput = document.getElementById("columnPickerSearch");
-  if (searchInput) { searchInput.value = ""; filterColumnPicker(""); }
+  if (searchInput) { searchInput.value = ""; filterColumnPicker(""); setTimeout(function() { searchInput.focus(); }, 50); }
 }
 
 function closeColumnPicker(e) {
