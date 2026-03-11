@@ -6,7 +6,13 @@ This is the endgame. Every decision made during development should move toward t
 
 ## Vision
 
-Razzle is a fantasy football Bloomberg terminal disguised as a Sunday comic strip. Free data terminal that builds trust and brand through Reddit power users. Monetized through league-contextualized AI agent intelligence at $240/year.
+Razzle is the research terminal that actually knows your league. A fantasy football Bloomberg terminal disguised as a Sunday comic strip — playful surface, deadly serious analysis underneath.
+
+**Core Value Proposition — We solve three things:**
+
+1. **Context awareness** — Users get league-specific insights, not generic advice. Your scoring settings, your leaguemates' tendencies, your roster construction — every answer is contextualized.
+2. **LLM convenience** — Access to AI agents without manually feeding screenshots and context. No copy-pasting stats into ChatGPT. The agents already know your league.
+3. **Stat discoverability** — Find any stat instantly instead of hunting across ten sources. One terminal, every metric, every format.
 
 **Business model**: Lifestyle business. Target 10k paying users at peak = $2.4M ARR. No VC. Grown organically through Reddit.
 
@@ -14,27 +20,27 @@ Razzle is a fantasy football Bloomberg terminal disguised as a Sunday comic stri
 
 ---
 
-## The Three Layers
+## The Three Pillars
 
 ### 1. The Lab (Free)
-The Bloomberg terminal. Full nflverse + college stat depth (100+ columns), custom formula builder, formula store, saved/shareable views with watermarked export, and generic agent queries. Monetized with Google AdSense.
+Our Bloomberg terminal — over a hundred well-defined stats across all formats. Full nflverse + college stat depth, custom formula builder, formula store, saved/shareable views with watermarked export, and generic agent queries. Monetized with Google AdSense.
 
-**This is the growth engine.** Every screenshot is a billboard. Every shareable URL is a funnel entry. The Lab must be genuinely best-in-class as a free tool. Reddit power users must feel like they discovered a secret weapon.
+**This is the growth engine.** Every screenshot is a billboard. Every shareable URL is a funnel entry. The Lab must be genuinely best-in-class as a free tool. Reddit power users must feel like they discovered a secret weapon. This is where stat discoverability lives — one terminal instead of ten browser tabs.
 
-### 2. The Connection (Free, Sleeper-linked)
-Connect Sleeper username to see leagues, rosters, and basic league structure in League Intel. This is the conversion funnel — once users see their data in Razzle, they want intelligence on top of it.
+### 2. The Situation Room (Paid, $240/year)
+Houses six AI agents that understand your league context. Razzle and five specialist agents operating with full league context and multi-season memory. Personalized briefings, trade strategies against specific leaguemates, championship probability for your roster, injury impact on your lineup. This is where LLM convenience and context awareness converge — no prompt engineering, no screenshot feeding, just ask.
 
-### 3. The Situation Room (Paid, $240/year)
-Razzle and specialist agents operating with full league context and multi-season memory. Personalized briefings, trade strategies against specific leaguemates, championship probability for your roster, injury impact on your lineup. Sleeper username tied to Razzle account — no free trial abuse.
+### 3. The Bureau of Intelligence (Free, Sleeper-linked)
+Pulls live Sleeper data showing what competitors are doing. Connect Sleeper username to see leagues, rosters, transactions, and basic league structure. This is the conversion funnel — once users see their league data in Razzle and realize what intelligence the Situation Room could layer on top, they convert.
 
 ---
 
 ## Pages
 
 - `home` — Landing with live anonymized Situation Room demo (50-60 pre-built permutations)
-- `lab` — The Bloomberg terminal (screener, formulas, visualizations)
-- `league-intel` — League context view (free: roster overview, paid: full intel)
-- `agents` — The Situation Room (free: generic, paid: league-contextualized)
+- `lab` — The Lab (screener, formulas, visualizations — 100+ stats across all formats)
+- `bureau` — The Bureau of Intelligence (live Sleeper data, league context, competitor activity)
+- `agents` — The Situation Room (six AI agents with full league context)
 
 ---
 
@@ -81,22 +87,23 @@ Razzle and specialist agents operating with full league context and multi-season
 
 ---
 
-## League Intel & The Situation Room
+## The Bureau of Intelligence & The Situation Room
 
-### Free (Sleeper connected)
-- See your leagues, rosters, standings.
+### The Bureau of Intelligence (Free, Sleeper connected)
+- See your leagues, rosters, standings, transactions.
 - Basic roster overview: bye weeks, position depth, roster construction.
+- Live view of what competitors are doing — waiver claims, trades, roster moves.
 
-### Paid — League Intel
+### Bureau — Paid Tier
 - Full behavioral history of every manager across all available seasons.
 - Manager profiles: who panics, who hoards, who overpays in FAAB, who sells late.
 - Trade deadline pressure maps — which managers are desperate and when.
 - League economy trends over time.
 
-### Paid — The Situation Room
-- All agents operate with full context: your roster, league scoring, rivals' rosters, multi-season history.
+### The Situation Room (Paid, $240/year — Six AI Agents)
+- All six agents operate with full context: your roster, league scoring, rivals' rosters, multi-season history.
 - **Razzle** (Bengal tiger) delivers prioritized daily/weekly briefings, orchestrates all agents, resolves conflicts.
-- **Specialist agents** (NFL team animals, TBD) cover: injury intelligence, scouting/breakout detection, trade negotiation/adversarial intel, projections/championship probability, league history/pattern recognition.
+- **Five specialist agents** cover: injury intelligence, scouting/breakout detection, trade negotiation/adversarial intel, projections/championship probability, league history/pattern recognition.
 - Agents reference each other — Razzle synthesizes and resolves conflicts.
 
 ### Home Page — Situation Room Demo
@@ -118,9 +125,9 @@ Razzle and specialist agents operating with full league context and multi-season
 ### Conversion Funnel
 1. Reddit user sees screenshot/link → clicks through to Lab.
 2. Lab is genuinely powerful for free → user builds views, creates formulas.
-3. User connects Sleeper → sees their leagues, no friction.
+3. User connects Sleeper → Bureau of Intelligence shows their leagues and competitor activity, no friction.
 4. User sees Situation Room demo on home page → curiosity builds.
-5. User hits a decision point → generic agent answer is fine, but league-contextualized answer is clearly better → converts to $240/year.
+5. User hits a decision point → generic agent answer is fine, but league-contextualized answer from the Situation Room is clearly better → converts to $240/year.
 
 ### Retention
 - Agent memory gets more valuable every season — switching cost increases over time.
@@ -245,6 +252,6 @@ When making any product or implementation decision, ask in this order:
 
 1. **Does this help The Lab get screenshotted on Reddit?** If yes, prioritize it. If no, it can wait.
 2. **Does this follow the design guide?** Anthropic sand, chunky borders, Garfield font, trust the user.
-3. **Does this move toward the three-layer architecture?** Free Lab → Sleeper Connection → Paid Situation Room.
+3. **Does this move toward the three-pillar architecture?** Free Lab → Bureau of Intelligence (Sleeper) → Paid Situation Room.
 4. **Is this the simplest version that works?** No over-engineering. Ship ugly, then polish.
 5. **Would a Reddit power user care?** If no, it's not a priority before draft week.
