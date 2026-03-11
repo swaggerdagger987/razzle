@@ -1547,10 +1547,12 @@ function updateApiKeyNotice() {
   var runBtn = document.getElementById('scenarioRunAll');
   if (!notice) return;
   var hasKey = AGENT_DEFS.some(function(_, i) { return getAgentSettings(i).apiKey; });
-  notice.style.display = hasKey ? 'none' : 'block';
+  var elite = isEliteUser();
+  var canRun = hasKey || elite;
+  notice.style.display = canRun ? 'none' : 'block';
   if (runBtn) {
-    runBtn.disabled = !hasKey;
-    runBtn.title = hasKey ? '' : 'Set an API key in the config panel first';
+    runBtn.disabled = !canRun;
+    runBtn.title = canRun ? '' : 'Set an API key in the config panel first';
   }
 }
 
@@ -1975,16 +1977,60 @@ async function callLLM(apiKey, model, baseUrl, systemPrompt, userMessage) {
 // Store last results per agent for Razzle synthesis
 const agentResults = new Map();
 
+async function callServerLLM(systemPrompt, userMessage) {
+  /** Call the server-side LLM proxy for Elite users (AI-included mode). */
+  var token = localStorage.getItem('razzle_token');
+  if (!token) throw new Error('Sign in required for AI-included mode');
+
+  var resp = await fetch('/api/llm/chat', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token,
+    },
+    body: JSON.stringify({
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userMessage },
+      ],
+      temperature: LLM_TEMPERATURE,
+    }),
+  });
+
+  if (!resp.ok) {
+    var detail = await resp.json().catch(function() { return {}; });
+    throw new Error(detail.error || 'Server LLM error ' + resp.status);
+  }
+
+  var data = await resp.json();
+  var content = data && data.choices && data.choices[0] && data.choices[0].message
+    ? data.choices[0].message.content : null;
+  if (!content) throw new Error('No content in model response');
+  return content.trim();
+}
+
 async function executeAgent(agentId, scenario, peerInsights) {
   const agentDef = AGENT_DEFS[agentId];
   if (!agentDef) throw new Error('Unknown agent');
 
   const settings = getAgentSettings(agentId);
-  if (!settings.apiKey) throw new Error('No API key configured');
+  const elite = isEliteUser();
+  const hasBYOK = !!settings.apiKey;
+
+  // Elite users can use server-side proxy OR their own key
+  if (!hasBYOK && !elite) throw new Error('No API key configured');
 
   const persona = await loadPersona(agentId);
   const userMessage = buildUserMessage(scenario, agentDef, peerInsights);
-  var result = await callLLM(settings.apiKey, settings.model, settings.baseUrl, persona, userMessage);
+
+  var result;
+  if (hasBYOK) {
+    // BYOK mode (Pro or Elite with custom key)
+    result = await callLLM(settings.apiKey, settings.model, settings.baseUrl, persona, userMessage);
+  } else {
+    // Server-side proxy (Elite AI-included mode)
+    result = await callServerLLM(persona, userMessage);
+  }
 
   agentResults.set(agentId, { name: agentDef.name, text: result, at: Date.now() });
   return result;
@@ -1995,7 +2041,7 @@ async function runSingleAgent(agentId, scenario) {
   if (!agent) return;
 
   const settings = getAgentSettings(agentId);
-  if (!settings.apiKey) {
+  if (!settings.apiKey && !isEliteUser()) {
     setScenarioStatus('set an API key in Config first', 'error');
     return;
   }
@@ -2092,7 +2138,8 @@ async function runAllAgents(scenario) {
   }
 
   const hasKey = AGENT_DEFS.some(function(_, i) { return getAgentSettings(i).apiKey; });
-  if (!hasKey) {
+  const elite = isEliteUser();
+  if (!hasKey && !elite) {
     setScenarioStatus('set an API key in Config first', 'error');
     return;
   }
@@ -2116,7 +2163,7 @@ async function runAllAgents(scenario) {
   var specialistPromises = specialistIds.map(function(id) {
     return (async function() {
       var s = getAgentSettings(id);
-      if (!s.apiKey) {
+      if (!s.apiKey && !elite) {
         errors[id] = 'no API key';
         setAgentStatus(id, 'error');
         return;
@@ -2161,7 +2208,7 @@ async function runAllAgents(scenario) {
   var razzleSynthesis = null;
   try {
     var razzleSettings = getAgentSettings(0);
-    if (razzleSettings.apiKey) {
+    if (razzleSettings.apiKey || elite) {
       razzleSynthesis = await executeAgent(0, scenario, peerInsights);
       setAgentStatus(0, 'done');
       var ca = agents[0];

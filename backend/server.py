@@ -12,7 +12,9 @@ from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, Response
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from pathlib import Path
 import html as _html
+import httpx
 import logging
+import os
 import re
 import time as _time
 import uvicorn
@@ -450,6 +452,111 @@ async def billing_status(request: Request):
     if not user:
         return JSONResponse({"error": "Authentication required"}, status_code=401)
     return billing_module.get_billing_status(user)
+
+
+# ---------------------------------------------------------------------------
+# LLM Proxy (Elite tier — AI-included mode)
+# ---------------------------------------------------------------------------
+
+# Server-side LLM key for Elite users (never exposed to frontend)
+_LLM_API_KEY = os.environ.get("RAZZLE_LLM_API_KEY", "")  # OpenRouter API key
+_LLM_BASE_URL = os.environ.get("RAZZLE_LLM_BASE_URL", "https://openrouter.ai/api/v1/chat/completions")
+_LLM_MODEL = os.environ.get("RAZZLE_LLM_MODEL", "anthropic/claude-3.5-haiku")  # cost-efficient default
+_LLM_TIMEOUT = 25  # seconds
+_LLM_MAX_TOKENS = 2000
+
+# Per-user server-side rate limiter for LLM proxy
+_llm_rate_buckets = defaultdict(list)  # user_id -> [timestamps]
+_LLM_RATE_LIMIT_ELITE = 100  # max queries per day for Elite (server-side)
+_LLM_RATE_WINDOW = 86400  # 24 hours in seconds
+
+
+def _check_llm_rate(user_id: int) -> bool:
+    """Check if user is within LLM rate limit. Returns True if allowed."""
+    now = _time.time()
+    bucket = _llm_rate_buckets[user_id]
+    # Prune old entries
+    _llm_rate_buckets[user_id] = [t for t in bucket if now - t < _LLM_RATE_WINDOW]
+    if len(_llm_rate_buckets[user_id]) >= _LLM_RATE_LIMIT_ELITE:
+        return False
+    _llm_rate_buckets[user_id].append(now)
+    return True
+
+
+@app.post("/api/llm/chat")
+async def llm_chat(request: Request):
+    """Server-side LLM proxy for Elite tier users.
+    Accepts OpenRouter-compatible request body. Proxies to configured LLM provider.
+    Elite users don't need their own API key — the server pays for the inference.
+    """
+    # Require Elite tier
+    user, err = require_plan(request, "elite")
+    if err:
+        return err
+
+    if not _LLM_API_KEY:
+        return JSONResponse(
+            {"error": "AI-included mode not yet configured. Use BYOK mode with your own API key."},
+            status_code=503,
+        )
+
+    # Rate limit
+    if not _check_llm_rate(user["id"]):
+        return JSONResponse(
+            {"error": "Daily server-side query limit reached. Try again tomorrow."},
+            status_code=429,
+        )
+
+    # Parse request
+    try:
+        body = await request.json()
+    except Exception:
+        return JSONResponse({"error": "Invalid request body"}, status_code=400)
+
+    messages = body.get("messages", [])
+    if not messages:
+        return JSONResponse({"error": "No messages provided"}, status_code=400)
+
+    # Sanitize: enforce max_tokens and model
+    llm_body = {
+        "model": _LLM_MODEL,
+        "messages": messages,
+        "temperature": body.get("temperature", 0.3),
+        "max_tokens": min(body.get("max_tokens", _LLM_MAX_TOKENS), _LLM_MAX_TOKENS),
+    }
+
+    # Proxy to LLM provider
+    try:
+        async with httpx.AsyncClient(timeout=_LLM_TIMEOUT) as client:
+            resp = await client.post(
+                _LLM_BASE_URL,
+                json=llm_body,
+                headers={
+                    "Authorization": f"Bearer {_LLM_API_KEY}",
+                    "Content-Type": "application/json",
+                    "HTTP-Referer": "https://razzle.lol",
+                    "X-Title": "Razzle Situation Room",
+                },
+            )
+        if resp.status_code != 200:
+            # Don't expose provider error details to user
+            logger.error(f"LLM proxy error: {resp.status_code} {resp.text[:200]}")
+            return JSONResponse(
+                {"error": "Agent is temporarily unavailable. Try again in a moment."},
+                status_code=502,
+            )
+        return JSONResponse(resp.json())
+    except httpx.TimeoutException:
+        return JSONResponse(
+            {"error": "Agent took too long to respond. Try a shorter question."},
+            status_code=504,
+        )
+    except Exception as e:
+        logger.error(f"LLM proxy exception: {type(e).__name__}: {e}")
+        return JSONResponse(
+            {"error": "Something went wrong. Try again."},
+            status_code=500,
+        )
 
 
 # ---------------------------------------------------------------------------

@@ -27,6 +27,10 @@
 - Plan hierarchy: free(0) < pro(1) < elite(2) -- Elite users get all Pro features automatically
 - AI query rate limiting: Free=5/day, Pro=20/day, Elite=unlimited -- enforced client-side via localStorage with daily reset
 - Query counter badge shows remaining queries next to scenario panel
+- Server-side LLM proxy at POST /api/llm/chat for Elite AI-included mode (RAZZLE_LLM_API_KEY env var)
+- Elite users can run agents without BYOK key -- server proxies to OpenRouter with server-side API key
+- Server-side rate limit: 100 queries/day per Elite user (defense against abuse)
+- Frontend executeAgent() auto-detects Elite mode and routes to server proxy when no BYOK key set
 
 ## Previous Phase: Phase 131 — Platform: Backend Hardening + Agent Persona Depth (COMPLETE)
 
