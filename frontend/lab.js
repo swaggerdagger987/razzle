@@ -4020,13 +4020,14 @@ function _getDiffBaselineName() {
 }
 
 var _diffBaselineCache = null;
-var _diffBaselineCacheId = "";
+var _diffBaselineCacheKey = "";
 function _getDiffBaseline() {
   if (!state.diffMode || state.pinnedPlayers.length < 2) return null;
   var baseId = state.pinnedPlayers[0];
-  if (_diffBaselineCacheId === baseId && _diffBaselineCache) return _diffBaselineCache;
+  var cacheKey = baseId + ":" + state.items.length;
+  if (_diffBaselineCacheKey === cacheKey && _diffBaselineCache) return _diffBaselineCache;
   _diffBaselineCache = state.items.find(function(pl) { return pl.player_id === baseId; }) || null;
-  _diffBaselineCacheId = baseId;
+  _diffBaselineCacheKey = cacheKey;
   return _diffBaselineCache;
 }
 
@@ -4041,7 +4042,7 @@ function _renderDiffBanner() {
   var banner = document.createElement("div");
   banner.id = "diffModeBanner";
   banner.className = "diff-mode-banner";
-  banner.innerHTML = '<span class="diff-mode-label">DIFF MODE</span> comparing all rows vs <strong>' + escapeHtml(baseline.full_name || baseline.player_name) + '</strong> (first pin) <button onclick="toggleDiffMode()" style="margin-left:8px; cursor:pointer; background:var(--ink); color:var(--bg); border:2px solid var(--ink); border-radius:6px; padding:2px 10px; font-family:var(--font-data); font-size:11px;">OFF</button>';
+  banner.innerHTML = '<span class="diff-mode-label">DIFF MODE</span> comparing all rows vs <strong>' + escapeHtml(baseline.full_name || baseline.player_name || "Unknown") + '</strong> (first pin) <button onclick="toggleDiffMode()" style="margin-left:8px; cursor:pointer; background:var(--ink); color:var(--bg); border:2px solid var(--ink); border-radius:6px; padding:2px 10px; font-family:var(--font-mono); font-size:11px;">OFF</button>';
   wrap.parentNode.insertBefore(banner, wrap);
 }
 

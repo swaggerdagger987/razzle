@@ -1,60 +1,52 @@
-# QA + UX Audit — Phases 121-124
+# QA + UX Audit — Phases 126-130
 
 **Date**: 2026-03-11
-**Phases audited**: 121 (Undo/Redo), 122 (Stat Leaders), 123 (Column Stats Popover), 124 (Interactive Data Cells)
-**Files reviewed**: frontend/lab.js (+394 lines), frontend/lab.html (+44 lines)
-
----
+**Phases audited**: 126 (Pin Diff Mode), 127 (Filter Indicators), 128 (Bulk Pin), 129 (Age Badges), 130 (QA+UX Audit)
 
 ## QA FINDINGS
 
-### CRITICAL — None
+### CRITICAL
+
+1. **Missing CSS variable `--font-data`** — `lab.js:4044` and `lab.html:477` used `var(--font-data)` which does not exist. Only `--font-display`, `--font-mono`, `--font-hand` are defined.
+   - **FIX APPLIED**: Replaced with `var(--font-mono)`.
 
 ### HIGH
 
-**H1. Column stats popover not dismissed on table scroll**
-- **File**: frontend/lab.js, `showColumnStatsPopover()`
-- **What**: The popover is `position:fixed` and stays in place when the user scrolls the table horizontally or vertically. The header scrolls away but the popover remains floating over unrelated content.
-- **Fix**: Add a scroll listener on `.table-wrap` that calls `dismissColumnStatsPopover()`.
-
-**H2. Escape key conflict in column stats popover**
-- **File**: frontend/lab.js, `_colStatsEscDismiss()`
-- **What**: Pressing Escape dismisses the popover but doesn't `stopPropagation()`, so it also triggers the global Escape handler (which clears row highlights). Two actions fire from one keypress.
-- **Fix**: Add `e.stopPropagation()` in `_colStatsEscDismiss` when popover is visible.
+2. **Diff baseline cache stale on data refresh** — `lab.js:4022-4030` cached diff baseline only by player ID, not invalidating when `state.items` changes.
+   - **FIX APPLIED**: Added `state.items.length` to cache key.
 
 ### MEDIUM
 
-**M1. Duplicate filters possible via double-click**
-- **File**: frontend/lab.js, dblclick handler
-- **What**: Double-clicking the same stat cell multiple times adds the same filter repeatedly. No dedup check.
-- **Fix**: Before pushing the filter, check if `state.filters` already has a matching key+op+value.
+3. **Diff banner name fallback** — `baseline.full_name || baseline.player_name` had no final fallback.
+   - **FIX APPLIED**: Added `|| "Unknown"` fallback.
 
-**M2. Leader badge cache key too weak**
-- **File**: frontend/lab.js, `computeLeaderRanks()`
-- **What**: Cache key is `items.length + first_id + last_id`. Could produce false cache hits when switching seasons with identical player counts.
-- **Fix**: Add `state.sortKey + state.season` to the cache key.
+4. **Quick-filter on tiny datasets** — `_applyQuickFilter()` creates "Top 10" filter even with fewer than 10 items. Low impact, filter still works.
+
+5. **Age badges in compact density mode** — Age badges add visual clutter in compact mode. Consider hiding in density mode.
 
 ### LOW
 
-**L1. Leader dots add ~9px extra width to cells** — No action needed, minimal jitter.
-**L2. Undo/Redo doesn't capture visual mode state** — Intentional, visual modes are separate from data state.
-
----
+6. **Age badge CSS in lab.html** — Style separation could be cleaner but follows existing pattern.
 
 ## UX FINDINGS
 
-### CRITICAL — None
+### First 30 Seconds Test — PASS
+- Lab loads with data, filters work, new features enhance exploration.
+- Age badges add visual interest for dynasty users.
 
-### HIGH — None
+### Readability — PASS
+- All new labels clear and intuitive.
 
-### MEDIUM
+### Flow Tests — PASS
+- All 3 core journeys work without regressions.
 
-**UX-M1. "Leaders" button label ambiguous**
-- **File**: frontend/lab.html, toolbar
-- **What**: "Leaders" could mean leaderboard, team leaders, etc. Other toggle buttons (Heat, Pctl, Bars) are clearer.
-- **Fix**: Rename to "Top 3" for immediate clarity.
+### Visual Noise — MEDIUM
+- Age badges add density in compact mode. Addressed in fix tasks.
 
-### LOW
+## FIXES APPLIED
+- CRITICAL #1: `--font-data` → `--font-mono`
+- HIGH #2: Diff cache key includes items.length
+- MEDIUM #3: Diff banner name fallback
 
-**UX-L1. No discoverability for double-click filter** — Power-user feature, add to shortcuts modal.
-**UX-L2. Column stats popover doesn't show position context** — Add position label to popover.
+## REMAINING TASKS
+- MEDIUM #5: Hide age badges in compact density mode

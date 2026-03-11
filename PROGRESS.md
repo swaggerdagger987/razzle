@@ -1,5 +1,16 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 130 — QA + UX Audit Fixes for Phases 126-130 (COMPLETE)
+
+**Exit Criterion MET**: 1 CRITICAL + 1 HIGH + MEDIUM findings fixed. 34 tests pass.
+
+### Phase 130 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | CRITICAL + HIGH fixes | DONE | --font-data → --font-mono, diff cache key, diff banner fallback |
+| 2 | MEDIUM fixes | DONE | Age badges hidden in dense mode, QA-AUDIT.md updated |
+
 ## Previous Phase: Phase 129 — Player Age Badges in Table (COMPLETE)
 
 **Exit Criterion MET**: NFL player name cells show color-coded age badge (green ≤24, blue 25-27, orange 28-29, red 30+). Pill styling with colored border. 34 tests pass.
