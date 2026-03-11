@@ -313,7 +313,7 @@
     var positions = ['QB', 'RB', 'WR', 'TE'];
     for (var i = 0; i < positions.length; i++) {
       var pos = positions[i];
-      var color = POS_COLORS[pos] || '#888';
+      var color = POS_COLORS[pos] || '#8a7565';
       html += '<div class="pa-avg-chip"><span style="color:' + color + '">' + escapeHtml(pos) + '</span> avg: ' + escapeHtml(String(fmt(avgs[pos]))) + ' PPG</div>';
     }
     html += '</div>';
@@ -338,7 +338,7 @@
 
     for (var i = 0; i < players.length; i++) {
       var p = players[i];
-      var posColor = POS_COLORS[p.position] || '#888';
+      var posColor = POS_COLORS[p.position] || '#8a7565';
       var sign = p.advantage > 0 ? '+' : '';
       var badgeClass = p.advantage >= 0 ? 'pa-adv-pos' : 'pa-adv-neg';
       var barWidth = Math.max(2, Math.round(Math.abs(p.advantage) / maxAdv * 80));

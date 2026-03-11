@@ -679,14 +679,14 @@
       ctx.moveTo(pad.left, gy);
       ctx.lineTo(w - pad.right, gy);
       ctx.stroke();
-      ctx.fillStyle = '#999';
+      ctx.fillStyle = '#8a7565';
       ctx.font = '11px "Space Mono", monospace';
       ctx.textAlign = 'right';
       ctx.fillText(gv.toFixed(1), pad.left - 6, gy + 4);
     }
 
     // Bars
-    var colors = ['#d97757', '#5b7fff', '#2ec4b6', '#8b5cf6', '#e87422', '#d44040', '#999'];
+    var colors = ['#d97757', '#5b7fff', '#2ec4b6', '#8b5cf6', '#e87422', '#d44040', '#8a7565'];
     for (var bi = 0; bi < rounds.length; bi++) {
       var r = rounds[bi];
       var barH = (r.avg_ppg / maxPpg) * plotH;
@@ -705,7 +705,7 @@
       ctx.fillText(r.avg_ppg.toFixed(1), bx + barW / 2, by - 6);
 
       // X label
-      ctx.fillStyle = '#666';
+      ctx.fillStyle = '#5c4a3d';
       ctx.font = '12px "Space Mono", monospace';
       ctx.fillText('R' + r.round, bx + barW / 2, h - pad.bottom + 16);
     }

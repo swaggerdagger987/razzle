@@ -4793,7 +4793,7 @@
 
       // X axis labels
       var agChartCollege = typeof state !== 'undefined' && state.universe === 'college';
-      ctx.fillStyle = '#666';
+      ctx.fillStyle = '#5c4a3d';
       ctx.font = '10px Space Mono, monospace';
       ctx.textAlign = 'center';
       var ageStep = agChartCollege ? 1 : 2;
@@ -5493,7 +5493,7 @@
         for (var g = 0; g <= 4; g++) {
           var gy = pad.t + ch - (g / 4) * ch;
           ctx.beginPath(); ctx.moveTo(pad.l, gy); ctx.lineTo(pad.l + cw, gy); ctx.stroke();
-          ctx.fillStyle = '#999'; ctx.font = '10px monospace'; ctx.textAlign = 'right';
+          ctx.fillStyle = '#8a7565'; ctx.font = '10px monospace'; ctx.textAlign = 'right';
           ctx.fillText(fmt(maxPPG * g / 4), pad.l - 5, gy + 3);
         }
         // Area fill
@@ -5525,12 +5525,12 @@
           ctx.fillStyle = '#333'; ctx.font = 'bold 10px monospace'; ctx.textAlign = 'center';
           ctx.fillText(fmt(v), x, y - 10);
           // Season label
-          ctx.fillStyle = '#888'; ctx.font = '10px monospace';
+          ctx.fillStyle = '#8a7565'; ctx.font = '10px monospace';
           ctx.fillText(String(seasons[i].season || ''), x, pad.t + ch + 16);
         });
         // Y-axis label
         ctx.save(); ctx.translate(12, pad.t + ch / 2); ctx.rotate(-Math.PI / 2);
-        ctx.fillStyle = '#888'; ctx.font = '11px monospace'; ctx.textAlign = 'center';
+        ctx.fillStyle = '#8a7565'; ctx.font = '11px monospace'; ctx.textAlign = 'center';
         ctx.fillText('PPG', 0, 0); ctx.restore();
       }
     }
@@ -5681,13 +5681,13 @@
         for (var g = 0; g <= 4; g++) {
           var gy = pad.t + ch - (g / 4) * ch;
           ctx.beginPath(); ctx.moveTo(pad.l, gy); ctx.lineTo(pad.l + cw, gy); ctx.stroke();
-          ctx.fillStyle = '#999'; ctx.font = '10px monospace'; ctx.textAlign = 'right';
+          ctx.fillStyle = '#8a7565'; ctx.font = '10px monospace'; ctx.textAlign = 'right';
           ctx.fillText(fmt(maxPPG * g / 4), pad.l - 5, gy + 3);
         }
         // X labels
         xYears.forEach(function(yr, i) {
           var x = pad.l + (xYears.length > 1 ? i / (xYears.length - 1) : 0.5) * cw;
-          ctx.fillStyle = '#888'; ctx.font = '10px monospace'; ctx.textAlign = 'center';
+          ctx.fillStyle = '#8a7565'; ctx.font = '10px monospace'; ctx.textAlign = 'center';
           ctx.fillText(yr, x, pad.t + ch + 16);
         });
 
@@ -5889,7 +5889,7 @@
     el.querySelector('#sw2-season').addEventListener('change', function() { curSeason = parseInt(this.value); });
 
     function gradeColor(g) {
-      if (!g) return '#888';
+      if (!g) return '#8a7565';
       if (g === 'A+' || g === 'A') return '#16a34a';
       if (g === 'B+' || g === 'B') return '#5b7fff';
       if (g === 'C+' || g === 'C') return '#eab308';
@@ -6604,7 +6604,7 @@
         ctx.textBaseline = 'middle';
         ctx.fillText(fmt(ppg), cx, cy - 8);
         ctx.font = '12px monospace';
-        ctx.fillStyle = '#888';
+        ctx.fillStyle = '#8a7565';
         ctx.fillText('PPG', cx, cy + 12);
       }
     }
@@ -9251,7 +9251,7 @@
       hit: '#5b7fff',
       average: '#d97757',
       bust: '#d44040',
-      too_early: '#999'
+      too_early: '#8a7565'
     };
     var CLASSIFICATION_LABELS = {
       stud: 'Stud',

@@ -459,7 +459,7 @@
           if (!players.length) { acList.style.display = 'none'; return; }
           acIdx = -1;
           acList.innerHTML = players.map(function(p, i) {
-            var posColor = POS_COLORS[p.position] || '#888';
+            var posColor = POS_COLORS[p.position] || '#8a7565';
             return '<div class="gl-ac-item" data-id="' + escapeHtml(p.player_id) + '" data-idx="' + i + '">' +
               '<span>' + escapeHtml(p.name) + ' <span class="gl-ac-pos" style="color:' + posColor + '">' + escapeHtml(p.position) + '</span></span>' +
               '<span style="color:var(--ink-light)">' + escapeHtml(p.team) + '</span></div>';
@@ -531,7 +531,7 @@
 
   /* ---- Render ---- */
   function render(data) {
-    var posColor = POS_COLORS[data.position] || '#888';
+    var posColor = POS_COLORS[data.position] || '#8a7565';
     var weeks = (data.weeks || []).slice();
 
     // Sort

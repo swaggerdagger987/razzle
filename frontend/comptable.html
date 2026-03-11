@@ -424,7 +424,7 @@
     var html = '';
     for (var i = 0; i < selectedPlayers.length; i++) {
       var p = selectedPlayers[i];
-      var pc = POS_COLORS[p.position] || '#888';
+      var pc = POS_COLORS[p.position] || '#8a7565';
       html += '<div class="ct-chip"><span class="ct-pos-badge" style="background:' + pc + '">' +
         escapeHtml(p.position) + '</span> ' + escapeHtml(p.name) +
         ' <span class="ct-chip-x" data-idx="' + i + '">x</span></div>';
@@ -458,7 +458,7 @@
           if (!players.length) { acList.style.display = 'none'; return; }
           acIdx = -1;
           acList.innerHTML = players.map(function(p, i) {
-            var pc = POS_COLORS[p.position] || '#888';
+            var pc = POS_COLORS[p.position] || '#8a7565';
             var already = selectedPlayers.some(function(s) { return s.id === p.player_id; });
             return '<div class="ct-ac-item' + (already ? ' style="opacity:0.4"' : '') +
               '" data-id="' + escapeHtml(p.player_id) + '" data-name="' + escapeHtml(p.name) +
@@ -605,7 +605,7 @@
 
     for (var i = 0; i < players.length; i++) {
       var p = players[i];
-      var pc = POS_COLORS[p.position] || '#888';
+      var pc = POS_COLORS[p.position] || '#8a7565';
       html += '<tr>';
       for (var j = 0; j < cols.length; j++) {
         var c = cols[j];

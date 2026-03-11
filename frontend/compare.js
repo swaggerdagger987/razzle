@@ -781,7 +781,7 @@ function drawRadarOnExport(ctx, cx, cy, R, color1, color2, pos) {
 
   // Labels
   ctx.font = "9px 'Space Mono', monospace";
-  ctx.fillStyle = "#777";
+  ctx.fillStyle = "#5c4a3d";
   ctx.textAlign = "center";
   for (var i = 0; i < n; i++) {
     var angle = (Math.PI * 2 * i) / n - Math.PI / 2;

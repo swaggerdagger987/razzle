@@ -855,14 +855,14 @@
       ctx.moveTo(pad.left, gy);
       ctx.lineTo(w - pad.right, gy);
       ctx.stroke();
-      ctx.fillStyle = '#999';
+      ctx.fillStyle = '#8a7565';
       ctx.font = '11px "Space Mono", monospace';
       ctx.textAlign = 'right';
       ctx.fillText(gv.toFixed(1), pad.left - 6, gy + 4);
     }
 
     // X-axis
-    ctx.fillStyle = '#999';
+    ctx.fillStyle = '#8a7565';
     ctx.font = '12px "Space Mono", monospace';
     ctx.textAlign = 'center';
     for (var xi = 0; xi < seasonArr.length; xi++) {
@@ -916,7 +916,7 @@
     ctx.save();
     ctx.translate(14, pad.top + plotH / 2);
     ctx.rotate(-Math.PI / 2);
-    ctx.fillStyle = '#999';
+    ctx.fillStyle = '#8a7565';
     ctx.font = '11px "Space Mono", monospace';
     ctx.textAlign = 'center';
     ctx.fillText('PPG (PPR)', 0, 0);

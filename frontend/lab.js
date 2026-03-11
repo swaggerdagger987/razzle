@@ -4362,7 +4362,7 @@ function exportProspectImage() {
       const pctText = row.querySelector(".prospect-metric-pct")?.textContent || "";
       const bar = row.querySelector(".prospect-metric-bar");
       const barWidth = bar ? parseFloat(bar.style.width) || 0 : 0;
-      const barColor = bar ? bar.style.background : "#ccc";
+      const barColor = bar ? bar.style.background : "#c4b5a5";
 
       ctx.font = "12px sans-serif";
       ctx.fillStyle = "#2d1f14";
@@ -7996,7 +7996,7 @@ function drawRosterPieChart() {
     ctx.moveTo(cx, cy);
     ctx.arc(cx, cy, radius, startAngle, endAngle);
     ctx.closePath();
-    ctx.fillStyle = _POS_HEX[sl.pos] || "#888";
+    ctx.fillStyle = _POS_HEX[sl.pos] || "#8a7565";
     ctx.fill();
     ctx.strokeStyle = "#2d1f14";
     ctx.lineWidth = 2;
@@ -8007,7 +8007,7 @@ function drawRosterPieChart() {
   // Legend
   var ly = 20;
   slices.forEach(function(sl) {
-    ctx.fillStyle = _POS_HEX[sl.pos] || "#888";
+    ctx.fillStyle = _POS_HEX[sl.pos] || "#8a7565";
     ctx.fillRect(W - 65, ly, 12, 12);
     ctx.strokeStyle = "#2d1f14";
     ctx.lineWidth = 1;
@@ -8137,7 +8137,7 @@ function exportRosterTeamCard() {
   ctx.textAlign = "center";
   ctx.fillText("MY DYNASTY ROSTER", W / 2, 44);
   ctx.font = "16px 'Caveat', cursive";
-  ctx.fillStyle = "#666";
+  ctx.fillStyle = "#5c4a3d";
   ctx.fillText("razzle.lol team card", W / 2, 68);
 
   var y = HEADER_H;
@@ -8162,7 +8162,7 @@ function exportRosterTeamCard() {
   ctx.textAlign = "left";
   ctx.fillText(r.total_value + " pts", 120, y + 30);
   ctx.font = "14px sans-serif";
-  ctx.fillStyle = "#666";
+  ctx.fillStyle = "#5c4a3d";
   ctx.fillText("total dynasty value  |  avg age: " + r.average_age, 120, y + 50);
 
   // Status badge
@@ -8202,7 +8202,7 @@ function exportRosterTeamCard() {
     ctx.moveTo(pieCx, pieCy);
     ctx.arc(pieCx, pieCy, pieR, startAngle, endAngle);
     ctx.closePath();
-    ctx.fillStyle = _POS_HEX[sl.pos] || "#888";
+    ctx.fillStyle = _POS_HEX[sl.pos] || "#8a7565";
     ctx.fill();
     ctx.strokeStyle = "#2d1f14";
     ctx.lineWidth = 2;
@@ -8214,7 +8214,7 @@ function exportRosterTeamCard() {
   var ly = y + 20;
   ctx.textAlign = "left";
   slices.forEach(function(sl) {
-    ctx.fillStyle = _POS_HEX[sl.pos] || "#888";
+    ctx.fillStyle = _POS_HEX[sl.pos] || "#8a7565";
     ctx.fillRect(210, ly, 14, 14);
     ctx.strokeStyle = "#2d1f14";
     ctx.lineWidth = 1;
@@ -8251,7 +8251,7 @@ function exportRosterTeamCard() {
   ctx.lineWidth = 1;
   for (var a = Math.ceil(sMinAge); a <= sMaxAge; a += 2) {
     ctx.beginPath(); ctx.moveTo(sxPos(a), scatterY + sPad.top); ctx.lineTo(sxPos(a), scatterY + scatterH - sPad.bottom); ctx.stroke();
-    ctx.fillStyle = "#666"; ctx.font = "9px sans-serif"; ctx.textAlign = "center";
+    ctx.fillStyle = "#5c4a3d"; ctx.font = "9px sans-serif"; ctx.textAlign = "center";
     ctx.fillText(a, sxPos(a), scatterY + scatterH - sPad.bottom + 12);
   }
   ctx.fillStyle = "#2d1f14"; ctx.font = "bold 9px sans-serif"; ctx.textAlign = "center";
@@ -8289,7 +8289,7 @@ function exportRosterTeamCard() {
     ctx.fillRect(30, rowY, W - 60, ROW_H);
 
     // Rank
-    ctx.fillStyle = "#999";
+    ctx.fillStyle = "#8a7565";
     ctx.font = "10px sans-serif";
     ctx.textAlign = "right";
     ctx.fillText((i + 1) + ".", 50, rowY + 16);
@@ -8310,7 +8310,7 @@ function exportRosterTeamCard() {
     ctx.fillText(p.full_name || "", 90, rowY + 16);
 
     // Team
-    ctx.fillStyle = "#999";
+    ctx.fillStyle = "#8a7565";
     ctx.font = "10px sans-serif";
     ctx.textAlign = "left";
     var nameW = ctx.measureText(p.full_name || "").width;

@@ -462,7 +462,7 @@
   }
 
   function posChip(pos) {
-    var c = POS_COLORS[pos] || '#888';
+    var c = POS_COLORS[pos] || '#8a7565';
     return '<span class="rc-pos-chip" style="background:' + c + '">' + escapeHtml(pos) + '</span>';
   }
 
@@ -488,7 +488,7 @@
     for (var i = 0; i < posOrder.length; i++) {
       var pos = posOrder[i];
       var ldr = (data.pos_leaders || {})[pos];
-      var pc = POS_COLORS[pos] || '#888';
+      var pc = POS_COLORS[pos] || '#8a7565';
       html += '<div class="rc-pos-card">';
       html += '<div class="rc-pos-label" style="background:' + pc + '">' + escapeHtml(pos) + '1</div>';
       if (ldr) {
