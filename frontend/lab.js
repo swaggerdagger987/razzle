@@ -817,6 +817,7 @@ const state = {
   heatColors: false, // percentile heat coloring toggle
   percentileMode: (function() { try { return localStorage.getItem("razzle_percentile_mode") === "1"; } catch(e) { return false; } })(), // show percentile values instead of raw
   dataBars: (function() { try { return localStorage.getItem("razzle_data_bars") === "1"; } catch(e) { return false; } })(), // inline data bars toggle
+  leaderBadges: (function() { try { return localStorage.getItem("razzle_leader_badges") === "1"; } catch(e) { return false; } })(), // stat leader dot indicators
   density: (function() { try { return localStorage.getItem("razzle_density") === "1"; } catch(e) { return false; } })(), // compact density mode
   tierBreaks: (function() { try { return localStorage.getItem("razzle_tier_breaks") === "1"; } catch(e) { return false; } })(), // tier break dividers
   groupHeaders: (function() { try { return localStorage.getItem("razzle_group_headers") !== "0"; } catch(e) { return true; } })(), // column group headers (on by default)
@@ -1493,7 +1494,7 @@ let _vscrollRows = [];   // Pre-computed HTML strings for each row
 let _vscrollRAF = null;  // requestAnimationFrame handle
 let _vscrollBound = false;
 
-function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode) {
+function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, leaderRanks) {
   const pos = (player.position || "").toUpperCase();
   const playKey = player.player_id || player.player_name;
   const selected = state.selectedPlayers.some(p => p.player_id === playKey);
@@ -1578,6 +1579,10 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode) {
       }
       continue;
     }
+    // Leader dot for top 3 values in this column
+    const ldrRank = leaderRanks && leaderRanks[key] ? (leaderRanks[key][playKey] || 0) : 0;
+    const ldrDot = ldrRank ? getLeaderDot(ldrRank) : "";
+
     const hBg = heatPcts && heatPcts[key] != null ? getHeatColor(heatPcts[key]) : "";
     const isSortCol = key === state.sortKey;
     const isSort2Col = key === state.sortKey2;
@@ -1615,15 +1620,15 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode) {
     } else if (key === "dynasty_value" && val != null) {
       const dvsColor = val >= 85 ? "var(--green)" : val >= 70 ? "var(--pos-qb)" : val >= 55 ? "var(--orange)" : "var(--ink-light)";
       const dvsTier = val >= 85 ? "Elite" : val >= 70 ? "Star" : val >= 55 ? "Starter" : "";
-      html += `<td${scAttr}${hStyle}><span style="background:${dvsColor}; color:white; padding:1px 8px; border-radius:10px; border:2px solid var(--ink); font-size:11px; font-weight:700; white-space:nowrap;">${val.toFixed(1)}${dvsTier ? " " + dvsTier : ""}</span></td>`;
+      html += `<td${scAttr}${hStyle}>${ldrDot}<span style="background:${dvsColor}; color:white; padding:1px 8px; border-radius:10px; border:2px solid var(--ink); font-size:11px; font-weight:700; white-space:nowrap;">${val.toFixed(1)}${dvsTier ? " " + dvsTier : ""}</span></td>`;
     } else if (key === "age" && val != null) {
-      html += `<td${scAttr} style="font-weight:600;">${Math.round(val)}</td>`;
+      html += `<td${scAttr} style="font-weight:600;">${ldrDot}${Math.round(val)}</td>`;
     } else if (key === "breakout_pct" && val != null && val >= 50) {
-      html += `<td${scAttr}${hStyle}><span style="background:var(--green); color:white; padding:1px 6px; border-radius:10px; border:2px solid var(--ink); font-size:11px; font-weight:700;">+${val.toFixed(0)}%</span></td>`;
+      html += `<td${scAttr}${hStyle}>${ldrDot}<span style="background:var(--green); color:white; padding:1px 6px; border-radius:10px; border:2px solid var(--ink); font-size:11px; font-weight:700;">+${val.toFixed(0)}%</span></td>`;
     } else if (col.pct && val != null) {
-      html += `<td${scAttr}${hStyle}>${(val * 100).toFixed(col.decimals)}%</td>`;
+      html += `<td${scAttr}${hStyle}>${ldrDot}${(val * 100).toFixed(col.decimals)}%</td>`;
     } else {
-      html += `<td${scAttr}${hStyle}>${formatStat(val, col.decimals)}</td>`;
+      html += `<td${scAttr}${hStyle}>${ldrDot}${formatStat(val, col.decimals)}</td>`;
     }
   }
   html += '<td style="width:32px;"></td>'; // spacer for "+" column
@@ -1712,9 +1717,11 @@ function renderTableBody() {
   const pctData = (heatOn || pctMode) ? computePercentiles() : {};
   const barsOn = state.dataBars;
   if (barsOn) computeBarMaxes();
+  const leadersOn = state.leaderBadges && !state.percentileMode;
+  const leaderRanks = leadersOn ? computeLeaderRanks() : {};
   _vscrollRows = [];
   for (let i = 0; i < state.items.length; i++) {
-    _vscrollRows.push(buildRowHTML(state.items[i], cols, heatOn, pctData, i, barsOn, pctMode));
+    _vscrollRows.push(buildRowHTML(state.items[i], cols, heatOn, pctData, i, barsOn, pctMode, leaderRanks));
   }
 
   // Insert tier break divider rows if enabled (NFL only)
@@ -3076,6 +3083,7 @@ function saveStateToURL() {
   if (state.heatColors) params.set("heat", "1");
   if (state.percentileMode) params.set("pctl", "1");
   if (state.dataBars) params.set("bars", "1");
+  if (state.leaderBadges) params.set("leaders", "1");
   if (state.tierBreaks) params.set("tiers", "1");
   if (state.density) params.set("dense", "1");
   if (!state.groupHeaders) params.set("groups", "0");
@@ -3199,6 +3207,9 @@ function loadStateFromURL() {
   if (params.has("bars")) {
     state.dataBars = params.get("bars") === "1";
   }
+  if (params.has("leaders")) {
+    state.leaderBadges = params.get("leaders") === "1";
+  }
   if (params.has("tiers")) {
     state.tierBreaks = params.get("tiers") === "1";
   }
@@ -3286,6 +3297,18 @@ function loadStateFromURL() {
     } else {
       dbBtn.classList.remove("active");
       dbBtn.style.borderColor = "";
+    }
+  }
+
+  // Sync leader badges button
+  const lbBtn = document.getElementById("leaderBadgesBtn");
+  if (lbBtn) {
+    if (state.leaderBadges) {
+      lbBtn.classList.add("active");
+      lbBtn.style.borderColor = "var(--yellow)";
+    } else {
+      lbBtn.classList.remove("active");
+      lbBtn.style.borderColor = "";
     }
   }
 
@@ -3445,6 +3468,7 @@ function saveCurrentView() {
     heatColors: state.heatColors,
     percentileMode: state.percentileMode,
     dataBars: state.dataBars,
+    leaderBadges: state.leaderBadges,
     density: state.density,
     columnWidths: state.columnWidths ? JSON.parse(JSON.stringify(state.columnWidths)) : {},
     filters: JSON.parse(JSON.stringify(state.filters)),
@@ -3493,6 +3517,7 @@ function loadSavedView(id) {
   if (view.heatColors !== undefined) state.heatColors = view.heatColors;
   if (view.percentileMode !== undefined) state.percentileMode = view.percentileMode;
   if (view.dataBars !== undefined) state.dataBars = view.dataBars;
+  if (view.leaderBadges !== undefined) state.leaderBadges = view.leaderBadges;
   if (view.density !== undefined) state.density = view.density;
   if (view.columnWidths) state.columnWidths = view.columnWidths;
 
@@ -3635,12 +3660,14 @@ function renderPinnedRows() {
   const pctData = (heatOn || pctMode) ? computePercentiles() : {};
   const barsOn = state.dataBars;
   if (barsOn) computeBarMaxes();
+  const leadersOn = state.leaderBadges && !state.percentileMode;
+  const leaderRanks = leadersOn ? computeLeaderRanks() : {};
   let html = "";
 
   for (const pid of state.pinnedPlayers) {
     const player = state.items.find(p => p.player_id === pid);
     if (!player) continue;
-    html += buildRowHTML(player, cols, heatOn, pctData, null, barsOn, pctMode);
+    html += buildRowHTML(player, cols, heatOn, pctData, null, barsOn, pctMode, leaderRanks);
   }
 
   if (!html) {
@@ -4263,26 +4290,97 @@ function toggleDataBars() {
   _showToast(state.dataBars ? "data bars on" : "data bars off");
 }
 
+// ─── Stat leader indicators ─────────────────────────────────────
+let _leaderRanksCache = null;
+let _leaderRanksCacheKey = null;
+
+function computeLeaderRanks() {
+  // Cache key based on item count + first/last player IDs
+  var items = state.items;
+  if (!items.length) return {};
+  var cacheKey = items.length + ":" + (items[0].player_id || "") + ":" + (items[items.length - 1].player_id || "");
+  if (_leaderRanksCache && _leaderRanksCacheKey === cacheKey) return _leaderRanksCache;
+
+  var cols = getActiveColumns();
+  var ranks = {}; // { colKey: { playerId: rank (1,2,3) } }
+
+  for (var c = 0; c < cols.length; c++) {
+    var key = cols[c];
+    var col = getColumnDef(key);
+    if (!col || col.isText || col.isSparkline || col.isNotes || key === "age" || key === "games" || key === "seasons") continue;
+
+    // Collect numeric values with player IDs
+    var vals = [];
+    for (var i = 0; i < items.length; i++) {
+      var v = items[i][key];
+      if (v != null && typeof v === "number" && v !== 0) {
+        vals.push({ idx: i, pid: items[i].player_id || items[i].player_name || i, val: v });
+      }
+    }
+    if (vals.length < 3) continue;
+
+    // Sort: INVERSE_STATS ascending (lowest = best), others descending
+    var inv = INVERSE_STATS.has(key);
+    vals.sort(function(a, b) { return inv ? a.val - b.val : b.val - a.val; });
+
+    var colRanks = {};
+    // Assign top 3 — skip ties at boundary carefully
+    for (var r = 0; r < Math.min(3, vals.length); r++) {
+      colRanks[vals[r].pid] = r + 1;
+    }
+    ranks[key] = colRanks;
+  }
+
+  _leaderRanksCache = ranks;
+  _leaderRanksCacheKey = cacheKey;
+  return ranks;
+}
+
+function getLeaderDot(rank) {
+  if (rank === 1) return '<span class="leader-dot leader-gold" title="1st">&#9679;</span>';
+  if (rank === 2) return '<span class="leader-dot leader-silver" title="2nd">&#9679;</span>';
+  if (rank === 3) return '<span class="leader-dot leader-bronze" title="3rd">&#9679;</span>';
+  return "";
+}
+
+function toggleLeaderBadges() {
+  state.leaderBadges = !state.leaderBadges;
+  try { localStorage.setItem("razzle_leader_badges", state.leaderBadges ? "1" : "0"); } catch(e) {}
+  var btn = document.getElementById("leaderBadgesBtn");
+  if (btn) {
+    btn.classList.toggle("active", state.leaderBadges);
+    btn.style.borderColor = state.leaderBadges ? "var(--yellow)" : "";
+  }
+  _leaderRanksCache = null;
+  renderTable();
+  saveStateToURL();
+  _showToast(state.leaderBadges ? "stat leaders on — gold/silver/bronze dots" : "stat leaders off");
+}
+
 function cycleVisualMode() {
   if (state.universe !== "nfl") { _showToast("visual modes: nfl only"); return; }
-  // Cycle: off → heat → percentile → bars → off
-  var h = state.heatColors, p = state.percentileMode, b = state.dataBars;
+  // Cycle: off → heat → percentile → bars → leaders → off
+  var h = state.heatColors, p = state.percentileMode, b = state.dataBars, l = state.leaderBadges;
   // Determine current mode and advance
-  if (!h && !p && !b) {
+  if (!h && !p && !b && !l) {
     // off → heat
-    state.heatColors = true; state.percentileMode = false; state.dataBars = false;
+    state.heatColors = true; state.percentileMode = false; state.dataBars = false; state.leaderBadges = false;
     _showToast("visual: heat colors");
-  } else if (h && !p && !b) {
+  } else if (h && !p && !b && !l) {
     // heat → percentile
-    state.heatColors = false; state.percentileMode = true; state.dataBars = false;
+    state.heatColors = false; state.percentileMode = true; state.dataBars = false; state.leaderBadges = false;
     _showToast("visual: percentile mode");
-  } else if (!h && p && !b) {
+  } else if (!h && p && !b && !l) {
     // percentile → bars
-    state.heatColors = false; state.percentileMode = false; state.dataBars = true;
+    state.heatColors = false; state.percentileMode = false; state.dataBars = true; state.leaderBadges = false;
     _showToast("visual: data bars");
+  } else if (!h && !p && b && !l) {
+    // bars → leaders
+    state.heatColors = false; state.percentileMode = false; state.dataBars = false; state.leaderBadges = true;
+    _showToast("visual: stat leaders");
   } else {
     // anything else → off
-    state.heatColors = false; state.percentileMode = false; state.dataBars = false;
+    state.heatColors = false; state.percentileMode = false; state.dataBars = false; state.leaderBadges = false;
     _showToast("visual: off");
   }
   // Sync buttons
@@ -4292,12 +4390,16 @@ function cycleVisualMode() {
   if (pBtn) { pBtn.classList.toggle("active", state.percentileMode); pBtn.style.borderColor = state.percentileMode ? "var(--pos-qb)" : ""; }
   var bBtn = document.getElementById("dataBarsBtn");
   if (bBtn) { bBtn.classList.toggle("active", state.dataBars); bBtn.style.borderColor = state.dataBars ? "var(--orange)" : ""; }
+  var lBtn = document.getElementById("leaderBadgesBtn");
+  if (lBtn) { lBtn.classList.toggle("active", state.leaderBadges); lBtn.style.borderColor = state.leaderBadges ? "var(--yellow)" : ""; }
   // Persist
   try { localStorage.setItem("razzle_heat_colors", state.heatColors ? "1" : "0"); } catch(e) {}
   try { localStorage.setItem("razzle_percentile_mode", state.percentileMode ? "1" : "0"); } catch(e) {}
   try { localStorage.setItem("razzle_data_bars", state.dataBars ? "1" : "0"); } catch(e) {}
+  try { localStorage.setItem("razzle_leader_badges", state.leaderBadges ? "1" : "0"); } catch(e) {}
   _percentileCache = null;
   _barMaxCache = null;
+  _leaderRanksCache = null;
   renderTable();
   saveStateToURL();
 }
@@ -9346,6 +9448,12 @@ document.addEventListener("keydown", function(e) {
     return;
   }
 
+  // L: toggle stat leader badges
+  if (e.key === "l" || e.key === "L") {
+    toggleLeaderBadges();
+    return;
+  }
+
   // P: clear all pinned players
   if (e.key === "p" || e.key === "P") {
     if (state.pinnedPlayers.length > 0) {
@@ -9431,7 +9539,8 @@ function toggleShortcutRef() {
           ${shortcutRow("X", "Share / export")}
           ${shortcutRow("H", "Heat colors (percentiles)")}
           ${shortcutRow("R", "Percentile display mode")}
-          ${shortcutRow("V", "Cycle visual mode (heat → pctl → bars)")}
+          ${shortcutRow("V", "Cycle visual mode (heat → pctl → bars → leaders)")}
+          ${shortcutRow("L", "Stat leader badges (gold/silver/bronze)")}
           ${shortcutRow("B", "Inline data bars")}
           ${shortcutRow("T", "Tier break dividers")}
           ${shortcutRow("D", "Compact density mode")}

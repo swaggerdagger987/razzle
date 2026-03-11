@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 122 — Stat Leader Indicators (COMPLETE)
+
+**Exit Criterion MET**: Top 3 values per numeric stat column get gold/silver/bronze dots. INVERSE_STATS reversed. L key toggle. Toolbar button. localStorage persist. Disabled during percentile mode. V cycle includes leaders. 34 tests pass.
+
+### Phase 122 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Stat leader indicator system | DONE | computeLeaderRanks(), getLeaderDot(), L key, toolbar button, saved views, URL state |
+
 ## Previous Phase: Phase 121 — Undo/Redo State History (COMPLETE)
 
 **Exit Criterion MET**: Ctrl+Z/Ctrl+Y undo/redo screener state changes. Toolbar buttons with disabled state. Max 30 snapshots. Toast feedback. 34 tests pass.

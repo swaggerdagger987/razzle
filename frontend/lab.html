@@ -905,6 +905,12 @@
   .screener-table th.sort2-asc, .screener-table th.sort2-desc { background: rgba(217, 119, 87, 0.06); }
   .screener-table td.sort-col { background: rgba(217, 119, 87, 0.05); }
   .screener-table td.sort2-col { background: rgba(217, 119, 87, 0.025); }
+
+  /* ─── Stat leader dots ─── */
+  .leader-dot { font-size: 7px; vertical-align: middle; margin-right: 2px; }
+  .leader-gold { color: #ffc857; }
+  .leader-silver { color: #c4b5a5; }
+  .leader-bronze { color: #d97757; }
   .screener-table .col-rank { width: 36px; text-align: center; font-size: 11px; color: var(--ink-light); font-weight: 600; padding: 7px 2px; white-space: nowrap; }
 
   /* ─── Frozen utility columns (star, checkbox, pin, rank, player) ─── */
@@ -3086,6 +3092,7 @@
     <button class="btn-chunky" id="heatColorsBtn" onclick="toggleHeatColors()" title="Per-position percentile coloring: green = elite (90th+), red = below avg (10th-). Press H to toggle.">Heat</button>
     <button class="btn-chunky" id="percentileModeBtn" onclick="togglePercentileMode()" title="Show position percentile ranks (0-99) instead of raw values. Press R to toggle.">Pctl</button>
     <button class="btn-chunky" id="dataBarsBtn" onclick="toggleDataBars()" title="Inline data bars showing relative value per column. Press B to toggle.">Bars</button>
+    <button class="btn-chunky" id="leaderBadgesBtn" onclick="toggleLeaderBadges()" title="Gold/silver/bronze dots on top 3 stat values per column. Press L to toggle.">Leaders</button>
     <button class="btn-chunky" id="tierBreaksBtn" onclick="toggleTierBreaks()" title="Show tier break dividers in the table. Press T to toggle.">Tiers</button>
     <button class="btn-chunky" id="densityBtn" onclick="toggleDensity()" title="Compact table mode — more rows, less padding. Press D to toggle.">Dense</button>
     <button class="btn-chunky" id="groupHeadersBtn" onclick="toggleGroupHeaders()" title="Show column category groups above headers. Press G to toggle.">Groups</button>
