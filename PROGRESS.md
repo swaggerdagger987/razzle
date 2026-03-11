@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 128 — Bulk Pin from Selection (COMPLETE)
+
+**Exit Criterion MET**: Bulk action bar "Pin" button pins all selected players to top (max 5, skip duplicates). NFL-only visibility. Toast feedback. 34 tests pass.
+
+### Phase 128 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Bulk pin from selection | DONE | bulkPinSelected(), Pin button in bulk bar, NFL-only toggle, max 5, duplicate check |
+
 ## Previous Phase: Phase 127 — Filter Column Indicators + Quick-Filter (COMPLETE)
 
 **Exit Criterion MET**: Column headers with active filters show orange dot indicator with hover tooltip showing filter criteria. Right-click column context menu includes Top 10, Top 25, Above Avg, Below Avg quick-filter options. Duplicate filter check. Toast with correct op symbol. Shortcut modal updated. 34 tests pass.

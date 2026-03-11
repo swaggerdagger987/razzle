@@ -3922,6 +3922,24 @@ function clearAllPins() {
   saveStateToURL();
 }
 
+function bulkPinSelected() {
+  if (state.universe !== "nfl") { _showToast("pins: nfl only"); return; }
+  var added = 0;
+  for (var i = 0; i < state.selectedPlayers.length; i++) {
+    var pid = state.selectedPlayers[i].player_id;
+    if (!pid || isPlayerPinned(pid)) continue;
+    if (state.pinnedPlayers.length >= 5) { _showToast("max 5 pins — " + added + " added"); break; }
+    state.pinnedPlayers.push(pid);
+    added++;
+  }
+  if (added === 0) { _showToast("all selected already pinned"); return; }
+  savePinnedPlayers();
+  renderPinnedRows();
+  renderVisibleRows();
+  saveStateToURL();
+  _showToast(added + " player" + (added > 1 ? "s" : "") + " pinned");
+}
+
 function renderPinnedRows() {
   const pinnedBody = document.getElementById("pinnedBody");
   if (!pinnedBody) return;
@@ -4115,6 +4133,8 @@ function updateSelectionUI() {
       namesEl.textContent = state.selectedPlayers.map(p => p.full_name || p.player_name || "").join(", ");
       var cmpBtn = document.getElementById("bulkCompareBtn");
       if (cmpBtn) { cmpBtn.disabled = count < 2; cmpBtn.style.opacity = count < 2 ? "0.5" : "1"; }
+      var pinBtn = document.getElementById("bulkPinBtn");
+      if (pinBtn) { pinBtn.style.display = state.universe === "nfl" ? "" : "none"; }
       // Quick compare strip: show for exactly 2 selected players
       var strip = document.getElementById("quickCompareStrip");
       if (strip) {
