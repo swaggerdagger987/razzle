@@ -473,7 +473,7 @@
       tiers.forEach(function(tier) {
         var filtered = filterBySearch(tier.players || []);
         html += '<div class="tl-tier">';
-        html += '<div class="tl-tier-label ' + escapeHtml(tier.tier) + '">';
+        html += '<div class="tl-tier-label ' + tier.tier + '">';
         html += '<div class="tl-tier-letter">' + escapeHtml(tier.tier) + '</div>';
         html += '<div class="tl-tier-count">' + filtered.length + '</div>';
         html += '<div class="tl-tier-desc">' + escapeHtml(tier.label || '') + '</div>';
@@ -484,7 +484,7 @@
           anyVisible = true;
           filtered.forEach(function(p) {
             html += '<div class="tl-player-chip">';
-            html += '<span class="tl-chip-pos ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span>';
+            html += '<span class="tl-chip-pos ' + p.position + '">' + escapeHtml(p.position) + '</span>';
             html += '<span class="tl-chip-name">' + escapeHtml(p.full_name) + '</span>';
             html += '<span class="tl-chip-tv">' + escapeHtml(String(p.trade_value)) + '</span>';
             html += '</div>';

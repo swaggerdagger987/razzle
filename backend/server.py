@@ -1623,7 +1623,7 @@ def tier_list(season: int = 0, position: str = ""):
     """Return players grouped into S/A/B/C/D/F tiers by trade value."""
     try:
         s = season if season > 0 else None
-        pos = position if position else None
+        pos = position.strip().upper() if position else None
         return live_data.fetch_tier_list(season=s, position=pos)
     except Exception as e:
         logger.exception("tier-list error")

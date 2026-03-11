@@ -1,8 +1,28 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 44 (Shareability & Player Comps)
-## Phase 44: Shareability & Player Comps
+- Phase: 45 (QA + UX Audit — Phases 41-44 Fixes)
+## Phase 45: QA + UX Audit — Phases 41-44 Fixes
+**Exit Criterion**: All HIGH and MEDIUM audit findings fixed. Class name escaping corrected. API parameter normalization consistent.
+
+- Task 1: PASS
+- Task 2: PASS
+- Stage: COMPLETE
+- Next: Phase gate
+
+### Task 1: Fix class name escaping in Tiers panel (HIGH)
+**Status**: PASS
+**Attempts**: 1
+**Acceptance**: escapeHtml() removed from class attribute contexts in Tiers panel (tier labels and position chips). Text content still escaped.
+**Result**: Removed escapeHtml from tier.tier in class context (line 476) and p.position in class context (line 487). Text content still properly escaped.
+
+### Task 2: Normalize position param in tier-list endpoint (MEDIUM)
+**Status**: PASS
+**Attempts**: 1
+**Acceptance**: /api/tier-list endpoint normalizes position with .strip().upper() like other dynasty endpoints.
+**Result**: Changed `pos = position if position else None` to `pos = position.strip().upper() if position else None` in server.py tier_list endpoint.
+
+## Phase 44: Shareability & Player Comps (COMPLETE)
 **Exit Criterion**: Dynasty History view has PNG export. Trade Values custom weights persist in URL state. Dynasty History supports comparing 2+ selected players.
 
 - Task 1: PASS
