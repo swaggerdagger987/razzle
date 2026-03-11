@@ -1192,3 +1192,25 @@ tr:hover .notes-cell .note-pencil {
   border-radius: 4px;
   letter-spacing: 0.5px;
 }
+
+/* ── Toast notifications (global — works on all pages) ─────────── */
+.razzle-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--ink);
+  color: var(--bg-card);
+  font-family: var(--font-hand);
+  font-size: 18px;
+  padding: 10px 24px;
+  border-radius: 6px;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  pointer-events: none;
+}
+.razzle-toast-show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}

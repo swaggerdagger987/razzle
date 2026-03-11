@@ -132,6 +132,24 @@ function refreshPlanGating() {
   if (typeof checkAuth === "function") checkAuth();
 }
 
+/**
+ * Show a toast notification. Available on all pages (defined in app.js).
+ * If lab.js also defines _showToast, its version runs (they're identical).
+ */
+function _showToast(msg) {
+  var existing = document.querySelector('.razzle-toast');
+  if (existing) existing.remove();
+  var toast = document.createElement('div');
+  toast.className = 'razzle-toast';
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  setTimeout(function() { toast.classList.add('razzle-toast-show'); }, 10);
+  setTimeout(function() {
+    toast.classList.remove('razzle-toast-show');
+    setTimeout(function() { toast.remove(); }, 300);
+  }, 2500);
+}
+
 function escapeHtml(str) {
   if (!str) return "";
   var d = document.createElement("div");
