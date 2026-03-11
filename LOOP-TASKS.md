@@ -1,15 +1,15 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 76 (QA + UX Audit Fixes for Phases 71-75)
-## Phase 76: QA + UX Audit — Auto-Generated Fixes
-**Exit Criterion**: All MEDIUM QA findings from phases 71-75 audit are fixed. Copy to clipboard has textarea fallback for non-HTTPS environments.
+- Phase: 77 (Screener Row Position Stripe)
+## Phase 77: Screener Row Position Stripe
+**Exit Criterion**: Every data row in the screener table has a 3px left border in the position color (QB=blue, RB=teal, WR=terracotta, TE=purple). Makes ALL-position view instantly scannable. Always visible, no toggle needed.
 
 - Task 1: PASS
 - Stage: COMPLETE
 - Next: Phase gate
 
-### Task 1: Fix copy to clipboard fallback
+### Task 1: Row position stripe on all data rows
 **Status**: PASS
 **Attempts**: 1
-**Result**: Updated copyTableToClipboard() to check navigator.clipboard availability first, then fall back to _fallbackCopy() (textarea method). Same pattern as sharePanelURL(). onCopySuccess() callback shared for both paths. 34 tests pass.
+**Result**: Added posStripeColor computation in buildRowHTML() mapping position to CSS variable. Applied as border-left:3px solid on each tr element. Non-standard positions get ink-faint fallback. Works in NFL, college, and prospect modes. 34 tests pass.

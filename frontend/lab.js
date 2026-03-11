@@ -1242,7 +1242,8 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode) {
   const starred = isOnWatchlist(playKey);
   const pName = escapeAttr(player.full_name || player.player_name || "");
   const pTeam = escapeAttr(player.team || player.school || "");
-  let html = '<tr tabindex="0" data-player-id="' + escapeAttr(playKey) + '" style="height:' + getVScrollRowHeight() + 'px;">';
+  const posStripeColor = pos === "QB" ? "var(--pos-qb)" : pos === "RB" ? "var(--pos-rb)" : pos === "WR" ? "var(--pos-wr)" : pos === "TE" ? "var(--pos-te)" : "var(--ink-faint)";
+  let html = '<tr tabindex="0" data-player-id="' + escapeAttr(playKey) + '" style="height:' + getVScrollRowHeight() + 'px; border-left:3px solid ' + posStripeColor + ';">';
   html += `<td style="text-align:center; padding:7px 4px; cursor:pointer; font-size:16px;" onclick="toggleWatchlistPlayer('${escapeAttr(playKey)}', '${pName}', '${escapeAttr(pos)}', '${pTeam}', '${state.universe}')" title="${starred ? 'Remove from watchlist' : 'Add to watchlist'}">${starred ? '<span style="color:var(--orange);">&#9733;</span>' : '<span style="color:var(--ink-faint);">&#9734;</span>'}</td>`;
   html += `<td style="text-align:center; padding:7px 6px;">
     <input type="checkbox" ${selected ? "checked" : ""} onchange="togglePlayerSelect('${escapeAttr(player.player_id || player.player_name)}', this.checked)"

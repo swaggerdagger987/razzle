@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 77 — Screener Row Position Stripe (COMPLETE)
+
+**Exit Criterion MET**: Every data row has a 3px left border in position color (QB blue, RB teal, WR terracotta, TE purple). Always visible, makes ALL-position view instantly scannable.
+
+### Phase 77 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Row position stripe | DONE | posStripeColor in buildRowHTML, border-left:3px solid, CSS variable mapping, ink-faint fallback |
+
 ## Previous Phase: Phase 76 — QA + UX Audit Fixes for Phases 71-75 (COMPLETE)
 
 **Exit Criterion MET**: 1 MEDIUM QA finding fixed (clipboard fallback). 0 CRITICAL/HIGH issues. Clean audit overall.
