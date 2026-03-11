@@ -1,15 +1,15 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 102 (Filter Count Badge)
-## Phase 102: Filter Count Badge
-**Exit Criterion**: Orange badge on "+ add filter" button showing count of active filters (stat filters + minGP + teams + tagFilter). 34 tests pass.
+- Phase: 103 (Column Quick-Hide via Right-Click)
+## Phase 103: Column Quick-Hide via Right-Click
+**Exit Criterion**: Right-click column header shows context menu with Hide/Sort Asc/Sort Desc options. 34 tests pass.
 
 - Task 1: PASS
 - Stage: COMPLETE
 - Next: Phase gate
 
-### Task 1: Filter count badge on add-filter button
+### Task 1: Column header context menu
 **Status**: PASS
 **Attempts**: 1
-**Result**: (1) .filter-badge CSS with orange pill, absolute positioned. (2) Updated renderActiveFilters() to dynamically add/remove badge. (3) Counts stat filters + minGP + teams + tagFilter. 34 tests pass.
+**Result**: (1) Right-click any sortable column header → context menu with Hide column, Sort Ascending, Sort Descending. (2) Reuses existing screener-context-menu styling. (3) Hide calls toggleColumn(key, false) with toast. (4) Sort options clear secondary sort and trigger fetchAndRender. 34 tests pass.

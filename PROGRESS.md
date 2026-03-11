@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 103 — Column Quick-Hide via Right-Click (COMPLETE)
+
+**Exit Criterion MET**: Right-click column header → context menu with Hide/Sort Asc/Sort Desc. 34 tests pass.
+
+### Phase 103 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Column header context menu | DONE | Hide column, Sort Asc, Sort Desc options; reuses ctx-menu styling |
+
 ## Previous Phase: Phase 102 — Filter Count Badge (COMPLETE)
 
 **Exit Criterion MET**: Orange badge on filter button showing active filter count. 34 tests pass.

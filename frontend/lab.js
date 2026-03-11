@@ -1897,10 +1897,52 @@ function _ctxMenuAction(action) {
 
   document.addEventListener("click", hideContextMenu);
   document.addEventListener("contextmenu", function(e) {
-    if (!e.target.closest("#screenerTable tbody")) hideContextMenu();
+    if (!e.target.closest("#screenerTable tbody") && !e.target.closest("#screenerTable thead")) hideContextMenu();
   });
 
+  // Column header right-click to hide column
   table.addEventListener("contextmenu", function(e) {
+    var th = e.target.closest("thead th");
+    if (th && th.hasAttribute("onclick")) {
+      var onclickStr = th.getAttribute("onclick") || "";
+      var m = onclickStr.match(/sortBy\('([^']+)'/);
+      if (m) {
+        e.preventDefault();
+        hideContextMenu();
+        var colKey = m[1];
+        var col = getColumnDef(colKey);
+        var colLabel = col ? col.label : colKey;
+        var menu = document.createElement("div");
+        menu.id = "screenerContextMenu";
+        menu.className = "screener-context-menu";
+        menu.innerHTML = '<div class="ctx-item" data-action="hide-col" data-col="' + escapeAttr(colKey) + '"><span class="ctx-icon">🙈</span>Hide "' + escapeHtml(colLabel) + '"</div>' +
+          '<div class="ctx-item" data-action="sort-asc" data-col="' + escapeAttr(colKey) + '"><span class="ctx-icon">↑</span>Sort Ascending</div>' +
+          '<div class="ctx-item" data-action="sort-desc" data-col="' + escapeAttr(colKey) + '"><span class="ctx-icon">↓</span>Sort Descending</div>';
+        menu.addEventListener("click", function(ev) {
+          var item = ev.target.closest(".ctx-item");
+          if (!item) return;
+          var act = item.dataset.action;
+          var ck = item.dataset.col;
+          hideContextMenu();
+          if (act === "hide-col") {
+            toggleColumn(ck, false);
+            _showToast("column hidden: " + (getColumnDef(ck) ? getColumnDef(ck).label : ck));
+          } else if (act === "sort-asc") {
+            state.sortKey = ck; state.sortDir = "asc"; state.sortKey2 = ""; state.sortDir2 = "desc"; state.offset = 0; fetchAndRender();
+          } else if (act === "sort-desc") {
+            state.sortKey = ck; state.sortDir = "desc"; state.sortKey2 = ""; state.sortDir2 = "desc"; state.offset = 0; fetchAndRender();
+          }
+        });
+        document.body.appendChild(menu);
+        var x = e.clientX, y = e.clientY;
+        var mw = menu.offsetWidth, mh = menu.offsetHeight;
+        if (x + mw > window.innerWidth) x = window.innerWidth - mw - 8;
+        if (y + mh > window.innerHeight) y = window.innerHeight - mh - 8;
+        menu.style.left = x + "px"; menu.style.top = y + "px";
+        return;
+      }
+    }
+
     var tr = e.target.closest("tbody tr");
     if (!tr) return;
     e.preventDefault();
