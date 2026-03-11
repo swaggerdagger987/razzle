@@ -10,6 +10,22 @@ from .core import _cached, _CACHE_TTL_STABLE, _current_nfl_season, _enrich_colle
 
 logger = logging.getLogger("razzle.live_data.college")
 
+
+def _efficiency_grade(percentile):
+    """Convert a 0-100 percentile to a letter grade."""
+    if percentile >= 95:
+        return "A+"
+    elif percentile >= 85:
+        return "A"
+    elif percentile >= 70:
+        return "B"
+    elif percentile >= 45:
+        return "C"
+    elif percentile >= 25:
+        return "D"
+    return "F"
+
+
 def _fetch_college_players_uncached(
     search="",
     position="",
