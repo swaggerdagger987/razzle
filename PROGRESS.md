@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 119 — Export UX Polish (COMPLETE)
+
+**Exit Criterion MET**: CSV toast feedback, E shortcut, pro-lock removed. 34 tests pass.
+
+### Phase 119 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | CSV export UX | DONE | Toast, E shortcut, pro-lock removed from Share modal |
+
 ## Previous Phase: Phase 118 — Column Header Stat Tooltips (COMPLETE — already existed)
 
 **Exit Criterion MET**: Hover stat columns shows min/max/avg in title tooltip. Already built in lab.js:1242-1256.

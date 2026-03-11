@@ -1,15 +1,15 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 118 (Column Header Stat Tooltips)
-## Phase 118: Column Header Stat Tooltips
-**Exit Criterion**: Hover any stat column header → tooltip shows min/max/avg for that stat across current filtered data. Styled with design system.
+- Phase: 119 (Export UX Polish)
+## Phase 119: Export UX Polish
+**Exit Criterion**: CSV export has toast feedback, E keyboard shortcut, and pro-lock removed from Share modal CSV button.
 
 - Task 1: PASS
 - Stage: COMPLETE
-- Next: Phase gate (already exists — no code change needed)
+- Next: Phase gate
 
-### Task 1: Stat summary tooltips on column headers
+### Task 1: CSV export UX improvements
 **Status**: PASS
 **Attempts**: 1
-**Result**: Feature already exists at lab.js:1242-1256. renderTableHead() computes min/max/avg/count for numeric columns and appends to title attribute. Shows "Min: X  Avg: Y  Max: Z  (N players)" on hover. Works for all universes.
+**Result**: (a) Toast "N rows exported as CSV" after download. (b) E key shortcut for CSV export, added to shortcuts reference. (c) Removed pro-locked class from Share modal CSV button (Lab is free). 34 tests pass.

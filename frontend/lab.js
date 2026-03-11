@@ -4721,6 +4721,7 @@ function exportCSV() {
   link.href = URL.createObjectURL(blob);
   link.click();
   URL.revokeObjectURL(link.href);
+  _showToast(state.items.length + " rows exported as CSV");
 }
 
 function csvEscape(val) {
@@ -9273,6 +9274,12 @@ document.addEventListener("keydown", function(e) {
     return;
   }
 
+  // E: export CSV
+  if (e.key === "e" || e.key === "E") {
+    exportCSV();
+    return;
+  }
+
   // X: share/export
   if (e.key === "x" || e.key === "X") {
     openShareModal();
@@ -9402,6 +9409,7 @@ function toggleShortcutRef() {
           ${shortcutRow("F", "Formula builder")}
           ${shortcutRow("M", "Formula store")}
           ${shortcutRow("W", "Watchlist")}
+          ${shortcutRow("E", "Export CSV")}
           ${shortcutRow("X", "Share / export")}
           ${shortcutRow("H", "Heat colors (percentiles)")}
           ${shortcutRow("R", "Percentile display mode")}
