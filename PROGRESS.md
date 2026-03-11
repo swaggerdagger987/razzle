@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 64 — Screener Quick Column Add Button (COMPLETE)
+
+**Exit Criterion MET**: "+" button at end of column header row opens column picker. Spacer columns in group header, summary bar, data rows. All colCount references updated.
+
+### Phase 64 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Quick column add button with alignment | DONE | "+" th, spacer th/td in group row/summary/data rows, colCount +1 in virtual scroll/pins/tiers |
+
 ## Previous Phase: Phase 63 — Screener Column Header Stats Tooltip (COMPLETE)
 
 **Exit Criterion MET**: Hovering numeric column headers shows tooltip with description + "Min: X  Avg: X  Max: X  (N players)" from displayed data. Non-numeric columns show only description. Works in all modes.

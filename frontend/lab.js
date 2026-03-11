@@ -1157,6 +1157,7 @@ function buildGroupHeaderRow(cols) {
     html += `<th colspan="${g.span}" class="${sepCls}">${g.name}</th>`;
     first = false;
   }
+  html += '<th style="width:32px;"></th>'; // spacer for "+" column
   html += "</tr>";
   return html;
 }
@@ -1216,6 +1217,9 @@ function renderTableHead() {
       html += `<th class="${cls}"${tip} tabindex="0" onclick="sortBy('${key}')" onkeydown="if(event.key==='Enter'){sortBy('${key}');event.preventDefault();}">${col.label}${extra}</th>`;
     }
   }
+
+  // Quick add column button
+  html += `<th style="width:32px; text-align:center; padding:4px; cursor:pointer; font-size:16px; color:var(--ink-light); border-bottom:3px solid var(--ink);" onclick="openColumnPicker()" title="Add/remove columns (C)">+</th>`;
 
   html += "</tr>";
   thead.innerHTML = html;
@@ -1328,6 +1332,7 @@ function buildRowHTML(player, cols, heatOn, pctData) {
       html += `<td${hStyle}>${formatStat(val, col.decimals)}</td>`;
     }
   }
+  html += '<td style="width:32px;"></td>'; // spacer for "+" column
   html += "</tr>";
   return html;
 }
@@ -1340,7 +1345,7 @@ function renderVisibleRows() {
   const totalRows = _vscrollRows.length;
   const scrollTop = wrap.scrollTop;
   const viewHeight = wrap.clientHeight;
-  const colCount = getActiveColumns().length + 3 + (state.universe === "nfl" ? 1 : 0); // +star +checkbox +player (+pin if NFL)
+  const colCount = getActiveColumns().length + 4 + (state.universe === "nfl" ? 1 : 0); // +star +checkbox +player (+pin if NFL) (+add column btn)
 
   // Calculate visible range
   const startRow = Math.max(0, Math.floor(scrollTop / getVScrollRowHeight()) - VSCROLL_BUFFER);
@@ -2737,7 +2742,7 @@ function renderPinnedRows() {
   }
 
   // Add a separator row at end
-  const colCount = cols.length + 3 + (state.universe === "nfl" ? 1 : 0); // +star +checkbox +player (+pin if NFL)
+  const colCount = cols.length + 4 + (state.universe === "nfl" ? 1 : 0); // +star +checkbox +player (+pin if NFL) (+add column btn)
   html += `<tr class="pinned-separator"><td colspan="${colCount}"></td></tr>`;
 
   pinnedBody.innerHTML = html;
@@ -3165,7 +3170,7 @@ const TIER_BREAK_SIZES = [5, 12, 24, 36]; // cumulative breakpoints: Tier 1 = to
 
 function insertTierBreakRows(rows, cols) {
   if (!rows.length) return rows;
-  const colCount = cols.length + 3 + (state.universe === "nfl" ? 1 : 0); // star + checkbox + player + pin
+  const colCount = cols.length + 4 + (state.universe === "nfl" ? 1 : 0); // star + checkbox + player + pin + add column btn
   const result = [];
   let tierIdx = 0;
   const tierLabels = ["Tier 1 — Elite", "Tier 2 — Starters", "Tier 3 — Flex", "Tier 4 — Bench", "Tier 5 — Deep"];
@@ -3279,6 +3284,7 @@ function renderSummaryBar() {
     const dec = col.decimals != null ? col.decimals : 1;
     html += `<td title="Average of ${n} displayed rows"><span class="summary-label">page avg</span><span class="summary-val">${avg.toFixed(dec)}</span></td>`;
   }
+  html += '<td></td>'; // spacer for "+" column
   html += '</tr>';
   tfoot.innerHTML = html;
 }
