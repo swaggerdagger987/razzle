@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 124 — Interactive Data Cells (COMPLETE)
+
+**Exit Criterion MET**: Position breakdown badges clickable. Double-click stat cell creates filter. 34 tests pass.
+
+### Phase 124 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Clickable pos badges + dblclick filter | DONE | togglePosition on badges, dblclick → gte/lte filter, toast |
+
 ## Previous Phase: Phase 123 — Column Stats Popover (COMPLETE)
 
 **Exit Criterion MET**: Right-click column header → "Column Stats" shows min/max/mean/median/stddev/count + 5-bar histogram. Escape/click dismiss. 34 tests pass.

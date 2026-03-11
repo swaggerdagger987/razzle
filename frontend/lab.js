@@ -2142,6 +2142,45 @@ function _ctxMenuAction(action) {
     if (!e.target.closest("#screenerTable tbody") && !e.target.closest("#screenerTable thead")) hideContextMenu();
   });
 
+  // Double-click stat cell to create filter from value
+  table.addEventListener("dblclick", function(e) {
+    var td = e.target.closest("tbody td");
+    if (!td) return;
+    // Skip utility columns (star, checkbox, pin, rank, player, notes, sparkline)
+    if (td.classList.contains("col-star") || td.classList.contains("col-select") ||
+        td.classList.contains("col-pin") || td.classList.contains("col-rank") ||
+        td.classList.contains("col-player") || td.classList.contains("notes-cell") ||
+        td.classList.contains("sparkline-cell") || td.classList.contains("pin-cell")) return;
+    var tr = td.closest("tr");
+    if (!tr) return;
+    // Find the column index (skip frozen utility cols)
+    var allTds = Array.from(tr.querySelectorAll("td"));
+    var tdIdx = allTds.indexOf(td);
+    var cols = getActiveColumns();
+    // Utility cols: star + checkbox + (pin if NFL) + rank + player = 4 or 5
+    var utilCount = state.universe === "nfl" ? 5 : 4;
+    var colIdx = tdIdx - utilCount;
+    if (colIdx < 0 || colIdx >= cols.length) return;
+    var colKey = cols[colIdx];
+    var col = getColumnDef(colKey);
+    if (!col || col.isText || col.isSparkline || col.isNotes) return;
+    // Get player data for this row
+    var pid = tr.dataset.playerId;
+    var player = state.items.find(function(p) { return (p.player_id || p.player_name) === pid; });
+    if (!player) return;
+    var val = parseFloat(player[colKey]);
+    if (isNaN(val)) return;
+    // Create filter: >= for normal stats, <= for inverse stats
+    var op = INVERSE_STATS.has(colKey) ? "lte" : "gte";
+    state.filters.push({ key: colKey, op: op, value: val });
+    state.offset = 0;
+    renderActiveFilters();
+    fetchAndRender();
+    var opLabel = op === "gte" ? ">=" : "<=";
+    var fmtVal = col.pct ? (val * 100).toFixed(col.decimals || 1) + "%" : val.toFixed(col.decimals != null ? col.decimals : 1);
+    _showToast("filter added: " + col.label + " " + opLabel + " " + fmtVal);
+  });
+
   // Column header right-click to hide column
   table.addEventListener("contextmenu", function(e) {
     var th = e.target.closest("thead th");
@@ -2630,7 +2669,7 @@ function updateResultCount() {
     for (var j = 0; j < posOrder.length; j++) {
       var pp = posOrder[j];
       if (posCounts[pp]) {
-        badges.push('<span style="font-size:10px; font-weight:700; color:' + posColors[pp] + ';">' + pp + ':' + posCounts[pp] + '</span>');
+        badges.push('<span style="font-size:10px; font-weight:700; color:' + posColors[pp] + '; cursor:pointer; border-bottom:1px dashed ' + posColors[pp] + ';" onclick="togglePosition(\'' + pp + '\')" title="Filter to ' + pp + '">' + pp + ':' + posCounts[pp] + '</span>');
       }
     }
     if (badges.length) parts.push(badges.join(" "));
