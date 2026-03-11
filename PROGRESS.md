@@ -1,5 +1,16 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 49 — Player Hover Cards (COMPLETE)
+
+**Exit Criterion MET**: Hovering over player names in the NFL screener shows a compact hover card with headshot, position badge, team/age/GP, PPG/FPTS/DVS stats, and weekly sparkline. 300ms debounce, viewport clamped, hidden on mobile, no blocking API calls.
+
+### Phase 49 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Player hover card component | DONE | Fixed-position div, DESIGN.md styled, reads state.items + _sparklineCache, 300ms show delay, animate in |
+| 2 | Wire hover cards to screener | DONE | mouseenter/mouseleave on NFL player name links, hideHoverCard on profile open |
+
 ## Previous Phase: Phase 48 — Screener Sparkline Column (COMPLETE)
 
 **Exit Criterion MET**: Screener table has a toggleable "Trend" column showing inline SVG sparklines of weekly fantasy points (PPR) for each player. Sparklines color-coded green (trending up) or terracotta (trending down). Backend batch endpoint returns weekly scoring arrays efficiently. Column visible by default in PPR and Dynasty presets.

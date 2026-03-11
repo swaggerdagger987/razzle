@@ -928,7 +928,7 @@ function buildRowHTML(player, cols, heatOn, pctData) {
     html += `<td class="col-player"><div class="player-name-cell">`;
     html += playerHeadshot(player, pos);
     html += `<span class="pos-badge ${posClass(pos)}">${escapeHtml(pos)}</span>`;
-    html += `<a href="/player/${encodeURIComponent(pid)}" onclick="event.preventDefault(); openPlayerProfile('${pid}');" style="color:var(--ink); text-decoration:none; border-bottom:1px dashed var(--ink-faint);">${escapeHtml(player.full_name)}</a>`;
+    html += `<a href="/player/${encodeURIComponent(pid)}" onclick="event.preventDefault(); openPlayerProfile('${pid}');" onmouseenter="onPlayerNameEnter('${pid}', this)" onmouseleave="onPlayerNameLeave()" style="color:var(--ink); text-decoration:none; border-bottom:1px dashed var(--ink-faint);">${escapeHtml(player.full_name)}</a>`;
     html += `<span class="team-label">${escapeHtml(player.team)}</span>`;
     html += `</div></td>`;
   }
@@ -1144,6 +1144,99 @@ function buildSparklineSVG(pts) {
     `<polyline points="${points}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>` +
     `<circle cx="${lastX}" cy="${lastY}" r="2" fill="${color}"/>` +
     `</svg>`;
+}
+
+// ─── Player Hover Card ─────────────────────────────────────────
+let _hoverTimer = null;
+let _hoverCardVisible = false;
+
+function showHoverCard(playerId, anchorEl) {
+  const card = document.getElementById("playerHoverCard");
+  if (!card) return;
+
+  // Find player in state.items
+  const player = state.items.find(p => p.player_id === playerId);
+  if (!player) return;
+
+  const pos = (player.position || "").toUpperCase();
+  const posColors = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
+  const posColor = posColors[pos] || "var(--ink)";
+
+  // Build card HTML
+  let html = '<div class="hover-card-header">';
+  if (player.headshot_url) {
+    html += `<img class="hover-card-headshot" src="${escapeAttr(player.headshot_url)}" alt="" onerror="this.style.display='none';">`;
+  }
+  html += '<div>';
+  html += `<div class="hover-card-name">${escapeHtml(player.full_name || "")}</div>`;
+  html += `<div class="hover-card-meta">`;
+  html += `<span class="pos-badge ${posClass(pos)}" style="font-size:9px; padding:1px 5px;">${pos}</span> `;
+  html += `${escapeHtml(player.team || "FA")}`;
+  if (player.age) html += ` · ${Math.floor(player.age)}y`;
+  if (player.games) html += ` · ${player.games}gp`;
+  html += `</div></div></div>`;
+
+  // Stats row
+  const ppg = player.ppg != null ? player.ppg.toFixed(1) : "—";
+  const fpts = player.fantasy_points_ppr != null ? player.fantasy_points_ppr.toFixed(0) : "—";
+  const dvs = player.dynasty_value != null ? player.dynasty_value.toFixed(1) : "—";
+  html += '<div class="hover-card-stats">';
+  html += `<div class="hover-card-stat"><div class="hover-card-stat-value">${ppg}</div><div class="hover-card-stat-label">PPG</div></div>`;
+  html += `<div class="hover-card-stat"><div class="hover-card-stat-value">${fpts}</div><div class="hover-card-stat-label">FPTS</div></div>`;
+  html += `<div class="hover-card-stat"><div class="hover-card-stat-value" style="color:${posColor}">${dvs}</div><div class="hover-card-stat-label">DVS</div></div>`;
+  html += '</div>';
+
+  // Sparkline (from cache)
+  const pts = _sparklineCache[playerId];
+  if (pts && pts.length > 1) {
+    html += '<div class="hover-card-sparkline">' + buildSparklineSVG(pts) + '</div>';
+  }
+
+  card.innerHTML = html;
+
+  // Position card near anchor
+  const rect = anchorEl.getBoundingClientRect();
+  let top = rect.bottom + 8;
+  let left = rect.left;
+
+  // Clamp to viewport
+  const cw = card.offsetWidth || 260;
+  const ch = card.offsetHeight || 160;
+  if (left + cw > window.innerWidth - 12) left = window.innerWidth - cw - 12;
+  if (left < 12) left = 12;
+  if (top + ch > window.innerHeight - 12) top = rect.top - ch - 8;
+
+  card.style.top = top + "px";
+  card.style.left = left + "px";
+  card.style.display = "block";
+  // Trigger reflow then add visible class for animation
+  card.offsetHeight;
+  card.classList.add("visible");
+  _hoverCardVisible = true;
+}
+
+function hideHoverCard() {
+  clearTimeout(_hoverTimer);
+  _hoverTimer = null;
+  const card = document.getElementById("playerHoverCard");
+  if (card) {
+    card.classList.remove("visible");
+    card.style.display = "none";
+  }
+  _hoverCardVisible = false;
+}
+
+function onPlayerNameEnter(playerId, el) {
+  clearTimeout(_hoverTimer);
+  _hoverTimer = setTimeout(function() {
+    showHoverCard(playerId, el);
+  }, 300);
+}
+
+function onPlayerNameLeave() {
+  clearTimeout(_hoverTimer);
+  _hoverTimer = null;
+  if (_hoverCardVisible) hideHoverCard();
 }
 
 function renderProspectTable() {
@@ -2904,6 +2997,7 @@ function renderRankingsPNG(players, posLabel, sortLabel) {
 
 async function openPlayerProfile(playerId) {
   if (!playerId) return;
+  hideHoverCard();
   const overlay = document.getElementById("profileOverlay");
   const content = document.getElementById("profileContent");
   overlay.classList.add("open");
