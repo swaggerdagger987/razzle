@@ -1526,7 +1526,6 @@
   .buysell-card-body { padding: 10px; }
   .buysell-stats { gap: 4px; }
   .buysell-column-note { display: none; }
-  .stk-pos-tab { padding: 5px 10px; font-size: 12px; }
   .scarcity-summary { grid-template-columns: 1fr 1fr; gap: 8px; }
   .scarcity-bar-name { min-width: 55px; max-width: 55px; }
 }
@@ -1926,10 +1925,7 @@
   .gt-sections { grid-template-columns: 1fr; }
   .gt-bar-cell { width: 50px; }
 }
-@media (max-width: 480px) {
-  .eff-pos-tab { padding: 5px 10px; font-size: 12px; }
-  .con-pos-tab { padding: 5px 10px; font-size: 12px; }
-}
+/* eff-pos-tab and con-pos-tab overrides removed — handled by shared .lp-pos-tab 375px rule */
 
 /* ===== WEEKLY SCORING HEATMAP ===== */
 .wh-container {
