@@ -1242,10 +1242,14 @@ def dynasty_rankings(season: int = 0, position: str = "", limit: int = 200):
 
 
 @app.get("/api/dynasty-history")
-def dynasty_history(position: str = "", limit: int = 20):
+def dynasty_history(position: str = "", limit: int = 20, players: str = ""):
     """Return dynasty value progression for top players across all seasons."""
     pos = position.strip().upper() if position else None
     limit = max(1, min(50, limit))
+    if players:
+        pids = [p.strip() for p in players.split(",") if p.strip()][:5]
+        if pids:
+            return live_data.fetch_dynasty_history(player_ids=pids)
     return live_data.fetch_dynasty_history(position=pos, limit=limit)
 
 

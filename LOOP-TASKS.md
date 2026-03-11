@@ -1,8 +1,35 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 43 (Mobile & Polish — New Features)
-## Phase 43: Mobile & Polish — New Features
+- Phase: 44 (Shareability & Player Comps)
+## Phase 44: Shareability & Player Comps
+**Exit Criterion**: Dynasty History view has PNG export. Trade Values custom weights persist in URL state. Dynasty History supports comparing 2+ selected players.
+
+- Task 1: PASS
+- Task 2: PASS
+- Task 3: PASS
+- Stage: COMPLETE
+- Next: Phase gate
+
+### Task 1: PNG export for Dynasty History view
+**Status**: PASS
+**Attempts**: 1
+**Acceptance**: Dynasty History view has a "Copy PNG" button that captures the history table as an image with razzle.lol watermark.
+**Result**: Added Export PNG button below history table. Uses html2canvas to capture .dh-wrap with 2x scale, adds razzle.lol watermark, downloads as PNG.
+
+### Task 2: Trade Values weight URL state
+**Status**: PASS
+**Attempts**: 1
+**Acceptance**: Moving Trade Values sliders updates URL params (?wp=60&wa=20&ws=20). Loading with those params restores weights. Shareable link reproduces the custom formula.
+**Result**: Weights read from URL params (wp/wa/ws) on init, sliders set from those values. updateWeights() writes params via history.replaceState. Default 50/30/20 removes params for clean URLs.
+
+### Task 3: Dynasty History player comparison
+**Status**: PASS
+**Attempts**: 1
+**Acceptance**: Dynasty History view has a player search to add specific players for comparison. Can select 2-5 players to show side-by-side value trajectories.
+**Result**: Added compare search bar above history table using quick-search API. Select players from dropdown to add (max 5). Clear button resets to default top-20. Backend accepts ?players=id1,id2 parameter. Dropdown styled with lp-search-list pattern.
+
+## Phase 43: Mobile & Polish — New Features (COMPLETE)
 **Exit Criterion**: Dynasty History table scrolls horizontally on mobile. Trade Values weight sliders stack vertically at 768px. View toggle buttons are touch-friendly. New CSS for history/weights has no layout breaks at 375px. Search bars on Rankings/Tiers/VORP work at mobile widths.
 
 - Task 1: PASS

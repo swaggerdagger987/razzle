@@ -260,7 +260,7 @@ def fetch_dynasty_rankings(season=None, position=None, limit=200):
     return _cached(f"fetch_dynasty_rankings:{season}:{position}:{limit}", lambda: _fetch_dynasty_rankings_uncached(season=season, position=position, limit=limit))
 
 
-def _fetch_dynasty_history_uncached(position=None, limit=20):
+def _fetch_dynasty_history_uncached(position=None, limit=20, player_ids=None):
     """Return dynasty value progression for top players across all seasons."""
     limit = max(1, min(50, limit))
     with get_db() as conn:
@@ -273,28 +273,38 @@ def _fetch_dynasty_history_uncached(position=None, limit=20):
 
         latest = available_seasons[-1]
 
-        # Get top players from latest season
-        pos_filter = ""
-        params = [latest]
-        if position and position.upper() in ("QB", "RB", "WR", "TE"):
-            pos_filter = "AND p.position = ?"
-            params.append(position.upper())
+        if player_ids:
+            # Fetch specific players by ID
+            placeholders = ",".join(["?"] * len(player_ids))
+            top_players = conn.execute(f"""
+                SELECT p.player_id, p.full_name, p.position, p.team, p.headshot_url,
+                       0 as ppg
+                FROM players p
+                WHERE p.player_id IN ({placeholders})
+            """, player_ids).fetchall()
+        else:
+            # Get top players from latest season
+            pos_filter = ""
+            params = [latest]
+            if position and position.upper() in ("QB", "RB", "WR", "TE"):
+                pos_filter = "AND p.position = ?"
+                params.append(position.upper())
 
-        top_query = f"""
-            SELECT p.player_id, p.full_name, p.position, p.team, p.headshot_url,
-                   SUM(s.fantasy_points_ppr) / COUNT(DISTINCT s.week) as ppg
-            FROM players p
-            JOIN player_week_stats s ON s.player_id = p.player_id AND s.season = ?
-            WHERE p.position IN ('QB','RB','WR','TE')
-              AND p.fantasy_relevant = 1
-              {pos_filter}
-            GROUP BY p.player_id
-            HAVING COUNT(DISTINCT s.week) >= 3
-            ORDER BY ppg DESC
-            LIMIT ?
-        """
-        params.append(limit)
-        top_players = conn.execute(top_query, params).fetchall()
+            top_query = f"""
+                SELECT p.player_id, p.full_name, p.position, p.team, p.headshot_url,
+                       SUM(s.fantasy_points_ppr) / COUNT(DISTINCT s.week) as ppg
+                FROM players p
+                JOIN player_week_stats s ON s.player_id = p.player_id AND s.season = ?
+                WHERE p.position IN ('QB','RB','WR','TE')
+                  AND p.fantasy_relevant = 1
+                  {pos_filter}
+                GROUP BY p.player_id
+                HAVING COUNT(DISTINCT s.week) >= 3
+                ORDER BY ppg DESC
+                LIMIT ?
+            """
+            params.append(limit)
+            top_players = conn.execute(top_query, params).fetchall()
 
         player_ids = [r[0] for r in top_players]
         if not player_ids:
@@ -354,7 +364,10 @@ def _fetch_dynasty_history_uncached(position=None, limit=20):
         }
 
 
-def fetch_dynasty_history(position=None, limit=20):
+def fetch_dynasty_history(position=None, limit=20, player_ids=None):
+    if player_ids:
+        key = f"fetch_dynasty_history:ids:{','.join(sorted(player_ids[:5]))}"
+        return _cached(key, lambda: _fetch_dynasty_history_uncached(player_ids=player_ids))
     return _cached(f"fetch_dynasty_history:{position}:{limit}", lambda: _fetch_dynasty_history_uncached(position=position, limit=limit))
 
 

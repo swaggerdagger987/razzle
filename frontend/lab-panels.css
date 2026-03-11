@@ -340,6 +340,41 @@
 .dh-val.low { background: var(--orange-light, #fde8d8); color: var(--accent); }
 .dh-val.rep { background: var(--red-light); color: #a82d3a; }
 .dh-val.empty { color: var(--ink-light); background: none; }
+.dh-compare-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.dh-compare-bar .lp-search-wrap { position: relative; flex: 1; min-width: 200px; }
+.dh-compare-bar .lp-search { width: 100%; }
+.dh-compare-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: var(--bg-card);
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  box-shadow: 4px 4px 0 var(--ink);
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 2px;
+}
+.dh-compare-results > div {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  border-bottom: 2px dashed var(--border-light);
+}
+.dh-compare-results > div:last-child { border-bottom: none; }
+.dh-compare-results > div:hover { background: rgba(217,119,87,0.08); }
 
 /* ===== TIERS PANEL ===== */
 .tl-tier {

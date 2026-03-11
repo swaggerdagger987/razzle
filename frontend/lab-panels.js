@@ -71,6 +71,7 @@
     var state = { position: '', data: null, view: 'rankings', historyData: null };
     var searchQuery = '';
     var seasonsLoaded = false;
+    var compareIds = [];
 
     el.innerHTML =
       '<div class="lp-page">' +
@@ -141,7 +142,11 @@
       content.innerHTML = '<div class="lp-loading">pulling historical film...</div>';
 
       var url = '/api/dynasty-history?limit=20';
-      if (state.position) url += '&position=' + encodeURIComponent(state.position);
+      if (compareIds.length) {
+        url = '/api/dynasty-history?players=' + encodeURIComponent(compareIds.join(','));
+      } else if (state.position) {
+        url += '&position=' + encodeURIComponent(state.position);
+      }
 
       fetch(url).then(function(r) {
         if (!r.ok) throw new Error('API error');
@@ -157,12 +162,23 @@
     function renderHistory(data, content) {
       var players = filterBySearch(data.players || []);
       var seasons = data.seasons || [];
+
+      // Compare player search UI
+      var html = '<div class="dh-compare-bar">';
+      html += '<div class="lp-search-wrap"><input class="lp-search" type="text" id="lp-dh-compare-input" placeholder="add player to compare..."></div>';
+      if (compareIds.length) {
+        html += '<button class="lp-btn-small" id="lp-dh-clear-compare">clear comparison</button>';
+      }
+      html += '</div>';
+
       if (!players.length || !seasons.length) {
-        content.innerHTML = '<div class="lp-empty">' + (searchQuery ? 'no players match "' + escapeHtml(searchQuery) + '"' : 'no history data') + '</div>';
+        html += '<div class="lp-empty">' + (searchQuery ? 'no players match "' + escapeHtml(searchQuery) + '"' : 'no history data') + '</div>';
+        content.innerHTML = html;
+        setupCompareSearch(content);
         return;
       }
 
-      var html = '<div class="dh-wrap">';
+      html += '<div class="dh-wrap">';
       html += '<table class="dh-table"><thead><tr>';
       html += '<th>Player</th>';
       seasons.forEach(function(s) { html += '<th class="center">' + s + '</th>'; });
@@ -212,13 +228,82 @@
       });
 
       html += '</tbody></table></div>';
+      html += '<div style="text-align:center;margin-top:12px"><button class="lp-btn-small" id="lp-dh-export">Export PNG</button></div>';
       content.innerHTML = html;
+
+      var exportBtn = content.querySelector('#lp-dh-export');
+      if (exportBtn) {
+        exportBtn.addEventListener('click', function() {
+          var wrap = content.querySelector('.dh-wrap');
+          if (wrap && typeof html2canvas !== 'undefined') {
+            html2canvas(wrap, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+              var ctx = canvas.getContext('2d');
+              ctx.font = '20px sans-serif';
+              ctx.fillStyle = 'rgba(0,0,0,0.12)';
+              ctx.fillText('razzle.lol', canvas.width - 140, canvas.height - 14);
+              var link = document.createElement('a');
+              link.download = 'razzle-dynasty-history.png';
+              link.href = canvas.toDataURL();
+              link.click();
+            });
+          }
+        });
+      }
 
       content.querySelectorAll('tr[data-pid]').forEach(function(tr) {
         tr.addEventListener('click', function() {
           var pid = tr.getAttribute('data-pid');
           if (pid) window.location.href = '/player/' + encodeURIComponent(pid);
         });
+      });
+      setupCompareSearch(content);
+    }
+
+    function setupCompareSearch(content) {
+      var input = content.querySelector('#lp-dh-compare-input');
+      var clearBtn = content.querySelector('#lp-dh-clear-compare');
+      if (clearBtn) {
+        clearBtn.addEventListener('click', function() {
+          compareIds = [];
+          loadHistory();
+        });
+      }
+      if (!input) return;
+      var timer;
+      input.addEventListener('input', function() {
+        clearTimeout(timer);
+        var self = this;
+        timer = setTimeout(function() {
+          var q = self.value.trim();
+          if (q.length < 2) {
+            var list = content.querySelector('.dh-compare-results');
+            if (list) list.remove();
+            return;
+          }
+          fetch('/api/players/quick-search?q=' + encodeURIComponent(q) + '&limit=5').then(function(r) {
+            return r.json();
+          }).then(function(results) {
+            var existing = content.querySelector('.dh-compare-results');
+            if (existing) existing.remove();
+            if (!results.length) return;
+            var dropdown = document.createElement('div');
+            dropdown.className = 'dh-compare-results lp-search-list';
+            dropdown.style.display = 'block';
+            results.forEach(function(p) {
+              var row = document.createElement('div');
+              row.innerHTML = '<span class="rankings-pos-badge ' + (p.position || '').toLowerCase() + '">' + escapeHtml(p.position || '') + '</span> ' +
+                escapeHtml(p.full_name || '') + ' <span style="color:var(--ink-light);font-size:10px">' + escapeHtml(p.team || '') + '</span>';
+              row.addEventListener('click', function() {
+                if (compareIds.indexOf(p.player_id) === -1 && compareIds.length < 5) {
+                  compareIds.push(p.player_id);
+                  loadHistory();
+                }
+              });
+              dropdown.appendChild(row);
+            });
+            input.parentNode.appendChild(dropdown);
+          });
+        }, 250);
       });
     }
 
@@ -441,7 +526,14 @@
     var currentData = null;
     var searchQuery = '';
     var seasonsLoaded = false;
-    var weights = { production: 50, age: 30, scarcity: 20 };
+
+    // Read weights from URL or use defaults
+    var urlParams = new URLSearchParams(window.location.search);
+    var weights = {
+      production: parseInt(urlParams.get('wp'), 10) || 50,
+      age: parseInt(urlParams.get('wa'), 10) || 30,
+      scarcity: parseInt(urlParams.get('ws'), 10) || 20
+    };
 
     var TIER_LABELS = {
       1: 'Elite', 2: 'Blue Chip', 3: 'Premium', 4: 'Solid',
@@ -491,6 +583,14 @@
       '</div>';
 
     var seasonSel = el.querySelector('#lp-tv-season');
+
+    // Set slider initial values from URL params
+    el.querySelector('#lp-tv-w-prod').value = weights.production;
+    el.querySelector('#lp-tv-w-age').value = weights.age;
+    el.querySelector('#lp-tv-w-scar').value = weights.scarcity;
+    el.querySelector('#lp-tv-w-prod-val').textContent = weights.production;
+    el.querySelector('#lp-tv-w-age-val').textContent = weights.age;
+    el.querySelector('#lp-tv-w-scar-val').textContent = weights.scarcity;
 
     function filterBySearch(players) {
       if (!searchQuery) return players;
@@ -650,6 +750,16 @@
       el.querySelector('#lp-tv-w-prod-val').textContent = weights.production;
       el.querySelector('#lp-tv-w-age-val').textContent = weights.age;
       el.querySelector('#lp-tv-w-scar-val').textContent = weights.scarcity;
+      // Persist weights in URL for sharing
+      var p = new URLSearchParams(window.location.search);
+      if (weights.production !== 50 || weights.age !== 30 || weights.scarcity !== 20) {
+        p.set('wp', weights.production);
+        p.set('wa', weights.age);
+        p.set('ws', weights.scarcity);
+      } else {
+        p.delete('wp'); p.delete('wa'); p.delete('ws');
+      }
+      history.replaceState(null, '', '?' + p.toString());
       if (currentData) render(currentData);
     }
 
