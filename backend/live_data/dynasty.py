@@ -162,14 +162,20 @@ def fetch_roster_value(player_ids):
     _key = "fetch_roster_value:" + ":".join(sorted(str(x) for x in player_ids))
     return _cached(_key, lambda: _fetch_roster_value_uncached(player_ids=player_ids))
 
-def _fetch_dynasty_rankings_uncached(position=None, limit=200):
+def _fetch_dynasty_rankings_uncached(season=None, position=None, limit=200):
     """Return top dynasty-relevant players ranked by dynasty value with tiers."""
     limit = max(1, min(300, limit))
     with get_db() as conn:
 
-        # Get latest season
-        row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-        latest_season = row[0] if row and row[0] else _current_nfl_season()
+        available_seasons = [r[0] for r in conn.execute(
+            "SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC"
+        ).fetchall()]
+
+        if not season:
+            row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+            latest_season = row[0] if row and row[0] else _current_nfl_season()
+        else:
+            latest_season = season
 
         pos_filter = ""
         params = [latest_season]
@@ -241,6 +247,7 @@ def _fetch_dynasty_rankings_uncached(position=None, limit=200):
             "tiers": [tiers[t] for t in sorted(tiers.keys())],
             "total": len(results),
             "season": latest_season,
+            "available_seasons": available_seasons,
         }
 
 
@@ -249,8 +256,8 @@ def _fetch_dynasty_rankings_uncached(position=None, limit=200):
 # ---------------------------------------------------------------------------
 
 
-def fetch_dynasty_rankings(position=None, limit=200):
-    return _cached(f"fetch_dynasty_rankings:{position}:{limit}", lambda: _fetch_dynasty_rankings_uncached(position=position, limit=limit))
+def fetch_dynasty_rankings(season=None, position=None, limit=200):
+    return _cached(f"fetch_dynasty_rankings:{season}:{position}:{limit}", lambda: _fetch_dynasty_rankings_uncached(season=season, position=position, limit=limit))
 
 def _fetch_trade_value_chart_uncached(season=None, position=None, limit=150):
     """Return all fantasy-relevant players ranked by trade value with component breakdown."""
@@ -1045,11 +1052,15 @@ def _fetch_tier_list_uncached(season=None, position=None):
         tiers = {t[1]: {"tier": t[1], "label": t[2], "min_tv": t[0], "players": []} for t in _TIER_BREAKS}
         tier_order = [t[1] for t in _TIER_BREAKS]
 
+        # Adjust age for historical seasons: DB stores current age, so subtract years elapsed
+        current_year = _current_nfl_season()
+        age_offset = current_year - season if season and season < current_year else 0
+
         for r in rows:
             pos = r[2] or "WR"
             games = r[7] or 1
             ppg = round((r[6] or 0) / games, 2)
-            age = r[4] or 25
+            age = (r[4] or 25) - age_offset
             tv = compute_trade_value(ppg, age, pos)
 
             tier_key = "F"

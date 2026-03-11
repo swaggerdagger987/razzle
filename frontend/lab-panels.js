@@ -69,6 +69,8 @@
   defs.push({ name: 'rankings', render: function(el) {
     if (showNflOnlyMsg(el, 'rankings', 'Dynasty Rankings', 'who\'s worth the most in your league')) return;
     var state = { position: '', data: null };
+    var searchQuery = '';
+    var seasonsLoaded = false;
 
     el.innerHTML =
       '<div class="lp-page">' +
@@ -83,23 +85,47 @@
           '<button class="lp-pos-tab" data-pos="WR">WR</button>' +
           '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
           '</div>' +
+          '<select class="lp-select" id="lp-rankings-season"></select>' +
+          '<input class="lp-search" type="text" id="lp-rankings-search" placeholder="search player...">' +
         '</div>' +
         '<div id="lp-rankings-content"><div class="lp-loading">pulling film on dynasty values...</div></div>' +
       '</div>';
 
-    function loadRankings(pos) {
-      state.position = pos || '';
+    var seasonSel = el.querySelector('#lp-rankings-season');
+
+    function filterBySearch(players) {
+      if (!searchQuery) return players;
+      var q = searchQuery.toLowerCase();
+      return players.filter(function(p) {
+        return (p.full_name || '').toLowerCase().indexOf(q) !== -1 ||
+               (p.team || '').toLowerCase().indexOf(q) !== -1;
+      });
+    }
+
+    function loadRankings() {
       var content = el.querySelector('#lp-rankings-content');
       content.innerHTML = '<div class="lp-loading">pulling film on dynasty values...</div>';
 
       var url = '/api/dynasty-rankings?limit=200';
-      if (pos) url += '&position=' + encodeURIComponent(pos);
+      if (state.position) url += '&position=' + encodeURIComponent(state.position);
+      var season = seasonSel.value || '';
+      if (season) url += '&season=' + season;
 
       fetch(url).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
         state.data = data;
+        if (!seasonsLoaded && data.available_seasons) {
+          seasonsLoaded = true;
+          seasonSel.innerHTML = '';
+          data.available_seasons.forEach(function(s) {
+            var opt = document.createElement('option');
+            opt.value = s; opt.textContent = s;
+            seasonSel.appendChild(opt);
+          });
+          seasonSel.value = data.season;
+        }
         renderTiers(data.tiers || [], content);
       }).catch(function() {
         content.innerHTML = '<div class="lp-error">could not load rankings</div>';
@@ -115,14 +141,16 @@
       var rank = 1;
       for (var i = 0; i < tiers.length; i++) {
         var tier = tiers[i];
+        var filtered = filterBySearch(tier.players);
+        if (!filtered.length) continue;
         html += '<div class="rankings-tier tier-' + tier.tier + '">';
         html += '<div class="rankings-tier-header">';
         html += '<div class="rankings-tier-badge">Tier ' + tier.tier + '</div>';
         html += '<div class="rankings-tier-label">' + escapeHtml(tier.label) + '</div>';
-        html += '<div class="rankings-tier-count">' + tier.players.length + ' players</div>';
+        html += '<div class="rankings-tier-count">' + filtered.length + ' players</div>';
         html += '</div><div class="rankings-grid">';
-        for (var j = 0; j < tier.players.length; j++) {
-          var p = tier.players[j];
+        for (var j = 0; j < filtered.length; j++) {
+          var p = filtered[j];
           var posLc = (p.position || '').toLowerCase();
           var ageCls = !p.age ? '' : p.age <= 25 ? 'young' : p.age <= 28 ? 'prime' : 'aging';
           html += '<div class="rankings-card" data-pid="' + escapeAttr(p.player_id) + '">';
@@ -143,6 +171,10 @@
         }
         html += '</div></div>';
       }
+      if (!html) {
+        content.innerHTML = '<div class="lp-empty">no players match "' + escapeHtml(searchQuery) + '"</div>';
+        return;
+      }
       content.innerHTML = html;
       content.querySelectorAll('.rankings-card').forEach(function(card) {
         card.addEventListener('click', function() {
@@ -155,18 +187,26 @@
     el.querySelector('#lp-rankings-filters').addEventListener('click', function(e) {
       var btn = e.target.closest('.lp-pos-tab');
       if (!btn) return;
-      el.querySelectorAll('.lp-pos-tab').forEach(function(b) { b.classList.remove('active'); });
+      el.querySelectorAll('#lp-rankings-filters .lp-pos-tab').forEach(function(b) { b.classList.remove('active'); });
       btn.classList.add('active');
-      loadRankings(btn.getAttribute('data-pos'));
+      state.position = btn.getAttribute('data-pos') || '';
+      loadRankings();
+    });
+    seasonSel.addEventListener('change', function() { loadRankings(); });
+    el.querySelector('#lp-rankings-search').addEventListener('input', function(e) {
+      searchQuery = e.target.value.trim();
+      if (state.data) renderTiers(state.data.tiers || [], el.querySelector('#lp-rankings-content'));
     });
 
-    loadRankings('');
+    loadRankings();
   }});
 
   // ─── 2. TIERS ─────────────────────────────────────────────────
   defs.push({ name: 'tiers', render: function(el) {
     if (showNflOnlyMsg(el, 'tiers', 'Dynasty Tiers', 'S-tier to F-tier dynasty assets')) return;
     var state = { season: 0, position: '' };
+    var searchQuery = '';
+    var currentData = null;
 
     el.innerHTML =
       '<div class="lp-page">' +
@@ -174,7 +214,6 @@
         '<div class="lp-subtitle">who\'s untouchable and who\'s getting cut</div>' +
         '<div class="lp-meta" id="lp-tl-meta"></div></div>' +
         '<div class="lp-controls">' +
-          '<select class="lp-select" id="lp-tl-season"></select>' +
           '<div class="lp-pos-tabs" id="lp-tl-pos">' +
             '<button class="lp-pos-tab active" data-pos="">All</button>' +
             '<button class="lp-pos-tab" data-pos="QB">QB</button>' +
@@ -182,12 +221,23 @@
             '<button class="lp-pos-tab" data-pos="WR">WR</button>' +
             '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
           '</div>' +
+          '<select class="lp-select" id="lp-tl-season"></select>' +
+          '<input class="lp-search" type="text" id="lp-tl-search" placeholder="search player...">' +
         '</div>' +
         '<div id="lp-tl-tiers"><div class="lp-loading">pulling film...</div></div>' +
       '</div>';
 
     var seasonSel = el.querySelector('#lp-tl-season');
     var seasonsLoaded = false;
+
+    function filterBySearch(players) {
+      if (!searchQuery) return players;
+      var q = searchQuery.toLowerCase();
+      return players.filter(function(p) {
+        return (p.full_name || '').toLowerCase().indexOf(q) !== -1 ||
+               (p.team || '').toLowerCase().indexOf(q) !== -1;
+      });
+    }
 
     function fetchTiers() {
       var tiersEl = el.querySelector('#lp-tl-tiers');
@@ -201,6 +251,7 @@
         if (!r.ok) throw new Error('HTTP ' + r.status);
         return r.json();
       }).then(function(data) {
+        currentData = data;
         if (!seasonsLoaded && data.available_seasons) {
           seasonsLoaded = true;
           seasonSel.innerHTML = '';
@@ -220,17 +271,20 @@
 
     function renderTiers(tiers, container) {
       var html = '';
+      var anyVisible = false;
       tiers.forEach(function(tier) {
+        var filtered = filterBySearch(tier.players || []);
         html += '<div class="tl-tier">';
         html += '<div class="tl-tier-label ' + escapeHtml(tier.tier) + '">';
         html += '<div class="tl-tier-letter">' + escapeHtml(tier.tier) + '</div>';
-        html += '<div class="tl-tier-count">' + tier.players.length + '</div>';
+        html += '<div class="tl-tier-count">' + filtered.length + '</div>';
         html += '<div class="tl-tier-desc">' + escapeHtml(tier.label || '') + '</div>';
         html += '</div><div class="tl-tier-players">';
-        if (!tier.players.length) {
+        if (!filtered.length) {
           html += '<span class="tl-empty-tier">no players in this tier</span>';
         } else {
-          tier.players.forEach(function(p) {
+          anyVisible = true;
+          filtered.forEach(function(p) {
             html += '<div class="tl-player-chip">';
             html += '<span class="tl-chip-pos ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span>';
             html += '<span class="tl-chip-name">' + escapeHtml(p.full_name) + '</span>';
@@ -240,6 +294,10 @@
         }
         html += '</div></div>';
       });
+      if (searchQuery && !anyVisible) {
+        container.innerHTML = '<div class="lp-empty">no players match "' + escapeHtml(searchQuery) + '"</div>';
+        return;
+      }
       container.innerHTML = html;
     }
 
@@ -254,6 +312,10 @@
       tab.classList.add('active');
       state.position = tab.getAttribute('data-pos');
       fetchTiers();
+    });
+    el.querySelector('#lp-tl-search').addEventListener('input', function(e) {
+      searchQuery = e.target.value.trim();
+      if (currentData) renderTiers(currentData.tiers || [], el.querySelector('#lp-tl-tiers'));
     });
 
     fetchTiers();

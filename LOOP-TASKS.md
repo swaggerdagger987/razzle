@@ -6,11 +6,11 @@
 **Exit Criterion**: VORP has player search. Dynasty Rankings/Trade Values/VORP/Tiers share consistent layout. Trade Values has adjustable formula weights. Dynasty Rankings shows historical value progression.
 
 - Task 1: PASS
-- Task 2: PENDING
+- Task 2: PASS
 - Task 3: PENDING
 - Task 4: PENDING
 - Stage: IN PROGRESS
-- Next: Task 2
+- Next: Task 3
 
 ### Task 1: Add player search to VORP panel
 **Status**: PASS
@@ -19,9 +19,10 @@
 **Result**: Added searchQuery state, lp-search input, filterBySearch() function matching Trade Values pattern (name+team), client-side filtering in renderVorp, input event listener.
 
 ### Task 2: Standardize all ranking/value panel layouts
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 **Acceptance**: Dynasty Rankings, Trade Values, VORP, Tiers all share: (1) position filter chips at top, (2) search bar, (3) sortable table with consistent column widths, (4) same card/container styling.
+**Result**: Added search bar to Dynasty Rankings and Tiers. Added season selector to Dynasty Rankings (was missing). Standardized controls order across all 4 panels: pos tabs → season select → search input. Added available_seasons + season param to dynasty rankings backend. All 4 panels now share: lp-page container, lp-header, lp-controls with pos tabs + season + search, filterBySearch pattern.
 
 ### Task 3: Add adjustable formula to Trade Values
 **Status**: PENDING

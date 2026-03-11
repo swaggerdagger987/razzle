@@ -1234,11 +1234,11 @@ async def roster_value(request: Request):
 # ---------------------------------------------------------------------------
 
 @app.get("/api/dynasty-rankings")
-def dynasty_rankings(position: str = "", limit: int = 200):
+def dynasty_rankings(season: int = 0, position: str = "", limit: int = 200):
     """Return tiered dynasty rankings for all fantasy-relevant players."""
     pos = position.strip().upper() if position else None
     limit = max(1, min(300, limit))
-    return live_data.fetch_dynasty_rankings(position=pos, limit=limit)
+    return live_data.fetch_dynasty_rankings(season=season or None, position=pos, limit=limit)
 
 
 @app.get("/api/stat-leaders")
