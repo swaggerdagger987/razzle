@@ -1,5 +1,17 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 43 — Mobile & Polish — New Features (COMPLETE)
+
+**Exit Criterion MET**: Dynasty History table scrolls horizontally on mobile. Weight sliders stack vertically at 768px. View toggle buttons are 44px touch targets. Search bars have 44px height on mobile. No layout breaks at 375px.
+
+### Phase 43 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Dynasty History mobile | DONE | dh-wrap overflow-x:auto, compact cells, 44px view toggle |
+| 2 | Trade Values weight sliders mobile | DONE | Stacked layout, full-width ranges, kept visible at 480px |
+| 3 | Search bars mobile | DONE | 44px min-height, 14px font-size, flex-wrap handles stacking |
+
 ## Previous Phase: Phase 42 — UX Consistency & Features (COMPLETE)
 
 **Exit Criterion MET**: VORP has player search. Dynasty Rankings/Trade Values/VORP/Tiers share consistent layout (pos tabs → season → search). Trade Values has adjustable formula weights. Dynasty Rankings shows historical value progression.
