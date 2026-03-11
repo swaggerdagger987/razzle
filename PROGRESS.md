@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 94 — Quick Compare Strip (COMPLETE)
+
+**Exit Criterion MET**: Inline stat comparison in bulk bar when 2 players selected. 8 key stats, winner in green.
+
+### Phase 94 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Quick compare strip | DONE | renderQuickCompare(), 8 stats, position-colored names, green winners |
+
 ## Previous Phase: Phase 93 — Visual Mode Cycle Shortcut (COMPLETE)
 
 **Exit Criterion MET**: V key cycles off → heat → percentile → bars → off. Buttons synced. localStorage persisted.

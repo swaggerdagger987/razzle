@@ -3218,9 +3218,22 @@ function updateSelectionUI() {
     if (count > 0) {
       bar.style.display = "";
       document.getElementById("bulkCount").textContent = count + " selected";
-      document.getElementById("bulkNames").textContent = state.selectedPlayers.map(p => p.full_name || p.player_name || "").join(", ");
+      var namesEl = document.getElementById("bulkNames");
+      namesEl.textContent = state.selectedPlayers.map(p => p.full_name || p.player_name || "").join(", ");
       var cmpBtn = document.getElementById("bulkCompareBtn");
       if (cmpBtn) { cmpBtn.disabled = count < 2; cmpBtn.style.opacity = count < 2 ? "0.5" : "1"; }
+      // Quick compare strip: show for exactly 2 selected players
+      var strip = document.getElementById("quickCompareStrip");
+      if (strip) {
+        if (count === 2) {
+          namesEl.style.display = "none";
+          strip.style.display = "";
+          renderQuickCompare(strip);
+        } else {
+          namesEl.style.display = "";
+          strip.style.display = "none";
+        }
+      }
     } else {
       bar.style.display = "none";
     }
@@ -3228,6 +3241,55 @@ function updateSelectionUI() {
   updateResultCount();
   // Persist Lab context for Situation Room agent bridge
   saveLabContext();
+}
+
+function renderQuickCompare(container) {
+  var sp = state.selectedPlayers;
+  if (sp.length !== 2) return;
+  var a = state.items.find(function(p) { return p.player_id === sp[0].player_id; });
+  var b = state.items.find(function(p) { return p.player_id === sp[1].player_id; });
+  if (!a || !b) { container.innerHTML = ""; return; }
+
+  // Key stats to compare
+  var stats = [
+    { key: "ppg", label: "PPG", dec: 1 },
+    { key: "games", label: "GP", dec: 0 },
+    { key: "fantasy_points_ppr", label: "FPts", dec: 0 },
+    { key: "receiving_yards", label: "RecYd", dec: 0 },
+    { key: "rushing_yards", label: "RshYd", dec: 0 },
+    { key: "touchdowns", label: "TD", dec: 0 },
+    { key: "targets", label: "Tgt", dec: 0 },
+    { key: "receptions", label: "Rec", dec: 0 },
+  ];
+
+  var nameA = escapeHtml(a.full_name || a.player_name || "");
+  var nameB = escapeHtml(b.full_name || b.player_name || "");
+  var posA = (a.position || "").toUpperCase();
+  var posB = (b.position || "").toUpperCase();
+  var posColors = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
+
+  var html = '<span style="font-weight:700; color:' + (posColors[posA] || "var(--ink)") + '; font-size:11px;">' + nameA + '</span>';
+  html += ' <span style="color:var(--ink-light); font-size:10px;">vs</span> ';
+  html += '<span style="font-weight:700; color:' + (posColors[posB] || "var(--ink)") + '; font-size:11px;">' + nameB + '</span>';
+  html += ' <span style="color:var(--ink-faint);">|</span> ';
+
+  for (var i = 0; i < stats.length; i++) {
+    var s = stats[i];
+    var va = parseFloat(a[s.key]);
+    var vb = parseFloat(b[s.key]);
+    if (isNaN(va) && isNaN(vb)) continue;
+    va = isNaN(va) ? 0 : va;
+    vb = isNaN(vb) ? 0 : vb;
+    var winner = va > vb ? "a" : vb > va ? "b" : "";
+    var colorA = winner === "a" ? "font-weight:700; color:var(--green);" : "";
+    var colorB = winner === "b" ? "font-weight:700; color:var(--green);" : "";
+    html += '<span style="font-size:10px; color:var(--ink-light); margin:0 2px;">' + s.label + '</span>';
+    html += '<span style="font-size:11px; ' + colorA + '">' + va.toFixed(s.dec) + '</span>';
+    html += '<span style="color:var(--ink-faint); font-size:9px;">/</span>';
+    html += '<span style="font-size:11px; ' + colorB + '">' + vb.toFixed(s.dec) + '</span> ';
+  }
+
+  container.innerHTML = html;
 }
 
 function clearSelection() {
