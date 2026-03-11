@@ -2422,6 +2422,17 @@ function renderActiveFilters() {
   }
 
   container.innerHTML = html;
+
+  // Update filter count badge on button
+  var filterBtn = document.querySelector(".add-filter-btn");
+  if (filterBtn) {
+    var count = state.filters.length + (state.minGP > 0 ? 1 : 0) + state.teams.length + (state.tagFilter ? 1 : 0);
+    var badge = filterBtn.querySelector(".filter-badge");
+    if (count > 0) {
+      if (!badge) { badge = document.createElement("span"); badge.className = "filter-badge"; filterBtn.appendChild(badge); }
+      badge.textContent = count;
+    } else if (badge) { badge.remove(); }
+  }
 }
 
 function resetAllFilters() {

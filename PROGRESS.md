@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 102 — Filter Count Badge (COMPLETE)
+
+**Exit Criterion MET**: Orange badge on filter button showing active filter count. 34 tests pass.
+
+### Phase 102 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Filter count badge | DONE | .filter-badge CSS, dynamic add/remove in renderActiveFilters() |
+
 ## Previous Phase: Phase 101 — Row Expand Weekly Breakdown (COMPLETE)
 
 **Exit Criterion MET**: Click rank # to expand weekly stats inline. Fetches /api/players/{id}/weeks. Color-coded FPts. NFL only. 34 tests pass.
