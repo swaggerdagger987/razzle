@@ -1,5 +1,18 @@
 # Razzle — Progress Tracker
 
+## Current Phase: Phase 111 — QA + UX Audit Fixes for Phases 106-110
+
+**Exit Criterion**: 1 HIGH (Enter preventDefault) + 3 MEDIUM (focus ring, filter restore, badge spacing) fixed.
+
+### Phase 111 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Enter key preventDefault | TODO | Prevent double-action on profile open |
+| 2 | Focus ring 1.5px → 2px | TODO | Match design system chunky borders |
+| 3 | Add filters to auto-restore | TODO | Save/restore state.filters in localStorage |
+| 4 | LOW polish (badge spacing) | TODO | CSS margin-left instead of &nbsp; |
+
 ## Previous Phase: Phase 110 — QA + UX Audit Fixes for Phases 106-109 (COMPLETE)
 
 **Exit Criterion MET**: 2 HIGH (column validation + scroll timing) fixed. 0 CRITICAL.
