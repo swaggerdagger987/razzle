@@ -667,6 +667,7 @@
   <ul class="nav-links">
     <li><a href="/" class="active">Home</a></li>
     <li><a href="/lab.html">The Lab</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
     <li><a href="/agents.html">Situation Room</a></li>
   </ul>
   <div class="nav-auth" id="nav-auth">
@@ -729,7 +730,7 @@
 <!-- DRAFT SEASON SHOWCASE -->
 <div class="draft-section">
   <div class="draft-inner">
-    <div class="section-label">Draft Season 2025</div>
+    <div class="section-label">Draft Season 2026</div>
     <h2 style="font-family:var(--font-display); font-size:28px; margin-bottom:8px;">Built for draft week.</h2>
     <p class="section-desc">The Lab has everything a dynasty manager needs to evaluate the incoming class. College production, athletic profiles, composite scoring, and cross-year analytics — all in one place.</p>
 
@@ -916,15 +917,14 @@
   <p style="margin-top:8px;"><a href="/pricing.html" style="font-family:var(--font-mono); font-size:12px; color:var(--orange);">See full feature comparison &rarr;</a></p>
 </div>
 
-<!-- WAITLIST -->
-<div class="waitlist" id="waitlist">
-  <h2>Get notified when The Situation Room opens</h2>
-  <p>personalized agent intelligence, your league context, starting at $9.99/mo</p>
-  <div class="waitlist-form">
-    <input type="email" class="input-chunky" id="waitlistEmail" placeholder="your@email.com">
-    <button class="btn-primary" onclick="submitWaitlist()">Notify Me</button>
+<!-- FINAL CTA -->
+<div class="waitlist" id="finalCta">
+  <h2>The Situation Room is live.</h2>
+  <p>six agents. full league context. starting at $9.99/mo.</p>
+  <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:16px;">
+    <a href="/agents.html" class="btn-hero btn-hero-primary" style="font-size:14px; padding:10px 24px;">Enter the Situation Room</a>
+    <a href="/lab.html" class="btn-hero btn-hero-secondary" style="font-size:14px; padding:10px 24px;">Explore The Lab (free)</a>
   </div>
-  <div id="waitlistMsg" style="margin-top:12px; font-family:var(--font-hand); font-size:18px; color:var(--green);"></div>
 </div>
 
 <!-- AD SLOT -->
@@ -934,132 +934,69 @@
 
 <!-- FOOTER -->
 <div class="site-footer">
-  <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-bottom:8px; font-family:var(--font-mono); font-size:12px;">
-    <a href="/" style="color:var(--ink-light); text-decoration:none;">Home</a>
-    <a href="/lab.html" style="color:var(--ink-light); text-decoration:none;">The Lab</a>
-    <a href="/tools.html" style="color:var(--ink-light); text-decoration:none;">Tools</a>
-    <a href="/rankings.html" style="color:var(--ink-light); text-decoration:none;">Rankings</a>
-    <a href="/leaders.html" style="color:var(--ink-light); text-decoration:none;">Leaders</a>
-    <a href="/prospects.html" style="color:var(--ink-light); text-decoration:none;">Prospects</a>
-    <a href="/scarcity.html" style="color:var(--ink-light); text-decoration:none;">Scarcity</a>
-    <a href="/breakouts.html" style="color:var(--ink-light); text-decoration:none;">Breakouts</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/buysell.html" style="color:var(--ink-light); text-decoration:none;">Buy/Sell</a>
-    <a href="/aging.html" style="color:var(--ink-light); text-decoration:none;">Aging</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/weekly.html" style="color:var(--ink-light); text-decoration:none;">Weekly</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/targets.html" style="color:var(--ink-light); text-decoration:none;">Targets</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/matchups.html" style="color:var(--ink-light); text-decoration:none;">Matchups</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/usage.html" style="color:var(--ink-light); text-decoration:none;">Usage</a>
-    <a href="/yoy.html" style="color:var(--ink-light); text-decoration:none;">YoY</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/airyards.html" style="color:var(--ink-light); text-decoration:none;">Air Yards</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/explorer.html" style="color:var(--ink-light); text-decoration:none;">Explorer</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/redzone.html" style="color:var(--ink-light); text-decoration:none;">Red Zone</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/efficiency.html" style="color:var(--ink-light); text-decoration:none;">Efficiency</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/consistency.html" style="color:var(--ink-light); text-decoration:none;">Consistency</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/schedule.html" style="color:var(--ink-light); text-decoration:none;">Schedule</a>
-    <a href="/stocks.html" style="color:var(--ink-light); text-decoration:none;">Stocks</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/opportunity.html" style="color:var(--ink-light); text-decoration:none;">Opportunity</a>
-    <a href="/reportcard.html" style="color:var(--ink-light); text-decoration:none;">Report Card</a>
-    <a href="/awards.html" style="color:var(--ink-light); text-decoration:none;">Awards</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/vorp.html" style="color:var(--ink-light); text-decoration:none;">VORP</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/tradevalues.html" style="color:var(--ink-light); text-decoration:none;">Trade Values</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/tradefinder.html" style="color:var(--ink-light); text-decoration:none;">Trade Finder</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/rosterbuilder.html" style="color:var(--ink-light); text-decoration:none;">Roster Builder</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/scoring.html" style="color:var(--ink-light); text-decoration:none;">Scoring</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/cheatsheet.html" style="color:var(--ink-light); text-decoration:none;">Cheat Sheet</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/auction.html" style="color:var(--ink-light); text-decoration:none;">Auction</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/dashboard.html" style="color:var(--ink-light); text-decoration:none;">Dashboard</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/tiers.html" style="color:var(--ink-light); text-decoration:none;">Tiers</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/archetypes.html" style="color:var(--ink-light); text-decoration:none;">Archetypes</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/career.html" style="color:var(--ink-light); text-decoration:none;">Career</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/career-compare.html" style="color:var(--ink-light); text-decoration:none;">Career Compare</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/draftclass.html" style="color:var(--ink-light); text-decoration:none;">Draft Class</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/percentiles.html" style="color:var(--ink-light); text-decoration:none;">Percentiles</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/regression.html" style="color:var(--ink-light); text-decoration:none;">TD Regression</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/strengths.html" style="color:var(--ink-light); text-decoration:none;">Strengths</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/breakdown.html" style="color:var(--ink-light); text-decoration:none;">Breakdown</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/weeklyleaders.html" style="color:var(--ink-light); text-decoration:none;">Week Leaders</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/pace.html" style="color:var(--ink-light); text-decoration:none;">Pace</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/gamelog.html" style="color:var(--ink-light); text-decoration:none;">Game Log</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/streaks.html" style="color:var(--ink-light); text-decoration:none;">Streaks</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/recap.html" style="color:var(--ink-light); text-decoration:none;">Recap</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/comptable.html" style="color:var(--ink-light); text-decoration:none;">Compare Table</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/records.html" style="color:var(--ink-light); text-decoration:none;">Records</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/waivers.html" style="color:var(--ink-light); text-decoration:none;">Waivers</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/playoffs.html" style="color:var(--ink-light); text-decoration:none;">Playoffs</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/fptsbreakdown.html" style="color:var(--ink-light); text-decoration:none;">FPTS Breakdown</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/handcuffs.html" style="color:var(--ink-light); text-decoration:none;">Handcuffs</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/weeklymvp.html" style="color:var(--ink-light); text-decoration:none;">Weekly MVP</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/stacks.html" style="color:var(--ink-light); text-decoration:none;">Stacks</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/advantage.html" style="color:var(--ink-light); text-decoration:none;">Advantage</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/tdregression.html" style="color:var(--ink-light); text-decoration:none;">TD Regression</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/dualthreat.html" style="color:var(--ink-light); text-decoration:none;">Dual-Threat</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/snapefficiency.html" style="color:var(--ink-light); text-decoration:none;">Snap Efficiency</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/garbagetime.html" style="color:var(--ink-light); text-decoration:none;">Garbage Time</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/seasonpace.html" style="color:var(--ink-light); text-decoration:none;">Season Pace</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/targetpremium.html" style="color:var(--ink-light); text-decoration:none;">Target Premium</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/workload.html" style="color:var(--ink-light); text-decoration:none;">Workload</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/drops.html" style="color:var(--ink-light); text-decoration:none;">Drops</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/successrate.html" style="color:var(--ink-light); text-decoration:none;">Success Rate</a>
-    <span style="margin:0 8px;">|</span>
-    <a href="/team/KC" style="color:var(--ink-light); text-decoration:none;">Teams</a>
-    <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none;">League Intel</a>
-    <a href="/agents.html" style="color:var(--ink-light); text-decoration:none;">Situation Room</a>
-    <a href="/about.html" style="color:var(--ink-light); text-decoration:none;">About</a>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:24px 16px; max-width:900px; margin:0 auto 24px; padding:0 24px; font-family:var(--font-mono); font-size:11px; text-align:left;">
+
+    <div>
+      <div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Razzle</div>
+      <a href="/" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Home</a>
+      <a href="/lab.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">The Lab</a>
+      <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">League Intel</a>
+      <a href="/agents.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Situation Room</a>
+      <a href="/pricing.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Pricing</a>
+      <a href="/about.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">About</a>
+    </div>
+
+    <div>
+      <div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Dynasty</div>
+      <a href="/rankings.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Rankings</a>
+      <a href="/tradevalues.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Trade Values</a>
+      <a href="/tradefinder.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Trade Finder</a>
+      <a href="/tiers.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Tiers</a>
+      <a href="/vorp.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">VORP</a>
+      <a href="/aging.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Aging Curves</a>
+      <a href="/buysell.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Buy/Sell</a>
+      <a href="/archetypes.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Archetypes</a>
+    </div>
+
+    <div>
+      <div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Weekly</div>
+      <a href="/weekly.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Weekly Stats</a>
+      <a href="/weeklyleaders.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Week Leaders</a>
+      <a href="/weeklymvp.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Weekly MVP</a>
+      <a href="/matchups.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Matchups</a>
+      <a href="/waivers.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Waivers</a>
+      <a href="/schedule.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Schedule</a>
+      <a href="/stocks.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Stocks</a>
+      <a href="/playoffs.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Playoffs</a>
+    </div>
+
+    <div>
+      <div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Analytics</div>
+      <a href="/targets.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Targets</a>
+      <a href="/usage.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Usage</a>
+      <a href="/efficiency.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Efficiency</a>
+      <a href="/airyards.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Air Yards</a>
+      <a href="/redzone.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Red Zone</a>
+      <a href="/consistency.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Consistency</a>
+      <a href="/breakouts.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Breakouts</a>
+      <a href="/opportunity.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Opportunity</a>
+    </div>
+
+    <div>
+      <div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Tools</div>
+      <a href="/explorer.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Stat Explorer</a>
+      <a href="/compare.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Compare</a>
+      <a href="/rosterbuilder.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Roster Builder</a>
+      <a href="/cheatsheet.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Cheat Sheet</a>
+      <a href="/auction.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Auction Values</a>
+      <a href="/dashboard.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Dashboard</a>
+      <a href="/prospects.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Prospects</a>
+      <a href="/team/KC" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Teams</a>
+    </div>
+
   </div>
-  <p><a href="/" style="color:var(--orange); text-decoration:none;">razzle.lol</a> — let's razzle dazzle em baby</p>
-  <p style="margin-top:6px;">powered by nflverse + sportsdataverse | made for Reddit | <a href="/about.html" style="color:var(--ink-light);">attribution &amp; privacy</a></p>
+  <p style="text-align:center;"><a href="/" style="color:var(--orange); text-decoration:none;">razzle.lol</a> — let's razzle dazzle em baby</p>
+  <p style="text-align:center; margin-top:6px;">powered by nflverse + sportsdataverse | made for Reddit | <a href="/about.html" style="color:var(--ink-light);">attribution &amp; privacy</a></p>
 </div>
 
 <script src="app.js"></script>
@@ -1323,7 +1260,7 @@ function renderFeaturedCards(data) {
   // Rookie Big Board
   if (data.rookie_board && data.rookie_board.length) {
     html += '<div class="featured-card">';
-    html += '<div class="featured-card-header"><h3>Rookie Big Board</h3><div class="featured-sub">' + (data.draft_year || '2025') + ' class</div></div>';
+    html += '<div class="featured-card-header"><h3>Rookie Big Board</h3><div class="featured-sub">' + (data.draft_year || '2026') + ' class</div></div>';
     html += '<div class="featured-card-body">';
     data.rookie_board.forEach(function(p, i) {
       html += '<div class="featured-row">';

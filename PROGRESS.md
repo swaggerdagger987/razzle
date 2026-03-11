@@ -1,5 +1,28 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 149 — Platform: Pre-Launch Polish — Navigation, Copy, and Conversion Funnel (COMPLETE)
+
+**Exit Criterion MET**: Six polish tasks shipped. (1) Outdated copy fixed: "Draft Season 2025" updated to "Draft Season 2026" on landing page, Rookie Big Board fallback year updated. Waitlist section (obsolete — Situation Room is live) replaced with dual-CTA "The Situation Room is live" section linking to agents.html and lab.html. (2) Navigation consistency: League Intel nav link added to all 74 HTML pages between The Lab and Situation Room, matching the North Star's 4-page architecture (home, lab, bureau, agents). League-intel.html updated with correct active class. Pricing link added to index.html footer. (3) Pricing page FAQ: 8-question FAQ section added below feature matrix covering BYOK, free trial, cancellation, Sleeper requirement, trial expiry, API key compatibility, format support, and free tier commitment. Razzle design system styling. (4) "Coming soon" copy removed from agents.html — replaced with accurate "upgrade to Pro for league-contextualized intelligence" hint for free users. (5) Footer modernization: massive wall of ~120 pipe-separated links reorganized into 5-column responsive CSS grid (Razzle, Dynasty, Weekly, Analytics, Tools) with orange category headers and clean link layout. (6) Sitemap verified complete: all 70 static HTML pages present including pricing.html, about.html, league-intel.html.
+
+### Phase 149 Tasks (Platform Loop)
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Fix Outdated Copy (2025 to 2026 + Waitlist Removal) | DONE | Draft Season 2026, waitlist replaced with live CTA, Big Board year |
+| 2 | Navigation Consistency (League Intel + Pricing) | DONE | 74 HTML files updated, active class fixed, footer pricing link |
+| 3 | Pricing Page FAQ Section | DONE | 8 questions, Razzle design system, dashed dividers |
+| 4 | Remove "Coming Soon" on Agents Page | DONE | Replaced with accurate upgrade hint |
+| 5 | Footer Modernization | DONE | 5-column responsive grid, categorized links, orange headers |
+| 6 | Sitemap Completeness Audit | DONE | All 70 static pages verified in sitemap |
+
+### Decisions Log
+- Waitlist replaced (not just removed) with active CTA section since Situation Room is now live
+- League Intel placed between Lab and Situation Room in nav to match the conversion funnel flow: explore data > connect league > unlock AI
+- FAQ answers written in Razzle voice: confident, slightly warm, assumes intelligence
+- Footer uses CSS grid with auto-fit minmax(160px, 1fr) for responsive column count — 5 columns on desktop, fewer on mobile
+- Kept footer link count manageable (~40 curated links) rather than listing all 70+ pages — focused on highest-traffic panels
+- No changes needed to backend sitemap — already comprehensive
+
 ## Previous Phase: Phase 148 — Platform: Cross-Agent Intelligence + Attribution (COMPLETE)
 
 **Exit Criterion MET**: Three features shipped plus verification. (1) Cross-agent trigger system in warroom.js: after runAllAgents completes, specialist outputs are scanned for 6 trigger patterns (injury_handcuff Medical->Scout, injury_trade Medical->Diplomat, low_odds_rebuild Quant->Diplomat, breakout_faab Scout->Diplomat, breakout_value Scout->Quant, panic_pattern Historian->Diplomat). Triggered follow-up agents run automatically with context from the source agent's output. Results render as "Follow-Up Intelligence" cards with cross-reference badges. Capped at 3 concurrent follow-ups to control LLM costs. (2) About/attribution page (about.html): data source cards for nflverse (MIT, NFL stats), sportsdataverse/cfbfastR (MIT, college stats), and Sleeper API (read-only league data). Privacy section, technology section, contact section. Linked from landing page footer. Added to sitemap. (3) Landing page demo verification: 55 briefings already exist across all 6 agents, exceeding the 50-60 target. (4) Agent persona verification: all 6 personas have 12 use cases each with format-aware logic covering redraft, dynasty, keeper, best ball, superflex, TE premium, and FAAB.
