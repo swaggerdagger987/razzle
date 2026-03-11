@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 63 — Screener Column Header Stats Tooltip (COMPLETE)
+
+**Exit Criterion MET**: Hovering numeric column headers shows tooltip with description + "Min: X  Avg: X  Max: X  (N players)" from displayed data. Non-numeric columns show only description. Works in all modes.
+
+### Phase 63 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Column header tooltip with stats | DONE | Min/avg/max computed from state.items, appended to title, escapeAttr for safety |
+
 ## Previous Phase: Phase 62 — Screener Status Bar Enhancement (COMPLETE)
 
 **Exit Criterion MET**: Result count area shows contextual status: "1-100 of 342 players · PPG ↓ · 2025 · WR" with range, sort column+direction, season, and active position filter. Compact middot-separated status line. Works in all modes.

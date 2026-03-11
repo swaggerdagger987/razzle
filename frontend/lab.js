@@ -1189,7 +1189,21 @@ function renderTableHead() {
     const lockCls = _getTierLockClass(key);
     const cls = [sortCls, lockCls].filter(Boolean).join(" ");
     const tierLabel = lockCls === "elite-locked" ? " [Elite]" : lockCls === "pro-locked" ? " [Pro]" : "";
-    const tip = col.tip ? ` title="${col.tip}${tierLabel}"` : (tierLabel ? ` title="${col.label}${tierLabel}"` : "");
+    // Build tooltip with optional column stats
+    let tipText = col.tip || col.label;
+    if (tierLabel) tipText += tierLabel;
+    if (!col.isText && !col.isSparkline && !col.isNotes && state.items.length > 0) {
+      const vals = [];
+      for (const p of state.items) { const v = parseFloat(p[key]); if (!isNaN(v)) vals.push(v); }
+      if (vals.length > 0) {
+        const dec = col.decimals != null ? col.decimals : 1;
+        const mn = Math.min(...vals).toFixed(dec);
+        const mx = Math.max(...vals).toFixed(dec);
+        const av = (vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(dec);
+        tipText += `\nMin: ${mn}  Avg: ${av}  Max: ${mx}  (${vals.length} players)`;
+      }
+    }
+    const tip = ` title="${escapeAttr(tipText)}"`;
     let extra = "";
     if (key === "dynasty_value") {
       extra = ` <span class="dvs-info" onclick="event.stopPropagation(); toggleDVSInfo()" title="Click for DVS methodology" style="cursor:help; font-size:10px; opacity:0.6;">&#9432;</span>`;
