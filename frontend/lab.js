@@ -799,6 +799,10 @@ const state = {
   selectedPlayers: [], // for compare/charts [{player_id, full_name, position, team}]
   heatColors: false, // percentile heat coloring toggle
   tagFilter: false, // show only tagged players
+  pinnedPlayers: (function() {
+    try { return JSON.parse(localStorage.getItem('razzle_pinned_players')) || []; }
+    catch(e) { return []; }
+  })(), // pinned player IDs for sticky comparison rows
   formulas: [], // user custom formulas [{name, components: [{stat, weight}]}]
   // College-specific state (includes prospect sub-view)
   collegeView: (function() {
@@ -1111,6 +1115,7 @@ function getColumnDef(key) {
 function renderNFLTable() {
   renderTableHead();
   renderTableBody();
+  renderPinnedRows();
   // Load sparklines async (non-blocking)
   if (getActiveColumns().includes("trend")) {
     loadScreenerSparklines();
@@ -1123,6 +1128,11 @@ function renderTableHead() {
 
   const nameKey = (isProspectView() || state.universe === "college") ? "player_name" : "full_name";
   let html = '<tr><th style="width:28px; text-align:center; padding:8px 4px;" title="Watchlist">&#9733;</th><th style="width:30px; text-align:center; padding:8px 6px;">&#9744;</th>';
+  if (state.universe === "nfl") {
+    const pinCount = state.pinnedPlayers.length;
+    const pinTitle = pinCount > 0 ? `${pinCount} pinned — click to clear` : "Pin players to top";
+    html += `<th style="width:28px; text-align:center; padding:8px 2px; cursor:${pinCount ? 'pointer' : 'default'}; font-size:12px;" title="${pinTitle}"${pinCount ? ' onclick="clearAllPins()"' : ''}>&#128204;${pinCount ? '<span style="font-size:9px; color:var(--orange); font-weight:700;"> ' + pinCount + '</span>' : ''}</th>`;
+  }
   html += `<th class="col-player" onclick="sortBy('${nameKey}')">Player`;
   if (state.sortKey === "full_name" || state.sortKey === "player_name") {
     html += state.sortDir === "asc" ? " &#9650;" : " &#9660;";
@@ -1174,6 +1184,12 @@ function buildRowHTML(player, cols, heatOn, pctData) {
     <input type="checkbox" ${selected ? "checked" : ""} onchange="togglePlayerSelect('${escapeAttr(player.player_id || player.player_name)}', this.checked)"
       style="accent-color:${state.universe === 'college' ? 'var(--pos-qb)' : 'var(--orange)'}; width:15px; height:15px; cursor:pointer;">
   </td>`;
+
+  // Pin icon (NFL only)
+  if (state.universe === "nfl") {
+    const pinned = isPlayerPinned(playKey);
+    html += `<td class="pin-cell" style="text-align:center; padding:7px 2px; cursor:pointer; font-size:13px;" onclick="event.stopPropagation(); togglePinPlayer('${escapeAttr(playKey)}')" title="${pinned ? 'Unpin player' : 'Pin to top'}">${pinned ? '<span style="color:var(--orange);">&#128204;</span>' : '<span class="pin-icon-faint">&#128204;</span>'}</td>`;
+  }
 
   if (state.universe === "college") {
     const cid = escapeAttr(player.player_id || "");
@@ -1267,7 +1283,7 @@ function renderVisibleRows() {
   const totalRows = _vscrollRows.length;
   const scrollTop = wrap.scrollTop;
   const viewHeight = wrap.clientHeight;
-  const colCount = getActiveColumns().length + 3; // +star +checkbox +player
+  const colCount = getActiveColumns().length + 3 + (state.universe === "nfl" ? 1 : 0); // +star +checkbox +player (+pin if NFL)
 
   // Calculate visible range
   const startRow = Math.max(0, Math.floor(scrollTop / VSCROLL_ROW_HEIGHT) - VSCROLL_BUFFER);
@@ -2083,6 +2099,7 @@ function saveStateToURL() {
   if (state.minGP > 0) params.set("min_gp", state.minGP);
   if (state.heatColors) params.set("heat", "1");
   if (state.tagFilter) params.set("tagged", "1");
+  if (state.pinnedPlayers.length) params.set("pins", state.pinnedPlayers.join(","));
 
   if (isProspectView()) {
     if (state.draftYear) params.set("draft_year", state.draftYear);
@@ -2148,6 +2165,10 @@ function loadStateFromURL() {
   }
   if (params.has("tagged")) {
     state.tagFilter = params.get("tagged") === "1";
+  }
+  if (params.has("pins")) {
+    state.pinnedPlayers = params.get("pins").split(",").filter(Boolean);
+    savePinnedPlayers();
   }
 
   if (isProspectView()) {
@@ -2383,6 +2404,78 @@ function renderSavedViewsList() {
       <button onclick="event.stopPropagation(); deleteSavedView('${v.id}')" style="background:none; border:2px solid var(--ink-faint); border-radius:6px; padding:4px 8px; cursor:pointer; font-family:var(--font-mono); font-size:11px; color:var(--ink-light);" title="Delete view">✕</button>
     </div>`;
   }).join("");
+}
+
+// ─── Pinned players (sticky comparison rows) ─────────────────────
+function savePinnedPlayers() {
+  try { localStorage.setItem('razzle_pinned_players', JSON.stringify(state.pinnedPlayers)); } catch(e) {}
+}
+
+function isPlayerPinned(playerId) {
+  return state.pinnedPlayers.includes(playerId);
+}
+
+function togglePinPlayer(playerId) {
+  if (state.universe !== "nfl") return;
+  if (isPlayerPinned(playerId)) {
+    state.pinnedPlayers = state.pinnedPlayers.filter(id => id !== playerId);
+  } else {
+    if (state.pinnedPlayers.length >= 5) return; // max 5 pinned
+    state.pinnedPlayers.push(playerId);
+  }
+  savePinnedPlayers();
+  renderPinnedRows();
+  renderVisibleRows(); // re-render to update pin icons
+  saveStateToURL();
+}
+
+function clearAllPins() {
+  state.pinnedPlayers = [];
+  savePinnedPlayers();
+  renderPinnedRows();
+  renderVisibleRows();
+  saveStateToURL();
+}
+
+function renderPinnedRows() {
+  const pinnedBody = document.getElementById("pinnedBody");
+  if (!pinnedBody) return;
+
+  // Only show pins in NFL mode
+  if (state.universe !== "nfl" || !state.pinnedPlayers.length) {
+    pinnedBody.innerHTML = "";
+    pinnedBody.style.display = "none";
+    return;
+  }
+
+  const cols = getActiveColumns();
+  const heatOn = state.heatColors;
+  const pctData = heatOn ? computePercentiles() : {};
+  let html = "";
+
+  for (const pid of state.pinnedPlayers) {
+    const player = state.items.find(p => p.player_id === pid);
+    if (!player) continue;
+    html += buildRowHTML(player, cols, heatOn, pctData);
+  }
+
+  if (!html) {
+    pinnedBody.innerHTML = "";
+    pinnedBody.style.display = "none";
+    return;
+  }
+
+  // Add a separator row at end
+  const colCount = cols.length + 3; // +star +checkbox +player
+  html += `<tr class="pinned-separator"><td colspan="${colCount}"></td></tr>`;
+
+  pinnedBody.innerHTML = html;
+  pinnedBody.style.display = "";
+
+  // Inject sparklines for pinned rows
+  if (cols.includes("trend") && Object.keys(_sparklineCache).length > 1) {
+    injectSparklines();
+  }
 }
 
 // ─── Player selection (for compare/charts) ───────────────────────
@@ -7507,6 +7600,14 @@ document.addEventListener("keydown", function(e) {
     toggleColumn("notes", !state.visibleColumns.includes("notes"));
     return;
   }
+
+  // P: clear all pinned players
+  if (e.key === "p" || e.key === "P") {
+    if (state.pinnedPlayers.length > 0) {
+      clearAllPins();
+    }
+    return;
+  }
 });
 
 // Shortcut reference overlay
@@ -7540,6 +7641,7 @@ function toggleShortcutRef() {
           ${shortcutRow("X", "Share / export")}
           ${shortcutRow("H", "Heat colors (percentiles)")}
           ${shortcutRow("N", "Toggle notes column")}
+          ${shortcutRow("P", "Clear pinned players")}
           ${shortcutRow("?", "This reference")}
         </tbody>
       </table>

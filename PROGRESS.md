@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 53 — Screener Player Pins (COMPLETE)
+
+**Exit Criterion MET**: Users can pin up to 5 players in the NFL screener to a sticky section at the top of the table. Pinned rows stay visible while scrolling. Pin icon in each row (orange when pinned, faint when not). Pins persist in localStorage. Pins serialize to URL for sharing. P key clears all pins. Pin column header shows count and click-to-clear. Hidden in college/prospect modes.
+
+### Phase 53 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Pinned player rows with sticky display | DONE | pinnedPlayers state (localStorage), togglePinPlayer, renderPinnedRows in separate tbody, 3px dashed orange separator, pin icon faint/orange, URL ?pins= param, P key shortcut |
+
 ## Previous Phase: Phase 52 — Screener Player Notes (COMPLETE)
 
 **Exit Criterion MET**: Users can add personal text notes (140 chars) to any player in the NFL screener. Notes appear in an optional "Notes" column with Caveat handwriting font. Notes visible in hover cards below stats. Notes persist in localStorage. Inline popup editor with Enter to save, Escape to close. N key toggles notes column. Empty cells show faint pencil icon on hover. Hidden in non-NFL modes.

@@ -916,6 +916,43 @@
     background: var(--orange-light);
   }
 
+  /* ─── Pinned rows ─── */
+  #pinnedBody {
+    position: sticky;
+    top: 0;
+    z-index: 8;
+  }
+  #pinnedBody tr {
+    background: var(--bg-card) !important;
+  }
+  #pinnedBody tr td {
+    background: var(--bg-card) !important;
+    border-bottom: 1px solid var(--ink-faint);
+  }
+  #pinnedBody tr td.col-player {
+    background: var(--bg-card) !important;
+  }
+  #pinnedBody tr:hover td {
+    background: var(--orange-light) !important;
+  }
+  .pinned-separator td {
+    height: 3px !important;
+    padding: 0 !important;
+    border-bottom: 3px dashed var(--orange) !important;
+    background: transparent !important;
+  }
+  .pin-icon-faint {
+    opacity: 0.15;
+    transition: opacity 0.15s;
+  }
+  .screener-table tr:hover .pin-icon-faint {
+    opacity: 0.5;
+  }
+  .pin-cell {
+    width: 28px;
+    min-width: 28px;
+  }
+
   .sparkline-cell {
     padding: 4px 6px !important;
     text-align: center;
@@ -2734,6 +2771,7 @@
   <div class="table-wrap">
     <table class="screener-table" id="screenerTable">
       <thead id="tableHead"></thead>
+      <tbody id="pinnedBody" style="display:none;"></tbody>
       <tbody id="tableBody"></tbody>
     </table>
     <div class="loading-msg" id="loadingMsg">pulling film...</div>

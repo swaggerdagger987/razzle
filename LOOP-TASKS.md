@@ -1,23 +1,16 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 52 (Screener Player Notes)
-## Phase 52: Screener Player Notes
-**Exit Criterion**: Users can add personal text notes to any player in the NFL screener. Notes appear in an optional "Notes" column. Notes visible in hover cards. Notes persist in localStorage. Notes editable inline via click. Hidden in non-NFL modes.
+- Phase: 53 (Screener Player Pins)
+## Phase 53: Screener Player Pins
+**Exit Criterion**: Users can pin up to 5 players in the NFL screener to a sticky section at the top of the table. Pinned rows stay visible while scrolling. Pin icon in each row (orange when pinned, faint when not). Pins persist in localStorage. Pins serialize to URL for sharing. P key clears all pins. Pin column header shows count. Hidden in college/prospect modes.
 
 - Task 1: PASS
-- Task 2: PASS
 - Stage: COMPLETE
 - Next: Phase gate
 
-### Task 1: Notes data model + inline editing UI
+### Task 1: Pinned player rows with sticky display
 **Status**: PASS
 **Attempts**: 1
-**Acceptance**: Clicking a notes cell in the screener opens an inline text input popup where users can type a note (max 140 chars). Notes stored as {playerId: "note text"} in localStorage under 'razzle_player_notes'. Notes appear as a toggleable "Notes" column in the screener table. Empty notes show a faint pencil icon on hover. Existing notes show truncated text. Notes persist across page refresh.
-**Result**: Added notes data layer (getPlayerNotes/savePlayerNotes/setPlayerNote with localStorage cache), note-editor-popup with textarea (140 char max), Caveat handwriting font for note text, pencil icon on empty cells, truncated text on filled cells, chunky design-system popup.
-
-### Task 2: Notes in hover card + keyboard shortcut
-**Status**: PASS
-**Attempts**: 1
-**Acceptance**: Player hover cards show the note text (if any) below the stats. Pressing 'N' toggles notes column. Notes column available in column picker under "Notes" group. Clear note by emptying the text.
-**Result**: Hover card shows note with pencil icon and dashed separator. N key toggles notes column visibility. Notes column in COLUMNS with group "Notes". Clear button in editor. Shortcut added to keyboard hint strip and ? reference overlay.
+**Acceptance**: Clicking pin icon in a row pins the player to a sticky tbody above the main table body. Pinned rows have cream background (var(--bg-card)), separated by 3px dashed orange border. Pin icon is orange when pinned, faint on hover when not. Max 5 pins. Pins persist in localStorage (razzle_pinned_players). Pins in URL params (?pins=id1,id2). P key clears all pins. Pin column header shows pin count with click-to-clear. Hidden in college/prospect modes.
+**Result**: Added pinnedPlayers to state (localStorage-backed), togglePinPlayer/clearAllPins/renderPinnedRows functions, pin icon td in buildRowHTML (NFL only), pinnedBody tbody with sticky positioning, 3px dashed orange separator, URL serialization, P keyboard shortcut, shortcut reference updated.
