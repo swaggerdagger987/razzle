@@ -7,10 +7,10 @@
 
 - Task 1: PASS
 - Task 2: PASS
-- Task 3: PENDING
+- Task 3: PASS
 - Task 4: PENDING
 - Stage: IN PROGRESS
-- Next: Task 3
+- Next: Task 4
 
 ### Task 1: Add player search to VORP panel
 **Status**: PASS
@@ -25,9 +25,10 @@
 **Result**: Added search bar to Dynasty Rankings and Tiers. Added season selector to Dynasty Rankings (was missing). Standardized controls order across all 4 panels: pos tabs → season select → search input. Added available_seasons + season param to dynasty rankings backend. All 4 panels now share: lp-page container, lp-header, lp-controls with pos tabs + season + search, filterBySearch pattern.
 
 ### Task 3: Add adjustable formula to Trade Values
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 **Acceptance**: User can adjust at least 3 formula weights and see trade values update in real time.
+**Result**: Replaced static methodology chips with 3 range sliders (Production, Age Curve, Pos Scarcity). Client-side recalculation using component scores (production_score, age_score, scarcity_score) from API. Weights auto-normalize. Tier reassignment on the fly. Reset button restores 50/30/20 defaults. CSS for sliders follows design guide.
 
 ### Task 4: Add historical dynasty valuations
 **Status**: PENDING

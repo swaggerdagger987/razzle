@@ -328,11 +328,21 @@
     var currentData = null;
     var searchQuery = '';
     var seasonsLoaded = false;
+    var weights = { production: 50, age: 30, scarcity: 20 };
 
     var TIER_LABELS = {
       1: 'Elite', 2: 'Blue Chip', 3: 'Premium', 4: 'Solid',
       5: 'Promising', 6: 'Depth', 7: 'Roster Clogger', 8: 'Cut Bait'
     };
+
+    var TV_TIER_THRESHOLDS = [80, 65, 50, 35, 20, 10, 5, 0];
+
+    function recalcTier(tv) {
+      for (var i = 0; i < TV_TIER_THRESHOLDS.length; i++) {
+        if (tv >= TV_TIER_THRESHOLDS[i]) return i + 1;
+      }
+      return 8;
+    }
 
     el.innerHTML =
       '<div class="lp-page">' +
@@ -349,10 +359,20 @@
           '<select class="lp-select" id="lp-tv-season"></select>' +
           '<input class="lp-search" type="text" id="lp-tv-search" placeholder="search player...">' +
         '</div>' +
-        '<div class="tv-methodology">' +
-          '<div class="tv-method-chip"><span class="method-label">Production:</span> 50%</div>' +
-          '<div class="tv-method-chip"><span class="method-label">Age Curve:</span> 30%</div>' +
-          '<div class="tv-method-chip"><span class="method-label">Pos Scarcity:</span> 20%</div>' +
+        '<div class="tv-methodology" id="lp-tv-weights">' +
+          '<div class="tv-weight-slider">' +
+            '<label>Production <span id="lp-tv-w-prod-val">50</span>%</label>' +
+            '<input type="range" id="lp-tv-w-prod" min="0" max="100" value="50">' +
+          '</div>' +
+          '<div class="tv-weight-slider">' +
+            '<label>Age Curve <span id="lp-tv-w-age-val">30</span>%</label>' +
+            '<input type="range" id="lp-tv-w-age" min="0" max="100" value="30">' +
+          '</div>' +
+          '<div class="tv-weight-slider">' +
+            '<label>Pos Scarcity <span id="lp-tv-w-scar-val">20</span>%</label>' +
+            '<input type="range" id="lp-tv-w-scar" min="0" max="100" value="20">' +
+          '</div>' +
+          '<button class="lp-btn-small" id="lp-tv-w-reset">reset</button>' +
         '</div>' +
         '<div id="lp-tv-body"><div class="lp-loading">calculating trade values...</div></div>' +
       '</div>';
@@ -398,10 +418,34 @@
       return html;
     }
 
+    function applyWeights(players) {
+      var total = weights.production + weights.age + weights.scarcity;
+      if (total === 0) total = 1;
+      var wp = weights.production / total;
+      var wa = weights.age / total;
+      var ws = weights.scarcity / total;
+      return players.map(function(p) {
+        var tv = Math.min(100, Math.max(0,
+          (p.production_score || 0) * wp +
+          (p.age_score || 0) * wa +
+          (p.scarcity_score || 0) * ws
+        ));
+        tv = Math.round(tv * 10) / 10;
+        var tier = recalcTier(tv);
+        return Object.assign({}, p, {
+          trade_value: tv,
+          tier: tier,
+          tier_label: TIER_LABELS[tier] || 'Tier ' + tier
+        });
+      }).sort(function(a, b) { return b.trade_value - a.trade_value; })
+        .map(function(p, i) { return Object.assign({}, p, { rank: i + 1 }); });
+    }
+
     function render(data) {
       currentData = data;
       var body = el.querySelector('#lp-tv-body');
-      var players = filterBySearch(data.players || []);
+      var reweighted = applyWeights(data.players || []);
+      var players = filterBySearch(reweighted);
 
       if (!players.length) {
         body.innerHTML = '<div class="lp-empty">' + (searchQuery ? 'no players match "' + escapeHtml(searchQuery) + '"' : 'no trade value data found') + '</div>';
@@ -484,6 +528,26 @@
         searchQuery = self.value.trim();
         if (currentData) render(currentData);
       }, 200);
+    });
+
+    function updateWeights() {
+      weights.production = parseInt(el.querySelector('#lp-tv-w-prod').value, 10);
+      weights.age = parseInt(el.querySelector('#lp-tv-w-age').value, 10);
+      weights.scarcity = parseInt(el.querySelector('#lp-tv-w-scar').value, 10);
+      el.querySelector('#lp-tv-w-prod-val').textContent = weights.production;
+      el.querySelector('#lp-tv-w-age-val').textContent = weights.age;
+      el.querySelector('#lp-tv-w-scar-val').textContent = weights.scarcity;
+      if (currentData) render(currentData);
+    }
+
+    el.querySelector('#lp-tv-w-prod').addEventListener('input', updateWeights);
+    el.querySelector('#lp-tv-w-age').addEventListener('input', updateWeights);
+    el.querySelector('#lp-tv-w-scar').addEventListener('input', updateWeights);
+    el.querySelector('#lp-tv-w-reset').addEventListener('click', function() {
+      el.querySelector('#lp-tv-w-prod').value = 50;
+      el.querySelector('#lp-tv-w-age').value = 30;
+      el.querySelector('#lp-tv-w-scar').value = 20;
+      updateWeights();
     });
 
     loadData();
