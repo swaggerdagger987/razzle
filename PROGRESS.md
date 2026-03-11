@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 126 — Pin Comparison Diff Mode (COMPLETE)
+
+**Exit Criterion MET**: When 2+ players pinned, I key or Diff toolbar button toggles diff mode. All numeric cells show green/red deltas vs first pinned player. INVERSE_STATS respected (lower = better shown as green). Banner shows baseline player name with OFF button. Auto-disables when pins cleared or reduced below 2. URL state (?diff=1) for shareable diff views. Shortcut modal updated. 34 tests pass.
+
+### Phase 126 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Pin Comparison Diff Mode | DONE | state.diffMode, _getDiffBaseline() with cache, _formatDiffCell() green/red deltas, INVERSE_STATS, diff banner, I key, toolbar button, URL state, auto-disable |
+
 ## Previous Phase: Phase 125 — QA + UX Audit Fixes for Phases 121-124 (COMPLETE)
 
 **Exit Criterion MET**: 2 HIGH + MEDIUM fixes resolved. 34 tests pass.

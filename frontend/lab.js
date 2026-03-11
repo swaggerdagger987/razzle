@@ -823,6 +823,7 @@ const state = {
   groupHeaders: (function() { try { return localStorage.getItem("razzle_group_headers") !== "0"; } catch(e) { return true; } })(), // column group headers (on by default)
   summaryBar: (function() { try { return localStorage.getItem("razzle_summary_bar") === "1"; } catch(e) { return false; } })(), // stats summary bar (off by default)
   tagFilter: false, // show only tagged players
+  diffMode: false, // pin comparison diff mode: show deltas from first pinned player
   pinnedPlayers: (function() {
     try { return JSON.parse(localStorage.getItem('razzle_pinned_players')) || []; }
     catch(e) { return []; }
@@ -1557,6 +1558,7 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
 
   const heatPcts = heatOn ? (pctData[playKey] || {}) : null;
   const pctPcts = pctMode ? (pctData[playKey] || {}) : null;
+  const diffBaseline = _getDiffBaseline(); // cached per row, not per cell
 
   for (const key of cols) {
     const col = getColumnDef(key);
@@ -1579,6 +1581,16 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
       }
       continue;
     }
+    // Diff mode: show delta from baseline instead of raw value
+    if (diffBaseline && playKey !== diffBaseline.player_id && !col.isText) {
+      const diffHtml = _formatDiffCell(val, diffBaseline[key], col, key);
+      if (diffHtml !== null) {
+        html += '<td>' + diffHtml + '</td>';
+        continue;
+      }
+      // null means non-numeric — fall through to normal render
+    }
+
     // Leader dot for top 3 values in this column
     const ldrRank = leaderRanks && leaderRanks[key] ? (leaderRanks[key][playKey] || 0) : 0;
     const ldrDot = ldrRank ? getLeaderDot(ldrRank) : "";
@@ -3253,6 +3265,7 @@ function saveStateToURL() {
   if (state.summaryBar) params.set("summary", "1");
   if (state.tagFilter) params.set("tagged", "1");
   if (state.pinnedPlayers.length) params.set("pins", state.pinnedPlayers.join(","));
+  if (state.diffMode) params.set("diff", "1");
 
   if (isProspectView()) {
     if (state.draftYear) params.set("draft_year", state.draftYear);
@@ -3392,6 +3405,9 @@ function loadStateFromURL() {
     state.pinnedPlayers = params.get("pins").split(",").filter(Boolean);
     savePinnedPlayers();
   }
+  if (params.get("diff") === "1" && state.pinnedPlayers.length >= 2) {
+    state.diffMode = true;
+  }
 
   if (isProspectView()) {
     if (params.has("draft_year")) state.draftYear = parseInt(params.get("draft_year"));
@@ -3474,6 +3490,22 @@ function loadStateFromURL() {
       lbBtn.style.borderColor = "";
     }
   }
+
+  // Sync diff mode button — hide in non-NFL modes
+  const dfBtn = document.getElementById("diffModeBtn");
+  if (dfBtn) {
+    const isNFL = state.universe === "nfl";
+    dfBtn.style.display = isNFL ? "" : "none";
+    if (state.diffMode && isNFL) {
+      dfBtn.classList.add("active");
+      dfBtn.style.borderColor = "var(--green)";
+    } else {
+      dfBtn.classList.remove("active");
+      dfBtn.style.borderColor = "";
+    }
+  }
+  // Render diff banner if active
+  _renderDiffBanner();
 
   // Sync tier breaks button — hide in non-NFL modes
   const tbBtn = document.getElementById("tierBreaksBtn");
@@ -3788,6 +3820,13 @@ function togglePinPlayer(playerId) {
   if (state.universe !== "nfl") return;
   if (isPlayerPinned(playerId)) {
     state.pinnedPlayers = state.pinnedPlayers.filter(id => id !== playerId);
+    // Auto-disable diff mode if fewer than 2 pins
+    if (state.diffMode && state.pinnedPlayers.length < 2) {
+      state.diffMode = false;
+      var dBtn = document.getElementById("diffModeBtn");
+      if (dBtn) { dBtn.classList.remove("active"); dBtn.style.borderColor = ""; }
+      _renderDiffBanner();
+    }
   } else {
     if (state.pinnedPlayers.length >= 5) return; // max 5 pinned
     state.pinnedPlayers.push(playerId);
@@ -3800,6 +3839,13 @@ function togglePinPlayer(playerId) {
 
 function clearAllPins() {
   state.pinnedPlayers = [];
+  // Auto-disable diff mode
+  if (state.diffMode) {
+    state.diffMode = false;
+    var dBtn = document.getElementById("diffModeBtn");
+    if (dBtn) { dBtn.classList.remove("active"); dBtn.style.borderColor = ""; }
+    _renderDiffBanner();
+  }
   savePinnedPlayers();
   renderPinnedRows();
   renderVisibleRows();
@@ -3850,6 +3896,78 @@ function renderPinnedRows() {
   if (cols.includes("trend") && Object.keys(_sparklineCache).length > 1) {
     injectSparklines();
   }
+}
+
+// ─── Pin Comparison Diff Mode ─────────────────────────────────────
+function toggleDiffMode() {
+  if (state.universe !== "nfl") { _showToast("diff mode: nfl only"); return; }
+  if (state.pinnedPlayers.length < 2) {
+    _showToast("pin 2+ players to use diff mode");
+    return;
+  }
+  state.diffMode = !state.diffMode;
+  var btn = document.getElementById("diffModeBtn");
+  if (btn) { btn.classList.toggle("active", state.diffMode); btn.style.borderColor = state.diffMode ? "var(--green)" : ""; }
+  // Show/hide diff banner
+  _renderDiffBanner();
+  if (state.diffMode) {
+    _showToast("diff mode: comparing vs " + _getDiffBaselineName());
+  } else {
+    _showToast("diff mode: off");
+  }
+  renderPinnedRows();
+  renderVisibleRows();
+}
+
+function _getDiffBaselineName() {
+  if (!state.pinnedPlayers.length) return "";
+  var baseId = state.pinnedPlayers[0];
+  var p = state.items.find(function(pl) { return pl.player_id === baseId; });
+  return p ? (p.full_name || p.player_name || "baseline") : "baseline";
+}
+
+var _diffBaselineCache = null;
+var _diffBaselineCacheId = "";
+function _getDiffBaseline() {
+  if (!state.diffMode || state.pinnedPlayers.length < 2) return null;
+  var baseId = state.pinnedPlayers[0];
+  if (_diffBaselineCacheId === baseId && _diffBaselineCache) return _diffBaselineCache;
+  _diffBaselineCache = state.items.find(function(pl) { return pl.player_id === baseId; }) || null;
+  _diffBaselineCacheId = baseId;
+  return _diffBaselineCache;
+}
+
+function _renderDiffBanner() {
+  var existing = document.getElementById("diffModeBanner");
+  if (existing) existing.remove();
+  if (!state.diffMode) return;
+  var baseline = _getDiffBaseline();
+  if (!baseline) return;
+  var wrap = document.querySelector(".table-wrap");
+  if (!wrap) return;
+  var banner = document.createElement("div");
+  banner.id = "diffModeBanner";
+  banner.className = "diff-mode-banner";
+  banner.innerHTML = '<span class="diff-mode-label">DIFF MODE</span> comparing all rows vs <strong>' + escapeHtml(baseline.full_name || baseline.player_name) + '</strong> (first pin) <button onclick="toggleDiffMode()" style="margin-left:8px; cursor:pointer; background:var(--ink); color:var(--bg); border:2px solid var(--ink); border-radius:6px; padding:2px 10px; font-family:var(--font-data); font-size:11px;">OFF</button>';
+  wrap.parentNode.insertBefore(banner, wrap);
+}
+
+function _formatDiffCell(val, baseVal, col, key) {
+  if (val == null || baseVal == null || typeof val !== "number" || typeof baseVal !== "number") return null;
+  var delta = val - baseVal;
+  if (delta === 0) return '<span style="color:var(--ink-light);">\u2014</span>';
+  var inv = INVERSE_STATS.has(key);
+  // For inverse stats, negative delta (fewer turnovers) is good
+  var isGood = inv ? delta < 0 : delta > 0;
+  var color = isGood ? "var(--green)" : "var(--red)";
+  var sign = delta > 0 ? "+" : "";
+  var formatted;
+  if (col.pct) {
+    formatted = sign + (delta * 100).toFixed(col.decimals != null ? col.decimals : 1) + "%";
+  } else {
+    formatted = sign + delta.toFixed(col.decimals != null ? col.decimals : 1);
+  }
+  return '<span style="color:' + color + '; font-weight:600;">' + formatted + '</span>';
 }
 
 // ─── Player selection (for compare/charts) ───────────────────────
@@ -9625,6 +9743,12 @@ document.addEventListener("keydown", function(e) {
     return;
   }
 
+  // I: toggle pin comparison diff mode
+  if (e.key === "i" || e.key === "I") {
+    toggleDiffMode();
+    return;
+  }
+
   // V: cycle visual modes (off → heat → percentile → bars → off)
   if (e.key === "v" || e.key === "V") {
     cycleVisualMode();
@@ -9711,6 +9835,7 @@ function toggleShortcutRef() {
           ${shortcutRow("A", "Stats summary bar")}
           ${shortcutRow("N", "Toggle notes column")}
           ${shortcutRow("P", "Clear pinned players")}
+          ${shortcutRow("I", "Pin diff mode (compare vs 1st pin)")}
           ${shortcutRow("Shift+click", "Column header → secondary sort")}
           ${shortcutRow("Dbl-click", "Column header → quick filter")}
           ${shortcutRow("Dbl-click", "Stat cell → add filter from value")}
