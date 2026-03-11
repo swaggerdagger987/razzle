@@ -1616,13 +1616,18 @@ function renderContextBadges() {
     );
   }
 
-  // Mode badge
+  // Mode badge — detect trial state for annotation
   var leagueMode = isLeagueContextMode();
+  var _trialUser = null;
+  try { _trialUser = JSON.parse(localStorage.getItem("razzle_user") || "null"); } catch(e) {}
+  var _isTrial = _trialUser && _trialUser.trial_active && _trialUser.plan_source === "trial";
+
   if (leagueMode) {
+    var _modeLabel = _isTrial ? 'League Context \u2014 Trial' : 'League Context \u2014 Pro';
     badges.unshift(
       '<span class="context-badge active" style="border-color:var(--orange); background:var(--orange-light); color:var(--orange);">' +
         '<span class="context-badge-dot" style="background:var(--orange);"></span>' +
-        'League Context \u2014 Pro' +
+        _modeLabel +
       '</span>'
     );
   } else if (hasLeague && !pro) {
@@ -2806,10 +2811,15 @@ function renderBriefingCard(agentId, content, isError) {
   var collapsed = !isRazzle ? ' collapsed' : '';
   var toggleText = !isRazzle ? (collapsed ? '[expand]' : '[collapse]') : '';
 
-  // Pro badge or generic hint
+  // Pro/Trial badge or generic hint
   var contextPill = '';
   if (isLeagueContextMode()) {
-    contextPill = '<span class="briefing-pro-pill">Pro</span>';
+    var _tu = null;
+    try { _tu = JSON.parse(localStorage.getItem("razzle_user") || "null"); } catch(e) {}
+    var _onTrial = _tu && _tu.trial_active && _tu.plan_source === "trial";
+    contextPill = _onTrial
+      ? '<span class="briefing-pro-pill" style="background:var(--orange);">Trial</span>'
+      : '<span class="briefing-pro-pill">Pro</span>';
   } else if (hasLeagueData() && !isProUser()) {
     contextPill = '<span class="briefing-generic-hint">generic analysis \u2014 upgrade for league-specific intel</span>';
   }

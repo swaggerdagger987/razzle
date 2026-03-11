@@ -622,19 +622,73 @@ function showSleeperPrompt() {
   if (!modal) return;
   var inner = modal.querySelector(".auth-modal");
   if (!inner) return;
+
+  // Check if user has an active trial (just registered)
+  var user = null;
+  try { user = JSON.parse(localStorage.getItem("razzle_user") || "null"); } catch(e) {}
+  var isTrial = user && user.trial_active && user.plan_source === "trial";
+  var trialDays = (user && user.trial_days_remaining) || 7;
+
+  var trialBanner = "";
+  if (isTrial) {
+    trialBanner =
+      '<div style="background:var(--orange); color:white; padding:10px 16px; border-radius:8px; border:2px solid var(--ink); margin-bottom:16px; text-align:center;">' +
+        '<div style="font-family:var(--font-display); font-size:14px;">Pro Trial Active</div>' +
+        '<div style="font-family:var(--font-hand); font-size:14px; margin-top:2px;">' + trialDays + ' days of Pro access — no credit card needed</div>' +
+      '</div>';
+  }
+
   inner.innerHTML =
     '<button class="auth-modal-close" onclick="closeAuthModal()">&times;</button>' +
+    trialBanner +
     '<div style="text-align:center; margin-bottom:16px;">' +
-      '<div style="font-size:40px;">🐯</div>' +
+      '<div style="font-size:40px;">&#x1F42F;</div>' +
       '<h3 style="font-family:var(--font-display); font-size:18px; margin-top:8px;">Connect Your Sleeper</h3>' +
-      '<p style="font-family:var(--font-hand); font-size:16px; color:var(--ink-medium); margin-top:4px;">link your Sleeper username for league context</p>' +
+      '<p style="font-family:var(--font-hand); font-size:16px; color:var(--ink-medium); margin-top:4px;">' +
+        (isTrial ? 'connect Sleeper to unlock league-contextualized AI agents' : 'link your Sleeper username for league context') +
+      '</p>' +
     '</div>' +
     '<form onsubmit="handleSleeperLink(event)" style="display:flex; flex-direction:column; gap:10px;">' +
       '<input type="text" id="sleeperLinkInput" placeholder="Sleeper username" style="font-family:var(--font-mono); font-size:14px; padding:10px 14px; border:2px solid var(--ink); border-radius:8px; background:white;">' +
       '<div id="sleeperLinkError" style="font-family:var(--font-mono); font-size:12px; color:var(--red); min-height:16px;"></div>' +
       '<button type="submit" class="btn-chunky btn-primary auth-submit">Connect</button>' +
-      '<a href="#" onclick="closeAuthModal(); return false;" style="text-align:center; font-family:var(--font-mono); font-size:12px; color:var(--ink-light);">skip for now</a>' +
+      '<a href="#" onclick="showWelcomeState(); return false;" style="text-align:center; font-family:var(--font-mono); font-size:12px; color:var(--ink-light);">skip for now</a>' +
     '</form>';
+}
+
+function showWelcomeState() {
+  var modal = document.getElementById("authModal");
+  if (!modal) return;
+  var inner = modal.querySelector(".auth-modal");
+  if (!inner) return;
+
+  var user = null;
+  try { user = JSON.parse(localStorage.getItem("razzle_user") || "null"); } catch(e) {}
+  var isTrial = user && user.trial_active && user.plan_source === "trial";
+  var hasSleeper = user && user.sleeper_username;
+
+  inner.innerHTML =
+    '<button class="auth-modal-close" onclick="closeAuthModal()">&times;</button>' +
+    '<div style="text-align:center; padding:8px 0;">' +
+      '<div style="font-size:48px;">&#x1F42F;</div>' +
+      '<h3 style="font-family:var(--font-display); font-size:20px; margin-top:8px;">Welcome to Razzle</h3>' +
+      (isTrial
+        ? '<p style="font-family:var(--font-hand); font-size:16px; color:var(--orange); margin-top:4px;">your 7-day Pro trial is running</p>'
+        : '<p style="font-family:var(--font-hand); font-size:16px; color:var(--ink-medium); margin-top:4px;">you\'re all set</p>'
+      ) +
+      '<div style="display:flex; flex-direction:column; gap:10px; margin-top:20px;">' +
+        '<a href="/agents" class="btn-chunky btn-primary" style="text-decoration:none; text-align:center; font-size:13px;" onclick="closeAuthModal();">' +
+          (hasSleeper ? 'Enter the Situation Room' : 'Tour the Situation Room') +
+        '</a>' +
+        '<a href="/lab.html" class="btn-chunky" style="text-decoration:none; text-align:center; font-size:13px; background:var(--bg-card);" onclick="closeAuthModal();">' +
+          'Explore The Lab' +
+        '</a>' +
+      '</div>' +
+      (!hasSleeper
+        ? '<p style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); margin-top:16px;">tip: connect your Sleeper username in Settings for league-contextualized agents</p>'
+        : ''
+      ) +
+    '</div>';
 }
 
 async function handleSleeperLink(e) {
@@ -655,7 +709,7 @@ async function handleSleeperLink(e) {
     localStorage.setItem("razzle_user", JSON.stringify(data.user));
     localStorage.setItem("razzle_sleeper_user", username);
     updateAuthUI(data.user);
-    closeAuthModal();
+    showWelcomeState();
   } catch (err) {
     errEl.textContent = "Connection error";
   }
