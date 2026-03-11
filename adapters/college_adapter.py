@@ -18,6 +18,7 @@ import re
 import sqlite3
 import sys
 import urllib.request
+from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -83,6 +84,16 @@ def get_connection():
     conn.execute("PRAGMA journal_mode=WAL")
     conn.execute("PRAGMA synchronous=NORMAL")
     return conn
+
+
+@contextmanager
+def get_db():
+    """Context manager for adapter connections. Guarantees cleanup on exit."""
+    conn = get_connection()
+    try:
+        yield conn
+    finally:
+        conn.close()
 
 
 def initialize_tables(conn):

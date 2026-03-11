@@ -1,5 +1,26 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 161 — Platform: Launch Readiness — Adapter Hardening + E2E Test Suite + Startup Validation (COMPLETE)
+
+**Exit Criterion MET**: Three backend hardening improvements shipped. (1) Adapter context manager wrappers: all 3 adapters (nflverse, college, cfbfastR) now export `get_db()` context managers. `bootstrap_database()` in server.py refactored from manual try/finally to `with adapter.get_db() as conn:` for all 3 connection patterns — zero manual `conn.close()` calls remain in bootstrap flow. This closes the last Backend Audit Priority Fix #1 gap. (2) End-to-end API test suite: new `tests/test_e2e_flows.py` with 22 tests covering auth lifecycle (register, login, /me, duplicate, weak password, wrong password, no token, bad token), query quota (check, track+decrement), formula CRUD (create, list, delete), watchlist CRUD (sync, get), agent memory tier gating (Pro user correctly rejected from Elite-only endpoints), and security boundaries (auth required on all protected endpoints, Elite tier enforced on LLM proxy + briefings). Total test count: 56 (34 existing + 22 new). (3) Startup environment validation: `_validate_env()` function runs at lifespan startup, logs structured table of 12 environment variables with SET/MISSING/not set status and feature impact descriptions (e.g., "STRIPE_SECRET_KEY... not set (billing endpoints disabled)"). Critical vars trigger logger.warning, optional vars use logger.info.
+
+### Phase 161 Tasks (Platform Loop)
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Adapter Context Manager Wrappers | PASS | 3 adapters get get_db(), bootstrap uses with-blocks |
+| 2 | End-to-End API Test Suite | PASS | 22 new tests, 56 total, all pass |
+| 3 | Startup Environment Validation | PASS | _validate_env() logs 12 env vars at startup |
+| 4 | QA Verification | PASS | 56/56 tests pass, zero regressions |
+
+### Decisions Log
+- Adapter get_db() context managers sit alongside existing get_connection() for backward compatibility — callers that manage connections manually (e.g., standalone adapter scripts) can still use get_connection()
+- E2E tests exercise the REAL auth system with unique random test emails per session to avoid cross-test contamination
+- Environment validation uses non-blocking logger calls — missing vars are documented but never prevent server startup
+- Test user gets Pro trial on registration, so Pro-gated endpoints (formulas, watchlist) work but Elite-gated endpoints (memory, briefings, LLM proxy) correctly return 403
+
+---
+
 ## Previous Phase: Phase 160 — Platform: Situation Room Accessibility Hardening (COMPLETE)
 
 **Exit Criterion MET**: Situation Room (agents.html) accessibility upgraded from 2 to 18 ARIA attributes, 4 role attributes, 1 tabindex. (1) Skip-to-content link: hidden link at top of page that appears on Tab focus, jumps to scenario input area. (2) Canvas: role="img", aria-label describing the pixel art scene, tabindex="0" for keyboard focus. (3) Config panel: aria-expanded toggling on Config button, aria-controls linking to panel, role="region" with aria-label on panel. (4) Roster panel: same aria-expanded + aria-controls + role="region" pattern. (5) Scenario textarea: aria-label for screen readers. (6) Briefing cards container: role="region", aria-label, aria-live="polite" for dynamic content updates. (7) Form inputs: aria-label on API key, model, base URL, and promo code inputs. (8) Run All Agents button: aria-label. (9) Navigation: aria-label="Main navigation" on nav element. HTML balance verified: div 139/139, button 14/14. JS syntax clean.

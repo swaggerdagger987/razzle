@@ -76,17 +76,16 @@ def bootstrap_database():
     import sys, os
     sys.path.insert(0, str(Path(__file__).parent.parent))
     from adapters.nflverse_adapter import (
-        get_connection, initialize_database, process_season, current_nfl_season,
-        sync_rosters, migrate_add_columns, sync_snap_counts,
+        get_db as nflverse_db, initialize_database, process_season,
+        current_nfl_season, sync_rosters, migrate_add_columns, sync_snap_counts,
     )
     from adapters.college_adapter import (
-        get_connection as college_conn,
+        get_db as college_db,
         initialize_tables as college_init_tables,
         process_combine, process_draft_picks,
     )
 
-    conn = get_connection()
-    try:
+    with nflverse_db() as conn:
         initialize_database(conn)
         migrate_add_columns(conn)
 
@@ -124,34 +123,29 @@ def bootstrap_database():
                 logger.warning(f"  Roster enrichment failed: {e}")
         else:
             logger.info(f"Database has {count} players — skipping bootstrap")
-    finally:
-        conn.close()
 
     if count < 50:
         # College/prospect data
         logger.info("Bootstrapping college/prospect data...")
-        cconn = college_conn()
-        try:
-            college_init_tables(cconn)
-            process_combine(cconn)
-            process_draft_picks(cconn)
-            logger.info("  College data synced")
-        except Exception as e:
-            logger.warning(f"  College data failed: {e}")
-        finally:
-            cconn.close()
+        with college_db() as cconn:
+            try:
+                college_init_tables(cconn)
+                process_combine(cconn)
+                process_draft_picks(cconn)
+                logger.info("  College data synced")
+            except Exception as e:
+                logger.warning(f"  College data failed: {e}")
 
         # cfbfastR college production stats
         logger.info("Bootstrapping cfbfastR college production stats...")
         try:
             from adapters.cfbfastr_adapter import (
-                get_connection as cfb_conn,
+                get_db as cfb_db,
                 initialize_tables as cfb_init_tables,
                 fetch_season_csv, aggregate_season, upsert_stats,
                 refine_positions_from_combine,
             )
-            fconn = cfb_conn()
-            try:
+            with cfb_db() as fconn:
                 cfb_init_tables(fconn)
                 for s in range(2015, current_nfl_season() + 1):
                     try:
@@ -167,8 +161,6 @@ def bootstrap_database():
                 except Exception:
                     logger.warning("refine_positions_from_combine failed", exc_info=True)
                 logger.info("  cfbfastR data synced")
-            finally:
-                fconn.close()
         except Exception as e:
             logger.warning(f"  cfbfastR bootstrap failed: {e}")
 
@@ -239,9 +231,44 @@ def _background_bootstrap():
         _bootstrap_status["running"] = False
 
 
+def _validate_env():
+    """Log structured summary of environment variable status at startup."""
+    env_vars = [
+        # (name, required, description when missing)
+        ("JWT_SECRET", True, "auth tokens will expire on restart"),
+        ("STRIPE_SECRET_KEY", False, "billing endpoints disabled"),
+        ("STRIPE_WEBHOOK_SECRET", False, "webhook signature verification disabled"),
+        ("STRIPE_PRICE_PRO_MONTHLY", False, "Pro monthly checkout disabled"),
+        ("STRIPE_PRICE_PRO_ANNUAL", False, "Pro annual checkout disabled"),
+        ("STRIPE_PRICE_ELITE_MONTHLY", False, "Elite monthly checkout disabled"),
+        ("STRIPE_PRICE_ELITE_ANNUAL", False, "Elite annual checkout disabled"),
+        ("ENCRYPTION_KEY", False, "BYOK key encryption falls back to JWT_SECRET"),
+        ("RAZZLE_LLM_API_KEY", False, "AI-included mode (Elite) disabled"),
+        ("RAZZLE_LLM_BASE_URL", False, "defaults to OpenRouter"),
+        ("RAZZLE_LLM_MODEL", False, "defaults to claude-3.5-haiku"),
+        ("RAZZLE_BASE_URL", False, "defaults to https://razzle.lol"),
+    ]
+    lines = ["Environment variable status:"]
+    warnings = 0
+    for name, critical, desc in env_vars:
+        val = os.environ.get(name)
+        if val:
+            lines.append(f"  {name:.<40s} SET")
+        elif critical:
+            lines.append(f"  {name:.<40s} MISSING (warning: {desc})")
+            warnings += 1
+        else:
+            lines.append(f"  {name:.<40s} not set ({desc})")
+    if warnings:
+        logger.warning("\n".join(lines))
+    else:
+        logger.info("\n".join(lines))
+
+
 @asynccontextmanager
 async def lifespan(app):
     setup_logging()
+    _validate_env()
     # Essential tables first (fast, < 100ms) — server can respond immediately
     auth_module.initialize_users_db()
     billing_module.initialize_subscriptions_table()
