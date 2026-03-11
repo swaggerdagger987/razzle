@@ -2039,7 +2039,20 @@ function nextPage() {
 function updateResultCount() {
   const el = document.getElementById("resultCount");
   const label = isProspectView() ? "prospects" : state.universe === "college" ? "college players" : "players";
-  el.innerHTML = `<strong>${state.totalCount}</strong> ${label}`;
+  const from = state.offset + 1;
+  const to = Math.min(state.offset + state.items.length, state.totalCount);
+  const colDefs = isProspectView() ? PROSPECT_COLUMNS : state.universe === "college" ? COLLEGE_COLUMNS : COLUMNS;
+  const sortCol = colDefs[state.sortKey];
+  const sortLabel = sortCol ? sortCol.label : state.sortKey;
+  const sortArrow = state.sortDir === "asc" ? "↑" : "↓";
+  const seasonLabel = state.season === "career" ? "Career" : isProspectView() ? state.draftYear + " Draft" : state.universe === "college" ? state.collegeSeason : state.season;
+  let parts = [];
+  if (state.totalCount > 0) parts.push(`<strong>${from}-${to}</strong> of <strong>${state.totalCount}</strong> ${label}`);
+  else parts.push(`<strong>0</strong> ${label}`);
+  parts.push(`${sortLabel} ${sortArrow}`);
+  if (seasonLabel) parts.push(String(seasonLabel));
+  if (state.position !== "ALL") parts.push(state.position);
+  el.innerHTML = parts.join(" · ");
 }
 
 // ─── Filters ─────────────────────────────────────────────────────

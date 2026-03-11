@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 62 — Screener Status Bar Enhancement (COMPLETE)
+
+**Exit Criterion MET**: Result count area shows contextual status: "1-100 of 342 players · PPG ↓ · 2025 · WR" with range, sort column+direction, season, and active position filter. Compact middot-separated status line. Works in all modes.
+
+### Phase 62 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Enhanced status bar with context info | DONE | updateResultCount() enhanced: range, sort label+arrow, season, position filter, middot separator |
+
 ## Previous Phase: Phase 61 — QA + UX Audit Fixes for Phases 56-60 (COMPLETE)
 
 **Exit Criterion MET**: All HIGH findings fixed. Context menu rewritten to use data attributes + _ctxMenuAction() switch (no inline JS strings). clipboard.writeText wrapped in try/catch. Separator consistent across modes. Summary label "page avg" with tooltip. Escape clears highlights. Context menu "Clear All Highlights" option.

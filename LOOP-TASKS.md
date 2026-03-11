@@ -1,33 +1,16 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 61 (QA + UX Audit Fixes for Phases 56-60)
-## Phase 61: QA + UX Audit — Auto-Generated Fixes
-**Exit Criterion**: All CRITICAL and HIGH QA findings fixed. MEDIUM UX findings addressed.
+- Phase: 62 (Screener Status Bar Enhancement)
+## Phase 62: Screener Status Bar Enhancement
+**Exit Criterion**: Result count area shows contextual status: "1-100 of 342 players · PPG ↓ · 2025 · WR" showing range, sort column+direction, season, and active position filter. Compact, informative, Bloomberg-style status line.
 
 - Task 1: PASS
-- Task 2: PASS
-- Task 3: PASS
-- Task 4: PASS
 - Stage: COMPLETE
 - Next: Phase gate
 
-### Task 1: Fix context menu JS string injection with apostrophe names
+### Task 1: Enhanced status bar with sort/season/position context
 **Status**: PASS
 **Attempts**: 1
-**Result**: Rewrote context menu to use data attributes + _ctxMenuAction() switch instead of inline onclick strings. Player data stored in _ctxMenuData variable. No more escapeAttr in JS string context.
-
-### Task 2: Fix clipboard.writeText error handling
-**Status**: PASS
-**Attempts**: 1
-**Result**: Wrapped navigator.clipboard.writeText in try/catch with .then()/.catch() handlers. Shows "copy failed" toast on error.
-
-### Task 3: Fix context menu separator for college/prospect mode
-**Status**: PASS
-**Attempts**: 1
-**Result**: Moved separator outside NFL conditional — now always present before utility actions (highlight, copy).
-
-### Task 4: Fix MEDIUM UX issues (summary label + clear highlights)
-**Status**: PASS
-**Attempts**: 1
-**Result**: Summary bar label changed to "page avg" with tooltip. Escape key clears all highlights with toast. Context menu shows "Clear All Highlights" when any rows highlighted.
+**Acceptance**: Status bar shows row range (from-to of total), sort column label with arrow, season/draft year, and position filter. Parts joined with · separator. Updates on every data fetch. Works in NFL, college, and prospect modes.
+**Result**: Enhanced updateResultCount() to show range, sort column label + direction arrow, season label, and position filter. Parts joined with middot separator.
