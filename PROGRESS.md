@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 67 — Screener Sort Column Highlight + Row Rank (COMPLETE)
+
+**Exit Criterion MET**: Sorted column has subtle terracotta background tint on all data cells. Row rank # column shows overall rank adjusting for pagination. Works in NFL, college, and prospect modes.
+
+### Phase 67 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Sort column highlight + row rank column | DONE | sort-col CSS class (5% terracotta tint), col-rank # column (36px), colspan updates in group headers/summary/tier breaks |
+
 ## Previous Phase: Phase 66 — QA + UX Audit Fixes for Phases 62-65 (COMPLETE)
 
 **Exit Criterion MET**: Clean audit. 1 MEDIUM finding fixed (Compare button disabled for <2 selected). No CRITICAL or HIGH issues.

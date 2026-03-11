@@ -1147,8 +1147,8 @@ function buildGroupHeaderRow(cols) {
   // Only show if 2+ distinct groups
   const uniqueGroups = new Set(groups.map(g => g.name));
   if (uniqueGroups.size < 2) return "";
-  // Utility columns: star + checkbox + (pin if NFL) = 2 or 3, plus Player column
-  const utilCols = state.universe === "nfl" ? 3 : 2;
+  // Utility columns: star + checkbox + (pin if NFL) + rank = 3 or 4, plus Player column
+  const utilCols = state.universe === "nfl" ? 4 : 3;
   let html = '<tr class="group-header-row">';
   html += `<th class="group-cell-player" colspan="${utilCols + 1}"></th>`;
   let first = true;
@@ -1177,6 +1177,7 @@ function renderTableHead() {
     const pinTitle = pinCount > 0 ? `${pinCount} pinned — click to clear` : "Pin players to top";
     html += `<th style="width:28px; text-align:center; padding:8px 2px; cursor:${pinCount ? 'pointer' : 'default'}; font-size:12px;" title="${pinTitle}"${pinCount ? ' onclick="clearAllPins()"' : ''}>&#128204;${pinCount ? '<span style="font-size:9px; color:var(--orange); font-weight:700;"> ' + pinCount + '</span>' : ''}</th>`;
   }
+  html += '<th class="col-rank" title="Overall rank by current sort">#</th>';
   html += `<th class="col-player" onclick="sortBy('${nameKey}')">Player`;
   if (state.sortKey === "full_name" || state.sortKey === "player_name") {
     html += state.sortDir === "asc" ? " &#9650;" : " &#9660;";
@@ -1232,7 +1233,7 @@ let _vscrollRows = [];   // Pre-computed HTML strings for each row
 let _vscrollRAF = null;  // requestAnimationFrame handle
 let _vscrollBound = false;
 
-function buildRowHTML(player, cols, heatOn, pctData) {
+function buildRowHTML(player, cols, heatOn, pctData, rowIdx) {
   const pos = (player.position || "").toUpperCase();
   const playKey = player.player_id || player.player_name;
   const selected = state.selectedPlayers.some(p => p.player_id === playKey);
@@ -1251,6 +1252,10 @@ function buildRowHTML(player, cols, heatOn, pctData) {
     const pinned = isPlayerPinned(playKey);
     html += `<td class="pin-cell" style="text-align:center; padding:7px 2px; cursor:pointer; font-size:13px;" onclick="event.stopPropagation(); togglePinPlayer('${escapeAttr(playKey)}')" title="${pinned ? 'Unpin player' : 'Pin to top'}">${pinned ? '<span style="color:var(--orange);">&#128204;</span>' : '<span class="pin-icon-faint">&#128204;</span>'}</td>`;
   }
+
+  // Rank column
+  const rank = (rowIdx != null) ? (state.offset + rowIdx + 1) : "";
+  html += `<td class="col-rank">${rank}</td>`;
 
   if (state.universe === "college") {
     const cid = escapeAttr(player.player_id || "");
@@ -1307,29 +1312,32 @@ function buildRowHTML(player, cols, heatOn, pctData) {
       continue;
     }
     const hBg = heatPcts && heatPcts[key] != null ? getHeatColor(heatPcts[key]) : "";
+    const isSortCol = key === state.sortKey;
+    const sc = isSortCol && !hBg ? "sort-col" : "";
     const hStyle = hBg ? ` style="background:${hBg};"` : "";
+    const scAttr = sc ? ` class="${sc}"` : "";
     if ((isProspectView() || state.universe === "college") && !col.isText && (val === 0 || val === null || val === undefined)) {
-      html += `<td style="color:var(--ink-faint);">\u2014</td>`;
+      html += `<td${scAttr} style="color:var(--ink-faint);">\u2014</td>`;
       continue;
     }
     if (state.universe === "nfl" && isNonApplicableStat(pos, key, val)) {
-      html += `<td style="color:var(--ink-faint);">—</td>`;
+      html += `<td${scAttr} style="color:var(--ink-faint);">—</td>`;
     } else if (state.universe === "nfl" && !col.isText && !col.pct && !col.isRate && (val === 0 || val === null || val === undefined) && key !== "age" && key !== "games") {
-      html += `<td style="color:var(--ink-faint);">—</td>`;
+      html += `<td${scAttr} style="color:var(--ink-faint);">—</td>`;
     } else if (col.isText) {
-      html += `<td>${val ? escapeHtml(val) : "—"}</td>`;
+      html += `<td${scAttr}>${val ? escapeHtml(val) : "—"}</td>`;
     } else if (key === "dynasty_value" && val != null) {
       const dvsColor = val >= 85 ? "var(--green)" : val >= 70 ? "var(--pos-qb)" : val >= 55 ? "var(--orange)" : "var(--ink-light)";
       const dvsTier = val >= 85 ? "Elite" : val >= 70 ? "Star" : val >= 55 ? "Starter" : "";
-      html += `<td${hStyle}><span style="background:${dvsColor}; color:white; padding:1px 8px; border-radius:10px; border:2px solid var(--ink); font-size:11px; font-weight:700; white-space:nowrap;">${val.toFixed(1)}${dvsTier ? " " + dvsTier : ""}</span></td>`;
+      html += `<td${scAttr}${hStyle}><span style="background:${dvsColor}; color:white; padding:1px 8px; border-radius:10px; border:2px solid var(--ink); font-size:11px; font-weight:700; white-space:nowrap;">${val.toFixed(1)}${dvsTier ? " " + dvsTier : ""}</span></td>`;
     } else if (key === "age" && val != null) {
-      html += `<td style="font-weight:600;">${Math.round(val)}</td>`;
+      html += `<td${scAttr} style="font-weight:600;">${Math.round(val)}</td>`;
     } else if (key === "breakout_pct" && val != null && val >= 50) {
-      html += `<td${hStyle}><span style="background:var(--green); color:white; padding:1px 6px; border-radius:10px; border:2px solid var(--ink); font-size:11px; font-weight:700;">+${val.toFixed(0)}%</span></td>`;
+      html += `<td${scAttr}${hStyle}><span style="background:var(--green); color:white; padding:1px 6px; border-radius:10px; border:2px solid var(--ink); font-size:11px; font-weight:700;">+${val.toFixed(0)}%</span></td>`;
     } else if (col.pct && val != null) {
-      html += `<td${hStyle}>${(val * 100).toFixed(col.decimals)}%</td>`;
+      html += `<td${scAttr}${hStyle}>${(val * 100).toFixed(col.decimals)}%</td>`;
     } else {
-      html += `<td${hStyle}>${formatStat(val, col.decimals)}</td>`;
+      html += `<td${scAttr}${hStyle}>${formatStat(val, col.decimals)}</td>`;
     }
   }
   html += '<td style="width:32px;"></td>'; // spacer for "+" column
@@ -1399,8 +1407,8 @@ function renderTableBody() {
   const heatOn = state.heatColors;
   const pctData = heatOn ? computePercentiles() : {};
   _vscrollRows = [];
-  for (const player of state.items) {
-    _vscrollRows.push(buildRowHTML(player, cols, heatOn, pctData));
+  for (let i = 0; i < state.items.length; i++) {
+    _vscrollRows.push(buildRowHTML(state.items[i], cols, heatOn, pctData, i));
   }
 
   // Insert tier break divider rows if enabled (NFL only)
@@ -3182,7 +3190,7 @@ const TIER_BREAK_SIZES = [5, 12, 24, 36]; // cumulative breakpoints: Tier 1 = to
 
 function insertTierBreakRows(rows, cols) {
   if (!rows.length) return rows;
-  const colCount = cols.length + 4 + (state.universe === "nfl" ? 1 : 0); // star + checkbox + player + pin + add column btn
+  const colCount = cols.length + 5 + (state.universe === "nfl" ? 1 : 0); // star + checkbox + rank + player + pin + add column btn
   const result = [];
   let tierIdx = 0;
   const tierLabels = ["Tier 1 — Elite", "Tier 2 — Starters", "Tier 3 — Flex", "Tier 4 — Bench", "Tier 5 — Deep"];
@@ -3272,7 +3280,7 @@ function renderSummaryBar() {
   const items = state.items;
   const n = items.length;
 
-  const utilCols = state.universe === "nfl" ? 3 : 2;
+  const utilCols = state.universe === "nfl" ? 4 : 3;
   let html = '<tr>';
   html += `<td class="col-player" colspan="${utilCols + 1}" style="font-family:var(--font-hand); font-size:13px;">${n} players</td>`;
 
