@@ -1,18 +1,80 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 39 (Critical Bug Fixes — Priority 1)
-## Phase 39: Critical Bug Fixes — Priority 1
-**Exit Criterion**: Fix the 5 critical + 1 high severity bugs that make core features unusable. NFL screener shows correct year data. NFL/College toggle works without year change. Target Premium, Drop Rate, Matchups, Gamescript panels load. Garbage Time reliably works.
+- Phase: 40 (Panel Data Coverage Fixes — Priority 2)
+## Phase 40: Panel Data Coverage Fixes — Priority 2
+**Exit Criterion**: Panels that work but have limited date ranges are fixed to cover all available seasons. Snap-dependent panels show clear message for pre-2020 years. Tiers show S-tier for 2015-2016 elites. Half PPR cheat sheet recalculates.
 
-- Task 1: PASS
-- Task 2: PASS
-- Task 3: PASS
-- Task 4: PASS
-- Task 5: PASS
-- Task 6: PASS
-- Task 7: PASS
-- Stage: COMPLETE
+- Task 1: PENDING
+- Task 2: PENDING
+- Task 3: PENDING
+- Task 4: PENDING
+- Task 5: PENDING
+- Task 6: PENDING
+- Task 7: PENDING
+- Task 8: PENDING
+- Task 9: PENDING
+- Task 10: PENDING
+- Task 11: PENDING
+- Stage: IN PROGRESS
+- Next: Task 1
+
+### Task 1: Fix Efficiency Rankings — extend beyond 2024
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: Shows data for all seasons in the database including latest available.
+
+### Task 2: Fix Consistency Rankings — extend beyond 2024
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: Shows data for all seasons in the database.
+
+### Task 3: Fix Snap Efficiency — extend beyond 2020-2024
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: Works for all years where snap data exists, shows clear message for years without it.
+
+### Task 4: Fix Dual Threat Index — extend beyond 2020-2024
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: Works for all available years. Clear message for years without required data.
+
+### Task 5: Fix Workload Monitor — extend beyond 2020-2024
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: Works for all available years.
+
+### Task 6: Fix Tiers — extend to 2025, fix S-tier in 2015-2016
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: 2015 shows Antonio Brown/Julio Jones as S-tier, 2016 shows David Johnson/Antonio Brown as S-tier, 2025 data available.
+
+### Task 7: Fix Stacks — add 2025 and 2026
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: Stack correlations show for 2025 (or latest available season).
+
+### Task 8: Fix Red Zone — add missing years
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: Red zone data available for all seasons in the database.
+
+### Task 9: Fix Streaks — add 2025 and 2026
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: Streak data shows for latest available season.
+
+### Task 10: Fix Handcuff Rankings — add 2025
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: Handcuff rankings show for latest available season.
+
+### Task 11: Fix Half PPR on Cheat Sheet
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: Selecting Half PPR shows correctly calculated 0.5-per-reception values across all positions.
+
+## Phase 39: Critical Bug Fixes — Priority 1 (COMPLETE)
 
 ### Task 1: Fix NFL screener showing only 2024 data regardless of year
 **Status**: PASS
