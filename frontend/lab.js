@@ -2961,139 +2961,19 @@ function populatePresetSelect() {
   sel.innerHTML = html;
 }
 
-// ─── Saved views ─────────────────────────────────────────────────
-function _getSavedViews() {
-  try { return JSON.parse(localStorage.getItem("razzle_saved_views")) || []; } catch(e) { return []; }
-}
-
-function _saveSavedViews(views) {
-  try { localStorage.setItem("razzle_saved_views", JSON.stringify(views)); } catch(e) {}
-}
-
+// ─── Saved views (toolbar dropdown) ──────────────────────────────
 function populateSavedViewSelect() {
   var sel = document.getElementById("savedViewSelect");
   if (!sel) return;
-  var views = _getSavedViews();
-  var html = '<option value="">Views...</option>';
+  var views = getSavedViews();
+  var html = '<option value="">Saved Views...</option>';
   for (var i = 0; i < views.length; i++) {
-    html += '<option value="' + i + '">' + escapeHtml(views[i].name) + '</option>';
+    html += '<option value="' + escapeAttr(views[i].id || String(i)) + '">' + escapeHtml(views[i].name) + '</option>';
   }
   if (views.length > 0) {
     html += '<option value="__manage__">Manage views...</option>';
   }
   sel.innerHTML = html;
-}
-
-function saveCurrentView() {
-  var views = _getSavedViews();
-  if (views.length >= 20) { _showToast("max 20 saved views"); return; }
-  var name = prompt("Name this view:");
-  if (!name || !name.trim()) return;
-  name = name.trim().substring(0, 40);
-  views.push({
-    name: name,
-    universe: state.universe, collegeView: state.collegeView,
-    position: state.position, sortKey: state.sortKey, sortDir: state.sortDir,
-    sortKey2: state.sortKey2, sortDir2: state.sortDir2,
-    season: state.season, collegeSeason: state.collegeSeason, draftYear: state.draftYear,
-    relevance: state.relevance, limit: state.limit,
-    visibleColumns: state.visibleColumns.slice(),
-    collegeColumns: state.collegeColumns.slice(),
-    prospectColumns: state.prospectColumns.slice(),
-    filters: JSON.parse(JSON.stringify(state.filters)),
-    teams: state.teams.slice(),
-    minGP: state.minGP,
-    heatColors: state.heatColors, percentileMode: state.percentileMode,
-    dataBars: state.dataBars, density: state.density,
-    columnWidths: JSON.parse(JSON.stringify(state.columnWidths))
-  });
-  _saveSavedViews(views);
-  populateSavedViewSelect();
-  _showToast("view saved: " + name);
-}
-
-function loadSavedView(idx) {
-  if (idx === "" || idx === null) return;
-  if (idx === "__manage__") {
-    _openViewManager();
-    var sel = document.getElementById("savedViewSelect");
-    if (sel) sel.value = "";
-    return;
-  }
-  var views = _getSavedViews();
-  var v = views[parseInt(idx)];
-  if (!v) return;
-  if (v.universe) state.universe = v.universe;
-  if (v.collegeView) state.collegeView = v.collegeView;
-  if (v.position) state.position = v.position;
-  if (v.sortKey) state.sortKey = v.sortKey;
-  if (v.sortDir) state.sortDir = v.sortDir;
-  if (v.season !== undefined) state.season = v.season;
-  if (v.collegeSeason !== undefined) state.collegeSeason = v.collegeSeason;
-  if (v.draftYear !== undefined) state.draftYear = v.draftYear;
-  if (v.relevance) state.relevance = v.relevance;
-  if (v.limit) state.limit = v.limit;
-  if (v.visibleColumns) state.visibleColumns = v.visibleColumns.filter(function(k) { return COLUMNS[k]; });
-  if (v.collegeColumns) state.collegeColumns = v.collegeColumns.filter(function(k) { return COLLEGE_COLUMNS[k]; });
-  if (v.prospectColumns) state.prospectColumns = v.prospectColumns.filter(function(k) { return PROSPECT_COLUMNS[k]; });
-  if (v.filters) state.filters = v.filters;
-  if (v.teams) state.teams = v.teams;
-  if (v.minGP !== undefined) state.minGP = v.minGP;
-  if (v.sortKey2 !== undefined) state.sortKey2 = v.sortKey2;
-  if (v.sortDir2 !== undefined) state.sortDir2 = v.sortDir2;
-  if (v.heatColors !== undefined) state.heatColors = v.heatColors;
-  if (v.percentileMode !== undefined) state.percentileMode = v.percentileMode;
-  if (v.dataBars !== undefined) state.dataBars = v.dataBars;
-  if (v.density !== undefined) state.density = v.density;
-  if (v.columnWidths) state.columnWidths = v.columnWidths;
-  state.offset = 0;
-  // Update all UI to match restored state
-  applyUniverseUI();
-  populateSeasonSelect();
-  populateFilterStatSelect();
-  renderColumnPicker();
-  renderPresets();
-  populatePresetSelect();
-  populateSavedViewSelect();
-  renderActiveFilters();
-  saveStateToURL();
-  fetchAndRender();
-  var sel = document.getElementById("savedViewSelect");
-  if (sel) sel.value = "";
-  _showToast("loaded: " + v.name);
-}
-
-function _openViewManager() {
-  var views = _getSavedViews();
-  if (!views.length) { _showToast("no saved views"); return; }
-  var overlay = document.createElement("div");
-  overlay.className = "filter-modal-overlay open";
-  overlay.onclick = function(e) { if (e.target === overlay) overlay.remove(); };
-  var html = '<div class="filter-modal" style="max-width:400px;">';
-  html += '<h3 style="margin:0 0 12px; font-family:var(--font-display); font-size:18px;">Saved Views</h3>';
-  for (var i = 0; i < views.length; i++) {
-    html += '<div style="display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid var(--ink-light);">';
-    html += '<span style="font-family:var(--font-data); font-size:13px;">' + escapeHtml(views[i].name) + '</span>';
-    html += '<button class="btn-chunky" onclick="deleteSavedView(' + i + ')" style="padding:3px 8px; font-size:11px; color:var(--orange);">Delete</button>';
-    html += '</div>';
-  }
-  html += '<div style="margin-top:12px; text-align:right;"><button class="btn-chunky" onclick="this.closest(\'.filter-modal-overlay\').remove()">Close</button></div>';
-  html += '</div>';
-  overlay.innerHTML = html;
-  document.body.appendChild(overlay);
-}
-
-function deleteSavedView(idx) {
-  var views = _getSavedViews();
-  var name = views[idx] ? views[idx].name : "";
-  if (!confirm('Delete view "' + name + '"?')) return;
-  views.splice(idx, 1);
-  _saveSavedViews(views);
-  populateSavedViewSelect();
-  // Refresh the manager overlay if open
-  var overlay = document.querySelector(".filter-modal-overlay.open");
-  if (overlay) { overlay.remove(); if (views.length) _openViewManager(); }
-  _showToast("deleted: " + name);
 }
 
 // ─── URL state ───────────────────────────────────────────────────
@@ -3459,12 +3339,15 @@ function getSavedViews() {
 
 function saveCurrentView() {
   const nameInput = document.getElementById("saveViewName");
-  const name = nameInput.value.trim();
+  const name = (nameInput.value || "").trim();
   if (!name) { nameInput.style.borderColor = "var(--red)"; setTimeout(() => nameInput.style.borderColor = "", 1500); return; }
+
+  const views = getSavedViews();
+  if (views.length >= 20) { _showToast("max 20 saved views"); return; }
 
   const view = {
     id: Date.now().toString(36),
-    name,
+    name: name.substring(0, 40),
     createdAt: new Date().toISOString(),
     universe: state.universe,
     collegeView: state.collegeView,
@@ -3476,19 +3359,37 @@ function saveCurrentView() {
     sortDir: state.sortDir,
     sortKey2: state.sortKey2,
     sortDir2: state.sortDir2,
-    filters: [...state.filters],
+    heatColors: state.heatColors,
+    percentileMode: state.percentileMode,
+    dataBars: state.dataBars,
+    density: state.density,
+    columnWidths: state.columnWidths ? JSON.parse(JSON.stringify(state.columnWidths)) : {},
+    filters: JSON.parse(JSON.stringify(state.filters)),
     columns: isProspectView() ? [...state.prospectColumns] : state.universe === "college" ? [...state.collegeColumns] : [...state.visibleColumns],
   };
 
-  const views = getSavedViews();
   views.unshift(view);
-  try { localStorage.setItem("razzle_saved_views", JSON.stringify(views)); } catch(e) {}
+  try {
+    localStorage.setItem("razzle_saved_views", JSON.stringify(views));
+  } catch(e) {
+    _showToast("failed to save view");
+    return;
+  }
 
   nameInput.value = "";
+  populateSavedViewSelect();
   renderSavedViewsList();
+  _showToast("view saved: " + name);
 }
 
 function loadSavedView(id) {
+  if (id === "" || id === null) return;
+  if (id === "__manage__") {
+    openSavedViews();
+    var sel = document.getElementById("savedViewSelect");
+    if (sel) sel.value = "";
+    return;
+  }
   const views = getSavedViews();
   const view = views.find(v => v.id === id);
   if (!view) return;
@@ -3505,15 +3406,33 @@ function loadSavedView(id) {
   state.filters = view.filters ? [...view.filters] : [];
   state.relevance = view.relevance || "fantasy";
 
-  if (isProspectView()) {
-    if (view.season) state.draftYear = view.season;
-    state.prospectColumns = view.columns ? [...view.columns] : [...PROSPECT_PRESETS.combine.columns];
-  } else if (view.universe === "college") {
-    if (view.season) state.collegeSeason = view.season;
-    state.collegeColumns = view.columns ? [...view.columns] : [...COLLEGE_PRESETS.production.columns];
+  // Visual state
+  if (view.heatColors !== undefined) state.heatColors = view.heatColors;
+  if (view.percentileMode !== undefined) state.percentileMode = view.percentileMode;
+  if (view.dataBars !== undefined) state.dataBars = view.dataBars;
+  if (view.density !== undefined) state.density = view.density;
+  if (view.columnWidths) state.columnWidths = view.columnWidths;
+
+  // Legacy column arrays (old format) + new format
+  if (view.columns) {
+    if (isProspectView()) {
+      if (view.season) state.draftYear = view.season;
+      state.prospectColumns = [...view.columns];
+    } else if (state.universe === "college") {
+      if (view.season) state.collegeSeason = view.season;
+      state.collegeColumns = [...view.columns];
+    } else {
+      if (view.season !== undefined) state.season = view.season;
+      state.visibleColumns = [...view.columns];
+    }
   } else {
+    // Legacy format with separate column arrays
+    if (view.visibleColumns) state.visibleColumns = view.visibleColumns.filter(k => COLUMNS[k]);
+    if (view.collegeColumns) state.collegeColumns = view.collegeColumns.filter(k => COLLEGE_COLUMNS[k]);
+    if (view.prospectColumns) state.prospectColumns = view.prospectColumns.filter(k => PROSPECT_COLUMNS[k]);
     if (view.season !== undefined) state.season = view.season;
-    state.visibleColumns = view.columns ? [...view.columns] : [...PRESETS.ppr.columns];
+    if (view.collegeSeason !== undefined) state.collegeSeason = view.collegeSeason;
+    if (view.draftYear !== undefined) state.draftYear = view.draftYear;
   }
 
   // Sync UI controls
@@ -3527,18 +3446,26 @@ function loadSavedView(id) {
   applyUniverseUI();
   populateSeasonSelect();
   populateFilterStatSelect();
+  renderColumnPicker();
+  renderPresets();
+  populatePresetSelect();
+  populateSavedViewSelect();
   renderActiveFilters();
   saveStateToURL();
 
   state.offset = 0;
   closeSavedViews();
   fetchAndRender();
+  _showToast("loaded: " + view.name);
 }
 
 function deleteSavedView(id) {
+  if (!confirm("Delete this saved view?")) return;
   const views = getSavedViews().filter(v => v.id !== id);
   try { localStorage.setItem("razzle_saved_views", JSON.stringify(views)); } catch(e) {}
+  populateSavedViewSelect();
   renderSavedViewsList();
+  _showToast("view deleted");
 }
 
 function renderSavedViewsList() {
@@ -3568,11 +3495,11 @@ function renderSavedViewsList() {
     const filterCount = (v.filters && v.filters.length) ? ` <span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">${v.filters.length} filter${v.filters.length > 1 ? "s" : ""}</span>` : "";
 
     return `<div style="display:flex; align-items:center; gap:10px; padding:10px 12px; border:2px solid var(--ink); border-radius:8px; margin-bottom:8px; background:var(--bg); cursor:pointer; transition:transform 0.1s, box-shadow 0.1s;" onmouseenter="this.style.transform='translate(-2px,-2px)';this.style.boxShadow='4px 4px 0 var(--ink)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
-      <div style="flex:1; min-width:0;" onclick="loadSavedView('${v.id}')">
-        <div style="font-family:var(--font-display); font-size:14px; font-weight:600; margin-bottom:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${v.name}</div>
+      <div style="flex:1; min-width:0;" onclick="loadSavedView('${escapeAttr(v.id)}')">
+        <div style="font-family:var(--font-display); font-size:14px; font-weight:600; margin-bottom:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHtml(v.name)}</div>
         <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">${universeBadge(v.universe)}${posBadge(v.position)}${filterCount}<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">${dateStr}</span></div>
       </div>
-      <button onclick="event.stopPropagation(); deleteSavedView('${v.id}')" style="background:none; border:2px solid var(--ink-faint); border-radius:6px; padding:4px 8px; cursor:pointer; font-family:var(--font-mono); font-size:11px; color:var(--ink-light);" title="Delete view">✕</button>
+      <button onclick="event.stopPropagation(); deleteSavedView('${escapeAttr(v.id)}')" style="background:none; border:2px solid var(--ink-faint); border-radius:6px; padding:4px 8px; cursor:pointer; font-family:var(--font-mono); font-size:11px; color:var(--ink-light);" title="Delete view">✕</button>
     </div>`;
   }).join("");
 }

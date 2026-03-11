@@ -5,35 +5,23 @@
 ## Phase 120: QA + UX Audit — Auto-Generated Fixes
 **Exit Criterion**: 3 CRITICAL (dead code, XSS x2) and 4 HIGH (visual state, CSS vars, 1px borders, max views) fixed. MEDIUM findings resolved.
 
-- Task 1: PENDING
-- Task 2: PENDING
-- Task 3: PENDING
-- Stage: IN PROGRESS
+- Task 1: PASS
+- Task 2: PASS
+- Task 3: PASS
+- Stage: COMPLETE
+- Next: Phase gate
 
 ### Task 1: Delete old saved views dead code + fix XSS
-**Status**: PENDING
-**Attempts**: 0
-**Acceptance Criteria**:
-- Delete old saved views implementation (lines 2964-3097 in lab.js): _getSavedViews, _saveSavedViews, populateSavedViewSelect, saveCurrentView (old), loadSavedView (old), deleteSavedView (old), _openViewManager
-- Escape v.name with escapeHtml() and v.id with escapeAttr() in renderSavedViewsList()
-- Verify populateSavedViewSelect is not called elsewhere (or move to new implementation)
-- 34 tests pass
+**Status**: PASS
+**Attempts**: 1
+**Result**: Deleted 85 lines of dead code (old _getSavedViews, _saveSavedViews, saveCurrentView, loadSavedView, deleteSavedView, _openViewManager). Updated populateSavedViewSelect to use getSavedViews() and IDs. Fixed XSS: escapeHtml(v.name) and escapeAttr(v.id) in renderSavedViewsList.
 
 ### Task 2: Restore missing visual state in saved views + add limits/toasts
-**Status**: PENDING
-**Attempts**: 0
-**Acceptance Criteria**:
-- Add columnWidths, heatColors, percentileMode, dataBars, density to saveCurrentView()
-- Restore those fields in loadSavedView()
-- Add max 20 views limit check
-- Add toast for save ("View saved: name"), load ("Loaded: name"), delete ("View deleted")
-- Add confirm() before delete
+**Status**: PASS
+**Attempts**: 1
+**Result**: saveCurrentView now saves heatColors, percentileMode, dataBars, density, columnWidths. loadSavedView restores them + handles __manage__ + legacy column formats. Max 20 limit. Toast for save/load/delete. Confirm on delete.
 
 ### Task 3: MEDIUM + design fixes
-**Status**: PENDING
-**Attempts**: 0
-**Acceptance Criteria**:
-- Fix invalid CSS vars: --bg-sand → --bg, --font-data → --font-mono (lab.html:3215)
-- Fix 1px borders on DVS badges → 2px (lab.html:3148-3151)
-- Replace gradient in heatmap legend with stepped color blocks (lab.html:3696)
-- Add aria-label to CSV button
+**Status**: PASS
+**Attempts**: 1
+**Result**: (a) --bg-sand → --bg, --font-data → --font-mono in column picker. (b) 1px → 2px borders on DVS badges. (c) Gradient replaced with 5-step color blocks in heatmap legend. (d) aria-label on CSV button.

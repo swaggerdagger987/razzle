@@ -1,16 +1,16 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 120 — QA + UX Audit Fixes for Phases 116-119 (IN PROGRESS)
+## Previous Phase: Phase 120 — QA + UX Audit Fixes for Phases 116-119 (COMPLETE)
 
-**Exit Criterion**: 3 CRITICAL + 4 HIGH + MEDIUM findings fixed. 34 tests pass.
+**Exit Criterion MET**: 3 CRITICAL + 4 HIGH + MEDIUM findings fixed. 34 tests pass.
 
 ### Phase 120 Tasks
 
 | # | Task | Status | Notes |
 |---|------|--------|-------|
-| 1 | Dead code + XSS | IN PROGRESS | Delete old saved views, escape v.name/v.id |
-| 2 | Visual state + limits | PENDING | columnWidths/heatColors/etc, max 20, toasts |
-| 3 | Design fixes | PENDING | CSS vars, 1px borders, gradient |
+| 1 | Dead code + XSS | DONE | 85 lines old saved views deleted, XSS escaped |
+| 2 | Visual state + limits | DONE | heatColors/density/etc saved/restored, max 20, toasts, confirm |
+| 3 | Design fixes | DONE | CSS vars, 2px borders, stepped colors, aria-label |
 
 ## Previous Phase: Phase 119 — Export UX Polish (COMPLETE)
 

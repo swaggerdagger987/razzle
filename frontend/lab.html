@@ -3075,7 +3075,7 @@
     <button class="btn-chunky" id="classAnalyticsBtn" onclick="openClassAnalytics()" style="display:none;">Class Analytics</button>
     <button class="btn-chunky" onclick="openMyRoster()" style="border-color:var(--green);">My Roster</button>
     <button class="btn-chunky" onclick="openTradeAnalyzer()" style="border-color:var(--orange);">Trade</button>
-    <button class="btn-chunky" onclick="exportCSV()" title="Export current view as CSV">CSV</button>
+    <button class="btn-chunky" onclick="exportCSV()" title="Export current view as CSV" aria-label="Export current view as CSV">CSV</button>
     <button class="btn-chunky" onclick="openShareModal()" style="border-color:var(--orange);">Share</button>
     <button class="btn-chunky" id="exportRankingsBtn" onclick="openRankingsExport()" style="display:none;">Export Rankings</button>
     <button class="btn-chunky" id="tradeValuesBtn" onclick="openTradeValues()" style="display:none; border-color:var(--orange);">Trade Values</button>
@@ -3145,10 +3145,10 @@
       <div style="text-align:center; font-family:var(--font-hand); font-size:20px; color:var(--ink-light); margin-top:12px;">pulling film...</div>
     </div>
     <div style="display:flex; gap:14px; flex-wrap:wrap; padding:6px 12px; font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">
-      <span><span style="background:var(--green); color:white; padding:0 4px; border-radius:4px; border:1px solid var(--ink); font-weight:700;">85+</span> DVS Elite</span>
-      <span><span style="background:var(--pos-qb); color:white; padding:0 4px; border-radius:4px; border:1px solid var(--ink); font-weight:700;">70+</span> DVS Star</span>
-      <span><span style="background:var(--orange); color:white; padding:0 4px; border-radius:4px; border:1px solid var(--ink); font-weight:700;">55+</span> DVS Starter</span>
-      <span><span style="background:var(--green); color:white; padding:0 4px; border-radius:4px; border:1px solid var(--ink); font-weight:700;">+50%</span> Breakout</span>
+      <span><span style="background:var(--green); color:white; padding:0 4px; border-radius:4px; border:2px solid var(--ink); font-weight:700;">85+</span> DVS Elite</span>
+      <span><span style="background:var(--pos-qb); color:white; padding:0 4px; border-radius:4px; border:2px solid var(--ink); font-weight:700;">70+</span> DVS Star</span>
+      <span><span style="background:var(--orange); color:white; padding:0 4px; border-radius:4px; border:2px solid var(--ink); font-weight:700;">55+</span> DVS Starter</span>
+      <span><span style="background:var(--green); color:white; padding:0 4px; border-radius:4px; border:2px solid var(--ink); font-weight:700;">+50%</span> Breakout</span>
       <span style="color:var(--ink-faint);">&#8212; = not applicable for position</span>
     </div>
   </div>
@@ -3212,7 +3212,7 @@
 <div class="column-picker-overlay" id="columnPickerOverlay" onclick="closeColumnPicker(event)">
   <div class="column-picker" onclick="event.stopPropagation()">
     <h3>Columns</h3>
-    <input type="text" id="columnPickerSearch" placeholder="Search columns..." oninput="filterColumnPicker(this.value)" style="width:100%; padding:8px 12px; margin-bottom:10px; font-family:var(--font-data); font-size:13px; border:3px solid var(--ink); border-radius:8px; background:var(--bg-sand); box-sizing:border-box;">
+    <input type="text" id="columnPickerSearch" placeholder="Search columns..." oninput="filterColumnPicker(this.value)" style="width:100%; padding:8px 12px; margin-bottom:10px; font-family:var(--font-mono); font-size:13px; border:3px solid var(--ink); border-radius:8px; background:var(--bg); box-sizing:border-box;">
     <div class="preset-bar" id="presetBar"></div>
     <div id="columnGroups"></div>
     <div style="margin-top: 16px; display: flex; gap: 8px; justify-content: flex-end;">
@@ -3693,7 +3693,7 @@
     </div>
     <div id="hmLegend" style="margin-top:12px; display:flex; align-items:center; gap:12px; justify-content:center;">
       <span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">0th</span>
-      <div style="width:200px; height:14px; border:2px solid var(--ink); border-radius:4px; background:linear-gradient(to right, #e63946, #ffc857, #2ec4b6);"></div>
+      <div style="width:200px; height:14px; border:2px solid var(--ink); border-radius:4px; display:flex; overflow:hidden;"><div style="flex:1; background:#e63946;"></div><div style="flex:1; background:#f4845f;"></div><div style="flex:1; background:#ffc857;"></div><div style="flex:1; background:#7ecba1;"></div><div style="flex:1; background:#2ec4b6;"></div></div>
       <span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">100th percentile</span>
     </div>
   </div>
