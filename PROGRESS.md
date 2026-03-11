@@ -1,5 +1,28 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 145 — Platform: Format-Aware Agents + Backend Hardening (COMPLETE)
+
+**Exit Criterion MET**: Five improvements shipped. (1) Format-aware league context: warroom.js now detects league format (redraft/dynasty/keeper/best ball/superflex) from Sleeper settings via new detectLeagueFormat() and buildFormatInstructions() functions. Format-specific instructions injected into every agent prompt — redraft agents focus on this-season value, dynasty agents think multi-year, keeper agents calculate surplus value, best ball agents optimize for ceiling, superflex agents inflate QB valuations. When no league is connected, defaults to 0.5 PPR redraft. (2) All 6 agent persona files updated with "Format-Aware Logic" sections covering redraft, dynasty, keeper, best ball, superflex, TE premium, and FAAB-specific reasoning. (3) SQLite connection pooling: db.py now maintains a thread-safe pool of up to 5 reusable connections with checkout/checkin pattern, stale connection detection, and rollback on return. get_write_conn() bypasses the pool for long-running adapter writes. pool_stats() exposed in health check. (4) Structured logging with request IDs: middleware generates X-Request-ID per request (or propagates from client header), includes it in all log entries and response headers for end-to-end tracing. JSONFormatter updated to serialize request_id. (5) tools_hub inline JSON (~120 lines) extracted to backend/config/tools_hub.json, endpoint reads from file. League-intel.html enriched league metadata with superflex detection, TE premium, waiver type, taxi slots, reserve slots, trade deadline, draft rounds, best ball flag, and scoring details.
+
+### Phase 145 Tasks (Platform Loop)
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Format-Aware League Context | DONE | detectLeagueFormat(), buildFormatInstructions() in warroom.js, league-intel.html enriched metadata |
+| 2 | Agent Persona Format-Awareness | DONE | All 6 personas updated with format-specific logic sections |
+| 3 | SQLite Connection Pooling | DONE | Thread-safe pool (5 connections), checkout/checkin, stale detection, pool_stats() in health check |
+| 4 | Structured Logging with Request IDs | DONE | X-Request-ID middleware, JSONFormatter includes request_id, timing per request |
+| 5 | Tools Hub JSON Extraction | DONE | 120 lines of inline JSON moved to backend/config/tools_hub.json |
+
+### Decisions Log
+- Format detection reads Sleeper roster_positions for superflex (SUPER_FLEX slot or 2+ QB slots)
+- TE premium detected from bonus_rec_te or rec_te > rec in scoring_settings
+- Connection pool uses check_same_thread=False for thread safety, validates connections with SELECT 1 before checkout
+- Write connections bypass pool since adapter ingestion is long-running and should not block read pool
+- Request IDs are 12-char hex (uuid4 truncated) for brevity in logs
+- tools_hub.json is loaded on each request (cached by filesystem, could add in-memory cache later if needed)
+- Default format when no league detected: 0.5 PPR redraft (broadest common format per system prompt)
+
 ## Previous Phase: Phase 144 — Platform: Career Mode + Roster Grading Tier Gating (COMPLETE)
 
 **Exit Criterion MET**: Career mode in Lab screener gated behind Pro+ plan per pricing strategy ("Career mode: Current only for Free, ALL for Pro/Elite"). Free users see "Career" option disabled with lock icon, forced back to allowed season if they had career mode from a shared URL. Roster grading API endpoint (`POST /api/roster-grade`) now requires Pro+ auth via `require_plan("pro")`. Frontend roster builder and lab-panels roster grading handle 401/403 gracefully with upgrade prompt linking to /pricing.html.

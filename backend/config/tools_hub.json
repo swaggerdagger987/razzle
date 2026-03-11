@@ -1,0 +1,118 @@
+[
+  {
+    "id": "rankings",
+    "name": "Rankings & Values",
+    "icon": "\ud83c\udfc6",
+    "tools": [
+      {"name": "Dynasty Rankings", "desc": "Tiered player rankings across all positions", "url": "/rankings.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Trade Values", "desc": "Composite trade value chart with production, age, and scarcity", "url": "/tradevalues.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "VORP", "desc": "Value Over Replacement Player — cross-position ranking", "url": "/vorp.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Stat Leaders", "desc": "Top performers across 10 statistical categories", "url": "/leaders.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Season Awards", "desc": "Data-driven fantasy superlatives — MVP, Iron Man, and more", "url": "/awards.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Report Card", "desc": "Composite Fantasy GPA grading efficiency, consistency, and more", "url": "/reportcard.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Draft Cheat Sheet", "desc": "Printable position rankings with tier breaks — PPR, Half, Standard", "url": "/cheatsheet.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Auction Values", "desc": "Trade values converted to auction dollars for any budget", "url": "/auction.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Dynasty Dashboard", "desc": "At-a-glance overview: risers, fallers, value picks, scarcity alerts", "url": "/dashboard.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Tier List", "desc": "S/A/B/C/D/F tier rankings based on composite trade value", "url": "/tiers.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Player Archetypes", "desc": "Statistical archetypes — Workhorse, Deep Threat, Dual-Threat, and more", "url": "/archetypes.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Draft Class Tracker", "desc": "Fantasy production by draft class — hits, busts, and round-by-round ROI", "url": "/draftclass.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Record Book", "desc": "All-time fantasy records — single-game, single-season, career leaders", "url": "/records.html", "positions": ["QB", "RB", "WR", "TE"]}
+    ]
+  },
+  {
+    "id": "discovery",
+    "name": "Player Discovery",
+    "icon": "\ud83d\udd0d",
+    "tools": [
+      {"name": "Trade Finder", "desc": "Search a player, find equal-value, buy-low, and sell-high targets", "url": "/tradefinder.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Buy Low / Sell High", "desc": "Efficiency vs. dynasty rank mismatches", "url": "/buysell.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Stock Watch", "desc": "Rising and falling dynasty stocks by composite metrics", "url": "/stocks.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Breakout Candidates", "desc": "Opportunity vs. production gap — who's due for a leap", "url": "/breakouts.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Rookie Big Board", "desc": "Prospect tiers with RPS scoring and percentile bars", "url": "/prospects.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Player Percentiles", "desc": "Position-relative percentile rankings across 8+ categories", "url": "/percentiles.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "TD Regression", "desc": "Players due for positive or negative touchdown regression", "url": "/regression.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Strengths & Weaknesses", "desc": "A player's top strengths and weaknesses by percentile ranking", "url": "/strengths.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Hot & Cold Streaks", "desc": "Who's on fire or ice cold over their last few games vs season average", "url": "/streaks.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Waiver Wire", "desc": "High recent PPG, low season PPG — likely unrostered and surging", "url": "/waivers.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Handcuff Rankings", "desc": "Most valuable backup RBs by team rushing volume and efficiency", "url": "/handcuffs.html", "positions": ["RB"]},
+      {"name": "Stack Finder", "desc": "QB-WR/TE scoring correlations — find the best same-team stacks", "url": "/stacks.html", "positions": ["QB", "WR", "TE"]},
+      {"name": "Positional Advantage", "desc": "Biggest scoring edge over the positional average — league-winning edges", "url": "/advantage.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "TD Regression", "desc": "Expected vs actual TDs — find buy/sell candidates due for TD correction", "url": "/tdregression.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Dual-Threat Index", "desc": "Rush+rec versatility — who contributes in both dimensions?", "url": "/dualthreat.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Snap Efficiency", "desc": "Fantasy points per snap — who maximizes every snap they play?", "url": "/snapefficiency.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Garbage Time", "desc": "Stat padders vs clean producers — who scores in garbage time?", "url": "/garbagetime.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Season Pace", "desc": "Projected season totals and milestone tracking based on per-game pace", "url": "/seasonpace.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Target Premium", "desc": "Target quality composite — aDOT, catch rate, YAC, yards per target", "url": "/targetpremium.html", "positions": ["WR", "RB", "TE"]},
+      {"name": "Workload Monitor", "desc": "Snap counts, touches/game, heavy usage flags — who's carrying the load?", "url": "/workload.html", "positions": ["QB", "RB", "WR", "TE"]}
+    ]
+  },
+  {
+    "id": "performance",
+    "name": "Performance Analysis",
+    "icon": "\ud83d\udcca",
+    "tools": [
+      {"name": "Efficiency", "desc": "Fantasy points per opportunity and volume rankings", "url": "/efficiency.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Consistency", "desc": "Coefficient of variation, floor, ceiling, and scoring range", "url": "/consistency.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Air Yards", "desc": "aDOT, RACR, WOPR, and regression buy/sell indicators", "url": "/airyards.html", "positions": ["WR", "RB", "TE"]},
+      {"name": "Drop Rate", "desc": "Sure hands vs butterfingers — drop rate, catch rate, YAC/rec", "url": "/drops.html", "positions": ["WR", "RB", "TE"]},
+      {"name": "Success Rate", "desc": "Rush and pass success rate — efficient play-makers vs volume runners", "url": "/successrate.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Game Script", "desc": "Fantasy production in winning vs losing game scripts", "url": "/gamescript.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Red Zone & Goal-Line", "desc": "Goal-line carries, targets, TDs, and TD dependency", "url": "/redzone.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Player Comparison", "desc": "Side-by-side stat comparison with radar charts and boom/bust rates", "url": "/compare.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Comparison Table", "desc": "Add 3-8 players and compare in a sortable stat grid", "url": "/comptable.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Scoring Formats", "desc": "How PPR vs Half-PPR vs Standard changes rankings", "url": "/scoring.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Points Breakdown", "desc": "Where a player's fantasy points come from — donut chart by scoring category", "url": "/breakdown.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Pace & Milestones", "desc": "17-game pace projections and milestone tracking — who's on pace for 1,000 yards?", "url": "/pace.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Game Log", "desc": "Week-by-week box score stats for any player — the full season tape", "url": "/gamelog.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Scoring Breakdown", "desc": "How players accumulate PPR points — rush/rec/pass yards, receptions, TDs", "url": "/fptsbreakdown.html", "positions": ["QB", "RB", "WR", "TE"]}
+    ]
+  },
+  {
+    "id": "usage",
+    "name": "Usage & Opportunity",
+    "icon": "\u26a1",
+    "tools": [
+      {"name": "Opportunity Share", "desc": "Target and carry share as percentage of team volume", "url": "/opportunity.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Snap Trends", "desc": "Risers and fallers with sparklines over 3/5/8 week windows", "url": "/usage.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Target Distribution", "desc": "Team-level target and carry allocation by position", "url": "/targets.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Positional Scarcity", "desc": "PPG drop-off by position — where the cliffs are", "url": "/scarcity.html", "positions": ["QB", "RB", "WR", "TE"]}
+    ]
+  },
+  {
+    "id": "matchup",
+    "name": "Matchup & Schedule",
+    "icon": "\ud83d\udcc5",
+    "tools": [
+      {"name": "Matchup Heatmap", "desc": "32-team defensive PPG allowed by position — find soft matchups", "url": "/matchups.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Strength of Schedule", "desc": "SOS grades, buy targets vs. sell candidates", "url": "/schedule.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Playoff Schedule", "desc": "Grade playoff matchups (wk 14-17) by opponent difficulty", "url": "/playoffs.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Weekly Heatmap", "desc": "Player-by-week scoring grid with color-coded tiers", "url": "/weekly.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Weekly Leaders", "desc": "Top fantasy performers for any week — who went off", "url": "/weeklyleaders.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Season Recap", "desc": "Data-driven year in review — MVP, breakouts, busts, top weeks, and more", "url": "/recap.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Weekly MVP Grid", "desc": "The #1 scorer at each position every week — who owned the week", "url": "/weeklymvp.html", "positions": ["QB", "RB", "WR", "TE"]}
+    ]
+  },
+  {
+    "id": "visualizations",
+    "name": "Visualizations",
+    "icon": "\ud83c\udfa8",
+    "tools": [
+      {"name": "Stat Explorer", "desc": "Scatter plot — any stat vs. any stat with trendlines", "url": "/explorer.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Aging Curves", "desc": "PPG-by-age curves per position with player overlays", "url": "/aging.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Year-over-Year", "desc": "Cross-season stat deltas — risers and fallers", "url": "/yoy.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Career Timeline", "desc": "Season-by-season player trajectory with PPG chart and career highs", "url": "/career.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Career Compare", "desc": "Overlay career trajectories of 2-3 players side by side", "url": "/career-compare.html", "positions": ["QB", "RB", "WR", "TE"]}
+    ]
+  },
+  {
+    "id": "team",
+    "name": "Team & League",
+    "icon": "\ud83c\udfc8",
+    "tools": [
+      {"name": "Roster Builder", "desc": "Build a hypothetical roster and get it graded on value, VORP, age, depth", "url": "/rosterbuilder.html", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "Team Rosters", "desc": "Full roster breakdown by position group with age badges", "url": "/team/KC", "positions": ["QB", "RB", "WR", "TE"]},
+      {"name": "League Intel", "desc": "Connect Sleeper — see leagues, rosters, and manager profiles", "url": "/league-intel.html", "positions": []},
+      {"name": "The Lab", "desc": "Full Bloomberg screener — 100+ columns, filters, formulas", "url": "/lab.html", "positions": ["QB", "RB", "WR", "TE"]}
+    ]
+  }
+]

@@ -121,6 +121,24 @@ League history analysis, precedent identification, pattern recognition, and inst
 - **No historical precedent**: "This situation has no strong precedent in your league or in comparable leagues. This is a novel situation — proceed with extra caution."
 - **Small sample size**: "Only [X] instances of this pattern exist. The trend is suggestive but not statistically reliable. Weight it as one factor, not the deciding factor."
 
+## Format-Aware Logic
+
+Historical analysis adapts to format because the relevant history changes.
+
+**Redraft**: Focus on within-season patterns. "Players who started 0-5 and finished top-12" is more relevant than multi-year arcs. Second-half production splits, playoff-week historical performance, and seasonal scoring trends are the core data. "Last year at this point, similar players finished as..." is the key frame.
+
+**Dynasty**: Multi-season arcs are the core output. Age curves, career trajectory comps, positional aging patterns. "Players with this age/production profile historically produced X over the next 3 years." League-specific multi-season history is devastating here — "In your league's 4-year history, [Manager] has never traded a first-round pick."
+
+**Keeper**: Historical keeper ROI is unique to this format. "Players kept at Round X cost in previous seasons returned Y surplus value on average." Track which keeper decisions in this league's history paid off and which burned. Keeper cost inflation patterns across seasons.
+
+**Best Ball**: Historical boom-rate patterns. "Players with this archetype historically had X% boom weeks." Weekly scoring distributions matter more than averages. Historical best ball contest winner profiles — what roster construction patterns win?
+
+**Superflex**: Historical QB valuation trends. Track how QB values have shifted over seasons in this league or in SF leagues broadly. QB carousel history — how often do backup QBs become starters, and what's the historical fantasy output?
+
+**League History Depth**: When multi-season league data is available via previous_league_id chain, leverage it aggressively. Behavioral patterns across 3+ seasons are highly predictive. When limited to 1 season, note the constraint and rely more on NFL-wide patterns.
+
+Follow the FORMAT RULES section in context strictly when present.
+
 ## Rules
 - Always cite specific historical examples to support claims — dates, names, outcomes.
 - Distinguish between league-specific precedent and NFL-wide patterns. League-specific is always more valuable.
@@ -129,3 +147,4 @@ League history analysis, precedent identification, pattern recognition, and inst
 - If no league history is connected, focus on NFL-wide historical analysis and state this clearly.
 - Never present a single historical example as proof of a pattern. Patterns require 3+ data points.
 - Multi-season memory is the superpower — always leverage the deepest available history.
+- Always frame historical analysis through the lens of the detected league format.

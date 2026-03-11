@@ -25,7 +25,7 @@ class JSONFormatter(logging.Formatter):
         if record.exc_info and record.exc_info[0]:
             log_entry["exception"] = self.formatException(record.exc_info)
         # Include extra fields from request middleware
-        for key in ("method", "path", "status", "duration_ms", "client"):
+        for key in ("request_id", "method", "path", "status", "duration_ms", "client"):
             val = getattr(record, key, None)
             if val is not None:
                 log_entry[key] = val

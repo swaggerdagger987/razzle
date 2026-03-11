@@ -679,16 +679,45 @@ async function loadLeagues(userId) {
 
     // Save league metadata for Situation Room context bridge
     try {
-      const leagueMeta = leagues.map(lg => ({
-        id: lg.league_id,
-        name: lg.name,
-        teams: lg.total_rosters || "?",
-        scoring: lg.scoring_settings?.rec === 1 ? "PPR"
-          : lg.scoring_settings?.rec === 0.5 ? "Half PPR" : "Standard",
-        type: lg.settings?.type === 2 ? "Dynasty"
-          : lg.settings?.type === 1 ? "Keeper" : "Redraft",
-        season: season,
-      }));
+      const leagueMeta = leagues.map(lg => {
+        // Detect superflex from roster positions
+        var rosterPos = lg.roster_positions || [];
+        var hasSuperFlex = rosterPos.includes("SUPER_FLEX");
+        var has2QB = rosterPos.filter(p => p === "QB").length >= 2;
+        var isSuperFlex = hasSuperFlex || has2QB;
+        // TE premium detection
+        var tePremium = (lg.scoring_settings?.bonus_rec_te || 0) > 0
+          || (lg.scoring_settings?.rec_te || 0) > (lg.scoring_settings?.rec || 0);
+        // Scoring label
+        var scoringLabel = lg.scoring_settings?.rec === 1 ? "PPR"
+          : lg.scoring_settings?.rec === 0.5 ? "Half PPR" : "Standard";
+        if (isSuperFlex) scoringLabel += " Superflex";
+        if (tePremium) scoringLabel += " TEP";
+        return {
+          id: lg.league_id,
+          name: lg.name,
+          teams: lg.total_rosters || "?",
+          scoring: scoringLabel,
+          type: lg.settings?.type === 2 ? "Dynasty"
+            : lg.settings?.type === 1 ? "Keeper" : "Redraft",
+          season: season,
+          // Rich format fields for agent context
+          rosterPositions: rosterPos,
+          superflex: isSuperFlex,
+          tePremium: tePremium,
+          taxiSlots: lg.settings?.taxi_slots || 0,
+          reserveSlots: lg.settings?.reserve_slots || 0,
+          waiverType: lg.settings?.waiver_type === 2 ? "FAAB"
+            : lg.settings?.waiver_type === 1 ? "Rolling" : "Standard",
+          tradeDeadline: lg.settings?.trade_deadline || null,
+          draftRounds: lg.settings?.draft_rounds || null,
+          previousLeagueId: lg.previous_league_id || null,
+          bestBall: lg.settings?.best_ball === 1,
+          scoringRec: lg.scoring_settings?.rec || 0,
+          scoringPassTD: lg.scoring_settings?.pass_td || 4,
+          scoringBonusRecTE: lg.scoring_settings?.bonus_rec_te || 0,
+        };
+      });
       const existing = JSON.parse(localStorage.getItem("razzle_league_context") || "{}");
       existing.leagues = leagueMeta;
       existing.updatedAt = Date.now();

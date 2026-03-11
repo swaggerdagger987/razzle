@@ -1793,6 +1793,7 @@ function buildRules(agentDef) {
   } else {
     rules.push('- GENERIC MODE: No league context available. Give general fantasy football analysis.');
     rules.push('- Use broad rankings and general strategy, not league-specific advice.');
+    rules.push('- If format is unknown, default to 0.5 PPR redraft analysis. Adapt if the user specifies a format in their question.');
   }
   if (agentDef.id === 0) {
     rules.push('- Lead with the Urgency Tier.');
@@ -1877,6 +1878,130 @@ function getLeagueContext() {
   } catch (e) { return null; }
 }
 
+function detectLeagueFormat(ctx) {
+  // Extract the primary league's format for agent instructions
+  var lg = null;
+  if (ctx.leagues && ctx.leagues.length) {
+    // Use the currently selected league if available, otherwise first
+    var selectedId = ctx.selectedLeagueId;
+    if (selectedId) {
+      lg = ctx.leagues.find(function(l) { return l.id === selectedId; });
+    }
+    if (!lg) lg = ctx.leagues[0];
+  }
+  if (!lg) {
+    return { type: 'Redraft', scoring: 'Half PPR', superflex: false, tePremium: false,
+      bestBall: false, waiverType: 'Standard', taxiSlots: 0, draftRounds: null,
+      tradeDeadline: null, previousLeagueId: null, teams: '12', label: 'Standard 0.5 PPR Redraft (default — no league detected)' };
+  }
+  var label = lg.teams + '-team ' + lg.scoring + ' ' + lg.type;
+  if (lg.bestBall) label += ' (Best Ball)';
+  if (lg.waiverType === 'FAAB') label += ', FAAB waivers';
+  if (lg.taxiSlots > 0) label += ', ' + lg.taxiSlots + ' taxi slots';
+  return {
+    type: lg.type || 'Redraft',
+    scoring: lg.scoring || 'Half PPR',
+    superflex: lg.superflex || false,
+    tePremium: lg.tePremium || false,
+    bestBall: lg.bestBall || false,
+    waiverType: lg.waiverType || 'Standard',
+    taxiSlots: lg.taxiSlots || 0,
+    reserveSlots: lg.reserveSlots || 0,
+    draftRounds: lg.draftRounds || null,
+    tradeDeadline: lg.tradeDeadline || null,
+    previousLeagueId: lg.previousLeagueId || null,
+    teams: lg.teams || '12',
+    scoringPassTD: lg.scoringPassTD || 4,
+    label: label,
+  };
+}
+
+function buildFormatInstructions(fmt) {
+  var lines = [];
+  lines.push('');
+  lines.push('--- LEAGUE FORMAT (CRITICAL — adapt ALL analysis to this format) ---');
+  lines.push('Format: ' + fmt.label);
+  lines.push('');
+
+  // Type-specific instructions
+  if (fmt.type === 'Dynasty') {
+    lines.push('FORMAT RULES — DYNASTY:');
+    lines.push('- Time horizon is MULTI-YEAR. Player value includes future seasons, not just this year.');
+    lines.push('- Age and trajectory matter enormously. A 23-year-old with upside > 28-year-old producing now.');
+    lines.push('- Draft picks have real trade value. Reference pick valuations when relevant.');
+    lines.push('- Rebuilding vs contending is a core strategic axis. Determine which mode the user is in.');
+    lines.push('- Taxi squad stashing is relevant for rookies.' + (fmt.taxiSlots > 0 ? ' This league has ' + fmt.taxiSlots + ' taxi slots.' : ''));
+    lines.push('- Trade deadline pressure differs: contenders buy, rebuilders sell.');
+  } else if (fmt.type === 'Keeper') {
+    lines.push('FORMAT RULES — KEEPER:');
+    lines.push('- Players can be kept at a draft round cost. Keeper VALUE = (projected ADP) - (keeper round cost).');
+    lines.push('- Surplus value is king. A WR2 kept at Round 10 can be more valuable than a WR1 kept at Round 1.');
+    lines.push('- Factor in keeper cost when evaluating trades — the receiving team loses keeper eligibility.');
+    lines.push('- Draft rounds matter: ' + (fmt.draftRounds ? fmt.draftRounds + ' rounds in this league.' : 'check league settings for round count.'));
+    lines.push('- Mix of dynasty thinking (some long-term) and redraft thinking (yearly reset on non-keepers).');
+  } else if (fmt.bestBall) {
+    lines.push('FORMAT RULES — BEST BALL:');
+    lines.push('- No lineup setting. Optimal lineup is auto-calculated each week.');
+    lines.push('- CEILING MATTERS MORE THAN FLOOR. Boom/bust players are more valuable than consistent ones.');
+    lines.push('- Weekly variance is a feature, not a bug. High-upside players win best ball leagues.');
+    lines.push('- QB-WR stacking correlation matters. Recommend stacks with correlated upside.');
+    lines.push('- Roster construction should emphasize depth and weekly boom potential.');
+  } else {
+    // Redraft
+    lines.push('FORMAT RULES — REDRAFT:');
+    lines.push('- Time horizon is THIS SEASON ONLY. Next year does not matter.');
+    lines.push('- Age is irrelevant. A 31-year-old producing now is as valuable as a 23-year-old.');
+    lines.push('- "Buy low / sell high" means for THIS season\'s playoff push, not long-term asset management.');
+    lines.push('- Playoff schedule (Weeks 15-17) matters enormously for trade targets.');
+    lines.push('- Streaming (QB, TE, DST) is a core strategy. Identify streamable positions.');
+    lines.push('- Bench depth matters less as season progresses — consolidate for studs.');
+  }
+
+  // Scoring-specific
+  if (fmt.superflex) {
+    lines.push('');
+    lines.push('SCORING MODIFIER — SUPERFLEX:');
+    lines.push('- QBs are SIGNIFICANTLY more valuable. A top-5 QB can be the most valuable asset in fantasy.');
+    lines.push('- Rostering 3 QBs is a viable strategy. QB scarcity drives all valuations upward.');
+    lines.push('- Adjust ALL trade values for QB premium. A QB1 is worth a top-tier RB or WR package.');
+  }
+
+  if (fmt.tePremium) {
+    lines.push('');
+    lines.push('SCORING MODIFIER — TE PREMIUM:');
+    lines.push('- Top TEs are significantly more valuable than standard scoring. TE scarcity is amplified.');
+    lines.push('- A top-3 TE can be a league-winning advantage. Factor TE premium into all valuations.');
+  }
+
+  if (fmt.scoring && fmt.scoring.indexOf('PPR') >= 0) {
+    lines.push('');
+    if (fmt.scoring.indexOf('Half') >= 0) {
+      lines.push('SCORING: Half PPR (0.5 points per reception) — balanced between volume and efficiency.');
+    } else {
+      lines.push('SCORING: Full PPR (1.0 points per reception) — reception volume is king. Target share and catch rate matter more.');
+    }
+  } else if (fmt.scoring && fmt.scoring.indexOf('Standard') >= 0) {
+    lines.push('');
+    lines.push('SCORING: Standard (no PPR) — touchdowns and yardage dominate. RBs more valuable, especially goal-line backs.');
+  }
+
+  if (fmt.scoringPassTD === 6) {
+    lines.push('SCORING: 6-point passing TDs — QBs are significantly more valuable than in 4-point leagues.');
+  }
+
+  // Waiver type
+  if (fmt.waiverType === 'FAAB') {
+    lines.push('');
+    lines.push('WAIVERS: FAAB (Free Agent Acquisition Budget) — budget management is critical. Recommend specific dollar amounts for bids.');
+  } else if (fmt.waiverType === 'Rolling') {
+    lines.push('');
+    lines.push('WAIVERS: Rolling priority — waiver priority is a scarce resource. Only recommend burning priority on impactful adds.');
+  }
+
+  lines.push('--- END FORMAT RULES ---');
+  return lines.join('\n');
+}
+
 function formatLeagueContext(ctx) {
   var lines = ['', '--- WHAT LEAGUE INTEL KNOWS ---'];
   lines.push('Sleeper user: ' + ctx.username);
@@ -1885,7 +2010,14 @@ function formatLeagueContext(ctx) {
   }
   if (ctx.leagues && ctx.leagues.length) {
     ctx.leagues.forEach(function(lg) {
-      lines.push('League: ' + lg.name + ' (' + lg.type + ', ' + lg.scoring + ', ' + lg.teams + '-team, ' + lg.season + ')');
+      var extras = [];
+      if (lg.superflex) extras.push('SF');
+      if (lg.tePremium) extras.push('TEP');
+      if (lg.bestBall) extras.push('BestBall');
+      if (lg.waiverType === 'FAAB') extras.push('FAAB');
+      if (lg.taxiSlots > 0) extras.push(lg.taxiSlots + ' taxi');
+      var extraStr = extras.length ? ' [' + extras.join(', ') + ']' : '';
+      lines.push('League: ' + lg.name + ' (' + lg.type + ', ' + lg.scoring + ', ' + lg.teams + '-team, ' + lg.season + ')' + extraStr);
     });
   }
   if (ctx.record) {
@@ -1979,7 +2111,14 @@ function formatLeagueContext(ctx) {
 }
 
 function buildUserMessage(scenario, agentDef, peerInsights) {
-  const parts = [buildRules(agentDef), '', 'Scenario:', scenario];
+  const parts = [buildRules(agentDef)];
+
+  // Inject format-specific instructions (always — uses league data if available, defaults otherwise)
+  var leagueCtx = getLeagueContext();
+  var fmt = detectLeagueFormat(leagueCtx || {});
+  parts.push(buildFormatInstructions(fmt));
+
+  parts.push('', 'Scenario:', scenario);
 
   // Inject Lab context if available
   var labCtx = getLabContext();
@@ -1989,7 +2128,6 @@ function buildUserMessage(scenario, agentDef, peerInsights) {
 
   // Inject League context only for Pro users
   if (isProUser()) {
-    var leagueCtx = getLeagueContext();
     if (leagueCtx) {
       parts.push(formatLeagueContext(leagueCtx));
     }
