@@ -1528,7 +1528,7 @@
           html += '<td><span class="ww-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
           html += '<td>' + escapeHtml(String(p.games)) + '</td>';
           html += '<td>' + fmt(p.season_avg) + '</td>';
-          html += '<td style="font-weight:700;color:#166534">' + fmt(p.recent_avg) + '</td>';
+          html += '<td style="font-weight:700;color:var(--green)">' + fmt(p.recent_avg) + '</td>';
           html += '<td><span class="ww-delta-badge">' + sign + fmt(p.delta) + ' (' + sign + fmt(p.delta_pct, 0) + '%)</span></td>';
           var scores = p.recent_scores || [];
           var maxScore = Math.max.apply(null, scores.concat([1]));
@@ -1722,7 +1722,7 @@
           html += '<td class="hc-rank">' + (i + 1) + '</td>';
           html += '<td><span class="hc-team-badge">' + escapeHtml(h.team) + '</span></td>';
           html += '<td style="font-weight:700">' + escapeHtml(h.handcuff_name) + '</td>';
-          html += '<td style="font-weight:700;color:#166534">' + fmt(h.hc_ppg) + '</td>';
+          html += '<td style="font-weight:700;color:var(--green)">' + fmt(h.hc_ppg) + '</td>';
           html += '<td>' + fmt(h.hc_car_g) + '</td>';
           html += '<td>' + fmt(h.hc_ypc) + '</td>';
           html += '<td><span class="hc-value-badge">' + fmt(h.hc_value) + '</span></td>';
@@ -3614,7 +3614,7 @@
           '<div class="lp-header"><h2>Weekly Leaders</h2>' +
           '<div class="lp-subtitle">who went off this week</div></div>' +
           '<div style="text-align:center;padding:60px 20px;">' +
-            '<div style="font-family:var(--font-hand,Caveat,cursive);font-size:22px;color:var(--ink-light);transform:rotate(-1deg);max-width:400px;margin:0 auto;">' +
+            '<div style="font-family:var(--font-hand);font-size:22px;color:var(--ink-light);transform:rotate(-1deg);max-width:400px;margin:0 auto;">' +
               'college stats are season-level only — weekly game data isn\'t available for college players. check <b>Stat Leaders</b> for season totals!' +
             '</div>' +
           '</div>' +
@@ -9001,8 +9001,8 @@
             pd.avg_ppg + ' avg PPG' +
           '</div>' +
           '<div style="font-family:var(--font-mono); font-size:11px;">' +
-            '<span style="color:#2ec4b6;">' + pd.studs + ' studs</span> · ' +
-            '<span style="color:#d44040;">' + pd.busts + ' busts</span>' +
+            '<span style="color:var(--green);">' + pd.studs + ' studs</span> · ' +
+            '<span style="color:var(--red);">' + pd.busts + ' busts</span>' +
           '</div>' +
         '</div>';
       });
@@ -9168,7 +9168,7 @@
       var canvasH = labelW + keys.length * cellSize + 10;
       html += '<div class="corr-section">';
       html += '<h3 class="corr-section-title">Correlation Matrix</h3>';
-      html += '<div class="corr-hint" style="font-family:var(--font-hand,Caveat,cursive);font-size:18px;color:var(--ink-light,#8a7565);margin-bottom:8px">click a cell to see the scatter plot</div>';
+      html += '<div class="corr-hint" style="font-family:var(--font-hand);font-size:18px;color:var(--ink-light);margin-bottom:8px">click a cell to see the scatter plot</div>';
       html += '<div class="corr-heatmap-wrap" style="overflow-x:auto">';
       html += '<canvas id="corr-heatmap" width="' + canvasW + '" height="' + canvasH + '" style="cursor:pointer"></canvas>';
       html += '</div></div>';
@@ -9180,7 +9180,7 @@
       html += '</div>';
 
       // Sample size
-      html += '<div class="corr-sample" style="text-align:center;font-family:var(--font-mono,monospace);font-size:11px;color:var(--ink-light,#8a7565);margin-top:12px">n = ' + (data.sample_size || 0) + ' player-seasons</div>';
+      html += '<div class="corr-sample" style="text-align:center;font-family:var(--font-mono);font-size:11px;color:var(--ink-light);margin-top:12px">n = ' + (data.sample_size || 0) + ' player-seasons</div>';
 
       content.innerHTML = html;
 
@@ -9388,7 +9388,7 @@
           '<select class="lp-select pr-season"></select>' +
         '</div>' +
         '<div class="pr-chart-wrap" style="margin:16px 0;">' +
-          '<canvas id="pr-canvas" width="800" height="900" style="width:100%;max-width:800px;border:3px solid var(--ink,#2d1f14);border-radius:6px;box-shadow:4px 4px 0 var(--ink,#2d1f14);background:var(--bg-card,#f7efe5);"></canvas>' +
+          '<canvas id="pr-canvas" width="800" height="900" style="width:100%;max-width:800px;border:3px solid var(--ink);border-radius:6px;box-shadow:4px 4px 0 var(--ink);background:var(--bg-card);"></canvas>' +
         '</div>' +
         '<div class="pr-detail" id="pr-detail" style="display:none;"></div>' +
         '<div class="pr-loading"><div class="lp-loading">pulling film on every roster...</div></div>' +
@@ -9547,10 +9547,10 @@
       selectedTeam = team;
       drawChart(panelData);
 
-      var html = '<div class="lp-card" style="border:3px solid var(--ink,#2d1f14);border-radius:8px;box-shadow:4px 4px 0 var(--ink,#2d1f14);padding:16px;margin-top:12px;background:var(--bg-card,#f7efe5);">';
+      var html = '<div class="lp-card" style="border:3px solid var(--ink);border-radius:8px;box-shadow:4px 4px 0 var(--ink);padding:16px;margin-top:12px;background:var(--bg-card);">';
       html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">';
-      html += '<h3 style="margin:0;font-family:\'Luckiest Guy\',cursive;font-size:20px;color:var(--ink,#2d1f14);">' + escapeHtml(t.team) + ' — #' + t.rank + '</h3>';
-      html += '<span style="font-family:\'Space Mono\',monospace;font-size:14px;color:var(--ink-medium,#5c4a3d);">Total: ' + fmt(t.total_value, 0) + '</span>';
+      html += '<h3 style="margin:0;font-family:\'Luckiest Guy\',cursive;font-size:20px;color:var(--ink);">' + escapeHtml(t.team) + ' — #' + t.rank + '</h3>';
+      html += '<span style="font-family:\'Space Mono\',monospace;font-size:14px;color:var(--ink-medium);">Total: ' + fmt(t.total_value, 0) + '</span>';
       html += '</div>';
 
       // Position breakdown chips
@@ -9562,17 +9562,17 @@
         var pct = t.total_value > 0 ? Math.round(g.val / t.total_value * 100) : 0;
         html += '<div style="background:' + g.col + '22;border:2px solid ' + g.col + ';border-radius:6px;padding:6px 12px;font-family:\'Space Mono\',monospace;font-size:12px;">';
         html += '<span style="font-weight:bold;color:' + g.col + ';">' + g.label + '</span> ';
-        html += '<span style="color:var(--ink,#2d1f14);">' + fmt(g.val, 0) + '</span> ';
-        html += '<span style="color:var(--ink-light,#8a7565);">(' + pct + '%)</span>';
+        html += '<span style="color:var(--ink);">' + fmt(g.val, 0) + '</span> ';
+        html += '<span style="color:var(--ink-light);">(' + pct + '%)</span>';
         html += '</div>';
       });
       html += '</div>';
 
       // Top players
       if (t.top_players && t.top_players.length) {
-        html += '<div style="font-family:\'Caveat\',cursive;font-size:15px;color:var(--ink-light,#8a7565);margin-bottom:6px;">top dynasty assets</div>';
+        html += '<div style="font-family:\'Caveat\',cursive;font-size:15px;color:var(--ink-light);margin-bottom:6px;">top dynasty assets</div>';
         html += '<table style="width:100%;border-collapse:collapse;font-family:\'Space Mono\',monospace;font-size:12px;">';
-        html += '<tr style="border-bottom:2px solid var(--ink-faint,#c4b5a5);">';
+        html += '<tr style="border-bottom:2px solid var(--ink-faint);">';
         html += '<th style="text-align:left;padding:4px 6px;">Player</th>';
         html += '<th style="text-align:center;padding:4px 6px;">Pos</th>';
         html += '<th style="text-align:right;padding:4px 6px;">PPG</th>';
@@ -9580,7 +9580,7 @@
         html += '<th style="text-align:right;padding:4px 6px;">Value</th></tr>';
         t.top_players.forEach(function(p) {
           var posColor = POS_COLS[p.position] || '#8a7565';
-          html += '<tr style="border-bottom:1px solid var(--ink-faint,#c4b5a5);">';
+          html += '<tr style="border-bottom:1px solid var(--ink-faint);">';
           html += '<td style="padding:4px 6px;">' + escapeHtml(p.full_name) + '</td>';
           html += '<td style="text-align:center;padding:4px 6px;color:' + posColor + ';font-weight:bold;">' + escapeHtml(p.position) + '</td>';
           html += '<td style="text-align:right;padding:4px 6px;">' + fmt(p.ppg) + '</td>';
