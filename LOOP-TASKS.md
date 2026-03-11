@@ -1,15 +1,15 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 105 (QA + UX Audit Fixes for Phases 101-104)
-## Phase 105: QA + UX Audit — Auto-Generated Fixes
-**Exit Criterion**: XSS in expand data fixed. Memory leak fixed. Colspan fixed. Title escaping fixed. All CRITICAL/HIGH findings resolved.
+- Phase: 106 (Bulk Bar Position Breakdown)
+## Phase 106: Bulk Bar Position Breakdown
+**Exit Criterion**: Bulk action bar shows position breakdown badges (QB:2 RB:1 WR:3) next to selected count. 34 tests pass.
 
 - Task 1: PASS
 - Stage: COMPLETE
 - Next: Phase gate
 
-### Task 1: Fix XSS + memory leak + colspan + title escaping
+### Task 1: Position badges in bulk action bar
 **Status**: PASS
 **Attempts**: 1
-**Result**: (1) _n() numeric sanitizer + escapeHtml() on week/opponent in expand. (2) _expandedRows cleared on renderTableBody(). (3) Colspan dynamic for NFL vs college. (4) Freshness title wrapped in escapeAttr(). 34 tests pass.
+**Result**: (1) Position-colored badges in bulk count (QB:n RB:n WR:n TE:n). (2) Only shows positions present in selection. 34 tests pass.

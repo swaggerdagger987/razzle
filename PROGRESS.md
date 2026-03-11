@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 106 — Bulk Bar Position Breakdown (COMPLETE)
+
+**Exit Criterion MET**: Position badges (QB:2 RB:1 WR:3) in bulk action bar. 34 tests pass.
+
+### Phase 106 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Position badges in bulk bar | DONE | Color-coded badges from selected players' positions |
+
 ## Previous Phase: Phase 105 — QA + UX Audit Fixes for Phases 101-104 (COMPLETE)
 
 **Exit Criterion MET**: 1 CRITICAL (XSS in expand) + 3 HIGH (memory leak, colspan, title escaping) fixed. 0 remaining.

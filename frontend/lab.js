@@ -3386,7 +3386,16 @@ function updateSelectionUI() {
   if (bar) {
     if (count > 0) {
       bar.style.display = "";
-      document.getElementById("bulkCount").textContent = count + " selected";
+      var posColors = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
+      var posCounts = {};
+      for (var i = 0; i < state.selectedPlayers.length; i++) {
+        var pp = (state.selectedPlayers[i].position || "").toUpperCase();
+        if (pp) posCounts[pp] = (posCounts[pp] || 0) + 1;
+      }
+      var posBadges = ["QB", "RB", "WR", "TE"].filter(function(p) { return posCounts[p]; }).map(function(p) {
+        return '<span style="color:' + posColors[p] + '; font-weight:700; font-size:11px;">' + p + ':' + posCounts[p] + '</span>';
+      }).join(" ");
+      document.getElementById("bulkCount").innerHTML = count + " selected" + (posBadges ? " &nbsp;" + posBadges : "");
       var namesEl = document.getElementById("bulkNames");
       namesEl.textContent = state.selectedPlayers.map(p => p.full_name || p.player_name || "").join(", ");
       var cmpBtn = document.getElementById("bulkCompareBtn");
