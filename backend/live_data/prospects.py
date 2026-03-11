@@ -926,3 +926,114 @@ def _fetch_draft_class_analytics_uncached(position=""):
 
 def fetch_draft_class_analytics(position=""):
     return _cached(f"fetch_draft_class_analytics:{position}", lambda: _fetch_draft_class_analytics_uncached(position=position), _CACHE_TTL_STABLE)
+
+
+def _fetch_athletic_radar_uncached(position="", draft_year=0):
+    """Return prospects with pre-computed position percentiles for 6 combine metrics.
+
+    Designed for radar/spider chart rendering — each prospect gets raw values
+    and percentile ranks for forty, bench, vertical, broad_jump, cone, shuttle.
+    """
+    with get_db() as conn:
+        if not draft_year:
+            row = conn.execute("SELECT MAX(draft_year) FROM combine_data").fetchone()
+            draft_year = row[0] if row and row[0] else _current_draft_year()
+
+        pos_filter = "AND c.position = ?" if position else ""
+        params = [draft_year] + ([position.upper()] if position else [])
+
+        rows = conn.execute(f"""
+            SELECT c.player_name, c.position, c.school, c.draft_year,
+                   c.draft_team, c.draft_round, c.draft_pick,
+                   c.height_inches, c.weight,
+                   c.forty, c.bench, c.vertical, c.broad_jump, c.cone, c.shuttle
+            FROM combine_data c
+            WHERE c.draft_year = ? {pos_filter}
+            ORDER BY c.player_name
+        """, params).fetchall()
+
+        if not rows:
+            return {
+                "prospects": [],
+                "draft_year": draft_year,
+                "position": position.upper() if position else "ALL",
+            }
+
+        # Gather position-group distributions for percentile computation
+        metric_keys = ["forty", "bench", "vertical", "broad_jump", "cone", "shuttle"]
+        metric_dirs = {
+            "forty": "lower", "bench": "higher", "vertical": "higher",
+            "broad_jump": "higher", "cone": "lower", "shuttle": "lower",
+        }
+
+        positions_in_data = set(r["position"] for r in rows)
+        pos_vals = {}
+        for pos in positions_in_data:
+            pos_vals[pos] = {}
+            for mk in metric_keys:
+                all_rows = conn.execute(
+                    f"SELECT {mk} FROM combine_data WHERE position = ? AND {mk} IS NOT NULL",
+                    (pos,),
+                ).fetchall()
+                vals = [r[0] for r in all_rows]
+                if vals:
+                    pos_vals[pos][mk] = vals
+
+        prospects = []
+        for row in rows:
+            p = dict(row)
+            pos = p["position"]
+
+            # Abbreviate team
+            dt = (p.get("draft_team") or "").upper()
+            p["draft_team"] = TEAM_ABBREV.get(dt, dt[:3] if dt else None)
+
+            # Height display
+            ht = p.get("height_inches")
+            p["height_display"] = f"{ht // 12}'{ht % 12}\"" if ht else None
+
+            # Compute percentiles for 6 combine metrics
+            pcts = {}
+            has_any = False
+            for mk in metric_keys:
+                val = p.get(mk)
+                if val is None or mk not in pos_vals.get(pos, {}):
+                    pcts[mk] = None
+                    continue
+                all_v = pos_vals[pos][mk]
+                if metric_dirs[mk] == "lower":
+                    pct = sum(1 for v in all_v if v > val) / len(all_v) * 100
+                else:
+                    pct = sum(1 for v in all_v if v < val) / len(all_v) * 100
+                pcts[mk] = round(pct, 1)
+                has_any = True
+
+            p["percentiles"] = pcts
+            p["avg_percentile"] = (
+                round(sum(v for v in pcts.values() if v is not None) /
+                      sum(1 for v in pcts.values() if v is not None), 1)
+                if has_any else None
+            )
+
+            # Only include prospects that tested in at least 1 drill
+            if has_any:
+                prospects.append(p)
+
+        # Sort by avg_percentile descending (best athletes first)
+        prospects.sort(
+            key=lambda x: x.get("avg_percentile") or 0, reverse=True
+        )
+
+        return {
+            "prospects": prospects,
+            "draft_year": draft_year,
+            "position": position.upper() if position else "ALL",
+        }
+
+
+def fetch_athletic_radar(position="", draft_year=0):
+    return _cached(
+        f"fetch_athletic_radar:{position}:{draft_year}",
+        lambda: _fetch_athletic_radar_uncached(position=position, draft_year=draft_year),
+        _CACHE_TTL_STABLE,
+    )

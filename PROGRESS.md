@@ -1,6 +1,18 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 37 — Bake player_season_stats into Adapter Pipeline + Re-upload DB (COMPLETE)
+## Current Phase: Phase 38 — Athletic Radar — Prospect Combine Spider Charts (IN PROGRESS)
+
+**Exit Criterion**: proradar panel renders canvas spider charts of combine percentiles (forty, bench, vertical, broad_jump, cone, shuttle) for any prospect. Select up to 3 prospects to overlay. Position + draft year filters. /api/athletic-radar endpoint returns all prospects with pre-computed percentiles. Sidebar item works end-to-end.
+
+### Phase 38 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Create /api/athletic-radar endpoint | DONE | prospects.py + server.py, cached, 43 WR prospects for 2025 |
+| 2 | Add proradar panel to lab-panels.js | TODO | Canvas spider chart, 3 prospect overlay |
+| 3 | End-to-end verification | TODO | Sidebar → panel → chart → overlay |
+
+## Previous Phase: Phase 37 — Bake player_season_stats into Adapter Pipeline + Re-upload DB (COMPLETE)
 
 **Exit Criterion MET**: player_season_stats creation moved from server boot to nflverse adapter pipeline (adapters/nflverse_adapter.py main()). Updated 541MB terminal.db uploaded to GitHub release data-v1. Server.py fallback kept as idempotent safety net. All 34 smoke tests pass.
 

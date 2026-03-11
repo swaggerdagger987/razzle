@@ -44,6 +44,7 @@ from .prospects import (  # noqa: F401
     fetch_prospects_compare,
     fetch_prospect_scores,
     fetch_draft_class_analytics,
+    fetch_athletic_radar,
 )
 
 # --- college ---

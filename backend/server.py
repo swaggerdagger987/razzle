@@ -178,7 +178,7 @@ def _ensure_season_stats_table():
                 SUM(touchdowns) as touchdowns,
                 SUM(turnovers) as turnovers,
                 SUM(fantasy_points_ppr) as fantasy_points_ppr,
-                SUM(fantasy_points_half_ppr) as fantasy_points_half_ppr,
+                COALESCE(SUM(fantasy_points_half_ppr), SUM(fantasy_points_ppr) - 0.5 * SUM(receptions)) as fantasy_points_half_ppr,
                 SUM(fantasy_points_std) as fantasy_points_std,
                 SUM(completions) as completions,
                 SUM(attempts) as attempts,
@@ -600,6 +600,14 @@ def draft_class_tracker(draft_year: int = 0, position: str = ""):
         draft_year=draft_year or None,
         position=position or None,
     )
+
+
+@app.get("/api/athletic-radar")
+def athletic_radar(position: str = "", draft_year: int = 0):
+    pos = position.strip().upper() if position else ""
+    if pos and pos not in ("QB", "RB", "WR", "TE", "OL", "DL", "LB", "CB", "S", "EDGE"):
+        pos = ""
+    return live_data.fetch_athletic_radar(position=pos, draft_year=draft_year)
 
 
 @app.get("/api/prospect-options")
