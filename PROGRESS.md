@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 87 — Multi-Sort (Shift+Click Secondary Sort) (COMPLETE)
+
+**Exit Criterion MET**: Shift+click column header sets secondary sort as client-side tiebreaker. Sort indicators, URL state, saved views, result count all updated.
+
+### Phase 87 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Multi-sort implementation | DONE | state.sortKey2/sortDir2, applySecondarySort(), CSS sort2-* classes, URL sort2/dir2, shortcut ref |
+
 ## Previous Phase: Phase 83 — Screener Keyboard Page Navigation (COMPLETE)
 
 **Exit Criterion MET**: Left/Right arrow keys navigate pages. Bounds-checked. Toast feedback. Shortcut reference updated.

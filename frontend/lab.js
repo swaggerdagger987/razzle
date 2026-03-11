@@ -787,6 +787,8 @@ const state = {
   relevance: "fantasy",
   sortKey: "fantasy_points_ppr",
   sortDir: "desc",
+  sortKey2: "",
+  sortDir2: "desc",
   limit: (function() { try { var v = parseInt(localStorage.getItem("razzle_page_size")); return [25,50,100,200].includes(v) ? v : 100; } catch(e) { return 100; } })(),
   offset: 0,
   filters: [],
@@ -985,6 +987,7 @@ async function fetchAndRenderNFL(signal, myId) {
       const tags = getPlayerTags();
       state.items = state.items.filter(p => tags[p.player_id]);
     }
+    applySecondarySort();
     loading.style.display = "none";
     renderTable();
     renderPagination();
@@ -1030,6 +1033,7 @@ async function fetchAndRenderProspects(signal, myId) {
     state.totalCount = data.count || 0;
     state.draftYear = data.draft_year || state.draftYear;
 
+    applySecondarySort();
     loading.style.display = "none";
     renderTable();
     renderPagination();
@@ -1075,6 +1079,7 @@ async function fetchAndRenderCollege(signal, myId) {
     state.totalCount = data.count || 0;
     state.collegeSeason = data.season || state.collegeSeason;
 
+    applySecondarySort();
     loading.style.display = "none";
     renderTable();
     renderPagination();
@@ -1182,16 +1187,18 @@ function renderTableHead() {
     html += `<th style="width:28px; text-align:center; padding:8px 2px; cursor:${pinCount ? 'pointer' : 'default'}; font-size:12px;" title="${pinTitle}"${pinCount ? ' onclick="clearAllPins()"' : ''}>&#128204;${pinCount ? '<span style="font-size:9px; color:var(--orange); font-weight:700;"> ' + pinCount + '</span>' : ''}</th>`;
   }
   html += '<th class="col-rank" title="Overall rank by current sort">#</th>';
-  html += `<th class="col-player" onclick="sortBy('${nameKey}')">Player`;
+  html += `<th class="col-player" onclick="sortBy('${nameKey}', event)">Player`;
   if (state.sortKey === "full_name" || state.sortKey === "player_name") {
     html += state.sortDir === "asc" ? " &#9650;" : " &#9660;";
+  } else if (state.sortKey2 === "full_name" || state.sortKey2 === "player_name") {
+    html += ' <span style="opacity:0.4; font-size:10px;">' + (state.sortDir2 === "asc" ? "&#9650;" : "&#9660;") + "2</span>";
   }
   html += "</th>";
 
   for (const key of cols) {
     const col = getColumnDef(key);
     if (!col) continue;
-    const sortCls = state.sortKey === key ? `sort-${state.sortDir}` : "";
+    const sortCls = state.sortKey === key ? `sort-${state.sortDir}` : state.sortKey2 === key ? `sort2-${state.sortDir2}` : "";
     const lockCls = _getTierLockClass(key);
     const cls = [sortCls, lockCls].filter(Boolean).join(" ");
     const tierLabel = lockCls === "elite-locked" ? " [Elite]" : lockCls === "pro-locked" ? " [Pro]" : "";
@@ -1219,7 +1226,7 @@ function renderTableHead() {
     } else if (col.isNotes) {
       html += `<th${tip} style="width:120px; min-width:80px;">${col.label}</th>`;
     } else {
-      html += `<th class="${cls}"${tip} tabindex="0" onclick="sortBy('${key}')" ondblclick="openFilterForColumn('${key}')" onkeydown="if(event.key==='Enter'){sortBy('${key}');event.preventDefault();}">${col.label}${extra}</th>`;
+      html += `<th class="${cls}"${tip} tabindex="0" onclick="sortBy('${key}', event)" ondblclick="openFilterForColumn('${key}')" onkeydown="if(event.key==='Enter'){sortBy('${key}');event.preventDefault();}">${col.label}${extra}</th>`;
     }
   }
 
@@ -1320,7 +1327,8 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode) {
     }
     const hBg = heatPcts && heatPcts[key] != null ? getHeatColor(heatPcts[key]) : "";
     const isSortCol = key === state.sortKey;
-    const sc = isSortCol && !hBg && !barsOn ? "sort-col" : "";
+    const isSort2Col = key === state.sortKey2;
+    const sc = isSortCol && !hBg && !barsOn ? "sort-col" : isSort2Col && !hBg && !barsOn ? "sort2-col" : "";
     // Data bar gradient (takes precedence over heat bg when active)
     let cellStyle = "";
     if (barsOn && val != null && typeof val === "number") {
@@ -1874,6 +1882,8 @@ function setUniverse(u) {
   state.selectedPlayers = [];
   document.getElementById("searchInput").value = "";
 
+  state.sortKey2 = "";
+  state.sortDir2 = "desc";
   if (isProspectView()) {
     state.sortKey = "draft_pick";
     state.sortDir = "asc";
@@ -1907,6 +1917,8 @@ function setCollegeView(view) {
   state.selectedPlayers = [];
   document.getElementById("searchInput").value = "";
 
+  state.sortKey2 = "";
+  state.sortDir2 = "desc";
   if (view === "prospects") {
     state.sortKey = "draft_pick";
     state.sortDir = "asc";
@@ -2022,11 +2034,32 @@ function applyUniverseUI() {
 }
 
 // ─── Sort ────────────────────────────────────────────────────────
-function sortBy(key) {
+function sortBy(key, e) {
   // Normalize player name sort key per universe
   if (key === "full_name" && (isProspectView() || state.universe === "college")) key = "player_name";
   if (key === "player_name" && state.universe === "nfl") key = "full_name";
 
+  var isShift = e && e.shiftKey;
+
+  if (isShift) {
+    // Shift+click: set secondary sort (can't be same as primary)
+    if (key === state.sortKey) return;
+    if (state.sortKey2 === key) {
+      state.sortDir2 = state.sortDir2 === "desc" ? "asc" : "desc";
+    } else {
+      state.sortKey2 = key;
+      state.sortDir2 = (key === "full_name" || key === "player_name" || key === "draft_pick") ? "asc" : "desc";
+    }
+    // Secondary sort is client-side — re-sort current items and re-render
+    applySecondarySort();
+    renderTable();
+    saveStateToURL();
+    var col2 = getColumnDef(state.sortKey2);
+    _showToast("secondary sort: " + (col2 ? col2.label : state.sortKey2) + " " + state.sortDir2);
+    return;
+  }
+
+  // Regular click: primary sort (clears secondary)
   if (state.sortKey === key) {
     state.sortDir = state.sortDir === "desc" ? "asc" : "desc";
   } else {
@@ -2034,8 +2067,38 @@ function sortBy(key) {
     // Text fields and draft pick default to asc
     state.sortDir = (key === "full_name" || key === "player_name" || key === "draft_pick") ? "asc" : "desc";
   }
+  state.sortKey2 = "";
+  state.sortDir2 = "desc";
   state.offset = 0;
   fetchAndRender();
+}
+
+function applySecondarySort() {
+  if (!state.sortKey2 || !state.items.length) return;
+  var key2 = state.sortKey2;
+  var dir2 = state.sortDir2 === "asc" ? 1 : -1;
+  var primary = state.sortKey;
+
+  // Stable sort: only reorder items with equal primary sort values
+  state.items.sort(function(a, b) {
+    // Keep primary order for different primary values
+    var pa = a[primary], pb = b[primary];
+    if (pa == null) pa = -Infinity;
+    if (pb == null) pb = -Infinity;
+    var paf = parseFloat(pa), pbf = parseFloat(pb);
+    if (!isNaN(paf) && !isNaN(pbf)) { pa = paf; pb = pbf; }
+    if (pa !== pb) return 0; // preserve backend primary order
+
+    // Tiebreaker: sort by secondary key
+    var va = a[key2], vb = b[key2];
+    if (va == null && vb == null) return 0;
+    if (va == null) return 1;
+    if (vb == null) return -1;
+    var fa = parseFloat(va), fb = parseFloat(vb);
+    if (!isNaN(fa) && !isNaN(fb)) return (fa - fb) * dir2;
+    // String comparison
+    return String(va).localeCompare(String(vb)) * dir2;
+  });
 }
 
 // ─── Position toggle ─────────────────────────────────────────────
@@ -2140,11 +2203,18 @@ function updateResultCount() {
   const sortCol = colDefs[state.sortKey];
   const sortLabel = sortCol ? sortCol.label : state.sortKey;
   const sortArrow = state.sortDir === "asc" ? "↑" : "↓";
+  let sortText = `${sortLabel} ${sortArrow}`;
+  if (state.sortKey2) {
+    const sort2Col = colDefs[state.sortKey2];
+    const sort2Label = sort2Col ? sort2Col.label : state.sortKey2;
+    const sort2Arrow = state.sortDir2 === "asc" ? "↑" : "↓";
+    sortText += `, ${sort2Label} ${sort2Arrow}`;
+  }
   const seasonLabel = state.season === "career" ? "Career" : isProspectView() ? state.draftYear + " Draft" : state.universe === "college" ? state.collegeSeason : state.season;
   let parts = [];
   if (state.totalCount > 0) parts.push(`<strong>${from}-${to}</strong> of <strong>${state.totalCount}</strong> ${label}`);
   else parts.push(`<strong>0</strong> ${label}`);
-  parts.push(`${sortLabel} ${sortArrow}`);
+  parts.push(sortText);
   if (seasonLabel) parts.push(String(seasonLabel));
   if (state.position !== "ALL") parts.push(state.position);
   el.innerHTML = parts.join(" · ");
@@ -2507,6 +2577,7 @@ function saveStateToURL() {
   if (state.filters.length) params.set("filters", JSON.stringify(state.filters));
   if (state.teams.length) params.set("teams", state.teams.join(","));
   if (state.minGP > 0) params.set("min_gp", state.minGP);
+  if (state.sortKey2) { params.set("sort2", state.sortKey2); if (state.sortDir2 !== "desc") params.set("dir2", state.sortDir2); }
   if (state.heatColors) params.set("heat", "1");
   if (state.percentileMode) params.set("pctl", "1");
   if (state.dataBars) params.set("bars", "1");
@@ -2563,6 +2634,8 @@ function loadStateFromURL() {
   if (params.has("q")) state.search = params.get("q");
   if (params.has("sort")) state.sortKey = params.get("sort");
   if (params.has("dir")) state.sortDir = params.get("dir");
+  if (params.has("sort2")) state.sortKey2 = params.get("sort2");
+  if (params.has("dir2")) state.sortDir2 = params.get("dir2");
   if (params.has("offset")) state.offset = parseInt(params.get("offset"));
   if (params.has("filters")) {
     try { state.filters = JSON.parse(params.get("filters")); } catch (e) {}
@@ -2823,6 +2896,8 @@ function saveCurrentView() {
     relevance: state.relevance,
     sortKey: state.sortKey,
     sortDir: state.sortDir,
+    sortKey2: state.sortKey2,
+    sortDir2: state.sortDir2,
     filters: [...state.filters],
     columns: isProspectView() ? [...state.prospectColumns] : state.universe === "college" ? [...state.collegeColumns] : [...state.visibleColumns],
   };
@@ -2847,6 +2922,8 @@ function loadSavedView(id) {
   state.search = view.search || "";
   state.sortKey = view.sortKey || "fantasy_points_ppr";
   state.sortDir = view.sortDir || "desc";
+  state.sortKey2 = view.sortKey2 || "";
+  state.sortDir2 = view.sortDir2 || "desc";
   state.filters = view.filters ? [...view.filters] : [];
   state.relevance = view.relevance || "fantasy";
 
@@ -8565,6 +8642,7 @@ function toggleShortcutRef() {
           ${shortcutRow("A", "Stats summary bar")}
           ${shortcutRow("N", "Toggle notes column")}
           ${shortcutRow("P", "Clear pinned players")}
+          ${shortcutRow("Shift+click", "Column header → secondary sort")}
           ${shortcutRow("Dbl-click", "Column header → quick filter")}
           ${shortcutRow("Dbl-click", "Stat cell → copy value")}
           ${shortcutRow("← →", "Previous / next page")}
