@@ -916,6 +916,35 @@
     background: var(--orange-light);
   }
 
+  /* ─── Dense / compact mode ─── */
+  body.dense-mode .screener-table td {
+    padding: 3px 8px;
+    font-size: 11px;
+  }
+  body.dense-mode .screener-table th {
+    padding: 5px 8px;
+    font-size: 10px;
+  }
+  body.dense-mode .screener-table tbody tr {
+    height: 26px;
+  }
+  body.dense-mode .screener-table td.col-player {
+    font-size: 11px;
+  }
+  body.dense-mode .screener-table th.col-player {
+    min-width: 160px;
+  }
+  body.dense-mode #pinnedBody tr {
+    height: 26px;
+  }
+  body.dense-mode .tag-chip {
+    font-size: 8px;
+    padding: 0px 4px;
+  }
+  body.dense-mode .note-cell-text {
+    font-size: 10px;
+  }
+
   /* ─── Pinned rows ─── */
   #pinnedBody {
     position: sticky;
@@ -2741,6 +2770,7 @@
     <button class="btn-chunky" id="heatMapBtn" onclick="openHeatMap()" style="display:none; border-color:var(--red);">Heat Map</button>
     <button class="btn-chunky" id="heatColorsBtn" onclick="toggleHeatColors()" title="Per-position percentile coloring: green = elite (90th+), red = below avg (10th-). Press H to toggle.">Heat</button>
     <button class="btn-chunky" id="tierBreaksBtn" onclick="toggleTierBreaks()" title="Show tier break dividers in the table. Press T to toggle.">Tiers</button>
+    <button class="btn-chunky" id="densityBtn" onclick="toggleDensity()" title="Compact table mode — more rows, less padding. Press D to toggle.">Dense</button>
 
     <span class="result-count" id="resultCount"></span>
   </div>

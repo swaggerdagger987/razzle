@@ -1,16 +1,16 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 55 (QA + UX Audit Fixes for Phases 51-54)
-## Phase 55: QA + UX Audit Fixes for Phases 51-54
-**Exit Criterion**: All CRITICAL and HIGH QA findings fixed. MEDIUM findings addressed. Pinned rows colspan corrected. Tag picker borders match design system.
+- Phase: 56 (Screener Data Density Toggle)
+## Phase 56: Screener Data Density Toggle
+**Exit Criterion**: Screener table has a togglable compact/density mode. D key toggles between comfortable (default) and compact mode. Compact mode reduces row height, font size, and padding to show ~50% more rows on screen. Toolbar button with active state. State persists in localStorage. URL serialization (?dense=1). Bloomberg-terminal aesthetic in compact mode.
 
 - Task 1: PASS
 - Stage: COMPLETE
 - Next: Phase gate
 
-### Task 1: Fix CRITICAL + HIGH findings (colspan, tag borders)
+### Task 1: Density toggle with compact table mode
 **Status**: PASS
 **Attempts**: 1
-**Acceptance**: Pinned rows separator colspan includes pin column (+1 for NFL mode). Tag picker option borders use 2px per design system. Transparent border on default state prevents layout shift.
-**Result**: Fixed colspan at line 2493 (cols.length + 3 + NFL pin col). Changed tag-picker-option border from none to 2px solid transparent, active state from 1.5px to 2px.
+**Acceptance**: D key toggles compact mode. Toolbar "Dense" button shows active state when on. Compact mode: row height 26px (from 36px), font-size 11px (from 13px), tighter padding 3px 8px (from 7px 14px). State persists in localStorage (razzle_density). URL param ?dense=1. Shortcut help updated. Works with all existing features (heat colors, tier breaks, pins, tags, notes). Virtual scroll row height dynamic via getVScrollRowHeight().
+**Result**: Added density state to state object, toggleDensity() function, dense-mode CSS class on body, toolbar button, D keyboard shortcut, URL param, shortcut reference entry, init sync, and dynamic virtual scroll row height.

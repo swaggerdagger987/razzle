@@ -798,6 +798,7 @@ const state = {
   seasons: [],
   selectedPlayers: [], // for compare/charts [{player_id, full_name, position, team}]
   heatColors: false, // percentile heat coloring toggle
+  density: (function() { try { return localStorage.getItem("razzle_density") === "1"; } catch(e) { return false; } })(), // compact density mode
   tierBreaks: (function() { try { return localStorage.getItem("razzle_tier_breaks") === "1"; } catch(e) { return false; } })(), // tier break dividers
   tagFilter: false, // show only tagged players
   pinnedPlayers: (function() {
@@ -1166,7 +1167,7 @@ function renderTableHead() {
 }
 
 // ─── Virtual scrolling ──────────────────────────────────────────
-const VSCROLL_ROW_HEIGHT = 36;
+function getVScrollRowHeight() { return state.density ? 26 : 36; }
 const VSCROLL_BUFFER = 20;
 let _vscrollRows = [];   // Pre-computed HTML strings for each row
 let _vscrollRAF = null;  // requestAnimationFrame handle
@@ -1179,7 +1180,7 @@ function buildRowHTML(player, cols, heatOn, pctData) {
   const starred = isOnWatchlist(playKey);
   const pName = escapeAttr(player.full_name || player.player_name || "");
   const pTeam = escapeAttr(player.team || player.school || "");
-  let html = '<tr tabindex="0" data-player-id="' + escapeAttr(playKey) + '" style="height:' + VSCROLL_ROW_HEIGHT + 'px;">';
+  let html = '<tr tabindex="0" data-player-id="' + escapeAttr(playKey) + '" style="height:' + getVScrollRowHeight() + 'px;">';
   html += `<td style="text-align:center; padding:7px 4px; cursor:pointer; font-size:16px;" onclick="toggleWatchlistPlayer('${escapeAttr(playKey)}', '${pName}', '${escapeAttr(pos)}', '${pTeam}', '${state.universe}')" title="${starred ? 'Remove from watchlist' : 'Add to watchlist'}">${starred ? '<span style="color:var(--orange);">&#9733;</span>' : '<span style="color:var(--ink-faint);">&#9734;</span>'}</td>`;
   html += `<td style="text-align:center; padding:7px 6px;">
     <input type="checkbox" ${selected ? "checked" : ""} onchange="togglePlayerSelect('${escapeAttr(player.player_id || player.player_name)}', this.checked)"
@@ -1287,12 +1288,12 @@ function renderVisibleRows() {
   const colCount = getActiveColumns().length + 3 + (state.universe === "nfl" ? 1 : 0); // +star +checkbox +player (+pin if NFL)
 
   // Calculate visible range
-  const startRow = Math.max(0, Math.floor(scrollTop / VSCROLL_ROW_HEIGHT) - VSCROLL_BUFFER);
-  const endRow = Math.min(totalRows, Math.ceil((scrollTop + viewHeight) / VSCROLL_ROW_HEIGHT) + VSCROLL_BUFFER);
+  const startRow = Math.max(0, Math.floor(scrollTop / getVScrollRowHeight()) - VSCROLL_BUFFER);
+  const endRow = Math.min(totalRows, Math.ceil((scrollTop + viewHeight) / getVScrollRowHeight()) + VSCROLL_BUFFER);
 
   // Build HTML with spacer rows
-  const topHeight = startRow * VSCROLL_ROW_HEIGHT;
-  const bottomHeight = (totalRows - endRow) * VSCROLL_ROW_HEIGHT;
+  const topHeight = startRow * getVScrollRowHeight();
+  const bottomHeight = (totalRows - endRow) * getVScrollRowHeight();
 
   let html = "";
   if (topHeight > 0) {
@@ -2105,6 +2106,7 @@ function saveStateToURL() {
   if (state.minGP > 0) params.set("min_gp", state.minGP);
   if (state.heatColors) params.set("heat", "1");
   if (state.tierBreaks) params.set("tiers", "1");
+  if (state.density) params.set("dense", "1");
   if (state.tagFilter) params.set("tagged", "1");
   if (state.pinnedPlayers.length) params.set("pins", state.pinnedPlayers.join(","));
 
@@ -2173,6 +2175,9 @@ function loadStateFromURL() {
   if (params.has("tiers")) {
     state.tierBreaks = params.get("tiers") === "1";
   }
+  if (params.has("dense")) {
+    state.density = params.get("dense") === "1";
+  }
   if (params.has("tagged")) {
     state.tagFilter = params.get("tagged") === "1";
   }
@@ -2236,6 +2241,20 @@ function loadStateFromURL() {
     } else {
       tbBtn.classList.remove("active");
       tbBtn.style.borderColor = "";
+    }
+  }
+
+  // Sync density button
+  const densBtn = document.getElementById("densityBtn");
+  if (densBtn) {
+    if (state.density) {
+      densBtn.classList.add("active");
+      densBtn.style.borderColor = "var(--blue)";
+      document.body.classList.add("dense-mode");
+    } else {
+      densBtn.classList.remove("active");
+      densBtn.style.borderColor = "";
+      document.body.classList.remove("dense-mode");
     }
   }
 
@@ -2936,7 +2955,7 @@ function insertTierBreakRows(rows, cols) {
 }
 
 function buildTierBreakRow(label, colCount) {
-  return `<tr class="tier-break-row" style="height:${VSCROLL_ROW_HEIGHT}px; background:var(--bg-warm); border-top:3px solid var(--orange); pointer-events:none;">
+  return `<tr class="tier-break-row" style="height:${getVScrollRowHeight()}px; background:var(--bg-warm); border-top:3px solid var(--orange); pointer-events:none;">
     <td colspan="${colCount}" style="padding:4px 16px; font-family:var(--font-hand); font-size:16px; color:var(--orange); letter-spacing:0.5px; border-left:4px solid var(--orange);">
       ${label}
     </td>
@@ -2952,6 +2971,20 @@ function toggleTierBreaks() {
     btn.classList.toggle("active", state.tierBreaks);
     btn.style.borderColor = state.tierBreaks ? "var(--orange)" : "";
   }
+  renderTable();
+  saveStateToURL();
+}
+
+// ─── Data density toggle ─────────────────────────────────────────
+function toggleDensity() {
+  state.density = !state.density;
+  try { localStorage.setItem("razzle_density", state.density ? "1" : "0"); } catch(e) {}
+  const btn = document.getElementById("densityBtn");
+  if (btn) {
+    btn.classList.toggle("active", state.density);
+    btn.style.borderColor = state.density ? "var(--blue)" : "";
+  }
+  document.body.classList.toggle("dense-mode", state.density);
   renderTable();
   saveStateToURL();
 }
@@ -7668,6 +7701,12 @@ document.addEventListener("keydown", function(e) {
     return;
   }
 
+  // D: toggle density mode
+  if (e.key === "d" || e.key === "D") {
+    toggleDensity();
+    return;
+  }
+
   // N: toggle notes column
   if (e.key === "n" || e.key === "N") {
     toggleColumn("notes", !state.visibleColumns.includes("notes"));
@@ -7714,6 +7753,7 @@ function toggleShortcutRef() {
           ${shortcutRow("X", "Share / export")}
           ${shortcutRow("H", "Heat colors (percentiles)")}
           ${shortcutRow("T", "Tier break dividers")}
+          ${shortcutRow("D", "Compact density mode")}
           ${shortcutRow("N", "Toggle notes column")}
           ${shortcutRow("P", "Clear pinned players")}
           ${shortcutRow("?", "This reference")}

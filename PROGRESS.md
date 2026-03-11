@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 56 — Screener Data Density Toggle (COMPLETE)
+
+**Exit Criterion MET**: Screener table has a togglable compact/density mode. D key toggles between comfortable (default) and compact mode. Compact mode reduces row height (26px from 36px), font size (11px from 13px), and padding (3px 8px from 7px 14px) to show ~50% more rows. Toolbar "Dense" button with blue active state. State persists in localStorage. URL serialization (?dense=1). Virtual scroll row height dynamic.
+
+### Phase 56 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Density toggle with compact table mode | DONE | state.density, toggleDensity(), dense-mode CSS, D shortcut, densityBtn, ?dense=1 URL param, getVScrollRowHeight() |
+
 ## Previous Phase: Phase 55 — QA + UX Audit Fixes for Phases 51-54 (COMPLETE)
 
 **Exit Criterion MET**: All CRITICAL and HIGH findings fixed. Pinned rows separator colspan corrected to include pin column in NFL mode. Tag picker borders changed from 1.5px to 2px per DESIGN.md, with transparent border on default state to prevent layout shift.
