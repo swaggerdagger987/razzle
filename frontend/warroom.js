@@ -2583,7 +2583,7 @@ function renderAllBriefings(detail) {
     html += '<div class="pro-teaser-card">' +
       '<p>your league data is connected but locked</p>' +
       '<div class="pro-teaser-detail">this analysis would reference your actual roster, rivals, and league settings with Pro</div>' +
-      '<a class="btn-pro-upgrade" href="#" onclick="event.preventDefault(); if(typeof startCheckout===\'function\'){startCheckout(\'year\')}else if(typeof openAuthModal===\'function\'){openAuthModal();}">Upgrade to Pro \u2014 from $9.99/mo</a>' +
+      '<a class="btn-pro-upgrade" href="/pricing.html" onclick="event.preventDefault(); if(localStorage.getItem(\'razzle_token\')&&typeof startCheckout===\'function\'){startCheckout(\'year\')}else{window.location.href=\'/pricing.html\';}">Upgrade to Pro \u2014 from $9.99/mo</a>' +
     '</div>';
   }
 

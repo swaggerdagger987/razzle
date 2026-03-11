@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Pricing — Razzle</title>
+<meta property="og:title" content="Pricing — Razzle">
+<meta property="og:description" content="Razzle Pro and Elite plans. AI agents with league context, cloud sync, full historical data, and more.">
+<meta property="og:site_name" content="razzle.lol">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://razzle.lol/pricing.html">
+<meta property="og:image" content="https://razzle.lol/assets/og-image.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Pricing — Razzle">
+<meta name="twitter:description" content="Razzle Pro and Elite plans. AI agents with league context, cloud sync, full historical data.">
+<meta name="twitter:image" content="https://razzle.lol/assets/og-image.svg">
+<meta name="description" content="Razzle pricing. Pro at $9.99/mo or $79.99/yr. Elite at $19.99/mo or $149.99/yr. AI agents, league context, cloud sync, full data.">
+<link rel="canonical" href="https://razzle.lol/pricing.html">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .pricing-page { max-width: 900px; margin: 0 auto; padding: 48px 24px 80px; }
+  .pricing-hero { text-align: center; margin-bottom: 40px; }
+  .pricing-hero h1 { font-family: var(--font-display); font-size: 36px; color: var(--ink); margin: 0 0 8px; }
+  .pricing-hero h1 span { color: var(--orange); }
+  .pricing-hero p { font-family: var(--font-mono); font-size: 14px; color: var(--ink-light); max-width: 500px; margin: 0 auto; }
+
+  /* Interval toggle */
+  .interval-toggle { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 32px; }
+  .interval-toggle label { font-family: var(--font-display); font-size: 14px; color: var(--ink-light); cursor: pointer; transition: color 0.15s; }
+  .interval-toggle label.active { color: var(--ink); }
+  .interval-toggle .toggle-track {
+    width: 48px; height: 26px; background: var(--ink-faint); border: 2px solid var(--ink);
+    border-radius: 13px; cursor: pointer; position: relative; transition: background 0.2s;
+  }
+  .interval-toggle .toggle-track.yearly { background: var(--orange); border-color: var(--ink); }
+  .interval-toggle .toggle-knob {
+    width: 18px; height: 18px; background: white; border: 2px solid var(--ink);
+    border-radius: 50%; position: absolute; top: 2px; left: 2px; transition: transform 0.2s;
+  }
+  .interval-toggle .toggle-track.yearly .toggle-knob { transform: translateX(22px); }
+  .save-badge {
+    font-family: var(--font-display); font-size: 11px; color: white;
+    background: var(--green, #2ec4b6); padding: 2px 8px; border-radius: 6px;
+    border: 1.5px solid var(--ink); transform: rotate(-2deg); display: inline-block;
+  }
+
+  /* Plan cards */
+  .plans-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 40px; }
+  @media (max-width: 640px) { .plans-grid { grid-template-columns: 1fr; } }
+
+  .plan-card {
+    background: var(--card, #f7efe5); border: 3px solid var(--ink);
+    border-radius: 8px; padding: 28px 24px; position: relative;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .plan-card.elite { border-color: var(--purple, #8b5cf6); box-shadow: 4px 4px 0 var(--purple, #8b5cf6); }
+  .plan-card.elite .plan-badge { background: var(--purple, #8b5cf6); }
+
+  .plan-badge {
+    position: absolute; top: -12px; right: 16px;
+    font-family: var(--font-display); font-size: 11px; color: white;
+    background: var(--orange); padding: 3px 12px; border-radius: 4px;
+    border: 2px solid var(--ink); transform: rotate(2deg);
+  }
+
+  .plan-name { font-family: var(--font-display); font-size: 24px; color: var(--ink); margin: 0 0 4px; }
+  .plan-price { font-family: var(--font-display); font-size: 36px; color: var(--ink); margin: 0 0 2px; }
+  .plan-price span { font-size: 16px; color: var(--ink-light); }
+  .plan-interval { font-family: var(--font-mono); font-size: 12px; color: var(--ink-light); margin: 0 0 20px; }
+  .plan-interval .yearly-price { color: var(--orange); font-weight: 700; }
+
+  .plan-features { list-style: none; padding: 0; margin: 0 0 24px; }
+  .plan-features li {
+    font-family: var(--font-mono); font-size: 12px; color: var(--ink-medium, #555);
+    padding: 6px 0; border-bottom: 1px dashed var(--ink-faint);
+    display: flex; align-items: flex-start; gap: 8px;
+  }
+  .plan-features li:last-child { border-bottom: none; }
+  .plan-features .check { color: var(--green, #2ec4b6); font-weight: 700; flex-shrink: 0; }
+  .plan-features .highlight { color: var(--orange); font-weight: 700; }
+
+  .plan-cta { width: 100%; }
+  .plan-cta .btn-primary { width: 100%; font-size: 15px; padding: 12px 0; }
+  .plan-cta .btn-chunky { width: 100%; font-size: 15px; padding: 12px 0; }
+
+  /* Promo code */
+  .promo-section { text-align: center; margin-bottom: 40px; }
+  .promo-row { display: flex; gap: 8px; justify-content: center; align-items: center; max-width: 360px; margin: 0 auto; }
+  .promo-row input { flex: 1; font-family: var(--font-mono); font-size: 13px; padding: 8px 12px;
+    border: 2px solid var(--ink); border-radius: 4px; background: var(--card, #f7efe5); }
+  .promo-feedback { font-family: var(--font-mono); font-size: 11px; margin-top: 6px; min-height: 16px; }
+
+  /* Feature matrix */
+  .matrix-section { margin-top: 48px; }
+  .matrix-section h2 { font-family: var(--font-display); font-size: 22px; text-align: center; margin: 0 0 20px; }
+  .feature-matrix { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 12px; }
+  .feature-matrix th { font-family: var(--font-display); font-size: 13px; padding: 10px 8px;
+    border-bottom: 3px solid var(--ink); text-align: center; }
+  .feature-matrix th:first-child { text-align: left; }
+  .feature-matrix td { padding: 8px; border-bottom: 1px dashed var(--ink-faint); text-align: center; }
+  .feature-matrix td:first-child { text-align: left; color: var(--ink-medium, #555); }
+  .feature-matrix .yes { color: var(--green, #2ec4b6); font-weight: 700; }
+  .feature-matrix .no { color: var(--ink-faint); }
+  .feature-matrix .limit { color: var(--orange); font-weight: 600; }
+  .feature-matrix .group-row td { font-family: var(--font-display); font-size: 11px; text-transform: uppercase;
+    letter-spacing: 1px; color: var(--ink-light); padding-top: 16px; border-bottom: 2px solid var(--ink-faint); }
+
+  /* Manage link */
+  .manage-section { text-align: center; margin-top: 24px; font-family: var(--font-mono); font-size: 12px; }
+  .manage-section a { color: var(--orange); }
+
+  /* Already subscribed banner */
+  .subscribed-banner {
+    text-align: center; padding: 16px 24px; background: var(--card, #f7efe5);
+    border: 3px solid var(--green, #2ec4b6); border-radius: 8px;
+    box-shadow: 4px 4px 0 var(--green, #2ec4b6); margin-bottom: 32px; display: none;
+  }
+  .subscribed-banner.visible { display: block; }
+  .subscribed-banner p { font-family: var(--font-display); font-size: 16px; margin: 0 0 8px; }
+  .subscribed-banner .plan-name-badge { color: var(--orange); }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="/" class="logo">
+    <div class="logo-mark">&#x1F42F;</div>
+    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/lab.html">The Lab</a></li>
+    <li><a href="/agents.html">Situation Room</a></li>
+  </ul>
+  <div class="nav-auth" id="nav-auth">
+    <span class="nav-search-hint" onclick="document.querySelector('.cmd-palette-backdrop')?.classList.add('open'); document.querySelector('.cmd-palette-input')?.focus();" title="Quick search"><kbd>Ctrl+K</kbd> Search</span>
+    <a href="#" class="btn-chunky btn-sm" onclick="document.getElementById('auth-modal')?.classList.add('open'); return false;">Sign In</a>
+  </div>
+</nav>
+
+<div class="pricing-page">
+
+  <!-- Already subscribed banner (shown for Pro/Elite users) -->
+  <div class="subscribed-banner" id="subscribedBanner">
+    <p>You're on <span class="plan-name-badge" id="currentPlanName">Pro</span></p>
+    <a href="#" onclick="openManageSubscription(); return false;" class="btn-chunky" style="font-size:13px; padding:6px 16px;">Manage Subscription</a>
+  </div>
+
+  <div class="pricing-hero">
+    <h1>Pick Your <span>Plan</span></h1>
+    <p>The Lab is free forever. Pro and Elite unlock the full war machine.</p>
+  </div>
+
+  <!-- Interval toggle -->
+  <div class="interval-toggle">
+    <label id="monthlyLabel" class="active" onclick="setInterval('month')">Monthly</label>
+    <div class="toggle-track" id="intervalToggle" onclick="toggleInterval()">
+      <div class="toggle-knob"></div>
+    </div>
+    <label id="yearlyLabel" onclick="setInterval('year')">Yearly</label>
+    <span class="save-badge" id="saveBadge" style="opacity:0;">save 33%</span>
+  </div>
+
+  <!-- Plan cards -->
+  <div class="plans-grid">
+
+    <!-- PRO -->
+    <div class="plan-card">
+      <div class="plan-badge">most popular</div>
+      <div class="plan-name">Pro</div>
+      <div class="plan-price" id="proPrice">$9.99<span>/mo</span></div>
+      <div class="plan-interval" id="proInterval">billed monthly</div>
+
+      <ul class="plan-features">
+        <li><span class="check">&#10003;</span> 20 AI queries/day (BYOK)</li>
+        <li><span class="check">&#10003;</span> League-contextualized agents</li>
+        <li><span class="check">&#10003;</span> Full historical data (2015+)</li>
+        <li><span class="check">&#10003;</span> Unlimited custom formulas</li>
+        <li><span class="check">&#10003;</span> Formula Store full access</li>
+        <li><span class="check">&#10003;</span> Cloud sync (formulas, watchlist, views)</li>
+        <li><span class="check">&#10003;</span> CSV export</li>
+        <li><span class="check">&#10003;</span> Compare up to 4 players</li>
+        <li><span class="check">&#10003;</span> Roster grading</li>
+        <li><span class="check">&#10003;</span> 7-day free trial</li>
+      </ul>
+
+      <div class="plan-cta">
+        <button class="btn-primary" onclick="handleCheckout('pro')">Start Free Trial</button>
+      </div>
+    </div>
+
+    <!-- ELITE -->
+    <div class="plan-card elite">
+      <div class="plan-badge">full war machine</div>
+      <div class="plan-name">Elite</div>
+      <div class="plan-price" id="elitePrice">$19.99<span>/mo</span></div>
+      <div class="plan-interval" id="eliteInterval">billed monthly</div>
+
+      <ul class="plan-features">
+        <li><span class="check">&#10003;</span> <span class="highlight">Unlimited</span> AI queries (included)</li>
+        <li><span class="check">&#10003;</span> <span class="highlight">No API key needed</span> — we pay for it</li>
+        <li><span class="check">&#10003;</span> <span class="highlight">Agent memory</span> (multi-season, per-league)</li>
+        <li><span class="check">&#10003;</span> <span class="highlight">Weekly Razzle briefings</span></li>
+        <li><span class="check">&#10003;</span> Everything in Pro, plus:</li>
+        <li><span class="check">&#10003;</span> Priority data refresh</li>
+        <li><span class="check">&#10003;</span> League-contextualized agents</li>
+        <li><span class="check">&#10003;</span> Full historical data (2015+)</li>
+        <li><span class="check">&#10003;</span> Cloud sync everywhere</li>
+        <li><span class="check">&#10003;</span> 7-day free trial</li>
+      </ul>
+
+      <div class="plan-cta">
+        <button class="btn-primary" style="background:var(--purple, #8b5cf6); border-color:var(--ink);" onclick="handleCheckout('elite')">Start Free Trial</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Promo code -->
+  <div class="promo-section">
+    <div class="promo-row">
+      <input type="text" id="promoCodeInput" placeholder="promo code" autocomplete="off" spellcheck="false"
+        oninput="clearPromoFeedback()" onkeydown="if(event.key==='Enter') validatePromoCode()">
+      <button class="btn-chunky" style="font-size:12px; padding:8px 14px;" onclick="validatePromoCode()">Apply</button>
+    </div>
+    <div class="promo-feedback" id="promoCodeFeedback"></div>
+  </div>
+
+  <!-- Feature comparison matrix -->
+  <div class="matrix-section">
+    <h2>Feature Comparison</h2>
+    <table class="feature-matrix">
+      <thead>
+        <tr>
+          <th style="width:50%;">Feature</th>
+          <th style="width:16%;">Free</th>
+          <th style="width:17%;">Pro</th>
+          <th style="width:17%;">Elite</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Screener -->
+        <tr class="group-row"><td colspan="4">Screener / Lab</td></tr>
+        <tr><td>Lab screener (100+ columns)</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
+        <tr><td>All 60+ analytical panels</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
+        <tr><td>Season selector</td><td class="limit">3 seasons</td><td class="yes">All (2015+)</td><td class="yes">All (2015+)</td></tr>
+        <tr><td>Compare mode</td><td class="limit">2 players</td><td class="yes">4 players</td><td class="yes">4 players</td></tr>
+
+        <!-- Formulas -->
+        <tr class="group-row"><td colspan="4">Custom Formulas</td></tr>
+        <tr><td>Formula builder</td><td class="limit">3 max</td><td class="yes">Unlimited</td><td class="yes">Unlimited</td></tr>
+        <tr><td>Formula cloud sync</td><td class="no">&mdash;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
+        <tr><td>Formula Store (browse)</td><td class="limit">Preview</td><td class="yes">Full</td><td class="yes">Full</td></tr>
+        <tr><td>Formula Store (publish)</td><td class="no">&mdash;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
+
+        <!-- AI -->
+        <tr class="group-row"><td colspan="4">Situation Room (AI)</td></tr>
+        <tr><td>Generic AI queries</td><td class="limit">5/day</td><td class="limit">20/day</td><td class="yes">Unlimited</td></tr>
+        <tr><td>League-contextualized AI</td><td class="no">&mdash;</td><td class="yes">BYOK</td><td class="yes">Included</td></tr>
+        <tr><td>Agent memory</td><td class="no">&mdash;</td><td class="no">&mdash;</td><td class="yes">&#10003;</td></tr>
+        <tr><td>Weekly briefings</td><td class="no">&mdash;</td><td class="no">&mdash;</td><td class="yes">&#10003;</td></tr>
+
+        <!-- Data -->
+        <tr class="group-row"><td colspan="4">Data &amp; Export</td></tr>
+        <tr><td>Full historical data (2015+)</td><td class="no">&mdash;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
+        <tr><td>CSV export</td><td class="no">&mdash;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
+        <tr><td>Watchlist cloud sync</td><td class="no">&mdash;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
+        <tr><td>Saved views cloud sync</td><td class="no">&mdash;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
+
+        <!-- League -->
+        <tr class="group-row"><td colspan="4">League Tools</td></tr>
+        <tr><td>Sleeper connection</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
+        <tr><td>League Intel (rosters, standings)</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
+        <tr><td>Roster grading</td><td class="no">&mdash;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
+        <tr><td>Trade finder (league-specific)</td><td class="no">&mdash;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Manage link for existing subscribers -->
+  <div class="manage-section">
+    Already subscribed? <a href="#" onclick="openManageSubscription(); return false;">Manage your subscription</a>
+  </div>
+
+</div>
+
+<script src="app.js"></script>
+<script>
+  // Pricing page logic
+  var _pricingInterval = 'month';
+
+  var PRICES = {
+    pro:   { month: '$9.99',  year: '$79.99',  monthlyEquiv: '$6.67',  save: '33%' },
+    elite: { month: '$19.99', year: '$149.99', monthlyEquiv: '$12.50', save: '37%' }
+  };
+
+  function setInterval(interval) {
+    _pricingInterval = interval;
+    updatePricingUI();
+  }
+
+  function toggleInterval() {
+    _pricingInterval = _pricingInterval === 'month' ? 'year' : 'month';
+    updatePricingUI();
+  }
+
+  function updatePricingUI() {
+    var yearly = _pricingInterval === 'year';
+    var toggle = document.getElementById('intervalToggle');
+    var badge = document.getElementById('saveBadge');
+    var monthlyLabel = document.getElementById('monthlyLabel');
+    var yearlyLabel = document.getElementById('yearlyLabel');
+
+    if (yearly) {
+      toggle.classList.add('yearly');
+      badge.style.opacity = '1';
+      monthlyLabel.classList.remove('active');
+      yearlyLabel.classList.add('active');
+
+      document.getElementById('proPrice').innerHTML = PRICES.pro.year + '<span>/yr</span>';
+      document.getElementById('proInterval').innerHTML = 'that\'s <span class="yearly-price">' + PRICES.pro.monthlyEquiv + '/mo</span> — save ' + PRICES.pro.save;
+      document.getElementById('elitePrice').innerHTML = PRICES.elite.year + '<span>/yr</span>';
+      document.getElementById('eliteInterval').innerHTML = 'that\'s <span class="yearly-price">' + PRICES.elite.monthlyEquiv + '/mo</span> — save ' + PRICES.elite.save;
+    } else {
+      toggle.classList.remove('yearly');
+      badge.style.opacity = '0';
+      monthlyLabel.classList.add('active');
+      yearlyLabel.classList.remove('active');
+
+      document.getElementById('proPrice').innerHTML = PRICES.pro.month + '<span>/mo</span>';
+      document.getElementById('proInterval').textContent = 'billed monthly';
+      document.getElementById('elitePrice').innerHTML = PRICES.elite.month + '<span>/mo</span>';
+      document.getElementById('eliteInterval').textContent = 'billed monthly';
+    }
+  }
+
+  function handleCheckout(plan) {
+    var token = localStorage.getItem('razzle_token');
+    if (!token) {
+      // Need to sign in first
+      if (typeof openAuthModal === 'function') {
+        openAuthModal();
+      }
+      return;
+    }
+    // startCheckout from app.js expects interval
+    if (typeof startCheckout === 'function') {
+      startCheckout(_pricingInterval === 'year' ? 'year' : 'month');
+    }
+  }
+
+  function clearPromoFeedback() {
+    var fb = document.getElementById('promoCodeFeedback');
+    if (fb) fb.textContent = '';
+  }
+
+  // Check if already subscribed and show banner
+  function checkSubscription() {
+    try {
+      var user = JSON.parse(localStorage.getItem('razzle_user') || '{}');
+      if (user.plan && user.plan !== 'free') {
+        var banner = document.getElementById('subscribedBanner');
+        var planName = document.getElementById('currentPlanName');
+        if (banner) banner.classList.add('visible');
+        if (planName) planName.textContent = user.plan.charAt(0).toUpperCase() + user.plan.slice(1);
+      }
+    } catch (e) {}
+  }
+
+  // Init
+  checkSubscription();
+</script>
+</body>
+</html>

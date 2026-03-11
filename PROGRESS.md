@@ -1,5 +1,25 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 142 — Platform: Pricing Page + Conversion Funnel Polish (COMPLETE)
+
+**Exit Criterion MET**: Dedicated pricing.html page created with full Razzle design system: two-tier card layout (Pro $9.99/mo | $79.99/yr, Elite $19.99/mo | $149.99/yr), monthly/yearly toggle with save badges, promo code input with validation, feature comparison matrix, "Already subscribed" banner for existing users, Stripe checkout integration. refreshPlanGating() function implemented in app.js — refreshes all tier-gated UI (seasons, formulas, query limits, formula store, watchlist sync, nav badge) on plan change. All upgrade CTAs audited: links to /agents.html#pricing updated to /pricing.html, warroom upgrade links updated to route to pricing.html for unauthenticated users. Pricing page added to sitemap.
+
+### Phase 142 Tasks (Platform Loop)
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Pricing Page | DONE | pricing.html with tier cards, toggle, promo code, feature matrix, checkout integration |
+| 2 | refreshPlanGating | DONE | Defined in app.js, refreshes all gated features on plan change |
+| 3 | Upgrade CTA Audit | DONE | Fixed /agents.html#pricing to /pricing.html in app.js, index.html, warroom.js |
+
+### Decisions Log
+- Pricing page uses inline styles + page-scoped CSS to match Razzle design system without adding to global styles.css
+- Monthly/yearly toggle uses CSS-only animation (transform on knob, class toggle on track)
+- Already-subscribed banner auto-detects plan from localStorage — no server call needed
+- handleCheckout() routes to openAuthModal for unauthenticated users, startCheckout() for authenticated
+- refreshPlanGating consolidates all the individual refresh calls that were scattered in the plan-changed listener
+- Pricing page loads app.js for auth modal, checkout, and promo validation functions
+
 ## Previous Phase: Phase 141 — Platform: Watchlist Cloud Sync + Formula Store Gating + Server-Side Query Limits (COMPLETE)
 
 **Exit Criterion MET**: Five tier-gating and cloud-sync features implemented. (1) Watchlist cloud sync: backend `GET/POST /api/user/watchlist` endpoints with Pro+ plan gating, `user_watchlist` table with UNIQUE constraint, 200-player cap. Frontend `syncWatchlistFromCloud()` merges server+local by player_id, pushes changes on save, shows "synced"/"local only" badge. (2) Formula Store tier gating: free users see blurred descriptions, "Unlock with Pro" CTA on import/rate/review. `installFormula`, `rateFormula`, `openPublishFlow` all reject free users with toast + auth modal. (3) Server-side AI query rate limiting: `ai_query_log` table in users.db tracks queries per user/IP per day. `GET /api/agents/quota` and `POST /api/agents/track` endpoints. Free=5/day, Pro=20/day, Elite=unlimited. Returns 429 when exhausted. Frontend syncs local cache with server truth, preventing localStorage bypass. (4) Compare mode tier gating: free users limited to 2 player selections, Pro/Elite get 4. Toast nudge on limit hit. (5) Watchlist sync triggered on plan-changed event.

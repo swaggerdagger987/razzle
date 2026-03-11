@@ -1562,6 +1562,7 @@ def sitemap_xml():
         ("/gamescript.html", "0.8", "weekly"),
         ("/league-intel.html", "0.7", "monthly"),
         ("/agents.html", "0.7", "monthly"),
+        ("/pricing.html", "0.7", "monthly"),
     ]
 
     urlset = ET.Element("urlset", xmlns="http://www.sitemaps.org/schemas/sitemap/0.9")

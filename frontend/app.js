@@ -105,6 +105,33 @@ function checkFeatureGate(feature, currentCount) {
   return { allowed: true, limit: limit, message: "" };
 }
 
+/**
+ * Refresh all tier-gated UI elements. Called after plan changes (checkout return, login).
+ */
+function refreshPlanGating() {
+  // Re-populate season selector (unlock all seasons for paid users)
+  if (typeof populateSeasonSelect === "function") populateSeasonSelect();
+
+  // Re-render formula builder (update limit display)
+  if (typeof renderSavedFormulas === "function") renderSavedFormulas();
+
+  // Re-render column picker
+  if (typeof renderColumnPicker === "function") renderColumnPicker();
+
+  // Update query limit badge in Situation Room
+  if (typeof updateQueryLimitBadge === "function") updateQueryLimitBadge();
+  if (typeof syncQuotaFromServer === "function") syncQuotaFromServer();
+
+  // Refresh Formula Store gating (if store overlay is open)
+  if (typeof renderFormulaStore === "function") renderFormulaStore();
+
+  // Update watchlist sync badge
+  if (typeof syncWatchlistFromCloud === "function") syncWatchlistFromCloud();
+
+  // Update nav auth UI to show new plan badge
+  if (typeof checkAuth === "function") checkAuth();
+}
+
 function escapeHtml(str) {
   if (!str) return "";
   var d = document.createElement("div");
@@ -457,7 +484,7 @@ function updateAuthUI(user) {
     if (isPaid) {
       dropdownItems += '<a href="#" onclick="openManageSubscription(); return false;" class="nav-dropdown-item">Manage Subscription</a>';
     } else {
-      dropdownItems += '<a href="/agents.html#pricing" class="nav-dropdown-item" style="color:var(--orange);">Upgrade to Pro</a>';
+      dropdownItems += '<a href="/pricing.html" class="nav-dropdown-item" style="color:var(--orange);">Upgrade to Pro</a>';
     }
     dropdownItems += '<div class="nav-dropdown-divider"></div>';
     dropdownItems += '<a href="#" onclick="signOut(); return false;" class="nav-dropdown-item nav-dropdown-signout">Sign Out</a>';
