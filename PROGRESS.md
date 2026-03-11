@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 118 — Column Header Stat Tooltips (COMPLETE — already existed)
+
+**Exit Criterion MET**: Hover stat columns shows min/max/avg in title tooltip. Already built in lab.js:1242-1256.
+
+### Phase 118 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Stat tooltips | DONE | Already existed in renderTableHead() |
+
 ## Previous Phase: Phase 117 — CSV Export (COMPLETE)
 
 **Exit Criterion MET**: CSV button in toolbar downloads current view as CSV. Filename includes position, season, and date. 34 tests pass.

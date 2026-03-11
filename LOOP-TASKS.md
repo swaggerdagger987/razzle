@@ -1,15 +1,15 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 117 (CSV Export)
-## Phase 117: CSV Export
-**Exit Criterion**: Click "Export CSV" button in Lab toolbar → downloads CSV of current filtered/sorted view with all visible columns. Filename includes position and date.
+- Phase: 118 (Column Header Stat Tooltips)
+## Phase 118: Column Header Stat Tooltips
+**Exit Criterion**: Hover any stat column header → tooltip shows min/max/avg for that stat across current filtered data. Styled with design system.
 
 - Task 1: PASS
 - Stage: COMPLETE
-- Next: Phase gate
+- Next: Phase gate (already exists — no code change needed)
 
-### Task 1: CSV export button and download logic
+### Task 1: Stat summary tooltips on column headers
 **Status**: PASS
 **Attempts**: 1
-**Result**: Added "CSV" btn-chunky button to toolbar (between Trade and Share). Uses existing exportCSV() which handles all three universes, visible columns only, proper CSV escaping. Filename updated to include date: razzle-export-{pos}-{season}-{YYYY-MM-DD}.csv. 34 tests pass.
+**Result**: Feature already exists at lab.js:1242-1256. renderTableHead() computes min/max/avg/count for numeric columns and appends to title attribute. Shows "Min: X  Avg: Y  Max: Z  (N players)" on hover. Works for all universes.
