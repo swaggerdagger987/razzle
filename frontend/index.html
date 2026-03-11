@@ -880,7 +880,7 @@
         <li>Unlimited formulas + Formula Store</li>
         <li>CSV export</li>
       </ul>
-      <button class="btn-chunky btn-primary" style="font-size:13px; width:100%;" onclick="var u=null;try{u=JSON.parse(localStorage.getItem('razzle_user'))}catch(e){}if(!u){if(typeof openAuthModal==='function')openAuthModal();else window.location='/pricing.html'}else if(typeof startCheckout==='function'){startCheckout('pro_year')}else{window.location='/pricing.html'}">Start Free Trial</button>
+      <button id="homeProCta" class="btn-chunky btn-primary" style="font-size:13px; width:100%;" onclick="var u=null;try{u=JSON.parse(localStorage.getItem('razzle_user'))}catch(e){}if(!u){if(typeof openAuthModal==='function')openAuthModal();else window.location='/pricing.html'}else if(typeof startCheckout==='function'){startCheckout('pro_year')}else{window.location='/pricing.html'}">Get Pro</button>
     </div>
 
     <!-- ELITE -->
@@ -897,7 +897,7 @@
         <li>Weekly Razzle briefings</li>
         <li>Priority data refresh</li>
       </ul>
-      <button class="btn-chunky btn-primary" style="font-size:13px; width:100%;" onclick="var u=null;try{u=JSON.parse(localStorage.getItem('razzle_user'))}catch(e){}if(!u){if(typeof openAuthModal==='function')openAuthModal();else window.location='/pricing.html'}else if(typeof startCheckout==='function'){startCheckout('elite_year')}else{window.location='/pricing.html'}">Start Free Trial</button>
+      <button id="homeEliteCta" class="btn-chunky btn-primary" style="font-size:13px; width:100%;" onclick="var u=null;try{u=JSON.parse(localStorage.getItem('razzle_user'))}catch(e){}if(!u){if(typeof openAuthModal==='function')openAuthModal();else window.location='/pricing.html'}else if(typeof startCheckout==='function'){startCheckout('elite_year')}else{window.location='/pricing.html'}">Get Elite</button>
     </div>
 
   </div>
@@ -1268,6 +1268,17 @@ function renderFeaturedCards(data) {
   }
 })();
 </script>
-<script>fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({page:location.pathname})}).catch(function(){});</script>
+<script>
+fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({page:location.pathname})}).catch(function(){});
+// Update pricing CTAs based on user state
+(function(){try{
+  var u=JSON.parse(localStorage.getItem('razzle_user')||'null');
+  var pro=document.getElementById('homeProCta');
+  var elite=document.getElementById('homeEliteCta');
+  if(!u){if(pro)pro.textContent='Sign Up Free';if(elite)elite.textContent='Sign Up Free';}
+  else if(u.trial_active&&u.plan_source==='trial'){if(pro)pro.textContent='Subscribe to Pro';if(elite)elite.textContent='Subscribe to Elite';}
+  else if(u.plan&&u.plan!=='free'){if(pro)pro.textContent='Enter Situation Room';if(elite)elite.textContent='Enter Situation Room';if(pro)pro.onclick=function(){window.location='/agents'};if(elite)elite.onclick=function(){window.location='/agents'};}
+}catch(e){}})();
+</script>
 </body>
 </html>

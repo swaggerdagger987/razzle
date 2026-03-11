@@ -203,7 +203,7 @@
       </ul>
 
       <div class="plan-cta">
-        <button class="btn-primary" onclick="handleCheckout('pro')">Start Free Trial</button>
+        <button class="btn-primary" onclick="handleCheckout('pro')">Get Pro</button>
       </div>
     </div>
 
@@ -228,7 +228,7 @@
       </ul>
 
       <div class="plan-cta">
-        <button class="btn-primary" style="background:var(--purple, #8b5cf6); border-color:var(--ink);" onclick="handleCheckout('elite')">Start Free Trial</button>
+        <button class="btn-primary" style="background:var(--purple, #8b5cf6); border-color:var(--ink);" onclick="handleCheckout('elite')">Get Elite</button>
       </div>
     </div>
   </div>
@@ -507,9 +507,15 @@
       var trialActiveBanner = document.getElementById('trialActiveBanner');
       var trialCountdown = document.getElementById('trialCountdown');
 
+      // Get plan card CTA buttons
+      var proCta = document.querySelector('.plan-card:not(.elite) .plan-cta button');
+      var eliteCta = document.querySelector('.plan-card.elite .plan-cta button');
+
       if (!user) {
-        // Not logged in — show trial CTA
+        // Not logged in — show trial CTA, update buttons to "Sign Up Free"
         if (trialBanner) trialBanner.style.display = 'block';
+        if (proCta) proCta.textContent = 'Sign Up Free';
+        if (eliteCta) eliteCta.textContent = 'Sign Up Free';
         return;
       }
 
@@ -520,6 +526,9 @@
           var days = user.trial_days_remaining || 0;
           trialCountdown.textContent = days + ' day' + (days !== 1 ? 's' : '') + ' remaining on your free trial';
         }
+        // Update buttons — user already has trial access
+        if (proCta) proCta.textContent = 'Subscribe to Pro';
+        if (eliteCta) eliteCta.textContent = 'Subscribe to Elite';
         return;
       }
 
@@ -528,7 +537,20 @@
         var banner = document.getElementById('subscribedBanner');
         var planName = document.getElementById('currentPlanName');
         if (banner) banner.classList.add('visible');
-        if (planName) planName.textContent = user.plan.charAt(0).toUpperCase() + user.plan.slice(1);
+        if (planName) {
+          var displayName = user.plan.replace('_lifetime', ' Lifetime');
+          planName.textContent = displayName.charAt(0).toUpperCase() + displayName.slice(1);
+        }
+        // Update buttons for paid users
+        if (proCta) proCta.textContent = 'Current Plan';
+        if (eliteCta) {
+          var isElite = user.plan === 'elite' || user.plan === 'elite_lifetime';
+          eliteCta.textContent = isElite ? 'Current Plan' : 'Upgrade to Elite';
+        }
+      } else {
+        // Free user (no trial, no subscription) — show subscribe buttons
+        if (proCta) proCta.textContent = 'Subscribe to Pro';
+        if (eliteCta) eliteCta.textContent = 'Subscribe to Elite';
       }
     } catch (e) {}
   }
