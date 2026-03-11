@@ -1,8 +1,21 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 45 (QA + UX Audit — Phases 41-44 Fixes)
-## Phase 45: QA + UX Audit — Phases 41-44 Fixes
+- Phase: 46 (Player Profile — Dynasty Value Sparkline)
+## Phase 46: Player Profile — Dynasty Value Sparkline
+**Exit Criterion**: Player profile modal shows a dynasty trade value sparkline with season-by-season values.
+
+- Task 1: PASS
+- Stage: COMPLETE
+- Next: Phase gate
+
+### Task 1: Add dynasty value sparkline to player profile modal
+**Status**: PASS
+**Attempts**: 1
+**Acceptance**: renderProfile() in lab.js fetches dynasty history for the player and renders an inline SVG sparkline showing trade value across seasons, displayed after the headline stats bar.
+**Result**: Added loadDynastySparkline() async function called from renderProfile. Fetches /api/dynasty-history?players={id}, renders SVG polyline sparkline with start/end dots, first/latest season values, and delta with trend arrow. Styled with chunky border and position color (teal up, terracotta down).
+
+## Phase 45: QA + UX Audit — Phases 41-44 Fixes (COMPLETE)
 **Exit Criterion**: All HIGH and MEDIUM audit findings fixed. Class name escaping corrected. API parameter normalization consistent.
 
 - Task 1: PASS

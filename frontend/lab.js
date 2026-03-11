@@ -3088,6 +3088,9 @@ function renderProfile(data, container) {
   }
   html += `</div>`;
 
+  // Dynasty Value Sparkline (loads async)
+  html += `<div id="profile-dynasty-sparkline" style="margin-bottom:16px;"></div>`;
+
   // Season-by-season table
   if (seasons && seasons.length > 0) {
     const seasonCols = getSeasonColumns(pos);
@@ -3167,6 +3170,69 @@ function renderProfile(data, container) {
   if (seasons && seasons.length > 1) {
     requestAnimationFrame(() => drawProfileArc(seasons, pos));
   }
+
+  // Load dynasty value sparkline async
+  if (player.player_id) {
+    loadDynastySparkline(player.player_id, container);
+  }
+}
+
+function loadDynastySparkline(playerId, container) {
+  const el = container.querySelector('#profile-dynasty-sparkline');
+  if (!el) return;
+  fetch(`/api/dynasty-history?players=${encodeURIComponent(playerId)}`)
+    .then(r => r.ok ? r.json() : null)
+    .then(data => {
+      if (!data || !data.players || !data.players.length) return;
+      const p = data.players[0];
+      const history = (p.history || []).filter(h => h !== null);
+      if (history.length < 2) return;
+
+      const seasons = data.seasons || [];
+      const w = 280, h = 60, pad = 4;
+      const vals = [];
+      const labels = [];
+      for (let i = 0; i < seasons.length; i++) {
+        const entry = p.history[i];
+        if (entry) {
+          vals.push(entry.trade_value);
+          labels.push({ season: seasons[i], tv: entry.trade_value, ppg: entry.ppg });
+        }
+      }
+      if (vals.length < 2) return;
+
+      const mn = Math.min(...vals), mx = Math.max(...vals);
+      const rng = mx - mn || 1;
+      const pts = vals.map((v, i) => {
+        const x = pad + (i / (vals.length - 1)) * (w - 2 * pad);
+        const y = pad + (1 - (v - mn) / rng) * (h - 2 * pad);
+        return `${x.toFixed(1)},${y.toFixed(1)}`;
+      });
+
+      const trend = vals[vals.length - 1] - vals[0];
+      const color = trend >= 0 ? 'var(--teal)' : 'var(--accent)';
+      const latest = labels[labels.length - 1];
+      const first = labels[0];
+
+      let sparkHtml = '<div class="profile-section-title">Dynasty Value Trend</div>';
+      sparkHtml += '<div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">';
+      sparkHtml += `<svg width="${w}" height="${h}" style="border:2px solid var(--ink); border-radius:8px; background:var(--bg-card);">`;
+      sparkHtml += `<polyline points="${pts.join(' ')}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+      // Dots at start and end
+      const startPt = pts[0].split(','), endPt = pts[pts.length - 1].split(',');
+      sparkHtml += `<circle cx="${startPt[0]}" cy="${startPt[1]}" r="3" fill="${color}"/>`;
+      sparkHtml += `<circle cx="${endPt[0]}" cy="${endPt[1]}" r="3" fill="${color}"/>`;
+      sparkHtml += '</svg>';
+      sparkHtml += '<div style="font-family:var(--font-mono); font-size:12px;">';
+      sparkHtml += `<div><span style="color:var(--ink-light)">${first.season}:</span> <strong>${first.tv.toFixed(1)}</strong></div>`;
+      sparkHtml += `<div><span style="color:var(--ink-light)">${latest.season}:</span> <strong>${latest.tv.toFixed(1)}</strong></div>`;
+      const delta = latest.tv - first.tv;
+      const arrow = delta >= 0 ? '&#9650;' : '&#9660;';
+      sparkHtml += `<div style="color:${color}; font-weight:700;">${arrow} ${delta >= 0 ? '+' : ''}${delta.toFixed(1)}</div>`;
+      sparkHtml += '</div></div>';
+      el.innerHTML = sparkHtml;
+    })
+    .catch(() => {});
 }
 
 function getHeadlineStats(pos, career) {
