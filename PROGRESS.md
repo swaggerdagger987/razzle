@@ -1,5 +1,25 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 157 — Platform: Situation Room — "What Can I Ask?" Format Reference Panel (COMPLETE)
+
+**Exit Criterion MET**: The Situation Room scenario input now includes a collapsible "what can I ask?" reference panel organized by fantasy format. Uses native `<details>/<summary>` for zero-JS expand/collapse. 4-column responsive grid: Redraft (5 questions), Dynasty (5 questions), Keeper/Best Ball (4 questions), Universal (5 questions). Clicking any question populates the scenario textarea and auto-closes the panel. Styled with Razzle design system: orange column labels, mono font, hover state fills orange. Responsive: 2-column at 640px, 1-column at 400px. Triangle indicator rotates on open. Questions sourced directly from agent persona use cases to ensure agents can actually handle them well.
+
+### Phase 157 Tasks (Platform Loop)
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Format-Organized Question Reference | DONE | details/summary, 4 columns, 19 questions, click-to-fill |
+| 2 | QA + Syntax Verification | DONE | JS syntax OK, page serves 200, HTML balanced |
+
+### Decisions Log
+- Used native `<details>/<summary>` instead of JS-driven accordion to minimize JS weight and leverage browser accessibility features.
+- Questions are deliberately phrased as natural language that a user would actually type, not as feature descriptions.
+- Clicking a question closes the panel AND populates the input, creating a smooth flow to hitting "Run All Agents."
+- 4 format columns match the major formats: Redraft, Dynasty, Keeper/Best Ball (combined because similar UX), Universal (format-agnostic questions).
+- Orange hover state on question items matches the CTA color, creating visual consistency.
+
+---
+
 ## Previous Phase: Phase 156 — Platform: Situation Room — First-Run Demo Briefing (COMPLETE)
 
 **Exit Criterion MET**: The Situation Room (agents.html) now shows pre-rendered sample briefing cards when a user first visits, before they configure an API key or run any queries. The demo uses the exact same briefing card styling as real agent output, creating an immediate "aha moment" that demonstrates the product's value. Content: (1) Razzle synthesis card with URGENT urgency badge, expanded by default, showing conflict resolution between specialists and a clear GM decision. (2) Five specialist cards (Medical, Scout, Diplomat, Quant, Historian) collapsed by default, each with realistic analysis for a "Daniels vs Hurts" start/sit scenario. (3) Cross-agent follow-up section showing Scout auto-triggered by Medical's injury flag (handcuff assessment). (4) Every card has a "demo" badge and italicized free-vs-paid hints showing what league context would add (e.g., "With league context: would identify the 2-3 managers most desperate for a QB"). (5) Conversion CTA at bottom: "imagine this analysis with your roster, your opponents, and your league's scoring" with a 7-day trial button. (6) Demo auto-dismisses when a real query starts (via razzle:agents-starting event) or when user clicks "dismiss." Dismissal persisted in localStorage. All JS syntax verified.

@@ -327,6 +327,94 @@
     color: var(--ink-light);
   }
 
+  /* Ask Reference Panel */
+  .ask-reference {
+    margin: 8px 0 12px;
+    border: 2px dashed var(--ink-faint);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color 0.15s;
+  }
+
+  .ask-reference[open] {
+    border-color: var(--orange);
+  }
+
+  .ask-reference-toggle {
+    font-family: var(--font-display);
+    font-size: 12px;
+    color: var(--ink-medium);
+    padding: 8px 12px;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    user-select: none;
+  }
+
+  .ask-reference-toggle::-webkit-details-marker {
+    display: none;
+  }
+
+  .ask-reference-toggle::before {
+    content: '\25B6';
+    font-size: 8px;
+    color: var(--orange);
+    transition: transform 0.15s;
+  }
+
+  .ask-reference[open] .ask-reference-toggle::before {
+    transform: rotate(90deg);
+  }
+
+  .ask-reference-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    padding: 0 12px 12px;
+  }
+
+  .ask-ref-col {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .ask-ref-label {
+    font-family: var(--font-display);
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--orange);
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  .ask-ref-item {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-medium);
+    padding: 4px 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.1s;
+    line-height: 1.35;
+  }
+
+  .ask-ref-item:hover {
+    background: var(--orange);
+    color: white;
+  }
+
+  @media (max-width: 640px) {
+    .ask-reference-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .ask-ref-item { font-size: 10px; }
+  }
+
+  @media (max-width: 400px) {
+    .ask-reference-grid { grid-template-columns: 1fr; }
+  }
+
   .scenario-examples {
     margin-top: 10px;
     margin-bottom: 14px;
@@ -1562,6 +1650,44 @@
           <div class="scenario-examples-label">try one of these:</div>
           <div class="scenario-chips" id="scenarioChips"></div>
         </div>
+
+        <!-- What can I ask? collapsible reference -->
+        <details class="ask-reference" id="askReference">
+          <summary class="ask-reference-toggle">what can I ask? <span style="font-family:var(--font-hand); color:var(--ink-light); font-weight:400;">(by format)</span></summary>
+          <div class="ask-reference-grid">
+            <div class="ask-ref-col">
+              <div class="ask-ref-label">Redraft</div>
+              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">Should I start Player A or Player B this week?</div>
+              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">Who should I pick up on waivers?</div>
+              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">My RB1 is hurt, who do I pivot to?</div>
+              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">What streaming options are best this week?</div>
+              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">Should I play for ceiling or floor this week?</div>
+            </div>
+            <div class="ask-ref-col">
+              <div class="ask-ref-label">Dynasty</div>
+              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">I got offered X for Y, should I take it?</div>
+              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">My team is 3-5, should I go all-in or rebuild?</div>
+              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">Who should I target if I'm rebuilding?</div>
+              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">Which rookies are earning more work?</div>
+              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">Who's fading that I should sell before the market drops?</div>
+            </div>
+            <div class="ask-ref-col">
+              <div class="ask-ref-label">Keeper / Best Ball</div>
+              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">Rank my keeper options by surplus value</div>
+              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">Is Player X worth keeping at round 3 cost?</div>
+              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">Which players have the highest boom rate at their ADP?</div>
+              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">What late-round stacks have the highest ceiling?</div>
+            </div>
+            <div class="ask-ref-col">
+              <div class="ask-ref-label">Universal</div>
+              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">What are you seeing that I'm not?</div>
+              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">What are my championship odds?</div>
+              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">Is this player's breakout real or a mirage?</div>
+              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">How much FAAB should I bid on this player?</div>
+              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">Rank my priorities for this week</div>
+            </div>
+          </div>
+        </details>
 
         <!-- Context indicators -->
         <div class="context-badges" id="contextBadges"></div>

@@ -1,7 +1,7 @@
-# Platform Loop — Phase 156 Task List
+# Platform Loop — Phase 157 Task List
 
 ## Status
-Current Phase: 156 (Situation Room — First-Run Demo Briefing)
+Current Phase: 157 (Situation Room — "What Can I Ask?" Format Reference Panel)
 Current Task: 2
 Current Stage: COMPLETE
 Attempt: 1/3
@@ -12,31 +12,30 @@ Loop Iterations: 2
 
 ## Phase Rationale
 
-The North Star conversion funnel requires: "User hits a decision point -> generic agent answer is fine, but league-contextualized answer from the Situation Room is clearly better -> converts."
+The system prompt mandates: "Razzle serves ALL fantasy formats. Dynasty, redraft, keeper, best ball, superflex, 2QB, IDP, DFS -- every format." The agent personas have 10+ use cases each across multiple formats, but users visiting the Situation Room have no idea what types of questions they can ask. The example chips show 6 generic scenarios, but there's no format-organized reference.
 
-When a user first visits agents.html, they see the pixel canvas and an empty briefing zone with a scenario input. Without an API key configured, they have no idea what agent output looks like. The first-run demo briefing shows pre-rendered sample briefing cards (identical styling to real output) that demonstrate:
-1. What each agent's output looks like
-2. The Razzle synthesis with urgency tier
-3. Cross-agent follow-up triggers
-4. The free vs paid gap (each card has italicized hints showing what league context would add)
-5. A conversion CTA at the bottom
+Adding a collapsible "What can I ask?" panel below the scenario examples gives users:
+1. Immediate understanding of what the agents can do
+2. Format-organized question suggestions (Redraft, Dynasty, Keeper/Best Ball, Universal)
+3. One-click population of the scenario input from any suggestion
+4. Confidence to ask real questions about their specific format
 
-This creates the "aha moment" before the user even configures anything.
+This is a conversion accelerator -- users who understand what they can ask are more likely to configure an API key and run their first query.
 
 ---
 
-## Task 1: First-Run Demo Briefing Cards
-**Requirement**: "User sees Situation Room demo -> curiosity builds" + "generic vs league-contextualized gap is obvious" from North Star.
-**Accept when**: (1) Pre-rendered sample briefing cards appear in briefing zone on first visit. (2) Razzle synthesis card expanded, 5 specialist cards collapsed. (3) Cross-agent follow-up section visible. (4) Demo badge on each card. (5) Free vs paid hints on each card. (6) Conversion CTA at bottom. (7) Dismissed via localStorage, auto-clears on first real query.
+## Task 1: Format-Organized Question Reference Panel
+**Requirement**: "Every agent must be deep enough that a user thinks 'I can't believe this thing just did that for me'" + agents must be "format-aware, not format-locked."
+**Accept when**: (1) Collapsible `<details>` panel below scenario examples. (2) 4 columns: Redraft, Dynasty, Keeper/Best Ball, Universal. (3) 4-5 questions per column. (4) Clicking any question populates scenario input and closes panel. (5) Styled with Razzle design system. (6) Responsive on mobile.
 **Depends on**: none
-**Size**: M
+**Size**: S
 **Primary role**: FRONTEND
-**Status**: PASS — DEMO_BRIEFINGS object, showFirstRunDemo(), renderDemoCard(), dismissFirstRunDemo(), razzle:agents-starting event dispatch
+**Status**: PASS — details/summary, 4-column grid, 19 clickable questions, auto-close on click, responsive CSS
 
 ## Task 2: QA + Syntax Verification
-**Requirement**: No JS errors, pages serve correctly.
-**Accept when**: (1) warroom.js passes node --check. (2) agents.html inline JS passes. (3) Both pages serve 200.
+**Requirement**: No errors, page serves correctly.
+**Accept when**: (1) agents.html inline JS passes. (2) Page serves 200. (3) HTML structure balanced.
 **Depends on**: Task 1
 **Size**: S
 **Primary role**: QA
-**Status**: PASS — warroom.js syntax OK, agents.html JS OK, both pages serve 200
+**Status**: PASS — JS syntax OK, page serves 200, details tag properly balanced
