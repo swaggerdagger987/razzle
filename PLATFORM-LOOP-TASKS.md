@@ -1,7 +1,7 @@
-# Platform Loop — Phase 135 Task List
+# Platform Loop — Phase 136 Task List
 
 ## Status
-Current Phase: 135 (Bureau of Intelligence — Multi-Season Sleeper History)
+Current Phase: 136 (Agent Memory Engine — Server-Side Persistence for Elite)
 Current Task: COMPLETE
 Current Stage: PHASE GATE
 Attempt: -
@@ -10,25 +10,25 @@ Loop Iterations: 3
 
 ---
 
-## Task 1: Multi-season league history crawler via previous_league_id chain
-**Requirement**: "On Sleeper connection (paid), recursively pulls league history via previous_league_id" (North Star, Agent Architecture)
-**Accept when**: League Intel page detects previous_league_id on each league and follows the chain back up to 5 seasons. Transaction history and standings from all seasons aggregated into manager profiles. History depth shown in UI ("4 seasons of data").
+## Task 1: Backend API for agent memory storage
+**Requirement**: "Agent memory gets more valuable every season — switching cost increases over time" (North Star). "Agent memory: NO / NO / YES" (Pricing Strategy — Elite tier only).
+**Accept when**: POST /api/user/memory saves a memory entry (scenario + agent findings) tied to user_id. GET /api/user/memory retrieves memories with optional keyword search. DELETE /api/user/memory/:id deletes a single entry. Auth required (JWT). Tier check: only Elite users can write. Memory entries stored in users.db with timestamp, scenario text, agent findings JSON, and optional league_id.
 **Depends on**: none
-**Size**: L
-**Primary role**: FRONTEND
+**Size**: M
+**Primary role**: BACKEND
 **Status**: PASS
 
-## Task 2: Enhanced manager behavioral profiles from multi-season data
-**Requirement**: "Builds per-manager behavioral profiles: FAAB patterns, Trade tendencies, Draft patterns, Panic indicators" (North Star)
-**Accept when**: Manager profile cards show multi-season behavioral traits: trade frequency trend, FAAB spending pattern, positional bias consistency, win/loss correlation with roster moves, panic sell indicators. Data saved to localStorage for agent context bridge.
+## Task 2: Frontend memory sync for Elite users
+**Requirement**: "Agent memory (multi-season, per-league, Elite tier)" (Roadmap Phase 9)
+**Accept when**: warroom.js saveWarRoomMemory() POSTs to server when user is Elite. getWarRoomMemory() fetches from server when Elite (merges with localStorage). Memory panel shows server-synced entries with cloud icon. Non-Elite users continue using localStorage only (no degradation). Memory count bumped from 20 (localStorage) to 100 (server) for Elite.
 **Depends on**: Task 1
 **Size**: M
 **Primary role**: FRONTEND
 **Status**: PASS
 
-## Task 3: Feed enhanced profiles into agent context bridge
+## Task 3: Memory relevance and context enrichment
 **Requirement**: "More seasons = richer profiles = higher switching cost" (North Star)
-**Accept when**: warroom.js getLeagueContext() includes enhanced multi-season manager profiles in agent prompts. Agents reference specific historical patterns ("In 3 seasons, Manager X has never traded a 1st round pick"). Free users see single-season data; paid users see full history.
+**Accept when**: getRelevantMemory() uses improved keyword matching that considers league context (which league the memory was recorded for). formatMemoryContext() includes league name and season. Older memories get lower relevance scores (time decay). Memory entries include league_id so agents can reference "your history in [League Name]". Free trial prompt shows "Agent memory available with Elite plan."
 **Depends on**: Task 2
 **Size**: S
 **Primary role**: FRONTEND

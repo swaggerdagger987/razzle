@@ -2516,12 +2516,76 @@ window.addEventListener('razzle:agent-result', function(e) {
 // ── WAR ROOM MEMORY ───────────────────────────────────────────────────
 
 var MEMORY_KEY = 'razzle_warroom_memory';
-var MEMORY_MAX = 20;
+var MEMORY_MAX_LOCAL = 20;
+var MEMORY_MAX_SERVER = 100;
+var _serverMemoryCache = null; // cached server memories for Elite
 
 function getWarRoomMemory() {
   try {
     return JSON.parse(localStorage.getItem(MEMORY_KEY)) || [];
   } catch (e) { return []; }
+}
+
+/**
+ * Get all memories (local + server for Elite).
+ * Returns a promise that resolves to an array.
+ */
+async function getWarRoomMemoryFull() {
+  var local = getWarRoomMemory();
+
+  if (!isEliteUser()) return local;
+
+  // Elite users: merge server memories with local
+  try {
+    var token = localStorage.getItem('razzle_token');
+    if (!token) return local;
+
+    var resp = await fetch(
+      (typeof API_BASE !== 'undefined' ? API_BASE : '') + '/api/user/memory?limit=100',
+      { headers: { 'Authorization': 'Bearer ' + token } }
+    );
+    if (!resp.ok) return local;
+    var data = await resp.json();
+    var serverEntries = (data.memories || []).map(function(m) {
+      return {
+        id: m.id,
+        ts: new Date(m.created_at).getTime(),
+        scenario: m.scenario,
+        agents: _parseFindings(m.findings),
+        leagueId: m.league_id,
+        leagueName: m.league_name,
+        synced: true
+      };
+    });
+
+    _serverMemoryCache = serverEntries;
+
+    // Merge: server entries + local entries not yet synced
+    // Deduplicate by scenario + timestamp proximity (within 5 seconds)
+    var merged = serverEntries.slice();
+    local.forEach(function(l) {
+      var isDupe = merged.some(function(s) {
+        return s.scenario === l.scenario && Math.abs(s.ts - l.ts) < 5000;
+      });
+      if (!isDupe) {
+        l.synced = false;
+        merged.push(l);
+      }
+    });
+
+    merged.sort(function(a, b) { return b.ts - a.ts; });
+    return merged;
+  } catch (e) {
+    return local;
+  }
+}
+
+function _parseFindings(findingsStr) {
+  try {
+    return JSON.parse(findingsStr);
+  } catch (e) {
+    return [{ name: 'Razzle', finding: findingsStr.slice(0, 200) }];
+  }
 }
 
 function saveWarRoomMemory(scenario, detail) {
@@ -2545,14 +2609,51 @@ function saveWarRoomMemory(scenario, detail) {
     }
   });
 
+  // Save to localStorage
   memory.unshift(entry);
-  if (memory.length > MEMORY_MAX) memory = memory.slice(0, MEMORY_MAX);
+  if (memory.length > MEMORY_MAX_LOCAL) memory = memory.slice(0, MEMORY_MAX_LOCAL);
   try { localStorage.setItem(MEMORY_KEY, JSON.stringify(memory)); } catch (e) { /* quota */ }
+
+  // Sync to server if Elite
+  _syncMemoryToServer(entry);
+}
+
+function _syncMemoryToServer(entry) {
+  if (!isEliteUser()) return;
+  var token = localStorage.getItem('razzle_token');
+  if (!token) return;
+
+  // Get league context for league_id/name
+  var leagueId = null;
+  var leagueName = null;
+  try {
+    var ctx = JSON.parse(localStorage.getItem('razzle_league_context') || '{}');
+    if (ctx.leagues && ctx.leagues.length > 0) {
+      leagueId = ctx.leagues[0].id || null;
+      leagueName = ctx.leagues[0].name || null;
+    }
+  } catch (e) { /* ignore */ }
+
+  fetch(
+    (typeof API_BASE !== 'undefined' ? API_BASE : '') + '/api/user/memory',
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({
+        scenario: entry.scenario,
+        findings: JSON.stringify(entry.agents),
+        league_id: leagueId,
+        league_name: leagueName
+      })
+    }
+  ).catch(function() { /* silent fail — local copy is the fallback */ });
 }
 
 function getRelevantMemory(scenario, maxItems) {
   maxItems = maxItems || 3;
-  var memory = getWarRoomMemory();
+
+  // Use server-synced cache for Elite, otherwise localStorage
+  var memory = (_serverMemoryCache && isEliteUser()) ? _serverMemoryCache : getWarRoomMemory();
   if (!memory.length) return [];
 
   // Extract keywords from scenario (words 4+ chars, lowercased)
@@ -2560,15 +2661,40 @@ function getRelevantMemory(scenario, maxItems) {
     .filter(function(w) { return w.length >= 4; });
   if (!words.length) return memory.slice(0, maxItems);
 
-  // Score each memory entry by keyword overlap
+  // Get current league context for league-aware scoring
+  var currentLeagueId = null;
+  try {
+    var ctx = JSON.parse(localStorage.getItem('razzle_league_context') || '{}');
+    if (ctx.leagues && ctx.leagues.length > 0) currentLeagueId = ctx.leagues[0].id || null;
+  } catch (e) { /* ignore */ }
+
+  var now = Date.now();
+
+  // Score each memory entry by keyword overlap + time decay + league match
   var scored = memory.map(function(m) {
     var text = (m.scenario + ' ' + m.agents.map(function(a) { return a.finding; }).join(' ')).toLowerCase();
-    var score = 0;
-    words.forEach(function(w) { if (text.indexOf(w) >= 0) score++; });
-    return { entry: m, score: score };
+    var keywordScore = 0;
+    words.forEach(function(w) { if (text.indexOf(w) >= 0) keywordScore++; });
+
+    // Time decay: memories older than 7 days get penalized, older than 30 days heavily
+    var ageMs = now - (m.ts || 0);
+    var ageDays = ageMs / 86400000;
+    var timeDecay = 1.0;
+    if (ageDays > 30) timeDecay = 0.3;
+    else if (ageDays > 14) timeDecay = 0.6;
+    else if (ageDays > 7) timeDecay = 0.8;
+
+    // League bonus: memories from the same league get a boost
+    var leagueBonus = 0;
+    if (currentLeagueId && m.leagueId && m.leagueId === currentLeagueId) {
+      leagueBonus = 2; // equivalent to 2 extra keyword matches
+    }
+
+    var totalScore = (keywordScore + leagueBonus) * timeDecay;
+    return { entry: m, score: totalScore };
   });
 
-  // Return top matches that have any overlap, or most recent if no overlap
+  // Return top matches by score, then by recency
   scored.sort(function(a, b) { return b.score - a.score || b.entry.ts - a.entry.ts; });
   return scored.slice(0, maxItems).map(function(s) { return s.entry; });
 }
@@ -2576,10 +2702,14 @@ function getRelevantMemory(scenario, maxItems) {
 function formatMemoryContext(entries) {
   if (!entries.length) return '';
   var lines = ['', '--- WHAT THE WAR ROOM REMEMBERS ---'];
+  var eliteNote = isEliteUser() ? ' (cloud-synced, multi-season)' : '';
+  if (eliteNote) lines.push('Memory depth: ' + entries.length + ' briefings' + eliteNote);
+
   entries.forEach(function(m) {
     var ago = formatTimeAgo(m.ts);
+    var leaguePrefix = m.leagueName ? ' [' + m.leagueName + ']' : '';
     lines.push('');
-    lines.push('Briefing from ' + ago + ': "' + m.scenario.slice(0, 100) + '"');
+    lines.push('Briefing from ' + ago + leaguePrefix + ': "' + m.scenario.slice(0, 100) + '"');
     m.agents.forEach(function(a) {
       lines.push('  ' + a.name + ': ' + a.finding);
     });
@@ -2611,29 +2741,76 @@ window.addEventListener('razzle:all-agents-done', function(e) {
 function renderMemoryPanel() {
   var panel = document.getElementById('memoryPanel');
   if (!panel) return;
-  var memory = getWarRoomMemory();
+
+  // Elite users get server-synced memories
+  if (isEliteUser()) {
+    panel.innerHTML = '<div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); text-align:center; padding:8px;">loading memory...</div>';
+    getWarRoomMemoryFull().then(function(memories) {
+      _renderMemoryEntries(panel, memories, true);
+    });
+  } else {
+    var memory = getWarRoomMemory();
+    _renderMemoryEntries(panel, memory, false);
+  }
+}
+
+function _renderMemoryEntries(panel, memory, isElite) {
   if (!memory.length) {
-    panel.innerHTML = '<div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); text-align:center; padding:16px;">no briefings recorded yet</div>';
+    var emptyMsg = isElite
+      ? 'no briefings recorded yet — your memory syncs across devices'
+      : 'no briefings recorded yet';
+    if (!isElite) {
+      emptyMsg += '<div style="margin-top:8px; font-size:12px; color:var(--orange);">Elite plan: unlimited cloud-synced memory</div>';
+    }
+    panel.innerHTML = '<div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); text-align:center; padding:16px;">' + emptyMsg + '</div>';
     return;
   }
-  var html = '';
-  memory.forEach(function(m, i) {
+
+  var headerBadge = isElite
+    ? '<div style="font-family:var(--font-mono); font-size:9px; color:var(--pos-qb); text-align:center; margin-bottom:6px; padding:2px 8px; border:1px solid var(--pos-qb); border-radius:3px; display:inline-block;">cloud-synced</div>'
+    : '';
+
+  var html = headerBadge ? '<div style="text-align:center;">' + headerBadge + '</div>' : '';
+
+  memory.forEach(function(m) {
     var ago = formatTimeAgo(m.ts);
     var agentSummary = m.agents.map(function(a) { return a.name; }).join(', ');
+    var syncIcon = m.synced ? '<span title="Synced to cloud" style="font-size:10px; color:var(--pos-qb); margin-left:4px;">&#9729;</span>' : '';
+    var leagueTag = m.leagueName ? '<span style="font-family:var(--font-mono); font-size:9px; color:var(--orange); margin-left:4px;">[' + escapeHtml(m.leagueName) + ']</span>' : '';
+
     html += '<div style="padding:8px 0; border-bottom:1px dashed var(--ink-faint);">';
-    html += '<div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + ago + '</div>';
+    html += '<div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + ago + syncIcon + leagueTag + '</div>';
     html += '<div style="font-family:var(--font-display); font-size:12px; margin:2px 0;">' + escapeHtml(m.scenario.slice(0, 80)) + (m.scenario.length > 80 ? '...' : '') + '</div>';
     html += '<div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + agentSummary + '</div>';
     html += '</div>';
   });
+
   html += '<div style="text-align:center; margin-top:8px;">';
   html += '<button class="btn-chunky" style="font-size:10px; padding:3px 10px;" onclick="clearWarRoomMemory()">clear memory</button>';
+  if (!isElite) {
+    html += '<div style="font-family:var(--font-hand); font-size:11px; color:var(--ink-light); margin-top:6px;">' + memory.length + '/' + MEMORY_MAX_LOCAL + ' local entries</div>';
+  } else {
+    html += '<div style="font-family:var(--font-hand); font-size:11px; color:var(--pos-qb); margin-top:6px;">' + memory.length + '/' + MEMORY_MAX_SERVER + ' cloud entries</div>';
+  }
   html += '</div>';
   panel.innerHTML = html;
 }
 
 function clearWarRoomMemory() {
   localStorage.removeItem(MEMORY_KEY);
+
+  // Also clear server memory for Elite users
+  if (isEliteUser()) {
+    var token = localStorage.getItem('razzle_token');
+    if (token) {
+      fetch(
+        (typeof API_BASE !== 'undefined' ? API_BASE : '') + '/api/user/memory',
+        { method: 'DELETE', headers: { 'Authorization': 'Bearer ' + token } }
+      ).catch(function() {});
+    }
+    _serverMemoryCache = null;
+  }
+
   renderMemoryPanel();
 }
 

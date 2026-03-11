@@ -703,6 +703,58 @@ async def import_user_formulas(request: Request):
 
 
 # ---------------------------------------------------------------------------
+# Agent Memory endpoints (Elite tier — server-side persistence)
+# ---------------------------------------------------------------------------
+
+@app.get("/api/user/memory")
+async def get_agent_memory(request: Request, league_id: str = None,
+                           search: str = None, limit: int = 50):
+    user, err = require_plan(request, "elite")
+    if err:
+        return err
+    return auth_module.get_agent_memories(
+        user["id"], league_id=league_id, search=search, limit=limit
+    )
+
+
+@app.post("/api/user/memory")
+async def save_agent_memory(request: Request):
+    user, err = require_plan(request, "elite")
+    if err:
+        return err
+    body = await request.json()
+    result = auth_module.save_agent_memory(
+        user["id"],
+        scenario=body.get("scenario", ""),
+        findings=body.get("findings", ""),
+        league_id=body.get("league_id"),
+        league_name=body.get("league_name"),
+    )
+    if "error" in result:
+        return JSONResponse({"error": result["error"]}, status_code=result.get("status", 400))
+    return result
+
+
+@app.delete("/api/user/memory/{memory_id}")
+async def delete_agent_memory(memory_id: int, request: Request):
+    user, err = require_plan(request, "elite")
+    if err:
+        return err
+    result = auth_module.delete_agent_memory(user["id"], memory_id)
+    if "error" in result:
+        return JSONResponse({"error": result["error"]}, status_code=result.get("status", 404))
+    return result
+
+
+@app.delete("/api/user/memory")
+async def clear_agent_memory(request: Request, league_id: str = None):
+    user, err = require_plan(request, "elite")
+    if err:
+        return err
+    return auth_module.clear_agent_memories(user["id"], league_id=league_id)
+
+
+# ---------------------------------------------------------------------------
 # Player endpoints
 # ---------------------------------------------------------------------------
 

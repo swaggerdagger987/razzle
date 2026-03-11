@@ -73,6 +73,20 @@ def initialize_users_db():
             );
 
             CREATE INDEX IF NOT EXISTS idx_user_formulas_user ON user_formulas(user_id);
+
+            CREATE TABLE IF NOT EXISTS agent_memory (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                league_id TEXT,
+                league_name TEXT,
+                scenario TEXT NOT NULL,
+                findings TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users(id)
+            );
+
+            CREATE INDEX IF NOT EXISTS idx_agent_memory_user ON agent_memory(user_id);
+            CREATE INDEX IF NOT EXISTS idx_agent_memory_league ON agent_memory(user_id, league_id);
         """)
         conn.commit()
     logger.info("Users database initialized")
@@ -258,3 +272,110 @@ def import_formulas(user_id: int, formulas: list) -> dict:
                 imported += 1
         conn.commit()
         return {"status": "ok", "imported": imported}
+
+
+# ---------------------------------------------------------------------------
+# Agent Memory (Elite tier — server-side persistence)
+# ---------------------------------------------------------------------------
+
+MEMORY_MAX_PER_USER = 100
+
+
+def save_agent_memory(user_id: int, scenario: str, findings: str,
+                      league_id: str = None, league_name: str = None) -> dict:
+    """Save an agent memory entry. findings is a JSON string of agent results."""
+    if not scenario or not findings:
+        return {"error": "Scenario and findings are required", "status": 400}
+
+    with get_users_db() as conn:
+        # Check count — enforce max per user
+        count = conn.execute(
+            "SELECT COUNT(*) FROM agent_memory WHERE user_id = ?", (user_id,)
+        ).fetchone()[0]
+
+        if count >= MEMORY_MAX_PER_USER:
+            # Delete oldest entry to make room
+            conn.execute("""
+                DELETE FROM agent_memory WHERE id = (
+                    SELECT id FROM agent_memory WHERE user_id = ?
+                    ORDER BY created_at ASC LIMIT 1
+                )
+            """, (user_id,))
+
+        conn.execute(
+            """INSERT INTO agent_memory (user_id, league_id, league_name, scenario, findings)
+               VALUES (?, ?, ?, ?, ?)""",
+            (user_id, league_id, league_name, scenario, findings),
+        )
+        conn.commit()
+        return {"status": "ok"}
+
+
+def get_agent_memories(user_id: int, league_id: str = None,
+                       search: str = None, limit: int = 50) -> dict:
+    """Retrieve agent memories for a user, optionally filtered by league or keyword."""
+    limit = min(limit, 100)
+
+    with get_users_db() as conn:
+        params = [user_id]
+        where_clauses = ["user_id = ?"]
+
+        if league_id:
+            where_clauses.append("league_id = ?")
+            params.append(league_id)
+
+        if search:
+            where_clauses.append("(scenario LIKE ? OR findings LIKE ?)")
+            params.append(f"%{search}%")
+            params.append(f"%{search}%")
+
+        where = " AND ".join(where_clauses)
+        params.append(limit)
+
+        rows = conn.execute(
+            f"SELECT id, league_id, league_name, scenario, findings, created_at "
+            f"FROM agent_memory WHERE {where} ORDER BY created_at DESC LIMIT ?",
+            params,
+        ).fetchall()
+
+        memories = []
+        for row in rows:
+            memories.append({
+                "id": row[0],
+                "league_id": row[1],
+                "league_name": row[2],
+                "scenario": row[3],
+                "findings": row[4],
+                "created_at": row[5],
+            })
+
+        return {"memories": memories}
+
+
+def delete_agent_memory(user_id: int, memory_id: int) -> dict:
+    """Delete a specific memory entry owned by this user."""
+    with get_users_db() as conn:
+        result = conn.execute(
+            "DELETE FROM agent_memory WHERE id = ? AND user_id = ?",
+            (memory_id, user_id),
+        )
+        conn.commit()
+        if result.rowcount == 0:
+            return {"error": "Memory not found", "status": 404}
+        return {"status": "ok"}
+
+
+def clear_agent_memories(user_id: int, league_id: str = None) -> dict:
+    """Clear all memories for a user (optionally scoped to a league)."""
+    with get_users_db() as conn:
+        if league_id:
+            conn.execute(
+                "DELETE FROM agent_memory WHERE user_id = ? AND league_id = ?",
+                (user_id, league_id),
+            )
+        else:
+            conn.execute(
+                "DELETE FROM agent_memory WHERE user_id = ?", (user_id,)
+            )
+        conn.commit()
+        return {"status": "ok"}
