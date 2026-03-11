@@ -2,6 +2,7 @@ services:
   - type: web
     name: razzle-api
     runtime: python
+    healthCheckPath: /api/health
     buildCommand: |
       pip install -r requirements.txt
       mkdir -p data
@@ -15,3 +16,15 @@ services:
         value: "3.11.0"
       - key: ENVIRONMENT
         value: "production"
+      # Required env vars (set in Render dashboard, not here):
+      # JWT_SECRET           - Secret key for JWT signing (random hex string)
+      # STRIPE_SECRET_KEY    - Stripe API secret key
+      # STRIPE_WEBHOOK_SECRET - Stripe webhook signing secret
+      # STRIPE_PRICE_PRO_MONTHLY   - Stripe price ID for Pro monthly
+      # STRIPE_PRICE_PRO_YEARLY    - Stripe price ID for Pro yearly
+      # STRIPE_PRICE_ELITE_MONTHLY - Stripe price ID for Elite monthly
+      # STRIPE_PRICE_ELITE_YEARLY  - Stripe price ID for Elite yearly
+      # STRIPE_COUPON_RAZZLE       - Stripe coupon ID for RAZZLE promo code
+      # GH_TOKEN             - GitHub token for DB download from releases
+      # RAZZLE_BASE_URL      - Base URL for billing redirects (default: https://razzle.lol)
+      # ANTHROPIC_API_KEY    - Anthropic API key for Elite AI-included mode (optional)

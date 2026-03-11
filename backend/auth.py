@@ -29,6 +29,21 @@ JWT_EXPIRY_DAYS = 7
 
 EMAIL_REGEX = re.compile(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
 
+# Common passwords (top ~200 most used) — reject these outright
+_COMMON_PASSWORDS = frozenset([
+    "password", "123456", "12345678", "qwerty", "abc123", "monkey", "1234567",
+    "letmein", "trustno1", "dragon", "baseball", "iloveyou", "master", "sunshine",
+    "ashley", "bailey", "shadow", "123123", "654321", "superman", "qazwsx",
+    "michael", "football", "password1", "password123", "batman", "login",
+    "starwars", "solo", "princess", "welcome", "admin", "passw0rd", "hello",
+    "charlie", "donald", "loveme", "beer", "access", "flower", "hottie",
+    "pepper", "thunder", "1qaz2wsx", "zaq1zaq1", "test", "qwer1234",
+    "mustang", "killer", "soccer", "jordan", "ranger", "buster", "tigger",
+    "1234", "12345", "123456789", "1234567890", "0987654321", "fantasy",
+    "football1", "dynasty", "sleeper", "razzle", "razzledazzle", "fantasy1",
+    "touchd0wn", "touchdown", "quarterback", "nfl2026", "redraft", "bestball",
+])
+
 
 def get_users_conn():
     """Get connection to users.db (separate from terminal.db)."""
@@ -148,13 +163,27 @@ def _user_dict(row) -> dict:
     return d
 
 
+def _validate_password(password: str) -> str | None:
+    """Validate password strength. Returns error message or None if valid."""
+    if len(password) < 8:
+        return "Password must be at least 8 characters"
+    if not re.search(r"[a-zA-Z]", password):
+        return "Password must contain at least one letter"
+    if not re.search(r"[0-9]", password):
+        return "Password must contain at least one number"
+    if password.lower() in _COMMON_PASSWORDS:
+        return "That password is too common. Please choose a stronger one."
+    return None
+
+
 def register(email: str, password: str) -> dict:
     """Register a new user. Returns {token, user}."""
     email = email.strip().lower()
     if not EMAIL_REGEX.match(email):
         return {"error": "Invalid email format", "status": 400}
-    if len(password) < 6:
-        return {"error": "Password must be at least 6 characters", "status": 400}
+    pw_error = _validate_password(password)
+    if pw_error:
+        return {"error": pw_error, "status": 400}
 
     try:
         with get_users_db() as conn:
@@ -272,24 +301,29 @@ def delete_user_formula(user_id: int, formula_id: int) -> dict:
 
 def import_formulas(user_id: int, formulas: list) -> dict:
     with get_users_db() as conn:
-        imported = 0
+        # Fetch existing formula names in one query to avoid N+1
+        existing_names = {
+            row["name"]
+            for row in conn.execute(
+                "SELECT name FROM user_formulas WHERE user_id = ?", (user_id,)
+            ).fetchall()
+        }
+        batch = []
         for f in formulas:
             name = f.get("name", "")
             weights = f.get("weights", "")
             if not name or not weights:
                 continue
-            existing = conn.execute(
-                "SELECT id FROM user_formulas WHERE user_id = ? AND name = ?",
-                (user_id, name),
-            ).fetchone()
-            if not existing:
-                conn.execute(
-                    "INSERT INTO user_formulas (user_id, name, weights) VALUES (?, ?, ?)",
-                    (user_id, name, weights),
-                )
-                imported += 1
+            if name not in existing_names:
+                batch.append((user_id, name, weights))
+                existing_names.add(name)  # prevent duplicates within import
+        if batch:
+            conn.executemany(
+                "INSERT INTO user_formulas (user_id, name, weights) VALUES (?, ?, ?)",
+                batch,
+            )
         conn.commit()
-        return {"status": "ok", "imported": imported}
+        return {"status": "ok", "imported": len(batch)}
 
 
 # ---------------------------------------------------------------------------

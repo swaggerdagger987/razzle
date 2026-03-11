@@ -1,5 +1,26 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 147 — Platform: Pre-Launch Hardening + Security Polish (COMPLETE)
+
+**Exit Criterion MET**: Five hardening improvements shipped. (1) Password strength hardening: minimum 8 characters (up from 6), requires at least one letter and one number, rejects ~60 common passwords including fantasy-specific terms (football1, dynasty, razzle). _validate_password() function with specific error messages. Frontend validation updated to match. (2) Auth edge case hardening: billing SUCCESS_URL/CANCEL_URL now use RAZZLE_BASE_URL env var with razzle.lol fallback, import_formulas refactored from N+1 loop to batch insert using executemany() with pre-fetched existing names set. (3) Cache coverage verified: 120 _cached() calls across all live_data modules + Cache-Control middleware on all GET /api/ endpoints (5min default, 60min for stable data, no-store for auth/billing). Already production-grade. (4) Render deployment hardening: healthCheckPath added to render.yaml, all required env vars documented in render.yaml comments, .env.example file created with all 12 required environment variables. (5) Error boundary polish: LLM error messages now use Razzle personality ("agent took too long" instead of "timeout"), specific HTTP status handling (401=bad key, 429=rate limited, 500=provider down), Stripe checkout errors use toast system instead of alert(), "all specialists failed" replaced with "the room hit a wall."
+
+### Phase 147 Tasks (Platform Loop)
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Password Strength Hardening | DONE | 8-char min, letter+number required, common password blocklist |
+| 2 | Auth Edge Case Hardening | DONE | Env var billing URLs, batch formula imports |
+| 3 | Cache Coverage Verification | DONE | Already 120 _cached() calls + middleware — pre-existing |
+| 4 | Render Health Check + Env Docs | DONE | healthCheckPath, env var comments, .env.example |
+| 5 | Error Boundary Polish | DONE | Personality error messages, toast instead of alert, specific HTTP error handling |
+
+### Decisions Log
+- Password common list includes fantasy-specific terms (dynasty, razzle, football1, sleeper) since our user base will predictably try these
+- RAZZLE_BASE_URL env var defaults to https://razzle.lol so production works without setting it explicitly
+- Batch formula import pre-fetches all existing names in one query then uses executemany for new inserts — O(1) queries instead of O(N)
+- Error messages in warroom.js match Razzle's personality: lowercase, dry, helpful without being dramatic
+- Checkout errors now use _showToast (global toast system from Phase 143) instead of browser alert()
+
 ## Previous Phase: Phase 146 — Platform: Weekly Briefings + Priority Data Refresh + Accessibility (COMPLETE)
 
 **Exit Criterion MET**: Four features shipped. (1) Weekly Razzle Briefing infrastructure: `weekly_briefings` table in users.db with user_id, league_id, week_label, summary, urgency/monitor/opportunity items (JSON), and agent highlights. Three API endpoints: `GET /api/briefings/latest`, `GET /api/briefings/history`, `POST /api/briefings/save` — all Elite-only via require_plan("elite"). Upsert logic prevents duplicate briefings for same user+week+league. (2) Weekly Briefing UI: Elite users see a yellow-bordered briefing panel in agents.html with latest briefing rendered (urgency tiers, agent highlights, timestamps), "Generate New Briefing" button that auto-populates the scenario runner with a weekly briefing prompt and saves the result via API, and "History" toggle showing past briefings. Non-Elite users see a blurred teaser with "Unlock with Elite" CTA. (3) Priority Data Refresh: `POST /api/data/refresh` endpoint (Elite-only) that returns the user's Sleeper username so the client can trigger a fresh Sleeper API pull. (4) Accessibility: `.sr-only` CSS class for screen-reader-only content, `aria-hidden="true"` on blurred paywall content, `aria-label` on upgrade CTAs, `focus-visible` outline styles on `.btn-chunky`, `.btn-primary`, and `.btn-pro-upgrade` for keyboard navigation.

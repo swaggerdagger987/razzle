@@ -2174,7 +2174,11 @@ async function callLLM(apiKey, model, baseUrl, systemPrompt, userMessage) {
 
     if (!resp.ok) {
       const detail = await resp.text().catch(function() { return ''; });
-      throw new Error('API error ' + resp.status + (detail ? ': ' + detail.slice(0, 200) : ''));
+      var msg = resp.status === 401 ? 'invalid API key. check Config.' :
+               resp.status === 429 ? 'rate limited by provider. wait a moment.' :
+               resp.status >= 500 ? 'LLM provider is down. try again shortly.' :
+               'API error ' + resp.status + (detail ? ': ' + detail.slice(0, 200) : '');
+      throw new Error(msg);
     }
 
     const data = await resp.json();
@@ -2183,7 +2187,7 @@ async function callLLM(apiKey, model, baseUrl, systemPrompt, userMessage) {
     if (!content) throw new Error('No content in model response');
     return content.trim();
   } catch (err) {
-    if (err.name === 'AbortError') throw new Error('Request timed out after 20s');
+    if (err.name === 'AbortError') throw new Error('agent took too long to respond. try again or check your API key.');
     throw err;
   } finally {
     clearTimeout(timer);
@@ -2487,7 +2491,7 @@ async function runAllAgents(scenario) {
   var errorCount = Object.keys(errors).length;
 
   if (successCount === 0) {
-    setScenarioStatus('all specialists failed', 'error');
+    setScenarioStatus('the room hit a wall. check your API key and try again.', 'error');
     setScenarioButtonsDisabled(false);
     agents.forEach(function(a) { a.workBubble = ''; });
     window.dispatchEvent(new CustomEvent('razzle:all-agents-done', {

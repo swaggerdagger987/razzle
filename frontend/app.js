@@ -425,7 +425,9 @@ async function handleRegister(e) {
   var errEl = document.getElementById("authRegisterError");
   errEl.textContent = "";
   if (password !== confirm) { errEl.textContent = "Passwords don't match"; return; }
-  if (password.length < 8) { errEl.textContent = "Password must be 8+ characters"; return; }
+  if (password.length < 8) { errEl.textContent = "Password must be at least 8 characters"; return; }
+  if (!/[a-zA-Z]/.test(password)) { errEl.textContent = "Password must contain at least one letter"; return; }
+  if (!/[0-9]/.test(password)) { errEl.textContent = "Password must contain at least one number"; return; }
   try {
     var resp = await fetch(API_BASE + "/api/auth/register", {
       method: "POST",
@@ -551,10 +553,10 @@ async function startCheckout(interval) {
     if (data.checkout_url) {
       window.location.href = data.checkout_url;
     } else {
-      alert(data.error || "Could not start checkout");
+      _showToast(data.error || "could not start checkout. try again.", "error");
     }
   } catch (e) {
-    alert("network fumble. try again.");
+    _showToast("network fumble. try again.", "error");
   }
 }
 

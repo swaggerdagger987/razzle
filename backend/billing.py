@@ -44,8 +44,9 @@ if STRIPE_SECRET_KEY:
 else:
     logger.warning("STRIPE_SECRET_KEY not set — billing endpoints will fail")
 
-SUCCESS_URL = "https://razzle.lol/agents?session_id={CHECKOUT_SESSION_ID}"
-CANCEL_URL = "https://razzle.lol/agents"
+_BASE_URL = os.environ.get("RAZZLE_BASE_URL", "https://razzle.lol")
+SUCCESS_URL = f"{_BASE_URL}/agents?session_id={{CHECKOUT_SESSION_ID}}"
+CANCEL_URL = f"{_BASE_URL}/agents"
 
 
 def initialize_subscriptions_table():
