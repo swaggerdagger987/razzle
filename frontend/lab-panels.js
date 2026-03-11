@@ -476,7 +476,7 @@
     }
 
     function buildTable(players, section) {
-      if (!players || !players.length) return '<div class="lp-empty">no data</div>';
+      if (!players || !players.length) return '<div class="lp-empty">no data for this selection</div>';
 
       var isW = section === 'league_winners';
       var title = isW ? 'League Winners' : 'Replacement Level';
@@ -676,7 +676,7 @@
       var players = data.players || [];
       var content = el.querySelector('#lp-pa-content');
       if (!players.length) {
-        content.innerHTML = '<div class="pa-card"><div class="pa-card-header">Positional Advantage</div><div class="lp-empty">no data found</div></div>';
+        content.innerHTML = '<div class="pa-card"><div class="pa-card-header">Positional Advantage</div><div class="lp-empty">no data for this selection</div></div>';
         return;
       }
       var html = '<div class="pa-card">';
@@ -1092,7 +1092,7 @@
             window.location.href = '/player/' + encodeURIComponent(card.getAttribute('data-pid'));
           });
         });
-      }).catch(function() { body.innerHTML = '<div class="lp-empty">failed to load breakout data</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="lp-error">failed to load breakout data</div>'; });
     }
 
     el.querySelector('#bo-pos-tabs').addEventListener('click', function(e) {
@@ -1242,7 +1242,7 @@
             window.location.href = '/player/' + encodeURIComponent(card.getAttribute('data-pid'));
           });
         });
-      }).catch(function() { body.innerHTML = '<div class="lp-empty">failed to load buy/sell data</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="lp-error">failed to load buy/sell data</div>'; });
     }
 
     el.querySelector('#bs-pos-tabs').addEventListener('click', function(e) {
@@ -1443,7 +1443,7 @@
           seasonsPopulated = true;
         }
         render(data);
-      }).catch(function() { body.innerHTML = '<div class="lp-empty">failed to load stock watch data</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="lp-error">failed to load stock watch data</div>'; });
     }
 
     el.querySelector('#stk-pos-tabs').addEventListener('click', function(e) {
@@ -1542,7 +1542,7 @@
         }
         html += '</tbody></table></div>';
         body.innerHTML = html;
-      }).catch(function() { body.innerHTML = '<div class="lp-empty">failed to load waiver data</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="lp-error">failed to load waiver data</div>'; });
     }
 
     el.querySelector('#ww-pos-tabs').addEventListener('click', function(e) {
@@ -1664,7 +1664,7 @@
             window.location.href = '/player/' + encodeURIComponent(row.getAttribute('data-pid'));
           });
         });
-      }).catch(function() { body.innerHTML = '<div class="lp-empty">failed to load scarcity data</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="lp-error">failed to load scarcity data</div>'; });
     }
 
     el.querySelector('#sc-season').addEventListener('change', loadSC);
@@ -1735,7 +1735,7 @@
 
         html += '</tbody></table></div>';
         body.innerHTML = html;
-      }).catch(function() { body.innerHTML = '<div class="lp-empty">failed to load handcuff data</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="lp-error">failed to load handcuff data</div>'; });
     }
 
     el.querySelector('#hc-season').addEventListener('change', loadHC);
@@ -1938,7 +1938,7 @@
           seasonsPopulated = true;
         }
         render(data);
-      }).catch(function() { body.innerHTML = '<div class="lp-empty">failed to load efficiency data</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="lp-error">failed to load efficiency data</div>'; });
     }
 
     el.querySelector('#eff-pos-tabs').addEventListener('click', function(e) {
@@ -2142,7 +2142,7 @@
           seasonsPopulated = true;
         }
         render(data);
-      }).catch(function() { body.innerHTML = '<div class="lp-empty">failed to load consistency data</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="lp-error">failed to load consistency data</div>'; });
     }
 
     el.querySelector('#con-pos-tabs').addEventListener('click', function(e) {
@@ -2254,7 +2254,7 @@
         }
         html += '</tbody></table></div>';
         body.innerHTML = html;
-      }).catch(function() { body.innerHTML = '<div class="lp-empty">failed to load snap efficiency data</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="lp-error">failed to load snap efficiency data</div>'; });
     }
 
     el.querySelector('#se-pos-tabs').addEventListener('click', function(e) {
@@ -2370,7 +2370,7 @@
         }
         html += '</tbody></table></div>';
         body.innerHTML = html;
-      }).catch(function() { body.innerHTML = '<div class="lp-empty">failed to load workload data</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="lp-error">failed to load workload data</div>'; });
     }
 
     el.querySelector('#wl-pos-tabs').addEventListener('click', function(e) {
@@ -2477,7 +2477,7 @@
         }
         html += '</tbody></table></div>';
         body.innerHTML = html;
-      }).catch(function() { body.innerHTML = '<div class="lp-empty">failed to load dual-threat data</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="lp-error">failed to load dual-threat data</div>'; });
     }
 
     el.querySelector('#dt-pos-tabs').addEventListener('click', function(e) {
@@ -2567,7 +2567,7 @@
         }
         html += '</tbody></table></div>';
         body.innerHTML = html;
-      }).catch(function() { body.innerHTML = '<div class="lp-empty">failed to load target premium data</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="lp-error">failed to load target premium data</div>'; });
     }
 
     el.querySelector('#tp-pos-tabs').addEventListener('click', function(e) {
@@ -2674,7 +2674,7 @@
         html += '<div class="dr-card"><div class="dr-card-header butter">Butterfingers</div>' + renderDropTable(butter, 'butter') + '</div>';
         html += '</div>';
         body.innerHTML = html;
-      }).catch(function() { body.innerHTML = '<div class="lp-empty">failed to load drop rate data</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="lp-error">failed to load drop rate data</div>'; });
     }
 
     el.querySelector('#dr-pos-tabs').addEventListener('click', function(e) {
@@ -2777,7 +2777,7 @@
         html += buildGTCard('Clean Producers — Low Garbage Time %', 'clean', clean, false);
         html += '</div>';
         body.innerHTML = html;
-      }).catch(function() { body.innerHTML = '<div class="lp-empty">failed to load garbage time data</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="lp-error">failed to load garbage time data</div>'; });
     }
 
     el.querySelector('#gt-pos-tabs').addEventListener('click', function(e) {
@@ -2860,7 +2860,7 @@
         }
         renderWH(data);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-empty">failed to load weekly heatmap</div>';
+        body.innerHTML = '<div class="lp-error">failed to load weekly heatmap</div>';
       });
     }
 
@@ -3047,7 +3047,7 @@
         }
         renderMH(data);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-empty">could not pull defensive data</div>';
+        body.innerHTML = '<div class="lp-error">could not pull defensive data</div>';
       });
     }
 
@@ -3234,7 +3234,7 @@
         }
         renderSK(data);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-empty">failed to load stack data</div>';
+        body.innerHTML = '<div class="lp-error">failed to load stack data</div>';
       });
     }
 
@@ -3469,7 +3469,7 @@
         }
         renderRZ(data);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-empty">failed to load red zone data</div>';
+        body.innerHTML = '<div class="lp-error">failed to load red zone data</div>';
       });
     }
 
@@ -3540,7 +3540,7 @@
         }
         renderSTR(data);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-empty">failed to load streaks data</div>';
+        body.innerHTML = '<div class="lp-error">failed to load streaks data</div>';
       });
     }
 
@@ -3687,7 +3687,7 @@
         updateWeekUI();
         renderWKL(data);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-empty">failed to load weekly leaders</div>';
+        body.innerHTML = '<div class="lp-error">failed to load weekly leaders</div>';
       });
     }
 
@@ -3832,7 +3832,7 @@
         }
         renderMV(data);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-empty">failed to load weekly MVP data</div>';
+        body.innerHTML = '<div class="lp-error">failed to load weekly MVP data</div>';
       });
     }
 
@@ -3928,7 +3928,7 @@
         }
         renderPO(data);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-empty">failed to load playoff schedule</div>';
+        body.innerHTML = '<div class="lp-error">failed to load playoff schedule</div>';
       });
     }
 
@@ -5462,7 +5462,7 @@
     }
 
     function renderTable(data, content) {
-      if (!data || !data.length) { content.innerHTML = '<div class="lp-empty">no data found</div>'; return; }
+      if (!data || !data.length) { content.innerHTML = '<div class="lp-empty">no data for this selection</div>'; return; }
       // Sort
       data.sort(function(a, b) {
         var va = a[sortCol], vb = b[sortCol];
@@ -5826,7 +5826,7 @@
     }
 
     function renderBreakdown(players, content) {
-      if (!players || !players.length) { content.innerHTML = '<div class="lp-empty">no data found</div>'; return; }
+      if (!players || !players.length) { content.innerHTML = '<div class="lp-empty">no data for this selection</div>'; return; }
 
       // Legend
       var html = '<div class="fpb-legend">';
@@ -7271,7 +7271,7 @@
     }
 
     function buildTable(players, section) {
-      if (!players || !players.length) return '<div class="lp-empty">no data found</div>';
+      if (!players || !players.length) return '<div class="lp-empty">no data for this selection</div>';
       var isAlpha = section === 'alpha_dogs';
       var icon = isAlpha ? '&#x1F43A;' : '&#x1F451;';
       var title = isAlpha ? 'Alpha Dogs' : 'Dominator Rating Leaders';
@@ -8183,7 +8183,7 @@
     }
 
     function buildTable(players, section) {
-      if (!players || !players.length) return '<div class="lp-empty">no data found</div>';
+      if (!players || !players.length) return '<div class="lp-empty">no data for this selection</div>';
       var isSuppressed = section === 'schedule_suppressed';
       var title = isSuppressed ? '&#x1F6E1; Schedule Suppressed' : '&#x1F36D; Schedule Inflated';
       var st = sortState[section];
@@ -9716,7 +9716,7 @@
             window.location.href = '/player/' + encodeURIComponent(row.getAttribute('data-pid'));
           });
         });
-      }).catch(function() { body.innerHTML = '<div class="lp-empty">failed to load game script data</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="lp-error">failed to load game script data</div>'; });
     }
 
     el.querySelector('#gs-pos-tabs').addEventListener('click', function(e) {
