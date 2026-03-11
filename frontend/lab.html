@@ -2990,6 +2990,15 @@
 
     <div id="activeFilters"></div>
     <button class="add-filter-btn" onclick="openFilterModal()">+ add filter</button>
+    <select class="select-chunky filter-select-sm" onchange="applySmartFilter(this.value); this.value='';" title="Pre-built filter combos for common analysis">
+      <option value="">Smart Filters</option>
+      <option value="breakout">Breakout Candidates (Age ≤25, Snap% ≥50)</option>
+      <option value="buylow">Buy Low (PPG ≤14, Y/CAR ≥4)</option>
+      <option value="studs">Veteran Studs (Age 26-30, PPG ≥15)</option>
+      <option value="rookies">Rookies (Age ≤23)</option>
+      <option value="workhorses">Workhorses (Snap% ≥65, TGT/G ≥4)</option>
+      <option value="sleepers">Sleepers (PPG ≤12, Snap% ≥40)</option>
+    </select>
   </div>
 
   <!-- TABLE -->

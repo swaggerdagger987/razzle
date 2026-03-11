@@ -332,6 +332,7 @@ def _fetch_screener_uncached(body):
         }
 
         having = []
+        post_filters = []  # filters for derived stats (applied after enrichment)
         ops = {"gt": ">", "gte": ">=", "lt": "<", "lte": "<=", "eq": "=", "neq": "!="}
         for f in filters:
             key = f.get("key", "")
@@ -343,6 +344,9 @@ def _fetch_screener_uncached(body):
             if sql_expr:
                 having.append(f"{sql_expr} {op} ?")
                 params.append(float(val))
+            else:
+                # Derived stat — filter post-query
+                post_filters.append({"key": key, "op": op, "value": float(val)})
 
         # Add minimum games played filter
         if min_gp and int(min_gp) > 0:
@@ -422,6 +426,28 @@ def _fetch_screener_uncached(body):
         _enrich_with_dynasty_value(items)
         _enrich_with_team_shares(conn, items, season=season, career_mode=career_mode)
         _enrich_with_pbp_stats(conn, items, season=season, career_mode=career_mode)
+
+        # Apply post-query filters for derived stats
+        if post_filters:
+            def _passes(item, pf):
+                v = item.get(pf["key"])
+                if v is None:
+                    return False
+                try:
+                    v = float(v)
+                except (TypeError, ValueError):
+                    return False
+                op = pf["op"]
+                tv = pf["value"]
+                if op == ">": return v > tv
+                if op == ">=": return v >= tv
+                if op == "<": return v < tv
+                if op == "<=": return v <= tv
+                if op == "=": return v == tv
+                if op == "!=": return v != tv
+                return True
+            items = [it for it in items if all(_passes(it, pf) for pf in post_filters)]
+            total = len(items)  # adjusted count
 
         # Re-sort in Python if sorting by a derived/rate metric
         if python_sort:

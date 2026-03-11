@@ -2350,6 +2350,73 @@ function filterColumnPicker(query) {
   });
 }
 
+// ─── Smart filter presets ──────────────────────────────────────
+const SMART_FILTERS = {
+  breakout: {
+    label: "Breakout Candidates",
+    filters: [
+      { key: "age", op: "lte", value: 25 },
+      { key: "snap_share", op: "gte", value: 0.5 },
+    ],
+    minGP: 6,
+  },
+  buylow: {
+    label: "Buy Low Targets",
+    filters: [
+      { key: "ppg", op: "lte", value: 14 },
+      { key: "yards_per_carry", op: "gte", value: 4 },
+    ],
+    minGP: 6,
+  },
+  studs: {
+    label: "Veteran Studs",
+    filters: [
+      { key: "age", op: "gte", value: 26 },
+      { key: "age", op: "lte", value: 30 },
+      { key: "ppg", op: "gte", value: 15 },
+    ],
+  },
+  rookies: {
+    label: "Rookies",
+    filters: [
+      { key: "age", op: "lte", value: 23 },
+    ],
+  },
+  workhorses: {
+    label: "Workhorses",
+    filters: [
+      { key: "snap_share", op: "gte", value: 0.65 },
+      { key: "targets_per_game", op: "gte", value: 4 },
+    ],
+    minGP: 6,
+  },
+  sleepers: {
+    label: "Sleepers",
+    filters: [
+      { key: "ppg", op: "lte", value: 12 },
+      { key: "snap_share", op: "gte", value: 0.4 },
+    ],
+    minGP: 4,
+  },
+};
+
+function applySmartFilter(key) {
+  if (!key) return;
+  const preset = SMART_FILTERS[key];
+  if (!preset) return;
+  // Clear existing filters and apply preset
+  state.filters = [...preset.filters];
+  if (preset.minGP) {
+    state.minGP = preset.minGP;
+    const inp = document.getElementById("minGPInput");
+    if (inp) inp.value = preset.minGP;
+  }
+  state.offset = 0;
+  renderActiveFilters();
+  fetchAndRender();
+  _showToast("smart filter: " + preset.label);
+}
+
 function toggleColumn(key, checked) {
   const colArray = isProspectView() ? "prospectColumns" : state.universe === "college" ? "collegeColumns" : "visibleColumns";
   const colDefs = isProspectView() ? PROSPECT_COLUMNS : state.universe === "college" ? COLLEGE_COLUMNS : COLUMNS;

@@ -10,6 +10,26 @@
 |---|------|--------|-------|
 | 1 | Arrow key page navigation | DONE | ArrowLeft/ArrowRight in keydown, bounds check, toast, shortcut ref |
 
+## Previous Phase: Phase 84 — Screener Smart Filter Presets (COMPLETE)
+
+**Exit Criterion MET**: Smart Filters dropdown with 6 presets. Backend post-query filtering for derived stats. Toast feedback.
+
+### Phase 84 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Smart filter presets | DONE | SMART_FILTERS object, applySmartFilter(), backend post_filters, 6 presets |
+
+## Previous Phase: Phase 83 — Screener Keyboard Page Navigation (COMPLETE)
+
+**Exit Criterion MET**: Left/Right arrow keys navigate pages. Bounds-checked. Toast feedback. Shortcut reference updated.
+
+### Phase 83 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Arrow key page navigation | DONE | ArrowLeft/ArrowRight in keydown, bounds check, toast, shortcut ref |
+
 ## Previous Phase: Phase 82 — Screener Select All Checkbox (COMPLETE)
 
 **Exit Criterion MET**: Checkbox in header selects/deselects all visible players (max 5). Reflects current state. Bulk action bar updates.
