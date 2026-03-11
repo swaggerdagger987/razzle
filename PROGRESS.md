@@ -1,5 +1,16 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 52 — Screener Player Notes (COMPLETE)
+
+**Exit Criterion MET**: Users can add personal text notes (140 chars) to any player in the NFL screener. Notes appear in an optional "Notes" column with Caveat handwriting font. Notes visible in hover cards below stats. Notes persist in localStorage. Inline popup editor with Enter to save, Escape to close. N key toggles notes column. Empty cells show faint pencil icon on hover. Hidden in non-NFL modes.
+
+### Phase 52 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Notes data model + inline editing UI | DONE | localStorage-backed cache (razzle_player_notes), note-editor-popup, 140 char max, Caveat font, pencil icon, truncated text |
+| 2 | Notes in hover card + keyboard shortcut | DONE | hover-card-note div, N key toggle, column picker group, clear button, shortcut hint strip + ? overlay |
+
 ## Previous Phase: Phase 51 — Screener Player Tags (COMPLETE)
 
 **Exit Criterion MET**: Users can color-tag players in the NFL screener with 5 labels (BUY/SELL/WATCH/TARGET/AVOID). Tags appear as colored pill chips next to player names. Tags persist in localStorage. "Tagged" filter button shows only tagged players. Tags visible in hover cards. Tag state in URL params. Hidden in non-NFL modes.

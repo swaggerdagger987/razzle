@@ -339,6 +339,124 @@ function buildTagChip(playerId) {
   return ` <span class="player-tag-chip" style="background:${opt.bg}; color:${opt.color}; border-color:${opt.color};">${opt.label}</span>`;
 }
 
+// ─── Player Notes (localStorage, cached in memory) ─────────────
+let _playerNotesCache = null;
+
+function getPlayerNotes() {
+  if (_playerNotesCache !== null) return _playerNotesCache;
+  try { _playerNotesCache = JSON.parse(localStorage.getItem("razzle_player_notes")) || {}; }
+  catch(e) { _playerNotesCache = {}; }
+  return _playerNotesCache;
+}
+
+function savePlayerNotes(notes) {
+  _playerNotesCache = notes;
+  try { localStorage.setItem("razzle_player_notes", JSON.stringify(notes)); } catch(e) {}
+}
+
+function getPlayerNote(playerId) {
+  return getPlayerNotes()[playerId] || "";
+}
+
+function setPlayerNote(playerId, text) {
+  const notes = getPlayerNotes();
+  const trimmed = (text || "").trim().substring(0, 140);
+  if (trimmed) {
+    notes[playerId] = trimmed;
+  } else {
+    delete notes[playerId];
+  }
+  savePlayerNotes(notes);
+}
+
+function getNotedCount() {
+  return Object.keys(getPlayerNotes()).length;
+}
+
+let _noteEditorVisible = false;
+let _noteEditorPlayerId = null;
+
+function showNoteEditor(playerId, anchorEl) {
+  hideNoteEditor();
+  _noteEditorPlayerId = playerId;
+  _noteEditorVisible = true;
+
+  const existing = getPlayerNote(playerId);
+  const player = state.items.find(p => p.player_id === playerId);
+  const name = player ? escapeHtml(player.full_name) : playerId;
+
+  let editor = document.getElementById("noteEditor");
+  if (!editor) {
+    editor = document.createElement("div");
+    editor.id = "noteEditor";
+    editor.className = "note-editor-popup";
+    document.body.appendChild(editor);
+  }
+
+  editor.innerHTML = `<div class="note-editor-title">${name}</div>`
+    + `<textarea class="note-editor-input" id="noteEditorInput" maxlength="140" placeholder="Add a note... (140 chars)">${escapeHtml(existing)}</textarea>`
+    + `<div class="note-editor-footer">`
+    + `<span class="note-editor-count" id="noteCharCount">${existing.length}/140</span>`
+    + `<div style="display:flex; gap:6px;">`
+    + `<button class="btn-chunky note-editor-clear" onclick="clearPlayerNote('${escapeAttr(playerId)}')" style="font-size:10px; padding:3px 8px; ${existing ? '' : 'display:none;'}">Clear</button>`
+    + `<button class="btn-primary note-editor-save" onclick="saveNoteFromEditor()" style="font-size:10px; padding:3px 10px;">Save</button>`
+    + `</div></div>`;
+
+  // Position near anchor
+  const rect = anchorEl.getBoundingClientRect();
+  editor.style.display = "block";
+  editor.style.top = (rect.bottom + 6) + "px";
+  editor.style.left = Math.max(12, Math.min(rect.left, window.innerWidth - 280)) + "px";
+
+  // Focus and char count
+  const input = document.getElementById("noteEditorInput");
+  input.focus();
+  input.selectionStart = input.selectionEnd = input.value.length;
+  input.addEventListener("input", function() {
+    const ct = document.getElementById("noteCharCount");
+    if (ct) ct.textContent = this.value.length + "/140";
+  });
+  input.addEventListener("keydown", function(e) {
+    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); saveNoteFromEditor(); }
+    if (e.key === "Escape") hideNoteEditor();
+  });
+
+  // Close on outside click (delayed to avoid immediate close)
+  setTimeout(function() {
+    document.addEventListener("click", _closeNoteEditorOutside, { once: true });
+  }, 50);
+}
+
+function _closeNoteEditorOutside(e) {
+  const editor = document.getElementById("noteEditor");
+  if (editor && !editor.contains(e.target)) {
+    hideNoteEditor();
+  } else if (editor) {
+    document.addEventListener("click", _closeNoteEditorOutside, { once: true });
+  }
+}
+
+function hideNoteEditor() {
+  const editor = document.getElementById("noteEditor");
+  if (editor) editor.style.display = "none";
+  _noteEditorVisible = false;
+  _noteEditorPlayerId = null;
+}
+
+function saveNoteFromEditor() {
+  const input = document.getElementById("noteEditorInput");
+  if (!input || !_noteEditorPlayerId) return;
+  setPlayerNote(_noteEditorPlayerId, input.value);
+  hideNoteEditor();
+  renderTable();
+}
+
+function clearPlayerNote(playerId) {
+  setPlayerNote(playerId, "");
+  hideNoteEditor();
+  renderTable();
+}
+
 // ─── Prospect column definitions ────────────────────────────────
 const PROSPECT_COLUMNS = {
   draft_round:   { label: "Rd",       group: "Draft",     decimals: 0 },
@@ -581,6 +699,9 @@ const COLUMNS = {
 
   // Sparkline trend
   trend:               { label: "Trend",   tip: "Weekly fantasy points trend — sparkline showing scoring arc across the season", group: "Fantasy", decimals: 0, derived: true, isSparkline: true },
+
+  // Player notes
+  notes:               { label: "Notes",   tip: "Your personal notes on this player — click to edit", group: "Notes", decimals: null, isText: true, derived: true, isNotes: true },
 };
 
 // ─── Tier lock mapping (visual only, does not block access) ──────
@@ -1022,6 +1143,8 @@ function renderTableHead() {
     }
     if (col.isSparkline) {
       html += `<th${tip} style="width:80px; text-align:center;">${col.label}</th>`;
+    } else if (col.isNotes) {
+      html += `<th${tip} style="width:120px; min-width:80px;">${col.label}</th>`;
     } else {
       html += `<th class="${cls}"${tip} tabindex="0" onclick="sortBy('${key}')" onkeydown="if(event.key==='Enter'){sortBy('${key}');event.preventDefault();}">${col.label}${extra}</th>`;
     }
@@ -1093,6 +1216,17 @@ function buildRowHTML(player, cols, heatOn, pctData) {
     if (col.isSparkline) {
       const sid = player.player_id || player.player_name || "";
       html += `<td class="sparkline-cell" data-sparkline-pid="${escapeAttr(sid)}"><span class="sparkline-placeholder"></span></td>`;
+      continue;
+    }
+    // Notes column: inline editable
+    if (col.isNotes) {
+      const pid = player.player_id || player.player_name || "";
+      const note = getPlayerNote(pid);
+      if (note) {
+        html += `<td class="notes-cell has-note" onclick="event.stopPropagation(); showNoteEditor('${escapeAttr(pid)}', this)" title="${escapeAttr(note)}"><span class="note-text">${escapeHtml(note)}</span></td>`;
+      } else {
+        html += `<td class="notes-cell" onclick="event.stopPropagation(); showNoteEditor('${escapeAttr(pid)}', this)" title="Click to add note"><span class="note-pencil">&#9998;</span></td>`;
+      }
       continue;
     }
     const hBg = heatPcts && heatPcts[key] != null ? getHeatColor(heatPcts[key]) : "";
@@ -1340,6 +1474,12 @@ function showHoverCard(playerId, anchorEl) {
   const pts = _sparklineCache[playerId];
   if (pts && pts.length > 1) {
     html += '<div class="hover-card-sparkline">' + buildSparklineSVG(pts) + '</div>';
+  }
+
+  // Player note
+  const hoverNote = getPlayerNote(playerId);
+  if (hoverNote) {
+    html += `<div class="hover-card-note"><span class="hover-card-note-icon">&#9998;</span> ${escapeHtml(hoverNote)}</div>`;
   }
 
   card.innerHTML = html;
@@ -7361,6 +7501,12 @@ document.addEventListener("keydown", function(e) {
     toggleHeatColors();
     return;
   }
+
+  // N: toggle notes column
+  if (e.key === "n" || e.key === "N") {
+    toggleColumn("notes", !state.visibleColumns.includes("notes"));
+    return;
+  }
 });
 
 // Shortcut reference overlay
@@ -7393,6 +7539,7 @@ function toggleShortcutRef() {
           ${shortcutRow("W", "Watchlist")}
           ${shortcutRow("X", "Share / export")}
           ${shortcutRow("H", "Heat colors (percentiles)")}
+          ${shortcutRow("N", "Toggle notes column")}
           ${shortcutRow("?", "This reference")}
         </tbody>
       </table>
@@ -9693,6 +9840,6 @@ function exportBoomBustImage() {
   if (!toolbar) return;
   const hint = document.createElement("div");
   hint.style.cssText = "font-family:var(--font-mono); font-size:10px; color:var(--ink-faint); padding:2px 0; white-space:nowrap;";
-  hint.innerHTML = `<kbd style="font-size:10px; border:1px solid var(--ink-faint); border-radius:2px; padding:0 3px;">/</kbd> search &nbsp; <kbd style="font-size:10px; border:1px solid var(--ink-faint); border-radius:2px; padding:0 3px;">1-5</kbd> position &nbsp; <kbd style="font-size:10px; border:1px solid var(--ink-faint); border-radius:2px; padding:0 3px;">?</kbd> shortcuts`;
+  hint.innerHTML = `<kbd style="font-size:10px; border:1px solid var(--ink-faint); border-radius:2px; padding:0 3px;">/</kbd> search &nbsp; <kbd style="font-size:10px; border:1px solid var(--ink-faint); border-radius:2px; padding:0 3px;">1-5</kbd> position &nbsp; <kbd style="font-size:10px; border:1px solid var(--ink-faint); border-radius:2px; padding:0 3px;">N</kbd> notes &nbsp; <kbd style="font-size:10px; border:1px solid var(--ink-faint); border-radius:2px; padding:0 3px;">?</kbd> shortcuts`;
   toolbar.appendChild(hint);
 })();
