@@ -1,75 +1,83 @@
-# QA + UX Audit — Phases 36-40
+# QA + UX Audit — Phases 46-49
 
-**Date**: 2026-03-10
-**Scope**: Phase 36 (player_season_stats fix), Phase 37 (adapter pipeline), Phase 38 (Athletic Radar), Phase 39 (critical bug fixes), Phase 40 (panel data coverage)
+**Audit Date**: 2026-03-10
+**Phases Covered**: 46 (Dynasty Sparkline), 47 (Gray Color Fixes), 48 (Screener Sparklines), 49 (Hover Cards)
 
 ---
 
 ## QA FINDINGS
 
-### CRITICAL-1: Wrong Column Names in `fetch_pace_tracker` SQL Query
+### CRITICAL
 
-**Severity**: CRITICAL
-**File**: `backend/live_data/tools.py`, lines 737-742
-**What's wrong**: Query references `s.pass_yards`, `s.pass_td`, `s.rush_yards`, `s.rush_td`, `s.rec_yards`, `s.rec_td` on `player_week_stats` table. Actual columns are `passing_yards`, `passing_tds`, `rushing_yards`, `rushing_tds`, `receiving_yards`, `receiving_tds`. SQLite silently returns NULL for non-existent columns, so all stat projections are zero.
-**Fix**: Rename to correct column names.
+**Q1: No input type validation for player_ids in sparklines endpoint**
+- File: `backend/server.py` line 498 + `backend/live_data/players.py` line 468
+- Issue: `player_ids = body.get("player_ids", [])` accepts any type (string, number, dict) without validation. A string input causes silent slicing (`"abc"[:200]` = `"abc"`), mismatched SQL placeholders, and a crash.
+- Fix: Add `if not isinstance(player_ids, list): return {"sparklines": {}}` at the top of `fetch_screener_sparklines()`.
 
-### HIGH-1: XSS via `escapeHtml` in HTML Attribute Context
+### HIGH
 
-**Severity**: HIGH
-**File**: `frontend/lab-prospect-radar.js`, line 163
-**What's wrong**: `data-name` attribute uses `escapeHtml(p.player_name)` which doesn't escape double quotes. Should use `escapeAttr` for attribute contexts.
-**Fix**: Change `escapeHtml` to `escapeAttr` in `data-name` attribute.
+**Q2: No type validation for season parameter**
+- File: `backend/server.py` line 499
+- Issue: `season = body.get("season", 0)` accepts string/float. A string season like `"2024"` may cause cache key or SQL type affinity issues.
+- Fix: Add `season = int(season) if isinstance(season, (int, float)) else 0` with try/except.
 
-### MEDIUM-1: Redundant `import math` Inside Functions
+**Q3: Unescaped position in hover card HTML**
+- File: `frontend/lab.js` showHoverCard function
+- Issue: `${pos}` in hover card pos-badge is not escaped with `escapeHtml()`. While positions are controlled (QB/RB/WR/TE), this violates the established escaping pattern used on lines 911, 922, 930.
+- Fix: Replace `${pos}` with `${escapeHtml(pos)}` in hover card.
 
-**Severity**: MEDIUM
-**File**: `backend/live_data/tools.py`, lines 1053 and 1980
-**What's wrong**: `math` is already imported at module level. Inner imports are redundant.
-**Fix**: Delete both `import math` lines.
+### MEDIUM
 
-### MEDIUM-2: 5 Panels Missing `available_seasons` + Frontend Hardcodes Years
+**M1: Cache key crashes with mixed types in player_ids list**
+- File: `backend/live_data/players.py` fetch_screener_sparklines
+- Issue: `sorted(ids)` crashes if list contains mixed int + string types. While frontend sends strings, a malformed API call could trigger this.
+- Fix: Coerce all IDs to strings: `ids = [str(pid) for pid in player_ids[:200]]`.
 
-**Severity**: MEDIUM
-**Files**: `backend/live_data/tools.py` + `frontend/lab-panels.js`
-**Panels**: Target Premium, Season Pace, Season Recap, TD Regression, Positional Advantage
-**What's wrong**: Backend doesn't return `available_seasons`. Frontend generates season dropdown from `new Date().getFullYear()` down to 2020, showing 2025/2026 which have no data.
-**Fix**: Add `available_seasons` to each backend function. Update frontend dropdowns.
+**M2: Hover card pointer-events:none prevents reading the card**
+- File: `frontend/lab.html` .hover-card CSS
+- Issue: `pointer-events: none` means the card disappears as soon as the cursor leaves the player name link. Users can't hover over the card itself to keep reading.
+- Fix: Change to `pointer-events: auto` and add onmouseenter/onmouseleave on the card itself to keep it visible while the cursor is over it.
 
-### LOW-1: 1px Borders Still Present in Some Elements
+### LOW
 
-**Severity**: LOW
-**Files**: `frontend/styles.css` (lines 185, 731), `frontend/lab-panels.js` (lines 8522, 9029, 9560)
-**What's wrong**: Design guide says "NO thin 1px borders". Small kbd elements and some inline styles still use 1px.
-**Fix**: Change to 2px where visually appropriate.
+**L1: Sparkline has no scale indicator**
+- File: `frontend/lab.js` buildSparklineSVG function
+- Issue: The sparkline shows relative shape but no indication of absolute values. A 5 PPG player and a 25 PPG player look the same if their trend is similar.
+- Note: Acceptable for now — sparklines are for trend direction, not absolute comparison.
+
+**L2: Missing alt text for hover card headshot**
+- File: `frontend/lab.js` showHoverCard function
+- Issue: Headshot image has `alt=""` — not descriptive for screen readers.
+- Fix: Use descriptive alt text with player name.
 
 ---
 
 ## UX FINDINGS
 
-### MEDIUM-3: Season Dropdowns Show Non-Existent Seasons (2025, 2026)
+### HIGH
 
-**Severity**: MEDIUM
-**Panels**: Target Premium, Season Pace, Season Recap, TD Regression, Positional Advantage
-**What's wrong**: Same root cause as MEDIUM-2. Users select 2025/2026 and get empty results with no explanation.
-**Fix**: Use API-provided available_seasons (same fix as MEDIUM-2).
+**U1: Sparkline column adds horizontal width to already-wide PPR preset**
+- Impact: Default PPR preset now has 14 columns including 80px sparkline. On 1366px screens, stat columns get pushed off-screen.
+- Fix: Remove "trend" from PPR preset default (keep in Dynasty only). Users add via column picker.
 
-### LOW-2: Athletic Radar Lacks Cross-Year Season Comparison
+### MEDIUM
 
-**Severity**: LOW
-**Panel**: proradar (Athletic Radar)
-**What's wrong**: Only draft_year dropdown available. Can't easily compare combine metrics across historical years.
-**Fix**: Low priority — current UX works for primary use case.
+**U2: No visual hint that player names have hover cards**
+- Impact: First-time users won't discover hover cards unless they accidentally hover. The dashed underline suggests clickability but not hoverable info cards.
+- Note: Low priority — users will discover organically. Current UX is acceptable.
+
+### LOW
+
+**U3: Sparkline placeholder loading state is noisy**
+- Impact: Repeating gradient placeholder draws attention before sparkline data loads.
+- Fix: Use simpler placeholder (faint dash or nothing).
 
 ---
 
-## Summary
+## DESIGN SYSTEM COMPLIANCE
 
-| # | Severity | Category | Issue |
-|---|----------|----------|-------|
-| 1 | CRITICAL | QA | Wrong column names in pace tracker SQL — projections return 0 |
-| 2 | HIGH | QA | XSS via escapeHtml in attribute context |
-| 3 | MEDIUM | QA | Redundant import math (2 locations) |
-| 4 | MEDIUM | QA/UX | 5 panels missing available_seasons, frontends hardcode years |
-| 5 | LOW | QA | 1px borders in styles.css and inline styles |
-| 6 | LOW | UX | Athletic Radar lacks cross-year comparison |
+- Phase 47 gray replacements: PASS — no hardcoded grays in non-warroom frontend files
+- Sparkline CSS: PASS — uses var(--ink-faint), var(--green), var(--orange)
+- Hover card CSS: PASS — var(--bg-card), 3px solid var(--ink), 4px 4px 0 shadow, 12px radius
+- Fonts: PASS — var(--font-display), var(--font-mono)
+- Mobile: PASS — hover card hidden at 768px, sparkline toggleable
