@@ -1,15 +1,15 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 104 (Data Freshness Indicator)
-## Phase 104: Data Freshness Indicator
-**Exit Criterion**: Result count bar shows "⏱ just now" / "Xs ago" / "Xm ago" after data fetch. Hover shows exact time. 34 tests pass.
+- Phase: 105 (QA + UX Audit Fixes for Phases 101-104)
+## Phase 105: QA + UX Audit — Auto-Generated Fixes
+**Exit Criterion**: XSS in expand data fixed. Memory leak fixed. Colspan fixed. Title escaping fixed. All CRITICAL/HIGH findings resolved.
 
 - Task 1: PASS
 - Stage: COMPLETE
-- Next: Phase gate (Phase 105 = QA audit)
+- Next: Phase gate
 
-### Task 1: Data freshness timestamp in result count
+### Task 1: Fix XSS + memory leak + colspan + title escaping
 **Status**: PASS
 **Attempts**: 1
-**Result**: (1) _lastFetchTime tracked on all three fetch paths. (2) updateResultCount() appends "⏱ Xs ago" badge. (3) Title shows exact fetch time. 34 tests pass.
+**Result**: (1) _n() numeric sanitizer + escapeHtml() on week/opponent in expand. (2) _expandedRows cleared on renderTableBody(). (3) Colspan dynamic for NFL vs college. (4) Freshness title wrapped in escapeAttr(). 34 tests pass.

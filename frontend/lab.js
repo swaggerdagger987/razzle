@@ -1453,6 +1453,7 @@ function onTableScroll() {
 }
 
 function renderTableBody() {
+  _expandedRows = {};
   const tbody = document.getElementById("tableBody");
   const cols = getActiveColumns();
   const emptyMsg = isProspectView()
@@ -1806,7 +1807,7 @@ async function toggleRowExpand(playerId, tdEl) {
   var expandTr = document.createElement("tr");
   expandTr.className = "expand-row";
   var cols = getActiveColumns();
-  var totalCols = cols.length + 5; // star, select, pin, rank, player
+  var totalCols = cols.length + (state.universe === "nfl" ? 5 : 4) + 1; // star, select, [pin], rank, player + add-col btn
   expandTr.innerHTML = '<td colspan="' + totalCols + '" style="padding:0; background:var(--bg-warm, rgba(45,31,20,0.04));"><div class="expand-content" style="padding:8px 12px 8px 130px; font-family:var(--font-mono); font-size:11px; color:var(--ink-medium);">loading weeks...</div></td>';
   tr.after(expandTr);
 
@@ -1838,17 +1839,18 @@ async function toggleRowExpand(playerId, tdEl) {
       var fpts = parseFloat(w.fantasy_points_ppr || w.fantasy_points || 0).toFixed(1);
       var fptsColor = fpts >= 20 ? 'color:var(--green); font-weight:700;' : fpts < 5 ? 'color:var(--red);' : '';
       html += '<tr style="border-bottom:1px solid rgba(0,0,0,0.04);">';
-      html += '<td style="padding:2px 6px;">' + (w.week || "") + '</td>';
+      var _n = function(v) { var n = parseInt(v); return isNaN(n) ? 0 : n; };
+      html += '<td style="padding:2px 6px;">' + escapeHtml(String(w.week || "")) + '</td>';
       html += '<td style="padding:2px 6px;">' + escapeHtml(w.opponent || w.recent_team || "") + '</td>';
       html += '<td style="padding:2px 6px; text-align:right; ' + fptsColor + '">' + fpts + '</td>';
-      html += '<td style="padding:2px 6px; text-align:right;">' + (w.passing_yards || 0) + '</td>';
-      html += '<td style="padding:2px 6px; text-align:right;">' + (w.passing_tds || 0) + '</td>';
-      html += '<td style="padding:2px 6px; text-align:right;">' + (w.rushing_yards || 0) + '</td>';
-      html += '<td style="padding:2px 6px; text-align:right;">' + (w.rushing_tds || 0) + '</td>';
-      html += '<td style="padding:2px 6px; text-align:right;">' + (w.receptions || 0) + '</td>';
-      html += '<td style="padding:2px 6px; text-align:right;">' + (w.receiving_yards || 0) + '</td>';
-      html += '<td style="padding:2px 6px; text-align:right;">' + (w.receiving_tds || 0) + '</td>';
-      html += '<td style="padding:2px 6px; text-align:right;">' + (w.targets || 0) + '</td>';
+      html += '<td style="padding:2px 6px; text-align:right;">' + _n(w.passing_yards) + '</td>';
+      html += '<td style="padding:2px 6px; text-align:right;">' + _n(w.passing_tds) + '</td>';
+      html += '<td style="padding:2px 6px; text-align:right;">' + _n(w.rushing_yards) + '</td>';
+      html += '<td style="padding:2px 6px; text-align:right;">' + _n(w.rushing_tds) + '</td>';
+      html += '<td style="padding:2px 6px; text-align:right;">' + _n(w.receptions) + '</td>';
+      html += '<td style="padding:2px 6px; text-align:right;">' + _n(w.receiving_yards) + '</td>';
+      html += '<td style="padding:2px 6px; text-align:right;">' + _n(w.receiving_tds) + '</td>';
+      html += '<td style="padding:2px 6px; text-align:right;">' + _n(w.targets) + '</td>';
       html += '</tr>';
     }
     html += '</table>';
@@ -2392,7 +2394,7 @@ function updateResultCount() {
   if (_lastFetchTime) {
     var ago = Math.round((Date.now() - _lastFetchTime) / 1000);
     var agoText = ago < 5 ? "just now" : ago < 60 ? ago + "s ago" : Math.floor(ago / 60) + "m ago";
-    parts.push('<span style="color:var(--ink-faint); font-size:10px;" title="Data fetched at ' + new Date(_lastFetchTime).toLocaleTimeString() + '">⏱ ' + agoText + '</span>');
+    parts.push('<span style="color:var(--ink-faint); font-size:10px;" title="Data fetched at ' + escapeAttr(new Date(_lastFetchTime).toLocaleTimeString()) + '">⏱ ' + agoText + '</span>');
   }
 
   el.innerHTML = parts.join(" · ");

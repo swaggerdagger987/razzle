@@ -1,5 +1,18 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 105 — QA + UX Audit Fixes for Phases 101-104 (COMPLETE)
+
+**Exit Criterion MET**: 1 CRITICAL (XSS in expand) + 3 HIGH (memory leak, colspan, title escaping) fixed. 0 remaining.
+
+### Phase 105 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | XSS fix in weekly expand | DONE | _n() numeric sanitizer, escapeHtml on week/opponent |
+| 2 | Memory leak fix | DONE | _expandedRows = {} on renderTableBody() |
+| 3 | Colspan fix | DONE | Dynamic calculation for NFL vs college |
+| 4 | Title escaping | DONE | escapeAttr() on freshness timestamp |
+
 ## Previous Phase: Phase 104 — Data Freshness Indicator (COMPLETE)
 
 **Exit Criterion MET**: Result count shows "⏱ Xs ago" with tooltip showing exact time. 34 tests pass.
