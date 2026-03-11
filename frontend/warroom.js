@@ -2118,6 +2118,24 @@ async function runSingleAgent(agentId, scenario) {
   const agent = AGENT_DEFS[agentId];
   if (!agent) return;
 
+  // Check rate limit
+  var limitMsg = getQueryLimitMessage();
+  if (limitMsg) {
+    setScenarioStatus(limitMsg, 'error');
+    return;
+  }
+
+  // Server-side tracking
+  var serverQuota = await trackQueryServerSide();
+  if (serverQuota && !serverQuota.allowed) {
+    var serverMsg = serverQuota.error || 'Daily query limit reached.';
+    if (serverQuota.plan === 'free') serverMsg += ' Upgrade to Pro for 20/day.';
+    else if (serverQuota.plan === 'pro') serverMsg += ' Upgrade to Elite for unlimited.';
+    setScenarioStatus(serverMsg, 'error');
+    updateQueryLimitBadge();
+    return;
+  }
+
   const settings = getAgentSettings(agentId);
   if (!settings.apiKey && !isEliteUser()) {
     setScenarioStatus('set an API key in Config first', 'error');
@@ -2152,7 +2170,7 @@ async function runSingleAgent(agentId, scenario) {
   }
 }
 
-// ── AI QUERY RATE LIMITING ───────────────────────────────────────────
+// ── AI QUERY RATE LIMITING (server-side + localStorage cache) ────────
 function getDailyQueryLimit() {
   if (isEliteUser()) return Infinity;
   if (isProUser()) return 20;
@@ -2168,11 +2186,43 @@ function getTodayQueryCount() {
   } catch (e) { return 0; }
 }
 
-function incrementQueryCount() {
+function _setLocalQueryCount(count) {
   var today = new Date().toISOString().slice(0, 10);
-  var data = { date: today, count: getTodayQueryCount() + 1 };
-  localStorage.setItem('razzle_query_count', JSON.stringify(data));
-  return data.count;
+  localStorage.setItem('razzle_query_count', JSON.stringify({ date: today, count: count }));
+}
+
+function incrementQueryCount() {
+  var newCount = getTodayQueryCount() + 1;
+  _setLocalQueryCount(newCount);
+  return newCount;
+}
+
+/**
+ * Server-side query tracking. Call BEFORE making LLM request.
+ * Returns { allowed, used, limit, remaining, plan } or null on error.
+ */
+async function trackQueryServerSide() {
+  try {
+    var headers = { 'Content-Type': 'application/json' };
+    var token = localStorage.getItem('razzle_token');
+    if (token) headers['Authorization'] = 'Bearer ' + token;
+    var base = typeof API_BASE !== 'undefined' ? API_BASE : '';
+    var resp = await fetch(base + '/api/agents/track', { method: 'POST', headers: headers });
+    var data = await resp.json();
+    if (resp.status === 429) {
+      // Sync local cache with server truth
+      _setLocalQueryCount(data.used || data.limit || 999);
+      return { allowed: false, error: data.error, used: data.used, limit: data.limit, remaining: 0, plan: data.plan };
+    }
+    if (data.used != null) {
+      // Sync local cache with server-reported count
+      _setLocalQueryCount(data.used);
+    }
+    return data;
+  } catch (e) {
+    // Server unreachable — fall back to local tracking
+    return null;
+  }
 }
 
 function getQueryLimitMessage() {
@@ -2204,14 +2254,46 @@ function updateQueryLimitBadge() {
   }
 }
 
-// Initialize badge on load
-setTimeout(updateQueryLimitBadge, 100);
+// Sync quota from server on load (updates local cache with server truth)
+function syncQuotaFromServer() {
+  try {
+    var headers = {};
+    var token = localStorage.getItem('razzle_token');
+    if (token) headers['Authorization'] = 'Bearer ' + token;
+    var base = typeof API_BASE !== 'undefined' ? API_BASE : '';
+    fetch(base + '/api/agents/quota', { headers: headers })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.used != null) {
+          _setLocalQueryCount(data.used);
+          updateQueryLimitBadge();
+        }
+      }).catch(function() {});
+  } catch (e) {}
+}
+
+// Initialize badge and sync quota on load
+setTimeout(function() {
+  updateQueryLimitBadge();
+  syncQuotaFromServer();
+}, 100);
 
 async function runAllAgents(scenario) {
-  // Check rate limit
+  // Check rate limit (local cache first for instant UX)
   var limitMsg = getQueryLimitMessage();
   if (limitMsg) {
     setScenarioStatus(limitMsg, 'error');
+    return;
+  }
+
+  // Server-side tracking (authoritative — prevents localStorage bypass)
+  var serverQuota = await trackQueryServerSide();
+  if (serverQuota && !serverQuota.allowed) {
+    var serverMsg = serverQuota.error || 'Daily query limit reached.';
+    if (serverQuota.plan === 'free') serverMsg += ' Upgrade to Pro for 20/day.';
+    else if (serverQuota.plan === 'pro') serverMsg += ' Upgrade to Elite for unlimited.';
+    setScenarioStatus(serverMsg, 'error');
+    updateQueryLimitBadge();
     return;
   }
 
@@ -2302,12 +2384,12 @@ async function runAllAgents(scenario) {
     if (ca) { ca.workBubble = '❌'; ca.bubbleTimer = 3000; }
   }
 
-  // Count this as a successful query for rate limiting
+  // Update rate limit badge (server already tracked the query in trackQueryServerSide)
   if (successCount > 0) {
-    var queryNum = incrementQueryCount();
     updateQueryLimitBadge();
     var limit = getDailyQueryLimit();
-    var remaining = limit === Infinity ? '' : ' (' + (limit - queryNum) + ' remaining today)';
+    var used = getTodayQueryCount();
+    var remaining = limit === Infinity ? '' : ' (' + Math.max(0, limit - used) + ' remaining today)';
     var statusMsg = razzleSynthesis
       ? 'briefing complete — ' + successCount + ' specialists reported' + remaining
       : successCount + ' specialists done' + (errorCount ? ', ' + errorCount + ' failed' : '') + remaining;

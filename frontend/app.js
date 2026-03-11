@@ -881,6 +881,7 @@ window.addEventListener("razzle-plan-changed", function(e) {
   // Trigger cloud sync now that user is paid
   if (typeof syncFormulasFromCloud === "function") syncFormulasFromCloud();
   if (typeof syncSavedViewsFromCloud === "function") syncSavedViewsFromCloud();
+  if (typeof syncWatchlistFromCloud === "function") syncWatchlistFromCloud();
 
   // Update Situation Room gating (hide upsell, enable full features)
   if (typeof refreshPlanGating === "function") refreshPlanGating();

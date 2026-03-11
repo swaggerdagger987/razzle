@@ -1,5 +1,27 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 141 — Platform: Watchlist Cloud Sync + Formula Store Gating + Server-Side Query Limits (COMPLETE)
+
+**Exit Criterion MET**: Five tier-gating and cloud-sync features implemented. (1) Watchlist cloud sync: backend `GET/POST /api/user/watchlist` endpoints with Pro+ plan gating, `user_watchlist` table with UNIQUE constraint, 200-player cap. Frontend `syncWatchlistFromCloud()` merges server+local by player_id, pushes changes on save, shows "synced"/"local only" badge. (2) Formula Store tier gating: free users see blurred descriptions, "Unlock with Pro" CTA on import/rate/review. `installFormula`, `rateFormula`, `openPublishFlow` all reject free users with toast + auth modal. (3) Server-side AI query rate limiting: `ai_query_log` table in users.db tracks queries per user/IP per day. `GET /api/agents/quota` and `POST /api/agents/track` endpoints. Free=5/day, Pro=20/day, Elite=unlimited. Returns 429 when exhausted. Frontend syncs local cache with server truth, preventing localStorage bypass. (4) Compare mode tier gating: free users limited to 2 player selections, Pro/Elite get 4. Toast nudge on limit hit. (5) Watchlist sync triggered on plan-changed event.
+
+### Phase 141 Tasks (Platform Loop)
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Watchlist Cloud Sync Backend | DONE | get_watchlist/sync_watchlist in auth.py, endpoints in server.py, Pro+ gated |
+| 2 | Watchlist Cloud Sync Frontend | DONE | syncWatchlistFromCloud(), _pushWatchlistAfterChange(), cloud badge, plan-changed listener |
+| 3 | Formula Store Tier Gating | DONE | Blurred descriptions for free, gated import/rate/review/publish, "Unlock with Pro" CTA |
+| 4 | Server-Side AI Query Limits | DONE | ai_query_log table, /api/agents/quota + /api/agents/track, 429 on exhaustion, local cache sync |
+| 5 | Compare Mode Tier Gating | DONE | Free=2 players, Pro/Elite=4 players, toast nudge |
+
+### Decisions Log
+- Watchlist sync uses full replacement strategy (delete + re-insert) matching saved views pattern
+- Watchlist merges by player_id union (local + server) before push, ensuring no data loss
+- Formula Store gating uses CSS blur on descriptions for free users — they can SEE something exists but can't read details
+- Server-side query tracking uses SQLite table not in-memory dict — persists across restarts
+- Query tracking supports both authenticated (user_id) and anonymous (IP) users
+- Compare limit changed from 5 to 2 (free) / 4 (paid) per pricing strategy
+
 ## Previous Phase: Phase 140 — Platform: QA + Integration Audit for Phases 138-139 (COMPLETE)
 
 **Exit Criterion MET**: All new JS functions verified callable with proper script loading order. Activity feed handles edge cases (empty transactions, missing player data, null adds/drops, $0 FAAB, various timestamps). Backend saved views endpoints validated: rejects non-list payloads, caps at 20 views, returns correct counts, handles empty user. Guard added to sync_saved_views for non-list input validation.

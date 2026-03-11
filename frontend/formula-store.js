@@ -131,6 +131,10 @@ function resetStars(el, rating) {
 // ---------------------------------------------------------------------------
 
 async function rateFormula(formulaId, rating) {
+  if (!_isStorePaidUser()) {
+    showStoreToast("upgrade to Pro to rate formulas");
+    return;
+  }
   // Optimistic update
   storeState.userRatings[formulaId] = rating;
   localStorage.setItem("razzle_store_ratings", JSON.stringify(storeState.userRatings));
@@ -184,6 +188,11 @@ async function submitReview(formulaId) {
 // ---------------------------------------------------------------------------
 
 async function installFormula(formulaId) {
+  if (!_isStorePaidUser()) {
+    showStoreToast("upgrade to Pro to import formulas");
+    if (typeof openAuthModal === "function") openAuthModal();
+    return;
+  }
   try {
     const resp = await fetch(`/api/formulas/${formulaId}`);
     const formula = await resp.json();
@@ -283,6 +292,11 @@ function isFormulaPublished(name) {
 }
 
 function openPublishFlow(formulaName) {
+  if (!_isStorePaidUser()) {
+    showStoreToast("upgrade to Pro to publish formulas");
+    if (typeof openAuthModal === "function") openAuthModal();
+    return;
+  }
   const formula = state.formulas.find(f => f.name === formulaName);
   if (!formula) return;
 
@@ -451,10 +465,20 @@ function renderFormulaStore() {
   `;
 }
 
+function _isStorePaidUser() {
+  // Check if user has Pro or Elite plan
+  if (typeof isPaidUser === "function") return isPaidUser();
+  try {
+    var user = JSON.parse(localStorage.getItem("razzle_user") || "{}");
+    return user.plan === "pro" || user.plan === "elite";
+  } catch (e) { return false; }
+}
+
 function renderFormulaCard(formula, userReviews) {
   const isInstalled = storeState.installed.includes(formula.id);
   const userRating = storeState.userRatings[formula.id] || 0;
   const existingUserReview = (userReviews || {})[formula.id] || null;
+  const paid = _isStorePaidUser();
 
   // Position tags
   const posTags = (formula.positions || []).map(p => {
@@ -462,22 +486,17 @@ function renderFormulaCard(formula, userReviews) {
     return `<span style="font-family:var(--font-display); font-size:9px; font-weight:700; padding:1px 6px; border-radius:4px; border:1.5px solid var(--ink); background:${colors[p] || "var(--ink-light)"}; color:white; text-transform:uppercase;">${p}</span>`;
   }).join(" ");
 
-  return `
-    <div class="store-card">
-      <div class="store-card-header">
-        <div style="flex:1; min-width:0;">
-          <div style="font-family:var(--font-display); font-size:16px; line-height:1.2; margin-bottom:4px;">${escapeHtml(formula.name)}</div>
-          <div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">by ${escapeHtml(formula.creator)}</div>
-        </div>
-        <div style="display:flex; gap:3px; flex-shrink:0;">${posTags}</div>
-      </div>
-      <p style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); margin:10px 0; line-height:1.4;">${escapeHtml(formula.description)}</p>
-      <div class="store-card-footer">
-        <div style="display:flex; align-items:center; gap:6px;">
-          ${renderStars(formula.avgRating)}
-          <span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">${formula.avgRating.toFixed(1)} (${formula.ratingCount})</span>
-        </div>
-      </div>
+  // Free user: description is partially blurred, actions are gated
+  const descriptionHtml = paid
+    ? `<p style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); margin:10px 0; line-height:1.4;">${escapeHtml(formula.description)}</p>`
+    : `<p style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); margin:10px 0; line-height:1.4; position:relative;">
+        <span style="filter:blur(3px); user-select:none; pointer-events:none;">${escapeHtml(formula.description)}</span>
+       </p>`;
+
+  // Actions section: full for paid, upgrade CTA for free
+  let actionsHtml = "";
+  if (paid) {
+    actionsHtml = `
       <div style="margin-top:10px; padding-top:10px; border-top:2px dashed var(--ink-faint);">
         <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
           <div style="display:flex; align-items:center; gap:4px;">
@@ -503,7 +522,36 @@ function renderFormulaCard(formula, userReviews) {
             your review: "${escapeHtml(existingUserReview.text)}"
           </div>
         ` : ""}
+      </div>`;
+  } else {
+    actionsHtml = `
+      <div style="margin-top:10px; padding-top:10px; border-top:2px dashed var(--ink-faint); text-align:center;">
+        <div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); margin-bottom:6px;">
+          import, rate, and review with Pro
+        </div>
+        <button class="btn-primary" style="font-size:11px; padding:5px 14px;" onclick="if(typeof openAuthModal==='function') openAuthModal(); else window.location.href='/pricing.html';">
+          Unlock with Pro
+        </button>
+      </div>`;
+  }
+
+  return `
+    <div class="store-card">
+      <div class="store-card-header">
+        <div style="flex:1; min-width:0;">
+          <div style="font-family:var(--font-display); font-size:16px; line-height:1.2; margin-bottom:4px;">${escapeHtml(formula.name)}</div>
+          <div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">by ${escapeHtml(formula.creator)}</div>
+        </div>
+        <div style="display:flex; gap:3px; flex-shrink:0;">${posTags}</div>
       </div>
+      ${descriptionHtml}
+      <div class="store-card-footer">
+        <div style="display:flex; align-items:center; gap:6px;">
+          ${renderStars(formula.avgRating)}
+          <span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">${formula.avgRating.toFixed(1)} (${formula.ratingCount})</span>
+        </div>
+      </div>
+      ${actionsHtml}
     </div>
   `;
 }

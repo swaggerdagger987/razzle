@@ -552,6 +552,67 @@ async def validate_promo(request: Request):
 
 
 # ---------------------------------------------------------------------------
+# AI Query Rate Limiting (server-side, all tiers)
+# ---------------------------------------------------------------------------
+
+@app.get("/api/agents/quota")
+async def get_query_quota(request: Request):
+    """Check remaining AI query quota for today."""
+    ip = request.client.host if request.client else "unknown"
+    token = request.headers.get("Authorization", "").replace("Bearer ", "")
+    user_id = None
+    plan = "free"
+
+    if token:
+        try:
+            result = auth_module.get_current_user(token)
+            if "user" in result:
+                user_id = result["user"]["id"]
+                plan = result["user"].get("plan", "free")
+        except Exception:
+            pass
+
+    return auth_module.check_query_quota(user_id=user_id, ip_address=ip, plan=plan)
+
+
+@app.post("/api/agents/track")
+async def track_query(request: Request):
+    """Record an AI query and return updated quota. Call BEFORE making LLM request.
+    Returns 429 if quota exhausted."""
+    ip = request.client.host if request.client else "unknown"
+    token = request.headers.get("Authorization", "").replace("Bearer ", "")
+    user_id = None
+    plan = "free"
+
+    if token:
+        try:
+            result = auth_module.get_current_user(token)
+            if "user" in result:
+                user_id = result["user"]["id"]
+                plan = result["user"].get("plan", "free")
+        except Exception:
+            pass
+
+    # Check quota first
+    quota = auth_module.check_query_quota(user_id=user_id, ip_address=ip, plan=plan)
+    if not quota["allowed"]:
+        return JSONResponse({
+            "error": "Daily query limit reached",
+            "used": quota["used"],
+            "limit": quota["limit"],
+            "remaining": 0,
+            "plan": plan,
+        }, status_code=429)
+
+    # Record the query
+    auth_module.record_query(user_id=user_id, ip_address=ip)
+
+    # Return updated quota
+    updated = auth_module.check_query_quota(user_id=user_id, ip_address=ip, plan=plan)
+    return updated
+
+
+# ---------------------------------------------------------------------------
 # LLM Proxy (Elite tier — AI-included mode)
 # ---------------------------------------------------------------------------
 
@@ -776,6 +837,30 @@ async def sync_saved_views(request: Request):
     if not isinstance(views, list):
         return JSONResponse({"error": "views must be a list"}, status_code=400)
     return auth_module.sync_saved_views(user["id"], views)
+
+
+# ---------------------------------------------------------------------------
+# Watchlist endpoints (Pro+ cloud sync)
+# ---------------------------------------------------------------------------
+
+@app.get("/api/user/watchlist")
+async def get_watchlist(request: Request):
+    user, err = require_plan(request, "pro")
+    if err:
+        return err
+    return auth_module.get_watchlist(user["id"])
+
+
+@app.post("/api/user/watchlist/sync")
+async def sync_watchlist(request: Request):
+    user, err = require_plan(request, "pro")
+    if err:
+        return err
+    body = await request.json()
+    players = body.get("players", [])
+    if not isinstance(players, list):
+        return JSONResponse({"error": "players must be a list"}, status_code=400)
+    return auth_module.sync_watchlist(user["id"], players)
 
 
 # ---------------------------------------------------------------------------

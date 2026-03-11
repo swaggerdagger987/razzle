@@ -180,6 +180,8 @@ function saveWatchlist(list) {
   _watchlistCache = list;
   try { localStorage.setItem("razzle_watchlist", JSON.stringify(list)); } catch(e) {}
   updateWatchlistBadge();
+  // Push to cloud for Pro+ users (silent, non-blocking)
+  if (typeof _pushWatchlistAfterChange === "function") _pushWatchlistAfterChange();
 }
 
 function isOnWatchlist(playerId) {
@@ -215,6 +217,116 @@ function setWatchlistTier(playerId, tier) {
 function removeFromWatchlist(playerId) {
   var list = getWatchlist().filter(function(p) { return p.player_id !== playerId; });
   saveWatchlist(list);
+}
+
+// ─── Watchlist Cloud Sync (Pro+ users) ──────────────────────────
+function syncWatchlistFromCloud() {
+  var token = localStorage.getItem("razzle_token");
+  if (!token) {
+    _showWatchlistSyncHint(false);
+    return;
+  }
+
+  var base = typeof API_BASE !== "undefined" ? API_BASE : "";
+  fetch(base + "/api/user/watchlist", {
+    headers: { "Authorization": "Bearer " + token }
+  }).then(function(r) {
+    if (r.status === 403) {
+      // Free user — show upgrade hint
+      _showWatchlistSyncHint(false);
+      return null;
+    }
+    if (!r.ok) return null;
+    return r.json();
+  }).then(function(data) {
+    if (!data || !data.watchlist) return;
+
+    var serverList = data.watchlist;
+    var localList = getWatchlist();
+
+    // Merge: union by player_id, server wins on conflict
+    var merged = {};
+    for (var i = 0; i < localList.length; i++) {
+      merged[localList[i].player_id] = localList[i];
+    }
+    for (var j = 0; j < serverList.length; j++) {
+      var sp = serverList[j];
+      merged[sp.player_id] = {
+        player_id: sp.player_id,
+        name: sp.player_name || (merged[sp.player_id] || {}).name || "",
+        position: sp.position || "",
+        team: sp.team || "",
+        universe: sp.universe || "nfl",
+        tier: (merged[sp.player_id] || {}).tier || 0,
+        added_at: (merged[sp.player_id] || {}).added_at || Date.now()
+      };
+    }
+
+    var mergedList = [];
+    for (var pid in merged) {
+      mergedList.push(merged[pid]);
+    }
+
+    // Save locally
+    _watchlistCache = mergedList;
+    try { localStorage.setItem("razzle_watchlist", JSON.stringify(mergedList)); } catch(e) {}
+    updateWatchlistBadge();
+
+    // Push merged list back to server
+    _pushWatchlistToServer(token, base, mergedList);
+
+    // Refresh table if showing watchlist stars
+    if (typeof renderTable === "function") renderTable();
+
+    _showWatchlistSyncHint(true);
+  }).catch(function() {
+    _showWatchlistSyncHint(true);
+  });
+}
+
+function _pushWatchlistToServer(token, base, list) {
+  if (!list || !list.length) return;
+  var payload = list.map(function(p) {
+    return {
+      player_id: p.player_id,
+      player_name: p.name || "",
+      position: p.position || "",
+      team: p.team || "",
+      universe: p.universe || "nfl"
+    };
+  });
+  fetch(base + "/api/user/watchlist/sync", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+    body: JSON.stringify({ players: payload })
+  }).catch(function() {});
+}
+
+function _pushWatchlistAfterChange() {
+  var token = localStorage.getItem("razzle_token");
+  if (!token) return;
+  var base = typeof API_BASE !== "undefined" ? API_BASE : "";
+  _pushWatchlistToServer(token, base, getWatchlist());
+}
+
+function _showWatchlistSyncHint(isPaid) {
+  var btn = document.getElementById("watchlistBtn");
+  if (!btn) return;
+  var existing = document.getElementById("watchlistCloudBadge");
+  if (existing) existing.remove();
+  var badge = document.createElement("span");
+  badge.id = "watchlistCloudBadge";
+  badge.style.cssText = "font-family:var(--font-mono); font-size:8px; margin-left:6px; padding:1px 5px; border-radius:3px; vertical-align:middle;";
+  if (isPaid) {
+    badge.style.color = "var(--pos-qb)";
+    badge.style.border = "1px solid var(--pos-qb)";
+    badge.textContent = "synced";
+  } else {
+    badge.style.color = "var(--ink-light)";
+    badge.style.border = "1px dashed var(--ink-faint)";
+    badge.textContent = "local only";
+  }
+  btn.appendChild(badge);
 }
 
 function updateWatchlistBadge() {
@@ -4242,9 +4354,28 @@ function toggleSelectAll(checked) {
   renderTable();
 }
 
+function _getCompareLimit() {
+  // Free: 2 players, Pro/Elite: 4 players
+  if (typeof isPaidUser === "function" && isPaidUser()) return 4;
+  try {
+    var user = JSON.parse(localStorage.getItem("razzle_user") || "{}");
+    if (user.plan === "pro" || user.plan === "elite") return 4;
+  } catch (e) {}
+  return 2;
+}
+
 function togglePlayerSelect(playerId, checked) {
   if (checked) {
-    if (state.selectedPlayers.length >= 5) return; // max 5
+    var maxPlayers = _getCompareLimit();
+    if (state.selectedPlayers.length >= maxPlayers) {
+      // Show upgrade nudge for free users
+      if (maxPlayers <= 2) {
+        if (typeof _showToast === "function") {
+          _showToast("compare up to 4 players with Pro");
+        }
+      }
+      return;
+    }
     if (isProspectView()) {
       const player = state.items.find(p => (p.player_id || p.player_name) === playerId);
       if (player && !state.selectedPlayers.some(p => p.player_id === playerId)) {
@@ -5114,6 +5245,10 @@ if (typeof syncFormulasFromCloud === "function") {
 setTimeout(function() {
   if (typeof syncSavedViewsFromCloud === "function") syncSavedViewsFromCloud();
 }, 2000);
+// Cloud sync watchlist (Pro+ users)
+setTimeout(function() {
+  if (typeof syncWatchlistFromCloud === "function") syncWatchlistFromCloud();
+}, 2500);
 
 // ─── Image export ────────────────────────────────────────────────
 function exportImage() {

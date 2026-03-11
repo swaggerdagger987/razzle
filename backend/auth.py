@@ -424,6 +424,191 @@ def sync_saved_views(user_id: int, views: list) -> dict:
         return {"status": "ok", "synced": count}
 
 
+# ---------------------------------------------------------------------------
+# Watchlist Cloud Sync (Pro+ tier)
+# ---------------------------------------------------------------------------
+
+WATCHLIST_MAX = 200
+
+
+def get_watchlist(user_id: int) -> dict:
+    """Retrieve all watchlist items for a user."""
+    with get_users_db() as conn:
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS user_watchlist (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                player_id TEXT NOT NULL,
+                player_name TEXT,
+                position TEXT,
+                team TEXT,
+                universe TEXT DEFAULT 'nfl',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users(id),
+                UNIQUE(user_id, player_id)
+            )
+        """)
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_watchlist_user ON user_watchlist(user_id)")
+        conn.commit()
+
+        rows = conn.execute(
+            "SELECT player_id, player_name, position, team, universe, created_at "
+            "FROM user_watchlist WHERE user_id = ? ORDER BY created_at DESC",
+            (user_id,),
+        ).fetchall()
+        return {"watchlist": [
+            {"player_id": r[0], "player_name": r[1], "position": r[2],
+             "team": r[3], "universe": r[4], "created_at": r[5]}
+            for r in rows
+        ]}
+
+
+def sync_watchlist(user_id: int, players: list) -> dict:
+    """Sync watchlist from client. Merges by player_id — union strategy."""
+    if not isinstance(players, list):
+        return {"error": "players must be a list", "status": 400}
+
+    with get_users_db() as conn:
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS user_watchlist (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                player_id TEXT NOT NULL,
+                player_name TEXT,
+                position TEXT,
+                team TEXT,
+                universe TEXT DEFAULT 'nfl',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users(id),
+                UNIQUE(user_id, player_id)
+            )
+        """)
+
+        # Delete and re-insert (full replacement, like saved views)
+        conn.execute("DELETE FROM user_watchlist WHERE user_id = ?", (user_id,))
+        count = 0
+        for p in players[:WATCHLIST_MAX]:
+            if not isinstance(p, dict):
+                continue
+            player_id = p.get("player_id", "")
+            if not player_id:
+                continue
+            try:
+                conn.execute(
+                    "INSERT INTO user_watchlist (user_id, player_id, player_name, position, team, universe) "
+                    "VALUES (?, ?, ?, ?, ?, ?)",
+                    (user_id, str(player_id),
+                     p.get("player_name", ""),
+                     p.get("position", ""),
+                     p.get("team", ""),
+                     p.get("universe", "nfl")),
+                )
+                count += 1
+            except Exception:
+                continue
+        conn.commit()
+        return {"status": "ok", "synced": count}
+
+
+# ---------------------------------------------------------------------------
+# AI Query Tracking (server-side rate limiting for all tiers)
+# ---------------------------------------------------------------------------
+
+QUERY_LIMITS = {"free": 5, "pro": 20, "elite": 999999}  # daily limits per plan
+
+
+def _ensure_query_tracking_table(conn):
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS ai_query_log (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER,
+            ip_address TEXT,
+            query_date TEXT NOT NULL,
+            query_count INTEGER DEFAULT 0,
+            UNIQUE(user_id, ip_address, query_date)
+        )
+    """)
+    conn.execute("CREATE INDEX IF NOT EXISTS idx_query_log_date ON ai_query_log(query_date)")
+
+
+def check_query_quota(user_id: int = None, ip_address: str = None, plan: str = "free") -> dict:
+    """Check if user/IP has queries remaining today. Returns quota info."""
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    limit = QUERY_LIMITS.get(plan, 5)
+
+    with get_users_db() as conn:
+        _ensure_query_tracking_table(conn)
+
+        if user_id:
+            row = conn.execute(
+                "SELECT query_count FROM ai_query_log WHERE user_id = ? AND query_date = ?",
+                (user_id, today),
+            ).fetchone()
+        else:
+            row = conn.execute(
+                "SELECT query_count FROM ai_query_log WHERE ip_address = ? AND user_id IS NULL AND query_date = ?",
+                (ip_address or "unknown", today),
+            ).fetchone()
+
+        used = row[0] if row else 0
+        remaining = max(0, limit - used)
+
+        return {
+            "allowed": remaining > 0,
+            "used": used,
+            "limit": limit,
+            "remaining": remaining,
+            "plan": plan,
+        }
+
+
+def record_query(user_id: int = None, ip_address: str = None) -> dict:
+    """Record an AI query for rate limiting. Returns updated quota."""
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+
+    with get_users_db() as conn:
+        _ensure_query_tracking_table(conn)
+
+        if user_id:
+            row = conn.execute(
+                "SELECT id, query_count FROM ai_query_log WHERE user_id = ? AND query_date = ?",
+                (user_id, today),
+            ).fetchone()
+            if row:
+                conn.execute(
+                    "UPDATE ai_query_log SET query_count = query_count + 1 WHERE id = ?",
+                    (row[0],),
+                )
+                count = row[1] + 1
+            else:
+                conn.execute(
+                    "INSERT INTO ai_query_log (user_id, ip_address, query_date, query_count) VALUES (?, ?, ?, 1)",
+                    (user_id, ip_address, today),
+                )
+                count = 1
+        else:
+            ip = ip_address or "unknown"
+            row = conn.execute(
+                "SELECT id, query_count FROM ai_query_log WHERE ip_address = ? AND user_id IS NULL AND query_date = ?",
+                (ip, today),
+            ).fetchone()
+            if row:
+                conn.execute(
+                    "UPDATE ai_query_log SET query_count = query_count + 1 WHERE id = ?",
+                    (row[0],),
+                )
+                count = row[1] + 1
+            else:
+                conn.execute(
+                    "INSERT INTO ai_query_log (ip_address, query_date, query_count) VALUES (?, ?, 1)",
+                    (ip, today),
+                )
+                count = 1
+
+        conn.commit()
+        return {"recorded": True, "count": count}
+
+
 def clear_agent_memories(user_id: int, league_id: str = None) -> dict:
     """Clear all memories for a user (optionally scoped to a league)."""
     with get_users_db() as conn:
