@@ -2330,14 +2330,12 @@ function renderPagination() {
 
 function prevPage() {
   state.offset = Math.max(0, state.offset - state.limit);
-  fetchAndRender();
-  _scrollTableTop();
+  fetchAndRender().then(function() { requestAnimationFrame(_scrollTableTop); });
 }
 
 function nextPage() {
   state.offset += state.limit;
-  fetchAndRender();
-  _scrollTableTop();
+  fetchAndRender().then(function() { requestAnimationFrame(_scrollTableTop); });
 }
 
 function _scrollTableTop() {
@@ -2896,9 +2894,9 @@ function loadStateFromURL() {
         if (saved.draftYear) state.draftYear = saved.draftYear;
         if (saved.relevance) state.relevance = saved.relevance;
         if (saved.limit) state.limit = saved.limit;
-        if (saved.visibleColumns && saved.visibleColumns.length) state.visibleColumns = saved.visibleColumns;
-        if (saved.collegeColumns && saved.collegeColumns.length) state.collegeColumns = saved.collegeColumns;
-        if (saved.prospectColumns && saved.prospectColumns.length) state.prospectColumns = saved.prospectColumns;
+        if (saved.visibleColumns && saved.visibleColumns.length) state.visibleColumns = saved.visibleColumns.filter(function(k) { return COLUMNS[k]; });
+        if (saved.collegeColumns && saved.collegeColumns.length) state.collegeColumns = saved.collegeColumns.filter(function(k) { return COLLEGE_COLUMNS[k]; });
+        if (saved.prospectColumns && saved.prospectColumns.length) state.prospectColumns = saved.prospectColumns.filter(function(k) { return PROSPECT_COLUMNS[k]; });
       }
     } catch(e) {}
   }

@@ -1,5 +1,16 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 110 — QA + UX Audit Fixes for Phases 106-109 (COMPLETE)
+
+**Exit Criterion MET**: 2 HIGH (column validation + scroll timing) fixed. 0 CRITICAL.
+
+### Phase 110 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Column restore validation | DONE | Filter restored columns against valid column definitions |
+| 2 | Scroll timing fix | DONE | .then() + requestAnimationFrame after fetchAndRender() |
+
 ## Previous Phase: Phase 109 — Smooth Scroll on Page Change (COMPLETE)
 
 **Exit Criterion MET**: Table smoothly scrolls to top on page navigation. 34 tests pass.
