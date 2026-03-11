@@ -1004,6 +1004,7 @@ async function fetchAndRenderNFL(signal, myId) {
       state.items = state.items.filter(p => tags[p.player_id]);
     }
     applySecondarySort();
+    _lastFetchTime = Date.now();
     loading.style.display = "none";
     renderTable();
     renderPagination();
@@ -1050,6 +1051,7 @@ async function fetchAndRenderProspects(signal, myId) {
     state.draftYear = data.draft_year || state.draftYear;
 
     applySecondarySort();
+    _lastFetchTime = Date.now();
     loading.style.display = "none";
     renderTable();
     renderPagination();
@@ -1096,6 +1098,7 @@ async function fetchAndRenderCollege(signal, myId) {
     state.collegeSeason = data.season || state.collegeSeason;
 
     applySecondarySort();
+    _lastFetchTime = Date.now();
     loading.style.display = "none";
     renderTable();
     renderPagination();
@@ -2385,8 +2388,16 @@ function updateResultCount() {
     if (badges.length) parts.push(badges.join(" "));
   }
 
+  // Data freshness indicator
+  if (_lastFetchTime) {
+    var ago = Math.round((Date.now() - _lastFetchTime) / 1000);
+    var agoText = ago < 5 ? "just now" : ago < 60 ? ago + "s ago" : Math.floor(ago / 60) + "m ago";
+    parts.push('<span style="color:var(--ink-faint); font-size:10px;" title="Data fetched at ' + new Date(_lastFetchTime).toLocaleTimeString() + '">⏱ ' + agoText + '</span>');
+  }
+
   el.innerHTML = parts.join(" · ");
 }
+var _lastFetchTime = 0;
 
 // ─── Filters ─────────────────────────────────────────────────────
 function populateFilterStatSelect() {

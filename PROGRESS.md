@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 104 — Data Freshness Indicator (COMPLETE)
+
+**Exit Criterion MET**: Result count shows "⏱ Xs ago" with tooltip showing exact time. 34 tests pass.
+
+### Phase 104 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Data freshness timestamp | DONE | _lastFetchTime on all fetch paths, "just now"/"Xs ago"/"Xm ago" in result count |
+
 ## Previous Phase: Phase 103 — Column Quick-Hide via Right-Click (COMPLETE)
 
 **Exit Criterion MET**: Right-click column header → context menu with Hide/Sort Asc/Sort Desc. 34 tests pass.

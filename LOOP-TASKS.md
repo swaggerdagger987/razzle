@@ -1,15 +1,15 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 103 (Column Quick-Hide via Right-Click)
-## Phase 103: Column Quick-Hide via Right-Click
-**Exit Criterion**: Right-click column header shows context menu with Hide/Sort Asc/Sort Desc options. 34 tests pass.
+- Phase: 104 (Data Freshness Indicator)
+## Phase 104: Data Freshness Indicator
+**Exit Criterion**: Result count bar shows "⏱ just now" / "Xs ago" / "Xm ago" after data fetch. Hover shows exact time. 34 tests pass.
 
 - Task 1: PASS
 - Stage: COMPLETE
-- Next: Phase gate
+- Next: Phase gate (Phase 105 = QA audit)
 
-### Task 1: Column header context menu
+### Task 1: Data freshness timestamp in result count
 **Status**: PASS
 **Attempts**: 1
-**Result**: (1) Right-click any sortable column header → context menu with Hide column, Sort Ascending, Sort Descending. (2) Reuses existing screener-context-menu styling. (3) Hide calls toggleColumn(key, false) with toast. (4) Sort options clear secondary sort and trigger fetchAndRender. 34 tests pass.
+**Result**: (1) _lastFetchTime tracked on all three fetch paths. (2) updateResultCount() appends "⏱ Xs ago" badge. (3) Title shows exact fetch time. 34 tests pass.
