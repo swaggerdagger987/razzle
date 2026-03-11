@@ -5,8 +5,8 @@
 ## Phase 39: Critical Bug Fixes — Priority 1
 **Exit Criterion**: Fix the 5 critical + 1 high severity bugs that make core features unusable. NFL screener shows correct year data. NFL/College toggle works without year change. Target Premium, Drop Rate, Matchups, Gamescript panels load. Garbage Time reliably works.
 
-- Task 1: PENDING
-- Task 2: PENDING
+- Task 1: PASS
+- Task 2: PASS
 - Task 3: PENDING
 - Task 4: PENDING
 - Task 5: PENDING
@@ -16,13 +16,13 @@
 - Next: Task 1
 
 ### Task 1: Fix NFL screener showing only 2024 data regardless of year
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 **Acceptance**: Selecting 2015 shows 2015 players (Antonio Brown, Julio Jones, etc.), 2020 shows 2020 players, etc.
 
 ### Task 2: Fix NFL/College toggle not switching without year change
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 **Acceptance**: Clicking NFL → College → Prospects each immediately loads the correct data without touching the year dropdown.
 
 ### Task 3: Fix Target Premium panel — completely broken

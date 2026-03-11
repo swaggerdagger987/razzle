@@ -579,7 +579,7 @@ function isProspectView() {
     ]);
 
     state.seasons = nflOpts.seasons || [_nflYear];
-    if (state.season == null && state.season !== "career") state.season = state.seasons[0] || _nflYear;
+    if (!state.season && state.season !== "career") state.season = state.seasons[0] || _nflYear;
 
     if (state.seasons.length === 0) {
       _showToast("No seasons found — data may not be loaded yet");
@@ -1201,22 +1201,22 @@ function applyUniverseUI() {
   const ds = document.getElementById("dataSource");
   if (ds) {
     if (isCollege) ds.textContent = "powered by sportsdataverse cfbfastR data";
-    else if (isProspect) ds.textContent = "powered by nflverse combine + draft data";
+    else if (prospectMode) ds.textContent = "powered by nflverse combine + draft data";
     else ds.textContent = "powered by nflverse";
   }
 
   // Page title
   if (isCollege) document.title = "College Lab — Razzle";
-  else if (isProspect) document.title = "Prospect Lab — Razzle";
+  else if (prospectMode) document.title = "Prospect Lab — Razzle";
   else document.title = "The Lab — Razzle";
 
   // Show Tiers and Big Board buttons only in prospect mode
   const tiersBtn = document.getElementById("tiersBtn");
-  if (tiersBtn) tiersBtn.style.display = isProspect ? "" : "none";
+  if (tiersBtn) tiersBtn.style.display = prospectMode ? "" : "none";
   const bigBoardBtn = document.getElementById("bigBoardBtn");
-  if (bigBoardBtn) bigBoardBtn.style.display = isProspect ? "" : "none";
+  if (bigBoardBtn) bigBoardBtn.style.display = prospectMode ? "" : "none";
   const classAnalyticsBtn = document.getElementById("classAnalyticsBtn");
-  if (classAnalyticsBtn) classAnalyticsBtn.style.display = isProspect ? "" : "none";
+  if (classAnalyticsBtn) classAnalyticsBtn.style.display = prospectMode ? "" : "none";
 
   // Show Export Rankings and Trade Values only in NFL mode
   const exportRankingsBtn = document.getElementById("exportRankingsBtn");
