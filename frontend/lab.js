@@ -1450,7 +1450,15 @@ function renderTableBody() {
 
   if (!state.items.length) {
     _vscrollRows = [];
-    tbody.innerHTML = `<tr><td colspan="99" style="text-align:center; padding:40px; font-family: var(--font-hand); font-size: 22px; color: var(--ink-light);">${emptyMsg}</td></tr>`;
+    var hasFilters = state.filters.length > 0 || state.search || state.teams.length > 0 || state.minGP > 0;
+    var hint = hasFilters
+      ? 'try loosening your filters or <a href="#" onclick="resetAllFilters(); return false;" style="color:var(--orange); text-decoration:underline; cursor:pointer;">reset all filters</a>'
+      : 'try a different position or season';
+    tbody.innerHTML = `<tr><td colspan="99" style="text-align:center; padding:50px 20px;">
+      <div style="font-size:36px; margin-bottom:8px;">🐅</div>
+      <div style="font-family:var(--font-hand); font-size:24px; color:var(--ink-medium); margin-bottom:6px;">${emptyMsg}</div>
+      <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-light);">${hint}</div>
+    </td></tr>`;
     return;
   }
 

@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 98 — Empty State Illustration (COMPLETE)
+
+**Exit Criterion MET**: Zero-result screener shows tiger emoji, message, and filter reset link. 34 tests pass.
+
+### Phase 98 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Empty state illustration | DONE | Tiger emoji, context-aware message, "reset all filters" link when filters active |
+
 ## Previous Phase: Phase 97 — Loading Skeleton Animation (COMPLETE)
 
 **Exit Criterion MET**: Skeleton shimmer rows during data loading. Error states show fallback text. 34 tests pass.
