@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 99 — Search Text Highlight (COMPLETE)
+
+**Exit Criterion MET**: Matching search text highlighted in player names with terracotta-tinted <mark>. 34 tests pass.
+
+### Phase 99 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Search text highlight | DONE | _highlightSearch() helper, applied to NFL/college/prospect name render paths |
+
 ## Previous Phase: Phase 98 — Empty State Illustration (COMPLETE)
 
 **Exit Criterion MET**: Zero-result screener shows tiger emoji, message, and filter reset link. 34 tests pass.

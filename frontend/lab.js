@@ -148,6 +148,12 @@ function _resetLoadingSkeleton(el) {
 function _setLoadingError(el, msg) {
   el.innerHTML = '<div style="text-align:center; font-family:var(--font-hand); font-size:22px; color:var(--ink-light); padding:40px 20px;">' + msg + '</div>';
 }
+function _highlightSearch(escaped) {
+  if (!state.search) return escaped;
+  var q = escapeHtml(state.search);
+  var re = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+  return escaped.replace(re, '<mark style="background:rgba(217,119,87,0.25); padding:0 1px; border-radius:2px;">$1</mark>');
+}
 
 // ─── Watchlist (localStorage, cached in memory) ────────────────
 let _watchlistCache = null;
@@ -1285,7 +1291,7 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode) {
     html += `<td class="col-player"><div class="player-name-cell">`;
     html += playerHeadshot(player, pos);
     html += `<span class="pos-badge ${posClass(pos)}">${escapeHtml(pos)}</span>`;
-    html += `<a href="#" onclick="openCollegeProfile('${cid}'); return false;" style="color:var(--ink); text-decoration:none; border-bottom:1px dashed var(--pos-qb);">${escapeHtml(player.player_name)}</a>`;
+    html += `<a href="#" onclick="openCollegeProfile('${cid}'); return false;" style="color:var(--ink); text-decoration:none; border-bottom:1px dashed var(--pos-qb);">${_highlightSearch(escapeHtml(player.player_name))}</a>`;
     html += `<span class="team-label">${escapeHtml(player.team)}</span>`;
     if (player.conference) html += `<span class="school-label" style="font-size:10px; color:var(--ink-light);">${escapeHtml(player.conference)}</span>`;
     html += `</div></td>`;
@@ -1296,7 +1302,7 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode) {
     html += `<td class="col-player"><div class="player-name-cell">`;
     html += playerHeadshot(player, pos);
     html += `<span class="pos-badge ${posClass(pos)}">${escapeHtml(pos)}</span>`;
-    html += `<a href="#" onclick="openProspectProfile('${pn}', '${escapeAttr(pPos)}', ${pYear}); return false;" style="color:var(--ink); text-decoration:none; border-bottom:1px dashed var(--pos-qb);">${escapeHtml(player.player_name)}</a>`;
+    html += `<a href="#" onclick="openProspectProfile('${pn}', '${escapeAttr(pPos)}', ${pYear}); return false;" style="color:var(--ink); text-decoration:none; border-bottom:1px dashed var(--pos-qb);">${_highlightSearch(escapeHtml(player.player_name))}</a>`;
     html += `<span class="school-label">${escapeHtml(player.school)}</span>`;
     html += `</div></td>`;
   } else {
@@ -1304,7 +1310,7 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode) {
     html += `<td class="col-player"><div class="player-name-cell">`;
     html += playerHeadshot(player, pos);
     html += `<span class="pos-badge ${posClass(pos)}">${escapeHtml(pos)}</span>`;
-    html += `<a href="/player/${encodeURIComponent(pid)}" onclick="event.preventDefault(); openPlayerProfile('${pid}');" onmouseenter="onPlayerNameEnter('${pid}', this)" onmouseleave="onPlayerNameLeave()" style="color:var(--ink); text-decoration:none; border-bottom:1px dashed var(--ink-faint);">${escapeHtml(player.full_name)}</a>`;
+    html += `<a href="/player/${encodeURIComponent(pid)}" onclick="event.preventDefault(); openPlayerProfile('${pid}');" onmouseenter="onPlayerNameEnter('${pid}', this)" onmouseleave="onPlayerNameLeave()" style="color:var(--ink); text-decoration:none; border-bottom:1px dashed var(--ink-faint);">${_highlightSearch(escapeHtml(player.full_name))}</a>`;
     html += buildTagChip(pid);
     html += `<span class="tag-icon" onclick="event.stopPropagation(); showTagPicker('${pid}', this)" title="Tag player">&#9679;</span>`;
     html += `<span class="team-label">${escapeHtml(player.team)}</span>`;
