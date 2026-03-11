@@ -1,15 +1,19 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 124 (Interactive Data Cells)
-## Phase 124: Interactive Data Cells
-**Exit Criterion**: (1) Position breakdown badges in result count are clickable — clicking "WR:62" filters to WR. (2) Double-click a stat cell creates a filter (>= for normal stats, <= for INVERSE_STATS) with toast feedback. Both enhance data exploration without extra UI chrome.
+- Phase: 125 (QA + UX Audit Fixes for Phases 121-124)
+## Phase 125: QA + UX Audit — Auto-Generated Fixes
+**Exit Criterion**: 2 HIGH (popover scroll dismiss, Escape stopPropagation) + MEDIUM fixes (duplicate filter dedup, cache key, rename Leaders, shortcuts hint, position context) all fixed. 34 tests pass.
 
-- Task 1: PASS
-- Stage: COMPLETE
-- Next: Phase gate
+- Task 1: PENDING — HIGH fixes
+- Task 2: PENDING — MEDIUM fixes
+- Stage: BUILD
+- Next: Implement
 
-### Task 1: Clickable position badges + double-click cell filter
-**Status**: PASS
-**Attempts**: 1
-**Result**: Position badges in result count now clickable with dashed underline + cursor:pointer, onclick togglePosition(). Double-click stat cell adds filter (gte/lte based on INVERSE_STATS), skips utility/text/sparkline/notes columns, toast feedback with column label + operator + formatted value.
+### Task 1: HIGH — Popover scroll dismiss + Escape stopPropagation
+**Status**: PENDING
+**Attempts**: 0
+
+### Task 2: MEDIUM — Dedup filters, cache key, rename Leaders to Top 3, shortcuts hint, position context
+**Status**: PENDING
+**Attempts**: 0

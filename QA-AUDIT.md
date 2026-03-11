@@ -1,84 +1,60 @@
-# QA + UX Audit — Phases 116-119
+# QA + UX Audit — Phases 121-124
 
 **Date**: 2026-03-11
-**Scope**: QA audit fixes, CSV export, export UX polish, column stat tooltips
-**Files**: frontend/lab.html, frontend/lab.js
+**Phases audited**: 121 (Undo/Redo), 122 (Stat Leaders), 123 (Column Stats Popover), 124 (Interactive Data Cells)
+**Files reviewed**: frontend/lab.js (+394 lines), frontend/lab.html (+44 lines)
 
 ---
 
 ## QA FINDINGS
 
-### CRITICAL
-
-**C1: Dead code — duplicate saved views implementation**
-- File: `frontend/lab.js`, lines 2964-3097
-- Old saved views functions are completely overridden by new implementation at lines 3455-3578. Dead code adds confusion and maintenance risk.
-- Fix: Delete lines 2964-3097.
-
-**C2: XSS in saved view name display**
-- File: `frontend/lab.js`, line 3572
-- `v.name` interpolated into HTML without escaping.
-- Fix: Use `escapeHtml(v.name)`.
-
-**C3: XSS in saved view onclick handlers**
-- File: `frontend/lab.js`, lines 3571, 3575
-- `v.id` interpolated into onclick attributes without escaping.
-- Fix: Use `escapeAttr(v.id)`.
+### CRITICAL — None
 
 ### HIGH
 
-**H1: New saveCurrentView missing visual state fields**
-- File: `frontend/lab.js`, lines 3465-3481
-- Missing: columnWidths, heatColors, percentileMode, dataBars, density. Phase 116 fixed this in old code but new code doesn't have it.
-- Fix: Add fields to save and restore.
+**H1. Column stats popover not dismissed on table scroll**
+- **File**: frontend/lab.js, `showColumnStatsPopover()`
+- **What**: The popover is `position:fixed` and stays in place when the user scrolls the table horizontally or vertically. The header scrolls away but the popover remains floating over unrelated content.
+- **Fix**: Add a scroll listener on `.table-wrap` that calls `dismissColumnStatsPopover()`.
 
-**H2: Invalid CSS variables**
-- File: `frontend/lab.html`, line 3215
-- `var(--bg-sand)` and `var(--font-data)` don't exist. Should be `var(--bg)` and `var(--font-mono)`.
-
-**H3: 1px borders on DVS legend badges**
-- File: `frontend/lab.html`, lines 3148-3151
-- Violates DESIGN.md chunky border rule.
-- Fix: Change to `border:2px solid`.
-
-**H4: No max view limit in new saved views**
-- File: `frontend/lab.js`, line 3483
-- Old code capped at 20 views, new code has no limit.
-- Fix: Add limit check.
+**H2. Escape key conflict in column stats popover**
+- **File**: frontend/lab.js, `_colStatsEscDismiss()`
+- **What**: Pressing Escape dismisses the popover but doesn't `stopPropagation()`, so it also triggers the global Escape handler (which clears row highlights). Two actions fire from one keypress.
+- **Fix**: Add `e.stopPropagation()` in `_colStatsEscDismiss` when popover is visible.
 
 ### MEDIUM
 
-**M1: Missing toast feedback in new saved views**
-- No toast for save/load/delete operations in new implementation.
-- Fix: Add `_showToast()` calls.
+**M1. Duplicate filters possible via double-click**
+- **File**: frontend/lab.js, dblclick handler
+- **What**: Double-clicking the same stat cell multiple times adds the same filter repeatedly. No dedup check.
+- **Fix**: Before pushing the filter, check if `state.filters` already has a matching key+op+value.
 
-**M2: Missing confirm on delete**
-- New `deleteSavedView` deletes immediately without confirmation.
-- Fix: Add `confirm()` check.
-
-**M3: Gradient in heatmap legend**
-- File: `frontend/lab.html`, line 3696
-- `linear-gradient` violates DESIGN.md no-gradient rule.
-- Fix: Replace with stepped color blocks.
+**M2. Leader badge cache key too weak**
+- **File**: frontend/lab.js, `computeLeaderRanks()`
+- **What**: Cache key is `items.length + first_id + last_id`. Could produce false cache hits when switching seasons with identical player counts.
+- **Fix**: Add `state.sortKey + state.season` to the cache key.
 
 ### LOW
 
-**L1: Missing aria-label on CSV button** (lab.html:3078)
-**L2: Date format missing year in saved views** (lab.js:3567)
+**L1. Leader dots add ~9px extra width to cells** — No action needed, minimal jitter.
+**L2. Undo/Redo doesn't capture visual mode state** — Intentional, visual modes are separate from data state.
 
 ---
 
 ## UX FINDINGS
 
-### First 30 Seconds Test
-- PASS: Position tabs and search provide clear entry points. Onboarding toast guides to shortcuts.
+### CRITICAL — None
 
-### Readability Pass
-- PASS: Column tooltips explain abbreviations. Power-user audience handles stat jargon well.
-- LOW: "Views..." dropdown placeholder could be "Saved Views..."
+### HIGH — None
 
-### Flow Tests
-- All 3 core flows pass end-to-end.
+### MEDIUM
 
-### Visual Noise Check
-- Default view is clean. Heat coloring lacks legend but tooltip on H button explains it.
+**UX-M1. "Leaders" button label ambiguous**
+- **File**: frontend/lab.html, toolbar
+- **What**: "Leaders" could mean leaderboard, team leaders, etc. Other toggle buttons (Heat, Pctl, Bars) are clearer.
+- **Fix**: Rename to "Top 3" for immediate clarity.
+
+### LOW
+
+**UX-L1. No discoverability for double-click filter** — Power-user feature, add to shortcuts modal.
+**UX-L2. Column stats popover doesn't show position context** — Add position label to popover.
