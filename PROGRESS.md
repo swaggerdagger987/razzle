@@ -1,5 +1,25 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 155 — Platform: Landing Page — Mini Pixel Canvas War Room Preview (COMPLETE)
+
+**Exit Criterion MET**: Landing page now features a live animated mini pixel canvas in the War Room demo section. The canvas (480x160, dark background #121a2e) shows 6 colored agent dots (matching actual agent colors: Razzle=#d97757, Scout=#5b7fff, Medical=#2ec4b6, Diplomat=#8b5cf6, Quant=#f59e0b, Historian=#10b981) moving around a simplified War Room with desk furniture, monitor glows (green pulse), a turf strategy table, and intermittent activity bubbles showing redacted symbols (???, !!!, ..., $, %). Scanline effect adds CRT monitor aesthetic. IntersectionObserver ensures animation only starts when the canvas scrolls into view. All JS syntax verified via node --check (4 executable blocks pass). Page serves 200.
+
+### Phase 155 Tasks (Platform Loop)
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Mini Pixel Canvas Preview | DONE | 6 agents, furniture, monitor glow, bubbles, scanline, IntersectionObserver |
+| 2 | QA + Syntax Verification | DONE | All JS blocks pass node --check, page serves 200 |
+
+### Decisions Log
+- Canvas dimensions 480x160 chosen as a wide banner format that looks good at various screen widths with max-width:100%.
+- image-rendering:pixelated preserves the pixel art aesthetic when scaled.
+- Activity bubbles use redacted fantasy symbols (???, !!!, $, %) matching the North Star spec for "content redacted" demo.
+- IntersectionObserver with 0.1 threshold means animation starts as soon as 10% of the canvas is visible.
+- Dark background #121a2e matches the Situation Room dark mode palette.
+
+---
+
 ## Previous Phase: Phase 154 — Platform: Bureau of Intelligence — Paid Tier Analytics + Conversion Deepening (COMPLETE)
 
 **Exit Criterion MET**: Bureau of Intelligence enriched with four visual analytics features and a conversion bridge system. (1) Manager behavioral timeline charts: Canvas-rendered bar charts inside each profile card showing moves-per-week across all tracked seasons, with panic burst weeks highlighted in red (#e63946) and season dividers for multi-season leagues. renderActivityTimeline() draws directly on canvas with DPR-aware scaling. (2) Trade deadline pressure map: computePressureScores() calculates a 0-100 desperation score per manager based on win rate, panic history, trade frequency, and FAAB burn rate. Rendered as color-coded horizontal bars (red=desperate, orange=motivated, green=comfortable). Pro-gated: free users see top 3 managers, remaining are blurred with "unlock with Pro" CTA. (3) Activity feed conversion nudges: Free users see subtle context-aware annotations on trade and waiver activity — "the Quant has thoughts on this trade" and "Scout can explain their strategy" — linking to agents.html with pre-populated scenarios. Nudges capped (2 waiver, 3 trade max) and hidden for paid users. (4) Manager comparison view: radar chart (Canvas pentagon) comparing 2 managers across 5 axes (trades, waivers, FAAB, activity, aggression) with dual-polygon overlay (orange vs blue). Stats grid below shows per-year averages with winner highlighting. Toggle panel UI. (5) Bureau-to-Situation-Room bridge: prefillScenario() stores scenario text in localStorage, warroom.js reads razzle_prefill_scenario on load and pre-populates the scenario input. Every manager card has "ask the Diplomat about [Manager]" CTA. Pressure map has "ask the Diplomat how to exploit this" CTA. All JS verified via node --check, all pages serve 200, mobile CSS responsive adjustments added.

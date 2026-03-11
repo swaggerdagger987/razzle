@@ -853,6 +853,12 @@
     <h2>This is a real manager's Situation Room.</h2>
     <p class="section-desc">Razzle and specialist agents with full league context. Personalized briefings, trade strategies, championship probability.</p>
 
+    <!-- Mini pixel canvas preview -->
+    <div style="text-align:center; margin-bottom:16px;">
+      <canvas id="miniWarRoom" width="480" height="160" style="border:2px solid var(--ink-medium); border-radius:8px; max-width:100%; image-rendering:pixelated; background:#121a2e;"></canvas>
+      <div style="font-family:var(--font-hand); font-size:12px; color:var(--ink-light); margin-top:4px; transform:rotate(-1deg); display:inline-block;">agents at work...</div>
+    </div>
+
     <div id="demoCards" aria-live="polite"></div>
 
     <div style="text-align:center; margin-top:12px;">
@@ -1319,6 +1325,133 @@ fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"applicat
   else if(u.trial_active&&u.plan_source==='trial'){if(pro)pro.textContent='Subscribe to Pro';if(elite)elite.textContent='Subscribe to Elite';}
   else if(u.plan&&u.plan!=='free'){if(pro)pro.textContent='Enter Situation Room';if(elite)elite.textContent='Enter Situation Room';if(pro)pro.onclick=function(){window.location='/agents'};if(elite)elite.onclick=function(){window.location='/agents'};}
 }catch(e){}})();
+</script>
+<script>
+// Mini War Room pixel canvas — decorative animated preview
+(function() {
+  var cvs = document.getElementById('miniWarRoom');
+  if (!cvs) return;
+  var ctx = cvs.getContext('2d');
+  var W = cvs.width, H = cvs.height;
+
+  // Mini agents — simplified dots with color trails
+  var agents = [
+    { x: 60, y: 80, color: '#d97757', name: 'R', dx: 0.4, dy: 0.2, phase: 0 },
+    { x: 140, y: 60, color: '#5b7fff', name: 'M', dx: -0.3, dy: 0.35, phase: 1 },
+    { x: 200, y: 100, color: '#2ec4b6', name: 'S', dx: 0.35, dy: -0.25, phase: 2 },
+    { x: 300, y: 70, color: '#8b5cf6', name: 'D', dx: -0.25, dy: 0.3, phase: 3 },
+    { x: 370, y: 90, color: '#e87422', name: 'Q', dx: 0.3, dy: -0.2, phase: 4 },
+    { x: 420, y: 60, color: '#d44040', name: 'H', dx: -0.35, dy: 0.25, phase: 5 }
+  ];
+
+  // Furniture rectangles (dark room fixtures)
+  var furniture = [
+    { x: 20, y: 20, w: 80, h: 30, c: '#1b2845' },    // desk
+    { x: 180, y: 15, w: 120, h: 25, c: '#1e5c28' },   // turf table
+    { x: 380, y: 20, w: 80, h: 30, c: '#1b2845' },    // desk
+    { x: 100, y: 120, w: 60, h: 25, c: '#1b2845' },   // desk
+    { x: 320, y: 120, w: 60, h: 25, c: '#1b2845' },   // desk
+  ];
+
+  // Activity bubbles
+  var bubbles = ['...', '!!!', '???', '$$$', '%'];
+  var bubbleTimers = agents.map(function() { return Math.random() * 200; });
+
+  var frame = 0;
+
+  function draw() {
+    frame++;
+
+    // Background — dark War Room
+    ctx.fillStyle = '#121a2e';
+    ctx.fillRect(0, 0, W, H);
+
+    // Floor grid lines
+    ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+    ctx.lineWidth = 0.5;
+    for (var gx = 0; gx < W; gx += 32) {
+      ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, H); ctx.stroke();
+    }
+    for (var gy = 0; gy < H; gy += 32) {
+      ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(W, gy); ctx.stroke();
+    }
+
+    // Draw furniture
+    for (var fi = 0; fi < furniture.length; fi++) {
+      var f = furniture[fi];
+      ctx.fillStyle = f.c;
+      ctx.fillRect(f.x, f.y, f.w, f.h);
+      // Monitor glow on desks
+      if (f.c === '#1b2845') {
+        ctx.fillStyle = '#22cc55';
+        ctx.globalAlpha = 0.15 + 0.05 * Math.sin(frame * 0.05 + fi);
+        ctx.fillRect(f.x + 8, f.y + 3, 12, 8);
+        ctx.globalAlpha = 1;
+      }
+    }
+
+    // Turf table yard lines
+    ctx.strokeStyle = 'rgba(232,232,232,0.2)';
+    ctx.lineWidth = 0.5;
+    for (var yl = 190; yl < 300; yl += 15) {
+      ctx.beginPath(); ctx.moveTo(yl, 18); ctx.lineTo(yl, 38); ctx.stroke();
+    }
+
+    // Update and draw agents
+    for (var i = 0; i < agents.length; i++) {
+      var a = agents[i];
+
+      // Movement with sinusoidal drift
+      a.x += a.dx + 0.15 * Math.sin(frame * 0.01 + a.phase * 2);
+      a.y += a.dy + 0.1 * Math.cos(frame * 0.012 + a.phase * 3);
+
+      // Bounce off walls
+      if (a.x < 10 || a.x > W - 10) a.dx *= -1;
+      if (a.y < 15 || a.y > H - 15) a.dy *= -1;
+      a.x = Math.max(10, Math.min(W - 10, a.x));
+      a.y = Math.max(15, Math.min(H - 15, a.y));
+
+      // Occasionally change direction
+      if (Math.random() < 0.005) {
+        a.dx = (Math.random() - 0.5) * 0.8;
+        a.dy = (Math.random() - 0.5) * 0.6;
+      }
+
+      // Draw agent dot (pixel-art style)
+      ctx.fillStyle = a.color;
+      ctx.fillRect(Math.round(a.x) - 3, Math.round(a.y) - 4, 6, 8);
+      // Head
+      ctx.fillRect(Math.round(a.x) - 2, Math.round(a.y) - 6, 4, 3);
+
+      // Activity bubble (intermittent)
+      bubbleTimers[i]--;
+      if (bubbleTimers[i] <= 0) {
+        bubbleTimers[i] = 120 + Math.random() * 200;
+      }
+      if (bubbleTimers[i] > 80 && bubbleTimers[i] < 120) {
+        var bIdx = (i + Math.floor(frame / 60)) % bubbles.length;
+        ctx.fillStyle = 'rgba(255,255,255,0.6)';
+        ctx.font = '8px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(bubbles[bIdx], Math.round(a.x), Math.round(a.y) - 10);
+      }
+    }
+
+    // Scanline effect
+    ctx.fillStyle = 'rgba(0,0,0,0.02)';
+    for (var sl = (frame % 4); sl < H; sl += 4) {
+      ctx.fillRect(0, sl, W, 1);
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  // Only animate if canvas is visible
+  var observer = new IntersectionObserver(function(entries) {
+    if (entries[0].isIntersecting) { draw(); observer.disconnect(); }
+  }, { threshold: 0.1 });
+  observer.observe(cvs);
+})();
 </script>
 </body>
 </html>
