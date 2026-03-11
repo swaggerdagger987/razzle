@@ -1,16 +1,16 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 38 — Athletic Radar — Prospect Combine Spider Charts (IN PROGRESS)
+## Current Phase: Phase 38 — Athletic Radar — Prospect Combine Spider Charts (COMPLETE)
 
-**Exit Criterion**: proradar panel renders canvas spider charts of combine percentiles (forty, bench, vertical, broad_jump, cone, shuttle) for any prospect. Select up to 3 prospects to overlay. Position + draft year filters. /api/athletic-radar endpoint returns all prospects with pre-computed percentiles. Sidebar item works end-to-end.
+**Exit Criterion MET**: proradar panel renders canvas spider charts of combine percentiles for any prospect. Up to 3 prospects overlay with terracotta/blue/teal colors. Position tabs + draft year dropdown. /api/athletic-radar endpoint returns all prospects with pre-computed percentiles. Sidebar item works end-to-end. 34 smoke tests pass.
 
 ### Phase 38 Tasks
 
 | # | Task | Status | Notes |
 |---|------|--------|-------|
-| 1 | Create /api/athletic-radar endpoint | DONE | prospects.py + server.py, cached, 43 WR prospects for 2025 |
-| 2 | Add proradar panel to lab-panels.js | TODO | Canvas spider chart, 3 prospect overlay |
-| 3 | End-to-end verification | TODO | Sidebar → panel → chart → overlay |
+| 1 | Create /api/athletic-radar endpoint | DONE | prospects.py + server.py, cached, 247 ALL / 43 WR for 2025 |
+| 2 | Update proradar panel | DONE | 3 prospect overlay, draft year dropdown, /api/athletic-radar |
+| 3 | End-to-end verification | DONE | All positions work, JS syntax OK, 34 tests pass |
 
 ## Previous Phase: Phase 37 — Bake player_season_stats into Adapter Pipeline + Re-upload DB (COMPLETE)
 
