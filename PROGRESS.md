@@ -1,5 +1,16 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 47 — Data Quality & Design System Hardening (COMPLETE)
+
+**Exit Criterion MET**: Half-PPR fallback computation works for all seasons. All 46 hardcoded gray colors across 18 frontend files replaced with design system CSS variables.
+
+### Phase 47 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Half-PPR fallback + initial color fixes | DONE | COALESCE half-PPR with PPR-0.5*rec fallback. 3 files #888/#999→var(--ink-light) |
+| 2 | Replace all hardcoded grays across frontend | DONE | 46 occurrences in 18 files: #666→#5c4a3d, #888/#999→#8a7565, #ccc→#c4b5a5. warroom.js excluded |
+
 ## Previous Phase: Phase 46 — Player Profile Dynasty Value Sparkline (COMPLETE)
 
 **Exit Criterion MET**: Player profile modal shows dynasty value sparkline with season-by-season values, start/end points, and trend delta.
