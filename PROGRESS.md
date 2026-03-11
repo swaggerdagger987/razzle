@@ -25,6 +25,8 @@
 - Health check returns structured JSON with per-database status and timing
 - Billing module now supports 4 Stripe price IDs via env vars (STRIPE_PRICE_PRO_MONTHLY, STRIPE_PRICE_PRO_YEARLY, STRIPE_PRICE_ELITE_MONTHLY, STRIPE_PRICE_ELITE_YEARLY) with legacy fallback
 - Plan hierarchy: free(0) < pro(1) < elite(2) -- Elite users get all Pro features automatically
+- AI query rate limiting: Free=5/day, Pro=20/day, Elite=unlimited -- enforced client-side via localStorage with daily reset
+- Query counter badge shows remaining queries next to scenario panel
 
 ## Previous Phase: Phase 131 — Platform: Backend Hardening + Agent Persona Depth (COMPLETE)
 

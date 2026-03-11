@@ -2028,7 +2028,69 @@ async function runSingleAgent(agentId, scenario) {
   }
 }
 
+// ── AI QUERY RATE LIMITING ───────────────────────────────────────────
+function getDailyQueryLimit() {
+  if (isEliteUser()) return Infinity;
+  if (isProUser()) return 20;
+  return 5; // free tier
+}
+
+function getTodayQueryCount() {
+  try {
+    var data = JSON.parse(localStorage.getItem('razzle_query_count') || '{}');
+    var today = new Date().toISOString().slice(0, 10);
+    if (data.date !== today) return 0;
+    return data.count || 0;
+  } catch (e) { return 0; }
+}
+
+function incrementQueryCount() {
+  var today = new Date().toISOString().slice(0, 10);
+  var data = { date: today, count: getTodayQueryCount() + 1 };
+  localStorage.setItem('razzle_query_count', JSON.stringify(data));
+  return data.count;
+}
+
+function getQueryLimitMessage() {
+  var limit = getDailyQueryLimit();
+  var used = getTodayQueryCount();
+  var remaining = Math.max(0, limit - used);
+  if (limit === Infinity) return null;
+  if (remaining <= 0) {
+    if (!isProUser()) return 'Daily limit reached (5 free queries). Upgrade to Pro for 20/day.';
+    return 'Daily limit reached (20 Pro queries). Upgrade to Elite for unlimited.';
+  }
+  return null;
+}
+
+function updateQueryLimitBadge() {
+  var el = document.getElementById('queryLimitBadge');
+  if (!el) return;
+  var limit = getDailyQueryLimit();
+  var used = getTodayQueryCount();
+  if (limit === Infinity) {
+    el.textContent = 'unlimited queries (Elite)';
+  } else {
+    var remaining = Math.max(0, limit - used);
+    var tier = isProUser() ? 'Pro' : 'Free';
+    el.textContent = remaining + '/' + limit + ' queries remaining today (' + tier + ')';
+    if (remaining <= 1) el.style.color = 'var(--orange)';
+    else if (remaining <= 0) el.style.color = '#d44040';
+    else el.style.color = 'var(--ink-light)';
+  }
+}
+
+// Initialize badge on load
+setTimeout(updateQueryLimitBadge, 100);
+
 async function runAllAgents(scenario) {
+  // Check rate limit
+  var limitMsg = getQueryLimitMessage();
+  if (limitMsg) {
+    setScenarioStatus(limitMsg, 'error');
+    return;
+  }
+
   const hasKey = AGENT_DEFS.some(function(_, i) { return getAgentSettings(i).apiKey; });
   if (!hasKey) {
     setScenarioStatus('set an API key in Config first', 'error');
@@ -2115,9 +2177,18 @@ async function runAllAgents(scenario) {
     if (ca) { ca.workBubble = '❌'; ca.bubbleTimer = 3000; }
   }
 
-  var statusMsg = razzleSynthesis
-    ? 'briefing complete — ' + successCount + ' specialists reported'
-    : successCount + ' specialists done' + (errorCount ? ', ' + errorCount + ' failed' : '');
+  // Count this as a successful query for rate limiting
+  if (successCount > 0) {
+    var queryNum = incrementQueryCount();
+    updateQueryLimitBadge();
+    var limit = getDailyQueryLimit();
+    var remaining = limit === Infinity ? '' : ' (' + (limit - queryNum) + ' remaining today)';
+    var statusMsg = razzleSynthesis
+      ? 'briefing complete — ' + successCount + ' specialists reported' + remaining
+      : successCount + ' specialists done' + (errorCount ? ', ' + errorCount + ' failed' : '') + remaining;
+  } else {
+    var statusMsg = successCount + ' specialists done' + (errorCount ? ', ' + errorCount + ' failed' : '');
+  }
   setScenarioStatus(statusMsg, razzleSynthesis ? 'done' : 'error');
   setScenarioButtonsDisabled(false);
 
