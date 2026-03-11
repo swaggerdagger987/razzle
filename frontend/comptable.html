@@ -58,7 +58,7 @@
     padding: 10px 14px;
     border: 3px solid var(--ink);
     border-radius: 8px;
-    background: var(--card);
+    background: var(--bg-card);
     box-sizing: border-box;
   }
   .ct-search::placeholder { color: var(--ink-light); }
@@ -67,7 +67,7 @@
     top: 100%;
     left: 0;
     right: 0;
-    background: var(--card);
+    background: var(--bg-card);
     border: 2px solid var(--ink);
     border-radius: 6px;
     max-height: 220px;
@@ -84,7 +84,7 @@
     justify-content: space-between;
   }
   .ct-ac-item:hover, .ct-ac-item.highlighted {
-    background: var(--sand);
+    background: var(--bg);
   }
 
   .ct-selected {
@@ -98,7 +98,7 @@
     padding: 4px 10px;
     border: 2px solid var(--ink);
     border-radius: 4px;
-    background: var(--card);
+    background: var(--bg-card);
     display: flex;
     align-items: center;
     gap: 6px;
@@ -125,7 +125,7 @@
     padding: 6px 10px;
     border: 2px solid var(--ink);
     border-radius: 4px;
-    background: var(--card);
+    background: var(--bg-card);
   }
   .ct-btn {
     font-family: var(--font-mono);
@@ -133,12 +133,12 @@
     padding: 5px 14px;
     border: 2px solid var(--ink);
     border-radius: 4px;
-    background: var(--card);
+    background: var(--bg-card);
     cursor: pointer;
     font-weight: 700;
   }
-  .ct-btn:hover { background: var(--ink); color: var(--sand); }
-  .ct-btn.primary { background: var(--terracotta); color: #fff; border-color: var(--ink); }
+  .ct-btn:hover { background: var(--ink); color: var(--bg); }
+  .ct-btn.primary { background: var(--orange); color: #fff; border-color: var(--ink); }
   .ct-btn.primary:hover { background: #b85a3a; }
 
   .ct-loading {
@@ -164,7 +164,7 @@
   }
   .ct-table th {
     background: var(--ink);
-    color: var(--sand);
+    color: var(--bg);
     padding: 8px 10px;
     text-align: right;
     font-size: 11px;

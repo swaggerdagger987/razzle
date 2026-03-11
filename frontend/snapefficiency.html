@@ -25,18 +25,18 @@
   .se-header h1 { font-family: var(--font-display); font-size: 32px; color: var(--ink); margin: 0 0 4px; }
   .se-header .se-subtitle { font-family: var(--font-hand); font-size: 20px; color: var(--ink-light); }
   .se-controls { display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
-  .se-controls select { font-family: var(--font-mono); font-size: 13px; padding: 6px 10px; border: 2px solid var(--ink); border-radius: 4px; background: var(--card); }
+  .se-controls select { font-family: var(--font-mono); font-size: 13px; padding: 6px 10px; border: 2px solid var(--ink); border-radius: 4px; background: var(--bg-card); }
   .se-controls .pos-tabs { display: flex; gap: 4px; }
-  .se-controls .pos-tab { font-family: var(--font-mono); font-size: 12px; padding: 5px 12px; border: 2px solid var(--ink); border-radius: 4px; background: var(--card); cursor: pointer; font-weight: 700; }
-  .se-controls .pos-tab.active { background: var(--ink); color: var(--sand); }
-  .se-export { font-family: var(--font-mono); font-size: 12px; padding: 5px 14px; border: 2px solid var(--ink); border-radius: 4px; background: var(--card); cursor: pointer; font-weight: 700; }
-  .se-export:hover { background: var(--ink); color: var(--sand); }
+  .se-controls .pos-tab { font-family: var(--font-mono); font-size: 12px; padding: 5px 12px; border: 2px solid var(--ink); border-radius: 4px; background: var(--bg-card); cursor: pointer; font-weight: 700; }
+  .se-controls .pos-tab.active { background: var(--ink); color: var(--bg); }
+  .se-export { font-family: var(--font-mono); font-size: 12px; padding: 5px 14px; border: 2px solid var(--ink); border-radius: 4px; background: var(--bg-card); cursor: pointer; font-weight: 700; }
+  .se-export:hover { background: var(--ink); color: var(--bg); }
   .se-loading { text-align: center; font-family: var(--font-hand); font-size: 18px; color: var(--ink-light); padding: 60px 0; }
 
-  .se-card { background: var(--card); border: 3px solid var(--ink); border-radius: 10px; box-shadow: 4px 4px 0 var(--ink); overflow: hidden; }
-  .se-card-header { font-family: var(--font-display); font-size: 18px; padding: 10px 16px; background: var(--ink); color: var(--sand); }
+  .se-card { background: var(--bg-card); border: 3px solid var(--ink); border-radius: 10px; box-shadow: 4px 4px 0 var(--ink); overflow: hidden; }
+  .se-card-header { font-family: var(--font-display); font-size: 18px; padding: 10px 16px; background: var(--ink); color: var(--bg); }
   .se-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 12px; }
-  .se-table th { background: var(--sand); padding: 6px 8px; text-align: right; font-size: 10px; font-weight: 700; border-bottom: 2px solid var(--ink-faint); white-space: nowrap; }
+  .se-table th { background: var(--bg); padding: 6px 8px; text-align: right; font-size: 10px; font-weight: 700; border-bottom: 2px solid var(--ink-faint); white-space: nowrap; }
   .se-table th:first-child, .se-table th:nth-child(2), .se-table th:nth-child(3) { text-align: left; }
   .se-table td { padding: 6px 8px; text-align: right; border-bottom: 1px solid var(--ink-faint); }
   .se-table td:first-child, .se-table td:nth-child(2), .se-table td:nth-child(3) { text-align: left; }

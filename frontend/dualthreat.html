@@ -25,18 +25,18 @@
   .dt-header h1 { font-family: var(--font-display); font-size: 32px; color: var(--ink); margin: 0 0 4px; }
   .dt-header .dt-subtitle { font-family: var(--font-hand); font-size: 20px; color: var(--ink-light); }
   .dt-controls { display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
-  .dt-controls select { font-family: var(--font-mono); font-size: 13px; padding: 6px 10px; border: 2px solid var(--ink); border-radius: 4px; background: var(--card); }
+  .dt-controls select { font-family: var(--font-mono); font-size: 13px; padding: 6px 10px; border: 2px solid var(--ink); border-radius: 4px; background: var(--bg-card); }
   .dt-controls .pos-tabs { display: flex; gap: 4px; }
-  .dt-controls .pos-tab { font-family: var(--font-mono); font-size: 12px; padding: 5px 12px; border: 2px solid var(--ink); border-radius: 4px; background: var(--card); cursor: pointer; font-weight: 700; }
-  .dt-controls .pos-tab.active { background: var(--ink); color: var(--sand); }
-  .dt-export { font-family: var(--font-mono); font-size: 12px; padding: 5px 14px; border: 2px solid var(--ink); border-radius: 4px; background: var(--card); cursor: pointer; font-weight: 700; }
-  .dt-export:hover { background: var(--ink); color: var(--sand); }
+  .dt-controls .pos-tab { font-family: var(--font-mono); font-size: 12px; padding: 5px 12px; border: 2px solid var(--ink); border-radius: 4px; background: var(--bg-card); cursor: pointer; font-weight: 700; }
+  .dt-controls .pos-tab.active { background: var(--ink); color: var(--bg); }
+  .dt-export { font-family: var(--font-mono); font-size: 12px; padding: 5px 14px; border: 2px solid var(--ink); border-radius: 4px; background: var(--bg-card); cursor: pointer; font-weight: 700; }
+  .dt-export:hover { background: var(--ink); color: var(--bg); }
   .dt-loading { text-align: center; font-family: var(--font-hand); font-size: 18px; color: var(--ink-light); padding: 60px 0; }
 
-  .dt-card { background: var(--card); border: 3px solid var(--ink); border-radius: 10px; box-shadow: 4px 4px 0 var(--ink); overflow: hidden; }
-  .dt-card-header { font-family: var(--font-display); font-size: 18px; padding: 10px 16px; background: var(--ink); color: var(--sand); }
+  .dt-card { background: var(--bg-card); border: 3px solid var(--ink); border-radius: 10px; box-shadow: 4px 4px 0 var(--ink); overflow: hidden; }
+  .dt-card-header { font-family: var(--font-display); font-size: 18px; padding: 10px 16px; background: var(--ink); color: var(--bg); }
   .dt-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 12px; }
-  .dt-table th { background: var(--sand); padding: 6px 8px; text-align: right; font-size: 10px; font-weight: 700; border-bottom: 2px solid var(--ink-faint); white-space: nowrap; }
+  .dt-table th { background: var(--bg); padding: 6px 8px; text-align: right; font-size: 10px; font-weight: 700; border-bottom: 2px solid var(--ink-faint); white-space: nowrap; }
   .dt-table th:first-child, .dt-table th:nth-child(2), .dt-table th:nth-child(3) { text-align: left; }
   .dt-table td { padding: 6px 8px; text-align: right; border-bottom: 1px solid var(--ink-faint); }
   .dt-table td:first-child, .dt-table td:nth-child(2), .dt-table td:nth-child(3) { text-align: left; }

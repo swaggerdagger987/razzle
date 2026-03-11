@@ -5413,7 +5413,7 @@
         '<div class="lp-controls">' +
           searchWrapHTML('cmt-', 'add player...') +
           '<select class="lp-select" id="cmt-season">' + seasonOptions() + '</select>' +
-          '<button class="lp-pos-tab" id="cmt-compare-btn" style="background:var(--accent);color:#fff;">Compare</button>' +
+          '<button class="lp-pos-tab" id="cmt-compare-btn" style="background:var(--orange);color:#fff;">Compare</button>' +
         '</div>' +
         '<div id="cmt-chips" class="cmt-chips"></div>' +
         '<div id="cmt-content"><div class="lp-empty">add 2-8 players then click Compare</div></div>' +
@@ -8971,7 +8971,7 @@
       rounds.forEach(function(rd) {
         var hitPct = rd.hit_rate;
         var barColor = hitPct >= 50 ? '#2ec4b6' : hitPct >= 30 ? '#d97757' : '#d44040';
-        html += '<div style="background:var(--card); border:2px solid var(--ink); border-radius:6px; padding:8px 12px; min-width:100px; text-align:center;">' +
+        html += '<div style="background:var(--bg-card); border:2px solid var(--ink); border-radius:6px; padding:8px 12px; min-width:100px; text-align:center;">' +
           '<div style="font-family:var(--font-display); font-size:14px; color:var(--ink);">Round ' + rd.round + '</div>' +
           '<div style="margin:4px 0; height:6px; background:#eee; border-radius:3px;">' +
             '<div style="height:100%; width:' + hitPct + '%; background:' + barColor + '; border-radius:3px;"></div>' +
@@ -8994,7 +8994,7 @@
         var pd = positions[pos];
         if (!pd) return;
         var color = POS_COLORS[pos] || '#888';
-        html += '<div style="background:var(--card); border:2px solid var(--ink); border-radius:6px; padding:8px 12px; min-width:90px; text-align:center; border-left:4px solid ' + color + ';">' +
+        html += '<div style="background:var(--bg-card); border:2px solid var(--ink); border-radius:6px; padding:8px 12px; min-width:90px; text-align:center; border-left:4px solid ' + color + ';">' +
           '<div style="font-family:var(--font-display); font-size:14px; color:' + color + ';">' + pos + '</div>' +
           '<div style="font-family:var(--font-mono); font-size:12px;">' + pd.total + ' drafted</div>' +
           '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' +

@@ -56,7 +56,7 @@
     flex-wrap: wrap;
   }
   .db-top5-card {
-    background: var(--card);
+    background: var(--bg-card);
     border: 3px solid var(--ink);
     border-radius: 12px;
     box-shadow: 4px 4px 0 var(--ink);
@@ -83,7 +83,7 @@
   .db-top5-tv {
     font-family: var(--font-display);
     font-size: 22px;
-    color: var(--terracotta);
+    color: var(--orange);
   }
   .db-top5-meta {
     font-family: var(--font-mono);
@@ -101,7 +101,7 @@
 
   /* Section cards */
   .db-section {
-    background: var(--card);
+    background: var(--bg-card);
     border: 3px solid var(--ink);
     border-radius: 14px;
     box-shadow: 4px 4px 0 var(--ink);
@@ -182,7 +182,7 @@
   }
   .db-chip.up { background: rgba(46,196,182,0.12); color: var(--rb); border-color: var(--rb); }
   .db-chip.down { background: rgba(212,64,64,0.12); color: #d44040; border-color: #d44040; }
-  .db-chip.tv { background: rgba(217,119,87,0.12); color: var(--terracotta); border-color: var(--terracotta); }
+  .db-chip.tv { background: rgba(217,119,87,0.12); color: var(--orange); border-color: var(--orange); }
   .db-chip.ppg { background: rgba(91,127,255,0.12); color: var(--qb); border-color: var(--qb); }
 
   /* Scarcity bars */
@@ -232,7 +232,7 @@
     margin-bottom: 24px;
   }
   .db-trend-card {
-    background: var(--card);
+    background: var(--bg-card);
     border: 3px solid var(--ink);
     border-radius: 12px;
     box-shadow: 4px 4px 0 var(--ink);
@@ -271,12 +271,12 @@
     padding: 6px 16px;
     border: 2px solid var(--ink);
     border-radius: 8px;
-    background: var(--card);
+    background: var(--bg-card);
     color: var(--ink);
     cursor: pointer;
     box-shadow: 2px 2px 0 var(--ink);
   }
-  .db-export-btn:hover { background: var(--terracotta); color: white; }
+  .db-export-btn:hover { background: var(--orange); color: white; }
 
   /* Loading */
   .db-loading {
@@ -345,7 +345,7 @@
   </div>
 
   <div class="db-export" style="display:flex; justify-content:center; align-items:center; gap:12px;">
-    <select id="season-select" style="font-family:var(--font-mono); font-size:13px; padding:6px 10px; border:3px solid var(--ink); border-radius:6px; background:var(--card); color:var(--ink);"></select>
+    <select id="season-select" style="font-family:var(--font-mono); font-size:13px; padding:6px 10px; border:3px solid var(--ink); border-radius:6px; background:var(--bg-card); color:var(--ink);"></select>
     <button class="db-export-btn" id="export-btn">Export PNG</button>
   </div>
 
@@ -622,14 +622,14 @@
     // Empty 4th slot with link to tools
     html += '<div class="db-section">';
     html += '<div class="db-section-header scarcity"><span class="db-icon">&#x1F527;</span> Quick Links</div>';
-    html += '<div class="db-row"><a href="/tradefinder.html" style="color:var(--terracotta);">Trade Finder</a></div>';
-    html += '<div class="db-row"><a href="/stocks.html" style="color:var(--terracotta);">Stock Watch</a></div>';
-    html += '<div class="db-row"><a href="/buysell.html" style="color:var(--terracotta);">Buy Low / Sell High</a></div>';
-    html += '<div class="db-row"><a href="/cheatsheet.html" style="color:var(--terracotta);">Draft Cheat Sheet</a></div>';
-    html += '<div class="db-row"><a href="/auction.html" style="color:var(--terracotta);">Auction Values</a></div>';
-    html += '<div class="db-row"><a href="/rosterbuilder.html" style="color:var(--terracotta);">Roster Builder</a></div>';
-    html += '<div class="db-row"><a href="/reportcard.html" style="color:var(--terracotta);">Report Cards</a></div>';
-    html += '<div class="db-row"><a href="/tools.html" style="color:var(--terracotta);">All Tools &rarr;</a></div>';
+    html += '<div class="db-row"><a href="/tradefinder.html" style="color:var(--orange);">Trade Finder</a></div>';
+    html += '<div class="db-row"><a href="/stocks.html" style="color:var(--orange);">Stock Watch</a></div>';
+    html += '<div class="db-row"><a href="/buysell.html" style="color:var(--orange);">Buy Low / Sell High</a></div>';
+    html += '<div class="db-row"><a href="/cheatsheet.html" style="color:var(--orange);">Draft Cheat Sheet</a></div>';
+    html += '<div class="db-row"><a href="/auction.html" style="color:var(--orange);">Auction Values</a></div>';
+    html += '<div class="db-row"><a href="/rosterbuilder.html" style="color:var(--orange);">Roster Builder</a></div>';
+    html += '<div class="db-row"><a href="/reportcard.html" style="color:var(--orange);">Report Cards</a></div>';
+    html += '<div class="db-row"><a href="/tools.html" style="color:var(--orange);">All Tools &rarr;</a></div>';
     html += '</div>';
 
     grid.innerHTML = html;

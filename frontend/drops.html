@@ -25,21 +25,21 @@
   .dr-header h1 { font-family: var(--font-display); font-size: 32px; color: var(--ink); margin: 0 0 4px; }
   .dr-header .dr-subtitle { font-family: var(--font-hand); font-size: 20px; color: var(--ink-light); }
   .dr-controls { display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
-  .dr-controls select { font-family: var(--font-mono); font-size: 13px; padding: 6px 10px; border: 2px solid var(--ink); border-radius: 4px; background: var(--card); }
+  .dr-controls select { font-family: var(--font-mono); font-size: 13px; padding: 6px 10px; border: 2px solid var(--ink); border-radius: 4px; background: var(--bg-card); }
   .dr-controls .pos-tabs { display: flex; gap: 4px; }
-  .dr-controls .pos-tab { font-family: var(--font-mono); font-size: 12px; padding: 5px 12px; border: 2px solid var(--ink); border-radius: 4px; background: var(--card); cursor: pointer; font-weight: 700; }
-  .dr-controls .pos-tab.active { background: var(--ink); color: var(--sand); }
-  .dr-export { font-family: var(--font-mono); font-size: 12px; padding: 5px 14px; border: 2px solid var(--ink); border-radius: 4px; background: var(--card); cursor: pointer; font-weight: 700; }
-  .dr-export:hover { background: var(--ink); color: var(--sand); }
+  .dr-controls .pos-tab { font-family: var(--font-mono); font-size: 12px; padding: 5px 12px; border: 2px solid var(--ink); border-radius: 4px; background: var(--bg-card); cursor: pointer; font-weight: 700; }
+  .dr-controls .pos-tab.active { background: var(--ink); color: var(--bg); }
+  .dr-export { font-family: var(--font-mono); font-size: 12px; padding: 5px 14px; border: 2px solid var(--ink); border-radius: 4px; background: var(--bg-card); cursor: pointer; font-weight: 700; }
+  .dr-export:hover { background: var(--ink); color: var(--bg); }
   .dr-loading { text-align: center; font-family: var(--font-hand); font-size: 18px; color: var(--ink-light); padding: 60px 0; }
 
   .dr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-  .dr-card { background: var(--card); border: 3px solid var(--ink); border-radius: 10px; box-shadow: 4px 4px 0 var(--ink); overflow: hidden; }
-  .dr-card-header { font-family: var(--font-display); font-size: 18px; padding: 10px 16px; color: var(--sand); }
+  .dr-card { background: var(--bg-card); border: 3px solid var(--ink); border-radius: 10px; box-shadow: 4px 4px 0 var(--ink); overflow: hidden; }
+  .dr-card-header { font-family: var(--font-display); font-size: 18px; padding: 10px 16px; color: var(--bg); }
   .dr-card-header.sure { background: #166534; }
   .dr-card-header.butter { background: #991b1b; }
   .dr-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 12px; }
-  .dr-table th { background: var(--sand); padding: 6px 8px; text-align: right; font-size: 10px; font-weight: 700; border-bottom: 2px solid var(--ink-faint); white-space: nowrap; }
+  .dr-table th { background: var(--bg); padding: 6px 8px; text-align: right; font-size: 10px; font-weight: 700; border-bottom: 2px solid var(--ink-faint); white-space: nowrap; }
   .dr-table th:first-child, .dr-table th:nth-child(2), .dr-table th:nth-child(3) { text-align: left; }
   .dr-table td { padding: 6px 8px; text-align: right; border-bottom: 1px solid var(--ink-faint); }
   .dr-table td:first-child, .dr-table td:nth-child(2), .dr-table td:nth-child(3) { text-align: left; }
