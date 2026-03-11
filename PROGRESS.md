@@ -1,5 +1,18 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 61 — QA + UX Audit Fixes for Phases 56-60 (COMPLETE)
+
+**Exit Criterion MET**: All HIGH findings fixed. Context menu rewritten to use data attributes + _ctxMenuAction() switch (no inline JS strings). clipboard.writeText wrapped in try/catch. Separator consistent across modes. Summary label "page avg" with tooltip. Escape clears highlights. Context menu "Clear All Highlights" option.
+
+### Phase 61 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Context menu JS injection fix | DONE | data-action attributes + _ctxMenuAction switch, _ctxMenuData var, CSS.escape for querySelector |
+| 2 | clipboard.writeText error handling | DONE | try/catch + .then/.catch, "copy failed" toast |
+| 3 | Context menu separator for college mode | DONE | Separator moved outside NFL conditional |
+| 4 | Summary label + clear highlights UX | DONE | "page avg" label, tooltip, Escape key, "Clear All Highlights" in context menu |
+
 ## Previous Phase: Phase 60 — Screener Context Menu (COMPLETE)
 
 **Exit Criterion MET**: Right-clicking a player row shows a context menu with quick actions (View Profile, Compare, Watchlist, Pin, Highlight, Copy Name). DESIGN.md styled. Viewport-clamped. Dismissed on click elsewhere. Dynamic labels based on player state.

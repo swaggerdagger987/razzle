@@ -1663,9 +1663,36 @@ function renderProspectTable() {
 })();
 
 // ─── Context menu ────────────────────────────────────────────────
+var _ctxMenuData = null; // Stores {playerId, pName, pos, team} for current menu
+
 function hideContextMenu() {
   var menu = document.getElementById("screenerContextMenu");
   if (menu) menu.remove();
+  _ctxMenuData = null;
+}
+
+function _ctxMenuAction(action) {
+  if (!_ctxMenuData) return;
+  var d = _ctxMenuData;
+  switch (action) {
+    case "profile": openPlayerProfile(d.playerId); break;
+    case "compare": togglePlayerSelect(d.playerId, !state.selectedPlayers.some(function(p) { return p.player_id === d.playerId; })); break;
+    case "watchlist": toggleWatchlistPlayer(d.playerId, d.pName, d.pos, d.team, state.universe); break;
+    case "pin": togglePinPlayer(d.playerId); break;
+    case "highlight":
+      var r = document.querySelector('tr[data-player-id="' + CSS.escape(d.playerId) + '"]');
+      if (r) r.classList.toggle("row-highlighted");
+      break;
+    case "clear-highlights":
+      document.querySelectorAll(".row-highlighted").forEach(function(el) { el.classList.remove("row-highlighted"); });
+      _showToast("highlights cleared");
+      break;
+    case "copy":
+      try { navigator.clipboard.writeText(d.pName).then(function() { _showToast("copied"); }).catch(function() { _showToast("copy failed"); }); }
+      catch(e) { _showToast("copy failed"); }
+      break;
+  }
+  hideContextMenu();
 }
 
 (function() {
@@ -1686,54 +1713,58 @@ function hideContextMenu() {
     var playerId = tr.dataset.playerId;
     if (!playerId) return;
 
-    // Find player data
     var player = state.items.find(function(p) { return (p.player_id || p.player_name) === playerId; });
     if (!player) return;
 
-    var pName = player.full_name || player.player_name || "";
-    var pos = (player.position || "").toUpperCase();
-    var team = player.team || player.school || "";
+    _ctxMenuData = {
+      playerId: playerId,
+      pName: player.full_name || player.player_name || "",
+      pos: (player.position || "").toUpperCase(),
+      team: player.team || player.school || ""
+    };
 
     var menu = document.createElement("div");
     menu.id = "screenerContextMenu";
     menu.className = "screener-context-menu";
 
     var items = [];
-    // View profile
     if (state.universe === "nfl") {
-      items.push({ icon: "👤", label: "View Profile", action: "openPlayerProfile('" + escapeAttr(playerId) + "')" });
+      items.push({ icon: "👤", label: "View Profile", action: "profile" });
     }
-    // Compare
     var isSelected = state.selectedPlayers.some(function(p) { return p.player_id === playerId; });
-    items.push({ icon: isSelected ? "☑" : "☐", label: isSelected ? "Remove from Compare" : "Add to Compare", action: "togglePlayerSelect('" + escapeAttr(playerId) + "', " + !isSelected + "); hideContextMenu()" });
-    // Watchlist
+    items.push({ icon: isSelected ? "☑" : "☐", label: isSelected ? "Remove from Compare" : "Add to Compare", action: "compare" });
     var starred = isOnWatchlist(playerId);
-    items.push({ icon: starred ? "★" : "☆", label: starred ? "Remove from Watchlist" : "Add to Watchlist", action: "toggleWatchlistPlayer('" + escapeAttr(playerId) + "', '" + escapeAttr(pName) + "', '" + escapeAttr(pos) + "', '" + escapeAttr(team) + "', '" + state.universe + "'); hideContextMenu()" });
-
+    items.push({ icon: starred ? "★" : "☆", label: starred ? "Remove from Watchlist" : "Add to Watchlist", action: "watchlist" });
     if (state.universe === "nfl") {
-      // Pin
       var pinned = isPlayerPinned(playerId);
-      items.push({ icon: "📌", label: pinned ? "Unpin Player" : "Pin to Top", action: "togglePinPlayer('" + escapeAttr(playerId) + "'); hideContextMenu()" });
-      // Separator + highlight
-      items.push({ sep: true });
+      items.push({ icon: "📌", label: pinned ? "Unpin Player" : "Pin to Top", action: "pin" });
     }
-    // Highlight
-    items.push({ icon: "🖍", label: "Toggle Highlight", action: "(function(){ var r=document.querySelector('tr[data-player-id=\"" + escapeAttr(playerId) + "\"]'); if(r) r.classList.toggle('row-highlighted'); hideContextMenu(); })()" });
-    // Copy name
-    items.push({ icon: "📋", label: "Copy Name", action: "navigator.clipboard.writeText('" + escapeAttr(pName) + "'); _showToast('copied'); hideContextMenu()" });
+    items.push({ sep: true });
+    items.push({ icon: "🖍", label: "Toggle Highlight", action: "highlight" });
+    var hasHighlights = document.querySelectorAll(".row-highlighted").length > 0;
+    if (hasHighlights) {
+      items.push({ icon: "✕", label: "Clear All Highlights", action: "clear-highlights" });
+    }
+    items.push({ icon: "📋", label: "Copy Name", action: "copy" });
 
     var html = "";
     for (var i = 0; i < items.length; i++) {
       if (items[i].sep) {
         html += '<div class="ctx-sep"></div>';
       } else {
-        html += '<div class="ctx-item" onclick="' + items[i].action + '"><span class="ctx-icon">' + items[i].icon + '</span>' + escapeHtml(items[i].label) + '</div>';
+        html += '<div class="ctx-item" data-action="' + items[i].action + '"><span class="ctx-icon">' + items[i].icon + '</span>' + escapeHtml(items[i].label) + '</div>';
       }
     }
     menu.innerHTML = html;
+
+    // Event delegation for menu items
+    menu.addEventListener("click", function(ev) {
+      var item = ev.target.closest(".ctx-item");
+      if (item && item.dataset.action) _ctxMenuAction(item.dataset.action);
+    });
+
     document.body.appendChild(menu);
 
-    // Position: keep within viewport
     var x = e.clientX, y = e.clientY;
     var mw = menu.offsetWidth, mh = menu.offsetHeight;
     if (x + mw > window.innerWidth) x = window.innerWidth - mw - 8;
@@ -3219,7 +3250,7 @@ function renderSummaryBar() {
     }
     const avg = vals.reduce((a, b) => a + b, 0) / vals.length;
     const dec = col.decimals != null ? col.decimals : 1;
-    html += `<td><span class="summary-label">avg</span><span class="summary-val">${avg.toFixed(dec)}</span></td>`;
+    html += `<td title="Average of ${n} displayed rows"><span class="summary-label">page avg</span><span class="summary-val">${avg.toFixed(dec)}</span></td>`;
   }
   html += '</tr>';
   tfoot.innerHTML = html;
@@ -7859,6 +7890,14 @@ document.addEventListener("keydown", function(e) {
     }
     if (isInputFocused()) {
       document.activeElement.blur();
+      e.preventDefault();
+      return;
+    }
+    // Clear all row highlights
+    var highlighted = document.querySelectorAll(".row-highlighted");
+    if (highlighted.length) {
+      highlighted.forEach(function(el) { el.classList.remove("row-highlighted"); });
+      _showToast("highlights cleared");
       e.preventDefault();
       return;
     }
