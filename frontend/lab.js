@@ -1156,7 +1156,7 @@ function buildGroupHeaderRow(cols) {
   let first = true;
   for (const g of groups) {
     const sepCls = first ? "" : " group-sep";
-    html += `<th colspan="${g.span}" class="${sepCls}">${g.name}</th>`;
+    html += `<th colspan="${g.span}" class="${sepCls}" style="cursor:pointer;" onclick="toggleColumnGroup('${g.name}')" title="Click to toggle all ${g.name} columns">${g.name}</th>`;
     first = false;
   }
   html += '<th style="width:32px;"></th>'; // spacer for "+" column
@@ -2333,6 +2333,38 @@ function renderColumnPicker() {
     html += `</div>`;
   }
   container.innerHTML = html;
+}
+
+function toggleColumnGroup(groupName) {
+  const colDefs = isProspectView() ? PROSPECT_COLUMNS : state.universe === "college" ? COLLEGE_COLUMNS : COLUMNS;
+  const colArray = isProspectView() ? "prospectColumns" : state.universe === "college" ? "collegeColumns" : "visibleColumns";
+  // Find all columns in this group
+  const groupCols = Object.entries(colDefs).filter(([k, c]) => c.group === groupName).map(([k]) => k);
+  if (!groupCols.length) return;
+  // Check if most are already visible
+  const visibleCount = groupCols.filter(k => state[colArray].includes(k)).length;
+  const shouldRemove = visibleCount > groupCols.length / 2;
+  if (shouldRemove) {
+    // Remove all group columns
+    state[colArray] = state[colArray].filter(k => !groupCols.includes(k));
+    _showToast(groupName + " columns hidden");
+  } else {
+    // Add all group columns in definition order
+    const allKeys = Object.keys(colDefs);
+    for (const key of groupCols) {
+      if (!state[colArray].includes(key)) {
+        const idx = allKeys.indexOf(key);
+        let insertAt = state[colArray].length;
+        for (let i = 0; i < state[colArray].length; i++) {
+          if (allKeys.indexOf(state[colArray][i]) > idx) { insertAt = i; break; }
+        }
+        state[colArray].splice(insertAt, 0, key);
+      }
+    }
+    _showToast(groupName + " columns shown");
+  }
+  renderTable();
+  saveStateToURL();
 }
 
 function filterColumnPicker(query) {

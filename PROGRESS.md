@@ -10,6 +10,16 @@
 |---|------|--------|-------|
 | 1 | Arrow key page navigation | DONE | ArrowLeft/ArrowRight in keydown, bounds check, toast, shortcut ref |
 
+## Previous Phase: Phase 85 — Screener Group Header Click to Toggle (COMPLETE)
+
+**Exit Criterion MET**: Click group name in column group header to toggle all columns in that group. Visibility ratio check, definition-order insertion, toast feedback.
+
+### Phase 85 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Group header toggle | DONE | toggleColumnGroup(), visibility ratio, definition-order insertion, cursor pointer |
+
 ## Previous Phase: Phase 84 — Screener Smart Filter Presets (COMPLETE)
 
 **Exit Criterion MET**: Smart Filters dropdown with 6 presets. Backend post-query filtering for derived stats. Toast feedback.
