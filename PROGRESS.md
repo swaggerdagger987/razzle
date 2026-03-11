@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 57 — Screener Column Group Headers (COMPLETE)
+
+**Exit Criterion MET**: Screener table shows a spanning group header row above column headers, displaying category names (Fantasy, Passing, Rushing, Receiving, Efficiency, etc.) that span their member columns. G key toggles on/off. Toolbar "Groups" button with blue active state. On by default. State persists in localStorage (razzle_group_headers). URL serialization (?groups=0 when off). Works in NFL, college, and prospect modes. Hidden when fewer than 2 distinct groups visible. Dense mode support.
+
+### Phase 57 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Column group header row with toggle and persistence | DONE | buildGroupHeaderRow(), state.groupHeaders, toggleGroupHeaders(), G shortcut, Groups btn, ?groups=0 URL, group-header-row CSS, group-sep borders |
+
 ## Previous Phase: Phase 56 — Screener Data Density Toggle (COMPLETE)
 
 **Exit Criterion MET**: Screener table has a togglable compact/density mode. D key toggles between comfortable (default) and compact mode. Compact mode reduces row height (26px from 36px), font size (11px from 13px), and padding (3px 8px from 7px 14px) to show ~50% more rows. Toolbar "Dense" button with blue active state. State persists in localStorage. URL serialization (?dense=1). Virtual scroll row height dynamic.

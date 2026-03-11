@@ -800,6 +800,7 @@ const state = {
   heatColors: false, // percentile heat coloring toggle
   density: (function() { try { return localStorage.getItem("razzle_density") === "1"; } catch(e) { return false; } })(), // compact density mode
   tierBreaks: (function() { try { return localStorage.getItem("razzle_tier_breaks") === "1"; } catch(e) { return false; } })(), // tier break dividers
+  groupHeaders: (function() { try { return localStorage.getItem("razzle_group_headers") !== "0"; } catch(e) { return true; } })(), // column group headers (on by default)
   tagFilter: false, // show only tagged players
   pinnedPlayers: (function() {
     try { return JSON.parse(localStorage.getItem('razzle_pinned_players')) || []; }
@@ -1124,12 +1125,49 @@ function renderNFLTable() {
   }
 }
 
+function buildGroupHeaderRow(cols) {
+  if (!state.groupHeaders) return "";
+  // Build consecutive group spans from visible columns
+  const groups = [];
+  let lastGroup = null;
+  for (const key of cols) {
+    const col = getColumnDef(key);
+    if (!col) continue;
+    const g = col.group || "Other";
+    if (g === lastGroup) {
+      groups[groups.length - 1].span++;
+    } else {
+      groups.push({ name: g, span: 1 });
+      lastGroup = g;
+    }
+  }
+  // Only show if 2+ distinct groups
+  const uniqueGroups = new Set(groups.map(g => g.name));
+  if (uniqueGroups.size < 2) return "";
+  // Utility columns: star + checkbox + (pin if NFL) = 2 or 3, plus Player column
+  const utilCols = state.universe === "nfl" ? 3 : 2;
+  let html = '<tr class="group-header-row">';
+  html += `<th class="group-cell-player" colspan="${utilCols + 1}"></th>`;
+  let first = true;
+  for (const g of groups) {
+    const sepCls = first ? "" : " group-sep";
+    html += `<th colspan="${g.span}" class="${sepCls}">${g.name}</th>`;
+    first = false;
+  }
+  html += "</tr>";
+  return html;
+}
+
 function renderTableHead() {
   const thead = document.getElementById("tableHead");
   const cols = getActiveColumns();
 
   const nameKey = (isProspectView() || state.universe === "college") ? "player_name" : "full_name";
-  let html = '<tr><th style="width:28px; text-align:center; padding:8px 4px;" title="Watchlist">&#9733;</th><th style="width:30px; text-align:center; padding:8px 6px;">&#9744;</th>';
+
+  // Group header row
+  let html = buildGroupHeaderRow(cols);
+
+  html += '<tr><th style="width:28px; text-align:center; padding:8px 4px;" title="Watchlist">&#9733;</th><th style="width:30px; text-align:center; padding:8px 6px;">&#9744;</th>';
   if (state.universe === "nfl") {
     const pinCount = state.pinnedPlayers.length;
     const pinTitle = pinCount > 0 ? `${pinCount} pinned — click to clear` : "Pin players to top";
@@ -2107,6 +2145,7 @@ function saveStateToURL() {
   if (state.heatColors) params.set("heat", "1");
   if (state.tierBreaks) params.set("tiers", "1");
   if (state.density) params.set("dense", "1");
+  if (!state.groupHeaders) params.set("groups", "0");
   if (state.tagFilter) params.set("tagged", "1");
   if (state.pinnedPlayers.length) params.set("pins", state.pinnedPlayers.join(","));
 
@@ -2177,6 +2216,9 @@ function loadStateFromURL() {
   }
   if (params.has("dense")) {
     state.density = params.get("dense") === "1";
+  }
+  if (params.has("groups")) {
+    state.groupHeaders = params.get("groups") !== "0";
   }
   if (params.has("tagged")) {
     state.tagFilter = params.get("tagged") === "1";
@@ -2255,6 +2297,18 @@ function loadStateFromURL() {
       densBtn.classList.remove("active");
       densBtn.style.borderColor = "";
       document.body.classList.remove("dense-mode");
+    }
+  }
+
+  // Sync group headers button
+  const grpBtn = document.getElementById("groupHeadersBtn");
+  if (grpBtn) {
+    if (state.groupHeaders) {
+      grpBtn.classList.add("active");
+      grpBtn.style.borderColor = "var(--blue)";
+    } else {
+      grpBtn.classList.remove("active");
+      grpBtn.style.borderColor = "";
     }
   }
 
@@ -2986,6 +3040,19 @@ function toggleDensity() {
   }
   document.body.classList.toggle("dense-mode", state.density);
   renderTable();
+  saveStateToURL();
+}
+
+// ─── Column group headers toggle ─────────────────────────────────
+function toggleGroupHeaders() {
+  state.groupHeaders = !state.groupHeaders;
+  try { localStorage.setItem("razzle_group_headers", state.groupHeaders ? "1" : "0"); } catch(e) {}
+  const btn = document.getElementById("groupHeadersBtn");
+  if (btn) {
+    btn.classList.toggle("active", state.groupHeaders);
+    btn.style.borderColor = state.groupHeaders ? "var(--blue)" : "";
+  }
+  renderTableHead();
   saveStateToURL();
 }
 
@@ -7707,6 +7774,12 @@ document.addEventListener("keydown", function(e) {
     return;
   }
 
+  // G: toggle column group headers
+  if (e.key === "g" || e.key === "G") {
+    toggleGroupHeaders();
+    return;
+  }
+
   // N: toggle notes column
   if (e.key === "n" || e.key === "N") {
     toggleColumn("notes", !state.visibleColumns.includes("notes"));
@@ -7754,6 +7827,7 @@ function toggleShortcutRef() {
           ${shortcutRow("H", "Heat colors (percentiles)")}
           ${shortcutRow("T", "Tier break dividers")}
           ${shortcutRow("D", "Compact density mode")}
+          ${shortcutRow("G", "Column group headers")}
           ${shortcutRow("N", "Toggle notes column")}
           ${shortcutRow("P", "Clear pinned players")}
           ${shortcutRow("?", "This reference")}

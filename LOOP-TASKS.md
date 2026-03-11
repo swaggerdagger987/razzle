@@ -1,16 +1,16 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 56 (Screener Data Density Toggle)
-## Phase 56: Screener Data Density Toggle
-**Exit Criterion**: Screener table has a togglable compact/density mode. D key toggles between comfortable (default) and compact mode. Compact mode reduces row height, font size, and padding to show ~50% more rows on screen. Toolbar button with active state. State persists in localStorage. URL serialization (?dense=1). Bloomberg-terminal aesthetic in compact mode.
+- Phase: 57 (Screener Column Group Headers)
+## Phase 57: Screener Column Group Headers
+**Exit Criterion**: Screener table shows a spanning group header row above column headers, displaying category names (Fantasy, Passing, Rushing, Receiving, etc.) that span their member columns. G key toggles on/off. Toolbar "Groups" button with active state. On by default. State persists in localStorage. URL serialization (?groups=0 when off). Works in NFL, college, and prospect modes. Hidden when fewer than 2 distinct groups are visible.
 
 - Task 1: PASS
 - Stage: COMPLETE
 - Next: Phase gate
 
-### Task 1: Density toggle with compact table mode
+### Task 1: Column group header row with toggle and persistence
 **Status**: PASS
 **Attempts**: 1
-**Acceptance**: D key toggles compact mode. Toolbar "Dense" button shows active state when on. Compact mode: row height 26px (from 36px), font-size 11px (from 13px), tighter padding 3px 8px (from 7px 14px). State persists in localStorage (razzle_density). URL param ?dense=1. Shortcut help updated. Works with all existing features (heat colors, tier breaks, pins, tags, notes). Virtual scroll row height dynamic via getVScrollRowHeight().
-**Result**: Added density state to state object, toggleDensity() function, dense-mode CSS class on body, toolbar button, D keyboard shortcut, URL param, shortcut reference entry, init sync, and dynamic virtual scroll row height.
+**Acceptance**: Group header row spans consecutive columns of the same group. G key toggles. Toolbar "Groups" button shows active state when on. On by default (localStorage razzle_group_headers). URL param ?groups=0 when off. Works in all three modes (NFL/college/prospect). Shortcut reference updated. Group separators with left border. Dense mode reduces group header padding/font. Player/utility columns merged into one spanning cell.
+**Result**: Added buildGroupHeaderRow() function computing consecutive group spans from visible columns, state.groupHeaders (default true), toggleGroupHeaders(), CSS for .group-header-row, toolbar button, G keyboard shortcut, URL param, shortcut reference entry, init sync.
