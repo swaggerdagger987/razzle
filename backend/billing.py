@@ -32,30 +32,29 @@ CANCEL_URL = "https://razzle.lol/agents"
 
 def initialize_subscriptions_table():
     """Create subscriptions table in users.db if it doesn't exist."""
-    conn = auth_module.get_users_conn()
-    conn.executescript("""
-        CREATE TABLE IF NOT EXISTS subscriptions (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER NOT NULL,
-            stripe_customer_id TEXT,
-            stripe_subscription_id TEXT,
-            plan TEXT DEFAULT 'free',
-            status TEXT DEFAULT 'inactive',
-            current_period_end TIMESTAMP,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (user_id) REFERENCES users(id)
-        );
-        CREATE INDEX IF NOT EXISTS idx_subscriptions_user ON subscriptions(user_id);
-        CREATE INDEX IF NOT EXISTS idx_subscriptions_customer ON subscriptions(stripe_customer_id);
-    """)
-    # Add stripe_customer_id to users table if not exists
-    try:
-        conn.execute("ALTER TABLE users ADD COLUMN stripe_customer_id TEXT")
-    except Exception:
-        logger.debug("stripe_customer_id column already exists or migration failed", exc_info=True)
-    conn.commit()
-    conn.close()
+    with auth_module.get_users_db() as conn:
+        conn.executescript("""
+            CREATE TABLE IF NOT EXISTS subscriptions (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                stripe_customer_id TEXT,
+                stripe_subscription_id TEXT,
+                plan TEXT DEFAULT 'free',
+                status TEXT DEFAULT 'inactive',
+                current_period_end TIMESTAMP,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users(id)
+            );
+            CREATE INDEX IF NOT EXISTS idx_subscriptions_user ON subscriptions(user_id);
+            CREATE INDEX IF NOT EXISTS idx_subscriptions_customer ON subscriptions(stripe_customer_id);
+        """)
+        # Add stripe_customer_id to users table if not exists
+        try:
+            conn.execute("ALTER TABLE users ADD COLUMN stripe_customer_id TEXT")
+        except Exception:
+            logger.debug("stripe_customer_id column already exists or migration failed", exc_info=True)
+        conn.commit()
     logger.info("Subscriptions table initialized")
 
 
@@ -89,24 +88,22 @@ def create_checkout_session(user: dict, interval: str = "year") -> dict:
 
 def _get_or_create_customer(user: dict) -> str:
     """Get existing Stripe customer ID or create new one."""
-    conn = auth_module.get_users_conn()
-    row = conn.execute("SELECT stripe_customer_id FROM users WHERE id = ?", (user["id"],)).fetchone()
-    if row and row["stripe_customer_id"]:
-        conn.close()
-        return row["stripe_customer_id"]
+    with auth_module.get_users_db() as conn:
+        row = conn.execute("SELECT stripe_customer_id FROM users WHERE id = ?", (user["id"],)).fetchone()
+        if row and row["stripe_customer_id"]:
+            return row["stripe_customer_id"]
 
-    # Create new customer
-    customer = stripe.Customer.create(
-        email=user["email"],
-        metadata={"razzle_user_id": str(user["id"])},
-    )
-    conn.execute(
-        "UPDATE users SET stripe_customer_id = ? WHERE id = ?",
-        (customer.id, user["id"]),
-    )
-    conn.commit()
-    conn.close()
-    return customer.id
+        # Create new customer
+        customer = stripe.Customer.create(
+            email=user["email"],
+            metadata={"razzle_user_id": str(user["id"])},
+        )
+        conn.execute(
+            "UPDATE users SET stripe_customer_id = ? WHERE id = ?",
+            (customer.id, user["id"]),
+        )
+        conn.commit()
+        return customer.id
 
 
 def handle_webhook(payload: bytes, sig_header: str) -> dict:
@@ -142,38 +139,36 @@ def _handle_checkout_completed(session):
 
     if not user_id:
         # Try to find user by customer_id
-        conn = auth_module.get_users_conn()
-        row = conn.execute("SELECT id FROM users WHERE stripe_customer_id = ?", (customer_id,)).fetchone()
-        conn.close()
-        if row:
-            user_id = str(row["id"])
+        with auth_module.get_users_db() as conn:
+            row = conn.execute("SELECT id FROM users WHERE stripe_customer_id = ?", (customer_id,)).fetchone()
+            if row:
+                user_id = str(row["id"])
+            else:
+                logger.error(f"Checkout completed but can't find user for customer {customer_id}")
+                return
+
+    with auth_module.get_users_db() as conn:
+        # Update user plan
+        conn.execute("UPDATE users SET plan = 'pro' WHERE id = ?", (int(user_id),))
+
+        # Upsert subscription record
+        existing = conn.execute(
+            "SELECT id FROM subscriptions WHERE user_id = ?", (int(user_id),)
+        ).fetchone()
+        if existing:
+            conn.execute("""
+                UPDATE subscriptions SET
+                    stripe_customer_id = ?, stripe_subscription_id = ?,
+                    plan = 'pro', status = 'active', updated_at = CURRENT_TIMESTAMP
+                WHERE user_id = ?
+            """, (customer_id, subscription_id, int(user_id)))
         else:
-            logger.error(f"Checkout completed but can't find user for customer {customer_id}")
-            return
+            conn.execute("""
+                INSERT INTO subscriptions (user_id, stripe_customer_id, stripe_subscription_id, plan, status)
+                VALUES (?, ?, ?, 'pro', 'active')
+            """, (int(user_id), customer_id, subscription_id))
 
-    conn = auth_module.get_users_conn()
-    # Update user plan
-    conn.execute("UPDATE users SET plan = 'pro' WHERE id = ?", (int(user_id),))
-
-    # Upsert subscription record
-    existing = conn.execute(
-        "SELECT id FROM subscriptions WHERE user_id = ?", (int(user_id),)
-    ).fetchone()
-    if existing:
-        conn.execute("""
-            UPDATE subscriptions SET
-                stripe_customer_id = ?, stripe_subscription_id = ?,
-                plan = 'pro', status = 'active', updated_at = CURRENT_TIMESTAMP
-            WHERE user_id = ?
-        """, (customer_id, subscription_id, int(user_id)))
-    else:
-        conn.execute("""
-            INSERT INTO subscriptions (user_id, stripe_customer_id, stripe_subscription_id, plan, status)
-            VALUES (?, ?, ?, 'pro', 'active')
-        """, (int(user_id), customer_id, subscription_id))
-
-    conn.commit()
-    conn.close()
+        conn.commit()
     logger.info(f"User {user_id} upgraded to pro (subscription {subscription_id})")
 
 
@@ -181,43 +176,40 @@ def _handle_subscription_deleted(subscription):
     """Downgrade user to free when subscription cancelled."""
     customer_id = subscription.get("customer")
 
-    conn = auth_module.get_users_conn()
-    row = conn.execute("SELECT id FROM users WHERE stripe_customer_id = ?", (customer_id,)).fetchone()
-    if row:
-        conn.execute("UPDATE users SET plan = 'free' WHERE id = ?", (row["id"],))
-        conn.execute("""
-            UPDATE subscriptions SET plan = 'free', status = 'cancelled', updated_at = CURRENT_TIMESTAMP
-            WHERE user_id = ?
-        """, (row["id"],))
-        conn.commit()
-        logger.info(f"User {row['id']} downgraded to free (subscription cancelled)")
-    conn.close()
+    with auth_module.get_users_db() as conn:
+        row = conn.execute("SELECT id FROM users WHERE stripe_customer_id = ?", (customer_id,)).fetchone()
+        if row:
+            conn.execute("UPDATE users SET plan = 'free' WHERE id = ?", (row["id"],))
+            conn.execute("""
+                UPDATE subscriptions SET plan = 'free', status = 'cancelled', updated_at = CURRENT_TIMESTAMP
+                WHERE user_id = ?
+            """, (row["id"],))
+            conn.commit()
+            logger.info(f"User {row['id']} downgraded to free (subscription cancelled)")
 
 
 def _handle_payment_failed(invoice):
     """Flag user when payment fails."""
     customer_id = invoice.get("customer")
 
-    conn = auth_module.get_users_conn()
-    row = conn.execute("SELECT id FROM users WHERE stripe_customer_id = ?", (customer_id,)).fetchone()
-    if row:
-        conn.execute("""
-            UPDATE subscriptions SET status = 'payment_failed', updated_at = CURRENT_TIMESTAMP
-            WHERE user_id = ?
-        """, (row["id"],))
-        conn.commit()
-        logger.warning(f"Payment failed for user {row['id']}")
-    conn.close()
+    with auth_module.get_users_db() as conn:
+        row = conn.execute("SELECT id FROM users WHERE stripe_customer_id = ?", (customer_id,)).fetchone()
+        if row:
+            conn.execute("""
+                UPDATE subscriptions SET status = 'payment_failed', updated_at = CURRENT_TIMESTAMP
+                WHERE user_id = ?
+            """, (row["id"],))
+            conn.commit()
+            logger.warning(f"Payment failed for user {row['id']}")
 
 
 def get_billing_status(user: dict) -> dict:
     """Get current billing status for a user."""
-    conn = auth_module.get_users_conn()
-    sub = conn.execute(
-        "SELECT * FROM subscriptions WHERE user_id = ? ORDER BY updated_at DESC LIMIT 1",
-        (user["id"],),
-    ).fetchone()
-    conn.close()
+    with auth_module.get_users_db() as conn:
+        sub = conn.execute(
+            "SELECT * FROM subscriptions WHERE user_id = ? ORDER BY updated_at DESC LIMIT 1",
+            (user["id"],),
+        ).fetchone()
 
     result = {
         "plan": user.get("plan", "free"),

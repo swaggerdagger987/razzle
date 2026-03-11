@@ -1,5 +1,25 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 131 — Platform: Backend Hardening + Agent Persona Depth (COMPLETE)
+
+**Exit Criterion MET**: Connection management fixed in auth.py and billing.py (context managers). All 6 agent personas deepened to 12 use cases each with data contracts, cross-agent triggers, failure modes, and free vs paid divergence.
+
+### Phase 131 Tasks (Platform Loop)
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Fix connection management in auth.py | DONE | Added get_users_db() context manager, refactored all 10 functions |
+| 2 | Fix connection management in billing.py | DONE | All 7 functions use get_users_db() context manager, zero manual conn.close() |
+| 3 | Fix connection management in server.py | DONE | Already handled — adapter connections in try/finally blocks |
+| 4 | Remove duplicate route definitions | DONE | Already resolved — only one aging_curves and one td_regression |
+| 5 | Deepen Razzle agent persona | DONE | 12 use cases, 126 lines, full depth standard (data contract, triggers, failure modes) |
+| 6 | Deepen all 5 specialist personas | DONE | Scout/Medical/Diplomat/Quant/Historian: 12 use cases each, 128-133 lines each |
+
+### Decisions Log
+- Agent animals assigned: Scout=Eagle, Medical=Owl, Diplomat=Bear, Quant=Fox, Historian=Elephant
+- Backend audit findings: live_data.py split and context managers for data layer were already done by Lab loop
+- Remaining backend audit items (caching, bootstrap async, structured logging) deferred to Phase 132+
+
 ## Previous Phase: Phase 130 — QA + UX Audit Fixes for Phases 126-130 (COMPLETE)
 
 **Exit Criterion MET**: 1 CRITICAL + 1 HIGH + MEDIUM findings fixed. 34 tests pass.
