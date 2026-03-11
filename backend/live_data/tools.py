@@ -64,7 +64,7 @@ def _fetch_featured_uncached():
 
             rows = conn.execute("""
                 SELECT c.player_name, c.position, c.school,
-                       d.draft_round, d.draft_pick, d.team as draft_team
+                       d.round, d.pick, d.team as draft_team
                 FROM combine_data c
                 LEFT JOIN draft_picks d
                     ON c.draft_year = d.season
@@ -72,7 +72,7 @@ def _fetch_featured_uncached():
                     AND c.position = d.position
                 WHERE c.draft_year = ?
                   AND c.position IN ('QB','RB','WR','TE')
-                ORDER BY COALESCE(d.draft_pick, 999) ASC, c.player_name ASC
+                ORDER BY COALESCE(d.pick, 999) ASC, c.player_name ASC
                 LIMIT 5
             """, (draft_year,)).fetchall()
 
