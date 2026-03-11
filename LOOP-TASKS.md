@@ -7,7 +7,7 @@
 
 - Task 1: PASS
 - Task 2: PASS
-- Task 3: PENDING
+- Task 3: PASS
 - Task 4: PENDING
 - Task 5: PENDING
 - Task 6: PENDING
@@ -26,8 +26,8 @@
 **Acceptance**: Clicking NFL → College → Prospects each immediately loads the correct data without touching the year dropdown.
 
 ### Task 3: Fix Target Premium panel — completely broken
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 **Acceptance**: Target Premium panel loads with data for all available seasons.
 
 ### Task 4: Fix Drop Rate Dashboard — completely broken

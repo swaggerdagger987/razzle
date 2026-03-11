@@ -139,7 +139,7 @@ def fetch_scoring_comparison(season=None, position=None, limit=40):
                     p.player_id, p.full_name, p.position, p.team,
                     p.headshot_url,
                     SUM(s.fantasy_points_ppr) as total_ppr,
-                    SUM(s.fantasy_points_half_ppr) as total_half,
+                    COALESCE(SUM(s.fantasy_points_half_ppr), SUM(s.fantasy_points_ppr) - 0.5 * SUM(s.receptions)) as total_half,
                     SUM(s.receptions) as total_rec,
                     COUNT(DISTINCT s.week) as games
                 FROM players p
@@ -243,14 +243,14 @@ def fetch_cheat_sheet(season=None, fmt="ppr"):
             if not season:
                 season = available_seasons[0] if available_seasons else _current_nfl_season()
 
-            # Select the right fantasy points column
-            pts_col = {
-                "ppr": "fantasy_points_ppr",
-                "half": "fantasy_points_half_ppr",
-                "std": "fantasy_points_ppr",  # fallback; compute std below
-            }.get(fmt, "fantasy_points_ppr")
+            # All formats use fantasy_points_ppr as base column.
+            # half_ppr column is NULL in the DB, so we compute from PPR:
+            #   Half-PPR = PPR - 0.5 * receptions
+            #   Standard = PPR - receptions
+            pts_col = "fantasy_points_ppr"
 
             use_std_calc = (fmt == "std")
+            use_half_calc = (fmt == "half")
 
             query = f"""
                 SELECT
@@ -282,9 +282,12 @@ def fetch_cheat_sheet(season=None, fmt="ppr"):
                 total_pts = r[5] or 0
                 total_rec = r[6] or 0
 
-                # Standard = PPR points - receptions (1 point per rec in PPR)
+                # Compute scoring format from PPR base:
+                # Standard = PPR - receptions, Half-PPR = PPR - 0.5 * receptions
                 if use_std_calc:
                     total_pts = total_pts - total_rec
+                elif use_half_calc:
+                    total_pts = total_pts - (0.5 * total_rec)
 
                 ppg = round(total_pts / games, 2)
                 age = r[4] or 25
@@ -2417,14 +2420,18 @@ def fetch_target_premium(season=None, position=None, limit=50):
 
             cursor.execute(f"""
                 SELECT p.gsis_id, p.full_name, p.position, p.team,
-                       s.targets, s.receptions, s.receiving_yards,
-                       s.receiving_air_yards, s.receiving_yards_after_catch,
-                       s.games
-                FROM player_season_stats s
-                JOIN players p ON p.gsis_id = s.player_id
-                WHERE s.season = ? AND p.fantasy_relevant = 1
+                       SUM(w.targets) as tot_targets,
+                       SUM(w.receptions) as tot_receptions,
+                       SUM(w.receiving_yards) as tot_rec_yards,
+                       SUM(w.receiving_air_yards) as tot_air_yards,
+                       SUM(w.receiving_yards_after_catch) as tot_yac,
+                       COUNT(DISTINCT w.week) as gp
+                FROM player_week_stats w
+                JOIN players p ON p.gsis_id = w.player_id
+                WHERE w.season = ? AND p.fantasy_relevant = 1
                 {pos_filter}
-                AND s.games >= 4 AND s.targets >= 20
+                GROUP BY p.gsis_id
+                HAVING gp >= 4 AND tot_targets >= 20
             """, params)
 
             all_adot = []
