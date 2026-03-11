@@ -432,6 +432,7 @@
     var currentPosition = '';
     var currentData = null;
     var seasonsLoaded = false;
+    var searchQuery = '';
     var sortState = {
       league_winners: { col: 'vorp', dir: -1 },
       replacement_level: { col: 'vorp', dir: 1 }
@@ -450,6 +451,7 @@
             '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
           '</div>' +
           '<select class="lp-select" id="lp-vorp-season"></select>' +
+          '<input class="lp-search" type="text" id="lp-vorp-search" placeholder="search player...">' +
         '</div>' +
         '<div class="vorp-thresholds" id="lp-vorp-thresholds"></div>' +
         '<div id="lp-vorp-body"><div class="lp-loading">calculating replacement value...</div></div>' +
@@ -527,6 +529,15 @@
       return html;
     }
 
+    function filterBySearch(players) {
+      if (!searchQuery) return players;
+      var q = searchQuery.toLowerCase();
+      return players.filter(function(p) {
+        return (p.full_name || '').toLowerCase().indexOf(q) !== -1 ||
+               (p.team || '').toLowerCase().indexOf(q) !== -1;
+      });
+    }
+
     function renderVorp(data) {
       currentData = data;
       var body = el.querySelector('#lp-vorp-body');
@@ -541,12 +552,15 @@
       });
       thRow.innerHTML = thtml;
 
-      if (!data.league_winners.length && !data.replacement_level.length) {
-        body.innerHTML = '<div class="lp-empty">no VORP data found</div>';
+      var winners = filterBySearch(data.league_winners || []);
+      var replacements = filterBySearch(data.replacement_level || []);
+
+      if (!winners.length && !replacements.length) {
+        body.innerHTML = '<div class="lp-empty">' + (searchQuery ? 'no players match "' + escapeHtml(searchQuery) + '"' : 'no VORP data found') + '</div>';
         return;
       }
 
-      body.innerHTML = buildTable(data.league_winners, 'league_winners') + buildTable(data.replacement_level, 'replacement_level');
+      body.innerHTML = buildTable(winners, 'league_winners') + buildTable(replacements, 'replacement_level');
 
       body.querySelectorAll('th[data-sort]').forEach(function(th) {
         th.addEventListener('click', function() {
@@ -602,6 +616,10 @@
       loadData();
     });
     seasonSel.addEventListener('change', function() { loadData(); });
+    el.querySelector('#lp-vorp-search').addEventListener('input', function(e) {
+      searchQuery = e.target.value.trim();
+      if (currentData) renderVorp(currentData);
+    });
 
     loadData();
   }});

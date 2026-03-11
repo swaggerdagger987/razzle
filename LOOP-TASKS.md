@@ -5,17 +5,18 @@
 ## Phase 42: UX Consistency & Features — Priority 3
 **Exit Criterion**: VORP has player search. Dynasty Rankings/Trade Values/VORP/Tiers share consistent layout. Trade Values has adjustable formula weights. Dynasty Rankings shows historical value progression.
 
-- Task 1: PENDING
+- Task 1: PASS
 - Task 2: PENDING
 - Task 3: PENDING
 - Task 4: PENDING
 - Stage: IN PROGRESS
-- Next: Task 1
+- Next: Task 2
 
 ### Task 1: Add player search to VORP panel
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 **Acceptance**: VORP panel has a search bar matching Trade Values design pattern.
+**Result**: Added searchQuery state, lp-search input, filterBySearch() function matching Trade Values pattern (name+team), client-side filtering in renderVorp, input event listener.
 
 ### Task 2: Standardize all ranking/value panel layouts
 **Status**: PENDING
