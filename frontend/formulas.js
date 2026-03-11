@@ -140,6 +140,134 @@ function renderSavedFormulas() {
     }).join("");
 }
 
+// ── Cloud sync (Pro+ feature) ──────────────────────────────────────
+
+/**
+ * On page load, fetch formulas from server and merge with localStorage.
+ * Server wins on name conflict. Only runs for logged-in Pro/Elite users.
+ * Called from lab.js after loadFormulas().
+ */
+function syncFormulasFromCloud() {
+  var token = localStorage.getItem("razzle_token");
+  if (!token) return;
+
+  // Check if user is Pro or Elite
+  if (typeof isPaidUser === "function" && !isPaidUser()) {
+    // Show upgrade hint in formula builder
+    _showCloudSyncHint(false);
+    return;
+  }
+
+  var base = (typeof API_BASE !== "undefined" ? API_BASE : "");
+  fetch(base + "/api/user/formulas", {
+    headers: { "Authorization": "Bearer " + token }
+  }).then(function(r) {
+    if (!r.ok) throw new Error("fetch failed");
+    return r.json();
+  }).then(function(data) {
+    var serverFormulas = data.formulas || [];
+    if (!serverFormulas.length) {
+      // No server formulas — push local to server
+      _pushAllFormulasToServer(token, base);
+      _showCloudSyncHint(true);
+      return;
+    }
+
+    // Merge: server wins on name conflict
+    var localFormulas = state.formulas || [];
+    var mergedMap = {};
+
+    // Add local formulas first
+    for (var i = 0; i < localFormulas.length; i++) {
+      mergedMap[localFormulas[i].name] = localFormulas[i];
+    }
+
+    // Server overwrites on name match
+    var serverCount = 0;
+    for (var j = 0; j < serverFormulas.length; j++) {
+      var sf = serverFormulas[j];
+      try {
+        var components = JSON.parse(sf.weights);
+        mergedMap[sf.name] = { name: sf.name, components: components };
+        serverCount++;
+      } catch (e) { /* skip malformed */ }
+    }
+
+    // Convert back to array
+    var merged = [];
+    for (var name in mergedMap) {
+      merged.push(mergedMap[name]);
+    }
+
+    // Update state and localStorage
+    state.formulas = merged;
+    localStorage.setItem("razzle_formulas", JSON.stringify(merged));
+
+    // Re-register formula columns
+    for (var k = 0; k < merged.length; k++) {
+      var key = "formula_" + merged[k].name.toLowerCase().replace(/[^a-z0-9]/g, "_");
+      if (typeof COLUMNS !== "undefined") {
+        COLUMNS[key] = { label: merged[k].name, group: "Formulas", decimals: 1 };
+      }
+    }
+
+    // Push any local-only formulas to server
+    _pushAllFormulasToServer(token, base);
+
+    // Update UI
+    if (typeof computeFormulaValues === "function") computeFormulaValues();
+    if (typeof renderTable === "function") renderTable();
+    if (typeof renderColumnPicker === "function") renderColumnPicker();
+    if (typeof renderSavedFormulas === "function") renderSavedFormulas();
+
+    _showCloudSyncHint(true);
+  }).catch(function() {
+    // Silent fail — local formulas still work
+    _showCloudSyncHint(true);
+  });
+}
+
+function _pushAllFormulasToServer(token, base) {
+  var formulas = state.formulas || [];
+  if (!formulas.length) return;
+
+  var payload = formulas.map(function(f) {
+    return { name: f.name, weights: JSON.stringify(f.components) };
+  });
+
+  fetch(base + "/api/user/formulas/import", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+    body: JSON.stringify({ formulas: payload })
+  }).catch(function() {});
+}
+
+function _showCloudSyncHint(isPaid) {
+  // Add a cloud sync badge near the formula count
+  var container = document.getElementById("savedFormulas");
+  if (!container) return;
+
+  // Remove existing badge if any
+  var existing = document.getElementById("cloudSyncBadge");
+  if (existing) existing.remove();
+
+  var badge = document.createElement("div");
+  badge.id = "cloudSyncBadge";
+  badge.style.cssText = "font-family:var(--font-mono); font-size:9px; margin-bottom:6px; display:inline-block; padding:2px 8px; border-radius:4px;";
+
+  if (isPaid) {
+    badge.style.color = "var(--pos-qb)";
+    badge.style.border = "1px solid var(--pos-qb)";
+    badge.textContent = "cloud-synced";
+  } else {
+    badge.style.color = "var(--ink-light)";
+    badge.style.border = "1px dashed var(--ink-faint)";
+    badge.innerHTML = "upgrade to sync formulas across devices";
+  }
+
+  container.insertBefore(badge, container.firstChild);
+}
+
 // ── Server sync helpers ──────────────────────────────────────────
 function _syncFormulaToServer(name, components) {
   var token = localStorage.getItem("razzle_token");

@@ -1,5 +1,27 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 138 — Platform: Bureau Activity Feed + Formula Cloud Sync (COMPLETE)
+
+**Exit Criterion MET**: Bureau of Intelligence league-intel.html now shows a competitor activity feed (last 25 transactions) auto-loading when a league card is expanded. Transactions show manager name, type badge (trade/waiver/FA), position-colored player adds/drops, FAAB bid amounts, and relative timestamps. Trades show both sides with arrow layout. Activity feed data saved to localStorage razzle_league_context.recentActivity for agent context bridge. Agent prompts in warroom.js now include RECENT LEAGUE ACTIVITY section with last 10 transactions for paid users. Formula cloud sync implemented: Pro/Elite users get formulas fetched from server on Lab page load, merged with localStorage (server wins on conflict), pushed back to server. Cloud-synced badge shown for paid users, upgrade hint for free users.
+
+### Phase 138 Tasks (Platform Loop)
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Bureau Competitor Activity Feed | DONE | loadActivityFeed() in league-intel.html, CSS styles, auto-loads on league expand, Razzle personality loading states |
+| 2 | Formula Cloud Sync Backend | DONE | Already existed: GET/POST /api/user/formulas, POST /api/user/formulas/import |
+| 3 | Formula Cloud Sync Frontend | DONE | syncFormulasFromCloud() in formulas.js, merge logic, cloud badge, upgrade hint, delayed load 1.5s |
+| 4 | Activity Feed Context Bridge | DONE | recentActivity saved to localStorage, formatLeagueContext() in warroom.js includes RECENT LEAGUE ACTIVITY section |
+
+### Decisions Log
+- Activity feed fetches all 18 weeks in parallel (same as manager profiles) for complete transaction history, sorts by recency, takes top 25
+- Context bridge saves top 10 transactions to localStorage for agent prompts — keeps prompt size manageable
+- Formula cloud sync runs 1.5s after page load to avoid blocking initial render
+- Server wins on formula name conflict during merge — server is source of truth
+- Free users see dashed-border upgrade hint instead of cloud badge — invitation not wall
+- Trade cards show both sides of the trade with a bidirectional arrow layout
+- Activity type badges use purple for trades, green for waivers, blue for free agents — distinct and position-color-consistent
+
 ## Previous Phase: Phase 134 — Platform: Tier Gating (Feature Limits for Free vs Pro vs Elite) (COMPLETE)
 
 **Exit Criterion MET**: Tier gating helpers added to app.js (getUserPlan, isPaidUser, checkFeatureGate, getAllowedSeasons). Season selector in Lab gates free users to 3 most recent seasons with lock emoji on older seasons. Formula builder blocks 4th formula for free users with toast. Advanced filter builder blocks 4th condition for free users across all entry points (addFilter, quick-filter, context menu). Compare mode gating available via checkFeatureGate("compare", count).

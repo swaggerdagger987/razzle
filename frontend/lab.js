@@ -4993,6 +4993,10 @@ function computePosRanks() {
 // Load formulas and custom scoring on startup
 loadFormulas();
 loadCustomScoringColumns();
+// Cloud sync formulas (Pro+ users — runs silently after page load)
+if (typeof syncFormulasFromCloud === "function") {
+  setTimeout(syncFormulasFromCloud, 1500);
+}
 
 // ─── Image export ────────────────────────────────────────────────
 function exportImage() {

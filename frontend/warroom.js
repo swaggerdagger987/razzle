@@ -1951,6 +1951,29 @@ function formatLeagueContext(ctx) {
     lines.push('--- END MANAGER PROFILES ---');
   }
 
+  // Recent league activity feed (from Bureau of Intelligence)
+  if (ctx.recentActivity && ctx.recentActivity.length) {
+    lines.push('');
+    lines.push('--- RECENT LEAGUE ACTIVITY ---');
+    ctx.recentActivity.forEach(function(txn) {
+      var mgrs = (txn.managers || []).join(' & ');
+      var adds = (txn.adds || []).join(', ');
+      var drops = (txn.drops || []).join(', ');
+      var line = txn.type.toUpperCase() + ': ' + mgrs;
+      if (adds) line += ' added ' + adds;
+      if (drops) line += ' | dropped ' + drops;
+      if (txn.faab > 0) line += ' ($' + txn.faab + ' FAAB)';
+      if (txn.time) {
+        var ago = Math.floor((Date.now() - txn.time) / 86400000);
+        if (ago <= 0) line += ' (today)';
+        else if (ago === 1) line += ' (yesterday)';
+        else line += ' (' + ago + ' days ago)';
+      }
+      lines.push(line);
+    });
+    lines.push('--- END RECENT ACTIVITY ---');
+  }
+
   lines.push('--- END LEAGUE CONTEXT ---');
   return lines.join('\n');
 }
