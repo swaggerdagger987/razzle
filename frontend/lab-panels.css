@@ -59,6 +59,11 @@
   width: 180px;
 }
 .lp-search::placeholder { color: var(--ink-light); }
+.lp-ctrl-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink);
+}
 .lp-pos-tabs {
   display: flex;
   border: 2px solid var(--ink);
@@ -75,7 +80,7 @@
   border: none;
   border-right: 2px solid var(--ink);
   cursor: pointer;
-  transition: all 0.12s;
+  transition: all 0.15s;
 }
 .lp-pos-tab:last-child { border-right: none; }
 .lp-pos-tab.active { background: var(--ink); color: var(--bg-card); }
@@ -2282,9 +2287,9 @@
 }
 .wkl-week-btn {
   font-family: var(--font-display); font-size: 16px; font-weight: 700;
-  padding: 4px 10px; border: 2px solid var(--ink); border-radius: 6px;
+  padding: 4px 10px; border: 2px solid var(--ink); border-radius: 8px;
   background: var(--bg-card); color: var(--ink); cursor: pointer;
-  transition: all 0.15s;
+  transition: all 0.12s;
 }
 .wkl-week-btn:hover:not(:disabled) { background: var(--bg-warm); }
 .wkl-week-btn:disabled { opacity: 0.3; cursor: not-allowed; }

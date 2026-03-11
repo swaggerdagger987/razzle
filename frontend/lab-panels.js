@@ -75,12 +75,14 @@
         '<div class="lp-header"><h2>Dynasty Rankings</h2>' +
         '<div class="lp-subtitle">who\'s worth the most in your league</div>' +
         '<div class="lp-meta">ranked by DVS (Dynasty Value Score) — production x age curve</div></div>' +
-        '<div class="rankings-filters" id="lp-rankings-filters">' +
-          '<button class="rankings-filter-btn active" data-pos="">All</button>' +
-          '<button class="rankings-filter-btn pos-qb" data-pos="QB">QB</button>' +
-          '<button class="rankings-filter-btn pos-rb" data-pos="RB">RB</button>' +
-          '<button class="rankings-filter-btn pos-wr" data-pos="WR">WR</button>' +
-          '<button class="rankings-filter-btn pos-te" data-pos="TE">TE</button>' +
+        '<div class="lp-controls" id="lp-rankings-filters">' +
+          '<div class="lp-pos-tabs">' +
+          '<button class="lp-pos-tab active" data-pos="">All</button>' +
+          '<button class="lp-pos-tab" data-pos="QB">QB</button>' +
+          '<button class="lp-pos-tab" data-pos="RB">RB</button>' +
+          '<button class="lp-pos-tab" data-pos="WR">WR</button>' +
+          '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
+          '</div>' +
         '</div>' +
         '<div id="lp-rankings-content"><div class="lp-loading">pulling film on dynasty values...</div></div>' +
       '</div>';
@@ -151,9 +153,9 @@
     }
 
     el.querySelector('#lp-rankings-filters').addEventListener('click', function(e) {
-      var btn = e.target.closest('.rankings-filter-btn');
+      var btn = e.target.closest('.lp-pos-tab');
       if (!btn) return;
-      el.querySelectorAll('.rankings-filter-btn').forEach(function(b) { b.classList.remove('active'); });
+      el.querySelectorAll('.lp-pos-tab').forEach(function(b) { b.classList.remove('active'); });
       btn.classList.add('active');
       loadRankings(btn.getAttribute('data-pos'));
     });
@@ -734,17 +736,17 @@
         '<div class="lp-controls">' +
           '<label>Budget: <input type="range" id="lp-av-slider" min="50" max="500" step="10" value="200"></label>' +
           '<div class="av-budget-display" id="lp-av-budget">$200</div>' +
-          '<label>Roster: <input type="number" id="lp-av-roster" min="8" max="25" value="15" style="width:60px;font-family:var(--font-mono);font-size:13px;padding:4px 8px;border:2px solid var(--ink);border-radius:6px"></label>' +
+          '<label>Roster: <input type="number" class="lp-select" id="lp-av-roster" min="8" max="25" value="15" style="width:60px"></label>' +
           '<label>Season: <select class="lp-select" id="lp-av-season"></select></label>' +
         '</div>' +
-        '<div class="lp-controls" id="lp-av-pos">' +
-          '<button class="lp-pos-tab active" data-pos="ALL" style="border:2px solid var(--ink);border-radius:20px;padding:5px 14px;font-family:var(--font-mono);font-size:12px;box-shadow:2px 2px 0 var(--ink);cursor:pointer;background:var(--ink);color:var(--bg-card)">All</button>' +
-          '<button class="lp-pos-tab" data-pos="QB" style="border:2px solid var(--ink);border-radius:20px;padding:5px 14px;font-family:var(--font-mono);font-size:12px;box-shadow:2px 2px 0 var(--ink);cursor:pointer;background:var(--bg-card)">QB</button>' +
-          '<button class="lp-pos-tab" data-pos="RB" style="border:2px solid var(--ink);border-radius:20px;padding:5px 14px;font-family:var(--font-mono);font-size:12px;box-shadow:2px 2px 0 var(--ink);cursor:pointer;background:var(--bg-card)">RB</button>' +
-          '<button class="lp-pos-tab" data-pos="WR" style="border:2px solid var(--ink);border-radius:20px;padding:5px 14px;font-family:var(--font-mono);font-size:12px;box-shadow:2px 2px 0 var(--ink);cursor:pointer;background:var(--bg-card)">WR</button>' +
-          '<button class="lp-pos-tab" data-pos="TE" style="border:2px solid var(--ink);border-radius:20px;padding:5px 14px;font-family:var(--font-mono);font-size:12px;box-shadow:2px 2px 0 var(--ink);cursor:pointer;background:var(--bg-card)">TE</button>' +
+        '<div class="lp-pos-tabs" id="lp-av-pos">' +
+          '<button class="lp-pos-tab active" data-pos="ALL">All</button>' +
+          '<button class="lp-pos-tab" data-pos="QB">QB</button>' +
+          '<button class="lp-pos-tab" data-pos="RB">RB</button>' +
+          '<button class="lp-pos-tab" data-pos="WR">WR</button>' +
+          '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
         '</div>' +
-        '<div style="display:flex;justify-content:center;margin-bottom:16px"><input class="lp-search" type="text" id="lp-av-search" placeholder="search players..."></div>' +
+        '<div class="lp-controls"><input class="lp-search" type="text" id="lp-av-search" placeholder="search player..."></div>' +
         '<div class="av-summary" id="lp-av-summary"></div>' +
         '<div class="av-table-wrap" id="lp-av-table"><div class="lp-loading">pulling film...</div></div>' +
       '</div>';
@@ -764,10 +766,8 @@
     el.querySelector('#lp-av-pos').addEventListener('click', function(e) {
       var tab = e.target.closest('.lp-pos-tab');
       if (!tab) return;
-      el.querySelectorAll('#lp-av-pos .lp-pos-tab').forEach(function(t) { t.classList.remove('active'); t.style.background = 'var(--bg-card)'; t.style.color = 'var(--ink)'; });
+      el.querySelectorAll('#lp-av-pos .lp-pos-tab').forEach(function(t) { t.classList.remove('active'); });
       tab.classList.add('active');
-      tab.style.background = 'var(--ink)';
-      tab.style.color = 'var(--bg-card)';
       state.position = tab.getAttribute('data-pos');
       renderTable();
     });
@@ -5413,7 +5413,7 @@
         '<div class="lp-controls">' +
           searchWrapHTML('cmt-', 'add player...') +
           '<select class="lp-select" id="cmt-season">' + seasonOptions() + '</select>' +
-          '<button class="lp-pos-tab" id="cmt-compare-btn" style="background:var(--orange);color:#fff;">Compare</button>' +
+          '<button class="btn-primary" id="cmt-compare-btn">Compare</button>' +
         '</div>' +
         '<div id="cmt-chips" class="cmt-chips"></div>' +
         '<div id="cmt-content"><div class="lp-empty">add 2-8 players then click Compare</div></div>' +
@@ -6787,8 +6787,8 @@
         '<div class="lp-header"><h2>' + (expCollege ? 'College Stat Explorer' : 'Stat Explorer') + '</h2>' +
         '<div class="lp-subtitle">' + (expCollege ? 'plot any college stat against any other' : 'plot any stat against any other') + '</div></div>' +
         '<div class="lp-controls">' +
-          '<label style="font-family:var(--font-mono);font-size:12px;">X: <select class="lp-select exp-x-select">' + metricOpts + '</select></label>' +
-          '<label style="font-family:var(--font-mono);font-size:12px;">Y: <select class="lp-select exp-y-select">' + yOpts + '</select></label>' +
+          '<label class="lp-ctrl-label">X: <select class="lp-select exp-x-select">' + metricOpts + '</select></label>' +
+          '<label class="lp-ctrl-label">Y: <select class="lp-select exp-y-select">' + yOpts + '</select></label>' +
           '<select class="lp-select exp-season">' + seasonOptions() + '</select>' +
           posTabsHTML('exp-pos-tabs', true) +
         '</div>' +

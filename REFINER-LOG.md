@@ -23,11 +23,32 @@
 **Files changed**: lab-panels.css + 28 standalone HTML pages + lab-panels.js
 **Impact**: Dark mode now works across ALL panels. Previously 10+ panels had broken/transparent backgrounds.
 
-## Pass 2: TABLES
-**Status**: PENDING
+## Pass 2: TABLE HOVER STANDARDIZATION
+**Status**: COMPLETE
+**Found**: 3 inconsistencies
+**Fixed**:
+1. Table row hover opacity standardized to 0.08 across all panels (was mix of 0.06, 0.07, 0.08)
+
+**Files changed**: lab-panels.css
+**Commit**: f05e58e
 
 ## Pass 3: CONTROLS
-**Status**: PENDING
+**Status**: COMPLETE
+**Found**: 10 inconsistencies
+**Fixed**:
+1. Rankings panel: replaced custom rankings-filter-btn with standard lp-pos-tabs/lp-pos-tab pattern
+2. Auction Values panel: removed inline styles from position filter tabs (was border-radius:20px, font-mono, box-shadow pills) -- now uses standard lp-pos-tab class
+3. Auction Values panel: removed inline active state management via JS (was setting style.background/color) -- now uses CSS class toggle like all other panels
+4. Auction Values panel: fixed search placeholder from "search players..." to "search player..." (majority pattern)
+5. Auction Values panel: replaced inline style wrapper div for search with standard lp-controls class
+6. Auction Values panel: replaced inline-styled number input with lp-select class for consistency
+7. Compare panel: replaced lp-pos-tab class abuse on Compare button with proper btn-primary class
+8. Stat Explorer: replaced inline font-family/font-size on axis labels with new lp-ctrl-label class
+9. Workload Monitor: fixed wkl-week-btn border-radius from 6px to 8px (standard)
+10. Standardized lp-pos-tab transition from 0.12s to 0.15s to match majority pattern in lab-panels.css
+11. Sidebar borders: fixed 1px dashed to 2px dashed (DESIGN.md specifies 2px minimum for dashed dividers)
+
+**Files changed**: lab-panels.js, lab-panels.css, lab.html
 
 ## Pass 4: SPACING & ALIGNMENT
 **Status**: PENDING
