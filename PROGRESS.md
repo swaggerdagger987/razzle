@@ -10,6 +10,17 @@
 |---|------|--------|-------|
 | 1 | Arrow key page navigation | DONE | ArrowLeft/ArrowRight in keydown, bounds check, toast, shortcut ref |
 
+## Previous Phase: Phase 86 — QA + UX Audit Fixes for Phases 81-85 (COMPLETE)
+
+**Exit Criterion MET**: 1 HIGH finding fixed (post-query filter pagination). Smart filters hidden in college mode. 0 CRITICAL issues.
+
+### Phase 86 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Post-query filter pagination fix | DONE | 5x fetch, manual slice, adjusted total count |
+| 2 | Smart filters college mode hide | DONE | smartFilterSelect display sync |
+
 ## Previous Phase: Phase 85 — Screener Group Header Click to Toggle (COMPLETE)
 
 **Exit Criterion MET**: Click group name in column group header to toggle all columns in that group. Visibility ratio check, definition-order insertion, toast feedback.

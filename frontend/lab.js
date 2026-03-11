@@ -2727,6 +2727,10 @@ function loadStateFromURL() {
     }
   }
 
+  // Sync smart filter dropdown — NFL only
+  const sfSel = document.getElementById("smartFilterSelect");
+  if (sfSel) sfSel.style.display = state.universe === "nfl" ? "" : "none";
+
   renderActiveFilters();
 }
 

@@ -2990,7 +2990,7 @@
 
     <div id="activeFilters"></div>
     <button class="add-filter-btn" onclick="openFilterModal()">+ add filter</button>
-    <select class="select-chunky filter-select-sm" onchange="applySmartFilter(this.value); this.value='';" title="Pre-built filter combos for common analysis">
+    <select class="select-chunky filter-select-sm" id="smartFilterSelect" onchange="applySmartFilter(this.value); this.value='';" title="Pre-built filter combos for common analysis">
       <option value="">Smart Filters</option>
       <option value="breakout">Breakout Candidates (Age ≤25, Snap% ≥50)</option>
       <option value="buylow">Buy Low (PPG ≤14, Y/CAR ≥4)</option>

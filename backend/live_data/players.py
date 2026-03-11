@@ -400,7 +400,10 @@ def _fetch_screener_uncached(body):
             ORDER BY {order_expr} {sort_dir}
             LIMIT ? OFFSET ?
         """
-        params.extend([limit, offset])
+        # When post-filters exist, fetch more rows to account for filtering
+        sql_limit = limit * 5 if post_filters else limit
+        sql_offset = 0 if post_filters else offset
+        params.extend([sql_limit, sql_offset])
 
         rows = conn.execute(query, params).fetchall()
 
@@ -447,7 +450,9 @@ def _fetch_screener_uncached(body):
                 if op == "!=": return v != tv
                 return True
             items = [it for it in items if all(_passes(it, pf) for pf in post_filters)]
-            total = len(items)  # adjusted count
+            total = len(items)  # adjusted count for post-filtered results
+            # Apply pagination after filtering
+            items = items[offset:offset + limit]
 
         # Re-sort in Python if sorting by a derived/rate metric
         if python_sort:
