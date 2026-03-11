@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 80 — Screener Cell Double-Click to Copy (COMPLETE)
+
+**Exit Criterion MET**: Double-click any stat cell to copy its value. Toast confirms. Clipboard API with _fallbackCopy() fallback. Shortcut reference updated.
+
+### Phase 80 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Double-click cell to copy | DONE | tbody dblclick delegation, cell type filtering, clipboard+fallback, toast |
+
 ## Previous Phase: Phase 79 — Screener Column Picker Search (COMPLETE)
 
 **Exit Criterion MET**: Search input at top of column picker filters columns by name. Empty groups hidden. Search cleared on open.

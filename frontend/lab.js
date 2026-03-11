@@ -1721,6 +1721,27 @@ function renderProspectTable() {
     if (!tr) return;
     tr.classList.toggle("row-highlighted");
   });
+
+  // Double-click stat cell to copy value
+  tbody.addEventListener("dblclick", function(e) {
+    var td = e.target.closest("td");
+    if (!td) return;
+    // Skip non-stat cells (player, watchlist, checkbox, pin, rank, notes, sparkline)
+    if (td.classList.contains("col-player") || td.classList.contains("col-rank") ||
+        td.classList.contains("notes-cell") || td.classList.contains("sparkline-cell") ||
+        td.classList.contains("pin-cell")) return;
+    if (td.querySelector("input")) return;
+    var text = td.textContent.trim();
+    if (!text || text === "\u2014" || text === "—") return;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function() { _showToast("copied: " + text); }).catch(function() {
+        _fallbackCopy(text); _showToast("copied: " + text);
+      });
+    } else {
+      _fallbackCopy(text); _showToast("copied: " + text);
+    }
+    e.preventDefault();
+  });
 })();
 
 // ─── Context menu ────────────────────────────────────────────────
@@ -8407,6 +8428,7 @@ function toggleShortcutRef() {
           ${shortcutRow("N", "Toggle notes column")}
           ${shortcutRow("P", "Clear pinned players")}
           ${shortcutRow("Dbl-click", "Column header → quick filter")}
+          ${shortcutRow("Dbl-click", "Stat cell → copy value")}
           ${shortcutRow("?", "This reference")}
         </tbody>
       </table>

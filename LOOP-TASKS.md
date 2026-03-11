@@ -1,15 +1,15 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 79 (Screener Column Picker Search)
-## Phase 79: Screener Column Picker Search
-**Exit Criterion**: Search input at top of column picker overlay. Typing filters column list by name. Empty groups are hidden. Search clears when picker opens.
+- Phase: 80 (Screener Cell Double-Click to Copy)
+## Phase 80: Screener Cell Double-Click to Copy
+**Exit Criterion**: Double-click any stat cell to copy its value to clipboard. Toast shows "copied: [value]". Skips non-stat cells (player, rank, notes, sparklines, checkboxes). Uses _fallbackCopy() for non-HTTPS. Shortcut reference updated.
 
 - Task 1: PASS
 - Stage: COMPLETE
-- Next: Phase gate
+- Next: Phase gate → QA+UX audit (phase 80 is multiple of 5)
 
-### Task 1: Column picker search filter
+### Task 1: Double-click cell to copy value
 **Status**: PASS
 **Attempts**: 1
-**Result**: Added search input in column picker HTML with chunky border design. filterColumnPicker() function hides non-matching column-option labels and empty groups. Search cleared on open. 34 tests pass.
+**Result**: Added dblclick event listener on tbody via event delegation. Identifies stat cells by excluding col-player, col-rank, notes-cell, sparkline-cell, pin-cell, and input-containing cells. Copies textContent via clipboard API with _fallbackCopy() fallback. Toast feedback. Shortcut reference updated. 34 tests pass.
