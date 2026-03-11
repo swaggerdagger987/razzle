@@ -1,5 +1,17 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 96 — QA + UX Audit Fixes for Phases 92-95 (COMPLETE)
+
+**Exit Criterion MET**: 1 HIGH (pipe escaping) and 2 MEDIUM (college stats + visual mode guard) fixed. 0 CRITICAL.
+
+### Phase 96 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Pipe escaping in Reddit table | DONE | escPipe() helper for all cell values |
+| 2 | College-mode quick compare stats | DONE | Universe-aware stats array |
+| 3 | Visual mode cycle college guard | DONE | Early return with toast in non-NFL modes |
+
 ## Previous Phase: Phase 95 — Copy as Reddit Table (COMPLETE)
 
 **Exit Criterion MET**: "Copy as Reddit Table" button in Share modal. Pipe-delimited markdown table, 50 row cap.

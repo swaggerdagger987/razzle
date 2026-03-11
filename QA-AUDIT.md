@@ -1,7 +1,7 @@
-# QA + UX Audit — Phases 87-90
+# QA + UX Audit — Phases 92-95
 
 **Audit Date**: 2026-03-11
-**Scope**: Phases 87-90 (Multi-sort, Sticky frozen columns, Reset all filters, Position breakdown badges)
+**Scope**: Phases 92-95 (Quick preset select, Visual mode cycle, Quick compare strip, Reddit table copy)
 **Files Audited**: frontend/lab.js, frontend/lab.html
 
 ---
@@ -10,51 +10,48 @@
 
 ### CRITICAL: None
 
-### HIGH: None
+### HIGH
+
+1. **Pipe character escaping in Reddit table** (`frontend/lab.js`)
+   - Original: Player names/values with pipe chars would corrupt markdown table formatting.
+   - **Fixed in this audit**: Added `escPipe()` helper to escape `|` chars in all table cell values.
 
 ### MEDIUM
 
-1. **XSS in filter value rendering** (`frontend/lab.js`)
-   - Original: Filter values from URL params rendered directly in HTML without escaping.
-   - Attack vector: Crafted URL with `?filters=[{"key":"ppg","op":"eq","value":"<script>"}]`
-   - **Fixed in this audit**: (a) Filter tag rendering now uses `escapeHtml()` for label, op, and value. (b) URL-loaded filters validated: must have string key, string op, numeric value. Non-numeric values stripped.
+2. **Quick compare stats not universe-aware** (`frontend/lab.js`)
+   - Original: Hardcoded NFL stats (ppg, fantasy_points_ppr) that don't exist in college data.
+   - **Fixed in this audit**: Stats array now checks `state.universe === "college"` and uses college-appropriate stats (total_yards, total_tds, rec_yards, etc.).
 
-2. **Position badges only shown when 2+ positions present** (`frontend/lab.js`)
-   - Original: `badges.length > 1` check suppressed badge when all visible players were same position.
-   - **Fixed in this audit**: Changed to `badges.length` so single-position results still show breakdown.
+3. **Visual mode cycle fires in college mode** (`frontend/lab.js`)
+   - Original: V key cycles visual modes even when heat/percentile buttons are hidden in college mode, causing state/UI desync.
+   - **Fixed in this audit**: Added guard `if (state.universe !== "nfl") return` with toast feedback.
 
 ### LOW
 
-3. **Secondary sort header tint barely visible** (`frontend/lab.html`)
-   - Original: 4% opacity background on secondary sort column header.
-   - **Fixed in this audit**: Increased to 6% opacity for better visibility while still being subtler than primary sort (8%).
-
-4. Summary bar tfoot colspan'd cell spans all utility columns — works correctly but no visual boundary between frozen and scrollable areas. Not a functional issue.
+4. Quick compare strip lacks aria-label for screen readers. Not a functional issue.
+5. Reddit table copy fallback toast doesn't include row count (minor inconsistency).
 
 ---
 
 ## UX FINDINGS
 
 ### CRITICAL: None
-
 ### HIGH: None
-
 ### MEDIUM: None
 
 ### LOW
 
-1. Multi-sort △2/▽2 suffix is compact and discoverable. Good.
-2. "Reset All ×" dark pill contrasts well against lighter filter tags — clear call to action.
-3. Position breakdown badges use correct position colors (QB blue, RB teal, WR terracotta, TE purple).
-4. Sticky columns scroll smoothly on desktop with proper background preservation.
+1. Preset select works correctly in all universes (NFL/College/Prospect) — populates with appropriate presets.
+2. Quick compare strip green highlighting is clear and position colors are accurate.
+3. Reddit table button styled with orange border — matches export action theme.
 
 ---
 
 ## SUMMARY
 
 - **CRITICAL**: 0
-- **HIGH**: 0
-- **MEDIUM**: 2 (both fixed — XSS filter escape + position badge guard)
+- **HIGH**: 1 (pipe escaping — fixed)
+- **MEDIUM**: 2 (college stats + visual mode guard — both fixed)
 - **LOW**: 4
 
-Overall: One XSS vulnerability found and fixed (filter value rendering from URL params). Position badge display improved. Secondary sort visibility improved. All phases 87-90 functional requirements met.
+Overall: One data corruption bug (pipe chars in Reddit table) and two college-mode issues found and fixed. All phases 92-95 functional requirements met.

@@ -1,15 +1,15 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 95 (Copy as Reddit Table)
-## Phase 95: Copy as Reddit Table — Auto-Generated
-**Exit Criterion**: "Copy as Reddit Table" button in Share modal exports pipe-delimited markdown table format ready for Reddit posts. Capped at 50 rows. Clipboard copy with toast.
+- Phase: 96 (QA + UX Audit Fixes for Phases 92-95)
+## Phase 96: QA + UX Audit — Auto-Generated Fixes
+**Exit Criterion**: Pipe escaping in Reddit table fixed. College-mode quick compare stats fixed. Visual mode cycle college guard added. All HIGH/MEDIUM findings resolved.
 
 - Task 1: PASS
 - Stage: COMPLETE
 - Next: Phase gate
 
-### Task 1: Add copy as Reddit table format
+### Task 1: Fix pipe escaping + college stats + visual mode guard
 **Status**: PASS
 **Attempts**: 1
-**Result**: copyTableAsReddit() generates pipe-delimited markdown with --- separator row. Max 50 rows for Reddit. Button added to Share modal export section. Toast shows row count. 34 tests pass.
+**Result**: (1) escPipe() helper escapes | in Reddit table values. (2) Quick compare stats now universe-aware (college vs NFL). (3) cycleVisualMode() returns early in non-NFL modes with toast. 34 tests pass.

@@ -3250,8 +3250,17 @@ function renderQuickCompare(container) {
   var b = state.items.find(function(p) { return p.player_id === sp[1].player_id; });
   if (!a || !b) { container.innerHTML = ""; return; }
 
-  // Key stats to compare
-  var stats = [
+  // Key stats to compare (universe-aware)
+  var stats = state.universe === "college" ? [
+    { key: "total_yards", label: "Yds", dec: 0 },
+    { key: "total_tds", label: "TD", dec: 0 },
+    { key: "games", label: "GP", dec: 0 },
+    { key: "rec_yards", label: "RecYd", dec: 0 },
+    { key: "rush_yards", label: "RshYd", dec: 0 },
+    { key: "receptions", label: "Rec", dec: 0 },
+    { key: "carries", label: "Car", dec: 0 },
+    { key: "pass_yards", label: "PassYd", dec: 0 },
+  ] : [
     { key: "ppg", label: "PPG", dec: 1 },
     { key: "games", label: "GP", dec: 0 },
     { key: "fantasy_points_ppr", label: "FPts", dec: 0 },
@@ -3740,6 +3749,7 @@ function toggleDataBars() {
 }
 
 function cycleVisualMode() {
+  if (state.universe !== "nfl") { _showToast("visual modes: nfl only"); return; }
   // Cycle: off → heat → percentile → bars → off
   var h = state.heatColors, p = state.percentileMode, b = state.dataBars;
   // Determine current mode and advance
@@ -4281,19 +4291,20 @@ function copyTableAsReddit() {
   var sep = headers.map(function() { return "---"; });
   var lines = [headers.join(" | "), sep.join(" | ")];
 
+  function escPipe(s) { return String(s).replace(/\|/g, "\\|"); }
   var max = Math.min(state.items.length, 50); // Reddit table cap
   for (var i = 0; i < max; i++) {
     var p = state.items[i];
-    var name = p.full_name || p.player_name || "";
+    var name = escPipe(p.full_name || p.player_name || "");
     var pos = p.position || "";
-    var team = p.team || p.school || "";
+    var team = escPipe(p.team || p.school || "");
     var rank = state.offset + i + 1;
     var vals = visCols.map(function(k) {
       var col = colDefs[k]; var v = p[k];
       if (v == null || v === "") return "";
       if (col.pct) return ((v * 100).toFixed(col.decimals)) + "%";
       if (col.decimals != null) return Number(v).toFixed(col.decimals);
-      return v;
+      return escPipe(v);
     });
     lines.push([rank, name, pos, team].concat(vals).join(" | "));
   }
