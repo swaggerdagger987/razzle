@@ -1,8 +1,38 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 40 (Panel Data Coverage Fixes — Priority 2)
-## Phase 40: Panel Data Coverage Fixes — Priority 2
+- Phase: 41 (QA + UX Audit — Auto-Generated Fixes)
+## Phase 41: QA + UX Audit — Auto-Generated Fixes
+**Exit Criterion**: All CRITICAL and HIGH QA findings fixed. MEDIUM findings addressed. Pace tracker returns real stat projections. XSS in prospect radar fixed. Remaining 5 panels get available_seasons.
+
+- Task 1: PENDING
+- Task 2: PENDING
+- Task 3: PENDING
+- Task 4: PENDING
+- Stage: IN PROGRESS
+- Next: Task 1
+
+### Task 1: Fix pace tracker SQL column names (CRITICAL)
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: `/api/season-pace` returns non-zero projected pass yards, rush yards, rec yards for qualifying players. All column names match player_week_stats schema.
+
+### Task 2: Fix XSS in prospect radar — escapeHtml to escapeAttr (HIGH)
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: `data-name` and `value` attributes in lab-prospect-radar.js use `escapeAttr` not `escapeHtml`. No attribute injection possible.
+
+### Task 3: Add available_seasons to remaining 5 panels (MEDIUM)
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: Target Premium, Season Pace, Season Recap, TD Regression, Positional Advantage backends return `available_seasons`. Frontend dropdowns populate from API data, not hardcoded years.
+
+### Task 4: Remove redundant import math + fix 1px borders (MEDIUM+LOW grouped)
+**Status**: PENDING
+**Attempts**: 0
+**Acceptance**: No `import math` inside functions in tools.py. 1px borders in styles.css kbd elements changed to 2px.
+
+## Phase 40: Panel Data Coverage Fixes — Priority 2 (COMPLETE)
 **Exit Criterion**: Panels that work but have limited date ranges are fixed to cover all available seasons. Snap-dependent panels show clear message for pre-2020 years. Tiers show S-tier for 2015-2016 elites. Half PPR cheat sheet recalculates.
 
 - Task 1: PASS

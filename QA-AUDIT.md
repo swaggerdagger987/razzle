@@ -1,49 +1,75 @@
-# QA + UX Audit — Phases 26-30
+# QA + UX Audit — Phases 36-40
 
 **Date**: 2026-03-10
-**Scope**: Phase 26 (Connection mgmt), Phase 27 (Module split), Phase 28 (Caching), Phase 29 (Data expansion), Phase 30 (Route fixes)
+**Scope**: Phase 36 (player_season_stats fix), Phase 37 (adapter pipeline), Phase 38 (Athletic Radar), Phase 39 (critical bug fixes), Phase 40 (panel data coverage)
+
+---
 
 ## QA FINDINGS
 
-### CRITICAL-1: Missing `nonlocal` in ~25 tools.py cached functions
+### CRITICAL-1: Wrong Column Names in `fetch_pace_tracker` SQL Query
+
 **Severity**: CRITICAL
-**File**: `backend/live_data/tools.py` (~25 functions)
-**What's wrong**: Functions wrapped with `_cached()` define a `_query()` closure that reads then assigns `season` (e.g., `if not season: season = ...`). Python treats any assigned variable as local — reading before assignment causes `UnboundLocalError`. Every tools.py endpoint crashes with default params.
-**Fix**: Add `nonlocal season` (and `nonlocal draft_year`, `nonlocal week`, `nonlocal window`) at top of each `_query()`.
+**File**: `backend/live_data/tools.py`, lines 737-742
+**What's wrong**: Query references `s.pass_yards`, `s.pass_td`, `s.rush_yards`, `s.rush_td`, `s.rec_yards`, `s.rec_td` on `player_week_stats` table. Actual columns are `passing_yards`, `passing_tds`, `rushing_yards`, `rushing_tds`, `receiving_yards`, `receiving_tds`. SQLite silently returns NULL for non-existent columns, so all stat projections are zero.
+**Fix**: Rename to correct column names.
 
-### HIGH-1: Wrong column name `metric_key` in analytics.py SQL
+### HIGH-1: XSS via `escapeHtml` in HTML Attribute Context
+
 **Severity**: HIGH
-**File**: `backend/live_data/analytics.py` line 371
-**What's wrong**: SQL references `m.metric_key` but actual column is `m.stat_key`.
-**Fix**: Change `m.metric_key` to `m.stat_key`.
+**File**: `frontend/lab-prospect-radar.js`, line 163
+**What's wrong**: `data-name` attribute uses `escapeHtml(p.player_name)` which doesn't escape double quotes. Should use `escapeAttr` for attribute contexts.
+**Fix**: Change `escapeHtml` to `escapeAttr` in `data-name` attribute.
 
-### HIGH-2: `seasonOptions()` hardcodes 2025-2015 in 18 panels
-**Severity**: HIGH
-**File**: `frontend/lab-panels.js` line 5027
-**What's wrong**: Hardcoded year range doesn't adapt to available data.
-**Fix**: Compute dynamically or use `available_seasons` from API.
+### MEDIUM-1: Redundant `import math` Inside Functions
 
-### MEDIUM-1: Aging Curves chart label says "2020-2024" (data is now 2015-2024)
 **Severity**: MEDIUM
-**File**: `frontend/lab.js` line 6082
-**Fix**: Update to dynamic or correct label.
+**File**: `backend/live_data/tools.py`, lines 1053 and 1980
+**What's wrong**: `math` is already imported at module level. Inner imports are redundant.
+**Fix**: Delete both `import math` lines.
 
-### MEDIUM-2: NFL screener shows 0.0 instead of em-dash for zero counting stats
+### MEDIUM-2: 5 Panels Missing `available_seasons` + Frontend Hardcodes Years
+
 **Severity**: MEDIUM
-**File**: `frontend/lab.js` lines 877-882
-**Fix**: Extend em-dash treatment to NFL zero counting stats.
+**Files**: `backend/live_data/tools.py` + `frontend/lab-panels.js`
+**Panels**: Target Premium, Season Pace, Season Recap, TD Regression, Positional Advantage
+**What's wrong**: Backend doesn't return `available_seasons`. Frontend generates season dropdown from `new Date().getFullYear()` down to 2020, showing 2025/2026 which have no data.
+**Fix**: Add `available_seasons` to each backend function. Update frontend dropdowns.
 
-### LOW-1: First-visit toast says "62 tools" (actually ~70)
-**Severity**: LOW — `frontend/lab.js` line 587
+### LOW-1: 1px Borders Still Present in Some Elements
 
-### LOW-2: Error message tone inconsistency across panels
-**Severity**: LOW — panels use flat "failed to load" vs screener's playful "fumbled..."
+**Severity**: LOW
+**Files**: `frontend/styles.css` (lines 185, 731), `frontend/lab-panels.js` (lines 8522, 9029, 9560)
+**What's wrong**: Design guide says "NO thin 1px borders". Small kbd elements and some inline styles still use 1px.
+**Fix**: Change to 2px where visually appropriate.
 
-### LOW-3: `state.season = 0` (falsy init) is fragile
-**Severity**: LOW — `frontend/lab.js` line 503
+---
 
-### LOW-4: push_to_turso.py OFFSET pagination is O(n^2) for large tables
-**Severity**: LOW — `scripts/push_to_turso.py`
+## UX FINDINGS
 
-### LOW-5: Cache key for list params uses str(list) representation
-**Severity**: LOW — `backend/live_data/prospects.py` line 707
+### MEDIUM-3: Season Dropdowns Show Non-Existent Seasons (2025, 2026)
+
+**Severity**: MEDIUM
+**Panels**: Target Premium, Season Pace, Season Recap, TD Regression, Positional Advantage
+**What's wrong**: Same root cause as MEDIUM-2. Users select 2025/2026 and get empty results with no explanation.
+**Fix**: Use API-provided available_seasons (same fix as MEDIUM-2).
+
+### LOW-2: Athletic Radar Lacks Cross-Year Season Comparison
+
+**Severity**: LOW
+**Panel**: proradar (Athletic Radar)
+**What's wrong**: Only draft_year dropdown available. Can't easily compare combine metrics across historical years.
+**Fix**: Low priority — current UX works for primary use case.
+
+---
+
+## Summary
+
+| # | Severity | Category | Issue |
+|---|----------|----------|-------|
+| 1 | CRITICAL | QA | Wrong column names in pace tracker SQL — projections return 0 |
+| 2 | HIGH | QA | XSS via escapeHtml in attribute context |
+| 3 | MEDIUM | QA | Redundant import math (2 locations) |
+| 4 | MEDIUM | QA/UX | 5 panels missing available_seasons, frontends hardcode years |
+| 5 | LOW | QA | 1px borders in styles.css and inline styles |
+| 6 | LOW | UX | Athletic Radar lacks cross-year comparison |
