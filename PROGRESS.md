@@ -1,5 +1,17 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 50 — QA + UX Audit Fixes for Phases 46-49 (COMPLETE)
+
+**Exit Criterion MET**: All CRITICAL and HIGH findings fixed. Backend input validation (isinstance, str coercion, int season). XSS escape in hover card. Hover card pointer-events:auto with stay-on-hover. Sparkline removed from PPR default preset. Alt text on headshot.
+
+### Phase 50 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend input validation for sparklines | DONE | isinstance(list) check, str() coercion, int(season) try/except |
+| 2 | Frontend XSS + hover card interaction | DONE | escapeHtml(pos), pointer-events:auto, 150ms leave delay |
+| 3 | PPR preset + alt text | DONE | Removed "trend" from PPR, added escapeAttr alt text |
+
 ## Previous Phase: Phase 49 — Player Hover Cards (COMPLETE)
 
 **Exit Criterion MET**: Hovering over player names in the NFL screener shows a compact hover card with headshot, position badge, team/age/GP, PPG/FPTS/DVS stats, and weekly sparkline. 300ms debounce, viewport clamped, hidden on mobile, no blocking API calls.

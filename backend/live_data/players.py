@@ -465,10 +465,15 @@ def get_filter_options():
 
 def fetch_screener_sparklines(player_ids, season=0):
     """Batch-fetch weekly fantasy_points_ppr for up to 200 players (for inline sparklines)."""
-    if not player_ids:
+    if not isinstance(player_ids, list) or not player_ids:
         return {"sparklines": {}}
-    # Clamp to 200
-    ids = player_ids[:200]
+    # Coerce all IDs to strings, clamp to 200
+    ids = [str(pid) for pid in player_ids[:200]]
+    # Coerce season to int
+    try:
+        season = int(season) if season else 0
+    except (ValueError, TypeError):
+        season = 0
     def _query():
         with get_db() as conn:
             _season = season

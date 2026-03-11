@@ -464,7 +464,7 @@ function _getTierLockClass(key) {
 const PRESETS = {
   ppr: {
     label: "PPR",
-    columns: ["pos_rank", "trend", "fantasy_points_ppr", "ppg", "games", "passing_yards", "passing_tds",
+    columns: ["pos_rank", "fantasy_points_ppr", "ppg", "games", "passing_yards", "passing_tds",
               "rushing_yards", "rushing_tds", "receptions", "receiving_yards", "receiving_tds",
               "targets", "touchdowns"],
   },
@@ -1165,12 +1165,12 @@ function showHoverCard(playerId, anchorEl) {
   // Build card HTML
   let html = '<div class="hover-card-header">';
   if (player.headshot_url) {
-    html += `<img class="hover-card-headshot" src="${escapeAttr(player.headshot_url)}" alt="" onerror="this.style.display='none';">`;
+    html += `<img class="hover-card-headshot" src="${escapeAttr(player.headshot_url)}" alt="${escapeAttr(player.full_name || '')}" onerror="this.style.display='none';">`;
   }
   html += '<div>';
   html += `<div class="hover-card-name">${escapeHtml(player.full_name || "")}</div>`;
   html += `<div class="hover-card-meta">`;
-  html += `<span class="pos-badge ${posClass(pos)}" style="font-size:9px; padding:1px 5px;">${pos}</span> `;
+  html += `<span class="pos-badge ${posClass(pos)}" style="font-size:9px; padding:1px 5px;">${escapeHtml(pos)}</span> `;
   html += `${escapeHtml(player.team || "FA")}`;
   if (player.age) html += ` · ${Math.floor(player.age)}y`;
   if (player.games) html += ` · ${player.games}gp`;
@@ -1235,8 +1235,10 @@ function onPlayerNameEnter(playerId, el) {
 
 function onPlayerNameLeave() {
   clearTimeout(_hoverTimer);
-  _hoverTimer = null;
-  if (_hoverCardVisible) hideHoverCard();
+  // Small delay so user can move cursor to the hover card itself
+  _hoverTimer = setTimeout(function() {
+    if (_hoverCardVisible) hideHoverCard();
+  }, 150);
 }
 
 function renderProspectTable() {
