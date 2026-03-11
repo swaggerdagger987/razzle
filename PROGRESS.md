@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 69 — Screener PNG Export Enhancement (COMPLETE)
+
+**Exit Criterion MET**: PNG export includes dark title bar with context (mode/position/season/sort), rank numbers, sort column highlight, sort arrow on header. Polished Reddit-ready layout.
+
+### Phase 69 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Enhanced PNG export | DONE | Title bar, rank column, sort column highlight (15% header, 6% data), sort arrow, rank divider |
+
 ## Previous Phase: Phase 68 — Screener Rows Per Page Selector (COMPLETE)
 
 **Exit Criterion MET**: Dropdown near pagination lets users choose 25/50/100/200 rows per page. Persists in localStorage. Resets to page 1 on change. Works in all modes.

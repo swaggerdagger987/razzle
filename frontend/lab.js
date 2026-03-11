@@ -3377,19 +3377,21 @@ function exportImage() {
 
   // Determine dimensions from visible data
   const visibleCols = getActiveColumns().filter(k => getColumnDef(k));
-  const colCount = visibleCols.length + 1; // +1 for player name
   const rowCount = Math.min(state.items.length, 25); // cap at 25 rows for export
 
   const colW = 100;
+  const rankColW = 36;
   const playerColW = 200;
   const rowH = 28;
   const headerH = 36;
+  const titleH = 32;
   const padX = 20;
   const padY = 20;
   const watermarkH = 40;
 
-  const W = padX * 2 + playerColW + colCount * colW;
-  const H = padY * 2 + headerH + rowCount * rowH + watermarkH;
+  const tableW = rankColW + playerColW + visibleCols.length * colW;
+  const W = padX * 2 + tableW;
+  const H = padY * 2 + titleH + headerH + rowCount * rowH + watermarkH;
 
   const canvas = document.createElement("canvas");
   canvas.width = W;
@@ -3400,35 +3402,77 @@ function exportImage() {
   ctx.fillStyle = "#ede0cf";
   ctx.fillRect(0, 0, W, H);
 
+  // Title bar with context
+  const colDefs = isProspectView() ? PROSPECT_COLUMNS : state.universe === "college" ? COLLEGE_COLUMNS : COLUMNS;
+  const sortCol = colDefs[state.sortKey];
+  const sortLabel = sortCol ? sortCol.label : state.sortKey;
+  const sortArrow = state.sortDir === "asc" ? "\u2191" : "\u2193";
+  const seasonLabel = state.season === "career" ? "Career" : isProspectView() ? state.draftYear + " Draft" : state.universe === "college" ? state.collegeSeason : state.season;
+  const posLabel = state.position !== "ALL" ? state.position : "All Positions";
+  const modeLabel = isProspectView() ? "Prospects" : state.universe === "college" ? "College" : "NFL";
+  const titleText = `${modeLabel} \u00B7 ${posLabel} \u00B7 ${seasonLabel} \u00B7 sorted by ${sortLabel} ${sortArrow}`;
+
+  ctx.fillStyle = "#2d1f14";
+  ctx.fillRect(padX, padY, tableW, titleH);
+  ctx.font = "bold 12px 'Space Mono', monospace";
+  ctx.fillStyle = "#ede0cf";
+  ctx.textAlign = "left";
+  ctx.fillText(titleText, padX + 10, padY + titleH / 2 + 4);
+
+  // Find sort column index for highlight
+  const sortColIdx = visibleCols.indexOf(state.sortKey);
+
   // Header row
+  const hdrY = padY + titleH;
   ctx.fillStyle = "#e5d5c3";
-  ctx.fillRect(padX, padY, W - padX * 2, headerH);
+  ctx.fillRect(padX, hdrY, tableW, headerH);
   ctx.strokeStyle = "#2d1f14";
   ctx.lineWidth = 2;
-  ctx.strokeRect(padX, padY, W - padX * 2, headerH);
+  ctx.strokeRect(padX, hdrY, tableW, headerH);
+
+  // Sort column header highlight
+  if (sortColIdx >= 0) {
+    const sx = padX + rankColW + playerColW + sortColIdx * colW;
+    ctx.fillStyle = "rgba(217, 119, 87, 0.15)";
+    ctx.fillRect(sx, hdrY, colW, headerH);
+  }
+
+  ctx.font = "bold 10px 'Space Mono', monospace";
+  ctx.fillStyle = "#8a7565";
+  ctx.textAlign = "center";
+  ctx.fillText("#", padX + rankColW / 2, hdrY + headerH / 2 + 4);
 
   ctx.font = "bold 11px 'Space Mono', monospace";
   ctx.fillStyle = "#2d1f14";
   ctx.textAlign = "left";
-  ctx.fillText("PLAYER", padX + 8, padY + headerH / 2 + 4);
+  ctx.fillText("PLAYER", padX + rankColW + 8, hdrY + headerH / 2 + 4);
 
   ctx.textAlign = "right";
   for (let i = 0; i < visibleCols.length; i++) {
     const col = getColumnDef(visibleCols[i]);
-    const x = padX + playerColW + i * colW + colW - 8;
-    ctx.fillText((col ? col.label : visibleCols[i]).toUpperCase(), x, padY + headerH / 2 + 4);
+    const x = padX + rankColW + playerColW + i * colW + colW - 8;
+    let label = (col ? col.label : visibleCols[i]).toUpperCase();
+    if (visibleCols[i] === state.sortKey) label += " " + sortArrow;
+    ctx.fillText(label, x, hdrY + headerH / 2 + 4);
   }
 
   // Data rows
   const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
   for (let r = 0; r < rowCount; r++) {
     const player = state.items[r];
-    const y = padY + headerH + r * rowH;
+    const y = hdrY + headerH + r * rowH;
 
     // Alternate row bg
     if (r % 2 === 0) {
       ctx.fillStyle = "#f7efe5";
-      ctx.fillRect(padX, y, W - padX * 2, rowH);
+      ctx.fillRect(padX, y, tableW, rowH);
+    }
+
+    // Sort column highlight on data rows
+    if (sortColIdx >= 0) {
+      const sx = padX + rankColW + playerColW + sortColIdx * colW;
+      ctx.fillStyle = "rgba(217, 119, 87, 0.06)";
+      ctx.fillRect(sx, y, colW, rowH);
     }
 
     // Row border
@@ -3436,21 +3480,28 @@ function exportImage() {
     ctx.lineWidth = 0.5;
     ctx.beginPath();
     ctx.moveTo(padX, y + rowH);
-    ctx.lineTo(W - padX, y + rowH);
+    ctx.lineTo(padX + tableW, y + rowH);
     ctx.stroke();
+
+    // Rank number
+    ctx.font = "10px 'Space Mono', monospace";
+    ctx.fillStyle = "#8a7565";
+    ctx.textAlign = "center";
+    ctx.fillText(String(state.offset + r + 1), padX + rankColW / 2, y + 18);
 
     // Position badge
     const pos = (player.position || "").toUpperCase();
     const badgeColor = posColors[pos] || "#8a7565";
     ctx.fillStyle = badgeColor;
-    ctx.fillRect(padX + 6, y + 6, 26, 16);
+    const badgeX = padX + rankColW + 6;
+    ctx.fillRect(badgeX, y + 6, 26, 16);
     ctx.strokeStyle = "#2d1f14";
     ctx.lineWidth = 1;
-    ctx.strokeRect(padX + 6, y + 6, 26, 16);
+    ctx.strokeRect(badgeX, y + 6, 26, 16);
     ctx.font = "bold 9px 'Space Mono', monospace";
     ctx.fillStyle = "#fff";
     ctx.textAlign = "center";
-    ctx.fillText(pos, padX + 19, y + 18);
+    ctx.fillText(pos, badgeX + 13, y + 18);
 
     // Player name
     ctx.font = "bold 12px sans-serif";
@@ -3460,12 +3511,12 @@ function exportImage() {
     const displayName = pName.length > 20
       ? pName.substring(0, 18) + "..."
       : pName;
-    ctx.fillText(displayName, padX + 38, y + 18);
+    ctx.fillText(displayName, badgeX + 32, y + 18);
 
     // Team
     ctx.font = "10px 'Space Mono', monospace";
     ctx.fillStyle = "#8a7565";
-    ctx.fillText(player.team || "", padX + playerColW - 30, y + 18);
+    ctx.fillText(player.team || "", padX + rankColW + playerColW - 30, y + 18);
 
     // Stats
     ctx.font = "12px 'Space Mono', monospace";
@@ -3474,7 +3525,7 @@ function exportImage() {
     for (let i = 0; i < visibleCols.length; i++) {
       const col = getColumnDef(visibleCols[i]);
       const val = player[visibleCols[i]];
-      const x = padX + playerColW + i * colW + colW - 8;
+      const x = padX + rankColW + playerColW + i * colW + colW - 8;
       ctx.fillText(formatStat(val, col ? col.decimals : 0), x, y + 18);
     }
   }
@@ -3482,13 +3533,22 @@ function exportImage() {
   // Table border
   ctx.strokeStyle = "#2d1f14";
   ctx.lineWidth = 3;
-  ctx.strokeRect(padX, padY, W - padX * 2, headerH + rowCount * rowH);
+  ctx.strokeRect(padX, hdrY, tableW, headerH + rowCount * rowH);
+
+  // Rank column divider
+  ctx.lineWidth = 1;
+  ctx.strokeStyle = "#c4b5a5";
+  ctx.beginPath();
+  ctx.moveTo(padX + rankColW, hdrY);
+  ctx.lineTo(padX + rankColW, hdrY + headerH + rowCount * rowH);
+  ctx.stroke();
 
   // Player column divider
   ctx.lineWidth = 2;
+  ctx.strokeStyle = "#2d1f14";
   ctx.beginPath();
-  ctx.moveTo(padX + playerColW, padY);
-  ctx.lineTo(padX + playerColW, padY + headerH + rowCount * rowH);
+  ctx.moveTo(padX + rankColW + playerColW, hdrY);
+  ctx.lineTo(padX + rankColW + playerColW, hdrY + headerH + rowCount * rowH);
   ctx.stroke();
 
   // Watermark
@@ -3497,12 +3557,8 @@ function exportImage() {
   ctx.fillStyle = "#2d1f14";
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
-  ctx.fillText("razzle.lol — let's razzle dazzle em baby", W / 2, wmY);
+  ctx.fillText("razzle.lol \u2014 let's razzle dazzle em baby", W / 2, wmY);
   ctx.globalAlpha = 1.0;
-
-  // Razzle logo mark
-  ctx.font = "20px serif";
-  ctx.fillText("🐯", W / 2 - 140, wmY + 2);
 
   // Download
   const link = document.createElement("a");
