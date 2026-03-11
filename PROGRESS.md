@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 70 — Screener Scroll-to-Top + Header Shadow (COMPLETE)
+
+**Exit Criterion MET**: Thead shadow on scroll (box-shadow 0 4px 8px rgba 8%). Scroll-to-top circle button at scrollTop > 200. Both in RAF-throttled scroll handler.
+
+### Phase 70 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Header shadow + scroll-to-top | DONE | thead-shadow class, .scroll-top-btn (36px circle, chunky border), smooth scroll |
+
 ## Previous Phase: Phase 69 — Screener PNG Export Enhancement (COMPLETE)
 
 **Exit Criterion MET**: PNG export includes dark title bar with context (mode/position/season/sort), rank numbers, sort column highlight, sort arrow on header. Polished Reddit-ready layout.

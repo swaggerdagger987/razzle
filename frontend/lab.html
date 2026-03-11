@@ -830,6 +830,9 @@
     top: 0;
     z-index: 10;
   }
+  .screener-table thead.thead-shadow th {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+  }
 
   .screener-table th {
     background: var(--bg-warm);
@@ -1337,6 +1340,29 @@
 
   .watermark span {
     color: var(--orange);
+  }
+
+  .scroll-top-btn {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    z-index: 20;
+    width: 36px;
+    height: 36px;
+    border: 3px solid var(--ink);
+    border-radius: 50%;
+    background: var(--bg-card);
+    box-shadow: 3px 3px 0 var(--ink);
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 30px;
+    text-align: center;
+    color: var(--ink);
+    transition: transform 0.1s;
+  }
+  .scroll-top-btn:hover {
+    transform: translateY(-2px);
+    background: var(--orange-light);
   }
 
   /* ===== UNIVERSE BAR (persistent across panels) ===== */
@@ -2966,6 +2992,7 @@
 
   <!-- TABLE -->
   <div class="table-wrap">
+    <button class="scroll-top-btn" id="scrollTopBtn" style="display:none;" onclick="document.querySelector('.table-wrap').scrollTo({top:0, behavior:'smooth'})" title="Scroll to top">&#9650;</button>
     <table class="screener-table" id="screenerTable">
       <thead id="tableHead"></thead>
       <tbody id="pinnedBody" style="display:none;"></tbody>

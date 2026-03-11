@@ -1385,6 +1385,14 @@ function onTableScroll() {
   _vscrollRAF = requestAnimationFrame(function() {
     _vscrollRAF = null;
     renderVisibleRows();
+    // Header shadow + scroll-to-top toggle
+    var wrap = document.querySelector(".table-wrap");
+    if (!wrap) return;
+    var scrolled = wrap.scrollTop > 0;
+    var thead = document.getElementById("tableHead");
+    if (thead) thead.classList.toggle("thead-shadow", scrolled);
+    var btn = document.getElementById("scrollTopBtn");
+    if (btn) btn.style.display = wrap.scrollTop > 200 ? "" : "none";
   });
 }
 
