@@ -1,5 +1,16 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 45 — QA + UX Audit Fixes for Phases 41-44 (COMPLETE)
+
+**Exit Criterion MET**: All HIGH and MEDIUM findings fixed. Class name escaping corrected. API parameter normalization consistent.
+
+### Phase 45 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Fix class name escaping in Tiers | DONE | Removed escapeHtml from class contexts, kept for text content |
+| 2 | Normalize tier-list position param | DONE | Added .strip().upper() to match other dynasty endpoints |
+
 ## Previous Phase: Phase 44 — Shareability & Player Comps (COMPLETE)
 
 **Exit Criterion MET**: Dynasty History has PNG export with watermark. Trade Values custom weights persist in URL params (shareable). Dynasty History supports comparing 2-5 selected players via search.
