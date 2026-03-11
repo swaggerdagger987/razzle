@@ -1,5 +1,17 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 91 — QA + UX Audit Fixes for Phases 87-90 (COMPLETE)
+
+**Exit Criterion MET**: 2 MEDIUM findings fixed (XSS filter escape + position badge guard). 1 LOW fixed (sort2 tint). 0 CRITICAL/HIGH.
+
+### Phase 91 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | XSS filter value escape | DONE | escapeHtml() on label/op/value, numeric validation on URL-loaded filters |
+| 2 | Position badge guard fix | DONE | Changed badges.length > 1 to badges.length |
+| 3 | Secondary sort tint | DONE | Increased from 4% to 6% opacity |
+
 ## Previous Phase: Phase 90 — Position Breakdown Badges (COMPLETE)
 
 **Exit Criterion MET**: Result count shows position-colored breakdown badges (QB:12 RB:45 WR:62 TE:18) when ALL positions shown.

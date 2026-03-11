@@ -1,8 +1,8 @@
-# QA + UX Audit — Phases 81-85
+# QA + UX Audit — Phases 87-90
 
 **Audit Date**: 2026-03-11
-**Scope**: Phases 81-85 (QA fixes 76-80, select all checkbox, keyboard page nav, smart filter presets, group header toggle)
-**Files Audited**: frontend/lab.js, frontend/lab.html, backend/live_data/players.py
+**Scope**: Phases 87-90 (Multi-sort, Sticky frozen columns, Reset all filters, Position breakdown badges)
+**Files Audited**: frontend/lab.js, frontend/lab.html
 
 ---
 
@@ -10,20 +10,26 @@
 
 ### CRITICAL: None
 
-### HIGH
+### HIGH: None
 
-1. **Post-query filter pagination was incorrect** (`backend/live_data/players.py`)
-   - Original: SQL LIMIT/OFFSET applied before post-query filters, causing incorrect total counts and missing items across pages.
-   - **Fixed in this audit**: When post_filters exist, SQL fetches 5x items with offset 0, post-filters applied in Python, then manual pagination slice. Total count reflects filtered results.
+### MEDIUM
 
-### MEDIUM: None (after fix above)
+1. **XSS in filter value rendering** (`frontend/lab.js`)
+   - Original: Filter values from URL params rendered directly in HTML without escaping.
+   - Attack vector: Crafted URL with `?filters=[{"key":"ppg","op":"eq","value":"<script>"}]`
+   - **Fixed in this audit**: (a) Filter tag rendering now uses `escapeHtml()` for label, op, and value. (b) URL-loaded filters validated: must have string key, string op, numeric value. Non-numeric values stripped.
+
+2. **Position badges only shown when 2+ positions present** (`frontend/lab.js`)
+   - Original: `badges.length > 1` check suppressed badge when all visible players were same position.
+   - **Fixed in this audit**: Changed to `badges.length` so single-position results still show breakdown.
 
 ### LOW
 
-2. Select all checkbox selects max 5 players (comparison limit). Expected behavior but no visual indication of the 5-player cap. Tooltip says "Select all / none" which is slightly misleading.
-3. ArrowLeft/Right page navigation fires when a table row is focused. The keyboard navigation handler checks for TR focus but doesn't intercept arrow keys. Not a functional issue since left/right don't have row-level behavior.
-4. Group header onclick uses string literal for group name. Safe since group names are hardcoded without quotes.
-5. Smart filter presets hidden in college mode (added in this audit fix).
+3. **Secondary sort header tint barely visible** (`frontend/lab.html`)
+   - Original: 4% opacity background on secondary sort column header.
+   - **Fixed in this audit**: Increased to 6% opacity for better visibility while still being subtler than primary sort (8%).
+
+4. Summary bar tfoot colspan'd cell spans all utility columns — works correctly but no visual boundary between frozen and scrollable areas. Not a functional issue.
 
 ---
 
@@ -37,17 +43,18 @@
 
 ### LOW
 
-1. Smart Filters dropdown has descriptive labels showing actual filter criteria — good for transparency.
-2. Group header click-to-toggle is discoverable via cursor:pointer and title tooltip.
-3. Column picker search auto-focuses on open — smooth flow.
+1. Multi-sort △2/▽2 suffix is compact and discoverable. Good.
+2. "Reset All ×" dark pill contrasts well against lighter filter tags — clear call to action.
+3. Position breakdown badges use correct position colors (QB blue, RB teal, WR terracotta, TE purple).
+4. Sticky columns scroll smoothly on desktop with proper background preservation.
 
 ---
 
 ## SUMMARY
 
 - **CRITICAL**: 0
-- **HIGH**: 1 (pagination fix — already applied)
-- **MEDIUM**: 0
-- **LOW**: 6
+- **HIGH**: 0
+- **MEDIUM**: 2 (both fixed — XSS filter escape + position badge guard)
+- **LOW**: 4
 
-Overall: One significant bug found and fixed (post-query filter pagination). Smart filters and college mode visibility also fixed proactively during audit. All other features clean.
+Overall: One XSS vulnerability found and fixed (filter value rendering from URL params). Position badge display improved. Secondary sort visibility improved. All phases 87-90 functional requirements met.

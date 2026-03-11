@@ -2234,7 +2234,7 @@ function updateResultCount() {
         badges.push('<span style="font-size:10px; font-weight:700; color:' + posColors[pp] + ';">' + pp + ':' + posCounts[pp] + '</span>');
       }
     }
-    if (badges.length > 1) parts.push(badges.join(" "));
+    if (badges.length) parts.push(badges.join(" "));
   }
 
   el.innerHTML = parts.join(" · ");
@@ -2306,7 +2306,7 @@ function renderActiveFilters() {
   html += state.filters.map((f, i) => {
     const col = getColumnDef(f.key);
     const label = col ? col.label : f.key;
-    return `<span class="filter-tag">${label} ${opLabels[f.op] || f.op} ${f.value} <span class="remove" onclick="removeFilter(${i})">×</span></span>`;
+    return `<span class="filter-tag">${escapeHtml(label)} ${opLabels[f.op] || escapeHtml(String(f.op))} ${escapeHtml(String(f.value))} <span class="remove" onclick="removeFilter(${i})">×</span></span>`;
   }).join(" ");
 
   // "Reset All" button when any filters, search, teams, or minGP are active
@@ -2689,7 +2689,13 @@ function loadStateFromURL() {
   if (params.has("dir2")) state.sortDir2 = params.get("dir2");
   if (params.has("offset")) state.offset = parseInt(params.get("offset"));
   if (params.has("filters")) {
-    try { state.filters = JSON.parse(params.get("filters")); } catch (e) {}
+    try {
+      var parsed = JSON.parse(params.get("filters"));
+      // Validate: each filter must have string key, string op, numeric value
+      state.filters = Array.isArray(parsed) ? parsed.filter(function(f) {
+        return f && typeof f.key === "string" && typeof f.op === "string" && !isNaN(parseFloat(f.value));
+      }).map(function(f) { return { key: f.key, op: f.op, value: parseFloat(f.value) }; }) : [];
+    } catch (e) { state.filters = []; }
   }
   if (params.has("teams")) {
     state.teams = params.get("teams").split(",").filter(t => t);
