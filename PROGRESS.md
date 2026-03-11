@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 107 — Keyboard Row Navigation (COMPLETE)
+
+**Exit Criterion MET**: J/K navigate rows, Enter opens profile, blue focus ring. 34 tests pass.
+
+### Phase 107 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | J/K row navigation | DONE | Focus ring CSS, Enter opens profile, shortcut reference updated |
+
 ## Previous Phase: Phase 106 — Bulk Bar Position Breakdown (COMPLETE)
 
 **Exit Criterion MET**: Position badges (QB:2 RB:1 WR:3) in bulk action bar. 34 tests pass.

@@ -9016,6 +9016,33 @@ document.addEventListener("keydown", function(e) {
     if (state.offset + state.limit < state.totalCount) { nextPage(); _showToast("next page"); }
     return;
   }
+
+  // J/K: navigate table rows
+  if (e.key === "j" || e.key === "J" || e.key === "k" || e.key === "K") {
+    e.preventDefault();
+    var tbody = document.getElementById("tableBody");
+    if (!tbody) return;
+    var rows = tbody.querySelectorAll("tr[data-player-id]");
+    if (!rows.length) return;
+    var cur = tbody.querySelector("tr.row-focused");
+    var idx = -1;
+    if (cur) { for (var i = 0; i < rows.length; i++) { if (rows[i] === cur) { idx = i; break; } } }
+    if (e.key === "j" || e.key === "J") idx = Math.min(idx + 1, rows.length - 1);
+    else idx = Math.max(idx - 1, 0);
+    if (cur) cur.classList.remove("row-focused");
+    rows[idx].classList.add("row-focused");
+    rows[idx].scrollIntoView({ block: "nearest" });
+    return;
+  }
+
+  // Enter: open focused player profile
+  if (e.key === "Enter") {
+    var focused = document.querySelector("#tableBody tr.row-focused");
+    if (focused && focused.dataset.playerId && state.universe === "nfl") {
+      openPlayerProfile(focused.dataset.playerId);
+    }
+    return;
+  }
 });
 
 // Shortcut reference overlay
@@ -9061,6 +9088,8 @@ function toggleShortcutRef() {
           ${shortcutRow("Dbl-click", "Column header → quick filter")}
           ${shortcutRow("Dbl-click", "Stat cell → copy value")}
           ${shortcutRow("← →", "Previous / next page")}
+          ${shortcutRow("J / K", "Navigate rows down / up")}
+          ${shortcutRow("Enter", "Open focused player profile")}
           ${shortcutRow("?", "This reference")}
         </tbody>
       </table>
