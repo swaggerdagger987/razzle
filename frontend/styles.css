@@ -837,3 +837,92 @@ body {
     padding: 10px 12px;
   }
 }
+
+/* ===== Player Tags ===== */
+.player-tag-chip {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 8px;
+  border: 1.5px solid;
+  vertical-align: middle;
+  margin-left: 4px;
+  letter-spacing: 0.5px;
+  line-height: 14px;
+}
+
+.tag-icon {
+  display: inline-block;
+  font-size: 8px;
+  color: var(--ink-faint);
+  cursor: pointer;
+  vertical-align: middle;
+  margin-left: 3px;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+tr:hover .tag-icon {
+  opacity: 1;
+}
+.tag-icon:hover {
+  color: var(--orange);
+}
+
+.tag-picker {
+  position: fixed;
+  z-index: 1000;
+  background: var(--bg-card);
+  border: 3px solid var(--ink);
+  border-radius: 10px;
+  box-shadow: 4px 4px 0 var(--ink);
+  padding: 8px;
+  min-width: 120px;
+  display: none;
+}
+.tag-picker-title {
+  font-family: var(--font-display);
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  padding: 2px 6px 6px;
+  letter-spacing: 1px;
+}
+.tag-picker-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 5px 8px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink);
+  border-radius: 6px;
+  transition: background 0.1s;
+}
+.tag-picker-option:hover {
+  background: var(--tag-bg, var(--bg-warm));
+}
+.tag-picker-option.active {
+  background: var(--tag-bg);
+  border: 1.5px solid var(--tag-color);
+}
+.tag-picker-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.tag-picker-clear {
+  color: var(--ink-light);
+  font-weight: 400;
+  margin-top: 4px;
+  border-top: 1px dashed var(--ink-faint);
+  padding-top: 6px;
+  border-radius: 0 0 6px 6px;
+}

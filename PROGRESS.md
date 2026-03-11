@@ -1,5 +1,16 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 51 — Screener Player Tags (COMPLETE)
+
+**Exit Criterion MET**: Users can color-tag players in the NFL screener with 5 labels (BUY/SELL/WATCH/TARGET/AVOID). Tags appear as colored pill chips next to player names. Tags persist in localStorage. "Tagged" filter button shows only tagged players. Tags visible in hover cards. Tag state in URL params. Hidden in non-NFL modes.
+
+### Phase 51 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Tag data model + UI interaction | DONE | TAG_OPTIONS (5 colors), localStorage cache, tag picker popup, buildTagChip() pills, dot icon on hover |
+| 2 | Tag filter + clear all | DONE | Tags toolbar button, count badge, orange highlight when active, right-click clear all, hover card tags, tagged=1 URL param |
+
 ## Previous Phase: Phase 50 — QA + UX Audit Fixes for Phases 46-49 (COMPLETE)
 
 **Exit Criterion MET**: All CRITICAL and HIGH findings fixed. Backend input validation (isinstance, str coercion, int season). XSS escape in hover card. Hover card pointer-events:auto with stay-on-hover. Sparkline removed from PPR default preset. Alt text on headshot.

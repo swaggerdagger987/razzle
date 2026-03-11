@@ -198,6 +198,147 @@ function updateWatchlistBadge() {
   btn.textContent = count > 0 ? "Watchlist (" + count + ")" : "Watchlist";
 }
 
+// ─── Player Tags (localStorage, cached in memory) ──────────────
+const TAG_OPTIONS = {
+  BUY:    { label: "BUY",    color: "var(--green)",  bg: "var(--green-light)" },
+  SELL:   { label: "SELL",   color: "var(--red)",    bg: "var(--red-light)" },
+  WATCH:  { label: "WATCH",  color: "var(--yellow)", bg: "var(--yellow-light)" },
+  TARGET: { label: "TARGET", color: "var(--blue)",   bg: "var(--blue-light)" },
+  AVOID:  { label: "AVOID",  color: "var(--purple)", bg: "var(--purple-light)" },
+};
+
+let _playerTagsCache = null;
+
+function getPlayerTags() {
+  if (_playerTagsCache !== null) return _playerTagsCache;
+  try { _playerTagsCache = JSON.parse(localStorage.getItem("razzle_player_tags")) || {}; }
+  catch(e) { _playerTagsCache = {}; }
+  return _playerTagsCache;
+}
+
+function savePlayerTags(tags) {
+  _playerTagsCache = tags;
+  try { localStorage.setItem("razzle_player_tags", JSON.stringify(tags)); } catch(e) {}
+  updateTagFilterBadge();
+}
+
+function getPlayerTag(playerId) {
+  return getPlayerTags()[playerId] || null;
+}
+
+function setPlayerTag(playerId, tagName) {
+  const tags = getPlayerTags();
+  if (tagName && TAG_OPTIONS[tagName]) {
+    tags[playerId] = tagName;
+  } else {
+    delete tags[playerId];
+  }
+  savePlayerTags(tags);
+}
+
+function clearAllTags() {
+  savePlayerTags({});
+  hideTagPicker();
+  renderTable();
+  _showToast("all tags cleared");
+}
+
+function getTaggedCount() {
+  return Object.keys(getPlayerTags()).length;
+}
+
+function updateTagFilterBadge() {
+  const btn = document.getElementById("tagFilterBtn");
+  if (!btn) return;
+  const count = getTaggedCount();
+  const active = state.tagFilter;
+  btn.textContent = active ? "Tagged (" + count + ")" : (count > 0 ? "Tags (" + count + ")" : "Tags");
+  btn.style.background = active ? "var(--orange)" : "";
+  btn.style.color = active ? "white" : "";
+}
+
+// Tag picker popup
+let _tagPickerVisible = false;
+
+function showTagPicker(playerId, anchorEl) {
+  let picker = document.getElementById("tagPicker");
+  if (!picker) {
+    picker = document.createElement("div");
+    picker.id = "tagPicker";
+    picker.className = "tag-picker";
+    document.body.appendChild(picker);
+  }
+
+  const currentTag = getPlayerTag(playerId);
+  let html = '<div class="tag-picker-title">Tag Player</div>';
+  for (const [key, opt] of Object.entries(TAG_OPTIONS)) {
+    const isActive = currentTag === key;
+    html += `<button class="tag-picker-option${isActive ? " active" : ""}" `
+      + `style="--tag-color:${opt.color}; --tag-bg:${opt.bg};" `
+      + `onclick="onTagSelect('${escapeAttr(playerId)}', '${isActive ? "" : key}')">`
+      + `<span class="tag-picker-dot" style="background:${opt.color};"></span>`
+      + `${opt.label}</button>`;
+  }
+  if (currentTag) {
+    html += `<button class="tag-picker-option tag-picker-clear" onclick="onTagSelect('${escapeAttr(playerId)}', '')">Remove Tag</button>`;
+  }
+  picker.innerHTML = html;
+
+  // Position near anchor
+  const rect = anchorEl.getBoundingClientRect();
+  let top = rect.bottom + 4;
+  let left = rect.left;
+  picker.style.display = "block";
+  const pw = picker.offsetWidth || 140;
+  const ph = picker.offsetHeight || 200;
+  if (left + pw > window.innerWidth - 12) left = window.innerWidth - pw - 12;
+  if (left < 12) left = 12;
+  if (top + ph > window.innerHeight - 12) top = rect.top - ph - 4;
+  picker.style.top = top + "px";
+  picker.style.left = left + "px";
+  _tagPickerVisible = true;
+
+  // Close on outside click (once)
+  setTimeout(function() {
+    document.addEventListener("click", _closeTagPickerOutside, { once: true });
+  }, 0);
+}
+
+function _closeTagPickerOutside(e) {
+  const picker = document.getElementById("tagPicker");
+  if (picker && !picker.contains(e.target)) {
+    hideTagPicker();
+  } else if (picker) {
+    // Re-attach if clicked inside
+    document.addEventListener("click", _closeTagPickerOutside, { once: true });
+  }
+}
+
+function hideTagPicker() {
+  const picker = document.getElementById("tagPicker");
+  if (picker) picker.style.display = "none";
+  _tagPickerVisible = false;
+}
+
+function onTagSelect(playerId, tagName) {
+  setPlayerTag(playerId, tagName);
+  hideTagPicker();
+  renderTable();
+}
+
+function toggleTagFilter() {
+  state.tagFilter = !state.tagFilter;
+  updateTagFilterBadge();
+  fetchAndRender();
+}
+
+function buildTagChip(playerId) {
+  const tag = getPlayerTag(playerId);
+  if (!tag || !TAG_OPTIONS[tag]) return "";
+  const opt = TAG_OPTIONS[tag];
+  return ` <span class="player-tag-chip" style="background:${opt.bg}; color:${opt.color}; border-color:${opt.color};">${opt.label}</span>`;
+}
+
 // ─── Prospect column definitions ────────────────────────────────
 const PROSPECT_COLUMNS = {
   draft_round:   { label: "Rd",       group: "Draft",     decimals: 0 },
@@ -536,6 +677,7 @@ const state = {
   seasons: [],
   selectedPlayers: [], // for compare/charts [{player_id, full_name, position, team}]
   heatColors: false, // percentile heat coloring toggle
+  tagFilter: false, // show only tagged players
   formulas: [], // user custom formulas [{name, components: [{stat, weight}]}]
   // College-specific state (includes prospect sub-view)
   collegeView: (function() {
@@ -627,6 +769,7 @@ function isProspectView() {
   renderColumnPicker();
   renderPresets();
   updateWatchlistBadge();
+  updateTagFilterBadge();
   await fetchAndRender();
 
   // Search debounce
@@ -706,6 +849,11 @@ async function fetchAndRenderNFL(signal, myId) {
     computeFormulaValues();
     computeCustomScoringValues();
     computePosRanks();
+    // Apply tag filter (client-side)
+    if (state.tagFilter) {
+      const tags = getPlayerTags();
+      state.items = state.items.filter(p => tags[p.player_id]);
+    }
     loading.style.display = "none";
     renderTable();
     renderPagination();
@@ -929,6 +1077,8 @@ function buildRowHTML(player, cols, heatOn, pctData) {
     html += playerHeadshot(player, pos);
     html += `<span class="pos-badge ${posClass(pos)}">${escapeHtml(pos)}</span>`;
     html += `<a href="/player/${encodeURIComponent(pid)}" onclick="event.preventDefault(); openPlayerProfile('${pid}');" onmouseenter="onPlayerNameEnter('${pid}', this)" onmouseleave="onPlayerNameLeave()" style="color:var(--ink); text-decoration:none; border-bottom:1px dashed var(--ink-faint);">${escapeHtml(player.full_name)}</a>`;
+    html += buildTagChip(pid);
+    html += `<span class="tag-icon" onclick="event.stopPropagation(); showTagPicker('${pid}', this)" title="Tag player">&#9679;</span>`;
     html += `<span class="team-label">${escapeHtml(player.team)}</span>`;
     html += `</div></td>`;
   }
@@ -1168,7 +1318,7 @@ function showHoverCard(playerId, anchorEl) {
     html += `<img class="hover-card-headshot" src="${escapeAttr(player.headshot_url)}" alt="${escapeAttr(player.full_name || '')}" onerror="this.style.display='none';">`;
   }
   html += '<div>';
-  html += `<div class="hover-card-name">${escapeHtml(player.full_name || "")}</div>`;
+  html += `<div class="hover-card-name">${escapeHtml(player.full_name || "")}${buildTagChip(playerId)}</div>`;
   html += `<div class="hover-card-meta">`;
   html += `<span class="pos-badge ${posClass(pos)}" style="font-size:9px; padding:1px 5px;">${escapeHtml(pos)}</span> `;
   html += `${escapeHtml(player.team || "FA")}`;
@@ -1401,6 +1551,10 @@ function applyUniverseUI() {
 
   // Hide relevance toggle in non-NFL modes
   document.getElementById("relevanceToggle").style.display = isNFL ? "" : "none";
+
+  // Hide tag filter in non-NFL modes
+  const tagFilterBtn = document.getElementById("tagFilterBtn");
+  if (tagFilterBtn) tagFilterBtn.style.display = isNFL ? "" : "none";
 
   // Hide filter bar in non-NFL modes
   document.getElementById("filterBar").style.display = isNFL ? "" : "none";
@@ -1788,6 +1942,7 @@ function saveStateToURL() {
   if (state.teams.length) params.set("teams", state.teams.join(","));
   if (state.minGP > 0) params.set("min_gp", state.minGP);
   if (state.heatColors) params.set("heat", "1");
+  if (state.tagFilter) params.set("tagged", "1");
 
   if (isProspectView()) {
     if (state.draftYear) params.set("draft_year", state.draftYear);
@@ -1850,6 +2005,9 @@ function loadStateFromURL() {
   } else {
     // Fall back to localStorage preference
     state.heatColors = (function() { try { return localStorage.getItem("razzle_heat_colors") === "1"; } catch(e) { return false; } })();
+  }
+  if (params.has("tagged")) {
+    state.tagFilter = params.get("tagged") === "1";
   }
 
   if (isProspectView()) {
