@@ -1487,8 +1487,12 @@
 </head>
 <body>
 
+<!-- Skip to content (accessibility) -->
+<a href="#scenarioInput" class="skip-link" style="position:absolute; top:-40px; left:0; background:var(--orange); color:#fff; padding:8px 16px; z-index:9999; font-family:var(--font-display); font-size:14px; transition:top 0.2s;">Skip to scenario input</a>
+<style>.skip-link:focus { top: 0; }</style>
+
 <!-- NAV -->
-<nav class="topnav">
+<nav class="topnav" aria-label="Main navigation">
   <a href="/" class="logo">
     <div class="logo-mark">🐯</div>
     <div class="logo-text">Razzle<span class="accent">.lol</span></div>
@@ -1529,7 +1533,7 @@
   <div class="warroom-canvas-wrap">
     <div class="warroom-canvas-label">Situation Room — Live Feed</div>
     <div class="canvas-container" id="canvasContainer">
-      <canvas id="warRoomCanvas" width="960" height="704"></canvas>
+      <canvas id="warRoomCanvas" width="960" height="704" role="img" aria-label="Pixel art Situation Room with 6 AI agents working at desks and analyzing data. Click an agent to select them." tabindex="0"></canvas>
       <!-- Placeholder until pixel engine loads -->
       <div class="canvas-placeholder" id="canvasPlaceholder">
         <div class="canvas-placeholder-icon">🐯</div>
@@ -1537,14 +1541,14 @@
         <div class="canvas-placeholder-sub">pixel engine loading</div>
       </div>
       <!-- Config toggle + panel -->
-      <button class="config-toggle" id="configToggle">Config</button>
-      <div class="config-panel" id="configPanel">
+      <button class="config-toggle" id="configToggle" aria-expanded="false" aria-controls="configPanel">Config</button>
+      <div class="config-panel" id="configPanel" role="region" aria-label="Agent configuration settings">
         <div class="config-header">Agent Configuration</div>
 
         <!-- Shared API Key -->
         <div class="config-section">
           <label class="config-label">API Key (all agents)</label>
-          <input class="config-input" id="cfgSharedKey" type="password" autocomplete="off" placeholder="sk-or-v1-...">
+          <input class="config-input" id="cfgSharedKey" type="password" autocomplete="off" placeholder="sk-or-v1-..." aria-label="API key for all agents">
           <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
             <button class="config-btn config-btn-primary" id="cfgApplyKey">Apply to All</button>
             <button class="config-btn" id="cfgSaveCloud" title="Encrypt and save to your Razzle account (Pro+)">Save to Cloud</button>
@@ -1556,14 +1560,14 @@
         <!-- Model -->
         <div class="config-section">
           <label class="config-label">Model</label>
-          <input class="config-input" id="cfgModel" type="text" placeholder="openrouter/auto" value="openrouter/auto">
+          <input class="config-input" id="cfgModel" type="text" placeholder="openrouter/auto" value="openrouter/auto" aria-label="LLM model identifier">
           <button class="config-btn" id="cfgApplyModel">Apply to All</button>
         </div>
 
         <!-- Base URL -->
         <div class="config-section">
           <label class="config-label">Base URL</label>
-          <input class="config-input" id="cfgBaseUrl" type="text" placeholder="https://openrouter.ai/api/v1/chat/completions">
+          <input class="config-input" id="cfgBaseUrl" type="text" placeholder="https://openrouter.ai/api/v1/chat/completions" aria-label="LLM provider base URL">
           <button class="config-btn" id="cfgApplyUrl">Apply to All</button>
         </div>
 
@@ -1580,8 +1584,8 @@
       </div>
 
       <!-- Roster toggle + panel -->
-      <button class="roster-toggle" id="rosterToggle">Roster</button>
-      <div class="roster-panel" id="rosterPanel">
+      <button class="roster-toggle" id="rosterToggle" aria-expanded="false" aria-controls="rosterPanel">Roster</button>
+      <div class="roster-panel" id="rosterPanel" role="region" aria-label="Agent roster list">
         <div class="roster-header">Agent Roster</div>
         <div id="rosterList"></div>
       </div>
@@ -1646,7 +1650,7 @@
         Scenario Briefing
       </div>
       <div class="scenario-body">
-        <textarea class="scenario-textarea" id="scenarioInput" placeholder="Describe the situation... e.g. 'Bijan Robinson questionable with knee injury, I need to decide on a flex play'"></textarea>
+        <textarea class="scenario-textarea" id="scenarioInput" placeholder="Describe the situation... e.g. 'Bijan Robinson questionable with knee injury, I need to decide on a flex play'" aria-label="Describe your fantasy football scenario for agent analysis"></textarea>
 
         <div class="scenario-examples">
           <div class="scenario-examples-label">try one of these:</div>
@@ -1702,7 +1706,7 @@
         </div>
 
         <div class="scenario-actions">
-          <button class="scenario-run-all" id="scenarioRunAll">Run All Agents</button>
+          <button class="scenario-run-all" id="scenarioRunAll" aria-label="Run all 6 agents on this scenario">Run All Agents</button>
           <button class="btn-chunky" style="font-size:11px; padding:6px 12px; background:var(--bg-card);" onclick="toggleMemoryPanel()">Memory</button>
           <div class="scenario-agent-btns" id="scenarioAgentBtns"></div>
           <div class="scenario-status" id="scenarioStatus"></div>
@@ -1747,7 +1751,7 @@
 
   <!-- BRIEFING CARDS (rendered by JS after agents respond) -->
   <div class="briefing-zone">
-    <div id="briefingCards"></div>
+    <div id="briefingCards" role="region" aria-label="Agent briefing responses" aria-live="polite"></div>
   </div>
 </div>
 
@@ -1802,7 +1806,7 @@
 
     <!-- Promo code input -->
     <div style="display:inline-flex; align-items:center; gap:8px; margin-bottom:8px;">
-      <input type="text" id="promoCodeInput" placeholder="promo code" maxlength="20"
+      <input type="text" id="promoCodeInput" placeholder="promo code" maxlength="20" aria-label="Promo code"
         style="font-family:var(--font-mono); font-size:11px; padding:6px 12px; border:2px solid var(--ink-faint); border-radius:8px; background:var(--bg-card); width:140px; text-transform:uppercase; text-align:center;"
         oninput="this.value=this.value.toUpperCase()">
       <button class="btn-chunky" style="font-size:11px; padding:5px 12px;" onclick="if(typeof validatePromoCode==='function')validatePromoCode()">Apply</button>

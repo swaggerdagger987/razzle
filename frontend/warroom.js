@@ -1306,7 +1306,9 @@ const rosterPanel = document.getElementById('rosterPanel');
 if (rosterToggle && rosterPanel) {
   rosterToggle.addEventListener('click', () => {
     rosterPanel.classList.toggle('open');
-    if (rosterPanel.classList.contains('open')) {
+    var isOpen = rosterPanel.classList.contains('open');
+    rosterToggle.setAttribute('aria-expanded', String(isOpen));
+    if (isOpen) {
       buildRoster();
     }
   });
@@ -1405,6 +1407,7 @@ function setupConfigPanel() {
   // Toggle panel
   toggle.addEventListener('click', () => {
     panel.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', String(panel.classList.contains('open')));
   });
 
   // Apply shared key to all agents

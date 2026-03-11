@@ -1,5 +1,25 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 160 — Platform: Situation Room Accessibility Hardening (COMPLETE)
+
+**Exit Criterion MET**: Situation Room (agents.html) accessibility upgraded from 2 to 18 ARIA attributes, 4 role attributes, 1 tabindex. (1) Skip-to-content link: hidden link at top of page that appears on Tab focus, jumps to scenario input area. (2) Canvas: role="img", aria-label describing the pixel art scene, tabindex="0" for keyboard focus. (3) Config panel: aria-expanded toggling on Config button, aria-controls linking to panel, role="region" with aria-label on panel. (4) Roster panel: same aria-expanded + aria-controls + role="region" pattern. (5) Scenario textarea: aria-label for screen readers. (6) Briefing cards container: role="region", aria-label, aria-live="polite" for dynamic content updates. (7) Form inputs: aria-label on API key, model, base URL, and promo code inputs. (8) Run All Agents button: aria-label. (9) Navigation: aria-label="Main navigation" on nav element. HTML balance verified: div 139/139, button 14/14. JS syntax clean.
+
+### Phase 160 Tasks (Platform Loop)
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | ARIA + Accessibility Attributes | PASS | 18 aria- attributes, 4 role, 1 tabindex, skip-link, aria-live |
+| 2 | aria-expanded Toggle Integration | PASS | Config + Roster panels update aria-expanded on click |
+| 3 | QA Verification | PASS | JS syntax clean, HTML balanced, ARIA count verified |
+
+### Decisions Log
+- Skip-to-content link targets #scenarioInput (the primary interactive element on the page) rather than #warRoomCanvas because the scenario input is where keyboard users spend most time.
+- Canvas gets role="img" (not "application") because it's primarily a visual display, not an interactive widget for keyboard users. The canvas has tabindex="0" so it can receive focus, but actual agent selection is primarily mouse-driven.
+- aria-live="polite" on briefingCards means screen readers announce new agent responses without interrupting current reading.
+- All config inputs get aria-label because their associated <label> elements use class-based styling rather than proper `for` attribute binding.
+
+---
+
 ## Previous Phase: Phase 159 — Platform: BYOK Cloud Sync Frontend Integration (COMPLETE)
 
 **Exit Criterion MET**: Frontend config panel in agents.html now supports encrypted cloud storage for BYOK API keys. Two new buttons added next to "Apply to All": "Save to Cloud" (encrypts and stores the current key server-side via POST /api/user/api-keys) and "Load from Cloud" (retrieves decrypted key via GET /api/user/api-keys/openrouter/decrypt and applies to all 6 agents). Both buttons check auth status and Pro+ tier before attempting operations, showing user-friendly messages ("sign in first", "Pro+ required for cloud storage"). Status hint updates during operations: "encrypting...", "saved to cloud (encrypted)", "loading...", "loaded from cloud". IIFE pattern keeps cloud sync code encapsulated. JS syntax verified clean via node --check, HTML div/button tags balanced.
