@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 129 — Player Age Badges in Table (COMPLETE)
+
+**Exit Criterion MET**: NFL player name cells show color-coded age badge (green ≤24, blue 25-27, orange 28-29, red 30+). Pill styling with colored border. 34 tests pass.
+
+### Phase 129 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Age badges | DONE | .age-badge with 4 age tiers (young/prime/aging/vet), pill CSS, after team label |
+
 ## Previous Phase: Phase 128 — Bulk Pin from Selection (COMPLETE)
 
 **Exit Criterion MET**: Bulk action bar "Pin" button pins all selected players to top (max 5, skip duplicates). NFL-only visibility. Toast feedback. 34 tests pass.
