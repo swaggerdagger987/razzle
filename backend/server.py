@@ -2283,6 +2283,37 @@ def trade_finder(player_id: str = "", season: int = 0):
         return JSONResponse({"error": "Failed to fetch trade finder data"}, status_code=500)
 
 
+@app.post("/api/league-trade-finder")
+async def league_trade_finder(request: Request):
+    """Match Sleeper player names to Razzle trade values for league-specific trade analysis.
+    Pro+ only. Accepts {players: [{name, position, team}, ...]}."""
+    user, err = require_plan(request, "pro")
+    if err:
+        return err
+    try:
+        body = await request.json()
+        player_names = body.get("players", [])
+        if not player_names or not isinstance(player_names, list):
+            return JSONResponse({"error": "players array is required"}, status_code=400)
+        # Cap at 500 players (large leagues with many rosters)
+        player_names = player_names[:500]
+        # Validate entries
+        clean = []
+        for entry in player_names:
+            if isinstance(entry, dict) and entry.get("name"):
+                clean.append({
+                    "name": str(entry["name"])[:100],
+                    "position": str(entry.get("position", ""))[:5],
+                    "team": str(entry.get("team", ""))[:5],
+                })
+        if not clean:
+            return JSONResponse({"error": "No valid player entries"}, status_code=400)
+        return live_data.fetch_league_trade_values(player_names=clean)
+    except Exception as e:
+        logger.exception("league-trade-finder error")
+        return JSONResponse({"error": "Failed to fetch league trade values"}, status_code=500)
+
+
 @app.get("/api/cheat-sheet")
 def cheat_sheet(season: int = 0, format: str = "ppr"):
     """Return a draft cheat sheet grouped by position."""

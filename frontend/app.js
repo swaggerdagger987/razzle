@@ -996,4 +996,42 @@ window.addEventListener("razzle-plan-changed", function(e) {
 
   // Update Situation Room gating (hide upsell, enable full features)
   if (typeof refreshPlanGating === "function") refreshPlanGating();
+
+  // Hide ads for paid users (plan just changed)
+  var adSlots = document.querySelectorAll(".razzle-ad-slot");
+  for (var i = 0; i < adSlots.length; i++) adSlots[i].style.display = "none";
 });
+
+/* ===== AdSense Scaffolding (free-tier only) ===== */
+(function initAds() {
+  // Only show ads to free users
+  if (isPaidUser()) return;
+
+  // Skip ads on Situation Room and Pricing pages
+  var path = location.pathname;
+  if (path === "/agents.html" || path === "/pricing.html") return;
+
+  // AdSense publisher ID — set when account is approved
+  var ADSENSE_PUB_ID = ""; // e.g., "ca-pub-XXXXXXXXXX"
+  if (!ADSENSE_PUB_ID) return; // No ads until publisher ID is configured
+
+  // Load AdSense script
+  var script = document.createElement("script");
+  script.async = true;
+  script.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=" + ADSENSE_PUB_ID;
+  script.crossOrigin = "anonymous";
+  document.head.appendChild(script);
+
+  // Insert ad slot before the footer (tasteful placement)
+  var footer = document.querySelector(".site-footer");
+  if (footer) {
+    var adDiv = document.createElement("div");
+    adDiv.className = "razzle-ad-slot";
+    adDiv.style.cssText = "max-width:900px; margin:24px auto 0; padding:0 24px; text-align:center;";
+    adDiv.innerHTML =
+      '<ins class="adsbygoogle" style="display:block" data-ad-client="' + ADSENSE_PUB_ID + '" ' +
+      'data-ad-slot="" data-ad-format="auto" data-full-width-responsive="true"></ins>';
+    footer.parentNode.insertBefore(adDiv, footer);
+    try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) {}
+  }
+})();

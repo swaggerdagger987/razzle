@@ -8,7 +8,7 @@ function exportPanelCSV(panelName) {
   try {
     var user = JSON.parse(localStorage.getItem("razzle_user"));
     if (!user || (user.plan !== "pro" && user.plan !== "elite")) {
-      _showToast("CSV export requires Pro. Upgrade at razzle.lol");
+      _showToast('CSV export requires Pro. <a href="/pricing.html" style="color:var(--orange);">Upgrade</a>');
       return;
     }
   } catch (e) {
@@ -5466,7 +5466,7 @@ function exportCSV() {
   try {
     var user = JSON.parse(localStorage.getItem("razzle_user"));
     if (!user || (user.plan !== "pro" && user.plan !== "elite")) {
-      _showToast("CSV export requires Pro. Upgrade at razzle.lol");
+      _showToast('CSV export requires Pro. <a href="/pricing.html" style="color:var(--orange);">Upgrade</a>');
       return;
     }
   } catch (e) {

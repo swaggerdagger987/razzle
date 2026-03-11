@@ -694,6 +694,132 @@ def _fetch_trade_finder_uncached(player_id, season=None):
 
 
 # ---------------------------------------------------------------------------
+# League-Specific Trade Finder — match Sleeper names to Razzle trade values
+# ---------------------------------------------------------------------------
+
+
+def _normalize_name(name):
+    """Normalize a player name for fuzzy matching: lowercase, strip suffixes."""
+    if not name:
+        return ""
+    n = name.lower().strip()
+    # Strip common suffixes
+    for suffix in (" jr.", " jr", " sr.", " sr", " ii", " iii", " iv", " v"):
+        if n.endswith(suffix):
+            n = n[: -len(suffix)].strip()
+    # Remove periods and extra spaces
+    n = n.replace(".", "").replace("  ", " ")
+    return n
+
+
+def fetch_league_trade_values(player_names, season=None):
+    """Given a list of {name, position, team} dicts from Sleeper, return Razzle
+    trade values for each matched player.
+
+    Returns: {"players": [{sleeper_name, matched_name, position, team, trade_value,
+              ppg, age, tier, tier_label, production_score, age_score, scarcity_score}, ...],
+              "unmatched": [names that couldn't be found]}
+    """
+    if not player_names:
+        return {"players": [], "unmatched": []}
+
+    with get_db() as conn:
+        if not season:
+            row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+            season = row[0] if row and row[0] else _current_nfl_season()
+
+        # Fetch all fantasy-relevant players with trade values
+        rows = conn.execute("""
+            SELECT
+                p.player_id, p.full_name, p.position, p.team, p.age,
+                SUM(s.fantasy_points_ppr) as total_ppr,
+                COUNT(DISTINCT s.week) as games
+            FROM players p
+            JOIN player_week_stats s
+                ON s.player_id = p.player_id AND s.season = ?
+            WHERE p.position IN ('QB','RB','WR','TE')
+              AND p.fantasy_relevant = 1
+            GROUP BY p.player_id
+            HAVING games >= 1
+            ORDER BY total_ppr DESC
+        """, [season]).fetchall()
+
+        # Build lookup: normalized name -> player data
+        name_map = {}
+        # Also build team+name lookup for disambiguation
+        team_name_map = {}
+        for r in rows:
+            pid = r[0]
+            full_name = r[1] or "Unknown"
+            pos = r[2] or "?"
+            team = r[3] or "FA"
+            age = r[4]
+            total_ppr = r[5] or 0
+            games = r[6] or 1
+            ppg = round(total_ppr / games, 2)
+
+            tv = compute_trade_value(ppg, age, pos)
+            tier = _tv_tier(tv)
+
+            player_data = {
+                "player_id": pid,
+                "full_name": full_name,
+                "position": pos,
+                "team": team,
+                "age": age,
+                "ppg": ppg,
+                "games": games,
+                "trade_value": tv,
+                "tier": tier,
+                "tier_label": _TV_TIER_LABELS[tier],
+                "production_score": round(_production_value(ppg, pos), 1),
+                "age_score": round(_age_value(age, pos), 1),
+                "scarcity_score": round(_scarcity_value(pos), 1),
+            }
+
+            norm = _normalize_name(full_name)
+            if norm not in name_map:
+                name_map[norm] = player_data
+            # Team+name for disambiguation
+            team_key = f"{(team or '').upper()}:{norm}"
+            team_name_map[team_key] = player_data
+
+        # Match Sleeper names to Razzle players
+        matched = []
+        unmatched = []
+        for entry in player_names:
+            sleeper_name = entry.get("name", "")
+            sleeper_pos = entry.get("position", "")
+            sleeper_team = entry.get("team", "")
+            norm = _normalize_name(sleeper_name)
+
+            # Try team+name first (most precise)
+            team_key = f"{(sleeper_team or '').upper()}:{norm}"
+            player = team_name_map.get(team_key) or name_map.get(norm)
+
+            if player:
+                matched.append({
+                    "sleeper_name": sleeper_name,
+                    "matched_name": player["full_name"],
+                    "position": player["position"],
+                    "team": player["team"],
+                    "age": player["age"],
+                    "ppg": player["ppg"],
+                    "games": player["games"],
+                    "trade_value": player["trade_value"],
+                    "tier": player["tier"],
+                    "tier_label": player["tier_label"],
+                    "production_score": player["production_score"],
+                    "age_score": player["age_score"],
+                    "scarcity_score": player["scarcity_score"],
+                })
+            else:
+                unmatched.append(sleeper_name)
+
+        return {"players": matched, "unmatched": unmatched, "season": season}
+
+
+# ---------------------------------------------------------------------------
 # Roster Builder — Grade a hypothetical dynasty roster
 # ---------------------------------------------------------------------------
 

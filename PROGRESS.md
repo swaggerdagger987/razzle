@@ -1,5 +1,30 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 162 — Platform: League-Specific Trade Finder + Conversion Funnel Hardening (COMPLETE)
+
+**Exit Criterion MET**: Four features shipped plus conversion funnel verification. (1) League-specific trade finder backend: new `fetch_league_trade_values()` in dynasty.py matches Sleeper player names to Razzle trade value database via normalized name matching (strips suffixes, case-insensitive, team disambiguation). POST /api/league-trade-finder endpoint in server.py, Pro+ gated via require_plan(), input validation with 500 player cap. (2) League-specific trade finder frontend: new "Find Trade Partners" button on league-intel.html. Collects all players from all Sleeper rosters, sends to API for value matching, then runs client-side trade matching algorithm with 25% value gap threshold, positional need/surplus detection (based on roster depth thresholds), and cross-position trade interest scoring. Renders comic-strip trade partner cards with manager name, record, position need/surplus chips (red=need, green=surplus), value-matched trade pairs with position colors, and "ask the Diplomat" CTA linking to Situation Room with pre-populated scenario. Free users see blurred gate preview with Pro upgrade CTA. (3) Conversion funnel verified end-to-end: 12-step automated test confirms landing->Lab->League Intel->Situation Room->Pricing->Register (Pro trial)->Authenticated /me->Query quota (20/day Pro)->League trade finder access->Billing status->Formulas access->Elite gating (403 on memory+briefings). Zero dead ends. (4) CTA consistency audit: all gated features link to /pricing.html. CSV export toasts now include clickable upgrade links. (5) AdSense scaffolding: centralized initializer in app.js, loads only for free users, skips agents+pricing pages, configurable publisher ID variable, responsive ad slot before footer, hidden on plan upgrade. (6) 59/59 tests pass (3 new for league trade finder).
+
+### Phase 162 Tasks (Platform Loop)
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | League Trade Finder Backend | PASS | fetch_league_trade_values, name normalization, Pro+ gated endpoint |
+| 2 | League Trade Finder Frontend | PASS | Trade partner cards, value matching, position analysis, Diplomat CTA |
+| 3 | Conversion Funnel Smoke Test | PASS | 12-step end-to-end, all pages 200, auth flow, tier gating verified |
+| 4 | CTA Consistency Audit | PASS | All gates link to /pricing.html, CSV toast fixed |
+| 5 | AdSense Scaffolding | PASS | Centralized in app.js, free-only, configurable pub ID |
+| 6 | QA Verification | PASS | 59/59 tests, all JS syntax clean, zero regressions |
+
+### Decisions Log
+- League trade finder is primarily frontend-driven: backend provides name-to-value matching, frontend handles roster analysis and trade suggestion logic. This keeps Sleeper data client-side (no league data sent to Razzle servers).
+- Trade matching uses 25% value gap threshold — wide enough to find interesting trades but narrow enough to exclude absurd mismatches.
+- Positional need/surplus thresholds: QB < 2 = need, RB < 5 = need, WR < 5 = need, TE < 2 = need. Surplus = threshold + 2.
+- Cross-position trades get +10 interest bonus (more interesting than same-position swaps). Giving opponent a position they need gets +15 bonus.
+- AdSense uses empty publisher ID by default — no ads load until account is approved and ID is configured. This is intentional: ads should never appear unexpectedly.
+- Free user gate on trade finder uses the same blur+CTA pattern as Formula Store and other gated features for visual consistency.
+
+---
+
 ## Previous Phase: Phase 161 — Platform: Launch Readiness — Adapter Hardening + E2E Test Suite + Startup Validation (COMPLETE)
 
 **Exit Criterion MET**: Three backend hardening improvements shipped. (1) Adapter context manager wrappers: all 3 adapters (nflverse, college, cfbfastR) now export `get_db()` context managers. `bootstrap_database()` in server.py refactored from manual try/finally to `with adapter.get_db() as conn:` for all 3 connection patterns — zero manual `conn.close()` calls remain in bootstrap flow. This closes the last Backend Audit Priority Fix #1 gap. (2) End-to-end API test suite: new `tests/test_e2e_flows.py` with 22 tests covering auth lifecycle (register, login, /me, duplicate, weak password, wrong password, no token, bad token), query quota (check, track+decrement), formula CRUD (create, list, delete), watchlist CRUD (sync, get), agent memory tier gating (Pro user correctly rejected from Elite-only endpoints), and security boundaries (auth required on all protected endpoints, Elite tier enforced on LLM proxy + briefings). Total test count: 56 (34 existing + 22 new). (3) Startup environment validation: `_validate_env()` function runs at lifespan startup, logs structured table of 12 environment variables with SET/MISSING/not set status and feature impact descriptions (e.g., "STRIPE_SECRET_KEY... not set (billing endpoints disabled)"). Critical vars trigger logger.warning, optional vars use logger.info.

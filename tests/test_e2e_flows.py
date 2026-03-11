@@ -175,6 +175,37 @@ class TestWatchlistCRUD:
         assert isinstance(watchlist, list)
 
 
+class TestLeagueTradeFinder:
+    """League-specific trade finder requires Pro+ tier."""
+
+    def test_league_trade_finder_works_for_pro(self, client):
+        """Pro trial users can access the league trade finder."""
+        resp = client.post("/api/league-trade-finder", headers=_auth_header(), json={
+            "players": [
+                {"name": "Patrick Mahomes", "position": "QB", "team": "KC"},
+                {"name": "Josh Allen", "position": "QB", "team": "BUF"},
+            ],
+        })
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "players" in data
+        assert "unmatched" in data
+
+    def test_league_trade_finder_requires_auth(self, client):
+        """Unauthenticated users cannot access league trade finder."""
+        resp = client.post("/api/league-trade-finder", json={
+            "players": [{"name": "Test Player", "position": "QB", "team": "KC"}],
+        })
+        assert resp.status_code in (401, 403)
+
+    def test_league_trade_finder_validates_input(self, client):
+        """Empty players array is rejected."""
+        resp = client.post("/api/league-trade-finder", headers=_auth_header(), json={
+            "players": [],
+        })
+        assert resp.status_code == 400
+
+
 class TestAgentMemoryGating:
     """Agent memory requires Elite tier. Trial user (Pro) should be rejected."""
 

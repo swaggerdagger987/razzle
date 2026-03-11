@@ -601,6 +601,170 @@
     transform: translate(-1px, -1px);
   }
 
+  /* ===== LEAGUE TRADE FINDER ===== */
+  .trade-finder-trigger {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 2px dashed var(--ink-faint);
+    text-align: center;
+  }
+
+  .trade-finder-trigger button {
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border: 2px solid var(--orange);
+    border-radius: 8px;
+    background: var(--orange-light);
+    color: var(--ink);
+    box-shadow: 2px 2px 0 var(--ink);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+
+  .trade-finder-trigger button:hover {
+    box-shadow: 3px 3px 0 var(--ink);
+    transform: translate(-1px, -1px);
+    background: var(--orange);
+    color: #fff;
+  }
+
+  .trade-finder-results {
+    margin-top: 16px;
+  }
+
+  .trade-partner-card {
+    background: var(--bg-card);
+    border: 2px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 3px 3px 0 var(--ink);
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+
+  .trade-partner-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .trade-partner-name {
+    font-family: var(--font-display);
+    font-size: 16px;
+    color: var(--ink);
+  }
+
+  .trade-partner-record {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-light);
+  }
+
+  .trade-partner-needs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+
+  .trade-need-chip {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 12px;
+    border: 1.5px solid;
+  }
+
+  .trade-need-chip.surplus { background: var(--green-light); border-color: var(--green); color: var(--green); }
+  .trade-need-chip.need { background: var(--red-light); border-color: var(--red); color: var(--red); }
+
+  .trade-match-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    border-bottom: 1px dashed var(--ink-faint);
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+
+  .trade-match-row:last-child { border-bottom: none; }
+
+  .trade-match-give {
+    flex: 1;
+    text-align: right;
+    color: var(--red);
+  }
+
+  .trade-match-arrow {
+    font-size: 16px;
+    color: var(--ink-light);
+  }
+
+  .trade-match-get {
+    flex: 1;
+    text-align: left;
+    color: var(--green);
+  }
+
+  .trade-match-value {
+    font-size: 10px;
+    color: var(--ink-light);
+    min-width: 40px;
+    text-align: center;
+  }
+
+  .trade-finder-gate {
+    position: relative;
+    padding: 24px;
+    text-align: center;
+    background: var(--bg-card);
+    border: 2px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 3px 3px 0 var(--ink);
+    margin-top: 12px;
+  }
+
+  .trade-finder-gate .gate-blur {
+    filter: blur(4px);
+    opacity: 0.5;
+    pointer-events: none;
+    user-select: none;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-light);
+    margin-bottom: 12px;
+  }
+
+  .trade-finder-gate .gate-cta {
+    font-family: var(--font-display);
+    font-size: 14px;
+    color: var(--orange);
+  }
+
+  .trade-finder-gate .gate-cta a {
+    color: var(--orange);
+    text-decoration: underline;
+  }
+
+  .trade-diplomat-cta {
+    margin-top: 10px;
+    text-align: right;
+  }
+
+  .trade-diplomat-cta a {
+    font-family: var(--font-hand);
+    font-size: 14px;
+    color: var(--purple);
+    text-decoration: none;
+  }
+
+  .trade-diplomat-cta a:hover { text-decoration: underline; }
+
   /* ===== MOBILE ===== */
   @media (max-width: 768px) {
     html, body { overflow-x: hidden; }
@@ -620,6 +784,8 @@
     .pressure-bar-tag { font-size: 7px; padding: 1px 3px; }
     .bureau-cta a { font-size: 12px; }
     .activity-nudge { font-size: 11px; }
+    .trade-match-row { font-size: 10px; gap: 4px; }
+    .trade-partner-card { padding: 12px; }
   }
 </style>
 </head>
@@ -994,6 +1160,12 @@ async function toggleLeague(card, leagueId, userId) {
       '</div>' +
       '<div id="profiles-' + leagueId + '"></div>';
 
+    // Add league trade finder trigger
+    html += '<div class="trade-finder-trigger">' +
+      '<button id="tradeFinderBtn-' + leagueId + '">find trade partners</button>' +
+      '</div>' +
+      '<div id="tradeFinder-' + leagueId + '"></div>';
+
     rosterDiv.innerHTML = html;
 
     // Bind profile button with closure over variables
@@ -1004,6 +1176,17 @@ async function toggleLeague(card, leagueId, userId) {
         this.disabled = true;
         this.textContent = "scouting...";
         loadManagerProfiles(leagueId, userId, allPlayers, userMap, rosters);
+      });
+    }
+
+    // Bind trade finder button
+    var tradeFinderBtn = document.getElementById("tradeFinderBtn-" + leagueId);
+    if (tradeFinderBtn) {
+      tradeFinderBtn.addEventListener("click", function(e) {
+        e.stopPropagation();
+        this.disabled = true;
+        this.textContent = "scouting the market...";
+        loadLeagueTradeFinder(leagueId, userId, myRoster, rosters, allPlayers, userMap);
       });
     }
 
@@ -2224,6 +2407,282 @@ function renderCompareStats(a, b) {
     html += '<div class="stat-right' + bWin + '">' + r.bVal + '</div>';
   }
   el.innerHTML = html;
+}
+
+// ── LEAGUE TRADE FINDER ──────────────────────────────────────────────
+
+async function loadLeagueTradeFinder(leagueId, userId, myRoster, rosters, allPlayers, userMap) {
+  var container = document.getElementById("tradeFinder-" + leagueId);
+  if (!container) return;
+
+  // Check if user is Pro+
+  var plan = "free";
+  try {
+    var u = JSON.parse(localStorage.getItem("razzle_user") || "{}");
+    plan = u.plan || "free";
+  } catch (e) {}
+
+  var isPaid = plan === "pro" || plan === "elite" || plan === "pro_lifetime" || plan === "elite_lifetime";
+
+  if (!isPaid) {
+    // Show gated preview
+    container.innerHTML =
+      '<div class="trade-finder-gate">' +
+        '<div class="gate-blur">' +
+          'ManagerA: needs WR, has surplus RB &mdash; trade Derrick Henry for Ja\'Marr Chase (value: 87 vs 91)<br>' +
+          'ManagerB: needs QB, has surplus WR &mdash; trade Jalen Hurts for CeeDee Lamb (value: 78 vs 82)' +
+        '</div>' +
+        '<div class="gate-cta">league-specific trade matches are a Pro feature<br>' +
+          '<a href="/pricing.html">unlock with Pro &rarr;</a>' +
+        '</div>' +
+      '</div>';
+    // Re-enable button
+    var btn = document.getElementById("tradeFinderBtn-" + leagueId);
+    if (btn) { btn.disabled = false; btn.textContent = "find trade partners"; }
+    return;
+  }
+
+  container.innerHTML = '<div class="loading-intel" style="font-size:14px;">pulling film on every roster...</div>';
+
+  try {
+    // Build full player list from all rosters
+    var allRosterPlayers = [];
+    var rosterMap = {}; // sleeper_name -> {owner_id, position, team}
+
+    for (var i = 0; i < rosters.length; i++) {
+      var roster = rosters[i];
+      var playerIds = roster.players || [];
+      for (var j = 0; j < playerIds.length; j++) {
+        var pid = playerIds[j];
+        var p = allPlayers[pid];
+        if (!p) continue;
+        var pos = p.position || "?";
+        if (pos !== "QB" && pos !== "RB" && pos !== "WR" && pos !== "TE") continue;
+        var name = (p.first_name || "") + " " + (p.last_name || "");
+        name = name.trim();
+        if (!name) continue;
+        allRosterPlayers.push({ name: name, position: pos, team: p.team || "" });
+        rosterMap[name] = { owner_id: roster.owner_id, position: pos, team: p.team || "", sleeper_pid: pid };
+      }
+    }
+
+    if (allRosterPlayers.length === 0) {
+      container.innerHTML = '<div class="loading-intel" style="color:var(--ink-light);">no players found on rosters</div>';
+      return;
+    }
+
+    // Fetch trade values for all players from Razzle API
+    var token = "";
+    try { token = JSON.parse(localStorage.getItem("razzle_user") || "{}").token || ""; } catch(e) {}
+    var headers = { "Content-Type": "application/json" };
+    if (token) headers["Authorization"] = "Bearer " + token;
+
+    var resp = await fetch("/api/league-trade-finder", {
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify({ players: allRosterPlayers })
+    });
+
+    if (resp.status === 403) {
+      container.innerHTML =
+        '<div class="trade-finder-gate">' +
+          '<div class="gate-cta">upgrade to Pro to unlock league-specific trade matches<br>' +
+            '<a href="/pricing.html">see pricing &rarr;</a>' +
+          '</div>' +
+        '</div>';
+      return;
+    }
+
+    var data = await resp.json();
+    if (!data.players || data.players.length === 0) {
+      container.innerHTML = '<div class="loading-intel" style="color:var(--ink-light);">couldn\'t match roster players to trade values</div>';
+      return;
+    }
+
+    // Build value lookup: sleeper_name -> trade_value data
+    var valueLookup = {};
+    for (var k = 0; k < data.players.length; k++) {
+      var pl = data.players[k];
+      valueLookup[pl.sleeper_name] = pl;
+    }
+
+    // Identify my players and their values
+    var myPlayerIds = myRoster.players || [];
+    var myPlayers = [];
+    for (var m = 0; m < myPlayerIds.length; m++) {
+      var mp = allPlayers[myPlayerIds[m]];
+      if (!mp) continue;
+      var mpos = mp.position || "?";
+      if (mpos !== "QB" && mpos !== "RB" && mpos !== "WR" && mpos !== "TE") continue;
+      var mname = ((mp.first_name || "") + " " + (mp.last_name || "")).trim();
+      var mval = valueLookup[mname];
+      if (mval) {
+        myPlayers.push(Object.assign({}, mval, { sleeper_pid: myPlayerIds[m] }));
+      }
+    }
+
+    // Analyze each opponent roster
+    var opponents = rosters.filter(function(r) { return r.owner_id !== userId; });
+    var tradePartners = [];
+
+    for (var oi = 0; oi < opponents.length; oi++) {
+      var opp = opponents[oi];
+      var oppName = userMap[opp.owner_id] || "Unknown";
+      var oppWins = opp.settings?.wins || 0;
+      var oppLosses = opp.settings?.losses || 0;
+      var oppPlayerIds = opp.players || [];
+
+      // Get opponent's players with values
+      var oppPlayers = [];
+      var oppPosCounts = { QB: 0, RB: 0, WR: 0, TE: 0 };
+      for (var op = 0; op < oppPlayerIds.length; op++) {
+        var oPlayer = allPlayers[oppPlayerIds[op]];
+        if (!oPlayer) continue;
+        var oPos = oPlayer.position || "?";
+        if (oppPosCounts[oPos] !== undefined) oppPosCounts[oPos]++;
+        var oName = ((oPlayer.first_name || "") + " " + (oPlayer.last_name || "")).trim();
+        var oVal = valueLookup[oName];
+        if (oVal) {
+          oppPlayers.push(Object.assign({}, oVal, { sleeper_pid: oppPlayerIds[op] }));
+        }
+      }
+
+      // Determine positional needs/surplus
+      // Typical roster: QB 2-3, RB 5-7, WR 5-7, TE 2-3
+      var posThresholds = { QB: 2, RB: 5, WR: 5, TE: 2 };
+      var posAnalysis = {};
+      for (var pos in posThresholds) {
+        var count = oppPosCounts[pos] || 0;
+        var threshold = posThresholds[pos];
+        if (count < threshold) {
+          posAnalysis[pos] = "need";
+        } else if (count > threshold + 2) {
+          posAnalysis[pos] = "surplus";
+        }
+      }
+
+      // Find trade matches: my players that fill their needs, their players that fill mine
+      var matches = [];
+      for (var mi = 0; mi < myPlayers.length; mi++) {
+        var give = myPlayers[mi];
+        // Prefer giving positions they need
+        var giveBonus = posAnalysis[give.position] === "need" ? 10 : 0;
+
+        for (var gi = 0; gi < oppPlayers.length; gi++) {
+          var get = oppPlayers[gi];
+          // Calculate value gap
+          var giveVal = give.trade_value + giveBonus;
+          var getVal = get.trade_value;
+          var gap = Math.abs(giveVal - getVal);
+          var maxVal = Math.max(giveVal, getVal, 1);
+          var gapPct = gap / maxVal;
+
+          // Match if within 25% value range and different positions (more interesting trades)
+          if (gapPct <= 0.25 && give.trade_value > 5 && get.trade_value > 5) {
+            var interestScore = 100 - Math.round(gapPct * 100);
+            // Bonus for cross-position trades
+            if (give.position !== get.position) interestScore += 10;
+            // Bonus if we're giving them something they need
+            if (posAnalysis[give.position] === "need") interestScore += 15;
+            // Bonus if opponent has surplus at that position
+            if (posAnalysis[get.position] === "surplus") interestScore += 10;
+
+            matches.push({
+              give: give,
+              get: get,
+              gap: gap,
+              gapPct: gapPct,
+              score: interestScore
+            });
+          }
+        }
+      }
+
+      // Sort by interest score, take top 5
+      matches.sort(function(a, b) { return b.score - a.score; });
+      matches = matches.slice(0, 5);
+
+      if (matches.length > 0) {
+        tradePartners.push({
+          name: oppName,
+          wins: oppWins,
+          losses: oppLosses,
+          posAnalysis: posAnalysis,
+          matches: matches
+        });
+      }
+    }
+
+    // Sort partners by best match quality
+    tradePartners.sort(function(a, b) {
+      return (b.matches[0]?.score || 0) - (a.matches[0]?.score || 0);
+    });
+
+    // Render results
+    if (tradePartners.length === 0) {
+      container.innerHTML = '<div class="loading-intel" style="color:var(--ink-light); font-size:13px;">no strong trade matches found in this league</div>';
+      return;
+    }
+
+    var html = '<div class="trade-finder-results">';
+    html += '<div style="font-family:var(--font-hand); font-size:18px; color:var(--ink-medium); margin-bottom:12px;">trade partners found: ' + tradePartners.length + '</div>';
+
+    var posColors = { QB: "var(--blue)", RB: "var(--green)", WR: "var(--orange)", TE: "var(--purple)" };
+
+    for (var ti = 0; ti < tradePartners.length; ti++) {
+      var partner = tradePartners[ti];
+      html += '<div class="trade-partner-card">';
+      html += '<div class="trade-partner-header">';
+      html += '<div class="trade-partner-name">' + escapeHtml(partner.name) + '</div>';
+      html += '<div class="trade-partner-record">' + partner.wins + '-' + partner.losses + '</div>';
+      html += '</div>';
+
+      // Position needs/surplus chips
+      html += '<div class="trade-partner-needs">';
+      for (var pos in partner.posAnalysis) {
+        var cls = partner.posAnalysis[pos] === "need" ? "need" : "surplus";
+        html += '<span class="trade-need-chip ' + cls + '">' + pos + ': ' + partner.posAnalysis[pos] + '</span>';
+      }
+      html += '</div>';
+
+      // Trade matches
+      for (var mi2 = 0; mi2 < partner.matches.length; mi2++) {
+        var match = partner.matches[mi2];
+        var giveColor = posColors[match.give.position] || "var(--ink)";
+        var getColor = posColors[match.get.position] || "var(--ink)";
+        html += '<div class="trade-match-row">';
+        html += '<div class="trade-match-give" style="color:' + giveColor + ';">' +
+          '<span style="font-size:9px; opacity:0.7;">' + escapeHtml(match.give.position) + '</span> ' +
+          escapeHtml(match.give.matched_name) +
+          ' <span style="font-size:10px; color:var(--ink-light);">(' + match.give.trade_value + ')</span>' +
+          '</div>';
+        html += '<div class="trade-match-arrow">&harr;</div>';
+        html += '<div class="trade-match-get" style="color:' + getColor + ';">' +
+          '<span style="font-size:9px; opacity:0.7;">' + escapeHtml(match.get.position) + '</span> ' +
+          escapeHtml(match.get.matched_name) +
+          ' <span style="font-size:10px; color:var(--ink-light);">(' + match.get.trade_value + ')</span>' +
+          '</div>';
+        html += '</div>';
+      }
+
+      // Ask the Diplomat CTA
+      var diplomScenario = "I want to trade with " + partner.name + " in my league. They need " +
+        Object.keys(partner.posAnalysis).filter(function(p) { return partner.posAnalysis[p] === "need"; }).join(", ") +
+        ". Suggest the best approach.";
+      html += '<div class="trade-diplomat-cta">' +
+        '<a href="/agents.html" onclick="prefillScenario(\'' + diplomScenario.replace(/'/g, "\\'") + '\'); return true;">' +
+        'ask the Diplomat how to approach ' + escapeHtml(partner.name) + ' &rarr;</a></div>';
+
+      html += '</div>';
+    }
+
+    html += '</div>';
+    container.innerHTML = html;
+
+  } catch (e) {
+    console.error("Trade finder error:", e);
+    container.innerHTML = '<div class="loading-intel" style="color:var(--red); font-size:13px;">fumbled the trade analysis</div>';
+  }
 }
 
 // ── BRIDGE CTA: Prefill Situation Room scenario ──────────────────────
