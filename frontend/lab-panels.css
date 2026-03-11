@@ -3572,6 +3572,10 @@
   }
   .lp-page table thead th:first-child { z-index: 3; }
 
+  /* Touch targets: ensure 44px minimum for interactive elements */
+  .lp-pos-tab { min-height: 44px; display: flex; align-items: center; justify-content: center; }
+  .lp-select { min-height: 44px; }
+
   /* NFL-only message mobile */
   .lp-nfl-only { padding: 40px 16px 30px; }
 }
@@ -3581,6 +3585,10 @@
   .lp-page table { font-size: 11px; }
   .lp-page table th,
   .lp-page table td { padding: 4px 6px; }
+  .lp-pos-tab { padding: 5px 10px; font-size: 11px; }
+  .lp-select { font-size: 12px; padding: 5px 8px; }
+  .lp-header h2 { font-size: 22px; }
+  .lp-subtitle { font-size: 15px; }
 }
 
 /* ===================================================================
