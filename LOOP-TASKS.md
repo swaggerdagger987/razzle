@@ -1,15 +1,15 @@
 # Razzle Consolidation -- Task Tracker
 
 ## Current State
-- Phase: 107 (Keyboard Row Navigation)
-## Phase 107: Keyboard Row Navigation
-**Exit Criterion**: J/K navigate rows with blue focus ring. Enter opens player profile. Shortcut reference updated. 34 tests pass.
+- Phase: 108 (Auto-Restore Last Screener State)
+## Phase 108: Auto-Restore Last Screener State
+**Exit Criterion**: Lab restores last universe/position/sort/season/columns from localStorage when opened with no URL params. Auto-saves on every state change. 34 tests pass.
 
 - Task 1: PASS
 - Stage: COMPLETE
 - Next: Phase gate
 
-### Task 1: J/K row navigation with focus ring
+### Task 1: Auto-save and auto-restore screener state
 **Status**: PASS
 **Attempts**: 1
-**Result**: (1) J moves focus down, K moves up with boundary clamping. (2) Blue inset box-shadow focus ring on row-focused. (3) Enter opens player profile (NFL only). (4) scrollIntoView nearest for visibility. (5) Shortcut reference updated with J/K/Enter. 34 tests pass.
+**Result**: (1) saveStateToURL() now persists key state to razzle_last_state in localStorage. (2) loadStateFromURL() checks for empty URL params and restores from localStorage. (3) Saves: universe, position, sort, season, relevance, limit, columns. (4) URL params always override localStorage. 34 tests pass.

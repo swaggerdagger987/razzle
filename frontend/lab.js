@@ -2857,10 +2857,44 @@ function saveStateToURL() {
   const qs = params.toString();
   const newURL = window.location.pathname + (qs ? "?" + qs : "");
   history.replaceState(null, "", newURL);
+
+  // Auto-save key state to localStorage for restore on next visit
+  try {
+    localStorage.setItem("razzle_last_state", JSON.stringify({
+      universe: state.universe, collegeView: state.collegeView,
+      position: state.position, sortKey: state.sortKey, sortDir: state.sortDir,
+      season: state.season, collegeSeason: state.collegeSeason, draftYear: state.draftYear,
+      relevance: state.relevance, limit: state.limit,
+      visibleColumns: state.visibleColumns, collegeColumns: state.collegeColumns,
+      prospectColumns: state.prospectColumns
+    }));
+  } catch(e) {}
 }
 
 function loadStateFromURL() {
   const params = new URLSearchParams(window.location.search);
+
+  // If no URL params, try to restore last state from localStorage
+  if (!params.toString()) {
+    try {
+      var saved = JSON.parse(localStorage.getItem("razzle_last_state"));
+      if (saved) {
+        if (saved.universe) state.universe = saved.universe;
+        if (saved.collegeView) state.collegeView = saved.collegeView;
+        if (saved.position) state.position = saved.position;
+        if (saved.sortKey) state.sortKey = saved.sortKey;
+        if (saved.sortDir) state.sortDir = saved.sortDir;
+        if (saved.season) state.season = saved.season;
+        if (saved.collegeSeason) state.collegeSeason = saved.collegeSeason;
+        if (saved.draftYear) state.draftYear = saved.draftYear;
+        if (saved.relevance) state.relevance = saved.relevance;
+        if (saved.limit) state.limit = saved.limit;
+        if (saved.visibleColumns && saved.visibleColumns.length) state.visibleColumns = saved.visibleColumns;
+        if (saved.collegeColumns && saved.collegeColumns.length) state.collegeColumns = saved.collegeColumns;
+        if (saved.prospectColumns && saved.prospectColumns.length) state.prospectColumns = saved.prospectColumns;
+      }
+    } catch(e) {}
+  }
 
   if (params.has("u")) {
     const uParam = params.get("u");

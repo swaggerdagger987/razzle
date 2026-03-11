@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 108 — Auto-Restore Last Screener State (COMPLETE)
+
+**Exit Criterion MET**: Lab restores last state from localStorage. Auto-saves on every change. URL params override. 34 tests pass.
+
+### Phase 108 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Auto-save/restore screener state | DONE | razzle_last_state in localStorage, restore on empty URL |
+
 ## Previous Phase: Phase 107 — Keyboard Row Navigation (COMPLETE)
 
 **Exit Criterion MET**: J/K navigate rows, Enter opens profile, blue focus ring. 34 tests pass.
