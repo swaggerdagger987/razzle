@@ -1,17 +1,17 @@
 # Razzle — Progress Tracker
 
-## Current Phase: Phase 111 — QA + UX Audit Fixes for Phases 106-110
+## Previous Phase: Phase 111 — QA + UX Audit Fixes for Phases 106-110 (COMPLETE)
 
-**Exit Criterion**: 1 HIGH (Enter preventDefault) + 3 MEDIUM (focus ring, filter restore, badge spacing) fixed.
+**Exit Criterion MET**: 1 HIGH (Enter preventDefault) + 3 MEDIUM (focus ring, filter restore, badge spacing) fixed. 34 tests pass.
 
 ### Phase 111 Tasks
 
 | # | Task | Status | Notes |
 |---|------|--------|-------|
-| 1 | Enter key preventDefault | TODO | Prevent double-action on profile open |
-| 2 | Focus ring 1.5px → 2px | TODO | Match design system chunky borders |
-| 3 | Add filters to auto-restore | TODO | Save/restore state.filters in localStorage |
-| 4 | LOW polish (badge spacing) | TODO | CSS margin-left instead of &nbsp; |
+| 1 | Enter key preventDefault | DONE | e.preventDefault() before openPlayerProfile() |
+| 2 | Focus ring 1.5px → 2px | DONE | Chunky 2px inset box-shadow |
+| 3 | Add filters to auto-restore | DONE | state.filters saved/restored with validation |
+| 4 | LOW polish (badge spacing) | DONE | CSS margin-left:6px instead of &nbsp; |
 
 ## Previous Phase: Phase 110 — QA + UX Audit Fixes for Phases 106-109 (COMPLETE)
 

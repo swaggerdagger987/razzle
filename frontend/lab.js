@@ -2871,7 +2871,8 @@ function saveStateToURL() {
       season: state.season, collegeSeason: state.collegeSeason, draftYear: state.draftYear,
       relevance: state.relevance, limit: state.limit,
       visibleColumns: state.visibleColumns, collegeColumns: state.collegeColumns,
-      prospectColumns: state.prospectColumns
+      prospectColumns: state.prospectColumns,
+      filters: state.filters
     }));
   } catch(e) {}
 }
@@ -2897,6 +2898,11 @@ function loadStateFromURL() {
         if (saved.visibleColumns && saved.visibleColumns.length) state.visibleColumns = saved.visibleColumns.filter(function(k) { return COLUMNS[k]; });
         if (saved.collegeColumns && saved.collegeColumns.length) state.collegeColumns = saved.collegeColumns.filter(function(k) { return COLLEGE_COLUMNS[k]; });
         if (saved.prospectColumns && saved.prospectColumns.length) state.prospectColumns = saved.prospectColumns.filter(function(k) { return PROSPECT_COLUMNS[k]; });
+        if (saved.filters && Array.isArray(saved.filters)) {
+          state.filters = saved.filters.filter(function(f) {
+            return f && typeof f.key === "string" && typeof f.op === "string" && !isNaN(parseFloat(f.value));
+          }).map(function(f) { return { key: f.key, op: f.op, value: parseFloat(f.value) }; });
+        }
       }
     } catch(e) {}
   }
@@ -3434,7 +3440,7 @@ function updateSelectionUI() {
       var posBadges = ["QB", "RB", "WR", "TE"].filter(function(p) { return posCounts[p]; }).map(function(p) {
         return '<span style="color:' + posColors[p] + '; font-weight:700; font-size:11px;">' + p + ':' + posCounts[p] + '</span>';
       }).join(" ");
-      document.getElementById("bulkCount").innerHTML = count + " selected" + (posBadges ? " &nbsp;" + posBadges : "");
+      document.getElementById("bulkCount").innerHTML = count + " selected" + (posBadges ? ' <span style="margin-left:6px;">' + posBadges + '</span>' : "");
       var namesEl = document.getElementById("bulkNames");
       namesEl.textContent = state.selectedPlayers.map(p => p.full_name || p.player_name || "").join(", ");
       var cmpBtn = document.getElementById("bulkCompareBtn");
@@ -9078,6 +9084,7 @@ document.addEventListener("keydown", function(e) {
   if (e.key === "Enter") {
     var focused = document.querySelector("#tableBody tr.row-focused");
     if (focused && focused.dataset.playerId && state.universe === "nfl") {
+      e.preventDefault();
       openPlayerProfile(focused.dataset.playerId);
     }
     return;
