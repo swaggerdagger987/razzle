@@ -3652,6 +3652,56 @@ function csvEscape(val) {
   return s;
 }
 
+// ─── Copy Table to Clipboard (TSV for Excel/Sheets) ──────────────
+
+function copyTableToClipboard() {
+  if (!state.items.length) { _showToast("no data to copy"); return; }
+
+  let colDefs, visCols;
+  if (isProspectView()) {
+    colDefs = PROSPECT_COLUMNS;
+    visCols = state.prospectColumns;
+  } else if (state.universe === "college") {
+    colDefs = COLLEGE_COLUMNS;
+    visCols = state.collegeColumns;
+  } else {
+    colDefs = COLUMNS;
+    visCols = state.visibleColumns;
+  }
+  visCols = visCols.filter(k => colDefs[k] && !colDefs[k].isSparkline && !colDefs[k].isNotes);
+
+  const lines = [];
+  // Header
+  lines.push(["#", "Player", "POS", "Team", ...visCols.map(k => colDefs[k].label)].join("\t"));
+
+  // Data rows
+  for (let i = 0; i < state.items.length; i++) {
+    const p = state.items[i];
+    const name = p.full_name || p.player_name || "";
+    const pos = p.position || "";
+    const team = p.team || p.school || "";
+    const rank = state.offset + i + 1;
+    const vals = visCols.map(k => {
+      const col = colDefs[k];
+      const v = p[k];
+      if (v == null || v === "") return "";
+      if (col.pct) return ((v * 100).toFixed(col.decimals)) + "%";
+      if (col.decimals != null) return Number(v).toFixed(col.decimals);
+      return v;
+    });
+    lines.push([rank, name, pos, team, ...vals].join("\t"));
+  }
+
+  const tsv = lines.join("\n");
+  try {
+    navigator.clipboard.writeText(tsv).then(function() {
+      var btn = document.getElementById("clipboardCopyBtn");
+      if (btn) { btn.textContent = "Copied!"; setTimeout(function() { btn.textContent = "Copy to Clipboard"; }, 1500); }
+      _showToast(state.items.length + " rows copied");
+    }).catch(function() { _showToast("copy failed"); });
+  } catch(e) { _showToast("copy failed"); }
+}
+
 // ─── Rankings Export ───────────────────────────────────────────────
 
 const _rankState = { position: "ALL", count: 10, sortBy: "dynasty_value" };

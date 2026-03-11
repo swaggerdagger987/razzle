@@ -1,5 +1,15 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 73 — Screener Copy Table to Clipboard (COMPLETE)
+
+**Exit Criterion MET**: Copy to Clipboard button in share modal copies current table as TSV (tab-separated). Includes rank, headers, formatted stats. Pastes into Sheets/Excel.
+
+### Phase 73 Tasks
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Copy table to clipboard as TSV | DONE | copyTableToClipboard(), share modal button, toast feedback |
+
 ## Previous Phase: Phase 72 — Screener Double-Click Column Header to Filter (COMPLETE)
 
 **Exit Criterion MET**: Double-clicking a numeric column header opens filter modal with that stat pre-selected. Single click still sorts. Works in all modes.
