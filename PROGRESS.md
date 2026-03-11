@@ -1,5 +1,30 @@
 # Razzle — Progress Tracker
 
+## Previous Phase: Phase 154 — Platform: Bureau of Intelligence — Paid Tier Analytics + Conversion Deepening (COMPLETE)
+
+**Exit Criterion MET**: Bureau of Intelligence enriched with four visual analytics features and a conversion bridge system. (1) Manager behavioral timeline charts: Canvas-rendered bar charts inside each profile card showing moves-per-week across all tracked seasons, with panic burst weeks highlighted in red (#e63946) and season dividers for multi-season leagues. renderActivityTimeline() draws directly on canvas with DPR-aware scaling. (2) Trade deadline pressure map: computePressureScores() calculates a 0-100 desperation score per manager based on win rate, panic history, trade frequency, and FAAB burn rate. Rendered as color-coded horizontal bars (red=desperate, orange=motivated, green=comfortable). Pro-gated: free users see top 3 managers, remaining are blurred with "unlock with Pro" CTA. (3) Activity feed conversion nudges: Free users see subtle context-aware annotations on trade and waiver activity — "the Quant has thoughts on this trade" and "Scout can explain their strategy" — linking to agents.html with pre-populated scenarios. Nudges capped (2 waiver, 3 trade max) and hidden for paid users. (4) Manager comparison view: radar chart (Canvas pentagon) comparing 2 managers across 5 axes (trades, waivers, FAAB, activity, aggression) with dual-polygon overlay (orange vs blue). Stats grid below shows per-year averages with winner highlighting. Toggle panel UI. (5) Bureau-to-Situation-Room bridge: prefillScenario() stores scenario text in localStorage, warroom.js reads razzle_prefill_scenario on load and pre-populates the scenario input. Every manager card has "ask the Diplomat about [Manager]" CTA. Pressure map has "ask the Diplomat how to exploit this" CTA. All JS verified via node --check, all pages serve 200, mobile CSS responsive adjustments added.
+
+### Phase 154 Tasks (Platform Loop)
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Manager Behavioral Timeline Charts | DONE | Canvas bar chart per profile card, panic weeks red, multi-season dividers |
+| 2 | Trade Deadline Pressure Map | DONE | Pressure scoring algorithm, color-coded bars, Pro gating (top 3 free) |
+| 3 | Activity Feed Conversion Nudges | DONE | Trade + waiver nudges for free users, capped, links to agents.html |
+| 4 | Manager Comparison View | DONE | Radar pentagon canvas, dual-polygon, stats grid, toggle panel |
+| 5 | Bureau-to-Situation-Room Bridge CTA | DONE | prefillScenario localStorage handoff, warroom.js prefill read |
+| 6 | QA + Integration Verification | DONE | JS syntax OK, all pages 200, API endpoints healthy |
+
+### Decisions Log
+- Pressure score formula: 35pts for <35% win rate, 25pts for <45%, 15pts for <50%, +5pts per panic week (capped at 20), +10pts for active trader, +5pts for FAAB whale. Clamped 0-100.
+- Free users see top 3 pressure entries (most desperate) — enough to see the value, blurred remainder creates upgrade desire.
+- Activity feed nudges check `razzle_user` localStorage for plan to distinguish paid vs free. Only first 3 trades and first 2 waiver items get nudges to avoid spam.
+- Manager comparison radar uses 5 axes normalized to the max of the two managers being compared. Orange (#d97757) for manager A, blue (#5b7fff) for manager B.
+- Bureau-to-Situation-Room bridge uses a simple localStorage key handoff rather than URL params to keep the URL clean and avoid scenario text in the address bar.
+- Mobile CSS adjustments: smaller pressure bar name width, smaller tags, smaller CTA text at 768px breakpoint.
+
+---
+
 ## Previous Phase: Phase 153 — Platform: Production Readiness — Error Handling, Performance, SEO (COMPLETE)
 
 **Exit Criterion MET**: Full production readiness pass. (1) Preconnect hints for Google Fonts added to all 74 HTML pages, eliminating DNS lookup latency for font loading. (2) JSON-LD structured data (WebApplication schema with Free/Pro/Elite pricing tiers) added to index.html for search engine rich results. (3) Bug fix: missing _efficiency_grade() function added to backend/live_data/college.py — was causing 500 Internal Server Error on /api/college/efficiency and /api/college/consistency. (4) Full QA verification: 63/63 API endpoints return 200, auth flow works end-to-end (register with 7-day Pro trial, login, /me), all JS files pass node --check, all 74 HTML pages have nav elements, all 5 static pages serve correctly. robots.txt and sitemap.xml served via FastAPI routes. 7 main pages have canonical URLs.

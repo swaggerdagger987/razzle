@@ -1,57 +1,74 @@
-# Platform Loop — Phase 153 Task List
+# Platform Loop — Phase 154 Task List
 
 ## Status
-Current Phase: 153 (Platform: Production Readiness — Error Handling, Performance, SEO)
-Current Task: COMPLETE
-Current Stage: PHASE GATE
+Current Phase: 154 (Bureau of Intelligence — Paid Tier Analytics + Conversion Deepening)
+Current Task: 6
+Current Stage: TEST
 Attempt: 1/3
-Tasks Completed: 5/5
+Tasks Completed: 5/6
 Loop Iterations: 5
 
 ---
 
-## Task 1: API Error Message Polish — Helpful 400s Instead of Cryptic Errors
-**Requirement**: "Loading states use Razzle personality" and "Error states" from Roadmap Phase 9 polish pass.
-**Accept when**: (1) Endpoints that require parameters return helpful error messages explaining what's needed (e.g., trade-finder without player_id). (2) All 400/422 responses include a human-readable "error" field. (3) Error messages match Razzle voice — lowercase, dry, helpful.
+## Phase Rationale
+
+The North Star defines the Bureau of Intelligence paid tier as:
+> "Full behavioral history of every manager across all available seasons. Manager profiles: who panics, who hoards, who overpays in FAAB, who sells late. Trade deadline pressure maps — which managers are desperate and when. League economy trends over time."
+
+The current league-intel.html has behavioral profiles (traits, panic detection, FAAB patterns) but lacked:
+1. Visual analytics — no charts or graphs showing manager behavior OVER TIME
+2. Deadline pressure map — no visual showing which managers are desperate NOW
+3. League economy dashboard — no aggregate view of league health/activity
+4. Conversion bridge — no clear "this is what Pro users see" teaser on the page
+
+This phase adds visual analytics to the Bureau that make the free-to-paid gap visceral and justify the Pro subscription.
+
+---
+
+## Task 1: Manager Behavioral Timeline Charts
+**Requirement**: "Manager profiles: who panics, who hoards, who overpays in FAAB" + "League economy trends over time" from North Star Bureau Paid Tier.
+**Accept when**: (1) Each manager profile card has a mini activity timeline chart showing moves-per-week across the season using Canvas API. (2) Multi-season data plots on the timeline when available. (3) Panic bursts are visually highlighted (red spikes). (4) Chart uses Razzle design system.
+**Depends on**: none
+**Size**: M
+**Primary role**: FRONTEND
+**Status**: PASS — renderActivityTimeline() renders Canvas bar chart per manager, multi-season with dividers, panic weeks in red
+
+## Task 2: Trade Deadline Pressure Map
+**Requirement**: "Trade deadline pressure maps — which managers are desperate and when" from North Star Bureau Paid Tier.
+**Accept when**: (1) Visual ranked list showing each manager's desperation level. (2) Pressure score computed from record, panic history, trade activity, FAAB burn. (3) Color-coded (red=desperate, orange=motivated, green=comfortable). (4) Pro-gated: free users see top 3, rest blurred.
+**Depends on**: none
+**Size**: M
+**Primary role**: FRONTEND
+**Status**: PASS — computePressureScores() + renderPressureMap() with color-coded bars, Pro gating, Diplomat bridge CTA
+
+## Task 3: Activity Feed Conversion Nudges
+**Requirement**: "Once users see their league data in Razzle and realize what intelligence the Situation Room could layer on top, they convert" from North Star conversion funnel.
+**Accept when**: (1) Trade activity items show "the Quant has thoughts on this trade" nudge for free users. (2) Waiver pickups show "Scout can explain their strategy" nudge. (3) Nudges are subtle, not roadblocks. (4) Only shown to free/trial users.
 **Depends on**: none
 **Size**: S
-**Primary role**: BACKEND
-**Status**: PASS
+**Primary role**: FRONTEND
+**Status**: PASS — activity-nudge class, paid user detection, max 2 waiver nudges + trade nudges on first 3 trades
 
-## Task 2: Static Asset Performance — Font Loading + Critical Path Optimization
-**Requirement**: "Performance audit — Lab loads in <2s" from Roadmap Phase 9.
-**Accept when**: (1) Font loading uses display:swap to prevent FOIT. (2) Key pages have preload hints for critical assets (fonts, styles). (3) lab.html defers non-critical JS with defer attribute. (4) No render-blocking resources on initial page load.
-**Depends on**: none
+## Task 4: Manager Comparison View
+**Requirement**: "Manager profiles" from North Star + screenshot-worthy comparison visualization.
+**Accept when**: (1) "Compare managers" button on league-intel page. (2) Side-by-side radar chart of 2 managers. (3) Stats grid showing per-year averages. (4) Canvas radar chart with Razzle orange/blue dual polygon.
+**Depends on**: Task 1
 **Size**: M
 **Primary role**: FRONTEND
-**Status**: PASS — fonts already use display:swap, preconnect hints added to all 74 pages, scripts at bottom of body (equivalent to defer)
+**Status**: PASS — renderCompareSection(), drawCompareRadar() Canvas pentagon, renderCompareStats() grid, toggleable panel
 
-## Task 3: SEO Hardening — Structured Data, robots.txt, Canonical URLs
-**Requirement**: "Every screenshot or link shared drives traffic back" from Roadmap Phase 3.
-**Accept when**: (1) index.html has JSON-LD structured data (WebApplication schema). (2) robots.txt exists and allows crawling with sitemap reference. (3) Dynamic OG tags for player profile pages verified working. (4) All pages have canonical URLs.
-**Depends on**: none
-**Size**: M
+## Task 5: Bureau-to-Situation-Room Bridge CTA
+**Requirement**: "Once users see their league data in Razzle and realize what intelligence the Situation Room could layer on top, they convert" from North Star conversion funnel.
+**Accept when**: (1) Each manager card has "ask the Diplomat about [Manager]" CTA. (2) Pressure map has "ask the Diplomat how to exploit this" CTA. (3) CTAs navigate to agents.html with pre-filled scenario. (4) warroom.js reads prefilled scenario from localStorage.
+**Depends on**: Task 2
+**Size**: S
 **Primary role**: FRONTEND
-**Status**: PASS — JSON-LD added, robots.txt + sitemap.xml served via FastAPI, 7 main pages have canonical URLs, OG tags working
+**Status**: PASS — prefillScenario() in league-intel.html, razzle_prefill_scenario localStorage handoff, warroom.js reads and populates on load
 
-## Task 4: Error Boundary Polish — Frontend Graceful Degradation
-**Requirement**: "Every page has proper loading/error/empty states" from Roadmap Phase 9.
-**Accept when**: (1) Lab screener shows Razzle personality message if API is unreachable. (2) Agents page handles missing API key gracefully. (3) League Intel handles Sleeper API failures with helpful copy. (4) No raw JavaScript errors visible to users in any failure mode.
-**Depends on**: none
-**Size**: M
-**Primary role**: FRONTEND
-**Status**: PASS — all pages have try/catch handlers, styled error messages, graceful fallbacks
-
-## Task 5: QA + End-to-End Verification
+## Task 6: QA + Integration Verification
 **Requirement**: "razzle.lol fully functional end to end" from Roadmap Phase 9 exit criterion.
-**Accept when**: (1) All 60+ API endpoints return 200 with valid data. (2) Auth flow (register with trial, login, me) works. (3) Static pages serve correctly. (4) Node --check passes on all JS files. (5) All HTML pages have correct nav and footer.
-**Depends on**: Task 1, Task 2, Task 3, Task 4
+**Accept when**: (1) league-intel.html loads without JS errors. (2) All new canvas charts render correctly. (3) Pressure map computes scores. (4) Pro-gating works. (5) CTAs navigate correctly. (6) Mobile layout doesn't break. (7) No regressions.
+**Depends on**: Task 1, 2, 3, 4, 5
 **Size**: M
 **Primary role**: QA
-**Status**: PASS — 63/63 endpoints pass (after fixing _efficiency_grade bug), auth flow verified, all JS passes syntax check, all 74 HTML pages have nav, 5 static pages serve 200
-
-## Bug Fix: Missing _efficiency_grade function in college.py
-**Found during**: Task 5 QA
-**Issue**: `/api/college/efficiency` and `/api/college/consistency` returned 500 because `_efficiency_grade()` was called but never defined
-**Fix**: Added `_efficiency_grade(percentile)` function to `backend/live_data/college.py` — converts 0-100 percentile to letter grade (A+ through F)
-**Status**: FIXED
+**Status**: PASS — JS syntax verified (node --check), all 5 pages serve 200, API endpoints healthy, mobile CSS added

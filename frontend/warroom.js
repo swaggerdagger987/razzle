@@ -1540,6 +1540,17 @@ function setupScenarioPanel() {
 
   // Check API key status and show/hide notice
   updateApiKeyNotice();
+
+  // Check for prefilled scenario from Bureau of Intelligence bridge
+  try {
+    var prefilled = localStorage.getItem('razzle_prefill_scenario');
+    if (prefilled && input) {
+      input.value = prefilled;
+      localStorage.removeItem('razzle_prefill_scenario');
+      input.focus();
+      setScenarioStatus('scenario pre-loaded from League Intel', '');
+    }
+  } catch (e) { /* ignore */ }
 }
 
 function updateApiKeyNotice() {

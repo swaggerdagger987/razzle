@@ -377,6 +377,230 @@
     padding: 40px;
   }
 
+  /* ===== ACTIVITY TIMELINE CHART ===== */
+  .profile-timeline {
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px dashed var(--ink-faint);
+  }
+  .profile-timeline canvas {
+    display: block;
+    width: 100%;
+    height: 40px;
+    border-radius: 4px;
+  }
+  .profile-timeline-label {
+    font-family: var(--font-mono);
+    font-size: 8px;
+    color: var(--ink-light);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  /* ===== PRESSURE MAP ===== */
+  .pressure-map {
+    margin-top: 16px;
+    padding: 14px;
+    background: var(--bg-card);
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+  .pressure-map-title {
+    font-family: var(--font-display);
+    font-size: 14px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .pressure-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .pressure-bar-name {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    min-width: 90px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .pressure-bar-track {
+    flex: 1;
+    height: 14px;
+    background: var(--bg-warm);
+    border: 1.5px solid var(--ink-faint);
+    border-radius: 3px;
+    position: relative;
+    overflow: hidden;
+  }
+  .pressure-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+  .pressure-bar-score {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 700;
+    min-width: 24px;
+    text-align: right;
+  }
+  .pressure-bar-tag {
+    font-family: var(--font-mono);
+    font-size: 8px;
+    padding: 1px 5px;
+    border-radius: 3px;
+    border: 1px solid;
+    white-space: nowrap;
+  }
+
+  /* ===== BRIDGE CTA ===== */
+  .bureau-cta {
+    margin-top: 6px;
+  }
+  .bureau-cta a {
+    font-family: var(--font-hand);
+    font-size: 13px;
+    color: var(--orange);
+    text-decoration: none;
+    display: inline-block;
+    transition: transform 0.12s;
+  }
+  .bureau-cta a:hover {
+    transform: translateX(2px);
+    text-decoration: underline;
+  }
+
+  /* ===== ACTIVITY NUDGE ===== */
+  .activity-nudge {
+    font-family: var(--font-hand);
+    font-size: 12px;
+    color: var(--ink-light);
+    margin-top: 2px;
+    padding-left: 12px;
+    border-left: 2px solid var(--orange);
+    opacity: 0.8;
+  }
+  .activity-nudge a {
+    color: var(--orange);
+    text-decoration: none;
+  }
+  .activity-nudge a:hover { text-decoration: underline; }
+
+  /* ===== MANAGER COMPARE ===== */
+  .mgr-compare-section {
+    margin-top: 16px;
+  }
+  .mgr-compare-btn {
+    font-family: var(--font-display);
+    font-size: 12px;
+    padding: 6px 14px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--bg-card);
+    box-shadow: 2px 2px 0 var(--ink);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .mgr-compare-btn:hover {
+    box-shadow: 3px 3px 0 var(--ink);
+    transform: translate(-1px, -1px);
+  }
+  .mgr-compare-panel {
+    margin-top: 10px;
+    padding: 14px;
+    background: var(--bg-card);
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    box-shadow: 2px 2px 0 var(--ink);
+    display: none;
+  }
+  .mgr-compare-panel.visible { display: block; }
+  .mgr-compare-selectors {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .mgr-compare-selectors select {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 4px 8px;
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+    background: var(--bg);
+    cursor: pointer;
+  }
+  .mgr-compare-canvas-wrap {
+    display: flex;
+    justify-content: center;
+  }
+  .mgr-compare-canvas-wrap canvas {
+    max-width: 320px;
+    max-height: 320px;
+  }
+  .mgr-compare-stats {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 2px 12px;
+    margin-top: 10px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+  }
+  .mgr-compare-stats .stat-label {
+    text-align: center;
+    color: var(--ink-light);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .mgr-compare-stats .stat-left { text-align: right; }
+  .mgr-compare-stats .stat-right { text-align: left; }
+  .mgr-compare-stats .stat-winner { color: var(--orange); font-weight: 700; }
+
+  /* ===== PRESSURE MAP LOCKED ===== */
+  .pressure-locked {
+    position: relative;
+  }
+  .pressure-locked-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(237,224,207,0.85);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    z-index: 2;
+  }
+  .pressure-locked-overlay span {
+    font-family: var(--font-display);
+    font-size: 12px;
+    color: var(--ink-medium);
+    margin-bottom: 4px;
+  }
+  .pressure-locked-overlay a {
+    font-family: var(--font-display);
+    font-size: 11px;
+    color: var(--orange);
+    text-decoration: none;
+    padding: 3px 10px;
+    border: 2px solid var(--orange);
+    border-radius: 12px;
+    background: var(--bg-card);
+    box-shadow: 2px 2px 0 var(--ink);
+    transition: all 0.12s;
+  }
+  .pressure-locked-overlay a:hover {
+    box-shadow: 3px 3px 0 var(--ink);
+    transform: translate(-1px, -1px);
+  }
+
   /* ===== MOBILE ===== */
   @media (max-width: 768px) {
     html, body { overflow-x: hidden; }
@@ -392,6 +616,10 @@
     .league-meta { flex-wrap: wrap; gap: 6px; }
     .league-roster { padding: 10px 14px; }
     .profile-grid { grid-template-columns: 1fr; }
+    .pressure-bar-name { min-width: 70px; font-size: 9px; }
+    .pressure-bar-tag { font-size: 7px; padding: 1px 3px; }
+    .bureau-cta a { font-size: 12px; }
+    .activity-nudge { font-size: 11px; }
   }
 </style>
 </head>
@@ -923,6 +1151,12 @@ async function loadActivityFeed(leagueId, userMap, allPlayers, rosters) {
     } catch (e) { /* ignore storage errors */ }
 
     // Render feed
+    var _activityFeedPaid = false;
+    try {
+      var _afUser = JSON.parse(localStorage.getItem("razzle_user") || "null");
+      _activityFeedPaid = _afUser && (_afUser.plan === "pro" || _afUser.plan === "elite");
+    } catch (e) {}
+    var _activityNudgeCount = 0;
     var html = "";
     for (var t = 0; t < recent.length; t++) {
       var txn = recent[t];
@@ -984,6 +1218,10 @@ async function loadActivityFeed(leagueId, userMap, allPlayers, rosters) {
         html += '</div>'; // trade-sides
         html += '</div>'; // body
         html += '<span class="activity-time">' + escapeHtml(timeStr) + '</span>';
+        // Conversion nudge for free users
+        if (!_activityFeedPaid && t < 3) {
+          html += '<div class="activity-nudge"><a href="/agents.html" onclick="prefillScenario(\'Evaluate this trade in my league: ' + managers.map(escapeHtml).join(' and ').replace(/'/g, "\\'") + ' just traded. Is this fair? Who won?\'); return true;">the Quant has thoughts on this trade &rarr;</a></div>';
+        }
         html += '</div>';
 
       } else {
@@ -1016,6 +1254,12 @@ async function loadActivityFeed(leagueId, userMap, allPlayers, rosters) {
         html += '</div>'; // players
         html += '</div>'; // body
         html += '<span class="activity-time">' + escapeHtml(timeStr) + '</span>';
+        // Conversion nudge for waiver pickups (free users only, first 2)
+        if (!_activityFeedPaid && txnType === 'waiver' && t < 5 && _activityNudgeCount < 2) {
+          var _nudgeMgr = escapeHtml(managers[0] || 'this manager').replace(/'/g, "\\'");
+          html += '<div class="activity-nudge"><a href="/agents.html" onclick="prefillScenario(\'Why is ' + _nudgeMgr + ' making waiver moves? What are they building toward?\'); return true;">Scout can explain ' + escapeHtml(managers[0] || 'their') + '\'s strategy &rarr;</a></div>';
+          _activityNudgeCount++;
+        }
         html += '</div>';
       }
     }
@@ -1513,10 +1757,37 @@ async function loadManagerProfiles(leagueId, userId, allPlayers, userMap, roster
         html += '</div>';
       }
 
+      // Activity timeline chart
+      if (c.prof.total > 0) {
+        html += '<div class="profile-timeline">';
+        html += '<div class="profile-timeline-label">activity by week' + (c.seasonsTracked > 1 ? ' (' + c.seasonsTracked + ' seasons)' : '') + '</div>';
+        html += '<canvas id="timeline-' + ci + '" style="height:40px;"></canvas>';
+        html += '</div>';
+      }
+
+      // Bridge CTA to Situation Room
+      html += '<div class="bureau-cta">';
+      html += '<a href="/agents.html" onclick="prefillScenario(\'Tell me about ' + escapeHtml(c.name).replace(/'/g, "\\'") + ' in my league. What are their tendencies and how can I exploit them in trades?\'); return true;">ask the Diplomat about ' + escapeHtml(c.name) + ' &rarr;</a>';
+      html += '</div>';
+
       html += '</div></div>';
     }
     html += '</div>';
     profileDiv.innerHTML = html;
+
+    // Render timeline canvases after DOM insertion
+    for (var ti = 0; ti < cards.length; ti++) {
+      var tCanvas = document.getElementById('timeline-' + ti);
+      if (tCanvas && cards[ti].prof.weeklyMoves) {
+        renderActivityTimeline(tCanvas, cards[ti].prof.weeklyMoves, cards[ti].color);
+      }
+    }
+
+    // Render pressure map after profiles
+    renderPressureMap(profileDiv, cards, paid);
+
+    // Render manager comparison view
+    renderCompareSection(profileDiv, cards, paid);
 
     // ── Step 6: Save enhanced profiles to localStorage ───────────
     try {
@@ -1557,6 +1828,409 @@ async function loadManagerProfiles(leagueId, userId, allPlayers, userMap, roster
     profileDiv.innerHTML = '<div style="font-family:var(--font-hand); font-size:16px; color:var(--red); text-align:center; padding:12px;">couldn\'t scout the managers</div>';
     console.error(e);
   }
+}
+
+// ── ACTIVITY TIMELINE CHART (Canvas) ─────────────────────────────────
+function renderActivityTimeline(canvas, weeklyMoves, color) {
+  if (!canvas || !weeklyMoves) return;
+  var dpr = window.devicePixelRatio || 1;
+  var rect = canvas.getBoundingClientRect();
+  var w = rect.width * dpr;
+  var h = rect.height * dpr;
+  canvas.width = w;
+  canvas.height = h;
+  var ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  var cw = rect.width;
+  var ch = rect.height;
+
+  // Flatten all seasons into a single timeline
+  var points = [];
+  var seasons = Object.keys(weeklyMoves).sort();
+  for (var si = 0; si < seasons.length; si++) {
+    var s = seasons[si];
+    var wks = weeklyMoves[s];
+    for (var wk = 1; wk <= 18; wk++) {
+      points.push({ season: s, week: wk, moves: wks[wk] || 0 });
+    }
+  }
+  if (points.length === 0) return;
+
+  var maxMoves = Math.max.apply(null, points.map(function(p) { return p.moves; }));
+  if (maxMoves === 0) maxMoves = 1;
+
+  var barW = Math.max(1, (cw - 4) / points.length);
+  var pad = 2;
+
+  // Draw bars
+  for (var i = 0; i < points.length; i++) {
+    var p = points[i];
+    var barH = (p.moves / maxMoves) * (ch - pad * 2);
+    var x = pad + i * barW;
+    var y = ch - pad - barH;
+
+    // Panic weeks (3+ moves) get red fill
+    if (p.moves >= 3) {
+      ctx.fillStyle = '#e63946';
+    } else if (p.moves > 0) {
+      ctx.fillStyle = color || '#d97757';
+    } else {
+      ctx.fillStyle = 'transparent';
+    }
+
+    if (p.moves > 0) {
+      ctx.fillRect(x, y, Math.max(1, barW - 0.5), barH);
+    }
+  }
+
+  // Draw season dividers
+  if (seasons.length > 1) {
+    ctx.strokeStyle = 'rgba(0,0,0,0.15)';
+    ctx.lineWidth = 0.5;
+    for (var di = 1; di < seasons.length; di++) {
+      var dx = pad + di * 18 * barW;
+      ctx.beginPath();
+      ctx.moveTo(dx, 0);
+      ctx.lineTo(dx, ch);
+      ctx.stroke();
+    }
+  }
+}
+
+// ── PRESSURE MAP ─────────────────────────────────────────────────────
+function computePressureScores(cards) {
+  // Compute a "desperation pressure" score for each manager (0-100)
+  // Factors: losing record, recent loss streaks, panic history, roster weaknesses
+  var scores = [];
+  for (var i = 0; i < cards.length; i++) {
+    var c = cards[i];
+    var score = 0;
+
+    // Record pressure: losing record = higher pressure
+    var totalGames = c.wins + c.losses;
+    if (totalGames > 0) {
+      var winPct = c.wins / totalGames;
+      if (winPct < 0.35) score += 35;
+      else if (winPct < 0.45) score += 25;
+      else if (winPct < 0.50) score += 15;
+      else if (winPct >= 0.65) score -= 10; // comfortable
+    }
+
+    // Panic history: past panic behavior predicts future desperation
+    var panicWeeks = 0;
+    for (var ws in c.prof.weeklyMoves) {
+      var wd = c.prof.weeklyMoves[ws];
+      for (var wk in wd) { if (wd[wk] >= 3) panicWeeks++; }
+    }
+    score += Math.min(20, panicWeeks * 5);
+
+    // Trade activity: more trades = more willing to deal
+    var tradesPerSeason = c.seasonsTracked > 0 ? c.prof.trades / c.seasonsTracked : 0;
+    if (tradesPerSeason >= 5) score += 10; // active trader = approachable
+
+    // FAAB burn rate: spent a lot = more aggressive in general
+    var faabPerSeason = c.seasonsTracked > 0 ? c.prof.faabSpent / c.seasonsTracked : 0;
+    if (faabPerSeason > 150) score += 5;
+
+    // Clamp to 0-100
+    score = Math.max(0, Math.min(100, score));
+
+    scores.push({
+      name: c.name,
+      score: score,
+      color: c.color,
+      summary: c.summary,
+      record: c.wins + '-' + c.losses
+    });
+  }
+
+  // Sort by pressure descending
+  scores.sort(function(a, b) { return b.score - a.score; });
+  return scores;
+}
+
+function renderPressureMap(container, cards, isPro) {
+  var scores = computePressureScores(cards);
+  if (scores.length === 0) return;
+
+  var html = '<div class="pressure-map">';
+  html += '<div class="pressure-map-title">trade deadline pressure map <span style="font-family:var(--font-hand); font-size:11px; color:var(--ink-light); transform:rotate(2deg); display:inline-block;">who\'s desperate?</span></div>';
+
+  // Show top 3 in detail for free, rest blurred
+  var visibleCount = isPro ? scores.length : Math.min(3, scores.length);
+
+  for (var i = 0; i < scores.length; i++) {
+    var s = scores[i];
+    var pressureColor = s.score >= 60 ? '#e63946' : s.score >= 35 ? '#d97757' : '#2ec4b6';
+    var pressureLabel = s.score >= 60 ? 'desperate' : s.score >= 35 ? 'motivated' : 'comfortable';
+    var pressureLabelColor = s.score >= 60 ? '#e63946' : s.score >= 35 ? '#d97757' : '#2ec4b6';
+
+    if (i < visibleCount) {
+      html += '<div class="pressure-bar-row">';
+      html += '<div class="pressure-bar-name">' + escapeHtml(s.name) + ' <span style="font-size:8px; color:var(--ink-light);">' + s.record + '</span></div>';
+      html += '<div class="pressure-bar-track"><div class="pressure-bar-fill" style="width:' + s.score + '%; background:' + pressureColor + ';"></div></div>';
+      html += '<div class="pressure-bar-score" style="color:' + pressureColor + ';">' + s.score + '</div>';
+      html += '<div class="pressure-bar-tag" style="color:' + pressureLabelColor + '; border-color:' + pressureLabelColor + ';">' + pressureLabel + '</div>';
+      html += '</div>';
+    } else {
+      // Locked row for free users
+      html += '<div class="pressure-bar-row" style="opacity:0.35; filter:blur(2px); pointer-events:none;">';
+      html += '<div class="pressure-bar-name">Manager</div>';
+      html += '<div class="pressure-bar-track"><div class="pressure-bar-fill" style="width:' + s.score + '%; background:var(--ink-faint);"></div></div>';
+      html += '<div class="pressure-bar-score">?</div>';
+      html += '<div class="pressure-bar-tag" style="color:var(--ink-faint); border-color:var(--ink-faint);">locked</div>';
+      html += '</div>';
+    }
+  }
+
+  if (!isPro && scores.length > visibleCount) {
+    html += '<div style="text-align:center; margin-top:8px;">';
+    html += '<a href="/pricing.html" style="font-family:var(--font-display); font-size:11px; color:var(--orange); text-decoration:none; padding:4px 12px; border:2px solid var(--orange); border-radius:12px; box-shadow:2px 2px 0 var(--ink); display:inline-block; transition:all 0.12s;">unlock full pressure map with Pro</a>';
+    html += '</div>';
+  }
+
+  // Bridge CTA — link to Diplomat agent
+  html += '<div class="bureau-cta">';
+  html += '<a href="/agents.html" onclick="prefillScenario(\'Which managers in my league are most desperate right now? Who should I target for trades?\'); return true;">ask the Diplomat how to exploit this &rarr;</a>';
+  html += '</div>';
+
+  html += '</div>';
+  container.insertAdjacentHTML('beforeend', html);
+}
+
+// ── MANAGER COMPARISON VIEW ──────────────────────────────────────────
+var _compareCards = null; // stored reference to cards for comparison
+
+function renderCompareSection(container, cards, isPro) {
+  _compareCards = cards;
+  if (cards.length < 2) return;
+
+  var html = '<div class="mgr-compare-section">';
+  html += '<button class="mgr-compare-btn" onclick="toggleComparePanel()">compare managers</button>';
+  html += '<div class="mgr-compare-panel" id="mgrComparePanel">';
+
+  // Selectors
+  html += '<div class="mgr-compare-selectors">';
+  html += '<select id="mgrCompareA">';
+  for (var i = 0; i < cards.length; i++) {
+    html += '<option value="' + i + '">' + escapeHtml(cards[i].name) + '</option>';
+  }
+  html += '</select>';
+  html += '<span style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light);">vs</span>';
+  html += '<select id="mgrCompareB">';
+  for (var i = 0; i < cards.length; i++) {
+    var sel = i === 1 ? ' selected' : '';
+    html += '<option value="' + i + '"' + sel + '>' + escapeHtml(cards[i].name) + '</option>';
+  }
+  html += '</select>';
+  html += '<button class="mgr-compare-btn" onclick="runComparison()" style="font-size:10px; padding:4px 10px;">compare</button>';
+  html += '</div>';
+
+  // Canvas + stats placeholder
+  html += '<div class="mgr-compare-canvas-wrap"><canvas id="mgrCompareRadar" width="300" height="300"></canvas></div>';
+  html += '<div id="mgrCompareStats" class="mgr-compare-stats"></div>';
+
+  // Pro gate for 3+ comparisons
+  if (!isPro) {
+    html += '<div style="font-family:var(--font-hand); font-size:12px; color:var(--ink-light); text-align:center; margin-top:8px;">free comparison — <a href="/pricing.html" style="color:var(--orange);">Pro unlocks deeper manager intel</a></div>';
+  }
+
+  html += '</div></div>';
+  container.insertAdjacentHTML('beforeend', html);
+}
+
+function toggleComparePanel() {
+  var panel = document.getElementById('mgrComparePanel');
+  if (!panel) return;
+  panel.classList.toggle('visible');
+  if (panel.classList.contains('visible')) {
+    runComparison();
+  }
+}
+
+function runComparison() {
+  if (!_compareCards || _compareCards.length < 2) return;
+  var aIdx = parseInt(document.getElementById('mgrCompareA').value);
+  var bIdx = parseInt(document.getElementById('mgrCompareB').value);
+  if (aIdx === bIdx) { bIdx = aIdx === 0 ? 1 : 0; }
+  var a = _compareCards[aIdx];
+  var b = _compareCards[bIdx];
+  if (!a || !b) return;
+
+  drawCompareRadar(a, b);
+  renderCompareStats(a, b);
+}
+
+function drawCompareRadar(a, b) {
+  var canvas = document.getElementById('mgrCompareRadar');
+  if (!canvas) return;
+  var dpr = window.devicePixelRatio || 1;
+  canvas.width = 300 * dpr;
+  canvas.height = 300 * dpr;
+  var ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  var cx = 150, cy = 150, r = 110;
+
+  // 5 axes: trades, waivers, FAAB, total moves, panic score
+  var labels = ['trades', 'waivers', 'FAAB', 'activity', 'aggression'];
+  var aSeasons = Math.max(1, a.seasonsTracked);
+  var bSeasons = Math.max(1, b.seasonsTracked);
+
+  // Normalize values to 0-1 range
+  var aVals = [
+    a.prof.trades / aSeasons,
+    a.prof.waivers / aSeasons,
+    a.prof.faabSpent / aSeasons,
+    a.prof.total / aSeasons,
+    computeSinglePressure(a)
+  ];
+  var bVals = [
+    b.prof.trades / bSeasons,
+    b.prof.waivers / bSeasons,
+    b.prof.faabSpent / bSeasons,
+    b.prof.total / bSeasons,
+    computeSinglePressure(b)
+  ];
+
+  // Find max per axis for normalization
+  var maxVals = [];
+  for (var i = 0; i < 5; i++) {
+    maxVals.push(Math.max(aVals[i], bVals[i], 1));
+  }
+
+  var aNorm = aVals.map(function(v, i) { return v / maxVals[i]; });
+  var bNorm = bVals.map(function(v, i) { return v / maxVals[i]; });
+
+  var n = 5;
+  var angle = -Math.PI / 2; // start from top
+
+  // Clear
+  ctx.clearRect(0, 0, 300, 300);
+
+  // Draw grid rings
+  ctx.strokeStyle = 'rgba(0,0,0,0.08)';
+  ctx.lineWidth = 0.5;
+  for (var ring = 0.25; ring <= 1; ring += 0.25) {
+    ctx.beginPath();
+    for (var j = 0; j <= n; j++) {
+      var a2 = angle + (j % n) * (2 * Math.PI / n);
+      var px = cx + Math.cos(a2) * r * ring;
+      var py = cy + Math.sin(a2) * r * ring;
+      if (j === 0) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+  }
+
+  // Draw axis lines + labels
+  ctx.strokeStyle = 'rgba(0,0,0,0.12)';
+  ctx.fillStyle = '#5c4a3d';
+  ctx.font = '9px Space Mono, monospace';
+  ctx.textAlign = 'center';
+  for (var j = 0; j < n; j++) {
+    var a2 = angle + j * (2 * Math.PI / n);
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + Math.cos(a2) * r, cy + Math.sin(a2) * r);
+    ctx.stroke();
+    // Label
+    var lx = cx + Math.cos(a2) * (r + 14);
+    var ly = cy + Math.sin(a2) * (r + 14);
+    ctx.fillText(labels[j], lx, ly + 3);
+  }
+
+  // Draw manager A polygon
+  ctx.beginPath();
+  for (var j = 0; j < n; j++) {
+    var a2 = angle + j * (2 * Math.PI / n);
+    var px = cx + Math.cos(a2) * r * aNorm[j];
+    var py = cy + Math.sin(a2) * r * aNorm[j];
+    if (j === 0) ctx.moveTo(px, py);
+    else ctx.lineTo(px, py);
+  }
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(217,119,87,0.2)';
+  ctx.fill();
+  ctx.strokeStyle = '#d97757';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Draw manager B polygon
+  ctx.beginPath();
+  for (var j = 0; j < n; j++) {
+    var a2 = angle + j * (2 * Math.PI / n);
+    var px = cx + Math.cos(a2) * r * bNorm[j];
+    var py = cy + Math.sin(a2) * r * bNorm[j];
+    if (j === 0) ctx.moveTo(px, py);
+    else ctx.lineTo(px, py);
+  }
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(91,127,255,0.2)';
+  ctx.fill();
+  ctx.strokeStyle = '#5b7fff';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Legend
+  ctx.font = '10px "Luckiest Guy", cursive';
+  ctx.fillStyle = '#d97757';
+  ctx.textAlign = 'left';
+  ctx.fillText(a.name, 10, 18);
+  ctx.fillStyle = '#5b7fff';
+  ctx.fillText(b.name, 10, 32);
+}
+
+function computeSinglePressure(c) {
+  // Simplified pressure score for radar comparison
+  var score = 0;
+  var totalGames = c.wins + c.losses;
+  if (totalGames > 0) {
+    var winPct = c.wins / totalGames;
+    if (winPct < 0.35) score += 35;
+    else if (winPct < 0.45) score += 25;
+    else if (winPct < 0.50) score += 15;
+  }
+  var panicWeeks = 0;
+  for (var ws in c.prof.weeklyMoves) {
+    var wd = c.prof.weeklyMoves[ws];
+    for (var wk in wd) { if (wd[wk] >= 3) panicWeeks++; }
+  }
+  score += Math.min(20, panicWeeks * 5);
+  return Math.max(0, Math.min(100, score));
+}
+
+function renderCompareStats(a, b) {
+  var el = document.getElementById('mgrCompareStats');
+  if (!el) return;
+  var aS = Math.max(1, a.seasonsTracked);
+  var bS = Math.max(1, b.seasonsTracked);
+
+  var rows = [
+    { label: 'record', aVal: a.wins + '-' + a.losses, bVal: b.wins + '-' + b.losses, aNum: a.wins, bNum: b.wins },
+    { label: 'trades/yr', aVal: (a.prof.trades / aS).toFixed(1), bVal: (b.prof.trades / bS).toFixed(1), aNum: a.prof.trades / aS, bNum: b.prof.trades / bS },
+    { label: 'waivers/yr', aVal: (a.prof.waivers / aS).toFixed(1), bVal: (b.prof.waivers / bS).toFixed(1), aNum: a.prof.waivers / aS, bNum: b.prof.waivers / bS },
+    { label: 'FAAB/yr', aVal: '$' + Math.round(a.prof.faabSpent / aS), bVal: '$' + Math.round(b.prof.faabSpent / bS), aNum: a.prof.faabSpent / aS, bNum: b.prof.faabSpent / bS },
+    { label: 'total moves/yr', aVal: (a.prof.total / aS).toFixed(1), bVal: (b.prof.total / bS).toFixed(1), aNum: a.prof.total / aS, bNum: b.prof.total / bS },
+    { label: 'pressure', aVal: computeSinglePressure(a), bVal: computeSinglePressure(b), aNum: computeSinglePressure(a), bNum: computeSinglePressure(b) }
+  ];
+
+  var html = '';
+  for (var i = 0; i < rows.length; i++) {
+    var r = rows[i];
+    var aWin = r.aNum > r.bNum ? ' stat-winner' : '';
+    var bWin = r.bNum > r.aNum ? ' stat-winner' : '';
+    html += '<div class="stat-left' + aWin + '">' + r.aVal + '</div>';
+    html += '<div class="stat-label">' + r.label + '</div>';
+    html += '<div class="stat-right' + bWin + '">' + r.bVal + '</div>';
+  }
+  el.innerHTML = html;
+}
+
+// ── BRIDGE CTA: Prefill Situation Room scenario ──────────────────────
+function prefillScenario(text) {
+  try {
+    localStorage.setItem('razzle_prefill_scenario', text);
+  } catch (e) { /* ignore */ }
 }
 
 function disconnect() {
