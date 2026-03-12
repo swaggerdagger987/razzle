@@ -128,6 +128,180 @@
     color: var(--ink);
   }
 
+  /* ===== RESEARCH SPRAWL ===== */
+  .sprawl-section {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 24px 20px;
+  }
+
+  .sprawl-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 20px;
+    box-shadow: 6px 6px 0 var(--ink);
+    padding: 36px 32px 24px;
+    text-align: center;
+  }
+
+  .sprawl-headline {
+    font-family: var(--font-display);
+    font-size: 32px;
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+
+  .sprawl-headline span { color: var(--orange); }
+
+  .sprawl-sub {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-medium);
+    margin-bottom: 28px;
+  }
+
+  .sprawl-columns {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    position: relative;
+  }
+
+  .sprawl-col {
+    padding: 0 20px;
+    position: relative;
+  }
+
+  .sprawl-col:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 1.5px;
+    background: repeating-linear-gradient(to bottom, var(--ink-faint) 0, var(--ink-faint) 6px, transparent 6px, transparent 12px);
+  }
+
+  .sprawl-knot {
+    position: relative;
+    height: 150px;
+    margin-bottom: 12px;
+  }
+
+  .sprawl-knot-svg {
+    width: 140px;
+    height: 110px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  /* Floating app icons */
+  .sprawl-icon {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    border-radius: 7px;
+    border: 2px solid var(--ink);
+    color: white;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+
+  .sprawl-icon-1 { top: 8px; left: 10%; }
+  .sprawl-icon-2 { top: 12px; right: 10%; }
+  .sprawl-icon-3 { bottom: 18px; left: 8%; }
+  .sprawl-icon-4 { bottom: 22px; right: 8%; }
+  .sprawl-icon-5 { bottom: 0; left: 50%; transform: translateX(-50%); }
+  .sprawl-icon-6 { top: 50%; left: 5%; transform: translateY(-50%); }
+
+  /* Stat pills */
+  .sprawl-pill {
+    position: absolute;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 6px;
+    border: 1.5px solid;
+    white-space: nowrap;
+  }
+
+  .sprawl-pill-1 { top: 10px; left: 5%; }
+  .sprawl-pill-2 { top: 14px; right: 5%; }
+  .sprawl-pill-3 { bottom: 18px; left: 5%; }
+  .sprawl-pill-4 { bottom: 22px; right: 5%; }
+
+  .sprawl-q {
+    position: absolute;
+    font-family: var(--font-hand);
+    font-size: 24px;
+    color: var(--ink-faint);
+    font-weight: 700;
+  }
+
+  .sprawl-q-1 { top: 4px; left: 50%; }
+  .sprawl-q-2 { bottom: 4px; right: 20%; }
+  .sprawl-q-3 { top: 40%; left: 18%; }
+
+  /* Speech bubbles */
+  .sprawl-bubble {
+    position: absolute;
+    font-family: var(--font-hand);
+    font-size: 13px;
+    color: var(--ink-medium);
+    background: white;
+    border: 1.5px solid var(--ink-faint);
+    border-radius: 8px;
+    padding: 4px 10px;
+    white-space: nowrap;
+  }
+
+  .sprawl-bubble-1 { top: 6px; left: 0; }
+  .sprawl-bubble-2 { top: 16px; right: 0; }
+  .sprawl-bubble-3 { bottom: 6px; left: 50%; transform: translateX(-50%); }
+
+  .sprawl-col-title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    margin-bottom: 4px;
+  }
+
+  .sprawl-col-desc {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-medium);
+    line-height: 1.5;
+    margin-bottom: 8px;
+  }
+
+  .sprawl-annotation {
+    font-family: var(--font-hand);
+    font-size: 17px;
+    color: var(--orange);
+  }
+
+  .sprawl-cta {
+    font-family: var(--font-hand);
+    font-size: 19px;
+    color: var(--ink-light);
+    margin-top: 20px;
+  }
+
+  @media (max-width: 700px) {
+    .sprawl-columns { grid-template-columns: 1fr; gap: 24px; }
+    .sprawl-col:not(:last-child)::after { display: none; }
+    .sprawl-col:not(:last-child) { border-bottom: 1.5px dashed var(--ink-faint); padding-bottom: 24px; }
+    .sprawl-headline { font-size: 24px; }
+    .sprawl-card { padding: 24px 16px 16px; }
+  }
+
   /* ===== SECTIONS ===== */
   .section {
     max-width: 900px;
@@ -716,8 +890,70 @@
 </div>
 
 <!-- RESEARCH SPRAWL INFOGRAPHIC -->
-<div style="max-width:960px; margin:0 auto; padding:0 24px 20px;">
-  <img src="assets/research-sprawl.svg" alt="80% of your fantasy edge is lost before kickoff — Tab Sprawl, Data Gaps, Context Loss" style="width:100%; height:auto; border-radius:20px;">
+<div class="sprawl-section">
+  <div class="sprawl-card">
+    <h2 class="sprawl-headline">80% of your fantasy edge <span>is lost before kickoff</span></h2>
+    <p class="sprawl-sub">Research Sprawl is killing your edge — and wasting your Sundays.</p>
+
+    <div class="sprawl-columns">
+      <!-- Tab Sprawl -->
+      <div class="sprawl-col">
+        <div class="sprawl-knot">
+          <svg viewBox="0 0 180 140" class="sprawl-knot-svg">
+            <path d="M50,30 C70,0 110,10 100,40 C90,70 60,65 75,45 C90,25 130,20 125,50 C120,80 80,85 65,60 C50,35 105,5 120,35 C135,65 85,90 60,70" fill="none" stroke="#c4b5a5" stroke-width="8" stroke-linecap="round"/>
+            <path d="M50,30 C70,0 110,10 100,40 C90,70 60,65 75,45 C90,25 130,20 125,50 C120,80 80,85 65,60 C50,35 105,5 120,35 C135,65 85,90 60,70" fill="none" stroke="#ede0cf" stroke-width="5" stroke-linecap="round"/>
+          </svg>
+          <div class="sprawl-icon sprawl-icon-1" style="background:#5b7fff;">FP</div>
+          <div class="sprawl-icon sprawl-icon-2" style="background:#e63946;">r/</div>
+          <div class="sprawl-icon sprawl-icon-3" style="background:#2ec4b6;">S</div>
+          <div class="sprawl-icon sprawl-icon-4" style="background:#2d1f14;">X</div>
+          <div class="sprawl-icon sprawl-icon-5" style="background:#8b5cf6;">Pod</div>
+          <div class="sprawl-icon sprawl-icon-6" style="background:#d97757;">YT</div>
+        </div>
+        <h3 class="sprawl-col-title">Tab Sprawl</h3>
+        <p class="sprawl-col-desc">12 tabs open, 6 podcasts queued, 3 Twitter threads half-read</p>
+        <p class="sprawl-annotation" style="transform:rotate(-2deg);">^ this is you on Tuesday night</p>
+      </div>
+
+      <!-- Data Gaps -->
+      <div class="sprawl-col">
+        <div class="sprawl-knot">
+          <svg viewBox="0 0 180 140" class="sprawl-knot-svg">
+            <path d="M55,35 C80,5 115,15 105,45 C95,75 65,70 80,50 C95,30 135,25 130,55 C125,85 85,80 70,60" fill="none" stroke="#c4b5a5" stroke-width="8" stroke-linecap="round"/>
+            <path d="M55,35 C80,5 115,15 105,45 C95,75 65,70 80,50 C95,30 135,25 130,55 C125,85 85,80 70,60" fill="none" stroke="#ede0cf" stroke-width="5" stroke-linecap="round"/>
+          </svg>
+          <div class="sprawl-pill sprawl-pill-1" style="background:#f7e4d8; color:#d97757; border-color:#d97757;">PPG?</div>
+          <div class="sprawl-pill sprawl-pill-2" style="background:#dde4f7; color:#5b7fff; border-color:#5b7fff;">TGT%</div>
+          <div class="sprawl-pill sprawl-pill-3" style="background:#d9efec; color:#2ec4b6; border-color:#2ec4b6;">ADOT</div>
+          <div class="sprawl-pill sprawl-pill-4" style="background:#f5eacc; color:#8a7565; border-color:#8a7565;">RZ%</div>
+          <span class="sprawl-q sprawl-q-1">?</span>
+          <span class="sprawl-q sprawl-q-2">?</span>
+          <span class="sprawl-q sprawl-q-3">?</span>
+        </div>
+        <h3 class="sprawl-col-title">Data Gaps</h3>
+        <p class="sprawl-col-desc">Stats scattered across 8 sites. None of them agree.</p>
+        <p class="sprawl-annotation" style="transform:rotate(1.5deg);">^ wait, which PPR scoring?</p>
+      </div>
+
+      <!-- Context Loss -->
+      <div class="sprawl-col">
+        <div class="sprawl-knot">
+          <svg viewBox="0 0 180 140" class="sprawl-knot-svg">
+            <path d="M60,40 C85,10 120,20 110,50 C100,80 70,75 85,55 C100,35 140,30 135,60 C130,90 90,85 75,65" fill="none" stroke="#c4b5a5" stroke-width="8" stroke-linecap="round"/>
+            <path d="M60,40 C85,10 120,20 110,50 C100,80 70,75 85,55 C100,35 140,30 135,60 C130,90 90,85 75,65" fill="none" stroke="#ede0cf" stroke-width="5" stroke-linecap="round"/>
+          </svg>
+          <div class="sprawl-bubble sprawl-bubble-1">Who was that sleeper?</div>
+          <div class="sprawl-bubble sprawl-bubble-2">Was he a buy or sell...</div>
+          <div class="sprawl-bubble sprawl-bubble-3">What round was he again?</div>
+        </div>
+        <h3 class="sprawl-col-title">Context Loss</h3>
+        <p class="sprawl-col-desc">By draft day, you forgot half your research. Panic-pick incoming.</p>
+        <p class="sprawl-annotation" style="transform:rotate(-1deg);">^ narrator: he was a sell</p>
+      </div>
+    </div>
+
+    <p class="sprawl-cta">razzle.lol puts it all in one place. no tabs. no guessing. just edge.</p>
+  </div>
 </div>
 
 <!-- FEATURES -->
