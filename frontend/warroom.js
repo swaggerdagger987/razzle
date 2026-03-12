@@ -1644,7 +1644,7 @@ function setupScenarioPanel() {
       input.value = prefilled;
       localStorage.removeItem('razzle_prefill_scenario');
       input.focus();
-      setScenarioStatus('scenario pre-loaded from League Intel', '');
+      setScenarioStatus('scenario pre-loaded from Bureau of Intelligence', '');
     }
   } catch (e) { /* ignore */ }
 }
