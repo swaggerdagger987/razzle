@@ -42,3 +42,17 @@ Full build history archived in `docs/PROGRESS_ARCHIVE.md`.
 ### Decisions Log
 
 ---
+
+## Ship Phase: Phase B — The Lab Production Hardening (Mar 19–25)
+
+**Goal**: Make the Lab bulletproof for strangers. Screener, formulas, viz, export all work flawlessly.
+
+**Exit Criterion**: Hand the Lab URL to a fantasy football stranger. They can explore, filter, create a formula, export an image, and share a link — all without hitting a single bug.
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| B-1 | Core screener stress test | DONE | Fixed tag filter pagination bug — tagFilter now fetches all players (limit=1000, offset=0) and paginates client-side after filtering, preventing empty pages and wrong total counts. Cache key left as-is (per-page caching is correct for SQL LIMIT/OFFSET pattern). Syntax verified clean. |
+
+### Decisions Log
+
+---

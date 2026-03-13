@@ -1192,14 +1192,17 @@ async function fetchAndRenderNFL(signal, myId) {
     ? (state.relevance === "fantasy" ? ["QB", "RB", "WR", "TE"] : [])
     : [state.position];
 
+  // When tagFilter is active, fetch ALL matching players so client-side
+  // tag filtering + pagination is consistent (no empty pages or wrong counts)
+  const useTagFilter = state.tagFilter;
   const body = {
     search: state.search,
     positions: positions,
     season: state.season,
     sort_key: state.sortKey,
     sort_direction: state.sortDir,
-    limit: state.limit,
-    offset: state.offset,
+    limit: useTagFilter ? 1000 : state.limit,
+    offset: useTagFilter ? 0 : state.offset,
     filters: state.filters,
     relevance: state.relevance,
     teams: state.teams,
@@ -1224,10 +1227,12 @@ async function fetchAndRenderNFL(signal, myId) {
     computeFormulaValues();
     computeCustomScoringValues();
     computePosRanks();
-    // Apply tag filter (client-side)
-    if (state.tagFilter) {
+    // Apply tag filter (client-side) then paginate locally
+    if (useTagFilter) {
       const tags = getPlayerTags();
-      state.items = state.items.filter(p => tags[p.player_id]);
+      const allTagged = state.items.filter(p => tags[p.player_id]);
+      state.totalCount = allTagged.length;
+      state.items = allTagged.slice(state.offset, state.offset + state.limit);
     }
     applySecondarySort();
     _lastFetchTime = Date.now();

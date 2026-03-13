@@ -1,11 +1,11 @@
 # Razzle Ship Loop — Task Tracker
 
 ## Current State
-- Phase: A (Visual & Design Audit)
-- Current Task: COMPLETE
-- Current Stage: PHASE GATE
-- Tasks Completed: 6/6
-- Loop Iterations: 1
+- Phase: B (Lab Production Hardening)
+- Current Task: B-2 Formula builder QA
+- Current Stage: BUILD
+- Tasks Completed: 1/7
+- Loop Iterations: 2
 
 ## Phase A: Visual & Design Audit (Mar 12–18)
 **Exit Criterion**: Open each of the three rooms plus the landing page. The visual language is unmistakably Razzle — warm sand, chunky borders, espresso ink, comic-strip energy. No page looks like it was built by a different team.
@@ -57,3 +57,64 @@
 **Size**: S
 **Status**: PASS
 **Attempts**: 1
+
+---
+
+## Phase B: The Lab — Production Hardening (Mar 19–25)
+**Exit Criterion**: Hand the Lab URL to a fantasy football stranger. They can explore, filter, create a formula, export an image, and share a link — all without hitting a single bug. The exported image makes them want to post it on Reddit.
+
+### Task B-1: Core screener stress test
+**Requirement**: "Load Lab with 600+ players. Sort every column. Apply 3+ filters simultaneously. Verify no JS errors, no layout breaks, pagination works."
+**Accept when**: Screener handles full dataset without errors. Tag filter pagination bug fixed. Cache key optimized.
+**Depends on**: none
+**Size**: L
+**Status**: PASS
+**Attempts**: 1
+
+### Task B-2: Formula builder QA
+**Requirement**: "Create formula → save → refresh → loads. Share formula URL → opens in new browser → exact same formula + sort. Delete formula → gone."
+**Accept when**: Full formula CRUD lifecycle works across sessions and URLs.
+**Depends on**: none
+**Size**: M
+**Status**: PENDING
+**Attempts**: 0
+
+### Task B-3: Visualization QA
+**Requirement**: "Radar chart with 2-player overlay renders correctly. Scatter plot dots are clickable. Trend chart shows weekly data. No canvas rendering bugs."
+**Accept when**: All chart types render correctly with real data.
+**Depends on**: none
+**Size**: M
+**Status**: PENDING
+**Attempts**: 0
+
+### Task B-4: Panel audit (top 20)
+**Requirement**: "Test the 20 highest-value Lab panels (dynasty rankings, trade values, breakout finder, aging curves, rookie big board, matchup heatmap, etc). Each must: load data, render correctly, handle empty states, export cleanly."
+**Accept when**: Top 20 panels verified working.
+**Depends on**: none
+**Size**: L
+**Status**: PENDING
+**Attempts**: 0
+
+### Task B-5: Export & sharing
+**Requirement**: "PNG export on screener view, radar chart, scatter plot. Watermark ('razzle.lol') baked in. Clean aspect ratio. Shareable URLs resolve with og:image."
+**Accept when**: Exported PNGs look screenshot-worthy with watermark.
+**Depends on**: B-3
+**Size**: M
+**Status**: PENDING
+**Attempts**: 0
+
+### Task B-6: URL state integrity
+**Requirement**: "Serialize screener state (filters, sort, columns, formula) → copy URL → paste in incognito → exact same view loads. Test 5 complex screener configs."
+**Accept when**: URL state round-trips perfectly.
+**Depends on**: B-1
+**Size**: M
+**Status**: PENDING
+**Attempts**: 0
+
+### Task B-7: Performance
+**Requirement**: "Lab initial load < 2 seconds. Screener filter response < 500ms. No jank on sort/filter. Pagination smooth."
+**Accept when**: Lab feels fast and responsive.
+**Depends on**: B-1
+**Size**: M
+**Status**: PENDING
+**Attempts**: 0
