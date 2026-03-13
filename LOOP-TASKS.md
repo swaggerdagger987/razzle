@@ -2,9 +2,9 @@
 
 ## Current State
 - Phase: B (Lab Production Hardening)
-- Current Task: B-2 Formula builder QA
+- Current Task: B-3 Visualization QA
 - Current Stage: BUILD
-- Tasks Completed: 1/7
+- Tasks Completed: 2/7
 - Loop Iterations: 2
 
 ## Phase A: Visual & Design Audit (Mar 12–18)
@@ -76,8 +76,8 @@
 **Accept when**: Full formula CRUD lifecycle works across sessions and URLs.
 **Depends on**: none
 **Size**: M
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task B-3: Visualization QA
 **Requirement**: "Radar chart with 2-player overlay renders correctly. Scatter plot dots are clickable. Trend chart shows weekly data. No canvas rendering bugs."

@@ -69,13 +69,13 @@ function saveFormula() {
   state.formulas.push({ name, components });
 
   // Save to localStorage
-  localStorage.setItem("razzle_formulas", JSON.stringify(state.formulas));
+  try { localStorage.setItem("razzle_formulas", JSON.stringify(state.formulas)); } catch(e) {}
   // Sync to server if logged in
   _syncFormulaToServer(name, components);
 
   // Register the column
   const key = `formula_${name.toLowerCase().replace(/[^a-z0-9]/g, "_")}`;
-  COLUMNS[key] = { label: name, group: "Formulas", decimals: 1 };
+  COLUMNS[key] = { label: (typeof escapeHtml === "function" ? escapeHtml(name) : name), group: "Formulas", decimals: 1 };
 
   // Add to visible columns if not there
   if (!state.visibleColumns.includes(key)) {
@@ -97,7 +97,7 @@ function saveFormula() {
 
 function deleteFormula(name) {
   state.formulas = state.formulas.filter(f => f.name !== name);
-  localStorage.setItem("razzle_formulas", JSON.stringify(state.formulas));
+  try { localStorage.setItem("razzle_formulas", JSON.stringify(state.formulas)); } catch(e) {}
   _deleteFormulaFromServer(name);
 
   const key = `formula_${name.toLowerCase().replace(/[^a-z0-9]/g, "_")}`;
@@ -129,12 +129,12 @@ function renderSavedFormulas() {
         : `<button class="btn-chunky" style="font-size:9px; padding:2px 8px;" onclick="event.stopPropagation(); openPublishFlow('${f.name.replace(/'/g, "\\'")}')">Publish</button>`;
       return `<div style="display:flex; align-items:center; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--ink-faint); gap:6px;">
         <div style="flex:1; min-width:0;">
-          <strong style="font-family:var(--font-display); font-size:13px;">${f.name}</strong>
+          <strong style="font-family:var(--font-display); font-size:13px;">${(typeof escapeHtml === "function" ? escapeHtml(f.name) : f.name)}</strong>
           <span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); margin-left:8px;">${desc}</span>
         </div>
         <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
           ${publishBtn}
-          <span style="cursor:pointer; color:var(--red); font-weight:700; font-size:14px;" onclick="deleteFormula('${f.name}')">×</span>
+          <span style="cursor:pointer; color:var(--red); font-weight:700; font-size:14px;" onclick="deleteFormula('${f.name.replace(/\\/g, "\\\\").replace(/'/g, "\\'")}')">×</span>
         </div>
       </div>`;
     }).join("");

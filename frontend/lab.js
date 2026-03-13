@@ -1058,6 +1058,9 @@ function _syncUndoRedoButtons() {
 
 // ─── Init ────────────────────────────────────────────────────────
 (async function init() {
+  // Load formulas BEFORE URL state so formula columns exist when visibleColumns are restored
+  loadFormulas();
+  loadCustomScoringColumns();
   loadStateFromURL();
 
   // Dynamic year fallbacks (shared by try + catch)
@@ -4587,7 +4590,7 @@ function loadFormulas() {
   // Register formula columns
   for (const formula of state.formulas) {
     const key = `formula_${formula.name.toLowerCase().replace(/[^a-z0-9]/g, "_")}`;
-    COLUMNS[key] = { label: formula.name, group: "Formulas", decimals: 1 };
+    COLUMNS[key] = { label: escapeHtml(formula.name), group: "Formulas", decimals: 1 };
   }
 }
 
@@ -5249,9 +5252,7 @@ function computePosRanks() {
   }
 }
 
-// Load formulas and custom scoring on startup
-loadFormulas();
-loadCustomScoringColumns();
+// Formulas and custom scoring loaded in init() — cloud sync after page load
 // Cloud sync formulas and saved views (Pro+ users — runs silently after page load)
 if (typeof syncFormulasFromCloud === "function") {
   setTimeout(syncFormulasFromCloud, 1500);
