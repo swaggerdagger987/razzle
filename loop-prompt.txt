@@ -22,7 +22,11 @@ EXECUTION — Find the next PENDING or FAIL task in LOOP-TASKS.md. Do exactly ON
 1) DESIGN: Write a design spec matching docs/DESIGN.md. Output inline, no separate files.
 2) BUILD: Implement in vanilla HTML/JS/CSS. No frameworks. Reference C:\Users\mcgui\Documents\FDL for proven patterns but rewrite clean.
 3) TEST: Verify acceptance criteria from LOOP-TASKS.md. Check syntax errors, missing files, design rule violations.
-4) If PASS: Update LOOP-TASKS.md status to PASS. Update PROGRESS.md task to DONE. Git add, commit with message "Phase [letter] Task [N]: [description]", then git push origin master.
+4) If PASS: Update LOOP-TASKS.md status to PASS. Update PROGRESS.md task to DONE. Then run ALL THREE git commands in sequence — this is mandatory, do not skip the push:
+   git add -A
+   git commit -m "Phase [letter] Task [N]: [description]"
+   git push origin master
+   If the push fails, retry once. If it fails again, log it and continue.
 5) If FAIL: Update LOOP-TASKS.md with incremented attempt count and specific failure reason. Do NOT retry. Exit and let the next session handle it.
 6) If a task hits 3 failed attempts, mark it BLOCKED, log the blocker in PROGRESS.md, and move to the next unblocked task.
 
@@ -47,7 +51,7 @@ PART B — UX AUDIT: First-30-seconds test, readability pass, flow test (3 core 
 
 PART C — Write findings to QA-AUDIT.md. Create fix tasks for CRITICAL and HIGH findings. MEDIUM grouped as one task. LOW logged only.
 
-GIT — Set user.name=swaggerdagger987, user.email=swaggerdagger987@users.noreply.github.com before committing. Push after every task PASS.
+GIT — CRITICAL: You MUST run "git push origin master" after EVERY commit. No exceptions. Commits without pushes are useless — the deploy reads from GitHub, not local. Set user.name=swaggerdagger987, user.email=swaggerdagger987@users.noreply.github.com before committing.
 
 RULES:
 - No new features until Draft Day. Polish and harden only.
