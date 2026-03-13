@@ -62,3 +62,17 @@ Full build history archived in `docs/PROGRESS_ARCHIVE.md`.
 ### Decisions Log
 
 ---
+
+## Ship Phase: Phase C — Bureau of Intelligence Production Hardening (Mar 26–Apr 1)
+
+**Goal**: Make the Bureau bulletproof. Sleeper connection, league data, manager profiles, trade finder, pressure map all work flawlessly.
+
+**Exit Criterion**: Connect a real Sleeper account. Browse leagues, see manager profiles, find trade partners, and click through to the Situation Room — all without friction.
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| C-1 | Sleeper connection flow | DONE | Added AbortController timeout (10s) on all Sleeper API fetches, loading state on Connect button ("connecting..."), Enter key support on username input, differentiated error messages (timeout vs not-found vs network), null guards on resp.ok and user.user_id in showLeagues fallback path. |
+
+### Decisions Log
+
+---

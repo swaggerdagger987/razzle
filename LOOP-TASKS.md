@@ -1,11 +1,11 @@
 # Razzle Ship Loop — Task Tracker
 
 ## Current State
-- Phase: B (Lab Production Hardening)
-- Current Task: COMPLETE
-- Current Stage: PHASE GATE
-- Tasks Completed: 7/7
-- Loop Iterations: 2
+- Phase: C (Bureau of Intelligence — Production Hardening)
+- Current Task: C-2
+- Current Stage: BUILD
+- Tasks Completed: 1/7
+- Loop Iterations: 3
 
 ## Phase A: Visual & Design Audit (Mar 12–18)
 **Exit Criterion**: Open each of the three rooms plus the landing page. The visual language is unmistakably Razzle — warm sand, chunky borders, espresso ink, comic-strip energy. No page looks like it was built by a different team.
@@ -118,3 +118,64 @@
 **Size**: M
 **Status**: PASS
 **Attempts**: 1
+
+---
+
+## Phase C: Bureau of Intelligence — Production Hardening (Mar 26–Apr 1)
+**Exit Criterion**: Connect a real Sleeper account. Browse leagues, see manager profiles, find trade partners, and click through to the Situation Room — all without friction. The free tier shows enough value to hook; the gated content makes Pro feel worth it.
+
+### Task C-1: Sleeper connection flow
+**Requirement**: "Enter username → fetch leagues → display roster for each league. Test with 5+ real Sleeper usernames (different league counts, different formats). Handle: invalid username, API timeout, user with 0 leagues."
+**Accept when**: Sleeper flow works for real users with proper error handling.
+**Depends on**: none
+**Size**: L
+**Status**: PASS
+**Attempts**: 1
+
+### Task C-2: League data rendering
+**Requirement**: "Rosters, standings, transactions render correctly. Bye weeks display. Position depth visible. No stale or missing data."
+**Accept when**: League data is accurate and complete.
+**Depends on**: C-1
+**Size**: M
+**Status**: PENDING
+**Attempts**: 0
+
+### Task C-3: Manager profiling
+**Requirement**: "Behavioral profiles (panic history, FAAB patterns, trade tendencies) generate correctly for multi-season leagues. Profiles render in comic-strip card style."
+**Accept when**: Manager profiles render with real behavioral data.
+**Depends on**: C-1
+**Size**: M
+**Status**: PENDING
+**Attempts**: 0
+
+### Task C-4: Trade finder QA
+**Requirement**: "League-specific trade finder: value matching works, position need/surplus detection accurate, trade partner cards render with correct data."
+**Accept when**: Trade suggestions are reasonable and well-presented.
+**Depends on**: C-2
+**Size**: M
+**Status**: PENDING
+**Attempts**: 0
+
+### Task C-5: Pressure map QA
+**Requirement**: "Desperation scores calculate correctly. Color coding (red=desperate, green=comfortable) renders. Pro gating works (top 3 free, rest blurred)."
+**Accept when**: Pressure map provides useful signal.
+**Depends on**: C-2
+**Size**: M
+**Status**: PENDING
+**Attempts**: 0
+
+### Task C-6: Bureau → Situation Room bridge
+**Requirement**: "'Ask the Diplomat' CTAs from trade finder and pressure map pre-populate scenario input in Situation Room. Cross-page handoff works via localStorage."
+**Accept when**: Clicking CTA in Bureau lands in Situation Room with pre-filled scenario.
+**Depends on**: C-4, C-5
+**Size**: S
+**Status**: PENDING
+**Attempts**: 0
+
+### Task C-7: Free vs Pro gating
+**Requirement**: "Free users see: leagues, rosters, basic standings, top 3 pressure entries. Pro features (full profiles, trade finder, full pressure map) show blurred preview + upgrade CTA. Gating is clear, upgrade path is obvious, no content leaks."
+**Accept when**: Gating is clear, upgrade path is obvious, no content leaks.
+**Depends on**: C-3, C-4, C-5
+**Size**: M
+**Status**: PENDING
+**Attempts**: 0

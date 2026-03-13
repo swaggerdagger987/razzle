@@ -817,8 +817,8 @@
       <h2>Connect Your Sleeper</h2>
       <p>enter your Sleeper username to see your leagues</p>
       <div class="connect-form">
-        <input type="text" class="input-chunky" id="sleeperUsername" placeholder="sleeper username">
-        <button class="btn-primary" onclick="connectSleeper()">Connect</button>
+        <input type="text" class="input-chunky" id="sleeperUsername" placeholder="sleeper username" onkeydown="if(event.key==='Enter'){event.preventDefault();connectSleeper();}">
+        <button class="btn-primary" id="connectBtn" onclick="connectSleeper()">Connect</button>
       </div>
       <div class="connect-error" id="connectError"></div>
     </div>
@@ -925,11 +925,18 @@ async function connectSleeper() {
   const username = document.getElementById("sleeperUsername").value.trim();
   if (!username) return;
 
-  document.getElementById("connectError").textContent = "";
+  var errorEl = document.getElementById("connectError");
+  var btn = document.getElementById("connectBtn");
+  errorEl.textContent = "";
+  btn.disabled = true;
+  btn.textContent = "connecting...";
 
   try {
-    // Verify user exists
-    const resp = await fetch(`${SLEEPER_API}/user/${username}`);
+    // Verify user exists (10s timeout)
+    var controller = new AbortController();
+    var timeout = setTimeout(function() { controller.abort(); }, 10000);
+    const resp = await fetch(`${SLEEPER_API}/user/${username}`, { signal: controller.signal });
+    clearTimeout(timeout);
     if (!resp.ok) throw new Error("User not found");
     const user = await resp.json();
     if (!user || !user.user_id) throw new Error("User not found");
@@ -940,7 +947,15 @@ async function connectSleeper() {
     if (typeof linkSleeperToAccount === "function") linkSleeperToAccount(username);
     showLeagues(username);
   } catch (e) {
-    document.getElementById("connectError").textContent = "couldn't find that username on Sleeper";
+    if (e.name === "AbortError") {
+      errorEl.textContent = "Sleeper took too long to respond — try again";
+    } else if (e.message === "User not found") {
+      errorEl.textContent = "couldn't find that username on Sleeper";
+    } else {
+      errorEl.textContent = "couldn't reach Sleeper — check your connection";
+    }
+    btn.disabled = false;
+    btn.textContent = "Connect";
   }
 }
 
@@ -951,15 +966,23 @@ async function showLeagues(username) {
 
   const userId = localStorage.getItem("razzle_sleeper_user_id");
   if (!userId) {
-    // Need to fetch user ID first
+    // Need to fetch user ID first (10s timeout)
     try {
-      const resp = await fetch(`${SLEEPER_API}/user/${username}`);
+      var controller = new AbortController();
+      var timeout = setTimeout(function() { controller.abort(); }, 10000);
+      const resp = await fetch(`${SLEEPER_API}/user/${username}`, { signal: controller.signal });
+      clearTimeout(timeout);
+      if (!resp.ok) throw new Error("not found");
       const user = await resp.json();
+      if (!user || !user.user_id) throw new Error("not found");
       localStorage.setItem("razzle_sleeper_user_id", user.user_id);
       await loadLeagues(user.user_id);
     } catch (e) {
+      var msg = e.name === "AbortError"
+        ? "Sleeper took too long — try again"
+        : "couldn't connect to Sleeper";
       document.getElementById("leaguesList").innerHTML =
-        '<div class="loading-intel" style="color:var(--red);">couldn\'t connect to Sleeper</div>';
+        '<div class="loading-intel" style="color:var(--red);">' + msg + '</div>';
     }
   } else {
     await loadLeagues(userId);
@@ -975,7 +998,10 @@ async function loadLeagues(userId) {
     const now = new Date();
     const season = now.getMonth() >= 7 ? now.getFullYear() : now.getFullYear() - 1;
 
-    const resp = await fetch(`${SLEEPER_API}/user/${userId}/leagues/nfl/${season}`);
+    var leagueController = new AbortController();
+    var leagueTimeout = setTimeout(function() { leagueController.abort(); }, 15000);
+    const resp = await fetch(`${SLEEPER_API}/user/${userId}/leagues/nfl/${season}`, { signal: leagueController.signal });
+    clearTimeout(leagueTimeout);
     const leagues = await resp.json();
 
     if (!leagues || !leagues.length) {
@@ -1059,7 +1085,10 @@ async function loadLeagues(userId) {
       localStorage.setItem("razzle_league_context", JSON.stringify(existing));
     } catch (e) { /* ignore storage errors */ }
   } catch (e) {
-    container.innerHTML = '<div class="loading-intel" style="color:var(--red);">fumbled the Sleeper connection</div>';
+    var errMsg = e.name === "AbortError"
+      ? "Sleeper took too long — try refreshing"
+      : "fumbled the Sleeper connection";
+    container.innerHTML = '<div class="loading-intel" style="color:var(--red);">' + errMsg + '</div>';
     console.error(e);
   }
 }
