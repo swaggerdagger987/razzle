@@ -63,16 +63,25 @@ function _csvCell(val) {
   return val;
 }
 
+var _html2canvasLoading = false;
+function _loadHtml2Canvas(cb) {
+  if (typeof html2canvas !== 'undefined') { cb(); return; }
+  if (_html2canvasLoading) { setTimeout(function() { _loadHtml2Canvas(cb); }, 200); return; }
+  _html2canvasLoading = true;
+  var s = document.createElement('script');
+  s.src = 'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
+  s.onload = function() { _html2canvasLoading = false; cb(); };
+  s.onerror = function() { _html2canvasLoading = false; _showToast('screenshot library failed to load'); };
+  document.head.appendChild(s);
+}
+
 function screenshotPanel(panelName) {
-  if (typeof html2canvas === 'undefined') {
-    _showToast('screenshot library warming up...');
-    return;
-  }
   var panel = document.getElementById('panel-' + panelName);
   if (!panel) return;
   var content = panel.querySelector('.lab-panel-content');
   if (!content) return;
   _showToast('capturing...');
+  _loadHtml2Canvas(function() {
   html2canvas(content, {
     backgroundColor: '#ede0cf',
     scale: 2,
@@ -98,6 +107,7 @@ function screenshotPanel(panelName) {
   }).catch(function() {
     _showToast('screenshot failed');
   });
+  }); // end _loadHtml2Canvas callback
 }
 
 function toggleMethodology(methodId) {
