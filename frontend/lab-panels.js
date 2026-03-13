@@ -4737,7 +4737,7 @@
       function yPos(ppg) { return pad.top + ch - (ppg / maxPPG) * ch; }
 
       // grid lines
-      ctx.strokeStyle = '#ddd';
+      ctx.strokeStyle = '#c4b5a5';
       ctx.lineWidth = 0.5;
       for (var g = 0; g <= 5; g++) {
         var gy = pad.top + (g / 5) * ch;
@@ -5489,7 +5489,7 @@
 
         ctx.clearRect(0, 0, W, H);
         // Grid
-        ctx.strokeStyle = '#ddd'; ctx.lineWidth = 1;
+        ctx.strokeStyle = '#c4b5a5'; ctx.lineWidth = 1;
         for (var g = 0; g <= 4; g++) {
           var gy = pad.t + ch - (g / 4) * ch;
           ctx.beginPath(); ctx.moveTo(pad.l, gy); ctx.lineTo(pad.l + cw, gy); ctx.stroke();
@@ -5522,7 +5522,7 @@
           var y = pad.t + ch - (v / maxPPG) * ch;
           ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2); ctx.fillStyle = posColor; ctx.fill();
           ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
-          ctx.fillStyle = '#333'; ctx.font = 'bold 10px monospace'; ctx.textAlign = 'center';
+          ctx.fillStyle = '#2d1f14'; ctx.font = 'bold 10px monospace'; ctx.textAlign = 'center';
           ctx.fillText(fmt(v), x, y - 10);
           // Season label
           ctx.fillStyle = '#8a7565'; ctx.font = '10px monospace';
@@ -5677,7 +5677,7 @@
         maxPPG *= 1.15;
 
         // Grid
-        ctx.strokeStyle = '#ddd'; ctx.lineWidth = 1;
+        ctx.strokeStyle = '#c4b5a5'; ctx.lineWidth = 1;
         for (var g = 0; g <= 4; g++) {
           var gy = pad.t + ch - (g / 4) * ch;
           ctx.beginPath(); ctx.moveTo(pad.l, gy); ctx.lineTo(pad.l + cw, gy); ctx.stroke();
@@ -6598,7 +6598,7 @@
         });
 
         // Center label
-        ctx.fillStyle = '#333';
+        ctx.fillStyle = '#2d1f14';
         ctx.font = 'bold 24px monospace';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';

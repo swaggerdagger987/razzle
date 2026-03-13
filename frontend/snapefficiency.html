@@ -259,7 +259,7 @@ function render() {
   let html = '<table class="se-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Pts/Snap</th><th>PPG</th><th>Snaps/G</th><th>Snaps</th><th>GP</th><th></th></tr></thead><tbody>';
 
   players.forEach((p, i) => {
-    const posColor = POS_COLORS[p.position] || "#333";
+    const posColor = POS_COLORS[p.position] || "#8a7565";
     const cls = effClass(p.pts_per_snap);
     const barPct = maxPPS > 0 ? p.pts_per_snap / maxPPS * 100 : 0;
 

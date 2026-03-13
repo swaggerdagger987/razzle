@@ -556,15 +556,15 @@ a.btn-pro-upgrade:focus-visible {
   display: flex;
   gap: 10px;
   padding: 8px 12px;
-  border-bottom: 1px solid var(--border-light, rgba(0,0,0,0.06));
+  border-bottom: 2px dashed var(--ink-faint);
 }
 .skeleton-row.skeleton-header {
-  border-bottom: 2px solid var(--border-light, rgba(0,0,0,0.1));
+  border-bottom: 2px solid var(--ink-faint);
 }
 .skeleton-cell {
   height: 16px;
   border-radius: 4px;
-  background: linear-gradient(90deg, rgba(0,0,0,0.06) 25%, rgba(0,0,0,0.02) 50%, rgba(0,0,0,0.06) 75%);
+  background: linear-gradient(90deg, var(--bg-warm) 25%, var(--bg-card) 50%, var(--bg-warm) 75%);
   background-size: 200% 100%;
   animation: skeleton-shimmer 1.5s ease-in-out infinite;
 }

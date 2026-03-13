@@ -353,7 +353,7 @@ function drawCompareRadar(color1, color2, pos) {
 
   // Axis lines + labels
   ctx.font = "11px 'Space Mono', monospace";
-  ctx.fillStyle = "#555";
+  ctx.fillStyle = "#5c4a3d";
   ctx.textAlign = "center";
   for (var i = 0; i < n; i++) {
     var angle = (Math.PI * 2 * i) / n - Math.PI / 2;
@@ -361,7 +361,7 @@ function drawCompareRadar(color1, color2, pos) {
     ctx.beginPath();
     ctx.moveTo(cx, cy);
     ctx.lineTo(cx + R * Math.cos(angle), cy + R * Math.sin(angle));
-    ctx.strokeStyle = "#ddd";
+    ctx.strokeStyle = "#c4b5a5";
     ctx.lineWidth = 1;
     ctx.stroke();
   }

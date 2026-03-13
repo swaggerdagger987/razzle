@@ -258,7 +258,7 @@ function render() {
   let html = '<table class="wl-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Load</th><th>Tch/G</th><th>Snp/G</th><th>Snp%</th><th>Car/G</th><th>Tgt/G</th><th>Flags</th><th></th></tr></thead><tbody>';
 
   players.forEach((p, i) => {
-    const posColor = POS_COLORS[p.position] || "#333";
+    const posColor = POS_COLORS[p.position] || "#8a7565";
     const cls = scoreClass(p.workload);
     const barPct = maxWL > 0 ? p.workload / maxWL * 100 : 0;
     const flagsHtml = p.flags.map(f => '<span class="wl-flag">' + escapeHtml(f) + '</span>').join("");

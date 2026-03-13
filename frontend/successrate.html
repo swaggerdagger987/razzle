@@ -258,7 +258,7 @@ function render() {
   let html = '<table class="sr-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>SR%</th><th>Type</th><th>Vol</th><th>PPG</th><th>YPC</th><th></th></tr></thead><tbody>';
 
   players.forEach((p, i) => {
-    const posColor = POS_COLORS[p.position] || "#333";
+    const posColor = POS_COLORS[p.position] || "#8a7565";
     const cls = rateClass(p.success_rate);
     const barPct = maxSR > 0 ? p.success_rate / maxSR * 100 : 0;
     const ypc = p.ypc !== null ? escapeHtml(String(p.ypc)) : "-";

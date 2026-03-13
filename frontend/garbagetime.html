@@ -264,7 +264,7 @@ function buildCard(title, cls, players, isPadders) {
   html += '<table class="gt-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>GT%</th><th>PPG</th><th>Avg Diff</th><th></th></tr></thead><tbody>';
 
   players.forEach((p, i) => {
-    const posColor = POS_COLORS[p.position] || "#333";
+    const posColor = POS_COLORS[p.position] || "#8a7565";
     const pctCls = pctClass(p.garbage_time_pct);
     const barVal = isPadders ? p.garbage_time_pct : p.ppg;
     const barPct = maxVal > 0 ? barVal / maxVal * 100 : 0;

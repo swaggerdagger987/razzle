@@ -2,10 +2,10 @@
 
 ## Current State
 - Phase: A (Visual & Design Audit)
-- Current Task: 1
+- Current Task: 2
 - Current Stage: PENDING
-- Tasks Completed: 0/6
-- Loop Iterations: 0
+- Tasks Completed: 1/6
+- Loop Iterations: 1
 
 ## Phase A: Visual & Design Audit (Mar 12–18)
 **Exit Criterion**: Open each of the three rooms plus the landing page. The visual language is unmistakably Razzle — warm sand, chunky borders, espresso ink, comic-strip energy. No page looks like it was built by a different team.
@@ -15,8 +15,8 @@
 **Accept when**: Zero hardcoded colors outside CSS variables in styles.css. All pages reference CSS variables only.
 **Depends on**: none
 **Size**: M
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task 2: Typography audit
 **Requirement**: "Confirm three-font rule: Garfield/Luckiest Guy for display, Space Mono for data, Caveat only for annotations. Check font loading (preconnect, display:swap)."

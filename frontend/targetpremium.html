@@ -257,7 +257,7 @@ function render() {
   let html = '<table class="tp-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Premium</th><th>Tgt/G</th><th>aDOT</th><th>Catch%</th><th>YAC/R</th><th>Y/Tgt</th><th></th></tr></thead><tbody>';
 
   players.forEach((p, i) => {
-    const posColor = POS_COLORS[p.position] || "#333";
+    const posColor = POS_COLORS[p.position] || "#8a7565";
     const cls = premiumClass(p.premium);
     const barPct = p.premium;
 

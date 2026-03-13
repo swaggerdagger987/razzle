@@ -829,7 +829,7 @@
     function yPos(val) { return pad.top + plotH - ((val - yMin) / (yMax - yMin)) * plotH; }
 
     // Grid lines
-    ctx.strokeStyle = '#ddd';
+    ctx.strokeStyle = '#c4b5a5';
     ctx.lineWidth = 1;
     var gridLines = 5;
     for (var g = 0; g <= gridLines; g++) {
@@ -902,7 +902,7 @@
       ctx.stroke();
 
       // Value label
-      ctx.fillStyle = '#333';
+      ctx.fillStyle = '#2d1f14';
       ctx.font = 'bold 12px "Space Mono", monospace';
       ctx.textAlign = 'center';
       ctx.fillText(seasons[di].ppg.toFixed(1), dx, dy - 12);

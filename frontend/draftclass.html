@@ -601,7 +601,7 @@
     var gap = (plotW - barW * rounds.length) / (rounds.length + 1);
 
     // Grid
-    ctx.strokeStyle = '#ddd';
+    ctx.strokeStyle = '#c4b5a5';
     ctx.lineWidth = 1;
     for (var g = 0; g <= 4; g++) {
       var gv = maxPpg * g / 4;
@@ -630,7 +630,7 @@
       ctx.fill();
 
       // Value label
-      ctx.fillStyle = '#333';
+      ctx.fillStyle = '#2d1f14';
       ctx.font = 'bold 12px "Space Mono", monospace';
       ctx.textAlign = 'center';
       ctx.fillText(r.avg_ppg.toFixed(1), bx + barW / 2, by - 6);

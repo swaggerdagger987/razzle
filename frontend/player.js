@@ -364,7 +364,7 @@ function drawRadar(seasons, career, pos) {
 
   // Axis lines + labels
   ctx.font = "11px 'Space Mono', monospace";
-  ctx.fillStyle = "#555";
+  ctx.fillStyle = "#5c4a3d";
   ctx.textAlign = "center";
   for (let i = 0; i < n; i++) {
     const angle = (Math.PI * 2 * i) / n - Math.PI / 2;
@@ -375,7 +375,7 @@ function drawRadar(seasons, career, pos) {
     ctx.beginPath();
     ctx.moveTo(cx, cy);
     ctx.lineTo(cx + R * Math.cos(angle), cy + R * Math.sin(angle));
-    ctx.strokeStyle = "#ddd";
+    ctx.strokeStyle = "#c4b5a5";
     ctx.stroke();
   }
 
@@ -530,7 +530,7 @@ function drawArc(seasons, pos) {
     ctx.stroke();
 
     // Value label
-    ctx.fillStyle = "#333";
+    ctx.fillStyle = "#2d1f14";
     ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(Math.round(values[i]), x, y - 12);
@@ -671,7 +671,7 @@ function drawRadarOnCanvas(ctx, cx, cy, R, seasons, career, pos) {
 
   // Labels
   ctx.font = "10px 'Space Mono', monospace";
-  ctx.fillStyle = "#555";
+  ctx.fillStyle = "#5c4a3d";
   ctx.textAlign = "center";
   for (let i = 0; i < n; i++) {
     const angle = (Math.PI * 2 * i) / n - Math.PI / 2;

@@ -392,20 +392,20 @@
     <select id="season-select" class="matchups-season-select" aria-label="Select season"></select>
     <div class="matchups-pos-tabs">
       <button class="matchups-pos-tab active" data-pos="ALL" aria-label="All positions">All</button>
-      <button class="matchups-pos-tab" data-pos="QB" aria-label="Quarterbacks" style="border-color:#5b7fff;">QB</button>
-      <button class="matchups-pos-tab" data-pos="RB" aria-label="Running backs" style="border-color:#2ec4b6;">RB</button>
-      <button class="matchups-pos-tab" data-pos="WR" aria-label="Wide receivers" style="border-color:#d97757;">WR</button>
-      <button class="matchups-pos-tab" data-pos="TE" aria-label="Tight ends" style="border-color:#8b5cf6;">TE</button>
+      <button class="matchups-pos-tab" data-pos="QB" aria-label="Quarterbacks" style="border-color:var(--pos-qb);">QB</button>
+      <button class="matchups-pos-tab" data-pos="RB" aria-label="Running backs" style="border-color:var(--pos-rb);">RB</button>
+      <button class="matchups-pos-tab" data-pos="WR" aria-label="Wide receivers" style="border-color:var(--pos-wr);">WR</button>
+      <button class="matchups-pos-tab" data-pos="TE" aria-label="Tight ends" style="border-color:var(--pos-te);">TE</button>
     </div>
     <button class="matchups-export-btn" id="export-btn">Export PNG</button>
   </div>
 
   <div class="matchups-legend">
-    <div class="legend-item"><div class="legend-swatch" style="background:#2ec4b6;"></div> Easy (allows most pts)</div>
-    <div class="legend-item"><div class="legend-swatch" style="background:#d9efec;"></div> Soft</div>
-    <div class="legend-item"><div class="legend-swatch" style="background:#f7efe5;"></div> Average</div>
-    <div class="legend-item"><div class="legend-swatch" style="background:#f2d5d8;"></div> Tough</div>
-    <div class="legend-item"><div class="legend-swatch" style="background:#e63946;"></div> Hard (allows fewest pts)</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:var(--green);"></div> Easy (allows most pts)</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:var(--green-light);"></div> Soft</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:var(--bg-card);"></div> Average</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:var(--red-light);"></div> Tough</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:var(--red);"></div> Hard (allows fewest pts)</div>
   </div>
 
   <div id="matchups-content">

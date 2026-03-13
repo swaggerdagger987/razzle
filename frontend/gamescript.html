@@ -259,7 +259,7 @@ function renderTable(players, type) {
   let html = '<table class="gs-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>PPG</th><th>Avg Diff</th><th>GT%</th><th></th></tr></thead><tbody>';
 
   players.forEach((p, i) => {
-    const posColor = POS_COLORS[p.position] || "#333";
+    const posColor = POS_COLORS[p.position] || "#8a7565";
     const barPct = maxPPG > 0 ? p.ppg / maxPPG * 100 : 0;
     const diffCls = p.avg_diff >= 0 ? "gs-diff-pos" : "gs-diff-neg";
     const diffSign = p.avg_diff >= 0 ? "+" : "";

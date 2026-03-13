@@ -269,7 +269,7 @@ function renderTable(players, type) {
   let html = '<table class="dr-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Drop%</th><th>Drops</th><th>Tgt</th><th>Catch%</th><th>YAC/R</th><th></th></tr></thead><tbody>';
 
   players.forEach((p, i) => {
-    const posColor = POS_COLORS[p.position] || "#333";
+    const posColor = POS_COLORS[p.position] || "#8a7565";
     const barPct = maxDrops > 0 ? p.drops / maxDrops * 100 : 0;
     const cls = rateClass(p.drop_rate, isGood);
 

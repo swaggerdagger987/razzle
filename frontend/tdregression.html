@@ -251,7 +251,7 @@ function render() {
   ratesEl.innerHTML = "";
   if (d.pos_avg_td_rates) {
     for (const [pos, rate] of Object.entries(d.pos_avg_td_rates)) {
-      ratesEl.innerHTML += '<div class="tdr-rate-chip"><span style="color:' + escapeHtml(POS_COLORS[pos] || "#333") + '">' + escapeHtml(pos) + '</span> avg TD rate: ' + escapeHtml(String(rate)) + '%</div>';
+      ratesEl.innerHTML += '<div class="tdr-rate-chip"><span style="color:' + escapeHtml(POS_COLORS[pos] || "#8a7565") + '">' + escapeHtml(pos) + '</span> avg TD rate: ' + escapeHtml(String(rate)) + '%</div>';
     }
   }
 
@@ -274,7 +274,7 @@ function buildCard(title, cls, players, isPositive) {
   html += '<table class="tdr-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>TD</th><th>xTD</th><th>Diff</th><th>TD%</th><th>Opp</th><th></th></tr></thead><tbody>';
 
   players.forEach((p, i) => {
-    const posColor = POS_COLORS[p.position] || "#333";
+    const posColor = POS_COLORS[p.position] || "#8a7565";
     const diffCls = isPositive ? "tdr-diff-pos" : "tdr-diff-neg";
     const diffSign = p.td_diff > 0 ? "+" : "";
     const barPct = maxDiff > 0 ? Math.abs(p.td_diff) / maxDiff * 100 : 0;

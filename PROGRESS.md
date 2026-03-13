@@ -32,7 +32,7 @@ Full build history archived in `docs/PROGRESS_ARCHIVE.md`.
 
 | # | Task | Status | Notes |
 |---|------|--------|-------|
-| 1 | Design token audit | NOT STARTED | |
+| 1 | Design token audit | DONE | Cold grays (#ddd/#333/#555) replaced with warm browns across 18 files; skeleton loader uses CSS vars; inline position colors converted to var() refs in 6 HTML files; warroom.js pixel art exempted |
 | 2 | Typography audit | NOT STARTED | |
 | 3 | Component consistency | NOT STARTED | |
 | 4 | Situation Room dark mode | NOT STARTED | |
