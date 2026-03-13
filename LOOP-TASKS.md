@@ -2,9 +2,9 @@
 
 ## Current State
 - Phase: E (Landing Page + Conversion Funnel)
-- Current Task: E-4 (Pricing page clarity)
-- Current Stage: BUILD
-- Tasks Completed: 3/6
+- Current Task: COMPLETE
+- Current Stage: PHASE GATE
+- Tasks Completed: 6/6
 - Loop Iterations: 5
 
 ## Phase A: Visual & Design Audit (Mar 12–18)
@@ -283,21 +283,21 @@
 **Accept when**: A visitor knows exactly what they get at each tier.
 **Depends on**: none
 **Size**: M
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task E-5: Trial onboarding
 **Requirement**: "Register → 7-day Pro trial auto-starts → Sleeper prompt → welcome state with CTAs → trial badge in nav → expiry warning at 2 days."
 **Accept when**: Trial experience is smooth and drives conversion.
 **Depends on**: E-3
 **Size**: M
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task E-6: og:image + social previews
 **Requirement**: "Share razzle.lol, any Lab URL, any panel URL on Reddit/Discord/Twitter. Preview card renders with branded image + description."
 **Accept when**: Every shareable link looks good in social previews.
 **Depends on**: none
 **Size**: S
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1

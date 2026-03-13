@@ -137,18 +137,20 @@ function refreshPlanGating() {
  * Show a toast notification. Available on all pages (defined in app.js).
  * If lab.js also defines _showToast, its version runs (they're identical).
  */
-function _showToast(msg) {
+function _showToast(msg, type, duration) {
   var existing = document.querySelector('.razzle-toast');
   if (existing) existing.remove();
   var toast = document.createElement('div');
   toast.className = 'razzle-toast';
+  if (type === 'warning') toast.style.borderColor = 'var(--orange)';
+  if (type === 'error') toast.style.borderColor = 'var(--red)';
   toast.textContent = msg;
   document.body.appendChild(toast);
   setTimeout(function() { toast.classList.add('razzle-toast-show'); }, 10);
   setTimeout(function() {
     toast.classList.remove('razzle-toast-show');
     setTimeout(function() { toast.remove(); }, 300);
-  }, 2500);
+  }, duration || 2500);
 }
 
 function escapeHtml(str) {
@@ -537,6 +539,18 @@ function updateAuthUI(user) {
       var dd = item.querySelector(".nav-user-dropdown");
       if (dd && !dd.contains(e.target)) dd.classList.remove("open");
     });
+
+    // Trial expiry warning — show once per session when <= 2 days remaining
+    if (isTrial && (user.trial_days_remaining || 0) <= 2 && !sessionStorage.getItem("razzle_trial_warn")) {
+      sessionStorage.setItem("razzle_trial_warn", "1");
+      setTimeout(function() {
+        var days = user.trial_days_remaining || 0;
+        var msg = days === 0
+          ? "your Pro trial expires today. subscribe to keep your access."
+          : "your Pro trial expires in " + days + " day" + (days !== 1 ? "s" : "") + ". subscribe to keep your access.";
+        _showToast(msg, "warning", 10000);
+      }, 3000);
+    }
   } else {
     item.innerHTML = '<a href="#" onclick="openAuthModal(); return false;" id="navSignIn" class="btn-chunky btn-sm">Sign In</a>';
   }
