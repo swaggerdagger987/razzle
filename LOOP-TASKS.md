@@ -2,9 +2,9 @@
 
 ## Current State
 - Phase: C (Bureau of Intelligence — Production Hardening)
-- Current Task: C-4
+- Current Task: C-5
 - Current Stage: BUILD
-- Tasks Completed: 3/7
+- Tasks Completed: 4/7
 - Loop Iterations: 3
 
 ## Phase A: Visual & Design Audit (Mar 12–18)
@@ -153,8 +153,8 @@
 **Accept when**: Trade suggestions are reasonable and well-presented.
 **Depends on**: C-2
 **Size**: M
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task C-5: Pressure map QA
 **Requirement**: "Desperation scores calculate correctly. Color coding (red=desperate, green=comfortable) renders. Pro gating works (top 3 free, rest blurred)."

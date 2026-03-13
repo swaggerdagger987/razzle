@@ -2522,11 +2522,15 @@ async function loadLeagueTradeFinder(leagueId, userId, myRoster, rosters, allPla
     var headers = { "Content-Type": "application/json" };
     if (token) headers["Authorization"] = "Bearer " + token;
 
+    var tfCtrl = new AbortController();
+    var tfTimeout = setTimeout(function() { tfCtrl.abort(); }, 15000);
     var resp = await fetch("/api/league-trade-finder", {
       method: "POST",
       headers: headers,
-      body: JSON.stringify({ players: allRosterPlayers })
+      body: JSON.stringify({ players: allRosterPlayers }),
+      signal: tfCtrl.signal
     });
+    clearTimeout(tfTimeout);
 
     if (resp.status === 403) {
       container.innerHTML =
@@ -2726,7 +2730,13 @@ async function loadLeagueTradeFinder(leagueId, userId, myRoster, rosters, allPla
 
   } catch (e) {
     console.error("Trade finder error:", e);
-    container.innerHTML = '<div class="loading-intel" style="color:var(--red); font-size:13px;">fumbled the trade analysis</div>';
+    var tfErr = e.name === "AbortError"
+      ? "trade analysis took too long — try again"
+      : "fumbled the trade analysis";
+    container.innerHTML = '<div class="loading-intel" style="color:var(--red); font-size:13px;">' + tfErr + '</div>';
+    // Re-enable button for retry
+    var tfBtn = document.getElementById("tradeFinderBtn-" + leagueId);
+    if (tfBtn) { tfBtn.disabled = false; tfBtn.textContent = "find trade partners"; }
   }
 }
 
