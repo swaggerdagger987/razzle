@@ -1382,7 +1382,7 @@ async function loadActivityFeed(leagueId, userMap, allPlayers, rosters) {
     var _activityFeedPaid = false;
     try {
       var _afUser = JSON.parse(localStorage.getItem("razzle_user") || "null");
-      _activityFeedPaid = _afUser && (_afUser.plan === "pro" || _afUser.plan === "elite");
+      _activityFeedPaid = _afUser && (typeof isPaidUser === "function" ? isPaidUser() : (_afUser.plan === "pro" || _afUser.plan === "elite"));
     } catch (e) {}
     var _activityNudgeCount = 0;
     var html = "";
