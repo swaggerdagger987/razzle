@@ -1071,7 +1071,7 @@ function _syncUndoRedoButtons() {
         console.error("Failed to load NFL filter options:", err);
         var labContent = document.getElementById("labContent") || document.querySelector(".lab-main");
         if (labContent) {
-          labContent.innerHTML = '<div style="text-align:center;padding:40px;font-family:Space Mono,monospace;color:#d97757;font-size:15px;border:3px solid #2d1f14;background:#f7efe5;border-radius:8px;margin:24px;">failed to load filter options — check your connection and reload</div>';
+          labContent.innerHTML = '<div style="text-align:center;padding:40px;font-family:var(--font-mono);color:var(--orange);font-size:15px;border:3px solid var(--ink);background:var(--bg-card);border-radius:8px;margin:24px;">failed to load filter options — check your connection and reload</div>';
         }
         return { seasons: [], teams: [], positions: [] };
       }),

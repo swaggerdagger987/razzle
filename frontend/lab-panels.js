@@ -9905,8 +9905,8 @@
 
       var html = '<div class="lp-card" style="border:3px solid var(--ink);border-radius:8px;box-shadow:4px 4px 0 var(--ink);padding:16px;margin-top:12px;background:var(--bg-card);">';
       html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">';
-      html += '<h3 style="margin:0;font-family:\'Luckiest Guy\',cursive;font-size:20px;color:var(--ink);">' + escapeHtml(t.team) + ' — #' + t.rank + '</h3>';
-      html += '<span style="font-family:\'Space Mono\',monospace;font-size:14px;color:var(--ink-medium);">Total: ' + fmt(t.total_value, 0) + '</span>';
+      html += '<h3 style="margin:0;font-family:var(--font-display);font-size:20px;color:var(--ink);">' + escapeHtml(t.team) + ' — #' + t.rank + '</h3>';
+      html += '<span style="font-family:var(--font-mono);font-size:14px;color:var(--ink-medium);">Total: ' + fmt(t.total_value, 0) + '</span>';
       html += '</div>';
 
       // Position breakdown chips
@@ -9916,7 +9916,7 @@
        { label: 'WR', val: t.wr_value, col: POS_COLS.WR },
        { label: 'TE', val: t.te_value, col: POS_COLS.TE }].forEach(function(g) {
         var pct = t.total_value > 0 ? Math.round(g.val / t.total_value * 100) : 0;
-        html += '<div style="background:' + g.col + '22;border:2px solid ' + g.col + ';border-radius:6px;padding:6px 12px;font-family:\'Space Mono\',monospace;font-size:12px;">';
+        html += '<div style="background:' + g.col + '22;border:2px solid ' + g.col + ';border-radius:6px;padding:6px 12px;font-family:var(--font-mono);font-size:12px;">';
         html += '<span style="font-weight:bold;color:' + g.col + ';">' + g.label + '</span> ';
         html += '<span style="color:var(--ink);">' + fmt(g.val, 0) + '</span> ';
         html += '<span style="color:var(--ink-light);">(' + pct + '%)</span>';
@@ -9926,8 +9926,8 @@
 
       // Top players
       if (t.top_players && t.top_players.length) {
-        html += '<div style="font-family:\'Caveat\',cursive;font-size:15px;color:var(--ink-light);margin-bottom:6px;">top dynasty assets</div>';
-        html += '<table style="width:100%;border-collapse:collapse;font-family:\'Space Mono\',monospace;font-size:12px;">';
+        html += '<div style="font-family:var(--font-hand);font-size:15px;color:var(--ink-light);margin-bottom:6px;">top dynasty assets</div>';
+        html += '<table style="width:100%;border-collapse:collapse;font-family:var(--font-mono);font-size:12px;">';
         html += '<tr style="border-bottom:2px solid var(--ink-faint);">';
         html += '<th style="text-align:left;padding:4px 6px;">Player</th>';
         html += '<th style="text-align:center;padding:4px 6px;">Pos</th>';

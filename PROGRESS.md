@@ -33,7 +33,7 @@ Full build history archived in `docs/PROGRESS_ARCHIVE.md`.
 | # | Task | Status | Notes |
 |---|------|--------|-------|
 | 1 | Design token audit | DONE | Cold grays (#ddd/#333/#555) replaced with warm browns across 18 files; skeleton loader uses CSS vars; inline position colors converted to var() refs in 6 HTML files; warroom.js pixel art exempted |
-| 2 | Typography audit | NOT STARTED | |
+| 2 | Typography audit | DONE | 6 hardcoded font-family refs fixed (5 in lab-panels.js, 1 in lab.js); all 74 pages have preconnect+display:swap; three-font rule enforced via CSS vars |
 | 3 | Component consistency | NOT STARTED | |
 | 4 | Situation Room dark mode | NOT STARTED | |
 | 5 | Position color consistency | NOT STARTED | |
