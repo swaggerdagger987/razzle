@@ -351,7 +351,9 @@ function drawScatter() {
     const sumXY = data.reduce((a, p) => a + p[xKey] * p[yKey], 0);
     const sumX2 = xVals.reduce((a, b) => a + b * b, 0);
     const sumY2 = yVals.reduce((a, b) => a + b * b, 0);
-    const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+    const denom = n * sumX2 - sumX * sumX;
+    if (denom !== 0) {
+    const slope = (n * sumXY - sumX * sumY) / denom;
     const intercept = (sumY - slope * sumX) / n;
     // R-squared
     const ssRes = data.reduce((a, p) => { const pred = slope * p[xKey] + intercept; return a + (p[yKey] - pred) ** 2; }, 0);
@@ -374,6 +376,7 @@ function drawScatter() {
     ctx.fillStyle = "#d97757";
     ctx.textAlign = "right";
     ctx.fillText(`R\u00b2 = ${r2.toFixed(3)}`, W - pad.right - 5, pad.top + 16);
+    } // end denom !== 0
   }
 
   // Label selected/top players
@@ -622,9 +625,9 @@ function drawHeatmap() {
     percentiles[stat] = {};
     for (const p of posPlayers) {
       const v = p[stat];
-      if (v == null) { percentiles[stat][p.player_id] = null; continue; }
+      if (v == null || vals.length === 0) { percentiles[stat][p.player_id] = null; continue; }
       const rank = vals.filter(x => x <= v).length;
-      let pct = (rank / vals.length) * 100;
+      let pct = Math.min(100, Math.max(0, (rank / vals.length) * 100));
       if (LOWER_IS_BETTER.includes(stat)) pct = 100 - pct;
       percentiles[stat][p.player_id] = pct;
     }
