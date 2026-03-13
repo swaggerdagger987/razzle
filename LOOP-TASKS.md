@@ -2,9 +2,9 @@
 
 ## Current State
 - Phase: B (Lab Production Hardening)
-- Current Task: B-6 URL state integrity
+- Current Task: B-7 Performance
 - Current Stage: BUILD
-- Tasks Completed: 5/7
+- Tasks Completed: 6/7
 - Loop Iterations: 2
 
 ## Phase A: Visual & Design Audit (Mar 12–18)
@@ -108,8 +108,8 @@
 **Accept when**: URL state round-trips perfectly.
 **Depends on**: B-1
 **Size**: M
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task B-7: Performance
 **Requirement**: "Lab initial load < 2 seconds. Screener filter response < 500ms. No jank on sort/filter. Pagination smooth."

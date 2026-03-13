@@ -3657,19 +3657,19 @@ function loadStateFromURL() {
     if (params.has("draft_year")) state.draftYear = parseInt(params.get("draft_year"));
     if (!params.has("sort")) state.sortKey = "draft_pick";
     if (!params.has("dir")) state.sortDir = "asc";
-    if (params.has("cols")) state.prospectColumns = params.get("cols").split(",");
+    if (params.has("cols")) state.prospectColumns = params.get("cols").split(",").filter(function(k) { return PROSPECT_COLUMNS[k]; });
   } else if (state.universe === "college") {
     if (params.has("season")) state.collegeSeason = parseInt(params.get("season"));
     if (!params.has("sort")) state.sortKey = "total_yards";
     if (!params.has("dir")) state.sortDir = "desc";
-    if (params.has("cols")) state.collegeColumns = params.get("cols").split(",");
+    if (params.has("cols")) state.collegeColumns = params.get("cols").split(",").filter(function(k) { return COLLEGE_COLUMNS[k]; });
   } else {
     if (params.has("season")) {
       const sv = params.get("season");
       state.season = sv === "career" ? "career" : parseInt(sv);
     }
     if (params.has("rel")) state.relevance = params.get("rel");
-    if (params.has("cols")) state.visibleColumns = params.get("cols").split(",");
+    if (params.has("cols")) state.visibleColumns = params.get("cols").split(",").filter(function(k) { return COLUMNS[k]; });
   }
 
   // Sync UI
