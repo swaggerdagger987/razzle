@@ -483,7 +483,7 @@ function renderFormulaCard(formula, userReviews) {
   // Position tags
   const posTags = (formula.positions || []).map(p => {
     const colors = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
-    return `<span style="font-family:var(--font-display); font-size:9px; font-weight:700; padding:1px 6px; border-radius:4px; border:1.5px solid var(--ink); background:${colors[p] || "var(--ink-light)"}; color:white; text-transform:uppercase;">${p}</span>`;
+    return `<span style="font-family:var(--font-display); font-size:9px; font-weight:700; padding:1px 6px; border-radius:4px; border:2px solid var(--ink); background:${colors[p] || "var(--ink-light)"}; color:white; text-transform:uppercase;">${p}</span>`;
   }).join(" ");
 
   // Free user: description is partially blurred, actions are gated

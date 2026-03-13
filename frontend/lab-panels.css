@@ -2160,7 +2160,7 @@
 .wh-player-inner:hover { color: var(--orange); }
 .wh-pos-dot {
   width: 8px; height: 8px; border-radius: 50%;
-  border: 1.5px solid var(--ink); flex-shrink: 0;
+  border: 2px solid var(--ink); flex-shrink: 0;
 }
 .wh-rank {
   font-family: var(--font-mono); font-size: 10px;
@@ -2181,7 +2181,7 @@
 }
 .wh-legend-bar {
   display: flex; border-radius: 4px; overflow: hidden;
-  border: 1.5px solid var(--ink); height: 16px;
+  border: 2px solid var(--ink); height: 16px;
 }
 .wh-legend-cell { width: 32px; height: 16px; }
 .wh-legend-note {

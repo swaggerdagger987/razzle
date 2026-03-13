@@ -34,7 +34,7 @@ Full build history archived in `docs/PROGRESS_ARCHIVE.md`.
 |---|------|--------|-------|
 | 1 | Design token audit | DONE | Cold grays (#ddd/#333/#555) replaced with warm browns across 18 files; skeleton loader uses CSS vars; inline position colors converted to var() refs in 6 HTML files; warroom.js pixel art exempted |
 | 2 | Typography audit | DONE | 6 hardcoded font-family refs fixed (5 in lab-panels.js, 1 in lab.js); all 74 pages have preconnect+display:swap; three-font rule enforced via CSS vars |
-| 3 | Component consistency | NOT STARTED | |
+| 3 | Component consistency | DONE | 1px/1.5px borders upgraded to 2px across 17 files (lab.js, formulas.js, lab-panels.js, warroom.js, formula-store.js, styles.css, lab-panels.css, plus 11 HTML files); all interactive badges/chips/links now 2px+; dividers in styles.css upgraded to 2px dashed; 10 representative panels verified (Lab, Bureau, Situation Room, landing page, dashboard, trade values, rankings, awards, formulas, targets) |
 | 4 | Situation Room dark mode | NOT STARTED | |
 | 5 | Position color consistency | NOT STARTED | |
 | 6 | Loading state audit | NOT STARTED | |

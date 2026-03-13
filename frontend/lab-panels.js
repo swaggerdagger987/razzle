@@ -8898,7 +8898,7 @@
           var posColor = POS_COLORS[p.position] || '#d97757';
           var lightColor = POS_LIGHT[p.position] || '#f7e4d8';
           var lastName = p.name.split(' ').pop();
-          html += '<div class="td2-dist-seg" style="width:' + share + '%;background:' + lightColor + ';border-right:1px solid ' + posColor + '" title="' + escapeAttr(p.name) + ': ' + share + '%">';
+          html += '<div class="td2-dist-seg" style="width:' + share + '%;background:' + lightColor + ';border-right:2px solid ' + posColor + '" title="' + escapeAttr(p.name) + ': ' + share + '%">';
           if (share > 8) html += '<span class="td2-seg-label">' + escapeHtml(lastName) + '</span>';
           html += '</div>';
         });
@@ -9405,7 +9405,7 @@
           '<td style="font-weight:700;">' + fmt(p.career_ppg) + '</td>' +
           '<td>' + fmt(p.career_fpts, 0) + '</td>' +
           '<td>' + p.career_av + '</td>' +
-          '<td><span style="background:' + verdictColor + '; color:white; padding:2px 8px; border-radius:4px; font-size:10px; font-weight:700; border:1px solid rgba(0,0,0,0.15);">' + verdictLabel + '</span></td>' +
+          '<td><span style="background:' + verdictColor + '; color:white; padding:2px 8px; border-radius:4px; font-size:10px; font-weight:700; border:2px solid rgba(0,0,0,0.15);">' + verdictLabel + '</span></td>' +
         '</tr>';
       });
 

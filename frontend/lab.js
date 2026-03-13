@@ -319,11 +319,11 @@ function _showWatchlistSyncHint(isPaid) {
   badge.style.cssText = "font-family:var(--font-mono); font-size:8px; margin-left:6px; padding:1px 5px; border-radius:3px; vertical-align:middle;";
   if (isPaid) {
     badge.style.color = "var(--pos-qb)";
-    badge.style.border = "1px solid var(--pos-qb)";
+    badge.style.border = "2px solid var(--pos-qb)";
     badge.textContent = "synced";
   } else {
     badge.style.color = "var(--ink-light)";
-    badge.style.border = "1px dashed var(--ink-faint)";
+    badge.style.border = "2px dashed var(--ink-faint)";
     badge.textContent = "local only";
   }
   btn.appendChild(badge);
@@ -1658,7 +1658,7 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
     html += `<td class="col-player"><div class="player-name-cell">`;
     html += playerHeadshot(player, pos);
     html += `<span class="pos-badge ${posClass(pos)}">${escapeHtml(pos)}</span>`;
-    html += `<a href="#" onclick="openCollegeProfile('${cid}'); return false;" style="color:var(--ink); text-decoration:none; border-bottom:1px dashed var(--pos-qb);">${_highlightSearch(escapeHtml(player.player_name))}</a>`;
+    html += `<a href="#" onclick="openCollegeProfile('${cid}'); return false;" style="color:var(--ink); text-decoration:none; border-bottom:2px dashed var(--pos-qb);">${_highlightSearch(escapeHtml(player.player_name))}</a>`;
     html += `<span class="team-label">${escapeHtml(player.team)}</span>`;
     if (player.conference) html += `<span class="school-label" style="font-size:10px; color:var(--ink-light);">${escapeHtml(player.conference)}</span>`;
     html += `</div></td>`;
@@ -1669,7 +1669,7 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
     html += `<td class="col-player"><div class="player-name-cell">`;
     html += playerHeadshot(player, pos);
     html += `<span class="pos-badge ${posClass(pos)}">${escapeHtml(pos)}</span>`;
-    html += `<a href="#" onclick="openProspectProfile('${pn}', '${escapeAttr(pPos)}', ${pYear}); return false;" style="color:var(--ink); text-decoration:none; border-bottom:1px dashed var(--pos-qb);">${_highlightSearch(escapeHtml(player.player_name))}</a>`;
+    html += `<a href="#" onclick="openProspectProfile('${pn}', '${escapeAttr(pPos)}', ${pYear}); return false;" style="color:var(--ink); text-decoration:none; border-bottom:2px dashed var(--pos-qb);">${_highlightSearch(escapeHtml(player.player_name))}</a>`;
     html += `<span class="school-label">${escapeHtml(player.school)}</span>`;
     html += `</div></td>`;
   } else {
@@ -1677,7 +1677,7 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
     html += `<td class="col-player"><div class="player-name-cell">`;
     html += playerHeadshot(player, pos);
     html += `<span class="pos-badge ${posClass(pos)}">${escapeHtml(pos)}</span>`;
-    html += `<a href="/player/${encodeURIComponent(pid)}" onclick="event.preventDefault(); openPlayerProfile('${pid}');" onmouseenter="onPlayerNameEnter('${pid}', this)" onmouseleave="onPlayerNameLeave()" style="color:var(--ink); text-decoration:none; border-bottom:1px dashed var(--ink-faint);">${_highlightSearch(escapeHtml(player.full_name))}</a>`;
+    html += `<a href="/player/${encodeURIComponent(pid)}" onclick="event.preventDefault(); openPlayerProfile('${pid}');" onmouseenter="onPlayerNameEnter('${pid}', this)" onmouseleave="onPlayerNameLeave()" style="color:var(--ink); text-decoration:none; border-bottom:2px dashed var(--ink-faint);">${_highlightSearch(escapeHtml(player.full_name))}</a>`;
     html += buildTagChip(pid);
     html += `<span class="tag-icon" onclick="event.stopPropagation(); showTagPicker('${pid}', this)" title="Tag player">&#9679;</span>`;
     html += `<span class="team-label">${escapeHtml(player.team)}</span>`;
@@ -2856,7 +2856,7 @@ function updateResultCount() {
     for (var j = 0; j < posOrder.length; j++) {
       var pp = posOrder[j];
       if (posCounts[pp]) {
-        badges.push('<span style="font-size:10px; font-weight:700; color:' + posColors[pp] + '; cursor:pointer; border-bottom:1px dashed ' + posColors[pp] + ';" onclick="togglePosition(\'' + pp + '\')" title="Filter to ' + pp + '">' + pp + ':' + posCounts[pp] + '</span>');
+        badges.push('<span style="font-size:10px; font-weight:700; color:' + posColors[pp] + '; cursor:pointer; border-bottom:2px dashed ' + posColors[pp] + ';" onclick="togglePosition(\'' + pp + '\')" title="Filter to ' + pp + '">' + pp + ':' + posCounts[pp] + '</span>');
       }
     }
     if (badges.length) parts.push(badges.join(" "));
@@ -4111,11 +4111,11 @@ function _showViewsSyncHint(isPaid) {
 
   if (isPaid) {
     badge.style.color = "var(--pos-qb)";
-    badge.style.border = "1px solid var(--pos-qb)";
+    badge.style.border = "2px solid var(--pos-qb)";
     badge.textContent = "cloud-synced";
   } else {
     badge.style.color = "var(--ink-light)";
-    badge.style.border = "1px dashed var(--ink-faint)";
+    badge.style.border = "2px dashed var(--ink-faint)";
     badge.textContent = "upgrade to sync views across devices";
   }
   container.insertBefore(badge, container.firstChild);
@@ -8732,13 +8732,13 @@ function renderTradeValueChart() {
       // Name + position
       html += '<div style="display:flex; align-items:center; gap:6px;">';
       html += '<span style="font-family:var(--font-display); font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + escapeHtml(p.full_name) + '</span>';
-      html += '<span style="font-family:var(--font-mono); font-size:9px; font-weight:bold; color:#fff; background:' + pc + '; padding:1px 5px; border-radius:3px; border:1px solid var(--ink);">' + escapeHtml(p.position) + '</span>';
+      html += '<span style="font-family:var(--font-mono); font-size:9px; font-weight:bold; color:#fff; background:' + pc + '; padding:1px 5px; border-radius:3px; border:2px solid var(--ink);">' + escapeHtml(p.position) + '</span>';
       html += '</div>';
       // Team + Age
       html += '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + escapeHtml(p.team || "FA") + (p.age ? ' · Age ' + p.age : '') + '</div>';
       // Trade value bar
       html += '<div style="display:flex; align-items:center; gap:6px;">';
-      html += '<div style="flex:1; height:8px; background:var(--bg-warm); border:1px solid var(--ink-faint); border-radius:4px; overflow:hidden;">';
+      html += '<div style="flex:1; height:8px; background:var(--bg-warm); border:2px solid var(--ink-faint); border-radius:4px; overflow:hidden;">';
       html += '<div style="width:' + barWidth + '%; height:100%; background:' + pc + '; border-radius:4px;"></div>';
       html += '</div>';
       html += '<span style="font-family:var(--font-mono); font-size:13px; font-weight:bold; min-width:28px; text-align:right;">' + p._tv + '</span>';
@@ -12130,9 +12130,9 @@ function renderBoomBust(data, container) {
 
   // Histogram legend
   html += `<div style="display:flex; gap:16px; justify-content:center; margin:8px 0; font-family:var(--font-mono); font-size:11px; color:var(--ink-medium);">`;
-  html += `<span style="display:flex; align-items:center; gap:4px;"><span style="width:12px; height:12px; background:var(--green); border:1.5px solid var(--ink); display:inline-block;"></span> Boom (${boom_threshold}+ pts)</span>`;
-  html += `<span style="display:flex; align-items:center; gap:4px;"><span style="width:12px; height:12px; background:${posColor}; border:1.5px solid var(--ink); display:inline-block;"></span> Normal</span>`;
-  html += `<span style="display:flex; align-items:center; gap:4px;"><span style="width:12px; height:12px; background:var(--red); border:1.5px solid var(--ink); display:inline-block;"></span> Bust (${bust_threshold} or below)</span>`;
+  html += `<span style="display:flex; align-items:center; gap:4px;"><span style="width:12px; height:12px; background:var(--green); border:2px solid var(--ink); display:inline-block;"></span> Boom (${boom_threshold}+ pts)</span>`;
+  html += `<span style="display:flex; align-items:center; gap:4px;"><span style="width:12px; height:12px; background:${posColor}; border:2px solid var(--ink); display:inline-block;"></span> Normal</span>`;
+  html += `<span style="display:flex; align-items:center; gap:4px;"><span style="width:12px; height:12px; background:var(--red); border:2px solid var(--ink); display:inline-block;"></span> Bust (${bust_threshold} or below)</span>`;
   html += `</div>`;
 
   // Floor-ceiling range bar

@@ -3330,7 +3330,7 @@ function _renderMemoryEntries(panel, memory, isElite) {
   }
 
   var headerBadge = isElite
-    ? '<div style="font-family:var(--font-mono); font-size:9px; color:var(--pos-qb); text-align:center; margin-bottom:6px; padding:2px 8px; border:1px solid var(--pos-qb); border-radius:3px; display:inline-block;">cloud-synced</div>'
+    ? '<div style="font-family:var(--font-mono); font-size:9px; color:var(--pos-qb); text-align:center; margin-bottom:6px; padding:2px 8px; border:2px solid var(--pos-qb); border-radius:3px; display:inline-block;">cloud-synced</div>'
     : '';
 
   var html = headerBadge ? '<div style="text-align:center;">' + headerBadge + '</div>' : '';

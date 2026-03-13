@@ -125,7 +125,7 @@ function renderSavedFormulas() {
       }).join(" + ");
       const isPublished = f.fromStore || isFormulaPublished(f.name);
       const publishBtn = isPublished
-        ? `<span style="font-family:var(--font-mono); font-size:9px; color:var(--green); font-weight:700; padding:2px 6px; border:1.5px solid var(--green); border-radius:4px;">Published</span>`
+        ? `<span style="font-family:var(--font-mono); font-size:9px; color:var(--green); font-weight:700; padding:2px 6px; border:2px solid var(--green); border-radius:4px;">Published</span>`
         : `<button class="btn-chunky" style="font-size:9px; padding:2px 8px;" onclick="event.stopPropagation(); openPublishFlow('${f.name.replace(/'/g, "\\'")}')">Publish</button>`;
       return `<div style="display:flex; align-items:center; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--ink-faint); gap:6px;">
         <div style="flex:1; min-width:0;">
@@ -257,11 +257,11 @@ function _showCloudSyncHint(isPaid) {
 
   if (isPaid) {
     badge.style.color = "var(--pos-qb)";
-    badge.style.border = "1px solid var(--pos-qb)";
+    badge.style.border = "2px solid var(--pos-qb)";
     badge.textContent = "cloud-synced";
   } else {
     badge.style.color = "var(--ink-light)";
-    badge.style.border = "1px dashed var(--ink-faint)";
+    badge.style.border = "2px dashed var(--ink-faint)";
     badge.innerHTML = "upgrade to sync formulas across devices";
   }
 
