@@ -21,9 +21,10 @@ DB_PATH = Path(__file__).parent.parent / "data" / "terminal.db"
 # on every request adds ~1-5ms overhead and risks leaks. Pool keeps up to
 # POOL_SIZE idle connections ready for reuse.
 
-POOL_SIZE = 5
+POOL_SIZE = 10
 _pool: deque = deque()
 _pool_lock = threading.Lock()
+
 
 
 def _make_conn() -> sqlite3.Connection:
@@ -32,6 +33,9 @@ def _make_conn() -> sqlite3.Connection:
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA journal_mode=WAL")
     conn.execute("PRAGMA busy_timeout=30000")
+    conn.execute("PRAGMA read_uncommitted=true")  # Skip shared locks for reads in WAL mode
+    conn.execute("PRAGMA cache_size=-8000")  # 8MB page cache per connection (was 64MB, too much at 50 conns)
+    conn.execute("PRAGMA mmap_size=67108864")  # 64MB memory-mapped I/O (shared across connections)
     return conn
 
 

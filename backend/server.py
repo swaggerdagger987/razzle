@@ -27,6 +27,33 @@ from .logging_config import setup_logging
 
 logger = logging.getLogger("razzle.server")
 
+# ---------------------------------------------------------------------------
+# Response-level cache — caches full JSON response bytes for GET /api/* endpoints.
+# Eliminates both data-level cache lookup and JSON serialization on hits.
+# ---------------------------------------------------------------------------
+_resp_cache: dict = {}  # url_path -> {"body": bytes, "t": float, "headers": dict}
+_RESP_CACHE_TTL = 120  # 2 minutes
+_RESP_CACHE_MAX = 100
+
+
+def _resp_cache_get(key: str):
+    """Get cached response bytes. Returns (body, headers) or None."""
+    entry = _resp_cache.get(key)
+    if entry and _time.time() - entry["t"] < _RESP_CACHE_TTL:
+        return entry["body"], entry["headers"]
+    return None
+
+
+def _resp_cache_set(key: str, body: bytes, headers: dict):
+    """Cache response bytes."""
+    if len(_resp_cache) >= _RESP_CACHE_MAX:
+        # Evict oldest entries
+        oldest = sorted(_resp_cache.items(), key=lambda x: x[1]["t"])
+        for k, _ in oldest[:20]:
+            del _resp_cache[k]
+    _resp_cache[key] = {"body": body, "t": _time.time(), "headers": headers}
+
+
 # Simple in-memory rate limiter for auth endpoints
 _rate_buckets = defaultdict(list)  # ip -> [timestamps]
 _RATE_LIMIT = 10  # max attempts
@@ -216,6 +243,39 @@ import threading
 _bootstrap_status = {"done": False, "running": False, "error": None}
 
 
+def _warm_cache():
+    """Pre-populate cache with commonly-hit endpoints to prevent cold-start stampede."""
+    warm_targets = [
+        ("filter_options", lambda: live_data.get_filter_options()),
+        ("featured", lambda: live_data.fetch_featured()),
+        ("dynasty_dashboard", lambda: live_data.fetch_dynasty_dashboard()),
+        ("dynasty_rankings", lambda: live_data.fetch_dynasty_rankings()),
+        ("trade_value_chart", lambda: live_data.fetch_trade_value_chart()),
+        ("stat_leaders_2025", lambda: live_data.fetch_stat_leaders(season=2025)),
+        ("breakout_2025", lambda: live_data.fetch_breakout_candidates(season=2025)),
+        ("matchup_heatmap_2025", lambda: live_data.fetch_matchup_heatmap(season=2025)),
+        ("aging_curves", lambda: live_data.fetch_aging_curves()),
+        ("players_QB", lambda: live_data.fetch_players(position="QB", limit=50)),
+        ("players_RB", lambda: live_data.fetch_players(position="RB", limit=50)),
+        ("players_WR", lambda: live_data.fetch_players(position="WR", limit=50)),
+        ("players_TE", lambda: live_data.fetch_players(position="TE", limit=50)),
+        ("screener_QB", lambda: live_data.fetch_screener({"position": "QB", "season": "2025", "limit": 50, "sort_key": "fantasy_points_half_ppr", "sort_dir": "desc"})),
+        ("screener_RB", lambda: live_data.fetch_screener({"position": "RB", "season": "2025", "limit": 50, "sort_key": "fantasy_points_half_ppr", "sort_dir": "desc"})),
+        ("screener_WR", lambda: live_data.fetch_screener({"position": "WR", "season": "2025", "limit": 200, "sort_key": "fantasy_points_half_ppr", "sort_dir": "desc"})),
+        ("weekly_heatmap_QB", lambda: live_data.fetch_weekly_heatmap(season=2025, position="QB")),
+        ("consistency_2025", lambda: live_data.fetch_consistency_rankings(season=2025)),
+        ("efficiency_2025", lambda: live_data.fetch_efficiency_rankings(season=2025)),
+    ]
+    warmed = 0
+    for name, fn in warm_targets:
+        try:
+            fn()
+            warmed += 1
+        except Exception:
+            logger.debug(f"Cache warm skip: {name}")
+    logger.info(f"Cache warmed: {warmed}/{len(warm_targets)} endpoints")
+
+
 def _background_bootstrap():
     """Run heavy data bootstrap in a background thread so the server starts fast."""
     _bootstrap_status["running"] = True
@@ -224,6 +284,7 @@ def _background_bootstrap():
         _ensure_season_stats_table()
         _bootstrap_status["done"] = True
         logger.info("Background bootstrap complete")
+        _warm_cache()
     except Exception as e:
         _bootstrap_status["error"] = str(e)
         logger.exception("Background bootstrap failed")
@@ -269,6 +330,11 @@ def _validate_env():
 async def lifespan(app):
     setup_logging()
     _validate_env()
+    # Increase thread pool for sync endpoints (default is min(32, cpu+4))
+    import asyncio
+    from concurrent.futures import ThreadPoolExecutor
+    loop = asyncio.get_running_loop()
+    loop.set_default_executor(ThreadPoolExecutor(max_workers=20))
     # Essential tables first (fast, < 100ms) — server can respond immediately
     auth_module.initialize_users_db()
     billing_module.initialize_subscriptions_table()
@@ -294,6 +360,44 @@ app.add_middleware(
 FRONTEND_DIR = Path(__file__).parent.parent / "frontend"
 
 _req_logger = logging.getLogger("razzle.requests")
+
+# Paths that should be cached at response level (GET only, public data)
+_RESP_CACHEABLE_PREFIXES = (
+    "/api/players", "/api/filter-options", "/api/featured",
+    "/api/dynasty-dashboard", "/api/dynasty-rankings", "/api/trade-value-chart",
+    "/api/stat-leaders", "/api/breakout-candidates", "/api/matchup-heatmap",
+    "/api/aging-curves", "/api/weekly-heatmap", "/api/efficiency-rankings",
+    "/api/consistency-rankings", "/api/health",
+)
+
+
+@app.middleware("http")
+async def response_cache_middleware(request: Request, call_next):
+    """Cache full response bytes for GET /api/* endpoints."""
+    path = request.url.path
+    if request.method == "GET" and any(path.startswith(p) for p in _RESP_CACHEABLE_PREFIXES):
+        cache_key = str(request.url)
+        cached = _resp_cache_get(cache_key)
+        if cached:
+            body, headers = cached
+            resp = Response(content=body, media_type="application/json")
+            for k, v in headers.items():
+                resp.headers[k] = v
+            return resp
+        response = await call_next(request)
+        # Only cache successful responses
+        if response.status_code == 200:
+            body = b""
+            async for chunk in response.body_iterator:
+                body += chunk if isinstance(chunk, bytes) else chunk.encode()
+            save_headers = {k: v for k, v in response.headers.items()
+                           if k.lower() in ("cache-control", "content-type")}
+            _resp_cache_set(cache_key, body, save_headers)
+            return Response(content=body, status_code=200,
+                           media_type=response.media_type, headers=dict(response.headers))
+        return response
+    return await call_next(request)
+
 
 @app.middleware("http")
 async def request_logging_middleware(request: Request, call_next):
@@ -1197,8 +1301,17 @@ def get_players(
 
 @app.post("/api/screener/query")
 async def screener_query(request: Request):
+    import json as _json
     body = await request.json()
-    return live_data.fetch_screener(body)
+    # Response-level cache for screener POST (most expensive endpoint)
+    cache_key = "screener_post:" + _json.dumps(body, sort_keys=True, default=str)
+    cached = _resp_cache_get(cache_key)
+    if cached:
+        return Response(content=cached[0], media_type="application/json")
+    result = live_data.fetch_screener(body)
+    resp_bytes = _json.dumps(result, default=str).encode()
+    _resp_cache_set(cache_key, resp_bytes, {})
+    return Response(content=resp_bytes, media_type="application/json")
 
 
 @app.post("/api/screener/sparklines")

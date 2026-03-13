@@ -2,9 +2,9 @@
 
 ## Current State
 - Phase: F (Data Refresh + Backend Hardening)
-- Current Task: F-4
+- Current Task: F-5
 - Current Stage: BUILD
-- Tasks Completed: 3/6
+- Tasks Completed: 4/6
 - Loop Iterations: 6
 
 ## Phase A: Visual & Design Audit (Mar 12–18)
@@ -336,8 +336,8 @@
 **Accept when**: Backend handles launch-day traffic.
 **Depends on**: none
 **Size**: M
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task F-5: Test suite green
 **Requirement**: "All 59+ tests pass. Run full suite against production-like config. No regressions from QA fixes."
