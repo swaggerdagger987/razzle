@@ -155,9 +155,26 @@
   }
 
   /* ===== WAR ROOM DARK ZONE ===== */
+  /* Force dark-mode variables inside the Situation Room regardless of theme toggle */
   .warroom-dark {
+    --bg: #2d1f14;
+    --bg-warm: #3b2821;
+    --bg-card: #4a3728;
+    --bg-ink: #1a110a;
+    --ink: #ede0cf;
+    --ink-medium: #c4b5a5;
+    --ink-light: #8a7565;
+    --ink-faint: #5c4a3d;
+    --orange-light: #5c3325;
+    --yellow-light: #4a3a1e;
+    --green-light: #1a3a36;
+    --blue-light: #2a3350;
+    --red-light: #4a1a1e;
+    --purple-light: #352450;
+
     background: var(--bg-ink);
-    border-top: 3px solid var(--ink);
+    color: var(--ink);
+    border-top: 3px solid #5c4a3d;
     min-height: 600px;
     position: relative;
   }
@@ -238,7 +255,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 10px 16px;
-    background: rgba(26, 26, 46, 0.8);
+    background: rgba(26, 17, 10, 0.85);
     border-top: 2px solid var(--ink-medium);
     font-family: var(--font-mono);
     font-size: 11px;
@@ -307,8 +324,8 @@
     font-family: var(--font-mono);
     font-size: 13px;
     color: var(--ink);
-    background: #fff;
-    border: 2px solid var(--ink);
+    background: var(--bg-warm);
+    border: 2px solid var(--ink-faint);
     border-radius: 8px;
     box-sizing: border-box;
     resize: vertical;
@@ -601,7 +618,7 @@
   .context-badge.inactive .context-badge-dot { background: var(--ink-faint); }
 
   .context-badge.locked {
-    background: #fff5ee;
+    background: var(--orange-light);
     border-color: var(--orange);
     color: var(--orange);
     opacity: 0.85;
@@ -610,7 +627,7 @@
 
   /* ===== PRO TEASER CARD (post-scenario for free users) ===== */
   .pro-teaser-card {
-    background: #fff5ee;
+    background: var(--bg-card);
     border: 3px solid var(--orange);
     border-radius: 12px;
     box-shadow: 4px 4px 0 var(--orange);
@@ -1354,9 +1371,9 @@
     padding: 6px 10px;
     font-family: var(--font-mono);
     font-size: 12px;
-    border: 2px solid var(--ink);
+    border: 2px solid var(--ink-faint);
     border-radius: 6px;
-    background: #fff;
+    background: var(--bg-warm);
     color: var(--ink);
     box-sizing: border-box;
     margin-bottom: 8px;
@@ -1432,7 +1449,7 @@
     font-size: 11px;
     border: 2px solid var(--ink-faint);
     border-radius: 4px;
-    background: #fff;
+    background: var(--bg-warm);
     color: var(--ink);
     min-width: 0;
   }
@@ -1632,7 +1649,7 @@
           Your WR1 has a grade 2 hamstring strain. Medical estimates 2-3 weeks. Scout identified 2 waiver targets to replace production. Diplomat recommends trading your QB2 to the 2-6 manager who historically overpays after back-to-back losses. Championship odds shift from 14% to 11% without action — but rise to 18% if you execute all three recommendations...
         </div>
       </div>
-      <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(247,239,229,0.8);">
+      <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(26,17,10,0.85);">
         <div style="text-align:center;">
           <div style="font-family:var(--font-display); font-size:18px; color:var(--ink); margin-bottom:6px;">Weekly Briefings</div>
           <div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-medium); margin-bottom:12px;">personalized intelligence, delivered weekly</div>
@@ -1699,7 +1716,7 @@
         <div class="context-badges" id="contextBadges"></div>
 
         <!-- API key notice (shown when no key configured) -->
-        <div id="apiKeyNotice" style="display:none; background:#fff5ee; border:2px solid var(--orange); border-radius:8px; padding:10px 14px; margin-bottom:10px; font-family:var(--font-mono); font-size:12px; color:var(--ink);">
+        <div id="apiKeyNotice" style="display:none; background:var(--orange-light); border:2px solid var(--orange); border-radius:8px; padding:10px 14px; margin-bottom:10px; font-family:var(--font-mono); font-size:12px; color:var(--ink);">
           <strong style="font-family:var(--font-display);">API key needed</strong> &mdash; agents use OpenRouter for LLM calls.
           <a href="#" onclick="event.preventDefault(); document.getElementById('configToggle').click();" style="color:var(--orange); text-decoration:underline;">Open config panel</a> to set your key.
           <span style="color:var(--ink-light); font-size:10px; display:block; margin-top:4px;">Free at openrouter.ai &mdash; works with GPT-4o-mini, Claude, and more.</span>

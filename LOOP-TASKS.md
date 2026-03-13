@@ -2,9 +2,9 @@
 
 ## Current State
 - Phase: A (Visual & Design Audit)
-- Current Task: 4
+- Current Task: 5
 - Current Stage: PENDING
-- Tasks Completed: 3/6
+- Tasks Completed: 4/6
 - Loop Iterations: 1
 
 ## Phase A: Visual & Design Audit (Mar 12–18)
@@ -39,8 +39,8 @@
 **Accept when**: Situation Room is always dark, rest of site respects theme toggle.
 **Depends on**: 1
 **Size**: S
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task 5: Position color consistency
 **Requirement**: "QB=blue, RB=teal, WR=terracotta, TE=purple — audit Lab table, panel charts, Bureau roster views, agent briefing cards."
