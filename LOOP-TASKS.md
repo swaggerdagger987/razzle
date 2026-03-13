@@ -2,9 +2,9 @@
 
 ## Current State
 - Phase: B (Lab Production Hardening)
-- Current Task: B-5 Export & sharing
+- Current Task: B-6 URL state integrity
 - Current Stage: BUILD
-- Tasks Completed: 4/7
+- Tasks Completed: 5/7
 - Loop Iterations: 2
 
 ## Phase A: Visual & Design Audit (Mar 12–18)
@@ -100,8 +100,8 @@
 **Accept when**: Exported PNGs look screenshot-worthy with watermark.
 **Depends on**: B-3
 **Size**: M
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task B-6: URL state integrity
 **Requirement**: "Serialize screener state (filters, sort, columns, formula) → copy URL → paste in incognito → exact same view loads. Test 5 complex screener configs."

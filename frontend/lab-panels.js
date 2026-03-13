@@ -236,16 +236,17 @@
         exportBtn.addEventListener('click', function() {
           var wrap = content.querySelector('.dh-wrap');
           if (wrap && typeof html2canvas !== 'undefined') {
-            html2canvas(wrap, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+            html2canvas(wrap, { backgroundColor: '#ede0cf', scale: 2, useCORS: true, logging: false }).then(function(canvas) {
               var ctx = canvas.getContext('2d');
-              ctx.font = '20px sans-serif';
-              ctx.fillStyle = 'rgba(0,0,0,0.12)';
-              ctx.fillText('razzle.lol', canvas.width - 140, canvas.height - 14);
+              ctx.font = '600 28px Caveat, cursive';
+              ctx.fillStyle = 'rgba(45, 31, 20, 0.25)';
+              ctx.textAlign = 'right';
+              ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 16);
               var link = document.createElement('a');
               link.download = 'razzle-dynasty-history.png';
-              link.href = canvas.toDataURL();
+              link.href = canvas.toDataURL('image/png');
               link.click();
-            });
+            }).catch(function() { if (typeof _showToast === 'function') _showToast('screenshot failed'); });
           }
         });
       }
