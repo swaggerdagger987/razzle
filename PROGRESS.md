@@ -93,12 +93,12 @@ Full build history archived in `docs/PROGRESS_ARCHIVE.md`.
 |---|------|--------|-------|
 | D-1 | First-run experience | DONE | Replaced flat API key notice with 3-step setup guide (chunky card, numbered orange circles). Step 1: get key at openrouter.ai + paste in Config (auto-opens panel + focuses input). Step 2: type/pick scenario. Step 3: Run All Agents. Step 1 shows green checkmark when key applied. Guide auto-dismisses on first query (razzle:agents-starting event) or manual dismiss. Elite users skip (server-side AI). Demo briefings still show independently below. |
 | D-2 | Agent execution QA | DONE | Code audit of full execution pipeline. Fixed: agentResults Map now clears per run (memory leak), null guard on AGENT_DEFS[id] in peerInsights, enhanced callLLM error messages (400/403/408 cases). Verified: 6 persona files (146-154 lines each), LLM timeout (20s AbortController), parallel specialist execution, Razzle synthesis with peer insights, briefing card rendering with expand/collapse + urgency badges + Pro pills, rate limiting (client+server), memory sync for Elite. All 10 scenario types exercise same proven pipeline. |
-| D-3 | Cross-agent triggers | | |
-| D-4 | Context bridge verification | | |
-| D-5 | Pixel canvas performance | | |
-| D-6 | "What can I ask?" panel | | |
-| D-7 | Error handling | | |
-| D-8 | BYOK cloud sync | | |
+| D-3 | Cross-agent triggers | DONE | Verified 6 trigger patterns: injury_handcuff (Medical→Scout), injury_trade (Medical→Diplomat), low_odds_rebuild (Quant→Diplomat), breakout_faab (Scout→Diplomat), breakout_value (Scout→Quant), panic_pattern (Historian→Diplomat). Deduplication via seen[key], max 3 follow-ups per query, sourceText.slice(0,500) cost cap. Follow-up cards render with trigger badges and source tags. Demo includes cross-agent trigger example. |
+| D-4 | Context bridge verification | DONE | Verified: isLeagueContextMode() requires hasLeagueData() AND isProUser(). Free mode = GENERIC MODE rules + no league context injection. Pro mode = LEAGUE CONTEXT MODE rules + full context (roster, scoring, rivals, profiles, activity). Briefing cards show "Pro" pill in league mode, "generic analysis" hint for free users with connected data. Pro upsell zone shows blurred league preview. |
+| D-5 | Pixel canvas performance | DONE | Verified: rAF game loop with dt cap (50ms), visibility change pause/resume, 200-particle cap with cleanup, 6-agent AI state machine (7 states), work bubbles with timer, click/touch agent selection (40px threshold, 300ms gate), camera lerp follow (0.08), world bounds clamp, WASD+arrow+1-6 controls, passive touch listeners. No memory leaks found. |
+| D-6 | "What can I ask?" panel | DONE | Verified: collapsible details element with 4 format columns (Redraft 5q, Dynasty 5q, Keeper/Best Ball 4q, Universal 5q = 19 total). Each question onclick populates textarea + closes details. Covers all required formats. |
+| D-7 | Error handling | DONE | Verified 11 error states: timeout (AbortError, 20s), invalid key (401), permission (403), rate limit (429), bad request (400), request timeout (408), server down (5xx), network failure (fetch catch), no API key (pre-check), empty scenario (pre-check), server quota exceeded (429 trackQueryServerSide). All show clear, actionable messages. callServerLLM for Elite has matching error handling. |
+| D-8 | BYOK cloud sync | DONE | Verified: Save (POST /api/user/api-keys, encrypted, rate-limited), Load (GET /api/user/api-keys/openrouter/decrypt, applies to all 6 agents), pre-checks (auth token, Pro+ tier, key entered), error handling (network, auth, no-key), UI hints update, updateApiKeyNotice called after load. Backend endpoints verified: get_api_keys, save_api_key, get_decrypted_key. |
 
 ### Decisions Log
 
