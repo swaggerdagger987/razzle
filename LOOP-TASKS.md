@@ -2,9 +2,9 @@
 
 ## Current State
 - Phase: B (Lab Production Hardening)
-- Current Task: B-4 Panel audit (top 20)
+- Current Task: B-5 Export & sharing
 - Current Stage: BUILD
-- Tasks Completed: 3/7
+- Tasks Completed: 4/7
 - Loop Iterations: 2
 
 ## Phase A: Visual & Design Audit (Mar 12–18)
@@ -92,8 +92,8 @@
 **Accept when**: Top 20 panels verified working.
 **Depends on**: none
 **Size**: L
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task B-5: Export & sharing
 **Requirement**: "PNG export on screener view, radar chart, scatter plot. Watermark ('razzle.lol') baked in. Clean aspect ratio. Shareable URLs resolve with og:image."

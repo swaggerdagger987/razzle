@@ -451,7 +451,7 @@
 
   function populateSeasons(seasons, current) {
     var sel = document.getElementById('season-select');
-    if (sel.options.length > 0) return;
+    if (!seasons || sel.options.length > 0) return;
     seasons.forEach(function(s) {
       var opt = document.createElement('option');
       opt.value = s;
@@ -463,7 +463,7 @@
 
   function populateTeams(teams) {
     var sel = document.getElementById('team-select');
-    if (sel.options.length > 1) return;
+    if (!teams || sel.options.length > 1) return;
     teams.forEach(function(t) {
       var opt = document.createElement('option');
       opt.value = t.team;

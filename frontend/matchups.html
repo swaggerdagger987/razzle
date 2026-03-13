@@ -527,7 +527,7 @@
 
   function populateSeasons(seasons, current) {
     var sel = document.getElementById('season-select');
-    if (sel.options.length > 0) return;
+    if (!seasons || sel.options.length > 0) return;
     seasons.forEach(function(s) {
       var opt = document.createElement('option');
       opt.value = s;
