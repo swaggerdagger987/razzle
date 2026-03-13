@@ -274,8 +274,10 @@ def initialize_database(conn):
 def find_player_stats_asset(season):
     """Find the best nflverse weekly player stats CSV for a given season.
 
-    We want: player_stats_YYYY.csv (weekly offensive stats)
-    We skip: player_stats_def_*, player_stats_kicking_*, player_stats_season_*
+    Searches two release formats:
+    - Old: release tag 'player_stats', files like player_stats_YYYY.csv
+    - New: release tag 'stats_player', files like stats_player_week_YYYY.csv
+    We skip: def_*, kicking_*, season_*, _post_*, _reg_*, _regpost_*
     """
     req = urllib.request.Request(NFLVERSE_RELEASES_URL)
     req.add_header("User-Agent", "razzle-adapter/1.0")
@@ -287,6 +289,7 @@ def find_player_stats_asset(season):
     best_score = -1
 
     for release in releases:
+        tag = release.get("tag_name", "")
         for asset in release.get("assets", []):
             name = asset.get("name", "").lower()
             url = asset.get("browser_download_url", "")
@@ -297,12 +300,22 @@ def find_player_stats_asset(season):
             if not (name.endswith(".csv") or name.endswith(".csv.gz")):
                 continue
 
-            # Must look like player stats
-            if "player_stats" not in name:
+            # Match old format: player_stats_YYYY.csv (skip def/kicking/season)
+            old_match = "player_stats" in name and tag == "player_stats"
+            # Match new format: stats_player_week_YYYY.csv
+            new_match = name.startswith("stats_player_week_") and tag == "stats_player"
+
+            if not (old_match or new_match):
                 continue
 
-            # Skip defensive, kicking, and season-aggregate files
+            # Skip defensive, kicking, season-aggregate, postseason-only, reg-only files
             if "def" in name or "kicking" in name or "season" in name:
+                continue
+            # New format splits: _post_, _reg_, _regpost_ — we want _week_ (all games)
+            if "_post_" in name or "_regpost_" in name:
+                continue
+            # Old format: skip _reg_ files (we want the combined one)
+            if old_match and "_reg_" in name:
                 continue
 
             # Prefer uncompressed for simplicity, but accept .gz
@@ -324,11 +337,39 @@ def find_player_stats_asset(season):
                 else:
                     score += 10
 
+            # Prefer new format (more complete data)
+            if new_match:
+                score += 10
+
             if score > best_score:
                 best_score = score
-                best = {"name": asset["name"], "url": url, "score": score}
+                best = {"name": asset["name"], "url": url, "score": score, "format": "new" if new_match else "old"}
 
     return best
+
+
+# Column name mapping: new nflverse format → old format names used by our adapter
+NEW_FORMAT_COLUMN_MAP = {
+    "passing_interceptions": "interceptions",
+    "sacks_suffered": "sacks",
+    "sack_yards_lost": "sack_yards",
+    "team": "recent_team",
+}
+
+
+def normalize_csv_row(row, fmt):
+    """Normalize CSV row column names for compatibility across nflverse formats.
+
+    The new stats_player_week format (2025+) renamed several columns.
+    This maps them back to the names our CORE_STATS and processing expect.
+    """
+    if fmt != "new":
+        return row
+    normalized = {}
+    for key, val in row.items():
+        mapped_key = NEW_FORMAT_COLUMN_MAP.get(key, key)
+        normalized[mapped_key] = val
+    return normalized
 
 
 def fetch_csv(url):
@@ -434,8 +475,12 @@ def process_season(conn, season):
         print(f"  No nflverse asset found for {season}, skipping.")
         return 0
 
-    print(f"  Downloading {asset['name']}...")
+    fmt = asset.get("format", "old")
+    print(f"  Downloading {asset['name']} (format: {fmt})...")
     rows = fetch_csv(asset["url"])
+    # Normalize column names for new format compatibility
+    if fmt == "new":
+        rows = [normalize_csv_row(r, fmt) for r in rows]
     print(f"  Got {len(rows)} rows from CSV.")
 
     gsis_map, name_map = build_player_lookup(conn)
@@ -471,6 +516,13 @@ def process_season(conn, season):
         core = {}
         for csv_key, db_key in CORE_STATS.items():
             core[db_key] = safe_float(row.get(csv_key))
+
+        # Compute fantasy_points_half_ppr if missing (not in nflverse CSVs)
+        if core.get("fantasy_points_half_ppr") is None:
+            ppr = core.get("fantasy_points_ppr")
+            std = core.get("fantasy_points_std")
+            if ppr is not None and std is not None:
+                core["fantasy_points_half_ppr"] = round((ppr + std) / 2, 2)
 
         # Computed fields
         passing_tds = core.get("passing_tds") or 0

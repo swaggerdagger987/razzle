@@ -1,11 +1,11 @@
 # Razzle Ship Loop — Task Tracker
 
 ## Current State
-- Phase: E (Landing Page + Conversion Funnel)
-- Current Task: COMPLETE
-- Current Stage: PHASE GATE
-- Tasks Completed: 6/6
-- Loop Iterations: 5
+- Phase: F (Data Refresh + Backend Hardening)
+- Current Task: F-2
+- Current Stage: BUILD
+- Tasks Completed: 1/6
+- Loop Iterations: 6
 
 ## Phase A: Visual & Design Audit (Mar 12–18)
 **Exit Criterion**: Open each of the three rooms plus the landing page. The visual language is unmistakably Razzle — warm sand, chunky borders, espresso ink, comic-strip energy. No page looks like it was built by a different team.
@@ -301,3 +301,56 @@
 **Size**: S
 **Status**: PASS
 **Attempts**: 1
+
+---
+
+## Phase F: Data Refresh + Backend Hardening (Apr 13–16)
+**Exit Criterion**: razzle.lol is deployed with fresh 2025 data, handles concurrent load, and has monitoring in place to catch issues on launch day.
+
+### Task F-1: 2025 season data
+**Requirement**: "nflverse adapter pulls complete 2025 regular season + playoff data. All stats current through Super Bowl. Verify terminal.db has full 2025 season."
+**Accept when**: terminal.db has full 2025 season data. Adapter handles all 2025 weeks. No missing players or stats.
+**Depends on**: none
+**Size**: L
+**Status**: PASS
+**Attempts**: 1
+
+### Task F-2: College data refresh
+**Requirement**: "cfbfastR adapter pulls 2025 college season. Draft class prospects have current combine/pro day data if available."
+**Accept when**: College stats current for 2026 draft class.
+**Depends on**: none
+**Size**: M
+**Status**: PENDING
+**Attempts**: 0
+
+### Task F-3: Render deployment QA
+**Requirement**: "Deploy to Render. Health check passes. DB downloads from GitHub release. All 63+ API endpoints return 200. Auth flow works. Billing webhooks fire."
+**Accept when**: razzle.lol is fully functional in production.
+**Depends on**: F-1, F-2
+**Size**: L
+**Status**: PENDING
+**Attempts**: 0
+
+### Task F-4: Load testing
+**Requirement**: "Simulate 50 concurrent users hitting Lab endpoints. API response times < 1s under load. No SQLite locking issues."
+**Accept when**: Backend handles launch-day traffic.
+**Depends on**: none
+**Size**: M
+**Status**: PENDING
+**Attempts**: 0
+
+### Task F-5: Test suite green
+**Requirement**: "All 59+ tests pass. Run full suite against production-like config. No regressions from QA fixes."
+**Accept when**: CI is green, zero test failures.
+**Depends on**: none
+**Size**: M
+**Status**: PENDING
+**Attempts**: 0
+
+### Task F-6: Error monitoring
+**Requirement**: "Structured logging captures all 4xx/5xx errors with context. Server startup validates all env vars. Unhandled exceptions don't crash the process."
+**Accept when**: Errors are visible and diagnosable in production.
+**Depends on**: none
+**Size**: M
+**Status**: PENDING
+**Attempts**: 0

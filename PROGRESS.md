@@ -120,3 +120,15 @@ Full build history archived in `docs/PROGRESS_ARCHIVE.md`.
 | E-6 | og:image + social previews | DONE | Fixed 71 HTML files using og-image.svg → og-image.png (SVG not supported by Reddit/Twitter/Discord). Verified og-image.png (16KB) and og-image-lab.png (15KB) exist. Added twitter:card + og:image:width/height to about.html. All 74 pages now have og:title, og:description, og:image (PNG), twitter:card. |
 
 ### Decisions Log
+
+---
+
+## Ship Phase: Phase F — Data Refresh + Backend Hardening (Apr 13–16)
+
+**Goal**: Fresh 2025 data, stable deployment, load testing, monitoring.
+
+**Exit Criterion**: razzle.lol is deployed with fresh 2025 data, handles concurrent load, and has monitoring in place to catch issues on launch day.
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| F-1 | 2025 season data | DONE | Updated nflverse adapter to support new `stats_player_week_YYYY.csv` format (2025+). Added column name normalization (`passing_interceptions`→`interceptions`, `sacks_suffered`→`sacks`, `team`→`recent_team`). Computed `fantasy_points_half_ppr` = (PPR+STD)/2 for all seasons (was null). 2025: 19,421 rows (18,539 REG + 882 POST), 2,025 players, week 1-22, snap counts + PBP enriched. Backfilled half-PPR for 54,479 rows across 2015-2024. |
