@@ -578,7 +578,7 @@ def process_season(conn, season):
             fumbles_lost,
             None,  # offense_snaps (populated by sync_snap_counts)
             None,  # offense_pct (populated by sync_snap_counts)
-            json.dumps({k: v for k, v in row.items() if v and v != "NA"}),
+            None,  # stats_json — no longer stored (all stats in named columns + metrics table)
             "nflverse",
             now,
         ))
