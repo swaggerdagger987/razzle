@@ -649,6 +649,115 @@
     margin-bottom: 12px;
   }
 
+  /* ===== BUREAU SECTION ===== */
+  .bureau-section {
+    background: var(--bg-warm);
+    padding: 48px 24px;
+    border-top: 3px solid var(--ink);
+    border-bottom: 3px solid var(--ink);
+  }
+
+  .bureau-inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .bureau-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 20px;
+  }
+
+  .bureau-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 20px;
+    transition: all 0.15s;
+  }
+
+  .bureau-card:hover {
+    box-shadow: 6px 6px 0 var(--ink);
+    transform: translate(-2px, -2px);
+  }
+
+  .bureau-card-icon {
+    font-size: 32px;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .bureau-card h3 {
+    font-family: var(--font-display);
+    font-size: 16px;
+    margin-bottom: 6px;
+  }
+
+  .bureau-card p {
+    font-size: 13px;
+    color: var(--ink-medium);
+    line-height: 1.6;
+  }
+
+  .bureau-sleeper-demo {
+    margin-top: 24px;
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 14px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 24px 28px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .bureau-sleeper-visual {
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+    background: var(--green);
+    border: 3px solid var(--ink);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    transform: rotate(-3deg);
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+
+  .bureau-sleeper-info {
+    flex: 1;
+  }
+
+  .bureau-sleeper-info h3 {
+    font-family: var(--font-display);
+    font-size: 18px;
+    margin-bottom: 4px;
+  }
+
+  .bureau-sleeper-info p {
+    font-size: 13px;
+    color: var(--ink-medium);
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+
+  .bureau-sleeper-info .bureau-note {
+    font-family: var(--font-hand);
+    font-size: 17px;
+    color: var(--ink-light);
+  }
+
+  @media (max-width: 768px) {
+    .bureau-section { padding: 32px 16px; }
+    .bureau-grid { grid-template-columns: 1fr; }
+    .bureau-sleeper-demo { flex-direction: column; text-align: center; }
+    .bureau-sleeper-visual { width: 60px; height: 60px; font-size: 32px; }
+  }
+
   /* ===== MASCOT SECTION ===== */
   .mascot-row {
     display: flex;
@@ -996,6 +1105,15 @@
   </div>
 </div>
 
+<!-- LIVE FROM THE LAB -->
+<div class="section" id="featuredSection" style="display:none;">
+  <div class="section-label">Live from The Lab</div>
+  <h2>Real data. Real players. Right now.</h2>
+  <div id="featuredCards" class="featured-grid">
+    <div style="text-align:center; padding:32px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light); grid-column:1/-1;">pulling film...</div>
+  </div>
+</div>
+
 <!-- DRAFT SEASON SHOWCASE -->
 <div class="draft-section">
   <div class="draft-inner">
@@ -1052,6 +1170,43 @@
   </div>
 </div>
 
+<!-- BUREAU OF INTELLIGENCE -->
+<div class="bureau-section">
+  <div class="bureau-inner">
+    <div class="section-label">Bureau of Intelligence</div>
+    <h2 style="font-family:var(--font-display); font-size:28px; margin-bottom:8px;">Your league. Their weaknesses.</h2>
+    <p class="section-desc">Connect your Sleeper leagues and Razzle maps your entire league — rosters, rivals, trade tendencies, panic patterns. Intelligence you can act on.</p>
+
+    <div class="bureau-grid">
+      <div class="bureau-card">
+        <span class="bureau-card-icon">🔍</span>
+        <h3>Manager Profiles</h3>
+        <p>Behavioral analysis of every leaguemate. Who panic-sells after losses. Who overpays at the deadline. Who hoards RBs. Years of patterns, one card.</p>
+      </div>
+      <div class="bureau-card">
+        <span class="bureau-card-icon">🤝</span>
+        <h3>Trade Finder</h3>
+        <p>Value-matched trade targets based on your roster needs and their surplus. Position gaps, desperation scores, and the exact manager most likely to accept.</p>
+      </div>
+      <div class="bureau-card">
+        <span class="bureau-card-icon">🎯</span>
+        <h3>Pressure Map</h3>
+        <p>Desperation scores for every manager. Red means desperate, green means comfortable. Know who's about to fire-sell before they do.</p>
+      </div>
+    </div>
+
+    <div class="bureau-sleeper-demo">
+      <div class="bureau-sleeper-visual">🏈</div>
+      <div class="bureau-sleeper-info">
+        <h3>Connect in 10 seconds</h3>
+        <p>Enter your Sleeper username and Razzle pulls your leagues, rosters, standings, and transaction history. No passwords. No API keys. Just your username.</p>
+        <a href="/league-intel.html" class="btn-chunky btn-primary" style="font-size:13px; padding:8px 20px; display:inline-block; text-decoration:none;">Connect Sleeper</a>
+        <span class="bureau-note" style="margin-left:12px;">free to connect. Pro unlocks full intel.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- MASCOT -->
 <div class="section">
   <div class="section-label">Meet Your GM</div>
@@ -1068,15 +1223,6 @@
         <span class="mascot-trait">your GM</span>
       </div>
     </div>
-  </div>
-</div>
-
-<!-- LIVE FROM THE LAB -->
-<div class="section" id="featuredSection" style="display:none;">
-  <div class="section-label">Live from The Lab</div>
-  <h2>Real data. Real players. Right now.</h2>
-  <div id="featuredCards" class="featured-grid">
-    <div style="text-align:center; padding:32px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light); grid-column:1/-1;">pulling film...</div>
   </div>
 </div>
 

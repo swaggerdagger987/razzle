@@ -1,11 +1,11 @@
 # Razzle Ship Loop — Task Tracker
 
 ## Current State
-- Phase: D (Situation Room — Production Hardening)
-- Current Task: COMPLETE
-- Current Stage: PHASE GATE
-- Tasks Completed: 8/8
-- Loop Iterations: 4
+- Phase: E (Landing Page + Conversion Funnel)
+- Current Task: E-2 (Situation Room demo)
+- Current Stage: BUILD
+- Tasks Completed: 1/6
+- Loop Iterations: 5
 
 ## Phase A: Visual & Design Audit (Mar 12–18)
 **Exit Criterion**: Open each of the three rooms plus the landing page. The visual language is unmistakably Razzle — warm sand, chunky borders, espresso ink, comic-strip energy. No page looks like it was built by a different team.
@@ -248,3 +248,56 @@
 **Size**: M
 **Status**: PASS
 **Attempts**: 1
+
+---
+
+## Phase E: Landing Page + Conversion Funnel (Apr 9–12)
+**Exit Criterion**: Send the razzle.lol URL to 5 friends who play fantasy football. Within 60 seconds, each one understands what Razzle is, finds something interesting in the Lab, and knows how to connect their league.
+
+### Task E-1: Landing page story
+**Requirement**: "Hero → 'The Lab' section (screener preview + CTA) → 'Bureau' section (Sleeper connection pitch) → 'Situation Room' section (demo + agent bios) → Pricing → Footer. 10-second scan tells the whole story."
+**Accept when**: Landing page communicates value proposition clearly. Bureau section exists between Lab and Situation Room. Flow is Hero → Problem → Lab → Bureau → Situation Room → Pricing → Footer.
+**Depends on**: none
+**Size**: L
+**Status**: PASS
+**Attempts**: 1
+
+### Task E-2: Situation Room demo
+**Requirement**: "Mini pixel canvas + 55 pre-built briefing permutations rotate on visit. Agents working, content redacted (???, !!!, ...). CTA: 'This is a real manager's Situation Room.'"
+**Accept when**: Demo creates curiosity and demonstrates product.
+**Depends on**: none
+**Size**: M
+**Status**: PENDING
+**Attempts**: 0
+
+### Task E-3: Full funnel walkthrough
+**Requirement**: "Land on home → click to Lab → explore → connect Sleeper → see Bureau → click Situation Room CTA → see pricing → start trial → run first query. Every step works."
+**Accept when**: Zero dead ends in the conversion funnel.
+**Depends on**: E-1
+**Size**: L
+**Status**: PENDING
+**Attempts**: 0
+
+### Task E-4: Pricing page clarity
+**Requirement**: "Free / Pro / Elite tiers clearly differentiated. Feature matrix accurate. FAQ answers common objections. Trial CTA prominent."
+**Accept when**: A visitor knows exactly what they get at each tier.
+**Depends on**: none
+**Size**: M
+**Status**: PENDING
+**Attempts**: 0
+
+### Task E-5: Trial onboarding
+**Requirement**: "Register → 7-day Pro trial auto-starts → Sleeper prompt → welcome state with CTAs → trial badge in nav → expiry warning at 2 days."
+**Accept when**: Trial experience is smooth and drives conversion.
+**Depends on**: E-3
+**Size**: M
+**Status**: PENDING
+**Attempts**: 0
+
+### Task E-6: og:image + social previews
+**Requirement**: "Share razzle.lol, any Lab URL, any panel URL on Reddit/Discord/Twitter. Preview card renders with branded image + description."
+**Accept when**: Every shareable link looks good in social previews.
+**Depends on**: none
+**Size**: S
+**Status**: PENDING
+**Attempts**: 0

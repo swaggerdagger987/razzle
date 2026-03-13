@@ -103,3 +103,15 @@ Full build history archived in `docs/PROGRESS_ARCHIVE.md`.
 ### Decisions Log
 
 ---
+
+## Ship Phase: Phase E — Landing Page + Conversion Funnel (Apr 9–12)
+
+**Goal**: The landing page is the 10-second pitch. The funnel is the path from curiosity to payment.
+
+**Exit Criterion**: Send the razzle.lol URL to 5 friends who play fantasy football. Within 60 seconds, each one understands what Razzle is, finds something interesting in the Lab, and knows how to connect their league.
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| E-1 | Landing page story | DONE | Added Bureau of Intelligence section (3 feature cards: Manager Profiles, Trade Finder, Pressure Map + Sleeper connect CTA) between Draft Season and Situation Room. Reorganized page flow: Hero → Research Sprawl → Lab Features → Live Data → Draft Season → Bureau → Mascot → Agent Bios → War Room Demo → Pricing → CTA → Footer. Bureau uses --bg-warm, chunky 3px borders, hover-lift, responsive at 768px. |
+
+### Decisions Log
