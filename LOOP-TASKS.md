@@ -1,11 +1,11 @@
 # Razzle Ship Loop — Task Tracker
 
 ## Current State
-- Phase: C (Bureau of Intelligence — Production Hardening)
-- Current Task: COMPLETE
-- Current Stage: PHASE GATE
-- Tasks Completed: 7/7
-- Loop Iterations: 3
+- Phase: D (Situation Room — Production Hardening)
+- Current Task: D-2 (Agent execution QA)
+- Current Stage: BUILD
+- Tasks Completed: 1/8
+- Loop Iterations: 4
 
 ## Phase A: Visual & Design Audit (Mar 12–18)
 **Exit Criterion**: Open each of the three rooms plus the landing page. The visual language is unmistakably Razzle — warm sand, chunky borders, espresso ink, comic-strip energy. No page looks like it was built by a different team.
@@ -179,3 +179,72 @@
 **Size**: M
 **Status**: PASS
 **Attempts**: 1
+
+---
+
+## Phase D: Situation Room — Production Hardening (Apr 2–8)
+**Exit Criterion**: A paying user enters a real fantasy scenario and gets a briefing that feels like it was written by a team of analysts who know their league. The pixel agents feel alive. The experience justifies $240/year.
+
+### Task D-1: First-run experience
+**Requirement**: "New user with no API key: sees demo briefing cards, understands what the product does, knows how to configure. BYOK setup flow is clear. First-time user can go from zero to first real query in under 2 minutes."
+**Accept when**: First-time user can go from zero to first real query in under 2 minutes. Setup steps are numbered and obvious.
+**Depends on**: none
+**Size**: M
+**Status**: PASS
+**Attempts**: 1
+
+### Task D-2: Agent execution QA
+**Requirement**: "Run 10 diverse scenarios across formats (redraft start/sit, dynasty trade, keeper decision, injury impact, waiver claim). All 5 specialists + Razzle synthesis must return structured responses."
+**Accept when**: 10/10 scenarios produce useful, well-structured briefings.
+**Depends on**: none
+**Size**: L
+**Status**: PENDING
+**Attempts**: 0
+
+### Task D-3: Cross-agent triggers
+**Requirement**: "Verify trigger patterns fire correctly: Medical injury → Scout handcuff check, Quant low odds → Diplomat rebuild trade, etc. Follow-up cards render with cross-reference badges."
+**Accept when**: Cross-agent intelligence visibly adds value.
+**Depends on**: D-2
+**Size**: M
+**Status**: PENDING
+**Attempts**: 0
+
+### Task D-4: Context bridge verification
+**Requirement**: "Free mode: generic player data in agent context. Pro mode: league roster, scoring settings, rival rosters visible in agent responses. The difference is obvious."
+**Accept when**: Pro responses clearly reference user's specific league context.
+**Depends on**: D-2
+**Size**: M
+**Status**: PENDING
+**Attempts**: 0
+
+### Task D-5: Pixel canvas performance
+**Requirement**: "Canvas renders at 60fps. 6 agents walk, work, visit stations. Activity bubbles appear. No memory leaks on long sessions. Agent selection + camera follow works."
+**Accept when**: Canvas feels alive and performant.
+**Depends on**: none
+**Size**: M
+**Status**: PENDING
+**Attempts**: 0
+
+### Task D-6: "What can I ask?" panel
+**Requirement**: "Format-organized question reference renders. Clicking a question populates textarea. Questions cover redraft, dynasty, keeper, best ball, universal."
+**Accept when**: Panel helps users understand capabilities.
+**Depends on**: none
+**Size**: S
+**Status**: PENDING
+**Attempts**: 0
+
+### Task D-7: Error handling
+**Requirement**: "LLM timeout (>20s) shows graceful message. Invalid API key shows clear error. Rate limit hit shows retry guidance. Network failure recovers cleanly."
+**Accept when**: Every error state has a clear, helpful message.
+**Depends on**: D-2
+**Size**: M
+**Status**: PENDING
+**Attempts**: 0
+
+### Task D-8: BYOK cloud sync
+**Requirement**: "Save key to cloud (encrypted) → load on different browser → key decrypts and works. Auth + Pro tier check works."
+**Accept when**: Cloud sync is reliable for paying users.
+**Depends on**: none
+**Size**: M
+**Status**: PENDING
+**Attempts**: 0

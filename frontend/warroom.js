@@ -1650,18 +1650,62 @@ function setupScenarioPanel() {
 }
 
 function updateApiKeyNotice() {
-  var notice = document.getElementById('apiKeyNotice');
   var runBtn = document.getElementById('scenarioRunAll');
-  if (!notice) return;
   var hasKey = AGENT_DEFS.some(function(_, i) { return getAgentSettings(i).apiKey; });
   var elite = isEliteUser();
   var canRun = hasKey || elite;
-  notice.style.display = canRun ? 'none' : 'block';
   if (runBtn) {
     runBtn.disabled = !canRun;
     runBtn.title = canRun ? '' : 'Set an API key in the config panel first';
   }
+  updateSetupGuide();
 }
+
+// ── FIRST-RUN SETUP GUIDE ──────────────────────────────────────────────
+function updateSetupGuide() {
+  var guide = document.getElementById('setupGuide');
+  if (!guide) return;
+
+  // Don't show if dismissed or user already ran a query
+  if (localStorage.getItem('razzle_setup_dismissed')) { guide.style.display = 'none'; return; }
+  if (localStorage.getItem('razzle_first_query_done')) { guide.style.display = 'none'; return; }
+
+  var hasKey = AGENT_DEFS.some(function(_, i) { return getAgentSettings(i).apiKey; });
+  var elite = isEliteUser();
+
+  // Don't show for Elite users (they don't need BYOK setup)
+  if (elite) { guide.style.display = 'none'; return; }
+
+  guide.style.display = 'block';
+
+  // Update step 1 checkmark
+  var check1 = document.getElementById('setupCheck1');
+  var step1 = document.getElementById('setupStep1');
+  if (hasKey) {
+    check1.textContent = '\u2713';
+    check1.style.background = 'var(--green)';
+    step1.style.borderColor = 'var(--green)';
+    step1.style.opacity = '0.6';
+  } else {
+    check1.textContent = '1';
+    check1.style.background = 'var(--orange)';
+    step1.style.borderColor = 'var(--ink-faint)';
+    step1.style.opacity = '1';
+  }
+}
+
+function dismissSetupGuide() {
+  localStorage.setItem('razzle_setup_dismissed', '1');
+  var guide = document.getElementById('setupGuide');
+  if (guide) guide.style.display = 'none';
+}
+
+// Auto-dismiss setup guide on first successful query
+window.addEventListener('razzle:agents-starting', function() {
+  localStorage.setItem('razzle_first_query_done', '1');
+  var guide = document.getElementById('setupGuide');
+  if (guide) guide.style.display = 'none';
+});
 
 function renderContextBadges() {
   var host = document.getElementById('contextBadges');

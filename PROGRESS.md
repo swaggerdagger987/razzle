@@ -82,3 +82,24 @@ Full build history archived in `docs/PROGRESS_ARCHIVE.md`.
 ### Decisions Log
 
 ---
+
+## Ship Phase: Phase D — Situation Room Production Hardening (Apr 2–8)
+
+**Goal**: Make the Situation Room feel like premium intelligence, not a tech demo. First-run experience, agent execution, cross-agent triggers, context bridge, pixel canvas, error handling, BYOK cloud sync.
+
+**Exit Criterion**: A paying user enters a real fantasy scenario and gets a briefing that feels like it was written by a team of analysts who know their league. The pixel agents feel alive. The experience justifies $240/year.
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| D-1 | First-run experience | DONE | Replaced flat API key notice with 3-step setup guide (chunky card, numbered orange circles). Step 1: get key at openrouter.ai + paste in Config (auto-opens panel + focuses input). Step 2: type/pick scenario. Step 3: Run All Agents. Step 1 shows green checkmark when key applied. Guide auto-dismisses on first query (razzle:agents-starting event) or manual dismiss. Elite users skip (server-side AI). Demo briefings still show independently below. |
+| D-2 | Agent execution QA | | |
+| D-3 | Cross-agent triggers | | |
+| D-4 | Context bridge verification | | |
+| D-5 | Pixel canvas performance | | |
+| D-6 | "What can I ask?" panel | | |
+| D-7 | Error handling | | |
+| D-8 | BYOK cloud sync | | |
+
+### Decisions Log
+
+---
