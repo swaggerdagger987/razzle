@@ -1,245 +1,223 @@
 # Razzle Development Roadmap
 
 **Hard Deadline: NFL Draft Week (April 24, 2026)**
-
-## Strategic Framing
-
-~7 weeks until the NFL Draft. The goal is NOT to ship the entire platform. The goal is to have a free tool on Reddit that dynasty and fantasy power users can't stop screenshotting. Everything else follows from that.
-
-**The Lab is what gets screenshotted, shared, and linked.** If The Lab is excellent, everything else has a distribution channel. If The Lab doesn't exist, nothing else matters.
-
-## What Ships By Draft Week vs. Later
-
-### Ships by April 24
-- The Lab: full screener (nflverse + college data)
-- Custom formula builder + saved formulas
-- Radar charts + scatter plots
-- Shareable URLs with Razzle watermark
-- Image export (Share to Reddit)
-- Landing page with Situation Room teaser
-- Basic Sleeper connection (show leagues)
-
-### Ships by May–June (Pre-Season Build)
-- The Situation Room: pixel agent canvas + agent personas + scenario runner
-- Agent page (agents.html) wired into nav
-- OpenRouter LLM integration (browser-side, API key per user)
-- Context bridge: Lab + League Intel data feeds into agent prompts
-- Free generic mode + paid league-contextualized mode (gated)
-- Formula Store (marketplace)
-
-### Ships Later (Summer / Season)
-- League Intel behavioral profiles (manager profiling from Sleeper history)
-- Auth + Stripe payments ($240/yr)
-- Agent memory (multi-season per-league persistence)
-- Weekly Razzle briefings (automated)
-- AdSense integration
+**Today: March 12, 2026 — 6 weeks out**
 
 ---
 
-## Phase 0: Foundation (Days 1-3, Mar 9-11)
+## Where We Are
 
-Clean repo, working local dev, data pipeline confirmed. Zero feature work — just scaffolding.
+162 development phases completed. All three pillars from the North Star are built: The Lab (74 HTML pages, 70+ analytical panels, full screener with formulas/visualizations/export), the Bureau of Intelligence (Sleeper connection, manager profiling, trade finder, pressure maps, activity feeds), and the Situation Room (pixel canvas, 6 agent personas, LLM integration, cross-agent triggers, BYOK cloud sync, format-aware queries). Auth, Stripe billing, tiered gating (Free/Pro/Elite), 7-day trial, early adopter pricing, and production infrastructure (security headers, rate limiting, encrypted key storage, 59+ tests) are all in place.
+
+**The features exist. What remains is making them production-quality, visually cohesive, and ready for real users to hit on Draft Day.**
+
+---
+
+## Strategic Framing (Updated)
+
+The original roadmap was a build plan. This roadmap is a ship plan.
+
+The Lab, the Bureau, and the Situation Room all function — but they were built across 162 incremental phases by an autonomous agent. That means inconsistencies have accumulated: design drift across 74 pages, UX flows that were never tested as a cohesive journey, performance under real concurrent load, and edge cases that only surface when strangers use the product for the first time.
+
+**The goal for the next 6 weeks is not new features. It is production confidence.**
+
+Three things must be true by April 24:
+
+1. A Reddit power user lands on razzle.lol, explores The Lab, screenshots something, and shares it — and the link back works flawlessly.
+2. A curious user connects Sleeper, sees their leagues in the Bureau, and the upgrade path to the Situation Room is obvious and compelling.
+3. A paying user runs a scenario in the Situation Room, gets a league-contextualized briefing, and it feels like magic — not a prototype.
+
+---
+
+## What Ships By Draft Week (April 24)
+
+### Must Have (Launch Blockers)
+- All three rooms production-quality: no dead links, no broken JS, no layout bugs
+- The Lab → Bureau → Situation Room conversion funnel tested end-to-end with real Sleeper data
+- Landing page tells the story in under 10 seconds
+- Every shareable URL resolves correctly with og:image preview cards
+- Image export with watermark works on the top 10 most-used Lab views
+- Render deployment stable under load (health checks, error recovery, DB connection pooling)
+
+### Should Have (Launch Day Polish)
+- Mobile-responsive Lab (table is usable on phone — even if not ideal)
+- Situation Room first-run experience guides new users to a successful first query
+- Pricing page clearly communicates Free vs Pro vs Elite value
+- Data freshness: 2025 NFL season stats current through end of regular season + playoffs
+
+### Won't Ship By Draft
+- DFS or IDP support
+- Formula Store paid listings (marketplace commission)
+- Agent memory persistence across seasons
+- Weekly automated briefings
+- Native mobile app
+
+---
+
+## Phase A: Visual & Design Audit (Mar 12–18, 1 week)
+
+Systematic pass across all three rooms to enforce the design guide. 162 phases of incremental work means design drift is guaranteed.
 
 | # | Task | Detail | Done When |
 |---|------|--------|-----------|
-| 1 | Project structure | Folders: /frontend, /backend, /data, /adapters, /scripts. Vanilla HTML/JS/CSS. | Folder structure in place |
-| 2 | nflverse adapter | `adapters/nflverse_adapter.py`: fetch CSVs, normalize to common schema, write to SQLite | `python adapters/nflverse_adapter.py` populates terminal.db with 2024-25 data |
-| 3 | Serving layer | FastAPI app. `GET /api/players?filters=...` returns JSON | `curl localhost:8000/api/players` returns player data |
-| 4 | Local dev confirmed | Frontend served locally. API calls work end to end. | Browser shows raw player data from API |
-| 5 | Deploy to Render | Push backend + static frontend. Confirm it runs on Render with SQLite. | razzle.lol returns data |
+| 1 | Design token audit | Verify every page uses correct CSS variables: `--bg` (#ede0cf), `--ink` (#2d1f14), `--orange` (#d97757). Hunt for hardcoded hex values, gray tones, or thin 1px borders that violate the guide. | Zero hardcoded colors outside CSS variables in styles.css |
+| 2 | Typography audit | Confirm three-font rule: Garfield/Luckiest Guy for display, Space Mono for data, Caveat only for annotations. Check font loading (preconnect, display:swap). | Every page uses correct fonts for correct purposes |
+| 3 | Component consistency | Cards, buttons, chips, badges — verify 3px borders, 4px 4px 0 shadows, hover-lift behavior across all 74 pages. Spot-check 10 representative panels. | Consistent chunky aesthetic across Lab panels, Bureau, Situation Room |
+| 4 | Situation Room dark mode | Verify agents.html uses `--bg-ink` (#1a110a) always-dark regardless of theme toggle. Canvas, briefing cards, config panel all dark. | Situation Room is always dark, rest of site respects theme toggle |
+| 5 | Position color consistency | QB=blue, RB=teal, WR=terracotta, TE=purple — audit Lab table, panel charts, Bureau roster views, agent briefing cards. | Position colors consistent across all three rooms |
+| 6 | Loading state audit | Every async flow shows personality loading text ("pulling film...", "checking the tape..."), not generic spinners or blank states. | Zero generic "Loading..." strings remain |
 
-**Exit criterion:** Open a browser, hit API, see real NFL player stats from SQLite. No UI yet — just plumbing.
+**Exit criterion:** Open each of the three rooms plus the landing page. The visual language is unmistakably Razzle — warm sand, chunky borders, espresso ink, comic-strip energy. No page looks like it was built by a different team.
 
 ---
 
-## Phase 1: The Lab — Core Screener (Days 4-12, Mar 12-20)
+## Phase B: The Lab — Production Hardening (Mar 19–25, 1 week)
 
-The screener IS the product. If this is good, Reddit will come.
+The Lab is the growth engine. It must be bulletproof for strangers.
 
 | # | Task | Detail | Done When |
 |---|------|--------|-----------|
-| 1 | Screener table UI | Sortable, filterable data table. 100+ columns. Horizontal scroll. Sticky player name column. Position filter tabs. | Table renders all players with sort + filter |
-| 2 | Advanced filtering | Multi-condition filter builder: stat > threshold AND/OR logic. Persist in URL params. | Can filter: snap% > 60 AND target share > 20% |
-| 3 | Column picker | Toggle which columns visible. Presets for common views (PPR, dynasty, efficiency). | User can show/hide any column, presets work |
-| 4 | Season / week selector | Toggle between full-season aggregates and per-week breakdowns. Multi-season for career view. | Can switch between 2024 season, Week 1-18, career |
-| 5 | Relevance tier toggle | Fantasy-relevant players vs. full universe. Default to relevant. | Toggle switches between ~200 relevant and ~600+ full |
-| 6 | Search + URL state | Search bar for player name. Full screener state serialized to URL. | Copy URL → paste in new tab → exact same view |
-| 7 | NFL/NCAA toggle | Switch between NFL and college stats in screener. Blue accent for NCAA mode. | Toggle switches data source and column set |
+| 1 | Core screener stress test | Load Lab with 600+ players. Sort every column. Apply 3+ filters simultaneously. Verify no JS errors, no layout breaks, pagination works. | Screener handles full dataset without errors |
+| 2 | Formula builder QA | Create formula → save → refresh → loads. Share formula URL → opens in new browser → exact same formula + sort. Delete formula → gone. | Full formula CRUD lifecycle works across sessions and URLs |
+| 3 | Visualization QA | Radar chart with 2-player overlay renders correctly. Scatter plot dots are clickable. Trend chart shows weekly data. No canvas rendering bugs. | All chart types render correctly with real data |
+| 4 | Panel audit (top 20) | Test the 20 highest-value Lab panels (dynasty rankings, trade values, breakout finder, aging curves, rookie big board, matchup heatmap, etc). Each must: load data, render correctly, handle empty states, export cleanly. | Top 20 panels verified working |
+| 5 | Export & sharing | PNG export on screener view, radar chart, scatter plot. Watermark ("razzle.lol") baked in. Clean aspect ratio. Shareable URLs resolve with og:image. | Exported PNGs look screenshot-worthy with watermark |
+| 6 | URL state integrity | Serialize screener state (filters, sort, columns, formula) → copy URL → paste in incognito → exact same view loads. Test 5 complex screener configs. | URL state round-trips perfectly |
+| 7 | Performance | Lab initial load < 2 seconds. Screener filter response < 500ms. No jank on sort/filter. Pagination smooth. | Lab feels fast and responsive |
 
-**Exit criterion:** The Lab loads with real data, filters work, share a URL that reproduces the exact view. Feels fast and dense.
+**Exit criterion:** Hand the Lab URL to a fantasy football stranger. They can explore, filter, create a formula, export an image, and share a link — all without hitting a single bug. The exported image makes them want to post it on Reddit.
 
 ---
 
-## Phase 2: Formulas + Visualizations (Days 13-22, Mar 21-30)
+## Phase C: Bureau of Intelligence — Production Hardening (Mar 26–Apr 1, 1 week)
 
-Custom formulas are the "look what I built" hook. Charts are the "look at this comparison" hook. Both are screenshot bait.
+The Bureau is the conversion bridge. Connecting Sleeper must feel seamless, and the league data must make users want more.
 
 | # | Task | Detail | Done When |
 |---|------|--------|-----------|
-| 1 | Formula builder UI | Stat dropdowns + weight sliders + name field. Formula = weighted composite. | User creates a formula, it appears as sortable column |
-| 2 | Formula persistence | Save formulas to localStorage. Load on return. Encode in shareable URL. | Formulas survive refresh and are shareable |
-| 3 | Radar charts | 5-6 stat pentagon/hexagon. Select stats from dropdowns. Overlay two players. | Radar chart renders, comparison overlay works |
-| 4 | Scatter plots | Any stat vs. any stat. Clickable player dots with tooltips. Color by position. | Scatter plot with real data, click dot → see player |
-| 5 | Trend charts | Stat over weeks for selected player. Multi-player overlay. | Select player → see weekly stat trajectory |
-| 6 | Comparison mode | Side-by-side player cards with stat overlays and radar charts. | Pick 2-3 players → see comparison view |
+| 1 | Sleeper connection flow | Enter username → fetch leagues → display roster for each league. Test with 5+ real Sleeper usernames (different league counts, different formats). Handle: invalid username, API timeout, user with 0 leagues. | Sleeper flow works for real users with proper error handling |
+| 2 | League data rendering | Rosters, standings, transactions render correctly. Bye weeks display. Position depth visible. No stale or missing data. | League data is accurate and complete |
+| 3 | Manager profiling | Behavioral profiles (panic history, FAAB patterns, trade tendencies) generate correctly for multi-season leagues. Profiles render in comic-strip card style. | Manager profiles render with real behavioral data |
+| 4 | Trade finder QA | League-specific trade finder: value matching works, position need/surplus detection accurate, trade partner cards render with correct data. | Trade suggestions are reasonable and well-presented |
+| 5 | Pressure map QA | Desperation scores calculate correctly. Color coding (red=desperate, green=comfortable) renders. Pro gating works (top 3 free, rest blurred). | Pressure map provides useful signal |
+| 6 | Bureau → Situation Room bridge | "Ask the Diplomat" CTAs from trade finder and pressure map pre-populate scenario input in Situation Room. Cross-page handoff works via localStorage. | Clicking CTA in Bureau lands in Situation Room with pre-filled scenario |
+| 7 | Free vs Pro gating | Free users see: leagues, rosters, basic standings, top 3 pressure entries. Pro features (full profiles, trade finder, full pressure map) show blurred preview + upgrade CTA. | Gating is clear, upgrade path is obvious, no content leaks |
 
-**Exit criterion:** Create a custom WR formula, sort screener by it, open radar chart comparing two players, and it looks like something a Reddit power user would screenshot.
+**Exit criterion:** Connect a real Sleeper account. Browse leagues, see manager profiles, find trade partners, and click through to the Situation Room — all without friction. The free tier shows enough value to hook; the gated content makes Pro feel worth it.
 
 ---
 
-## Phase 3: Sharing Engine + Watermark (Days 23-28, Mar 31-Apr 5)
+## Phase D: Situation Room — Production Hardening (Apr 2–8, 1 week)
 
-Without this phase, everything is invisible. With it, every screenshot is a billboard.
+The Situation Room is the revenue product. It must feel like premium intelligence, not a tech demo.
 
 | # | Task | Detail | Done When |
 |---|------|--------|-----------|
-| 1 | Razzle watermark | CSS-positioned fixed element: "razzle.lol" in bottom-right. Always visible. | Watermark visible on Lab page at all times |
-| 2 | Image export | HTML Canvas render of current view. Watermark baked in. Download as PNG. | Click export → get PNG with watermark |
-| 3 | Share to Reddit button | Clean aspect ratio image, title suggestion, direct link back to Razzle URL. | One click → image + suggested post ready |
-| 4 | Shareable URL polish | ALL state serializes cleanly. Preview card (og:image) for link posts. | Share link on Discord/Reddit → preview card shows |
+| 1 | First-run experience | New user with no API key: sees demo briefing cards, understands what the product does, knows how to configure. BYOK setup flow is clear. | First-time user can go from zero to first real query in under 2 minutes |
+| 2 | Agent execution QA | Run 10 diverse scenarios across formats (redraft start/sit, dynasty trade, keeper decision, injury impact, waiver claim). All 5 specialists + Razzle synthesis must return structured responses. | 10/10 scenarios produce useful, well-structured briefings |
+| 3 | Cross-agent triggers | Verify trigger patterns fire correctly: Medical injury → Scout handcuff check, Quant low odds → Diplomat rebuild trade, etc. Follow-up cards render with cross-reference badges. | Cross-agent intelligence visibly adds value |
+| 4 | Context bridge verification | Free mode: generic player data in agent context. Pro mode: league roster, scoring settings, rival rosters visible in agent responses. The difference is obvious. | Pro responses clearly reference user's specific league context |
+| 5 | Pixel canvas performance | Canvas renders at 60fps. 6 agents walk, work, visit stations. Activity bubbles appear. No memory leaks on long sessions. Agent selection + camera follow works. | Canvas feels alive and performant |
+| 6 | "What can I ask?" panel | Format-organized question reference renders. Clicking a question populates textarea. Questions cover redraft, dynasty, keeper, best ball, universal. | Panel helps users understand capabilities |
+| 7 | Error handling | LLM timeout (>20s) shows graceful message. Invalid API key shows clear error. Rate limit hit shows retry guidance. Network failure recovers cleanly. | Every error state has a clear, helpful message |
+| 8 | BYOK cloud sync | Save key to cloud (encrypted) → load on different browser → key decrypts and works. Auth + Pro tier check works. | Cloud sync is reliable for paying users |
 
-**Exit criterion:** Every screenshot or link shared drives traffic back. Watermark is tasteful but unmissable. Sharing flow is frictionless.
+**Exit criterion:** A paying user enters a real fantasy scenario ("Should I trade Ja'Marr Chase for 2 first-round picks in my 12-team SF dynasty league?") and gets a briefing that feels like it was written by a team of analysts who know their league. The pixel agents feel alive. The experience justifies $240/year.
 
 ---
 
-## Phase 4: Landing Page + Sleeper Connection (Days 29-35, Apr 6-12)
+## Phase E: Landing Page + Conversion Funnel (Apr 9–12, 4 days)
+
+The landing page is the 10-second pitch. The funnel is the path from curiosity to payment.
 
 | # | Task | Detail | Done When |
 |---|------|--------|-----------|
-| 1 | Landing page | Hero + CTA to Lab. Sections: Lab preview, agent teasers, Situation Room demo placeholder. Razzle mascot featured. | Landing page looks polished |
-| 2 | Situation Room demo (static) | 10-15 pre-built anonymized demo scripts. Razzle "working" with redacted outputs. | Demo plays on landing page |
-| 3 | Sleeper connection | Input Sleeper username → fetch leagues → display rosters on league-intel page. | User enters username → sees leagues |
-| 4 | League Intel (free tier) | Show leagues, rosters, standings, bye weeks, position depth. | Connected user sees league structure |
-| 5 | Waitlist / email capture | Email capture for Situation Room launch notifications. | Users can sign up |
+| 1 | Landing page story | Hero → "The Lab" section (screener preview + CTA) → "Bureau" section (Sleeper connection pitch) → "Situation Room" section (demo + agent bios) → Pricing → Footer. 10-second scan tells the whole story. | Landing page communicates value proposition clearly |
+| 2 | Situation Room demo | Mini pixel canvas + 55 pre-built briefing permutations rotate on visit. Agents working, content redacted (???, !!!, ...). CTA: "This is a real manager's Situation Room." | Demo creates curiosity and demonstrates product |
+| 3 | Full funnel walkthrough | Land on home → click to Lab → explore → connect Sleeper → see Bureau → click Situation Room CTA → see pricing → start trial → run first query. Every step works. | Zero dead ends in the conversion funnel |
+| 4 | Pricing page clarity | Free / Pro / Elite tiers clearly differentiated. Feature matrix accurate. FAQ answers common objections. Trial CTA prominent. | A visitor knows exactly what they get at each tier |
+| 5 | Trial onboarding | Register → 7-day Pro trial auto-starts → Sleeper prompt → welcome state with CTAs → trial badge in nav → expiry warning at 2 days. | Trial experience is smooth and drives conversion |
+| 6 | og:image + social previews | Share razzle.lol, any Lab URL, any panel URL on Reddit/Discord/Twitter. Preview card renders with branded image + description. | Every shareable link looks good in social previews |
 
-**Exit criterion:** New visitor lands on home, sees polished pitch, clicks to Lab, explores data, connects Sleeper, sees leagues, optionally joins waitlist.
-
----
-
-## Phase 5: Reddit Launch (Days 36-42, Apr 13-19)
-
-| Day | Action | Detail |
-|-----|--------|--------|
-| 36-37 | Seed posts (value-first) | 3-4 analysis posts using Lab screenshots. No promotion — pure analysis. Watermark does marketing. |
-| 38 | Community engagement | Respond to comments. Be most useful person in thread. Drop Lab links organically. |
-| 39-40 | Tool reveal post | "I built a free Bloomberg terminal for fantasy football." Show screener, formulas, charts. |
-| 41-42 | Sustain + iterate | Keep posting. Monitor feedback. Fix bugs. Post in r/SleeperApp about Sleeper connection. |
-
-**Target subreddits:** r/DynastyFF, r/fantasyfootball, r/SleeperApp, r/FantasyFootballers
+**Exit criterion:** Send the razzle.lol URL to 5 friends who play fantasy football. Within 60 seconds, each one understands what Razzle is, finds something interesting in the Lab, and knows how to connect their league.
 
 ---
 
-## Phase 6: Situation Room — Pixel Engine + Agent Canvas (Days 43-52, Apr 20-29)
+## Phase F: Data Refresh + Backend Hardening (Apr 13–16, 4 days)
 
-The Situation Room is the paid product's visual identity. Pixel agents living in a room makes Razzle feel alive. Reference FDL's `pixel-agents/index.html` for the proven canvas engine.
+Stale data kills credibility instantly.
 
 | # | Task | Detail | Done When |
 |---|------|--------|-----------|
-| 1 | agents.html page | New page in nav: "Situation Room". Razzle design system, hero section "Six Minds. One Situation Room." | Page exists, nav links to it, follows design guide |
-| 2 | Pixel agent sprite sheets | 6 character PNGs (16×24 frames, 7×4 grid). Razzle tiger + 5 NFL team animals. Port FDL's char_0–5.png or create new. | 6 sprite files in `frontend/assets/characters/` |
-| 3 | Canvas Situation Room engine | Full-screen canvas: 30×22 tile grid, wood floor + turf war table, furniture sprites, collision map. Port from FDL's pixel-agents/index.html. | Canvas renders the room with furniture, floor, turf table |
-| 4 | Agent AI + animation | State machine: IDLE → WALK → WORK_DESK → ANALYZE_BOARD → DISCUSS → THINK → COFFEE. Walk frames cycle at 150ms. Collision detection with furniture. | Agents walk around room autonomously, visit stations, show activity bubbles |
-| 5 | Agent selection + camera | Click agent to select (dashed ellipse highlight). Camera follows selected agent. D-pad controls for manual movement. Agent name tags + role labels. | Can click agents, camera tracks, D-pad works |
-| 6 | Agent roster sidebar | Overlay panel showing all 6 agents: pixel avatar, name, role, current activity status. Click to select + pan camera. | Roster visible, click agent → selects + pans |
+| 1 | 2025 season data | nflverse adapter pulls complete 2025 regular season + playoff data. All stats current through Super Bowl. | terminal.db has full 2025 season |
+| 2 | College data refresh | cfbfastR adapter pulls 2025 college season. Draft class prospects have current combine/pro day data if available. | College stats current for 2026 draft class |
+| 3 | Render deployment QA | Deploy to Render. Health check passes. DB downloads from GitHub release. All 63+ API endpoints return 200. Auth flow works. Billing webhooks fire. | razzle.lol is fully functional in production |
+| 4 | Load testing | Simulate 50 concurrent users hitting Lab endpoints. API response times < 1s under load. No SQLite locking issues. | Backend handles launch-day traffic |
+| 5 | Test suite green | All 59+ tests pass. Run full suite against production-like config. No regressions from QA fixes. | CI is green, zero test failures |
+| 6 | Error monitoring | Structured logging captures all 4xx/5xx errors with context. Server startup validates all env vars. Unhandled exceptions don't crash the process. | Errors are visible and diagnosable in production |
 
-**Agent Roster (from North Star):**
-
-| # | Name | Animal | Role | Color |
-|---|------|--------|------|-------|
-| 0 | **Razzle** | Bengal Tiger | Chief of Staff / Orchestrator | Terracotta #d97757 |
-| 1 | **TBD** | TBD (NFL team animal) | Medical Analyst | Blue #5b7fff |
-| 2 | **TBD** | TBD (NFL team animal) | Scout | Teal #2ec4b6 |
-| 3 | **TBD** | TBD (NFL team animal) | Diplomat | Purple #8b5cf6 |
-| 4 | **TBD** | TBD (NFL team animal) | Quant | Orange #e87422 |
-| 5 | **TBD** | TBD (NFL team animal) | Historian | Red #d44040 |
-
-**Exit criterion:** agents.html loads with a live pixel Situation Room. 6 agents walk around, work at desks, visit the war table. Clicking an agent selects them. Room looks like an NFL war room with the Razzle comic-strip aesthetic. Feels alive.
+**Exit criterion:** razzle.lol is deployed with fresh 2025 data, handles concurrent load, and has monitoring in place to catch issues on launch day.
 
 ---
 
-## Phase 7: Situation Room — Agent Personas + Scenario Runner (Days 53-62, Apr 30-May 9)
+## Phase G: Reddit Launch Prep + Content (Apr 17–23, 1 week)
 
-The brains behind the pixels. Each agent gets a persona prompt, structured output format, and the scenario panel lets users ask questions.
+Everything before this phase was building. This phase is distribution.
 
 | # | Task | Detail | Done When |
 |---|------|--------|-----------|
-| 1 | Agent persona files | 6 markdown files in `agent-personas/`: personality, reasoning style, mandatory output sections. Port + adapt from FDL's persona files for Razzle brand. | 6 files in `agent-personas/`, each with role-specific output format |
-| 2 | Agent config panel | UI panel: per-agent API key + model selector + base URL. Default to OpenRouter + gpt-4o-mini. Store in localStorage. | User can set API keys, model persists across sessions |
-| 3 | Scenario input panel | Text area: "Describe the situation..." + "Run All Agents" / individual agent buttons. Scenario examples pre-loaded. | User types scenario, clicks run, sees loading state |
-| 4 | LLM integration | Browser-side fetch to OpenRouter (or custom base URL). Send persona + scenario + rules → receive structured response. 20s timeout, temperature 0.3. | Agent returns structured response from LLM provider |
-| 5 | Specialist agent execution | 5 specialists run in parallel. Each returns role-specific structured output (Medical: injury type + duration + risk; Scout: usage trend + breakout signal; etc). | All 5 specialists return structured responses |
-| 6 | Razzle orchestration | Razzle (agent 0) receives all 5 specialist outputs as peer insights. Synthesizes into prioritized brief with urgency tiers (URGENT, MONITOR, OPPORTUNITY) + conflict resolution. | Razzle synthesizes all specialist outputs into final brief |
-| 7 | Response rendering | Briefing cards per agent in Situation Room UI. Razzle's synthesis at top. Collapsible specialist details. Comic-strip card styling matching design guide. | Responses render as styled cards, Razzle brief is prominent |
+| 1 | Seed analysis posts (3-4) | Use Lab screenshots to post genuine analysis on r/DynastyFF and r/fantasyfootball. Pure value — watermark does the marketing. Topics: rookie rankings, dynasty buy-lows, offseason trade values, breakout candidates. | 3-4 posts published, watermark visible, engagement monitored |
+| 2 | Community engagement | Respond to comments helpfully. Be the most useful person in the thread. Drop Lab links organically when relevant. | Active presence in target subreddits |
+| 3 | Tool reveal post | "I built a free Bloomberg terminal for fantasy football." Screenshots of screener, formulas, charts, agent briefings. Link to razzle.lol. | Reveal post drafted and ready |
+| 4 | r/SleeperApp post | "Connect your Sleeper leagues to see AI-powered manager profiles." Highlight Bureau features. | SleeperApp-specific post drafted |
+| 5 | Bug triage process | Monitor for user-reported issues. Have a fast fix → deploy cycle ready. Prioritize anything that blocks the funnel. | Can ship a hotfix within 1 hour of report |
+| 6 | Analytics baseline | Track: landing page views, Lab usage, Sleeper connections, trial starts, paid conversions. Even simple server logs count. | Know if launch is working |
 
-**Mandatory Output Sections per Agent:**
-- **Razzle**: Urgency Tier, Conflicts and Resolution, GM Decision Needed
-- **Medical**: Injury Type/Mechanism, Injury History, Duration Out, Return-to-Play Risk
-- **Scout**: Usage Trend, Breakout Signal, Waiver Priority
-- **Diplomat**: Leverage Read, FAAB Range, Trade Opening / Walkaway
-- **Quant**: Current Value, Confidence Range, Optimal EV Path
-- **Historian**: League Precedent, Pattern Detected, Historical Risk
-
-**Exit criterion:** User types "Bijan Robinson questionable with knee injury" → 5 specialists respond in parallel → Razzle synthesizes → briefing cards render with structured analysis. Works with OpenRouter API key.
+**Exit criterion:** Razzle has a visible presence on Reddit before Draft Day. Power users are using The Lab. Some have connected Sleeper. The conversion funnel is live and measurable.
 
 ---
 
-## Phase 8: Situation Room — Context Bridge + Free/Paid Gating (Days 63-72, May 10-19)
+## Draft Week (April 24–26)
 
-Connect the Situation Room to real data. Free users get generic answers; paid users get league-contextualized intelligence.
-
-| # | Task | Detail | Done When |
-|---|------|--------|-----------|
-| 1 | Lab context feed | Agent prompts auto-include: player stats from screener selection, formula scores, comparison data. "What The Lab knows" section in prompt. | Selected players in Lab feed into agent context |
-| 2 | League Intel context feed | If Sleeper connected: include user's roster, league scoring settings, rival rosters, standings. "What League Intel knows" section in prompt. | Connected Sleeper data feeds into agent prompts |
-| 3 | Free vs. paid prompt tiers | Free mode: agent receives question + generic player data from SQLite. Paid mode: agent receives question + player data + full league context. | Both modes work, paid mode clearly richer |
-| 4 | Paywall UI gating | Situation Room page shows free generic mode by default. League-contextualized sections show blurred/redacted previews with "Unlock with Razzle Pro" CTA. | Free users see generic, paid content teased but gated |
-| 5 | Home page Situation Room demo upgrade | Replace static demo with 50-60 pre-built anonymized agent briefing permutations. Agents visibly "working" with redacted outputs (???, !!!, ...). Rotates on each visit. | Landing page shows live-looking Situation Room demo |
-| 6 | Agent bio cards | Public-facing bio cards for each agent: pixel avatar, name, animal, role description, "specialty" one-liner. Shown on landing page + Situation Room intro. | Agent bios visible on home + agents page |
-
-**Exit criterion:** Free user asks a question → gets generic agent analysis. Connected Sleeper user asks the same question → gets league-contextualized answer that references their roster and rivals. The difference is obvious and compelling. Home page demo looks alive.
+**Brand presence established.** Razzle is live on Reddit. The Lab is the most powerful free fantasy tool these subreddits have seen. The Bureau shows league intelligence. The Situation Room is converting trial users to paid. Every screenshot is a billboard.
 
 ---
 
-## Phase 9: Polish + Formula Store (Days 73-82, May 20-29)
+## Post-Draft (May–June): Growth + Depth
 
-Polish everything. Formula store creates community content and another Reddit growth channel.
+These are not launch blockers. They ship after Draft Week based on user feedback and conversion data.
 
-| # | Task | Detail | Done When |
-|---|------|--------|-----------|
-| 1 | Formula Store UI | Browse published formulas. Search/filter by position, stat type, rating. Creator name + description visible. Blended score visible, weights hidden. | Store page renders with formula cards |
-| 2 | Formula publishing | "Publish to Store" button in formula builder. Name, description, position tags. Weights stay hidden (creator IP protected). | User publishes formula, appears in store |
-| 3 | Formula ratings/reviews | Star rating + short review per formula. Sort by rating, popularity, newest. | Users can rate formulas, best rise to top |
-| 4 | Full UX polish pass | Loading states ("pulling film..."), error states, empty states, transitions, mobile responsiveness, favicon, 404 page. | Every page has proper loading/error/empty states |
-| 5 | Performance audit | Screener pagination, lazy loading, API response times, canvas frame rate. | Lab loads in <2s, Situation Room canvas runs at 60fps |
-| 6 | Deploy + smoke test | Full deploy to Render. Hit every page, every API endpoint, every feature. | razzle.lol fully functional end to end |
-
-**Exit criterion:** Complete product loop: land on home → explore Lab → create formula → publish to store → connect Sleeper → enter Situation Room → run agent scenario → see league-contextualized brief. Everything works, nothing crashes, design is cohesive.
+| Priority | Initiative | Detail |
+|----------|-----------|--------|
+| P1 | Agent memory persistence | Multi-season per-league memory. More seasons = richer profiles = higher switching cost. |
+| P1 | Weekly Razzle briefings | Automated weekly intel drops for paid users. Habit-forming retention mechanism. |
+| P2 | Formula Store marketplace | Paid listings with 15-20% Razzle commission. Community content + Reddit growth channel. |
+| P2 | IDP support | Defensive stats as filterable columns. Agents evaluate IDP same as offensive. |
+| P3 | DFS support | Ownership projections, correlation stacking, value formulas. |
+| P3 | AdSense optimization | Tune ad placement on free pages. Revenue target: cover server costs. |
 
 ---
 
-## Daily Execution Rules
+## Execution Rules
 
-1. **One phase at a time.** Do not start Phase 2 until Phase 1's exit criterion is met.
-2. **Ship ugly, then polish.** Working screener with raw CSS beats beautiful landing page with no product.
-3. **No auth until post-draft.** Use localStorage for formulas. Sleeper usernames as pseudo-identity.
-4. **Every coding session ends with a deploy.** If it's not on Render, it doesn't exist.
-5. **Screenshot test daily.** Would a Reddit power user post this? If no, that's priority.
-6. **Reddit is the customer.** Every decision filtered through: "Would this get upvoted on r/DynastyFF?"
+1. **No new features until Draft Day.** Every hour spent on a new panel is an hour not spent making the existing product bulletproof. The Lab has 70+ panels — make 20 of them excellent rather than adding panel 71.
+2. **Fix the funnel, not the edges.** If the landing page → Lab → Bureau → Situation Room path has a single broken step, that's priority over any polish work.
+3. **Every deploy gets a smoke test.** Hit the funnel: home → Lab → Bureau → Situation Room → pricing. If any page errors, fix before moving on.
+4. **Screenshot test.** After every phase, export a Lab screenshot. Would you post it on Reddit? If not, that's the priority.
+5. **Real Sleeper data.** Test the Bureau with real usernames, not mocks. Real data surfaces real bugs.
+6. **The Situation Room must justify $240/year.** Every QA pass of the Situation Room should be evaluated through the lens of: would I pay for this?
 
 ---
 
 ## Timeline Summary
 
-| Days | Phase | Deliverable | Calendar |
-|------|-------|-------------|----------|
-| 1-3 | Phase 0: Foundation | Repo + data pipeline + deploy | Mar 9-11 |
-| 4-12 | Phase 1: Lab Screener | Full filterable data table | Mar 12-20 |
-| 13-22 | Phase 2: Formulas + Viz | Custom formulas + charts | Mar 21-30 |
-| 23-28 | Phase 3: Sharing Engine | Watermark + export + URLs | Mar 31-Apr 5 |
-| 29-35 | Phase 4: Landing + Sleeper | Home page + league connection | Apr 6-12 |
-| 36-42 | Phase 5: Reddit Launch | Sustained content campaign | Apr 13-19 |
-| — | **NFL Draft Week** | **Brand presence established** | **Apr 24-26** |
-| 43-52 | Phase 6: Pixel Engine | Situation Room canvas + agent sprites + AI | Apr 20-29 |
-| 53-62 | Phase 7: Agent Brains | Personas + scenario runner + LLM | Apr 30-May 9 |
-| 63-72 | Phase 8: Context Bridge | Lab/League feeds + free/paid gating | May 10-19 |
-| 73-82 | Phase 9: Polish + Store | Formula store + full UX polish | May 20-29 |
+| Dates | Phase | Focus | Duration |
+|-------|-------|-------|----------|
+| Mar 12–18 | Phase A: Design Audit | Visual consistency across all rooms | 1 week |
+| Mar 19–25 | Phase B: Lab Hardening | Screener, formulas, viz, export bulletproof | 1 week |
+| Mar 26–Apr 1 | Phase C: Bureau Hardening | Sleeper flow, profiles, trade finder, gating | 1 week |
+| Apr 2–8 | Phase D: Situation Room Hardening | Agent execution, canvas, BYOK, error handling | 1 week |
+| Apr 9–12 | Phase E: Landing + Funnel | Story, demo, conversion path, trial flow | 4 days |
+| Apr 13–16 | Phase F: Data + Backend | Fresh data, deploy, load test, monitoring | 4 days |
+| Apr 17–23 | Phase G: Reddit Launch | Seed posts, reveal, community, analytics | 1 week |
+| **Apr 24–26** | **NFL Draft Week** | **Brand presence established** | — |
