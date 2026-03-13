@@ -2,9 +2,9 @@
 
 ## Current State
 - Phase: C (Bureau of Intelligence — Production Hardening)
-- Current Task: C-6
+- Current Task: C-7
 - Current Stage: BUILD
-- Tasks Completed: 5/7
+- Tasks Completed: 6/7
 - Loop Iterations: 3
 
 ## Phase A: Visual & Design Audit (Mar 12–18)
@@ -169,8 +169,8 @@
 **Accept when**: Clicking CTA in Bureau lands in Situation Room with pre-filled scenario.
 **Depends on**: C-4, C-5
 **Size**: S
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task C-7: Free vs Pro gating
 **Requirement**: "Free users see: leagues, rosters, basic standings, top 3 pressure entries. Pro features (full profiles, trade finder, full pressure map) show blurred preview + upgrade CTA. Gating is clear, upgrade path is obvious, no content leaks."
