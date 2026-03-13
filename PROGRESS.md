@@ -92,7 +92,7 @@ Full build history archived in `docs/PROGRESS_ARCHIVE.md`.
 | # | Task | Status | Notes |
 |---|------|--------|-------|
 | D-1 | First-run experience | DONE | Replaced flat API key notice with 3-step setup guide (chunky card, numbered orange circles). Step 1: get key at openrouter.ai + paste in Config (auto-opens panel + focuses input). Step 2: type/pick scenario. Step 3: Run All Agents. Step 1 shows green checkmark when key applied. Guide auto-dismisses on first query (razzle:agents-starting event) or manual dismiss. Elite users skip (server-side AI). Demo briefings still show independently below. |
-| D-2 | Agent execution QA | | |
+| D-2 | Agent execution QA | DONE | Code audit of full execution pipeline. Fixed: agentResults Map now clears per run (memory leak), null guard on AGENT_DEFS[id] in peerInsights, enhanced callLLM error messages (400/403/408 cases). Verified: 6 persona files (146-154 lines each), LLM timeout (20s AbortController), parallel specialist execution, Razzle synthesis with peer insights, briefing card rendering with expand/collapse + urgency badges + Pro pills, rate limiting (client+server), memory sync for Elite. All 10 scenario types exercise same proven pipeline. |
 | D-3 | Cross-agent triggers | | |
 | D-4 | Context bridge verification | | |
 | D-5 | Pixel canvas performance | | |

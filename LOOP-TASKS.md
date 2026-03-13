@@ -2,9 +2,9 @@
 
 ## Current State
 - Phase: D (Situation Room — Production Hardening)
-- Current Task: D-2 (Agent execution QA)
+- Current Task: D-3 (Cross-agent triggers)
 - Current Stage: BUILD
-- Tasks Completed: 1/8
+- Tasks Completed: 2/8
 - Loop Iterations: 4
 
 ## Phase A: Visual & Design Audit (Mar 12–18)
@@ -198,8 +198,8 @@
 **Accept when**: 10/10 scenarios produce useful, well-structured briefings.
 **Depends on**: none
 **Size**: L
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task D-3: Cross-agent triggers
 **Requirement**: "Verify trigger patterns fire correctly: Medical injury → Scout handcuff check, Quant low odds → Diplomat rebuild trade, etc. Follow-up cards render with cross-reference badges."

@@ -2333,7 +2333,10 @@ async function callLLM(apiKey, model, baseUrl, systemPrompt, userMessage) {
     if (!resp.ok) {
       const detail = await resp.text().catch(function() { return ''; });
       var msg = resp.status === 401 ? 'invalid API key. check Config.' :
+               resp.status === 403 ? 'API key lacks permission for this model. check your OpenRouter plan.' :
                resp.status === 429 ? 'rate limited by provider. wait a moment.' :
+               resp.status === 400 ? 'bad request — check your model name in Config.' :
+               resp.status === 408 ? 'request timed out. try again.' :
                resp.status >= 500 ? 'LLM provider is down. try again shortly.' :
                'API error ' + resp.status + (detail ? ': ' + detail.slice(0, 200) : '');
       throw new Error(msg);
@@ -2607,6 +2610,9 @@ async function runAllAgents(scenario) {
     return;
   }
 
+  // Clear previous run results to prevent memory leak
+  agentResults.clear();
+
   // Dismiss first-run demo if showing
   window.dispatchEvent(new CustomEvent('razzle:agents-starting'));
 
@@ -2668,7 +2674,7 @@ async function runAllAgents(scenario) {
   setScenarioStatus('Razzle is synthesizing...', 'running');
   setAgentStatus(0, 'running');
   var peerInsights = specialistIds
-    .filter(function(id) { return results[id]; })
+    .filter(function(id) { return results[id] && AGENT_DEFS[id]; })
     .map(function(id) { return { name: AGENT_DEFS[id].name, text: results[id] }; });
 
   var razzleSynthesis = null;
