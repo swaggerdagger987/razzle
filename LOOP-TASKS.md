@@ -2,9 +2,9 @@
 
 ## Current State
 - Phase: C (Bureau of Intelligence — Production Hardening)
-- Current Task: C-2
+- Current Task: C-3
 - Current Stage: BUILD
-- Tasks Completed: 1/7
+- Tasks Completed: 2/7
 - Loop Iterations: 3
 
 ## Phase A: Visual & Design Audit (Mar 12–18)
@@ -137,8 +137,8 @@
 **Accept when**: League data is accurate and complete.
 **Depends on**: C-1
 **Size**: M
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task C-3: Manager profiling
 **Requirement**: "Behavioral profiles (panic history, FAAB patterns, trade tendencies) generate correctly for multi-season leagues. Profiles render in comic-strip card style."
