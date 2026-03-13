@@ -113,5 +113,7 @@ Full build history archived in `docs/PROGRESS_ARCHIVE.md`.
 | # | Task | Status | Notes |
 |---|------|--------|-------|
 | E-1 | Landing page story | DONE | Added Bureau of Intelligence section (3 feature cards: Manager Profiles, Trade Finder, Pressure Map + Sleeper connect CTA) between Draft Season and Situation Room. Reorganized page flow: Hero → Research Sprawl → Lab Features → Live Data → Draft Season → Bureau → Mascot → Agent Bios → War Room Demo → Pricing → CTA → Footer. Bureau uses --bg-warm, chunky 3px borders, hover-lift, responsive at 768px. |
+| E-2 | Situation Room demo | DONE | Already complete: mini pixel canvas (480x160, 6 animated agents, furniture, scanlines), 55 pre-built briefing permutations (Razzle 11, Scout 11, Diplomat 9, Quant 7, Medical 8, Historian 8), redacted content (████ spans), 8s auto-rotation with fade transition, shuffle button, hover-pause, personalized CTA (paid→enter, free+sleeper→upgrade, no sleeper→connect). |
+| E-3 | Full funnel walkthrough | DONE | Funnel audit found missing Pricing link in topnav. Added Pricing nav link to all 73 HTML pages (5 primary + 68 panel pages). Full funnel path verified: Home → Lab → Bureau → Situation Room → Pricing → Register (auth modal in app.js) → Trial → First query. Zero dead ends. All pages have consistent topnav with 5 links: Home, Lab, Bureau, Situation Room, Pricing. |
 
 ### Decisions Log

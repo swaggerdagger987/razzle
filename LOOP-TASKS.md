@@ -2,9 +2,9 @@
 
 ## Current State
 - Phase: E (Landing Page + Conversion Funnel)
-- Current Task: E-2 (Situation Room demo)
+- Current Task: E-4 (Pricing page clarity)
 - Current Stage: BUILD
-- Tasks Completed: 1/6
+- Tasks Completed: 3/6
 - Loop Iterations: 5
 
 ## Phase A: Visual & Design Audit (Mar 12–18)
@@ -267,16 +267,16 @@
 **Accept when**: Demo creates curiosity and demonstrates product.
 **Depends on**: none
 **Size**: M
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task E-3: Full funnel walkthrough
 **Requirement**: "Land on home → click to Lab → explore → connect Sleeper → see Bureau → click Situation Room CTA → see pricing → start trial → run first query. Every step works."
 **Accept when**: Zero dead ends in the conversion funnel.
 **Depends on**: E-1
 **Size**: L
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task E-4: Pricing page clarity
 **Requirement**: "Free / Pro / Elite tiers clearly differentiated. Feature matrix accurate. FAQ answers common objections. Trial CTA prominent."
