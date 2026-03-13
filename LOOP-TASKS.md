@@ -2,9 +2,9 @@
 
 ## Current State
 - Phase: C (Bureau of Intelligence — Production Hardening)
-- Current Task: C-3
+- Current Task: C-4
 - Current Stage: BUILD
-- Tasks Completed: 2/7
+- Tasks Completed: 3/7
 - Loop Iterations: 3
 
 ## Phase A: Visual & Design Audit (Mar 12–18)
@@ -145,8 +145,8 @@
 **Accept when**: Manager profiles render with real behavioral data.
 **Depends on**: C-1
 **Size**: M
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task C-4: Trade finder QA
 **Requirement**: "League-specific trade finder: value matching works, position need/surplus detection accurate, trade partner cards render with correct data."

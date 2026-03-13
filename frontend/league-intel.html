@@ -201,7 +201,7 @@
     align-items: flex-start;
     gap: 8px;
     padding: 6px 0;
-    border-bottom: 1px solid var(--ink-faint);
+    border-bottom: 2px solid var(--ink-faint);
     font-family: var(--font-mono);
     font-size: 11px;
     line-height: 1.4;
@@ -381,7 +381,7 @@
   .profile-timeline {
     margin-top: 6px;
     padding-top: 6px;
-    border-top: 1px dashed var(--ink-faint);
+    border-top: 2px dashed var(--ink-faint);
   }
   .profile-timeline canvas {
     display: block;
@@ -687,7 +687,7 @@
     align-items: center;
     gap: 8px;
     padding: 6px 0;
-    border-bottom: 1px dashed var(--ink-faint);
+    border-bottom: 2px dashed var(--ink-faint);
     font-family: var(--font-mono);
     font-size: 12px;
   }
@@ -1967,7 +1967,7 @@ async function loadManagerProfiles(leagueId, userId, allPlayers, userMap, roster
 
       // Multi-season breakdown (paid users with 2+ seasons)
       if (c.seasonsTracked > 1) {
-        html += '<div style="margin-top:6px; padding-top:6px; border-top:1px solid var(--ink-faint);">';
+        html += '<div style="margin-top:6px; padding-top:6px; border-top:2px dashed var(--ink-faint);">';
         html += '<div style="font-family:var(--font-mono); font-size:9px; color:var(--ink-light); text-transform:uppercase; letter-spacing:1px; margin-bottom:3px;">per-season breakdown</div>';
         var seasonKeys = Object.keys(c.prof.movesBySeason).sort();
         for (var sk = 0; sk < seasonKeys.length; sk++) {
