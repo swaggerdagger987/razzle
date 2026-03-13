@@ -2,9 +2,9 @@
 
 ## Current State
 - Phase: A (Visual & Design Audit)
-- Current Task: 5
+- Current Task: 6
 - Current Stage: PENDING
-- Tasks Completed: 4/6
+- Tasks Completed: 5/6
 - Loop Iterations: 1
 
 ## Phase A: Visual & Design Audit (Mar 12–18)
@@ -47,8 +47,8 @@
 **Accept when**: Position colors consistent across all three rooms.
 **Depends on**: 1
 **Size**: M
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task 6: Loading state audit
 **Requirement**: "Every async flow shows personality loading text ('pulling film...', 'checking the tape...'), not generic spinners or blank states."

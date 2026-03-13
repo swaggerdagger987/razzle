@@ -219,7 +219,7 @@
             pts.push(x.toFixed(1) + ',' + y.toFixed(1));
           }
           var trend = vals[vals.length - 1] - vals[0];
-          var color = trend >= 0 ? 'var(--teal)' : 'var(--accent)';
+          var color = trend >= 0 ? 'var(--green)' : 'var(--accent)';
           html += '<svg width="' + w + '" height="' + h2 + '" style="vertical-align:middle">';
           html += '<polyline points="' + pts.join(' ') + '" fill="none" stroke="' + color + '" stroke-width="2"/>';
           html += '</svg>';

@@ -2627,7 +2627,7 @@ async function loadLeagueTradeFinder(leagueId, userId, myRoster, rosters, allPla
     var html = '<div class="trade-finder-results">';
     html += '<div style="font-family:var(--font-hand); font-size:18px; color:var(--ink-medium); margin-bottom:12px;">trade partners found: ' + tradePartners.length + '</div>';
 
-    var posColors = { QB: "var(--blue)", RB: "var(--green)", WR: "var(--orange)", TE: "var(--purple)" };
+    var posColors = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
 
     for (var ti = 0; ti < tradePartners.length; ti++) {
       var partner = tradePartners[ti];

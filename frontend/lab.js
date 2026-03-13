@@ -6293,7 +6293,7 @@ function loadDynastySparkline(playerId, container) {
       });
 
       const trend = vals[vals.length - 1] - vals[0];
-      const color = trend >= 0 ? 'var(--teal)' : 'var(--accent)';
+      const color = trend >= 0 ? 'var(--green)' : 'var(--accent)';
       const latest = labels[labels.length - 1];
       const first = labels[0];
 
