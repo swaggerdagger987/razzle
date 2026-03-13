@@ -2,9 +2,9 @@
 
 ## Current State
 - Phase: F (Data Refresh + Backend Hardening)
-- Current Task: F-2
+- Current Task: F-3
 - Current Stage: BUILD
-- Tasks Completed: 1/6
+- Tasks Completed: 2/6
 - Loop Iterations: 6
 
 ## Phase A: Visual & Design Audit (Mar 12–18)
@@ -320,8 +320,8 @@
 **Accept when**: College stats current for 2026 draft class.
 **Depends on**: none
 **Size**: M
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task F-3: Render deployment QA
 **Requirement**: "Deploy to Render. Health check passes. DB downloads from GitHub release. All 63+ API endpoints return 200. Auth flow works. Billing webhooks fire."

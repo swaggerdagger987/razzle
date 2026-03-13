@@ -448,6 +448,118 @@ def _insert_batch(conn, batch):
 
 
 # ---------------------------------------------------------------------------
+# Combine data sync
+# ---------------------------------------------------------------------------
+
+COMBINE_URL = "https://github.com/nflverse/nflverse-data/releases/download/combine/combine.csv"
+
+
+def sync_combine_data(conn):
+    """Fetch nflverse combine data and write to combine_data table.
+
+    Uses existing schema: cfb_id, pfr_id, player_name, position, school,
+    draft_year, draft_team, draft_round, draft_pick, height_inches, weight,
+    forty, bench, vertical, broad_jump, cone, shuttle, source, updated_at
+    """
+    conn.executescript("""
+        CREATE TABLE IF NOT EXISTS combine_data (
+            cfb_id TEXT,
+            pfr_id TEXT,
+            player_name TEXT,
+            position TEXT,
+            school TEXT,
+            draft_year INTEGER,
+            draft_team TEXT,
+            draft_round INTEGER,
+            draft_pick INTEGER,
+            height_inches REAL,
+            weight INTEGER,
+            forty REAL,
+            bench INTEGER,
+            vertical REAL,
+            broad_jump INTEGER,
+            cone REAL,
+            shuttle REAL,
+            source TEXT DEFAULT 'nflverse',
+            updated_at TEXT,
+            PRIMARY KEY (draft_year, player_name, school)
+        );
+        CREATE INDEX IF NOT EXISTS idx_combine_year ON combine_data(draft_year);
+        CREATE INDEX IF NOT EXISTS idx_combine_pos ON combine_data(position);
+    """)
+
+    print("  Fetching combine data...")
+    req = urllib.request.Request(COMBINE_URL)
+    req.add_header("User-Agent", "razzle-cfbfastr-adapter/1.0")
+
+    try:
+        with urllib.request.urlopen(req, timeout=60) as resp:
+            raw = resp.read()
+        text = raw.decode("utf-8-sig")
+        reader = csv.DictReader(io.StringIO(text))
+        rows = list(reader)
+    except Exception as e:
+        print(f"  Combine fetch failed: {e}")
+        return
+
+    def parse_height_inches(ht_str):
+        """Convert height string like '6-2' or '74' to inches."""
+        if not ht_str or ht_str.strip() in ("", "NA"):
+            return None
+        ht = ht_str.strip()
+        if "-" in ht:
+            parts = ht.split("-")
+            try:
+                return int(parts[0]) * 12 + int(parts[1])
+            except (ValueError, IndexError):
+                return None
+        return safe_float(ht)
+
+    now = utc_now()
+    batch = []
+    for row in rows:
+        draft_year = safe_int(row.get("draft_year") or row.get("season"))
+        if draft_year is None:
+            continue
+        batch.append((
+            (row.get("cfb_id") or "").strip(),
+            (row.get("pfr_id") or "").strip(),
+            (row.get("player_name") or "").strip(),
+            (row.get("pos") or "").strip().upper(),
+            (row.get("school") or "").strip(),
+            draft_year,
+            (row.get("draft_team") or "").strip(),
+            safe_int(row.get("draft_round")),
+            safe_int(row.get("draft_ovr")),
+            parse_height_inches(row.get("ht")),
+            safe_int(row.get("wt")),
+            safe_float(row.get("forty")),
+            safe_int(row.get("bench")),
+            safe_float(row.get("vertical")),
+            safe_int(row.get("broad_jump")),
+            safe_float(row.get("cone")),
+            safe_float(row.get("shuttle")),
+            "nflverse",
+            now,
+        ))
+
+    if batch:
+        conn.executemany("""
+            INSERT OR REPLACE INTO combine_data (
+                cfb_id, pfr_id, player_name, position, school,
+                draft_year, draft_team, draft_round, draft_pick,
+                height_inches, weight, forty, bench, vertical,
+                broad_jump, cone, shuttle, source, updated_at
+            ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+        """, batch)
+        conn.commit()
+
+    total = conn.execute("SELECT COUNT(*) FROM combine_data").fetchone()[0]
+    recent = conn.execute("SELECT COUNT(*) FROM combine_data WHERE draft_year >= 2025").fetchone()[0]
+    print(f"  Combine data: {total} total rows, {recent} for 2025+ draft classes.")
+
+
+# ---------------------------------------------------------------------------
 # Position refinement via combine/draft data
 # ---------------------------------------------------------------------------
 
@@ -530,6 +642,12 @@ def main():
             upsert_stats(conn, results)
             total_players += len(results)
             print(f"  {season}: {len(results)} players written.")
+
+        # Sync combine data (includes 2026 draft class)
+        try:
+            sync_combine_data(conn)
+        except Exception as e:
+            print(f"  Combine sync skipped: {e}")
 
         # Refine positions using combine/draft data if available
         try:
