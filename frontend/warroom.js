@@ -1534,7 +1534,7 @@ setupConfigPanel();
     if (!token) { updateHint('sign in first'); return; }
     if (!isPro()) { updateHint('Pro+ required'); return; }
 
-    updateHint('loading...');
+    updateHint('checking the vault...');
     try {
       var resp = await fetch('/api/user/api-keys/openrouter/decrypt', {
         headers: { 'Authorization': 'Bearer ' + token }

@@ -6902,7 +6902,7 @@
         '<div class="lp-header"><h2>Draft Class Grades</h2>' +
         '<div class="lp-subtitle">who hit and who busted</div></div>' +
         '<div class="lp-controls">' +
-          '<select class="lp-select dc2-year"><option value="">loading...</option></select>' +
+          '<select class="lp-select dc2-year"><option value="">pulling seasons...</option></select>' +
           posTabsHTML('dc2-pos-tabs', true) +
         '</div>' +
         '<div class="dc2-content"><div class="lp-loading">pulling film...</div></div>' +
@@ -7820,7 +7820,7 @@
         '<div class="lp-header"><h2>Rookie Big Board</h2>' +
         '<div class="lp-subtitle">scouting the next wave</div></div>' +
         '<div class="lp-controls">' +
-          '<select class="lp-select bb-year"><option value="">loading...</option></select>' +
+          '<select class="lp-select bb-year"><option value="">scouting classes...</option></select>' +
           posTabsHTML('bb-pos-tabs', true) +
         '</div>' +
         '<div class="bb-content"><div class="lp-loading">scouting the board...</div></div>' +
@@ -9278,7 +9278,7 @@
         '<div class="lp-header"><h2>Draft Class Tracker</h2>' +
         '<div class="lp-subtitle">how did each draft class actually produce?</div></div>' +
         '<div class="lp-controls">' +
-          '<select class="lp-select dct-year"><option value="">loading...</option></select>' +
+          '<select class="lp-select dct-year"><option value="">pulling drafts...</option></select>' +
           posTabsHTML('dct-pos-tabs', true) +
         '</div>' +
         '<div class="dct-round-breakdown"></div>' +

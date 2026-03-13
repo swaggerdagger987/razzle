@@ -65,7 +65,7 @@ function _csvCell(val) {
 
 function screenshotPanel(panelName) {
   if (typeof html2canvas === 'undefined') {
-    _showToast('screenshot library loading...');
+    _showToast('screenshot library warming up...');
     return;
   }
   var panel = document.getElementById('panel-' + panelName);
