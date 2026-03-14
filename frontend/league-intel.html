@@ -910,6 +910,87 @@
     vertical-align: middle;
   }
 
+  /* ===== BUILD PROFILES ===== */
+  .build-profiles-trigger {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 2px dashed var(--ink-faint);
+  }
+
+  .build-profiles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  .build-profile-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 16px;
+    transition: all 0.15s;
+  }
+
+  .build-profile-card:hover {
+    box-shadow: 6px 6px 0 var(--ink);
+    transform: translate(-2px, -2px);
+  }
+
+  .build-profile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 2px dashed var(--ink-faint);
+  }
+
+  .build-profile-name {
+    font-family: var(--font-display);
+    font-size: 16px;
+  }
+
+  .archetype-badge {
+    font-family: var(--font-display);
+    font-size: 11px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border: 2px solid var(--ink);
+    border-radius: 20px;
+    transform: rotate(2deg);
+    white-space: nowrap;
+  }
+
+  .build-profile-scout {
+    font-family: var(--font-hand);
+    font-size: 16px;
+    color: var(--ink-medium);
+    margin: 8px 0 12px;
+    line-height: 1.3;
+  }
+
+  .build-profile-stats {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-light);
+    margin-bottom: 10px;
+  }
+
+  .build-profile-stat strong {
+    color: var(--ink);
+  }
+
+  .build-radar-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 8px;
+  }
+
   /* ===== MOBILE ===== */
   @media (max-width: 768px) {
     html, body { overflow-x: hidden; }
@@ -933,6 +1014,8 @@
     .trade-partner-card { padding: 12px; }
     .depth-grid { grid-template-columns: 1fr; }
     .depth-card { padding: 12px; }
+    .build-profiles-grid { grid-template-columns: 1fr; }
+    .build-profile-card { padding: 12px; }
   }
 </style>
 </head>
@@ -1388,6 +1471,12 @@ async function toggleLeague(card, leagueId, userId) {
       '</div>' +
       '<div id="rosterDepth-' + leagueId + '"></div>';
 
+    // Add build profiles trigger
+    html += '<div class="build-profiles-trigger">' +
+      '<button id="buildProfileBtn-' + leagueId + '">roster build profiles</button>' +
+      '</div>' +
+      '<div id="buildProfiles-' + leagueId + '"></div>';
+
     rosterDiv.innerHTML = html;
 
     // Bind profile button with closure over variables
@@ -1420,6 +1509,17 @@ async function toggleLeague(card, leagueId, userId) {
         this.disabled = true;
         this.textContent = "analyzing depth charts...";
         loadRosterDepth(leagueId, userId, rosters, allPlayers, userMap);
+      });
+    }
+
+    // Bind build profiles button
+    var buildProfileBtn = document.getElementById("buildProfileBtn-" + leagueId);
+    if (buildProfileBtn) {
+      buildProfileBtn.addEventListener("click", function(e) {
+        e.stopPropagation();
+        this.disabled = true;
+        this.textContent = "profiling roster builds...";
+        loadBuildProfiles(leagueId, userId, rosters, allPlayers, userMap);
       });
     }
 
@@ -2947,6 +3047,352 @@ async function loadLeagueTradeFinder(leagueId, userId, myRoster, rosters, allPla
     // Re-enable button for retry
     var tfBtn = document.getElementById("tradeFinderBtn-" + leagueId);
     if (tfBtn) { tfBtn.disabled = false; tfBtn.textContent = "find trade partners"; }
+  }
+}
+
+// ── BUILD PROFILES ────────────────────────────────────────────────────
+async function loadBuildProfiles(leagueId, userId, rosters, allPlayers, userMap) {
+  var container = document.getElementById("buildProfiles-" + leagueId);
+  if (!container) return;
+
+  container.innerHTML = '<div class="loading-intel" style="font-size:14px;">scouting roster constructions...</div>';
+
+  try {
+    // Build full player list for PPG lookup
+    var allRosterPlayers = [];
+    for (var i = 0; i < rosters.length; i++) {
+      var roster = rosters[i];
+      var playerIds = roster.players || [];
+      for (var j = 0; j < playerIds.length; j++) {
+        var pid = playerIds[j];
+        var p = allPlayers[pid];
+        if (!p) continue;
+        var pos = p.position || "?";
+        if (pos !== "QB" && pos !== "RB" && pos !== "WR" && pos !== "TE") continue;
+        var name = ((p.first_name || "") + " " + (p.last_name || "")).trim();
+        if (!name) continue;
+        allRosterPlayers.push({ name: name, position: pos, team: p.team || "" });
+      }
+    }
+
+    // Fetch PPG data
+    var ppgLookup = {};
+    if (allRosterPlayers.length > 0) {
+      var ctrl = new AbortController();
+      var timer = setTimeout(function() { ctrl.abort(); }, 20000);
+      var resp = await fetch("/api/roster-depth-lookup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ players: allRosterPlayers }),
+        signal: ctrl.signal
+      });
+      clearTimeout(timer);
+      if (resp.ok) {
+        var data = await resp.json();
+        if (data.players) {
+          for (var k = 0; k < data.players.length; k++) {
+            var pl = data.players[k];
+            ppgLookup[pl.sleeper_name] = pl.ppg || 0;
+          }
+        }
+      }
+    }
+
+    // Analyze each manager
+    var profiles = [];
+
+    for (var ri = 0; ri < rosters.length; ri++) {
+      var r = rosters[ri];
+      var ownerId = r.owner_id;
+      var managerName = userMap[ownerId] || "Manager";
+      var pids = r.players || [];
+
+      var posPlayers = { QB: [], RB: [], WR: [], TE: [] };
+      var totalAge = 0;
+      var ageCount = 0;
+      var totalPPG = { QB: 0, RB: 0, WR: 0, TE: 0 };
+      var posCounts = { QB: 0, RB: 0, WR: 0, TE: 0 };
+
+      for (var pi = 0; pi < pids.length; pi++) {
+        var pp = allPlayers[pids[pi]];
+        if (!pp) continue;
+        var ppos = pp.position || "?";
+        if (!posPlayers[ppos]) continue;
+        var pname = ((pp.first_name || "") + " " + (pp.last_name || "")).trim();
+        var ppg = ppgLookup[pname] || 0;
+        var age = pp.age || 0;
+        posPlayers[ppos].push({ name: pname, ppg: ppg, age: age });
+        totalPPG[ppos] += ppg;
+        posCounts[ppos]++;
+        if (age > 0) { totalAge += age; ageCount++; }
+      }
+
+      // Sort by PPG
+      for (var sp in posPlayers) {
+        posPlayers[sp].sort(function(a, b) { return b.ppg - a.ppg; });
+      }
+
+      var avgAge = ageCount > 0 ? totalAge / ageCount : 26;
+      var rbCount = posCounts.RB;
+      var wrCount = posCounts.WR;
+      var teCount = posCounts.TE;
+      var qbCount = posCounts.QB;
+
+      // Top player PPG at each position
+      var topRBppg = posPlayers.RB.length > 0 ? posPlayers.RB[0].ppg : 0;
+      var topWRppg = posPlayers.WR.length > 0 ? posPlayers.WR[0].ppg : 0;
+      var secondRBppg = posPlayers.RB.length > 1 ? posPlayers.RB[1].ppg : 0;
+
+      // Starter PPG total
+      var starterSlots = { QB: 1, RB: 2, WR: 2, TE: 1 };
+      var totalStarterPPG = 0;
+      var totalBenchPPG = 0;
+      for (var spos in starterSlots) {
+        var needed = starterSlots[spos];
+        var sorted = posPlayers[spos];
+        for (var si = 0; si < sorted.length; si++) {
+          if (si < needed) totalStarterPPG += sorted[si].ppg;
+          else totalBenchPPG += sorted[si].ppg;
+        }
+      }
+
+      // PPG concentration: how much of total PPG comes from top 3 players
+      var allPlayersSorted = [];
+      for (var apos in posPlayers) {
+        allPlayersSorted = allPlayersSorted.concat(posPlayers[apos]);
+      }
+      allPlayersSorted.sort(function(a, b) { return b.ppg - a.ppg; });
+      var top3PPG = 0;
+      var totalRosterPPG = 0;
+      for (var ai = 0; ai < allPlayersSorted.length; ai++) {
+        totalRosterPPG += allPlayersSorted[ai].ppg;
+        if (ai < 3) top3PPG += allPlayersSorted[ai].ppg;
+      }
+      var concentration = totalRosterPPG > 0 ? top3PPG / totalRosterPPG : 0;
+
+      // Positional investment % (share of total PPG by position)
+      var posInvestment = {};
+      for (var ipos in totalPPG) {
+        posInvestment[ipos] = totalRosterPPG > 0 ? (totalPPG[ipos] / totalRosterPPG * 100) : 25;
+      }
+
+      // Archetype detection
+      var archetype = "Balanced";
+      var archetypeColor = "var(--green)";
+      var scoutReport = "";
+
+      if (avgAge < 25) {
+        archetype = "Youth Movement";
+        archetypeColor = "var(--blue)";
+        scoutReport = "avg age " + avgAge.toFixed(1) + " — building for the future. dangerous in two years if the picks hit.";
+      } else if (avgAge > 27) {
+        archetype = "Win Now";
+        archetypeColor = "var(--red)";
+        scoutReport = "avg age " + avgAge.toFixed(1) + " — veterans everywhere. championship window is closing. sell the farm or go home.";
+      } else if (topRBppg > 15 && secondRBppg < 8 && rbCount <= 4) {
+        archetype = "Hero RB";
+        archetypeColor = "var(--pos-rb)";
+        scoutReport = "one elite RB carrying the whole squad. if " + escapeHtml(posPlayers.RB[0].name) + " goes down, this roster craters.";
+      } else if (rbCount <= 3 && wrCount >= 6) {
+        archetype = "Zero RB";
+        archetypeColor = "var(--pos-wr)";
+        scoutReport = "stacked at receiver, paper thin at RB. living on the wire for running backs every week.";
+      } else if (concentration > 0.55 && totalBenchPPG < totalStarterPPG * 0.3) {
+        archetype = "Stars & Scrubs";
+        archetypeColor = "var(--orange)";
+        scoutReport = "top-heavy roster. starters are elite but the bench is a wasteland. one injury from disaster.";
+      } else {
+        archetype = "Balanced";
+        archetypeColor = "var(--green)";
+        scoutReport = "even distribution across positions. no glaring holes, no obvious edge. the safe build.";
+      }
+
+      profiles.push({
+        ownerId: ownerId,
+        name: managerName,
+        isUser: ownerId === userId,
+        archetype: archetype,
+        archetypeColor: archetypeColor,
+        scoutReport: scoutReport,
+        avgAge: avgAge,
+        posCounts: posCounts,
+        posInvestment: posInvestment,
+        totalStarterPPG: totalStarterPPG,
+        totalBenchPPG: totalBenchPPG,
+        concentration: concentration,
+        record: (r.settings?.wins || 0) + "-" + (r.settings?.losses || 0)
+      });
+    }
+
+    // Sort: user first, then alphabetical
+    profiles.sort(function(a, b) {
+      if (a.isUser) return -1;
+      if (b.isUser) return 1;
+      return a.name.localeCompare(b.name);
+    });
+
+    renderBuildProfiles(container, profiles);
+
+  } catch (e) {
+    container.innerHTML = '<div class="loading-intel" style="color:var(--red);font-size:14px;">' +
+      (e.name === "AbortError" ? "profiling timed out. try again." : "profiling failed. try again.") + '</div>';
+    var btn = document.getElementById("buildProfileBtn-" + leagueId);
+    if (btn) { btn.disabled = false; btn.textContent = "roster build profiles"; }
+    console.error(e);
+  }
+}
+
+function renderBuildProfiles(container, profiles) {
+  var html = '<div class="depth-section-header">roster build profiles — how every manager is constructed</div>';
+  html += '<div class="build-profiles-grid">';
+
+  for (var i = 0; i < profiles.length; i++) {
+    var mgr = profiles[i];
+
+    html += '<div class="build-profile-card"' + (mgr.isUser ? ' style="border-color:var(--orange);"' : '') + '>';
+
+    // Header
+    html += '<div class="build-profile-header">';
+    html += '<div>';
+    html += '<span class="build-profile-name">' + escapeHtml(mgr.name) + '</span>';
+    if (mgr.isUser) html += ' <span style="font-family:var(--font-hand);font-size:14px;color:var(--orange);">you</span>';
+    html += '</div>';
+    html += '<span class="archetype-badge" style="background:' + mgr.archetypeColor + ';color:white;border-color:' + mgr.archetypeColor + ';">' + escapeHtml(mgr.archetype) + '</span>';
+    html += '</div>';
+
+    // Scout report
+    html += '<div class="build-profile-scout">"' + escapeHtml(mgr.scoutReport) + '"</div>';
+
+    // Stats row
+    html += '<div class="build-profile-stats">';
+    html += '<span class="build-profile-stat">age: <strong>' + mgr.avgAge.toFixed(1) + '</strong></span>';
+    html += '<span class="build-profile-stat">record: <strong>' + escapeHtml(mgr.record) + '</strong></span>';
+    html += '<span class="build-profile-stat">starter PPG: <strong>' + mgr.totalStarterPPG.toFixed(1) + '</strong></span>';
+    html += '<span class="build-profile-stat">concentration: <strong>' + Math.round(mgr.concentration * 100) + '%</strong></span>';
+    html += '</div>';
+
+    // Positional investment — mini bar breakdown
+    html += '<div style="font-family:var(--font-mono);font-size:10px;color:var(--ink-light);margin-bottom:4px;">positional investment</div>';
+    html += '<div style="display:flex;height:18px;border:2px solid var(--ink);border-radius:4px;overflow:hidden;">';
+    var investPositions = ["QB", "RB", "WR", "TE"];
+    var investColors = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
+    for (var ipi = 0; ipi < investPositions.length; ipi++) {
+      var ipos = investPositions[ipi];
+      var pct = mgr.posInvestment[ipos] || 0;
+      html += '<div style="width:' + pct + '%;background:' + investColors[ipos] + ';' + (ipi < 3 ? 'border-right:1px solid var(--ink);' : '') + '" title="' + ipos + ': ' + pct.toFixed(0) + '%"></div>';
+    }
+    html += '</div>';
+    // Labels under bar
+    html += '<div style="display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:9px;color:var(--ink-light);margin-top:2px;">';
+    for (var li = 0; li < investPositions.length; li++) {
+      var lpos = investPositions[li];
+      html += '<span>' + lpos + ' ' + (mgr.posInvestment[lpos] || 0).toFixed(0) + '%</span>';
+    }
+    html += '</div>';
+
+    // Radar chart (canvas)
+    var canvasId = "radar-" + mgr.ownerId;
+    html += '<div class="build-radar-container"><canvas id="' + canvasId + '" width="160" height="160"></canvas></div>';
+
+    html += '</div>'; // close card
+  }
+
+  html += '</div>'; // close grid
+  container.innerHTML = html;
+
+  // Draw radar charts
+  for (var ri = 0; ri < profiles.length; ri++) {
+    drawBuildRadar(profiles[ri]);
+  }
+}
+
+function drawBuildRadar(mgr) {
+  var canvas = document.getElementById("radar-" + mgr.ownerId);
+  if (!canvas || !canvas.getContext) return;
+  var ctx = canvas.getContext("2d");
+  var w = canvas.width;
+  var h = canvas.height;
+  var cx = w / 2;
+  var cy = h / 2;
+  var radius = 60;
+
+  // 4 axes: QB, RB, WR, TE
+  var labels = ["QB", "RB", "WR", "TE"];
+  var values = [
+    Math.min((mgr.posInvestment.QB || 0) / 50, 1),
+    Math.min((mgr.posInvestment.RB || 0) / 50, 1),
+    Math.min((mgr.posInvestment.WR || 0) / 50, 1),
+    Math.min((mgr.posInvestment.TE || 0) / 50, 1)
+  ];
+  var colors = ["#5b7fff", "#2ec4b6", "#d97757", "#8b5cf6"];
+  var angles = [];
+  for (var i = 0; i < 4; i++) {
+    angles.push(-Math.PI / 2 + (i * Math.PI * 2 / 4));
+  }
+
+  // Background rings
+  ctx.strokeStyle = "#c4b5a5";
+  ctx.lineWidth = 1;
+  for (var ring = 1; ring <= 3; ring++) {
+    var rr = radius * ring / 3;
+    ctx.beginPath();
+    for (var ai = 0; ai < 4; ai++) {
+      var ax = cx + rr * Math.cos(angles[ai]);
+      var ay = cy + rr * Math.sin(angles[ai]);
+      if (ai === 0) ctx.moveTo(ax, ay);
+      else ctx.lineTo(ax, ay);
+    }
+    ctx.closePath();
+    ctx.stroke();
+  }
+
+  // Axis lines
+  for (var axi = 0; axi < 4; axi++) {
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + radius * Math.cos(angles[axi]), cy + radius * Math.sin(angles[axi]));
+    ctx.stroke();
+  }
+
+  // Data polygon
+  ctx.beginPath();
+  for (var di = 0; di < 4; di++) {
+    var dr = radius * values[di];
+    var dx = cx + dr * Math.cos(angles[di]);
+    var dy = cy + dr * Math.sin(angles[di]);
+    if (di === 0) ctx.moveTo(dx, dy);
+    else ctx.lineTo(dx, dy);
+  }
+  ctx.closePath();
+  ctx.fillStyle = "rgba(217, 119, 87, 0.2)";
+  ctx.fill();
+  ctx.strokeStyle = "#d97757";
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Data points
+  for (var pi = 0; pi < 4; pi++) {
+    var pr = radius * values[pi];
+    var px = cx + pr * Math.cos(angles[pi]);
+    var py = cy + pr * Math.sin(angles[pi]);
+    ctx.beginPath();
+    ctx.arc(px, py, 3, 0, Math.PI * 2);
+    ctx.fillStyle = colors[pi];
+    ctx.fill();
+    ctx.strokeStyle = "#2d1f14";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // Labels
+  ctx.font = "bold 10px 'Space Mono', monospace";
+  ctx.textAlign = "center";
+  ctx.fillStyle = "#2d1f14";
+  var labelOffset = 14;
+  for (var li = 0; li < 4; li++) {
+    var lx = cx + (radius + labelOffset) * Math.cos(angles[li]);
+    var ly = cy + (radius + labelOffset) * Math.sin(angles[li]);
+    ctx.fillText(labels[li], lx, ly + 4);
   }
 }
 
