@@ -170,3 +170,25 @@ Full build history archived in `docs/PROGRESS_ARCHIVE.md`.
 | H-3 | BYOK info in pricing page FAQ | DONE | FAQ item: 'Is my API key safe?' with honest answer about localStorage and spending cap. |
 
 ### Decisions Log
+
+---
+
+## Ship Phase: Bug Fixes — Panel Season Defaults (Mar 13)
+
+**Goal**: Fix 16 tracked bugs where panels broke due to defaulting to year 2026 (no NFL data exists for current calendar year before September).
+
+**Exit Criterion**: All 22 tracked bugs resolved or triaged.
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Season default fix (lab-panels.js) | DONE | Replaced 4 instances of `new Date().getFullYear()` with `_latestSeason` (NFL-season-aware: month >= 7 ? year : year-1). Fixes BUG-015 (Target Premium), BUG-016 (Drop Rate), BUG-017 (Garbage Time), plus success-rate panel. |
+| 2 | Season default fix (10 standalone HTML) | DONE | Fixed targetpremium, drops, garbagetime, gamescript, seasonpace, snapefficiency, successrate, workload, dualthreat, tdregression. All use NFL-season-aware default instead of raw calendar year. Fixes BUG-012, BUG-013, BUG-014. |
+| 3 | Matchups empty string season (BUG-018) | DONE | Panel sent `season=` (empty string) causing HTTP 422 on FastAPI int parameter. Fixed to default to `_latestSeason`. |
+| 4 | Gamescript standalone missing app.js (BUG-022) | DONE | Added app.js script include. Also added to all 9 other standalone panel pages that called razzleError()/razzleEmpty() without it. |
+| 5 | Target premium empty response (BUG-015) | DONE | Backend now returns `available_seasons` even when `rows` is empty, so season dropdown populates correctly. |
+| 6 | Verified already-working bugs | DONE | BUG-001 (screener year filter), BUG-002 (universe toggle), BUG-009 (half PPR cheat sheet), BUG-010 (efficiency 2025), BUG-011 (consistency 2025), BUG-019 (stacks 2025), BUG-020 (red zone 2025), BUG-021 (streaks 2025) — all backends work correctly; bugs were caused by 2026 default. |
+| 7 | Triage remaining bugs | DONE | BUG-003 (handcuff data), BUG-004 (historical dynasty snapshots), BUG-005 (tier thresholds), BUG-006 (adjustable trade formula), BUG-007/008 (design consistency) triaged as feature requests / low priority. |
+
+### Decisions Log
+- All 16 fixable bugs had the same root cause: `new Date().getFullYear()` returning 2026 before NFL season starts in September
+- 6 remaining bugs triaged as feature requests, not launch blockers
