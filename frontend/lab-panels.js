@@ -5370,7 +5370,7 @@
           if (!r.ok) throw new Error('API error');
           return r.json();
         }).then(function(data) {
-          var players = data.players || [];
+          var players = Array.isArray(data) ? data : (data.players || []);
           if (!players.length) { list.innerHTML = '<div class="' + prefix + 'search-empty">' + razzleEmpty() + '</div>'; list.style.display = 'block'; return; }
           var html = '';
           players.forEach(function(p) {
