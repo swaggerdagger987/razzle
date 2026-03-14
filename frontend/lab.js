@@ -5396,7 +5396,7 @@ function exportImage() {
     ctx.fillText(pos, badgeX + 13, y + 18);
 
     // Player name
-    ctx.font = "bold 12px sans-serif";
+    ctx.font = "bold 12px 'Space Mono', monospace";
     ctx.fillStyle = "#2d1f14";
     ctx.textAlign = "left";
     const pName = player.full_name || player.player_name || "";
@@ -5445,7 +5445,7 @@ function exportImage() {
 
   // Watermark
   const wmY = H - watermarkH / 2;
-  ctx.font = "bold 16px sans-serif";
+  ctx.font = "bold 16px 'Luckiest Guy', cursive";
   ctx.fillStyle = "#2d1f14";
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
@@ -5745,7 +5745,7 @@ function renderRankingsPNG(players, posLabel, sortLabel) {
   ctx.fillRect(0, 0, W, H);
 
   // Title
-  ctx.font = "bold 24px sans-serif";
+  ctx.font = "bold 24px 'Luckiest Guy', cursive";
   ctx.fillStyle = "#2d1f14";
   ctx.textAlign = "center";
   ctx.fillText(`Razzle Dynasty Top ${players.length} ${posLabel}`, W / 2, padY + 28);
@@ -5798,7 +5798,7 @@ function renderRankingsPNG(players, posLabel, sortLabel) {
     ctx.lineWidth = 2;
     ctx.stroke();
     ctx.fillStyle = "#fff";
-    ctx.font = "bold 12px sans-serif";
+    ctx.font = "bold 12px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(String(i + 1), rankX, rankCY + 4);
 
@@ -5810,14 +5810,14 @@ function renderRankingsPNG(players, posLabel, sortLabel) {
     ctx.lineWidth = 1.5;
     ctx.strokeRect(posBadgeX, y + 8, 30, 20);
     ctx.fillStyle = "#fff";
-    ctx.font = "bold 9px sans-serif";
+    ctx.font = "bold 9px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(p.position, posBadgeX + 15, y + 22);
 
     // Player name
     ctx.textAlign = "left";
     ctx.fillStyle = "#2d1f14";
-    ctx.font = "bold 14px sans-serif";
+    ctx.font = "bold 14px 'Space Mono', monospace";
     ctx.fillText(p.full_name || p.player_name, padX + 88, y + 23);
 
     // Team
@@ -6295,7 +6295,7 @@ function loadDynastySparkline(playerId, container) {
       });
 
       const trend = vals[vals.length - 1] - vals[0];
-      const color = trend >= 0 ? 'var(--green)' : 'var(--accent)';
+      const color = trend >= 0 ? 'var(--green)' : 'var(--orange)';
       const latest = labels[labels.length - 1];
       const first = labels[0];
 
@@ -6588,14 +6588,14 @@ function exportProfileImage() {
   ctx.lineWidth = 2;
   ctx.strokeRect(padX, padY, 50, 36);
   ctx.fillStyle = "#fff";
-  ctx.font = "bold 16px sans-serif";
+  ctx.font = "bold 16px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText(pos, padX + 25, padY + 24);
 
   // Name + meta
   ctx.textAlign = "left";
   ctx.fillStyle = "#2d1f14";
-  ctx.font = "bold 28px sans-serif";
+  ctx.font = "bold 28px 'Luckiest Guy', cursive";
   ctx.fillText(name, padX + 64, padY + 28);
   ctx.fillStyle = "#8a7565";
   ctx.font = "12px monospace";
@@ -6619,7 +6619,7 @@ function exportProfileImage() {
       ctx.stroke();
     }
     ctx.fillStyle = "#2d1f14";
-    ctx.font = "bold 22px sans-serif";
+    ctx.font = "bold 22px 'Luckiest Guy', cursive";
     ctx.textAlign = "center";
     ctx.fillText(stats[i].val, x + sbW / 2, sbY + 32);
     ctx.fillStyle = "#8a7565";
@@ -6676,7 +6676,7 @@ function exportProfileImage() {
 
   // Watermark
   const wmY = H - watermarkH / 2;
-  ctx.font = "bold 16px sans-serif";
+  ctx.font = "bold 16px 'Luckiest Guy', cursive";
   ctx.fillStyle = "#2d1f14";
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
@@ -7331,12 +7331,12 @@ function exportProspectImage() {
   ctx.fillRect(padX, y, W - padX * 2, 6);
   y += 14;
 
-  ctx.font = "bold 24px sans-serif";
+  ctx.font = "bold 24px 'Luckiest Guy', cursive";
   ctx.fillStyle = "#2d1f14";
   ctx.textAlign = "left";
   ctx.fillText(`${posText}  ${name}`, padX + 8, y + 24);
 
-  ctx.font = "14px sans-serif";
+  ctx.font = "14px 'Space Mono', monospace";
   ctx.fillStyle = "#5c4a3d";
   ctx.fillText(metaText, padX + 8, y + 46);
   y += 70;
@@ -7349,11 +7349,11 @@ function exportProspectImage() {
       const val = box.querySelector(".profile-stat-value")?.textContent || "";
       const lbl = box.querySelector(".profile-stat-label")?.textContent || "";
       const bx = padX + i * boxW;
-      ctx.font = "bold 20px sans-serif";
+      ctx.font = "bold 20px 'Luckiest Guy', cursive";
       ctx.fillStyle = "#2d1f14";
       ctx.textAlign = "center";
       ctx.fillText(val, bx + boxW / 2, y + 24);
-      ctx.font = "11px sans-serif";
+      ctx.font = "11px 'Space Mono', monospace";
       ctx.fillStyle = "#8a7565";
       ctx.fillText(lbl, bx + boxW / 2, y + 42);
     });
@@ -7376,7 +7376,7 @@ function exportProspectImage() {
     ctx.fillRect(padX + 1, y + 1, W - padX * 2 - 2, 98);
 
     // Title
-    ctx.font = "bold 13px sans-serif";
+    ctx.font = "bold 13px 'Space Mono', monospace";
     ctx.fillStyle = "#2d1f14";
     ctx.textAlign = "left";
     ctx.fillText("Razzle Prospect Score", padX + 14, y + 22);
@@ -7391,14 +7391,14 @@ function exportProspectImage() {
     ctx.strokeStyle = "#2d1f14";
     ctx.lineWidth = 2;
     ctx.strokeRect(-badgeW / 2, -10, badgeW, 20);
-    ctx.font = "bold 11px sans-serif";
+    ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.fillStyle = "white";
     ctx.textAlign = "center";
     ctx.fillText(tierLabel.toUpperCase(), 0, 4);
     ctx.restore();
 
     // RPS big number
-    ctx.font = "bold 36px sans-serif";
+    ctx.font = "bold 36px 'Luckiest Guy', cursive";
     ctx.fillStyle = "#2d1f14";
     ctx.textAlign = "left";
     ctx.fillText(rpsVal, padX + 14, y + 68);
@@ -7420,11 +7420,11 @@ function exportProspectImage() {
       const cVal = box.querySelector(".prospect-rps-comp-val")?.textContent || "";
       const cLbl = box.querySelector(".prospect-rps-comp-label")?.textContent || "";
       const bx = padX + 14 + i * 140;
-      ctx.font = "bold 14px sans-serif";
+      ctx.font = "bold 14px 'Space Mono', monospace";
       ctx.fillStyle = "#2d1f14";
       ctx.textAlign = "left";
       ctx.fillText(cVal, bx, y + 90);
-      ctx.font = "10px sans-serif";
+      ctx.font = "10px 'Space Mono', monospace";
       ctx.fillStyle = "#8a7565";
       ctx.fillText(cLbl, bx + 30, y + 90);
     });
@@ -7434,7 +7434,7 @@ function exportProspectImage() {
 
   // Combine metrics with bars
   if (combineGrid) {
-    ctx.font = "bold 13px sans-serif";
+    ctx.font = "bold 13px 'Space Mono', monospace";
     ctx.fillStyle = "#2d1f14";
     ctx.textAlign = "left";
     ctx.fillText("Athletic Testing", padX + 8, y + 16);
@@ -7449,7 +7449,7 @@ function exportProspectImage() {
       const barWidth = bar ? parseFloat(bar.style.width) || 0 : 0;
       const barColor = bar ? bar.style.background : "#c4b5a5";
 
-      ctx.font = "12px sans-serif";
+      ctx.font = "12px 'Space Mono', monospace";
       ctx.fillStyle = "#2d1f14";
       ctx.textAlign = "left";
       ctx.fillText(label, padX + 8, y + 12);
@@ -7484,7 +7484,7 @@ function exportProspectImage() {
 
   // Athletic comps
   if (compsGrid) {
-    ctx.font = "bold 13px sans-serif";
+    ctx.font = "bold 13px 'Space Mono', monospace";
     ctx.fillStyle = "#2d1f14";
     ctx.textAlign = "left";
     ctx.fillText("NFL Athletic Comps", padX + 8, y + 16);
@@ -7510,14 +7510,14 @@ function exportProspectImage() {
       ctx.fillStyle = simBg;
       ctx.fillRect(padX + 8, y + 8, 44, 28);
       ctx.strokeRect(padX + 8, y + 8, 44, 28);
-      ctx.font = "bold 14px sans-serif";
+      ctx.font = "bold 14px 'Space Mono', monospace";
       ctx.fillStyle = "white";
       ctx.textAlign = "center";
       ctx.fillText(simText, padX + 30, y + 27);
 
       // Comp info
       ctx.textAlign = "left";
-      ctx.font = "bold 14px sans-serif";
+      ctx.font = "bold 14px 'Space Mono', monospace";
       ctx.fillStyle = "#2d1f14";
       ctx.fillText(compName, padX + 62, y + 20);
       ctx.font = "10px monospace";
@@ -7537,7 +7537,7 @@ function exportProspectImage() {
 
   // Comp-based projections
   if (projGrid) {
-    ctx.font = "bold 13px sans-serif";
+    ctx.font = "bold 13px 'Space Mono', monospace";
     ctx.fillStyle = "#2d1f14";
     ctx.textAlign = "left";
     ctx.fillText("Comp-Based Projection", padX + 8, y + 16);
@@ -7556,11 +7556,11 @@ function exportProspectImage() {
       ctx.lineWidth = 2;
       ctx.strokeRect(bx, y, boxW, 50);
 
-      ctx.font = "bold 16px sans-serif";
+      ctx.font = "bold 16px 'Luckiest Guy', cursive";
       ctx.fillStyle = "#2d1f14";
       ctx.textAlign = "center";
       ctx.fillText(val, bx + boxW / 2, y + 22);
-      ctx.font = "9px sans-serif";
+      ctx.font = "9px 'Space Mono', monospace";
       ctx.fillStyle = "#8a7565";
       ctx.fillText(lbl, bx + boxW / 2, y + 40);
     });
@@ -7568,7 +7568,7 @@ function exportProspectImage() {
   }
 
   // Watermark
-  ctx.font = "bold 16px sans-serif";
+  ctx.font = "bold 16px 'Luckiest Guy', cursive";
   ctx.fillStyle = "#2d1f14";
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
@@ -7715,7 +7715,7 @@ function exportTierImage() {
   let y = padY;
 
   // Title
-  ctx.font = "bold 24px sans-serif";
+  ctx.font = "bold 24px 'Luckiest Guy', cursive";
   ctx.fillStyle = "#2d1f14";
   ctx.textAlign = "center";
   ctx.fillText(`${state.season} ${currentTierPosition} Athletic Tiers`, W / 2, y + 24);
@@ -7751,7 +7751,7 @@ function exportTierImage() {
     ctx.lineWidth = 2;
     ctx.stroke();
     ctx.fillStyle = "white";
-    ctx.font = "bold 12px sans-serif";
+    ctx.font = "bold 12px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(badgeText, 0, 4);
     ctx.restore();
@@ -7781,7 +7781,7 @@ function exportTierImage() {
       ctx.stroke();
 
       // Name
-      ctx.font = "bold 14px sans-serif";
+      ctx.font = "bold 14px 'Space Mono', monospace";
       ctx.fillStyle = "#2d1f14";
       ctx.textAlign = "left";
       ctx.fillText(name.substring(0, 22), cx + 8, cy + 18);
@@ -7800,7 +7800,7 @@ function exportTierImage() {
       if (pctEl) {
         const pctText = pctEl.textContent;
         const pctColor = pctEl.style.color;
-        ctx.font = "bold 18px sans-serif";
+        ctx.font = "bold 18px 'Luckiest Guy', cursive";
         ctx.fillStyle = pctColor;
         ctx.textAlign = "right";
         ctx.fillText(pctText, cx + cardW - 8, cy + 24);
@@ -7813,7 +7813,7 @@ function exportTierImage() {
   });
 
   // Watermark
-  ctx.font = "bold 16px sans-serif";
+  ctx.font = "bold 16px 'Luckiest Guy', cursive";
   ctx.fillStyle = "#2d1f14";
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
@@ -8074,7 +8074,7 @@ function exportBigBoardImage() {
   let y = padY;
 
   // Title
-  ctx.font = "bold 26px sans-serif";
+  ctx.font = "bold 26px 'Luckiest Guy', cursive";
   ctx.fillStyle = "#2d1f14";
   ctx.textAlign = "center";
   ctx.fillText(`Razzle Big Board — ${currentBBData.position} ${currentBBData.draft_year}`, W / 2, y + 26);
@@ -8107,7 +8107,7 @@ function exportBigBoardImage() {
     ctx.lineWidth = 2;
     ctx.stroke();
     ctx.fillStyle = "white";
-    ctx.font = "bold 12px sans-serif";
+    ctx.font = "bold 12px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(label, 0, 4);
     ctx.restore();
@@ -8126,13 +8126,13 @@ function exportBigBoardImage() {
       ctx.strokeRect(padX, rowY, W - padX * 2, rowH - 2);
 
       // Rank
-      ctx.font = "bold 16px sans-serif";
+      ctx.font = "bold 16px 'Luckiest Guy', cursive";
       ctx.fillStyle = posColor;
       ctx.textAlign = "center";
       ctx.fillText(`${p.rank}`, padX + 22, rowY + 27);
 
       // Name
-      ctx.font = "bold 14px sans-serif";
+      ctx.font = "bold 14px 'Space Mono', monospace";
       ctx.fillStyle = "#2d1f14";
       ctx.textAlign = "left";
       ctx.fillText(p.player_name.substring(0, 22), padX + 44, rowY + 18);
@@ -8149,7 +8149,7 @@ function exportBigBoardImage() {
       ctx.beginPath();
       ctx.roundRect(chipX, rowY + 10, 30, 20, 10);
       ctx.fill();
-      ctx.font = "bold 10px sans-serif";
+      ctx.font = "bold 10px 'Space Mono', monospace";
       ctx.fillStyle = "white";
       ctx.textAlign = "center";
       ctx.fillText(p.position, chipX + 15, rowY + 24);
@@ -8187,7 +8187,7 @@ function exportBigBoardImage() {
   }
 
   // Watermark
-  ctx.font = "bold 14px sans-serif";
+  ctx.font = "bold 14px 'Space Mono', monospace";
   ctx.fillStyle = "#2d1f14";
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
@@ -8363,7 +8363,7 @@ function drawClassAnalyticsChart(classes, maxRPS) {
   ctx.translate(14, PAD_T + chartH / 2);
   ctx.rotate(-Math.PI / 2);
   ctx.fillStyle = "#5c4a3d";
-  ctx.font = "bold 11px sans-serif";
+  ctx.font = "bold 11px 'Space Mono', monospace";
   ctx.textAlign = "center";
   ctx.fillText("Avg RPS", 0, 0);
   ctx.restore();
@@ -8401,12 +8401,12 @@ function drawClassAnalyticsChart(classes, maxRPS) {
     ctx.lineWidth = 1.5;
     ctx.strokeRect(bx, by, badgeW, badgeH);
     ctx.fillStyle = "white";
-    ctx.font = "bold 11px sans-serif";
+    ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.fillText(cls.grade, x + barW / 2, by + 13);
 
     // Year label
     ctx.fillStyle = "#2d1f14";
-    ctx.font = "bold 14px sans-serif";
+    ctx.font = "bold 14px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(cls.year.toString(), x + barW / 2, PAD_T + chartH + 20);
 
@@ -8418,7 +8418,7 @@ function drawClassAnalyticsChart(classes, maxRPS) {
 
   // Title
   ctx.fillStyle = "#2d1f14";
-  ctx.font = "bold 14px sans-serif";
+  ctx.font = "bold 14px 'Space Mono', monospace";
   ctx.textAlign = "left";
   const posLabel = currentCAData?.filterPosition === "ALL" ? "All Positions" : (currentCAData?.filterPosition || "ALL");
   ctx.fillText(`${posLabel} — Average RPS by Draft Class`, PAD_L, 18);
@@ -8452,7 +8452,7 @@ function exportClassAnalyticsImage() {
   // Title
   let y = 0;
   ctx.fillStyle = "#2d1f14";
-  ctx.font = "bold 24px sans-serif";
+  ctx.font = "bold 24px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText(`Razzle Draft Class Analytics — ${posLabel}`, W / 2, y + 32);
   ctx.font = "16px 'Caveat', cursive";
@@ -8515,12 +8515,12 @@ function exportClassAnalyticsImage() {
     ctx.lineWidth = 1;
     ctx.strokeRect(x + barW / 2 - gw / 2, by - 24, gw, gh);
     ctx.fillStyle = "white";
-    ctx.font = "bold 10px sans-serif";
+    ctx.font = "bold 10px 'Space Mono', monospace";
     ctx.fillText(cls.grade, x + barW / 2, by - 12);
 
     // Year
     ctx.fillStyle = "#2d1f14";
-    ctx.font = "bold 12px sans-serif";
+    ctx.font = "bold 12px 'Space Mono', monospace";
     ctx.fillText(cls.year.toString(), x + barW / 2, y + chartH - 18);
   }
 
@@ -8560,14 +8560,14 @@ function exportClassAnalyticsImage() {
     ctx.lineWidth = 1.5;
     ctx.strokeRect(gbx, gby, 24, 20);
     ctx.fillStyle = "white";
-    ctx.font = "bold 13px sans-serif";
+    ctx.font = "bold 13px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(cls.grade, gbx + 12, gby + 15);
 
     // Year
     ctx.textAlign = "left";
     ctx.fillStyle = "#2d1f14";
-    ctx.font = "bold 18px sans-serif";
+    ctx.font = "bold 18px 'Luckiest Guy', cursive";
     ctx.fillText(cls.year.toString(), cx + 10, cy + 24);
 
     // Stats
@@ -8586,7 +8586,7 @@ function exportClassAnalyticsImage() {
       ctx.fillStyle = "#8a7565";
       ctx.fillText("Top:", cx + 10, cy + 82);
       ctx.fillStyle = "#2d1f14";
-      ctx.font = "bold 11px sans-serif";
+      ctx.font = "bold 11px 'Space Mono', monospace";
       const name = cls.top_prospect.name.length > 22 ? cls.top_prospect.name.slice(0, 20) + "..." : cls.top_prospect.name;
       ctx.fillText(`${name} (${cls.top_prospect.rps.toFixed(1)})`, cx + 10, cy + 96);
     }
@@ -8614,7 +8614,7 @@ function exportClassAnalyticsImage() {
   y += cardRows * (cardH + 12) + 10;
 
   // Watermark
-  ctx.font = "bold 14px sans-serif";
+  ctx.font = "bold 14px 'Space Mono', monospace";
   ctx.fillStyle = "#2d1f14";
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
@@ -8925,7 +8925,7 @@ function exportTradeValuesPNG() {
   ctx.fillRect(0, 0, W, H);
 
   // Title
-  ctx.font = "bold 24px sans-serif";
+  ctx.font = "bold 24px 'Luckiest Guy', cursive";
   ctx.fillStyle = "#2d1f14";
   ctx.textAlign = "center";
   const posLabel = _tvState.position === "ALL" ? "Dynasty" : _tvState.position;
@@ -8953,7 +8953,7 @@ function exportTradeValuesPNG() {
     ctx.lineWidth = 1.5;
     ctx.stroke();
     ctx.fillStyle = "#fff";
-    ctx.font = "bold 10px sans-serif";
+    ctx.font = "bold 10px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(g.tier.badge, 0, 4);
     ctx.restore();
@@ -8985,14 +8985,14 @@ function exportTradeValuesPNG() {
       ctx.lineWidth = 1;
       ctx.strokeRect(padX + 8, ry + 6, 28, 16);
       ctx.fillStyle = "#fff";
-      ctx.font = "bold 8px sans-serif";
+      ctx.font = "bold 8px 'Space Mono', monospace";
       ctx.textAlign = "center";
       ctx.fillText(p.position, padX + 22, ry + 17);
 
       // Name
       ctx.textAlign = "left";
       ctx.fillStyle = "#2d1f14";
-      ctx.font = "bold 12px sans-serif";
+      ctx.font = "bold 12px 'Space Mono', monospace";
       ctx.fillText(p.full_name || "", padX + 44, ry + 18);
 
       // Team + age
@@ -9025,7 +9025,7 @@ function exportTradeValuesPNG() {
   }
 
   // Watermark
-  ctx.font = "bold 14px sans-serif";
+  ctx.font = "bold 14px 'Space Mono', monospace";
   ctx.fillStyle = "#2d1f14";
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
@@ -9358,7 +9358,7 @@ function exportAgingCurvesPNG() {
   renderAgingCurveChart(canvas);
 
   // Watermark
-  ctx.font = "bold 14px sans-serif";
+  ctx.font = "bold 14px 'Space Mono', monospace";
   ctx.fillStyle = "#2d1f14";
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
@@ -9650,7 +9650,7 @@ function exportHeatMapPNG() {
   const H = canvas.height;
 
   // Watermark
-  ctx.font = "bold 14px sans-serif";
+  ctx.font = "bold 14px 'Space Mono', monospace";
   ctx.fillStyle = "#2d1f14";
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
@@ -10542,7 +10542,7 @@ function exportTradeAnalyzerPNG() {
   ctx.strokeRect(4, 4, W - 8, H - 8);
 
   // Title
-  ctx.font = "bold 28px sans-serif";
+  ctx.font = "bold 28px 'Luckiest Guy', cursive";
   ctx.fillStyle = "#2d1f14";
   ctx.textAlign = "center";
   ctx.fillText("Razzle Trade Analyzer", W / 2, 44);
@@ -10581,7 +10581,7 @@ function exportTradeAnalyzerPNG() {
     ctx.fill();
     ctx.stroke();
     ctx.fillStyle = "#2d1f14";
-    ctx.font = "bold 13px sans-serif";
+    ctx.font = "bold 13px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(label, x + 56, topY + 30);
 
@@ -10616,14 +10616,14 @@ function exportTradeAnalyzerPNG() {
       ctx.lineWidth = 1.5;
       ctx.stroke();
       ctx.fillStyle = "#fff";
-      ctx.font = "bold 10px sans-serif";
+      ctx.font = "bold 10px 'Space Mono', monospace";
       ctx.textAlign = "center";
       ctx.fillText(isPick ? ("RD" + p.round) : p.position, x + 36, cy + 25);
 
       // Name
       ctx.textAlign = "left";
       ctx.fillStyle = "#2d1f14";
-      ctx.font = "bold 14px sans-serif";
+      ctx.font = "bold 14px 'Space Mono', monospace";
       ctx.fillText(isPick ? (p.pick_label || "") : (p.full_name || ""), x + 62, cy + 22);
 
       // Sub-text
@@ -10655,7 +10655,7 @@ function exportTradeAnalyzerPNG() {
   // VS divider
   ctx.save();
   ctx.fillStyle = "#2d1f14";
-  ctx.font = "bold 22px sans-serif";
+  ctx.font = "bold 22px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText("VS", W / 2, topY + 200);
   ctx.restore();
@@ -10705,7 +10705,7 @@ function exportTradeAnalyzerPNG() {
   ctx.textAlign = "right";
   ctx.fillText(String(giveTotal), giveX + sideW, barY - 6);
   ctx.fillText(String(getTotal), getX + sideW, barY - 6);
-  ctx.font = "bold 11px sans-serif";
+  ctx.font = "bold 11px 'Space Mono', monospace";
   ctx.textAlign = "left";
   ctx.fillText("GIVE", giveX, barY - 6);
   ctx.fillText("GET", getX, barY - 6);
@@ -10746,7 +10746,7 @@ function exportTradeAnalyzerPNG() {
   ctx.fillRect(-bw / 2 + 3, -bh / 2 + 3 + bh, bw, 3);
   ctx.globalAlpha = 1.0;
   ctx.fillStyle = verdictColor;
-  ctx.font = "bold 18px sans-serif";
+  ctx.font = "bold 18px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText(verdict, 0, 7);
   ctx.restore();
@@ -10772,7 +10772,7 @@ function exportTradeAnalyzerPNG() {
   ctx.fillText(quip, W / 2, 565);
 
   // Watermark
-  ctx.font = "bold 14px sans-serif";
+  ctx.font = "bold 14px 'Space Mono', monospace";
   ctx.fillStyle = "#2d1f14";
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "right";
@@ -10922,7 +10922,7 @@ function _taDrawPickChart() {
   }
 
   // Round labels at bottom
-  ctx.font = "bold 10px sans-serif";
+  ctx.font = "bold 10px 'Space Mono', monospace";
   ctx.textAlign = "center";
   for (let rd = 1; rd <= 4; rd++) {
     const startIdx = (rd - 1) * 12;
@@ -10933,7 +10933,7 @@ function _taDrawPickChart() {
   }
 
   // Title
-  ctx.font = "bold 11px sans-serif";
+  ctx.font = "bold 11px 'Space Mono', monospace";
   ctx.fillStyle = "#2d1f14";
   ctx.textAlign = "left";
   ctx.fillText("PICK VALUE CURVE", pad.left, 14);
@@ -11247,7 +11247,7 @@ function drawRosterPieChart() {
     ctx.lineWidth = 1;
     ctx.strokeRect(W - 65, ly, 12, 12);
     ctx.fillStyle = "#2d1f14";
-    ctx.font = "bold 11px sans-serif";
+    ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.textAlign = "left";
     ctx.fillText(sl.pos + " " + Math.round(sl.pct * 100) + "%", W - 48, ly + 10);
     ly += 20;
@@ -11286,7 +11286,7 @@ function drawRosterAgeChart() {
     var gx = xPos(a);
     ctx.beginPath(); ctx.moveTo(gx, pad.top); ctx.lineTo(gx, H - pad.bottom); ctx.stroke();
     ctx.fillStyle = "#2d1f14";
-    ctx.font = "10px sans-serif";
+    ctx.font = "10px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(a, gx, H - pad.bottom + 14);
   }
@@ -11294,14 +11294,14 @@ function drawRosterAgeChart() {
     var gy = yPos(v);
     ctx.beginPath(); ctx.moveTo(pad.left, gy); ctx.lineTo(W - pad.right, gy); ctx.stroke();
     ctx.fillStyle = "#2d1f14";
-    ctx.font = "10px sans-serif";
+    ctx.font = "10px 'Space Mono', monospace";
     ctx.textAlign = "right";
     ctx.fillText(v, pad.left - 4, gy + 3);
   }
 
   // Axis labels
   ctx.fillStyle = "#2d1f14";
-  ctx.font = "bold 10px sans-serif";
+  ctx.font = "bold 10px 'Space Mono', monospace";
   ctx.textAlign = "center";
   ctx.fillText("AGE", pad.left + plotW / 2, H - 2);
   ctx.save();
@@ -11327,7 +11327,7 @@ function drawRosterAgeChart() {
     // Name label for top players
     if (val >= 40 || players.length <= 10) {
       ctx.fillStyle = "#2d1f14";
-      ctx.font = "9px sans-serif";
+      ctx.font = "9px 'Space Mono', monospace";
       ctx.textAlign = "center";
       var lastName = (p.full_name || "").split(" ").slice(-1)[0];
       ctx.fillText(lastName, x, y - 8);
@@ -11367,7 +11367,7 @@ function exportRosterTeamCard() {
 
   // Header
   ctx.fillStyle = "#2d1f14";
-  ctx.font = "bold 28px 'Luckiest Guy', sans-serif";
+  ctx.font = "bold 28px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText("MY DYNASTY ROSTER", W / 2, 44);
   ctx.font = "16px 'Caveat', cursive";
@@ -11386,16 +11386,16 @@ function exportRosterTeamCard() {
   _roundRect(ctx, 30, y + 5, 70, 55, 10);
   ctx.stroke();
   ctx.fillStyle = "white";
-  ctx.font = "bold 32px sans-serif";
+  ctx.font = "bold 32px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText(r.grade, 65, y + 42);
 
   // Total value
   ctx.fillStyle = "#2d1f14";
-  ctx.font = "bold 26px sans-serif";
+  ctx.font = "bold 26px 'Luckiest Guy', cursive";
   ctx.textAlign = "left";
   ctx.fillText(r.total_value + " pts", 120, y + 30);
-  ctx.font = "14px sans-serif";
+  ctx.font = "14px 'Space Mono', monospace";
   ctx.fillStyle = "#5c4a3d";
   ctx.fillText("total dynasty value  |  avg age: " + r.average_age, 120, y + 50);
 
@@ -11411,7 +11411,7 @@ function exportRosterTeamCard() {
   _roundRect(ctx, W - sw - 30, y + 12, sw, 30, 8);
   ctx.stroke();
   ctx.fillStyle = "white";
-  ctx.font = "bold 14px sans-serif";
+  ctx.font = "bold 14px 'Space Mono', monospace";
   ctx.textAlign = "center";
   ctx.fillText(statusText, W - sw / 2 - 30, y + 32);
 
@@ -11454,7 +11454,7 @@ function exportRosterTeamCard() {
     ctx.lineWidth = 1;
     ctx.strokeRect(210, ly, 14, 14);
     ctx.fillStyle = "#2d1f14";
-    ctx.font = "bold 12px sans-serif";
+    ctx.font = "bold 12px 'Space Mono', monospace";
     ctx.fillText(sl.pos + ": " + Math.round(sl.val) + " (" + Math.round(sl.pct * 100) + "%)", 230, ly + 12);
     ly += 22;
   });
@@ -11485,10 +11485,10 @@ function exportRosterTeamCard() {
   ctx.lineWidth = 1;
   for (var a = Math.ceil(sMinAge); a <= sMaxAge; a += 2) {
     ctx.beginPath(); ctx.moveTo(sxPos(a), scatterY + sPad.top); ctx.lineTo(sxPos(a), scatterY + scatterH - sPad.bottom); ctx.stroke();
-    ctx.fillStyle = "#5c4a3d"; ctx.font = "9px sans-serif"; ctx.textAlign = "center";
+    ctx.fillStyle = "#5c4a3d"; ctx.font = "9px 'Space Mono', monospace"; ctx.textAlign = "center";
     ctx.fillText(a, sxPos(a), scatterY + scatterH - sPad.bottom + 12);
   }
-  ctx.fillStyle = "#2d1f14"; ctx.font = "bold 9px sans-serif"; ctx.textAlign = "center";
+  ctx.fillStyle = "#2d1f14"; ctx.font = "bold 9px 'Space Mono', monospace"; ctx.textAlign = "center";
   ctx.fillText("AGE", scatterX + sPad.left + sPlotW / 2, scatterY + scatterH - 2);
 
   // Dots
@@ -11505,14 +11505,14 @@ function exportRosterTeamCard() {
   });
 
   // Title
-  ctx.fillStyle = "#2d1f14"; ctx.font = "bold 10px sans-serif"; ctx.textAlign = "left";
+  ctx.fillStyle = "#2d1f14"; ctx.font = "bold 10px 'Space Mono', monospace"; ctx.textAlign = "left";
   ctx.fillText("AGE vs VALUE", scatterX + sPad.left, scatterY + 14);
 
   y += CHART_AREA_H;
 
   // Player values table
   ctx.fillStyle = "#2d1f14";
-  ctx.font = "bold 12px sans-serif";
+  ctx.font = "bold 12px 'Space Mono', monospace";
   ctx.textAlign = "left";
   ctx.fillText("PLAYER VALUES", 30, y + 16);
   y += 26;
@@ -11524,7 +11524,7 @@ function exportRosterTeamCard() {
 
     // Rank
     ctx.fillStyle = "#8a7565";
-    ctx.font = "10px sans-serif";
+    ctx.font = "10px 'Space Mono', monospace";
     ctx.textAlign = "right";
     ctx.fillText((i + 1) + ".", 50, rowY + 16);
 
@@ -11533,19 +11533,19 @@ function exportRosterTeamCard() {
     _roundRect(ctx, 56, rowY + 4, 26, 16, 4);
     ctx.fill();
     ctx.fillStyle = "white";
-    ctx.font = "bold 9px sans-serif";
+    ctx.font = "bold 9px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(p.position, 69, rowY + 15);
 
     // Name
     ctx.fillStyle = "#2d1f14";
-    ctx.font = "bold 12px sans-serif";
+    ctx.font = "bold 12px 'Space Mono', monospace";
     ctx.textAlign = "left";
     ctx.fillText(p.full_name || "", 90, rowY + 16);
 
     // Team
     ctx.fillStyle = "#8a7565";
-    ctx.font = "10px sans-serif";
+    ctx.font = "10px 'Space Mono', monospace";
     ctx.textAlign = "left";
     var nameW = ctx.measureText(p.full_name || "").width;
     ctx.fillText(p.team || "", 94 + nameW, rowY + 16);
@@ -11562,7 +11562,7 @@ function exportRosterTeamCard() {
 
     // Value number
     ctx.fillStyle = "#2d1f14";
-    ctx.font = "bold 12px sans-serif";
+    ctx.font = "bold 12px 'Space Mono', monospace";
     ctx.textAlign = "right";
     ctx.fillText(p.trade_value, W - 36, rowY + 16);
   });
@@ -11571,7 +11571,7 @@ function exportRosterTeamCard() {
 
   // Watermark
   ctx.fillStyle = "#2d1f14";
-  ctx.font = "bold 14px 'Luckiest Guy', sans-serif";
+  ctx.font = "bold 14px 'Luckiest Guy', cursive";
   ctx.textAlign = "right";
   ctx.globalAlpha = 0.3;
   ctx.fillText("razzle.lol", W - 20, H - 12);
@@ -11886,7 +11886,7 @@ function exportCompsImage() {
 
   // Header
   ctx.fillStyle = "#2d1f14";
-  ctx.font = "bold 24px sans-serif";
+  ctx.font = "bold 24px 'Luckiest Guy', cursive";
   ctx.textAlign = "left";
   ctx.fillText(`PLAYER COMPS — ${player.full_name}`, padX, padY + 28);
 
@@ -11903,7 +11903,7 @@ function exportCompsImage() {
   ctx.lineWidth = 2;
   ctx.strokeRect(badgeX, padY + 10, 50, 30);
   ctx.fillStyle = "#fff";
-  ctx.font = "bold 14px sans-serif";
+  ctx.font = "bold 14px 'Space Mono', monospace";
   ctx.textAlign = "center";
   ctx.fillText(pos, badgeX + 25, padY + 30);
 
@@ -11938,14 +11938,14 @@ function exportCompsImage() {
     ctx.lineWidth = 2;
     ctx.strokeRect(padX + 10, cardY + 10, 30, 30);
     ctx.fillStyle = "#fff";
-    ctx.font = "bold 16px sans-serif";
+    ctx.font = "bold 16px 'Luckiest Guy', cursive";
     ctx.textAlign = "center";
     ctx.fillText(`#${i + 1}`, padX + 25, cardY + 30);
 
     // Name + team
     ctx.textAlign = "left";
     ctx.fillStyle = "#2d1f14";
-    ctx.font = "bold 18px sans-serif";
+    ctx.font = "bold 18px 'Luckiest Guy', cursive";
     ctx.fillText(c.full_name, padX + 52, cardY + 28);
     ctx.fillStyle = "#8a7565";
     ctx.font = "11px monospace";
@@ -11954,7 +11954,7 @@ function exportCompsImage() {
     // Similarity score
     const simColor = c.similarity >= 95 ? "#2ec4b6" : c.similarity >= 90 ? "#d97757" : "#5c4a3d";
     ctx.fillStyle = simColor;
-    ctx.font = "bold 28px sans-serif";
+    ctx.font = "bold 28px 'Luckiest Guy', cursive";
     ctx.textAlign = "right";
     ctx.fillText(`${c.similarity}%`, W - padX - 16, cardY + 35);
     ctx.fillStyle = "#8a7565";
@@ -12027,7 +12027,7 @@ function exportCompsImage() {
   // Watermark
   const wmY = H - padY - 10;
   ctx.fillStyle = "#8a7565";
-  ctx.font = "italic 14px sans-serif";
+  ctx.font = "italic 14px 'Caveat', cursive";
   ctx.textAlign = "center";
   ctx.fillText("razzle.lol — let's razzle dazzle em baby", W / 2, wmY);
 
@@ -12363,7 +12363,7 @@ function exportBoomBustImage() {
   ctx.fillStyle = "#2d1f14";
   ctx.fillRect(0, 0, 800, 56);
   ctx.fillStyle = "#f7efe5";
-  ctx.font = "bold 22px 'Segoe UI', Arial, sans-serif";
+  ctx.font = "bold 22px 'Luckiest Guy', cursive";
   ctx.textAlign = "left";
   ctx.fillText(`BOOM/BUST PROFILE — ${player.full_name}`, 20, 36);
 
@@ -12371,13 +12371,13 @@ function exportBoomBustImage() {
   ctx.fillStyle = posColor;
   ctx.fillRect(700, 10, 80, 36);
   ctx.fillStyle = "white";
-  ctx.font = "bold 18px 'Segoe UI', Arial, sans-serif";
+  ctx.font = "bold 18px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText(pos, 740, 35);
 
   // Subtitle
   ctx.fillStyle = "#5c4a3d";
-  ctx.font = "13px 'Segoe UI', Arial, sans-serif";
+  ctx.font = "13px 'Space Mono', monospace";
   ctx.textAlign = "left";
   ctx.fillText(`${player.team || "FA"} · ${season} Season · ${games_played} Games · Avg ${mean_ppg} PPR/G`, 20, 80);
 
@@ -12393,7 +12393,7 @@ function exportBoomBustImage() {
   ctx.lineWidth = 3;
   ctx.stroke();
   ctx.fillStyle = "white";
-  ctx.font = "bold 32px 'Segoe UI', Arial, sans-serif";
+  ctx.font = "bold 32px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText(grade, 0, 12);
   ctx.restore();
@@ -12418,11 +12418,11 @@ function exportBoomBustImage() {
     ctx.lineWidth = 2;
     ctx.stroke();
     ctx.fillStyle = cardStats[i].color;
-    ctx.font = "bold 22px 'Segoe UI', Arial, sans-serif";
+    ctx.font = "bold 22px 'Luckiest Guy', cursive";
     ctx.textAlign = "center";
     ctx.fillText(cardStats[i].value, x + cardW / 2, startY + 28);
     ctx.fillStyle = "#5c4a3d";
-    ctx.font = "bold 10px 'Segoe UI', Arial, sans-serif";
+    ctx.font = "bold 10px 'Space Mono', monospace";
     ctx.fillText(cardStats[i].label, x + cardW / 2, startY + 50);
   }
 
@@ -12452,7 +12452,7 @@ function exportBoomBustImage() {
     ctx.lineTo(800 - hPad.right, y);
     ctx.stroke();
     ctx.fillStyle = "#5c4a3d";
-    ctx.font = "11px 'Segoe UI', Arial, sans-serif";
+    ctx.font = "11px 'Space Mono', monospace";
     ctx.textAlign = "right";
     ctx.fillText(i.toString(), hPad.left - 6, y + 4);
   }
@@ -12470,7 +12470,7 @@ function exportBoomBustImage() {
     ctx.lineWidth = 1.5;
     ctx.strokeRect(x, y, barW, bH);
     ctx.fillStyle = "#5c4a3d";
-    ctx.font = "10px 'Segoe UI', Arial, sans-serif";
+    ctx.font = "10px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(`${i * bucketSize}`, x + barW / 2, hPad.top + hH + 16);
   }
@@ -12486,7 +12486,7 @@ function exportBoomBustImage() {
   ctx.stroke();
   ctx.setLineDash([]);
   ctx.fillStyle = "#2ec4b6";
-  ctx.font = "bold 11px 'Segoe UI', Arial, sans-serif";
+  ctx.font = "bold 11px 'Space Mono', monospace";
   ctx.textAlign = "left";
   ctx.fillText("BOOM", boomX + 4, hPad.top + 14);
 
@@ -12500,13 +12500,13 @@ function exportBoomBustImage() {
   ctx.stroke();
   ctx.setLineDash([]);
   ctx.fillStyle = "#e63946";
-  ctx.font = "bold 11px 'Segoe UI', Arial, sans-serif";
+  ctx.font = "bold 11px 'Space Mono', monospace";
   ctx.textAlign = "right";
   ctx.fillText("BUST", bustX - 4, hPad.top + 14);
 
   // Axis labels
   ctx.fillStyle = "#5c4a3d";
-  ctx.font = "12px 'Segoe UI', Arial, sans-serif";
+  ctx.font = "12px 'Space Mono', monospace";
   ctx.textAlign = "center";
   ctx.fillText("Fantasy Points (PPR)", 400, hPad.top + hH + 40);
 
@@ -12529,7 +12529,7 @@ function exportBoomBustImage() {
   ctx.fillStyle = posColor;
   ctx.fillRect(mdX - 2, rbY - 4, 4, 26);
 
-  ctx.font = "bold 10px 'Segoe UI', Arial, sans-serif";
+  ctx.font = "bold 10px 'Space Mono', monospace";
   ctx.textAlign = "center";
   ctx.fillStyle = "#e63946";
   ctx.fillText(`${floor_ppg.toFixed(1)} FLOOR`, flX, rbY - 6);
@@ -12541,7 +12541,7 @@ function exportBoomBustImage() {
   // Watermark
   ctx.fillStyle = "#2d1f14";
   ctx.globalAlpha = 0.4;
-  ctx.font = "bold 14px 'Segoe UI', Arial, sans-serif";
+  ctx.font = "bold 14px 'Space Mono', monospace";
   ctx.textAlign = "right";
   ctx.fillText("razzle.lol", 780, 690);
   ctx.globalAlpha = 1;

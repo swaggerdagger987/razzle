@@ -584,14 +584,14 @@ function exportComparePNG() {
 
   // VS badge
   ctx.fillStyle = "#ede0cf";
-  ctx.strokeStyle = "#2a2a2e";
+  ctx.strokeStyle = "#2d1f14";
   ctx.lineWidth = 3;
   ctx.beginPath();
   ctx.arc(W / 2, 80, 28, 0, Math.PI * 2);
   ctx.fill();
   ctx.stroke();
   ctx.fillStyle = "#d97757";
-  ctx.font = "bold 20px 'Luckiest Guy', sans-serif";
+  ctx.font = "bold 20px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText("VS", W / 2, 87);
 
@@ -623,7 +623,7 @@ function exportComparePNG() {
     }
 
     // Label
-    ctx.fillStyle = "#6b6b7b";
+    ctx.fillStyle = "#8a7565";
     ctx.font = "11px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(r.label, W / 2, y + 14);
@@ -636,12 +636,12 @@ function exportComparePNG() {
     }
 
     ctx.font = winner === 1 ? "bold 13px 'Space Mono', monospace" : "13px 'Space Mono', monospace";
-    ctx.fillStyle = winner === 1 ? color1 : "#2a2a2e";
+    ctx.fillStyle = winner === 1 ? color1 : "#2d1f14";
     ctx.textAlign = "right";
     ctx.fillText(v1 !== null ? r.fmt(v1) : "\u2014", W / 2 - 70, y + 14);
 
     ctx.font = winner === 2 ? "bold 13px 'Space Mono', monospace" : "13px 'Space Mono', monospace";
-    ctx.fillStyle = winner === 2 ? color2 : "#2a2a2e";
+    ctx.fillStyle = winner === 2 ? color2 : "#2d1f14";
     ctx.textAlign = "left";
     ctx.fillText(v2 !== null ? r.fmt(v2) : "\u2014", W / 2 + 70, y + 14);
   }
@@ -651,13 +651,13 @@ function exportComparePNG() {
   drawRadarOnExport(ctx, radarCx, radarCy, radarR, color1, color2, pos);
 
   // Watermark
-  ctx.fillStyle = "rgba(42,42,46,0.3)";
-  ctx.font = "18px 'Luckiest Guy', sans-serif";
+  ctx.fillStyle = "rgba(45,31,20,0.3)";
+  ctx.font = "18px 'Luckiest Guy', cursive";
   ctx.textAlign = "right";
   ctx.fillText("razzle.lol", W - 50, H - 30);
 
   // Handwritten annotation
-  ctx.fillStyle = "rgba(42,42,46,0.25)";
+  ctx.fillStyle = "rgba(45,31,20,0.25)";
   ctx.font = "16px 'Caveat', cursive";
   ctx.textAlign = "left";
   ctx.fillText("who would you rather have?", 50, H - 30);
@@ -674,7 +674,7 @@ function exportComparePNG() {
 function drawExportPlayerCard(ctx, x, y, w, h, player, career, pos, color) {
   // Card bg
   ctx.fillStyle = "#f7efe5";
-  ctx.strokeStyle = "#2a2a2e";
+  ctx.strokeStyle = "#2d1f14";
   ctx.lineWidth = 2;
   roundRect(ctx, x, y, w, h, 10);
   ctx.fill();
@@ -689,18 +689,18 @@ function drawExportPlayerCard(ctx, x, y, w, h, player, career, pos, color) {
   ctx.fillStyle = color;
   roundRect(ctx, x + 14, y + 18, 50, 36, 6);
   ctx.fill();
-  ctx.strokeStyle = "#2a2a2e";
+  ctx.strokeStyle = "#2d1f14";
   ctx.lineWidth = 2;
   roundRect(ctx, x + 14, y + 18, 50, 36, 6);
   ctx.stroke();
   ctx.fillStyle = "#fff";
-  ctx.font = "bold 22px 'Luckiest Guy', sans-serif";
+  ctx.font = "bold 22px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText(pos, x + 39, y + 44);
 
   // Name
-  ctx.fillStyle = "#2a2a2e";
-  ctx.font = "bold 26px 'Luckiest Guy', sans-serif";
+  ctx.fillStyle = "#2d1f14";
+  ctx.font = "bold 26px 'Luckiest Guy', cursive";
   ctx.textAlign = "left";
   var displayName = player.full_name || "";
   // Truncate if too long
@@ -713,7 +713,7 @@ function drawExportPlayerCard(ctx, x, y, w, h, player, career, pos, color) {
   ctx.fillText(displayName, x + 74, y + 46);
 
   // Meta
-  ctx.fillStyle = "#6b6b7b";
+  ctx.fillStyle = "#8a7565";
   ctx.font = "13px 'Space Mono', monospace";
   ctx.fillText((player.team || "FA") + " \u00B7 Age " + (player.age ? Math.floor(player.age) : "?"), x + 74, y + 68);
 
@@ -739,13 +739,13 @@ function drawExportPlayerCard(ctx, x, y, w, h, player, career, pos, color) {
     ctx.fillStyle = "#ede0cf";
     roundRect(ctx, bx, by, boxW, 52, 6);
     ctx.fill();
-    ctx.strokeStyle = "#2a2a2e";
+    ctx.strokeStyle = "#2d1f14";
     ctx.lineWidth = 1;
     roundRect(ctx, bx, by, boxW, 52, 6);
     ctx.stroke();
 
-    ctx.fillStyle = "#2a2a2e";
-    ctx.font = "bold 20px 'Luckiest Guy', sans-serif";
+    ctx.fillStyle = "#2d1f14";
+    ctx.font = "bold 20px 'Luckiest Guy', cursive";
     ctx.textAlign = "center";
     ctx.fillText(stats[i].value, bx + boxW / 2, by + 26);
 

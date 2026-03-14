@@ -575,7 +575,7 @@ async function exportPlayerPNG() {
 
   // Card background
   ctx.fillStyle = "#f7efe5";
-  ctx.strokeStyle = "#2a2a2e";
+  ctx.strokeStyle = "#2d1f14";
   ctx.lineWidth = 3;
   roundRect(ctx, 40, 30, W - 80, H - 80, 16);
   ctx.fill();
@@ -585,23 +585,23 @@ async function exportPlayerPNG() {
   ctx.fillStyle = posHex;
   roundRect(ctx, 60, 50, 80, 60, 8);
   ctx.fill();
-  ctx.strokeStyle = "#2a2a2e";
+  ctx.strokeStyle = "#2d1f14";
   ctx.lineWidth = 2;
   roundRect(ctx, 60, 50, 80, 60, 8);
   ctx.stroke();
   ctx.fillStyle = "#fff";
-  ctx.font = "bold 32px 'Luckiest Guy', sans-serif";
+  ctx.font = "bold 32px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText(pos, 100, 92);
 
   // Player name
-  ctx.fillStyle = "#2a2a2e";
-  ctx.font = "bold 42px 'Luckiest Guy', sans-serif";
+  ctx.fillStyle = "#2d1f14";
+  ctx.font = "bold 42px 'Luckiest Guy', cursive";
   ctx.textAlign = "left";
   ctx.fillText(p.full_name || "", 160, 92);
 
   // Meta line
-  ctx.fillStyle = "#6b6b7b";
+  ctx.fillStyle = "#8a7565";
   ctx.font = "16px 'Space Mono', monospace";
   ctx.fillText(`${p.team || "FA"} · Age ${p.age ? Math.floor(p.age) : "?"} · ${p.college || ""}`, 160, 120);
 
@@ -612,15 +612,15 @@ async function exportPlayerPNG() {
     const x = startX + i * (boxW + 12);
     const y = startY;
     ctx.fillStyle = "#ede0cf";
-    ctx.strokeStyle = "#2a2a2e";
+    ctx.strokeStyle = "#2d1f14";
     ctx.lineWidth = 2;
     roundRect(ctx, x, y, boxW, boxH, 8);
     ctx.fill();
     roundRect(ctx, x, y, boxW, boxH, 8);
     ctx.stroke();
 
-    ctx.fillStyle = "#2a2a2e";
-    ctx.font = "bold 28px 'Luckiest Guy', sans-serif";
+    ctx.fillStyle = "#2d1f14";
+    ctx.font = "bold 28px 'Luckiest Guy', cursive";
     ctx.textAlign = "center";
     ctx.fillText(stats[i].value, x + boxW / 2, y + 38);
 
@@ -634,7 +634,7 @@ async function exportPlayerPNG() {
 
   // Watermark
   ctx.fillStyle = "rgba(42,42,46,0.3)";
-  ctx.font = "18px 'Luckiest Guy', sans-serif";
+  ctx.font = "18px 'Luckiest Guy', cursive";
   ctx.textAlign = "right";
   ctx.fillText("razzle.lol", W - 56, H - 56);
 

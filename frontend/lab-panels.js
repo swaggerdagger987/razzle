@@ -219,7 +219,7 @@
             pts.push(x.toFixed(1) + ',' + y.toFixed(1));
           }
           var trend = vals[vals.length - 1] - vals[0];
-          var color = trend >= 0 ? 'var(--green)' : 'var(--accent)';
+          var color = trend >= 0 ? 'var(--green)' : 'var(--orange)';
           html += '<svg width="' + w + '" height="' + h2 + '" style="vertical-align:middle">';
           html += '<polyline points="' + pts.join(' ') + '" fill="none" stroke="' + color + '" stroke-width="2"/>';
           html += '</svg>';
@@ -9330,7 +9330,7 @@
         var barColor = hitPct >= 50 ? '#2ec4b6' : hitPct >= 30 ? '#d97757' : '#d44040';
         html += '<div style="background:var(--bg-card); border:2px solid var(--ink); border-radius:6px; padding:8px 12px; min-width:100px; text-align:center;">' +
           '<div style="font-family:var(--font-display); font-size:14px; color:var(--ink);">Round ' + rd.round + '</div>' +
-          '<div style="margin:4px 0; height:6px; background:#eee; border-radius:3px;">' +
+          '<div style="margin:4px 0; height:6px; background:#e8d5c4; border-radius:3px;">' +
             '<div style="height:100%; width:' + hitPct + '%; background:' + barColor + '; border-radius:3px;"></div>' +
           '</div>' +
           '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' +

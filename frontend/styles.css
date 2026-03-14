@@ -43,7 +43,12 @@
   --pos-wr: #d97757;
   --pos-te: #8b5cf6;
 
-  --font-display: 'Garfield', 'Luckiest Guy', cursive;
+  --semantic-green: #2e7d52;
+  --semantic-green-light: #e8f0e4;
+  --semantic-red: #9b3232;
+  --semantic-red-light: #f0e0df;
+
+  --font-display: 'Luckiest Guy', cursive;
   --font-mono: 'Space Mono', monospace;
   --font-hand: 'Caveat', cursive;
 
@@ -69,6 +74,11 @@
   --blue-light: #2a3350;
   --red-light: #4a1a1e;
   --purple-light: #352450;
+
+  --semantic-green: #5cb87a;
+  --semantic-green-light: #1a3325;
+  --semantic-red: #e06060;
+  --semantic-red-light: #3d1f1f;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -1361,7 +1371,7 @@ tr:hover .notes-cell .note-pencil {
   border-radius: 8px;
   padding: 6px 16px;
   margin: 4px 0;
-  font-family: var(--font-data);
+  font-family: var(--font-mono);
   font-size: 12px;
   color: var(--ink);
   display: flex;

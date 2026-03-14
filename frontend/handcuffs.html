@@ -141,9 +141,9 @@
     padding: 1px 6px;
     border-radius: 3px;
     border: 2px solid;
-    background: #dcfce7;
-    color: #166534;
-    border-color: #166534;
+    background: var(--semantic-green-light);
+    color: var(--semantic-green);
+    border-color: var(--semantic-green);
   }
 
   .hc-starter {
@@ -355,7 +355,7 @@
       html += '<td class="hc-rank">' + (i + 1) + '</td>';
       html += '<td><span class="hc-team-badge">' + escapeHtml(h.team) + '</span></td>';
       html += '<td style="font-weight:700">' + escapeHtml(h.handcuff_name) + '</td>';
-      html += '<td style="font-weight:700;color:#166534">' + escapeHtml(String(fmt(h.hc_ppg))) + '</td>';
+      html += '<td style="font-weight:700;color:var(--semantic-green)">' + escapeHtml(String(fmt(h.hc_ppg))) + '</td>';
       html += '<td>' + escapeHtml(String(fmt(h.hc_car_g))) + '</td>';
       html += '<td>' + escapeHtml(String(fmt(h.hc_ypc))) + '</td>';
       html += '<td><span class="hc-value-badge">' + escapeHtml(String(fmt(h.hc_value))) + '</span></td>';

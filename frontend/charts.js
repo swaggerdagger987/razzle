@@ -1068,14 +1068,14 @@ function exportNFLCompareImage() {
     ctx.lineWidth = 2;
     ctx.strokeRect(badgeX, badgeY, badgeW, badgeH);
     ctx.fillStyle = "#fff";
-    ctx.font = "bold 11px sans-serif";
+    ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(p.position, badgeX + badgeW / 2, badgeY + 15);
 
     // Player name
     ctx.textAlign = "left";
     ctx.fillStyle = "#2d1f14";
-    ctx.font = "bold 18px sans-serif";
+    ctx.font = "bold 18px 'Luckiest Guy', cursive";
     const nameX = badgeX + badgeW + 8;
     ctx.fillText(p.full_name, nameX, cardY + 32);
 
@@ -1105,7 +1105,7 @@ function exportNFLCompareImage() {
 
       // Tier label
       if (dvsLabel) {
-        ctx.font = "bold 9px sans-serif";
+        ctx.font = "bold 9px 'Space Mono', monospace";
         ctx.fillText(dvsLabel, cx + 10 + 18, cardY + 68);
       }
     }
@@ -1137,7 +1137,7 @@ function exportNFLCompareImage() {
   ctx.fillText("STAT", padX + 8, tY + 18);
   players.forEach((p, i) => {
     ctx.textAlign = "right";
-    ctx.font = "bold 10px sans-serif";
+    ctx.font = "bold 10px 'Space Mono', monospace";
     ctx.fillText(p.full_name.split(" ").pop(), padX + (i + 2) * colW - 8, tY + 18);
   });
 
@@ -1165,7 +1165,7 @@ function exportNFLCompareImage() {
 
     // Label
     ctx.fillStyle = "#2d1f14";
-    ctx.font = "bold 11px sans-serif";
+    ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.textAlign = "left";
     ctx.fillText(col.label, padX + 8, rY + 18);
 
