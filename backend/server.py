@@ -54,6 +54,20 @@ def _resp_cache_set(key: str, body: bytes, headers: dict):
     _resp_cache[key] = {"body": body, "t": _time.time(), "headers": headers}
 
 
+# ---------------------------------------------------------------------------
+# Client IP extraction — use X-Forwarded-For behind reverse proxies (Render)
+# ---------------------------------------------------------------------------
+
+def _get_client_ip(request: Request) -> str:
+    """Extract real client IP from X-Forwarded-For header (first entry),
+    falling back to request.client.host for direct connections."""
+    forwarded = request.headers.get("x-forwarded-for", "")
+    if forwarded:
+        # X-Forwarded-For: client, proxy1, proxy2 — first entry is the real client
+        return forwarded.split(",")[0].strip()
+    return request.client.host if request.client else "unknown"
+
+
 # Simple in-memory rate limiter for auth endpoints
 _rate_buckets = defaultdict(list)  # ip -> [timestamps]
 _RATE_LIMIT = 10  # max attempts
@@ -392,9 +406,13 @@ async def lifespan(app):
 app = FastAPI(title="Razzle API", version="0.1.0", lifespan=lifespan)
 
 app.add_middleware(GZipMiddleware, minimum_size=500)
+_CORS_ORIGINS = ["https://razzle.lol"]
+if os.environ.get("RAZZLE_ENV", "production") != "production":
+    _CORS_ORIGINS += ["http://localhost:8000", "http://localhost:5173", "http://127.0.0.1:8000"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://razzle.lol", "http://localhost:8000", "http://localhost:5173", "http://127.0.0.1:8000"],
+    allow_origins=_CORS_ORIGINS,
     allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
     allow_headers=["Authorization", "Content-Type"],
 )
@@ -486,7 +504,7 @@ async def request_logging_middleware(request: Request, call_next):
     req_id = request.headers.get("X-Request-ID") or _uuid.uuid4().hex[:12]
     path = request.url.path
     method = request.method
-    client = request.client.host if request.client else "unknown"
+    client = _get_client_ip(request)
     start = _time.time()
     try:
         response = await call_next(request)
@@ -762,7 +780,7 @@ def require_plan(request: Request, plan: str = "pro"):
 
 @app.post("/api/auth/register")
 async def auth_register(request: Request):
-    ip = request.client.host if request.client else "unknown"
+    ip = _get_client_ip(request)
     if not _check_rate_limit(ip):
         return JSONResponse({"error": "Too many attempts. Try again in a minute."}, status_code=429, headers={"Retry-After": "60"})
     # Stricter registration rate limit: 3 per IP per 24 hours
@@ -783,7 +801,7 @@ async def auth_register(request: Request):
 
 @app.post("/api/auth/login")
 async def auth_login(request: Request):
-    ip = request.client.host if request.client else "unknown"
+    ip = _get_client_ip(request)
     if not _check_rate_limit(ip):
         return JSONResponse({"error": "Too many attempts. Try again in a minute."}, status_code=429, headers={"Retry-After": "60"})
     body = await request.json()
@@ -846,7 +864,7 @@ async def auth_link_sleeper(request: Request):
 
 @app.post("/api/billing/create-checkout")
 async def create_checkout(request: Request):
-    ip = request.client.host if request.client else "unknown"
+    ip = _get_client_ip(request)
     if not _check_sensitive_rate(ip):
         return JSONResponse(
             {"error": "Too many checkout attempts. Try again in a minute."},
@@ -906,7 +924,7 @@ async def billing_promotions():
 @app.get("/api/agents/quota")
 async def get_query_quota(request: Request):
     """Check remaining AI query quota for today."""
-    ip = request.client.host if request.client else "unknown"
+    ip = _get_client_ip(request)
     token = request.headers.get("Authorization", "").replace("Bearer ", "")
     user_id = None
     plan = "free"
@@ -927,7 +945,7 @@ async def get_query_quota(request: Request):
 async def track_query(request: Request):
     """Record an AI query and return updated quota. Call BEFORE making LLM request.
     Returns 429 if quota exhausted."""
-    ip = request.client.host if request.client else "unknown"
+    ip = _get_client_ip(request)
     token = request.headers.get("Authorization", "").replace("Bearer ", "")
     user_id = None
     plan = "free"
@@ -1103,7 +1121,7 @@ async def llm_chat_free(request: Request):
         )
 
     # Check quota via existing system
-    ip = request.client.host if request.client else "unknown"
+    ip = _get_client_ip(request)
     plan = user.get("plan", "free")
     quota = auth_module.check_query_quota(user_id=user["id"], ip_address=ip, plan=plan)
     if not quota.get("allowed", False):
@@ -1197,7 +1215,7 @@ async def get_api_keys(request: Request):
 @app.post("/api/user/api-keys")
 async def save_api_key(request: Request):
     """Store an encrypted API key. Requires Pro+ tier."""
-    ip = request.client.host if request.client else "unknown"
+    ip = _get_client_ip(request)
     if not _check_sensitive_rate(ip):
         return JSONResponse(
             {"error": "Too many requests. Try again in a minute."},
@@ -1269,9 +1287,22 @@ async def save_user_formula(request: Request):
     if not user:
         return JSONResponse({"error": "Authentication required"}, status_code=401)
     body = await request.json()
-    result = auth_module.save_user_formula(
-        user["id"], body.get("name", ""), body.get("weights", "")
-    )
+    name = body.get("name", "")
+    weights = body.get("weights", "")
+
+    # Server-side formula count enforcement for free users
+    plan = user.get("plan", "free")
+    if plan == "free":
+        existing = auth_module.get_user_formulas(user["id"])
+        formula_names = [f["name"] for f in existing.get("formulas", [])]
+        # Allow update of existing formula, but cap new creations at 3
+        if name not in formula_names and len(formula_names) >= 3:
+            return JSONResponse(
+                {"error": "Free plan limited to 3 formulas. Upgrade to Pro for unlimited."},
+                status_code=403,
+            )
+
+    result = auth_module.save_user_formula(user["id"], name, weights)
     if "error" in result:
         return JSONResponse({"error": result["error"]}, status_code=result["status"])
     return result
@@ -1511,7 +1542,7 @@ def get_players(
 
 @app.post("/api/screener/query")
 async def screener_query(request: Request):
-    client_ip = request.client.host if request.client else "unknown"
+    client_ip = _get_client_ip(request)
     if not _check_screener_rate(client_ip):
         return JSONResponse({"error": "Rate limited. Try again shortly."}, status_code=429)
     import json as _json
@@ -1820,7 +1851,7 @@ async def waitlist(request: Request):
     email = body.get("email", "").strip()
     if not email or not _EMAIL_RE.match(email):
         return JSONResponse({"error": "Invalid email format"}, status_code=400)
-    ip = request.client.host if request.client else "unknown"
+    ip = _get_client_ip(request)
     now_ts = _time.time()
     if ip in _waitlist_rate and now_ts - _waitlist_rate[ip] < 60:
         return JSONResponse({"error": "Rate limited. Try again in 60 seconds."}, status_code=429)
@@ -1848,9 +1879,9 @@ def get_formula_store(
 
 @app.post("/api/formulas/publish")
 async def publish_formula(request: Request):
-    user = require_auth(request)
-    if not user:
-        return JSONResponse({"error": "Sign in to publish formulas"}, status_code=401)
+    user, err = require_plan(request, "pro")
+    if err:
+        return err
     body = await request.json()
     return live_data.publish_formula(
         name=body.get("name", ""),
@@ -2583,7 +2614,10 @@ def vorp(season: int = 0, position: str = "", limit: int = 30):
 
 
 @app.get("/api/analytics/summary")
-def analytics_summary():
+async def analytics_summary(request: Request):
+    user = require_auth(request)
+    if not user:
+        return JSONResponse({"error": "Authentication required"}, status_code=401)
     return live_data.get_analytics_summary()
 
 
