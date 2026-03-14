@@ -1284,3 +1284,96 @@ window.addEventListener("razzle-plan-changed", function(e) {
     try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) {}
   }
 })();
+
+// Console welcome
+(function() {
+  var tiger = [
+    "  /\\_/\\  ",
+    " ( o.o ) ",
+    "  > ^ <  ",
+    " /|   |\\ ",
+    "(_|   |_)",
+  ].join("\n");
+  console.log("%c" + tiger, "font-family:monospace; color:#d97757; font-size:14px;");
+  console.log("%crazzle.lol%c — the fantasy football research lab", "color:#d97757; font-weight:bold; font-size:16px;", "color:#2d1f14; font-size:13px;");
+
+  window.razzle = {
+    help: function() { console.log("razzle.tiger() — print the tiger\nrazzle.stats() — page stats\nrazzle.version — current version"); },
+    tiger: function() { console.log("%c" + tiger, "font-family:monospace; color:#d97757; font-size:14px;"); },
+    stats: function() { console.log("page: " + location.pathname + "\nscripts: " + document.scripts.length + "\nstylesheets: " + document.styleSheets.length); },
+    version: "1.0.0"
+  };
+})();
+
+// Konami Code Easter egg
+(function() {
+  var _konamiSeq = [38,38,40,40,37,39,37,39,66,65];
+  var _konamiIdx = 0;
+  document.addEventListener("keydown", function(e) {
+    if (e.keyCode === _konamiSeq[_konamiIdx]) {
+      _konamiIdx++;
+      if (_konamiIdx === _konamiSeq.length) {
+        _konamiIdx = 0;
+        _triggerKonami();
+      }
+    } else {
+      _konamiIdx = 0;
+    }
+  });
+
+  function _triggerKonami() {
+    // Confetti burst
+    for (var i = 0; i < 50; i++) {
+      var c = document.createElement("div");
+      c.style.cssText = "position:fixed;width:8px;height:8px;border-radius:50%;z-index:99999;pointer-events:none;";
+      c.style.background = ["#d97757","#5b7fff","#2ec4b6","#8b5cf6","#ffc857"][i % 5];
+      c.style.left = Math.random() * 100 + "vw";
+      c.style.top = "-10px";
+      document.body.appendChild(c);
+      var dur = 1000 + Math.random() * 2000;
+      c.animate([
+        { transform: "translateY(0) rotate(0deg)", opacity: 1 },
+        { transform: "translateY(" + (80 + Math.random() * 40) + "vh) rotate(" + (Math.random() * 720) + "deg)", opacity: 0 }
+      ], { duration: dur, easing: "ease-out" });
+      setTimeout(function(el) { el.remove(); }, dur, c);
+    }
+    // Spin the tiger
+    var logo = document.querySelector(".logo-mark");
+    if (logo) {
+      logo.style.transition = "transform 1s ease";
+      logo.style.transform = "rotate(360deg)";
+      setTimeout(function() { logo.style.transform = ""; }, 1200);
+    }
+    if (typeof _showToast === "function") _showToast("you found the Konami code! Razzle approves.", "warning", 3000);
+  }
+})();
+
+// Randomized footer taglines
+(function() {
+  var taglines = [
+    "built different. literally.",
+    "your league. their weaknesses.",
+    "where the film doesn't lie.",
+    "fantasy football, but make it cinema.",
+    "the waiver wire whisperer.",
+    "data > vibes (but vibes help).",
+    "pulling film since 2025.",
+    "Razzle never sleeps. your opponents do."
+  ];
+  var footer = document.querySelector(".site-footer .footer-tagline, .site-footer [data-tagline]");
+  if (!footer) {
+    // Try to find a copyright line
+    var footerEls = document.querySelectorAll(".site-footer div, .site-footer p");
+    for (var i = 0; i < footerEls.length; i++) {
+      if (footerEls[i].textContent.indexOf("razzle") > -1 || footerEls[i].textContent.indexOf("Razzle") > -1) {
+        var tag = document.createElement("div");
+        tag.style.cssText = "font-family:var(--font-hand);font-size:14px;color:var(--ink-light);margin-top:4px;";
+        tag.textContent = taglines[Math.floor(Math.random() * taglines.length)];
+        footerEls[i].parentNode.insertBefore(tag, footerEls[i].nextSibling);
+        break;
+      }
+    }
+  } else {
+    footer.textContent = taglines[Math.floor(Math.random() * taglines.length)];
+  }
+})();

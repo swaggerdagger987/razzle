@@ -534,6 +534,36 @@
     if (fb) fb.textContent = '';
   }
 
+  // Easter egg promo codes
+  var EASTER_EGG_CODES = {
+    'RAZZLEDAZZLE': "now THAT's a football name. 10% off? ...nah, but you earned our respect.",
+    'TIGER': 'Razzle approves. no discount, but have a tiger paw: \uD83D\uDC3E',
+    'GOAT': "that's what they call Razzle around the office."
+  };
+
+  function validatePromoCode() {
+    var input = document.getElementById('promoCodeInput');
+    var fb = document.getElementById('promoCodeFeedback');
+    if (!input || !fb) return;
+    var code = input.value.trim().toUpperCase();
+    if (!code) return;
+
+    var easterMsg = EASTER_EGG_CODES[code];
+    if (easterMsg) {
+      fb.textContent = easterMsg;
+      fb.style.color = 'var(--orange)';
+      input.style.borderColor = 'var(--orange)';
+      setTimeout(function() {
+        input.style.borderColor = '';
+      }, 3000);
+      return;
+    }
+
+    // Default: not a recognized code
+    fb.textContent = 'code not recognized';
+    fb.style.color = 'var(--ink-light)';
+  }
+
   // Check if already subscribed and show appropriate banners
   function checkSubscription() {
     try {

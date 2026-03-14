@@ -90,6 +90,39 @@
     .four-oh-four-mascot { font-size: 48px; }
     .four-oh-four-title { font-size: 22px; }
   }
+
+  /* Tiger walk Easter egg */
+  .four-oh-four-mascot {
+    animation: tigerWalk 10s ease-in-out 3s infinite;
+  }
+
+  @keyframes tigerWalk {
+    0%   { transform: rotate(-5deg) translateX(0); }
+    5%   { transform: rotate(-5deg) translateX(0); }
+    25%  { transform: rotate(0deg) translateX(120vw); }
+    26%  { transform: rotate(0deg) scaleX(-1) translateX(120vw); }
+    50%  { transform: rotate(0deg) scaleX(-1) translateX(0); }
+    55%  { transform: rotate(-5deg) scaleX(1) translateX(0); }
+    100% { transform: rotate(-5deg) scaleX(1) translateX(0); }
+  }
+
+  .tiger-annotation {
+    font-family: var(--font-hand);
+    font-size: 18px;
+    color: var(--ink-light);
+    opacity: 0;
+    margin-top: -8px;
+    margin-bottom: 8px;
+    animation: annotationFade 10s ease-in-out 3s infinite;
+  }
+
+  @keyframes annotationFade {
+    0%   { opacity: 0; }
+    8%   { opacity: 1; }
+    22%  { opacity: 1; }
+    28%  { opacity: 0; }
+    100% { opacity: 0; }
+  }
 </style>
 </head>
 <body>
@@ -116,6 +149,7 @@
 
 <div class="four-oh-four" id="main-content">
   <div class="four-oh-four-mascot">&#x1F42F;</div>
+  <div class="tiger-annotation">gone scouting the waiver wire...</div>
   <div class="four-oh-four-code">404</div>
   <div class="four-oh-four-title">Page Not Found</div>
   <div class="four-oh-four-subtitle">This page got cut from the roster.</div>

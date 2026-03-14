@@ -1409,3 +1409,15 @@ tr:hover .notes-cell .note-pencil {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
+
+/* Loading dots animation */
+.loading-dots::after {
+  content: '';
+  animation: loadingDots 1.5s steps(4, end) infinite;
+}
+@keyframes loadingDots {
+  0% { content: ''; }
+  25% { content: '.'; }
+  50% { content: '..'; }
+  75% { content: '...'; }
+}
