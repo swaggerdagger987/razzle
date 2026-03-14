@@ -5,14 +5,8 @@
 
 function exportPanelCSV(panelName) {
   // Pro+ gating
-  try {
-    var user = JSON.parse(localStorage.getItem("razzle_user"));
-    if (!user || (user.plan !== "pro" && user.plan !== "elite")) {
-      _showToast('CSV export requires Pro. <a href="/pricing.html" style="color:var(--orange);">Upgrade</a>');
-      return;
-    }
-  } catch (e) {
-    _showToast("Sign in to export CSV");
+  if (typeof isPaidUser === "function" && !isPaidUser()) {
+    _showToast('CSV export requires Pro. Visit the pricing page to upgrade.', 'warning');
     return;
   }
   var panel = document.getElementById('panel-' + panelName);
@@ -147,19 +141,7 @@ function _fallbackCopy(text) {
   document.body.removeChild(ta);
 }
 
-function _showToast(msg) {
-  var existing = document.querySelector('.razzle-toast');
-  if (existing) existing.remove();
-  var toast = document.createElement('div');
-  toast.className = 'razzle-toast';
-  toast.textContent = msg;
-  document.body.appendChild(toast);
-  setTimeout(function() { toast.classList.add('razzle-toast-show'); }, 10);
-  setTimeout(function() {
-    toast.classList.remove('razzle-toast-show');
-    setTimeout(function() { toast.remove(); }, 300);
-  }, 2500);
-}
+
 
 var _skeletonHTML = '';
 function _resetLoadingSkeleton(el) {
@@ -4370,10 +4352,6 @@ function toggleSelectAll(checked) {
 function _getCompareLimit() {
   // Free: 2 players, Pro/Elite: 4 players
   if (typeof isPaidUser === "function" && isPaidUser()) return 4;
-  try {
-    var user = JSON.parse(localStorage.getItem("razzle_user") || "{}");
-    if (user.plan === "pro" || user.plan === "elite") return 4;
-  } catch (e) {}
   return 2;
 }
 
@@ -5465,14 +5443,8 @@ function exportCSV() {
   if (!state.items.length) return;
 
   // Pro+ gating: CSV export requires Pro or Elite plan
-  try {
-    var user = JSON.parse(localStorage.getItem("razzle_user"));
-    if (!user || (user.plan !== "pro" && user.plan !== "elite")) {
-      _showToast('CSV export requires Pro. <a href="/pricing.html" style="color:var(--orange);">Upgrade</a>');
-      return;
-    }
-  } catch (e) {
-    _showToast("Sign in to export CSV");
+  if (typeof isPaidUser === "function" && !isPaidUser()) {
+    _showToast('CSV export requires Pro. Visit the pricing page to upgrade.', 'warning');
     return;
   }
 

@@ -204,6 +204,12 @@ if (document.readyState === "loading") {
   _injectHamburgerMenu();
 }
 
+/* ===== Nav Dropdown Close Handler (module-level to avoid listener leaks) ===== */
+var _dropdownCloseHandler = function(e) {
+    var dd = document.querySelector(".nav-user-dropdown");
+    if (dd && !dd.contains(e.target)) dd.classList.remove("open");
+};
+
 /* ===== Tier Gating Helpers ===== */
 
 /**
@@ -409,6 +415,7 @@ function computeClientDVS(ppg, age, position) {
 function initAuth() {
   _injectAuthModal();
   _injectNavAuthButton();
+  document.addEventListener("click", _dropdownCloseHandler);
   checkAuth();
   _detectCheckoutReturn();
 }
@@ -727,12 +734,6 @@ function updateAuthUI(user) {
           dropdownItems +
         '</div>' +
       '</div>';
-
-    // Close dropdown on outside click
-    document.addEventListener("click", function _closeDropdown(e) {
-      var dd = item.querySelector(".nav-user-dropdown");
-      if (dd && !dd.contains(e.target)) dd.classList.remove("open");
-    });
 
     // Trial expiry warning — show once per session when <= 2 days remaining
     if (isTrial && (user.trial_days_remaining || 0) <= 2 && !sessionStorage.getItem("razzle_trial_warn")) {

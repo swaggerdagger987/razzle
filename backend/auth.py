@@ -140,6 +140,57 @@ def initialize_users_db():
 
             CREATE INDEX IF NOT EXISTS idx_briefings_user ON weekly_briefings(user_id);
             CREATE INDEX IF NOT EXISTS idx_briefings_user_week ON weekly_briefings(user_id, week_label);
+
+            CREATE TABLE IF NOT EXISTS user_saved_views (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                view_data TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users(id)
+            );
+
+            CREATE INDEX IF NOT EXISTS idx_saved_views_user ON user_saved_views(user_id);
+
+            CREATE TABLE IF NOT EXISTS user_watchlist (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                player_id TEXT NOT NULL,
+                player_name TEXT,
+                position TEXT,
+                team TEXT,
+                universe TEXT DEFAULT 'nfl',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users(id),
+                UNIQUE(user_id, player_id)
+            );
+
+            CREATE INDEX IF NOT EXISTS idx_watchlist_user ON user_watchlist(user_id);
+
+            CREATE TABLE IF NOT EXISTS ai_query_log (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER,
+                ip_address TEXT,
+                query_date TEXT NOT NULL,
+                query_count INTEGER DEFAULT 0,
+                UNIQUE(user_id, ip_address, query_date)
+            );
+
+            CREATE INDEX IF NOT EXISTS idx_query_log_date ON ai_query_log(query_date);
+
+            CREATE TABLE IF NOT EXISTS user_api_keys (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                provider TEXT NOT NULL,
+                encrypted_key BLOB NOT NULL,
+                label TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(user_id, provider),
+                FOREIGN KEY (user_id) REFERENCES users(id)
+            );
+
+            CREATE INDEX IF NOT EXISTS idx_api_keys_user ON user_api_keys(user_id);
         """)
         conn.commit()
 
@@ -497,20 +548,6 @@ def delete_agent_memory(user_id: int, memory_id: int) -> dict:
 def get_saved_views(user_id: int) -> dict:
     """Retrieve all saved views for a user."""
     with get_users_db() as conn:
-        # Ensure table exists
-        conn.execute("""
-            CREATE TABLE IF NOT EXISTS user_saved_views (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id INTEGER NOT NULL,
-                view_data TEXT NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (user_id) REFERENCES users(id)
-            )
-        """)
-        conn.execute("CREATE INDEX IF NOT EXISTS idx_saved_views_user ON user_saved_views(user_id)")
-        conn.commit()
-
         rows = conn.execute(
             "SELECT id, view_data, created_at FROM user_saved_views WHERE user_id = ? ORDER BY created_at DESC",
             (user_id,),
@@ -524,18 +561,6 @@ def sync_saved_views(user_id: int, views: list) -> dict:
     if not isinstance(views, list):
         return {"error": "views must be a list", "status": 400}
     with get_users_db() as conn:
-        # Ensure table exists
-        conn.execute("""
-            CREATE TABLE IF NOT EXISTS user_saved_views (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id INTEGER NOT NULL,
-                view_data TEXT NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (user_id) REFERENCES users(id)
-            )
-        """)
-
         # Delete existing views for user, then re-insert
         conn.execute("DELETE FROM user_saved_views WHERE user_id = ?", (user_id,))
         count = 0
@@ -563,23 +588,6 @@ WATCHLIST_MAX = 200
 def get_watchlist(user_id: int) -> dict:
     """Retrieve all watchlist items for a user."""
     with get_users_db() as conn:
-        conn.execute("""
-            CREATE TABLE IF NOT EXISTS user_watchlist (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id INTEGER NOT NULL,
-                player_id TEXT NOT NULL,
-                player_name TEXT,
-                position TEXT,
-                team TEXT,
-                universe TEXT DEFAULT 'nfl',
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (user_id) REFERENCES users(id),
-                UNIQUE(user_id, player_id)
-            )
-        """)
-        conn.execute("CREATE INDEX IF NOT EXISTS idx_watchlist_user ON user_watchlist(user_id)")
-        conn.commit()
-
         rows = conn.execute(
             "SELECT player_id, player_name, position, team, universe, created_at "
             "FROM user_watchlist WHERE user_id = ? ORDER BY created_at DESC",
@@ -598,21 +606,6 @@ def sync_watchlist(user_id: int, players: list) -> dict:
         return {"error": "players must be a list", "status": 400}
 
     with get_users_db() as conn:
-        conn.execute("""
-            CREATE TABLE IF NOT EXISTS user_watchlist (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id INTEGER NOT NULL,
-                player_id TEXT NOT NULL,
-                player_name TEXT,
-                position TEXT,
-                team TEXT,
-                universe TEXT DEFAULT 'nfl',
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (user_id) REFERENCES users(id),
-                UNIQUE(user_id, player_id)
-            )
-        """)
-
         # Delete and re-insert (full replacement, like saved views)
         conn.execute("DELETE FROM user_watchlist WHERE user_id = ?", (user_id,))
         count = 0
@@ -647,17 +640,8 @@ QUERY_LIMITS = {"free": 5, "pro": 20, "elite": 999999}  # daily limits per plan
 
 
 def _ensure_query_tracking_table(conn):
-    conn.execute("""
-        CREATE TABLE IF NOT EXISTS ai_query_log (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER,
-            ip_address TEXT,
-            query_date TEXT NOT NULL,
-            query_count INTEGER DEFAULT 0,
-            UNIQUE(user_id, ip_address, query_date)
-        )
-    """)
-    conn.execute("CREATE INDEX IF NOT EXISTS idx_query_log_date ON ai_query_log(query_date)")
+    """No-op — table is now created in initialize_users_db()."""
+    pass
 
 
 def check_query_quota(user_id: int = None, ip_address: str = None, plan: str = "free") -> dict:
@@ -750,23 +734,6 @@ def save_weekly_briefing(user_id: int, league_id: str, league_name: str,
                          agent_highlights: str = "[]") -> dict:
     """Save a weekly briefing for an Elite user."""
     with get_users_db() as conn:
-        # Ensure table exists (migration safety)
-        conn.execute("""
-            CREATE TABLE IF NOT EXISTS weekly_briefings (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id INTEGER NOT NULL,
-                league_id TEXT,
-                league_name TEXT,
-                week_label TEXT NOT NULL,
-                summary TEXT NOT NULL,
-                urgency_items TEXT,
-                monitor_items TEXT,
-                opportunity_items TEXT,
-                agent_highlights TEXT,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (user_id) REFERENCES users(id)
-            )
-        """)
         # Upsert: replace if same user+week+league already exists
         conn.execute(
             "DELETE FROM weekly_briefings WHERE user_id = ? AND week_label = ? AND league_id = ?",
@@ -787,23 +754,6 @@ def save_weekly_briefing(user_id: int, league_id: str, league_name: str,
 def get_latest_briefing(user_id: int, league_id: str = None) -> dict:
     """Get the most recent weekly briefing for a user (optionally filtered by league)."""
     with get_users_db() as conn:
-        # Ensure table exists
-        conn.execute("""
-            CREATE TABLE IF NOT EXISTS weekly_briefings (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id INTEGER NOT NULL,
-                league_id TEXT,
-                league_name TEXT,
-                week_label TEXT NOT NULL,
-                summary TEXT NOT NULL,
-                urgency_items TEXT,
-                monitor_items TEXT,
-                opportunity_items TEXT,
-                agent_highlights TEXT,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (user_id) REFERENCES users(id)
-            )
-        """)
         if league_id:
             row = conn.execute(
                 """SELECT * FROM weekly_briefings
@@ -826,22 +776,6 @@ def get_latest_briefing(user_id: int, league_id: str = None) -> dict:
 def get_briefing_history(user_id: int, limit: int = 10) -> list:
     """Get recent briefing history for a user."""
     with get_users_db() as conn:
-        conn.execute("""
-            CREATE TABLE IF NOT EXISTS weekly_briefings (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id INTEGER NOT NULL,
-                league_id TEXT,
-                league_name TEXT,
-                week_label TEXT NOT NULL,
-                summary TEXT NOT NULL,
-                urgency_items TEXT,
-                monitor_items TEXT,
-                opportunity_items TEXT,
-                agent_highlights TEXT,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (user_id) REFERENCES users(id)
-            )
-        """)
         rows = conn.execute(
             """SELECT * FROM weekly_briefings
                WHERE user_id = ?
@@ -897,23 +831,8 @@ VALID_PROVIDERS = frozenset(["openrouter", "anthropic", "openai", "custom"])
 
 
 def _ensure_api_keys_table(conn):
-    """Create the user_api_keys table if it doesn't exist."""
-    conn.execute("""
-        CREATE TABLE IF NOT EXISTS user_api_keys (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER NOT NULL,
-            provider TEXT NOT NULL,
-            encrypted_key BLOB NOT NULL,
-            label TEXT,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            UNIQUE(user_id, provider),
-            FOREIGN KEY (user_id) REFERENCES users(id)
-        )
-    """)
-    conn.execute(
-        "CREATE INDEX IF NOT EXISTS idx_api_keys_user ON user_api_keys(user_id)"
-    )
+    """No-op — table is now created in initialize_users_db()."""
+    pass
 
 
 def _encrypt_key(plaintext: str) -> bytes:
