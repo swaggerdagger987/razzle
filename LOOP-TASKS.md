@@ -1,7 +1,7 @@
 # Razzle Ship Loop — Task Tracker
 
 ## Current State
-- Phase: Lab Frontend Performance Hardening
+- Phase: Critical Security & Data Persistence
 - Current Task: 1
 - Current Stage: BUILD
 - Tasks Completed: 0/6
