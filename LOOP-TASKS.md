@@ -2,10 +2,33 @@
 
 ## Current State
 - Phase: EMERGENCY — Fix Google Fonts (Site Typography Broken)
-- Current Task: 1
-- Current Stage: BUILD
-- Tasks Completed: 0/2
-- Loop Iterations: 0
+- Current Task: 2
+- Current Stage: PASS
+- Tasks Completed: 2/2
+- Loop Iterations: 1
+
+## Phase: EMERGENCY — Fix Google Fonts (Site Typography Broken)
+**Exit Criterion**: All three Razzle fonts (Luckiest Guy, Space Mono, Caveat) load on every page. The comic-strip aesthetic is restored.
+
+### Task 1: Add Google Fonts link tag to ALL HTML files
+**Requirement**: The @import was removed from styles.css but the HTML link tags were never added. All three custom fonts broken across entire site. Add Google Fonts CSS2 link to all 74 HTML files.
+**Accept when**: grep -r "fonts.googleapis.com/css2" frontend/*.html returns a match for every HTML file.
+**Depends on**: none
+**Size**: M
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Added `<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">` to all 74 HTML files, inserted after preconnect tags and before styles.css link.
+
+### Task 2: Fix var(--card) on pricing page — should be var(--bg-card)
+**Requirement**: 3 instances of var(--card) in pricing.html — the variable --card doesn't exist, --bg-card is correct.
+**Accept when**: Zero instances of var(--card) in pricing.html.
+**Depends on**: none
+**Size**: S
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Replaced all 3 instances of var(--card, #f7efe5) with var(--bg-card, #f7efe5) in pricing.html.
+
+---
 
 ## Phase: Polish Mode — Design Audit
 **Exit Criterion**: Systematic page-by-page audit against DESIGN.md
