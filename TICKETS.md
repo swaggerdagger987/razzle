@@ -17,69 +17,6 @@ The database file `data/terminal.db` uses WAL journal mode locally. Uploading it
 
 ---
 
-## Phase: Lab Backend Performance Hardening
-
-**Exit Criterion**: Screener API response < 200ms for typical queries. Enrichment queries batched. Database indexes optimized. No API contract changes. All 59 existing tests pass (`python -m pytest tests/ -v`).
-
-### Task 1: Add missing database indexes
-
-**File**: `adapters/nflverse_adapter.py`
-
-In the `initialize_database()` function, find the index block after the `player_week_metrics` table definition (line ~218-219). After the existing two indexes (`idx_pwm_key_val`, `idx_pwm_player`), add:
-
-```sql
-CREATE INDEX IF NOT EXISTS idx_pwm_player_key ON player_week_metrics(player_id, stat_key);
-CREATE INDEX IF NOT EXISTS idx_pwm_season_player ON player_week_metrics(season, player_id);
-```
-
-Also after the `player_week_stats` indexes (line ~202-204), add:
-
-```sql
-CREATE INDEX IF NOT EXISTS idx_pws_player_season_ppr ON player_week_stats(player_id, season, fantasy_points_ppr);
-```
-
-Also after the `players` table indexes (line ~148-151), add:
-
-```sql
-CREATE INDEX IF NOT EXISTS idx_players_pos_relevant ON players(position, fantasy_relevant);
-```
-
-**Acceptance**: All 4 new `CREATE INDEX IF NOT EXISTS` statements present. Tests pass.
-
----
-
-### Task 2: Reduce over-fetch in _enrich_with_pbp_stats (SELECT * removal)
-
-**File**: `backend/live_data/core.py`
-
-In `_enrich_with_pbp_stats()` (line ~491), the non-career branch uses `SELECT * FROM player_season_pbp`. Replace with an explicit column list matching the `pbp_cols` consumed downstream (plus `player_id`).
-
-**Acceptance**: `SELECT *` replaced with explicit columns. Tests pass.
-
----
-
-### Task 3: Reduce 5x over-fetch multiplier for post-filters
-
-**File**: `backend/live_data/players.py`
-
-In `_fetch_screener_uncached()` (line ~404), change `sql_limit = limit * 5` to use a dynamic multiplier: 2x for single filter, 3x for multiple filters.
-
-**Acceptance**: Multiplier is 2 for single filter, 3 for multiple. Tests pass.
-
----
-
-### Task 4: Add Cache-Control headers for static assets and screener endpoints
-
-**File**: `backend/server.py`
-
-1. Add middleware or modify the static file mount to set `Cache-Control: public, max-age=31536000, immutable` for `.js`, `.css`, `.png`, `.svg`, `.woff2` files.
-2. Add `Cache-Control: public, max-age=60` response headers to the screener POST endpoints (query and sparklines) using `JSONResponse`.
-3. Move Google Fonts from CSS `@import` (styles.css line 2) to `<link rel="stylesheet">` in the HTML `<head>` of all pages (or self-host the fonts). Remove the `@import` line.
-
-**Acceptance**: Static assets have long cache headers. Screener responses have 60s cache. Google Fonts loaded via `<link>` not `@import`. Tests pass.
-
----
-
 ## Phase: Lab Frontend Performance Hardening
 
 **Exit Criterion**: Lab initial render < 500ms for 1000-row dataset. Sort/filter feels instant. Scroll is jank-free. Zero functionality or visual changes.
@@ -370,6 +307,40 @@ Hero h1 42px to 36px. Panel title 22px to 20px.
 Global rule killing all animations when OS reduce-motion is enabled.
 
 **Acceptance**: All animations stop with reduce-motion enabled.
+
+---
+
+## Phase: Bloomberg Kill — Full Rebrand Pass
+
+**Exit Criterion**: Zero instances of Bloomberg in any file. Hero leads with Lab. All references use research lab positioning.
+
+### Task 1: Kill Bloomberg across all frontend files
+
+**Files**: All HTML files in frontend/, frontend/assets/og-image.svg, frontend/assets/og-image-lab.svg
+
+Search for Bloomberg and bloomberg across the entire frontend. Replace based on context: hero/titles use "Fantasy Football Research Lab" or "The Lab is open." Meta descriptions use "Free fantasy football research lab." OG image SVGs update text.
+
+**Acceptance**: grep -ri bloomberg frontend/ returns zero results.
+
+---
+
+### Task 2: Kill Bloomberg in docs and config
+
+**Files**: CLAUDE.md, docs/NORTH_STAR.md, docs/ROADMAP.md, README.md, backend/config/tools_hub.json
+
+Replace all Bloomberg references with research lab language. Reveal post title becomes "I built a free fantasy football research lab."
+
+**Acceptance**: grep -ri bloomberg . returns zero results across entire repo (excluding git history).
+
+---
+
+### Task 3: Reorder landing page — Lab first, agents second
+
+**File**: frontend/index.html
+
+Hero: "The Lab is open." / "70+ stat panels. Custom formulas. Shareable views. Free." CTA buttons: Open the Lab first (primary), Meet the agents second (secondary). Final CTA leads with Lab. Page flow: Hero then Lab features then Bureau then Situation Room then Pricing. The Lab is the star.
+
+**Acceptance**: Hero says The Lab is open. Primary CTA is Lab. Page flow leads with free product.
 
 ---
 
