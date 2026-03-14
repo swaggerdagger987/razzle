@@ -132,7 +132,7 @@
     font-size: 36px;
     line-height: 1;
     color: white;
-    text-shadow: 2px 2px 0 rgba(0,0,0,0.2);
+    text-shadow: 2px 2px 0 rgba(45,31,20,0.2);
   }
   .tl-tier-count {
     font-family: var(--font-mono);
@@ -239,7 +239,7 @@
     right: 14px;
     font-family: var(--font-hand);
     font-size: 14px;
-    color: rgba(0,0,0,0.15);
+    color: rgba(45,31,20,0.15);
     pointer-events: none;
     z-index: 1;
   }
@@ -281,7 +281,7 @@
   </ul>
   <div class="nav-auth" id="nav-auth">
     <button class="nav-search-hint" aria-label="Open quick search (Ctrl+K)" onclick="document.querySelector('.cmd-palette-backdrop')?.classList.add('open'); document.querySelector('.cmd-palette-input')?.focus();" title="Quick search"><kbd>Ctrl+K</kbd> Search</button>
-    <a href="#" class="btn-chunky btn-sm" onclick="document.getElementById('auth-modal')?.classList.add('open'); return false;">Sign In</a>
+    <a href="#" class="btn-chunky btn-sm" onclick="if(typeof openAuthModal==='function') openAuthModal(); return false;">Sign In</a>
   </div>
 </nav>
 
@@ -419,7 +419,7 @@
       html2canvas(el, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
         var ctx = canvas.getContext('2d');
         ctx.font = '24px sans-serif';
-        ctx.fillStyle = 'rgba(0,0,0,0.12)';
+        ctx.fillStyle = 'rgba(45,31,20,0.12)';
         ctx.fillText('razzle.lol', canvas.width - 160, canvas.height - 20);
         var link = document.createElement('a');
         link.download = 'razzle-tier-list.png';

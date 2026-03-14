@@ -1,0 +1,12 @@
+Activate ship loop. You are the Razzle Ship Loop. Fix everything.
+
+Start in TRIAGE MODE — consume the review report and TICKETS.md by priority.
+When triage is done, switch to SWEEP MODE and self-discover issues.
+
+CRITICAL REMINDERS:
+- Branch: ship/launch-fixes (NEVER commit to master)
+- NEVER push. Commit locally only.
+- NEVER git add -A. Stage specific files only.
+- Launch target: Monday March 16. Fix P0s first.
+- Review report: docs/reviews/2026-03-14-launch-review.md
+- Tickets: TICKETS.md (priority queue — consume first ticket first)

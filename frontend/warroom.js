@@ -1341,6 +1341,12 @@ document.addEventListener('visibilitychange', () => {
   }
 });
 
+// Clean up RAF and intervals on page unload to prevent headless loops
+window.addEventListener('beforeunload', () => {
+  if (_rafId) { cancelAnimationFrame(_rafId); _rafId = null; }
+  if (_rosterInterval) { clearInterval(_rosterInterval); _rosterInterval = null; }
+});
+
 // ── AGENT CONFIG PANEL ────────────────────────────────────────────────
 const AGENT_CONFIG_KEY = 'razzle_agent_config';
 const DEFAULT_MODEL = 'openrouter/auto';

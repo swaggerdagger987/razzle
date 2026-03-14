@@ -699,6 +699,18 @@ async function handleRegister(e) {
 function signOut() {
   localStorage.removeItem("razzle_token");
   localStorage.removeItem("razzle_user");
+  localStorage.removeItem("razzle_formulas");
+  localStorage.removeItem("razzle_last_state");
+  localStorage.removeItem("razzle_recent_players");
+  localStorage.removeItem("razzle_league_context");
+  localStorage.removeItem("razzle_prefill_scenario");
+  localStorage.removeItem("razzle_query_count");
+  localStorage.removeItem("razzle_store_ratings");
+  localStorage.removeItem("razzle_store_installed");
+  localStorage.removeItem("razzle_store_reviews");
+  localStorage.removeItem("razzle_store_my_published");
+  localStorage.removeItem("razzle_store_username");
+  localStorage.removeItem("razzle_agent_config");
   updateAuthUI(null);
 }
 
@@ -932,7 +944,7 @@ function showWelcomeState() {
         : '<p style="font-family:var(--font-hand); font-size:16px; color:var(--ink-medium); margin-top:4px;">you\'re all set</p>'
       ) +
       '<div style="display:flex; flex-direction:column; gap:10px; margin-top:20px;">' +
-        '<a href="/agents" class="btn-chunky btn-primary" style="text-decoration:none; text-align:center; font-size:13px;" onclick="closeAuthModal();">' +
+        '<a href="/agents.html" class="btn-chunky btn-primary" style="text-decoration:none; text-align:center; font-size:13px;" onclick="closeAuthModal();">' +
           (hasSleeper ? 'Enter the Situation Room' : 'Tour the Situation Room') +
         '</a>' +
         '<a href="/lab.html" class="btn-chunky" style="text-decoration:none; text-align:center; font-size:13px; background:var(--bg-card);" onclick="closeAuthModal();">' +

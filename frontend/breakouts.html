@@ -358,7 +358,7 @@
   </ul>
   <div class="nav-auth" id="nav-auth">
     <button class="nav-search-hint" aria-label="Open quick search (Ctrl+K)" onclick="document.querySelector('.cmd-palette-backdrop')?.classList.add('open'); document.querySelector('.cmd-palette-input')?.focus();" title="Quick search"><kbd>Ctrl+K</kbd> Search</button>
-    <a href="#" class="btn-chunky btn-sm" onclick="document.getElementById('auth-modal')?.classList.add('open'); return false;">Sign In</a>
+    <a href="#" class="btn-chunky btn-sm" onclick="if(typeof openAuthModal==='function') openAuthModal(); return false;">Sign In</a>
   </div>
 </nav>
 

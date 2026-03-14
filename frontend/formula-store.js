@@ -16,8 +16,8 @@ const storeState = {
 // ---------------------------------------------------------------------------
 
 function loadStoreLocalState() {
-  storeState.userRatings = JSON.parse(localStorage.getItem("razzle_store_ratings") || "{}");
-  storeState.installed = JSON.parse(localStorage.getItem("razzle_store_installed") || "[]");
+  try { storeState.userRatings = JSON.parse(localStorage.getItem("razzle_store_ratings") || "{}"); } catch (e) { storeState.userRatings = {}; }
+  try { storeState.installed = JSON.parse(localStorage.getItem("razzle_store_installed") || "[]"); } catch (e) { storeState.installed = []; }
 }
 
 async function fetchStoreFormulas() {
@@ -173,9 +173,10 @@ async function submitReview(formulaId) {
     const data = await resp.json();
     if (data.status === "ok") {
       // Mark review submitted in localStorage so we don't show input again
-      const reviews = JSON.parse(localStorage.getItem("razzle_store_reviews") || "{}");
+      let reviews = {};
+      try { reviews = JSON.parse(localStorage.getItem("razzle_store_reviews") || "{}"); } catch (e) { reviews = {}; }
       reviews[formulaId] = { rating, text };
-      localStorage.setItem("razzle_store_reviews", JSON.stringify(reviews));
+      try { localStorage.setItem("razzle_store_reviews", JSON.stringify(reviews)); } catch (e) {}
       await fetchStoreFormulas();
     }
   } catch (e) {
@@ -271,7 +272,7 @@ function showStoreToast(msg) {
       position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
       background: var(--ink); color: var(--bg); padding: 10px 24px;
       border-radius: 8px; font-family: var(--font-display); font-size: 14px;
-      z-index: 10000; box-shadow: 4px 4px 0 rgba(0,0,0,0.3);
+      z-index: 10000; box-shadow: 4px 4px 0 rgba(45,31,20,0.3);
       transition: opacity 0.3s; pointer-events: none;
     `;
     document.body.appendChild(toast);
@@ -287,7 +288,8 @@ function showStoreToast(msg) {
 
 function isFormulaPublished(name) {
   // Check localStorage cache of published names
-  const published = JSON.parse(localStorage.getItem("razzle_store_my_published") || "[]");
+  let published = [];
+  try { published = JSON.parse(localStorage.getItem("razzle_store_my_published") || "[]"); } catch (e) {}
   return published.includes(name);
 }
 
@@ -385,9 +387,10 @@ async function submitPublish() {
     const data = await resp.json();
     if (data.status === "ok") {
       // Track locally
-      const myPublished = JSON.parse(localStorage.getItem("razzle_store_my_published") || "[]");
+      let myPublished = [];
+      try { myPublished = JSON.parse(localStorage.getItem("razzle_store_my_published") || "[]"); } catch (e) {}
       if (!myPublished.includes(name)) myPublished.push(name);
-      localStorage.setItem("razzle_store_my_published", JSON.stringify(myPublished));
+      try { localStorage.setItem("razzle_store_my_published", JSON.stringify(myPublished)); } catch (e) {}
 
       closePublishFlow();
       showStoreToast("Published to the Formula Store!");
@@ -412,7 +415,8 @@ function renderFormulaStore() {
   if (!container) return;
 
   const formulas = storeState.formulas;
-  const userReviews = JSON.parse(localStorage.getItem("razzle_store_reviews") || "{}");
+  let userReviews = {};
+  try { userReviews = JSON.parse(localStorage.getItem("razzle_store_reviews") || "{}"); } catch (e) {}
 
   // Position filter chips
   const positions = ["ALL", "QB", "RB", "WR", "TE"];
@@ -470,7 +474,7 @@ function _isStorePaidUser() {
   if (typeof isPaidUser === "function") return isPaidUser();
   try {
     var user = JSON.parse(localStorage.getItem("razzle_user") || "{}");
-    return user.plan === "pro" || user.plan === "elite";
+    return user.plan === "pro" || user.plan === "elite" || user.plan === "pro_lifetime" || user.plan === "elite_lifetime";
   } catch (e) { return false; }
 }
 

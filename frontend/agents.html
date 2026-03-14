@@ -1525,7 +1525,7 @@
   </ul>
   <div class="nav-auth" id="nav-auth">
     <button class="nav-search-hint" aria-label="Open quick search (Ctrl+K)" onclick="document.querySelector('.cmd-palette-backdrop')?.classList.add('open'); document.querySelector('.cmd-palette-input')?.focus();" title="Quick search"><kbd>Ctrl+K</kbd> Search</button>
-    <a href="#" class="btn-chunky btn-sm" onclick="document.getElementById('auth-modal')?.classList.add('open'); return false;">Sign In</a>
+    <a href="#" class="btn-chunky btn-sm" onclick="if(typeof openAuthModal==='function') openAuthModal(); return false;">Sign In</a>
   
 </nav>
 
@@ -1828,7 +1828,7 @@
           <li>CSV export + Formula Store</li>
         </ul>
         <div style="text-align:center;">
-          <button class="btn-chunky btn-primary" style="font-size:12px; width:100%;" onclick="if(typeof startCheckout==='function'){startCheckout('pro_month')}else{document.getElementById('auth-modal')?.classList.add('open')}">Get Pro</button>
+          <button class="btn-chunky btn-primary" style="font-size:12px; width:100%;" onclick="if(typeof startCheckout==='function'){startCheckout('pro_month')}else{if(typeof openAuthModal==='function') openAuthModal()}">Get Pro</button>
         
       
 
@@ -1848,7 +1848,7 @@
           <li>Weekly personalized briefings</li>
         </ul>
         <div style="text-align:center;">
-          <button class="btn-chunky btn-primary" style="font-size:12px; width:100%;" onclick="if(typeof startCheckout==='function'){startCheckout('elite_month')}else{document.getElementById('auth-modal')?.classList.add('open')}">Get Elite</button>
+          <button class="btn-chunky btn-primary" style="font-size:12px; width:100%;" onclick="if(typeof startCheckout==='function'){startCheckout('elite_month')}else{if(typeof openAuthModal==='function') openAuthModal()}">Get Elite</button>
         
       
     

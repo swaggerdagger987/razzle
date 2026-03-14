@@ -716,7 +716,7 @@ function openCompareSearch() {
   // Create a search overlay
   var overlay = document.createElement("div");
   overlay.id = "compareOverlay";
-  overlay.style.cssText = "position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;display:flex;align-items:center;justify-content:center;";
+  overlay.style.cssText = "position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(45,31,20,0.5);z-index:9999;display:flex;align-items:center;justify-content:center;";
   overlay.innerHTML = '<div style="background:var(--bg-card);border:3px solid var(--ink);border-radius:12px;box-shadow:4px 4px 0 var(--ink);padding:24px;width:380px;max-width:90vw;">' +
     '<div style="font-family:var(--font-display);font-size:18px;margin-bottom:12px;">Compare ' + esc(_profileData.player.full_name) + ' with...</div>' +
     '<input id="compareSearchInput" type="text" placeholder="Search player name..." style="width:100%;box-sizing:border-box;padding:10px 14px;border:2px solid var(--ink);border-radius:8px;font-family:var(--font-mono);font-size:14px;background:var(--bg);margin-bottom:8px;">' +
@@ -767,7 +767,7 @@ function showToast(msg) {
       position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
       background:var(--ink); color:var(--bg); padding:10px 24px;
       border-radius:8px; font-family:var(--font-display); font-size:14px;
-      z-index:10000; box-shadow:4px 4px 0 rgba(0,0,0,0.3);
+      z-index:10000; box-shadow:4px 4px 0 rgba(45,31,20,0.3);
       transition:opacity 0.3s; pointer-events:none;
     `;
     document.body.appendChild(toast);

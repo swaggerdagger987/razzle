@@ -2303,7 +2303,7 @@ async function toggleRowExpand(playerId, tdEl) {
     for (var w of weeks) {
       var fpts = parseFloat(w.fantasy_points_ppr || w.fantasy_points || 0).toFixed(1);
       var fptsColor = fpts >= 20 ? 'color:var(--green); font-weight:700;' : fpts < 5 ? 'color:var(--red);' : '';
-      html += '<tr style="border-bottom:1px solid rgba(0,0,0,0.04);">';
+      html += '<tr style="border-bottom:1px solid rgba(45,31,20,0.04);">';
       var _n = function(v) { var n = parseInt(v); return isNaN(n) ? 0 : n; };
       html += '<td style="padding:2px 6px;">' + escapeHtml(String(w.week || "")) + '</td>';
       html += '<td style="padding:2px 6px;">' + escapeHtml(w.opponent || w.recent_team || "") + '</td>';
@@ -9637,7 +9637,7 @@ function renderHeatMapChart(targetCanvas) {
 
     // Alternating row bg
     if (r % 2 === 0) {
-      ctx.fillStyle = "rgba(0,0,0,0.03)";
+      ctx.fillStyle = "rgba(45,31,20,0.03)";
       ctx.fillRect(padL, rowY, chartW, cellH);
     }
 

@@ -9406,7 +9406,7 @@
           '<td style="font-weight:700;">' + fmt(p.career_ppg) + '</td>' +
           '<td>' + fmt(p.career_fpts, 0) + '</td>' +
           '<td>' + p.career_av + '</td>' +
-          '<td><span style="background:' + verdictColor + '; color:white; padding:2px 8px; border-radius:4px; font-size:10px; font-weight:700; border:2px solid rgba(0,0,0,0.15);">' + verdictLabel + '</span></td>' +
+          '<td><span style="background:' + verdictColor + '; color:white; padding:2px 8px; border-radius:4px; font-size:10px; font-weight:700; border:2px solid rgba(45,31,20,0.15);">' + verdictLabel + '</span></td>' +
         '</tr>';
       });
 

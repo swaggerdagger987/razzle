@@ -78,7 +78,7 @@
   </ul>
   <div class="nav-auth" id="nav-auth">
     <button class="nav-search-hint" aria-label="Open quick search (Ctrl+K)" onclick="document.querySelector('.cmd-palette-backdrop')?.classList.add('open'); document.querySelector('.cmd-palette-input')?.focus();" title="Quick search"><kbd>Ctrl+K</kbd> Search</button>
-    <a href="#" class="btn-chunky btn-sm" onclick="document.getElementById('auth-modal')?.classList.add('open'); return false;">Sign In</a>
+    <a href="#" class="btn-chunky btn-sm" onclick="if(typeof openAuthModal==='function') openAuthModal(); return false;">Sign In</a>
   </div>
 </nav>
 
@@ -289,7 +289,7 @@ function exportPNG() {
   html2canvas(el, { backgroundColor: "#ede0cf", scale: 2 }).then(canvas => {
     const ctx = canvas.getContext("2d");
     ctx.font = "bold 28px 'Space Mono', monospace";
-    ctx.fillStyle = "rgba(0,0,0,0.13)";
+    ctx.fillStyle = "rgba(45,31,20,0.13)";
     ctx.fillText("razzle.lol", canvas.width - 220, canvas.height - 20);
     const link = document.createElement("a");
     link.download = "razzle-snap-efficiency.png";

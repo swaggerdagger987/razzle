@@ -656,7 +656,7 @@ def sync_watchlist(user_id: int, players: list) -> dict:
 # AI Query Tracking (server-side rate limiting for all tiers)
 # ---------------------------------------------------------------------------
 
-QUERY_LIMITS = {"free": 5, "pro": 20, "elite": 999999}  # daily limits per plan
+QUERY_LIMITS = {"free": 5, "pro": 20, "elite": 999999, "pro_lifetime": 20, "elite_lifetime": 999999}  # daily limits per plan
 
 
 def _ensure_query_tracking_table(conn):

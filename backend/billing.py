@@ -232,6 +232,11 @@ def create_checkout_session(user: dict, interval: str = "year", promo_code: str 
     if not STRIPE_SECRET_KEY:
         return {"error": "Stripe not configured", "status": 503}
 
+    # Idempotency: reject if user already has an active paid plan
+    current_plan = user.get("plan", "free")
+    if current_plan in ("pro", "elite", "pro_lifetime", "elite_lifetime"):
+        return {"error": "You already have an active subscription. Manage it from your billing portal.", "status": 400}
+
     is_lifetime = interval.startswith("lifetime_")
     is_early_adopter = interval.startswith("ea_")
 
@@ -359,6 +364,8 @@ def handle_webhook(payload: bytes, sig_header: str) -> dict:
 
     if event_type == "checkout.session.completed":
         _handle_checkout_completed(data)
+    elif event_type == "customer.subscription.updated":
+        _handle_subscription_updated(data)
     elif event_type == "customer.subscription.deleted":
         _handle_subscription_deleted(data)
     elif event_type == "invoice.payment_failed":
@@ -428,6 +435,54 @@ def _handle_checkout_completed(session):
     logger.info(f"User {user_id} upgraded to {plan_tier} (subscription {subscription_id}, trial={is_trial})")
 
 
+def _handle_subscription_updated(subscription):
+    """Sync plan when subscription is updated via Stripe portal (plan change, reactivation, etc.).
+    Skips lifetime users — their plan is permanent."""
+    customer_id = subscription.get("customer")
+    status = subscription.get("status")  # active, past_due, trialing, canceled, etc.
+    metadata = subscription.get("metadata", {})
+    plan_tier = metadata.get("plan_tier")
+
+    with auth_module.get_users_db() as conn:
+        row = conn.execute("SELECT id, plan FROM users WHERE stripe_customer_id = ?", (customer_id,)).fetchone()
+        if not row:
+            logger.warning(f"Subscription updated for unknown customer {customer_id}")
+            return
+
+        # Never touch lifetime plans
+        if row["plan"] in ("pro_lifetime", "elite_lifetime"):
+            logger.info(f"User {row['id']} has lifetime plan — skipping subscription update")
+            return
+
+        # If subscription went to canceled/unpaid, downgrade
+        if status in ("canceled", "unpaid"):
+            conn.execute("UPDATE users SET plan = 'free' WHERE id = ?", (row["id"],))
+            conn.execute("""
+                UPDATE subscriptions SET plan = 'free', status = ?, updated_at = CURRENT_TIMESTAMP
+                WHERE user_id = ?
+            """, (status, row["id"]))
+            conn.commit()
+            logger.info(f"User {row['id']} downgraded to free (subscription {status})")
+            return
+
+        # If plan_tier in metadata, sync it (handles upgrades/downgrades via portal)
+        if plan_tier and plan_tier in ("pro", "elite"):
+            conn.execute("UPDATE users SET plan = ? WHERE id = ?", (plan_tier, row["id"]))
+            conn.execute("""
+                UPDATE subscriptions SET plan = ?, status = ?, updated_at = CURRENT_TIMESTAMP
+                WHERE user_id = ?
+            """, (plan_tier, status, row["id"]))
+            conn.commit()
+            logger.info(f"User {row['id']} plan synced to {plan_tier} (subscription {status})")
+        else:
+            # At minimum sync the status
+            conn.execute("""
+                UPDATE subscriptions SET status = ?, updated_at = CURRENT_TIMESTAMP
+                WHERE user_id = ?
+            """, (status, row["id"]))
+            conn.commit()
+
+
 def _handle_subscription_deleted(subscription):
     """Downgrade user to free when subscription cancelled. Skips lifetime users."""
     customer_id = subscription.get("customer")
@@ -449,18 +504,23 @@ def _handle_subscription_deleted(subscription):
 
 
 def _handle_payment_failed(invoice):
-    """Flag user when payment fails."""
+    """Downgrade user to free when payment fails. Skips lifetime users."""
     customer_id = invoice.get("customer")
 
     with auth_module.get_users_db() as conn:
-        row = conn.execute("SELECT id FROM users WHERE stripe_customer_id = ?", (customer_id,)).fetchone()
+        row = conn.execute("SELECT id, plan FROM users WHERE stripe_customer_id = ?", (customer_id,)).fetchone()
         if row:
+            # Never downgrade lifetime plans on payment failure
+            if row["plan"] in ("pro_lifetime", "elite_lifetime"):
+                logger.info(f"User {row['id']} has lifetime plan — skipping payment failure downgrade")
+                return
             conn.execute("""
                 UPDATE subscriptions SET status = 'payment_failed', updated_at = CURRENT_TIMESTAMP
                 WHERE user_id = ?
             """, (row["id"],))
+            conn.execute("UPDATE users SET plan = 'free' WHERE id = ?", (row["id"],))
             conn.commit()
-            logger.warning(f"Payment failed for user {row['id']}")
+            logger.warning(f"Payment failed for user {row['id']} — downgraded to free")
 
 
 def get_billing_status(user: dict) -> dict:
