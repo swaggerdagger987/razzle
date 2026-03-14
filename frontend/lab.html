@@ -4079,6 +4079,22 @@
   window.addEventListener('razzle-plan-changed', _updateSidebarLocks);
 
   // CSV export lock styling for free users
+  // Hide CSV button on panels without table data (checks on render + after async load)
+  function _updateCsvVisibility(container) {
+    if (!container) return;
+    function check() {
+      var csvBtn = container.querySelector('.btn-csv-export');
+      if (!csvBtn) return;
+      var content = container.querySelector('.lab-panel-content');
+      var hasTable = content && (content.querySelector('table') || content.querySelector('.lp-table'));
+      csvBtn.style.display = hasTable ? '' : 'none';
+    }
+    check();
+    // Re-check after async data loads
+    setTimeout(check, 1500);
+    setTimeout(check, 4000);
+  }
+
   function _updateCsvLocks() {
     var paid = typeof isPaidUser === 'function' && isPaidUser();
     document.querySelectorAll('.btn-csv-export').forEach(function(btn) {
@@ -4359,6 +4375,8 @@
           }
           entry.loaded = true;
         }
+        // Hide CSV button if panel has no table data (check after async render)
+        _updateCsvVisibility(entry.container);
         // Update CSV lock styling on newly created panel buttons
         if (typeof _updateCsvLocks === 'function') _updateCsvLocks();
       }
