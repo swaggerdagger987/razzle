@@ -266,7 +266,7 @@ function checkFeatureGate(feature, currentCount) {
       allowed: false,
       limit: limit,
       message: plan === "free"
-        ? "Free plan limit (" + limit + "). Upgrade to Pro for unlimited."
+        ? "Screener limit (" + limit + "). Subscribe to Pro for unlimited."
         : "Plan limit reached (" + limit + ")."
     };
   }
