@@ -28,12 +28,12 @@
   /* ===== LAB SIDEBAR ===== */
   .lab-sidebar {
     position: fixed;
-    left: 0;
+    right: 0;
     top: 56px;
     bottom: 0;
     width: 240px;
     background: var(--bg-card);
-    border-right: 3px solid var(--ink);
+    border-left: 3px solid var(--ink);
     overflow-y: auto;
     z-index: 50;
     transition: width 0.2s ease;
@@ -65,7 +65,7 @@
     padding: 6px 0;
     text-align: center;
     font-size: 0;
-    border-left: none;
+    border-right: none;
   }
   .lab-sidebar.collapsed .lab-sidebar-item::before {
     font-size: 14px;
@@ -77,7 +77,7 @@
   .lab-sidebar.collapsed .lab-sidebar-item .sidebar-tooltip {
     display: none;
     position: absolute;
-    left: 52px;
+    right: 52px;
     top: 50%;
     transform: translateY(-50%);
     background: var(--ink);
@@ -291,9 +291,9 @@
   .lab-sidebar-item {
     font-family: var(--font-mono);
     font-size: 12px;
-    padding: 6px 16px 6px 22px;
+    padding: 6px 22px 6px 16px;
     cursor: pointer;
-    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
     transition: all 0.1s;
     color: var(--ink-medium);
     display: block;
@@ -308,13 +308,13 @@
   .lab-sidebar-item:hover {
     background: var(--bg-warm);
     color: var(--ink);
-    border-left-color: var(--ink-faint);
+    border-right-color: var(--ink-faint);
   }
 
   .lab-sidebar-item.active {
     background: var(--orange-light);
     color: var(--ink);
-    border-left-color: var(--orange);
+    border-right-color: var(--orange);
     font-weight: 700;
   }
 
@@ -383,13 +383,13 @@
 
   /* ===== LAB MAIN ===== */
   .lab-main {
-    margin-left: 240px;
+    margin-right: 240px;
     min-height: calc(100vh - 56px);
-    transition: margin-left 0.2s ease;
+    transition: margin-right 0.2s ease;
   }
 
   .lab-sidebar.collapsed ~ .lab-main {
-    margin-left: 48px;
+    margin-right: 48px;
   }
 
   /* ===== LAB PANELS ===== */
@@ -557,25 +557,25 @@
   .prospect-mode .lab-sidebar-item.active,
   .college-mode .lab-sidebar-item.active {
     background: var(--blue-light);
-    border-left-color: var(--blue);
+    border-right-color: var(--blue);
   }
 
   /* ===== MOBILE SIDEBAR ===== */
   @media (max-width: 768px) {
     .lab-sidebar {
-      transform: translateX(-100%);
+      transform: translateX(100%);
       width: 260px;
       box-shadow: none;
     }
     .lab-sidebar.open {
       transform: translateX(0);
-      box-shadow: 8px 0 24px rgba(15, 15, 26, 0.15);
+      box-shadow: -8px 0 24px rgba(15, 15, 26, 0.15);
     }
     .lab-main {
-      margin-left: 0;
+      margin-right: 0;
     }
     .lab-sidebar.collapsed ~ .lab-main {
-      margin-left: 0;
+      margin-right: 0;
     }
     .lab-menu-toggle {
       display: flex;
@@ -3205,7 +3205,7 @@
   </div>
 
   <button class="lab-sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" title="Toggle sidebar">
-    <span id="sidebarToggleIcon">&laquo;</span>
+    <span id="sidebarToggleIcon">&raquo;</span>
   </button>
 </aside>
 
