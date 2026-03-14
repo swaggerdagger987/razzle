@@ -3137,6 +3137,45 @@ def dynasty_power_rankings(season: int = 0):
 
 
 # ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# Admin — minimal dashboard stats (protected by secret header)
+# ---------------------------------------------------------------------------
+
+_ADMIN_SECRET = os.environ.get("RAZZLE_ADMIN_SECRET", "")
+
+
+@app.get("/api/admin/stats")
+async def admin_stats(request: Request):
+    """Return user counts and subscription stats. Protected by X-Admin-Secret header."""
+    secret = request.headers.get("x-admin-secret", "")
+    if not _ADMIN_SECRET or secret != _ADMIN_SECRET:
+        return JSONResponse({"error": "unauthorized"}, status_code=403)
+
+    try:
+        with auth_module.get_users_db() as conn:
+            total = conn.execute("SELECT COUNT(*) FROM users").fetchone()[0]
+            free = conn.execute("SELECT COUNT(*) FROM users WHERE plan = 'free'").fetchone()[0]
+            pro = conn.execute("SELECT COUNT(*) FROM users WHERE plan = 'pro'").fetchone()[0]
+            elite = conn.execute("SELECT COUNT(*) FROM users WHERE plan = 'elite'").fetchone()[0]
+            pro_lt = conn.execute("SELECT COUNT(*) FROM users WHERE plan = 'pro_lifetime'").fetchone()[0]
+            elite_lt = conn.execute("SELECT COUNT(*) FROM users WHERE plan = 'elite_lifetime'").fetchone()[0]
+            trial = conn.execute("SELECT COUNT(*) FROM users WHERE trial_end IS NOT NULL AND trial_end > datetime('now')").fetchone()[0]
+            today = conn.execute("SELECT COUNT(*) FROM users WHERE DATE(created_at) = DATE('now')").fetchone()[0]
+        return JSONResponse({
+            "total_users": total,
+            "registered_today": today,
+            "plans": {
+                "free": free, "pro": pro, "elite": elite,
+                "pro_lifetime": pro_lt, "elite_lifetime": elite_lt,
+                "trial_active": trial
+            }
+        })
+    except Exception as e:
+        logger.error(f"Admin stats error: {e}")
+        return JSONResponse({"error": "internal"}, status_code=500)
+
+
+# ---------------------------------------------------------------------------
 # Serve frontend as static files (catch-all for SPA-like behavior)
 # ---------------------------------------------------------------------------
 
