@@ -2,9 +2,9 @@
 
 ## Current State
 - Phase: F (Data Refresh + Backend Hardening)
-- Current Task: F-6
-- Current Stage: BUILD
-- Tasks Completed: 5/6
+- Current Task: COMPLETE
+- Current Stage: DONE
+- Tasks Completed: 6/6
 - Loop Iterations: 6
 
 ## Phase A: Visual & Design Audit (Mar 12–18)
@@ -352,5 +352,5 @@
 **Accept when**: Errors are visible and diagnosable in production.
 **Depends on**: none
 **Size**: M
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1

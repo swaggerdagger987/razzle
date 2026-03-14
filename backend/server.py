@@ -553,6 +553,15 @@ async def custom_http_exception_handler(request: Request, exc: StarletteHTTPExce
     return HTMLResponse(content=str(exc.detail), status_code=exc.status_code)
 
 
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    """Catch unhandled exceptions — log full traceback, return generic 500."""
+    logger.exception("Unhandled exception on %s %s", request.method, request.url.path)
+    if request.url.path.startswith("/api/"):
+        return JSONResponse({"error": "Internal server error"}, status_code=500)
+    return HTMLResponse("Internal server error", status_code=500)
+
+
 # ---------------------------------------------------------------------------
 # API endpoints
 # ---------------------------------------------------------------------------
