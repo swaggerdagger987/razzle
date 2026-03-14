@@ -2,20 +2,27 @@
 
 ## Current State
 - Phase: Bureau of Intelligence — Roster Depth Analysis
-- Current Task: Task 1 — Build Roster Depth panel
-- Current Stage: BUILD
-- Tasks Completed: 0/1
-- Loop Iterations: 0
+- Current Task: COMPLETE
+- Current Stage: DONE
+- Tasks Completed: 1/1
+- Loop Iterations: 1
 
 ## Phase Spec
 
 **Exit Criterion**: Bureau has a "Roster Depth" panel showing every manager's depth by position with vulnerability flags.
 
-### Task 1: Build Roster Depth panel
-**Requirement**: Add a "Roster Depth" panel to the Bureau (league-intel.html) that analyzes every manager's roster depth by position. For each manager show: (1) Starter quality — average PPG of top starters at each position slot (1QB, 2RB, 2WR, 1TE, 1FLEX), (2) Bench depth — average PPG of remaining players by position, (3) Depth score — 0-100 composite of starter + bench quality, (4) Vulnerability flags — positions where they have only 1 startable player (one injury from disaster), (5) Visual stacked bar chart per manager showing starter vs bench strength by position. Color: green = deep, yellow = thin, red = vulnerable. Sort managers by overall depth score. Use Sleeper roster data cross-referenced with Razzle player stats from terminal.db (PPG lookup via `/api/players` or existing trade value data). Chunky Razzle card styling per DESIGN.md.
-**Accept when**: Depth panel renders for a connected Sleeper league. Each manager shows starter quality, bench depth, depth score, and vulnerability flags. Bar chart renders. Sorted by depth score. Matches DESIGN.md styling.
-**Depends on**: none
-**Size**: L
+### Task 1: Build Roster Depth panel — PASS
+- Added "analyze roster depth" button to Bureau league cards
+- loadRosterDepth() fetches PPG via free /api/roster-depth-lookup endpoint
+- Per-manager depth cards with starter quality, bench depth, depth score (0-100)
+- Stacked position bars (QB/RB/WR/TE) showing starter vs bench strength
+- Vulnerability flags (thin positions) and strength flags (loaded positions)
+- Sorted by composite depth score, user's card highlighted orange
+- Fallback renderDepthFromSleeper() if API unavailable
+- Backend: fetch_roster_depth_lookup() in dynasty.py + ungated POST endpoint
+- CSS: depth-grid, depth-card, depth-bar-track with DESIGN.md chunky styling
+- Mobile responsive (1-column grid at 768px)
+- 59 tests pass, JS syntax verified
 
 ## Status
-- [ ] Task 1: Build Roster Depth panel
+- [x] Task 1: Build Roster Depth panel — PASS
