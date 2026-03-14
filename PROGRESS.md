@@ -218,9 +218,32 @@ Systematic page-by-page audit against DESIGN.md and NORTH_STAR.md.
 | league-intel.html | Design: 1px → 2px borders on badges/chips | DONE | 2 instances: .pressure-bar-tag CSS (1px solid → 2px solid), inline season badge span (1px → 2px). DESIGN.md: "2px borders on chips, badges." |
 
 ### Final Quality Sweep (Mar 13)
-- All 74 pages: title tags ✓, og:description ✓, Pricing nav link ✓, viewport meta ✓
+- All 74 pages: title tags, og:description, Pricing nav link, viewport meta
 - No placeholder text, no debug CSS, no console.log noise, no TODO/FIXME comments
 - No broken asset references, no unhandled fetch() calls
 - Every data table scrolls on mobile (29 standalone pages + 26 lab panel containers)
 - Hamburger menu dynamically injected on all 74 pages via app.js
 - All 59 tests pass
+
+---
+
+## Ship Loop: Launch Fixes (Mar 14) — Branch: ship/launch-fixes
+
+**Goal**: Fix all P0 launch blockers from 2026-03-14 review + consume TICKETS.md.
+
+| # | Fix | Status | Notes |
+|---|-----|--------|-------|
+| 1 | Server crash: infinite recursion in _get_client_ip | DONE | One-line fix: fallback to request.client.host instead of recursive call. server.py:68. |
+| 2 | --ink-light CSS variable wrong color | DONE | Changed #6d5c4e to #8a7565 in both light and dark mode. Affects all 74 pages. |
+| 3 | Bureau of Intelligence right-aligned | DONE | Changed margin: 0 0 0 auto to margin: 0 auto on .intel-container and .connect-card. |
+| 4 | Lab panels blank pages (P0 CRITICAL) | DONE | Root cause: defer script timing. lab-panels.js (defer) runs after inline script. panelRegistry was empty because _labPanelDefs wasn't populated yet. Fixed by deferring registration and initial panel switch to DOMContentLoaded. |
+| 5 | agents.html 130 unclosed div tags | DONE | Systematically added closing tags throughout entire file. 135 opens = 135 closes. Nesting validated. |
+| 6 | Lab sidebar reorganization + tier gating | DONE | 10 free panels at top, 60+ Pro panels below with lock icons. switchPanel() checks isPaidUser() and shows upgrade CTA for locked panels. Lock icons toggle on plan change. |
+| 7 | Screener page size: remove 50/100/200 | DONE | Only 25 rows per page. Prevents slow load times. |
+| 8 | Admin stats endpoint | DONE | GET /api/admin/stats with X-Admin-Secret header protection. Returns user/plan/trial counts. |
+
+### Remaining items (need user input or post-launch):
+- P0-5 Pricing mismatch: North Star says $240/yr, site has $9.99-$19.99/mo. Needs user confirmation of intentional pricing.
+- P1-2 Client-side tier gating: bypassable via localStorage. Need server-side enforcement (post-launch).
+- P1-4 Empty AdSense publisher ID: awaiting account approval.
+- Lab Toolbar Redesign: large ticket (L+L+M), left in TICKETS.md for next sprint.
