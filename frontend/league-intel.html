@@ -824,6 +824,7 @@
         <button class="btn-primary" id="connectBtn" onclick="connectSleeper()">Connect</button>
       </div>
       <div class="connect-error" id="connectError"></div>
+      <div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); margin-top:8px;">this will permanently link your Sleeper account to your Razzle account</div>
     </div>
   </div>
 
@@ -931,6 +932,16 @@ async function connectSleeper() {
   var errorEl = document.getElementById("connectError");
   var btn = document.getElementById("connectBtn");
   errorEl.textContent = "";
+
+  // Check if account is locked to a different Sleeper username
+  var razzleUser = null;
+  try { razzleUser = JSON.parse(localStorage.getItem("razzle_user")); } catch(e) {}
+  if (razzleUser && razzleUser.sleeper_locked && razzleUser.sleeper_username &&
+      razzleUser.sleeper_username.toLowerCase() !== username.toLowerCase()) {
+    errorEl.textContent = "Your account is linked to " + razzleUser.sleeper_username + ". One Sleeper ID per account keeps the free trial fair for everyone.";
+    return;
+  }
+
   btn.disabled = true;
   btn.textContent = "connecting...";
 
@@ -946,7 +957,7 @@ async function connectSleeper() {
 
     localStorage.setItem("razzle_sleeper_user", username);
     localStorage.setItem("razzle_sleeper_user_id", user.user_id);
-    // Link to account if logged in
+    // Link to account if logged in (will lock on server)
     if (typeof linkSleeperToAccount === "function") linkSleeperToAccount(username);
     showLeagues(username);
   } catch (e) {

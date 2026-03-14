@@ -197,11 +197,12 @@ def initialize_users_db():
         """)
         conn.commit()
 
-        # Migration: add trial columns to users table
+        # Migration: add trial and sleeper lock columns to users table
         for col, default in [
             ("trial_start", "NULL"),
             ("trial_end", "NULL"),
             ("trial_used", "0"),
+            ("sleeper_locked", "0"),
         ]:
             try:
                 conn.execute(f"ALTER TABLE users ADD COLUMN {col} DEFAULT {default}")
@@ -247,6 +248,12 @@ def _user_dict(row) -> dict:
         d["stripe_customer_id"] = row["stripe_customer_id"]
     except (IndexError, KeyError):
         pass
+
+    # Sleeper lock status
+    try:
+        d["sleeper_locked"] = bool(row["sleeper_locked"])
+    except (IndexError, KeyError):
+        d["sleeper_locked"] = False
 
     # Trial info
     trial_end_str = None
@@ -369,16 +376,34 @@ def get_current_user(token: str) -> dict:
 
 
 def link_sleeper(user_id: int, sleeper_username: str) -> dict:
-    """Link a Sleeper username to user account."""
+    """Link a Sleeper username to user account. Once locked, cannot be changed."""
     with get_users_db() as conn:
+        row = conn.execute("SELECT * FROM users WHERE id = ?", (user_id,)).fetchone()
+        if not row:
+            return {"error": "User not found", "status": 404}
+
+        # Check if already locked to a different username
+        existing_username = row["sleeper_username"]
+        sleeper_locked = False
+        try:
+            sleeper_locked = bool(row["sleeper_locked"])
+        except (IndexError, KeyError):
+            pass
+
+        if sleeper_locked and existing_username and existing_username.lower() != sleeper_username.lower():
+            return {
+                "error": f"Your account is linked to {existing_username}. One Sleeper ID per account keeps the free trial fair for everyone.",
+                "status": 409,
+                "locked_username": existing_username,
+            }
+
+        # Link and lock
         conn.execute(
-            "UPDATE users SET sleeper_username = ? WHERE id = ?",
+            "UPDATE users SET sleeper_username = ?, sleeper_locked = 1 WHERE id = ?",
             (sleeper_username, user_id),
         )
         conn.commit()
         row = conn.execute("SELECT * FROM users WHERE id = ?", (user_id,)).fetchone()
-        if not row:
-            return {"error": "User not found", "status": 404}
         return {"user": _user_dict(row)}
 
 

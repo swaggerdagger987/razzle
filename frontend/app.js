@@ -974,6 +974,7 @@ function showSleeperPrompt() {
     '</div>' +
     '<form onsubmit="handleSleeperLink(event)" style="display:flex; flex-direction:column; gap:10px;">' +
       '<input type="text" id="sleeperLinkInput" placeholder="Sleeper username" style="font-family:var(--font-mono); font-size:14px; padding:10px 14px; border:2px solid var(--ink); border-radius:8px; background:var(--bg-card);">' +
+      '<div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); padding:4px 0;">this will permanently link your Sleeper account to your Razzle account</div>' +
       '<div id="sleeperLinkError" style="font-family:var(--font-mono); font-size:12px; color:var(--red); min-height:16px;"></div>' +
       '<button type="submit" class="btn-chunky btn-primary auth-submit">Connect</button>' +
       '<a href="#" onclick="showWelcomeState(); return false;" style="text-align:center; font-family:var(--font-mono); font-size:12px; color:var(--ink-light);">skip for now</a>' +
@@ -1029,7 +1030,14 @@ async function handleSleeperLink(e) {
       body: JSON.stringify({ sleeper_username: username })
     });
     var data = await resp.json();
-    if (!resp.ok) { errEl.textContent = data.error || "Invalid username"; return; }
+    if (!resp.ok) {
+      if (data.locked_username) {
+        errEl.textContent = data.error || "This account is already linked to " + data.locked_username;
+      } else {
+        errEl.textContent = data.error || "Invalid username";
+      }
+      return;
+    }
     localStorage.setItem("razzle_user", JSON.stringify(data.user));
     localStorage.setItem("razzle_sleeper_user", username);
     updateAuthUI(data.user);

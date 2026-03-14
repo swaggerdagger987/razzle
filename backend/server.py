@@ -854,7 +854,10 @@ async def auth_link_sleeper(request: Request):
 
     result = auth_module.link_sleeper(user["id"], sleeper_username)
     if "error" in result:
-        return JSONResponse({"error": result["error"]}, status_code=result["status"])
+        resp_body = {"error": result["error"]}
+        if "locked_username" in result:
+            resp_body["locked_username"] = result["locked_username"]
+        return JSONResponse(resp_body, status_code=result["status"])
     return result
 
 
