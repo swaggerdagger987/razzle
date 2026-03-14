@@ -1386,6 +1386,11 @@
       return p.targets_per_game;
     }
 
+    function fmtD(v) {
+      if (v == null || isNaN(v)) return '0';
+      return parseFloat(Number(v).toFixed(1)).toString();
+    }
+
     function loadBO() {
       var body = el.querySelector('#bo-body');
       body.innerHTML = '<div class="lp-loading">scouting the film...</div>';
@@ -1415,7 +1420,7 @@
         candidates.forEach(function(p) {
           var pos = (p.position || 'WR').toLowerCase();
           var ac = ageClass(p.age);
-          var rbsVal = p.rbs_score != null ? p.rbs_score : (p.breakout_score != null ? p.breakout_score : 0);
+          var rbsVal = p.rbs_score != null ? fmtD(p.rbs_score) : (p.breakout_score != null ? fmtD(p.breakout_score) : '0');
           html += '<div class="breakout-card" data-pid="' + escapeAttr(p.player_id) + '">';
           html += '<div class="breakout-card-top ' + pos + '"></div><div class="breakout-card-body">';
           html += '<div class="breakout-card-row1">';
@@ -1434,21 +1439,21 @@
           html += '<div class="breakout-rbs"><div class="breakout-rbs-score">' + escapeHtml(String(rbsVal)) + '</div>';
           html += '<div class="breakout-rbs-label">' + (isCollege ? 'BKO' : 'RBS') + '</div></div></div>';
           html += '<div class="breakout-bars">';
-          html += '<div class="breakout-bar-group"><div class="breakout-bar-label"><span>Opportunity</span><span>' + escapeHtml(String(p.opportunity_pct)) + '%</span></div>';
+          html += '<div class="breakout-bar-group"><div class="breakout-bar-label"><span>Opportunity</span><span>' + escapeHtml(fmtD(p.opportunity_pct)) + '%</span></div>';
           html += '<div class="breakout-bar-track"><div class="breakout-bar-fill opportunity" style="width:' + parseFloat(p.opportunity_pct) + '%"></div></div></div>';
-          html += '<div class="breakout-bar-group"><div class="breakout-bar-label"><span>Production</span><span>' + escapeHtml(String(p.production_pct)) + '%</span></div>';
+          html += '<div class="breakout-bar-group"><div class="breakout-bar-label"><span>Production</span><span>' + escapeHtml(fmtD(p.production_pct)) + '%</span></div>';
           html += '<div class="breakout-bar-track"><div class="breakout-bar-fill production" style="width:' + parseFloat(p.production_pct) + '%"></div></div></div></div>';
           html += '<div class="breakout-gap"><span class="breakout-gap-arrow">&#9650;</span><span class="breakout-gap-text">' + escapeHtml(p.annotation) + '</span></div>';
           html += '<div class="breakout-stats">';
           if (isCollege) {
-            html += '<div class="breakout-stat"><div class="breakout-stat-val">' + escapeHtml(String(p.yards_per_game || 0)) + '</div><div class="breakout-stat-key">YD/G</div></div>';
-            html += '<div class="breakout-stat"><div class="breakout-stat-val">' + escapeHtml(String(p.tds_per_game || 0)) + '</div><div class="breakout-stat-key">TD/G</div></div>';
+            html += '<div class="breakout-stat"><div class="breakout-stat-val">' + escapeHtml(fmtD(p.yards_per_game || 0)) + '</div><div class="breakout-stat-key">YD/G</div></div>';
+            html += '<div class="breakout-stat"><div class="breakout-stat-val">' + escapeHtml(fmtD(p.tds_per_game || 0)) + '</div><div class="breakout-stat-key">TD/G</div></div>';
           } else {
-            html += '<div class="breakout-stat"><div class="breakout-stat-val">' + escapeHtml(String(p.ppg)) + '</div><div class="breakout-stat-key">PPG</div></div>';
-            html += '<div class="breakout-stat"><div class="breakout-stat-val">' + escapeHtml(String(p.snap_pct)) + '%</div><div class="breakout-stat-key">Snap%</div></div>';
+            html += '<div class="breakout-stat"><div class="breakout-stat-val">' + escapeHtml(fmtD(p.ppg)) + '</div><div class="breakout-stat-key">PPG</div></div>';
+            html += '<div class="breakout-stat"><div class="breakout-stat-val">' + escapeHtml(fmtD(p.snap_pct)) + '%</div><div class="breakout-stat-key">Snap%</div></div>';
           }
-          html += '<div class="breakout-stat"><div class="breakout-stat-val">' + escapeHtml(String(posStatVal(p))) + '</div><div class="breakout-stat-key">' + posStatLabel(p.position) + '</div></div>';
-          if (!isCollege && p.position !== 'QB' && p.position !== 'RB') html += '<div class="breakout-stat"><div class="breakout-stat-val">' + escapeHtml(String(p.target_share)) + '%</div><div class="breakout-stat-key">TGT%</div></div>';
+          html += '<div class="breakout-stat"><div class="breakout-stat-val">' + escapeHtml(fmtD(posStatVal(p))) + '</div><div class="breakout-stat-key">' + posStatLabel(p.position) + '</div></div>';
+          if (!isCollege && p.position !== 'QB' && p.position !== 'RB') html += '<div class="breakout-stat"><div class="breakout-stat-val">' + escapeHtml(fmtD(p.target_share)) + '%</div><div class="breakout-stat-key">TGT%</div></div>';
           html += '<div class="breakout-stat"><div class="breakout-stat-val">' + escapeHtml(String(p.games)) + '</div><div class="breakout-stat-key">Games</div></div>';
           html += '</div></div></div>';
         });
