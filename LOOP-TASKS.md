@@ -1,11 +1,30 @@
 # Razzle Ship Loop — Task Tracker
 
 ## Current State
-- Phase: I (Review Fix 1 — Ship-Blockers)
-- Current Task: COMPLETE
-- Current Stage: DONE
-- Tasks Completed: 10/10
-- Loop Iterations: 9
+- Phase: Mobile Hamburger Menu
+- Current Task: 1
+- Current Stage: BUILD
+- Tasks Completed: 0/2
+- Loop Iterations: 0
+
+## Phase: Mobile Hamburger Menu
+**Exit Criterion**: All pages have a functional hamburger menu on screens below 768px. All nav links are accessible. Desktop nav unchanged.
+
+### Task 1: Add hamburger menu component
+**Requirement**: Add a tiger paw hamburger toggle button (only visible below 768px) that opens a slide-out left panel with all 5 nav links, theme toggle, and sign in button. Escape and outside-tap close it. Works on all pages via dynamic JS injection.
+**Accept when**: Tiger paw button visible on mobile only. Tapping opens left-sliding panel with all 5 nav links + theme toggle + sign in. Chunky Razzle styling. Escape and outside-tap close. Desktop nav unchanged. Works on all pages.
+**Depends on**: none
+**Size**: L
+**Status**: IN_PROGRESS
+**Attempts**: 1
+
+### Task 2: Fix mobile nav text size and touch targets
+**Requirement**: Remove 375px breakpoint that shrinks nav to 9px. Remove scrollbar-width:none from .nav-links. Ensure 44px min touch targets in mobile panel. Style active page link with bg-warm background and orange left border.
+**Accept when**: No text below 12px in nav. All touch targets >= 44px. Active page highlighted. No horizontal scroll remnants.
+**Depends on**: 1
+**Size**: M
+**Status**: PENDING
+**Attempts**: 0
 
 ## Phase A: Visual & Design Audit (Mar 12–18)
 **Exit Criterion**: Open each of the three rooms plus the landing page. The visual language is unmistakably Razzle — warm sand, chunky borders, espresso ink, comic-strip energy. No page looks like it was built by a different team.
