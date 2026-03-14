@@ -34,7 +34,7 @@
 
   .warroom-hero-mascot {
     font-size: 64px;
-    filter: drop-shadow(3px 3px 0 rgba(0,0,0,0.15));
+    filter: drop-shadow(3px 3px 0 rgba(45,31,20,0.15));
     transform: rotate(-3deg);
     display: inline-block;
     margin-bottom: 12px;
@@ -175,7 +175,7 @@
 
     background: var(--bg-ink);
     color: var(--ink);
-    border-top: 3px solid #5c4a3d;
+    border-top: 3px solid var(--ink-faint);
     min-height: 600px;
     position: relative;
   }
@@ -201,8 +201,8 @@
     border: 3px solid var(--ink-medium);
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 6px 6px 0 rgba(0,0,0,0.4);
-    background: #2d1f14;
+    box-shadow: 6px 6px 0 rgba(45,31,20,0.4);
+    background: var(--bg);
     position: relative;
     aspect-ratio: 30 / 22;
     max-height: 704px;
@@ -227,7 +227,7 @@
 
   .canvas-placeholder-icon {
     font-size: 48px;
-    filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.3));
+    filter: drop-shadow(2px 2px 0 rgba(45,31,20,0.3));
     animation: pulse-glow 2s ease-in-out infinite;
   }
 
@@ -937,7 +937,7 @@
   }
 
   .urgency-badge.urgent { background: var(--red-light); color: var(--red); border-color: var(--red); }
-  .urgency-badge.monitor { background: var(--yellow-light); color: #996600; border-color: #996600; }
+  .urgency-badge.monitor { background: var(--yellow-light); color: var(--ink-medium); border-color: var(--ink-medium); }
   .urgency-badge.opportunity { background: var(--green-light); color: var(--green); border-color: var(--green); }
 
   .briefing-card.loading .briefing-card-body {
@@ -1531,7 +1531,7 @@
 
 <span id="main-content"></span>
 <!-- Trial expiry banner (rendered by JS) -->
-<div id="trialExpiryBanner" style="display:none; max-width:800px; margin:0 auto; padding:0 24px;">
+<div id="trialExpiryBanner" style="display:none; max-width:800px; margin:0 auto; padding:0 24px;"></div>
 
 <!-- HERO (sand bg, Razzle design system) -->
 <div class="warroom-hero">
@@ -1807,7 +1807,7 @@
 
 
 <!-- SITUATION ROOM PRICING -->
-<div style="background:var(--bg-sand, #ede0cf); border-top:3px solid var(--ink); padding:48px 24px; text-align:center;">
+<div style="background:var(--bg); border-top:3px solid var(--ink); padding:48px 24px; text-align:center;">
   <div style="max-width:900px; margin:0 auto;">
     <h2 style="font-family:var(--font-display); font-size:28px; margin-bottom:4px;">Unlock the full <span style="color:var(--orange);">Situation Room</span></h2>
     <p style="font-family:var(--font-hand); font-size:20px; color:var(--ink-medium); margin-bottom:24px;">Generic mode is free. League context changes everything.</p>
@@ -1868,7 +1868,7 @@
     <div style="margin-top:32px; overflow-x:auto;">
       <table style="width:100%; max-width:700px; margin:0 auto; border-collapse:collapse; font-family:var(--font-mono); font-size:11px; border:3px solid var(--ink); border-radius:8px; overflow:hidden; box-shadow:4px 4px 0 var(--ink);">
         <thead>
-          <tr style="background:var(--ink); color:var(--bg-sand);">
+          <tr style="background:var(--ink); color:var(--bg);">
             <th style="padding:10px 12px; text-align:left; font-family:var(--font-display); font-size:13px; font-weight:400;">Feature</th>
             <th style="padding:10px 12px; text-align:center; font-family:var(--font-display); font-size:13px; font-weight:400;">Free</th>
             <th style="padding:10px 12px; text-align:center; font-family:var(--font-display); font-size:13px; font-weight:400; color:var(--orange);">Pro</th>
