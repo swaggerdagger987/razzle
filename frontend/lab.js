@@ -160,16 +160,31 @@ function _highlightSearch(escaped) {
 
 // ─── Watchlist (localStorage, cached in memory) ────────────────
 let _watchlistCache = null;
+var _watchlistSet = new Set();
+var _selectedSet = new Set();
+
+function _rebuildWatchlistSet() {
+  _watchlistSet.clear();
+  var list = getWatchlist();
+  for (var i = 0; i < list.length; i++) _watchlistSet.add(list[i].player_id);
+}
+
+function _rebuildSelectedSet() {
+  _selectedSet.clear();
+  for (var i = 0; i < state.selectedPlayers.length; i++) _selectedSet.add(state.selectedPlayers[i].player_id);
+}
 
 function getWatchlist() {
   if (_watchlistCache !== null) return _watchlistCache;
   try { _watchlistCache = JSON.parse(localStorage.getItem("razzle_watchlist")) || []; }
   catch { _watchlistCache = []; }
+  _rebuildWatchlistSet();
   return _watchlistCache;
 }
 
 function saveWatchlist(list) {
   _watchlistCache = list;
+  _rebuildWatchlistSet();
   try { localStorage.setItem("razzle_watchlist", JSON.stringify(list)); } catch(e) {}
   updateWatchlistBadge();
   // Push to cloud for Pro+ users (silent, non-blocking)
@@ -177,7 +192,7 @@ function saveWatchlist(list) {
 }
 
 function isOnWatchlist(playerId) {
-  return getWatchlist().some(function(p) { return p.player_id === playerId; });
+  return _watchlistSet.has(playerId);
 }
 
 function toggleWatchlistPlayer(playerId, name, position, team, universe) {
@@ -261,6 +276,7 @@ function syncWatchlistFromCloud() {
 
     // Save locally
     _watchlistCache = mergedList;
+    _rebuildWatchlistSet();
     try { localStorage.setItem("razzle_watchlist", JSON.stringify(mergedList)); } catch(e) {}
     updateWatchlistBadge();
 
@@ -1142,6 +1158,35 @@ function _syncUndoRedoButtons() {
 })();
 
 // ─── Data fetching ───────────────────────────────────────────────
+// ─── Screener query cache (LRU, 5 entries) ───────────────────────
+var _queryCache = [];  // [{key, data}]
+var _QUERY_CACHE_MAX = 5;
+
+function _queryCacheGet(key) {
+  for (var i = 0; i < _queryCache.length; i++) {
+    if (_queryCache[i].key === key) {
+      // Move to end (most recently used)
+      var entry = _queryCache.splice(i, 1)[0];
+      _queryCache.push(entry);
+      return entry.data;
+    }
+  }
+  return null;
+}
+
+function _queryCachePut(key, data) {
+  // Remove existing entry with same key
+  for (var i = 0; i < _queryCache.length; i++) {
+    if (_queryCache[i].key === key) { _queryCache.splice(i, 1); break; }
+  }
+  _queryCache.push({ key: key, data: data });
+  if (_queryCache.length > _QUERY_CACHE_MAX) _queryCache.shift();
+}
+
+function _queryCacheClear() {
+  _queryCache = [];
+}
+
 // ─── Request deduplication ────────────────────────────────────────
 let _fetchController = null;
 let _fetchId = 0;
@@ -1191,17 +1236,25 @@ async function fetchAndRenderNFL(signal, myId) {
   };
 
   try {
-    const fetchOpts = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    };
-    if (signal) fetchOpts.signal = signal;
-    const data = await apiFetch("/api/screener/query", fetchOpts);
+    const bodyJson = JSON.stringify(body);
+    const cacheKey = bodyJson;
+    var data = _queryCacheGet(cacheKey);
+
+    if (!data) {
+      const fetchOpts = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: bodyJson,
+      };
+      if (signal) fetchOpts.signal = signal;
+      data = await apiFetch("/api/screener/query", fetchOpts);
+      _queryCachePut(cacheKey, data);
+    }
 
     if (myId !== _fetchId) return; // stale response
 
-    state.items = data.items || [];
+    // Deep-clone items to prevent mutations from corrupting the cache
+    state.items = (data.items || []).map(function(p) { return Object.assign({}, p); });
     state.totalCount = data.count || 0;
     state.season = data.season || state.season;
 
@@ -1605,14 +1658,15 @@ function _setActiveColumnArray(arr) {
 // ─── Virtual scrolling ──────────────────────────────────────────
 function getVScrollRowHeight() { return state.density ? 26 : 36; }
 const VSCROLL_BUFFER = 20;
-let _vscrollRows = [];   // Pre-computed HTML strings for each row
+let _vscrollRows = [];   // Sparse array: lazily-built HTML strings per row
 let _vscrollRAF = null;  // requestAnimationFrame handle
 let _vscrollBound = false;
+let _vscrollRenderCtx = null; // Cached render context for lazy row building
 
-function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, leaderRanks) {
+function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, leaderRanks, colDefMap) {
   const pos = (player.position || "").toUpperCase();
   const playKey = player.player_id || player.player_name;
-  const selected = state.selectedPlayers.some(p => p.player_id === playKey);
+  const selected = _selectedSet.has(playKey);
   const starred = isOnWatchlist(playKey);
   const pName = escapeAttr(player.full_name || player.player_name || "");
   const pTeam = escapeAttr(player.team || player.school || "");
@@ -1680,7 +1734,7 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
   const diffBaseline = _getDiffBaseline(); // cached per row, not per cell
 
   for (const key of cols) {
-    const col = getColumnDef(key);
+    const col = colDefMap ? colDefMap.get(key) : getColumnDef(key);
     if (!col) continue;
     let val = player[key];
     // Sparkline column: render placeholder cell for async fill
@@ -1777,9 +1831,22 @@ function renderVisibleRows() {
   const viewHeight = wrap.clientHeight;
   const colCount = getActiveColumns().length + 5 + (state.universe === "nfl" ? 1 : 0); // +star +checkbox +rank +player (+pin if NFL) (+add column btn)
 
-  // Calculate visible range
+  // Calculate visible range with buffer
   const startRow = Math.max(0, Math.floor(scrollTop / getVScrollRowHeight()) - VSCROLL_BUFFER);
   const endRow = Math.min(totalRows, Math.ceil((scrollTop + viewHeight) / getVScrollRowHeight()) + VSCROLL_BUFFER);
+
+  // Lazy build: only construct HTML for rows about to become visible
+  if (_vscrollRenderCtx) {
+    var ctx = _vscrollRenderCtx;
+    // Build 10 extra rows above/below the visible+buffer range for smoother scrolling
+    var lazyStart = Math.max(0, startRow - 10);
+    var lazyEnd = Math.min(totalRows, endRow + 10);
+    for (var li = lazyStart; li < lazyEnd; li++) {
+      if (_vscrollRows[li] === undefined) {
+        _vscrollRows[li] = buildRowHTML(state.items[li], ctx.cols, ctx.heatOn, ctx.pctData, li, ctx.barsOn, ctx.pctMode, ctx.leaderRanks, ctx.colDefMap);
+      }
+    }
+  }
 
   // Build HTML with spacer rows
   const topHeight = startRow * getVScrollRowHeight();
@@ -1826,6 +1893,7 @@ function renderTableBody() {
 
   if (!state.items.length) {
     _vscrollRows = [];
+    _vscrollRenderCtx = null;
     var hasFilters = state.filters.length > 0 || state.search || state.teams.length > 0 || state.minGP > 0;
     var hint = hasFilters
       ? 'try loosening your filters or <a href="#" onclick="resetAllFilters(); return false;" style="color:var(--orange); text-decoration:underline; cursor:pointer;">reset all filters</a>'
@@ -1838,7 +1906,11 @@ function renderTableBody() {
     return;
   }
 
-  // Pre-compute all row HTML
+  // Rebuild lookup sets for O(1) checks in buildRowHTML
+  _rebuildSelectedSet();
+  _rebuildWatchlistSet();
+
+  // Pre-compute render context (shared across all rows)
   const heatOn = state.heatColors;
   const pctMode = state.percentileMode;
   const pctData = (heatOn || pctMode) ? computePercentiles() : {};
@@ -1846,14 +1918,26 @@ function renderTableBody() {
   if (barsOn) computeBarMaxes();
   const leadersOn = state.leaderBadges && !state.percentileMode;
   const leaderRanks = leadersOn ? computeLeaderRanks() : {};
-  _vscrollRows = [];
-  for (let i = 0; i < state.items.length; i++) {
-    _vscrollRows.push(buildRowHTML(state.items[i], cols, heatOn, pctData, i, barsOn, pctMode, leaderRanks));
+
+  // Task 5: Cache column definitions for all active columns
+  var colDefMap = new Map();
+  for (var ci = 0; ci < cols.length; ci++) {
+    var cd = getColumnDef(cols[ci]);
+    if (cd) colDefMap.set(cols[ci], cd);
   }
 
-  // Insert tier break divider rows if enabled (NFL only)
+  // Task 1: Lazy virtual scroll — sparse array, build rows on demand
+  var totalItems = state.items.length;
+  _vscrollRows = new Array(totalItems);
+  _vscrollRenderCtx = { cols: cols, heatOn: heatOn, pctData: pctData, barsOn: barsOn, pctMode: pctMode, leaderRanks: leaderRanks, colDefMap: colDefMap };
+
+  // If tier breaks enabled, pre-build ALL rows (tier breaks change indices)
   if (state.tierBreaks && state.universe === "nfl") {
+    for (var ti = 0; ti < totalItems; ti++) {
+      _vscrollRows[ti] = buildRowHTML(state.items[ti], cols, heatOn, pctData, ti, barsOn, pctMode, leaderRanks, colDefMap);
+    }
     _vscrollRows = insertTierBreakRows(_vscrollRows, cols);
+    _vscrollRenderCtx = null; // disable lazy building when tier breaks active
   }
 
   // Bind scroll handler once
@@ -1865,7 +1949,7 @@ function renderTableBody() {
     }
   }
 
-  // Render visible rows
+  // Render visible rows (builds lazily for non-tier-break mode)
   renderVisibleRows();
 }
 
@@ -2456,6 +2540,7 @@ function setUniverse(u) {
   }
   if (state.universe === u && u !== "college") return;
   state.universe = u;
+  _queryCacheClear();
   try { localStorage.setItem('razzle_universe', u); } catch(e) {}
   state.offset = 0;
   state.search = "";
@@ -4388,6 +4473,7 @@ function togglePlayerSelect(playerId, checked) {
   } else {
     state.selectedPlayers = state.selectedPlayers.filter(p => p.player_id !== playerId);
   }
+  _rebuildSelectedSet();
   updateSelectionUI();
 }
 
