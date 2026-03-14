@@ -1442,15 +1442,15 @@ function renderTableHead() {
   let html = buildGroupHeaderRow(cols);
 
   const allSelected = state.items.length > 0 && state.items.every(p => state.selectedPlayers.some(s => s.player_id === (p.player_id || p.player_name)));
-  html += '<tr><th class="col-star" style="width:28px; text-align:center; padding:8px 4px;" title="Watchlist">&#9733;</th>';
-  html += `<th class="col-select" style="width:30px; text-align:center; padding:8px 6px;" title="Select all / none"><input type="checkbox" ${allSelected ? "checked" : ""} onchange="toggleSelectAll(this.checked)" style="accent-color:var(--orange); width:15px; height:15px; cursor:pointer;"></th>`;
+  html += '<tr><th scope="col" class="col-star" style="width:28px; text-align:center; padding:8px 4px;" title="Watchlist">&#9733;</th>';
+  html += `<th scope="col" class="col-select" style="width:30px; text-align:center; padding:8px 6px;" title="Select all / none"><input type="checkbox" ${allSelected ? "checked" : ""} onchange="toggleSelectAll(this.checked)" style="accent-color:var(--orange); width:15px; height:15px; cursor:pointer;"></th>`;
   if (state.universe === "nfl") {
     const pinCount = state.pinnedPlayers.length;
     const pinTitle = pinCount > 0 ? `${pinCount} pinned — click to clear` : "Pin players to top";
-    html += `<th class="col-pin" style="width:28px; text-align:center; padding:8px 2px; cursor:${pinCount ? 'pointer' : 'default'}; font-size:12px;" title="${pinTitle}"${pinCount ? ' onclick="clearAllPins()"' : ''}>&#128204;${pinCount ? '<span style="font-size:9px; color:var(--orange); font-weight:700;"> ' + pinCount + '</span>' : ''}</th>`;
+    html += `<th scope="col" class="col-pin" style="width:28px; text-align:center; padding:8px 2px; cursor:${pinCount ? 'pointer' : 'default'}; font-size:12px;" title="${pinTitle}"${pinCount ? ' onclick="clearAllPins()"' : ''}>&#128204;${pinCount ? '<span style="font-size:9px; color:var(--orange); font-weight:700;"> ' + pinCount + '</span>' : ''}</th>`;
   }
-  html += '<th class="col-rank" title="Overall rank by current sort">#</th>';
-  html += `<th class="col-player" onclick="sortBy('${nameKey}', event)">Player`;
+  html += '<th scope="col" class="col-rank" title="Overall rank by current sort">#</th>';
+  html += `<th scope="col" class="col-player" onclick="sortBy('${nameKey}', event)">Player`;
   if (state.sortKey === "full_name" || state.sortKey === "player_name") {
     html += state.sortDir === "asc" ? " &#9650;" : " &#9660;";
   } else if (state.sortKey2 === "full_name" || state.sortKey2 === "player_name") {
@@ -1493,11 +1493,11 @@ function renderTableHead() {
     var cwStyle = cw ? `width:${cw}px; min-width:${cw}px; max-width:${cw}px;` : "";
     var dragAttr = ' draggable="true" ondragstart="_colDragStart(event)" ondragover="_colDragOver(event)" ondrop="_colDrop(event)" ondragend="_colDragEnd(event)"';
     if (col.isSparkline) {
-      html += `<th${tip} data-col="${key}"${dragAttr} style="${cwStyle || 'width:80px;'} text-align:center;">${col.label}<div class="col-resize-handle" data-col="${key}"></div></th>`;
+      html += `<th scope="col"${tip} data-col="${key}"${dragAttr} style="${cwStyle || 'width:80px;'} text-align:center;">${col.label}<div class="col-resize-handle" data-col="${key}"></div></th>`;
     } else if (col.isNotes) {
-      html += `<th${tip} data-col="${key}"${dragAttr} style="${cwStyle || 'width:120px; min-width:80px;'}">${col.label}<div class="col-resize-handle" data-col="${key}"></div></th>`;
+      html += `<th scope="col"${tip} data-col="${key}"${dragAttr} style="${cwStyle || 'width:120px; min-width:80px;'}">${col.label}<div class="col-resize-handle" data-col="${key}"></div></th>`;
     } else {
-      html += `<th class="${cls}"${tip} data-col="${key}"${dragAttr} style="${cwStyle}" tabindex="0" onclick="sortBy('${key}', event)" ondblclick="openFilterForColumn('${key}')" onkeydown="if(event.key==='Enter'){sortBy('${key}');event.preventDefault();}">${col.label}${extra}<div class="col-resize-handle" data-col="${key}"></div></th>`;
+      html += `<th scope="col" class="${cls}"${tip} data-col="${key}"${dragAttr} style="${cwStyle}" tabindex="0" onclick="sortBy('${key}', event)" ondblclick="openFilterForColumn('${key}')" onkeydown="if(event.key==='Enter'){sortBy('${key}');event.preventDefault();}">${col.label}${extra}<div class="col-resize-handle" data-col="${key}"></div></th>`;
     }
   }
 
@@ -6253,7 +6253,7 @@ function renderProfile(data, container) {
   if (seasons && seasons.length > 1) {
     html += `<div class="profile-section-title">Career Arc</div>`;
     html += `<div class="profile-chart-wrap">`;
-    html += `<canvas id="profileArcCanvas" width="720" height="240" style="border:2px solid var(--ink); border-radius:8px; background:var(--bg); width:100%;"></canvas>`;
+    html += `<canvas id="profileArcCanvas" width="720" height="240" role="img" aria-label="Career arc trend line chart" style="border:2px solid var(--ink); border-radius:8px; background:var(--bg); width:100%;"></canvas>`;
     html += `</div>`;
   }
 
@@ -6903,7 +6903,7 @@ function renderProspectProfile(data, container, compsData) {
     // College production arc chart
     if (college.seasons.length >= 2) {
       html += `<div class="profile-chart-wrap" style="text-align:center; margin-top:10px;">`;
-      html += `<canvas id="collegeArcCanvas" width="480" height="200" style="border:2px solid var(--ink); border-radius:8px; background:var(--bg); max-width:100%;"></canvas>`;
+      html += `<canvas id="collegeArcCanvas" width="480" height="200" role="img" aria-label="College production arc trend line chart" style="border:2px solid var(--ink); border-radius:8px; background:var(--bg); max-width:100%;"></canvas>`;
       html += `</div>`;
     }
   }
@@ -6951,7 +6951,7 @@ function renderProspectProfile(data, container, compsData) {
   if (hasSpiderData) {
     html += `<div class="profile-section-title">Athletic Profile</div>`;
     html += `<div class="profile-chart-wrap" style="text-align:center;">`;
-    html += `<canvas id="prospectSpiderCanvas" width="400" height="360" style="border:2px solid var(--ink); border-radius:8px; background:var(--bg); max-width:100%;"></canvas>`;
+    html += `<canvas id="prospectSpiderCanvas" width="400" height="360" role="img" aria-label="Athletic profile radar chart" style="border:2px solid var(--ink); border-radius:8px; background:var(--bg); max-width:100%;"></canvas>`;
     html += `</div>`;
   }
 
@@ -8273,7 +8273,7 @@ function renderClassAnalytics(data, container) {
   let html = `<div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); margin-bottom:16px;">${posLabel} draft class comparison — year-over-year strength analysis</div>`;
 
   // Bar chart canvas
-  html += `<div style="margin-bottom:24px;"><canvas id="caBarChart" width="900" height="280" style="width:100%; max-width:900px; border:2px solid var(--ink); border-radius:8px; box-shadow:3px 3px 0 var(--ink);"></canvas></div>`;
+  html += `<div style="margin-bottom:24px;"><canvas id="caBarChart" width="900" height="280" role="img" aria-label="Draft class comparison bar chart" style="width:100%; max-width:900px; border:2px solid var(--ink); border-radius:8px; box-shadow:3px 3px 0 var(--ink);"></canvas></div>`;
 
   // Class cards grid
   html += `<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:16px;">`;
@@ -11169,12 +11169,12 @@ function renderRosterReport() {
   // Pie chart
   html += '<div style="flex:1; min-width:220px;">';
   html += '<div style="font-family:var(--font-display); font-size:13px; margin-bottom:6px;">Positional Breakdown</div>';
-  html += '<canvas id="rosterPieChart" width="240" height="200" style="border:3px solid var(--ink); border-radius:10px; background:var(--bg); box-shadow:3px 3px 0 var(--ink);"></canvas>';
+  html += '<canvas id="rosterPieChart" width="240" height="200" role="img" aria-label="Roster positional breakdown pie chart" style="border:3px solid var(--ink); border-radius:10px; background:var(--bg); box-shadow:3px 3px 0 var(--ink);"></canvas>';
   html += '</div>';
   // Age scatter
   html += '<div style="flex:1; min-width:220px;">';
   html += '<div style="font-family:var(--font-display); font-size:13px; margin-bottom:6px;">Age vs Value</div>';
-  html += '<canvas id="rosterAgeChart" width="280" height="200" style="border:3px solid var(--ink); border-radius:10px; background:var(--bg); box-shadow:3px 3px 0 var(--ink);"></canvas>';
+  html += '<canvas id="rosterAgeChart" width="280" height="200" role="img" aria-label="Roster age versus value scatter plot" style="border:3px solid var(--ink); border-radius:10px; background:var(--bg); box-shadow:3px 3px 0 var(--ink);"></canvas>';
   html += '</div>';
   html += '</div>';
 
@@ -11710,7 +11710,7 @@ function renderPlayerComps(data, container) {
   html += `<div style="display:flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:12px;"><span style="width:12px; height:12px; background:${posColor}; opacity:0.5; border:2px solid var(--ink); display:inline-block;"></span> ${escapeHtml(player.full_name)}</div>`;
   html += `<div style="display:flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:12px;"><span style="width:12px; height:12px; background:var(--ink); opacity:0.4; border:2px solid var(--ink); display:inline-block;"></span> ${escapeHtml(topComp.full_name)}</div>`;
   html += `</div>`;
-  html += `<canvas id="compRadarCanvas" width="400" height="340" style="border:2px solid var(--ink); border-radius:8px; background:var(--bg); width:100%; max-width:400px; display:block; margin:0 auto;"></canvas>`;
+  html += `<canvas id="compRadarCanvas" width="400" height="340" role="img" aria-label="Player comparison radar chart" style="border:2px solid var(--ink); border-radius:8px; background:var(--bg); width:100%; max-width:400px; display:block; margin:0 auto;"></canvas>`;
 
   // Stat comparison table
   html += `<div class="profile-section-title" style="font-size:14px; margin-top:16px;">Full Stat Comparison</div>`;
@@ -12141,7 +12141,7 @@ function renderBoomBust(data, container) {
 
   // Histogram canvas
   html += `<div class="profile-chart-wrap">`;
-  html += `<canvas id="boomBustHistogram" width="720" height="280" style="border:2px solid var(--ink); border-radius:8px; background:var(--bg); width:100%;"></canvas>`;
+  html += `<canvas id="boomBustHistogram" width="720" height="280" role="img" aria-label="Weekly scoring distribution histogram" style="border:2px solid var(--ink); border-radius:8px; background:var(--bg); width:100%;"></canvas>`;
   html += `</div>`;
 
   // Histogram legend
@@ -12154,7 +12154,7 @@ function renderBoomBust(data, container) {
   // Floor-ceiling range bar
   html += `<div style="margin-top:12px; padding:12px; background:var(--bg-card); border:2px solid var(--ink); border-radius:8px;">`;
   html += `<div style="font-family:var(--font-display); font-size:12px; text-transform:uppercase; margin-bottom:8px; color:var(--ink-medium);">Score Range</div>`;
-  html += `<canvas id="boomBustRangeBar" width="720" height="50" style="width:100%; height:50px;"></canvas>`;
+  html += `<canvas id="boomBustRangeBar" width="720" height="50" role="img" aria-label="Score range floor to ceiling bar" style="width:100%; height:50px;"></canvas>`;
   html += `</div>`;
 
   container.innerHTML = html;

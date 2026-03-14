@@ -790,9 +790,10 @@
 </style>
 </head>
 <body>
+<a href="#main-content" class="sr-only" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;" onfocus="this.style.position='static';this.style.width='auto';this.style.height='auto';" onblur="this.style.position='absolute';this.style.left='-9999px';this.style.width='1px';this.style.height='1px';">Skip to main content</a>
 
 <!-- NAV -->
-<nav class="topnav">
+<nav class="topnav" aria-label="Main navigation">
   <a href="/" class="logo">
     <div class="logo-mark">🐯</div>
     <div class="logo-text">Razzle<span class="accent">.lol</span></div>
@@ -805,12 +806,12 @@
     <li><a href="/pricing.html">Pricing</a></li>
   </ul>
   <div class="nav-auth" id="nav-auth">
-    <span class="nav-search-hint" onclick="document.querySelector('.cmd-palette-backdrop')?.classList.add('open'); document.querySelector('.cmd-palette-input')?.focus();" title="Quick search"><kbd>Ctrl+K</kbd> Search</span>
+    <button class="nav-search-hint" aria-label="Open quick search (Ctrl+K)" onclick="document.querySelector('.cmd-palette-backdrop')?.classList.add('open'); document.querySelector('.cmd-palette-input')?.focus();" title="Quick search"><kbd>Ctrl+K</kbd> Search</button>
     <a href="#" class="btn-chunky btn-sm" onclick="document.getElementById('auth-modal')?.classList.add('open'); return false;">Sign In</a>
   </div>
 </nav>
 
-<div class="intel-container">
+<div class="intel-container" id="main-content">
   <!-- Connect Card (shown when no username) -->
   <div id="connectView">
     <div class="connect-card">
@@ -1990,7 +1991,7 @@ async function loadManagerProfiles(leagueId, userId, allPlayers, userMap, roster
       if (c.prof.total > 0) {
         html += '<div class="profile-timeline">';
         html += '<div class="profile-timeline-label">activity by week' + (c.seasonsTracked > 1 ? ' (' + c.seasonsTracked + ' seasons)' : '') + '</div>';
-        html += '<canvas id="timeline-' + ci + '" style="height:40px;"></canvas>';
+        html += '<canvas id="timeline-' + ci + '" role="img" aria-label="Manager weekly activity timeline" style="height:40px;"></canvas>';
         html += '</div>';
       }
 
@@ -2256,7 +2257,7 @@ function renderCompareSection(container, cards, isPro) {
   html += '</div>';
 
   // Canvas + stats placeholder
-  html += '<div class="mgr-compare-canvas-wrap"><canvas id="mgrCompareRadar" width="300" height="300"></canvas></div>';
+  html += '<div class="mgr-compare-canvas-wrap"><canvas id="mgrCompareRadar" width="300" height="300" role="img" aria-label="Manager comparison radar chart"></canvas></div>';
   html += '<div id="mgrCompareStats" class="mgr-compare-stats"></div>';
 
   // Pro gate for 3+ comparisons

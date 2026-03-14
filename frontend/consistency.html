@@ -276,8 +276,9 @@
 </style>
 </head>
 <body>
+<a href="#main-content" class="sr-only" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;" onfocus="this.style.position='static';this.style.width='auto';this.style.height='auto';" onblur="this.style.position='absolute';this.style.left='-9999px';this.style.width='1px';this.style.height='1px';">Skip to main content</a>
 
-<nav class="topnav">
+<nav class="topnav" aria-label="Main navigation">
   <a href="/" class="logo">
     <div class="logo-mark">🐯</div>
     <div class="logo-text">Razzle<span class="accent">.lol</span></div>
@@ -290,11 +291,12 @@
     <li><a href="/pricing.html">Pricing</a></li>
   </ul>
   <div class="nav-auth" id="nav-auth">
-    <span class="nav-search-hint" onclick="document.querySelector('.cmd-palette-backdrop')?.classList.add('open'); document.querySelector('.cmd-palette-input')?.focus();" title="Quick search"><kbd>Ctrl+K</kbd> Search</span>
+    <button class="nav-search-hint" aria-label="Open quick search (Ctrl+K)" onclick="document.querySelector('.cmd-palette-backdrop')?.classList.add('open'); document.querySelector('.cmd-palette-input')?.focus();" title="Quick search"><kbd>Ctrl+K</kbd> Search</button>
     <a href="#" class="btn-chunky btn-sm" onclick="document.getElementById('auth-modal')?.classList.add('open'); return false;">Sign In</a>
   </div>
 </nav>
 
+<span id="main-content"></span>
 <main class="con-page" id="con-content">
   <div class="con-header">
     <h1>Consistency Rankings</h1>

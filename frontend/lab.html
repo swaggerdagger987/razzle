@@ -2946,9 +2946,10 @@
 </style>
 </head>
 <body>
+<a href="#main-content" class="sr-only" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;" onfocus="this.style.position='static';this.style.width='auto';this.style.height='auto';" onblur="this.style.position='absolute';this.style.left='-9999px';this.style.width='1px';this.style.height='1px';">Skip to main content</a>
 
 <!-- NAV -->
-<nav class="topnav">
+<nav class="topnav" aria-label="Main navigation">
   <button class="lab-menu-toggle btn-chunky" onclick="document.getElementById('labSidebar').classList.toggle('open')" aria-label="Toggle sidebar" style="font-size:18px; padding:4px 10px; line-height:1;">&#9776;</button>
   <a href="/" class="logo">
     <div class="logo-mark">🐯</div>
@@ -2962,11 +2963,12 @@
     <li><a href="/pricing.html">Pricing</a></li>
   </ul>
   <div class="nav-auth" id="nav-auth">
-    <span class="nav-search-hint" onclick="document.querySelector('.cmd-palette-backdrop')?.classList.add('open'); document.querySelector('.cmd-palette-input')?.focus();" title="Quick search"><kbd>Ctrl+K</kbd> Search</span>
+    <button class="nav-search-hint" aria-label="Open quick search (Ctrl+K)" onclick="document.querySelector('.cmd-palette-backdrop')?.classList.add('open'); document.querySelector('.cmd-palette-input')?.focus();" title="Quick search"><kbd>Ctrl+K</kbd> Search</button>
     <a href="#" class="btn-chunky btn-sm" onclick="document.getElementById('auth-modal')?.classList.add('open'); return false;">Sign In</a>
   </div>
 </nav>
 
+<span id="main-content"></span>
 <!-- SIDEBAR -->
 <aside class="lab-sidebar" id="labSidebar" role="navigation" aria-label="Lab panels">
   <div class="lab-sidebar-inner">
@@ -3205,6 +3207,7 @@
   <div class="table-wrap">
     <button class="scroll-top-btn" id="scrollTopBtn" style="display:none;" onclick="var w=document.querySelector('.table-wrap'); if(w) w.scrollTo({top:0, behavior:'smooth'})" title="Scroll to top" aria-label="Scroll to top">&#9650;</button>
     <table class="screener-table" id="screenerTable">
+      <caption class="sr-only">NFL Player Statistics Screener</caption>
       <thead id="tableHead"></thead>
       <tbody id="pinnedBody" style="display:none;"></tbody>
       <tbody id="tableBody"></tbody>
@@ -3265,7 +3268,7 @@
 </div>
 
 <!-- FILTER MODAL -->
-<div class="filter-modal-overlay" id="filterModalOverlay" onclick="closeFilterModal(event)">
+<div role="dialog" aria-modal="true" class="filter-modal-overlay" id="filterModalOverlay" onclick="closeFilterModal(event)">
   <div class="filter-modal" onclick="event.stopPropagation()">
     <h3>Add Filter</h3>
     <div class="filter-modal-row">
@@ -3287,7 +3290,7 @@
 </div>
 
 <!-- COLUMN PICKER -->
-<div class="column-picker-overlay" id="columnPickerOverlay" onclick="closeColumnPicker(event)">
+<div role="dialog" aria-modal="true" class="column-picker-overlay" id="columnPickerOverlay" onclick="closeColumnPicker(event)">
   <div class="column-picker" onclick="event.stopPropagation()">
     <h3>Columns</h3>
     <input type="text" id="columnPickerSearch" placeholder="Search columns..." oninput="filterColumnPicker(this.value)" style="width:100%; padding:8px 12px; margin-bottom:10px; font-family:var(--font-mono); font-size:13px; border:3px solid var(--ink); border-radius:8px; background:var(--bg); box-sizing:border-box;">
@@ -3300,7 +3303,7 @@
 </div>
 
 <!-- FORMULA BUILDER -->
-<div class="filter-modal-overlay" id="formulaOverlay" onclick="closeFormulaBuilder(event)">
+<div role="dialog" aria-modal="true" class="filter-modal-overlay" id="formulaOverlay" onclick="closeFormulaBuilder(event)">
   <div class="filter-modal" style="width:440px;" onclick="event.stopPropagation()">
     <h3>Custom Formula</h3>
     <p style="font-family:var(--font-hand); font-size:18px; color:var(--ink-light); margin-bottom:12px;">
@@ -3320,7 +3323,7 @@
 </div>
 
 <!-- CHART PANEL -->
-<div class="filter-modal-overlay" id="chartOverlay" onclick="closeChartPanel(event)">
+<div role="dialog" aria-modal="true" class="filter-modal-overlay" id="chartOverlay" onclick="closeChartPanel(event)">
   <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:820px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
     <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
       <h3>Charts</h3>
@@ -3348,7 +3351,7 @@
 </div>
 
 <!-- PLAYER COMPARE PANEL -->
-<div class="filter-modal-overlay" id="compareOverlay" onclick="closeCompare(event)">
+<div role="dialog" aria-modal="true" class="filter-modal-overlay" id="compareOverlay" onclick="closeCompare(event)">
   <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:860px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
     <h3>Player Comparison</h3>
     <div id="compareContent"></div>
@@ -3362,7 +3365,7 @@
 </div>
 
 <!-- SHARE MODAL -->
-<div class="filter-modal-overlay" id="shareOverlay" onclick="closeShareModal(event)">
+<div role="dialog" aria-modal="true" class="filter-modal-overlay" id="shareOverlay" onclick="closeShareModal(event)">
   <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:520px; max-width:95vw;" onclick="event.stopPropagation()">
     <h3 style="margin:0 0 16px 0; font-family:var(--font-display);">Share This View</h3>
 
@@ -3403,7 +3406,7 @@
 </div>
 
 <!-- SAVED VIEWS OVERLAY -->
-<div class="filter-modal-overlay" id="savedViewsOverlay" onclick="closeSavedViews(event)">
+<div role="dialog" aria-modal="true" class="filter-modal-overlay" id="savedViewsOverlay" onclick="closeSavedViews(event)">
   <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:520px; max-width:95vw;" onclick="event.stopPropagation()">
     <h3 style="margin:0 0 16px 0; font-family:var(--font-display);">Saved Views</h3>
 
@@ -3427,7 +3430,7 @@
 </div>
 
 <!-- CUSTOM SCORING OVERLAY -->
-<div class="filter-modal-overlay" id="customScoringOverlay" onclick="closeCustomScoring(event)">
+<div role="dialog" aria-modal="true" class="filter-modal-overlay" id="customScoringOverlay" onclick="closeCustomScoring(event)">
   <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:480px; max-width:95vw;" onclick="event.stopPropagation()">
     <h3 style="margin:0 0 12px 0; font-family:var(--font-display);">Custom Scoring</h3>
     <p style="font-family:var(--font-hand); font-size:15px; color:var(--ink-light); margin:0 0 16px 0;">build your own fantasy scoring system</p>
@@ -3457,7 +3460,7 @@
 </div>
 
 <!-- RANKINGS EXPORT OVERLAY -->
-<div class="filter-modal-overlay" id="rankingsExportOverlay" onclick="closeRankingsExport(event)">
+<div role="dialog" aria-modal="true" class="filter-modal-overlay" id="rankingsExportOverlay" onclick="closeRankingsExport(event)">
   <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:500px; max-width:95vw;" onclick="event.stopPropagation()">
     <h3 style="margin:0 0 16px 0; font-family:var(--font-display);">Export Rankings</h3>
     <div style="display:flex; flex-direction:column; gap:12px;">
@@ -3483,7 +3486,7 @@
 </div>
 
 <!-- PROSPECT TIER VIEW -->
-<div class="filter-modal-overlay" id="tierOverlay" onclick="closeTierView(event)">
+<div role="dialog" aria-modal="true" class="filter-modal-overlay" id="tierOverlay" onclick="closeTierView(event)">
   <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:900px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
     <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
       <h3 style="margin:0;">Draft Class Athletic Tiers</h3>
@@ -3500,7 +3503,7 @@
 </div>
 
 <!-- BIG BOARD OVERLAY -->
-<div class="filter-modal-overlay" id="bigBoardOverlay" onclick="closeBigBoard(event)">
+<div role="dialog" aria-modal="true" class="filter-modal-overlay" id="bigBoardOverlay" onclick="closeBigBoard(event)">
   <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:960px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
     <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
       <h3 style="margin:0;">Razzle Big Board</h3>
@@ -3517,7 +3520,7 @@
 </div>
 
 <!-- CLASS ANALYTICS OVERLAY -->
-<div class="filter-modal-overlay" id="classAnalyticsOverlay" onclick="closeClassAnalytics(event)">
+<div role="dialog" aria-modal="true" class="filter-modal-overlay" id="classAnalyticsOverlay" onclick="closeClassAnalytics(event)">
   <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:960px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
     <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
       <h3 style="margin:0;">Draft Class Analytics</h3>
@@ -3534,7 +3537,7 @@
 </div>
 
 <!-- TRADE ANALYZER OVERLAY -->
-<div class="filter-modal-overlay" id="tradeAnalyzerOverlay" onclick="closeTradeAnalyzer(event)">
+<div role="dialog" aria-modal="true" class="filter-modal-overlay" id="tradeAnalyzerOverlay" onclick="closeTradeAnalyzer(event)">
   <div class="trade-analyzer-modal" onclick="event.stopPropagation()">
     <div class="trade-analyzer-header">
       <h3 style="margin:0; font-family:var(--font-display); font-size:22px;">Trade Analyzer</h3>
@@ -3617,7 +3620,7 @@
 </div>
 
 <!-- TRADE VALUE CHART OVERLAY -->
-<div class="filter-modal-overlay" id="tradeValuesOverlay" onclick="closeTradeValues(event)">
+<div role="dialog" aria-modal="true" class="filter-modal-overlay" id="tradeValuesOverlay" onclick="closeTradeValues(event)">
   <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:960px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
     <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
       <h3 style="margin:0; font-family:var(--font-display);">Trade Values</h3>
@@ -3669,7 +3672,7 @@
 </div>
 
 <!-- PLAYER PROFILE MODAL -->
-<div class="filter-modal-overlay" id="profileOverlay" onclick="closeProfile(event)">
+<div role="dialog" aria-modal="true" class="filter-modal-overlay" id="profileOverlay" onclick="closeProfile(event)">
   <div class="profile-modal" onclick="event.stopPropagation()">
     <div id="profileContent">
       <div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">pulling film...</div>
@@ -3684,7 +3687,7 @@
 <div id="playerHoverCard" class="hover-card" style="display:none;" onmouseenter="clearTimeout(_hoverTimer)" onmouseleave="hideHoverCard()"></div>
 
 <!-- PUBLISH TO STORE -->
-<div class="filter-modal-overlay" id="publishOverlay" onclick="closePublishFlow(event)">
+<div role="dialog" aria-modal="true" class="filter-modal-overlay" id="publishOverlay" onclick="closePublishFlow(event)">
   <div class="filter-modal" style="width:420px;" onclick="event.stopPropagation()">
     <h3>Publish to Store</h3>
     <p style="font-family:var(--font-hand); font-size:18px; color:var(--ink-light); margin-bottom:12px;">
@@ -3727,7 +3730,7 @@
 </div>
 
 <!-- FORMULA STORE -->
-<div class="filter-modal-overlay" id="storeOverlay" onclick="closeFormulaStore(event)">
+<div role="dialog" aria-modal="true" class="filter-modal-overlay" id="storeOverlay" onclick="closeFormulaStore(event)">
   <div class="store-modal" onclick="event.stopPropagation()">
     <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
       <div>
@@ -3741,7 +3744,7 @@
 </div>
 
 <!-- AGING CURVES -->
-<div class="filter-modal-overlay" id="agingCurvesOverlay" onclick="closeAgingCurves(event)">
+<div role="dialog" aria-modal="true" class="filter-modal-overlay" id="agingCurvesOverlay" onclick="closeAgingCurves(event)">
   <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:960px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
     <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
       <h3 style="margin:0; font-family:var(--font-display);">Aging Curves</h3>
@@ -3757,7 +3760,7 @@
 </div>
 
 <!-- HEAT MAP -->
-<div class="filter-modal-overlay" id="heatMapOverlay" onclick="closeHeatMap(event)">
+<div role="dialog" aria-modal="true" class="filter-modal-overlay" id="heatMapOverlay" onclick="closeHeatMap(event)">
   <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:1000px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
     <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
       <h3 style="margin:0; font-family:var(--font-display);">Heat Map</h3>

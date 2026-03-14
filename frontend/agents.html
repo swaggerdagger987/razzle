@@ -1503,6 +1503,7 @@
 </style>
 </head>
 <body>
+<a href="#main-content" class="sr-only" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;" onfocus="this.style.position='static';this.style.width='auto';this.style.height='auto';" onblur="this.style.position='absolute';this.style.left='-9999px';this.style.width='1px';this.style.height='1px';">Skip to main content</a>
 
 <!-- Skip to content (accessibility) -->
 <a href="#scenarioInput" class="skip-link" style="position:absolute; top:-40px; left:0; background:var(--orange); color:#fff; padding:8px 16px; z-index:9999; font-family:var(--font-display); font-size:14px; transition:top 0.2s;">Skip to scenario input</a>
@@ -1511,8 +1512,8 @@
 <!-- NAV -->
 <nav class="topnav" aria-label="Main navigation">
   <a href="/" class="logo">
-    <div class="logo-mark">🐯</div>
-    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
+    <div class="logo-mark">🐯
+    <div class="logo-text">Razzle<span class="accent">.lol</span>
   </a>
   <ul class="nav-links">
     <li><a href="/">Home</a></li>
@@ -1522,19 +1523,20 @@
     <li><a href="/pricing.html">Pricing</a></li>
   </ul>
   <div class="nav-auth" id="nav-auth">
-    <span class="nav-search-hint" onclick="document.querySelector('.cmd-palette-backdrop')?.classList.add('open'); document.querySelector('.cmd-palette-input')?.focus();" title="Quick search"><kbd>Ctrl+K</kbd> Search</span>
+    <button class="nav-search-hint" aria-label="Open quick search (Ctrl+K)" onclick="document.querySelector('.cmd-palette-backdrop')?.classList.add('open'); document.querySelector('.cmd-palette-input')?.focus();" title="Quick search"><kbd>Ctrl+K</kbd> Search</button>
     <a href="#" class="btn-chunky btn-sm" onclick="document.getElementById('auth-modal')?.classList.add('open'); return false;">Sign In</a>
-  </div>
+  
 </nav>
 
+<span id="main-content"></span>
 <!-- Trial expiry banner (rendered by JS) -->
-<div id="trialExpiryBanner" style="display:none; max-width:800px; margin:0 auto; padding:0 24px;"></div>
+<div id="trialExpiryBanner" style="display:none; max-width:800px; margin:0 auto; padding:0 24px;">
 
 <!-- HERO (sand bg, Razzle design system) -->
 <div class="warroom-hero">
-  <div class="warroom-hero-mascot">🐯</div>
+  <div class="warroom-hero-mascot">🐯
   <h1>The <span>Situation Room</span></h1>
-  <div class="warroom-hero-sub">six specialist agents, one mission: your championship</div>
+  <div class="warroom-hero-sub">six specialist agents, one mission: your championship
   <div class="warroom-hero-badges">
     <span class="agent-badge">🐯 Razzle</span>
     <span class="agent-badge">🦅 Scout</span>
@@ -1542,26 +1544,26 @@
     <span class="agent-badge">🦊 Quant</span>
     <span class="agent-badge">🦉 Medical</span>
     <span class="agent-badge">🐘 Historian</span>
-  </div>
-  <div class="warroom-bio-grid" id="warroomBioGrid"></div>
-</div>
+  
+  <div class="warroom-bio-grid" id="warroomBioGrid">
+
 
 <!-- DARK ZONE — pixel engine canvas area -->
 <div class="warroom-dark">
   <div class="warroom-canvas-wrap">
-    <div class="warroom-canvas-label">Situation Room — Live Feed</div>
+    <div class="warroom-canvas-label">Situation Room — Live Feed
     <div class="canvas-container" id="canvasContainer">
       <canvas id="warRoomCanvas" width="960" height="704" role="img" aria-label="Pixel art Situation Room with 6 AI agents working at desks and analyzing data. Click an agent to select them." tabindex="0"></canvas>
       <!-- Placeholder until pixel engine loads -->
       <div class="canvas-placeholder" id="canvasPlaceholder">
-        <div class="canvas-placeholder-icon">🐯</div>
-        <div class="canvas-placeholder-text">agents are setting up the war room...</div>
-        <div class="canvas-placeholder-sub">pixel engine loading</div>
-      </div>
+        <div class="canvas-placeholder-icon">🐯
+        <div class="canvas-placeholder-text">agents are setting up the war room...
+        <div class="canvas-placeholder-sub">pixel engine loading
+      
       <!-- Config toggle + panel -->
       <button class="config-toggle" id="configToggle" aria-expanded="false" aria-controls="configPanel">Config</button>
       <div class="config-panel" id="configPanel" role="region" aria-label="Agent configuration settings">
-        <div class="config-header">Agent Configuration</div>
+        <div class="config-header">Agent Configuration
 
         <!-- Shared API Key -->
         <div class="config-section">
@@ -1571,50 +1573,50 @@
             <button class="config-btn config-btn-primary" id="cfgApplyKey">Apply to All</button>
             <button class="config-btn" id="cfgSaveCloud" title="Encrypt and save to your Razzle account (Pro+)">Save to Cloud</button>
             <span class="config-hint" id="cfgStorageHint">stored locally</span>
-          </div>
+          
           <p style="font-family:'Caveat',cursive;font-size:15px;color:var(--ink-light);margin:8px 0 0;line-height:1.4;">your key is stored in your browser's local storage. browser extensions on this page can technically see it. we recommend using a dedicated key with a spending limit on openrouter.ai &mdash; that way even if it leaks, the damage is capped.</p>
-        </div>
+        
 
         <!-- Model -->
         <div class="config-section">
           <label class="config-label">Model</label>
           <input class="config-input" id="cfgModel" type="text" placeholder="openrouter/auto" value="openrouter/auto" aria-label="LLM model identifier">
           <button class="config-btn" id="cfgApplyModel">Apply to All</button>
-        </div>
+        
 
         <!-- Base URL -->
         <div class="config-section">
           <label class="config-label">Base URL</label>
           <input class="config-input" id="cfgBaseUrl" type="text" placeholder="https://openrouter.ai/api/v1/chat/completions" aria-label="LLM provider base URL">
           <button class="config-btn" id="cfgApplyUrl">Apply to All</button>
-        </div>
+        
 
         <!-- Per-agent key overrides -->
         <div class="config-section">
           <label class="config-label">Per-Agent Key Overrides</label>
-          <div id="cfgAgentKeys"></div>
-        </div>
+          <div id="cfgAgentKeys">
+        
 
         <!-- Status -->
         <div class="config-section" style="padding:8px 14px;">
-          <div class="config-status" id="cfgStatus"></div>
-        </div>
-      </div>
+          <div class="config-status" id="cfgStatus">
+        
+      
 
       <!-- Roster toggle + panel -->
       <button class="roster-toggle" id="rosterToggle" aria-expanded="false" aria-controls="rosterPanel">Roster</button>
       <div class="roster-panel" id="rosterPanel" role="region" aria-label="Agent roster list">
-        <div class="roster-header">Agent Roster</div>
-        <div id="rosterList"></div>
-      </div>
-    </div>
-  </div>
+        <div class="roster-header">Agent Roster
+        <div id="rosterList">
+      
+    
+  
 
   <!-- Status bar -->
   <div class="warroom-status">
     <span><span class="status-dot"></span>6 agents online</span>
     <span>30 x 22 tile grid | 32px tiles</span>
-  </div>
+  
 
   <!-- WEEKLY BRIEFING PANEL (Elite only) -->
   <div class="scenario-section" id="weeklyBriefingSection" style="display:none;">
@@ -1623,19 +1625,19 @@
         <span class="scenario-header-icon">📰</span>
         Weekly Razzle Briefing
         <span style="font-family:var(--font-hand); font-size:14px; margin-left:auto; color:var(--ink-medium);" id="briefingWeekLabel"></span>
-      </div>
+      
       <div class="scenario-body" id="weeklyBriefingBody">
         <div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); text-align:center; padding:16px;">
           loading your briefing...
-        </div>
-      </div>
+        
+      
       <div style="display:flex; gap:8px; justify-content:center; padding:8px 0;">
         <button class="btn-chunky" style="font-size:11px; padding:5px 12px;" onclick="generateWeeklyBriefing()">Generate New Briefing</button>
         <button class="btn-chunky" style="font-size:11px; padding:5px 12px; background:var(--bg-card);" onclick="toggleBriefingHistory()">History</button>
-      </div>
-      <div id="briefingHistoryPanel" style="display:none; padding:8px 0; border-top:2px dashed var(--ink-faint);"></div>
-    </div>
-  </div>
+      
+      <div id="briefingHistoryPanel" style="display:none; padding:8px 0; border-top:2px dashed var(--ink-faint);">
+    
+  
 
   <!-- WEEKLY BRIEFING TEASER (non-Elite) -->
   <div class="scenario-section" id="weeklyBriefingTeaser" style="display:none;">
@@ -1643,22 +1645,22 @@
       <div class="scenario-header" style="background:var(--yellow); color:var(--ink);">
         <span class="scenario-header-icon">📰</span>
         Weekly Razzle Briefing
-      </div>
+      
       <div class="scenario-body" style="filter:blur(3px); pointer-events:none; user-select:none;" aria-hidden="true">
-        <div style="font-family:var(--font-display); font-size:14px; margin-bottom:8px; color:var(--orange);">URGENT</div>
+        <div style="font-family:var(--font-display); font-size:14px; margin-bottom:8px; color:var(--orange);">URGENT
         <div style="font-family:var(--font-mono); font-size:12px; line-height:1.6; color:var(--ink-medium);">
           Your WR1 has a grade 2 hamstring strain. Medical estimates 2-3 weeks. Scout identified 2 waiver targets to replace production. Diplomat recommends trading your QB2 to the 2-6 manager who historically overpays after back-to-back losses. Championship odds shift from 14% to 11% without action — but rise to 18% if you execute all three recommendations...
-        </div>
-      </div>
+        
+      
       <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(26,17,10,0.85);">
         <div style="text-align:center;">
-          <div style="font-family:var(--font-display); font-size:18px; color:var(--ink); margin-bottom:6px;">Weekly Briefings</div>
-          <div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-medium); margin-bottom:12px;">personalized intelligence, delivered weekly</div>
+          <div style="font-family:var(--font-display); font-size:18px; color:var(--ink); margin-bottom:6px;">Weekly Briefings
+          <div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-medium); margin-bottom:12px;">personalized intelligence, delivered weekly
           <a href="/pricing.html" class="btn-primary" style="font-size:13px; padding:8px 20px; text-decoration:none;" aria-label="Unlock weekly briefings with Elite plan">Unlock with Elite</a>
-        </div>
-      </div>
-    </div>
-  </div>
+        
+      
+    
+  
 
   <!-- SCENARIO INPUT PANEL -->
   <div class="scenario-section">
@@ -1666,142 +1668,142 @@
       <div class="scenario-header">
         <span class="scenario-header-icon">📋</span>
         Scenario Briefing
-      </div>
+      
       <div class="scenario-body">
         <textarea class="scenario-textarea" id="scenarioInput" placeholder="Describe the situation... e.g. 'Bijan Robinson questionable with knee injury, I need to decide on a flex play'" aria-label="Describe your fantasy football scenario for agent analysis"></textarea>
 
         <div class="scenario-examples">
-          <div class="scenario-examples-label">try one of these:</div>
-          <div class="scenario-chips" id="scenarioChips"></div>
-        </div>
+          <div class="scenario-examples-label">try one of these:
+          <div class="scenario-chips" id="scenarioChips">
+        
 
         <!-- What can I ask? collapsible reference -->
         <details class="ask-reference" id="askReference">
           <summary class="ask-reference-toggle">what can I ask? <span style="font-family:var(--font-hand); color:var(--ink-light); font-weight:400;">(by format)</span></summary>
           <div class="ask-reference-grid">
             <div class="ask-ref-col">
-              <div class="ask-ref-label">Redraft</div>
-              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">Should I start Player A or Player B this week?</div>
-              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">Who should I pick up on waivers?</div>
-              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">My RB1 is hurt, who do I pivot to?</div>
-              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">What streaming options are best this week?</div>
-              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">Should I play for ceiling or floor this week?</div>
-            </div>
+              <div class="ask-ref-label">Redraft
+              <button class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">Should I start Player A or Player B this week?</button>
+              <button class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">Who should I pick up on waivers?</button>
+              <button class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">My RB1 is hurt, who do I pivot to?</button>
+              <button class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">What streaming options are best this week?</button>
+              <button class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">Should I play for ceiling or floor this week?</button>
+            
             <div class="ask-ref-col">
-              <div class="ask-ref-label">Dynasty</div>
-              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">I got offered X for Y, should I take it?</div>
-              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">My team is 3-5, should I go all-in or rebuild?</div>
-              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">Who should I target if I'm rebuilding?</div>
-              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">Which rookies are earning more work?</div>
-              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">Who's fading that I should sell before the market drops?</div>
-            </div>
+              <div class="ask-ref-label">Dynasty
+              <button class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">I got offered X for Y, should I take it?</button>
+              <button class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">My team is 3-5, should I go all-in or rebuild?</button>
+              <button class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">Who should I target if I'm rebuilding?</button>
+              <button class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">Which rookies are earning more work?</button>
+              <button class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">Who's fading that I should sell before the market drops?</button>
+            
             <div class="ask-ref-col">
-              <div class="ask-ref-label">Keeper / Best Ball</div>
-              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">Rank my keeper options by surplus value</div>
-              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">Is Player X worth keeping at round 3 cost?</div>
-              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">Which players have the highest boom rate at their ADP?</div>
-              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">What late-round stacks have the highest ceiling?</div>
-            </div>
+              <div class="ask-ref-label">Keeper / Best Ball
+              <button class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">Rank my keeper options by surplus value</button>
+              <button class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">Is Player X worth keeping at round 3 cost?</button>
+              <button class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">Which players have the highest boom rate at their ADP?</button>
+              <button class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">What late-round stacks have the highest ceiling?</button>
+            
             <div class="ask-ref-col">
-              <div class="ask-ref-label">Universal</div>
-              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">What are you seeing that I'm not?</div>
-              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">What are my championship odds?</div>
-              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">Is this player's breakout real or a mirage?</div>
-              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">How much FAAB should I bid on this player?</div>
-              <div class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">Rank my priorities for this week</div>
-            </div>
-          </div>
+              <div class="ask-ref-label">Universal
+              <button class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">What are you seeing that I'm not?</button>
+              <button class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">What are my championship odds?</button>
+              <button class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">Is this player's breakout real or a mirage?</button>
+              <button class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">How much FAAB should I bid on this player?</button>
+              <button class="ask-ref-item" onclick="document.getElementById('scenarioInput').value=this.textContent.trim(); this.closest('details').open=false;">Rank my priorities for this week</button>
+            
+          
         </details>
 
         <!-- Context indicators -->
-        <div class="context-badges" id="contextBadges"></div>
+        <div class="context-badges" id="contextBadges">
 
         <!-- API key notice (old, hidden — replaced by setup guide) -->
-        <div id="apiKeyNotice" style="display:none;"></div>
+        <div id="apiKeyNotice" style="display:none;">
 
         <!-- First-run setup guide (shown when no API key + no prior queries) -->
         <div id="setupGuide" style="display:none; background:var(--bg-card); border:3px solid var(--ink); border-radius:10px; box-shadow:4px 4px 0 var(--ink); padding:14px 16px; margin-bottom:12px;">
           <div style="font-family:var(--font-display); font-size:16px; margin-bottom:10px; display:flex; align-items:center; gap:8px;">
             <span style="font-size:20px;">🐯</span> first time? three steps to your first briefing
-          </div>
+          
           <div style="display:flex; flex-direction:column; gap:8px;">
             <div class="setup-step" id="setupStep1" style="display:flex; align-items:flex-start; gap:10px; padding:8px 10px; border:2px solid var(--ink-faint); border-radius:8px; background:var(--bg-warm); transition:all 0.2s;">
               <span class="setup-step-num" id="setupCheck1" style="font-family:var(--font-display); font-size:14px; background:var(--orange); color:#fff; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">1</span>
               <div>
-                <div style="font-family:var(--font-display); font-size:13px;">Get a free API key</div>
+                <div style="font-family:var(--font-display); font-size:13px;">Get a free API key
                 <div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-medium); margin-top:2px;">
                   Sign up at <a href="https://openrouter.ai" target="_blank" rel="noopener" style="color:var(--orange); text-decoration:underline;">openrouter.ai</a>, copy your key, then
                   <a href="#" onclick="event.preventDefault(); document.getElementById('configToggle').click(); document.getElementById('cfgSharedKey').focus();" style="color:var(--orange); text-decoration:underline;">paste it in Config</a>
-                </div>
-              </div>
-            </div>
+                
+              
+            
             <div class="setup-step" id="setupStep2" style="display:flex; align-items:flex-start; gap:10px; padding:8px 10px; border:2px solid var(--ink-faint); border-radius:8px; background:var(--bg-warm); transition:all 0.2s;">
               <span class="setup-step-num" style="font-family:var(--font-display); font-size:14px; background:var(--orange); color:#fff; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">2</span>
               <div>
-                <div style="font-family:var(--font-display); font-size:13px;">Type a scenario or pick one above</div>
-                <div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-medium); margin-top:2px;">try: "Should I trade Ja'Marr Chase for two 1sts in my 12-team SF dynasty?"</div>
-              </div>
-            </div>
+                <div style="font-family:var(--font-display); font-size:13px;">Type a scenario or pick one above
+                <div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-medium); margin-top:2px;">try: "Should I trade Ja'Marr Chase for two 1sts in my 12-team SF dynasty?"
+              
+            
             <div class="setup-step" id="setupStep3" style="display:flex; align-items:flex-start; gap:10px; padding:8px 10px; border:2px solid var(--ink-faint); border-radius:8px; background:var(--bg-warm); transition:all 0.2s;">
               <span class="setup-step-num" style="font-family:var(--font-display); font-size:14px; background:var(--orange); color:#fff; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">3</span>
               <div>
-                <div style="font-family:var(--font-display); font-size:13px;">Hit "Run All Agents"</div>
-                <div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-medium); margin-top:2px;">6 specialists analyze your scenario simultaneously</div>
-              </div>
-            </div>
-          </div>
+                <div style="font-family:var(--font-display); font-size:13px;">Hit "Run All Agents"
+                <div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-medium); margin-top:2px;">6 specialists analyze your scenario simultaneously
+              
+            
+          
           <button onclick="dismissSetupGuide()" style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); background:none; border:none; cursor:pointer; margin-top:6px; text-decoration:underline;">dismiss</button>
-        </div>
+        
 
         <div class="scenario-actions">
           <button class="scenario-run-all" id="scenarioRunAll" aria-label="Run all 6 agents on this scenario">Run All Agents</button>
           <button class="btn-chunky" style="font-size:11px; padding:6px 12px; background:var(--bg-card);" onclick="toggleMemoryPanel()">Memory</button>
-          <div class="scenario-agent-btns" id="scenarioAgentBtns"></div>
-          <div class="scenario-status" id="scenarioStatus"></div>
-        </div>
+          <div class="scenario-agent-btns" id="scenarioAgentBtns">
+          <div class="scenario-status" id="scenarioStatus">
+        
 
         <!-- Query rate limit counter -->
-        <div id="queryLimitBadge" style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); text-align:right; margin-top:4px; padding-right:4px;"></div>
+        <div id="queryLimitBadge" style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); text-align:right; margin-top:4px; padding-right:4px;">
 
         <!-- Per-agent status tracker -->
-        <div class="agent-status-tracker" id="agentStatusTracker" style="display:none;"></div>
-      </div>
-    </div>
-  </div>
+        <div class="agent-status-tracker" id="agentStatusTracker" style="display:none;">
+      
+    
+  
 
   <!-- PRO UPSELL (visible when no Sleeper connection) -->
   <div class="briefing-zone" id="proUpsellZone" style="display:none;">
     <div class="pro-upsell-card">
       <div class="pro-upsell-header">
         <span>🔒</span> League Context Preview
-      </div>
+      
       <div class="pro-upsell-body">
         <div class="pro-upsell-preview">
-          <div class="pro-preview-line blurred">Your roster: <span class="redacted">██████ ████████</span> (RB), <span class="redacted">████ ██████</span> (WR), <span class="redacted">█████ ████</span> (QB)...</div>
-          <div class="pro-preview-line blurred">League: <span class="redacted">████████ ███████</span> — 12-team PPR Dynasty</div>
-          <div class="pro-preview-line blurred">Rival <span class="redacted">████</span> is <span class="redacted">█</span>-<span class="redacted">█</span> and desperate at RB. Trade window: <span class="redacted">██</span> hours.</div>
-          <div class="pro-preview-line blurred">Championship odds shift from <span class="redacted">██</span>% to <span class="redacted">██</span>% with this move.</div>
-        </div>
+          <div class="pro-preview-line blurred">Your roster: <span class="redacted">██████ ████████</span> (RB), <span class="redacted">████ ██████</span> (WR), <span class="redacted">█████ ████</span> (QB)...
+          <div class="pro-preview-line blurred">League: <span class="redacted">████████ ███████</span> — 12-team PPR Dynasty
+          <div class="pro-preview-line blurred">Rival <span class="redacted">████</span> is <span class="redacted">█</span>-<span class="redacted">█</span> and desperate at RB. Trade window: <span class="redacted">██</span> hours.
+          <div class="pro-preview-line blurred">Championship odds shift from <span class="redacted">██</span>% to <span class="redacted">██</span>% with this move.
+        
         <div class="pro-upsell-cta" id="proUpsellCta">
           <p class="pro-upsell-text">Razzle knows every manager in your league. What they panic-buy, when they sell low, who they overpay.</p>
           <a href="/pricing.html" class="pro-upsell-btn" id="proUpsellBtn">Start Free 7-Day Trial</a>
           <p class="pro-upsell-hint" id="proUpsellHint">no credit card required — full Pro access for 7 days</p>
-        </div>
-      </div>
-    </div>
-  </div>
+        
+      
+    
+  
 
   <!-- MEMORY PANEL -->
   <div class="briefing-zone" style="margin-bottom:0;">
     <div id="memoryPanel" style="display:none; background:var(--bg-card); border:2px solid var(--ink); border-radius:10px; box-shadow:3px 3px 0 var(--ink); padding:12px 16px; margin-bottom:12px;">
-    </div>
-  </div>
+    
+  
 
   <!-- BRIEFING CARDS (rendered by JS after agents respond) -->
   <div class="briefing-zone">
-    <div id="briefingCards" role="region" aria-label="Agent briefing responses" aria-live="polite"></div>
-  </div>
-</div>
+    <div id="briefingCards" role="region" aria-label="Agent briefing responses" aria-live="polite">
+  
+
 
 <!-- SITUATION ROOM PRICING -->
 <div style="background:var(--bg-sand, #ede0cf); border-top:3px solid var(--ink); padding:48px 24px; text-align:center;">
@@ -1813,10 +1815,10 @@
       <!-- PRO -->
       <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:24px 24px; text-align:left; min-width:220px; max-width:300px; flex:1;">
         <div style="text-align:center; margin-bottom:12px;">
-          <div style="font-family:var(--font-display); font-size:18px;">Pro</div>
-          <div style="font-family:var(--font-display); font-size:28px; color:var(--orange);">$9.99<span style="font-size:13px; color:var(--ink-light);">/mo</span></div>
-          <div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">or $79.99/year</div>
-        </div>
+          <div style="font-family:var(--font-display); font-size:18px;">Pro
+          <div style="font-family:var(--font-display); font-size:28px; color:var(--orange);">$9.99<span style="font-size:13px; color:var(--ink-light);">/mo</span>
+          <div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">or $79.99/year
+        
         <ul style="font-family:var(--font-mono); font-size:11px; padding-left:16px; line-height:1.9; color:var(--ink-medium); margin-bottom:16px;">
           <li>All 6 agents with league context</li>
           <li>Bring your own API key (BYOK)</li>
@@ -1826,17 +1828,17 @@
         </ul>
         <div style="text-align:center;">
           <button class="btn-chunky btn-primary" style="font-size:12px; width:100%;" onclick="if(typeof startCheckout==='function'){startCheckout('pro_month')}else{document.getElementById('auth-modal')?.classList.add('open')}">Get Pro</button>
-        </div>
-      </div>
+        
+      
 
       <!-- ELITE -->
       <div style="background:var(--bg-card); border:3px solid var(--orange); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:24px 24px; text-align:left; min-width:220px; max-width:300px; flex:1; position:relative;">
-        <div style="position:absolute; top:-11px; left:50%; transform:translateX(-50%) rotate(-2deg); background:var(--orange); color:white; font-family:var(--font-display); font-size:10px; padding:2px 12px; border-radius:20px; border:2px solid var(--ink); box-shadow:2px 2px 0 var(--ink);">recommended</div>
+        <div style="position:absolute; top:-11px; left:50%; transform:translateX(-50%) rotate(-2deg); background:var(--orange); color:white; font-family:var(--font-display); font-size:10px; padding:2px 12px; border-radius:20px; border:2px solid var(--ink); box-shadow:2px 2px 0 var(--ink);">recommended
         <div style="text-align:center; margin-bottom:12px;">
-          <div style="font-family:var(--font-display); font-size:18px;">Elite</div>
-          <div style="font-family:var(--font-display); font-size:28px; color:var(--orange);">$19.99<span style="font-size:13px; color:var(--ink-light);">/mo</span></div>
-          <div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">or $149.99/year</div>
-        </div>
+          <div style="font-family:var(--font-display); font-size:18px;">Elite
+          <div style="font-family:var(--font-display); font-size:28px; color:var(--orange);">$19.99<span style="font-size:13px; color:var(--ink-light);">/mo</span>
+          <div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">or $149.99/year
+        
         <ul style="font-family:var(--font-mono); font-size:11px; padding-left:16px; line-height:1.9; color:var(--ink-medium); margin-bottom:16px;">
           <li>Everything in Pro, plus:</li>
           <li style="color:var(--orange); font-weight:700;">AI included (no API key needed)</li>
@@ -1846,9 +1848,9 @@
         </ul>
         <div style="text-align:center;">
           <button class="btn-chunky btn-primary" style="font-size:12px; width:100%;" onclick="if(typeof startCheckout==='function'){startCheckout('elite_month')}else{document.getElementById('auth-modal')?.classList.add('open')}">Get Elite</button>
-        </div>
-      </div>
-    </div>
+        
+      
+    
 
     <p style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); margin-bottom:12px;">7-day free trial on all plans. Cancel anytime. The Lab stays free forever.</p>
 
@@ -1858,8 +1860,8 @@
         style="font-family:var(--font-mono); font-size:11px; padding:6px 12px; border:2px solid var(--ink-faint); border-radius:8px; background:var(--bg-card); width:140px; text-transform:uppercase; text-align:center;"
         oninput="this.value=this.value.toUpperCase()">
       <button class="btn-chunky" style="font-size:11px; padding:5px 12px;" onclick="if(typeof validatePromoCode==='function')validatePromoCode()">Apply</button>
-    </div>
-    <div id="promoCodeFeedback" style="font-family:var(--font-mono); font-size:11px; min-height:16px;"></div>
+    
+    <div id="promoCodeFeedback" style="font-family:var(--font-mono); font-size:11px; min-height:16px;">
 
     <!-- Feature Comparison Table -->
     <div style="margin-top:32px; overflow-x:auto;">
@@ -1935,26 +1937,26 @@
           </tr>
         </tbody>
       </table>
-    </div>
-  </div>
-</div>
+    
+  
+
 
 <!-- FOOTER -->
 <div class="site-footer">
   <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:24px 16px; max-width:900px; margin:0 auto 24px; padding:0 24px; font-family:var(--font-mono); font-size:11px; text-align:left;">
 
     <div>
-      <div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Razzle</div>
+      <div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Razzle
       <a href="/" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Home</a>
       <a href="/lab.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">The Lab</a>
       <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Bureau of Intelligence</a>
       <a href="/agents.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Situation Room</a>
       <a href="/pricing.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Pricing</a>
       <a href="/about.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">About</a>
-    </div>
+    
 
     <div>
-      <div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Dynasty</div>
+      <div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Dynasty
       <a href="/rankings.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Rankings</a>
       <a href="/tradevalues.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Trade Values</a>
       <a href="/tradefinder.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Trade Finder</a>
@@ -1963,10 +1965,10 @@
       <a href="/aging.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Aging Curves</a>
       <a href="/buysell.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Buy/Sell</a>
       <a href="/archetypes.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Archetypes</a>
-    </div>
+    
 
     <div>
-      <div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Weekly</div>
+      <div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Weekly
       <a href="/weekly.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Weekly Stats</a>
       <a href="/weeklyleaders.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Week Leaders</a>
       <a href="/weeklymvp.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Weekly MVP</a>
@@ -1975,10 +1977,10 @@
       <a href="/schedule.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Schedule</a>
       <a href="/stocks.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Stocks</a>
       <a href="/playoffs.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Playoffs</a>
-    </div>
+    
 
     <div>
-      <div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Analytics</div>
+      <div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Analytics
       <a href="/targets.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Targets</a>
       <a href="/usage.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Usage</a>
       <a href="/efficiency.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Efficiency</a>
@@ -1987,10 +1989,10 @@
       <a href="/consistency.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Consistency</a>
       <a href="/breakouts.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Breakouts</a>
       <a href="/opportunity.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Opportunity</a>
-    </div>
+    
 
     <div>
-      <div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Tools</div>
+      <div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Tools
       <a href="/explorer.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Stat Explorer</a>
       <a href="/compare.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Compare</a>
       <a href="/rosterbuilder.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Roster Builder</a>
@@ -1999,12 +2001,12 @@
       <a href="/dashboard.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Dashboard</a>
       <a href="/prospects.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Prospects</a>
       <a href="/team/KC" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Teams</a>
-    </div>
+    
 
-  </div>
+  
   <p style="text-align:center;"><a href="/" style="color:var(--orange); text-decoration:none;">razzle.lol</a> — let's razzle dazzle em baby</p>
   <p style="text-align:center; margin-top:6px;">powered by nflverse + sportsdataverse | made for Reddit | <a href="/about.html" style="color:var(--ink-light);">attribution &amp; privacy</a></p>
-</div>
+
 
 <script src="app.js"></script>
 <script src="warroom.js"></script>

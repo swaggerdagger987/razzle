@@ -472,10 +472,14 @@ function _injectAuthModal() {
   var modal = document.createElement("div");
   modal.id = "authModal";
   modal.className = "auth-modal-overlay";
+  modal.setAttribute("role", "dialog");
+  modal.setAttribute("aria-modal", "true");
+  modal.setAttribute("aria-labelledby", "auth-modal-title");
   modal.style.display = "none";
   modal.innerHTML =
     '<div class="auth-modal">' +
-      '<button class="auth-modal-close" onclick="closeAuthModal()">&times;</button>' +
+      '<button class="auth-modal-close" onclick="closeAuthModal()" aria-label="Close sign-in dialog">&times;</button>' +
+      '<h2 id="auth-modal-title" class="sr-only">Sign In or Register</h2>' +
       '<div class="auth-tabs">' +
         '<button class="auth-tab active" data-tab="login" onclick="switchAuthTab(\'login\')">Sign In</button>' +
         '<button class="auth-tab" data-tab="register" onclick="switchAuthTab(\'register\')">Register</button>' +
@@ -528,19 +532,48 @@ function _injectNavAuthButton() {
   nav.appendChild(li);
 }
 
+var _authModalTrigger = null;
+
 function openAuthModal() {
   var m = document.getElementById("authModal");
   if (m) {
+    _authModalTrigger = document.activeElement;
     m.style.display = "flex";
     switchAuthTab("login");
     clearAuthErrors();
+    // Focus first input
+    var firstInput = m.querySelector("input");
+    if (firstInput) setTimeout(function() { firstInput.focus(); }, 50);
   }
 }
 
 function closeAuthModal() {
   var m = document.getElementById("authModal");
   if (m) m.style.display = "none";
+  // Return focus to trigger element
+  if (_authModalTrigger && _authModalTrigger.focus) {
+    _authModalTrigger.focus();
+    _authModalTrigger = null;
+  }
 }
+
+// Focus trap and Escape for auth modal
+document.addEventListener("keydown", function(e) {
+  var m = document.getElementById("authModal");
+  if (!m || m.style.display === "none") return;
+  if (e.key === "Escape") { closeAuthModal(); return; }
+  if (e.key === "Tab") {
+    var focusable = m.querySelectorAll('button, input, [tabindex]:not([tabindex="-1"])');
+    if (focusable.length === 0) return;
+    var first = focusable[0];
+    var last = focusable[focusable.length - 1];
+    if (e.shiftKey) {
+      if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+    } else {
+      if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  }
+});
 
 function switchAuthTab(tab) {
   var tabs = document.querySelectorAll(".auth-tab");

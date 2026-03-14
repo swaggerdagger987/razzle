@@ -4472,7 +4472,7 @@
           var scoresJson = escapeHtml(JSON.stringify(p.weekly_scores || []));
           html += '<td class="ut-num">' + fmt(p.ppg) + '</td>';
           html += '<td class="ut-num"><span class="' + deltaClass + '">' + arrow + ' ' + fmt(Math.abs(delta)) + '</span></td>';
-          html += '<td><canvas data-ut-spark data-ut-scores="' + scoresJson + '" data-ut-riser="' + (isRiser ? '1' : '0') + '" width="80" height="24"></canvas></td>';
+          html += '<td><canvas data-ut-spark data-ut-scores="' + scoresJson + '" data-ut-riser="' + (isRiser ? '1' : '0') + '" width="80" height="24" role="img" aria-label="Usage trend sparkline"></canvas></td>';
         }
         html += '</tr>';
       });
@@ -4699,7 +4699,7 @@
         body.innerHTML = '<div class="lp-empty">no aging curve data available</div>';
         return;
       }
-      var html = '<div class="ag-chart-wrap"><canvas id="ag-canvas" width="600" height="350"></canvas></div>';
+      var html = '<div class="ag-chart-wrap"><canvas id="ag-canvas" width="600" height="350" role="img" aria-label="Aging curve trend line chart"></canvas></div>';
       html += '<div class="ag-summary">';
       var agIsCollege = typeof state !== 'undefined' && state.universe === 'college';
       var agPeakLabel = agIsCollege ? 'Peak Year' : 'Peak Age';
@@ -5435,7 +5435,7 @@
       html += '</div>';
 
       // Canvas chart placeholder
-      html += '<div class="cst-chart-card"><canvas id="cst-canvas" width="700" height="260"></canvas></div>';
+      html += '<div class="cst-chart-card"><canvas id="cst-canvas" width="700" height="260" role="img" aria-label="Career stat timeline chart"></canvas></div>';
 
       // Career highs
       var highs = data.career_highs || {};
@@ -5596,7 +5596,7 @@
       var loaded = players.filter(function(p) { return p.data; });
       if (!loaded.length) { content.innerHTML = '<div class="lp-empty">search and add players to compare careers</div>'; return; }
 
-      var html = '<div class="ccp-chart-card"><canvas id="ccp-canvas" width="700" height="280"></canvas></div>';
+      var html = '<div class="ccp-chart-card"><canvas id="ccp-canvas" width="700" height="280" role="img" aria-label="Career comparison trend line chart"></canvas></div>';
 
       // Summary comparison table
       html += '<div class="ccp-table-wrap"><table class="ccp-table"><thead><tr><th>Metric</th>';
@@ -6526,7 +6526,7 @@
 
       // Canvas donut + legend
       html += '<div class="pbd-chart-area">';
-      html += '<canvas id="pbd-canvas" width="280" height="280"></canvas>';
+      html += '<canvas id="pbd-canvas" width="280" height="280" role="img" aria-label="Points breakdown donut chart"></canvas>';
       html += '<div class="pbd-legend">';
       var total = 0;
       components.forEach(function(c) { total += Math.abs(c.points || c.value || 0); });
@@ -6973,7 +6973,7 @@
 
       if (d.rounds && d.rounds.length > 0) {
         html += '<div class="dc2-chart-wrap"><div class="dc2-chart-title">Average PPG by Round</div>';
-        html += '<canvas class="dc2-canvas"></canvas></div>';
+        html += '<canvas class="dc2-canvas" role="img" aria-label="Average PPG by draft round bar chart"></canvas></div>';
       }
 
       html += '<div class="dc2-table-wrap"><table class="dc2-table"><thead><tr>';
@@ -7235,7 +7235,7 @@
       var yLabel = METRIC_LABELS[data.y_stat] || data.y_stat;
 
       var html = '<div class="exp-count">' + players.length + ' players shown</div>';
-      html += '<div class="exp-chart-wrap"><canvas class="exp-canvas"></canvas>';
+      html += '<div class="exp-chart-wrap"><canvas class="exp-canvas" role="img" aria-label="Stat explorer scatter plot"></canvas>';
       html += '<div class="exp-tooltip"></div></div>';
       body.innerHTML = html;
 
@@ -9527,13 +9527,13 @@
       html += '<h3 class="corr-section-title">Correlation Matrix</h3>';
       html += '<div class="corr-hint" style="font-family:var(--font-hand);font-size:18px;color:var(--ink-light);margin-bottom:8px">click a cell to see the scatter plot</div>';
       html += '<div class="corr-heatmap-wrap" style="overflow-x:auto">';
-      html += '<canvas id="corr-heatmap" width="' + canvasW + '" height="' + canvasH + '" style="cursor:pointer"></canvas>';
+      html += '<canvas id="corr-heatmap" width="' + canvasW + '" height="' + canvasH + '" role="img" aria-label="Stat correlation heat map" style="cursor:pointer"></canvas>';
       html += '</div></div>';
 
       // Scatter plot placeholder
       html += '<div class="corr-section" id="corr-scatter-section" style="display:none">';
       html += '<h3 class="corr-section-title" id="corr-scatter-title">Scatter Plot</h3>';
-      html += '<div class="corr-scatter-wrap"><canvas id="corr-scatter" width="600" height="400"></canvas></div>';
+      html += '<div class="corr-scatter-wrap"><canvas id="corr-scatter" width="600" height="400" role="img" aria-label="Correlation scatter plot"></canvas></div>';
       html += '</div>';
 
       // Sample size
@@ -9745,7 +9745,7 @@
           '<select class="lp-select pr-season"></select>' +
         '</div>' +
         '<div class="pr-chart-wrap" style="margin:16px 0;">' +
-          '<canvas id="pr-canvas" width="800" height="900" style="width:100%;max-width:800px;border:3px solid var(--ink);border-radius:6px;box-shadow:4px 4px 0 var(--ink);background:var(--bg-card);"></canvas>' +
+          '<canvas id="pr-canvas" width="800" height="900" role="img" aria-label="Dynasty power rankings bar chart" style="width:100%;max-width:800px;border:3px solid var(--ink);border-radius:6px;box-shadow:4px 4px 0 var(--ink);background:var(--bg-card);"></canvas>' +
         '</div>' +
         '<div class="pr-detail" id="pr-detail" style="display:none;"></div>' +
         '<div class="pr-loading"><div class="lp-loading">pulling film on every roster...</div></div>' +

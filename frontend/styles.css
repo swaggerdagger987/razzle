@@ -346,6 +346,11 @@ body {
   margin-right: 4px;
 }
 
+button.nav-search-hint {
+  background: none;
+  font: inherit;
+}
+
 /* ===== AUTH UI ===== */
 .nav-user {
   display: flex;
