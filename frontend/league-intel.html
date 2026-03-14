@@ -137,6 +137,11 @@
 
   .league-card.expanded .league-roster { display: block; }
 
+  .league-odds {
+    padding: 0 20px 16px;
+    border-top: 2px dashed var(--ink-faint);
+  }
+
   .roster-section {
     margin-bottom: 12px;
   }
@@ -1043,11 +1048,13 @@ async function loadLeagues(userId) {
               <span>${escapeHtml(scoringType)}</span>
               <span>${escapeHtml(leagueType)}</span>
               <span>${escapeHtml(String(season))}</span>
+              <button class="btn-chunky" style="font-size:10px; padding:3px 10px; margin-left:8px; border-color:var(--green);" onclick="event.stopPropagation(); runLeagueOdds('${escapeAttr(league.league_id)}', '${escapeAttr(userId)}', '${escapeAttr(scoringType.toLowerCase().replace(' ', '_'))}');">League Odds</button>
             </div>
           </div>
           <div class="league-roster" id="roster-${escapeAttr(league.league_id)}">
             <div class="loading-intel" style="font-size:18px; padding:16px;">checking the tape...</div>
           </div>
+          <div class="league-odds" id="odds-${escapeAttr(league.league_id)}" style="display:none;"></div>
         </div>`;
     }
 
@@ -2795,6 +2802,159 @@ function prefillScenario(text) {
   try {
     localStorage.setItem('razzle_prefill_scenario', text);
   } catch (e) { /* ignore */ }
+}
+
+// ── Monte Carlo League Odds ─────────────────────────────────────────
+
+async function runLeagueOdds(leagueId, userId, scoring) {
+  var oddsDiv = document.getElementById('odds-' + leagueId);
+  if (!oddsDiv) return;
+  oddsDiv.style.display = 'block';
+  oddsDiv.innerHTML = '<div style="text-align:center;padding:24px;font-family:var(--font-hand);font-size:18px;color:var(--ink-light);">running the numbers... (Monte Carlo simulation)</div>';
+
+  try {
+    // 1. Fetch rosters and standings from Sleeper
+    var rCtrl = new AbortController();
+    var rTimer = setTimeout(function() { rCtrl.abort(); }, 15000);
+    var [rostersResp, usersResp] = await Promise.all([
+      fetch(SLEEPER_API + '/league/' + leagueId + '/rosters', { signal: rCtrl.signal }),
+      fetch(SLEEPER_API + '/league/' + leagueId + '/users', { signal: rCtrl.signal }),
+    ]);
+    clearTimeout(rTimer);
+    var rosters = await rostersResp.json();
+    var users = await usersResp.json();
+    if (!Array.isArray(rosters) || !Array.isArray(users)) throw new Error('Invalid league data');
+
+    var userMap = {};
+    users.forEach(function(u) { userMap[u.user_id] = u.display_name || u.username || 'Manager'; });
+
+    // 2. Collect all player IDs across all rosters
+    var allPlayerIds = [];
+    var rosterPlayers = {};
+    rosters.forEach(function(r) {
+      var players = (r.players || []).slice(0, 30); // cap per roster
+      rosterPlayers[r.roster_id] = { players: players, ownerId: r.owner_id, wins: (r.settings || {}).wins || 0, losses: (r.settings || {}).losses || 0 };
+      players.forEach(function(pid) { if (allPlayerIds.indexOf(pid) === -1) allPlayerIds.push(pid); });
+    });
+
+    if (allPlayerIds.length === 0) {
+      oddsDiv.innerHTML = '<div style="text-align:center;padding:24px;font-family:var(--font-hand);font-size:16px;color:var(--ink-light);">no roster data found</div>';
+      return;
+    }
+
+    // 3. Fetch projection distributions from backend
+    var scoringType = scoring === 'half_ppr' ? 'half_ppr' : scoring === 'standard' ? 'standard' : 'ppr';
+    var projResp = await fetch('/api/monte-carlo/projections', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ player_ids: allPlayerIds.slice(0, 200), scoring: scoringType })
+    });
+    var projData = await projResp.json();
+    var distributions = projData.distributions || {};
+
+    // 4. Run Monte Carlo simulation (1000 iterations)
+    var SIMS = 1000;
+    var numRosters = rosters.length;
+    var playoffSpots = Math.max(4, Math.floor(numRosters / 2));
+    var rosterIds = Object.keys(rosterPlayers);
+
+    // Track results
+    var playoffCount = {};
+    var champCount = {};
+    var totalPts = {};
+    rosterIds.forEach(function(rid) { playoffCount[rid] = 0; champCount[rid] = 0; totalPts[rid] = 0; });
+
+    // Simulate
+    for (var sim = 0; sim < SIMS; sim++) {
+      var scores = {};
+      rosterIds.forEach(function(rid) {
+        var roster = rosterPlayers[rid];
+        var total = 0;
+        // Sum projected weekly score for top ~9 starters (simplified)
+        var playerScores = [];
+        roster.players.forEach(function(pid) {
+          var dist = distributions[pid];
+          if (!dist || dist.games === 0) return;
+          // Sample from normal distribution
+          var u1 = Math.random(), u2 = Math.random();
+          var z = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+          var pts = Math.max(0, dist.mean + z * dist.stdev);
+          playerScores.push(pts);
+        });
+        playerScores.sort(function(a, b) { return b - a; });
+        // Take top 9 (typical starting lineup)
+        for (var i = 0; i < Math.min(9, playerScores.length); i++) total += playerScores[i];
+        scores[rid] = total;
+      });
+
+      // Sort by combined record + simulated score
+      var ranked = rosterIds.map(function(rid) {
+        var rp = rosterPlayers[rid];
+        return { rid: rid, simScore: scores[rid], wins: rp.wins, losses: rp.losses };
+      }).sort(function(a, b) {
+        if (b.wins !== a.wins) return b.wins - a.wins;
+        return b.simScore - a.simScore;
+      });
+
+      // Playoffs = top N
+      for (var j = 0; j < Math.min(playoffSpots, ranked.length); j++) {
+        playoffCount[ranked[j].rid]++;
+      }
+      // Champion = highest simulated score among playoff teams
+      var playoffTeams = ranked.slice(0, playoffSpots);
+      playoffTeams.sort(function(a, b) { return b.simScore - a.simScore; });
+      if (playoffTeams.length > 0) champCount[playoffTeams[0].rid]++;
+
+      // Accumulate scores for ROS projection
+      rosterIds.forEach(function(rid) { totalPts[rid] += scores[rid]; });
+    }
+
+    // 5. Render results
+    var results = rosterIds.map(function(rid) {
+      var rp = rosterPlayers[rid];
+      return {
+        rid: rid,
+        name: userMap[rp.ownerId] || 'Manager',
+        wins: rp.wins,
+        losses: rp.losses,
+        playoffPct: Math.round(playoffCount[rid] / SIMS * 100),
+        champPct: Math.round(champCount[rid] / SIMS * 1000) / 10,
+        avgPts: Math.round(totalPts[rid] / SIMS * 10) / 10,
+      };
+    }).sort(function(a, b) { return b.champPct - a.champPct; });
+
+    var paid = typeof isPaidUser === 'function' && isPaidUser();
+    var html = '<div style="padding:16px;">';
+    html += '<div style="font-family:var(--font-display);font-size:18px;margin-bottom:4px;">League Odds</div>';
+    html += '<div style="font-family:var(--font-hand);font-size:14px;color:var(--ink-light);margin-bottom:16px;">based on ' + SIMS + ' Monte Carlo simulations</div>';
+
+    html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;">';
+    for (var k = 0; k < results.length; k++) {
+      var r = results[k];
+      var isBlurred = !paid && k >= 3;
+      var champColor = r.champPct >= 15 ? 'var(--green)' : r.champPct >= 8 ? 'var(--orange)' : 'var(--ink-light)';
+      var playoffColor = r.playoffPct >= 70 ? 'var(--green)' : r.playoffPct >= 40 ? 'var(--orange)' : 'var(--red)';
+
+      html += '<div style="background:var(--bg-card);border:3px solid var(--ink);border-radius:10px;box-shadow:4px 4px 0 var(--ink);padding:14px;' + (isBlurred ? 'filter:blur(3px);opacity:0.4;pointer-events:none;' : '') + '">';
+      html += '<div style="font-family:var(--font-display);font-size:14px;margin-bottom:4px;">' + escapeHtml(isBlurred ? 'Manager' : r.name) + '</div>';
+      html += '<div style="font-family:var(--font-mono);font-size:11px;color:var(--ink-medium);margin-bottom:8px;">' + r.wins + '-' + r.losses + '</div>';
+      html += '<div style="display:flex;gap:12px;">';
+      html += '<div style="text-align:center;"><div style="font-family:var(--font-display);font-size:22px;color:' + champColor + ';">' + r.champPct + '%</div><div style="font-family:var(--font-mono);font-size:9px;color:var(--ink-light);">CHAMP</div></div>';
+      html += '<div style="text-align:center;"><div style="font-family:var(--font-display);font-size:22px;color:' + playoffColor + ';">' + r.playoffPct + '%</div><div style="font-family:var(--font-mono);font-size:9px;color:var(--ink-light);">PLAYOFF</div></div>';
+      html += '<div style="text-align:center;"><div style="font-family:var(--font-mono);font-size:14px;font-weight:700;">' + r.avgPts + '</div><div style="font-family:var(--font-mono);font-size:9px;color:var(--ink-light);">AVG PTS</div></div>';
+      html += '</div></div>';
+    }
+    html += '</div>';
+
+    if (!paid && results.length > 3) {
+      html += '<div style="text-align:center;margin-top:16px;font-family:var(--font-hand);font-size:14px;color:var(--ink-medium);">';
+      html += 'top 3 managers shown free. <a href="/pricing.html" style="color:var(--orange);">subscribe to Pro</a> to see all ' + results.length + ' managers and deep-dive analysis.</div>';
+    }
+    html += '</div>';
+    oddsDiv.innerHTML = html;
+  } catch (e) {
+    oddsDiv.innerHTML = '<div style="text-align:center;padding:24px;font-family:var(--font-hand);font-size:16px;color:var(--red);">' + (e.name === 'AbortError' ? 'simulation timed out' : 'fumbled the simulation... ' + escapeHtml(e.message)) + '</div>';
+  }
 }
 
 function disconnect() {

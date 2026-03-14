@@ -3179,6 +3179,92 @@ async def admin_stats(request: Request):
 
 
 # ---------------------------------------------------------------------------
+# Monte Carlo — Player projection distributions for league simulation
+# ---------------------------------------------------------------------------
+
+@app.post("/api/monte-carlo/projections")
+async def monte_carlo_projections(request: Request):
+    """Return weekly scoring distributions for a list of player IDs.
+    Used by the frontend Monte Carlo simulation engine."""
+    try:
+        body = await request.json()
+    except Exception:
+        return JSONResponse({"error": "Invalid JSON"}, status_code=400)
+
+    player_ids = body.get("player_ids", [])
+    scoring = body.get("scoring", "ppr")  # ppr, half_ppr, standard
+    season = body.get("season", 0)
+
+    if not player_ids or not isinstance(player_ids, list):
+        return JSONResponse({"error": "player_ids required"}, status_code=400)
+    if len(player_ids) > 200:
+        return JSONResponse({"error": "Max 200 players"}, status_code=400)
+
+    scoring_col = {
+        "ppr": "fantasy_points_ppr",
+        "half_ppr": "fantasy_points_half_ppr",
+        "standard": "fantasy_points",
+    }.get(scoring, "fantasy_points_ppr")
+
+    import statistics
+    conn = live_data.get_connection()
+    try:
+        if season <= 0:
+            month = __import__("datetime").datetime.now().month
+            year = __import__("datetime").datetime.now().year
+            season = year if month >= 7 else year - 1
+
+        placeholders = ",".join("?" * len(player_ids))
+        rows = conn.execute(f"""
+            SELECT player_id, week, {scoring_col} as pts
+            FROM stats
+            WHERE player_id IN ({placeholders})
+              AND season = ?
+              AND season_type = 'REG'
+              AND {scoring_col} IS NOT NULL
+            ORDER BY player_id, week
+        """, (*player_ids, season)).fetchall()
+
+        # Group by player
+        player_weeks = defaultdict(list)
+        for r in rows:
+            player_weeks[r[0]].append(r[2])
+
+        distributions = {}
+        for pid in player_ids:
+            weeks = player_weeks.get(pid, [])
+            if len(weeks) >= 2:
+                mean = statistics.mean(weeks)
+                stdev = statistics.stdev(weeks)
+                distributions[pid] = {
+                    "mean": round(mean, 2),
+                    "stdev": round(stdev, 2),
+                    "games": len(weeks),
+                    "floor": round(min(weeks), 2),
+                    "ceiling": round(max(weeks), 2),
+                }
+            elif len(weeks) == 1:
+                distributions[pid] = {
+                    "mean": round(weeks[0], 2),
+                    "stdev": round(weeks[0] * 0.3, 2),  # estimate 30% CV
+                    "games": 1,
+                    "floor": round(weeks[0] * 0.5, 2),
+                    "ceiling": round(weeks[0] * 1.5, 2),
+                }
+            else:
+                distributions[pid] = {
+                    "mean": 0, "stdev": 0, "games": 0, "floor": 0, "ceiling": 0,
+                }
+
+        return {"distributions": distributions, "season": season, "scoring": scoring}
+    except Exception as e:
+        logger.error(f"Monte Carlo projections error: {e}")
+        return JSONResponse({"error": "Projection calculation failed"}, status_code=500)
+    finally:
+        conn.close()
+
+
+# ---------------------------------------------------------------------------
 # Serve frontend as static files (catch-all for SPA-like behavior)
 # ---------------------------------------------------------------------------
 
