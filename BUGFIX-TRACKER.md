@@ -7,7 +7,7 @@
 | lab.html | DONE | Missing PANEL_LABELS/PANEL_FLAVORS for powerrankings and gamescript (broken breadcrumbs); hardcoded leader dot colors (#ffc857/#c4b5a5/#d97757) replaced with CSS vars (--yellow/--ink-faint/--orange); cold blue-black overlay rgba(15,15,26) replaced with warm espresso rgba(45,31,20); cold rgba(26,26,46) replaced with warm rgba(45,31,20); ctx-sep 1px border fixed to 2px; hardcoded heatmap legend colors replaced with CSS vars |
 | league-intel.html | DONE | Missing resp.ok check on loadLeagues fetch; hardcoded pressure map hex colors (#e63946/#d97757/#2ec4b6) replaced with CSS vars (--red/--orange/--green); hardcoded canvas colors in renderActivityTimeline and drawCompareRadar replaced with cssVar() helper using getComputedStyle; XSS fix — onclick prefillScenario handlers used escapeHtml+replace which double-decoded via HTML parser, replaced with escapeJsString() for proper JS-in-attribute escaping |
 | agents.html | DONE | Unclosed trialExpiryBanner div (missing closing tag); undefined CSS var --bg-sand replaced with --bg (2 occurrences: pricing section bg + table header text color); hardcoded #5c4a3d border replaced with var(--ink-faint); hardcoded #2d1f14 canvas-container bg replaced with var(--bg); hardcoded #996600 monitor badge color replaced with var(--ink-medium) |
-| pricing.html | PENDING | |
+| pricing.html | DONE | XSS: escape API data in loadPromotions innerHTML (price, savings, remaining, limit fields); hardcoded `white` toggle knob background replaced with var(--bg-card); cold gray #555 fallback in var(--ink-medium) replaced with warm #5c4a3d (2 occurrences) |
 | about.html | PENDING | |
 | 404.html | PENDING | |
 

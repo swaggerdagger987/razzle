@@ -40,7 +40,7 @@
   }
   .interval-toggle .toggle-track.yearly { background: var(--orange); border-color: var(--ink); }
   .interval-toggle .toggle-knob {
-    width: 18px; height: 18px; background: white; border: 2px solid var(--ink);
+    width: 18px; height: 18px; background: var(--bg-card); border: 2px solid var(--ink);
     border-radius: 50%; position: absolute; top: 2px; left: 2px; transition: transform 0.2s;
   }
   .interval-toggle .toggle-track.yearly .toggle-knob { transform: translateX(22px); }
@@ -80,7 +80,7 @@
 
   .plan-features { list-style: none; padding: 0; margin: 0 0 24px; }
   .plan-features li {
-    font-family: var(--font-mono); font-size: 12px; color: var(--ink-medium, #555);
+    font-family: var(--font-mono); font-size: 12px; color: var(--ink-medium, #5c4a3d);
     padding: 6px 0; border-bottom: 2px dashed var(--ink-faint);
     display: flex; align-items: flex-start; gap: 8px;
   }
@@ -107,7 +107,7 @@
     border-bottom: 3px solid var(--ink); text-align: center; }
   .feature-matrix th:first-child { text-align: left; }
   .feature-matrix td { padding: 8px; border-bottom: 2px dashed var(--ink-faint); text-align: center; }
-  .feature-matrix td:first-child { text-align: left; color: var(--ink-medium, #555); }
+  .feature-matrix td:first-child { text-align: left; color: var(--ink-medium, #5c4a3d); }
   .feature-matrix .yes { color: var(--green, #2ec4b6); font-weight: 700; }
   .feature-matrix .no { color: var(--ink-faint); }
   .feature-matrix .limit { color: var(--orange); font-weight: 600; }
@@ -628,6 +628,7 @@
       if (!resp.ok) return;
       var data = await resp.json();
       var cards = [];
+      var esc = typeof escapeHtml === 'function' ? escapeHtml : function(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; };
 
       // Early adopter cards
       var ea = data.early_adopter;
@@ -636,8 +637,8 @@
           cards.push(
             '<div style="background:var(--bg-card); border:3px solid var(--orange); border-radius:10px; box-shadow:3px 3px 0 var(--ink); padding:16px 20px; text-align:center;">' +
               '<div style="font-family:var(--font-display); font-size:14px; margin-bottom:4px;">Early Adopter Pro</div>' +
-              '<div style="font-family:var(--font-display); font-size:28px; color:var(--orange);">' + ea.pro.price + '</div>' +
-              '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + ea.pro.savings + ' — ' + ea.pro.remaining + ' of ' + ea.pro.limit + ' spots left</div>' +
+              '<div style="font-family:var(--font-display); font-size:28px; color:var(--orange);">' + esc(ea.pro.price) + '</div>' +
+              '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + esc(ea.pro.savings) + ' — ' + esc(String(ea.pro.remaining)) + ' of ' + esc(String(ea.pro.limit)) + ' spots left</div>' +
               '<button class="btn-primary" style="margin-top:12px; width:100%;" onclick="handleCheckout(\'ea_pro\')">Claim Early Adopter</button>' +
             '</div>'
           );
@@ -646,8 +647,8 @@
           cards.push(
             '<div style="background:var(--bg-card); border:3px solid var(--purple, #8b5cf6); border-radius:10px; box-shadow:3px 3px 0 var(--ink); padding:16px 20px; text-align:center;">' +
               '<div style="font-family:var(--font-display); font-size:14px; margin-bottom:4px;">Early Adopter Elite</div>' +
-              '<div style="font-family:var(--font-display); font-size:28px; color:var(--purple, #8b5cf6);">' + ea.elite.price + '</div>' +
-              '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + ea.elite.savings + ' — ' + ea.elite.remaining + ' of ' + ea.elite.limit + ' spots left</div>' +
+              '<div style="font-family:var(--font-display); font-size:28px; color:var(--purple, #8b5cf6);">' + esc(ea.elite.price) + '</div>' +
+              '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + esc(ea.elite.savings) + ' — ' + esc(String(ea.elite.remaining)) + ' of ' + esc(String(ea.elite.limit)) + ' spots left</div>' +
               '<button class="btn-primary" style="margin-top:12px; width:100%;" onclick="handleCheckout(\'ea_elite\')">Claim Early Adopter</button>' +
             '</div>'
           );
@@ -660,16 +661,16 @@
         cards.push(
           '<div style="background:var(--bg-card); border:3px solid var(--green, #2ec4b6); border-radius:10px; box-shadow:3px 3px 0 var(--ink); padding:16px 20px; text-align:center;">' +
             '<div style="font-family:var(--font-display); font-size:14px; margin-bottom:4px;">Lifetime Pro</div>' +
-            '<div style="font-family:var(--font-display); font-size:28px; color:var(--green, #2ec4b6);">' + lt.pro_price + '</div>' +
-            '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">one-time — ' + lt.remaining + ' of ' + lt.limit + ' lifetime spots left</div>' +
+            '<div style="font-family:var(--font-display); font-size:28px; color:var(--green, #2ec4b6);">' + esc(lt.pro_price) + '</div>' +
+            '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">one-time — ' + esc(String(lt.remaining)) + ' of ' + esc(String(lt.limit)) + ' lifetime spots left</div>' +
             '<button class="btn-primary" style="margin-top:12px; width:100%;" onclick="handleCheckout(\'lifetime_pro\')">Go Lifetime</button>' +
           '</div>'
         );
         cards.push(
           '<div style="background:var(--bg-card); border:3px solid var(--purple, #8b5cf6); border-radius:10px; box-shadow:3px 3px 0 var(--ink); padding:16px 20px; text-align:center;">' +
             '<div style="font-family:var(--font-display); font-size:14px; margin-bottom:4px;">Lifetime Elite</div>' +
-            '<div style="font-family:var(--font-display); font-size:28px; color:var(--purple, #8b5cf6);">' + lt.elite_price + '</div>' +
-            '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">one-time — ' + lt.remaining + ' of ' + lt.limit + ' lifetime spots left</div>' +
+            '<div style="font-family:var(--font-display); font-size:28px; color:var(--purple, #8b5cf6);">' + esc(lt.elite_price) + '</div>' +
+            '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">one-time — ' + esc(String(lt.remaining)) + ' of ' + esc(String(lt.limit)) + ' lifetime spots left</div>' +
             '<button class="btn-primary" style="margin-top:12px; width:100%;" onclick="handleCheckout(\'lifetime_elite\')">Go Lifetime</button>' +
           '</div>'
         );
