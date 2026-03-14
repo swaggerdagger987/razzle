@@ -15,130 +15,6 @@ The database file `data/terminal.db` uses WAL journal mode locally. Uploading it
 
 ---
 
-## Phase: Review Fix 3 — CSS & Design System Cleanup
-
-**Exit Criterion**: Zero undefined CSS variables. Zero cold grays. All hardcoded position colors use CSS variable tokens. 1px table borders upgraded to 2px. Canvas charts use Razzle fonts. Dark mode renders correctly for all components.
-
-### Task 1: Fix undefined CSS variables in lab-panels.css
-
-**File**: `frontend/lab-panels.css`
-
-Find and replace all undefined CSS variables with correct tokens:
-- `var(--accent)` → `var(--orange)` (5 occurrences at lines ~283, 340, 502, 507, 520)
-- `var(--bg-main)` → `var(--bg-warm)` (2 occurrences at lines ~284, 306)
-- `var(--border-light)` → `var(--ink-faint)` (2 occurrences at lines ~312, 374)
-
-Also fix in `frontend/styles.css`:
-- `var(--font-data)` → `var(--font-mono)` (line ~1213)
-
-Also fix in `frontend/lab-panels.js` and `frontend/lab.js`:
-- `var(--accent)` → `var(--orange)` wherever used in inline styles for sparkline colors
-
-**Why**: These variables are never defined in `:root`. Components using them have broken/missing styles in production right now.
-
-**Acceptance**: Zero references to `--accent`, `--bg-main`, `--border-light`, or `--font-data` remain anywhere in the codebase. All replaced with defined tokens. Visual appearance is correct.
-
----
-
-### Task 2: Replace cold grays with warm Razzle equivalents
-
-**Files**: `frontend/lab-panels.css`, `frontend/gamescript.html`, `frontend/comptable.html`, `frontend/gamelog.html`, `frontend/records.html`, `frontend/weeklyleaders.html`, `frontend/compare.js`, `frontend/player.js`
-
-Replace all cold gray hex values with warm equivalents:
-- `#e5e7eb` → `var(--bg-warm)` (Tailwind gray-200)
-- `#f3f4f6` → `var(--bg-card)` (Tailwind gray-100)
-- `#374151` → `var(--ink-medium)` (Tailwind gray-700)
-- `#6b7280` → `var(--ink-light)` (Tailwind gray-500)
-- `#9ca3af` → `var(--ink-faint)` (Tailwind gray-400)
-- `#3a3a3a` → `var(--ink)` (dark cold gray in table hovers)
-- `#808080` → `var(--ink-light)` (pure gray for silver badges)
-- `#c0c0c0` → `var(--ink-faint)` (silver gray)
-- `#2a2a2e` → `var(--ink)` or `#2d1f14` (blue-black in canvas charts)
-- `#6b6b7b` → `var(--ink-light)` or `#8a7565` (cold gray labels in canvas)
-- `#eee` → `var(--bg-warm)` (in lab-panels.js inline styles)
-- `#333`, `#444`, `#555`, `#666`, `#888`, `#aaa`, `#ccc`, `#ddd` in `warroom.js` — leave these alone (pixel art exception per design guide)
-
-**Why**: Design guide explicitly says "Cold grays anywhere — even dark mode stays warm (brown, not gray)." These are Tailwind defaults that leaked in during development.
-
-**Acceptance**: Zero cold gray hex values in any CSS or HTML file (except warroom.js pixel art). All replaced with warm CSS variable tokens. Grep for `#e5e7eb|#f3f4f6|#374151|#6b7280|#9ca3af|#3a3a3a|#808080|#c0c0c0|#2a2a2e|#6b6b7b` returns zero results outside warroom.js.
-
----
-
-### Task 3: Define semantic color tokens for positive/negative states
-
-**File**: `frontend/styles.css`
-
-Add to `:root` (after the existing accent colors):
-```css
---semantic-green: #2e7d52;
---semantic-green-light: #e8f0e4;
---semantic-red: #9b3232;
---semantic-red-light: #f0e0df;
-```
-
-Add to `[data-theme="dark"]`:
-```css
---semantic-green: #5cb87a;
---semantic-green-light: #1a3325;
---semantic-red: #e06060;
---semantic-red-light: #3d1f1f;
-```
-
-Then replace across `frontend/lab-panels.css` and HTML files:
-- `#166534` → `var(--semantic-green)` (Tailwind green-800, ~35 occurrences)
-- `#991b1b` → `var(--semantic-red)` (Tailwind red-800, ~30 occurrences)
-- `#dcfce7` → `var(--semantic-green-light)` (~25 occurrences)
-- `#fee2e2` → `var(--semantic-red-light)` (~20 occurrences)
-- `#fef2f2` → `var(--semantic-red-light)` (~10 occurrences)
-- `#d44040` → `var(--red)` (custom red, ~15 occurrences)
-
-**Why**: These Tailwind green/red values are hardcoded across 100+ locations. They don't shift in dark mode. Defining warm-shifted semantic tokens fixes dark mode and brand consistency in one pass.
-
-**Acceptance**: New semantic tokens defined in both light and dark mode. Zero hardcoded Tailwind green/red hex values remain. Dark mode positive/negative colors render correctly.
-
----
-
-### Task 4: Upgrade 1px table borders to 2px dashed
-
-**File**: `frontend/lab-panels.css`
-
-Find all instances of `border-bottom: 1px solid var(--ink-faint)` on table cells and list rows (56 occurrences across lines 568-3603). Replace with `border-bottom: 2px dashed var(--ink-faint)`.
-
-**Why**: Design guide says "Dashed dividers: 2px dashed var(--ink-faint) inside cards" and "Don't: Thin 1px borders on primary elements."
-
-**Acceptance**: Zero `1px solid var(--ink-faint)` on table/list row borders in lab-panels.css. All upgraded to `2px dashed var(--ink-faint)`.
-
----
-
-### Task 5: Replace sans-serif with Razzle fonts in canvas rendering
-
-**Files**: `frontend/lab.js`, `frontend/charts.js`, `frontend/player.js`, `frontend/compare.js`
-
-Find all canvas `ctx.font` assignments that use bare `sans-serif` (121 total: 107 in lab.js, 5 in charts.js, 4 in player.js, 5 in compare.js).
-
-Replace based on context:
-- Chart titles, axis labels, player names → `'Luckiest Guy', cursive`
-- Data values, stat numbers, percentages → `'Space Mono', monospace`
-- Annotations, notes → `'Caveat', cursive`
-
-When unsure, use `'Space Mono', monospace` for numbers and `'Luckiest Guy', cursive` for text labels.
-
-**Why**: Every exported chart/screenshot renders in the browser's default sans-serif instead of Razzle fonts. Charts are the most screenshot-worthy content. Wrong fonts destroy brand identity.
-
-**Acceptance**: Zero instances of bare `sans-serif` in any canvas font assignment. All use one of the three Razzle font families.
-
----
-
-### Task 6: Remove Garfield from font declaration
-
-**File**: `frontend/styles.css`
-
-Find `--font-display: 'Garfield', 'Luckiest Guy', cursive;` (line ~46). Change to `--font-display: 'Luckiest Guy', cursive;`.
-
-**Why**: "Garfield" font is never loaded — no @font-face, no Google Fonts import, no font file. It silently fails on every page.
-
-**Acceptance**: No reference to "Garfield" font in any CSS or JS file.
-
 ---
 
 ## Phase: Review Fix 4 — Frontend Code Quality & Bug Fixes
@@ -536,13 +412,15 @@ Max 3 registrations per IP per 24 hours using existing rate limit pattern.
 
 ---
 
-### Task 3: Sandbox Elite LLM endpoint
+### Task 3: Sandbox Elite LLM endpoint and use free model
 
 **File**: backend/server.py
 
-Reject client role:system messages. Prepend mandatory fantasy football system prompt server-side. Cap max_tokens at 2000.
+1. Reject client role:system messages. Prepend mandatory fantasy football system prompt server-side. Cap max_tokens at 2000.
+2. Override the model to always use the best free model on OpenRouter (e.g., `meta-llama/llama-3.1-8b-instruct:free` or NVIDIA's latest free model). Do NOT use paid models. This is a bootstrap — zero marginal cost per query. Store the model ID as a config constant `FREE_MODEL = "meta-llama/llama-3.1-8b-instruct:free"` so it can be swapped easily as better free models appear.
+3. Elite users get the same free model as free-tier users for now. The value of Elite is convenience (no API key) + context (league data), not a better model. When revenue justifies it, we can upgrade Elite to a paid model later.
 
-**Acceptance**: Client cannot override system prompt. max_tokens capped. Tests pass.
+**Acceptance**: Client cannot override system prompt or model. All server-side LLM calls use the free model. max_tokens capped. Zero API cost per query. Tests pass.
 
 ---
 
