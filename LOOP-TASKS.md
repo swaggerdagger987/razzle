@@ -1,11 +1,23 @@
 # Razzle Ship Loop — Task Tracker
 
 ## Current State
-- Phase: Visual Polish + Brand Refresh + Brand Voice + Bug Fixes (combined)
+- Phase: Polish Pass
 - Current Task: 1
-- Current Stage: BUILD
-- Tasks Completed: 0/16
-- Loop Iterations: 0
+- Current Stage: PASS
+- Tasks Completed: 1/1
+- Loop Iterations: 1
+
+## Phase: Polish Pass — Brand Voice
+**Exit Criterion**: All frontend pages use correct brand voice per DESIGN.md.
+
+### Task 1: Remove "free forever" brand voice violation
+**Requirement**: DESIGN.md says "Never say 'free forever' — that sounds like it needs defending. Just say 'free.'" Remove all instances of "free forever" across index.html, pricing.html, agents.html.
+**Accept when**: Zero instances of "free forever" in frontend/.
+**Depends on**: none
+**Size**: S
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Fixed 8 instances across 3 files (index.html: 3, pricing.html: 4, agents.html: 1). All replaced with "free".
 
 ## Phase: Mobile Hamburger Menu
 **Exit Criterion**: All pages have a functional hamburger menu on screens below 768px. All nav links are accessible. Desktop nav unchanged.

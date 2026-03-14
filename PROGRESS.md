@@ -192,3 +192,15 @@ Full build history archived in `docs/PROGRESS_ARCHIVE.md`.
 ### Decisions Log
 - All 16 fixable bugs had the same root cause: `new Date().getFullYear()` returning 2026 before NFL season starts in September
 - 6 remaining bugs triaged as feature requests, not launch blockers
+
+---
+
+## Polish Pass (Mar 13+)
+
+Systematic page-by-page audit against DESIGN.md and NORTH_STAR.md.
+
+| Page | Fix | Status | Notes |
+|------|-----|--------|-------|
+| index.html | Brand voice: "free forever" → "free" | DONE | 3 instances fixed. DESIGN.md: "Never say 'free forever' — that sounds like it needs defending." |
+| pricing.html | Brand voice: "free forever" → "free" | DONE | 4 instances fixed (og:description, hero, plan badge, plan price, FAQ question). |
+| agents.html | Brand voice: "free forever" → "free" | DONE | 1 instance fixed in pricing section. |
