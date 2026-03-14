@@ -1,11 +1,23 @@
 # Razzle Ship Loop — Task Tracker
 
 ## Current State
-- Phase: Mobile Polish Pass
-- Current Task: 3
+- Phase: Polish Mode — Design Audit
+- Current Task: 1
 - Current Stage: PASS
-- Tasks Completed: 3/3
-- Loop Iterations: 4
+- Tasks Completed: 1/1
+- Loop Iterations: 5
+
+## Phase: Polish Mode — Design Audit
+**Exit Criterion**: Systematic page-by-page audit against DESIGN.md
+
+### Task 1: Fix cold white text in demo section (index.html)
+**Requirement**: Demo section h2 used `color: white` (cold) instead of warm sand. DESIGN.md says no cold colors — even dark mode stays warm.
+**Accept when**: Demo section h2 uses warm sand `#ede0cf` instead of white.
+**Depends on**: none
+**Size**: S
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Changed `.demo-section h2 { color: white; }` to `color: #ede0cf` (warm sand). Other `color: white` usages (buttons, badges) are on colored backgrounds and correct.
 
 ## Phase: Mobile Polish Pass
 **Exit Criterion**: All data table pages scroll horizontally on mobile. Lab sidebar Escape key works correctly on mobile.
