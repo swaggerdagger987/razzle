@@ -804,7 +804,7 @@
           '<input class="lp-search" type="text" id="lp-vorp-search" placeholder="search player...">' +
         '</div>' +
         '<div class="vorp-thresholds" id="lp-vorp-thresholds"></div>' +
-        '<div id="lp-vorp-body"><div class="lp-loading">calculating replacement value...</div></div>' +
+        '<div id="lp-vorp-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">calculating replacement value...</div></div>' +
       '</div>';
 
     var seasonSel = el.querySelector('#lp-vorp-season');
@@ -1361,7 +1361,7 @@
       '</div>' +
       '<select class="lp-select" id="bo-season" aria-label="Season"></select>' +
       '</div>' +
-      '<div id="bo-body"><div class="lp-loading">scouting the film...</div></div>' +
+      '<div id="bo-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">scouting the film...</div></div>' +
       '</div>';
 
     var curPos = '';
@@ -1491,7 +1491,7 @@
       '</div>' +
       '<select class="lp-select" id="bs-season" aria-label="Season"></select>' +
       '</div>' +
-      '<div id="bs-body"><div class="lp-loading">studying the market...</div></div>' +
+      '<div id="bs-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">studying the market...</div></div>' +
       '</div>';
 
     var curPos = '';
@@ -1643,7 +1643,7 @@
       '</div>' +
       '<select class="lp-select" id="stk-season" aria-label="Season"></select>' +
       '</div>' +
-      '<div id="stk-body"><div class="lp-loading">crunching the composite...</div></div>' +
+      '<div id="stk-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">crunching the composite...</div></div>' +
       '</div>';
 
     var curPos = '';
@@ -1847,7 +1847,7 @@
       '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
       '</div>' +
       '</div>' +
-      '<div id="ww-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+      '<div id="ww-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     var curPos = '';
@@ -1937,7 +1937,7 @@
       '<div class="lp-controls">' +
       '<select class="lp-select" id="sc-season" aria-label="Season"></select>' +
       '</div>' +
-      '<div id="sc-body"><div class="lp-loading">running the numbers...</div></div>' +
+      '<div id="sc-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">running the numbers...</div></div>' +
       '</div>';
 
     var seasonsPopulated = false;
@@ -2048,7 +2048,7 @@
       '<div class="lp-controls">' +
       '<select class="lp-select" id="hc-season" aria-label="Season"></select>' +
       '</div>' +
-      '<div id="hc-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+      '<div id="hc-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     var seasonsPopulated = false;
@@ -2543,7 +2543,7 @@
       '</div>' +
       '<select class="lp-select" id="se-season" aria-label="Season"></select>' +
       '</div>' +
-      '<div id="se-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+      '<div id="se-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     var curPos = '';
@@ -2652,7 +2652,7 @@
       '</div>' +
       '<select class="lp-select" id="wl-season" aria-label="Season"></select>' +
       '</div>' +
-      '<div id="wl-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+      '<div id="wl-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     var curPos = '';
@@ -2758,7 +2758,7 @@
       '</div>' +
       '<select class="lp-select" id="dt-season" aria-label="Season"></select>' +
       '</div>' +
-      '<div id="dt-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+      '<div id="dt-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     var curPos = '';
@@ -2852,7 +2852,7 @@
       '</div>' +
       '<select class="lp-select" id="tp-season" aria-label="Season"></select>' +
       '</div>' +
-      '<div id="tp-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+      '<div id="tp-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     var curPos = '';
@@ -2942,7 +2942,7 @@
       '</div>' +
       '<select class="lp-select" id="dr-season" aria-label="Season"></select>' +
       '</div>' +
-      '<div id="dr-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+      '<div id="dr-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     var curPos = '';
@@ -3050,7 +3050,7 @@
       '</div>' +
       '<select class="lp-select" id="gt-season" aria-label="Season"></select>' +
       '</div>' +
-      '<div id="gt-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+      '<div id="gt-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     var curPos = '';
@@ -3176,7 +3176,7 @@
           '</div>' +
           '<select class="lp-select" id="wh-season" aria-label="Season"></select>' +
         '</div>' +
-        '<div id="wh-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+        '<div id="wh-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function loadWH() {
@@ -3340,7 +3340,7 @@
           '<div class="mh-legend-item"><div class="mh-legend-swatch" style="background:#f2d5d8;"></div> Tough</div>' +
           '<div class="mh-legend-item"><div class="mh-legend-swatch" style="background:#e63946;"></div> Hard</div>' +
         '</div>' +
-        '<div id="mh-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+        '<div id="mh-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
         '<div id="mh-detail" class="mh-detail"></div>' +
       '</div>';
 
@@ -3546,7 +3546,7 @@
         '<div class="lp-controls">' +
           '<select class="lp-select" id="sk-season" aria-label="Season"></select>' +
         '</div>' +
-        '<div id="sk-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+        '<div id="sk-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function corrClass(c) {
@@ -3670,7 +3670,7 @@
           '</div>' +
           '<select class="lp-select" id="rz-season" aria-label="Season"></select>' +
         '</div>' +
-        '<div id="rz-body"><div class="lp-loading">scouting the goal line...</div></div>' +
+        '<div id="rz-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">scouting the goal line...</div></div>' +
       '</div>';
 
     function getCols(section) { return section === 'dominators' ? DOM_COLUMNS : TDD_COLUMNS; }
@@ -3856,7 +3856,7 @@
             '<option value="5">5 weeks</option>' +
           '</select>' +
         '</div>' +
-        '<div id="str-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+        '<div id="str-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function loadSTR() {
@@ -3993,7 +3993,7 @@
             '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
           '</div>' +
         '</div>' +
-        '<div id="wkl-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+        '<div id="wkl-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function updateWeekUI() {
@@ -4151,7 +4151,7 @@
         '<div class="lp-controls">' +
           '<select class="lp-select" id="mv-season" aria-label="Season"></select>' +
         '</div>' +
-        '<div id="mv-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+        '<div id="mv-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function loadMV() {
@@ -4242,7 +4242,7 @@
           '</div>' +
           '<select class="lp-select" id="po-season" aria-label="Season"></select>' +
         '</div>' +
-        '<div id="po-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+        '<div id="po-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function gradeClass(grade) {
@@ -4358,7 +4358,7 @@
             '<option value="8">8 weeks</option>' +
           '</select>') +
         '</div>' +
-        '<div id="ut-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+        '<div id="ut-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function loadUT() {
@@ -4537,7 +4537,7 @@
             '<option value="snap_pct">Snap%</option>' +
           '</select>') +
         '</div>' +
-        '<div id="yy-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+        '<div id="yy-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function loadYY() {
@@ -4671,7 +4671,7 @@
             '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
           '</div>' +
         '</div>' +
-        '<div id="ag-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+        '<div id="ag-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function loadAG() {
@@ -4850,7 +4850,7 @@
           '</div>' +
           '<select class="lp-select" id="pt-season">' + seasonOptions() + '</select>' +
         '</div>' +
-        '<div id="pt-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+        '<div id="pt-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function loadPT() {
@@ -4937,7 +4937,7 @@
           '</div>' +
           '<select class="lp-select" id="spc-season">' + seasonOptions() + '</select>' +
         '</div>' +
-        '<div id="spc-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+        '<div id="spc-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function loadSPC() {
@@ -5025,7 +5025,7 @@
           '</div>' +
           '<select class="lp-select" id="tdr-season">' + seasonOptions() + '</select>' +
         '</div>' +
-        '<div id="tdr-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+        '<div id="tdr-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function loadTDR() {
@@ -5159,7 +5159,7 @@
           '</div>' +
           '<select class="lp-select" id="ay-season">' + seasonOptions() + '</select>' +
         '</div>' +
-        '<div id="ay-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+        '<div id="ay-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function loadAY() {
@@ -9996,7 +9996,7 @@
       '</div>' +
       '<select class="lp-select" id="gs-season" aria-label="Season"></select>' +
       '</div>' +
-      '<div id="gs-body"><div class="lp-loading">reviewing the film...</div></div>' +
+      '<div id="gs-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">reviewing the film...</div></div>' +
       '</div>';
 
     function diffBadge(val) {

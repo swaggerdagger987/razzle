@@ -2,10 +2,10 @@
 
 ## Current State
 - Phase: Mobile Polish Pass
-- Current Task: 2
+- Current Task: 3
 - Current Stage: PASS
-- Tasks Completed: 2/2
-- Loop Iterations: 3
+- Tasks Completed: 3/3
+- Loop Iterations: 4
 
 ## Phase: Mobile Polish Pass
 **Exit Criterion**: All data table pages scroll horizontally on mobile. Lab sidebar Escape key works correctly on mobile.
@@ -27,6 +27,15 @@
 **Status**: PASS
 **Attempts**: 1
 **Notes**: Changed sidebar.classList.add('collapsed') to sidebar.classList.remove('open') in Escape handler.
+
+### Task 3: Add overflow-x:auto to all remaining table pages
+**Requirement**: 19 standalone HTML pages + 26 lab-panels.js panel body containers had tables that would clip or overflow on mobile. Add scroll wrappers to all.
+**Accept when**: Every data table in standalone pages and lab panels scrolls horizontally on phones.
+**Depends on**: none
+**Size**: M
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Fixed 19 standalone HTML pages (airyards, redzone, schedule, vorp, stocks, usage, yoy, weeklyleaders, waivers, streaks, advantage, seasonpace, tdregression, snapefficiency, targetpremium, records, workload, stacks, playoffs) + 26 body containers in lab-panels.js. All now have overflow-x:auto;-webkit-overflow-scrolling:touch.
 
 ## Phase: Polish Pass — Brand Voice
 **Exit Criterion**: All frontend pages use correct brand voice per DESIGN.md.

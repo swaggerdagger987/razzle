@@ -210,3 +210,5 @@ Systematic page-by-page audit against DESIGN.md and NORTH_STAR.md.
 | opportunity.html | Mobile: add overflow-x:auto to table | DONE | Table was clipping on phones. |
 | lab-panels.js | Mobile: add overflow-x:auto to eff/con panels | DONE | Lab panel versions of efficiency + consistency tables. |
 | lab.html | Fix: Escape key on mobile sidebar | DONE | Was adding 'collapsed' instead of removing 'open'. Sidebar wouldn't close on Escape. |
+| 19 standalone pages | Mobile: add overflow-x:auto to table containers | DONE | airyards, redzone, schedule, vorp, stocks, usage, yoy, weeklyleaders, waivers, streaks, advantage, seasonpace, tdregression, snapefficiency, targetpremium, records, workload, stacks, playoffs |
+| lab-panels.js | Mobile: add overflow-x:auto to all 26 panel body containers | DONE | Every panel table container now scrolls horizontally on mobile. |
