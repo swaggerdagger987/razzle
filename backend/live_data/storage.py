@@ -66,12 +66,20 @@ def init_formula_store_tables():
             CREATE TABLE IF NOT EXISTS formula_ratings (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 formula_id INTEGER NOT NULL,
+                user_id INTEGER,
                 rating INTEGER NOT NULL CHECK(rating >= 1 AND rating <= 5),
                 review TEXT NOT NULL DEFAULT '',
                 created_at TEXT NOT NULL DEFAULT (datetime('now')),
-                FOREIGN KEY (formula_id) REFERENCES formula_store(id)
+                FOREIGN KEY (formula_id) REFERENCES formula_store(id),
+                UNIQUE(formula_id, user_id)
             )
         """)
+        # Migrate: add user_id column if missing (existing databases)
+        cols = [row[1] for row in conn.execute("PRAGMA table_info(formula_ratings)").fetchall()]
+        if "user_id" not in cols:
+            conn.execute("ALTER TABLE formula_ratings ADD COLUMN user_id INTEGER")
+            conn.execute("CREATE UNIQUE INDEX IF NOT EXISTS uq_formula_user ON formula_ratings(formula_id, user_id)")
+
         conn.commit()
 
         # Seed formulas if table is empty
@@ -277,7 +285,7 @@ def get_formula_detail(formula_id: int) -> dict:
         }
 
 
-def rate_formula(formula_id: int, rating: int, review: str = "") -> dict:
+def rate_formula(formula_id: int, rating: int, review: str = "", user_id: int = None) -> dict:
     if rating < 1 or rating > 5:
         return {"status": "error", "message": "rating must be 1-5"}
 
@@ -287,14 +295,37 @@ def rate_formula(formula_id: int, rating: int, review: str = "") -> dict:
         if not exists:
             return {"status": "not_found"}
 
-        conn.execute(
-            "INSERT INTO formula_ratings (formula_id, rating, review) VALUES (?, ?, ?)",
-            (formula_id, rating, review.strip()),
-        )
-        conn.execute(
-            "UPDATE formula_store SET rating_sum = rating_sum + ?, rating_count = rating_count + 1 WHERE id = ?",
-            (rating, formula_id),
-        )
+        # Check for existing rating by this user (deduplication)
+        old_rating = None
+        if user_id is not None:
+            existing = conn.execute(
+                "SELECT rating FROM formula_ratings WHERE formula_id = ? AND user_id = ?",
+                (formula_id, user_id),
+            ).fetchone()
+            if existing:
+                old_rating = existing[0]
+
+        if old_rating is not None:
+            # Update existing rating — adjust the aggregate accordingly
+            conn.execute(
+                "UPDATE formula_ratings SET rating = ?, review = ?, created_at = datetime('now') "
+                "WHERE formula_id = ? AND user_id = ?",
+                (rating, review.strip(), formula_id, user_id),
+            )
+            conn.execute(
+                "UPDATE formula_store SET rating_sum = rating_sum - ? + ? WHERE id = ?",
+                (old_rating, rating, formula_id),
+            )
+        else:
+            # New rating
+            conn.execute(
+                "INSERT INTO formula_ratings (formula_id, user_id, rating, review) VALUES (?, ?, ?, ?)",
+                (formula_id, user_id, rating, review.strip()),
+            )
+            conn.execute(
+                "UPDATE formula_store SET rating_sum = rating_sum + ?, rating_count = rating_count + 1 WHERE id = ?",
+                (rating, formula_id),
+            )
         conn.commit()
         return {"status": "ok"}
 

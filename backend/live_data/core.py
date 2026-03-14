@@ -7,6 +7,7 @@ enrichment functions that need a connection receive it as a parameter.
 
 import logging
 import math
+import threading
 import time as _time
 from datetime import datetime as _datetime
 
@@ -31,23 +32,36 @@ _cache = {}
 _CACHE_TTL = 300  # 5 minutes default
 _CACHE_TTL_STABLE = 3600  # 60 minutes for stable/historical data
 _CACHE_MAX_SIZE = 200  # LRU eviction threshold
+_cache_locks = {}  # per-key locks for stampede protection
+_cache_meta_lock = threading.Lock()  # protects _cache_locks dict
 
 
 def _cached(key, fn, ttl=None):
-    """Return cached result or compute and cache. LRU eviction at _CACHE_MAX_SIZE."""
+    """Return cached result or compute and cache. Stampede-protected, LRU eviction."""
     if ttl is None:
         ttl = _CACHE_TTL
     now = _time.time()
+    # Fast path: cache hit (no lock needed, dict reads are thread-safe in CPython)
     if key in _cache and now - _cache[key]["t"] < ttl:
-        # Touch the entry (move to end for LRU ordering)
-        _cache[key]["a"] = now  # last access time
+        _cache[key]["a"] = now  # touch for LRU
         return _cache[key]["v"]
-    # Evict stale entries first, then LRU if still over limit
-    if len(_cache) >= _CACHE_MAX_SIZE:
-        _cache_evict(now)
-    result = fn()
-    _cache[key] = {"t": now, "v": result, "a": now}
-    return result
+    # Slow path: get per-key lock to prevent stampede (only one thread computes)
+    with _cache_meta_lock:
+        if key not in _cache_locks:
+            _cache_locks[key] = threading.Lock()
+        key_lock = _cache_locks[key]
+    with key_lock:
+        # Double-check: another thread may have filled the cache while we waited
+        now = _time.time()
+        if key in _cache and now - _cache[key]["t"] < ttl:
+            _cache[key]["a"] = now
+            return _cache[key]["v"]
+        # Evict stale entries first, then LRU if still over limit
+        if len(_cache) >= _CACHE_MAX_SIZE:
+            _cache_evict(now)
+        result = fn()
+        _cache[key] = {"t": now, "v": result, "a": now, "ttl": ttl}
+        return result
 
 
 def _cache_evict(now):

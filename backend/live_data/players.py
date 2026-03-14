@@ -44,7 +44,8 @@ def quick_search_players(query, limit=8):
     limit = max(1, min(limit, 20))
     def _query():
         with get_db() as conn:
-            search_term = "%" + query.lower().replace(" ", "") + "%"
+            escaped_q = query.lower().replace(" ", "").replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+            search_term = "%" + escaped_q + "%"
             rows = conn.execute("""
                 WITH ms AS (SELECT MAX(season) AS s FROM player_week_stats)
                 SELECT p.player_id, p.full_name, p.position, p.team, p.headshot_url,
@@ -55,7 +56,7 @@ def quick_search_players(query, limit=8):
                               AND s.season = ms.s),
                            0) AS ppg
                 FROM players p
-                WHERE p.search_name LIKE ?
+                WHERE p.search_name LIKE ? ESCAPE '\\'
                   AND p.position IN ('QB', 'RB', 'WR', 'TE')
                   AND p.fantasy_relevant = 1
                 ORDER BY ppg DESC
@@ -127,8 +128,9 @@ def fetch_players(
                 params.append(_season)
 
             if search:
-                where.append("p.search_name LIKE ?")
-                params.append(f"%{search.lower().replace(' ', '')}%")
+                escaped_s = search.lower().replace(" ", "").replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+                where.append("p.search_name LIKE ? ESCAPE '\\'")
+                params.append(f"%{escaped_s}%")
 
             if pos_list:
                 placeholders = ",".join("?" * len(pos_list))
@@ -237,8 +239,9 @@ def _fetch_screener_uncached(body):
             params.append(season)
 
         if search:
-            where.append("p.search_name LIKE ?")
-            params.append(f"%{search.lower().replace(' ', '')}%")
+            escaped_s = search.lower().replace(" ", "").replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+            where.append("p.search_name LIKE ? ESCAPE '\\'")
+            params.append(f"%{escaped_s}%")
 
         if pos_list:
             placeholders = ",".join("?" * len(pos_list))

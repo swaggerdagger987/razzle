@@ -318,8 +318,8 @@ def create_checkout_session(user: dict, interval: str = "year", promo_code: str 
             "trial_days": trial_days,
         }
     except stripe.error.StripeError as e:
-        logger.error(f"Stripe checkout error: {e}")
-        return {"error": str(e), "status": 400}
+        logger.error("Stripe checkout error: %s", e, exc_info=True)
+        return {"error": "Payment processing failed. Please try again or contact support.", "status": 400}
 
 
 def _get_or_create_customer(user: dict) -> str:

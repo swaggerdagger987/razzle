@@ -14,18 +14,32 @@ from contextlib import contextmanager
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
+import sys
+
 import bcrypt
 import jwt
 from cryptography.fernet import Fernet
 
 logger = logging.getLogger("razzle.auth")
 
+_ENVIRONMENT = os.environ.get("ENVIRONMENT", "development")
+
 USERS_DB_PATH = Path(__file__).parent.parent / "data" / "users.db"
 
 # JWT config
 JWT_SECRET = os.environ.get("JWT_SECRET")
 if not JWT_SECRET:
+    if _ENVIRONMENT == "production":
+        raise RuntimeError(
+            "JWT_SECRET environment variable is required in production. "
+            "Set it to a stable, random hex string (e.g. `python -c \"import secrets; print(secrets.token_hex(32))\"`)."
+        )
     JWT_SECRET = secrets.token_hex(32)
+    print(
+        "WARNING: JWT_SECRET not set — using random fallback. "
+        "Tokens will not survive restarts. Set JWT_SECRET for stable sessions.",
+        file=sys.stderr,
+    )
     logger.warning("JWT_SECRET not set — using random key (tokens will expire on restart)")
 JWT_ALGORITHM = "HS256"
 JWT_EXPIRY_DAYS = 7
@@ -439,9 +453,10 @@ def get_agent_memories(user_id: int, league_id: str = None,
             params.append(league_id)
 
         if search:
-            where_clauses.append("(scenario LIKE ? OR findings LIKE ?)")
-            params.append(f"%{search}%")
-            params.append(f"%{search}%")
+            escaped_search = search.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+            where_clauses.append("(scenario LIKE ? ESCAPE '\\' OR findings LIKE ? ESCAPE '\\')")
+            params.append(f"%{escaped_search}%")
+            params.append(f"%{escaped_search}%")
 
         where = " AND ".join(where_clauses)
         params.append(limit)
@@ -858,7 +873,20 @@ def clear_agent_memories(user_id: int, league_id: str = None) -> dict:
 
 # Derive a Fernet key from ENCRYPTION_KEY env var (or JWT_SECRET as fallback).
 # Fernet requires a 32-byte URL-safe base64-encoded key.
-_ENCRYPTION_KEY_RAW = os.environ.get("ENCRYPTION_KEY") or JWT_SECRET
+_ENCRYPTION_KEY_RAW = os.environ.get("ENCRYPTION_KEY")
+if not _ENCRYPTION_KEY_RAW:
+    if _ENVIRONMENT == "production":
+        raise RuntimeError(
+            "ENCRYPTION_KEY environment variable is required in production. "
+            "Set it to a stable, random string (e.g. `python -c \"import secrets; print(secrets.token_hex(32))\"`)."
+        )
+    _ENCRYPTION_KEY_RAW = JWT_SECRET
+    print(
+        "WARNING: ENCRYPTION_KEY not set — falling back to JWT_SECRET for encryption. "
+        "Set ENCRYPTION_KEY for independent key rotation.",
+        file=sys.stderr,
+    )
+    logger.warning("ENCRYPTION_KEY not set — falling back to JWT_SECRET for API key encryption")
 _FERNET_KEY = base64.urlsafe_b64encode(
     hashlib.sha256(_ENCRYPTION_KEY_RAW.encode("utf-8")).digest()
 )
