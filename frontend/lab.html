@@ -2965,7 +2965,7 @@
   </ul>
   <div class="nav-auth" id="nav-auth">
     <button class="nav-search-hint" aria-label="Open quick search (Ctrl+K)" onclick="document.querySelector('.cmd-palette-backdrop')?.classList.add('open'); document.querySelector('.cmd-palette-input')?.focus();" title="Quick search"><kbd>Ctrl+K</kbd> Search</button>
-    <a href="#" class="btn-chunky btn-sm" onclick="document.getElementById('auth-modal')?.classList.add('open'); return false;">Sign In</a>
+    <a href="#" class="btn-chunky btn-sm" onclick="if(typeof openAuthModal==='function') openAuthModal(); return false;">Sign In</a>
   </div>
 </nav>
 
@@ -3865,11 +3865,20 @@
   panelRegistry['screener'].container = document.getElementById('panel-screener');
   panelRegistry['screener'].loaded = true;
 
-  // Register native panels from lab-panels.js (loaded before this script)
-  if (window._labPanelDefs) {
-    window._labPanelDefs.forEach(function(def) {
-      registerPanel(def.name, def.render);
-    });
+  // Register native panels from lab-panels.js (deferred — runs after parsing)
+  // Defer scripts execute before DOMContentLoaded, so we register then.
+  function _registerDeferredPanels() {
+    if (window._labPanelDefs) {
+      window._labPanelDefs.forEach(function(def) {
+        registerPanel(def.name, def.render);
+      });
+    }
+  }
+  // If lab-panels.js already ran (e.g. cached), register now; otherwise wait
+  if (window._labPanelDefs && window._labPanelDefs.length > 0) {
+    _registerDeferredPanels();
+  } else {
+    document.addEventListener('DOMContentLoaded', _registerDeferredPanels);
   }
 
   // ─── Panel Labels & Categories ─────────────────────────────────
@@ -4496,13 +4505,26 @@
     }
   }
 
-  var initPanel = params.get('panel');
-  if (!initPanel) {
-    // Restore last-visited panel from localStorage
-    try { initPanel = localStorage.getItem('razzle_last_panel'); } catch(e) {}
+  // Defer initial panel switch until after deferred scripts have registered panels
+  function _initPanel() {
+    var initPanel = params.get('panel');
+    if (!initPanel) {
+      // Restore last-visited panel from localStorage
+      try { initPanel = localStorage.getItem('razzle_last_panel'); } catch(e) {}
+    }
+    if (initPanel && initPanel !== 'screener') {
+      switchPanel(initPanel);
+    }
   }
-  if (initPanel && initPanel !== 'screener') {
-    switchPanel(initPanel);
+  // If panels already registered, switch now; otherwise wait for DOMContentLoaded
+  if (window._labPanelDefs && window._labPanelDefs.length > 0) {
+    _initPanel();
+  } else {
+    document.addEventListener('DOMContentLoaded', function() {
+      // Ensure panels are registered first (in case _registerDeferredPanels hasn't fired)
+      _registerDeferredPanels();
+      _initPanel();
+    });
   }
 
   // Handle browser back/forward
