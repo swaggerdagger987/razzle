@@ -2,9 +2,9 @@
 
 ## Current State
 - Phase: G (Build Pipeline — esbuild Minification)
-- Current Task: G-2
-- Current Stage: BUILD
-- Tasks Completed: 1/2
+- Current Task: COMPLETE
+- Current Stage: DONE
+- Tasks Completed: 2/2
 - Loop Iterations: 7
 
 ## Phase A: Visual & Design Audit (Mar 12–18)
@@ -373,5 +373,5 @@
 **Accept when**: Full smoke test passes against minified build. All features work identically to raw source.
 **Depends on**: G-1
 **Size**: M
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
