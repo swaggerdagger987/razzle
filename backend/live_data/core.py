@@ -503,7 +503,15 @@ def _enrich_with_pbp_stats(conn, items, season=None, career_mode=False):
         params = player_ids
     else:
         query = f"""
-            SELECT * FROM player_season_pbp
+            SELECT player_id,
+                pass_success_rate, rush_success_rate, total_ryoe, ryoe_per_carry,
+                avg_score_differential, play_action_attempts, play_action_completions,
+                play_action_yards, play_action_tds, scramble_attempts, scramble_yards,
+                scramble_tds, garbage_time_pct, gl_carries, gl_targets, gl_tds,
+                two_point_conversions, return_yards, return_tds,
+                intended_air_yards, intended_air_yards_per_target, drops, drop_rate,
+                bye_week, games_missed
+            FROM player_season_pbp
             WHERE player_id IN ({placeholders}) AND season = ?
         """
         params = player_ids + [season]

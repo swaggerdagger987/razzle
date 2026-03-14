@@ -422,6 +422,25 @@ async def response_cache_middleware(request: Request, call_next):
     return await call_next(request)
 
 
+_STATIC_ASSET_EXTS = (".js", ".css", ".png", ".svg", ".woff2", ".woff", ".ico", ".jpg", ".jpeg", ".webp")
+
+
+@app.middleware("http")
+async def static_cache_middleware(request: Request, call_next):
+    """Add Cache-Control headers for static assets and screener endpoints."""
+    response = await call_next(request)
+    path = request.url.path
+
+    # Static assets — long cache
+    if any(path.endswith(ext) for ext in _STATIC_ASSET_EXTS):
+        response.headers["Cache-Control"] = "public, max-age=31536000, immutable"
+    # Screener POST endpoints — short cache
+    elif request.method == "POST" and path in ("/api/screener/query", "/api/screener/sparklines"):
+        response.headers["Cache-Control"] = "public, max-age=60"
+
+    return response
+
+
 @app.middleware("http")
 async def request_logging_middleware(request: Request, call_next):
     """Log every HTTP request with method, path, status, duration, and request ID."""

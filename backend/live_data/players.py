@@ -404,7 +404,11 @@ def _fetch_screener_uncached(body):
             LIMIT ? OFFSET ?
         """
         # When post-filters exist, fetch more rows to account for filtering
-        sql_limit = limit * 5 if post_filters else limit
+        # Use 2x for a single post-filter, 3x for multiple post-filters
+        if post_filters:
+            sql_limit = limit * 2 if len(post_filters) == 1 else limit * 3
+        else:
+            sql_limit = limit
         sql_offset = 0 if post_filters else offset
         params.extend([sql_limit, sql_offset])
 

@@ -1,5 +1,5 @@
 /* Razzle — shared styles (follows DESIGN.md) */
-@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&family=Luckiest+Guy&display=swap');
+/* Google Fonts loaded via <link> in HTML <head> — no @import needed */
 
 /* Screen-reader only utility — visually hidden but accessible to assistive tech */
 .sr-only {

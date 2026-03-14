@@ -149,6 +149,7 @@ def initialize_database(conn):
         CREATE INDEX IF NOT EXISTS idx_players_position ON players(position);
         CREATE INDEX IF NOT EXISTS idx_players_team ON players(team);
         CREATE INDEX IF NOT EXISTS idx_players_gsis ON players(gsis_id);
+        CREATE INDEX IF NOT EXISTS idx_players_pos_relevant ON players(position, fantasy_relevant);
 
         CREATE TABLE IF NOT EXISTS player_week_stats (
             player_id TEXT,
@@ -202,6 +203,7 @@ def initialize_database(conn):
         CREATE INDEX IF NOT EXISTS idx_pws_player_season ON player_week_stats(player_id, season, week);
         CREATE INDEX IF NOT EXISTS idx_pws_season_player ON player_week_stats(season, player_id);
         CREATE INDEX IF NOT EXISTS idx_pws_fpts ON player_week_stats(fantasy_points_ppr);
+        CREATE INDEX IF NOT EXISTS idx_pws_player_season_ppr ON player_week_stats(player_id, season, fantasy_points_ppr);
 
         CREATE TABLE IF NOT EXISTS player_week_metrics (
             player_id TEXT,
@@ -217,6 +219,8 @@ def initialize_database(conn):
 
         CREATE INDEX IF NOT EXISTS idx_pwm_key_val ON player_week_metrics(stat_key, stat_value);
         CREATE INDEX IF NOT EXISTS idx_pwm_player ON player_week_metrics(player_id, season, week);
+        CREATE INDEX IF NOT EXISTS idx_pwm_player_key ON player_week_metrics(player_id, stat_key);
+        CREATE INDEX IF NOT EXISTS idx_pwm_season_player ON player_week_metrics(season, player_id);
 
         CREATE TABLE IF NOT EXISTS player_season_pbp (
             player_id TEXT,
