@@ -204,3 +204,4 @@ Systematic page-by-page audit against DESIGN.md and NORTH_STAR.md.
 | index.html | Brand voice: "free forever" → "free" | DONE | 3 instances fixed. DESIGN.md: "Never say 'free forever' — that sounds like it needs defending." |
 | pricing.html | Brand voice: "free forever" → "free" | DONE | 4 instances fixed (og:description, hero, plan badge, plan price, FAQ question). |
 | agents.html | Brand voice: "free forever" → "free" | DONE | 1 instance fixed in pricing section. |
+| index.html | Design: 1.5px sprawl divider → 2px | DONE | DESIGN.md requires minimum 2px. Full page audit clean. |

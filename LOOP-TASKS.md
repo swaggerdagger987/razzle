@@ -2,10 +2,10 @@
 
 ## Current State
 - Phase: Polish Pass
-- Current Task: 1
+- Current Task: 2
 - Current Stage: PASS
-- Tasks Completed: 1/1
-- Loop Iterations: 1
+- Tasks Completed: 2/2
+- Loop Iterations: 2
 
 ## Phase: Polish Pass — Brand Voice
 **Exit Criterion**: All frontend pages use correct brand voice per DESIGN.md.
@@ -18,6 +18,18 @@
 **Status**: PASS
 **Attempts**: 1
 **Notes**: Fixed 8 instances across 3 files (index.html: 3, pricing.html: 4, agents.html: 1). All replaced with "free".
+
+## Phase: Polish Pass — index.html Design Audit
+**Exit Criterion**: index.html fully matches DESIGN.md.
+
+### Task 2: Fix 1.5px sprawl column divider
+**Requirement**: DESIGN.md requires minimum 2px borders/dividers. The sprawl-col::after pseudo-element had width:1.5px.
+**Accept when**: No sub-2px borders in index.html.
+**Depends on**: none
+**Size**: S
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Fixed sprawl column divider from 1.5px to 2px. Full index.html audit complete — no other design violations found (pixel art canvas colors are exempt).
 
 ## Phase: Mobile Hamburger Menu
 **Exit Criterion**: All pages have a functional hamburger menu on screens below 768px. All nav links are accessible. Desktop nav unchanged.
