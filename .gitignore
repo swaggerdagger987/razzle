@@ -24,5 +24,8 @@ data/*.sqlite
 # Node (if ever needed)
 node_modules/
 
+# Build artifacts
+frontend/dist/
+
 # Claude
 .claude/

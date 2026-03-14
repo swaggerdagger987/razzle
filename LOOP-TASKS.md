@@ -2,9 +2,9 @@
 
 ## Current State
 - Phase: G (Build Pipeline — esbuild Minification)
-- Current Task: G-1
+- Current Task: G-2
 - Current Stage: BUILD
-- Tasks Completed: 0/2
+- Tasks Completed: 1/2
 - Loop Iterations: 7
 
 ## Phase A: Visual & Design Audit (Mar 12–18)
@@ -365,8 +365,8 @@
 **Accept when**: render.yaml has esbuild in buildCommand. Server serves from dist/ when it exists. .gitignore includes frontend/dist/.
 **Depends on**: none
 **Size**: M
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task G-2: Verify minified build works end-to-end
 **Requirement**: "Run build locally, start server, verify it serves from dist/. Test Lab screener, panels, formulas, charts, warroom, pricing toggle, auth modal. Verify all asset paths resolve."

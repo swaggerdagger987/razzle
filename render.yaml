@@ -12,7 +12,15 @@ services:
       curl -sL -H "Authorization: token $GH_TOKEN" -H "Accept: application/octet-stream" -o data/terminal.db "$ASSET_URL"
       echo "Downloaded terminal.db: $(ls -lh data/terminal.db | awk '{print $5}')"
       python -c "import sqlite3; c=sqlite3.connect('data/terminal.db'); tables=c.execute('SELECT COUNT(*) FROM sqlite_master WHERE type=\"table\"').fetchone()[0]; print(f'DB has {tables} tables'); assert tables>0, 'EMPTY DB'; c.close()"
-    startCommand: uvicorn backend.server:app --host 0.0.0.0 --port $PORT
+      echo "--- Minifying JS/CSS with esbuild ---"
+      mkdir -p frontend/dist
+      npx --yes esbuild frontend/*.js --minify --outdir=frontend/dist/
+      npx --yes esbuild frontend/*.css --minify --outdir=frontend/dist/
+      cp frontend/*.html frontend/dist/
+      cp -r frontend/assets frontend/dist/assets
+      cp frontend/favicon.svg frontend/dist/
+      echo "Minified build: $(ls frontend/dist/*.js | wc -l) JS, $(ls frontend/dist/*.css | wc -l) CSS, $(ls frontend/dist/*.html | wc -l) HTML"
+    startCommand: uvicorn backend.server:app --host 0.0.0.0 --port $PORT --workers 4
     envVars:
       - key: PYTHON_VERSION
         value: "3.11.0"

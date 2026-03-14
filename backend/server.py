@@ -357,7 +357,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-FRONTEND_DIR = Path(__file__).parent.parent / "frontend"
+# Serve from frontend/dist/ in production (minified), fallback to frontend/ for local dev
+_DIST_DIR = Path(__file__).resolve().parent.parent / "frontend" / "dist"
+FRONTEND_DIR = _DIST_DIR if _DIST_DIR.exists() else Path(__file__).resolve().parent.parent / "frontend"
 
 _req_logger = logging.getLogger("razzle.requests")
 
