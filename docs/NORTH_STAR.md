@@ -27,8 +27,8 @@ Our research lab — over a hundred well-defined stats across all formats. Full 
 
 **This is the growth engine.** Every screenshot is a billboard. Every shareable URL is a funnel entry. The Lab must be genuinely best-in-class as a free tool. Reddit power users must feel like they discovered a secret weapon. This is where stat discoverability lives — one terminal instead of ten browser tabs.
 
-### 2. The Situation Room (Paid, $240/year)
-Houses six AI agents that understand your league context. Razzle and five specialist agents operating with full league context and multi-season memory. Personalized briefings, trade strategies against specific leaguemates, championship probability for your roster, injury impact on your lineup. This is where LLM convenience and context awareness converge — no prompt engineering, no screenshot feeding, just ask.
+### 2. The Situation Room (Paid — Pro $9.99/mo or $79.99/yr, Elite $19.99/mo or $149.99/yr)
+Houses six AI agents that understand your league context. Razzle and five specialist agents operating with full league context and multi-season memory. Personalized briefings, trade strategies against specific leaguemates, championship probability for your roster, injury impact on your lineup. This is where LLM convenience and context awareness converge — no prompt engineering, no screenshot feeding, just ask. Pro = BYOK (bring your own API key). Elite = API key included. Feature access is identical.
 
 ### 3. The Bureau of Intelligence (Free, Sleeper-linked)
 Pulls live Sleeper data showing what competitors are doing. Connect Sleeper username to see leagues, rosters, transactions, and basic league structure. This is the conversion funnel — once users see their league data in Razzle and realize what intelligence the Situation Room could layer on top, they convert.
@@ -100,7 +100,7 @@ Pulls live Sleeper data showing what competitors are doing. Connect Sleeper user
 - Trade deadline pressure maps — which managers are desperate and when.
 - League economy trends over time.
 
-### The Situation Room (Paid, $240/year — Six AI Agents)
+### The Situation Room (Pro $79.99/yr BYOK, Elite $149.99/yr included — Six AI Agents)
 - All six agents operate with full context: your roster, league scoring, rivals' rosters, multi-season history.
 - **Razzle** (Bengal tiger) delivers prioritized daily/weekly briefings, orchestrates all agents, resolves conflicts.
 - **Five specialist agents** cover: injury intelligence, scouting/breakout detection, trade negotiation/adversarial intel, projections/championship probability, league history/pattern recognition.
@@ -127,7 +127,7 @@ Pulls live Sleeper data showing what competitors are doing. Connect Sleeper user
 2. Lab is genuinely powerful for free → user builds views, creates formulas.
 3. User connects Sleeper → Bureau of Intelligence shows their leagues and competitor activity, no friction.
 4. User sees Situation Room demo on home page → curiosity builds.
-5. User hits a decision point → generic agent answer is fine, but league-contextualized answer from the Situation Room is clearly better → converts to $240/year.
+5. User hits a decision point → generic agent answer is fine, but league-contextualized answer from the Situation Room is clearly better → converts to Pro ($79.99/yr) or Elite ($149.99/yr).
 
 ### Retention
 - Agent memory gets more valuable every season — switching cost increases over time.
@@ -135,7 +135,7 @@ Pulls live Sleeper data showing what competitors are doing. Connect Sleeper user
 - Weekly Razzle briefings become habit-forming.
 
 ### Revenue Streams
-1. **Primary**: Subscriptions — $240/year ($20/month), target 10k users = $2.4M ARR.
+1. **Primary**: Subscriptions — Pro $9.99/mo ($79.99/yr BYOK) or Elite $19.99/mo ($149.99/yr, AI included). Target 10k users at ~$100/yr blended = ~$1M ARR.
 2. **Secondary**: Google AdSense on free pages — covers server costs.
 3. **Tertiary**: Formula store paid listings (optional future).
 

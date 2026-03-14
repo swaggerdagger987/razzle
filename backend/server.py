@@ -796,6 +796,7 @@ async def auth_register(request: Request):
     result = auth_module.register(email, password)
     if "error" in result:
         return JSONResponse({"error": result["error"]}, status_code=result.get("status", 400))
+    live_data.log_event("register")
     return result
 
 
@@ -810,6 +811,7 @@ async def auth_login(request: Request):
     result = auth_module.login(email, password)
     if "error" in result:
         return JSONResponse({"error": result["error"]}, status_code=result.get("status", 400))
+    live_data.log_event("login")
     return result
 
 
@@ -858,6 +860,7 @@ async def auth_link_sleeper(request: Request):
         if "locked_username" in result:
             resp_body["locked_username"] = result["locked_username"]
         return JSONResponse(resp_body, status_code=result["status"])
+    live_data.log_event("sleeper_connect", sleeper_username)
     return result
 
 
@@ -883,6 +886,7 @@ async def create_checkout(request: Request):
     result = billing_module.create_checkout_session(user, interval, promo_code=promo_code)
     if "error" in result:
         return JSONResponse({"error": result["error"]}, status_code=result.get("status", 400))
+    live_data.log_event("checkout", interval)
     return result
 
 
@@ -975,6 +979,7 @@ async def track_query(request: Request):
 
     # Record the query
     auth_module.record_query(user_id=user_id, ip_address=ip)
+    live_data.log_event("agent_query", "byok")
 
     # Return updated quota
     updated = auth_module.check_query_quota(user_id=user_id, ip_address=ip, plan=plan)
@@ -1085,6 +1090,7 @@ async def llm_chat(request: Request):
                 {"error": "Agent is temporarily unavailable. Try again in a moment."},
                 status_code=502,
             )
+        live_data.log_event("agent_query", "elite")
         return JSONResponse(resp.json())
     except httpx.TimeoutException:
         return JSONResponse(
@@ -1184,6 +1190,7 @@ async def llm_chat_free(request: Request):
         data = resp.json()
         # Tag response with free model info
         data["_razzle_free_model"] = _LLM_FREE_MODEL
+        live_data.log_event("agent_query", "free")
         return JSONResponse(data)
     except httpx.TimeoutException:
         return JSONResponse(

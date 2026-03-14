@@ -82,6 +82,7 @@ from .storage import (  # noqa: F401
     get_formula_detail,
     rate_formula,
     log_pageview,
+    log_event,
     get_analytics_summary,
     _init_analytics_table,
 )

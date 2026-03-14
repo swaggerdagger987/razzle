@@ -378,6 +378,20 @@ def _init_analytics_table():
                 created_at TEXT NOT NULL DEFAULT (datetime('now'))
             )
         """)
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS events (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                event_type TEXT NOT NULL,
+                detail TEXT DEFAULT '',
+                created_at TEXT NOT NULL DEFAULT (datetime('now'))
+            )
+        """)
+        conn.execute("""
+            CREATE INDEX IF NOT EXISTS idx_events_type ON events(event_type)
+        """)
+        conn.execute("""
+            CREATE INDEX IF NOT EXISTS idx_events_created ON events(created_at)
+        """)
         conn.commit()
 
 
@@ -390,6 +404,19 @@ def log_pageview(page: str):
         logger.warning("log_pageview failed for page=%s", page, exc_info=True)
 
 
+def log_event(event_type: str, detail: str = ""):
+    """Log a funnel event (register, login, sleeper_connect, trial_start, checkout, agent_query)."""
+    try:
+        with get_db() as conn:
+            conn.execute(
+                "INSERT INTO events (event_type, detail) VALUES (?, ?)",
+                (event_type[:50], detail[:200]),
+            )
+            conn.commit()
+    except Exception:
+        logger.warning("log_event failed type=%s", event_type, exc_info=True)
+
+
 def get_analytics_summary() -> dict:
     try:
         with get_db() as conn:
@@ -400,11 +427,21 @@ def get_analytics_summary() -> dict:
             by_day = conn.execute(
                 "SELECT DATE(created_at) as day, COUNT(*) as views FROM pageviews GROUP BY day ORDER BY day DESC LIMIT 30"
             ).fetchall()
+            # Funnel events summary
+            events_by_type = conn.execute(
+                "SELECT event_type, COUNT(*) as cnt FROM events GROUP BY event_type ORDER BY cnt DESC"
+            ).fetchall()
+            events_by_day = conn.execute(
+                "SELECT DATE(created_at) as day, event_type, COUNT(*) as cnt "
+                "FROM events GROUP BY day, event_type ORDER BY day DESC LIMIT 100"
+            ).fetchall()
             return {
                 "total": total,
                 "by_page": [{"page": r[0], "views": r[1]} for r in by_page],
                 "by_day": [{"day": r[0], "views": r[1]} for r in by_day],
+                "events_by_type": [{"event": r[0], "count": r[1]} for r in events_by_type],
+                "events_by_day": [{"day": r[0], "event": r[1], "count": r[2]} for r in events_by_day],
             }
     except Exception:
         logger.exception("get_analytics_summary failed")
-        return {"total": 0, "by_page": [], "by_day": []}
+        return {"total": 0, "by_page": [], "by_day": [], "events_by_type": [], "events_by_day": []}

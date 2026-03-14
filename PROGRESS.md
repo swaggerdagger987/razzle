@@ -296,3 +296,18 @@ Systematic page-by-page audit against DESIGN.md and NORTH_STAR.md.
 | 8 | Brand Guardian | "forever free" language consistently applied across all pages | Clean |
 | 9 | Whimsy Injector | Loading states, error messages, empty states all have personality | Clean |
 | 10 | Evidence Collector | All new functions (getUserTierInfo, openPlayerPopup, toggleSettingsPanel, runLeagueOdds) verified reachable from call sites. 59 tests pass. No regressions. | Verified |
+
+---
+
+## Pre-Launch Verification: N-8 — Funnel Event Analytics (Mar 14)
+
+**Goal**: Track key funnel events beyond pageviews so we can answer "how many people registered/connected Sleeper/ran queries today?"
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| N-8 | Funnel event analytics | DONE | Added `events` table (event_type, detail, created_at) with indexes. Added `log_event()` in storage.py. Instrumented 6 funnel points: register, login, sleeper_connect, checkout, agent_query (byok/elite/free). Enhanced `get_analytics_summary()` to return events_by_type and events_by_day. All 59 tests pass. |
+
+### Decisions Log
+- Events table is separate from pageviews (different access patterns, different retention needs)
+- Agent queries tracked with detail=byok/elite/free to distinguish tiers
+- No PII stored in events — just event type and tier/interval metadata
