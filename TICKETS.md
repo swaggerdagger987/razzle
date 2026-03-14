@@ -13,18 +13,6 @@ The database file `data/terminal.db` uses WAL journal mode locally. Uploading it
 
 ---
 
-## Phase: Bureau of Intelligence — League Power Rankings
-
-**Exit Criterion**: Bureau has composite power rankings beyond simple W-L.
-
-### Task 1: Build league power rankings panel
-**Requirement**: Add "Power Rankings" panel: (1) Composite score from roster strength (total trade value), recent performance (if in-season), depth score (from depth analysis), and transaction activity, (2) Weekly movement arrows up/down, (3) Tier groupings — Contenders / Bubble / Rebuilding (based on score distribution), (4) "If the season ended today" playoff bracket preview based on current standings + roster strength, (5) Each manager card shows rank, composite score, tier badge, and key strength/weakness. This should be the FIRST panel users see when entering the Bureau — the overview before diving into specifics. Use trade value data from Razzle + roster data from Sleeper.
-**Accept when**: Power rankings render with composite scores. Tier groupings visible and reasonable. Playoff bracket preview renders. Cards show rank + score + tier.
-**Depends on**: none
-**Size**: L
-
----
-
 ## Phase: Bureau of Intelligence — Head-to-Head Rivalry Analysis
 
 **Exit Criterion**: Users can select two managers and see full head-to-head comparison.
