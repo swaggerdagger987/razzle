@@ -134,3 +134,39 @@ Full build history archived in `docs/PROGRESS_ARCHIVE.md`.
 | F-1 | 2025 season data | DONE | Updated nflverse adapter to support new `stats_player_week_YYYY.csv` format (2025+). Added column name normalization (`passing_interceptions`→`interceptions`, `sacks_suffered`→`sacks`, `team`→`recent_team`). Computed `fantasy_points_half_ppr` = (PPR+STD)/2 for all seasons (was null). 2025: 19,421 rows (18,539 REG + 882 POST), 2,025 players, week 1-22, snap counts + PBP enriched. Backfilled half-PPR for 54,479 rows across 2015-2024. |
 | F-2 | College data refresh | DONE | 2025 college season: 4,148 players, 213K plays processed. Added sync_combine_data() to cfbfastr adapter — pulls nflverse combine CSV, maps to existing schema (draft_year, height_inches). 8,967 combine rows total, 319 prospects for 2026 draft class with height/weight/40/bench/vertical. 1,754 positions refined from combine+draft data. |
 | F-3 | Render deployment QA | DONE | Uploaded 924MB terminal.db to GitHub release (data-v1). Cleared unused stats_json column (115MB saved). Stopped storing stats_json in adapter. All 42 API endpoints return 200: health, players, screener, 30+ Lab panels, prospects, dynasty dashboard, trade finder, featured, quick-search. Server imports clean, DB pool healthy. |
+| F-4 | Load testing | DONE | Verified SQLite WAL mode + connection pooling handles concurrent reads. API response times within acceptable range. |
+| F-5 | Test suite green | DONE | All tests pass against production-like config. No regressions from QA fixes. |
+| F-6 | Error monitoring | DONE | Structured logging captures all 4xx/5xx errors with context. Server startup validates env vars. Unhandled exceptions handled gracefully. |
+
+### Decisions Log
+
+---
+
+## Ship Phase: Phase G — Build Pipeline (esbuild Minification)
+
+**Goal**: Minify JS/CSS for production. Zero functionality changes.
+
+**Exit Criterion**: All JS and CSS files are minified on deploy. Lab page JS payload drops significantly.
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| G-1 | Add esbuild minification to Render build | DONE | render.yaml buildCommand runs esbuild on frontend/*.js and frontend/*.css, outputs to frontend/dist/. Server serves from dist/ in production, fallback to frontend/ for dev. frontend/dist/ in .gitignore. |
+| G-2 | Verify minified build works end-to-end | DONE | Full smoke test passes against minified build. All features work identically to raw source. |
+
+### Decisions Log
+
+---
+
+## Ship Phase: Phase H — BYOK Security Transparency & Cleanup
+
+**Goal**: Honest security model for BYOK API keys. Remove encryption theater.
+
+**Exit Criterion**: Users understand the BYOK security model. Decrypt endpoint removed. No false sense of security.
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| H-1 | Remove decrypt endpoint and cloud sync load | DONE | Removed GET /api/user/api-keys/{provider}/decrypt. Removed 'Load from cloud' button. Save to cloud kept for encrypted backup. |
+| H-2 | BYOK security disclosure in Situation Room | DONE | Disclosure note below API key input, Caveat font, mentions localStorage + spending limit recommendation. |
+| H-3 | BYOK info in pricing page FAQ | DONE | FAQ item: 'Is my API key safe?' with honest answer about localStorage and spending cap. |
+
+### Decisions Log

@@ -2871,7 +2871,7 @@
       var season = el.querySelector('#tp-season').value;
       var url = '/api/target-premium';
       if (season) url += '?season=' + season;
-      else url += '?season=' + new Date().getFullYear();
+      else url += '?season=' + _latestSeason;
       if (curPos) url += '&position=' + curPos;
 
       fetch(url).then(function(r) {
@@ -2993,7 +2993,7 @@
       var season = el.querySelector('#dr-season').value;
       var url = '/api/drop-rate';
       if (season) url += '?season=' + season;
-      else url += '?season=' + new Date().getFullYear();
+      else url += '?season=' + _latestSeason;
       if (curPos) url += '&position=' + curPos;
 
       fetch(url).then(function(r) {
@@ -3096,7 +3096,7 @@
       var season = el.querySelector('#gt-season').value;
       var url = '/api/garbage-time';
       if (season) url += '?season=' + season;
-      else url += '?season=' + new Date().getFullYear();
+      else url += '?season=' + _latestSeason;
       if (curPos) url += '&position=' + curPos;
 
       fetch(url).then(function(r) {
@@ -3370,7 +3370,7 @@
       var body = el.querySelector('#mh-body');
       body.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       el.querySelector('#mh-detail').classList.remove('visible');
-      var season = el.querySelector('#mh-season').value || '';
+      var season = el.querySelector('#mh-season').value || _latestSeason;
       var posParam = curPos === 'ALL' ? '' : curPos;
       var url = '/api/matchup-heatmap?season=' + season;
       if (posParam) url += '&position=' + posParam;
@@ -8736,7 +8736,7 @@
     function load() {
       var content = el.querySelector('.sr2-content');
       content.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
-      var url = '/api/success-rate?season=' + (state.season || new Date().getFullYear());
+      var url = '/api/success-rate?season=' + (state.season || _latestSeason);
       if (state.position) url += '&position=' + state.position;
 
       fetch(url).then(function(r) {

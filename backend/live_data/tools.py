@@ -2516,7 +2516,7 @@ def fetch_target_premium(season=None, position=None, limit=50):
                 })
 
             if not rows:
-                return {"players": [], "season": season, "count": 0}
+                return {"players": [], "season": season, "count": 0, "available_seasons": available_seasons}
 
             # Compute percentiles for composite
             def pct_rank(val, arr):
