@@ -10,8 +10,15 @@
 
 - **Name**: Razzle
 - **Domain**: razzle.lol
+- **Tagline**: The fantasy football research lab. Free.
 - **Mascot**: Bengal tiger — Chief of Staff, gigachad Garfield energy, toylike, unbothered, slightly smug
 - **Personality**: Film room junkie friend. Earnest, slightly obsessive about precision, dry wit in the margins. Never tries to look impressive — just IS impressive once you use it.
+- **Positioning**: Razzle is a free fantasy football research lab. The Lab — 70+ stat panels, custom formulas, prospect scoring, shareable views — is the product. Free. The Situation Room is the paid upgrade for managers who want AI agents that know their league. The Lab is the hero, not the paid tier. Never say "free tier" — there is no tier. It is the product. Never say "free forever" — that sounds like it needs defending. Just say "free."
+
+### Brand Hierarchy
+1. **The Lab (Free)** — The identity. When someone says "have you used Razzle?" they mean the Lab. Every screenshot, every shareable URL, every Reddit post comes from here. The Lab is Razzle.
+2. **The Bureau (Free, Sleeper-linked)** — The hook. Connecting Sleeper makes Razzle personal. It is the bridge between "cool free tool" and "I need this." Free to connect.
+3. **The Situation Room (Paid)** — The upgrade. AI agents with full league context. Never the first thing a user sees. It earns attention through the Lab and Bureau, not through hero positioning.
 
 ---
 
@@ -22,7 +29,7 @@ Razzle looks like it shouldn't be as powerful as it is. Warm, playful, comic-str
 Think Luffy: goofy on the outside, strongest person in the room.
 
 **Not this**: every dark-mode fintech/AI dashboard
-**This**: a Sunday comics page that happens to run a Bloomberg terminal
+**This**: a Sunday comics page that runs a research lab your league doesn't know about yet
 
 ---
 
