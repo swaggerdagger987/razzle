@@ -745,7 +745,7 @@
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(15,15,26,0.3);
+    background: rgba(45,31,20,0.3);
     z-index: 200;
     align-items: center;
     justify-content: center;
@@ -793,7 +793,7 @@
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(15,15,26,0.3);
+    background: rgba(45,31,20,0.3);
     z-index: 200;
     align-items: flex-start;
     justify-content: flex-end;
@@ -911,9 +911,9 @@
 
   /* ─── Stat leader dots ─── */
   .leader-dot { font-size: 7px; vertical-align: middle; margin-right: 2px; }
-  .leader-gold { color: #ffc857; }
-  .leader-silver { color: #c4b5a5; }
-  .leader-bronze { color: #d97757; }
+  .leader-gold { color: var(--yellow); }
+  .leader-silver { color: var(--ink-faint); }
+  .leader-bronze { color: var(--orange); }
 
   /* ─── Column filter indicator dots ─── */
   .col-filter-dot {
@@ -1179,7 +1179,7 @@
     background: var(--orange-light);
   }
   .screener-context-menu .ctx-sep {
-    height: 1px;
+    height: 2px;
     background: var(--ink-faint);
     margin: 4px 8px;
   }
@@ -1932,7 +1932,7 @@
 
   .prospect-metric-bar-wrap {
     height: 16px;
-    background: rgba(26,26,46,0.06);
+    background: rgba(45,31,20,0.06);
     border-radius: 8px;
     overflow: hidden;
     border: 2px solid var(--ink-faint);
@@ -2065,7 +2065,7 @@
   .prospect-rps-bar-wrap {
     flex: 1;
     height: 14px;
-    background: rgba(26,26,46,0.06);
+    background: rgba(45,31,20,0.06);
     border-radius: 7px;
     overflow: hidden;
     border: 2px solid var(--ink);
@@ -3775,7 +3775,7 @@
     </div>
     <div id="hmLegend" style="margin-top:12px; display:flex; align-items:center; gap:12px; justify-content:center;">
       <span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">0th</span>
-      <div style="width:200px; height:14px; border:2px solid var(--ink); border-radius:4px; display:flex; overflow:hidden;"><div style="flex:1; background:#e63946;"></div><div style="flex:1; background:#f4845f;"></div><div style="flex:1; background:#ffc857;"></div><div style="flex:1; background:#7ecba1;"></div><div style="flex:1; background:#2ec4b6;"></div></div>
+      <div style="width:200px; height:14px; border:2px solid var(--ink); border-radius:4px; display:flex; overflow:hidden;"><div style="flex:1; background:var(--red);"></div><div style="flex:1; background:var(--orange);"></div><div style="flex:1; background:var(--yellow);"></div><div style="flex:1; background:var(--green-light);"></div><div style="flex:1; background:var(--green);"></div></div>
       <span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">100th percentile</span>
     </div>
   </div>
@@ -3896,7 +3896,9 @@
     explorer: 'Explorer', targets: 'Target Distribution', team: 'Team Rosters',
     mockdraft: 'Mock Draft',
     proradar: 'Athletic Radar',
-    drafttracker: 'Draft Class Tracker'
+    drafttracker: 'Draft Class Tracker',
+    powerrankings: 'Power Rankings',
+    gamescript: 'Game Script'
   };
 
   var PANEL_FLAVORS = {
@@ -3966,7 +3968,9 @@
     team: 'full roster views by team',
     mockdraft: 'pick your squad before anyone else does',
     proradar: 'see who\'s a freak athlete and who\'s just hype',
-    drafttracker: 'how each draft class actually produced in fantasy'
+    drafttracker: 'how each draft class actually produced in fantasy',
+    powerrankings: 'which teams have the most dynasty firepower?',
+    gamescript: 'who produces when their team is winning vs losing?'
   };
 
   // Panel methodology descriptions (top 10 complex panels + generic fallback)

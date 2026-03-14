@@ -4,7 +4,7 @@
 | Page | Status | Fixes |
 |------|--------|-------|
 | index.html | DONE | XSS: escape playerName from localStorage in CTA personalization (escapeHtml unavailable before app.js loads); Canvas perf: mini War Room animation now pauses when scrolled off-screen via IntersectionObserver |
-| lab.html | PENDING | |
+| lab.html | DONE | Missing PANEL_LABELS/PANEL_FLAVORS for powerrankings and gamescript (broken breadcrumbs); hardcoded leader dot colors (#ffc857/#c4b5a5/#d97757) replaced with CSS vars (--yellow/--ink-faint/--orange); cold blue-black overlay rgba(15,15,26) replaced with warm espresso rgba(45,31,20); cold rgba(26,26,46) replaced with warm rgba(45,31,20); ctx-sep 1px border fixed to 2px; hardcoded heatmap legend colors replaced with CSS vars |
 | league-intel.html | PENDING | |
 | agents.html | PENDING | |
 | pricing.html | PENDING | |
