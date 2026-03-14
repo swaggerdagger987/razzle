@@ -744,13 +744,44 @@
       }, 200);
     });
 
-    function updateWeights() {
-      weights.production = parseInt(el.querySelector('#lp-tv-w-prod').value, 10);
-      weights.age = parseInt(el.querySelector('#lp-tv-w-age').value, 10);
-      weights.scarcity = parseInt(el.querySelector('#lp-tv-w-scar').value, 10);
+    // Linked sliders: always sum to 100%. Adjusting one proportionally adjusts the others.
+    function linkedSliderUpdate(changedKey) {
+      var prodEl = el.querySelector('#lp-tv-w-prod');
+      var ageEl = el.querySelector('#lp-tv-w-age');
+      var scarEl = el.querySelector('#lp-tv-w-scar');
+      var sliders = { production: prodEl, age: ageEl, scarcity: scarEl };
+      var newVal = parseInt(sliders[changedKey].value, 10);
+      if (newVal > 100) newVal = 100;
+      if (newVal < 0) newVal = 0;
+
+      var otherKeys = Object.keys(sliders).filter(function(k) { return k !== changedKey; });
+      var otherSum = weights[otherKeys[0]] + weights[otherKeys[1]];
+      var remaining = 100 - newVal;
+
+      if (otherSum > 0) {
+        // Distribute remaining proportionally
+        var r0 = Math.round(remaining * weights[otherKeys[0]] / otherSum);
+        var r1 = remaining - r0;
+        // Clamp
+        if (r0 < 0) { r1 += r0; r0 = 0; }
+        if (r1 < 0) { r0 += r1; r1 = 0; }
+        weights[otherKeys[0]] = r0;
+        weights[otherKeys[1]] = r1;
+      } else {
+        // Both others are 0: split remaining evenly
+        weights[otherKeys[0]] = Math.round(remaining / 2);
+        weights[otherKeys[1]] = remaining - weights[otherKeys[0]];
+      }
+      weights[changedKey] = newVal;
+
+      // Update slider elements and labels
+      prodEl.value = weights.production;
+      ageEl.value = weights.age;
+      scarEl.value = weights.scarcity;
       el.querySelector('#lp-tv-w-prod-val').textContent = weights.production;
       el.querySelector('#lp-tv-w-age-val').textContent = weights.age;
       el.querySelector('#lp-tv-w-scar-val').textContent = weights.scarcity;
+
       // Persist weights in URL for sharing
       var p = new URLSearchParams(window.location.search);
       if (weights.production !== 50 || weights.age !== 30 || weights.scarcity !== 20) {
@@ -764,14 +795,23 @@
       if (currentData) render(currentData);
     }
 
-    el.querySelector('#lp-tv-w-prod').addEventListener('input', updateWeights);
-    el.querySelector('#lp-tv-w-age').addEventListener('input', updateWeights);
-    el.querySelector('#lp-tv-w-scar').addEventListener('input', updateWeights);
+    el.querySelector('#lp-tv-w-prod').addEventListener('input', function() { linkedSliderUpdate('production'); });
+    el.querySelector('#lp-tv-w-age').addEventListener('input', function() { linkedSliderUpdate('age'); });
+    el.querySelector('#lp-tv-w-scar').addEventListener('input', function() { linkedSliderUpdate('scarcity'); });
     el.querySelector('#lp-tv-w-reset').addEventListener('click', function() {
+      weights.production = 50;
+      weights.age = 30;
+      weights.scarcity = 20;
       el.querySelector('#lp-tv-w-prod').value = 50;
       el.querySelector('#lp-tv-w-age').value = 30;
       el.querySelector('#lp-tv-w-scar').value = 20;
-      updateWeights();
+      el.querySelector('#lp-tv-w-prod-val').textContent = 50;
+      el.querySelector('#lp-tv-w-age-val').textContent = 30;
+      el.querySelector('#lp-tv-w-scar-val').textContent = 20;
+      var p = new URLSearchParams(window.location.search);
+      p.delete('wp'); p.delete('wa'); p.delete('ws');
+      history.replaceState(null, '', '?' + p.toString());
+      if (currentData) render(currentData);
     });
 
     loadData();
