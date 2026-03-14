@@ -336,6 +336,15 @@
     outline-offset: -2px;
   }
 
+  /* FOREVER FREE and PRO parent headers — non-collapsible */
+  .sidebar-cat-forever-free,
+  .sidebar-cat-pro-parent {
+    cursor: default !important;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    font-size: 10px;
+  }
+
   /* Pro-locked sidebar items: lock icon + slight dim for free users */
   .lab-sidebar-item.pro-locked.show-lock {
     opacity: 0.7;
@@ -3110,7 +3119,7 @@
     </div>
 
     <!-- FREE PANELS -->
-    <div class="lab-sidebar-category" style="color:var(--green);"><span class="cat-icon" style="display:none">&#x2605;</span><span class="cat-text">Free</span></div>
+    <div class="lab-sidebar-category sidebar-cat-forever-free" style="color:var(--green); cursor:default;"><span class="cat-icon" style="display:none">&#x2605;</span><span class="cat-text">FOREVER FREE</span></div>
     <a class="lab-sidebar-item active" data-panel="screener" data-icon="&#x25C9;" onclick="switchPanel('screener')">The Screener<span class="sidebar-tooltip">The Screener</span></a>
     <a class="lab-sidebar-item" data-panel="rankings" data-icon="&#x2660;" onclick="switchPanel('rankings')">Dynasty Rankings<span class="sidebar-tooltip">Dynasty Rankings</span></a>
     <a class="lab-sidebar-item" data-panel="tiers" data-icon="&#x25B2;" onclick="switchPanel('tiers')">Tiers<span class="sidebar-tooltip">Tiers</span></a>
@@ -3123,9 +3132,9 @@
     <a class="lab-sidebar-item" data-panel="leaders" data-icon="&#x1F451;" onclick="switchPanel('leaders')">Stat Leaders<span class="sidebar-tooltip">Stat Leaders</span></a>
 
     <!-- PRO PANELS -->
-    <div class="lab-sidebar-category lab-sidebar-pro-divider"><span class="cat-icon" style="display:none">&#x1F512;</span><span class="cat-text">Pro</span></div>
+    <div class="lab-sidebar-category lab-sidebar-pro-divider sidebar-cat-pro-parent" style="color:var(--orange); cursor:default;"><span class="cat-icon" style="display:none">&#x1F512;</span><span class="cat-text">PRO</span></div>
 
-    <div class="lab-sidebar-category"><span class="cat-icon" style="display:none">&#x1F4CA;</span><span class="cat-text">Rankings &amp; Values</span></div>
+    <div class="lab-sidebar-category"><span class="cat-icon" style="display:none">&#x1F4CA;</span><span class="cat-text">Rankings &amp; Values</span><span class="cat-chevron">&#x25B8;</span></div>
     <a class="lab-sidebar-item pro-locked" data-panel="vorp" data-icon="&#x2191;" onclick="switchPanel('vorp')">VORP<span class="sidebar-tooltip">Value Over Replacement Player</span></a>
     <a class="lab-sidebar-item pro-locked" data-panel="advantage" data-icon="&#x25C6;" onclick="switchPanel('advantage')">Positional Advantage<span class="sidebar-tooltip">Scoring edge over position average</span></a>
     <a class="lab-sidebar-item pro-locked" data-panel="auction" data-icon="$" onclick="switchPanel('auction')">Auction Values<span class="sidebar-tooltip">Auction Values</span></a>
@@ -4664,11 +4673,16 @@
     var saved = getSavedState();
 
     cats.forEach(function(cat, idx) {
-      // Add chevron
-      var chevron = document.createElement('span');
-      chevron.className = 'cat-chevron';
-      chevron.textContent = '\u25BE'; // ▾
-      cat.appendChild(chevron);
+      // Skip non-collapsible parent headers
+      if (cat.classList.contains('sidebar-cat-forever-free') || cat.classList.contains('sidebar-cat-pro-parent')) return;
+
+      // Add chevron if not already present
+      if (!cat.querySelector('.cat-chevron')) {
+        var chevron = document.createElement('span');
+        chevron.className = 'cat-chevron';
+        chevron.textContent = '\u25BE'; // ▾
+        cat.appendChild(chevron);
+      }
 
       // Restore saved state
       var catKey = 'cat_' + idx;
