@@ -1279,7 +1279,7 @@
         try { leagueCtx = JSON.parse(localStorage.getItem('razzle_league_context') || '{}'); } catch(e) {}
         var playerName = '';
         if (leagueCtx && leagueCtx.roster && leagueCtx.roster.length > 0) {
-          playerName = leagueCtx.roster[0].name || '';
+          playerName = (leagueCtx.roster[0].name || '').replace(/[&<>"']/g, function(c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; });
         }
         var personalMsg = playerName
           ? 'the agents would tell you about <strong>' + playerName + '</strong> and your whole roster'
@@ -1834,12 +1834,14 @@ fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"applicat
       ctx.fillRect(0, sl, W, 1);
     }
 
-    requestAnimationFrame(draw);
+    if (_miniWarRoomVisible) requestAnimationFrame(draw);
   }
 
-  // Only animate if canvas is visible
+  // Pause/resume animation based on visibility
+  var _miniWarRoomVisible = false;
   var observer = new IntersectionObserver(function(entries) {
-    if (entries[0].isIntersecting) { draw(); observer.disconnect(); }
+    _miniWarRoomVisible = entries[0].isIntersecting;
+    if (_miniWarRoomVisible) draw();
   }, { threshold: 0.1 });
   observer.observe(cvs);
 })();
