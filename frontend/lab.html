@@ -454,6 +454,10 @@
     transform: translate(0, 0);
     box-shadow: none;
   }
+  .btn-csv-export.csv-locked {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
   .panel-methodology {
     font-family: var(--font-hand);
     font-size: 16px;
@@ -3172,7 +3176,7 @@
     <button class="btn-chunky" id="classAnalyticsBtn" onclick="openClassAnalytics()" style="display:none;">Class Analytics</button>
     <button class="btn-chunky" onclick="openMyRoster()" style="border-color:var(--green);">My Roster</button>
     <button class="btn-chunky" onclick="openTradeAnalyzer()" style="border-color:var(--orange);">Trade</button>
-    <button class="btn-chunky" onclick="exportCSV()" title="Export current view as CSV" aria-label="Export current view as CSV">CSV</button>
+    <button class="btn-chunky btn-csv-export" onclick="exportCSV()" title="Export current view as CSV" aria-label="Export current view as CSV">CSV</button>
     <button class="btn-chunky" onclick="openShareModal()" style="border-color:var(--orange);">Share</button>
     <button class="btn-chunky" id="exportRankingsBtn" onclick="openRankingsExport()" style="display:none;">Export Rankings</button>
     <button class="btn-chunky" id="tradeValuesBtn" onclick="openTradeValues()" style="display:none; border-color:var(--orange);">Trade Values</button>
@@ -3400,7 +3404,7 @@
       <label style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; display:block; margin-bottom:6px;">Export Data</label>
       <div style="display:flex; gap:8px; flex-wrap:wrap;">
         <button class="btn-chunky" onclick="exportImage(); closeShareModal();" style="font-size:12px; padding:6px 14px;">Download PNG</button>
-        <button class="btn-chunky" onclick="exportCSV(); closeShareModal();" style="font-size:12px; padding:6px 14px;">Download CSV</button>
+        <button class="btn-chunky btn-csv-export" onclick="exportCSV(); closeShareModal();" style="font-size:12px; padding:6px 14px;">Download CSV</button>
         <button class="btn-chunky" id="clipboardCopyBtn" onclick="copyTableToClipboard()" style="font-size:12px; padding:6px 14px;">Copy to Clipboard</button>
         <button class="btn-chunky" onclick="copyTableAsReddit()" style="font-size:12px; padding:6px 14px; border-color:var(--orange);">Copy as Reddit Table</button>
       </div>
@@ -3920,6 +3924,23 @@
   document.addEventListener('DOMContentLoaded', _updateSidebarLocks);
   window.addEventListener('razzle-plan-changed', _updateSidebarLocks);
 
+  // CSV export lock styling for free users
+  function _updateCsvLocks() {
+    var paid = typeof isPaidUser === 'function' && isPaidUser();
+    document.querySelectorAll('.btn-csv-export').forEach(function(btn) {
+      if (paid) {
+        btn.classList.remove('csv-locked');
+        btn.textContent = 'CSV';
+      } else {
+        btn.classList.add('csv-locked');
+        btn.innerHTML = '&#x1F512; CSV';
+      }
+    });
+  }
+  _updateCsvLocks();
+  document.addEventListener('DOMContentLoaded', _updateCsvLocks);
+  window.addEventListener('razzle-plan-changed', _updateCsvLocks);
+
   // ─── Panel Labels & Categories ─────────────────────────────────
   var PANEL_LABELS = {
     screener: 'The Screener',
@@ -4139,7 +4160,7 @@
                                '<div class="panel-title">' + escapeHtml(label) + '</div>' +
                                '<div class="panel-actions">' +
                                  '<button class="btn-panel-action btn-info-toggle" onclick="toggleMethodology(\'' + escapeAttr(methodId) + '\')" title="How is this calculated?">&#9432;</button>' +
-                                 '<button class="btn-panel-action" onclick="exportPanelCSV(\'' + escapeAttr(panelName) + '\')" title="Export as CSV">CSV</button>' +
+                                 '<button class="btn-panel-action btn-csv-export" onclick="exportPanelCSV(\'' + escapeAttr(panelName) + '\')" title="Export as CSV">CSV</button>' +
                                  '<button class="btn-panel-action" onclick="screenshotPanel(\'' + escapeAttr(panelName) + '\')" title="Screenshot as PNG">PNG</button>' +
                                  '<button class="btn-panel-action" onclick="sharePanelURL(\'' + escapeAttr(panelName) + '\')" title="Copy share link">Share</button>' +
                                '</div>' +
@@ -4178,6 +4199,8 @@
           }
           entry.loaded = true;
         }
+        // Update CSV lock styling on newly created panel buttons
+        if (typeof _updateCsvLocks === 'function') _updateCsvLocks();
       }
 
     }
