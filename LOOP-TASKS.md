@@ -1,11 +1,32 @@
 # Razzle Ship Loop — Task Tracker
 
 ## Current State
-- Phase: Polish Pass
+- Phase: Mobile Polish Pass
 - Current Task: 2
 - Current Stage: PASS
 - Tasks Completed: 2/2
-- Loop Iterations: 2
+- Loop Iterations: 3
+
+## Phase: Mobile Polish Pass
+**Exit Criterion**: All data table pages scroll horizontally on mobile. Lab sidebar Escape key works correctly on mobile.
+
+### Task 1: Add overflow-x:auto to data table pages
+**Requirement**: consistency.html, efficiency.html, opportunity.html have multi-column tables injected into bare divs with no overflow wrapper. On phones, content clips or causes horizontal page overflow. Also fix lab-panels.js versions.
+**Accept when**: All 3 standalone pages + 2 lab panel versions have overflow-x:auto wrappers.
+**Depends on**: none
+**Size**: S
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Added overflow-x:auto + -webkit-overflow-scrolling:touch to con-body, eff-body, opp-body divs in 3 HTML files and 2 lab-panels.js panel builders. player.js already had the wrapper.
+
+### Task 2: Fix Lab sidebar Escape key on mobile
+**Requirement**: Lab sidebar uses 'open' class for mobile slide-in, but Escape key handler was adding 'collapsed' instead of removing 'open'. Escape on mobile wouldn't close the sidebar.
+**Accept when**: Pressing Escape on mobile Lab closes the sidebar.
+**Depends on**: none
+**Size**: S
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Changed sidebar.classList.add('collapsed') to sidebar.classList.remove('open') in Escape handler.
 
 ## Phase: Polish Pass — Brand Voice
 **Exit Criterion**: All frontend pages use correct brand voice per DESIGN.md.

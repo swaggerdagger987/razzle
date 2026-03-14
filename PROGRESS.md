@@ -205,3 +205,8 @@ Systematic page-by-page audit against DESIGN.md and NORTH_STAR.md.
 | pricing.html | Brand voice: "free forever" → "free" | DONE | 4 instances fixed (og:description, hero, plan badge, plan price, FAQ question). |
 | agents.html | Brand voice: "free forever" → "free" | DONE | 1 instance fixed in pricing section. |
 | index.html | Design: 1.5px sprawl divider → 2px | DONE | DESIGN.md requires minimum 2px. Full page audit clean. |
+| consistency.html | Mobile: add overflow-x:auto to table | DONE | Table was clipping on phones. |
+| efficiency.html | Mobile: add overflow-x:auto to table | DONE | Table was clipping on phones. |
+| opportunity.html | Mobile: add overflow-x:auto to table | DONE | Table was clipping on phones. |
+| lab-panels.js | Mobile: add overflow-x:auto to eff/con panels | DONE | Lab panel versions of efficiency + consistency tables. |
+| lab.html | Fix: Escape key on mobile sidebar | DONE | Was adding 'collapsed' instead of removing 'open'. Sidebar wouldn't close on Escape. |

@@ -2132,7 +2132,7 @@
       '</div>' +
       '<select class="lp-select" id="eff-season" aria-label="Season"></select>' +
       '</div>' +
-      '<div id="eff-body"><div class="lp-loading">running the numbers...</div></div>' +
+      '<div id="eff-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">running the numbers...</div></div>' +
       '</div>';
 
     var curPos = '';
@@ -2339,7 +2339,7 @@
       '</div>' +
       '<select class="lp-select" id="con-season" aria-label="Season"></select>' +
       '</div>' +
-      '<div id="con-body"><div class="lp-loading">checking the tape...</div></div>' +
+      '<div id="con-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">checking the tape...</div></div>' +
       '</div>';
 
     var curPos = '';
