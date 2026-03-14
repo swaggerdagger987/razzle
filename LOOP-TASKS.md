@@ -1,23 +1,21 @@
 # Razzle Ship Loop — Task Tracker
 
 ## Current State
-- Phase: QUEUE EMPTY
-- Current Task: none
-- Current Stage: IDLE
-- Tasks Completed: all
+- Phase: Bureau of Intelligence — Roster Depth Analysis
+- Current Task: Task 1 — Build Roster Depth panel
+- Current Stage: BUILD
+- Tasks Completed: 0/1
 - Loop Iterations: 0
 
+## Phase Spec
+
+**Exit Criterion**: Bureau has a "Roster Depth" panel showing every manager's depth by position with vulnerability flags.
+
+### Task 1: Build Roster Depth panel
+**Requirement**: Add a "Roster Depth" panel to the Bureau (league-intel.html) that analyzes every manager's roster depth by position. For each manager show: (1) Starter quality — average PPG of top starters at each position slot (1QB, 2RB, 2WR, 1TE, 1FLEX), (2) Bench depth — average PPG of remaining players by position, (3) Depth score — 0-100 composite of starter + bench quality, (4) Vulnerability flags — positions where they have only 1 startable player (one injury from disaster), (5) Visual stacked bar chart per manager showing starter vs bench strength by position. Color: green = deep, yellow = thin, red = vulnerable. Sort managers by overall depth score. Use Sleeper roster data cross-referenced with Razzle player stats from terminal.db (PPG lookup via `/api/players` or existing trade value data). Chunky Razzle card styling per DESIGN.md.
+**Accept when**: Depth panel renders for a connected Sleeper league. Each manager shows starter quality, bench depth, depth score, and vulnerability flags. Bar chart renders. Sorted by depth score. Matches DESIGN.md styling.
+**Depends on**: none
+**Size**: L
+
 ## Status
-
-All autonomous work is complete. TICKETS.md has no pending tickets.
-
-Remaining roadmap items (N-1 through N-7) require human verification on production:
-- N-1: Production deployment — deploy to Render, verify razzle.lol loads
-- N-2: Stripe end-to-end — real test charges, webhook verification
-- N-3: Auth flow on production — real email registration
-- N-4: Sleeper connection on production — real Sleeper usernames
-- N-5: Situation Room on production — real OpenRouter API key
-- N-6: Mobile spot check — real phone testing
-- N-7: Performance baseline — measure real production load times
-
-To resume the loop: add a phase spec to TICKETS.md.
+- [ ] Task 1: Build Roster Depth panel
