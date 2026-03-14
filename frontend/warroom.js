@@ -3427,7 +3427,7 @@ function _renderMemoryEntries(panel, memory, isElite) {
     var syncIcon = m.synced ? '<span title="Synced to cloud" style="font-size:10px; color:var(--pos-qb); margin-left:4px;">&#9729;</span>' : '';
     var leagueTag = m.leagueName ? '<span style="font-family:var(--font-mono); font-size:9px; color:var(--orange); margin-left:4px;">[' + escapeHtml(m.leagueName) + ']</span>' : '';
 
-    html += '<div style="padding:8px 0; border-bottom:1px dashed var(--ink-faint);">';
+    html += '<div style="padding:8px 0; border-bottom:2px dashed var(--ink-faint);">';
     html += '<div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + ago + syncIcon + leagueTag + '</div>';
     html += '<div style="font-family:var(--font-display); font-size:12px; margin:2px 0;">' + escapeHtml(m.scenario.slice(0, 80)) + (m.scenario.length > 80 ? '...' : '') + '</div>';
     html += '<div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + agentSummary + '</div>';
@@ -3681,7 +3681,7 @@ function toggleBriefingHistory() {
     var html = '';
     data.briefings.forEach(function(b) {
       var leagueTag = b.league_name ? ' [' + escapeHtml(b.league_name) + ']' : '';
-      html += '<div style="padding:6px 0; border-bottom:1px dashed var(--ink-faint); cursor:pointer;" onclick="loadBriefingById(' + b.id + ')">';
+      html += '<div style="padding:6px 0; border-bottom:2px dashed var(--ink-faint); cursor:pointer;" onclick="loadBriefingById(' + b.id + ')">';
       html += '<div style="font-family:var(--font-display); font-size:12px;">' + escapeHtml(b.week_label) + leagueTag + '</div>';
       html += '<div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + escapeHtml(b.summary.slice(0, 80)) + '...</div>';
       html += '</div>';

@@ -214,6 +214,7 @@ Systematic page-by-page audit against DESIGN.md and NORTH_STAR.md.
 | lab-panels.js | Mobile: add overflow-x:auto to all 26 panel body containers | DONE | Every panel table container now scrolls horizontally on mobile. |
 | 7 more standalone pages | Mobile: add overflow-x:auto to table containers | DONE | reportcard, tradefinder, handcuffs, drops, gamescript, successrate, dualthreat |
 | index.html | Design: demo section h2 `color:white` → warm sand `#ede0cf` | DONE | DESIGN.md: no cold colors. White on dark bg should be warm sand. |
+| about/pricing/warroom | Design: 1px dashed → 2px dashed dividers | DONE | 5 instances fixed across 3 files. DESIGN.md: "Dashed dividers: 2px dashed var(--ink-faint) inside cards." |
 
 ### Final Quality Sweep (Mar 13)
 - All 74 pages: title tags ✓, og:description ✓, Pricing nav link ✓, viewport meta ✓

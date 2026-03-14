@@ -2,10 +2,10 @@
 
 ## Current State
 - Phase: Polish Mode — Design Audit
-- Current Task: 1
+- Current Task: 2
 - Current Stage: PASS
-- Tasks Completed: 1/1
-- Loop Iterations: 5
+- Tasks Completed: 2/2
+- Loop Iterations: 6
 
 ## Phase: Polish Mode — Design Audit
 **Exit Criterion**: Systematic page-by-page audit against DESIGN.md
@@ -18,6 +18,15 @@
 **Status**: PASS
 **Attempts**: 1
 **Notes**: Changed `.demo-section h2 { color: white; }` to `color: #ede0cf` (warm sand). Other `color: white` usages (buttons, badges) are on colored backgrounds and correct.
+
+### Task 2: Fix all 1px dashed dividers to 2px
+**Requirement**: DESIGN.md requires "Dashed dividers: 2px dashed var(--ink-faint) inside cards". Found 5 instances of 1px dashed across about.html, pricing.html, warroom.js.
+**Accept when**: Zero instances of `1px dashed` in frontend/.
+**Depends on**: none
+**Size**: S
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Fixed 5 instances: about.html data-source-card dividers (1), pricing.html plan-features + feature-matrix (2), warroom.js memory list + briefing history (2). Verified 0 remaining.
 
 ## Phase: Mobile Polish Pass
 **Exit Criterion**: All data table pages scroll horizontally on mobile. Lab sidebar Escape key works correctly on mobile.
