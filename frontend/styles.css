@@ -376,7 +376,7 @@ button.nav-search-hint {
 }
 
 .nav-plan-badge {
-  font-family: var(--font-display);
+  font-family: var(--font-mono);
   font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
@@ -570,7 +570,7 @@ button.nav-search-hint {
 
 .auth-tab {
   flex: 1;
-  font-family: var(--font-display);
+  font-family: var(--font-mono);
   font-size: 14px;
   font-weight: 700;
   padding: 8px 0;
@@ -629,7 +629,7 @@ button.nav-search-hint {
 
 /* ===== BUTTONS ===== */
 .btn-chunky {
-  font-family: var(--font-display);
+  font-family: var(--font-mono);
   font-size: 13px;
   font-weight: 700;
   padding: 6px 14px;
@@ -653,7 +653,7 @@ button.nav-search-hint {
 }
 
 .btn-primary {
-  font-family: var(--font-display);
+  font-family: var(--font-mono);
   font-size: 13px;
   font-weight: 700;
   padding: 6px 16px;
@@ -682,7 +682,7 @@ a.btn-pro-upgrade:focus-visible {
 
 /* ===== CHIPS / BADGES ===== */
 .chip {
-  font-family: var(--font-display);
+  font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;

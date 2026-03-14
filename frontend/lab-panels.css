@@ -77,7 +77,7 @@
   overflow: hidden;
 }
 .lp-pos-tab {
-  font-family: var(--font-display);
+  font-family: var(--font-mono);
   font-size: 13px;
   font-weight: 700;
   padding: 6px 14px;
@@ -492,7 +492,7 @@
 }
 .tv-weight-slider label {
   min-width: 130px;
-  font-family: var(--font-display);
+  font-family: var(--font-mono);
   font-weight: 700;
   font-size: 13px;
   color: var(--ink);
@@ -3475,7 +3475,7 @@
 .rbld-player-vorp.positive { color: #155724; }
 .rbld-player-vorp.negative { color: #721c24; }
 .rbld-remove-btn { background: none; border: none; color: var(--red); font-size: 18px; cursor: pointer; padding: 0 4px; }
-.rbld-clear-btn { font-family: var(--font-display); font-size: 12px; padding: 6px 14px; border: 2px solid var(--ink); border-radius: 8px; background: var(--bg-card); cursor: pointer; margin-top: 10px; }
+.rbld-clear-btn { font-family: var(--font-mono); font-size: 12px; padding: 6px 14px; border: 2px solid var(--ink); border-radius: 8px; background: var(--bg-card); cursor: pointer; margin-top: 10px; }
 .rbld-clear-btn:hover { background: var(--bg-warm); }
 .rbld-grade-empty { font-family: var(--font-hand); font-size: 16px; color: var(--ink-light); text-align: center; padding: 40px 20px; }
 .rbld-grade-card { background: var(--bg-card); border: 3px solid var(--ink); border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 16px; box-shadow: 4px 4px 0 var(--ink); }
@@ -3568,7 +3568,7 @@
 
 /* ===== TARGETS PANEL (td2-) ===== */
 .td2-mode-tabs { display: flex; border: 2px solid var(--ink); border-radius: 8px; overflow: hidden; }
-.td2-mode-tab { font-family: var(--font-display); font-size: 13px; padding: 6px 14px; background: var(--bg-card); color: var(--ink); border: none; cursor: pointer; border-right: 2px solid var(--ink); }
+.td2-mode-tab { font-family: var(--font-mono); font-size: 13px; padding: 6px 14px; background: var(--bg-card); color: var(--ink); border: none; cursor: pointer; border-right: 2px solid var(--ink); }
 .td2-mode-tab:last-child { border-right: none; }
 .td2-mode-tab.active { background: var(--ink); color: var(--bg-card); }
 .td2-team-card { background: var(--bg-card); border: 3px solid var(--ink); border-radius: 10px; padding: 16px; margin-bottom: 16px; box-shadow: 3px 3px 0 var(--ink); }
@@ -3634,7 +3634,7 @@
 .tf2-sel-stat-label { font-family: var(--font-mono); font-size: 10px; color: var(--ink-light); }
 .tf2-target-controls { margin-bottom: 16px; }
 .tf2-pos-tabs { display: flex; border: 2px solid var(--ink); border-radius: 8px; overflow: hidden; width: fit-content; }
-.tf2-pos-tab { font-family: var(--font-display); font-size: 13px; padding: 6px 14px; background: var(--bg-card); color: var(--ink); border: none; cursor: pointer; border-right: 2px solid var(--ink); }
+.tf2-pos-tab { font-family: var(--font-mono); font-size: 13px; padding: 6px 14px; background: var(--bg-card); color: var(--ink); border: none; cursor: pointer; border-right: 2px solid var(--ink); }
 .tf2-pos-tab:last-child { border-right: none; }
 .tf2-pos-tab.active { background: var(--ink); color: var(--bg-card); }
 .tf2-section { margin-bottom: 20px; }
