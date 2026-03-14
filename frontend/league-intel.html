@@ -910,6 +910,102 @@
     vertical-align: middle;
   }
 
+  /* ===== TRADE NETWORK ===== */
+  .trade-network-trigger {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 2px dashed var(--ink-faint);
+  }
+
+  .trade-network-section {
+    margin-top: 16px;
+  }
+
+  .trade-network-section h4 {
+    font-family: var(--font-display);
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+
+  .trade-matrix {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .trade-matrix th, .trade-matrix td {
+    padding: 6px 8px;
+    text-align: center;
+    border: 1px solid var(--ink-faint);
+  }
+
+  .trade-matrix th {
+    background: var(--bg-warm);
+    font-weight: 700;
+    font-size: 10px;
+  }
+
+  .trade-matrix td.self {
+    background: var(--ink-faint);
+  }
+
+  .trade-matrix td.has-trades {
+    background: var(--orange-light);
+    font-weight: 700;
+    color: var(--orange);
+  }
+
+  .trade-partner-rec {
+    background: var(--bg-card);
+    border: 3px solid var(--orange);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 16px;
+    margin-top: 12px;
+  }
+
+  .trade-partner-rec-header {
+    font-family: var(--font-display);
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
+  .trade-tendency-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .trade-tendency-card {
+    background: var(--bg-card);
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    padding: 10px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+  }
+
+  .trade-tendency-name {
+    font-family: var(--font-display);
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+
+  .trade-timing-badge {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border: 2px solid var(--ink);
+    border-radius: 12px;
+    margin-right: 4px;
+  }
+
   /* ===== BUILD PROFILES ===== */
   .build-profiles-trigger {
     margin-top: 12px;
@@ -1016,6 +1112,9 @@
     .depth-card { padding: 12px; }
     .build-profiles-grid { grid-template-columns: 1fr; }
     .build-profile-card { padding: 12px; }
+    .trade-matrix { font-size: 9px; }
+    .trade-matrix th, .trade-matrix td { padding: 4px 3px; }
+    .trade-tendency-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -1477,6 +1576,12 @@ async function toggleLeague(card, leagueId, userId) {
       '</div>' +
       '<div id="buildProfiles-' + leagueId + '"></div>';
 
+    // Add trade network trigger
+    html += '<div class="trade-network-trigger">' +
+      '<button id="tradeNetworkBtn-' + leagueId + '">trade network</button>' +
+      '</div>' +
+      '<div id="tradeNetwork-' + leagueId + '"></div>';
+
     rosterDiv.innerHTML = html;
 
     // Bind profile button with closure over variables
@@ -1520,6 +1625,17 @@ async function toggleLeague(card, leagueId, userId) {
         this.disabled = true;
         this.textContent = "profiling roster builds...";
         loadBuildProfiles(leagueId, userId, rosters, allPlayers, userMap);
+      });
+    }
+
+    // Bind trade network button
+    var tradeNetworkBtn = document.getElementById("tradeNetworkBtn-" + leagueId);
+    if (tradeNetworkBtn) {
+      tradeNetworkBtn.addEventListener("click", function(e) {
+        e.stopPropagation();
+        this.disabled = true;
+        this.textContent = "mapping trade networks...";
+        loadTradeNetwork(leagueId, userId, rosters, allPlayers, userMap);
       });
     }
 
@@ -3048,6 +3164,274 @@ async function loadLeagueTradeFinder(leagueId, userId, myRoster, rosters, allPla
     var tfBtn = document.getElementById("tradeFinderBtn-" + leagueId);
     if (tfBtn) { tfBtn.disabled = false; tfBtn.textContent = "find trade partners"; }
   }
+}
+
+// ── TRADE NETWORK ─────────────────────────────────────────────────────
+async function loadTradeNetwork(leagueId, userId, rosters, allPlayers, userMap) {
+  var container = document.getElementById("tradeNetwork-" + leagueId);
+  if (!container) return;
+
+  container.innerHTML = '<div class="loading-intel" style="font-size:14px;">mapping trade relationships...</div>';
+
+  try {
+    // Build roster_id -> owner_id map
+    var rosterOwnerMap = {};
+    for (var ri = 0; ri < rosters.length; ri++) {
+      rosterOwnerMap[rosters[ri].roster_id] = rosters[ri].owner_id;
+    }
+
+    // Get all owner IDs for matrix
+    var ownerIds = [];
+    var ownerNames = {};
+    for (var ri2 = 0; ri2 < rosters.length; ri2++) {
+      var oid = rosters[ri2].owner_id;
+      if (oid && ownerIds.indexOf(oid) < 0) {
+        ownerIds.push(oid);
+        ownerNames[oid] = userMap[oid] || "Manager";
+      }
+    }
+
+    // Fetch transactions
+    var txns = await fetchLeagueTransactions(leagueId);
+
+    // Filter trades only
+    var trades = [];
+    for (var ti = 0; ti < txns.length; ti++) {
+      if (txns[ti].type === "trade") trades.push(txns[ti]);
+    }
+
+    if (trades.length === 0) {
+      container.innerHTML = '<div class="loading-intel" style="color:var(--ink-light);font-size:14px;">no trades found this season. dead air on the wire.</div>';
+      var btn = document.getElementById("tradeNetworkBtn-" + leagueId);
+      if (btn) { btn.disabled = false; btn.textContent = "trade network"; }
+      return;
+    }
+
+    // Parse each trade to get who traded with whom and what
+    var tradeData = []; // {parties: [oid1, oid2], players: {oid: [{name, pos}]}, week: N}
+    for (var txi = 0; txi < trades.length; txi++) {
+      var txn = trades[txi];
+      var adds = txn.adds || {};
+      var rosterIds = txn.roster_ids || [];
+      var week = txn.leg || 0;
+
+      // Map roster_ids to owner_ids
+      var parties = [];
+      for (var pi = 0; pi < rosterIds.length; pi++) {
+        var owner = rosterOwnerMap[rosterIds[pi]];
+        if (owner && parties.indexOf(owner) < 0) parties.push(owner);
+      }
+      if (parties.length < 2) continue;
+
+      // Figure out what each party received
+      var received = {}; // oid -> [{name, pos}]
+      for (var addPid in adds) {
+        var addRid = adds[addPid];
+        var addOwner = rosterOwnerMap[addRid];
+        if (!addOwner) continue;
+        if (!received[addOwner]) received[addOwner] = [];
+        var addP = allPlayers[addPid];
+        received[addOwner].push({
+          name: addP ? (addP.first_name + " " + addP.last_name) : addPid,
+          pos: addP ? (addP.position || "?") : "?"
+        });
+      }
+
+      tradeData.push({ parties: parties, received: received, week: week });
+    }
+
+    // Build frequency matrix: pairKey -> count
+    var pairCounts = {}; // "oid1:oid2" -> count (alphabetically sorted key)
+    var perManagerTrades = {}; // oid -> { total, posAcquired: {}, posSent: {}, weeks: [], partners: {} }
+
+    for (var di = 0; di < tradeData.length; di++) {
+      var td = tradeData[di];
+      // Each pair combination
+      for (var a = 0; a < td.parties.length; a++) {
+        for (var b = a + 1; b < td.parties.length; b++) {
+          var key = [td.parties[a], td.parties[b]].sort().join(":");
+          pairCounts[key] = (pairCounts[key] || 0) + 1;
+        }
+      }
+
+      // Per-manager stats
+      for (var mi = 0; mi < td.parties.length; mi++) {
+        var mid = td.parties[mi];
+        if (!perManagerTrades[mid]) {
+          perManagerTrades[mid] = { total: 0, posAcquired: {}, posSent: {}, weeks: [], partners: {} };
+        }
+        var mt = perManagerTrades[mid];
+        mt.total++;
+        mt.weeks.push(td.week);
+
+        // Track partners
+        for (var oi = 0; oi < td.parties.length; oi++) {
+          if (td.parties[oi] !== mid) {
+            mt.partners[td.parties[oi]] = (mt.partners[td.parties[oi]] || 0) + 1;
+          }
+        }
+
+        // Positions acquired (what this manager received)
+        var got = td.received[mid] || [];
+        for (var gi = 0; gi < got.length; gi++) {
+          mt.posAcquired[got[gi].pos] = (mt.posAcquired[got[gi].pos] || 0) + 1;
+        }
+
+        // Positions sent (what other parties received from this manager)
+        for (var si = 0; si < td.parties.length; si++) {
+          if (td.parties[si] !== mid) {
+            var sent = td.received[td.parties[si]] || [];
+            for (var spi = 0; spi < sent.length; spi++) {
+              mt.posSent[sent[spi].pos] = (mt.posSent[sent[spi].pos] || 0) + 1;
+            }
+          }
+        }
+      }
+    }
+
+    // Render
+    var html = '<div class="depth-section-header">trade network — ' + trades.length + ' trades this season</div>';
+
+    // ── Trade Frequency Matrix ──
+    html += '<div class="trade-network-section">';
+    html += '<h4>trade frequency matrix</h4>';
+    html += '<div style="overflow-x:auto;">';
+    html += '<table class="trade-matrix"><thead><tr><th></th>';
+    // Shorten names for matrix headers
+    for (var hi = 0; hi < ownerIds.length; hi++) {
+      var shortName = (ownerNames[ownerIds[hi]] || "?").substring(0, 8);
+      html += '<th>' + escapeHtml(shortName) + '</th>';
+    }
+    html += '</tr></thead><tbody>';
+
+    for (var rowi = 0; rowi < ownerIds.length; rowi++) {
+      var rowId = ownerIds[rowi];
+      var rowName = (ownerNames[rowId] || "?").substring(0, 8);
+      html += '<tr><th>' + escapeHtml(rowName) + '</th>';
+      for (var coli = 0; coli < ownerIds.length; coli++) {
+        var colId = ownerIds[coli];
+        if (rowId === colId) {
+          html += '<td class="self">-</td>';
+        } else {
+          var pairKey = [rowId, colId].sort().join(":");
+          var count = pairCounts[pairKey] || 0;
+          html += '<td class="' + (count > 0 ? 'has-trades' : '') + '">' + count + '</td>';
+        }
+      }
+      html += '</tr>';
+    }
+    html += '</tbody></table></div></div>';
+
+    // ── Per-Manager Tendencies ──
+    html += '<div class="trade-network-section">';
+    html += '<h4>trade tendencies</h4>';
+    html += '<div class="trade-tendency-grid">';
+
+    var sortedManagers = ownerIds.slice().sort(function(a, b) {
+      var at = perManagerTrades[a] ? perManagerTrades[a].total : 0;
+      var bt = perManagerTrades[b] ? perManagerTrades[b].total : 0;
+      return bt - at;
+    });
+
+    for (var mi2 = 0; mi2 < sortedManagers.length; mi2++) {
+      var moid = sortedManagers[mi2];
+      var mt2 = perManagerTrades[moid];
+      if (!mt2 || mt2.total === 0) continue;
+
+      html += '<div class="trade-tendency-card">';
+      html += '<div class="trade-tendency-name">' + escapeHtml(ownerNames[moid] || "?");
+      if (moid === userId) html += ' <span style="font-family:var(--font-hand);font-size:12px;color:var(--orange);">you</span>';
+      html += '</div>';
+
+      // Trade count
+      html += '<div>' + mt2.total + ' trade' + (mt2.total !== 1 ? 's' : '') + '</div>';
+
+      // Trade timing
+      var avgWeek = 0;
+      for (var wi = 0; wi < mt2.weeks.length; wi++) avgWeek += mt2.weeks[wi];
+      avgWeek = mt2.weeks.length > 0 ? avgWeek / mt2.weeks.length : 0;
+      var timingLabel = avgWeek <= 5 ? "early mover" : (avgWeek <= 10 ? "mid-season" : "deadline dealer");
+      var timingColor = avgWeek <= 5 ? "var(--green)" : (avgWeek <= 10 ? "var(--yellow)" : "var(--red)");
+      html += '<span class="trade-timing-badge" style="background:' + timingColor + ';color:white;border-color:' + timingColor + ';">' + timingLabel + '</span>';
+
+      // Position tendencies
+      var topAcq = _topPos(mt2.posAcquired);
+      var topSent = _topPos(mt2.posSent);
+      if (topAcq) html += '<div style="margin-top:4px;">acquires: <strong style="color:var(--green);">' + topAcq + '</strong></div>';
+      if (topSent) html += '<div>sends: <strong style="color:var(--red);">' + topSent + '</strong></div>';
+
+      // Favorite partner
+      var favPartner = null;
+      var favCount = 0;
+      for (var fp in mt2.partners) {
+        if (mt2.partners[fp] > favCount) { favCount = mt2.partners[fp]; favPartner = fp; }
+      }
+      if (favPartner) {
+        html += '<div style="margin-top:4px;font-size:10px;color:var(--ink-light);">favorite: ' + escapeHtml(ownerNames[favPartner] || "?") + ' (' + favCount + ')</div>';
+      }
+
+      html += '</div>';
+    }
+
+    html += '</div></div>';
+
+    // ── Most Likely Trade Partner (for current user) ──
+    var userTrades = perManagerTrades[userId];
+    if (userTrades && userTrades.total > 0) {
+      // Find top partner by trade frequency
+      var bestPartner = null;
+      var bestPartnerCount = 0;
+      for (var bp in userTrades.partners) {
+        if (userTrades.partners[bp] > bestPartnerCount) {
+          bestPartnerCount = userTrades.partners[bp];
+          bestPartner = bp;
+        }
+      }
+
+      if (bestPartner) {
+        html += '<div class="trade-partner-rec">';
+        html += '<div class="trade-partner-rec-header">most likely trade partner</div>';
+        html += '<div style="font-family:var(--font-hand);font-size:18px;color:var(--orange);margin-bottom:6px;">' + escapeHtml(ownerNames[bestPartner] || "?") + '</div>';
+        html += '<div style="font-family:var(--font-mono);font-size:12px;color:var(--ink-medium);">';
+        html += "you've traded " + bestPartnerCount + " time" + (bestPartnerCount !== 1 ? "s" : "") + " this season. ";
+        // What positions you tend to get from them
+        html += '</div>';
+        html += '</div>';
+      }
+    } else if (userId) {
+      // User hasn't traded — find who trades the most
+      var mostActive = sortedManagers.length > 0 ? sortedManagers[0] : null;
+      if (mostActive && mostActive !== userId && perManagerTrades[mostActive]) {
+        html += '<div class="trade-partner-rec">';
+        html += '<div class="trade-partner-rec-header">suggested trade partner</div>';
+        html += '<div style="font-family:var(--font-hand);font-size:18px;color:var(--orange);margin-bottom:6px;">' + escapeHtml(ownerNames[mostActive] || "?") + '</div>';
+        html += '<div style="font-family:var(--font-mono);font-size:12px;color:var(--ink-medium);">';
+        html += "most active trader in the league (" + perManagerTrades[mostActive].total + " trades). most likely to pick up the phone.";
+        html += '</div>';
+        html += '</div>';
+      }
+    }
+
+    container.innerHTML = html;
+
+  } catch (e) {
+    container.innerHTML = '<div class="loading-intel" style="color:var(--red);font-size:14px;">' +
+      (e.name === "AbortError" ? "trade network timed out. try again." : "trade network failed. try again.") + '</div>';
+    var btn2 = document.getElementById("tradeNetworkBtn-" + leagueId);
+    if (btn2) { btn2.disabled = false; btn2.textContent = "trade network"; }
+    console.error(e);
+  }
+}
+
+// Helper: get top position from pos count object
+function _topPos(posObj) {
+  var top = null;
+  var topCount = 0;
+  for (var p in posObj) {
+    if (p === "?" || p === "K" || p === "DEF") continue;
+    if (posObj[p] > topCount) { topCount = posObj[p]; top = p; }
+  }
+  return top;
 }
 
 // ── BUILD PROFILES ────────────────────────────────────────────────────
