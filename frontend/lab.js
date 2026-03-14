@@ -10348,7 +10348,7 @@ function toggleShortcutRef() {
 
 function shortcutRow(key, desc) {
   return `<tr style="border-bottom:1px solid var(--ink-faint);">
-    <td style="padding:6px 8px; width:80px;"><kbd style="font-family:var(--font-display); font-size:13px; background:var(--bg); border:2px solid var(--ink); border-radius:4px; padding:2px 8px; box-shadow:1px 1px 0 var(--ink);">${key}</kbd></td>
+    <td style="padding:6px 8px; width:80px;"><kbd style="font-family:var(--font-mono); font-size:13px; background:var(--bg); border:2px solid var(--ink); border-radius:4px; padding:2px 8px; box-shadow:2px 2px 0 var(--ink);">${key}</kbd></td>
     <td style="padding:6px 8px;">${desc}</td>
   </tr>`;
 }
