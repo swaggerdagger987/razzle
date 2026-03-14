@@ -212,3 +212,12 @@ Systematic page-by-page audit against DESIGN.md and NORTH_STAR.md.
 | lab.html | Fix: Escape key on mobile sidebar | DONE | Was adding 'collapsed' instead of removing 'open'. Sidebar wouldn't close on Escape. |
 | 19 standalone pages | Mobile: add overflow-x:auto to table containers | DONE | airyards, redzone, schedule, vorp, stocks, usage, yoy, weeklyleaders, waivers, streaks, advantage, seasonpace, tdregression, snapefficiency, targetpremium, records, workload, stacks, playoffs |
 | lab-panels.js | Mobile: add overflow-x:auto to all 26 panel body containers | DONE | Every panel table container now scrolls horizontally on mobile. |
+| 7 more standalone pages | Mobile: add overflow-x:auto to table containers | DONE | reportcard, tradefinder, handcuffs, drops, gamescript, successrate, dualthreat |
+
+### Final Quality Sweep (Mar 13)
+- All 74 pages: title tags ✓, og:description ✓, Pricing nav link ✓, viewport meta ✓
+- No placeholder text, no debug CSS, no console.log noise, no TODO/FIXME comments
+- No broken asset references, no unhandled fetch() calls
+- Every data table scrolls on mobile (29 standalone pages + 26 lab panel containers)
+- Hamburger menu dynamically injected on all 74 pages via app.js
+- All 59 tests pass
