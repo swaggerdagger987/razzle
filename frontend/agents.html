@@ -2107,6 +2107,26 @@ fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"applicat
     eliteCta.style.cursor = "default";
   }
 }catch(e){}})();
+
+// Update pro upsell CTA for trial/paid users
+(function(){try{
+  if (typeof getUserTierInfo !== 'function') return;
+  var t = getUserTierInfo();
+  var btn = document.getElementById('proUpsellBtn');
+  var hint = document.getElementById('proUpsellHint');
+  var cta = document.getElementById('proUpsellCta');
+  if (!btn) return;
+  if (t.isPaid && !t.isTrial) {
+    // Paid user — hide upsell entirely
+    if (cta) cta.style.display = 'none';
+  } else if (t.isTrial) {
+    btn.textContent = 'Subscribe to Keep Pro';
+    if (hint) hint.textContent = t.daysLeft + ' day' + (t.daysLeft !== 1 ? 's' : '') + ' remaining on your trial.';
+  } else if (t.isExpiredTrial) {
+    btn.textContent = 'Subscribe to Pro';
+    if (hint) hint.textContent = 'Your trial ended. Subscribe to regain access.';
+  }
+}catch(e){}})();
 </script>
 </body>
 </html>

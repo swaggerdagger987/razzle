@@ -865,6 +865,8 @@ function updateAuthUI(user) {
   } else {
     item.innerHTML = '<a href="#" onclick="openAuthModal(); return false;" id="navSignIn" class="btn-chunky btn-sm">Sign In</a>';
   }
+  // Notify lock icons and tier-gated UI to re-evaluate
+  window.dispatchEvent(new CustomEvent("razzle-plan-changed", { detail: user }));
 }
 
 async function startCheckout(interval) {
