@@ -13,6 +13,28 @@ from ..db import get_db
 
 logger = logging.getLogger("razzle.live_data.storage")
 
+# Pattern to detect HTML tags: < followed by a letter or /
+_HTML_TAG_RE = re.compile(r"<[a-zA-Z/]")
+
+
+def _contains_html(value: str) -> bool:
+    """Return True if value contains anything that looks like an HTML tag."""
+    return bool(_HTML_TAG_RE.search(value))
+
+
+def _validate_no_html(**fields: str) -> dict | None:
+    """Check multiple named fields for HTML tags.
+
+    Returns an error dict if any field contains HTML, or None if all are clean.
+    """
+    for field_name, value in fields.items():
+        if value and _contains_html(value):
+            return {
+                "status": "error",
+                "message": f"{field_name} must not contain HTML tags",
+            }
+    return None
+
 
 # ---------------------------------------------------------------------------
 # Waitlist
@@ -188,6 +210,14 @@ def _seed_formula_store(conn):
 def publish_formula(name: str, description: str, position_tags: list,
                     stat_weights: dict, creator_name: str) -> dict:
     import json
+
+    # Reject any field containing HTML tags to prevent stored XSS
+    html_err = _validate_no_html(
+        name=name, description=description, creator_name=creator_name
+    )
+    if html_err:
+        return html_err
+
     with get_db() as conn:
         try:
             cur = conn.execute(
@@ -288,6 +318,11 @@ def get_formula_detail(formula_id: int) -> dict:
 def rate_formula(formula_id: int, rating: int, review: str = "", user_id: int = None) -> dict:
     if rating < 1 or rating > 5:
         return {"status": "error", "message": "rating must be 1-5"}
+
+    # Reject review text containing HTML tags
+    html_err = _validate_no_html(review=review)
+    if html_err:
+        return html_err
 
     with get_db() as conn:
         # Check formula exists

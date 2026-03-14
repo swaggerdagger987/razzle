@@ -24,7 +24,10 @@ logger = logging.getLogger("razzle.auth")
 
 _ENVIRONMENT = os.environ.get("ENVIRONMENT", "development")
 
-USERS_DB_PATH = Path(__file__).parent.parent / "data" / "users.db"
+if os.environ.get("ENVIRONMENT") == "production":
+    USERS_DB_PATH = Path("/data/users.db")
+else:
+    USERS_DB_PATH = Path(__file__).parent.parent / "data" / "users.db"
 
 # JWT config
 JWT_SECRET = os.environ.get("JWT_SECRET")
@@ -426,7 +429,15 @@ def delete_user_formula(user_id: int, formula_id: int) -> dict:
         return {"status": "ok"}
 
 
+_FORMULA_IMPORT_MAX = 50
+_FORMULA_WEIGHTS_MAX_BYTES = 10_240  # 10 KB
+
 def import_formulas(user_id: int, formulas: list) -> dict:
+    if not isinstance(formulas, list):
+        return {"error": "formulas must be a list", "status": 400}
+    if len(formulas) > _FORMULA_IMPORT_MAX:
+        return {"error": f"Too many formulas. Maximum is {_FORMULA_IMPORT_MAX} per import.", "status": 400}
+
     with get_users_db() as conn:
         # Fetch existing formula names in one query to avoid N+1
         existing_names = {
@@ -436,10 +447,15 @@ def import_formulas(user_id: int, formulas: list) -> dict:
             ).fetchall()
         }
         batch = []
+        skipped = 0
         for f in formulas:
             name = f.get("name", "")
             weights = f.get("weights", "")
             if not name or not weights:
+                continue
+            # Validate weights size to prevent abuse
+            if len(str(weights)) > _FORMULA_WEIGHTS_MAX_BYTES:
+                skipped += 1
                 continue
             if name not in existing_names:
                 batch.append((user_id, name, weights))
@@ -450,7 +466,11 @@ def import_formulas(user_id: int, formulas: list) -> dict:
                 batch,
             )
         conn.commit()
-        return {"status": "ok", "imported": len(batch)}
+        result = {"status": "ok", "imported": len(batch)}
+        if skipped:
+            result["skipped"] = skipped
+            result["warning"] = f"{skipped} formula(s) skipped — weights exceeded 10 KB limit"
+        return result
 
 
 # ---------------------------------------------------------------------------

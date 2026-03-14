@@ -224,7 +224,7 @@ async function installFormula(formulaId) {
       // Register column
       const key = `formula_${formula.name.toLowerCase().replace(/[^a-z0-9]/g, "_")}`;
       if (typeof COLUMNS !== "undefined") {
-        COLUMNS[key] = { label: formula.name, group: "Formulas", decimals: 1 };
+        COLUMNS[key] = { label: escapeHtml(formula.name), group: "Formulas", decimals: 1 };
         if (!state.visibleColumns.includes(key)) {
           state.visibleColumns.push(key);
         }
@@ -449,7 +449,7 @@ function renderFormulaStore() {
     <div class="store-controls">
       <div class="store-search-row">
         <input type="search" class="input-chunky" placeholder="search formulas..."
-          value="${storeState.search}" oninput="setStoreSearch(this.value)"
+          value="${escapeHtml(storeState.search)}" oninput="setStoreSearch(this.value)"
           autocomplete="off" style="flex:1; max-width:300px;">
         <div style="display:flex; gap:4px;">${posChips}</div>
       </div>

@@ -119,6 +119,27 @@ def _check_screener_rate(ip: str) -> bool:
     return True
 
 
+# Registration rate limiter: 3 registrations per IP per 24 hours
+_reg_rate_buckets = defaultdict(list)  # ip -> [timestamps]
+_REG_RATE_LIMIT = 3
+_REG_RATE_WINDOW = 86400  # 24 hours
+
+def _check_reg_rate(ip: str) -> bool:
+    """Return True if registration is allowed for this IP, False if rate limited."""
+    now = _time.time()
+    if len(_reg_rate_buckets) > _RATE_MAX_IPS:
+        stale = [k for k, v in _reg_rate_buckets.items()
+                 if not v or now - v[-1] > _REG_RATE_WINDOW]
+        for k in stale:
+            del _reg_rate_buckets[k]
+    bucket = _reg_rate_buckets[ip]
+    _reg_rate_buckets[ip] = [t for t in bucket if now - t < _REG_RATE_WINDOW]
+    if len(_reg_rate_buckets[ip]) >= _REG_RATE_LIMIT:
+        return False
+    _reg_rate_buckets[ip].append(now)
+    return True
+
+
 def bootstrap_database():
     """Sync nflverse + college data if the DB is empty or missing."""
     import sys, os
@@ -392,6 +413,22 @@ _RESP_CACHEABLE_PREFIXES = (
     "/api/aging-curves", "/api/weekly-heatmap", "/api/efficiency-rankings",
     "/api/consistency-rankings", "/api/health",
 )
+
+
+@app.middleware("http")
+async def body_size_limit_middleware(request: Request, call_next):
+    """Reject requests with Content-Length exceeding 1 MB."""
+    content_length = request.headers.get("content-length")
+    if content_length:
+        try:
+            if int(content_length) > 1_048_576:
+                return JSONResponse(
+                    {"error": "Request body too large. Maximum size is 1 MB."},
+                    status_code=413,
+                )
+        except ValueError:
+            pass
+    return await call_next(request)
 
 
 @app.middleware("http")
@@ -728,6 +765,13 @@ async def auth_register(request: Request):
     ip = request.client.host if request.client else "unknown"
     if not _check_rate_limit(ip):
         return JSONResponse({"error": "Too many attempts. Try again in a minute."}, status_code=429, headers={"Retry-After": "60"})
+    # Stricter registration rate limit: 3 per IP per 24 hours
+    if not _check_reg_rate(ip):
+        return JSONResponse(
+            {"error": "Too many registrations from this address. Try again in 24 hours."},
+            status_code=429,
+            headers={"Retry-After": "86400"},
+        )
     body = await request.json()
     email = body.get("email", "")
     password = body.get("password", "")
@@ -981,10 +1025,21 @@ async def llm_chat(request: Request):
     if not messages:
         return JSONResponse({"error": "No messages provided"}, status_code=400)
 
-    # Sanitize: enforce max_tokens and model
+    # Security: strip all client-supplied system messages to prevent prompt injection
+    user_messages = [m for m in messages if m.get("role") != "system"]
+    # Prepend mandatory server-side system prompt
+    system_prompt = (
+        "You are a fantasy football analyst for Razzle, a dynasty and redraft analytics platform. "
+        "Provide helpful, concise analysis based on the scenario provided. "
+        "Cover key factors, risks, and a clear recommendation. "
+        "Stay on topic — only discuss fantasy football."
+    )
+    sanitized_messages = [{"role": "system", "content": system_prompt}] + user_messages
+
+    # Sanitize: enforce max_tokens and model (use free model — zero marginal cost)
     llm_body = {
-        "model": _LLM_MODEL,
-        "messages": messages,
+        "model": _LLM_FREE_MODEL,
+        "messages": sanitized_messages,
         "temperature": body.get("temperature", 0.3),
         "max_tokens": min(body.get("max_tokens", _LLM_MAX_TOKENS), _LLM_MAX_TOKENS),
     }
