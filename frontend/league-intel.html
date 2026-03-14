@@ -1005,6 +1005,7 @@ async function loadLeagues(userId) {
     var leagueTimeout = setTimeout(function() { leagueController.abort(); }, 15000);
     const resp = await fetch(`${SLEEPER_API}/user/${userId}/leagues/nfl/${season}`, { signal: leagueController.signal });
     clearTimeout(leagueTimeout);
+    if (!resp.ok) throw new Error("Sleeper API returned " + resp.status);
     const leagues = await resp.json();
 
     if (!leagues || !leagues.length) {
@@ -1464,7 +1465,7 @@ async function loadActivityFeed(leagueId, userMap, allPlayers, rosters) {
         html += '<span class="activity-time">' + escapeHtml(timeStr) + '</span>';
         // Conversion nudge for free users
         if (!_activityFeedPaid && t < 3) {
-          html += '<div class="activity-nudge"><a href="/agents.html" onclick="prefillScenario(\'Evaluate this trade in my league: ' + managers.map(escapeHtml).join(' and ').replace(/'/g, "\\'") + ' just traded. Is this fair? Who won?\'); return true;">the Quant has thoughts on this trade &rarr;</a></div>';
+          html += '<div class="activity-nudge"><a href="/agents.html" onclick="prefillScenario(\'Evaluate this trade in my league: ' + escapeJsString(managers.join(' and ')) + ' just traded. Is this fair? Who won?\'); return true;">the Quant has thoughts on this trade &rarr;</a></div>';
         }
         html += '</div>';
 
@@ -1500,7 +1501,7 @@ async function loadActivityFeed(leagueId, userMap, allPlayers, rosters) {
         html += '<span class="activity-time">' + escapeHtml(timeStr) + '</span>';
         // Conversion nudge for waiver pickups (free users only, first 2)
         if (!_activityFeedPaid && txnType === 'waiver' && t < 5 && _activityNudgeCount < 2) {
-          var _nudgeMgr = escapeHtml(managers[0] || 'this manager').replace(/'/g, "\\'");
+          var _nudgeMgr = escapeJsString(managers[0] || 'this manager');
           html += '<div class="activity-nudge"><a href="/agents.html" onclick="prefillScenario(\'Why is ' + _nudgeMgr + ' making waiver moves? What are they building toward?\'); return true;">Scout can explain ' + escapeHtml(managers[0] || 'their') + '\'s strategy &rarr;</a></div>';
           _activityNudgeCount++;
         }
@@ -2011,7 +2012,7 @@ async function loadManagerProfiles(leagueId, userId, allPlayers, userMap, roster
 
       // Bridge CTA to Situation Room
       html += '<div class="bureau-cta">';
-      html += '<a href="/agents.html" onclick="prefillScenario(\'Tell me about ' + escapeHtml(c.name).replace(/'/g, "\\'") + ' in my league. What are their tendencies and how can I exploit them in trades?\'); return true;">ask the Diplomat about ' + escapeHtml(c.name) + ' &rarr;</a>';
+      html += '<a href="/agents.html" onclick="prefillScenario(\'Tell me about ' + escapeJsString(c.name) + ' in my league. What are their tendencies and how can I exploit them in trades?\'); return true;">ask the Diplomat about ' + escapeHtml(c.name) + ' &rarr;</a>';
       html += '</div>';
 
       html += '</div></div>';
@@ -2074,6 +2075,11 @@ async function loadManagerProfiles(leagueId, userId, allPlayers, userMap, roster
   }
 }
 
+// ── CSS VAR READER FOR CANVAS ────────────────────────────────────────
+function cssVar(name) {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
+
 // ── ACTIVITY TIMELINE CHART (Canvas) ─────────────────────────────────
 function renderActivityTimeline(canvas, weeklyMoves, color) {
   if (!canvas || !weeklyMoves) return;
@@ -2115,9 +2121,9 @@ function renderActivityTimeline(canvas, weeklyMoves, color) {
 
     // Panic weeks (3+ moves) get red fill
     if (p.moves >= 3) {
-      ctx.fillStyle = '#e63946';
+      ctx.fillStyle = cssVar('--red');
     } else if (p.moves > 0) {
-      ctx.fillStyle = color || '#d97757';
+      ctx.fillStyle = color || cssVar('--orange');
     } else {
       ctx.fillStyle = 'transparent';
     }
@@ -2129,7 +2135,7 @@ function renderActivityTimeline(canvas, weeklyMoves, color) {
 
   // Draw season dividers
   if (seasons.length > 1) {
-    ctx.strokeStyle = 'rgba(0,0,0,0.15)';
+    ctx.strokeStyle = cssVar('--ink-faint');
     ctx.lineWidth = 0.5;
     for (var di = 1; di < seasons.length; di++) {
       var dx = pad + di * 18 * barW;
@@ -2205,9 +2211,9 @@ function renderPressureMap(container, cards, isPro) {
 
   for (var i = 0; i < scores.length; i++) {
     var s = scores[i];
-    var pressureColor = s.score >= 60 ? '#e63946' : s.score >= 35 ? '#d97757' : '#2ec4b6';
+    var pressureColor = s.score >= 60 ? 'var(--red)' : s.score >= 35 ? 'var(--orange)' : 'var(--green)';
     var pressureLabel = s.score >= 60 ? 'desperate' : s.score >= 35 ? 'motivated' : 'comfortable';
-    var pressureLabelColor = s.score >= 60 ? '#e63946' : s.score >= 35 ? '#d97757' : '#2ec4b6';
+    var pressureLabelColor = pressureColor;
 
     if (i < visibleCount) {
       html += '<div class="pressure-bar-row">';
@@ -2352,7 +2358,8 @@ function drawCompareRadar(a, b) {
   ctx.clearRect(0, 0, 300, 300);
 
   // Draw grid rings
-  ctx.strokeStyle = 'rgba(0,0,0,0.08)';
+  ctx.strokeStyle = cssVar('--ink-faint');
+  ctx.globalAlpha = 0.3;
   ctx.lineWidth = 0.5;
   for (var ring = 0.25; ring <= 1; ring += 0.25) {
     ctx.beginPath();
@@ -2367,8 +2374,9 @@ function drawCompareRadar(a, b) {
   }
 
   // Draw axis lines + labels
-  ctx.strokeStyle = 'rgba(0,0,0,0.12)';
-  ctx.fillStyle = '#5c4a3d';
+  ctx.globalAlpha = 1;
+  ctx.strokeStyle = cssVar('--ink-faint');
+  ctx.fillStyle = cssVar('--ink-medium');
   ctx.font = '9px Space Mono, monospace';
   ctx.textAlign = 'center';
   for (var j = 0; j < n; j++) {
@@ -2393,9 +2401,12 @@ function drawCompareRadar(a, b) {
     else ctx.lineTo(px, py);
   }
   ctx.closePath();
-  ctx.fillStyle = 'rgba(217,119,87,0.2)';
+  var orangeHex = cssVar('--orange');
+  ctx.fillStyle = orangeHex;
+  ctx.globalAlpha = 0.2;
   ctx.fill();
-  ctx.strokeStyle = '#d97757';
+  ctx.globalAlpha = 1;
+  ctx.strokeStyle = orangeHex;
   ctx.lineWidth = 2;
   ctx.stroke();
 
@@ -2409,18 +2420,21 @@ function drawCompareRadar(a, b) {
     else ctx.lineTo(px, py);
   }
   ctx.closePath();
-  ctx.fillStyle = 'rgba(91,127,255,0.2)';
+  var blueHex = cssVar('--blue');
+  ctx.fillStyle = blueHex;
+  ctx.globalAlpha = 0.2;
   ctx.fill();
-  ctx.strokeStyle = '#5b7fff';
+  ctx.globalAlpha = 1;
+  ctx.strokeStyle = blueHex;
   ctx.lineWidth = 2;
   ctx.stroke();
 
   // Legend
   ctx.font = '10px "Luckiest Guy", cursive';
-  ctx.fillStyle = '#d97757';
+  ctx.fillStyle = orangeHex;
   ctx.textAlign = 'left';
   ctx.fillText(a.name, 10, 18);
-  ctx.fillStyle = '#5b7fff';
+  ctx.fillStyle = blueHex;
   ctx.fillText(b.name, 10, 32);
 }
 
@@ -2735,7 +2749,7 @@ async function loadLeagueTradeFinder(leagueId, userId, myRoster, rosters, allPla
         Object.keys(partner.posAnalysis).filter(function(p) { return partner.posAnalysis[p] === "need"; }).join(", ") +
         ". Suggest the best approach.";
       html += '<div class="trade-diplomat-cta">' +
-        '<a href="/agents.html" onclick="prefillScenario(\'' + diplomScenario.replace(/'/g, "\\'") + '\'); return true;">' +
+        '<a href="/agents.html" onclick="prefillScenario(\'' + escapeJsString(diplomScenario) + '\'); return true;">' +
         'ask the Diplomat how to approach ' + escapeHtml(partner.name) + ' &rarr;</a></div>';
 
       html += '</div>';
@@ -2754,6 +2768,11 @@ async function loadLeagueTradeFinder(leagueId, userId, myRoster, rosters, allPla
     var tfBtn = document.getElementById("tradeFinderBtn-" + leagueId);
     if (tfBtn) { tfBtn.disabled = false; tfBtn.textContent = "find trade partners"; }
   }
+}
+
+// ── JS-safe string escape for inline onclick attributes ──────────────
+function escapeJsString(str) {
+  return String(str).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"').replace(/</g, '\\x3c').replace(/>/g, '\\x3e').replace(/&/g, '\\x26');
 }
 
 // ── BRIDGE CTA: Prefill Situation Room scenario ──────────────────────
