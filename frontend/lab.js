@@ -3206,6 +3206,16 @@ function setMinGP(val) {
   fetchAndRender();
 }
 
+// ─── Settings panel toggle ──────────────────────────────────────
+function toggleSettingsPanel() {
+  var panel = document.getElementById("settingsPanel");
+  if (!panel) return;
+  var isOpen = panel.style.display !== "none";
+  panel.style.display = isOpen ? "none" : "";
+  var btn = document.getElementById("settingsToggleBtn");
+  if (btn) btn.classList.toggle("active", !isOpen);
+}
+
 // ─── Column picker ───────────────────────────────────────────────
 function openColumnPicker() {
   document.getElementById("columnPickerOverlay").classList.add("open");

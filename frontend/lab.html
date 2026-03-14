@@ -633,6 +633,45 @@
     color: var(--ink);
   }
 
+  /* ===== SETTINGS PANEL ===== */
+  .settings-panel {
+    background: var(--bg-card);
+    border-bottom: 2px solid var(--ink-faint);
+    padding: 8px 20px;
+    overflow-x: auto;
+  }
+  .settings-panel-inner {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .settings-panel-label {
+    font-family: var(--font-display);
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    letter-spacing: 1px;
+    margin-right: 4px;
+  }
+  .settings-btn {
+    font-size: 11px !important;
+    padding: 4px 10px !important;
+  }
+  .settings-panel-divider {
+    width: 2px;
+    height: 20px;
+    background: var(--ink-faint);
+    margin: 0 4px;
+  }
+  .settings-panel-hint {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: var(--ink-light);
+    margin-left: auto;
+  }
+  .hide-mobile { }
+
   /* ===== FILTER BAR ===== */
   .filter-bar {
     display: flex;
@@ -2456,11 +2495,16 @@
     }
     .toolbar::-webkit-scrollbar { display: none; }
     .toolbar-divider { display: none; }
+    .hide-mobile { display: none !important; }
     .toolbar-section { flex-shrink: 0; }
     .search-box { width: 140px; flex-shrink: 0; }
     .result-count { display: none; }
-    .toolbar .btn-chunky { flex-shrink: 0; white-space: nowrap; min-height: 36px; }
+    .toolbar .btn-chunky { flex-shrink: 0; white-space: nowrap; min-height: 36px; padding: 6px 10px; font-size: 12px; }
     .toolbar .chip { min-height: 36px; display: inline-flex; align-items: center; }
+    .settings-panel { padding: 6px 12px; }
+    .settings-panel-inner { gap: 4px; }
+    .settings-panel-hint { display: none; }
+    .settings-btn { min-height: 32px !important; }
 
     .filter-bar {
       padding: 6px 12px;
@@ -3133,6 +3177,7 @@
 <!-- TOOLBAR -->
 <div class="lab-container">
   <div class="toolbar" id="mainToolbar">
+    <!-- ROW 1: Core controls -->
     <div class="toolbar-section">
       <span class="chip active" data-pos="ALL" onclick="togglePosition('ALL')">All</span>
       <span class="chip" data-pos="QB" onclick="togglePosition('QB')">QB</span>
@@ -3154,46 +3199,85 @@
 
     <div class="toolbar-divider"></div>
 
-    <select class="select-chunky" id="presetSelect" onchange="applyPresetFromToolbar(this.value)" title="Quick column preset">
-      <option value="">Preset...</option>
-    </select>
-    <select class="select-chunky" id="savedViewSelect" onchange="loadSavedView(this.value)" title="Saved views" style="max-width:140px;">
-      <option value="">Views...</option>
-    </select>
-    <button class="btn-chunky" onclick="saveCurrentView()" title="Save current screener as a named view" style="padding:6px 8px; font-size:13px;">Save View</button>
-    <button class="btn-chunky" onclick="openColumnPicker()">Columns</button>
-    <button class="btn-chunky" id="formulaBtn" onclick="openFormulaBuilder()">Formulas</button>
-    <button class="btn-chunky" onclick="openCustomScoring()">Custom Scoring</button>
-    <button class="btn-chunky" onclick="openFormulaStore()">Store</button>
-    <button class="btn-chunky" onclick="openChartPanel()">Charts</button>
-    <button class="btn-chunky" onclick="openCompare()" id="compareBtn" title="Select 2+ players with checkboxes first">Compare</button>
-    <button class="btn-chunky" id="tagFilterBtn" onclick="toggleTagFilter()" oncontextmenu="event.preventDefault(); if(getTaggedCount()>0 && confirm('Clear all player tags?')) clearAllTags();" title="Show only tagged players. Right-click to clear all.">Tags</button>
-    <button class="btn-chunky" id="watchlistBtn" onclick="openWatchlistPanel()" style="border-color:var(--orange);">Watchlist</button>
-    <button class="btn-chunky" id="undoBtn" onclick="undoState()" title="Undo last state change (Ctrl+Z)" disabled style="font-size:14px; padding:6px 8px;">&#8630;</button>
-    <button class="btn-chunky" id="redoBtn" onclick="redoState()" title="Redo state change (Ctrl+Y)" disabled style="font-size:14px; padding:6px 8px;">&#8631;</button>
-    <button class="btn-chunky" onclick="openSavedViews()">Views</button>
+    <!-- Primary actions -->
+    <div class="toolbar-section">
+      <select class="select-chunky" id="presetSelect" onchange="applyPresetFromToolbar(this.value)" title="Quick column preset">
+        <option value="">Preset...</option>
+      </select>
+      <button class="btn-chunky" onclick="openColumnPicker()">Columns</button>
+      <button class="btn-chunky" onclick="openChartPanel()">Charts</button>
+    </div>
+
+    <div class="toolbar-divider hide-mobile"></div>
+
+    <!-- Tools group -->
+    <div class="toolbar-section">
+      <button class="btn-chunky" id="formulaBtn" onclick="openFormulaBuilder()">Formulas</button>
+      <button class="btn-chunky" onclick="openFormulaStore()">Store</button>
+      <button class="btn-chunky" onclick="openCompare()" id="compareBtn" title="Select 2+ players with checkboxes first">Compare</button>
+      <button class="btn-chunky" id="tagFilterBtn" onclick="toggleTagFilter()" oncontextmenu="event.preventDefault(); if(getTaggedCount()>0 && confirm('Clear all player tags?')) clearAllTags();" title="Show only tagged players. Right-click to clear all.">Tags</button>
+    </div>
+
+    <div class="toolbar-divider hide-mobile"></div>
+
+    <!-- Dynasty/Trade tools -->
+    <div class="toolbar-section">
+      <button class="btn-chunky" id="watchlistBtn" onclick="openWatchlistPanel()" style="border-color:var(--orange);">Watchlist</button>
+      <button class="btn-chunky" onclick="openMyRoster()" style="border-color:var(--green);">My Roster</button>
+      <button class="btn-chunky" onclick="openTradeAnalyzer()" style="border-color:var(--orange);">Trade</button>
+    </div>
+
+    <div class="toolbar-divider hide-mobile"></div>
+
+    <!-- Export & Share -->
+    <div class="toolbar-section">
+      <button class="btn-chunky btn-csv-export" onclick="exportCSV()" title="Export current view as CSV" aria-label="Export current view as CSV">CSV</button>
+      <button class="btn-chunky" onclick="openShareModal()" style="border-color:var(--orange);">Share</button>
+    </div>
+
+    <div class="toolbar-divider hide-mobile"></div>
+
+    <!-- Settings toggle + Views -->
+    <div class="toolbar-section">
+      <select class="select-chunky" id="savedViewSelect" onchange="loadSavedView(this.value)" title="Saved views" style="max-width:140px;">
+        <option value="">Views...</option>
+      </select>
+      <button class="btn-chunky" onclick="saveCurrentView()" title="Save current screener as a named view" style="padding:6px 8px; font-size:13px;">Save</button>
+      <button class="btn-chunky" id="undoBtn" onclick="undoState()" title="Undo last state change (Ctrl+Z)" disabled style="font-size:14px; padding:6px 8px;">&#8630;</button>
+      <button class="btn-chunky" id="redoBtn" onclick="redoState()" title="Redo state change (Ctrl+Y)" disabled style="font-size:14px; padding:6px 8px;">&#8631;</button>
+      <button class="btn-chunky" id="settingsToggleBtn" onclick="toggleSettingsPanel()" title="Display settings (keyboard shortcuts inside)" style="font-size:13px; padding:6px 8px;">&#9881; Display</button>
+    </div>
+
+    <!-- Hidden mode-specific buttons -->
     <button class="btn-chunky" id="tiersBtn" onclick="openTierView()" style="display:none;">Tiers</button>
     <button class="btn-chunky" id="bigBoardBtn" onclick="openBigBoard()" style="display:none;">Big Board</button>
     <button class="btn-chunky" id="classAnalyticsBtn" onclick="openClassAnalytics()" style="display:none;">Class Analytics</button>
-    <button class="btn-chunky" onclick="openMyRoster()" style="border-color:var(--green);">My Roster</button>
-    <button class="btn-chunky" onclick="openTradeAnalyzer()" style="border-color:var(--orange);">Trade</button>
-    <button class="btn-chunky btn-csv-export" onclick="exportCSV()" title="Export current view as CSV" aria-label="Export current view as CSV">CSV</button>
-    <button class="btn-chunky" onclick="openShareModal()" style="border-color:var(--orange);">Share</button>
     <button class="btn-chunky" id="exportRankingsBtn" onclick="openRankingsExport()" style="display:none;">Export Rankings</button>
     <button class="btn-chunky" id="tradeValuesBtn" onclick="openTradeValues()" style="display:none; border-color:var(--orange);">Trade Values</button>
     <button class="btn-chunky" id="agingCurvesBtn" onclick="openAgingCurves()" style="display:none; border-color:var(--green);">Aging Curves</button>
     <button class="btn-chunky" id="heatMapBtn" onclick="openHeatMap()" style="display:none; border-color:var(--red);">Heat Map</button>
-    <button class="btn-chunky" id="heatColorsBtn" onclick="toggleHeatColors()" title="Per-position percentile coloring: green = elite (90th+), red = below avg (10th-). Press H to toggle.">Heat</button>
-    <button class="btn-chunky" id="percentileModeBtn" onclick="togglePercentileMode()" title="Show position percentile ranks (0-99) instead of raw values. Press R to toggle.">Pctl</button>
-    <button class="btn-chunky" id="dataBarsBtn" onclick="toggleDataBars()" title="Inline data bars showing relative value per column. Press B to toggle.">Bars</button>
-    <button class="btn-chunky" id="leaderBadgesBtn" onclick="toggleLeaderBadges()" title="Gold/silver/bronze dots on top 3 stat values per column. Press L to toggle.">Top 3</button>
-    <button class="btn-chunky" id="diffModeBtn" onclick="toggleDiffMode()" title="Compare all rows vs first pinned player. Shows green/red deltas. Press I to toggle.">Diff</button>
-    <button class="btn-chunky" id="tierBreaksBtn" onclick="toggleTierBreaks()" title="Show tier break dividers in the table. Press T to toggle.">Tiers</button>
-    <button class="btn-chunky" id="densityBtn" onclick="toggleDensity()" title="Compact table mode — more rows, less padding. Press D to toggle.">Dense</button>
-    <button class="btn-chunky" id="groupHeadersBtn" onclick="toggleGroupHeaders()" title="Show column category groups above headers. Press G to toggle.">Groups</button>
-    <button class="btn-chunky" id="summaryBarBtn" onclick="toggleSummaryBar()" title="Show average stats summary row at bottom. Press A to toggle.">Summary</button>
 
     <span class="result-count" id="resultCount"></span>
+  </div>
+
+  <!-- SETTINGS / DISPLAY PANEL (collapsible) -->
+  <div class="settings-panel" id="settingsPanel" style="display:none;">
+    <div class="settings-panel-inner">
+      <span class="settings-panel-label">Display</span>
+      <button class="btn-chunky settings-btn" id="heatColorsBtn" onclick="toggleHeatColors()" title="Percentile coloring (H)">Heat</button>
+      <button class="btn-chunky settings-btn" id="percentileModeBtn" onclick="togglePercentileMode()" title="Percentile ranks (R)">Pctl</button>
+      <button class="btn-chunky settings-btn" id="dataBarsBtn" onclick="toggleDataBars()" title="Inline data bars (B)">Bars</button>
+      <button class="btn-chunky settings-btn" id="leaderBadgesBtn" onclick="toggleLeaderBadges()" title="Top 3 badges (L)">Top 3</button>
+      <button class="btn-chunky settings-btn" id="diffModeBtn" onclick="toggleDiffMode()" title="Diff vs pinned (I)">Diff</button>
+      <button class="btn-chunky settings-btn" id="tierBreaksBtn" onclick="toggleTierBreaks()" title="Tier dividers (T)">Tiers</button>
+      <button class="btn-chunky settings-btn" id="densityBtn" onclick="toggleDensity()" title="Compact rows (D)">Dense</button>
+      <button class="btn-chunky settings-btn" id="groupHeadersBtn" onclick="toggleGroupHeaders()" title="Column groups (G)">Groups</button>
+      <button class="btn-chunky settings-btn" id="summaryBarBtn" onclick="toggleSummaryBar()" title="Summary row (A)">Summary</button>
+      <span class="settings-panel-divider"></span>
+      <button class="btn-chunky settings-btn" onclick="openCustomScoring()">Custom Scoring</button>
+      <button class="btn-chunky settings-btn" onclick="openSavedViews()">Manage Views</button>
+      <span class="settings-panel-hint">keyboard: H R B L I T D G A</span>
+    </div>
   </div>
 
   <!-- FILTER BAR -->
