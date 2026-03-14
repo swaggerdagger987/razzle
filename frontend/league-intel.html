@@ -771,6 +771,145 @@
 
   .trade-diplomat-cta a:hover { text-decoration: underline; }
 
+  /* ===== ROSTER DEPTH ===== */
+  .depth-trigger {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 2px dashed var(--ink-faint);
+  }
+
+  .depth-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  .depth-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 16px;
+    transition: all 0.15s;
+  }
+
+  .depth-card:hover {
+    box-shadow: 6px 6px 0 var(--ink);
+    transform: translate(-2px, -2px);
+  }
+
+  .depth-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px dashed var(--ink-faint);
+  }
+
+  .depth-card-name {
+    font-family: var(--font-display);
+    font-size: 16px;
+  }
+
+  .depth-score-badge {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border: 2px solid var(--ink);
+    border-radius: 20px;
+  }
+
+  .depth-bar-group {
+    margin-bottom: 8px;
+  }
+
+  .depth-bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    margin-bottom: 3px;
+    color: var(--ink-medium);
+  }
+
+  .depth-bar-track {
+    height: 18px;
+    background: var(--bg-warm);
+    border: 2px solid var(--ink);
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+  }
+
+  .depth-bar-starter {
+    height: 100%;
+    transition: width 0.3s;
+  }
+
+  .depth-bar-bench {
+    height: 100%;
+    opacity: 0.5;
+    transition: width 0.3s;
+  }
+
+  .depth-vulns {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .depth-vuln-flag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border: 2px solid var(--red);
+    border-radius: 12px;
+    color: var(--red);
+    background: var(--red-light);
+  }
+
+  .depth-deep-flag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border: 2px solid var(--green);
+    border-radius: 12px;
+    color: var(--green);
+    background: var(--green-light);
+  }
+
+  .depth-section-header {
+    font-family: var(--font-hand);
+    font-size: 18px;
+    color: var(--ink-medium);
+    margin-bottom: 8px;
+  }
+
+  .depth-legend {
+    display: flex;
+    gap: 16px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-light);
+    margin-bottom: 12px;
+  }
+
+  .depth-legend-swatch {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--ink);
+    border-radius: 3px;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+
   /* ===== MOBILE ===== */
   @media (max-width: 768px) {
     html, body { overflow-x: hidden; }
@@ -792,6 +931,8 @@
     .activity-nudge { font-size: 11px; }
     .trade-match-row { font-size: 10px; gap: 4px; }
     .trade-partner-card { padding: 12px; }
+    .depth-grid { grid-template-columns: 1fr; }
+    .depth-card { padding: 12px; }
   }
 </style>
 </head>
@@ -1241,6 +1382,12 @@ async function toggleLeague(card, leagueId, userId) {
       '</div>' +
       '<div id="tradeFinder-' + leagueId + '"></div>';
 
+    // Add roster depth trigger
+    html += '<div class="depth-trigger">' +
+      '<button id="depthBtn-' + leagueId + '">analyze roster depth</button>' +
+      '</div>' +
+      '<div id="rosterDepth-' + leagueId + '"></div>';
+
     rosterDiv.innerHTML = html;
 
     // Bind profile button with closure over variables
@@ -1262,6 +1409,17 @@ async function toggleLeague(card, leagueId, userId) {
         this.disabled = true;
         this.textContent = "scouting the market...";
         loadLeagueTradeFinder(leagueId, userId, myRoster, rosters, allPlayers, userMap);
+      });
+    }
+
+    // Bind depth button
+    var depthBtn = document.getElementById("depthBtn-" + leagueId);
+    if (depthBtn) {
+      depthBtn.addEventListener("click", function(e) {
+        e.stopPropagation();
+        this.disabled = true;
+        this.textContent = "analyzing depth charts...";
+        loadRosterDepth(leagueId, userId, rosters, allPlayers, userMap);
       });
     }
 
@@ -2790,6 +2948,392 @@ async function loadLeagueTradeFinder(leagueId, userId, myRoster, rosters, allPla
     var tfBtn = document.getElementById("tradeFinderBtn-" + leagueId);
     if (tfBtn) { tfBtn.disabled = false; tfBtn.textContent = "find trade partners"; }
   }
+}
+
+// ── ROSTER DEPTH ANALYSIS ─────────────────────────────────────────────
+async function loadRosterDepth(leagueId, userId, rosters, allPlayers, userMap) {
+  var container = document.getElementById("rosterDepth-" + leagueId);
+  if (!container) return;
+
+  container.innerHTML = '<div class="loading-intel" style="font-size:14px;">pulling depth charts for all managers...</div>';
+
+  try {
+    // Build full player list from all rosters (QB/RB/WR/TE only)
+    var allRosterPlayers = [];
+    var playerRosterMap = {}; // sleeper_name -> owner_id
+
+    for (var i = 0; i < rosters.length; i++) {
+      var roster = rosters[i];
+      var playerIds = roster.players || [];
+      for (var j = 0; j < playerIds.length; j++) {
+        var pid = playerIds[j];
+        var p = allPlayers[pid];
+        if (!p) continue;
+        var pos = p.position || "?";
+        if (pos !== "QB" && pos !== "RB" && pos !== "WR" && pos !== "TE") continue;
+        var name = ((p.first_name || "") + " " + (p.last_name || "")).trim();
+        if (!name) continue;
+        allRosterPlayers.push({ name: name, position: pos, team: p.team || "" });
+        playerRosterMap[name] = { owner_id: roster.owner_id, position: pos, sleeper_pid: pid };
+      }
+    }
+
+    if (allRosterPlayers.length === 0) {
+      container.innerHTML = '<div class="loading-intel" style="color:var(--ink-light);">no rosters to analyze.</div>';
+      return;
+    }
+
+    // Fetch PPG for all players from Razzle API (free endpoint)
+    var ctrl = new AbortController();
+    var timer = setTimeout(function() { ctrl.abort(); }, 20000);
+    var resp = await fetch("/api/roster-depth-lookup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ players: allRosterPlayers }),
+      signal: ctrl.signal
+    });
+    clearTimeout(timer);
+
+    if (!resp.ok) {
+      // Fallback: use Sleeper data only (no PPG enrichment)
+      renderDepthFromSleeper(container, rosters, allPlayers, userMap, userId);
+      return;
+    }
+
+    var data = await resp.json();
+    var valueLookup = {};
+    if (data.players) {
+      for (var k = 0; k < data.players.length; k++) {
+        var pl = data.players[k];
+        valueLookup[pl.sleeper_name] = pl;
+      }
+    }
+
+    // Build per-manager depth data
+    var managerDepths = [];
+
+    for (var ri = 0; ri < rosters.length; ri++) {
+      var r = rosters[ri];
+      var ownerId = r.owner_id;
+      var managerName = userMap[ownerId] || "Manager";
+      var playerIds2 = r.players || [];
+
+      // Group players by position with PPG
+      var posPlayers = { QB: [], RB: [], WR: [], TE: [] };
+      for (var pi = 0; pi < playerIds2.length; pi++) {
+        var pp = allPlayers[playerIds2[pi]];
+        if (!pp) continue;
+        var ppos = pp.position || "?";
+        if (!posPlayers[ppos]) continue;
+        var pname = ((pp.first_name || "") + " " + (pp.last_name || "")).trim();
+        var vData = valueLookup[pname];
+        var ppg = vData ? (vData.ppg || 0) : 0;
+        posPlayers[ppos].push({ name: pname, ppg: ppg, pos: ppos });
+      }
+
+      // Sort each position by PPG descending
+      for (var pos2 in posPlayers) {
+        posPlayers[pos2].sort(function(a, b) { return b.ppg - a.ppg; });
+      }
+
+      // Starter slots: 1QB, 2RB, 2WR, 1TE, 1FLEX (best remaining RB/WR/TE)
+      var starterSlots = { QB: 1, RB: 2, WR: 2, TE: 1 };
+      var starters = {};
+      var bench = {};
+      var flexCandidates = [];
+
+      for (var sp in starterSlots) {
+        var count = starterSlots[sp];
+        starters[sp] = posPlayers[sp].slice(0, count);
+        var remaining = posPlayers[sp].slice(count);
+        // Flex candidates from RB/WR/TE
+        if (sp !== "QB") {
+          for (var fx = 0; fx < remaining.length; fx++) {
+            flexCandidates.push(remaining[fx]);
+          }
+        } else {
+          bench[sp] = remaining;
+        }
+      }
+
+      // Pick best FLEX from remaining RB/WR/TE
+      flexCandidates.sort(function(a, b) { return b.ppg - a.ppg; });
+      var flexStarter = flexCandidates.length > 0 ? flexCandidates[0] : null;
+      var benchPlayers = flexCandidates.slice(1);
+
+      // Group bench by position
+      bench.RB = [];
+      bench.WR = [];
+      bench.TE = [];
+      for (var bx = 0; bx < benchPlayers.length; bx++) {
+        var bp = benchPlayers[bx];
+        if (bench[bp.pos]) bench[bp.pos].push(bp);
+      }
+
+      // Calculate starter avg PPG and bench avg PPG per position
+      var posDepth = {};
+      var totalStarterPPG = 0;
+      var totalBenchPPG = 0;
+      var starterCount = 0;
+      var benchCount = 0;
+      var vulnerabilities = [];
+      var strengths = [];
+
+      for (var dp in starterSlots) {
+        var sPlayers = starters[dp] || [];
+        var bPlayers = bench[dp] || [];
+        var sAvg = sPlayers.length > 0 ? sPlayers.reduce(function(s, p) { return s + p.ppg; }, 0) / sPlayers.length : 0;
+        var bAvg = bPlayers.length > 0 ? bPlayers.reduce(function(s, p) { return s + p.ppg; }, 0) / bPlayers.length : 0;
+
+        totalStarterPPG += sPlayers.reduce(function(s, p) { return s + p.ppg; }, 0);
+        totalBenchPPG += bPlayers.reduce(function(s, p) { return s + p.ppg; }, 0);
+        starterCount += sPlayers.length;
+        benchCount += bPlayers.length;
+
+        posDepth[dp] = {
+          starterAvg: sAvg,
+          benchAvg: bAvg,
+          starterCount: sPlayers.length,
+          benchCount: bPlayers.length,
+          totalCount: sPlayers.length + bPlayers.length,
+          starters: sPlayers,
+          bench: bPlayers
+        };
+
+        // Vulnerability: only 1 startable player (starter + 0 bench, or bench PPG < 5)
+        var totalAtPos = sPlayers.length + bPlayers.length;
+        var hasBenchDepth = bPlayers.length > 0 && bAvg >= 5;
+        if (totalAtPos <= starterSlots[dp] && !hasBenchDepth) {
+          vulnerabilities.push(dp);
+        }
+        // Strength: good bench depth (3+ players, bench avg > 8)
+        if (bPlayers.length >= 2 && bAvg >= 8) {
+          strengths.push(dp);
+        }
+      }
+
+      // Add FLEX starter to total starter PPG
+      if (flexStarter) {
+        totalStarterPPG += flexStarter.ppg;
+        starterCount++;
+      }
+
+      // Depth Score: 0-100 composite
+      // 60% starter quality (normalized to ~20 PPG max avg) + 40% bench depth
+      var starterAvgAll = starterCount > 0 ? totalStarterPPG / starterCount : 0;
+      var benchAvgAll = benchCount > 0 ? totalBenchPPG / benchCount : 0;
+      var starterScore = Math.min(starterAvgAll / 20, 1) * 60;
+      var benchScore = Math.min(benchAvgAll / 12, 1) * 40;
+      // Penalty for vulnerabilities
+      var vulnPenalty = vulnerabilities.length * 8;
+      var depthScore = Math.max(0, Math.min(100, Math.round(starterScore + benchScore - vulnPenalty)));
+
+      managerDepths.push({
+        ownerId: ownerId,
+        name: managerName,
+        isUser: ownerId === userId,
+        depthScore: depthScore,
+        starterAvg: starterAvgAll,
+        benchAvg: benchAvgAll,
+        posDepth: posDepth,
+        vulnerabilities: vulnerabilities,
+        strengths: strengths,
+        flexStarter: flexStarter,
+        record: (r.settings?.wins || 0) + "-" + (r.settings?.losses || 0)
+      });
+    }
+
+    // Sort by depth score descending
+    managerDepths.sort(function(a, b) { return b.depthScore - a.depthScore; });
+
+    // Render
+    renderDepthPanel(container, managerDepths);
+
+  } catch (e) {
+    container.innerHTML = '<div class="loading-intel" style="color:var(--red); font-size:14px;">' +
+      (e.name === "AbortError" ? "depth analysis timed out. try again." : "depth analysis failed. try again.") + '</div>';
+    // Re-enable button
+    var btn = document.getElementById("depthBtn-" + leagueId);
+    if (btn) { btn.disabled = false; btn.textContent = "analyze roster depth"; }
+    console.error(e);
+  }
+}
+
+function renderDepthPanel(container, managerDepths) {
+  var POS_COLORS = {
+    QB: "var(--pos-qb)",
+    RB: "var(--pos-rb)",
+    WR: "var(--pos-wr)",
+    TE: "var(--pos-te)"
+  };
+
+  function scoreColor(score) {
+    if (score >= 70) return "background:var(--green-light);color:var(--green);border-color:var(--green);";
+    if (score >= 45) return "background:var(--yellow-light);color:var(--ink-medium);border-color:var(--ink-light);";
+    return "background:var(--red-light);color:var(--red);border-color:var(--red);";
+  }
+
+  function depthLabel(score) {
+    if (score >= 80) return "elite";
+    if (score >= 65) return "deep";
+    if (score >= 50) return "solid";
+    if (score >= 35) return "thin";
+    return "paper thin";
+  }
+
+  var html = '<div class="depth-section-header">roster depth analysis — all managers ranked</div>';
+
+  // Legend
+  html += '<div class="depth-legend">' +
+    '<span><span class="depth-legend-swatch" style="background:var(--green);"></span> starter</span>' +
+    '<span><span class="depth-legend-swatch" style="background:var(--green);opacity:0.5;"></span> bench</span>' +
+    '<span><span class="depth-legend-swatch" style="background:var(--red-light);border-color:var(--red);"></span> vulnerable</span>' +
+    '<span><span class="depth-legend-swatch" style="background:var(--green-light);border-color:var(--green);"></span> deep</span>' +
+    '</div>';
+
+  html += '<div class="depth-grid">';
+
+  for (var i = 0; i < managerDepths.length; i++) {
+    var mgr = managerDepths[i];
+    var rank = i + 1;
+
+    html += '<div class="depth-card"' + (mgr.isUser ? ' style="border-color:var(--orange);"' : '') + '>';
+
+    // Header: rank + name + score badge
+    html += '<div class="depth-card-header">';
+    html += '<div>';
+    html += '<span style="font-family:var(--font-mono);font-size:11px;color:var(--ink-light);">#' + rank + '</span> ';
+    html += '<span class="depth-card-name">' + escapeHtml(mgr.name) + '</span>';
+    if (mgr.isUser) html += ' <span style="font-family:var(--font-hand);font-size:14px;color:var(--orange);">you</span>';
+    html += '</div>';
+    html += '<div style="text-align:right;">';
+    html += '<span class="depth-score-badge" style="' + scoreColor(mgr.depthScore) + '">' + mgr.depthScore + '</span>';
+    html += '<div style="font-family:var(--font-hand);font-size:13px;color:var(--ink-light);margin-top:2px;">' + depthLabel(mgr.depthScore) + '</div>';
+    html += '</div>';
+    html += '</div>';
+
+    // Starter/Bench PPG summary
+    html += '<div style="display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:11px;color:var(--ink-light);margin-bottom:8px;">';
+    html += '<span>starter avg: <strong style="color:var(--ink);">' + mgr.starterAvg.toFixed(1) + '</strong> PPG</span>';
+    html += '<span>bench avg: <strong style="color:var(--ink);">' + mgr.benchAvg.toFixed(1) + '</strong> PPG</span>';
+    html += '<span>' + mgr.record + '</span>';
+    html += '</div>';
+
+    // Position depth bars
+    var positions = ["QB", "RB", "WR", "TE"];
+    // Find max PPG across all positions for scaling
+    var maxPPG = 0;
+    for (var pi = 0; pi < positions.length; pi++) {
+      var pd = mgr.posDepth[positions[pi]];
+      if (pd && pd.starterAvg > maxPPG) maxPPG = pd.starterAvg;
+    }
+    if (maxPPG < 10) maxPPG = 20; // floor for scaling
+
+    for (var pi2 = 0; pi2 < positions.length; pi2++) {
+      var pos = positions[pi2];
+      var pd2 = mgr.posDepth[pos];
+      if (!pd2) continue;
+      var color = POS_COLORS[pos];
+      var isVuln = mgr.vulnerabilities.indexOf(pos) >= 0;
+      var isDeep = mgr.strengths.indexOf(pos) >= 0;
+
+      var starterPct = Math.min((pd2.starterAvg / (maxPPG * 1.2)) * 100, 90);
+      var benchPct = Math.min((pd2.benchAvg / (maxPPG * 1.2)) * 100, 90);
+
+      html += '<div class="depth-bar-group">';
+      html += '<div class="depth-bar-label">';
+      html += '<span><strong>' + pos + '</strong> (' + pd2.totalCount + ')';
+      if (isVuln) html += ' <span style="color:var(--red);font-size:9px;">THIN</span>';
+      if (isDeep) html += ' <span style="color:var(--green);font-size:9px;">DEEP</span>';
+      html += '</span>';
+      html += '<span>' + pd2.starterAvg.toFixed(1) + ' / ' + pd2.benchAvg.toFixed(1) + ' PPG</span>';
+      html += '</div>';
+
+      html += '<div class="depth-bar-track">';
+      html += '<div class="depth-bar-starter" style="width:' + starterPct + '%;background:' + color + ';"></div>';
+      html += '<div class="depth-bar-bench" style="width:' + benchPct + '%;background:' + color + ';"></div>';
+      html += '</div>';
+      html += '</div>';
+    }
+
+    // Vulnerability / Strength flags
+    if (mgr.vulnerabilities.length > 0 || mgr.strengths.length > 0) {
+      html += '<div class="depth-vulns">';
+      for (var vi = 0; vi < mgr.vulnerabilities.length; vi++) {
+        html += '<span class="depth-vuln-flag">' + mgr.vulnerabilities[vi] + ' vulnerable</span>';
+      }
+      for (var si = 0; si < mgr.strengths.length; si++) {
+        html += '<span class="depth-deep-flag">' + mgr.strengths[si] + ' loaded</span>';
+      }
+      html += '</div>';
+    }
+
+    html += '</div>'; // close depth-card
+  }
+
+  html += '</div>'; // close depth-grid
+  container.innerHTML = html;
+}
+
+// Fallback: render depth from Sleeper data only (no PPG enrichment)
+function renderDepthFromSleeper(container, rosters, allPlayers, userMap, userId) {
+  var managerDepths = [];
+
+  for (var ri = 0; ri < rosters.length; ri++) {
+    var r = rosters[ri];
+    var ownerId = r.owner_id;
+    var managerName = userMap[ownerId] || "Manager";
+    var playerIds = r.players || [];
+
+    var posPlayers = { QB: [], RB: [], WR: [], TE: [] };
+    for (var pi = 0; pi < playerIds.length; pi++) {
+      var pp = allPlayers[playerIds[pi]];
+      if (!pp) continue;
+      var pos = pp.position || "?";
+      if (!posPlayers[pos]) continue;
+      var name = ((pp.first_name || "") + " " + (pp.last_name || "")).trim();
+      posPlayers[pos].push({ name: name, ppg: 0, pos: pos });
+    }
+
+    var starterSlots = { QB: 1, RB: 2, WR: 2, TE: 1 };
+    var posDepth = {};
+    var vulnerabilities = [];
+
+    for (var sp in starterSlots) {
+      var total = posPlayers[sp].length;
+      var needed = starterSlots[sp];
+      posDepth[sp] = {
+        starterAvg: 0, benchAvg: 0,
+        starterCount: Math.min(total, needed),
+        benchCount: Math.max(0, total - needed),
+        totalCount: total,
+        starters: posPlayers[sp].slice(0, needed),
+        bench: posPlayers[sp].slice(needed)
+      };
+      if (total <= needed) vulnerabilities.push(sp);
+    }
+
+    // Simple depth score based on roster count
+    var totalPlayers = playerIds.length;
+    var depthScore = Math.min(100, Math.round((totalPlayers / 25) * 50 + (4 - vulnerabilities.length) * 12.5));
+
+    managerDepths.push({
+      ownerId: ownerId,
+      name: managerName,
+      isUser: ownerId === userId,
+      depthScore: depthScore,
+      starterAvg: 0,
+      benchAvg: 0,
+      posDepth: posDepth,
+      vulnerabilities: vulnerabilities,
+      strengths: [],
+      flexStarter: null,
+      record: (r.settings?.wins || 0) + "-" + (r.settings?.losses || 0)
+    });
+  }
+
+  managerDepths.sort(function(a, b) { return b.depthScore - a.depthScore; });
+  renderDepthPanel(container, managerDepths);
 }
 
 // ── JS-safe string escape for inline onclick attributes ──────────────

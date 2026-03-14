@@ -102,6 +102,7 @@ from .dynasty import (  # noqa: F401
     fetch_dynasty_dashboard,
     fetch_tier_list,
     fetch_dynasty_power_rankings,
+    fetch_roster_depth_lookup,
 )
 
 # --- analytics (heatmaps, leaders, scarcity, breakouts, explorer, ...) ---

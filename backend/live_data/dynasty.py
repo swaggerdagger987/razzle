@@ -819,6 +819,64 @@ def fetch_league_trade_values(player_names, season=None):
         return {"players": matched, "unmatched": unmatched, "season": season}
 
 
+def fetch_roster_depth_lookup(player_names, season=None):
+    """Lightweight PPG lookup for roster depth analysis. Free/ungated.
+    Takes [{name, position, team}, ...] and returns [{sleeper_name, ppg, position}, ...]."""
+    if not player_names:
+        return {"players": []}
+
+    with get_db() as conn:
+        if not season:
+            row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+            season = row[0] if row and row[0] else _current_nfl_season()
+
+        rows = conn.execute("""
+            SELECT p.full_name, p.position, p.team,
+                   SUM(s.fantasy_points_ppr) as total_ppr,
+                   COUNT(DISTINCT s.week) as games
+            FROM players p
+            JOIN player_week_stats s ON s.player_id = p.player_id AND s.season = ?
+            WHERE p.position IN ('QB','RB','WR','TE') AND p.fantasy_relevant = 1
+            GROUP BY p.player_id HAVING games >= 1
+        """, [season]).fetchall()
+
+        name_map = {}
+        team_name_map = {}
+        for r in rows:
+            full_name = r[0] or "Unknown"
+            pos = r[1] or "?"
+            team = r[2] or "FA"
+            ppg = round((r[3] or 0) / max(r[4] or 1, 1), 2)
+            norm = _normalize_name(full_name)
+            data = {"full_name": full_name, "position": pos, "ppg": ppg}
+            if norm not in name_map:
+                name_map[norm] = data
+            team_key = f"{(team or '').upper()}:{norm}"
+            team_name_map[team_key] = data
+
+        matched = []
+        for entry in player_names:
+            sleeper_name = entry.get("name", "")
+            sleeper_team = entry.get("team", "")
+            norm = _normalize_name(sleeper_name)
+            team_key = f"{(sleeper_team or '').upper()}:{norm}"
+            player = team_name_map.get(team_key) or name_map.get(norm)
+            if player:
+                matched.append({
+                    "sleeper_name": sleeper_name,
+                    "position": player["position"],
+                    "ppg": player["ppg"],
+                })
+            else:
+                matched.append({
+                    "sleeper_name": sleeper_name,
+                    "position": entry.get("position", "?"),
+                    "ppg": 0,
+                })
+
+        return {"players": matched}
+
+
 # ---------------------------------------------------------------------------
 # Roster Builder — Grade a hypothetical dynasty roster
 # ---------------------------------------------------------------------------

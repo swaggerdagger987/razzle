@@ -2688,6 +2688,33 @@ async def league_trade_finder(request: Request):
         return JSONResponse({"error": "Failed to fetch league trade values"}, status_code=500)
 
 
+@app.post("/api/roster-depth-lookup")
+async def roster_depth_lookup(request: Request):
+    """Lightweight PPG lookup for roster depth analysis. Free/ungated.
+    Accepts {players: [{name, position, team}, ...]}."""
+    try:
+        body = await request.json()
+        players = body.get("players", [])
+        if not isinstance(players, list) or len(players) == 0:
+            return JSONResponse({"error": "players array required"}, status_code=400)
+        if len(players) > 500:
+            return JSONResponse({"error": "Max 500 players"}, status_code=400)
+        clean = []
+        for p in players:
+            if isinstance(p, dict) and p.get("name"):
+                clean.append({
+                    "name": str(p["name"])[:100],
+                    "position": str(p.get("position", ""))[:5],
+                    "team": str(p.get("team", ""))[:5],
+                })
+        if not clean:
+            return JSONResponse({"error": "No valid player entries"}, status_code=400)
+        return live_data.fetch_roster_depth_lookup(player_names=clean)
+    except Exception as e:
+        logger.exception("roster-depth-lookup error")
+        return JSONResponse({"error": "Failed to fetch depth data"}, status_code=500)
+
+
 @app.get("/api/cheat-sheet")
 def cheat_sheet(season: int = 0, format: str = "ppr"):
     """Return a draft cheat sheet grouped by position."""
