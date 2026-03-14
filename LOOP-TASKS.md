@@ -1,21 +1,21 @@
 # Razzle Ship Loop — Task Tracker
 
 ## Current State
-- Phase: Bureau of Intelligence — Trade Network
-- Current Task: Task 1 — Build trade network visualization
+- Phase: Bureau of Intelligence — Waiver Tendencies
+- Current Task: Task 1 — Build waiver analysis panel
 - Current Stage: BUILD
 - Tasks Completed: 0/1
 - Loop Iterations: 0
 
 ## Phase Spec
 
-**Exit Criterion**: Bureau shows a trade relationship map between all managers.
+**Exit Criterion**: Bureau shows waiver/FA analysis per manager.
 
-### Task 1: Build trade network visualization
-**Requirement**: Add a "Trade Network" panel showing trade relationships: (1) Trade frequency matrix — grid/table showing how often each pair of managers trades with each other (from Sleeper transaction history), (2) Trade balance — for each pair, who has "won" more trades (compare trade value at time of trade using Razzle valuations), (3) Trade timing — does each manager trade early season, deadline, or offseason? (4) Position tendencies — what positions does each manager trade away vs acquire? (5) "Most likely trade partner" recommendation for the current user based on historical patterns + current roster needs. Pull transaction data from Sleeper API (already fetched in league-intel.html for activity feed). Cross-reference player names with Razzle trade values.
-**Accept when**: Trade matrix renders for leagues with trade history. Balance column shows value exchanged. Position tendencies visible per manager. Trade partner recommendation renders.
+### Task 1: Build waiver analysis panel
+**Requirement**: Add waiver/FA analysis per manager: (1) FAAB budget remaining vs spent (if FAAB league — check league settings), (2) Total waiver claims count per season, (3) Position bias — what positions do they claim most? (4) Hit rate — of their pickups, how many were still rostered 4+ weeks later? (estimate from transaction history), (5) "Waiver hawk" score 0-100 measuring aggressiveness (claims per week, FAAB spend rate, speed of claims). Use existing transaction data already parsed from Sleeper API in league-intel.html. Display as chunky cards with bar charts per manager, sorted by hawk score.
+**Accept when**: Waiver panel renders with real transaction data. FAAB tracking works for FAAB leagues. Hawk score differentiates aggressive vs passive managers. Position bias visible.
 **Depends on**: none
 **Size**: L
 
 ## Status
-- [ ] Task 1: Build trade network visualization
+- [ ] Task 1: Build waiver analysis panel

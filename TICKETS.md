@@ -13,18 +13,6 @@ The database file `data/terminal.db` uses WAL journal mode locally. Uploading it
 
 ---
 
-## Phase: Bureau of Intelligence — Waiver Tendencies
-
-**Exit Criterion**: Bureau shows waiver/FA analysis per manager.
-
-### Task 1: Build waiver analysis panel
-**Requirement**: Add waiver/FA analysis per manager: (1) FAAB budget remaining vs spent (if FAAB league — check league settings), (2) Total waiver claims count per season, (3) Position bias — what positions do they claim most? (4) Hit rate — of their pickups, how many were still rostered 4+ weeks later? (estimate from transaction history), (5) "Waiver hawk" score 0-100 measuring aggressiveness (claims per week, FAAB spend rate, speed of claims). Use existing transaction data already parsed from Sleeper API in league-intel.html. Display as chunky cards with bar charts per manager, sorted by hawk score.
-**Accept when**: Waiver panel renders with real transaction data. FAAB tracking works for FAAB leagues. Hawk score differentiates aggressive vs passive managers. Position bias visible.
-**Depends on**: none
-**Size**: L
-
----
-
 ## Phase: Bureau of Intelligence — League Power Rankings
 
 **Exit Criterion**: Bureau has composite power rankings beyond simple W-L.
