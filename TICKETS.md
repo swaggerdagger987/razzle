@@ -13,50 +13,6 @@ The database file `data/terminal.db` uses WAL journal mode locally. Uploading it
 
 ---
 
-## Phase: Build Pipeline — esbuild Minification
-
-**Exit Criterion**: All JS and CSS files are minified on deploy. Raw source files unchanged. Lab page JS payload drops from 1.16MB to ~350-400KB. Zero functionality changes.
-
-### Task 1: Add esbuild minification to the Render build
-
-**Files**: `render.yaml`, `backend/server.py`
-
-1. In `render.yaml`, update the `buildCommand` to add esbuild minification after pip install:
-```yaml
-buildCommand: pip install -r requirements.txt && npx esbuild frontend/*.js --minify --outdir=frontend/dist/ && npx esbuild frontend/*.css --minify --outdir=frontend/dist/
-```
-2. Copy all non-JS/CSS frontend files (HTML, assets/, favicon.svg, etc.) into `frontend/dist/` as part of the build. Add to the buildCommand:
-```
-&& cp frontend/*.html frontend/dist/ && cp -r frontend/assets frontend/dist/assets && cp frontend/favicon.svg frontend/dist/
-```
-3. In `backend/server.py`, find the static file mount (line ~2784): `StaticFiles(directory=str(FRONTEND_DIR), html=True)`. Change `FRONTEND_DIR` to point to `frontend/dist/` in production. Keep a fallback to `frontend/` for local dev (when `dist/` doesn't exist):
-```python
-DIST_DIR = Path(__file__).resolve().parent.parent / "frontend" / "dist"
-FRONTEND_DIR = DIST_DIR if DIST_DIR.exists() else Path(__file__).resolve().parent.parent / "frontend"
-```
-4. Add `frontend/dist/` to `.gitignore` — it's a build artifact, never committed.
-
-**Why**: 1.16MB of unminified JS on the Lab page. esbuild runs in ~50ms, zero config, cuts payload 60-70%. Dev workflow unchanged — you still edit raw files in `frontend/`.
-
-**Acceptance**: `render.yaml` build command includes esbuild. `frontend/dist/` is generated on build with minified JS/CSS + copied HTML/assets. Server serves from `dist/` in production, raw `frontend/` in local dev. `.gitignore` includes `frontend/dist/`. All pages load and function correctly from minified files. No source files modified by esbuild.
-
----
-
-### Task 2: Verify minified build works end-to-end
-
-**Files**: `frontend/dist/` (generated)
-
-After the build pipeline is set up:
-1. Run the build command locally to generate `frontend/dist/`
-2. Start the server and verify it serves from `dist/`
-3. Test: Lab screener loads, sidebar panel switching works, formulas work, charts render, warroom canvas animates, pricing page toggle works, auth modal opens
-4. Check that all asset paths resolve (images, fonts, favicon)
-5. Check that HTML files correctly reference the minified JS/CSS (since HTML files are copied as-is, script `src="lab.js"` will resolve to the minified `dist/lab.js`)
-
-**Acceptance**: Full smoke test passes against minified build. No console errors. All features work identically to raw source.
-
----
-
 ## Phase: BYOK Security Transparency & Cleanup
 
 **Exit Criterion**: Users understand the BYOK security model. Decrypt endpoint removed. No false sense of security from "cloud sync" encryption theater.

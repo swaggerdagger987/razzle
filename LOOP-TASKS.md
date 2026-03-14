@@ -1,11 +1,11 @@
 # Razzle Ship Loop — Task Tracker
 
 ## Current State
-- Phase: F (Data Refresh + Backend Hardening)
-- Current Task: COMPLETE
-- Current Stage: DONE
-- Tasks Completed: 6/6
-- Loop Iterations: 6
+- Phase: G (Build Pipeline — esbuild Minification)
+- Current Task: G-1
+- Current Stage: BUILD
+- Tasks Completed: 0/2
+- Loop Iterations: 7
 
 ## Phase A: Visual & Design Audit (Mar 12–18)
 **Exit Criterion**: Open each of the three rooms plus the landing page. The visual language is unmistakably Razzle — warm sand, chunky borders, espresso ink, comic-strip energy. No page looks like it was built by a different team.
@@ -354,3 +354,24 @@
 **Size**: M
 **Status**: PASS
 **Attempts**: 1
+
+---
+
+## Phase G: Build Pipeline — esbuild Minification
+**Exit Criterion**: All JS and CSS files are minified on deploy. Raw source files unchanged. Lab page JS payload drops from 1.16MB to ~350-400KB. Zero functionality changes.
+
+### Task G-1: Add esbuild minification to the Render build
+**Requirement**: "Update render.yaml buildCommand to run esbuild on frontend/*.js and frontend/*.css, output to frontend/dist/. Copy HTML/assets/favicon. Update server.py FRONTEND_DIR to serve from dist/ in production, fallback to frontend/ for dev. Add frontend/dist/ to .gitignore."
+**Accept when**: render.yaml has esbuild in buildCommand. Server serves from dist/ when it exists. .gitignore includes frontend/dist/.
+**Depends on**: none
+**Size**: M
+**Status**: PENDING
+**Attempts**: 0
+
+### Task G-2: Verify minified build works end-to-end
+**Requirement**: "Run build locally, start server, verify it serves from dist/. Test Lab screener, panels, formulas, charts, warroom, pricing toggle, auth modal. Verify all asset paths resolve."
+**Accept when**: Full smoke test passes against minified build. All features work identically to raw source.
+**Depends on**: G-1
+**Size**: M
+**Status**: PENDING
+**Attempts**: 0
