@@ -1131,6 +1131,23 @@ function _syncUndoRedoButtons() {
       setTimeout(function() { toast.classList.add("razzle-onboarding-show"); }, 10);
       setTimeout(function() { toast.classList.remove("razzle-onboarding-show"); setTimeout(function() { toast.remove(); }, 300); }, 8000);
     }, 1500);
+    // Lab nudge tooltip — show after first-visit toast
+    var nudgeShown = (function() { try { return localStorage.getItem("razzle_lab_nudge_shown"); } catch(e) { return "1"; } })();
+    if (!nudgeShown) {
+      setTimeout(function() {
+        var nudge = document.createElement("div");
+        nudge.style.cssText = "position:fixed;bottom:80px;right:20px;background:var(--bg-card);border:3px solid var(--ink);border-radius:12px;padding:12px 16px;font-family:var(--font-hand);font-size:16px;color:var(--ink);box-shadow:4px 4px 0 var(--ink);z-index:100;transform:rotate(-1deg);cursor:pointer;max-width:260px;";
+        nudge.innerHTML = 'try sorting by <strong style="color:var(--orange);">Target Share</strong> — the usage trend is where the value hides';
+        nudge.onclick = function() {
+          nudge.remove();
+          localStorage.setItem("razzle_lab_nudge_shown", "1");
+          if (typeof sortBy === "function") sortBy("target_share");
+        };
+        document.body.appendChild(nudge);
+        setTimeout(function() { if (nudge.parentNode) nudge.remove(); }, 12000);
+        localStorage.setItem("razzle_lab_nudge_shown", "1");
+      }, 5000);
+    }
   }
 
   applyUniverseUI();

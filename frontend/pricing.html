@@ -23,7 +23,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="styles.css">
 <style>
-  .pricing-page { max-width: 900px; margin: 0 auto; padding: 48px 24px 80px; }
+  .pricing-page { max-width: 1100px; margin: 0 auto; padding: 48px 24px 80px; }
   .pricing-hero { text-align: center; margin-bottom: 40px; }
   .pricing-hero h1 { font-family: var(--font-display); font-size: 36px; color: var(--ink); margin: 0 0 8px; }
   .pricing-hero h1 span { color: var(--orange); }
@@ -50,8 +50,11 @@
   }
 
   /* Plan cards */
-  .plans-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 40px; }
-  @media (max-width: 640px) { .plans-grid { grid-template-columns: 1fr; } }
+  .plans-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; margin-bottom: 40px; }
+  @media (max-width: 900px) { .plans-grid { grid-template-columns: 1fr; } }
+
+  .plan-card.free { border-color: var(--green, #2ec4b6); box-shadow: 4px 4px 0 var(--green, #2ec4b6); }
+  .plan-card.free .plan-badge { background: var(--green, #2ec4b6); }
 
   .plan-card {
     background: var(--card, #f7efe5); border: 3px solid var(--ink);
@@ -136,7 +139,7 @@
   <ul class="nav-links">
     <li><a href="/">Home</a></li>
     <li><a href="/lab.html">The Lab</a></li>
-    <li><a href="/league-intel.html">Bureau of Intelligence</a></li>
+    <li><a href="/league-intel.html">Bureau</a></li>
     <li><a href="/agents.html">Situation Room</a></li>
     <li><a href="/pricing.html" class="active">Pricing</a></li>
   </ul>
@@ -175,23 +178,46 @@
 
   <!-- Interval toggle -->
   <div class="interval-toggle">
-    <label id="monthlyLabel" class="active" onclick="setPricingInterval('month')">Monthly</label>
-    <div class="toggle-track" id="intervalToggle" onclick="toggleInterval()">
+    <label id="monthlyLabel" onclick="setPricingInterval('month')">Monthly</label>
+    <div class="toggle-track yearly" id="intervalToggle" onclick="toggleInterval()">
       <div class="toggle-knob"></div>
     </div>
-    <label id="yearlyLabel" onclick="setPricingInterval('year')">Yearly</label>
-    <span class="save-badge" id="saveBadge" style="opacity:0;">save 33%</span>
+    <label id="yearlyLabel" class="active" onclick="setPricingInterval('year')">Yearly</label>
+    <span class="save-badge" id="saveBadge">save 33%</span>
   </div>
 
   <!-- Plan cards -->
   <div class="plans-grid">
 
+    <!-- FREE -->
+    <div class="plan-card free">
+      <div class="plan-badge">free forever</div>
+      <div class="plan-name">Free</div>
+      <div class="plan-price" style="font-size:28px;">Free Forever</div>
+      <div class="plan-interval">no credit card required</div>
+
+      <ul class="plan-features">
+        <li><span class="check">&#10003;</span> The Lab (70+ stat panels)</li>
+        <li><span class="check">&#10003;</span> Custom formulas</li>
+        <li><span class="check">&#10003;</span> Shareable views</li>
+        <li><span class="check">&#10003;</span> Compare tool</li>
+        <li><span class="check">&#10003;</span> Trade analyzer</li>
+        <li><span class="check">&#10003;</span> Charts and visualizations</li>
+        <li><span class="check">&#10003;</span> URL state sharing</li>
+        <li><span class="check">&#10003;</span> PNG export</li>
+      </ul>
+
+      <div class="plan-cta">
+        <a href="/lab.html" class="btn-chunky" style="display:block; text-align:center; text-decoration:none;">Open The Lab</a>
+      </div>
+    </div>
+
     <!-- PRO -->
     <div class="plan-card">
       <div class="plan-badge">most popular</div>
       <div class="plan-name">Pro</div>
-      <div class="plan-price" id="proPrice">$9.99<span>/mo</span></div>
-      <div class="plan-interval" id="proInterval">billed monthly</div>
+      <div class="plan-price" id="proPrice">$79.99<span>/yr</span></div>
+      <div class="plan-interval" id="proInterval">that's <span class="yearly-price">$6.67/mo</span> — save 33%</div>
 
       <ul class="plan-features">
         <li><span class="check">&#10003;</span> 20 AI queries/day (BYOK)</li>
@@ -215,8 +241,8 @@
     <div class="plan-card elite">
       <div class="plan-badge">full war machine</div>
       <div class="plan-name">Elite</div>
-      <div class="plan-price" id="elitePrice">$19.99<span>/mo</span></div>
-      <div class="plan-interval" id="eliteInterval">billed monthly</div>
+      <div class="plan-price" id="elitePrice">$149.99<span>/yr</span></div>
+      <div class="plan-interval" id="eliteInterval">that's <span class="yearly-price">$12.50/mo</span> — save 37%</div>
 
       <ul class="plan-features">
         <li><span class="check">&#10003;</span> <span class="highlight">Unlimited</span> AI queries (included)</li>
@@ -378,7 +404,7 @@
       <div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Razzle</div>
       <a href="/" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Home</a>
       <a href="/lab.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">The Lab</a>
-      <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Bureau of Intelligence</a>
+      <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Bureau</a>
       <a href="/agents.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Situation Room</a>
       <a href="/pricing.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Pricing</a>
       <a href="/about.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">About</a>

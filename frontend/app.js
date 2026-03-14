@@ -76,7 +76,7 @@ function _injectHamburgerMenu() {
   var links = [
     { href: "/", label: "Home" },
     { href: "/lab.html", label: "The Lab" },
-    { href: "/league-intel.html", label: "Bureau of Intelligence" },
+    { href: "/league-intel.html", label: "Bureau" },
     { href: "/agents.html", label: "Situation Room" },
     { href: "/pricing.html", label: "Pricing" }
   ];
