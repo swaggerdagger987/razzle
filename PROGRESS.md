@@ -267,7 +267,7 @@ Systematic page-by-page audit against DESIGN.md and NORTH_STAR.md.
 | T-6 | Big Board UI Overhaul | DONE | Cards upgraded to 3px/4px4px shadows/6px hover-lift. Position badges get ink border. Rank circles get warm bg. RPS bars get borders. |
 | T-7 | Monte Carlo League Odds | DONE | Backend: POST /api/monte-carlo/projections returns weekly scoring distributions. Frontend: 1000-iteration Monte Carlo sim with Box-Muller normal sampling. "League Odds" button per league card. Summary cards show championship/playoff %, avg pts. Free=top 3, Pro=all managers. |
 
-### Sweep Mode (Mar 14)
+### Sweep Mode (Mar 14 — earlier session)
 
 | Pass | Persona | Findings | Fixes |
 |------|---------|----------|-------|
@@ -281,3 +281,18 @@ Systematic page-by-page audit against DESIGN.md and NORTH_STAR.md.
 | 8 | Brand Guardian | "free tier" in pricing FAQ | Replaced with specific product language |
 | 9 | Whimsy Injector | 6 error, 5 empty, 15 loading personality strings | Already covered |
 | 10 | Evidence Collector | All new function refs valid, no dangling references | Verified |
+
+### Sweep Mode (Mar 14 — post-triage session)
+
+| Pass | Persona | Findings | Fixes |
+|------|---------|----------|-------|
+| 1 | Frontend Developer | No console.log debug statements, no undefined references | Clean |
+| 2 | UI Designer | Player headshots had empty alt text; "best value" badge used cold white | Fixed alt to "[Name] headshot"; changed to var(--bg) |
+| 3 | Security Engineer | All innerHTML uses escapeHtml, no SQL injection vectors, no exposed secrets | Clean |
+| 4 | Backend Architect | Stripe webhooks already handle subscription.updated. 59 tests pass. | Clean |
+| 5 | UX Architect | All 74 pages have pricing links, funnel Home>Lab>Bureau>SitRoom>Pricing verified | Clean |
+| 6 | Performance Benchmarker | esbuild minification in place, lazy html2canvas, deferred scripts | Clean |
+| 7 | Accessibility Auditor | Player headshot alt text fixed (was empty, now descriptive) | Fixed |
+| 8 | Brand Guardian | "forever free" language consistently applied across all pages | Clean |
+| 9 | Whimsy Injector | Loading states, error messages, empty states all have personality | Clean |
+| 10 | Evidence Collector | All new functions (getUserTierInfo, openPlayerPopup, toggleSettingsPanel, runLeagueOdds) verified reachable from call sites. 59 tests pass. No regressions. | Verified |
