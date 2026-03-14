@@ -254,11 +254,18 @@ Systematic page-by-page audit against DESIGN.md and NORTH_STAR.md.
 - P0-5 Pricing mismatch: North Star says $240/yr, site has $9.99-$19.99/mo. Needs user confirmation of intentional pricing.
 - P1-2 Client-side tier gating: bypassable via localStorage. Need server-side enforcement (post-launch).
 - P1-4 Empty AdSense publisher ID: awaiting account approval.
-- Lab Toolbar Redesign: large ticket (L+L+M), left in TICKETS.md for next sprint.
-- Universal Player Click Popup: large ticket (L), left in TICKETS.md for post-launch.
-- Big Board UI Overhaul: large ticket (L), left in TICKETS.md for post-launch.
-- Monte Carlo League Odds: new feature (L+L+M+XL), left in TICKETS.md for post-launch.
-- Brand Copy Update: 3 tasks (M+M+S), left in TICKETS.md for post-launch.
+
+### TICKETS.md Consumption (Mar 14 — Ship Loop Triage)
+
+| # | Ticket | Status | Notes |
+|---|--------|--------|-------|
+| T-1 | Context-Aware CTAs | DONE | Added getUserTierInfo/getProCtaText/getEliteCtaText helpers. Updated CTAs on index, lab, agents, pricing, league-intel, warroom, rosterbuilder. Trial users see "Subscribe to keep Pro." Paid users see "Current Plan" or "Enter Situation Room." Expired trial users see "Your trial ended." |
+| T-2 | Sleeper ID Lock | DONE | Backend: sleeper_locked column, link_sleeper() enforces one-time lock with 409 on mismatch. Frontend: permanent link warning on connect cards, error handling for lock rejection. Auto-load already worked. 59 tests pass. |
+| T-3 | Lab Toolbar Redesign | DONE | Moved 9 display toggles (Heat/Pctl/Bars/Top3/Diff/Tiers/Dense/Groups/Summary) + Custom Scoring + Manage Views into collapsible Settings panel. Toolbar reorganized into logical groups. Mobile: hide-mobile class, compact sizing, touch-friendly settings. |
+| T-4 | Brand Copy Update | DONE | Updated all brand copy to "The Screener is forever free. The intelligence is what you pay for." Hero, pricing, agents, about, and gate messages updated. |
+| T-5 | Universal Player Click Popup | DONE | Added openPlayerPopup() to app.js (lightweight popup on non-lab pages, delegates to existing modal on lab). Updated all 25 player click handlers in lab-panels.js. Command palette uses popup too. |
+| T-6 | Big Board UI Overhaul | DONE | Cards upgraded to 3px/4px4px shadows/6px hover-lift. Position badges get ink border. Rank circles get warm bg. RPS bars get borders. |
+| T-7 | Monte Carlo League Odds | DONE | Backend: POST /api/monte-carlo/projections returns weekly scoring distributions. Frontend: 1000-iteration Monte Carlo sim with Box-Muller normal sampling. "League Odds" button per league card. Summary cards show championship/playoff %, avg pts. Free=top 3, Pro=all managers. |
 
 ### Sweep Mode (Mar 14)
 
