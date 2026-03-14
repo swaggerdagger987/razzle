@@ -242,8 +242,20 @@ Systematic page-by-page audit against DESIGN.md and NORTH_STAR.md.
 | 7 | Screener page size: remove 50/100/200 | DONE | Only 25 rows per page. Prevents slow load times. |
 | 8 | Admin stats endpoint | DONE | GET /api/admin/stats with X-Admin-Secret header protection. Returns user/plan/trial counts. |
 
+| 9 | Breakouts panel decimal precision | DONE | Added fmtD() helper, applied to all numeric values (RBS, opportunity%, production%, YD/G, TD/G, PPG, Snap%, TGT%, position stats). Max 1 decimal. |
+| 10 | Button font: Space Mono for controls | DONE | Switched btn-chunky, btn-primary, chip, agent-badge, scenario-chip, lp-pos-tab, td2-mode-tab, tf2-pos-tab, rbld-clear-btn, auth-tab, nav-plan-badge, add-filter-btn, tv-weight-slider label, interval-toggle label from Luckiest Guy to Space Mono. Headers/titles stay Luckiest Guy. |
+| 11 | CSV export Pro lock visual | DONE | Free users see greyed-out CSV buttons with lock icon (opacity 0.5). Updates on plan change. Applied to toolbar, share modal, and per-panel CSV buttons. |
+| 12 | Trade value linked weight sliders | DONE | Sliders always sum to 100%. Moving one proportionally adjusts the other two. Edge cases: both others at 0 splits evenly. Reset restores 50/30/20. |
+| 13 | Bureau manager click fix | DONE | Root cause: onclick=toggleLeague on entire .league-card div. Clicks on profiles/activity/trades propagated up and collapsed the card. Moved onclick to .league-header only. |
+| 14 | Lab sidebar Free category label | DONE | Added visible "Free" category header above the 10 free panels with green color. |
+| 15 | Share modal panel-aware URLs | DONE | openShareModal now includes currentPanel parameter when on non-screener panels. Previously lost panel context on share. |
+
 ### Remaining items (need user input or post-launch):
 - P0-5 Pricing mismatch: North Star says $240/yr, site has $9.99-$19.99/mo. Needs user confirmation of intentional pricing.
 - P1-2 Client-side tier gating: bypassable via localStorage. Need server-side enforcement (post-launch).
 - P1-4 Empty AdSense publisher ID: awaiting account approval.
 - Lab Toolbar Redesign: large ticket (L+L+M), left in TICKETS.md for next sprint.
+- Universal Player Click Popup: large ticket (L), left in TICKETS.md for post-launch.
+- Big Board UI Overhaul: large ticket (L), left in TICKETS.md for post-launch.
+- Monte Carlo League Odds: new feature (L+L+M+XL), left in TICKETS.md for post-launch.
+- Brand Copy Update: 3 tasks (M+M+S), left in TICKETS.md for post-launch.
