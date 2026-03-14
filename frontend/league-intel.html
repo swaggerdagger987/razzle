@@ -910,6 +910,95 @@
     vertical-align: middle;
   }
 
+  /* ===== WAIVER TENDENCIES ===== */
+  .waiver-trigger {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 2px dashed var(--ink-faint);
+  }
+
+  .waiver-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  .waiver-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 16px;
+    transition: all 0.15s;
+  }
+
+  .waiver-card:hover {
+    box-shadow: 6px 6px 0 var(--ink);
+    transform: translate(-2px, -2px);
+  }
+
+  .waiver-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 2px dashed var(--ink-faint);
+  }
+
+  .waiver-card-name {
+    font-family: var(--font-display);
+    font-size: 16px;
+  }
+
+  .hawk-score-badge {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border: 2px solid var(--ink);
+    border-radius: 20px;
+  }
+
+  .waiver-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-light);
+    margin-bottom: 8px;
+  }
+
+  .waiver-stats strong {
+    color: var(--ink);
+  }
+
+  .waiver-pos-bar {
+    display: flex;
+    height: 14px;
+    border: 2px solid var(--ink);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 6px;
+  }
+
+  .waiver-faab-bar {
+    height: 12px;
+    background: var(--bg-warm);
+    border: 2px solid var(--ink);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 4px;
+  }
+
+  .waiver-faab-fill {
+    height: 100%;
+    background: var(--orange);
+    transition: width 0.3s;
+  }
+
   /* ===== TRADE NETWORK ===== */
   .trade-network-trigger {
     margin-top: 12px;
@@ -1115,6 +1204,8 @@
     .trade-matrix { font-size: 9px; }
     .trade-matrix th, .trade-matrix td { padding: 4px 3px; }
     .trade-tendency-grid { grid-template-columns: 1fr; }
+    .waiver-grid { grid-template-columns: 1fr; }
+    .waiver-card { padding: 12px; }
   }
 </style>
 </head>
@@ -1582,6 +1673,12 @@ async function toggleLeague(card, leagueId, userId) {
       '</div>' +
       '<div id="tradeNetwork-' + leagueId + '"></div>';
 
+    // Add waiver tendencies trigger
+    html += '<div class="waiver-trigger">' +
+      '<button id="waiverBtn-' + leagueId + '">waiver tendencies</button>' +
+      '</div>' +
+      '<div id="waiverTendencies-' + leagueId + '"></div>';
+
     rosterDiv.innerHTML = html;
 
     // Bind profile button with closure over variables
@@ -1636,6 +1733,17 @@ async function toggleLeague(card, leagueId, userId) {
         this.disabled = true;
         this.textContent = "mapping trade networks...";
         loadTradeNetwork(leagueId, userId, rosters, allPlayers, userMap);
+      });
+    }
+
+    // Bind waiver tendencies button
+    var waiverBtn = document.getElementById("waiverBtn-" + leagueId);
+    if (waiverBtn) {
+      waiverBtn.addEventListener("click", function(e) {
+        e.stopPropagation();
+        this.disabled = true;
+        this.textContent = "scanning waiver wire activity...";
+        loadWaiverTendencies(leagueId, userId, rosters, allPlayers, userMap);
       });
     }
 
@@ -3163,6 +3271,258 @@ async function loadLeagueTradeFinder(leagueId, userId, myRoster, rosters, allPla
     // Re-enable button for retry
     var tfBtn = document.getElementById("tradeFinderBtn-" + leagueId);
     if (tfBtn) { tfBtn.disabled = false; tfBtn.textContent = "find trade partners"; }
+  }
+}
+
+// ── WAIVER TENDENCIES ─────────────────────────────────────────────────
+async function loadWaiverTendencies(leagueId, userId, rosters, allPlayers, userMap) {
+  var container = document.getElementById("waiverTendencies-" + leagueId);
+  if (!container) return;
+
+  container.innerHTML = '<div class="loading-intel" style="font-size:14px;">scanning the waiver wire...</div>';
+
+  try {
+    // Build roster_id -> owner_id map
+    var rosterOwnerMap = {};
+    for (var ri = 0; ri < rosters.length; ri++) {
+      rosterOwnerMap[rosters[ri].roster_id] = rosters[ri].owner_id;
+    }
+
+    // Check if FAAB league (fetch league settings)
+    var isFAAB = false;
+    var faabBudget = 100; // default
+    try {
+      var leagueResp = await fetch(SLEEPER_API + "/league/" + leagueId);
+      if (leagueResp.ok) {
+        var leagueData = await leagueResp.json();
+        var waiverType = leagueData.settings?.waiver_type || 0;
+        isFAAB = waiverType === 2; // 2 = FAAB in Sleeper
+        faabBudget = leagueData.settings?.waiver_budget || 100;
+      }
+    } catch(e) { /* ignore */ }
+
+    // Fetch transactions
+    var txns = await fetchLeagueTransactions(leagueId);
+
+    // Filter waivers and free agent pickups
+    var waiverTxns = [];
+    for (var ti = 0; ti < txns.length; ti++) {
+      if (txns[ti].type === "waiver" || txns[ti].type === "free_agent") {
+        waiverTxns.push(txns[ti]);
+      }
+    }
+
+    if (waiverTxns.length === 0) {
+      container.innerHTML = '<div class="loading-intel" style="color:var(--ink-light);font-size:14px;">no waiver activity this season. quiet wire.</div>';
+      var btn = document.getElementById("waiverBtn-" + leagueId);
+      if (btn) { btn.disabled = false; btn.textContent = "waiver tendencies"; }
+      return;
+    }
+
+    // Build current roster sets for hit rate estimation
+    var currentRosters = {}; // oid -> Set of player_ids
+    for (var cri = 0; cri < rosters.length; cri++) {
+      var cr = rosters[cri];
+      currentRosters[cr.owner_id] = new Set(cr.players || []);
+    }
+
+    // Parse per-manager waiver data
+    var managerWaivers = {}; // oid -> {claims, faabSpent, posAdds: {}, weeks: [], pickups: [{pid, week}]}
+
+    for (var wi = 0; wi < waiverTxns.length; wi++) {
+      var txn = waiverTxns[wi];
+      var adds = txn.adds || {};
+      var rids = txn.roster_ids || [];
+      var week = txn.leg || 0;
+      var waiver_bid = (txn.settings || {}).waiver_bid || 0;
+
+      for (var arIdx = 0; arIdx < rids.length; arIdx++) {
+        var rid = rids[arIdx];
+        var oid = rosterOwnerMap[rid];
+        if (!oid) continue;
+
+        if (!managerWaivers[oid]) {
+          managerWaivers[oid] = {
+            claims: 0, faabSpent: 0, posAdds: {},
+            weeks: [], pickups: [], isWaiver: 0, isFreeAgent: 0
+          };
+        }
+        var mw = managerWaivers[oid];
+
+        // Count adds for this manager
+        var gotPlayer = false;
+        for (var addPid in adds) {
+          if (adds[addPid] === rid) {
+            gotPlayer = true;
+            var addP = allPlayers[addPid];
+            var pos = addP ? (addP.position || "?") : "?";
+            mw.posAdds[pos] = (mw.posAdds[pos] || 0) + 1;
+            mw.pickups.push({ pid: addPid, week: week });
+          }
+        }
+
+        if (gotPlayer) {
+          mw.claims++;
+          mw.faabSpent += waiver_bid;
+          mw.weeks.push(week);
+          if (txn.type === "waiver") mw.isWaiver++;
+          else mw.isFreeAgent++;
+        }
+      }
+    }
+
+    // Calculate hawk score and hit rate per manager
+    var cards = [];
+    var maxWeek = 0;
+    for (var oid2 in managerWaivers) {
+      var mw2 = managerWaivers[oid2];
+      for (var wki = 0; wki < mw2.weeks.length; wki++) {
+        if (mw2.weeks[wki] > maxWeek) maxWeek = mw2.weeks[wki];
+      }
+    }
+    if (maxWeek < 1) maxWeek = 1;
+
+    for (var oid3 in managerWaivers) {
+      var mw3 = managerWaivers[oid3];
+      var managerName = userMap[oid3] || "Manager";
+
+      // Hit rate: how many pickups are still on the roster?
+      var hits = 0;
+      for (var pi2 = 0; pi2 < mw3.pickups.length; pi2++) {
+        var pickup = mw3.pickups[pi2];
+        var rosterSet = currentRosters[oid3];
+        if (rosterSet && rosterSet.has(pickup.pid)) hits++;
+      }
+      var hitRate = mw3.pickups.length > 0 ? Math.round((hits / mw3.pickups.length) * 100) : 0;
+
+      // Hawk score: 0-100
+      // 40% claims per week + 30% FAAB spend rate + 30% waiver vs FA ratio
+      var claimsPerWeek = mw3.claims / maxWeek;
+      var claimScore = Math.min(claimsPerWeek / 2, 1) * 40; // 2+ claims/week = max
+      var faabScore = 0;
+      if (isFAAB && faabBudget > 0) {
+        faabScore = Math.min(mw3.faabSpent / faabBudget, 1) * 30;
+      } else {
+        // No FAAB: weight claims more
+        faabScore = Math.min(claimsPerWeek / 1.5, 1) * 30;
+      }
+      var waiverRatio = mw3.claims > 0 ? mw3.isWaiver / mw3.claims : 0;
+      var aggrScore = waiverRatio * 30; // higher waiver (vs FA) = more aggressive
+      var hawkScore = Math.round(claimScore + faabScore + aggrScore);
+
+      // Top position
+      var topPos = _topPos(mw3.posAdds);
+
+      cards.push({
+        ownerId: oid3,
+        name: managerName,
+        isUser: oid3 === userId,
+        claims: mw3.claims,
+        isWaiver: mw3.isWaiver,
+        isFreeAgent: mw3.isFreeAgent,
+        faabSpent: mw3.faabSpent,
+        posAdds: mw3.posAdds,
+        topPos: topPos,
+        hitRate: hitRate,
+        hits: hits,
+        totalPickups: mw3.pickups.length,
+        hawkScore: hawkScore,
+        claimsPerWeek: claimsPerWeek
+      });
+    }
+
+    // Sort by hawk score descending
+    cards.sort(function(a, b) { return b.hawkScore - a.hawkScore; });
+
+    // Render
+    var POS_COLORS = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
+    function hawkColor(score) {
+      if (score >= 60) return "background:var(--red-light);color:var(--red);border-color:var(--red);";
+      if (score >= 35) return "background:var(--yellow-light);color:var(--ink-medium);border-color:var(--ink-light);";
+      return "background:var(--green-light);color:var(--green);border-color:var(--green);";
+    }
+    function hawkLabel(score) {
+      if (score >= 70) return "apex predator";
+      if (score >= 50) return "waiver hawk";
+      if (score >= 30) return "opportunist";
+      return "patient";
+    }
+
+    var html = '<div class="depth-section-header">waiver tendencies — ' + waiverTxns.length + ' moves this season</div>';
+    html += '<div class="waiver-grid">';
+
+    for (var ci = 0; ci < cards.length; ci++) {
+      var c = cards[ci];
+
+      html += '<div class="waiver-card"' + (c.isUser ? ' style="border-color:var(--orange);"' : '') + '>';
+
+      // Header
+      html += '<div class="waiver-card-header">';
+      html += '<div>';
+      html += '<span class="waiver-card-name">' + escapeHtml(c.name) + '</span>';
+      if (c.isUser) html += ' <span style="font-family:var(--font-hand);font-size:14px;color:var(--orange);">you</span>';
+      html += '</div>';
+      html += '<div style="text-align:right;">';
+      html += '<span class="hawk-score-badge" style="' + hawkColor(c.hawkScore) + '">' + c.hawkScore + '</span>';
+      html += '<div style="font-family:var(--font-hand);font-size:12px;color:var(--ink-light);margin-top:2px;">' + hawkLabel(c.hawkScore) + '</div>';
+      html += '</div>';
+      html += '</div>';
+
+      // Stats grid
+      html += '<div class="waiver-stats">';
+      html += '<div>claims: <strong>' + c.claims + '</strong></div>';
+      html += '<div>hit rate: <strong>' + c.hitRate + '%</strong> (' + c.hits + '/' + c.totalPickups + ')</div>';
+      html += '<div>waivers: <strong>' + c.isWaiver + '</strong> / FA: <strong>' + c.isFreeAgent + '</strong></div>';
+      html += '<div>per week: <strong>' + c.claimsPerWeek.toFixed(1) + '</strong></div>';
+      if (isFAAB) {
+        html += '<div>FAAB spent: <strong>$' + c.faabSpent + '</strong> / $' + faabBudget + '</div>';
+        html += '<div>remaining: <strong>$' + (faabBudget - c.faabSpent) + '</strong></div>';
+      }
+      html += '</div>';
+
+      // FAAB bar (if FAAB league)
+      if (isFAAB) {
+        var faabPct = Math.min((c.faabSpent / faabBudget) * 100, 100);
+        html += '<div style="font-family:var(--font-mono);font-size:10px;color:var(--ink-light);">FAAB burn</div>';
+        html += '<div class="waiver-faab-bar"><div class="waiver-faab-fill" style="width:' + faabPct + '%;"></div></div>';
+      }
+
+      // Position bias bar
+      if (c.topPos) {
+        html += '<div style="font-family:var(--font-mono);font-size:10px;color:var(--ink-light);margin-top:6px;">position bias</div>';
+        html += '<div class="waiver-pos-bar">';
+        var posOrder = ["QB", "RB", "WR", "TE"];
+        for (var poi = 0; poi < posOrder.length; poi++) {
+          var ppos = posOrder[poi];
+          var pcount = c.posAdds[ppos] || 0;
+          var ppct = c.claims > 0 ? (pcount / c.claims * 100) : 0;
+          if (ppct > 0) {
+            html += '<div style="width:' + ppct + '%;background:' + (POS_COLORS[ppos] || 'var(--ink-light)') + ';" title="' + ppos + ': ' + pcount + '"></div>';
+          }
+        }
+        html += '</div>';
+        // Labels
+        html += '<div style="display:flex;gap:8px;font-family:var(--font-mono);font-size:9px;color:var(--ink-light);margin-top:2px;">';
+        for (var pli = 0; pli < posOrder.length; pli++) {
+          var plpos = posOrder[pli];
+          var plcount = c.posAdds[plpos] || 0;
+          if (plcount > 0) html += '<span>' + plpos + ':' + plcount + '</span>';
+        }
+        html += '</div>';
+      }
+
+      html += '</div>'; // close card
+    }
+
+    html += '</div>'; // close grid
+    container.innerHTML = html;
+
+  } catch (e) {
+    container.innerHTML = '<div class="loading-intel" style="color:var(--red);font-size:14px;">' +
+      (e.name === "AbortError" ? "waiver scan timed out. try again." : "waiver scan failed. try again.") + '</div>';
+    var btn2 = document.getElementById("waiverBtn-" + leagueId);
+    if (btn2) { btn2.disabled = false; btn2.textContent = "waiver tendencies"; }
+    console.error(e);
   }
 }
 
