@@ -905,8 +905,10 @@ async def track_query(request: Request):
 _LLM_API_KEY = os.environ.get("RAZZLE_LLM_API_KEY", "")  # OpenRouter API key
 _LLM_BASE_URL = os.environ.get("RAZZLE_LLM_BASE_URL", "https://openrouter.ai/api/v1/chat/completions")
 _LLM_MODEL = os.environ.get("RAZZLE_LLM_MODEL", "anthropic/claude-3.5-haiku")  # cost-efficient default
+_LLM_FREE_MODEL = os.environ.get("RAZZLE_LLM_FREE_MODEL", "meta-llama/llama-3.1-8b-instruct:free")
 _LLM_TIMEOUT = 25  # seconds
 _LLM_MAX_TOKENS = 2000
+_LLM_FREE_MAX_TOKENS = 1000
 
 # Per-user server-side rate limiter for LLM proxy
 _llm_rate_buckets = defaultdict(list)  # user_id -> [timestamps]
@@ -996,6 +998,105 @@ async def llm_chat(request: Request):
         )
     except Exception as e:
         logger.error(f"LLM proxy exception: {type(e).__name__}: {e}")
+        return JSONResponse(
+            {"error": "Something went wrong. Try again."},
+            status_code=500,
+        )
+
+
+@app.post("/api/llm/chat-free")
+async def llm_chat_free(request: Request):
+    """Server-side LLM proxy for free-tier users (5 queries/day).
+    Uses a free model via OpenRouter. Requires authentication.
+    """
+    # Require any logged-in user
+    token = request.headers.get("Authorization", "").replace("Bearer ", "")
+    if not token:
+        return JSONResponse({"error": "Sign in required for free AI queries."}, status_code=401)
+
+    try:
+        result = auth_module.get_current_user(token)
+        if "error" in result:
+            return JSONResponse({"error": "Sign in required."}, status_code=401)
+        user = result["user"]
+    except Exception:
+        return JSONResponse({"error": "Sign in required."}, status_code=401)
+
+    if not _LLM_API_KEY:
+        return JSONResponse(
+            {"error": "AI queries not yet configured. Use BYOK mode with your own API key."},
+            status_code=503,
+        )
+
+    # Check quota via existing system
+    ip = request.client.host if request.client else "unknown"
+    plan = user.get("plan", "free")
+    quota = auth_module.check_query_quota(user_id=user["id"], ip_address=ip, plan=plan)
+    if not quota.get("allowed", False):
+        return JSONResponse({
+            "error": "you've used all 5 free queries today. upgrade to Pro or add your own API key.",
+            "used": quota.get("used", 5),
+            "limit": quota.get("limit", 5),
+        }, status_code=429)
+
+    # Record the query
+    auth_module.record_query(user_id=user["id"], ip_address=ip)
+
+    # Parse request
+    try:
+        body = await request.json()
+    except Exception:
+        return JSONResponse({"error": "Invalid request body"}, status_code=400)
+
+    messages = body.get("messages", [])
+    if not messages:
+        return JSONResponse({"error": "No messages provided"}, status_code=400)
+
+    # Enforce server-side system prompt — strip any client system messages
+    user_messages = [m for m in messages if m.get("role") != "system"]
+    system_prompt = (
+        "You are a fantasy football analyst for Razzle, a dynasty and redraft analytics platform. "
+        "Provide helpful, concise analysis based on the scenario provided. "
+        "Cover key factors, risks, and a clear recommendation."
+    )
+    sanitized_messages = [{"role": "system", "content": system_prompt}] + user_messages
+
+    llm_body = {
+        "model": _LLM_FREE_MODEL,
+        "messages": sanitized_messages,
+        "temperature": body.get("temperature", 0.3),
+        "max_tokens": min(body.get("max_tokens", _LLM_FREE_MAX_TOKENS), _LLM_FREE_MAX_TOKENS),
+    }
+
+    try:
+        async with httpx.AsyncClient(timeout=_LLM_TIMEOUT) as client:
+            resp = await client.post(
+                _LLM_BASE_URL,
+                json=llm_body,
+                headers={
+                    "Authorization": f"Bearer {_LLM_API_KEY}",
+                    "Content-Type": "application/json",
+                    "HTTP-Referer": "https://razzle.lol",
+                    "X-Title": "Razzle Situation Room (Free Tier)",
+                },
+            )
+        if resp.status_code != 200:
+            logger.error(f"Free LLM proxy error: {resp.status_code} {resp.text[:200]}")
+            return JSONResponse(
+                {"error": "Agent is temporarily unavailable. Try again in a moment."},
+                status_code=502,
+            )
+        data = resp.json()
+        # Tag response with free model info
+        data["_razzle_free_model"] = _LLM_FREE_MODEL
+        return JSONResponse(data)
+    except httpx.TimeoutException:
+        return JSONResponse(
+            {"error": "Agent took too long to respond. Try a shorter question."},
+            status_code=504,
+        )
+    except Exception as e:
+        logger.error(f"Free LLM proxy exception: {type(e).__name__}: {e}")
         return JSONResponse(
             {"error": "Something went wrong. Try again."},
             status_code=500,

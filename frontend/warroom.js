@@ -2356,6 +2356,46 @@ async function callServerLLM(systemPrompt, userMessage) {
   return content.trim();
 }
 
+async function callFreeLLM(userMessage) {
+  /** Call the free-tier LLM proxy (5 queries/day, free model). */
+  var token = localStorage.getItem('razzle_token');
+  if (!token) throw new Error('Sign in required for free AI queries');
+
+  var resp = await fetch('/api/llm/chat-free', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token,
+    },
+    body: JSON.stringify({
+      messages: [
+        { role: 'user', content: userMessage },
+      ],
+      temperature: LLM_TEMPERATURE,
+    }),
+  });
+
+  if (!resp.ok) {
+    var detail = await resp.json().catch(function() { return {}; });
+    throw new Error(detail.error || 'Free query error ' + resp.status);
+  }
+
+  var data = await resp.json();
+  var content = data && data.choices && data.choices[0] && data.choices[0].message
+    ? data.choices[0].message.content : null;
+  if (!content) throw new Error('No content in model response');
+  // Tag as free model response
+  var modelTag = data._razzle_free_model || 'free model';
+  return { text: content.trim(), freeModel: modelTag };
+}
+
+function isLoggedIn() {
+  try {
+    var user = JSON.parse(localStorage.getItem("razzle_user"));
+    return !!(user && user.email);
+  } catch(e) { return false; }
+}
+
 async function executeAgent(agentId, scenario, peerInsights) {
   const agentDef = AGENT_DEFS[agentId];
   if (!agentDef) throw new Error('Unknown agent');
@@ -2363,23 +2403,32 @@ async function executeAgent(agentId, scenario, peerInsights) {
   const settings = getAgentSettings(agentId);
   const elite = isEliteUser();
   const hasBYOK = !!settings.apiKey;
+  const loggedIn = isLoggedIn();
 
-  // Elite users can use server-side proxy OR their own key
-  if (!hasBYOK && !elite) throw new Error('No API key configured');
+  // Determine mode: BYOK > Elite server > Free server
+  if (!hasBYOK && !elite && !loggedIn) throw new Error('Sign in to use free AI queries, or add your own API key');
 
   const persona = await loadPersona(agentId);
   const userMessage = buildUserMessage(scenario, agentDef, peerInsights);
 
   var result;
+  var freeModel = null;
   if (hasBYOK) {
     // BYOK mode (Pro or Elite with custom key)
     result = await callLLM(settings.apiKey, settings.model, settings.baseUrl, persona, userMessage);
-  } else {
+  } else if (elite) {
     // Server-side proxy (Elite AI-included mode)
     result = await callServerLLM(persona, userMessage);
+  } else {
+    // Free tier — server-side with free model
+    var freeResult = await callFreeLLM(userMessage);
+    result = freeResult.text;
+    freeModel = freeResult.freeModel;
   }
 
-  agentResults.set(agentId, { name: agentDef.name, text: result, at: Date.now() });
+  var entry = { name: agentDef.name, text: result, at: Date.now() };
+  if (freeModel) entry.freeModel = freeModel;
+  agentResults.set(agentId, entry);
   return result;
 }
 
@@ -2953,6 +3002,14 @@ function renderBriefingCard(agentId, content, isError) {
     contextPill = '<span class="briefing-generic-hint">generic analysis \u2014 upgrade for league-specific intel</span>';
   }
 
+  // Free model footer
+  var freeFooter = '';
+  var agentEntry = agentResults.get(agentId);
+  if (agentEntry && agentEntry.freeModel) {
+    var modelShort = agentEntry.freeModel.split('/').pop().split(':')[0];
+    freeFooter = '<div style="font-family:var(--font-hand);font-size:12px;color:var(--ink-light);padding:8px 0 0;border-top:2px dashed var(--ink-faint);margin-top:8px;">powered by ' + escapeHtml(modelShort) + ' \u2014 <a href="/pricing.html" style="color:var(--orange);">upgrade to Pro</a> for premium models</div>';
+  }
+
   return '<div class="' + cardClass + collapsed + '" data-briefing-agent="' + agentId + '">' +
     '<div class="briefing-card-header" onclick="toggleBriefingCard(this)">' +
       '<span class="briefing-card-dot" style="background:' + agent.color + '"></span>' +
@@ -2961,7 +3018,7 @@ function renderBriefingCard(agentId, content, isError) {
       contextPill +
       '<span class="briefing-card-toggle">' + toggleText + '</span>' +
     '</div>' +
-    '<div class="briefing-card-body">' + bodyHtml + '</div>' +
+    '<div class="briefing-card-body">' + bodyHtml + freeFooter + '</div>' +
   '</div>';
 }
 

@@ -1120,18 +1120,19 @@ function _syncUndoRedoButtons() {
     if (inp) inp.value = state.minGP;
   }
 
-  // First-visit hint: show a brief toast if user has never visited the Lab
+  // First-visit hint: single onboarding toast (merged, works with URL params)
   var hasVisited = (function() { try { return localStorage.getItem("razzle_lab_visited"); } catch(e) { return "1"; } })();
-  if (!hasVisited && !window.location.search) {
-    try { localStorage.setItem("razzle_lab_visited", "1"); } catch(e) {}
+  if (!hasVisited) {
+    try { localStorage.setItem("razzle_lab_visited", "1"); localStorage.setItem("razzle_shortcuts_shown", "1"); } catch(e) {}
     setTimeout(function() {
       var toast = document.createElement("div");
-      toast.className = "first-visit-toast";
+      toast.className = "razzle-onboarding-toast";
       toast.innerHTML = '70 tools in the sidebar \u2014 press <kbd>?</kbd> for shortcuts';
-      toast.onclick = function() { toast.remove(); };
+      toast.onclick = function() { toast.classList.remove("razzle-onboarding-show"); setTimeout(function() { toast.remove(); }, 300); };
       document.body.appendChild(toast);
-      setTimeout(function() { toast.remove(); }, 6000);
-    }, 800);
+      setTimeout(function() { toast.classList.add("razzle-onboarding-show"); }, 10);
+      setTimeout(function() { toast.classList.remove("razzle-onboarding-show"); setTimeout(function() { toast.remove(); }, 300); }, 8000);
+    }, 1500);
   }
 
   applyUniverseUI();
@@ -1156,21 +1157,6 @@ function _syncUndoRedoButtons() {
 
   document.getElementById("searchInput").value = state.search;
 
-  // Onboarding toast for first-time visitors
-  try {
-    if (!localStorage.getItem("razzle_shortcuts_shown")) {
-      setTimeout(function() {
-        var t = document.createElement("div");
-        t.className = "razzle-onboarding-toast";
-        t.innerHTML = 'Press <kbd>?</kbd> for keyboard shortcuts';
-        t.onclick = function() { t.classList.remove("razzle-onboarding-show"); setTimeout(function() { t.remove(); }, 300); };
-        document.body.appendChild(t);
-        setTimeout(function() { t.classList.add("razzle-onboarding-show"); }, 10);
-        setTimeout(function() { t.classList.remove("razzle-onboarding-show"); setTimeout(function() { t.remove(); }, 300); }, 8000);
-        localStorage.setItem("razzle_shortcuts_shown", "1");
-      }, 3000);
-    }
-  } catch(e) {}
 })();
 
 // ─── Data fetching ───────────────────────────────────────────────
