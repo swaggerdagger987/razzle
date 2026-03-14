@@ -510,3 +510,328 @@ Add `defer` attribute to `lab.js` and `lab-panels.js` script tags (line ~3784-37
 **Acceptance**: `lab.js` and `lab-panels.js` have `defer`. Page still functions correctly (verify screener loads, sidebar works, panels switch).
 
 ---
+
+
+## Phase: Critical Security & Data Persistence
+
+**Exit Criterion**: users.db survives deploys. Trial abuse is rate-limited. LLM endpoint is sandboxed. No stored XSS vectors. Request body sizes are capped.
+
+### Task 1: Add Render persistent disk for users.db
+
+**File**: render.yaml, backend/auth.py
+
+Add a persistent disk mount to render.yaml. Update auth.py to use /data/users.db when on Render, fallback to data/users.db locally.
+
+**Acceptance**: render.yaml has persistent disk config. users.db survives deploys. Tests pass.
+
+---
+
+### Task 2: Rate-limit registration to prevent trial abuse
+
+**File**: backend/server.py
+
+Max 3 registrations per IP per 24 hours using existing rate limit pattern.
+
+**Acceptance**: 4th registration from same IP returns 429. Tests pass.
+
+---
+
+### Task 3: Sandbox Elite LLM endpoint
+
+**File**: backend/server.py
+
+Reject client role:system messages. Prepend mandatory fantasy football system prompt server-side. Cap max_tokens at 2000.
+
+**Acceptance**: Client cannot override system prompt. max_tokens capped. Tests pass.
+
+---
+
+### Task 4: Add request body size limit middleware
+
+**File**: backend/server.py
+
+Reject Content-Length over 1MB with 413 status.
+
+**Acceptance**: Requests over 1MB rejected. Tests pass.
+
+---
+
+### Task 5: Fix stored XSS in formula store
+
+**Files**: backend/live_data/storage.py, frontend/formula-store.js
+
+Server: reject HTML tags in name/description/creator_name. Frontend: escapeHtml on all formula store rendering.
+
+**Acceptance**: HTML in formula fields rejected server-side. Frontend escapes all fields. Tests pass.
+
+---
+
+### Task 6: Cap formula import count
+
+**File**: backend/auth.py, backend/server.py
+
+Cap import list at 50 formulas. Validate weights string under 10KB each.
+
+**Acceptance**: Import rejects lists over 50. Tests pass.
+
+---
+
+## Phase: Product Polish - CEO Opportunities
+
+**Exit Criterion**: Pricing has Free tier card. Bureau has pre-connection preview. Nav says Bureau. First-visit Lab nudge exists.
+
+### Task 1: Add Free tier card to pricing page
+
+**File**: frontend/pricing.html
+
+Three-column layout: Free / Pro / Elite. Free card lists all free features with Free Forever badge. CTA: Open The Lab.
+
+**Acceptance**: Three pricing cards visible. Free card celebrates the free tier.
+
+---
+
+### Task 2: Add Bureau pre-connection visual preview
+
+**File**: frontend/league-intel.html
+
+Above connect card, add anonymized sample data: mini pressure map, blurred manager profile, mini trade finder result.
+
+**Acceptance**: Visual preview above connect card. Uses anonymized data.
+
+---
+
+### Task 3: Shorten Bureau of Intelligence to Bureau in nav
+
+**Files**: All HTML files with topnav
+
+Replace nav link text. Keep full name on Bureau page h1.
+
+**Acceptance**: All nav links say Bureau. Bureau page h1 unchanged.
+
+---
+
+### Task 4: Add first-visit Lab nudge
+
+**File**: frontend/lab.js
+
+localStorage-gated tooltip on first visit: suggest sorting by Target Share. Caveat font, slight rotation. Dismiss sets flag.
+
+**Acceptance**: First-visit tooltip appears once. Clicking suggestion applies sort.
+
+---
+
+### Task 5: Fix pricing page HTML defaults to match yearly
+
+**File**: frontend/pricing.html
+
+Change HTML default prices from monthly to yearly to prevent flash of wrong pricing.
+
+**Acceptance**: No flash of monthly pricing. HTML matches JS default.
+
+---
+
+## Phase: Whimsy and Easter Eggs
+
+**Exit Criterion**: Console has ASCII tiger. Konami code works. 404 tiger walks. Footer taglines rotate. Loading dots animate.
+
+### Task 1: Console.log ASCII tiger welcome art
+
+**File**: frontend/app.js
+
+ASCII tiger art + welcome message + global razzle object with .help(), .stats(), .tiger().
+
+**Acceptance**: Console shows tiger art. razzle.help() works.
+
+---
+
+### Task 2: Konami Code confetti burst
+
+**File**: frontend/app.js
+
+Up Up Down Down Left Right Left Right B A triggers confetti, nav tiger spin, toast. Returns to normal after 5s.
+
+**Acceptance**: Konami code triggers confetti. Returns to normal.
+
+---
+
+### Task 3: 404 tiger walks offscreen
+
+**File**: frontend/404.html
+
+After 3 seconds, tiger walks offscreen right. Caveat annotation fades in. Tiger re-enters from left.
+
+**Acceptance**: Tiger walks, annotation appears, loops.
+
+---
+
+### Task 4: Randomized footer taglines
+
+**File**: frontend/app.js
+
+Replace footer text with random pick from 8 options on each page load.
+
+**Acceptance**: Different tagline on each load.
+
+---
+
+### Task 5: Animated loading dots
+
+**File**: frontend/styles.css
+
+Add .loading-dots CSS class with staggered pulse. Apply to all loading states.
+
+**Acceptance**: All loading states have animated dots.
+
+---
+
+### Task 6: Promo code easter eggs
+
+**File**: frontend/pricing.html
+
+RAZZLEDAZZLE, TIGER, GOAT get fun responses. Real codes still work.
+
+**Acceptance**: Easter egg codes show personality.
+
+---
+
+## Phase: Visual Polish
+
+**Exit Criterion**: Zero 1px borders on primary elements. Zero hardcoded white. Typography on-scale. prefers-reduced-motion exists.
+
+### Task 1: Fix 1px borders across pricing, landing, agents
+
+**Files**: frontend/index.html, frontend/pricing.html, frontend/agents.html
+
+Replace 1px solid with 2px dashed on featured rows, feature lists, matrix cells, comparison table.
+
+**Acceptance**: Zero 1px solid borders on primary content.
+
+---
+
+### Task 2: Fix hardcoded white and cold backgrounds for dark mode
+
+**Files**: frontend/index.html, frontend/lab.html, frontend/app.js
+
+sprawl-bubble white to var(--bg-card). Modal overlays to warm espresso rgba. Sleeper input to var(--bg-card).
+
+**Acceptance**: No hardcoded white or cold rgba. Dark mode correct.
+
+---
+
+### Task 3: Fix off-scale typography
+
+**Files**: frontend/index.html, frontend/lab.html
+
+Hero h1 42px to 36px. Panel title 22px to 20px.
+
+**Acceptance**: All font sizes on scale.
+
+---
+
+### Task 4: Add prefers-reduced-motion media query
+
+**File**: frontend/styles.css
+
+Global rule killing all animations when OS reduce-motion is enabled.
+
+**Acceptance**: All animations stop with reduce-motion enabled.
+
+---
+
+## Phase: Brand Voice Copy Polish
+
+**Exit Criterion**: No fake stats, no fear marketing, no generic SaaS copy.
+
+### Task 1: Fix landing page copy
+
+**File**: frontend/index.html
+
+Replace fake 80 percent stat with Your edge is scattered across 12 tabs. Remove fear marketing. Fix self-congratulatory lines.
+
+**Acceptance**: No fake statistics. No fear language.
+
+---
+
+### Task 2: Fix pricing page copy
+
+**File**: frontend/pricing.html
+
+Pick Your Plan to Pick Your Playbook. Trial banner to On the house. Feature Comparison to The full breakdown. FAQ header to Questions we keep getting.
+
+**Acceptance**: All copy matches Razzle voice.
+
+---
+
+### Task 3: Fix agents page loading states
+
+**File**: frontend/agents.html
+
+Replace loading with pulling. Fix setup wizard copy. Fix pixel engine text.
+
+**Acceptance**: Zero instances of loading in user-facing text.
+
+---
+
+## Phase: Staff Engineer Bug Fixes
+
+**Exit Criterion**: Lifetime badge correct. Trial expiry enforced. Failed leagues retryable. Checkout has error state. Timeouts on all async calls.
+
+### Task 1: Fix pro_lifetime badge
+
+**File**: frontend/app.js
+
+Fix updateAuthUI plan check to include pro_lifetime and elite_lifetime.
+
+**Acceptance**: Lifetime users see correct badge.
+
+---
+
+### Task 2: Force re-check auth on tab focus
+
+**File**: frontend/app.js
+
+visibilitychange listener calls checkAuth() after 5+ minutes hidden.
+
+**Acceptance**: Expired trial users lose Pro on tab return.
+
+---
+
+### Task 3: Fix dataset.loaded race condition
+
+**File**: frontend/league-intel.html
+
+Move dataset.loaded=true to after successful fetch. Set false on failure.
+
+**Acceptance**: Failed league expansions retryable.
+
+---
+
+### Task 4: Add timeout to callServerLLM
+
+**File**: frontend/warroom.js
+
+30s AbortController. User-friendly error on timeout.
+
+**Acceptance**: 30s timeout. Error message shown.
+
+---
+
+### Task 5: Add error state for failed checkout polling
+
+**File**: frontend/app.js
+
+After 10 failed polls, show clear error with next steps.
+
+**Acceptance**: User sees actionable error.
+
+---
+
+### Task 6: Add getSleeperPlayers timeout and error handling
+
+**File**: frontend/league-intel.html
+
+15s AbortController. Try-catch. User-friendly error. Retry possible.
+
+**Acceptance**: 15s timeout. Error shown. Retry works.
+
+---
