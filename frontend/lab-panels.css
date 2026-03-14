@@ -3,6 +3,19 @@
    Styles for native panel rendering inside lab.html
    =================================================================== */
 
+/* ===== Clickable player names in panels ===== */
+.panel-player-link {
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 2px dashed var(--ink-faint);
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.panel-player-link:hover {
+  border-bottom-color: var(--orange);
+  color: var(--orange);
+}
+
 /* ===== SHARED PANEL STYLES ===== */
 .lp-page {
   max-width: 1200px;

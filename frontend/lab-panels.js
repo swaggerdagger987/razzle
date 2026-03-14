@@ -17,6 +17,27 @@
 
   var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
 
+  // ─── Clickable player name helper ─────────────────────────────
+  // Returns HTML for a player name that opens the profile popup on click.
+  // Usage: pLink('Josh Allen', 'abc123') or pLink('Josh Allen', 'abc123', 'extra-class')
+  function pLink(name, playerId, extraStyle) {
+    if (!playerId) return escapeHtml(name);
+    return '<a href="/player/' + encodeURIComponent(playerId) + '" class="panel-player-link" data-player-id="' + escapeAttr(playerId) + '"' +
+      (extraStyle ? ' style="' + extraStyle + '"' : '') +
+      '>' + escapeHtml(name) + '</a>';
+  }
+
+  // Delegated click handler — attached once to .lab-main
+  document.addEventListener('click', function(e) {
+    var link = e.target.closest('.panel-player-link');
+    if (!link) return;
+    e.preventDefault();
+    var pid = link.getAttribute('data-player-id');
+    if (pid && typeof openPlayerProfile === 'function') {
+      openPlayerProfile(pid);
+    }
+  });
+
   // ─── NFL-Only Panel Messages ────────────────────────────────────
   // Panels that don't apply to college show a friendly Caveat-font message
   var NFL_ONLY_MESSAGES = {
@@ -190,7 +211,7 @@
         html += '<tr data-pid="' + escapeAttr(p.player_id) + '">';
         html += '<td><div class="dh-player-cell">';
         if (p.headshot_url) html += '<img class="dh-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
-        html += '<div><div class="dh-name">' + escapeHtml(p.full_name) + '</div>';
+        html += '<div><div class="dh-name">' + pLink(p.full_name, p.player_id) + '</div>';
         html += '<span class="rankings-pos-badge ' + posLc + '">' + escapeHtml(p.position) + '</span>';
         html += ' <span class="dh-team">' + escapeHtml(p.team) + '</span></div></div></td>';
 
@@ -333,7 +354,7 @@
           html += '<div class="rankings-rank">#' + rank + '</div>';
           html += playerHeadshot(p, p.position);
           html += '<div class="rankings-info">';
-          html += '<div class="rankings-name">' + escapeHtml(p.full_name) + '</div>';
+          html += '<div class="rankings-name">' + pLink(p.full_name, p.player_id) + '</div>';
           html += '<div class="rankings-meta">';
           html += '<span class="rankings-pos-badge ' + posLc + '">' + escapeHtml(p.position) + '</span>';
           html += '<span class="rankings-team">' + escapeHtml(p.team) + '</span>';
@@ -486,7 +507,7 @@
           filtered.forEach(function(p) {
             html += '<div class="tl-player-chip" data-pid="' + escapeAttr(p.player_id) + '">';
             html += '<span class="tl-chip-pos ' + p.position + '">' + escapeHtml(p.position) + '</span>';
-            html += '<span class="tl-chip-name">' + escapeHtml(p.full_name) + '</span>';
+            html += '<span class="tl-chip-name">' + pLink(p.full_name, p.player_id) + '</span>';
             html += '<span class="tl-chip-tv">' + escapeHtml(String(p.trade_value)) + '</span>';
             html += '</div>';
           });
@@ -615,7 +636,7 @@
         html += '<div class="tv-headshot"></div>';
       }
       html += '<div class="tv-player-info">';
-      html += '<div class="tv-player-name">' + escapeHtml(p.full_name) + '</div>';
+      html += '<div class="tv-player-name">' + pLink(p.full_name, p.player_id) + '</div>';
       html += '<div class="tv-player-meta">';
       html += '<span class="tv-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
       html += '<span class="tv-team-label">' + escapeHtml(p.team) + '</span>';
@@ -906,7 +927,7 @@
         html += '<tr data-pid="' + escapeAttr(p.player_id) + '">';
         html += '<td><div class="vorp-player-cell">';
         if (p.headshot_url) html += '<img class="vorp-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
-        html += '<div class="vorp-player-info"><div class="vorp-player-name">' + escapeHtml(p.full_name) + '</div>';
+        html += '<div class="vorp-player-info"><div class="vorp-player-name">' + pLink(p.full_name, p.player_id) + '</div>';
         html += '<div class="vorp-player-meta"><span class="vorp-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
         html += '<span class="vorp-team-label">' + escapeHtml(p.team) + '</span></div></div></div></td>';
         html += '<td class="center"><span class="vorp-badge ' + tier + '">' + sign + fmt(p.vorp, 2) + '</span></td>';
@@ -1104,7 +1125,7 @@
 
         html += '<tr data-pid="' + escapeAttr(p.player_id) + '">';
         html += '<td class="pa-rank">' + (i + 1) + '</td>';
-        html += '<td>' + escapeHtml(p.name) + ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></td>';
+        html += '<td>' + pLink(p.name, p.player_id) + ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></td>';
         html += '<td><span class="pa-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
         html += '<td style="font-weight:700">' + fmt(p.ppg) + '</td>';
         html += '<td>' + fmt(p.pos_avg) + '</td>';
@@ -1255,7 +1276,7 @@
       players.forEach(function(p, i) {
         html += '<tr data-pid="' + escapeAttr(p.player_id) + '">';
         html += '<td>' + (i + 1) + '</td>';
-        html += '<td>' + escapeHtml(p.full_name) + '</td>';
+        html += '<td>' + pLink(p.full_name, p.player_id) + '</td>';
         html += '<td><span class="av-pos-badge ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span></td>';
         html += '<td>' + escapeHtml(p.team) + '</td>';
         html += '<td><span class="av-dollar ' + tierClass(p.tier) + '">$' + p.auction_value + '</span></td>';
@@ -1358,7 +1379,7 @@
           }
           html += '<div class="cs-player" data-pid="' + escapeAttr(p.player_id) + '">';
           html += '<span class="cs-rank">' + p.rank + '</span>';
-          html += '<span class="cs-pname">' + escapeHtml(p.full_name) + '</span>';
+          html += '<span class="cs-pname">' + pLink(p.full_name, p.player_id) + '</span>';
           html += '<span class="cs-team">' + escapeHtml(p.team) + '</span>';
           html += '<span class="cs-ppg">' + fmt(p.ppg) + '</span>';
           html += '</div>';
@@ -1466,7 +1487,7 @@
           html += '<div class="breakout-card-row1">';
           html += '<div class="breakout-rank">' + escapeHtml(String(p.rank)) + '</div>';
           if (p.headshot_url) html += '<img class="breakout-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
-          html += '<div class="breakout-info"><div class="breakout-name">' + escapeHtml(p.name) + '</div>';
+          html += '<div class="breakout-info"><div class="breakout-name">' + pLink(p.name, p.player_id) + '</div>';
           html += '<div class="breakout-meta"><span class="breakout-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
           if (isCollege && p.conference) {
             html += '<span class="breakout-team">' + escapeHtml(p.team) + '</span>';
@@ -1593,7 +1614,7 @@
       h += '<div class="buysell-card-row1">';
       h += '<div class="buysell-rank">' + escapeHtml(String(p.rank)) + '</div>';
       if (p.headshot_url) h += '<img class="buysell-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
-      h += '<div class="buysell-info"><div class="buysell-name">' + escapeHtml(p.name) + '</div>';
+      h += '<div class="buysell-info"><div class="buysell-name">' + pLink(p.name, p.player_id) + '</div>';
       h += '<div class="buysell-meta"><span class="buysell-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
       h += '<span class="buysell-team">' + escapeHtml(p.team) + '</span>';
       if (p.age) h += '<span class="buysell-age-badge ' + ac + '">' + ac + ' ' + p.age + '</span>';
@@ -1743,7 +1764,7 @@
         if (c.key === 'name') {
           h += '<td><div class="stk-player-cell">';
           if (p.headshot_url) h += '<img class="stk-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
-          h += '<div class="stk-player-info"><div class="stk-player-name">' + escapeHtml(p.name) + '</div>';
+          h += '<div class="stk-player-info"><div class="stk-player-name">' + pLink(p.name, p.player_id) + '</div>';
           h += '<div class="stk-player-meta"><span class="stk-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
           h += '<span class="stk-team-label">' + escapeHtml(p.team) + '</span>';
           if (isCollege && p.conference) h += '<span class="stk-team-label" style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
@@ -1937,7 +1958,7 @@
           var sign = p.delta > 0 ? '+' : '';
           html += '<tr>';
           html += '<td class="ww-rank">' + (i + 1) + '</td>';
-          html += '<td>' + escapeHtml(p.name) + ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></td>';
+          html += '<td>' + pLink(p.name, p.player_id) + ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></td>';
           html += '<td><span class="ww-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
           html += '<td>' + escapeHtml(String(p.games)) + '</td>';
           html += '<td>' + fmt(p.season_avg) + '</td>';
@@ -2238,7 +2259,7 @@
           var isCollegeEff = typeof state !== 'undefined' && state.universe === 'college';
           h += '<td><div class="eff-player-cell">';
           if (p.headshot_url) h += '<img class="eff-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
-          h += '<div class="eff-player-info"><div class="eff-player-name">' + escapeHtml(p.name) + '</div>';
+          h += '<div class="eff-player-info"><div class="eff-player-name">' + pLink(p.name, p.player_id) + '</div>';
           h += '<div class="eff-player-meta"><span class="eff-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
           h += '<span class="eff-team-label">' + escapeHtml(p.team) + '</span>';
           if (isCollegeEff && p.conference) h += '<span class="eff-team-label" style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
@@ -2443,7 +2464,7 @@
           var isCollegeCon = typeof state !== 'undefined' && state.universe === 'college';
           h += '<td><div class="con-player-cell">';
           if (p.headshot_url) h += '<img class="con-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
-          h += '<div class="con-player-info"><div class="con-player-name">' + escapeHtml(p.name) + '</div>';
+          h += '<div class="con-player-info"><div class="con-player-name">' + pLink(p.name, p.player_id) + '</div>';
           h += '<div class="con-player-meta"><span class="con-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
           h += '<span class="con-team-label">' + escapeHtml(p.team) + '</span>';
           if (isCollegeCon && p.conference) h += '<span class="con-team-label" style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
@@ -2652,7 +2673,7 @@
           if (isCollege && p.conference) teamLabel += ' <span style="font-size:9px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
           html += '<tr>';
           html += '<td class="se-rank">' + (i + 1) + '</td>';
-          html += '<td>' + escapeHtml(p.name) + ' <span style="color:var(--ink-light);font-size:10px">' + teamLabel + '</span></td>';
+          html += '<td>' + pLink(p.name, p.player_id) + ' <span style="color:var(--ink-light);font-size:10px">' + teamLabel + '</span></td>';
           html += '<td><span class="se-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
           html += '<td><span class="se-eff-badge ' + cls + '">' + fmt(p.pts_per_snap, 3) + '</span></td>';
           html += '<td>' + fmt(p.ppg) + '</td>';
@@ -2753,7 +2774,7 @@
           if (isCollege && p.conference) teamLabel += ' <span style="font-size:9px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
           html += '<tr>';
           html += '<td class="wl-rank">' + (i + 1) + '</td>';
-          html += '<td>' + escapeHtml(p.name) + ' <span style="color:var(--ink-light);font-size:10px">' + teamLabel + '</span></td>';
+          html += '<td>' + pLink(p.name, p.player_id) + ' <span style="color:var(--ink-light);font-size:10px">' + teamLabel + '</span></td>';
           html += '<td><span class="wl-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
           html += '<td><span class="wl-score-badge ' + cls + '">' + escapeHtml(String(p.workload)) + '</span></td>';
           html += '<td>' + fmt(p.touches_pg) + '</td>';
@@ -2854,7 +2875,7 @@
           if (isCollege && p.conference) teamLabel += ' <span style="font-size:9px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
           html += '<tr>';
           html += '<td class="dt-rank">' + (i + 1) + '</td>';
-          html += '<td>' + escapeHtml(p.name) + ' <span style="color:var(--ink-light);font-size:10px">' + teamLabel + '</span></td>';
+          html += '<td>' + pLink(p.name, p.player_id) + ' <span style="color:var(--ink-light);font-size:10px">' + teamLabel + '</span></td>';
           html += '<td><span class="dt-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
           html += '<td><span class="dt-dti-badge ' + cls + '">' + escapeHtml(String(p.dti)) + '</span></td>';
           html += '<td>' + fmt(p.rush_yd_pg) + '</td>';
@@ -2944,7 +2965,7 @@
           var cls = premiumClass(p.premium);
           html += '<tr>';
           html += '<td class="tp-rank">' + (i + 1) + '</td>';
-          html += '<td>' + escapeHtml(p.name) + ' <span style="color:var(--ink-light);font-size:10px">' + escapeHtml(p.team) + '</span></td>';
+          html += '<td>' + pLink(p.name, p.player_id) + ' <span style="color:var(--ink-light);font-size:10px">' + escapeHtml(p.team) + '</span></td>';
           html += '<td><span class="tp-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
           html += '<td><span class="tp-premium-badge ' + cls + '">' + escapeHtml(String(p.premium)) + '</span></td>';
           html += '<td>' + fmt(p.targets_pg) + '</td>';
@@ -3018,7 +3039,7 @@
         var cls = rateClass(p.drop_rate, isGood);
         html += '<tr>';
         html += '<td class="dr-rank">' + (i + 1) + '</td>';
-        html += '<td>' + escapeHtml(p.name) + ' <span style="color:var(--ink-light);font-size:10px">' + escapeHtml(p.team) + '</span></td>';
+        html += '<td>' + pLink(p.name, p.player_id) + ' <span style="color:var(--ink-light);font-size:10px">' + escapeHtml(p.team) + '</span></td>';
         html += '<td><span class="dr-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
         html += '<td><span class="dr-rate-badge ' + cls + '">' + fmt(p.drop_rate) + '%</span></td>';
         html += '<td>' + escapeHtml(String(p.drops)) + '</td>';
@@ -3123,7 +3144,7 @@
         var barCls = isPadders ? 'red' : 'green';
         html += '<tr>';
         html += '<td class="gt-rank">' + (i + 1) + '</td>';
-        html += '<td>' + escapeHtml(p.name) + ' <span style="color:var(--ink-light);font-size:10px">' + escapeHtml(p.team) + '</span></td>';
+        html += '<td>' + pLink(p.name, p.player_id) + ' <span style="color:var(--ink-light);font-size:10px">' + escapeHtml(p.team) + '</span></td>';
         html += '<td><span class="gt-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
         html += '<td><span class="gt-pct-badge ' + pCls + '">' + fmt(p.garbage_time_pct) + '%</span></td>';
         html += '<td>' + fmt(p.ppg) + '</td>';
@@ -3292,7 +3313,7 @@
         html += '<td class="wh-player-cell"><div class="wh-player-inner" data-pid="' + escapeAttr(p.player_id) + '">';
         html += '<span class="wh-rank">' + (idx + 1) + '</span>';
         html += '<span class="wh-pos-dot" style="background:' + posColor + '"></span>';
-        html += '<span>' + escapeHtml(p.name) + '</span>';
+        html += '<span>' + pLink(p.name, p.player_id) + '</span>';
         html += '<span class="wh-team">' + escapeHtml(p.team) + '</span>';
         html += '</div></td>';
 
@@ -3733,7 +3754,7 @@
         if (col.key === 'name') {
           html += '<td><div class="rz-player-cell">';
           if (p.headshot_url) html += '<img class="rz-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
-          html += '<div class="rz-player-info"><div class="rz-player-name">' + escapeHtml(p.name) + '</div>';
+          html += '<div class="rz-player-info"><div class="rz-player-name">' + pLink(p.name, p.player_id) + '</div>';
           html += '<div class="rz-player-meta"><span class="rz-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
           html += '<span class="rz-team-label">' + escapeHtml(p.team) + '</span></div></div></div></td>';
         } else if (col.key === 'gl_td_rate') {
@@ -3947,7 +3968,7 @@
         var sign = p.delta > 0 ? '+' : '';
 
         html += '<tr>';
-        html += '<td>' + escapeHtml(p.name) + ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></td>';
+        html += '<td>' + pLink(p.name, p.player_id) + ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></td>';
         html += '<td><span class="str-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
         html += '<td>' + fmt(p.season_avg) + '</td>';
         html += '<td>' + fmt(p.recent_avg) + '</td>';
@@ -4125,7 +4146,7 @@
         html += '<td class="center"><span class="wkl-rank ' + rankCls + '">' + p._rank + '</span></td>';
 
         html += '<td><div class="wkl-player-cell"><div class="wkl-player-info">';
-        html += '<div class="wkl-player-name">' + escapeHtml(p.name) + '</div>';
+        html += '<div class="wkl-player-name">' + pLink(p.name, p.player_id) + '</div>';
         html += '<div class="wkl-player-meta"><span class="wkl-pos-badge ' + (p.position || '').toLowerCase() + '">' + escapeHtml(p.position) + '</span>';
         html += '<span class="wkl-team-label">' + escapeHtml(p.team) + '</span></div></div></div></td>';
 
@@ -4339,7 +4360,7 @@
         var posColor = POS_COLORS[p.position] || '#8a7565';
         html += '<tr>';
         html += '<td class="po-rank">' + (i + 1) + '</td>';
-        html += '<td>' + escapeHtml(p.name) + ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></td>';
+        html += '<td>' + pLink(p.name, p.player_id) + ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></td>';
         html += '<td><span class="po-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
         html += '<td style="font-weight:700">' + fmt(p.playoff_ppg) + '</td>';
         html += '<td><span class="po-grade ' + gradeClass(p.sos_grade) + '">' + escapeHtml(p.sos_grade) + '</span></td>';
@@ -4504,7 +4525,7 @@
         html += '<td class="ut-rank">' + (i + 1) + '</td>';
         html += '<td class="ut-player-cell">';
         if (!isCollege && p.headshot_url) html += '<img class="ut-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="" loading="lazy">';
-        html += '<span class="ut-name">' + escapeHtml(p.name) + '</span>';
+        html += '<span class="ut-name">' + pLink(p.name, p.player_id) + '</span>';
         html += '<span class="ut-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span>';
         html += '<span class="ut-team">' + escapeHtml(p.team || '') + '</span>';
         if (isCollege && p.conference) html += '<span class="ut-team" style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
@@ -4647,7 +4668,7 @@
         html += '<td class="yy-rank">' + (i + 1) + '</td>';
         html += '<td class="yy-player-cell">';
         if (!isCollege && p.headshot_url) html += '<img class="yy-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="" loading="lazy">';
-        html += '<span class="yy-name">' + escapeHtml(p.name) + '</span>';
+        html += '<span class="yy-name">' + pLink(p.name, p.player_id) + '</span>';
         html += '<span class="yy-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span>';
         html += '<span class="yy-team">' + escapeHtml(p.team || '') + '</span>';
         if (isCollege && p.conference) html += '<span class="yy-team" style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
@@ -4925,7 +4946,7 @@
         var posColor = POS_COLORS[p.position] || '#8a7565';
         html += '<div class="pt-card">';
         html += '<div class="pt-card-header">';
-        html += '<span class="pt-player-name">' + escapeHtml(p.name) + '</span>';
+        html += '<span class="pt-player-name">' + pLink(p.name, p.player_id) + '</span>';
         html += '<span class="pt-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span>';
         html += '<span class="pt-team">' + escapeHtml(p.team || '') + '</span>';
         html += '</div>';
@@ -5017,7 +5038,7 @@
         var posColor = POS_COLORS[p.position] || '#8a7565';
         html += '<tr>';
         html += '<td class="spc-rank">' + (i + 1) + '</td>';
-        html += '<td class="spc-name">' + escapeHtml(p.name) + ' <span class="spc-team">' + escapeHtml(p.team || '') + '</span></td>';
+        html += '<td class="spc-name">' + pLink(p.name, p.player_id) + ' <span class="spc-team">' + escapeHtml(p.team || '') + '</span></td>';
         html += '<td><span class="spc-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
         html += '<td class="spc-num">' + (p.games_played || '-') + '</td>';
         html += '<td class="spc-num">' + fmt(p.ppg) + '</td>';
@@ -5143,7 +5164,7 @@
         var barColor = isBuy ? '#16a34a' : '#dc2626';
         html += '<tr>';
         html += '<td class="tdr-rank">' + (i + 1) + '</td>';
-        html += '<td class="tdr-name">' + escapeHtml(p.name) + ' <span class="tdr-team">' + escapeHtml(p.team || '') + '</span></td>';
+        html += '<td class="tdr-name">' + pLink(p.name, p.player_id) + ' <span class="tdr-team">' + escapeHtml(p.team || '') + '</span></td>';
         html += '<td><span class="tdr-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
         html += '<td class="tdr-num">' + fmt(p.actual_tds, 0) + '</td>';
         html += '<td class="tdr-num">' + fmt(p.expected_tds) + '</td>';
@@ -5299,7 +5320,7 @@
         // player cell
         html += '<td class="ay-player-cell">';
         if (p.headshot_url) html += '<img class="ay-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="" loading="lazy">';
-        html += '<span class="ay-name">' + escapeHtml(p.name) + '</span>';
+        html += '<span class="ay-name">' + pLink(p.name, p.player_id) + '</span>';
         html += '<span class="ay-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span>';
         html += '<span class="ay-team">' + escapeHtml(p.team || '') + '</span>';
         html += '</td>';
