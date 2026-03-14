@@ -3888,8 +3888,15 @@ function loadStateFromURL() {
 
 function openShareModal() {
   saveStateToURL();
+  // If on a non-screener panel, include the panel parameter in the share URL
+  var shareURL = window.location.href;
+  if (typeof currentPanel !== 'undefined' && currentPanel && currentPanel !== 'screener') {
+    var params = new URLSearchParams(window.location.search);
+    params.set('panel', currentPanel);
+    shareURL = window.location.origin + window.location.pathname + '?' + params.toString();
+  }
   document.getElementById("shareOverlay").classList.add("open");
-  document.getElementById("shareURLInput").value = window.location.href;
+  document.getElementById("shareURLInput").value = shareURL;
   document.getElementById("redditTitleInput").value = generateRedditTitle();
 }
 
