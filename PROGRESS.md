@@ -259,3 +259,18 @@ Systematic page-by-page audit against DESIGN.md and NORTH_STAR.md.
 - Big Board UI Overhaul: large ticket (L), left in TICKETS.md for post-launch.
 - Monte Carlo League Odds: new feature (L+L+M+XL), left in TICKETS.md for post-launch.
 - Brand Copy Update: 3 tasks (M+M+S), left in TICKETS.md for post-launch.
+
+### Sweep Mode (Mar 14)
+
+| Pass | Persona | Findings | Fixes |
+|------|---------|----------|-------|
+| 1 | Frontend Developer | kbd shadow 1px, kbd font wrong | Upgraded to 2px shadow, switched to mono |
+| 2 | UI Designer | No cold grays, no gradients, no 1px borders | Clean |
+| 3 | Security Engineer | No SQL injection, no exposed secrets, escapeHtml everywhere | Clean |
+| 4 | Backend Architect | No bare except, all errors logged | Clean |
+| 5 | UX Architect | All nav links valid, all 74 pages exist, funnel complete | Clean |
+| 6 | Performance Benchmarker | JS defer and esbuild minification in place | Clean |
+| 7 | Accessibility Auditor | ARIA labels on key elements, focus-visible styles present | Clean |
+| 8 | Brand Guardian | "free tier" in pricing FAQ | Replaced with specific product language |
+| 9 | Whimsy Injector | 6 error, 5 empty, 15 loading personality strings | Already covered |
+| 10 | Evidence Collector | All new function refs valid, no dangling references | Verified |
