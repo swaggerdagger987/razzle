@@ -484,7 +484,7 @@
         } else {
           anyVisible = true;
           filtered.forEach(function(p) {
-            html += '<div class="tl-player-chip">';
+            html += '<div class="tl-player-chip" data-pid="' + escapeAttr(p.player_id) + '">';
             html += '<span class="tl-chip-pos ' + p.position + '">' + escapeHtml(p.position) + '</span>';
             html += '<span class="tl-chip-name">' + escapeHtml(p.full_name) + '</span>';
             html += '<span class="tl-chip-tv">' + escapeHtml(String(p.trade_value)) + '</span>';
@@ -1102,7 +1102,7 @@
         var barWidth = Math.max(2, Math.round(Math.abs(p.advantage) / maxAdv * 80));
         var barColor = p.advantage >= 0 ? '#2ec4b6' : '#d97757';
 
-        html += '<tr>';
+        html += '<tr data-pid="' + escapeAttr(p.player_id) + '">';
         html += '<td class="pa-rank">' + (i + 1) + '</td>';
         html += '<td>' + escapeHtml(p.name) + ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></td>';
         html += '<td><span class="pa-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
@@ -1253,7 +1253,7 @@
       html += '</tr></thead><tbody>';
 
       players.forEach(function(p, i) {
-        html += '<tr>';
+        html += '<tr data-pid="' + escapeAttr(p.player_id) + '">';
         html += '<td>' + (i + 1) + '</td>';
         html += '<td>' + escapeHtml(p.full_name) + '</td>';
         html += '<td><span class="av-pos-badge ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span></td>';
@@ -6838,7 +6838,7 @@
       '</div>';
 
     function playerRow(p, i, chipType, chipText) {
-      var html = '<div class="db2-row">';
+      var html = '<div class="db2-row" data-pid="' + escapeAttr(p.player_id) + '">';
       html += '<span class="db2-row-rank">' + (i + 1) + '</span>';
       html += '<span class="db2-pos ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span>';
       html += '<span class="db2-row-name">' + escapeHtml(p.full_name) + '</span>';
@@ -6870,7 +6870,7 @@
         // Top 5
         var t5html = '<div class="db2-top5-row">';
         (d.top5 || []).forEach(function(p, i) {
-          t5html += '<div class="db2-top5-card"><div class="db2-top5-rank">#' + (i + 1) + '</div>';
+          t5html += '<div class="db2-top5-card" data-pid="' + escapeAttr(p.player_id) + '"><div class="db2-top5-rank">#' + (i + 1) + '</div>';
           t5html += '<div class="db2-top5-name">' + escapeHtml(p.full_name) + '</div>';
           t5html += '<div class="db2-top5-tv">' + escapeHtml(String(p.trade_value)) + '</div>';
           t5html += '<div class="db2-top5-meta"><span class="db2-pos ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span> ' + escapeHtml(p.team) + ' &middot; ' + escapeHtml(String(p.ppg)) + ' PPG</div>';
@@ -7382,8 +7382,8 @@
 
       chartCanvas.addEventListener('mousemove', function(e) {
         var rect = chartCanvas.getBoundingClientRect();
-        var mx = (e.clientX - rect.left) * (chartCanvas.width / dpr) / rect.width / dpr;
-        var my = (e.clientY - rect.top) * (chartCanvas.height / dpr) / rect.height / dpr;
+        var mx = (e.clientX - rect.left) * (wrapW / rect.width);
+        var my = (e.clientY - rect.top) * (canvasH / rect.height);
         var closest = null, minDist = 20;
         plotPoints.forEach(function(pt) {
           var dist = Math.sqrt(Math.pow(pt.px - mx, 2) + Math.pow(pt.py - my, 2));
@@ -8212,7 +8212,7 @@
         html += '<div class="rec-section"><div class="rec-section-header">Single-Game Records</div>';
         html += '<table class="rec-table"><thead><tr><th>#</th><th>Player</th><th>Szn</th><th>Wk</th><th>PPR</th></tr></thead><tbody>';
         (data.single_game || []).forEach(function(p, i) {
-          html += '<tr><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
+          html += '<tr data-pid="' + escapeAttr(p.player_id) + '"><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
           html += '<td>' + escapeHtml(p.name) + posChip(p.position) + '</td>';
           html += '<td><span class="rec-season-badge">' + p.season + '</span></td>';
           html += '<td>' + p.week + '</td><td class="rec-fpts">' + p.fpts + '</td></tr>';
@@ -8223,7 +8223,7 @@
       html += '<div class="rec-section"><div class="rec-section-header">' + (isCollege ? 'Best Single Seasons (Fantasy Pts)' : 'Single-Season Records') + '</div>';
       html += '<table class="rec-table"><thead><tr><th>#</th><th>Player</th><th>Szn</th><th>G</th><th>Total</th><th>PPG</th></tr></thead><tbody>';
       (data.single_season || []).forEach(function(p, i) {
-        html += '<tr><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
+        html += '<tr data-pid="' + escapeAttr(p.player_id) + '"><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
         html += '<td>' + playerCell(p, isCollege) + '</td>';
         html += '<td><span class="rec-season-badge">' + p.season + '</span></td>';
         html += '<td>' + p.games + '</td><td class="rec-fpts">' + p.total_fpts + '</td><td>' + p.ppg + '</td></tr>';
@@ -8234,7 +8234,7 @@
         html += '<div class="rec-section"><div class="rec-section-header">Best Single Seasons (Total Yards)</div>';
         html += '<table class="rec-table"><thead><tr><th>#</th><th>Player</th><th>Szn</th><th>G</th><th>Yards</th><th>YPG</th></tr></thead><tbody>';
         (data.season_yards || []).forEach(function(p, i) {
-          html += '<tr><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
+          html += '<tr data-pid="' + escapeAttr(p.player_id) + '"><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
           html += '<td>' + playerCell(p, true) + '</td>';
           html += '<td><span class="rec-season-badge">' + p.season + '</span></td>';
           html += '<td>' + p.games + '</td><td class="rec-fpts">' + p.total_yards + '</td><td>' + p.ypg + '</td></tr>';
@@ -8244,7 +8244,7 @@
         html += '<div class="rec-section"><div class="rec-section-header">Best Single Seasons (TDs)</div>';
         html += '<table class="rec-table"><thead><tr><th>#</th><th>Player</th><th>Szn</th><th>G</th><th>TDs</th></tr></thead><tbody>';
         (data.season_tds || []).forEach(function(p, i) {
-          html += '<tr><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
+          html += '<tr data-pid="' + escapeAttr(p.player_id) + '"><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
           html += '<td>' + playerCell(p, true) + '</td>';
           html += '<td><span class="rec-season-badge">' + p.season + '</span></td>';
           html += '<td>' + p.games + '</td><td class="rec-fpts">' + p.tds + '</td></tr>';
@@ -8254,7 +8254,7 @@
         html += '<div class="rec-section"><div class="rec-section-header">Career Fantasy Points Leaders</div>';
         html += '<table class="rec-table"><thead><tr><th>#</th><th>Player</th><th>Szns</th><th>G</th><th>Total</th><th>PPG</th></tr></thead><tbody>';
         (data.career_fpts || []).forEach(function(p, i) {
-          html += '<tr><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
+          html += '<tr data-pid="' + escapeAttr(p.player_id) + '"><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
           html += '<td>' + playerCell(p, true) + '</td>';
           html += '<td><span class="rec-season-badge">' + escapeHtml(p.seasons) + '</span></td>';
           html += '<td>' + p.games + '</td><td class="rec-fpts">' + p.total_fpts + '</td><td>' + p.ppg + '</td></tr>';
@@ -8264,7 +8264,7 @@
         html += '<div class="rec-section"><div class="rec-section-header">Career Yards Leaders</div>';
         html += '<table class="rec-table"><thead><tr><th>#</th><th>Player</th><th>Szns</th><th>G</th><th>Yards</th><th>YPG</th></tr></thead><tbody>';
         (data.career_yards || []).forEach(function(p, i) {
-          html += '<tr><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
+          html += '<tr data-pid="' + escapeAttr(p.player_id) + '"><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
           html += '<td>' + playerCell(p, true) + '</td>';
           html += '<td><span class="rec-season-badge">' + escapeHtml(p.seasons) + '</span></td>';
           html += '<td>' + p.games + '</td><td class="rec-fpts">' + p.total_yards + '</td><td>' + p.ypg + '</td></tr>';
@@ -8274,7 +8274,7 @@
         html += '<div class="rec-section"><div class="rec-section-header">Career PPG Leaders</div>';
         html += '<table class="rec-table"><thead><tr><th>#</th><th>Player</th><th>G</th><th>PPG</th><th>Total</th></tr></thead><tbody>';
         (data.career_ppg || []).forEach(function(p, i) {
-          html += '<tr><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
+          html += '<tr data-pid="' + escapeAttr(p.player_id) + '"><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
           html += '<td>' + escapeHtml(p.name) + posChip(p.position) + '</td>';
           html += '<td>' + p.games + '</td><td class="rec-fpts">' + p.ppg + '</td><td>' + p.total_fpts + '</td></tr>';
         });
@@ -8283,7 +8283,7 @@
         html += '<div class="rec-section"><div class="rec-section-header">Most Career Points</div>';
         html += '<table class="rec-table"><thead><tr><th>#</th><th>Player</th><th>G</th><th>Total</th><th>PPG</th></tr></thead><tbody>';
         (data.career_total || []).forEach(function(p, i) {
-          html += '<tr><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
+          html += '<tr data-pid="' + escapeAttr(p.player_id) + '"><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
           html += '<td>' + escapeHtml(p.name) + posChip(p.position) + '</td>';
           html += '<td>' + p.games + '</td><td class="rec-fpts">' + p.total_fpts + '</td><td>' + p.ppg + '</td></tr>';
         });
