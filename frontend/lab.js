@@ -3206,14 +3206,30 @@ function setMinGP(val) {
   fetchAndRender();
 }
 
-// ─── Settings panel toggle ──────────────────────────────────────
+// ─── Settings panel toggle (legacy — now uses Tools dropdown) ────
 function toggleSettingsPanel() {
-  var panel = document.getElementById("settingsPanel");
-  if (!panel) return;
-  var isOpen = panel.style.display !== "none";
-  panel.style.display = isOpen ? "none" : "";
-  var btn = document.getElementById("settingsToggleBtn");
+  toggleToolsDropdown();
+}
+
+// ─── Tools dropdown ─────────────────────────────────────────────
+function toggleToolsDropdown() {
+  var dd = document.getElementById("toolsDropdown");
+  var bd = document.getElementById("toolsDropdownBackdrop");
+  var btn = document.getElementById("toolsDropdownBtn");
+  if (!dd) return;
+  var isOpen = dd.classList.contains("open");
+  dd.classList.toggle("open", !isOpen);
+  if (bd) bd.classList.toggle("open", !isOpen);
   if (btn) btn.classList.toggle("active", !isOpen);
+}
+
+function closeToolsDropdown() {
+  var dd = document.getElementById("toolsDropdown");
+  var bd = document.getElementById("toolsDropdownBackdrop");
+  var btn = document.getElementById("toolsDropdownBtn");
+  if (dd) dd.classList.remove("open");
+  if (bd) bd.classList.remove("open");
+  if (btn) btn.classList.remove("active");
 }
 
 // ─── Column picker ───────────────────────────────────────────────
@@ -10089,6 +10105,12 @@ function isInputFocused() {
 document.addEventListener("keydown", function(e) {
   // Escape: close overlays or blur search
   if (e.key === "Escape") {
+    var toolsDd = document.getElementById("toolsDropdown");
+    if (toolsDd && toolsDd.classList.contains("open")) {
+      closeToolsDropdown();
+      e.preventDefault();
+      return;
+    }
     if (isAnyOverlayOpen()) {
       closeAllOverlays();
       e.preventDefault();
