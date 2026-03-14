@@ -3,6 +3,7 @@ services:
     name: razzle-api
     runtime: python
     healthCheckPath: /api/health
+    plan: standard
     numInstances: 1
     autoDeploy: true
     buildCommand: |
@@ -20,7 +21,7 @@ services:
       cp -r frontend/assets frontend/dist/assets
       cp frontend/favicon.svg frontend/dist/
       echo "Minified build: $(ls frontend/dist/*.js | wc -l) JS, $(ls frontend/dist/*.css | wc -l) CSS, $(ls frontend/dist/*.html | wc -l) HTML"
-    startCommand: uvicorn backend.server:app --host 0.0.0.0 --port $PORT --workers 4
+    startCommand: uvicorn backend.server:app --host 0.0.0.0 --port $PORT --workers 2
     envVars:
       - key: PYTHON_VERSION
         value: "3.11.0"

@@ -98,6 +98,27 @@ def _check_sensitive_rate(ip: str) -> bool:
     return True
 
 
+# Screener rate limiter: 30 requests / 60 seconds per IP
+_screener_rate_buckets = defaultdict(list)
+_SCREENER_RATE_LIMIT = 30
+_SCREENER_RATE_WINDOW = 60
+
+def _check_screener_rate(ip: str) -> bool:
+    """Rate limit for screener POST endpoint."""
+    now = _time.time()
+    if len(_screener_rate_buckets) > _RATE_MAX_IPS:
+        stale = [k for k, v in _screener_rate_buckets.items()
+                 if not v or now - v[-1] > _SCREENER_RATE_WINDOW]
+        for k in stale:
+            del _screener_rate_buckets[k]
+    bucket = _screener_rate_buckets[ip]
+    _screener_rate_buckets[ip] = [t for t in bucket if now - t < _SCREENER_RATE_WINDOW]
+    if len(_screener_rate_buckets[ip]) >= _SCREENER_RATE_LIMIT:
+        return False
+    _screener_rate_buckets[ip].append(now)
+    return True
+
+
 def bootstrap_database():
     """Sync nflverse + college data if the DB is empty or missing."""
     import sys, os
@@ -353,8 +374,8 @@ app.add_middleware(GZipMiddleware, minimum_size=500)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["https://razzle.lol", "http://localhost:8000", "http://localhost:5173", "http://127.0.0.1:8000"],
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type"],
 )
 
 # Serve from frontend/dist/ in production (minified), fallback to frontend/ for local dev
@@ -476,7 +497,7 @@ async def security_headers_middleware(request: Request, call_next):
     # Content Security Policy — allow Razzle assets, Google Fonts, OpenRouter, Stripe
     response.headers["Content-Security-Policy"] = (
         "default-src 'self'; "
-        "script-src 'self' 'unsafe-inline' https://js.stripe.com https://pagead2.googlesyndication.com; "
+        "script-src 'self' 'unsafe-inline' https://js.stripe.com https://pagead2.googlesyndication.com https://html2canvas.hertzen.com https://cdn.jsdelivr.net; "
         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
         "font-src 'self' https://fonts.gstatic.com; "
         "img-src 'self' data: blob: https:; "
@@ -569,7 +590,7 @@ async def global_exception_handler(request: Request, exc: Exception):
 # ---------------------------------------------------------------------------
 
 @app.get("/api/health")
-def health():
+def health(request: Request):
     checks = {}
     overall = "ok"
 
@@ -585,6 +606,7 @@ def health():
             "query_ms": round((_time.time() - t0) * 1000, 1),
         }
     except Exception as e:
+        logger.error("Health check terminal_db error: %s", e, exc_info=True)
         checks["terminal_db"] = {"status": "error", "error": str(e)}
         overall = "degraded"
 
@@ -599,6 +621,7 @@ def health():
                 "query_ms": round((_time.time() - t1) * 1000, 1),
             }
     except Exception as e:
+        logger.error("Health check users_db error: %s", e, exc_info=True)
         checks["users_db"] = {"status": "error", "error": str(e)}
         overall = "degraded"
 
@@ -619,7 +642,17 @@ def health():
     from .db import pool_stats
     checks["connection_pool"] = pool_stats()
 
+    # Always log full diagnostics server-side
+    logger.info("Health check: status=%s checks=%s", overall, checks)
+
     status_code = 200 if overall == "ok" else 503
+
+    # Without valid auth, return only minimal status (no internal details)
+    user = require_auth(request)
+    if not user:
+        return JSONResponse({"status": overall}, status_code=status_code)
+
+    # Authenticated: return full diagnostics
     return JSONResponse(
         {"status": overall, "checks": checks},
         status_code=status_code,
@@ -719,6 +752,9 @@ async def auth_link_sleeper(request: Request):
     sleeper_username = body.get("sleeper_username", "").strip()
     if not sleeper_username:
         return JSONResponse({"error": "Sleeper username required"}, status_code=400)
+    # Strict validation to prevent SSRF via username injection
+    if not re.match(r'^[a-zA-Z0-9_]{1,30}$', sleeper_username):
+        return JSONResponse({"error": "Invalid Sleeper username"}, status_code=400)
 
     # Validate against Sleeper API
     import urllib.request
@@ -1300,6 +1336,9 @@ def get_players(
 
 @app.post("/api/screener/query")
 async def screener_query(request: Request):
+    client_ip = request.client.host if request.client else "unknown"
+    if not _check_screener_rate(client_ip):
+        return JSONResponse({"error": "Rate limited. Try again shortly."}, status_code=429)
     import json as _json
     body = await request.json()
     # Response-level cache for screener POST (most expensive endpoint)
@@ -1654,11 +1693,15 @@ def get_formula_detail(formula_id: int):
 
 @app.post("/api/formulas/{formula_id}/rate")
 async def rate_formula(formula_id: int, request: Request):
+    user = require_auth(request)
+    if not user:
+        return JSONResponse({"error": "Authentication required"}, status_code=401)
     body = await request.json()
     return live_data.rate_formula(
         formula_id=formula_id,
         rating=body.get("rating", 0),
         review=body.get("review", ""),
+        user_id=user["id"],
     )
 
 

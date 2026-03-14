@@ -21,7 +21,7 @@ DB_PATH = Path(__file__).parent.parent / "data" / "terminal.db"
 # on every request adds ~1-5ms overhead and risks leaks. Pool keeps up to
 # POOL_SIZE idle connections ready for reuse.
 
-POOL_SIZE = 10
+POOL_SIZE = 5
 _pool: deque = deque()
 _pool_lock = threading.Lock()
 

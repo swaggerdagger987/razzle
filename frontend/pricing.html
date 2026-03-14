@@ -174,11 +174,11 @@
 
   <!-- Interval toggle -->
   <div class="interval-toggle">
-    <label id="monthlyLabel" class="active" onclick="setInterval('month')">Monthly</label>
+    <label id="monthlyLabel" class="active" onclick="setPricingInterval('month')">Monthly</label>
     <div class="toggle-track" id="intervalToggle" onclick="toggleInterval()">
       <div class="toggle-knob"></div>
     </div>
-    <label id="yearlyLabel" onclick="setInterval('year')">Yearly</label>
+    <label id="yearlyLabel" onclick="setPricingInterval('year')">Yearly</label>
     <span class="save-badge" id="saveBadge" style="opacity:0;">save 33%</span>
   </div>
 
@@ -446,7 +446,7 @@
     elite: { month: '$19.99', year: '$149.99', monthlyEquiv: '$12.50', save: '37%' }
   };
 
-  function setInterval(interval) {
+  function setPricingInterval(interval) {  // renamed from setInterval to avoid shadowing native
     _pricingInterval = interval;
     updatePricingUI();
   }

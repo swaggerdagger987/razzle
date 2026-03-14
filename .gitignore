@@ -27,5 +27,10 @@ node_modules/
 # Build artifacts
 frontend/dist/
 
+# Junk
+users.db
+.pytest_cache/
+=*
+
 # Claude
 .claude/
