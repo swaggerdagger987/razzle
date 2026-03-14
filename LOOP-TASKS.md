@@ -386,8 +386,8 @@
 **Accept when**: No endpoint returns decrypted API keys. Save to cloud works. Load from cloud removed.
 **Depends on**: none
 **Size**: M
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ### Task H-2: Add BYOK security disclosure to the Situation Room
 **Requirement**: "Add disclosure note below API key input in agents.html config panel. Caveat font. Mentions localStorage, extensions, spending limit recommendation. 2-3 sentences max."

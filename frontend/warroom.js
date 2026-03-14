@@ -1470,13 +1470,14 @@ function setupConfigPanel() {
 
 setupConfigPanel();
 
-// ── BYOK CLOUD KEY SYNC (encrypted server-side storage) ──────────────
+// ── BYOK CLOUD KEY SYNC (encrypted server-side backup) ──────────────
+// Save-only: encrypted backup for support recovery. No decrypt/load —
+// users paste their key on each new browser for security.
 (function setupCloudKeySync() {
   var saveBtn = document.getElementById('cfgSaveCloud');
-  var loadBtn = document.getElementById('cfgLoadCloud');
   var hintEl = document.getElementById('cfgStorageHint');
   var sharedKeyInput = document.getElementById('cfgSharedKey');
-  if (!saveBtn || !loadBtn) return;
+  if (!saveBtn) return;
 
   function getAuthToken() {
     try {
@@ -1504,7 +1505,6 @@ setupConfigPanel();
     if (!token) { updateHint('sign in first'); return; }
     if (!isPro()) { updateHint('Pro+ required for cloud storage'); return; }
 
-    // Get the current shared key from config
     var cfg = loadAgentConfig();
     var key = (cfg['0'] && cfg['0'].apiKey) ? cfg['0'].apiKey : '';
     if (!key && sharedKeyInput) key = sharedKeyInput.value.trim();
@@ -1522,40 +1522,6 @@ setupConfigPanel();
         updateHint('saved to cloud (encrypted)');
       } else {
         updateHint(data.error || 'save failed');
-      }
-    } catch (e) {
-      updateHint('network error');
-    }
-  });
-
-  // Load key from server
-  loadBtn.addEventListener('click', async function() {
-    var token = getAuthToken();
-    if (!token) { updateHint('sign in first'); return; }
-    if (!isPro()) { updateHint('Pro+ required'); return; }
-
-    updateHint('checking the vault...');
-    try {
-      var resp = await fetch('/api/user/api-keys/openrouter/decrypt', {
-        headers: { 'Authorization': 'Bearer ' + token }
-      });
-      var data = await resp.json();
-      if (resp.ok && data.api_key) {
-        // Apply to all agents
-        var cfg = loadAgentConfig();
-        AGENT_DEFS.forEach(function(a) {
-          var existing = cfg[String(a.id)] || {};
-          cfg[String(a.id)] = Object.assign({}, existing, { apiKey: data.api_key });
-        });
-        saveAgentConfig(cfg);
-        // Update UI
-        var rows = document.querySelectorAll('#cfgAgentKeys .config-agent-key');
-        rows.forEach(function(inp) { inp.value = data.api_key; });
-        if (sharedKeyInput) sharedKeyInput.value = '';
-        updateHint('loaded from cloud');
-        if (typeof updateApiKeyNotice === 'function') updateApiKeyNotice();
-      } else {
-        updateHint(data.error || 'no key found');
       }
     } catch (e) {
       updateHint('network error');

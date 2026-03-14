@@ -1018,22 +1018,10 @@ async def save_api_key(request: Request):
     return result
 
 
-@app.get("/api/user/api-keys/{provider}/decrypt")
-async def get_decrypted_key(provider: str, request: Request):
-    """Retrieve a decrypted API key for LLM calls. Pro+ only.
-    SECURITY: Returns the actual key value. Only used by the frontend for BYOK LLM calls.
-    The key travels over HTTPS and is used immediately — never stored in logs or error messages."""
-    user = require_auth(request)
-    if not user:
-        return JSONResponse({"error": "Authentication required"}, status_code=401)
-    _, err = require_plan(request, "pro")
-    if err:
-        return err
-
-    key = auth_module.get_api_key_decrypted(user["id"], provider.strip().lower())
-    if key is None:
-        return JSONResponse({"error": "No key found for this provider"}, status_code=404)
-    return {"provider": provider, "api_key": key}
+# REMOVED: /api/user/api-keys/{provider}/decrypt
+# Decrypt endpoint was security theater — returning plaintext keys to the browser
+# defeats the purpose of encrypting them. Users paste their key on each new browser.
+# Encrypted backup (POST /api/user/api-keys) still works for support recovery.
 
 
 @app.delete("/api/user/api-keys/{provider}")
