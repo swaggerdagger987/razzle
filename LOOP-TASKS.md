@@ -1,21 +1,21 @@
 # Razzle Ship Loop — Task Tracker
 
 ## Current State
-- Phase: Bureau of Intelligence — Build Profiles
-- Current Task: Task 1 — Build roster construction profiling panel
+- Phase: Bureau of Intelligence — Trade Network
+- Current Task: Task 1 — Build trade network visualization
 - Current Stage: BUILD
 - Tasks Completed: 0/1
 - Loop Iterations: 0
 
 ## Phase Spec
 
-**Exit Criterion**: Bureau has a "Build Profiles" panel categorizing each manager's roster construction archetype.
+**Exit Criterion**: Bureau shows a trade relationship map between all managers.
 
-### Task 1: Build roster construction profiling panel
-**Requirement**: Add a "Build Profiles" panel that categorizes each manager's roster construction style based on their Sleeper roster composition: (1) Hero RB — 1 elite RB, thin elsewhere, (2) Zero RB — loaded at WR/TE, light at RB, (3) Balanced — even distribution across positions, (4) Stars & Scrubs — top-heavy roster, weak bench, (5) Youth Movement — average age < 25, dynasty builders, (6) Win Now — average age > 27, veterans everywhere. Show each manager's archetype as a chunky badge. Add a radar chart comparing positional investment (% of roster trade value at QB/RB/WR/TE). Archetype detection: use PPG and trade value data to classify starter quality vs bench quality vs age profile. Each card should read like a scouting report: "Stars & Scrubs — if his RB1 goes down, he's cooked."
-**Accept when**: Every manager gets an archetype badge. Radar chart renders. Archetypes are reasonable based on roster composition. Scouting-report flavor text on each card.
+### Task 1: Build trade network visualization
+**Requirement**: Add a "Trade Network" panel showing trade relationships: (1) Trade frequency matrix — grid/table showing how often each pair of managers trades with each other (from Sleeper transaction history), (2) Trade balance — for each pair, who has "won" more trades (compare trade value at time of trade using Razzle valuations), (3) Trade timing — does each manager trade early season, deadline, or offseason? (4) Position tendencies — what positions does each manager trade away vs acquire? (5) "Most likely trade partner" recommendation for the current user based on historical patterns + current roster needs. Pull transaction data from Sleeper API (already fetched in league-intel.html for activity feed). Cross-reference player names with Razzle trade values.
+**Accept when**: Trade matrix renders for leagues with trade history. Balance column shows value exchanged. Position tendencies visible per manager. Trade partner recommendation renders.
 **Depends on**: none
 **Size**: L
 
 ## Status
-- [ ] Task 1: Build roster construction profiling panel
+- [ ] Task 1: Build trade network visualization
