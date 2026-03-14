@@ -3425,7 +3425,7 @@
       </select>
     </div>
     <span id="dataSource" style="font-family: var(--font-hand); font-size: 16px; color: var(--ink-light);">
-      powered by nflverse
+      the screener is forever free
     </span>
   </div>
 </div>
@@ -4198,12 +4198,12 @@
 
   // Panel methodology descriptions (top 10 complex panels + generic fallback)
   var PANEL_METHODS = {
-    vorp: 'VORP = Player PPG minus replacement-level PPG for their position. Replacement thresholds: QB12, RB24, WR36, TE12. Higher VORP = more value above what you could get for free on waivers. Data: nflverse player stats.',
+    vorp: 'VORP = Player PPG minus replacement-level PPG for their position. Replacement thresholds: QB12, RB24, WR36, TE12. Higher VORP = more value above what you could get for free on waivers.',
     stocks: 'Stock Score is a composite of 4 percentile rankings: PPO (efficiency), CoV (consistency), SOS (schedule), and PPG (production) — 25% each. Rising stocks = composite outperforms PPG rank. Falling = PPG rank outperforms composite.',
     reportcard: 'Fantasy GPA combines 5 equal-weighted grades (20% each): Efficiency (PPO), Consistency (inverse CoV), Schedule (SOS), Production (PPG), and Opportunity Share. Each graded A+ to F on positional percentile curves.',
     tdregression: 'Compares actual TDs scored to expected TDs based on historical TD rates per opportunity type (rush attempt, target, etc). Buy targets: fewer TDs than expected. Sell candidates: more TDs than expected.',
     airyards: 'Air Yards measure target depth. Key metrics: aDOT (avg depth of target), RACR (receiver air conversion ratio = rec yards / air yards), WOPR (weighted opportunity rating = target share * 1.5 + air yard share * 0.7). Buy low: low RACR + high aDOT.',
-    snapefficiency: 'Fantasy Points Per Snap shows who produces the most per opportunity on the field. Filters to players with meaningful snap counts. Higher Pts/Snap = efficient usage. Data: nflverse snap counts + scoring.',
+    snapefficiency: 'Fantasy Points Per Snap shows who produces the most per opportunity on the field. Filters to players with meaningful snap counts. Higher Pts/Snap = efficient usage.',
     breakouts: 'Breakout Score measures the gap between opportunity metrics (targets, carries, snap%) and current production (PPG, YPG). High opportunity + low production = breakout candidate. Position-specific weighting.',
     dualthreat: 'Dual-Threat Index uses the geometric mean of rushing and receiving production (yards, TDs, touches). Geometric mean rewards balance — a player must contribute in BOTH to score high. Primarily for RBs and QBs.',
     targetpremium: 'Target Premium composite: YPT (yards per target) + catch rate + YAC/rec (yards after catch) + aDOT (target depth). Measures target quality over quantity — who does the most per target?',
@@ -4211,7 +4211,7 @@
     mockdraft: 'Simulates a dynasty rookie draft using Razzle Prospect Scores (RPS) as the draft board. CPU teams pick best available by RPS. Snake or linear draft order. Pick grades compare your selection number to the prospect\'s RPS rank — picking later than their rank = Value/Steal, earlier = Reach.',
     proradar: 'Spider chart visualizes prospect combine metrics as position-relative percentiles: 40-yard dash, bench press, vertical jump, broad jump, 3-cone drill, shuttle. Percentiles are calculated against all players at the same position in the combine database. Compare up to 3 prospects side by side.'
   };
-  var PANEL_METHOD_DEFAULT = 'Powered by nflverse data (2015-2025). College data from cfbfastR.';
+  var PANEL_METHOD_DEFAULT = 'Player statistics sourced from publicly available NFL and NCAA data (2015-2025).';
 
   // Map each panel to its sidebar category for breadcrumbs
   var PANEL_CATEGORIES = {};

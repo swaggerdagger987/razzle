@@ -13,12 +13,13 @@
 - **Tagline**: The fantasy football research lab. Free.
 - **Mascot**: Bengal tiger — Chief of Staff, gigachad Garfield energy, toylike, unbothered, slightly smug
 - **Personality**: Film room junkie friend. Earnest, slightly obsessive about precision, dry wit in the margins. Never tries to look impressive — just IS impressive once you use it.
-- **Positioning**: Razzle is a free fantasy football research lab. The Lab — 70+ stat panels, custom formulas, prospect scoring, shareable views — is the product. Free. The Situation Room is the paid upgrade for managers who want AI agents that know their league. The Lab is the hero, not the paid tier. Never say "free tier" — there is no tier. It is the product. Never say "free forever" — that sounds like it needs defending. Just say "free."
+- **Positioning**: Razzle is a fantasy football research lab. The Screener is forever free — no catch, no trial, no bait-and-switch. 70+ analytical panels, custom formulas, and the Situation Room (AI agents with full league context) are the paid upgrade. The brand line is: **"The Screener is forever free. The intelligence is what you pay for."** Use "forever free" deliberately and proudly — it's a trust signal, not a defense.
 
 ### Brand Hierarchy
-1. **The Lab (Free)** — The identity. When someone says "have you used Razzle?" they mean the Lab. Every screenshot, every shareable URL, every Reddit post comes from here. The Lab is Razzle.
-2. **The Bureau (Free, Sleeper-linked)** — The hook. Connecting Sleeper makes Razzle personal. It is the bridge between "cool free tool" and "I need this." Free to connect.
-3. **The Situation Room (Paid)** — The upgrade. AI agents with full league context. Never the first thing a user sees. It earns attention through the Lab and Bureau, not through hero positioning.
+1. **The Screener (Forever Free)** — The front door. When someone says "have you used Razzle?" they mean the Screener. Every screenshot, every shareable URL, every Reddit post comes from here. Forever free, no strings.
+2. **The Lab Panels (Pro)** — The depth. 70+ analytical panels behind the Screener — dynasty rankings, trade values, breakouts, aging curves, and more. This is what turns a curious visitor into a paying user.
+3. **The Bureau (Free, Sleeper-linked)** — The hook. Connecting Sleeper makes Razzle personal. It is the bridge between "cool free tool" and "I need this." Free to connect. Monte Carlo league odds (summary cards) are free — deep-dive is Pro.
+4. **The Situation Room (Pro)** — The upgrade. AI agents with full league context. Never the first thing a user sees. It earns attention through the Screener and Bureau, not through hero positioning.
 
 ---
 

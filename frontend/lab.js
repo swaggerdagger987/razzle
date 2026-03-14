@@ -2675,9 +2675,9 @@ function applyUniverseUI() {
   // Data source label
   const ds = document.getElementById("dataSource");
   if (ds) {
-    if (isCollege) ds.textContent = "powered by sportsdataverse cfbfastR data";
-    else if (prospectMode) ds.textContent = "powered by nflverse combine + draft data";
-    else ds.textContent = "powered by nflverse";
+    if (isCollege) ds.textContent = "college stats — the screener is forever free";
+    else if (prospectMode) ds.textContent = "draft prospects — the screener is forever free";
+    else ds.textContent = "the screener is forever free";
   }
 
   // Page title
