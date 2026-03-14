@@ -1,10 +1,10 @@
 # Razzle Ship Loop — Task Tracker
 
 ## Current State
-- Phase: Mobile Hamburger Menu
+- Phase: Review Fix 2 — Accessibility (WCAG AA Compliance)
 - Current Task: 1
 - Current Stage: BUILD
-- Tasks Completed: 0/2
+- Tasks Completed: 0/8
 - Loop Iterations: 0
 
 ## Phase: Mobile Hamburger Menu
@@ -15,7 +15,7 @@
 **Accept when**: Tiger paw button visible on mobile only. Tapping opens left-sliding panel with all 5 nav links + theme toggle + sign in. Chunky Razzle styling. Escape and outside-tap close. Desktop nav unchanged. Works on all pages.
 **Depends on**: none
 **Size**: L
-**Status**: IN_PROGRESS
+**Status**: PASS
 **Attempts**: 1
 
 ### Task 2: Fix mobile nav text size and touch targets
@@ -23,8 +23,8 @@
 **Accept when**: No text below 12px in nav. All touch targets >= 44px. Active page highlighted. No horizontal scroll remnants.
 **Depends on**: 1
 **Size**: M
-**Status**: PENDING
-**Attempts**: 0
+**Status**: PASS
+**Attempts**: 1
 
 ## Phase A: Visual & Design Audit (Mar 12–18)
 **Exit Criterion**: Open each of the three rooms plus the landing page. The visual language is unmistakably Razzle — warm sand, chunky borders, espresso ink, comic-strip energy. No page looks like it was built by a different team.
