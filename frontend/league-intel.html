@@ -101,10 +101,9 @@
     margin-bottom: 16px;
     overflow: hidden;
     transition: all 0.15s;
-    cursor: pointer;
   }
 
-  .league-card:hover {
+  .league-card:not(.expanded):hover {
     box-shadow: 6px 6px 0 var(--ink);
     transform: translate(-2px, -2px);
   }
@@ -115,6 +114,7 @@
     justify-content: space-between;
     padding: 16px 20px;
     border-bottom: 2px dashed var(--ink-faint);
+    cursor: pointer;
   }
 
   .league-name {
@@ -1024,8 +1024,8 @@ async function loadLeagues(userId) {
         : "Redraft";
 
       html += `
-        <div class="league-card" onclick="toggleLeague(this, '${escapeAttr(league.league_id)}', '${escapeAttr(userId)}')">
-          <div class="league-header">
+        <div class="league-card" id="lc-${escapeAttr(league.league_id)}">
+          <div class="league-header" onclick="toggleLeague(this.parentElement, '${escapeAttr(league.league_id)}', '${escapeAttr(userId)}')" style="cursor:pointer;">
             <span class="league-name">${escapeHtml(league.name)}</span>
             <div class="league-meta">
               <span>${escapeHtml(String(totalRosters))}-team</span>
