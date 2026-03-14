@@ -235,7 +235,7 @@ async function loadData() {
     state.data = await resp.json();
     render();
   } catch (e) {
-    document.getElementById("gt-loading").textContent = "failed to load garbage time data";
+    document.getElementById("gt-loading").textContent = razzleError();
   }
 }
 
@@ -258,7 +258,7 @@ function render() {
 
 function buildCard(title, cls, players, isPadders) {
   if (players.length === 0) {
-    return '<div class="gt-card"><div class="gt-card-header ' + escapeHtml(cls) + '">' + escapeHtml(title) + '</div><div class="gt-empty">no players found for this filter</div></div>';
+    return '<div class="gt-card"><div class="gt-card-header ' + escapeHtml(cls) + '">' + escapeHtml(title) + '</div><div class="gt-empty">' + razzleEmpty() + '</div></div>';
   }
 
   const maxVal = Math.max(...players.map(p => isPadders ? p.garbage_time_pct : p.ppg));

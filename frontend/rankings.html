@@ -328,7 +328,7 @@
   </div>
 
   <div id="rankingsContent">
-    <div class="rankings-loading">pulling film on dynasty values...</div>
+    <div class="rankings-loading">pulling film...</div>
   </div>
 </div>
 
@@ -411,7 +411,7 @@
   async function loadRankings(pos) {
     state.loading = true;
     state.position = pos || "";
-    content.innerHTML = '<div class="rankings-loading">pulling film on dynasty values...</div>';
+    content.innerHTML = '<div class="rankings-loading">' + razzleLoading() + '</div>';
 
     try {
       var url = "/api/dynasty-rankings?limit=200";

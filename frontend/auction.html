@@ -518,7 +518,7 @@
   });
 
   function fetchData() {
-    tableWrap.innerHTML = '<div class="av-loading">pulling film...</div>';
+    tableWrap.innerHTML = '<div class="av-loading">' + razzleLoading() + '</div>';
     var url = '/api/auction-values?budget=' + state.budget + '&roster_size=' + state.rosterSize;
     if (state.season > 0) url += '&season=' + state.season;
 
@@ -543,7 +543,7 @@
       renderSummary();
       renderTable();
     }).catch(function(err) {
-      tableWrap.innerHTML = '<div class="av-error">failed to load auction values: ' + escapeHtml(err.message) + '</div>';
+      tableWrap.innerHTML = '<div class="av-error">' + razzleError() + '</div>';
     });
   }
 
@@ -565,7 +565,7 @@
 
   function renderTable() {
     if (!state.data || !state.data.players) {
-      tableWrap.innerHTML = '<div class="av-loading">no data</div>';
+      tableWrap.innerHTML = '<div class="av-loading">' + razzleEmpty() + '</div>';
       return;
     }
 
@@ -595,7 +595,7 @@
     });
 
     if (players.length === 0) {
-      tableWrap.innerHTML = '<div class="av-loading">no players match your filters</div>';
+      tableWrap.innerHTML = '<div class="av-loading">' + razzleEmpty() + '</div>';
       return;
     }
 

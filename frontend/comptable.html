@@ -460,7 +460,7 @@
     var url = '/api/compare-table?players=' + encodeURIComponent(ids);
     if (season) url += '&season=' + encodeURIComponent(season);
 
-    document.getElementById('ctContent').innerHTML = '<div class="ct-loading">pulling film...</div>';
+    document.getElementById('ctContent').innerHTML = '<div class="ct-loading">' + razzleLoading() + '</div>';
 
     fetch(url).then(function(r) {
       if (!r.ok) throw new Error('API error');

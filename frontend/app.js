@@ -300,9 +300,49 @@ function refreshPlanGating() {
   if (typeof checkAuth === "function") checkAuth();
 }
 
+/* ===== Brand Voice — Shared Vocabulary ===== */
+
+var RAZZLE_ERRORS = [
+  "fumbled the data fetch... try again in a sec",
+  "film room's dark right now \u2014 give it another shot",
+  "the tape machine jammed. Razzle's on it",
+  "interception on that request. retry?",
+  "false start on the server. try refreshing",
+  "delay of game \u2014 something went sideways"
+];
+
+var RAZZLE_EMPTY = [
+  "nobody home for this filter",
+  "the film room's empty. adjust your filters",
+  "zero matches \u2014 either your standards are elite or your filter's off",
+  "Razzle checked everywhere. nothing matches",
+  "clean pocket, no receivers open. try different filters"
+];
+
+var RAZZLE_LOADING = [
+  "pulling film...",
+  "checking the tape...",
+  "running the numbers...",
+  "consulting the analytics department...",
+  "cross-referencing the scouting reports...",
+  "Razzle's reviewing game tape...",
+  "scanning the waiver wire...",
+  "breaking down the all-22...",
+  "crunching the combine data...",
+  "studying the matchup charts...",
+  "reviewing snap counts...",
+  "calculating trade values...",
+  "processing the depth chart...",
+  "scouting the next breakout...",
+  "analyzing target shares..."
+];
+
+function razzleError() { return RAZZLE_ERRORS[Math.floor(Math.random() * RAZZLE_ERRORS.length)]; }
+function razzleEmpty() { return RAZZLE_EMPTY[Math.floor(Math.random() * RAZZLE_EMPTY.length)]; }
+function razzleLoading() { return RAZZLE_LOADING[Math.floor(Math.random() * RAZZLE_LOADING.length)]; }
+
 /**
  * Show a toast notification. Available on all pages (defined in app.js).
- * If lab.js also defines _showToast, its version runs (they're identical).
  */
 function _showToast(msg, type, duration) {
   var existing = document.querySelector('.razzle-toast');
@@ -1001,7 +1041,7 @@ function initCommandPalette() {
       renderRecentlyViewed();
       return;
     }
-    _cmdResultsEl.innerHTML = '<div class="cmd-palette-status">pulling film...</div>';
+    _cmdResultsEl.innerHTML = '<div class="cmd-palette-status">' + razzleLoading() + '</div>';
     _cmdDebounce = setTimeout(function() { cmdSearch(q); }, 300);
   });
 
@@ -1068,7 +1108,7 @@ async function cmdSearch(query) {
 
 function renderCmdResults(items, sectionLabel) {
   if (!items.length) {
-    _cmdResultsEl.innerHTML = '<div class="cmd-palette-status">no players found</div>';
+    _cmdResultsEl.innerHTML = '<div class="cmd-palette-status">' + razzleEmpty() + '</div>';
     return;
   }
   var html = '<div class="cmd-palette-section">' + escapeHtml(sectionLabel) + '</div>';

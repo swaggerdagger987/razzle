@@ -231,7 +231,7 @@ async function loadData() {
     state.data = await resp.json();
     render();
   } catch (e) {
-    document.getElementById("sp-loading").textContent = "failed to load season pace data";
+    document.getElementById("sp-loading").textContent = razzleError();
   }
 }
 
@@ -242,7 +242,7 @@ function render() {
   const wrap = document.getElementById("sp-table-wrap");
 
   if (players.length === 0) {
-    wrap.innerHTML = '<div class="sp-empty">no players on pace for milestones with this filter</div>';
+    wrap.innerHTML = '<div class="sp-empty">' + razzleEmpty() + '</div>';
     return;
   }
 

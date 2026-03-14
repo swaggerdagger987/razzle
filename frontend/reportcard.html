@@ -673,7 +673,7 @@
       }
       render(data);
     }).catch(function(err) {
-      body.innerHTML = '<div class="rc-error">failed to load report cards<br><button class="btn-chunky" onclick="location.reload()">retry</button></div>';
+      body.innerHTML = '<div class="rc-error">' + razzleError() + '<br><button class="btn-chunky" onclick="location.reload()">retry</button></div>';
     });
   }
 

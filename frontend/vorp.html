@@ -655,7 +655,7 @@
       }
       render(data);
     }).catch(function(err) {
-      body.innerHTML = '<div class="vorp-error">failed to load VORP data<br><button class="btn-chunky" onclick="location.reload()">retry</button></div>';
+      body.innerHTML = '<div class="vorp-error">' + razzleError() + '<br><button class="btn-chunky" onclick="location.reload()">retry</button></div>';
     });
   }
 

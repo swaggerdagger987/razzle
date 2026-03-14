@@ -532,7 +532,7 @@
 
       renderCards(data, bodyEl);
     } catch(e) {
-      bodyEl.innerHTML = '<div class="breakouts-empty">failed to load breakout data</div>';
+      bodyEl.innerHTML = '<div class="breakouts-empty">' + razzleError() + '</div>';
     }
   }
 

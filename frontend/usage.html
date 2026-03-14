@@ -604,7 +604,7 @@
         });
       });
     } catch(e) {
-      bodyEl.innerHTML = '<div class="usage-error"><div class="usage-error-msg">failed to load usage trends</div><button class="btn-chunky" onclick="location.reload()">Retry</button></div>';
+      bodyEl.innerHTML = '<div class="usage-error"><div class="usage-error-msg">' + razzleError() + '</div><button class="btn-chunky" onclick="location.reload()">Retry</button></div>';
     }
   }
 

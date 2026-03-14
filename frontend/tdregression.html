@@ -239,7 +239,7 @@ async function loadData() {
     state.data = await resp.json();
     render();
   } catch (e) {
-    document.getElementById("tdr-loading").textContent = "failed to load TD regression data";
+    document.getElementById("tdr-loading").textContent = razzleError();
   }
 }
 

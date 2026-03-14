@@ -368,7 +368,7 @@
     var url = '/api/season-recap?';
     if (season) url += 'season=' + encodeURIComponent(season);
 
-    document.getElementById('rcContent').innerHTML = '<div class="rc-loading">pulling film...</div>';
+    document.getElementById('rcContent').innerHTML = '<div class="rc-loading">' + razzleLoading() + '</div>';
 
     fetch(url).then(function(r) {
       if (!r.ok) throw new Error('API error');
@@ -503,7 +503,7 @@
   }
 
   function renderList(items, fn) {
-    if (!items.length) return '<ul class="rc-list"><li>no data available</li></ul>';
+    if (!items.length) return '<ul class="rc-list"><li>' + razzleEmpty() + '</li></ul>';
     var html = '<ul class="rc-list">';
     for (var i = 0; i < items.length; i++) {
       html += '<li>' + fn(items[i]) + '</li>';

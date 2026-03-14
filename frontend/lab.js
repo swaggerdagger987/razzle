@@ -65,7 +65,7 @@ function _loadHtml2Canvas(cb) {
   var s = document.createElement('script');
   s.src = 'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
   s.onload = function() { _html2canvasLoading = false; cb(); };
-  s.onerror = function() { _html2canvasLoading = false; _showToast('screenshot library failed to load'); };
+  s.onerror = function() { _html2canvasLoading = false; _showToast(razzleError()); };
   document.head.appendChild(s);
 }
 
@@ -1066,7 +1066,7 @@ function _syncUndoRedoButtons() {
         console.error("Failed to load NFL filter options:", err);
         var labContent = document.getElementById("labContent") || document.querySelector(".lab-main");
         if (labContent) {
-          labContent.innerHTML = '<div style="text-align:center;padding:40px;font-family:var(--font-mono);color:var(--orange);font-size:15px;border:3px solid var(--ink);background:var(--bg-card);border-radius:8px;margin:24px;">failed to load filter options — check your connection and reload</div>';
+          labContent.innerHTML = '<div style="text-align:center;padding:40px;font-family:var(--font-mono);color:var(--orange);font-size:15px;border:3px solid var(--ink);background:var(--bg-card);border-radius:8px;margin:24px;">' + razzleError() + '</div>';
         }
         return { seasons: [], teams: [], positions: [] };
       }),
@@ -1822,11 +1822,7 @@ function renderTableBody() {
   _expandedRows = {};
   const tbody = document.getElementById("tableBody");
   const cols = getActiveColumns();
-  const emptyMsg = isProspectView()
-    ? "no prospects match these filters"
-    : state.universe === "college"
-    ? "no college players match these filters"
-    : "no players match these filters";
+  const emptyMsg = razzleEmpty();
 
   if (!state.items.length) {
     _vscrollRows = [];
@@ -2226,7 +2222,7 @@ async function toggleRowExpand(playerId, tdEl) {
   } catch (err) {
     console.error("Weekly expand error:", err);
     if (_expandedRows[playerId]) {
-      expandTr.querySelector(".expand-content").textContent = "failed to load weekly data";
+      expandTr.querySelector(".expand-content").textContent = razzleError();
     }
   }
 }
@@ -5851,7 +5847,7 @@ async function openPlayerProfile(playerId) {
   const overlay = document.getElementById("profileOverlay");
   const content = document.getElementById("profileContent");
   overlay.classList.add("open");
-  content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">pulling film...</div>`;
+  content.innerHTML = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">' + razzleLoading() + '</div>';
 
   try {
     const data = await apiFetch(`/api/players/${playerId}/profile`);
@@ -8723,7 +8719,7 @@ function renderTradeValueChart() {
   }
 
   if (!html) {
-    html = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">no players found</div>';
+    html = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">' + razzleEmpty() + '</div>';
   }
 
   content.innerHTML = html;
@@ -9673,7 +9669,7 @@ function renderWatchlistPanel() {
   html += '</div></div>';
 
   if (list.length === 0) {
-    html += '<p style="font-family:var(--font-hand); font-size:22px; color:var(--ink-light); text-align:center; padding:40px 0;">no players watchlisted yet</p>';
+    html += '<p style="font-family:var(--font-hand); font-size:22px; color:var(--ink-light); text-align:center; padding:40px 0;">' + razzleEmpty() + '</p>';
     html += '<p style="font-family:var(--font-mono); font-size:12px; color:var(--ink-faint); text-align:center;">click the &#9734; star next to any player in the table</p>';
     html += '</div>';
     overlay.innerHTML = html;
@@ -10990,10 +10986,10 @@ async function rosterSearchPlayers(query) {
       html += '<span style="font-family:var(--font-hand); font-size:12px; color:var(--green); margin-left:auto;">+ add</span>';
       html += '</div>';
     });
-    if (players.length === 0) html = '<div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-faint); padding:8px;">no matches</div>';
+    if (players.length === 0) html = '<div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-faint); padding:8px;">' + razzleEmpty() + '</div>';
     results.innerHTML = html;
   } catch (err) {
-    results.innerHTML = '<div style="color:var(--red); font-size:12px;">search failed</div>';
+    results.innerHTML = '<div style="color:var(--red); font-size:12px;">' + razzleError() + '</div>';
   }
 }
 
@@ -11002,7 +10998,7 @@ async function calculateRosterValue() {
   if (list.length === 0) return;
   var ids = list.map(function(p) { return p.player_id; });
   var reportArea = document.getElementById("rosterReportArea");
-  if (reportArea) reportArea.innerHTML = '<div style="text-align:center; padding:30px; font-family:var(--font-hand); font-size:20px; color:var(--orange);">pulling film on your roster...</div>';
+  if (reportArea) reportArea.innerHTML = '<div style="text-align:center; padding:30px; font-family:var(--font-hand); font-size:20px; color:var(--orange);">' + razzleLoading() + '</div>';
   try {
     var data = await apiFetch("/api/roster-value", {
       method: "POST",

@@ -311,7 +311,7 @@
   </div>
 
   <div id="teamContent">
-    <div class="team-loading">pulling film on the roster...</div>
+    <div class="team-loading">pulling film...</div>
   </div>
 </div>
 
@@ -447,7 +447,7 @@
   // ---- Fetch team roster ----
   async function loadTeam() {
     state.loading = true;
-    content.innerHTML = '<div class="team-loading">pulling film on the roster...</div>';
+    content.innerHTML = '<div class="team-loading">' + razzleLoading() + '</div>';
 
     try {
       var url = "/api/team-roster";

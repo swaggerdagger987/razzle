@@ -585,7 +585,7 @@
 
   function loadCareer(playerId) {
     emptyEl.style.display = 'none';
-    resultEl.innerHTML = '<div class="car-loading">pulling film...</div>';
+    resultEl.innerHTML = '<div class="car-loading">' + razzleLoading() + '</div>';
 
     fetch('/api/career-stats?player_id=' + encodeURIComponent(playerId))
       .then(function(r) { if (!r.ok) throw new Error('fetch failed'); return r.json(); })
@@ -597,7 +597,7 @@
         renderCareer(data);
       })
       .catch(function() {
-        resultEl.innerHTML = '<div class="car-empty">failed to load career stats</div>';
+        resultEl.innerHTML = '<div class="car-empty">' + razzleError() + '</div>';
       });
   }
 

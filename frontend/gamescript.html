@@ -247,13 +247,13 @@ async function loadData() {
     state.data = await resp.json();
     render();
   } catch (e) {
-    document.getElementById("gs-loading").textContent = "failed to load game script data";
+    document.getElementById("gs-loading").textContent = razzleError();
   }
 }
 
 function renderTable(players, type) {
   if (players.length === 0) {
-    return '<div class="gs-empty">no players found for this filter</div>';
+    return '<div class="gs-empty">' + razzleEmpty() + '</div>';
   }
   const maxPPG = Math.max(...players.map(p => p.ppg));
   const barCls = type === "win" ? "gs-bar-win" : "gs-bar-lose";

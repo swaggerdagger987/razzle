@@ -225,7 +225,7 @@
     var url = '/api/records?';
     if (currentPosition) url += 'position=' + encodeURIComponent(currentPosition);
 
-    document.getElementById('rbContent').innerHTML = '<div class="rb-loading">pulling film...</div>';
+    document.getElementById('rbContent').innerHTML = '<div class="rb-loading">' + razzleLoading() + '</div>';
 
     fetch(url).then(function(r) {
       if (!r.ok) throw new Error('API error');

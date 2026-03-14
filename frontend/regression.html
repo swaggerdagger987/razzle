@@ -477,7 +477,7 @@
     if (season) url += 'season=' + encodeURIComponent(season) + '&';
     if (pos) url += 'position=' + encodeURIComponent(pos);
 
-    document.getElementById('regContent').innerHTML = '<div class="reg-loading">pulling film...</div>';
+    document.getElementById('regContent').innerHTML = '<div class="reg-loading">' + razzleLoading() + '</div>';
 
     fetch(url).then(function(r) {
       if (!r.ok) throw new Error('API error');
@@ -489,7 +489,7 @@
       render(data);
     }).catch(function(err) {
       document.getElementById('regContent').innerHTML =
-        '<div class="reg-error">failed to load TD regression data<br><button class="btn btn-outline" onclick="location.reload()">retry</button></div>';
+        '<div class="reg-error">' + razzleError() + '<br><button class="btn btn-outline" onclick="location.reload()">retry</button></div>';
     });
   }
 

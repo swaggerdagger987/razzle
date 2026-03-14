@@ -234,7 +234,7 @@ async function loadData() {
     state.data = await resp.json();
     render();
   } catch (e) {
-    document.getElementById("tp-loading").textContent = "failed to load target premium data";
+    document.getElementById("tp-loading").textContent = razzleError();
   }
 }
 

@@ -235,7 +235,7 @@ async function loadData() {
     state.data = await resp.json();
     render();
   } catch (e) {
-    document.getElementById("se-loading").textContent = "failed to load snap efficiency data";
+    document.getElementById("se-loading").textContent = razzleError();
   }
 }
 

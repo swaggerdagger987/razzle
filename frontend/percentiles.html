@@ -466,7 +466,7 @@
 
   function loadPercentiles(playerId, season) {
     emptyEl.style.display = 'none';
-    resultEl.innerHTML = '<div class="pct-loading">pulling film...</div>';
+    resultEl.innerHTML = '<div class="pct-loading">' + razzleLoading() + '</div>';
 
     var url = '/api/player-percentiles?player_id=' + encodeURIComponent(playerId);
     if (season) url += '&season=' + season;
@@ -493,7 +493,7 @@
         renderPercentiles(data);
       })
       .catch(function() {
-        resultEl.innerHTML = '<div class="pct-empty">failed to load percentiles</div>';
+        resultEl.innerHTML = '<div class="pct-empty">' + razzleError() + '</div>';
       });
   }
 

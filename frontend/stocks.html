@@ -675,7 +675,7 @@
       }
       render(data);
     }).catch(function(err) {
-      body.innerHTML = '<div class="stk-error">failed to load stock watch data<br><button class="btn-chunky" onclick="location.reload()">retry</button></div>';
+      body.innerHTML = '<div class="stk-error">' + razzleError() + '<br><button class="btn-chunky" onclick="location.reload()">retry</button></div>';
     });
   }
 

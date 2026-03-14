@@ -421,7 +421,7 @@
         render();
       })
       .catch(function() {
-        document.getElementById('cs-loading').textContent = 'failed to load — try refreshing';
+        document.getElementById('cs-loading').textContent = razzleError();
       });
   }
 

@@ -426,7 +426,7 @@
     var week = currentWeek || '';
     writeURL(season, week, pos);
 
-    document.getElementById('wlContent').innerHTML = '<div class="wl-loading">pulling film...</div>';
+    document.getElementById('wlContent').innerHTML = '<div class="wl-loading">' + razzleLoading() + '</div>';
 
     var url = '/api/weekly-leaders?';
     if (season) url += 'season=' + encodeURIComponent(season) + '&';
@@ -445,7 +445,7 @@
       render(data);
     }).catch(function() {
       document.getElementById('wlContent').innerHTML =
-        '<div class="wl-error">failed to load weekly leaders<br><button class="btn btn-outline" onclick="location.reload()">retry</button></div>';
+        '<div class="wl-error">' + razzleError() + '<br><button class="btn btn-outline" onclick="location.reload()">retry</button></div>';
     });
   }
 
@@ -475,7 +475,7 @@
     var leaders = data.leaders || [];
 
     if (!leaders.length) {
-      c.innerHTML = '<div class="wl-empty">no data for this week</div>';
+      c.innerHTML = '<div class="wl-empty">' + razzleEmpty() + '</div>';
       return;
     }
 

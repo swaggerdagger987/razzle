@@ -421,7 +421,7 @@
         render();
       })
       .catch(function(err) {
-        document.getElementById('tools-loading').textContent = 'failed to load tools — try refreshing';
+        document.getElementById('tools-loading').textContent = razzleError();
       });
 
     document.getElementById('tools-search').addEventListener('input', function(e) {

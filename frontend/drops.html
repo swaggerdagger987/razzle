@@ -245,7 +245,7 @@ async function loadData() {
     state.data = await resp.json();
     render();
   } catch (e) {
-    document.getElementById("dr-loading").textContent = "failed to load drop rate data";
+    document.getElementById("dr-loading").textContent = razzleError();
   }
 }
 

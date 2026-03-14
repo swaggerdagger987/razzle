@@ -415,7 +415,7 @@
     if (season) url += 'season=' + encodeURIComponent(season) + '&';
     if (pos) url += 'position=' + encodeURIComponent(pos);
 
-    document.getElementById('paceContent').innerHTML = '<div class="pace-loading">pulling film...</div>';
+    document.getElementById('paceContent').innerHTML = '<div class="pace-loading">' + razzleLoading() + '</div>';
 
     fetch(url).then(function(r) {
       if (!r.ok) throw new Error('API error');

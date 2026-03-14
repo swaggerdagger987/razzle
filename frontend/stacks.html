@@ -316,7 +316,7 @@
     var url = '/api/stacks';
     if (season) url += '?season=' + encodeURIComponent(season);
 
-    document.getElementById('skContent').innerHTML = '<div class="sk-loading">pulling film...</div>';
+    document.getElementById('skContent').innerHTML = '<div class="sk-loading">' + razzleLoading() + '</div>';
 
     fetch(url).then(function(r) {
       if (!r.ok) throw new Error('API error');

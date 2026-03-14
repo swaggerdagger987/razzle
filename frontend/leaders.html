@@ -347,7 +347,7 @@
   </div>
 
   <div id="leadersContent">
-    <div class="leaders-loading">pulling film on the leaders...</div>
+    <div class="leaders-loading">pulling film...</div>
   </div>
 </div>
 
@@ -443,7 +443,7 @@
   // ---- Fetch leaders ----
   async function loadLeaders() {
     state.loading = true;
-    content.innerHTML = '<div class="leaders-loading">pulling film on the leaders...</div>';
+    content.innerHTML = '<div class="leaders-loading">' + razzleLoading() + '</div>';
 
     try {
       var url = "/api/stat-leaders?limit=10";

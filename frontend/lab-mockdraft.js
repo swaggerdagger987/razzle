@@ -266,7 +266,7 @@
           renderDraftUI(el);
         })
         .catch(function(err) {
-          el.innerHTML = '<div class="lab-panel-loading"><div class="loading-msg" style="color:var(--red);">failed to load prospects: ' + escapeHtml(err.message) + '</div></div>';
+          el.innerHTML = '<div class="lab-panel-loading"><div class="loading-msg" style="color:var(--red);">' + razzleError() + '</div></div>';
         });
     });
   }

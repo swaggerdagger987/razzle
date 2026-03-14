@@ -672,7 +672,7 @@
       }
       render(data);
     }).catch(function(err) {
-      body.innerHTML = '<div class="air-error"><div class="air-error-msg">failed to load air yards data</div><button class="btn-chunky" onclick="window.location.reload()">Retry</button></div>';
+      body.innerHTML = '<div class="air-error"><div class="air-error-msg">' + razzleError() + '</div><button class="btn-chunky" onclick="window.location.reload()">Retry</button></div>';
     });
   }
 

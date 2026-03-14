@@ -429,7 +429,7 @@
   }
 
   function loadData() {
-    bodyEl.innerHTML = '<div class="dc-loading">pulling film...</div>';
+    bodyEl.innerHTML = '<div class="dc-loading">' + razzleLoading() + '</div>';
     var url = '/api/draft-class';
     var p = [];
     if (state.year) p.push('year=' + state.year);
@@ -455,7 +455,7 @@
         renderData(d);
       })
       .catch(function() {
-        bodyEl.innerHTML = '<div class="dc-loading">failed to load draft class data</div>';
+        bodyEl.innerHTML = '<div class="dc-loading">' + razzleError() + '</div>';
       });
   }
 

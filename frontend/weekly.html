@@ -431,7 +431,7 @@
     if (posParam) url += '&position=' + posParam;
 
     document.getElementById('weekly-loading').style.display = '';
-    document.getElementById('weekly-loading').textContent = 'pulling film...';
+    document.getElementById('weekly-loading').textContent = razzleLoading();
 
     fetch(url)
       .then(function(r) {
@@ -463,7 +463,7 @@
   function renderHeatmap(data) {
     var container = document.getElementById('weekly-body');
     if (!data.players || data.players.length === 0) {
-      container.innerHTML = '<div class="weekly-loading">no data for this selection...</div>';
+      container.innerHTML = '<div class="weekly-loading">' + razzleEmpty() + '</div>';
       return;
     }
 

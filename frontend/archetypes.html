@@ -425,7 +425,7 @@
   });
 
   function fetchData() {
-    listEl.innerHTML = '<div class="ar-loading">pulling film...</div>';
+    listEl.innerHTML = '<div class="ar-loading">' + razzleLoading() + '</div>';
     var params = [];
     if (state.season > 0) params.push('season=' + state.season);
     if (state.position) params.push('position=' + state.position);
@@ -448,7 +448,7 @@
       document.getElementById('ar-meta').textContent = data.season + ' season \u00b7 ' + data.total_players + ' players classified';
       renderArchetypes(data.archetypes || []);
     }).catch(function(err) {
-      listEl.innerHTML = '<div class="ar-error">failed to load archetypes: ' + escapeHtml(err.message) + '</div>';
+      listEl.innerHTML = '<div class="ar-error">' + razzleError() + '</div>';
     });
   }
 

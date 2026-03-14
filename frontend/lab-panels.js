@@ -93,7 +93,7 @@
             '<button class="lp-view-btn" data-view="history">History</button>' +
           '</div>' +
         '</div>' +
-        '<div id="lp-rankings-content"><div class="lp-loading">pulling film on dynasty values...</div></div>' +
+        '<div id="lp-rankings-content"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     var seasonSel = el.querySelector('#lp-rankings-season');
@@ -109,7 +109,7 @@
 
     function loadRankings() {
       var content = el.querySelector('#lp-rankings-content');
-      content.innerHTML = '<div class="lp-loading">pulling film on dynasty values...</div>';
+      content.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
 
       var url = '/api/dynasty-rankings?limit=200';
       if (state.position) url += '&position=' + encodeURIComponent(state.position);
@@ -172,7 +172,7 @@
       html += '</div>';
 
       if (!players.length || !seasons.length) {
-        html += '<div class="lp-empty">' + (searchQuery ? 'no players match "' + escapeHtml(searchQuery) + '"' : 'no history data') + '</div>';
+        html += '<div class="lp-empty">' + razzleEmpty() + '</div>';
         content.innerHTML = html;
         setupCompareSearch(content);
         return;
@@ -310,7 +310,7 @@
 
     function renderTiers(tiers, content) {
       if (!tiers.length) {
-        content.innerHTML = '<div class="lp-empty">no ranked players found</div>';
+        content.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
         return;
       }
       var html = '';
@@ -348,7 +348,7 @@
         html += '</div></div>';
       }
       if (!html) {
-        content.innerHTML = '<div class="lp-empty">no players match "' + escapeHtml(searchQuery) + '"</div>';
+        content.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
         return;
       }
       content.innerHTML = html;
@@ -423,7 +423,7 @@
           '<select class="lp-select" id="lp-tl-season"></select>' +
           '<input class="lp-search" type="text" id="lp-tl-search" placeholder="search player...">' +
         '</div>' +
-        '<div id="lp-tl-tiers"><div class="lp-loading">pulling film...</div></div>' +
+        '<div id="lp-tl-tiers"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     var seasonSel = el.querySelector('#lp-tl-season');
@@ -440,7 +440,7 @@
 
     function fetchTiers() {
       var tiersEl = el.querySelector('#lp-tl-tiers');
-      tiersEl.innerHTML = '<div class="lp-loading">pulling film...</div>';
+      tiersEl.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var params = [];
       if (state.season > 0) params.push('season=' + state.season);
       if (state.position) params.push('position=' + state.position);
@@ -464,7 +464,7 @@
         el.querySelector('#lp-tl-meta').textContent = data.season + ' season \u00b7 ' + data.total_players + ' players';
         renderTiers(data.tiers || [], tiersEl);
       }).catch(function(err) {
-        tiersEl.innerHTML = '<div class="lp-error">failed to load tier list</div>';
+        tiersEl.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -480,7 +480,7 @@
         html += '<div class="tl-tier-desc">' + escapeHtml(tier.label || '') + '</div>';
         html += '</div><div class="tl-tier-players">';
         if (!filtered.length) {
-          html += '<span class="tl-empty-tier">no players in this tier</span>';
+          html += '<span class="tl-empty-tier">' + razzleEmpty() + '</span>';
         } else {
           anyVisible = true;
           filtered.forEach(function(p) {
@@ -494,7 +494,7 @@
         html += '</div></div>';
       });
       if (searchQuery && !anyVisible) {
-        container.innerHTML = '<div class="lp-empty">no players match "' + escapeHtml(searchQuery) + '"</div>';
+        container.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
         return;
       }
       container.innerHTML = html;
@@ -662,7 +662,7 @@
       var players = filterBySearch(reweighted);
 
       if (!players.length) {
-        body.innerHTML = '<div class="lp-empty">' + (searchQuery ? 'no players match "' + escapeHtml(searchQuery) + '"' : 'no trade value data found') + '</div>';
+        body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
         return;
       }
 
@@ -720,7 +720,7 @@
         }
         render(data);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">failed to load trade value data</div>';
+        body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -828,7 +828,7 @@
     }
 
     function buildTable(players, section) {
-      if (!players || !players.length) return '<div class="lp-empty">no data for this selection</div>';
+      if (!players || !players.length) return '<div class="lp-empty">' + razzleEmpty() + '</div>';
 
       var isW = section === 'league_winners';
       var title = isW ? 'League Winners' : 'Replacement Level';
@@ -906,7 +906,7 @@
       var replacements = filterBySearch(data.replacement_level || []);
 
       if (!winners.length && !replacements.length) {
-        body.innerHTML = '<div class="lp-empty">' + (searchQuery ? 'no players match "' + escapeHtml(searchQuery) + '"' : 'no VORP data found') + '</div>';
+        body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
         return;
       }
 
@@ -953,7 +953,7 @@
         }
         renderVorp(data);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">failed to load VORP data</div>';
+        body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -994,7 +994,7 @@
           '</div>' +
         '</div>' +
         '<div id="lp-pa-avgs"></div>' +
-        '<div id="lp-pa-content"><div class="lp-loading">pulling film...</div></div>' +
+        '<div id="lp-pa-content"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     var seasonSel = el.querySelector('#lp-pa-season');
@@ -1005,7 +1005,7 @@
       if (season) url += 'season=' + encodeURIComponent(season) + '&';
       if (currentPosition) url += 'position=' + encodeURIComponent(currentPosition) + '&';
 
-      el.querySelector('#lp-pa-content').innerHTML = '<div class="lp-loading">pulling film...</div>';
+      el.querySelector('#lp-pa-content').innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       el.querySelector('#lp-pa-avgs').innerHTML = '';
 
       fetch(url).then(function(r) {
@@ -1044,7 +1044,7 @@
       var players = data.players || [];
       var content = el.querySelector('#lp-pa-content');
       if (!players.length) {
-        content.innerHTML = '<div class="pa-card"><div class="pa-card-header">Positional Advantage</div><div class="lp-empty">no data for this selection</div></div>';
+        content.innerHTML = '<div class="pa-card"><div class="pa-card-header">Positional Advantage</div><div class="lp-empty">' + razzleEmpty() + '</div></div>';
         return;
       }
       var html = '<div class="pa-card">';
@@ -1116,7 +1116,7 @@
         '</div>' +
         '<div class="lp-controls"><input class="lp-search" type="text" id="lp-av-search" placeholder="search player..."></div>' +
         '<div class="av-summary" id="lp-av-summary"></div>' +
-        '<div class="av-table-wrap" id="lp-av-table"><div class="lp-loading">pulling film...</div></div>' +
+        '<div class="av-table-wrap" id="lp-av-table"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     var slider = el.querySelector('#lp-av-slider');
@@ -1145,7 +1145,7 @@
 
     function fetchData() {
       var tableEl = el.querySelector('#lp-av-table');
-      tableEl.innerHTML = '<div class="lp-loading">pulling film...</div>';
+      tableEl.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var url = '/api/auction-values?budget=' + state.budget + '&roster_size=' + state.rosterSize;
       if (state.season > 0) url += '&season=' + state.season;
 
@@ -1165,7 +1165,7 @@
         renderSummary();
         renderTable();
       }).catch(function() {
-        tableEl.innerHTML = '<div class="lp-error">failed to load auction values</div>';
+        tableEl.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -1197,7 +1197,7 @@
         return state.sortDir * (bv - av);
       });
 
-      if (!players.length) { tableEl.innerHTML = '<div class="lp-empty">no players match your filters</div>'; return; }
+      if (!players.length) { tableEl.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>'; return; }
 
       var html = '<table class="av-table"><thead><tr>';
       var cols = [
@@ -1259,7 +1259,7 @@
           '</div>' +
           '<select class="lp-select" id="lp-cs-season"></select>' +
         '</div>' +
-        '<div class="lp-loading" id="lp-cs-loading">pulling film...</div>' +
+        '<div class="lp-loading" id="lp-cs-loading">' + razzleLoading() + '</div>' +
         '<div class="cs-grid" id="lp-cs-grid" style="display:none"></div>' +
       '</div>';
 
@@ -1297,7 +1297,7 @@
         state.season = data.season;
         renderCS();
       }).catch(function() {
-        el.querySelector('#lp-cs-loading').textContent = 'failed to load cheat sheet';
+        el.querySelector('#lp-cs-loading').textContent = razzleError();
       });
     }
 
@@ -1409,7 +1409,7 @@
           seasonsPopulated = true;
         }
         var candidates = data.candidates || [];
-        if (!candidates.length) { body.innerHTML = '<div class="lp-empty">no breakout candidates found</div>'; return; }
+        if (!candidates.length) { body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>'; return; }
 
         var html = '<div class="breakouts-grid">';
         candidates.forEach(function(p) {
@@ -1460,7 +1460,7 @@
             window.location.href = '/player/' + encodeURIComponent(card.getAttribute('data-pid'));
           });
         });
-      }).catch(function() { body.innerHTML = '<div class="lp-error">failed to load breakout data</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>'; });
     }
 
     el.querySelector('#bo-pos-tabs').addEventListener('click', function(e) {
@@ -1566,7 +1566,7 @@
     }
 
     function renderColumn(players, isBuy) {
-      if (!players || !players.length) return '<div class="lp-empty">no ' + (isBuy ? 'buy low' : 'sell high') + ' candidates</div>';
+      if (!players || !players.length) return '<div class="lp-empty">' + razzleEmpty() + '</div>';
       var h = '<div class="buysell-list">';
       players.forEach(function(p) { h += renderCard(p, isBuy); });
       h += '</div>';
@@ -1610,7 +1610,7 @@
             window.location.href = '/player/' + encodeURIComponent(card.getAttribute('data-pid'));
           });
         });
-      }).catch(function() { body.innerHTML = '<div class="lp-error">failed to load buy/sell data</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>'; });
     }
 
     el.querySelector('#bs-pos-tabs').addEventListener('click', function(e) {
@@ -1738,7 +1738,7 @@
     }
 
     function buildTable(players, section) {
-      if (!players || !players.length) return '<div class="lp-empty">no ' + section + ' stocks found</div>';
+      if (!players || !players.length) return '<div class="lp-empty">' + razzleEmpty() + '</div>';
       var isRising = section === 'rising';
       var icon = isRising ? '&#x1F4C8;' : '&#x1F4C9;';
       var title = isRising ? 'Rising Stocks' : 'Falling Stocks';
@@ -1767,7 +1767,7 @@
       currentData = data;
       var body = el.querySelector('#stk-body');
       if (!data || (!data.rising.length && !data.falling.length)) {
-        body.innerHTML = '<div class="lp-empty">no stock watch data found</div>';
+        body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
         return;
       }
       body.innerHTML = buildTable(data.rising, 'rising') + buildTable(data.falling, 'falling');
@@ -1811,7 +1811,7 @@
           seasonsPopulated = true;
         }
         render(data);
-      }).catch(function() { body.innerHTML = '<div class="lp-error">failed to load stock watch data</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>'; });
     }
 
     el.querySelector('#stk-pos-tabs').addEventListener('click', function(e) {
@@ -1847,7 +1847,7 @@
       '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
       '</div>' +
       '</div>' +
-      '<div id="ww-body"><div class="lp-loading">pulling film...</div></div>' +
+      '<div id="ww-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     var curPos = '';
@@ -1856,7 +1856,7 @@
 
     function loadWW() {
       var body = el.querySelector('#ww-body');
-      body.innerHTML = '<div class="lp-loading">pulling film...</div>';
+      body.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var season = el.querySelector('#ww-season').value;
       var win = el.querySelector('#ww-window').value;
       currentWin = win;
@@ -1879,7 +1879,7 @@
         var targets = data.targets || [];
         var html = '<div class="ww-card"><div class="ww-card-header">Waiver Wire Targets (' + escapeHtml(String(data.count || 0)) + ')</div>';
         if (!targets.length) {
-          html += '<div class="lp-empty">no waiver targets found</div></div>';
+          html += '<div class="lp-empty">' + razzleEmpty() + '</div></div>';
           body.innerHTML = html;
           return;
         }
@@ -1910,7 +1910,7 @@
         }
         html += '</tbody></table></div>';
         body.innerHTML = html;
-      }).catch(function() { body.innerHTML = '<div class="lp-error">failed to load waiver data</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>'; });
     }
 
     el.querySelector('#ww-pos-tabs').addEventListener('click', function(e) {
@@ -2032,7 +2032,7 @@
             window.location.href = '/player/' + encodeURIComponent(row.getAttribute('data-pid'));
           });
         });
-      }).catch(function() { body.innerHTML = '<div class="lp-error">failed to load scarcity data</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>'; });
     }
 
     el.querySelector('#sc-season').addEventListener('change', loadSC);
@@ -2048,14 +2048,14 @@
       '<div class="lp-controls">' +
       '<select class="lp-select" id="hc-season" aria-label="Season"></select>' +
       '</div>' +
-      '<div id="hc-body"><div class="lp-loading">pulling film...</div></div>' +
+      '<div id="hc-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     var seasonsPopulated = false;
 
     function loadHC() {
       var body = el.querySelector('#hc-body');
-      body.innerHTML = '<div class="lp-loading">pulling film...</div>';
+      body.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var season = el.querySelector('#hc-season').value;
       var url = '/api/handcuffs';
       if (season) url += '?season=' + encodeURIComponent(season);
@@ -2075,7 +2075,7 @@
 
         var hcs = data.handcuffs || [];
         if (!hcs.length) {
-          body.innerHTML = '<div class="hc-card"><div class="hc-card-header">Handcuff Rankings</div><div class="lp-empty">no handcuff data found</div></div>';
+          body.innerHTML = '<div class="hc-card"><div class="hc-card-header">Handcuff Rankings</div><div class="lp-empty">' + razzleEmpty() + '</div></div>';
           return;
         }
 
@@ -2103,7 +2103,7 @@
 
         html += '</tbody></table></div>';
         body.innerHTML = html;
-      }).catch(function() { body.innerHTML = '<div class="lp-error">failed to load handcuff data</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>'; });
     }
 
     el.querySelector('#hc-season').addEventListener('change', loadHC);
@@ -2229,7 +2229,7 @@
     }
 
     function buildTable(players, section) {
-      if (!players || !players.length) return '<div class="lp-empty">no ' + (section === 'most_efficient' ? 'efficient' : 'volume') + ' players found</div>';
+      if (!players || !players.length) return '<div class="lp-empty">' + razzleEmpty() + '</div>';
       var isEff = section === 'most_efficient';
       var title = isEff ? 'Most Efficient' : 'Volume Kings';
       var headerClass = isEff ? 'efficient' : 'volume';
@@ -2260,7 +2260,7 @@
       currentData = data;
       var body = el.querySelector('#eff-body');
       if (!data || (!(data.most_efficient || []).length && !(data.volume_kings || []).length)) {
-        body.innerHTML = '<div class="lp-empty">no efficiency data found</div>';
+        body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
         return;
       }
       body.innerHTML = buildTable(data.most_efficient || [], 'most_efficient') + buildTable(data.volume_kings || [], 'volume_kings');
@@ -2306,7 +2306,7 @@
           seasonsPopulated = true;
         }
         render(data);
-      }).catch(function() { body.innerHTML = '<div class="lp-error">failed to load efficiency data</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>'; });
     }
 
     el.querySelector('#eff-pos-tabs').addEventListener('click', function(e) {
@@ -2434,7 +2434,7 @@
     }
 
     function buildTable(players, section) {
-      if (!players || !players.length) return '<div class="lp-empty">no ' + (section === 'rock_solid' ? 'consistent' : 'volatile') + ' players found</div>';
+      if (!players || !players.length) return '<div class="lp-empty">' + razzleEmpty() + '</div>';
       var isSolid = section === 'rock_solid';
       var title = isSolid ? 'Rock Solid' : 'Wild Cards';
       var headerClass = isSolid ? 'solid' : 'wild';
@@ -2464,7 +2464,7 @@
       currentData = data;
       var body = el.querySelector('#con-body');
       if (!data || (!(data.rock_solid || []).length && !(data.wild_cards || []).length)) {
-        body.innerHTML = '<div class="lp-empty">no consistency data found</div>';
+        body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
         return;
       }
       body.innerHTML = buildTable(data.rock_solid || [], 'rock_solid') + buildTable(data.wild_cards || [], 'wild_cards');
@@ -2510,7 +2510,7 @@
           seasonsPopulated = true;
         }
         render(data);
-      }).catch(function() { body.innerHTML = '<div class="lp-error">failed to load consistency data</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>'; });
     }
 
     el.querySelector('#con-pos-tabs').addEventListener('click', function(e) {
@@ -2543,7 +2543,7 @@
       '</div>' +
       '<select class="lp-select" id="se-season" aria-label="Season"></select>' +
       '</div>' +
-      '<div id="se-body"><div class="lp-loading">pulling film...</div></div>' +
+      '<div id="se-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     var curPos = '';
@@ -2558,7 +2558,7 @@
 
     function loadSE() {
       var body = el.querySelector('#se-body');
-      body.innerHTML = '<div class="lp-loading">pulling film...</div>';
+      body.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var sel = el.querySelector('#se-season');
       if (sel && sel.options.length === 0) seasonsPopulated = false;
       var season = sel.value;
@@ -2589,7 +2589,7 @@
           return;
         }
         var players = data.players || [];
-        if (!players.length) { body.innerHTML = '<div class="lp-empty">no ' + (isCollege ? 'touch' : 'snap') + ' efficiency data found</div>'; return; }
+        if (!players.length) { body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>'; return; }
 
         var ptsLabel = isCollege ? 'Pts/Tch' : 'Pts/Snap';
         var volLabel = isCollege ? 'Tch/G' : 'Snaps/G';
@@ -2619,7 +2619,7 @@
         }
         html += '</tbody></table></div>';
         body.innerHTML = html;
-      }).catch(function() { body.innerHTML = '<div class="lp-error">failed to load snap efficiency data</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>'; });
     }
 
     el.querySelector('#se-pos-tabs').addEventListener('click', function(e) {
@@ -2652,7 +2652,7 @@
       '</div>' +
       '<select class="lp-select" id="wl-season" aria-label="Season"></select>' +
       '</div>' +
-      '<div id="wl-body"><div class="lp-loading">pulling film...</div></div>' +
+      '<div id="wl-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     var curPos = '';
@@ -2666,7 +2666,7 @@
 
     function loadWL() {
       var body = el.querySelector('#wl-body');
-      body.innerHTML = '<div class="lp-loading">pulling film...</div>';
+      body.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var sel = el.querySelector('#wl-season');
       if (sel && sel.options.length === 0) seasonsPopulated = false;
       var season = sel.value;
@@ -2690,7 +2690,7 @@
           seasonsPopulated = true;
         }
         var players = data.players || [];
-        if (!players.length) { body.innerHTML = '<div class="lp-empty">no workload data found</div>'; return; }
+        if (!players.length) { body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>'; return; }
 
         var maxWL = Math.max.apply(null, players.map(function(p) { return p.workload; }));
         var showSnaps = !isCollege;
@@ -2725,7 +2725,7 @@
         }
         html += '</tbody></table></div>';
         body.innerHTML = html;
-      }).catch(function() { body.innerHTML = '<div class="lp-error">failed to load workload data</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>'; });
     }
 
     el.querySelector('#wl-pos-tabs').addEventListener('click', function(e) {
@@ -2758,7 +2758,7 @@
       '</div>' +
       '<select class="lp-select" id="dt-season" aria-label="Season"></select>' +
       '</div>' +
-      '<div id="dt-body"><div class="lp-loading">pulling film...</div></div>' +
+      '<div id="dt-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     var curPos = '';
@@ -2773,7 +2773,7 @@
 
     function loadDT() {
       var body = el.querySelector('#dt-body');
-      body.innerHTML = '<div class="lp-loading">pulling film...</div>';
+      body.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var sel = el.querySelector('#dt-season');
       if (sel && sel.options.length === 0) seasonsPopulated = false;
       var season = sel.value;
@@ -2797,7 +2797,7 @@
           seasonsPopulated = true;
         }
         var players = data.players || [];
-        if (!players.length) { body.innerHTML = '<div class="lp-empty">no dual-threat players found</div>'; return; }
+        if (!players.length) { body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>'; return; }
 
         var html = '<div class="dt-card"><div class="dt-card-header">Dual-Threat Rankings</div>';
         html += '<table class="dt-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>DTI</th><th>Rush/G</th><th>Rec/G</th><th>Tot/G</th><th>Car/G</th><th>Rec/G</th><th>Split</th></tr></thead><tbody>';
@@ -2822,7 +2822,7 @@
         }
         html += '</tbody></table></div>';
         body.innerHTML = html;
-      }).catch(function() { body.innerHTML = '<div class="lp-error">failed to load dual-threat data</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>'; });
     }
 
     el.querySelector('#dt-pos-tabs').addEventListener('click', function(e) {
@@ -2852,7 +2852,7 @@
       '</div>' +
       '<select class="lp-select" id="tp-season" aria-label="Season"></select>' +
       '</div>' +
-      '<div id="tp-body"><div class="lp-loading">pulling film...</div></div>' +
+      '<div id="tp-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     var curPos = '';
@@ -2867,7 +2867,7 @@
 
     function loadTP() {
       var body = el.querySelector('#tp-body');
-      body.innerHTML = '<div class="lp-loading">pulling film...</div>';
+      body.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var season = el.querySelector('#tp-season').value;
       var url = '/api/target-premium';
       if (season) url += '?season=' + season;
@@ -2889,7 +2889,7 @@
           seasonsPopulated = true;
         }
         var players = data.players || [];
-        if (!players.length) { body.innerHTML = '<div class="lp-empty">no target premium data found</div>'; return; }
+        if (!players.length) { body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>'; return; }
 
         var html = '<div class="tp-card"><div class="tp-card-header">Target Quality Rankings</div>';
         html += '<table class="tp-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Premium</th><th>Tgt/G</th><th>aDOT</th><th>Catch%</th><th>YAC/R</th><th>Y/Tgt</th><th></th></tr></thead><tbody>';
@@ -2912,7 +2912,7 @@
         }
         html += '</tbody></table></div>';
         body.innerHTML = html;
-      }).catch(function() { body.innerHTML = '<div class="lp-error">failed to load target premium data</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>'; });
     }
 
     el.querySelector('#tp-pos-tabs').addEventListener('click', function(e) {
@@ -2942,7 +2942,7 @@
       '</div>' +
       '<select class="lp-select" id="dr-season" aria-label="Season"></select>' +
       '</div>' +
-      '<div id="dr-body"><div class="lp-loading">pulling film...</div></div>' +
+      '<div id="dr-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     var curPos = '';
@@ -2960,7 +2960,7 @@
     }
 
     function renderDropTable(players, type) {
-      if (!players.length) return '<div class="lp-empty">no ' + (type === 'sure' ? 'sure hands' : 'butterfingers') + ' found</div>';
+      if (!players.length) return '<div class="lp-empty">' + razzleEmpty() + '</div>';
       var maxDrops = Math.max.apply(null, players.map(function(p) { return p.drops; }));
       var barCls = type === 'sure' ? 'dr-bar-good' : 'dr-bar-bad';
       var isGood = type === 'sure';
@@ -2989,7 +2989,7 @@
 
     function loadDR() {
       var body = el.querySelector('#dr-body');
-      body.innerHTML = '<div class="lp-loading">pulling film...</div>';
+      body.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var season = el.querySelector('#dr-season').value;
       var url = '/api/drop-rate';
       if (season) url += '?season=' + season;
@@ -3012,14 +3012,14 @@
         }
         var sure = data.sure_hands || [];
         var butter = data.butterfingers || [];
-        if (!sure.length && !butter.length) { body.innerHTML = '<div class="lp-empty">no drop rate data found</div>'; return; }
+        if (!sure.length && !butter.length) { body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>'; return; }
 
         var html = '<div class="dr-grid">';
         html += '<div class="dr-card"><div class="dr-card-header sure">Sure Hands</div>' + renderDropTable(sure, 'sure') + '</div>';
         html += '<div class="dr-card"><div class="dr-card-header butter">Butterfingers</div>' + renderDropTable(butter, 'butter') + '</div>';
         html += '</div>';
         body.innerHTML = html;
-      }).catch(function() { body.innerHTML = '<div class="lp-error">failed to load drop rate data</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>'; });
     }
 
     el.querySelector('#dr-pos-tabs').addEventListener('click', function(e) {
@@ -3050,7 +3050,7 @@
       '</div>' +
       '<select class="lp-select" id="gt-season" aria-label="Season"></select>' +
       '</div>' +
-      '<div id="gt-body"><div class="lp-loading">pulling film...</div></div>' +
+      '<div id="gt-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     var curPos = '';
@@ -3064,7 +3064,7 @@
 
     function buildGTCard(title, cls, players, isPadders) {
       if (!players.length) {
-        return '<div class="gt-card"><div class="gt-card-header ' + cls + '">' + escapeHtml(title) + '</div><div class="lp-empty">no players found</div></div>';
+        return '<div class="gt-card"><div class="gt-card-header ' + cls + '">' + escapeHtml(title) + '</div><div class="lp-empty">' + razzleEmpty() + '</div></div>';
       }
       var maxVal = Math.max.apply(null, players.map(function(p) { return isPadders ? p.garbage_time_pct : p.ppg; }));
       var html = '<div class="gt-card"><div class="gt-card-header ' + cls + '">' + escapeHtml(title) + '</div>';
@@ -3092,7 +3092,7 @@
 
     function loadGT() {
       var body = el.querySelector('#gt-body');
-      body.innerHTML = '<div class="lp-loading">pulling film...</div>';
+      body.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var season = el.querySelector('#gt-season').value;
       var url = '/api/garbage-time';
       if (season) url += '?season=' + season;
@@ -3115,14 +3115,14 @@
         }
         var padders = data.stat_padders || [];
         var clean = data.clean_producers || [];
-        if (!padders.length && !clean.length) { body.innerHTML = '<div class="lp-empty">no garbage time data found</div>'; return; }
+        if (!padders.length && !clean.length) { body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>'; return; }
 
         var html = '<div class="gt-sections">';
         html += buildGTCard('Stat Padders — High Garbage Time %', 'padders', padders, true);
         html += buildGTCard('Clean Producers — Low Garbage Time %', 'clean', clean, false);
         html += '</div>';
         body.innerHTML = html;
-      }).catch(function() { body.innerHTML = '<div class="lp-error">failed to load garbage time data</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>'; });
     }
 
     el.querySelector('#gt-pos-tabs').addEventListener('click', function(e) {
@@ -3176,12 +3176,12 @@
           '</div>' +
           '<select class="lp-select" id="wh-season" aria-label="Season"></select>' +
         '</div>' +
-        '<div id="wh-body"><div class="lp-loading">pulling film...</div></div>' +
+        '<div id="wh-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function loadWH() {
       var body = el.querySelector('#wh-body');
-      body.innerHTML = '<div class="lp-loading">pulling film...</div>';
+      body.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var season = el.querySelector('#wh-season').value || '';
       var posParam = curPos === 'ALL' ? '' : curPos;
       var url = '/api/weekly-heatmap?limit=40';
@@ -3205,14 +3205,14 @@
         }
         renderWH(data);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">failed to load weekly heatmap</div>';
+        body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
     function renderWH(data) {
       var body = el.querySelector('#wh-body');
       if (!data.players || !data.players.length) {
-        body.innerHTML = '<div class="lp-empty">no data for this selection</div>';
+        body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
         return;
       }
 
@@ -3340,7 +3340,7 @@
           '<div class="mh-legend-item"><div class="mh-legend-swatch" style="background:#f2d5d8;"></div> Tough</div>' +
           '<div class="mh-legend-item"><div class="mh-legend-swatch" style="background:#e63946;"></div> Hard</div>' +
         '</div>' +
-        '<div id="mh-body"><div class="lp-loading">pulling film on every defense...</div></div>' +
+        '<div id="mh-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
         '<div id="mh-detail" class="mh-detail"></div>' +
       '</div>';
 
@@ -3368,7 +3368,7 @@
 
     function loadMH() {
       var body = el.querySelector('#mh-body');
-      body.innerHTML = '<div class="lp-loading">pulling film on every defense...</div>';
+      body.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       el.querySelector('#mh-detail').classList.remove('visible');
       var season = el.querySelector('#mh-season').value || '';
       var posParam = curPos === 'ALL' ? '' : curPos;
@@ -3399,7 +3399,7 @@
     function renderMH(data) {
       var body = el.querySelector('#mh-body');
       if (!data.teams || !data.teams.length) {
-        body.innerHTML = '<div class="lp-empty">no matchup data available</div>';
+        body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
         return;
       }
 
@@ -3546,7 +3546,7 @@
         '<div class="lp-controls">' +
           '<select class="lp-select" id="sk-season" aria-label="Season"></select>' +
         '</div>' +
-        '<div id="sk-body"><div class="lp-loading">pulling film...</div></div>' +
+        '<div id="sk-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function corrClass(c) {
@@ -3558,7 +3558,7 @@
 
     function loadSK() {
       var body = el.querySelector('#sk-body');
-      body.innerHTML = '<div class="lp-loading">pulling film...</div>';
+      body.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var season = el.querySelector('#sk-season').value || '';
       var url = '/api/stacks';
       if (season) url += '?season=' + encodeURIComponent(season);
@@ -3579,7 +3579,7 @@
         }
         renderSK(data);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">failed to load stack data</div>';
+        body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -3814,7 +3814,7 @@
         }
         renderRZ(data);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">failed to load red zone data</div>';
+        body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -3856,12 +3856,12 @@
             '<option value="5">5 weeks</option>' +
           '</select>' +
         '</div>' +
-        '<div id="str-body"><div class="lp-loading">pulling film...</div></div>' +
+        '<div id="str-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function loadSTR() {
       var body = el.querySelector('#str-body');
-      body.innerHTML = '<div class="lp-loading">pulling film...</div>';
+      body.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var season = el.querySelector('#str-season').value || '';
       var win = el.querySelector('#str-window').value || '4';
       var url = '/api/streaks?window=' + encodeURIComponent(win);
@@ -3885,7 +3885,7 @@
         }
         renderSTR(data);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">failed to load streaks data</div>';
+        body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -3993,7 +3993,7 @@
             '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
           '</div>' +
         '</div>' +
-        '<div id="wkl-body"><div class="lp-loading">pulling film...</div></div>' +
+        '<div id="wkl-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function updateWeekUI() {
@@ -4005,7 +4005,7 @@
 
     function loadWKL() {
       var body = el.querySelector('#wkl-body');
-      body.innerHTML = '<div class="lp-loading">pulling film...</div>';
+      body.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var season = el.querySelector('#wkl-season').value || '';
       var url = '/api/weekly-leaders?';
       if (season) url += 'season=' + encodeURIComponent(season) + '&';
@@ -4032,14 +4032,14 @@
         updateWeekUI();
         renderWKL(data);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">failed to load weekly leaders</div>';
+        body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
     function renderWKL(data) {
       var body = el.querySelector('#wkl-body');
       var leaders = data.leaders || [];
-      if (!leaders.length) { body.innerHTML = '<div class="lp-empty">no data for this week</div>'; return; }
+      if (!leaders.length) { body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>'; return; }
 
       var sorted = leaders.slice().sort(function(a, b) {
         var va = a[sortState.col], vb = b[sortState.col];
@@ -4151,12 +4151,12 @@
         '<div class="lp-controls">' +
           '<select class="lp-select" id="mv-season" aria-label="Season"></select>' +
         '</div>' +
-        '<div id="mv-body"><div class="lp-loading">pulling film...</div></div>' +
+        '<div id="mv-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function loadMV() {
       var body = el.querySelector('#mv-body');
-      body.innerHTML = '<div class="lp-loading">pulling film...</div>';
+      body.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var season = el.querySelector('#mv-season').value || '';
       var url = '/api/weekly-mvp';
       if (season) url += '?season=' + encodeURIComponent(season);
@@ -4177,14 +4177,14 @@
         }
         renderMV(data);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">failed to load weekly MVP data</div>';
+        body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
     function renderMV(data) {
       var body = el.querySelector('#mv-body');
       var weeks = data.weeks || [];
-      if (!weeks.length) { body.innerHTML = '<div class="mv-empty">no data found</div>'; return; }
+      if (!weeks.length) { body.innerHTML = '<div class="mv-empty">' + razzleEmpty() + '</div>'; return; }
 
       var html = '<div class="mv-card">';
       html += '<div class="mv-card-header">Weekly MVP Grid — ' + escapeHtml(String(data.season)) + ' (' + escapeHtml(String(data.total_weeks)) + ' weeks)</div>';
@@ -4242,7 +4242,7 @@
           '</div>' +
           '<select class="lp-select" id="po-season" aria-label="Season"></select>' +
         '</div>' +
-        '<div id="po-body"><div class="lp-loading">pulling film...</div></div>' +
+        '<div id="po-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function gradeClass(grade) {
@@ -4251,7 +4251,7 @@
 
     function loadPO() {
       var body = el.querySelector('#po-body');
-      body.innerHTML = '<div class="lp-loading">pulling film...</div>';
+      body.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var season = el.querySelector('#po-season').value || '';
       var url = '/api/playoff-schedule?';
       if (season) url += 'season=' + encodeURIComponent(season) + '&';
@@ -4273,7 +4273,7 @@
         }
         renderPO(data);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">failed to load playoff schedule</div>';
+        body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -4358,13 +4358,13 @@
             '<option value="8">8 weeks</option>' +
           '</select>') +
         '</div>' +
-        '<div id="ut-body"><div class="lp-loading">pulling film on ' + (utCollege ? 'college trends' : 'usage trends') + '...</div></div>' +
+        '<div id="ut-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function loadUT() {
       var body = el.querySelector('#ut-body');
       var isCollege = typeof state !== 'undefined' && state.universe === 'college';
-      body.innerHTML = '<div class="lp-loading">pulling film on ' + (isCollege ? 'college trends' : 'usage trends') + '...</div>';
+      body.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var url;
       if (isCollege) {
         url = '/api/college/trends?limit=30';
@@ -4417,7 +4417,7 @@
       var risers = data.risers || [];
       var fallers = data.fallers || [];
       if (!risers.length && !fallers.length) {
-        body.innerHTML = '<div class="lp-empty">no usage trend data available</div>';
+        body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
         return;
       }
       var html = '';
@@ -4537,13 +4537,13 @@
             '<option value="snap_pct">Snap%</option>' +
           '</select>') +
         '</div>' +
-        '<div id="yy-body"><div class="lp-loading">pulling film on year-over-year...</div></div>' +
+        '<div id="yy-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function loadYY() {
       var body = el.querySelector('#yy-body');
       var isCollege = typeof state !== 'undefined' && state.universe === 'college';
-      body.innerHTML = '<div class="lp-loading">pulling film on year-over-year...</div>';
+      body.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var url;
       if (isCollege) {
         url = '/api/college/trends?limit=30';
@@ -4567,7 +4567,7 @@
       var risers = data.risers || [];
       var fallers = data.fallers || [];
       if (!risers.length && !fallers.length) {
-        body.innerHTML = '<div class="lp-empty">no year-over-year data available</div>';
+        body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
         return;
       }
       var label = isCollege ? 'YPG' : (metricLabels[curMetric] || curMetric);
@@ -4671,13 +4671,13 @@
             '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
           '</div>' +
         '</div>' +
-        '<div id="ag-body"><div class="lp-loading">pulling film on ' + (agCollege ? 'experience curves' : 'aging curves') + '...</div></div>' +
+        '<div id="ag-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function loadAG() {
       var body = el.querySelector('#ag-body');
       var isCollege = typeof state !== 'undefined' && state.universe === 'college';
-      body.innerHTML = '<div class="lp-loading">pulling film on ' + (isCollege ? 'experience curves' : 'aging curves') + '...</div>';
+      body.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var url = isCollege
         ? '/api/college/aging-curves?position=' + encodeURIComponent(curPos)
         : '/api/aging-curves?position=' + encodeURIComponent(curPos);
@@ -4696,7 +4696,7 @@
       var curve = data.curve || [];
       var peak = data.peak || {};
       if (!curve.length) {
-        body.innerHTML = '<div class="lp-empty">no aging curve data available</div>';
+        body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
         return;
       }
       var html = '<div class="ag-chart-wrap"><canvas id="ag-canvas" width="600" height="350" role="img" aria-label="Aging curve trend line chart"></canvas></div>';
@@ -4850,12 +4850,12 @@
           '</div>' +
           '<select class="lp-select" id="pt-season">' + seasonOptions() + '</select>' +
         '</div>' +
-        '<div id="pt-body"><div class="lp-loading">pulling film on pace projections...</div></div>' +
+        '<div id="pt-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function loadPT() {
       var body = el.querySelector('#pt-body');
-      body.innerHTML = '<div class="lp-loading">pulling film on pace projections...</div>';
+      body.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var url = '/api/pace-tracker?season=' + curSeason;
       if (curPos) url += '&position=' + encodeURIComponent(curPos);
 
@@ -4872,7 +4872,7 @@
     function renderPT(data, body) {
       var players = data.players || [];
       if (!players.length) {
-        body.innerHTML = '<div class="lp-empty">no pace data available</div>';
+        body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
         return;
       }
       var html = '<div class="pt-grid">';
@@ -4937,12 +4937,12 @@
           '</div>' +
           '<select class="lp-select" id="spc-season">' + seasonOptions() + '</select>' +
         '</div>' +
-        '<div id="spc-body"><div class="lp-loading">pulling film on season milestones...</div></div>' +
+        '<div id="spc-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function loadSPC() {
       var body = el.querySelector('#spc-body');
-      body.innerHTML = '<div class="lp-loading">pulling film on season milestones...</div>';
+      body.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var url = '/api/season-pace?season=' + curSeason;
       if (curPos) url += '&position=' + encodeURIComponent(curPos);
 
@@ -4959,7 +4959,7 @@
     function renderSPC(data, body) {
       var players = data.players || [];
       if (!players.length) {
-        body.innerHTML = '<div class="lp-empty">no season pace data available</div>';
+        body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
         return;
       }
       var eliteMilestones = ['5000 pass yd', '40 pass TD', '1500 rush yd', '1500 rec yd',
@@ -5025,12 +5025,12 @@
           '</div>' +
           '<select class="lp-select" id="tdr-season">' + seasonOptions() + '</select>' +
         '</div>' +
-        '<div id="tdr-body"><div class="lp-loading">pulling film on TD regression...</div></div>' +
+        '<div id="tdr-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function loadTDR() {
       var body = el.querySelector('#tdr-body');
-      body.innerHTML = '<div class="lp-loading">pulling film on TD regression...</div>';
+      body.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var url = '/api/td-regression?season=' + curSeason;
       if (curPos) url += '&position=' + encodeURIComponent(curPos);
 
@@ -5049,7 +5049,7 @@
       var sellHigh = data.sell_high || [];
       var rates = data.position_rates || {};
       if (!buyLow.length && !sellHigh.length) {
-        body.innerHTML = '<div class="lp-empty">no TD regression data available</div>';
+        body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
         return;
       }
 
@@ -5159,12 +5159,12 @@
           '</div>' +
           '<select class="lp-select" id="ay-season">' + seasonOptions() + '</select>' +
         '</div>' +
-        '<div id="ay-body"><div class="lp-loading">pulling film on air yards...</div></div>' +
+        '<div id="ay-body"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function loadAY() {
       var body = el.querySelector('#ay-body');
-      body.innerHTML = '<div class="lp-loading">pulling film on air yards...</div>';
+      body.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var url = '/api/air-yards?limit=25&season=' + curSeason;
       if (curPos) url += '&position=' + encodeURIComponent(curPos);
 
@@ -5191,7 +5191,7 @@
       var buyLow = data.buy_low || [];
       var sellHigh = data.sell_high || [];
       if (!buyLow.length && !sellHigh.length) {
-        body.innerHTML = '<div class="lp-empty">no air yards data available</div>';
+        body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
         return;
       }
 
@@ -5305,7 +5305,7 @@
           return r.json();
         }).then(function(data) {
           var players = data.players || [];
-          if (!players.length) { list.innerHTML = '<div class="' + prefix + 'search-empty">no players found</div>'; list.style.display = 'block'; return; }
+          if (!players.length) { list.innerHTML = '<div class="' + prefix + 'search-empty">' + razzleEmpty() + '</div>'; list.style.display = 'block'; return; }
           var html = '';
           players.forEach(function(p) {
             var posColor = POS_COLORS[p.position] || '#8a7565';
@@ -5381,7 +5381,7 @@
 
     function loadCareer(pid) {
       var content = el.querySelector('#cst-content');
-      content.innerHTML = '<div class="lp-loading">pulling film on career stats...</div>';
+      content.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       fetch('/api/career-stats?player_id=' + encodeURIComponent(pid)).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
@@ -5579,7 +5579,7 @@
 
     function loadPlayerData(entry) {
       var content = el.querySelector('#ccp-content');
-      content.innerHTML = '<div class="lp-loading">pulling film...</div>';
+      content.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       fetch('/api/career-stats?player_id=' + encodeURIComponent(entry.player_id)).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
@@ -5795,7 +5795,7 @@
       if (selectedPlayers.length < 2) { el.querySelector('#cmt-content').innerHTML = '<div class="lp-empty">add at least 2 players</div>'; return; }
       var ids = selectedPlayers.map(function(p) { return p.player_id; }).join(',');
       var content = el.querySelector('#cmt-content');
-      content.innerHTML = '<div class="lp-loading">pulling film...</div>';
+      content.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       fetch('/api/compare-table?players=' + encodeURIComponent(ids) + '&season=' + curSeason).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
@@ -5807,7 +5807,7 @@
     }
 
     function renderTable(data, content) {
-      if (!data || !data.length) { content.innerHTML = '<div class="lp-empty">no data for this selection</div>'; return; }
+      if (!data || !data.length) { content.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>'; return; }
       // Sort
       data.sort(function(a, b) {
         var va = a[sortCol], vb = b[sortCol];
@@ -5907,7 +5907,7 @@
 
     function loadStrengths(pid) {
       var content = el.querySelector('#sw2-content');
-      content.innerHTML = '<div class="lp-loading">pulling film...</div>';
+      content.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       fetch('/api/player-strengths?player_id=' + encodeURIComponent(pid) + '&season=' + curSeason).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
@@ -6001,7 +6001,7 @@
           posTabsHTML('rpc-pos-tabs', true) +
           '<select class="lp-select" id="rpc-season">' + seasonOptions() + '</select>' +
         '</div>' +
-        '<div id="rpc-content"><div class="lp-loading">pulling film on report cards...</div></div>' +
+        '<div id="rpc-content"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function gradeClass(g) {
@@ -6021,7 +6021,7 @@
 
     function loadData() {
       var content = el.querySelector('#rpc-content');
-      content.innerHTML = '<div class="lp-loading">pulling film on report cards...</div>';
+      content.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var url = '/api/report-cards?limit=25&season=' + curSeason;
       if (curPos) url += '&position=' + encodeURIComponent(curPos);
       fetch(url).then(function(r) {
@@ -6152,12 +6152,12 @@
           posTabsHTML('fpb-pos-tabs', true) +
           '<select class="lp-select" id="fpb-season">' + seasonOptions() + '</select>' +
         '</div>' +
-        '<div id="fpb-content"><div class="lp-loading">pulling film...</div></div>' +
+        '<div id="fpb-content"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function loadData() {
       var content = el.querySelector('#fpb-content');
-      content.innerHTML = '<div class="lp-loading">pulling film on scoring breakdown...</div>';
+      content.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var url = '/api/fpts-breakdown?season=' + curSeason;
       if (curPos) url += '&position=' + encodeURIComponent(curPos);
       fetch(url).then(function(r) {
@@ -6171,7 +6171,7 @@
     }
 
     function renderBreakdown(players, content) {
-      if (!players || !players.length) { content.innerHTML = '<div class="lp-empty">no data for this selection</div>'; return; }
+      if (!players || !players.length) { content.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>'; return; }
 
       // Legend
       var html = '<div class="fpb-legend">';
@@ -6264,7 +6264,7 @@
     function loadGameLog() {
       if (!curPlayer) return;
       var content = el.querySelector('#glo-content');
-      content.innerHTML = '<div class="lp-loading">pulling film...</div>';
+      content.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       fetch('/api/game-log?player_id=' + encodeURIComponent(curPlayer.player_id) + '&season=' + curSeason).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
@@ -6395,7 +6395,7 @@
           posTabsHTML('arc-pos-tabs', true) +
           '<select class="lp-select" id="arc-season">' + seasonOptions() + '</select>' +
         '</div>' +
-        '<div id="arc-content"><div class="lp-loading">pulling film...</div></div>' +
+        '<div id="arc-content"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function getIcon(archetype) {
@@ -6408,7 +6408,7 @@
 
     function loadData() {
       var content = el.querySelector('#arc-content');
-      content.innerHTML = '<div class="lp-loading">pulling film on archetypes...</div>';
+      content.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var url = '/api/player-archetypes?season=' + curSeason;
       if (curPos) url += '&position=' + encodeURIComponent(curPos);
       fetch(url).then(function(r) {
@@ -6422,7 +6422,7 @@
     }
 
     function renderArchetypes(archetypes, content) {
-      if (!archetypes || !archetypes.length) { content.innerHTML = '<div class="lp-empty">no archetypes found</div>'; return; }
+      if (!archetypes || !archetypes.length) { content.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>'; return; }
       var html = '<div class="arc-grid">';
       archetypes.forEach(function(arch) {
         var archPlayers = arch.players || [];
@@ -6491,7 +6491,7 @@
 
     function loadBreakdown(pid, playerInfo) {
       var content = el.querySelector('#pbd-content');
-      content.innerHTML = '<div class="lp-loading">pulling film...</div>';
+      content.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       fetch('/api/points-breakdown?player_id=' + encodeURIComponent(pid) + '&season=' + curSeason).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
@@ -6738,7 +6738,7 @@
     function renderAwards(data, isCollege) {
       var content = el.querySelector('.aw2-content');
       if (!data || !data.awards || !data.awards.length) {
-        content.innerHTML = '<div class="lp-empty">no awards data found</div>';
+        content.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
         return;
       }
       var html = '<div class="aw2-grid">';
@@ -6805,7 +6805,7 @@
     }
 
     function load() {
-      el.querySelector('.db2-grid').innerHTML = '<div class="lp-loading">pulling film...</div>';
+      el.querySelector('.db2-grid').innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var url = '/api/dynasty-dashboard';
       if (state.season > 0) url += '?season=' + state.season;
 
@@ -6880,7 +6880,7 @@
         scHtml += '</div>';
         el.querySelector('.db2-scarcity').innerHTML = scHtml;
       }).catch(function() {
-        el.querySelector('.db2-grid').innerHTML = '<div class="lp-error">failed to load dashboard</div>';
+        el.querySelector('.db2-grid').innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -6906,7 +6906,7 @@
           '<select class="lp-select dc2-year"><option value="">pulling seasons...</option></select>' +
           posTabsHTML('dc2-pos-tabs', true) +
         '</div>' +
-        '<div class="dc2-content"><div class="lp-loading">pulling film...</div></div>' +
+        '<div class="dc2-content"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function verdictLabel(v) {
@@ -6931,7 +6931,7 @@
 
     function load() {
       var content = el.querySelector('.dc2-content');
-      content.innerHTML = '<div class="lp-loading">pulling film...</div>';
+      content.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var url = '/api/draft-class';
       var p = [];
       if (state.year) p.push('year=' + state.year);
@@ -6953,7 +6953,7 @@
         state.year = d.draft_year;
         renderData(d);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">failed to load draft class data</div>';
+        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -7227,7 +7227,7 @@
       var body = el.querySelector('.exp-body');
       var players = data.players || [];
       if (!players.length) {
-        body.innerHTML = '<div class="lp-empty">no data for this selection</div>';
+        body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
         return;
       }
 
@@ -7417,13 +7417,13 @@
           '<select class="lp-select ld2-season">' + seasonOptions() + '</select>' +
           posTabsHTML('ld2-pos-tabs', true) +
         '</div>' +
-        '<div class="ld2-content"><div class="lp-loading">pulling film on the leaders...</div></div>' +
+        '<div class="ld2-content"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function load() {
       var content = el.querySelector('.ld2-content');
       var isCollege = typeof state !== 'undefined' && state.universe === 'college';
-      content.innerHTML = '<div class="lp-loading">pulling film on the leaders...</div>';
+      content.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var url;
       if (isCollege) {
         url = '/api/college/leaders?limit=10';
@@ -7457,7 +7457,7 @@
     function renderCategories(categories, isCollege) {
       var content = el.querySelector('.ld2-content');
       if (!categories.length) {
-        content.innerHTML = '<div class="lp-empty">no stat leaders found</div>';
+        content.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
         return;
       }
       var html = '<div class="ld2-grid">';
@@ -7616,7 +7616,7 @@
     }
 
     function buildTable(players, section) {
-      if (!players || !players.length) return '<div class="lp-empty">no data for this selection</div>';
+      if (!players || !players.length) return '<div class="lp-empty">' + razzleEmpty() + '</div>';
       var isAlpha = section === 'alpha_dogs';
       var icon = isAlpha ? '&#x1F43A;' : '&#x1F451;';
       var title = isAlpha ? 'Alpha Dogs' : 'Dominator Rating Leaders';
@@ -7633,7 +7633,7 @@
       currentData = data;
       var content = el.querySelector('.opp2-content');
       if (!data || (!data.alpha_dogs.length && !data.dominators.length)) {
-        content.innerHTML = '<div class="lp-empty">no opportunity data found</div>';
+        content.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
         return;
       }
       var html = buildTable(data.alpha_dogs, 'alpha_dogs') + buildTable(data.dominators, 'dominators');
@@ -7724,7 +7724,7 @@
 
     function loadPercentiles(playerId, season) {
       var result = el.querySelector('.pct2-result');
-      result.innerHTML = '<div class="lp-loading">pulling film...</div>';
+      result.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var url = '/api/player-percentiles?player_id=' + encodeURIComponent(playerId);
       if (season) url += '&season=' + season;
 
@@ -7745,7 +7745,7 @@
         }
         renderPercentiles(data);
       }).catch(function() {
-        result.innerHTML = '<div class="lp-error">failed to load percentiles</div>';
+        result.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -7756,7 +7756,7 @@
       var result = el.querySelector('.pct2-result');
 
       if (!pcts.length) {
-        result.innerHTML = '<div class="lp-empty">no percentile data for ' + escapeHtml(p.full_name) + '</div>';
+        result.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
         return;
       }
 
@@ -7882,7 +7882,7 @@
 
     function renderBoard(prospects) {
       var content = el.querySelector('.bb-content');
-      if (!prospects.length) { content.innerHTML = '<div class="lp-empty">no prospects found</div>'; return; }
+      if (!prospects.length) { content.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>'; return; }
 
       var tiers = groupByTier(prospects);
       var html = '';
@@ -7976,7 +7976,7 @@
         '<div class="lp-controls">' +
           '<select class="lp-select rc2-season">' + seasonOptions() + '</select>' +
         '</div>' +
-        '<div class="rc2-content"><div class="lp-loading">pulling film...</div></div>' +
+        '<div class="rc2-content"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function posChip(pos) {
@@ -7985,7 +7985,7 @@
     }
 
     function renderList(items, fn) {
-      if (!items.length) return '<ul class="rc2-list"><li>no data available</li></ul>';
+      if (!items.length) return '<ul class="rc2-list"><li>' + razzleEmpty() + '</li></ul>';
       var html = '<ul class="rc2-list">';
       for (var i = 0; i < items.length; i++) html += '<li>' + fn(items[i]) + '</li>';
       html += '</ul>';
@@ -7995,7 +7995,7 @@
     function load() {
       var content = el.querySelector('.rc2-content');
       var isCollege = typeof state !== 'undefined' && state.universe === 'college';
-      content.innerHTML = '<div class="lp-loading">pulling film on ' + (isCollege ? 'college recap' : 'recap') + '...</div>';
+      content.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var season = el.querySelector('.rc2-season').value || '';
       var url = isCollege ? '/api/college/season-recap?' : '/api/season-recap?';
       if (season) url += 'season=' + encodeURIComponent(season);
@@ -8130,13 +8130,13 @@
         '<div class="lp-controls">' +
           posTabsHTML('rec-pos-tabs', true) +
         '</div>' +
-        '<div class="rec-content"><div class="lp-loading">pulling film...</div></div>' +
+        '<div class="rec-content"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function load() {
       var content = el.querySelector('.rec-content');
       var isCollege = typeof state !== 'undefined' && state.universe === 'college';
-      content.innerHTML = '<div class="lp-loading">pulling film on ' + (isCollege ? 'college records' : 'records') + '...</div>';
+      content.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var url;
       if (isCollege) {
         url = '/api/college/records?';
@@ -8540,7 +8540,7 @@
     }
 
     function buildTable(players, section) {
-      if (!players || !players.length) return '<div class="lp-empty">no data for this selection</div>';
+      if (!players || !players.length) return '<div class="lp-empty">' + razzleEmpty() + '</div>';
       var isSuppressed = section === 'schedule_suppressed';
       var title = isSuppressed ? '&#x1F6E1; Schedule Suppressed' : '&#x1F36D; Schedule Inflated';
       var st = sortState[section];
@@ -8556,7 +8556,7 @@
       currentData = data;
       var content = el.querySelector('.sos2-content');
       if (!data || (!data.schedule_suppressed.length && !data.schedule_inflated.length)) {
-        content.innerHTML = '<div class="lp-empty">no schedule data found</div>';
+        content.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
         return;
       }
       var html = buildTable(data.schedule_suppressed, 'schedule_suppressed') + buildTable(data.schedule_inflated, 'schedule_inflated');
@@ -8632,7 +8632,7 @@
       '</div>';
 
     function buildTable(players) {
-      if (!players || !players.length) return '<div class="lp-empty">no players in this category</div>';
+      if (!players || !players.length) return '<div class="lp-empty">' + razzleEmpty() + '</div>';
       var html = '<table class="sc2-table"><thead><tr>';
       html += '<th>Pos</th><th>Player</th><th>Team</th>';
       html += '<th>PPR PPG</th><th>Half PPG</th><th>Std PPG</th>';
@@ -8678,7 +8678,7 @@
         state.season = data.season;
         render(data);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">failed to load scoring data</div>';
+        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -8730,12 +8730,12 @@
           '<select class="lp-select sr2-season">' + seasonOptions() + '</select>' +
           posTabsHTML('sr2-pos-tabs', true) +
         '</div>' +
-        '<div class="sr2-content"><div class="lp-loading">pulling film...</div></div>' +
+        '<div class="sr2-content"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function load() {
       var content = el.querySelector('.sr2-content');
-      content.innerHTML = '<div class="lp-loading">pulling film...</div>';
+      content.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var url = '/api/success-rate?season=' + (state.season || new Date().getFullYear());
       if (state.position) url += '&position=' + state.position;
 
@@ -8746,7 +8746,7 @@
         state.data = data;
         render(data);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">failed to load success rate data</div>';
+        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -8754,7 +8754,7 @@
       var content = el.querySelector('.sr2-content');
       var players = data.players || [];
       if (!players.length) {
-        content.innerHTML = '<div class="lp-empty">no success rate data found</div>';
+        content.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
         return;
       }
 
@@ -8874,7 +8874,7 @@
     function renderDistribution(data) {
       var content = el.querySelector('.td2-content');
       if (!data.teams || !data.teams.length) {
-        content.innerHTML = '<div class="lp-empty">no data for this selection</div>';
+        content.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
         return;
       }
 
@@ -8981,12 +8981,12 @@
           '<select class="lp-select tm-team"><option value="">Select a team</option></select>' +
           '<select class="lp-select tm-season">' + seasonOptions() + '</select>' +
         '</div>' +
-        '<div class="tm-content"><div class="lp-loading">pulling film on the roster...</div></div>' +
+        '<div class="tm-content"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function load() {
       var content = el.querySelector('.tm-content');
-      content.innerHTML = '<div class="lp-loading">pulling film on the roster...</div>';
+      content.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var url = '/api/team-roster';
       var params = [];
       if (state.team) params.push('team=' + encodeURIComponent(state.team));
@@ -9028,7 +9028,7 @@
       var content = el.querySelector('.tm-content');
       var totalPlayers = 0;
       for (var k in groups) totalPlayers += (groups[k] || []).length;
-      if (!totalPlayers) { content.innerHTML = '<div class="lp-empty">no fantasy-relevant players found</div>'; return; }
+      if (!totalPlayers) { content.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>'; return; }
 
       var html = '<div class="tm-groups">';
       for (var g = 0; g < GROUP_ORDER.length; g++) {
@@ -9748,7 +9748,7 @@
           '<canvas id="pr-canvas" width="800" height="900" role="img" aria-label="Dynasty power rankings bar chart" style="width:100%;max-width:800px;border:3px solid var(--ink);border-radius:6px;box-shadow:4px 4px 0 var(--ink);background:var(--bg-card);"></canvas>' +
         '</div>' +
         '<div class="pr-detail" id="pr-detail" style="display:none;"></div>' +
-        '<div class="pr-loading"><div class="lp-loading">pulling film on every roster...</div></div>' +
+        '<div class="pr-loading"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function loadData() {
@@ -10014,7 +10014,7 @@
     }
 
     function renderTable(players, isPositive) {
-      if (!players || !players.length) return '<div class="lp-empty">no ' + (isPositive ? 'winning' : 'losing') + ' script players</div>';
+      if (!players || !players.length) return '<div class="lp-empty">' + razzleEmpty() + '</div>';
       var h = '<table class="gs-table"><thead><tr>';
       h += '<th>#</th><th>Player</th><th>Team</th><th>GP</th>';
       h += '<th title="Fantasy Points Per Game (PPR)">PPG</th><th title="Average Score Differential — positive means team was winning">Avg Diff</th><th title="Garbage Time % — % of stats scored in garbage time">GT%</th></tr></thead><tbody>';
@@ -10073,7 +10073,7 @@
             window.location.href = '/player/' + encodeURIComponent(row.getAttribute('data-pid'));
           });
         });
-      }).catch(function() { body.innerHTML = '<div class="lp-error">failed to load game script data</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>'; });
     }
 
     el.querySelector('#gs-pos-tabs').addEventListener('click', function(e) {

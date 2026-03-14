@@ -297,7 +297,7 @@
     var url = '/api/weekly-mvp';
     if (season) url += '?season=' + encodeURIComponent(season);
 
-    document.getElementById('mvContent').innerHTML = '<div class="mv-loading">pulling film...</div>';
+    document.getElementById('mvContent').innerHTML = '<div class="mv-loading">' + razzleLoading() + '</div>';
 
     fetch(url).then(function(r) {
       if (!r.ok) throw new Error('API error');
@@ -329,7 +329,7 @@
     var weeks = data.weeks || [];
 
     if (!weeks.length) {
-      document.getElementById('mvContent').innerHTML = '<div class="mv-card"><div class="mv-card-header">Weekly MVP Grid</div><div class="mv-empty">no data found</div></div>';
+      document.getElementById('mvContent').innerHTML = '<div class="mv-card"><div class="mv-card-header">Weekly MVP Grid</div><div class="mv-empty">' + razzleEmpty() + '</div></div>';
       return;
     }
 

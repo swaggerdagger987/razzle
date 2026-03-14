@@ -402,7 +402,7 @@
     var players = data.players || [];
 
     if (!players.length) {
-      body.innerHTML = '<div class="explorer-loading">no data for this selection</div>';
+      body.innerHTML = '<div class="explorer-loading">' + razzleEmpty() + '</div>';
       return;
     }
 
@@ -676,7 +676,7 @@
 
       drawChart(data);
     }).catch(function(err) {
-      body.innerHTML = '<div class="explorer-error"><div class="explorer-error-msg">failed to load explorer data</div><button class="btn-chunky" onclick="window.location.reload()">Retry</button></div>';
+      body.innerHTML = '<div class="explorer-error"><div class="explorer-error-msg">' + razzleError() + '</div><button class="btn-chunky" onclick="window.location.reload()">Retry</button></div>';
     });
   }
 

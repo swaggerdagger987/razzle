@@ -724,7 +724,7 @@
       renderData(currentData);
       populateSeasons(currentData.available_seasons, currentData.season);
     } catch (err) {
-      if (loadingEl) loadingEl.textContent = 'failed to load data...';
+      if (loadingEl) loadingEl.textContent = razzleError();
     }
   }
 

@@ -640,7 +640,7 @@
       }
       render(data);
     }).catch(function(err) {
-      body.innerHTML = '<div class="con-error">failed to load consistency data<br><button class="btn-chunky" onclick="location.reload()">retry</button></div>';
+      body.innerHTML = '<div class="con-error">' + razzleError() + '<br><button class="btn-chunky" onclick="location.reload()">retry</button></div>';
     });
   }
 

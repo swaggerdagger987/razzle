@@ -459,7 +459,7 @@
   });
 
   function fetchDashboard() {
-    grid.innerHTML = '<div class="db-loading">pulling film...</div>';
+    grid.innerHTML = '<div class="db-loading">' + razzleLoading() + '</div>';
     var url = '/api/dynasty-dashboard';
     if (currentSeason > 0) url += '?season=' + currentSeason;
     fetch(url).then(function(resp) {
@@ -483,7 +483,7 @@
       renderGrid(d);
       renderScarcity(d.position_scarcity || {});
     }).catch(function(err) {
-      grid.innerHTML = '<div class="db-error">failed to load dashboard: ' + escapeHtml(err.message) + '</div>';
+      grid.innerHTML = '<div class="db-error">' + razzleError() + '</div>';
     });
   }
 

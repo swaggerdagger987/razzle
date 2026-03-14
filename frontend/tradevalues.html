@@ -606,7 +606,7 @@
     var players = filterBySearch(data.players || []);
 
     if (!players.length) {
-      body.innerHTML = '<div class="tv-empty">' + (searchQuery ? 'no players match "' + escapeHtml(searchQuery) + '"' : 'no trade value data found') + '</div>';
+      body.innerHTML = '<div class="tv-empty">' + razzleEmpty() + '</div>';
       return;
     }
 
@@ -674,7 +674,7 @@
       }
       render(data);
     }).catch(function() {
-      body.innerHTML = '<div class="tv-error">failed to load trade value data<br><button class="btn-chunky" onclick="location.reload()">retry</button></div>';
+      body.innerHTML = '<div class="tv-error">' + razzleError() + '<br><button class="btn-chunky" onclick="location.reload()">retry</button></div>';
     });
   }
 

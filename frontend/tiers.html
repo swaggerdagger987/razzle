@@ -429,7 +429,7 @@
   });
 
   function fetchData() {
-    tiersEl.innerHTML = '<div class="tl-loading">pulling film...</div>';
+    tiersEl.innerHTML = '<div class="tl-loading">' + razzleLoading() + '</div>';
     var params = [];
     if (state.season > 0) params.push('season=' + state.season);
     if (state.position) params.push('position=' + state.position);
@@ -454,7 +454,7 @@
       document.getElementById('tl-meta').textContent = data.season + ' season \u00b7 ' + data.total_players + ' players \u00b7 ' + (data.position === 'ALL' ? 'all positions' : data.position);
       renderTiers(data.tiers || []);
     }).catch(function(err) {
-      tiersEl.innerHTML = '<div class="tl-error">failed to load tier list: ' + escapeHtml(err.message) + '</div>';
+      tiersEl.innerHTML = '<div class="tl-error">' + razzleError() + '</div>';
     });
   }
 
@@ -469,7 +469,7 @@
       html += '</div>';
       html += '<div class="tl-tier-players">';
       if (tier.players.length === 0) {
-        html += '<span class="tl-empty-tier">no players in this tier</span>';
+        html += '<span class="tl-empty-tier">' + razzleEmpty() + '</span>';
       } else {
         tier.players.forEach(function(p) {
           html += '<div class="tl-player-chip">';

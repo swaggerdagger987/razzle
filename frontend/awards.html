@@ -616,7 +616,7 @@
       }
       render(data);
     }).catch(function(err) {
-      body.innerHTML = '<div class="aw-error">failed to load awards data<br><button class="btn-chunky" onclick="location.reload()">Retry</button></div>';
+      body.innerHTML = '<div class="aw-error">' + razzleError() + '<br><button class="btn-chunky" onclick="location.reload()">Retry</button></div>';
     });
   }
 

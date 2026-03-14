@@ -394,7 +394,7 @@
     if (season) url += 'season=' + encodeURIComponent(season) + '&';
     if (pos) url += 'position=' + encodeURIComponent(pos) + '&';
 
-    document.getElementById('fbContent').innerHTML = '<div class="fb-loading">pulling film...</div>';
+    document.getElementById('fbContent').innerHTML = '<div class="fb-loading">' + razzleLoading() + '</div>';
 
     fetch(url).then(function(r) {
       if (!r.ok) throw new Error('API error');
@@ -426,7 +426,7 @@
     var players = data.players || [];
 
     if (!players.length) {
-      document.getElementById('fbContent').innerHTML = '<div class="fb-card"><div class="fb-card-header">Scoring Breakdown</div><div class="fb-empty">no data found for this selection</div></div>';
+      document.getElementById('fbContent').innerHTML = '<div class="fb-card"><div class="fb-card-header">Scoring Breakdown</div><div class="fb-empty">' + razzleEmpty() + '</div></div>';
       return;
     }
 

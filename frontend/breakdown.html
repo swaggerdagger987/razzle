@@ -558,7 +558,7 @@
 
     document.getElementById('bdControls').style.display = 'flex';
     document.getElementById('bdActions').style.display = 'flex';
-    document.getElementById('bdContent').innerHTML = '<div class="bd-loading">pulling film...</div>';
+    document.getElementById('bdContent').innerHTML = '<div class="bd-loading">' + razzleLoading() + '</div>';
 
     var url = '/api/points-breakdown?player_id=' + encodeURIComponent(currentPlayerId);
     if (season) url += '&season=' + encodeURIComponent(season);
@@ -576,7 +576,7 @@
       render(data);
     }).catch(function() {
       document.getElementById('bdContent').innerHTML =
-        '<div class="bd-error">failed to load breakdown data<br><button class="btn btn-outline" onclick="location.reload()">retry</button></div>';
+        '<div class="bd-error">' + razzleError() + '<br><button class="btn btn-outline" onclick="location.reload()">retry</button></div>';
     });
   }
 
@@ -750,7 +750,7 @@
   }
   if (urlState.player) {
     currentPlayerId = urlState.player;
-    searchInput.value = 'pulling film...';
+    searchInput.value = razzleLoading();
     load();
   }
 })();

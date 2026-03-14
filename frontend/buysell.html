@@ -700,7 +700,7 @@
         });
       });
     } catch(e) {
-      bodyEl.innerHTML = '<div class="buysell-empty">failed to load buy/sell data</div>';
+      bodyEl.innerHTML = '<div class="buysell-empty">' + razzleError() + '</div>';
     }
   }
 

@@ -212,7 +212,7 @@
     if (season) url += 'season=' + encodeURIComponent(season) + '&';
     if (pos) url += 'position=' + encodeURIComponent(pos) + '&';
 
-    document.getElementById('paContent').innerHTML = '<div class="pa-loading">pulling film...</div>';
+    document.getElementById('paContent').innerHTML = '<div class="pa-loading">' + razzleLoading() + '</div>';
     document.getElementById('paAvgs').innerHTML = '';
 
     fetch(url).then(function(r) {
@@ -258,7 +258,7 @@
     var players = data.players || [];
 
     if (!players.length) {
-      document.getElementById('paContent').innerHTML = '<div class="pa-card"><div class="pa-card-header">Positional Advantage</div><div class="pa-empty">no data found</div></div>';
+      document.getElementById('paContent').innerHTML = '<div class="pa-card"><div class="pa-card-header">Positional Advantage</div><div class="pa-empty">' + razzleEmpty() + '</div></div>';
       return;
     }
 

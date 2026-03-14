@@ -416,7 +416,7 @@ async function drawWeeklyTrend() {
   ctx.font = "24px 'Caveat', cursive";
   ctx.fillStyle = "#8a7565";
   ctx.textAlign = "center";
-  ctx.fillText("pulling film...", W / 2, H / 2);
+  ctx.fillText(razzleLoading(), W / 2, H / 2);
 
   try {
     const season = state.season === "career" ? 0 : state.season;
@@ -437,7 +437,7 @@ async function drawWeeklyTrend() {
     ctx.font = "24px 'Caveat', cursive";
     ctx.fillStyle = "#e63946";
     ctx.textAlign = "center";
-    ctx.fillText("couldn't load weekly data", W / 2, H / 2);
+    ctx.fillText(razzleError(), W / 2, H / 2);
     console.error(e);
   }
 }
@@ -457,7 +457,7 @@ async function drawSeasonTrend() {
   ctx.font = "24px 'Caveat', cursive";
   ctx.fillStyle = "#8a7565";
   ctx.textAlign = "center";
-  ctx.fillText("pulling film...", W / 2, H / 2);
+  ctx.fillText(razzleLoading(), W / 2, H / 2);
 
   try {
     const data = await apiFetch(`/api/players/${playerId}/seasons`);
@@ -477,7 +477,7 @@ async function drawSeasonTrend() {
     ctx.font = "24px 'Caveat', cursive";
     ctx.fillStyle = "#e63946";
     ctx.textAlign = "center";
-    ctx.fillText("couldn't load season data", W / 2, H / 2);
+    ctx.fillText(razzleError(), W / 2, H / 2);
     console.error(e);
   }
 }

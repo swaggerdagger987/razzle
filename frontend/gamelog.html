@@ -444,7 +444,7 @@
     if (season) url += '&season=' + encodeURIComponent(season);
 
     writeURL(pid, season || '');
-    document.getElementById('glContent').innerHTML = '<div class="gl-loading">pulling film...</div>';
+    document.getElementById('glContent').innerHTML = '<div class="gl-loading">' + razzleLoading() + '</div>';
 
     fetch(url).then(function(r) {
       if (!r.ok) throw new Error('API error');

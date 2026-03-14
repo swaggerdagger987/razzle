@@ -638,7 +638,7 @@
       }
       render(data);
     }).catch(function(err) {
-      body.innerHTML = '<div class="eff-error">failed to load efficiency data<br><button class="btn-chunky" onclick="location.reload()">retry</button></div>';
+      body.innerHTML = '<div class="eff-error">' + razzleError() + '<br><button class="btn-chunky" onclick="location.reload()">retry</button></div>';
     });
   }
 

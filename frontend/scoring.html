@@ -467,13 +467,13 @@
         render();
       })
       .catch(function() {
-        document.getElementById('sc-loading').textContent = 'failed to load — try refreshing';
+        document.getElementById('sc-loading').textContent = razzleError();
       });
   }
 
   function buildTable(players) {
     if (!players || players.length === 0) {
-      return '<div style="text-align:center; padding:20px; font-family:var(--font-hand); color:var(--ink-light);">no players in this category</div>';
+      return '<div style="text-align:center; padding:20px; font-family:var(--font-hand); color:var(--ink-light);">' + razzleEmpty() + '</div>';
     }
 
     var html = '<table class="sc-table">';

@@ -648,7 +648,7 @@
 
     document.getElementById('swControls').style.display = 'flex';
     document.getElementById('swActions').style.display = 'flex';
-    document.getElementById('swContent').innerHTML = '<div class="sw-loading">pulling film...</div>';
+    document.getElementById('swContent').innerHTML = '<div class="sw-loading">' + razzleLoading() + '</div>';
 
     var url = '/api/player-strengths?player_id=' + encodeURIComponent(currentPlayerId);
     if (season) url += '&season=' + encodeURIComponent(season);
@@ -666,7 +666,7 @@
       render(data);
     }).catch(function() {
       document.getElementById('swContent').innerHTML =
-        '<div class="sw-error">failed to load player data<br><button class="btn btn-outline" onclick="location.reload()">retry</button></div>';
+        '<div class="sw-error">' + razzleError() + '<br><button class="btn btn-outline" onclick="location.reload()">retry</button></div>';
     });
   }
 
@@ -805,7 +805,7 @@
   }
   if (urlState.player) {
     currentPlayerId = urlState.player;
-    searchInput.value = 'pulling film...';
+    searchInput.value = razzleLoading();
     load();
   }
 })();

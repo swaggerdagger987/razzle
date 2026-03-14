@@ -650,7 +650,7 @@
       }
       render(data);
     }).catch(function(err) {
-      body.innerHTML = '<div class="sos-error">failed to load schedule data<br><button class="btn-chunky" onclick="location.reload()">retry</button></div>';
+      body.innerHTML = '<div class="sos-error">' + razzleError() + '<br><button class="btn-chunky" onclick="location.reload()">retry</button></div>';
     });
   }
 

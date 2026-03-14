@@ -306,7 +306,7 @@
     var url = '/api/handcuffs';
     if (season) url += '?season=' + encodeURIComponent(season);
 
-    document.getElementById('hcContent').innerHTML = '<div class="hc-loading">pulling film...</div>';
+    document.getElementById('hcContent').innerHTML = '<div class="hc-loading">' + razzleLoading() + '</div>';
 
     fetch(url).then(function(r) {
       if (!r.ok) throw new Error('API error');

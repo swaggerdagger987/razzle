@@ -565,7 +565,7 @@
 
     // Show loading
     emptyEl.style.display = 'none';
-    resultEl.innerHTML = '<div class="cc-loading">pulling film...</div>';
+    resultEl.innerHTML = '<div class="cc-loading">' + razzleLoading() + '</div>';
 
     fetch('/api/career-stats?player_id=' + encodeURIComponent(pid))
       .then(function(r) { if (!r.ok) throw new Error('fail'); return r.json(); })

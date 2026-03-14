@@ -836,7 +836,7 @@
       </div>
     </div>
     <div id="leaguesList">
-      <div class="loading-intel">pulling film on your leagues...</div>
+      <div class="loading-intel">pulling film...</div>
     </div>
   </div>
 </div>
@@ -950,11 +950,11 @@ async function connectSleeper() {
     showLeagues(username);
   } catch (e) {
     if (e.name === "AbortError") {
-      errorEl.textContent = "Sleeper took too long to respond — try again";
+      errorEl.textContent = "field transmission timed out. try again, agent.";
     } else if (e.message === "User not found") {
-      errorEl.textContent = "couldn't find that username on Sleeper";
+      errorEl.textContent = "agent not found in the field. check the callsign and try again.";
     } else {
-      errorEl.textContent = "couldn't reach Sleeper — check your connection";
+      errorEl.textContent = "the wire went dark. check your connection and retry.";
     }
     btn.disabled = false;
     btn.textContent = "Connect";
@@ -981,8 +981,8 @@ async function showLeagues(username) {
       await loadLeagues(user.user_id);
     } catch (e) {
       var msg = e.name === "AbortError"
-        ? "Sleeper took too long — try again"
-        : "couldn't connect to Sleeper";
+        ? "field transmission timed out. try again, agent."
+        : "the wire went dark. couldn't establish contact.";
       document.getElementById("leaguesList").innerHTML =
         '<div class="loading-intel" style="color:var(--red);">' + msg + '</div>';
     }
@@ -993,7 +993,7 @@ async function showLeagues(username) {
 
 async function loadLeagues(userId) {
   const container = document.getElementById("leaguesList");
-  container.innerHTML = '<div class="loading-intel">pulling film on your leagues...</div>';
+  container.innerHTML = '<div class="loading-intel">' + razzleLoading() + '</div>';
 
   try {
     // Get current NFL season
@@ -1007,7 +1007,7 @@ async function loadLeagues(userId) {
     const leagues = await resp.json();
 
     if (!leagues || !leagues.length) {
-      container.innerHTML = '<div class="loading-intel">no leagues found for this season</div>';
+      container.innerHTML = '<div class="loading-intel">no active operations this season. try a different year.</div>';
       return;
     }
 
@@ -1088,8 +1088,8 @@ async function loadLeagues(userId) {
     } catch (e) { /* ignore storage errors */ }
   } catch (e) {
     var errMsg = e.name === "AbortError"
-      ? "Sleeper took too long — try refreshing"
-      : "fumbled the Sleeper connection";
+      ? "field transmission timed out. try refreshing."
+      : "lost contact with Sleeper HQ. the wire went dark.";
     container.innerHTML = '<div class="loading-intel" style="color:var(--red);">' + errMsg + '</div>';
     console.error(e);
   }
@@ -1130,7 +1130,7 @@ async function toggleLeague(card, leagueId, userId) {
     const users = await usersResp.json();
 
     if (!Array.isArray(rosters) || rosters.length === 0) {
-      rosterDiv.innerHTML = '<div class="loading-intel" style="font-size:16px;">no rosters found for this league</div>';
+      rosterDiv.innerHTML = '<div class="loading-intel" style="font-size:16px;">intel report came back empty. roster data unavailable.</div>';
       return;
     }
 
@@ -1146,7 +1146,7 @@ async function toggleLeague(card, leagueId, userId) {
     const myRoster = rosters.find(r => r.owner_id === userId);
 
     if (!myRoster) {
-      rosterDiv.innerHTML = '<div class="loading-intel" style="font-size:16px;">couldn\'t find your roster</div>';
+      rosterDiv.innerHTML = '<div class="loading-intel" style="font-size:16px;">your dossier is missing from this operation.</div>';
       return;
     }
 
@@ -1266,8 +1266,8 @@ async function toggleLeague(card, leagueId, userId) {
     } catch (e) { /* ignore storage errors */ }
   } catch (e) {
     var rosterErr = e.name === "AbortError"
-      ? "Sleeper took too long — tap to retry"
-      : "fumbled the roster load";
+      ? "field transmission interrupted. tap to retry."
+      : "lost the signal. tap to retry.";
     rosterDiv.innerHTML = '<div class="loading-intel" style="color:var(--red); font-size:16px;">' + rosterErr + '</div>';
     rosterDiv.dataset.loaded = ""; // allow retry on re-click
     console.error(e);
@@ -1347,7 +1347,7 @@ async function loadActivityFeed(leagueId, userMap, allPlayers, rosters) {
     var recent = allTxns.slice(0, 25);
 
     if (recent.length === 0) {
-      feedDiv.innerHTML = '<div class="activity-loading">no transactions found yet</div>';
+      feedDiv.innerHTML = '<div class="activity-loading">no chatter on the wire yet. check back during the season.</div>';
       return;
     }
 
@@ -1499,7 +1499,7 @@ async function loadActivityFeed(leagueId, userMap, allPlayers, rosters) {
 
   } catch (e) {
     console.error("Activity feed error:", e);
-    feedDiv.innerHTML = '<div class="activity-loading" style="color:var(--red);">fumbled the activity feed</div>';
+    feedDiv.innerHTML = '<div class="activity-loading" style="color:var(--red);">field transmission interrupted. activity feed went dark.</div>';
   }
 }
 
@@ -1926,7 +1926,7 @@ async function loadManagerProfiles(leagueId, userId, allPlayers, userMap, roster
     cards.sort(function(a, b) { return b.prof.total - a.prof.total; });
 
     if (cards.length === 0) {
-      profileDiv.innerHTML = '<div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); text-align:center; padding:12px;">no transaction history found</div>';
+      profileDiv.innerHTML = '<div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); text-align:center; padding:12px;">no intel on file. these managers have left no trace.</div>';
       return;
     }
 
@@ -2055,7 +2055,7 @@ async function loadManagerProfiles(leagueId, userId, allPlayers, userMap, roster
     } catch (e) { /* ignore */ }
 
   } catch (e) {
-    profileDiv.innerHTML = '<div style="font-family:var(--font-hand); font-size:16px; color:var(--red); text-align:center; padding:12px;">couldn\'t scout the managers</div>';
+    profileDiv.innerHTML = '<div style="font-family:var(--font-hand); font-size:16px; color:var(--red); text-align:center; padding:12px;">recon mission failed. the wire went dark.</div>';
     console.error(e);
   }
 }
@@ -2489,7 +2489,7 @@ async function loadLeagueTradeFinder(leagueId, userId, myRoster, rosters, allPla
     return;
   }
 
-  container.innerHTML = '<div class="loading-intel" style="font-size:14px;">pulling film on every roster...</div>';
+  container.innerHTML = '<div class="loading-intel" style="font-size:14px;">' + razzleLoading() + '</div>';
 
   try {
     // Build full player list from all rosters
@@ -2514,7 +2514,7 @@ async function loadLeagueTradeFinder(leagueId, userId, myRoster, rosters, allPla
     }
 
     if (allRosterPlayers.length === 0) {
-      container.innerHTML = '<div class="loading-intel" style="color:var(--ink-light);">no players found on rosters</div>';
+      container.innerHTML = '<div class="loading-intel" style="color:var(--ink-light);">the roster is classified — or empty.</div>';
       return;
     }
 
@@ -2546,7 +2546,7 @@ async function loadLeagueTradeFinder(leagueId, userId, myRoster, rosters, allPla
 
     var data = await resp.json();
     if (!data.players || data.players.length === 0) {
-      container.innerHTML = '<div class="loading-intel" style="color:var(--ink-light);">couldn\'t match roster players to trade values</div>';
+      container.innerHTML = '<div class="loading-intel" style="color:var(--ink-light);">assets couldn\'t be cross-referenced. intel incomplete.</div>';
       return;
     }
 
@@ -2671,7 +2671,7 @@ async function loadLeagueTradeFinder(leagueId, userId, myRoster, rosters, allPla
 
     // Render results
     if (tradePartners.length === 0) {
-      container.innerHTML = '<div class="loading-intel" style="color:var(--ink-light); font-size:13px;">no strong trade matches found in this league</div>';
+      container.innerHTML = '<div class="loading-intel" style="color:var(--ink-light); font-size:13px;">the Diplomat found no viable angles in this league.</div>';
       return;
     }
 
@@ -2733,8 +2733,8 @@ async function loadLeagueTradeFinder(leagueId, userId, myRoster, rosters, allPla
   } catch (e) {
     console.error("Trade finder error:", e);
     var tfErr = e.name === "AbortError"
-      ? "trade analysis took too long — try again"
-      : "fumbled the trade analysis";
+      ? "the dead drop timed out. try again."
+      : "trade recon failed. the wire went dark.";
     container.innerHTML = '<div class="loading-intel" style="color:var(--red); font-size:13px;">' + tfErr + '</div>';
     // Re-enable button for retry
     var tfBtn = document.getElementById("tradeFinderBtn-" + leagueId);

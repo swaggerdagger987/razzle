@@ -639,7 +639,7 @@
       }
       render(data);
     }).catch(function(err) {
-      body.innerHTML = '<div class="rz-error">failed to load red zone data<br><button class="btn-chunky" onclick="location.reload()">retry</button></div>';
+      body.innerHTML = '<div class="rz-error">' + razzleError() + '<br><button class="btn-chunky" onclick="location.reload()">retry</button></div>';
     });
   }
 

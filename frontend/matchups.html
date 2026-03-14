@@ -411,7 +411,7 @@
   </div>
 
   <div id="matchups-content">
-    <div class="matchups-loading">pulling film on every defense...</div>
+    <div class="matchups-loading">pulling film...</div>
   </div>
 
   <div id="matchups-detail" class="matchups-detail"></div>
@@ -511,7 +511,7 @@
     var url = '/api/matchup-heatmap?season=' + season;
     if (posParam) url += '&position=' + posParam;
 
-    document.getElementById('matchups-content').innerHTML = '<div class="matchups-loading">pulling film on every defense...</div>';
+    document.getElementById('matchups-content').innerHTML = '<div class="matchups-loading">' + razzleLoading() + '</div>';
     document.getElementById('matchups-detail').classList.remove('visible');
 
     fetch(url).then(function(resp) {

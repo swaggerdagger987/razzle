@@ -488,7 +488,7 @@
   function renderDistribution(data) {
     var container = document.getElementById('targets-body');
     if (!data.teams || data.teams.length === 0) {
-      container.innerHTML = '<div class="targets-loading">no data for this selection...</div>';
+      container.innerHTML = '<div class="targets-loading">' + razzleEmpty() + '</div>';
       return;
     }
 
