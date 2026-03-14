@@ -2669,7 +2669,7 @@ Expanded data range to 2015-present for NFL and college.
 | 4 | Smoke test | DONE | Python + JS syntax clean, 34/34 nav links, XSS escaped, 15/15 design checks |
 
 ### Decisions Log
-- **Tools Hub as Phase 96**: With 33 HTML pages, new users are overwhelmed by the nav bar. A Bloomberg-style "Tools Hub" directory page organizes all analytical dashboards into categorized cards, making the platform discoverable. Extremely screenshottable: "look at everything this free tool offers." Serves as a natural landing page for users exploring beyond the Lab. Also helps SEO — one page that links to every tool with descriptions.
+- **Tools Hub as Phase 96**: With 33 HTML pages, new users are overwhelmed by the nav bar. A research-lab-style "Tools Hub" directory page organizes all analytical dashboards into categorized cards, making the platform discoverable. Extremely screenshottable: "look at everything this free tool offers." Serves as a natural landing page for users exploring beyond the Lab. Also helps SEO — one page that links to every tool with descriptions.
 - **7 categories**: Grouped tools by user intent (Rankings & Values = "what are players worth?", Player Discovery = "who should I target?", Performance Analysis = "how good is this player?", etc.) rather than by technical implementation. This matches how fantasy managers think.
 - **Static endpoint**: Tool catalog is configuration data, not database-driven. Simple static JSON endpoint keeps it lightweight with zero DB queries.
 
@@ -2956,7 +2956,7 @@ Expanded data range to 2015-present for NFL and college.
 | 4 | Smoke test | DONE | Python + JS syntax clean, 22/22 nav links verified, design compliance confirmed |
 
 ### Decisions Log
-- **Stat Explorer as Phase 80**: The ability to plot any two stats against each other is quintessentially Bloomberg-terminal. It lets users discover relationships that predefined dashboards don't surface — "who has high aDOT but low PPG?" or "targets/game vs RACR" to find efficiency outliers. Each scatter plot is a unique screenshot opportunity for r/DynastyFF.
+- **Stat Explorer as Phase 80**: The ability to plot any two stats against each other is quintessentially research-lab. It lets users discover relationships that predefined dashboards don't surface — "who has high aDOT but low PPG?" or "targets/game vs RACR" to find efficiency outliers. Each scatter plot is a unique screenshot opportunity for r/DynastyFF.
 - **Canvas-drawn scatter**: Canvas gives us full control over the visualization — dot sizes, hover detection, trendlines, gridlines. No charting library needed. Keeps the bundle size at zero (no additional dependencies).
 - **17 metrics**: Covers all major fantasy-relevant stats from both the core player_week_stats table and the player_week_metrics rate table. Adding new metrics later just means adding to the EXPLORER_METRICS list.
 - **Linear regression trendline**: Shows the overall relationship direction at a glance. Dashed terracotta to match the brand accent without overwhelming the data points.

@@ -168,7 +168,7 @@ Everything before this phase was building. This phase is distribution.
 |---|------|--------|-----------|
 | 1 | Seed analysis posts (3-4) | Use Lab screenshots to post genuine analysis on r/DynastyFF and r/fantasyfootball. Pure value — watermark does the marketing. Topics: rookie rankings, dynasty buy-lows, offseason trade values, breakout candidates. | 3-4 posts published, watermark visible, engagement monitored |
 | 2 | Community engagement | Respond to comments helpfully. Be the most useful person in the thread. Drop Lab links organically when relevant. | Active presence in target subreddits |
-| 3 | Tool reveal post | "I built a free Bloomberg terminal for fantasy football." Screenshots of screener, formulas, charts, agent briefings. Link to razzle.lol. | Reveal post drafted and ready |
+| 3 | Tool reveal post | "I built a free research lab for fantasy football." Screenshots of screener, formulas, charts, agent briefings. Link to razzle.lol. | Reveal post drafted and ready |
 | 4 | r/SleeperApp post | "Connect your Sleeper leagues to see AI-powered manager profiles." Highlight Bureau features. | SleeperApp-specific post drafted |
 | 5 | Bug triage process | Monitor for user-reported issues. Have a fast fix → deploy cycle ready. Prioritize anything that blocks the funnel. | Can ship a hotfix within 1 hour of report |
 | 6 | Analytics baseline | Track: landing page views, Lab usage, Sleeper connections, trial starts, paid conversions. Even simple server logs count. | Know if launch is working |

@@ -8,7 +8,7 @@
 
 ## Summary
 
-Razzle's current voice is **strong and differentiated**. The "Bloomberg terminal disguised as a Sunday comic strip" positioning is clear, the mascot personality lands, and the copy consistently respects the reader's intelligence — which is exactly what Reddit power users respond to. The biggest strengths are the Research Sprawl infographic (perfectly names a pain point every fantasy manager recognizes) and the dry annotation layer (Caveat font asides that feel like a friend's margin notes, not marketing copy).
+Razzle's current voice is **strong and differentiated**. The "research lab terminal disguised as a Sunday comic strip" positioning is clear, the mascot personality lands, and the copy consistently respects the reader's intelligence — which is exactly what Reddit power users respond to. The biggest strengths are the Research Sprawl infographic (perfectly names a pain point every fantasy manager recognizes) and the dry annotation layer (Caveat font asides that feel like a friend's margin notes, not marketing copy).
 
 The most important improvements are: tightening a few lines that drift into generic SaaS marketing language, adding more Reddit-native social proof, and sharpening the pricing copy so the value proposition of BYOK vs. Elite is immediately legible to a skeptical power user who assumes AI products are overpriced.
 
@@ -34,7 +34,7 @@ The most important improvements are: tightening a few lines that drift into gene
 
 | Issue | Location | Severity | Suggestion |
 |-------|----------|----------|------------|
-| "Bloomberg terminal" metaphor | Hero, meta descriptions | Low | Strong metaphor. Works because r/DynastyFF and r/fantasyfootball users already joke about wanting a "Bloomberg for fantasy." No change needed — just ensure it's used sparingly (hero + one reinforcement, not every page). |
+| "research lab" metaphor | Hero, meta descriptions | Low | Strong metaphor. Works because r/DynastyFF and r/fantasyfootball users already joke about wanting a "research lab for fantasy." No change needed — just ensure it's used sparingly (hero + one reinforcement, not every page). |
 | "AI agents" vs. "specialist agents" | Various | Low | Be consistent. "AI agents" triggers skepticism on Reddit ("just another wrapper"). "Specialist agents" or just "agents" sounds more like a capability, less like a buzzword. |
 | "League-contextualized analysis" | Pricing bullet | Medium | This is a feature spec phrase, not user-facing copy. A Reddit user would say "it knows my league." Rewrite as: "Agents that know your league, your rivals, your scoring" |
 | "BYOK" | Pricing section | Medium | Acronym is clear to developers but opaque to many Reddit fantasy users. First mention should spell out: "Bring your own API key — use your own OpenRouter or Anthropic key" |

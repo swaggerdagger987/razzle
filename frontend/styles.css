@@ -197,7 +197,7 @@ body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0,0,0,0.4);
+  background: rgba(45,31,20,0.4);
   z-index: 9998;
 }
 
@@ -1420,4 +1420,14 @@ tr:hover .notes-cell .note-pencil {
   25% { content: '.'; }
   50% { content: '..'; }
   75% { content: '...'; }
+}
+
+/* ===== REDUCED MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

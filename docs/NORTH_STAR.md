@@ -6,7 +6,7 @@ This is the endgame. Every decision made during development should move toward t
 
 ## Vision
 
-Razzle is the research terminal that actually knows your league. A fantasy football Bloomberg terminal disguised as a Sunday comic strip — playful surface, deadly serious analysis underneath.
+Razzle is the research terminal that actually knows your league. A fantasy football research lab disguised as a Sunday comic strip — playful surface, deadly serious analysis underneath.
 
 **Core Value Proposition — We solve three things:**
 
@@ -23,7 +23,7 @@ Razzle is the research terminal that actually knows your league. A fantasy footb
 ## The Three Pillars
 
 ### 1. The Lab (Free)
-Our Bloomberg terminal — over a hundred well-defined stats across all formats. Full nflverse + college stat depth, custom formula builder, formula store, saved/shareable views with watermarked export, and generic agent queries. Monetized with Google AdSense.
+Our research lab — over a hundred well-defined stats across all formats. Full nflverse + college stat depth, custom formula builder, formula store, saved/shareable views with watermarked export, and generic agent queries. Monetized with Google AdSense.
 
 **This is the growth engine.** Every screenshot is a billboard. Every shareable URL is a funnel entry. The Lab must be genuinely best-in-class as a free tool. Reddit power users must feel like they discovered a secret weapon. This is where stat discoverability lives — one terminal instead of ten browser tabs.
 

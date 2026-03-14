@@ -2329,31 +2329,44 @@ async function callServerLLM(systemPrompt, userMessage) {
   var token = localStorage.getItem('razzle_token');
   if (!token) throw new Error('Sign in required for AI-included mode');
 
-  var resp = await fetch('/api/llm/chat', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + token,
-    },
-    body: JSON.stringify({
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: userMessage },
-      ],
-      temperature: LLM_TEMPERATURE,
-    }),
-  });
+  var controller = new AbortController();
+  var timeout = setTimeout(function() { controller.abort(); }, 30000);
 
-  if (!resp.ok) {
-    var detail = await resp.json().catch(function() { return {}; });
-    throw new Error(detail.error || 'Server LLM error ' + resp.status);
+  try {
+    var resp = await fetch('/api/llm/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token,
+      },
+      body: JSON.stringify({
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userMessage },
+        ],
+        temperature: LLM_TEMPERATURE,
+      }),
+      signal: controller.signal,
+    });
+    clearTimeout(timeout);
+
+    if (!resp.ok) {
+      var detail = await resp.json().catch(function() { return {}; });
+      throw new Error(detail.error || 'Server LLM error ' + resp.status);
+    }
+
+    var data = await resp.json();
+    var content = data && data.choices && data.choices[0] && data.choices[0].message
+      ? data.choices[0].message.content : null;
+    if (!content) throw new Error('No content in model response');
+    return content.trim();
+  } catch (e) {
+    clearTimeout(timeout);
+    if (e.name === 'AbortError') {
+      throw new Error('the agent took too long to respond. try a shorter question or try again in a moment.');
+    }
+    throw e;
   }
-
-  var data = await resp.json();
-  var content = data && data.choices && data.choices[0] && data.choices[0].message
-    ? data.choices[0].message.content : null;
-  if (!content) throw new Error('No content in model response');
-  return content.trim();
 }
 
 async function callFreeLLM(userMessage) {

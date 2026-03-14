@@ -1100,18 +1100,30 @@ let _sleeperPlayersCache = null;
 
 async function getSleeperPlayers() {
   if (_sleeperPlayersCache) return _sleeperPlayersCache;
-  const resp = await fetch(`${SLEEPER_API}/players/nfl`);
-  _sleeperPlayersCache = await resp.json();
-  return _sleeperPlayersCache;
+  var ctrl = new AbortController();
+  var timer = setTimeout(function() { ctrl.abort(); }, 15000);
+  try {
+    const resp = await fetch(`${SLEEPER_API}/players/nfl`, { signal: ctrl.signal });
+    clearTimeout(timer);
+    if (!resp.ok) throw new Error("Sleeper players API returned " + resp.status);
+    _sleeperPlayersCache = await resp.json();
+    return _sleeperPlayersCache;
+  } catch (e) {
+    clearTimeout(timer);
+    if (e.name === "AbortError") {
+      throw new Error("Sleeper player data took too long to load. check your connection and try again.");
+    }
+    throw e;
+  }
 }
 
 async function toggleLeague(card, leagueId, userId) {
   card.classList.toggle("expanded");
   const rosterDiv = document.getElementById(`roster-${escapeAttr(leagueId)}`);
 
-  // Only load once
-  if (rosterDiv.dataset.loaded) return;
-  rosterDiv.dataset.loaded = "true";
+  // Only load once (set after successful fetch to avoid race condition)
+  if (rosterDiv.dataset.loaded === "true") return;
+  rosterDiv.dataset.loaded = "loading";
 
   try {
     // Fetch rosters, users, and players (cached) with 15s timeout
@@ -1264,12 +1276,13 @@ async function toggleLeague(card, leagueId, userId) {
       existing.updatedAt = Date.now();
       localStorage.setItem("razzle_league_context", JSON.stringify(existing));
     } catch (e) { /* ignore storage errors */ }
+    rosterDiv.dataset.loaded = "true"; // Mark loaded only after success
   } catch (e) {
+    rosterDiv.dataset.loaded = ""; // Allow retry on failure
     var rosterErr = e.name === "AbortError"
       ? "field transmission interrupted. tap to retry."
       : "lost the signal. tap to retry.";
     rosterDiv.innerHTML = '<div class="loading-intel" style="color:var(--red); font-size:16px;">' + rosterErr + '</div>';
-    rosterDiv.dataset.loaded = ""; // allow retry on re-click
     console.error(e);
   }
 }

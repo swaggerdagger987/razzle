@@ -5,7 +5,7 @@
 <h1 align="center">Razzle</h1>
 
 <p align="center">
-  A fantasy football Bloomberg terminal disguised as a Sunday comic strip.
+  A fantasy football research lab disguised as a Sunday comic strip.
   <br />
   <a href="https://razzle.lol"><strong>razzle.lol</strong></a>
 </p>
@@ -14,7 +14,7 @@
 
 ## What is this
 
-Razzle is a free fantasy football analytics platform — 100+ stat columns, 60+ analytical panels, custom formulas, prospect tools, and dynasty rankings. It looks like a comic strip. It hits like a Bloomberg terminal.
+Razzle is a free fantasy football analytics platform — 100+ stat columns, 60+ analytical panels, custom formulas, prospect tools, and dynasty rankings. It looks like a comic strip. It hits like a research lab.
 
 Built for the Reddit power user who screenshots their research at 2am.
 

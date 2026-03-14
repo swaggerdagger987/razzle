@@ -67,7 +67,7 @@ Build credibility as a stat-posting account on Reddit and Twitter before anyone 
 
 **Account**: @razzle_lol (or @razzledotlol)
 
-**Bio**: "fantasy football bloomberg terminal. free. razzle.lol" + Bengal tiger emoji
+**Bio**: "fantasy football research lab. free. razzle.lol" + Bengal tiger emoji
 
 **Voice on Twitter**: Same as the annotation layer — dry, observational, slightly smug. Think NBA Twitter but for fantasy football data. Short, punchy observations with a chart attached. Never try to go viral. Just be consistently sharp.
 

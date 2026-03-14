@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Razzle — Fantasy Football Bloomberg Terminal</title>
-<meta property="og:title" content="Razzle — Fantasy Football Bloomberg Terminal | NFL + College Data">
+<title>Razzle — Fantasy Football Research Lab</title>
+<meta property="og:title" content="Razzle — Free Fantasy Football Research Lab | NFL + College Data">
 <meta property="og:description" content="Free fantasy football data terminal. NFL stats + college production + prospect scoring. Dynasty Value Score, Big Board, Class Analytics, custom formulas. The tool Reddit can't stop screenshotting.">
 <meta property="og:site_name" content="razzle.lol">
 <meta property="og:type" content="website">
@@ -13,10 +13,10 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Razzle — Fantasy Football Bloomberg Terminal | NFL + College Data">
+<meta name="twitter:title" content="Razzle — Free Fantasy Football Research Lab | NFL + College Data">
 <meta name="twitter:description" content="Free fantasy football data terminal. NFL stats + college production + prospect scoring. Dynasty Value Score, Big Board, Class Analytics, custom formulas.">
 <meta name="twitter:image" content="https://razzle.lol/assets/og-image.png">
-<meta name="description" content="Razzle is a free fantasy football Bloomberg terminal. NFL + college data screener, custom formulas, radar charts, dynasty value scores. The tool Reddit power users can't stop screenshotting.">
+<meta name="description" content="Razzle is a free fantasy football research lab. NFL + college data screener, custom formulas, radar charts, dynasty value scores. The tool Reddit power users can't stop screenshotting.">
 <link rel="canonical" href="https://razzle.lol/">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,7 +28,7 @@
   "@type": "WebApplication",
   "name": "Razzle",
   "url": "https://razzle.lol",
-  "description": "Free fantasy football Bloomberg terminal. NFL + college data screener, custom formulas, radar charts, dynasty value scores, AI agents with league context.",
+  "description": "Free fantasy football research lab. NFL + college data screener, custom formulas, radar charts, dynasty value scores, AI agents with league context.",
   "applicationCategory": "SportsApplication",
   "operatingSystem": "Web",
   "offers": [
@@ -71,7 +71,7 @@
 
   .hero-mascot {
     font-size: 80px;
-    filter: drop-shadow(3px 3px 0 rgba(0,0,0,0.15));
+    filter: drop-shadow(3px 3px 0 rgba(45,31,20,0.15));
     transform: rotate(-3deg);
     display: inline-block;
     margin-bottom: 16px;
@@ -79,7 +79,7 @@
 
   .hero h1 {
     font-family: var(--font-display);
-    font-size: 42px;
+    font-size: 36px;
     letter-spacing: -1px;
     margin-bottom: 8px;
   }
@@ -256,7 +256,7 @@
     font-family: var(--font-hand);
     font-size: 13px;
     color: var(--ink-medium);
-    background: white;
+    background: var(--bg-card);
     border: 2px solid var(--ink-faint);
     border-radius: 8px;
     padding: 4px 10px;
@@ -418,7 +418,7 @@
     align-items: center;
     gap: 8px;
     padding: 5px 0;
-    border-bottom: 1px solid var(--ink-faint);
+    border-bottom: 2px dashed var(--ink-faint);
   }
   .featured-row:last-child { border-bottom: none; }
 
@@ -993,19 +993,19 @@
 <!-- HERO -->
 <div class="hero">
   <div class="hero-mascot">🐯</div>
-  <h1>Fantasy football's <span>Bloomberg terminal</span></h1>
-  <div class="hero-sub">The terminal is free. The agents know your league. razzle.lol</div>
+  <h1>The Lab is <span>open.</span></h1>
+  <div class="hero-sub">70+ stat panels. Custom formulas. Shareable views. Free.</div>
   <div class="hero-cta">
-    <a href="/lab.html" class="btn-hero btn-hero-primary">Open The Lab</a>
-    <a href="/agents.html" class="btn-hero btn-hero-secondary">Situation Room</a>
+    <a href="/lab.html" class="btn-hero btn-hero-primary">Open the Lab</a>
+    <a href="/agents.html" class="btn-hero btn-hero-secondary">Meet the agents</a>
   </div>
 </div>
 
 <!-- RESEARCH SPRAWL INFOGRAPHIC -->
 <div class="sprawl-section">
   <div class="sprawl-card">
-    <h2 class="sprawl-headline">80% of your fantasy edge <span>is lost before kickoff</span></h2>
-    <p class="sprawl-sub">Research Sprawl is killing your edge — and wasting your Sundays.</p>
+    <h2 class="sprawl-headline">Your edge is scattered across <span>12 tabs right now</span></h2>
+    <p class="sprawl-sub">Research Sprawl means more time searching and less time deciding.</p>
 
     <div class="sprawl-columns">
       <!-- Tab Sprawl -->
@@ -1828,7 +1828,7 @@ fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"applicat
     }
 
     // Scanline effect
-    ctx.fillStyle = 'rgba(0,0,0,0.02)';
+    ctx.fillStyle = 'rgba(45,31,20,0.02)';
     for (var sl = (frame % 4); sl < H; sl += 4) {
       ctx.fillRect(0, sl, W, 1);
     }

@@ -112,7 +112,7 @@
       {"name": "Roster Builder", "desc": "Build a hypothetical roster and get it graded on value, VORP, age, depth", "url": "/rosterbuilder.html", "positions": ["QB", "RB", "WR", "TE"]},
       {"name": "Team Rosters", "desc": "Full roster breakdown by position group with age badges", "url": "/team/KC", "positions": ["QB", "RB", "WR", "TE"]},
       {"name": "League Intel", "desc": "Connect Sleeper — see leagues, rosters, and manager profiles", "url": "/league-intel.html", "positions": []},
-      {"name": "The Lab", "desc": "Full Bloomberg screener — 100+ columns, filters, formulas", "url": "/lab.html", "positions": ["QB", "RB", "WR", "TE"]}
+      {"name": "The Lab", "desc": "Full research lab screener — 100+ columns, filters, formulas", "url": "/lab.html", "positions": ["QB", "RB", "WR", "TE"]}
     ]
   }
 ]

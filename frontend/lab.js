@@ -5567,7 +5567,7 @@ function exportCSV() {
   const lines = [];
 
   // Branding header comment
-  lines.push("# razzle.lol — Fantasy Football Bloomberg Terminal");
+  lines.push("# razzle.lol — Fantasy Football Research Lab");
   lines.push("# " + state.universe.toUpperCase() + " | " + state.position + " | " +
     (state.universe === "college" ? state.collegeSeason :
      isProspectView() ? state.draftYear : state.season));

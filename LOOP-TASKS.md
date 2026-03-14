@@ -1,7 +1,7 @@
 # Razzle Ship Loop — Task Tracker
 
 ## Current State
-- Phase: Visual Polish + Bloomberg Kill + Brand Voice + Bug Fixes (combined)
+- Phase: Visual Polish + Brand Refresh + Brand Voice + Bug Fixes (combined)
 - Current Task: 1
 - Current Stage: BUILD
 - Tasks Completed: 0/16

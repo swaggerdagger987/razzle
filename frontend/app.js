@@ -501,13 +501,19 @@ function _detectCheckoutReturn() {
       } else if (attempts < maxAttempts) {
         setTimeout(pollForPlanChange, pollInterval);
       } else {
-        // Give up — webhook may be delayed
+        // Give up after 10 polls — show clear error with next steps
         if (typeof _showToast === "function") {
-          _showToast("subscription processing. features will unlock shortly.");
+          _showToast("still processing. if your plan doesn't activate within a few minutes, try refreshing the page or contact us.", 10000);
         }
       }
     }).catch(function() {
-      if (attempts < maxAttempts) setTimeout(pollForPlanChange, pollInterval);
+      if (attempts < maxAttempts) {
+        setTimeout(pollForPlanChange, pollInterval);
+      } else {
+        if (typeof _showToast === "function") {
+          _showToast("couldn't confirm your subscription. try refreshing the page. if the issue persists, your payment was received and we'll sort it out — reach out via the About page.", 10000);
+        }
+      }
     });
   }
 
@@ -738,7 +744,7 @@ function updateAuthUI(user) {
     } else if (isTrial) {
       var daysLeft = user.trial_days_remaining || 0;
       badge = '<span class="nav-plan-badge nav-plan-trial">Trial ' + daysLeft + 'd</span>';
-    } else if (user.plan === "pro") {
+    } else if (user.plan === "pro" || user.plan === "pro_lifetime") {
       badge = '<span class="nav-plan-badge nav-plan-pro">Pro' + (user.plan === "pro_lifetime" ? ' ∞' : '') + '</span>';
     } else {
       badge = '<span class="nav-plan-badge nav-plan-free">Free</span>';
@@ -898,7 +904,7 @@ function showSleeperPrompt() {
       '</p>' +
     '</div>' +
     '<form onsubmit="handleSleeperLink(event)" style="display:flex; flex-direction:column; gap:10px;">' +
-      '<input type="text" id="sleeperLinkInput" placeholder="Sleeper username" style="font-family:var(--font-mono); font-size:14px; padding:10px 14px; border:2px solid var(--ink); border-radius:8px; background:white;">' +
+      '<input type="text" id="sleeperLinkInput" placeholder="Sleeper username" style="font-family:var(--font-mono); font-size:14px; padding:10px 14px; border:2px solid var(--ink); border-radius:8px; background:var(--bg-card);">' +
       '<div id="sleeperLinkError" style="font-family:var(--font-mono); font-size:12px; color:var(--red); min-height:16px;"></div>' +
       '<button type="submit" class="btn-chunky btn-primary auth-submit">Connect</button>' +
       '<a href="#" onclick="showWelcomeState(); return false;" style="text-align:center; font-family:var(--font-mono); font-size:12px; color:var(--ink-light);">skip for now</a>' +
@@ -1376,4 +1382,15 @@ window.addEventListener("razzle-plan-changed", function(e) {
   } else {
     footer.textContent = taglines[Math.floor(Math.random() * taglines.length)];
   }
+})();
+
+/* ===== Re-check auth on tab re-focus (after 5 min away) ===== */
+(function() {
+  var _lastCheck = Date.now();
+  document.addEventListener("visibilitychange", function() {
+    if (!document.hidden && Date.now() - _lastCheck > 300000) {
+      _lastCheck = Date.now();
+      if (typeof checkAuth === "function") checkAuth();
+    }
+  });
 })();
