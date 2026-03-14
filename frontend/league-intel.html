@@ -1953,8 +1953,12 @@ async function loadManagerProfiles(leagueId, userId, allPlayers, userMap, roster
 
     var upgradeBanner = "";
     if (!paid && seasonCount <= 1) {
+      var tierInfo = typeof getUserTierInfo === 'function' ? getUserTierInfo() : {};
+      var upgradeMsg = tierInfo.isExpiredTrial
+        ? 'Your trial ended — subscribe to Pro for multi-season scouting'
+        : 'Subscribe to Pro for multi-season scouting — deeper patterns, stronger intel';
       upgradeBanner = '<div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-medium); text-align:center; margin-bottom:10px; padding:8px; border:2px dashed var(--orange); border-radius:8px;">' +
-        'Unlock multi-season scouting with Pro — deeper patterns, stronger intel' + '</div>';
+        upgradeMsg + '</div>';
     }
 
     var html = seasonBadge + upgradeBanner + '<div class="profile-grid">';
@@ -2565,8 +2569,8 @@ async function loadLeagueTradeFinder(leagueId, userId, myRoster, rosters, allPla
     if (resp.status === 403) {
       container.innerHTML =
         '<div class="trade-finder-gate">' +
-          '<div class="gate-cta">upgrade to Pro to unlock league-specific trade matches<br>' +
-            '<a href="/pricing.html">see pricing &rarr;</a>' +
+          '<div class="gate-cta">' + (typeof getUserTierInfo === 'function' && getUserTierInfo().isExpiredTrial ? 'your trial ended — ' : '') + 'subscribe to Pro to unlock league-specific trade matches<br>' +
+            '<a href="/pricing.html">see plans &rarr;</a>' +
           '</div>' +
         '</div>';
       return;

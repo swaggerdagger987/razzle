@@ -1777,25 +1777,32 @@ function renderContextBadges() {
   if (upsellZone) {
     var user = null;
     try { user = JSON.parse(localStorage.getItem("razzle_user")); } catch(e) {}
-    var isPaid = user && (user.plan === "pro" || user.plan === "elite");
-    // Hide upsell if in league mode OR paid user
-    upsellZone.style.display = (leagueMode || isPaid) ? 'none' : 'block';
+    var isPaid = user && (user.plan === "pro" || user.plan === "elite" || user.plan === "pro_lifetime" || user.plan === "elite_lifetime");
+    var isTrial = user && user.trial_active && user.plan_source === "trial";
+    // Hide upsell if in league mode OR paid user OR on trial
+    upsellZone.style.display = (leagueMode || isPaid || isTrial) ? 'none' : 'block';
     // Update CTA based on auth state
     var btn = document.getElementById('proUpsellBtn');
     var hint = document.getElementById('proUpsellHint');
     if (btn && hint) {
       if (!user) {
-        btn.textContent = 'Start Free 7-Day Trial';
+        btn.textContent = 'Sign Up Free';
         btn.href = '#';
         btn.onclick = function(e) { e.preventDefault(); if (typeof openAuthModal === 'function') openAuthModal(); };
-        hint.textContent = 'no credit card required — full Pro access for 7 days';
+        hint.textContent = '7-day Pro trial on sign-up — no credit card required';
+      } else if (user.plan_source === 'trial' && !user.trial_active) {
+        // Expired trial
+        btn.textContent = 'Subscribe to Pro';
+        btn.href = '/pricing.html';
+        btn.onclick = null;
+        hint.textContent = 'your trial ended — subscribe to keep league context';
       } else if (!user.sleeper_username) {
         btn.textContent = 'Connect Sleeper to Unlock';
         btn.href = '/league-intel.html';
         btn.onclick = null;
         hint.textContent = 'connect your leagues for full league context';
       } else {
-        btn.textContent = 'Upgrade to Pro — from $6.67/mo';
+        btn.textContent = 'Subscribe to Pro';
         btn.href = '/pricing.html';
         btn.onclick = null;
         hint.textContent = 'full league context, agent memory, personalized briefings';
@@ -3133,7 +3140,7 @@ function renderAllBriefings(detail) {
     html += '<div class="pro-teaser-card">' +
       '<p>your league data is connected but locked</p>' +
       '<div class="pro-teaser-detail">this analysis would reference your actual roster, rivals, and league settings with Pro</div>' +
-      '<a class="btn-pro-upgrade" href="/pricing.html" aria-label="Upgrade to Pro plan for league-contextualized AI agents" onclick="event.preventDefault(); if(localStorage.getItem(\'razzle_token\')&&typeof startCheckout===\'function\'){startCheckout(\'year\')}else{window.location.href=\'/pricing.html\';}">Upgrade to Pro \u2014 from $9.99/mo</a>' +
+      '<a class="btn-pro-upgrade" href="/pricing.html" aria-label="Subscribe to Pro plan for league-contextualized AI agents" onclick="event.preventDefault(); if(localStorage.getItem(\'razzle_token\')&&typeof startCheckout===\'function\'){startCheckout(\'year\')}else{window.location.href=\'/pricing.html\';}">Subscribe to Pro</a>' +
     '</div>';
   }
 
@@ -3838,11 +3845,29 @@ function showFirstRunDemo() {
   // Upgrade CTA at bottom
   html += '<div class="demo-briefing-cta">' +
     '<p>imagine this analysis with <strong>your roster</strong>, <strong>your opponents</strong>, and <strong>your league\u2019s scoring</strong>.</p>' +
-    '<a href="/pricing.html" class="btn-chunky btn-primary" style="font-size:13px;">Start Free 7-Day Trial</a>' +
-    '<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); display:block; margin-top:6px;">no credit card required</span>' +
+    '<a href="/pricing.html" class="btn-chunky btn-primary" style="font-size:13px;" id="demoBriefingCta">Sign Up Free</a>' +
+    '<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); display:block; margin-top:6px;" id="demoBriefingHint">7-day Pro trial on sign-up</span>' +
   '</div>';
 
   host.innerHTML = html;
+
+  // Tier-aware CTA update for demo briefing
+  var demoCta = document.getElementById('demoBriefingCta');
+  var demoHint = document.getElementById('demoBriefingHint');
+  if (demoCta && demoHint && typeof getUserTierInfo === 'function') {
+    var t = getUserTierInfo();
+    if (t.isTrial) {
+      demoCta.textContent = 'Subscribe to keep Pro';
+      demoHint.textContent = t.daysLeft + ' day' + (t.daysLeft !== 1 ? 's' : '') + ' left on your trial';
+    } else if (t.isExpiredTrial) {
+      demoCta.textContent = 'Subscribe to Pro';
+      demoHint.textContent = 'your trial ended — subscribe to keep access';
+    } else if (t.isPaid) {
+      demoCta.textContent = 'Enter the Situation Room';
+      demoCta.href = '/agents.html';
+      demoHint.textContent = '';
+    }
+  }
 }
 
 function renderDemoCard(agentId, content, collapsed) {

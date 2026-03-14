@@ -300,6 +300,61 @@ function refreshPlanGating() {
   if (typeof checkAuth === "function") checkAuth();
 }
 
+/* ===== Tier-Aware CTA Helpers ===== */
+
+/**
+ * Get user tier info for CTA personalization.
+ * Returns { plan, isTrial, isPaid, isElite, isExpiredTrial, daysLeft }
+ */
+function getUserTierInfo() {
+  var u = null;
+  try { u = JSON.parse(localStorage.getItem("razzle_user") || "null"); } catch(e) {}
+  if (!u) return { plan: "none", isTrial: false, isPaid: false, isElite: false, isExpiredTrial: false, daysLeft: 0, loggedIn: false };
+  var plan = u.plan || "free";
+  var isTrial = !!(u.trial_active && u.plan_source === "trial");
+  var isPaid = plan === "pro" || plan === "elite" || plan === "pro_lifetime" || plan === "elite_lifetime";
+  var isElite = plan === "elite" || plan === "elite_lifetime";
+  var isExpiredTrial = !!(u.plan_source === "trial" && !u.trial_active);
+  var daysLeft = u.trial_days_remaining || 0;
+  return { plan: plan, isTrial: isTrial, isPaid: isPaid, isElite: isElite, isExpiredTrial: isExpiredTrial, daysLeft: daysLeft, loggedIn: true };
+}
+
+/**
+ * Get appropriate CTA text for a Pro upgrade button based on user tier.
+ */
+function getProCtaText() {
+  var t = getUserTierInfo();
+  if (!t.loggedIn) return "Sign Up Free";
+  if (t.isExpiredTrial) return "Your trial ended. Subscribe to Pro";
+  if (t.isTrial) return "Subscribe to keep Pro";
+  if (t.isElite) return "Current Plan (Elite)";
+  if (t.isPaid) return "Current Plan";
+  return "Subscribe to Pro";
+}
+
+/**
+ * Get appropriate CTA text for an Elite upgrade button based on user tier.
+ */
+function getEliteCtaText() {
+  var t = getUserTierInfo();
+  if (!t.loggedIn) return "Sign Up Free";
+  if (t.isExpiredTrial) return "Your trial ended. Subscribe to Elite";
+  if (t.isTrial) return "Subscribe to Elite";
+  if (t.isElite) return "Current Plan";
+  if (t.isPaid) return "Upgrade to Elite";
+  return "Subscribe to Elite";
+}
+
+/**
+ * Get trial status text (returns empty string if not relevant).
+ */
+function getTrialStatusText() {
+  var t = getUserTierInfo();
+  if (t.isTrial) return "You're on Pro (" + t.daysLeft + " day" + (t.daysLeft !== 1 ? "s" : "") + " left). Subscribe to keep Pro.";
+  if (t.isExpiredTrial) return "Your trial ended. Subscribe to keep Pro.";
+  return "";
+}
+
 /* ===== Brand Voice — Shared Vocabulary ===== */
 
 var RAZZLE_ERRORS = [
@@ -774,8 +829,10 @@ function updateAuthUI(user) {
       dropdownItems += '<a href="#" onclick="openManageSubscription(); return false;" class="nav-dropdown-item">Manage Subscription</a>';
     } else if (isTrial) {
       dropdownItems += '<a href="/pricing.html" class="nav-dropdown-item" style="color:var(--orange);">Keep Pro — Subscribe</a>';
+    } else if (user.plan_source === "trial" && !user.trial_active) {
+      dropdownItems += '<a href="/pricing.html" class="nav-dropdown-item" style="color:var(--orange);">Your trial ended — Subscribe</a>';
     } else {
-      dropdownItems += '<a href="/pricing.html" class="nav-dropdown-item" style="color:var(--orange);">Upgrade to Pro</a>';
+      dropdownItems += '<a href="/pricing.html" class="nav-dropdown-item" style="color:var(--orange);">Subscribe to Pro</a>';
     }
     dropdownItems += '<div class="nav-dropdown-divider"></div>';
     dropdownItems += '<a href="#" onclick="signOut(); return false;" class="nav-dropdown-item nav-dropdown-signout">Sign Out</a>';

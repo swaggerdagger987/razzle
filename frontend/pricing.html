@@ -614,9 +614,20 @@
           eliteCta.textContent = isElite ? 'Current Plan' : 'Upgrade to Elite';
         }
       } else {
-        // Free user (no trial, no subscription) — show subscribe buttons
-        if (proCta) proCta.textContent = 'Subscribe to Pro';
-        if (eliteCta) eliteCta.textContent = 'Subscribe to Elite';
+        // Free user — check if expired trial
+        var isExpiredTrial = user.plan_source === 'trial' && !user.trial_active;
+        if (isExpiredTrial) {
+          if (proCta) proCta.textContent = 'Subscribe to Pro';
+          if (eliteCta) eliteCta.textContent = 'Subscribe to Elite';
+          // Show expired trial banner
+          if (trialActiveBanner) {
+            trialActiveBanner.style.display = 'block';
+            if (trialCountdown) trialCountdown.textContent = 'your trial ended — subscribe to keep Pro access';
+          }
+        } else {
+          if (proCta) proCta.textContent = 'Subscribe to Pro';
+          if (eliteCta) eliteCta.textContent = 'Subscribe to Elite';
+        }
       }
     } catch (e) {}
   }

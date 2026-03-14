@@ -1832,7 +1832,7 @@
           <li>CSV export + Formula Store</li>
         </ul>
         <div style="text-align:center;">
-          <button class="btn-chunky btn-primary" style="font-size:12px; width:100%;" onclick="if(typeof startCheckout==='function'){startCheckout('pro_month')}else{if(typeof openAuthModal==='function') openAuthModal()}">Get Pro</button>
+          <button id="agentsProCta" class="btn-chunky btn-primary" style="font-size:12px; width:100%;" onclick="if(typeof startCheckout==='function'){startCheckout('pro_month')}else{if(typeof openAuthModal==='function') openAuthModal()}">Get Pro</button>
         </div>
       </div>
 
@@ -1852,12 +1852,12 @@
           <li>Weekly personalized briefings</li>
         </ul>
         <div style="text-align:center;">
-          <button class="btn-chunky btn-primary" style="font-size:12px; width:100%;" onclick="if(typeof startCheckout==='function'){startCheckout('elite_month')}else{if(typeof openAuthModal==='function') openAuthModal()}">Get Elite</button>
+          <button id="agentsEliteCta" class="btn-chunky btn-primary" style="font-size:12px; width:100%;" onclick="if(typeof startCheckout==='function'){startCheckout('elite_month')}else{if(typeof openAuthModal==='function') openAuthModal()}">Get Elite</button>
         </div>
       </div>
     </div>
 
-    <p style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); margin-bottom:12px;">7-day free trial on all plans. Cancel anytime. The Lab stays free.</p>
+    <p id="agentsTrialNote" style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); margin-bottom:12px;">7-day Pro trial on sign-up. Cancel anytime. The Lab stays free.</p>
 
     <!-- Promo code input -->
     <div style="display:inline-flex; align-items:center; gap:8px; margin-bottom:8px;">
@@ -2068,6 +2068,45 @@ fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"applicat
     }
   } catch(e) {}
 })();
+// Tier-aware pricing CTAs on agents.html
+(function(){try{
+  if (typeof getUserTierInfo !== 'function') return;
+  var t = getUserTierInfo();
+  var proCta = document.getElementById('agentsProCta');
+  var eliteCta = document.getElementById('agentsEliteCta');
+  var trialNote = document.getElementById('agentsTrialNote');
+  var pricingSection = proCta ? proCta.closest('div[style*="background:var(--bg)"]') : null;
+
+  // Update button text
+  if (proCta) proCta.textContent = getProCtaText();
+  if (eliteCta) eliteCta.textContent = getEliteCtaText();
+
+  // Update trial note
+  if (trialNote) {
+    if (t.isTrial) trialNote.textContent = "You're on Pro (" + t.daysLeft + "d left). Subscribe to keep access.";
+    else if (t.isExpiredTrial) trialNote.textContent = "Your trial ended. Subscribe to keep Pro access.";
+    else if (t.isPaid) trialNote.textContent = "";
+  }
+
+  // For paid Pro users, redirect Pro button to Situation Room
+  if (t.isPaid && !t.isTrial && !t.isElite && proCta) {
+    proCta.textContent = "Current Plan";
+    proCta.onclick = null;
+    proCta.style.opacity = "0.6";
+    proCta.style.cursor = "default";
+  }
+  // For Elite users, redirect both
+  if (t.isElite && proCta && eliteCta) {
+    proCta.textContent = "Current Plan (Elite)";
+    proCta.onclick = null;
+    proCta.style.opacity = "0.6";
+    proCta.style.cursor = "default";
+    eliteCta.textContent = "Current Plan";
+    eliteCta.onclick = null;
+    eliteCta.style.opacity = "0.6";
+    eliteCta.style.cursor = "default";
+  }
+}catch(e){}})();
 </script>
 </body>
 </html>

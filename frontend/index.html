@@ -1269,7 +1269,9 @@
       var cta = document.getElementById('demoCta');
       if (!cta) return;
 
-      if (sleeperUser && razzleUser && (razzleUser.plan === 'pro' || razzleUser.plan === 'elite')) {
+      var isPaid = razzleUser && (razzleUser.plan === 'pro' || razzleUser.plan === 'elite' || razzleUser.plan === 'pro_lifetime' || razzleUser.plan === 'elite_lifetime');
+      var isTrial = razzleUser && razzleUser.trial_active && razzleUser.plan_source === 'trial';
+      if (sleeperUser && razzleUser && (isPaid || isTrial)) {
         // Paid user with Sleeper connected — direct to Situation Room
         cta.innerHTML = '<p>your Situation Room is ready</p>' +
           '<a href="/agents.html" class="btn-chunky" style="font-size:14px; padding:8px 20px; margin-top:8px; display:inline-block; text-decoration:none;">Enter the Situation Room</a>';
@@ -1284,9 +1286,12 @@
         var personalMsg = playerName
           ? 'the agents would tell you about <strong>' + playerName + '</strong> and your whole roster'
           : 'the agents would analyze your entire roster and your rivals';
+        var isExpiredTrial = razzleUser && razzleUser.plan_source === 'trial' && !razzleUser.trial_active;
+        var upgradeText = isExpiredTrial ? 'your trial ended — subscribe to unlock league intelligence' : 'subscribe to Pro to unlock league-contextualized intelligence';
+        var btnText = isExpiredTrial ? 'Subscribe to Pro' : 'Subscribe to Pro';
         cta.innerHTML = '<p>' + personalMsg + '</p>' +
-          '<p style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); margin-top:4px;">upgrade to Pro to unlock league-contextualized intelligence</p>' +
-          '<a href="/pricing.html" class="btn-chunky" style="font-size:13px; padding:6px 16px; margin-top:8px; display:inline-block; text-decoration:none; background:var(--orange); color:white; border-color:var(--orange);">Upgrade to Pro</a>';
+          '<p style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); margin-top:4px;">' + upgradeText + '</p>' +
+          '<a href="/pricing.html" class="btn-chunky" style="font-size:13px; padding:6px 16px; margin-top:8px; display:inline-block; text-decoration:none; background:var(--orange); color:white; border-color:var(--orange);">' + btnText + '</a>';
       } else {
         // No Sleeper — encourage connection
         cta.innerHTML = '<p>this is a real manager\'s Situation Room</p>' +
@@ -1338,7 +1343,7 @@
     </div>
 
   </div>
-  <p style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">The Lab is free. 7-day Pro trial on sign-up — no credit card required.</p>
+  <p data-cta-trial-note style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">The Lab is free. 7-day Pro trial on sign-up — no credit card required.</p>
   <p style="margin-top:8px;"><a href="/pricing.html" style="font-family:var(--font-mono); font-size:12px; color:var(--orange);">See full feature comparison &rarr;</a></p>
 </div>
 
@@ -1707,14 +1712,54 @@ function renderFeaturedCards(data) {
 </script>
 <script>
 fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({page:location.pathname})}).catch(function(){});
-// Update pricing CTAs based on user state
+// Update pricing CTAs based on user state (tier-aware)
 (function(){try{
-  var u=JSON.parse(localStorage.getItem('razzle_user')||'null');
-  var pro=document.getElementById('homeProCta');
-  var elite=document.getElementById('homeEliteCta');
-  if(!u){if(pro)pro.textContent='Sign Up Free';if(elite)elite.textContent='Sign Up Free';}
-  else if(u.trial_active&&u.plan_source==='trial'){if(pro)pro.textContent='Subscribe to Pro';if(elite)elite.textContent='Subscribe to Elite';}
-  else if(u.plan&&u.plan!=='free'){if(pro)pro.textContent='Enter Situation Room';if(elite)elite.textContent='Enter Situation Room';if(pro)pro.onclick=function(){window.location='/agents'};if(elite)elite.onclick=function(){window.location='/agents'};}
+  var t = typeof getUserTierInfo === 'function' ? getUserTierInfo() : { plan: 'none', loggedIn: false, isTrial: false, isPaid: false, isElite: false, isExpiredTrial: false, daysLeft: 0 };
+  var pro = document.getElementById('homeProCta');
+  var elite = document.getElementById('homeEliteCta');
+  var trialNote = document.querySelector('[data-cta-trial-note]');
+
+  // Update button text
+  if (pro) pro.textContent = typeof getProCtaText === 'function' ? getProCtaText() : 'Get Pro';
+  if (elite) elite.textContent = typeof getEliteCtaText === 'function' ? getEliteCtaText() : 'Get Elite';
+
+  // Paid users: redirect to Situation Room instead of checkout
+  if (t.isPaid && !t.isTrial) {
+    if (pro) { pro.textContent = 'Enter the Situation Room'; pro.onclick = function(){ window.location='/agents.html'; }; }
+    if (elite && !t.isElite) { elite.textContent = 'Upgrade to Elite'; }
+    else if (elite && t.isElite) { elite.textContent = 'Enter the Situation Room'; elite.onclick = function(){ window.location='/agents.html'; }; }
+  }
+
+  // Update trial note text
+  if (trialNote) {
+    if (t.isTrial) {
+      trialNote.textContent = "You're on Pro (" + t.daysLeft + " day" + (t.daysLeft !== 1 ? "s" : "") + " left). Subscribe to keep your access.";
+    } else if (t.isExpiredTrial) {
+      trialNote.textContent = "Your trial ended. Subscribe to keep Pro access.";
+    } else if (t.isPaid) {
+      trialNote.textContent = "";
+    }
+  }
+
+  // Hide pricing section entirely for Elite users
+  var pricingSection = pro ? pro.closest('[data-pricing-section]') : null;
+  if (pricingSection && t.isElite) {
+    pricingSection.innerHTML = '<div style="text-align:center; padding:24px;"><div style="font-family:var(--font-display); font-size:20px; margin-bottom:8px;">You have Elite access</div><a href="/agents.html" class="btn-chunky btn-primary" style="font-size:14px; padding:10px 24px; text-decoration:none;">Enter the Situation Room</a></div>';
+  }
+
+  // Update final CTA
+  var finalCta = document.getElementById('finalCta');
+  if (finalCta && t.isPaid && !t.isTrial) {
+    finalCta.innerHTML = '<h2>Your Situation Room is ready.</h2><p>six agents. full league context. all yours.</p>' +
+      '<div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:16px;">' +
+      '<a href="/agents.html" class="btn-hero btn-hero-primary" style="font-size:14px; padding:10px 24px;">Enter the Situation Room</a>' +
+      '<a href="/lab.html" class="btn-hero btn-hero-secondary" style="font-size:14px; padding:10px 24px;">Explore The Lab</a></div>';
+  } else if (finalCta && t.isTrial) {
+    finalCta.innerHTML = '<h2>The Situation Room is live.</h2><p>you have ' + t.daysLeft + ' day' + (t.daysLeft !== 1 ? 's' : '') + ' of Pro access. subscribe to keep it.</p>' +
+      '<div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:16px;">' +
+      '<a href="/agents.html" class="btn-hero btn-hero-primary" style="font-size:14px; padding:10px 24px;">Enter the Situation Room</a>' +
+      '<a href="/pricing.html" class="btn-hero btn-hero-secondary" style="font-size:14px; padding:10px 24px;">Subscribe to keep Pro</a></div>';
+  }
 }catch(e){}})();
 </script>
 <script>
