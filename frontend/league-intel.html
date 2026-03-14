@@ -456,7 +456,7 @@
     font-size: 8px;
     padding: 1px 5px;
     border-radius: 3px;
-    border: 1px solid;
+    border: 2px solid;
     white-space: nowrap;
   }
 
@@ -1960,7 +1960,7 @@ async function loadManagerProfiles(leagueId, userId, allPlayers, userMap, roster
     for (var ci = 0; ci < cards.length; ci++) {
       var c = cards[ci];
       var seasonTag = c.seasonsTracked > 1
-        ? '<span style="font-family:var(--font-mono); font-size:9px; color:var(--orange); border:1px solid var(--orange); border-radius:3px; padding:1px 4px; margin-left:6px;">' +
+        ? '<span style="font-family:var(--font-mono); font-size:9px; color:var(--orange); border:2px solid var(--orange); border-radius:3px; padding:1px 4px; margin-left:6px;">' +
           c.seasonsTracked + 'yr</span>'
         : '';
 

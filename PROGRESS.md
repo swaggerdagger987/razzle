@@ -215,6 +215,7 @@ Systematic page-by-page audit against DESIGN.md and NORTH_STAR.md.
 | 7 more standalone pages | Mobile: add overflow-x:auto to table containers | DONE | reportcard, tradefinder, handcuffs, drops, gamescript, successrate, dualthreat |
 | index.html | Design: demo section h2 `color:white` → warm sand `#ede0cf` | DONE | DESIGN.md: no cold colors. White on dark bg should be warm sand. |
 | about/pricing/warroom | Design: 1px dashed → 2px dashed dividers | DONE | 5 instances fixed across 3 files. DESIGN.md: "Dashed dividers: 2px dashed var(--ink-faint) inside cards." |
+| league-intel.html | Design: 1px → 2px borders on badges/chips | DONE | 2 instances: .pressure-bar-tag CSS (1px solid → 2px solid), inline season badge span (1px → 2px). DESIGN.md: "2px borders on chips, badges." |
 
 ### Final Quality Sweep (Mar 13)
 - All 74 pages: title tags ✓, og:description ✓, Pricing nav link ✓, viewport meta ✓

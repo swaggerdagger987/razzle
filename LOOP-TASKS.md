@@ -1,11 +1,25 @@
 # Razzle Ship Loop — Task Tracker
 
 ## Current State
-- Phase: EMERGENCY — Fix Google Fonts (Site Typography Broken)
-- Current Task: 2
+- Phase: Polish Mode — league-intel.html Design Audit
+- Current Task: 1
 - Current Stage: PASS
-- Tasks Completed: 2/2
+- Tasks Completed: 1/1
 - Loop Iterations: 1
+
+## Phase: Polish Mode — league-intel.html Design Audit
+**Exit Criterion**: league-intel.html fully matches DESIGN.md.
+
+### Task 1: Fix 1px borders on badges/chips to 2px
+**Requirement**: DESIGN.md requires 2px borders on chips/badges. Two instances of 1px solid borders found: .pressure-bar-tag CSS rule and inline season badge in manager profiles.
+**Accept when**: Zero instances of 1px solid borders on badge/chip elements in league-intel.html.
+**Depends on**: none
+**Size**: S
+**Status**: PASS
+**Attempts**: 1
+**Notes**: Fixed .pressure-bar-tag border from 1px to 2px solid. Fixed inline season badge span from border:1px to border:2px solid var(--orange).
+
+---
 
 ## Phase: EMERGENCY — Fix Google Fonts (Site Typography Broken)
 **Exit Criterion**: All three Razzle fonts (Luckiest Guy, Space Mono, Caveat) load on every page. The comic-strip aesthetic is restored.
