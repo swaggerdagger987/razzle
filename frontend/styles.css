@@ -22,7 +22,7 @@
 
   --ink: #2d1f14;
   --ink-medium: #5c4a3d;
-  --ink-light: #8a7565;
+  --ink-light: #6d5c4e;
   --ink-faint: #c4b5a5;
 
   --orange: #d97757;
@@ -60,7 +60,7 @@
 
   --ink: #ede0cf;
   --ink-medium: #c4b5a5;
-  --ink-light: #8a7565;
+  --ink-light: #6d5c4e;
   --ink-faint: #5c4a3d;
 
   --orange-light: #5c3325;
@@ -323,7 +323,7 @@ body {
   font-size: 11px;
   color: var(--ink-light);
   padding: 3px 8px;
-  border: 2px solid var(--ink-faint);
+  border: 2px solid var(--ink-light);
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.12s;
@@ -340,7 +340,7 @@ body {
   font-family: var(--font-mono);
   font-size: 10px;
   background: var(--bg-warm);
-  border: 2px solid var(--ink-faint);
+  border: 2px solid var(--ink-light);
   border-radius: 3px;
   padding: 0 4px;
   margin-right: 4px;
@@ -372,7 +372,7 @@ body {
 
 .nav-plan-free {
   color: var(--ink-light);
-  border-color: var(--ink-faint);
+  border-color: var(--ink-light);
   background: var(--bg);
 }
 
@@ -592,6 +592,10 @@ body {
   border-color: var(--orange);
   box-shadow: 0 0 0 2px var(--orange-light);
 }
+.auth-form input:focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: 2px;
+}
 
 .auth-error {
   font-family: var(--font-mono);
@@ -768,6 +772,10 @@ a.btn-pro-upgrade:focus-visible {
 .input-chunky:focus {
   box-shadow: 3px 3px 0 var(--ink);
 }
+.input-chunky:focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: 2px;
+}
 
 .input-chunky::placeholder {
   color: var(--ink-light);
@@ -786,6 +794,10 @@ a.btn-pro-upgrade:focus-visible {
   color: var(--ink);
   cursor: pointer;
   outline: none;
+}
+.select-chunky:focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: 2px;
 }
 
 /* ===== MOBILE RESPONSIVE ===== */
@@ -925,6 +937,10 @@ body {
 }
 .cmd-palette-input:focus {
   border-color: var(--orange);
+}
+.cmd-palette-input:focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: 2px;
 }
 .cmd-palette-input::placeholder {
   color: var(--ink-light);
