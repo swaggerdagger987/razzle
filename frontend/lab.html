@@ -336,6 +336,24 @@
     outline-offset: -2px;
   }
 
+  /* Pro-locked sidebar items: lock icon + slight dim for free users */
+  .lab-sidebar-item.pro-locked.show-lock {
+    opacity: 0.7;
+  }
+  .lab-sidebar-item.pro-locked.show-lock::after {
+    content: '\1F512';
+    font-size: 10px;
+    margin-left: 4px;
+    opacity: 0.6;
+  }
+
+  /* Pro divider line in sidebar */
+  .lab-sidebar-pro-divider {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 2px dashed var(--ink-faint);
+  }
+
   .lab-sidebar-toggle {
     position: sticky;
     bottom: 0;
@@ -2989,96 +3007,97 @@
       <div class="sidebar-recent-chips" id="sidebarRecentChips"></div>
     </div>
 
-    <div class="lab-sidebar-category"><span class="cat-icon" style="display:none">&#x1F50D;</span><span class="cat-text">Screener</span></div>
+    <!-- FREE PANELS -->
     <a class="lab-sidebar-item active" data-panel="screener" data-icon="&#x25C9;" onclick="switchPanel('screener')">The Screener<span class="sidebar-tooltip">The Screener</span></a>
-
-    <div class="lab-sidebar-category"><span class="cat-icon" style="display:none">&#x1F4CA;</span><span class="cat-text">Rankings &amp; Values</span></div>
     <a class="lab-sidebar-item" data-panel="rankings" data-icon="&#x2660;" onclick="switchPanel('rankings')">Dynasty Rankings<span class="sidebar-tooltip">Dynasty Rankings</span></a>
     <a class="lab-sidebar-item" data-panel="tiers" data-icon="&#x25B2;" onclick="switchPanel('tiers')">Tiers<span class="sidebar-tooltip">Tiers</span></a>
     <a class="lab-sidebar-item" data-panel="tradevalues" data-icon="&#x2194;" onclick="switchPanel('tradevalues')">Trade Values<span class="sidebar-tooltip">Trade Values</span></a>
-    <a class="lab-sidebar-item" data-panel="vorp" data-icon="&#x2191;" onclick="switchPanel('vorp')">VORP<span class="sidebar-tooltip">Value Over Replacement Player</span></a>
-    <a class="lab-sidebar-item" data-panel="advantage" data-icon="&#x25C6;" onclick="switchPanel('advantage')">Positional Advantage<span class="sidebar-tooltip">Scoring edge over position average</span></a>
-    <a class="lab-sidebar-item" data-panel="auction" data-icon="$" onclick="switchPanel('auction')">Auction Values<span class="sidebar-tooltip">Auction Values</span></a>
     <a class="lab-sidebar-item" data-panel="cheatsheet" data-icon="&#x2611;" onclick="switchPanel('cheatsheet')">Cheat Sheet<span class="sidebar-tooltip">Cheat Sheet</span></a>
-
-    <div class="lab-sidebar-category"><span class="cat-icon" style="display:none">&#x1F50E;</span><span class="cat-text">Discovery</span></div>
     <a class="lab-sidebar-item" data-panel="breakouts" data-icon="&#x2605;" onclick="switchPanel('breakouts')">Breakouts<span class="sidebar-tooltip">Breakouts</span></a>
-    <a class="lab-sidebar-item" data-panel="buysell" data-icon="&#x21C5;" onclick="switchPanel('buysell')">Buy / Sell<span class="sidebar-tooltip">Buy / Sell</span></a>
-    <a class="lab-sidebar-item" data-panel="stocks" data-icon="&#x2197;" onclick="switchPanel('stocks')">Stock Watch<span class="sidebar-tooltip">Stock Watch</span></a>
-    <a class="lab-sidebar-item" data-panel="waivers" data-icon="&#x2295;" onclick="switchPanel('waivers')">Waivers<span class="sidebar-tooltip">Waivers</span></a>
-    <a class="lab-sidebar-item" data-panel="scarcity" data-icon="&#x25EF;" onclick="switchPanel('scarcity')">Scarcity<span class="sidebar-tooltip">Scarcity</span></a>
-    <a class="lab-sidebar-item" data-panel="handcuffs" data-icon="&#x26D3;" onclick="switchPanel('handcuffs')">Handcuffs<span class="sidebar-tooltip">Handcuffs</span></a>
+    <a class="lab-sidebar-item" data-panel="weekly" data-icon="&#x25A6;" onclick="switchPanel('weekly')">Weekly Heatmap<span class="sidebar-tooltip">Weekly Heatmap</span></a>
+    <a class="lab-sidebar-item" data-panel="prospects" data-icon="&#x2606;" onclick="switchPanel('prospects')">Big Board<span class="sidebar-tooltip">Big Board</span></a>
+    <a class="lab-sidebar-item" data-panel="dashboard" data-icon="&#x25A3;" onclick="switchPanel('dashboard')">Dashboard<span class="sidebar-tooltip">Dashboard</span></a>
+    <a class="lab-sidebar-item" data-panel="leaders" data-icon="&#x1F451;" onclick="switchPanel('leaders')">Stat Leaders<span class="sidebar-tooltip">Stat Leaders</span></a>
+
+    <!-- PRO PANELS -->
+    <div class="lab-sidebar-category lab-sidebar-pro-divider"><span class="cat-icon" style="display:none">&#x1F512;</span><span class="cat-text">Pro</span></div>
+
+    <div class="lab-sidebar-category"><span class="cat-icon" style="display:none">&#x1F4CA;</span><span class="cat-text">Rankings &amp; Values</span></div>
+    <a class="lab-sidebar-item pro-locked" data-panel="vorp" data-icon="&#x2191;" onclick="switchPanel('vorp')">VORP<span class="sidebar-tooltip">Value Over Replacement Player</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="advantage" data-icon="&#x25C6;" onclick="switchPanel('advantage')">Positional Advantage<span class="sidebar-tooltip">Scoring edge over position average</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="auction" data-icon="$" onclick="switchPanel('auction')">Auction Values<span class="sidebar-tooltip">Auction Values</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="buysell" data-icon="&#x21C5;" onclick="switchPanel('buysell')">Buy / Sell<span class="sidebar-tooltip">Buy / Sell</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="stocks" data-icon="&#x2197;" onclick="switchPanel('stocks')">Stock Watch<span class="sidebar-tooltip">Stock Watch</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="waivers" data-icon="&#x2295;" onclick="switchPanel('waivers')">Waivers<span class="sidebar-tooltip">Waivers</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="scarcity" data-icon="&#x25EF;" onclick="switchPanel('scarcity')">Scarcity<span class="sidebar-tooltip">Scarcity</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="handcuffs" data-icon="&#x26D3;" onclick="switchPanel('handcuffs')">Handcuffs<span class="sidebar-tooltip">Handcuffs</span></a>
 
     <div class="lab-sidebar-category"><span class="cat-icon" style="display:none">&#x1F4C8;</span><span class="cat-text">Performance</span></div>
-    <a class="lab-sidebar-item" data-panel="efficiency" data-icon="&#x26A1;" onclick="switchPanel('efficiency')">Efficiency<span class="sidebar-tooltip">Efficiency</span></a>
-    <a class="lab-sidebar-item" data-panel="consistency" data-icon="&#x2261;" onclick="switchPanel('consistency')">Consistency<span class="sidebar-tooltip">Consistency</span></a>
-    <a class="lab-sidebar-item" data-panel="snapefficiency" data-icon="&#x23F1;" onclick="switchPanel('snapefficiency')">Snap Efficiency<span class="sidebar-tooltip">Fantasy points per snap</span></a>
-    <a class="lab-sidebar-item" data-panel="workload" data-icon="&#x2699;" onclick="switchPanel('workload')">Workload Monitor<span class="sidebar-tooltip">Workload Monitor</span></a>
-    <a class="lab-sidebar-item" data-panel="dualthreat" data-icon="&#x21CB;" onclick="switchPanel('dualthreat')">Dual-Threat<span class="sidebar-tooltip">Rush + receiving versatility index</span></a>
-    <a class="lab-sidebar-item" data-panel="targetpremium" data-icon="&#x25CE;" onclick="switchPanel('targetpremium')">Target Premium<span class="sidebar-tooltip">Target quality: YPT + catch% + YAC + aDOT</span></a>
-    <a class="lab-sidebar-item" data-panel="drops" data-icon="&#x2193;" onclick="switchPanel('drops')">Drop Rate<span class="sidebar-tooltip">Pass drops per target by receiver</span></a>
-    <a class="lab-sidebar-item" data-panel="garbagetime" data-icon="&#x267B;" onclick="switchPanel('garbagetime')">Garbage Time<span class="sidebar-tooltip">Stat padders vs clean producers</span></a>
-    <a class="lab-sidebar-item" data-panel="successrate" data-icon="&#x2713;" onclick="switchPanel('successrate')">Success Rate<span class="sidebar-tooltip">Positive play rate (EPA-based)</span></a>
-    <a class="lab-sidebar-item" data-panel="correlations" data-icon="&#x2234;" onclick="switchPanel('correlations')">Correlations<span class="sidebar-tooltip">Which stats predict fantasy PPG?</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="efficiency" data-icon="&#x26A1;" onclick="switchPanel('efficiency')">Efficiency<span class="sidebar-tooltip">Efficiency</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="consistency" data-icon="&#x2261;" onclick="switchPanel('consistency')">Consistency<span class="sidebar-tooltip">Consistency</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="snapefficiency" data-icon="&#x23F1;" onclick="switchPanel('snapefficiency')">Snap Efficiency<span class="sidebar-tooltip">Fantasy points per snap</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="workload" data-icon="&#x2699;" onclick="switchPanel('workload')">Workload Monitor<span class="sidebar-tooltip">Workload Monitor</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="dualthreat" data-icon="&#x21CB;" onclick="switchPanel('dualthreat')">Dual-Threat<span class="sidebar-tooltip">Rush + receiving versatility index</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="targetpremium" data-icon="&#x25CE;" onclick="switchPanel('targetpremium')">Target Premium<span class="sidebar-tooltip">Target quality: YPT + catch% + YAC + aDOT</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="drops" data-icon="&#x2193;" onclick="switchPanel('drops')">Drop Rate<span class="sidebar-tooltip">Pass drops per target by receiver</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="garbagetime" data-icon="&#x267B;" onclick="switchPanel('garbagetime')">Garbage Time<span class="sidebar-tooltip">Stat padders vs clean producers</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="successrate" data-icon="&#x2713;" onclick="switchPanel('successrate')">Success Rate<span class="sidebar-tooltip">Positive play rate (EPA-based)</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="correlations" data-icon="&#x2234;" onclick="switchPanel('correlations')">Correlations<span class="sidebar-tooltip">Which stats predict fantasy PPG?</span></a>
 
     <div class="lab-sidebar-category"><span class="cat-icon" style="display:none">&#x1F3C8;</span><span class="cat-text">Game Analysis</span></div>
-    <a class="lab-sidebar-item" data-panel="weekly" data-icon="&#x25A6;" onclick="switchPanel('weekly')">Weekly Heatmap<span class="sidebar-tooltip">Weekly Heatmap</span></a>
-    <a class="lab-sidebar-item" data-panel="matchups" data-icon="&#x2694;" onclick="switchPanel('matchups')">Matchups<span class="sidebar-tooltip">Matchups</span></a>
-    <a class="lab-sidebar-item" data-panel="stacks" data-icon="&#x25A4;" onclick="switchPanel('stacks')">Stacks<span class="sidebar-tooltip">QB + pass catcher correlations</span></a>
-    <a class="lab-sidebar-item" data-panel="redzone" data-icon="&#x25A0;" onclick="switchPanel('redzone')">Red Zone<span class="sidebar-tooltip">Red Zone</span></a>
-    <a class="lab-sidebar-item" data-panel="streaks" data-icon="&#x1F525;" onclick="switchPanel('streaks')">Streaks<span class="sidebar-tooltip">Streaks</span></a>
-    <a class="lab-sidebar-item" data-panel="weeklyleaders" data-icon="&#x265B;" onclick="switchPanel('weeklyleaders')">Weekly Leaders<span class="sidebar-tooltip">Weekly Leaders</span></a>
-    <a class="lab-sidebar-item" data-panel="weeklymvp" data-icon="&#x2655;" onclick="switchPanel('weeklymvp')">Weekly MVP Grid<span class="sidebar-tooltip">Weekly MVP Grid</span></a>
-    <a class="lab-sidebar-item" data-panel="playoffs" data-icon="&#x1F3C6;" onclick="switchPanel('playoffs')">Playoffs<span class="sidebar-tooltip">Playoffs</span></a>
-    <a class="lab-sidebar-item" data-panel="gamescript" data-icon="&#x1F3AC;" onclick="switchPanel('gamescript')">Game Script<span class="sidebar-tooltip">Fantasy production in winning vs losing scripts</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="matchups" data-icon="&#x2694;" onclick="switchPanel('matchups')">Matchups<span class="sidebar-tooltip">Matchups</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="stacks" data-icon="&#x25A4;" onclick="switchPanel('stacks')">Stacks<span class="sidebar-tooltip">QB + pass catcher correlations</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="redzone" data-icon="&#x25A0;" onclick="switchPanel('redzone')">Red Zone<span class="sidebar-tooltip">Red Zone</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="streaks" data-icon="&#x1F525;" onclick="switchPanel('streaks')">Streaks<span class="sidebar-tooltip">Streaks</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="weeklyleaders" data-icon="&#x265B;" onclick="switchPanel('weeklyleaders')">Weekly Leaders<span class="sidebar-tooltip">Weekly Leaders</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="weeklymvp" data-icon="&#x2655;" onclick="switchPanel('weeklymvp')">Weekly MVP Grid<span class="sidebar-tooltip">Weekly MVP Grid</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="playoffs" data-icon="&#x1F3C6;" onclick="switchPanel('playoffs')">Playoffs<span class="sidebar-tooltip">Playoffs</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="gamescript" data-icon="&#x1F3AC;" onclick="switchPanel('gamescript')">Game Script<span class="sidebar-tooltip">Fantasy production in winning vs losing scripts</span></a>
 
     <div class="lab-sidebar-category"><span class="cat-icon" style="display:none">&#x1F4C9;</span><span class="cat-text">Trends &amp; Projections</span></div>
-    <a class="lab-sidebar-item" data-panel="usage" data-icon="&#x2935;" onclick="switchPanel('usage')">Usage Trends<span class="sidebar-tooltip">Usage Trends</span></a>
-    <a class="lab-sidebar-item" data-panel="yoy" data-icon="&#x21C4;" onclick="switchPanel('yoy')">Year-over-Year<span class="sidebar-tooltip">Year-over-Year</span></a>
-    <a class="lab-sidebar-item" data-panel="aging" data-icon="&#x231B;" onclick="switchPanel('aging')">Aging Curves<span class="sidebar-tooltip">Aging Curves</span></a>
-    <a class="lab-sidebar-item" data-panel="pace" data-icon="&#x23F3;" onclick="switchPanel('pace')">Player Pace<span class="sidebar-tooltip">Projected season totals per player</span></a>
-    <a class="lab-sidebar-item" data-panel="seasonpace" data-icon="&#x23ED;" onclick="switchPanel('seasonpace')">Season Pace<span class="sidebar-tooltip">Milestone watch: 1000yd, 10TD pace</span></a>
-    <a class="lab-sidebar-item" data-panel="tdregression" data-icon="&#x2248;" onclick="switchPanel('tdregression')">TD Regression<span class="sidebar-tooltip">Expected vs actual touchdowns</span></a>
-    <a class="lab-sidebar-item" data-panel="airyards" data-icon="&#x2708;" onclick="switchPanel('airyards')">Air Yards<span class="sidebar-tooltip">Target depth and air yard share</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="usage" data-icon="&#x2935;" onclick="switchPanel('usage')">Usage Trends<span class="sidebar-tooltip">Usage Trends</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="yoy" data-icon="&#x21C4;" onclick="switchPanel('yoy')">Year-over-Year<span class="sidebar-tooltip">Year-over-Year</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="aging" data-icon="&#x231B;" onclick="switchPanel('aging')">Aging Curves<span class="sidebar-tooltip">Aging Curves</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="pace" data-icon="&#x23F3;" onclick="switchPanel('pace')">Player Pace<span class="sidebar-tooltip">Projected season totals per player</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="seasonpace" data-icon="&#x23ED;" onclick="switchPanel('seasonpace')">Season Pace<span class="sidebar-tooltip">Milestone watch: 1000yd, 10TD pace</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="tdregression" data-icon="&#x2248;" onclick="switchPanel('tdregression')">TD Regression<span class="sidebar-tooltip">Expected vs actual touchdowns</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="airyards" data-icon="&#x2708;" onclick="switchPanel('airyards')">Air Yards<span class="sidebar-tooltip">Target depth and air yard share</span></a>
 
     <div class="lab-sidebar-category"><span class="cat-icon" style="display:none">&#x1F393;</span><span class="cat-text">College</span></div>
-    <a class="lab-sidebar-item" data-panel="prospects" data-icon="&#x2606;" onclick="switchPanel('prospects')">Big Board<span class="sidebar-tooltip">Big Board</span></a>
-    <a class="lab-sidebar-item" data-panel="draftclass" data-icon="&#x1F4CB;" onclick="switchPanel('draftclass')">Draft Class Analytics<span class="sidebar-tooltip">Draft Class Analytics</span></a>
-    <a class="lab-sidebar-item" data-panel="percentiles" data-icon="%" onclick="switchPanel('percentiles')">Percentiles<span class="sidebar-tooltip">Percentiles</span></a>
-    <a class="lab-sidebar-item" data-panel="mockdraft" data-icon="&#x1F3AF;" onclick="switchPanel('mockdraft')">Mock Draft<span class="sidebar-tooltip">Simulate a dynasty rookie draft</span></a>
-    <a class="lab-sidebar-item" data-panel="proradar" data-icon="&#x25CE;" onclick="switchPanel('proradar')">Athletic Radar<span class="sidebar-tooltip">Prospect combine spider charts</span></a>
-    <a class="lab-sidebar-item" data-panel="drafttracker" data-icon="&#x1F4C5;" onclick="switchPanel('drafttracker')">Draft Class Tracker<span class="sidebar-tooltip">How each draft class performed in fantasy</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="draftclass" data-icon="&#x1F4CB;" onclick="switchPanel('draftclass')">Draft Class Analytics<span class="sidebar-tooltip">Draft Class Analytics</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="percentiles" data-icon="%" onclick="switchPanel('percentiles')">Percentiles<span class="sidebar-tooltip">Percentiles</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="mockdraft" data-icon="&#x1F3AF;" onclick="switchPanel('mockdraft')">Mock Draft<span class="sidebar-tooltip">Simulate a dynasty rookie draft</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="proradar" data-icon="&#x25CE;" onclick="switchPanel('proradar')">Athletic Radar<span class="sidebar-tooltip">Prospect combine spider charts</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="drafttracker" data-icon="&#x1F4C5;" onclick="switchPanel('drafttracker')">Draft Class Tracker<span class="sidebar-tooltip">How each draft class performed in fantasy</span></a>
 
     <div class="lab-sidebar-category"><span class="cat-icon" style="display:none">&#x1F464;</span><span class="cat-text">Player Tools</span></div>
     <a class="lab-sidebar-item pro-locked" data-panel="career" data-icon="&#x1F4C4;" onclick="switchPanel('career')">Career Stats<span class="sidebar-tooltip">Career Stats</span></a>
     <a class="lab-sidebar-item pro-locked" data-panel="career-compare" data-icon="&#x2B0C;" onclick="switchPanel('career-compare')">Career Compare<span class="sidebar-tooltip">Career Compare</span></a>
-    <a class="lab-sidebar-item" data-panel="comptable" data-icon="&#x2263;" onclick="switchPanel('comptable')">Compare Table<span class="sidebar-tooltip">Compare Table</span></a>
-    <a class="lab-sidebar-item" data-panel="strengths" data-icon="&#x1F4AA;" onclick="switchPanel('strengths')">Strengths<span class="sidebar-tooltip">Strengths</span></a>
-    <a class="lab-sidebar-item" data-panel="reportcard" data-icon="&#x1F4DD;" onclick="switchPanel('reportcard')">Report Card<span class="sidebar-tooltip">Report Card</span></a>
-    <a class="lab-sidebar-item" data-panel="fptsbreakdown" data-icon="&#x2211;" onclick="switchPanel('fptsbreakdown')">Points Breakdown<span class="sidebar-tooltip">Fantasy points by scoring category</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="comptable" data-icon="&#x2263;" onclick="switchPanel('comptable')">Compare Table<span class="sidebar-tooltip">Compare Table</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="strengths" data-icon="&#x1F4AA;" onclick="switchPanel('strengths')">Strengths<span class="sidebar-tooltip">Strengths</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="reportcard" data-icon="&#x1F4DD;" onclick="switchPanel('reportcard')">Report Card<span class="sidebar-tooltip">Report Card</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="fptsbreakdown" data-icon="&#x2211;" onclick="switchPanel('fptsbreakdown')">Points Breakdown<span class="sidebar-tooltip">Fantasy points by scoring category</span></a>
     <a class="lab-sidebar-item pro-locked" data-panel="gamelog" data-icon="&#x1F4D3;" onclick="switchPanel('gamelog')">Game Log<span class="sidebar-tooltip">Game Log</span></a>
-    <a class="lab-sidebar-item" data-panel="archetypes" data-icon="&#x2726;" onclick="switchPanel('archetypes')">Archetypes<span class="sidebar-tooltip">Archetypes</span></a>
-    <a class="lab-sidebar-item" data-panel="breakdown" data-icon="&#x25E9;" onclick="switchPanel('breakdown')">Scoring Breakdown<span class="sidebar-tooltip">Donut chart: scoring category %</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="archetypes" data-icon="&#x2726;" onclick="switchPanel('archetypes')">Archetypes<span class="sidebar-tooltip">Archetypes</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="breakdown" data-icon="&#x25E9;" onclick="switchPanel('breakdown')">Scoring Breakdown<span class="sidebar-tooltip">Donut chart: scoring category %</span></a>
 
     <div class="lab-sidebar-category"><span class="cat-icon" style="display:none">&#x1F6E0;</span><span class="cat-text">League Tools</span></div>
     <a class="lab-sidebar-item pro-locked" data-panel="rosterbuilder" data-icon="&#x1F4CB;" onclick="switchPanel('rosterbuilder')">Roster Builder<span class="sidebar-tooltip">Roster Builder</span></a>
     <a class="lab-sidebar-item pro-locked" data-panel="tradefinder" data-icon="&#x21C6;" onclick="switchPanel('tradefinder')">Trade Finder<span class="sidebar-tooltip">Trade Finder</span></a>
-    <a class="lab-sidebar-item" data-panel="scoring" data-icon="&#x2116;" onclick="switchPanel('scoring')">Scoring Comparison<span class="sidebar-tooltip">Scoring Comparison</span></a>
-    <a class="lab-sidebar-item" data-panel="dashboard" data-icon="&#x25A3;" onclick="switchPanel('dashboard')">Dashboard<span class="sidebar-tooltip">Dashboard</span></a>
-    <a class="lab-sidebar-item" data-panel="schedule" data-icon="&#x1F4C5;" onclick="switchPanel('schedule')">Schedule / SOS<span class="sidebar-tooltip">Schedule / SOS</span></a>
-    <a class="lab-sidebar-item" data-panel="opportunity" data-icon="&#x25CE;" onclick="switchPanel('opportunity')">Opportunity Share<span class="sidebar-tooltip">Opportunity Share</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="scoring" data-icon="&#x2116;" onclick="switchPanel('scoring')">Scoring Comparison<span class="sidebar-tooltip">Scoring Comparison</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="schedule" data-icon="&#x1F4C5;" onclick="switchPanel('schedule')">Schedule / SOS<span class="sidebar-tooltip">Schedule / SOS</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="opportunity" data-icon="&#x25CE;" onclick="switchPanel('opportunity')">Opportunity Share<span class="sidebar-tooltip">Opportunity Share</span></a>
 
     <div class="lab-sidebar-category"><span class="cat-icon" style="display:none">&#x1F3C6;</span><span class="cat-text">Records &amp; History</span></div>
-    <a class="lab-sidebar-item" data-panel="records" data-icon="&#x1F4D6;" onclick="switchPanel('records')">Records<span class="sidebar-tooltip">Records</span></a>
-    <a class="lab-sidebar-item" data-panel="recap" data-icon="&#x1F4F0;" onclick="switchPanel('recap')">Season Recap<span class="sidebar-tooltip">Season Recap</span></a>
-    <a class="lab-sidebar-item" data-panel="awards" data-icon="&#x1F3C5;" onclick="switchPanel('awards')">Awards<span class="sidebar-tooltip">Awards</span></a>
-    <a class="lab-sidebar-item" data-panel="leaders" data-icon="&#x1F451;" onclick="switchPanel('leaders')">Stat Leaders<span class="sidebar-tooltip">Stat Leaders</span></a>
-    <a class="lab-sidebar-item" data-panel="explorer" data-icon="&#x1F9ED;" onclick="switchPanel('explorer')">Explorer<span class="sidebar-tooltip">Explorer</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="records" data-icon="&#x1F4D6;" onclick="switchPanel('records')">Records<span class="sidebar-tooltip">Records</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="recap" data-icon="&#x1F4F0;" onclick="switchPanel('recap')">Season Recap<span class="sidebar-tooltip">Season Recap</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="awards" data-icon="&#x1F3C5;" onclick="switchPanel('awards')">Awards<span class="sidebar-tooltip">Awards</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="explorer" data-icon="&#x1F9ED;" onclick="switchPanel('explorer')">Explorer<span class="sidebar-tooltip">Explorer</span></a>
 
     <div class="lab-sidebar-category"><span class="cat-icon" style="display:none">&#x1F3DF;</span><span class="cat-text">Teams</span></div>
-    <a class="lab-sidebar-item" data-panel="targets" data-icon="&#x25CE;" onclick="switchPanel('targets')">Target Distribution<span class="sidebar-tooltip">Target Distribution</span></a>
-    <a class="lab-sidebar-item" data-panel="team" data-icon="&#x1F465;" onclick="switchPanel('team')">Team Rosters<span class="sidebar-tooltip">Team Rosters</span></a>
-    <a class="lab-sidebar-item" data-panel="powerrankings" data-icon="&#x1F3C6;" onclick="switchPanel('powerrankings')">Power Rankings<span class="sidebar-tooltip">Which teams have the most dynasty value?</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="targets" data-icon="&#x25CE;" onclick="switchPanel('targets')">Target Distribution<span class="sidebar-tooltip">Target Distribution</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="team" data-icon="&#x1F465;" onclick="switchPanel('team')">Team Rosters<span class="sidebar-tooltip">Team Rosters</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="powerrankings" data-icon="&#x1F3C6;" onclick="switchPanel('powerrankings')">Power Rankings<span class="sidebar-tooltip">Which teams have the most dynasty value?</span></a>
 
   </div>
 
@@ -3801,6 +3820,13 @@
   var currentPanel = 'screener';
   var labMain = document.getElementById('labMain');
 
+  // ─── Free panel set (no tier gate) ────────────────────────────
+  var FREE_PANELS = {
+    screener: true, rankings: true, tiers: true, tradevalues: true,
+    cheatsheet: true, breakouts: true, weekly: true, prospects: true,
+    dashboard: true, leaders: true
+  };
+
   // ─── escapeHtml fallback (in case app.js fails to load) ────────
   if (typeof escapeHtml !== 'function') {
     window.escapeHtml = function(s) {
@@ -3880,6 +3906,22 @@
   } else {
     document.addEventListener('DOMContentLoaded', _registerDeferredPanels);
   }
+
+  // ─── Lock icons on Pro sidebar items for free users ────────────
+  function _updateSidebarLocks() {
+    var paid = typeof isPaidUser === 'function' && isPaidUser();
+    document.querySelectorAll('.lab-sidebar-item.pro-locked').forEach(function(item) {
+      if (paid) {
+        item.classList.remove('show-lock');
+      } else {
+        item.classList.add('show-lock');
+      }
+    });
+  }
+  // Run on load and on plan change
+  _updateSidebarLocks();
+  document.addEventListener('DOMContentLoaded', _updateSidebarLocks);
+  window.addEventListener('razzle-plan-changed', _updateSidebarLocks);
 
   // ─── Panel Labels & Categories ─────────────────────────────────
   var PANEL_LABELS = {
@@ -4013,9 +4055,54 @@
     }
   });
 
+  // ─── Upgrade gate overlay for free users ───────────────────────
+  function _showUpgradeGate(panelName) {
+    // Hide all panels
+    document.querySelectorAll('.lab-panel').forEach(function(p) {
+      p.style.display = 'none';
+      p.classList.remove('panel-fade-out', 'panel-fade-in');
+    });
+    // Find or create the gate container
+    var gateId = 'panel-upgrade-gate';
+    var gate = document.getElementById(gateId);
+    if (!gate) {
+      gate = document.createElement('section');
+      gate.className = 'lab-panel';
+      gate.id = gateId;
+      gate.dataset.panel = '__gate__';
+      labMain.appendChild(gate);
+    }
+    var label = PANEL_LABELS[panelName] || panelName;
+    gate.innerHTML =
+      '<div style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:400px; text-align:center; padding:48px 24px;">' +
+        '<div style="font-size:48px; margin-bottom:16px;">&#x1F512;</div>' +
+        '<div style="font-family:var(--font-display); font-size:24px; margin-bottom:8px;">' + escapeHtml(label) + ' is a Pro panel</div>' +
+        '<div style="font-family:var(--font-hand); font-size:18px; color:var(--ink-medium); margin-bottom:24px; max-width:400px;">unlock 60+ advanced panels, full historical data, CSV export, and custom formulas with Pro</div>' +
+        '<a href="/pricing.html" class="btn-chunky btn-primary" style="font-size:14px; padding:10px 28px; text-decoration:none;">See Plans</a>' +
+        '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); margin-top:12px;">7-day free trial. Cancel anytime.</div>' +
+      '</div>';
+    gate.style.display = '';
+  }
+
   // ─── switchPanel ───────────────────────────────────────────────
   window.switchPanel = function(panelName) {
     if (panelName === currentPanel) return;
+
+    // Tier gate: non-free panels require Pro/Elite
+    if (!FREE_PANELS[panelName] && typeof isPaidUser === 'function' && !isPaidUser()) {
+      // Show upgrade prompt instead of panel content
+      _showUpgradeGate(panelName);
+      currentPanel = panelName;
+      // Update sidebar active state
+      document.querySelectorAll('.lab-sidebar-item').forEach(function(item) {
+        item.classList.toggle('active', item.dataset.panel === panelName);
+      });
+      // Update URL
+      var urlParams = new URLSearchParams();
+      urlParams.set('panel', panelName);
+      history.pushState({ panel: panelName, universe: 'nfl' }, '', window.location.pathname + '?' + urlParams.toString());
+      return;
+    }
 
     // Update sidebar active state
     document.querySelectorAll('.lab-sidebar-item').forEach(function(item) {
