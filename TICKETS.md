@@ -13,54 +13,6 @@ The database file `data/terminal.db` uses WAL journal mode locally. Uploading it
 
 ---
 
-## Phase: BYOK Security Transparency & Cleanup
-
-**Exit Criterion**: Users understand the BYOK security model. Decrypt endpoint removed. No false sense of security from "cloud sync" encryption theater.
-
-### Task 1: Remove the decrypt endpoint and cloud sync "load" feature
-
-**Files**: `backend/server.py`, `frontend/warroom.js`
-
-1. In `server.py`, remove or disable the `GET /api/user/api-keys/{provider}/decrypt` endpoint (line ~906-921). Keep the `POST /api/user/api-keys` save endpoint — encrypted backup is still useful, just don't send decrypted keys back to the browser.
-2. In `warroom.js`, remove the "Load from cloud" button/logic that calls the decrypt endpoint. Keep the "Save to cloud" option — users can back up their key, they just re-paste it manually on a new browser instead of auto-loading it.
-
-**Why**: The decrypt endpoint defeats the encryption by returning plaintext keys to the browser. Removing it closes the security theater while keeping encrypted backup as a genuine safety net (if localStorage is cleared, support can help restore from the encrypted copy).
-
-**Acceptance**: No endpoint returns decrypted API keys to the browser. "Save to cloud" still works. "Load from cloud" button removed. Users must paste their key on each new browser.
-
----
-
-### Task 2: Add BYOK security disclosure to the Situation Room
-
-**File**: `frontend/agents.html`
-
-In the API key configuration panel (where users paste their key), add a clear disclosure note below the input field:
-
-Use Caveat font (handwritten annotation style, per design guide). Something like:
-
-"your API key is stored in your browser's local storage. browser extensions on this page can technically see it. if that worries you, use a dedicated key with a spending limit on openrouter.ai — that way even if it leaks, the damage is capped."
-
-Keep the tone Razzle — honest, helpful, not scary. This is not a legal disclaimer, it's a friend giving you a heads up.
-
-**Why**: Users deserve to know where their key lives. Recommending a spending-capped key is the practical mitigation.
-
-**Acceptance**: Disclosure text visible below the API key input in the config panel. Uses Caveat font. Mentions localStorage, extensions, and spending limit recommendation. Not a wall of legal text — 2-3 sentences max.
-
----
-
-### Task 3: Add BYOK info to the pricing page FAQ
-
-**File**: `frontend/pricing.html`
-
-Add a new FAQ item:
-
-**Q: "Is my API key safe?"**
-**A: "Your key is stored in your browser only — we never see it. Browser extensions on the page could technically read it, so we recommend creating a dedicated key with a monthly spending cap on OpenRouter. That way you're covered even in the worst case."**
-
-**Acceptance**: New FAQ entry present on pricing page. Honest, clear, not alarming.
-
----
-
 ## Phase: Review Fix 1 — Ship-Blockers (Infrastructure, Security, Critical Bugs)
 
 **Exit Criterion**: App can physically start on Render without OOM. No user secrets exposed to the browser. No native JS methods shadowed. All 59 tests pass.

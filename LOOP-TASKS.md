@@ -1,11 +1,11 @@
 # Razzle Ship Loop — Task Tracker
 
 ## Current State
-- Phase: G (Build Pipeline — esbuild Minification)
-- Current Task: COMPLETE
-- Current Stage: DONE
-- Tasks Completed: 2/2
-- Loop Iterations: 7
+- Phase: H (BYOK Security Transparency & Cleanup)
+- Current Task: H-1
+- Current Stage: BUILD
+- Tasks Completed: 0/3
+- Loop Iterations: 8
 
 ## Phase A: Visual & Design Audit (Mar 12–18)
 **Exit Criterion**: Open each of the three rooms plus the landing page. The visual language is unmistakably Razzle — warm sand, chunky borders, espresso ink, comic-strip energy. No page looks like it was built by a different team.
@@ -375,3 +375,32 @@
 **Size**: M
 **Status**: PASS
 **Attempts**: 1
+
+---
+
+## Phase H: BYOK Security Transparency & Cleanup
+**Exit Criterion**: Users understand the BYOK security model. Decrypt endpoint removed. No false sense of security from "cloud sync" encryption theater.
+
+### Task H-1: Remove decrypt endpoint and cloud sync "load" feature
+**Requirement**: "Remove GET /api/user/api-keys/{provider}/decrypt endpoint from server.py. Remove 'Load from cloud' button/logic from warroom.js. Keep 'Save to cloud' for encrypted backup."
+**Accept when**: No endpoint returns decrypted API keys. Save to cloud works. Load from cloud removed.
+**Depends on**: none
+**Size**: M
+**Status**: PENDING
+**Attempts**: 0
+
+### Task H-2: Add BYOK security disclosure to the Situation Room
+**Requirement**: "Add disclosure note below API key input in agents.html config panel. Caveat font. Mentions localStorage, extensions, spending limit recommendation. 2-3 sentences max."
+**Accept when**: Disclosure text visible, uses Caveat font, honest and helpful.
+**Depends on**: none
+**Size**: S
+**Status**: PENDING
+**Attempts**: 0
+
+### Task H-3: Add BYOK info to pricing page FAQ
+**Requirement**: "Add FAQ item: 'Is my API key safe?' with honest answer about localStorage and spending cap recommendation."
+**Accept when**: New FAQ entry present on pricing page.
+**Depends on**: none
+**Size**: S
+**Status**: PENDING
+**Attempts**: 0
