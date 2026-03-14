@@ -468,7 +468,8 @@ function playerHeadshot(player, pos) {
   var initials = ((player.full_name || player.player_name || "").split(" ").map(function(w) { return w[0] || ""; }).join("").substring(0, 2)).toUpperCase();
   var bgColor = POS_COLOR_MAP[pos] || "#8a7565";
   if (url) {
-    return '<img class="player-headshot" src="' + escapeAttr(url) + '" alt="" width="' + size + '" height="' + size + '" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">' +
+    var altText = escapeAttr((player.full_name || player.player_name || "") + " headshot");
+    return '<img class="player-headshot" src="' + escapeAttr(url) + '" alt="' + altText + '" width="' + size + '" height="' + size + '" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">' +
            '<span class="player-headshot-fallback" style="display:none;background:' + bgColor + ';">' + escapeHtml(initials) + '</span>';
   }
   return '<span class="player-headshot-fallback" style="background:' + bgColor + ';">' + escapeHtml(initials) + '</span>';
