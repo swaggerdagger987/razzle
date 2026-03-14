@@ -1251,7 +1251,7 @@ function cmdSelect() {
   var player = _cmdItems[_cmdActiveIdx];
   addToRecentlyViewed(player);
   closeCmdPalette();
-  window.location.href = "/player/" + encodeURIComponent(player.player_id);
+  openPlayerPopup(player.player_id);
 }
 
 /* Recently Viewed — stored in localStorage */
@@ -1460,6 +1460,100 @@ window.addEventListener("razzle-plan-changed", function(e) {
     footer.textContent = taglines[Math.floor(Math.random() * taglines.length)];
   }
 })();
+
+/* ===== Universal Player Popup ===== */
+
+/**
+ * Open a player profile popup from any page. On the Lab, uses the existing
+ * profileOverlay modal. On other pages, creates a lightweight overlay or
+ * navigates to /player/{id}.
+ */
+function openPlayerPopup(playerId) {
+  if (!playerId) return;
+  // If lab's openPlayerProfile exists (on lab.html), use it
+  if (typeof openPlayerProfile === "function") {
+    openPlayerProfile(playerId);
+    return;
+  }
+  // Otherwise, create a lightweight popup overlay
+  var overlay = document.getElementById("razzlePlayerPopup");
+  if (!overlay) {
+    overlay = document.createElement("div");
+    overlay.id = "razzlePlayerPopup";
+    overlay.style.cssText = "position:fixed;inset:0;background:rgba(45,31,20,0.5);z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px;";
+    overlay.innerHTML =
+      '<div style="background:var(--bg-card);border:3px solid var(--ink);border-radius:12px;box-shadow:6px 6px 0 var(--ink);max-width:600px;width:100%;max-height:80vh;overflow-y:auto;padding:24px;position:relative;">' +
+        '<button onclick="closePlayerPopup()" style="position:absolute;top:8px;right:12px;font-size:24px;background:none;border:none;cursor:pointer;color:var(--ink);font-family:var(--font-display);">&times;</button>' +
+        '<div id="razzlePlayerPopupContent"></div>' +
+      '</div>';
+    overlay.addEventListener("click", function(e) {
+      if (e.target === overlay) closePlayerPopup();
+    });
+    document.body.appendChild(overlay);
+  }
+  overlay.style.display = "flex";
+  var content = document.getElementById("razzlePlayerPopupContent");
+  content.innerHTML = '<div style="text-align:center;padding:40px;font-family:var(--font-hand);font-size:20px;color:var(--ink-light);">' + razzleLoading() + '</div>';
+
+  apiFetch("/api/players/" + encodeURIComponent(playerId) + "/profile").then(function(data) {
+    if (!data || !data.player || !data.player.full_name) {
+      content.innerHTML = '<div style="text-align:center;padding:32px;font-family:var(--font-hand);font-size:18px;color:var(--ink-light);">player not found on the film</div>';
+      return;
+    }
+    var p = data.player;
+    var pos = (p.position || "").toUpperCase();
+    var posColorMap = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
+    var posColor = posColorMap[pos] || "var(--orange)";
+    var html = "";
+    // Header
+    html += '<div style="display:flex;align-items:center;gap:12px;border-left:6px solid ' + posColor + ';padding-left:12px;margin-bottom:16px;">';
+    if (p.headshot_url) {
+      html += '<img src="' + escapeAttr(p.headshot_url) + '" alt="" style="width:56px;height:56px;border-radius:50%;border:2px solid var(--ink);object-fit:cover;" onerror="this.style.display=\'none\'">';
+    }
+    html += '<div>';
+    html += '<div style="font-family:var(--font-display);font-size:22px;">' + escapeHtml(p.full_name) + '</div>';
+    html += '<div style="font-family:var(--font-mono);font-size:12px;color:var(--ink-medium);">' + escapeHtml(pos) + ' · ' + escapeHtml(p.team || "FA") + (p.age ? ' · Age ' + p.age : '') + '</div>';
+    html += '</div></div>';
+    // Key stats
+    var stats = data.seasons && data.seasons.length ? data.seasons[data.seasons.length - 1] : null;
+    if (stats) {
+      html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(80px,1fr));gap:8px;margin-bottom:16px;">';
+      var keys = [
+        { k: "games_played", l: "GP" }, { k: "fantasy_points_ppr", l: "PPR" },
+        { k: "targets", l: "TGT" }, { k: "receptions", l: "REC" },
+        { k: "receiving_yards", l: "REC YD" }, { k: "rushing_yards", l: "RUSH YD" },
+        { k: "passing_yards", l: "PASS YD" }, { k: "total_tds", l: "TD" },
+      ];
+      for (var i = 0; i < keys.length; i++) {
+        var val = stats[keys[i].k];
+        if (val != null && val !== 0) {
+          html += '<div style="background:var(--bg-warm);border:2px solid var(--ink-faint);border-radius:8px;padding:8px;text-align:center;">';
+          html += '<div style="font-family:var(--font-mono);font-size:16px;font-weight:700;">' + formatStat(val, 0) + '</div>';
+          html += '<div style="font-family:var(--font-mono);font-size:9px;color:var(--ink-light);text-transform:uppercase;">' + keys[i].l + '</div>';
+          html += '</div>';
+        }
+      }
+      html += '</div>';
+    }
+    // Link to full profile
+    html += '<div style="text-align:center;margin-top:12px;">';
+    html += '<a href="/player/' + encodeURIComponent(playerId) + '" style="font-family:var(--font-mono);font-size:12px;color:var(--orange);">view full profile &rarr;</a>';
+    html += '</div>';
+    content.innerHTML = html;
+  }).catch(function(err) {
+    content.innerHTML = '<div style="text-align:center;padding:32px;font-family:var(--font-hand);font-size:18px;color:var(--red);">' + razzleError() + '</div>';
+  });
+}
+
+function closePlayerPopup() {
+  var overlay = document.getElementById("razzlePlayerPopup");
+  if (overlay) overlay.style.display = "none";
+}
+
+// Close on Escape
+document.addEventListener("keydown", function(e) {
+  if (e.key === "Escape") closePlayerPopup();
+});
 
 /* ===== Re-check auth on tab re-focus (after 5 min away) ===== */
 (function() {

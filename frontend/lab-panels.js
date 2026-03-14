@@ -254,7 +254,7 @@
       content.querySelectorAll('tr[data-pid]').forEach(function(tr) {
         tr.addEventListener('click', function() {
           var pid = tr.getAttribute('data-pid');
-          if (pid) window.location.href = '/player/' + encodeURIComponent(pid);
+          if (pid) if (typeof openPlayerPopup === 'function') openPlayerPopup(pid); else window.location.href = '/player/' + encodeURIComponent(pid);
         });
       });
       setupCompareSearch(content);
@@ -355,7 +355,7 @@
       content.querySelectorAll('.rankings-card').forEach(function(card) {
         card.addEventListener('click', function() {
           var pid = this.getAttribute('data-pid');
-          if (pid) window.location.href = '/player/' + encodeURIComponent(pid);
+          if (pid) if (typeof openPlayerPopup === 'function') openPlayerPopup(pid); else window.location.href = '/player/' + encodeURIComponent(pid);
         });
       });
     }
@@ -691,7 +691,7 @@
       body.querySelectorAll('.tv-row[data-pid]').forEach(function(row) {
         row.addEventListener('click', function() {
           var pid = row.getAttribute('data-pid');
-          if (pid) window.location.href = '/player/' + encodeURIComponent(pid);
+          if (pid) if (typeof openPlayerPopup === 'function') openPlayerPopup(pid); else window.location.href = '/player/' + encodeURIComponent(pid);
         });
       });
     }
@@ -964,7 +964,7 @@
       body.querySelectorAll('tr[data-pid]').forEach(function(tr) {
         tr.addEventListener('click', function() {
           var pid = tr.getAttribute('data-pid');
-          if (pid) window.location.href = '/player/' + encodeURIComponent(pid);
+          if (pid) if (typeof openPlayerPopup === 'function') openPlayerPopup(pid); else window.location.href = '/player/' + encodeURIComponent(pid);
         });
       });
     }
@@ -1370,7 +1370,7 @@
       grid.querySelectorAll('.cs-player[data-pid]').forEach(function(row) {
         row.addEventListener('click', function() {
           var pid = this.getAttribute('data-pid');
-          if (pid) window.location.href = '/player/' + encodeURIComponent(pid);
+          if (pid) if (typeof openPlayerPopup === 'function') openPlayerPopup(pid); else window.location.href = '/player/' + encodeURIComponent(pid);
         });
       });
     }
@@ -1502,7 +1502,7 @@
 
         body.querySelectorAll('.breakout-card[data-pid]').forEach(function(card) {
           card.addEventListener('click', function() {
-            window.location.href = '/player/' + encodeURIComponent(card.getAttribute('data-pid'));
+            var _pid = card.getAttribute('data-pid'); if (typeof openPlayerPopup === 'function') openPlayerPopup(_pid); else window.location.href = '/player/' + encodeURIComponent(_pid);
           });
         });
       }).catch(function() { body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>'; });
@@ -1652,7 +1652,7 @@
 
         body.querySelectorAll('.buysell-card[data-pid]').forEach(function(card) {
           card.addEventListener('click', function() {
-            window.location.href = '/player/' + encodeURIComponent(card.getAttribute('data-pid'));
+            var _pid = card.getAttribute('data-pid'); if (typeof openPlayerPopup === 'function') openPlayerPopup(_pid); else window.location.href = '/player/' + encodeURIComponent(_pid);
           });
         });
       }).catch(function() { body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>'; });
@@ -1828,7 +1828,7 @@
       });
       body.querySelectorAll('tr[data-pid]').forEach(function(tr) {
         tr.addEventListener('click', function() {
-          window.location.href = '/player/' + encodeURIComponent(tr.getAttribute('data-pid'));
+          var _pid = tr.getAttribute('data-pid'); if (typeof openPlayerPopup === 'function') openPlayerPopup(_pid); else window.location.href = '/player/' + encodeURIComponent(_pid);
         });
       });
     }
@@ -2074,7 +2074,7 @@
 
         body.querySelectorAll('.scarcity-bar-row[data-pid]').forEach(function(row) {
           row.addEventListener('click', function() {
-            window.location.href = '/player/' + encodeURIComponent(row.getAttribute('data-pid'));
+            var _pid = row.getAttribute('data-pid'); if (typeof openPlayerPopup === 'function') openPlayerPopup(_pid); else window.location.href = '/player/' + encodeURIComponent(_pid);
           });
         });
       }).catch(function() { body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>'; });
@@ -2320,7 +2320,7 @@
       });
       body.querySelectorAll('tr[data-pid]').forEach(function(tr) {
         tr.addEventListener('click', function() {
-          window.location.href = '/player/' + encodeURIComponent(tr.getAttribute('data-pid'));
+          var _pid = tr.getAttribute('data-pid'); if (typeof openPlayerPopup === 'function') openPlayerPopup(_pid); else window.location.href = '/player/' + encodeURIComponent(_pid);
         });
       });
     }
@@ -2524,7 +2524,7 @@
       });
       body.querySelectorAll('tr[data-pid]').forEach(function(tr) {
         tr.addEventListener('click', function() {
-          window.location.href = '/player/' + encodeURIComponent(tr.getAttribute('data-pid'));
+          var _pid = tr.getAttribute('data-pid'); if (typeof openPlayerPopup === 'function') openPlayerPopup(_pid); else window.location.href = '/player/' + encodeURIComponent(_pid);
         });
       });
     }
@@ -3338,7 +3338,7 @@
       body.querySelectorAll('.wh-player-inner').forEach(function(pi) {
         pi.addEventListener('click', function() {
           var pid = pi.getAttribute('data-pid');
-          if (pid) window.location.href = '/player/' + encodeURIComponent(pid);
+          if (pid) if (typeof openPlayerPopup === 'function') openPlayerPopup(pid); else window.location.href = '/player/' + encodeURIComponent(pid);
         });
       });
     }
@@ -3553,7 +3553,7 @@
 
         panel.querySelectorAll('.mh-detail-player[data-pid]').forEach(function(dp) {
           dp.addEventListener('click', function() {
-            window.location.href = '/player/' + encodeURIComponent(dp.getAttribute('data-pid'));
+            var _pid = dp.getAttribute('data-pid'); if (typeof openPlayerPopup === 'function') openPlayerPopup(_pid); else window.location.href = '/player/' + encodeURIComponent(_pid);
           });
         });
       } else {
@@ -3830,7 +3830,7 @@
 
       body.querySelectorAll('tr[data-pid]').forEach(function(tr) {
         tr.addEventListener('click', function() {
-          window.location.href = '/player/' + encodeURIComponent(tr.getAttribute('data-pid'));
+          var _pid = tr.getAttribute('data-pid'); if (typeof openPlayerPopup === 'function') openPlayerPopup(_pid); else window.location.href = '/player/' + encodeURIComponent(_pid);
         });
       });
     }
@@ -4158,7 +4158,7 @@
 
       body.querySelectorAll('tr[data-pid]').forEach(function(tr) {
         tr.addEventListener('click', function() {
-          window.location.href = '/player/' + encodeURIComponent(tr.getAttribute('data-pid'));
+          var _pid = tr.getAttribute('data-pid'); if (typeof openPlayerPopup === 'function') openPlayerPopup(_pid); else window.location.href = '/player/' + encodeURIComponent(_pid);
         });
       });
     }
@@ -6795,7 +6795,7 @@
           el2.style.cursor = 'pointer';
           el2.addEventListener('click', function() {
             var pid = this.getAttribute('data-pid');
-            if (pid) window.location.href = '/player/' + encodeURIComponent(pid);
+            if (pid) if (typeof openPlayerPopup === 'function') openPlayerPopup(pid); else window.location.href = '/player/' + encodeURIComponent(pid);
           });
         });
       }
@@ -7067,7 +7067,7 @@
       content.querySelectorAll('.dc2-table tbody tr[data-pid]').forEach(function(row) {
         row.addEventListener('click', function() {
           var pid = this.getAttribute('data-pid');
-          if (pid) window.location.href = '/player/' + encodeURIComponent(pid);
+          if (pid) if (typeof openPlayerPopup === 'function') openPlayerPopup(pid); else window.location.href = '/player/' + encodeURIComponent(pid);
         });
       });
 
@@ -7539,7 +7539,7 @@
       content.querySelectorAll('.ld2-row[data-pid]').forEach(function(row) {
         row.addEventListener('click', function() {
           var pid = this.getAttribute('data-pid');
-          if (pid) window.location.href = '/player/' + encodeURIComponent(pid);
+          if (pid) if (typeof openPlayerPopup === 'function') openPlayerPopup(pid); else window.location.href = '/player/' + encodeURIComponent(pid);
         });
       });
     }
@@ -7695,7 +7695,7 @@
       content.querySelectorAll('tr[data-pid]').forEach(function(tr) {
         tr.addEventListener('click', function() {
           var pid = tr.getAttribute('data-pid');
-          if (pid) window.location.href = '/player/' + encodeURIComponent(pid);
+          if (pid) if (typeof openPlayerPopup === 'function') openPlayerPopup(pid); else window.location.href = '/player/' + encodeURIComponent(pid);
         });
       });
     }
@@ -8618,7 +8618,7 @@
       content.querySelectorAll('tr[data-pid]').forEach(function(tr) {
         tr.addEventListener('click', function() {
           var pid = tr.getAttribute('data-pid');
-          if (pid) window.location.href = '/player/' + encodeURIComponent(pid);
+          if (pid) if (typeof openPlayerPopup === 'function') openPlayerPopup(pid); else window.location.href = '/player/' + encodeURIComponent(pid);
         });
       });
     }
@@ -8735,7 +8735,7 @@
       content.querySelectorAll('tr[data-pid]').forEach(function(tr) {
         tr.addEventListener('click', function() {
           var pid = tr.getAttribute('data-pid');
-          if (pid) window.location.href = '/player/' + encodeURIComponent(pid);
+          if (pid) if (typeof openPlayerPopup === 'function') openPlayerPopup(pid); else window.location.href = '/player/' + encodeURIComponent(pid);
         });
       });
     }
@@ -8978,7 +8978,7 @@
       content.querySelectorAll('[data-pid]').forEach(function(row) {
         row.addEventListener('click', function() {
           var pid = row.getAttribute('data-pid');
-          if (pid) window.location.href = '/player/' + encodeURIComponent(pid);
+          if (pid) if (typeof openPlayerPopup === 'function') openPlayerPopup(pid); else window.location.href = '/player/' + encodeURIComponent(pid);
         });
       });
     }
@@ -9115,7 +9115,7 @@
       content.querySelectorAll('.tm-player-row[data-pid]').forEach(function(row) {
         row.addEventListener('click', function() {
           var pid = this.getAttribute('data-pid');
-          if (pid) window.location.href = '/player/' + encodeURIComponent(pid);
+          if (pid) if (typeof openPlayerPopup === 'function') openPlayerPopup(pid); else window.location.href = '/player/' + encodeURIComponent(pid);
         });
       });
     }
@@ -9274,7 +9274,7 @@
       body.querySelectorAll('tr[data-pid]').forEach(function(row) {
         row.addEventListener('click', function() {
           var pid = row.getAttribute('data-pid');
-          if (pid) window.location.href = '/player/' + encodeURIComponent(pid);
+          if (pid) if (typeof openPlayerPopup === 'function') openPlayerPopup(pid); else window.location.href = '/player/' + encodeURIComponent(pid);
         });
       });
 
@@ -10115,7 +10115,7 @@
 
         body.querySelectorAll('.gs-row[data-pid]').forEach(function(row) {
           row.addEventListener('click', function() {
-            window.location.href = '/player/' + encodeURIComponent(row.getAttribute('data-pid'));
+            var _pid = row.getAttribute('data-pid'); if (typeof openPlayerPopup === 'function') openPlayerPopup(_pid); else window.location.href = '/player/' + encodeURIComponent(_pid);
           });
         });
       }).catch(function() { body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>'; });
