@@ -634,7 +634,7 @@
     box-shadow: 3px 3px 0 var(--ink);
     transform: translate(-1px, -1px);
     background: var(--orange);
-    color: #fff;
+    color: var(--bg);
   }
 
   .trade-finder-results {
@@ -1339,7 +1339,7 @@
   .trade-matrix th, .trade-matrix td {
     padding: 6px 8px;
     text-align: center;
-    border: 1px solid var(--ink-faint);
+    border: 2px solid var(--ink-faint);
   }
 
   .trade-matrix th {
@@ -5068,7 +5068,7 @@ function renderBuildProfiles(container, profiles) {
     for (var ipi = 0; ipi < investPositions.length; ipi++) {
       var ipos = investPositions[ipi];
       var pct = mgr.posInvestment[ipos] || 0;
-      html += '<div style="width:' + pct + '%;background:' + investColors[ipos] + ';' + (ipi < 3 ? 'border-right:1px solid var(--ink);' : '') + '" title="' + ipos + ': ' + pct.toFixed(0) + '%"></div>';
+      html += '<div style="width:' + pct + '%;background:' + investColors[ipos] + ';' + (ipi < 3 ? 'border-right:2px solid var(--ink);' : '') + '" title="' + ipos + ': ' + pct.toFixed(0) + '%"></div>';
     }
     html += '</div>';
     // Labels under bar

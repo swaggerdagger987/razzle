@@ -11288,7 +11288,7 @@ function renderRosterReport() {
     // Value bar
     var pct = Math.min(100, p.trade_value);
     var pc = _POS_HEX[p.position] || "#d97757";
-    html += '<div style="width:80px; height:14px; background:var(--ink-faint); border-radius:4px; overflow:hidden; border:1px solid var(--ink);">';
+    html += '<div style="width:80px; height:14px; background:var(--ink-faint); border-radius:4px; overflow:hidden; border:2px solid var(--ink);">';
     html += '<div style="width:' + pct + '%; height:100%; background:' + pc + ';"></div>';
     html += '</div>';
     html += '<span style="font-family:var(--font-mono); font-size:12px; font-weight:bold; width:32px; text-align:right;">' + p.trade_value + '</span>';
@@ -12670,6 +12670,6 @@ function exportBoomBustImage() {
   if (!toolbar) return;
   const hint = document.createElement("div");
   hint.style.cssText = "font-family:var(--font-mono); font-size:10px; color:var(--ink-faint); padding:2px 0; white-space:nowrap;";
-  hint.innerHTML = `<kbd style="font-size:10px; border:1px solid var(--ink-faint); border-radius:2px; padding:0 3px;">/</kbd> search &nbsp; <kbd style="font-size:10px; border:1px solid var(--ink-faint); border-radius:2px; padding:0 3px;">1-5</kbd> position &nbsp; <kbd style="font-size:10px; border:1px solid var(--ink-faint); border-radius:2px; padding:0 3px;">N</kbd> notes &nbsp; <kbd style="font-size:10px; border:1px solid var(--ink-faint); border-radius:2px; padding:0 3px;">?</kbd> shortcuts`;
+  hint.innerHTML = `<kbd style="font-size:10px; border:2px solid var(--ink-faint); border-radius:2px; padding:0 3px;">/</kbd> search &nbsp; <kbd style="font-size:10px; border:2px solid var(--ink-faint); border-radius:2px; padding:0 3px;">1-5</kbd> position &nbsp; <kbd style="font-size:10px; border:2px solid var(--ink-faint); border-radius:2px; padding:0 3px;">N</kbd> notes &nbsp; <kbd style="font-size:10px; border:2px solid var(--ink-faint); border-radius:2px; padding:0 3px;">?</kbd> shortcuts`;
   toolbar.appendChild(hint);
 })();
