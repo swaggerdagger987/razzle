@@ -910,6 +910,105 @@
     vertical-align: middle;
   }
 
+  /* ===== SELF-SCOUT ===== */
+  .self-scout {
+    margin-top: 16px;
+    padding: 16px;
+    background: var(--bg-card);
+    border: 3px solid var(--orange);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+
+  .self-scout-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px dashed var(--ink-faint);
+  }
+
+  .self-scout-title {
+    font-family: var(--font-display);
+    font-size: 20px;
+  }
+
+  .self-scout-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .self-scout-stat {
+    background: var(--bg-warm);
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    padding: 10px;
+  }
+
+  .self-scout-stat-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-light);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .self-scout-stat-value {
+    font-family: var(--font-display);
+    font-size: 20px;
+    margin-top: 2px;
+  }
+
+  .self-scout-stat-sub {
+    font-family: var(--font-hand);
+    font-size: 14px;
+    color: var(--ink-light);
+  }
+
+  .self-scout-opponents {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 2px dashed var(--ink-faint);
+  }
+
+  .self-scout-opponents h4 {
+    font-family: var(--font-display);
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+
+  .self-scout-opp-text {
+    font-family: var(--font-hand);
+    font-size: 16px;
+    color: var(--ink-medium);
+    margin-bottom: 8px;
+  }
+
+  .self-scout-rivals {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .self-scout-rival-chip {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 4px 10px;
+    border: 2px solid var(--ink);
+    border-radius: 12px;
+    background: var(--bg-card);
+    cursor: pointer;
+    transition: all 0.1s;
+  }
+
+  .self-scout-rival-chip:hover {
+    background: var(--orange-light);
+    border-color: var(--orange);
+  }
+
   /* ===== H2H RIVALRY ===== */
   .h2h-trigger {
     margin-top: 12px;
@@ -1423,6 +1522,8 @@
     .h2h-columns { grid-template-columns: 1fr; }
     .h2h-divider { display: none; }
     .h2h-selectors { flex-direction: column; align-items: stretch; }
+    .self-scout-grid { grid-template-columns: 1fr; }
+    .self-scout { padding: 12px; }
   }
 </style>
 </head>
@@ -1854,6 +1955,9 @@ async function toggleLeague(card, leagueId, userId) {
       </span>
     </div>`;
 
+    // Add self-scout section (auto-loads)
+    html += '<div id="selfScout-' + leagueId + '"></div>';
+
     // Add activity feed section (auto-loads)
     html += '<div class="activity-feed">' +
       '<div class="activity-feed-header">recent activity</div>' +
@@ -1997,6 +2101,9 @@ async function toggleLeague(card, leagueId, userId) {
         loadH2HRivalry(leagueId, userId, rosters, allPlayers, userMap);
       });
     }
+
+    // Auto-load self-scout (user's own team analysis)
+    loadSelfScout(leagueId, userId, myRoster, rosters, allPlayers, userMap);
 
     // Auto-load activity feed
     loadActivityFeed(leagueId, userMap, allPlayers, rosters);
@@ -3522,6 +3629,193 @@ async function loadLeagueTradeFinder(leagueId, userId, myRoster, rosters, allPla
     // Re-enable button for retry
     var tfBtn = document.getElementById("tradeFinderBtn-" + leagueId);
     if (tfBtn) { tfBtn.disabled = false; tfBtn.textContent = "find trade partners"; }
+  }
+}
+
+// ── SELF-SCOUT ───────────────────────────────────────────────────────
+async function loadSelfScout(leagueId, userId, myRoster, rosters, allPlayers, userMap) {
+  var container = document.getElementById("selfScout-" + leagueId);
+  if (!container) return;
+
+  try {
+    // Build player list for PPG lookup
+    var allRosterPlayers = [];
+    for (var i = 0; i < rosters.length; i++) {
+      for (var j = 0; j < (rosters[i].players || []).length; j++) {
+        var pid = rosters[i].players[j];
+        var p = allPlayers[pid];
+        if (!p) continue;
+        var pos = p.position || "?";
+        if (pos !== "QB" && pos !== "RB" && pos !== "WR" && pos !== "TE") continue;
+        var name = ((p.first_name || "") + " " + (p.last_name || "")).trim();
+        if (name) allRosterPlayers.push({ name: name, position: pos, team: p.team || "" });
+      }
+    }
+
+    // Fetch PPG
+    var ppgLookup = {};
+    if (allRosterPlayers.length > 0) {
+      var ctrl = new AbortController();
+      var timer = setTimeout(function() { ctrl.abort(); }, 15000);
+      var resp = await fetch("/api/roster-depth-lookup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ players: allRosterPlayers }),
+        signal: ctrl.signal
+      });
+      clearTimeout(timer);
+      if (resp.ok) {
+        var data = await resp.json();
+        if (data.players) {
+          for (var k = 0; k < data.players.length; k++) {
+            ppgLookup[data.players[k].sleeper_name] = data.players[k].ppg || 0;
+          }
+        }
+      }
+    }
+
+    // Analyze user's roster
+    var myPids = myRoster.players || [];
+    var posPlayers = { QB: [], RB: [], WR: [], TE: [] };
+    var totalAge = 0;
+    var ageCount = 0;
+
+    for (var pi = 0; pi < myPids.length; pi++) {
+      var pp = allPlayers[myPids[pi]];
+      if (!pp) continue;
+      var ppos = pp.position || "?";
+      if (!posPlayers[ppos]) continue;
+      var pname = ((pp.first_name || "") + " " + (pp.last_name || "")).trim();
+      var ppg = ppgLookup[pname] || 0;
+      posPlayers[ppos].push({ name: pname, ppg: ppg });
+      if (pp.age > 0) { totalAge += pp.age; ageCount++; }
+    }
+
+    for (var sp in posPlayers) posPlayers[sp].sort(function(a, b) { return b.ppg - a.ppg; });
+
+    var avgAge = ageCount > 0 ? (totalAge / ageCount).toFixed(1) : "?";
+
+    // Starter PPG (1QB + 2RB + 2WR + 1TE + 1FLEX)
+    var starterPPG = 0;
+    var starterSlots = { QB: 1, RB: 2, WR: 2, TE: 1 };
+    var flexCandidates = [];
+    var vulnerabilities = [];
+
+    for (var sp2 in starterSlots) {
+      var needed = starterSlots[sp2];
+      var sorted = posPlayers[sp2];
+      for (var si = 0; si < sorted.length; si++) {
+        if (si < needed) starterPPG += sorted[si].ppg;
+        else if (sp2 !== "QB") flexCandidates.push(sorted[si]);
+      }
+      if (sorted.length <= needed) vulnerabilities.push(sp2);
+    }
+    flexCandidates.sort(function(a, b) { return b.ppg - a.ppg; });
+    if (flexCandidates.length > 0) starterPPG += flexCandidates[0].ppg;
+
+    // Build archetype (simplified)
+    var archetype = "Balanced";
+    if (avgAge !== "?" && parseFloat(avgAge) < 25) archetype = "Youth Movement";
+    else if (avgAge !== "?" && parseFloat(avgAge) > 27) archetype = "Win Now";
+    else if (posPlayers.RB.length <= 3 && posPlayers.WR.length >= 6) archetype = "Zero RB";
+    else if (posPlayers.RB.length > 0 && posPlayers.RB[0].ppg > 15 && (posPlayers.RB.length <= 4 || (posPlayers.RB[1] && posPlayers.RB[1].ppg < 8))) archetype = "Hero RB";
+
+    // Rank among league
+    var allStarterPPGs = [];
+    for (var ri2 = 0; ri2 < rosters.length; ri2++) {
+      var rPids = rosters[ri2].players || [];
+      var rPPG = 0;
+      var rPlayers = [];
+      for (var rpi = 0; rpi < rPids.length; rpi++) {
+        var rp = allPlayers[rPids[rpi]];
+        if (!rp) continue;
+        var rppos = rp.position || "?";
+        if (rppos !== "QB" && rppos !== "RB" && rppos !== "WR" && rppos !== "TE") continue;
+        var rpname = ((rp.first_name || "") + " " + (rp.last_name || "")).trim();
+        rPlayers.push({ ppg: ppgLookup[rpname] || 0 });
+      }
+      rPlayers.sort(function(a, b) { return b.ppg - a.ppg; });
+      for (var rsi = 0; rsi < Math.min(7, rPlayers.length); rsi++) rPPG += rPlayers[rsi].ppg;
+      allStarterPPGs.push({ oid: rosters[ri2].owner_id, ppg: rPPG });
+    }
+    allStarterPPGs.sort(function(a, b) { return b.ppg - a.ppg; });
+    var rank = allStarterPPGs.findIndex(function(r) { return r.oid === userId; }) + 1;
+
+    // Find weakest position and best surplus
+    var weakest = null;
+    var weakestPPG = Infinity;
+    var strongest = null;
+    var strongestPPG = 0;
+    for (var wp in posPlayers) {
+      var avg = posPlayers[wp].length > 0 ? posPlayers[wp].reduce(function(s, p) { return s + p.ppg; }, 0) / posPlayers[wp].length : 0;
+      if (avg < weakestPPG) { weakestPPG = avg; weakest = wp; }
+      if (avg > strongestPPG) { strongestPPG = avg; strongest = wp; }
+    }
+
+    // Render self-scout card
+    var html = '<div class="self-scout">';
+    html += '<div class="self-scout-header">';
+    html += '<span class="self-scout-title">your team — ' + escapeHtml(userMap[userId] || "you") + '</span>';
+    html += '<span class="archetype-badge" style="background:var(--orange);color:white;border-color:var(--orange);">' + escapeHtml(archetype) + '</span>';
+    html += '</div>';
+
+    // Stats grid
+    html += '<div class="self-scout-grid">';
+    html += '<div class="self-scout-stat"><div class="self-scout-stat-label">power rank</div>';
+    html += '<div class="self-scout-stat-value">#' + rank + '</div>';
+    html += '<div class="self-scout-stat-sub">of ' + rosters.length + ' teams</div></div>';
+
+    html += '<div class="self-scout-stat"><div class="self-scout-stat-label">starter PPG</div>';
+    html += '<div class="self-scout-stat-value">' + starterPPG.toFixed(1) + '</div>';
+    html += '<div class="self-scout-stat-sub">projected weekly</div></div>';
+
+    html += '<div class="self-scout-stat"><div class="self-scout-stat-label">avg age</div>';
+    html += '<div class="self-scout-stat-value">' + avgAge + '</div>';
+    html += '<div class="self-scout-stat-sub">' + archetype.toLowerCase() + '</div></div>';
+
+    html += '<div class="self-scout-stat"><div class="self-scout-stat-label">vulnerabilities</div>';
+    html += '<div class="self-scout-stat-value" style="font-size:14px;">';
+    if (vulnerabilities.length > 0) {
+      html += '<span style="color:var(--red);">' + vulnerabilities.join(', ') + ' thin</span>';
+    } else {
+      html += '<span style="color:var(--green);">none</span>';
+    }
+    html += '</div>';
+    html += '<div class="self-scout-stat-sub">' + myPids.length + ' rostered</div></div>';
+    html += '</div>';
+
+    // How opponents see you
+    html += '<div class="self-scout-opponents">';
+    html += '<h4>how opponents see you</h4>';
+    html += '<div class="self-scout-opp-text">';
+    if (weakest && strongest) {
+      html += '"target their ' + weakest + ' — weakest position at ' + weakestPPG.toFixed(1) + ' avg PPG. ';
+      html += 'they have surplus ' + strongest + ' (' + strongestPPG.toFixed(1) + ' PPG avg) — offer to pry one loose."';
+    } else {
+      html += '"balanced roster. no obvious weakness to exploit."';
+    }
+    html += '</div>';
+
+    // Rival quick links
+    html += '<div style="font-family:var(--font-mono);font-size:10px;color:var(--ink-light);margin-top:8px;">rival rosters</div>';
+    html += '<div class="self-scout-rivals">';
+    for (var ri3 = 0; ri3 < rosters.length; ri3++) {
+      var rival = rosters[ri3];
+      if (rival.owner_id === userId) continue;
+      var rivalName = userMap[rival.owner_id] || "Manager";
+      var rivalRecord = (rival.settings?.wins || 0) + "-" + (rival.settings?.losses || 0);
+      html += '<span class="self-scout-rival-chip" onclick="document.getElementById(\'h2hBtn-' + leagueId + '\')?.click();">' + escapeHtml(rivalName) + ' (' + rivalRecord + ')</span>';
+    }
+    html += '</div>';
+
+    html += '</div>'; // opponents
+    html += '</div>'; // self-scout
+
+    container.innerHTML = html;
+
+  } catch (e) {
+    // Silently fail — self-scout is a bonus, not critical
+    console.error("Self-scout error:", e);
   }
 }
 
