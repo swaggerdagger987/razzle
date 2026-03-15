@@ -13,18 +13,6 @@ The database file `data/terminal.db` uses WAL journal mode locally. Uploading it
 
 ---
 
-## Phase: Lab Panel-by-Panel Audit — Batch 2 (E-P)
-
-**Exit Criterion**: All Lab panels E-P pass same audit criteria.
-
-### Task 1: Audit and fix panels E-P
-**Requirement**: Same audit as Batch 1 for: efficiency, explorer, fptsbreakdown, gamelog, gamescript, garbagetime, handcuffs, leaders, matchups, mockdraft, opportunity, pace, percentiles, playoffs, powerrankings, proradar.
-**Accept when**: All 16 panels pass same criteria as batch 1.
-**Depends on**: none
-**Size**: XL
-
----
-
 ## Phase: Lab Panel-by-Panel Audit — Batch 3 (R-Z)
 
 **Exit Criterion**: All Lab panels R-Z pass same audit criteria. Every single Lab panel verified.
