@@ -13,18 +13,6 @@ The database file `data/terminal.db` uses WAL journal mode locally. Uploading it
 
 ---
 
-## Phase: Lab Panel-by-Panel Audit — Batch 1 (A-D)
-
-**Exit Criterion**: All Lab panels A-D load, render data, match DESIGN.md, zero JS errors.
-
-### Task 1: Audit and fix panels A-D
-**Requirement**: Open each panel one by one: advantage, aging, airyards, archetypes, auction, awards, breakdown, breakouts, buysell, career, career-compare, cheatsheet, compare, comptable, consistency, correlations, dashboard, draftclass, drafttracker, drops, dualthreat. For each: (1) Does it load without JS errors? (2) Does it render real data from the API? (3) Do colors use CSS vars only (no hardcoded hex)? (4) Are fonts correct (Space Mono for data, Luckiest Guy for titles only, Caveat for annotations)? (5) Are borders 2px+ and shadows 4px offset? (6) Does mobile scroll horizontally on tables? (7) Do player names have click handlers (popup)? Fix every issue found. Log each panel's status in PROGRESS.md.
-**Accept when**: All 21 panels load, render data, match design guide. Zero console errors. Player clicks work.
-**Depends on**: none
-**Size**: XL
-
----
-
 ## Phase: Lab Panel-by-Panel Audit — Batch 2 (E-P)
 
 **Exit Criterion**: All Lab panels E-P pass same audit criteria.
