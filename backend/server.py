@@ -1334,6 +1334,20 @@ async def import_user_formulas(request: Request):
     user = require_auth(request)
     if not user:
         return JSONResponse({"error": "Authentication required"}, status_code=401)
+    plan = user.get("plan", "free")
+    if plan == "free":
+        existing = auth_module.get_user_formulas(user["id"])
+        current_count = len(existing.get("formulas", []))
+        if current_count >= 3:
+            return JSONResponse(
+                {"error": "Free plan limited to 3 formulas. Upgrade to Pro for unlimited."},
+                status_code=403,
+            )
+        # Cap import to stay within 3-formula limit
+        body = await request.json()
+        formulas = body.get("formulas", [])
+        remaining_slots = 3 - current_count
+        return auth_module.import_formulas(user["id"], formulas[:remaining_slots])
     body = await request.json()
     return auth_module.import_formulas(user["id"], body.get("formulas", []))
 

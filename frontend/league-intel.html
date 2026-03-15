@@ -1220,6 +1220,94 @@
     margin-right: 4px;
   }
 
+  /* ===== SCHEDULE STRENGTH ===== */
+  .sos-trigger {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 2px dashed var(--ink-faint);
+  }
+
+  .sos-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: all 0.15s;
+  }
+
+  .sos-card:hover {
+    box-shadow: 6px 6px 0 var(--ink);
+    transform: translate(-2px, -2px);
+  }
+
+  .sos-rank {
+    font-family: var(--font-display);
+    font-size: 24px;
+    min-width: 36px;
+    text-align: center;
+    color: var(--ink);
+  }
+
+  .sos-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .sos-name {
+    font-family: var(--font-display);
+    font-size: 16px;
+  }
+
+  .sos-detail {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-light);
+    margin-top: 2px;
+  }
+
+  .sos-right {
+    text-align: right;
+    min-width: 90px;
+  }
+
+  .sos-score {
+    font-family: var(--font-mono);
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .sos-grade-badge {
+    font-family: var(--font-display);
+    font-size: 10px;
+    text-transform: uppercase;
+    padding: 2px 10px;
+    border: 2px solid var(--ink);
+    border-radius: 12px;
+    margin-top: 4px;
+    display: inline-block;
+  }
+
+  .sos-teams {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 4px;
+  }
+
+  .sos-team-chip {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    padding: 1px 6px;
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+    background: var(--bg-warm);
+  }
+
   /* ===== WAIVER TENDENCIES ===== */
   .waiver-trigger {
     margin-top: 12px;
@@ -2012,6 +2100,12 @@ async function toggleLeague(card, leagueId, userId) {
       '</div>' +
       '<div id="h2hRivalry-' + leagueId + '"></div>';
 
+    // Add schedule strength trigger
+    html += '<div class="sos-trigger">' +
+      '<button id="sosBtn-' + leagueId + '">schedule strength</button>' +
+      '</div>' +
+      '<div id="scheduleStrength-' + leagueId + '"></div>';
+
     rosterDiv.innerHTML = html;
 
     // Bind profile button with closure over variables
@@ -2099,6 +2193,17 @@ async function toggleLeague(card, leagueId, userId) {
         this.disabled = true;
         this.textContent = "loading matchup intel...";
         loadH2HRivalry(leagueId, userId, rosters, allPlayers, userMap);
+      });
+    }
+
+    // Bind schedule strength button
+    var sosBtn = document.getElementById("sosBtn-" + leagueId);
+    if (sosBtn) {
+      sosBtn.addEventListener("click", function(e) {
+        e.stopPropagation();
+        this.disabled = true;
+        this.textContent = "analyzing schedule matchups...";
+        loadScheduleStrength(leagueId, userId, rosters, allPlayers, userMap);
       });
     }
 
@@ -5733,6 +5838,255 @@ async function runLeagueOdds(leagueId, userId, scoring) {
     oddsDiv.innerHTML = html;
   } catch (e) {
     oddsDiv.innerHTML = '<div style="text-align:center;padding:24px;font-family:var(--font-hand);font-size:16px;color:var(--red);">' + (e.name === 'AbortError' ? 'simulation timed out' : 'fumbled the simulation... ' + escapeHtml(e.message)) + '</div>';
+  }
+}
+
+// ===== SCHEDULE STRENGTH PANEL =====
+async function loadScheduleStrength(leagueId, userId, rosters, allPlayers, userMap) {
+  var container = document.getElementById("scheduleStrength-" + leagueId);
+  if (!container) return;
+
+  container.innerHTML = '<div class="loading-intel">analyzing schedule matchups...</div>';
+
+  try {
+    // 1. Build player list from all rosters
+    var allRosterPlayers = [];
+    var playerToOwner = {};
+    for (var i = 0; i < rosters.length; i++) {
+      var roster = rosters[i];
+      var oid = roster.owner_id;
+      var pids = roster.players || [];
+      for (var j = 0; j < pids.length; j++) {
+        var pid = pids[j];
+        var p = allPlayers[pid];
+        if (!p) continue;
+        var pos = p.position || p.fantasy_positions?.[0] || "";
+        if (!["QB", "RB", "WR", "TE"].includes(pos)) continue;
+        var name = (p.first_name || "") + " " + (p.last_name || "");
+        var team = p.team || "";
+        allRosterPlayers.push({ name: name.trim(), position: pos, team: team, sleeper_id: pid });
+        playerToOwner[pid] = oid;
+      }
+    }
+
+    // 2. Fetch PPG enrichment
+    var ppgLookup = {};
+    if (allRosterPlayers.length > 0) {
+      var ctrl1 = new AbortController();
+      var timer1 = setTimeout(function() { ctrl1.abort(); }, 15000);
+      var resp1 = await fetch("/api/roster-depth-lookup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ players: allRosterPlayers }),
+        signal: ctrl1.signal
+      });
+      clearTimeout(timer1);
+      if (resp1.ok) {
+        var data1 = await resp1.json();
+        if (data1.players) {
+          for (var k = 0; k < data1.players.length; k++) {
+            var dp = data1.players[k];
+            ppgLookup[dp.sleeper_name] = dp.ppg || 0;
+          }
+        }
+      }
+    }
+
+    // 3. Fetch matchup heatmap (defensive PPG allowed by position)
+    var nflYear = new Date().getMonth() >= 7 ? new Date().getFullYear() : new Date().getFullYear() - 1;
+    var ctrl2 = new AbortController();
+    var timer2 = setTimeout(function() { ctrl2.abort(); }, 15000);
+    var resp2 = await fetch("/api/matchup-heatmap?season=" + nflYear, { signal: ctrl2.signal });
+    clearTimeout(timer2);
+    if (!resp2.ok) throw new Error("matchup heatmap unavailable");
+    var heatData = await resp2.json();
+
+    // Build defense lookup: { team: { QB: avg_ppg, RB: avg_ppg, ... } }
+    var defLookup = {};
+    var leagueAvg = heatData.averages || {};
+    if (heatData.teams) {
+      for (var ti = 0; ti < heatData.teams.length; ti++) {
+        var t = heatData.teams[ti];
+        defLookup[t.team] = {};
+        var positions = t.positions || {};
+        for (var pos in positions) {
+          defLookup[t.team][pos] = positions[pos].avg_ppg || 0;
+        }
+      }
+    }
+
+    // Compute league-average PPG allowed per position
+    var posAvgs = {};
+    var posCounts = {};
+    for (var teamKey in defLookup) {
+      for (var posKey in defLookup[teamKey]) {
+        if (!posAvgs[posKey]) { posAvgs[posKey] = 0; posCounts[posKey] = 0; }
+        posAvgs[posKey] += defLookup[teamKey][posKey];
+        posCounts[posKey]++;
+      }
+    }
+    for (var pk in posAvgs) {
+      posAvgs[pk] = posCounts[pk] > 0 ? posAvgs[pk] / posCounts[pk] : 0;
+    }
+
+    // Find easiest and hardest defenses per position
+    var bestDef = {}; // easiest = HIGHEST PPG allowed
+    var worstDef = {}; // hardest = LOWEST PPG allowed
+    for (var pk2 in posAvgs) {
+      bestDef[pk2] = { team: "", ppg: 0 };
+      worstDef[pk2] = { team: "", ppg: 999 };
+      for (var tk in defLookup) {
+        var val = defLookup[tk][pk2] || 0;
+        if (val > bestDef[pk2].ppg) { bestDef[pk2] = { team: tk, ppg: val }; }
+        if (val < worstDef[pk2].ppg && val > 0) { worstDef[pk2] = { team: tk, ppg: val }; }
+      }
+    }
+
+    // 4. For each manager, compute schedule metrics
+    var managers = [];
+    for (var ri = 0; ri < rosters.length; ri++) {
+      var r = rosters[ri];
+      var ownerId = r.owner_id;
+      var managerName = userMap[ownerId] || "Manager";
+      var pids2 = r.players || [];
+      var teamCounts = {};
+      var totalPPG = 0;
+      var bestCasePPG = 0;
+      var worstCasePPG = 0;
+      var playerCount = 0;
+      var starterPlayers = [];
+
+      for (var pi = 0; pi < pids2.length; pi++) {
+        var p2 = allPlayers[pids2[pi]];
+        if (!p2) continue;
+        var pos2 = p2.position || p2.fantasy_positions?.[0] || "";
+        if (!["QB", "RB", "WR", "TE"].includes(pos2)) continue;
+        var name2 = ((p2.first_name || "") + " " + (p2.last_name || "")).trim();
+        var team2 = p2.team || "";
+        var ppg = ppgLookup[name2] || 0;
+
+        if (team2) teamCounts[team2] = (teamCounts[team2] || 0) + 1;
+
+        if (ppg > 0) {
+          starterPlayers.push({ name: name2, pos: pos2, team: team2, ppg: ppg });
+        }
+      }
+
+      // Sort by PPG and take top starters (QB1, RB2, WR3, TE1, FLEX1 = 8)
+      starterPlayers.sort(function(a, b) { return b.ppg - a.ppg; });
+      var starters = starterPlayers.slice(0, 8);
+
+      for (var si = 0; si < starters.length; si++) {
+        var sp = starters[si];
+        totalPPG += sp.ppg;
+        // Best case: player faces easiest defense at their position
+        bestCasePPG += (bestDef[sp.pos] ? bestDef[sp.pos].ppg : sp.ppg);
+        // Worst case: player faces hardest defense
+        worstCasePPG += (worstDef[sp.pos] ? worstDef[sp.pos].ppg : sp.ppg);
+        playerCount++;
+      }
+
+      var swing = playerCount > 0 ? bestCasePPG - worstCasePPG : 0;
+      var avgPerPlayer = playerCount > 0 ? totalPPG / playerCount : 0;
+
+      // Compute "schedule sensitivity" — how much this roster's output depends on matchups
+      var sensitivity = playerCount > 0 ? swing / playerCount : 0;
+
+      managers.push({
+        ownerId: ownerId,
+        name: managerName,
+        isUser: ownerId === userId,
+        totalPPG: totalPPG,
+        bestCasePPG: bestCasePPG,
+        worstCasePPG: worstCasePPG,
+        swing: swing,
+        sensitivity: sensitivity,
+        playerCount: playerCount,
+        teamCounts: teamCounts,
+        starters: starters
+      });
+    }
+
+    // Sort by swing (most schedule-dependent first)
+    managers.sort(function(a, b) { return b.swing - a.swing; });
+
+    // Assign grades based on sensitivity percentile
+    var sensValues = managers.map(function(m) { return m.sensitivity; });
+    sensValues.sort(function(a, b) { return b - a; });
+
+    function getSosGrade(sensitivity) {
+      if (sensValues.length === 0) return { letter: "C", bg: "var(--bg-warm)", color: "var(--ink)" };
+      var rank = sensValues.indexOf(sensitivity);
+      var pct = sensValues.length > 1 ? rank / (sensValues.length - 1) : 0.5;
+      // High sensitivity = more schedule-dependent = higher volatility
+      if (pct <= 0.15) return { letter: "volatile", bg: "var(--red)", color: "var(--bg)" };
+      if (pct <= 0.35) return { letter: "exposed", bg: "var(--orange)", color: "var(--bg)" };
+      if (pct <= 0.65) return { letter: "neutral", bg: "var(--bg-warm)", color: "var(--ink)" };
+      if (pct <= 0.85) return { letter: "stable", bg: "var(--pos-rb)", color: "var(--bg)" };
+      return { letter: "rock solid", bg: "var(--green)", color: "var(--bg)" };
+    }
+
+    // 5. Render
+    var paid = typeof isPaidUser === "function" && isPaidUser();
+
+    var html = '<div class="depth-section-header">schedule strength — roster matchup volatility</div>';
+    html += '<div style="font-family:var(--font-hand);font-size:13px;color:var(--ink-medium);margin-bottom:12px;">';
+    html += 'how much each roster swings between best-case and worst-case defensive matchups</div>';
+
+    for (var ci = 0; ci < managers.length; ci++) {
+      var mgr = managers[ci];
+      var rank = ci + 1;
+      var grade = getSosGrade(mgr.sensitivity);
+      var isBlurred = !paid && ci >= 3;
+
+      html += '<div class="sos-card"' +
+        (mgr.isUser ? ' style="border-color:var(--orange);"' : '') +
+        (isBlurred ? ' style="filter:blur(3px);opacity:0.4;pointer-events:none;"' : '') + '>';
+
+      html += '<div class="sos-rank">' + rank + '</div>';
+      html += '<div class="sos-info">';
+      html += '<div class="sos-name">' + escapeHtml(isBlurred ? "Manager" : mgr.name);
+      if (mgr.isUser) html += ' <span style="font-family:var(--font-hand);font-size:12px;color:var(--orange);">you</span>';
+      html += '</div>';
+
+      html += '<div class="sos-detail">';
+      html += 'starters PPG: ' + mgr.totalPPG.toFixed(1);
+      html += ' | ceiling: ' + mgr.bestCasePPG.toFixed(1);
+      html += ' | floor: ' + mgr.worstCasePPG.toFixed(1);
+      html += '</div>';
+
+      // Team concentration chips
+      html += '<div class="sos-teams">';
+      var teams = Object.keys(mgr.teamCounts).sort(function(a, b) {
+        return mgr.teamCounts[b] - mgr.teamCounts[a];
+      });
+      for (var tci = 0; tci < Math.min(teams.length, 5); tci++) {
+        html += '<span class="sos-team-chip">' + escapeHtml(teams[tci]) + ':' + mgr.teamCounts[teams[tci]] + '</span>';
+      }
+      html += '</div>';
+
+      html += '</div>'; // .sos-info
+
+      html += '<div class="sos-right">';
+      html += '<div class="sos-score">&plusmn;' + mgr.swing.toFixed(1) + '</div>';
+      html += '<span class="sos-grade-badge" style="background:' + grade.bg + ';color:' + grade.color + ';">' + grade.letter + '</span>';
+      html += '</div>';
+
+      html += '</div>'; // .sos-card
+    }
+
+    if (!paid && managers.length > 3) {
+      html += '<div style="text-align:center;margin-top:16px;font-family:var(--font-hand);font-size:14px;color:var(--ink-medium);">';
+      html += 'top 3 managers shown free. <a href="/pricing.html" style="color:var(--orange);">subscribe to Pro</a> to see all ' + managers.length + ' managers.</div>';
+    }
+
+    container.innerHTML = html;
+  } catch (e) {
+    container.innerHTML = '<div class="loading-intel" style="color:var(--red);">' +
+      (e.name === "AbortError" ? "request timed out — try again" : "fumbled the schedule analysis... " + escapeHtml(e.message)) + '</div>';
+    var sosBtn2 = document.getElementById("sosBtn-" + leagueId);
+    if (sosBtn2) { sosBtn2.disabled = false; sosBtn2.textContent = "schedule strength"; }
+    console.error("Schedule strength error:", e);
   }
 }
 

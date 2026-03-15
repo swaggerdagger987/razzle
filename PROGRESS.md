@@ -382,3 +382,20 @@ Systematic page-by-page audit against DESIGN.md and NORTH_STAR.md.
 - 59/59 tests pass
 - No code blockers for N-1 production deployment
 - Human action required: set Render dashboard env vars (JWT_SECRET, STRIPE_*, GH_TOKEN)
+
+---
+
+## Pre-Launch Hardening + Bureau SOS (Mar 14)
+
+**Goal**: Close security gaps and complete Bureau feature set before March 16 launch.
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Server-side trial expiry validation | VERIFIED | Already correct — get_current_user() re-fetches from DB, _user_dict() recomputes trial_active server-side. JWT plan claim ignored in favor of live DB state. |
+| 2 | Formula import endpoint enforcement | DONE | /api/user/formulas/import was bypassing the 3-formula limit for free users. Now checks plan and caps imports to remaining slots. |
+| 3 | Bureau Schedule Strength panel | DONE | Phase 2-8 complete. Fetches roster PPGs + matchup heatmap, computes best/worst case PPG per manager, swing score, volatility grades (volatile → rock solid). Team concentration chips. Free=top 3, Pro=all. |
+
+### Decisions Log
+- Bureau SOS uses "matchup volatility" framing rather than raw schedule difficulty — shows how much each roster swings between best-case and worst-case defensive matchups
+- This is more useful than traditional SOS because it factors in roster composition, not just team schedule
+- Reused existing /api/matchup-heatmap and /api/roster-depth-lookup endpoints — no new backend needed
