@@ -6068,6 +6068,13 @@ function _mcResimulate(leagueId) {
     html += '<div id="mc-scenario-' + leagueId + '"></div>';
   }
 
+  // Quant CTA bridge to Situation Room
+  if (paid) {
+    html += '<div style="text-align:center;margin-top:16px;padding-top:12px;border-top:2px dashed var(--ink-faint);">';
+    html += '<button class="btn-chunky" style="font-size:11px;padding:6px 16px;border-color:var(--pos-te);" onclick="prefillScenario(\'Based on Monte Carlo simulations of my league, analyze my championship odds and suggest moves to improve my chances.\');window.location.href=\'/agents.html\';">Ask the Quant about these odds</button>';
+    html += '</div>';
+  }
+
   html += '</div>';
   oddsDiv.innerHTML = html;
 
@@ -6216,6 +6223,13 @@ async function runLeagueOdds(leagueId, userId, scoring) {
     // Scenario explorer placeholder (Pro only)
     if (paid) {
       html += '<div id="mc-scenario-' + leagueId + '"></div>';
+    }
+
+    // Quant CTA bridge to Situation Room
+    if (paid) {
+      html += '<div style="text-align:center;margin-top:16px;padding-top:12px;border-top:2px dashed var(--ink-faint);">';
+      html += '<button class="btn-chunky" style="font-size:11px;padding:6px 16px;border-color:var(--pos-te);" onclick="prefillScenario(\'Based on Monte Carlo simulations of my league, analyze my championship odds and suggest moves to improve my chances.\');window.location.href=\'/agents.html\';">Ask the Quant about these odds</button>';
+      html += '</div>';
     }
 
     html += '</div>';
