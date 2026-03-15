@@ -56,7 +56,7 @@ async function loadPlayer(playerId) {
   } catch (err) {
     page.innerHTML = `
       <div class="player-loading">
-        <div class="player-loading-text" style="color:var(--red);">fumbled the data fetch... ${err.message}</div>
+        <div class="player-loading-text" style="color:var(--red);">fumbled the data fetch... ${esc(err.message)}</div>
         <a href="/lab.html" class="btn-primary" style="margin-top:16px;">Back to The Lab</a>
       </div>`;
   }

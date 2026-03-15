@@ -416,3 +416,21 @@ Systematic page-by-page audit against DESIGN.md and NORTH_STAR.md.
 - agents.html uses non-standard 640px/400px breakpoints for ask-reference-grid but these work correctly — not worth changing
 - lab.html mobile coverage was already comprehensive (768px/480px/375px with sidebar slide-out, unfrozen columns, toolbar scroll)
 - Monte Carlo had two bugs (wrong connection method AND wrong table name) — both would have caused 500 errors on the Bureau league odds feature
+
+---
+
+## Pre-Launch Final QA (Mar 14)
+
+**Goal**: Final autonomous QA sweep before March 16 Twitter launch. Verify all systems green.
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Test suite verification | DONE | 59/59 tests pass in 13.66s |
+| 2 | JS syntax check | DONE | All 11 frontend JS files pass node --check |
+| 3 | Security sweep | DONE | 1 XSS fix: player.js `err.message` → `esc(err.message)`. CORS locked to razzle.lol in production. No hardcoded secrets. No SQL injection vectors. No debug/test endpoints. Admin stats endpoint properly gated by secret header. |
+| 4 | API route audit | DONE | All 26 frontend fetch() calls match backend routes. 0 broken references. 0 orphaned endpoints. |
+| 5 | HTML structure check | DONE | All 6 main pages (index, lab, agents, league-intel, pricing, about) have balanced div tags. No unclosed elements. |
+| 6 | Debug statement audit | DONE | Zero debug console.log/console.warn in codebase. Only branded easter eggs in app.js. |
+
+### Decisions Log
+- Table row separators (td border-bottom: 1px) intentionally kept at 1px for data density in analytics tables. Design guide's "no 1px borders" applies to component/card borders, not internal table dividers. Reviewed in prior sweeps.
