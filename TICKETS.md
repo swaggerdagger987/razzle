@@ -13,18 +13,6 @@ The database file `data/terminal.db` uses WAL journal mode locally. Uploading it
 
 ---
 
-## Phase: Bureau of Intelligence — Self-Scout (Default View)
-
-**Exit Criterion**: Connected user sees their own team analyzed first when entering the Bureau.
-
-### Task 1: Build self-scout as default Bureau view
-**Requirement**: When a user connects their Sleeper league, the Bureau should default to showing THEIR OWN team analysis — not a generic league overview. Auto-detect which roster belongs to the connected user (match `owner_id` from Sleeper rosters to the connected username's user_id). Show: (1) "Your Team" header with their manager name, (2) Their depth analysis (starter quality, bench depth, vulnerability flags), (3) Their build profile archetype badge, (4) Their power ranking position and tier, (5) "How opponents see you" summary — what a smart rival would target (your weakest position, your most tradeable surplus), (6) Quick links to each rival's profile. This is the "home base" of the Bureau — "here's your team, here's where you're strong, here's where you're vulnerable." Clicking any rival name navigates to their full profile.
-**Accept when**: Connected user sees their own team by default. All analysis panels (depth, profile, power rank) populated for the user's own roster. "How opponents see you" renders. Rival quick links work.
-**Depends on**: none
-**Size**: L
-
----
-
 ## Phase: Lab Panel-by-Panel Audit — Batch 1 (A-D)
 
 **Exit Criterion**: All Lab panels A-D load, render data, match DESIGN.md, zero JS errors.
