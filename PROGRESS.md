@@ -470,3 +470,23 @@ All 59 tests pass. All 11 JS files syntax-clean.
 | 5 | _deleteFormulaFromServer missing resp.ok | Robustness | formulas.js:289 — could parse error JSON silently |
 
 All 59 tests pass. All 11 JS files syntax-clean. 0 remaining issues found.
+
+---
+
+## Monte Carlo Deep-Dive + Bureau Polish (Mar 14)
+
+**Goal**: Build the missing Monte Carlo Deep-Dive features from the North Star: distribution charts, scenario explorer (trade/injury what-if with instant re-simulation). Add ESPN/Yahoo coming soon badge.
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Distribution histograms | DONE | Canvas histograms in each odds card showing PPG distribution across 1000 sims (15-bin, color-coded by frequency). Pro users only. Drawn via _mcDrawHistogram(). |
+| 2 | Scenario explorer | DONE | Injury toggle (select player → mark OUT → instant re-sim) + trade what-if (pick two players from different rosters → swap → instant re-sim). All client-side using stored _mcState — no additional API calls. Delta badges (green/red +/-%) show how scenarios change championship, playoff, and avg pts odds compared to baseline. Reset all button clears scenarios. |
+| 3 | Simulation refactor | DONE | Extracted simulation logic to _mcSimulate() and _mcBuildResults(). Stored state in _mcState per league for re-use. ptsHistory array captured per manager for histogram rendering. |
+| 4 | Coming soon: ESPN, Yahoo | DONE | Badges on Bureau connect card. |
+| 5 | resp.ok guard on projections API | DONE | Added missing check on /api/monte-carlo/projections response. |
+
+### Decisions Log
+- Monte Carlo Deep-Dive is entirely client-side for re-simulation (North Star: "instant re-simulation without API calls")
+- Odds history (tracking across weeks) deferred — requires persistent storage and multi-session tracking, not achievable in a single autonomous loop
+- Distribution histograms are per-card (inline canvas) rather than a separate panel — keeps the UI compact and contextual
+- Scenario explorer allows multiple trades + injuries simultaneously — each scenario stacks and the re-simulation reflects all active modifications

@@ -1,32 +1,29 @@
 # Razzle Ship Loop — Task Tracker
 
 ## Current State
-- Phase: IDLE — No tickets in queue
-- Current Task: N/A
-- Current Stage: WAITING
-- Tasks Completed: N/A
-- Loop Iterations: 0
+- Phase: Monte Carlo Deep-Dive + Bureau Polish
+- Current Task: DONE
+- Current Stage: COMPLETE
+- Tasks Completed: 4/4
+- Loop Iterations: 1
 
-## Status
+## Phase: Monte Carlo Deep-Dive (Mar 14)
 
-All ship phases (A–H) complete. All launch fixes applied. Launch-eve audit passed.
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Distribution histograms | DONE | Canvas histograms in each odds card showing PPG distribution (15-bin, color-coded frequency). Pro only. |
+| 2 | Scenario explorer | DONE | Injury toggle (mark player OUT, instant re-sim) + trade what-if (swap players between rosters, instant re-sim). Delta badges show odds changes. All client-side, no API calls. |
+| 3 | Coming soon: ESPN, Yahoo | DONE | Badges on Bureau connect card below Sleeper link notice. |
+| 4 | Verification | DONE | 59/59 tests pass, 11/11 JS syntax clean. |
 
-**Final verification (Mar 14, post-sweep):**
-- 59/59 tests pass (14.08s)
+## Verification (Mar 14)
+- 59/59 tests pass (16.60s)
 - 11/11 JS files pass syntax check
-- 0 P0/P1 bugs found in comprehensive code sweep
-- 0 broken API references
-- 0 XSS vulnerabilities
-- 0 hardcoded dev URLs
-- 0 remaining 1px border violations
-- 0 fetch() calls missing error guards
-
-**Awaiting human action for Phase 1 (Twitter Launch, Mar 16):**
-- Deploy to Render production (set env vars: JWT_SECRET, STRIPE_*, GH_TOKEN)
-- Stripe test transaction with real charge
-- Mobile spot check on real phone
-- Twitter account setup (@razzle_lol)
-- Launch thread posted
-- 20 Screener screenshots prepared
+- Monte Carlo refactored: simulation logic extracted to _mcSimulate(), state stored in _mcState for re-use
+- Distribution histograms render per-manager PPG spread via canvas
+- Scenario explorer: injury toggles + trade what-if with instant re-simulation
+- Delta badges (green/red +/- percentages) show how scenarios change odds
+- All new functions use escapeHtml/escapeAttr for user data
+- Pro gating maintained (free users see top 3 + upgrade CTA)
 
 **To queue more work:** Add phase specs to TICKETS.md.

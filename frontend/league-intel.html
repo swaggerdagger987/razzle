@@ -1677,6 +1677,7 @@
       </div>
       <div class="connect-error" id="connectError"></div>
       <div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); margin-top:8px;">this will permanently link your Sleeper account to your Razzle account</div>
+      <div style="margin-top:16px;font-family:var(--font-hand);font-size:14px;color:var(--ink-light);">Coming soon: <span style="font-family:var(--font-mono);font-size:11px;background:var(--bg-warm);border:2px solid var(--ink-faint);border-radius:6px;padding:2px 8px;margin:0 2px;">ESPN</span> <span style="font-family:var(--font-mono);font-size:11px;background:var(--bg-warm);border:2px solid var(--ink-faint);border-radius:6px;padding:2px 8px;margin:0 2px;">Yahoo</span></div>
     </div>
   </div>
 
@@ -5715,7 +5716,421 @@ function prefillScenario(text) {
   } catch (e) { /* ignore */ }
 }
 
-// ── Monte Carlo League Odds ─────────────────────────────────────────
+// ── Monte Carlo League Odds + Deep Dive ─────────────────────────────
+
+// Store simulation state per league for scenario re-simulation
+var _mcState = {};
+
+function _mcSimulate(rosterPlayers, distributions, rosterIds, playoffSpots, SIMS, excludedPlayers) {
+  var playoffCount = {};
+  var champCount = {};
+  var totalPts = {};
+  var ptsHistory = {};
+  rosterIds.forEach(function(rid) { playoffCount[rid] = 0; champCount[rid] = 0; totalPts[rid] = 0; ptsHistory[rid] = []; });
+
+  for (var sim = 0; sim < SIMS; sim++) {
+    var scores = {};
+    rosterIds.forEach(function(rid) {
+      var roster = rosterPlayers[rid];
+      var playerScores = [];
+      roster.players.forEach(function(pid) {
+        if (excludedPlayers && excludedPlayers[pid]) return;
+        var dist = distributions[pid];
+        if (!dist || dist.games === 0) return;
+        var u1 = Math.random(), u2 = Math.random();
+        var z = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+        var pts = Math.max(0, dist.mean + z * dist.stdev);
+        playerScores.push(pts);
+      });
+      playerScores.sort(function(a, b) { return b - a; });
+      var total = 0;
+      for (var i = 0; i < Math.min(9, playerScores.length); i++) total += playerScores[i];
+      scores[rid] = total;
+    });
+
+    var ranked = rosterIds.map(function(rid) {
+      var rp = rosterPlayers[rid];
+      return { rid: rid, simScore: scores[rid], wins: rp.wins, losses: rp.losses };
+    }).sort(function(a, b) {
+      if (b.wins !== a.wins) return b.wins - a.wins;
+      return b.simScore - a.simScore;
+    });
+
+    for (var j = 0; j < Math.min(playoffSpots, ranked.length); j++) {
+      playoffCount[ranked[j].rid]++;
+    }
+    var playoffTeams = ranked.slice(0, playoffSpots);
+    playoffTeams.sort(function(a, b) { return b.simScore - a.simScore; });
+    if (playoffTeams.length > 0) champCount[playoffTeams[0].rid]++;
+
+    rosterIds.forEach(function(rid) {
+      totalPts[rid] += scores[rid];
+      ptsHistory[rid].push(scores[rid]);
+    });
+  }
+  return { playoffCount: playoffCount, champCount: champCount, totalPts: totalPts, ptsHistory: ptsHistory };
+}
+
+function _mcBuildResults(rosterIds, rosterPlayers, userMap, simResult, SIMS) {
+  return rosterIds.map(function(rid) {
+    var rp = rosterPlayers[rid];
+    return {
+      rid: rid,
+      name: userMap[rp.ownerId] || 'Manager',
+      wins: rp.wins,
+      losses: rp.losses,
+      playoffPct: Math.round(simResult.playoffCount[rid] / SIMS * 100),
+      champPct: Math.round(simResult.champCount[rid] / SIMS * 1000) / 10,
+      avgPts: Math.round(simResult.totalPts[rid] / SIMS * 10) / 10,
+      ptsHistory: simResult.ptsHistory[rid],
+    };
+  }).sort(function(a, b) { return b.champPct - a.champPct; });
+}
+
+function _mcDrawHistogram(canvas, ptsHistory, name) {
+  var ctx = canvas.getContext('2d');
+  var w = canvas.width, h = canvas.height;
+  ctx.clearRect(0, 0, w, h);
+
+  if (!ptsHistory || ptsHistory.length === 0) return;
+  var mn = Math.min.apply(null, ptsHistory);
+  var mx = Math.max.apply(null, ptsHistory);
+  if (mx === mn) mx = mn + 1;
+  var BINS = 15;
+  var binWidth = (mx - mn) / BINS;
+  var bins = [];
+  for (var i = 0; i < BINS; i++) bins.push(0);
+  for (var j = 0; j < ptsHistory.length; j++) {
+    var idx = Math.min(BINS - 1, Math.floor((ptsHistory[j] - mn) / binWidth));
+    bins[idx]++;
+  }
+  var maxBin = Math.max.apply(null, bins);
+  if (maxBin === 0) maxBin = 1;
+
+  var padL = 6, padR = 6, padT = 4, padB = 18;
+  var drawW = w - padL - padR;
+  var drawH = h - padT - padB;
+  var barW = drawW / BINS - 2;
+
+  // Draw bars
+  for (var b = 0; b < BINS; b++) {
+    var barH = (bins[b] / maxBin) * drawH;
+    var x = padL + b * (drawW / BINS) + 1;
+    var y = padT + drawH - barH;
+    var pct = bins[b] / ptsHistory.length;
+    // Color: green for common, orange for moderate, light for rare
+    ctx.fillStyle = pct > 0.12 ? '#2ec4b6' : pct > 0.06 ? '#d97757' : '#c4b5a4';
+    ctx.fillRect(x, y, barW, barH);
+    ctx.strokeStyle = '#3d2e22';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(x, y, barW, barH);
+  }
+
+  // X-axis labels (min and max)
+  ctx.fillStyle = '#6d5c4e';
+  ctx.font = '9px monospace';
+  ctx.textAlign = 'left';
+  ctx.fillText(Math.round(mn), padL, h - 2);
+  ctx.textAlign = 'right';
+  ctx.fillText(Math.round(mx), w - padR, h - 2);
+  ctx.textAlign = 'center';
+  ctx.fillText('PPG', w / 2, h - 2);
+}
+
+function _mcRenderOddsCards(results, paid, leagueId) {
+  var html = '<div class="odds-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;">';
+  for (var k = 0; k < results.length; k++) {
+    var r = results[k];
+    var isBlurred = !paid && k >= 3;
+    var champColor = r.champPct >= 15 ? 'var(--green)' : r.champPct >= 8 ? 'var(--orange)' : 'var(--ink-light)';
+    var playoffColor = r.playoffPct >= 70 ? 'var(--green)' : r.playoffPct >= 40 ? 'var(--orange)' : 'var(--red)';
+
+    html += '<div class="odds-card" style="background:var(--bg-card);border:3px solid var(--ink);border-radius:10px;box-shadow:4px 4px 0 var(--ink);padding:14px;' + (isBlurred ? 'filter:blur(3px);opacity:0.4;pointer-events:none;' : '') + '">';
+    html += '<div style="font-family:var(--font-display);font-size:14px;margin-bottom:4px;">' + escapeHtml(isBlurred ? 'Manager' : r.name) + '</div>';
+    html += '<div style="font-family:var(--font-mono);font-size:11px;color:var(--ink-medium);margin-bottom:8px;">' + r.wins + '-' + r.losses + '</div>';
+    html += '<div style="display:flex;gap:12px;">';
+    html += '<div style="text-align:center;"><div style="font-family:var(--font-display);font-size:22px;color:' + champColor + ';">' + r.champPct + '%</div><div style="font-family:var(--font-mono);font-size:9px;color:var(--ink-light);">CHAMP</div></div>';
+    html += '<div style="text-align:center;"><div style="font-family:var(--font-display);font-size:22px;color:' + playoffColor + ';">' + r.playoffPct + '%</div><div style="font-family:var(--font-mono);font-size:9px;color:var(--ink-light);">PLAYOFF</div></div>';
+    html += '<div style="text-align:center;"><div style="font-family:var(--font-mono);font-size:14px;font-weight:700;">' + r.avgPts + '</div><div style="font-family:var(--font-mono);font-size:9px;color:var(--ink-light);">AVG PTS</div></div>';
+    html += '</div>';
+    // Mini histogram canvas per card (Pro only, not blurred)
+    if (!isBlurred && paid) {
+      html += '<canvas id="mc-hist-' + leagueId + '-' + r.rid + '" width="180" height="60" style="margin-top:8px;width:100%;height:60px;"></canvas>';
+    }
+    html += '</div>';
+  }
+  html += '</div>';
+  return html;
+}
+
+function _mcGetPlayerName(pid) {
+  if (_sleeperPlayersCache && _sleeperPlayersCache[pid]) {
+    var p = _sleeperPlayersCache[pid];
+    return (p.first_name || '') + ' ' + (p.last_name || '');
+  }
+  return pid;
+}
+
+function _mcGetPlayerPos(pid) {
+  if (_sleeperPlayersCache && _sleeperPlayersCache[pid]) {
+    return _sleeperPlayersCache[pid].position || '';
+  }
+  return '';
+}
+
+function _mcRenderScenario(leagueId) {
+  var st = _mcState[leagueId];
+  if (!st) return;
+  var paid = typeof isPaidUser === 'function' && isPaidUser();
+  if (!paid) return;
+
+  var scenDiv = document.getElementById('mc-scenario-' + leagueId);
+  if (!scenDiv) return;
+
+  var excluded = st.excludedPlayers || {};
+  var trades = st.trades || [];
+
+  var html = '<div style="padding:12px 0;">';
+  html += '<div style="font-family:var(--font-display);font-size:15px;margin-bottom:8px;">Scenario Explorer</div>';
+  html += '<div style="font-family:var(--font-hand);font-size:13px;color:var(--ink-light);margin-bottom:12px;">toggle injuries and simulate trades — odds update instantly, no API calls</div>';
+
+  // Active scenarios
+  var hasScenarios = Object.keys(excluded).length > 0 || trades.length > 0;
+  if (hasScenarios) {
+    html += '<div style="margin-bottom:12px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;">';
+    html += '<span style="font-family:var(--font-mono);font-size:10px;color:var(--ink-light);">ACTIVE:</span>';
+    for (var epid in excluded) {
+      html += '<span style="font-family:var(--font-mono);font-size:10px;background:var(--red);color:var(--bg);padding:2px 8px;border-radius:8px;border:2px solid var(--ink);cursor:pointer;" onclick="_mcToggleInjury(\'' + escapeAttr(leagueId) + '\',\'' + escapeAttr(epid) + '\')">' + escapeHtml(_mcGetPlayerName(epid)) + ' OUT ×</span>';
+    }
+    for (var t = 0; t < trades.length; t++) {
+      html += '<span style="font-family:var(--font-mono);font-size:10px;background:var(--orange);color:var(--bg);padding:2px 8px;border-radius:8px;border:2px solid var(--ink);cursor:pointer;" onclick="_mcRemoveTrade(\'' + escapeAttr(leagueId) + '\',' + t + ')">' + escapeHtml(_mcGetPlayerName(trades[t].playerA)) + ' ↔ ' + escapeHtml(_mcGetPlayerName(trades[t].playerB)) + ' ×</span>';
+    }
+    html += '<span style="font-family:var(--font-mono);font-size:10px;color:var(--red);cursor:pointer;text-decoration:underline;" onclick="_mcResetScenarios(\'' + escapeAttr(leagueId) + '\')">reset all</span>';
+    html += '</div>';
+  }
+
+  // Injury toggle: select from roster dropdown
+  html += '<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px;">';
+  html += '<label style="font-family:var(--font-mono);font-size:10px;color:var(--ink-medium);">INJURY:</label>';
+  html += '<select id="mc-injury-sel-' + leagueId + '" style="font-family:var(--font-mono);font-size:11px;padding:3px 6px;border:2px solid var(--ink);border-radius:6px;background:var(--bg-card);">';
+  html += '<option value="">select player...</option>';
+  // Build sorted player list from all rosters
+  var allP = [];
+  var rosterIds = Object.keys(st.rosterPlayers);
+  rosterIds.forEach(function(rid) {
+    st.rosterPlayers[rid].players.forEach(function(pid) {
+      if (!excluded[pid]) {
+        var pos = _mcGetPlayerPos(pid);
+        if (['QB','RB','WR','TE'].indexOf(pos) >= 0) {
+          allP.push({ pid: pid, name: _mcGetPlayerName(pid), pos: pos, owner: st.userMap[st.rosterPlayers[rid].ownerId] || 'Manager' });
+        }
+      }
+    });
+  });
+  allP.sort(function(a, b) { return a.name.localeCompare(b.name); });
+  for (var pi = 0; pi < allP.length; pi++) {
+    html += '<option value="' + escapeAttr(allP[pi].pid) + '">' + escapeHtml(allP[pi].name) + ' (' + allP[pi].pos + ', ' + escapeHtml(allP[pi].owner) + ')</option>';
+  }
+  html += '</select>';
+  html += '<button class="btn-chunky" style="font-size:10px;padding:2px 10px;border-color:var(--red);" onclick="_mcToggleInjuryFromSelect(\'' + escapeAttr(leagueId) + '\')">Mark Out</button>';
+  html += '</div>';
+
+  // Trade what-if: pick two players from different rosters
+  html += '<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;">';
+  html += '<label style="font-family:var(--font-mono);font-size:10px;color:var(--ink-medium);">TRADE:</label>';
+  html += '<select id="mc-trade-a-' + leagueId + '" style="font-family:var(--font-mono);font-size:11px;padding:3px 6px;border:2px solid var(--ink);border-radius:6px;background:var(--bg-card);max-width:180px;">';
+  html += '<option value="">player A...</option>';
+  for (var pa = 0; pa < allP.length; pa++) {
+    html += '<option value="' + escapeAttr(allP[pa].pid) + '">' + escapeHtml(allP[pa].name) + ' (' + escapeHtml(allP[pa].owner) + ')</option>';
+  }
+  html += '</select>';
+  html += '<span style="font-family:var(--font-display);font-size:13px;">↔</span>';
+  html += '<select id="mc-trade-b-' + leagueId + '" style="font-family:var(--font-mono);font-size:11px;padding:3px 6px;border:2px solid var(--ink);border-radius:6px;background:var(--bg-card);max-width:180px;">';
+  html += '<option value="">player B...</option>';
+  for (var pb = 0; pb < allP.length; pb++) {
+    html += '<option value="' + escapeAttr(allP[pb].pid) + '">' + escapeHtml(allP[pb].name) + ' (' + escapeHtml(allP[pb].owner) + ')</option>';
+  }
+  html += '</select>';
+  html += '<button class="btn-chunky" style="font-size:10px;padding:2px 10px;border-color:var(--orange);" onclick="_mcExecuteTrade(\'' + escapeAttr(leagueId) + '\')">Simulate Trade</button>';
+  html += '</div>';
+
+  html += '</div>';
+  scenDiv.innerHTML = html;
+}
+
+function _mcFindPlayerRoster(leagueId, pid) {
+  var st = _mcState[leagueId];
+  if (!st) return null;
+  var rosterIds = Object.keys(st.rosterPlayers);
+  for (var i = 0; i < rosterIds.length; i++) {
+    if (st.rosterPlayers[rosterIds[i]].players.indexOf(pid) >= 0) return rosterIds[i];
+  }
+  return null;
+}
+
+function _mcResimulate(leagueId) {
+  var st = _mcState[leagueId];
+  if (!st) return;
+
+  // Build modified rosters based on trades
+  var modRosters = {};
+  var rosterIds = Object.keys(st.rosterPlayers);
+  rosterIds.forEach(function(rid) {
+    modRosters[rid] = { players: st.rosterPlayers[rid].players.slice(), ownerId: st.rosterPlayers[rid].ownerId, wins: st.rosterPlayers[rid].wins, losses: st.rosterPlayers[rid].losses };
+  });
+
+  // Apply trades
+  var trades = st.trades || [];
+  for (var t = 0; t < trades.length; t++) {
+    var tr = trades[t];
+    var rA = tr.rosterA, rB = tr.rosterB;
+    if (!modRosters[rA] || !modRosters[rB]) continue;
+    // Swap players
+    var idxA = modRosters[rA].players.indexOf(tr.playerA);
+    var idxB = modRosters[rB].players.indexOf(tr.playerB);
+    if (idxA >= 0) { modRosters[rA].players.splice(idxA, 1); modRosters[rA].players.push(tr.playerB); }
+    if (idxB >= 0) { modRosters[rB].players.splice(idxB, 1); modRosters[rB].players.push(tr.playerA); }
+  }
+
+  var simResult = _mcSimulate(modRosters, st.distributions, rosterIds, st.playoffSpots, st.SIMS, st.excludedPlayers);
+  var results = _mcBuildResults(rosterIds, modRosters, st.userMap, simResult, st.SIMS);
+
+  // Store baseline for comparison
+  var baseResults = st.baseResults || results;
+  st.currentResults = results;
+
+  // Re-render
+  var oddsDiv = document.getElementById('odds-' + leagueId);
+  if (!oddsDiv) return;
+  var paid = typeof isPaidUser === 'function' && isPaidUser();
+  var hasScenarios = Object.keys(st.excludedPlayers || {}).length > 0 || (st.trades || []).length > 0;
+
+  var html = '<div style="padding:16px;">';
+  html += '<div style="font-family:var(--font-display);font-size:18px;margin-bottom:4px;">League Odds' + (hasScenarios ? ' <span style="font-family:var(--font-hand);font-size:13px;color:var(--orange);">(what-if)</span>' : '') + '</div>';
+  html += '<div style="font-family:var(--font-hand);font-size:14px;color:var(--ink-light);margin-bottom:16px;">based on ' + st.SIMS + ' Monte Carlo simulations</div>';
+
+  // Odds cards with delta badges
+  html += '<div class="odds-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;">';
+  for (var k = 0; k < results.length; k++) {
+    var r = results[k];
+    var isBlurred = !paid && k >= 3;
+    var champColor = r.champPct >= 15 ? 'var(--green)' : r.champPct >= 8 ? 'var(--orange)' : 'var(--ink-light)';
+    var playoffColor = r.playoffPct >= 70 ? 'var(--green)' : r.playoffPct >= 40 ? 'var(--orange)' : 'var(--red)';
+
+    // Find baseline for deltas
+    var baseLine = null;
+    if (hasScenarios && baseResults) {
+      for (var bi = 0; bi < baseResults.length; bi++) {
+        if (baseResults[bi].rid === r.rid) { baseLine = baseResults[bi]; break; }
+      }
+    }
+
+    html += '<div class="odds-card" style="background:var(--bg-card);border:3px solid var(--ink);border-radius:10px;box-shadow:4px 4px 0 var(--ink);padding:14px;' + (isBlurred ? 'filter:blur(3px);opacity:0.4;pointer-events:none;' : '') + '">';
+    html += '<div style="font-family:var(--font-display);font-size:14px;margin-bottom:4px;">' + escapeHtml(isBlurred ? 'Manager' : r.name) + '</div>';
+    html += '<div style="font-family:var(--font-mono);font-size:11px;color:var(--ink-medium);margin-bottom:8px;">' + r.wins + '-' + r.losses + '</div>';
+    html += '<div style="display:flex;gap:12px;flex-wrap:wrap;">';
+    // Champ
+    html += '<div style="text-align:center;"><div style="font-family:var(--font-display);font-size:22px;color:' + champColor + ';">' + r.champPct + '%</div>';
+    if (baseLine && !isBlurred) {
+      var cd = Math.round((r.champPct - baseLine.champPct) * 10) / 10;
+      if (cd !== 0) html += '<div style="font-family:var(--font-mono);font-size:9px;color:' + (cd > 0 ? 'var(--green)' : 'var(--red)') + ';">' + (cd > 0 ? '+' : '') + cd + '%</div>';
+    }
+    html += '<div style="font-family:var(--font-mono);font-size:9px;color:var(--ink-light);">CHAMP</div></div>';
+    // Playoff
+    html += '<div style="text-align:center;"><div style="font-family:var(--font-display);font-size:22px;color:' + playoffColor + ';">' + r.playoffPct + '%</div>';
+    if (baseLine && !isBlurred) {
+      var pd = r.playoffPct - baseLine.playoffPct;
+      if (pd !== 0) html += '<div style="font-family:var(--font-mono);font-size:9px;color:' + (pd > 0 ? 'var(--green)' : 'var(--red)') + ';">' + (pd > 0 ? '+' : '') + pd + '%</div>';
+    }
+    html += '<div style="font-family:var(--font-mono);font-size:9px;color:var(--ink-light);">PLAYOFF</div></div>';
+    // Avg Pts
+    html += '<div style="text-align:center;"><div style="font-family:var(--font-mono);font-size:14px;font-weight:700;">' + r.avgPts + '</div>';
+    if (baseLine && !isBlurred) {
+      var ptd = Math.round((r.avgPts - baseLine.avgPts) * 10) / 10;
+      if (ptd !== 0) html += '<div style="font-family:var(--font-mono);font-size:9px;color:' + (ptd > 0 ? 'var(--green)' : 'var(--red)') + ';">' + (ptd > 0 ? '+' : '') + ptd + '</div>';
+    }
+    html += '<div style="font-family:var(--font-mono);font-size:9px;color:var(--ink-light);">AVG PTS</div></div>';
+    html += '</div>';
+    if (!isBlurred && paid) {
+      html += '<canvas id="mc-hist-' + leagueId + '-' + r.rid + '" width="180" height="60" style="margin-top:8px;width:100%;height:60px;"></canvas>';
+    }
+    html += '</div>';
+  }
+  html += '</div>';
+
+  if (!paid && results.length > 3) {
+    html += '<div style="text-align:center;margin-top:16px;font-family:var(--font-hand);font-size:14px;color:var(--ink-medium);">';
+    html += 'top 3 managers shown free. <a href="/pricing.html" style="color:var(--orange);">subscribe to Pro</a> to see all ' + results.length + ' managers and the scenario explorer.</div>';
+  }
+
+  // Scenario explorer (Pro only)
+  if (paid) {
+    html += '<div id="mc-scenario-' + leagueId + '"></div>';
+  }
+
+  html += '</div>';
+  oddsDiv.innerHTML = html;
+
+  // Draw histograms
+  if (paid) {
+    for (var h = 0; h < results.length; h++) {
+      var rc = results[h];
+      var canvas = document.getElementById('mc-hist-' + leagueId + '-' + rc.rid);
+      if (canvas) _mcDrawHistogram(canvas, rc.ptsHistory, rc.name);
+    }
+    _mcRenderScenario(leagueId);
+  }
+}
+
+function _mcToggleInjury(leagueId, pid) {
+  var st = _mcState[leagueId];
+  if (!st) return;
+  if (!st.excludedPlayers) st.excludedPlayers = {};
+  if (st.excludedPlayers[pid]) {
+    delete st.excludedPlayers[pid];
+  } else {
+    st.excludedPlayers[pid] = true;
+  }
+  _mcResimulate(leagueId);
+}
+
+function _mcToggleInjuryFromSelect(leagueId) {
+  var sel = document.getElementById('mc-injury-sel-' + leagueId);
+  if (!sel || !sel.value) return;
+  _mcToggleInjury(leagueId, sel.value);
+}
+
+function _mcExecuteTrade(leagueId) {
+  var st = _mcState[leagueId];
+  if (!st) return;
+  var selA = document.getElementById('mc-trade-a-' + leagueId);
+  var selB = document.getElementById('mc-trade-b-' + leagueId);
+  if (!selA || !selB || !selA.value || !selB.value) return;
+  if (selA.value === selB.value) return;
+
+  var rosterA = _mcFindPlayerRoster(leagueId, selA.value);
+  var rosterB = _mcFindPlayerRoster(leagueId, selB.value);
+  if (!rosterA || !rosterB || rosterA === rosterB) return;
+
+  if (!st.trades) st.trades = [];
+  st.trades.push({ playerA: selA.value, playerB: selB.value, rosterA: rosterA, rosterB: rosterB });
+  _mcResimulate(leagueId);
+}
+
+function _mcRemoveTrade(leagueId, idx) {
+  var st = _mcState[leagueId];
+  if (!st || !st.trades) return;
+  st.trades.splice(idx, 1);
+  _mcResimulate(leagueId);
+}
+
+function _mcResetScenarios(leagueId) {
+  var st = _mcState[leagueId];
+  if (!st) return;
+  st.excludedPlayers = {};
+  st.trades = [];
+  _mcResimulate(leagueId);
+}
 
 async function runLeagueOdds(leagueId, userId, scoring) {
   var oddsDiv = document.getElementById('odds-' + leagueId);
@@ -5743,7 +6158,7 @@ async function runLeagueOdds(leagueId, userId, scoring) {
     var allPlayerIds = [];
     var rosterPlayers = {};
     rosters.forEach(function(r) {
-      var players = (r.players || []).slice(0, 30); // cap per roster
+      var players = (r.players || []).slice(0, 30);
       rosterPlayers[r.roster_id] = { players: players, ownerId: r.owner_id, wins: (r.settings || {}).wins || 0, losses: (r.settings || {}).losses || 0 };
       players.forEach(function(pid) { if (allPlayerIds.indexOf(pid) === -1) allPlayerIds.push(pid); });
     });
@@ -5760,109 +6175,61 @@ async function runLeagueOdds(leagueId, userId, scoring) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ player_ids: allPlayerIds.slice(0, 200), scoring: scoringType })
     });
+    if (!projResp.ok) throw new Error('Projection API returned ' + projResp.status);
     var projData = await projResp.json();
     var distributions = projData.distributions || {};
 
-    // 4. Run Monte Carlo simulation (1000 iterations)
+    // 4. Run Monte Carlo simulation
     var SIMS = 1000;
-    var numRosters = rosters.length;
-    var playoffSpots = Math.max(4, Math.floor(numRosters / 2));
+    var playoffSpots = Math.max(4, Math.floor(rosters.length / 2));
     var rosterIds = Object.keys(rosterPlayers);
 
-    // Track results
-    var playoffCount = {};
-    var champCount = {};
-    var totalPts = {};
-    rosterIds.forEach(function(rid) { playoffCount[rid] = 0; champCount[rid] = 0; totalPts[rid] = 0; });
+    var simResult = _mcSimulate(rosterPlayers, distributions, rosterIds, playoffSpots, SIMS, null);
+    var results = _mcBuildResults(rosterIds, rosterPlayers, userMap, simResult, SIMS);
 
-    // Simulate
-    for (var sim = 0; sim < SIMS; sim++) {
-      var scores = {};
-      rosterIds.forEach(function(rid) {
-        var roster = rosterPlayers[rid];
-        var total = 0;
-        // Sum projected weekly score for top ~9 starters (simplified)
-        var playerScores = [];
-        roster.players.forEach(function(pid) {
-          var dist = distributions[pid];
-          if (!dist || dist.games === 0) return;
-          // Sample from normal distribution
-          var u1 = Math.random(), u2 = Math.random();
-          var z = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
-          var pts = Math.max(0, dist.mean + z * dist.stdev);
-          playerScores.push(pts);
-        });
-        playerScores.sort(function(a, b) { return b - a; });
-        // Take top 9 (typical starting lineup)
-        for (var i = 0; i < Math.min(9, playerScores.length); i++) total += playerScores[i];
-        scores[rid] = total;
-      });
+    // 5. Store state for scenario re-simulation
+    _mcState[leagueId] = {
+      rosterPlayers: rosterPlayers,
+      distributions: distributions,
+      userMap: userMap,
+      playoffSpots: playoffSpots,
+      SIMS: SIMS,
+      baseResults: results,
+      currentResults: results,
+      excludedPlayers: {},
+      trades: [],
+    };
 
-      // Sort by combined record + simulated score
-      var ranked = rosterIds.map(function(rid) {
-        var rp = rosterPlayers[rid];
-        return { rid: rid, simScore: scores[rid], wins: rp.wins, losses: rp.losses };
-      }).sort(function(a, b) {
-        if (b.wins !== a.wins) return b.wins - a.wins;
-        return b.simScore - a.simScore;
-      });
-
-      // Playoffs = top N
-      for (var j = 0; j < Math.min(playoffSpots, ranked.length); j++) {
-        playoffCount[ranked[j].rid]++;
-      }
-      // Champion = highest simulated score among playoff teams
-      var playoffTeams = ranked.slice(0, playoffSpots);
-      playoffTeams.sort(function(a, b) { return b.simScore - a.simScore; });
-      if (playoffTeams.length > 0) champCount[playoffTeams[0].rid]++;
-
-      // Accumulate scores for ROS projection
-      rosterIds.forEach(function(rid) { totalPts[rid] += scores[rid]; });
-    }
-
-    // 5. Render results
-    var results = rosterIds.map(function(rid) {
-      var rp = rosterPlayers[rid];
-      return {
-        rid: rid,
-        name: userMap[rp.ownerId] || 'Manager',
-        wins: rp.wins,
-        losses: rp.losses,
-        playoffPct: Math.round(playoffCount[rid] / SIMS * 100),
-        champPct: Math.round(champCount[rid] / SIMS * 1000) / 10,
-        avgPts: Math.round(totalPts[rid] / SIMS * 10) / 10,
-      };
-    }).sort(function(a, b) { return b.champPct - a.champPct; });
-
+    // 6. Render
     var paid = typeof isPaidUser === 'function' && isPaidUser();
     var html = '<div style="padding:16px;">';
     html += '<div style="font-family:var(--font-display);font-size:18px;margin-bottom:4px;">League Odds</div>';
     html += '<div style="font-family:var(--font-hand);font-size:14px;color:var(--ink-light);margin-bottom:16px;">based on ' + SIMS + ' Monte Carlo simulations</div>';
 
-    html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;">';
-    for (var k = 0; k < results.length; k++) {
-      var r = results[k];
-      var isBlurred = !paid && k >= 3;
-      var champColor = r.champPct >= 15 ? 'var(--green)' : r.champPct >= 8 ? 'var(--orange)' : 'var(--ink-light)';
-      var playoffColor = r.playoffPct >= 70 ? 'var(--green)' : r.playoffPct >= 40 ? 'var(--orange)' : 'var(--red)';
-
-      html += '<div style="background:var(--bg-card);border:3px solid var(--ink);border-radius:10px;box-shadow:4px 4px 0 var(--ink);padding:14px;' + (isBlurred ? 'filter:blur(3px);opacity:0.4;pointer-events:none;' : '') + '">';
-      html += '<div style="font-family:var(--font-display);font-size:14px;margin-bottom:4px;">' + escapeHtml(isBlurred ? 'Manager' : r.name) + '</div>';
-      html += '<div style="font-family:var(--font-mono);font-size:11px;color:var(--ink-medium);margin-bottom:8px;">' + r.wins + '-' + r.losses + '</div>';
-      html += '<div style="display:flex;gap:12px;">';
-      html += '<div style="text-align:center;"><div style="font-family:var(--font-display);font-size:22px;color:' + champColor + ';">' + r.champPct + '%</div><div style="font-family:var(--font-mono);font-size:9px;color:var(--ink-light);">CHAMP</div></div>';
-      html += '<div style="text-align:center;"><div style="font-family:var(--font-display);font-size:22px;color:' + playoffColor + ';">' + r.playoffPct + '%</div><div style="font-family:var(--font-mono);font-size:9px;color:var(--ink-light);">PLAYOFF</div></div>';
-      html += '<div style="text-align:center;"><div style="font-family:var(--font-mono);font-size:14px;font-weight:700;">' + r.avgPts + '</div><div style="font-family:var(--font-mono);font-size:9px;color:var(--ink-light);">AVG PTS</div></div>';
-      html += '</div></div>';
-    }
-    html += '</div>';
+    html += _mcRenderOddsCards(results, paid, leagueId);
 
     if (!paid && results.length > 3) {
       html += '<div style="text-align:center;margin-top:16px;font-family:var(--font-hand);font-size:14px;color:var(--ink-medium);">';
-      html += 'top 3 managers shown free. <a href="/pricing.html" style="color:var(--orange);">subscribe to Pro</a> to see all ' + results.length + ' managers and deep-dive analysis.</div>';
+      html += 'top 3 managers shown free. <a href="/pricing.html" style="color:var(--orange);">subscribe to Pro</a> to see all ' + results.length + ' managers and the scenario explorer.</div>';
     }
+
+    // Scenario explorer placeholder (Pro only)
+    if (paid) {
+      html += '<div id="mc-scenario-' + leagueId + '"></div>';
+    }
+
     html += '</div>';
     oddsDiv.innerHTML = html;
+
+    // Draw histograms after DOM update
+    if (paid) {
+      for (var h = 0; h < results.length; h++) {
+        var rc = results[h];
+        var canvas = document.getElementById('mc-hist-' + leagueId + '-' + rc.rid);
+        if (canvas) _mcDrawHistogram(canvas, rc.ptsHistory, rc.name);
+      }
+      _mcRenderScenario(leagueId);
+    }
   } catch (e) {
     oddsDiv.innerHTML = '<div style="text-align:center;padding:24px;font-family:var(--font-hand);font-size:16px;color:var(--red);">' + (e.name === 'AbortError' ? 'simulation timed out' : 'fumbled the simulation... ' + escapeHtml(e.message)) + '</div>';
   }
