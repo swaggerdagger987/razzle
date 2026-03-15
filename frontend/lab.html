@@ -1055,7 +1055,7 @@
     font-family: var(--font-mono); font-size: 12px;
   }
   .colstats-title {
-    font-family: var(--font-display); font-size: 14px; font-weight: 700;
+    font-family: var(--font-mono); font-size: 14px; font-weight: 700;
     color: var(--orange); margin-bottom: 8px;
     border-bottom: 2px dashed var(--ink-faint); padding-bottom: 6px;
   }
@@ -3543,7 +3543,7 @@
 
     <!-- Shareable URL -->
     <div style="margin-bottom:16px;">
-      <label style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; display:block; margin-bottom:6px;">Shareable URL</label>
+      <label style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; display:block; margin-bottom:6px;">Shareable URL</label>
       <div style="display:flex; gap:8px; align-items:center;">
         <input type="text" id="shareURLInput" readonly style="flex:1; font-family:var(--font-mono); font-size:12px; padding:8px 10px; border:2px solid var(--ink); border-radius:6px; background:var(--bg); color:var(--ink);">
         <button class="btn-primary" id="shareURLCopyBtn" onclick="copyShareURLFromModal()" style="font-size:11px; padding:6px 14px; white-space:nowrap;">Copy URL</button>
@@ -3552,7 +3552,7 @@
 
     <!-- Export PNG + CSV -->
     <div style="margin-bottom:16px;">
-      <label style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; display:block; margin-bottom:6px;">Export Data</label>
+      <label style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; display:block; margin-bottom:6px;">Export Data</label>
       <div style="display:flex; gap:8px; flex-wrap:wrap;">
         <button class="btn-chunky" onclick="exportImage(); closeShareModal();" style="font-size:12px; padding:6px 14px;">Download PNG</button>
         <button class="btn-chunky btn-csv-export" onclick="exportCSV(); closeShareModal();" style="font-size:12px; padding:6px 14px;">Download CSV</button>
@@ -3563,7 +3563,7 @@
 
     <!-- Reddit Title -->
     <div style="margin-bottom:16px;">
-      <label style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; display:block; margin-bottom:6px;">Suggested Reddit Title</label>
+      <label style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; display:block; margin-bottom:6px;">Suggested Reddit Title</label>
       <div style="display:flex; gap:8px; align-items:center;">
         <input type="text" id="redditTitleInput" readonly style="flex:1; font-family:var(--font-mono); font-size:12px; padding:8px 10px; border:2px solid var(--ink); border-radius:6px; background:var(--bg); color:var(--ink);">
         <button class="btn-chunky" id="redditTitleCopyBtn" onclick="copyRedditTitle()" style="font-size:11px; padding:6px 14px; white-space:nowrap;">Copy</button>
@@ -3584,7 +3584,7 @@
 
     <!-- Save current view -->
     <div style="margin-bottom:16px; padding-bottom:16px; border-bottom:2px dashed var(--ink-faint);">
-      <label style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; display:block; margin-bottom:6px;">Save Current View</label>
+      <label style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; display:block; margin-bottom:6px;">Save Current View</label>
       <div style="display:flex; gap:8px; align-items:center;">
         <input type="text" id="saveViewName" placeholder="e.g. Dynasty WR Targets" style="flex:1; font-family:var(--font-mono); font-size:12px; padding:8px 10px; border:2px solid var(--ink); border-radius:6px; background:var(--bg); color:var(--ink);">
         <button class="btn-primary" onclick="saveCurrentView()" style="font-size:11px; padding:6px 14px; white-space:nowrap;">Save</button>
@@ -3609,7 +3609,7 @@
 
     <!-- Config name -->
     <div style="margin-bottom:12px;">
-      <label style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; display:block; margin-bottom:4px;">Config Name</label>
+      <label style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; display:block; margin-bottom:4px;">Config Name</label>
       <input type="text" id="customScoringName" placeholder="e.g. My League" maxlength="20" style="width:100%; box-sizing:border-box; font-family:var(--font-mono); font-size:12px; padding:8px 10px; border:2px solid var(--ink); border-radius:6px; background:var(--bg); color:var(--ink);">
     </div>
 
@@ -3637,15 +3637,15 @@
     <h3 style="margin:0 0 16px 0; font-family:var(--font-display);">Export Rankings</h3>
     <div style="display:flex; flex-direction:column; gap:12px;">
       <div>
-        <label style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; display:block; margin-bottom:4px;">Position</label>
+        <label style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; display:block; margin-bottom:4px;">Position</label>
         <div id="rankPosButtons" style="display:flex; gap:6px; flex-wrap:wrap;"></div>
       </div>
       <div>
-        <label style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; display:block; margin-bottom:4px;">Count</label>
+        <label style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; display:block; margin-bottom:4px;">Count</label>
         <div id="rankCountButtons" style="display:flex; gap:6px;"></div>
       </div>
       <div>
-        <label style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; display:block; margin-bottom:4px;">Sort By</label>
+        <label style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; display:block; margin-bottom:4px;">Sort By</label>
         <div id="rankSortButtons" style="display:flex; gap:6px;"></div>
       </div>
       <p id="rankingsPreview" style="font-family:var(--font-hand); font-size:18px; color:var(--ink-medium); margin:4px 0;"></p>
@@ -3721,7 +3721,7 @@
       <!-- I GIVE side -->
       <div class="trade-side">
         <div class="trade-side-label" style="background:var(--red-light); border-color:var(--red);">
-          <span style="font-family:var(--font-display); font-size:14px; text-transform:uppercase; letter-spacing:1px;">I Give</span>
+          <span style="font-family:var(--font-mono); font-size:14px; text-transform:uppercase; letter-spacing:1px;">I Give</span>
         </div>
         <div class="trade-search-wrap">
           <input type="text" class="input-chunky" id="taSearchGive" placeholder="search player..." autocomplete="off">
@@ -3737,7 +3737,7 @@
           <div class="trade-empty-hint">add players or picks to trade away</div>
         </div>
         <div class="trade-side-total">
-          <span style="font-family:var(--font-display); font-size:13px;">TOTAL</span>
+          <span style="font-family:var(--font-mono); font-size:13px;">TOTAL</span>
           <span class="trade-total-value" id="taTotalGive">0</span>
         </div>
       </div>
@@ -3750,7 +3750,7 @@
       <!-- I GET side -->
       <div class="trade-side">
         <div class="trade-side-label" style="background:var(--green-light); border-color:var(--green);">
-          <span style="font-family:var(--font-display); font-size:14px; text-transform:uppercase; letter-spacing:1px;">I Get</span>
+          <span style="font-family:var(--font-mono); font-size:14px; text-transform:uppercase; letter-spacing:1px;">I Get</span>
         </div>
         <div class="trade-search-wrap">
           <input type="text" class="input-chunky" id="taSearchGet" placeholder="search player..." autocomplete="off">
@@ -3766,7 +3766,7 @@
           <div class="trade-empty-hint">add players or picks to acquire</div>
         </div>
         <div class="trade-side-total">
-          <span style="font-family:var(--font-display); font-size:13px;">TOTAL</span>
+          <span style="font-family:var(--font-mono); font-size:13px;">TOTAL</span>
           <span class="trade-total-value" id="taTotalGet">0</span>
         </div>
       </div>
@@ -3783,7 +3783,7 @@
     <!-- Pick Value Chart -->
     <div class="trade-pick-chart-wrap">
       <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
-        <span style="font-family:var(--font-display); font-size:14px;">Pick Value Curve</span>
+        <span style="font-family:var(--font-mono); font-size:14px;">Pick Value Curve</span>
         <span style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light);">dynasty draft capital at a glance</span>
       </div>
       <canvas id="taPickChartCanvas" width="720" height="220" style="border:3px solid var(--ink); border-radius:8px; background:var(--bg); max-width:100%; display:block;"></canvas>
@@ -3811,12 +3811,12 @@
       </div>
       <div style="display:grid; grid-template-columns:1fr auto 1fr; gap:16px; align-items:start;">
         <div>
-          <div style="font-family:var(--font-display); font-size:13px; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Side A</div>
+          <div style="font-family:var(--font-mono); font-size:13px; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Side A</div>
           <input type="text" class="input-chunky" id="tvSearchA" placeholder="search player..." style="width:100%; margin-bottom:8px; font-size:12px;">
           <div id="tvAutoA" style="display:none; position:absolute; background:var(--bg-card); border:2px solid var(--ink); border-radius:8px; box-shadow:4px 4px 0 var(--ink); max-height:150px; overflow-y:auto; z-index:100; width:280px;"></div>
           <div id="tvListA" style="display:flex; flex-direction:column; gap:6px; min-height:40px;"></div>
           <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; padding:6px 10px; border:2px solid var(--ink); border-radius:8px; background:var(--bg-warm);">
-            <span style="font-family:var(--font-display); font-size:12px;">TOTAL</span>
+            <span style="font-family:var(--font-mono); font-size:12px;">TOTAL</span>
             <span id="tvTotalA" style="font-family:var(--font-mono); font-size:16px; font-weight:bold;">0</span>
           </div>
           <button class="btn-chunky" onclick="clearTradeSide('A')" style="font-size:10px; padding:3px 10px; margin-top:6px;">Clear</button>
@@ -3825,12 +3825,12 @@
           <div style="font-family:var(--font-mono); font-size:14px; font-weight:bold; padding:8px 14px; border:2px solid var(--ink); border-radius:8px;" id="tvBalanceBadge">—</div>
         </div>
         <div>
-          <div style="font-family:var(--font-display); font-size:13px; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Side B</div>
+          <div style="font-family:var(--font-mono); font-size:13px; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Side B</div>
           <input type="text" class="input-chunky" id="tvSearchB" placeholder="search player..." style="width:100%; margin-bottom:8px; font-size:12px;">
           <div id="tvAutoB" style="display:none; position:absolute; background:var(--bg-card); border:2px solid var(--ink); border-radius:8px; box-shadow:4px 4px 0 var(--ink); max-height:150px; overflow-y:auto; z-index:100; width:280px;"></div>
           <div id="tvListB" style="display:flex; flex-direction:column; gap:6px; min-height:40px;"></div>
           <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; padding:6px 10px; border:2px solid var(--ink); border-radius:8px; background:var(--bg-warm);">
-            <span style="font-family:var(--font-display); font-size:12px;">TOTAL</span>
+            <span style="font-family:var(--font-mono); font-size:12px;">TOTAL</span>
             <span id="tvTotalB" style="font-family:var(--font-mono); font-size:16px; font-weight:bold;">0</span>
           </div>
           <button class="btn-chunky" onclick="clearTradeSide('B')" style="font-size:10px; padding:3px 10px; margin-top:6px;">Clear</button>
@@ -3875,7 +3875,7 @@
       <textarea class="input-chunky" id="publishDescription" placeholder="describe what this formula does..." style="flex:1; min-height:60px; resize:vertical; font-family:var(--font-mono); font-size:12px;"></textarea>
     </div>
     <div style="margin-bottom:12px;">
-      <div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; color:var(--ink-light); letter-spacing:1px; margin-bottom:6px;">Position Tags</div>
+      <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; color:var(--ink-light); letter-spacing:1px; margin-bottom:6px;">Position Tags</div>
       <div style="display:flex; gap:8px; flex-wrap:wrap;">
         <label style="display:flex; align-items:center; gap:4px; font-family:var(--font-mono); font-size:12px; cursor:pointer;">
           <input type="checkbox" class="publish-pos-check" value="QB" style="accent-color:var(--pos-qb);"> QB

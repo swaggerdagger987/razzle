@@ -7854,7 +7854,7 @@
       for (var j = 0; j < pcts.length; j++) avgPct += pcts[j].percentile;
       avgPct = Math.round(avgPct / pcts.length);
       html += '<div style="text-align:center;margin:16px 0">';
-      html += '<span style="font-family:var(--font-display);font-size:14px;color:var(--ink-light)">Average Percentile: </span>';
+      html += '<span style="font-family:var(--font-mono);font-size:14px;color:var(--ink-light)">Average Percentile: </span>';
       html += '<span style="font-family:var(--font-mono);font-size:18px;font-weight:700;color:' + barColor(avgPct) + '">' + avgPct + 'th</span>';
       html += '</div>';
 
@@ -8421,7 +8421,7 @@
           el.querySelector('.rbld-grade-empty').style.display = 'block';
           el.querySelector('.rbld-grade-content').style.display = 'none';
           el.querySelector('.rbld-grade-empty').innerHTML =
-            '<div style="font-family:var(--font-display); font-size:14px;">Roster Grading requires Pro</div>' +
+            '<div style="font-family:var(--font-mono); font-size:14px;">Roster Grading requires Pro</div>' +
             '<a href="/pricing.html" style="font-family:var(--font-mono); font-size:11px; color:var(--orange);">Upgrade &rarr;</a>';
           return null;
         }
@@ -9395,7 +9395,7 @@
         var hitPct = rd.hit_rate;
         var barColor = hitPct >= 50 ? '#2ec4b6' : hitPct >= 30 ? '#d97757' : '#d44040';
         html += '<div style="background:var(--bg-card); border:2px solid var(--ink); border-radius:6px; padding:8px 12px; min-width:100px; text-align:center;">' +
-          '<div style="font-family:var(--font-display); font-size:14px; color:var(--ink);">Round ' + rd.round + '</div>' +
+          '<div style="font-family:var(--font-mono); font-size:14px; color:var(--ink);">Round ' + rd.round + '</div>' +
           '<div style="margin:4px 0; height:6px; background:#e8d5c4; border-radius:3px;">' +
             '<div style="height:100%; width:' + hitPct + '%; background:' + barColor + '; border-radius:3px;"></div>' +
           '</div>' +
@@ -9418,7 +9418,7 @@
         if (!pd) return;
         var color = POS_COLORS[pos] || '#8a7565';
         html += '<div style="background:var(--bg-card); border:2px solid var(--ink); border-radius:6px; padding:8px 12px; min-width:90px; text-align:center; border-left:4px solid ' + color + ';">' +
-          '<div style="font-family:var(--font-display); font-size:14px; color:' + color + ';">' + pos + '</div>' +
+          '<div style="font-family:var(--font-mono); font-size:14px; color:' + color + ';">' + pos + '</div>' +
           '<div style="font-family:var(--font-mono); font-size:12px;">' + pd.total + ' drafted</div>' +
           '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' +
             pd.avg_ppg + ' avg PPG' +

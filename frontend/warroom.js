@@ -3442,7 +3442,7 @@ function _renderMemoryEntries(panel, memory, isElite) {
 
     html += '<div style="padding:8px 0; border-bottom:2px dashed var(--ink-faint);">';
     html += '<div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + ago + syncIcon + leagueTag + '</div>';
-    html += '<div style="font-family:var(--font-display); font-size:12px; margin:2px 0;">' + escapeHtml(m.scenario.slice(0, 80)) + (m.scenario.length > 80 ? '...' : '') + '</div>';
+    html += '<div style="font-family:var(--font-mono); font-size:12px; margin:2px 0;">' + escapeHtml(m.scenario.slice(0, 80)) + (m.scenario.length > 80 ? '...' : '') + '</div>';
     html += '<div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + agentSummary + '</div>';
     html += '</div>';
   });
@@ -3535,7 +3535,7 @@ function renderBriefingContent(container, briefing) {
   // Urgency items
   var urgents = safeParse(briefing.urgency_items);
   if (urgents.length) {
-    html += '<div style="margin-bottom:8px;"><span style="font-family:var(--font-display); font-size:12px; color:var(--red); text-transform:uppercase;">Urgent</span>';
+    html += '<div style="margin-bottom:8px;"><span style="font-family:var(--font-mono); font-size:12px; color:var(--red); text-transform:uppercase;">Urgent</span>';
     urgents.forEach(function(item) {
       html += '<div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); margin:2px 0 2px 8px;">- ' + escapeHtml(item) + '</div>';
     });
@@ -3545,7 +3545,7 @@ function renderBriefingContent(container, briefing) {
   // Monitor items
   var monitors = safeParse(briefing.monitor_items);
   if (monitors.length) {
-    html += '<div style="margin-bottom:8px;"><span style="font-family:var(--font-display); font-size:12px; color:var(--yellow); text-transform:uppercase;">Monitor</span>';
+    html += '<div style="margin-bottom:8px;"><span style="font-family:var(--font-mono); font-size:12px; color:var(--yellow); text-transform:uppercase;">Monitor</span>';
     monitors.forEach(function(item) {
       html += '<div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); margin:2px 0 2px 8px;">- ' + escapeHtml(item) + '</div>';
     });
@@ -3555,7 +3555,7 @@ function renderBriefingContent(container, briefing) {
   // Opportunity items
   var opps = safeParse(briefing.opportunity_items);
   if (opps.length) {
-    html += '<div style="margin-bottom:8px;"><span style="font-family:var(--font-display); font-size:12px; color:var(--green); text-transform:uppercase;">Opportunity</span>';
+    html += '<div style="margin-bottom:8px;"><span style="font-family:var(--font-mono); font-size:12px; color:var(--green); text-transform:uppercase;">Opportunity</span>';
     opps.forEach(function(item) {
       html += '<div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); margin:2px 0 2px 8px;">- ' + escapeHtml(item) + '</div>';
     });
@@ -3566,7 +3566,7 @@ function renderBriefingContent(container, briefing) {
   var highlights = safeParse(briefing.agent_highlights);
   if (highlights.length) {
     html += '<div style="border-top:2px dashed var(--ink-faint); padding-top:8px; margin-top:8px;">';
-    html += '<div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; color:var(--ink-light); margin-bottom:4px;">Agent Highlights</div>';
+    html += '<div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; color:var(--ink-light); margin-bottom:4px;">Agent Highlights</div>';
     highlights.forEach(function(h) {
       html += '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-medium); margin:3px 0;">';
       html += '<strong style="color:var(--orange);">' + escapeHtml(h.agent || '') + ':</strong> ' + escapeHtml(h.finding || h.text || '') + '</div>';
@@ -3695,7 +3695,7 @@ function toggleBriefingHistory() {
     data.briefings.forEach(function(b) {
       var leagueTag = b.league_name ? ' [' + escapeHtml(b.league_name) + ']' : '';
       html += '<div style="padding:6px 0; border-bottom:2px dashed var(--ink-faint); cursor:pointer;" onclick="loadBriefingById(' + b.id + ')">';
-      html += '<div style="font-family:var(--font-display); font-size:12px;">' + escapeHtml(b.week_label) + leagueTag + '</div>';
+      html += '<div style="font-family:var(--font-mono); font-size:12px;">' + escapeHtml(b.week_label) + leagueTag + '</div>';
       html += '<div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + escapeHtml(b.summary.slice(0, 80)) + '...</div>';
       html += '</div>';
     });

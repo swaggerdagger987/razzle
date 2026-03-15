@@ -188,7 +188,7 @@
   }
 
   .warroom-canvas-label {
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -1507,7 +1507,7 @@
 <a href="#main-content" class="sr-only" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;" onfocus="this.style.position='static';this.style.width='auto';this.style.height='auto';" onblur="this.style.position='absolute';this.style.left='-9999px';this.style.width='1px';this.style.height='1px';">Skip to main content</a>
 
 <!-- Skip to content (accessibility) -->
-<a href="#scenarioInput" class="skip-link" style="position:absolute; top:-40px; left:0; background:var(--orange); color:var(--bg); padding:8px 16px; z-index:9999; font-family:var(--font-display); font-size:14px; transition:top 0.2s;">Skip to scenario input</a>
+<a href="#scenarioInput" class="skip-link" style="position:absolute; top:-40px; left:0; background:var(--orange); color:var(--bg); padding:8px 16px; z-index:9999; font-family:var(--font-mono); font-size:14px; transition:top 0.2s;">Skip to scenario input</a>
 <style>.skip-link:focus { top: 0; }</style>
 
 <!-- NAV -->
@@ -1649,7 +1649,7 @@
         Weekly Razzle Briefing
       </div>
       <div class="scenario-body" style="filter:blur(3px); pointer-events:none; user-select:none;" aria-hidden="true">
-        <div style="font-family:var(--font-display); font-size:14px; margin-bottom:8px; color:var(--orange);">URGENT</div>
+        <div style="font-family:var(--font-mono); font-size:14px; margin-bottom:8px; color:var(--orange);">URGENT</div>
         <div style="font-family:var(--font-mono); font-size:12px; line-height:1.6; color:var(--ink-medium);">
           Your WR1 has a grade 2 hamstring strain. Medical estimates 2-3 weeks. Scout identified 2 waiver targets to replace production. Diplomat recommends trading your QB2 to the 2-6 manager who historically overpays after back-to-back losses. Championship odds shift from 14% to 11% without action — but rise to 18% if you execute all three recommendations...
         </div>
@@ -1731,9 +1731,9 @@
           </div>
           <div style="display:flex; flex-direction:column; gap:8px;">
             <div class="setup-step" id="setupStep1" style="display:flex; align-items:flex-start; gap:10px; padding:8px 10px; border:2px solid var(--ink-faint); border-radius:8px; background:var(--bg-warm); transition:all 0.2s;">
-              <span class="setup-step-num" id="setupCheck1" style="font-family:var(--font-display); font-size:14px; background:var(--orange); color:var(--bg); width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">1</span>
+              <span class="setup-step-num" id="setupCheck1" style="font-family:var(--font-mono); font-size:14px; background:var(--orange); color:var(--bg); width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">1</span>
               <div>
-                <div style="font-family:var(--font-display); font-size:13px;">Get a free API key</div>
+                <div style="font-family:var(--font-mono); font-size:13px;">Get a free API key</div>
                 <div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-medium); margin-top:2px;">
                   Sign up at <a href="https://openrouter.ai" target="_blank" rel="noopener" style="color:var(--orange); text-decoration:underline;">openrouter.ai</a>, copy your key, then
                   <a href="#" onclick="event.preventDefault(); document.getElementById('configToggle').click(); document.getElementById('cfgSharedKey').focus();" style="color:var(--orange); text-decoration:underline;">paste it in Config</a>
@@ -1741,16 +1741,16 @@
               </div>
             </div>
             <div class="setup-step" id="setupStep2" style="display:flex; align-items:flex-start; gap:10px; padding:8px 10px; border:2px solid var(--ink-faint); border-radius:8px; background:var(--bg-warm); transition:all 0.2s;">
-              <span class="setup-step-num" style="font-family:var(--font-display); font-size:14px; background:var(--orange); color:var(--bg); width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">2</span>
+              <span class="setup-step-num" style="font-family:var(--font-mono); font-size:14px; background:var(--orange); color:var(--bg); width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">2</span>
               <div>
-                <div style="font-family:var(--font-display); font-size:13px;">Type a scenario or pick one above</div>
+                <div style="font-family:var(--font-mono); font-size:13px;">Type a scenario or pick one above</div>
                 <div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-medium); margin-top:2px;">try: "Should I trade Ja'Marr Chase for two 1sts in my 12-team SF dynasty?"</div>
               </div>
             </div>
             <div class="setup-step" id="setupStep3" style="display:flex; align-items:flex-start; gap:10px; padding:8px 10px; border:2px solid var(--ink-faint); border-radius:8px; background:var(--bg-warm); transition:all 0.2s;">
-              <span class="setup-step-num" style="font-family:var(--font-display); font-size:14px; background:var(--orange); color:var(--bg); width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">3</span>
+              <span class="setup-step-num" style="font-family:var(--font-mono); font-size:14px; background:var(--orange); color:var(--bg); width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">3</span>
               <div>
-                <div style="font-family:var(--font-display); font-size:13px;">Hit "Run All Agents"</div>
+                <div style="font-family:var(--font-mono); font-size:13px;">Hit "Run All Agents"</div>
                 <div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-medium); margin-top:2px;">6 specialists analyze your scenario simultaneously</div>
               </div>
             </div>
@@ -1821,7 +1821,7 @@
       <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:24px 24px; text-align:left; min-width:220px; max-width:300px; flex:1;">
         <div style="text-align:center; margin-bottom:12px;">
           <div style="font-family:var(--font-display); font-size:18px;">Pro</div>
-          <div style="font-family:var(--font-display); font-size:28px; color:var(--orange);">$9.99<span style="font-size:13px; color:var(--ink-light);">/mo</span></div>
+          <div style="font-family:var(--font-display); font-size:28px; color:var(--orange);">$9.99<span style="font-family:var(--font-mono); font-size:13px; color:var(--ink-light);">/mo</span></div>
           <div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">or $79.99/year</div>
         </div>
         <ul style="font-family:var(--font-mono); font-size:11px; padding-left:16px; line-height:1.9; color:var(--ink-medium); margin-bottom:16px;">
@@ -1838,10 +1838,10 @@
 
       <!-- ELITE -->
       <div style="background:var(--bg-card); border:3px solid var(--orange); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:24px 24px; text-align:left; min-width:220px; max-width:300px; flex:1; position:relative;">
-        <div style="position:absolute; top:-11px; left:50%; transform:translateX(-50%) rotate(-2deg); background:var(--orange); color:var(--bg); font-family:var(--font-display); font-size:10px; padding:2px 12px; border-radius:20px; border:2px solid var(--ink); box-shadow:2px 2px 0 var(--ink);">recommended</div>
+        <div style="position:absolute; top:-11px; left:50%; transform:translateX(-50%) rotate(-2deg); background:var(--orange); color:var(--bg); font-family:var(--font-mono); font-size:10px; padding:2px 12px; border-radius:20px; border:2px solid var(--ink); box-shadow:2px 2px 0 var(--ink);">recommended</div>
         <div style="text-align:center; margin-bottom:12px;">
           <div style="font-family:var(--font-display); font-size:18px;">Elite</div>
-          <div style="font-family:var(--font-display); font-size:28px; color:var(--orange);">$19.99<span style="font-size:13px; color:var(--ink-light);">/mo</span></div>
+          <div style="font-family:var(--font-display); font-size:28px; color:var(--orange);">$19.99<span style="font-family:var(--font-mono); font-size:13px; color:var(--ink-light);">/mo</span></div>
           <div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">or $149.99/year</div>
         </div>
         <ul style="font-family:var(--font-mono); font-size:11px; padding-left:16px; line-height:1.9; color:var(--ink-medium); margin-bottom:16px;">
@@ -1873,10 +1873,10 @@
       <table style="width:100%; max-width:700px; margin:0 auto; border-collapse:collapse; font-family:var(--font-mono); font-size:11px; border:3px solid var(--ink); border-radius:8px; overflow:hidden; box-shadow:4px 4px 0 var(--ink);">
         <thead>
           <tr style="background:var(--ink); color:var(--bg);">
-            <th style="padding:10px 12px; text-align:left; font-family:var(--font-display); font-size:13px; font-weight:400;">Feature</th>
-            <th style="padding:10px 12px; text-align:center; font-family:var(--font-display); font-size:13px; font-weight:400;">Free</th>
-            <th style="padding:10px 12px; text-align:center; font-family:var(--font-display); font-size:13px; font-weight:400; color:var(--orange);">Pro</th>
-            <th style="padding:10px 12px; text-align:center; font-family:var(--font-display); font-size:13px; font-weight:400; color:var(--orange);">Elite</th>
+            <th style="padding:10px 12px; text-align:left; font-family:var(--font-mono); font-size:13px; font-weight:400;">Feature</th>
+            <th style="padding:10px 12px; text-align:center; font-family:var(--font-mono); font-size:13px; font-weight:400;">Free</th>
+            <th style="padding:10px 12px; text-align:center; font-family:var(--font-mono); font-size:13px; font-weight:400; color:var(--orange);">Pro</th>
+            <th style="padding:10px 12px; text-align:center; font-family:var(--font-mono); font-size:13px; font-weight:400; color:var(--orange);">Elite</th>
           </tr>
         </thead>
         <tbody>
@@ -1952,7 +1952,7 @@
   <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:24px 16px; max-width:900px; margin:0 auto 24px; padding:0 24px; font-family:var(--font-mono); font-size:11px; text-align:left;">
 
     <div>
-      <div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Razzle</div>
+      <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Razzle</div>
       <a href="/" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Home</a>
       <a href="/lab.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">The Lab</a>
       <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Bureau</a>
@@ -1962,7 +1962,7 @@
     </div>
 
     <div>
-      <div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Dynasty</div>
+      <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Dynasty</div>
       <a href="/rankings.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Rankings</a>
       <a href="/tradevalues.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Trade Values</a>
       <a href="/tradefinder.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Trade Finder</a>
@@ -1974,7 +1974,7 @@
     </div>
 
     <div>
-      <div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Weekly</div>
+      <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Weekly</div>
       <a href="/weekly.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Weekly Stats</a>
       <a href="/weeklyleaders.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Week Leaders</a>
       <a href="/weeklymvp.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Weekly MVP</a>
@@ -1986,7 +1986,7 @@
     </div>
 
     <div>
-      <div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Analytics</div>
+      <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Analytics</div>
       <a href="/targets.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Targets</a>
       <a href="/usage.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Usage</a>
       <a href="/efficiency.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Efficiency</a>
@@ -1998,7 +1998,7 @@
     </div>
 
     <div>
-      <div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Tools</div>
+      <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Tools</div>
       <a href="/explorer.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Stat Explorer</a>
       <a href="/compare.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Compare</a>
       <a href="/rosterbuilder.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Roster Builder</a>
@@ -2045,7 +2045,7 @@ fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"applicat
       banner.innerHTML =
         '<div style="background:var(--bg-card); border:3px solid var(--orange); border-radius:10px; box-shadow:3px 3px 0 var(--ink); padding:14px 20px; margin-top:16px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">' +
           '<div>' +
-            '<span style="font-family:var(--font-display); font-size:14px; color:var(--ink);">Your Pro trial has ended</span>' +
+            '<span style="font-family:var(--font-mono); font-size:14px; color:var(--ink);">Your Pro trial has ended</span>' +
             '<span style="font-family:var(--font-hand); font-size:14px; color:var(--ink-medium); margin-left:8px;">upgrade to keep league-contextualized agents</span>' +
           '</div>' +
           '<a href="/pricing.html" class="btn-chunky btn-primary" style="font-size:12px; padding:6px 16px; text-decoration:none;">See Plans</a>' +
@@ -2060,7 +2060,7 @@ fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"applicat
       banner.innerHTML =
         '<div style="background:var(--bg-card); border:3px solid ' + urgencyColor + '; border-radius:10px; box-shadow:3px 3px 0 var(--ink); padding:14px 20px; margin-top:16px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">' +
           '<div>' +
-            '<span style="font-family:var(--font-display); font-size:14px; color:var(--ink);">' + msg + '</span>' +
+            '<span style="font-family:var(--font-mono); font-size:14px; color:var(--ink);">' + msg + '</span>' +
             '<span style="font-family:var(--font-hand); font-size:14px; color:var(--ink-medium); margin-left:8px;">keep your league-contextualized agents</span>' +
           '</div>' +
           '<a href="/pricing.html" class="btn-chunky btn-primary" style="font-size:12px; padding:6px 16px; text-decoration:none;">Upgrade Now</a>' +

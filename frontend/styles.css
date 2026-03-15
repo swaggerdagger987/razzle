@@ -86,10 +86,14 @@
 body {
   background: var(--bg);
   color: var(--ink);
-  font-family: var(--font-display);
+  font-family: var(--font-mono);
   font-size: 14px;
   line-height: 1.5;
   min-height: 100vh;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
 }
 
 /* ===== NAV ===== */
@@ -145,7 +149,7 @@ body {
 }
 
 .nav-links a {
-  font-family: var(--font-display);
+  font-family: var(--font-mono);
   font-size: 13px;
   font-weight: 700;
   text-decoration: none;
@@ -259,7 +263,7 @@ body {
 }
 
 .mobile-nav-link {
-  font-family: var(--font-display);
+  font-family: var(--font-mono);
   font-size: 16px;
   font-weight: 700;
   text-decoration: none;
@@ -480,7 +484,7 @@ button.nav-search-hint {
 
 .nav-dropdown-item {
   display: block;
-  font-family: var(--font-display);
+  font-family: var(--font-mono);
   font-size: 12px;
   color: var(--ink);
   padding: 8px 12px;
@@ -940,7 +944,7 @@ body {
 }
 .cmd-palette-input {
   width: 100%;
-  font-family: var(--font-display);
+  font-family: var(--font-mono);
   font-size: 18px;
   padding: 10px 14px;
   border: 2px solid var(--ink);
@@ -959,7 +963,7 @@ body {
 }
 .cmd-palette-input::placeholder {
   color: var(--ink-light);
-  font-family: var(--font-display);
+  font-family: var(--font-mono);
 }
 .cmd-palette-results {
   max-height: 380px;
@@ -1019,7 +1023,7 @@ body {
   min-width: 0;
 }
 .cmd-palette-item-name {
-  font-family: var(--font-display);
+  font-family: var(--font-mono);
   font-size: 15px;
   color: var(--ink);
   white-space: nowrap;
@@ -1215,7 +1219,7 @@ tr:hover .tag-icon {
   display: none;
 }
 .tag-picker-title {
-  font-family: var(--font-display);
+  font-family: var(--font-mono);
   font-size: 11px;
   text-transform: uppercase;
   color: var(--ink-light);
@@ -1308,7 +1312,7 @@ tr:hover .notes-cell .note-pencil {
   display: none;
 }
 .note-editor-title {
-  font-family: var(--font-display);
+  font-family: var(--font-mono);
   font-size: 12px;
   text-transform: uppercase;
   color: var(--ink-light);

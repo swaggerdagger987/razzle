@@ -4266,7 +4266,7 @@ function renderSavedViewsList() {
 
     return `<div style="display:flex; align-items:center; gap:10px; padding:10px 12px; border:2px solid var(--ink); border-radius:8px; margin-bottom:8px; background:var(--bg); cursor:pointer; transition:transform 0.1s, box-shadow 0.1s;" onmouseenter="this.style.transform='translate(-2px,-2px)';this.style.boxShadow='4px 4px 0 var(--ink)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
       <div style="flex:1; min-width:0;" onclick="loadSavedView('${escapeAttr(v.id)}')">
-        <div style="font-family:var(--font-display); font-size:14px; font-weight:600; margin-bottom:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHtml(v.name)}</div>
+        <div style="font-family:var(--font-mono); font-size:14px; font-weight:600; margin-bottom:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHtml(v.name)}</div>
         <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">${universeBadge(v.universe)}${posBadge(v.position)}${filterCount}<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">${dateStr}</span></div>
       </div>
       <button onclick="event.stopPropagation(); deleteSavedView('${escapeAttr(v.id)}')" style="background:none; border:2px solid var(--ink-faint); border-radius:6px; padding:4px 8px; cursor:pointer; font-family:var(--font-mono); font-size:11px; color:var(--ink-light);" title="Delete view">✕</button>
@@ -6032,7 +6032,7 @@ function renderCollegeProfile(data, container) {
   html += `<div>`;
   html += `<div class="profile-name">${escapeHtml(player.player_name)}</div>`;
   html += `<div class="profile-meta">${escapeHtml(player.team || "")} · ${escapeHtml(player.conference || "")} · ${player.seasons_played} season${player.seasons_played > 1 ? "s" : ""}</div>`;
-  html += `<span style="display:inline-block; background:var(--pos-qb); color:white; font-family:var(--font-display); font-size:10px; padding:2px 8px; border:2px solid var(--ink); border-radius:4px; transform:rotate(-2deg);">COLLEGE</span>`;
+  html += `<span style="display:inline-block; background:var(--pos-qb); color:white; font-family:var(--font-mono); font-size:10px; padding:2px 8px; border:2px solid var(--ink); border-radius:4px; transform:rotate(-2deg);">COLLEGE</span>`;
   html += `</div>`;
   html += `</div>`;
 
@@ -6253,7 +6253,7 @@ function renderProfile(data, container) {
   html += `<div class="profile-meta">${teamDisplay} · Age ${displayAge} · ${escapeHtml(player.college || "")} · ${seasonCount} ${seasonLabel}</div>`;
   if (combine && combine.draft_round) {
     const draftPick = combine.draft_overall || combine.draft_pick;
-    html += `<span style="display:inline-block; background:var(--ink); color:white; font-family:var(--font-display); font-size:10px; padding:2px 8px; border:2px solid var(--ink); border-radius:4px; transform:rotate(-1deg); margin-right:6px;">Rd ${combine.draft_round}${draftPick ? " #" + draftPick : ""}${combine.draft_year ? " '" + String(combine.draft_year).slice(2) : ""}</span>`;
+    html += `<span style="display:inline-block; background:var(--ink); color:white; font-family:var(--font-mono); font-size:10px; padding:2px 8px; border:2px solid var(--ink); border-radius:4px; transform:rotate(-1deg); margin-right:6px;">Rd ${combine.draft_round}${draftPick ? " #" + draftPick : ""}${combine.draft_year ? " '" + String(combine.draft_year).slice(2) : ""}</span>`;
   }
   if (breakoutInfo) {
     html += `<span class="breakout-badge">BREAKOUT +${breakoutInfo.pct}% (${breakoutInfo.season})</span>`;
@@ -7140,7 +7140,7 @@ function renderProspectProfile(data, container, compsData) {
       const confColor = compProjection.confidence >= 75 ? "#22a06b" : compProjection.confidence >= 50 ? "#ffc857" : "#e87422";
       html += `<div class="prospect-proj-confidence">`;
       html += `<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">Comp confidence:</span> `;
-      html += `<span style="font-family:var(--font-display); font-size:14px; font-weight:700; color:${confColor};">${Math.round(compProjection.confidence)}%</span>`;
+      html += `<span style="font-family:var(--font-mono); font-size:14px; font-weight:700; color:${confColor};">${Math.round(compProjection.confidence)}%</span>`;
       html += `<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); margin-left:8px;">(${compProjection.compCount} comps with NFL data)</span>`;
       html += `</div>`;
     }
@@ -8392,7 +8392,7 @@ function renderClassAnalytics(data, container) {
 
         <!-- Tier distribution bar -->
         <div style="margin-bottom:10px;">
-          <div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; color:var(--ink-light); margin-bottom:4px;">Tier Distribution</div>
+          <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; color:var(--ink-light); margin-bottom:4px;">Tier Distribution</div>
           <div style="display:flex; height:20px; border:2px solid var(--ink); border-radius:4px; overflow:hidden;">
             ${cls.count > 0 ? ['elite','premium','solid','flier'].map(tier => {
               const pct = (cls.tiers[tier] / cls.count * 100);
@@ -8408,8 +8408,8 @@ function renderClassAnalytics(data, container) {
 
         <!-- Top prospect -->
         <div style="border-top:2px dashed var(--ink-faint); padding-top:8px;">
-          <div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; color:var(--ink-light); margin-bottom:2px;">Top Prospect</div>
-          <div style="font-family:var(--font-display); font-size:14px; font-weight:700;">${topName}</div>
+          <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; color:var(--ink-light); margin-bottom:2px;">Top Prospect</div>
+          <div style="font-family:var(--font-mono); font-size:14px; font-weight:700;">${topName}</div>
           <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium);">RPS: ${topRPS}</div>
         </div>
       </div>`;
@@ -8825,7 +8825,7 @@ function renderTradeValueChart() {
     // Tier header with rotated sticker badge
     html += '<div style="margin-bottom:20px;">';
     html += '<div style="display:flex; align-items:center; gap:12px; margin-bottom:10px;">';
-    html += '<span style="display:inline-block; font-family:var(--font-display); font-size:12px; text-transform:uppercase; letter-spacing:1px; color:#fff; background:' + tier.color + '; padding:4px 14px; border:2px solid var(--ink); border-radius:4px; transform:rotate(-2deg); box-shadow:2px 2px 0 var(--ink);">' + tier.badge + '</span>';
+    html += '<span style="display:inline-block; font-family:var(--font-mono); font-size:12px; text-transform:uppercase; letter-spacing:1px; color:#fff; background:' + tier.color + '; padding:4px 14px; border:2px solid var(--ink); border-radius:4px; transform:rotate(-2deg); box-shadow:2px 2px 0 var(--ink);">' + tier.badge + '</span>';
     html += '<span style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light);">' + tierPlayers.length + ' player' + (tierPlayers.length !== 1 ? 's' : '') + '</span>';
     html += '</div>';
 
@@ -8837,7 +8837,7 @@ function renderTradeValueChart() {
       html += '<div style="background:var(--bg-card); border:2px solid var(--ink); border-radius:8px; padding:8px 10px; box-shadow:2px 2px 0 var(--ink); display:flex; flex-direction:column; gap:4px; border-left:5px solid ' + pc + ';">';
       // Name + position
       html += '<div style="display:flex; align-items:center; gap:6px;">';
-      html += '<span style="font-family:var(--font-display); font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + escapeHtml(p.full_name) + '</span>';
+      html += '<span style="font-family:var(--font-mono); font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + escapeHtml(p.full_name) + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:9px; font-weight:bold; color:#fff; background:' + pc + '; padding:1px 5px; border-radius:3px; border:2px solid var(--ink);">' + escapeHtml(p.position) + '</span>';
       html += '</div>';
       // Team + Age
@@ -8887,7 +8887,7 @@ function setupTradeSearchInput(side) {
         const pc = posColors[p.position] || "#2d1f14";
         return '<div style="padding:6px 10px; cursor:pointer; display:flex; align-items:center; gap:6px; border-bottom:1px solid var(--ink-faint);" onmousedown="addToTradeSide(\'' + side + '\', \'' + escapeAttr(p.player_id || p.full_name) + '\')">'
           + '<span style="font-family:var(--font-mono); font-size:9px; font-weight:bold; color:#fff; background:' + pc + '; padding:1px 5px; border-radius:3px;">' + escapeHtml(p.position) + '</span>'
-          + '<span style="font-family:var(--font-display); font-size:12px;">' + escapeHtml(p.full_name) + '</span>'
+          + '<span style="font-family:var(--font-mono); font-size:12px;">' + escapeHtml(p.full_name) + '</span>'
           + '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); margin-left:auto;">' + p._tv + '</span>'
           + '</div>';
       }).join("");
@@ -8941,7 +8941,7 @@ function renderTradeSide(side) {
     const pc = posColors[p.position] || "#2d1f14";
     return '<div style="display:flex; align-items:center; gap:6px; padding:5px 8px; background:var(--bg-card); border:2px solid var(--ink); border-radius:6px; border-left:4px solid ' + pc + ';">'
       + '<span style="font-family:var(--font-mono); font-size:9px; font-weight:bold; color:#fff; background:' + pc + '; padding:1px 4px; border-radius:3px;">' + escapeHtml(p.position) + '</span>'
-      + '<span style="font-family:var(--font-display); font-size:12px; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">' + escapeHtml(p.full_name) + '</span>'
+      + '<span style="font-family:var(--font-mono); font-size:12px; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">' + escapeHtml(p.full_name) + '</span>'
       + '<span style="font-family:var(--font-mono); font-size:12px; font-weight:bold;">' + p._tv + '</span>'
       + '<button onclick="removeFromTradeSide(\'' + side + '\', ' + i + ')" style="background:none; border:none; cursor:pointer; font-size:14px; color:var(--ink-light); padding:0 2px;">×</button>'
       + '</div>';
@@ -9416,7 +9416,7 @@ function renderACLegend() {
     "#ffc857", "#e63946", "#2d1f14", "#4a9e5c", "#c44daa",
   ];
 
-  let html = '<div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--ink-light); margin-right:8px; padding-top:6px;">Players</div>';
+  let html = '<div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--ink-light); margin-right:8px; padding-top:6px;">Players</div>';
   data.players.forEach((p, i) => {
     const color = playerColors[i % playerColors.length];
     const enabled = _acState.enabledPlayers[p.name];
@@ -9824,12 +9824,12 @@ function renderWatchlistPanel() {
   ["QB", "RB", "WR", "TE", "OTHER"].forEach(function(pos) {
     if (groups[pos].length === 0) return;
     html += '<div style="margin-bottom:14px;">';
-    html += '<div style="font-family:var(--font-display); font-size:14px; color:' + posColors[pos] + '; margin-bottom:6px; border-bottom:2px dashed var(--ink-faint); padding-bottom:4px;">' + pos + ' (' + groups[pos].length + ')</div>';
+    html += '<div style="font-family:var(--font-mono); font-size:14px; color:' + posColors[pos] + '; margin-bottom:6px; border-bottom:2px dashed var(--ink-faint); padding-bottom:4px;">' + pos + ' (' + groups[pos].length + ')</div>';
 
     groups[pos].forEach(function(p) {
       html += '<div style="display:flex; align-items:center; gap:8px; padding:5px 8px; border-radius:6px; margin-bottom:3px; background:var(--bg);">';
       html += '<span class="pos-badge pos-' + p.position.toLowerCase() + '" style="font-size:10px; padding:1px 6px;">' + escapeHtml(p.position) + '</span>';
-      html += '<span style="font-family:var(--font-display); font-size:13px; flex:1;">' + escapeHtml(p.name) + '</span>';
+      html += '<span style="font-family:var(--font-mono); font-size:13px; flex:1;">' + escapeHtml(p.name) + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + escapeHtml(p.team) + '</span>';
       html += '<select class="select-chunky" style="font-size:11px; padding:2px 6px; width:90px;" onchange="setWatchlistTier(\'' + escapeAttr(p.player_id) + '\', this.value); renderWatchlistPanel();">';
       for (var t = 0; t <= 5; t++) {
@@ -9900,7 +9900,7 @@ function renderTierBoard() {
     html += '<div style="margin-bottom:14px; border:2px solid var(--ink); border-radius:10px; overflow:hidden; background:var(--bg);">';
     // Tier header
     html += '<div style="display:flex; align-items:center; gap:10px; padding:8px 14px; background:var(--bg-warm); border-bottom:2px dashed var(--ink-faint);">';
-    html += '<span style="display:inline-block; font-family:var(--font-display); font-size:13px; color:white; background:' + color + '; border:2px solid var(--ink); border-radius:8px; padding:2px 12px; transform:rotate(-2deg); box-shadow:2px 2px 0 var(--ink);">' + label + '</span>';
+    html += '<span style="display:inline-block; font-family:var(--font-mono); font-size:13px; color:white; background:' + color + '; border:2px solid var(--ink); border-radius:8px; padding:2px 12px; transform:rotate(-2deg); box-shadow:2px 2px 0 var(--ink);">' + label + '</span>';
     html += '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + players.length + ' player' + (players.length !== 1 ? 's' : '') + '</span>';
     html += '</div>';
 
@@ -9914,7 +9914,7 @@ function renderTierBoard() {
       html += '<div style="display:inline-flex; align-items:center; gap:5px; padding:4px 10px 4px 0; border:2px solid var(--ink); border-radius:8px; background:var(--bg-card); box-shadow:2px 2px 0 var(--ink); font-size:12px;">';
       html += '<div style="width:5px; align-self:stretch; background:' + pc + '; border-radius:6px 0 0 6px;"></div>';
       html += '<span class="pos-badge pos-' + p.position.toLowerCase() + '" style="font-size:9px; padding:1px 5px; margin-left:4px;">' + escapeHtml(p.position) + '</span>';
-      html += '<span style="font-family:var(--font-display); font-size:12px;">' + escapeHtml(p.name) + '</span>';
+      html += '<span style="font-family:var(--font-mono); font-size:12px;">' + escapeHtml(p.name) + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + escapeHtml(p.team) + '</span>';
       html += '<select class="select-chunky" style="font-size:10px; padding:1px 4px; width:72px; border-width:2px;" onchange="setWatchlistTier(\'' + escapeAttr(p.player_id) + '\', this.value); renderTierBoard();">';
       for (var t = 0; t <= 5; t++) {
@@ -10435,7 +10435,7 @@ function _taSetupSearch(side) {
           const pid = p.player_id || p.full_name;
           return '<div class="trade-autocomplete-item" data-pid="' + escapeAttr(pid) + '" data-side="' + side + '">'
             + '<span class="pos-badge" style="background:' + pc + ';">' + escapeHtml(p.position) + '</span>'
-            + '<span style="font-family:var(--font-display); font-size:12px;">' + escapeHtml(p.full_name) + '</span>'
+            + '<span style="font-family:var(--font-mono); font-size:12px;">' + escapeHtml(p.full_name) + '</span>'
             + '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); margin-left:auto;">' + escapeHtml(p.team || "FA") + '</span>'
             + '</div>';
         }).join("");
@@ -10561,12 +10561,12 @@ function _taUpdateVerdict() {
 
   const barsHtml = '<div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">'
     + '<div style="display:flex; align-items:center; gap:8px;">'
-    + '<span style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; min-width:50px;">Give</span>'
+    + '<span style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; min-width:50px;">Give</span>'
     + '<div style="flex:1; height:14px; background:var(--bg-warm); border:2px solid var(--ink); border-radius:6px; overflow:hidden; display:flex;">' + giveSegments + '</div>'
     + '<span style="font-family:var(--font-mono); font-size:13px; font-weight:bold; min-width:32px; text-align:right;">' + giveTotal + '</span>'
     + '</div>'
     + '<div style="display:flex; align-items:center; gap:8px;">'
-    + '<span style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; min-width:50px;">Get</span>'
+    + '<span style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; min-width:50px;">Get</span>'
     + '<div style="flex:1; height:14px; background:var(--bg-warm); border:2px solid var(--ink); border-radius:6px; overflow:hidden; display:flex;">' + getSegments + '</div>'
     + '<span style="font-family:var(--font-mono); font-size:13px; font-weight:bold; min-width:32px; text-align:right;">' + getTotal + '</span>'
     + '</div>'
@@ -11123,7 +11123,7 @@ async function rosterSearchPlayers(query) {
       var pos = p.position || "??";
       html += '<div style="display:flex; align-items:center; gap:6px; padding:4px 8px; cursor:pointer; border-radius:4px; margin-bottom:2px; background:var(--bg);" onclick="addToRoster(\'' + escapeAttr(pid) + '\',\'' + escapeAttr(p.full_name || p.name || "") + '\',\'' + escapeAttr(pos) + '\',\'' + escapeAttr(p.team || "FA") + '\'); rosterSearchPlayers(\'' + escapeAttr(query) + '\'); renderMyRosterPanel();">';
       html += '<span class="pos-badge pos-' + pos.toLowerCase() + '" style="font-size:9px; padding:1px 5px;">' + escapeHtml(pos) + '</span>';
-      html += '<span style="font-family:var(--font-display); font-size:12px;">' + escapeHtml(p.full_name || p.name || "") + '</span>';
+      html += '<span style="font-family:var(--font-mono); font-size:12px;">' + escapeHtml(p.full_name || p.name || "") + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + escapeHtml(p.team || "FA") + '</span>';
       html += '<span style="font-family:var(--font-hand); font-size:12px; color:var(--green); margin-left:auto;">+ add</span>';
       html += '</div>';
@@ -11195,11 +11195,11 @@ function renderMyRosterPanel() {
     if (groups[pos].length === 0) return;
     var pc = posColors[pos] || "var(--ink-light)";
     html += '<div style="margin-bottom:10px;">';
-    html += '<div style="font-family:var(--font-display); font-size:13px; color:' + pc + '; margin-bottom:4px; border-bottom:2px dashed var(--ink-faint); padding-bottom:3px;">' + pos + ' (' + groups[pos].length + ')</div>';
+    html += '<div style="font-family:var(--font-mono); font-size:13px; color:' + pc + '; margin-bottom:4px; border-bottom:2px dashed var(--ink-faint); padding-bottom:3px;">' + pos + ' (' + groups[pos].length + ')</div>';
     groups[pos].forEach(function(p) {
       html += '<div style="display:flex; align-items:center; gap:6px; padding:4px 8px; border-radius:6px; margin-bottom:2px; background:var(--bg);">';
       html += '<span class="pos-badge pos-' + p.position.toLowerCase() + '" style="font-size:9px; padding:1px 5px;">' + escapeHtml(p.position) + '</span>';
-      html += '<span style="font-family:var(--font-display); font-size:12px; flex:1;">' + escapeHtml(p.name) + '</span>';
+      html += '<span style="font-family:var(--font-mono); font-size:12px; flex:1;">' + escapeHtml(p.name) + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + escapeHtml(p.team) + '</span>';
       html += '<button class="btn-chunky" style="font-size:10px; padding:2px 6px; color:var(--red);" onclick="removeFromRoster(\'' + escapeAttr(p.player_id) + '\'); renderMyRosterPanel();" title="Remove">&#10005;</button>';
       html += '</div>';
@@ -11250,12 +11250,12 @@ function renderRosterReport() {
   html += '</div>';
   // Stats
   html += '<div style="flex:1;">';
-  html += '<div style="font-family:var(--font-display); font-size:24px;">' + r.total_value + ' <span style="font-size:14px; color:var(--ink-light);">total value</span></div>';
+  html += '<div style="font-family:var(--font-display); font-size:24px;">' + r.total_value + ' <span style="font-family:var(--font-mono); font-size:14px; color:var(--ink-light);">total value</span></div>';
   html += '<div style="font-family:var(--font-mono); font-size:13px; color:var(--ink-light);">avg age: ' + r.average_age + '</div>';
   html += '</div>';
   // Status badge with explainer
   html += '<div style="text-align:center;">';
-  html += '<div title="Based on total value + average age: high value + young = competing, low value or old = rebuilding" style="background:' + sc + '; color:white; font-family:var(--font-display); font-size:14px; padding:6px 14px; border:2px solid var(--ink); border-radius:8px; box-shadow:3px 3px 0 var(--ink); transform:rotate(2deg); text-transform:uppercase; cursor:help;">' + escapeHtml(r.competing_status) + '</div>';
+  html += '<div title="Based on total value + average age: high value + young = competing, low value or old = rebuilding" style="background:' + sc + '; color:white; font-family:var(--font-mono); font-size:14px; padding:6px 14px; border:2px solid var(--ink); border-radius:8px; box-shadow:3px 3px 0 var(--ink); transform:rotate(2deg); text-transform:uppercase; cursor:help;">' + escapeHtml(r.competing_status) + '</div>';
   html += '<div style="font-family:var(--font-mono); font-size:9px; color:var(--ink-light); text-transform:uppercase; margin-top:4px;">Window</div>';
   html += '</div>';
   html += '</div>';
@@ -11264,18 +11264,18 @@ function renderRosterReport() {
   html += '<div style="display:flex; gap:16px; flex-wrap:wrap; margin-bottom:16px;">';
   // Pie chart
   html += '<div style="flex:1; min-width:220px;">';
-  html += '<div style="font-family:var(--font-display); font-size:13px; margin-bottom:6px;">Positional Breakdown</div>';
+  html += '<div style="font-family:var(--font-mono); font-size:13px; margin-bottom:6px;">Positional Breakdown</div>';
   html += '<canvas id="rosterPieChart" width="240" height="200" role="img" aria-label="Roster positional breakdown pie chart" style="border:3px solid var(--ink); border-radius:10px; background:var(--bg); box-shadow:3px 3px 0 var(--ink);"></canvas>';
   html += '</div>';
   // Age scatter
   html += '<div style="flex:1; min-width:220px;">';
-  html += '<div style="font-family:var(--font-display); font-size:13px; margin-bottom:6px;">Age vs Value</div>';
+  html += '<div style="font-family:var(--font-mono); font-size:13px; margin-bottom:6px;">Age vs Value</div>';
   html += '<canvas id="rosterAgeChart" width="280" height="200" role="img" aria-label="Roster age versus value scatter plot" style="border:3px solid var(--ink); border-radius:10px; background:var(--bg); box-shadow:3px 3px 0 var(--ink);"></canvas>';
   html += '</div>';
   html += '</div>';
 
   // Player values table
-  html += '<div style="font-family:var(--font-display); font-size:13px; margin-bottom:6px;">Player Values</div>';
+  html += '<div style="font-family:var(--font-mono); font-size:13px; margin-bottom:6px;">Player Values</div>';
   html += '<div style="max-height:200px; overflow-y:auto; border:2px solid var(--ink); border-radius:8px;">';
   var sortedPlayers = (r.players || []).slice().sort(function(a, b) { return b.trade_value - a.trade_value; });
   sortedPlayers.forEach(function(p, i) {
@@ -11766,12 +11766,12 @@ function renderPlayerComps(data, container) {
     html += `<div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">`;
     if (comp.headshot_url) {
       html += `<img src="${escapeAttr(comp.headshot_url)}" style="width:36px; height:36px; border-radius:50%; border:2px solid var(--ink); object-fit:cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">`;
-      html += `<span style="display:none; width:36px; height:36px; border-radius:50%; border:2px solid var(--ink); background:${posColor}; color:white; font-family:var(--font-display); font-size:14px; align-items:center; justify-content:center;">${(comp.full_name || "").split(" ").map(n => n[0]).join("")}</span>`;
+      html += `<span style="display:none; width:36px; height:36px; border-radius:50%; border:2px solid var(--ink); background:${posColor}; color:white; font-family:var(--font-mono); font-size:14px; align-items:center; justify-content:center;">${(comp.full_name || "").split(" ").map(n => n[0]).join("")}</span>`;
     } else {
-      html += `<span style="display:flex; width:36px; height:36px; border-radius:50%; border:2px solid var(--ink); background:${posColor}; color:white; font-family:var(--font-display); font-size:14px; align-items:center; justify-content:center;">${(comp.full_name || "").split(" ").map(n => n[0]).join("")}</span>`;
+      html += `<span style="display:flex; width:36px; height:36px; border-radius:50%; border:2px solid var(--ink); background:${posColor}; color:white; font-family:var(--font-mono); font-size:14px; align-items:center; justify-content:center;">${(comp.full_name || "").split(" ").map(n => n[0]).join("")}</span>`;
     }
     html += `<div style="flex:1; min-width:0;">`;
-    html += `<div style="font-family:var(--font-display); font-size:14px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(comp.full_name)}</div>`;
+    html += `<div style="font-family:var(--font-mono); font-size:14px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(comp.full_name)}</div>`;
     html += `<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-medium);">${escapeHtml(comp.team || "FA")} · ${comp.games}G · ${comp.ppg} PPG</div>`;
     html += `</div>`;
     html += `</div>`;
@@ -12249,7 +12249,7 @@ function renderBoomBust(data, container) {
 
   // Floor-ceiling range bar
   html += `<div style="margin-top:12px; padding:12px; background:var(--bg-card); border:2px solid var(--ink); border-radius:8px;">`;
-  html += `<div style="font-family:var(--font-display); font-size:12px; text-transform:uppercase; margin-bottom:8px; color:var(--ink-medium);">Score Range</div>`;
+  html += `<div style="font-family:var(--font-mono); font-size:12px; text-transform:uppercase; margin-bottom:8px; color:var(--ink-medium);">Score Range</div>`;
   html += `<canvas id="boomBustRangeBar" width="720" height="50" role="img" aria-label="Score range floor to ceiling bar" style="width:100%; height:50px;"></canvas>`;
   html += `</div>`;
 

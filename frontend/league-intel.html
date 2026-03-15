@@ -1701,7 +1701,7 @@
   <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:24px 16px; max-width:900px; margin:0 auto 24px; padding:0 24px; font-family:var(--font-mono); font-size:11px; text-align:left;">
 
     <div>
-      <div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Razzle</div>
+      <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Razzle</div>
       <a href="/" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Home</a>
       <a href="/lab.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">The Lab</a>
       <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Bureau</a>
@@ -1711,7 +1711,7 @@
     </div>
 
     <div>
-      <div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Dynasty</div>
+      <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Dynasty</div>
       <a href="/rankings.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Rankings</a>
       <a href="/tradevalues.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Trade Values</a>
       <a href="/tradefinder.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Trade Finder</a>
@@ -1723,7 +1723,7 @@
     </div>
 
     <div>
-      <div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Weekly</div>
+      <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Weekly</div>
       <a href="/weekly.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Weekly Stats</a>
       <a href="/weeklyleaders.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Week Leaders</a>
       <a href="/weeklymvp.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Weekly MVP</a>
@@ -1735,7 +1735,7 @@
     </div>
 
     <div>
-      <div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Analytics</div>
+      <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Analytics</div>
       <a href="/targets.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Targets</a>
       <a href="/usage.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Usage</a>
       <a href="/efficiency.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Efficiency</a>
@@ -1747,7 +1747,7 @@
     </div>
 
     <div>
-      <div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Tools</div>
+      <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Tools</div>
       <a href="/explorer.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Stat Explorer</a>
       <a href="/compare.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Compare</a>
       <a href="/rosterbuilder.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Roster Builder</a>
@@ -3230,7 +3230,7 @@ function renderPressureMap(container, cards, isPro) {
 
   if (!isPro && scores.length > visibleCount) {
     html += '<div style="text-align:center; margin-top:8px;">';
-    html += '<a href="/pricing.html" style="font-family:var(--font-display); font-size:11px; color:var(--orange); text-decoration:none; padding:4px 12px; border:2px solid var(--orange); border-radius:12px; box-shadow:2px 2px 0 var(--ink); display:inline-block; transition:all 0.12s;">unlock full pressure map with Pro</a>';
+    html += '<a href="/pricing.html" style="font-family:var(--font-mono); font-size:11px; color:var(--orange); text-decoration:none; padding:4px 12px; border:2px solid var(--orange); border-radius:12px; box-shadow:2px 2px 0 var(--ink); display:inline-block; transition:all 0.12s;">unlock full pressure map with Pro</a>';
     html += '</div>';
   }
 
@@ -5846,7 +5846,7 @@ function _mcRenderOddsCards(results, paid, leagueId) {
     var playoffColor = r.playoffPct >= 70 ? 'var(--green)' : r.playoffPct >= 40 ? 'var(--orange)' : 'var(--red)';
 
     html += '<div class="odds-card" style="background:var(--bg-card);border:3px solid var(--ink);border-radius:10px;box-shadow:4px 4px 0 var(--ink);padding:14px;' + (isBlurred ? 'filter:blur(3px);opacity:0.4;pointer-events:none;' : '') + '">';
-    html += '<div style="font-family:var(--font-display);font-size:14px;margin-bottom:4px;">' + escapeHtml(isBlurred ? 'Manager' : r.name) + '</div>';
+    html += '<div style="font-family:var(--font-mono);font-size:14px;font-weight:700;margin-bottom:4px;">' + escapeHtml(isBlurred ? 'Manager' : r.name) + '</div>';
     html += '<div style="font-family:var(--font-mono);font-size:11px;color:var(--ink-medium);margin-bottom:8px;">' + r.wins + '-' + r.losses + '</div>';
     html += '<div style="display:flex;gap:12px;">';
     html += '<div style="text-align:center;"><div style="font-family:var(--font-display);font-size:22px;color:' + champColor + ';">' + r.champPct + '%</div><div style="font-family:var(--font-mono);font-size:9px;color:var(--ink-light);">CHAMP</div></div>';
@@ -5891,7 +5891,7 @@ function _mcRenderScenario(leagueId) {
   var trades = st.trades || [];
 
   var html = '<div style="padding:12px 0;">';
-  html += '<div style="font-family:var(--font-display);font-size:15px;margin-bottom:8px;">Scenario Explorer</div>';
+  html += '<div style="font-family:var(--font-mono);font-size:15px;font-weight:700;margin-bottom:8px;">Scenario Explorer</div>';
   html += '<div style="font-family:var(--font-hand);font-size:13px;color:var(--ink-light);margin-bottom:12px;">toggle injuries and simulate trades — odds update instantly, no API calls</div>';
 
   // Active scenarios
@@ -5944,7 +5944,7 @@ function _mcRenderScenario(leagueId) {
     html += '<option value="' + escapeAttr(allP[pa].pid) + '">' + escapeHtml(allP[pa].name) + ' (' + escapeHtml(allP[pa].owner) + ')</option>';
   }
   html += '</select>';
-  html += '<span style="font-family:var(--font-display);font-size:13px;">↔</span>';
+  html += '<span style="font-family:var(--font-mono);font-size:13px;">↔</span>';
   html += '<select id="mc-trade-b-' + leagueId + '" style="font-family:var(--font-mono);font-size:11px;padding:3px 6px;border:2px solid var(--ink);border-radius:6px;background:var(--bg-card);max-width:180px;">';
   html += '<option value="">player B...</option>';
   for (var pb = 0; pb < allP.length; pb++) {
@@ -6026,7 +6026,7 @@ function _mcResimulate(leagueId) {
     }
 
     html += '<div class="odds-card" style="background:var(--bg-card);border:3px solid var(--ink);border-radius:10px;box-shadow:4px 4px 0 var(--ink);padding:14px;' + (isBlurred ? 'filter:blur(3px);opacity:0.4;pointer-events:none;' : '') + '">';
-    html += '<div style="font-family:var(--font-display);font-size:14px;margin-bottom:4px;">' + escapeHtml(isBlurred ? 'Manager' : r.name) + '</div>';
+    html += '<div style="font-family:var(--font-mono);font-size:14px;font-weight:700;margin-bottom:4px;">' + escapeHtml(isBlurred ? 'Manager' : r.name) + '</div>';
     html += '<div style="font-family:var(--font-mono);font-size:11px;color:var(--ink-medium);margin-bottom:8px;">' + r.wins + '-' + r.losses + '</div>';
     html += '<div style="display:flex;gap:12px;flex-wrap:wrap;">';
     // Champ

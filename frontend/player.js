@@ -766,7 +766,7 @@ function showToast(msg) {
     toast.style.cssText = `
       position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
       background:var(--ink); color:var(--bg); padding:10px 24px;
-      border-radius:8px; font-family:var(--font-display); font-size:14px;
+      border-radius:8px; font-family:var(--font-mono); font-size:14px;
       z-index:10000; box-shadow:4px 4px 0 rgba(45,31,20,0.3);
       transition:opacity 0.3s; pointer-events:none;
     `;

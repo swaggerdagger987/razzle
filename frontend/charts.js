@@ -51,14 +51,14 @@ function renderChartConfig() {
     const playerOptions = getPlayerOptions();
     container.innerHTML = `
       <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
-        <span style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; color:var(--ink-light);">Players:</span>
+        <span style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; color:var(--ink-light);">Players:</span>
         <select class="select-chunky" id="radarPlayer1" onchange="drawChart()">${playerOptions}</select>
         <select class="select-chunky" id="radarPlayer2" onchange="drawChart()"><option value="">— compare —</option>${playerOptions}</select>
         <select class="select-chunky" id="radarPlayer3" onchange="drawChart()"><option value="">— player 3 —</option>${playerOptions}</select>
         <select class="select-chunky" id="radarPlayer4" onchange="drawChart()"><option value="">— player 4 —</option>${playerOptions}</select>
       </div>
       <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;">
-        <span style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; color:var(--ink-light);">Stats (5-6):</span>
+        <span style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; color:var(--ink-light);">Stats (5-6):</span>
         ${["fantasy_points_ppr", "rushing_yards", "receiving_yards", "touchdowns", "targets", "receptions"].map((s, i) =>
           `<select class="select-chunky radar-stat" onchange="drawChart()">${statOptions.replace(`value="${s}"`, `value="${s}" selected`)}</select>`
         ).join("")}
@@ -66,9 +66,9 @@ function renderChartConfig() {
   } else if (currentChartTab === "scatter") {
     container.innerHTML = `
       <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-        <span style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; color:var(--ink-light);">X:</span>
+        <span style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; color:var(--ink-light);">X:</span>
         <select class="select-chunky" id="scatterX" onchange="drawChart()">${statOptions.replace('value="targets"', 'value="targets" selected')}</select>
-        <span style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; color:var(--ink-light);">Y:</span>
+        <span style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; color:var(--ink-light);">Y:</span>
         <select class="select-chunky" id="scatterY" onchange="drawChart()">${statOptions.replace('value="receiving_yards"', 'value="receiving_yards" selected')}</select>
         <label style="display:flex; align-items:center; gap:4px; font-family:var(--font-mono); font-size:11px; cursor:pointer;">
           <input type="checkbox" id="scatterTrend" onchange="drawChart()" style="accent-color:var(--orange); width:14px; height:14px;"> Trend line
@@ -85,16 +85,16 @@ function renderChartConfig() {
     const presetOptions = Object.entries(heatmapPresets).map(([k, v]) => `<option value="${k}">${v.label}</option>`).join("");
     container.innerHTML = `
       <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
-        <span style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; color:var(--ink-light);">Position:</span>
+        <span style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; color:var(--ink-light);">Position:</span>
         <select class="select-chunky" id="heatmapPos" onchange="drawChart()">
           <option value="QB">QB</option>
           <option value="RB">RB</option>
           <option value="WR" selected>WR</option>
           <option value="TE">TE</option>
         </select>
-        <span style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; color:var(--ink-light);">Stats:</span>
+        <span style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; color:var(--ink-light);">Stats:</span>
         <select class="select-chunky" id="heatmapPreset" onchange="drawChart()">${presetOptions}</select>
-        <span style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; color:var(--ink-light);">Top:</span>
+        <span style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; color:var(--ink-light);">Top:</span>
         <select class="select-chunky" id="heatmapCount" onchange="drawChart()">
           <option value="15">15</option>
           <option value="20" selected>20</option>
@@ -109,11 +109,11 @@ function renderChartConfig() {
     const isCareer = state.season === "career";
     container.innerHTML = `
       <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-        <span style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; color:var(--ink-light);">Player:</span>
+        <span style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; color:var(--ink-light);">Player:</span>
         <select class="select-chunky" id="trendPlayer" onchange="drawChart()">${playerOptions}</select>
-        <span style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; color:var(--ink-light);">Stat:</span>
+        <span style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; color:var(--ink-light);">Stat:</span>
         <select class="select-chunky" id="trendStat" onchange="drawChart()">${statOptions.replace('value="fantasy_points_ppr"', 'value="fantasy_points_ppr" selected')}</select>
-        <span style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; color:var(--ink-light);">View:</span>
+        <span style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; color:var(--ink-light);">View:</span>
         <select class="select-chunky" id="trendMode" onchange="drawChart()">
           <option value="weekly" ${!isCareer ? "selected" : ""}>Weekly</option>
           <option value="seasons" ${isCareer ? "selected" : ""}>By Season</option>
@@ -866,11 +866,11 @@ function renderCompareTable(players) {
   let html = '<table style="width:100%; border-collapse:collapse; font-family:var(--font-mono); font-size:13px; margin-top:16px;">';
 
   // Header
-  html += '<tr><th style="text-align:left; padding:8px; border-bottom:3px solid var(--ink); font-family:var(--font-display); font-size:11px; text-transform:uppercase;">Stat</th>';
+  html += '<tr><th style="text-align:left; padding:8px; border-bottom:3px solid var(--ink); font-family:var(--font-mono); font-size:11px; text-transform:uppercase;">Stat</th>';
   for (const p of players) {
     const posColor = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" }[p.position] || "var(--ink)";
     html += `<th style="text-align:right; padding:8px; border-bottom:3px solid var(--ink);">
-      <span style="font-family:var(--font-display); font-size:13px;">${p.full_name}</span>
+      <span style="font-family:var(--font-mono); font-size:13px;">${p.full_name}</span>
       <span style="display:inline-block; background:${posColor}; color:white; padding:1px 5px; border-radius:4px; border:2px solid var(--ink); font-size:9px; margin-left:4px;">${p.position}</span>
     </th>`;
   }
@@ -1231,11 +1231,11 @@ function renderProspectCompareTable(prospects) {
   let html = '<table style="width:100%; border-collapse:collapse; font-family:var(--font-mono); font-size:13px; margin-top:16px;">';
 
   // Header
-  html += '<tr><th style="text-align:left; padding:8px; border-bottom:3px solid var(--ink); font-family:var(--font-display); font-size:11px; text-transform:uppercase;">Metric</th>';
+  html += '<tr><th style="text-align:left; padding:8px; border-bottom:3px solid var(--ink); font-family:var(--font-mono); font-size:11px; text-transform:uppercase;">Metric</th>';
   prospects.forEach((p, i) => {
     const color = PROSPECT_COMPARE_COLORS[i % PROSPECT_COMPARE_COLORS.length];
     html += `<th style="text-align:right; padding:8px; border-bottom:3px solid var(--ink);">
-      <span style="font-family:var(--font-display); font-size:13px;">${p.prospect.player_name}</span>
+      <span style="font-family:var(--font-mono); font-size:13px;">${p.prospect.player_name}</span>
       <span style="display:inline-block; background:${color}; color:white; padding:1px 5px; border-radius:4px; border:2px solid var(--ink); font-size:9px; margin-left:4px;">${p.prospect.position}</span>
     </th>`;
   });

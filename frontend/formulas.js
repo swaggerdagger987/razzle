@@ -117,7 +117,7 @@ function renderSavedFormulas() {
     return;
   }
 
-  container.innerHTML = '<div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; color:var(--ink-light); letter-spacing:1px; margin-bottom:8px;">Saved Formulas</div>' +
+  container.innerHTML = '<div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; color:var(--ink-light); letter-spacing:1px; margin-bottom:8px;">Saved Formulas</div>' +
     state.formulas.map(f => {
       const desc = f.components.map(c => {
         const col = COLUMNS[c.stat];
@@ -129,7 +129,7 @@ function renderSavedFormulas() {
         : `<button class="btn-chunky" style="font-size:9px; padding:2px 8px;" onclick="event.stopPropagation(); openPublishFlow('${f.name.replace(/'/g, "\\'")}')">Publish</button>`;
       return `<div style="display:flex; align-items:center; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--ink-faint); gap:6px;">
         <div style="flex:1; min-width:0;">
-          <strong style="font-family:var(--font-display); font-size:13px;">${(typeof escapeHtml === "function" ? escapeHtml(f.name) : f.name)}</strong>
+          <strong style="font-family:var(--font-mono); font-size:13px;">${(typeof escapeHtml === "function" ? escapeHtml(f.name) : f.name)}</strong>
           <span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); margin-left:8px;">${desc}</span>
         </div>
         <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">

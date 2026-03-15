@@ -960,7 +960,7 @@ function showSleeperPrompt() {
   if (isTrial) {
     trialBanner =
       '<div style="background:var(--orange); color:white; padding:10px 16px; border-radius:8px; border:2px solid var(--ink); margin-bottom:16px; text-align:center;">' +
-        '<div style="font-family:var(--font-display); font-size:14px;">Pro Trial Active</div>' +
+        '<div style="font-family:var(--font-mono); font-size:14px;">Pro Trial Active</div>' +
         '<div style="font-family:var(--font-hand); font-size:14px; margin-top:2px;">' + trialDays + ' days of Pro access — no credit card needed</div>' +
       '</div>';
   }
