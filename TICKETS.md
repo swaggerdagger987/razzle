@@ -13,18 +13,6 @@ The database file `data/terminal.db` uses WAL journal mode locally. Uploading it
 
 ---
 
-## Phase: Bureau of Intelligence — Head-to-Head Rivalry Analysis
-
-**Exit Criterion**: Users can select two managers and see full head-to-head comparison.
-
-### Task 1: Build H2H comparison view
-**Requirement**: Add ability to click any two managers and see a full head-to-head comparison: (1) All-time record against each other (from matchup history in Sleeper), (2) Roster comparison — side by side, position by position, who has the edge at each slot (compare PPG/trade value), (3) Trade history between them (from transactions), (4) Strengths/weaknesses relative to each other — "You have the edge at WR, they have the edge at RB", (5) Overall matchup verdict — "You win this matchup 60% of the time" (simple strength comparison). Two-column layout with chunky Razzle card styling. User picks their team on the left, opponent on the right via dropdown.
-**Accept when**: Select any two managers → full H2H comparison renders. Roster comparison shows position-by-position edges. Trade history between the pair visible. Verdict renders.
-**Depends on**: none
-**Size**: L
-
----
-
 ## Phase: Bureau of Intelligence — Self-Scout (Default View)
 
 **Exit Criterion**: Connected user sees their own team analyzed first when entering the Bureau.
