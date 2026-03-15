@@ -220,7 +220,7 @@
 
   /* PPR color tiers */
   .fpts-elite { color: var(--semantic-green); font-weight: 700; }
-  .fpts-great { color: #1e40af; font-weight: 700; }
+  .fpts-great { color: var(--blue); font-weight: 700; }
   .fpts-ok { }
   .fpts-bad { color: var(--semantic-red); }
 
@@ -356,7 +356,13 @@
     return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+  var _cs = getComputedStyle(document.documentElement);
+  var POS_COLORS = {
+    QB: _cs.getPropertyValue('--pos-qb').trim() || '#5b7fff',
+    RB: _cs.getPropertyValue('--pos-rb').trim() || '#2ec4b6',
+    WR: _cs.getPropertyValue('--pos-wr').trim() || '#d97757',
+    TE: _cs.getPropertyValue('--pos-te').trim() || '#8b5cf6'
+  };
 
   var currentPlayerId = '';
   var currentData = null;
@@ -394,7 +400,7 @@
           if (!players.length) { acList.style.display = 'none'; return; }
           acIdx = -1;
           acList.innerHTML = players.map(function(p, i) {
-            var posColor = POS_COLORS[p.position] || '#8a7565';
+            var posColor = POS_COLORS[p.position] || (_cs.getPropertyValue('--ink-light').trim() || '#8a7565');
             return '<div class="gl-ac-item" data-id="' + escapeHtml(p.player_id) + '" data-idx="' + i + '">' +
               '<span>' + escapeHtml(p.name) + ' <span class="gl-ac-pos" style="color:' + posColor + '">' + escapeHtml(p.position) + '</span></span>' +
               '<span style="color:var(--ink-light)">' + escapeHtml(p.team) + '</span></div>';
@@ -466,7 +472,7 @@
 
   /* ---- Render ---- */
   function render(data) {
-    var posColor = POS_COLORS[data.position] || '#8a7565';
+    var posColor = POS_COLORS[data.position] || (_cs.getPropertyValue('--ink-light').trim() || '#8a7565');
     var weeks = (data.weeks || []).slice();
 
     // Sort

@@ -401,7 +401,13 @@
 (function() {
   'use strict';
 
-  const POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+  var _cs = getComputedStyle(document.documentElement);
+  const POS_COLORS = {
+    QB: _cs.getPropertyValue('--pos-qb').trim() || '#5b7fff',
+    RB: _cs.getPropertyValue('--pos-rb').trim() || '#2ec4b6',
+    WR: _cs.getPropertyValue('--pos-wr').trim() || '#d97757',
+    TE: _cs.getPropertyValue('--pos-te').trim() || '#8b5cf6'
+  };
   const POS_ANNOTATIONS = {
     QB: 'signal callers',
     RB: 'the backfield',

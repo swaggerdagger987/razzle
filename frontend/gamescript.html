@@ -52,7 +52,7 @@
   .gs-diff-pos { background: var(--semantic-green-light); color: var(--semantic-green); border-color: var(--semantic-green); }
   .gs-diff-neg { background: var(--semantic-red-light); color: var(--semantic-red); border-color: var(--semantic-red); }
   .gs-gt-chip { font-family: var(--font-mono); font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 3px; }
-  .gs-gt-high { background: #fbbf24; color: #78350f; }
+  .gs-gt-high { background: var(--yellow); color: var(--ink); }
   .gs-gt-low { background: var(--bg-warm); color: var(--ink-medium); }
   .gs-bar-cell { width: 60px; }
   .gs-bar { height: 12px; border-radius: 2px; min-width: 2px; }
@@ -197,7 +197,13 @@ function escapeHtml(t) {
   return d.innerHTML;
 }
 
-const POS_COLORS = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+var _cs = getComputedStyle(document.documentElement);
+const POS_COLORS = {
+  QB: _cs.getPropertyValue('--pos-qb').trim() || '#5b7fff',
+  RB: _cs.getPropertyValue('--pos-rb').trim() || '#2ec4b6',
+  WR: _cs.getPropertyValue('--pos-wr').trim() || '#d97757',
+  TE: _cs.getPropertyValue('--pos-te').trim() || '#8b5cf6'
+};
 let state = { season: null, position: "", data: null };
 
 function initSeasons() {
@@ -263,7 +269,7 @@ function renderTable(players, type) {
   let html = '<table class="gs-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>PPG</th><th>Avg Diff</th><th>GT%</th><th></th></tr></thead><tbody>';
 
   players.forEach((p, i) => {
-    const posColor = POS_COLORS[p.position] || "#8a7565";
+    const posColor = POS_COLORS[p.position] || (_cs.getPropertyValue('--ink-light').trim() || '#8a7565');
     const barPct = maxPPG > 0 ? p.ppg / maxPPG * 100 : 0;
     const diffCls = p.avg_diff >= 0 ? "gs-diff-pos" : "gs-diff-neg";
     const diffSign = p.avg_diff >= 0 ? "+" : "";

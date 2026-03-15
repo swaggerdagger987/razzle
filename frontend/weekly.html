@@ -394,14 +394,20 @@
 (function() {
   'use strict';
 
-  var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+  var _cs = getComputedStyle(document.documentElement);
+  var POS_COLORS = {
+    QB: _cs.getPropertyValue('--pos-qb').trim() || '#5b7fff',
+    RB: _cs.getPropertyValue('--pos-rb').trim() || '#2ec4b6',
+    WR: _cs.getPropertyValue('--pos-wr').trim() || '#d97757',
+    TE: _cs.getPropertyValue('--pos-te').trim() || '#8b5cf6'
+  };
 
   // Color scale: 5 tiers from cold (bad) to hot (good)
   var HEAT_COLORS = [
-    { bg: '#f2d5d8', text: '#8b2030' },  // bottom 20% — red tint
-    { bg: '#f5eacc', text: '#7a6020' },  // 20-40% — yellow tint
+    { bg: 'var(--red-light)', text: 'var(--red)' },  // bottom 20% — red tint
+    { bg: 'var(--yellow-light)', text: 'var(--ink-medium)' },  // 20-40% — yellow tint
     { bg: '#f7efe5', text: '#5c4a3d' },  // 40-60% — neutral sand
-    { bg: '#d9efec', text: '#1a6b60' },  // 60-80% — green tint
+    { bg: 'var(--green-light)', text: 'var(--green)' },  // 60-80% — green tint
     { bg: '#b8e6d8', text: '#0d5040' },  // top 80%+ — strong green
   ];
 
@@ -500,7 +506,7 @@
 
     sorted.forEach(function(p, idx) {
       var pos = p.position || 'WR';
-      var posColor = POS_COLORS[pos] || '#d97757';
+      var posColor = POS_COLORS[pos] || 'var(--orange)';
       var t = thresholds[pos] || thresholds['WR'] || { p20: 5, p40: 10, p60: 15, p80: 20 };
 
       html += '<tr>';

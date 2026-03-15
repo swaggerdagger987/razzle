@@ -51,12 +51,12 @@
   .gt-pos-badge { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 3px; color: #fff; }
   .gt-pct-badge { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 3px; border: 2px solid; }
   .gt-pct-high { background: var(--semantic-red-light); color: var(--semantic-red); border-color: var(--semantic-red); }
-  .gt-pct-mid { background: #fef9c3; color: #854d0e; border-color: #854d0e; }
+  .gt-pct-mid { background: var(--yellow-light); color: var(--ink-medium); border-color: var(--ink-medium); }
   .gt-pct-low { background: var(--semantic-green-light); color: var(--semantic-green); border-color: var(--semantic-green); }
   .gt-bar-cell { width: 80px; }
   .gt-bar { height: 12px; border-radius: 2px; min-width: 2px; }
-  .gt-bar.red { background: #d97757; }
-  .gt-bar.green { background: #2ec4b6; }
+  .gt-bar.red { background: var(--orange); }
+  .gt-bar.green { background: var(--green); }
   .gt-empty { text-align: center; padding: 40px 16px; font-family: var(--font-hand); font-size: 16px; color: var(--ink-light); }
 
   @media (max-width: 768px) {
@@ -185,7 +185,13 @@ function escapeHtml(t) {
   return d.innerHTML;
 }
 
-const POS_COLORS = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+var _cs = getComputedStyle(document.documentElement);
+const POS_COLORS = {
+  QB: _cs.getPropertyValue('--pos-qb').trim() || '#5b7fff',
+  RB: _cs.getPropertyValue('--pos-rb').trim() || '#2ec4b6',
+  WR: _cs.getPropertyValue('--pos-wr').trim() || '#d97757',
+  TE: _cs.getPropertyValue('--pos-te').trim() || '#8b5cf6'
+};
 let state = { season: null, position: "", data: null };
 
 function initSeasons() {
@@ -268,7 +274,7 @@ function buildCard(title, cls, players, isPadders) {
   html += '<table class="gt-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>GT%</th><th>PPG</th><th>Avg Diff</th><th></th></tr></thead><tbody>';
 
   players.forEach((p, i) => {
-    const posColor = POS_COLORS[p.position] || "#8a7565";
+    const posColor = POS_COLORS[p.position] || (_cs.getPropertyValue('--ink-light').trim() || '#8a7565');
     const pctCls = pctClass(p.garbage_time_pct);
     const barVal = isPadders ? p.garbage_time_pct : p.ppg;
     const barPct = maxVal > 0 ? barVal / maxVal * 100 : 0;

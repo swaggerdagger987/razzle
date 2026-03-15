@@ -336,7 +336,13 @@
     return Number(v).toFixed(dec === undefined ? 1 : dec);
   }
 
-  var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+  var _cs = getComputedStyle(document.documentElement);
+  var POS_COLORS = {
+    QB: _cs.getPropertyValue('--pos-qb').trim() || '#5b7fff',
+    RB: _cs.getPropertyValue('--pos-rb').trim() || '#2ec4b6',
+    WR: _cs.getPropertyValue('--pos-wr').trim() || '#d97757',
+    TE: _cs.getPropertyValue('--pos-te').trim() || '#8b5cf6'
+  };
 
   var currentPosition = '';
   var currentData = null;
@@ -434,7 +440,7 @@
 
     for (var i = 0; i < players.length; i++) {
       var p = players[i];
-      var posColor = POS_COLORS[p.position] || '#8a7565';
+      var posColor = POS_COLORS[p.position] || 'var(--ink-light)';
       var badgeClass = type === 'hot' ? 'hot' : 'cold';
       var sign = p.delta > 0 ? '+' : '';
 
@@ -451,7 +457,7 @@
       html += '<td><div class="str-recent">';
       for (var j = 0; j < scores.length; j++) {
         var h = Math.max(2, Math.round((scores[j] / maxScore) * 20));
-        var barColor = scores[j] >= p.season_avg ? '#2ec4b6' : '#d97757';
+        var barColor = scores[j] >= p.season_avg ? 'var(--green)' : 'var(--orange)';
         html += '<div class="str-recent-bar" style="height:' + h + 'px;background:' + barColor + '" title="Wk: ' + escapeHtml(String(fmt(scores[j]))) + '"></div>';
       }
       html += '</div></td>';

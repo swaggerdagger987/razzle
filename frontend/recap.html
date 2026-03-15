@@ -213,8 +213,8 @@
   }
   .rc-badge.green { background: var(--semantic-green-light); color: var(--semantic-green); border-color: var(--semantic-green); }
   .rc-badge.red { background: var(--semantic-red-light); color: var(--semantic-red); border-color: var(--semantic-red); }
-  .rc-badge.blue { background: #dbeafe; color: #1e40af; border-color: #1e40af; }
-  .rc-badge.gold { background: #fef3c7; color: #92400e; border-color: #92400e; }
+  .rc-badge.blue { background: var(--blue-light); color: var(--blue); border-color: var(--blue); }
+  .rc-badge.gold { background: var(--yellow-light); color: var(--ink-medium); border-color: var(--ink-medium); }
 
   .rc-pos-chip {
     font-size: 10px;
@@ -347,7 +347,13 @@
     return Number(v).toFixed(dec === undefined ? 1 : dec);
   }
 
-  var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+  var _cs = getComputedStyle(document.documentElement);
+  var POS_COLORS = {
+    QB: _cs.getPropertyValue('--pos-qb').trim() || '#5b7fff',
+    RB: _cs.getPropertyValue('--pos-rb').trim() || '#2ec4b6',
+    WR: _cs.getPropertyValue('--pos-wr').trim() || '#d97757',
+    TE: _cs.getPropertyValue('--pos-te').trim() || '#8b5cf6'
+  };
 
   /* ---- URL state ---- */
   function readURL() {
@@ -397,7 +403,7 @@
   }
 
   function posChip(pos) {
-    var c = POS_COLORS[pos] || '#8a7565';
+    var c = POS_COLORS[pos] || 'var(--ink-light)';
     return '<span class="rc-pos-chip" style="background:' + c + '">' + escapeHtml(pos) + '</span>';
   }
 
@@ -423,7 +429,7 @@
     for (var i = 0; i < posOrder.length; i++) {
       var pos = posOrder[i];
       var ldr = (data.pos_leaders || {})[pos];
-      var pc = POS_COLORS[pos] || '#8a7565';
+      var pc = POS_COLORS[pos] || 'var(--ink-light)';
       html += '<div class="rc-pos-card">';
       html += '<div class="rc-pos-label" style="background:' + pc + '">' + escapeHtml(pos) + '1</div>';
       if (ldr) {

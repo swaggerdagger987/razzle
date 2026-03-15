@@ -390,7 +390,13 @@
     return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+  var _cs = getComputedStyle(document.documentElement);
+  var POS_COLORS = {
+    QB: _cs.getPropertyValue('--pos-qb').trim() || '#5b7fff',
+    RB: _cs.getPropertyValue('--pos-rb').trim() || '#2ec4b6',
+    WR: _cs.getPropertyValue('--pos-wr').trim() || '#d97757',
+    TE: _cs.getPropertyValue('--pos-te').trim() || '#8b5cf6'
+  };
 
   var searchInput = document.getElementById('player-search');
   var dropdown = document.getElementById('search-dropdown');
@@ -499,9 +505,9 @@
   }
 
   function barColor(pctile) {
-    if (pctile >= 90) return '#2ec4b6';
-    if (pctile >= 75) return '#5b7fff';
-    if (pctile >= 50) return '#d97757';
+    if (pctile >= 90) return _cs.getPropertyValue('--green').trim() || '#2ec4b6';
+    if (pctile >= 75) return _cs.getPropertyValue('--blue').trim() || '#5b7fff';
+    if (pctile >= 50) return _cs.getPropertyValue('--orange').trim() || '#d97757';
     if (pctile >= 25) return '#e87422';
     return '#d44040';
   }

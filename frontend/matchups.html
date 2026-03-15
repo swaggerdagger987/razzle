@@ -493,7 +493,13 @@
 (function() {
   'use strict';
 
-  var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+  var _cs = getComputedStyle(document.documentElement);
+  var POS_COLORS = {
+    QB: _cs.getPropertyValue('--pos-qb').trim() || '#5b7fff',
+    RB: _cs.getPropertyValue('--pos-rb').trim() || '#2ec4b6',
+    WR: _cs.getPropertyValue('--pos-wr').trim() || '#d97757',
+    TE: _cs.getPropertyValue('--pos-te').trim() || '#8b5cf6'
+  };
   var POS_LIGHT = { QB: '#dde4f7', RB: '#d9efec', WR: '#f7e4d8', TE: '#e5dcf7' };
 
   function escapeHtml(str) {
@@ -541,7 +547,7 @@
   }
 
   function getHeatColor(ppg, avg, allValues) {
-    if (!allValues || allValues.length === 0) return '#f7efe5';
+    if (!allValues || allValues.length === 0) return _cs.getPropertyValue('--bg-card').trim() || '#f7efe5';
     var sorted = allValues.slice().sort(function(a, b) { return a - b; });
     var p20 = sorted[Math.floor(sorted.length * 0.2)] || 0;
     var p40 = sorted[Math.floor(sorted.length * 0.4)] || 0;
@@ -549,11 +555,11 @@
     var p80 = sorted[Math.floor(sorted.length * 0.8)] || 0;
 
     // High PPG allowed = easy matchup = green. Low = hard = red.
-    if (ppg >= p80) return '#2ec4b6';      // easy — teal/green
-    if (ppg >= p60) return '#d9efec';      // soft — light green
-    if (ppg >= p40) return '#f7efe5';      // average — sand
-    if (ppg >= p20) return '#f2d5d8';      // tough — light red
-    return '#e63946';                       // hard — red
+    if (ppg >= p80) return _cs.getPropertyValue('--green').trim() || '#2ec4b6';       // easy — teal/green
+    if (ppg >= p60) return _cs.getPropertyValue('--green-light').trim() || '#d9efec';  // soft — light green
+    if (ppg >= p40) return _cs.getPropertyValue('--bg-card').trim() || '#f7efe5';      // average — sand
+    if (ppg >= p20) return _cs.getPropertyValue('--red-light').trim() || '#f2d5d8';    // tough — light red
+    return _cs.getPropertyValue('--red').trim() || '#e63946';                           // hard — red
   }
 
   function getAnnotation(rank, total) {
@@ -633,7 +639,9 @@
         var ppg = d.avg_ppg || 0;
         var rank = d.rank || 0;
         var bg = getHeatColor(ppg, data.averages[pos] || 0, posValues[pos]);
-        var textColor = (bg === '#e63946' || bg === '#2ec4b6') ? '#fff' : 'var(--ink)';
+        var greenVal = _cs.getPropertyValue('--green').trim() || '#2ec4b6';
+        var redVal = _cs.getPropertyValue('--red').trim() || '#e63946';
+        var textColor = (bg === redVal || bg === greenVal) ? '#fff' : 'var(--ink)';
         var annotation = getAnnotation(rank, totalTeams);
 
         html += '<td style="background:' + bg + ';color:' + textColor + ';" data-team="' + escapeHtml(t.team) + '" data-pos="' + pos + '">';
@@ -689,7 +697,7 @@
       var html = '<h3>Top scorers vs ' + escapeHtml(team) + ' (' + pos + ')</h3>';
       html += '<div class="detail-players">';
       players.forEach(function(p) {
-        var posColor = POS_COLORS[p.position] || '#8a7565';
+        var posColor = POS_COLORS[p.position] || (_cs.getPropertyValue('--ink-light').trim() || '#8a7565');
         var img = p.headshot_url ? '<img src="' + escapeHtml(p.headshot_url) + '" alt="" onerror="this.style.display=\'none\'">' : '';
         html += '<div class="detail-player" onclick="window.location.href=\'/player/' + escapeHtml(p.player_id) + '\'">';
         html += img;

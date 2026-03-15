@@ -360,13 +360,19 @@
     return Number(v).toFixed(dec === undefined ? 1 : dec);
   }
 
-  var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+  var _cs = getComputedStyle(document.documentElement);
+  var POS_COLORS = {
+    QB: _cs.getPropertyValue('--pos-qb').trim() || '#5b7fff',
+    RB: _cs.getPropertyValue('--pos-rb').trim() || '#2ec4b6',
+    WR: _cs.getPropertyValue('--pos-wr').trim() || '#d97757',
+    TE: _cs.getPropertyValue('--pos-te').trim() || '#8b5cf6'
+  };
   var COMP_COLORS = {
-    pass_yd: '#5b7fff',
-    rush_yd: '#2ec4b6',
-    rec_yd: '#d97757',
-    rec: '#8b5cf6',
-    td: '#e74c3c'
+    pass_yd: _cs.getPropertyValue('--blue').trim() || '#5b7fff',
+    rush_yd: _cs.getPropertyValue('--green').trim() || '#2ec4b6',
+    rec_yd: _cs.getPropertyValue('--orange').trim() || '#d97757',
+    rec: _cs.getPropertyValue('--purple').trim() || '#8b5cf6',
+    td: _cs.getPropertyValue('--red').trim() || '#e63946'
   };
 
   var currentPosition = '';
@@ -436,7 +442,7 @@
 
     for (var i = 0; i < players.length; i++) {
       var p = players[i];
-      var posColor = POS_COLORS[p.position] || '#8a7565';
+      var posColor = POS_COLORS[p.position] || (_cs.getPropertyValue('--ink-light').trim() || '#8a7565');
 
       html += '<div class="fb-row">';
       html += '<div class="fb-rank">' + (i + 1) + '</div>';

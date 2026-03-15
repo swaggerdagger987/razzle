@@ -47,12 +47,12 @@
   .tp-rank { font-weight: 700; color: var(--ink-light); font-size: 11px; }
   .tp-pos-badge { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 3px; color: #fff; }
   .tp-premium-badge { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 3px; border: 2px solid; }
-  .tp-premium-elite { background: #dbeafe; color: #1e40af; border-color: #1e40af; }
+  .tp-premium-elite { background: var(--blue-light); color: var(--blue); border-color: var(--blue); }
   .tp-premium-high { background: var(--semantic-green-light); color: var(--semantic-green); border-color: var(--semantic-green); }
-  .tp-premium-mid { background: #fef9c3; color: #854d0e; border-color: #854d0e; }
+  .tp-premium-mid { background: var(--yellow-light); color: var(--ink-medium); border-color: var(--ink-medium); }
   .tp-premium-low { background: var(--semantic-red-light); color: var(--semantic-red); border-color: var(--semantic-red); }
   .tp-bar-cell { width: 80px; }
-  .tp-bar { height: 12px; border-radius: 2px; background: #2ec4b6; min-width: 2px; }
+  .tp-bar { height: 12px; border-radius: 2px; background: var(--green); min-width: 2px; }
   .tp-empty { text-align: center; padding: 40px 16px; font-family: var(--font-hand); font-size: 16px; color: var(--ink-light); }
 
   @media (max-width: 768px) {
@@ -184,7 +184,13 @@ function escapeHtml(t) {
   return d.innerHTML;
 }
 
-const POS_COLORS = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+var _cs = getComputedStyle(document.documentElement);
+const POS_COLORS = {
+  QB: _cs.getPropertyValue("--pos-qb").trim() || "#5b7fff",
+  RB: _cs.getPropertyValue("--pos-rb").trim() || "#2ec4b6",
+  WR: _cs.getPropertyValue("--pos-wr").trim() || "#d97757",
+  TE: _cs.getPropertyValue("--pos-te").trim() || "#8b5cf6"
+};
 let state = { season: null, position: "", data: null };
 
 function initSeasons() {
@@ -261,7 +267,7 @@ function render() {
   let html = '<table class="tp-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Premium</th><th>Tgt/G</th><th>aDOT</th><th>Catch%</th><th>YAC/R</th><th>Y/Tgt</th><th></th></tr></thead><tbody>';
 
   players.forEach((p, i) => {
-    const posColor = POS_COLORS[p.position] || "#8a7565";
+    const posColor = POS_COLORS[p.position] || "var(--ink-light)";
     const cls = premiumClass(p.premium);
     const barPct = p.premium;
 

@@ -158,9 +158,9 @@
     text-align: center;
   }
   .po-grade-A, .po-grade-Aplus { background: var(--semantic-green-light); color: var(--semantic-green); border-color: var(--semantic-green); }
-  .po-grade-B, .po-grade-Bplus { background: #dbeafe; color: #1e40af; border-color: #1e40af; }
-  .po-grade-C { background: #fef9c3; color: #854d0e; border-color: #854d0e; }
-  .po-grade-D { background: #fed7aa; color: #9a3412; border-color: #9a3412; }
+  .po-grade-B, .po-grade-Bplus { background: var(--blue-light); color: var(--blue); border-color: var(--blue); }
+  .po-grade-C { background: var(--yellow-light); color: var(--ink-medium); border-color: var(--ink-medium); }
+  .po-grade-D { background: var(--orange-light); color: var(--orange); border-color: var(--orange); }
   .po-grade-F { background: var(--semantic-red-light); color: var(--semantic-red); border-color: var(--semantic-red); }
 
   .po-matchup {
@@ -325,7 +325,13 @@
     return Number(v).toFixed(dec === undefined ? 1 : dec);
   }
 
-  var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+  var _cs = getComputedStyle(document.documentElement);
+  var POS_COLORS = {
+    QB: _cs.getPropertyValue('--pos-qb').trim() || '#5b7fff',
+    RB: _cs.getPropertyValue('--pos-rb').trim() || '#2ec4b6',
+    WR: _cs.getPropertyValue('--pos-wr').trim() || '#d97757',
+    TE: _cs.getPropertyValue('--pos-te').trim() || '#8b5cf6'
+  };
   var GRADE_COLORS = {
     'A+': 'Aplus', 'A': 'A', 'B+': 'Bplus', 'B': 'B', 'C': 'C', 'D': 'D', 'F': 'F'
   };
@@ -407,7 +413,7 @@
 
       for (var i = 0; i < players.length; i++) {
         var p = players[i];
-        var posColor = POS_COLORS[p.position] || '#8a7565';
+        var posColor = POS_COLORS[p.position] || (_cs.getPropertyValue('--ink-light').trim() || '#8a7565');
 
         html += '<tr>';
         html += '<td class="po-rank">' + (i + 1) + '</td>';

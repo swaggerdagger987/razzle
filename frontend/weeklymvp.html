@@ -274,7 +274,13 @@
     return Number(v).toFixed(dec === undefined ? 1 : dec);
   }
 
-  var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+  var _cs = getComputedStyle(document.documentElement);
+  var POS_COLORS = {
+    QB: _cs.getPropertyValue('--pos-qb').trim() || '#5b7fff',
+    RB: _cs.getPropertyValue('--pos-rb').trim() || '#2ec4b6',
+    WR: _cs.getPropertyValue('--pos-wr').trim() || '#d97757',
+    TE: _cs.getPropertyValue('--pos-te').trim() || '#8b5cf6'
+  };
   var POSITIONS = ['QB', 'RB', 'WR', 'TE'];
 
   /* ---- URL state ---- */
@@ -349,7 +355,7 @@
       for (var p = 0; p < POSITIONS.length; p++) {
         var pos = POSITIONS[p];
         var mvp = wk[pos];
-        var color = POS_COLORS[pos] || '#8a7565';
+        var color = POS_COLORS[pos] || 'var(--ink-light)';
 
         if (mvp && mvp.name !== '-') {
           html += '<td><div class="mv-cell">';

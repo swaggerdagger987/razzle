@@ -415,8 +415,14 @@
 (function() {
   'use strict';
 
-  var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
-  var POS_LIGHT = { QB: '#dde4f7', RB: '#d9efec', WR: '#f7e4d8', TE: '#e5dcf7' };
+  var _cs = getComputedStyle(document.documentElement);
+  var POS_COLORS = {
+    QB: _cs.getPropertyValue('--pos-qb').trim() || '#5b7fff',
+    RB: _cs.getPropertyValue('--pos-rb').trim() || '#2ec4b6',
+    WR: _cs.getPropertyValue('--pos-wr').trim() || '#d97757',
+    TE: _cs.getPropertyValue('--pos-te').trim() || '#8b5cf6'
+  };
+  var POS_LIGHT = { QB: 'var(--blue-light)', RB: 'var(--green-light)', WR: 'var(--orange-light)', TE: 'var(--purple-light)' };
 
   function escapeHtml(str) {
     if (!str) return '';
@@ -518,7 +524,7 @@
         var share = activeMode === 'targets' ? p.target_share : p.carry_share;
         if (share < 2) return;
         otherPct -= share;
-        var posColor = POS_COLORS[p.position] || '#d97757';
+        var posColor = POS_COLORS[p.position] || 'var(--orange)';
         var lightColor = POS_LIGHT[p.position] || '#f7e4d8';
         var lastName = p.name.split(' ').pop();
         html += '<div class="dist-segment" style="width:' + share + '%; background:' + lightColor + '; border-right:1px solid ' + posColor + ';" ';
@@ -548,7 +554,7 @@
         var share = activeMode === 'targets' ? p.target_share : p.carry_share;
         var count = activeMode === 'targets' ? p.targets : p.carries;
         if (count === 0) return;
-        var posColor = POS_COLORS[p.position] || '#d97757';
+        var posColor = POS_COLORS[p.position] || 'var(--orange)';
         html += '<div class="team-player-row" data-pid="' + escapeHtml(p.player_id) + '">';
         html += '<div class="player-row-pos" style="background:' + posColor + '">' + escapeHtml(p.position) + '</div>';
         html += '<div class="player-row-name">' + escapeHtml(p.name) + '</div>';

@@ -387,7 +387,13 @@
     return Number(v).toFixed(dec === undefined ? 1 : dec);
   }
 
-  var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+  var _cs = getComputedStyle(document.documentElement);
+  var POS_COLORS = {
+    QB: _cs.getPropertyValue('--pos-qb').trim() || '#5b7fff',
+    RB: _cs.getPropertyValue('--pos-rb').trim() || '#2ec4b6',
+    WR: _cs.getPropertyValue('--pos-wr').trim() || '#d97757',
+    TE: _cs.getPropertyValue('--pos-te').trim() || '#8b5cf6'
+  };
 
   var currentPosition = '';
   var currentData = null;
@@ -455,7 +461,7 @@
     var html = '<div class="pace-grid">';
     for (var i = 0; i < players.length; i++) {
       var p = players[i];
-      var posColor = POS_COLORS[p.position] || '#8a7565';
+      var posColor = POS_COLORS[p.position] || (_cs.getPropertyValue('--ink-light').trim() || '#8a7565');
 
       html += '<div class="pace-card">';
       html += '<div class="pace-card-header">';
@@ -495,7 +501,7 @@
         html += '<div class="pace-milestones">';
         for (var j = 0; j < ms.length; j++) {
           var m = ms[j];
-          var barColor = m.on_pace ? '#2ec4b6' : '#d97757';
+          var barColor = m.on_pace ? (_cs.getPropertyValue('--green').trim() || '#2ec4b6') : (_cs.getPropertyValue('--orange').trim() || '#d97757');
           var badgeClass = m.on_pace ? 'on-pace' : 'off-pace';
           var badgeText = m.on_pace ? 'ON PACE' : 'OFF PACE';
           var pctWidth = Math.min(100, m.pct);

@@ -415,7 +415,13 @@
 (function() {
   'use strict';
 
-  var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+  var _cs = getComputedStyle(document.documentElement);
+  var POS_COLORS = {
+    QB: _cs.getPropertyValue('--pos-qb').trim() || '#5b7fff',
+    RB: _cs.getPropertyValue('--pos-rb').trim() || '#2ec4b6',
+    WR: _cs.getPropertyValue('--pos-wr').trim() || '#d97757',
+    TE: _cs.getPropertyValue('--pos-te').trim() || '#8b5cf6'
+  };
 
   function escapeHtml(str) {
     if (!str) return '';
@@ -448,7 +454,7 @@
     var totalW = vals.length * (barW + gap) - gap;
     var startX = Math.max(0, (w - totalW) / 2);
 
-    var barColor = trend === 'up' ? '#2ec4b6' : (trend === 'down' ? '#e63946' : '#8a7565');
+    var barColor = trend === 'up' ? 'var(--green)' : (trend === 'down' ? 'var(--red)' : 'var(--ink-light)');
 
     for (var i = 0; i < vals.length; i++) {
       var barH = Math.max(3, ((vals[i] - minVal) / range) * (h - 4));

@@ -70,9 +70,9 @@
   .rb-table tbody tr:hover { background: rgba(217,119,87,0.08); }
 
   .rb-rank { font-family: var(--font-display); font-size: 14px; }
-  .rb-rank.gold { color: #b8860b; }
+  .rb-rank.gold { color: var(--yellow); }
   .rb-rank.silver { color: var(--ink-light); }
-  .rb-rank.bronze { color: #cd7f32; }
+  .rb-rank.bronze { color: var(--orange); }
 
   .rb-pos-chip {
     font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 3px;
@@ -207,11 +207,17 @@
     return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+  var _cs = getComputedStyle(document.documentElement);
+  var POS_COLORS = {
+    QB: _cs.getPropertyValue('--pos-qb').trim() || '#5b7fff',
+    RB: _cs.getPropertyValue('--pos-rb').trim() || '#2ec4b6',
+    WR: _cs.getPropertyValue('--pos-wr').trim() || '#d97757',
+    TE: _cs.getPropertyValue('--pos-te').trim() || '#8b5cf6'
+  };
   var currentPosition = '';
 
   function posChip(pos) {
-    var c = POS_COLORS[pos] || '#8a7565';
+    var c = POS_COLORS[pos] || 'var(--ink-light)';
     return '<span class="rb-pos-chip" style="background:' + c + '">' + escapeHtml(pos) + '</span>';
   }
 
