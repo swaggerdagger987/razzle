@@ -454,3 +454,19 @@ Systematic page-by-page audit against DESIGN.md and NORTH_STAR.md.
 | 9 | billing.py silent exception | P2 | Added logging to plan_type migration catch block |
 
 All 59 tests pass. All 11 JS files syntax-clean.
+
+---
+
+## Final Sweep (Mar 14)
+
+**Goal**: Last autonomous sweep before launch. Find and fix any remaining design/robustness issues.
+
+| # | Fix | Category | Notes |
+|---|-----|----------|-------|
+| 1 | colstats-bar 1px→2px border | Design | lab.html:1077 — histogram bars in column stats popover |
+| 2 | Tier board select 1px→2px border-width | Design | lab.js:9919 — tier selector dropdown |
+| 3 | Target dist segment 1px→2px border-right | Design | targets.html:530 — position segment dividers |
+| 4 | pollForPlanChange missing resp.ok | Robustness | app.js:548 — could parse error JSON silently |
+| 5 | _deleteFormulaFromServer missing resp.ok | Robustness | formulas.js:289 — could parse error JSON silently |
+
+All 59 tests pass. All 11 JS files syntax-clean. 0 remaining issues found.
