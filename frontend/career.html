@@ -948,7 +948,11 @@
   };
 
   // Analytics
-  if (typeof trackPage === 'function') trackPage('career');
+  fetch('/api/analytics/pageview', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ page: '/career.html', referrer: document.referrer || '' })
+  }).catch(function() {});
 
   // Load from URL
   if (initialPlayer) {

@@ -566,13 +566,11 @@
   });
 
   // Analytics
-  try {
-    fetch('/api/analytics/pageview', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ page: '/scarcity.html' }),
-    });
-  } catch(e) {}
+  fetch('/api/analytics/pageview', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ page: '/scarcity.html' }),
+  }).catch(function() {});
 
   // Quick search (Ctrl+K)
   if (typeof window.initQuickSearch === 'function') window.initQuickSearch();

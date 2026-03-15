@@ -59,7 +59,7 @@
   }
   .cs-fmt-tab {
     padding: 6px 16px;
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 13px;
     border: 2px solid var(--ink);
     border-radius: 20px;
@@ -374,7 +374,11 @@
   };
 
   function init() {
-    if (window.__razzleAnalytics) window.__razzleAnalytics('cheatsheet');
+    fetch('/api/analytics/pageview', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ page: '/cheatsheet.html', referrer: document.referrer || '' })
+    }).catch(function() {});
 
     document.querySelectorAll('.cs-fmt-tab').forEach(function(tab) {
       tab.addEventListener('click', function() {

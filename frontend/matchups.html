@@ -71,7 +71,7 @@
     gap: 6px;
   }
   .matchups-pos-tab {
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 13px;
     font-weight: 700;
     padding: 6px 14px;
@@ -94,7 +94,7 @@
   }
 
   .matchups-export-btn {
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 13px;
     font-weight: 700;
     padding: 6px 14px;
@@ -300,7 +300,7 @@
     color: var(--ink-medium);
   }
   .detail-pos-badge {
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 10px;
     font-weight: 700;
     padding: 2px 6px;
@@ -324,7 +324,7 @@
     color: var(--red);
   }
   .matchups-retry-btn {
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 13px;
     padding: 6px 16px;
     border: 2px solid var(--ink);
@@ -500,7 +500,12 @@
     WR: _cs.getPropertyValue('--pos-wr').trim() || '#d97757',
     TE: _cs.getPropertyValue('--pos-te').trim() || '#8b5cf6'
   };
-  var POS_LIGHT = { QB: '#dde4f7', RB: '#d9efec', WR: '#f7e4d8', TE: '#e5dcf7' };
+  var POS_LIGHT = {
+    QB: _cs.getPropertyValue('--blue-light').trim() || '#dde4f7',
+    RB: _cs.getPropertyValue('--green-light').trim() || '#d9efec',
+    WR: _cs.getPropertyValue('--orange-light').trim() || '#f7e4d8',
+    TE: _cs.getPropertyValue('--purple-light').trim() || '#e5dcf7'
+  };
 
   function escapeHtml(str) {
     if (!str) return '';
@@ -767,13 +772,11 @@
   });
 
   // Analytics
-  try {
-    fetch('/api/analytics/pageview', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ page: '/matchups.html', referrer: document.referrer || '' })
-    });
-  } catch(e) {}
+  fetch('/api/analytics/pageview', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ page: '/matchups.html', referrer: document.referrer || '' })
+  }).catch(function() {});
 
   // Initial load
   loadData();

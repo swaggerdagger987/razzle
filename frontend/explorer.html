@@ -67,7 +67,7 @@
   }
 
   .explorer-axis-label {
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 13px;
     font-weight: 700;
     color: var(--ink-medium);
@@ -80,7 +80,7 @@
     overflow: hidden;
   }
   .explorer-pos-tab {
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 13px;
     font-weight: 700;
     padding: 6px 14px;
@@ -730,7 +730,7 @@
   });
 
   // Analytics
-  try { fetch('/api/analytics/pageview', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ page: '/explorer.html', referrer: document.referrer || '' }) }); } catch(e) {}
+  fetch('/api/analytics/pageview', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ page: '/explorer.html', referrer: document.referrer || '' }) }).catch(function() {});
 
   // Initial load
   loadData();

@@ -74,7 +74,7 @@
     overflow: hidden;
   }
   .buysell-pos-tab {
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 13px;
     font-weight: 700;
     padding: 6px 14px;
@@ -657,6 +657,7 @@
 
     try {
       var resp = await fetch(url);
+      if (!resp.ok) throw new Error('API error ' + resp.status);
       var data = await resp.json();
 
       // Populate season selector

@@ -143,7 +143,7 @@
     border-bottom: 1px solid var(--ink-faint);
     gap: 8px;
   }
-  .fb-row:hover { background: rgba(217,119,87,0.08); }
+  .fb-row:hover { background: var(--bg-warm); }
 
   .fb-rank {
     font-family: var(--font-mono);
@@ -164,6 +164,7 @@
     white-space: nowrap;
   }
   .fb-pos-badge {
+    font-family: var(--font-mono);
     font-size: 10px;
     font-weight: 700;
     padding: 1px 5px;
@@ -272,7 +273,7 @@
     <div class="fb-legend-item"><div class="fb-legend-swatch" style="background:var(--red)"></div>TDs</div>
   </div>
 
-  <div id="fbContent">
+  <div id="fbContent" style="overflow-x:auto;-webkit-overflow-scrolling:touch">
     <div class="fb-loading">pulling film...</div>
   </div>
 </main>

@@ -60,7 +60,7 @@
     gap: 6px;
   }
   .aging-pos-tab {
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 13px;
     font-weight: 700;
     padding: 6px 14px;
@@ -792,13 +792,11 @@
   });
 
   // Analytics
-  try {
-    fetch('/api/analytics/pageview', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ page: '/aging.html' }),
-    });
-  } catch(e) {}
+  fetch('/api/analytics/pageview', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ page: '/aging.html' }),
+  }).catch(function() {});
 
   // Quick search
   if (typeof window.initQuickSearch === 'function') window.initQuickSearch();

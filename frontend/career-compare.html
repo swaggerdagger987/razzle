@@ -889,7 +889,11 @@
   });
 
   // Analytics
-  if (typeof trackPage === 'function') trackPage('career-compare');
+  fetch('/api/analytics/pageview', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ page: '/career-compare.html', referrer: document.referrer || '' })
+  }).catch(function() {});
 
   init();
 })();

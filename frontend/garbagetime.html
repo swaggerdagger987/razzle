@@ -46,7 +46,7 @@
   .gt-table th:first-child, .gt-table th:nth-child(2), .gt-table th:nth-child(3) { text-align: left; }
   .gt-table td { padding: 6px 8px; text-align: right; border-bottom: 1px solid var(--ink-faint); }
   .gt-table td:first-child, .gt-table td:nth-child(2), .gt-table td:nth-child(3) { text-align: left; }
-  .gt-table tbody tr:hover { background: rgba(217,119,87,0.08); }
+  .gt-table tbody tr:hover { background: var(--bg-warm); }
   .gt-rank { font-weight: 700; color: var(--ink-light); font-size: 11px; }
   .gt-pos-badge { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 3px; color: #fff; }
   .gt-pct-badge { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 3px; border: 2px solid; }
@@ -271,6 +271,7 @@ function buildCard(title, cls, players, isPadders) {
 
   const maxVal = Math.max(...players.map(p => isPadders ? p.garbage_time_pct : p.ppg));
   let html = '<div class="gt-card"><div class="gt-card-header ' + escapeHtml(cls) + '">' + escapeHtml(title) + '</div>';
+  html += '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch">';
   html += '<table class="gt-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>GT%</th><th>PPG</th><th>Avg Diff</th><th></th></tr></thead><tbody>';
 
   players.forEach((p, i) => {
@@ -291,7 +292,7 @@ function buildCard(title, cls, players, isPadders) {
     html += '</tr>';
   });
 
-  html += '</tbody></table></div>';
+  html += '</tbody></table></div></div>';
   return html;
 }
 

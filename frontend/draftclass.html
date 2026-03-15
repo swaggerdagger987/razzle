@@ -72,7 +72,7 @@
     overflow: hidden;
   }
   .dc-pos-tab {
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 13px;
     font-weight: 700;
     padding: 6px 14px;
@@ -664,7 +664,11 @@
   };
 
   // Analytics
-  if (typeof trackPage === 'function') trackPage('draftclass');
+  fetch('/api/analytics/pageview', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ page: '/draftclass.html', referrer: document.referrer || '' })
+  }).catch(function() {});
 
   loadData();
 })();
