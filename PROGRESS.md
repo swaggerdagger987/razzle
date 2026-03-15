@@ -490,3 +490,42 @@ All 59 tests pass. All 11 JS files syntax-clean. 0 remaining issues found.
 - Odds history (tracking across weeks) deferred — requires persistent storage and multi-session tracking, not achievable in a single autonomous loop
 - Distribution histograms are per-card (inline canvas) rather than a separate panel — keeps the UI compact and contextual
 - Scenario explorer allows multiple trades + injuries simultaneously — each scenario stacks and the re-simulation reflects all active modifications
+
+---
+
+## Quality Pass: Font Overhaul (Mar 14)
+
+**Goal**: Enforce three-font rule across entire codebase. Luckiest Guy for headers at 16px+ only. Space Mono for all interactive/data elements. Caveat for annotations.
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Body font root cause | DONE | Changed body from --font-display to --font-mono. Added explicit h1/h2/h3 rule for display font. All text now defaults to Space Mono. |
+| 2 | styles.css violations | DONE | Fixed nav links (13px), mobile nav (16px), dropdown items (12px), command palette input/placeholder, tag-picker title (11px), note-editor title (12px), cmd-palette item name (15px). |
+| 3 | lab-panels.css violations | DONE | 101 fixes: table headers, position badges (10-11px), rank numbers (14px), data values, tier badges, method chips, player names in data context (12-14px), buttons/tabs under 16px. 72 legitimate uses retained. |
+| 4 | JS file violations | DONE | 40 fixes across 9 files: charts.js (12 control labels/table headers), lab.js (15 badges/labels/player names), warroom.js (6 badges/labels), formulas.js (2), formula-store.js (2), app.js (1), compare.js (1), player.js (1). |
+| 5 | HTML file violations | DONE | 370 footer category labels at 11px fixed across 73 HTML files. agents.html: 15 specific fixes (setup steps, table headers, badges, trial messages). pricing.html: 4 fixes. lab.html: 9 fixes. league-intel.html: 4 fixes. |
+| 6 | Inner span inheritance | DONE | Fixed 14px spans inheriting --font-display from 24-28px parent containers (lab.js trade value, agents.html pricing). |
+| 7 | Dark mode legibility | DONE | WCAG contrast verified: primary text 14.3:1 AAA (dark), 12.3:1 AAA (light). All color pairs pass AA minimum. |
+
+### Decisions Log
+- Body font change is the single biggest legibility improvement — every element that previously inherited Luckiest Guy at 14px now gets Space Mono
+- Inner spans in large display containers need explicit --font-mono to prevent inheritance
+- 11px footer category labels were the most widespread violation (370 instances across 73 files)
+
+---
+
+## Quality Pass: Lab Panel Audit (Mar 14)
+
+**Goal**: Audit every standalone Lab panel page for design compliance, error handling, mobile support.
+
+| # | Batch | Status | Notes |
+|---|-------|--------|-------|
+| 1 | A-D (19 panels) | DONE | 22 fixes: font-display on pos-tabs/badges→mono, box-shadows 2px→4px, hardcoded hex→CSS vars, missing resp.ok checks, analytics standardized. 3 panels clean (advantage, breakdown, compare). |
+| 2 | E-P (13 panels) | DONE | 28 fixes: font-display on pos-tabs/buttons→mono, hardcoded rgba hovers→var(--bg-warm), missing overflow-x:auto, POS_LIGHT hex→CSS vars, analytics error handling, responsive breakpoints added to playoffs. 1 panel clean (pace). |
+| 3 | R-Z (32 panels) | DONE | 22 fixes: 13 rgba hover colors→var(--bg-warm), 7 badge hex→CSS vars in regression, box-shadow 3px→4px, analytics fetch handling. 16 panels clean. |
+
+### Summary
+- 72 fixes across 44 of 64 standalone panel pages
+- 20 panels passed all criteria with no changes needed
+- Most common issues: hardcoded rgba hover colors, font-display on sub-16px controls, analytics error handling
+- All 59 tests pass, all JS syntax clean
