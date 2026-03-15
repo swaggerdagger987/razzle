@@ -525,7 +525,7 @@
         if (share < 2) return;
         otherPct -= share;
         var posColor = POS_COLORS[p.position] || 'var(--orange)';
-        var lightColor = POS_LIGHT[p.position] || '#f7e4d8';
+        var lightColor = POS_LIGHT[p.position] || 'var(--orange-light)';
         var lastName = p.name.split(' ').pop();
         html += '<div class="dist-segment" style="width:' + share + '%; background:' + lightColor + '; border-right:1px solid ' + posColor + ';" ';
         html += 'title="' + escapeHtml(p.name) + ': ' + share + '% (' + (activeMode === 'targets' ? p.targets : p.carries) + ')" ';

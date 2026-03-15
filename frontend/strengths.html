@@ -355,11 +355,11 @@
   .grade-fplus, .grade-f { background: var(--red-light); color: var(--red); border-color: var(--red); }
 
   /* Pct bar colors */
-  .bar-elite { background: #22c55e; }
-  .bar-good { background: #60a5fa; }
-  .bar-avg { background: #fbbf24; }
-  .bar-below { background: #f97316; }
-  .bar-poor { background: #ef4444; }
+  .bar-elite { background: var(--green); }
+  .bar-good { background: var(--blue); }
+  .bar-avg { background: var(--yellow); }
+  .bar-below { background: var(--orange); }
+  .bar-poor { background: var(--red); }
 
   /* Loading / Empty / Error */
   .sw-loading, .sw-empty {
@@ -555,11 +555,11 @@
   }
 
   function pctColor(pct) {
-    if (pct >= 90) return '#1a7a6d';
-    if (pct >= 75) return '#3a5abf';
-    if (pct >= 50) return '#8a6d20';
-    if (pct >= 25) return '#a85a3a';
-    return '#a83240';
+    if (pct >= 90) return 'var(--green)';
+    if (pct >= 75) return 'var(--blue)';
+    if (pct >= 50) return 'var(--ink-medium)';
+    if (pct >= 25) return 'var(--orange)';
+    return 'var(--red)';
   }
 
   /* ---- Autocomplete ---- */

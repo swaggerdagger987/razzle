@@ -454,7 +454,7 @@
     var totalW = vals.length * (barW + gap) - gap;
     var startX = Math.max(0, (w - totalW) / 2);
 
-    var barColor = trend === 'up' ? 'var(--green)' : (trend === 'down' ? 'var(--red)' : 'var(--ink-light)');
+    var barColor = trend === 'up' ? (_cs.getPropertyValue('--green').trim() || '#2ec4b6') : (trend === 'down' ? (_cs.getPropertyValue('--red').trim() || '#e63946') : (_cs.getPropertyValue('--ink-light').trim() || '#8a7565'));
 
     for (var i = 0; i < vals.length; i++) {
       var barH = Math.max(3, ((vals[i] - minVal) / range) * (h - 4));
