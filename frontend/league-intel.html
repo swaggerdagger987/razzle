@@ -910,6 +910,114 @@
     vertical-align: middle;
   }
 
+  /* ===== POWER RANKINGS ===== */
+  .power-trigger {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 2px dashed var(--ink-faint);
+  }
+
+  .power-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: all 0.15s;
+  }
+
+  .power-card:hover {
+    box-shadow: 6px 6px 0 var(--ink);
+    transform: translate(-2px, -2px);
+  }
+
+  .power-rank {
+    font-family: var(--font-display);
+    font-size: 24px;
+    min-width: 36px;
+    text-align: center;
+    color: var(--ink);
+  }
+
+  .power-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .power-name {
+    font-family: var(--font-display);
+    font-size: 16px;
+  }
+
+  .power-detail {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-light);
+    margin-top: 2px;
+  }
+
+  .power-right {
+    text-align: right;
+    min-width: 80px;
+  }
+
+  .power-score {
+    font-family: var(--font-mono);
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .power-tier-badge {
+    font-family: var(--font-display);
+    font-size: 10px;
+    text-transform: uppercase;
+    padding: 2px 10px;
+    border: 2px solid var(--ink);
+    border-radius: 12px;
+    margin-top: 4px;
+    display: inline-block;
+  }
+
+  .power-bracket {
+    margin-top: 16px;
+    padding: 16px;
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+
+  .power-bracket h4 {
+    font-family: var(--font-display);
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+
+  .power-bracket-slots {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+
+  .power-bracket-slot {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 6px 10px;
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+    background: var(--bg-warm);
+  }
+
+  .power-bracket-seed {
+    font-weight: 700;
+    color: var(--ink);
+    margin-right: 4px;
+  }
+
   /* ===== WAIVER TENDENCIES ===== */
   .waiver-trigger {
     margin-top: 12px;
@@ -1206,6 +1314,9 @@
     .trade-tendency-grid { grid-template-columns: 1fr; }
     .waiver-grid { grid-template-columns: 1fr; }
     .waiver-card { padding: 12px; }
+    .power-card { padding: 10px 12px; gap: 10px; }
+    .power-rank { font-size: 20px; min-width: 28px; }
+    .power-bracket-slots { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -1679,6 +1790,12 @@ async function toggleLeague(card, leagueId, userId) {
       '</div>' +
       '<div id="waiverTendencies-' + leagueId + '"></div>';
 
+    // Add power rankings trigger
+    html += '<div class="power-trigger">' +
+      '<button id="powerBtn-' + leagueId + '">league power rankings</button>' +
+      '</div>' +
+      '<div id="powerRankings-' + leagueId + '"></div>';
+
     rosterDiv.innerHTML = html;
 
     // Bind profile button with closure over variables
@@ -1744,6 +1861,17 @@ async function toggleLeague(card, leagueId, userId) {
         this.disabled = true;
         this.textContent = "scanning waiver wire activity...";
         loadWaiverTendencies(leagueId, userId, rosters, allPlayers, userMap);
+      });
+    }
+
+    // Bind power rankings button
+    var powerBtn = document.getElementById("powerBtn-" + leagueId);
+    if (powerBtn) {
+      powerBtn.addEventListener("click", function(e) {
+        e.stopPropagation();
+        this.disabled = true;
+        this.textContent = "computing power rankings...";
+        loadPowerRankings(leagueId, userId, rosters, allPlayers, userMap);
       });
     }
 
@@ -3271,6 +3399,256 @@ async function loadLeagueTradeFinder(leagueId, userId, myRoster, rosters, allPla
     // Re-enable button for retry
     var tfBtn = document.getElementById("tradeFinderBtn-" + leagueId);
     if (tfBtn) { tfBtn.disabled = false; tfBtn.textContent = "find trade partners"; }
+  }
+}
+
+// ── LEAGUE POWER RANKINGS ─────────────────────────────────────────────
+async function loadPowerRankings(leagueId, userId, rosters, allPlayers, userMap) {
+  var container = document.getElementById("powerRankings-" + leagueId);
+  if (!container) return;
+
+  container.innerHTML = '<div class="loading-intel" style="font-size:14px;">computing composite power rankings...</div>';
+
+  try {
+    // Build player list for PPG lookup
+    var allRosterPlayers = [];
+    for (var i = 0; i < rosters.length; i++) {
+      var roster = rosters[i];
+      for (var j = 0; j < (roster.players || []).length; j++) {
+        var pid = (roster.players || [])[j];
+        var p = allPlayers[pid];
+        if (!p) continue;
+        var pos = p.position || "?";
+        if (pos !== "QB" && pos !== "RB" && pos !== "WR" && pos !== "TE") continue;
+        var name = ((p.first_name || "") + " " + (p.last_name || "")).trim();
+        if (name) allRosterPlayers.push({ name: name, position: pos, team: p.team || "" });
+      }
+    }
+
+    // Fetch PPG data
+    var ppgLookup = {};
+    if (allRosterPlayers.length > 0) {
+      var ctrl = new AbortController();
+      var timer = setTimeout(function() { ctrl.abort(); }, 20000);
+      var resp = await fetch("/api/roster-depth-lookup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ players: allRosterPlayers }),
+        signal: ctrl.signal
+      });
+      clearTimeout(timer);
+      if (resp.ok) {
+        var data = await resp.json();
+        if (data.players) {
+          for (var k = 0; k < data.players.length; k++) {
+            ppgLookup[data.players[k].sleeper_name] = data.players[k].ppg || 0;
+          }
+        }
+      }
+    }
+
+    // Fetch transactions for activity score
+    var txns = await fetchLeagueTransactions(leagueId);
+    var rosterOwnerMap = {};
+    for (var roi = 0; roi < rosters.length; roi++) {
+      rosterOwnerMap[rosters[roi].roster_id] = rosters[roi].owner_id;
+    }
+    var txnCounts = {}; // oid -> count
+    for (var ti = 0; ti < txns.length; ti++) {
+      var rids = txns[ti].roster_ids || [];
+      for (var trii = 0; trii < rids.length; trii++) {
+        var toid = rosterOwnerMap[rids[trii]];
+        if (toid) txnCounts[toid] = (txnCounts[toid] || 0) + 1;
+      }
+    }
+
+    // Get league playoff settings
+    var playoffTeams = 6; // default
+    try {
+      var leagueResp = await fetch(SLEEPER_API + "/league/" + leagueId);
+      if (leagueResp.ok) {
+        var leagueSettings = await leagueResp.json();
+        playoffTeams = leagueSettings.settings?.playoff_teams || 6;
+      }
+    } catch(e) {}
+
+    // Build power rankings
+    var rankings = [];
+    var maxTxnCount = 1;
+    for (var toid2 in txnCounts) {
+      if (txnCounts[toid2] > maxTxnCount) maxTxnCount = txnCounts[toid2];
+    }
+
+    for (var ri2 = 0; ri2 < rosters.length; ri2++) {
+      var r = rosters[ri2];
+      var oid = r.owner_id;
+      var managerName = userMap[oid] || "Manager";
+      var wins = r.settings?.wins || 0;
+      var losses = r.settings?.losses || 0;
+      var fpts = r.settings?.fpts || 0;
+
+      // Roster strength: total starter PPG
+      var pids = r.players || [];
+      var playerPPGs = [];
+      for (var pi = 0; pi < pids.length; pi++) {
+        var pp = allPlayers[pids[pi]];
+        if (!pp) continue;
+        var ppos = pp.position || "?";
+        if (ppos !== "QB" && ppos !== "RB" && ppos !== "WR" && ppos !== "TE") continue;
+        var pname = ((pp.first_name || "") + " " + (pp.last_name || "")).trim();
+        playerPPGs.push(ppgLookup[pname] || 0);
+      }
+      playerPPGs.sort(function(a, b) { return b - a; });
+      // Top 7 starters (1QB + 2RB + 2WR + 1TE + 1FLEX)
+      var starterPPG = 0;
+      for (var si = 0; si < Math.min(7, playerPPGs.length); si++) {
+        starterPPG += playerPPGs[si];
+      }
+
+      // Bench depth: remaining players
+      var benchPPG = 0;
+      for (var bi = 7; bi < playerPPGs.length; bi++) {
+        benchPPG += playerPPGs[bi];
+      }
+
+      // Win rate
+      var totalGames = wins + losses;
+      var winRate = totalGames > 0 ? wins / totalGames : 0.5;
+
+      // Transaction activity
+      var txnCount = txnCounts[oid] || 0;
+      var activityScore = Math.min(txnCount / maxTxnCount, 1);
+
+      // Composite score (0-100):
+      // 40% roster strength + 25% win rate + 20% bench depth + 15% activity
+      var rosterScore = Math.min(starterPPG / 120, 1) * 40; // 120 PPG starters = max
+      var winScore = winRate * 25;
+      var depthScore = Math.min(benchPPG / 60, 1) * 20; // 60 PPG bench = max
+      var actScore = activityScore * 15;
+      var composite = Math.round(rosterScore + winScore + depthScore + actScore);
+
+      // Key strength/weakness
+      var strength = "";
+      var weakness = "";
+      if (starterPPG > 90) strength = "elite starters";
+      else if (winRate > 0.65) strength = "clutch record";
+      else if (benchPPG > 40) strength = "deep bench";
+      else if (activityScore > 0.7) strength = "active manager";
+      else strength = "steady";
+
+      if (starterPPG < 60) weakness = "weak starters";
+      else if (winRate < 0.35) weakness = "losing record";
+      else if (benchPPG < 15) weakness = "thin bench";
+      else if (activityScore < 0.1) weakness = "inactive";
+      else weakness = "no glaring hole";
+
+      rankings.push({
+        ownerId: oid,
+        name: managerName,
+        isUser: oid === userId,
+        composite: composite,
+        wins: wins,
+        losses: losses,
+        fpts: fpts,
+        starterPPG: starterPPG,
+        benchPPG: benchPPG,
+        winRate: winRate,
+        txnCount: txnCount,
+        strength: strength,
+        weakness: weakness
+      });
+    }
+
+    // Sort by composite score
+    rankings.sort(function(a, b) { return b.composite - a.composite; });
+
+    // Assign tiers based on score distribution
+    var topScore = rankings.length > 0 ? rankings[0].composite : 100;
+    function getTier(score) {
+      if (score >= topScore * 0.8) return { label: "Contender", color: "var(--green)", bg: "var(--green-light)" };
+      if (score >= topScore * 0.5) return { label: "Bubble", color: "var(--yellow)", bg: "var(--yellow-light)" };
+      return { label: "Rebuilding", color: "var(--red)", bg: "var(--red-light)" };
+    }
+
+    // Render
+    var html = '<div class="depth-section-header">league power rankings — composite scores</div>';
+
+    for (var ci = 0; ci < rankings.length; ci++) {
+      var mgr = rankings[ci];
+      var rank = ci + 1;
+      var tier = getTier(mgr.composite);
+
+      html += '<div class="power-card"' + (mgr.isUser ? ' style="border-color:var(--orange);"' : '') + '>';
+
+      // Rank
+      html += '<div class="power-rank">' + rank + '</div>';
+
+      // Info
+      html += '<div class="power-info">';
+      html += '<div class="power-name">' + escapeHtml(mgr.name);
+      if (mgr.isUser) html += ' <span style="font-family:var(--font-hand);font-size:13px;color:var(--orange);">you</span>';
+      html += '</div>';
+      html += '<div class="power-detail">';
+      html += mgr.wins + '-' + mgr.losses + ' | ';
+      html += 'starters: ' + mgr.starterPPG.toFixed(0) + ' PPG | ';
+      html += mgr.txnCount + ' moves';
+      html += '</div>';
+      html += '<div class="power-detail" style="margin-top:2px;">';
+      html += '<span style="color:var(--green);">' + escapeHtml(mgr.strength) + '</span>';
+      html += ' / <span style="color:var(--red);">' + escapeHtml(mgr.weakness) + '</span>';
+      html += '</div>';
+      html += '</div>';
+
+      // Score + tier
+      html += '<div class="power-right">';
+      html += '<div class="power-score">' + mgr.composite + '</div>';
+      html += '<span class="power-tier-badge" style="background:' + tier.bg + ';color:' + tier.color + ';border-color:' + tier.color + ';">' + tier.label + '</span>';
+      html += '</div>';
+
+      html += '</div>'; // close card
+    }
+
+    // Playoff bracket preview
+    var playoffRankings = rankings.slice(0, playoffTeams);
+    if (playoffRankings.length >= 2) {
+      html += '<div class="power-bracket">';
+      html += '<h4>if the season ended today</h4>';
+      html += '<div style="font-family:var(--font-hand);font-size:14px;color:var(--ink-light);margin-bottom:8px;">top ' + playoffTeams + ' make the playoffs</div>';
+      html += '<div class="power-bracket-slots">';
+      for (var pi2 = 0; pi2 < playoffRankings.length; pi2++) {
+        var pr = playoffRankings[pi2];
+        var seed = pi2 + 1;
+        var slotStyle = pr.isUser ? 'border-color:var(--orange);background:var(--orange-light);' : '';
+        html += '<div class="power-bracket-slot" style="' + slotStyle + '">';
+        html += '<span class="power-bracket-seed">#' + seed + '</span>';
+        html += escapeHtml(pr.name);
+        html += ' <span style="color:var(--ink-light);">(' + pr.wins + '-' + pr.losses + ')</span>';
+        html += '</div>';
+      }
+      html += '</div>';
+
+      // Bubble teams
+      if (rankings.length > playoffTeams) {
+        var bubble = rankings.slice(playoffTeams, playoffTeams + 2);
+        html += '<div style="margin-top:8px;font-family:var(--font-hand);font-size:14px;color:var(--ink-light);">on the bubble:</div>';
+        for (var bi2 = 0; bi2 < bubble.length; bi2++) {
+          html += '<div style="font-family:var(--font-mono);font-size:11px;color:var(--red);margin-top:2px;">';
+          html += '#' + (playoffTeams + bi2 + 1) + ' ' + escapeHtml(bubble[bi2].name) + ' (' + bubble[bi2].wins + '-' + bubble[bi2].losses + ')';
+          html += '</div>';
+        }
+      }
+
+      html += '</div>';
+    }
+
+    container.innerHTML = html;
+
+  } catch (e) {
+    container.innerHTML = '<div class="loading-intel" style="color:var(--red);font-size:14px;">' +
+      (e.name === "AbortError" ? "power rankings timed out. try again." : "power rankings failed. try again.") + '</div>';
+    var btn = document.getElementById("powerBtn-" + leagueId);
+    if (btn) { btn.disabled = false; btn.textContent = "league power rankings"; }
+    console.error(e);
   }
 }
 
