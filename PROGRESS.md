@@ -333,3 +333,28 @@ Systematic page-by-page audit against DESIGN.md and NORTH_STAR.md.
 - Self-Scout auto-loads (no button click) — it's the "home base" of the Bureau
 - All panels use Sleeper API client-side + PPG enrichment from Razzle backend
 - Trade Network and Waiver Tendencies are pure client-side (Sleeper transaction data only)
+
+---
+
+## QA Sweep: Post-Bureau Audit (Mar 14)
+
+**Goal**: Verify code quality after 7 Bureau panels + Lab CSS variable audit.
+
+| # | Finding | Status | Notes |
+|---|---------|--------|-------|
+| 1 | 1px border: Build Profiles investment bar | FIXED | border-right:1px → 2px in league-intel.html |
+| 2 | 1px border: Trade matrix cells | FIXED | border:1px → 2px in league-intel.html |
+| 3 | Hardcoded #fff: Trade finder button hover | FIXED | #fff → var(--bg) in league-intel.html |
+| 4 | 1px border: Trade value bar in Lab | FIXED | border:1px → 2px in lab.js |
+| 5 | 1px border: Keyboard hint kbd elements | FIXED | 4 instances border:1px → 2px in lab.js |
+
+### Audit Results (Clean)
+- 59/59 tests pass
+- No console.log debug statements (only branded easter eggs)
+- No TODO/FIXME comments
+- No unescaped user data in innerHTML (all use escapeHtml)
+- All fetch calls have error handling (.catch or try/catch)
+- All Bureau API calls have AbortController timeouts (15-20s)
+- All division operations properly guarded
+- No hardcoded year references (2026) in dynamic code
+- Lab-panels.css semantic colors (gold/bronze, grade badges) are intentional, not drift
