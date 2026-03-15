@@ -563,7 +563,7 @@ def get_billing_status(user: dict) -> dict:
         try:
             portal = stripe.billing_portal.Session.create(
                 customer=customer_id,
-                return_url="https://razzle.lol/agents",
+                return_url=f"{_BASE_URL}/agents",
             )
             result["portal_url"] = portal.url
         except Exception as e:
