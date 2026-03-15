@@ -403,7 +403,15 @@ async def lifespan(app):
     yield
 
 
-app = FastAPI(title="Razzle API", version="0.1.0", lifespan=lifespan)
+_is_prod = os.environ.get("ENVIRONMENT", "development") == "production"
+app = FastAPI(
+    title="Razzle API",
+    version="0.1.0",
+    lifespan=lifespan,
+    docs_url=None if _is_prod else "/docs",
+    redoc_url=None if _is_prod else "/redoc",
+    openapi_url=None if _is_prod else "/openapi.json",
+)
 
 app.add_middleware(GZipMiddleware, minimum_size=500)
 _CORS_ORIGINS = ["https://razzle.lol"]
@@ -3251,7 +3259,7 @@ async def monte_carlo_projections(request: Request):
     scoring_col = {
         "ppr": "fantasy_points_ppr",
         "half_ppr": "fantasy_points_half_ppr",
-        "standard": "fantasy_points",
+        "standard": "fantasy_points_std",
     }.get(scoring, "fantasy_points_ppr")
 
     import statistics
@@ -3270,7 +3278,7 @@ async def monte_carlo_projections(request: Request):
                 FROM player_week_stats
                 WHERE player_id IN ({placeholders})
                   AND season = ?
-                  AND season_type = 'REG'
+                  AND season_type = 'regular'
                   AND {scoring_col} IS NOT NULL
                 ORDER BY player_id, week
             """, (*player_ids, season)).fetchall()

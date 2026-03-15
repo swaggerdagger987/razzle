@@ -434,3 +434,23 @@ Systematic page-by-page audit against DESIGN.md and NORTH_STAR.md.
 
 ### Decisions Log
 - Table row separators (td border-bottom: 1px) intentionally kept at 1px for data density in analytics tables. Design guide's "no 1px borders" applies to component/card borders, not internal table dividers. Reviewed in prior sweeps.
+
+---
+
+## Launch-Eve Audit (Mar 14)
+
+**Goal**: Final autonomous 4-agent parallel audit before March 16 Twitter launch.
+
+| # | Fix | Severity | Notes |
+|---|-----|----------|-------|
+| 1 | college.py missing `import re` | P0 | NameError crash on college player profile page (re.sub call on line 213) |
+| 2 | college.py missing `TEAM_ABBREV` import | P0 | NameError crash on college player profile when combine data has draft_team |
+| 3 | Monte Carlo `season_type = 'REG'` → `'regular'` | P1 | Endpoint returned zero rows for all players (wrong filter value) |
+| 4 | Monte Carlo `"fantasy_points"` → `"fantasy_points_std"` | P1 | SQL crash on standard scoring mode (column doesn't exist) |
+| 5 | FastAPI docs exposed in production | P1 | `/docs`, `/redoc`, `/openapi.json` disabled when ENVIRONMENT=production |
+| 6 | `_showToast` wrong arg order (app.js) | P2 | Checkout confirmation toasts showed for 2.5s instead of 10s |
+| 7 | XSS in player profiles (lab.js) | P2 | 5 unescaped innerHTML insertions (player_name, team, conference, school, draft_team) |
+| 8 | Missing analytics on about/pricing | P2 | Pageview tracking added to both pages |
+| 9 | billing.py silent exception | P2 | Added logging to plan_type migration catch block |
+
+All 59 tests pass. All 11 JS files syntax-clean.

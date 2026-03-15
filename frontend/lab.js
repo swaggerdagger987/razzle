@@ -6030,8 +6030,8 @@ function renderCollegeProfile(data, container) {
   html += `<div class="profile-header" style="border-left:6px solid var(--pos-qb);">`;
   html += `<span class="profile-pos-badge" style="background:${posColor};">${pos}</span>`;
   html += `<div>`;
-  html += `<div class="profile-name">${player.player_name}</div>`;
-  html += `<div class="profile-meta">${player.team || ""} · ${player.conference || ""} · ${player.seasons_played} season${player.seasons_played > 1 ? "s" : ""}</div>`;
+  html += `<div class="profile-name">${escapeHtml(player.player_name)}</div>`;
+  html += `<div class="profile-meta">${escapeHtml(player.team || "")} · ${escapeHtml(player.conference || "")} · ${player.seasons_played} season${player.seasons_played > 1 ? "s" : ""}</div>`;
   html += `<span style="display:inline-block; background:var(--pos-qb); color:white; font-family:var(--font-display); font-size:10px; padding:2px 8px; border:2px solid var(--ink); border-radius:4px; transform:rotate(-2deg);">COLLEGE</span>`;
   html += `</div>`;
   html += `</div>`;
@@ -6245,7 +6245,7 @@ function renderProfile(data, container) {
   }
   html += `<span class="profile-pos-badge" style="background:${posColor};">${pos}</span>`;
   html += `<div>`;
-  html += `<div class="profile-name">${player.full_name}</div>`;
+  html += `<div class="profile-name">${escapeHtml(player.full_name)}</div>`;
   const displayAge = player.age ? Math.floor(player.age) : "?";
   const seasonCount = seasons ? seasons.length : 0;
   const seasonLabel = seasonCount === 1 ? "Season" : "Seasons";
@@ -6832,10 +6832,10 @@ function renderProspectProfile(data, container, compsData) {
   html += `<div class="profile-header" style="border-top: 6px solid ${posColor};">`;
   html += `<span class="profile-pos-badge" style="background:${posColor};">${pos}</span>`;
   html += `<div>`;
-  html += `<div class="profile-name">${prospect.player_name}</div>`;
+  html += `<div class="profile-name">${escapeHtml(prospect.player_name)}</div>`;
   html += `<div class="profile-meta">`;
-  html += prospect.school || "";
-  if (prospect.draft_team) html += ` · ${prospect.draft_team}`;
+  html += escapeHtml(prospect.school || "");
+  if (prospect.draft_team) html += ` · ${escapeHtml(prospect.draft_team)}`;
   if (prospect.draft_round && prospect.draft_pick) {
     html += ` · Rd ${prospect.draft_round}, Pick #${prospect.draft_pick}`;
   } else {

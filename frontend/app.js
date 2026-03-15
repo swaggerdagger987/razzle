@@ -559,7 +559,7 @@ function _detectCheckoutReturn() {
       } else {
         // Give up after 10 polls — show clear error with next steps
         if (typeof _showToast === "function") {
-          _showToast("still processing. if your plan doesn't activate within a few minutes, try refreshing the page or contact us.", 10000);
+          _showToast("still processing. if your plan doesn't activate within a few minutes, try refreshing the page or contact us.", "warning", 10000);
         }
       }
     }).catch(function() {
@@ -567,7 +567,7 @@ function _detectCheckoutReturn() {
         setTimeout(pollForPlanChange, pollInterval);
       } else {
         if (typeof _showToast === "function") {
-          _showToast("couldn't confirm your subscription. try refreshing the page. if the issue persists, your payment was received and we'll sort it out — reach out via the About page.", 10000);
+          _showToast("couldn't confirm your subscription. try refreshing the page. if the issue persists, your payment was received and we'll sort it out — reach out via the About page.", "error", 10000);
         }
       }
     });

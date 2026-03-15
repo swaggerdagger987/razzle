@@ -108,7 +108,7 @@ def initialize_subscriptions_table():
         try:
             conn.execute("ALTER TABLE subscriptions ADD COLUMN plan_type TEXT DEFAULT 'subscription'")
         except Exception:
-            pass  # Already exists
+            logger.debug("plan_type column already exists or migration failed", exc_info=True)
         conn.commit()
     logger.info("Subscriptions table initialized")
 

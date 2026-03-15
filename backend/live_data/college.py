@@ -4,9 +4,10 @@ College football functions — cfb player stats, analytics, records, awards.
 
 import logging
 import math
+import re
 
 from ..db import get_db
-from .core import _cached, _CACHE_TTL_STABLE, _current_nfl_season, _enrich_college_derived
+from .core import _cached, _CACHE_TTL_STABLE, _current_nfl_season, _enrich_college_derived, TEAM_ABBREV
 
 logger = logging.getLogger("razzle.live_data.college")
 
