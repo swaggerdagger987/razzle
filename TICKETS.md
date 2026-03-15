@@ -13,12 +13,3 @@ The database file `data/terminal.db` uses WAL journal mode locally. Uploading it
 
 ---
 
-## Phase: Lab Panel-by-Panel Audit — Batch 3 (R-Z)
-
-**Exit Criterion**: All Lab panels R-Z pass same audit criteria. Every single Lab panel verified.
-
-### Task 1: Audit and fix panels R-Z
-**Requirement**: Same audit as Batch 1 for: rankings, recap, records, redzone, reportcard, rosterbuilder, scarcity, schedule, scoring, seasonpace, snapefficiency, stacks, stocks, streaks, strengths, successrate, targetpremium, targets, tdregression, team, tiers, tradefinder, tradevalues, usage, vorp, waivers, weekly, weeklyleaders, weeklymvp, workload, yoy.
-**Accept when**: All 33 panels pass same criteria. Every single Lab panel verified and logged in PROGRESS.md.
-**Depends on**: none
-**Size**: XL
