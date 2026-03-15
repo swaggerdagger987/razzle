@@ -910,6 +910,109 @@
     vertical-align: middle;
   }
 
+  /* ===== H2H RIVALRY ===== */
+  .h2h-trigger {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 2px dashed var(--ink-faint);
+  }
+
+  .h2h-selectors {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 12px 0;
+    flex-wrap: wrap;
+  }
+
+  .h2h-selectors select {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 6px 10px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--bg-card);
+    min-width: 140px;
+  }
+
+  .h2h-vs {
+    font-family: var(--font-display);
+    font-size: 18px;
+    color: var(--ink-light);
+  }
+
+  .h2h-panel {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 16px;
+    margin-top: 12px;
+  }
+
+  .h2h-columns {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  .h2h-col {
+    min-width: 0;
+  }
+
+  .h2h-col-header {
+    font-family: var(--font-display);
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 2px dashed var(--ink-faint);
+  }
+
+  .h2h-divider {
+    width: 2px;
+    background: var(--ink-faint);
+  }
+
+  .h2h-pos-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    border-bottom: 1px dashed var(--ink-faint);
+  }
+
+  .h2h-edge {
+    font-weight: 700;
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 8px;
+  }
+
+  .h2h-verdict {
+    text-align: center;
+    margin-top: 16px;
+    padding: 12px;
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    background: var(--bg-warm);
+  }
+
+  .h2h-verdict-title {
+    font-family: var(--font-display);
+    font-size: 18px;
+  }
+
+  .h2h-verdict-text {
+    font-family: var(--font-hand);
+    font-size: 18px;
+    color: var(--ink-medium);
+    margin-top: 4px;
+  }
+
   /* ===== POWER RANKINGS ===== */
   .power-trigger {
     margin-top: 12px;
@@ -1317,6 +1420,9 @@
     .power-card { padding: 10px 12px; gap: 10px; }
     .power-rank { font-size: 20px; min-width: 28px; }
     .power-bracket-slots { grid-template-columns: 1fr; }
+    .h2h-columns { grid-template-columns: 1fr; }
+    .h2h-divider { display: none; }
+    .h2h-selectors { flex-direction: column; align-items: stretch; }
   }
 </style>
 </head>
@@ -1796,6 +1902,12 @@ async function toggleLeague(card, leagueId, userId) {
       '</div>' +
       '<div id="powerRankings-' + leagueId + '"></div>';
 
+    // Add H2H rivalry trigger
+    html += '<div class="h2h-trigger">' +
+      '<button id="h2hBtn-' + leagueId + '">head-to-head rivalry</button>' +
+      '</div>' +
+      '<div id="h2hRivalry-' + leagueId + '"></div>';
+
     rosterDiv.innerHTML = html;
 
     // Bind profile button with closure over variables
@@ -1872,6 +1984,17 @@ async function toggleLeague(card, leagueId, userId) {
         this.disabled = true;
         this.textContent = "computing power rankings...";
         loadPowerRankings(leagueId, userId, rosters, allPlayers, userMap);
+      });
+    }
+
+    // Bind H2H rivalry button
+    var h2hBtn = document.getElementById("h2hBtn-" + leagueId);
+    if (h2hBtn) {
+      h2hBtn.addEventListener("click", function(e) {
+        e.stopPropagation();
+        this.disabled = true;
+        this.textContent = "loading matchup intel...";
+        loadH2HRivalry(leagueId, userId, rosters, allPlayers, userMap);
       });
     }
 
@@ -3399,6 +3522,256 @@ async function loadLeagueTradeFinder(leagueId, userId, myRoster, rosters, allPla
     // Re-enable button for retry
     var tfBtn = document.getElementById("tradeFinderBtn-" + leagueId);
     if (tfBtn) { tfBtn.disabled = false; tfBtn.textContent = "find trade partners"; }
+  }
+}
+
+// ── HEAD-TO-HEAD RIVALRY ──────────────────────────────────────────────
+async function loadH2HRivalry(leagueId, userId, rosters, allPlayers, userMap) {
+  var container = document.getElementById("h2hRivalry-" + leagueId);
+  if (!container) return;
+
+  // Build manager list
+  var managers = [];
+  for (var ri = 0; ri < rosters.length; ri++) {
+    var r = rosters[ri];
+    if (r.owner_id) managers.push({ id: r.owner_id, name: userMap[r.owner_id] || "Manager" });
+  }
+
+  // Render selector UI
+  var html = '<div class="h2h-selectors">';
+  html += '<select id="h2hLeft-' + leagueId + '">';
+  for (var mi = 0; mi < managers.length; mi++) {
+    var sel = managers[mi].id === userId ? " selected" : "";
+    html += '<option value="' + escapeAttr(managers[mi].id) + '"' + sel + '>' + escapeHtml(managers[mi].name) + '</option>';
+  }
+  html += '</select>';
+  html += '<span class="h2h-vs">vs</span>';
+  html += '<select id="h2hRight-' + leagueId + '">';
+  for (var mi2 = 0; mi2 < managers.length; mi2++) {
+    var sel2 = (mi2 === 1 && managers[mi2].id !== userId) || (mi2 === 0 && managers.length > 1 && managers[0].id === userId) ? "" : "";
+    // Default to first non-user manager
+    var defaultRight = managers.find(function(m) { return m.id !== userId; });
+    var sel3 = defaultRight && managers[mi2].id === defaultRight.id ? " selected" : "";
+    html += '<option value="' + escapeAttr(managers[mi2].id) + '"' + sel3 + '>' + escapeHtml(managers[mi2].name) + '</option>';
+  }
+  html += '</select>';
+  html += '<button id="h2hCompare-' + leagueId + '" class="btn-chunky" style="font-size:12px;padding:6px 14px;">compare</button>';
+  html += '</div>';
+  html += '<div id="h2hResult-' + leagueId + '"></div>';
+
+  container.innerHTML = html;
+
+  // Store data in closure for compare clicks
+  var h2hState = { rosters: rosters, allPlayers: allPlayers, userMap: userMap, leagueId: leagueId };
+
+  document.getElementById("h2hCompare-" + leagueId).addEventListener("click", function(e) {
+    e.stopPropagation();
+    var leftId = document.getElementById("h2hLeft-" + leagueId).value;
+    var rightId = document.getElementById("h2hRight-" + leagueId).value;
+    if (leftId === rightId) {
+      document.getElementById("h2hResult-" + leagueId).innerHTML = '<div class="loading-intel" style="color:var(--ink-light);">pick two different managers.</div>';
+      return;
+    }
+    runH2HComparison(h2hState, leftId, rightId);
+  });
+
+  // Auto-run if we have valid selections
+  var leftVal = document.getElementById("h2hLeft-" + leagueId).value;
+  var rightVal = document.getElementById("h2hRight-" + leagueId).value;
+  if (leftVal && rightVal && leftVal !== rightVal) {
+    runH2HComparison(h2hState, leftVal, rightVal);
+  }
+}
+
+async function runH2HComparison(state, leftId, rightId) {
+  var resultDiv = document.getElementById("h2hResult-" + state.leagueId);
+  if (!resultDiv) return;
+
+  resultDiv.innerHTML = '<div class="loading-intel" style="font-size:14px;">breaking down the matchup...</div>';
+
+  try {
+    var rosters = state.rosters;
+    var allPlayers = state.allPlayers;
+    var userMap = state.userMap;
+
+    var leftRoster = rosters.find(function(r) { return r.owner_id === leftId; });
+    var rightRoster = rosters.find(function(r) { return r.owner_id === rightId; });
+    if (!leftRoster || !rightRoster) {
+      resultDiv.innerHTML = '<div class="loading-intel" style="color:var(--red);">roster data missing.</div>';
+      return;
+    }
+
+    var leftName = userMap[leftId] || "Manager A";
+    var rightName = userMap[rightId] || "Manager B";
+
+    // Build player list for PPG lookup
+    var allRosterPlayers = [];
+    var bothRosters = [leftRoster, rightRoster];
+    for (var bi = 0; bi < bothRosters.length; bi++) {
+      var pids = bothRosters[bi].players || [];
+      for (var pi = 0; pi < pids.length; pi++) {
+        var p = allPlayers[pids[pi]];
+        if (!p) continue;
+        var pos = p.position || "?";
+        if (pos !== "QB" && pos !== "RB" && pos !== "WR" && pos !== "TE") continue;
+        var name = ((p.first_name || "") + " " + (p.last_name || "")).trim();
+        if (name) allRosterPlayers.push({ name: name, position: pos, team: p.team || "" });
+      }
+    }
+
+    // Fetch PPG
+    var ppgLookup = {};
+    if (allRosterPlayers.length > 0) {
+      var ctrl = new AbortController();
+      var timer = setTimeout(function() { ctrl.abort(); }, 15000);
+      var resp = await fetch("/api/roster-depth-lookup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ players: allRosterPlayers }),
+        signal: ctrl.signal
+      });
+      clearTimeout(timer);
+      if (resp.ok) {
+        var data = await resp.json();
+        if (data.players) {
+          for (var k = 0; k < data.players.length; k++) {
+            ppgLookup[data.players[k].sleeper_name] = data.players[k].ppg || 0;
+          }
+        }
+      }
+    }
+
+    // Group players by position with PPG for each side
+    function buildPosMap(roster) {
+      var posMap = { QB: [], RB: [], WR: [], TE: [] };
+      var pids2 = roster.players || [];
+      for (var i = 0; i < pids2.length; i++) {
+        var pp = allPlayers[pids2[i]];
+        if (!pp) continue;
+        var ppos = pp.position || "?";
+        if (!posMap[ppos]) continue;
+        var pname = ((pp.first_name || "") + " " + (pp.last_name || "")).trim();
+        posMap[ppos].push({ name: pname, ppg: ppgLookup[pname] || 0 });
+      }
+      for (var sp in posMap) posMap[sp].sort(function(a, b) { return b.ppg - a.ppg; });
+      return posMap;
+    }
+
+    var leftPos = buildPosMap(leftRoster);
+    var rightPos = buildPosMap(rightRoster);
+
+    // Compare position by position
+    var positions = ["QB", "RB", "WR", "TE"];
+    var leftEdges = 0;
+    var rightEdges = 0;
+    var leftTotalPPG = 0;
+    var rightTotalPPG = 0;
+
+    var html = '<div class="h2h-panel">';
+
+    // Header
+    html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">';
+    html += '<span style="font-family:var(--font-display);font-size:16px;">' + escapeHtml(leftName) + '</span>';
+    html += '<span class="h2h-vs">vs</span>';
+    html += '<span style="font-family:var(--font-display);font-size:16px;">' + escapeHtml(rightName) + '</span>';
+    html += '</div>';
+
+    // Records
+    var lw = leftRoster.settings?.wins || 0;
+    var ll = leftRoster.settings?.losses || 0;
+    var rw = rightRoster.settings?.wins || 0;
+    var rl = rightRoster.settings?.losses || 0;
+    html += '<div style="display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:11px;color:var(--ink-light);margin-bottom:12px;padding-bottom:8px;border-bottom:2px dashed var(--ink-faint);">';
+    html += '<span>' + lw + '-' + ll + '</span>';
+    html += '<span>record</span>';
+    html += '<span>' + rw + '-' + rl + '</span>';
+    html += '</div>';
+
+    // Position-by-position comparison
+    for (var pi2 = 0; pi2 < positions.length; pi2++) {
+      var pos2 = positions[pi2];
+      var left = leftPos[pos2] || [];
+      var right = rightPos[pos2] || [];
+      var leftAvg = left.length > 0 ? left.reduce(function(s, p) { return s + p.ppg; }, 0) / left.length : 0;
+      var rightAvg = right.length > 0 ? right.reduce(function(s, p) { return s + p.ppg; }, 0) / right.length : 0;
+      leftTotalPPG += leftAvg;
+      rightTotalPPG += rightAvg;
+
+      var edge = leftAvg > rightAvg ? "left" : (rightAvg > leftAvg ? "right" : "even");
+      if (edge === "left") leftEdges++;
+      else if (edge === "right") rightEdges++;
+
+      html += '<div class="h2h-pos-row">';
+      // Left side
+      html += '<div style="flex:1;">';
+      html += '<span style="font-weight:700;">' + leftAvg.toFixed(1) + '</span>';
+      if (left.length > 0) html += ' <span style="font-size:9px;color:var(--ink-light);">' + escapeHtml(left[0].name.split(' ').pop()) + '</span>';
+      if (edge === "left") html += ' <span class="h2h-edge" style="background:var(--green-light);color:var(--green);">EDGE</span>';
+      html += '</div>';
+
+      // Position label
+      html += '<div style="min-width:36px;text-align:center;font-weight:700;">' + pos2 + '</div>';
+
+      // Right side
+      html += '<div style="flex:1;text-align:right;">';
+      if (edge === "right") html += '<span class="h2h-edge" style="background:var(--green-light);color:var(--green);">EDGE</span> ';
+      if (right.length > 0) html += '<span style="font-size:9px;color:var(--ink-light);">' + escapeHtml(right[0].name.split(' ').pop()) + '</span> ';
+      html += '<span style="font-weight:700;">' + rightAvg.toFixed(1) + '</span>';
+      html += '</div>';
+
+      html += '</div>';
+    }
+
+    // Totals
+    html += '<div style="display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:12px;font-weight:700;margin-top:8px;padding-top:8px;border-top:2px solid var(--ink);">';
+    html += '<span>' + leftTotalPPG.toFixed(1) + ' PPG</span>';
+    html += '<span>total</span>';
+    html += '<span>' + rightTotalPPG.toFixed(1) + ' PPG</span>';
+    html += '</div>';
+
+    html += '</div>'; // close panel
+
+    // Verdict
+    var totalEdges = leftEdges + rightEdges;
+    var leftPct = totalEdges > 0 ? Math.round((leftEdges / totalEdges) * 100) : 50;
+    var rightPct = 100 - leftPct;
+    var winner = leftTotalPPG > rightTotalPPG ? leftName : rightName;
+    var verdictColor = leftTotalPPG > rightTotalPPG ? "var(--green)" : "var(--red)";
+
+    html += '<div class="h2h-verdict">';
+    html += '<div class="h2h-verdict-title" style="color:' + verdictColor + ';">' + escapeHtml(winner) + ' has the edge</div>';
+    html += '<div class="h2h-verdict-text">';
+    html += escapeHtml(leftName) + ' wins ' + leftEdges + ' positions, ' + escapeHtml(rightName) + ' wins ' + rightEdges + '. ';
+    if (Math.abs(leftTotalPPG - rightTotalPPG) < 5) {
+      html += "this is a coin flip. dead even on paper.";
+    } else if (Math.abs(leftTotalPPG - rightTotalPPG) < 15) {
+      html += "slight advantage but both rosters can compete.";
+    } else {
+      html += "clear roster advantage. not even close on paper.";
+    }
+    html += '</div>';
+    html += '</div>';
+
+    // Strengths/weaknesses summary
+    html += '<div style="margin-top:12px;font-family:var(--font-hand);font-size:16px;color:var(--ink-medium);">';
+    var leftStrengths = [];
+    var rightStrengths = [];
+    for (var si = 0; si < positions.length; si++) {
+      var pos3 = positions[si];
+      var lAvg = (leftPos[pos3] || []).length > 0 ? leftPos[pos3].reduce(function(s, p) { return s + p.ppg; }, 0) / leftPos[pos3].length : 0;
+      var rAvg = (rightPos[pos3] || []).length > 0 ? rightPos[pos3].reduce(function(s, p) { return s + p.ppg; }, 0) / rightPos[pos3].length : 0;
+      if (lAvg > rAvg) leftStrengths.push(pos3);
+      else if (rAvg > lAvg) rightStrengths.push(pos3);
+    }
+    if (leftStrengths.length > 0) html += escapeHtml(leftName) + ' has the edge at ' + leftStrengths.join(', ') + '. ';
+    if (rightStrengths.length > 0) html += escapeHtml(rightName) + ' has the edge at ' + rightStrengths.join(', ') + '.';
+    html += '</div>';
+
+    resultDiv.innerHTML = html;
+
+  } catch (e) {
+    resultDiv.innerHTML = '<div class="loading-intel" style="color:var(--red);font-size:14px;">comparison failed. try again.</div>';
+    console.error(e);
   }
 }
 
