@@ -399,3 +399,20 @@ Systematic page-by-page audit against DESIGN.md and NORTH_STAR.md.
 - Bureau SOS uses "matchup volatility" framing rather than raw schedule difficulty — shows how much each roster swings between best-case and worst-case defensive matchups
 - This is more useful than traditional SOS because it factors in roster composition, not just team schedule
 - Reused existing /api/matchup-heatmap and /api/roster-depth-lookup endpoints — no new backend needed
+
+---
+
+## Pre-Launch Final Sweep (Mar 14)
+
+**Goal**: Fix critical bugs and mobile responsiveness gaps found in pre-launch audit.
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Monte Carlo endpoint crash fix | DONE | /api/monte-carlo/projections called nonexistent live_data.get_connection() — changed to get_db() context manager. Also fixed wrong table name: `stats` → `player_week_stats`. |
+| 2 | Bureau mobile 480px breakpoint | DONE | league-intel.html only had 768px media query. Added 480px breakpoint: tighter padding, smaller fonts on pressure bars/trade matrix/trade matches, trade matrix overflow-x:auto, compact depth/waiver/build-profile/self-scout cards. |
+| 3 | Pre-launch audit (3 parallel agents) | DONE | Broken references: all clean, 0 issues. API endpoints: 152 routes verified, all frontend fetch() calls matched. Mobile: lab.html already has 768px/480px/375px coverage. agents.html functional at all widths. |
+
+### Decisions Log
+- agents.html uses non-standard 640px/400px breakpoints for ask-reference-grid but these work correctly — not worth changing
+- lab.html mobile coverage was already comprehensive (768px/480px/375px with sidebar slide-out, unfrozen columns, toolbar scroll)
+- Monte Carlo had two bugs (wrong connection method AND wrong table name) — both would have caused 500 errors on the Bureau league odds feature
