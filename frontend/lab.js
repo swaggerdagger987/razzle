@@ -9916,7 +9916,7 @@ function renderTierBoard() {
       html += '<span class="pos-badge pos-' + p.position.toLowerCase() + '" style="font-size:9px; padding:1px 5px; margin-left:4px;">' + escapeHtml(p.position) + '</span>';
       html += '<span style="font-family:var(--font-display); font-size:12px;">' + escapeHtml(p.name) + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + escapeHtml(p.team) + '</span>';
-      html += '<select class="select-chunky" style="font-size:10px; padding:1px 4px; width:72px; border-width:1px;" onchange="setWatchlistTier(\'' + escapeAttr(p.player_id) + '\', this.value); renderTierBoard();">';
+      html += '<select class="select-chunky" style="font-size:10px; padding:1px 4px; width:72px; border-width:2px;" onchange="setWatchlistTier(\'' + escapeAttr(p.player_id) + '\', this.value); renderTierBoard();">';
       for (var t = 0; t <= 5; t++) {
         html += '<option value="' + t + '"' + (p.tier === t ? ' selected' : '') + '>' + TIER_LABELS[t] + '</option>';
       }

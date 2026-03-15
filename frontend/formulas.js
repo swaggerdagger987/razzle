@@ -286,7 +286,7 @@ function _deleteFormulaFromServer(name) {
   // Need to find the formula ID from server — do a quick lookup
   fetch((typeof API_BASE !== "undefined" ? API_BASE : "") + "/api/user/formulas", {
     headers: { "Authorization": "Bearer " + token }
-  }).then(function(r) { return r.json(); }).then(function(data) {
+  }).then(function(r) { if (!r.ok) throw new Error("fetch failed"); return r.json(); }).then(function(data) {
     var formulas = data.formulas || [];
     var match = formulas.find(function(f) { return f.name === name; });
     if (match) {
