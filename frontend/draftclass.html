@@ -650,7 +650,7 @@
   window.exportDcPng = function() {
     var el = document.getElementById('dc-content');
     if (!el || typeof html2canvas === 'undefined') return;
-    html2canvas(el, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+    html2canvas(el, { backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--bg').trim() || '#ede0cf', scale: 2 }).then(function(canvas) {
       var ctx = canvas.getContext('2d');
       ctx.font = 'bold 20px "Space Mono", monospace';
       ctx.fillStyle = 'rgba(45,31,20,0.15)';

@@ -188,7 +188,13 @@
     return Number(v).toFixed(dec === undefined ? 1 : dec);
   }
 
-  var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+  var _cs = getComputedStyle(document.documentElement);
+  var POS_COLORS = {
+    QB: _cs.getPropertyValue('--pos-qb').trim() || '#5b7fff',
+    RB: _cs.getPropertyValue('--pos-rb').trim() || '#2ec4b6',
+    WR: _cs.getPropertyValue('--pos-wr').trim() || '#d97757',
+    TE: _cs.getPropertyValue('--pos-te').trim() || '#8b5cf6'
+  };
   var currentPosition = '';
 
   function readURL() {
@@ -248,7 +254,7 @@
     var positions = ['QB', 'RB', 'WR', 'TE'];
     for (var i = 0; i < positions.length; i++) {
       var pos = positions[i];
-      var color = POS_COLORS[pos] || '#8a7565';
+      var color = POS_COLORS[pos] || _cs.getPropertyValue('--ink-light').trim() || '#8a7565';
       html += '<div class="pa-avg-chip"><span style="color:' + color + '">' + escapeHtml(pos) + '</span> avg: ' + escapeHtml(String(fmt(avgs[pos]))) + ' PPG</div>';
     }
     html += '</div>';
@@ -273,11 +279,11 @@
 
     for (var i = 0; i < players.length; i++) {
       var p = players[i];
-      var posColor = POS_COLORS[p.position] || '#8a7565';
+      var posColor = POS_COLORS[p.position] || _cs.getPropertyValue('--ink-light').trim() || '#8a7565';
       var sign = p.advantage > 0 ? '+' : '';
       var badgeClass = p.advantage >= 0 ? 'pa-adv-pos' : 'pa-adv-neg';
       var barWidth = Math.max(2, Math.round(Math.abs(p.advantage) / maxAdv * 80));
-      var barColor = p.advantage >= 0 ? '#2ec4b6' : '#d97757';
+      var barColor = p.advantage >= 0 ? (_cs.getPropertyValue('--green').trim() || '#2ec4b6') : (_cs.getPropertyValue('--orange').trim() || '#d97757');
 
       html += '<tr>';
       html += '<td class="pa-rank">' + (i + 1) + '</td>';

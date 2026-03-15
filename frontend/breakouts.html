@@ -205,9 +205,9 @@
     border-radius: 4px;
     border: 2px solid;
   }
-  .breakout-age-badge.young { background: #d9efec; color: #1a7a6d; border-color: #2ec4b6; }
-  .breakout-age-badge.prime { background: #f5eacc; color: #8a6d20; border-color: #ffc857; }
-  .breakout-age-badge.aging { background: #f2d5d8; color: #a83240; border-color: #e63946; }
+  .breakout-age-badge.young { background: var(--green-light); color: var(--green); border-color: var(--green); }
+  .breakout-age-badge.prime { background: var(--yellow-light); color: var(--ink-medium); border-color: var(--yellow); }
+  .breakout-age-badge.aging { background: var(--red-light); color: var(--red); border-color: var(--red); }
 
   .breakout-rbs {
     text-align: right;
@@ -464,7 +464,13 @@
 (function() {
   'use strict';
 
-  var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+  var _cs = getComputedStyle(document.documentElement);
+  var POS_COLORS = {
+    QB: _cs.getPropertyValue('--pos-qb').trim() || '#5b7fff',
+    RB: _cs.getPropertyValue('--pos-rb').trim() || '#2ec4b6',
+    WR: _cs.getPropertyValue('--pos-wr').trim() || '#d97757',
+    TE: _cs.getPropertyValue('--pos-te').trim() || '#8b5cf6'
+  };
 
   function escapeHtml(str) {
     if (!str) return '';
@@ -548,7 +554,7 @@
 
     candidates.forEach(function(p) {
       var pos = (p.position || 'WR').toLowerCase();
-      var posColor = POS_COLORS[p.position] || '#d97757';
+      var posColor = POS_COLORS[p.position] || (_cs.getPropertyValue('--orange').trim() || '#d97757');
       var ac = ageClass(p.age);
       var al = ageLabel(p.age);
       var gap = p.opportunity_pct - p.production_pct;

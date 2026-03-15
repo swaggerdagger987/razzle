@@ -122,10 +122,10 @@
   .db-section-header .db-icon {
     font-size: 18px;
   }
-  .db-section-header.risers { background: rgba(46,196,182,0.1); }
-  .db-section-header.fallers { background: rgba(212,64,64,0.1); }
-  .db-section-header.value { background: rgba(91,127,255,0.1); }
-  .db-section-header.scarcity { background: rgba(139,92,246,0.1); }
+  .db-section-header.risers { background: var(--green-light); }
+  .db-section-header.fallers { background: var(--red-light); }
+  .db-section-header.value { background: var(--blue-light); }
+  .db-section-header.scarcity { background: var(--purple-light); }
 
   /* Player rows */
   .db-row {
@@ -183,10 +183,10 @@
     border: 2px solid;
     white-space: nowrap;
   }
-  .db-chip.up { background: rgba(46,196,182,0.12); color: var(--rb); border-color: var(--rb); }
-  .db-chip.down { background: rgba(212,64,64,0.12); color: var(--red); border-color: var(--red); }
-  .db-chip.tv { background: rgba(217,119,87,0.12); color: var(--orange); border-color: var(--orange); }
-  .db-chip.ppg { background: rgba(91,127,255,0.12); color: var(--qb); border-color: var(--qb); }
+  .db-chip.up { background: var(--green-light); color: var(--rb); border-color: var(--rb); }
+  .db-chip.down { background: var(--red-light); color: var(--red); border-color: var(--red); }
+  .db-chip.tv { background: var(--orange-light); color: var(--orange); border-color: var(--orange); }
+  .db-chip.ppg { background: var(--blue-light); color: var(--qb); border-color: var(--qb); }
 
   /* Scarcity bars */
   .db-scar-row {
@@ -304,7 +304,7 @@
     right: 14px;
     font-family: var(--font-hand);
     font-size: 14px;
-    color: rgba(45,31,20,0.15);
+    color: var(--ink-faint);
     pointer-events: none;
     z-index: 1;
   }
@@ -608,7 +608,7 @@
   document.getElementById('export-btn').addEventListener('click', function() {
     var el = document.getElementById('db-content');
     if (typeof html2canvas !== 'undefined') {
-      html2canvas(el, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+      html2canvas(el, { backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--bg').trim() || '#ede0cf', scale: 2 }).then(function(canvas) {
         var ctx = canvas.getContext('2d');
         ctx.font = '24px sans-serif';
         ctx.fillStyle = 'rgba(45,31,20,0.12)';

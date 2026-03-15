@@ -410,7 +410,12 @@
     return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  var SLOT_COLORS = ['#d97757', '#5b7fff', '#2ec4b6'];
+  var _cs = getComputedStyle(document.documentElement);
+  var SLOT_COLORS = [
+    _cs.getPropertyValue('--orange').trim() || '#d97757',
+    _cs.getPropertyValue('--blue').trim() || '#5b7fff',
+    _cs.getPropertyValue('--green').trim() || '#2ec4b6'
+  ];
   var MAX_PLAYERS = 3;
   var players = []; // {id, name, pos, team, data}
   var slotsEl = document.getElementById('cc-slots');

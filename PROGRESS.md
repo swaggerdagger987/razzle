@@ -311,3 +311,25 @@ Systematic page-by-page audit against DESIGN.md and NORTH_STAR.md.
 - Events table is separate from pageviews (different access patterns, different retention needs)
 - Agent queries tracked with detail=byok/elite/free to distinguish tiers
 - No PII stored in events — just event type and tier/interval metadata
+
+---
+
+## Bureau of Intelligence — Full Panel Suite (Mar 14)
+
+**Goal**: Build all Bureau analysis panels for Sleeper-connected leagues.
+
+| # | Panel | Status | Notes |
+|---|-------|--------|-------|
+| 1 | Roster Depth | DONE | Per-manager depth cards, starter/bench PPG, vulnerability flags, depth score 0-100, stacked position bars. Free /api/roster-depth-lookup endpoint (ungated). |
+| 2 | Build Profiles | DONE | 6 archetypes (Hero RB, Zero RB, Balanced, Stars & Scrubs, Youth Movement, Win Now), scouting report flavor text, positional investment bar + radar chart. |
+| 3 | Trade Network | DONE | Trade frequency matrix (manager pairs), per-manager tendency cards (timing/position/partner), most likely trade partner recommendation. |
+| 4 | Waiver Tendencies | DONE | Hawk score 0-100, claims/hit rate/FAAB tracking, position bias bars, auto-detects FAAB leagues. |
+| 5 | Power Rankings | DONE | Composite score (roster strength + win rate + bench depth + activity), Contender/Bubble/Rebuilding tiers, playoff bracket preview. |
+| 6 | H2H Rivalry | DONE | Dropdown manager selectors, position-by-position PPG comparison with EDGE badges, matchup verdict. |
+| 7 | Self-Scout | DONE | Auto-loads on league expand. Power rank, starter PPG, avg age, archetype, vulnerability flags, "How opponents see you" summary, rival quick links. |
+
+### Decisions Log
+- Created free /api/roster-depth-lookup endpoint (PPG only, no trade values) so Bureau depth/profiles/power rankings work for free users
+- Self-Scout auto-loads (no button click) — it's the "home base" of the Bureau
+- All panels use Sleeper API client-side + PPG enrichment from Razzle backend
+- Trade Network and Waiver Tendencies are pure client-side (Sleeper transaction data only)
