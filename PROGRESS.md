@@ -358,3 +358,27 @@ Systematic page-by-page audit against DESIGN.md and NORTH_STAR.md.
 - All division operations properly guarded
 - No hardcoded year references (2026) in dynamic code
 - Lab-panels.css semantic colors (gold/bronze, grade badges) are intentional, not drift
+
+---
+
+## Pre-Deployment Code Audit (Mar 14)
+
+**Goal**: Verify codebase is deployment-ready before NOW phase (N-1 production deployment).
+
+| # | Area | Status | Notes |
+|---|------|--------|-------|
+| 1 | Billing portal URL | FIXED | Hardcoded `https://razzle.lol/agents` → `f"{_BASE_URL}/agents"` in billing.py. Would break staging/dev. |
+| 2 | DB path (db.py) | OK | Resolves to repo's `data/terminal.db` — matches build download path. Persistent disk `/data` correctly used only for users.db (auth.py). |
+| 3 | Static file serving | OK | server.py serves from `frontend/dist/` (production) with fallback to `frontend/` (dev). `html=True` enables SPA routing. |
+| 4 | Build pipeline | OK | render.yaml minifies all JS/CSS, copies HTML/assets/favicon. No files missed (all JS/CSS at root level). |
+| 5 | Dependencies | OK | All imports verified against requirements.txt. No missing packages. |
+| 6 | CORS / Security | OK | Production: only `https://razzle.lol`. Dev: localhost origins. Security headers (CSP, upgrade-insecure-requests) in place. |
+| 7 | Environment vars | OK | JWT_SECRET enforced in production (RuntimeError). Stripe keys from env. GH_TOKEN for DB download. All documented in render.yaml comments. |
+| 8 | Frontend URLs | OK | All API calls use relative paths via `window.location.origin`. No hardcoded localhost/ports. |
+| 9 | Draft year fallbacks | OK | Draft contexts correctly use calendar year (draft happens in April). NFL season contexts already use `_nflYear` (month >= 7 logic). |
+| 10 | .gitignore | OK | `frontend/dist/` excluded from git. |
+
+### Deployment Readiness: PASS
+- 59/59 tests pass
+- No code blockers for N-1 production deployment
+- Human action required: set Render dashboard env vars (JWT_SECRET, STRIPE_*, GH_TOKEN)
