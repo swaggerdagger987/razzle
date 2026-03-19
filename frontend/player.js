@@ -15,7 +15,7 @@ let _profileData = null;
     document.getElementById("playerPage").innerHTML = `
       <div class="player-loading">
         <div class="player-loading-text">no player ID found</div>
-        <a href="/lab.html" class="btn-primary" style="margin-top:16px;">Back to The Lab</a>
+        <a href="/lab.html" class="btn-primary" style="margin-top:16px;">Back to Screener</a>
       </div>`;
     return;
   }
@@ -43,7 +43,7 @@ async function loadPlayer(playerId) {
       page.innerHTML = `
         <div class="player-loading">
           <div class="player-loading-text">player not found on the film</div>
-          <a href="/lab.html" class="btn-primary" style="margin-top:16px;">Back to The Lab</a>
+          <a href="/lab.html" class="btn-primary" style="margin-top:16px;">Back to Screener</a>
         </div>`;
       return;
     }
@@ -57,7 +57,7 @@ async function loadPlayer(playerId) {
     page.innerHTML = `
       <div class="player-loading">
         <div class="player-loading-text" style="color:var(--red);">fumbled the data fetch... ${esc(err.message)}</div>
-        <a href="/lab.html" class="btn-primary" style="margin-top:16px;">Back to The Lab</a>
+        <a href="/lab.html" class="btn-primary" style="margin-top:16px;">Back to Screener</a>
       </div>`;
   }
 }
@@ -95,7 +95,7 @@ function renderPlayerPage(data, container) {
   // Contextual back link based on referrer
   const ref = document.referrer || "";
   let backHref = "/lab.html";
-  let backLabel = "Back to The Lab";
+  let backLabel = "Back to Screener";
   if (ref.includes("/rankings")) { backHref = "/rankings.html"; backLabel = "Back to Rankings"; }
   else if (ref.includes("/leaders")) { backHref = "/leaders.html"; backLabel = "Back to Leaders"; }
   else if (ref.includes("/team/")) { backHref = ref.split("?")[0]; backLabel = "Back to Team"; }

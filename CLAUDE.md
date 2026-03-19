@@ -78,7 +78,8 @@ razzle/
 - Borders: 3px solid ink, 4px 4px 0 offset box-shadows
 - Position colors: QB=blue `#5b7fff`, RB=teal `#2ec4b6`, WR=terracotta `#d97757`, TE=purple `#8b5cf6`
 - Loading states: "pulling film..." not "Loading..."
-- NO dark mode (except Situation Room). NO gradients. NO thin 1px borders.
+- Site-wide dark mode toggle available. Situation Room is always dark regardless of toggle. Dark mode uses Espresso Flip palette (see DESIGN.md).
+- NO gradients. NO thin 1px borders.
 - Sticker/badge aesthetic, slightly rotated tier badges
 - Trust the user — don't over-explain in UI
 

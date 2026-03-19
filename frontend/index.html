@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Razzle — Fantasy Football Research Lab</title>
 <meta property="og:title" content="Razzle — Free Fantasy Football Research Lab | NFL + College Data">
-<meta property="og:description" content="Free fantasy football data terminal. NFL stats + college production + prospect scoring. Dynasty Value Score, Big Board, Class Analytics, custom formulas. The tool Reddit can't stop screenshotting.">
+<meta property="og:description" content="Free fantasy football research lab. 100+ stat columns, custom formulas, AI agents with full league context. The tool your leaguemates don't know about yet.">
 <meta property="og:site_name" content="razzle.lol">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://razzle.lol/">
@@ -14,9 +14,9 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Razzle — Free Fantasy Football Research Lab | NFL + College Data">
-<meta name="twitter:description" content="Free fantasy football data terminal. NFL stats + college production + prospect scoring. Dynasty Value Score, Big Board, Class Analytics, custom formulas.">
+<meta name="twitter:description" content="Free fantasy football research lab. 100+ stat columns, custom formulas, AI agents with full league context. The tool your leaguemates don't know about yet.">
 <meta name="twitter:image" content="https://razzle.lol/assets/og-image.png">
-<meta name="description" content="Razzle is a free fantasy football research lab. NFL + college data screener, custom formulas, radar charts, dynasty value scores. The tool Reddit power users can't stop screenshotting.">
+<meta name="description" content="Razzle is a free fantasy football research lab. 100+ stat columns, custom formulas, AI agents with full league context. The tool your leaguemates don't know about yet.">
 <link rel="canonical" href="https://razzle.lol/">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -259,11 +259,14 @@
     border-radius: 2px;
   }
 
-  /* ===== BRIEFING CARD (single example) ===== */
+  /* ===== BRIEFING CARDS ===== */
   .briefing-example {
     max-width: 600px;
     margin: 20px auto 0;
     text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
 
   .demo-card {
@@ -311,7 +314,7 @@
 
   /* ===== PRICING ===== */
   .pricing-section {
-    max-width: 700px;
+    max-width: 960px;
     margin: 0 auto;
     padding: 48px 24px;
     text-align: center;
@@ -338,15 +341,21 @@
     border: 3px solid var(--ink);
     border-radius: 12px;
     box-shadow: 4px 4px 0 var(--ink);
-    padding: 28px 28px 24px;
+    padding: 28px 24px 24px;
     text-align: center;
-    min-width: 240px;
-    max-width: 300px;
+    min-width: 200px;
+    max-width: 280px;
     flex: 1;
   }
 
   .pricing-card--highlight {
     border-color: var(--orange);
+    position: relative;
+  }
+
+  .pricing-card--elite {
+    border-color: var(--purple, #8b5cf6);
+    box-shadow: 4px 4px 0 var(--purple, #8b5cf6);
     position: relative;
   }
 
@@ -363,6 +372,12 @@
     border-radius: 20px;
     border: 2px solid var(--ink);
     box-shadow: 2px 2px 0 var(--ink);
+    white-space: nowrap;
+  }
+
+  .pricing-badge--elite {
+    background: var(--purple, #8b5cf6);
+    color: white;
   }
 
   .pricing-name {
@@ -454,7 +469,7 @@
   </a>
   <ul class="nav-links">
     <li><a href="/" class="active">Home</a></li>
-    <li><a href="/lab.html">The Lab</a></li>
+    <li><a href="/lab.html">Screener</a></li>
     <li><a href="/league-intel.html">Bureau</a></li>
     <li><a href="/agents.html">Situation Room</a></li>
     <li><a href="/pricing.html">Pricing</a></li>
@@ -545,6 +560,10 @@
       <div class="agent-name">🐯 Razzle <span class="urgency urgency-urgent">urgent</span></div>
       <span class="redacted">████████</span> just dropped <span class="redacted">██████</span> to waivers. Based on <span class="redacted">████</span>'s FAAB patterns, they'll bid $<span class="redacted">██</span>. You should bid $<span class="redacted">██</span> to guarantee the pickup. This changes your championship odds from <span class="redacted">██</span>% to <span class="redacted">██</span>%.
     </div>
+    <div class="demo-card">
+      <div class="agent-name">🐙 The Quant <span class="urgency urgency-opportunity">opportunity</span></div>
+      Trade value model flags <span class="redacted">██████</span> as <span class="redacted">██</span>% undervalued relative to production. Selling <span class="redacted">████████</span> + a <span class="redacted">███</span> round pick returns <span class="redacted">██</span>% expected surplus. Your championship probability increases from <span class="redacted">██</span>% to <span class="redacted">██</span>%.
+    </div>
   </div>
 
   <div style="margin-top:20px;">
@@ -556,21 +575,21 @@
 
 <!-- 5. PRICING -->
 <div class="pricing-section">
-  <h2>Forever Free vs <span>Pro</span></h2>
+  <h2>Pick Your <span>Playbook</span></h2>
   <p style="font-family:var(--font-hand); font-size:20px; color:var(--ink-medium); margin-bottom:4px;">The Screener is free. The intelligence is what you pay for.</p>
 
   <div class="pricing-cols">
     <!-- FREE -->
     <div class="pricing-card">
-      <div class="pricing-name">Forever Free</div>
+      <div class="pricing-name">Free</div>
       <div class="pricing-price">$0</div>
-      <div class="pricing-note">always</div>
+      <div class="pricing-note">no card, no catch</div>
       <ul class="pricing-list">
         <li>Full Screener (NFL + College + Prospects)</li>
         <li>60+ metrics, 10 seasons of data</li>
         <li>Custom formulas</li>
-        <li>Radar charts, scatter plots, heat maps</li>
-        <li>PNG export + shareable URLs</li>
+        <li>Charts, heat maps, PNG export</li>
+        <li>Shareable URLs</li>
         <li>Sleeper league connection</li>
       </ul>
       <a href="/lab.html" class="btn-chunky" style="font-size:13px; width:100%; display:block; text-align:center; text-decoration:none;">Open the Screener</a>
@@ -578,19 +597,36 @@
 
     <!-- PRO -->
     <div class="pricing-card pricing-card--highlight">
-      <div class="pricing-badge">best value</div>
+      <div class="pricing-badge">the film room upgrade</div>
       <div class="pricing-name">Pro</div>
       <div class="pricing-price">$9.99<span>/mo</span></div>
       <div class="pricing-note">or $79.99/year (save 33%)</div>
       <ul class="pricing-list">
         <li>Everything free, plus:</li>
-        <li class="highlight">6 AI agents with league context</li>
-        <li>Personalized briefings</li>
+        <li class="highlight">6 AI agents (BYOK)</li>
+        <li>Full Bureau deep-dive</li>
         <li>Manager behavioral profiles</li>
         <li>Trade strategies + FAAB intel</li>
         <li>Championship probability</li>
       </ul>
       <button id="homeProCta" class="btn-chunky btn-primary" style="font-size:13px; width:100%;" onclick="var u=null;try{u=JSON.parse(localStorage.getItem('razzle_user'))}catch(e){}if(!u){if(typeof openAuthModal==='function')openAuthModal();else window.location='/pricing.html'}else if(typeof startCheckout==='function'){startCheckout('pro_year')}else{window.location='/pricing.html'}">Get Pro</button>
+    </div>
+
+    <!-- ELITE -->
+    <div class="pricing-card pricing-card--elite">
+      <div class="pricing-badge pricing-badge--elite">full war machine</div>
+      <div class="pricing-name">Elite</div>
+      <div class="pricing-price" style="color:var(--purple, #8b5cf6);">$19.99<span>/mo</span></div>
+      <div class="pricing-note">or $149.99/year (save 37%)</div>
+      <ul class="pricing-list">
+        <li>Everything in Pro, plus:</li>
+        <li class="highlight">No API key needed — we pay for it</li>
+        <li class="highlight">Unlimited AI queries</li>
+        <li class="highlight">Agent memory (multi-season)</li>
+        <li class="highlight">Weekly Razzle briefings</li>
+        <li>Priority data refresh</li>
+      </ul>
+      <button id="homeEliteCta" class="btn-chunky btn-primary" style="font-size:13px; width:100%; background:var(--purple, #8b5cf6); border-color:var(--ink);" onclick="var u=null;try{u=JSON.parse(localStorage.getItem('razzle_user'))}catch(e){}if(!u){if(typeof openAuthModal==='function')openAuthModal();else window.location='/pricing.html'}else if(typeof startCheckout==='function'){startCheckout('elite_year')}else{window.location='/pricing.html'}">Get Elite</button>
     </div>
   </div>
 
@@ -604,64 +640,64 @@
 
     <div>
       <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Razzle</div>
-      <a href="/" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Home</a>
-      <a href="/lab.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">The Lab</a>
-      <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Bureau</a>
-      <a href="/agents.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Situation Room</a>
-      <a href="/pricing.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Pricing</a>
-      <a href="/about.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">About</a>
+      <a href="/" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Home</a>
+      <a href="/lab.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Screener</a>
+      <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Bureau</a>
+      <a href="/agents.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Situation Room</a>
+      <a href="/pricing.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Pricing</a>
+      <a href="/about.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">About</a>
     </div>
 
     <div>
       <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Dynasty</div>
-      <a href="/rankings.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Rankings</a>
-      <a href="/tradevalues.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Trade Values</a>
-      <a href="/tradefinder.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Trade Finder</a>
-      <a href="/tiers.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Tiers</a>
-      <a href="/vorp.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">VORP</a>
-      <a href="/aging.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Aging Curves</a>
-      <a href="/buysell.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Buy/Sell</a>
-      <a href="/archetypes.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Archetypes</a>
+      <a href="/rankings.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Rankings</a>
+      <a href="/tradevalues.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Trade Values</a>
+      <a href="/tradefinder.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Trade Finder</a>
+      <a href="/tiers.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Tiers</a>
+      <a href="/vorp.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">VORP</a>
+      <a href="/aging.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Aging Curves</a>
+      <a href="/buysell.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Buy/Sell</a>
+      <a href="/archetypes.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Archetypes</a>
     </div>
 
     <div>
       <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Weekly</div>
-      <a href="/weekly.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Weekly Stats</a>
-      <a href="/weeklyleaders.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Week Leaders</a>
-      <a href="/weeklymvp.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Weekly MVP</a>
-      <a href="/matchups.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Matchups</a>
-      <a href="/waivers.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Waivers</a>
-      <a href="/schedule.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Schedule</a>
-      <a href="/stocks.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Stocks</a>
-      <a href="/playoffs.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Playoffs</a>
+      <a href="/weekly.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Weekly Stats</a>
+      <a href="/weeklyleaders.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Week Leaders</a>
+      <a href="/weeklymvp.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Weekly MVP</a>
+      <a href="/matchups.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Matchups</a>
+      <a href="/waivers.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Waivers</a>
+      <a href="/schedule.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Schedule</a>
+      <a href="/stocks.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Stocks</a>
+      <a href="/playoffs.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Playoffs</a>
     </div>
 
     <div>
       <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Analytics</div>
-      <a href="/targets.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Targets</a>
-      <a href="/usage.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Usage</a>
-      <a href="/efficiency.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Efficiency</a>
-      <a href="/airyards.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Air Yards</a>
-      <a href="/redzone.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Red Zone</a>
-      <a href="/consistency.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Consistency</a>
-      <a href="/breakouts.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Breakouts</a>
-      <a href="/opportunity.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Opportunity</a>
+      <a href="/targets.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Targets</a>
+      <a href="/usage.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Usage</a>
+      <a href="/efficiency.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Efficiency</a>
+      <a href="/airyards.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Air Yards</a>
+      <a href="/redzone.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Red Zone</a>
+      <a href="/consistency.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Consistency</a>
+      <a href="/breakouts.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Breakouts</a>
+      <a href="/opportunity.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Opportunity</a>
     </div>
 
     <div>
       <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Tools</div>
-      <a href="/explorer.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Stat Explorer</a>
-      <a href="/compare.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Compare</a>
-      <a href="/rosterbuilder.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Roster Builder</a>
-      <a href="/cheatsheet.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Cheat Sheet</a>
-      <a href="/auction.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Auction Values</a>
-      <a href="/dashboard.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Dashboard</a>
-      <a href="/prospects.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Prospects</a>
-      <a href="/team/KC" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Teams</a>
+      <a href="/explorer.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Stat Explorer</a>
+      <a href="/compare.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Compare</a>
+      <a href="/rosterbuilder.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Roster Builder</a>
+      <a href="/cheatsheet.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Cheat Sheet</a>
+      <a href="/auction.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Auction Values</a>
+      <a href="/dashboard.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Dashboard</a>
+      <a href="/prospects.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Prospects</a>
+      <a href="/team/KC" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Teams</a>
     </div>
 
   </div>
-  <p style="text-align:center;"><a href="/" style="color:var(--orange); text-decoration:none;">razzle.lol</a> — let's razzle dazzle em baby</p>
+  <p style="text-align:center;"><a href="/" style="color:var(--orange); text-decoration:none;">razzle.lol</a></p>
   <p style="text-align:center; margin-top:6px;">made for Reddit | <a href="/about.html" style="color:var(--ink-light);">attribution &amp; privacy</a></p>
 </div>
 
@@ -673,6 +709,7 @@ fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"applicat
 (function(){try{
   var t = typeof getUserTierInfo === 'function' ? getUserTierInfo() : { plan: 'none', loggedIn: false, isTrial: false, isPaid: false, isElite: false, isExpiredTrial: false, daysLeft: 0 };
   var pro = document.getElementById('homeProCta');
+  var elite = document.getElementById('homeEliteCta');
   var trialNote = document.querySelector('[data-cta-trial-note]');
 
   // Update button text
@@ -681,6 +718,8 @@ fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"applicat
   // Paid users: redirect to Situation Room instead of checkout
   if (t.isPaid && !t.isTrial) {
     if (pro) { pro.textContent = 'Enter the Situation Room'; pro.onclick = function(){ window.location='/agents.html'; }; }
+    if (elite && t.isElite) { elite.textContent = 'Enter the Situation Room'; elite.onclick = function(){ window.location='/agents.html'; }; }
+    else if (elite && !t.isElite) { elite.textContent = 'Upgrade to Elite'; }
   }
 
   // Update trial note text

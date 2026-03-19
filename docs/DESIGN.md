@@ -10,9 +10,13 @@
 
 - **Name**: Razzle
 - **Domain**: razzle.lol
-- **Tagline**: The fantasy football research lab. Free.
+- **Tagline**: The fantasy football research lab. Forever free.
+- **Mission**: "Testing weekly what's stronger — our bad luck or the numbers. Come join us."
 - **Mascot**: Bengal tiger — Chief of Staff, gigachad Garfield energy, toylike, unbothered, slightly smug
 - **Personality**: Film room junkie friend. Earnest, slightly obsessive about precision, dry wit in the margins. Never tries to look impressive — just IS impressive once you use it.
+- **Voice**: Razzle doesn't hedge. Other tools say "consider starting" — Razzle says "start him." No ifs, buts, or maybes — just absolutes. The agents provide analysis, Razzle delivers the verdict with conviction. Confident, not arrogant. Direct, not reckless.
+- **On a win**: Let the users say it. "Razzle called it." Don't celebrate yourself.
+- **On a loss**: "Put our best effort in. Ball up top." No excuses, no blame, no "well technically the model was right." Head up, next week.
 - **Positioning**: Razzle is a fantasy football research lab. The Screener is forever free — no catch, no trial, no bait-and-switch. 70+ analytical panels, custom formulas, and the Situation Room (AI agents with full league context) are the paid upgrade. The brand line is: **"The Screener is forever free. The intelligence is what you pay for."** Use "forever free" deliberately and proudly — it's a trust signal, not a defense.
 
 ### Brand Hierarchy
@@ -192,9 +196,15 @@ Bengal tiger. Chief of Staff. Runs the whole operation.
 - Traits: unbothered, always right, slightly smug, your GM
 
 ## Agents
-- Razzle (Bengal tiger) = Chief of Staff / orchestrator
-- Other agents TBD — will be animals from NFL teams user likes
-- Agent roles: scout, medical, intel/diplomat, quant/projections, historian
+
+Six AI agents staff the Situation Room. Each has a distinct personality and analytical lens.
+
+- **Razzle** (Bengal Tiger) — Chief of Staff. Orchestrates all agents, delivers prioritized briefings, triages into URGENT / MONITOR / OPPORTUNITY. Doesn't hedge — "no ifs, buts, or maybes. Absolutes." Other tools say "consider starting." Razzle says "start him."
+- **Dr. Dolphin** (Medical) — Injury intelligence. Recovery timelines, return-to-play modeling, performance impact projections. Flags buy-low and sell-high windows around injuries.
+- **Hawkeye** (Scout) — Usage trends, snap counts, breakout detection, waiver targets. The film room analyst who catches things the box score misses.
+- **The Fox** (Diplomat) — Trade negotiation and competitive intelligence. Models opponent psychology, calculates acceptance probability, gives leverage angles. Knows what your rivals need before they do.
+- **The Octopus** (Quant) — Valuations, projections, expected value, championship probability. Leads with the number and the conclusion.
+- **The Elephant** (Historian) — League memory and pattern recognition. Knows your league's past trades, your blind spots, the last time this exact scenario played out.
 
 ---
 

@@ -675,6 +675,15 @@ button.nav-search-hint {
   transform: translate(-1px, -1px);
 }
 
+/* Disabled button state */
+button:disabled,
+.btn-chunky:disabled,
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 /* Keyboard focus styles for buttons and interactive links */
 .btn-chunky:focus-visible,
 .btn-primary:focus-visible,

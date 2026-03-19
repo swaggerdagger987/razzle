@@ -10,6 +10,7 @@ from .core import (  # noqa: F401
     FANTASY_POSITIONS,
     compute_trade_value,
     ABBREV_TO_TEAM,
+    _current_nfl_season,
 )
 
 # --- players (NFL CRUD, screener, profiles) ---

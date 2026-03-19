@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pricing — Razzle</title>
 <meta property="og:title" content="Pricing — Razzle">
-<meta property="og:description" content="Free Lab. Pro unlocks the Bureau of Intelligence. Elite gets the full war machine — six AI agents who know your league.">
+<meta property="og:description" content="The Screener is forever free. Pro adds league intelligence. Elite gets six AI agents who know your league inside out.">
 <meta property="og:site_name" content="razzle.lol">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://razzle.lol/pricing.html">
@@ -14,9 +14,9 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Pricing — Razzle">
-<meta name="twitter:description" content="Razzle Pro and Elite plans. AI agents with league context, cloud sync, full historical data.">
+<meta name="twitter:description" content="The Screener is forever free. Pro adds league intelligence. Elite gets six AI agents who know your league inside out.">
 <meta name="twitter:image" content="https://razzle.lol/assets/og-image.png">
-<meta name="description" content="Razzle pricing. Pro at $9.99/mo or $79.99/yr. Elite at $19.99/mo or $149.99/yr. AI agents, league context, cloud sync, full data.">
+<meta name="description" content="Razzle pricing. The Screener is forever free. Pro unlocks league intelligence. Elite gives you six AI agents with full league context, cloud sync, and historical data.">
 <link rel="canonical" href="https://razzle.lol/pricing.html">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -53,6 +53,18 @@
   /* Plan cards */
   .plans-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; margin-bottom: 40px; }
   @media (max-width: 900px) { .plans-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 480px) {
+    .pricing-page { padding: 24px 12px; }
+    .plan-card { padding: 20px 14px; }
+    .plan-name { font-size: 20px; }
+    .plan-price { font-size: 28px; }
+    .plan-cta .btn-primary, .plan-cta .btn-chunky { font-size: 13px; padding: 10px 0; }
+    .promo-row { flex-direction: column; }
+    .promo-row input { width: 100%; }
+    .feature-matrix { font-size: 11px; }
+    .feature-matrix th { font-size: 11px; padding: 8px 4px; }
+    .feature-matrix td { padding: 6px 4px; }
+  }
 
   .plan-card.free { border-color: var(--green, #2ec4b6); box-shadow: 4px 4px 0 var(--green, #2ec4b6); }
   .plan-card.free .plan-badge { background: var(--green, #2ec4b6); }
@@ -139,7 +151,7 @@
   </a>
   <ul class="nav-links">
     <li><a href="/">Home</a></li>
-    <li><a href="/lab.html">The Lab</a></li>
+    <li><a href="/lab.html">Screener</a></li>
     <li><a href="/league-intel.html">Bureau</a></li>
     <li><a href="/agents.html">Situation Room</a></li>
     <li><a href="/pricing.html" class="active">Pricing</a></li>
@@ -194,11 +206,11 @@
     <div class="plan-card free">
       <div class="plan-badge">free</div>
       <div class="plan-name">Free</div>
-      <div class="plan-price" style="font-size:28px;">Free</div>
-      <div class="plan-interval">no credit card required</div>
+      <div class="plan-price" style="font-size:28px;">$0</div>
+      <div class="plan-interval">no card, no catch</div>
 
       <ul class="plan-features">
-        <li><span class="check">&#10003;</span> The Lab (70+ stat panels)</li>
+        <li><span class="check">&#10003;</span> Screener (70+ stat panels)</li>
         <li><span class="check">&#10003;</span> Custom formulas</li>
         <li><span class="check">&#10003;</span> Shareable views</li>
         <li><span class="check">&#10003;</span> Compare tool</li>
@@ -209,13 +221,13 @@
       </ul>
 
       <div class="plan-cta">
-        <a href="/lab.html" class="btn-chunky" style="display:block; text-align:center; text-decoration:none;">Open The Lab</a>
+        <a href="/lab.html" class="btn-chunky" style="display:block; text-align:center; text-decoration:none;">Open the Screener</a>
       </div>
     </div>
 
     <!-- PRO -->
     <div class="plan-card">
-      <div class="plan-badge">most popular</div>
+      <div class="plan-badge">the film room upgrade</div>
       <div class="plan-name">Pro</div>
       <div class="plan-price" id="proPrice">$79.99<span>/yr</span></div>
       <div class="plan-interval" id="proInterval">that's <span class="yearly-price">$6.67/mo</span> — save 33%</div>
@@ -337,7 +349,7 @@
 
       <div style="border-bottom:2px dashed var(--ink-faint); padding:16px 0;">
         <div style="font-family:var(--font-mono); font-size:14px; color:var(--ink); margin-bottom:6px;">Is there a free trial?</div>
-        <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7;">Yes. Every new account gets 7 days of full Pro access automatically. No credit card required. Just sign up and you're in. After 7 days, you can subscribe to keep Pro or continue using The Lab for free.</div>
+        <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7;">Yes. Every new account gets 7 days of full Pro access automatically. No credit card required. Just sign up and you're in. After 7 days, you can subscribe to keep Pro or continue using the Screener for free.</div>
       </div>
 
       <div style="border-bottom:2px dashed var(--ink-faint); padding:16px 0;">
@@ -347,7 +359,7 @@
 
       <div style="border-bottom:2px dashed var(--ink-faint); padding:16px 0;">
         <div style="font-family:var(--font-mono); font-size:14px; color:var(--ink); margin-bottom:6px;">Do I need a Sleeper account?</div>
-        <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7;">No. The Lab works without Sleeper. But connecting Sleeper unlocks league-contextualized AI — agents analyze YOUR roster, YOUR rivals, YOUR league's scoring settings. That's where the real value is.</div>
+        <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7;">No. The Screener works without Sleeper. But connecting Sleeper unlocks league-contextualized AI — agents analyze YOUR roster, YOUR rivals, YOUR league's scoring settings. That's where the real value is.</div>
       </div>
 
       <div style="border-bottom:2px dashed var(--ink-faint); padding:16px 0;">
@@ -366,7 +378,7 @@
       </div>
 
       <div style="border-bottom:2px dashed var(--ink-faint); padding:16px 0;">
-        <div style="font-family:var(--font-mono); font-size:14px; color:var(--ink); margin-bottom:6px;">Is The Lab really free?</div>
+        <div style="font-family:var(--font-mono); font-size:14px; color:var(--ink); margin-bottom:6px;">Is the Screener really free?</div>
         <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7;">Yes. 100+ stat columns, 60+ analytical panels, custom formulas, radar charts, scatter plots, prospect screener, shareable URLs, image export. All forever free. No account required. The Screener is the product — Pro and Elite unlock the intelligence on top.</div>
       </div>
 
@@ -403,64 +415,64 @@
 
     <div>
       <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Razzle</div>
-      <a href="/" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Home</a>
-      <a href="/lab.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">The Lab</a>
-      <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Bureau</a>
-      <a href="/agents.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Situation Room</a>
-      <a href="/pricing.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Pricing</a>
-      <a href="/about.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">About</a>
+      <a href="/" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Home</a>
+      <a href="/lab.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Screener</a>
+      <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Bureau</a>
+      <a href="/agents.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Situation Room</a>
+      <a href="/pricing.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Pricing</a>
+      <a href="/about.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">About</a>
     </div>
 
     <div>
       <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Dynasty</div>
-      <a href="/rankings.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Rankings</a>
-      <a href="/tradevalues.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Trade Values</a>
-      <a href="/tradefinder.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Trade Finder</a>
-      <a href="/tiers.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Tiers</a>
-      <a href="/vorp.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">VORP</a>
-      <a href="/aging.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Aging Curves</a>
-      <a href="/buysell.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Buy/Sell</a>
-      <a href="/archetypes.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Archetypes</a>
+      <a href="/rankings.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Rankings</a>
+      <a href="/tradevalues.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Trade Values</a>
+      <a href="/tradefinder.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Trade Finder</a>
+      <a href="/tiers.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Tiers</a>
+      <a href="/vorp.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">VORP</a>
+      <a href="/aging.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Aging Curves</a>
+      <a href="/buysell.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Buy/Sell</a>
+      <a href="/archetypes.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Archetypes</a>
     </div>
 
     <div>
       <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Weekly</div>
-      <a href="/weekly.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Weekly Stats</a>
-      <a href="/weeklyleaders.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Week Leaders</a>
-      <a href="/weeklymvp.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Weekly MVP</a>
-      <a href="/matchups.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Matchups</a>
-      <a href="/waivers.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Waivers</a>
-      <a href="/schedule.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Schedule</a>
-      <a href="/stocks.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Stocks</a>
-      <a href="/playoffs.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Playoffs</a>
+      <a href="/weekly.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Weekly Stats</a>
+      <a href="/weeklyleaders.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Week Leaders</a>
+      <a href="/weeklymvp.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Weekly MVP</a>
+      <a href="/matchups.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Matchups</a>
+      <a href="/waivers.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Waivers</a>
+      <a href="/schedule.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Schedule</a>
+      <a href="/stocks.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Stocks</a>
+      <a href="/playoffs.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Playoffs</a>
     </div>
 
     <div>
       <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Analytics</div>
-      <a href="/targets.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Targets</a>
-      <a href="/usage.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Usage</a>
-      <a href="/efficiency.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Efficiency</a>
-      <a href="/airyards.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Air Yards</a>
-      <a href="/redzone.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Red Zone</a>
-      <a href="/consistency.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Consistency</a>
-      <a href="/breakouts.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Breakouts</a>
-      <a href="/opportunity.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Opportunity</a>
+      <a href="/targets.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Targets</a>
+      <a href="/usage.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Usage</a>
+      <a href="/efficiency.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Efficiency</a>
+      <a href="/airyards.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Air Yards</a>
+      <a href="/redzone.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Red Zone</a>
+      <a href="/consistency.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Consistency</a>
+      <a href="/breakouts.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Breakouts</a>
+      <a href="/opportunity.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Opportunity</a>
     </div>
 
     <div>
       <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Tools</div>
-      <a href="/explorer.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Stat Explorer</a>
-      <a href="/compare.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Compare</a>
-      <a href="/rosterbuilder.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Roster Builder</a>
-      <a href="/cheatsheet.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Cheat Sheet</a>
-      <a href="/auction.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Auction Values</a>
-      <a href="/dashboard.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Dashboard</a>
-      <a href="/prospects.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Prospects</a>
-      <a href="/team/KC" style="color:var(--ink-light); text-decoration:none; display:block; padding:2px 0;">Teams</a>
+      <a href="/explorer.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Stat Explorer</a>
+      <a href="/compare.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Compare</a>
+      <a href="/rosterbuilder.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Roster Builder</a>
+      <a href="/cheatsheet.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Cheat Sheet</a>
+      <a href="/auction.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Auction Values</a>
+      <a href="/dashboard.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Dashboard</a>
+      <a href="/prospects.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Prospects</a>
+      <a href="/team/KC" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Teams</a>
     </div>
 
   </div>
-  <p style="text-align:center;"><a href="/" style="color:var(--orange); text-decoration:none;">razzle.lol</a> — let's razzle dazzle em baby</p>
+  <p style="text-align:center;"><a href="/" style="color:var(--orange); text-decoration:none;">razzle.lol</a></p>
   <p style="text-align:center; margin-top:6px;">made for Reddit | <a href="/about.html" style="color:var(--ink-light);">attribution &amp; privacy</a></p>
 </div>
 

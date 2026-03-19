@@ -986,7 +986,7 @@
   border-radius: 4px;
   border: 2px solid;
 }
-.breakout-age-badge.young { background: #d9efec; color: #1a7a6d; border-color: #2ec4b6; }
+.breakout-age-badge.young { background: var(--green-light); color: #1a7a6d; border-color: var(--green); }
 .breakout-age-badge.prime { background: #f5eacc; color: #8a6d20; border-color: #ffc857; }
 .breakout-age-badge.aging { background: #f2d5d8; color: #a83240; border-color: #e63946; }
 .breakout-rbs { text-align: right; flex-shrink: 0; }
@@ -1171,7 +1171,7 @@
   border-radius: 4px;
   border: 2px solid;
 }
-.buysell-age-badge.young { background: #d9efec; color: #1a7a6d; border-color: #2ec4b6; }
+.buysell-age-badge.young { background: var(--green-light); color: #1a7a6d; border-color: var(--green); }
 .buysell-age-badge.prime { background: #f5eacc; color: #8a6d20; border-color: #ffc857; }
 .buysell-age-badge.aging { background: #f2d5d8; color: #a83240; border-color: #e63946; }
 .buysell-age-badge.veteran { background: #f2d5d8; color: #a83240; border-color: #e63946; }
@@ -3096,7 +3096,7 @@
 .glo-table tbody tr:hover { background: rgba(217,119,87,0.08); }
 .glo-num { text-align: right; padding: 5px 8px; font-variant-numeric: tabular-nums; }
 .glo-elite { font-weight: 700; color: #16a34a; }
-.glo-great { font-weight: 700; color: #5b7fff; }
+.glo-great { font-weight: 700; color: var(--blue); }
 .glo-ok { color: var(--ink); }
 .glo-bad { color: #dc2626; }
 .glo-totals { font-weight: 700; border-top: 2px solid var(--ink); background: rgba(217,119,87,0.05); }
@@ -4462,9 +4462,9 @@
   min-width: 32px;
   text-align: right;
 }
-.pr-pct-elite { color: #d97757; }
-.pr-pct-good { color: #2ec4b6; }
-.pr-pct-avg { color: #5b7fff; }
+.pr-pct-elite { color: var(--orange); }
+.pr-pct-good { color: var(--green); }
+.pr-pct-avg { color: var(--blue); }
 .pr-pct-below { color: #8a7565; }
 
 /* Athletic Grade Cards */

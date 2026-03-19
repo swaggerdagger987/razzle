@@ -3032,7 +3032,7 @@ function renderBriefingCard(agentId, content, isError) {
   var freeFooter = '';
   var agentEntry = agentResults.get(agentId);
   if (agentEntry && agentEntry.freeModel) {
-    var modelShort = agentEntry.freeModel.split('/').pop().split(':')[0];
+    var modelShort = (agentEntry.freeModel || 'unknown').split('/').pop().split(':')[0];
     freeFooter = '<div style="font-family:var(--font-hand);font-size:12px;color:var(--ink-light);padding:8px 0 0;border-top:2px dashed var(--ink-faint);margin-top:8px;">powered by ' + escapeHtml(modelShort) + ' \u2014 <a href="/pricing.html" style="color:var(--orange);">upgrade to Pro</a> for premium models</div>';
   }
 

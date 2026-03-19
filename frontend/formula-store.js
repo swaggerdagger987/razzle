@@ -32,6 +32,7 @@ async function fetchStoreFormulas() {
 
   try {
     const resp = await fetch(`/api/formulas/store?${params}`);
+    if (!resp.ok) throw new Error("store fetch failed: " + resp.status);
     const data = await resp.json();
     storeState.formulas = (data.formulas || []).map(f => ({
       id: f.id,
@@ -130,14 +131,17 @@ function resetStars(el, rating) {
 // Rate formula (API call)
 // ---------------------------------------------------------------------------
 
+var _ratingInProgress = {};
 async function rateFormula(formulaId, rating) {
   if (!_isStorePaidUser()) {
     showStoreToast("upgrade to Pro to rate formulas");
     return;
   }
+  if (_ratingInProgress[formulaId]) return;
+  _ratingInProgress[formulaId] = true;
   // Optimistic update
   storeState.userRatings[formulaId] = rating;
-  localStorage.setItem("razzle_store_ratings", JSON.stringify(storeState.userRatings));
+  try { localStorage.setItem("razzle_store_ratings", JSON.stringify(storeState.userRatings)); } catch (e) {}
   renderFormulaStore();
 
   try {
@@ -153,6 +157,8 @@ async function rateFormula(formulaId, rating) {
     }
   } catch (e) {
     console.error("Rate formula failed:", e);
+  } finally {
+    _ratingInProgress[formulaId] = false;
   }
 }
 

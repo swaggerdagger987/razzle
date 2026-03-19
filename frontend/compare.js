@@ -16,7 +16,7 @@ var _p2Data = null;
     document.getElementById("comparePage").innerHTML =
       '<div class="compare-loading">' +
       '<div class="compare-loading-text">need two player IDs to compare</div>' +
-      '<a href="/lab.html" class="btn-primary" style="margin-top:16px;">Back to The Lab</a>' +
+      '<a href="/lab.html" class="btn-primary" style="margin-top:16px;">Back to Screener</a>' +
       '</div>';
     return;
   }
@@ -51,7 +51,7 @@ async function loadComparison(id1, id2) {
       page.innerHTML =
         '<div class="compare-loading">' +
         '<div class="compare-loading-text">one or both players not found on the film</div>' +
-        '<a href="/lab.html" class="btn-primary" style="margin-top:16px;">Back to The Lab</a>' +
+        '<a href="/lab.html" class="btn-primary" style="margin-top:16px;">Back to Screener</a>' +
         '</div>';
       return;
     }
@@ -62,7 +62,7 @@ async function loadComparison(id1, id2) {
     page.innerHTML =
       '<div class="compare-loading">' +
       '<div class="compare-loading-text" style="color:var(--red);">fumbled the data fetch... ' + esc(err.message) + '</div>' +
-      '<a href="/lab.html" class="btn-primary" style="margin-top:16px;">Back to The Lab</a>' +
+      '<a href="/lab.html" class="btn-primary" style="margin-top:16px;">Back to Screener</a>' +
       '</div>';
   }
 }
@@ -86,7 +86,7 @@ function renderComparison(container) {
   var html = "";
 
   // Back link
-  html += '<a href="/lab.html" class="compare-back">&larr; Back to The Lab</a>';
+  html += '<a href="/lab.html" class="compare-back">&larr; Back to Screener</a>';
 
   // Hero cards
   html += '<div class="compare-heroes">';
@@ -243,7 +243,7 @@ function renderStatDiffTable(p1, p2, c1, c2, pos1, pos2, color1, color2) {
 
     // Diff bar
     var bar = "";
-    if (v1 !== null && v2 !== null && (v1 + v2) > 0) {
+    if (v1 !== null && v2 !== null && (v1 + v2) > 0 && isFinite(v1 + v2)) {
       var pct1 = (v1 / (v1 + v2)) * 100;
       bar = '<span class="compare-diff-bar" style="width:' + Math.max(pct1, 5) + '%; background:' + color1 + '; opacity:0.5;"></span>' +
             '<span class="compare-diff-bar" style="width:' + Math.max(100 - pct1, 5) + '%; background:' + color2 + '; opacity:0.5;"></span>';

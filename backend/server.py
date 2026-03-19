@@ -11,6 +11,8 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, Response
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from pathlib import Path
+import datetime as _datetime
+import hmac as _hmac
 import html as _html
 import httpx
 import logging
@@ -301,26 +303,27 @@ _bootstrap_status = {"done": False, "running": False, "error": None}
 
 def _warm_cache():
     """Pre-populate cache with commonly-hit endpoints to prevent cold-start stampede."""
+    _s = live_data._current_nfl_season()
     warm_targets = [
         ("filter_options", lambda: live_data.get_filter_options()),
         ("featured", lambda: live_data.fetch_featured()),
         ("dynasty_dashboard", lambda: live_data.fetch_dynasty_dashboard()),
         ("dynasty_rankings", lambda: live_data.fetch_dynasty_rankings()),
         ("trade_value_chart", lambda: live_data.fetch_trade_value_chart()),
-        ("stat_leaders_2025", lambda: live_data.fetch_stat_leaders(season=2025)),
-        ("breakout_2025", lambda: live_data.fetch_breakout_candidates(season=2025)),
-        ("matchup_heatmap_2025", lambda: live_data.fetch_matchup_heatmap(season=2025)),
+        ("stat_leaders", lambda: live_data.fetch_stat_leaders(season=_s)),
+        ("breakout", lambda: live_data.fetch_breakout_candidates(season=_s)),
+        ("matchup_heatmap", lambda: live_data.fetch_matchup_heatmap(season=_s)),
         ("aging_curves", lambda: live_data.fetch_aging_curves()),
         ("players_QB", lambda: live_data.fetch_players(position="QB", limit=50)),
         ("players_RB", lambda: live_data.fetch_players(position="RB", limit=50)),
         ("players_WR", lambda: live_data.fetch_players(position="WR", limit=50)),
         ("players_TE", lambda: live_data.fetch_players(position="TE", limit=50)),
-        ("screener_QB", lambda: live_data.fetch_screener({"position": "QB", "season": "2025", "limit": 50, "sort_key": "fantasy_points_half_ppr", "sort_dir": "desc"})),
-        ("screener_RB", lambda: live_data.fetch_screener({"position": "RB", "season": "2025", "limit": 50, "sort_key": "fantasy_points_half_ppr", "sort_dir": "desc"})),
-        ("screener_WR", lambda: live_data.fetch_screener({"position": "WR", "season": "2025", "limit": 200, "sort_key": "fantasy_points_half_ppr", "sort_dir": "desc"})),
-        ("weekly_heatmap_QB", lambda: live_data.fetch_weekly_heatmap(season=2025, position="QB")),
-        ("consistency_2025", lambda: live_data.fetch_consistency_rankings(season=2025)),
-        ("efficiency_2025", lambda: live_data.fetch_efficiency_rankings(season=2025)),
+        ("screener_QB", lambda: live_data.fetch_screener({"position": "QB", "season": str(_s), "limit": 50, "sort_key": "fantasy_points_half_ppr", "sort_dir": "desc"})),
+        ("screener_RB", lambda: live_data.fetch_screener({"position": "RB", "season": str(_s), "limit": 50, "sort_key": "fantasy_points_half_ppr", "sort_dir": "desc"})),
+        ("screener_WR", lambda: live_data.fetch_screener({"position": "WR", "season": str(_s), "limit": 200, "sort_key": "fantasy_points_half_ppr", "sort_dir": "desc"})),
+        ("weekly_heatmap_QB", lambda: live_data.fetch_weekly_heatmap(season=_s, position="QB")),
+        ("consistency", lambda: live_data.fetch_consistency_rankings(season=_s)),
+        ("efficiency", lambda: live_data.fetch_efficiency_rankings(season=_s)),
     ]
     warmed = 0
     for name, fn in warm_targets:
@@ -3207,7 +3210,7 @@ _ADMIN_SECRET = os.environ.get("RAZZLE_ADMIN_SECRET", "")
 async def admin_stats(request: Request):
     """Return user counts and subscription stats. Protected by X-Admin-Secret header."""
     secret = request.headers.get("x-admin-secret", "")
-    if not _ADMIN_SECRET or secret != _ADMIN_SECRET:
+    if not _ADMIN_SECRET or not _hmac.compare_digest(secret, _ADMIN_SECRET):
         return JSONResponse({"error": "unauthorized"}, status_code=403)
 
     try:
@@ -3268,8 +3271,9 @@ async def monte_carlo_projections(request: Request):
     try:
         with get_db() as conn:
             if season <= 0:
-                month = __import__("datetime").datetime.now().month
-                year = __import__("datetime").datetime.now().year
+                _now = _datetime.datetime.now()
+                month = _now.month
+                year = _now.year
                 season = year if month >= 7 else year - 1
 
             placeholders = ",".join("?" * len(player_ids))

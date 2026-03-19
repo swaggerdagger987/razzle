@@ -452,10 +452,11 @@
     var grade = overallDraftGrade(userPicks);
 
     var gradeColor = '#8a7565';
-    if (grade.charAt(0) === 'A') gradeColor = '#d97757';
-    else if (grade.charAt(0) === 'B') gradeColor = '#2ec4b6';
-    else if (grade.charAt(0) === 'C') gradeColor = '#ffc857';
-    else if (grade.charAt(0) === 'D' || grade === 'F') gradeColor = '#e63946';
+    var g0 = grade ? grade.charAt(0) : '';
+    if (g0 === 'A') gradeColor = '#d97757';
+    else if (g0 === 'B') gradeColor = '#2ec4b6';
+    else if (g0 === 'C') gradeColor = '#ffc857';
+    else if (g0 === 'D' || grade === 'F') gradeColor = '#e63946';
 
     var html = '<div class="md-recap">';
     html += '<div class="md-recap-header">';

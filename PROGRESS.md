@@ -529,3 +529,27 @@ All 59 tests pass. All 11 JS files syntax-clean. 0 remaining issues found.
 - 20 panels passed all criteria with no changes needed
 - Most common issues: hardcoded rgba hover colors, font-display on sub-16px controls, analytics error handling
 - All 59 tests pass, all JS syntax clean
+
+---
+
+## Brand Consistency + Polish Pass (Mar 14)
+
+**Goal**: Consume all remaining TICKETS.md brand consistency and polish items.
+
+| # | Ticket | Status | Notes |
+|---|--------|--------|-------|
+| 1 | Nav rename: "The Lab" → "Screener" | DONE | 74 HTML nav/footer links, app.js dynamic nav, lab.js title, lab.html breadcrumbs, compare.js/player.js "Back to" links, pricing.html features/CTA/FAQ, agents.html feature table, about.html tier list, og-image-lab.svg. URLs unchanged. |
+| 2 | og:description + meta tags | DONE | All 74 pages updated with compelling page-specific descriptions. Zero "terminal" references in meta tags. Lab pages mention Screener, Bureau mentions league intelligence, Situation Room mentions 6 AI agents. career.html XML corruption fixed. |
+| 3 | Pricing section + Elite tier | DONE | Added Elite tier card to index.html ($19.99/mo, $149.99/yr, purple border). Replaced "best value" badge with "the film room upgrade". pricing.html "most popular" → "the film room upgrade". Three-card layout. Free tier label kept as "Free" (not "Forever Free" per design guide). |
+| 4 | DESIGN.md + CLAUDE.md contradictions | DONE | DESIGN.md agents section updated with all 6 finalized personas (was placeholder "TBD"). CLAUDE.md dark mode line updated: "NO dark mode" → "Site-wide dark mode toggle available. Situation Room always dark." |
+| 5 | Watermark shortened | DONE | "razzle.lol — let's razzle dazzle em baby" → "razzle.lol" across 73 HTML footers, lab.js (13 canvas calls), charts.js (3 canvas calls), 2 SVG OG images, update_footers.py template. |
+| 6 | Briefing demo second agent | DONE | Added The Quant (🐙) card below Razzle (🐯) card in landing page Situation Room demo. Redacted trade-value analysis text with "opportunity" urgency badge. Reinforces multi-agent pitch. |
+
+### Post-fix cleanup
+- Fixed Quant emoji: 🦊 (fox/Diplomat) → 🐙 (octopus/Quant)
+- Fixed pricing meta tags: "free forever" → "forever free" (brand copy word order)
+- Free tier label: "Forever Free" → "Free" on both index.html and pricing.html
+- 59/59 tests pass, all 11 JS files syntax clean
+- Zero "The Lab" in user-facing text (only internal code comment in lab.js:1)
+- Zero "terminal" in any meta description tag
+- All consumed tickets removed from TICKETS.md

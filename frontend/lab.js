@@ -58,10 +58,16 @@ function _csvCell(val) {
 }
 
 var _html2canvasLoading = false;
+var _html2canvasRetries = 0;
 function _loadHtml2Canvas(cb) {
   if (typeof html2canvas !== 'undefined') { cb(); return; }
-  if (_html2canvasLoading) { setTimeout(function() { _loadHtml2Canvas(cb); }, 200); return; }
+  if (_html2canvasLoading) {
+    if (++_html2canvasRetries > 25) { _html2canvasLoading = false; _html2canvasRetries = 0; _showToast(razzleError()); return; }
+    setTimeout(function() { _loadHtml2Canvas(cb); }, 200);
+    return;
+  }
   _html2canvasLoading = true;
+  _html2canvasRetries = 0;
   var s = document.createElement('script');
   s.src = 'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
   s.onload = function() { _html2canvasLoading = false; cb(); };
@@ -2683,7 +2689,7 @@ function applyUniverseUI() {
   // Page title
   if (isCollege) document.title = "College Lab — Razzle";
   else if (prospectMode) document.title = "Prospect Lab — Razzle";
-  else document.title = "The Lab — Razzle";
+  else document.title = "Screener — Razzle";
 
   // Show Tiers and Big Board buttons only in prospect mode
   const tiersBtn = document.getElementById("tiersBtn");
@@ -5559,7 +5565,7 @@ function exportImage() {
   ctx.fillStyle = "#2d1f14";
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
-  ctx.fillText("razzle.lol \u2014 let's razzle dazzle em baby", W / 2, wmY);
+  ctx.fillText("razzle.lol", W / 2, wmY);
   ctx.globalAlpha = 1.0;
 
   // Download
@@ -5965,7 +5971,7 @@ function renderRankingsPNG(players, posLabel, sortLabel) {
   ctx.font = "16px 'Caveat', cursive";
   ctx.fillStyle = "rgba(217, 119, 87, 0.5)";
   ctx.textAlign = "right";
-  ctx.fillText("razzle.lol — let's razzle dazzle em baby", W - 20, H - 16);
+  ctx.fillText("razzle.lol", W - 20, H - 16);
 
   // Download
   const posFile = posLabel.toLowerCase().replace(/\s+/g, "-");
@@ -6784,7 +6790,7 @@ function exportProfileImage() {
   ctx.fillStyle = "#2d1f14";
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
-  ctx.fillText("razzle.lol — let's razzle dazzle em baby", W / 2, wmY);
+  ctx.fillText("razzle.lol", W / 2, wmY);
   ctx.globalAlpha = 1.0;
 
   const safeName = name.replace(/[^a-zA-Z0-9]/g, "-").toLowerCase();
@@ -7676,7 +7682,7 @@ function exportProspectImage() {
   ctx.fillStyle = "#2d1f14";
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
-  ctx.fillText("razzle.lol — let's razzle dazzle em baby", W / 2, y + 10);
+  ctx.fillText("razzle.lol", W / 2, y + 10);
   ctx.globalAlpha = 1.0;
 
   const safeName = name.replace(/[^a-zA-Z0-9]/g, "-").toLowerCase();
@@ -7921,7 +7927,7 @@ function exportTierImage() {
   ctx.fillStyle = "#2d1f14";
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
-  ctx.fillText("razzle.lol — let's razzle dazzle em baby", W / 2, y + 10);
+  ctx.fillText("razzle.lol", W / 2, y + 10);
   ctx.globalAlpha = 1.0;
 
   const link = document.createElement("a");
@@ -8295,7 +8301,7 @@ function exportBigBoardImage() {
   ctx.fillStyle = "#2d1f14";
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
-  ctx.fillText("razzle.lol — let's razzle dazzle em baby", W / 2, y + 8);
+  ctx.fillText("razzle.lol", W / 2, y + 8);
   ctx.globalAlpha = 1.0;
 
   const link = document.createElement("a");
@@ -8722,7 +8728,7 @@ function exportClassAnalyticsImage() {
   ctx.fillStyle = "#2d1f14";
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
-  ctx.fillText("razzle.lol — let's razzle dazzle em baby", W / 2, y + 8);
+  ctx.fillText("razzle.lol", W / 2, y + 8);
   ctx.globalAlpha = 1.0;
 
   const link = document.createElement("a");
@@ -9133,7 +9139,7 @@ function exportTradeValuesPNG() {
   ctx.fillStyle = "#2d1f14";
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
-  ctx.fillText("razzle.lol — let's razzle dazzle em baby", W / 2, y + 8);
+  ctx.fillText("razzle.lol", W / 2, y + 8);
   ctx.globalAlpha = 1.0;
 
   const link = document.createElement("a");
@@ -9466,7 +9472,7 @@ function exportAgingCurvesPNG() {
   ctx.fillStyle = "#2d1f14";
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
-  ctx.fillText("razzle.lol — let's razzle dazzle em baby", W / 2, H - 10);
+  ctx.fillText("razzle.lol", W / 2, H - 10);
   ctx.globalAlpha = 1.0;
 
   const link = document.createElement("a");
@@ -9758,7 +9764,7 @@ function exportHeatMapPNG() {
   ctx.fillStyle = "#2d1f14";
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
-  ctx.fillText("razzle.lol — let's razzle dazzle em baby", W / 2, H - 4);
+  ctx.fillText("razzle.lol", W / 2, H - 4);
   ctx.globalAlpha = 1.0;
 
   const link = document.createElement("a");
@@ -10077,7 +10083,7 @@ function exportTierBoardPNG() {
   ctx.fillStyle = "#8a7565";
   ctx.font = "14px 'Caveat', cursive";
   ctx.textAlign = "right";
-  ctx.fillText("razzle.lol — let's razzle dazzle em baby", W - 20, totalH - 14);
+  ctx.fillText("razzle.lol", W - 20, totalH - 14);
 
   // Download
   var link = document.createElement("a");
@@ -10886,7 +10892,7 @@ function exportTradeAnalyzerPNG() {
   ctx.fillStyle = "#2d1f14";
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "right";
-  ctx.fillText("razzle.lol — let's razzle dazzle em baby", W - 20, H - 16);
+  ctx.fillText("razzle.lol", W - 20, H - 16);
   ctx.globalAlpha = 1.0;
 
   const link = document.createElement("a");
@@ -12139,7 +12145,7 @@ function exportCompsImage() {
   ctx.fillStyle = "#8a7565";
   ctx.font = "italic 14px 'Caveat', cursive";
   ctx.textAlign = "center";
-  ctx.fillText("razzle.lol — let's razzle dazzle em baby", W / 2, wmY);
+  ctx.fillText("razzle.lol", W / 2, wmY);
 
   // Download
   const link = document.createElement("a");

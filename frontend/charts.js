@@ -708,8 +708,9 @@ function drawHeatmap() {
     ctx.font = "bold 12px 'Luckiest Guy', cursive";
     ctx.fillStyle = "#2d1f14";
     ctx.textAlign = "left";
-    const lastName = player.full_name.split(" ").slice(-1)[0];
-    const firstName = player.full_name.split(" ")[0];
+    const nameParts = (player.full_name || "?").split(" ");
+    const lastName = nameParts.slice(-1)[0];
+    const firstName = nameParts[0] || "?";
     const shortName = firstName.charAt(0) + ". " + lastName;
     ctx.fillText(shortName, padL + 4, y + cellH / 2 + 4);
 
@@ -804,7 +805,7 @@ function drawHeatmap() {
   ctx.font = "bold 12px 'Luckiest Guy', cursive";
   ctx.fillStyle = "#2d1f1433";
   ctx.textAlign = "right";
-  ctx.fillText("razzle.lol — let's razzle dazzle em baby", W - 12, H - 8);
+  ctx.fillText("razzle.lol", W - 12, H - 8);
 }
 
 function heatmapColor(pct) {
@@ -1194,7 +1195,7 @@ function exportNFLCompareImage() {
   ctx.font = "16px 'Caveat', cursive";
   ctx.fillStyle = "rgba(217, 119, 87, 0.5)";
   ctx.textAlign = "right";
-  ctx.fillText("razzle.lol — let's razzle dazzle em baby", W - 20, H - 16);
+  ctx.fillText("razzle.lol", W - 20, H - 16);
 
   // Download
   const names = players.map(p => (p.full_name || "player").replace(/\s+/g, "-").toLowerCase());
@@ -1467,7 +1468,7 @@ function exportProspectCompareImage() {
   ctx.font = "16px 'Caveat', cursive";
   ctx.fillStyle = "rgba(217, 119, 87, 0.5)";
   ctx.textAlign = "right";
-  ctx.fillText("razzle.lol — let's razzle dazzle em baby", W - 20, H - 16);
+  ctx.fillText("razzle.lol", W - 20, H - 16);
 
   const link = document.createElement("a");
   link.download = "razzle-prospect-compare.png";

@@ -75,7 +75,7 @@ function _injectHamburgerMenu() {
 
   var links = [
     { href: "/", label: "Home" },
-    { href: "/lab.html", label: "The Lab" },
+    { href: "/lab.html", label: "Screener" },
     { href: "/league-intel.html", label: "Bureau" },
     { href: "/agents.html", label: "Situation Room" },
     { href: "/pricing.html", label: "Pricing" }
@@ -178,7 +178,7 @@ function _injectHamburgerMenu() {
     try {
       var user = JSON.parse(localStorage.getItem("razzle_user") || "null");
       if (user && user.email) {
-        var name = user.sleeper_username || user.email.split("@")[0];
+        var name = user.sleeper_username || (user.email ? user.email.split("@")[0] : "user");
         mobileSignIn.textContent = name;
         mobileSignIn.onclick = function(e) {
           e.preventDefault();
@@ -552,7 +552,8 @@ function _detectCheckoutReturn() {
         updateAuthUI(data.user);
         window.dispatchEvent(new CustomEvent("razzle-plan-changed", { detail: data.user }));
         if (typeof _showToast === "function") {
-          _showToast("welcome to Razzle " + data.user.plan.charAt(0).toUpperCase() + data.user.plan.slice(1) + ".");
+          var planName = data.user.plan || "pro";
+          _showToast("welcome to Razzle " + planName.charAt(0).toUpperCase() + planName.slice(1) + ".");
         }
       } else if (attempts < maxAttempts) {
         setTimeout(pollForPlanChange, pollInterval);
@@ -701,6 +702,8 @@ function clearAuthErrors() {
 
 async function handleLogin(e) {
   e.preventDefault();
+  var btn = e.target.querySelector('button[type="submit"]');
+  if (btn) btn.disabled = true;
   var email = document.getElementById("authLoginEmail").value.trim();
   var password = document.getElementById("authLoginPassword").value;
   var errEl = document.getElementById("authLoginError");
@@ -711,8 +714,8 @@ async function handleLogin(e) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: email, password: password })
     });
+    if (!resp.ok) { try { var d = await resp.json(); errEl.textContent = d.error || d.detail || "Login failed"; } catch(_) { errEl.textContent = "Login failed"; } return; }
     var data = await resp.json();
-    if (!resp.ok) { errEl.textContent = data.error || data.detail || "Login failed"; return; }
     localStorage.setItem("razzle_token", data.token);
     localStorage.setItem("razzle_user", JSON.stringify(data.user));
     if (!data.user.sleeper_username) { showSleeperPrompt(); } else { closeAuthModal(); }
@@ -720,28 +723,32 @@ async function handleLogin(e) {
     migrateLocalFormulas();
   } catch (err) {
     errEl.textContent = "network fumble. try again.";
+  } finally {
+    if (btn) btn.disabled = false;
   }
 }
 
 async function handleRegister(e) {
   e.preventDefault();
+  var btn = e.target.querySelector('button[type="submit"]');
+  if (btn) btn.disabled = true;
   var email = document.getElementById("authRegisterEmail").value.trim();
   var password = document.getElementById("authRegisterPassword").value;
   var confirm = document.getElementById("authRegisterConfirm").value;
   var errEl = document.getElementById("authRegisterError");
   errEl.textContent = "";
-  if (password !== confirm) { errEl.textContent = "Passwords don't match"; return; }
-  if (password.length < 8) { errEl.textContent = "Password must be at least 8 characters"; return; }
-  if (!/[a-zA-Z]/.test(password)) { errEl.textContent = "Password must contain at least one letter"; return; }
-  if (!/[0-9]/.test(password)) { errEl.textContent = "Password must contain at least one number"; return; }
+  if (password !== confirm) { errEl.textContent = "Passwords don't match"; if (btn) btn.disabled = false; return; }
+  if (password.length < 8) { errEl.textContent = "Password must be at least 8 characters"; if (btn) btn.disabled = false; return; }
+  if (!/[a-zA-Z]/.test(password)) { errEl.textContent = "Password must contain at least one letter"; if (btn) btn.disabled = false; return; }
+  if (!/[0-9]/.test(password)) { errEl.textContent = "Password must contain at least one number"; if (btn) btn.disabled = false; return; }
   try {
     var resp = await fetch(API_BASE + "/api/auth/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: email, password: password })
     });
+    if (!resp.ok) { try { var d = await resp.json(); errEl.textContent = d.error || d.detail || "Registration failed"; } catch(_) { errEl.textContent = "Registration failed"; } return; }
     var data = await resp.json();
-    if (!resp.ok) { errEl.textContent = data.error || data.detail || "Registration failed"; return; }
     localStorage.setItem("razzle_token", data.token);
     localStorage.setItem("razzle_user", JSON.stringify(data.user));
     if (!data.user.sleeper_username) { showSleeperPrompt(); } else { closeAuthModal(); }
@@ -749,6 +756,8 @@ async function handleRegister(e) {
     migrateLocalFormulas();
   } catch (err) {
     errEl.textContent = "network fumble. try again.";
+  } finally {
+    if (btn) btn.disabled = false;
   }
 }
 
@@ -803,7 +812,7 @@ function updateAuthUI(user) {
   if (user) {
     var displayName = user.sleeper_username
       ? escapeHtml(user.sleeper_username)
-      : escapeHtml(user.email.split("@")[0]);
+      : escapeHtml(user.email ? user.email.split("@")[0] : "user");
     var isPaid = user.plan === "pro" || user.plan === "elite" || user.plan === "pro_lifetime" || user.plan === "elite_lifetime";
     var isTrial = user.trial_active && user.plan_source === "trial";
     var badge;
@@ -937,10 +946,10 @@ async function openManageSubscription() {
     if (data.portal_url) {
       window.location.href = data.portal_url;
     } else {
-      alert("Subscription management not available");
+      if (typeof _showToast === "function") _showToast("subscription management not available", "error"); else alert("Subscription management not available");
     }
   } catch (e) {
-    alert("Connection error");
+    if (typeof _showToast === "function") _showToast("connection error — try again", "error"); else alert("Connection error");
   }
 }
 
@@ -1009,7 +1018,7 @@ function showWelcomeState() {
           (hasSleeper ? 'Enter the Situation Room' : 'Tour the Situation Room') +
         '</a>' +
         '<a href="/lab.html" class="btn-chunky" style="text-decoration:none; text-align:center; font-size:13px; background:var(--bg-card);" onclick="closeAuthModal();">' +
-          'Explore The Lab' +
+          'Explore the Screener' +
         '</a>' +
       '</div>' +
       (!hasSleeper
@@ -1279,7 +1288,7 @@ function addToRecentlyViewed(player) {
   });
   // Cap at 8
   if (recent.length > 8) recent = recent.slice(0, 8);
-  localStorage.setItem("razzle_recent_players", JSON.stringify(recent));
+  try { localStorage.setItem("razzle_recent_players", JSON.stringify(recent)); } catch (e) {}
 }
 
 function renderRecentlyViewed() {

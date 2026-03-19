@@ -1,167 +1,207 @@
-# Razzle — Updated Ship Roadmap
+# Razzle — Ship Roadmap
 
-**Hard Deadline: NFL Draft Week (April 24, 2026)**
-**Today: March 14, 2026 — 41 days out**
+**Goal: 1,000 paid users by end of 2026 NFL season.**
+**Today: March 14, 2026 (Saturday)**
 
 ---
 
 ## Where We Are
 
-The product is built and hardened. 162 build phases shipped all three pillars, then 8 ship phases (A through H) plus bug fixes and polish passes brought everything to production quality. Here's the scorecard:
+The core product is built. 162 build phases + 8 ship phases + autonomous loop fixes. What exists:
 
-**Done:**
-- The Lab: 74 HTML pages, 70+ analytical panels, full screener, formula builder, visualizations, PNG export with watermark, URL state serialization, mobile scroll support
-- Bureau of Intelligence: Sleeper connection, manager profiling (multi-season behavioral data), trade finder, pressure maps, activity feeds, free/Pro gating with blurred previews
-- Situation Room: Pixel canvas with 6 animated agents, LLM integration via BYOK (OpenRouter), cross-agent triggers, format-aware queries, "What can I ask?" panel, first-run setup guide, Elite server-side AI
-- Auth & Billing: Registration, JWT sessions, Stripe integration, Free/Pro/Elite tiers, 7-day trial, early adopter + lifetime pricing, promo codes
-- Infrastructure: esbuild minification, security headers, rate limiting, encrypted BYOK backup, 59+ tests, structured logging, season-aware defaults, Render deployment config
-- Conversion Funnel: Landing page storytelling, Bureau section, Situation Room demo (55 permutations), pricing page with feature matrix + FAQ, trial onboarding with expiry warnings, Pricing nav on all 74 pages, og:image PNG on all pages
-- Design Consistency: Design token audit, typography audit, position colors, component borders (2px+ everywhere), loading state personality, dark mode scoping, mobile overflow scroll on all tables
-- Data: Full 2025 NFL season (19,421 rows), 2025 college season (4,148 players), 2026 combine data (319 prospects), half-PPR backfilled across all seasons
+**Built and working:**
+- The Screener: 100+ stat columns, custom formulas, formula store, visualizations, PNG export with watermark, URL state serialization
+- The Lab: 70+ analytical panels behind Pro paywall
+- Bureau of Intelligence: Sleeper connection, manager profiling, trade finder, pressure maps, activity feeds, Monte Carlo league odds (summary + deep-dive)
+- Situation Room: Pixel canvas with 6 animated agents, LLM integration (BYOK + Elite), cross-agent triggers, format-aware queries
+- Auth & Billing: Registration, JWT, Stripe, Free/Pro/Elite tiers, 7-day trial, Sleeper ID lock
+- Infrastructure: esbuild minification, security headers, rate limiting, 59+ tests, Render deployment config
 
-**Not Done:**
-- Never deployed to production and verified live on razzle.lol with real traffic
-- No analytics or tracking for user behavior
-- Reddit launch strategy not executed
-- Stripe not verified with real test transactions end-to-end
-- Domain (razzle.lol) DNS and HTTPS not verified
-- No real-user testing beyond automated test suite
-- AdSense not configured (empty publisher ID)
-- Formula Store exists but hasn't been stress-tested with real formulas
+**Not yet built:**
+- Bureau deep intelligence features (roster depth, build profiles, trade network, waiver tendencies, power rankings, H2H, self-scout)
+- Full Lab panel-by-panel quality audit
+- Production deployment verified with real traffic
+- Stripe verified with real charges
+- Twitter/Reddit launch content
 
----
-
-## Strategic Framing
-
-The build is done. The hardening is done. What remains is the gap between "works in development" and "survives contact with strangers."
-
-Three things must be true by April 24:
-
-1. **razzle.lol loads in a browser**, fast, on any device, and every page works. Not "the code is written" — actually live on the internet.
-2. **The money path works.** A real human can register, start a trial, connect Sleeper, enter a scenario in the Situation Room, and upgrade to Pro — with a real Stripe charge that lands in your bank account.
-3. **Reddit knows Razzle exists.** Lab screenshots are circulating. Power users have discovered it. The draft week reveal post has a warm audience.
+**Known issues being fixed by autonomous loop:**
+- Various UI inconsistencies across 74 pages
+- Dark mode font legibility
+- Toolbar still needs work on some pages
 
 ---
 
-## Now / Next / Later
+## The Phases
 
-### NOW — Pre-Launch Verification (Mar 15–28, 2 weeks)
+### PHASE 1: TWITTER LAUNCH (March 16-22)
 
-Everything here is about proving the product actually works live. No new features. No new panels. Just verification that what's built survives the real world.
+**Goal:** Announce Razzle on Twitter. Establish "context is the product" narrative. Drive first traffic to razzle.lol.
 
-| # | Task | Detail | Done When |
-|---|------|--------|-----------|
-| N-1 | Production deployment | Deploy to Render. Verify terminal.db downloads from GitHub release. Health check passes. Hit every page on razzle.lol — home, Lab, Bureau, Situation Room, pricing, about, 404. Verify HTTPS. Verify custom domain resolves. | razzle.lol loads in a browser with no errors |
-| N-2 | Stripe end-to-end | Create Stripe test mode products and price IDs. Run through full flow: register → start trial → enter billing info → upgrade to Pro → verify webhook fires → subscription active → Pro features unlock → cancel → downgrade. Then repeat in live mode with a real $1 test charge. | Money flows from user to your Stripe account |
-| N-3 | Auth flow on production | Register with real email. Login. Logout. Password reset (if implemented). JWT persists across refresh. Session expires correctly. Trial badge shows. | Auth works for real humans, not just test scripts |
-| N-4 | Sleeper connection on production | Connect 3+ real Sleeper usernames (different league counts, formats). Verify leagues load, rosters render, manager profiles build, trade finder runs, pressure map calculates. Test with an invalid username. Test with a user who has 0 leagues. | Bureau works with real Sleeper data in production |
-| N-5 | Situation Room on production | Configure a real OpenRouter API key. Run 5 diverse scenarios (dynasty trade, start/sit, waiver claim, injury impact, keeper decision). Verify all 6 agents respond. Verify cross-agent triggers fire. Verify league context appears in Pro mode but not Free mode. | AI briefings work in production with real LLM calls |
-| N-6 | Mobile spot check | Open razzle.lol on a real phone (iPhone Safari + Android Chrome). Navigate home → Lab → screener → panel → Bureau → Situation Room. Verify no horizontal overflow, nav works, tables scroll, text is readable. | Core flow is usable on mobile |
-| N-7 | Performance baseline | Measure: landing page load time (target < 3s), Lab screener initial load (target < 2s), screener filter response (target < 500ms), agent LLM round-trip (target < 25s). Document baseline numbers. | Know your actual performance numbers |
-| N-8 | Basic analytics | Add simple server-side request logging: page views by path, API calls by endpoint, registration count, trial starts, Sleeper connections. Can be as simple as structured log lines parsed later. No need for a full analytics platform pre-launch. | Can answer "how many people visited today?" |
+The site doesn't need to be perfect — it needs to be functional enough that a curious Twitter visitor can open the Screener, be impressed, and follow the account.
 
-**Exit criterion:** You can hand someone the URL razzle.lol, they can explore the Lab, connect Sleeper, run an agent query, and upgrade to Pro — all on a real phone or laptop — without hitting a single error. You know how many people are doing each step.
+| # | Task | Done When |
+|---|------|-----------|
+| 1-1 | Deploy to production | razzle.lol loads. Health check passes. HTTPS works. Every page renders. |
+| 1-2 | Stripe test transaction | Register → trial → upgrade → real charge → webhook fires → Pro unlocks. Money in your Stripe account. |
+| 1-3 | Mobile spot check | Open razzle.lol on a real phone. Home → Screener → one panel → Bureau. No broken layouts. |
+| 1-4 | Twitter account ready | @razzle_lol (or chosen handle) has bio, profile image (tiger), pinned tweet ready. |
+| 1-5 | Launch thread posted | "ChatGPT doesn't know your league. Razzle does." thread with Screener screenshots. Link to razzle.lol. |
+| 1-6 | 20 Screener screenshots ready | Pre-made screenshots of the most compelling Lab views — scatter plots, heat maps, dynasty rankings, breakout finder. Ammunition for daily tweets. |
 
----
-
-### NEXT — Soft Launch + Reddit Seeding (Mar 29–Apr 12, 2 weeks)
-
-Get real humans using the product. Build credibility on Reddit before the reveal.
-
-| # | Task | Detail | Done When |
-|---|------|--------|-----------|
-| X-1 | Friends & family beta | Send razzle.lol to 5-10 people who play fantasy football. Watch them use it (screen share or ask for feedback). Fix whatever they hit. | 5+ real humans have used the product and given feedback |
-| X-2 | Hotfix cycle | Based on beta feedback, fix the top 3-5 issues. Prioritize anything that blocks the funnel (can't register, can't connect Sleeper, page crashes). Deploy fixes same day. | Top beta issues resolved |
-| X-3 | Seed analysis posts (3-4) | Use Lab screenshots to post genuine analysis on r/DynastyFF and r/fantasyfootball. Pure value, no self-promotion. Watermark does the marketing. Topics: 2026 rookie big board, dynasty buy-lows, offseason trade values using the screener, breakout candidate analysis. | 3-4 posts published with watermark visible |
-| X-4 | Community engagement | Be the most helpful person in the comments. When someone asks "where'd you get that data?" or "what tool is that?" — answer naturally with a Lab link. | Active, helpful presence in target subreddits |
-| X-5 | AdSense setup | Apply for Google AdSense. Configure publisher ID. Verify ads render on free pages (Lab, Bureau, landing) without breaking layout or UX. | Ad revenue is flowing (even if small) |
-| X-6 | Formula Store seeding | Create 3-5 high-quality formulas yourself (dynasty value composite, breakout score, buy-low indicator, best ball ceiling score). Publish to Formula Store. Test the full flow: create → publish → someone else finds it → uses it. | Formula Store has real, useful content |
-
-**Exit criterion:** Real humans are using the product. You've fixed the worst bugs they found. Reddit has seen Razzle screenshots but doesn't know it's yours yet. The Formula Store has seed content. Ads are rendering.
+**Exit criterion:** razzle.lol is live, Stripe works, Twitter account is active with launch thread posted.
 
 ---
 
-### LATER — Draft Week Launch (Apr 13–26)
+### PHASE 2: BUILD THE BUREAU (March 23 - April 15)
 
-The reveal. Everything before this was preparation.
+**Goal:** Build the Bureau intelligence features that make the product indispensable. These are the conversion drivers — the features that turn "cool free tool" into "I need to pay for this."
 
-| # | Task | Detail | Done When |
-|---|------|--------|-----------|
-| L-1 | Tool reveal post | "I built a free research lab for fantasy football." Post on r/DynastyFF and r/fantasyfootball with Lab screenshots (screener, radar charts, prospect rankings, formula builder). Link to razzle.lol. Tone: humble builder sharing a passion project. | Reveal post published, engagement tracked |
-| L-2 | r/SleeperApp post | "Connect your Sleeper leagues to see AI-powered manager profiles and trade intelligence." Highlight Bureau features — manager behavioral profiles, trade finder, pressure maps. | SleeperApp-specific post published |
-| L-3 | Launch day monitoring | Watch server logs for errors. Monitor Render health. Be ready to hotfix within 1 hour. Have a "sorry, we're seeing heavy traffic" message ready if load spikes. | No extended downtime on launch day |
-| L-4 | Conversion tracking | Track: landing page → Lab click-through, Lab → Sleeper connection, Sleeper → Situation Room trial, trial → paid conversion. Even rough numbers from server logs. | Know your funnel conversion rates |
-| L-5 | Response management | Reply to every comment on reveal posts. Answer questions. Be genuinely helpful. Fix reported bugs publicly ("fixed, try again"). This is your brand moment. | Every commenter gets a response |
-| L-6 | Draft week content | During the actual NFL Draft (Apr 24-26), post Lab screenshots of rookies as they're picked — instant draft grades, prospect profiles, dynasty impact. Real-time content that showcases the tool. | Razzle is the tool people are looking at during the draft |
+The autonomous loop builds these from TICKETS.md while you focus on Twitter presence.
 
-**Exit criterion:** Razzle has a visible presence on Reddit. Power users are in the Lab. Some have connected Sleeper. Trial signups are happening. You can measure the funnel.
+| # | Feature | What it does |
+|---|---------|-------------|
+| 2-1 | Self-Scout (default view) | Connected user sees their own team analyzed first — depth, build profile, power rank, "how opponents see you" |
+| 2-2 | Roster Depth Analysis | Starter quality vs bench depth by position, vulnerability flags, depth scores (0-100) |
+| 2-3 | Build Profiles | Roster construction archetypes — Hero RB, Zero RB, Stars & Scrubs, Youth Movement, Win Now, Balanced |
+| 2-4 | League Power Rankings | Composite rankings beyond W-L — roster strength, depth, activity, schedule difficulty |
+| 2-5 | Trade Network | Who trades with whom, trade balance, position tendencies, "most likely trade partner" |
+| 2-6 | Waiver Tendencies | FAAB burn rate, pickup hit rate, position bias, waiver hawk scores |
+| 2-7 | Head-to-Head | Full rivalry comparison — record, roster edges, trade history, simulated matchup |
+| 2-8 | Strength of Schedule | Remaining matchup difficulty, easy/hard stretches, playoff path preview |
+
+**Parallel work during this phase:**
+- Lab panel-by-panel quality audit (batches A-D, E-P, R-Z)
+- Continue Twitter presence — 3-5 posts/week with Screener data
+- Fix bugs as users report them
+- "Coming soon: ESPN, Yahoo" announcement on Bureau page
+
+**Exit criterion:** All 8 Bureau features are live. Self-scout is the default Bureau view. A connected Sleeper user can answer every question they have about their league and their rivals.
 
 ---
 
-## Post-Draft Growth (May–August)
+### PHASE 3: REDDIT SEEDING (April 16 - May 31)
 
-These ship after launch based on user feedback and conversion data. Ordered by expected impact on retention and revenue.
+**Goal:** Build Reddit credibility and seed Razzle screenshots into the fantasy community. By the end of this phase, r/DynastyFF should have seen Razzle screenshots multiple times without knowing it's a coordinated effort.
+
+| # | Task | Done When |
+|---|------|-----------|
+| 3-1 | Build posting history | 2+ months of genuine participation on r/DynastyFF and r/fantasyfootball. Helpful comments, analysis, trade advice. No product mentions. | Active, credible account |
+| 3-2 | Seed analysis posts (4-6) | Use Screener screenshots to post genuine analysis. "2026 rookie big board using combine + college data." "Dynasty buy-lows heading into camp." Watermark does the marketing. | 4-6 posts with visible watermark |
+| 3-3 | "I built a thing" post | When posting history is established. "I built a free fantasy football screener." Lab walkthrough with screenshots. Humble builder tone. | Post published with positive engagement |
+| 3-4 | Formula Store seeding | Create 5+ high-quality formulas (dynasty value composite, breakout score, buy-low indicator). Publish to store. Share in relevant threads. | Store has real, useful content |
+| 3-5 | Friends & family beta | Send razzle.lol to 10+ people who play fantasy. Watch them use it. Fix what they hit. | 10+ real humans have used it and given feedback |
+| 3-6 | "Coming soon" hype | Announce ESPN/Yahoo support coming soon. Post Bureau screenshots showing league odds, depth analysis. "Connect your Sleeper league and see this for your team." | Community is aware and interested |
+
+**Exit criterion:** Reddit has seen Razzle. Screenshots are circulating. Multiple organic "what tool is that?" questions in comments. Friends & family feedback incorporated.
+
+---
+
+### PHASE 4: DRAFT SEASON PUSH (June - August)
+
+**Goal:** Convert awareness into registrations. Dynasty startup drafts and rookie drafts are happening. This is peak engagement for the primary audience.
+
+| # | Task | Done When |
+|---|------|-----------|
+| 4-1 | Draft content blitz | Lab screenshots during rookie drafts and startup drafts — prospect profiles, dynasty values, draft grades. Real-time content. | Razzle is the tool people reference during drafts |
+| 4-2 | Situation Room showcase | "ChatGPT vs Razzle with league context" comparison thread on Twitter + Reddit. Side-by-side screenshots. The money content. | Comparison posted with strong engagement |
+| 4-3 | Bureau showcase | Post league odds screenshots, self-scout results, depth analysis. "I just connected my league and found out I'm one injury from crisis at RB." | Bureau screenshots shared organically |
+| 4-4 | Community formula posts | Highlight community formulas from the store. "This dynasty breakout formula predicted 3 of last year's top 10 risers." | Formula Store has community engagement |
+| 4-5 | Email capture | Waitlist or registration flow capturing emails before the NFL season starts. Target: 5,000 registered users by Week 1. | Email list growing |
+| 4-6 | Weekly email briefing | For registered users — 3-4 stat insights from the Lab + Situation Room teaser. Drives Pro trial starts. | Automated weekly emails sending |
+
+**Exit criterion:** 500+ registered users. 50+ Sleeper connections. Formula Store has community content. Email list building. First paid conversions happening.
+
+---
+
+### PHASE 5: NFL SEASON — CONVERSION (September 2026 - January 2027)
+
+**Goal:** Convert registered users to paid. This is where the 1,000 paid user target gets hit.
+
+| # | Task | Done When |
+|---|------|-----------|
+| 5-1 | In-season content machine | Weekly Screener screenshots, Bureau odds updates, Situation Room briefing highlights. The product generates shareable content every week. | Consistent weekly content output |
+| 5-2 | Group chat virality | League odds screenshots, self-scout results, and trade analysis designed to be shared in league group chats. One manager using Razzle makes the whole league curious. | Users sharing Razzle in group chats organically |
+| 5-3 | Weekly Razzle briefings | Automated weekly intel drops for paid users. The habit loop. Users open Razzle every Tuesday because Razzle has something for them. | Briefings driving retention |
+| 5-4 | Trade deadline content | "The managers most likely to panic-sell in your league" — Bureau pressure maps at peak trade season. Highest conversion moment of the year. | Trade deadline content drives upgrade spike |
+| 5-5 | Conversion funnel optimization | Track: Screener visit → registration → Sleeper connection → trial start → paid conversion. Optimize the weakest step. | Funnel conversion rates improving weekly |
+| 5-6 | Playoff/championship push | "What the Quant agent says about your championship odds." High-stakes moments drive fence-sitters to convert. | Championship content drives final conversion push |
+
+**Exit criterion:** 1,000 paid users. The business is profitable at ~$100k/yr.
+
+---
+
+### POST-SEASON (February 2027+)
+
+Build based on what users actually asked for.
 
 | Priority | Initiative | Rationale |
 |----------|-----------|-----------|
-| P1 | Weekly Razzle briefings | Automated weekly intel drops for paid users. The habit loop that drives retention. Users should open Razzle every Tuesday because Razzle has something for them. |
-| P1 | Agent memory persistence | Multi-season per-league behavioral data. More seasons = richer profiles = higher switching cost. The moat. |
-| P1 | User feedback loop | In-app feedback mechanism. You need to hear from users systematically, not just from Reddit comments. |
-| P2 | Formula Store marketplace | Paid listings with 15-20% commission. Community content creates Reddit discussion threads = growth. |
-| P2 | IDP support | Defensive stats as filterable Lab columns. Agents evaluate IDP same as offense. Opens a large underserved market. |
-| P2 | Performance optimization | Based on real usage data — optimize the queries, pages, and flows that actual users hit most. |
-| P3 | DFS support | Ownership projections, correlation stacking, value formulas. Separate audience but high-volume. |
-| P3 | Native mobile experience | Not a native app, but a PWA with offline capability for the most-used Lab views. |
-| P3 | AdSense optimization | Tune placement on free pages. Target: cover server costs ($50-100/mo). |
+| P1 | ESPN/Yahoo league imports | 3x the addressable market. Build what was announced as "coming soon." |
+| P1 | Agent memory persistence | Multi-season behavioral data. More seasons = richer profiles = higher switching cost. |
+| P1 | User feedback loop | In-app feedback mechanism. Systematic input, not just Reddit comments. |
+| P2 | Formula Store marketplace | Paid listings with commission. Community content = Reddit discussion = growth. |
+| P2 | IDP support | Defensive stats. Opens an underserved market. |
+| P2 | Performance optimization | Based on real usage data — optimize what real users actually hit. |
+| P3 | DFS support | Ownership projections, correlation stacking. Separate audience, high volume. |
+| P3 | PWA / mobile experience | Offline capability for most-used views. |
+
+---
+
+## Conversion Funnel
+
+```
+Twitter/Reddit post (screenshot with watermark)
+    ↓
+razzle.lol landing page ("The Screener is forever free")
+    ↓
+Open the Screener → explore data → create formulas → share screenshots
+    ↓
+Connect Sleeper → see league odds summary (free) → "I want the deep-dive"
+    ↓
+Self-scout shows your team's vulnerabilities → "I need this"
+    ↓
+Start 7-day Pro trial (no credit card)
+    ↓
+Bureau deep intelligence + Situation Room agents
+    ↓
+Trial ends → "Subscribe to keep Pro" → $9.99/mo or $79.99/yr
+```
+
+Every step must work flawlessly. If any step is broken, that's priority over everything else.
 
 ---
 
 ## Risks
 
-| Risk | Likelihood | Impact | Mitigation |
-|------|-----------|--------|------------|
-| Render deployment issues (DB download, env vars) | Medium | High — blocks everything | Test deploy this weekend. Keep a local backup deployment plan. |
-| Stripe webhook misconfiguration | Medium | High — no revenue | Test in Stripe test mode first. Verify webhook signatures. Log every webhook event. |
-| Reddit posts removed by mods | Medium | Medium — delays distribution | Follow subreddit rules exactly. Lead with value, not promotion. Have backup subreddits. |
-| SQLite locking under concurrent load | Low | High — site breaks at worst time | WAL mode already enabled. Monitor during soft launch. Have a "read replica" plan if needed. |
-| LLM API costs surprise | Low | Medium — margin squeeze | BYOK model means users bear most cost. Monitor Elite tier usage closely. Set spending alerts on OpenRouter. |
-| 2026 NFL offseason trades change data | Low | Low — stale but not wrong | Plan a data refresh script that can run in 10 minutes. Run weekly during offseason. |
+| Risk | Mitigation |
+|------|-----------|
+| Twitter launch gets no traction | Have 20 screenshot posts ready. Engage with fantasy accounts directly. The thread format allows multiple shots. |
+| Reddit posts removed by mods | Follow subreddit rules exactly. 2+ months of genuine posting history first. Lead with value, not promotion. |
+| Users sign up but don't convert | Bureau self-scout is the conversion driver. If it doesn't create "I need this" moments, the features aren't good enough — improve them. |
+| Stripe webhook issues in production | Test with real charges before launch. Log every webhook event. Have manual upgrade capability as backup. |
+| Sleeper API rate limits or changes | Cache league data aggressively. Build offline-capable Bureau views. Monitor API status. |
+| 80% of users are free forever | Expected. Free users generate screenshots and word of mouth. Even 5% conversion from 20,000 free users = 1,000 paid. |
 
 ---
 
 ## Execution Rules
 
-1. **No new features until after Draft Day.** The Lab has 70+ panels. The Bureau has manager profiles, trade finder, and pressure maps. The Situation Room has 6 agents. This is enough. Make what exists work flawlessly.
-2. **Live verification over local testing.** Every task in the NOW phase must be verified on razzle.lol, not localhost. The gap between "works on my machine" and "works on the internet" is where launches die.
-3. **Fix the funnel, not the edges.** If the landing page → Lab → Bureau → Situation Room → pricing → register → trial path has a single broken step, that's priority over everything else.
-4. **Real humans, real data, real money.** Test with real Sleeper usernames. Process a real Stripe charge. Have a real person use the product while you watch. Synthetic testing is over.
-5. **Ship fast, fix fast.** During soft launch and reveal, deploy fixes within 1 hour of a report. Speed of response IS the brand during launch week.
+1. **1,000 paid users is the only metric.** Every decision filters through: "does this help us get to 1,000?"
+2. **The Screener is the growth engine.** Every screenshot is a billboard. Protect its quality obsessively.
+3. **The Bureau is the conversion engine.** If a connected user doesn't feel the urge to upgrade, the Bureau isn't good enough.
+4. **Ship fast, fix fast.** Deploy fixes within 1 hour during launch windows. Speed of response IS the brand.
+5. **Real humans, real data, real money.** No more synthetic testing. Every verification uses real Sleeper accounts, real Stripe charges, real phones.
+6. **Twitter first, Reddit second.** Build credibility on Twitter, transfer it to Reddit. Not the other way around.
 
 ---
 
 ## Timeline Summary
 
-| Dates | Phase | Focus |
-|-------|-------|-------|
-| Mar 15–28 | **NOW: Pre-Launch Verification** | Deploy, verify Stripe, verify auth, verify Sleeper, verify agents, mobile check, analytics |
-| Mar 29–Apr 12 | **NEXT: Soft Launch + Reddit Seeding** | Beta users, hotfixes, seed posts, community presence, AdSense, Formula Store content |
-| Apr 13–26 | **LATER: Draft Week Launch** | Reveal post, SleeperApp post, launch monitoring, conversion tracking, draft content |
-| May–Aug | **Post-Draft: Growth** | Weekly briefings, agent memory, Formula Store marketplace, IDP, DFS |
-
----
-
-## What Changed From the Previous Roadmap
-
-The previous roadmap (Phases A–G) was a hardening plan that assumed the product wasn't production-ready. **That work is done.** Phases A through H, bug fixes, and polish passes are all complete.
-
-This updated roadmap shifts from "make it work" to "prove it works live and get it in front of people." The key changes:
-
-- **Removed**: All QA/hardening phases (A–F) — completed
-- **Removed**: Build pipeline phase (G) — completed
-- **Removed**: BYOK security cleanup (H) — completed
-- **Added**: Production deployment verification (was assumed, never explicitly verified live)
-- **Added**: Stripe end-to-end with real money (was tested in code, not with real charges)
-- **Added**: Friends & family beta (real humans, not automated tests)
-- **Added**: Analytics baseline (can't improve what you can't measure)
-- **Restructured**: Now/Next/Later format instead of weekly phases — more honest about what's committed vs. directional
-- **Kept**: Reddit launch strategy from original Phase G, expanded with soft launch seeding period
+| Dates | Phase | Goal |
+|-------|-------|------|
+| Mar 16-22 | **Twitter Launch** | Site live, Stripe working, launch thread posted |
+| Mar 23 - Apr 15 | **Build the Bureau** | 8 intelligence features, Lab audit, daily Twitter |
+| Apr 16 - May 31 | **Reddit Seeding** | Posting history, seed screenshots, "I built a thing" |
+| Jun - Aug | **Draft Season Push** | Registrations, draft content, email list, Formula Store |
+| Sep 26 - Jan 27 | **NFL Season Conversion** | Hit 1,000 paid users |
+| Feb 27+ | **Post-Season Growth** | ESPN/Yahoo, agent memory, community features |

@@ -4501,7 +4501,7 @@
       // draw sparklines
       var canvases = body.querySelectorAll('canvas[data-ut-spark]');
       canvases.forEach(function(c) {
-        var scores = JSON.parse(c.getAttribute('data-ut-scores') || '[]');
+        var scores; try { scores = JSON.parse(c.getAttribute('data-ut-scores') || '[]'); } catch(e) { scores = []; }
         var riser = c.getAttribute('data-ut-riser') === '1';
         drawSparkline(c, scores, riser);
       });
