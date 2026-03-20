@@ -61,7 +61,7 @@ async function loadComparison(id1, id2) {
   } catch (err) {
     page.innerHTML =
       '<div class="compare-loading">' +
-      '<div class="compare-loading-text" style="color:var(--red);">fumbled the data fetch... ' + esc(err.message) + '</div>' +
+      '<div class="compare-loading-text" style="color:var(--red);">fumbled the data fetch... try again in a sec.</div>' +
       '<a href="/lab.html" class="btn-primary" style="margin-top:16px;">Back to Screener</a>' +
       '</div>';
   }
@@ -322,6 +322,7 @@ function drawCompareRadar(color1, color2, pos) {
   var W = canvas.width, H = canvas.height;
   var cx = W / 2, cy = H / 2 + 10;
   var R = Math.min(W, H) / 2 - 50;
+  var t = getCanvasTheme();
 
   var s1 = _p1Data.seasons || [];
   var s2 = _p2Data.seasons || [];
@@ -346,14 +347,14 @@ function drawCompareRadar(color1, color2, pos) {
       i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
     }
     ctx.closePath();
-    ctx.strokeStyle = "#c4b5a5";
+    ctx.strokeStyle = t.inkFaint;
     ctx.lineWidth = 1;
     ctx.stroke();
   }
 
   // Axis lines + labels
   ctx.font = "11px 'Space Mono', monospace";
-  ctx.fillStyle = "#5c4a3d";
+  ctx.fillStyle = t.inkMedium;
   ctx.textAlign = "center";
   for (var i = 0; i < n; i++) {
     var angle = (Math.PI * 2 * i) / n - Math.PI / 2;
@@ -361,7 +362,7 @@ function drawCompareRadar(color1, color2, pos) {
     ctx.beginPath();
     ctx.moveTo(cx, cy);
     ctx.lineTo(cx + R * Math.cos(angle), cy + R * Math.sin(angle));
-    ctx.strokeStyle = "#c4b5a5";
+    ctx.strokeStyle = t.inkFaint;
     ctx.lineWidth = 1;
     ctx.stroke();
   }
@@ -372,6 +373,7 @@ function drawCompareRadar(color1, color2, pos) {
 }
 
 function drawRadarPoly(ctx, cx, cy, R, n, axes, data, color, alpha) {
+  var t = getCanvasTheme();
   var values = axes.map(function(a) { return Math.min((data[a.key] || 0) / a.max, 1); });
 
   ctx.beginPath();
@@ -403,7 +405,7 @@ function drawRadarPoly(ctx, cx, cy, R, n, axes, data, color, alpha) {
     ctx.arc(cx + r * Math.cos(angle), cy + r * Math.sin(angle), 4, 0, Math.PI * 2);
     ctx.fillStyle = color;
     ctx.fill();
-    ctx.strokeStyle = "#fff";
+    ctx.strokeStyle = t.white;
     ctx.lineWidth = 1.5;
     ctx.stroke();
   }
@@ -457,6 +459,7 @@ function drawCompareArc(color1, color2) {
   var pad = { top: 20, right: 30, bottom: 35, left: 55 };
   var plotW = W - pad.left - pad.right;
   var plotH = H - pad.top - pad.bottom;
+  var t = getCanvasTheme();
 
   ctx.clearRect(0, 0, W, H);
 
@@ -478,7 +481,7 @@ function drawCompareArc(color1, color2) {
   var maxVal = Math.max.apply(null, allVals.concat([1]));
 
   // Y gridlines
-  ctx.strokeStyle = "#c4b5a5";
+  ctx.strokeStyle = t.inkFaint;
   ctx.lineWidth = 1;
   ctx.setLineDash([4, 4]);
   for (var i = 0; i <= 4; i++) {
@@ -487,7 +490,7 @@ function drawCompareArc(color1, color2) {
     ctx.moveTo(pad.left, y);
     ctx.lineTo(W - pad.right, y);
     ctx.stroke();
-    ctx.fillStyle = "#8a7565";
+    ctx.fillStyle = t.inkLight;
     ctx.font = "11px 'Space Mono', monospace";
     ctx.textAlign = "right";
     ctx.fillText(String(Math.round((i / 4) * maxVal)), pad.left - 8, y + 4);
@@ -495,7 +498,7 @@ function drawCompareArc(color1, color2) {
   ctx.setLineDash([]);
 
   // X labels
-  ctx.fillStyle = "#8a7565";
+  ctx.fillStyle = t.inkLight;
   ctx.font = "11px 'Space Mono', monospace";
   ctx.textAlign = "center";
   for (var i = 0; i < years.length; i++) {
@@ -511,7 +514,7 @@ function drawCompareArc(color1, color2) {
   ctx.save();
   ctx.translate(14, pad.top + plotH / 2);
   ctx.rotate(-Math.PI / 2);
-  ctx.fillStyle = "#8a7565";
+  ctx.fillStyle = t.inkLight;
   ctx.font = "11px 'Space Mono', monospace";
   ctx.textAlign = "center";
   ctx.fillText("PPR Points", 0, 0);
@@ -540,12 +543,13 @@ function drawArcLine(ctx, years, vMap, maxVal, pad, plotW, plotH, color) {
   ctx.stroke();
 
   // Dots
+  var t = getCanvasTheme();
   for (var i = 0; i < points.length; i++) {
     ctx.beginPath();
     ctx.arc(points[i].x, points[i].y, 4, 0, Math.PI * 2);
     ctx.fillStyle = color;
     ctx.fill();
-    ctx.strokeStyle = "#fff";
+    ctx.strokeStyle = t.white;
     ctx.lineWidth = 2;
     ctx.stroke();
   }
@@ -566,6 +570,8 @@ function exportComparePNG() {
   var color2 = POS_COLORS[pos2] || "#8b5cf6";
   if (pos1 === pos2) color2 = adjustColor(color1, -30);
 
+  var t = getCanvasTheme();
+
   var W = 1200, H = 630;
   var canvas = document.createElement("canvas");
   canvas.width = W;
@@ -573,7 +579,7 @@ function exportComparePNG() {
   var ctx = canvas.getContext("2d");
 
   // Background
-  ctx.fillStyle = "#ede0cf";
+  ctx.fillStyle = t.bg;
   ctx.fillRect(0, 0, W, H);
 
   // Top accent stripe split
@@ -583,8 +589,8 @@ function exportComparePNG() {
   ctx.fillRect(W / 2, 0, W / 2, 8);
 
   // VS badge
-  ctx.fillStyle = "#ede0cf";
-  ctx.strokeStyle = "#2d1f14";
+  ctx.fillStyle = t.bg;
+  ctx.strokeStyle = t.ink;
   ctx.lineWidth = 3;
   ctx.beginPath();
   ctx.arc(W / 2, 80, 28, 0, Math.PI * 2);
@@ -618,12 +624,12 @@ function exportComparePNG() {
 
     // Alternating row bg
     if (i % 2 === 0) {
-      ctx.fillStyle = "rgba(247,239,229,0.5)";
+      ctx.fillStyle = t.isDark ? "rgba(237,224,207,0.06)" : "rgba(247,239,229,0.5)";
       ctx.fillRect(50, y - 2, W - 100, rowH);
     }
 
     // Label
-    ctx.fillStyle = "#8a7565";
+    ctx.fillStyle = t.inkLight;
     ctx.font = "11px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(r.label, W / 2, y + 14);
@@ -636,12 +642,12 @@ function exportComparePNG() {
     }
 
     ctx.font = winner === 1 ? "bold 13px 'Space Mono', monospace" : "13px 'Space Mono', monospace";
-    ctx.fillStyle = winner === 1 ? color1 : "#2d1f14";
+    ctx.fillStyle = winner === 1 ? color1 : t.ink;
     ctx.textAlign = "right";
     ctx.fillText(v1 !== null ? r.fmt(v1) : "\u2014", W / 2 - 70, y + 14);
 
     ctx.font = winner === 2 ? "bold 13px 'Space Mono', monospace" : "13px 'Space Mono', monospace";
-    ctx.fillStyle = winner === 2 ? color2 : "#2d1f14";
+    ctx.fillStyle = winner === 2 ? color2 : t.ink;
     ctx.textAlign = "left";
     ctx.fillText(v2 !== null ? r.fmt(v2) : "\u2014", W / 2 + 70, y + 14);
   }
@@ -651,13 +657,13 @@ function exportComparePNG() {
   drawRadarOnExport(ctx, radarCx, radarCy, radarR, color1, color2, pos);
 
   // Watermark
-  ctx.fillStyle = "rgba(45,31,20,0.3)";
+  ctx.fillStyle = t.isDark ? "rgba(237,224,207,0.3)" : "rgba(45,31,20,0.3)";
   ctx.font = "18px 'Luckiest Guy', cursive";
   ctx.textAlign = "right";
   ctx.fillText("razzle.lol", W - 50, H - 30);
 
   // Handwritten annotation
-  ctx.fillStyle = "rgba(45,31,20,0.25)";
+  ctx.fillStyle = t.isDark ? "rgba(237,224,207,0.25)" : "rgba(45,31,20,0.25)";
   ctx.font = "16px 'Caveat', cursive";
   ctx.textAlign = "left";
   ctx.fillText("who would you rather have?", 50, H - 30);
@@ -672,9 +678,10 @@ function exportComparePNG() {
 }
 
 function drawExportPlayerCard(ctx, x, y, w, h, player, career, pos, color) {
+  var t = getCanvasTheme();
   // Card bg
-  ctx.fillStyle = "#f7efe5";
-  ctx.strokeStyle = "#2d1f14";
+  ctx.fillStyle = t.bgCard;
+  ctx.strokeStyle = t.ink;
   ctx.lineWidth = 2;
   roundRect(ctx, x, y, w, h, 10);
   ctx.fill();
@@ -689,17 +696,17 @@ function drawExportPlayerCard(ctx, x, y, w, h, player, career, pos, color) {
   ctx.fillStyle = color;
   roundRect(ctx, x + 14, y + 18, 50, 36, 6);
   ctx.fill();
-  ctx.strokeStyle = "#2d1f14";
+  ctx.strokeStyle = t.ink;
   ctx.lineWidth = 2;
   roundRect(ctx, x + 14, y + 18, 50, 36, 6);
   ctx.stroke();
-  ctx.fillStyle = "#fff";
+  ctx.fillStyle = t.white;
   ctx.font = "bold 22px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText(pos, x + 39, y + 44);
 
   // Name
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.font = "bold 26px 'Luckiest Guy', cursive";
   ctx.textAlign = "left";
   var displayName = player.full_name || "";
@@ -713,7 +720,7 @@ function drawExportPlayerCard(ctx, x, y, w, h, player, career, pos, color) {
   ctx.fillText(displayName, x + 74, y + 46);
 
   // Meta
-  ctx.fillStyle = "#8a7565";
+  ctx.fillStyle = t.inkLight;
   ctx.font = "13px 'Space Mono', monospace";
   ctx.fillText((player.team || "FA") + " \u00B7 Age " + (player.age ? Math.floor(player.age) : "?"), x + 74, y + 68);
 
@@ -736,26 +743,27 @@ function drawExportPlayerCard(ctx, x, y, w, h, player, career, pos, color) {
   for (var i = 0; i < stats.length; i++) {
     var bx = x + 14 + i * (boxW + 6);
     var by = y + 90;
-    ctx.fillStyle = "#ede0cf";
+    ctx.fillStyle = t.bg;
     roundRect(ctx, bx, by, boxW, 52, 6);
     ctx.fill();
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 1;
     roundRect(ctx, bx, by, boxW, 52, 6);
     ctx.stroke();
 
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.font = "bold 20px 'Luckiest Guy', cursive";
     ctx.textAlign = "center";
     ctx.fillText(stats[i].value, bx + boxW / 2, by + 26);
 
-    ctx.fillStyle = "#8a7565";
+    ctx.fillStyle = t.inkLight;
     ctx.font = "9px 'Space Mono', monospace";
     ctx.fillText(stats[i].label, bx + boxW / 2, by + 42);
   }
 }
 
 function drawRadarOnExport(ctx, cx, cy, R, color1, color2, pos) {
+  var t = getCanvasTheme();
   var s1 = _p1Data.seasons || [];
   var s2 = _p2Data.seasons || [];
   var latest1 = s1.length > 0 ? s1[s1.length - 1] : _p1Data.career;
@@ -774,14 +782,14 @@ function drawRadarOnExport(ctx, cx, cy, R, color1, color2, pos) {
               : ctx.lineTo(cx + r * Math.cos(angle), cy + r * Math.sin(angle));
     }
     ctx.closePath();
-    ctx.strokeStyle = "#c4b5a5";
+    ctx.strokeStyle = t.inkFaint;
     ctx.lineWidth = 1;
     ctx.stroke();
   }
 
   // Labels
   ctx.font = "9px 'Space Mono', monospace";
-  ctx.fillStyle = "#5c4a3d";
+  ctx.fillStyle = t.inkMedium;
   ctx.textAlign = "center";
   for (var i = 0; i < n; i++) {
     var angle = (Math.PI * 2 * i) / n - Math.PI / 2;

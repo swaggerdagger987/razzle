@@ -56,7 +56,7 @@ async function loadPlayer(playerId) {
   } catch (err) {
     page.innerHTML = `
       <div class="player-loading">
-        <div class="player-loading-text" style="color:var(--red);">fumbled the data fetch... ${esc(err.message)}</div>
+        <div class="player-loading-text" style="color:var(--red);">fumbled the data fetch... try again in a sec.</div>
         <a href="/lab.html" class="btn-primary" style="margin-top:16px;">Back to Screener</a>
       </div>`;
   }
@@ -333,6 +333,7 @@ function drawRadar(seasons, career, pos) {
   const W = canvas.width, H = canvas.height;
   const cx = W / 2, cy = H / 2 + 10;
   const R = Math.min(W, H) / 2 - 40;
+  var t = getCanvasTheme();
 
   const posHex = POS_COLORS[pos] || "#d97757";
 
@@ -357,14 +358,14 @@ function drawRadar(seasons, career, pos) {
       i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
     }
     ctx.closePath();
-    ctx.strokeStyle = "#c4b5a5";
+    ctx.strokeStyle = t.inkFaint;
     ctx.lineWidth = 1;
     ctx.stroke();
   }
 
   // Axis lines + labels
   ctx.font = "11px 'Space Mono', monospace";
-  ctx.fillStyle = "#5c4a3d";
+  ctx.fillStyle = t.inkMedium;
   ctx.textAlign = "center";
   for (let i = 0; i < n; i++) {
     const angle = (Math.PI * 2 * i) / n - Math.PI / 2;
@@ -375,7 +376,7 @@ function drawRadar(seasons, career, pos) {
     ctx.beginPath();
     ctx.moveTo(cx, cy);
     ctx.lineTo(cx + R * Math.cos(angle), cy + R * Math.sin(angle));
-    ctx.strokeStyle = "#c4b5a5";
+    ctx.strokeStyle = t.inkFaint;
     ctx.stroke();
   }
 
@@ -409,7 +410,7 @@ function drawRadar(seasons, career, pos) {
     ctx.arc(cx + r * Math.cos(angle), cy + r * Math.sin(angle), 4, 0, Math.PI * 2);
     ctx.fillStyle = posHex;
     ctx.fill();
-    ctx.strokeStyle = "#fff";
+    ctx.strokeStyle = t.white;
     ctx.lineWidth = 1.5;
     ctx.stroke();
   }
@@ -463,6 +464,7 @@ function drawArc(seasons, pos) {
   const pad = { top: 20, right: 30, bottom: 35, left: 55 };
   const plotW = W - pad.left - pad.right;
   const plotH = H - pad.top - pad.bottom;
+  var t = getCanvasTheme();
 
   const posHex = POS_COLORS[pos] || "#d97757";
 
@@ -473,7 +475,7 @@ function drawArc(seasons, pos) {
   const maxVal = Math.max(...values, 1);
 
   // Y gridlines
-  ctx.strokeStyle = "#c4b5a5";
+  ctx.strokeStyle = t.inkFaint;
   ctx.lineWidth = 1;
   ctx.setLineDash([4, 4]);
   const yTicks = 4;
@@ -483,7 +485,7 @@ function drawArc(seasons, pos) {
     ctx.moveTo(pad.left, y);
     ctx.lineTo(W - pad.right, y);
     ctx.stroke();
-    ctx.fillStyle = "#8a7565";
+    ctx.fillStyle = t.inkLight;
     ctx.font = "11px 'Space Mono', monospace";
     ctx.textAlign = "right";
     ctx.fillText(Math.round((i / yTicks) * maxVal), pad.left - 8, y + 4);
@@ -491,7 +493,7 @@ function drawArc(seasons, pos) {
   ctx.setLineDash([]);
 
   // X labels
-  ctx.fillStyle = "#8a7565";
+  ctx.fillStyle = t.inkLight;
   ctx.font = "11px 'Space Mono', monospace";
   ctx.textAlign = "center";
   for (let i = 0; i < labels.length; i++) {
@@ -525,12 +527,12 @@ function drawArc(seasons, pos) {
     ctx.arc(x, y, 5, 0, Math.PI * 2);
     ctx.fillStyle = posHex;
     ctx.fill();
-    ctx.strokeStyle = "#fff";
+    ctx.strokeStyle = t.white;
     ctx.lineWidth = 2;
     ctx.stroke();
 
     // Value label
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(Math.round(values[i]), x, y - 12);
@@ -540,7 +542,7 @@ function drawArc(seasons, pos) {
   ctx.save();
   ctx.translate(14, pad.top + plotH / 2);
   ctx.rotate(-Math.PI / 2);
-  ctx.fillStyle = "#8a7565";
+  ctx.fillStyle = t.inkLight;
   ctx.font = "11px 'Space Mono', monospace";
   ctx.textAlign = "center";
   ctx.fillText("PPR Points", 0, 0);
@@ -559,6 +561,8 @@ async function exportPlayerPNG() {
   const pos = (p.position || "").toUpperCase();
   const posHex = POS_COLORS[pos] || "#d97757";
 
+  var t = getCanvasTheme();
+
   const W = 1200, H = 630;
   const canvas = document.createElement("canvas");
   canvas.width = W;
@@ -566,7 +570,7 @@ async function exportPlayerPNG() {
   const ctx = canvas.getContext("2d");
 
   // Background
-  ctx.fillStyle = "#ede0cf";
+  ctx.fillStyle = t.bg;
   ctx.fillRect(0, 0, W, H);
 
   // Position color accent bar
@@ -574,8 +578,8 @@ async function exportPlayerPNG() {
   ctx.fillRect(0, 0, W, 8);
 
   // Card background
-  ctx.fillStyle = "#f7efe5";
-  ctx.strokeStyle = "#2d1f14";
+  ctx.fillStyle = t.bgCard;
+  ctx.strokeStyle = t.ink;
   ctx.lineWidth = 3;
   roundRect(ctx, 40, 30, W - 80, H - 80, 16);
   ctx.fill();
@@ -585,23 +589,23 @@ async function exportPlayerPNG() {
   ctx.fillStyle = posHex;
   roundRect(ctx, 60, 50, 80, 60, 8);
   ctx.fill();
-  ctx.strokeStyle = "#2d1f14";
+  ctx.strokeStyle = t.ink;
   ctx.lineWidth = 2;
   roundRect(ctx, 60, 50, 80, 60, 8);
   ctx.stroke();
-  ctx.fillStyle = "#fff";
+  ctx.fillStyle = t.white;
   ctx.font = "bold 32px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText(pos, 100, 92);
 
   // Player name
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.font = "bold 42px 'Luckiest Guy', cursive";
   ctx.textAlign = "left";
   ctx.fillText(p.full_name || "", 160, 92);
 
   // Meta line
-  ctx.fillStyle = "#8a7565";
+  ctx.fillStyle = t.inkLight;
   ctx.font = "16px 'Space Mono', monospace";
   ctx.fillText(`${p.team || "FA"} · Age ${p.age ? Math.floor(p.age) : "?"} · ${p.college || ""}`, 160, 120);
 
@@ -611,20 +615,20 @@ async function exportPlayerPNG() {
   for (let i = 0; i < stats.length; i++) {
     const x = startX + i * (boxW + 12);
     const y = startY;
-    ctx.fillStyle = "#ede0cf";
-    ctx.strokeStyle = "#2d1f14";
+    ctx.fillStyle = t.bg;
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 2;
     roundRect(ctx, x, y, boxW, boxH, 8);
     ctx.fill();
     roundRect(ctx, x, y, boxW, boxH, 8);
     ctx.stroke();
 
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.font = "bold 28px 'Luckiest Guy', cursive";
     ctx.textAlign = "center";
     ctx.fillText(stats[i].value, x + boxW / 2, y + 38);
 
-    ctx.fillStyle = "#8a7565";
+    ctx.fillStyle = t.inkLight;
     ctx.font = "12px 'Space Mono', monospace";
     ctx.fillText(stats[i].label.toUpperCase(), x + boxW / 2, y + 62);
   }
@@ -633,7 +637,7 @@ async function exportPlayerPNG() {
   drawRadarOnCanvas(ctx, 860, 360, 160, _profileData.seasons, _profileData.career, pos);
 
   // Watermark
-  ctx.fillStyle = "rgba(42,42,46,0.3)";
+  ctx.fillStyle = t.isDark ? "rgba(237,224,207,0.3)" : "rgba(45,31,20,0.3)";
   ctx.font = "18px 'Luckiest Guy', cursive";
   ctx.textAlign = "right";
   ctx.fillText("razzle.lol", W - 56, H - 56);
@@ -647,6 +651,7 @@ async function exportPlayerPNG() {
 }
 
 function drawRadarOnCanvas(ctx, cx, cy, R, seasons, career, pos) {
+  var t = getCanvasTheme();
   const posHex = POS_COLORS[pos] || "#d97757";
   const latest = seasons && seasons.length > 0 ? seasons[seasons.length - 1] : career;
   if (!latest) return;
@@ -664,14 +669,14 @@ function drawRadarOnCanvas(ctx, cx, cy, R, seasons, career, pos) {
               : ctx.lineTo(cx + r * Math.cos(angle), cy + r * Math.sin(angle));
     }
     ctx.closePath();
-    ctx.strokeStyle = "#c4b5a5";
+    ctx.strokeStyle = t.inkFaint;
     ctx.lineWidth = 1;
     ctx.stroke();
   }
 
   // Labels
   ctx.font = "10px 'Space Mono', monospace";
-  ctx.fillStyle = "#5c4a3d";
+  ctx.fillStyle = t.inkMedium;
   ctx.textAlign = "center";
   for (let i = 0; i < n; i++) {
     const angle = (Math.PI * 2 * i) / n - Math.PI / 2;

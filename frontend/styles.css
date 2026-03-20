@@ -689,7 +689,7 @@ button.nav-search-hint {
 
 .btn-chunky.active {
   background: var(--ink);
-  color: white;
+  color: var(--bg);
 }
 
 .btn-primary {
@@ -751,7 +751,7 @@ a.btn-pro-upgrade:focus-visible {
 .chip.active[data-pos="RB"] { background: var(--pos-rb); }
 .chip.active[data-pos="WR"] { background: var(--pos-wr); }
 .chip.active[data-pos="TE"] { background: var(--pos-te); }
-.chip.active[data-pos="ALL"] { background: var(--ink); }
+.chip.active[data-pos="ALL"] { background: var(--ink); color: var(--bg); }
 
 /* ===== LOADING ===== */
 .loading-msg {

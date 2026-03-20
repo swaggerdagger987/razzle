@@ -151,7 +151,7 @@ async function rateFormula(formulaId, rating) {
       body: JSON.stringify({ rating })
     });
     if (!resp.ok) {
-      showStoreToast("rating failed — try again");
+      showStoreToast("fumbled the rating... try again.");
       return;
     }
     const data = await resp.json();
@@ -207,7 +207,7 @@ async function installFormula(formulaId) {
   try {
     const resp = await fetch(`/api/formulas/${formulaId}`);
     if (!resp.ok) {
-      showStoreToast("failed to fetch formula — try again");
+      showStoreToast("couldn't pull that formula... try again.");
       return;
     }
     const formula = await resp.json();
@@ -369,7 +369,7 @@ async function submitPublish() {
 
   // Check duplicate
   if (isFormulaPublished(name)) {
-    showStoreToast("Already published this formula!");
+    showStoreToast("already published this formula.");
     closePublishFlow();
     return;
   }
@@ -567,8 +567,8 @@ function renderFormulaCard(formula, userReviews) {
       ${descriptionHtml}
       <div class="store-card-footer">
         <div style="display:flex; align-items:center; gap:6px;">
-          ${renderStars(formula.avgRating)}
-          <span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">${formula.avgRating.toFixed(1)} (${formula.ratingCount})</span>
+          ${renderStars(formula.avgRating || 0)}
+          <span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">${(formula.avgRating || 0).toFixed(1)} (${formula.ratingCount || 0})</span>
         </div>
       </div>
       ${actionsHtml}

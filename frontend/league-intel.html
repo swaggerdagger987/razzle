@@ -2829,10 +2829,12 @@ async function loadManagerProfiles(leagueId, userId, allPlayers, userMap, roster
       // Consistency across seasons
       if (seasonsTracked >= 2) {
         var moveValues = Object.values(prof.movesBySeason);
-        var moveAvg = moveValues.reduce(function(a, b) { return a + b; }, 0) / moveValues.length;
-        var moveVariance = moveValues.reduce(function(a, b) { return a + Math.pow(b - moveAvg, 2); }, 0) / moveValues.length;
-        if (Math.sqrt(moveVariance) < moveAvg * 0.3 && moveAvg > 5) traits.push("consistent pattern");
-        else if (Math.sqrt(moveVariance) > moveAvg * 0.7) traits.push("unpredictable");
+        if (moveValues.length > 0) {
+          var moveAvg = moveValues.reduce(function(a, b) { return a + b; }, 0) / moveValues.length;
+          var moveVariance = moveValues.reduce(function(a, b) { return a + Math.pow(b - moveAvg, 2); }, 0) / moveValues.length;
+          if (Math.sqrt(moveVariance) < moveAvg * 0.3 && moveAvg > 5) traits.push("consistent pattern");
+          else if (Math.sqrt(moveVariance) > moveAvg * 0.7) traits.push("unpredictable");
+        }
       }
 
       // Positional bias consistency across seasons

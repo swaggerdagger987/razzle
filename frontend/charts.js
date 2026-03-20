@@ -147,6 +147,7 @@ function drawRadar() {
   const W = canvas.width, H = canvas.height;
   const cx = W / 2, cy = H / 2;
   const R = Math.min(cx, cy) - 60;
+  var t = getCanvasTheme();
 
   ctx.clearRect(0, 0, W, H);
 
@@ -176,7 +177,7 @@ function drawRadar() {
   }
 
   // Draw grid
-  ctx.strokeStyle = "#c4b5a5";
+  ctx.strokeStyle = t.inkFaint;
   ctx.lineWidth = 1;
   for (let ring = 1; ring <= 4; ring++) {
     const r = (R * ring) / 4;
@@ -192,7 +193,7 @@ function drawRadar() {
   }
 
   // Draw axes and labels
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.font = "bold 11px 'Space Mono', monospace";
   ctx.textAlign = "center";
   for (let i = 0; i < n; i++) {
@@ -203,7 +204,7 @@ function drawRadar() {
     ctx.beginPath();
     ctx.moveTo(cx, cy);
     ctx.lineTo(x, y);
-    ctx.strokeStyle = "#c4b5a5";
+    ctx.strokeStyle = t.inkFaint;
     ctx.stroke();
 
     const col = COLUMNS[stats[i]];
@@ -244,7 +245,7 @@ function drawRadar() {
       ctx.arc(x, y, 4, 0, 2 * Math.PI);
       ctx.fillStyle = color;
       ctx.fill();
-      ctx.strokeStyle = "#2d1f14";
+      ctx.strokeStyle = t.ink;
       ctx.lineWidth = 2;
       ctx.stroke();
     }
@@ -254,10 +255,10 @@ function drawRadar() {
   players.forEach((player, pIdx) => {
     ctx.fillStyle = CHART_COLORS[pIdx];
     ctx.fillRect(20, 20 + pIdx * 24, 14, 14);
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 2;
     ctx.strokeRect(20, 20 + pIdx * 24, 14, 14);
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.font = "bold 13px 'Luckiest Guy', cursive";
     ctx.textAlign = "left";
     ctx.fillText(player.full_name, 40, 32 + pIdx * 24);
@@ -270,6 +271,7 @@ function drawScatter() {
   const ctx = canvas.getContext("2d");
   const W = canvas.width, H = canvas.height;
   const pad = { top: 30, right: 30, bottom: 50, left: 70 };
+  var t = getCanvasTheme();
 
   ctx.clearRect(0, 0, W, H);
 
@@ -295,7 +297,7 @@ function drawScatter() {
   const toY = v => pad.top + plotH - ((v - yMin) / yRange) * plotH;
 
   // Grid lines
-  ctx.strokeStyle = "#c4b5a5";
+  ctx.strokeStyle = t.inkFaint;
   ctx.lineWidth = 1;
   ctx.setLineDash([4, 4]);
   for (let i = 0; i <= 4; i++) {
@@ -307,7 +309,7 @@ function drawScatter() {
   ctx.setLineDash([]);
 
   // Axes
-  ctx.strokeStyle = "#2d1f14";
+  ctx.strokeStyle = t.ink;
   ctx.lineWidth = 2;
   ctx.beginPath();
   ctx.moveTo(pad.left, pad.top);
@@ -316,7 +318,7 @@ function drawScatter() {
   ctx.stroke();
 
   // Axis labels
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.font = "bold 12px 'Space Mono', monospace";
   ctx.textAlign = "center";
   ctx.fillText(xCol.label, pad.left + plotW / 2, H - 10);
@@ -331,13 +333,13 @@ function drawScatter() {
   for (const p of data) {
     const x = toX(p[xKey]);
     const y = toY(p[yKey]);
-    const color = posColors[p.position] || "#8a7565";
+    const color = posColors[p.position] || t.inkLight;
 
     ctx.beginPath();
     ctx.arc(x, y, 5, 0, 2 * Math.PI);
     ctx.fillStyle = color;
     ctx.fill();
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 1.5;
     ctx.stroke();
   }
@@ -385,7 +387,7 @@ function drawScatter() {
     : data.slice(0, 8);
   ctx.font = "bold 10px 'Space Mono', monospace";
   ctx.textAlign = "left";
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   for (const p of labeled) {
     const x = toX(p[xKey]);
     const y = toY(p[yKey]);
@@ -406,6 +408,7 @@ async function drawWeeklyTrend() {
   const ctx = canvas.getContext("2d");
   const W = canvas.width, H = canvas.height;
   const pad = { top: 30, right: 30, bottom: 50, left: 70 };
+  var t = getCanvasTheme();
 
   ctx.clearRect(0, 0, W, H);
 
@@ -414,7 +417,7 @@ async function drawWeeklyTrend() {
   if (!playerId) return;
 
   ctx.font = "24px 'Caveat', cursive";
-  ctx.fillStyle = "#8a7565";
+  ctx.fillStyle = t.inkLight;
   ctx.textAlign = "center";
   ctx.fillText(razzleLoading(), W / 2, H / 2);
 
@@ -447,6 +450,7 @@ async function drawSeasonTrend() {
   const ctx = canvas.getContext("2d");
   const W = canvas.width, H = canvas.height;
   const pad = { top: 30, right: 30, bottom: 50, left: 70 };
+  var t = getCanvasTheme();
 
   ctx.clearRect(0, 0, W, H);
 
@@ -455,7 +459,7 @@ async function drawSeasonTrend() {
   if (!playerId) return;
 
   ctx.font = "24px 'Caveat', cursive";
-  ctx.fillStyle = "#8a7565";
+  ctx.fillStyle = t.inkLight;
   ctx.textAlign = "center";
   ctx.fillText(razzleLoading(), W / 2, H / 2);
 
@@ -483,6 +487,7 @@ async function drawSeasonTrend() {
 }
 
 function _drawTrendLine(ctx, W, H, pad, vals, labels, playerName, statKey, subtitle) {
+  var t = getCanvasTheme();
   const maxVal = Math.max(...vals, 1);
   const plotW = W - pad.left - pad.right;
   const plotH = H - pad.top - pad.bottom;
@@ -491,7 +496,7 @@ function _drawTrendLine(ctx, W, H, pad, vals, labels, playerName, statKey, subti
   const toY = (v) => pad.top + plotH - (v / maxVal) * plotH;
 
   // Grid
-  ctx.strokeStyle = "#c4b5a5";
+  ctx.strokeStyle = t.inkFaint;
   ctx.lineWidth = 1;
   ctx.setLineDash([4, 4]);
   for (let i = 0; i <= 4; i++) {
@@ -499,14 +504,14 @@ function _drawTrendLine(ctx, W, H, pad, vals, labels, playerName, statKey, subti
     ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(pad.left + plotW, y); ctx.stroke();
     const val = maxVal * (1 - i / 4);
     ctx.font = "11px 'Space Mono', monospace";
-    ctx.fillStyle = "#8a7565";
+    ctx.fillStyle = t.inkLight;
     ctx.textAlign = "right";
     ctx.fillText(val.toFixed(1), pad.left - 8, y + 4);
   }
   ctx.setLineDash([]);
 
   // Axes
-  ctx.strokeStyle = "#2d1f14";
+  ctx.strokeStyle = t.ink;
   ctx.lineWidth = 2;
   ctx.beginPath();
   ctx.moveTo(pad.left, pad.top);
@@ -546,15 +551,15 @@ function _drawTrendLine(ctx, W, H, pad, vals, labels, playerName, statKey, subti
     ctx.arc(x, y, 5, 0, 2 * Math.PI);
     ctx.fillStyle = "#d97757";
     ctx.fill();
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.fillText(labels[i], x, pad.top + plotH + 16);
 
     if (vals.length <= 20) {
-      ctx.fillStyle = "#8a7565";
+      ctx.fillStyle = t.inkLight;
       ctx.fillText(vals[i].toFixed(1), x, y - 10);
     }
   }
@@ -563,7 +568,7 @@ function _drawTrendLine(ctx, W, H, pad, vals, labels, playerName, statKey, subti
   const col = COLUMNS[statKey];
   const statLabel = col ? col.label : statKey;
   ctx.font = "bold 16px 'Luckiest Guy', cursive";
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.textAlign = "left";
   ctx.fillText(`${playerName} — ${statLabel} ${subtitle}`, pad.left, 20);
 }
@@ -606,12 +611,14 @@ function drawHeatmap() {
     .sort((a, b) => (b.fantasy_points_ppr || 0) - (a.fantasy_points_ppr || 0))
     .slice(0, count);
 
+  var t = getCanvasTheme();
+
   if (posPlayers.length < 2) {
     canvas.width = 760;
     canvas.height = 460;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.font = "24px 'Caveat', cursive";
-    ctx.fillStyle = "#8a7565";
+    ctx.fillStyle = t.inkLight;
     ctx.textAlign = "center";
     ctx.fillText(`no ${pos} data — try loading more players`, canvas.width / 2, canvas.height / 2);
     return;
@@ -649,7 +656,7 @@ function drawHeatmap() {
   canvas.height = H;
 
   ctx.clearRect(0, 0, W, H);
-  ctx.fillStyle = "#ede0cf";
+  ctx.fillStyle = t.bg;
   ctx.fillRect(0, 0, W, H);
 
   // Position colors
@@ -658,13 +665,13 @@ function drawHeatmap() {
 
   // Title
   ctx.font = "bold 18px 'Luckiest Guy', cursive";
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.textAlign = "left";
   ctx.fillText(`${pos} Heat Map — Positional Percentiles`, padL, 26);
 
   // Subtitle
   ctx.font = "16px 'Caveat', cursive";
-  ctx.fillStyle = "#8a7565";
+  ctx.fillStyle = t.inkLight;
   ctx.fillText(`top ${posPlayers.length} by PPR`, padL + ctx.measureText(`${pos} Heat Map — Positional Percentiles`).width + 12, 26);
 
   const gridX = padL + nameColW;
@@ -673,7 +680,7 @@ function drawHeatmap() {
   // Column headers (rotated stat labels)
   ctx.save();
   ctx.font = "bold 11px 'Space Mono', monospace";
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   for (let c = 0; c < stats.length; c++) {
     const col = COLUMNS[stats[c]];
     const label = col ? col.label : stats[c];
@@ -689,7 +696,7 @@ function drawHeatmap() {
   ctx.restore();
 
   // Grid border
-  ctx.strokeStyle = "#2d1f14";
+  ctx.strokeStyle = t.ink;
   ctx.lineWidth = 3;
   ctx.strokeRect(gridX, gridY, gridW, gridH);
 
@@ -700,13 +707,13 @@ function drawHeatmap() {
 
     // Alternating row bg
     if (r % 2 === 0) {
-      ctx.fillStyle = "#f7efe5";
+      ctx.fillStyle = t.bgCard;
       ctx.fillRect(padL, y, nameColW, cellH);
     }
 
     // Player name
     ctx.font = "bold 12px 'Luckiest Guy', cursive";
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.textAlign = "left";
     const nameParts = (player.full_name || "?").split(" ");
     const lastName = nameParts.slice(-1)[0] || "?";
@@ -716,7 +723,7 @@ function drawHeatmap() {
 
     // Team badge
     ctx.font = "bold 9px 'Space Mono', monospace";
-    ctx.fillStyle = "#8a7565";
+    ctx.fillStyle = t.inkLight;
     ctx.fillText(player.team || "", padL + nameColW - 30, y + cellH / 2 + 3);
 
     // Stat cells
@@ -730,12 +737,12 @@ function drawHeatmap() {
         ctx.fillStyle = heatmapColor(pct);
         ctx.fillRect(x, y, cellW, cellH);
       } else {
-        ctx.fillStyle = "#e5d5c3";
+        ctx.fillStyle = t.bgWarm;
         ctx.fillRect(x, y, cellW, cellH);
       }
 
       // Cell border
-      ctx.strokeStyle = "#2d1f1422";
+      ctx.strokeStyle = t.gridLine;
       ctx.lineWidth = 1;
       ctx.strokeRect(x, y, cellW, cellH);
 
@@ -747,19 +754,19 @@ function drawHeatmap() {
         const pctSuffix = col && col.pct ? "%" : "";
         const formatted = dec !== null ? val.toFixed(dec) + pctSuffix : val;
         ctx.font = "bold 11px 'Space Mono', monospace";
-        ctx.fillStyle = pct !== null && pct > 75 ? "#ffffff" : "#2d1f14";
+        ctx.fillStyle = pct !== null && pct > 75 ? "#ffffff" : t.ink;
         ctx.textAlign = "center";
         ctx.fillText(formatted, x + cellW / 2, y + cellH / 2 + 4);
       } else {
         ctx.font = "11px 'Caveat', cursive";
-        ctx.fillStyle = "#8a7565";
+        ctx.fillStyle = t.inkLight;
         ctx.textAlign = "center";
         ctx.fillText("—", x + cellW / 2, y + cellH / 2 + 4);
       }
     }
 
     // Row divider
-    ctx.strokeStyle = "#2d1f1433";
+    ctx.strokeStyle = t.gridLine;
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(padL, y + cellH);
@@ -768,7 +775,7 @@ function drawHeatmap() {
   }
 
   // Grid outer border (redraw on top)
-  ctx.strokeStyle = "#2d1f14";
+  ctx.strokeStyle = t.ink;
   ctx.lineWidth = 3;
   ctx.strokeRect(gridX, gridY, gridW, gridH);
 
@@ -783,12 +790,12 @@ function drawHeatmap() {
     ctx.fillStyle = heatmapColor((i / legendW) * 100);
     ctx.fillRect(legendX + i, legendY, 1, legendH);
   }
-  ctx.strokeStyle = "#2d1f14";
+  ctx.strokeStyle = t.ink;
   ctx.lineWidth = 2;
   ctx.strokeRect(legendX, legendY, legendW, legendH);
 
   ctx.font = "bold 10px 'Space Mono', monospace";
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.textAlign = "left";
   ctx.fillText("0%", legendX, legendY + legendH + 12);
   ctx.textAlign = "center";
@@ -797,13 +804,13 @@ function drawHeatmap() {
   ctx.fillText("100%", legendX + legendW, legendY + legendH + 12);
 
   ctx.font = "14px 'Caveat', cursive";
-  ctx.fillStyle = "#8a7565";
+  ctx.fillStyle = t.inkLight;
   ctx.textAlign = "left";
   ctx.fillText("positional percentile", legendX + legendW + 10, legendY + legendH + 2);
 
   // Watermark
   ctx.font = "bold 12px 'Luckiest Guy', cursive";
-  ctx.fillStyle = "#2d1f1433";
+  ctx.fillStyle = t.isDark ? "rgba(237,224,207,0.2)" : "rgba(45,31,20,0.2)";
   ctx.textAlign = "right";
   ctx.fillText("razzle.lol", W - 12, H - 8);
 }
@@ -912,6 +919,7 @@ function drawCompareRadar(players) {
   const W = canvas.width, H = canvas.height;
   const cx = W / 2, cy = H / 2;
   const R = Math.min(cx, cy) - 50;
+  var t = getCanvasTheme();
 
   ctx.clearRect(0, 0, W, H);
 
@@ -926,7 +934,7 @@ function drawCompareRadar(players) {
   }
 
   // Grid
-  ctx.strokeStyle = "#c4b5a5";
+  ctx.strokeStyle = t.inkFaint;
   ctx.lineWidth = 1;
   for (let ring = 1; ring <= 4; ring++) {
     const r = (R * ring) / 4;
@@ -942,14 +950,14 @@ function drawCompareRadar(players) {
   }
 
   // Labels
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.font = "bold 11px 'Space Mono', monospace";
   ctx.textAlign = "center";
   for (let i = 0; i < n; i++) {
     const angle = i * angleStep - Math.PI / 2;
     ctx.beginPath(); ctx.moveTo(cx, cy);
     ctx.lineTo(cx + R * Math.cos(angle), cy + R * Math.sin(angle));
-    ctx.strokeStyle = "#c4b5a5";
+    ctx.strokeStyle = t.inkFaint;
     ctx.stroke();
 
     const col = COLUMNS[stats[i]];
@@ -984,10 +992,10 @@ function drawCompareRadar(players) {
   players.forEach((player, pIdx) => {
     ctx.fillStyle = CHART_COLORS[pIdx % CHART_COLORS.length];
     ctx.fillRect(10, 10 + pIdx * 22, 12, 12);
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 1.5;
     ctx.strokeRect(10, 10 + pIdx * 22, 12, 12);
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.font = "bold 12px 'Luckiest Guy', cursive";
     ctx.fillText(player.full_name, 28, 21 + pIdx * 22);
   });
@@ -1025,13 +1033,15 @@ function exportNFLCompareImage() {
   canvas.height = H;
   const ctx = canvas.getContext("2d");
 
+  var t = getCanvasTheme();
+
   // Background
-  ctx.fillStyle = "#f7efe5";
+  ctx.fillStyle = t.bgCard;
   ctx.fillRect(0, 0, W, H);
 
   // Title (handwritten annotation)
   ctx.font = "24px 'Caveat', cursive";
-  ctx.fillStyle = "rgba(26,26,46,0.5)";
+  ctx.fillStyle = t.subtitleAlpha;
   ctx.textAlign = "center";
   ctx.fillText("player comparison", W / 2, padY + 24);
 
@@ -1039,20 +1049,20 @@ function exportNFLCompareImage() {
   let cardY = padY + titleH;
   players.forEach((p, i) => {
     const cx = padX + i * (playerCardW + cardGap);
-    const pColor = posColors[p.position] || "#2d1f14";
+    const pColor = posColors[p.position] || t.ink;
 
     // Card bg + border
-    ctx.fillStyle = "#f7efe5";
+    ctx.fillStyle = t.bgCard;
     ctx.fillRect(cx, cardY, playerCardW, cardH);
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 3;
     ctx.strokeRect(cx, cardY, playerCardW, cardH);
     // Offset shadow
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.fillRect(cx + 4, cardY + 4, playerCardW, cardH);
-    ctx.fillStyle = "#f7efe5";
+    ctx.fillStyle = t.bgCard;
     ctx.fillRect(cx, cardY, playerCardW, cardH);
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 3;
     ctx.strokeRect(cx, cardY, playerCardW, cardH);
 
@@ -1065,23 +1075,23 @@ function exportNFLCompareImage() {
     const badgeX = cx + 10, badgeY = cardY + 16;
     ctx.fillStyle = pColor;
     ctx.fillRect(badgeX, badgeY, badgeW, badgeH);
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 2;
     ctx.strokeRect(badgeX, badgeY, badgeW, badgeH);
-    ctx.fillStyle = "#fff";
+    ctx.fillStyle = t.white;
     ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(p.position, badgeX + badgeW / 2, badgeY + 15);
 
     // Player name
     ctx.textAlign = "left";
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.font = "bold 18px 'Luckiest Guy', cursive";
     const nameX = badgeX + badgeW + 8;
     ctx.fillText(p.full_name, nameX, cardY + 32);
 
     // Team + Age
-    ctx.fillStyle = "#8a7565";
+    ctx.fillStyle = t.inkLight;
     ctx.font = "12px monospace";
     const ageText = p.age ? ` | Age ${p.age}` : "";
     ctx.fillText((p.team || "FA") + ageText, nameX, cardY + 48);
@@ -1089,7 +1099,7 @@ function exportNFLCompareImage() {
     // DVS badge
     const dvs = computeClientDVS(p.ppg, p.age, p.position);
     if (dvs != null) {
-      const dvsColor = dvs >= 85 ? "#2ec4b6" : dvs >= 70 ? "#5b7fff" : dvs >= 55 ? "#d97757" : "#8a7565";
+      const dvsColor = dvs >= 85 ? "#2ec4b6" : dvs >= 70 ? "#5b7fff" : dvs >= 55 ? "#d97757" : t.inkLight;
       const dvsLabel = dvs >= 85 ? "ELITE" : dvs >= 70 ? "STAR" : dvs >= 55 ? "STARTER" : "";
       const dvsW = 80, dvsH = 24;
       const dvsX = cx + playerCardW - dvsW - 10;
@@ -1118,21 +1128,21 @@ function exportNFLCompareImage() {
   const colW = tableW / (players.length + 1); // stat label + each player
 
   // Table border
-  ctx.strokeStyle = "#2d1f14";
+  ctx.strokeStyle = t.ink;
   ctx.lineWidth = 3;
   ctx.strokeRect(padX, tY, tableW, tableH);
 
   // Table header
-  ctx.fillStyle = "#e5d5c3";
+  ctx.fillStyle = t.bgWarm;
   ctx.fillRect(padX + 1.5, tY + 1.5, tableW - 3, 26);
-  ctx.strokeStyle = "#2d1f14";
+  ctx.strokeStyle = t.ink;
   ctx.lineWidth = 2;
   ctx.beginPath();
   ctx.moveTo(padX, tY + 28);
   ctx.lineTo(padX + tableW, tY + 28);
   ctx.stroke();
 
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.font = "bold 10px monospace";
   ctx.textAlign = "left";
   ctx.fillText("STAT", padX + 8, tY + 18);
@@ -1152,12 +1162,12 @@ function exportNFLCompareImage() {
 
     // Alternating bg
     if (rowIdx % 2 === 0) {
-      ctx.fillStyle = "rgba(229,213,195,0.3)";
+      ctx.fillStyle = t.isDark ? "rgba(237,224,207,0.06)" : "rgba(229,213,195,0.3)";
       ctx.fillRect(padX + 1.5, rY, tableW - 3, statsH);
     }
 
     // Row divider
-    ctx.strokeStyle = "#c4b5a5";
+    ctx.strokeStyle = t.inkFaint;
     ctx.lineWidth = 0.5;
     ctx.beginPath();
     ctx.moveTo(padX, rY + statsH);
@@ -1165,7 +1175,7 @@ function exportNFLCompareImage() {
     ctx.stroke();
 
     // Label
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.textAlign = "left";
     ctx.fillText(col.label, padX + 8, rY + 18);
@@ -1174,7 +1184,7 @@ function exportNFLCompareImage() {
     players.forEach((p, i) => {
       const val = p[statKey] || 0;
       const isBest = val === maxVal && maxVal > 0;
-      ctx.fillStyle = isBest ? "#2ec4b6" : "#2d1f14";
+      ctx.fillStyle = isBest ? "#2ec4b6" : t.ink;
       ctx.font = isBest ? "bold 12px monospace" : "12px monospace";
       ctx.textAlign = "right";
       const dec = col.decimals != null ? col.decimals : (statKey === "ppg" ? 1 : 0);
@@ -1315,9 +1325,10 @@ function drawProspectCompareSpider(prospects) {
   const W = canvas.width, H = canvas.height;
   const cx = W / 2, cy = H / 2;
   const R = Math.min(cx, cy) - 55;
+  var t = getCanvasTheme();
 
   ctx.clearRect(0, 0, W, H);
-  ctx.fillStyle = "#ede0cf";
+  ctx.fillStyle = t.bg;
   ctx.fillRect(0, 0, W, H);
 
   if (!prospects || prospects.length < 2) return;
@@ -1353,7 +1364,7 @@ function drawProspectCompareSpider(prospects) {
       i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
     }
     ctx.closePath();
-    ctx.strokeStyle = ring === 50 ? "rgba(26,26,46,0.2)" : "rgba(26,26,46,0.08)";
+    ctx.strokeStyle = ring === 50 ? (t.isDark ? "rgba(237,224,207,0.2)" : "rgba(45,31,20,0.2)") : (t.isDark ? "rgba(237,224,207,0.08)" : "rgba(45,31,20,0.08)");
     ctx.lineWidth = ring === 50 ? 1.5 : 1;
     ctx.stroke();
   }
@@ -1364,7 +1375,7 @@ function drawProspectCompareSpider(prospects) {
     ctx.beginPath();
     ctx.moveTo(cx, cy);
     ctx.lineTo(cx + R * Math.cos(angle), cy + R * Math.sin(angle));
-    ctx.strokeStyle = "rgba(26,26,46,0.1)";
+    ctx.strokeStyle = t.isDark ? "rgba(237,224,207,0.1)" : "rgba(45,31,20,0.1)";
     ctx.lineWidth = 1;
     ctx.stroke();
   }
@@ -1400,7 +1411,7 @@ function drawProspectCompareSpider(prospects) {
       ctx.arc(x, y, 4, 0, Math.PI * 2);
       ctx.fillStyle = color;
       ctx.fill();
-      ctx.strokeStyle = "#2d1f14";
+      ctx.strokeStyle = t.ink;
       ctx.lineWidth = 1.5;
       ctx.stroke();
     }
@@ -1415,7 +1426,7 @@ function drawProspectCompareSpider(prospects) {
     const x = cx + labelR * Math.cos(angle);
     const y = cy + labelR * Math.sin(angle);
     ctx.font = "bold 11px 'Space Mono', monospace";
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.fillText(activeMetrics[i].label, x, y);
   }
 
@@ -1425,17 +1436,17 @@ function drawProspectCompareSpider(prospects) {
     const color = PROSPECT_COMPARE_COLORS[pIdx % PROSPECT_COMPARE_COLORS.length];
     ctx.fillStyle = color;
     ctx.fillRect(10, 10 + pIdx * 22, 12, 12);
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 1.5;
     ctx.strokeRect(10, 10 + pIdx * 22, 12, 12);
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.font = "bold 12px 'Luckiest Guy', cursive";
     ctx.fillText(pData.prospect.player_name, 28, 21 + pIdx * 22);
   });
 
   // Title
   ctx.font = "18px 'Caveat', cursive";
-  ctx.fillStyle = "rgba(26,26,46,0.5)";
+  ctx.fillStyle = t.subtitleAlpha;
   ctx.textAlign = "center";
   ctx.fillText("prospect athletic comparison", cx, H - 10);
 }
@@ -1447,6 +1458,7 @@ function exportProspectCompareImage() {
   if (!canvas) return;
 
   // Create export canvas with table + radar + watermark
+  var t = getCanvasTheme();
   const expCanvas = document.createElement("canvas");
   const W = 800;
   const H = 500;
@@ -1455,7 +1467,7 @@ function exportProspectCompareImage() {
   const ctx = expCanvas.getContext("2d");
 
   // Background
-  ctx.fillStyle = "#ede0cf";
+  ctx.fillStyle = t.bg;
   ctx.fillRect(0, 0, W, H);
 
   // Draw radar canvas centered

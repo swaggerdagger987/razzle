@@ -2972,6 +2972,8 @@ function renderPagination() {
   document.getElementById("nextBtn").disabled = state.offset + state.limit >= state.totalCount;
   const sel = document.getElementById("pageSizeSelect");
   if (sel) sel.value = String(state.limit);
+  const pag = document.querySelector(".footer-bar .pagination");
+  if (pag) pag.style.visibility = state.totalCount > 0 ? "" : "hidden";
 }
 
 function prevPage() {
@@ -6367,7 +6369,7 @@ function renderProfile(data, container) {
   html += `<div class="profile-meta">${teamDisplay} · Age ${displayAge} · ${escapeHtml(player.college || "")} · ${seasonCount} ${seasonLabel}</div>`;
   if (combine && combine.draft_round) {
     const draftPick = combine.draft_overall || combine.draft_pick;
-    html += `<span style="display:inline-block; background:var(--ink); color:white; font-family:var(--font-mono); font-size:10px; padding:2px 8px; border:2px solid var(--ink); border-radius:4px; transform:rotate(-1deg); margin-right:6px;">Rd ${combine.draft_round}${draftPick ? " #" + draftPick : ""}${combine.draft_year ? " '" + String(combine.draft_year).slice(2) : ""}</span>`;
+    html += `<span style="display:inline-block; background:var(--ink); color:var(--bg); font-family:var(--font-mono); font-size:10px; padding:2px 8px; border:2px solid var(--ink); border-radius:4px; transform:rotate(-1deg); margin-right:6px;">Rd ${combine.draft_round}${draftPick ? " #" + draftPick : ""}${combine.draft_year ? " '" + String(combine.draft_year).slice(2) : ""}</span>`;
   }
   if (breakoutInfo) {
     html += `<span class="breakout-badge">BREAKOUT +${breakoutInfo.pct}% (${breakoutInfo.season})</span>`;
@@ -10246,6 +10248,11 @@ document.addEventListener("keydown", function(e) {
     var toolsDd = document.getElementById("toolsDropdown");
     if (toolsDd && toolsDd.classList.contains("open")) {
       closeToolsDropdown();
+      e.preventDefault();
+      return;
+    }
+    if (_tagPickerVisible) {
+      hideTagPicker();
       e.preventDefault();
       return;
     }

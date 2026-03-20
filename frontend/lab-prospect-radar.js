@@ -274,10 +274,11 @@
     var n = METRICS.length;
     var angleStep = (2 * Math.PI) / n;
 
+    var t = getCanvasTheme();
     ctx.clearRect(0, 0, cssW, cssH);
 
     // Draw grid rings
-    ctx.strokeStyle = '#c4b5a5';
+    ctx.strokeStyle = t.inkFaint;
     ctx.lineWidth = 1;
     for (var ring = 1; ring <= 4; ring++) {
       var r = (R * ring) / 4;
@@ -293,7 +294,7 @@
     }
 
     // Ring percentile labels
-    ctx.fillStyle = '#8a7565';
+    ctx.fillStyle = t.inkLight;
     ctx.font = '10px "Space Mono", monospace';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'bottom';
@@ -303,7 +304,7 @@
     }
 
     // Draw axes and labels
-    ctx.fillStyle = '#2d1f14';
+    ctx.fillStyle = t.ink;
     ctx.font = 'bold 12px "Space Mono", monospace';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
@@ -316,14 +317,14 @@
       ctx.beginPath();
       ctx.moveTo(cx, cy);
       ctx.lineTo(ax, ay);
-      ctx.strokeStyle = '#c4b5a5';
+      ctx.strokeStyle = t.inkFaint;
       ctx.lineWidth = 1;
       ctx.stroke();
 
       // Label
       var lx = cx + (R + 28) * Math.cos(angle2);
       var ly = cy + (R + 28) * Math.sin(angle2);
-      ctx.fillStyle = '#2d1f14';
+      ctx.fillStyle = t.ink;
       ctx.fillText(METRICS[j].short, lx, ly);
     }
 
@@ -365,7 +366,7 @@
         ctx.arc(dx, dy, 4, 0, 2 * Math.PI);
         ctx.fillStyle = color;
         ctx.fill();
-        ctx.strokeStyle = '#fff';
+        ctx.strokeStyle = t.white;
         ctx.lineWidth = 1.5;
         ctx.stroke();
       }
