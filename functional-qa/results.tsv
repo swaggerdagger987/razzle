@@ -1,0 +1,27 @@
+flow	severity	file	line	function	status	description	confidence	timestamp
+smoke-prod	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)	100	2026-03-20T12:12
+smoke-prod	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players	100	2026-03-20T12:12
+smoke-prod	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs	100	2026-03-20T12:12
+smoke-prod	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs	100	2026-03-20T12:12
+smoke-prod	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct	100	2026-03-20T12:12
+smoke-prod	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data	100	2026-03-20T12:12
+smoke-prod	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=21gp, week1=1gp	100	2026-03-20T12:12
+smoke-prod	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct	100	2026-03-20T12:12
+smoke-prod	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players	100	2026-03-20T12:12
+smoke-prod	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams	100	2026-03-20T12:12
+1	P0	backend/server.py	-	GZipMiddleware	ticket	FUNC-001: Double compression (GZip+Cloudflare Brotli) breaks Lab init — filter-options returns gzip bytes as JSON	100	2026-03-20T12:20
+1	P0	frontend/lab.js	2877	populateSeasonSelect	ticket	FUNC-001 cascade: #seasonSelect null crash during init because filter-options failed	100	2026-03-20T12:20
+1	P0	-	-	-	ticket	FUNC-001 cascade: Page crash — Cannot read properties of null (reading classList)	100	2026-03-20T12:20
+1	OK	-	-	-	pass	Landing page loads clean — 0 JS errors, tiger mascot, live data widget, CTAs work	100	2026-03-20T12:10
+2	OK	-	-	-	pass	Position filter: QB/RB/WR/TE all return only correct position (50 each verified)	100	2026-03-20T12:16
+3	OK	-	-	-	pass	Multi-filter: RB + 800+ rush yds returns 27 players, all correct	100	2026-03-20T12:16
+4	OK	-	-	-	pass	Sort: PPR desc correct (McCaffrey 458.4 > Puka 452.6 > Maye 416.9). Asc correct too.	100	2026-03-20T12:17
+5	P1	backend/live_data/players.py	131	fetch_players	ticket	FUNC-002: Search fails for hyphens/apostrophes — Amon-Ra, Ja'Marr, D'Andre all return 0	100	2026-03-20T12:18
+6	OK	-	-	-	pass	Season switch: 2025/2024/2023 return different top players and different counts	100	2026-03-20T12:19
+7	OK	-	-	-	pass	Week filter: screener POST with week=1 returns 1 game per player (production)	100	2026-03-20T12:19
+18	OK	-	-	-	pass	Dynasty rankings: correct order (young elite WRs/RBs at top, age-adjusted)	90	2026-03-20T12:21
+18	P2	backend/live_data/dynasty.py	-	dynasty_value	ticket	FUNC-003: Top 7 players all at 100.0 dynasty value — ceiling clustering reduces usefulness	80	2026-03-20T12:21
+19	OK	-	-	-	pass	Trade values: order sensible, same clustering issue as dynasty rankings	90	2026-03-20T12:21
+20	OK	-	-	-	pass	Trade finder: buy low/sell high suggestions reasonable (Jeanty, Hampton as buy targets)	90	2026-03-20T12:22
+32	OK	-	-	-	pass	Target share: per-team sums 89-93% (expected — top 8 players don't capture all)	90	2026-03-20T12:23
+36	OK	-	-	-	pass	Efficiency metrics: 0 NaN/Inf in 200 players checked — division-by-zero guards work	100	2026-03-20T12:23

@@ -15,13 +15,13 @@
 
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
-| 1 | Landing -> Lab | CTA click, initial data load, screener populates with real player data | PENDING |
-| 2 | Screener: Position filter | Filter QB/RB/WR/TE individually. Count matches. Remove filter. Table resets? | PENDING |
-| 3 | Screener: Multi-filter | Chain 3 filters (pos + team + min stat). Results are the correct intersection? | PENDING |
-| 4 | Screener: Sort | Sort every stat column. #1 player is actually the leader? Reverse sort works? | PENDING |
-| 5 | Screener: Search | Search "Mahomes", "McCaffrey", "Amon-Ra". Results correct? Clear resets? | PENDING |
-| 6 | Screener: Season switch | Switch 2025 -> 2024 -> 2023. Data actually changes? Stat values match that season? | PENDING |
-| 7 | Screener: Week filter | Select Week 1. Stats are single-week, not season totals? Switch back to All Weeks. | PENDING |
+| 1 | Landing -> Lab | CTA click, initial data load, screener populates with real player data | DONE — P0 FUNC-001: double gzip+Cloudflare breaks Lab init |
+| 2 | Screener: Position filter | Filter QB/RB/WR/TE individually. Count matches. Remove filter. Table resets? | DONE — PASS (all 4 positions clean) |
+| 3 | Screener: Multi-filter | Chain 3 filters (pos + team + min stat). Results are the correct intersection? | DONE — PASS (RB+800yd = 27, all correct) |
+| 4 | Screener: Sort | Sort every stat column. #1 player is actually the leader? Reverse sort works? | DONE — PASS (desc+asc both correct) |
+| 5 | Screener: Search | Search "Mahomes", "McCaffrey", "Amon-Ra". Results correct? Clear resets? | DONE — P1 FUNC-002: hyphens/apostrophes break search |
+| 6 | Screener: Season switch | Switch 2025 -> 2024 -> 2023. Data actually changes? Stat values match that season? | DONE — PASS |
+| 7 | Screener: Week filter | Select Week 1. Stats are single-week, not season totals? Switch back to All Weeks. | DONE — PASS (production only, local server stale) |
 | 8 | Screener: Universe toggle | NFL -> College -> Prospects -> NFL. Correct data loads? Wrong-universe panels hide? | PENDING |
 | 9 | Screener: Column picker | Add/remove columns. Presets load correct column sets? Custom columns persist? | PENDING |
 | 10 | Screener: Pin player | Pin a row. Survives sort? Survives filter? Unpin works? Multiple pins? | PENDING |
@@ -42,9 +42,9 @@
 
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
-| 18 | Dynasty Rankings | Rankings load? Sortable? Position filter? Do rankings reflect age + production reality? | PENDING |
-| 19 | Trade Values | Values load? Positional adjustment? Do elite young WRs > aging vets? Sensible tiers? | PENDING |
-| 20 | Trade Finder | Suggest trades? Values make sense? Not suggesting obviously lopsided deals? | PENDING |
+| 18 | Dynasty Rankings | Rankings load? Sortable? Position filter? Do rankings reflect age + production reality? | DONE — P2 FUNC-003: value ceiling clustering at 100.0 |
+| 19 | Trade Values | Values load? Positional adjustment? Do elite young WRs > aging vets? Sensible tiers? | DONE — PASS (same clustering note as #18) |
+| 20 | Trade Finder | Suggest trades? Values make sense? Not suggesting obviously lopsided deals? | DONE — PASS |
 | 21 | Tiers | Tiers load? Players grouped sensibly? Tier breaks at reasonable spots? | PENDING |
 | 22 | Aging Curves | Chart renders? Shows realistic age-based decline? Peak age correct per position? | PENDING |
 | 23 | Career Compare | Multi-player career overlay? Same scale? Correct seasons aligned? | PENDING |
@@ -66,11 +66,11 @@
 
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
-| 32 | Target Share / Air Yards | Values are percentages that sum correctly per team? WOPR calculated right? | PENDING |
+| 32 | Target Share / Air Yards | Values are percentages that sum correctly per team? WOPR calculated right? | DONE — PASS (per-team sums 89-93%) |
 | 33 | Snap Efficiency | Snap % shown? Fantasy points per snap derived correctly? | PENDING |
 | 34 | Red Zone | RZ targets/carries shown? RZ stats don't include non-RZ plays? | PENDING |
 | 35 | Opportunity Share | Opportunity = targets + carries? Per-team shares sum to ~100%? | PENDING |
-| 36 | Efficiency metrics | YPC, YPR, YPT calculated correctly from raw stats? Not showing NaN/Infinity for 0 attempts? | PENDING |
+| 36 | Efficiency metrics | YPC, YPR, YPT calculated correctly from raw stats? Not showing NaN/Infinity for 0 attempts? | DONE — PASS (0 NaN/Inf in 200 players) |
 | 37 | Regression candidates | TD regression logic sound? Flagging high-TD players with low expected TDs? | PENDING |
 | 38 | Garbage Time | Identified correctly? Based on game script, not arbitrary cutoff? | PENDING |
 | 39 | Gamescript | Game script data per player? Shows performance in various score differentials? | PENDING |
