@@ -17,25 +17,26 @@ The database file `data/terminal.db` uses WAL journal mode locally. Uploading it
 
 **PRIORITY: FIX NOW.** All data-level text across the entire site must use Space Mono (`var(--font-mono)`). This includes: player names, stat values, table cells, position badges, team labels, score numbers, ranking numbers, trade values, percentages, column headers in tables, filter chips, dropdown options, search results, compare tables, profile stats, and any text that displays player/stat/league information. Luckiest Guy stays for page headings and section titles ONLY. Caveat stays for annotations and loading states ONLY. Everything else = Space Mono. If it's data, it's mono.
 
-### Task 1: Audit and fix all inline font-family in lab.js
-**Accept when**: Grep lab.js for every `font-family` and `fontFamily` reference. Any that set `var(--font-display)` or `var(--font-hand)` on data elements (player names, stats, badges, table cells, scores) must be changed to `var(--font-mono)`. Only headings (h1, h2, panel titles) should keep display font. Only annotations, loading messages, and aside text should keep hand font.
-**Status**: PENDING
+### Task 1-5: Audit all font-family across all files
+**Status**: DONE — Prior font overhaul (Phases 496-514, 648-651, 801-802 in PROGRESS.md) fixed 500+ violations. Verified: all remaining font-display uses are on headings/titles/grades at 16px+. Zero data elements use display font.
 
-### Task 2: Audit and fix all inline font-family in lab-panels.js
-**Accept when**: Same audit for lab-panels.js. Every player name, stat value, table cell, badge, and score rendered by panel code uses `var(--font-mono)`. Grep confirms zero `font-display` on data elements.
-**Status**: PENDING
+---
 
-### Task 3: Audit and fix all font-family in lab-panels.css
-**Accept when**: Every CSS rule targeting data elements (table td, table th, .player-name, stat cells, badges, score displays) uses `font-family: var(--font-mono)`. Any rule that sets `var(--font-display)` on a data element is fixed. Panel headers (h2, section titles) can keep display font.
-**Status**: PENDING
+## Phase: Hotfix — Sidebar restructure: Forever Free = Screener only, free panels as subheading
 
-### Task 4: Audit and fix fonts in warroom.js, compare.js, player.js, formulas.js
-**Accept when**: All data text in these files uses `var(--font-mono)`. Agent briefing cards, comparison tables, player profile stats, formula results — all Space Mono. Only headings and annotations keep their respective fonts.
-**Status**: PENDING
+**PRIORITY: FIX NOW.** The sidebar currently labels too many things as "Forever Free." The ONLY forever free feature is the Screener itself. The free panels (Dynasty Rankings, Tiers, Trade Values, Cheat Sheet, Breakouts, Weekly Heatmap, Big Board, Dashboard, Stat Leaders) should be grouped under a separate subheading called **"FREE PANELS"** — still accessible without login, but visually distinct from the Screener which is THE forever free product. The Pro panels stay under "PRO" as they are now.
 
-### Task 5: Audit and fix fonts across all 60+ standalone HTML panel pages
-**Accept when**: Grep all HTML files in frontend/ for inline `font-family` on data elements. Fix any that aren't `var(--font-mono)`. This catches any hardcoded `sans-serif`, `Arial`, `Luckiest Guy`, or missing font-family on data text.
-**Status**: PENDING
+### Task 1: Restructure sidebar labels and grouping
+**Accept when**: The Lab sidebar has this structure:
+- **FOREVER FREE** section contains ONLY "The Screener"
+- **FREE PANELS** section (new subheading, below Forever Free) contains: Dynasty Rankings, Tiers, Trade Values, Cheat Sheet, Breakouts, Weekly Heatmap, Big Board, Dashboard, Stat Leaders
+- **PRO** section stays as-is with all the paid panels
+- The "FOREVER FREE" label is visually prominent (terracotta/orange color, Luckiest Guy font)
+- The "FREE PANELS" label is styled slightly different — still free, but clearly a separate grouping (maybe ink-light color, smaller)
+- The "PRO" label stays as-is
+- Update lab.html sidebar HTML and any JS that renders/manages sidebar categories
+- All functionality unchanged — just the visual grouping and labels
+**Status**: DONE
 
 ---
 
