@@ -1808,3 +1808,37 @@ All `ctx.fillStyle = 'rgba(45,31,20,...)'` → theme-branching with sand rgba fo
 - All 11 JS files syntax clean
 - All Python files compile clean
 - 59/59 tests pass (5.59s)
+
+---
+
+## UX + Dark Mode Quality Audit (Mar 20)
+
+**Goal**: 3-agent UX audit (homepage, Lab, Situation Room) + dark mode CSS audit. Fix every user-facing issue.
+
+### UX Fixes (7 total)
+
+| # | Fix | Severity | File | Notes |
+|---|-----|----------|------|-------|
+| 1 | Mobile sidebar double-toggle | HIGH | lab.html | Inline onclick + addEventListener both fired, sidebar flickered open/closed. Removed inline onclick. |
+| 2 | Config panel clipped on mobile | HIGH | agents.html | Panel inside overflow:hidden canvas container. Fixed: position:fixed at 480px breakpoint, max-height:80vh, overflow-y:auto. |
+| 3 | Demo briefing cards unreadable in dark mode | HIGH | index.html | --ink-faint text on --bg-ink bg both dark in dark mode. Fixed: explicit #c4b5a5 on #1a110a (always dark, like Situation Room). |
+| 4 | Filter modal Enter key | MEDIUM | lab.html | Added onkeydown Enter handler on filterValue input. |
+| 5 | JSON-LD pricing shows yearly | MEDIUM | index.html | Changed $9.99/P1M → $79.99/P1Y, $19.99/P1M → $149.99/P1Y to match default display. |
+| 6 | Pro feature list synced | MEDIUM | index.html | Added "20 queries/day" and "7-day free trial" to match pricing.html. Consolidated Bureau features. |
+| 7 | Aria-labels on search + season select | LOW | lab.html | Added aria-label="Search players" and aria-label="Season". |
+
+### Dark Mode Fixes (12 total)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | Mock draft POS_TINTS dark variants | lab-mockdraft.js | Added POS_TINTS_DARK (dark tinted cells), _isDark() helper, getPOSTint() function |
+| 2 | posColor fallback → getCanvasTheme().ink | lab.js (8 sites) | #2d1f14 was invisible on dark bg — now reads theme-aware ink color |
+| 3 | posColor fallback → getCanvasTheme().ink | lab-panels.js (7 sites) | Same fix across 7 panel render functions |
+| 4 | Aging curve player color #8 | lab.js (2 arrays) | Changed #2d1f14 → #8a7565 (visible in both themes) |
+| 5 | Radar comp overlay | lab.js | Changed #2d1f14 → getCanvasTheme().inkMedium |
+
+### Verified Clean
+- All 11 JS files syntax clean
+- All Python files compile clean
+- 59/59 tests pass
+- 18 standalone HTML panels audited: all pass consistency checks (app.js, viewport, nav, error handling, escapeHtml, overflow-x:auto)
