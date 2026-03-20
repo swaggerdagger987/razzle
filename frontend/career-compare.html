@@ -737,6 +737,7 @@
   }
 
   function drawCompareChart() {
+    var t = typeof getCanvasTheme === 'function' ? getCanvasTheme() : {bg:'#ede0cf',bgCard:'#f7efe5',ink:'#2d1f14',inkMedium:'#5c4a3d',inkLight:'#8a7565',inkFaint:'#c4b5a5',white:'#fff'};
     var canvas = document.getElementById('cc-chart');
     if (!canvas) return;
 
@@ -785,7 +786,7 @@
     }
 
     // Grid
-    ctx.strokeStyle = '#c4b5a5';
+    ctx.strokeStyle = t.inkFaint;
     ctx.lineWidth = 1;
     var gridN = 5;
     for (var g = 0; g <= gridN; g++) {
@@ -795,14 +796,14 @@
       ctx.moveTo(pad.left, gy);
       ctx.lineTo(w - pad.right, gy);
       ctx.stroke();
-      ctx.fillStyle = '#8a7565';
+      ctx.fillStyle = t.inkLight;
       ctx.font = '11px "Space Mono", monospace';
       ctx.textAlign = 'right';
       ctx.fillText(gv.toFixed(1), pad.left - 6, gy + 4);
     }
 
     // X-axis
-    ctx.fillStyle = '#8a7565';
+    ctx.fillStyle = t.inkLight;
     ctx.font = '12px "Space Mono", monospace';
     ctx.textAlign = 'center';
     for (var xi = 0; xi < seasonArr.length; xi++) {
@@ -839,7 +840,7 @@
         ctx.arc(dx, dy, 5, 0, Math.PI * 2);
         ctx.fillStyle = color;
         ctx.fill();
-        ctx.strokeStyle = '#fff';
+        ctx.strokeStyle = t.white;
         ctx.lineWidth = 2;
         ctx.stroke();
 
@@ -856,7 +857,7 @@
     ctx.save();
     ctx.translate(14, pad.top + plotH / 2);
     ctx.rotate(-Math.PI / 2);
-    ctx.fillStyle = '#8a7565';
+    ctx.fillStyle = t.inkLight;
     ctx.font = '11px "Space Mono", monospace';
     ctx.textAlign = 'center';
     ctx.fillText('PPG (PPR)', 0, 0);

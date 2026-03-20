@@ -193,7 +193,7 @@ function getHeadlineStats(pos, career) {
   if (!career || !career.games) return [];
   const f0 = v => v != null ? Math.round(v).toLocaleString() : "—";
   const f1 = v => v != null ? Number(v).toFixed(1) : "—";
-  const pprg = career.games > 0 ? (career.fantasy_points_ppr / career.games) : 0;
+  const pprg = (career.games > 0 && career.fantasy_points_ppr != null) ? (career.fantasy_points_ppr / career.games) : 0;
 
   const base = [
     { label: "PPR/G", value: f1(pprg) },

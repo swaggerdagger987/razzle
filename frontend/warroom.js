@@ -82,6 +82,7 @@ const ctx = cvs.getContext('2d');
 
 function resizeCanvas() {
   const container = document.getElementById('canvasContainer');
+  if (!container) return;
   const rect = container.getBoundingClientRect();
   cvs.width = WORLD_W;
   cvs.height = WORLD_H;
@@ -2648,7 +2649,10 @@ setTimeout(function() {
   syncQuotaFromServer();
 }, 100);
 
+var _runningAllAgents = false;
 async function runAllAgents(scenario) {
+  if (_runningAllAgents) return;
+  _runningAllAgents = true;
   // Disable buttons immediately to prevent double-click race condition
   setScenarioButtonsDisabled(true);
 
@@ -2657,6 +2661,7 @@ async function runAllAgents(scenario) {
   if (limitMsg) {
     setScenarioStatus(limitMsg, 'error');
     setScenarioButtonsDisabled(false);
+    _runningAllAgents = false;
     return;
   }
 
@@ -2669,6 +2674,7 @@ async function runAllAgents(scenario) {
     setScenarioStatus(serverMsg, 'error');
     updateQueryLimitBadge();
     setScenarioButtonsDisabled(false);
+    _runningAllAgents = false;
     return;
   }
 
@@ -2677,6 +2683,7 @@ async function runAllAgents(scenario) {
   if (!hasKey && !elite && !isLoggedIn()) {
     setScenarioStatus('sign in to use free AI queries, or add your own API key in Config', 'error');
     setScenarioButtonsDisabled(false);
+    _runningAllAgents = false;
     return;
   }
 
@@ -2735,6 +2742,7 @@ async function runAllAgents(scenario) {
   if (successCount === 0) {
     setScenarioStatus('the room hit a wall. check your API key and try again.', 'error');
     setScenarioButtonsDisabled(false);
+    _runningAllAgents = false;
     agents.forEach(function(a) { a.workBubble = ''; });
     window.dispatchEvent(new CustomEvent('razzle:all-agents-done', {
       detail: { scenario: scenario, results: results, errors: errors, razzleSynthesis: null }
@@ -2785,6 +2793,7 @@ async function runAllAgents(scenario) {
   }
   setScenarioStatus(statusMsg, razzleSynthesis ? 'done' : 'error');
   setScenarioButtonsDisabled(false);
+  _runningAllAgents = false;
 
   // ── CROSS-AGENT TRIGGERS ──────────────────────────────────────────────
   // Scan specialist outputs for trigger signals and auto-invoke follow-ups

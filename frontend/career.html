@@ -805,6 +805,7 @@
   }
 
   function drawPpgChart(seasons, pos) {
+    var t = typeof getCanvasTheme === 'function' ? getCanvasTheme() : {bg:'#ede0cf',bgCard:'#f7efe5',ink:'#2d1f14',inkMedium:'#5c4a3d',inkLight:'#8a7565',inkFaint:'#c4b5a5',white:'#fff'};
     var canvas = document.getElementById('ppg-chart');
     if (!canvas) return;
 
@@ -839,7 +840,7 @@
     function yPos(val) { return pad.top + plotH - ((val - yMin) / (yMax - yMin)) * plotH; }
 
     // Grid lines
-    ctx.strokeStyle = '#c4b5a5';
+    ctx.strokeStyle = t.inkFaint;
     ctx.lineWidth = 1;
     var gridLines = 5;
     for (var g = 0; g <= gridLines; g++) {
@@ -850,14 +851,14 @@
       ctx.lineTo(w - pad.right, gy);
       ctx.stroke();
       // Y-axis labels
-      ctx.fillStyle = '#8a7565';
+      ctx.fillStyle = t.inkLight;
       ctx.font = '11px "Space Mono", monospace';
       ctx.textAlign = 'right';
       ctx.fillText(gv.toFixed(1), pad.left - 6, gy + 4);
     }
 
     // X-axis labels
-    ctx.fillStyle = '#8a7565';
+    ctx.fillStyle = t.inkLight;
     ctx.font = '12px "Space Mono", monospace';
     ctx.textAlign = 'center';
     for (var xi = 0; xi < seasons.length; xi++) {
@@ -907,12 +908,12 @@
       ctx.arc(dx, dy, 6, 0, Math.PI * 2);
       ctx.fillStyle = color;
       ctx.fill();
-      ctx.strokeStyle = '#fff';
+      ctx.strokeStyle = t.white;
       ctx.lineWidth = 2;
       ctx.stroke();
 
       // Value label
-      ctx.fillStyle = '#2d1f14';
+      ctx.fillStyle = t.ink;
       ctx.font = 'bold 12px "Space Mono", monospace';
       ctx.textAlign = 'center';
       ctx.fillText(seasons[di].ppg.toFixed(1), dx, dy - 12);
@@ -922,7 +923,7 @@
     ctx.save();
     ctx.translate(14, pad.top + plotH / 2);
     ctx.rotate(-Math.PI / 2);
-    ctx.fillStyle = '#8a7565';
+    ctx.fillStyle = t.inkLight;
     ctx.font = '11px "Space Mono", monospace';
     ctx.textAlign = 'center';
     ctx.fillText('PPG (PPR)', 0, 0);

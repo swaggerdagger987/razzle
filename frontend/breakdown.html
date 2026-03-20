@@ -658,6 +658,7 @@
   }
 
   function drawDonut(breakdown) {
+    var t = typeof getCanvasTheme === 'function' ? getCanvasTheme() : {bg:'#ede0cf',bgCard:'#f7efe5',ink:'#2d1f14',inkMedium:'#5c4a3d',inkLight:'#8a7565',inkFaint:'#c4b5a5',white:'#fff'};
     var canvas = document.getElementById('bdDonut');
     if (!canvas) return;
     var ctx = canvas.getContext('2d');
@@ -687,7 +688,7 @@
       ctx.fill();
 
       // Thin border between slices
-      ctx.strokeStyle = '#ede0cf';
+      ctx.strokeStyle = t.bg;
       ctx.lineWidth = 3;
       ctx.stroke();
 
@@ -698,7 +699,7 @@
         var lx = cx + Math.cos(midAngle) * labelR;
         var ly = cy + Math.sin(midAngle) * labelR;
 
-        ctx.fillStyle = '#fff';
+        ctx.fillStyle = t.white;
         ctx.font = 'bold 22px Space Mono, monospace';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';

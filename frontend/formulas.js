@@ -144,12 +144,17 @@ function renderSavedFormulas() {
     }).join("");
 
   // Event delegation for publish/delete buttons (avoids inline onclick XSS)
-  container.addEventListener("click", function(e) {
+  // Remove previous listener to prevent stacking on re-render
+  if (container._formulaClickHandler) {
+    container.removeEventListener("click", container._formulaClickHandler);
+  }
+  container._formulaClickHandler = function(e) {
     var pub = e.target.closest("[data-publish-formula]");
     if (pub) { e.stopPropagation(); openPublishFlow(pub.dataset.publishFormula); return; }
     var del = e.target.closest("[data-delete-formula]");
     if (del) { deleteFormula(del.dataset.deleteFormula); return; }
-  });
+  };
+  container.addEventListener("click", container._formulaClickHandler);
 }
 
 // ── Cloud sync (Pro+ feature) ──────────────────────────────────────

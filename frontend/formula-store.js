@@ -41,8 +41,8 @@ async function fetchStoreFormulas() {
       positions: f.position_tags || [],
       creator: f.creator_name || "anonymous",
       createdAt: f.created_at || "",
-      avgRating: f.avg_rating || 0,
-      ratingCount: f.rating_count || 0
+      avgRating: Number(f.avg_rating) || 0,
+      ratingCount: Number(f.rating_count) || 0
     }));
   } catch (e) {
     console.error("Formula store fetch failed:", e);
@@ -322,12 +322,16 @@ function openPublishFlow(formulaName) {
   if (formulaOverlay) formulaOverlay.classList.remove("open");
 
   const overlay = document.getElementById("publishOverlay");
+  if (!overlay) return;
   overlay.classList.add("open");
 
   // Populate publish form
-  document.getElementById("publishName").value = formula.name;
-  document.getElementById("publishDescription").value = "";
-  document.getElementById("publishCreator").value = localStorage.getItem("razzle_store_username") || "";
+  var pubName = document.getElementById("publishName");
+  var pubDesc = document.getElementById("publishDescription");
+  var pubCreator = document.getElementById("publishCreator");
+  if (pubName) pubName.value = formula.name;
+  if (pubDesc) pubDesc.value = "";
+  if (pubCreator) pubCreator.value = localStorage.getItem("razzle_store_username") || "";
 
   // Reset position checkboxes
   document.querySelectorAll(".publish-pos-check").forEach(cb => cb.checked = false);
@@ -397,6 +401,11 @@ async function submitPublish() {
     if (resp.status === 401) {
       showStoreToast("Sign in to publish formulas");
       if (typeof openAuthModal === "function") openAuthModal();
+      return;
+    }
+    if (!resp.ok) {
+      try { var errData = await resp.json(); showStoreToast(errData.message || "couldn't publish. try again."); }
+      catch(_) { showStoreToast("couldn't publish. try again."); }
       return;
     }
     const data = await resp.json();

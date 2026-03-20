@@ -73,7 +73,8 @@ function _injectHamburgerMenu() {
   btn.setAttribute("aria-label", "Open navigation menu");
   btn.setAttribute("aria-expanded", "false");
   btn.textContent = "\uD83D\uDC3E"; // 🐾
-  nav.insertBefore(btn, nav.querySelector(".logo").nextSibling);
+  var logo = nav.querySelector(".logo");
+  nav.insertBefore(btn, logo ? logo.nextSibling : nav.firstChild);
 
   // Create overlay backdrop
   var overlay = document.createElement("div");

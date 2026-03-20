@@ -404,6 +404,7 @@
   }
 
   function drawChart(data) {
+    var t = typeof getCanvasTheme === 'function' ? getCanvasTheme() : {bg:'#ede0cf',bgCard:'#f7efe5',ink:'#2d1f14',inkMedium:'#5c4a3d',inkLight:'#8a7565',inkFaint:'#c4b5a5',white:'#fff'};
     currentData = data;
     var body = document.getElementById('explorer-body');
     var players = data.players || [];
@@ -459,11 +460,11 @@
     function yScale(v) { return MARGIN.top + plotH - ((v - yMin) / (yMax - yMin)) * plotH; }
 
     // Background
-    ctx.fillStyle = '#f7efe5';
+    ctx.fillStyle = t.bgCard;
     ctx.fillRect(0, 0, wrapW, canvasH);
 
     // Gridlines
-    ctx.strokeStyle = '#c4b5a5';
+    ctx.strokeStyle = t.inkFaint;
     ctx.lineWidth = 0.5;
     var xTicks = niceTickValues(xMin, xMax, 6);
     var yTicks = niceTickValues(yMin, yMax, 6);
@@ -478,7 +479,7 @@
     });
 
     // Axes
-    ctx.strokeStyle = '#2d1f14';
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.moveTo(MARGIN.left, MARGIN.top);
@@ -487,7 +488,7 @@
     ctx.stroke();
 
     // Tick labels
-    ctx.fillStyle = '#5c4a3d';
+    ctx.fillStyle = t.inkMedium;
     ctx.font = '11px "Space Mono", monospace';
     ctx.textAlign = 'center';
     xTicks.forEach(function(v) {
@@ -499,7 +500,7 @@
     });
 
     // Axis labels
-    ctx.fillStyle = '#2d1f14';
+    ctx.fillStyle = t.ink;
     ctx.font = 'bold 13px "Space Mono", monospace';
     ctx.textAlign = 'center';
     ctx.fillText(xLabel, MARGIN.left + plotW / 2, canvasH - 6);
@@ -546,7 +547,7 @@
       ctx.globalAlpha = 0.75;
       ctx.fill();
       ctx.globalAlpha = 1;
-      ctx.strokeStyle = '#2d1f14';
+      ctx.strokeStyle = t.ink;
       ctx.lineWidth = 1;
       ctx.stroke();
 

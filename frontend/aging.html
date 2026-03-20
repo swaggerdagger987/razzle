@@ -437,6 +437,7 @@
 
   // --- Canvas chart drawing ---
   function drawAgingChart(canvas, curveData, playersData, pos) {
+    var t = typeof getCanvasTheme === 'function' ? getCanvasTheme() : {bg:'#ede0cf',bgCard:'#f7efe5',ink:'#2d1f14',inkMedium:'#5c4a3d',inkLight:'#8a7565',inkFaint:'#c4b5a5',white:'#fff'};
     var dpr = window.devicePixelRatio || 1;
     var rect = canvas.parentElement.getBoundingClientRect();
     var w = rect.width - 16;
@@ -460,7 +461,7 @@
 
     if (!curveData || curveData.length === 0) {
       ctx.font = '16px Caveat, cursive';
-      ctx.fillStyle = '#8a7565';
+      ctx.fillStyle = t.inkLight;
       ctx.textAlign = 'center';
       ctx.fillText('not enough data...', w / 2, h / 2);
       return;
@@ -478,7 +479,7 @@
     function yScale(ppg) { return mt + ch - (ppg / Math.max(maxPpg, 1)) * ch; }
 
     // Grid lines
-    ctx.strokeStyle = '#e0d6c8';
+    ctx.strokeStyle = t.inkFaint;
     ctx.lineWidth = 1;
     var yTicks = 5;
     for (var i = 0; i <= yTicks; i++) {
@@ -490,7 +491,7 @@
       ctx.stroke();
       // Y-axis label
       ctx.font = '11px "Space Mono", monospace';
-      ctx.fillStyle = '#8a7565';
+      ctx.fillStyle = t.inkLight;
       ctx.textAlign = 'right';
       ctx.fillText(yVal.toFixed(0), ml - 6, yy + 4);
     }
@@ -500,19 +501,19 @@
     for (var age = minAge; age <= maxAge; age++) {
       var xx = xScale(age);
       ctx.font = '11px "Space Mono", monospace';
-      ctx.fillStyle = '#8a7565';
+      ctx.fillStyle = t.inkLight;
       ctx.fillText(String(age), xx, h - mb + 18);
       // Tick mark
       ctx.beginPath();
       ctx.moveTo(xx, mt + ch);
       ctx.lineTo(xx, mt + ch + 4);
-      ctx.strokeStyle = '#c4b5a5';
+      ctx.strokeStyle = t.inkFaint;
       ctx.stroke();
     }
 
     // Axis labels
     ctx.font = '11px "Space Mono", monospace';
-    ctx.fillStyle = '#8a7565';
+    ctx.fillStyle = t.inkLight;
     ctx.textAlign = 'center';
     ctx.fillText('Age', ml + cw / 2, h - 2);
     ctx.save();
@@ -585,7 +586,7 @@
       ctx.globalAlpha = 0.5;
       ctx.fill();
       ctx.globalAlpha = 1;
-      ctx.strokeStyle = '#2d1f14';
+      ctx.strokeStyle = t.ink;
       ctx.lineWidth = 1.2;
       ctx.stroke();
     });
@@ -597,7 +598,7 @@
       var lx = xScale(p.age);
       var ly = yScale(p.ppg);
       ctx.font = '11px "Space Mono", monospace';
-      ctx.fillStyle = '#2d1f14';
+      ctx.fillStyle = t.ink;
       ctx.textAlign = 'center';
       var nameParts = p.name.split(' ');
       var nameShort = nameParts.length > 1 ? nameParts[nameParts.length - 1] : p.name;
