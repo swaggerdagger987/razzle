@@ -7,42 +7,55 @@ import httpx
 import statistics
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from datetime import datetime
 
 BASE_URL = "http://127.0.0.1:8000"
 
-# Key Lab endpoints that real users hit most
-ENDPOINTS = [
-    ("GET", "/api/health", None),
-    ("GET", "/api/players?position=QB&limit=50", None),
-    ("GET", "/api/players?position=RB&limit=50", None),
-    ("GET", "/api/players?position=WR&limit=50", None),
-    ("GET", "/api/players?position=TE&limit=50", None),
-    ("GET", "/api/filter-options", None),
-    ("GET", "/api/featured", None),
-    ("POST", "/api/screener/query", {
-        "position": "QB", "season": "2025", "limit": 50,
-        "sort_key": "fantasy_points_half_ppr", "sort_dir": "desc"
-    }),
-    ("POST", "/api/screener/query", {
-        "position": "RB", "season": "2025", "limit": 50,
-        "sort_key": "fantasy_points_half_ppr", "sort_dir": "desc",
-        "filters": [{"key": "games", "op": "gte", "value": 10}]
-    }),
-    ("POST", "/api/screener/query", {
-        "position": "WR", "season": "2025", "limit": 200,
-        "sort_key": "fantasy_points_half_ppr", "sort_dir": "desc"
-    }),
-    ("GET", "/api/dynasty-dashboard", None),
-    ("GET", "/api/trade-value-chart?position=all", None),
-    ("GET", "/api/stat-leaders?season=2025", None),
-    ("GET", "/api/dynasty-rankings", None),
-    ("GET", "/api/breakout-candidates?season=2025", None),
-    ("GET", "/api/matchup-heatmap?season=2025", None),
-    ("GET", "/api/aging-curves", None),
-    ("GET", "/api/weekly-heatmap?position=QB&season=2025", None),
-    ("GET", "/api/efficiency-rankings?season=2025", None),
-    ("GET", "/api/consistency-rankings?season=2025", None),
-]
+
+def _discover_season():
+    """Discover latest season from /api/filter-options."""
+    try:
+        r = httpx.get(f"{BASE_URL}/api/filter-options", timeout=5)
+        seasons = sorted(r.json().get("seasons", []), reverse=True)
+        return str(seasons[0]) if seasons else str(datetime.now().year)
+    except Exception:
+        return str(datetime.now().year)
+
+
+def _build_endpoints(season: str):
+    """Build endpoint list using the discovered season."""
+    return [
+        ("GET", "/api/health", None),
+        ("GET", "/api/players?position=QB&limit=50", None),
+        ("GET", "/api/players?position=RB&limit=50", None),
+        ("GET", "/api/players?position=WR&limit=50", None),
+        ("GET", "/api/players?position=TE&limit=50", None),
+        ("GET", "/api/filter-options", None),
+        ("GET", "/api/featured", None),
+        ("POST", "/api/screener/query", {
+            "position": "QB", "season": season, "limit": 50,
+            "sort_key": "fantasy_points_half_ppr", "sort_dir": "desc"
+        }),
+        ("POST", "/api/screener/query", {
+            "position": "RB", "season": season, "limit": 50,
+            "sort_key": "fantasy_points_half_ppr", "sort_dir": "desc",
+            "filters": [{"key": "games", "op": "gte", "value": 10}]
+        }),
+        ("POST", "/api/screener/query", {
+            "position": "WR", "season": season, "limit": 200,
+            "sort_key": "fantasy_points_half_ppr", "sort_dir": "desc"
+        }),
+        ("GET", "/api/dynasty-dashboard", None),
+        ("GET", "/api/trade-value-chart?position=all", None),
+        ("GET", f"/api/stat-leaders?season={season}", None),
+        ("GET", "/api/dynasty-rankings", None),
+        ("GET", f"/api/breakout-candidates?season={season}", None),
+        ("GET", f"/api/matchup-heatmap?season={season}", None),
+        ("GET", "/api/aging-curves", None),
+        ("GET", f"/api/weekly-heatmap?position=QB&season={season}", None),
+        ("GET", f"/api/efficiency-rankings?season={season}", None),
+        ("GET", f"/api/consistency-rankings?season={season}", None),
+    ]
 
 CONCURRENT_USERS = 50
 REQUESTS_PER_USER = 5  # each user hits 5 random endpoints
@@ -64,6 +77,9 @@ def make_request(client: httpx.Client, method: str, path: str, json_body):
         return (path, 0, elapsed_ms, str(e))
 
 
+ENDPOINTS = []  # populated in main()
+
+
 def user_session(user_id: int):
     """Simulate one user making multiple requests."""
     import random
@@ -77,8 +93,11 @@ def user_session(user_id: int):
 
 
 def main():
+    global ENDPOINTS
+    season = _discover_season()
+    ENDPOINTS = _build_endpoints(season)
     print(f"Load test: {CONCURRENT_USERS} concurrent users, {REQUESTS_PER_USER} requests each")
-    print(f"Target: {BASE_URL}")
+    print(f"Target: {BASE_URL} (season {season})")
     print(f"Total requests: {CONCURRENT_USERS * REQUESTS_PER_USER}")
     print("-" * 70)
 
