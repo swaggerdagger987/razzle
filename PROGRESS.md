@@ -1782,3 +1782,29 @@ All `ctx.fillStyle = 'rgba(45,31,20,...)'` → theme-branching with sand rgba fo
 - 0 cold gray `rgba(26,26,46,...)` remaining in frontend
 - 0 hardcoded `backgroundColor: "#ede0cf"` remaining in HTML
 - 0 regressions
+
+---
+
+## Quality Audit: 5-Agent Deep Sweep (Mar 20)
+
+**Goal**: Fresh 5-agent parallel crash-bug audit across all major files. Fix every real production crash path.
+
+| # | Fix | Category | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | Math.max/min spread overflow on large arrays | STACK OVERFLOW | charts.js (3 sites) | Replaced `Math.max(...arr)` with `.reduce()` — prevents RangeError on 10K+ items in career mode scatter/radar |
+| 2 | Stored XSS in formula onclick handlers | XSS | formulas.js:131,139 | Replaced inline onclick with data attributes + event delegation — formula names with `</span>` could inject HTML |
+| 3 | Race condition: runAllAgents buttons disabled after await | RACE | warroom.js:2646+ | Moved setScenarioButtonsDisabled(true) before first await; re-enable on early returns |
+| 4 | Race condition: runSingleAgent buttons disabled after await | RACE | warroom.js:2475+ | Same fix — prevents double-click firing duplicate LLM calls |
+| 5 | XSS in briefing history onclick | XSS | warroom.js:3733 | Replaced `onclick="loadBriefingById(' + b.id + ')"` with data-briefing-id + event delegation |
+| 6 | .toFixed(2) on null p.r in correlations | CRASH | lab-panels.js:9746 | Added null guard: `p.r != null ? p.r.toFixed(2) : '—'` |
+| 7 | .toFixed(2) on undefined r in scatter title | CRASH | lab-panels.js:9852 | Changed `r !== null` to `r != null` (catches undefined too) |
+| 8 | .toFixed() on non-number val in heatmap | CRASH | charts.js:755 | Changed to `Number(val).toFixed(dec)` + `dec != null` (catches undefined decimals) |
+| 9 | Missing resp.ok on submitReview | ROBUSTNESS | formula-store.js:183 | Added guard — prevents SyntaxError on HTML error responses |
+| 10 | Null rosterDiv before .dataset access | CRASH | league-intel.html:1996 | Added null guard before .dataset.loaded check |
+| 11 | Global JSON decode error handler | ROBUSTNESS | server.py | Returns 400 instead of 500 on malformed POST bodies (covers 26 endpoints) |
+| 12 | LLM rate bucket unbounded growth | MEMORY LEAK | server.py:1027+ | Added pruning when buckets > 500 — removes stale users with empty/expired timestamps |
+
+### Verified Clean
+- All 11 JS files syntax clean
+- All Python files compile clean
+- 59/59 tests pass (5.59s)
