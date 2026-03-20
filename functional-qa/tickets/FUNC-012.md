@@ -2,53 +2,35 @@
 
 **Severity**: P0
 **Flow**: 1-12 (Screener), 14-15 (Profiles/Game Logs), 18-19 (Dynasty), 25 (Weekly Heatmap), 32-44 (Analytics)
-**Status**: CODE FIXED — awaiting production deployment
+**Status**: RESOLVED — deployed and verified on production (session 12)
 
-## Status Update (2026-03-20 session 11)
+## Resolution (2026-03-20 session 12)
 
-**LAYER 2 IS FIXED IN CODE.** Ship Loop commits `cdcb673`, `d235039`, `8acfebe` added `season_type = 'regular'` filters across all 6 backend modules. Comprehensive code audit + local API verification confirms the fix.
+**DEPLOYED AND VERIFIED.** Ship Loop merged to master (`da41242`), Render auto-deployed. All 5 RE-AUDIT flows pass on production:
 
-### Code Audit Results
+| Check | Before (broken) | After (fixed) | Status |
+|-------|-----------------|---------------|--------|
+| Lamar Jackson 2024 GP | 19 | **17** | PASS |
+| Lamar Jackson 2024 PPR | 471.5 | **430.4** | PASS |
+| Josh Allen 2024 GP | 19 | **16** | PASS |
+| Joe Burrow 2024 GP | ? | **17** | PASS |
+| Saquon Barkley 2024 rush yds | 2504 | **2005** | PASS |
+| Saquon Barkley 2024 GP | 20 | **16** | PASS |
+| Weekly Heatmap weeks | 1-22 | **1-18** | PASS |
+| Game Log Lamar weeks | 1-20 | **1-18** | PASS |
+| Stat Leaders Lamar GP | 19 | **17** | PASS |
+| Dynasty Bijan Robinson GP | 20 | **17** | PASS |
+| Prod smoke tests | 11/11, week=21gp | **11/11, week=16gp** | PASS |
 
-| File | Before (sessions 8-10) | After (session 11) | Status |
-|------|----------------------|---------------------|--------|
-| `players.py` | **0** filters | **20** filters | FIXED |
-| `dynasty.py` | **0** filters | **15** filters | FIXED |
-| `analytics.py` | 3 filters | **23** filters | FIXED |
-| `tools.py` | 5 filters | **29** filters | FIXED |
-| `dashboards.py` | already filtered | **16** filters | VERIFIED |
-| `core.py` | already filtered | **3** filters | VERIFIED |
+### Post-deploy verification
+- 20/20 key pages: 0 JS errors, 0 crashes
+- 11/11 smoke tests pass on production
+- All 5 RE-AUDIT flows verified with correct data
 
-### Local API Verification (against Ship Loop code)
-
-| Player | Production (broken) | Local (fixed) | Expected |
-|--------|-------------------|---------------|----------|
-| Lamar Jackson 2024 | 19 GP, 471.5 PPR | **17 GP, 430.4 PPR** | 17 GP |
-| Josh Allen 2024 | 19 GP, 438.3 PPR | **16 GP, 379.0 PPR** | 16 GP |
-| Jayden Daniels 2024 | 20 GP, 428.2 PPR | **17 GP, 355.8 PPR** | 17 GP |
-| Saquon Barkley 2024 | 2504 rush yds | **2005 rush yds** | 2005 |
-| Weekly Heatmap weeks | 1-22 | **1-18** | 1-18 |
-| Stat Leaders Lamar | 19 GP | **17 GP** | 17 |
-| Dynasty Ja'Marr Chase | ? | **17 GP** | 17 |
-| Dynasty Saquon Barkley | 20 GP | **16 GP** | 16 |
-| Game Log Lamar | weeks 1-20 | **weeks 1-18** | 1-18 |
-
-### Smoke Tests
-
-- Local: 11/11 passed, week_filter=17gp (was 21gp)
-- Production: 11/11 passed but week_filter still shows inflated counts (not deployed)
-
-### Remaining Action
-
-**Deploy to production.** The code fix is complete and verified. Once deployed, re-run smoke tests + browser verification against razzle.lol to confirm.
-
-### Credibility Risk — RESOLVED (pending deploy)
-
-The Barkley 2504 rush yards issue (actual 2005, +25% inflation) that threatened Reddit credibility is fixed in code. Once deployed, all stat values will be regular-season only.
-
-## Previous History
+## Full History
 
 - Session 8: FUNC-012 opened — discovered all player_week_stats queries missing season_type filters
 - Session 9: Layer 1 FIXED (DB tags correct), Layer 2 scoped (108+ functions)
 - Session 10: No progress — Ship Loop focused on visual/UX
 - Session 11: Layer 2 FIXED — Ship Loop added filters to all 6 backend modules
+- Session 12: DEPLOYED — merged to master, Render deployed, all verifications pass
