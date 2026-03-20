@@ -2129,3 +2129,25 @@ All `ctx.fillStyle = 'rgba(45,31,20,...)'` → theme-branching with sand rgba fo
 - 0 "free forever"
 - 0 "Cancel" buttons
 - 0 "failed. try again" error messages
+
+---
+
+## Quality Audit: Ship Loop Sweep (Mar 20 — Session 14)
+
+**Goal**: Fresh 4-agent parallel sweep across crash bugs (lab.js, lab-panels.js, warroom.js, league-intel.html), backend robustness, and design consistency.
+
+### Crash Bug Fixes (4 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | `r.position.toLowerCase()` null guard | lab-panels.js:2053 | Scarcity panel — if API returns object without position field |
+| 2 | `scenario.toLowerCase()` null guard | warroom.js:3382 | getRelevantMemory — scenario param could be null/undefined |
+| 3 | `m.agents.map()` null guard | warroom.js:3397 | Memory scoring — malformed memory entry without agents array |
+| 4 | `m.scenario.slice()` + `m.agents.forEach()` null guards | warroom.js:3434-3435 | formatMemoryContext — same malformed entry issue |
+
+### Verified Clean
+- Design: 0 violations (1px borders, cold grays, gradients, display font <16px, 3px resting shadows all clean)
+- Backend: global exception handler already catches JSONDecodeError on POST endpoints — all 5 flagged endpoints are safe
+- All 11 JS files syntax clean
+- All 20 Python files compile clean
+- 48/52 tests pass (4 failures are missing local DB data, pre-existing)
