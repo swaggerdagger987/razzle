@@ -103,7 +103,7 @@ def main():
         status = row.get("status", "").strip()
 
         # Only process posted tweets with an ID
-        if not tweet_id or status != "POSTED":
+        if not tweet_id or status.upper() != "POSTED":
             continue
 
         # Skip if already has metrics
