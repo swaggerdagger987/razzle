@@ -85,7 +85,7 @@
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
 | 45 | Big Board | Prospects ranked? Positional filter? Athletic data shown? | RE-AUDIT SESSION 13 — PASS. 2026 class: 319 prospects, Green QB#1 RPS 72.8, combine data present (height/weight/forty). Phase F college refresh verified. |
-| 46 | Draft Class | Aggregate class metrics? Per-position breakdown? | DONE — 7-round breakdown, per-round math correct. P0 FUNC-011: PPG inflated for multi-season players (COUNT DISTINCT week collapses across seasons — Bo Nix shows 33 PPG, actual ~20). |
+| 46 | Draft Class | Aggregate class metrics? Per-position breakdown? | RE-AUDIT SESSION 15 — FUNC-011 FIXED. Bo Nix now 18.30 PPG/34 GP/2 seasons (was 33 PPG). COUNT(DISTINCT season\|\|week) prevents cross-season collision. 77 players in 2024 class, 7 rounds. |
 | 47 | Prospect profiles | Click a prospect. Combine data correct? College stats shown? | SKIP — /api/prospect-profiles returns 404. No dedicated endpoint. Prospect data available via /api/prospect-scores (Big Board, flow 45). |
 | 48 | Mock Draft Board | Board loads? Picks assignable? Trade pick functionality? | SKIP — /api/mock-draft returns 404. Not implemented. |
 | 49 | Prospect Radar | Athletic measurables visualized? Percentiles correct? Comparison works? | SKIP — /api/prospect-radar returns 404. Not implemented. |

@@ -663,3 +663,84 @@ quality-sweep	OK	backend/server.py	-	-	pass	Rate limits + input clamping verifie
 broad-sweep	OK	-	-	-	pass	20/20 key pages on prod: 0 JS errors, 0 crashes post-deploy	100	2026-03-20T18:06
 stock-watch	P2	backend/live_data/analytics.py	-	fetch_stock_watch	ticket	FUNC-013: Stock Watch rising WRs are all scrubs (Powell 2PPG, Shenault 2.5PPG) — no min threshold	90	2026-03-20T18:08
 buy-sell	P2	backend/live_data/analytics.py	-	fetch_buy_sell_candidates	ticket	FUNC-013: Buy/Sell buy-low WRs are scrubs (Hodge 5PPG A+, Dulin 2PPG A+) — same threshold issue	90	2026-03-20T18:08
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke-local	OK	-	-	-	pass	S15 smoke: 11/11 pass on localhost (2024 single-season DB)	100	2026-03-20T19:00
+smoke-prod	OK	-	-	-	pass	S15 smoke: 11/11 pass on razzle.lol (2025+2024 data, week filter, sort, position all correct)	100	2026-03-20T19:02
+re-audit-FUNC013	P2	backend/live_data/dashboards.py	712	fetch_stock_watch	not-deployed	S15 re-audit: FUNC-013 fix (447088b) exists in ship/launch-fixes but NOT merged to master. Prod still has min 6 games/2 PPG. Fix raises to min 8 games + QB:10/RB:5/WR:5/TE:3 PPG. WR rising still all scrubs on prod (Thrash 2.59, Conner 2.26).	100	2026-03-20T19:05
+re-audit-FUNC014	P2	render.yaml	-	esbuild	still-broken	S15 re-audit: FUNC-014 still broken on prod. curl lab.js shows raw unminified source with comments. G-1/G-2 DONE in PROGRESS but esbuild doesn't run on Render.	100	2026-03-20T19:06
+re-audit-b51bc81	OK	backend/server.py	2422	trade_pick_values	pass	S15 re-audit: Ship fix b51bc81 — pick values year clamp now dynamic (current_draft_year +/- range). Year=2020 correctly clamps to 2024. Year=2026 returns correct picks.	100	2026-03-20T19:08
+re-audit-b51bc81-xss	OK	frontend/lab-panels.js	204	dynasty-history	pass	S15 re-audit: Ship fix b51bc81 — dynasty history headers now escape season data via escapeHtml(String(s)).	100	2026-03-20T19:08
+re-audit-FUNC011	OK	backend/live_data/tools.py	553	fetch_draft_class	pass	S15 re-audit: FUNC-011 PPG inflation FIXED on prod. Bo Nix 2024 class: 18.30 PPG/34 GP/2 seasons (was 33 PPG). COUNT(DISTINCT season||week) prevents cross-season collision.	100	2026-03-20T19:10
+page-sweep-prod	OK	-	-	-	pass	S15 page sweep: 40/40 standalone pages on razzle.lol return HTTP 200 with 0 JS errors, 0 crashes.	100	2026-03-20T19:12
+data-VORP	OK	backend/live_data/dashboards.py	-	fetch_vorp	pass	S15 data: VORP correct. Barkley RB1 PPG=14.52 VORP=2.37, replacement=12.15 (RB24). Math: 14.52-12.15=2.37.	90	2026-03-20T19:13
+data-awards	OK	backend/live_data/tools.py	-	fetch_season_awards	pass	S15 data: Season awards 10 categories, correct winners. MVP=Jefferson (GPA composite), all positions represented.	90	2026-03-20T19:14
+data-consistency	OK	backend/live_data/analytics.py	-	fetch_consistency	pass	S15 data: Consistency correct. Lamar Jackson most consistent QB (CoV=0.245). Wild cards sensible (Willis, DTR, Dalton).	90	2026-03-20T19:14
+data-trade-values	P2	backend/live_data/core.py	463	_enrich_with_dynasty_value	ticket	FUNC-015: Screener dynasty_value uses different formula than trade value chart compute_trade_value(). McBride screener=74.4 vs chart=95.6. Two formulas, same-sounding name.	90	2026-03-20T19:16
+data-trade-finder	OK	backend/live_data/dynasty.py	-	_fetch_trade_finder	pass	S15 data: Trade finder works. Barkley TV=65.6 (age-penalized, correct math). Buy low/sell high populated (15 each).	90	2026-03-20T19:17
+visual-lab-light	OK	-	-	-	pass	S15 visual: Lab light mode clean on prod. Sand background, chunky borders, position badges, sidebar organized.	100	2026-03-20T19:13
+visual-lab-dark	OK	-	-	-	pass	S15 visual: Lab dark mode clean on prod. Espresso palette, readable text, no white flashes.	100	2026-03-20T19:13
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
