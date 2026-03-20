@@ -2129,3 +2129,37 @@ All `ctx.fillStyle = 'rgba(45,31,20,...)'` → theme-branching with sand rgba fo
 - 0 "free forever"
 - 0 "Cancel" buttons
 - 0 "failed. try again" error messages
+
+---
+
+## Quality Audit: Ship Loop Sweep (Mar 20 — Session 14)
+
+**Goal**: Fresh 4-agent parallel sweep across crash bugs (lab.js, lab-panels.js, warroom.js, league-intel.html), backend robustness, and design consistency.
+
+### Crash Bug Fixes (4 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | `r.position.toLowerCase()` null guard | lab-panels.js:2053 | Scarcity panel — if API returns object without position field |
+| 2 | `scenario.toLowerCase()` null guard | warroom.js:3382 | getRelevantMemory — scenario param could be null/undefined |
+| 3 | `m.agents.map()` null guard | warroom.js:3397 | Memory scoring — malformed memory entry without agents array |
+| 4 | `m.scenario.slice()` + `m.agents.forEach()` null guards | warroom.js:3434-3435 | formatMemoryContext — same malformed entry issue |
+
+### Additional Fixes (Session 14 continued)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 5 | handleSleeperLink missing token guard | app.js:1206 | Sent "Bearer null" header when not logged in — now shows sign-in message |
+| 6 | College TD attribution overly broad | cfbfastr_adapter.py:222,249 | Pass/rec TD conditions credited wrong player on QB scramble edge case — tightened to `td_id == rec_id` only |
+| 7 | find_player_stats_asset no error handling | nflverse_adapter.py:287 | Unhandled exception if GitHub API unreachable — added try-except returning None |
+
+### Verified Clean
+- Design: 0 violations (1px borders, cold grays, gradients, display font <16px, 3px resting shadows all clean)
+- Backend: global exception handler already catches JSONDecodeError on POST endpoints — all 5 flagged endpoints are safe
+- Auth/billing: isPaidUser() correctly includes trial users (plan set to "pro" in _user_dict)
+- Passer rating /6 divisor is correct (NFL formula, max 158.3)
+- index.html: all links valid, all meta tags present, responsive breakpoints complete
+- Standalone HTML panels: all defensive, no crash bugs
+- All 11 JS files syntax clean
+- All 20 Python files compile clean
+- 48/52 tests pass (4 failures are missing local DB data, pre-existing)

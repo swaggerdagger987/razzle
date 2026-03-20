@@ -117,4 +117,4 @@ The database file `data/terminal.db` uses WAL journal mode locally. Uploading it
 
 ### Task 1: Fix push pin blinking
 **Accept when**: The push pin in the screener is completely static — no blinking, flickering, or animation. Verify across light and dark mode.
-**Status**: TODO
+**Status**: DONE — Removed `transition: opacity 0.15s` from `.pin-icon-faint` in lab.html. The virtual scroll (`renderVisibleRows`) replaces `tbody.innerHTML` on every scroll frame, which was replaying the opacity transition on each rebuild, causing visible shimmer/blink. Hover effect still works (instant opacity change from 0.15 to 0.5) without the transition.

@@ -217,9 +217,8 @@ def aggregate_season(csv_text, season):
             comp_yds = safe_int(row.get("completion_yds"))
             if comp_yds is not None:
                 p["pass_yards"] += comp_yds
-            # TD attribution is split: ~55% credit QB, ~45% credit receiver
-            # Count as passing TD if TD on this completion play
-            if td_id and (td_id == comp_id or (rec_id and td_id == rec_id)):
+            # Passing TD: credit QB only when the receiver scored
+            if td_id and rec_id and td_id == rec_id:
                 p["pass_tds"] += 1
                 p["total_tds"] += 1
 
@@ -245,8 +244,8 @@ def aggregate_season(csv_text, season):
             rec_yds = safe_int(row.get("reception_yds"))
             if rec_yds is not None:
                 p["rec_yards"] += rec_yds
-            # Receiving TD: TD on a completion play (credited to QB or receiver)
-            if td_id and (td_id == rec_id or (comp_id and td_id == comp_id)):
+            # Receiving TD: credit receiver only when they scored
+            if td_id and td_id == rec_id:
                 p["rec_tds"] += 1
                 p["total_tds"] += 1
 

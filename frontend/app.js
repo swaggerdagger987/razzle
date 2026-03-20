@@ -1204,6 +1204,7 @@ async function handleSleeperLink(e) {
   errEl.textContent = "";
   try {
     var token = localStorage.getItem("razzle_token");
+    if (!token) { errEl.textContent = "sign in first to link your Sleeper account."; return; }
     var resp = await fetch(API_BASE + "/api/auth/link-sleeper", {
       method: "POST",
       headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
