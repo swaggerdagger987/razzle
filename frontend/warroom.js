@@ -3743,8 +3743,28 @@ function toggleBriefingHistory() {
 }
 
 function loadBriefingById(id) {
-  // For now, just reload latest — a specific briefing fetch could be added later
-  loadLatestBriefing();
+  var token = localStorage.getItem('razzle_token');
+  if (!token) return;
+  var body = document.getElementById('weeklyBriefingBody');
+  var weekLabel = document.getElementById('briefingWeekLabel');
+
+  fetch(
+    (typeof API_BASE !== 'undefined' ? API_BASE : '') + '/api/briefings/' + encodeURIComponent(id),
+    { headers: { 'Authorization': 'Bearer ' + token } }
+  )
+  .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+  .then(function(data) {
+    if (!data.briefing) {
+      body.innerHTML = '<div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); text-align:center; padding:12px;">briefing not found</div>';
+      return;
+    }
+    var b = data.briefing;
+    if (weekLabel) weekLabel.textContent = b.week_label || '';
+    renderBriefingContent(body, b);
+  })
+  .catch(function() {
+    body.innerHTML = '<div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); text-align:center; padding:12px;">briefing got intercepted... try again</div>';
+  });
 }
 
 // ── FIRST-RUN DEMO BRIEFING ───────────────────────────────────────────

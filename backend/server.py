@@ -500,9 +500,9 @@ async def static_cache_middleware(request: Request, call_next):
     # Static assets — long cache
     if any(path.endswith(ext) for ext in _STATIC_ASSET_EXTS):
         response.headers["Cache-Control"] = "public, max-age=31536000, immutable"
-    # Screener POST endpoints — short cache
+    # Screener POST endpoints — private cache only (POST must not be publicly cached by CDN)
     elif request.method == "POST" and path in ("/api/screener/query", "/api/screener/sparklines"):
-        response.headers["Cache-Control"] = "public, max-age=60"
+        response.headers["Cache-Control"] = "private, max-age=60"
 
     return response
 
@@ -1439,6 +1439,18 @@ async def get_briefing_history(request: Request, limit: int = 10):
         return err
     history = auth_module.get_briefing_history(user["id"], limit=min(limit, 50))
     return JSONResponse({"briefings": history, "count": len(history)})
+
+
+@app.get("/api/briefings/{briefing_id}")
+async def get_briefing_by_id(briefing_id: int, request: Request):
+    """Get a specific briefing by ID for the authenticated Elite user."""
+    user, err = require_plan(request, "elite")
+    if err:
+        return err
+    briefing = auth_module.get_briefing_by_id(user["id"], briefing_id)
+    if not briefing:
+        return JSONResponse({"error": "briefing not found"}, status_code=404)
+    return JSONResponse({"briefing": briefing})
 
 
 @app.post("/api/briefings/save")

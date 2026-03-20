@@ -824,6 +824,16 @@ def get_latest_briefing(user_id: int, league_id: str = None) -> dict:
         return dict(row)
 
 
+def get_briefing_by_id(user_id: int, briefing_id: int) -> dict:
+    """Get a specific briefing by ID (only if owned by user)."""
+    with get_users_db() as conn:
+        row = conn.execute(
+            "SELECT * FROM weekly_briefings WHERE id = ? AND user_id = ?",
+            (briefing_id, user_id),
+        ).fetchone()
+        return dict(row) if row else None
+
+
 def get_briefing_history(user_id: int, limit: int = 10) -> list:
     """Get recent briefing history for a user."""
     with get_users_db() as conn:
