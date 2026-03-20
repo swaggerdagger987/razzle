@@ -149,8 +149,6 @@ def initialize_database(conn):
         CREATE INDEX IF NOT EXISTS idx_players_position ON players(position);
         CREATE INDEX IF NOT EXISTS idx_players_team ON players(team);
         CREATE INDEX IF NOT EXISTS idx_players_gsis ON players(gsis_id);
-        CREATE INDEX IF NOT EXISTS idx_players_pos_relevant ON players(position, fantasy_relevant);
-
         CREATE TABLE IF NOT EXISTS player_week_stats (
             player_id TEXT,
             season INTEGER,
@@ -1261,6 +1259,12 @@ def migrate_add_columns(conn):
         conn.execute("ALTER TABLE players ADD COLUMN fantasy_relevant INTEGER DEFAULT 1")
         conn.execute("UPDATE players SET fantasy_relevant = 1 WHERE fantasy_relevant IS NULL")
         print("  Added column: fantasy_relevant to players")
+
+    # Index on fantasy_relevant (must be after column exists)
+    try:
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_players_pos_relevant ON players(position, fantasy_relevant)")
+    except Exception:
+        pass  # Index may already exist
 
     conn.commit()
 
