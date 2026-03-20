@@ -2044,6 +2044,7 @@ function injectSparklines() {
 }
 
 function buildSparklineSVG(pts) {
+  if (!pts || !pts.length) return '';
   const w = 72, h = 22, pad = 2;
   const max = Math.max(...pts, 1);
   const min = Math.min(...pts, 0);

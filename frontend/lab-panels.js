@@ -1474,7 +1474,7 @@
           data.available_seasons.forEach(function(s) {
             var o = document.createElement('option');
             o.value = s; o.textContent = s;
-            if (s == (data.season || data.available_seasons[0])) o.selected = true;
+            if (s == (data.season || (data.available_seasons.length ? data.available_seasons[0] : null))) o.selected = true;
             sel.appendChild(o);
           });
           seasonsPopulated = true;
@@ -1664,7 +1664,7 @@
           data.available_seasons.forEach(function(s) {
             var o = document.createElement('option');
             o.value = s; o.textContent = s;
-            if (s == (data.season || data.available_seasons[0])) o.selected = true;
+            if (s == (data.season || (data.available_seasons.length ? data.available_seasons[0] : null))) o.selected = true;
             sel.appendChild(o);
           });
           seasonsPopulated = true;

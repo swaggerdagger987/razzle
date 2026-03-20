@@ -1367,3 +1367,50 @@ User needs to manually upload updated terminal.db to Render persistent disk at /
 - All 18 Python files compile clean
 - 59/59 tests pass (5.67s)
 - 0 regressions
+
+---
+
+## Quality Audit: 5-Agent Parallel Sweep (Mar 20 — Session 4)
+
+**Goal**: Fresh 5-agent parallel audit across crash bugs (lab.js, lab-panels.js), design consistency, dark mode completeness, backend robustness, and brand voice.
+
+### P1 Dark Mode Fixes (3 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | Warroom hero mascot shadow invisible on dark bg | agents.html:37 | `rgba(45,31,20,0.15)` → `rgba(0,0,0,0.15)` — inside `.warroom-dark` forced dark theme |
+| 2 | Canvas container shadow invisible on dark bg | agents.html:204 | `rgba(45,31,20,0.4)` → `rgba(0,0,0,0.4)` — inside `.warroom-dark` |
+| 3 | Canvas placeholder icon shadow invisible on dark bg | agents.html:230 | `rgba(45,31,20,0.3)` → `rgba(0,0,0,0.3)` — inside `.warroom-dark` |
+
+### P1 Defensive Guards (3 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 4 | `available_seasons[0]` without length check | lab-panels.js:1477 | Breakouts panel — added `.length ?` ternary guard |
+| 5 | `available_seasons[0]` without length check | lab-panels.js:1667 | Buy/Sell panel — added `.length ?` ternary guard |
+| 6 | `buildSparklineSVG(pts)` no null/empty guard | lab.js:2046 | Added `if (!pts || !pts.length) return ''` at function entry |
+
+### P2 Dark Mode CSS Fixes (4 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 7 | Placeholder text hardcoded rgba | archetypes.html:240 | `rgba(45,31,20,0.15)` → `var(--ink-faint)` — theme-responsive |
+| 8 | Placeholder text hardcoded rgba | auction.html:289 | `rgba(45,31,20,0.15)` → `var(--ink-faint)` — theme-responsive |
+| 9 | Placeholder text hardcoded rgba | tiers.html:242 | `rgba(45,31,20,0.15)` → `var(--ink-faint)` — theme-responsive |
+| 10 | Dollar tier badge hardcoded background | auction.html:232 | `rgba(45,31,20,0.06)` → `color-mix(in srgb, var(--ink) 6%, transparent)` |
+
+### Audit Findings (Not Bugs)
+- `color: white` on accent backgrounds (--orange, --pos-qb, etc.): correct — accents don't flip in dark mode
+- Auth modal 8px shadow: intentional elevated overlay emphasis
+- Mobile nav 6px shadow: intentional sliding panel emphasis
+- Focus-visible 6px shadow: accessibility needs extra visibility
+- `.chip.active[data-pos="ALL"]` already overrides to `color: var(--bg)` — correctly handled
+- `.btn-chunky.active` already uses `color: var(--bg)` — correctly handled
+- Backend: 0 SQL injection, 0 bare excepts, 0 connection leaks, 0 division by zero unguarded
+- Brand voice: 0 generic messages, 0 alert() calls, 0 "War Room" or "The Lab" in user-visible text
+
+### Verified Clean
+- All 11 JS files syntax clean
+- All Python files compile clean
+- 59/59 tests pass (5.63s)
+- 0 regressions
