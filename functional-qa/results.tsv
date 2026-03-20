@@ -95,3 +95,119 @@ smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
 37	OK	-	-	-	pass	TD regression: td_diff correct (actual-expected, 6/6 match exact)	100	2026-03-20T13:50
 37	OK	-	-	-	pass	TD regression: expected=opps*(avg_rate/100) verified (Ward 27.2≈27.3, Stafford 29.4≈29.5)	100	2026-03-20T13:50
 37	OK	-	-	-	pass	TD regression: position TD rates sensible (QB 4.7%, RB 3.3%, WR 4.9%, TE 5.8%)	95	2026-03-20T13:50
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	P0	backend/live_data/players.py	-	_fetch_screener_uncached	ticket	smoke:week_filter — Week 1 player has 21 games — week filter not working
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	P0	backend/live_data/players.py	-	_fetch_screener_uncached	ticket	smoke:week_filter — Week 1 player has 21 games — week filter not working
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	P0	backend/live_data/players.py	-	_fetch_screener_uncached	ticket	smoke:week_filter — Week 1 player has 21 games — week filter not working
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=21gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	P1	-	-	-	ticket	smoke:no_negative_stats — HTTP 0
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	P0	backend/live_data/players.py	-	_fetch_screener_uncached	ticket	smoke:week_filter — Week 1 player has 21 games — week filter not working
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+1	P0	ship/launch-fixes	-	deployment	ticket	re-audit: FUNC-001/002/003 code-fixed but NOT DEPLOYED to production (FUNC-006). Lab still crashes.	100	2026-03-20T17:00
+5	P1	ship/launch-fixes	-	deployment	ticket	re-audit: FUNC-002 search fix not deployed. Amon-Ra/Ja'Marr still return 0 on prod.	100	2026-03-20T17:00
+18	P2	ship/launch-fixes	-	deployment	ticket	re-audit: FUNC-003 dynasty ceiling fix not deployed. Top 7 still at 100.0 on prod.	100	2026-03-20T17:00
+14	OK	-	-	-	pass	Career stats: Lamar 8-season sum matches career totals exactly (GP=124, PPR=2531.04, PassYds=24361, RushYds=7163)	100	2026-03-20T17:03
+15	OK	-	-	-	pass	Game log: 19 weeks for Lamar 2024, PPR sum=471.54 matches season total, week 1 data correct	100	2026-03-20T17:03
+16	OK	-	-	-	pass	Player comparison: Jackson vs Stroud 2024 — data aligned, same season, correct stats	100	2026-03-20T17:04
+24	OK	-	-	-	pass	Cheat sheet: 4 position groups, Jackson QB#1 PPG=24.82, tiers and ranks correct	95	2026-03-20T17:05
+25	OK	-	-	-	pass	Weekly heatmap: 22 weeks data for QBs, sums match season totals (471.6 vs 471.5 rounding)	95	2026-03-20T17:05
+29	OK	-	-	-	pass	Breakouts: 50 candidates, RBS scores present (Rattler #1 RBS=70.0), opp/prod gap logic correct	85	2026-03-20T17:06
+29	P2	-	-	-	info	Breakouts: snap_pct=0 for all candidates due to FUNC-007 (offense_snaps NULL in DB)	80	2026-03-20T17:06
+38	OK	-	-	-	pass	Garbage time: clean producers sensible (Jackson 4.2% GT, Chase 2.8%, Allen 3.7%)	90	2026-03-20T17:06
+38	P2	backend/live_data/dashboards.py	-	fetch_garbage_time	info	Garbage time: no gt_ppg/clean_ppg split in API — only total PPG + GT%. Backup scrubs dominate padders.	70	2026-03-20T17:06
+40	OK	-	-	-	pass	Dual threat: DTI=geometric mean verified exact (Kamara 51.3, Barkley 46.7, Gibbs 49.3)	100	2026-03-20T17:07
+41	OK	-	-	-	pass	Consistency: CoV/StdDev/floor/ceiling verified from weekly data (Lamar CoV=0.245, Grade=A+)	100	2026-03-20T17:07
+42	P1	adapters/nflverse_adapter.py	-	snap import	ticket	FUNC-007: snaps_pg=0.0 and snap_pct=None for ALL 50 workload players — offense_snaps NULL in DB	100	2026-03-20T17:08
+44	OK	-	-	-	pass	Scoring: nflverse PPR ground truth, small diffs from 2pt conversions/fumbles not in basic fields	90	2026-03-20T17:08
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	P0	backend/live_data/players.py	-	_fetch_screener_uncached	ticket	smoke:week_filter — Week 1 player has 21 games — week filter not working
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=21gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	P1	-	-	-	ticket	smoke:no_negative_stats — HTTP 0
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	P0	backend/live_data/players.py	-	_fetch_screener_uncached	ticket	smoke:week_filter — Week 1 player has 21 games — week filter not working
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke-local	P0	backend/live_data/players.py	252	_fetch_screener_uncached	local-only	week filter returns season totals on local server (stale code). Production PASSES (week=1 returns 1 game).	90	2026-03-20T13:20
+smoke-prod	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=21gp, week1=1gp	100	2026-03-20T13:15
+smoke-prod	FAIL	functional-qa/tests/smoke.py	-	no_negative_stats	infra	smoke:no_negative_stats — HTTP 0 due to gzip decode error in test script against prod	80	2026-03-20T13:15
+10-pin-player	OK	frontend/lab.js	4401	togglePinPlayer	pass	Pin: max 5 cap, localStorage+URL persist, diff mode, bulk pin, clear all. Code PASS.	95	2026-03-20T13:30
+10-pin-player	P2	frontend/lab.js	4486	renderPinnedRows	open	Pinned rows vanish when filtered out of state.items — pin ID stored but row cant render if player not in current result set	85	2026-03-20T13:30
+12-url-state	OK	frontend/lab.js	3677	saveStateToURL	pass	URL state: 24 call sites, all filter/sort/col/visual state serialized, validated on restore. Code PASS.	95	2026-03-20T13:35
+17-player-charts	OK	frontend/lab.js	6638	drawProfileArc	pass	Charts: career arc, comp radar, scatter, heat map. All position-colored, div-by-zero guarded, DPI-scaled. API data correct.	95	2026-03-20T13:40
+23-career-compare	OK	frontend/career-compare.html	615	renderComparison	pass	Career compare: 3 slots, autocomplete, PPG chart, career summary table, season-by-season. API returns complete data. Code PASS.	95	2026-03-20T13:45
+26-weekly-leaders	OK	frontend/lab-panels.js	4104	weeklyleaders	pass	Weekly leaders: ranked performers, Barkley Wk1 2024 = 33.2 PPR verified exact. Position filter, sort, top 3 badges.	95	2026-03-20T13:50
+26-weekly-leaders	P2	frontend/lab-panels.js	4244	renderWKL	note	Zero stat values show '-' instead of '0' due to JS falsy (0 || '-'). Cosmetic, not misleading for fantasy.	70	2026-03-20T13:50
+39-gamescript	OK	frontend/lab-panels.js	10214	gamescript	pass	Gamescript: positive/negative script splits. Barkley 22.2 PPG positive, B.Robinson 20.1 PPG negative. Sensible data.	95	2026-03-20T13:55
+45-big-board	OK	frontend/lab-panels.js	8009	prospects	pass	Big Board: 319 prospects 2026 class, RPS scoring, 4 tiers, percentile bars, position filter. Field names aligned.	95	2026-03-20T14:00
