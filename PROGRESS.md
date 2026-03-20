@@ -1320,3 +1320,50 @@ User needs to manually upload updated terminal.db to Render persistent disk at /
 - 59/59 tests pass
 - 0 font-display below 14px in lab.html, league-intel.html, agents.html
 - 0 resting-state 3px box-shadows in agents.html
+
+---
+
+## Quality Audit: 5-Agent Parallel Sweep (Mar 20 — Session 3)
+
+**Goal**: Fresh-eyes 5-agent parallel audit across crash bugs (lab.js + lab-panels.js), backend robustness, design consistency, dark mode gaps, and brand voice.
+
+### HIGH Crash & Data Bugs (3 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | `drawBoomBustRangeBar` missing `var t = getCanvasTheme()` | lab.js:12551 | **ReferenceError** on every Boom/Bust render — only canvas function that forgot the theme call |
+| 2 | College QB `total_tds` double-counted | cfbfastr_adapter.py:330-331 | Pass TDs added during play loop (line 224) AND again after loop — all college QBs had inflated TDs |
+| 3 | Trendline division by zero (2 instances) | lab-panels.js:7492, 9907 | `n * sumX2 - sumX * sumX` can be 0 when all X values identical — added denom guard |
+
+### MEDIUM Defensive Guards (6 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 4 | `dynasty_value.toFixed()` on non-number | lab.js:1833 | `val != null` → `typeof val === "number"` |
+| 5 | `breakout_pct.toFixed()` on non-number | lab.js:1839 | Same typeof guard |
+| 6 | Null data destructuring in 3 profile renderers | lab.js:6133,6327,6939 | Added `if (!data) return` before destructuring |
+| 7 | `grade.startsWith()` on undefined (2 instances) | lab.js:12340,12612 | Added `grade \|\| "C"` fallback |
+| 8 | `score.toFixed()` on potential string + undefined thresholds | lab-panels.js:3382,3397 | `Number(score)` coercion + `(lt.p20 \|\| 0)` guard |
+| 9 | `escapeHtml(p.annotation)` on undefined | lab-panels.js:1639 | Added `\|\| ''` fallback |
+
+### LOW Design + Dark Mode + Brand Voice (12 fixes)
+
+| # | Fix | File(s) | Notes |
+|---|-----|---------|-------|
+| 10 | 3x box-shadow 3px→4px | lab.html | scroll-top-btn, prospect-comp-card, prospect-proj-box |
+| 11 | 4x box-shadow 3px→4px in JS | pricing.html | Early adopter + lifetime promotion cards |
+| 12 | 3x font-display 14px→16px | lab.html | hover-card-name, watermark, profile-section-title |
+| 13 | 5x font-display 14px→16px | league-intel.html | pressure-map-title, gate-cta, h2h-col-header, power-bracket h4, trade-network h4 |
+| 14 | Player overlay dark mode | player.js:724 | Hardcoded rgba(45,31,20,0.5) → theme-aware branching |
+| 15 | 3x toast box-shadow hardcoded | player.js, compare.js, formula-store.js | rgba(45,31,20,0.3) → var(--ink) |
+| 16 | Weekly expand row border | lab.js:2317 | rgba(45,31,20,0.04) → var(--ink-faint) |
+| 17 | Verdict badge border | lab-panels.js:9620 | rgba(45,31,20,0.15) → var(--ink-faint) |
+| 18 | "loading weeks..." → "pulling weekly film..." | lab.js:2287 | Brand voice personality |
+| 19 | "no prospect data found" → razzleEmpty() | lab-mockdraft.js:260 | Brand voice personality |
+| 20 | roster-grade integer PID rejection | server.py:2794 | isinstance(pid, str) → str(pid).strip() |
+
+### Verification
+- All 11 JS files syntax clean
+- All 18 Python files compile clean
+- 59/59 tests pass (5.67s)
+- 0 regressions
