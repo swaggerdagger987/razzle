@@ -1607,6 +1607,20 @@ def filter_options():
     return JSONResponse(content=data, headers={"Cache-Control": "public, max-age=300"})
 
 
+@app.get("/api/available-weeks")
+def available_weeks(season: int = 0):
+    from backend.db import get_db
+    with get_db() as conn:
+        if not season:
+            row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
+            season = row[0] if row and row[0] else 2025
+        rows = conn.execute(
+            "SELECT DISTINCT week FROM player_week_stats WHERE season = ? AND season_type = 'regular' ORDER BY week",
+            (season,),
+        ).fetchall()
+        return {"season": season, "weeks": [r[0] for r in rows]}
+
+
 @app.get("/api/players/quick-search")
 def quick_search(q: str = "", limit: int = 8):
     return live_data.quick_search_players(q, limit=limit)

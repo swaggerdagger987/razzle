@@ -463,7 +463,7 @@ def _enrich_with_dynasty_value(items):
     return items
 
 
-def _enrich_with_pbp_stats(conn, items, season=None, career_mode=False):
+def _enrich_with_pbp_stats(conn, items, season=None, career_mode=False, week=0):
     """Fetch play-by-play derived stats from player_season_pbp table."""
     if not items:
         return items

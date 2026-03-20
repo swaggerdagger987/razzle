@@ -473,7 +473,10 @@ def _fetch_screener_uncached(body):
             reverse = sort_dir.lower() == "desc"
             items.sort(key=lambda x: x.get(sort_key) or 0, reverse=reverse)
 
-        return {"count": total, "season": "career" if career_mode else season, "items": items}
+        result = {"count": total, "season": "career" if career_mode else season, "items": items}
+        if week > 0:
+            result["week"] = week
+        return result
 
 
 def fetch_screener(body):
