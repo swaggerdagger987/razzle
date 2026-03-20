@@ -2248,3 +2248,15 @@ All `ctx.fillStyle = 'rgba(45,31,20,...)'` → theme-branching with sand rgba fo
 | 3 | Dark mode thead shadow wrong color | LOW | lab.html:1011 | Dark mode override used espresso rgba(45,31,20) instead of true black rgba(0,0,0). Shadow was invisible. |
 
 All 11 JS files syntax clean. 16 Python files compile clean.
+
+---
+
+## Ship Loop: QA Ticket Consumption (Mar 20) — Branch: ship/launch-fixes
+
+**Goal**: Consume tickets from functional-qa/tickets/ written by QA Loop.
+
+| # | Ticket | Severity | Status | Notes |
+|---|--------|----------|--------|-------|
+| FUNC-001 | Response cache strips content-encoding header | P0 | DONE | Added "content-encoding" to save_headers allowlist in response_cache_middleware. GZipMiddleware already removed (previous fix). Cache now preserves encoding header on subsequent requests. |
+| FUNC-004 | Production headshots missing | P1 | ESCALATE (human) | Local DB has 0 players (empty). Production DB on Render needs headshot-populated terminal.db uploaded to GitHub release data-v1, then Render redeploy. Code cannot fix this — requires manual DB upload. |
+| FUNC-005 | Dominator rec_yd_share/rec_td_share null | P2 | IN PROGRESS | |
