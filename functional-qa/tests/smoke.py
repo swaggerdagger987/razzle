@@ -199,7 +199,7 @@ def test_season_switch():
     # Use filter-options to discover available seasons dynamically
     _fc, fopts = hit_json("GET", "/api/filter-options")
     avail = sorted(fopts.get("seasons", []), reverse=True) if isinstance(fopts, dict) else []
-    s_latest = str(avail[0]) if avail else "2024"
+    s_latest = str(avail[0]) if avail else str(datetime.now().year)
     if len(avail) <= 1:
         # Only one season in DB — can't test switching, pass gracefully
         results.append(TestResult("season_switch", True,
@@ -245,7 +245,7 @@ def test_week_filter():
     # Discover latest season dynamically (DB may not have current calendar year)
     _fc, fopts = hit_json("GET", "/api/filter-options")
     avail = sorted(fopts.get("seasons", []), reverse=True) if isinstance(fopts, dict) else []
-    _season = avail[0] if avail else 2024
+    _season = avail[0] if avail else datetime.now().year
     # /api/players doesn't support week — use screener POST
     code_all, data_all = hit_json("POST", "/api/screener/query",
                                   body={"season": _season, "limit": 5, "position": "QB"})
