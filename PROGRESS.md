@@ -663,3 +663,35 @@ All 59 tests pass. All 11 JS files syntax-clean. 0 remaining issues found.
 - All 11 JS files syntax clean
 - All Python files compile clean
 - 59/59 tests pass
+
+---
+
+## Quality Pass: Second Wave (Mar 19)
+
+**Goal**: Deep-dive audit of user-facing UX, formulas, compare pages, and error personality.
+
+| # | Fix | Category | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | Dark mode search highlight invisible | Dark mode | styles.css:776 | Added [data-theme="dark"] override with higher opacity |
+| 2 | Aging curves division by zero | Edge case | aging.html:476-477 | Math.max(denominator, 1) guard on xScale/yScale |
+| 3 | Onboarding toast vague message | UX | lab.js:1134 | "70 tools in the sidebar" → "Filter by position above, explore panels in the sidebar" |
+| 4 | Cloud-synced formula names not escaped | XSS | formulas.js:210 | Added escapeHtml() on server-synced names |
+| 5 | Formula delete no confirmation | UX | formulas.js:98 | Added confirm() dialog before deletion |
+| 6 | Formula store position tag injection | XSS | formula-store.js:494 | Whitelist QB/RB/WR/TE + escapeHtml on each tag |
+| 7 | Compare stat display "undefined" | Edge case | compare.js:239-246 | Changed !== null to != null (catches both null and undefined) |
+| 8 | 16 generic "something went wrong" errors | Whimsy | 15 HTML files + lab-panels.js | Replaced with film-room personality text (6 unique messages cycled) |
+| 9 | Font-display at <16px in agents.html | Design | agents.html | 24 CSS rules changed from --font-display to --font-mono |
+| 10 | Font-display at <16px in about.html | Design | about.html | 2 CSS rules changed |
+
+### Full Audit Coverage (3 passes, 12+ agents)
+- **Pass 1**: 6-agent parallel audit (lab.js, lab-panels.js, warroom.js, agents.html, app.js/styles.css/index.html/pricing.html, backend, league-intel.html)
+- **Pass 2**: Homepage first impressions, dark mode CSS completeness, Lab first-use experience
+- **Pass 3**: Top Lab panel formatting, formula builder edge cases, error/empty/loading personality, compare + player pages
+
+### Audit Results
+- Homepage: excellent first impression, no bugs, dark mode ready, mobile responsive
+- Lab panels (top 8): all format correctly, no NaN/null display issues
+- Backend: well-structured, no SQL injection, no connection leaks
+- Dark mode CSS: 99% complete (only canvas colors remain as known limitation)
+- Error personality: 0 generic "something went wrong" messages remaining
+- 59/59 tests pass, all JS syntax clean
