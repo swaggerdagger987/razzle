@@ -903,6 +903,11 @@ function signOut() {
   localStorage.removeItem("razzle_store_my_published");
   localStorage.removeItem("razzle_store_username");
   localStorage.removeItem("razzle_agent_config");
+  localStorage.removeItem("razzle_sleeper_user");
+  localStorage.removeItem("razzle_sleeper_user_id");
+  localStorage.removeItem("razzle_watchlist");
+  localStorage.removeItem("razzle_player_tags");
+  localStorage.removeItem("razzle_player_notes");
   updateAuthUI(null);
 }
 
@@ -1204,6 +1209,7 @@ async function handleSleeperLink(e) {
   errEl.textContent = "";
   try {
     var token = localStorage.getItem("razzle_token");
+    if (!token) { errEl.textContent = "sign in first to link your Sleeper account."; return; }
     var resp = await fetch(API_BASE + "/api/auth/link-sleeper", {
       method: "POST",
       headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },

@@ -3487,7 +3487,7 @@ function getRelevantMemory(scenario, maxItems) {
   if (!memory.length) return [];
 
   // Extract keywords from scenario (words 4+ chars, lowercased)
-  var words = scenario.toLowerCase().replace(/[^a-z0-9 ]/g, '').split(/\s+/)
+  var words = (scenario || '').toLowerCase().replace(/[^a-z0-9 ]/g, '').split(/\s+/)
     .filter(function(w) { return w.length >= 4; });
   if (!words.length) return memory.slice(0, maxItems);
 
@@ -3502,7 +3502,7 @@ function getRelevantMemory(scenario, maxItems) {
 
   // Score each memory entry by keyword overlap + time decay + league match
   var scored = memory.map(function(m) {
-    var text = (m.scenario + ' ' + m.agents.map(function(a) { return a.finding; }).join(' ')).toLowerCase();
+    var text = ((m.scenario || '') + ' ' + (m.agents || []).map(function(a) { return a.finding || ''; }).join(' ')).toLowerCase();
     var keywordScore = 0;
     words.forEach(function(w) { if (text.indexOf(w) >= 0) keywordScore++; });
 
@@ -3539,9 +3539,9 @@ function formatMemoryContext(entries) {
     var ago = formatTimeAgo(m.ts);
     var leaguePrefix = m.leagueName ? ' [' + m.leagueName + ']' : '';
     lines.push('');
-    lines.push('Briefing from ' + ago + leaguePrefix + ': "' + m.scenario.slice(0, 100) + '"');
-    m.agents.forEach(function(a) {
-      lines.push('  ' + a.name + ': ' + a.finding);
+    lines.push('Briefing from ' + ago + leaguePrefix + ': "' + (m.scenario || '').slice(0, 100) + '"');
+    (m.agents || []).forEach(function(a) {
+      lines.push('  ' + (a.name || 'agent') + ': ' + (a.finding || ''));
     });
   });
   lines.push('--- END MEMORY ---');
@@ -3604,7 +3604,7 @@ function _renderMemoryEntries(panel, memory, isElite) {
 
   memory.forEach(function(m) {
     var ago = formatTimeAgo(m.ts);
-    var agentSummary = m.agents.map(function(a) { return a.name; }).join(', ');
+    var agentSummary = m.agents.map(function(a) { return escapeHtml(a.name); }).join(', ');
     var syncIcon = m.synced ? '<span title="Synced to cloud" style="font-size:10px; color:var(--pos-qb); margin-left:4px;">&#9729;</span>' : '';
     var leagueTag = m.leagueName ? '<span style="font-family:var(--font-mono); font-size:9px; color:var(--orange); margin-left:4px;">[' + escapeHtml(m.leagueName) + ']</span>' : '';
 

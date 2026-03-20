@@ -6,7 +6,6 @@ All data queries live in live_data.py.
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, Response
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -208,6 +207,25 @@ def bootstrap_database():
                 logger.warning(f"  Roster enrichment failed: {e}")
         else:
             logger.info(f"Database has {count} players — skipping bootstrap")
+
+    # Snap counts: sync if missing even when DB already has players
+    # (handles DBs uploaded to persistent disk without snap data)
+    if count >= 50:
+        with nflverse_db() as conn:
+            try:
+                snap_count = conn.execute(
+                    "SELECT COUNT(*) FROM player_week_stats WHERE offense_snaps IS NOT NULL"
+                ).fetchone()[0]
+            except Exception:
+                snap_count = -1
+            if snap_count == 0:
+                logger.info("Snap counts missing — syncing offense_snaps...")
+                try:
+                    seasons = list(range(2015, current_nfl_season() + 1))
+                    sync_snap_counts(conn, sorted(seasons))
+                    logger.info("  Snap count backfill complete")
+                except Exception as e:
+                    logger.warning(f"  Snap count backfill failed: {e}")
 
     if count < 50:
         # College/prospect data
@@ -418,7 +436,6 @@ app = FastAPI(
 
 # JSON decode errors are handled in global_exception_handler below
 
-app.add_middleware(GZipMiddleware, minimum_size=500)
 _CORS_ORIGINS = ["https://razzle.lol"]
 if os.environ.get("RAZZLE_ENV", "production") != "production":
     _CORS_ORIGINS += ["http://localhost:8000", "http://localhost:5173", "http://127.0.0.1:8000"]
@@ -482,7 +499,7 @@ async def response_cache_middleware(request: Request, call_next):
             async for chunk in response.body_iterator:
                 body += chunk if isinstance(chunk, bytes) else chunk.encode()
             save_headers = {k: v for k, v in response.headers.items()
-                           if k.lower() in ("cache-control", "content-type")}
+                           if k.lower() in ("cache-control", "content-type", "content-encoding")}
             _resp_cache_set(cache_key, body, save_headers)
             return Response(content=body, status_code=200,
                            media_type=response.media_type, headers=dict(response.headers))
@@ -2042,8 +2059,7 @@ async def lab_with_og_tags(request: Request):
     params = request.query_params
     position = params.get("position", "").upper()
     sort_key = params.get("sort", "fantasy_points_ppr")
-    from backend.live_data.core import _current_nfl_season
-    season = params.get("season", str(_current_nfl_season()))
+    season = params.get("season", str(live_data._current_nfl_season()))
     universe = params.get("universe", "nfl").upper()
 
     # Build dynamic title
@@ -2403,8 +2419,7 @@ def trade_values(player_ids: str = ""):
 def trade_pick_values(year: int = 0, rounds: int = 4, teams: int = 12):
     """Return dynasty draft pick trade values."""
     if year <= 0:
-        from backend.live_data.core import _current_draft_year
-        year = _current_draft_year()
+        year = live_data._current_draft_year()
     year = max(2024, min(2030, year))
     rounds = max(1, min(5, rounds))
     teams = max(4, min(16, teams))

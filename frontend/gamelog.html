@@ -413,7 +413,7 @@
               acList.style.display = 'none';
             });
           });
-        });
+        }).catch(function() { acList.style.display = 'none'; });
     }, 200);
   });
 

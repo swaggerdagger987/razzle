@@ -284,8 +284,12 @@ def find_player_stats_asset(season):
     req = urllib.request.Request(NFLVERSE_RELEASES_URL)
     req.add_header("User-Agent", "razzle-adapter/1.0")
 
-    with urllib.request.urlopen(req, timeout=30) as resp:
-        releases = json.loads(resp.read().decode())
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            releases = json.loads(resp.read().decode())
+    except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError) as e:
+        print(f"  [!] Failed to fetch nflverse releases: {e}")
+        return None
 
     best = None
     best_score = -1
