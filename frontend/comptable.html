@@ -644,6 +644,12 @@
             renderChips();
             if (selectedPlayers.length >= 2) doCompare();
           }
+        }).catch(function() {
+          loaded++;
+          if (loaded === pids.length) {
+            renderChips();
+            if (selectedPlayers.length >= 2) doCompare();
+          }
         });
     });
   }

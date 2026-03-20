@@ -11,6 +11,7 @@ from .core import (  # noqa: F401
     compute_trade_value,
     ABBREV_TO_TEAM,
     _current_nfl_season,
+    _current_draft_year,
 )
 
 # --- players (NFL CRUD, screener, profiles) ---
