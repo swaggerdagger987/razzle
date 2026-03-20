@@ -2577,6 +2577,8 @@ week_filter failure (10/11) is a stale server process issue, not a code bug. Ver
 | 4 | XSS in player.js season table + combine | P1 | player.js:234,316 | s.season and combine display values unescaped — added esc(String()) |
 | 5 | XSS in formula-store.js inline handlers | P1 | formula-store.js:112,540,545 | formula.id interpolated in onclick/id — added parseInt() sanitization |
 | 6 | Crash risk in warroom.js canvas init | P1 | warroom.js:81 | cvs.getContext('2d') with no null guard — added ternary check |
+| 7 | XSS in JSON-LD via player_id | P0 | server.py:2191 | json.dumps doesn't escape </script> — added .replace("<", "\u003c") |
+| 8 | Dynasty history age always None | P1 | dynasty.py:344 | age_in_season never computed — now calculates current_age - (latest - season) |
 
 ### Verified Clean
 - 11/11 smoke tests pass after every fix
@@ -2585,3 +2587,4 @@ week_filter failure (10/11) is a stale server process issue, not a code bug. Ver
 - All JS files syntax clean
 - 0 remaining font-display violations in CSS (verified via script)
 - 0 unescaped API data in innerHTML (6-agent parallel audit + manual verification)
+- JSON-LD injection vectors neutralized
