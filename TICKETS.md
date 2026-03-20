@@ -13,20 +13,6 @@ The database file `data/terminal.db` uses WAL journal mode locally. Uploading it
 
 ---
 
-## Phase: Hotfix — Player name font in screener table
-
-**PRIORITY: FIX NOW. This was ticketed before but not fully fixed.** Player names in the main screener table (lab.html / lab.js) are NOT using the same font as the navigation links. The nav uses Space Mono 13px bold 700 — player names in the screener table cells must match exactly. Also audit ALL Lab panel tables (lab-panels.js / lab-panels.css) — every single player name must be Space Mono, bold 700, 13-14px. No exceptions. No Luckiest Guy on player names. No sans-serif fallbacks. No thin weight.
-
-### Task 1: Fix player name font in main screener table
-**Accept when**: Player name cells in the main screener table (rendered by lab.js) use `font-family: var(--font-mono)` (Space Mono), `font-weight: 700`, size 13-14px. Check the actual CSS class applied to player name `<td>` or `<span>` elements in the screener. If the font is set inline in JS during rendering, fix it there. If it's a CSS class, fix the class. View razzle.lol/lab.html and visually confirm player names look identical to the nav links. Grep lab.js for any `font-family` references on player name elements.
-**Status**: PENDING
-
-### Task 2: Audit all Lab panel player name fonts
-**Accept when**: Every `*-player-name` class in lab-panels.css uses `font-family: var(--font-mono); font-weight: 700;`. Grep lab-panels.css for `player-name` — every match must have `var(--font-mono)` and `700`. Also grep lab-panels.js for any inline `fontFamily` or `font-family` on player names and fix to Space Mono bold. Zero exceptions across all 60+ panels.
-**Status**: PENDING
-
----
-
 ## Phase: Weekly Data Filter — Screener + All Panels
 
 **Context**: The `player_week_stats` table already has per-week data (40+ stat columns, every player, every week, 2015-2025). Several endpoints already support week params (`/api/weekly-leaders`, `/api/players/{id}/weeks`). But the main screener and most analytical panels only show season-aggregated data. This phase adds a universal week selector so users can slice any view by individual week — critical for in-season use.
@@ -35,11 +21,11 @@ The database file `data/terminal.db` uses WAL journal mode locally. Uploading it
 
 ### Task 1: Backend — Add week parameter to screener query endpoint
 **Accept when**: `POST /api/screener/query` (or `GET /api/players`) accepts an optional `week` parameter (integer, 0 = all weeks). When `week > 0`, the query reads from `player_week_stats` (that specific week's row) instead of the season-aggregated `player_stats` table. When `week = 0` or omitted, behavior is unchanged (season totals). All stat columns that exist in both tables work correctly. Columns that only exist at season level (like career stats, dynasty values) gracefully show "—" in weekly mode. Verify by hitting the endpoint with `week=1` and confirming you get Week 1 stats only.
-**Status**: PENDING
+**Status**: DONE
 
 ### Task 2: Frontend — Add week selector to the screener toolbar
 **Accept when**: The Lab screener toolbar has a week dropdown next to the existing season selector. Options: "All Weeks" (default), "Week 1" through "Week 18" (dynamically populated based on what weeks exist in the selected season — query `SELECT DISTINCT week FROM player_week_stats WHERE season = ?`). Selecting a week triggers a re-fetch with the `week` parameter. The dropdown matches the existing toolbar design (chunky Razzle style, same height/font as season selector). Week selection is stored in `state.week` and serialized to URL params (`&week=5`). Shared URLs preserve week selection.
-**Status**: PENDING
+**Status**: DONE
 
 ### Task 3: Backend — Add week parameter to all applicable panel endpoints
 **Accept when**: The following endpoints accept an optional `week` parameter and filter `player_week_stats` by week when provided: `/api/breakouts`, `/api/efficiency`, `/api/consistency`, `/api/usage-trends`, `/api/target-distribution`, `/api/red-zone`, `/api/opportunity-share`, `/api/snap-efficiency`, `/api/workload`, `/api/dual-threat`, `/api/target-premium`, `/api/drop-rate`, `/api/success-rate`, `/api/gamescript`, `/api/garbage-time`, `/api/streaks`, `/api/report-cards`. Endpoints where weekly doesn't make sense (aging curves, dynasty rankings, trade values, prospect data, YoY comparisons) are left unchanged. Each modified endpoint returns single-week data when `week` is specified, season aggregate when omitted.
@@ -51,4 +37,4 @@ The database file `data/terminal.db` uses WAL journal mode locally. Uploading it
 
 ### Task 5: Screener column headers — indicate weekly vs season context
 **Accept when**: When a specific week is selected (not "All Weeks"), the screener shows a subtle indicator — e.g., a Caveat-font annotation below the toolbar saying "showing Week 5, 2025 stats" or a small badge on the week dropdown. This prevents confusion where a user sees low numbers and forgets they're looking at a single week instead of season totals. Matches Razzle design language (Caveat, slightly rotated, annotation style).
-**Status**: PENDING
+**Status**: DONE

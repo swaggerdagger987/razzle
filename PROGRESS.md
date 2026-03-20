@@ -918,3 +918,34 @@ All 59 tests pass. All 11 JS files syntax-clean. 0 remaining issues found.
 - All 11 JS files syntax clean
 - All 16 Python files compile clean
 - 59/59 tests pass
+
+---
+
+## Weekly Data Filter — Screener (Mar 19)
+
+**Goal**: Add week-level filtering to the screener so users can view individual week stats.
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend: week param in screener query | DONE | players.py: accepts `week` param, adds `AND s.week = ?` to WHERE. Rate metrics and team shares also filter by week. |
+| 2 | Backend: /api/available-weeks endpoint | DONE | server.py: returns distinct weeks for a season. |
+| 3 | Frontend: week dropdown in toolbar | DONE | lab.html: `#weekSelect` next to season. lab.js: `populateWeekSelect()`, URL `&week=5`, localStorage. |
+| 4 | Frontend: Caveat annotation | DONE | "showing Week X, YYYY stats" in handwritten font below toolbar. |
+| 5 | Week resets on season/universe change | DONE | `state.week = 0` on season change, universe switch. Hidden for college/career. |
+
+### Decisions Log
+- Panel-level week selectors deferred — screener week filter is the priority
+- PBP enrichment reads from season-level table, no week filtering needed
+
+---
+
+## Player Name Font Consistency (Mar 19)
+
+**Goal**: Enforce Space Mono bold 700 on all player names in data tables.
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Screener table player names | DONE | `.player-name-cell a { font-weight: 700; }` in lab.html |
+| 2 | lab-panels.css: 3 missing font-family | DONE | `.arc-player-name`, `.rbld-player-name`, `.td2-player-name` |
+| 3 | 17 standalone HTML panels | DONE | `--font-display` to `--font-mono` on sub-16px player names |
+| 4 | Hero names verified correct | DONE | 8 pages at 18-32px stay `--font-display` |
