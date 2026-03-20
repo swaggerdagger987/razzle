@@ -56,11 +56,11 @@
 | 24 | Cheat Sheet | Loads? Sortable? Position ranks correct? Matches screener sort order? | DONE — PASS (4 pos groups, Jackson QB#1 PPG=24.82, tiers+ranks correct) |
 | 25 | Weekly Heatmap | Loads? Week selector works? Colors match stat intensity? | DONE — PASS (22 weeks data, sums match season totals within rounding) |
 | 26 | Weekly Leaders | Loads? Leaders match that week's actual stat leaders? Category switch works? | DONE — PASS. API returns ranked weekly performers (verified Barkley Wk1 2024 = 33.2 PPR, exact calc confirmed). Position filter works (QB-only returns QBs). Season/week navigation, sortable columns, top 3 badges, points tiers (elite/great/good). P2: 0 shows as '-' due to JS falsy (0 || '-'). |
-| 27 | Matchups | Loads? Correct matchups for selected week? Opponent data shown? | PENDING |
-| 28 | Stacks | QB-WR/TE stacks shown? Correlation data makes sense? | PENDING |
+| 27 | Matchups | Loads? Correct matchups for selected week? Opponent data shown? | DONE — PASS (32 teams, ranks 1-32 unique, math 128/128 correct, detail works). P2 FUNC-009: includes playoff games (PHI 21 games vs 17 reg season). |
+| 28 | Stacks | QB-WR/TE stacks shown? Correlation data makes sense? | DONE — PASS (30 stacks, Pearson math correct). P2: min 5 common games too low, small-sample flukes dominate (Dalton+Johnson r=0.988 in 6G). Elite stacks (Allen, Hurts, Burrow) absent from top 30. |
 | 29 | Breakouts | Candidates shown with data? Breakout criteria visible and reasonable? | DONE — PASS (50 candidates, RBS scores present, opp/prod gap logic sound). P2: snap_pct=0 due to FUNC-007 |
-| 30 | Waivers | Waiver targets shown? FAAB values if applicable? Sorted by priority? | PENDING |
-| 31 | Streaks | Hot/cold streaks identified? Based on recent weeks, not season aggregate? | PENDING |
+| 30 | Waivers | Waiver targets shown? FAAB values if applicable? Sorted by priority? | DONE — PASS (30 targets, delta math correct, 4-week window). P2: no ownership data, so "waivers" are just trending-up players (Bryce Young #1 = rostered everywhere). No FAAB values. |
+| 31 | Streaks | Hot/cold streaks identified? Based on recent weeks, not season aggregate? | DONE — PASS (25 hot, 25 cold, recent_scores averages exact, football-sensible: Gibbs hot, Fields cold). |
 
 ## Group 5: Advanced Analytics Panels (the nerd stuff — has to be right)
 
@@ -85,33 +85,33 @@
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
 | 45 | Big Board | Prospects ranked? Positional filter? Athletic data shown? | DONE — PASS. 319 prospects for 2026 class. RPS scoring (athletic_avg + draft_capital + size), 4 tiers (Elite/Premium/Solid/Raw), percentile bars for combine metrics. Position filter works (16 QBs). Field names aligned (player_name, rps, height_display). |
-| 46 | Draft Class | Aggregate class metrics? Per-position breakdown? | PENDING |
-| 47 | Prospect profiles | Click a prospect. Combine data correct? College stats shown? | PENDING |
-| 48 | Mock Draft Board | Board loads? Picks assignable? Trade pick functionality? | PENDING |
-| 49 | Prospect Radar | Athletic measurables visualized? Percentiles correct? Comparison works? | PENDING |
+| 46 | Draft Class | Aggregate class metrics? Per-position breakdown? | DONE — 7-round breakdown, per-round math correct. P0 FUNC-011: PPG inflated for multi-season players (COUNT DISTINCT week collapses across seasons — Bo Nix shows 33 PPG, actual ~20). |
+| 47 | Prospect profiles | Click a prospect. Combine data correct? College stats shown? | SKIP — /api/prospect-profiles returns 404. No dedicated endpoint. Prospect data available via /api/prospect-scores (Big Board, flow 45). |
+| 48 | Mock Draft Board | Board loads? Picks assignable? Trade pick functionality? | SKIP — /api/mock-draft returns 404. Not implemented. |
+| 49 | Prospect Radar | Athletic measurables visualized? Percentiles correct? Comparison works? | SKIP — /api/prospect-radar returns 404. Not implemented. |
 
 ## Group 7: Tools & Export (the utility belt)
 
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
-| 50 | Custom Scoring | Change scoring weights. Screener recalculates? Values change appropriately? | PENDING |
-| 51 | Saved Views | Save a view. Reload page. Load the view. Exact state restored? | PENDING |
-| 52 | Formula Builder | Create a formula. Calculates? Appears as column? Math correct? | PENDING |
-| 53 | Formula Store | Browse formulas. Install one. It works? Shows in column picker? | PENDING |
-| 54 | Export PNG | Exports an image? Contains visible data? Watermark present? | PENDING |
-| 55 | Export CSV | Downloads a CSV? Columns match what's on screen? Data correct? | PENDING |
-| 56 | Share URL | Copy URL. Open fresh. Exact same view restored? | PENDING |
+| 50 | Custom Scoring | Change scoring weights. Screener recalculates? Values change appropriately? | SKIP — /api/custom-scoring returns 404. Not implemented as API endpoint. May be frontend-only. UI blocked by FUNC-001. |
+| 51 | Saved Views | Save a view. Reload page. Load the view. Exact state restored? | BLOCKED — UI blocked by FUNC-001. Code audit: localStorage-based, max 20 views, manage modal exists. |
+| 52 | Formula Builder | Create a formula. Calculates? Appears as column? Math correct? | BLOCKED — UI blocked by FUNC-001. |
+| 53 | Formula Store | Browse formulas. Install one. It works? Shows in column picker? | BLOCKED — UI blocked by FUNC-001. |
+| 54 | Export PNG | Exports an image? Contains visible data? Watermark present? | BLOCKED — UI blocked by FUNC-001. |
+| 55 | Export CSV | Downloads a CSV? Columns match what's on screen? Data correct? | BLOCKED — UI blocked by FUNC-001. |
+| 56 | Share URL | Copy URL. Open fresh. Exact same view restored? | DONE — Code PASS (flow 12). UI blocked by FUNC-001. |
 
 ## Group 8: Navigation & Platform (the shell around the data)
 
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
-| 57 | Sidebar navigation | Every sidebar item loads its panel? No dead links? Category headers correct? | PENDING |
-| 58 | Command palette (Ctrl+K) | Opens? Finds panels by name? Finds players? Selection navigates correctly? | PENDING |
-| 59 | Dark mode | Every element switches? Data readable in dark? Charts visible? No white flashes? | PENDING |
+| 57 | Sidebar navigation | Every sidebar item loads its panel? No dead links? Category headers correct? | DONE — 76 nav links, 69 tools. Categories: FOREVER FREE (Screener), FREE PANELS (9), PRO (sections with lock icons). Clicking panels blocked by FUNC-001 (init crash prevents panel rendering). |
+| 58 | Command palette (Ctrl+K) | Opens? Finds panels by name? Finds players? Selection navigates correctly? | BLOCKED — UI blocked by FUNC-001 (init crash). |
+| 59 | Dark mode | Every element switches? Data readable in dark? Charts visible? No white flashes? | DONE — PASS (visual). Dark mode applies cleanly: brown palette, readable text, proper contrast, no white flashes. Sidebar and main area both switch correctly. Charts untestable (FUNC-001). |
 | 60 | Auth flow | Sign in modal opens? Closes cleanly? Error states for bad input? | PENDING |
 | 61 | Pricing page | All plans shown? CTAs work? Correct prices? Checkout starts? | PENDING |
-| 62 | Dashboard / Stat Leaders | Summary stats populated? Leaders match screener data? Category switching works? | PENDING |
+| 62 | Dashboard / Stat Leaders | Summary stats populated? Leaders match screener data? Category switching works? | DONE — API PASS. 10 categories, Lamar #1 PPG=24.8 (cross-checks exact). Scoring comparison: 40 risers + 40 fallers, all math correct. Season awards: 10 awards, football-sensible. P2: Rising Stock winner is WR5 with 2 PPG (small-sample artifact). |
 
 ## Group 9: Bureau & Situation Room (the paid tier)
 
