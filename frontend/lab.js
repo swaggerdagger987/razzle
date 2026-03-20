@@ -4399,6 +4399,8 @@ function renderSavedViewsList() {
 }
 
 // ─── Pinned players (sticky comparison rows) ─────────────────────
+var _pinnedDataCache = {}; // player_id -> player object (survives filter changes)
+
 function savePinnedPlayers() {
   try { localStorage.setItem('razzle_pinned_players', JSON.stringify(state.pinnedPlayers)); } catch(e) {}
 }
@@ -4411,6 +4413,7 @@ function togglePinPlayer(playerId) {
   if (state.universe !== "nfl") return;
   if (isPlayerPinned(playerId)) {
     state.pinnedPlayers = state.pinnedPlayers.filter(id => id !== playerId);
+    delete _pinnedDataCache[playerId];
     // Auto-disable diff mode if fewer than 2 pins
     if (state.diffMode && state.pinnedPlayers.length < 2) {
       state.diffMode = false;
@@ -4420,6 +4423,8 @@ function togglePinPlayer(playerId) {
     }
   } else {
     if (state.pinnedPlayers.length >= 5) return; // max 5 pinned
+    var p = state.items.find(function(x) { return x.player_id === playerId; });
+    if (p) _pinnedDataCache[playerId] = p;
     state.pinnedPlayers.push(playerId);
   }
   savePinnedPlayers();
@@ -4430,6 +4435,7 @@ function togglePinPlayer(playerId) {
 
 function clearAllPins() {
   state.pinnedPlayers = [];
+  _pinnedDataCache = {};
   // Auto-disable diff mode
   if (state.diffMode) {
     state.diffMode = false;
@@ -4450,6 +4456,7 @@ function bulkPinSelected() {
     var pid = state.selectedPlayers[i].player_id;
     if (!pid || isPlayerPinned(pid)) continue;
     if (state.pinnedPlayers.length >= 5) { _showToast("max 5 pins — " + added + " added"); break; }
+    _pinnedDataCache[pid] = state.selectedPlayers[i];
     state.pinnedPlayers.push(pid);
     added++;
   }
@@ -4483,8 +4490,9 @@ function renderPinnedRows() {
   let html = "";
 
   for (const pid of state.pinnedPlayers) {
-    const player = state.items.find(p => p.player_id === pid);
+    const player = state.items.find(p => p.player_id === pid) || _pinnedDataCache[pid];
     if (!player) continue;
+    if (!_pinnedDataCache[pid]) _pinnedDataCache[pid] = player;
     html += buildRowHTML(player, cols, heatOn, pctData, null, barsOn, pctMode, leaderRanks);
   }
 
@@ -4531,7 +4539,7 @@ function toggleDiffMode() {
 function _getDiffBaselineName() {
   if (!state.pinnedPlayers.length) return "";
   var baseId = state.pinnedPlayers[0];
-  var p = state.items.find(function(pl) { return pl.player_id === baseId; });
+  var p = state.items.find(function(pl) { return pl.player_id === baseId; }) || _pinnedDataCache[baseId];
   return p ? (p.full_name || p.player_name || "baseline") : "baseline";
 }
 
@@ -4542,7 +4550,7 @@ function _getDiffBaseline() {
   var baseId = state.pinnedPlayers[0];
   var cacheKey = baseId + ":" + state.items.length;
   if (_diffBaselineCacheKey === cacheKey && _diffBaselineCache) return _diffBaselineCache;
-  _diffBaselineCache = state.items.find(function(pl) { return pl.player_id === baseId; }) || null;
+  _diffBaselineCache = state.items.find(function(pl) { return pl.player_id === baseId; }) || _pinnedDataCache[baseId] || null;
   _diffBaselineCacheKey = cacheKey;
   return _diffBaselineCache;
 }
