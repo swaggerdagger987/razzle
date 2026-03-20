@@ -1539,6 +1539,45 @@ All `ctx.fillStyle = 'rgba(45,31,20,...)'` → theme-branching with sand rgba fo
 
 ## Quality Audit: 5-Agent Parallel Sweep (Mar 20 — Session 6)
 
+**Goal**: Fresh 5-agent parallel audit: first-impression UX, data correctness, interaction flows, mobile/accessibility, backend security.
+
+### P1 Fixes (7 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | Home page Pro/Elite buttons hardcoded `pro_year`/`elite_year` | index.html:621,638 | Buttons showed $9.99/mo but triggered yearly checkout. Changed to `pro_month`/`elite_month` to match displayed price. |
+| 2 | LLM proxy `resp.json()` crash on non-JSON response | server.py:1105,1201 | Both elite and free LLM proxy endpoints could crash if provider returned HTML with status=200. Wrapped in try-except. |
+| 3 | Formula store `json.loads()` crash on corrupted data | storage.py:284,310-311 | position_tags/stat_weights could crash on corrupted JSON. Added `_safe_json_loads()` helper with fallback. |
+| 4 | Rating type confusion | storage.py:320 | `rating < 1` crashed on string input. Added int() coercion with try-except. |
+| 5 | Hamburger toggle below 44px touch target | styles.css:213 | Added `min-height: 44px; min-width: 44px` |
+| 6 | Mobile nav close below 44px touch target | styles.css:275 | Added `min-height: 44px; min-width: 44px` |
+| 7 | Auth input font-size 14px causes iOS auto-zoom | styles.css:637 | Changed to 16px — prevents unwanted zoom-on-focus on iOS |
+
+### P2 Fixes (4 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 8 | Note editor Escape missing stopPropagation | lab.js:574 | Escape in note editor now stops before bubbling to global handler |
+| 9 | Home page Pro feature list incomplete | index.html:613-620 | Added "Unlimited formulas + cloud sync" and "CSV export + compare up to 4" to match pricing page |
+| 10 | Formula store search no length limit | storage.py:264 | Truncate to 100 chars to prevent performance DoS |
+
+### Audit Triage (Not Bugs)
+- Context menu listeners in IIFE — runs once on load, not per re-render
+- Note editor innerHTML replaces textarea — old listeners garbage collected
+- `request.json()` error handling — FastAPI handles JSONDecodeError with 422 automatically
+- SQL in ALTER TABLE migration — values are hardcoded literals, not user input
+- dblclick + drag conflict — browser only fires dragstart on mousedown+move, not on stationary double-click
+- Post-filter pagination count — showing filtered count IS correct UX for post-filters
+- Nav dropdown overflow — `right: 0` extends leftward, no overflow
+
+### Verified Clean
+- All 11 JS files syntax clean
+- All 16 Python files compile clean
+- 59/59 tests pass (5.63s)
+- 0 regressions
+
+## Quality Audit: 5-Agent Parallel Sweep (Mar 20 — Session 6)
+
 **Goal**: Fresh 5-agent parallel audit across crash bugs (lab.js, lab-panels.js), backend robustness, dark mode completeness, and design consistency.
 
 ### P0 Crash Bug Fixes (4)

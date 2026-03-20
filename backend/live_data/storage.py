@@ -5,6 +5,7 @@ These are non-analytical data management functions that handle user-generated
 content, community features, and internal tracking.
 """
 
+import json
 import logging
 import re
 import sqlite3
@@ -12,6 +13,17 @@ import sqlite3
 from ..db import get_db
 
 logger = logging.getLogger("razzle.live_data.storage")
+
+
+def _safe_json_loads(val, default):
+    """Parse JSON string with fallback on corruption."""
+    if not val:
+        return default
+    try:
+        return json.loads(val)
+    except (json.JSONDecodeError, TypeError):
+        logger.warning(f"Corrupted JSON in formula store: {val[:50]}")
+        return default
 
 # Pattern to detect HTML tags: < followed by a letter or /
 _HTML_TAG_RE = re.compile(r"<[a-zA-Z/]")
@@ -249,6 +261,7 @@ def fetch_formula_store(position: str = "", sort: str = "newest",
             params.append(f'%"{position.upper()}"%')
 
         if search:
+            search = search[:100]
             where_parts.append("name LIKE ? ESCAPE '\\'")
             escaped_search = search.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
             params.append(f"%{escaped_search}%")
@@ -281,7 +294,7 @@ def fetch_formula_store(position: str = "", sort: str = "newest",
                 "id": r[0],
                 "name": r[1],
                 "description": r[2],
-                "position_tags": json.loads(r[3]) if r[3] else [],
+                "position_tags": _safe_json_loads(r[3], []),
                 "creator_name": r[4],
                 "created_at": r[5],
                 "avg_rating": avg_rating,
@@ -307,8 +320,8 @@ def get_formula_detail(formula_id: int) -> dict:
             "id": row[0],
             "name": row[1],
             "description": row[2],
-            "position_tags": json.loads(row[3]) if row[3] else [],
-            "stat_weights": json.loads(row[4]) if row[4] else {},
+            "position_tags": _safe_json_loads(row[3], []),
+            "stat_weights": _safe_json_loads(row[4], {}),
             "creator_name": row[5],
             "created_at": row[6],
             "avg_rating": avg_rating,
@@ -317,6 +330,10 @@ def get_formula_detail(formula_id: int) -> dict:
 
 
 def rate_formula(formula_id: int, rating: int, review: str = "", user_id: int = None) -> dict:
+    try:
+        rating = int(rating)
+    except (TypeError, ValueError):
+        return {"status": "error", "message": "rating must be 1-5"}
     if rating < 1 or rating > 5:
         return {"status": "error", "message": "rating must be 1-5"}
 

@@ -571,7 +571,7 @@ function showNoteEditor(playerId, anchorEl) {
   });
   input.addEventListener("keydown", function(e) {
     if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); saveNoteFromEditor(); }
-    if (e.key === "Escape") hideNoteEditor();
+    if (e.key === "Escape") { e.stopPropagation(); hideNoteEditor(); }
   });
 
   // Close on outside click (delayed to avoid immediate close)

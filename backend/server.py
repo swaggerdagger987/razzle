@@ -1102,7 +1102,11 @@ async def llm_chat(request: Request):
                 status_code=502,
             )
         live_data.log_event("agent_query", "elite")
-        return JSONResponse(resp.json())
+        try:
+            return JSONResponse(resp.json())
+        except Exception:
+            logger.error("LLM proxy returned non-JSON response")
+            return JSONResponse({"error": "Agent returned an unexpected response. Try again."}, status_code=502)
     except httpx.TimeoutException:
         return JSONResponse(
             {"error": "Agent took too long to respond. Try a shorter question."},
@@ -1198,7 +1202,11 @@ async def llm_chat_free(request: Request):
                 {"error": "Agent is temporarily unavailable. Try again in a moment."},
                 status_code=502,
             )
-        data = resp.json()
+        try:
+            data = resp.json()
+        except Exception:
+            logger.error("Free LLM proxy returned non-JSON response")
+            return JSONResponse({"error": "Agent returned an unexpected response. Try again."}, status_code=502)
         # Tag response with free model info
         data["_razzle_free_model"] = _LLM_FREE_MODEL
         live_data.log_event("agent_query", "free")

@@ -617,8 +617,10 @@
         <li>Manager behavioral profiles</li>
         <li>Trade strategies + FAAB intel</li>
         <li>Championship probability</li>
+        <li>Unlimited formulas + cloud sync</li>
+        <li>CSV export + compare up to 4</li>
       </ul>
-      <button id="homeProCta" class="btn-chunky btn-primary" style="font-size:13px; width:100%;" onclick="var u=null;try{u=JSON.parse(localStorage.getItem('razzle_user'))}catch(e){}if(!u){if(typeof openAuthModal==='function')openAuthModal();else window.location='/pricing.html'}else if(typeof startCheckout==='function'){startCheckout('pro_year')}else{window.location='/pricing.html'}">Get Pro</button>
+      <button id="homeProCta" class="btn-chunky btn-primary" style="font-size:13px; width:100%;" onclick="var u=null;try{u=JSON.parse(localStorage.getItem('razzle_user'))}catch(e){}if(!u){if(typeof openAuthModal==='function')openAuthModal();else window.location='/pricing.html'}else if(typeof startCheckout==='function'){startCheckout('pro_month')}else{window.location='/pricing.html'}">Get Pro</button>
     </div>
 
     <!-- ELITE -->
@@ -635,7 +637,7 @@
         <li class="highlight">Weekly Razzle briefings</li>
         <li>Priority data refresh</li>
       </ul>
-      <button id="homeEliteCta" class="btn-chunky btn-primary" style="font-size:13px; width:100%; background:var(--purple); border-color:var(--ink);" onclick="var u=null;try{u=JSON.parse(localStorage.getItem('razzle_user'))}catch(e){}if(!u){if(typeof openAuthModal==='function')openAuthModal();else window.location='/pricing.html'}else if(typeof startCheckout==='function'){startCheckout('elite_year')}else{window.location='/pricing.html'}">Get Elite</button>
+      <button id="homeEliteCta" class="btn-chunky btn-primary" style="font-size:13px; width:100%; background:var(--purple); border-color:var(--ink);" onclick="var u=null;try{u=JSON.parse(localStorage.getItem('razzle_user'))}catch(e){}if(!u){if(typeof openAuthModal==='function')openAuthModal();else window.location='/pricing.html'}else if(typeof startCheckout==='function'){startCheckout('elite_month')}else{window.location='/pricing.html'}">Get Elite</button>
     </div>
   </div>
 

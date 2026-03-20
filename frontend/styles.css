@@ -221,6 +221,8 @@ h1, h2, h3 {
   box-shadow: 2px 2px 0 var(--ink);
   line-height: 1;
   flex-shrink: 0;
+  min-height: 44px;
+  min-width: 44px;
 }
 
 .hamburger-toggle:active {
@@ -282,6 +284,8 @@ h1, h2, h3 {
   padding: 4px 8px;
   color: var(--ink);
   box-shadow: 2px 2px 0 var(--ink);
+  min-height: 44px;
+  min-width: 44px;
 }
 
 .mobile-nav-close:active {
@@ -634,7 +638,7 @@ button.nav-search-hint {
 
 .auth-form input {
   font-family: var(--font-mono);
-  font-size: 14px;
+  font-size: 16px;
   padding: 10px 14px;
   border: 2px solid var(--ink);
   border-radius: 8px;
