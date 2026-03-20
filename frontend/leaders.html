@@ -575,7 +575,7 @@
   });
 
   function doExport(el) {
-    html2canvas(el, { backgroundColor: "#ede0cf", scale: 2, useCORS: true }).then(function(canvas) {
+    html2canvas(el, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2, useCORS: true }).then(function(canvas) {
       // Add watermark
       var ctx = canvas.getContext("2d");
       ctx.font = "bold 18px 'Space Mono', monospace";

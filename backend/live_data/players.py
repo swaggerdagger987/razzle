@@ -12,7 +12,7 @@ logger = logging.getLogger("razzle.live_data.players")
 
 from .core import (
     _cached, _CACHE_TTL_STABLE,
-    _current_nfl_season,
+    _current_nfl_season, _safe_int,
     FANTASY_POSITIONS, RATE_METRICS, _STAT_SUM_COLS,
     TEAM_ABBREV, ABBREV_TO_TEAM,
     _enrich_with_derived_stats, _enrich_with_epa_per_play,
@@ -220,7 +220,7 @@ def _fetch_screener_uncached(body):
         # Determine season: 0 = latest, "career" = all seasons
         career_mode = str(season).lower() == "career"
         if not career_mode:
-            season = int(season) if season else 0
+            season = _safe_int(season)
             if not season:
                 row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
                 season = row[0] if row and row[0] else _current_nfl_season()
@@ -416,13 +416,14 @@ def _fetch_screener_uncached(body):
             ORDER BY {order_expr} {sort_dir}
             LIMIT ? OFFSET ?
         """
-        # When post-filters exist, fetch more rows to account for filtering
-        # Use 2x for a single post-filter, 3x for multiple post-filters
-        if post_filters:
-            sql_limit = limit * 2 if len(post_filters) == 1 else limit * 3
+        # When sorting by derived/rate metric or applying post-filters, fetch all matching
+        # rows so Python sort/filter operates on complete dataset before pagination
+        if python_sort or post_filters:
+            sql_limit = 1000
+            sql_offset = 0
         else:
             sql_limit = limit
-        sql_offset = 0 if post_filters else offset
+            sql_offset = offset
         params.extend([sql_limit, sql_offset])
 
         rows = conn.execute(query, params).fetchall()
@@ -470,14 +471,16 @@ def _fetch_screener_uncached(body):
                 if op == "!=": return v != tv
                 return True
             items = [it for it in items if all(_passes(it, pf) for pf in post_filters)]
-            total = len(items)  # adjusted count for post-filtered results
-            # Apply pagination after filtering
-            items = items[offset:offset + limit]
+            total = len(items)
 
         # Re-sort in Python if sorting by a derived/rate metric
         if python_sort:
             reverse = sort_dir.lower() == "desc"
             items.sort(key=lambda x: x.get(sort_key) or 0, reverse=reverse)
+
+        # Apply pagination after post-filtering and Python re-sort
+        if python_sort or post_filters:
+            items = items[offset:offset + limit]
 
         result = {"count": total, "season": "career" if career_mode else season, "items": items}
         if week > 0:
@@ -525,7 +528,7 @@ def fetch_screener_sparklines(player_ids, season=0):
     ids = [str(pid) for pid in player_ids[:200]]
     # Coerce season to int
     try:
-        season = int(season) if season else 0
+        season = _safe_int(season)
     except (ValueError, TypeError):
         season = 0
     def _query():
@@ -718,7 +721,7 @@ def _fetch_players_compare_uncached(player_ids, season=0):
 
         career_mode = str(season).lower() == "career"
         if not career_mode:
-            season = int(season) if season else 0
+            season = _safe_int(season)
             if not season:
                 row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
                 season = row[0] if row and row[0] else _current_nfl_season()

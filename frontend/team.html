@@ -624,7 +624,7 @@
   });
 
   function doExport(el) {
-    html2canvas(el, { backgroundColor: "#ede0cf", scale: 2, useCORS: true }).then(function(canvas) {
+    html2canvas(el, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2, useCORS: true }).then(function(canvas) {
       var ctx = canvas.getContext("2d");
       ctx.font = "bold 18px 'Space Mono', monospace";
       ctx.fillStyle = document.documentElement.dataset.theme === 'dark' ? 'rgba(237,224,207,0.25)' : 'rgba(45,31,20,0.25)';

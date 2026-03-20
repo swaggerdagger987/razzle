@@ -1718,3 +1718,67 @@ All `ctx.fillStyle = 'rgba(45,31,20,...)'` → theme-branching with sand rgba fo
 - All Python files compile clean
 - 59/59 tests pass (5.80s)
 - 0 regressions
+
+---
+
+## Quality Audit: 5-Agent Integration Seams Sweep (Mar 20 — Session 9)
+
+**Goal**: Deep 5-agent parallel audit targeting integration seams between pages/features, not generic crash bugs. Focus on state management, conversion funnel, backend pagination correctness, Pro data gating, and dark mode export completeness.
+
+### Screener State Management Seams (5 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | Saved view sortKey/sortKey2 not validated against universe columns | lab.js:4157-4159 | Could reference NFL column in college mode. Now validates against COLUMNS/COLLEGE_COLUMNS/PROSPECT_COLUMNS with fallback to universe default sort. |
+| 2 | Saved view columns not validated for college/prospect | lab.js:4176-4179 | Were assigned blindly (`[...view.columns]`), now `.filter()` through respective column defs. |
+| 3 | localStorage sortKey not validated against universe | lab.js:3753 | Restored from razzle_last_state without checking if column exists in current universe. Now validates against `_savedCols`. |
+| 4 | Week persisted for college universe from localStorage | lab.js:3756 | `state.week` restored even when saved.universe=college. Now skips if universe is college. |
+| 5 | URL sort params not validated against column defs | lab.js:3791-3794 | `?sort=anything` accepted blindly. Now validates against all three column sets. `dir2` also validated to only accept "asc"/"desc". |
+
+### Undo/Redo Week State (2 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 6 | `_captureState()` missing week field | lab.js:999 | Undo/redo didn't preserve week selection. Added `week: state.week`. |
+| 7 | `_restoreState()` missing week field | lab.js:1028 | Added `state.week = s.week \|\| 0` to restore. |
+
+### Monte Carlo + Pro Data Gating (5 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 8 | `_mcState` not cleared on Sleeper disconnect | league-intel.html:6541 | Simulation state from old league persisted after reconnecting new league. Added `Object.keys(_mcState).forEach(...)` cleanup. |
+| 9 | Pressure map: real score leaked in blurred fill width | league-intel.html:3243 | `width:${s.score}%` → `width:50%` for locked rows. Name was already "Manager", but actual score was in DOM. |
+| 10 | Monte Carlo summary: real stats in blurred cards | league-intel.html:5880-5886 | `r.champPct`, `r.playoffPct`, `r.avgPts`, `r.wins-r.losses` rendered in blurred DOM. Changed to "??" for blurred cards. |
+| 11 | Monte Carlo deep-dive: same data leak | league-intel.html:6060-6079 | Same fix for second render function (scenario explorer cards). |
+| 12 | SOS schedule strength: real PPG data in blurred cards | league-intel.html:6501-6503 | `mgr.totalPPG`, `mgr.bestCasePPG`, `mgr.worstCasePPG` replaced with "??" for blurred rows. |
+
+### Conversion Funnel (2 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 13 | Home page CTAs hardcoded monthly checkout | index.html:623,640 | `startCheckout('pro_month')` → `startCheckout('pro_year')`. Users clicking "Get Pro" from home were missing 33% yearly discount. |
+| 14 | Home page pricing cards led with monthly price | index.html:611,630 | Flipped to lead with yearly ($79.99/year, $149.99/year) with monthly as secondary note. Matches pricing page default. |
+
+### Backend Robustness (3 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 15 | Derived column sort pagination broken | players.py:421-480 | Sorting by cpoe/epa_per_play/dynasty_value fetched N rows by PPR, then re-sorted — wrong page of results. Now fetches up to 1000 rows, sorts in Python, then paginates. |
+| 16 | Season parameter ValueError on bad input | players.py:223,528,721 | `int(season)` crashed on non-numeric strings. Changed all 3 instances to `_safe_int(season)`. |
+| 17 | `_safe_int` not imported | players.py:14 | Added to imports from core. |
+
+### Dark Mode Export (16 fixes)
+
+| # | Fix | File(s) | Notes |
+|---|-----|---------|-------|
+| 18 | 6 cold gray watermarks (rgba 26,26,46) | explorer, airyards, matchups, targets, yoy, weekly | Changed to theme-aware branching: sand rgba for dark, espresso rgba for light. |
+| 19 | 10 hardcoded export backgrounds (#ede0cf) | workload, team, tdregression, successrate, targetpremium, snapefficiency, seasonpace, rankings, garbagetime, gamescript | Changed to theme-aware: `#2d1f14` for dark, `#ede0cf` for light. |
+| 20 | leaders.html export background | leaders.html:578 | Same fix. |
+
+### Verified Clean
+- All 11 JS files syntax clean
+- All Python files compile clean
+- 59/59 tests pass (5.68s)
+- 0 cold gray `rgba(26,26,46,...)` remaining in frontend
+- 0 hardcoded `backgroundColor: "#ede0cf"` remaining in HTML
+- 0 regressions

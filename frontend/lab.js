@@ -997,7 +997,7 @@ const _history = { stack: [], index: -1, maxSize: 30, _skipNext: false };
 function _captureState() {
   return JSON.stringify({
     position: state.position, season: state.season, universe: state.universe,
-    relevance: state.relevance, search: state.search,
+    relevance: state.relevance, search: state.search, week: state.week,
     sortKey: state.sortKey, sortDir: state.sortDir,
     sortKey2: state.sortKey2, sortDir2: state.sortDir2,
     filters: state.filters, teams: state.teams, minGP: state.minGP,
@@ -1025,7 +1025,7 @@ function _pushHistory() {
 function _restoreState(snap) {
   const s = JSON.parse(snap);
   state.position = s.position; state.season = s.season; state.universe = s.universe;
-  state.relevance = s.relevance; state.search = s.search;
+  state.relevance = s.relevance; state.search = s.search; state.week = s.week || 0;
   state.sortKey = s.sortKey; state.sortDir = s.sortDir;
   state.sortKey2 = s.sortKey2 || ""; state.sortDir2 = s.sortDir2 || "desc";
   state.filters = s.filters || []; state.teams = s.teams || []; state.minGP = s.minGP || 0;
@@ -3750,10 +3750,13 @@ function loadStateFromURL() {
         if (saved.universe) state.universe = saved.universe;
         if (saved.collegeView) state.collegeView = saved.collegeView;
         if (saved.position) state.position = saved.position;
-        if (saved.sortKey) state.sortKey = saved.sortKey;
+        // Validate sortKey against universe columns
+        var _savedCols = (saved.universe === "college" && saved.collegeView === "prospects") ? PROSPECT_COLUMNS : (saved.universe === "college" ? COLLEGE_COLUMNS : COLUMNS);
+        if (saved.sortKey && _savedCols[saved.sortKey]) state.sortKey = saved.sortKey;
         if (saved.sortDir) state.sortDir = saved.sortDir;
         if (saved.season) state.season = saved.season;
-        if (saved.week) state.week = parseInt(saved.week) || 0;
+        // Only restore week for NFL universe
+        if (saved.week && saved.universe !== "college") state.week = parseInt(saved.week) || 0;
         if (saved.collegeSeason) state.collegeSeason = saved.collegeSeason;
         if (saved.draftYear) state.draftYear = saved.draftYear;
         if (saved.relevance) state.relevance = saved.relevance;
@@ -3788,10 +3791,16 @@ function loadStateFromURL() {
     if (["ALL","QB","RB","WR","TE","K","DEF","DL","LB","DB"].indexOf(posVal) !== -1) state.position = posVal;
   }
   if (params.has("q")) state.search = params.get("q");
-  if (params.has("sort")) state.sortKey = params.get("sort");
+  if (params.has("sort")) {
+    var _sk = params.get("sort");
+    if (COLUMNS[_sk] || COLLEGE_COLUMNS[_sk] || PROSPECT_COLUMNS[_sk]) state.sortKey = _sk;
+  }
   if (params.has("dir")) { var dv = params.get("dir"); if (dv === "asc" || dv === "desc") state.sortDir = dv; }
-  if (params.has("sort2")) state.sortKey2 = params.get("sort2");
-  if (params.has("dir2")) state.sortDir2 = params.get("dir2");
+  if (params.has("sort2")) {
+    var _sk2 = params.get("sort2");
+    if (_sk2 === "" || COLUMNS[_sk2] || COLLEGE_COLUMNS[_sk2] || PROSPECT_COLUMNS[_sk2]) state.sortKey2 = _sk2;
+  }
+  if (params.has("dir2")) { var d2v = params.get("dir2"); if (d2v === "asc" || d2v === "desc") state.sortDir2 = d2v; }
   if (params.has("offset")) state.offset = Math.max(0, parseInt(params.get("offset")) || 0);
   if (params.has("filters")) {
     try {
@@ -4154,9 +4163,12 @@ function loadSavedView(id) {
   state.collegeView = (view.universe === "prospects" || view.collegeView === "prospects") ? "prospects" : "stats";
   state.position = view.position || "ALL";
   state.search = view.search || "";
-  state.sortKey = view.sortKey || "fantasy_points_ppr";
+  // Validate sortKey against current universe columns
+  var _colsForView = isProspectView() ? PROSPECT_COLUMNS : (state.universe === "college" ? COLLEGE_COLUMNS : COLUMNS);
+  var _defaultSort = isProspectView() ? "draft_pick" : (state.universe === "college" ? "total_yards" : "fantasy_points_ppr");
+  state.sortKey = (view.sortKey && _colsForView[view.sortKey]) ? view.sortKey : _defaultSort;
   state.sortDir = view.sortDir || "desc";
-  state.sortKey2 = view.sortKey2 || "";
+  state.sortKey2 = (view.sortKey2 && _colsForView[view.sortKey2]) ? view.sortKey2 : "";
   state.sortDir2 = view.sortDir2 || "desc";
   state.filters = view.filters ? [...view.filters] : [];
   state.relevance = view.relevance || "fantasy";
@@ -4169,17 +4181,17 @@ function loadSavedView(id) {
   if (view.density !== undefined) state.density = view.density;
   if (view.columnWidths) state.columnWidths = view.columnWidths;
 
-  // Legacy column arrays (old format) + new format
+  // Legacy column arrays (old format) + new format — validate against universe
   if (view.columns) {
     if (isProspectView()) {
       if (view.season) state.draftYear = view.season;
-      state.prospectColumns = [...view.columns];
+      state.prospectColumns = view.columns.filter(function(k) { return PROSPECT_COLUMNS[k]; });
     } else if (state.universe === "college") {
       if (view.season) state.collegeSeason = view.season;
-      state.collegeColumns = [...view.columns];
+      state.collegeColumns = view.columns.filter(function(k) { return COLLEGE_COLUMNS[k]; });
     } else {
       if (view.season !== undefined) state.season = view.season;
-      state.visibleColumns = [...view.columns];
+      state.visibleColumns = view.columns.filter(function(k) { return COLUMNS[k]; });
     }
   } else {
     // Legacy format with separate column arrays
