@@ -2220,4 +2220,31 @@ All `ctx.fillStyle = 'rgba(45,31,20,...)'` → theme-branching with sand rgba fo
 | FUNC-003 | Dynasty values cluster at 100.0 ceiling | P2 | DONE | Removed hard caps from _production_value and _age_value. Added soft ceiling in compute_trade_value: linear below 90, log compression above 90. Top players now spread across 96-97 instead of all at 100.0. Lower tiers unchanged. |
 
 ### Smoke Test Note
-- week_filter test (1 of 11) fails — pre-existing environment issue. The screener week filter code is correct (verified by direct function call). The running dev server (started Mar 19) may have stale state. Not a code bug.
+- week_filter test (1 of 11) fails — pre-existing environment issue. Local terminal.db is empty (0 rows in all data tables). Production has data on persistent disk. Not a code bug.
+
+---
+
+## Ship Loop: Sweep Mode (Mar 20) — Branch: ship/launch-fixes
+
+**Goal**: No tickets to consume. Systematic quality sweep across codebase.
+
+### Sweep Results (4 parallel agent audits)
+
+| Audit | Findings | Action |
+|-------|----------|--------|
+| 1px borders | 14 instances on list/dropdown item separators | Acceptable — same rationale as table row dividers (data density, not component borders) |
+| Hardcoded colors | #fff on colored badges (80+), html2canvas bg patterns (30+) | Acceptable — prior decision: white on saturated backgrounds for contrast regardless of theme; canvas bg is known limitation |
+| XSS/innerHTML | 1 CRITICAL: team chip onclick in lab.js:3283 — URL param unescaped | FIXED — added escapeHtml() + escapeAttr() |
+| Division by zero | 0 bugs | Clean — all divisions guarded |
+| Missing .catch() | 1 missing: gamelog.html:396 quick-search autocomplete | FIXED — added .catch() |
+| Dark mode | 1 issue: lab.html thead shadow dark override used espresso rgba instead of black | FIXED — rgba(0,0,0,0.25) |
+
+### Fixes Applied
+
+| # | Fix | Severity | File | Notes |
+|---|-----|----------|------|-------|
+| 1 | XSS in team chip onclick | HIGH | lab.js:3283 | Team names from URL params now escaped with escapeHtml/escapeAttr. Attack vector: malicious shared URL with crafted team param. |
+| 2 | Missing .catch() on quick-search fetch | MEDIUM | gamelog.html:416 | Unhandled promise rejection if API fails during autocomplete. Now hides dropdown on error. |
+| 3 | Dark mode thead shadow wrong color | LOW | lab.html:1011 | Dark mode override used espresso rgba(45,31,20) instead of true black rgba(0,0,0). Shadow was invisible. |
+
+All 11 JS files syntax clean. 16 Python files compile clean.
