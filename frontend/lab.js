@@ -1830,13 +1830,13 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
       const pctFw = pv >= 75 || pv <= 25 ? "font-weight:700;" : "";
       const pctSty = (pctColor || pctFw) ? ` style="${pctColor ? "color:" + pctColor + ";" : ""}${pctFw}"` : "";
       html += `<td${scAttr}${hStyle}><span class="pctl-val"${pctSty} title="${formatStat(val, col.decimals != null ? col.decimals : 1)}">${pv}<sup style="font-size:8px; opacity:0.6;">%</sup></span></td>`;
-    } else if (key === "dynasty_value" && val != null) {
+    } else if (key === "dynasty_value" && typeof val === "number") {
       const dvsColor = val >= 85 ? "var(--green)" : val >= 70 ? "var(--pos-qb)" : val >= 55 ? "var(--orange)" : "var(--ink-light)";
       const dvsTier = val >= 85 ? "Elite" : val >= 70 ? "Star" : val >= 55 ? "Starter" : "";
       html += `<td${scAttr}${hStyle}>${ldrDot}<span style="background:${dvsColor}; color:white; padding:1px 8px; border-radius:10px; border:2px solid var(--ink); font-size:11px; font-weight:700; white-space:nowrap;">${val.toFixed(1)}${dvsTier ? " " + dvsTier : ""}</span></td>`;
     } else if (key === "age" && val != null) {
       html += `<td${scAttr} style="font-weight:600;">${ldrDot}${Math.round(val)}</td>`;
-    } else if (key === "breakout_pct" && val != null && val >= 50) {
+    } else if (key === "breakout_pct" && typeof val === "number" && val >= 50) {
       html += `<td${scAttr}${hStyle}>${ldrDot}<span style="background:var(--green); color:white; padding:1px 6px; border-radius:10px; border:2px solid var(--ink); font-size:11px; font-weight:700;">+${val.toFixed(0)}%</span></td>`;
     } else if (col.pct && val != null) {
       html += `<td${scAttr}${hStyle}>${ldrDot}${(val * 100).toFixed(col.decimals)}%</td>`;
@@ -2284,7 +2284,7 @@ async function toggleRowExpand(playerId, tdEl) {
   expandTr.className = "expand-row";
   var cols = getActiveColumns();
   var totalCols = cols.length + (state.universe === "nfl" ? 5 : 4) + 1; // star, select, [pin], rank, player + add-col btn
-  expandTr.innerHTML = '<td colspan="' + totalCols + '" style="padding:0; background:var(--bg-warm, rgba(45,31,20,0.04));"><div class="expand-content" style="padding:8px 12px 8px 130px; font-family:var(--font-mono); font-size:11px; color:var(--ink-medium);">loading weeks...</div></td>';
+  expandTr.innerHTML = '<td colspan="' + totalCols + '" style="padding:0; background:var(--bg-warm, rgba(45,31,20,0.04));"><div class="expand-content" style="padding:8px 12px 8px 130px; font-family:var(--font-mono); font-size:11px; color:var(--ink-medium);">pulling weekly film...</div></td>';
   tr.after(expandTr);
 
   try {
@@ -2314,7 +2314,7 @@ async function toggleRowExpand(playerId, tdEl) {
     for (var w of weeks) {
       var fpts = parseFloat(w.fantasy_points_ppr || w.fantasy_points || 0).toFixed(1);
       var fptsColor = fpts >= 20 ? 'color:var(--green); font-weight:700;' : fpts < 5 ? 'color:var(--red);' : '';
-      html += '<tr style="border-bottom:1px solid rgba(45,31,20,0.04);">';
+      html += '<tr style="border-bottom:1px solid var(--ink-faint);">';
       var _n = function(v) { var n = parseInt(v); return isNaN(n) ? 0 : n; };
       html += '<td style="padding:2px 6px;">' + escapeHtml(String(w.week || "")) + '</td>';
       html += '<td style="padding:2px 6px;">' + escapeHtml(w.opponent || w.recent_team || "") + '</td>';
@@ -6130,6 +6130,7 @@ async function openCollegeProfile(playerId) {
 }
 
 function renderCollegeProfile(data, container) {
+  if (!data) { container.innerHTML = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">player not found on the film</div>'; return; }
   const { player, seasons, career, combine, draft } = data;
   if (!player || !player.player_name) {
     container.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">player not found on the film</div>`;
@@ -6324,6 +6325,7 @@ function getCollegeSeasonColumns(pos) {
 }
 
 function renderProfile(data, container) {
+  if (!data) { container.innerHTML = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">player not found on the film</div>'; return; }
   const { player, seasons, career, combine } = data;
   if (!player || !player.full_name) {
     container.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">player not found on the film</div>`;
@@ -6936,6 +6938,7 @@ async function openProspectProfile(name, position, draftYear) {
 }
 
 function renderProspectProfile(data, container, compsData) {
+  if (!data) { container.innerHTML = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">prospect not found on the board</div>'; return; }
   const { prospect, percentiles } = data;
   if (!prospect || !prospect.player_name) {
     container.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">prospect not found on the board</div>`;
@@ -12337,10 +12340,11 @@ function renderBoomBust(data, container) {
   const posColor = posColors[pos] || "var(--ink)";
 
   // Grade color
-  const gradeColor = grade.startsWith("A") ? "var(--green)" :
-                     grade.startsWith("B") ? "#5b7fff" :
-                     grade.startsWith("C") ? "var(--orange)" :
-                     grade.startsWith("D") ? "#e87422" : "var(--red)";
+  const safeGrade = grade || "C";
+  const gradeColor = safeGrade.startsWith("A") ? "var(--green)" :
+                     safeGrade.startsWith("B") ? "#5b7fff" :
+                     safeGrade.startsWith("C") ? "var(--orange)" :
+                     safeGrade.startsWith("D") ? "#e87422" : "var(--red)";
 
   let html = "";
 
@@ -12549,6 +12553,7 @@ function drawBoomBustHistogram(data) {
 function drawBoomBustRangeBar(data) {
   const canvas = document.getElementById("boomBustRangeBar");
   if (!canvas) return;
+  var t = getCanvasTheme();
   const ctx = canvas.getContext("2d");
   const W = canvas.width, H = canvas.height;
   ctx.clearRect(0, 0, W, H);
@@ -12609,10 +12614,11 @@ function exportBoomBustImage() {
   const pos = (player.position || "").toUpperCase();
   const posHex = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
   const posColor = posHex[pos] || "#d97757";
-  const gradeColor = grade.startsWith("A") ? "#2ec4b6" :
-                     grade.startsWith("B") ? "#5b7fff" :
-                     grade.startsWith("C") ? "#d97757" :
-                     grade.startsWith("D") ? "#e87422" : "#e63946";
+  const safeGrade = grade || "C";
+  const gradeColor = safeGrade.startsWith("A") ? "#2ec4b6" :
+                     safeGrade.startsWith("B") ? "#5b7fff" :
+                     safeGrade.startsWith("C") ? "#d97757" :
+                     safeGrade.startsWith("D") ? "#e87422" : "#e63946";
 
   const canvas = document.createElement("canvas");
   canvas.width = 800;

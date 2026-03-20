@@ -257,7 +257,7 @@
           draft.board = data.prospects || [];
           draft.draftYear = data.draft_year || new Date().getFullYear();
           if (!draft.board.length) {
-            el.innerHTML = '<div class="lab-panel-loading"><div class="loading-msg" style="color:var(--red);">no prospect data found</div></div>';
+            el.innerHTML = '<div class="lab-panel-loading"><div class="loading-msg" style="color:var(--red);">' + (typeof razzleEmpty === "function" ? razzleEmpty() : "no film on these prospects yet") + '</div></div>';
             return;
           }
           draft.started = true;

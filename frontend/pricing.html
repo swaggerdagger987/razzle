@@ -688,7 +688,7 @@
       if (ea && ea.enabled) {
         if (ea.pro.available) {
           cards.push(
-            '<div style="background:var(--bg-card); border:3px solid var(--orange); border-radius:10px; box-shadow:3px 3px 0 var(--ink); padding:16px 20px; text-align:center;">' +
+            '<div style="background:var(--bg-card); border:3px solid var(--orange); border-radius:10px; box-shadow:4px 4px 0 var(--ink); padding:16px 20px; text-align:center;">' +
               '<div style="font-family:var(--font-mono); font-size:14px; margin-bottom:4px;">Early Adopter Pro</div>' +
               '<div style="font-family:var(--font-display); font-size:28px; color:var(--orange);">' + esc(ea.pro.price) + '</div>' +
               '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + esc(ea.pro.savings) + ' — ' + esc(String(ea.pro.remaining)) + ' of ' + esc(String(ea.pro.limit)) + ' spots left</div>' +
@@ -698,7 +698,7 @@
         }
         if (ea.elite.available) {
           cards.push(
-            '<div style="background:var(--bg-card); border:3px solid var(--purple); border-radius:10px; box-shadow:3px 3px 0 var(--ink); padding:16px 20px; text-align:center;">' +
+            '<div style="background:var(--bg-card); border:3px solid var(--purple); border-radius:10px; box-shadow:4px 4px 0 var(--ink); padding:16px 20px; text-align:center;">' +
               '<div style="font-family:var(--font-mono); font-size:14px; margin-bottom:4px;">Early Adopter Elite</div>' +
               '<div style="font-family:var(--font-display); font-size:28px; color:var(--purple);">' + esc(ea.elite.price) + '</div>' +
               '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + esc(ea.elite.savings) + ' — ' + esc(String(ea.elite.remaining)) + ' of ' + esc(String(ea.elite.limit)) + ' spots left</div>' +
@@ -712,7 +712,7 @@
       var lt = data.lifetime;
       if (lt && lt.enabled && lt.available) {
         cards.push(
-          '<div style="background:var(--bg-card); border:3px solid var(--green); border-radius:10px; box-shadow:3px 3px 0 var(--ink); padding:16px 20px; text-align:center;">' +
+          '<div style="background:var(--bg-card); border:3px solid var(--green); border-radius:10px; box-shadow:4px 4px 0 var(--ink); padding:16px 20px; text-align:center;">' +
             '<div style="font-family:var(--font-mono); font-size:14px; margin-bottom:4px;">Lifetime Pro</div>' +
             '<div style="font-family:var(--font-display); font-size:28px; color:var(--green);">' + esc(lt.pro_price) + '</div>' +
             '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">one-time — ' + esc(String(lt.remaining)) + ' of ' + esc(String(lt.limit)) + ' lifetime spots left</div>' +
@@ -720,7 +720,7 @@
           '</div>'
         );
         cards.push(
-          '<div style="background:var(--bg-card); border:3px solid var(--purple); border-radius:10px; box-shadow:3px 3px 0 var(--ink); padding:16px 20px; text-align:center;">' +
+          '<div style="background:var(--bg-card); border:3px solid var(--purple); border-radius:10px; box-shadow:4px 4px 0 var(--ink); padding:16px 20px; text-align:center;">' +
             '<div style="font-family:var(--font-mono); font-size:14px; margin-bottom:4px;">Lifetime Elite</div>' +
             '<div style="font-family:var(--font-display); font-size:28px; color:var(--purple);">' + esc(lt.elite_price) + '</div>' +
             '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">one-time — ' + esc(String(lt.remaining)) + ' of ' + esc(String(lt.limit)) + ' lifetime spots left</div>' +

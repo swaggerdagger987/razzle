@@ -1636,7 +1636,7 @@
       h += '<span class="buysell-mismatch-label">Value Mismatch</span>';
       h += '<span class="buysell-mismatch-val ' + type + '">' + escapeHtml(String(p.mismatch_score)) + '</span></div>';
       h += '<div class="buysell-mismatch-track"><div class="buysell-mismatch-fill ' + type + '" style="width:' + barWidth + '%"></div></div></div>';
-      h += '<div class="buysell-annotation">' + escapeHtml(p.annotation) + '</div>';
+      h += '<div class="buysell-annotation">' + escapeHtml(p.annotation || '') + '</div>';
       h += '<div class="buysell-stats">' + renderEffStats(p) + '</div>';
       h += '</div></div>';
       return h;
@@ -3379,8 +3379,9 @@
             html += '<td class="wh-bye">bye</td>';
           } else {
             var hc = getHeatColor(score, t);
-            html += '<td class="wh-score-cell" style="background:' + hc.bg + '; color:' + hc.text + ';" title="' + escapeAttr(p.name) + ' Week ' + w + ': ' + score.toFixed(1) + ' pts">';
-            html += score.toFixed(1) + '</td>';
+            var sc = Number(score);
+            html += '<td class="wh-score-cell" style="background:' + hc.bg + '; color:' + hc.text + ';" title="' + escapeAttr(p.name) + ' Week ' + w + ': ' + sc.toFixed(1) + ' pts">';
+            html += sc.toFixed(1) + '</td>';
           }
         });
 
@@ -3394,9 +3395,9 @@
 
       var legendPos = curPos !== 'ALL' ? curPos : 'WR';
       var lt = thresholds[legendPos] || { p20: 5, p40: 10, p60: 15, p80: 20 };
-      html += '<div class="wh-legend"><span>&lt;' + lt.p20.toFixed(0) + '</span><div class="wh-legend-bar">';
+      html += '<div class="wh-legend"><span>&lt;' + (lt.p20 || 0).toFixed(0) + '</span><div class="wh-legend-bar">';
       getHeatColors().forEach(function(hc) { html += '<div class="wh-legend-cell" style="background:' + hc.bg + '"></div>'; });
-      html += '</div><span>' + lt.p80.toFixed(0) + '+</span></div>';
+      html += '</div><span>' + (lt.p80 || 0).toFixed(0) + '+</span></div>';
       html += '<div class="wh-legend-note">PPR points (' + legendPos + ' thresholds) — click column headers to sort</div>';
 
       body.innerHTML = html;
@@ -7489,7 +7490,9 @@
       if (players.length > 2) {
         var sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0, n = players.length;
         players.forEach(function(p) { sumX += p.x; sumY += p.y; sumXY += p.x * p.y; sumX2 += p.x * p.x; });
-        var slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+        var denom = n * sumX2 - sumX * sumX;
+        if (denom === 0) { denom = 1; }
+        var slope = (n * sumXY - sumX * sumY) / denom;
         var intercept = (sumY - slope * sumX) / n;
         if (isFinite(slope) && isFinite(intercept)) {
           ctx.strokeStyle = 'rgba(217, 119, 87, 0.4)';
@@ -9617,7 +9620,7 @@
           '<td style="font-weight:700;">' + fmt(p.career_ppg) + '</td>' +
           '<td>' + fmt(p.career_fpts, 0) + '</td>' +
           '<td>' + p.career_av + '</td>' +
-          '<td><span style="background:' + verdictColor + '; color:white; padding:2px 8px; border-radius:4px; font-size:10px; font-weight:700; border:2px solid rgba(45,31,20,0.15);">' + verdictLabel + '</span></td>' +
+          '<td><span style="background:' + verdictColor + '; color:white; padding:2px 8px; border-radius:4px; font-size:10px; font-weight:700; border:2px solid var(--ink-faint);">' + verdictLabel + '</span></td>' +
         '</tr>';
       });
 
@@ -9904,7 +9907,9 @@
         if (pts.length > 5) {
           var sx = 0, sy = 0, sxy = 0, sx2 = 0, n = pts.length;
           pts.forEach(function(p) { sx += p.x; sy += p.y; sxy += p.x * p.y; sx2 += p.x * p.x; });
-          var slope = (n * sxy - sx * sy) / (n * sx2 - sx * sx);
+          var sdenom = n * sx2 - sx * sx;
+          if (sdenom === 0) { sdenom = 1; }
+          var slope = (n * sxy - sx * sy) / sdenom;
           var intercept = (sy - slope * sx) / n;
           if (isFinite(slope) && isFinite(intercept)) {
             var x1 = xMin, y1 = slope * x1 + intercept;

@@ -2791,7 +2791,7 @@ async def roster_grade(request: Request):
         if not raw_ids or not isinstance(raw_ids, list):
             return JSONResponse({"error": "player_ids array is required"}, status_code=400)
         # Validate strings, deduplicate, cap at 25
-        player_ids = list(dict.fromkeys(str(pid) for pid in raw_ids if isinstance(pid, str) and pid))[:25]
+        player_ids = list(dict.fromkeys(str(pid).strip() for pid in raw_ids if pid is not None and str(pid).strip()))[:25]
         if not player_ids:
             return JSONResponse({"error": "No valid player IDs provided"}, status_code=400)
         return live_data.fetch_roster_grade(player_ids=player_ids, season=season)

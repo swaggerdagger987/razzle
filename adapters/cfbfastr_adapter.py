@@ -326,9 +326,7 @@ def aggregate_season(csv_text, season):
         if total_touches < 5:
             continue
 
-        # Also count passing TDs for QB total_tds
-        if pos == "QB":
-            stats["total_tds"] += stats["pass_tds"]
+        # pass_tds already counted in total_tds during play-level loop (line 224)
 
         results.append({
             "player_id": pid,
