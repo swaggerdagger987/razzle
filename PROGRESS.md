@@ -2481,3 +2481,25 @@ week_filter failure (10/11) is a stale server process issue, not a code bug. Ver
 - All Python files compile clean
 - 11/11 smoke tests pass
 - 0 regressions
+
+---
+
+## Ship Loop Session 16 (Mar 20)
+
+### FUNC-013: Stock Watch & Buy/Sell scrub player fix
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | Stock Watch min games 6→8, position PPG floors (QB>=10, RB/WR>=5, TE>=3) | dashboards.py:711-723 | Brandon Powell / Laviska Shenault no longer dominate rising stocks |
+| 2 | Buy/Sell min games 6→8, position PPG floors | analytics.py:866,882 | KhaDarel Hodge / Ashton Dulin no longer show as A+ buy-low |
+
+### Sweep Mode (Mar 20)
+
+| Pass | Findings | Fixes |
+|------|----------|-------|
+| Backend audit | 1 hardcoded year in pick values endpoint | server.py:2425 — dynamic range from _current_draft_year() |
+| Frontend audit | 1 XSS in dynasty history season headers | lab-panels.js:207 — escapeHtml(String(s)) on season values |
+
+### Verified Clean
+- 11/11 smoke tests pass
+- 0 regressions

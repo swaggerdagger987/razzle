@@ -204,7 +204,7 @@
       html += '<div class="dh-wrap">';
       html += '<table class="dh-table"><thead><tr>';
       html += '<th>Player</th>';
-      seasons.forEach(function(s) { html += '<th class="center">' + s + '</th>'; });
+      seasons.forEach(function(s) { html += '<th class="center">' + escapeHtml(String(s)) + '</th>'; });
       html += '<th class="center">Trend</th>';
       html += '</tr></thead><tbody>';
 
