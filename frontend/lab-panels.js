@@ -1087,7 +1087,7 @@
         renderAvgs(data.pos_averages);
         renderPA(data);
       }).catch(function() {
-        el.querySelector('#lp-pa-content').innerHTML = '<div class="lp-error">something went wrong</div>';
+        el.querySelector('#lp-pa-content').innerHTML = '<div class="lp-error">the tape machine jammed — give it another shot</div>';
       });
     }
 
@@ -8080,7 +8080,7 @@
         }
         render(data, isCollege);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">something went wrong</div>';
+        content.innerHTML = '<div class="lp-error">the tape machine jammed — give it another shot</div>';
       });
     }
 
@@ -8216,7 +8216,7 @@
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) { render(data, isCollege); }).catch(function() {
-        content.innerHTML = '<div class="lp-error">something went wrong</div>';
+        content.innerHTML = '<div class="lp-error">the tape machine jammed — give it another shot</div>';
       });
     }
 
