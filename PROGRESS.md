@@ -1305,3 +1305,18 @@ User needs to manually upload updated terminal.db to Render persistent disk at /
 - 0 duplicate app.js includes
 - 0 exclamation marks in user-visible toast/status messages
 - 0 generic "could not load" error messages in standalone HTML pages
+
+### Design Consistency Fixes (Wave 2)
+
+| # | Fix | File(s) | Notes |
+|---|-----|---------|-------|
+| 1 | 25 font-display at <14px → font-mono | lab.html (11), league-intel.html (13), agents.html (1) | Luckiest Guy illegible below 14px — design guide: 16px+ only |
+| 2 | 14 resting-state box-shadows 3px → 4px | agents.html (11 + 3 inline), league-intel.html (2), lab-panels.css (1) | Design guide: 4px 4px 0 resting, 3px only on hover transitions |
+| 3 | index.html agent name 14px → 16px | index.html | Bumped to meet display font minimum |
+
+### Verification (Final)
+- All 11 JS files syntax clean
+- All Python files compile clean
+- 59/59 tests pass
+- 0 font-display below 14px in lab.html, league-intel.html, agents.html
+- 0 resting-state 3px box-shadows in agents.html

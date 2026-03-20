@@ -80,7 +80,7 @@
   .agent-badge:nth-child(even) { transform: rotate(1.5deg); }
 
   .agent-badge:hover {
-    box-shadow: 3px 3px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
     transform: translate(-1px, -1px);
   }
 
@@ -98,7 +98,7 @@
     background: var(--bg-card);
     border: 3px solid var(--ink);
     border-radius: 10px;
-    box-shadow: 3px 3px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
     overflow: hidden;
     transition: all 0.12s;
   }
@@ -466,7 +466,7 @@
   }
 
   .scenario-chip:hover {
-    box-shadow: 3px 3px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
     transform: translate(-1px, -1px);
     background: var(--orange-light);
   }
@@ -491,7 +491,7 @@
     color: var(--bg);
     border: 2px solid var(--ink);
     border-radius: 8px;
-    box-shadow: 3px 3px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
     cursor: pointer;
     transition: all 0.12s;
   }
@@ -505,7 +505,7 @@
     opacity: 0.5;
     cursor: not-allowed;
     transform: none;
-    box-shadow: 3px 3px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
   }
 
   .scenario-agent-btns {
@@ -533,7 +533,7 @@
   }
 
   .scenario-agent-btn:hover {
-    box-shadow: 3px 3px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
     transform: translate(-1px, -1px);
   }
 
@@ -659,7 +659,7 @@
     background: var(--orange);
     color: var(--bg);
     cursor: pointer;
-    box-shadow: 3px 3px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
     transition: all 0.12s;
     text-decoration: none;
     display: inline-block;
@@ -895,7 +895,7 @@
   .briefing-card-body h1,
   .briefing-card-body h2,
   .briefing-card-body h3 {
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 13px;
     font-weight: 700;
     text-transform: uppercase;
@@ -1158,7 +1158,7 @@
     color: var(--bg);
     border: 2px solid var(--ink);
     border-radius: 8px;
-    box-shadow: 3px 3px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
     text-decoration: none;
     transition: all 0.12s;
   }
@@ -1211,7 +1211,7 @@
   }
 
   .roster-toggle:hover {
-    box-shadow: 3px 3px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
     transform: translate(-1px, -1px);
   }
 
@@ -1319,7 +1319,7 @@
   }
 
   .config-toggle:hover {
-    box-shadow: 3px 3px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
     transform: translate(-1px, -1px);
   }
 
@@ -1405,7 +1405,7 @@
   }
 
   .config-btn:hover {
-    box-shadow: 3px 3px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
     transform: translate(-1px, -1px);
   }
 
@@ -1803,7 +1803,7 @@
 
   <!-- MEMORY PANEL -->
   <div class="briefing-zone" style="margin-bottom:0;">
-    <div id="memoryPanel" style="display:none; background:var(--bg-card); border:2px solid var(--ink); border-radius:10px; box-shadow:3px 3px 0 var(--ink); padding:12px 16px; margin-bottom:12px;"></div>
+    <div id="memoryPanel" style="display:none; background:var(--bg-card); border:2px solid var(--ink); border-radius:10px; box-shadow:4px 4px 0 var(--ink); padding:12px 16px; margin-bottom:12px;"></div>
   </div>
 
   <!-- BRIEFING CARDS (rendered by JS after agents respond) -->
@@ -2046,7 +2046,7 @@ fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"applicat
       // Trial has expired
       banner.style.display = "block";
       banner.innerHTML =
-        '<div style="background:var(--bg-card); border:3px solid var(--orange); border-radius:10px; box-shadow:3px 3px 0 var(--ink); padding:14px 20px; margin-top:16px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">' +
+        '<div style="background:var(--bg-card); border:3px solid var(--orange); border-radius:10px; box-shadow:4px 4px 0 var(--ink); padding:14px 20px; margin-top:16px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">' +
           '<div>' +
             '<span style="font-family:var(--font-mono); font-size:14px; color:var(--ink);">Your Pro trial has ended</span>' +
             '<span style="font-family:var(--font-hand); font-size:14px; color:var(--ink-medium); margin-left:8px;">upgrade to keep league-contextualized agents</span>' +
@@ -2061,7 +2061,7 @@ fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"applicat
         ? "Your Pro trial ends tomorrow"
         : "Your Pro trial ends in " + days + " days";
       banner.innerHTML =
-        '<div style="background:var(--bg-card); border:3px solid ' + urgencyColor + '; border-radius:10px; box-shadow:3px 3px 0 var(--ink); padding:14px 20px; margin-top:16px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">' +
+        '<div style="background:var(--bg-card); border:3px solid ' + urgencyColor + '; border-radius:10px; box-shadow:4px 4px 0 var(--ink); padding:14px 20px; margin-top:16px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">' +
           '<div>' +
             '<span style="font-family:var(--font-mono); font-size:14px; color:var(--ink);">' + msg + '</span>' +
             '<span style="font-family:var(--font-hand); font-size:14px; color:var(--ink-medium); margin-left:8px;">keep your league-contextualized agents</span>' +

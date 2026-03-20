@@ -3321,7 +3321,7 @@
 .exp-count { text-align: center; font-family: var(--font-mono); font-size: 12px; color: var(--ink-light); margin-bottom: 10px; }
 .exp-chart-wrap { position: relative; background: var(--bg-card); border: 3px solid var(--ink); border-radius: 10px; padding: 20px; }
 .exp-canvas { display: block; width: 100%; cursor: crosshair; }
-.exp-tooltip { display: none; position: absolute; background: var(--bg-card); border: 2px solid var(--ink); border-radius: 8px; padding: 8px 12px; font-family: var(--font-mono); font-size: 12px; z-index: 10; pointer-events: none; box-shadow: 3px 3px 0 var(--ink); }
+.exp-tooltip { display: none; position: absolute; background: var(--bg-card); border: 2px solid var(--ink); border-radius: 8px; padding: 8px 12px; font-family: var(--font-mono); font-size: 12px; z-index: 10; pointer-events: none; box-shadow: 4px 4px 0 var(--ink); }
 
 /* ===== LEADERS PANEL (ld2-) ===== */
 .ld2-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
