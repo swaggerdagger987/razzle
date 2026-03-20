@@ -56,22 +56,32 @@ def hit(method: str, path: str, body: dict | None = None, params: dict | None = 
     req = urllib.request.Request(url, data=data, method=method)
     req.add_header("Content-Type", "application/json")
     req.add_header("Accept", "application/json")
+    req.add_header("Accept-Encoding", "gzip, deflate")
 
     try:
+        import gzip as _gzip
         with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
-            return (resp.status, resp.read().decode("utf-8"))
+            raw = resp.read()
+            # Try gzip decompress first, fallback to raw
+            try:
+                raw = _gzip.decompress(raw)
+            except Exception:
+                pass  # Not gzip or partial, use raw
+            return (resp.status, raw.decode("utf-8"))
     except urllib.error.HTTPError as e:
         body_text = e.read().decode("utf-8", errors="replace")[:500]
         return (e.code, body_text)
     except urllib.error.URLError as e:
         return (0, str(e.reason))
     except Exception as e:
-        return (0, str(e))
+        return (0, f"{type(e).__name__}: {e}")
 
 
 def hit_json(method: str, path: str, **kwargs) -> tuple[int, dict | list | None]:
     """Returns (status_code, parsed_json_or_None)."""
     code, body = hit(method, path, **kwargs)
+    if code == 0:
+        print(f"    [DEBUG] {method} {path} failed: {body[:200]}", file=sys.stderr)
     try:
         return (code, json.loads(body))
     except (json.JSONDecodeError, TypeError):
@@ -97,7 +107,7 @@ def test_players_returns_data():
     code, data = hit_json("GET", "/api/players")
     if code == 200 and isinstance(data, (list, dict)):
         # might be {"players": [...]} or just [...]
-        players = data if isinstance(data, list) else data.get("players", data.get("data", []))
+        players = data if isinstance(data, list) else data.get("items", data.get("items", data.get("players", data.get("data", []))))
         if len(players) > 0:
             results.append(TestResult("players_returns_data", True,
                                       f"Returns {len(players)} players"))
@@ -120,7 +130,7 @@ def test_position_filter_qb():
                                   file="backend/server.py", function="get_players"))
         return
 
-    players = data if isinstance(data, list) else data.get("players", data.get("data", []))
+    players = data if isinstance(data, list) else data.get("items", data.get("players", data.get("data", [])))
     non_qbs = [p for p in players[:50] if p.get("position") != "QB"]
     if len(non_qbs) == 0:
         results.append(TestResult("position_filter_qb", True,
@@ -141,7 +151,7 @@ def test_position_filter_wr():
                                   f"HTTP {code}", severity="P1"))
         return
 
-    players = data if isinstance(data, list) else data.get("players", data.get("data", []))
+    players = data if isinstance(data, list) else data.get("items", data.get("players", data.get("data", [])))
     non_wrs = [p for p in players[:50] if p.get("position") != "WR"]
     if len(non_wrs) == 0:
         results.append(TestResult("position_filter_wr", True,
@@ -156,13 +166,13 @@ def test_position_filter_wr():
 
 def test_sort_ppr_descending():
     """Sorting by PPR points descending: first player has highest PPR."""
-    code, data = hit_json("GET", "/api/players", params={"sort": "ppr_points", "order": "desc", "limit": "20"})
+    code, data = hit_json("GET", "/api/players", params={"sort": "fantasy_points_ppr", "order": "desc", "limit": "20"})
     if code != 200 or not data:
         results.append(TestResult("sort_ppr_desc", False,
                                   f"HTTP {code}", severity="P1"))
         return
 
-    players = data if isinstance(data, list) else data.get("players", data.get("data", []))
+    players = data if isinstance(data, list) else data.get("items", data.get("players", data.get("data", [])))
     if len(players) < 2:
         results.append(TestResult("sort_ppr_desc", False,
                                   "Too few players to test sort", severity="P1"))
@@ -171,10 +181,10 @@ def test_sort_ppr_descending():
     # Check first 10 are in descending order
     out_of_order = []
     for i in range(min(len(players) - 1, 10)):
-        curr = players[i].get("ppr_points") or players[i].get("fantasy_points_ppr") or 0
-        nxt = players[i + 1].get("ppr_points") or players[i + 1].get("fantasy_points_ppr") or 0
+        curr = players[i].get("fantasy_points_ppr") or 0
+        nxt = players[i + 1].get("fantasy_points_ppr") or 0
         if curr < nxt:
-            out_of_order.append(f"#{i+1} {players[i].get('name')}={curr} < #{i+2} {players[i+1].get('name')}={nxt}")
+            out_of_order.append(f"#{i+1} {players[i].get('full_name')}={curr} < #{i+2} {players[i+1].get('full_name')}={nxt}")
 
     if len(out_of_order) == 0:
         results.append(TestResult("sort_ppr_desc", True, "PPR sort descending is correct"))
@@ -194,8 +204,8 @@ def test_season_switch():
                                   f"HTTP {code_25}/{code_24}", severity="P1"))
         return
 
-    p25 = data_25 if isinstance(data_25, list) else data_25.get("players", data_25.get("data", []))
-    p24 = data_24 if isinstance(data_24, list) else data_24.get("players", data_24.get("data", []))
+    p25 = data_25 if isinstance(data_25, list) else data_25.get("items", data_25.get("players", data_25.get("data", [])))
+    p24 = data_24 if isinstance(data_24, list) else data_24.get("items", data_24.get("players", data_24.get("data", [])))
 
     if len(p25) == 0 or len(p24) == 0:
         results.append(TestResult("season_switch", False,
@@ -204,13 +214,13 @@ def test_season_switch():
 
     # Check that at least the stat values differ (different seasons should have different numbers)
     # Just compare first player's points
-    pts_25 = p25[0].get("ppr_points") or p25[0].get("fantasy_points_ppr")
-    pts_24 = p24[0].get("ppr_points") or p24[0].get("fantasy_points_ppr")
+    pts_25 = p25[0].get("fantasy_points_ppr")
+    pts_24 = p24[0].get("fantasy_points_ppr")
 
     if pts_25 is not None and pts_24 is not None and pts_25 == pts_24:
         # Same points for #1 player in two seasons is suspicious
-        name_25 = p25[0].get("name", "?")
-        name_24 = p24[0].get("name", "?")
+        name_25 = p25[0].get("full_name", "?")
+        name_24 = p24[0].get("full_name", "?")
         if name_25 == name_24:
             results.append(TestResult("season_switch", False,
                                       f"Same #1 player ({name_25}) with same points ({pts_25}) in 2024 and 2025 — season filter may not work",
@@ -221,47 +231,48 @@ def test_season_switch():
 
 
 def test_week_filter():
-    """Week filter returns different data than season totals."""
-    code_all, data_all = hit_json("GET", "/api/players", params={"season": "2025", "limit": "5"})
-    code_w1, data_w1 = hit_json("GET", "/api/players", params={"season": "2025", "week": "1", "limit": "5"})
+    """Week filter via screener returns single-week data, not season totals."""
+    # /api/players doesn't support week — use screener POST
+    code_all, data_all = hit_json("POST", "/api/screener/query",
+                                  body={"season": 2025, "limit": 5, "position": "QB"})
+    code_w1, data_w1 = hit_json("POST", "/api/screener/query",
+                                body={"season": 2025, "week": 1, "limit": 5, "position": "QB"})
 
     if code_all != 200 or code_w1 != 200:
         results.append(TestResult("week_filter", False,
                                   f"HTTP {code_all}/{code_w1}", severity="P1"))
         return
 
-    p_all = data_all if isinstance(data_all, list) else data_all.get("players", data_all.get("data", []))
-    p_w1 = data_w1 if isinstance(data_w1, list) else data_w1.get("players", data_w1.get("data", []))
+    def _items(d):
+        return d if isinstance(d, list) else d.get("items", d.get("players", []))
+
+    p_all = _items(data_all)
+    p_w1 = _items(data_w1)
 
     if len(p_all) == 0 or len(p_w1) == 0:
         results.append(TestResult("week_filter", False,
                                   "One or both returned empty", severity="P1"))
         return
 
-    # Weekly stats should generally be lower than season totals
-    # Find a player in both and compare
-    matches = 0
-    for pw in p_w1:
-        name = pw.get("name")
-        pts_w = pw.get("ppr_points") or pw.get("fantasy_points_ppr") or 0
-        for pa in p_all:
-            if pa.get("name") == name:
-                pts_a = pa.get("ppr_points") or pa.get("fantasy_points_ppr") or 0
-                if pts_w > 0 and pts_a > 0 and pts_w == pts_a:
-                    matches += 1
-                break
+    games_all = p_all[0].get("games", 0)
+    games_w1 = p_w1[0].get("games", 0)
 
-    if matches >= 3:
+    if games_w1 > 1:
         results.append(TestResult("week_filter", False,
-                                  f"{matches} players have identical points in week 1 and full season — week filter probably not working",
-                                  severity="P0", file="backend/server.py", function="get_players"))
+                                  f"Week 1 player has {games_w1} games — week filter not working",
+                                  severity="P0", file="backend/live_data/players.py",
+                                  function="_fetch_screener_uncached"))
+    elif games_all <= 1:
+        results.append(TestResult("week_filter", False,
+                                  f"Season top player has only {games_all} games", severity="P1"))
     else:
-        results.append(TestResult("week_filter", True, "Week filter returns different values than season"))
+        results.append(TestResult("week_filter", True,
+                                  f"Week filter OK: season={games_all}gp, week1={games_w1}gp"))
 
 
 def test_screener_query():
     """POST /api/screener/query with a position filter works."""
-    body = {"filters": [{"field": "position", "op": "eq", "value": "RB"}], "limit": 10}
+    body = {"position": "RB", "limit": 10}
     code, data = hit_json("POST", "/api/screener/query", body=body)
     if code != 200 or not data:
         results.append(TestResult("screener_query", False,
@@ -269,7 +280,7 @@ def test_screener_query():
                                   file="backend/server.py", function="screener_query"))
         return
 
-    players = data if isinstance(data, list) else data.get("players", data.get("data", data.get("results", [])))
+    players = data if isinstance(data, list) else data.get("items", data.get("results", data.get("players", data.get("data", []))))
     non_rbs = [p for p in players if p.get("position") != "RB"]
     if len(non_rbs) == 0 and len(players) > 0:
         results.append(TestResult("screener_query", True,
@@ -291,7 +302,7 @@ def test_no_nan_in_stats():
         results.append(TestResult("no_nan_stats", False, f"HTTP {code}", severity="P1"))
         return
 
-    players = data if isinstance(data, list) else data.get("players", data.get("data", []))
+    players = data if isinstance(data, list) else data.get("items", data.get("players", data.get("data", [])))
     nan_fields = []
     for p in players:
         for key, val in p.items():
@@ -317,9 +328,10 @@ def test_negative_stats():
         results.append(TestResult("no_negative_stats", False, f"HTTP {code}", severity="P1"))
         return
 
-    players = data if isinstance(data, list) else data.get("players", data.get("data", []))
-    non_negative_fields = ["games", "targets", "receptions", "carries",
-                           "receiving_yards", "rushing_yards", "snap_pct"]
+    players = data if isinstance(data, list) else data.get("items", data.get("players", data.get("data", [])))
+    # Note: rushing_yards and receiving_yards CAN be negative in real NFL data
+    # (sacks on QBs, laterals, end-arounds that lose yardage)
+    non_negative_fields = ["games", "targets", "receptions", "carries"]
     violations = []
     for p in players:
         for field in non_negative_fields:
@@ -384,12 +396,15 @@ def run_all():
     print(f"Target: {BASE_URL}")
     print()
 
-    for test_fn in ALL_TESTS:
+    for i, test_fn in enumerate(ALL_TESTS):
         name = test_fn.__name__.replace("test_", "")
         try:
             test_fn()
         except Exception as e:
             results.append(TestResult(name, False, f"Test crashed: {e}", severity="P0"))
+        # Small delay between tests to avoid rate limiting on production
+        if i < len(ALL_TESTS) - 1:
+            time.sleep(0.5)
 
     # Print results
     passed = sum(1 for r in results if r.passed)
