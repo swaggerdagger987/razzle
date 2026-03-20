@@ -5272,6 +5272,7 @@ function drawBuildRadar(mgr) {
     Math.min((mgr.posInvestment.WR || 0) / 50, 1),
     Math.min((mgr.posInvestment.TE || 0) / 50, 1)
   ];
+  var t = typeof getCanvasTheme === 'function' ? getCanvasTheme() : {ink:'#2d1f14',inkFaint:'#c4b5a5',inkMedium:'#6d5c4e'};
   var colors = ["#5b7fff", "#2ec4b6", "#d97757", "#8b5cf6"];
   var angles = [];
   for (var i = 0; i < 4; i++) {
@@ -5279,7 +5280,7 @@ function drawBuildRadar(mgr) {
   }
 
   // Background rings
-  ctx.strokeStyle = "#c4b5a5";
+  ctx.strokeStyle = t.inkFaint;
   ctx.lineWidth = 1;
   for (var ring = 1; ring <= 3; ring++) {
     var rr = radius * ring / 3;
@@ -5327,7 +5328,7 @@ function drawBuildRadar(mgr) {
     ctx.arc(px, py, 3, 0, Math.PI * 2);
     ctx.fillStyle = colors[pi];
     ctx.fill();
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 1;
     ctx.stroke();
   }
@@ -5335,7 +5336,7 @@ function drawBuildRadar(mgr) {
   // Labels
   ctx.font = "bold 10px 'Space Mono', monospace";
   ctx.textAlign = "center";
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   var labelOffset = 14;
   for (var li = 0; li < 4; li++) {
     var lx = cx + (radius + labelOffset) * Math.cos(angles[li]);
@@ -5854,13 +5855,15 @@ function _mcDrawHistogram(canvas, ptsHistory, name) {
     // Color: green for common, orange for moderate, light for rare
     ctx.fillStyle = pct > 0.12 ? '#2ec4b6' : pct > 0.06 ? '#d97757' : '#c4b5a4';
     ctx.fillRect(x, y, barW, barH);
-    ctx.strokeStyle = '#3d2e22';
+    var ht = typeof getCanvasTheme === 'function' ? getCanvasTheme() : {ink:'#2d1f14',inkMedium:'#6d5c4e'};
+    ctx.strokeStyle = ht.ink;
     ctx.lineWidth = 1;
     ctx.strokeRect(x, y, barW, barH);
   }
 
   // X-axis labels (min and max)
-  ctx.fillStyle = '#6d5c4e';
+  var ht2 = typeof getCanvasTheme === 'function' ? getCanvasTheme() : {inkMedium:'#6d5c4e'};
+  ctx.fillStyle = ht2.inkMedium;
   ctx.font = '9px monospace';
   ctx.textAlign = 'left';
   ctx.fillText(Math.round(mn), padL, h - 2);

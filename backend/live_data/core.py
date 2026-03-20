@@ -66,17 +66,17 @@ def _cached(key, fn, ttl=None):
 
 def _cache_evict(now):
     """Evict expired entries, then least-recently-accessed if still over limit."""
-    # Phase 1: remove expired entries
-    expired = [k for k, v in _cache.items() if now - v["t"] >= v.get("ttl", _CACHE_TTL_STABLE)]
+    # Phase 1: remove expired entries (snapshot via list() for thread safety)
+    expired = [k for k, v in list(_cache.items()) if now - v["t"] >= v.get("ttl", _CACHE_TTL_STABLE)]
     for k in expired:
-        del _cache[k]
+        _cache.pop(k, None)
         _cache_locks.pop(k, None)
     # Phase 2: if still over limit, remove least-recently-accessed
     if len(_cache) >= _CACHE_MAX_SIZE:
-        by_access = sorted(_cache.items(), key=lambda x: x[1].get("a", 0))
+        by_access = sorted(list(_cache.items()), key=lambda x: x[1].get("a", 0))
         remove_count = len(_cache) - _CACHE_MAX_SIZE + 20  # free 20 extra slots
         for k, _ in by_access[:remove_count]:
-            del _cache[k]
+            _cache.pop(k, None)
             _cache_locks.pop(k, None)
 
 

@@ -8,7 +8,7 @@ import math
 from collections import defaultdict
 
 from ..db import get_db
-from .core import FANTASY_POSITIONS, _cached, _CACHE_TTL_STABLE, _current_nfl_season
+from .core import FANTASY_POSITIONS, _cached, _CACHE_TTL_STABLE, _current_nfl_season, _safe_int
 
 logger = logging.getLogger("razzle.live_data.dashboards")
 
@@ -54,7 +54,7 @@ def fetch_efficiency_rankings(season=None, position=None, limit=30, week=None):
             if position and position.upper() in ("QB", "RB", "WR", "TE"):
                 pos_filter = "AND p.position = ?"
                 params.append(position.upper())
-            _week = int(week) if week else 0
+            _week = _safe_int(week)
             if _week > 0:
                 week_filter = "AND s.week = ?"
                 params.append(_week)
@@ -227,7 +227,7 @@ def fetch_consistency_rankings(season=None, position=None, limit=30, week=None):
             if position and position.upper() in ("QB", "RB", "WR", "TE"):
                 pos_filter = "AND p.position = ?"
                 params.append(position.upper())
-            _week = int(week) if week else 0
+            _week = _safe_int(week)
             if _week > 0:
                 week_filter = "AND s.week = ?"
                 params.append(_week)
@@ -870,7 +870,7 @@ def fetch_opportunity_share(season=None, position=None, limit=30, week=None):
             if position and position.upper() in FANTASY_POSITIONS:
                 pos_filter = "AND p.position = ?"
                 params.append(position.upper())
-            _week = int(week) if week else 0
+            _week = _safe_int(week)
             if _week > 0:
                 week_filter = "AND s.week = ?"
                 params.append(_week)
@@ -1074,7 +1074,7 @@ def fetch_report_cards(season=None, position=None, limit=25, week=None):
             if position and position.upper() in FANTASY_POSITIONS:
                 pos_filter = "AND p.position = ?"
                 params.append(position.upper())
-            _week = int(week) if week else 0
+            _week = _safe_int(week)
             if _week > 0:
                 week_filter = "AND s.week = ?"
                 params.append(_week)

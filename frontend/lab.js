@@ -2105,9 +2105,9 @@ function showHoverCard(playerId, anchorEl) {
   html += `</div></div></div>`;
 
   // Stats row
-  const ppg = player.ppg != null ? player.ppg.toFixed(1) : "—";
-  const fpts = player.fantasy_points_ppr != null ? player.fantasy_points_ppr.toFixed(0) : "—";
-  const dvs = player.dynasty_value != null ? player.dynasty_value.toFixed(1) : "—";
+  const ppg = player.ppg != null ? Number(player.ppg).toFixed(1) : "—";
+  const fpts = player.fantasy_points_ppr != null ? Number(player.fantasy_points_ppr).toFixed(0) : "—";
+  const dvs = player.dynasty_value != null ? Number(player.dynasty_value).toFixed(1) : "—";
   html += '<div class="hover-card-stats">';
   html += `<div class="hover-card-stat"><div class="hover-card-stat-value">${ppg}</div><div class="hover-card-stat-label">PPG</div></div>`;
   html += `<div class="hover-card-stat"><div class="hover-card-stat-value">${fpts}</div><div class="hover-card-stat-label">FPTS</div></div>`;
@@ -4034,27 +4034,39 @@ function closeShareModal(e) {
 function copyShareURLFromModal() {
   const input = document.getElementById("shareURLInput");
   const btn = document.getElementById("shareURLCopyBtn");
-  navigator.clipboard.writeText(input.value).then(() => {
-    btn.textContent = "Copied.";
-    setTimeout(() => btn.textContent = "Copy URL", 1500);
-  }).catch(function() {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(input.value).then(() => {
+      btn.textContent = "Copied.";
+      setTimeout(() => btn.textContent = "Copy URL", 1500);
+    }).catch(function() {
+      input.select(); document.execCommand("copy");
+      btn.textContent = "Copied.";
+      setTimeout(() => btn.textContent = "Copy URL", 1500);
+    });
+  } else {
     input.select(); document.execCommand("copy");
     btn.textContent = "Copied.";
     setTimeout(() => btn.textContent = "Copy URL", 1500);
-  });
+  }
 }
 
 function copyRedditTitle() {
   const input = document.getElementById("redditTitleInput");
   const btn = document.getElementById("redditTitleCopyBtn");
-  navigator.clipboard.writeText(input.value).then(() => {
-    btn.textContent = "Copied.";
-    setTimeout(() => btn.textContent = "Copy", 1500);
-  }).catch(function() {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(input.value).then(() => {
+      btn.textContent = "Copied.";
+      setTimeout(() => btn.textContent = "Copy", 1500);
+    }).catch(function() {
+      input.select(); document.execCommand("copy");
+      btn.textContent = "Copied.";
+      setTimeout(() => btn.textContent = "Copy", 1500);
+    });
+  } else {
     input.select(); document.execCommand("copy");
     btn.textContent = "Copied.";
     setTimeout(() => btn.textContent = "Copy", 1500);
-  });
+  }
 }
 
 function generateRedditTitle() {
@@ -6070,7 +6082,7 @@ function renderRankingsPNG(players, posLabel, sortLabel) {
       ctx.fillStyle = t.ink;
       ctx.font = "bold 13px monospace";
       ctx.textAlign = "right";
-      ctx.fillText(p.ppg.toFixed(1) + " PPG", padX + listW - 16, y + 23);
+      ctx.fillText(Number(p.ppg).toFixed(1) + " PPG", padX + listW - 16, y + 23);
     }
   });
 

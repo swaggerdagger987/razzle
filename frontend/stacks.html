@@ -340,7 +340,9 @@
     var sel = document.getElementById('skSeason');
     if (sel.options.length <= 1) {
       sel.innerHTML = '';
-      for (var y = 2024; y >= 2020; y--) {
+      var now = new Date();
+      var latestSeason = now.getMonth() >= 6 ? now.getFullYear() : now.getFullYear() - 1;
+      for (var y = latestSeason; y >= 2015; y--) {
         var opt = document.createElement('option');
         opt.value = y;
         opt.textContent = y;

@@ -1118,7 +1118,7 @@
       html += '<th>#</th><th>Player</th><th>Pos</th><th>PPG</th><th>Pos Avg</th><th>Edge</th><th>% Above</th><th></th><th>GP</th>';
       html += '</tr></thead><tbody>';
 
-      var maxAdv = Math.max.apply(null, players.map(function(p) { return Math.abs(p.advantage); }).concat([1]));
+      var maxAdv = Math.max.apply(null, players.map(function(p) { return Math.abs(p.advantage || 0); }).concat([1]));
       for (var i = 0; i < players.length; i++) {
         var p = players[i];
         var posColor = POS_COLORS[p.position] || '#8a7565';
@@ -2694,7 +2694,7 @@
         var volLabel = isCollege ? 'Tch/G' : 'Snaps/G';
         var totLabel = isCollege ? 'Touches' : 'Snaps';
         var headerTitle = isCollege ? 'Points Per Touch Rankings' : 'Points Per Snap Rankings';
-        var maxPPS = Math.max.apply(null, players.map(function(p) { return p.pts_per_snap; }).concat([1]));
+        var maxPPS = Math.max.apply(null, players.map(function(p) { return p.pts_per_snap || 0; }).concat([1]));
         var html = '<div class="se-card"><div class="se-card-header">' + headerTitle + '</div>';
         html += '<table class="se-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>' + ptsLabel + '</th><th>PPG</th><th>' + volLabel + '</th><th>' + totLabel + '</th><th>GP</th><th></th></tr></thead><tbody>';
         for (var i = 0; i < players.length; i++) {
@@ -2791,7 +2791,7 @@
         var players = data.players || [];
         if (!players.length) { body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>'; return; }
 
-        var maxWL = Math.max.apply(null, players.map(function(p) { return p.workload; }).concat([1]));
+        var maxWL = Math.max.apply(null, players.map(function(p) { return p.workload || 0; }).concat([1]));
         var showSnaps = !isCollege;
         var html = '<div class="wl-card"><div class="wl-card-header">Workload Rankings</div>';
         html += '<table class="wl-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Load</th><th>Tch/G</th>';
@@ -3068,7 +3068,7 @@
 
     function renderDropTable(players, type) {
       if (!players.length) return '<div class="lp-empty">' + razzleEmpty() + '</div>';
-      var maxDrops = Math.max.apply(null, players.map(function(p) { return p.drops; }).concat([1]));
+      var maxDrops = Math.max.apply(null, players.map(function(p) { return p.drops || 0; }).concat([1]));
       var barCls = type === 'sure' ? 'dr-bar-good' : 'dr-bar-bad';
       var isGood = type === 'sure';
 
@@ -3179,7 +3179,7 @@
       if (!players.length) {
         return '<div class="gt-card"><div class="gt-card-header ' + cls + '">' + escapeHtml(title) + '</div><div class="lp-empty">' + razzleEmpty() + '</div></div>';
       }
-      var maxVal = Math.max.apply(null, players.map(function(p) { return isPadders ? p.garbage_time_pct : p.ppg; }).concat([1]));
+      var maxVal = Math.max.apply(null, players.map(function(p) { return (isPadders ? p.garbage_time_pct : p.ppg) || 0; }).concat([1]));
       var html = '<div class="gt-card"><div class="gt-card-header ' + cls + '">' + escapeHtml(title) + '</div>';
       html += '<table class="gt-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>GT%</th><th>PPG</th><th>Avg Diff</th><th></th></tr></thead><tbody>';
       for (var i = 0; i < players.length; i++) {

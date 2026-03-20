@@ -246,7 +246,7 @@ def _fetch_screener_uncached(body):
             params.append(season)
 
         # Week filter: 0 = all weeks (season aggregate), >0 = specific week
-        week = int(week) if week else 0
+        week = _safe_int(week)
         if week > 0 and not career_mode:
             where.append("s.week = ?")
             params.append(week)
@@ -356,18 +356,23 @@ def _fetch_screener_uncached(body):
             val = f.get("value")
             if not key or not op or val is None:
                 continue
+            try:
+                fval = float(val)
+            except (ValueError, TypeError):
+                continue
             sql_expr = FILTER_COLUMN_MAP.get(key)
             if sql_expr:
                 having.append(f"{sql_expr} {op} ?")
-                params.append(float(val))
+                params.append(fval)
             else:
                 # Derived stat — filter post-query
-                post_filters.append({"key": key, "op": op, "value": float(val)})
+                post_filters.append({"key": key, "op": op, "value": fval})
 
         # Add minimum games played filter
-        if min_gp and int(min_gp) > 0:
+        _min_gp = _safe_int(min_gp)
+        if _min_gp > 0:
             having.append("COUNT(*) >= ?")
-            params.append(int(min_gp))
+            params.append(_min_gp)
 
         having_clause = ""
         if having:
