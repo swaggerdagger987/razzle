@@ -2249,6 +2249,16 @@ All `ctx.fillStyle = 'rgba(45,31,20,...)'` → theme-branching with sand rgba fo
 
 All 11 JS files syntax clean. 16 Python files compile clean.
 
+### Sweep Mode (Mar 20 — post-ticket session)
+
+| Audit | Findings | Action |
+|-------|----------|--------|
+| XSS/innerHTML | 4 findings: unescaped comp.player_id onclick, ms.label/comp_val, player initials, agent name summary | FIXED — escapeAttr/escapeHtml added to all 4 |
+| Missing .catch() | 2 HIGH: roster builder autocomplete (lab-panels.js:8511), comptable URL restore (comptable.html:635) | FIXED — .catch() added to both |
+| Python imports | 2 LOW: absolute imports in server.py (backend.live_data.core) | FIXED — use live_data.func() via __init__.py, exported _current_draft_year |
+| Python security | 0 injection, 0 bare except, 0 div-by-zero | Clean |
+| Python DB errors | 0 missing handlers (global exception handler catches all) | Clean |
+
 ---
 
 ## Ship Loop: QA Ticket Consumption (Mar 20) — Branch: ship/launch-fixes
@@ -2259,4 +2269,4 @@ All 11 JS files syntax clean. 16 Python files compile clean.
 |---|--------|----------|--------|-------|
 | FUNC-001 | Response cache strips content-encoding header | P0 | DONE | Added "content-encoding" to save_headers allowlist in response_cache_middleware. GZipMiddleware already removed (previous fix). Cache now preserves encoding header on subsequent requests. |
 | FUNC-004 | Production headshots missing | P1 | ESCALATE (human) | Local DB has 0 players (empty). Production DB on Render needs headshot-populated terminal.db uploaded to GitHub release data-v1, then Render redeploy. Code cannot fix this — requires manual DB upload. |
-| FUNC-005 | Dominator rec_yd_share/rec_td_share null | P2 | IN PROGRESS | |
+| FUNC-005 | Dominator rec_yd_share/rec_td_share null | P2 | DONE | All share fields (rec_yd_share, rec_td_share, rush_share) now computed for every position. Previously RB/QB had null receiving shares because dominator_rating used rush_share only. Dominator rating calc still position-specific, but share data always populated. |
