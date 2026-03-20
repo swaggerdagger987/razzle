@@ -529,7 +529,7 @@ def fetch_draft_class(draft_year=None, position=None):
         with get_db() as conn:
             available_classes = [
                 r[0] for r in conn.execute(
-                    "SELECT DISTINCT season FROM draft_picks WHERE season >= 2020 ORDER BY season DESC"
+                    "SELECT DISTINCT season FROM draft_picks ORDER BY season DESC"
                 ).fetchall()
             ]
 

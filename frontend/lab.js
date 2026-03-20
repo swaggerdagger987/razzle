@@ -1473,7 +1473,7 @@ function buildGroupHeaderRow(cols) {
   let first = true;
   for (const g of groups) {
     const sepCls = first ? "" : " group-sep";
-    html += `<th colspan="${g.span}" class="${sepCls}" style="cursor:pointer;" onclick="toggleColumnGroup('${g.name}')" title="Click to toggle all ${g.name} columns">${g.name}</th>`;
+    html += `<th colspan="${g.span}" class="${sepCls}" style="cursor:pointer;" onclick="toggleColumnGroup('${escapeAttr(g.name)}')" title="Click to toggle all ${escapeHtml(g.name)} columns">${escapeHtml(g.name)}</th>`;
     first = false;
   }
   html += '<th style="width:32px;"></th>'; // spacer for "+" column
