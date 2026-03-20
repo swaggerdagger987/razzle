@@ -984,21 +984,20 @@ def fetch_opportunity_share(season=None, position=None, limit=30, week=None):
                 team_opps = t["targets"] + t["carries"]
                 p["opp_share"] = round(total_opps / team_opps * 100, 1) if team_opps > 0 else 0
 
+                # Compute all shares for every player
+                rec_yd_share = (p["rec_yards"] / t["rec_yards"] * 100) if t["rec_yards"] > 0 else 0
+                rec_td_share = (p["rec_tds"] / t["rec_tds"] * 100) if t["rec_tds"] > 0 else 0
+                rush_share = (p["rush_yards"] / t["rush_yards"] * 100) if t["rush_yards"] > 0 else 0
+                p["rec_yd_share"] = round(rec_yd_share, 1)
+                p["rec_td_share"] = round(rec_td_share, 1)
+                p["rush_share"] = round(rush_share, 1)
+
                 # Dominator rating (WR/TE: receiving; RB/QB: rushing)
                 pos = p["position"]
                 if pos in ("WR", "TE"):
-                    rec_yd_share = (p["rec_yards"] / t["rec_yards"] * 100) if t["rec_yards"] > 0 else 0
-                    rec_td_share = (p["rec_tds"] / t["rec_tds"] * 100) if t["rec_tds"] > 0 else 0
                     p["dominator_rating"] = round((rec_yd_share + rec_td_share) / 2, 1)
-                    p["rec_yd_share"] = round(rec_yd_share, 1)
-                    p["rec_td_share"] = round(rec_td_share, 1)
-                    p["rush_share"] = None
                 else:
-                    rush_share = (p["rush_yards"] / t["rush_yards"] * 100) if t["rush_yards"] > 0 else 0
-                    p["rush_share"] = round(rush_share, 1)
                     p["dominator_rating"] = round(rush_share, 1)
-                    p["rec_yd_share"] = None
-                    p["rec_td_share"] = None
 
             # Filter: min 30 opportunities, min 4 games
             filtered = [p for p in players if p["total_opps"] >= 30 and p["games"] >= 4]
