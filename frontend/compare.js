@@ -264,7 +264,7 @@ function renderStatDiffTable(p1, p2, c1, c2, pos1, pos2, color1, color2) {
 function getStatValue(career, games, statDef) {
   if (statDef.perGame) {
     var raw = career[statDef.key];
-    return raw != null ? raw / games : null;
+    return raw != null ? raw / (games || 1) : null;
   }
   return career[statDef.key] != null ? career[statDef.key] : null;
 }

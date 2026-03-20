@@ -207,7 +207,7 @@ def initialize_users_db():
             try:
                 conn.execute(f"ALTER TABLE users ADD COLUMN {col} DEFAULT {default}")
                 conn.commit()
-            except Exception:
+            except sqlite3.OperationalError:
                 pass  # Column already exists
 
     logger.info("Users database initialized")
