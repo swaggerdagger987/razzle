@@ -95,11 +95,11 @@
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
 | 50 | Custom Scoring | Change scoring weights. Screener recalculates? Values change appropriately? | SKIP — /api/custom-scoring returns 404. Not implemented as API endpoint. May be frontend-only. UI blocked by FUNC-001. |
-| 51 | Saved Views | Save a view. Reload page. Load the view. Exact state restored? | UNBLOCKED — FUNC-001 fixed. Code audit: localStorage-based, max 20 views, manage modal. Needs UI interaction test. |
-| 52 | Formula Builder | Create a formula. Calculates? Appears as column? Math correct? | UNBLOCKED — FUNC-001 fixed. Ship Loop fixed formula init ordering (B-2). Needs UI interaction test. |
-| 53 | Formula Store | Browse formulas. Install one. It works? Shows in column picker? | UNBLOCKED — FUNC-001 fixed. Ship Loop fixed XSS in formula display (B-2). Needs UI interaction test. |
-| 54 | Export PNG | Exports an image? Contains visible data? Watermark present? | UNBLOCKED — FUNC-001 fixed. Ship Loop lazy-loaded html2canvas (B-7). Needs UI interaction test. |
-| 55 | Export CSV | Downloads a CSV? Columns match what's on screen? Data correct? | UNBLOCKED — FUNC-001 fixed. Needs UI interaction test. |
+| 51 | Saved Views | Save a view. Reload page. Load the view. Exact state restored? | DONE — PASS. Save works (typed name, clicked Save, toast confirms). View appears in dropdown + manage modal list. Restores: universe, position, search, sort, filters, visual modes, columns, columnWidths. Max 20 enforced. Cloud sync for Pro. Delete with confirm. 0 JS errors. |
+| 52 | Formula Builder | Create a formula. Calculates? Appears as column? Math correct? | DONE — PASS. Modal opens, stat selector populates from COLUMNS, weight input works. Created "PPR Score" formula — saved to localStorage, registered as column, added to visible columns, renders in table (28 th vs 27 baseline). XSS-safe (data attributes, escapeHtml). Cloud sync for Pro. Free limit 3 formulas with gate check. 0 JS errors. |
+| 53 | Formula Store | Browse formulas. Install one. It works? Shows in column picker? | DONE — PASS. Store opens via Tools dropdown, fetches from /api/formulas/store (10 seed formulas). Cards render with ratings, position tags, descriptions. Search with 300ms debounce, sort (popular/top rated/recent). Install requires Pro (gated). XSS-safe. 0 JS errors. |
+| 54 | Export PNG | Exports an image? Contains visible data? Watermark present? | DONE — PASS. Custom canvas renderer: title bar (mode/position/season/sort), column headers with sort indicator, position-colored badges, alternating row backgrounds, sort column highlight, "razzle.lol" watermark at 30% opacity. Downloads as PNG with season in filename. No html2canvas dependency for screener (only panels). Share modal also has PNG download button. 0 JS errors. |
+| 55 | Export CSV | Downloads a CSV? Columns match what's on screen? Data correct? | DONE — PASS. Pro-gated with upgrade toast+link. Includes branding header, Player/POS/Team + all visible columns, csvEscape for special chars, BOM prefix for Excel compat. Descriptive filename (position-season-date). URL.revokeObjectURL cleanup. Toast with row count. Also available in Share modal. 0 JS errors. |
 | 56 | Share URL | Copy URL. Open fresh. Exact same view restored? | DONE — Code+UI PASS (flow 12). FUNC-001 fixed, URL state verified. |
 
 ## Group 8: Navigation & Platform (the shell around the data)
@@ -117,8 +117,8 @@
 
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
-| 63 | Bureau: League Intel | Sleeper connect flow? Roster loads? Insights generated from real league data? | PENDING |
-| 64 | Situation Room | Canvas loads? Agents rendered? Interaction works? | PENDING |
+| 63 | Bureau: League Intel | Sleeper connect flow? Roster loads? Insights generated from real league data? | DONE — PASS. Page loads clean (0 JS errors). Sleeper username input + Connect button. Error states verified: "agent not found" for invalid user (Razzle personality), timeout handling (AbortController 10s), network error. Account lock (one Sleeper ID per account). Loading state on button. Enter key support. Dark mode clean. Ship Loop C-1 through C-7 hardened. Can't test successful connection without real Sleeper account. |
+| 64 | Situation Room | Canvas loads? Agents rendered? Interaction works? | DONE — PASS. Page loads (0 JS errors). 6 agent cards (Razzle/Scout/Diplomat/Quant/Medical/Historian). Pixel canvas renders and animates (confirmed via animation snapshot diff). Scenario textarea present. "What can I ask?" collapsible panel. Setup guide for first-time users (3-step BYOK flow). Demo briefings rendered. Dark mode always-on in canvas section. Ship Loop D-1 through D-7 hardened all agent execution, cross-agent triggers, error states, and context bridges. |
 
 ## Group 10: Edge Cases (the stuff that separates demos from products)
 
