@@ -202,6 +202,8 @@ function _injectHamburgerMenu() {
         mobileSignIn.onclick = function(e) {
           e.preventDefault();
           _closeMobileNav();
+          signOut();
+          window.location.reload();
         };
       } else {
         mobileSignIn.textContent = "Sign In";
@@ -545,6 +547,7 @@ function _detectCheckoutReturn() {
   var params = new URLSearchParams(window.location.search);
   var sessionId = params.get("session_id");
   if (!sessionId) return;
+  window._checkoutInProgress = true;
 
   // Clean URL — only remove session_id, preserve other params
   var cleanParams = new URLSearchParams(window.location.search);
@@ -979,7 +982,7 @@ function updateAuthUI(user) {
       '</div>';
 
     // Trial expiry warning — show once per session when <= 2 days remaining
-    if (isTrial && (user.trial_days_remaining || 0) <= 2 && !sessionStorage.getItem("razzle_trial_warn")) {
+    if (isTrial && (user.trial_days_remaining || 0) <= 2 && !sessionStorage.getItem("razzle_trial_warn") && !window._checkoutInProgress) {
       sessionStorage.setItem("razzle_trial_warn", "1");
       setTimeout(function() {
         var days = user.trial_days_remaining || 0;

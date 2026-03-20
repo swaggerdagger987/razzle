@@ -1883,11 +1883,19 @@ async function loadPersona(agentId) {
   if (personaCache.has(agentId)) return personaCache.get(agentId);
   const path = PERSONA_PATHS[agentId];
   if (!path) throw new Error('Unknown agent ID: ' + agentId);
-  const resp = await fetch(path, { cache: 'no-store' });
-  if (!resp.ok) throw new Error('Could not load persona for agent ' + agentId);
-  const text = await resp.text();
-  personaCache.set(agentId, text);
-  return text;
+  var ac = new AbortController();
+  var timer = setTimeout(function() { ac.abort(); }, 10000);
+  try {
+    const resp = await fetch(path, { cache: 'no-store', signal: ac.signal });
+    clearTimeout(timer);
+    if (!resp.ok) throw new Error('Could not load persona for agent ' + agentId);
+    const text = await resp.text();
+    personaCache.set(agentId, text);
+    return text;
+  } catch(e) {
+    clearTimeout(timer);
+    throw e;
+  }
 }
 
 function isProUser() {

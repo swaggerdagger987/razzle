@@ -240,7 +240,7 @@ def fetch_heatmap(position="WR", group="production", season=None):
                 d["comp_pct"] = _safe_div((d.get("completions") or 0) * 100, d.get("attempts"), 1)
                 d["yards_per_attempt"] = _safe_div(d.get("passing_yards") or 0, d.get("attempts"), 1)
                 d["td_rate"] = _safe_div((d.get("passing_tds") or 0) * 100, d.get("attempts"), 1)
-                d["int_rate"] = _safe_div((d.get("turnovers") or 0) * 100, d.get("attempts"), 1)
+                d["int_rate"] = _safe_div((d.get("interceptions") or 0) * 100, d.get("attempts"), 1)
                 d["yards_per_carry"] = _safe_div(d.get("rushing_yards") or 0, d.get("carries"), 1)
                 d["yards_per_reception"] = _safe_div(d.get("receiving_yards") or 0, d.get("receptions"), 1)
                 d["yards_per_target"] = _safe_div(d.get("receiving_yards") or 0, d.get("targets"), 1)
@@ -845,6 +845,7 @@ def fetch_buy_sell_candidates(season=None, position=None, limit=15):
                     SUM(s.passing_yards) as pass_yds,
                     SUM(s.attempts) as pass_att,
                     SUM(s.passing_tds) as pass_tds,
+                    SUM(s.interceptions) as ints,
                     SUM(s.turnovers) as turnovers,
                     SUM(s.receiving_yards_after_catch) as yac
                 FROM players p
@@ -882,8 +883,9 @@ def fetch_buy_sell_candidates(season=None, position=None, limit=15):
                 pass_yds = r[14] or 0
                 pass_att = r[15] or 0
                 pass_tds = r[16] or 0
-                turnovers = r[17] or 0
-                yac = r[18] or 0
+                ints = r[17] or 0
+                turnovers = r[18] or 0
+                yac = r[19] or 0
                 pos = r[2] or "WR"
                 age = r[4]
 
@@ -894,7 +896,7 @@ def fetch_buy_sell_candidates(season=None, position=None, limit=15):
                 if pos == "QB":
                     yards_per_att = round(pass_yds / pass_att, 2) if pass_att > 0 else 0
                     td_rate = round((pass_tds / pass_att) * 100, 2) if pass_att > 0 else 0
-                    int_rate = round((turnovers / pass_att) * 100, 2) if pass_att > 0 else 0
+                    int_rate = round((ints / pass_att) * 100, 2) if pass_att > 0 else 0
                     eff_stats = {
                         "yards_per_att": yards_per_att,
                         "td_rate": td_rate,

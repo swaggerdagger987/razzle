@@ -1637,7 +1637,7 @@ def fetch_garbage_time(season=None, position=None, limit=40):
                        s.receiving_yards, s.receiving_tds, s.receptions,
                        pbp.garbage_time_pct, pbp.avg_score_differential
                 FROM player_season_stats s
-                JOIN players p ON p.gsis_id = s.player_id
+                JOIN players p ON p.player_id = s.player_id
                 LEFT JOIN player_season_pbp pbp ON pbp.player_id = s.player_id AND pbp.season = s.season
                 WHERE s.season = ? AND p.fantasy_relevant = 1
                 {pos_filter}
@@ -1729,7 +1729,7 @@ def fetch_snap_efficiency(season=None, position=None, limit=50):
                        s.rushing_yards, s.rushing_tds,
                        s.receiving_yards, s.receiving_tds, s.receptions
                 FROM player_season_stats s
-                JOIN players p ON p.gsis_id = s.player_id
+                JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ? AND p.fantasy_relevant = 1
                 {pos_filter}
                 AND s.games >= 4
@@ -2164,7 +2164,7 @@ def fetch_td_regression(season=None, position=None, limit=50):
                        s.carries, s.targets, s.attempts,
                        s.games
                 FROM player_season_stats s
-                JOIN players p ON p.gsis_id = s.player_id
+                JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ? AND p.fantasy_relevant = 1
                 {pos_filter}
                 AND s.games >= 4
@@ -2272,7 +2272,7 @@ def fetch_dual_threat(season=None, position=None, limit=50):
                        s.rushing_yards, s.receiving_yards, s.carries, s.receptions,
                        s.targets, s.rushing_tds, s.receiving_tds, s.games
                 FROM player_season_stats s
-                JOIN players p ON p.gsis_id = s.player_id
+                JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ? AND p.fantasy_relevant = 1
                 {pos_filter}
                 AND s.games >= 4
@@ -2364,7 +2364,7 @@ def fetch_season_pace(season=None, position=None, limit=50):
                        s.receiving_yards, s.receiving_tds, s.receptions,
                        s.carries, s.targets
                 FROM player_season_stats s
-                JOIN players p ON p.gsis_id = s.player_id
+                JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ? AND p.fantasy_relevant = 1
                 {pos_filter}
                 AND s.games >= 3
@@ -2593,7 +2593,7 @@ def fetch_workload_monitor(season=None, position=None, limit=50):
                        s.carries, s.targets, s.receptions,
                        s.rushing_yards, s.receiving_yards
                 FROM player_season_stats s
-                JOIN players p ON p.gsis_id = s.player_id
+                JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ? AND p.fantasy_relevant = 1
                 {pos_filter}
                 AND s.games >= 4

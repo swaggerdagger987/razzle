@@ -1195,6 +1195,44 @@ User needs to manually upload updated terminal.db to Render persistent disk at /
 - Feature matrix pricing.html: already has `overflow-x:auto` wrapper
 - Filter modal + profile modal: already dismiss on Escape via `closeAllOverlays()` (both use `.filter-modal-overlay` class)
 
+---
+
+## Quality Audit: 5-Agent Deep Sweep (Mar 20 — Session 2)
+
+**Goal**: Systematic 5-agent parallel audit across all major files. Crash bugs, data correctness, dark mode, mobile, interaction edge cases.
+
+### P0 Crash & Data Bugs (4 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | Virtual scroll bounds check on `state.items[li]` | lab.js:1873 | Race condition: items replaced during scroll could make index out of bounds → TypeError crash. Added `&& state.items[li]` guard. |
+| 2 | `weekly_scores` null guard in boom/bust export | lab.js:12716 | Destructured field could be undefined if API returns partial response. Added `|| []` fallback + early return. |
+| 3 | `gsis_id` → `player_id` in 6 SQL joins | tools.py | `fetch_season_pace`, `fetch_garbage_time`, `fetch_snap_efficiency`, `fetch_workload`, `fetch_dual_threat`, `fetch_td_regression` all joined on `p.gsis_id = s.player_id` — wrong for fallback player IDs. Changed to `p.player_id`. |
+| 4 | INT rate used `turnovers` (includes fumbles) instead of `interceptions` | analytics.py:243,897 | QB interception rate was inflated. Added `interceptions` column to SQL, fixed both heatmap and buy/sell efficiency computations. |
+
+### P1 Data & UX Bugs (11 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 5 | Dynasty sparkline NaN from null `trade_value` | lab.js:6513 | Entry could have null trade_value → NaN in min/max/SVG coords. Added `entry.trade_value != null` guard. |
+| 6 | `mismatch_score` NaN when null | lab-panels.js:1623 | Buy/Sell bar width `NaN%`. Added `|| 0` fallback. |
+| 7 | `correlation` NaN when undefined | lab-panels.js:3735 | Stack Finder bar width `NaN%`. Added `|| 0` fallback. |
+| 8 | `projected` NaN when undefined | lab-panels.js:5049 | Pace Tracker progress bar `NaN%`. Added `|| 0` fallback. |
+| 9 | `success_rate`/`volume`/`ppg` raw null in HTML | lab-panels.js:8984-8987 | Success Rate panel showed literal "null" or "undefined". Changed to `fmt()`. |
+| 10 | `career_av` raw null in HTML | lab-panels.js:9632 | Draft Class Tracker showed literal "null". Changed to `fmt()`. |
+| 11 | Air Yards `sortPlayers` string subtraction | lab-panels.js:5341 | Sorting by name produced `NaN` from `string - string`. Added `typeof` check with `localeCompare`. |
+| 12 | Canvas `var(--orange)` string in fillStyle | league-intel.html:2941 | Canvas API ignores CSS var() syntax — bars rendered wrong color. Changed to `cssVar()` resolution at assignment. |
+| 13 | Player name "null Smith" in roster view | league-intel.html:2048 | Template literal without null guards. Changed to `(first_name || '') + ' ' + (last_name || '')`. |
+| 14 | `loadPersona` no timeout — agent run could hang forever | warroom.js:1886 | Added 10s AbortController timeout. |
+| 15 | Mobile nav missing sign-out for logged-in users | app.js:202 | Mobile hamburger menu showed username but had no action. Now signs out on tap. |
+| 16 | Toast collision: trial warning kills checkout toast | app.js:984 | Added `_checkoutInProgress` flag to suppress trial toast during checkout return. |
+
+### Verification
+- All 11 JS files syntax clean
+- All Python files compile clean
+- 59/59 tests pass
+- 0 regressions
+
 ### Verified Clean
 - 0 `alert()` calls in frontend JS
 - 0 debug `console.log` (only branded Easter egg)

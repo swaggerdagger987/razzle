@@ -1620,7 +1620,7 @@
       var ac = ageClass(p.age);
       var gc = gradeClass(p.efficiency_grade);
       var type = isBuy ? 'buy' : 'sell';
-      var barWidth = Math.min(100, Math.round((p.mismatch_score / 60) * 100));
+      var barWidth = Math.min(100, Math.round(((p.mismatch_score || 0) / 60) * 100));
 
       var h = '<div class="buysell-card" data-pid="' + escapeAttr(p.player_id) + '">';
       h += '<div class="buysell-card-top ' + pos + '"></div><div class="buysell-card-body">';
@@ -3732,7 +3732,7 @@
       for (var i = 0; i < stacks.length; i++) {
         var s = stacks[i];
         var posColor = POS_COLORS[s.receiver_pos] || '#8a7565';
-        var barWidth = Math.max(0, Math.min(100, Math.round(s.correlation * 100)));
+        var barWidth = Math.max(0, Math.min(100, Math.round((s.correlation || 0) * 100)));
 
         html += '<tr>';
         html += '<td class="sk-rank">' + (i + 1) + '</td>';
@@ -5046,7 +5046,7 @@
         html += '<div class="pt-stats">';
         var stats = p.projections || [];
         stats.forEach(function(s) {
-          var pct = s.milestone ? Math.min(100, (s.projected / s.milestone) * 100) : 0;
+          var pct = s.milestone ? Math.min(100, ((s.projected || 0) / s.milestone) * 100) : 0;
           var onPace = pct >= 100;
           html += '<div class="pt-stat-row">';
           html += '<span class="pt-stat-label">' + escapeHtml(s.label || s.stat) + '</span>';
@@ -5340,6 +5340,7 @@
     function sortPlayers(players, col, asc) {
       return players.slice().sort(function(a, b) {
         var va = a[col], vb = b[col];
+        if (typeof va === 'string' && typeof vb === 'string') return asc ? va.localeCompare(vb) : vb.localeCompare(va);
         if (va === null || va === undefined) va = -Infinity;
         if (vb === null || vb === undefined) vb = -Infinity;
         return asc ? va - vb : vb - va;
@@ -8981,10 +8982,10 @@
         html += '<td class="sr2-rank">' + (i + 1) + '</td>';
         html += '<td>' + escapeHtml(p.name) + ' <span style="color:var(--ink-light);font-size:10px">' + escapeHtml(p.team) + '</span></td>';
         html += '<td><span class="sr2-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
-        html += '<td><span class="sr2-rate-badge ' + cls + '">' + p.success_rate + '%</span></td>';
+        html += '<td><span class="sr2-rate-badge ' + cls + '">' + fmt(p.success_rate) + '%</span></td>';
         html += '<td><span class="sr2-type-chip">' + escapeHtml(p.sr_type) + '</span></td>';
-        html += '<td>' + p.volume + '</td>';
-        html += '<td>' + p.ppg + '</td>';
+        html += '<td>' + fmt(p.volume, 0) + '</td>';
+        html += '<td>' + fmt(p.ppg) + '</td>';
         html += '<td>' + ypc + '</td>';
         html += '<td class="sr2-bar-cell"><div class="sr2-bar" style="width:' + barPct + '%"></div></td>';
         html += '</tr>';
@@ -9629,7 +9630,7 @@
           '<td>' + p.career_games + '</td>' +
           '<td style="font-weight:700;">' + fmt(p.career_ppg) + '</td>' +
           '<td>' + fmt(p.career_fpts, 0) + '</td>' +
-          '<td>' + p.career_av + '</td>' +
+          '<td>' + fmt(p.career_av, 0) + '</td>' +
           '<td><span style="background:' + verdictColor + '; color:white; padding:2px 8px; border-radius:4px; font-size:10px; font-weight:700; border:2px solid var(--ink-faint);">' + verdictLabel + '</span></td>' +
         '</tr>';
       });

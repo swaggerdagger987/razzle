@@ -1870,7 +1870,7 @@ function renderVisibleRows() {
     var lazyStart = Math.max(0, startRow - 10);
     var lazyEnd = Math.min(totalRows, endRow + 10);
     for (var li = lazyStart; li < lazyEnd; li++) {
-      if (_vscrollRows[li] === undefined) {
+      if (_vscrollRows[li] === undefined && state.items[li]) {
         _vscrollRows[li] = buildRowHTML(state.items[li], ctx.cols, ctx.heatOn, ctx.pctData, li, ctx.barsOn, ctx.pctMode, ctx.leaderRanks, ctx.colDefMap);
       }
     }
@@ -6510,7 +6510,7 @@ function loadDynastySparkline(playerId, container) {
       const labels = [];
       for (let i = 0; i < seasons.length; i++) {
         const entry = p.history[i];
-        if (entry) {
+        if (entry && entry.trade_value != null) {
           vals.push(entry.trade_value);
           labels.push({ season: seasons[i], tv: entry.trade_value, ppg: entry.ppg });
         }
@@ -12713,8 +12713,9 @@ function exportBoomBustImage() {
   const hPad = { top: 200, left: 60, right: 40, bottom: 60 };
   const hW = 800 - hPad.left - hPad.right;
   const hH = 300;
-  const scores = weekly_scores.map(w => w.score);
-  const maxScore = Math.max(...scores, boom_threshold + 5);
+  const scores = (weekly_scores || []).map(w => w.score);
+  if (!scores.length) return;
+  const maxScore = Math.max(...scores, (boom_threshold || 20) + 5);
   const bucketSize = 5;
   const numBuckets = Math.ceil(maxScore / bucketSize) + 1;
   const buckets = new Array(numBuckets).fill(0);

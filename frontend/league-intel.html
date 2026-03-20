@@ -2045,7 +2045,7 @@ async function toggleLeague(card, leagueId, userId) {
       const pos = p.position || "?";
       const group = posGroups[pos] || (posGroups["DEF"] = posGroups["DEF"] || []);
       if (posGroups[pos]) {
-        posGroups[pos].push({ name: `${p.first_name} ${p.last_name}`, team: p.team || "", pos });
+        posGroups[pos].push({ name: ((p.first_name || '') + ' ' + (p.last_name || '')).trim() || 'Unknown', team: p.team || "", pos });
       }
     }
 
@@ -2938,7 +2938,7 @@ async function loadManagerProfiles(leagueId, userId, allPlayers, userMap, roster
       var summary = traits.length > 0 ? traits.join(", ") : "plays it safe";
 
       // Color based on activity
-      var color = movesPerSeason >= 10 ? "var(--orange)" : movesPerSeason >= 5 ? "var(--pos-rb)" : "var(--ink-light)";
+      var color = movesPerSeason >= 10 ? cssVar("--orange") : movesPerSeason >= 5 ? cssVar("--pos-rb") : cssVar("--ink-light");
 
       cards.push({
         name: managerName, wins: wins, losses: losses,
