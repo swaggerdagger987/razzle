@@ -2050,7 +2050,7 @@
         // Summary cards
         var html = '<div class="scarcity-summary">';
         ranking.forEach(function(r, i) {
-          var pos = r.position.toLowerCase();
+          var pos = (r.position || 'QB').toLowerCase();
           var label = i === 0 ? 'most scarce' : i === ranking.length - 1 ? 'most replaceable' : '#' + (i + 1) + ' scarcity';
           html += '<div class="scarcity-summary-card">' +
             '<div class="scarcity-summary-pos ' + pos + '">' + escapeHtml(r.position) + '</div>' +
