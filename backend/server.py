@@ -208,6 +208,25 @@ def bootstrap_database():
         else:
             logger.info(f"Database has {count} players — skipping bootstrap")
 
+    # Snap counts: sync if missing even when DB already has players
+    # (handles DBs uploaded to persistent disk without snap data)
+    if count >= 50:
+        with nflverse_db() as conn:
+            try:
+                snap_count = conn.execute(
+                    "SELECT COUNT(*) FROM player_week_stats WHERE offense_snaps IS NOT NULL"
+                ).fetchone()[0]
+            except Exception:
+                snap_count = -1
+            if snap_count == 0:
+                logger.info("Snap counts missing — syncing offense_snaps...")
+                try:
+                    seasons = list(range(2015, current_nfl_season() + 1))
+                    sync_snap_counts(conn, sorted(seasons))
+                    logger.info("  Snap count backfill complete")
+                except Exception as e:
+                    logger.warning(f"  Snap count backfill failed: {e}")
+
     if count < 50:
         # College/prospect data
         logger.info("Bootstrapping college/prospect data...")
