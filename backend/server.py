@@ -6,7 +6,6 @@ All data queries live in live_data.py.
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, Response
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -418,7 +417,6 @@ app = FastAPI(
 
 # JSON decode errors are handled in global_exception_handler below
 
-app.add_middleware(GZipMiddleware, minimum_size=500)
 _CORS_ORIGINS = ["https://razzle.lol"]
 if os.environ.get("RAZZLE_ENV", "production") != "production":
     _CORS_ORIGINS += ["http://localhost:8000", "http://localhost:5173", "http://127.0.0.1:8000"]
