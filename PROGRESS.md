@@ -2163,3 +2163,46 @@ All `ctx.fillStyle = 'rgba(45,31,20,...)'` → theme-branching with sand rgba fo
 - All 11 JS files syntax clean
 - All 20 Python files compile clean
 - 48/52 tests pass (4 failures are missing local DB data, pre-existing)
+
+---
+
+## Edge Case Sweep (Mar 20) — Branch: ship/launch-fixes
+
+**Goal**: Consume remaining EDGE-CASES.md items that can be fixed purely in code.
+
+| # | Fix | Severity | File | Notes |
+|---|-----|----------|------|-------|
+| 1 | signOut() data leak (#28) | HIGH | app.js:891 | Added cleanup for razzle_sleeper_user, razzle_sleeper_user_id, razzle_watchlist, razzle_player_tags, razzle_player_notes. Previous user data no longer persists on shared computers. |
+| 2 | Bare monospace canvas fonts (#47) | MEDIUM | lab.js, charts.js | Replaced 46 instances of bare `monospace` with `'Space Mono', monospace` in canvas ctx.font declarations. |
+| 3 | CSV export UTF-8 BOM (#66) | LOW | lab.js:5752 | Added \uFEFF BOM prefix to CSV blob for Excel auto-detection of UTF-8 encoding. |
+| 4 | LIKE injection in formula store (#19) | MEDIUM | storage.py:260 | Added ESCAPE clause and wildcard sanitization to position_tags LIKE query. Search field was already escaped. |
+
+### Edge Cases Already Fixed (verified in this sweep)
+- #4 Welcome modal /agents link → /agents.html (fixed prior)
+- #5 Sign In button targeting → uses openAuthModal() (fixed prior)
+- #7 Payment failure plan revocation → _handle_payment_failed sets plan='free' (fixed prior)
+- #8 subscription.updated webhook → _handle_subscription_updated handler exists (fixed prior)
+- #11 Idempotency check for existing subscriptions → rejects if plan in (pro/elite/lifetime) (fixed prior)
+- #15 Rate limiter proxy IP → _get_client_ip uses X-Forwarded-For (fixed prior)
+- #16 getAuthToken() in warroom.js → reads from razzle_token (fixed prior)
+- #18 Analytics summary unauthenticated → protected by x-admin-secret (fixed prior)
+- #21 CORS localhost in production → environment-gated (fixed prior)
+- #25 Clipboard fallback → _fallbackCopy() textarea method exists (fixed prior)
+- #26 Warroom rAF never stops → visibilitychange + beforeunload handlers (fixed prior)
+- #30 Elite LLM model → uses claude-3.5-haiku, not free model (fixed prior)
+- #3 pro_lifetime/elite_lifetime query limits → both in QUERY_LIMITS dict (fixed prior)
+- #33 _cache_locks unbounded growth → pruned during _cache_evict (fixed prior)
+- #36 Formula save no plan limit → 3-formula cap enforced server-side (fixed prior)
+- #37 Formula publish no tier gate → require_plan(request, "pro") (fixed prior)
+- #44 openManageSubscription uses alert → uses _showToast (fixed prior)
+- #57 outline:none without :focus-visible → all have :focus-visible rules (fixed prior)
+
+### Edge Cases Skipped (not code-fixable or intentional)
+- #46 --ink-light hex: Current #6d5a4d passes WCAG AA (5:1 contrast). DESIGN.md value #8a7565 fails (3.4:1). Kept accessible value.
+- #50 Gradient in data bars: Uses linear-gradient with identical stop — creates sharp-edge fill, not visual gradient. Intentional data viz technique.
+- #59 No main landmark: Affects 74 HTML pages. Too broad for quick sweep.
+- #42 No noscript fallback: Affects 74 HTML pages. Too broad for quick sweep.
+- #1 No admin role: Requires schema changes + new endpoints. Owner action item.
+- #2 No password reset: Requires email integration. Owner action item.
+- #6 Stripe never tested: Requires real Stripe test mode. Owner action item.
+- #12 Never deployed to production: Owner action item.
