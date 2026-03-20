@@ -3543,7 +3543,7 @@ async function loadLeagueTradeFinder(leagueId, userId, myRoster, rosters, allPla
 
     // Fetch trade values for all players from Razzle API
     var token = "";
-    try { token = JSON.parse(localStorage.getItem("razzle_user") || "{}").token || ""; } catch(e) {}
+    try { token = localStorage.getItem("razzle_token") || ""; } catch(e) {}
     var headers = { "Content-Type": "application/json" };
     if (token) headers["Authorization"] = "Bearer " + token;
 

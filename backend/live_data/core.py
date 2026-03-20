@@ -31,7 +31,7 @@ def _current_draft_year():
 _cache = {}
 _CACHE_TTL = 300  # 5 minutes default
 _CACHE_TTL_STABLE = 3600  # 60 minutes for stable/historical data
-_CACHE_MAX_SIZE = 200  # LRU eviction threshold
+_CACHE_MAX_SIZE = 500  # LRU eviction threshold
 _cache_locks = {}  # per-key locks for stampede protection
 _cache_meta_lock = threading.Lock()  # protects _cache_locks dict
 
@@ -76,6 +76,12 @@ def _cache_evict(now):
         remove_count = len(_cache) - _CACHE_MAX_SIZE + 20  # free 20 extra slots
         for k, _ in by_access[:remove_count]:
             del _cache[k]
+
+
+def cache_clear():
+    """Flush all cached data. Called after adapter data sync to ensure fresh results."""
+    _cache.clear()
+    logger.info("Data cache cleared")
 
 
 def cache_stats():

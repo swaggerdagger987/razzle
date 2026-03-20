@@ -553,3 +553,44 @@ All 59 tests pass. All 11 JS files syntax-clean. 0 remaining issues found.
 - Zero "The Lab" in user-facing text (only internal code comment in lab.js:1)
 - Zero "terminal" in any meta description tag
 - All consumed tickets removed from TICKETS.md
+
+---
+
+## Pre-Launch Critical Fixes (Mar 19)
+
+**Goal**: Fix all bugs from TICKETS.md Pre-Launch Critical Fixes phase.
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Fix rate limiter IP detection | VERIFIED | Already fixed — _get_client_ip() reads X-Forwarded-For, all rate limiters use it. Zero direct request.client.host outside helper. |
+| 2 | Fix Elite LLM model bug | DONE | /api/llm/chat was using _LLM_FREE_MODEL (llama-3.1-8b-instruct:free) for Elite users. Changed to _LLM_MODEL (claude-3.5-haiku). Free endpoint correctly uses _LLM_FREE_MODEL. |
+| 3 | Fix getAuthToken() in warroom.js | DONE | Was reading razzle_user.token (nonexistent field). Changed to read razzle_token directly. Same bug found and fixed in league-intel.html:3546. |
+| 4 | Fix lifetime plan query limits | VERIFIED | Already fixed — QUERY_LIMITS dict in auth.py has all 5 plan types including pro_lifetime and elite_lifetime. |
+| 5 | Server-side formula save tier gate | VERIFIED | Already implemented — POST /api/user/formulas checks plan and caps free users at 3 formulas. |
+| 6 | subscription.updated webhook | VERIFIED | Already implemented — billing.py handles customer.subscription.updated with plan sync, lifetime skip. |
+| 7 | payment_failed webhook | VERIFIED | Already implemented — billing.py handles invoice.payment_failed with downgrade to free, lifetime skip. |
+| 8 | JSON.parse(localStorage) try-catch | VERIFIED | All 40+ instances across all frontend files are wrapped in try-catch. Zero unprotected calls. |
+| 9 | Warroom animation loop cleanup | DONE | Added canvas.isConnected check at top of gameLoop(). Loop stops if canvas removed from DOM. |
+| 10 | Player name font consistency | DONE | Fixed 6 wrong-font classes (display→mono): .trade-player-card .player-name, .cst-player-name, .sw2-player-name, .glo-player-name, .pbd-player-name. Upgraded font-weight 600→700 on 4 classes: .md-ba-name, .md-recap-name, .rbld-player-name, .bb-name. Added explicit font-family/size to 3 classes: .opp2-player-name, .sos2-player-name, .td2-player-name, .pt-player-name. Hero titles (20px+) correctly stay display font. |
+
+### Decisions Log
+- Auth token in warroom.js and league-intel.html was reading from razzle_user.token (a field that doesn't exist on the user object). The canonical token is at razzle_token. Both files fixed.
+- Player names at hero size (20px+ in player.html, compare.html, pct2 panel) stay as display font per design guide rule: "Luckiest Guy for headers at 16px+ only."
+
+---
+
+## Persistent Disk + Response Cache (Mar 19)
+
+**Goal**: Use Render persistent disk for DB, remove build-time download, expand cache.
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | DB paths for /data mount | DONE | db.py checks ENVIRONMENT=production, sets DB_PATH=/data/terminal.db. auth.py already does this for users.db. Zero other hardcoded paths in backend. |
+| 2 | Remove DB download from build | DONE | render.yaml build command no longer curls terminal.db. Persistent disk at /data has the database. Comment explains the setup. |
+| 3 | In-memory response cache | VERIFIED | Already exists: two-level cache (response-level in server.py + data-level _cached() in core.py). Bumped _CACHE_MAX_SIZE from 200→500. 20+ high-traffic endpoints already cached via _cached(). |
+| 4 | Cache-bust on data refresh | DONE | Added cache_clear() to core.py. Called at end of all 3 adapter main() functions. Added POST /api/admin/cache-clear endpoint (admin-secret gated) for production cache flush after uploading new data. |
+
+### Decisions Log
+- Did not create separate backend/cache.py — existing two-level cache system already provides everything the ticket asked for
+- Adapter cache_clear() is best-effort (try/except) since adapters may run as standalone scripts outside the server process
+- Admin cache-clear endpoint clears both data-level and response-level caches

@@ -683,6 +683,13 @@ def main():
         print("Position breakdown:")
         for row in pos_counts:
             print(f"  {row[0]}: {row[1]} unique players")
+
+        # Bust data cache so server sees fresh results
+        try:
+            from backend.live_data.core import cache_clear
+            cache_clear()
+        except Exception:
+            pass
     finally:
         conn.close()
 

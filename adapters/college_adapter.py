@@ -416,6 +416,13 @@ def main():
         combine_total = conn.execute("SELECT COUNT(*) FROM combine_data").fetchone()[0]
         draft_total = conn.execute("SELECT COUNT(*) FROM draft_picks").fetchone()[0]
         print(f"\nDone. {combine_total} combine entries, {draft_total} draft picks in terminal.db")
+
+        # Bust data cache so server sees fresh results
+        try:
+            from backend.live_data.core import cache_clear
+            cache_clear()
+        except Exception:
+            pass
     finally:
         conn.close()
 

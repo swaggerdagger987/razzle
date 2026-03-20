@@ -1370,6 +1370,13 @@ def main():
         stat_count = conn.execute("SELECT COUNT(*) FROM player_week_stats").fetchone()[0]
         age_count = conn.execute("SELECT COUNT(*) FROM players WHERE age IS NOT NULL").fetchone()[0]
         print(f"\nDone. {player_count} players ({age_count} with age), {stat_count} stat rows in terminal.db")
+
+        # Bust data cache so server sees fresh results
+        try:
+            from backend.live_data.core import cache_clear
+            cache_clear()
+        except Exception:
+            pass  # Adapters may run standalone outside the server process
     finally:
         conn.close()
 

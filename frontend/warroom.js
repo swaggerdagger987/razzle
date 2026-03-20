@@ -1175,6 +1175,8 @@ let lastTime = now();
 let _rafId = null;
 
 function gameLoop() {
+  // Stop loop if canvas was removed from DOM
+  if (!cvs || !cvs.isConnected) { _rafId = null; return; }
   const t = now();
   const dt = Math.min(t - lastTime, 50);
   lastTime = t;
@@ -1487,8 +1489,7 @@ setupConfigPanel();
 
   function getAuthToken() {
     try {
-      var u = JSON.parse(localStorage.getItem('razzle_user') || 'null');
-      return (u && u.token) ? u.token : null;
+      return localStorage.getItem('razzle_token') || null;
     } catch (_) { return null; }
   }
 

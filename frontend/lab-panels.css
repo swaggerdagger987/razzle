@@ -2715,7 +2715,7 @@
   box-shadow: 4px 4px 0 var(--ink); padding: 16px;
 }
 .pt-card-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
-.pt-player-name { font-family: var(--font-mono); font-size: 16px; }
+.pt-player-name { font-family: var(--font-mono); font-size: 14px; font-weight: 700; }
 .pt-pos-badge { font-size: 10px; color: #fff; padding: 1px 5px; border-radius: 4px; font-weight: 700; }
 .pt-team { font-size: 11px; color: var(--ink-light); font-family: var(--font-mono); }
 .pt-stats { display: flex; flex-direction: column; gap: 8px; }
@@ -2871,7 +2871,7 @@
   box-shadow: 4px 4px 0 var(--ink); margin-bottom: 16px;
 }
 .cst-player-info { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.cst-player-name { font-family: var(--font-display); font-size: 18px; color: var(--ink); }
+.cst-player-name { font-family: var(--font-mono); font-size: 14px; font-weight: 700; color: var(--ink); }
 .cst-pos-badge { font-size: 10px; color: #fff; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
 .cst-team { font-family: var(--font-mono); font-size: 12px; color: var(--ink-light); }
 .cst-age { font-family: var(--font-mono); font-size: 12px; color: var(--ink-light); }
@@ -2975,7 +2975,7 @@
   box-shadow: 4px 4px 0 var(--ink); margin-bottom: 16px;
 }
 .sw2-player-info { display: flex; align-items: center; gap: 8px; flex: 1; flex-wrap: wrap; }
-.sw2-player-name { font-family: var(--font-display); font-size: 18px; color: var(--ink); }
+.sw2-player-name { font-family: var(--font-mono); font-size: 14px; font-weight: 700; color: var(--ink); }
 .sw2-pos-badge { font-size: 10px; color: #fff; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
 .sw2-team { font-family: var(--font-mono); font-size: 12px; color: var(--ink-light); }
 .sw2-overall-grade {
@@ -3079,7 +3079,7 @@
   box-shadow: 4px 4px 0 var(--ink); margin-bottom: 16px; flex-wrap: wrap;
 }
 .glo-player-info { display: flex; align-items: center; gap: 8px; flex: 1; }
-.glo-player-name { font-family: var(--font-display); font-size: 18px; color: var(--ink); }
+.glo-player-name { font-family: var(--font-mono); font-size: 14px; font-weight: 700; color: var(--ink); }
 .glo-pos { font-size: 10px; color: #fff; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
 .glo-team { font-family: var(--font-mono); font-size: 12px; color: var(--ink-light); }
 .glo-summary { display: flex; gap: 8px; }
@@ -3139,7 +3139,7 @@
   box-shadow: 4px 4px 0 var(--ink); margin-bottom: 16px; flex-wrap: wrap;
 }
 .pbd-player-info { display: flex; align-items: center; gap: 8px; flex: 1; }
-.pbd-player-name { font-family: var(--font-display); font-size: 18px; color: var(--ink); }
+.pbd-player-name { font-family: var(--font-mono); font-size: 14px; font-weight: 700; color: var(--ink); }
 .pbd-pos { font-size: 10px; color: #fff; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
 .pbd-team { font-family: var(--font-mono); font-size: 12px; color: var(--ink-light); }
 .pbd-summary { display: flex; gap: 8px; }
@@ -3361,7 +3361,7 @@
 .opp2-table tbody tr:hover { background: var(--bg-warm); }
 .opp2-player-cell { display: flex; align-items: center; gap: 8px; }
 .opp2-headshot { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid var(--ink); }
-.opp2-player-name { font-weight: 700; }
+.opp2-player-name { font-family: var(--font-mono); font-size: 13px; font-weight: 700; }
 .opp2-player-meta { font-size: 10px; color: var(--ink-light); }
 .opp2-pos-badge { padding: 1px 6px; border-radius: 3px; color: #fff; font-size: 9px; font-weight: 700; }
 .opp2-pos-badge.qb { background: var(--pos-qb); }
@@ -3409,7 +3409,7 @@
 .bb-pos-badge.wr { background: var(--pos-wr); }
 .bb-pos-badge.te { background: var(--pos-te); }
 .bb-info { flex: 1; min-width: 0; }
-.bb-name { font-family: var(--font-mono); font-size: 14px; }
+.bb-name { font-family: var(--font-mono); font-size: 14px; font-weight: 700; }
 .bb-meta { font-family: var(--font-mono); font-size: 11px; color: var(--ink-light); }
 .bb-rps { text-align: center; min-width: 50px; }
 .bb-rps-value { font-family: var(--font-display); font-size: 20px; color: var(--orange); }
@@ -3481,7 +3481,7 @@
 .rbld-roster-list { list-style: none; padding: 0; margin: 0; }
 .rbld-empty { font-family: var(--font-hand); font-size: 16px; color: var(--ink-light); padding: 20px; text-align: center; }
 .rbld-player-row { display: flex; align-items: center; gap: 6px; padding: 6px 0; border-bottom: 2px dashed var(--ink-faint); font-family: var(--font-mono); font-size: 12px; }
-.rbld-player-name { flex: 1; font-weight: 600; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rbld-player-name { flex: 1; font-weight: 700; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .rbld-player-team { color: var(--ink-light); font-size: 11px; }
 .rbld-player-tv { font-weight: 700; }
 .rbld-player-vorp { font-size: 11px; }
@@ -3527,7 +3527,7 @@
 .sos2-table tbody tr:hover { background: var(--bg-warm); }
 .sos2-player-cell { display: flex; align-items: center; gap: 8px; }
 .sos2-headshot { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid var(--ink); }
-.sos2-player-name { font-weight: 700; }
+.sos2-player-name { font-family: var(--font-mono); font-size: 13px; font-weight: 700; }
 .sos2-player-meta { font-size: 10px; color: var(--ink-light); }
 .sos2-pos-badge { padding: 1px 6px; border-radius: 3px; color: #fff; font-size: 9px; font-weight: 700; }
 .sos2-pos-badge.qb { background: var(--pos-qb); }
@@ -3597,7 +3597,7 @@
 .td2-player-row { display: flex; align-items: center; gap: 8px; padding: 4px 0; border-bottom: 2px dashed var(--ink-faint); font-family: var(--font-mono); font-size: 12px; cursor: pointer; }
 .td2-player-row:hover { background: var(--bg-warm); }
 .td2-player-pos { padding: 1px 6px; border-radius: 3px; color: #fff; font-size: 9px; font-weight: 700; }
-.td2-player-name { flex: 1; }
+.td2-player-name { flex: 1; font-weight: 700; }
 .td2-player-stat { color: var(--ink-light); }
 .td2-player-share { font-weight: 700; min-width: 36px; text-align: right; }
 
@@ -4076,7 +4076,7 @@
   color: var(--ink);
 }
 .md-ba-name {
-  font-weight: 600;
+  font-weight: 700;
   color: var(--ink);
 }
 .md-ba-school {
@@ -4200,7 +4200,7 @@
   color: var(--ink-medium);
 }
 .md-recap-name {
-  font-weight: 600;
+  font-weight: 700;
   color: var(--ink);
 }
 .md-grade-chip {

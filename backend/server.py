@@ -1073,9 +1073,9 @@ async def llm_chat(request: Request):
     )
     sanitized_messages = [{"role": "system", "content": system_prompt}] + user_messages
 
-    # Sanitize: enforce max_tokens and model (use free model — zero marginal cost)
+    # Sanitize: enforce max_tokens and model (Elite gets the good model)
     llm_body = {
-        "model": _LLM_FREE_MODEL,
+        "model": _LLM_MODEL,
         "messages": sanitized_messages,
         "temperature": body.get("temperature", 0.3),
         "max_tokens": min(body.get("max_tokens", _LLM_MAX_TOKENS), _LLM_MAX_TOKENS),
@@ -3235,6 +3235,18 @@ async def admin_stats(request: Request):
     except Exception as e:
         logger.error(f"Admin stats error: {e}")
         return JSONResponse({"error": "internal"}, status_code=500)
+
+
+@app.post("/api/admin/cache-clear")
+async def admin_cache_clear(request: Request):
+    """Flush all data caches. Call after uploading new data to persistent disk."""
+    secret = request.headers.get("x-admin-secret", "")
+    if not _ADMIN_SECRET or not _hmac.compare_digest(secret, _ADMIN_SECRET):
+        return JSONResponse({"error": "unauthorized"}, status_code=403)
+    from .live_data.core import cache_clear
+    cache_clear()
+    _resp_cache.clear()
+    return {"status": "ok", "message": "All caches cleared"}
 
 
 # ---------------------------------------------------------------------------

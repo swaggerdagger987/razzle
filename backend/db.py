@@ -6,6 +6,7 @@ connection pool to avoid creating/destroying connections on every request.
 """
 
 import logging
+import os
 import sqlite3
 import threading
 from collections import deque
@@ -14,7 +15,11 @@ from pathlib import Path
 
 logger = logging.getLogger("razzle.db")
 
-DB_PATH = Path(__file__).parent.parent / "data" / "terminal.db"
+# Persistent disk at /data in production; local data/ dir for dev
+if os.environ.get("ENVIRONMENT") == "production":
+    DB_PATH = Path("/data/terminal.db")
+else:
+    DB_PATH = Path(__file__).parent.parent / "data" / "terminal.db"
 
 # ── Connection Pool ──────────────────────────────────────────────────────
 # Simple thread-safe pool. SQLite connections are cheap but opening/closing
