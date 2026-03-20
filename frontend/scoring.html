@@ -520,10 +520,10 @@
   window.exportPng = function() {
     var el = document.getElementById('sc-content');
     if (typeof html2canvas === 'undefined') return;
-    html2canvas(el, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+    html2canvas(el, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2 }).then(function(canvas) {
       var ctx = canvas.getContext('2d');
       ctx.font = '24px Caveat, cursive';
-      ctx.fillStyle = 'rgba(45,31,20,0.18)';
+      ctx.fillStyle = document.documentElement.dataset.theme === 'dark' ? 'rgba(237,224,207,0.2)' : 'rgba(45,31,20,0.18)';
       ctx.fillText('razzle.lol', canvas.width - 160, canvas.height - 20);
       var link = document.createElement('a');
       link.download = 'razzle-scoring-comparison.png';

@@ -663,11 +663,11 @@
   document.getElementById('export-btn').addEventListener('click', function() {
     var el = document.getElementById('rz-content');
     if (typeof html2canvas !== 'undefined') {
-      html2canvas(el, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+      html2canvas(el, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2 }).then(function(canvas) {
         // Add watermark
         var ctx = canvas.getContext('2d');
         ctx.font = '24px Caveat, cursive';
-        ctx.fillStyle = 'rgba(45,31,20,0.3)';
+        ctx.fillStyle = document.documentElement.dataset.theme === 'dark' ? 'rgba(237,224,207,0.3)' : 'rgba(45,31,20,0.3)';
         ctx.textAlign = 'right';
         ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 16);
 

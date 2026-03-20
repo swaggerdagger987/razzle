@@ -752,7 +752,7 @@
     if (typeof html2canvas === 'undefined') return;
     var root = document.getElementById('matchups-root');
     html2canvas(root, {
-      backgroundColor: '#ede0cf',
+      backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf',
       scale: 2,
       useCORS: true,
       logging: false,

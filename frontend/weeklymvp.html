@@ -396,10 +396,10 @@
   document.getElementById('mvExport').addEventListener('click', function() {
     var root = document.getElementById('mvRoot');
     if (typeof html2canvas === 'undefined') return;
-    html2canvas(root, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+    html2canvas(root, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2 }).then(function(canvas) {
       var ctx = canvas.getContext('2d');
       ctx.font = 'bold 16px Space Mono, monospace';
-      ctx.fillStyle = 'rgba(45,31,20,0.12)';
+      ctx.fillStyle = document.documentElement.dataset.theme === 'dark' ? 'rgba(237,224,207,0.15)' : 'rgba(45,31,20,0.12)';
       ctx.fillText('razzle.lol', canvas.width - 130, canvas.height - 16);
       var link = document.createElement('a');
       link.download = 'razzle-weekly-mvp.png';

@@ -2652,8 +2652,9 @@ async function loadManagerProfiles(leagueId, userId, allPlayers, userMap, roster
       var rosterFetches = [];
       for (var hi = 1; hi < historyChain.length; hi++) {
         (function(entry) {
+          var _hrAc = new AbortController(); setTimeout(function() { _hrAc.abort(); }, 10000);
           rosterFetches.push(
-            fetch(SLEEPER_API + "/league/" + entry.leagueId + "/rosters")
+            fetch(SLEEPER_API + "/league/" + entry.leagueId + "/rosters", { signal: _hrAc.signal })
               .then(function(r) { return r.ok ? r.json() : []; })
               .then(function(rosterData) {
                 var map = {};
@@ -4281,7 +4282,8 @@ async function loadPowerRankings(leagueId, userId, rosters, allPlayers, userMap)
     // Get league playoff settings
     var playoffTeams = 6; // default
     try {
-      var leagueResp = await fetch(SLEEPER_API + "/league/" + leagueId);
+      var _prAc = new AbortController(); setTimeout(function() { _prAc.abort(); }, 10000);
+      var leagueResp = await fetch(SLEEPER_API + "/league/" + leagueId, { signal: _prAc.signal });
       if (leagueResp.ok) {
         var leagueSettings = await leagueResp.json();
         playoffTeams = leagueSettings.settings?.playoff_teams || 6;
@@ -4486,7 +4488,8 @@ async function loadWaiverTendencies(leagueId, userId, rosters, allPlayers, userM
     var isFAAB = false;
     var faabBudget = 100; // default
     try {
-      var leagueResp = await fetch(SLEEPER_API + "/league/" + leagueId);
+      var _wvAc = new AbortController(); setTimeout(function() { _wvAc.abort(); }, 10000);
+      var leagueResp = await fetch(SLEEPER_API + "/league/" + leagueId, { signal: _wvAc.signal });
       if (leagueResp.ok) {
         var leagueData = await leagueResp.json();
         var waiverType = leagueData.settings?.waiver_type || 0;

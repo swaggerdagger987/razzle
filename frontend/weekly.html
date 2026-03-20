@@ -599,7 +599,7 @@
   document.getElementById('export-btn').addEventListener('click', function() {
     var el = document.getElementById('weekly-content');
     if (typeof html2canvas === 'undefined') return;
-    html2canvas(el, { backgroundColor: '#ede0cf', scale: 2 }).then(function(canvas) {
+    html2canvas(el, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2 }).then(function(canvas) {
       // Add watermark
       var ctx = canvas.getContext('2d');
       ctx.font = '24px Caveat, cursive';
