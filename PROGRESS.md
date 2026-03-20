@@ -1158,3 +1158,98 @@ User needs to manually upload updated terminal.db to Render persistent disk at /
 - All 3 HTML inline scripts validated
 - 59/59 tests pass (5.58s)
 - 0 regressions
+
+---
+
+## Quality Audit: 5-Agent Parallel Sweep (Mar 20)
+
+**Goal**: Fresh 5-agent parallel audit across crash bugs, design consistency, dark mode, mobile, and brand voice.
+
+### P0 Crash Bugs (2 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | Division by zero: moveValues.length can be 0 | league-intel.html:2832 | `seasonsTracked >= 2` doesn't guarantee movesBySeason is non-empty — added `moveValues.length > 0` guard |
+| 2 | avgRating.toFixed() crash on null | formula-store.js:571 | API can return formula without avgRating — added `|| 0` fallback on avgRating and ratingCount |
+
+### P0 Dark Mode (3 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 3 | btn-chunky.active: `color:white` on `var(--ink)` bg | styles.css:692 | In dark mode, --ink becomes sand — white on sand is invisible. Changed to `color:var(--bg)` |
+| 4 | chip.active[ALL]: `color:white` on `var(--ink)` bg | styles.css:754 | Same issue — added `color:var(--bg)` override |
+| 5 | Draft round badge: `color:white` on `var(--ink)` bg | lab.js:6370 | Inline style in prospect profile — changed to `color:var(--bg)` |
+
+### P1 UX (2 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 6 | Tag picker not Escape-dismissible | lab.js:10252 | Added `_tagPickerVisible` check in Escape handler before overlay check |
+| 7 | Pagination visible on zero results | lab.js:2975 | Added `visibility:hidden` on `.footer-bar .pagination` when `totalCount === 0` |
+
+### Audit Findings (Not Bugs)
+- Box shadow 2px/3px on hover/active states: intentional depth effect (pressed/lifted), not a violation
+- `color:#fff` on accent-colored badges (--orange, --purple, --green backgrounds): correct — accents don't flip in dark mode
+- `rgba(0,0,0,...)` on dark mode overlays: standard approach for dimming, not a cold gray violation
+- Canvas hardcoded accent colors: position colors (blue/teal/orange/purple) intentionally stay the same per design guide
+- Feature matrix pricing.html: already has `overflow-x:auto` wrapper
+- Filter modal + profile modal: already dismiss on Escape via `closeAllOverlays()` (both use `.filter-modal-overlay` class)
+
+### Verified Clean
+- 0 `alert()` calls in frontend JS
+- 0 debug `console.log` (only branded Easter egg)
+- 0 unguarded division operations
+- 0 `color:white` on theme-responsive backgrounds
+- All 11 JS files syntax clean
+- All Python files compile clean
+- 59/59 tests pass
+
+---
+
+## Quality Audit: Deep Multi-Agent Sweep (Mar 20)
+
+**Goal**: Three-wave quality audit focused on crash bugs, canvas dark mode completeness, brand voice, and design consistency. Every pixel, every interaction, every error state.
+
+### Wave 1: Canvas Dark Mode + Crash Guards (7 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | 3 remaining hardcoded canvas hex → getCanvasTheme() | lab.js | `#8a7565` → t.inkLight (heatmap rank label, aging curve Y-axis), `#c4b5a5` → t.inkFaint (radar grid circles) |
+| 2 | 5 boom/bust canvas hex → getCanvasTheme() | lab.js | `#5c4a3d` → t.inkMedium (axis titles), `#8a7565` → t.inkLight (title annotation, floor/ceiling labels) |
+| 3 | Pie chart label '#fff' → getCanvasTheme().white | lab-panels.js | Donut chart percentage labels now theme-aware |
+| 4 | pick_label.split(" ")[1] null guard | lab.js | Added fallback to prevent "undefined" rendering |
+| 5 | Modal overlay invisible in dark mode | app.js | Feature gate + player popup overlays now use dark-aware rgba |
+| 6 | Warm watermark color on 25 panels | 25 HTML files | PNG export watermark was cold rgba → warm brown |
+| 7 | Backend email key crash | server.py | `user["email"]` → `user.get("email", "unknown")` in formula publish |
+
+### Wave 2: Standalone Panels + Inline Style Audit
+
+| # | Finding | Result |
+|---|---------|--------|
+| 1 | 22 standalone panel pages audited | ALL PASS — personality loading, error handling, correct seasons, app.js |
+| 2 | Inline style hex colors in all 11 JS files | CLEAN — all use CSS vars or intentional fixed colors |
+| 3 | First-user experience flow | Landing page clear, screener loads, funnel works end-to-end |
+
+### Wave 3: Brand Voice + Card Shadows (10 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | "search failed" → "fumbled the search..." | app.js | Command palette error |
+| 2 | "could not copy link" → "fumbled the copy — try again" | lab.js | Link share copy |
+| 3 | "copy failed" → "fumbled the copy — try again" | lab.js | Context menu copy (2 instances) |
+| 4 | "failed to save view" → "couldn't save the view..." | lab.js | Saved views localStorage error |
+| 5 | "no data to copy" → "no film to copy — run a query first" | lab.js | CSV with no results (2 instances) |
+| 6 | "screenshot failed" → "fumbled the screenshot..." | lab.js + lab-panels.js | PNG export failures |
+| 7 | "failed to find trade targets" → razzleError() | lab-panels.js | Trade finder panel |
+| 8 | "failed to calculate roster value" → "fumbled the roster math..." | lab.js | Roster report |
+| 9 | Card shadows 3px → 4px on 5 classes | lab-panels.css | db2-top5-card, ld2-card, pct2-player-card, bb-card, td2-team-card |
+| 10 | Logo shadow 3px → 4px | styles.css | Brand element per design guide |
+
+### Verified Clean
+- 0 generic "failed" / "could not" / "search failed" user-facing messages
+- 0 hardcoded canvas theme colors in lab.js (excl. intentional position/accent)
+- 0 card-level 3px box-shadows in CSS classes
+- 0 debug console.log / TODO / FIXME / debugger
+- All 11 JS files syntax clean
+- All Python files compile clean
+- 59/59 tests pass
