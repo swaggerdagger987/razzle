@@ -2281,3 +2281,28 @@ All 11 JS files syntax clean. 16 Python files compile clean.
 | XSS in charts.js | 2 HIGH: unescaped player names/positions in getPlayerOptions() innerHTML and compare table header | FIXED — escapeHtml() added to both |
 | Backend security | ALTER TABLE f-string in auth.py (LOW — hardcoded column names, not user input) | Noted, no fix needed |
 | Smoke tests | 10/11 pass (week_filter failure is pre-existing local DB issue) | No regressions |
+
+### Sweep Mode (Mar 20 — session 3)
+
+| Audit | Findings | Action |
+|-------|----------|--------|
+| JS falsy zero display | 12 instances of (val \|\| '-') on numeric stats (games, age, pos_rank, weekly leader stats) treated 0 as null | FIXED — all changed to (val != null ? val : '-') in lab-panels.js lines 652, 940, 4244-4251, 4864, 4869, 5136, 5430, 6306-6307, 9431, 10182 |
+| Division by zero | compare.js:267 getStatValue division by games without guard | FIXED — added (games \|\| 1) |
+| Bare except blocks | server.py:179, server.py:219 caught all exceptions; auth.py:210 caught all exceptions | FIXED — narrowed to sqlite3.OperationalError/DatabaseError |
+| Backend fetchone()[0] | 5+ locations use .fetchone()[0] on aggregate queries | VERIFIED SAFE — COUNT(*)/MAX() always return a row (never None) |
+| Frontend fetch error handling | All fetch() calls in 11 JS files have .catch() or try/catch | Clean |
+| Frontend XSS | All dynamic data in innerHTML uses escapeHtml() | Clean |
+| Backend week param coverage | All panel endpoints correctly aligned with function signatures | Clean |
+| Event listener leaks | innerHTML replacement handles cleanup; no persistent element leaks | Clean |
+
+---
+
+## QA Ticket Consumption (Mar 20 — Ship Loop)
+
+| Ticket | Severity | Status | Fix |
+|--------|----------|--------|-----|
+| FUNC-010: Production 502 | P0 | ESCALATE | Requires human action — check Render dashboard logs and restart service. Cannot fix from code. |
+| FUNC-011: Draft class PPG inflated | P0 | FIXED | `COUNT(DISTINCT s.week)` collapsed games across seasons. Changed to `COUNT(DISTINCT s.season \|\| '-' \|\| s.week)` in tools.py:548. Bo Nix was showing 33 PPG instead of ~20. |
+| FUNC-009: Matchup heatmap playoff data | P2 | FIXED | Added `AND s.season_type = 'regular'` to both queries in analytics.py:fetch_matchup_heatmap(). Playoff teams had inflated game counts (21 vs 17), diluting their defensive PPG. |
+
+Smoke tests: 10/11 pass (week_filter is pre-existing, unrelated to these fixes).

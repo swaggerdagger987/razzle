@@ -244,39 +244,6 @@ smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correc
 smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
 smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
 smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
-re-audit-13	OK	-	-	-	pass	re-audit: FUNC-004 headshots — local server has headshot_url for top 5 players (Lamar, Barkley, Allen, Daniels, Hurts). Prod is 502.	95	2026-03-20T19:30
-re-audit-35	OK	backend/live_data/dashboards.py	988	rec_yd_share	pass	re-audit: FUNC-005 — QA worktree has correct fix (all shares computed for all positions). Running server still has old code (rec_yd_share=None for RBs). Blocked by FUNC-006.	90	2026-03-20T19:30
-27-matchups	OK	-	-	-	pass	Matchup heatmap: 32 teams, ranks 1-32 unique (4 positions), PPG math 128/128 correct, detail view works	100	2026-03-20T19:35
-27-matchups	OK	-	-	-	pass	Matchup heatmap: rank ordering sensible (DAL rank 1 QB=20.9 PPG worst def, CHI rank 32=13.2 best def)	95	2026-03-20T19:35
-27-matchups	P2	backend/live_data/analytics.py	1580	fetch_matchup_heatmap	ticket	FUNC-009: playoff data contamination — PHI 21 games, BUF/KC 20, non-playoff 17. Dilutes per-game averages for playoff teams.	90	2026-03-20T19:35
-28-stacks	OK	backend/live_data/tools.py	2018	pearson	pass	Stacks: 30 QB-WR/TE pairs, Pearson correlation math correct, all between 0 and 1	100	2026-03-20T19:40
-28-stacks	P2	backend/live_data/tools.py	2012	min_games	info	Stacks: min 5 common games too low — top stacks are small-sample flukes (Dalton+Johnson r=0.988 in 6G). Elite stacks (Allen, Hurts, Burrow) absent.	85	2026-03-20T19:40
-30-waivers	OK	-	-	-	pass	Waivers: 30 targets, delta math correct (1 minor rounding diff), 4-week window, position mix QB:5/WR:11/RB:7/TE:7	95	2026-03-20T19:45
-30-waivers	P2	-	-	-	info	Waivers: no ownership data, "waiver targets" are just trending-up players (Bryce Young #1 = rostered everywhere). No FAAB values.	70	2026-03-20T19:45
-31-streaks	OK	-	-	-	pass	Streaks: 25 hot + 25 cold, recent_scores avg exactly matches recent_avg (6/6 verified), deltas correct, football-sensible	100	2026-03-20T19:50
-31-streaks	OK	-	-	-	pass	Streaks: hot=Gibbs/Young/Worthy (real late-season surgers), cold=Fields/Kupp/Love (benched/injured). All plausible.	95	2026-03-20T19:50
-prod-status	P0	-	-	-	ticket	Production returning 502 on all API endpoints (razzle.lol/api/health = 502). Service is completely down.	100	2026-03-20T19:30
-smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
-smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
-smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
-smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
-smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
-smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
-smoke	P0	backend/live_data/players.py	-	_fetch_screener_uncached	ticket	smoke:week_filter — Week 1 player has 21 games — week filter not working
-smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
-smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
-smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
-smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
-46-draftclass	P0	backend/live_data/tools.py	548	fetch_draft_class	ticket	FUNC-011: PPG inflated for multi-season players. COUNT(DISTINCT week) collapses across seasons. Bo Nix shows 33 PPG (actual ~20).	100	2026-03-20T20:00
-46-draftclass	OK	-	-	-	pass	Draft class: 7-round breakdown, per-round PPG math all correct, available_classes 2020-2025	95	2026-03-20T20:00
-46-draftclass	OK	-	-	-	pass	Draft class: round/pick data populated for all 77 players in 2024 class (round 1-7, pick 1-257)	100	2026-03-20T20:00
-62-statleaders	OK	-	-	-	pass	Stat leaders: 10 categories, Lamar #1 PPG=24.8 (cross-check: 471.54/19=24.82 rounded). All leaders football-sensible.	100	2026-03-20T20:05
-62-scoring	OK	-	-	-	pass	Scoring comparison: 40 risers + 40 fallers. Math: ppr >= half >= std (40/40), rank_diff formula correct (80/80).	100	2026-03-20T20:05
-62-awards	OK	-	-	-	pass	Season awards: 10 awards, winners sensible (MVP=Jefferson, Iron Man=Lamar, Volume King=Barkley, Red Zone King=KWilliams)	90	2026-03-20T20:05
-62-awards	P2	backend/live_data/tools.py	-	season_awards	info	Rising Stock winner Brandon Powell (WR5, MIN) 2.01 PPG in 7 games. Small-sample artifact, not actionable for fantasy.	65	2026-03-20T20:05
-57-sidebar	OK	-	-	-	pass	Sidebar: 76 nav links, 69 tools, organized into FOREVER FREE / FREE PANELS / PRO categories with lock icons	95	2026-03-20T20:10
-57-sidebar	BLOCKED	-	-	-	info	Sidebar panel clicking blocked by FUNC-001 (init crash prevents panel rendering on local server)	100	2026-03-20T20:10
-59-darkmode	OK	-	-	-	pass	Dark mode: visual PASS. Clean brown palette, readable text, proper contrast, sidebar+main switch correctly, no white flashes.	90	2026-03-20T20:10
 smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
 smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
 smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
@@ -299,42 +266,3 @@ smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correc
 smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
 smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
 smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
-smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
-smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
-smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
-smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
-smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
-smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
-smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=21gp, week1=1gp
-smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
-smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
-smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
-smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
-smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
-smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
-smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
-smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
-smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
-smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
-smoke	P0	backend/live_data/players.py	-	_fetch_screener_uncached	ticket	smoke:week_filter — Week 1 player has 21 games — week filter not working
-smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
-smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
-smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
-smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
-re-audit-1	OK	frontend/lab.js	-	init	pass	re-audit: FUNC-001 FIXED on prod. 0 JS errors, 25 player rows, McCaffrey at top. Dark mode clean.	100	2026-03-20T13:55
-re-audit-5	OK	backend/live_data/players.py	131	fetch_players	pass	re-audit: FUNC-002 FIXED on prod. Amon-Ra=1, Ja'Marr=1, D'Andre=1. Browser-verified.	100	2026-03-20T13:55
-re-audit-18	OK	backend/live_data/dynasty.py	-	dynasty_value	pass	re-audit: FUNC-003 FIXED on prod. Values 93.3-95.9 (Nacua #1 at 95.9). Panel renders in Lab sidebar.	100	2026-03-20T13:55
-re-audit-10	OK	frontend/lab.js	4399	_pinnedDataCache	pass	re-audit: FUNC-008 FIXED. Pin cache survives filter changes. Separator row appears on prod.	95	2026-03-20T13:55
-re-audit-42	OK	backend/server.py	208	bootstrap_database	pass	re-audit: FUNC-007 MOSTLY FIXED. Snap backfill deployed: McCaffrey 54.8, Taylor 51.9. 3 edge cases still at 0.	90	2026-03-20T13:55
-re-audit-prod	OK	-	-	-	pass	re-audit: FUNC-010 RESOLVED. Production healthy (200). 11/11 smoke tests pass.	100	2026-03-20T13:54
-9-col-picker	OK	frontend/lab.js	-	openColumnPicker	pass	Column picker: 87 columns, 8 presets, modal opens on prod. Browser-verified.	95	2026-03-20T13:56
-58-cmd-palette	OK	frontend/app.js	-	openCmdPalette	pass	Command palette opens via nav button, search input focused. Browser-verified on prod.	95	2026-03-20T13:56
-57-sidebar-nav	OK	frontend/lab.html	-	switchPanel	pass	Cross-panel nav: Rankings→TradeValues→Screener, data loads each time. 25 rows on return.	95	2026-03-20T13:56
-60-auth	OK	frontend/app.js	697	openAuthModal	pass	Auth modal: Sign In/Register tabs, focus trap, Escape close, overlay click. Rate limiting, generic errors.	95	2026-03-20T13:57
-61-pricing	OK	frontend/pricing.html	-	-	pass	Pricing: Free $0, Pro $79.99/yr, Elite $149.99/yr. Monthly toggle $9.99/$19.99. 7-day trial CTA. 0 errors.	95	2026-03-20T13:57
-65-empty	OK	-	-	-	pass	Empty state: search "zzzznonexistent" returns 0 players, count updates, no crash. API returns {count:0,items:[]}.	95	2026-03-20T13:58
-66-zero-null	OK	-	-	-	pass	Zero vs null: negative rushing yards correct (-10.0). API returns numeric 0 vs null cleanly.	90	2026-03-20T13:58
-67-special-chars	OK	frontend/lab.js	-	searchInput	pass	Special chars: Amon-Ra, Ja'Marr, D'Andre all found. Apostrophes display correctly. Browser-verified.	100	2026-03-20T13:58
-68-rapid	OK	frontend/lab.js	-	searchInput	pass	Rapid search: 5 swaps with 300ms intervals, final "chase" returns correct 3 results. No race conditions.	95	2026-03-20T13:58
-70-cross-panel	OK	frontend/lab.js	-	switchPanel	pass	Cross-panel state: Rankings→TradeValues→Screener returns with 25 rows, 610 players. No state loss.	95	2026-03-20T13:58
-46-draftclass	P0	backend/live_data/tools.py	548	fetch_draft_class	open	re-audit: FUNC-011 STILL BROKEN. Bo Nix 33.01 PPG (actual ~20), Caleb Williams 30.57. Multi-season COUNT(DISTINCT week) bug.	100	2026-03-20T13:59

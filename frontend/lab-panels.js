@@ -649,7 +649,7 @@
       html += '<div class="tv-value">' + fmt(p.trade_value) + '</div></div>';
       html += '<div class="tv-stats">';
       html += '<div class="tv-stat"><div>' + fmt(p.ppg) + '</div><div class="tv-stat-label">PPG</div></div>';
-      html += '<div class="tv-stat"><div>' + (p.games || '-') + '</div><div class="tv-stat-label">GP</div></div>';
+      html += '<div class="tv-stat"><div>' + (p.games != null ? p.games : '-') + '</div><div class="tv-stat-label">GP</div></div>';
       html += '</div>';
       html += '<span class="tv-tier-badge t' + p.tier + '">' + escapeHtml(p.tier_label) + '</span>';
       html += '</div>';
@@ -937,7 +937,7 @@
         html += '<td class="center"><span class="vorp-badge ' + tier + '">' + sign + fmt(p.vorp, 2) + '</span></td>';
         html += '<td class="center" style="font-weight:700">' + fmt(p.ppg) + '</td>';
         html += '<td class="center" style="color:var(--ink-medium)">' + fmt(p.replacement_ppg) + '</td>';
-        html += '<td class="center">' + (p.pos_rank || '-') + '</td>';
+        html += '<td class="center">' + (p.pos_rank != null ? p.pos_rank : '-') + '</td>';
         html += '</tr>';
       });
       html += '</tbody></table></div>';
@@ -4241,14 +4241,14 @@
         var ptsCls = pts >= 30 ? 'elite' : pts >= 20 ? 'great' : 'good';
         html += '<td class="center"><span class="wkl-pts ' + ptsCls + '">' + fmt(pts, 1) + '</span></td>';
 
-        html += '<td class="center hide-mobile">' + (p.pass_yd || '-') + '</td>';
-        html += '<td class="center hide-mobile">' + (p.pass_td || '-') + '</td>';
-        html += '<td class="center">' + (p.rush_yd || '-') + '</td>';
-        html += '<td class="center hide-mobile">' + (p.rush_td || '-') + '</td>';
-        html += '<td class="center">' + (p.rec || '-') + '</td>';
-        html += '<td class="center">' + (p.rec_yd || '-') + '</td>';
-        html += '<td class="center hide-mobile">' + (p.rec_td || '-') + '</td>';
-        html += '<td class="center hide-mobile">' + (p.tgt || '-') + '</td>';
+        html += '<td class="center hide-mobile">' + (p.pass_yd != null ? p.pass_yd : '-') + '</td>';
+        html += '<td class="center hide-mobile">' + (p.pass_td != null ? p.pass_td : '-') + '</td>';
+        html += '<td class="center">' + (p.rush_yd != null ? p.rush_yd : '-') + '</td>';
+        html += '<td class="center hide-mobile">' + (p.rush_td != null ? p.rush_td : '-') + '</td>';
+        html += '<td class="center">' + (p.rec != null ? p.rec : '-') + '</td>';
+        html += '<td class="center">' + (p.rec_yd != null ? p.rec_yd : '-') + '</td>';
+        html += '<td class="center hide-mobile">' + (p.rec_td != null ? p.rec_td : '-') + '</td>';
+        html += '<td class="center hide-mobile">' + (p.tgt != null ? p.tgt : '-') + '</td>';
         html += '</tr>';
       });
 
@@ -4861,12 +4861,12 @@
       html += '<div class="ag-summary">';
       var agIsCollege = typeof state !== 'undefined' && state.universe === 'college';
       var agPeakLabel = agIsCollege ? 'Peak Year' : 'Peak Age';
-      var agPeakVal = agIsCollege ? ('Yr ' + (peak.age || '-')) : (peak.age || '-');
+      var agPeakVal = agIsCollege ? ('Yr ' + (peak.age != null ? peak.age : '-')) : (peak.age != null ? peak.age : '-');
       var agStatLabel = agIsCollege ? 'Peak YPG' : 'Peak PPG';
       html += '<div class="ag-card"><div class="ag-card-label">' + agPeakLabel + '</div><div class="ag-card-value">' + agPeakVal + '</div></div>';
       html += '<div class="ag-card"><div class="ag-card-label">' + agStatLabel + '</div><div class="ag-card-value">' + fmt(peak.ppg) + '</div></div>';
       html += '<div class="ag-card"><div class="ag-card-label">Decline Start</div><div class="ag-card-value">' + (data.decline_start ? (agIsCollege ? 'Yr ' + data.decline_start : data.decline_start) : '-') + '</div></div>';
-      html += '<div class="ag-card"><div class="ag-card-label">Sample Size</div><div class="ag-card-value">' + (data.sample_size || '-') + '</div></div>';
+      html += '<div class="ag-card"><div class="ag-card-label">Sample Size</div><div class="ag-card-value">' + (data.sample_size != null ? data.sample_size : '-') + '</div></div>';
       html += '</div>';
       body.innerHTML = html;
 
@@ -5133,7 +5133,7 @@
         html += '<td class="spc-rank">' + (i + 1) + '</td>';
         html += '<td class="spc-name">' + pLink(p.name, p.player_id) + ' <span class="spc-team">' + escapeHtml(p.team || '') + '</span></td>';
         html += '<td><span class="spc-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
-        html += '<td class="spc-num">' + (p.games_played || '-') + '</td>';
+        html += '<td class="spc-num">' + (p.games_played != null ? p.games_played : '-') + '</td>';
         html += '<td class="spc-num">' + fmt(p.ppg) + '</td>';
         html += '<td class="spc-milestones">';
         var milestones = p.milestones || [];
@@ -5427,7 +5427,7 @@
         html += '<td class="ay-num">' + fmt(p.racr, 2) + '</td>';
         html += '<td class="ay-num">' + fmt(p.ppg) + '</td>';
         html += '<td class="ay-num"><span class="ay-regr-badge ' + regrClass + '">' + regrSign + fmt(regrDelta) + '</span></td>';
-        html += '<td class="ay-num">' + (p.games_played || '-') + '</td>';
+        html += '<td class="ay-num">' + (p.games_played != null ? p.games_played : '-') + '</td>';
         html += '<td class="ay-annotation hide-mobile">' + escapeHtml(p.annotation || '') + '</td>';
         html += '</tr>';
       });
@@ -6303,8 +6303,8 @@
         html += '<td class="rpc-num">' + fmt(p.dominator) + '%</td>';
         // PPG / Age / GP
         html += '<td class="rpc-num">' + fmt(p.ppg) + '</td>';
-        html += '<td class="rpc-num">' + (p.age || '-') + '</td>';
-        html += '<td class="rpc-num">' + (p.games_played || '-') + '</td>';
+        html += '<td class="rpc-num">' + (p.age != null ? p.age : '-') + '</td>';
+        html += '<td class="rpc-num">' + (p.games_played != null ? p.games_played : '-') + '</td>';
         html += '<td class="rpc-annotation">' + escapeHtml(p.annotation || '') + '</td>';
         html += '</tr>';
       });
@@ -9428,7 +9428,7 @@
       html += '<div class="tf2-sel-stats">';
       html += '<div class="tf2-sel-stat"><div class="tf2-sel-stat-val">' + fmt(sel.trade_value) + '</div><div class="tf2-sel-stat-label">Trade Value</div></div>';
       html += '<div class="tf2-sel-stat"><div class="tf2-sel-stat-val">' + fmt(sel.ppg) + '</div><div class="tf2-sel-stat-label">PPG</div></div>';
-      html += '<div class="tf2-sel-stat"><div class="tf2-sel-stat-val">' + (sel.games || '-') + '</div><div class="tf2-sel-stat-label">GP</div></div>';
+      html += '<div class="tf2-sel-stat"><div class="tf2-sel-stat-val">' + (sel.games != null ? sel.games : '-') + '</div><div class="tf2-sel-stat-label">GP</div></div>';
       html += '</div></div>';
 
       html += '<div class="tf2-target-controls"><div class="tf2-pos-tabs">';
@@ -10179,7 +10179,7 @@
           html += '<td style="padding:4px 6px;">' + escapeHtml(p.full_name) + '</td>';
           html += '<td style="text-align:center;padding:4px 6px;color:' + posColor + ';font-weight:bold;">' + escapeHtml(p.position) + '</td>';
           html += '<td style="text-align:right;padding:4px 6px;">' + fmt(p.ppg) + '</td>';
-          html += '<td style="text-align:right;padding:4px 6px;">' + (p.age || '-') + '</td>';
+          html += '<td style="text-align:right;padding:4px 6px;">' + (p.age != null ? p.age : '-') + '</td>';
           html += '<td style="text-align:right;padding:4px 6px;font-weight:bold;">' + fmt(p.trade_value) + '</td></tr>';
         });
         html += '</table>';
