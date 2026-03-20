@@ -2306,3 +2306,26 @@ All 11 JS files syntax clean. 16 Python files compile clean.
 | FUNC-009: Matchup heatmap playoff data | P2 | FIXED | Added `AND s.season_type = 'regular'` to both queries in analytics.py:fetch_matchup_heatmap(). Playoff teams had inflated game counts (21 vs 17), diluting their defensive PPG. |
 
 Smoke tests: 10/11 pass (week_filter is pre-existing, unrelated to these fixes).
+
+### Sweep: Regular-season filter audit (Mar 20)
+
+| Function | File | Fix |
+|----------|------|-----|
+| fetch_strength_of_schedule | dashboards.py:403,438 | Added season_type='regular' to defense grid + player weekly queries |
+| fetch_stock_watch | dashboards.py:645 | Added season_type='regular' to defense grid query |
+| fetch_season_awards | dashboards.py:1390,1415,1475 | Added season_type='regular' to player weekly, defense grid, and team totals queries |
+| fetch_report_cards | dashboards.py:1082,1111,1142 | Added season_type='regular' to player weekly, defense grid, and team totals queries |
+
+Same root cause as FUNC-009: playoff games inflated game counts for playoff teams, diluting PPG averages. All 4 functions compute defense PPG-allowed grids used for SOS, stock watch, awards, and report cards.
+
+### Sweep: XSS escape in prospect views (Mar 20)
+
+| File | Line | Fix |
+|------|------|-----|
+| lab.js | 7884 | escapeHtml() on draft_year/position in prospect tier header |
+| lab.js | 7930 | escapeHtml() on position/draft_year in prospect tier empty state |
+| lab.js | 8215 | escapeHtml() on draft_year/position in big board empty state |
+| lab.js | 8235 | escapeHtml() on draft_year/position in big board header |
+
+### Smoke test note
+week_filter failure (10/11) is a stale server process issue, not a code bug. Verified: calling _fetch_screener_uncached() directly with week=1 returns games=1 correctly. The running server process needs restart to pick up code changes.
