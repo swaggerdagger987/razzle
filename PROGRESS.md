@@ -1414,3 +1414,68 @@ User needs to manually upload updated terminal.db to Render persistent disk at /
 - All Python files compile clean
 - 59/59 tests pass (5.63s)
 - 0 regressions
+
+---
+
+## Dark Mode PNG Export — 65 Files Fixed (Mar 20 — Session 4)
+
+**Goal**: Make all standalone HTML panel PNG exports theme-aware. Previously every export was forced to light sand background regardless of user's dark mode setting.
+
+### html2canvas backgroundColor (46 files)
+All `backgroundColor: '#ede0cf'` → `document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf'`
+
+### Canvas watermark fillStyle (60+ instances across 60 files)
+All `ctx.fillStyle = 'rgba(45,31,20,...)'` → theme-branching with sand rgba for dark, espresso rgba for light. Covers all opacity levels (0.12, 0.13, 0.15, 0.18, 0.25, 0.3).
+
+### league-intel.html AbortController timeouts (3 fixes)
+
+| # | Fix | Line | Notes |
+|---|-----|------|-------|
+| 1 | Power ranking playoff settings fetch | 4284 | Added 10s AbortController — was hanging indefinitely on slow Sleeper API |
+| 2 | Waiver type detection fetch | 4489 | Added 10s AbortController — same issue |
+| 3 | Historical roster promise chain fetch | 2656 | Added 10s AbortController — blocked entire history display on slow API |
+
+### Verified Clean
+- All 11 JS files syntax clean
+- 59/59 tests pass (5.77s)
+- 0 hardcoded `backgroundColor: '#ede0cf'` remaining in any HTML file
+- 0 hardcoded `ctx.fillStyle = 'rgba(45,31,20,...)'` canvas watermarks remaining
+- 0 Sleeper API fetches without AbortController timeouts
+
+---
+
+## First-User Experience Audit (Mar 20 — Session 4)
+
+**Goal**: Walk through the entire first-user journey and fix UX issues a real visitor would hit.
+
+### Copy & Consistency Fixes (6 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | Developer jargon "30 x 22 tile grid" in status bar | agents.html:1622 | → "real-time simulation" |
+| 2 | Inconsistent "60+ metrics" on home page | index.html:598 | → "100+ stat columns" (matches meta tags and pricing) |
+| 3 | "70+ stat panels" on pricing | pricing.html:222 | → "100+ stat columns" (consistent with home + FAQ) |
+| 4 | "BYOK" unexplained in Pro features | pricing.html:245 | → "bring your own API key" |
+| 5 | Feature matrix "Full historical data" contradicts free access | pricing.html:335 | Removed row — all seasons are free since Mar 19 hotfix |
+| 6 | "Contact us" with no contact method | pricing.html:412 | Added Twitter DM link @razzle_lol |
+
+### Bureau UX Fixes (3 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 7 | "Permanently link" warning scares non-logged-in users | league-intel.html:1679 | Default text → "stored locally in your browser — sign up to save." Logged-in users see the permanent warning. |
+| 8 | Dead end for non-Sleeper users | league-intel.html:1681 | Added "Don't use Sleeper? explore the free Screener" fallback link |
+| 9 | Nav tooltips for Bureau + Situation Room | index.html:482-483 | Added title="Connect your Sleeper league" and "AI agents for your league" |
+
+### Situation Room UX Fixes (3 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 10 | OpenRouter setup lacks context | agents.html:1740 | Added "(routes to Claude, GPT-4, etc. — most queries cost <$0.01)" |
+| 11 | API key placeholder implies specific provider | agents.html:1575 | "sk-or-v1-..." → "paste your API key here" |
+| 12 | "Generic Mode" badge is unexplained jargon | warroom.js:1770 | → "No league data — general analysis" |
+
+### Verified Clean
+- All 11 JS files syntax clean
+- 59/59 tests pass (5.62s)
+- 0 regressions

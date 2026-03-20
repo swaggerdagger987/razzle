@@ -1767,7 +1767,7 @@ function renderContextBadges() {
     badges.unshift(
       '<span class="context-badge inactive">' +
         '<span class="context-badge-dot"></span>' +
-        'Generic Mode' +
+        'No league data \u2014 general analysis' +
       '</span>'
     );
   }

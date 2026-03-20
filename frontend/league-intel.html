@@ -1676,8 +1676,9 @@
         <button class="btn-primary" id="connectBtn" onclick="connectSleeper()">Connect</button>
       </div>
       <div class="connect-error" id="connectError"></div>
-      <div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); margin-top:8px;">this will permanently link your Sleeper account to your Razzle account</div>
+      <div id="connectWarning" style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); margin-top:8px;">stored locally in your browser — sign up to save</div>
       <div style="margin-top:16px;font-family:var(--font-hand);font-size:14px;color:var(--ink-light);">Coming soon: <span style="font-family:var(--font-mono);font-size:11px;background:var(--bg-warm);border:2px solid var(--ink-faint);border-radius:6px;padding:2px 8px;margin:0 2px;">ESPN</span> <span style="font-family:var(--font-mono);font-size:11px;background:var(--bg-warm);border:2px solid var(--ink-faint);border-radius:6px;padding:2px 8px;margin:0 2px;">Yahoo</span></div>
+      <div style="margin-top:16px;font-family:var(--font-mono);font-size:11px;color:var(--ink-light);">Don't use Sleeper? <a href="/lab.html" style="color:var(--orange);">explore the free Screener</a></div>
     </div>
   </div>
 
@@ -1775,6 +1776,11 @@ const SLEEPER_API = "https://api.sleeper.app/v1";
   if (sleeperUser) {
     if (!localStorage.getItem("razzle_sleeper_user")) localStorage.setItem("razzle_sleeper_user", sleeperUser);
     showLeagues(sleeperUser);
+  }
+  // Update connect warning for logged-in users
+  var warn = document.getElementById("connectWarning");
+  if (warn && user && localStorage.getItem("razzle_token")) {
+    warn.textContent = "this will permanently link your Sleeper account to your Razzle account";
   }
 })();
 
