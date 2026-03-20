@@ -1834,7 +1834,7 @@
     function render(data) {
       currentData = data;
       var body = el.querySelector('#stk-body');
-      if (!data || (!data.rising.length && !data.falling.length)) {
+      if (!data || (!(data.rising && data.rising.length) && !(data.falling && data.falling.length))) {
         body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
         return;
       }
@@ -3402,11 +3402,11 @@
           '<select class="lp-select" id="mh-season" aria-label="Season"></select>' +
         '</div>' +
         '<div class="mh-legend">' +
-          '<div class="mh-legend-item"><div class="mh-legend-swatch" style="background:#2ec4b6;"></div> Easy</div>' +
-          '<div class="mh-legend-item"><div class="mh-legend-swatch" style="background:#d9efec;"></div> Soft</div>' +
-          '<div class="mh-legend-item"><div class="mh-legend-swatch" style="background:#f7efe5;"></div> Average</div>' +
-          '<div class="mh-legend-item"><div class="mh-legend-swatch" style="background:#f2d5d8;"></div> Tough</div>' +
-          '<div class="mh-legend-item"><div class="mh-legend-swatch" style="background:#e63946;"></div> Hard</div>' +
+          '<div class="mh-legend-item"><div class="mh-legend-swatch" style="background:var(--green);"></div> Easy</div>' +
+          '<div class="mh-legend-item"><div class="mh-legend-swatch" style="background:var(--green-light);"></div> Soft</div>' +
+          '<div class="mh-legend-item"><div class="mh-legend-swatch" style="background:var(--bg-card);"></div> Average</div>' +
+          '<div class="mh-legend-item"><div class="mh-legend-swatch" style="background:var(--red-light);"></div> Tough</div>' +
+          '<div class="mh-legend-item"><div class="mh-legend-swatch" style="background:var(--red);"></div> Hard</div>' +
         '</div>' +
         '<div id="mh-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
         '<div id="mh-detail" class="mh-detail"></div>' +
@@ -3833,7 +3833,7 @@
     function renderRZ(data) {
       currentData = data;
       var body = el.querySelector('#rz-body');
-      if (!data || (!data.dominators.length && !data.td_dependent.length)) {
+      if (!data || (!(data.dominators && data.dominators.length) && !(data.td_dependent && data.td_dependent.length))) {
         body.innerHTML = '<div class="rz-empty">no red zone data found</div>';
         return;
       }
@@ -7701,7 +7701,7 @@
     function render(data) {
       currentData = data;
       var content = el.querySelector('.opp2-content');
-      if (!data || (!data.alpha_dogs.length && !data.dominators.length)) {
+      if (!data || (!(data.alpha_dogs && data.alpha_dogs.length) && !(data.dominators && data.dominators.length))) {
         content.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
         return;
       }
@@ -8624,7 +8624,7 @@
     function render(data) {
       currentData = data;
       var content = el.querySelector('.sos2-content');
-      if (!data || (!data.schedule_suppressed.length && !data.schedule_inflated.length)) {
+      if (!data || (!(data.schedule_suppressed && data.schedule_suppressed.length) && !(data.schedule_inflated && data.schedule_inflated.length))) {
         content.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
         return;
       }
@@ -9399,7 +9399,7 @@
         var barColor = hitPct >= 50 ? '#2ec4b6' : hitPct >= 30 ? '#d97757' : '#d44040';
         html += '<div style="background:var(--bg-card); border:2px solid var(--ink); border-radius:6px; padding:8px 12px; min-width:100px; text-align:center;">' +
           '<div style="font-family:var(--font-mono); font-size:14px; color:var(--ink);">Round ' + rd.round + '</div>' +
-          '<div style="margin:4px 0; height:6px; background:#e8d5c4; border-radius:3px;">' +
+          '<div style="margin:4px 0; height:6px; background:var(--ink-faint); border-radius:3px;">' +
             '<div style="height:100%; width:' + hitPct + '%; background:' + barColor + '; border-radius:3px;"></div>' +
           '</div>' +
           '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' +

@@ -3268,7 +3268,8 @@ function saveWarRoomMemory(scenario, detail) {
   ids.forEach(function(id) {
     if (detail.results && detail.results[id]) {
       var lines = detail.results[id].split('\n').filter(function(l) { return l.trim(); });
-      entry.agents.push({ name: AGENT_DEFS[id].name, finding: lines.slice(0, 1).join(' ').slice(0, 150) });
+      var agentDef = AGENT_DEFS[id];
+      if (agentDef) entry.agents.push({ name: agentDef.name, finding: lines.slice(0, 1).join(' ').slice(0, 150) });
     }
   });
 

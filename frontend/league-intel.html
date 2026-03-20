@@ -2582,7 +2582,8 @@ async function loadManagerProfiles(leagueId, userId, allPlayers, userMap, roster
       historyChain = await crawlLeagueHistory(leagueId, maxSeasons);
     } else {
       // Free users: current season only
-      historyChain = [{ leagueId: leagueId, season: new Date().getFullYear().toString(), name: "" }];
+      var _yr = new Date().getMonth() >= 7 ? new Date().getFullYear() : new Date().getFullYear() - 1;
+      historyChain = [{ leagueId: leagueId, season: _yr.toString(), name: "" }];
     }
 
     var seasonCount = historyChain.length;

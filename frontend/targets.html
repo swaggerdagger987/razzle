@@ -487,8 +487,8 @@
     if (!team.players || team.players.length === 0) return '';
     var top = team.players[0];
     var share = mode === 'targets' ? top.target_share : top.carry_share;
-    if (share > 30) return escapeHtml(top.name.split(' ').pop()) + ' owns this ' + mode.slice(0, -1) + ' tree';
-    if (share > 22) return escapeHtml(top.name.split(' ').pop()) + ' leads the way';
+    if (share > 30) return escapeHtml((top.name || '').split(' ').pop()) + ' owns this ' + mode.slice(0, -1) + ' tree';
+    if (share > 22) return escapeHtml((top.name || '').split(' ').pop()) + ' leads the way';
     return 'spread it around';
   }
 
@@ -526,7 +526,7 @@
         otherPct -= share;
         var posColor = POS_COLORS[p.position] || 'var(--orange)';
         var lightColor = POS_LIGHT[p.position] || 'var(--orange-light)';
-        var lastName = p.name.split(' ').pop();
+        var lastName = (p.name || '').split(' ').pop();
         html += '<div class="dist-segment" style="width:' + share + '%; background:' + lightColor + '; border-right:2px solid ' + posColor + ';" ';
         html += 'title="' + escapeHtml(p.name) + ': ' + share + '% (' + (activeMode === 'targets' ? p.targets : p.carries) + ')" ';
         html += 'data-pid="' + escapeHtml(p.player_id) + '">';

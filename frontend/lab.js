@@ -12106,9 +12106,9 @@ function exportCompsImage() {
   ctx.font = "bold 11px monospace";
   ctx.textAlign = "left";
   ctx.fillText("Stat", padX + 8, tableY + 18);
-  ctx.fillText(player.full_name.split(" ").pop(), padX + colW + 8, tableY + 18);
+  ctx.fillText((player.full_name || '').split(" ").pop(), padX + colW + 8, tableY + 18);
   for (let i = 0; i < Math.min(3, compsToShow.length); i++) {
-    ctx.fillText(compsToShow[i].full_name.split(" ").pop(), padX + colW * (i + 2) + 8, tableY + 18);
+    ctx.fillText((compsToShow[i].full_name || '').split(" ").pop(), padX + colW * (i + 2) + 8, tableY + 18);
   }
 
   // Table rows

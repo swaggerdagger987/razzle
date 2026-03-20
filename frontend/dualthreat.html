@@ -283,7 +283,7 @@ function render() {
     html += '<td style="font-weight:700">' + escapeHtml(String(p.total_yd_pg)) + '</td>';
     html += '<td>' + escapeHtml(String(p.carries_pg)) + '</td>';
     html += '<td>' + escapeHtml(String(p.rec_pg)) + '</td>';
-    html += '<td class="dt-split-cell"><div class="dt-split-bar"><div class="dt-split-rush" style="width:' + p.rush_pct + '%"></div><div class="dt-split-rec" style="width:' + p.rec_pct + '%"></div></div></td>';
+    html += '<td class="dt-split-cell"><div class="dt-split-bar"><div class="dt-split-rush" style="width:' + (p.rush_pct || 0) + '%"></div><div class="dt-split-rec" style="width:' + (p.rec_pct || 0) + '%"></div></div></td>';
     html += '</tr>';
   });
 
