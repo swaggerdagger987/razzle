@@ -414,7 +414,7 @@
           acList.querySelectorAll('.ct-ac-item').forEach(function(item) {
             item.addEventListener('click', function() { addPlayer(item); });
           });
-        });
+        }).catch(function() { acList.style.display = 'none'; });
     }, 200);
   });
 

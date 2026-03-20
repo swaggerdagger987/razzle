@@ -40,6 +40,7 @@ def _fetch_featured_uncached():
                        COUNT(DISTINCT s.week) as games
                 FROM players p
                 JOIN player_week_stats s ON p.player_id = s.player_id AND s.season = ?
+                    AND s.season_type = 'regular'
                 WHERE p.position IN ('QB','RB','WR','TE')
                   AND p.age IS NOT NULL AND p.age > 0 AND p.age <= 26
                   AND p.fantasy_relevant = 1
@@ -95,6 +96,7 @@ def _fetch_featured_uncached():
                        SUM(s.receptions) as total_rec
                 FROM players p
                 JOIN player_week_stats s ON p.player_id = s.player_id AND s.season = ?
+                    AND s.season_type = 'regular'
                 WHERE p.position IN ('WR','TE')
                   AND p.age IS NOT NULL AND p.age <= 27
                   AND p.fantasy_relevant = 1
@@ -145,6 +147,7 @@ def fetch_scoring_comparison(season=None, position=None, limit=40):
                 FROM players p
                 JOIN player_week_stats s
                     ON s.player_id = p.player_id AND s.season = ?
+                    AND s.season_type = 'regular'
                 WHERE p.position IN ('QB','RB','WR','TE')
                   AND p.fantasy_relevant = 1
                   {pos_filter}
@@ -261,6 +264,7 @@ def fetch_cheat_sheet(season=None, fmt="ppr"):
                 FROM players p
                 JOIN player_week_stats s
                     ON s.player_id = p.player_id AND s.season = ?
+                    AND s.season_type = 'regular'
                 WHERE p.position IN ('QB','RB','WR','TE')
                   AND p.fantasy_relevant = 1
                 GROUP BY p.player_id
@@ -422,6 +426,7 @@ def fetch_player_archetypes(season=None, position=None):
                 FROM players p
                 JOIN player_week_stats s
                     ON s.player_id = p.player_id AND s.season = ?
+                    AND s.season_type = 'regular'
                 WHERE p.position IN ('QB','RB','WR','TE')
                   AND p.fantasy_relevant = 1
                   {pos_filter}
@@ -657,7 +662,7 @@ def fetch_weekly_leaders(season=None, week=None, position=None, limit=25):
 
             # Available weeks for this season
             wk_rows = conn.execute(
-                "SELECT DISTINCT week FROM player_week_stats WHERE season = ? ORDER BY week",
+                "SELECT DISTINCT week FROM player_week_stats WHERE season = ? AND season_type = 'regular' ORDER BY week",
                 (season,)
             ).fetchall()
             available_weeks = [r[0] for r in wk_rows] if wk_rows else list(range(1, 19))
@@ -680,6 +685,7 @@ def fetch_weekly_leaders(season=None, week=None, position=None, limit=25):
                 FROM players p
                 JOIN player_week_stats s
                     ON s.player_id = p.player_id AND s.season = ? AND s.week = ?
+                    AND s.season_type = 'regular'
                 WHERE p.position IN ('QB','RB','WR','TE')
                   {pos_filter}
                 ORDER BY s.fantasy_points_ppr DESC
@@ -750,6 +756,7 @@ def fetch_pace_tracker(season=None, position=None, limit=50):
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ?
+                  AND s.season_type = 'regular'
                   AND p.fantasy_relevant = 1
             """
             params = [season]
@@ -900,6 +907,7 @@ def fetch_streaks(season=None, position=None, window=4, limit=25, week=None):
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ?
+                  AND s.season_type = 'regular'
                   AND p.fantasy_relevant = 1
             """
             params = [season]
@@ -995,7 +1003,8 @@ def fetch_season_recap(season=None):
                        COALESCE(SUM(s.fantasy_points_ppr), 0) as total_fpts
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
-                WHERE s.season = ? AND p.fantasy_relevant = 1
+                WHERE s.season = ? AND s.season_type = 'regular'
+                  AND p.fantasy_relevant = 1
                 GROUP BY p.player_id
                 HAVING games >= 6
                 ORDER BY total_fpts DESC
@@ -1029,7 +1038,8 @@ def fetch_season_recap(season=None):
                        s.week, s.fantasy_points_ppr
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
-                WHERE s.season = ? AND p.fantasy_relevant = 1
+                WHERE s.season = ? AND s.season_type = 'regular'
+                  AND p.fantasy_relevant = 1
                 ORDER BY s.fantasy_points_ppr DESC
                 LIMIT 5
             """, (season,))
@@ -1051,7 +1061,7 @@ def fetch_season_recap(season=None):
             cursor.execute("""
                 SELECT player_id, fantasy_points_ppr
                 FROM player_week_stats
-                WHERE season = ?
+                WHERE season = ? AND season_type = 'regular'
                 ORDER BY player_id, week
             """, (season,))
             for r in cursor.fetchall():
@@ -1089,7 +1099,8 @@ def fetch_season_recap(season=None):
                        COALESCE(SUM(s.fantasy_points_ppr), 0) as total_fpts
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
-                WHERE s.season = ? AND p.fantasy_relevant = 1
+                WHERE s.season = ? AND s.season_type = 'regular'
+                  AND p.fantasy_relevant = 1
                 GROUP BY p.player_id
                 HAVING games >= 6
             """, (prev_season,))
@@ -1157,7 +1168,7 @@ def fetch_records(position=None, limit=10):
                        s.season, s.week, s.fantasy_points_ppr
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
-                WHERE p.fantasy_relevant = 1 {pos_filter}
+                WHERE p.fantasy_relevant = 1 AND s.season_type = 'regular' {pos_filter}
                 ORDER BY s.fantasy_points_ppr DESC
                 LIMIT ?
             """, params_base + [limit])
@@ -1177,7 +1188,7 @@ def fetch_records(position=None, limit=10):
                        SUM(s.fantasy_points_ppr) as total_fpts
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
-                WHERE p.fantasy_relevant = 1 {pos_filter}
+                WHERE p.fantasy_relevant = 1 AND s.season_type = 'regular' {pos_filter}
                 GROUP BY p.player_id, s.season
                 HAVING games >= 6
                 ORDER BY total_fpts DESC
@@ -1204,7 +1215,7 @@ def fetch_records(position=None, limit=10):
                        MAX(s.season) as last_season
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
-                WHERE p.fantasy_relevant = 1 {pos_filter}
+                WHERE p.fantasy_relevant = 1 AND s.season_type = 'regular' {pos_filter}
                 GROUP BY p.player_id
                 HAVING games >= 20
                 ORDER BY (total_fpts * 1.0 / games) DESC
@@ -1229,7 +1240,7 @@ def fetch_records(position=None, limit=10):
                        SUM(s.fantasy_points_ppr) as total_fpts
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
-                WHERE p.fantasy_relevant = 1 {pos_filter}
+                WHERE p.fantasy_relevant = 1 AND s.season_type = 'regular' {pos_filter}
                 GROUP BY p.player_id
                 HAVING games >= 20
                 ORDER BY total_fpts DESC
@@ -1284,7 +1295,8 @@ def fetch_waivers(season=None, position=None, window=4, limit=30):
                        s.week, s.fantasy_points_ppr
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
-                WHERE s.season = ? AND p.fantasy_relevant = 1
+                WHERE s.season = ? AND s.season_type = 'regular'
+                  AND p.fantasy_relevant = 1
                   AND s.fantasy_points_ppr IS NOT NULL
                   {pos_filter}
                 ORDER BY p.player_id, s.week
@@ -1411,6 +1423,7 @@ def fetch_playoff_schedule(season=None, position=None, limit=40):
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ?
+                  AND s.season_type = 'regular'
                   AND p.position IN ('QB', 'RB', 'WR', 'TE')
                   AND p.fantasy_relevant = 1
                   AND s.week BETWEEN 14 AND 17
@@ -1549,7 +1562,8 @@ def fetch_fpts_breakdown(season=None, position=None, limit=40):
                        COUNT(DISTINCT s.week) as games
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
-                WHERE s.season = ? AND p.fantasy_relevant = 1
+                WHERE s.season = ? AND s.season_type = 'regular'
+                  AND p.fantasy_relevant = 1
                   AND p.position IN ('QB', 'RB', 'WR', 'TE')
                   {pos_filter}
                 GROUP BY p.player_id
@@ -1816,7 +1830,8 @@ def fetch_handcuffs(season=None, limit=30):
                        COUNT(DISTINCT s.week) as games
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
-                WHERE s.season = ? AND p.fantasy_relevant = 1
+                WHERE s.season = ? AND s.season_type = 'regular'
+                  AND p.fantasy_relevant = 1
                   AND p.position = 'RB'
                 GROUP BY p.player_id
                 HAVING games >= 3 AND total_car >= 10
@@ -1906,7 +1921,8 @@ def fetch_weekly_mvp(season=None):
                        s.fantasy_points_ppr, p.player_id
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
-                WHERE s.season = ? AND p.fantasy_relevant = 1
+                WHERE s.season = ? AND s.season_type = 'regular'
+                  AND p.fantasy_relevant = 1
                   AND p.position IN ('QB', 'RB', 'WR', 'TE')
                   AND s.fantasy_points_ppr IS NOT NULL
                 ORDER BY s.week, p.position, s.fantasy_points_ppr DESC
@@ -1964,7 +1980,8 @@ def fetch_stacks(season=None, limit=30):
                        s.week, s.fantasy_points_ppr
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
-                WHERE s.season = ? AND p.fantasy_relevant = 1
+                WHERE s.season = ? AND s.season_type = 'regular'
+                  AND p.fantasy_relevant = 1
                   AND p.position IN ('QB', 'WR', 'TE')
                   AND s.fantasy_points_ppr IS NOT NULL
                 ORDER BY p.player_id, s.week
@@ -2083,7 +2100,8 @@ def fetch_positional_advantage(season=None, position=None, limit=40):
                        COUNT(DISTINCT s.week) as games
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
-                WHERE s.season = ? AND p.fantasy_relevant = 1
+                WHERE s.season = ? AND s.season_type = 'regular'
+                  AND p.fantasy_relevant = 1
                   AND p.position IN ('QB', 'RB', 'WR', 'TE')
                   {pos_filter}
                 GROUP BY p.player_id
@@ -2484,7 +2502,8 @@ def fetch_target_premium(season=None, position=None, limit=50, week=None):
                        COUNT(DISTINCT w.week) as gp
                 FROM player_week_stats w
                 JOIN players p ON p.player_id = w.player_id
-                WHERE w.season = ? AND p.fantasy_relevant = 1
+                WHERE w.season = ? AND w.season_type = 'regular'
+                  AND p.fantasy_relevant = 1
                 {week_filter}
                 {pos_filter}
                 GROUP BY p.gsis_id

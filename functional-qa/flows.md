@@ -15,7 +15,7 @@
 
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
-| 1 | Landing -> Lab | CTA click, initial data load, screener populates with real player data | DONE — PASS. FUNC-001 FIXED on prod. 0 JS errors, 25 player rows load, McCaffrey at top. Dark mode clean. |
+| 1 | Landing -> Lab | CTA click, initial data load, screener populates with real player data | RE-AUDIT SESSION 11 — FUNC-012 L2 CODE FIXED. Local: Lamar=17 GP/430.4 PPR, Barkley=2005 rush yds. Prod: not deployed yet (still 19 GP). |
 | 2 | Screener: Position filter | Filter QB/RB/WR/TE individually. Count matches. Remove filter. Table resets? | DONE — PASS (all 4 positions clean) |
 | 3 | Screener: Multi-filter | Chain 3 filters (pos + team + min stat). Results are the correct intersection? | DONE — PASS (RB+800yd = 27, all correct) |
 | 4 | Screener: Sort | Sort every stat column. #1 player is actually the leader? Reverse sort works? | DONE — PASS (desc+asc both correct) |
@@ -34,7 +34,7 @@
 |---|------|-------------|--------|
 | 13 | Player profile: NFL | Click a player name. Profile loads? Stats match screener row? Season selector works? | DONE — PASS (data correct), P1 FUNC-004: all headshots missing on prod |
 | 14 | Player profile: Career stats | Career numbers add up across seasons? Per-game averages calculated correctly? | DONE — PASS (Lamar 8 seasons sum exactly matches career totals: GP=124, PPR=2531.04, PassYds=24361) |
-| 15 | Player profile: Game log | Individual game stats shown? Sum of game log = season total? Week numbers correct? | DONE — PASS (19 weeks for Lamar 2024, PPR sum=471.54 matches season total) |
+| 15 | Player profile: Game log | Individual game stats shown? Sum of game log = season total? Week numbers correct? | RE-AUDIT SESSION 11 — FUNC-012 L2 CODE FIXED. Local: Lamar 2024 game log=17 weeks (1-18 only), total PPR=430.4. Playoff weeks excluded. Awaiting deploy. |
 | 16 | Player comparison | Compare 2 players. Stats aligned? Same season? Difference calculations correct? | DONE — PASS (Jackson vs Stroud 2024, data aligned, same season) |
 | 17 | Player charts | Radar/scatter/trend for a player. Data matches profile? Axes labeled correctly? | DONE — Code PASS, API PASS. Career arc (multi-season PPG line), comp radar (5-6 stats, normalized), scatter (regression line div-by-zero fixed B-3), heat map (div-by-zero fixed B-3). All position-colored, theme-aware, DPI-scaled. |
 
@@ -42,7 +42,7 @@
 
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
-| 18 | Dynasty Rankings | Rankings load? Sortable? Position filter? Do rankings reflect age + production reality? | DONE — PASS. FUNC-003 FIXED on prod. Values spread 93.3-95.9 (Nacua #1 at 95.9). Panel renders in Lab sidebar. |
+| 18 | Dynasty Rankings | Rankings load? Sortable? Position filter? Do rankings reflect age + production reality? | RE-AUDIT SESSION 11 — FUNC-012 L2 CODE FIXED. Local: Chase=17 GP, Barkley=16 GP, Gibbs=17 GP. dynasty.py now has 15 season_type filters. Awaiting deploy. |
 | 19 | Trade Values | Values load? Positional adjustment? Do elite young WRs > aging vets? Sensible tiers? | DONE — PASS (same clustering note as #18) |
 | 20 | Trade Finder | Suggest trades? Values make sense? Not suggesting obviously lopsided deals? | DONE — PASS |
 | 21 | Tiers | Tiers load? Players grouped sensibly? Tier breaks at reasonable spots? | DONE — PASS (functional), P2 S-tier bloated (76 players, FUNC-003) |
@@ -56,7 +56,7 @@
 | 24 | Cheat Sheet | Loads? Sortable? Position ranks correct? Matches screener sort order? | DONE — PASS (4 pos groups, Jackson QB#1 PPG=24.82, tiers+ranks correct) |
 | 25 | Weekly Heatmap | Loads? Week selector works? Colors match stat intensity? | DONE — PASS (22 weeks data, sums match season totals within rounding) |
 | 26 | Weekly Leaders | Loads? Leaders match that week's actual stat leaders? Category switch works? | DONE — PASS. API returns ranked weekly performers (verified Barkley Wk1 2024 = 33.2 PPR, exact calc confirmed). Position filter works (QB-only returns QBs). Season/week navigation, sortable columns, top 3 badges, points tiers (elite/great/good). P2: 0 shows as '-' due to JS falsy (0 || '-'). |
-| 27 | Matchups | Loads? Correct matchups for selected week? Opponent data shown? | RE-AUDIT — Ship Loop added season_type=regular to defense grids in dashboards.py. Matchup heatmap (analytics.py:1569) already had the filter, but PHI still shows 21 games on prod. Root cause: DB season_type column is ALL 'regular' — playoff rows mistagged. P0 FUNC-012 filed. Code fix correct but blocked by data layer. |
+| 27 | Matchups | Loads? Correct matchups for selected week? Opponent data shown? | RE-AUDIT SESSION 11 — FUNC-012 L2 CODE FIXED. Local: weekly heatmap returns weeks 1-18 only (was 1-22). 4 season_type filters added. Awaiting deploy. |
 | 28 | Stacks | QB-WR/TE stacks shown? Correlation data makes sense? | DONE — PASS (30 stacks, Pearson math correct). P2: min 5 common games too low, small-sample flukes dominate (Dalton+Johnson r=0.988 in 6G). Elite stacks (Allen, Hurts, Burrow) absent from top 30. |
 | 29 | Breakouts | Candidates shown with data? Breakout criteria visible and reasonable? | DONE — PASS (50 candidates, RBS scores present, opp/prod gap logic sound). P2: snap_pct=0 due to FUNC-007 |
 | 30 | Waivers | Waiver targets shown? FAAB values if applicable? Sorted by priority? | DONE — PASS (30 targets, delta math correct, 4-week window). P2: no ownership data, so "waivers" are just trending-up players (Bryce Young #1 = rostered everywhere). No FAAB values. |
@@ -84,7 +84,7 @@
 
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
-| 45 | Big Board | Prospects ranked? Positional filter? Athletic data shown? | RE-AUDIT — Ship Loop added escapeHtml() on draft_year and position in renderTierView/renderBigBoard (lab.js). XSS fix verified correct. API returns 16 QB prospects for 2026 (Taylen Green #1, RPS 72.8). Not yet deployed to prod (on ship/launch-fixes). PASS. |
+| 45 | Big Board | Prospects ranked? Positional filter? Athletic data shown? | RE-AUDIT SESSION 9 — PASS. XSS fix deployed to prod. API returns correct prospect data (QB #1 RPS 72.8). Big Board not affected by FUNC-012 (uses college/draft data, not player_week_stats). |
 | 46 | Draft Class | Aggregate class metrics? Per-position breakdown? | DONE — 7-round breakdown, per-round math correct. P0 FUNC-011: PPG inflated for multi-season players (COUNT DISTINCT week collapses across seasons — Bo Nix shows 33 PPG, actual ~20). |
 | 47 | Prospect profiles | Click a prospect. Combine data correct? College stats shown? | SKIP — /api/prospect-profiles returns 404. No dedicated endpoint. Prospect data available via /api/prospect-scores (Big Board, flow 45). |
 | 48 | Mock Draft Board | Board loads? Picks assignable? Trade pick functionality? | SKIP — /api/mock-draft returns 404. Not implemented. |
@@ -111,7 +111,7 @@
 | 59 | Dark mode | Every element switches? Data readable in dark? Charts visible? No white flashes? | DONE — PASS (visual). Dark mode applies cleanly: brown palette, readable text, proper contrast, no white flashes. Sidebar and main area both switch correctly. Charts untestable (FUNC-001). |
 | 60 | Auth flow | Sign in modal opens? Closes cleanly? Error states for bad input? | DONE — PASS. Modal opens, Sign In/Register tabs, email/password fields. Focus trap, Escape close, overlay click close. Rate limiting (3 reg/24hr), generic errors, loading states. Browser-verified on prod. |
 | 61 | Pricing page | All plans shown? CTAs work? Correct prices? Checkout starts? | DONE — PASS. 3 tiers: Free $0, Pro $79.99/yr ($6.67/mo), Elite $149.99/yr ($12.50/mo). Monthly toggle: $9.99/$19.99. 7-day free trial CTA. 0 JS errors. |
-| 62 | Dashboard / Stat Leaders | Summary stats populated? Leaders match screener data? Category switching works? | RE-AUDIT — Ship Loop added season_type=regular to SOS/stock_watch/report_cards/awards in dashboards.py. Code fix correct but not deployed, and blocked by FUNC-012 (DB season_type all 'regular'). Prod still shows Lamar=19 games, Iron Man=19 games. Awards/leaders data contaminated by playoffs. |
+| 62 | Dashboard / Stat Leaders | Summary stats populated? Leaders match screener data? Category switching works? | RE-AUDIT SESSION 11 — FUNC-012 L2 CODE FIXED. Local: Stat Leaders Lamar=17 GP, Burrow=17 GP. analytics.py now has 23 season_type filters. Awaiting deploy. |
 
 ## Group 9: Bureau & Situation Room (the paid tier)
 

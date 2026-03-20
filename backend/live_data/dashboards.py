@@ -79,6 +79,7 @@ def fetch_efficiency_rankings(season=None, position=None, limit=30, week=None):
                     ON s.player_id = p.player_id AND s.season = ?
                 WHERE p.position IN ('QB','RB','WR','TE')
                   AND p.fantasy_relevant = 1
+                  AND s.season_type = 'regular'
                   {pos_filter}
                   {week_filter}
                 GROUP BY p.player_id
@@ -243,6 +244,7 @@ def fetch_consistency_rankings(season=None, position=None, limit=30, week=None):
                     ON s.player_id = p.player_id AND s.season = ?
                 WHERE p.position IN ('QB','RB','WR','TE')
                   AND p.fantasy_relevant = 1
+                  AND s.season_type = 'regular'
                   {pos_filter}
                   {week_filter}
                 ORDER BY p.player_id, s.week
@@ -1844,6 +1846,7 @@ def fetch_vorp(season=None, position=None, limit=30):
                     ON s.player_id = p.player_id AND s.season = ?
                 WHERE p.position IN ('QB','RB','WR','TE')
                   AND p.fantasy_relevant = 1
+                  AND s.season_type = 'regular'
                 GROUP BY p.player_id
                 HAVING games >= 6 AND (total_ppr / games) >= 2
                 ORDER BY total_ppr DESC
@@ -1962,7 +1965,7 @@ def fetch_stat_correlations(season=None, position=None, x_stat=None, y_stat=None
             params = []
             if season:
                 where.append("s.season = ?")
-                params.append(int(season))
+                params.append(_safe_int(season))
             if position and position.upper() in FANTASY_POSITIONS:
                 where.append("p.position = ?")
                 params.append(position.upper())

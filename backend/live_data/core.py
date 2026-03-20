@@ -386,7 +386,7 @@ def _enrich_with_breakout(conn, items, season=None, career_mode=False):
     rows = conn.execute(f"""
         SELECT player_id, season, SUM(fantasy_points_ppr) as ppr
         FROM player_week_stats
-        WHERE player_id IN ({placeholders})
+        WHERE player_id IN ({placeholders}) AND season_type = 'regular'
         GROUP BY player_id, season
         ORDER BY player_id, season
     """, player_ids).fetchall()
@@ -606,7 +606,7 @@ def _enrich_with_team_shares(conn, items, season=None, career_mode=False, week=0
                    SUM(s.carries) as team_carries
             FROM players p
             JOIN player_week_stats s ON p.player_id = s.player_id
-            WHERE p.team IN ({team_placeholders})
+            WHERE p.team IN ({team_placeholders}) AND s.season_type = 'regular'
             GROUP BY p.team
         """
         team_rows = conn.execute(team_query, team_list).fetchall()
@@ -627,7 +627,7 @@ def _enrich_with_team_shares(conn, items, season=None, career_mode=False, week=0
                    SUM(s.carries) as team_carries
             FROM players p
             JOIN player_week_stats s ON p.player_id = s.player_id
-            WHERE p.team IN ({team_placeholders}) AND s.season = ?{week_clause}
+            WHERE p.team IN ({team_placeholders}) AND s.season = ? AND s.season_type = 'regular'{week_clause}
             GROUP BY p.team
         """
         team_params = team_list + [s] + ([week] if week > 0 else [])
