@@ -96,6 +96,7 @@ function saveFormula() {
 }
 
 function deleteFormula(name) {
+  if (!confirm("Delete formula \"" + name + "\"?")) return;
   state.formulas = state.formulas.filter(f => f.name !== name);
   try { localStorage.setItem("razzle_formulas", JSON.stringify(state.formulas)); } catch(e) {}
   _deleteFormulaFromServer(name);
@@ -207,7 +208,7 @@ function syncFormulasFromCloud() {
     for (var k = 0; k < merged.length; k++) {
       var key = "formula_" + merged[k].name.toLowerCase().replace(/[^a-z0-9]/g, "_");
       if (typeof COLUMNS !== "undefined") {
-        COLUMNS[key] = { label: merged[k].name, group: "Formulas", decimals: 1 };
+        COLUMNS[key] = { label: (typeof escapeHtml === "function" ? escapeHtml(merged[k].name) : merged[k].name), group: "Formulas", decimals: 1 };
       }
     }
 
