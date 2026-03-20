@@ -1842,3 +1842,43 @@ All `ctx.fillStyle = 'rgba(45,31,20,...)'` → theme-branching with sand rgba fo
 - All Python files compile clean
 - 59/59 tests pass
 - 18 standalone HTML panels audited: all pass consistency checks (app.js, viewport, nav, error handling, escapeHtml, overflow-x:auto)
+
+---
+
+## Quality Audit: 5-Agent Deep Sweep (Mar 20 — Session 10)
+
+**Goal**: Fresh 5-agent parallel audit across crash bugs, dark mode, design, UX, backend robustness.
+
+### Wave 1 Fixes (28 total)
+
+| # | Fix | Category | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | 3x .toFixed() on potentially string values | Type safety | lab.js | hover card ppg/fpts/dvs + rankings PNG — wrapped in Number() |
+| 2 | 2x clipboard API guard | Crash prevention | lab.js | copyShareURLFromModal + copyRedditTitle — guard navigator.clipboard before access |
+| 3 | 5x NaN poisoning in Math.max.apply | Data corruption | lab-panels.js | advantage/snap-eff/workload/drops/garbage-time — null API fields caused NaN max, breaking all bar widths |
+| 4 | int(week) → _safe_int(week) | Input validation | players.py, dashboards.py (5 sites) | Non-numeric week params crashed with ValueError |
+| 5 | float(val) try/except on filter values | Input validation | players.py | Non-numeric filter values crashed screener endpoint |
+| 6 | int(min_gp) → _safe_int(min_gp) | Input validation | players.py | Non-numeric min games crashed screener |
+| 7 | Thread-safe cache eviction | Thread safety | core.py | list() snapshot on dict.items() prevents RuntimeError under concurrent load |
+| 8 | 7x canvas hex → getCanvasTheme() | Dark mode | league-intel.html | Radar chart + histogram now theme-aware |
+| 9 | 8x hardcoded 2024 seasons → dynamic | Season defaults | advantage, fptsbreakdown, pace, playoffs, stacks, streaks, waivers, weeklymvp | NFL-season-aware calc back to 2015 |
+
+### Wave 2 Fixes (19 total)
+
+| # | Fix | Category | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | Event listener leak in renderSavedFormulas | Memory leak | formulas.js | Click handler stacked on every re-render — stored on element, removed before re-add |
+| 2 | runAllAgents race condition guard | Race condition | warroom.js | _runningAllAgents flag prevents double-click firing two concurrent LLM runs |
+| 3 | resizeCanvas null guard | Crash prevention | warroom.js | Prevents crash if canvasContainer missing |
+| 4 | Logo null guard in hamburger | Crash prevention | app.js | Prevents crash if .logo element missing from nav |
+| 5 | publishOverlay null guards | Crash prevention | formula-store.js | 4 null guards on DOM elements in openPublishFlow |
+| 6 | resp.ok guard on submitPublish | Robustness | formula-store.js | Prevents SyntaxError on non-JSON error responses |
+| 7 | Number() coercion on avgRating | Type safety | formula-store.js | Prevents .toFixed() crash on string API values |
+| 8 | NaN display fix on undefined fantasy_points_ppr | Data display | player.js | Added null check before division |
+| 9 | 31x canvas hex → getCanvasTheme() | Dark mode | aging, explorer, breakdown, career, career-compare, draftclass | All canvas draw functions now theme-aware |
+
+### Verified Clean
+- All 11 JS files syntax clean
+- All Python files compile clean
+- 59/59 tests pass
+- 0 regressions
