@@ -116,8 +116,8 @@ def fetch_players(
             _sort_key = sort_key
             if _sort_key not in safe_sorts:
                 _sort_key = "fantasy_points_ppr"
-            _sort_dir = sort_dir
-            if _sort_dir.lower() not in ("asc", "desc"):
+            _sort_dir = sort_dir or "desc"
+            if str(_sort_dir).lower() not in ("asc", "desc"):
                 _sort_dir = "desc"
 
             where = ["s.season_type = 'regular'"]
@@ -309,7 +309,8 @@ def _fetch_screener_uncached(body):
         }
         if sort_key not in safe_sorts:
             sort_key = "fantasy_points_ppr"
-        if sort_dir.lower() not in ("asc", "desc"):
+        sort_dir = sort_dir or "desc"
+        if str(sort_dir).lower() not in ("asc", "desc"):
             sort_dir = "desc"
 
         # Columns that can be filtered via SQL HAVING (not derived/rate metrics)
