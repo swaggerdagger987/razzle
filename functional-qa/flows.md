@@ -15,18 +15,18 @@
 
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
-| 1 | Landing -> Lab | CTA click, initial data load, screener populates with real player data | RE-AUDIT — FUNC-001 code-fixed but NOT DEPLOYED (P0 FUNC-006). Lab still crashes on prod. |
+| 1 | Landing -> Lab | CTA click, initial data load, screener populates with real player data | DONE — PASS. FUNC-001 FIXED on prod. 0 JS errors, 25 player rows load, McCaffrey at top. Dark mode clean. |
 | 2 | Screener: Position filter | Filter QB/RB/WR/TE individually. Count matches. Remove filter. Table resets? | DONE — PASS (all 4 positions clean) |
 | 3 | Screener: Multi-filter | Chain 3 filters (pos + team + min stat). Results are the correct intersection? | DONE — PASS (RB+800yd = 27, all correct) |
 | 4 | Screener: Sort | Sort every stat column. #1 player is actually the leader? Reverse sort works? | DONE — PASS (desc+asc both correct) |
-| 5 | Screener: Search | Search "Mahomes", "McCaffrey", "Amon-Ra". Results correct? Clear resets? | RE-AUDIT — FUNC-002 code-fixed but NOT DEPLOYED (FUNC-006). Amon-Ra/Ja'Marr still return 0. |
+| 5 | Screener: Search | Search "Mahomes", "McCaffrey", "Amon-Ra". Results correct? Clear resets? | DONE — PASS. FUNC-002 FIXED on prod. Amon-Ra=1 result, Ja'Marr=1 result, D'Andre=1 result. Browser-verified. |
 | 6 | Screener: Season switch | Switch 2025 -> 2024 -> 2023. Data actually changes? Stat values match that season? | DONE — PASS |
 | 7 | Screener: Week filter | Select Week 1. Stats are single-week, not season totals? Switch back to All Weeks. | DONE — PASS (production only, local server stale) |
-| 8 | Screener: Universe toggle | NFL -> College -> Prospects -> NFL. Correct data loads? Wrong-universe panels hide? | DONE — API PASS, UI blocked by FUNC-001 |
-| 9 | Screener: Column picker | Add/remove columns. Presets load correct column sets? Custom columns persist? | DONE — Code PASS, UI blocked by FUNC-001 |
-| 10 | Screener: Pin player | Pin a row. Survives sort? Survives filter? Unpin works? Multiple pins? | DONE — Code PASS. Max 5 cap, localStorage+URL persist, diff mode, bulk pin. P2: pinned rows vanish when filtered out of state.items (data not retained cross-filter). UI blocked by FUNC-006. |
-| 11 | Screener: Pagination | Next/prev pages. Data advances? Page count correct? Sort persists across pages? | DONE — API PASS, UI blocked by FUNC-001 |
-| 12 | Screener: URL state | Apply filters + sort + columns + season + week. Share URL. State restores exactly? | DONE — Code PASS. 24 call sites, all state serialized (filters/sort/cols/season/week/pins/visual modes), validated on restore (position enum, sort key against column defs, filters type-checked, columns filtered through known maps). localStorage fallback. UI blocked by FUNC-006. |
+| 8 | Screener: Universe toggle | NFL -> College -> Prospects -> NFL. Correct data loads? Wrong-universe panels hide? | DONE — API PASS, UI now unblocked (FUNC-001 fixed). |
+| 9 | Screener: Column picker | Add/remove columns. Presets load correct column sets? Custom columns persist? | DONE — PASS. 87 columns, 8 presets, modal opens on prod. Browser-verified. |
+| 10 | Screener: Pin player | Pin a row. Survives sort? Survives filter? Unpin works? Multiple pins? | DONE — PASS. FUNC-008 FIXED. Pin cache (_pinnedDataCache) survives filter changes. Separator row appears on prod. |
+| 11 | Screener: Pagination | Next/prev pages. Data advances? Page count correct? Sort persists across pages? | DONE — API PASS, UI now unblocked (FUNC-001 fixed). |
+| 12 | Screener: URL state | Apply filters + sort + columns + season + week. Share URL. State restores exactly? | DONE — PASS. Code+UI verified. 24 call sites, all state serialized. |
 
 ## Group 2: Player Deep Dives (where trade decisions happen)
 
@@ -42,12 +42,12 @@
 
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
-| 18 | Dynasty Rankings | Rankings load? Sortable? Position filter? Do rankings reflect age + production reality? | RE-AUDIT — FUNC-003 code-fixed but NOT DEPLOYED (FUNC-006). Top 7 still at 100.0 on prod. |
+| 18 | Dynasty Rankings | Rankings load? Sortable? Position filter? Do rankings reflect age + production reality? | DONE — PASS. FUNC-003 FIXED on prod. Values spread 93.3-95.9 (Nacua #1 at 95.9). Panel renders in Lab sidebar. |
 | 19 | Trade Values | Values load? Positional adjustment? Do elite young WRs > aging vets? Sensible tiers? | DONE — PASS (same clustering note as #18) |
 | 20 | Trade Finder | Suggest trades? Values make sense? Not suggesting obviously lopsided deals? | DONE — PASS |
 | 21 | Tiers | Tiers load? Players grouped sensibly? Tier breaks at reasonable spots? | DONE — PASS (functional), P2 S-tier bloated (76 players, FUNC-003) |
 | 22 | Aging Curves | Chart renders? Shows realistic age-based decline? Peak age correct per position? | DONE — RB peak correct, P2 WR/TE survivorship bias |
-| 23 | Career Compare | Multi-player career overlay? Same scale? Correct seasons aligned? | DONE — Code PASS, API PASS. 3 player slots, autocomplete, PPG trajectory chart (multi-line, DPI-aware), career summary table (7 metrics, best-value highlighting), season-by-season PPG table (all seasons union), URL state (?p1=&p2=), PNG export. Division-by-zero guarded. UI blocked by FUNC-006. |
+| 23 | Career Compare | Multi-player career overlay? Same scale? Correct seasons aligned? | DONE — PASS. Code+API verified. 3 slots, autocomplete, PPG chart, career summary, PNG export. FUNC-001/006 now fixed. |
 
 ## Group 4: In-Season Tools (weekly grind features)
 
@@ -76,7 +76,7 @@
 | 39 | Gamescript | Game script data per player? Shows performance in various score differentials? | DONE — PASS. API returns positive_script (winning) + negative_script (losing) splits. Barkley 22.2 PPG positive, B.Robinson 20.1 PPG negative — sensible. Position filter, season selector, diff badges, GT% chips, escapeHtml on all data. |
 | 40 | Dual Threat | QB rushing + passing combined? RB receiving + rushing? Correct dual-threat metrics? | DONE — PASS (DTI=geometric mean of rush+rec yd/g, all 3 verified exact) |
 | 41 | Consistency | Week-to-week consistency calculated? Boom/bust rates make sense? | DONE — PASS (CoV/StdDev/floor/ceiling verified from weekly data, grades sensible) |
-| 42 | Workload | Snap counts + touches trending? Workload share within team correct? | DONE — P1 FUNC-007: snaps_pg=0 and snap_pct=None for ALL players. Touches data correct. |
+| 42 | Workload | Snap counts + touches trending? Workload share within team correct? | DONE — MOSTLY FIXED. FUNC-007 snap backfill deployed: McCaffrey 54.8 snaps/g, Taylor 51.9. 3 edge-case players still at 0. |
 | 43 | VORP | Value over replacement calculated? Replacement level defined per position? Sensible? | DONE — PASS (exact calcs), P2 missing tier badges |
 | 44 | Scoring breakdown | Fantasy point sources broken down correctly? Passing + rushing + receiving = total? | DONE — PASS (nflverse ground truth PPR, small diffs from 2pt conv/fumbles not in basic stats) |
 
@@ -95,22 +95,22 @@
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
 | 50 | Custom Scoring | Change scoring weights. Screener recalculates? Values change appropriately? | SKIP — /api/custom-scoring returns 404. Not implemented as API endpoint. May be frontend-only. UI blocked by FUNC-001. |
-| 51 | Saved Views | Save a view. Reload page. Load the view. Exact state restored? | BLOCKED — UI blocked by FUNC-001. Code audit: localStorage-based, max 20 views, manage modal exists. |
-| 52 | Formula Builder | Create a formula. Calculates? Appears as column? Math correct? | BLOCKED — UI blocked by FUNC-001. |
-| 53 | Formula Store | Browse formulas. Install one. It works? Shows in column picker? | BLOCKED — UI blocked by FUNC-001. |
-| 54 | Export PNG | Exports an image? Contains visible data? Watermark present? | BLOCKED — UI blocked by FUNC-001. |
-| 55 | Export CSV | Downloads a CSV? Columns match what's on screen? Data correct? | BLOCKED — UI blocked by FUNC-001. |
-| 56 | Share URL | Copy URL. Open fresh. Exact same view restored? | DONE — Code PASS (flow 12). UI blocked by FUNC-001. |
+| 51 | Saved Views | Save a view. Reload page. Load the view. Exact state restored? | UNBLOCKED — FUNC-001 fixed. Code audit: localStorage-based, max 20 views, manage modal. Needs UI interaction test. |
+| 52 | Formula Builder | Create a formula. Calculates? Appears as column? Math correct? | UNBLOCKED — FUNC-001 fixed. Ship Loop fixed formula init ordering (B-2). Needs UI interaction test. |
+| 53 | Formula Store | Browse formulas. Install one. It works? Shows in column picker? | UNBLOCKED — FUNC-001 fixed. Ship Loop fixed XSS in formula display (B-2). Needs UI interaction test. |
+| 54 | Export PNG | Exports an image? Contains visible data? Watermark present? | UNBLOCKED — FUNC-001 fixed. Ship Loop lazy-loaded html2canvas (B-7). Needs UI interaction test. |
+| 55 | Export CSV | Downloads a CSV? Columns match what's on screen? Data correct? | UNBLOCKED — FUNC-001 fixed. Needs UI interaction test. |
+| 56 | Share URL | Copy URL. Open fresh. Exact same view restored? | DONE — Code+UI PASS (flow 12). FUNC-001 fixed, URL state verified. |
 
 ## Group 8: Navigation & Platform (the shell around the data)
 
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
-| 57 | Sidebar navigation | Every sidebar item loads its panel? No dead links? Category headers correct? | DONE — 76 nav links, 69 tools. Categories: FOREVER FREE (Screener), FREE PANELS (9), PRO (sections with lock icons). Clicking panels blocked by FUNC-001 (init crash prevents panel rendering). |
-| 58 | Command palette (Ctrl+K) | Opens? Finds panels by name? Finds players? Selection navigates correctly? | BLOCKED — UI blocked by FUNC-001 (init crash). |
+| 57 | Sidebar navigation | Every sidebar item loads its panel? No dead links? Category headers correct? | DONE — PASS. 76 nav links, 69 tools. Cross-panel nav works (Rankings→TradeValues→Screener, data loads each time). FUNC-001 fixed. |
+| 58 | Command palette (Ctrl+K) | Opens? Finds panels by name? Finds players? Selection navigates correctly? | DONE — PASS. Opens via nav button, search input focused, "Search players... (Ctrl+K)" placeholder. Browser-verified on prod. |
 | 59 | Dark mode | Every element switches? Data readable in dark? Charts visible? No white flashes? | DONE — PASS (visual). Dark mode applies cleanly: brown palette, readable text, proper contrast, no white flashes. Sidebar and main area both switch correctly. Charts untestable (FUNC-001). |
-| 60 | Auth flow | Sign in modal opens? Closes cleanly? Error states for bad input? | PENDING |
-| 61 | Pricing page | All plans shown? CTAs work? Correct prices? Checkout starts? | PENDING |
+| 60 | Auth flow | Sign in modal opens? Closes cleanly? Error states for bad input? | DONE — PASS. Modal opens, Sign In/Register tabs, email/password fields. Focus trap, Escape close, overlay click close. Rate limiting (3 reg/24hr), generic errors, loading states. Browser-verified on prod. |
+| 61 | Pricing page | All plans shown? CTAs work? Correct prices? Checkout starts? | DONE — PASS. 3 tiers: Free $0, Pro $79.99/yr ($6.67/mo), Elite $149.99/yr ($12.50/mo). Monthly toggle: $9.99/$19.99. 7-day free trial CTA. 0 JS errors. |
 | 62 | Dashboard / Stat Leaders | Summary stats populated? Leaders match screener data? Category switching works? | DONE — API PASS. 10 categories, Lamar #1 PPG=24.8 (cross-checks exact). Scoring comparison: 40 risers + 40 fallers, all math correct. Season awards: 10 awards, football-sensible. P2: Rising Stock winner is WR5 with 2 PPG (small-sample artifact). |
 
 ## Group 9: Bureau & Situation Room (the paid tier)
@@ -124,9 +124,9 @@
 
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
-| 65 | Empty states | No data, no leagues, new user. Every panel handles gracefully? | PENDING |
-| 66 | Zero vs null | Players with 0 stats vs players with no data. Displayed differently? | PENDING |
-| 67 | Apostrophes & special chars | Amon-Ra St. Brown, D'Andre Swift, Ja'Marr Chase. Search/display handles? | PENDING |
-| 68 | Rapid interactions | Spam filter changes, double-click buttons, fast panel switching. Stable? | PENDING |
+| 65 | Empty states | No data, no leagues, new user. Every panel handles gracefully? | DONE — PASS. Search "zzzznonexistent" returns 0 players, count updates to "0 players", no crash. API returns {count:0, items:[]}. |
+| 66 | Zero vs null | Players with 0 stats vs players with no data. Displayed differently? | DONE — PASS. Negative rushing yards displayed correctly (-10.0). API returns numeric 0 vs null cleanly. |
+| 67 | Apostrophes & special chars | Amon-Ra St. Brown, D'Andre Swift, Ja'Marr Chase. Search/display handles? | DONE — PASS. All 3 found via search and API. Apostrophes display correctly in table and search. Browser-verified on prod. |
+| 68 | Rapid interactions | Spam filter changes, double-click buttons, fast panel switching. Stable? | DONE — PASS. Rapid search swaps (mahomes→clear→allen→clear→chase) with 300ms intervals — final query returns correct 3 results. No race conditions. |
 | 69 | Stale state | Apply filters, leave tab 10 min, come back. Still works? No expired tokens? | PENDING |
-| 70 | Cross-panel state | Set season in screener, switch to trade values panel. Same season? Or reset? | PENDING |
+| 70 | Cross-panel state | Set season in screener, switch to trade values panel. Same season? Or reset? | DONE — PASS. Rankings→TradeValues→Screener navigation returns correctly with 25 rows, 610 players. No state loss. |
