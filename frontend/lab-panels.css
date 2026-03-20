@@ -3908,7 +3908,7 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: white;
+  background: var(--orange);
   animation: md-pulse 1.2s ease-in-out infinite;
 }
 @keyframes md-pulse {

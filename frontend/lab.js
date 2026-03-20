@@ -9486,7 +9486,7 @@ function renderAgingCurveChart(targetCanvas) {
     ctx.font = "bold 10px 'Space Mono', monospace";
     ctx.fillStyle = color;
     ctx.textAlign = "left";
-    ctx.fillText(p.name.split(" ").pop(), xScale(last.age) + 6, yScale(last.ppg) + 3);
+    ctx.fillText((p.name || '').split(" ").pop(), xScale(last.age) + 6, yScale(last.ppg) + 3);
 
     ctx.globalAlpha = 1.0;
     colorIdx++;

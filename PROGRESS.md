@@ -1534,3 +1534,36 @@ All `ctx.fillStyle = 'rgba(45,31,20,...)'` → theme-branching with sand rgba fo
 - 0 regressions
 - 0 `box-shadow: 3px 3px 0` in resting states (all 29 instances are hover/focus — correct)
 - 0 display font below 16px in CSS (except intentional 11px uppercase section labels)
+
+---
+
+## Quality Audit: 5-Agent Parallel Sweep (Mar 20 — Session 6)
+
+**Goal**: Fresh 5-agent parallel audit across crash bugs (lab.js, lab-panels.js), backend robustness, dark mode completeness, and design consistency.
+
+### P0 Crash Bug Fixes (4)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | `p.name.split(" ").pop()` null crash | lab.js:9489 | Aging curve labels — added `(p.name || '')` guard |
+| 2 | `p.history.forEach` on undefined | lab-panels.js:219 | Rankings panel — added `(p.history || [])` guard |
+| 3 | `pd.players.forEach` on undefined | lab-panels.js:2079 | Scarcity panel — added `(pd.players || [])` guard |
+| 4 | `team.players.sort/forEach` on undefined | lab-panels.js:9104 | Targets panel — added `if (!team.players) team.players = []` guard |
+
+### Dark Mode Fix (1)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 5 | `.md-clock-pulse` background: white → var(--orange) | lab-panels.css:3911 | White dot invisible on light sand bg — orange works on both themes |
+
+### Audit Findings (Not Bugs)
+- Text-shadow `rgba(45,31,20,...)` on tier letters and bar values: these are on accent-colored backgrounds (not theme-responsive), shadow is for depth. Correct as-is.
+- Box shadow 3px on hover states: intentional pressed effect (reviewed in prior passes)
+- Backend SQL ORDER BY f-strings: all values are whitelist-validated before interpolation. Pattern is safe.
+- All `color: white` / `color: #fff` instances are on accent backgrounds — correct contrast
+
+### Verified Clean
+- All 11 JS files syntax clean
+- All Python files compile clean
+- 59/59 tests pass (5.67s)
+- 0 regressions

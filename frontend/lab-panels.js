@@ -216,7 +216,7 @@
         html += ' <span class="dh-team">' + escapeHtml(p.team) + '</span></div></div></td>';
 
         var vals = [];
-        p.history.forEach(function(h, idx) {
+        (p.history || []).forEach(function(h, idx) {
           if (h) {
             var tv = h.trade_value;
             vals.push(tv);
@@ -2076,7 +2076,7 @@
           var tierBreaks = pd.tier_breaks || [];
           var nextBreakIdx = 0;
 
-          pd.players.forEach(function(p) {
+          (pd.players || []).forEach(function(p) {
             while (nextBreakIdx < tierBreaks.length && p.rank > tierBreaks[nextBreakIdx].end) {
               var tb = tierBreaks[nextBreakIdx];
               html += '<div class="scarcity-tier-break"><div class="scarcity-tier-line"></div>';
@@ -9101,6 +9101,7 @@
       var html = '';
       data.teams.forEach(function(team) {
         var sortKey = activeMode === 'targets' ? 'targets' : 'carries';
+        if (!team.players) team.players = [];
         team.players.sort(function(a, b) { return b[sortKey] - a[sortKey]; });
         var total = activeMode === 'targets' ? team.total_targets : team.total_carries;
         var label = activeMode === 'targets' ? 'Targets' : 'Carries';
