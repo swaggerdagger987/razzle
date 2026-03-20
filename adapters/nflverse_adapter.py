@@ -792,6 +792,7 @@ def sync_rosters(conn, seasons=None):
             college = (row.get("college") or "").strip() or None
             status = (row.get("status") or "").strip() or None
             jersey = safe_int(row.get("jersey_number"))
+            headshot = (row.get("headshot_url") or "").strip() or None
 
             # Update existing player by gsis_id match
             result = conn.execute("""
@@ -803,10 +804,11 @@ def sync_rosters(conn, seasons=None):
                     college = COALESCE(?, college),
                     status = COALESCE(?, status),
                     jersey_number = COALESCE(?, jersey_number),
+                    headshot_url = COALESCE(?, headshot_url),
                     updated_at = ?
                 WHERE gsis_id = ? OR player_id = ?
             """, (age, years_exp, height, weight, college, status, jersey,
-                  utc_now(), gsis, gsis))
+                  headshot, utc_now(), gsis, gsis))
 
             if result.rowcount > 0:
                 enriched += 1
