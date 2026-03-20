@@ -264,7 +264,7 @@ function render() {
     return;
   }
 
-  const maxWL = Math.max(...players.map(p => p.workload));
+  const maxWL = Math.max(...players.map(p => p.workload), 1);
   let html = '<table class="wl-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Load</th><th>Tch/G</th><th>Snp/G</th><th>Snp%</th><th>Car/G</th><th>Tgt/G</th><th>Flags</th><th></th></tr></thead><tbody>';
 
   players.forEach((p, i) => {

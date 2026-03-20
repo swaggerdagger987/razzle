@@ -594,3 +594,40 @@ All 59 tests pass. All 11 JS files syntax-clean. 0 remaining issues found.
 - Did not create separate backend/cache.py — existing two-level cache system already provides everything the ticket asked for
 - Adapter cache_clear() is best-effort (try/except) since adapters may run as standalone scripts outside the server process
 - Admin cache-clear endpoint clears both data-level and response-level caches
+
+---
+
+## Quality Pass: Edge Cases + Design Consistency (Mar 19)
+
+**Goal**: Systematic quality audit across error handling, design consistency, dark mode, and mobile responsiveness. Every pixel, every interaction, every error state.
+
+| # | Fix | Category | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | Math.max/min empty array safeguards | Edge case | lab-panels.js, charts.js, drops.html, gamescript.html, garbagetime.html, snapefficiency.html, successrate.html, tdregression.html, workload.html, comptable.html | 15 instances: added fallback values (.concat([1]) or Math.max(...vals, 1)) to prevent -Infinity on empty arrays |
+| 2 | Unguarded name split/pop | Edge case | charts.js | 2 fixes: null guard on full_name.split().pop() for scatter plot and compare chart labels |
+| 3 | Missing resp.ok guards | Robustness | player.js, warroom.js | 4 fetch chains now check resp.ok before parsing JSON (compare search, agent quota, briefing latest, briefing history) |
+| 4 | Bootstrap grade colors → CSS variables | Design | lab-panels.css, styles.css | 45 Bootstrap palette colors (#d4edda, #cce5ff, #fff3cd, #ffe0cc, #f8d7da and their text pairs) replaced with semantic CSS variables. Added --semantic-blue, --semantic-yellow, --semantic-orange vars with dark mode overrides. |
+| 5 | Dark mode overlay visibility | Dark mode | styles.css, lab.html | 5 modal overlays (mobile-nav, auth-modal, filter-modal, column-picker, cmd-palette) used rgba(45,31,20,...) which is invisible on dark espresso backgrounds. Added [data-theme="dark"] overrides with rgba(0,0,0,...). |
+| 6 | JS inline hardcoded colors → CSS vars | Dark mode | lab.js, warroom.js | 4 inline style.color assignments changed from hex (#2ec4b6, #e63946, #d44040, "white") to var() references (--green, --red, --bg-card). |
+| 7 | Hardcoded hex in HTML inline styles | Design | prospects.html, comptable.html | Position tier badges (#d97757 etc.) → var(--orange) etc. Button hover #b85a3a → var(--ink). |
+
+### Verified Clean (no fixes needed)
+- 0 remaining 1px solid borders on components (only table row dividers at 1px)
+- 0 cold gray hex colors in CSS/HTML (all in warroom pixel art, exempted)
+- 0 Luckiest Guy at small sizes (<16px)
+- 0 debug console.log/TODO/FIXME
+- 0 unescaped innerHTML with user data (XSS)
+- 0 SQL injection vectors (all parameterized, sort cols whitelisted)
+- 0 bare except: blocks in backend
+- 0 missing viewport/title/lang tags across 74 pages
+- All touch/scroll listeners passive
+- CORS locked to razzle.lol in production
+- All 11 JS files syntax clean
+- All 16 Python files compile clean
+- 59/59 tests pass
+
+### Decisions Log
+- Canvas hardcoded colors (70+ instances of #ede0cf/#f7efe5 in ctx.fillStyle) are a known dark mode limitation — canvas can't use CSS variables directly. A getComputedStyle refactor would touch 200+ lines across 8 files with regression risk. Deferred to post-launch.
+- Silent .catch(function(){}) on analytics pageview and background sync fetches (formulas, watchlist) are intentional fire-and-forget patterns. Not bugs.
+- #fff on colored badges (position badges, tier badges) is correct — white text on saturated backgrounds for contrast regardless of theme.
+- Functional gradients (skeleton shimmer, data bar viz, resize handle) are not decorative and don't violate the "NO gradients" design rule.

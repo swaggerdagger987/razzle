@@ -264,7 +264,7 @@ function render() {
     return;
   }
 
-  const maxSR = Math.max(...players.map(p => p.success_rate));
+  const maxSR = Math.max(...players.map(p => p.success_rate), 1);
   let html = '<table class="sr-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>SR%</th><th>Type</th><th>Vol</th><th>PPG</th><th>YPC</th><th></th></tr></thead><tbody>';
 
   players.forEach((p, i) => {

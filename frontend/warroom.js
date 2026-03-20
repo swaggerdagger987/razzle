@@ -2597,7 +2597,7 @@ function updateQueryLimitBadge() {
     var tier = isProUser() ? 'Pro' : 'Free';
     el.textContent = remaining + '/' + limit + ' queries remaining today (' + tier + ')';
     if (remaining <= 1) el.style.color = 'var(--orange)';
-    else if (remaining <= 0) el.style.color = '#d44040';
+    else if (remaining <= 0) el.style.color = 'var(--red)';
     else el.style.color = 'var(--ink-light)';
   }
 }
@@ -2610,7 +2610,7 @@ function syncQuotaFromServer() {
     if (token) headers['Authorization'] = 'Bearer ' + token;
     var base = typeof API_BASE !== 'undefined' ? API_BASE : '';
     fetch(base + '/api/agents/quota', { headers: headers })
-      .then(function(r) { return r.json(); })
+      .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
       .then(function(data) {
         if (data.used != null) {
           _setLocalQueryCount(data.used);
@@ -3513,7 +3513,7 @@ function loadLatestBriefing() {
     (typeof API_BASE !== 'undefined' ? API_BASE : '') + '/api/briefings/latest',
     { headers: { 'Authorization': 'Bearer ' + token } }
   )
-  .then(function(r) { return r.json(); })
+  .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
   .then(function(data) {
     if (!data.briefing) {
       body.innerHTML = '<div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); text-align:center; padding:16px;">no briefings yet — hit "Generate New Briefing" to get your first one</div>';
@@ -3686,7 +3686,7 @@ function toggleBriefingHistory() {
     (typeof API_BASE !== 'undefined' ? API_BASE : '') + '/api/briefings/history?limit=5',
     { headers: { 'Authorization': 'Bearer ' + token } }
   )
-  .then(function(r) { return r.json(); })
+  .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
   .then(function(data) {
     if (!data.briefings || !data.briefings.length) {
       panel.innerHTML = '<div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); text-align:center; padding:8px;">no briefing history</div>';

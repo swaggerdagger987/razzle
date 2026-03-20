@@ -141,8 +141,8 @@
     font-weight: 700;
   }
   .ct-btn:hover { background: var(--ink); color: var(--bg); }
-  .ct-btn.primary { background: var(--orange); color: #fff; border-color: var(--ink); }
-  .ct-btn.primary:hover { background: #b85a3a; }
+  .ct-btn.primary { background: var(--orange); color: var(--bg-card); border-color: var(--ink); }
+  .ct-btn.primary:hover { background: var(--ink); color: var(--bg); }
 
   .ct-loading {
     text-align: center;
@@ -534,7 +534,7 @@
     cols.forEach(function(c) {
       if (c.type === 'text') return;
       var vals = players.map(function(p) { return p[c.key] || 0; });
-      best[c.key] = INVERSE_STATS[c.key] ? Math.min.apply(null, vals) : Math.max.apply(null, vals);
+      best[c.key] = INVERSE_STATS[c.key] ? Math.min.apply(null, vals.concat([0])) : Math.max.apply(null, vals.concat([0]));
     });
 
     var html = '<div class="ct-table-wrap"><table class="ct-table"><thead><tr>';

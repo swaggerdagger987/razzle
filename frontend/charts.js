@@ -389,7 +389,7 @@ function drawScatter() {
   for (const p of labeled) {
     const x = toX(p[xKey]);
     const y = toY(p[yKey]);
-    const lastName = p.full_name.split(" ").pop();
+    const lastName = (p.full_name || "?").split(" ").pop() || "?";
     ctx.fillText(lastName, x + 7, y + 3);
   }
 }
@@ -709,7 +709,7 @@ function drawHeatmap() {
     ctx.fillStyle = "#2d1f14";
     ctx.textAlign = "left";
     const nameParts = (player.full_name || "?").split(" ");
-    const lastName = nameParts.slice(-1)[0];
+    const lastName = nameParts.slice(-1)[0] || "?";
     const firstName = nameParts[0] || "?";
     const shortName = firstName.charAt(0) + ". " + lastName;
     ctx.fillText(shortName, padL + 4, y + cellH / 2 + 4);
@@ -882,7 +882,7 @@ function renderCompareTable(players) {
     const col = COLUMNS[statKey];
     if (!col) continue;
     const vals = players.map(p => p[statKey] || 0);
-    const maxVal = Math.max(...vals);
+    const maxVal = Math.max(...vals, 0);
 
     html += `<tr>`;
     html += `<td style="padding:6px 8px; border-bottom:1px solid var(--ink-faint); font-weight:700; font-size:11px;">${col.label}</td>`;
@@ -1148,7 +1148,7 @@ function exportNFLCompareImage() {
     const col = COLUMNS[statKey];
     if (!col) return;
     const vals = players.map(p => p[statKey] || 0);
-    const maxVal = Math.max(...vals);
+    const maxVal = Math.max(...vals, 0);
 
     // Alternating bg
     if (rowIdx % 2 === 0) {

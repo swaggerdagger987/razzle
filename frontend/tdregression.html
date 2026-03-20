@@ -279,7 +279,7 @@ function buildCard(title, cls, players, isPositive) {
     return '<div class="tdr-card"><div class="tdr-card-header ' + escapeHtml(cls) + '">' + escapeHtml(title) + '</div><div class="tdr-empty">no regression candidates found for this filter</div></div>';
   }
 
-  const maxDiff = Math.max(...players.map(p => Math.abs(p.td_diff)));
+  const maxDiff = Math.max(...players.map(p => Math.abs(p.td_diff)), 1);
   let html = '<div class="tdr-card"><div class="tdr-card-header ' + escapeHtml(cls) + '">' + escapeHtml(title) + '</div>';
   html += '<table class="tdr-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>TD</th><th>xTD</th><th>Diff</th><th>TD%</th><th>Opp</th><th></th></tr></thead><tbody>';
 

@@ -272,7 +272,7 @@ function renderTable(players, type) {
   if (players.length === 0) {
     return '<div class="dr-empty">no ' + (type === "sure" ? "sure hands" : "butterfingers") + ' found for this filter</div>';
   }
-  const maxDrops = Math.max(...players.map(p => p.drops));
+  const maxDrops = Math.max(...players.map(p => p.drops), 1);
   const barCls = type === "sure" ? "dr-bar-good" : "dr-bar-bad";
   const isGood = type === "sure";
 

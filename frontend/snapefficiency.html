@@ -265,7 +265,7 @@ function render() {
     return;
   }
 
-  const maxPPS = Math.max(...players.map(p => p.pts_per_snap));
+  const maxPPS = Math.max(...players.map(p => p.pts_per_snap), 1);
   let html = '<table class="se-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Pts/Snap</th><th>PPG</th><th>Snaps/G</th><th>Snaps</th><th>GP</th><th></th></tr></thead><tbody>';
 
   players.forEach((p, i) => {

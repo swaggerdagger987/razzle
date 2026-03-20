@@ -2661,7 +2661,7 @@
         var volLabel = isCollege ? 'Tch/G' : 'Snaps/G';
         var totLabel = isCollege ? 'Touches' : 'Snaps';
         var headerTitle = isCollege ? 'Points Per Touch Rankings' : 'Points Per Snap Rankings';
-        var maxPPS = Math.max.apply(null, players.map(function(p) { return p.pts_per_snap; }));
+        var maxPPS = Math.max.apply(null, players.map(function(p) { return p.pts_per_snap; }).concat([1]));
         var html = '<div class="se-card"><div class="se-card-header">' + headerTitle + '</div>';
         html += '<table class="se-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>' + ptsLabel + '</th><th>PPG</th><th>' + volLabel + '</th><th>' + totLabel + '</th><th>GP</th><th></th></tr></thead><tbody>';
         for (var i = 0; i < players.length; i++) {
@@ -2758,7 +2758,7 @@
         var players = data.players || [];
         if (!players.length) { body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>'; return; }
 
-        var maxWL = Math.max.apply(null, players.map(function(p) { return p.workload; }));
+        var maxWL = Math.max.apply(null, players.map(function(p) { return p.workload; }).concat([1]));
         var showSnaps = !isCollege;
         var html = '<div class="wl-card"><div class="wl-card-header">Workload Rankings</div>';
         html += '<table class="wl-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Load</th><th>Tch/G</th>';
@@ -3027,7 +3027,7 @@
 
     function renderDropTable(players, type) {
       if (!players.length) return '<div class="lp-empty">' + razzleEmpty() + '</div>';
-      var maxDrops = Math.max.apply(null, players.map(function(p) { return p.drops; }));
+      var maxDrops = Math.max.apply(null, players.map(function(p) { return p.drops; }).concat([1]));
       var barCls = type === 'sure' ? 'dr-bar-good' : 'dr-bar-bad';
       var isGood = type === 'sure';
 
@@ -3132,7 +3132,7 @@
       if (!players.length) {
         return '<div class="gt-card"><div class="gt-card-header ' + cls + '">' + escapeHtml(title) + '</div><div class="lp-empty">' + razzleEmpty() + '</div></div>';
       }
-      var maxVal = Math.max.apply(null, players.map(function(p) { return isPadders ? p.garbage_time_pct : p.ppg; }));
+      var maxVal = Math.max.apply(null, players.map(function(p) { return isPadders ? p.garbage_time_pct : p.ppg; }).concat([1]));
       var html = '<div class="gt-card"><div class="gt-card-header ' + cls + '">' + escapeHtml(title) + '</div>';
       html += '<table class="gt-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>GT%</th><th>PPG</th><th>Avg Diff</th><th></th></tr></thead><tbody>';
       for (var i = 0; i < players.length; i++) {
@@ -4456,8 +4456,8 @@
       var h = canvas.height;
       ctx.clearRect(0, 0, w, h);
       if (!scores || scores.length < 2) return;
-      var min = Math.min.apply(null, scores);
-      var max = Math.max.apply(null, scores);
+      var min = Math.min.apply(null, scores.concat([0]));
+      var max = Math.max.apply(null, scores.concat([1]));
       var range = max - min || 1;
       var color = isRiser ? '#16a34a' : '#dc2626';
       ctx.strokeStyle = color;
@@ -4796,9 +4796,9 @@
       // find ranges
       var ages = curve.map(function(c) { return c.age; });
       var ppgs = curve.map(function(c) { return c.ppg; });
-      var minAge = Math.min.apply(null, ages);
-      var maxAge = Math.max.apply(null, ages);
-      var maxPPG = Math.max.apply(null, ppgs) * 1.1;
+      var minAge = Math.min.apply(null, ages.concat([20]));
+      var maxAge = Math.max.apply(null, ages.concat([35]));
+      var maxPPG = Math.max.apply(null, ppgs.concat([1])) * 1.1;
 
       function xPos(age) { return pad.left + ((age - minAge) / (maxAge - minAge)) * cw; }
       function yPos(ppg) { return pad.top + ch - (ppg / maxPPG) * ch; }
@@ -7323,8 +7323,8 @@
 
       var xVals = players.map(function(p) { return p.x; });
       var yVals = players.map(function(p) { return p.y; });
-      var xMin = Math.min.apply(null, xVals), xMax = Math.max.apply(null, xVals);
-      var yMin = Math.min.apply(null, yVals), yMax = Math.max.apply(null, yVals);
+      var xMin = Math.min.apply(null, xVals.concat([0])), xMax = Math.max.apply(null, xVals.concat([1]));
+      var yMin = Math.min.apply(null, yVals.concat([0])), yMax = Math.max.apply(null, yVals.concat([1]));
       var xPad = (xMax - xMin) * 0.05 || 1;
       var yPad = (yMax - yMin) * 0.05 || 1;
       xMin -= xPad; xMax += xPad; yMin -= yPad; yMax += yPad;

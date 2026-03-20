@@ -264,7 +264,7 @@ function renderTable(players, type) {
   if (players.length === 0) {
     return '<div class="gs-empty">' + razzleEmpty() + '</div>';
   }
-  const maxPPG = Math.max(...players.map(p => p.ppg));
+  const maxPPG = Math.max(...players.map(p => p.ppg), 1);
   const barCls = type === "win" ? "gs-bar-win" : "gs-bar-lose";
 
   let html = '<table class="gs-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>PPG</th><th>Avg Diff</th><th>GT%</th><th></th></tr></thead><tbody>';

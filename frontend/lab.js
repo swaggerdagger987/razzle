@@ -406,7 +406,7 @@ function updateTagFilterBadge() {
   const active = state.tagFilter;
   btn.textContent = active ? "Tagged (" + count + ")" : (count > 0 ? "Tags (" + count + ")" : "Tags");
   btn.style.background = active ? "var(--orange)" : "";
-  btn.style.color = active ? "white" : "";
+  btn.style.color = active ? "var(--bg-card)" : "";
 }
 
 // Tag picker popup
@@ -8972,13 +8972,13 @@ function updateTradeBalance() {
 
   if (pctDiff <= 10) {
     badge.textContent = "FAIR";
-    badge.style.background = "#d9efec";
-    badge.style.color = "#2ec4b6";
+    badge.style.background = "var(--green-light)";
+    badge.style.color = "var(--green)";
   } else {
     const sign = diff > 0 ? "A+" : "B+";
     badge.textContent = sign + Math.abs(diff);
-    badge.style.background = "#f2d5d8";
-    badge.style.color = "#e63946";
+    badge.style.background = "var(--red-light)";
+    badge.style.color = "var(--red)";
   }
 }
 

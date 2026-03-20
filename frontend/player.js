@@ -735,7 +735,7 @@ function openCompareSearch() {
       var q = input.value.trim();
       if (q.length < 2) { document.getElementById("compareSearchResults").innerHTML = ""; return; }
       fetch("/api/players?search=" + encodeURIComponent(q) + "&limit=8")
-        .then(function(r) { return r.json(); })
+        .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
         .then(function(data) {
           var results = document.getElementById("compareSearchResults");
           if (!results) return;

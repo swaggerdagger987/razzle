@@ -269,7 +269,7 @@ function buildCard(title, cls, players, isPadders) {
     return '<div class="gt-card"><div class="gt-card-header ' + escapeHtml(cls) + '">' + escapeHtml(title) + '</div><div class="gt-empty">' + razzleEmpty() + '</div></div>';
   }
 
-  const maxVal = Math.max(...players.map(p => isPadders ? p.garbage_time_pct : p.ppg));
+  const maxVal = Math.max(...players.map(p => isPadders ? p.garbage_time_pct : p.ppg), 1);
   let html = '<div class="gt-card"><div class="gt-card-header ' + escapeHtml(cls) + '">' + escapeHtml(title) + '</div>';
   html += '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch">';
   html += '<table class="gt-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>GT%</th><th>PPG</th><th>Avg Diff</th><th></th></tr></thead><tbody>';

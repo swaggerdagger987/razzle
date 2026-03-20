@@ -45,6 +45,12 @@
 
   --semantic-green: #2e7d52;
   --semantic-green-light: #e8f0e4;
+  --semantic-blue: #2d4a8f;
+  --semantic-blue-light: #dde4f7;
+  --semantic-yellow: #6b4f1e;
+  --semantic-yellow-light: #f5eacc;
+  --semantic-orange: #7a3718;
+  --semantic-orange-light: #f7e4d8;
   --semantic-red: #9b3232;
   --semantic-red-light: #f0e0df;
 
@@ -77,6 +83,12 @@
 
   --semantic-green: #5cb87a;
   --semantic-green-light: #1a3325;
+  --semantic-blue: #7da0e0;
+  --semantic-blue-light: #1e2840;
+  --semantic-yellow: #d4a84a;
+  --semantic-yellow-light: #332a14;
+  --semantic-orange: #d49060;
+  --semantic-orange-light: #3d2010;
   --semantic-red: #e06060;
   --semantic-red-light: #3d1f1f;
 }
@@ -204,6 +216,7 @@ h1, h2, h3 {
   background: rgba(45,31,20,0.4);
   z-index: 9998;
 }
+[data-theme="dark"] .mobile-nav-overlay { background: rgba(0,0,0,0.5); }
 
 .mobile-nav-overlay.open {
   display: block;
@@ -537,6 +550,7 @@ button.nav-search-hint {
   justify-content: center;
   z-index: 9999;
 }
+[data-theme="dark"] .auth-modal-overlay { background: rgba(0,0,0,0.6); }
 
 .auth-modal {
   background: var(--bg-card);
@@ -929,6 +943,7 @@ body {
   justify-content: center;
   padding-top: 15vh;
 }
+[data-theme="dark"] .cmd-palette-backdrop { background: rgba(0,0,0,0.55); }
 .cmd-palette-backdrop.open {
   display: flex;
 }
