@@ -10227,7 +10227,7 @@ document.addEventListener("keydown", function(e) {
   // Position filters: 1=ALL, 2=QB, 3=RB, 4=WR, 5=TE
   const posMap = { "1": "", "2": "QB", "3": "RB", "4": "WR", "5": "TE" };
   if (posMap.hasOwnProperty(e.key)) {
-    setPosition(posMap[e.key]);
+    togglePosition(posMap[e.key]);
     return;
   }
 

@@ -410,7 +410,7 @@ def fetch_strength_of_schedule(season=None, position=None, limit=30):
                   AND p.position IN ('QB', 'RB', 'WR', 'TE')
                   AND s.opponent_team IS NOT NULL AND s.opponent_team != ''
                 GROUP BY s.opponent_team, p.position
-            """, [season]).fetchall()
+            """, [_season]).fetchall()
 
             # defense_ppg[team][position] = avg PPG allowed
             defense_ppg = {}
@@ -652,7 +652,7 @@ def fetch_stock_watch(season=None, position=None, limit=30):
                   AND p.position IN ('QB', 'RB', 'WR', 'TE')
                   AND s.opponent_team IS NOT NULL AND s.opponent_team != ''
                 GROUP BY s.opponent_team, p.position
-            """, [season]).fetchall()
+            """, [_season]).fetchall()
 
             defense_ppg = {}
             for r in def_rows:
@@ -1423,7 +1423,7 @@ def fetch_season_awards(season=None, position=None):
                   AND p.position IN ('QB', 'RB', 'WR', 'TE')
                   AND s.opponent_team IS NOT NULL AND s.opponent_team != ''
                 GROUP BY s.opponent_team, p.position
-            """, [season]).fetchall()
+            """, [_season]).fetchall()
 
             defense_ppg = {}
             for r in def_rows:
@@ -1486,7 +1486,7 @@ def fetch_season_awards(season=None, position=None):
                   AND p.position IN ('QB', 'RB', 'WR', 'TE')
                   AND p.fantasy_relevant = 1
                 GROUP BY p.team
-            """, [season]).fetchall()
+            """, [_season]).fetchall()
             for tr in tt_rows:
                 t = team_totals[tr[0] or "FA"]
                 t["targets"] = tr[1]

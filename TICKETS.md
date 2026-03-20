@@ -13,6 +13,16 @@ The database file `data/terminal.db` uses WAL journal mode locally. Uploading it
 
 ---
 
+## Phase: Hotfix — Repopulate player headshot URLs
+
+**PRIORITY: FIX NOW.** All player headshot_url values are NULL in the database. The headshots come from nflverse roster CSVs. Run `sync_rosters()` from the nflverse adapter to re-populate headshot_url for all players. This is a data fix, not a code fix.
+
+### Task 1: Run roster sync to repopulate headshot URLs
+**Accept when**: Run the nflverse `sync_rosters()` function against the local terminal.db for all seasons 2015-2025. After sync, verify with `SELECT COUNT(*) FROM players WHERE headshot_url IS NOT NULL AND headshot_url != ''` — should be 1500+ (all active/recent players with ESPN/nflverse headshot URLs). Verify star players have URLs: Mahomes, Allen, Jefferson, Chase, etc. Commit the repopulated database state by noting in PROGRESS.md that headshots were re-synced. NOTE: After this fix, the user needs to manually upload the updated terminal.db to the Render persistent disk at /data/terminal.db.
+**Status**: PENDING
+
+---
+
 ## Phase: Hotfix — Welcome to Pro page after checkout
 
 **PRIORITY: BUILD NOW.** After a user completes Stripe checkout and lands back on razzle.lol, there's no celebration, no onboarding, no acknowledgment that they just paid. They need a "Welcome to Pro" moment. This is the first impression of being a paying customer — make it count. Razzle personality, not corporate.
