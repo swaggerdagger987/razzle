@@ -97,6 +97,26 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
+/* Screener table player name cells */
+.player-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 13px;
+}
+.player-name-cell a {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 13px;
+}
+.col-player {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 13px;
+}
+
 body {
   background: var(--bg);
   color: var(--ink);
