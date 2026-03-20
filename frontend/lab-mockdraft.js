@@ -7,7 +7,10 @@
 
   var defs = window._labPanelDefs = window._labPanelDefs || [];
   var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
-  var POS_TINTS = { QB: '#dde4f7', RB: '#d9efec', WR: '#f7e4d8', TE: '#e5dcf7' };
+  var POS_TINTS_LIGHT = { QB: '#dde4f7', RB: '#d9efec', WR: '#f7e4d8', TE: '#e5dcf7' };
+  var POS_TINTS_DARK = { QB: '#2a3350', RB: '#1a3a36', WR: '#5c3325', TE: '#352450' };
+  function _isDark() { return document.documentElement.getAttribute('data-theme') === 'dark'; }
+  function getPOSTint(pos) { return (_isDark() ? POS_TINTS_DARK : POS_TINTS_LIGHT)[pos] || (_isDark() ? '#4a3728' : '#f7efe5'); }
 
   // ─── Tier helpers ───────────────────────────────────────────────
   function rpsTier(rps) {
@@ -337,7 +340,7 @@
 
         if (pick) {
           var pos = pick.prospect.position || '';
-          var bg = POS_TINTS[pos] || '#f7efe5';
+          var bg = getPOSTint(pos);
           var border = POS_COLORS[pos] || 'var(--ink-light)';
           var name = pick.prospect.player_name || '';
           // Truncate long names
@@ -538,7 +541,7 @@
 
         if (pick) {
           var pos = pick.prospect.position || '';
-          var bg = POS_TINTS[pos] || '#f7efe5';
+          var bg = getPOSTint(pos);
           var border = POS_COLORS[pos] || 'var(--ink-light)';
           var name = pick.prospect.player_name || '';
           var shortName = name.length > 14 ? name.substring(0, 12) + '..' : name;

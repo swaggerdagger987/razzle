@@ -2699,7 +2699,7 @@
         html += '<table class="se-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>' + ptsLabel + '</th><th>PPG</th><th>' + volLabel + '</th><th>' + totLabel + '</th><th>GP</th><th></th></tr></thead><tbody>';
         for (var i = 0; i < players.length; i++) {
           var p = players[i];
-          var posColor = POS_COLORS[p.position] || '#2d1f14';
+          var posColor = POS_COLORS[p.position] || (typeof getCanvasTheme === 'function' ? getCanvasTheme().ink : '#2d1f14');
           var cls = effClass(p.pts_per_snap);
           var barPct = maxPPS > 0 ? p.pts_per_snap / maxPPS * 100 : 0;
           var teamLabel = escapeHtml(p.team);
@@ -2799,7 +2799,7 @@
         html += '<th>Car/G</th><th>Tgt/G</th><th>Flags</th><th></th></tr></thead><tbody>';
         for (var i = 0; i < players.length; i++) {
           var p = players[i];
-          var posColor = POS_COLORS[p.position] || '#2d1f14';
+          var posColor = POS_COLORS[p.position] || (typeof getCanvasTheme === 'function' ? getCanvasTheme().ink : '#2d1f14');
           var cls = scoreClass(p.workload);
           var barPct = maxWL > 0 ? p.workload / maxWL * 100 : 0;
           var flagsHtml = (p.flags || []).map(function(f) { return '<span class="wl-flag">' + escapeHtml(f) + '</span>'; }).join('');
@@ -2902,7 +2902,7 @@
         html += '<table class="dt-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>DTI</th><th>Rush/G</th><th>Rec/G</th><th>Tot/G</th><th>Car/G</th><th>Rec/G</th><th>Split</th></tr></thead><tbody>';
         for (var i = 0; i < players.length; i++) {
           var p = players[i];
-          var posColor = POS_COLORS[p.position] || '#2d1f14';
+          var posColor = POS_COLORS[p.position] || (typeof getCanvasTheme === 'function' ? getCanvasTheme().ink : '#2d1f14');
           var cls = dtiClass(p.dti);
           var teamLabel = escapeHtml(p.team);
           if (isCollege && p.conference) teamLabel += ' <span style="font-size:9px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
@@ -2998,7 +2998,7 @@
         html += '<table class="tp-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Premium</th><th>Tgt/G</th><th>aDOT</th><th>Catch%</th><th>YAC/R</th><th>Y/Tgt</th><th></th></tr></thead><tbody>';
         for (var i = 0; i < players.length; i++) {
           var p = players[i];
-          var posColor = POS_COLORS[p.position] || '#2d1f14';
+          var posColor = POS_COLORS[p.position] || (typeof getCanvasTheme === 'function' ? getCanvasTheme().ink : '#2d1f14');
           var cls = premiumClass(p.premium);
           html += '<tr>';
           html += '<td class="tp-rank">' + (i + 1) + '</td>';
@@ -3075,7 +3075,7 @@
       var html = '<table class="dr-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Drop%</th><th>Drops</th><th>Tgt</th><th>Catch%</th><th>YAC/R</th><th></th></tr></thead><tbody>';
       for (var i = 0; i < players.length; i++) {
         var p = players[i];
-        var posColor = POS_COLORS[p.position] || '#2d1f14';
+        var posColor = POS_COLORS[p.position] || (typeof getCanvasTheme === 'function' ? getCanvasTheme().ink : '#2d1f14');
         var barPct = maxDrops > 0 ? p.drops / maxDrops * 100 : 0;
         var cls = rateClass(p.drop_rate, isGood);
         html += '<tr>';
@@ -3184,7 +3184,7 @@
       html += '<table class="gt-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>GT%</th><th>PPG</th><th>Avg Diff</th><th></th></tr></thead><tbody>';
       for (var i = 0; i < players.length; i++) {
         var p = players[i];
-        var posColor = POS_COLORS[p.position] || '#2d1f14';
+        var posColor = POS_COLORS[p.position] || (typeof getCanvasTheme === 'function' ? getCanvasTheme().ink : '#2d1f14');
         var pCls = pctClass(p.garbage_time_pct);
         var barVal = isPadders ? p.garbage_time_pct : p.ppg;
         var barPct = maxVal > 0 ? barVal / maxVal * 100 : 0;
@@ -8973,7 +8973,7 @@
       html += '</tr></thead><tbody>';
 
       players.forEach(function(p, i) {
-        var posColor = POS_COLORS[p.position] || '#2d1f14';
+        var posColor = POS_COLORS[p.position] || (typeof getCanvasTheme === 'function' ? getCanvasTheme().ink : '#2d1f14');
         var cls = rateClass(p.success_rate);
         var barPct = maxSR > 0 ? p.success_rate / maxSR * 100 : 0;
         var ypc = p.ypc != null ? escapeHtml(String(p.ypc)) : '-';

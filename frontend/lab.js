@@ -8877,7 +8877,8 @@ function closeTradeValues(e) {
 }
 
 function renderTVPositionBtns() {
-  const posColors = { ALL: "#2d1f14", QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  var _ink = typeof getCanvasTheme === "function" ? getCanvasTheme().ink : "#2d1f14";
+  const posColors = { ALL: _ink, QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
   const container = document.getElementById("tvPositionBtns");
   container.innerHTML = "";
   for (const pos of ["ALL", "QB", "RB", "WR", "TE"]) {
@@ -8886,7 +8887,7 @@ function renderTVPositionBtns() {
     btn.className = active ? "btn-primary" : "btn-chunky";
     btn.textContent = pos;
     btn.style.cssText = "font-size:11px; padding:4px 12px;";
-    if (!active && posColors[pos] !== "#2d1f14") btn.style.borderColor = posColors[pos];
+    if (!active && posColors[pos] !== _ink) btn.style.borderColor = posColors[pos];
     btn.onclick = () => { _tvState.position = pos; renderTVPositionBtns(); renderTradeValueChart(); };
     container.appendChild(btn);
   }
@@ -8962,7 +8963,7 @@ function renderTradeValueChart() {
     // Player cards grid
     html += '<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:8px;">';
     for (const p of tierPlayers) {
-      const pc = posColors[p.position] || "#2d1f14";
+      const pc = posColors[p.position] || getCanvasTheme().ink;
       const barWidth = Math.max(5, p._tv);
       html += '<div style="background:var(--bg-card); border:2px solid var(--ink); border-radius:8px; padding:8px 10px; box-shadow:2px 2px 0 var(--ink); display:flex; flex-direction:column; gap:4px; border-left:5px solid ' + pc + ';">';
       // Name + position
@@ -9014,7 +9015,7 @@ function setupTradeSearchInput(side) {
       if (!matches.length) { autoDiv.style.display = "none"; return; }
       const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
       autoDiv.innerHTML = matches.map(p => {
-        const pc = posColors[p.position] || "#2d1f14";
+        const pc = posColors[p.position] || getCanvasTheme().ink;
         return '<div style="padding:6px 10px; cursor:pointer; display:flex; align-items:center; gap:6px; border-bottom:1px solid var(--ink-faint);" onmousedown="addToTradeSide(\'' + side + '\', \'' + escapeAttr(p.player_id || p.full_name) + '\')">'
           + '<span style="font-family:var(--font-mono); font-size:9px; font-weight:bold; color:#fff; background:' + pc + '; padding:1px 5px; border-radius:3px;">' + escapeHtml(p.position) + '</span>'
           + '<span style="font-family:var(--font-mono); font-size:12px;">' + escapeHtml(p.full_name) + '</span>'
@@ -9068,7 +9069,7 @@ function renderTradeSide(side) {
   }
 
   container.innerHTML = arr.map((p, i) => {
-    const pc = posColors[p.position] || "#2d1f14";
+    const pc = posColors[p.position] || getCanvasTheme().ink;
     return '<div style="display:flex; align-items:center; gap:6px; padding:5px 8px; background:var(--bg-card); border:2px solid var(--ink); border-radius:6px; border-left:4px solid ' + pc + ';">'
       + '<span style="font-family:var(--font-mono); font-size:9px; font-weight:bold; color:#fff; background:' + pc + '; padding:1px 4px; border-radius:3px;">' + escapeHtml(p.position) + '</span>'
       + '<span style="font-family:var(--font-mono); font-size:12px; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">' + escapeHtml(p.full_name) + '</span>'
@@ -9205,7 +9206,7 @@ function exportTradeValuesPNG() {
     // Player rows
     for (let i = 0; i < g.players.length; i++) {
       const p = g.players[i];
-      const pc = posColors[p.position] || "#2d1f14";
+      const pc = posColors[p.position] || getCanvasTheme().ink;
       const ry = y + i * rowH;
 
       // Alternating bg
@@ -9446,7 +9447,7 @@ function renderAgingCurveChart(targetCanvas) {
   // Draw individual player curves FIRST (behind baseline)
   const playerColors = [
     "#e87422", "#5b7fff", "#2ec4b6", "#8b5cf6", "#d44040",
-    "#ffc857", "#e63946", "#2d1f14", "#4a9e5c", "#c44daa",
+    "#ffc857", "#e63946", "#8a7565", "#4a9e5c", "#c44daa",
   ];
   let colorIdx = 0;
   for (const p of data.players) {
@@ -9548,7 +9549,7 @@ function renderACLegend() {
 
   const playerColors = [
     "#e87422", "#5b7fff", "#2ec4b6", "#8b5cf6", "#d44040",
-    "#ffc857", "#e63946", "#2d1f14", "#4a9e5c", "#c44daa",
+    "#ffc857", "#e63946", "#8a7565", "#4a9e5c", "#c44daa",
   ];
 
   let html = '<div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--ink-light); margin-right:8px; padding-top:6px;">Players</div>';
@@ -10577,7 +10578,7 @@ function _taSetupSearch(side) {
         if (!players.length) { autoDiv.style.display = "none"; return; }
         const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
         autoDiv.innerHTML = players.map(p => {
-          const pc = posColors[p.position] || "#2d1f14";
+          const pc = posColors[p.position] || getCanvasTheme().ink;
           const pid = p.player_id || p.full_name;
           return '<div class="trade-autocomplete-item" data-pid="' + escapeAttr(pid) + '" data-side="' + side + '">'
             + '<span class="pos-badge" style="background:' + pc + ';">' + escapeHtml(p.position) + '</span>'
@@ -10664,7 +10665,7 @@ function _taRenderSide(side) {
         + '<button class="remove-btn" onclick="_taRemovePlayer(\'' + side + '\', ' + i + ')" title="Remove">\u00d7</button>'
         + '</div>';
     }
-    const pc = posColors[p.position] || "#2d1f14";
+    const pc = posColors[p.position] || getCanvasTheme().ink;
     return '<div class="trade-player-card" style="border-left:4px solid ' + pc + ';">'
       + '<span class="pos-badge" style="background:' + pc + ';">' + escapeHtml(p.position) + '</span>'
       + '<div class="player-info">'
@@ -12098,7 +12099,8 @@ function drawCompRadar(data) {
     return 0;
   });
 
-  drawPoly(compFullVals, "#2d1f14", "#2d1f14", 0.15);
+  var _ct = getCanvasTheme();
+  drawPoly(compFullVals, _ct.inkMedium, _ct.inkMedium, 0.15);
   drawPoly(targetVals, posColor, posColor, 0.3);
 
   // Dots on target polygon
@@ -12125,7 +12127,7 @@ function exportCompsImage() {
   const { player, comps, stat_keys, stat_labels, target_stats, season } = _compData;
   const pos = (player.position || "").toUpperCase();
   const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
-  const pColor = posColors[pos] || "#2d1f14";
+  const pColor = posColors[pos] || getCanvasTheme().ink;
 
   const padX = 30, padY = 30;
   const W = 800;
