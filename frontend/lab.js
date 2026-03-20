@@ -944,7 +944,7 @@ const state = {
   sortDir: "desc",
   sortKey2: "",
   sortDir2: "desc",
-  limit: (function() { try { var v = parseInt(localStorage.getItem("razzle_page_size")); return [25,50,100,200].includes(v) ? v : 100; } catch(e) { return 100; } })(),
+  limit: (function() { try { var v = parseInt(localStorage.getItem("razzle_page_size")); return [25,50,100,200].includes(v) ? v : 25; } catch(e) { return 25; } })(),
   offset: 0,
   filters: [],
   teams: [],    // selected team abbreviations for team filter
@@ -2988,13 +2988,13 @@ function nextPage() {
 }
 
 function _scrollTableTop() {
-  var wrap = document.getElementById("tableWrap");
+  var wrap = document.querySelector(".table-wrap");
   if (wrap) wrap.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function changePageSize(val) {
   const size = parseInt(val);
-  if (![25, 50, 100, 200].includes(size)) return;
+  if (![25].includes(size)) return;
   state.limit = size;
   state.offset = 0;
   try { localStorage.setItem("razzle_page_size", String(size)); } catch(e) {}
@@ -6050,7 +6050,7 @@ function renderRankingsPNG(players, posLabel, sortLabel) {
     if (p.age) {
       ctx.fillStyle = t.inkLight;
       ctx.font = "11px monospace";
-      ctx.fillText("Age " + p.age, padX + 380, y + 23);
+      ctx.fillText("Age " + (p.age != null ? Math.round(p.age) : "—"), padX + 380, y + 23);
     }
 
     // DVS badge
@@ -6438,12 +6438,12 @@ function renderProfile(data, container) {
       { key: "draft_pick", label: "Pick", fmt: v => v ? `#${v}` : "—" },
       { key: "height_display", label: "Height", fmt: v => v || "—" },
       { key: "weight", label: "Weight", fmt: v => v ? `${v} lbs` : "—" },
-      { key: "forty", label: "40-Yard", fmt: v => v ? v.toFixed(2) + "s" : "—" },
+      { key: "forty", label: "40-Yard", fmt: v => v ? Number(v).toFixed(2) + "s" : "—" },
       { key: "bench", label: "Bench", fmt: v => v ? `${v} reps` : "—" },
-      { key: "vertical", label: "Vertical", fmt: v => v ? v.toFixed(1) + '"' : "—" },
+      { key: "vertical", label: "Vertical", fmt: v => v ? Number(v).toFixed(1) + '"' : "—" },
       { key: "broad_jump", label: "Broad", fmt: v => v ? v + '"' : "—" },
-      { key: "cone", label: "3-Cone", fmt: v => v ? v.toFixed(2) + "s" : "—" },
-      { key: "shuttle", label: "Shuttle", fmt: v => v ? v.toFixed(2) + "s" : "—" },
+      { key: "cone", label: "3-Cone", fmt: v => v ? Number(v).toFixed(2) + "s" : "—" },
+      { key: "shuttle", label: "Shuttle", fmt: v => v ? Number(v).toFixed(2) + "s" : "—" },
     ];
 
     for (const f of combineFields) {
@@ -8493,7 +8493,7 @@ function renderClassAnalytics(data, container) {
   let html = `<div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); margin-bottom:16px;">${posLabel} draft class comparison — year-over-year strength analysis</div>`;
 
   // Bar chart canvas
-  html += `<div style="margin-bottom:24px;"><canvas id="caBarChart" width="900" height="280" role="img" aria-label="Draft class comparison bar chart" style="width:100%; max-width:900px; border:2px solid var(--ink); border-radius:8px; box-shadow:3px 3px 0 var(--ink);"></canvas></div>`;
+  html += `<div style="margin-bottom:24px;"><canvas id="caBarChart" width="900" height="280" role="img" aria-label="Draft class comparison bar chart" style="width:100%; max-width:900px; border:2px solid var(--ink); border-radius:8px; box-shadow:4px 4px 0 var(--ink);"></canvas></div>`;
 
   // Class cards grid
   html += `<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:16px;">`;
@@ -8974,7 +8974,7 @@ function renderTradeValueChart() {
       html += '<span style="font-family:var(--font-mono); font-size:9px; font-weight:bold; color:#fff; background:' + pc + '; padding:1px 5px; border-radius:3px; border:2px solid var(--ink);">' + escapeHtml(p.position) + '</span>';
       html += '</div>';
       // Team + Age
-      html += '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + escapeHtml(p.team || "FA") + (p.age ? ' · Age ' + p.age : '') + '</div>';
+      html += '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + escapeHtml(p.team || "FA") + (p.age ? ' · Age ' + Math.round(p.age) : '') + '</div>';
       // Trade value bar
       html += '<div style="display:flex; align-items:center; gap:6px;">';
       html += '<div style="flex:1; height:8px; background:var(--bg-warm); border:2px solid var(--ink-faint); border-radius:4px; overflow:hidden;">';
@@ -9237,7 +9237,7 @@ function exportTradeValuesPNG() {
       // Team + age
       ctx.fillStyle = t.inkLight;
       ctx.font = "10px monospace";
-      ctx.fillText((p.team || "FA") + (p.age ? "  Age " + p.age : ""), padX + 300, ry + 18);
+      ctx.fillText((p.team || "FA") + (p.age ? "  Age " + Math.round(p.age) : ""), padX + 300, ry + 18);
 
       // Trade value bar
       const barX = padX + 430;
@@ -10672,7 +10672,7 @@ function _taRenderSide(side) {
       + '<span class="pos-badge" style="background:' + pc + ';">' + escapeHtml(p.position) + '</span>'
       + '<div class="player-info">'
       + '<div class="player-name">' + escapeHtml(p.full_name) + '</div>'
-      + '<div class="player-meta">' + escapeHtml(p.team || "FA") + (p.age ? ' \u00b7 Age ' + p.age : '') + '</div>'
+      + '<div class="player-meta">' + escapeHtml(p.team || "FA") + (p.age ? ' \u00b7 Age ' + Math.round(p.age) : '') + '</div>'
       + '</div>'
       + '<span class="player-value">' + (p.trade_value || 0) + '</span>'
       + '<button class="remove-btn" onclick="_taRemovePlayer(\'' + side + '\', ' + i + ')" title="Remove">\u00d7</button>'
@@ -10746,7 +10746,7 @@ function _taUpdateVerdict() {
   const pctLabel = pctDiff <= 10 ? "Even value" : (diff > 0 ? "+" + pctDiff + "% in your favor" : "-" + pctDiff + "% against you");
 
   document.getElementById("taVerdict").innerHTML = '<div style="display:inline-block; margin:8px 0;">'
-    + '<span style="display:inline-block; font-family:var(--font-display); font-size:20px; color:' + verdictColor + '; background:' + verdictBg + '; padding:8px 24px; border:3px solid ' + verdictColor + '; border-radius:8px; box-shadow:3px 3px 0 var(--ink); transform:rotate(-2deg); letter-spacing:2px;">' + verdict + '</span>'
+    + '<span style="display:inline-block; font-family:var(--font-display); font-size:20px; color:' + verdictColor + '; background:' + verdictBg + '; padding:8px 24px; border:3px solid ' + verdictColor + '; border-radius:8px; box-shadow:4px 4px 0 var(--ink); transform:rotate(-2deg); letter-spacing:2px;">' + verdict + '</span>'
     + '</div>'
     + '<div style="font-family:var(--font-mono); font-size:13px; color:var(--ink-medium); margin-top:6px;">' + pctLabel + '</div>';
 
@@ -11406,7 +11406,7 @@ function renderRosterReport() {
   html += '</div>';
   // Status badge with explainer
   html += '<div style="text-align:center;">';
-  html += '<div title="Based on total value + average age: high value + young = competing, low value or old = rebuilding" style="background:' + sc + '; color:white; font-family:var(--font-mono); font-size:14px; padding:6px 14px; border:2px solid var(--ink); border-radius:8px; box-shadow:3px 3px 0 var(--ink); transform:rotate(2deg); text-transform:uppercase; cursor:help;">' + escapeHtml(r.competing_status) + '</div>';
+  html += '<div title="Based on total value + average age: high value + young = competing, low value or old = rebuilding" style="background:' + sc + '; color:white; font-family:var(--font-mono); font-size:14px; padding:6px 14px; border:2px solid var(--ink); border-radius:8px; box-shadow:4px 4px 0 var(--ink); transform:rotate(2deg); text-transform:uppercase; cursor:help;">' + escapeHtml(r.competing_status) + '</div>';
   html += '<div style="font-family:var(--font-mono); font-size:9px; color:var(--ink-light); text-transform:uppercase; margin-top:4px;">Window</div>';
   html += '</div>';
   html += '</div>';
@@ -11416,12 +11416,12 @@ function renderRosterReport() {
   // Pie chart
   html += '<div style="flex:1; min-width:220px;">';
   html += '<div style="font-family:var(--font-mono); font-size:13px; margin-bottom:6px;">Positional Breakdown</div>';
-  html += '<canvas id="rosterPieChart" width="240" height="200" role="img" aria-label="Roster positional breakdown pie chart" style="border:3px solid var(--ink); border-radius:10px; background:var(--bg); box-shadow:3px 3px 0 var(--ink);"></canvas>';
+  html += '<canvas id="rosterPieChart" width="240" height="200" role="img" aria-label="Roster positional breakdown pie chart" style="border:3px solid var(--ink); border-radius:10px; background:var(--bg); box-shadow:4px 4px 0 var(--ink);"></canvas>';
   html += '</div>';
   // Age scatter
   html += '<div style="flex:1; min-width:220px;">';
   html += '<div style="font-family:var(--font-mono); font-size:13px; margin-bottom:6px;">Age vs Value</div>';
-  html += '<canvas id="rosterAgeChart" width="280" height="200" role="img" aria-label="Roster age versus value scatter plot" style="border:3px solid var(--ink); border-radius:10px; background:var(--bg); box-shadow:3px 3px 0 var(--ink);"></canvas>';
+  html += '<canvas id="rosterAgeChart" width="280" height="200" role="img" aria-label="Roster age versus value scatter plot" style="border:3px solid var(--ink); border-radius:10px; background:var(--bg); box-shadow:4px 4px 0 var(--ink);"></canvas>';
   html += '</div>';
   html += '</div>';
 

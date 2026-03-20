@@ -178,7 +178,7 @@
     margin-top: 2px;
   }
   .aw-pos-badge {
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 10px;
     font-weight: 700;
     padding: 1px 6px;
@@ -227,7 +227,7 @@
 
   .aw-grade {
     display: inline-block;
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 10px;
     font-weight: 700;
     padding: 1px 5px;
@@ -264,7 +264,7 @@
   .aw-runner-row:last-child { border-bottom: none; }
   .aw-runner-row:hover { background: var(--bg-warm); }
   .aw-runner-rank {
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 12px;
     font-weight: 700;
     color: var(--ink-light);
@@ -281,7 +281,7 @@
     background: var(--bg-warm);
   }
   .aw-runner-name {
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 13px;
     font-weight: 700;
     color: var(--ink);
@@ -292,7 +292,7 @@
     text-overflow: ellipsis;
   }
   .aw-runner-pos {
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 9px;
     font-weight: 700;
     padding: 1px 5px;
@@ -359,7 +359,7 @@
     <li><a href="/pricing.html">Pricing</a></li>
   </ul>
   <div class="nav-auth" id="nav-auth">
-    <button class="nav-search-hint" aria-label="Open quick search (Ctrl+K)" onclick="document.querySelector('.cmd-palette-backdrop')?.classList.add('open'); document.querySelector('.cmd-palette-input')?.focus();" title="Quick search"><kbd>Ctrl+K</kbd> Search</button>
+    <button class="nav-search-hint" aria-label="Open quick search (Ctrl+K)" onclick="if(typeof openCmdPalette==='function') openCmdPalette();" title="Quick search"><kbd>Ctrl+K</kbd> Search</button>
     <a href="#" class="btn-chunky btn-sm" onclick="if(typeof openAuthModal==='function') openAuthModal(); return false;">Sign In</a>
   </div>
 </nav>

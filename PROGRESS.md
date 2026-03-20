@@ -1479,3 +1479,58 @@ All `ctx.fillStyle = 'rgba(45,31,20,...)'` → theme-branching with sand rgba fo
 - All 11 JS files syntax clean
 - 59/59 tests pass (5.62s)
 - 0 regressions
+
+---
+
+## Quality Audit: Fresh-Eyes 5-Agent Sweep (Mar 20 — Session 5)
+
+**Goal**: Final quality gate. 5 parallel audit agents examined lab.js crash bugs, lab-panels.js crash bugs, backend SQL/API robustness, design consistency, and first-user UX flows.
+
+### P0 Crash Bugs Fixed (3)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | Scroll-to-top broken: `getElementById("tableWrap")` but element only has `class="table-wrap"` | lab.js:2991 | Pagination never scrolled to top — fixed to `querySelector(".table-wrap")` |
+| 2 | Page size default 100 but only 25 in dropdown | lab.js:947 | Changed default from 100 to 25 to match the single available option |
+| 3 | Backend sort crash on derived columns (`age`, `half_ppr_ppg`, `cpoe`, `epa_per_play`) | players.py:147-155 | `SUM(s.age)` → `p.age`, derived columns fall back to PPR sort in SQL |
+
+### P1 Logic & Robustness Fixes (9)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 4 | `switchView` querySelector null crash on invalid view | lab-panels.js:389 | Added null guard before `.classList.add('active')` |
+| 5 | `renderPercentiles` crash when `data.player` is null | lab-panels.js:7948 | Added `if (!p)` guard with empty state |
+| 6 | Ctrl+K nav button bypassed `openCmdPalette()` | 74 HTML files | Raw DOM manipulation → proper function call with recently-viewed list |
+| 7 | `sortPlayers` NaN on mixed null/string types | lab-panels.js (4 instances) | Null → sort last, String coercion with `String(vb)`, Number with `Number()` |
+| 8 | Weekly leaders sort NaN on null values | lab-panels.js:4194 | Same null-safe sort pattern |
+| 9 | Compare button silent failure with <2 players | charts.js:837 | Added toast: "select 2+ players with the checkboxes first" |
+| 10 | `.toFixed()` crash on string combine values | lab.js:6441-6446 | Wrapped in `Number()` for forty, vertical, cone, shuttle |
+| 11 | `p.age` rendered as raw float (26.743) | lab.js:8977,9240,10675,6053 | All 4 instances → `Math.round(p.age)` or null guard |
+| 12 | Division by zero in prospects percentile calc | prospects.py (4 functions) | Added `if not all_vals: continue` guard before `/ len(all_vals)` |
+
+### P2 Design Consistency Fixes (10)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 13 | Canvas axis labels Luckiest Guy at 13px | explorer.html:503, lab-panels.js:7489 | → Space Mono 13px |
+| 14 | `.ar-export-btn` display font at 13px | archetypes.html | → `--font-mono` |
+| 15 | `.ar-arch-count` display font at 13px | archetypes.html | → `--font-mono` |
+| 16 | `.ar-player-ppg` display font at 14px | archetypes.html | → `--font-mono` bold 700 |
+| 17 | `.aging-tooltip-name` display font at 13px | aging.html | → `--font-mono` |
+| 18 | `.bd-pos-badge` display font at 12px | breakdown.html | → `--font-mono` |
+| 19 | `.bd-legend-label/pct` display font at 13px | breakdown.html (2) | → `--font-mono` |
+| 20 | `.aw-runner-rank` display font at 12px | awards.html | → `--font-mono` |
+| 21 | `.aw-runner-name` display font at 13px | awards.html | → `--font-mono` |
+| 22 | `.tl-export-btn` display font at 13px | tiers.html | → `--font-mono` |
+| 23 | `.tools-export button` display font at 13px | tools.html | → `--font-mono` |
+
+### changePageSize validation tightened
+- Allowed sizes: `[25]` only (was `[25, 50, 100, 200]`)
+
+### Verified Clean
+- All 11 JS files syntax clean
+- All Python files compile clean
+- 59/59 tests pass (5.61s)
+- 0 regressions
+- 0 `box-shadow: 3px 3px 0` in resting states (all 29 instances are hover/focus — correct)
+- 0 display font below 16px in CSS (except intentional 11px uppercase section labels)

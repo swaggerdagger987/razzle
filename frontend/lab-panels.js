@@ -386,7 +386,8 @@
     function switchView(view) {
       state.view = view;
       el.querySelectorAll('#lp-rankings-view .lp-view-btn').forEach(function(b) { b.classList.remove('active'); });
-      el.querySelector('#lp-rankings-view .lp-view-btn[data-view="' + view + '"]').classList.add('active');
+      var _vb = el.querySelector('#lp-rankings-view .lp-view-btn[data-view="' + view + '"]');
+      if (_vb) _vb.classList.add('active');
       // Hide season selector in history mode (shows all seasons)
       seasonSel.style.display = view === 'history' ? 'none' : '';
       if (view === 'history') {
@@ -883,10 +884,11 @@
     function sortPlayers(players, col, dir) {
       return players.slice().sort(function(a, b) {
         var va = a[col], vb = b[col];
-        if (va == null) va = -Infinity;
-        if (vb == null) vb = -Infinity;
-        if (typeof va === 'string') return dir * va.localeCompare(vb);
-        return dir * (vb - va);
+        if (va == null && vb == null) return 0;
+        if (va == null) return 1;
+        if (vb == null) return -1;
+        if (typeof va === 'string') return dir * va.localeCompare(String(vb));
+        return dir * ((Number(vb) || 0) - (Number(va) || 0));
       });
     }
 
@@ -2299,10 +2301,11 @@
     function sortPlayers(players, col, dir) {
       return players.slice().sort(function(a, b) {
         var va = a[col], vb = b[col];
-        if (va == null) va = -Infinity;
-        if (vb == null) vb = -Infinity;
-        if (typeof va === 'string') return dir * va.localeCompare(vb);
-        return dir * (vb - va);
+        if (va == null && vb == null) return 0;
+        if (va == null) return 1;
+        if (vb == null) return -1;
+        if (typeof va === 'string') return dir * va.localeCompare(String(vb));
+        return dir * ((Number(vb) || 0) - (Number(va) || 0));
       });
     }
 
@@ -2513,10 +2516,11 @@
     function sortPlayers(players, col, dir) {
       return players.slice().sort(function(a, b) {
         var va = a[col], vb = b[col];
-        if (va == null) va = -Infinity;
-        if (vb == null) vb = -Infinity;
-        if (typeof va === 'string') return dir * va.localeCompare(vb);
-        return dir * (vb - va);
+        if (va == null && vb == null) return 0;
+        if (va == null) return 1;
+        if (vb == null) return -1;
+        if (typeof va === 'string') return dir * va.localeCompare(String(vb));
+        return dir * ((Number(vb) || 0) - (Number(va) || 0));
       });
     }
 
@@ -3863,10 +3867,11 @@
     function sortPlayers(players, col, dir) {
       return players.slice().sort(function(a, b) {
         var va = a[col], vb = b[col];
-        if (va == null) va = -Infinity;
-        if (vb == null) vb = -Infinity;
-        if (typeof va === 'string') return dir * va.localeCompare(vb);
-        return dir * (vb - va);
+        if (va == null && vb == null) return 0;
+        if (va == null) return 1;
+        if (vb == null) return -1;
+        if (typeof va === 'string') return dir * va.localeCompare(String(vb));
+        return dir * ((Number(vb) || 0) - (Number(va) || 0));
       });
     }
 
@@ -4188,8 +4193,11 @@
 
       var sorted = leaders.slice().sort(function(a, b) {
         var va = a[sortState.col], vb = b[sortState.col];
-        if (typeof va === 'string') return sortState.dir * va.localeCompare(vb);
-        return sortState.dir * ((va || 0) - (vb || 0));
+        if (va == null && vb == null) return 0;
+        if (va == null) return 1;
+        if (vb == null) return -1;
+        if (typeof va === 'string') return sortState.dir * va.localeCompare(String(vb));
+        return sortState.dir * ((Number(va) || 0) - (Number(vb) || 0));
       });
       sorted.forEach(function(p, i) { p._rank = i + 1; });
 
@@ -7478,7 +7486,7 @@
       yTicks.forEach(function(v) { ctx.fillText(formatTickValue(v), MARGIN.left - 8, yScale(v) + 4); });
 
       ctx.fillStyle = t.ink;
-      ctx.font = 'bold 13px "Luckiest Guy", cursive';
+      ctx.font = 'bold 13px "Space Mono", monospace';
       ctx.textAlign = 'center';
       ctx.fillText(xLabel, MARGIN.left + plotW / 2, canvasH - 6);
       ctx.save();
@@ -7946,6 +7954,7 @@
 
     function renderPercentiles(data) {
       var p = data.player;
+      if (!p) { el.querySelector('.pct2-result').innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>'; return; }
       var pos = p.position || 'WR';
       var pcts = data.percentiles || [];
       var result = el.querySelector('.pct2-result');

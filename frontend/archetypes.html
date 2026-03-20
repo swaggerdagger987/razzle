@@ -69,7 +69,7 @@
     color: var(--ink);
   }
   .ar-export-btn {
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 13px;
     padding: 6px 16px;
     border: 2px solid var(--ink);
@@ -149,7 +149,7 @@
   .ar-arch-badge.TE { background: rgba(139,92,246,0.12); color: var(--te); border-color: var(--te); }
 
   .ar-arch-count {
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 13px;
     color: var(--ink-light);
   }
@@ -190,8 +190,9 @@
     color: var(--ink-light);
   }
   .ar-player-ppg {
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 14px;
+    font-weight: 700;
     color: var(--orange);
   }
   .ar-player-stat {
@@ -203,7 +204,7 @@
   /* Position badge small */
   .ar-pos-sm {
     display: inline-block;
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 9px;
     padding: 1px 5px;
     border-radius: 6px;
@@ -268,7 +269,7 @@
     <li><a href="/pricing.html">Pricing</a></li>
   </ul>
   <div class="nav-auth" id="nav-auth">
-    <button class="nav-search-hint" aria-label="Open quick search (Ctrl+K)" onclick="document.querySelector('.cmd-palette-backdrop')?.classList.add('open'); document.querySelector('.cmd-palette-input')?.focus();" title="Quick search"><kbd>Ctrl+K</kbd> Search</button>
+    <button class="nav-search-hint" aria-label="Open quick search (Ctrl+K)" onclick="if(typeof openCmdPalette==='function') openCmdPalette();" title="Quick search"><kbd>Ctrl+K</kbd> Search</button>
     <a href="#" class="btn-chunky btn-sm" onclick="if(typeof openAuthModal==='function') openAuthModal(); return false;">Sign In</a>
   </div>
 </nav>

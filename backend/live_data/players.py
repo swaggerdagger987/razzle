@@ -144,13 +144,19 @@ def fetch_players(
             where_clause = " AND ".join(where) if where else "1=1"
 
             # Handle sort expression
+            # Derived columns (computed post-query) fall back to PPR sort in SQL
+            _derived_sorts = {"half_ppr_ppg", "cpoe", "epa_per_play"}
             sort_expr = _sort_key
             if _sort_key == "seasons":
                 sort_expr = "COUNT(DISTINCT s.season)"
             elif _sort_key == "games":
                 sort_expr = "COUNT(*)"
+            elif _sort_key == "age":
+                sort_expr = "p.age"
             elif _sort_key in ("full_name", "position", "team"):
                 sort_expr = f"p.{_sort_key}"
+            elif _sort_key in _derived_sorts:
+                sort_expr = "SUM(s.fantasy_points_ppr)"
             elif _sort_key in safe_sorts:
                 sort_expr = f"SUM(s.{_sort_key})"
 

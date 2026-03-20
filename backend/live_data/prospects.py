@@ -474,6 +474,8 @@ def _fetch_prospect_comps_uncached(name, position="", draft_year=0, limit=5):
             if val is None or mk not in pos_stats:
                 continue
             all_vals = pos_stats[mk]
+            if not all_vals:
+                continue
             if metric_dirs[mk] == "lower":
                 pct = sum(1 for v in all_vals if v > val) / len(all_vals) * 100
             else:
@@ -515,6 +517,8 @@ def _fetch_prospect_comps_uncached(name, position="", draft_year=0, limit=5):
                 if oval is None or mk not in target_pcts or mk not in pos_stats:
                     continue
                 all_vals = pos_stats[mk]
+                if not all_vals:
+                    continue
                 if metric_dirs[mk] == "lower":
                     pct = sum(1 for v in all_vals if v > oval) / len(all_vals) * 100
                 else:
@@ -641,6 +645,8 @@ def _fetch_prospect_tiers_uncached(position, draft_year=0):
                 if val is None or mk not in pos_stats:
                     continue
                 all_vals = pos_stats[mk]
+                if not all_vals:
+                    continue
                 if metric_dirs[mk] == "lower":
                     pct = sum(1 for v in all_vals if v > val) / len(all_vals) * 100
                 else:
@@ -786,6 +792,8 @@ def _fetch_prospect_scores_uncached(position="", draft_year=0):
                 if val is None or mk not in pos_stats.get(pos, {}):
                     continue
                 all_vals = pos_stats[pos][mk]
+                if not all_vals:
+                    continue
                 if metric_dirs[mk] == "lower":
                     pct = sum(1 for v in all_vals if v > val) / len(all_vals) * 100
                 else:

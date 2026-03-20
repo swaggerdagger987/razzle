@@ -90,7 +90,7 @@
   }
   .bd-ac-item:hover, .bd-ac-item.highlighted { background: var(--bg-warm); }
   .bd-ac-pos {
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 10px;
     font-weight: 700;
     padding: 1px 6px;
@@ -154,7 +154,7 @@
     margin-top: 4px;
   }
   .bd-pos-badge {
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 12px;
     font-weight: 700;
     padding: 2px 8px;
@@ -242,7 +242,7 @@
     flex-shrink: 0;
   }
   .bd-legend-label {
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 13px;
     font-weight: 700;
     color: var(--ink);
@@ -255,7 +255,7 @@
     text-align: right;
   }
   .bd-legend-pct {
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 13px;
     font-weight: 700;
     min-width: 44px;
@@ -274,11 +274,11 @@
     border: 3px solid var(--ink);
     border-radius: 10px;
     background: var(--bg-card);
-    box-shadow: 3px 3px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
     text-align: center;
   }
   .bd-detail-label {
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 12px;
     font-weight: 700;
     color: var(--ink-light);
@@ -344,7 +344,7 @@
     <li><a href="/pricing.html">Pricing</a></li>
   </ul>
   <div class="nav-auth" id="nav-auth">
-    <button class="nav-search-hint" aria-label="Open quick search (Ctrl+K)" onclick="document.querySelector('.cmd-palette-backdrop')?.classList.add('open'); document.querySelector('.cmd-palette-input')?.focus();" title="Quick search"><kbd>Ctrl+K</kbd> Search</button>
+    <button class="nav-search-hint" aria-label="Open quick search (Ctrl+K)" onclick="if(typeof openCmdPalette==='function') openCmdPalette();" title="Quick search"><kbd>Ctrl+K</kbd> Search</button>
     <a href="#" class="btn-chunky btn-sm" onclick="if(typeof openAuthModal==='function') openAuthModal(); return false;">Sign In</a>
   </div>
 </nav>

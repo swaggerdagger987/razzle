@@ -259,7 +259,7 @@ function drawRadar() {
     ctx.lineWidth = 2;
     ctx.strokeRect(20, 20 + pIdx * 24, 14, 14);
     ctx.fillStyle = t.ink;
-    ctx.font = "bold 13px 'Luckiest Guy', cursive";
+    ctx.font = 'bold 13px "Space Mono", monospace';
     ctx.textAlign = "left";
     ctx.fillText(player.full_name, 40, 32 + pIdx * 24);
   });
@@ -712,7 +712,7 @@ function drawHeatmap() {
     }
 
     // Player name
-    ctx.font = "bold 12px 'Luckiest Guy', cursive";
+    ctx.font = 'bold 12px "Space Mono", monospace';
     ctx.fillStyle = t.ink;
     ctx.textAlign = "left";
     const nameParts = (player.full_name || "?").split(" ");
@@ -809,7 +809,7 @@ function drawHeatmap() {
   ctx.fillText("positional percentile", legendX + legendW + 10, legendY + legendH + 2);
 
   // Watermark
-  ctx.font = "bold 12px 'Luckiest Guy', cursive";
+  ctx.font = 'bold 12px "Space Mono", monospace';
   ctx.fillStyle = t.isDark ? "rgba(237,224,207,0.2)" : "rgba(45,31,20,0.2)";
   ctx.textAlign = "right";
   ctx.fillText("razzle.lol", W - 12, H - 8);
@@ -834,7 +834,7 @@ function heatmapColor(pct) {
 
 // ─── Comparison mode ─────────────────────────────────────────────
 async function openCompare() {
-  if (state.selectedPlayers.length < 2) return;
+  if (state.selectedPlayers.length < 2) { if (typeof _showToast === 'function') _showToast('select 2+ players with the checkboxes first'); return; }
   document.getElementById("compareOverlay").classList.add("open");
 
   if (typeof isProspectView === "function" && isProspectView()) {
@@ -996,7 +996,7 @@ function drawCompareRadar(players) {
     ctx.lineWidth = 1.5;
     ctx.strokeRect(10, 10 + pIdx * 22, 12, 12);
     ctx.fillStyle = t.ink;
-    ctx.font = "bold 12px 'Luckiest Guy', cursive";
+    ctx.font = 'bold 12px "Space Mono", monospace';
     ctx.fillText(player.full_name, 28, 21 + pIdx * 22);
   });
 }
@@ -1440,7 +1440,7 @@ function drawProspectCompareSpider(prospects) {
     ctx.lineWidth = 1.5;
     ctx.strokeRect(10, 10 + pIdx * 22, 12, 12);
     ctx.fillStyle = t.ink;
-    ctx.font = "bold 12px 'Luckiest Guy', cursive";
+    ctx.font = 'bold 12px "Space Mono", monospace';
     ctx.fillText(pData.prospect.player_name, 28, 21 + pIdx * 22);
   });
 

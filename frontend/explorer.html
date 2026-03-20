@@ -153,7 +153,7 @@
     border: 2px solid var(--ink);
     border-radius: 8px;
     padding: 8px 12px;
-    box-shadow: 3px 3px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
     pointer-events: none;
     z-index: 10;
     font-family: var(--font-mono);
@@ -232,7 +232,7 @@
     <li><a href="/pricing.html">Pricing</a></li>
   </ul>
   <div class="nav-auth" id="nav-auth">
-    <button class="nav-search-hint" aria-label="Open quick search (Ctrl+K)" onclick="document.querySelector('.cmd-palette-backdrop')?.classList.add('open'); document.querySelector('.cmd-palette-input')?.focus();" title="Quick search"><kbd>Ctrl+K</kbd> Search</button>
+    <button class="nav-search-hint" aria-label="Open quick search (Ctrl+K)" onclick="if(typeof openCmdPalette==='function') openCmdPalette();" title="Quick search"><kbd>Ctrl+K</kbd> Search</button>
     <a href="#" class="btn-chunky btn-sm" onclick="if(typeof openAuthModal==='function') openAuthModal(); return false;">Sign In</a>
   </div>
 </nav>
@@ -500,7 +500,7 @@
 
     // Axis labels
     ctx.fillStyle = '#2d1f14';
-    ctx.font = 'bold 13px "Luckiest Guy", "Garfield Sans", cursive';
+    ctx.font = 'bold 13px "Space Mono", monospace';
     ctx.textAlign = 'center';
     ctx.fillText(xLabel, MARGIN.left + plotW / 2, canvasH - 6);
 
