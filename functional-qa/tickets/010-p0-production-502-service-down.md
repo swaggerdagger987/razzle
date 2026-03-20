@@ -2,7 +2,7 @@
 id: FUNC-010
 severity: P0
 flow: all
-status: OPEN
+status: CLOSED
 file: render deployment
 function: service health
 created: 2026-03-20

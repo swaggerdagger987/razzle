@@ -277,3 +277,64 @@ smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
 57-sidebar	OK	-	-	-	pass	Sidebar: 76 nav links, 69 tools, organized into FOREVER FREE / FREE PANELS / PRO categories with lock icons	95	2026-03-20T20:10
 57-sidebar	BLOCKED	-	-	-	info	Sidebar panel clicking blocked by FUNC-001 (init crash prevents panel rendering on local server)	100	2026-03-20T20:10
 59-darkmode	OK	-	-	-	pass	Dark mode: visual PASS. Clean brown palette, readable text, proper contrast, sidebar+main switch correctly, no white flashes.	90	2026-03-20T20:10
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	P0	backend/live_data/players.py	-	_fetch_screener_uncached	ticket	smoke:week_filter — Week 1 player has 21 games — week filter not working
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	P0	backend/live_data/players.py	-	_fetch_screener_uncached	ticket	smoke:week_filter — Week 1 player has 21 games — week filter not working
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=21gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	P0	backend/live_data/players.py	-	_fetch_screener_uncached	ticket	smoke:week_filter — Week 1 player has 21 games — week filter not working
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+re-audit-1	OK	frontend/lab.js	-	init	pass	re-audit: FUNC-001 FIXED on prod. 0 JS errors, 25 player rows, McCaffrey at top. Dark mode clean.	100	2026-03-20T13:55
+re-audit-5	OK	backend/live_data/players.py	131	fetch_players	pass	re-audit: FUNC-002 FIXED on prod. Amon-Ra=1, Ja'Marr=1, D'Andre=1. Browser-verified.	100	2026-03-20T13:55
+re-audit-18	OK	backend/live_data/dynasty.py	-	dynasty_value	pass	re-audit: FUNC-003 FIXED on prod. Values 93.3-95.9 (Nacua #1 at 95.9). Panel renders in Lab sidebar.	100	2026-03-20T13:55
+re-audit-10	OK	frontend/lab.js	4399	_pinnedDataCache	pass	re-audit: FUNC-008 FIXED. Pin cache survives filter changes. Separator row appears on prod.	95	2026-03-20T13:55
+re-audit-42	OK	backend/server.py	208	bootstrap_database	pass	re-audit: FUNC-007 MOSTLY FIXED. Snap backfill deployed: McCaffrey 54.8, Taylor 51.9. 3 edge cases still at 0.	90	2026-03-20T13:55
+re-audit-prod	OK	-	-	-	pass	re-audit: FUNC-010 RESOLVED. Production healthy (200). 11/11 smoke tests pass.	100	2026-03-20T13:54
+9-col-picker	OK	frontend/lab.js	-	openColumnPicker	pass	Column picker: 87 columns, 8 presets, modal opens on prod. Browser-verified.	95	2026-03-20T13:56
+58-cmd-palette	OK	frontend/app.js	-	openCmdPalette	pass	Command palette opens via nav button, search input focused. Browser-verified on prod.	95	2026-03-20T13:56
+57-sidebar-nav	OK	frontend/lab.html	-	switchPanel	pass	Cross-panel nav: Rankings→TradeValues→Screener, data loads each time. 25 rows on return.	95	2026-03-20T13:56
+60-auth	OK	frontend/app.js	697	openAuthModal	pass	Auth modal: Sign In/Register tabs, focus trap, Escape close, overlay click. Rate limiting, generic errors.	95	2026-03-20T13:57
+61-pricing	OK	frontend/pricing.html	-	-	pass	Pricing: Free $0, Pro $79.99/yr, Elite $149.99/yr. Monthly toggle $9.99/$19.99. 7-day trial CTA. 0 errors.	95	2026-03-20T13:57
+65-empty	OK	-	-	-	pass	Empty state: search "zzzznonexistent" returns 0 players, count updates, no crash. API returns {count:0,items:[]}.	95	2026-03-20T13:58
+66-zero-null	OK	-	-	-	pass	Zero vs null: negative rushing yards correct (-10.0). API returns numeric 0 vs null cleanly.	90	2026-03-20T13:58
+67-special-chars	OK	frontend/lab.js	-	searchInput	pass	Special chars: Amon-Ra, Ja'Marr, D'Andre all found. Apostrophes display correctly. Browser-verified.	100	2026-03-20T13:58
+68-rapid	OK	frontend/lab.js	-	searchInput	pass	Rapid search: 5 swaps with 300ms intervals, final "chase" returns correct 3 results. No race conditions.	95	2026-03-20T13:58
+70-cross-panel	OK	frontend/lab.js	-	switchPanel	pass	Cross-panel state: Rankings→TradeValues→Screener returns with 25 rows, 610 players. No state loss.	95	2026-03-20T13:58
+46-draftclass	P0	backend/live_data/tools.py	548	fetch_draft_class	open	re-audit: FUNC-011 STILL BROKEN. Bo Nix 33.01 PPG (actual ~20), Caleb Williams 30.57. Multi-season COUNT(DISTINCT week) bug.	100	2026-03-20T13:59
