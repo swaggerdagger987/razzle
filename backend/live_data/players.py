@@ -1392,10 +1392,10 @@ def _fetch_game_log_uncached(player_id, season=None):
         # Get weekly stats
         cursor.execute("""
             SELECT week, fantasy_points_ppr,
-                   COALESCE(pass_yards, 0), COALESCE(pass_td, 0), COALESCE(interceptions, 0),
-                   COALESCE(pass_attempts, 0), COALESCE(completions, 0),
-                   COALESCE(rush_yards, 0), COALESCE(rush_td, 0), COALESCE(carries, 0),
-                   COALESCE(rec_yards, 0), COALESCE(rec_td, 0), COALESCE(receptions, 0),
+                   COALESCE(passing_yards, 0), COALESCE(passing_tds, 0), COALESCE(interceptions, 0),
+                   COALESCE(attempts, 0), COALESCE(completions, 0),
+                   COALESCE(rushing_yards, 0), COALESCE(rushing_tds, 0), COALESCE(carries, 0),
+                   COALESCE(receiving_yards, 0), COALESCE(receiving_tds, 0), COALESCE(receptions, 0),
                    COALESCE(targets, 0)
             FROM player_week_stats
             WHERE player_id = ? AND season = ?
@@ -1472,16 +1472,16 @@ def _fetch_compare_table_uncached(player_ids, season=None):
             SELECT p.player_id, p.full_name, p.position, p.team,
                    COUNT(DISTINCT s.week) as games,
                    COALESCE(SUM(s.fantasy_points_ppr), 0) as total_fpts,
-                   COALESCE(SUM(s.pass_yards), 0) as pass_yd,
-                   COALESCE(SUM(s.pass_td), 0) as pass_td,
+                   COALESCE(SUM(s.passing_yards), 0) as pass_yd,
+                   COALESCE(SUM(s.passing_tds), 0) as pass_td,
                    COALESCE(SUM(s.interceptions), 0) as ints,
                    COALESCE(SUM(s.completions), 0) as cmp,
-                   COALESCE(SUM(s.pass_attempts), 0) as pass_att,
-                   COALESCE(SUM(s.rush_yards), 0) as rush_yd,
-                   COALESCE(SUM(s.rush_td), 0) as rush_td,
+                   COALESCE(SUM(s.attempts), 0) as pass_att,
+                   COALESCE(SUM(s.rushing_yards), 0) as rush_yd,
+                   COALESCE(SUM(s.rushing_tds), 0) as rush_td,
                    COALESCE(SUM(s.carries), 0) as car,
-                   COALESCE(SUM(s.rec_yards), 0) as rec_yd,
-                   COALESCE(SUM(s.rec_td), 0) as rec_td,
+                   COALESCE(SUM(s.receiving_yards), 0) as rec_yd,
+                   COALESCE(SUM(s.receiving_tds), 0) as rec_td,
                    COALESCE(SUM(s.receptions), 0) as rec,
                    COALESCE(SUM(s.targets), 0) as tgt
             FROM player_week_stats s

@@ -70,12 +70,14 @@ def _cache_evict(now):
     expired = [k for k, v in _cache.items() if now - v["t"] >= v.get("ttl", _CACHE_TTL_STABLE)]
     for k in expired:
         del _cache[k]
+        _cache_locks.pop(k, None)
     # Phase 2: if still over limit, remove least-recently-accessed
     if len(_cache) >= _CACHE_MAX_SIZE:
         by_access = sorted(_cache.items(), key=lambda x: x[1].get("a", 0))
         remove_count = len(_cache) - _CACHE_MAX_SIZE + 20  # free 20 extra slots
         for k, _ in by_access[:remove_count]:
             del _cache[k]
+            _cache_locks.pop(k, None)
 
 
 def cache_clear():
@@ -175,8 +177,8 @@ ABBREV_TO_TEAM = {
 # ---------------------------------------------------------------------------
 
 def _safe_div(a, b, decimals=1):
-    """Safe division, returns None if denominator is 0/None."""
-    if not b:
+    """Safe division, returns None if denominator is 0/None or numerator is None."""
+    if not b or a is None:
         return None
     return round(a / b, decimals)
 

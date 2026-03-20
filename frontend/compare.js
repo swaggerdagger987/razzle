@@ -851,7 +851,7 @@ function adjustColor(hex, amount) {
 
 function copyCompareURL() {
   navigator.clipboard.writeText(window.location.href).then(function() {
-    showToast("Link copied!");
+    showToast("link copied.");
   }).catch(function() {
     showToast("fumbled the copy — try again");
   });

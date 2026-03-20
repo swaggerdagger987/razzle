@@ -3522,7 +3522,7 @@
         }
         renderMH(data);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">could not pull defensive data</div>';
+        body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -4104,7 +4104,7 @@
           '<div class="lp-subtitle">who went off this week</div></div>' +
           '<div style="text-align:center;padding:60px 20px;">' +
             '<div style="font-family:var(--font-hand);font-size:22px;color:var(--ink-light);transform:rotate(-1deg);max-width:400px;margin:0 auto;">' +
-              'college stats are season-level only — weekly game data isn\'t available for college players. check <b>Stat Leaders</b> for season totals!' +
+              'college stats are season-level only — weekly game data isn\'t available for college players. check <b>Stat Leaders</b> for season totals.' +
             '</div>' +
           '</div>' +
         '</div>';

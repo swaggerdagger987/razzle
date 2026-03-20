@@ -270,6 +270,8 @@
   <p style="text-align:center; margin-top:6px;">made for Reddit | <a href="/about.html" style="color:var(--ink-light);">attribution &amp; privacy</a></p>
 </div>
 
+<div style="position:fixed; bottom:10px; right:14px; font-family:var(--font-hand); font-size:14px; color:var(--ink-light); opacity:0.7; pointer-events:none; z-index:999;">razzle.lol</div>
+
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <script src="app.js"></script>
 <script>
@@ -313,25 +315,24 @@
       if (!r.ok) throw new Error('API error');
       return r.json();
     }).then(function(data) {
-      populateSeasons(data.season);
+      populateSeasons(data.available_seasons, data.season);
       render(data);
     }).catch(function() {
       document.getElementById('hcContent').innerHTML = '<div class="hc-loading">false start on the server. try refreshing</div>';
     });
   }
 
-  function populateSeasons(current) {
+  function populateSeasons(seasons, current) {
     var sel = document.getElementById('hcSeason');
-    if (sel.options.length <= 1) {
-      sel.innerHTML = '';
-      for (var y = 2024; y >= 2020; y--) {
-        var opt = document.createElement('option');
-        opt.value = y;
-        opt.textContent = y;
-        if (y === current) opt.selected = true;
-        sel.appendChild(opt);
-      }
-    }
+    if (sel.options.length > 0) return;
+    if (!seasons || !seasons.length) return;
+    seasons.forEach(function(s) {
+      var opt = document.createElement('option');
+      opt.value = s;
+      opt.textContent = s;
+      if (s === current) opt.selected = true;
+      sel.appendChild(opt);
+    });
   }
 
   /* ---- Render ---- */

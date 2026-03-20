@@ -13,7 +13,7 @@ function exportPanelCSV(panelName) {
   if (!panel) return;
   var table = panel.querySelector('.lab-panel-content table');
   if (!table) {
-    _showToast('no table data to export');
+    _showToast('nothing on the tape to export');
     return;
   }
   var rows = [];
@@ -31,7 +31,7 @@ function exportPanelCSV(panelName) {
     if (cells.length) rows.push(cells.join(','));
   });
   if (rows.length <= 1) {
-    _showToast('no data to export');
+    _showToast('no film to export — run a query first');
     return;
   }
   var csv = rows.join('\n');
@@ -1103,7 +1103,7 @@ function _syncUndoRedoButtons() {
     if (!state.season && state.season !== "career") state.season = state.seasons[0] || _nflYear;
 
     if (state.seasons.length === 0) {
-      _showToast("No seasons found — data may not be loaded yet");
+      _showToast("no seasons loaded yet — film room might still be warming up");
     }
 
     state.draftYears = prospectOpts.years || [_curYear];
@@ -3177,7 +3177,7 @@ function _applyQuickFilter(colKey, mode) {
     var v = parseFloat(state.items[i][colKey]);
     if (!isNaN(v)) vals.push(v);
   }
-  if (!vals.length) { _showToast("no data for quick filter"); return; }
+  if (!vals.length) { _showToast("no film for that quick filter"); return; }
   vals.sort(function(a, b) { return b - a; });
   var col = getColumnDef(colKey);
   var label = col ? col.label : colKey;
@@ -4799,7 +4799,7 @@ function loadFormulas() {
   try {
     const raw = JSON.parse(localStorage.getItem("razzle_formulas") || "[]");
     // Filter out dev/test formulas
-    state.formulas = raw.filter(f => !DEV_FORMULA_NAMES.has(f.name.toLowerCase()));
+    state.formulas = raw.filter(f => f && f.name && !DEV_FORMULA_NAMES.has(f.name.toLowerCase()));
     // Clean them from storage too
     if (state.formulas.length < raw.length) {
       localStorage.setItem("razzle_formulas", JSON.stringify(state.formulas));
@@ -5802,7 +5802,7 @@ function copyTableToClipboard() {
   const tsv = lines.join("\n");
   function onCopySuccess() {
     var btn = document.getElementById("clipboardCopyBtn");
-    if (btn) { btn.textContent = "Copied!"; setTimeout(function() { btn.textContent = "Copy to Clipboard"; }, 1500); }
+    if (btn) { btn.textContent = "copied."; setTimeout(function() { btn.textContent = "Copy to Clipboard"; }, 1500); }
     _showToast(state.items.length + " rows copied");
   }
   if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -6147,7 +6147,7 @@ function renderCollegeProfile(data, container) {
   html += `<span class="profile-pos-badge" style="background:${posColor};">${pos}</span>`;
   html += `<div>`;
   html += `<div class="profile-name">${escapeHtml(player.player_name)}</div>`;
-  html += `<div class="profile-meta">${escapeHtml(player.team || "")} · ${escapeHtml(player.conference || "")} · ${player.seasons_played} season${player.seasons_played > 1 ? "s" : ""}</div>`;
+  html += `<div class="profile-meta">${escapeHtml(player.team || "")} · ${escapeHtml(player.conference || "")} · ${player.seasons_played || 0} season${(player.seasons_played || 0) !== 1 ? "s" : ""}</div>`;
   html += `<span style="display:inline-block; background:var(--pos-qb); color:white; font-family:var(--font-mono); font-size:10px; padding:2px 8px; border:2px solid var(--ink); border-radius:4px; transform:rotate(-2deg);">COLLEGE</span>`;
   html += `</div>`;
   html += `</div>`;
@@ -6377,8 +6377,8 @@ function renderProfile(data, container) {
   html += `</div>`;
   html += `<div style="margin-left:auto; display:flex; gap:8px; flex-wrap:wrap;">`;
   html += `<a href="/player/${encodeURIComponent(player.player_id)}" class="btn-chunky" style="font-size:11px; padding:6px 14px; text-decoration:none; display:inline-flex; align-items:center;">Full Profile</a>`;
-  html += `<button class="btn-chunky" onclick="loadBoomBust('${player.player_id}')" style="font-size:11px; padding:6px 14px; border-color:var(--green);">Boom/Bust</button>`;
-  html += `<button class="btn-chunky" onclick="loadPlayerComps('${player.player_id}')" style="font-size:11px; padding:6px 14px; border-color:var(--orange);">Find Comps</button>`;
+  html += `<button class="btn-chunky" onclick="loadBoomBust('${escapeAttr(player.player_id)}')" style="font-size:11px; padding:6px 14px; border-color:var(--green);">Boom/Bust</button>`;
+  html += `<button class="btn-chunky" onclick="loadPlayerComps('${escapeAttr(player.player_id)}')" style="font-size:11px; padding:6px 14px; border-color:var(--orange);">Find Comps</button>`;
   html += `<button class="btn-primary" onclick="exportProfileImage()" style="font-size:11px; padding:6px 14px;">Export PNG</button>`;
   html += `</div>`;
   html += `</div>`;

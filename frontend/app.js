@@ -1545,7 +1545,7 @@ window.addEventListener("razzle-plan-changed", function(e) {
       logo.style.transform = "rotate(360deg)";
       setTimeout(function() { logo.style.transform = ""; }, 1200);
     }
-    if (typeof _showToast === "function") _showToast("you found the Konami code! Razzle approves.", "warning", 3000);
+    if (typeof _showToast === "function") _showToast("you found the Konami code. Razzle approves.", "warning", 3000);
   }
 })();
 

@@ -338,6 +338,8 @@ def register(email: str, password: str) -> dict:
             token = _create_token(user_id, email, "pro")
             return {"token": token, "user": user}
     except Exception as e:
+        if "UNIQUE constraint" in str(e) or "IntegrityError" in type(e).__name__:
+            return {"error": "Email already registered", "status": 409}
         logger.error(f"Registration error: {type(e).__name__}: {e}")
         return {"error": "Registration failed. Please try again.", "status": 500}
 
@@ -350,7 +352,11 @@ def login(email: str, password: str) -> dict:
         if not row:
             return {"error": "Invalid email or password", "status": 401}
 
-        if not _verify_password(password, row["password_hash"]):
+        try:
+            if not _verify_password(password, row["password_hash"]):
+                return {"error": "Invalid email or password", "status": 401}
+        except Exception:
+            logger.exception("Password verification error for %s", email)
             return {"error": "Invalid email or password", "status": 401}
 
         user = _user_dict(row)

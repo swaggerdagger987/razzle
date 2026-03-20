@@ -517,7 +517,7 @@
       renderBoard(data.prospects || []);
     } catch (err) {
       state.loading = false;
-      content.innerHTML = '<div class="prospects-empty">could not load prospect data</div>';
+      content.innerHTML = '<div class="prospects-empty">' + razzleError() + '</div>';
     }
   }
 

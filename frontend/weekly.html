@@ -390,6 +390,7 @@
 </div>
 
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script src="app.js"></script>
 <script>
 (function() {
   'use strict';
@@ -614,16 +615,11 @@
   });
 
   // Analytics
-  if (navigator.sendBeacon) {
-    navigator.sendBeacon('/api/analytics/pageview', JSON.stringify({ page: '/weekly.html' }));
-  } else {
-    fetch('/api/analytics/pageview', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ page: '/weekly.html' }) }).catch(function() {});
-  }
+  fetch('/api/analytics/pageview', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ page: '/weekly.html' }) }).catch(function() {});
 
   // Load on init
   loadData();
 })();
 </script>
-<script src="app.js"></script>
 </body>
 </html>

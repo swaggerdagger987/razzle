@@ -757,7 +757,7 @@ function openCompareSearch() {
 
 function copyPlayerURL() {
   navigator.clipboard.writeText(window.location.href).then(() => {
-    showToast("Link copied!");
+    showToast("link copied.");
   }).catch(() => {
     showToast("fumbled the copy — try again");
   });

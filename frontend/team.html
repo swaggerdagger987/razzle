@@ -505,7 +505,7 @@
       renderGroups(data.groups || {});
     } catch (err) {
       state.loading = false;
-      content.innerHTML = '<div class="team-empty">could not load team roster</div>';
+      content.innerHTML = '<div class="team-empty">' + razzleError() + '</div>';
     }
   }
 

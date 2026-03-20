@@ -469,7 +469,7 @@
       renderCategories(data.categories || []);
     } catch (err) {
       state.loading = false;
-      content.innerHTML = '<div class="leaders-empty">could not load stat leaders</div>';
+      content.innerHTML = '<div class="leaders-empty">' + razzleError() + '</div>';
     }
   }
 

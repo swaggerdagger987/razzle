@@ -424,7 +424,7 @@
       renderTiers(data.tiers || []);
     } catch (err) {
       state.loading = false;
-      content.innerHTML = '<div class="rankings-empty">could not load rankings</div>';
+      content.innerHTML = '<div class="rankings-empty">' + razzleError() + '</div>';
     }
   }
 

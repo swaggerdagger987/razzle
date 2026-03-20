@@ -250,7 +250,7 @@ async function installFormula(formulaId) {
     }
 
     // Toast
-    showStoreToast("Formula imported!");
+    showStoreToast("formula imported.");
     renderFormulaStore();
   } catch (e) {
     console.error("Install formula failed:", e);
@@ -407,7 +407,7 @@ async function submitPublish() {
       try { localStorage.setItem("razzle_store_my_published", JSON.stringify(myPublished)); } catch (e) {}
 
       closePublishFlow();
-      showStoreToast("Published to the Formula Store!");
+      showStoreToast("published to the Formula Store.");
 
       // Re-render saved formulas to show "Published" badge
       if (typeof renderSavedFormulas === "function") renderSavedFormulas();

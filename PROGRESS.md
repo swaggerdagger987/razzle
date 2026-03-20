@@ -1253,3 +1253,55 @@ User needs to manually upload updated terminal.db to Render persistent disk at /
 - All 11 JS files syntax clean
 - All Python files compile clean
 - 59/59 tests pass
+
+---
+
+## Quality Audit: 5-Agent Parallel Sweep (Mar 20 — Session 2)
+
+**Goal**: Fresh-eyes 5-agent parallel audit across crash bugs, design consistency, backend robustness, standalone HTML panels, and brand voice.
+
+### Standalone HTML Panel Fixes (6 fixes)
+
+| # | Fix | File(s) | Severity | Notes |
+|---|-----|---------|----------|-------|
+| 1 | app.js loaded after inline script — crash on razzleLoading() | weekly.html, aging.html, breakouts.html, buysell.html, scarcity.html, targets.html | **HIGH** | Moved app.js before inline script, removed duplicate at end. weekly.html crashed on every load. |
+| 2 | sendBeacon without Content-Type — analytics silently fails | weekly.html, targets.html | MEDIUM | Replaced sendBeacon with fetch() + Content-Type header |
+| 3 | Hardcoded season years 2024-2020 | handcuffs.html | MEDIUM | Changed to use API `available_seasons` response (like all other pages) |
+| 4 | Missing watermark div | handcuffs.html | LOW | Added standard fixed-position watermark |
+
+### Frontend Crash Bug Fixes (5 fixes)
+
+| # | Fix | File | Severity | Notes |
+|---|-----|------|----------|-------|
+| 1 | loadFormulas() crashes on corrupted formula name | lab.js:4802 | **HIGH** | Added `f && f.name &&` guard — null name.toLowerCase() bricked entire screener |
+| 2 | renderSavedFormulas() crash on non-lab pages | formulas.js:116 | **HIGH** | Added `if (!container) return` — called from refreshPlanGating() on all pages |
+| 3 | College profile renders "undefined season" | lab.js:6150 | MEDIUM | Added `player.seasons_played \|\| 0` guard |
+| 4 | Unescaped player_id in onclick attributes | lab.js:6380-6381 | LOW | Changed to escapeAttr() |
+| 5 | localStorage.setItem without try-catch in sync | formulas.js:205 | MEDIUM | Wrapped in try-catch |
+
+### Backend Robustness Fixes (5 fixes)
+
+| # | Fix | File | Severity | Notes |
+|---|-----|------|----------|-------|
+| 1 | Wrong column names in game log + compare table SQL | players.py:1393-1403, 1471-1493 | **HIGH** | `pass_yards` → `passing_yards`, etc. — all stats returned as zero |
+| 2 | Cache lock memory leak on eviction | core.py:67-78 | MEDIUM | Added `_cache_locks.pop(k, None)` in eviction |
+| 3 | `_safe_div` crashes on null numerator | core.py:177-181 | LOW | Added `a is None` guard |
+| 4 | Registration TOCTOU race on duplicate email | auth.py:340 | LOW | IntegrityError now returns 409 instead of generic 500 |
+| 5 | bcrypt crash on corrupted password hash | auth.py:355 | LOW | Wrapped in try-except |
+
+### Brand Voice Fixes (20 fixes)
+
+| # | Fix | File(s) | Notes |
+|---|-----|---------|-------|
+| 1 | 8 exclamation marks removed | compare.js, player.js, lab.js, rosterbuilder.html, formula-store.js (2), app.js, lab-panels.js | "Copied!" → "copied.", etc. |
+| 2 | 8 generic error messages → razzleError() | leaders.html, matchups.html, prospects.html, rankings.html, team.html, tradefinder.html, warroom.js, lab-panels.js | "could not load X" → personality text |
+| 3 | 4 generic toast messages → film room flavor | lab.js (4 instances) | "no data to export" → "no film to export — run a query first", etc. |
+
+### Verification
+- All 11 JS files syntax clean
+- All Python files compile clean
+- 59/59 tests pass
+- 0 remaining app.js ordering issues across all 74 pages
+- 0 duplicate app.js includes
+- 0 exclamation marks in user-visible toast/status messages
+- 0 generic "could not load" error messages in standalone HTML pages

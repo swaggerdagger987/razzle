@@ -535,7 +535,7 @@
       renderHeatmap(data);
     }).catch(function(err) {
       document.getElementById('matchups-content').innerHTML =
-        '<div class="matchups-error">could not pull defensive data<br><button class="matchups-retry-btn" onclick="location.reload()">retry</button></div>';
+        '<div class="matchups-error">' + razzleError() + '<br><button class="matchups-retry-btn" onclick="location.reload()">retry</button></div>';
     });
   }
 

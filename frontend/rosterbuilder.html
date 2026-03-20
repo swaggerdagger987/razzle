@@ -826,7 +826,7 @@
     var url = window.location.href;
     navigator.clipboard.writeText(url).then(function() {
       var btn = document.querySelector('.rb-actions button:last-child');
-      btn.textContent = 'Copied!';
+      btn.textContent = 'copied.';
       setTimeout(function() { btn.textContent = 'Copy Share URL'; }, 1500);
     });
   };

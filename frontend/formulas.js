@@ -113,6 +113,7 @@ function deleteFormula(name) {
 
 function renderSavedFormulas() {
   const container = document.getElementById("savedFormulas");
+  if (!container) return;
   if (!state.formulas.length) {
     container.innerHTML = '<p style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light);">no saved formulas yet</p>';
     return;
@@ -202,7 +203,7 @@ function syncFormulasFromCloud() {
 
     // Update state and localStorage
     state.formulas = merged;
-    localStorage.setItem("razzle_formulas", JSON.stringify(merged));
+    try { localStorage.setItem("razzle_formulas", JSON.stringify(merged)); } catch(e) {}
 
     // Re-register formula columns
     for (var k = 0; k < merged.length; k++) {

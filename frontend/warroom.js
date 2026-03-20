@@ -3738,7 +3738,7 @@ function toggleBriefingHistory() {
     panel.innerHTML = html;
   })
   .catch(function() {
-    panel.innerHTML = '<div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); text-align:center; padding:8px;">failed to load</div>';
+    panel.innerHTML = '<div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); text-align:center; padding:8px;">fumbled the briefing. try again in a sec.</div>';
   });
 }
 

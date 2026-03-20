@@ -691,7 +691,7 @@
       if (season) newUrl += '&season=' + season;
       history.replaceState(null, '', newUrl);
     }).catch(function() {
-      body.innerHTML = '<div class="tf-error">failed to find trade targets<br><button class="btn-chunky" onclick="location.reload()">retry</button></div>';
+      body.innerHTML = '<div class="tf-error">' + razzleError() + '<br><button class="btn-chunky" onclick="location.reload()">retry</button></div>';
     });
   }
 
