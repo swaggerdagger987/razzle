@@ -1013,3 +1013,148 @@ User needs to manually upload updated terminal.db to Render persistent disk at /
 | 2 | lab-panels.css: 3 missing font-family | DONE | `.arc-player-name`, `.rbld-player-name`, `.td2-player-name` |
 | 3 | 17 standalone HTML panels | DONE | `--font-display` to `--font-mono` on sub-16px player names |
 | 4 | Hero names verified correct | DONE | 8 pages at 18-32px stay `--font-display` |
+
+---
+
+## Quality Sweep: 5-Dimension Deep Audit (Mar 19-20)
+
+**Goal**: Systematic quality audit across dark mode, error states, mobile responsiveness, interaction edge cases, and brand voice consistency. Every pixel, every interaction, every error state.
+
+### Audit Methodology
+5 parallel audit agents examined the entire codebase across these dimensions:
+1. Dark mode completeness (canvas, heatmaps, inline colors)
+2. Error/empty/loading states (raw err.message, alert() calls, generic text)
+3. Mobile responsiveness (overflow, touch targets, flex-wrap)
+4. Interaction edge cases (URL validation, JWT expiry, double-click)
+5. Brand voice consistency (product naming, copy tone, exclamation marks)
+
+### Dark Mode: Canvas Theme System (P0 — 200+ fixes)
+
+| # | Fix | Files | Notes |
+|---|-----|-------|-------|
+| 1 | getCanvasTheme() helper | app.js | Global function returns {bg, bgWarm, bgCard, ink, inkMedium, inkLight, inkFaint, white, gridLine, subtitleAlpha, isDark} based on data-theme attribute |
+| 2 | charts.js full dark mode | charts.js | drawRadar, drawScatter, drawWeeklyTrend, _drawTrendLine, drawHeatmap, drawCompareRadar, exportNFLCompareImage, drawProspectCompareSpider, exportProspectCompareImage — all use getCanvasTheme() |
+| 3 | compare.js dark mode | compare.js | drawCompareRadar, drawRadarPoly, drawCompareArc, drawArcLine, exportComparePNG, drawExportPlayerCard, drawRadarOnExport |
+| 4 | player.js dark mode | player.js | drawRadar, drawArc, exportPlayerPNG, drawRadarOnCanvas |
+| 5 | lab.js dark mode (12+ export functions) | lab.js | exportImage, renderRankingsPNG, exportProspectImage, drawProspectSpider, drawCollegeArc, drawProfileArc, exportTierImage, drawClassAnalyticsChart, exportClassAnalyticsImage, trade values, heatmap, tier board, roster builder, boom/bust, player comp, aging curves, pick chart |
+| 6 | lab.js html2canvas dark mode | lab.js | screenshotPanel() backgroundColor + watermark now theme-aware |
+| 7 | lab-panels.js canvas (9 sections) | lab-panels.js | Aging curves, career trend, career compare, archetype donut, draft class chart, explorer scatter, correlation matrix, correlation scatter, dynasty power rankings |
+| 8 | lab-prospect-radar.js | lab-prospect-radar.js | Grid rings, axis lines, labels, dot strokes |
+| 9 | Weekly heatmap HEAT_COLORS | lab-panels.js | Static array → getHeatColors() function with dark palette |
+| 10 | Matchup heatmap getHeatColor | lab-panels.js | Returns dark muted tints in dark mode |
+| 11 | corrColor() dark mode | lab-panels.js | Correlation heatmap cells use dark muted colors |
+| 12 | POS_LIGHT → getPosLight() | lab-panels.js | Position tints now theme-aware function |
+| 13 | Cold gray elimination | 24 HTML files + charts.js | All rgba(26,26,46,...) → rgba(45,31,20,...) warm brown. Zero cold grays remaining anywhere in frontend |
+
+### Brand Voice P0s (12 fixes)
+
+| # | Fix | Files | Notes |
+|---|-----|-------|-------|
+| 1 | "Head back to the Lab" → "Screener" | 404.html | User-visible body text |
+| 2 | "All 60+ Lab analytical panels" → "All 60+ analytical panels" | app.js | Welcome to Pro modal (both Pro and Elite) |
+| 3 | "College Lab" / "Prospect Lab" → "College Screener" / "Prospect Screener" | lab.js | Browser tab titles |
+| 4 | "Lab: X players selected" → "Screener:" | warroom.js | Context badges in Situation Room |
+| 5 | "open Lab" → "open Screener" | warroom.js | Context badge link |
+| 6 | "WAR ROOM" → "SIT ROOM" | warroom.js | Pixel canvas whiteboard text |
+| 7 | "WHAT THE WAR ROOM REMEMBERS" → "SITUATION ROOM" | warroom.js | LLM memory context |
+| 8 | "war-room briefing" → "Situation Room briefing" | agents.html | og:description meta tag |
+| 9 | "setting up the war room" → "setting up the Situation Room" | agents.html | Canvas placeholder loading text |
+| 10 | "Lab panels" → "Screener panels" | lab.html | aria-label on sidebar |
+| 11 | "fantasy football war room" → "Situation Room" | 6 agent persona files | razzle.md, medical.md, scout.md, diplomat.md, historian.md, quant.md |
+
+### Error State P0s (20+ fixes)
+
+| # | Fix | Files | Notes |
+|---|-----|-------|-------|
+| 1 | 8x raw err.message removed | lab.js | All "fumbled..." messages now end with static "try again in a sec." |
+| 2 | 1x raw err.message removed | compare.js | Same pattern |
+| 3 | 1x raw err.message removed | player.js | Same pattern |
+| 4 | 3x raw err.message classified | warroom.js | Now checks for timeout/401/generic, shows appropriate branded message |
+| 5 | 2x raw e.message removed | league-intel.html | Monte Carlo and schedule analysis |
+| 6 | 2x alert() → _showToast() | lab.js | Custom scoring config messages |
+| 7 | 3x alert() → _showToast() | app.js | Subscription management fallbacks |
+| 8 | apiFetch HTTP status codes hidden | app.js | "API 500: Internal Server Error" → "the server fumbled. try again in a sec." |
+| 9 | 3x resp.status removed from toasts | app.js | Checkout, promo, subscription messages |
+| 10 | 3x generic text → Razzle voice | formula-store.js | Rating, fetch, duplicate publish messages |
+
+### Mobile P0s (5 fixes)
+
+| # | Fix | Files | Notes |
+|---|-----|-------|-------|
+| 1 | Feature matrix table overflow wrapper | pricing.html | overflow-x:auto prevents page-level horizontal scroll |
+| 2 | Config panel left:0 at 480px | agents.html | Prevents 12px overflow from base left:12px + width:100vw |
+| 3 | Touch targets 44px minimum | agents.html | roster-toggle, config-toggle min-height:44px; scenario-agent-btn min-height:36px |
+| 4 | Bulk action bar flex-wrap | lab.html | Prevents button overflow on narrow screens |
+| 5 | Body overflow-x:hidden at 480px | pricing.html | Prevents horizontal scroll |
+
+### Interaction Edge Cases (4 fixes)
+
+| # | Fix | Files | Notes |
+|---|-----|-------|-------|
+| 1 | URL offset validation | lab.js | Math.max(0, parseInt(offset) \|\| 0) prevents negative/NaN offsets |
+| 2 | URL universe validation | lab.js | Only "nfl" or "college" accepted, others ignored |
+| 3 | League Odds double-click prevention | league-intel.html | Button disabled during simulation, re-enabled on success/error |
+| 4 | JWT 401 interceptor | app.js | Expired token triggers localStorage clear + auth modal + branded error |
+
+### Verification
+- All 11 JS files pass `node --check` syntax validation
+- All 59 tests pass (5.53s)
+- 0 cold gray `rgba(26,26,46,...)` remaining in frontend
+- 0 `alert()` calls remaining in JS files
+- 0 raw `err.message` / `e.message` exposed to users
+- 0 "war room" in user-visible text or agent persona prompts
+- 0 "The Lab" in user-visible text (only internal code comments)
+
+### Decisions Log
+- Canvas dark mode was previously deferred as "post-launch" — now fully implemented via getCanvasTheme() helper
+- Cold grays in standalone HTML watermark code (24 files) fixed via bulk sed — all were identical `rgba(26,26,46,...)` patterns
+- "WAR ROOM" on pixel canvas shortened to "SIT ROOM" to fit the 9px monospace character width constraint
+- Remaining "war room" in CSS comments and JS code comments are internal-only, not user-visible — left as-is
+
+---
+
+## Quality Audit: 5-Agent Deep Sweep (Mar 20)
+
+**Goal**: Systematic 5-agent parallel crash/data/UX audit. Every pixel, every interaction, every error state.
+
+### P0 Crash & Data Bugs (8 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | `t` undefined in exportHeatMapPNG | lab.js:9890 | ReferenceError crash — missing `var t = getCanvasTheme()` |
+| 2 | Keyboard `1` sets position `""` not `"ALL"` | lab.js:10298 | Wrong query results — posMap value was empty string |
+| 3 | `p.ppg.toFixed(1)` crash on null | lab-panels.js:10250 | Game Script panel — changed to `fmt(p.ppg)` |
+| 4 | `t.total_avg.toFixed(1)` crash on null | lab-panels.js:3593 | Matchup Heatmap — changed to `fmt(t.total_avg)` |
+| 5 | Sitemap uses `"players"` key instead of `"items"` | server.py:2300 | Zero player URLs in sitemap.xml |
+| 6 | `interceptions` missing from `_STAT_SUM_COLS` | core.py:120 | Passer rating always computed with ints=0 — inflated for all QBs |
+| 7 | `checkFeatureGate` treats lifetime subscribers as free | app.js:277 | `gate["pro_lifetime"]` → undefined → fallback to `gate.free`. Fixed with `.replace("_lifetime", "")` |
+| 8 | Pricing page promo code shadows API version | pricing.html:568 | Local `validatePromoCode()` only checked Easter eggs, never hit `/api/billing/validate-promo`. Added API fallthrough. |
+
+### P1 Logic & UX Bugs (8 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 9 | Warroom briefing agent_highlights reads wrong props | warroom.js:3669 | `d.results[key]` is a string, not `{text, name}`. Added `typeof result === 'string'` check. |
+| 10 | `waitAndStart` leaks RAF without tracking ID | warroom.js:3980 | Sprite loading loop didn't store rAF ID in `_rafId`, preventing cleanup. |
+| 11 | `getSosGrade` indexOf on floats returns -1 | league-intel.html:6435 | Float precision mismatch. Changed to `findIndex` with epsilon comparison. |
+| 12 | Welcome modal links missing `.html` extension | app.js:646-647 | Only two links in codebase without `.html` — `/league-intel` and `/lab`. Fixed. |
+| 13 | Feature matrix claims "3 seasons" for free users | pricing.html:316, agents.html:1918 | Code gives all seasons free (Hotfix from Mar 19). Updated marketing to match. |
+| 14 | `_detectCheckoutReturn` strips all URL params | app.js:548 | Was nuking all query params, not just `session_id`. Now uses URLSearchParams.delete(). |
+| 15 | Sleeper transaction fetches (36 parallel) had no timeout | league-intel.html | Added 20s AbortController to `loadActivityFeed` and `fetchLeagueTransactions`. |
+| 16 | `crawlLeagueHistory` sequential fetches had no timeout | league-intel.html:2301 | Added 8s per-fetch AbortController. |
+
+### P2 Robustness Fixes (4 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 17 | `publish_formula` leaks exception message to user | storage.py:235 | `str(e)` → generic "failed to publish formula" |
+| 18 | Formula search doesn't escape LIKE wildcards | storage.py:253 | `%` and `_` in search matched everything. Added ESCAPE clause. |
+| 19 | Monte Carlo histogram blurry on Retina | league-intel.html:5795 | Added DPR scaling to `_mcDrawHistogram` canvas. |
+| 20 | Monte Carlo z-score extreme outliers | league-intel.html:5752 | Clamped Box-Muller z to ±4 standard deviations. |
+
+### Verification
+- All 11 JS files syntax clean
+- All 21 Python files compile clean
+- All 3 HTML inline scripts validated
+- 59/59 tests pass (5.58s)
+- 0 regressions

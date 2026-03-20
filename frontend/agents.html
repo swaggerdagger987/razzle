@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Situation Room — Razzle</title>
 <meta property="og:title" content="Situation Room — Razzle">
-<meta property="og:description" content="Six AI agents who know your league. Scout, Quant, Medic, Diplomat, Historian, and Razzle himself. Drop a scenario, get a war-room briefing in seconds.">
+<meta property="og:description" content="Six AI agents who know your league. Scout, Quant, Medic, Diplomat, Historian, and Razzle himself. Drop a scenario, get a Situation Room briefing in seconds.">
 <meta property="og:site_name" content="razzle.lol">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://razzle.lol/agents.html">
@@ -529,6 +529,7 @@
     display: flex;
     align-items: center;
     gap: 4px;
+    min-height: 36px;
   }
 
   .scenario-agent-btn:hover {
@@ -1206,6 +1207,7 @@
     box-shadow: 2px 2px 0 var(--ink);
     cursor: pointer;
     transition: all 0.12s;
+    min-height: 44px;
   }
 
   .roster-toggle:hover {
@@ -1313,6 +1315,7 @@
     box-shadow: 2px 2px 0 var(--ink);
     cursor: pointer;
     transition: all 0.12s;
+    min-height: 44px;
   }
 
   .config-toggle:hover {
@@ -1497,7 +1500,7 @@
     .warroom-hero-badges { gap: 4px; }
     .warroom-bio-grid { grid-template-columns: 1fr; }
     .roster-panel { width: 140px; font-size: 10px; }
-    .config-panel { width: 100vw; max-width: 100vw; border-radius: 0; right: 0; }
+    .config-panel { width: 100vw; max-width: 100vw; border-radius: 0; right: 0; left: 0; }
     .scenario-section { padding: 12px; }
     .scenario-input { font-size: 13px; }
   }
@@ -1558,8 +1561,8 @@
       <!-- Placeholder until pixel engine loads -->
       <div class="canvas-placeholder" id="canvasPlaceholder">
         <div class="canvas-placeholder-icon">🐯</div>
-        <div class="canvas-placeholder-text">agents are setting up the war room...</div>
-        <div class="canvas-placeholder-sub">pulling up the war room feed</div>
+        <div class="canvas-placeholder-text">agents are setting up the Situation Room...</div>
+        <div class="canvas-placeholder-sub">pulling up the Situation Room feed</div>
       </div>
       <!-- Config toggle + panel -->
       <button class="config-toggle" id="configToggle" aria-expanded="false" aria-controls="configPanel">Config</button>
@@ -1912,7 +1915,7 @@
           </tr>
           <tr>
             <td style="padding:8px 12px; border-bottom:2px dashed var(--ink-faint);">Historical data</td>
-            <td style="padding:8px 12px; border-bottom:2px dashed var(--ink-faint); text-align:center;">3 seasons</td>
+            <td style="padding:8px 12px; border-bottom:2px dashed var(--ink-faint); text-align:center;">all (2015+)</td>
             <td style="padding:8px 12px; border-bottom:2px dashed var(--ink-faint); text-align:center; font-weight:700;">all (2015+)</td>
             <td style="padding:8px 12px; border-bottom:2px dashed var(--ink-faint); text-align:center; font-weight:700;">all (2015+)</td>
           </tr>

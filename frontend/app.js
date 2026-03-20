@@ -43,6 +43,24 @@ if (document.readyState === "loading") {
   _injectThemeToggle();
 }
 
+/* ===== Canvas Theme Helper (dark mode palette for canvas draws) ===== */
+function getCanvasTheme() {
+  var isDark = document.documentElement.getAttribute("data-theme") === "dark";
+  return {
+    bg: isDark ? "#2d1f14" : "#ede0cf",
+    bgWarm: isDark ? "#3b2821" : "#e5d5c3",
+    bgCard: isDark ? "#4a3728" : "#f7efe5",
+    ink: isDark ? "#ede0cf" : "#2d1f14",
+    inkMedium: isDark ? "#c4b5a5" : "#5c4a3d",
+    inkLight: isDark ? "#8a7565" : "#8a7565",
+    inkFaint: isDark ? "#5c4a3d" : "#c4b5a5",
+    white: isDark ? "#ede0cf" : "#fff",
+    gridLine: isDark ? "rgba(237,224,207,0.12)" : "rgba(45,31,20,0.12)",
+    subtitleAlpha: isDark ? "rgba(237,224,207,0.5)" : "rgba(45,31,20,0.5)",
+    isDark: isDark
+  };
+}
+
 /* ===== Mobile Hamburger Menu ===== */
 
 function _injectHamburgerMenu() {
@@ -248,7 +266,7 @@ function getAllowedSeasons(allSeasons) {
  * Returns { allowed: bool, limit: number|null, message: string }
  */
 function checkFeatureGate(feature, currentCount) {
-  var plan = getUserPlan();
+  var plan = getUserPlan().replace("_lifetime", "");
   var gates = {
     formulas: { free: 3, pro: Infinity, elite: Infinity },
     filters: { free: 3, pro: Infinity, elite: Infinity },
@@ -438,7 +456,13 @@ async function apiFetch(path, options = {}) {
   const authHeaders = getAuthHeaders();
   options.headers = Object.assign({}, authHeaders, options.headers || {});
   const resp = await fetch(url, options);
-  if (!resp.ok) throw new Error(`API ${resp.status}: ${resp.statusText}`);
+  if (resp.status === 401) {
+    localStorage.removeItem("razzle_token");
+    localStorage.removeItem("razzle_user");
+    if (typeof openAuthModal === "function") openAuthModal();
+    throw new Error("session expired. sign in again.");
+  }
+  if (!resp.ok) throw new Error("the server fumbled. try again in a sec.");
   try {
     return await resp.json();
   } catch (e) {
@@ -521,8 +545,11 @@ function _detectCheckoutReturn() {
   var sessionId = params.get("session_id");
   if (!sessionId) return;
 
-  // Clean URL
-  var cleanUrl = window.location.pathname + window.location.hash;
+  // Clean URL — only remove session_id, preserve other params
+  var cleanParams = new URLSearchParams(window.location.search);
+  cleanParams.delete("session_id");
+  var remaining = cleanParams.toString();
+  var cleanUrl = window.location.pathname + (remaining ? "?" + remaining : "") + window.location.hash;
   window.history.replaceState({}, "", cleanUrl);
 
   // Show upgrade toast
@@ -585,14 +612,14 @@ function _showWelcomeModal(user) {
 
   var features = isElite
     ? [
-        "All 60+ Lab analytical panels",
+        "All 60+ analytical panels",
         "Full Bureau deep-dive + league intelligence",
         "Situation Room with AI key included",
         "Unlimited formulas + cloud sync",
         "CSV export on every table",
       ]
     : [
-        "All 60+ Lab analytical panels",
+        "All 60+ analytical panels",
         "Full Bureau deep-dive + league intelligence",
         "Situation Room (bring your own AI key)",
         "Unlimited formulas + cloud sync",
@@ -619,8 +646,8 @@ function _showWelcomeModal(user) {
         featureHTML +
       '</ul>' +
       '<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">' +
-        '<a href="/league-intel" style="font-family:var(--font-mono);font-size:13px;font-weight:700;padding:10px 20px;background:var(--orange);color:#fff;border:2px solid var(--ink);border-radius:8px;box-shadow:3px 3px 0 var(--ink);text-decoration:none;cursor:pointer;">Open the Bureau</a>' +
-        '<a href="/lab" style="font-family:var(--font-mono);font-size:13px;font-weight:700;padding:10px 20px;background:var(--bg-warm);color:var(--ink);border:2px solid var(--ink);border-radius:8px;box-shadow:3px 3px 0 var(--ink);text-decoration:none;cursor:pointer;">Back to the Screener</a>' +
+        '<a href="/league-intel.html" style="font-family:var(--font-mono);font-size:13px;font-weight:700;padding:10px 20px;background:var(--orange);color:#fff;border:2px solid var(--ink);border-radius:8px;box-shadow:3px 3px 0 var(--ink);text-decoration:none;cursor:pointer;">Open the Bureau</a>' +
+        '<a href="/lab.html" style="font-family:var(--font-mono);font-size:13px;font-weight:700;padding:10px 20px;background:var(--bg-warm);color:var(--ink);border:2px solid var(--ink);border-radius:8px;box-shadow:3px 3px 0 var(--ink);text-decoration:none;cursor:pointer;">Back to the Screener</a>' +
       '</div>' +
       '<button onclick="this.closest(\'div\').parentElement.remove();" style="position:absolute;top:12px;right:12px;background:none;border:none;font-size:20px;color:var(--ink-light);cursor:pointer;font-family:var(--font-mono);">&times;</button>' +
     '</div>';
@@ -959,7 +986,7 @@ async function startCheckout(interval) {
       body: JSON.stringify(body)
     });
     if (!resp.ok) {
-      _showToast("checkout failed (" + resp.status + "). try again.", "error");
+      _showToast("checkout hit a wall. try again or ping support.", "error");
       return;
     }
     var data = await resp.json();
@@ -987,7 +1014,7 @@ async function validatePromoCode() {
       body: JSON.stringify({ code: code })
     });
     if (!resp.ok) {
-      feedback.textContent = "couldn't verify that one (" + resp.status + ")";
+      feedback.textContent = "couldn't verify that one. try again.";
       feedback.style.color = "var(--red, #e63946)";
       return;
     }
@@ -1015,17 +1042,17 @@ async function openManageSubscription() {
       headers: { "Authorization": "Bearer " + token }
     });
     if (!resp.ok) {
-      if (typeof _showToast === "function") _showToast("couldn't load subscription info (" + resp.status + ")", "error"); else alert("Could not load subscription info");
+      if (typeof _showToast === "function") _showToast("couldn't pull your subscription info. try again.", "error"); else _showToast("couldn't pull your subscription info. try again.", "error");
       return;
     }
     var data = await resp.json();
     if (data.portal_url) {
       window.location.href = data.portal_url;
     } else {
-      if (typeof _showToast === "function") _showToast("subscription management not available", "error"); else alert("Subscription management not available");
+      if (typeof _showToast === "function") _showToast("subscription management isn't available right now.", "error"); else _showToast("subscription management isn't available right now.", "error");
     }
   } catch (e) {
-    if (typeof _showToast === "function") _showToast("connection error — try again", "error"); else alert("Connection error");
+    if (typeof _showToast === "function") _showToast("connection fumbled. try again.", "error"); else _showToast("connection fumbled. try again.", "error");
   }
 }
 

@@ -2297,7 +2297,7 @@ def sitemap_xml():
     # Top 200 NFL players by PPR
     try:
         data = live_data.fetch_players(sort_key="fantasy_points_ppr", limit=200)
-        for p in data.get("players", []):
+        for p in data.get("items", []):
             pid = p.get("player_id", "")
             if pid:
                 url = ET.SubElement(urlset, "url")

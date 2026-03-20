@@ -118,6 +118,7 @@ _STAT_SUM_COLS = """
             SUM(s.carries) as carries,
             SUM(s.completions) as completions,
             SUM(s.attempts) as attempts,
+            SUM(s.interceptions) as interceptions,
             SUM(s.passing_air_yards) as passing_air_yards,
             SUM(s.receiving_air_yards) as receiving_air_yards,
             SUM(s.receiving_yards_after_catch) as receiving_yards_after_catch,

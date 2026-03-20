@@ -82,8 +82,9 @@ function screenshotPanel(panelName) {
   if (!content) return;
   _showToast('capturing...');
   _loadHtml2Canvas(function() {
+  var _t = getCanvasTheme();
   html2canvas(content, {
-    backgroundColor: '#ede0cf',
+    backgroundColor: _t.bg,
     scale: 2,
     useCORS: true,
     logging: false
@@ -92,7 +93,7 @@ function screenshotPanel(panelName) {
     var ctx = canvas.getContext('2d');
     var wm = 'razzle.lol';
     ctx.font = '600 28px Caveat, cursive';
-    ctx.fillStyle = 'rgba(45, 31, 20, 0.25)';
+    ctx.fillStyle = _t.isDark ? 'rgba(237, 224, 207, 0.25)' : 'rgba(45, 31, 20, 0.25)';
     ctx.textAlign = 'right';
     ctx.fillText(wm, canvas.width - 20, canvas.height - 16);
     // Download
@@ -2705,8 +2706,8 @@ function applyUniverseUI() {
   }
 
   // Page title
-  if (isCollege) document.title = "College Lab — Razzle";
-  else if (prospectMode) document.title = "Prospect Lab — Razzle";
+  if (isCollege) document.title = "College Screener — Razzle";
+  else if (prospectMode) document.title = "Prospect Screener — Razzle";
   else document.title = "Screener — Razzle";
 
   // Show Tiers and Big Board buttons only in prospect mode
@@ -3789,7 +3790,7 @@ function loadStateFromURL() {
     if (uParam === "prospects") {
       state.universe = "college";
       state.collegeView = "prospects";
-    } else {
+    } else if (uParam === "nfl" || uParam === "college") {
       state.universe = uParam;
     }
   }
@@ -3803,7 +3804,7 @@ function loadStateFromURL() {
   if (params.has("dir")) state.sortDir = params.get("dir");
   if (params.has("sort2")) state.sortKey2 = params.get("sort2");
   if (params.has("dir2")) state.sortDir2 = params.get("dir2");
-  if (params.has("offset")) state.offset = parseInt(params.get("offset"));
+  if (params.has("offset")) state.offset = Math.max(0, parseInt(params.get("offset")) || 0);
   if (params.has("filters")) {
     try {
       var parsed = JSON.parse(params.get("filters"));
@@ -4911,7 +4912,7 @@ function saveCustomScoring() {
     configs[existIdx].weights = weights;
   } else {
     if (configs.length >= 3) {
-      alert("Max 3 configs. Delete one first.");
+      _showToast("max 3 configs. delete one first.");
       return;
     }
     configs.push({ name, weights });
@@ -4941,7 +4942,7 @@ function saveCustomScoring() {
 function deleteCustomScoring() {
   const sel = document.getElementById("customScoringSelect");
   const idx = parseInt(sel.value);
-  if (isNaN(idx)) { alert("Select a config to delete"); return; }
+  if (isNaN(idx)) { _showToast("pick a config to delete first."); return; }
   const configs = getCustomScoringConfigs();
   const config = configs[idx];
   if (!config) return;
@@ -5510,9 +5511,10 @@ function exportImage() {
   canvas.width = W;
   canvas.height = H;
   const ctx = canvas.getContext("2d");
+  var t = getCanvasTheme();
 
   // Background
-  ctx.fillStyle = "#ede0cf";
+  ctx.fillStyle = t.bg;
   ctx.fillRect(0, 0, W, H);
 
   // Title bar with context
@@ -5525,10 +5527,10 @@ function exportImage() {
   const modeLabel = isProspectView() ? "Prospects" : state.universe === "college" ? "College" : "NFL";
   const titleText = `${modeLabel} \u00B7 ${posLabel} \u00B7 ${seasonLabel} \u00B7 sorted by ${sortLabel} ${sortArrow}`;
 
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.fillRect(padX, padY, tableW, titleH);
   ctx.font = "bold 12px 'Space Mono', monospace";
-  ctx.fillStyle = "#ede0cf";
+  ctx.fillStyle = t.bg;
   ctx.textAlign = "left";
   ctx.fillText(titleText, padX + 10, padY + titleH / 2 + 4);
 
@@ -5537,9 +5539,9 @@ function exportImage() {
 
   // Header row
   const hdrY = padY + titleH;
-  ctx.fillStyle = "#e5d5c3";
+  ctx.fillStyle = t.bgWarm;
   ctx.fillRect(padX, hdrY, tableW, headerH);
-  ctx.strokeStyle = "#2d1f14";
+  ctx.strokeStyle = t.ink;
   ctx.lineWidth = 2;
   ctx.strokeRect(padX, hdrY, tableW, headerH);
 
@@ -5556,7 +5558,7 @@ function exportImage() {
   ctx.fillText("#", padX + rankColW / 2, hdrY + headerH / 2 + 4);
 
   ctx.font = "bold 11px 'Space Mono', monospace";
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.textAlign = "left";
   ctx.fillText("PLAYER", padX + rankColW + 8, hdrY + headerH / 2 + 4);
 
@@ -5577,7 +5579,7 @@ function exportImage() {
 
     // Alternate row bg
     if (r % 2 === 0) {
-      ctx.fillStyle = "#f7efe5";
+      ctx.fillStyle = t.bgCard;
       ctx.fillRect(padX, y, tableW, rowH);
     }
 
@@ -5589,7 +5591,7 @@ function exportImage() {
     }
 
     // Row border
-    ctx.strokeStyle = "#c4b5a5";
+    ctx.strokeStyle = t.inkFaint;
     ctx.lineWidth = 0.5;
     ctx.beginPath();
     ctx.moveTo(padX, y + rowH);
@@ -5598,7 +5600,7 @@ function exportImage() {
 
     // Rank number
     ctx.font = "10px 'Space Mono', monospace";
-    ctx.fillStyle = "#8a7565";
+    ctx.fillStyle = t.inkLight;
     ctx.textAlign = "center";
     ctx.fillText(String(state.offset + r + 1), padX + rankColW / 2, y + 18);
 
@@ -5608,17 +5610,17 @@ function exportImage() {
     ctx.fillStyle = badgeColor;
     const badgeX = padX + rankColW + 6;
     ctx.fillRect(badgeX, y + 6, 26, 16);
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 1;
     ctx.strokeRect(badgeX, y + 6, 26, 16);
     ctx.font = "bold 9px 'Space Mono', monospace";
-    ctx.fillStyle = "#fff";
+    ctx.fillStyle = t.white;
     ctx.textAlign = "center";
     ctx.fillText(pos, badgeX + 13, y + 18);
 
     // Player name
     ctx.font = "bold 12px 'Space Mono', monospace";
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.textAlign = "left";
     const pName = player.full_name || player.player_name || "";
     const displayName = pName.length > 20
@@ -5628,12 +5630,12 @@ function exportImage() {
 
     // Team
     ctx.font = "10px 'Space Mono', monospace";
-    ctx.fillStyle = "#8a7565";
+    ctx.fillStyle = t.inkLight;
     ctx.fillText(player.team || "", padX + rankColW + playerColW - 30, y + 18);
 
     // Stats
     ctx.font = "12px 'Space Mono', monospace";
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.textAlign = "right";
     for (let i = 0; i < visibleCols.length; i++) {
       const col = getColumnDef(visibleCols[i]);
@@ -5644,13 +5646,13 @@ function exportImage() {
   }
 
   // Table border
-  ctx.strokeStyle = "#2d1f14";
+  ctx.strokeStyle = t.ink;
   ctx.lineWidth = 3;
   ctx.strokeRect(padX, hdrY, tableW, headerH + rowCount * rowH);
 
   // Rank column divider
   ctx.lineWidth = 1;
-  ctx.strokeStyle = "#c4b5a5";
+  ctx.strokeStyle = t.inkFaint;
   ctx.beginPath();
   ctx.moveTo(padX + rankColW, hdrY);
   ctx.lineTo(padX + rankColW, hdrY + headerH + rowCount * rowH);
@@ -5658,7 +5660,7 @@ function exportImage() {
 
   // Player column divider
   ctx.lineWidth = 2;
-  ctx.strokeStyle = "#2d1f14";
+  ctx.strokeStyle = t.ink;
   ctx.beginPath();
   ctx.moveTo(padX + rankColW + playerColW, hdrY);
   ctx.lineTo(padX + rankColW + playerColW, hdrY + headerH + rowCount * rowH);
@@ -5667,7 +5669,7 @@ function exportImage() {
   // Watermark
   const wmY = H - watermarkH / 2;
   ctx.font = "bold 16px 'Luckiest Guy', cursive";
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
   ctx.fillText("razzle.lol", W / 2, wmY);
@@ -5954,20 +5956,21 @@ function renderRankingsPNG(players, posLabel, sortLabel) {
   canvas.width = W;
   canvas.height = H;
   const ctx = canvas.getContext("2d");
+  var t = getCanvasTheme();
 
   // Background
-  ctx.fillStyle = "#f7efe5";
+  ctx.fillStyle = t.bgCard;
   ctx.fillRect(0, 0, W, H);
 
   // Title
   ctx.font = "bold 24px 'Luckiest Guy', cursive";
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.textAlign = "center";
   ctx.fillText(`Razzle Dynasty Top ${players.length} ${posLabel}`, W / 2, padY + 28);
 
   // Subtitle (sort + season)
   ctx.font = "14px 'Caveat', cursive";
-  ctx.fillStyle = "rgba(26,26,46,0.5)";
+  ctx.fillStyle = t.subtitleAlpha;
   const seasonText = state.season === "career" ? "career" : state.season || "Latest";
   ctx.fillText(`ranked by ${sortLabel} — ${seasonText} season`, W / 2, padY + 46);
 
@@ -5977,14 +5980,14 @@ function renderRankingsPNG(players, posLabel, sortLabel) {
   const listW = W - padX * 2;
 
   // Outer border
-  ctx.strokeStyle = "#2d1f14";
+  ctx.strokeStyle = t.ink;
   ctx.lineWidth = 3;
   ctx.strokeRect(padX, listY, listW, listH);
 
   // Player rows
   players.forEach((p, i) => {
     const y = listY + i * rowH;
-    const pColor = posColors[p.position] || "#2d1f14";
+    const pColor = posColors[p.position] || t.ink;
 
     // Alternating bg
     if (i % 2 === 0) {
@@ -5994,7 +5997,7 @@ function renderRankingsPNG(players, posLabel, sortLabel) {
 
     // Row divider
     if (i > 0) {
-      ctx.strokeStyle = "#c4b5a5";
+      ctx.strokeStyle = t.inkFaint;
       ctx.lineWidth = 0.5;
       ctx.beginPath();
       ctx.moveTo(padX, y);
@@ -6009,10 +6012,10 @@ function renderRankingsPNG(players, posLabel, sortLabel) {
     ctx.arc(rankX, rankCY, 13, 0, Math.PI * 2);
     ctx.fillStyle = pColor;
     ctx.fill();
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 2;
     ctx.stroke();
-    ctx.fillStyle = "#fff";
+    ctx.fillStyle = t.white;
     ctx.font = "bold 12px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(String(i + 1), rankX, rankCY + 4);
@@ -6021,28 +6024,28 @@ function renderRankingsPNG(players, posLabel, sortLabel) {
     const posBadgeX = padX + 48;
     ctx.fillStyle = pColor;
     ctx.fillRect(posBadgeX, y + 8, 30, 20);
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 1.5;
     ctx.strokeRect(posBadgeX, y + 8, 30, 20);
-    ctx.fillStyle = "#fff";
+    ctx.fillStyle = t.white;
     ctx.font = "bold 9px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(p.position, posBadgeX + 15, y + 22);
 
     // Player name
     ctx.textAlign = "left";
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.font = "bold 14px 'Space Mono', monospace";
     ctx.fillText(p.full_name || p.player_name, padX + 88, y + 23);
 
     // Team
-    ctx.fillStyle = "#8a7565";
+    ctx.fillStyle = t.inkLight;
     ctx.font = "11px monospace";
     ctx.fillText(p.team || "FA", padX + 320, y + 23);
 
     // Age
     if (p.age) {
-      ctx.fillStyle = "#8a7565";
+      ctx.fillStyle = t.inkLight;
       ctx.font = "11px monospace";
       ctx.fillText("Age " + p.age, padX + 380, y + 23);
     }
@@ -6065,7 +6068,7 @@ function renderRankingsPNG(players, posLabel, sortLabel) {
 
     // Key stat (PPG)
     if (p.ppg != null) {
-      ctx.fillStyle = "#2d1f14";
+      ctx.fillStyle = t.ink;
       ctx.font = "bold 13px monospace";
       ctx.textAlign = "right";
       ctx.fillText(p.ppg.toFixed(1) + " PPG", padX + listW - 16, y + 23);
@@ -6100,7 +6103,7 @@ async function openPlayerProfile(playerId) {
     const data = await apiFetch(`/api/players/${playerId}/profile`);
     renderProfile(data, content);
   } catch (err) {
-    content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the data fetch... ${escapeHtml(err.message)}</div>`;
+    content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the data fetch... try again in a sec.</div>`;
   }
 }
 
@@ -6120,7 +6123,7 @@ async function openCollegeProfile(playerId) {
     const data = await apiFetch(`/api/college/player-profile/${encodeURIComponent(playerId)}`);
     renderCollegeProfile(data, content);
   } catch (err) {
-    content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the college data fetch... ${escapeHtml(err.message)}</div>`;
+    content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the college data fetch... try again in a sec.</div>`;
   }
 }
 
@@ -6631,6 +6634,7 @@ function drawProfileArc(seasons, pos) {
   const posHex = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
   const lineColor = posHex[pos] || "#d97757";
 
+  var t = getCanvasTheme();
   ctx.clearRect(0, 0, W, H);
 
   const values = seasons.map(s => s.fantasy_points_ppr || 0);
@@ -6638,7 +6642,7 @@ function drawProfileArc(seasons, pos) {
   const maxVal = Math.max(...values, 1);
 
   // Y-axis gridlines
-  ctx.strokeStyle = "#c4b5a5";
+  ctx.strokeStyle = t.inkFaint;
   ctx.lineWidth = 1;
   ctx.setLineDash([4, 4]);
   const yTicks = 4;
@@ -6649,7 +6653,7 @@ function drawProfileArc(seasons, pos) {
     ctx.lineTo(W - pad.right, y);
     ctx.stroke();
 
-    ctx.fillStyle = "#8a7565";
+    ctx.fillStyle = t.inkLight;
     ctx.font = "11px 'Space Mono', monospace";
     ctx.textAlign = "right";
     ctx.fillText(Math.round((i / yTicks) * maxVal), pad.left - 8, y + 4);
@@ -6657,7 +6661,7 @@ function drawProfileArc(seasons, pos) {
   ctx.setLineDash([]);
 
   // X-axis labels
-  ctx.fillStyle = "#8a7565";
+  ctx.fillStyle = t.inkLight;
   ctx.font = "11px 'Space Mono', monospace";
   ctx.textAlign = "center";
   for (let i = 0; i < labels.length; i++) {
@@ -6673,10 +6677,10 @@ function drawProfileArc(seasons, pos) {
     ctx.arc(x, y, 6, 0, Math.PI * 2);
     ctx.fillStyle = lineColor;
     ctx.fill();
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 2;
     ctx.stroke();
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.fillText(Math.round(values[0]), x, y - 14);
     return;
@@ -6718,11 +6722,11 @@ function drawProfileArc(seasons, pos) {
     ctx.arc(x, y, 5, 0, Math.PI * 2);
     ctx.fillStyle = lineColor;
     ctx.fill();
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(Math.round(values[i]), x, y - 12);
@@ -6789,55 +6793,57 @@ function exportProfileImage() {
   canvas.height = H;
   const ctx = canvas.getContext("2d");
 
+  var t = getCanvasTheme();
+
   // Background
-  ctx.fillStyle = "#f7efe5";
+  ctx.fillStyle = t.bgCard;
   ctx.fillRect(0, 0, W, H);
 
   const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
-  const pColor = posColors[pos] || "#2d1f14";
+  const pColor = posColors[pos] || t.ink;
 
   // Position badge
   ctx.fillStyle = pColor;
   ctx.fillRect(padX, padY, 50, 36);
-  ctx.strokeStyle = "#2d1f14";
+  ctx.strokeStyle = t.ink;
   ctx.lineWidth = 2;
   ctx.strokeRect(padX, padY, 50, 36);
-  ctx.fillStyle = "#fff";
+  ctx.fillStyle = t.white;
   ctx.font = "bold 16px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText(pos, padX + 25, padY + 24);
 
   // Name + meta
   ctx.textAlign = "left";
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.font = "bold 28px 'Luckiest Guy', cursive";
   ctx.fillText(name, padX + 64, padY + 28);
-  ctx.fillStyle = "#8a7565";
+  ctx.fillStyle = t.inkLight;
   ctx.font = "12px monospace";
   ctx.fillText(meta, padX + 64, padY + 48);
 
   // Stats bar
   const sbY = padY + headerH;
   const sbW = (W - padX * 2) / Math.max(stats.length, 1);
-  ctx.strokeStyle = "#2d1f14";
+  ctx.strokeStyle = t.ink;
   ctx.lineWidth = 3;
   ctx.strokeRect(padX, sbY, W - padX * 2, statsBarH);
 
   for (let i = 0; i < stats.length; i++) {
     const x = padX + i * sbW;
     if (i > 0) {
-      ctx.strokeStyle = "#c4b5a5";
+      ctx.strokeStyle = t.inkFaint;
       ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.moveTo(x, sbY);
       ctx.lineTo(x, sbY + statsBarH);
       ctx.stroke();
     }
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.font = "bold 22px 'Luckiest Guy', cursive";
     ctx.textAlign = "center";
     ctx.fillText(stats[i].val, x + sbW / 2, sbY + 32);
-    ctx.fillStyle = "#8a7565";
+    ctx.fillStyle = t.inkLight;
     ctx.font = "10px monospace";
     ctx.fillText(stats[i].label.toUpperCase(), x + sbW / 2, sbY + 52);
   }
@@ -6847,13 +6853,13 @@ function exportProfileImage() {
     const tY = sbY + statsBarH + 20;
     const colW = (W - padX * 2) / headers.length;
 
-    ctx.fillStyle = "#e5d5c3";
+    ctx.fillStyle = t.bgWarm;
     ctx.fillRect(padX, tY, W - padX * 2, tableHeaderH);
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 3;
     ctx.strokeRect(padX, tY, W - padX * 2, tableHeaderH);
 
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.font = "bold 10px monospace";
     for (let i = 0; i < headers.length; i++) {
       ctx.textAlign = i === 0 ? "left" : "right";
@@ -6865,17 +6871,17 @@ function exportProfileImage() {
       const rY = tY + tableHeaderH + r * tableRowH;
       const isCareer = r === rows.length - 1;
       if (isCareer) {
-        ctx.fillStyle = "#e5d5c3";
+        ctx.fillStyle = t.bgWarm;
         ctx.fillRect(padX, rY, W - padX * 2, tableRowH);
       }
-      ctx.strokeStyle = "#c4b5a5";
+      ctx.strokeStyle = t.inkFaint;
       ctx.lineWidth = 0.5;
       ctx.beginPath();
       ctx.moveTo(padX, rY + tableRowH);
       ctx.lineTo(W - padX, rY + tableRowH);
       ctx.stroke();
 
-      ctx.fillStyle = "#2d1f14";
+      ctx.fillStyle = t.ink;
       ctx.font = isCareer ? "bold 11px monospace" : "11px monospace";
       for (let c = 0; c < rows[r].length; c++) {
         ctx.textAlign = c === 0 ? "left" : "right";
@@ -6884,7 +6890,7 @@ function exportProfileImage() {
       }
     }
 
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 3;
     ctx.strokeRect(padX, tY, W - padX * 2, tableHeaderH + rows.length * tableRowH);
   }
@@ -6892,7 +6898,7 @@ function exportProfileImage() {
   // Watermark
   const wmY = H - watermarkH / 2;
   ctx.font = "bold 16px 'Luckiest Guy', cursive";
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
   ctx.fillText("razzle.lol", W / 2, wmY);
@@ -6923,7 +6929,7 @@ async function openProspectProfile(name, position, draftYear) {
     ]);
     renderProspectProfile(data, content, compsData);
   } catch (err) {
-    content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the prospect data... ${escapeHtml(err.message)}</div>`;
+    content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the prospect data... try again in a sec.</div>`;
   }
 }
 
@@ -7278,9 +7284,10 @@ function drawCollegeArc(college, pos) {
   const pad = { top: 30, right: 20, bottom: 30, left: 55 };
   const plotW = W - pad.left - pad.right;
   const plotH = H - pad.top - pad.bottom;
+  var t = getCanvasTheme();
 
   ctx.clearRect(0, 0, W, H);
-  ctx.fillStyle = "#ede0cf";
+  ctx.fillStyle = t.bg;
   ctx.fillRect(0, 0, W, H);
 
   const seasons = college.seasons;
@@ -7302,7 +7309,7 @@ function drawCollegeArc(college, pos) {
 
   // Y-axis gridlines
   ctx.font = "10px 'Space Mono', monospace";
-  ctx.fillStyle = "#8a7565";
+  ctx.fillStyle = t.inkLight;
   ctx.textAlign = "right";
   const gridSteps = 4;
   for (let i = 0; i <= gridSteps; i++) {
@@ -7311,7 +7318,7 @@ function drawCollegeArc(college, pos) {
     ctx.beginPath();
     ctx.moveTo(pad.left, y);
     ctx.lineTo(W - pad.right, y);
-    ctx.strokeStyle = "rgba(26,26,46,0.08)";
+    ctx.strokeStyle = t.gridLine;
     ctx.lineWidth = 1;
     ctx.stroke();
     ctx.fillText(v.toLocaleString(), pad.left - 5, y + 3);
@@ -7356,19 +7363,19 @@ function drawCollegeArc(college, pos) {
     ctx.arc(x, y, 5, 0, Math.PI * 2);
     ctx.fillStyle = "#5b7fff";
     ctx.fill();
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 2;
     ctx.stroke();
 
     // Value label
     ctx.font = "bold 11px 'Space Mono', monospace";
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.textAlign = "center";
     ctx.fillText(values[i].toLocaleString(), x, y - 10);
 
     // Season label
     ctx.font = "11px 'Space Mono', monospace";
-    ctx.fillStyle = "#5c4a3d";
+    ctx.fillStyle = t.inkMedium;
     ctx.fillText(labels[i], x, pad.top + plotH + 18);
   }
 }
@@ -7391,9 +7398,10 @@ function drawProspectSpider(prospect, percentiles, metrics) {
   const cx = W / 2;
   const cy = H / 2 + 10;
   const R = Math.min(W, H) / 2 - 60;
+  var t = getCanvasTheme();
 
   ctx.clearRect(0, 0, W, H);
-  ctx.fillStyle = "#ede0cf";
+  ctx.fillStyle = t.bg;
   ctx.fillRect(0, 0, W, H);
 
   // Filter to metrics that have data
@@ -7417,7 +7425,7 @@ function drawProspectSpider(prospect, percentiles, metrics) {
       else ctx.lineTo(x, y);
     }
     ctx.closePath();
-    ctx.strokeStyle = ring === 50 ? "rgba(26,26,46,0.2)" : "rgba(26,26,46,0.08)";
+    ctx.strokeStyle = ring === 50 ? "rgba(45,31,20,0.2)" : "rgba(45,31,20,0.08)";
     ctx.lineWidth = ring === 50 ? 1.5 : 1;
     ctx.stroke();
   }
@@ -7428,7 +7436,7 @@ function drawProspectSpider(prospect, percentiles, metrics) {
     ctx.beginPath();
     ctx.moveTo(cx, cy);
     ctx.lineTo(cx + R * Math.cos(angle), cy + R * Math.sin(angle));
-    ctx.strokeStyle = "rgba(26,26,46,0.1)";
+    ctx.strokeStyle = "rgba(45,31,20,0.1)";
     ctx.lineWidth = 1;
     ctx.stroke();
   }
@@ -7464,7 +7472,7 @@ function drawProspectSpider(prospect, percentiles, metrics) {
     ctx.arc(x, y, 5, 0, Math.PI * 2);
     ctx.fillStyle = "#5b7fff";
     ctx.fill();
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 1.5;
     ctx.stroke();
   }
@@ -7483,7 +7491,7 @@ function drawProspectSpider(prospect, percentiles, metrics) {
 
     // Metric name
     ctx.font = "bold 11px 'Space Mono', monospace";
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.fillText(activeMetrics[i].label.replace(" Drill", "").replace(" Dash", "").replace(" Press", "").replace(" Jump", ""), x, y - 8);
 
     // Percentile value
@@ -7494,7 +7502,7 @@ function drawProspectSpider(prospect, percentiles, metrics) {
 
   // Title
   ctx.font = "18px 'Caveat', cursive";
-  ctx.fillStyle = "rgba(26,26,46,0.5)";
+  ctx.fillStyle = t.subtitleAlpha;
   ctx.textAlign = "center";
   ctx.fillText(`${prospect.player_name} — ${prospect.position} Athletic Profile`, cx, 20);
 }
@@ -7532,9 +7540,10 @@ function exportProspectImage() {
   canvas.width = W;
   canvas.height = H;
   const ctx = canvas.getContext("2d");
+  var t = getCanvasTheme();
 
   // Background
-  ctx.fillStyle = "#ede0cf";
+  ctx.fillStyle = t.bg;
   ctx.fillRect(0, 0, W, H);
 
   let y = padY;
@@ -7547,12 +7556,12 @@ function exportProspectImage() {
   y += 14;
 
   ctx.font = "bold 24px 'Luckiest Guy', cursive";
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.textAlign = "left";
   ctx.fillText(`${posText}  ${name}`, padX + 8, y + 24);
 
   ctx.font = "14px 'Space Mono', monospace";
-  ctx.fillStyle = "#5c4a3d";
+  ctx.fillStyle = t.inkMedium;
   ctx.fillText(metaText, padX + 8, y + 46);
   y += 70;
 
@@ -7565,11 +7574,11 @@ function exportProspectImage() {
       const lbl = box.querySelector(".profile-stat-label")?.textContent || "";
       const bx = padX + i * boxW;
       ctx.font = "bold 20px 'Luckiest Guy', cursive";
-      ctx.fillStyle = "#2d1f14";
+      ctx.fillStyle = t.ink;
       ctx.textAlign = "center";
       ctx.fillText(val, bx + boxW / 2, y + 24);
       ctx.font = "11px 'Space Mono', monospace";
-      ctx.fillStyle = "#8a7565";
+      ctx.fillStyle = t.inkLight;
       ctx.fillText(lbl, bx + boxW / 2, y + 42);
     });
     y += 60;
@@ -7584,15 +7593,15 @@ function exportProspectImage() {
     const compBoxes = rpsSection.querySelectorAll(".prospect-rps-component");
 
     // Section border
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 3;
     ctx.strokeRect(padX, y, W - padX * 2, 100);
-    ctx.fillStyle = "#f7efe5";
+    ctx.fillStyle = t.bgCard;
     ctx.fillRect(padX + 1, y + 1, W - padX * 2 - 2, 98);
 
     // Title
     ctx.font = "bold 13px 'Space Mono', monospace";
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.textAlign = "left";
     ctx.fillText("Razzle Prospect Score", padX + 14, y + 22);
 
@@ -7603,18 +7612,18 @@ function exportProspectImage() {
     ctx.fillStyle = tierColor;
     const badgeW = ctx.measureText(tierLabel).width + 16;
     ctx.fillRect(-badgeW / 2, -10, badgeW, 20);
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 2;
     ctx.strokeRect(-badgeW / 2, -10, badgeW, 20);
     ctx.font = "bold 11px 'Space Mono', monospace";
-    ctx.fillStyle = "white";
+    ctx.fillStyle = t.white;
     ctx.textAlign = "center";
     ctx.fillText(tierLabel.toUpperCase(), 0, 4);
     ctx.restore();
 
     // RPS big number
     ctx.font = "bold 36px 'Luckiest Guy', cursive";
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.textAlign = "left";
     ctx.fillText(rpsVal, padX + 14, y + 68);
 
@@ -7622,9 +7631,9 @@ function exportProspectImage() {
     const rpsNum = parseFloat(rpsVal) || 0;
     const barX = padX + 80;
     const barW = W - padX * 2 - 100;
-    ctx.fillStyle = "rgba(26,26,46,0.06)";
+    ctx.fillStyle = t.gridLine;
     ctx.fillRect(barX, y + 48, barW, 14);
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 2;
     ctx.strokeRect(barX, y + 48, barW, 14);
     ctx.fillStyle = tierColor;
@@ -7636,11 +7645,11 @@ function exportProspectImage() {
       const cLbl = box.querySelector(".prospect-rps-comp-label")?.textContent || "";
       const bx = padX + 14 + i * 140;
       ctx.font = "bold 14px 'Space Mono', monospace";
-      ctx.fillStyle = "#2d1f14";
+      ctx.fillStyle = t.ink;
       ctx.textAlign = "left";
       ctx.fillText(cVal, bx, y + 90);
       ctx.font = "10px 'Space Mono', monospace";
-      ctx.fillStyle = "#8a7565";
+      ctx.fillStyle = t.inkLight;
       ctx.fillText(cLbl, bx + 30, y + 90);
     });
 
@@ -7650,7 +7659,7 @@ function exportProspectImage() {
   // Combine metrics with bars
   if (combineGrid) {
     ctx.font = "bold 13px 'Space Mono', monospace";
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.textAlign = "left";
     ctx.fillText("Athletic Testing", padX + 8, y + 16);
     y += 30;
@@ -7665,7 +7674,7 @@ function exportProspectImage() {
       const barColor = bar ? bar.style.background : "#c4b5a5";
 
       ctx.font = "12px 'Space Mono', monospace";
-      ctx.fillStyle = "#2d1f14";
+      ctx.fillStyle = t.ink;
       ctx.textAlign = "left";
       ctx.fillText(label, padX + 8, y + 12);
 
@@ -7676,7 +7685,7 @@ function exportProspectImage() {
       // Bar
       const barStartX = padX + 210;
       const barMaxW = W - padX * 2 - 280;
-      ctx.fillStyle = "rgba(26,26,46,0.06)";
+      ctx.fillStyle = t.gridLine;
       ctx.fillRect(barStartX, y + 2, barMaxW, 14);
       ctx.fillStyle = barColor;
       ctx.fillRect(barStartX, y + 2, (barWidth / 100) * barMaxW, 14);
@@ -7700,7 +7709,7 @@ function exportProspectImage() {
   // Athletic comps
   if (compsGrid) {
     ctx.font = "bold 13px 'Space Mono', monospace";
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.textAlign = "left";
     ctx.fillText("NFL Athletic Comps", padX + 8, y + 16);
     y += 30;
@@ -7715,9 +7724,9 @@ function exportProspectImage() {
       const compStats = card.querySelector(".prospect-comp-stats")?.textContent || "";
 
       // Card background
-      ctx.fillStyle = "#f7efe5";
+      ctx.fillStyle = t.bgCard;
       ctx.fillRect(padX, y, W - padX * 2, 44);
-      ctx.strokeStyle = "#2d1f14";
+      ctx.strokeStyle = t.ink;
       ctx.lineWidth = 2;
       ctx.strokeRect(padX, y, W - padX * 2, 44);
 
@@ -7726,22 +7735,22 @@ function exportProspectImage() {
       ctx.fillRect(padX + 8, y + 8, 44, 28);
       ctx.strokeRect(padX + 8, y + 8, 44, 28);
       ctx.font = "bold 14px 'Space Mono', monospace";
-      ctx.fillStyle = "white";
+      ctx.fillStyle = t.white;
       ctx.textAlign = "center";
       ctx.fillText(simText, padX + 30, y + 27);
 
       // Comp info
       ctx.textAlign = "left";
       ctx.font = "bold 14px 'Space Mono', monospace";
-      ctx.fillStyle = "#2d1f14";
+      ctx.fillStyle = t.ink;
       ctx.fillText(compName, padX + 62, y + 20);
       ctx.font = "10px monospace";
-      ctx.fillStyle = "#8a7565";
+      ctx.fillStyle = t.inkLight;
       ctx.fillText(compMeta, padX + 62, y + 34);
 
       // Stats on right
       ctx.font = "10px monospace";
-      ctx.fillStyle = "#5c4a3d";
+      ctx.fillStyle = t.inkMedium;
       ctx.textAlign = "right";
       ctx.fillText(compStats, W - padX - 8, y + 27);
 
@@ -7753,7 +7762,7 @@ function exportProspectImage() {
   // Comp-based projections
   if (projGrid) {
     ctx.font = "bold 13px 'Space Mono', monospace";
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.textAlign = "left";
     ctx.fillText("Comp-Based Projection", padX + 8, y + 16);
     y += 28;
@@ -7765,18 +7774,18 @@ function exportProspectImage() {
       const lbl = box.querySelector(".prospect-proj-label")?.textContent || "";
       const bx = padX + i * (boxW + 10);
 
-      ctx.fillStyle = "#f7efe5";
+      ctx.fillStyle = t.bgCard;
       ctx.fillRect(bx, y, boxW, 50);
-      ctx.strokeStyle = "#2d1f14";
+      ctx.strokeStyle = t.ink;
       ctx.lineWidth = 2;
       ctx.strokeRect(bx, y, boxW, 50);
 
       ctx.font = "bold 16px 'Luckiest Guy', cursive";
-      ctx.fillStyle = "#2d1f14";
+      ctx.fillStyle = t.ink;
       ctx.textAlign = "center";
       ctx.fillText(val, bx + boxW / 2, y + 22);
       ctx.font = "9px 'Space Mono', monospace";
-      ctx.fillStyle = "#8a7565";
+      ctx.fillStyle = t.inkLight;
       ctx.fillText(lbl, bx + boxW / 2, y + 40);
     });
     y += 60;
@@ -7784,7 +7793,7 @@ function exportProspectImage() {
 
   // Watermark
   ctx.font = "bold 16px 'Luckiest Guy', cursive";
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
   ctx.fillText("razzle.lol", W / 2, y + 10);
@@ -7835,7 +7844,7 @@ async function loadTierData(position) {
     const data = await apiFetch(`/api/prospect-tiers?position=${position}&draft_year=${state.draftYear || state.season}`);
     renderTierView(data, contentEl);
   } catch (err) {
-    contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the tier data... ${escapeHtml(err.message)}</div>`;
+    contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the tier data... try again in a sec.</div>`;
   }
 }
 
@@ -7923,21 +7932,23 @@ function exportTierImage() {
   canvas.height = H;
   const ctx = canvas.getContext("2d");
 
+  var t = getCanvasTheme();
+
   // Background
-  ctx.fillStyle = "#ede0cf";
+  ctx.fillStyle = t.bg;
   ctx.fillRect(0, 0, W, H);
 
   let y = padY;
 
   // Title
   ctx.font = "bold 24px 'Luckiest Guy', cursive";
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.textAlign = "center";
   ctx.fillText(`${state.season} ${currentTierPosition} Athletic Tiers`, W / 2, y + 24);
   y += 40;
 
   ctx.font = "16px 'Caveat', cursive";
-  ctx.fillStyle = "#8a7565";
+  ctx.fillStyle = t.inkLight;
   ctx.fillText("grouped by avg combine percentile — razzle.lol", W / 2, y + 14);
   y += 30;
 
@@ -7962,10 +7973,10 @@ function exportTierImage() {
     ctx.beginPath();
     ctx.roundRect(-tw / 2, -12, tw, 24, 12);
     ctx.fill();
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 2;
     ctx.stroke();
-    ctx.fillStyle = "white";
+    ctx.fillStyle = t.white;
     ctx.font = "bold 12px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(badgeText, 0, 4);
@@ -7987,8 +7998,8 @@ function exportTierImage() {
       const metrics = card.querySelector(".tier-card-metrics")?.textContent || "";
 
       // Card background
-      ctx.fillStyle = "#f7efe5";
-      ctx.strokeStyle = "#2d1f14";
+      ctx.fillStyle = t.bgCard;
+      ctx.strokeStyle = t.ink;
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.roundRect(cx, cy, cardW, 64, 8);
@@ -7997,18 +8008,18 @@ function exportTierImage() {
 
       // Name
       ctx.font = "bold 14px 'Space Mono', monospace";
-      ctx.fillStyle = "#2d1f14";
+      ctx.fillStyle = t.ink;
       ctx.textAlign = "left";
       ctx.fillText(name.substring(0, 22), cx + 8, cy + 18);
 
       // Meta
       ctx.font = "10px monospace";
-      ctx.fillStyle = "#8a7565";
+      ctx.fillStyle = t.inkLight;
       ctx.fillText(meta.substring(0, 35), cx + 8, cy + 32);
 
       // Metrics
       ctx.font = "9px monospace";
-      ctx.fillStyle = "#5c4a3d";
+      ctx.fillStyle = t.inkMedium;
       ctx.fillText(metrics.substring(0, 45), cx + 8, cy + 48);
 
       // Percentile
@@ -8029,7 +8040,7 @@ function exportTierImage() {
 
   // Watermark
   ctx.font = "bold 16px 'Luckiest Guy', cursive";
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
   ctx.fillText("razzle.lol", W / 2, y + 10);
@@ -8078,7 +8089,7 @@ async function loadBigBoard(position) {
     currentBBData = data;
     renderBigBoard(data, contentEl);
   } catch (err) {
-    contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the big board... ${escapeHtml(err.message)}</div>`;
+    contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the big board... try again in a sec.</div>`;
   }
 }
 
@@ -8282,21 +8293,23 @@ function exportBigBoardImage() {
   canvas.height = H;
   const ctx = canvas.getContext("2d");
 
+  var t = getCanvasTheme();
+
   // Background
-  ctx.fillStyle = "#ede0cf";
+  ctx.fillStyle = t.bg;
   ctx.fillRect(0, 0, W, H);
 
   let y = padY;
 
   // Title
   ctx.font = "bold 26px 'Luckiest Guy', cursive";
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.textAlign = "center";
   ctx.fillText(`Razzle Big Board — ${currentBBData.position} ${currentBBData.draft_year}`, W / 2, y + 26);
   y += 42;
 
   ctx.font = "16px 'Caveat', cursive";
-  ctx.fillStyle = "#8a7565";
+  ctx.fillStyle = t.inkLight;
   ctx.fillText("ranked by Razzle Prospect Score (RPS)", W / 2, y + 14);
   y += 28;
 
@@ -8318,10 +8331,10 @@ function exportBigBoardImage() {
     ctx.beginPath();
     ctx.roundRect(-tw / 2, -12, tw, 24, 12);
     ctx.fill();
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 2;
     ctx.stroke();
-    ctx.fillStyle = "white";
+    ctx.fillStyle = t.white;
     ctx.font = "bold 12px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(label, 0, 4);
@@ -8334,9 +8347,9 @@ function exportBigBoardImage() {
       const posColor = posColors[p.position] || "#d97757";
 
       // Row bg
-      ctx.fillStyle = p.rank % 2 === 0 ? "#f7efe5" : "#f0e4d4";
+      ctx.fillStyle = p.rank % 2 === 0 ? t.bgCard : t.bgWarm;
       ctx.fillRect(padX, rowY, W - padX * 2, rowH - 2);
-      ctx.strokeStyle = "#2d1f14";
+      ctx.strokeStyle = t.ink;
       ctx.lineWidth = 1;
       ctx.strokeRect(padX, rowY, W - padX * 2, rowH - 2);
 
@@ -8348,13 +8361,13 @@ function exportBigBoardImage() {
 
       // Name
       ctx.font = "bold 14px 'Space Mono', monospace";
-      ctx.fillStyle = "#2d1f14";
+      ctx.fillStyle = t.ink;
       ctx.textAlign = "left";
       ctx.fillText(p.player_name.substring(0, 22), padX + 44, rowY + 18);
 
       // Meta
       ctx.font = "10px monospace";
-      ctx.fillStyle = "#8a7565";
+      ctx.fillStyle = t.inkLight;
       const draftInfo = p.draft_round && p.draft_pick ? `Rd ${p.draft_round} #${p.draft_pick}` : "UDFA";
       ctx.fillText(`${p.school || ""} · ${draftInfo}`, padX + 44, rowY + 34);
 
@@ -8365,13 +8378,13 @@ function exportBigBoardImage() {
       ctx.roundRect(chipX, rowY + 10, 30, 20, 10);
       ctx.fill();
       ctx.font = "bold 10px 'Space Mono', monospace";
-      ctx.fillStyle = "white";
+      ctx.fillStyle = t.white;
       ctx.textAlign = "center";
       ctx.fillText(p.position, chipX + 15, rowY + 24);
 
       // RPS bar
       const barX = padX + 330;
-      ctx.fillStyle = "#e5d5c3";
+      ctx.fillStyle = t.bgWarm;
       ctx.beginPath();
       ctx.roundRect(barX, rowY + 16, barW, barH, 5);
       ctx.fill();
@@ -8383,13 +8396,13 @@ function exportBigBoardImage() {
 
       // RPS value
       ctx.font = "bold 14px monospace";
-      ctx.fillStyle = "#2d1f14";
+      ctx.fillStyle = t.ink;
       ctx.textAlign = "left";
       ctx.fillText(p.rps.toFixed(1), barX + barW + 8, rowY + 27);
 
       // Key metrics
       ctx.font = "10px monospace";
-      ctx.fillStyle = "#5c4a3d";
+      ctx.fillStyle = t.inkMedium;
       ctx.textAlign = "right";
       let metricStr = "";
       if (p.forty) metricStr += `40: ${p.forty.toFixed(2)}`;
@@ -8403,7 +8416,7 @@ function exportBigBoardImage() {
 
   // Watermark
   ctx.font = "bold 14px 'Space Mono', monospace";
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
   ctx.fillText("razzle.lol", W / 2, y + 8);
@@ -8453,7 +8466,7 @@ async function loadClassAnalytics(position) {
     currentCAData = { ...data, filterPosition: position };
     renderClassAnalytics(data, contentEl);
   } catch (err) {
-    contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the analytics... ${escapeHtml(err.message)}</div>`;
+    contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the analytics... try again in a sec.</div>`;
   }
 }
 
@@ -8543,8 +8556,9 @@ function drawClassAnalyticsChart(classes, maxRPS) {
   const chartW = W - PAD_L - PAD_R;
   const chartH = H - PAD_T - PAD_B;
 
+  var t = getCanvasTheme();
   ctx.clearRect(0, 0, W, H);
-  ctx.fillStyle = "#f7efe5";
+  ctx.fillStyle = t.bgCard;
   ctx.fillRect(0, 0, W, H);
 
   const barCount = classes.length;
@@ -8557,7 +8571,7 @@ function drawClassAnalyticsChart(classes, maxRPS) {
   const scaleMax = Math.ceil(maxRPS / 10) * 10;
 
   // Y-axis gridlines + labels
-  ctx.strokeStyle = "#c4b5a5";
+  ctx.strokeStyle = t.inkFaint;
   ctx.lineWidth = 1;
   ctx.setLineDash([4, 4]);
   for (let v = 0; v <= scaleMax; v += 10) {
@@ -8566,7 +8580,7 @@ function drawClassAnalyticsChart(classes, maxRPS) {
     ctx.moveTo(PAD_L, y);
     ctx.lineTo(W - PAD_R, y);
     ctx.stroke();
-    ctx.fillStyle = "#8a7565";
+    ctx.fillStyle = t.inkLight;
     ctx.font = "12px 'Space Mono', monospace";
     ctx.textAlign = "right";
     ctx.fillText(v.toString(), PAD_L - 8, y + 4);
@@ -8577,7 +8591,7 @@ function drawClassAnalyticsChart(classes, maxRPS) {
   ctx.save();
   ctx.translate(14, PAD_T + chartH / 2);
   ctx.rotate(-Math.PI / 2);
-  ctx.fillStyle = "#5c4a3d";
+  ctx.fillStyle = t.inkMedium;
   ctx.font = "bold 11px 'Space Mono', monospace";
   ctx.textAlign = "center";
   ctx.fillText("Avg RPS", 0, 0);
@@ -8596,12 +8610,12 @@ function drawClassAnalyticsChart(classes, maxRPS) {
     ctx.fillRect(x, y, barW, barH);
 
     // Bar border
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 2;
     ctx.strokeRect(x, y, barW, barH);
 
     // Value on top
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.font = "bold 12px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(cls.avg_rps.toFixed(1), x + barW / 2, y - 8);
@@ -8612,27 +8626,27 @@ function drawClassAnalyticsChart(classes, maxRPS) {
     const by = y - 28;
     ctx.fillStyle = color;
     ctx.fillRect(bx, by, badgeW, badgeH);
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 1.5;
     ctx.strokeRect(bx, by, badgeW, badgeH);
-    ctx.fillStyle = "white";
+    ctx.fillStyle = t.white;
     ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.fillText(cls.grade, x + barW / 2, by + 13);
 
     // Year label
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.font = "bold 14px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(cls.year.toString(), x + barW / 2, PAD_T + chartH + 20);
 
     // Count label
-    ctx.fillStyle = "#8a7565";
+    ctx.fillStyle = t.inkLight;
     ctx.font = "11px 'Space Mono', monospace";
     ctx.fillText(`(${cls.count})`, x + barW / 2, PAD_T + chartH + 36);
   }
 
   // Title
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.font = "bold 14px 'Space Mono', monospace";
   ctx.textAlign = "left";
   const posLabel = currentCAData?.filterPosition === "ALL" ? "All Positions" : (currentCAData?.filterPosition || "ALL");
@@ -8660,18 +8674,20 @@ function exportClassAnalyticsImage() {
   canvas.height = totalH;
   const ctx = canvas.getContext("2d");
 
+  var t = getCanvasTheme();
+
   // Background
-  ctx.fillStyle = "#f7efe5";
+  ctx.fillStyle = t.bgCard;
   ctx.fillRect(0, 0, W, totalH);
 
   // Title
   let y = 0;
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.font = "bold 24px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText(`Razzle Draft Class Analytics — ${posLabel}`, W / 2, y + 32);
   ctx.font = "16px 'Caveat', cursive";
-  ctx.fillStyle = "#8a7565";
+  ctx.fillStyle = t.inkLight;
   ctx.fillText("year-over-year class strength comparison", W / 2, y + 52);
   y += 60;
 
@@ -8686,7 +8702,7 @@ function exportClassAnalyticsImage() {
   const scaleMax = Math.ceil(Math.max(...classes.map(c => c.avg_rps), 60) / 10) * 10;
 
   // Gridlines
-  ctx.strokeStyle = "#c4b5a5";
+  ctx.strokeStyle = t.inkFaint;
   ctx.lineWidth = 1;
   ctx.setLineDash([3, 3]);
   for (let v = 0; v <= scaleMax; v += 10) {
@@ -8695,7 +8711,7 @@ function exportClassAnalyticsImage() {
     ctx.moveTo(PAD_L, gy);
     ctx.lineTo(W - PAD_R, gy);
     ctx.stroke();
-    ctx.fillStyle = "#8a7565";
+    ctx.fillStyle = t.inkLight;
     ctx.font = "11px monospace";
     ctx.textAlign = "right";
     ctx.fillText(v.toString(), PAD_L - 6, gy + 4);
@@ -8712,12 +8728,12 @@ function exportClassAnalyticsImage() {
     const color = gradeColors[cls.grade] || "#8a7565";
     ctx.fillStyle = color;
     ctx.fillRect(x, by, barW, bH);
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 2;
     ctx.strokeRect(x, by, barW, bH);
 
     // Value
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.font = "bold 11px monospace";
     ctx.textAlign = "center";
     ctx.fillText(cls.avg_rps.toFixed(1), x + barW / 2, by - 6);
@@ -8726,15 +8742,15 @@ function exportClassAnalyticsImage() {
     const gw = 20, gh = 16;
     ctx.fillStyle = color;
     ctx.fillRect(x + barW / 2 - gw / 2, by - 24, gw, gh);
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 1;
     ctx.strokeRect(x + barW / 2 - gw / 2, by - 24, gw, gh);
-    ctx.fillStyle = "white";
+    ctx.fillStyle = t.white;
     ctx.font = "bold 10px 'Space Mono', monospace";
     ctx.fillText(cls.grade, x + barW / 2, by - 12);
 
     // Year
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.font = "bold 12px 'Space Mono', monospace";
     ctx.fillText(cls.year.toString(), x + barW / 2, y + chartH - 18);
   }
@@ -8751,18 +8767,18 @@ function exportClassAnalyticsImage() {
     const cy = y + row * (cardH + 12);
 
     // Card bg
-    ctx.fillStyle = "#f7efe5";
+    ctx.fillStyle = t.bgCard;
     ctx.fillRect(cx, cy, cardW, cardH);
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 2;
     ctx.strokeRect(cx, cy, cardW, cardH);
 
     // Shadow
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.fillRect(cx + 3, cy + 3, cardW, cardH);
-    ctx.fillStyle = "#f7efe5";
+    ctx.fillStyle = t.bgCard;
     ctx.fillRect(cx, cy, cardW, cardH);
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 2;
     ctx.strokeRect(cx, cy, cardW, cardH);
 
@@ -8771,23 +8787,23 @@ function exportClassAnalyticsImage() {
     ctx.fillStyle = color;
     const gbx = cx + cardW - 30, gby = cy + 6;
     ctx.fillRect(gbx, gby, 24, 20);
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 1.5;
     ctx.strokeRect(gbx, gby, 24, 20);
-    ctx.fillStyle = "white";
+    ctx.fillStyle = t.white;
     ctx.font = "bold 13px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(cls.grade, gbx + 12, gby + 15);
 
     // Year
     ctx.textAlign = "left";
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.font = "bold 18px 'Luckiest Guy', cursive";
     ctx.fillText(cls.year.toString(), cx + 10, cy + 24);
 
     // Stats
     ctx.font = "12px monospace";
-    ctx.fillStyle = "#5c4a3d";
+    ctx.fillStyle = t.inkMedium;
     ctx.fillText(`${cls.count} prospects  |  Avg RPS: ${cls.avg_rps.toFixed(1)}`, cx + 10, cy + 44);
 
     // Tier counts
@@ -8798,9 +8814,9 @@ function exportClassAnalyticsImage() {
     // Top prospect
     if (cls.top_prospect) {
       ctx.font = "10px monospace";
-      ctx.fillStyle = "#8a7565";
+      ctx.fillStyle = t.inkLight;
       ctx.fillText("Top:", cx + 10, cy + 82);
-      ctx.fillStyle = "#2d1f14";
+      ctx.fillStyle = t.ink;
       ctx.font = "bold 11px 'Space Mono', monospace";
       const name = cls.top_prospect.name.length > 22 ? cls.top_prospect.name.slice(0, 20) + "..." : cls.top_prospect.name;
       ctx.fillText(`${name} (${cls.top_prospect.rps.toFixed(1)})`, cx + 10, cy + 96);
@@ -8820,7 +8836,7 @@ function exportClassAnalyticsImage() {
           barX += segW;
         }
       }
-      ctx.strokeStyle = "#2d1f14";
+      ctx.strokeStyle = t.ink;
       ctx.lineWidth = 1;
       ctx.strokeRect(cx + 10, barY, barTotalW, 8);
     }
@@ -8830,7 +8846,7 @@ function exportClassAnalyticsImage() {
 
   // Watermark
   ctx.font = "bold 14px 'Space Mono', monospace";
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
   ctx.fillText("razzle.lol", W / 2, y + 8);
@@ -9135,20 +9151,22 @@ function exportTradeValuesPNG() {
   canvas.height = H;
   const ctx = canvas.getContext("2d");
 
+  var t = getCanvasTheme();
+
   // Background
-  ctx.fillStyle = "#f7efe5";
+  ctx.fillStyle = t.bgCard;
   ctx.fillRect(0, 0, W, H);
 
   // Title
   ctx.font = "bold 24px 'Luckiest Guy', cursive";
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.textAlign = "center";
   const posLabel = _tvState.position === "ALL" ? "Dynasty" : _tvState.position;
   ctx.fillText("Razzle " + posLabel + " Trade Values", W / 2, padY + 26);
 
   // Subtitle
   ctx.font = "16px 'Caveat', cursive";
-  ctx.fillStyle = "rgba(26,26,46,0.5)";
+  ctx.fillStyle = t.subtitleAlpha;
   const seasonText = state.season === "career" ? "career" : state.season || "Latest";
   ctx.fillText("dynasty trade currency — " + seasonText + " season", W / 2, padY + 48);
 
@@ -9164,10 +9182,10 @@ function exportTradeValuesPNG() {
     const bw = 70, bh = 20;
     ctx.roundRect(-bw / 2, -bh / 2, bw, bh, 3);
     ctx.fill();
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 1.5;
     ctx.stroke();
-    ctx.fillStyle = "#fff";
+    ctx.fillStyle = t.white;
     ctx.font = "bold 10px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(g.tier.badge, 0, 4);
@@ -9175,7 +9193,7 @@ function exportTradeValuesPNG() {
 
     // Player count
     ctx.font = "14px 'Caveat', cursive";
-    ctx.fillStyle = "#8a7565";
+    ctx.fillStyle = t.inkLight;
     ctx.textAlign = "left";
     ctx.fillText(g.players.length + " player" + (g.players.length !== 1 ? "s" : ""), padX + 86, y + tierHeaderH / 2 + 5);
 
@@ -9196,22 +9214,22 @@ function exportTradeValuesPNG() {
       // Position badge
       ctx.fillStyle = pc;
       ctx.fillRect(padX + 8, ry + 6, 28, 16);
-      ctx.strokeStyle = "#2d1f14";
+      ctx.strokeStyle = t.ink;
       ctx.lineWidth = 1;
       ctx.strokeRect(padX + 8, ry + 6, 28, 16);
-      ctx.fillStyle = "#fff";
+      ctx.fillStyle = t.white;
       ctx.font = "bold 8px 'Space Mono', monospace";
       ctx.textAlign = "center";
       ctx.fillText(p.position, padX + 22, ry + 17);
 
       // Name
       ctx.textAlign = "left";
-      ctx.fillStyle = "#2d1f14";
+      ctx.fillStyle = t.ink;
       ctx.font = "bold 12px 'Space Mono', monospace";
       ctx.fillText(p.full_name || "", padX + 44, ry + 18);
 
       // Team + age
-      ctx.fillStyle = "#8a7565";
+      ctx.fillStyle = t.inkLight;
       ctx.font = "10px monospace";
       ctx.fillText((p.team || "FA") + (p.age ? "  Age " + p.age : ""), padX + 300, ry + 18);
 
@@ -9222,7 +9240,7 @@ function exportTradeValuesPNG() {
       const barY = ry + 9;
       ctx.fillStyle = "rgba(229,213,195,0.5)";
       ctx.fillRect(barX, barY, barW, barH);
-      ctx.strokeStyle = "#c4b5a5";
+      ctx.strokeStyle = t.inkFaint;
       ctx.lineWidth = 0.5;
       ctx.strokeRect(barX, barY, barW, barH);
       const fillW = Math.max(2, (p._tv / 100) * barW);
@@ -9230,7 +9248,7 @@ function exportTradeValuesPNG() {
       ctx.fillRect(barX, barY, fillW, barH);
 
       // Trade value number
-      ctx.fillStyle = "#2d1f14";
+      ctx.fillStyle = t.ink;
       ctx.font = "bold 13px monospace";
       ctx.textAlign = "right";
       ctx.fillText(String(p._tv), W - padX - 8, ry + 18);
@@ -9241,7 +9259,7 @@ function exportTradeValuesPNG() {
 
   // Watermark
   ctx.font = "bold 14px 'Space Mono', monospace";
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
   ctx.fillText("razzle.lol", W / 2, y + 8);
@@ -9297,11 +9315,12 @@ function renderACPositionBtns() {
 async function loadAgingCurves() {
   const canvas = document.getElementById("acCanvas");
   const ctx = canvas.getContext("2d");
+  var t = getCanvasTheme();
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = "#ede0cf";
+  ctx.fillStyle = t.bg;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   ctx.font = "22px 'Caveat', cursive";
-  ctx.fillStyle = "#8a7565";
+  ctx.fillStyle = t.inkLight;
   ctx.textAlign = "center";
   ctx.fillText("pulling aging film...", canvas.width / 2, canvas.height / 2);
 
@@ -9319,7 +9338,7 @@ async function loadAgingCurves() {
     renderACLegend();
   } catch (err) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "#ede0cf";
+    ctx.fillStyle = t.bg;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.font = "22px 'Caveat', cursive";
     ctx.fillStyle = "#d97757";
@@ -9343,9 +9362,11 @@ function renderAgingCurveChart(targetCanvas) {
   const chartW = W - padL - padR;
   const chartH = H - padT - padB;
 
+  var t = getCanvasTheme();
+
   // Clear
   ctx.clearRect(0, 0, W, H);
-  ctx.fillStyle = "#ede0cf";
+  ctx.fillStyle = t.bg;
   ctx.fillRect(0, 0, W, H);
 
   const baseline = data.baseline;
@@ -9372,7 +9393,7 @@ function renderAgingCurveChart(targetCanvas) {
   const yScale = (ppg) => padT + chartH - (ppg / maxPPG) * chartH;
 
   // Grid lines
-  ctx.strokeStyle = "#c4b5a5";
+  ctx.strokeStyle = t.inkFaint;
   ctx.lineWidth = 0.5;
   ctx.setLineDash([4, 4]);
   const ppgStep = maxPPG <= 20 ? 2 : 5;
@@ -9386,7 +9407,7 @@ function renderAgingCurveChart(targetCanvas) {
   ctx.setLineDash([]);
 
   // Y-axis labels
-  ctx.fillStyle = "#5c4a3d";
+  ctx.fillStyle = t.inkMedium;
   ctx.font = "11px 'Space Mono', monospace";
   ctx.textAlign = "right";
   for (let ppg = 0; ppg <= maxPPG; ppg += ppgStep) {
@@ -9400,7 +9421,7 @@ function renderAgingCurveChart(targetCanvas) {
     ctx.fillText(String(age), x, H - padB + 20);
     // Tick
     ctx.beginPath();
-    ctx.strokeStyle = "#c4b5a5";
+    ctx.strokeStyle = t.inkFaint;
     ctx.lineWidth = 1;
     ctx.moveTo(x, padT + chartH);
     ctx.lineTo(x, padT + chartH + 4);
@@ -9409,7 +9430,7 @@ function renderAgingCurveChart(targetCanvas) {
 
   // Axis labels
   ctx.font = "bold 12px 'Space Mono', monospace";
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.textAlign = "center";
   ctx.fillText("Age", padL + chartW / 2, H - 6);
 
@@ -9487,7 +9508,7 @@ function renderAgingCurveChart(targetCanvas) {
     ctx.arc(x, y, 5, 0, Math.PI * 2);
     ctx.fillStyle = posColor;
     ctx.fill();
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 1.5;
     ctx.stroke();
   }
@@ -9501,18 +9522,18 @@ function renderAgingCurveChart(targetCanvas) {
 
   // Title
   ctx.font = "bold 18px 'Luckiest Guy', cursive";
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.textAlign = "left";
   ctx.fillText(_acState.position + " Aging Curve", padL, 24);
 
   // Subtitle annotation
   ctx.font = "16px 'Caveat', cursive";
-  ctx.fillStyle = "#8a7565";
+  ctx.fillStyle = t.inkLight;
   ctx.textAlign = "right";
   ctx.fillText("avg PPG by age, all seasons", W - padR, 28);
 
   // Chart border
-  ctx.strokeStyle = "#2d1f14";
+  ctx.strokeStyle = t.ink;
   ctx.lineWidth = 2;
   ctx.strokeRect(padL, padT, chartW, chartH);
 }
@@ -9573,8 +9594,9 @@ function exportAgingCurvesPNG() {
   renderAgingCurveChart(canvas);
 
   // Watermark
+  var t = getCanvasTheme();
   ctx.font = "bold 14px 'Space Mono', monospace";
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
   ctx.fillText("razzle.lol", W / 2, H - 10);
@@ -9665,11 +9687,12 @@ function textColorForBg(pct) {
 async function loadHeatMap() {
   const canvas = document.getElementById("hmCanvas");
   const ctx = canvas.getContext("2d");
+  var t = getCanvasTheme();
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = "#ede0cf";
+  ctx.fillStyle = t.bg;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   ctx.font = "22px 'Caveat', cursive";
-  ctx.fillStyle = "#8a7565";
+  ctx.fillStyle = t.inkLight;
   ctx.textAlign = "center";
   ctx.fillText("pulling positional film...", canvas.width / 2, canvas.height / 2);
 
@@ -9679,8 +9702,9 @@ async function loadHeatMap() {
     _hmState.data = resp;
     renderHeatMapChart();
   } catch (err) {
+    var th = getCanvasTheme();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "#ede0cf";
+    ctx.fillStyle = th.bg;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.font = "22px 'Caveat', cursive";
     ctx.fillStyle = "#d97757";
@@ -9717,20 +9741,21 @@ function renderHeatMapChart(targetCanvas) {
   canvas.width = totalW;
   canvas.height = totalH;
   const ctx = canvas.getContext("2d");
+  var t = getCanvasTheme();
 
   // Background
-  ctx.fillStyle = "#ede0cf";
+  ctx.fillStyle = t.bg;
   ctx.fillRect(0, 0, totalW, totalH);
 
   // Title
   ctx.font = "bold 22px 'Luckiest Guy', cursive";
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.textAlign = "left";
   ctx.fillText(_hmState.position + " Heat Map", padL, 30);
 
   // Subtitle
   ctx.font = "18px 'Caveat', cursive";
-  ctx.fillStyle = "#8a7565";
+  ctx.fillStyle = t.inkLight;
   const groupLabel = _hmState.group.charAt(0).toUpperCase() + _hmState.group.slice(1);
   ctx.fillText(groupLabel + " — percentile ranks within position", padL + 280, 32);
 
@@ -9739,14 +9764,14 @@ function renderHeatMapChart(targetCanvas) {
   const chartY = titleH;
   const chartW = nameColW + numStats * cellW;
   const chartH = headerH + numPlayers * cellH;
-  ctx.strokeStyle = "#2d1f14";
+  ctx.strokeStyle = t.ink;
   ctx.lineWidth = 2;
   ctx.strokeRect(chartX, chartY, chartW, chartH);
 
   // Column headers (rotated stat labels)
   ctx.save();
   ctx.font = "bold 11px 'Space Mono', monospace";
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.textAlign = "left";
   for (let c = 0; c < numStats; c++) {
     const x = padL + nameColW + c * cellW + cellW / 2;
@@ -9760,7 +9785,7 @@ function renderHeatMapChart(targetCanvas) {
   ctx.restore();
 
   // Header separator
-  ctx.strokeStyle = "#2d1f14";
+  ctx.strokeStyle = t.ink;
   ctx.lineWidth = 2;
   ctx.beginPath();
   ctx.moveTo(chartX, titleH + headerH);
@@ -9769,7 +9794,7 @@ function renderHeatMapChart(targetCanvas) {
 
   // Name column header
   ctx.font = "bold 11px 'Space Mono', monospace";
-  ctx.fillStyle = "#5c4a3d";
+  ctx.fillStyle = t.inkMedium;
   ctx.textAlign = "left";
   ctx.fillText("PLAYER", padL + 8, titleH + headerH - 8);
 
@@ -9787,7 +9812,7 @@ function renderHeatMapChart(targetCanvas) {
 
     // Player name + team
     ctx.font = "bold 12px 'Space Mono', monospace";
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.textAlign = "left";
     const displayName = player.name.length > 16 ? player.name.substring(0, 15) + "." : player.name;
     ctx.fillText(displayName, padL + 8, rowY + 18);
@@ -9810,7 +9835,7 @@ function renderHeatMapChart(targetCanvas) {
       ctx.fillRect(cellX + 1, rowY + 1, cellW - 2, cellH - 2);
 
       // Cell border
-      ctx.strokeStyle = "rgba(26,26,46,0.12)";
+      ctx.strokeStyle = "rgba(45,31,20,0.12)";
       ctx.lineWidth = 1;
       ctx.strokeRect(cellX, rowY, cellW, cellH);
 
@@ -9828,14 +9853,14 @@ function renderHeatMapChart(targetCanvas) {
         ctx.fillText(display, cellX + cellW / 2, rowY + 18);
       } else {
         ctx.font = "11px 'Space Mono', monospace";
-        ctx.fillStyle = "#8a7565";
+        ctx.fillStyle = t.inkLight;
         ctx.textAlign = "center";
         ctx.fillText("—", cellX + cellW / 2, rowY + 18);
       }
     }
 
     // Row separator
-    ctx.strokeStyle = "rgba(26,26,46,0.08)";
+    ctx.strokeStyle = "rgba(45,31,20,0.08)";
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(padL, rowY + cellH);
@@ -9844,7 +9869,7 @@ function renderHeatMapChart(targetCanvas) {
   }
 
   // Name column separator
-  ctx.strokeStyle = "#2d1f14";
+  ctx.strokeStyle = t.ink;
   ctx.lineWidth = 2;
   ctx.beginPath();
   ctx.moveTo(padL + nameColW, titleH);
@@ -9863,10 +9888,11 @@ function exportHeatMapPNG() {
   const ctx = canvas.getContext("2d");
   const W = canvas.width;
   const H = canvas.height;
+  var t = getCanvasTheme();
 
   // Watermark
   ctx.font = "bold 14px 'Space Mono', monospace";
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
   ctx.fillText("razzle.lol", W / 2, H - 4);
@@ -10071,16 +10097,17 @@ function exportTierBoardPNG() {
   canvas.width = W;
   canvas.height = totalH;
   var ctx = canvas.getContext("2d");
+  var t = getCanvasTheme();
 
   // Sand background
-  ctx.fillStyle = "#ede0cf";
+  ctx.fillStyle = t.bg;
   ctx.fillRect(0, 0, W, totalH);
 
   // Header
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.font = "bold 24px 'Luckiest Guy', cursive";
   ctx.fillText("Tier Board", 24, 38);
-  ctx.fillStyle = "#8a7565";
+  ctx.fillStyle = t.inkLight;
   ctx.font = "18px 'Caveat', cursive";
   ctx.fillText("my watchlist rankings", 190, 38);
 
@@ -10093,8 +10120,8 @@ function exportTierBoardPNG() {
     var color = tierColorHex[tier];
 
     // Section bg
-    ctx.fillStyle = "#f7efe5";
-    ctx.strokeStyle = "#2d1f14";
+    ctx.fillStyle = t.bgCard;
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.roundRect(16, y, W - 32, sectionH - 4, 8);
@@ -10106,13 +10133,13 @@ function exportTierBoardPNG() {
     ctx.translate(40, y + 22);
     ctx.rotate(-0.04);
     ctx.fillStyle = color;
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.roundRect(-14, -12, 80, 24, 6);
     ctx.fill();
     ctx.stroke();
-    ctx.fillStyle = "#ffffff";
+    ctx.fillStyle = t.white;
     ctx.font = "bold 12px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(TIER_LABELS[tier], 26, 5);
@@ -10120,7 +10147,7 @@ function exportTierBoardPNG() {
     ctx.textAlign = "left";
 
     // Player count
-    ctx.fillStyle = "#8a7565";
+    ctx.fillStyle = t.inkLight;
     ctx.font = "11px 'Space Mono', monospace";
     ctx.fillText(players.length + " player" + (players.length !== 1 ? "s" : ""), 130, y + 26);
 
@@ -10137,8 +10164,8 @@ function exportTierBoardPNG() {
       var pc = posColorHex[p.position] || "#8a7565";
 
       // Card bg
-      ctx.fillStyle = "#f7efe5";
-      ctx.strokeStyle = "#2d1f14";
+      ctx.fillStyle = t.bgCard;
+      ctx.strokeStyle = t.ink;
       ctx.lineWidth = 1.5;
       ctx.beginPath();
       ctx.roundRect(px, py, cardW, CARD_H, 5);
@@ -10156,14 +10183,14 @@ function exportTierBoardPNG() {
       ctx.beginPath();
       ctx.roundRect(px + 10, py + 6, 24, 16, 4);
       ctx.fill();
-      ctx.fillStyle = "#ffffff";
+      ctx.fillStyle = t.white;
       ctx.font = "bold 9px 'Space Mono', monospace";
       ctx.textAlign = "center";
       ctx.fillText(p.position, px + 22, py + 18);
       ctx.textAlign = "left";
 
       // Player name
-      ctx.fillStyle = "#2d1f14";
+      ctx.fillStyle = t.ink;
       ctx.font = "bold 11px 'Space Mono', monospace";
       var nameW = cardW - 64;
       var dispName = p.name;
@@ -10174,7 +10201,7 @@ function exportTierBoardPNG() {
       ctx.fillText(dispName, px + 38, py + 18);
 
       // Team
-      ctx.fillStyle = "#8a7565";
+      ctx.fillStyle = t.inkLight;
       ctx.font = "10px 'Space Mono', monospace";
       ctx.textAlign = "right";
       ctx.fillText(p.team, px + cardW - 6, py + 18);
@@ -10185,7 +10212,7 @@ function exportTierBoardPNG() {
   });
 
   // Watermark
-  ctx.fillStyle = "#8a7565";
+  ctx.fillStyle = t.inkLight;
   ctx.font = "14px 'Caveat', cursive";
   ctx.textAlign = "right";
   ctx.fillText("razzle.lol", W - 20, totalH - 14);
@@ -10269,7 +10296,7 @@ document.addEventListener("keydown", function(e) {
   }
 
   // Position filters: 1=ALL, 2=QB, 3=RB, 4=WR, 5=TE
-  const posMap = { "1": "", "2": "QB", "3": "RB", "4": "WR", "5": "TE" };
+  const posMap = { "1": "ALL", "2": "QB", "3": "RB", "4": "WR", "5": "TE" };
   if (posMap.hasOwnProperty(e.key)) {
     togglePosition(posMap[e.key]);
     return;
@@ -10752,25 +10779,26 @@ function exportTradeAnalyzerPNG() {
   canvas.width = W;
   canvas.height = H;
   const ctx = canvas.getContext("2d");
+  var t = getCanvasTheme();
 
   // Background
-  ctx.fillStyle = "#f7efe5";
+  ctx.fillStyle = t.bgCard;
   ctx.fillRect(0, 0, W, H);
 
   // Border
-  ctx.strokeStyle = "#2d1f14";
+  ctx.strokeStyle = t.ink;
   ctx.lineWidth = 4;
   ctx.strokeRect(4, 4, W - 8, H - 8);
 
   // Title
   ctx.font = "bold 28px 'Luckiest Guy', cursive";
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.textAlign = "center";
   ctx.fillText("Razzle Trade Analyzer", W / 2, 44);
 
   // Subtitle
   ctx.font = "20px 'Caveat', cursive";
-  ctx.fillStyle = "rgba(26,26,46,0.5)";
+  ctx.fillStyle = t.subtitleAlpha;
   ctx.fillText("check the math on that deal", W / 2, 68);
 
   const sideW = 460;
@@ -10781,15 +10809,15 @@ function exportTradeAnalyzerPNG() {
   // Draw a side panel
   function drawSide(x, label, labelBg, labelBorder, players) {
     // Card background
-    ctx.fillStyle = "#ede0cf";
-    ctx.strokeStyle = "#2d1f14";
+    ctx.fillStyle = t.bg;
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 3;
     ctx.beginPath();
     ctx.roundRect(x, topY, sideW, 380, 8);
     ctx.fill();
     ctx.stroke();
     // Shadow
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.fillRect(x + 4, topY + 4 + 380, sideW, 4);
     ctx.fillRect(x + sideW, topY + 4, 4, 380);
 
@@ -10801,7 +10829,7 @@ function exportTradeAnalyzerPNG() {
     ctx.roundRect(x + 16, topY + 12, 80, 28, 4);
     ctx.fill();
     ctx.stroke();
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.font = "bold 13px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(label, x + 56, topY + 30);
@@ -10809,7 +10837,7 @@ function exportTradeAnalyzerPNG() {
     // Total
     const total = players.reduce((s, p) => s + (p.trade_value || 0), 0);
     ctx.font = "bold 18px monospace";
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.textAlign = "right";
     ctx.fillText(String(total), x + sideW - 16, topY + 32);
 
@@ -10833,22 +10861,22 @@ function exportTradeAnalyzerPNG() {
       ctx.beginPath();
       ctx.roundRect(x + 18, cy + 10, 36, 22, 3);
       ctx.fill();
-      ctx.strokeStyle = "#2d1f14";
+      ctx.strokeStyle = t.ink;
       ctx.lineWidth = 1.5;
       ctx.stroke();
-      ctx.fillStyle = "#fff";
+      ctx.fillStyle = t.white;
       ctx.font = "bold 10px 'Space Mono', monospace";
       ctx.textAlign = "center";
       ctx.fillText(isPick ? ("RD" + p.round) : p.position, x + 36, cy + 25);
 
       // Name
       ctx.textAlign = "left";
-      ctx.fillStyle = "#2d1f14";
+      ctx.fillStyle = t.ink;
       ctx.font = "bold 14px 'Space Mono', monospace";
       ctx.fillText(isPick ? (p.pick_label || "") : (p.full_name || ""), x + 62, cy + 22);
 
       // Sub-text
-      ctx.fillStyle = "#8a7565";
+      ctx.fillStyle = t.inkLight;
       ctx.font = "11px monospace";
       if (isPick) {
         ctx.fillText("Pick " + p.pick + " of 12", x + 62, cy + 37);
@@ -10864,7 +10892,7 @@ function exportTradeAnalyzerPNG() {
     }
     if (players.length > 7) {
       ctx.font = "14px 'Caveat', cursive";
-      ctx.fillStyle = "#8a7565";
+      ctx.fillStyle = t.inkLight;
       ctx.textAlign = "center";
       ctx.fillText("+" + (players.length - 7) + " more", x + sideW / 2, cardY + 7 * (cardH + 4) + 16);
     }
@@ -10875,7 +10903,7 @@ function exportTradeAnalyzerPNG() {
 
   // VS divider
   ctx.save();
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.font = "bold 22px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText("VS", W / 2, topY + 200);
@@ -10888,8 +10916,8 @@ function exportTradeAnalyzerPNG() {
   const maxVal = Math.max(giveTotal, getTotal, 1);
 
   // Give bar
-  ctx.fillStyle = "#ede0cf";
-  ctx.strokeStyle = "#2d1f14";
+  ctx.fillStyle = t.bg;
+  ctx.strokeStyle = t.ink;
   ctx.lineWidth = 2;
   ctx.beginPath();
   ctx.roundRect(giveX, barY, sideW, 18, 4);
@@ -10907,7 +10935,7 @@ function exportTradeAnalyzerPNG() {
   }
 
   // Get bar
-  ctx.fillStyle = "#ede0cf";
+  ctx.fillStyle = t.bg;
   ctx.beginPath();
   ctx.roundRect(getX, barY, sideW, 18, 4);
   ctx.fill();
@@ -10922,7 +10950,7 @@ function exportTradeAnalyzerPNG() {
 
   // Bar labels
   ctx.font = "bold 13px monospace";
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.textAlign = "right";
   ctx.fillText(String(giveTotal), giveX + sideW, barY - 6);
   ctx.fillText(String(getTotal), getX + sideW, barY - 6);
@@ -10962,7 +10990,7 @@ function exportTradeAnalyzerPNG() {
   ctx.fill();
   ctx.stroke();
   // Shadow
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.globalAlpha = 0.3;
   ctx.fillRect(-bw / 2 + 3, -bh / 2 + 3 + bh, bw, 3);
   ctx.globalAlpha = 1.0;
@@ -10975,7 +11003,7 @@ function exportTradeAnalyzerPNG() {
   // Pct label
   const pctLabel = pctDiff <= 10 ? "Even value" : (diff > 0 ? "+" + pctDiff + "% in your favor" : "-" + pctDiff + "% against you");
   ctx.font = "13px monospace";
-  ctx.fillStyle = "#5c4a3d";
+  ctx.fillStyle = t.inkMedium;
   ctx.textAlign = "center";
   ctx.fillText(pctLabel, W / 2, 540);
 
@@ -10988,13 +11016,13 @@ function exportTradeAnalyzerPNG() {
   const pool = quips[verdict] || quips.FAIR;
   const quip = pool[Math.floor(Math.random() * pool.length)];
   ctx.font = "20px 'Caveat', cursive";
-  ctx.fillStyle = "rgba(26,26,46,0.5)";
+  ctx.fillStyle = t.subtitleAlpha;
   ctx.textAlign = "center";
   ctx.fillText(quip, W / 2, 565);
 
   // Watermark
   ctx.font = "bold 14px 'Space Mono', monospace";
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "right";
   ctx.fillText("razzle.lol", W - 20, H - 16);
@@ -11065,8 +11093,9 @@ function _taDrawPickChart() {
   const ctx = canvas.getContext("2d");
   const W = canvas.width, H = canvas.height;
 
+  var t = getCanvasTheme();
   ctx.clearRect(0, 0, W, H);
-  ctx.fillStyle = "#ede0cf";
+  ctx.fillStyle = t.bg;
   ctx.fillRect(0, 0, W, H);
 
   // Collect all picks (48 picks for 4 rounds x 12 teams)
@@ -11085,7 +11114,7 @@ function _taDrawPickChart() {
   const maxVal = allPicks[0].trade_value;
 
   // Grid lines
-  ctx.strokeStyle = "rgba(26,26,46,0.1)";
+  ctx.strokeStyle = "rgba(45,31,20,0.1)";
   ctx.lineWidth = 1;
   for (let i = 0; i <= 4; i++) {
     const y = pad.top + (plotH * i / 4);
@@ -11093,7 +11122,7 @@ function _taDrawPickChart() {
     ctx.moveTo(pad.left, y);
     ctx.lineTo(W - pad.right, y);
     ctx.stroke();
-    ctx.fillStyle = "#8a7565";
+    ctx.fillStyle = t.inkLight;
     ctx.font = "10px monospace";
     ctx.textAlign = "right";
     ctx.fillText(Math.round(maxVal * (1 - i / 4)), pad.left - 6, y + 4);
@@ -11101,7 +11130,7 @@ function _taDrawPickChart() {
 
   // Draw curve
   ctx.beginPath();
-  ctx.strokeStyle = "#2d1f14";
+  ctx.strokeStyle = t.ink;
   ctx.lineWidth = 2;
   const selectedPicks = [];
   for (const side of ["give", "get"]) {
@@ -11131,11 +11160,11 @@ function _taDrawPickChart() {
     ctx.arc(x, y, isSelected ? 6 : 3, 0, Math.PI * 2);
     ctx.fill();
     if (isSelected) {
-      ctx.strokeStyle = "#2d1f14";
+      ctx.strokeStyle = t.ink;
       ctx.lineWidth = 2;
       ctx.stroke();
       // Label
-      ctx.fillStyle = "#2d1f14";
+      ctx.fillStyle = t.ink;
       ctx.font = "bold 10px monospace";
       ctx.textAlign = "center";
       ctx.fillText(pk.pick_label.split(" ")[1], x, y - 10);
@@ -11155,7 +11184,7 @@ function _taDrawPickChart() {
 
   // Title
   ctx.font = "bold 11px 'Space Mono', monospace";
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.textAlign = "left";
   ctx.fillText("PICK VALUE CURVE", pad.left, 14);
 }
@@ -11429,6 +11458,7 @@ function drawRosterPieChart() {
   if (!canvas || !_rosterReport) return;
   var ctx = canvas.getContext("2d");
   var W = canvas.width, H = canvas.height;
+  var t = getCanvasTheme();
   ctx.clearRect(0, 0, W, H);
 
   var totals = _rosterReport.positional_totals || {};
@@ -11453,7 +11483,7 @@ function drawRosterPieChart() {
     ctx.closePath();
     ctx.fillStyle = _POS_HEX[sl.pos] || "#8a7565";
     ctx.fill();
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 2;
     ctx.stroke();
     startAngle = endAngle;
@@ -11464,10 +11494,10 @@ function drawRosterPieChart() {
   slices.forEach(function(sl) {
     ctx.fillStyle = _POS_HEX[sl.pos] || "#8a7565";
     ctx.fillRect(W - 65, ly, 12, 12);
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 1;
     ctx.strokeRect(W - 65, ly, 12, 12);
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.textAlign = "left";
     ctx.fillText(sl.pos + " " + Math.round(sl.pct * 100) + "%", W - 48, ly + 10);
@@ -11482,6 +11512,7 @@ function drawRosterAgeChart() {
   if (!canvas || !_rosterReport) return;
   var ctx = canvas.getContext("2d");
   var W = canvas.width, H = canvas.height;
+  var t = getCanvasTheme();
   ctx.clearRect(0, 0, W, H);
 
   var players = _rosterReport.players || [];
@@ -11501,12 +11532,12 @@ function drawRosterAgeChart() {
   function yPos(val) { return pad.top + plotH - (val / maxVal) * plotH; }
 
   // Grid
-  ctx.strokeStyle = "#d5c5b0";
+  ctx.strokeStyle = t.inkFaint;
   ctx.lineWidth = 1;
   for (var a = Math.ceil(minAge); a <= maxAge; a += 2) {
     var gx = xPos(a);
     ctx.beginPath(); ctx.moveTo(gx, pad.top); ctx.lineTo(gx, H - pad.bottom); ctx.stroke();
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.font = "10px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(a, gx, H - pad.bottom + 14);
@@ -11514,14 +11545,14 @@ function drawRosterAgeChart() {
   for (var v = 0; v <= 100; v += 25) {
     var gy = yPos(v);
     ctx.beginPath(); ctx.moveTo(pad.left, gy); ctx.lineTo(W - pad.right, gy); ctx.stroke();
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.font = "10px 'Space Mono', monospace";
     ctx.textAlign = "right";
     ctx.fillText(v, pad.left - 4, gy + 3);
   }
 
   // Axis labels
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.font = "bold 10px 'Space Mono', monospace";
   ctx.textAlign = "center";
   ctx.fillText("AGE", pad.left + plotW / 2, H - 2);
@@ -11541,13 +11572,13 @@ function drawRosterAgeChart() {
     ctx.arc(x, y, 5, 0, Math.PI * 2);
     ctx.fillStyle = _POS_HEX[p.position] || "#d97757";
     ctx.fill();
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 1.5;
     ctx.stroke();
 
     // Name label for top players
     if (val >= 40 || players.length <= 10) {
-      ctx.fillStyle = "#2d1f14";
+      ctx.fillStyle = t.ink;
       ctx.font = "9px 'Space Mono', monospace";
       ctx.textAlign = "center";
       var lastName = (p.full_name || "").split(" ").slice(-1)[0];
@@ -11576,23 +11607,24 @@ function exportRosterTeamCard() {
   canvas.width = W;
   canvas.height = H;
   var ctx = canvas.getContext("2d");
+  var t = getCanvasTheme();
 
   // Sand background
-  ctx.fillStyle = "#ede0cf";
+  ctx.fillStyle = t.bg;
   ctx.fillRect(0, 0, W, H);
 
   // Border
-  ctx.strokeStyle = "#2d1f14";
+  ctx.strokeStyle = t.ink;
   ctx.lineWidth = 4;
   ctx.strokeRect(2, 2, W - 4, H - 4);
 
   // Header
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.font = "bold 28px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText("MY DYNASTY ROSTER", W / 2, 44);
   ctx.font = "16px 'Caveat', cursive";
-  ctx.fillStyle = "#5c4a3d";
+  ctx.fillStyle = t.inkMedium;
   ctx.fillText("razzle.lol team card", W / 2, 68);
 
   var y = HEADER_H;
@@ -11602,22 +11634,22 @@ function exportRosterTeamCard() {
   ctx.fillStyle = gc;
   _roundRect(ctx, 30, y + 5, 70, 55, 10);
   ctx.fill();
-  ctx.strokeStyle = "#2d1f14";
+  ctx.strokeStyle = t.ink;
   ctx.lineWidth = 3;
   _roundRect(ctx, 30, y + 5, 70, 55, 10);
   ctx.stroke();
-  ctx.fillStyle = "white";
+  ctx.fillStyle = t.white;
   ctx.font = "bold 32px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText(r.grade, 65, y + 42);
 
   // Total value
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.font = "bold 26px 'Luckiest Guy', cursive";
   ctx.textAlign = "left";
   ctx.fillText(r.total_value + " pts", 120, y + 30);
   ctx.font = "14px 'Space Mono', monospace";
-  ctx.fillStyle = "#5c4a3d";
+  ctx.fillStyle = t.inkMedium;
   ctx.fillText("total dynasty value  |  avg age: " + r.average_age, 120, y + 50);
 
   // Status badge
@@ -11627,11 +11659,11 @@ function exportRosterTeamCard() {
   var sw = ctx.measureText(statusText).width + 24;
   _roundRect(ctx, W - sw - 30, y + 12, sw, 30, 8);
   ctx.fill();
-  ctx.strokeStyle = "#2d1f14";
+  ctx.strokeStyle = t.ink;
   ctx.lineWidth = 2;
   _roundRect(ctx, W - sw - 30, y + 12, sw, 30, 8);
   ctx.stroke();
-  ctx.fillStyle = "white";
+  ctx.fillStyle = t.white;
   ctx.font = "bold 14px 'Space Mono', monospace";
   ctx.textAlign = "center";
   ctx.fillText(statusText, W - sw / 2 - 30, y + 32);
@@ -11659,7 +11691,7 @@ function exportRosterTeamCard() {
     ctx.closePath();
     ctx.fillStyle = _POS_HEX[sl.pos] || "#8a7565";
     ctx.fill();
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 2;
     ctx.stroke();
     startAngle = endAngle;
@@ -11671,10 +11703,10 @@ function exportRosterTeamCard() {
   slices.forEach(function(sl) {
     ctx.fillStyle = _POS_HEX[sl.pos] || "#8a7565";
     ctx.fillRect(210, ly, 14, 14);
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 1;
     ctx.strokeRect(210, ly, 14, 14);
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.font = "bold 12px 'Space Mono', monospace";
     ctx.fillText(sl.pos + ": " + Math.round(sl.val) + " (" + Math.round(sl.pct * 100) + "%)", 230, ly + 12);
     ly += 22;
@@ -11682,10 +11714,10 @@ function exportRosterTeamCard() {
 
   // Age scatter (right half)
   var scatterX = 320, scatterY = y + 10, scatterW = 250, scatterH = 170;
-  ctx.fillStyle = "#f7efe5";
+  ctx.fillStyle = t.bgCard;
   _roundRect(ctx, scatterX, scatterY, scatterW, scatterH, 8);
   ctx.fill();
-  ctx.strokeStyle = "#2d1f14";
+  ctx.strokeStyle = t.ink;
   ctx.lineWidth = 2;
   _roundRect(ctx, scatterX, scatterY, scatterW, scatterH, 8);
   ctx.stroke();
@@ -11702,14 +11734,14 @@ function exportRosterTeamCard() {
   function syPos(val) { return scatterY + sPad.top + sPlotH - (val / 100) * sPlotH; }
 
   // Grid
-  ctx.strokeStyle = "#d5c5b0";
+  ctx.strokeStyle = t.inkFaint;
   ctx.lineWidth = 1;
   for (var a = Math.ceil(sMinAge); a <= sMaxAge; a += 2) {
     ctx.beginPath(); ctx.moveTo(sxPos(a), scatterY + sPad.top); ctx.lineTo(sxPos(a), scatterY + scatterH - sPad.bottom); ctx.stroke();
-    ctx.fillStyle = "#5c4a3d"; ctx.font = "9px 'Space Mono', monospace"; ctx.textAlign = "center";
+    ctx.fillStyle = t.inkMedium; ctx.font = "9px 'Space Mono', monospace"; ctx.textAlign = "center";
     ctx.fillText(a, sxPos(a), scatterY + scatterH - sPad.bottom + 12);
   }
-  ctx.fillStyle = "#2d1f14"; ctx.font = "bold 9px 'Space Mono', monospace"; ctx.textAlign = "center";
+  ctx.fillStyle = t.ink; ctx.font = "bold 9px 'Space Mono', monospace"; ctx.textAlign = "center";
   ctx.fillText("AGE", scatterX + sPad.left + sPlotW / 2, scatterY + scatterH - 2);
 
   // Dots
@@ -11720,19 +11752,19 @@ function exportRosterTeamCard() {
     ctx.arc(ax, ay, 4, 0, Math.PI * 2);
     ctx.fillStyle = _POS_HEX[p.position] || "#d97757";
     ctx.fill();
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 1;
     ctx.stroke();
   });
 
   // Title
-  ctx.fillStyle = "#2d1f14"; ctx.font = "bold 10px 'Space Mono', monospace"; ctx.textAlign = "left";
+  ctx.fillStyle = t.ink; ctx.font = "bold 10px 'Space Mono', monospace"; ctx.textAlign = "left";
   ctx.fillText("AGE vs VALUE", scatterX + sPad.left, scatterY + 14);
 
   y += CHART_AREA_H;
 
   // Player values table
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.font = "bold 12px 'Space Mono', monospace";
   ctx.textAlign = "left";
   ctx.fillText("PLAYER VALUES", 30, y + 16);
@@ -11740,11 +11772,11 @@ function exportRosterTeamCard() {
 
   sortedPlayers.slice(0, 30).forEach(function(p, i) {
     var rowY = y + i * ROW_H;
-    ctx.fillStyle = i % 2 === 0 ? "#f7efe5" : "#ede0cf";
+    ctx.fillStyle = i % 2 === 0 ? t.bgCard : t.bg;
     ctx.fillRect(30, rowY, W - 60, ROW_H);
 
     // Rank
-    ctx.fillStyle = "#8a7565";
+    ctx.fillStyle = t.inkLight;
     ctx.font = "10px 'Space Mono', monospace";
     ctx.textAlign = "right";
     ctx.fillText((i + 1) + ".", 50, rowY + 16);
@@ -11753,19 +11785,19 @@ function exportRosterTeamCard() {
     ctx.fillStyle = _POS_HEX[p.position] || "#d97757";
     _roundRect(ctx, 56, rowY + 4, 26, 16, 4);
     ctx.fill();
-    ctx.fillStyle = "white";
+    ctx.fillStyle = t.white;
     ctx.font = "bold 9px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(p.position, 69, rowY + 15);
 
     // Name
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.font = "bold 12px 'Space Mono', monospace";
     ctx.textAlign = "left";
     ctx.fillText(p.full_name || "", 90, rowY + 16);
 
     // Team
-    ctx.fillStyle = "#8a7565";
+    ctx.fillStyle = t.inkLight;
     ctx.font = "10px 'Space Mono', monospace";
     ctx.textAlign = "left";
     var nameW = ctx.measureText(p.full_name || "").width;
@@ -11773,7 +11805,7 @@ function exportRosterTeamCard() {
 
     // Value bar
     var barX = W - 160, barW = 80, barH = 12;
-    ctx.fillStyle = "#d5c5b0";
+    ctx.fillStyle = t.inkFaint;
     _roundRect(ctx, barX, rowY + 6, barW, barH, 3);
     ctx.fill();
     var pct = Math.min(100, p.trade_value) / 100;
@@ -11782,7 +11814,7 @@ function exportRosterTeamCard() {
     ctx.fill();
 
     // Value number
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.font = "bold 12px 'Space Mono', monospace";
     ctx.textAlign = "right";
     ctx.fillText(p.trade_value, W - 36, rowY + 16);
@@ -11791,7 +11823,7 @@ function exportRosterTeamCard() {
   y += PLAYER_TABLE_H;
 
   // Watermark
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.font = "bold 14px 'Luckiest Guy', cursive";
   ctx.textAlign = "right";
   ctx.globalAlpha = 0.3;
@@ -11840,7 +11872,7 @@ async function loadPlayerComps(playerId) {
     _compData = data;
     renderPlayerComps(data, section);
   } catch (err) {
-    section.innerHTML = `<div style="text-align:center; padding:30px; font-family:var(--font-hand); font-size:18px; color:var(--red);">fumbled the comp search... ${escapeHtml(err.message)}</div>`;
+    section.innerHTML = `<div style="text-align:center; padding:30px; font-family:var(--font-hand); font-size:18px; color:var(--red);">fumbled the comp search... try again in a sec.</div>`;
   }
 }
 
@@ -11951,6 +11983,7 @@ function renderPlayerComps(data, container) {
 
 
 function drawCompRadar(data) {
+  var t = getCanvasTheme();
   const canvas = document.getElementById("compRadarCanvas");
   if (!canvas) return;
   const ctx = canvas.getContext("2d");
@@ -11998,8 +12031,8 @@ function drawCompRadar(data) {
   }
 
   // Draw axes + labels
-  ctx.strokeStyle = "#c4b5a5";
-  ctx.fillStyle = "#2d1f14";
+  ctx.strokeStyle = t.inkFaint;
+  ctx.fillStyle = t.ink;
   ctx.font = "bold 11px 'Space Mono', monospace";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
@@ -12071,7 +12104,7 @@ function drawCompRadar(data) {
     ctx.beginPath();
     ctx.arc(x, y, 4, 0, 2 * Math.PI);
     ctx.fill();
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 1.5;
     ctx.stroke();
   }
@@ -12101,18 +12134,20 @@ function exportCompsImage() {
   canvas.height = H;
   const ctx = canvas.getContext("2d");
 
+  var t = getCanvasTheme();
+
   // Background
-  ctx.fillStyle = "#f7efe5";
+  ctx.fillStyle = t.bgCard;
   ctx.fillRect(0, 0, W, H);
 
   // Header
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.font = "bold 24px 'Luckiest Guy', cursive";
   ctx.textAlign = "left";
   ctx.fillText(`PLAYER COMPS — ${player.full_name}`, padX, padY + 28);
 
   // Subtitle
-  ctx.fillStyle = "#8a7565";
+  ctx.fillStyle = t.inkLight;
   ctx.font = "12px monospace";
   ctx.fillText(`${pos} · ${player.team || "FA"} · ${season} Season · ${player.ppg} PPR PPG`, padX, padY + 48);
 
@@ -12120,10 +12155,10 @@ function exportCompsImage() {
   ctx.fillStyle = pColor;
   const badgeX = W - padX - 60;
   ctx.fillRect(badgeX, padY + 10, 50, 30);
-  ctx.strokeStyle = "#2d1f14";
+  ctx.strokeStyle = t.ink;
   ctx.lineWidth = 2;
   ctx.strokeRect(badgeX, padY + 10, 50, 30);
-  ctx.fillStyle = "#fff";
+  ctx.fillStyle = t.white;
   ctx.font = "bold 14px 'Space Mono', monospace";
   ctx.textAlign = "center";
   ctx.fillText(pos, badgeX + 25, padY + 30);
@@ -12137,38 +12172,38 @@ function exportCompsImage() {
     const cardY = y + i * (cardH + cardGap);
 
     // Card background
-    ctx.fillStyle = "#f7efe5";
+    ctx.fillStyle = t.bgCard;
     ctx.fillRect(padX, cardY, W - padX * 2, cardH);
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 3;
     ctx.strokeRect(padX, cardY, W - padX * 2, cardH);
     // Shadow
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.fillRect(padX + 4, cardY + 4, W - padX * 2, cardH);
     // Redraw card on top
-    ctx.fillStyle = "#f7efe5";
+    ctx.fillStyle = t.bgCard;
     ctx.fillRect(padX, cardY, W - padX * 2, cardH);
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 3;
     ctx.strokeRect(padX, cardY, W - padX * 2, cardH);
 
     // Rank badge
     ctx.fillStyle = pColor;
     ctx.fillRect(padX + 10, cardY + 10, 30, 30);
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 2;
     ctx.strokeRect(padX + 10, cardY + 10, 30, 30);
-    ctx.fillStyle = "#fff";
+    ctx.fillStyle = t.white;
     ctx.font = "bold 16px 'Luckiest Guy', cursive";
     ctx.textAlign = "center";
     ctx.fillText(`#${i + 1}`, padX + 25, cardY + 30);
 
     // Name + team
     ctx.textAlign = "left";
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.font = "bold 18px 'Luckiest Guy', cursive";
     ctx.fillText(c.full_name, padX + 52, cardY + 28);
-    ctx.fillStyle = "#8a7565";
+    ctx.fillStyle = t.inkLight;
     ctx.font = "11px monospace";
     ctx.fillText(`${c.team || "FA"} · ${c.games}G · ${c.ppg} PPG`, padX + 52, cardY + 46);
 
@@ -12178,7 +12213,7 @@ function exportCompsImage() {
     ctx.font = "bold 28px 'Luckiest Guy', cursive";
     ctx.textAlign = "right";
     ctx.fillText(`${c.similarity}%`, W - padX - 16, cardY + 35);
-    ctx.fillStyle = "#8a7565";
+    ctx.fillStyle = t.inkLight;
     ctx.font = "bold 10px monospace";
     ctx.fillText("MATCH", W - padX - 16, cardY + 50);
 
@@ -12189,9 +12224,9 @@ function exportCompsImage() {
     if (c.matching_stats) {
       for (let j = 0; j < Math.min(3, c.matching_stats.length); j++) {
         const ms = c.matching_stats[j];
-        ctx.fillStyle = "#8a7565";
+        ctx.fillStyle = t.inkLight;
         ctx.fillText(ms.label + ":", matchX + j * 110, cardY + 72);
-        ctx.fillStyle = "#2d1f14";
+        ctx.fillStyle = t.ink;
         ctx.fillText(String(ms.comp_val), matchX + j * 110 + 55, cardY + 72);
       }
     }
@@ -12202,12 +12237,12 @@ function exportCompsImage() {
   const colW = (W - padX * 2) / (2 + Math.min(3, compsToShow.length));
 
   // Table header
-  ctx.fillStyle = "#e5d5c3";
+  ctx.fillStyle = t.bgWarm;
   ctx.fillRect(padX, tableY, W - padX * 2, 28);
-  ctx.strokeStyle = "#2d1f14";
+  ctx.strokeStyle = t.ink;
   ctx.lineWidth = 2;
   ctx.strokeRect(padX, tableY, W - padX * 2, 28);
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.font = "bold 11px monospace";
   ctx.textAlign = "left";
   ctx.fillText("Stat", padX + 8, tableY + 18);
@@ -12219,10 +12254,10 @@ function exportCompsImage() {
   // Table rows
   for (let r = 0; r < stat_keys.length; r++) {
     const rowY = tableY + 28 + r * tableRowH;
-    ctx.fillStyle = r % 2 === 0 ? "#f7efe5" : "#ede0cf";
+    ctx.fillStyle = r % 2 === 0 ? t.bgCard : t.bg;
     ctx.fillRect(padX, rowY, W - padX * 2, tableRowH);
 
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     ctx.font = "bold 11px monospace";
     ctx.textAlign = "left";
     ctx.fillText(stat_labels[stat_keys[r]] || stat_keys[r], padX + 8, rowY + 16);
@@ -12232,7 +12267,7 @@ function exportCompsImage() {
     const tv = target_stats[stat_keys[r]] ? target_stats[stat_keys[r]].value : "—";
     ctx.fillText(String(tv), padX + colW + 8, rowY + 16);
 
-    ctx.fillStyle = "#2d1f14";
+    ctx.fillStyle = t.ink;
     for (let i = 0; i < Math.min(3, compsToShow.length); i++) {
       const val = compsToShow[i].all_stats && compsToShow[i].all_stats[stat_keys[r]] != null
         ? compsToShow[i].all_stats[stat_keys[r]] : "—";
@@ -12241,13 +12276,13 @@ function exportCompsImage() {
   }
 
   // Table border
-  ctx.strokeStyle = "#2d1f14";
+  ctx.strokeStyle = t.ink;
   ctx.lineWidth = 2;
   ctx.strokeRect(padX, tableY, W - padX * 2, 28 + stat_keys.length * tableRowH);
 
   // Watermark
   const wmY = H - padY - 10;
-  ctx.fillStyle = "#8a7565";
+  ctx.fillStyle = t.inkLight;
   ctx.font = "italic 14px 'Caveat', cursive";
   ctx.textAlign = "center";
   ctx.fillText("razzle.lol", W / 2, wmY);
@@ -12280,7 +12315,7 @@ async function loadBoomBust(playerId) {
     _boomBustData = data;
     renderBoomBust(data, section);
   } catch (err) {
-    section.innerHTML = `<div style="text-align:center; padding:30px; font-family:var(--font-hand); font-size:18px; color:var(--red);">fumbled the boom/bust analysis... ${escapeHtml(err.message)}</div>`;
+    section.innerHTML = `<div style="text-align:center; padding:30px; font-family:var(--font-hand); font-size:18px; color:var(--red);">fumbled the boom/bust analysis... try again in a sec.</div>`;
   }
 }
 
@@ -12378,6 +12413,7 @@ function drawBoomBustHistogram(data) {
   if (!canvas) return;
   const ctx = canvas.getContext("2d");
   const W = canvas.width, H = canvas.height;
+  var t = getCanvasTheme();
   ctx.clearRect(0, 0, W, H);
 
   const { weekly_scores, boom_threshold, bust_threshold, player } = data;
@@ -12404,13 +12440,13 @@ function drawBoomBustHistogram(data) {
   const barW = Math.floor(cW / numBuckets) - 2;
 
   // Y-axis labels
-  ctx.fillStyle = "#5c4a3d";
+  ctx.fillStyle = t.inkMedium;
   ctx.font = "11px 'Space Mono', monospace";
   ctx.textAlign = "right";
   for (let i = 0; i <= maxCount; i++) {
     const y = pad.top + cH - (i / maxCount) * cH;
     ctx.fillText(i.toString(), pad.left - 6, y + 4);
-    ctx.strokeStyle = "#e0d5c5";
+    ctx.strokeStyle = t.inkFaint;
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(pad.left, y);
@@ -12435,12 +12471,12 @@ function drawBoomBustHistogram(data) {
     }
 
     ctx.fillRect(x, y, barW, barH);
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 1.5;
     ctx.strokeRect(x, y, barW, barH);
 
     // X-axis label
-    ctx.fillStyle = "#5c4a3d";
+    ctx.fillStyle = t.inkMedium;
     ctx.font = "10px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(`${i * bucketSize}`, x + barW / 2, pad.top + cH + 16);
@@ -12575,15 +12611,16 @@ function exportBoomBustImage() {
   canvas.width = 800;
   canvas.height = 700;
   const ctx = canvas.getContext("2d");
+  var t = getCanvasTheme();
 
   // Background
-  ctx.fillStyle = "#ede0cf";
+  ctx.fillStyle = t.bg;
   ctx.fillRect(0, 0, 800, 700);
 
   // Header bar
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.fillRect(0, 0, 800, 56);
-  ctx.fillStyle = "#f7efe5";
+  ctx.fillStyle = t.bgCard;
   ctx.font = "bold 22px 'Luckiest Guy', cursive";
   ctx.textAlign = "left";
   ctx.fillText(`BOOM/BUST PROFILE — ${player.full_name}`, 20, 36);
@@ -12591,13 +12628,13 @@ function exportBoomBustImage() {
   // Position badge
   ctx.fillStyle = posColor;
   ctx.fillRect(700, 10, 80, 36);
-  ctx.fillStyle = "white";
+  ctx.fillStyle = t.white;
   ctx.font = "bold 18px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText(pos, 740, 35);
 
   // Subtitle
-  ctx.fillStyle = "#5c4a3d";
+  ctx.fillStyle = t.inkMedium;
   ctx.font = "13px 'Space Mono', monospace";
   ctx.textAlign = "left";
   ctx.fillText(`${player.team || "FA"} · ${season} Season · ${games_played} Games · Avg ${mean_ppg} PPR/G`, 20, 80);
@@ -12610,10 +12647,10 @@ function exportBoomBustImage() {
   ctx.beginPath();
   ctx.roundRect(-30, -30, 60, 60, 10);
   ctx.fill();
-  ctx.strokeStyle = "#2d1f14";
+  ctx.strokeStyle = t.ink;
   ctx.lineWidth = 3;
   ctx.stroke();
-  ctx.fillStyle = "white";
+  ctx.fillStyle = t.white;
   ctx.font = "bold 32px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText(grade, 0, 12);
@@ -12631,18 +12668,18 @@ function exportBoomBustImage() {
   const cardW = 105, cardH = 60, startX = 20, startY = 100;
   for (let i = 0; i < cardStats.length; i++) {
     const x = startX + i * (cardW + 10);
-    ctx.fillStyle = "#f7efe5";
+    ctx.fillStyle = t.bgCard;
     ctx.beginPath();
     ctx.roundRect(x, startY, cardW, cardH, 6);
     ctx.fill();
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 2;
     ctx.stroke();
     ctx.fillStyle = cardStats[i].color;
     ctx.font = "bold 22px 'Luckiest Guy', cursive";
     ctx.textAlign = "center";
     ctx.fillText(cardStats[i].value, x + cardW / 2, startY + 28);
-    ctx.fillStyle = "#5c4a3d";
+    ctx.fillStyle = t.inkMedium;
     ctx.font = "bold 10px 'Space Mono', monospace";
     ctx.fillText(cardStats[i].label, x + cardW / 2, startY + 50);
   }
@@ -12666,13 +12703,13 @@ function exportBoomBustImage() {
   // Grid lines
   for (let i = 0; i <= maxCount; i++) {
     const y = hPad.top + hH - (i / maxCount) * hH;
-    ctx.strokeStyle = "#e0d5c5";
+    ctx.strokeStyle = t.inkFaint;
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(hPad.left, y);
     ctx.lineTo(800 - hPad.right, y);
     ctx.stroke();
-    ctx.fillStyle = "#5c4a3d";
+    ctx.fillStyle = t.inkMedium;
     ctx.font = "11px 'Space Mono', monospace";
     ctx.textAlign = "right";
     ctx.fillText(i.toString(), hPad.left - 6, y + 4);
@@ -12687,10 +12724,10 @@ function exportBoomBustImage() {
     ctx.fillStyle = mid >= boom_threshold ? "#2ec4b6" :
                     (i + 1) * bucketSize <= bust_threshold ? "#e63946" : posColor;
     ctx.fillRect(x, y, barW, bH);
-    ctx.strokeStyle = "#2d1f14";
+    ctx.strokeStyle = t.ink;
     ctx.lineWidth = 1.5;
     ctx.strokeRect(x, y, barW, bH);
-    ctx.fillStyle = "#5c4a3d";
+    ctx.fillStyle = t.inkMedium;
     ctx.font = "10px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(`${i * bucketSize}`, x + barW / 2, hPad.top + hH + 16);
@@ -12726,7 +12763,7 @@ function exportBoomBustImage() {
   ctx.fillText("BUST", bustX - 4, hPad.top + 14);
 
   // Axis labels
-  ctx.fillStyle = "#5c4a3d";
+  ctx.fillStyle = t.inkMedium;
   ctx.font = "12px 'Space Mono', monospace";
   ctx.textAlign = "center";
   ctx.fillText("Fantasy Points (PPR)", 400, hPad.top + hH + 40);
@@ -12760,7 +12797,7 @@ function exportBoomBustImage() {
   ctx.fillText(`${ceiling_ppg.toFixed(1)} CEIL`, ceX, rbY - 6);
 
   // Watermark
-  ctx.fillStyle = "#2d1f14";
+  ctx.fillStyle = t.ink;
   ctx.globalAlpha = 0.4;
   ctx.font = "bold 14px 'Space Mono', monospace";
   ctx.textAlign = "right";

@@ -1896,7 +1896,7 @@ async function loadLeagues(userId) {
               <span>${escapeHtml(scoringType)}</span>
               <span>${escapeHtml(leagueType)}</span>
               <span>${escapeHtml(String(season))}</span>
-              <button class="btn-chunky" style="font-size:10px; padding:3px 10px; margin-left:8px; border-color:var(--green);" onclick="event.stopPropagation(); runLeagueOdds('${escapeAttr(league.league_id)}', '${escapeAttr(userId)}', '${escapeAttr(scoringType.toLowerCase().replace(' ', '_'))}');">League Odds</button>
+              <button id="odds-btn-${escapeAttr(league.league_id)}" class="btn-chunky" style="font-size:10px; padding:3px 10px; margin-left:8px; border-color:var(--green);" onclick="event.stopPropagation(); runLeagueOdds('${escapeAttr(league.league_id)}', '${escapeAttr(userId)}', '${escapeAttr(scoringType.toLowerCase().replace(' ', '_'))}');">League Odds</button>
             </div>
           </div>
           <div class="league-roster" id="roster-${escapeAttr(league.league_id)}">
@@ -2298,7 +2298,10 @@ async function crawlLeagueHistory(leagueId, maxSeasons) {
     visited.add(currentId);
 
     try {
-      var resp = await fetch(SLEEPER_API + "/league/" + currentId);
+      var crawlCtrl = new AbortController();
+      var crawlTimer = setTimeout(function() { crawlCtrl.abort(); }, 8000);
+      var resp = await fetch(SLEEPER_API + "/league/" + currentId, { signal: crawlCtrl.signal });
+      clearTimeout(crawlTimer);
       if (!resp.ok) break;
       var league = await resp.json();
       chain.push({ leagueId: currentId, season: league.season || "?", name: league.name });
@@ -2326,15 +2329,18 @@ async function loadActivityFeed(leagueId, userMap, allPlayers, rosters) {
 
   try {
     // Fetch all weeks in parallel, then sort by recency and take top 25
+    var txnCtrl = new AbortController();
+    var txnTimer = setTimeout(function() { txnCtrl.abort(); }, 20000);
     var fetches = [];
     for (var wk = 18; wk >= 1; wk--) {
       fetches.push(
-        fetch(SLEEPER_API + "/league/" + leagueId + "/transactions/" + wk)
+        fetch(SLEEPER_API + "/league/" + leagueId + "/transactions/" + wk, { signal: txnCtrl.signal })
           .then(function(r) { return r.ok ? r.json() : []; })
           .catch(function() { return []; })
       );
     }
     var results = await Promise.all(fetches);
+    clearTimeout(txnTimer);
 
     // Flatten and filter to completed transactions
     var allTxns = [];
@@ -2543,15 +2549,18 @@ function formatRelativeTime(timestamp) {
  */
 async function fetchLeagueTransactions(leagueId) {
   var allTxns = [];
+  var txnCtrl = new AbortController();
+  var txnTimer = setTimeout(function() { txnCtrl.abort(); }, 20000);
   var fetches = [];
   for (var wk = 1; wk <= 18; wk++) {
     fetches.push(
-      fetch(SLEEPER_API + "/league/" + leagueId + "/transactions/" + wk)
+      fetch(SLEEPER_API + "/league/" + leagueId + "/transactions/" + wk, { signal: txnCtrl.signal })
         .then(function(r) { return r.ok ? r.json() : []; })
         .catch(function() { return []; })
     );
   }
   var results = await Promise.all(fetches);
+  clearTimeout(txnTimer);
   for (var i = 0; i < results.length; i++) {
     if (Array.isArray(results[i])) {
       for (var j = 0; j < results[i].length; j++) {
@@ -5743,7 +5752,7 @@ function _mcSimulate(rosterPlayers, distributions, rosterIds, playoffSpots, SIMS
         var dist = distributions[pid];
         if (!dist || dist.games === 0) return;
         var u1 = Math.random() || 1e-10, u2 = Math.random();
-        var z = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+        var z = Math.max(-4, Math.min(4, Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2)));
         var pts = Math.max(0, dist.mean + z * dist.stdev);
         playerScores.push(pts);
       });
@@ -5793,8 +5802,15 @@ function _mcBuildResults(rosterIds, rosterPlayers, userMap, simResult, SIMS) {
 }
 
 function _mcDrawHistogram(canvas, ptsHistory, name) {
+  var dpr = window.devicePixelRatio || 1;
+  var rect = canvas.getBoundingClientRect();
+  if (rect.width > 0 && rect.height > 0) {
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+  }
   var ctx = canvas.getContext('2d');
-  var w = canvas.width, h = canvas.height;
+  ctx.scale(dpr, dpr);
+  var w = rect.width || canvas.width, h = rect.height || canvas.height;
   ctx.clearRect(0, 0, w, h);
 
   if (!ptsHistory || ptsHistory.length === 0) return;
@@ -6145,8 +6161,10 @@ function _mcResetScenarios(leagueId) {
 }
 
 async function runLeagueOdds(leagueId, userId, scoring) {
+  var oddsBtn = document.getElementById('odds-btn-' + leagueId);
+  if (oddsBtn) { oddsBtn.disabled = true; oddsBtn.style.opacity = '0.5'; }
   var oddsDiv = document.getElementById('odds-' + leagueId);
-  if (!oddsDiv) return;
+  if (!oddsDiv) { if (oddsBtn) { oddsBtn.disabled = false; oddsBtn.style.opacity = ''; } return; }
   oddsDiv.style.display = 'block';
   oddsDiv.innerHTML = '<div style="text-align:center;padding:24px;font-family:var(--font-hand);font-size:18px;color:var(--ink-light);">running the numbers... (Monte Carlo simulation)</div>';
 
@@ -6250,8 +6268,10 @@ async function runLeagueOdds(leagueId, userId, scoring) {
       }
       _mcRenderScenario(leagueId);
     }
+    if (oddsBtn) { oddsBtn.disabled = false; oddsBtn.style.opacity = ''; }
   } catch (e) {
-    oddsDiv.innerHTML = '<div style="text-align:center;padding:24px;font-family:var(--font-hand);font-size:16px;color:var(--red);">' + (e.name === 'AbortError' ? 'simulation timed out' : 'fumbled the simulation... ' + escapeHtml(e.message)) + '</div>';
+    oddsDiv.innerHTML = '<div style="text-align:center;padding:24px;font-family:var(--font-hand);font-size:16px;color:var(--red);">' + (e.name === 'AbortError' ? 'simulation timed out' : 'fumbled the simulation... give it another shot.') + '</div>';
+    if (oddsBtn) { oddsBtn.disabled = false; oddsBtn.style.opacity = ''; }
   }
 }
 
@@ -6430,7 +6450,8 @@ async function loadScheduleStrength(leagueId, userId, rosters, allPlayers, userM
 
     function getSosGrade(sensitivity) {
       if (sensValues.length === 0) return { letter: "C", bg: "var(--bg-warm)", color: "var(--ink)" };
-      var rank = sensValues.indexOf(sensitivity);
+      var rank = sensValues.findIndex(function(v) { return Math.abs(v - sensitivity) < 0.0001; });
+      if (rank === -1) rank = Math.floor(sensValues.length / 2);
       var pct = sensValues.length > 1 ? rank / (sensValues.length - 1) : 0.5;
       // High sensitivity = more schedule-dependent = higher volatility
       if (pct <= 0.15) return { letter: "volatile", bg: "var(--red)", color: "var(--bg)" };
@@ -6499,7 +6520,7 @@ async function loadScheduleStrength(leagueId, userId, rosters, allPlayers, userM
     container.innerHTML = html;
   } catch (e) {
     container.innerHTML = '<div class="loading-intel" style="color:var(--red);">' +
-      (e.name === "AbortError" ? "request timed out — try again" : "fumbled the schedule analysis... " + escapeHtml(e.message)) + '</div>';
+      (e.name === "AbortError" ? "request timed out — try again" : "fumbled the schedule analysis... try again.") + '</div>';
     var sosBtn2 = document.getElementById("sosBtn-" + leagueId);
     if (sosBtn2) { sosBtn2.disabled = false; sosBtn2.textContent = "schedule strength"; }
     console.error("Schedule strength error:", e);

@@ -3248,21 +3248,34 @@
 
   // ===== WEEKLY SCORING HEATMAP =====
   defs.push({ name: 'weekly', render: function(el) {
-    var HEAT_COLORS = [
-      { bg: '#f2d5d8', text: '#8b2030' },
-      { bg: '#f5eacc', text: '#7a6020' },
-      { bg: '#f7efe5', text: '#5c4a3d' },
-      { bg: '#d9efec', text: '#1a6b60' },
-      { bg: '#b8e6d8', text: '#0d5040' }
-    ];
+    function getHeatColors() {
+      var isDark = document.documentElement.getAttribute("data-theme") === "dark";
+      if (isDark) {
+        return [
+          { bg: '#5c2525', text: '#f2d5d8' },
+          { bg: '#5c4a25', text: '#f5eacc' },
+          { bg: '#4a3728', text: '#c4b5a5' },
+          { bg: '#1a4a42', text: '#d9efec' },
+          { bg: '#0d3a2d', text: '#b8e6d8' }
+        ];
+      }
+      return [
+        { bg: '#f2d5d8', text: '#8b2030' },
+        { bg: '#f5eacc', text: '#7a6020' },
+        { bg: '#f7efe5', text: '#5c4a3d' },
+        { bg: '#d9efec', text: '#1a6b60' },
+        { bg: '#b8e6d8', text: '#0d5040' }
+      ];
+    }
 
     function getHeatColor(score, thresholds) {
       if (score === null || score === undefined) return null;
-      if (score <= thresholds.p20) return HEAT_COLORS[0];
-      if (score <= thresholds.p40) return HEAT_COLORS[1];
-      if (score <= thresholds.p60) return HEAT_COLORS[2];
-      if (score <= thresholds.p80) return HEAT_COLORS[3];
-      return HEAT_COLORS[4];
+      var hc = getHeatColors();
+      if (score <= thresholds.p20) return hc[0];
+      if (score <= thresholds.p40) return hc[1];
+      if (score <= thresholds.p60) return hc[2];
+      if (score <= thresholds.p80) return hc[3];
+      return hc[4];
     }
 
     var curPos = 'ALL';
@@ -3382,7 +3395,7 @@
       var legendPos = curPos !== 'ALL' ? curPos : 'WR';
       var lt = thresholds[legendPos] || { p20: 5, p40: 10, p60: 15, p80: 20 };
       html += '<div class="wh-legend"><span>&lt;' + lt.p20.toFixed(0) + '</span><div class="wh-legend-bar">';
-      HEAT_COLORS.forEach(function(hc) { html += '<div class="wh-legend-cell" style="background:' + hc.bg + '"></div>'; });
+      getHeatColors().forEach(function(hc) { html += '<div class="wh-legend-cell" style="background:' + hc.bg + '"></div>'; });
       html += '</div><span>' + lt.p80.toFixed(0) + '+</span></div>';
       html += '<div class="wh-legend-note">PPR points (' + legendPos + ' thresholds) — click column headers to sort</div>';
 
@@ -3454,12 +3467,20 @@
       '</div>';
 
     function getHeatColor(ppg, allValues) {
-      if (!allValues || !allValues.length) return '#f7efe5';
+      var isDark = document.documentElement.getAttribute("data-theme") === "dark";
+      if (!allValues || !allValues.length) return isDark ? '#4a3728' : '#f7efe5';
       var s = allValues.slice().sort(function(a, b) { return a - b; });
       var p20 = s[Math.floor(s.length * 0.2)] || 0;
       var p40 = s[Math.floor(s.length * 0.4)] || 0;
       var p60 = s[Math.floor(s.length * 0.6)] || 0;
       var p80 = s[Math.floor(s.length * 0.8)] || 0;
+      if (isDark) {
+        if (ppg >= p80) return '#1a5a50';
+        if (ppg >= p60) return '#1a4a42';
+        if (ppg >= p40) return '#4a3728';
+        if (ppg >= p20) return '#5c2525';
+        return '#8b1a1a';
+      }
       if (ppg >= p80) return '#2ec4b6';
       if (ppg >= p60) return '#d9efec';
       if (ppg >= p40) return '#f7efe5';
@@ -3560,7 +3581,7 @@
           var ppg = d.avg_ppg || 0;
           var rank = d.rank || 0;
           var bg = getHeatColor(ppg, posValues[pos]);
-          var textColor = (bg === '#e63946' || bg === '#2ec4b6') ? '#fff' : 'var(--ink)';
+          var textColor = (bg === '#e63946' || bg === '#2ec4b6' || bg === '#8b1a1a' || bg === '#1a5a50') ? '#fff' : 'var(--ink)';
           var annotation = getAnnotation(rank, totalTeams);
 
           html += '<td style="background:' + bg + ';color:' + textColor + ';" data-team="' + escapeAttr(t.team) + '" data-pos="' + pos + '">';
@@ -3569,7 +3590,7 @@
           html += '</td>';
         });
 
-        if (positions.length > 1) html += '<td style="font-weight:700;">' + t.total_avg.toFixed(1) + '</td>';
+        if (positions.length > 1) html += '<td style="font-weight:700;">' + fmt(t.total_avg) + '</td>';
         html += '</tr>';
       });
 
@@ -4846,6 +4867,7 @@
 
     function drawAgingChart(canvas, curve, peak, data) {
       var ctx = canvas.getContext('2d');
+      var t = getCanvasTheme();
       var W = canvas.width;
       var H = canvas.height;
       var pad = { top: 20, right: 20, bottom: 40, left: 50 };
@@ -4866,7 +4888,7 @@
       function yPos(ppg) { return pad.top + ch - (ppg / maxPPG) * ch; }
 
       // grid lines
-      ctx.strokeStyle = '#c4b5a5';
+      ctx.strokeStyle = t.inkFaint;
       ctx.lineWidth = 0.5;
       for (var g = 0; g <= 5; g++) {
         var gy = pad.top + (g / 5) * ch;
@@ -4922,7 +4944,7 @@
 
       // X axis labels
       var agChartCollege = typeof state !== 'undefined' && state.universe === 'college';
-      ctx.fillStyle = '#5c4a3d';
+      ctx.fillStyle = t.inkMedium;
       ctx.font = '10px Space Mono, monospace';
       ctx.textAlign = 'center';
       var ageStep = agChartCollege ? 1 : 2;
@@ -5632,6 +5654,7 @@
       var canvas = el.querySelector('#cst-canvas');
       if (canvas && seasons.length > 0) {
         var ctx = canvas.getContext('2d');
+        var t = getCanvasTheme();
         var W = canvas.width, H = canvas.height;
         var pad = { t: 20, r: 20, b: 30, l: 40 };
         var cw = W - pad.l - pad.r, ch = H - pad.t - pad.b;
@@ -5640,11 +5663,11 @@
 
         ctx.clearRect(0, 0, W, H);
         // Grid
-        ctx.strokeStyle = '#c4b5a5'; ctx.lineWidth = 1;
+        ctx.strokeStyle = t.inkFaint; ctx.lineWidth = 1;
         for (var g = 0; g <= 4; g++) {
           var gy = pad.t + ch - (g / 4) * ch;
           ctx.beginPath(); ctx.moveTo(pad.l, gy); ctx.lineTo(pad.l + cw, gy); ctx.stroke();
-          ctx.fillStyle = '#8a7565'; ctx.font = '10px monospace'; ctx.textAlign = 'right';
+          ctx.fillStyle = t.inkLight; ctx.font = '10px monospace'; ctx.textAlign = 'right';
           ctx.fillText(fmt(maxPPG * g / 4), pad.l - 5, gy + 3);
         }
         // Area fill
@@ -5672,16 +5695,16 @@
           var x = pad.l + (seasons.length > 1 ? i / (seasons.length - 1) : 0.5) * cw;
           var y = pad.t + ch - (v / maxPPG) * ch;
           ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2); ctx.fillStyle = posColor; ctx.fill();
-          ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
-          ctx.fillStyle = '#2d1f14'; ctx.font = 'bold 10px monospace'; ctx.textAlign = 'center';
+          ctx.strokeStyle = t.white; ctx.lineWidth = 2; ctx.stroke();
+          ctx.fillStyle = t.ink; ctx.font = 'bold 10px monospace'; ctx.textAlign = 'center';
           ctx.fillText(fmt(v), x, y - 10);
           // Season label
-          ctx.fillStyle = '#8a7565'; ctx.font = '10px monospace';
+          ctx.fillStyle = t.inkLight; ctx.font = '10px monospace';
           ctx.fillText(String(seasons[i].season || ''), x, pad.t + ch + 16);
         });
         // Y-axis label
         ctx.save(); ctx.translate(12, pad.t + ch / 2); ctx.rotate(-Math.PI / 2);
-        ctx.fillStyle = '#8a7565'; ctx.font = '11px monospace'; ctx.textAlign = 'center';
+        ctx.fillStyle = t.inkLight; ctx.font = '11px monospace'; ctx.textAlign = 'center';
         ctx.fillText('PPG', 0, 0); ctx.restore();
       }
     }
@@ -5809,6 +5832,7 @@
       var canvas = el.querySelector('#ccp-canvas');
       if (canvas) {
         var ctx = canvas.getContext('2d');
+        var t = getCanvasTheme();
         var W = canvas.width, H = canvas.height;
         var pad = { t: 20, r: 20, b: 30, l: 40 };
         var cw = W - pad.l - pad.r, ch = H - pad.t - pad.b;
@@ -5828,17 +5852,17 @@
         maxPPG *= 1.15;
 
         // Grid
-        ctx.strokeStyle = '#c4b5a5'; ctx.lineWidth = 1;
+        ctx.strokeStyle = t.inkFaint; ctx.lineWidth = 1;
         for (var g = 0; g <= 4; g++) {
           var gy = pad.t + ch - (g / 4) * ch;
           ctx.beginPath(); ctx.moveTo(pad.l, gy); ctx.lineTo(pad.l + cw, gy); ctx.stroke();
-          ctx.fillStyle = '#8a7565'; ctx.font = '10px monospace'; ctx.textAlign = 'right';
+          ctx.fillStyle = t.inkLight; ctx.font = '10px monospace'; ctx.textAlign = 'right';
           ctx.fillText(fmt(maxPPG * g / 4), pad.l - 5, gy + 3);
         }
         // X labels
         xYears.forEach(function(yr, i) {
           var x = pad.l + (xYears.length > 1 ? i / (xYears.length - 1) : 0.5) * cw;
-          ctx.fillStyle = '#8a7565'; ctx.font = '10px monospace'; ctx.textAlign = 'center';
+          ctx.fillStyle = t.inkLight; ctx.font = '10px monospace'; ctx.textAlign = 'center';
           ctx.fillText(yr, x, pad.t + ch + 16);
         });
 
@@ -5866,7 +5890,7 @@
             var x = pad.l + (xYears.length > 1 ? i / (xYears.length - 1) : 0.5) * cw;
             var y = pad.t + ch - (seasonMap[yr] / maxPPG) * ch;
             ctx.beginPath(); ctx.arc(x, y, 4, 0, Math.PI * 2); ctx.fillStyle = color; ctx.fill();
-            ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
+            ctx.strokeStyle = t.white; ctx.lineWidth = 2; ctx.stroke();
           });
         });
       }
@@ -6717,6 +6741,7 @@
       var canvas = el.querySelector('#pbd-canvas');
       if (canvas && components.length > 0) {
         var ctx = canvas.getContext('2d');
+        var t = getCanvasTheme();
         var cx = 140, cy = 140, outerR = 120, innerR = 72;
         ctx.clearRect(0, 0, 280, 280);
 
@@ -6734,8 +6759,8 @@
           ctx.fillStyle = color;
           ctx.fill();
 
-          // Sand border between slices
-          ctx.strokeStyle = '#ede0cf';
+          // Border between slices
+          ctx.strokeStyle = t.bg;
           ctx.lineWidth = 2;
           ctx.stroke();
 
@@ -6757,13 +6782,13 @@
         });
 
         // Center label
-        ctx.fillStyle = '#2d1f14';
+        ctx.fillStyle = t.ink;
         ctx.font = 'bold 24px monospace';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(fmt(ppg), cx, cy - 8);
         ctx.font = '12px monospace';
-        ctx.fillStyle = '#8a7565';
+        ctx.fillStyle = t.inkLight;
         ctx.fillText('PPG', cx, cy + 12);
       }
     }
@@ -7209,7 +7234,8 @@
       var barW = Math.min(60, (w - 40) / rounds.length - 8);
       var left = 40;
 
-      ctx.fillStyle = '#f7efe5';
+      var t = getCanvasTheme();
+      ctx.fillStyle = t.bgCard;
       ctx.fillRect(0, 0, w, h);
 
       rounds.forEach(function(r, i) {
@@ -7218,10 +7244,10 @@
         var y = h - 30 - barH;
         ctx.fillStyle = '#d97757';
         ctx.fillRect(x, y, barW, barH);
-        ctx.strokeStyle = '#2d1f14';
+        ctx.strokeStyle = t.ink;
         ctx.lineWidth = 2;
         ctx.strokeRect(x, y, barW, barH);
-        ctx.fillStyle = '#2d1f14';
+        ctx.fillStyle = t.ink;
         ctx.font = 'bold 11px "Space Mono", monospace';
         ctx.textAlign = 'center';
         ctx.fillText('Rd ' + r.round, x + barW / 2, h - 14);
@@ -7399,6 +7425,7 @@
 
       chartCanvas = el.querySelector('.exp-canvas');
       var wrap = el.querySelector('.exp-chart-wrap');
+      var t = getCanvasTheme();
       var wrapW = wrap.clientWidth - 40;
       var canvasH = Math.min(600, Math.max(350, wrapW * 0.6));
       var dpr = window.devicePixelRatio || 1;
@@ -7424,17 +7451,17 @@
       function xScale(v) { return MARGIN.left + ((v - xMin) / (xMax - xMin)) * plotW; }
       function yScale(v) { return MARGIN.top + plotH - ((v - yMin) / (yMax - yMin)) * plotH; }
 
-      ctx.fillStyle = '#f7efe5';
+      ctx.fillStyle = t.bgCard;
       ctx.fillRect(0, 0, wrapW, canvasH);
 
-      ctx.strokeStyle = '#c4b5a5';
+      ctx.strokeStyle = t.inkFaint;
       ctx.lineWidth = 0.5;
       var xTicks = niceTickValues(xMin, xMax, 6);
       var yTicks = niceTickValues(yMin, yMax, 6);
       xTicks.forEach(function(v) { var x = xScale(v); ctx.beginPath(); ctx.moveTo(x, MARGIN.top); ctx.lineTo(x, MARGIN.top + plotH); ctx.stroke(); });
       yTicks.forEach(function(v) { var y = yScale(v); ctx.beginPath(); ctx.moveTo(MARGIN.left, y); ctx.lineTo(MARGIN.left + plotW, y); ctx.stroke(); });
 
-      ctx.strokeStyle = '#2d1f14';
+      ctx.strokeStyle = t.ink;
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.moveTo(MARGIN.left, MARGIN.top);
@@ -7442,14 +7469,14 @@
       ctx.lineTo(MARGIN.left + plotW, MARGIN.top + plotH);
       ctx.stroke();
 
-      ctx.fillStyle = '#5c4a3d';
+      ctx.fillStyle = t.inkMedium;
       ctx.font = '11px "Space Mono", monospace';
       ctx.textAlign = 'center';
       xTicks.forEach(function(v) { ctx.fillText(formatTickValue(v), xScale(v), MARGIN.top + plotH + 18); });
       ctx.textAlign = 'right';
       yTicks.forEach(function(v) { ctx.fillText(formatTickValue(v), MARGIN.left - 8, yScale(v) + 4); });
 
-      ctx.fillStyle = '#2d1f14';
+      ctx.fillStyle = t.ink;
       ctx.font = 'bold 13px "Luckiest Guy", cursive';
       ctx.textAlign = 'center';
       ctx.fillText(xLabel, MARGIN.left + plotW / 2, canvasH - 6);
@@ -7487,7 +7514,7 @@
         ctx.globalAlpha = 0.75;
         ctx.fill();
         ctx.globalAlpha = 1;
-        ctx.strokeStyle = '#2d1f14';
+        ctx.strokeStyle = t.ink;
         ctx.lineWidth = 1;
         ctx.stroke();
         plotPoints.push({ px: px, py: py, player: p });
@@ -8977,7 +9004,13 @@
   defs.push({ name: 'targets', render: function(el) {
     var currentData = null;
     var activeMode = 'targets';
-    var POS_LIGHT = { QB: '#dde4f7', RB: '#d9efec', WR: '#f7e4d8', TE: '#e5dcf7' };
+    function getPosLight() {
+      var isDark = document.documentElement.getAttribute("data-theme") === "dark";
+      if (isDark) {
+        return { QB: '#2a3352', RB: '#1a3a35', WR: '#5c3325', TE: '#3a2852' };
+      }
+      return { QB: '#dde4f7', RB: '#d9efec', WR: '#f7e4d8', TE: '#e5dcf7' };
+    }
 
     el.innerHTML =
       '<div class="lp-page">' +
@@ -9072,7 +9105,7 @@
           if (share < 2) return;
           otherPct -= share;
           var posColor = POS_COLORS[p.position] || '#d97757';
-          var lightColor = POS_LIGHT[p.position] || '#f7e4d8';
+          var lightColor = getPosLight()[p.position] || '#f7e4d8';
           var lastName = (p.name || '').split(' ').pop() || p.name || '';
           html += '<div class="td2-dist-seg" style="width:' + share + '%;background:' + lightColor + ';border-right:2px solid ' + posColor + '" title="' + escapeAttr(p.name) + ': ' + share + '%">';
           if (share > 8) html += '<span class="td2-seg-label">' + escapeHtml(lastName) + '</span>';
@@ -9664,9 +9697,15 @@
     }
 
     function corrColor(r) {
-      if (r === null || r === undefined) return '#f7efe5';
+      var isDark = document.documentElement.getAttribute("data-theme") === "dark";
+      if (r === null || r === undefined) return isDark ? '#4a3728' : '#f7efe5';
       var abs = Math.min(Math.abs(r), 1);
       var intensity = Math.round(abs * 200);
+      if (isDark) {
+        // Dark mode: start from dark card color, go toward muted tints
+        if (r > 0) return 'rgb(' + (74 + intensity * 0.15) + ',' + (55 - intensity * 0.15) + ',' + (40 - intensity * 0.15) + ')';
+        return 'rgb(' + (40 - intensity * 0.1) + ',' + (55 - intensity * 0.15) + ',' + (74 + intensity * 0.15) + ')';
+      }
       if (r > 0) return 'rgb(' + (255 - intensity * 0.3) + ',' + (240 - intensity * 0.7) + ',' + (240 - intensity * 0.9) + ')';
       return 'rgb(' + (240 - intensity * 0.9) + ',' + (240 - intensity * 0.7) + ',' + (255 - intensity * 0.3) + ')';
     }
@@ -9722,6 +9761,7 @@
       // Draw heat map
       var canvas = el.querySelector('#corr-heatmap');
       if (!canvas) return;
+      var t = getCanvasTheme();
       var ctx = canvas.getContext('2d');
       var dpr = window.devicePixelRatio || 1;
       canvas.width = canvasW * dpr;
@@ -9738,12 +9778,12 @@
           var y = labelW + i * cellSize;
           ctx.fillStyle = corrColor(r);
           ctx.fillRect(x, y, cellSize - 2, cellSize - 2);
-          ctx.strokeStyle = '#ede0cf';
+          ctx.strokeStyle = t.bg;
           ctx.lineWidth = 2;
           ctx.strokeRect(x, y, cellSize - 2, cellSize - 2);
           // Value text
           if (r !== null && r !== undefined) {
-            ctx.fillStyle = Math.abs(r) > 0.5 ? '#fff' : '#2d1f14';
+            ctx.fillStyle = Math.abs(r) > 0.5 ? '#fff' : t.ink;
             ctx.font = 'bold 11px "Space Mono", monospace';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
@@ -9753,7 +9793,7 @@
       });
 
       // Row labels (left)
-      ctx.fillStyle = '#2d1f14';
+      ctx.fillStyle = t.ink;
       ctx.font = 'bold 11px "Space Mono", monospace';
       ctx.textAlign = 'right';
       ctx.textBaseline = 'middle';
@@ -9766,7 +9806,7 @@
         ctx.save();
         ctx.translate(labelW + j * cellSize + (cellSize - 2) / 2, labelW - 6);
         ctx.rotate(-Math.PI / 4);
-        ctx.fillStyle = '#2d1f14';
+        ctx.fillStyle = t.ink;
         ctx.font = 'bold 11px "Space Mono", monospace';
         ctx.textAlign = 'right';
         ctx.textBaseline = 'middle';
@@ -9822,17 +9862,17 @@
         xRange = xMax - xMin; yRange = yMax - yMin;
 
         // Grid
-        sctx.strokeStyle = '#e5d5c3'; sctx.lineWidth = 1;
+        sctx.strokeStyle = t.bgWarm; sctx.lineWidth = 1;
         for (var g = 0; g <= 4; g++) {
           var gy = pad.t + ch - (g / 4) * ch;
           sctx.beginPath(); sctx.moveTo(pad.l, gy); sctx.lineTo(pad.l + cw, gy); sctx.stroke();
-          sctx.fillStyle = '#8a7565'; sctx.font = '10px "Space Mono", monospace'; sctx.textAlign = 'right';
+          sctx.fillStyle = t.inkLight; sctx.font = '10px "Space Mono", monospace'; sctx.textAlign = 'right';
           sctx.fillText(fmt(yMin + (g / 4) * yRange), pad.l - 5, gy + 3);
         }
         for (var g = 0; g <= 4; g++) {
           var gx = pad.l + (g / 4) * cw;
           sctx.beginPath(); sctx.moveTo(gx, pad.t); sctx.lineTo(gx, pad.t + ch); sctx.stroke();
-          sctx.fillStyle = '#8a7565'; sctx.font = '10px "Space Mono", monospace'; sctx.textAlign = 'center';
+          sctx.fillStyle = t.inkLight; sctx.font = '10px "Space Mono", monospace'; sctx.textAlign = 'center';
           sctx.fillText(fmt(xMin + (g / 4) * xRange), gx, pad.t + ch + 16);
         }
 
@@ -9851,7 +9891,7 @@
         });
 
         // Axis labels
-        sctx.fillStyle = '#2d1f14'; sctx.font = 'bold 12px "Space Mono", monospace';
+        sctx.fillStyle = t.ink; sctx.font = 'bold 12px "Space Mono", monospace';
         sctx.textAlign = 'center';
         sctx.fillText(xLabel, pad.l + cw / 2, sH - 5);
         sctx.save();
@@ -9979,25 +10019,26 @@
       canvas.height = totalH * dpr;
 
       var ctx = canvas.getContext('2d');
+      var th = getCanvasTheme();
       ctx.scale(dpr, dpr);
       var W = 800;
 
       // Background
-      ctx.fillStyle = '#f7efe5';
+      ctx.fillStyle = th.bgCard;
       ctx.fillRect(0, 0, W, totalH);
 
       // Find max value for scaling
       var maxVal = 0;
-      teams.forEach(function(t) { if (t.total_value > maxVal) maxVal = t.total_value; });
+      teams.forEach(function(tm) { if (tm.total_value > maxVal) maxVal = tm.total_value; });
       var barAreaW = W - padLeft - padRight;
 
       // Title
-      ctx.fillStyle = '#2d1f14';
+      ctx.fillStyle = th.ink;
       ctx.font = 'bold 16px "Space Mono", monospace';
       ctx.textAlign = 'center';
       ctx.fillText('Dynasty Roster Value by Team', W / 2, 22);
       ctx.font = '11px "Space Mono", monospace';
-      ctx.fillStyle = '#8a7565';
+      ctx.fillStyle = th.inkLight;
       ctx.fillText('league avg: ' + fmt(data.league_average) + ' total trade value', W / 2, 38);
 
       // League average line
@@ -10017,7 +10058,7 @@
         var barH = rowH - 4;
 
         // Rank + team label
-        ctx.fillStyle = '#2d1f14';
+        ctx.fillStyle = th.ink;
         ctx.font = '11px "Space Mono", monospace';
         ctx.textAlign = 'right';
         ctx.fillText(t.rank + '. ' + t.team, padLeft - 6, y + barH / 2 + 4);
@@ -10037,21 +10078,21 @@
             ctx.fillStyle = seg.color;
             ctx.fillRect(x, y, segW, barH);
             // Subtle right border between segments
-            ctx.fillStyle = 'rgba(255,255,255,0.3)';
+            ctx.fillStyle = th.isDark ? 'rgba(0,0,0,0.3)' : 'rgba(255,255,255,0.3)';
             ctx.fillRect(x + segW - 1, y, 1, barH);
           }
           x += segW;
         });
 
         // Total value label
-        ctx.fillStyle = '#2d1f14';
+        ctx.fillStyle = th.ink;
         ctx.font = '10px "Space Mono", monospace';
         ctx.textAlign = 'left';
         ctx.fillText(fmt(t.total_value, 0), x + 4, y + barH / 2 + 4);
 
         // Highlight selected
         if (selectedTeam === t.team) {
-          ctx.strokeStyle = '#2d1f14';
+          ctx.strokeStyle = th.ink;
           ctx.lineWidth = 2;
           ctx.strokeRect(padLeft, y, (t.total_value / maxVal) * barAreaW, barH);
         }
@@ -10065,7 +10106,7 @@
       ['QB', 'RB', 'WR', 'TE'].forEach(function(pos) {
         ctx.fillStyle = POS_COLS[pos];
         ctx.fillRect(legendX, legendY - 7, 10, 10);
-        ctx.fillStyle = '#2d1f14';
+        ctx.fillStyle = th.ink;
         ctx.fillText(pos, legendX + 13, legendY + 2);
         legendX += 45;
       });
@@ -10206,7 +10247,7 @@
         h += '<span class="gs-pos" style="color:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
         h += '<td class="gs-team">' + escapeHtml(p.team) + '</td>';
         h += '<td class="gs-gp">' + p.games + '</td>';
-        h += '<td class="gs-ppg"><strong>' + p.ppg.toFixed(1) + '</strong></td>';
+        h += '<td class="gs-ppg"><strong>' + fmt(p.ppg) + '</strong></td>';
         h += '<td class="gs-diff">' + diffBadge(p.avg_diff) + '</td>';
         h += '<td class="gs-gt">' + gtChip(p.gt_pct) + '</td>';
         h += '</tr>';

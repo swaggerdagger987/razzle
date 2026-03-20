@@ -516,7 +516,7 @@ function drawBanner(f) {
   ctx.textAlign = 'center';
   ctx.fillText('RAZZLE', x + w / 2, y + 22);
   ctx.font = 'bold 9px monospace';
-  ctx.fillText('WAR ROOM', x + w / 2, y + 36);
+  ctx.fillText('SIT ROOM', x + w / 2, y + 36);
   ctx.textAlign = 'left';
 }
 
@@ -1694,15 +1694,15 @@ function renderContextBadges() {
     badges.push(
       '<span class="context-badge active">' +
         '<span class="context-badge-dot"></span>' +
-        'Lab: ' + labCtx.players.length + ' player' + (labCtx.players.length > 1 ? 's' : '') + ' selected' +
+        'Screener: ' + labCtx.players.length + ' player' + (labCtx.players.length > 1 ? 's' : '') + ' selected' +
       '</span>'
     );
   } else {
     badges.push(
       '<span class="context-badge inactive">' +
         '<span class="context-badge-dot"></span>' +
-        'Lab: no players selected' +
-        ' <a href="/lab.html" class="context-badge-link">open Lab</a>' +
+        'Screener: no players selected' +
+        ' <a href="/lab.html" class="context-badge-link">open Screener</a>' +
       '</span>'
     );
   }
@@ -2524,7 +2524,11 @@ async function runSingleAgent(agentId, scenario) {
     }));
   } catch (err) {
     setAgentStatus(agentId, 'error');
-    setScenarioStatus(agent.name + ': ' + err.message, 'error');
+    var errMsg = err.message || '';
+    var userMsg = errMsg.includes('AbortError') || errMsg.includes('timeout') ? 'timed out. try again.'
+      : errMsg.includes('401') ? 'check your API key in Config.'
+      : 'hit a wall. try again.';
+    setScenarioStatus(agent.name + ': ' + userMsg, 'error');
   } finally {
     setScenarioButtonsDisabled(false);
     if (canvasAgent) { canvasAgent.workBubble = ''; }
@@ -2702,7 +2706,10 @@ async function runAllAgents(scenario) {
         var ca = agents[id];
         if (ca) { ca.workBubble = '✅'; ca.bubbleTimer = 3000; }
       } catch (err) {
-        errors[id] = err.message;
+        var errMsg = err.message || '';
+        errors[id] = errMsg.includes('AbortError') || errMsg.includes('timeout') ? 'timed out. try again.'
+          : errMsg.includes('401') ? 'check your API key in Config.'
+          : 'hit a wall. try again.';
         setAgentStatus(id, 'error');
         var ca = agents[id];
         if (ca) { ca.workBubble = '❌'; ca.bubbleTimer = 3000; }
@@ -2745,7 +2752,10 @@ async function runAllAgents(scenario) {
       setAgentStatus(0, 'error');
     }
   } catch (err) {
-    errors[0] = err.message;
+    var errMsg = err.message || '';
+    errors[0] = errMsg.includes('AbortError') || errMsg.includes('timeout') ? 'timed out. try again.'
+      : errMsg.includes('401') ? 'check your API key in Config.'
+      : 'hit a wall. try again.';
     setAgentStatus(0, 'error');
     var ca = agents[0];
     if (ca) { ca.workBubble = '❌'; ca.bubbleTimer = 3000; }
@@ -3383,7 +3393,7 @@ function getRelevantMemory(scenario, maxItems) {
 
 function formatMemoryContext(entries) {
   if (!entries.length) return '';
-  var lines = ['', '--- WHAT THE WAR ROOM REMEMBERS ---'];
+  var lines = ['', '--- WHAT THE SITUATION ROOM REMEMBERS ---'];
   var eliteNote = isEliteUser() ? ' (cloud-synced, multi-season)' : '';
   if (eliteNote) lines.push('Memory depth: ' + entries.length + ' briefings' + eliteNote);
 
@@ -3659,7 +3669,13 @@ window.addEventListener('razzle:all-agents-done', function(e) {
   if (d.results) {
     Object.keys(d.results).forEach(function(key) {
       var result = d.results[key];
-      if (result && result.text) {
+      if (typeof result === 'string' && result) {
+        var agentDef = AGENT_DEFS[parseInt(key)];
+        briefingData.agent_highlights.push({
+          agent: agentDef ? agentDef.name : key,
+          finding: result.slice(0, 500),
+        });
+      } else if (result && result.text) {
         briefingData.agent_highlights.push({
           agent: result.name || key,
           finding: result.text.slice(0, 500),
@@ -3967,7 +3983,7 @@ function waitAndStart() {
     const dots = '.'.repeat(Math.floor(now() / 500) % 4);
     ctx.fillText(dots, cvs.width / 2, cvs.height / 2 + 20);
     ctx.textAlign = 'left';
-    requestAnimationFrame(waitAndStart);
+    _rafId = requestAnimationFrame(waitAndStart);
   }
 }
 waitAndStart();

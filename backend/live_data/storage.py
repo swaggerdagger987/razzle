@@ -232,7 +232,7 @@ def publish_formula(name: str, description: str, position_tags: list,
             result = {"status": "ok", "id": formula_id}
         except Exception as e:
             logger.exception("publish_formula failed")
-            result = {"status": "error", "message": str(e)}
+            result = {"status": "error", "message": "failed to publish formula"}
         return result
 
 
@@ -249,8 +249,9 @@ def fetch_formula_store(position: str = "", sort: str = "newest",
             params.append(f'%"{position.upper()}"%')
 
         if search:
-            where_parts.append("name LIKE ?")
-            params.append(f"%{search}%")
+            where_parts.append("name LIKE ? ESCAPE '\\'")
+            escaped_search = search.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+            params.append(f"%{escaped_search}%")
 
         where_sql = ("WHERE " + " AND ".join(where_parts)) if where_parts else ""
 

@@ -54,6 +54,7 @@
   .plans-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; margin-bottom: 40px; }
   @media (max-width: 900px) { .plans-grid { grid-template-columns: 1fr; } }
   @media (max-width: 480px) {
+    html, body { overflow-x: hidden; }
     .pricing-page { padding: 24px 12px; }
     .plan-card { padding: 20px 14px; }
     .plan-name { font-size: 20px; }
@@ -297,6 +298,7 @@
   <!-- Feature comparison matrix -->
   <div class="matrix-section">
     <h2>The full breakdown</h2>
+    <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
     <table class="feature-matrix">
       <thead>
         <tr>
@@ -311,7 +313,7 @@
         <tr class="group-row"><td colspan="4">Screener / Lab</td></tr>
         <tr><td>Lab screener (100+ columns)</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
         <tr><td>All 60+ analytical panels</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
-        <tr><td>Season selector</td><td class="limit">3 seasons</td><td class="yes">All (2015+)</td><td class="yes">All (2015+)</td></tr>
+        <tr><td>Season selector</td><td class="yes">All (2015+)</td><td class="yes">All (2015+)</td><td class="yes">All (2015+)</td></tr>
         <tr><td>Compare mode</td><td class="limit">2 players</td><td class="yes">4 players</td><td class="yes">4 players</td></tr>
 
         <!-- Formulas -->
@@ -343,6 +345,7 @@
         <tr><td>Trade finder (league-specific)</td><td class="no">&mdash;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
       </tbody>
     </table>
+    </div>
   </div>
 
   <!-- FAQ -->
@@ -580,9 +583,28 @@
       return;
     }
 
-    // Default: not a recognized code
-    fb.textContent = 'that code didn\'t hit. double-check the spelling.';
-    fb.style.color = 'var(--ink-light)';
+    // Fall through to API validation for real Stripe promo codes
+    fetch((window.location.origin) + '/api/billing/validate-promo', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code: input.value.trim() })
+    }).then(function(resp) {
+      if (!resp.ok) { fb.textContent = "couldn't verify that one. try again."; fb.style.color = 'var(--ink-light)'; return; }
+      return resp.json();
+    }).then(function(data) {
+      if (!data) return;
+      if (data.valid) {
+        fb.textContent = (data.percent_off || 0) + '% off applied';
+        fb.style.color = 'var(--green)';
+        input.style.borderColor = 'var(--green)';
+      } else {
+        fb.textContent = data.error || "that code didn't hit. double-check the spelling.";
+        fb.style.color = 'var(--ink-light)';
+      }
+    }).catch(function() {
+      fb.textContent = "couldn't verify that one";
+      fb.style.color = 'var(--ink-light)';
+    });
   }
 
   // Check if already subscribed and show appropriate banners
