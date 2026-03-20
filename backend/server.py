@@ -480,7 +480,7 @@ async def response_cache_middleware(request: Request, call_next):
             async for chunk in response.body_iterator:
                 body += chunk if isinstance(chunk, bytes) else chunk.encode()
             save_headers = {k: v for k, v in response.headers.items()
-                           if k.lower() in ("cache-control", "content-type")}
+                           if k.lower() in ("cache-control", "content-type", "content-encoding")}
             _resp_cache_set(cache_key, body, save_headers)
             return Response(content=body, status_code=200,
                            media_type=response.media_type, headers=dict(response.headers))
