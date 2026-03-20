@@ -257,8 +257,9 @@ def fetch_formula_store(position: str = "", sort: str = "newest",
         params = []
 
         if position and position.upper() != "ALL":
-            where_parts.append("position_tags LIKE ?")
-            params.append(f'%"{position.upper()}"%')
+            pos_clean = position.upper().replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+            where_parts.append("position_tags LIKE ? ESCAPE '\\'")
+            params.append(f'%"{pos_clean}"%')
 
         if search:
             search = search[:100]

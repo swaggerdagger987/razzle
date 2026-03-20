@@ -805,25 +805,27 @@ _SCARCITY = {"QB": 0.85, "RB": 1.15, "WR": 1.0, "TE": 0.90}
 
 
 def _age_value(age, position):
-    """Age curve: 100 at/before peak, decays after. Youth gets slight premium."""
+    """Age curve: 100 at/before peak, decays after. Youth gets slight premium.
+    Can exceed 100 for young players — soft-capped in compute_trade_value."""
     if not age or not position:
         return 50.0
     peak = _AGE_PEAKS.get(position, 26)
     decay = _AGE_DECAY.get(position, 0.06)
     if age <= peak:
-        # Youth premium: younger than peak gets a small boost
-        return min(100.0, 100.0 + (peak - age) * 2.0)
+        # Youth premium: younger than peak gets a boost (uncapped)
+        return 100.0 + (peak - age) * 2.0
     else:
         years_past = age - peak
         return max(0.0, 100.0 * math.exp(-decay * years_past * years_past))
 
 
 def _production_value(ppg, position):
-    """Production score: PPR PPG normalized to 0-100 vs positional elite threshold."""
+    """Production score: PPR PPG normalized vs positional elite threshold.
+    Can exceed 100 for elite producers — soft-capped in compute_trade_value."""
     if not ppg or ppg <= 0:
         return 0.0
     elite = _ELITE_PPG.get(position, 16.0)
-    return min(100.0, (ppg / elite) * 100.0)
+    return (ppg / elite) * 100.0
 
 
 def _scarcity_value(position):
@@ -832,14 +834,19 @@ def _scarcity_value(position):
 
 
 def compute_trade_value(ppg, age, position):
-    """Composite trade value on 0-100 scale."""
+    """Composite trade value on 0-100 scale with soft ceiling for top-end spread."""
     prod = _production_value(ppg, position)
     age_v = _age_value(age, position)
     scar = _scarcity_value(position)
     # Weighted composite: production 50%, age 30%, scarcity 20%
     raw = prod * 0.50 + age_v * 0.30 + scar * 0.20
-    # Normalize: scarcity base is ~100, so raw max is ~100
-    return round(min(100.0, max(0.0, raw)), 1)
+    # Soft ceiling: below 90 is linear, above 90 uses log compression
+    # so elite players get meaningful spread instead of clustering at 100
+    if raw <= 90.0:
+        return round(max(0.0, raw), 1)
+    excess = raw - 90.0
+    value = 90.0 + 10.0 * (1.0 - math.exp(-excess / 30.0))
+    return round(value, 1)
 
 
 # ---------------------------------------------------------------------------

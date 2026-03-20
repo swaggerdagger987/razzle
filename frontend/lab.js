@@ -5749,7 +5749,7 @@ function exportCSV() {
   }
 
   // Download
-  const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8;" });
+  const blob = new Blob(["\uFEFF" + lines.join("\n")], { type: "text/csv;charset=utf-8;" });
   const link = document.createElement("a");
   const season = state.universe === "college" ? state.collegeSeason :
                  isProspectView() ? state.draftYear : state.season;
@@ -6052,13 +6052,13 @@ function renderRankingsPNG(players, posLabel, sortLabel) {
 
     // Team
     ctx.fillStyle = t.inkLight;
-    ctx.font = "11px monospace";
+    ctx.font = "11px 'Space Mono', monospace";
     ctx.fillText(p.team || "FA", padX + 320, y + 23);
 
     // Age
     if (p.age) {
       ctx.fillStyle = t.inkLight;
-      ctx.font = "11px monospace";
+      ctx.font = "11px 'Space Mono', monospace";
       ctx.fillText("Age " + (p.age != null ? Math.round(p.age) : "—"), padX + 380, y + 23);
     }
 
@@ -6073,7 +6073,7 @@ function renderRankingsPNG(players, posLabel, sortLabel) {
       ctx.lineWidth = 1.5;
       ctx.strokeRect(badgeX, y + 7, 70, 22);
       ctx.fillStyle = dvsColor;
-      ctx.font = "bold 11px monospace";
+      ctx.font = "bold 11px 'Space Mono', monospace";
       ctx.textAlign = "center";
       ctx.fillText("DVS " + dvs.toFixed(1), badgeX + 35, y + 22);
     }
@@ -6081,7 +6081,7 @@ function renderRankingsPNG(players, posLabel, sortLabel) {
     // Key stat (PPG)
     if (p.ppg != null) {
       ctx.fillStyle = t.ink;
-      ctx.font = "bold 13px monospace";
+      ctx.font = "bold 13px 'Space Mono', monospace";
       ctx.textAlign = "right";
       ctx.fillText(Number(p.ppg).toFixed(1) + " PPG", padX + listW - 16, y + 23);
     }
@@ -6833,7 +6833,7 @@ function exportProfileImage() {
   ctx.font = "bold 28px 'Luckiest Guy', cursive";
   ctx.fillText(name, padX + 64, padY + 28);
   ctx.fillStyle = t.inkLight;
-  ctx.font = "12px monospace";
+  ctx.font = "12px 'Space Mono', monospace";
   ctx.fillText(meta, padX + 64, padY + 48);
 
   // Stats bar
@@ -6858,7 +6858,7 @@ function exportProfileImage() {
     ctx.textAlign = "center";
     ctx.fillText(stats[i].val, x + sbW / 2, sbY + 32);
     ctx.fillStyle = t.inkLight;
-    ctx.font = "10px monospace";
+    ctx.font = "10px 'Space Mono', monospace";
     ctx.fillText(stats[i].label.toUpperCase(), x + sbW / 2, sbY + 52);
   }
 
@@ -6874,7 +6874,7 @@ function exportProfileImage() {
     ctx.strokeRect(padX, tY, W - padX * 2, tableHeaderH);
 
     ctx.fillStyle = t.ink;
-    ctx.font = "bold 10px monospace";
+    ctx.font = "bold 10px 'Space Mono', monospace";
     for (let i = 0; i < headers.length; i++) {
       ctx.textAlign = i === 0 ? "left" : "right";
       const x = i === 0 ? padX + 8 : padX + (i + 1) * colW - 8;
@@ -6896,7 +6896,7 @@ function exportProfileImage() {
       ctx.stroke();
 
       ctx.fillStyle = t.ink;
-      ctx.font = isCareer ? "bold 11px monospace" : "11px monospace";
+      ctx.font = isCareer ? "bold 11px 'Space Mono', monospace" : "11px 'Space Mono', monospace";
       for (let c = 0; c < rows[r].length; c++) {
         ctx.textAlign = c === 0 ? "left" : "right";
         const x = c === 0 ? padX + 8 : padX + (c + 1) * colW - 8;
@@ -7694,7 +7694,7 @@ function exportProspectImage() {
       ctx.textAlign = "left";
       ctx.fillText(label, padX + 8, y + 12);
 
-      ctx.font = "bold 12px monospace";
+      ctx.font = "bold 12px 'Space Mono', monospace";
       ctx.textAlign = "right";
       ctx.fillText(value, padX + 200, y + 12);
 
@@ -7706,7 +7706,7 @@ function exportProspectImage() {
       ctx.fillStyle = barColor;
       ctx.fillRect(barStartX, y + 2, (barWidth / 100) * barMaxW, 14);
 
-      ctx.font = "bold 11px monospace";
+      ctx.font = "bold 11px 'Space Mono', monospace";
       ctx.fillStyle = barColor;
       ctx.textAlign = "right";
       ctx.fillText(pctText, W - padX - 8, y + 14);
@@ -7760,12 +7760,12 @@ function exportProspectImage() {
       ctx.font = "bold 14px 'Space Mono', monospace";
       ctx.fillStyle = t.ink;
       ctx.fillText(compName, padX + 62, y + 20);
-      ctx.font = "10px monospace";
+      ctx.font = "10px 'Space Mono', monospace";
       ctx.fillStyle = t.inkLight;
       ctx.fillText(compMeta, padX + 62, y + 34);
 
       // Stats on right
-      ctx.font = "10px monospace";
+      ctx.font = "10px 'Space Mono', monospace";
       ctx.fillStyle = t.inkMedium;
       ctx.textAlign = "right";
       ctx.fillText(compStats, W - padX - 8, y + 27);
@@ -8029,12 +8029,12 @@ function exportTierImage() {
       ctx.fillText(name.substring(0, 22), cx + 8, cy + 18);
 
       // Meta
-      ctx.font = "10px monospace";
+      ctx.font = "10px 'Space Mono', monospace";
       ctx.fillStyle = t.inkLight;
       ctx.fillText(meta.substring(0, 35), cx + 8, cy + 32);
 
       // Metrics
-      ctx.font = "9px monospace";
+      ctx.font = "9px 'Space Mono', monospace";
       ctx.fillStyle = t.inkMedium;
       ctx.fillText(metrics.substring(0, 45), cx + 8, cy + 48);
 
@@ -8382,7 +8382,7 @@ function exportBigBoardImage() {
       ctx.fillText(p.player_name.substring(0, 22), padX + 44, rowY + 18);
 
       // Meta
-      ctx.font = "10px monospace";
+      ctx.font = "10px 'Space Mono', monospace";
       ctx.fillStyle = t.inkLight;
       const draftInfo = p.draft_round && p.draft_pick ? `Rd ${p.draft_round} #${p.draft_pick}` : "UDFA";
       ctx.fillText(`${p.school || ""} · ${draftInfo}`, padX + 44, rowY + 34);
@@ -8411,13 +8411,13 @@ function exportBigBoardImage() {
       ctx.fill();
 
       // RPS value
-      ctx.font = "bold 14px monospace";
+      ctx.font = "bold 14px 'Space Mono', monospace";
       ctx.fillStyle = t.ink;
       ctx.textAlign = "left";
       ctx.fillText(p.rps.toFixed(1), barX + barW + 8, rowY + 27);
 
       // Key metrics
-      ctx.font = "10px monospace";
+      ctx.font = "10px 'Space Mono', monospace";
       ctx.fillStyle = t.inkMedium;
       ctx.textAlign = "right";
       let metricStr = "";
@@ -8728,7 +8728,7 @@ function exportClassAnalyticsImage() {
     ctx.lineTo(W - PAD_R, gy);
     ctx.stroke();
     ctx.fillStyle = t.inkLight;
-    ctx.font = "11px monospace";
+    ctx.font = "11px 'Space Mono', monospace";
     ctx.textAlign = "right";
     ctx.fillText(v.toString(), PAD_L - 6, gy + 4);
   }
@@ -8750,7 +8750,7 @@ function exportClassAnalyticsImage() {
 
     // Value
     ctx.fillStyle = t.ink;
-    ctx.font = "bold 11px monospace";
+    ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(cls.avg_rps.toFixed(1), x + barW / 2, by - 6);
 
@@ -8818,18 +8818,18 @@ function exportClassAnalyticsImage() {
     ctx.fillText(cls.year.toString(), cx + 10, cy + 24);
 
     // Stats
-    ctx.font = "12px monospace";
+    ctx.font = "12px 'Space Mono', monospace";
     ctx.fillStyle = t.inkMedium;
     ctx.fillText(`${cls.count} prospects  |  Avg RPS: ${cls.avg_rps.toFixed(1)}`, cx + 10, cy + 44);
 
     // Tier counts
-    ctx.font = "11px monospace";
+    ctx.font = "11px 'Space Mono', monospace";
     const tierText = `E:${cls.tiers.elite} P:${cls.tiers.premium} S:${cls.tiers.solid} F:${cls.tiers.flier}`;
     ctx.fillText(tierText, cx + 10, cy + 62);
 
     // Top prospect
     if (cls.top_prospect) {
-      ctx.font = "10px monospace";
+      ctx.font = "10px 'Space Mono', monospace";
       ctx.fillStyle = t.inkLight;
       ctx.fillText("Top:", cx + 10, cy + 82);
       ctx.fillStyle = t.ink;
@@ -9247,7 +9247,7 @@ function exportTradeValuesPNG() {
 
       // Team + age
       ctx.fillStyle = t.inkLight;
-      ctx.font = "10px monospace";
+      ctx.font = "10px 'Space Mono', monospace";
       ctx.fillText((p.team || "FA") + (p.age ? "  Age " + Math.round(p.age) : ""), padX + 300, ry + 18);
 
       // Trade value bar
@@ -9266,7 +9266,7 @@ function exportTradeValuesPNG() {
 
       // Trade value number
       ctx.fillStyle = t.ink;
-      ctx.font = "bold 13px monospace";
+      ctx.font = "bold 13px 'Space Mono', monospace";
       ctx.textAlign = "right";
       ctx.fillText(String(p._tv), W - padX - 8, ry + 18);
     }
@@ -10859,7 +10859,7 @@ function exportTradeAnalyzerPNG() {
 
     // Total
     const total = players.reduce((s, p) => s + (p.trade_value || 0), 0);
-    ctx.font = "bold 18px monospace";
+    ctx.font = "bold 18px 'Space Mono', monospace";
     ctx.fillStyle = t.ink;
     ctx.textAlign = "right";
     ctx.fillText(String(total), x + sideW - 16, topY + 32);
@@ -10900,7 +10900,7 @@ function exportTradeAnalyzerPNG() {
 
       // Sub-text
       ctx.fillStyle = t.inkLight;
-      ctx.font = "11px monospace";
+      ctx.font = "11px 'Space Mono', monospace";
       if (isPick) {
         ctx.fillText("Pick " + p.pick + " of 12", x + 62, cy + 37);
       } else {
@@ -10909,7 +10909,7 @@ function exportTradeAnalyzerPNG() {
 
       // Value
       ctx.fillStyle = pc;
-      ctx.font = "bold 18px monospace";
+      ctx.font = "bold 18px 'Space Mono', monospace";
       ctx.textAlign = "right";
       ctx.fillText(String(p.trade_value || 0), x + sideW - 20, cy + 28);
     }
@@ -10972,7 +10972,7 @@ function exportTradeAnalyzerPNG() {
   }
 
   // Bar labels
-  ctx.font = "bold 13px monospace";
+  ctx.font = "bold 13px 'Space Mono', monospace";
   ctx.fillStyle = t.ink;
   ctx.textAlign = "right";
   ctx.fillText(String(giveTotal), giveX + sideW, barY - 6);
@@ -11025,7 +11025,7 @@ function exportTradeAnalyzerPNG() {
 
   // Pct label
   const pctLabel = pctDiff <= 10 ? "Even value" : (diff > 0 ? "+" + pctDiff + "% in your favor" : "-" + pctDiff + "% against you");
-  ctx.font = "13px monospace";
+  ctx.font = "13px 'Space Mono', monospace";
   ctx.fillStyle = t.inkMedium;
   ctx.textAlign = "center";
   ctx.fillText(pctLabel, W / 2, 540);
@@ -11146,7 +11146,7 @@ function _taDrawPickChart() {
     ctx.lineTo(W - pad.right, y);
     ctx.stroke();
     ctx.fillStyle = t.inkLight;
-    ctx.font = "10px monospace";
+    ctx.font = "10px 'Space Mono', monospace";
     ctx.textAlign = "right";
     ctx.fillText(Math.round(maxVal * (1 - i / 4)), pad.left - 6, y + 4);
   }
@@ -11188,7 +11188,7 @@ function _taDrawPickChart() {
       ctx.stroke();
       // Label
       ctx.fillStyle = t.ink;
-      ctx.font = "bold 10px monospace";
+      ctx.font = "bold 10px 'Space Mono', monospace";
       ctx.textAlign = "center";
       ctx.fillText((pk.pick_label || "").split(" ")[1] || "", x, y - 10);
     }
@@ -12172,7 +12172,7 @@ function exportCompsImage() {
 
   // Subtitle
   ctx.fillStyle = t.inkLight;
-  ctx.font = "12px monospace";
+  ctx.font = "12px 'Space Mono', monospace";
   ctx.fillText(`${pos} · ${player.team || "FA"} · ${season} Season · ${player.ppg} PPR PPG`, padX, padY + 48);
 
   // Position badge
@@ -12228,7 +12228,7 @@ function exportCompsImage() {
     ctx.font = "bold 18px 'Luckiest Guy', cursive";
     ctx.fillText(c.full_name, padX + 52, cardY + 28);
     ctx.fillStyle = t.inkLight;
-    ctx.font = "11px monospace";
+    ctx.font = "11px 'Space Mono', monospace";
     ctx.fillText(`${c.team || "FA"} · ${c.games}G · ${c.ppg} PPG`, padX + 52, cardY + 46);
 
     // Similarity score
@@ -12238,12 +12238,12 @@ function exportCompsImage() {
     ctx.textAlign = "right";
     ctx.fillText(`${c.similarity}%`, W - padX - 16, cardY + 35);
     ctx.fillStyle = t.inkLight;
-    ctx.font = "bold 10px monospace";
+    ctx.font = "bold 10px 'Space Mono', monospace";
     ctx.fillText("MATCH", W - padX - 16, cardY + 50);
 
     // Top matching stats
     ctx.textAlign = "left";
-    ctx.font = "11px monospace";
+    ctx.font = "11px 'Space Mono', monospace";
     const matchX = padX + 320;
     if (c.matching_stats) {
       for (let j = 0; j < Math.min(3, c.matching_stats.length); j++) {
@@ -12267,7 +12267,7 @@ function exportCompsImage() {
   ctx.lineWidth = 2;
   ctx.strokeRect(padX, tableY, W - padX * 2, 28);
   ctx.fillStyle = t.ink;
-  ctx.font = "bold 11px monospace";
+  ctx.font = "bold 11px 'Space Mono', monospace";
   ctx.textAlign = "left";
   ctx.fillText("Stat", padX + 8, tableY + 18);
   ctx.fillText((player.full_name || '').split(" ").pop(), padX + colW + 8, tableY + 18);
@@ -12282,11 +12282,11 @@ function exportCompsImage() {
     ctx.fillRect(padX, rowY, W - padX * 2, tableRowH);
 
     ctx.fillStyle = t.ink;
-    ctx.font = "bold 11px monospace";
+    ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.textAlign = "left";
     ctx.fillText(stat_labels[stat_keys[r]] || stat_keys[r], padX + 8, rowY + 16);
 
-    ctx.font = "11px monospace";
+    ctx.font = "11px 'Space Mono', monospace";
     ctx.fillStyle = pColor;
     const tv = target_stats[stat_keys[r]] ? target_stats[stat_keys[r]].value : "—";
     ctx.fillText(String(tv), padX + colW + 8, rowY + 16);

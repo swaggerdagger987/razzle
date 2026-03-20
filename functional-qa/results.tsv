@@ -95,3 +95,14 @@ smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
 37	OK	-	-	-	pass	TD regression: td_diff correct (actual-expected, 6/6 match exact)	100	2026-03-20T13:50
 37	OK	-	-	-	pass	TD regression: expected=opps*(avg_rate/100) verified (Ward 27.2≈27.3, Stafford 29.4≈29.5)	100	2026-03-20T13:50
 37	OK	-	-	-	pass	TD regression: position TD rates sensible (QB 4.7%, RB 3.3%, WR 4.9%, TE 5.8%)	95	2026-03-20T13:50
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	P0	backend/live_data/players.py	-	_fetch_screener_uncached	ticket	smoke:week_filter — Week 1 player has 21 games — week filter not working
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams

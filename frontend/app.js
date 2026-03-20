@@ -903,6 +903,11 @@ function signOut() {
   localStorage.removeItem("razzle_store_my_published");
   localStorage.removeItem("razzle_store_username");
   localStorage.removeItem("razzle_agent_config");
+  localStorage.removeItem("razzle_sleeper_user");
+  localStorage.removeItem("razzle_sleeper_user_id");
+  localStorage.removeItem("razzle_watchlist");
+  localStorage.removeItem("razzle_player_tags");
+  localStorage.removeItem("razzle_player_notes");
   updateAuthUI(null);
 }
 
