@@ -42,16 +42,16 @@
     {
       "@type": "Offer",
       "name": "Pro",
-      "price": "9.99",
+      "price": "79.99",
       "priceCurrency": "USD",
-      "billingIncrement": "P1M"
+      "billingIncrement": "P1Y"
     },
     {
       "@type": "Offer",
       "name": "Elite",
-      "price": "19.99",
+      "price": "149.99",
       "priceCurrency": "USD",
-      "billingIncrement": "P1M"
+      "billingIncrement": "P1Y"
     }
   ],
   "creator": {
@@ -270,14 +270,14 @@
   }
 
   .demo-card {
-    background: var(--bg-ink);
+    background: #1a110a;
     border: 3px solid var(--ink);
     border-radius: 12px;
     box-shadow: 4px 4px 0 var(--ink);
     padding: 20px;
     font-family: var(--font-mono);
     font-size: 13px;
-    color: var(--ink-faint);
+    color: #c4b5a5;
   }
 
   .demo-card .agent-name {
@@ -612,13 +612,13 @@
       <div class="pricing-note">or $9.99/month</div>
       <ul class="pricing-list">
         <li>Everything free, plus:</li>
-        <li class="highlight">6 AI agents (bring your own key)</li>
+        <li class="highlight">6 AI agents, 20 queries/day (BYOK)</li>
         <li>Full Bureau deep-dive</li>
-        <li>Manager behavioral profiles</li>
-        <li>Trade strategies + FAAB intel</li>
+        <li>Manager profiles + trade finder</li>
         <li>Championship probability</li>
         <li>Unlimited formulas + cloud sync</li>
         <li>CSV export + compare up to 4</li>
+        <li class="highlight">7-day free trial</li>
       </ul>
       <button id="homeProCta" class="btn-chunky btn-primary" style="font-size:13px; width:100%;" onclick="var u=null;try{u=JSON.parse(localStorage.getItem('razzle_user'))}catch(e){}if(!u){if(typeof openAuthModal==='function')openAuthModal();else window.location='/pricing.html'}else if(typeof startCheckout==='function'){startCheckout('pro_year')}else{window.location='/pricing.html'}">Get Pro</button>
     </div>

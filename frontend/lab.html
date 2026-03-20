@@ -3087,7 +3087,7 @@
 
 <!-- NAV -->
 <nav class="topnav" aria-label="Main navigation">
-  <button class="lab-menu-toggle btn-chunky" onclick="document.getElementById('labSidebar').classList.toggle('open')" aria-label="Toggle sidebar" style="font-size:18px; padding:4px 10px; line-height:1;">&#9776;</button>
+  <button class="lab-menu-toggle btn-chunky" aria-label="Toggle sidebar" style="font-size:18px; padding:4px 10px; line-height:1;">&#9776;</button>
   <a href="/" class="logo">
     <div class="logo-mark">🐯</div>
     <div class="logo-text">Razzle<span class="accent">.lol</span></div>
@@ -3261,12 +3261,12 @@
 
     <div class="toolbar-divider"></div>
 
-    <input type="search" class="input-chunky search-box" id="searchInput" placeholder="search players..." autocomplete="off">
+    <input type="search" class="input-chunky search-box" id="searchInput" placeholder="search players..." autocomplete="off" aria-label="Search players">
 
     <div class="toolbar-divider hide-mobile"></div>
 
     <div class="toolbar-section">
-      <select class="select-chunky" id="seasonSelect"></select>
+      <select class="select-chunky" id="seasonSelect" aria-label="Season"></select>
       <select class="select-chunky" id="weekSelect" style="display:none;" title="Filter by week"></select>
       <select class="select-chunky" id="presetSelect" onchange="applyPresetFromToolbar(this.value)" title="Quick column preset">
         <option value="">Preset...</option>
@@ -3463,7 +3463,7 @@
         <option value="lt"><</option>
         <option value="eq">=</option>
       </select>
-      <input type="number" class="input-chunky" id="filterValue" placeholder="0" style="flex:1">
+      <input type="number" class="input-chunky" id="filterValue" placeholder="0" style="flex:1" onkeydown="if(event.key==='Enter'){event.preventDefault();addFilter();}">
     </div>
     <div class="filter-modal-actions">
       <button class="btn-chunky" onclick="closeFilterModal()">Cancel</button>
