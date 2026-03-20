@@ -550,3 +550,35 @@ re-audit-41	P0	analytics.py	-	fetch_consistency	open	re-audit: FUNC-012 L2 — c
 regression-check	OK	-	-	-	pass	session10: Ship Loop Phases B-E — 0 regressions, all pages 0 JS errors, visual design consistent	100	2026-03-20T17:17
 regression-check	OK	-	-	-	pass	session10: URL state round-trip verified (pos=RB&season=2024 → 135 RBs correct)	100	2026-03-20T17:17
 regression-check	OK	-	-	-	pass	session10: og:image PNG verified, Pricing nav link on all pages, quick-search works	100	2026-03-20T17:17
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke-local	OK	-	-	-	pass	session11:smoke — 11/11 passed on local (Ship Loop code). week_filter=17gp (was 21gp)	100	2026-03-20T17:37
+re-audit-1	OK	players.py	123	_fetch_screener_uncached	pass	session11: FUNC-012 L2 CODE FIXED. players.py has 20 season_type filters (was 0). Local: Lamar=17 GP/430.4 PPR	100	2026-03-20T17:40
+re-audit-1	OK	players.py	-	Barkley rush yds	pass	session11: FUNC-012 L2 CODE FIXED. Barkley=2005 rush yds (was 2504, +25% inflation eliminated)	100	2026-03-20T17:40
+re-audit-15	OK	players.py	1427	_fetch_game_log	pass	session11: FUNC-012 L2 CODE FIXED. Lamar game log=17 weeks (1-18), total PPR=430.4. Playoff weeks excluded.	100	2026-03-20T17:41
+re-audit-18	OK	dynasty.py	196	dynasty_rankings	pass	session11: FUNC-012 L2 CODE FIXED. dynasty.py has 15 filters (was 0). Chase=17 GP, Barkley=16 GP, Gibbs=17 GP	100	2026-03-20T17:42
+re-audit-27	OK	analytics.py	1341	fetch_weekly_heatmap	pass	session11: FUNC-012 L2 CODE FIXED. Weekly heatmap returns weeks 1-18 (was 1-22). 4 filters added.	100	2026-03-20T17:43
+re-audit-62	OK	analytics.py	379	fetch_stat_leaders	pass	session11: FUNC-012 L2 CODE FIXED. Stat Leaders: Lamar=17 GP, Burrow=17 GP. 4 query branches filtered.	100	2026-03-20T17:43
+code-audit	OK	tools.py	-	all functions	pass	session11: tools.py has 29 season_type filters (was 5). cheat_sheet, streaks, waivers, stacks, draft_class all covered.	100	2026-03-20T17:44
+code-audit	OK	dashboards.py	-	all functions	pass	session11: dashboards.py has 16 season_type filters. core.py has 3. All modules verified complete.	100	2026-03-20T17:44
+prod-check	P1	-	-	deployment	open	session11: Production NOT YET DEPLOYED. Prod still shows Lamar=19 GP, Barkley=2504 rush yds. Code fix needs deploy.	100	2026-03-20T17:38
