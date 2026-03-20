@@ -4,6 +4,7 @@ Extracted from _monolith.py in Phase 27 Task 3.
 """
 
 import logging
+import re
 import statistics
 
 from ..db import get_db
@@ -128,7 +129,8 @@ def fetch_players(
                 params.append(_season)
 
             if search:
-                escaped_s = search.lower().replace(" ", "").replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+                escaped_s = re.sub(r"[^a-z0-9]", "", search.lower())
+                escaped_s = escaped_s.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
                 where.append("p.search_name LIKE ? ESCAPE '\\'")
                 params.append(f"%{escaped_s}%")
 
@@ -252,7 +254,8 @@ def _fetch_screener_uncached(body):
             params.append(week)
 
         if search:
-            escaped_s = search.lower().replace(" ", "").replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+            escaped_s = re.sub(r"[^a-z0-9]", "", search.lower())
+            escaped_s = escaped_s.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
             where.append("p.search_name LIKE ? ESCAPE '\\'")
             params.append(f"%{escaped_s}%")
 
@@ -685,7 +688,7 @@ def _fetch_player_profile_uncached(player_id):
         name = player.get("full_name", "")
         pos = player.get("position", "")
         if name and pos:
-            search_name = name.lower().replace(" ", "")
+            search_name = re.sub(r"[^a-z]", "", name.lower())
             combine_row = conn.execute("""
                 SELECT c.*, d.career_av, d.draft_av, d.allpro, d.probowls, d.seasons_started
                 FROM combine_data c
