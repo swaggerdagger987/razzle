@@ -13,6 +13,18 @@ The database file `data/terminal.db` uses WAL journal mode locally. Uploading it
 
 ---
 
+## Phase: Hotfix — Player name font in screener table
+
+**PRIORITY: FIX NOW. This was ticketed before but not fully fixed.** Player names in the main screener table (lab.html / lab.js) are NOT using the same font as the navigation links. The nav uses Space Mono 13px bold 700 — player names in the screener table cells must match exactly. Also audit ALL Lab panel tables (lab-panels.js / lab-panels.css) — every single player name must be Space Mono, bold 700, 13-14px. No exceptions. No Luckiest Guy on player names. No sans-serif fallbacks. No thin weight.
+
+### Task 1: Fix player name font in main screener table
+**Accept when**: Player name cells in the main screener table (rendered by lab.js) use `font-family: var(--font-mono)` (Space Mono), `font-weight: 700`, size 13-14px. Check the actual CSS class applied to player name `<td>` or `<span>` elements in the screener. If the font is set inline in JS during rendering, fix it there. If it's a CSS class, fix the class. View razzle.lol/lab.html and visually confirm player names look identical to the nav links. Grep lab.js for any `font-family` references on player name elements.
+**Status**: PENDING
+
+### Task 2: Audit all Lab panel player name fonts
+**Accept when**: Every `*-player-name` class in lab-panels.css uses `font-family: var(--font-mono); font-weight: 700;`. Grep lab-panels.css for `player-name` — every match must have `var(--font-mono)` and `700`. Also grep lab-panels.js for any inline `fontFamily` or `font-family` on player names and fix to Space Mono bold. Zero exceptions across all 60+ panels.
+**Status**: PENDING
+
 ---
 
 ## Phase: Weekly Data Filter — Screener + All Panels

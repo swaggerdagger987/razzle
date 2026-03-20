@@ -297,7 +297,7 @@ def _enrich_with_epa_per_play(items):
     return items
 
 
-def _enrich_with_rate_metrics(conn, items, season=None, career_mode=False):
+def _enrich_with_rate_metrics(conn, items, season=None, career_mode=False, week=0):
     """Fetch average rate metrics from player_week_metrics for returned players."""
     if not items:
         return items
@@ -315,6 +315,11 @@ def _enrich_with_rate_metrics(conn, items, season=None, career_mode=False):
     if not career_mode and season:
         where += " AND m.season = ?"
         params.append(season)
+
+    week = int(week) if week else 0
+    if week > 0 and not career_mode:
+        where += " AND m.week = ?"
+        params.append(week)
 
     rows = conn.execute(f"""
         SELECT m.player_id, m.stat_key, AVG(m.stat_value) as avg_val
@@ -549,7 +554,7 @@ def _enrich_with_pbp_stats(conn, items, season=None, career_mode=False):
     return items
 
 
-def _enrich_with_team_shares(conn, items, season=None, career_mode=False):
+def _enrich_with_team_shares(conn, items, season=None, career_mode=False, week=0):
     """Compute team-relative share stats: dominator rating, rush share."""
     if not items:
         return items
@@ -591,6 +596,8 @@ def _enrich_with_team_shares(conn, items, season=None, career_mode=False):
         if not s:
             row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
             s = row[0] if row and row[0] else _current_nfl_season()
+        week = int(week) if week else 0
+        week_clause = " AND s.week = ?" if week > 0 else ""
         team_query = f"""
             SELECT p.team,
                    SUM(s.receiving_yards) as team_rec_yds,
@@ -598,10 +605,11 @@ def _enrich_with_team_shares(conn, items, season=None, career_mode=False):
                    SUM(s.carries) as team_carries
             FROM players p
             JOIN player_week_stats s ON p.player_id = s.player_id
-            WHERE p.team IN ({team_placeholders}) AND s.season = ?
+            WHERE p.team IN ({team_placeholders}) AND s.season = ?{week_clause}
             GROUP BY p.team
         """
-        team_rows = conn.execute(team_query, team_list + [s]).fetchall()
+        team_params = team_list + [s] + ([week] if week > 0 else [])
+        team_rows = conn.execute(team_query, team_params).fetchall()
         team_map = {}
         for r in team_rows:
             team_map[r[0]] = {"rec_yds": r[1] or 0, "rec_tds": r[2] or 0, "carries": r[3] or 0}

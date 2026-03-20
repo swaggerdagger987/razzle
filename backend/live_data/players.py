@@ -203,6 +203,7 @@ def _fetch_screener_uncached(body):
         positions = body.get("positions", [])
         team = body.get("team", "")
         season = body.get("season", 0)
+        week = body.get("week", 0)
         sort_key = body.get("sort_key", "fantasy_points_ppr")
         sort_dir = body.get("sort_direction", "desc")
         limit = min(body.get("limit", 200), 1000)
@@ -237,6 +238,12 @@ def _fetch_screener_uncached(body):
         else:
             where.append("s.season = ?")
             params.append(season)
+
+        # Week filter: 0 = all weeks (season aggregate), >0 = specific week
+        week = int(week) if week else 0
+        if week > 0 and not career_mode:
+            where.append("s.week = ?")
+            params.append(week)
 
         if search:
             escaped_s = search.lower().replace(" ", "").replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
@@ -430,12 +437,12 @@ def _fetch_screener_uncached(body):
 
         items = [dict(r) for r in rows]
         _enrich_with_derived_stats(items)
-        _enrich_with_rate_metrics(conn, items, season=season, career_mode=career_mode)
+        _enrich_with_rate_metrics(conn, items, season=season, career_mode=career_mode, week=week)
         _enrich_with_epa_per_play(items)
         _enrich_with_breakout(conn, items, season=season, career_mode=career_mode)
         _enrich_with_dynasty_value(items)
-        _enrich_with_team_shares(conn, items, season=season, career_mode=career_mode)
-        _enrich_with_pbp_stats(conn, items, season=season, career_mode=career_mode)
+        _enrich_with_team_shares(conn, items, season=season, career_mode=career_mode, week=week)
+        _enrich_with_pbp_stats(conn, items, season=season, career_mode=career_mode, week=week)
 
         # Apply post-query filters for derived stats
         if post_filters:

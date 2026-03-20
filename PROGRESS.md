@@ -869,3 +869,52 @@ All 59 tests pass. All 11 JS files syntax-clean. 0 remaining issues found.
 - Bureau manager profiling multi-season crawl (1 free, 5 Pro) is NOT season data gating — it's Bureau depth analysis (a Pro feature). Left unchanged.
 - Filter limits (3 free), formula limits (3 free), CSV export (Pro), compare limits (2 free) all stay gated. Only season/data access was freed.
 - No backend changes needed — gating was purely frontend UI.
+
+---
+
+## Quality Audit: 5-Agent Parallel Sweep (Mar 19)
+
+**Goal**: Comprehensive multi-agent quality audit across all files. XSS, crash bugs, design violations, brand voice.
+
+### XSS Fixes (15 total)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | 11 unescaped player/team/school names | lab.js | prospect comps, tier view, big board, college profiles, config names |
+| 2 | 3 headshot URLs: escapeHtml→escapeAttr | lab-panels.js | usage trends, YoY, air yards panels |
+| 3 | markdownToHtml escape before markdown | warroom.js | LLM output could inject <script> tags |
+| 4 | Unescaped position in draft tracker | lab-panels.js | Raw p.position in innerHTML |
+
+### Crash Bug Fixes (12 total)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | 8 division-by-zero guards | backend (5 files) | analytics, dynasty, players, prospects, tools — all `/ len(list)` without empty guards |
+| 2 | parseFloat null guard (opportunity_pct, production_pct) | lab-panels.js | NaN on null values |
+| 3 | p.cov null guard | lab-panels.js | NaN multiplication |
+| 4 | d.summary null guard | lab-panels.js | Crash on missing API key |
+
+### Robustness Fixes (8 total)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | resp.ok on rateFormula, installFormula | formula-store.js | Could parse error JSON |
+| 2 | resp.ok on startCheckout, validatePromoCode, openManageSubscription | app.js | Could crash on non-JSON errors |
+| 3 | Free user LLM gate (runSingleAgent, runAllAgents) | warroom.js | Blocked free logged-in users from callFreeLLM |
+
+### Design + Brand Voice (4 total)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | h2h position row border 1px→2px | league-intel.html | Design guide: no 1px borders on components |
+| 2 | SOS card duplicate style attributes | league-intel.html | isUser + isBlurred both set style=, only last applies |
+| 3 | 3 generic error messages replaced | league-intel.html, pricing.html | Brand voice personality |
+
+### Deferred (known limitations)
+- Canvas hardcoded colors (70+ instances across 8 files) — getComputedStyle refactor deferred to post-launch
+- lab.html:1155 table td 1px border — intentional for data density (prior decision)
+
+### Verified Clean
+- All 11 JS files syntax clean
+- All 16 Python files compile clean
+- 59/59 tests pass
