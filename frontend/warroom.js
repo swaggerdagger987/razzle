@@ -1366,7 +1366,7 @@ function loadAgentConfig() {
 }
 
 function saveAgentConfig(cfg) {
-  localStorage.setItem(AGENT_CONFIG_KEY, JSON.stringify(cfg));
+  try { localStorage.setItem(AGENT_CONFIG_KEY, JSON.stringify(cfg)); } catch (_) {}
 }
 
 function getAgentSettings(agentId) {
