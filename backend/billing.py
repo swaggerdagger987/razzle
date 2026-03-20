@@ -396,6 +396,13 @@ def _handle_checkout_completed(session):
                 logger.error(f"Checkout completed but can't find user for customer {customer_id}")
                 return
 
+    # Validate user_id is numeric before DB operations
+    try:
+        _uid = int(user_id)
+    except (TypeError, ValueError):
+        logger.error(f"Invalid user_id in checkout metadata: {user_id!r}")
+        return
+
     # Check if subscription has a trial
     trial_end = None
     is_trial = False
@@ -410,11 +417,11 @@ def _handle_checkout_completed(session):
 
     with auth_module.get_users_db() as conn:
         # Update user plan
-        conn.execute("UPDATE users SET plan = ? WHERE id = ?", (plan_tier, int(user_id)))
+        conn.execute("UPDATE users SET plan = ? WHERE id = ?", (plan_tier, _uid))
 
         # Upsert subscription record
         existing = conn.execute(
-            "SELECT id FROM subscriptions WHERE user_id = ?", (int(user_id),)
+            "SELECT id FROM subscriptions WHERE user_id = ?", (_uid,)
         ).fetchone()
         status = "trialing" if is_trial else "active"
         if existing:
@@ -424,12 +431,12 @@ def _handle_checkout_completed(session):
                     plan = ?, status = ?, trial_used = 1, trial_end = ?,
                     updated_at = CURRENT_TIMESTAMP
                 WHERE user_id = ?
-            """, (customer_id, subscription_id, plan_tier, status, trial_end, int(user_id)))
+            """, (customer_id, subscription_id, plan_tier, status, trial_end, _uid))
         else:
             conn.execute("""
                 INSERT INTO subscriptions (user_id, stripe_customer_id, stripe_subscription_id, plan, status, trial_used, trial_end)
                 VALUES (?, ?, ?, ?, ?, 1, ?)
-            """, (int(user_id), customer_id, subscription_id, plan_tier, status, trial_end))
+            """, (_uid, customer_id, subscription_id, plan_tier, status, trial_end))
 
         conn.commit()
     logger.info(f"User {user_id} upgraded to {plan_tier} (subscription {subscription_id}, trial={is_trial})")

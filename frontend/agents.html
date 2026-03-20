@@ -1824,8 +1824,8 @@
       <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:24px 24px; text-align:left; min-width:220px; max-width:300px; flex:1;">
         <div style="text-align:center; margin-bottom:12px;">
           <div style="font-family:var(--font-display); font-size:18px;">Pro</div>
-          <div style="font-family:var(--font-display); font-size:28px; color:var(--orange);">$9.99<span style="font-family:var(--font-mono); font-size:13px; color:var(--ink-light);">/mo</span></div>
-          <div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">or $79.99/year</div>
+          <div style="font-family:var(--font-display); font-size:28px; color:var(--orange);">$79.99<span style="font-family:var(--font-mono); font-size:13px; color:var(--ink-light);">/year</span></div>
+          <div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">or $9.99/month</div>
         </div>
         <ul style="font-family:var(--font-mono); font-size:11px; padding-left:16px; line-height:1.9; color:var(--ink-medium); margin-bottom:16px;">
           <li>All 6 agents with league context</li>
@@ -1835,7 +1835,7 @@
           <li>CSV export + Formula Store</li>
         </ul>
         <div style="text-align:center;">
-          <button id="agentsProCta" class="btn-chunky btn-primary" style="font-size:12px; width:100%;" onclick="if(typeof startCheckout==='function'){startCheckout('pro_month')}else{if(typeof openAuthModal==='function') openAuthModal()}">Get Pro</button>
+          <button id="agentsProCta" class="btn-chunky btn-primary" style="font-size:12px; width:100%;" onclick="if(typeof startCheckout==='function'){startCheckout('pro_year')}else{if(typeof openAuthModal==='function') openAuthModal()}">Get Pro</button>
         </div>
       </div>
 
@@ -1844,8 +1844,8 @@
         <div style="position:absolute; top:-11px; left:50%; transform:translateX(-50%) rotate(-2deg); background:var(--orange); color:var(--bg); font-family:var(--font-mono); font-size:10px; padding:2px 12px; border-radius:20px; border:2px solid var(--ink); box-shadow:2px 2px 0 var(--ink);">recommended</div>
         <div style="text-align:center; margin-bottom:12px;">
           <div style="font-family:var(--font-display); font-size:18px;">Elite</div>
-          <div style="font-family:var(--font-display); font-size:28px; color:var(--orange);">$19.99<span style="font-family:var(--font-mono); font-size:13px; color:var(--ink-light);">/mo</span></div>
-          <div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">or $149.99/year</div>
+          <div style="font-family:var(--font-display); font-size:28px; color:var(--orange);">$149.99<span style="font-family:var(--font-mono); font-size:13px; color:var(--ink-light);">/year</span></div>
+          <div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">or $19.99/month</div>
         </div>
         <ul style="font-family:var(--font-mono); font-size:11px; padding-left:16px; line-height:1.9; color:var(--ink-medium); margin-bottom:16px;">
           <li>Everything in Pro, plus:</li>
@@ -1855,7 +1855,7 @@
           <li>Weekly personalized briefings</li>
         </ul>
         <div style="text-align:center;">
-          <button id="agentsEliteCta" class="btn-chunky btn-primary" style="font-size:12px; width:100%;" onclick="if(typeof startCheckout==='function'){startCheckout('elite_month')}else{if(typeof openAuthModal==='function') openAuthModal()}">Get Elite</button>
+          <button id="agentsEliteCta" class="btn-chunky btn-primary" style="font-size:12px; width:100%;" onclick="if(typeof startCheckout==='function'){startCheckout('elite_year')}else{if(typeof openAuthModal==='function') openAuthModal()}">Get Elite</button>
         </div>
       </div>
     </div>

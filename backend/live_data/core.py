@@ -328,7 +328,7 @@ def _enrich_with_rate_metrics(conn, items, season=None, career_mode=False, week=
         where += " AND m.season = ?"
         params.append(season)
 
-    week = int(week) if week else 0
+    week = _safe_int(week)
     if week > 0 and not career_mode:
         where += " AND m.week = ?"
         params.append(week)
@@ -604,11 +604,11 @@ def _enrich_with_team_shares(conn, items, season=None, career_mode=False, week=0
         for r in team_rows:
             team_map[r[0]] = {"rec_yds": r[1] or 0, "rec_tds": r[2] or 0, "carries": r[3] or 0}
     else:
-        s = int(season) if season else 0
+        s = _safe_int(season)
         if not s:
             row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
             s = row[0] if row and row[0] else _current_nfl_season()
-        week = int(week) if week else 0
+        week = _safe_int(week)
         week_clause = " AND s.week = ?" if week > 0 else ""
         team_query = f"""
             SELECT p.team,

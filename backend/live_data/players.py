@@ -84,7 +84,7 @@ def fetch_players(
             _career_mode = str(season).lower() == "career"
             _season = season
             if not _career_mode:
-                _season = int(_season) if _season else 0
+                _season = _safe_int(_season)
                 if not _season:
                     row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
                     _season = row[0] if row and row[0] else _current_nfl_season()
