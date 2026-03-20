@@ -2422,7 +2422,8 @@ def trade_pick_values(year: int = 0, rounds: int = 4, teams: int = 12):
     """Return dynasty draft pick trade values."""
     if year <= 0:
         year = live_data._current_draft_year()
-    year = max(2024, min(2030, year))
+    current_yr = live_data._current_draft_year()
+    year = max(current_yr - 2, min(current_yr + 4, year))
     rounds = max(1, min(5, rounds))
     teams = max(4, min(16, teams))
     return {"picks": live_data.fetch_pick_values(year, rounds, teams)}
