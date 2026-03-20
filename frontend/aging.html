@@ -600,7 +600,7 @@
       ctx.font = '11px "Space Mono", monospace';
       ctx.fillStyle = t.ink;
       ctx.textAlign = 'center';
-      var nameParts = p.name.split(' ');
+      var nameParts = (p.name || '').split(' ');
       var nameShort = nameParts.length > 1 ? nameParts[nameParts.length - 1] : p.name;
       ctx.fillText(nameShort, lx, ly - 8);
     });

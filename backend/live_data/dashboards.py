@@ -1965,7 +1965,7 @@ def fetch_stat_correlations(season=None, position=None, x_stat=None, y_stat=None
             params = []
             if season:
                 where.append("s.season = ?")
-                params.append(int(season))
+                params.append(_safe_int(season))
             if position and position.upper() in FANTASY_POSITIONS:
                 where.append("p.position = ?")
                 params.append(position.upper())

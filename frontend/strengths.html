@@ -709,13 +709,13 @@
     html += '</div></div>';
 
     // Strengths / Weaknesses columns
-    if (data.strengths.length || data.weaknesses.length) {
+    if ((data.strengths || []).length || (data.weaknesses || []).length) {
       html += '<div class="sw-columns">';
 
       // Strengths
       html += '<div>';
       html += '<div class="sw-col-header strengths">&#x1F4AA; Strengths</div>';
-      data.strengths.forEach(function(s, i) {
+      (data.strengths || []).forEach(function(s, i) {
         html += buildStatCard(s, i + 1);
       });
       html += '</div>';
@@ -723,7 +723,7 @@
       // Weaknesses
       html += '<div>';
       html += '<div class="sw-col-header weaknesses">&#x26A0;&#xFE0F; Weaknesses</div>';
-      data.weaknesses.forEach(function(w, i) {
+      (data.weaknesses || []).forEach(function(w, i) {
         html += buildStatCard(w, i + 1);
       });
       html += '</div>';

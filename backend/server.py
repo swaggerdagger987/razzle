@@ -460,7 +460,7 @@ _RESP_CACHEABLE_PREFIXES = (
     "/api/dynasty-dashboard", "/api/dynasty-rankings", "/api/trade-value-chart",
     "/api/stat-leaders", "/api/breakout-candidates", "/api/matchup-heatmap",
     "/api/aging-curves", "/api/weekly-heatmap", "/api/efficiency-rankings",
-    "/api/consistency-rankings", "/api/health",
+    "/api/consistency-rankings",
 )
 
 
@@ -1860,49 +1860,49 @@ def college_filter_options():
 @app.get("/api/college/breakouts")
 def college_breakouts(season: int = None, position: str = "", limit: int = 50):
     return live_data.fetch_college_breakouts(
-        season=season, position=position or None, limit=limit,
+        season=season, position=position or None, limit=max(1, min(limit, 200)),
     )
 
 
 @app.get("/api/college/efficiency")
 def college_efficiency(season: int = None, position: str = "", limit: int = 30):
     return live_data.fetch_college_efficiency(
-        season=season, position=position or None, limit=limit,
+        season=season, position=position or None, limit=max(1, min(limit, 200)),
     )
 
 
 @app.get("/api/college/leaders")
 def college_leaders(season: int = None, position: str = "", limit: int = 10):
     return live_data.fetch_college_leaders(
-        season=season, position=position or None, limit=limit,
+        season=season, position=position or None, limit=max(1, min(limit, 200)),
     )
 
 
 @app.get("/api/college/trends")
 def college_trends(season: int = None, position: str = "", limit: int = 30):
     return live_data.fetch_college_trends(
-        season=season, position=position or None, limit=limit,
+        season=season, position=position or None, limit=max(1, min(limit, 200)),
     )
 
 
 @app.get("/api/college/rankings")
 def college_rankings(season: int = None, position: str = "", limit: int = 50):
     return live_data.fetch_college_rankings(
-        season=season, position=position or None, limit=limit,
+        season=season, position=position or None, limit=max(1, min(limit, 200)),
     )
 
 
 @app.get("/api/college/streaks")
 def college_streaks(season: int = None, position: str = "", limit: int = 25):
     return live_data.fetch_college_streaks(
-        season=season, position=position or None, limit=limit,
+        season=season, position=position or None, limit=max(1, min(limit, 200)),
     )
 
 
 @app.get("/api/college/stock-watch")
 def college_stock_watch(season: int = None, position: str = "", limit: int = 30):
     return live_data.fetch_college_stock_watch(
-        season=season, position=position or None, limit=limit,
+        season=season, position=position or None, limit=max(1, min(limit, 200)),
     )
 
 
@@ -1914,28 +1914,28 @@ def college_scarcity(season: int = None):
 @app.get("/api/college/consistency")
 def college_consistency(season: int = None, position: str = "", limit: int = 30):
     return live_data.fetch_college_consistency(
-        season=season, position=position or None, limit=limit,
+        season=season, position=position or None, limit=max(1, min(limit, 200)),
     )
 
 
 @app.get("/api/college/workload")
 def college_workload(season: int = None, position: str = "", limit: int = 50):
     return live_data.fetch_college_workload(
-        season=season, position=position or None, limit=limit,
+        season=season, position=position or None, limit=max(1, min(limit, 200)),
     )
 
 
 @app.get("/api/college/dual-threat")
 def college_dual_threat(season: int = None, position: str = "", limit: int = 50):
     return live_data.fetch_college_dual_threat(
-        season=season, position=position or None, limit=limit,
+        season=season, position=position or None, limit=max(1, min(limit, 200)),
     )
 
 
 @app.get("/api/college/snap-efficiency")
 def college_snap_efficiency(season: int = None, position: str = "", limit: int = 50):
     return live_data.fetch_college_snap_efficiency(
-        season=season, position=position or None, limit=limit,
+        season=season, position=position or None, limit=max(1, min(limit, 200)),
     )
 
 
@@ -1946,7 +1946,7 @@ def college_aging_curves(position: str = ""):
 
 @app.get("/api/college/records")
 def college_records(position: str = "", limit: int = 10):
-    return live_data.fetch_college_records(position=position or None, limit=limit)
+    return live_data.fetch_college_records(position=position or None, limit=max(1, min(limit, 200)))
 
 
 @app.get("/api/college/season-recap")
@@ -2430,6 +2430,9 @@ def trade_pick_values(year: int = 0, rounds: int = 4, teams: int = 12):
 @app.post("/api/roster-value")
 async def roster_value(request: Request):
     """Calculate dynasty roster value analysis."""
+    ip = _get_client_ip(request)
+    if _check_screener_rate(ip):
+        return JSONResponse({"error": "Rate limit exceeded"}, status_code=429)
     body = await request.json()
     player_ids = body.get("player_ids", [])
     if not isinstance(player_ids, list):
@@ -2740,7 +2743,7 @@ def vorp(season: int = 0, position: str = "", limit: int = 30):
     try:
         s = season if season > 0 else None
         pos = position.upper() if position else None
-        return live_data.fetch_vorp(season=s, position=pos, limit=limit)
+        return live_data.fetch_vorp(season=s, position=pos, limit=max(1, min(limit, 100)))
     except Exception as e:
         logger.exception("vorp error")
         return JSONResponse({"error": "Failed to fetch VORP data"}, status_code=500)
@@ -2889,7 +2892,7 @@ def auction_values(season: int = 0, budget: int = 200, roster_size: int = 15):
     """Convert trade values into auction dollar amounts."""
     try:
         s = season if season > 0 else None
-        return live_data.fetch_auction_values(season=s, budget=budget, roster_size=roster_size)
+        return live_data.fetch_auction_values(season=s, budget=max(50, min(budget, 2000)), roster_size=max(1, min(roster_size, 30)))
     except Exception as e:
         logger.exception("auction-values error")
         return JSONResponse({"error": "Failed to fetch auction values"}, status_code=500)
@@ -3049,7 +3052,7 @@ def streaks(season: int = 0, position: str = "", window: int = 4, week: int = 0)
     try:
         s = season if season > 0 else None
         pos = position if position else None
-        w = window if window > 0 else 4
+        w = max(1, min(window, 18)) if window > 0 else 4
         return live_data.fetch_streaks(season=s, position=pos, window=w, week=week if week > 0 else None)
     except Exception as e:
         logger.exception("streaks error")
@@ -3245,7 +3248,7 @@ def playoff_schedule(season: int = None, position: str = None):
 def waivers(season: int = None, position: str = None, window: int = 4):
     try:
         pos = position.upper() if position else None
-        return live_data.fetch_waivers(season=season, position=pos, window=window)
+        return live_data.fetch_waivers(season=season, position=pos, window=max(1, min(window, 18)))
     except Exception as e:
         logger.exception("waivers error")
         return JSONResponse({"error": "Failed to fetch waiver targets"}, status_code=500)
@@ -3355,6 +3358,9 @@ async def admin_cache_clear(request: Request):
 async def monte_carlo_projections(request: Request):
     """Return weekly scoring distributions for a list of player IDs.
     Used by the frontend Monte Carlo simulation engine."""
+    ip = _get_client_ip(request)
+    if _check_screener_rate(ip):
+        return JSONResponse({"error": "Rate limit exceeded"}, status_code=429)
     try:
         body = await request.json()
     except Exception:
