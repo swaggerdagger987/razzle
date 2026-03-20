@@ -280,7 +280,7 @@ def _fetch_dynasty_history_uncached(position=None, limit=20, player_ids=None):
             placeholders = ",".join(["?"] * len(player_ids))
             top_players = conn.execute(f"""
                 SELECT p.player_id, p.full_name, p.position, p.team, p.headshot_url,
-                       0 as ppg
+                       0 as ppg, p.age
                 FROM players p
                 WHERE p.player_id IN ({placeholders})
             """, player_ids).fetchall()
@@ -294,7 +294,8 @@ def _fetch_dynasty_history_uncached(position=None, limit=20, player_ids=None):
 
             top_query = f"""
                 SELECT p.player_id, p.full_name, p.position, p.team, p.headshot_url,
-                       SUM(s.fantasy_points_ppr) / COUNT(DISTINCT s.week) as ppg
+                       SUM(s.fantasy_points_ppr) / COUNT(DISTINCT s.week) as ppg,
+                       p.age
                 FROM players p
                 JOIN player_week_stats s ON s.player_id = p.player_id AND s.season = ?
                     AND s.season_type = 'regular'
@@ -318,6 +319,7 @@ def _fetch_dynasty_history_uncached(position=None, limit=20, player_ids=None):
             player_info[r[0]] = {
                 "player_id": r[0], "full_name": r[1], "position": r[2],
                 "team": r[3], "headshot_url": r[4] or "",
+                "age": r[6] if len(r) > 6 else None,
             }
 
         # Get PPG per season for each player
@@ -341,9 +343,10 @@ def _fetch_dynasty_history_uncached(position=None, limit=20, player_ids=None):
             pid, season, ppg, games = r[0], r[1], r[2] or 0, r[3] or 0
             if pid not in player_history:
                 player_history[pid] = {}
-            age_in_season = None
             info = player_info.get(pid, {})
             pos = info.get("position", "WR")
+            current_age = info.get("age")
+            age_in_season = (current_age - (latest - season)) if current_age and latest else None
             tv = compute_trade_value(round(ppg, 2), age_in_season, pos)
             player_history[pid][season] = {
                 "season": season, "ppg": round(ppg, 2),

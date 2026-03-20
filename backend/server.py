@@ -2188,7 +2188,8 @@ async def player_profile_page(player_id: str):
             jsonld["jobTitle"] = f"{pos} — Fantasy Football"
         if team:
             jsonld["affiliation"] = {"@type": "SportsTeam", "name": team}
-        jsonld_tag = f'<script type="application/ld+json">{_json.dumps(jsonld)}</script>'
+        jsonld_safe = _json.dumps(jsonld).replace("<", r"\u003c")
+        jsonld_tag = f'<script type="application/ld+json">{jsonld_safe}</script>'
         html = html.replace("</head>", f"{jsonld_tag}\n</head>")
     except Exception:
         logger.debug("JSON-LD injection failed for player page", exc_info=True)
