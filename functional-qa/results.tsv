@@ -338,25 +338,3 @@ re-audit-prod	OK	-	-	-	pass	re-audit: FUNC-010 RESOLVED. Production healthy (200
 68-rapid	OK	frontend/lab.js	-	searchInput	pass	Rapid search: 5 swaps with 300ms intervals, final "chase" returns correct 3 results. No race conditions.	95	2026-03-20T13:58
 70-cross-panel	OK	frontend/lab.js	-	switchPanel	pass	Cross-panel state: Rankings→TradeValues→Screener returns with 25 rows, 610 players. No state loss.	95	2026-03-20T13:58
 46-draftclass	P0	backend/live_data/tools.py	548	fetch_draft_class	open	re-audit: FUNC-011 STILL BROKEN. Bo Nix 33.01 PPG (actual ~20), Caleb Williams 30.57. Multi-season COUNT(DISTINCT week) bug.	100	2026-03-20T13:59
-smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
-smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
-smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
-smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
-smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
-smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
-smoke	P0	backend/live_data/players.py	-	_fetch_screener_uncached	ticket	smoke:week_filter — Week 1 player has 21 games — week filter not working
-smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
-smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
-smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
-smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
-smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
-smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
-smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
-smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
-smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
-smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
-smoke	P0	backend/live_data/players.py	-	_fetch_screener_uncached	ticket	smoke:week_filter — Week 1 player has 21 games — week filter not working
-smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
-smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
-smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
-smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
