@@ -6150,6 +6150,7 @@
         '<div class="lp-controls">' +
           posTabsHTML('rpc-pos-tabs', true) +
           '<select class="lp-select" id="rpc-season">' + seasonOptions() + '</select>' +
+          weekSelectHTML('rpc-week') +
         '</div>' +
         '<div id="rpc-content"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
@@ -6174,6 +6175,8 @@
       content.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var url = '/api/report-cards?limit=25&season=' + curSeason;
       if (curPos) url += '&position=' + encodeURIComponent(curPos);
+      var rpcWeekVal = parseInt((el.querySelector('#rpc-week') || {}).value) || 0;
+      if (rpcWeekVal > 0) url += '&week=' + rpcWeekVal;
       fetch(url).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
@@ -6283,7 +6286,12 @@
       curPos = tab.getAttribute('data-pos') || '';
       loadData();
     });
-    el.querySelector('#rpc-season').addEventListener('change', function() { curSeason = parseInt(this.value); loadData(); });
+    el.querySelector('#rpc-season').addEventListener('change', function() {
+      curSeason = parseInt(this.value);
+      populateWeekSelect(el, 'rpc-week', this.value, loadData);
+      loadData();
+    });
+    populateWeekSelect(el, 'rpc-week', String(_latestSeason), loadData);
     loadData();
   }});
 
@@ -7709,6 +7717,7 @@
         '<div class="lp-subtitle">who\'s eating the most touches</div></div>' +
         '<div class="lp-controls">' +
           '<select class="lp-select opp2-season">' + seasonOptions() + '</select>' +
+          weekSelectHTML('opp2-week') +
           posTabsHTML('opp2-pos-tabs', true) +
         '</div>' +
         '<div class="opp2-content"><div class="lp-loading">mapping the opportunity landscape...</div></div>' +
@@ -7812,6 +7821,8 @@
       var url = '/api/opportunity-share?limit=30';
       if (season) url += '&season=' + season;
       if (currentPosition) url += '&position=' + currentPosition;
+      var opp2WeekVal = parseInt((el.querySelector('#opp2-week') || {}).value) || 0;
+      if (opp2WeekVal > 0) url += '&week=' + opp2WeekVal;
 
       fetch(url).then(function(r) {
         if (!r.ok) throw new Error('API error');
@@ -7823,6 +7834,7 @@
           data.available_seasons.forEach(function(s) {
             sel.innerHTML += '<option value="' + s + '"' + (s === data.season ? ' selected' : '') + '>' + s + '</option>';
           });
+          populateWeekSelect(el, 'opp2-week', sel.value, load);
         }
         render(data);
       }).catch(function() {
@@ -7839,7 +7851,10 @@
       load();
     });
 
-    el.querySelector('.opp2-season').addEventListener('change', function() { load(); });
+    el.querySelector('.opp2-season').addEventListener('change', function() {
+      populateWeekSelect(el, 'opp2-week', this.value, load);
+      load();
+    });
     load();
   }});
 
@@ -8994,9 +9009,11 @@
       content.innerHTML = '<div class="lp-loading">studying the film...</div>';
       var season = el.querySelector('.td2-season').value || '';
       var team = el.querySelector('.td2-team').value || '';
+      var td2WeekVal = parseInt((el.querySelector('#td2-week') || {}).value) || 0;
       var url = '/api/target-distribution?';
       if (season) url += 'season=' + season + '&';
-      if (team) url += 'team=' + team;
+      if (team) url += 'team=' + team + '&';
+      if (td2WeekVal > 0) url += 'week=' + td2WeekVal;
 
       fetch(url).then(function(r) {
         if (!r.ok) throw new Error('API error');
@@ -9005,6 +9022,8 @@
         currentData = data;
         populateSeasons(data.available_seasons, data.season);
         populateTeams(data.teams);
+        var td2SeasonSel = el.querySelector('.td2-season');
+        if (td2SeasonSel && td2SeasonSel.value) populateWeekSelect(el, 'td2-week', td2SeasonSel.value, load);
         renderDistribution(data);
       }).catch(function() {
         content.innerHTML = '<div class="lp-error">fumbled the data...</div>';
@@ -9103,7 +9122,10 @@
       });
     });
 
-    el.querySelector('.td2-season').addEventListener('change', load);
+    el.querySelector('.td2-season').addEventListener('change', function() {
+      populateWeekSelect(el, 'td2-week', this.value, load);
+      load();
+    });
     el.querySelector('.td2-team').addEventListener('change', load);
     load();
   }});
@@ -10151,6 +10173,7 @@
       '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
       '</div>' +
       '<select class="lp-select" id="gs-season" aria-label="Season"></select>' +
+      weekSelectHTML('gs-week') +
       '</div>' +
       '<div id="gs-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">reviewing the film...</div></div>' +
       '</div>';
@@ -10199,6 +10222,8 @@
       var url = '/api/game-script?limit=25';
       if (season) url += '&season=' + season;
       if (curPos) url += '&position=' + curPos;
+      var gsWeekVal = parseInt((el.querySelector('#gs-week') || {}).value) || 0;
+      if (gsWeekVal > 0) url += '&week=' + gsWeekVal;
 
       fetch(url).then(function(r) { if (!r.ok) throw new Error('API error'); return r.json(); }).then(function(data) {
         if (!seasonsPopulated && data.available_seasons) {
@@ -10210,6 +10235,7 @@
             sel.appendChild(o);
           });
           seasonsPopulated = true;
+          populateWeekSelect(el, 'gs-week', sel.value, loadGS);
         }
         var html = '<div class="gs-columns">';
         html += '<div class="gs-column"><div class="gs-column-header positive">';
@@ -10240,7 +10266,10 @@
       curPos = tab.getAttribute('data-pos') || '';
       loadGS();
     });
-    el.querySelector('#gs-season').addEventListener('change', loadGS);
+    el.querySelector('#gs-season').addEventListener('change', function() {
+      populateWeekSelect(el, 'gs-week', this.value, loadGS);
+      loadGS();
+    });
     loadGS();
   }});
 

@@ -47,11 +47,11 @@ The database file `data/terminal.db` uses WAL journal mode locally. Uploading it
 
 ### Task 3: Backend — Add week parameter to all applicable panel endpoints
 **Accept when**: The following endpoints accept an optional `week` parameter and filter `player_week_stats` by week when provided: `/api/breakouts`, `/api/efficiency`, `/api/consistency`, `/api/usage-trends`, `/api/target-distribution`, `/api/red-zone`, `/api/opportunity-share`, `/api/snap-efficiency`, `/api/workload`, `/api/dual-threat`, `/api/target-premium`, `/api/drop-rate`, `/api/success-rate`, `/api/gamescript`, `/api/garbage-time`, `/api/streaks`, `/api/report-cards`. Endpoints where weekly doesn't make sense (aging curves, dynasty rankings, trade values, prospect data, YoY comparisons) are left unchanged. Each modified endpoint returns single-week data when `week` is specified, season aggregate when omitted.
-**Status**: PENDING
+**Status**: DONE
 
 ### Task 4: Frontend — Add week selector to all applicable Lab panels
 **Accept when**: Every Lab panel whose endpoint now supports weekly filtering gets the same week selector UI. Use a shared `renderWeekSelector(containerId, season, onWeekChange)` helper to keep the UI identical across panels. The week selector appears below the season selector in each panel's controls area. Default is "All Weeks". Selecting a week re-fetches that panel's data with the week param. Panels where weekly doesn't apply (aging curves, dynasty rankings, trade values, prospects, big board, YoY) do NOT get a week selector.
-**Status**: PENDING
+**Status**: DONE
 
 ### Task 5: Screener column headers — indicate weekly vs season context
 **Accept when**: When a specific week is selected (not "All Weeks"), the screener shows a subtle indicator — e.g., a Caveat-font annotation below the toolbar saying "showing Week 5, 2025 stats" or a small badge on the week dropdown. This prevents confusion where a user sees low numbers and forgets they're looking at a single week instead of season totals. Matches Razzle design language (Caveat, slightly rotated, annotation style).

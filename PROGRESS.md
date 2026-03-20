@@ -934,8 +934,23 @@ All 59 tests pass. All 11 JS files syntax-clean. 0 remaining issues found.
 | 5 | Week resets on season/universe change | DONE | `state.week = 0` on season change, universe switch. Hidden for college/career. |
 
 ### Decisions Log
-- Panel-level week selectors deferred — screener week filter is the priority
 - PBP enrichment reads from season-level table, no week filtering needed
+
+---
+
+## Weekly Data Filter — All Panels (Mar 19)
+
+**Goal**: Add week-level filtering to all applicable Lab panel endpoints and UIs.
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Backend: week param on 13 panel endpoints | DONE | analytics.py (breakouts, usage_trends, target_distribution, redzone), dashboards.py (efficiency, consistency, opportunity_share, report_cards), tools.py (target_premium, streaks, drop_rate, success_rate, game_script). server.py routes updated. 4 endpoints skipped (snap_efficiency, workload, dual_threat, garbage_time — use player_season_stats, not week-level). |
+| 2 | Frontend: week selector on 13 Lab panels | DONE | Added weekSelectHTML()/populateWeekSelect() helpers. Week dropdown added to breakouts, efficiency, consistency, targetpremium, drops, redzone, streaks, usage, successrate, targets, opportunity, reportcard, gamescript. Populates from /api/available-weeks, re-fetches on change, hidden for college mode. |
+
+### Decisions Log
+- 4 endpoints (snap_efficiency, workload, dual_threat, garbage_time) use player_season_stats which has no week column — skipped rather than refactoring to player_week_stats
+- PBP-joined endpoints (drop_rate, success_rate, game_script) filter week on player_week_stats only, since player_season_pbp has no week column
+- Week selectors hidden in college mode — college data doesn't have week-level granularity in this format
 
 ---
 
