@@ -3280,7 +3280,7 @@ function renderTeamChips() {
   const container = document.getElementById("teamChips");
   if (!container) return;
   container.innerHTML = state.teams.map(t =>
-    `<span class="team-chip">${t} <span class="remove" onclick="removeTeam('${t}')">×</span></span>`
+    `<span class="team-chip">${escapeHtml(t)} <span class="remove" onclick="removeTeam('${escapeAttr(t)}')">×</span></span>`
   ).join("");
 }
 
