@@ -11,7 +11,16 @@ const ROWS = 22;
 const WORLD_W = COLS * TILE;
 const WORLD_H = ROWS * TILE;
 
-// Sprite sheet: 112×96 → 7 cols × 4 rows → 16×24 per frame
+// New sprite sheets: 2x2 grid per animation type, ~1024x1024 total
+// Each frame is half the sheet width × half the sheet height
+// Separate sheets for walk, idle, attack, jump
+// Frame order in 2x2: [0]=top-left, [1]=top-right, [2]=bottom-left, [3]=bottom-right
+const NEW_SPRITE_FRAMES = 4;
+const NEW_SPRITE_COLS = 2;
+const SP_DRAW_W = 32; // draw width on canvas
+const SP_DRAW_H = 48; // draw height on canvas
+
+// Legacy sprite sheet dimensions (for old char_*.png fallback)
 const FR_W = 16, FR_H = 24, FR_COLS = 7, FR_ROWS = 4;
 const SP_SCALE = 2; // draw at 32×48
 
@@ -113,12 +122,35 @@ function clampCam() {
 
 // ── SPRITE LOADING ─────────────────────────────────────────────────────
 const spriteImgs = {};
-const CHAR_NAMES = ['char_0','char_1','char_2','char_3','char_4','char_5'];
+const spriteSheets = {}; // { agentKey: { walk: img, idle: img, attack: img, jump: img } }
 let spritesLoaded = 0;
+const TOTAL_SPRITES_NEEDED = 24; // 6 agents × 4 sheets each
 
+// New sprite sheet mapping: agent key → file prefix
+const AGENT_SPRITES = {
+  razzle:    'razzle',
+  medical:   'drdolphin',
+  scout:     'scout',
+  diplomat:  'diplomat',
+  quant:     'quant',
+  historian: 'historian',
+};
+const ANIM_TYPES = ['walk', 'idle', 'attack', 'jump'];
+
+Object.entries(AGENT_SPRITES).forEach(([agentKey, prefix]) => {
+  spriteSheets[agentKey] = {};
+  ANIM_TYPES.forEach(anim => {
+    const img = new Image();
+    img.onload = () => { spritesLoaded++; };
+    img.src = `assets/characters/${prefix}-${anim}.png`;
+    spriteSheets[agentKey][anim] = img;
+  });
+});
+
+// Also load old sprites as fallback for bio cards
+const CHAR_NAMES = ['char_0','char_1','char_2','char_3','char_4','char_5'];
 CHAR_NAMES.forEach(name => {
   const img = new Image();
-  img.onload = () => { spritesLoaded++; };
   img.src = `assets/characters/${name}.png`;
   spriteImgs[name] = img;
 });
@@ -684,17 +716,17 @@ function drawParticles() {
 
 // ── AGENT DEFINITIONS ──────────────────────────────────────────────────
 const AGENT_DEFS = [
-  { id: 0, name: 'Razzle',    role: 'Chief of Staff', sprite: 'char_0', color: '#d97757',
+  { id: 0, name: 'Razzle',    role: 'Chief of Staff', sprite: 'char_0', spriteKey: 'razzle', color: '#d97757',
     homeX: 14, homeY: 8, stations: [{x:14,y:8},{x:15,y:10},{x:6,y:3},{x:20,y:10}] },
-  { id: 1, name: 'Medical',   role: 'Medical Analyst', sprite: 'char_1', color: '#5b7fff',
+  { id: 1, name: 'Dr. Dolphin', role: 'Medical Analyst', sprite: 'char_1', spriteKey: 'medical', color: '#5b7fff',
     homeX: 3, homeY: 7, stations: [{x:3,y:7},{x:15,y:13},{x:26,y:10},{x:12,y:10}] },
-  { id: 2, name: 'Scout',     role: 'Scout', sprite: 'char_2', color: '#2ec4b6',
+  { id: 2, name: 'Hawkeye',   role: 'Scout', sprite: 'char_2', spriteKey: 'scout', color: '#2ec4b6',
     homeX: 8, homeY: 7, stations: [{x:8,y:7},{x:15,y:3},{x:18,y:10},{x:10,y:8}] },
-  { id: 3, name: 'Diplomat',  role: 'Diplomat', sprite: 'char_3', color: '#8b5cf6',
+  { id: 3, name: 'Bones',     role: 'Diplomat', sprite: 'char_3', spriteKey: 'diplomat', color: '#8b5cf6',
     homeX: 22, homeY: 7, stations: [{x:22,y:7},{x:3,y:18},{x:16,y:13},{x:10,y:11}] },
-  { id: 4, name: 'Quant',     role: 'Quant', sprite: 'char_4', color: '#e87422',
+  { id: 4, name: 'Octo',      role: 'Quant', sprite: 'char_4', spriteKey: 'quant', color: '#e87422',
     homeX: 3, homeY: 14, stations: [{x:3,y:14},{x:16,y:8},{x:26,y:10},{x:19,y:10}] },
-  { id: 5, name: 'Historian', role: 'Historian', sprite: 'char_5', color: '#d44040',
+  { id: 5, name: 'Atlas',     role: 'Historian', sprite: 'char_5', spriteKey: 'historian', color: '#d44040',
     homeX: 8, homeY: 14, stations: [{x:8,y:14},{x:27,y:14},{x:12,y:11},{x:20,y:18}] },
 ];
 
@@ -861,48 +893,115 @@ class Agent {
   }
 
   draw() {
-    const img = spriteImgs[this.sprite];
-    if (!img || !img.complete) return;
+    // Determine which animation sheet to use based on state
+    let animType = 'idle';
+    if (this.state === STATE.WALK) animType = 'walk';
+    else if (this.state === STATE.CELEBRATE) animType = 'attack'; // celebrate uses attack sheet
+    else animType = 'idle';
 
-    const frameCol = this.state === STATE.WALK ? WALK_FRAMES[this.frame] : IDLE_FRAME;
-    const frameRow = this.dir;
-    const sx = frameCol * FR_W;
-    const sy = frameRow * FR_H;
+    // Try new sprite sheets first, fall back to old
+    const sheets = spriteSheets[this.spriteKey];
+    const newImg = sheets && sheets[animType];
+    const useNewSprites = newImg && newImg.complete && newImg.naturalWidth > 0;
 
-    let drawX = Math.floor(this.x - (FR_W * SP_SCALE) / 2);
-    let drawY = Math.floor(this.y - (FR_H * SP_SCALE) + 8);
+    let drawX, drawY;
 
-    if (this.state === STATE.CELEBRATE) {
-      const bounce = Math.abs(Math.sin(this.celebrateTimer / 150 * Math.PI)) * 12;
-      drawY -= bounce;
-    }
+    if (useNewSprites) {
+      // New 2x2 sprite sheets
+      const frameIdx = this.state === STATE.WALK ? WALK_FRAMES[this.frame] : (this.frame % NEW_SPRITE_FRAMES);
+      const col = frameIdx % NEW_SPRITE_COLS;
+      const row = Math.floor(frameIdx / NEW_SPRITE_COLS);
+      const frameW = newImg.naturalWidth / NEW_SPRITE_COLS;
+      const frameH = newImg.naturalHeight / NEW_SPRITE_COLS;
+      const sx = col * frameW;
+      const sy = row * frameH;
 
-    if (this.state !== STATE.WALK && this.state !== STATE.CELEBRATE) {
-      const bob = Math.sin(now() / 800 + this.bobOffset) * 1.5;
-      drawY += bob;
-    }
+      drawX = Math.floor(this.x - SP_DRAW_W / 2);
+      drawY = Math.floor(this.y - SP_DRAW_H + 8);
 
-    // Shadow
-    ctx.globalAlpha = 0.25;
-    ctx.fillStyle = '#000';
-    ctx.beginPath();
-    ctx.ellipse(this.x, this.y + 10, 10, 4, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.globalAlpha = 1;
+      if (this.state === STATE.CELEBRATE) {
+        const bounce = Math.abs(Math.sin(this.celebrateTimer / 150 * Math.PI)) * 12;
+        drawY -= bounce;
+      }
+      if (this.state !== STATE.WALK && this.state !== STATE.CELEBRATE) {
+        const bob = Math.sin(now() / 800 + this.bobOffset) * 1.5;
+        drawY += bob;
+      }
 
-    // Selection highlight
-    if (this.selected) {
-      ctx.strokeStyle = this.color;
-      ctx.lineWidth = 2;
-      ctx.setLineDash([4, 3]);
+      // Shadow
+      ctx.globalAlpha = 0.25;
+      ctx.fillStyle = '#000';
       ctx.beginPath();
-      ctx.ellipse(this.x, this.y + 10, 14, 6, 0, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.setLineDash([]);
-    }
+      ctx.ellipse(this.x, this.y + 10, 10, 4, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
 
-    // Sprite
-    ctx.drawImage(img, sx, sy, FR_W, FR_H, drawX, drawY, FR_W * SP_SCALE, FR_H * SP_SCALE);
+      // Selection highlight
+      if (this.selected) {
+        ctx.strokeStyle = this.color;
+        ctx.lineWidth = 2;
+        ctx.setLineDash([4, 3]);
+        ctx.beginPath();
+        ctx.ellipse(this.x, this.y + 10, 14, 6, 0, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      // Draw with horizontal flip for left-facing direction
+      const facingLeft = this.dir === DIR.LEFT;
+      ctx.save();
+      if (facingLeft) {
+        ctx.translate(drawX + SP_DRAW_W, drawY);
+        ctx.scale(-1, 1);
+        ctx.drawImage(newImg, sx, sy, frameW, frameH, 0, 0, SP_DRAW_W, SP_DRAW_H);
+      } else {
+        ctx.drawImage(newImg, sx, sy, frameW, frameH, drawX, drawY, SP_DRAW_W, SP_DRAW_H);
+      }
+      ctx.restore();
+
+    } else {
+      // Fallback: old 7×4 sprite sheets
+      const img = spriteImgs[this.sprite];
+      if (!img || !img.complete) return;
+
+      const frameCol = this.state === STATE.WALK ? WALK_FRAMES[this.frame] : IDLE_FRAME;
+      const frameRow = this.dir;
+      const sx = frameCol * FR_W;
+      const sy = frameRow * FR_H;
+
+      drawX = Math.floor(this.x - (FR_W * SP_SCALE) / 2);
+      drawY = Math.floor(this.y - (FR_H * SP_SCALE) + 8);
+
+      if (this.state === STATE.CELEBRATE) {
+        const bounce = Math.abs(Math.sin(this.celebrateTimer / 150 * Math.PI)) * 12;
+        drawY -= bounce;
+      }
+      if (this.state !== STATE.WALK && this.state !== STATE.CELEBRATE) {
+        const bob = Math.sin(now() / 800 + this.bobOffset) * 1.5;
+        drawY += bob;
+      }
+
+      // Shadow
+      ctx.globalAlpha = 0.25;
+      ctx.fillStyle = '#000';
+      ctx.beginPath();
+      ctx.ellipse(this.x, this.y + 10, 10, 4, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+
+      // Selection highlight
+      if (this.selected) {
+        ctx.strokeStyle = this.color;
+        ctx.lineWidth = 2;
+        ctx.setLineDash([4, 3]);
+        ctx.beginPath();
+        ctx.ellipse(this.x, this.y + 10, 14, 6, 0, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      ctx.drawImage(img, sx, sy, FR_W, FR_H, drawX, drawY, FR_W * SP_SCALE, FR_H * SP_SCALE);
+    }
 
     // Name tag
     ctx.font = 'bold 8px monospace';
@@ -1252,13 +1351,22 @@ function buildRoster() {
 
     // Draw mini sprite avatar onto a tiny canvas
     const miniCvs = document.createElement('canvas');
-    miniCvs.width = FR_W;
-    miniCvs.height = FR_H;
+    miniCvs.width = 32;
+    miniCvs.height = 32;
     miniCvs.className = 'roster-avatar';
     const miniCtx = miniCvs.getContext('2d');
-    const img = spriteImgs[a.sprite];
-    if (img && img.complete) {
-      miniCtx.drawImage(img, 0, 0, FR_W, FR_H, 0, 0, FR_W, FR_H);
+    // Try new idle sprite first
+    const sheets = spriteSheets[a.spriteKey];
+    const idleImg = sheets && sheets.idle;
+    if (idleImg && idleImg.complete && idleImg.naturalWidth > 0) {
+      const fw = idleImg.naturalWidth / 2;
+      const fh = idleImg.naturalHeight / 2;
+      miniCtx.drawImage(idleImg, 0, 0, fw, fh, 0, 0, 32, 32);
+    } else {
+      const img = spriteImgs[a.sprite];
+      if (img && img.complete) {
+        miniCtx.drawImage(img, 0, 0, FR_W, FR_H, 0, 0, 32, 32);
+      }
     }
 
     const info = document.createElement('div');
@@ -2975,17 +3083,17 @@ setupScenarioPanel();
   if (!grid) return;
 
   var BIOS = [
-    { name: 'Razzle', animal: 'Bengal Tiger', emoji: '\uD83D\uDC2F', role: 'Chief of Staff', color: '#d97757', sprite: 'char_0',
+    { name: 'Razzle', animal: 'Bengal Tiger', emoji: '\uD83D\uDC2F', role: 'Chief of Staff', color: '#d97757', sprite: 'char_0', spriteKey: 'razzle',
       specialty: 'synthesizes all intel, delivers the final call' },
-    { name: 'Medical', animal: 'Owl', emoji: '\uD83E\uDD89', role: 'Medical Analyst', color: '#5b7fff', sprite: 'char_1',
+    { name: 'Dr. Dolphin', animal: 'Dolphin', emoji: '\uD83D\uDC2C', role: 'Medical Analyst', color: '#5b7fff', sprite: 'char_1', spriteKey: 'medical',
       specialty: 'injury timelines, return-to-play risk' },
-    { name: 'Scout', animal: 'Eagle', emoji: '\uD83E\uDD85', role: 'Scout', color: '#2ec4b6', sprite: 'char_2',
+    { name: 'Hawkeye', animal: 'Eagle', emoji: '\uD83E\uDD85', role: 'Scout', color: '#2ec4b6', sprite: 'char_2', spriteKey: 'scout',
       specialty: 'breakout detection, usage trends' },
-    { name: 'Diplomat', animal: 'Bear', emoji: '\uD83D\uDC3B', role: 'Diplomat', color: '#8b5cf6', sprite: 'char_3',
+    { name: 'Bones', animal: 'Skeleton Buccaneer', emoji: '\u2620\uFE0F', role: 'Diplomat', color: '#8b5cf6', sprite: 'char_3', spriteKey: 'diplomat',
       specialty: 'trade strategy, leaguemate profiling' },
-    { name: 'Quant', animal: 'Fox', emoji: '\uD83E\uDD8A', role: 'Quant', color: '#e87422', sprite: 'char_4',
+    { name: 'Octo', animal: 'Octopus', emoji: '\uD83D\uDC19', role: 'Quant', color: '#e87422', sprite: 'char_4', spriteKey: 'quant',
       specialty: 'valuations, championship probability' },
-    { name: 'Historian', animal: 'Elephant', emoji: '\uD83D\uDC18', role: 'Historian', color: '#d44040', sprite: 'char_5',
+    { name: 'Atlas', animal: 'Bull', emoji: '\uD83D\uDC02', role: 'Historian', color: '#d44040', sprite: 'char_5', spriteKey: 'historian',
       specialty: 'league precedents, pattern recognition' },
   ];
 
@@ -2993,7 +3101,7 @@ setupScenarioPanel();
     return '<div class="warroom-bio-card">' +
       '<div class="warroom-bio-stripe" style="background:' + a.color + '"></div>' +
       '<div class="warroom-bio-body">' +
-        '<div class="warroom-bio-avatar" style="background-image:url(\'assets/characters/' + a.sprite + '.png\'); background-position:0 0; background-size:224px 96px;"></div>' +
+        '<div class="warroom-bio-avatar" style="background-image:url(\'assets/characters/' + (AGENT_SPRITES[a.spriteKey] || a.sprite) + '-idle.png\'); background-position:0 0; background-size:200% 200%;"></div>' +
         '<div>' +
           '<div class="warroom-bio-name" style="color:' + a.color + '">' + a.emoji + ' ' + a.name + '</div>' +
           '<div class="warroom-bio-role">' + a.role + ' <span style="font-family:var(--font-hand,Caveat,cursive); font-size:12px; opacity:0.7;">(' + a.animal + ')</span></div>' +
@@ -4017,7 +4125,7 @@ window.addEventListener('razzle-plan-changed', function() {
 
 // ── START ──────────────────────────────────────────────────────────────
 function waitAndStart() {
-  if (spritesLoaded >= 6) {
+  if (spritesLoaded >= TOTAL_SPRITES_NEEDED) {
     // Hide placeholder
     const placeholder = document.getElementById('canvasPlaceholder');
     if (placeholder) placeholder.style.display = 'none';
