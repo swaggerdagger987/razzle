@@ -754,7 +754,7 @@ function copyPlayerURL() {
   navigator.clipboard.writeText(window.location.href).then(() => {
     showToast("Link copied!");
   }).catch(() => {
-    showToast("Could not copy link");
+    showToast("fumbled the copy — try again");
   });
 }
 

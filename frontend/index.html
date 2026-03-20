@@ -180,15 +180,15 @@
   .screener-visual-placeholder .fake-row:last-child { border-bottom: none; }
 
   .fake-rank {
-    font-family: var(--font-display);
-    font-size: 14px;
+    font-family: var(--font-mono);
+    font-size: 13px;
     color: var(--ink-light);
     width: 24px;
     text-align: right;
   }
 
   .fake-pos {
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 9px;
     font-weight: 700;
     color: white;
@@ -354,8 +354,8 @@
   }
 
   .pricing-card--elite {
-    border-color: var(--purple, #8b5cf6);
-    box-shadow: 4px 4px 0 var(--purple, #8b5cf6);
+    border-color: var(--purple);
+    box-shadow: 4px 4px 0 var(--purple);
     position: relative;
   }
 
@@ -366,8 +366,9 @@
     transform: translateX(-50%) rotate(-2deg);
     background: var(--orange);
     color: var(--bg);
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 11px;
+    font-weight: 700;
     padding: 3px 14px;
     border-radius: 20px;
     border: 2px solid var(--ink);
@@ -376,7 +377,7 @@
   }
 
   .pricing-badge--elite {
-    background: var(--purple, #8b5cf6);
+    background: var(--purple);
     color: white;
   }
 
@@ -455,6 +456,14 @@
     .hero-cta { flex-direction: column; align-items: center; }
     .btn-hero { width: 100%; max-width: 260px; text-align: center; }
     .lp-section h2 { font-size: 20px; }
+  }
+  @media (max-width: 375px) {
+    .hero { padding: 40px 12px 24px; }
+    .hero h1 { font-size: 20px; }
+    .hero-sub { font-size: 16px; }
+    .pricing-name { font-size: 18px; }
+    .pricing-price { font-size: 22px; }
+    .pricing-card { padding: 20px 12px; }
   }
 </style>
 </head>
@@ -616,7 +625,7 @@
     <div class="pricing-card pricing-card--elite">
       <div class="pricing-badge pricing-badge--elite">full war machine</div>
       <div class="pricing-name">Elite</div>
-      <div class="pricing-price" style="color:var(--purple, #8b5cf6);">$19.99<span>/mo</span></div>
+      <div class="pricing-price" style="color:var(--purple);">$19.99<span>/mo</span></div>
       <div class="pricing-note">or $149.99/year (save 37%)</div>
       <ul class="pricing-list">
         <li>Everything in Pro, plus:</li>
@@ -626,7 +635,7 @@
         <li class="highlight">Weekly Razzle briefings</li>
         <li>Priority data refresh</li>
       </ul>
-      <button id="homeEliteCta" class="btn-chunky btn-primary" style="font-size:13px; width:100%; background:var(--purple, #8b5cf6); border-color:var(--ink);" onclick="var u=null;try{u=JSON.parse(localStorage.getItem('razzle_user'))}catch(e){}if(!u){if(typeof openAuthModal==='function')openAuthModal();else window.location='/pricing.html'}else if(typeof startCheckout==='function'){startCheckout('elite_year')}else{window.location='/pricing.html'}">Get Elite</button>
+      <button id="homeEliteCta" class="btn-chunky btn-primary" style="font-size:13px; width:100%; background:var(--purple); border-color:var(--ink);" onclick="var u=null;try{u=JSON.parse(localStorage.getItem('razzle_user'))}catch(e){}if(!u){if(typeof openAuthModal==='function')openAuthModal();else window.location='/pricing.html'}else if(typeof startCheckout==='function'){startCheckout('elite_year')}else{window.location='/pricing.html'}">Get Elite</button>
     </div>
   </div>
 
@@ -640,60 +649,60 @@
 
     <div>
       <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Razzle</div>
-      <a href="/" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Home</a>
-      <a href="/lab.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Screener</a>
-      <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Bureau</a>
-      <a href="/agents.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Situation Room</a>
-      <a href="/pricing.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Pricing</a>
-      <a href="/about.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">About</a>
+      <a href="/" class="footer-link">Home</a>
+      <a href="/lab.html" class="footer-link">Screener</a>
+      <a href="/league-intel.html" class="footer-link">Bureau</a>
+      <a href="/agents.html" class="footer-link">Situation Room</a>
+      <a href="/pricing.html" class="footer-link">Pricing</a>
+      <a href="/about.html" class="footer-link">About</a>
     </div>
 
     <div>
       <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Dynasty</div>
-      <a href="/rankings.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Rankings</a>
-      <a href="/tradevalues.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Trade Values</a>
-      <a href="/tradefinder.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Trade Finder</a>
-      <a href="/tiers.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Tiers</a>
-      <a href="/vorp.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">VORP</a>
-      <a href="/aging.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Aging Curves</a>
-      <a href="/buysell.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Buy/Sell</a>
-      <a href="/archetypes.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Archetypes</a>
+      <a href="/rankings.html" class="footer-link">Rankings</a>
+      <a href="/tradevalues.html" class="footer-link">Trade Values</a>
+      <a href="/tradefinder.html" class="footer-link">Trade Finder</a>
+      <a href="/tiers.html" class="footer-link">Tiers</a>
+      <a href="/vorp.html" class="footer-link">VORP</a>
+      <a href="/aging.html" class="footer-link">Aging Curves</a>
+      <a href="/buysell.html" class="footer-link">Buy/Sell</a>
+      <a href="/archetypes.html" class="footer-link">Archetypes</a>
     </div>
 
     <div>
       <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Weekly</div>
-      <a href="/weekly.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Weekly Stats</a>
-      <a href="/weeklyleaders.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Week Leaders</a>
-      <a href="/weeklymvp.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Weekly MVP</a>
-      <a href="/matchups.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Matchups</a>
-      <a href="/waivers.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Waivers</a>
-      <a href="/schedule.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Schedule</a>
-      <a href="/stocks.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Stocks</a>
-      <a href="/playoffs.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Playoffs</a>
+      <a href="/weekly.html" class="footer-link">Weekly Stats</a>
+      <a href="/weeklyleaders.html" class="footer-link">Week Leaders</a>
+      <a href="/weeklymvp.html" class="footer-link">Weekly MVP</a>
+      <a href="/matchups.html" class="footer-link">Matchups</a>
+      <a href="/waivers.html" class="footer-link">Waivers</a>
+      <a href="/schedule.html" class="footer-link">Schedule</a>
+      <a href="/stocks.html" class="footer-link">Stocks</a>
+      <a href="/playoffs.html" class="footer-link">Playoffs</a>
     </div>
 
     <div>
       <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Analytics</div>
-      <a href="/targets.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Targets</a>
-      <a href="/usage.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Usage</a>
-      <a href="/efficiency.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Efficiency</a>
-      <a href="/airyards.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Air Yards</a>
-      <a href="/redzone.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Red Zone</a>
-      <a href="/consistency.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Consistency</a>
-      <a href="/breakouts.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Breakouts</a>
-      <a href="/opportunity.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Opportunity</a>
+      <a href="/targets.html" class="footer-link">Targets</a>
+      <a href="/usage.html" class="footer-link">Usage</a>
+      <a href="/efficiency.html" class="footer-link">Efficiency</a>
+      <a href="/airyards.html" class="footer-link">Air Yards</a>
+      <a href="/redzone.html" class="footer-link">Red Zone</a>
+      <a href="/consistency.html" class="footer-link">Consistency</a>
+      <a href="/breakouts.html" class="footer-link">Breakouts</a>
+      <a href="/opportunity.html" class="footer-link">Opportunity</a>
     </div>
 
     <div>
       <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Tools</div>
-      <a href="/explorer.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Stat Explorer</a>
-      <a href="/compare.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Compare</a>
-      <a href="/rosterbuilder.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Roster Builder</a>
-      <a href="/cheatsheet.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Cheat Sheet</a>
-      <a href="/auction.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Auction Values</a>
-      <a href="/dashboard.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Dashboard</a>
-      <a href="/prospects.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Prospects</a>
-      <a href="/team/KC" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Teams</a>
+      <a href="/explorer.html" class="footer-link">Stat Explorer</a>
+      <a href="/compare.html" class="footer-link">Compare</a>
+      <a href="/rosterbuilder.html" class="footer-link">Roster Builder</a>
+      <a href="/cheatsheet.html" class="footer-link">Cheat Sheet</a>
+      <a href="/auction.html" class="footer-link">Auction Values</a>
+      <a href="/dashboard.html" class="footer-link">Dashboard</a>
+      <a href="/prospects.html" class="footer-link">Prospects</a>
+      <a href="/team/KC" class="footer-link">Teams</a>
     </div>
 
   </div>

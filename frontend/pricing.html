@@ -46,7 +46,7 @@
   .interval-toggle .toggle-track.yearly .toggle-knob { transform: translateX(22px); }
   .save-badge {
     font-family: var(--font-mono); font-size: 11px; color: white;
-    background: var(--green, #2ec4b6); padding: 2px 8px; border-radius: 6px;
+    background: var(--green); padding: 2px 8px; border-radius: 6px;
     border: 2px solid var(--ink); transform: rotate(-2deg); display: inline-block;
   }
 
@@ -65,17 +65,25 @@
     .feature-matrix th { font-size: 11px; padding: 8px 4px; }
     .feature-matrix td { padding: 6px 4px; }
   }
+  @media (max-width: 375px) {
+    .pricing-page { padding: 20px 8px; }
+    .plan-card { padding: 16px 10px; }
+    .plan-name { font-size: 18px; }
+    .plan-price { font-size: 24px; }
+    .feature-matrix { font-size: 10px; }
+    .feature-matrix th { padding: 6px 3px; }
+  }
 
-  .plan-card.free { border-color: var(--green, #2ec4b6); box-shadow: 4px 4px 0 var(--green, #2ec4b6); }
-  .plan-card.free .plan-badge { background: var(--green, #2ec4b6); }
+  .plan-card.free { border-color: var(--green); box-shadow: 4px 4px 0 var(--green); }
+  .plan-card.free .plan-badge { background: var(--green); }
 
   .plan-card {
     background: var(--bg-card, #f7efe5); border: 3px solid var(--ink);
     border-radius: 8px; padding: 28px 24px; position: relative;
     box-shadow: 4px 4px 0 var(--ink);
   }
-  .plan-card.elite { border-color: var(--purple, #8b5cf6); box-shadow: 4px 4px 0 var(--purple, #8b5cf6); }
-  .plan-card.elite .plan-badge { background: var(--purple, #8b5cf6); }
+  .plan-card.elite { border-color: var(--purple); box-shadow: 4px 4px 0 var(--purple); }
+  .plan-card.elite .plan-badge { background: var(--purple); }
 
   .plan-badge {
     position: absolute; top: -12px; right: 16px;
@@ -97,7 +105,7 @@
     display: flex; align-items: flex-start; gap: 8px;
   }
   .plan-features li:last-child { border-bottom: none; }
-  .plan-features .check { color: var(--green, #2ec4b6); font-weight: 700; flex-shrink: 0; }
+  .plan-features .check { color: var(--green); font-weight: 700; flex-shrink: 0; }
   .plan-features .highlight { color: var(--orange); font-weight: 700; }
 
   .plan-cta { width: 100%; }
@@ -120,7 +128,7 @@
   .feature-matrix th:first-child { text-align: left; }
   .feature-matrix td { padding: 8px; border-bottom: 2px dashed var(--ink-faint); text-align: center; }
   .feature-matrix td:first-child { text-align: left; color: var(--ink-medium, #5c4a3d); }
-  .feature-matrix .yes { color: var(--green, #2ec4b6); font-weight: 700; }
+  .feature-matrix .yes { color: var(--green); font-weight: 700; }
   .feature-matrix .no { color: var(--ink-faint); }
   .feature-matrix .limit { color: var(--orange); font-weight: 600; }
   .feature-matrix .group-row td { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase;
@@ -133,8 +141,8 @@
   /* Already subscribed banner */
   .subscribed-banner {
     text-align: center; padding: 16px 24px; background: var(--bg-card, #f7efe5);
-    border: 3px solid var(--green, #2ec4b6); border-radius: 8px;
-    box-shadow: 4px 4px 0 var(--green, #2ec4b6); margin-bottom: 32px; display: none;
+    border: 3px solid var(--green); border-radius: 8px;
+    box-shadow: 4px 4px 0 var(--green); margin-bottom: 32px; display: none;
   }
   .subscribed-banner.visible { display: block; }
   .subscribed-banner p { font-family: var(--font-display); font-size: 16px; margin: 0 0 8px; }
@@ -271,7 +279,7 @@
       </ul>
 
       <div class="plan-cta">
-        <button class="btn-primary" style="background:var(--purple, #8b5cf6); border-color:var(--ink);" onclick="handleCheckout('elite')">Get Elite</button>
+        <button class="btn-primary" style="background:var(--purple); border-color:var(--ink);" onclick="handleCheckout('elite')">Get Elite</button>
       </div>
     </div>
   </div>
@@ -393,7 +401,7 @@
   <!-- Early Adopter / Lifetime Deals (rendered dynamically) -->
   <div id="promotionsSection" style="display:none; margin-top:32px; padding:20px 0; border-top:2px dashed var(--ink-faint);">
     <h2 style="font-family:var(--font-display); font-size:20px; text-align:center; margin:0 0 16px;">Launch Specials</h2>
-    <div id="promotionsGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; max-width:680px; margin:0 auto;"></div>
+    <div id="promotionsGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap:16px; max-width:680px; margin:0 auto;"></div>
   </div>
 
   <!-- Discounts mention -->
@@ -415,60 +423,60 @@
 
     <div>
       <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Razzle</div>
-      <a href="/" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Home</a>
-      <a href="/lab.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Screener</a>
-      <a href="/league-intel.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Bureau</a>
-      <a href="/agents.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Situation Room</a>
-      <a href="/pricing.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Pricing</a>
-      <a href="/about.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">About</a>
+      <a href="/" class="footer-link">Home</a>
+      <a href="/lab.html" class="footer-link">Screener</a>
+      <a href="/league-intel.html" class="footer-link">Bureau</a>
+      <a href="/agents.html" class="footer-link">Situation Room</a>
+      <a href="/pricing.html" class="footer-link">Pricing</a>
+      <a href="/about.html" class="footer-link">About</a>
     </div>
 
     <div>
       <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Dynasty</div>
-      <a href="/rankings.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Rankings</a>
-      <a href="/tradevalues.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Trade Values</a>
-      <a href="/tradefinder.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Trade Finder</a>
-      <a href="/tiers.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Tiers</a>
-      <a href="/vorp.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">VORP</a>
-      <a href="/aging.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Aging Curves</a>
-      <a href="/buysell.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Buy/Sell</a>
-      <a href="/archetypes.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Archetypes</a>
+      <a href="/rankings.html" class="footer-link">Rankings</a>
+      <a href="/tradevalues.html" class="footer-link">Trade Values</a>
+      <a href="/tradefinder.html" class="footer-link">Trade Finder</a>
+      <a href="/tiers.html" class="footer-link">Tiers</a>
+      <a href="/vorp.html" class="footer-link">VORP</a>
+      <a href="/aging.html" class="footer-link">Aging Curves</a>
+      <a href="/buysell.html" class="footer-link">Buy/Sell</a>
+      <a href="/archetypes.html" class="footer-link">Archetypes</a>
     </div>
 
     <div>
       <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Weekly</div>
-      <a href="/weekly.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Weekly Stats</a>
-      <a href="/weeklyleaders.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Week Leaders</a>
-      <a href="/weeklymvp.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Weekly MVP</a>
-      <a href="/matchups.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Matchups</a>
-      <a href="/waivers.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Waivers</a>
-      <a href="/schedule.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Schedule</a>
-      <a href="/stocks.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Stocks</a>
-      <a href="/playoffs.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Playoffs</a>
+      <a href="/weekly.html" class="footer-link">Weekly Stats</a>
+      <a href="/weeklyleaders.html" class="footer-link">Week Leaders</a>
+      <a href="/weeklymvp.html" class="footer-link">Weekly MVP</a>
+      <a href="/matchups.html" class="footer-link">Matchups</a>
+      <a href="/waivers.html" class="footer-link">Waivers</a>
+      <a href="/schedule.html" class="footer-link">Schedule</a>
+      <a href="/stocks.html" class="footer-link">Stocks</a>
+      <a href="/playoffs.html" class="footer-link">Playoffs</a>
     </div>
 
     <div>
       <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Analytics</div>
-      <a href="/targets.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Targets</a>
-      <a href="/usage.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Usage</a>
-      <a href="/efficiency.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Efficiency</a>
-      <a href="/airyards.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Air Yards</a>
-      <a href="/redzone.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Red Zone</a>
-      <a href="/consistency.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Consistency</a>
-      <a href="/breakouts.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Breakouts</a>
-      <a href="/opportunity.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Opportunity</a>
+      <a href="/targets.html" class="footer-link">Targets</a>
+      <a href="/usage.html" class="footer-link">Usage</a>
+      <a href="/efficiency.html" class="footer-link">Efficiency</a>
+      <a href="/airyards.html" class="footer-link">Air Yards</a>
+      <a href="/redzone.html" class="footer-link">Red Zone</a>
+      <a href="/consistency.html" class="footer-link">Consistency</a>
+      <a href="/breakouts.html" class="footer-link">Breakouts</a>
+      <a href="/opportunity.html" class="footer-link">Opportunity</a>
     </div>
 
     <div>
       <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Tools</div>
-      <a href="/explorer.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Stat Explorer</a>
-      <a href="/compare.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Compare</a>
-      <a href="/rosterbuilder.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Roster Builder</a>
-      <a href="/cheatsheet.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Cheat Sheet</a>
-      <a href="/auction.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Auction Values</a>
-      <a href="/dashboard.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Dashboard</a>
-      <a href="/prospects.html" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Prospects</a>
-      <a href="/team/KC" style="color:var(--ink-light); text-decoration:none; display:block; padding:6px 0;">Teams</a>
+      <a href="/explorer.html" class="footer-link">Stat Explorer</a>
+      <a href="/compare.html" class="footer-link">Compare</a>
+      <a href="/rosterbuilder.html" class="footer-link">Roster Builder</a>
+      <a href="/cheatsheet.html" class="footer-link">Cheat Sheet</a>
+      <a href="/auction.html" class="footer-link">Auction Values</a>
+      <a href="/dashboard.html" class="footer-link">Dashboard</a>
+      <a href="/prospects.html" class="footer-link">Prospects</a>
+      <a href="/team/KC" class="footer-link">Teams</a>
     </div>
 
   </div>
@@ -668,9 +676,9 @@
         }
         if (ea.elite.available) {
           cards.push(
-            '<div style="background:var(--bg-card); border:3px solid var(--purple, #8b5cf6); border-radius:10px; box-shadow:3px 3px 0 var(--ink); padding:16px 20px; text-align:center;">' +
+            '<div style="background:var(--bg-card); border:3px solid var(--purple); border-radius:10px; box-shadow:3px 3px 0 var(--ink); padding:16px 20px; text-align:center;">' +
               '<div style="font-family:var(--font-mono); font-size:14px; margin-bottom:4px;">Early Adopter Elite</div>' +
-              '<div style="font-family:var(--font-display); font-size:28px; color:var(--purple, #8b5cf6);">' + esc(ea.elite.price) + '</div>' +
+              '<div style="font-family:var(--font-display); font-size:28px; color:var(--purple);">' + esc(ea.elite.price) + '</div>' +
               '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + esc(ea.elite.savings) + ' — ' + esc(String(ea.elite.remaining)) + ' of ' + esc(String(ea.elite.limit)) + ' spots left</div>' +
               '<button class="btn-primary" style="margin-top:12px; width:100%;" onclick="handleCheckout(\'ea_elite\')">Claim Early Adopter</button>' +
             '</div>'
@@ -682,17 +690,17 @@
       var lt = data.lifetime;
       if (lt && lt.enabled && lt.available) {
         cards.push(
-          '<div style="background:var(--bg-card); border:3px solid var(--green, #2ec4b6); border-radius:10px; box-shadow:3px 3px 0 var(--ink); padding:16px 20px; text-align:center;">' +
+          '<div style="background:var(--bg-card); border:3px solid var(--green); border-radius:10px; box-shadow:3px 3px 0 var(--ink); padding:16px 20px; text-align:center;">' +
             '<div style="font-family:var(--font-mono); font-size:14px; margin-bottom:4px;">Lifetime Pro</div>' +
-            '<div style="font-family:var(--font-display); font-size:28px; color:var(--green, #2ec4b6);">' + esc(lt.pro_price) + '</div>' +
+            '<div style="font-family:var(--font-display); font-size:28px; color:var(--green);">' + esc(lt.pro_price) + '</div>' +
             '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">one-time — ' + esc(String(lt.remaining)) + ' of ' + esc(String(lt.limit)) + ' lifetime spots left</div>' +
             '<button class="btn-primary" style="margin-top:12px; width:100%;" onclick="handleCheckout(\'lifetime_pro\')">Go Lifetime</button>' +
           '</div>'
         );
         cards.push(
-          '<div style="background:var(--bg-card); border:3px solid var(--purple, #8b5cf6); border-radius:10px; box-shadow:3px 3px 0 var(--ink); padding:16px 20px; text-align:center;">' +
+          '<div style="background:var(--bg-card); border:3px solid var(--purple); border-radius:10px; box-shadow:3px 3px 0 var(--ink); padding:16px 20px; text-align:center;">' +
             '<div style="font-family:var(--font-mono); font-size:14px; margin-bottom:4px;">Lifetime Elite</div>' +
-            '<div style="font-family:var(--font-display); font-size:28px; color:var(--purple, #8b5cf6);">' + esc(lt.elite_price) + '</div>' +
+            '<div style="font-family:var(--font-display); font-size:28px; color:var(--purple);">' + esc(lt.elite_price) + '</div>' +
             '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">one-time — ' + esc(String(lt.remaining)) + ' of ' + esc(String(lt.limit)) + ' lifetime spots left</div>' +
             '<button class="btn-primary" style="margin-top:12px; width:100%;" onclick="handleCheckout(\'lifetime_elite\')">Go Lifetime</button>' +
           '</div>'

@@ -1421,7 +1421,7 @@ function setupConfigPanel() {
   // Apply shared key to all agents
   applyKeyBtn.addEventListener('click', () => {
     const key = sharedKeyInput.value.trim();
-    if (!key) { showStatus('enter a key first'); return; }
+    if (!key) { showStatus('need an API key first'); return; }
     const cfg = loadAgentConfig();
     AGENT_DEFS.forEach(a => {
       const existing = cfg[String(a.id)] || {};
@@ -1515,7 +1515,7 @@ setupConfigPanel();
     var cfg = loadAgentConfig();
     var key = (cfg['0'] && cfg['0'].apiKey) ? cfg['0'].apiKey : '';
     if (!key && sharedKeyInput) key = sharedKeyInput.value.trim();
-    if (!key) { updateHint('enter a key first'); return; }
+    if (!key) { updateHint('need an API key first'); return; }
 
     updateHint('encrypting...');
     try {

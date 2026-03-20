@@ -930,7 +930,7 @@ async function validatePromoCode() {
       input.style.borderColor = "var(--red, #e63946)";
     }
   } catch (e) {
-    feedback.textContent = "Could not validate";
+    feedback.textContent = "couldn\u0027t verify that one";
     feedback.style.color = "var(--ink-light)";
   }
 }
@@ -1032,7 +1032,7 @@ async function handleSleeperLink(e) {
   e.preventDefault();
   var username = document.getElementById("sleeperLinkInput").value.trim();
   var errEl = document.getElementById("sleeperLinkError");
-  if (!username) { errEl.textContent = "Enter a username"; return; }
+  if (!username) { errEl.textContent = "need a Sleeper username"; return; }
   errEl.textContent = "";
   try {
     var token = localStorage.getItem("razzle_token");

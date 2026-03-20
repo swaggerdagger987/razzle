@@ -858,7 +858,7 @@ const COLUMNS = {
 
 // ─── Tier lock mapping (visual only, does not block access) ──────
 // Pro features: full historical data, career mode, roster grading, cloud sync
-// Elite features: exclusive advanced metrics, War Room AI
+// Elite features: exclusive advanced metrics, Situation Room AI
 const PRO_LOCKED_COLUMNS = new Set([
   "seasons", "breakout_pct", "dominator_rating", "rush_share",
   "snap_share", "yprr", "games_missed",
@@ -1694,7 +1694,7 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
   const pName = escapeAttr(player.full_name || player.player_name || "");
   const pTeam = escapeAttr(player.team || player.school || "");
   const posStripeColor = pos === "QB" ? "var(--pos-qb)" : pos === "RB" ? "var(--pos-rb)" : pos === "WR" ? "var(--pos-wr)" : pos === "TE" ? "var(--pos-te)" : "var(--ink-faint)";
-  const zebraBg = (rowIdx != null && rowIdx % 2 === 1) ? " background:rgba(45,31,20,0.025);" : "";
+  const zebraBg = (rowIdx != null && rowIdx % 2 === 1) ? " background:var(--zebra-stripe, rgba(45,31,20,0.025));" : "";
   let html = '<tr tabindex="0" data-player-id="' + escapeAttr(playKey) + '" style="height:' + getVScrollRowHeight() + 'px; border-left:3px solid ' + posStripeColor + ';' + zebraBg + '">';
   html += `<td class="col-star" style="text-align:center; padding:7px 4px; cursor:pointer; font-size:16px;" onclick="toggleWatchlistPlayer('${escapeAttr(playKey)}', '${pName}', '${escapeAttr(pos)}', '${pTeam}', '${state.universe}')" title="${starred ? 'Remove from watchlist' : 'Add to watchlist'}">${starred ? '<span style="color:var(--orange);">&#9733;</span>' : '<span style="color:var(--ink-faint);">&#9734;</span>'}</td>`;
   html += `<td class="col-select" style="text-align:center; padding:7px 6px;">
@@ -2999,7 +2999,7 @@ function addFilter() {
   const key = document.getElementById("filterStat").value;
   const op = document.getElementById("filterOp").value;
   const value = parseFloat(document.getElementById("filterValue").value);
-  if (isNaN(value)) return;
+  if (isNaN(value)) { _showToast("need a number for that filter"); return; }
 
   // Check filter limit for free users (3 max)
   if (typeof checkFeatureGate === "function") {
@@ -4799,7 +4799,7 @@ function loadCustomScoringConfig(idx) {
 
 function saveCustomScoring() {
   const name = document.getElementById("customScoringName").value.trim();
-  if (!name) { alert("Enter a config name"); return; }
+  if (!name) { _showToast("give it a name first"); return; }
 
   const weights = {};
   document.querySelectorAll("#customScoringWeights input[data-stat]").forEach(el => {

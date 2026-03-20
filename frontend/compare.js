@@ -845,7 +845,7 @@ function copyCompareURL() {
   navigator.clipboard.writeText(window.location.href).then(function() {
     showToast("Link copied!");
   }).catch(function() {
-    showToast("Could not copy link");
+    showToast("fumbled the copy — try again");
   });
 }
 

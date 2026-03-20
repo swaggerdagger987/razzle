@@ -7911,7 +7911,7 @@
         state.draftYear = years[0];
         loadProspects();
       }).catch(function() {
-        el.querySelector('.bb-year').innerHTML = '<option value="">No data</option>';
+        el.querySelector('.bb-year').innerHTML = '<option value="">no draft classes found</option>';
       });
     }
 

@@ -787,3 +787,67 @@ All 59 tests pass. All 11 JS files syntax-clean. 0 remaining issues found.
 - Agents.html bio grid already has proper mobile breakpoints (3 to 2 at 768px, 1 at 480px)
 - Canvas hardcoded colors (70+ fillStyle) remain a known dark mode limitation — deferred to post-launch
 - Footer touch targets (16px height) are acceptable for non-primary links — not a launch blocker
+
+---
+
+## Quality Pass: Deep Multi-Agent Audit (Mar 19)
+
+**Goal**: Fresh 5-agent parallel audit focused on landing page, Lab screener, dark mode, mobile 375px, and brand voice consistency.
+
+### Pass 1: Landing Page + Typography
+
+| # | Fix | Category | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | fake-rank/fake-pos font-display at 9-14px | Typography | index.html | Changed to --font-mono (design guide: display font only at 16px+) |
+| 2 | pricing-badge font-display at 11px | Typography | index.html | Changed to --font-mono with font-weight:700 |
+| 3 | Hardcoded #8b5cf6 purple fallbacks (5 instances) | CSS | index.html | Removed fallbacks, trust var(--purple) |
+| 4 | Footer links inline styles → CSS class | DRY | 72 HTML files | Created .footer-link class with hover state (color→orange on hover) |
+| 5 | Footer template outdated | Maintenance | update_footers.py | Updated template with footer-link class, mono font, correct nav names |
+
+### Pass 2: Dark Mode Badge Colors (lab-panels.css)
+
+| # | Fix | Category | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | 50+ hardcoded badge text colors → semantic vars | Dark mode | lab-panels.css | #1a7a6d→var(--semantic-green), #3a5abf→var(--semantic-blue), #8a6d20→var(--semantic-yellow), #a85a3a→var(--semantic-orange), #a83240→var(--semantic-red), plus 5+ more patterns |
+| 2 | 16 hardcoded badge backgrounds → semantic vars | Dark mode | lab-panels.css | #dbeafe→var(--semantic-blue-light), #fef9c3→var(--semantic-yellow-light), #d9efec→var(--semantic-green-light), #f2d5d8→var(--semantic-red-light), plus more |
+| 3 | 6 hardcoded border-colors → CSS vars | Dark mode | lab-panels.css | #1e40af, #854d0e, #ffc857, #e63946, etc. |
+| 4 | Risers/fallers green/red → var(--green)/var(--red) | Dark mode | lab-panels.css | 10+ instances of #16a34a and #dc2626 |
+| 5 | Removed unnecessary fallback on --orange-light | CSS | lab-panels.css | Line 353 |
+
+### Pass 3: Brand Voice
+
+| # | Fix | Category | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | "No data" dropdown → "no draft classes found" | Voice | prospects.html, lab-panels.js | User-facing generic text |
+| 2 | "Could not validate" → "couldn't verify that one" | Voice | app.js | Promo code validation |
+| 3 | "Enter a username" → "need a Sleeper username" | Voice | app.js | Sleeper link input |
+| 4 | "Could not copy link" → "fumbled the copy — try again" | Voice | compare.js, player.js | Clipboard error |
+| 5 | alert("Enter a config name") → toast "give it a name first" | Voice | lab.js | Custom scoring save |
+| 6 | "enter a key first" → "need an API key first" | Voice | warroom.js (2 instances) | API key validation |
+| 7 | "War Room" comment → "Situation Room" | Naming | lab.js | Internal comment consistency |
+
+### Pass 4: Mobile 375px
+
+| # | Fix | Category | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | 375px breakpoint for hero section | Mobile | index.html | Tighter padding, 20px h1, 16px subtitle |
+| 2 | 375px breakpoint for pricing cards | Mobile | index.html, pricing.html | Smaller fonts, tighter padding |
+| 3 | Promotions grid minmax(260px) → minmax(min(260px,100%),1fr) | Mobile | pricing.html | Prevents horizontal scroll at 375px |
+| 4 | Removed hardcoded CSS fallbacks | CSS | pricing.html | var(--green, #2ec4b6) → var(--green) across 12 instances |
+
+### Pass 5: Lab UX
+
+| # | Fix | Category | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | Zebra striping dark mode | Dark mode | lab.js, styles.css | Added --zebra-stripe CSS variable with dark mode override |
+| 2 | Filter NaN validation feedback | UX | lab.js | Added toast "need a number for that filter" when parseFloat fails |
+
+### Verified Clean
+- 0 hardcoded hex badge colors in lab-panels.css (only metallic gold/bronze/silver intentional)
+- 0 inline footer link styles across 72 HTML files
+- 0 generic "No data" / "Could not" / "Enter a" validation messages
+- 0 font-display below 16px on landing page
+- 0 unnecessary CSS var fallbacks on landing + pricing
+- All 11 JS files syntax clean
+- All 16 Python files compile clean
+- 59/59 tests pass
