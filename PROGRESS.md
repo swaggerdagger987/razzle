@@ -2352,3 +2352,30 @@ week_filter failure (10/11) is a stale server process issue, not a code bug. Ver
 - All modified Python files compile clean
 - 0 remaining `getMonth() >= 7` in frontend
 - 0 remaining unguarded `data.available_seasons.forEach` in lab-panels.js
+
+---
+
+## Ship Loop: Sweep Round 5 — Data Correctness + Interaction (Mar 20)
+
+**Goal**: Deep audit via 2 agents (backend data correctness, frontend interaction edge cases).
+
+| # | Fix | Severity | File(s) | Notes |
+|---|-----|----------|---------|-------|
+| 1 | target_premium JOIN on gsis_id instead of player_id | P0 | tools.py:2484 | Wrong JOIN column caused player mismatches/exclusions. Every other function uses player_id. |
+| 2 | draft_class missing season_type='regular' filter | P0 | tools.py:554 | LEFT JOIN to player_week_stats included playoff data, inflating PPG. Bo Nix-style inflation. |
+| 3 | stock_watch player query missing season_type filter | P1 | dashboards.py:630 | Player PPG included playoffs but defense grid used regular-season-only data. Mismatch distorted stock scores. |
+| 4 | heatmap missing season_type filter | P1 | analytics.py:222 | Stat aggregation included playoff weeks, inflating totals for playoff teams. |
+| 5 | opportunity_share player+team queries missing season_type | P1 | dashboards.py:895,929 | Both player totals and team denominators included playoff data. Opp share percentages were wrong. |
+| 6 | playoff_schedule defense grid missing season_type | P1 | tools.py:1379 | Defense PPG-allowed included playoff games, distorting matchup grades. |
+| 7 | runAllAgents re-enables buttons before cross-agent triggers finish | P1 | warroom.js:2806 | Moved setScenarioButtonsDisabled(false) and _runningAllAgents=false after Promise.all(followUpPromises). Prevents double-click corruption. |
+| 8 | toggleSelectAll bypasses free user compare limit | P1 | lab.js:4596 | Hard-coded max=5 instead of using _getCompareLimit() (returns 2 for free). Free users could select 5 players. |
+| 9 | toggleLeague collapse-then-refetch on retry | P2 | league-intel.html:1994 | Toggle collapsed card on retry click, loading data into hidden container. Refactored to only toggle on loaded state, keep expanded during retry. |
+
+### Deferred (architectural, post-launch)
+- Virtual scroll destroying row highlights/expanded rows — needs row state persistence in HTML strings, major refactor
+- HAVING clause with week filter returning empty — documented, endpoints where weekly doesn't make sense
+- "Top 10" quick filter threshold computed from current page — cosmetic, threshold is approximate
+
+### Verified Clean
+- 10/11 smoke tests pass (week_filter pre-existing)
+- All JS/Python syntax clean

@@ -1992,12 +1992,21 @@ async function getSleeperPlayers() {
 }
 
 async function toggleLeague(card, leagueId, userId) {
-  card.classList.toggle("expanded");
   const rosterDiv = document.getElementById(`roster-${escapeAttr(leagueId)}`);
   if (!rosterDiv) return;
 
-  // Only load once (set after successful fetch to avoid race condition)
-  if (rosterDiv.dataset.loaded) return;
+  // If already loaded, just toggle visibility
+  if (rosterDiv.dataset.loaded === "true") {
+    card.classList.toggle("expanded");
+    return;
+  }
+  // If loading in progress, ignore duplicate clicks
+  if (rosterDiv.dataset.loaded === "loading") return;
+
+  // Expand (or keep expanded for retry after failed load)
+  if (!card.classList.contains("expanded")) {
+    card.classList.add("expanded");
+  }
   rosterDiv.dataset.loaded = "loading";
 
   try {

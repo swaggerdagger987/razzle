@@ -4591,9 +4591,9 @@ function _formatDiffCell(val, baseVal, col, key) {
 // ─── Player selection (for compare/charts) ───────────────────────
 function toggleSelectAll(checked) {
   if (checked) {
-    // Select all visible players (up to 5)
+    // Select all visible players (up to compare limit)
     state.selectedPlayers = [];
-    const max = Math.min(state.items.length, 5);
+    const max = Math.min(state.items.length, _getCompareLimit());
     for (let i = 0; i < max; i++) {
       const p = state.items[i];
       const pid = p.player_id || p.player_name;
