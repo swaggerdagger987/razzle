@@ -266,3 +266,84 @@ smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correc
 smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
 smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
 smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	P0	backend/live_data/players.py	-	_fetch_screener_uncached	ticket	smoke:week_filter — Week 1 player has 21 games — week filter not working
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	P0	backend/live_data/players.py	-	_fetch_screener_uncached	ticket	smoke:week_filter — Week 1 player has 21 games — week filter not working
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	P0	backend/live_data/players.py	-	_fetch_screener_uncached	ticket	smoke:week_filter — Week 1 player has 21 games — week filter not working
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=21gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	P0	backend/live_data/players.py	-	_fetch_screener_uncached	ticket	smoke:week_filter — Week 1 player has 21 games — week filter not working
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke-prod	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)	100	2026-03-20T14:12
+smoke-prod	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players	100	2026-03-20T14:12
+smoke-prod	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs	100	2026-03-20T14:12
+smoke-prod	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs	100	2026-03-20T14:12
+smoke-prod	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct	100	2026-03-20T14:12
+smoke-prod	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data	100	2026-03-20T14:12
+smoke-prod	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=21gp, week1=1gp	100	2026-03-20T14:12
+smoke-prod	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct	100	2026-03-20T14:12
+smoke-prod	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players	100	2026-03-20T14:12
+smoke-prod	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values	100	2026-03-20T14:12
+smoke-prod	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams	100	2026-03-20T14:12
+re-audit	OK	frontend/lab.html	-	Lab init	pass	FUNC-001 FIXED: Lab loads on prod (0 JS errors, 27 table rows, 69 sidebar tools). GZip fix deployed.	100	2026-03-20T14:13
+re-audit	OK	frontend/lab.html	-	dark mode	pass	FUNC-001 re-audit: Dark mode clean — espresso palette, proper contrast, no white flashes.	100	2026-03-20T14:13
+51	OK	frontend/lab.js	4114	saveCurrentView	pass	Saved Views: save works (name+toast), appears in dropdown+manage list. Restores all state.	95	2026-03-20T14:20
+51	OK	frontend/lab.js	4161	loadSavedView	pass	Saved Views: load restores universe, position, search, sort, filters, visual modes, columns, columnWidths	95	2026-03-20T14:20
+51	OK	frontend/lab.js	4242	deleteSavedView	pass	Saved Views: delete with confirm, localStorage update, cloud sync for Pro	95	2026-03-20T14:20
+52	OK	frontend/formulas.js	38	saveFormula	pass	Formula Builder: modal opens, stat selector from COLUMNS, saved formula renders as column in table (28 th)	95	2026-03-20T14:25
+52	OK	frontend/formulas.js	146	renderSavedFormulas	pass	Formula Builder: XSS-safe (data attributes), event delegation, cloud sync, 3-formula free limit	95	2026-03-20T14:25
+53	OK	frontend/formula-store.js	55	openFormulaStore	pass	Formula Store: opens, fetches /api/formulas/store (10 formulas), cards with ratings/tags. Install Pro-gated.	95	2026-03-20T14:30
+54	OK	frontend/lab.js	5507	exportImage	pass	Export PNG: custom canvas renderer, title bar, position badges, sort highlight, watermark, downloads PNG	95	2026-03-20T14:35
+54	OK	frontend/lab.html	3569	shareModal	pass	Share Modal: URL+Copy, PNG, CSV, Clipboard, Reddit Table, Reddit Title. All buttons present.	95	2026-03-20T14:35
+55	OK	frontend/lab.js	5707	exportCSV	pass	Export CSV: Pro-gated, branding header, BOM, csvEscape, descriptive filename, revokeObjectURL	95	2026-03-20T14:35
+63	OK	frontend/league-intel.html	1787	connectSleeper	pass	Bureau: Sleeper connect with 10s timeout, error states (not found/timeout/network), account lock	95	2026-03-20T14:40
+63	OK	frontend/league-intel.html	-	darkMode	pass	Bureau: dark mode clean, proper espresso palette, input fields visible	95	2026-03-20T14:40
+64	OK	frontend/agents.html	-	pixelCanvas	pass	Situation Room: canvas renders+animates, 6 agent cards, scenario textarea, What Can I Ask panel	95	2026-03-20T14:45
+64	OK	frontend/agents.html	-	setupGuide	pass	Situation Room: first-run setup guide, demo briefings, 0 JS errors. Ship D-1 through D-7 hardened.	95	2026-03-20T14:45
