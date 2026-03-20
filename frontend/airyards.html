@@ -711,7 +711,7 @@
   });
 
   // Analytics
-  try { fetch('/api/analytics/pageview', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ page: '/airyards.html', referrer: document.referrer || '' }) }); } catch(e) {}
+  fetch('/api/analytics/pageview', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ page: '/airyards.html', referrer: document.referrer || '' }) }).catch(function(){});
 
   // Initial load
   loadData();

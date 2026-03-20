@@ -41,10 +41,15 @@ def _cached(key, fn, ttl=None):
     if ttl is None:
         ttl = _CACHE_TTL
     now = _time.time()
-    # Fast path: cache hit (no lock needed, dict reads are thread-safe in CPython)
-    if key in _cache and now - _cache[key]["t"] < ttl:
-        _cache[key]["a"] = now  # touch for LRU
-        return _cache[key]["v"]
+    # Fast path: cache hit (try/except guards against concurrent eviction between
+    # the 'in' check and the dict access — _cache_evict can pop the key in another thread)
+    try:
+        entry = _cache[key]
+        if now - entry["t"] < ttl:
+            entry["a"] = now  # touch for LRU
+            return entry["v"]
+    except KeyError:
+        pass
     # Slow path: get per-key lock to prevent stampede (only one thread computes)
     with _cache_meta_lock:
         if key not in _cache_locks:
