@@ -376,6 +376,7 @@ def fetch_stat_leaders(season=None, position=None, limit=10):
                             ON m.player_id = p.player_id AND m.season = ? AND m.week = s.week
                             AND m.stat_key = 'target_share'
                         WHERE p.fantasy_relevant = 1
+                          AND s.season_type = 'regular'
                           {pos_where}
                         GROUP BY p.player_id
                         HAVING games >= 3 AND stat_value IS NOT NULL
@@ -396,6 +397,7 @@ def fetch_stat_leaders(season=None, position=None, limit=10):
                         JOIN player_week_stats s
                             ON s.player_id = p.player_id AND s.season = ?
                         WHERE p.fantasy_relevant = 1
+                          AND s.season_type = 'regular'
                           {pos_where}
                         GROUP BY p.player_id
                         HAVING games >= 3 AND SUM(s.carries) >= 30
@@ -414,6 +416,7 @@ def fetch_stat_leaders(season=None, position=None, limit=10):
                         JOIN player_week_stats s
                             ON s.player_id = p.player_id AND s.season = ?
                         WHERE p.fantasy_relevant = 1
+                          AND s.season_type = 'regular'
                           {pos_where}
                         GROUP BY p.player_id
                         HAVING games >= 3
@@ -432,6 +435,7 @@ def fetch_stat_leaders(season=None, position=None, limit=10):
                         JOIN player_week_stats s
                             ON s.player_id = p.player_id AND s.season = ?
                         WHERE p.fantasy_relevant = 1
+                          AND s.season_type = 'regular'
                           {pos_where}
                         GROUP BY p.player_id
                         HAVING games >= 3
@@ -512,6 +516,7 @@ def fetch_positional_scarcity(season=None):
                         ON s.player_id = p.player_id AND s.season = ?
                     WHERE p.fantasy_relevant = 1
                       AND p.position = ?
+                      AND s.season_type = 'regular'
                     GROUP BY p.player_id
                     HAVING games >= 3
                     ORDER BY ppg DESC
@@ -638,6 +643,7 @@ def fetch_breakout_candidates(season=None, position=None, limit=50, week=None):
                   AND p.fantasy_relevant = 1
                   AND p.age IS NOT NULL
                   AND p.age <= 27
+                  AND s.season_type = 'regular'
                   {week_filter}
                   {pos_filter}
                 GROUP BY p.player_id
@@ -854,6 +860,7 @@ def fetch_buy_sell_candidates(season=None, position=None, limit=15):
                     ON s.player_id = p.player_id AND s.season = ?
                 WHERE p.position IN ('QB','RB','WR','TE')
                   AND p.fantasy_relevant = 1
+                  AND s.season_type = 'regular'
                   {pos_filter}
                 GROUP BY p.player_id
                 HAVING games >= 6
@@ -1096,6 +1103,7 @@ def fetch_stat_explorer(season=None, position=None, x_stat="targets_g", y_stat="
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ?
+                  AND s.season_type = 'regular'
                   AND p.position IN ('QB','RB','WR','TE')
                   {pos_filter}
                 GROUP BY p.player_id
@@ -1237,6 +1245,7 @@ def fetch_aging_curves(season=None, position=None):
                         WHERE p.position = ?
                           AND p.fantasy_relevant = 1
                           AND p.age IS NOT NULL
+                          AND s.season_type = 'regular'
                         GROUP BY p.player_id, s.season
                         HAVING COUNT(DISTINCT s.week) >= 6
                     ) sub
@@ -1266,6 +1275,7 @@ def fetch_aging_curves(season=None, position=None):
                     WHERE p.position = ?
                       AND p.fantasy_relevant = 1
                       AND p.age IS NOT NULL
+                      AND s.season_type = 'regular'
                     GROUP BY p.player_id
                     HAVING games >= 6
                     ORDER BY ppg DESC
@@ -1328,7 +1338,7 @@ def fetch_weekly_heatmap(season=None, position=None, limit=40):
 
             # Get available weeks for this season
             week_rows = conn.execute(
-                "SELECT DISTINCT week FROM player_week_stats WHERE season = ? ORDER BY week",
+                "SELECT DISTINCT week FROM player_week_stats WHERE season = ? AND season_type = 'regular' ORDER BY week",
                 [season]
             ).fetchall()
             weeks = [r[0] for r in week_rows] if week_rows else []
@@ -1341,6 +1351,7 @@ def fetch_weekly_heatmap(season=None, position=None, limit=40):
                     FROM player_week_stats s
                     JOIN players p ON p.player_id = s.player_id
                     WHERE s.season = ? AND p.position = ?
+                      AND s.season_type = 'regular'
                       AND s.fantasy_points_ppr IS NOT NULL
                       AND p.fantasy_relevant = 1
                     ORDER BY s.fantasy_points_ppr
@@ -1373,6 +1384,7 @@ def fetch_weekly_heatmap(season=None, position=None, limit=40):
                 FROM players p
                 JOIN player_week_stats s ON s.player_id = p.player_id AND s.season = ?
                 WHERE p.fantasy_relevant = 1
+                  AND s.season_type = 'regular'
                   AND s.fantasy_points_ppr IS NOT NULL
                   {pos_filter}
                 GROUP BY p.player_id
@@ -1389,7 +1401,7 @@ def fetch_weekly_heatmap(season=None, position=None, limit=40):
                 week_rows_data = conn.execute(f"""
                     SELECT player_id, week, fantasy_points_ppr
                     FROM player_week_stats
-                    WHERE season = ? AND player_id IN ({placeholders})
+                    WHERE season = ? AND season_type = 'regular' AND player_id IN ({placeholders})
                     ORDER BY player_id, week
                 """, [season] + player_ids).fetchall()
                 for wr in week_rows_data:
@@ -1472,6 +1484,7 @@ def fetch_target_distribution(season=None, team=None, week=None):
                 JOIN player_week_stats s ON s.player_id = p.player_id AND s.season = ?
                 WHERE p.position IN ('QB', 'RB', 'WR', 'TE')
                   AND p.team IS NOT NULL AND p.team != ''
+                  AND s.season_type = 'regular'
                   {week_filter}
                   {teams_filter}
                 GROUP BY p.player_id
@@ -1753,6 +1766,7 @@ def fetch_usage_trends(season=None, position=None, window=5, limit=30, week=None
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ?
+                  AND s.season_type = 'regular'
                   AND p.position IN ('QB','RB','WR','TE')
                   AND p.fantasy_relevant = 1
                   AND s.offense_pct IS NOT NULL
@@ -1927,6 +1941,7 @@ def fetch_year_over_year(season=None, position=None, metric="ppg", limit=25):
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ?
+                  AND s.season_type = 'regular'
                   AND p.position IN ('QB','RB','WR','TE')
                   {pos_filter}
                 GROUP BY p.player_id
@@ -2081,6 +2096,7 @@ def fetch_air_yards(season=None, position=None, limit=25):
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ?
+                  AND s.season_type = 'regular'
                   {pos_filter}
                 GROUP BY p.player_id
                 HAVING COUNT(DISTINCT s.week) >= 4 AND SUM(s.targets) >= 10
@@ -2244,6 +2260,7 @@ def fetch_redzone_usage(season=None, position=None, limit=30, week=None):
                     ON s.player_id = p.player_id AND s.season = ?
                 WHERE p.position IN ('QB','RB','WR','TE')
                   AND p.fantasy_relevant = 1
+                  AND s.season_type = 'regular'
                   {week_filter}
                   {pos_filter}
                 GROUP BY p.player_id
