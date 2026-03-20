@@ -851,3 +851,21 @@ All 59 tests pass. All 11 JS files syntax-clean. 0 remaining issues found.
 - All 11 JS files syntax clean
 - All 16 Python files compile clean
 - 59/59 tests pass
+
+---
+
+## Hotfix: All Historical Seasons Free (Mar 19)
+
+**Goal**: Remove tier gating on historical seasons. The data is the billboard — let people screenshot 2018 stats. The paywall is on intelligence features, not data.
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Remove getAllowedSeasons() restriction | DONE | app.js: function now returns all seasons regardless of plan. Was limiting free users to 3 most recent seasons. |
+| 2 | Remove lock emojis from season selector | DONE | lab.js: populateSeasonSelect() no longer adds lock emoji, disabled attribute, or "Unlock all seasons with Pro" hint. Career mode unlocked for everyone. |
+| 3 | Verify no backend season gating | DONE | Zero backend restrictions found — all data already accessible via API regardless of auth. |
+| 4 | Verify standalone panels ungated | DONE | No standalone HTML panel pages had season gating logic. |
+
+### Decisions Log
+- Bureau manager profiling multi-season crawl (1 free, 5 Pro) is NOT season data gating — it's Bureau depth analysis (a Pro feature). Left unchanged.
+- Filter limits (3 free), formula limits (3 free), CSV export (Pro), compare limits (2 free) all stay gated. Only season/data access was freed.
+- No backend changes needed — gating was purely frontend UI.

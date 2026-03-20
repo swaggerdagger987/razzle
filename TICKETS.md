@@ -13,6 +13,8 @@ The database file `data/terminal.db` uses WAL journal mode locally. Uploading it
 
 ---
 
+---
+
 ## Phase: Weekly Data Filter — Screener + All Panels
 
 **Context**: The `player_week_stats` table already has per-week data (40+ stat columns, every player, every week, 2015-2025). Several endpoints already support week params (`/api/weekly-leaders`, `/api/players/{id}/weeks`). But the main screener and most analytical panels only show season-aggregated data. This phase adds a universal week selector so users can slice any view by individual week — critical for in-season use.

@@ -237,14 +237,10 @@ function isEliteUser_global() {
 
 /**
  * Get the allowed season range for the current user.
- * Free: current season + 2 prior (3 total).
- * Pro/Elite: all seasons from 2015.
+ * All seasons are free for everyone — the data is the billboard.
  */
 function getAllowedSeasons(allSeasons) {
-  if (isPaidUser()) return allSeasons;
-  // Free: latest 3 seasons only
-  var sorted = allSeasons.slice().sort(function(a, b) { return b - a; });
-  return sorted.slice(0, 3);
+  return allSeasons;
 }
 
 /**
@@ -277,7 +273,7 @@ function checkFeatureGate(feature, currentCount) {
  * Refresh all tier-gated UI elements. Called after plan changes (checkout return, login).
  */
 function refreshPlanGating() {
-  // Re-populate season selector (unlock all seasons for paid users)
+  // Re-populate season selector
   if (typeof populateSeasonSelect === "function") populateSeasonSelect();
 
   // Re-render formula builder (update limit display)
@@ -1326,7 +1322,7 @@ window.addEventListener("razzle-plan-changed", function(e) {
   var user = e.detail;
   if (!user) return;
 
-  // Re-populate season selector if on Lab page (unlock all seasons)
+  // Re-populate season selector if on Lab page
   if (typeof populateSeasonSelect === "function") populateSeasonSelect();
 
   // Re-render formula builder (remove limit)
