@@ -54,7 +54,8 @@ def quick_search_players(query, limit=8):
                            (SELECT ROUND(SUM(s.fantasy_points_ppr) * 1.0 / COUNT(DISTINCT s.week), 1)
                             FROM player_week_stats s, ms
                             WHERE s.player_id = p.player_id
-                              AND s.season = ms.s),
+                              AND s.season = ms.s
+                              AND s.season_type = 'regular'),
                            0) AS ppg
                 FROM players p
                 WHERE p.search_name LIKE ? ESCAPE '\\'
@@ -119,11 +120,11 @@ def fetch_players(
             if _sort_dir.lower() not in ("asc", "desc"):
                 _sort_dir = "desc"
 
-            where = []
+            where = ["s.season_type = 'regular'"]
             params = []
 
             if _career_mode:
-                pass  # no season filter — aggregate all
+                pass  # no season filter — aggregate all seasons
             else:
                 where.append("s.season = ?")
                 params.append(_season)
@@ -238,11 +239,11 @@ def _fetch_screener_uncached(body):
         if relevance == "fantasy" and not pos_list:
             pos_list = list(FANTASY_POSITIONS)
 
-        where = []
+        where = ["s.season_type = 'regular'"]
         params = []
 
         if career_mode:
-            pass  # no season filter
+            pass  # no season filter — aggregate all seasons
         else:
             where.append("s.season = ?")
             params.append(season)
@@ -550,6 +551,7 @@ def fetch_screener_sparklines(player_ids, season=0):
                 SELECT player_id, week, fantasy_points_ppr
                 FROM player_week_stats
                 WHERE player_id IN ({placeholders}) AND season = ?
+                  AND season_type = 'regular'
                 ORDER BY player_id, week ASC
             """, ids + [_season]).fetchall()
             sparklines = {}
@@ -584,6 +586,7 @@ def fetch_player_weeks(player_id, season=0):
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.player_id = ? AND s.season = ?
+                  AND s.season_type = 'regular'
                 ORDER BY s.week ASC
             """, (player_id, _season)).fetchall()
 
@@ -617,6 +620,7 @@ def fetch_player_seasons(player_id):
                     {_STAT_SUM_COLS}
                 FROM player_week_stats s
                 WHERE s.player_id = ?
+                  AND s.season_type = 'regular'
                 GROUP BY s.season
                 ORDER BY s.season ASC
             """, (player_id,)).fetchall()
@@ -654,6 +658,7 @@ def _fetch_player_profile_uncached(player_id):
                 {_STAT_SUM_COLS}
             FROM player_week_stats s
             WHERE s.player_id = ?
+              AND s.season_type = 'regular'
             GROUP BY s.season
             ORDER BY s.season ASC
         """, (player_id,)).fetchall()
@@ -749,7 +754,7 @@ def _fetch_players_compare_uncached(player_ids, season=0):
                 {_STAT_SUM_COLS}
             FROM players p
             JOIN player_week_stats s ON p.player_id = s.player_id
-            WHERE p.player_id IN ({placeholders}) {season_filter}
+            WHERE p.player_id IN ({placeholders}) AND s.season_type = 'regular' {season_filter}
             GROUP BY p.player_id
         """, query_params).fetchall()
 
@@ -786,7 +791,7 @@ def _fetch_team_roster_uncached(team=None, season=None):
         # Get available teams for the selected season
         team_rows = conn.execute("""
             SELECT DISTINCT p.team FROM players p
-            JOIN player_week_stats s ON s.player_id = p.player_id AND s.season = ?
+            JOIN player_week_stats s ON s.player_id = p.player_id AND s.season = ? AND s.season_type = 'regular'
             WHERE p.position IN ('QB','RB','WR','TE')
               AND p.team IS NOT NULL AND p.team != ''
             ORDER BY p.team
@@ -816,7 +821,7 @@ def _fetch_team_roster_uncached(team=None, season=None):
                 SUM(s.carries) as carries
             FROM players p
             JOIN player_week_stats s
-                ON s.player_id = p.player_id AND s.season = ?
+                ON s.player_id = p.player_id AND s.season = ? AND s.season_type = 'regular'
             WHERE p.team = ?
               AND p.position IN ('QB','RB','WR','TE')
             GROUP BY p.player_id
@@ -924,6 +929,7 @@ def _fetch_career_stats_uncached(player_id):
                 SUM(s.offense_snaps) as snaps
             FROM player_week_stats s
             WHERE s.player_id = ?
+              AND s.season_type = 'regular'
             GROUP BY s.season
             ORDER BY s.season
         """, (player_id,)).fetchall()
@@ -1130,6 +1136,7 @@ def _fetch_player_percentiles_uncached(player_id, season=None):
             FROM player_week_stats s
             JOIN players p ON p.player_id = s.player_id
             WHERE s.season = ? AND p.position = ?
+              AND s.season_type = 'regular'
             GROUP BY s.player_id
             HAVING games >= 4 AND (total_ppr / games) >= 2.0
         """, (season, pos)).fetchall()
@@ -1325,6 +1332,7 @@ def _fetch_points_breakdown_uncached(player_id, season=None):
                 SUM(turnovers) as turnovers
             FROM player_week_stats
             WHERE player_id = ? AND season = ?
+              AND season_type = 'regular'
         """, (player_id, season)).fetchone()
 
         if not stats or not stats[8]:
@@ -1416,6 +1424,7 @@ def _fetch_game_log_uncached(player_id, season=None):
                    COALESCE(targets, 0)
             FROM player_week_stats
             WHERE player_id = ? AND season = ?
+              AND season_type = 'regular'
             ORDER BY week ASC
         """, (player_id, season))
         rows = cursor.fetchall()
@@ -1506,6 +1515,7 @@ def _fetch_compare_table_uncached(player_ids, season=None):
             WHERE s.season = ?
               AND p.player_id IN ({placeholders})
               AND p.fantasy_relevant = 1
+              AND s.season_type = 'regular'
             GROUP BY p.player_id
         """, [season] + list(player_ids))
         rows = cursor.fetchall()
@@ -1573,6 +1583,7 @@ def _fetch_player_boom_bust_uncached(player_id, season=0):
             SELECT week, fantasy_points_ppr
             FROM player_week_stats
             WHERE player_id = ? AND season = ?
+              AND season_type = 'regular'
             ORDER BY week
         """, (player_id, season)).fetchall()
 
@@ -1589,6 +1600,7 @@ def _fetch_player_boom_bust_uncached(player_id, season=0):
                 FROM player_week_stats s
                 JOIN players p ON s.player_id = p.player_id
                 WHERE p.position = ? AND s.season = ?
+                  AND s.season_type = 'regular'
                 GROUP BY s.player_id
                 HAVING COUNT(*) >= 4
             )
@@ -1603,6 +1615,7 @@ def _fetch_player_boom_bust_uncached(player_id, season=0):
             FROM player_week_stats s
             JOIN players p ON s.player_id = p.player_id
             WHERE p.position = ? AND s.season = ?
+              AND s.season_type = 'regular'
             GROUP BY s.player_id
             HAVING COUNT(*) >= 4
         """, (pos, season)).fetchall()
@@ -1751,6 +1764,7 @@ def _fetch_player_comps_uncached(player_id, limit=5, season=0):
             FROM player_week_stats s
             JOIN players p ON s.player_id = p.player_id
             WHERE s.player_id = ? AND s.season = ?
+              AND s.season_type = 'regular'
             GROUP BY s.player_id
             HAVING games >= 4
         """, (player_id, season)).fetchone()
@@ -1769,6 +1783,7 @@ def _fetch_player_comps_uncached(player_id, limit=5, season=0):
             FROM player_week_stats s
             JOIN players p ON s.player_id = p.player_id
             WHERE p.position = ? AND s.player_id != ? AND s.season = ?
+              AND s.season_type = 'regular'
             GROUP BY s.player_id
             HAVING games >= 4
         """, (pos, player_id, season)).fetchall()
