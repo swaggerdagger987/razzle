@@ -703,7 +703,7 @@
     var el = document.getElementById("prospectsPage");
     if (!el || typeof html2canvas === "undefined") return;
     html2canvas(el, {
-      backgroundColor: "#ede0cf",
+      backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf',
       scale: 2,
       useCORS: true,
       logging: false,

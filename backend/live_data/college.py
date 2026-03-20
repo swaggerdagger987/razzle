@@ -58,8 +58,8 @@ def _fetch_college_players_uncached(
         params = [season]
 
         if search:
-            search_clean = search.lower().replace(" ", "")
-            where.append("LOWER(REPLACE(c.player_name, ' ', '')) LIKE ?")
+            search_clean = search.lower().replace(" ", "").replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+            where.append("LOWER(REPLACE(c.player_name, ' ', '')) LIKE ? ESCAPE '\\'")
             params.append(f"%{search_clean}%")
 
         if pos_list:
@@ -68,12 +68,14 @@ def _fetch_college_players_uncached(
             params.extend(pos_list)
 
         if team:
-            where.append("c.team LIKE ?")
-            params.append(f"%{team}%")
+            team_clean = team.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+            where.append("c.team LIKE ? ESCAPE '\\'")
+            params.append(f"%{team_clean}%")
 
         if conference:
-            where.append("c.conference LIKE ?")
-            params.append(f"%{conference}%")
+            conf_clean = conference.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+            where.append("c.conference LIKE ? ESCAPE '\\'")
+            params.append(f"%{conf_clean}%")
 
         where_clause = " AND ".join(where)
 

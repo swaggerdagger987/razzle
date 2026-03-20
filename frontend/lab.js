@@ -3801,10 +3801,13 @@ function loadStateFromURL() {
     const cv = params.get("cv");
     if (cv === "stats" || cv === "prospects") state.collegeView = cv;
   }
-  if (params.has("pos")) state.position = params.get("pos");
+  if (params.has("pos")) {
+    var posVal = params.get("pos").toUpperCase();
+    if (["ALL","QB","RB","WR","TE","K","DEF","DL","LB","DB"].indexOf(posVal) !== -1) state.position = posVal;
+  }
   if (params.has("q")) state.search = params.get("q");
   if (params.has("sort")) state.sortKey = params.get("sort");
-  if (params.has("dir")) state.sortDir = params.get("dir");
+  if (params.has("dir")) { var dv = params.get("dir"); if (dv === "asc" || dv === "desc") state.sortDir = dv; }
   if (params.has("sort2")) state.sortKey2 = params.get("sort2");
   if (params.has("dir2")) state.sortDir2 = params.get("dir2");
   if (params.has("offset")) state.offset = Math.max(0, parseInt(params.get("offset")) || 0);
@@ -3888,8 +3891,7 @@ function loadStateFromURL() {
 
   if (state.relevance === "all") {
     const btn = document.getElementById("relevanceToggle");
-    btn.textContent = "All Players";
-    btn.classList.add("active");
+    if (btn) { btn.textContent = "All Players"; btn.classList.add("active"); }
   }
 
   // Sync heat colors button — hide in non-NFL modes (sparse numeric data)

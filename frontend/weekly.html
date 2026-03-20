@@ -438,8 +438,15 @@
     if (season) url += '&season=' + season;
     if (posParam) url += '&position=' + posParam;
 
-    document.getElementById('weekly-loading').style.display = '';
-    document.getElementById('weekly-loading').textContent = razzleLoading();
+    var loadEl = document.getElementById('weekly-loading');
+    if (!loadEl) {
+      loadEl = document.createElement('div');
+      loadEl.className = 'weekly-loading';
+      loadEl.id = 'weekly-loading';
+      document.getElementById('weekly-body').prepend(loadEl);
+    }
+    loadEl.style.display = '';
+    loadEl.textContent = razzleLoading();
 
     fetch(url)
       .then(function(r) {
@@ -532,8 +539,9 @@
 
       // Games + PPG columns
       html += '<td class="ppg-cell" style="color:var(--ink-light)">' + p.games + '</td>';
-      var ppgColor = getHeatColor(p.ppg, t);
-      html += '<td class="ppg-cell score-cell" style="background:' + (ppgColor ? ppgColor.bg : '') + '; color:' + (ppgColor ? ppgColor.text : '') + ';">' + p.ppg.toFixed(1) + '</td>';
+      var ppgVal = p.ppg != null ? p.ppg : 0;
+      var ppgColor = getHeatColor(ppgVal, t);
+      html += '<td class="ppg-cell score-cell" style="background:' + (ppgColor ? ppgColor.bg : '') + '; color:' + (ppgColor ? ppgColor.text : '') + ';">' + ppgVal.toFixed(1) + '</td>';
       html += '</tr>';
     });
 

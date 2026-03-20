@@ -46,8 +46,8 @@ def _fetch_prospects_uncached(
         params = [draft_year]
 
         if search:
-            search_clean = search.lower().replace(" ", "")
-            where.append("LOWER(REPLACE(c.player_name, ' ', '')) LIKE ?")
+            search_clean = search.lower().replace(" ", "").replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+            where.append("LOWER(REPLACE(c.player_name, ' ', '')) LIKE ? ESCAPE '\\'")
             params.append(f"%{search_clean}%")
 
         if pos_list:
@@ -56,8 +56,9 @@ def _fetch_prospects_uncached(
             params.extend(pos_list)
 
         if school:
-            where.append("(c.school LIKE ? OR d.college LIKE ?)")
-            params.extend([f"%{school}%", f"%{school}%"])
+            school_clean = school.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+            where.append("(c.school LIKE ? ESCAPE '\\' OR d.college LIKE ? ESCAPE '\\')")
+            params.extend([f"%{school_clean}%", f"%{school_clean}%"])
 
         where_clause = " AND ".join(where)
 

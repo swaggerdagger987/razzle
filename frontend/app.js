@@ -560,6 +560,15 @@ function _detectCheckoutReturn() {
   var token = localStorage.getItem("razzle_token");
   if (!token) return;
 
+  // Stash pre-checkout plan state to detect real changes (not just trial)
+  var prePlan = "";
+  var prePlanSource = "";
+  try {
+    var preUser = JSON.parse(localStorage.getItem("razzle_user") || "{}");
+    prePlan = preUser.plan || "free";
+    prePlanSource = preUser.plan_source || "";
+  } catch (e) {}
+
   var attempts = 0;
   var maxAttempts = 10;
   var pollInterval = 2000;
@@ -569,7 +578,12 @@ function _detectCheckoutReturn() {
     fetch(API_BASE + "/api/auth/me", {
       headers: { "Authorization": "Bearer " + token }
     }).then(function(r) { if (!r.ok) throw new Error("poll failed"); return r.json(); }).then(function(data) {
-      if (data.user && data.user.plan !== "free") {
+      // Detect real plan change: plan upgraded OR plan_source changed from trial to stripe
+      var planChanged = data.user && data.user.plan !== "free" && (
+        data.user.plan !== prePlan ||
+        (prePlanSource === "trial" && data.user.plan_source !== "trial")
+      );
+      if (planChanged) {
         // Plan updated — save and dispatch event
         localStorage.setItem("razzle_user", JSON.stringify(data.user));
         updateAuthUI(data.user);

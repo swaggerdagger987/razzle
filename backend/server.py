@@ -1569,8 +1569,8 @@ def get_players(
         team=team,
         sort_key=sort,
         sort_dir=order,
-        limit=min(limit, 1000),
-        offset=offset,
+        limit=max(1, min(limit, 1000)),
+        offset=max(0, offset),
         season=season,
     )
 
@@ -1677,8 +1677,8 @@ def get_prospects(
         school=school,
         sort_key=sort,
         sort_dir=order,
-        limit=min(limit, 1000),
-        offset=offset,
+        limit=max(1, min(limit, 1000)),
+        offset=max(0, offset),
         draft_year=draft_year,
     )
 
@@ -1763,8 +1763,8 @@ def get_college_players(
         conference=conference,
         sort_key=sort,
         sort_dir=order,
-        limit=min(limit, 1000),
-        offset=offset,
+        limit=max(1, min(limit, 1000)),
+        offset=max(0, offset),
         season=season,
     )
 

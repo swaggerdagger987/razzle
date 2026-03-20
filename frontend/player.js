@@ -300,12 +300,12 @@ function renderCombine(combine) {
     { key: "draft_pick", label: "Pick", fmt: v => v ? `#${v}` : null },
     { key: "height_display", label: "Height", fmt: v => v || null },
     { key: "weight", label: "Weight", fmt: v => v ? `${v} lbs` : null },
-    { key: "forty", label: "40-Yard", fmt: v => v ? v.toFixed(2) + "s" : null },
+    { key: "forty", label: "40-Yard", fmt: v => v ? Number(v).toFixed(2) + "s" : null },
     { key: "bench", label: "Bench", fmt: v => v ? `${v} reps` : null },
-    { key: "vertical", label: "Vertical", fmt: v => v ? v.toFixed(1) + '"' : null },
+    { key: "vertical", label: "Vertical", fmt: v => v ? Number(v).toFixed(1) + '"' : null },
     { key: "broad_jump", label: "Broad", fmt: v => v ? v + '"' : null },
-    { key: "cone", label: "3-Cone", fmt: v => v ? v.toFixed(2) + "s" : null },
-    { key: "shuttle", label: "Shuttle", fmt: v => v ? v.toFixed(2) + "s" : null },
+    { key: "cone", label: "3-Cone", fmt: v => v ? Number(v).toFixed(2) + "s" : null },
+    { key: "shuttle", label: "Shuttle", fmt: v => v ? Number(v).toFixed(2) + "s" : null },
   ];
 
   let html = `<div class="player-combine-grid">`;

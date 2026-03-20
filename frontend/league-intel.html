@@ -5761,7 +5761,7 @@ function _mcSimulate(rosterPlayers, distributions, rosterIds, playoffSpots, SIMS
       roster.players.forEach(function(pid) {
         if (excludedPlayers && excludedPlayers[pid]) return;
         var dist = distributions[pid];
-        if (!dist || dist.games === 0) return;
+        if (!dist || dist.games === 0 || dist.mean == null || dist.stdev == null) return;
         var u1 = Math.random() || 1e-10, u2 = Math.random();
         var z = Math.max(-4, Math.min(4, Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2)));
         var pts = Math.max(0, dist.mean + z * dist.stdev);

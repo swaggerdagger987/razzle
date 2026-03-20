@@ -188,7 +188,7 @@
 
   <!-- Trial active banner (visible to users currently on trial) -->
   <div id="trialActiveBanner" style="display:none; background:var(--orange-light, #f7e4d8); border:3px solid var(--orange); border-radius:10px; box-shadow:4px 4px 0 var(--ink); padding:16px 24px; margin-bottom:24px; text-align:center;">
-    <div style="font-family:var(--font-display); font-size:18px; color:var(--ink); margin-bottom:4px;">Your Pro Trial is Active</div>
+    <div id="trialBannerTitle" style="font-family:var(--font-display); font-size:18px; color:var(--ink); margin-bottom:4px;">Your Pro Trial is Active</div>
     <div id="trialCountdown" style="font-family:var(--font-mono); font-size:13px; color:var(--ink-medium);"></div>
     <div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); margin-top:4px;">subscribe now to keep your Pro access when the trial ends</div>
   </div>
@@ -660,10 +660,12 @@
         if (isExpiredTrial) {
           if (proCta) proCta.textContent = 'Subscribe to Pro';
           if (eliteCta) eliteCta.textContent = 'Subscribe to Elite';
-          // Show expired trial banner
+          // Show expired trial banner with correct title
           if (trialActiveBanner) {
             trialActiveBanner.style.display = 'block';
-            if (trialCountdown) trialCountdown.textContent = 'your trial ended — subscribe to keep Pro access';
+            var bannerTitle = document.getElementById('trialBannerTitle');
+            if (bannerTitle) bannerTitle.textContent = 'Your Pro Trial Has Ended';
+            if (trialCountdown) trialCountdown.textContent = 'subscribe to keep Pro access';
           }
         } else {
           if (proCta) proCta.textContent = 'Subscribe to Pro';

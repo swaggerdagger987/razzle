@@ -1626,3 +1626,48 @@ All `ctx.fillStyle = 'rgba(45,31,20,...)'` → theme-branching with sand rgba fo
 - All Python files compile clean
 - 59/59 tests pass (5.64s)
 - 0 regressions
+
+---
+
+## Quality Audit: Deep 5-Agent Security + UX Sweep (Mar 20 — Session 8)
+
+**Goal**: Fresh-eyes 5-agent parallel audit targeting security, conversion funnel, crash bugs, and interaction seams between pages. Focus on what automated sweeps miss: real user flows, XSS vectors, backend parameter validation, and conversion-critical code paths.
+
+### CRITICAL Security Fixes (3)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | XSS via URL position param | lab.js:3804 | `state.position` from `?pos=` injected into `.innerHTML` without validation. Now whitelisted against known positions (ALL/QB/RB/WR/TE/K/DEF/DL/LB/DB). |
+| 2 | Backend `limit=-1` bypasses 1000-row cap | server.py:1572,1680,1766 | `min(limit, 1000)` → `max(1, min(limit, 1000))` on all 3 endpoints. Also added `offset=max(0, offset)`. |
+| 3 | LIKE wildcard injection in search | college.py:62, prospects.py:50 | `%` and `_` in search terms matched unintended rows. Added ESCAPE clause and character escaping (matching players.py pattern). Also fixed team/conference/school LIKE params. |
+
+### HIGH Conversion Funnel Fixes (3)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 4 | Checkout polling succeeds prematurely for trial users | app.js:572 | Trial users already have `plan: "pro"`, so `plan !== "free"` was always true on first poll. Now stashes pre-checkout plan state and compares `plan_source` change (trial→stripe). |
+| 5 | Home page CTAs show stale state after async auth | index.html:718 | IIFE ran once before `checkAuth()` completed. Extracted to named function `_updateHomeCTAs()` and added `razzle-plan-changed` event listener for re-evaluation. |
+| 6 | Expired trial banner shows "Your Pro Trial is Active" | pricing.html:191,664 | Reused active trial banner element. Added `trialBannerTitle` ID and set title to "Your Pro Trial Has Ended" for expired state. |
+
+### HIGH Crash Bug Fix (1)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 7 | weekly.html crash on second load | weekly.html:441 | `getElementById('weekly-loading')` returned null after first `container.innerHTML` destroyed it. Now recreates the element if missing. Also fixed null `p.ppg.toFixed()` crash (line 536). |
+
+### MEDIUM Defensive Fixes (4)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 8 | URL sortDir not validated | lab.js:3807 | `?dir=sideways` would send garbage to backend. Now only accepts "asc" or "desc". |
+| 9 | `relevanceToggle` null crash | lab.js:3890 | Missing null guard on `getElementById` before `.textContent` access. |
+| 10 | matchups.html `t.total_avg.toFixed()` null crash | matchups.html:664 | Added null guard with dash fallback. |
+| 11 | player.js combine `.toFixed()` on string values | player.js:303-308 | Wrapped in `Number()` for forty/vertical/cone/shuttle. |
+| 12 | Monte Carlo NaN from missing mean/stdev | league-intel.html:5764 | Added `dist.mean == null || dist.stdev == null` guard. |
+| 13 | prospects.html dark mode PNG export | prospects.html:706 | Hardcoded light background → theme-aware branching. |
+
+### Verified Clean
+- All 11 JS files syntax clean
+- All Python files compile clean
+- 59/59 tests pass (5.70s)
+- 0 regressions

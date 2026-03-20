@@ -715,33 +715,38 @@
 fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({page:location.pathname})}).catch(function(){});
 
 // Update pricing CTA based on user state (tier-aware)
-(function(){try{
-  var t = typeof getUserTierInfo === 'function' ? getUserTierInfo() : { plan: 'none', loggedIn: false, isTrial: false, isPaid: false, isElite: false, isExpiredTrial: false, daysLeft: 0 };
-  var pro = document.getElementById('homeProCta');
-  var elite = document.getElementById('homeEliteCta');
-  var trialNote = document.querySelector('[data-cta-trial-note]');
+function _updateHomeCTAs() {
+  try {
+    var t = typeof getUserTierInfo === 'function' ? getUserTierInfo() : { plan: 'none', loggedIn: false, isTrial: false, isPaid: false, isElite: false, isExpiredTrial: false, daysLeft: 0 };
+    var pro = document.getElementById('homeProCta');
+    var elite = document.getElementById('homeEliteCta');
+    var trialNote = document.querySelector('[data-cta-trial-note]');
 
-  // Update button text
-  if (pro) pro.textContent = typeof getProCtaText === 'function' ? getProCtaText() : 'Get Pro';
+    // Update button text
+    if (pro) pro.textContent = typeof getProCtaText === 'function' ? getProCtaText() : 'Get Pro';
 
-  // Paid users: redirect to Situation Room instead of checkout
-  if (t.isPaid && !t.isTrial) {
-    if (pro) { pro.textContent = 'Enter the Situation Room'; pro.onclick = function(){ window.location='/agents.html'; }; }
-    if (elite && t.isElite) { elite.textContent = 'Enter the Situation Room'; elite.onclick = function(){ window.location='/agents.html'; }; }
-    else if (elite && !t.isElite) { elite.textContent = 'Upgrade to Elite'; }
-  }
-
-  // Update trial note text
-  if (trialNote) {
-    if (t.isTrial) {
-      trialNote.textContent = "You're on Pro (" + t.daysLeft + " day" + (t.daysLeft !== 1 ? "s" : "") + " left). Subscribe to keep your access.";
-    } else if (t.isExpiredTrial) {
-      trialNote.textContent = "Your trial ended. Subscribe to keep Pro access.";
-    } else if (t.isPaid) {
-      trialNote.textContent = "";
+    // Paid users: redirect to Situation Room instead of checkout
+    if (t.isPaid && !t.isTrial) {
+      if (pro) { pro.textContent = 'Enter the Situation Room'; pro.onclick = function(){ window.location='/agents.html'; }; }
+      if (elite && t.isElite) { elite.textContent = 'Enter the Situation Room'; elite.onclick = function(){ window.location='/agents.html'; }; }
+      else if (elite && !t.isElite) { elite.textContent = 'Upgrade to Elite'; }
     }
-  }
-}catch(e){}})();
+
+    // Update trial note text
+    if (trialNote) {
+      if (t.isTrial) {
+        trialNote.textContent = "You're on Pro (" + t.daysLeft + " day" + (t.daysLeft !== 1 ? "s" : "") + " left). Subscribe to keep your access.";
+      } else if (t.isExpiredTrial) {
+        trialNote.textContent = "Your trial ended. Subscribe to keep Pro access.";
+      } else if (t.isPaid) {
+        trialNote.textContent = "";
+      }
+    }
+  } catch(e) {}
+}
+_updateHomeCTAs();
+// Re-run when auth state changes (async checkAuth or plan change)
+window.addEventListener('razzle-plan-changed', _updateHomeCTAs);
 </script>
 </body>
 </html>
