@@ -936,6 +936,8 @@ const state = {
   position: "ALL",
   search: "",
   season: 0,
+  week: 0, // 0 = all weeks (season aggregate), 1-18 = specific week
+  availableWeeks: [], // populated from /api/available-weeks
   relevance: "fantasy",
   sortKey: "fantasy_points_ppr",
   sortDir: "desc",
@@ -1110,6 +1112,7 @@ function _syncUndoRedoButtons() {
     if (!state.collegeSeason) state.collegeSeason = state.collegeSeasons[0] || _nflYear;
 
     populateSeasonSelect();
+    populateWeekSelect();
     populateFilterStatSelect();
     populateTeamFilter();
   } catch (e) {
@@ -1248,6 +1251,7 @@ async function fetchAndRenderNFL(signal, myId) {
     search: state.search,
     positions: positions,
     season: state.season,
+    week: state.week || 0,
     sort_key: state.sortKey,
     sort_direction: state.sortDir,
     limit: useTagFilter ? 1000 : state.limit,
@@ -2584,8 +2588,10 @@ function setUniverse(u) {
     state.sortDir = "desc";
   }
 
+  state.week = 0;
   applyUniverseUI();
   populateSeasonSelect();
+  populateWeekSelect();
   populateFilterStatSelect();
   renderColumnPicker();
   renderPresets();
@@ -2852,11 +2858,72 @@ function populateSeasonSelect() {
     sel.onchange = (e) => {
       var val = e.target.value;
       state.season = val === "career" ? "career" : parseInt(val);
+      state.week = 0;
       state.offset = 0;
       clearTimeout(_seasonDebounce);
-      _seasonDebounce = setTimeout(() => fetchAndRender(), 200);
+      _seasonDebounce = setTimeout(() => {
+        fetchAndRender();
+        populateWeekSelect();
+      }, 200);
     };
   }
+}
+
+// ─── Week select ─────────────────────────────────────────────────
+let _weekDebounce = null;
+
+function populateWeekSelect() {
+  const weekSel = document.getElementById("weekSelect");
+  if (!weekSel) return;
+
+  // Week selector only for NFL season mode (not career, not college/prospects)
+  if (state.universe !== "nfl" || state.season === "career") {
+    weekSel.style.display = "none";
+    state.week = 0;
+    _updateWeekAnnotation();
+    return;
+  }
+
+  var season = state.season || 0;
+  weekSel.style.display = "";
+
+  fetch(window.location.origin + "/api/available-weeks?season=" + season)
+    .then(function(r) { return r.ok ? r.json() : { weeks: [] }; })
+    .then(function(data) {
+      state.availableWeeks = data.weeks || [];
+      var html = '<option value="0">All Weeks</option>';
+      html += state.availableWeeks.map(function(w) {
+        return '<option value="' + w + '"' + (w === state.week ? ' selected' : '') + '>Week ' + w + '</option>';
+      }).join("");
+      weekSel.innerHTML = html;
+      _updateWeekAnnotation();
+    })
+    .catch(function() {
+      weekSel.innerHTML = '<option value="0">All Weeks</option>';
+    });
+
+  weekSel.onchange = function(e) {
+    state.week = parseInt(e.target.value) || 0;
+    state.offset = 0;
+    clearTimeout(_weekDebounce);
+    _weekDebounce = setTimeout(function() {
+      fetchAndRender();
+      _updateWeekAnnotation();
+    }, 200);
+  };
+}
+
+function _updateWeekAnnotation() {
+  var existing = document.getElementById("weekAnnotation");
+  if (existing) existing.remove();
+  if (!state.week || state.week <= 0) return;
+  var toolbar = document.querySelector(".toolbar");
+  if (!toolbar) return;
+  var anno = document.createElement("div");
+  anno.id = "weekAnnotation";
+  anno.style.cssText = "font-family:var(--font-hand);font-size:14px;color:var(--orange);transform:rotate(-1deg);padding:2px 8px;";
+  anno.textContent = "showing Week " + state.week + ", " + (state.season || "") + " stats";
+  toolbar.parentNode.insertBefore(anno, toolbar.nextSibling);
 }
 
 // ─── Pagination ──────────────────────────────────────────────────
@@ -3624,6 +3691,7 @@ function saveStateToURL() {
     if (currentCols !== defaultCols) params.set("cols", currentCols);
   } else {
     if (state.season) params.set("season", state.season);
+    if (state.week > 0) params.set("week", state.week);
     if (state.relevance !== "fantasy") params.set("rel", state.relevance);
     if (state.sortKey !== "fantasy_points_ppr") params.set("sort", state.sortKey);
     const defaultCols = PRESETS.ppr.columns.join(",");
@@ -3640,7 +3708,7 @@ function saveStateToURL() {
     localStorage.setItem("razzle_last_state", JSON.stringify({
       universe: state.universe, collegeView: state.collegeView,
       position: state.position, sortKey: state.sortKey, sortDir: state.sortDir,
-      season: state.season, collegeSeason: state.collegeSeason, draftYear: state.draftYear,
+      season: state.season, week: state.week, collegeSeason: state.collegeSeason, draftYear: state.draftYear,
       relevance: state.relevance, limit: state.limit,
       visibleColumns: state.visibleColumns, collegeColumns: state.collegeColumns,
       prospectColumns: state.prospectColumns,
@@ -3663,6 +3731,7 @@ function loadStateFromURL() {
         if (saved.sortKey) state.sortKey = saved.sortKey;
         if (saved.sortDir) state.sortDir = saved.sortDir;
         if (saved.season) state.season = saved.season;
+        if (saved.week) state.week = parseInt(saved.week) || 0;
         if (saved.collegeSeason) state.collegeSeason = saved.collegeSeason;
         if (saved.draftYear) state.draftYear = saved.draftYear;
         if (saved.relevance) state.relevance = saved.relevance;
@@ -3767,6 +3836,7 @@ function loadStateFromURL() {
       const sv = params.get("season");
       state.season = sv === "career" ? "career" : parseInt(sv);
     }
+    if (params.has("week")) state.week = parseInt(params.get("week")) || 0;
     if (params.has("rel")) state.relevance = params.get("rel");
     if (params.has("cols")) state.visibleColumns = params.get("cols").split(",").filter(function(k) { return COLUMNS[k]; });
   }
