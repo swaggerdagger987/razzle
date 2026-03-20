@@ -2317,3 +2317,15 @@ Smoke tests: 10/11 pass (week_filter is pre-existing, unrelated to these fixes).
 | fetch_report_cards | dashboards.py:1082,1111,1142 | Added season_type='regular' to player weekly, defense grid, and team totals queries |
 
 Same root cause as FUNC-009: playoff games inflated game counts for playoff teams, diluting PPG averages. All 4 functions compute defense PPG-allowed grids used for SOS, stock watch, awards, and report cards.
+
+### Sweep: XSS escape in prospect views (Mar 20)
+
+| File | Line | Fix |
+|------|------|-----|
+| lab.js | 7884 | escapeHtml() on draft_year/position in prospect tier header |
+| lab.js | 7930 | escapeHtml() on position/draft_year in prospect tier empty state |
+| lab.js | 8215 | escapeHtml() on draft_year/position in big board empty state |
+| lab.js | 8235 | escapeHtml() on draft_year/position in big board header |
+
+### Smoke test note
+week_filter failure (10/11) is a stale server process issue, not a code bug. Verified: calling _fetch_screener_uncached() directly with week=1 returns games=1 correctly. The running server process needs restart to pick up code changes.
