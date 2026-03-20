@@ -899,7 +899,7 @@ def _fetch_draft_class_analytics_uncached(position=""):
         }
 
         # Class grade: elite ratio (% of class that is Elite/Premium) + avg RPS
-        top_tier_pct = (tiers["elite"] + tiers["premium"]) / len(prospects) * 100
+        top_tier_pct = (tiers["elite"] + tiers["premium"]) / (len(prospects) or 1) * 100
         if avg_rps >= 55 and top_tier_pct >= 15:
             grade = "A"
         elif avg_rps >= 50 or top_tier_pct >= 10:

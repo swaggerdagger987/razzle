@@ -1238,7 +1238,7 @@ def _fetch_player_strengths_uncached(player_id, season=None, top_n=4):
         item["grade"] = grade_pct(item["percentile"])
 
     # Average percentile
-    avg_pct = round(sum(p["percentile"] for p in percentiles) / len(percentiles))
+    avg_pct = round(sum(p["percentile"] for p in percentiles) / (len(percentiles) or 1))
 
     return {
         "player": pct_data.get("player", {}),

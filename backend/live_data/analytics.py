@@ -1788,8 +1788,8 @@ def fetch_usage_trends(season=None, position=None, window=5, limit=30):
                 first_half = recent[:mid] if mid > 0 else recent[:1]
                 second_half = recent[mid:] if mid > 0 else recent[1:]
 
-                first_avg = sum(w["snap_pct"] for w in first_half) / len(first_half)
-                second_avg = sum(w["snap_pct"] for w in second_half) / len(second_half)
+                first_avg = sum(w["snap_pct"] for w in first_half) / (len(first_half) or 1)
+                second_avg = sum(w["snap_pct"] for w in second_half) / (len(second_half) or 1)
                 delta = round(second_avg - first_avg, 1)
 
                 current_snap = recent[-1]["snap_pct"]

@@ -891,6 +891,10 @@ async function startCheckout(interval) {
       headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
       body: JSON.stringify(body)
     });
+    if (!resp.ok) {
+      _showToast("checkout failed (" + resp.status + "). try again.", "error");
+      return;
+    }
     var data = await resp.json();
     if (data.checkout_url) {
       window.location.href = data.checkout_url;
@@ -915,6 +919,11 @@ async function validatePromoCode() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ code: code })
     });
+    if (!resp.ok) {
+      feedback.textContent = "couldn't verify that one (" + resp.status + ")";
+      feedback.style.color = "var(--red, #e63946)";
+      return;
+    }
     var data = await resp.json();
     if (data.valid) {
       feedback.textContent = (data.percent_off || 0) + "% off applied";
@@ -938,6 +947,10 @@ async function openManageSubscription() {
     var resp = await fetch(API_BASE + "/api/billing/status", {
       headers: { "Authorization": "Bearer " + token }
     });
+    if (!resp.ok) {
+      if (typeof _showToast === "function") _showToast("couldn't load subscription info (" + resp.status + ")", "error"); else alert("Could not load subscription info");
+      return;
+    }
     var data = await resp.json();
     if (data.portal_url) {
       window.location.href = data.portal_url;

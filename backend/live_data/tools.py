@@ -928,7 +928,7 @@ def fetch_streaks(season=None, position=None, window=4, limit=25):
                     continue
 
                 total_fpts = sum(w["fpts"] for w in weeks)
-                season_avg = total_fpts / len(weeks)
+                season_avg = total_fpts / (len(weeks) or 1)
                 if season_avg < 2:
                     continue
 
@@ -1060,7 +1060,7 @@ def fetch_season_recap(season=None):
                 info = data["info"]
                 if len(scores) < 8:
                     continue
-                avg = sum(scores) / len(scores)
+                avg = sum(scores) / (len(scores) or 1)
                 if avg < 5:
                     continue
                 variance = sum((s - avg) ** 2 for s in scores) / max(1, len(scores) - 1)

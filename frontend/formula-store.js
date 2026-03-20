@@ -150,6 +150,10 @@ async function rateFormula(formulaId, rating) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ rating })
     });
+    if (!resp.ok) {
+      showStoreToast("rating failed — try again");
+      return;
+    }
     const data = await resp.json();
     if (data.status === "ok") {
       // Refresh to get updated avg
@@ -202,6 +206,10 @@ async function installFormula(formulaId) {
   }
   try {
     const resp = await fetch(`/api/formulas/${formulaId}`);
+    if (!resp.ok) {
+      showStoreToast("failed to fetch formula — try again");
+      return;
+    }
     const formula = await resp.json();
     if (formula.status === "not_found") return;
 

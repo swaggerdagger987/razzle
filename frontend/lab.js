@@ -4770,7 +4770,7 @@ function populateScoringSelect() {
   const sel = document.getElementById("customScoringSelect");
   const configs = getCustomScoringConfigs();
   sel.innerHTML = '<option value="">Load saved...</option>' +
-    configs.map((c, i) => `<option value="${i}">${c.name}</option>`).join("");
+    configs.map((c, i) => `<option value="${i}">${escapeHtml(c.name)}</option>`).join("");
 }
 
 function loadCustomScoringConfig(idx) {
@@ -6054,7 +6054,7 @@ function renderCollegeProfile(data, container) {
     html += `</tr></thead><tbody>`;
 
     for (const s of seasons) {
-      html += `<tr><td>${s.season}</td><td>${s.team || ""}</td>`;
+      html += `<tr><td>${s.season}</td><td>${escapeHtml(s.team || "")}</td>`;
       for (const c of seasonCols) {
         html += `<td>${c.fmt(s[c.key])}</td>`;
       }
@@ -6096,7 +6096,7 @@ function renderCollegeProfile(data, container) {
       html += `<div class="profile-combine-item"><span class="profile-combine-label">Draft</span><span class="profile-combine-value">Rd ${combine.draft_round} Pick ${combine.draft_pick}</span></div>`;
     }
     if (combine.draft_team) {
-      html += `<div class="profile-combine-item"><span class="profile-combine-label">NFL Team</span><span class="profile-combine-value">${combine.draft_team}</span></div>`;
+      html += `<div class="profile-combine-item"><span class="profile-combine-label">NFL Team</span><span class="profile-combine-value">${escapeHtml(combine.draft_team)}</span></div>`;
     }
     html += `</div>`;
   }
@@ -6944,7 +6944,7 @@ function renderProspectProfile(data, container, compsData) {
     for (const s of college.seasons) {
       html += `<tr>`;
       html += `<td style="font-weight:600;">${s.season}</td>`;
-      html += `<td>${s.team || ""}</td>`;
+      html += `<td>${escapeHtml(s.team || "")}</td>`;
       html += `<td>${s.games || 0}</td>`;
       if (isQB) {
         html += `<td>${s.completions || 0}</td><td>${s.pass_attempts || 0}</td>`;
@@ -7100,9 +7100,9 @@ function renderProspectProfile(data, container, compsData) {
       html += `<div class="prospect-comp-card">`;
       html += `<div class="prospect-comp-sim" style="background:${simColor};">${simPct}%</div>`;
       html += `<div class="prospect-comp-info">`;
-      html += `<div class="prospect-comp-name">${comp.player_name}</div>`;
+      html += `<div class="prospect-comp-name">${escapeHtml(comp.player_name)}</div>`;
       html += `<div class="prospect-comp-meta">${comp.draft_year}`;
-      if (comp.draft_team) html += ` · ${comp.draft_team}`;
+      if (comp.draft_team) html += ` · ${escapeHtml(comp.draft_team)}`;
       html += ` · ${draftInfo}</div>`;
       if (comp.nfl_games) {
         html += `<div class="prospect-comp-stats">`;
@@ -7763,8 +7763,8 @@ function renderTierView(data, container) {
       html += `<div class="tier-card">`;
       html += `<div style="display:flex; align-items:flex-start; gap:10px;">`;
       html += `<div style="flex:1;">`;
-      html += `<div class="tier-card-name">${p.player_name}</div>`;
-      html += `<div class="tier-card-meta">${p.school || ""}${draftInfo ? " · " + draftInfo : ""}</div>`;
+      html += `<div class="tier-card-name">${escapeHtml(p.player_name)}</div>`;
+      html += `<div class="tier-card-meta">${escapeHtml(p.school || "")}${draftInfo ? " · " + draftInfo : ""}</div>`;
       html += `</div>`;
       if (avgPct != null) {
         html += `<div class="tier-card-pct" style="color:${pctColor};">${avgPct}<span style="font-size:11px;">th</span></div>`;
@@ -8109,10 +8109,10 @@ function renderBigBoard(data, container) {
       html += `<div class="bb-card-rank" style="border-color:${posColor};">${p.rank}</div>`;
       html += `<div class="bb-card-body">`;
       html += `<div class="bb-card-header">`;
-      html += `<span class="bb-card-name">${p.player_name}</span>`;
-      html += `<span class="bb-card-pos" style="background:${posColor};">${p.position}</span>`;
+      html += `<span class="bb-card-name">${escapeHtml(p.player_name)}</span>`;
+      html += `<span class="bb-card-pos" style="background:${posColor};">${escapeHtml(p.position)}</span>`;
       html += `</div>`;
-      html += `<div class="bb-card-meta">${p.school || ""} · ${draftInfo}</div>`;
+      html += `<div class="bb-card-meta">${escapeHtml(p.school || "")} · ${draftInfo}</div>`;
       html += `<div class="bb-card-rps-row">`;
       html += `<div class="bb-card-rps-bar"><div class="bb-card-rps-fill" style="width:${rpsPct}%; background:${td.color};"></div></div>`;
       html += `<span class="bb-card-rps-val">${p.rps.toFixed(1)}</span>`;

@@ -1503,9 +1503,9 @@
           html += '<div class="breakout-rbs-label">' + (isCollege ? 'BKO' : 'RBS') + '</div></div></div>';
           html += '<div class="breakout-bars">';
           html += '<div class="breakout-bar-group"><div class="breakout-bar-label"><span>Opportunity</span><span>' + escapeHtml(fmtD(p.opportunity_pct)) + '%</span></div>';
-          html += '<div class="breakout-bar-track"><div class="breakout-bar-fill opportunity" style="width:' + parseFloat(p.opportunity_pct) + '%"></div></div></div>';
+          html += '<div class="breakout-bar-track"><div class="breakout-bar-fill opportunity" style="width:' + parseFloat(p.opportunity_pct || 0) + '%"></div></div></div>';
           html += '<div class="breakout-bar-group"><div class="breakout-bar-label"><span>Production</span><span>' + escapeHtml(fmtD(p.production_pct)) + '%</span></div>';
-          html += '<div class="breakout-bar-track"><div class="breakout-bar-fill production" style="width:' + parseFloat(p.production_pct) + '%"></div></div></div></div>';
+          html += '<div class="breakout-bar-track"><div class="breakout-bar-fill production" style="width:' + parseFloat(p.production_pct || 0) + '%"></div></div></div></div>';
           html += '<div class="breakout-gap"><span class="breakout-gap-arrow">&#9650;</span><span class="breakout-gap-text">' + escapeHtml(p.annotation) + '</span></div>';
           html += '<div class="breakout-stats">';
           if (isCollege) {
@@ -2477,7 +2477,7 @@
         } else if (c.key === 'ppg') {
           h += '<td class="' + cls.join(' ') + '" style="font-weight:700">' + fmt(p.ppg) + '</td>';
         } else if (c.key === 'cov') {
-          h += '<td class="' + cls.join(' ') + '" style="font-weight:700">' + fmt(p.cov * 100, 1) + '%</td>';
+          h += '<td class="' + cls.join(' ') + '" style="font-weight:700">' + fmt((p.cov || 0) * 100, 1) + '%</td>';
         } else if (c.key === 'floor') {
           h += '<td class="' + cls.join(' ') + '" style="color:var(--green)">' + fmt(p.floor) + '</td>';
         } else if (c.key === 'ceiling') {
@@ -4527,7 +4527,7 @@
         html += '<tr>';
         html += '<td class="ut-rank">' + (i + 1) + '</td>';
         html += '<td class="ut-player-cell">';
-        if (!isCollege && p.headshot_url) html += '<img class="ut-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="" loading="lazy">';
+        if (!isCollege && p.headshot_url) html += '<img class="ut-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy">';
         html += '<span class="ut-name">' + pLink(p.name, p.player_id) + '</span>';
         html += '<span class="ut-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span>';
         html += '<span class="ut-team">' + escapeHtml(p.team || '') + '</span>';
@@ -4670,7 +4670,7 @@
         html += '<tr>';
         html += '<td class="yy-rank">' + (i + 1) + '</td>';
         html += '<td class="yy-player-cell">';
-        if (!isCollege && p.headshot_url) html += '<img class="yy-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="" loading="lazy">';
+        if (!isCollege && p.headshot_url) html += '<img class="yy-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy">';
         html += '<span class="yy-name">' + pLink(p.name, p.player_id) + '</span>';
         html += '<span class="yy-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span>';
         html += '<span class="yy-team">' + escapeHtml(p.team || '') + '</span>';
@@ -5322,7 +5322,7 @@
         html += '<tr>';
         // player cell
         html += '<td class="ay-player-cell">';
-        if (p.headshot_url) html += '<img class="ay-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="" loading="lazy">';
+        if (p.headshot_url) html += '<img class="ay-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy">';
         html += '<span class="ay-name">' + pLink(p.name, p.player_id) + '</span>';
         html += '<span class="ay-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span>';
         html += '<span class="ay-team">' + escapeHtml(p.team || '') + '</span>';
@@ -7027,7 +7027,7 @@
     }
 
     function renderData(d) {
-      var s = d.summary;
+      var s = d.summary || {};
       var content = el.querySelector('.dc2-content');
       var html = '';
 
@@ -9466,7 +9466,7 @@
 
         html += '<tr>' +
           '<td style="text-align:left; font-weight:600;">' + escapeHtml(p.player_name) + '</td>' +
-          '<td><span style="background:' + posColor + '; color:white; padding:1px 6px; border-radius:3px; font-size:10px; font-weight:700;">' + p.position + '</span></td>' +
+          '<td><span style="background:' + posColor + '; color:white; padding:1px 6px; border-radius:3px; font-size:10px; font-weight:700;">' + escapeHtml(p.position) + '</span></td>' +
           '<td>' + p.round + '</td>' +
           '<td>' + p.pick + '</td>' +
           '<td style="font-family:var(--font-mono); font-size:11px;">' + escapeHtml(p.draft_team || '') + '</td>' +

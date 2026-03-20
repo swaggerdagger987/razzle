@@ -2482,8 +2482,8 @@ async function runSingleAgent(agentId, scenario) {
   }
 
   const settings = getAgentSettings(agentId);
-  if (!settings.apiKey && !isEliteUser()) {
-    setScenarioStatus('set an API key in Config first', 'error');
+  if (!settings.apiKey && !isEliteUser() && !isLoggedIn()) {
+    setScenarioStatus('sign in to use free AI queries, or add your own API key in Config', 'error');
     return;
   }
 
@@ -2647,8 +2647,8 @@ async function runAllAgents(scenario) {
 
   const hasKey = AGENT_DEFS.some(function(_, i) { return getAgentSettings(i).apiKey; });
   const elite = isEliteUser();
-  if (!hasKey && !elite) {
-    setScenarioStatus('set an API key in Config first', 'error');
+  if (!hasKey && !elite && !isLoggedIn()) {
+    setScenarioStatus('sign in to use free AI queries, or add your own API key in Config', 'error');
     return;
   }
 
@@ -2955,7 +2955,10 @@ setupScenarioPanel();
 
 function markdownToHtml(md) {
   // Simple markdown → HTML for agent responses
-  var html = md
+  // Escape HTML entities first to prevent XSS from LLM output.
+  // Asterisks, hashes, and dashes are not affected by escapeHtml,
+  // so markdown patterns still work after escaping.
+  var html = escapeHtml(md)
     // Headers
     .replace(/^### (.+)$/gm, '<h3>$1</h3>')
     .replace(/^## (.+)$/gm, '<h2>$1</h2>')

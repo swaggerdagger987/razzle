@@ -950,7 +950,7 @@ def _fetch_roster_grade_uncached(player_ids, season=None):
             })
 
         # --- Dimension 1: Trade Value (avg of all players, scaled to 0-100) ---
-        avg_tv = sum(p["trade_value"] for p in players) / len(players)
+        avg_tv = sum(p["trade_value"] for p in players) / (len(players) or 1)
         # Good rosters avg ~45-55 trade value; scale so 50 = 75 score
         tv_score = min(100, max(0, avg_tv * 1.5))
 
@@ -962,13 +962,13 @@ def _fetch_roster_grade_uncached(player_ids, season=None):
         # --- Dimension 3: Age Balance (penalize all-old or all-young) ---
         ages = [p["age"] for p in players if p["age"]]
         if ages:
-            avg_age = sum(ages) / len(ages)
+            avg_age = sum(ages) / (len(ages) or 1)
             # Ideal avg age is ~25-26 for dynasty
             age_dev = abs(avg_age - 25.5)
             age_score = max(0, 100 - age_dev * 12)
             # Bonus for age diversity (std dev)
             if len(ages) > 1:
-                age_std = math.sqrt(sum((a - avg_age) ** 2 for a in ages) / len(ages))
+                age_std = math.sqrt(sum((a - avg_age) ** 2 for a in ages) / (len(ages) or 1))
                 # Some diversity is good (std ~3-4), too much or too little is bad
                 diversity_bonus = max(0, 15 - abs(age_std - 3.5) * 5)
                 age_score = min(100, age_score + diversity_bonus)
