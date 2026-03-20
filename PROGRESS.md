@@ -2503,3 +2503,30 @@ week_filter failure (10/11) is a stale server process issue, not a code bug. Ver
 ### Verified Clean
 - 11/11 smoke tests pass
 - 0 regressions
+
+---
+
+## Ship Loop Session 17 (Mar 20)
+
+### FUNC-014: Production serving unminified JS/CSS
+- **Root cause**: `npx --yes esbuild` in render.yaml requires Node.js, fails silently on Render's Python runtime
+- **Fix**: Replaced with Python-based minifiers (rjsmin + rcssmin) via `scripts/build_dist.py`
+- **Impact**: 360KB saved from minification (lab.js: 534KB→403KB, etc.)
+- Files changed: `render.yaml`, `requirements.txt`, `scripts/build_dist.py` (new)
+
+### Sweep Mode (Mar 20)
+
+| Pass | Findings | Fixes |
+|------|----------|-------|
+| XSS scan | Column group name unescaped in onclick handler | lab.js:1476 — escapeAttr(g.name) + escapeHtml(g.name) |
+| Hardcoded years | 3 locations with hardcoded 2024/2025 | tools.py:532 (removed >= 2020 filter), smoke.py:202,248 (→ datetime.now().year) |
+| Hardcoded years | Load test with 9 hardcoded "2025" season values | load_test.py — dynamic season discovery via /api/filter-options |
+| Connection leaks | All 3 adapters calling get_conn() (pooled) then .close() | Changed to get_write_conn() (non-pooled, designed for adapter writes) |
+| CSS design | 1 gradient (skeleton shimmer) — intentional loading animation | No change needed |
+| HTML refs | All 74 HTML files, all JS/CSS refs valid | Clean |
+| Runtime patterns | All fetch() calls check .ok, all get_db() in context managers | Clean |
+
+### Verified Clean
+- 11/11 smoke tests pass after every fix
+- 0 regressions
+- 4 commits pushed to ship/launch-fixes
