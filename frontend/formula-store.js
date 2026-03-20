@@ -105,13 +105,15 @@ function renderStars(rating, size = 14) {
 
 function renderClickableStars(formulaId, currentRating, size = 18) {
   let html = "";
+  const safeId = parseInt(formulaId) || 0;
+  const safeRating = parseInt(currentRating) || 0;
   for (let i = 1; i <= 5; i++) {
-    const filled = i <= currentRating;
+    const filled = i <= safeRating;
     html += `<span
       style="color:${filled ? "var(--yellow)" : "var(--ink-faint)"}; font-size:${size}px; cursor:pointer;"
-      onclick="rateFormula(${formulaId}, ${i})"
+      onclick="rateFormula(${safeId}, ${i})"
       onmouseenter="previewStars(this, ${i})"
-      onmouseleave="resetStars(this, ${currentRating})"
+      onmouseleave="resetStars(this, ${safeRating})"
     >&#9733;</span>`;
   }
   return html;
@@ -534,17 +536,17 @@ function renderFormulaCard(formula, userReviews) {
             ${renderClickableStars(formula.id, userRating, 16)}
           </div>
           ${isInstalled
-            ? `<button class="btn-chunky" style="font-size:11px; padding:4px 10px; background:var(--green-light); border-color:var(--green);" onclick="uninstallFormula(${formula.id})">Installed</button>`
-            : `<button class="btn-primary" style="font-size:11px; padding:4px 10px;" onclick="installFormula(${formula.id})">Import</button>`
+            ? `<button class="btn-chunky" style="font-size:11px; padding:4px 10px; background:var(--green-light); border-color:var(--green);" onclick="uninstallFormula(${parseInt(formula.id) || 0})">Installed</button>`
+            : `<button class="btn-primary" style="font-size:11px; padding:4px 10px;" onclick="installFormula(${parseInt(formula.id) || 0})">Import</button>`
           }
         </div>
         ${userRating > 0 && !existingUserReview ? `
           <div style="display:flex; gap:4px; align-items:center;">
             <input type="text" class="input-chunky" placeholder="leave a short review..."
               style="flex:1; font-size:11px; padding:4px 8px;"
-              id="review_${formula.id}"
-              onkeydown="if(event.key==='Enter') submitReview(${formula.id})">
-            <button class="btn-chunky" style="font-size:10px; padding:3px 8px;" onclick="submitReview(${formula.id})">Post</button>
+              id="review_${parseInt(formula.id) || 0}"
+              onkeydown="if(event.key==='Enter') submitReview(${parseInt(formula.id) || 0})">
+            <button class="btn-chunky" style="font-size:10px; padding:3px 8px;" onclick="submitReview(${parseInt(formula.id) || 0})">Post</button>
           </div>
         ` : ""}
         ${existingUserReview ? `

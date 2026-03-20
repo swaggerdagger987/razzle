@@ -231,14 +231,14 @@ function renderSeasonTable(pos, seasons, career) {
   html += `</tr></thead><tbody>`;
 
   for (const s of seasons) {
-    html += `<tr><td>${s.season}</td>`;
-    for (const c of cols) html += `<td>${c.fmt(s[c.key])}</td>`;
+    html += `<tr><td>${esc(String(s.season))}</td>`;
+    for (const c of cols) html += `<td>${esc(String(c.fmt(s[c.key])))}</td>`;
     html += `</tr>`;
   }
 
   if (career && career.games) {
     html += `<tr style="font-weight:700; border-top:2px solid var(--ink);"><td>Career</td>`;
-    for (const c of cols) html += `<td>${c.fmt(career[c.key])}</td>`;
+    for (const c of cols) html += `<td>${esc(String(c.fmt(career[c.key])))}</td>`;
     html += `</tr>`;
   }
 
@@ -314,8 +314,8 @@ function renderCombine(combine) {
     const display = f.fmt(val);
     if (!display) continue;
     html += `<div class="player-combine-item">
-      <div class="player-combine-value">${display}</div>
-      <div class="player-combine-label">${f.label}</div>
+      <div class="player-combine-value">${esc(String(display))}</div>
+      <div class="player-combine-label">${esc(f.label)}</div>
     </div>`;
   }
   html += `</div>`;
