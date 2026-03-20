@@ -863,7 +863,7 @@ def fetch_buy_sell_candidates(season=None, position=None, limit=15):
                   AND s.season_type = 'regular'
                   {pos_filter}
                 GROUP BY p.player_id
-                HAVING games >= 6
+                HAVING games >= 8
                 ORDER BY total_ppr DESC
                 LIMIT 500
             """
@@ -878,10 +878,15 @@ def fetch_buy_sell_candidates(season=None, position=None, limit=15):
                 }
 
             # Build player list with raw stats + dynasty value
+            # Position-specific PPG floors to exclude scrub/depth players
+            MIN_PPG = {"QB": 10, "RB": 5, "WR": 5, "TE": 3}
             players = []
             for r in rows:
                 games = r[7] or 1
                 ppg = round((r[6] or 0) / games, 2)
+                pos = r[2] or "WR"
+                if ppg < MIN_PPG.get(pos, 5):
+                    continue
                 rush_yds = r[8] or 0
                 carries = r[9] or 0
                 rec_yds = r[10] or 0
