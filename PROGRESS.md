@@ -2567,10 +2567,16 @@ week_filter failure (10/11) is a stale server process issue, not a code bug. Ver
 | Deferred scripts | lab-mockdraft.js, lab-prospect-radar.js | escapeHtml, resp.ok checks | Clean |
 | Week selector | state.week serialized to URL, localStorage, backend params | Consistent int=0 default | Clean |
 
+### Fixes Applied
+
+| # | Fix | Severity | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | XSS in matchups.html detail player onclick | P1 | matchups.html:707 | Inline onclick with escapeHtml() didn't escape single quotes — replaced with data-pid + event delegation |
+| 2 | Font-display at <16px across 31 HTML files | P2 | 31 standalone pages | 96 CSS rules changed from --font-display to --font-mono (table headers at 11px, badges at 10-13px, tabs at 13px, rank numbers at 14px) |
+
 ### Verified Clean
-- 11/11 smoke tests pass
+- 11/11 smoke tests pass after every fix
 - 59/59 pytest tests pass
 - All Python files compile clean
 - All JS files syntax clean
-- 0 new bugs found
-- Codebase is exceptionally well-hardened from 17 prior sessions
+- 0 remaining font-display violations in CSS (verified via script)
