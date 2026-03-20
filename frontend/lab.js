@@ -2590,6 +2590,18 @@ function setUniverse(u) {
 
   state.week = 0;
   applyUniverseUI();
+
+  // If currently on an NFL-only panel and switching to college (or vice versa), go to screener
+  if (typeof window.switchPanel === 'function' && typeof window._currentPanelName === 'string') {
+    var curPanel = window._currentPanelName;
+    var NFL_ONLY = ['rankings','tiers','tradevalues','vorp','advantage','auction','cheatsheet','buysell','stocks','waivers','handcuffs','scarcity','snapefficiency','workload','dualthreat','targetpremium','drops','garbagetime','weekly','matchups','stacks','redzone','streaks','weeklyleaders','weeklymvp','playoffs','gamescript','pace','seasonpace','tdregression','airyards','dashboard','rosterbuilder','tradefinder','scoring','schedule','opportunity','targets','team','powerrankings','records','recap','awards','reportcard','fptsbreakdown','gamelog','archetypes','breakdown','comptable','strengths','career','career-compare'];
+    var COLLEGE_ONLY = ['draftclass','prospects','percentiles','proradar','drafttracker'];
+    if ((u === 'college' && NFL_ONLY.indexOf(curPanel) !== -1) ||
+        (u === 'nfl' && COLLEGE_ONLY.indexOf(curPanel) !== -1)) {
+      window.switchPanel('screener');
+    }
+  }
+
   populateSeasonSelect();
   populateWeekSelect();
   populateFilterStatSelect();
@@ -2715,18 +2727,42 @@ function applyUniverseUI() {
   const heatMapBtn = document.getElementById("heatMapBtn");
   if (heatMapBtn) heatMapBtn.style.display = (state.universe === "nfl") ? "" : "none";
 
-  // Dim NFL-only sidebar items in college mode
-  const NFL_ONLY_PANELS = [
-    'rankings', 'tiers', 'tradevalues', 'auction', 'cheatsheet',
-    'buysell', 'waivers', 'handcuffs', 'targetpremium', 'drops',
-    'garbagetime', 'matchups', 'stacks', 'redzone', 'streaks',
-    'weeklymvp', 'playoffs', 'yoy', 'pace', 'tdregression',
-    'airyards', 'dashboard', 'rosterbuilder', 'tradefinder',
-    'gamescript', 'powerrankings'
+  // Hide NFL-only sidebar items in college mode, college-only in NFL mode
+  var NFL_ONLY_PANELS = [
+    'rankings', 'tiers', 'tradevalues', 'vorp', 'advantage', 'auction',
+    'cheatsheet', 'buysell', 'stocks', 'waivers', 'handcuffs', 'scarcity',
+    'snapefficiency', 'workload', 'dualthreat', 'targetpremium', 'drops',
+    'garbagetime', 'weekly', 'matchups', 'stacks', 'redzone', 'streaks',
+    'weeklyleaders', 'weeklymvp', 'playoffs', 'gamescript',
+    'pace', 'seasonpace', 'tdregression', 'airyards',
+    'dashboard', 'rosterbuilder', 'tradefinder', 'scoring',
+    'schedule', 'opportunity', 'targets', 'team', 'powerrankings',
+    'records', 'recap', 'awards',
+    'reportcard', 'fptsbreakdown', 'gamelog', 'archetypes',
+    'breakdown', 'comptable', 'strengths', 'career', 'career-compare'
   ];
-  document.querySelectorAll('.lab-sidebar-item[data-panel]').forEach(item => {
-    const panel = item.getAttribute('data-panel');
-    item.classList.toggle('sidebar-nfl-only', isCollege && NFL_ONLY_PANELS.includes(panel));
+  var COLLEGE_ONLY_PANELS = [
+    'draftclass', 'prospects', 'percentiles', 'proradar', 'drafttracker'
+  ];
+  document.querySelectorAll('.lab-sidebar-item[data-panel]').forEach(function(item) {
+    var panel = item.getAttribute('data-panel');
+    var hide = (isCollege && NFL_ONLY_PANELS.indexOf(panel) !== -1) ||
+               (isNFL && COLLEGE_ONLY_PANELS.indexOf(panel) !== -1);
+    item.classList.toggle('sidebar-nfl-only', hide);
+  });
+
+  // Hide category headers that have no visible items
+  document.querySelectorAll('.lab-sidebar-category').forEach(function(cat) {
+    if (cat.classList.contains('sidebar-cat-forever-free') || cat.classList.contains('sidebar-cat-pro-parent')) return;
+    var next = cat.nextElementSibling;
+    var hasVisible = false;
+    while (next && !next.classList.contains('lab-sidebar-category')) {
+      if (next.classList.contains('lab-sidebar-item') && !next.classList.contains('sidebar-nfl-only') && !next.classList.contains('search-hidden')) {
+        hasVisible = true;
+      }
+      next = next.nextElementSibling;
+    }
+    cat.style.display = hasVisible ? '' : 'none';
   });
 }
 

@@ -50,6 +50,21 @@ The database file `data/terminal.db` uses WAL journal mode locally. Uploading it
 
 ---
 
+## Phase: Hotfix — Hide NFL-only panels when college universe is active
+
+**PRIORITY: FIX NOW.** When the user switches to the College universe, panels that only make sense for NFL players are still visible and accessible in the sidebar. Weekly Heatmap, Weekly Leaders, Weekly MVP, Matchups, Stacks, Gamescript, Garbage Time, Handcuffs, Waivers, Trade Values, Trade Finder, Roster Builder, FAAB, Streaks, and any other NFL-specific panel should be HIDDEN from the sidebar when `state.universe === "college"`. Clicking them in college mode currently shows broken/empty data which is confusing.
+
+### Task 1: Define NFL-only vs universal panel lists
+**Status**: DONE — NFL_ONLY_PANELS (45 panels) and COLLEGE_ONLY_PANELS (5 panels) defined in applyUniverseUI() in lab.js.
+
+### Task 2: Filter sidebar panels by active universe
+**Status**: DONE — sidebar items get display:none via .sidebar-nfl-only class. Category headers with no visible children are also hidden. Auto-switch to screener when on wrong-universe panel.
+
+### Task 3: Show friendly message if user navigates to wrong-universe panel via URL
+**Status**: DONE — panels already have showNflOnlyMsg() in lab-panels.js that shows a Caveat-font message with switch-to-NFL link. This handles URL deep-links.
+
+---
+
 ## Phase: Hotfix — Welcome to Pro page after checkout
 
 **PRIORITY: BUILD NOW.** After a user completes Stripe checkout and lands back on razzle.lol, there's no celebration, no onboarding, no acknowledgment that they just paid. They need a "Welcome to Pro" moment. This is the first impression of being a paying customer — make it count. Razzle personality, not corporate.

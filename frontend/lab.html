@@ -319,10 +319,7 @@
   }
 
   .lab-sidebar-item.sidebar-nfl-only {
-    opacity: 0.4;
-  }
-  .lab-sidebar-item.sidebar-nfl-only:hover {
-    opacity: 0.7;
+    display: none;
   }
   .lab-sidebar-item:focus {
     outline: 2px solid var(--orange);
@@ -3983,6 +3980,7 @@
 <script>
 (function() {
   var currentPanel = 'screener';
+  Object.defineProperty(window, '_currentPanelName', { get: function() { return currentPanel; } });
   var labMain = document.getElementById('labMain');
 
   // ─── Delegated click handler: any [data-pid] in panels opens player popup ───
