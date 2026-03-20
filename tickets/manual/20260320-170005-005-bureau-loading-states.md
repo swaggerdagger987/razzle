@@ -1,6 +1,6 @@
 ---
 id: 20260320-170005-005
-severity: P1
+severity: P0
 confidence: HIGH
 flow: bureau
 flow_name: Bureau — Loading & Error States
@@ -12,7 +12,7 @@ type: structural
 
 ## Build Bureau loading sequence and error states
 
-**PRIORITY: P1** | **Type: structural**
+**PRIORITY: P0** | **Type: structural**
 **Page**: league-intel.html
 **Design doc**: docs/bureau-design.md (Error & Loading States section)
 

@@ -10,12 +10,16 @@ STARTUP — run these steps in order:
 4. git pull origin ship/launch-fixes
 5. git merge origin/qa/findings --no-edit (pull in QA Loop's ticket files)
 5b. git merge origin/ceo/strategy --no-edit (pull in Razzle CEO's strategic tickets)
-6. List files in tickets/ directory — these are your work queue:
-   - Sort by filename (oldest first)
+6. List files in ALL ticket directories — these are your work queue:
+   - tickets/qa/      (functional bugs from QA Loop)
+   - tickets/ceo/     (strategic design tickets from CEO)
+   - tickets/manual/  (human-written backlog features)
+   - Sort ALL tickets by severity (P0 first), then by filename (oldest first)
    - Read each ticket's frontmatter for severity and confidence
    - SKIP: confidence=LOW (human reviews these)
    - SKIP: confidence=ESCALATE (file has 3+ tickets — flag in PROGRESS.md)
-   - PRIORITY: P0 HIGH first, then P0 MEDIUM, then P1, then P2
+   - PRIORITY: P0 from any source first, then P1, then P2
+   - CEO tickets with design doc references: READ the design doc before implementing
 7. If tickets/ has files, consume the highest-priority one (see EXECUTION below)
 8. Also read TICKETS.md for legacy tickets (non-QA feature requests)
 9. If BOTH tickets/ AND TICKETS.md are empty, enter SWEEP MODE
