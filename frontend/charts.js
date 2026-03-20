@@ -1151,7 +1151,7 @@ function exportNFLCompareImage() {
   players.forEach((p, i) => {
     ctx.textAlign = "right";
     ctx.font = "bold 10px 'Space Mono', monospace";
-    ctx.fillText(p.full_name.split(" ").pop(), padX + (i + 2) * colW - 8, tY + 18);
+    ctx.fillText((p.full_name || "").split(" ").pop() || "?", padX + (i + 2) * colW - 8, tY + 18);
   });
 
   // Stat rows

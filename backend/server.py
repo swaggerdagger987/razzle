@@ -416,13 +416,7 @@ app = FastAPI(
     openapi_url=None if _is_prod else "/openapi.json",
 )
 
-@app.exception_handler(Exception)
-async def _global_json_error_handler(request: Request, exc: Exception):
-    """Catch JSON decode errors from malformed POST bodies."""
-    import json
-    if isinstance(exc, (json.JSONDecodeError, ValueError)) and request.method == "POST":
-        return JSONResponse({"error": "invalid JSON body"}, status_code=400)
-    raise exc
+# JSON decode errors are handled in global_exception_handler below
 
 app.add_middleware(GZipMiddleware, minimum_size=500)
 _CORS_ORIGINS = ["https://razzle.lol"]
@@ -672,6 +666,9 @@ async def custom_http_exception_handler(request: Request, exc: StarletteHTTPExce
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
     """Catch unhandled exceptions — log full traceback, return generic 500."""
+    import json
+    if isinstance(exc, (json.JSONDecodeError, ValueError)) and request.method == "POST":
+        return JSONResponse({"error": "invalid JSON body"}, status_code=400)
     logger.exception("Unhandled exception on %s %s", request.method, request.url.path)
     if request.url.path.startswith("/api/"):
         return JSONResponse({"error": "Internal server error"}, status_code=500)
@@ -1628,6 +1625,9 @@ async def screener_query(request: Request):
 
 @app.post("/api/screener/sparklines")
 async def screener_sparklines(request: Request):
+    client_ip = _get_client_ip(request)
+    if not _check_screener_rate(client_ip):
+        return JSONResponse({"error": "Rate limited. Try again shortly."}, status_code=429)
     body = await request.json()
     player_ids = body.get("player_ids", [])
     season = body.get("season", 0)
@@ -3316,7 +3316,10 @@ async def monte_carlo_projections(request: Request):
 
     player_ids = body.get("player_ids", [])
     scoring = body.get("scoring", "ppr")  # ppr, half_ppr, standard
-    season = body.get("season", 0)
+    try:
+        season = int(body.get("season", 0))
+    except (TypeError, ValueError):
+        season = 0
 
     if not player_ids or not isinstance(player_ids, list):
         return JSONResponse({"error": "player_ids required"}, status_code=400)
