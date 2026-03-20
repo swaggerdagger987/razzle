@@ -2,7 +2,7 @@
 
 **Severity**: P2
 **Flow**: All pages (performance)
-**Status**: OPEN
+**Status**: OPEN (Ship claims G-1/G-2 DONE but fix doesn't work on prod)
 
 ## Problem
 
@@ -50,6 +50,23 @@ Option A: Add `set -e` to the buildCommand so esbuild failure is caught during d
 Option B: Install esbuild explicitly: `pip install nodeenv && nodeenv --node=18.0.0 --prebuilt -p && npm install -g esbuild`
 Option C: Use a Python-based minifier (rjsmin, csscompressor) that doesn't need Node.js
 Option D: Pre-build minified files and commit frontend/dist/ to git (simplest, guaranteed to work)
+
+## Session 14 Re-audit (2026-03-20)
+
+Ship Loop claims Phase G (G-1, G-2) completed esbuild minification. However, production
+still serves raw JS with comments. Verified via WebFetch of `https://razzle.lol/lab.js`:
+first 200 chars are unminified source with comments. The render.yaml buildCommand has the
+esbuild steps but the buildCommand lacks `set -e`, so npx failure is silent. The fallback
+in server.py works correctly (serves raw frontend/), making this invisible at runtime.
+
+Likely root cause: Render's Python runtime does not have npx/Node.js available, or the
+esbuild command fails silently during build. The `mkdir -p frontend/dist` creates the
+directory but without JS/CSS files, and the HTML copies work, so FRONTEND_DIR = dist/
+but then HTML references fail... UNLESS the server detects dist/ has no JS and falls back.
+Actually, the most likely scenario is dist/ is never created at all because the entire
+buildCommand block fails at the npx line and subsequent commands also fail.
+
+Recommended: Option C (Python-based minifier) or Option D (pre-built dist/ in git).
 
 ## Not Affected
 
