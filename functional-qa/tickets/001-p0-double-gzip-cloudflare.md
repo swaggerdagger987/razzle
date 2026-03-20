@@ -14,16 +14,37 @@ created: 2026-03-20
 
 The Lab page fails to initialize on production (razzle.lol) because `/api/filter-options` returns gzip-compressed bytes that the browser can't parse as JSON.
 
-## Root cause
+## Root cause (UPDATED 2026-03-20)
 
-The FastAPI server has `GZipMiddleware` that compresses responses with gzip and sets `Content-Encoding: gzip`. Cloudflare then applies its own compression (Brotli `br`), creating a double-compressed response. When the browser decompresses the outer Brotli layer, it gets raw gzip bytes instead of JSON.
+**TWO separate bugs, both causing the same symptom:**
+
+### Bug 1: Response cache strips Content-Encoding header (affects LOCAL + PROD)
+
+The response cache middleware (`server.py:465-490`) saves `cache-control` and `content-type` headers but NOT `content-encoding` (line 484). Here's the flow:
+
+1. First request: GZipMiddleware compresses response + adds `Content-Encoding: gzip`
+2. Response cache middleware saves gzip bytes but only keeps `cache-control` and `content-type`
+3. Second+ requests: cache returns gzip bytes WITHOUT `Content-Encoding: gzip` header
+4. Browser receives gzip bytes, thinks it's raw JSON (no encoding header), parse fails
+
+Evidence: `/api/filter-options` returns 728 bytes of gzip data with `Content-Encoding: None` on localhost (no Cloudflare involved). Body starts with `\x1f\x8b` (gzip magic number).
+
+Fix: Add `"content-encoding"` to the allowed headers in line 484:
+```python
+save_headers = {k: v for k, v in response.headers.items()
+               if k.lower() in ("cache-control", "content-type", "content-encoding")}
+```
+
+### Bug 2: Double compression on production (Cloudflare layer)
+
+Cloudflare applies Brotli on top of GZip from the server, creating double-compressed responses. This was the original diagnosis but Bug 1 is the primary cause.
 
 Evidence from Playwright response interception:
 - `/api/filter-options` response headers: `content-encoding: br` (Brotli from Cloudflare)
 - Response body starts with `1f 8b` (gzip magic number) — inner gzip layer not decoded
 - Browser's `resp.json()` fails with "Server returned non-JSON response"
 
-Contrast with `/api/college/filter-options` which showed `content-encoding: gzip` and decoded correctly.
+**Best fix for both bugs: Remove GZipMiddleware entirely (let Cloudflare handle compression) AND fix the response cache header stripping.**
 
 ## Impact
 
@@ -60,5 +81,7 @@ Or: open razzle.lol/lab.html in browser → DevTools console shows the error.
 
 ## Verified against
 
-- Production: razzle.lol (BROKEN)
-- Local dev: localhost:8000 (WORKS — no Cloudflare proxy)
+- Production: razzle.lol (BROKEN — double compression + cache header strip)
+- Local dev: localhost:8000 (BROKEN — cache header strip, any cached endpoint > 500 bytes)
+- Endpoints affected: any GET endpoint in `_RESP_CACHEABLE_PREFIXES` with response > 500 bytes (GZipMiddleware minimum_size)
+- Endpoints NOT affected: `/api/health` (not cached), any endpoint on its FIRST request (before being cached)

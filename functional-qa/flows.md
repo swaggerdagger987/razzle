@@ -22,17 +22,17 @@
 | 5 | Screener: Search | Search "Mahomes", "McCaffrey", "Amon-Ra". Results correct? Clear resets? | DONE — P1 FUNC-002: hyphens/apostrophes break search |
 | 6 | Screener: Season switch | Switch 2025 -> 2024 -> 2023. Data actually changes? Stat values match that season? | DONE — PASS |
 | 7 | Screener: Week filter | Select Week 1. Stats are single-week, not season totals? Switch back to All Weeks. | DONE — PASS (production only, local server stale) |
-| 8 | Screener: Universe toggle | NFL -> College -> Prospects -> NFL. Correct data loads? Wrong-universe panels hide? | PENDING |
-| 9 | Screener: Column picker | Add/remove columns. Presets load correct column sets? Custom columns persist? | PENDING |
+| 8 | Screener: Universe toggle | NFL -> College -> Prospects -> NFL. Correct data loads? Wrong-universe panels hide? | DONE — API PASS, UI blocked by FUNC-001 |
+| 9 | Screener: Column picker | Add/remove columns. Presets load correct column sets? Custom columns persist? | DONE — Code PASS, UI blocked by FUNC-001 |
 | 10 | Screener: Pin player | Pin a row. Survives sort? Survives filter? Unpin works? Multiple pins? | PENDING |
-| 11 | Screener: Pagination | Next/prev pages. Data advances? Page count correct? Sort persists across pages? | PENDING |
+| 11 | Screener: Pagination | Next/prev pages. Data advances? Page count correct? Sort persists across pages? | DONE — API PASS, UI blocked by FUNC-001 |
 | 12 | Screener: URL state | Apply filters + sort + columns + season + week. Share URL. State restores exactly? | PENDING |
 
 ## Group 2: Player Deep Dives (where trade decisions happen)
 
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
-| 13 | Player profile: NFL | Click a player name. Profile loads? Stats match screener row? Season selector works? | PENDING |
+| 13 | Player profile: NFL | Click a player name. Profile loads? Stats match screener row? Season selector works? | DONE — PASS (data correct), P1 FUNC-004: all headshots missing on prod |
 | 14 | Player profile: Career stats | Career numbers add up across seasons? Per-game averages calculated correctly? | PENDING |
 | 15 | Player profile: Game log | Individual game stats shown? Sum of game log = season total? Week numbers correct? | PENDING |
 | 16 | Player comparison | Compare 2 players. Stats aligned? Same season? Difference calculations correct? | PENDING |
@@ -45,8 +45,8 @@
 | 18 | Dynasty Rankings | Rankings load? Sortable? Position filter? Do rankings reflect age + production reality? | DONE — P2 FUNC-003: value ceiling clustering at 100.0 |
 | 19 | Trade Values | Values load? Positional adjustment? Do elite young WRs > aging vets? Sensible tiers? | DONE — PASS (same clustering note as #18) |
 | 20 | Trade Finder | Suggest trades? Values make sense? Not suggesting obviously lopsided deals? | DONE — PASS |
-| 21 | Tiers | Tiers load? Players grouped sensibly? Tier breaks at reasonable spots? | PENDING |
-| 22 | Aging Curves | Chart renders? Shows realistic age-based decline? Peak age correct per position? | PENDING |
+| 21 | Tiers | Tiers load? Players grouped sensibly? Tier breaks at reasonable spots? | DONE — PASS (functional), P2 S-tier bloated (76 players, FUNC-003) |
+| 22 | Aging Curves | Chart renders? Shows realistic age-based decline? Peak age correct per position? | DONE — RB peak correct, P2 WR/TE survivorship bias |
 | 23 | Career Compare | Multi-player career overlay? Same scale? Correct seasons aligned? | PENDING |
 
 ## Group 4: In-Season Tools (weekly grind features)
@@ -67,17 +67,17 @@
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
 | 32 | Target Share / Air Yards | Values are percentages that sum correctly per team? WOPR calculated right? | DONE — PASS (per-team sums 89-93%) |
-| 33 | Snap Efficiency | Snap % shown? Fantasy points per snap derived correctly? | PENDING |
-| 34 | Red Zone | RZ targets/carries shown? RZ stats don't include non-RZ plays? | PENDING |
-| 35 | Opportunity Share | Opportunity = targets + carries? Per-team shares sum to ~100%? | PENDING |
+| 33 | Snap Efficiency | Snap % shown? Fantasy points per snap derived correctly? | DONE — PASS (calcs correct), P2 no min snap threshold |
+| 34 | Red Zone | RZ targets/carries shown? RZ stats don't include non-RZ plays? | DONE — PASS (calcs correct, annotations good) |
+| 35 | Opportunity Share | Opportunity = targets + carries? Per-team shares sum to ~100%? | DONE — PASS (alpha dogs), P2 FUNC-005: dominator rec shares null |
 | 36 | Efficiency metrics | YPC, YPR, YPT calculated correctly from raw stats? Not showing NaN/Infinity for 0 attempts? | DONE — PASS (0 NaN/Inf in 200 players) |
-| 37 | Regression candidates | TD regression logic sound? Flagging high-TD players with low expected TDs? | PENDING |
+| 37 | Regression candidates | TD regression logic sound? Flagging high-TD players with low expected TDs? | DONE — PASS (calcs exact, rates sensible) |
 | 38 | Garbage Time | Identified correctly? Based on game script, not arbitrary cutoff? | PENDING |
 | 39 | Gamescript | Game script data per player? Shows performance in various score differentials? | PENDING |
 | 40 | Dual Threat | QB rushing + passing combined? RB receiving + rushing? Correct dual-threat metrics? | PENDING |
 | 41 | Consistency | Week-to-week consistency calculated? Boom/bust rates make sense? | PENDING |
 | 42 | Workload | Snap counts + touches trending? Workload share within team correct? | PENDING |
-| 43 | VORP | Value over replacement calculated? Replacement level defined per position? Sensible? | PENDING |
+| 43 | VORP | Value over replacement calculated? Replacement level defined per position? Sensible? | DONE — PASS (exact calcs), P2 missing tier badges |
 | 44 | Scoring breakdown | Fantasy point sources broken down correctly? Passing + rushing + receiving = total? | PENDING |
 
 ## Group 6: Draft & Prospects (draft season critical path)
