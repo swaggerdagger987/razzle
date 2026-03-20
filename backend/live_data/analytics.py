@@ -17,6 +17,7 @@ from .core import (
     FANTASY_POSITIONS,
     ABBREV_TO_TEAM,
     _safe_div,
+    _safe_int,
     _STAT_SUM_COLS,
     _cached,
     _CACHE_TTL_STABLE,
@@ -609,9 +610,10 @@ def fetch_breakout_candidates(season=None, position=None, limit=50, week=None):
             pos_filter = ""
             week_filter = ""
             params = [season]
-            if week and int(week) > 0:
+            _week = _safe_int(week)
+            if _week > 0:
                 week_filter = "AND s.week = ?"
-                params.append(int(week))
+                params.append(_week)
             if position and position.upper() in ("QB", "RB", "WR", "TE"):
                 pos_filter = "AND p.position = ?"
                 params.append(position.upper())
@@ -683,9 +685,10 @@ def fetch_breakout_candidates(season=None, position=None, limit=50, week=None):
             placeholders = ",".join("?" * len(pids))
             metrics_week_filter = ""
             metrics_params = pids + [season]
-            if week and int(week) > 0:
+            _week_m = _safe_int(week)
+            if _week_m > 0:
                 metrics_week_filter = "AND week = ?"
-                metrics_params.append(int(week))
+                metrics_params.append(_week_m)
             ts_rows = conn.execute(f"""
                 SELECT player_id, AVG(stat_value) as avg_ts
                 FROM player_week_metrics
@@ -1441,9 +1444,10 @@ def fetch_target_distribution(season=None, team=None, week=None):
             teams_filter = ""
             week_filter = ""
             params = [season]
-            if week and int(week) > 0:
+            _week = _safe_int(week)
+            if _week > 0:
                 week_filter = "AND s.week = ?"
-                params.append(int(week))
+                params.append(_week)
             if team and team.upper() in ABBREV_TO_TEAM:
                 teams_filter = "AND p.team = ?"
                 params.append(team.upper())
@@ -1726,9 +1730,10 @@ def fetch_usage_trends(season=None, position=None, window=5, limit=30, week=None
             pos_filter = ""
             week_filter = ""
             params = [season]
-            if week and int(week) > 0:
+            _week = _safe_int(week)
+            if _week > 0:
                 week_filter = "AND s.week = ?"
-                params.append(int(week))
+                params.append(_week)
             if position and position.upper() in FANTASY_POSITIONS:
                 pos_filter = "AND p.position = ?"
                 params.append(position.upper())
@@ -2211,9 +2216,10 @@ def fetch_redzone_usage(season=None, position=None, limit=30, week=None):
             pos_filter = ""
             week_filter = ""
             params = [season]
-            if week and int(week) > 0:
+            _week = _safe_int(week)
+            if _week > 0:
                 week_filter = "AND s.week = ?"
-                params.append(int(week))
+                params.append(_week)
             if position and position.upper() in ("QB", "RB", "WR", "TE"):
                 pos_filter = "AND p.position = ?"
                 params.append(position.upper())

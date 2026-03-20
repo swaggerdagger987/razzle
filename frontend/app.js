@@ -686,15 +686,15 @@ function _injectAuthModal() {
         '<button class="auth-tab" data-tab="register" onclick="switchAuthTab(\'register\')">Register</button>' +
       '</div>' +
       '<form id="authLoginForm" class="auth-form" onsubmit="handleLogin(event)">' +
-        '<input type="email" id="authLoginEmail" placeholder="Email" required autocomplete="email">' +
-        '<input type="password" id="authLoginPassword" placeholder="Password" required autocomplete="current-password">' +
+        '<input type="email" id="authLoginEmail" placeholder="Email" required autocomplete="email" aria-label="Email address">' +
+        '<input type="password" id="authLoginPassword" placeholder="Password" required autocomplete="current-password" aria-label="Password">' +
         '<div id="authLoginError" class="auth-error"></div>' +
         '<button type="submit" class="btn-chunky btn-primary auth-submit">Sign In</button>' +
       '</form>' +
       '<form id="authRegisterForm" class="auth-form" style="display:none" onsubmit="handleRegister(event)">' +
-        '<input type="email" id="authRegisterEmail" placeholder="Email" required autocomplete="email">' +
-        '<input type="password" id="authRegisterPassword" placeholder="Password (8+ chars)" required minlength="8" autocomplete="new-password">' +
-        '<input type="password" id="authRegisterConfirm" placeholder="Confirm password" required minlength="8" autocomplete="new-password">' +
+        '<input type="email" id="authRegisterEmail" placeholder="Email" required autocomplete="email" aria-label="Email address">' +
+        '<input type="password" id="authRegisterPassword" placeholder="Password (8+ chars)" required minlength="8" autocomplete="new-password" aria-label="Password (8 characters minimum)">' +
+        '<input type="password" id="authRegisterConfirm" placeholder="Confirm password" required minlength="8" autocomplete="new-password" aria-label="Confirm password">' +
         '<div id="authRegisterError" class="auth-error"></div>' +
         '<button type="submit" class="btn-chunky btn-primary auth-submit">Create Account</button>' +
       '</form>' +

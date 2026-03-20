@@ -89,8 +89,9 @@ def cache_clear():
 def cache_stats():
     """Return cache diagnostics for health check."""
     now = _time.time()
-    total = len(_cache)
-    active = sum(1 for v in _cache.values() if now - v["t"] < v.get("ttl", _CACHE_TTL))
+    values = list(_cache.values())  # snapshot to avoid RuntimeError on concurrent mutation
+    total = len(values)
+    active = sum(1 for v in values if now - v["t"] < v.get("ttl", _CACHE_TTL))
     return {"total_entries": total, "active_entries": active, "max_size": _CACHE_MAX_SIZE}
 
 
@@ -175,6 +176,14 @@ ABBREV_TO_TEAM = {
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
+def _safe_int(val, default=0):
+    """Safe int conversion, returns default on failure."""
+    try:
+        return int(val) if val else default
+    except (ValueError, TypeError):
+        return default
+
 
 def _safe_div(a, b, decimals=1):
     """Safe division, returns None if denominator is 0/None or numerator is None."""

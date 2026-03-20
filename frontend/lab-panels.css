@@ -424,7 +424,7 @@
 }
 .tl-tier-label.S { background: var(--red); }
 .tl-tier-label.A { background: var(--orange); }
-.tl-tier-label.B { background: #e8a838; }
+.tl-tier-label.B { background: var(--yellow); }
 .tl-tier-label.C { background: var(--pos-rb); }
 .tl-tier-label.D { background: var(--pos-qb); }
 .tl-tier-label.F { background: var(--ink-light); }
@@ -768,11 +768,11 @@
 .av-tv-bar { width: 80px; height: 8px; background: var(--ink-faint); border-radius: 4px; display: inline-block; vertical-align: middle; margin-right: 6px; }
 .av-tv-fill { height: 100%; border-radius: 4px; background: var(--orange); }
 .av-tier-badge { display: inline-block; font-family: var(--font-mono); font-size: 10px; padding: 2px 6px; border-radius: 8px; border: 2px solid; }
-.av-tier-badge.premium { background: rgba(212,64,64,0.12); color: var(--red); border-color: var(--red); }
-.av-tier-badge.starter { background: rgba(217,119,87,0.12); color: var(--orange); border-color: var(--orange); }
-.av-tier-badge.value { background: rgba(46,196,182,0.12); color: var(--pos-rb); border-color: var(--pos-rb); }
-.av-tier-badge.bargain { background: rgba(91,127,255,0.12); color: var(--pos-qb); border-color: var(--pos-qb); }
-.av-tier-badge.dollar-tier { background: rgba(45,31,20,0.06); color: var(--ink-light); border-color: var(--ink-faint); }
+.av-tier-badge.premium { background: var(--red-light); color: var(--red); border-color: var(--red); }
+.av-tier-badge.starter { background: var(--orange-light); color: var(--orange); border-color: var(--orange); }
+.av-tier-badge.value { background: var(--green-light); color: var(--pos-rb); border-color: var(--pos-rb); }
+.av-tier-badge.bargain { background: var(--blue-light); color: var(--pos-qb); border-color: var(--pos-qb); }
+.av-tier-badge.dollar-tier { background: var(--bg-warm); color: var(--ink-light); border-color: var(--ink-faint); }
 
 /* ===== CHEAT SHEET PANEL ===== */
 .cs-fmt-tabs { display: flex; gap: 6px; }

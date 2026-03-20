@@ -1567,3 +1567,62 @@ All `ctx.fillStyle = 'rgba(45,31,20,...)'` → theme-branching with sand rgba fo
 - All Python files compile clean
 - 59/59 tests pass (5.67s)
 - 0 regressions
+
+---
+
+## Quality Audit: 5-Agent Deep Sweep (Mar 20 — Session 7)
+
+**Goal**: Fresh 5-agent parallel audit across crash bugs (lab.js, lab-panels.js), backend robustness, dark mode + design consistency, and UX/accessibility.
+
+### P0 Crash Bug Fixes (9 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | `data.percentiles` undefined → `data.percentiles \|\| {}` | lab.js:6943 | Prospect profile athletic testing section crashed if API returned no percentiles |
+| 2 | `college.career` null → `college.career \|\| {}` | lab.js:7016 | Prospect college production section crashed if career data missing |
+| 3 | `c.full_name.split()` null → `(c.full_name \|\| "")` guard | lab.js:11971 | Comp stat table header crashed on null player name |
+| 4 | `player.full_name.replace()` null → `(player.full_name \|\| "player")` guard | lab.js:12303 | Comp PNG export filename crashed on null name |
+| 5 | `a.weeks[sortCol]` → `(a.weeks \|\| {})[sortCol]` | lab-panels.js:3353 | Weekly heatmap sort crashed if player had no weeks data |
+| 6 | `p.weeks[String(w)]` → `(p.weeks \|\| {})[String(w)]` | lab-panels.js:3381 | Weekly heatmap render crashed if player had no weeks data |
+| 7 | `t.positions[pos]` → `(t.positions \|\| {})[pos]` | lab-panels.js:3548 | Matchup heatmap value collection crashed if team had no positions data |
+| 8 | `a.positions[sortCol]` → `(a.positions \|\| {})[sortCol]` | lab-panels.js:3558 | Matchup heatmap sort crashed on missing positions |
+| 9 | `t.positions[pos]` → `(t.positions \|\| {})[pos]` | lab-panels.js:3585 | Matchup heatmap row render crashed on missing positions |
+
+### Backend Robustness Fixes (6 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | Thread-safe `cache_stats()` — snapshot values before iteration | core.py:89-94 | `RuntimeError: dictionary changed size during iteration` under concurrent /api/health calls |
+| 2 | Thread-safe `_resp_cache_set()` — snapshot items, use `.pop()` | server.py:49-56 | Same RuntimeError during response cache eviction under concurrent threads |
+| 3 | `_safe_int()` helper for week validation | core.py:180 | New helper prevents `ValueError` on non-numeric week params |
+| 4 | 10x `int(week)` → `_safe_int(week)` in analytics.py + tools.py | analytics.py, tools.py | All week parameter parsing now safe from ValueError on bad input |
+| 5 | `available_weeks` endpoint: relative import + dynamic season | server.py:1612,1616 | Was `from backend.db` (absolute, fragile) + hardcoded `2025`. Now `from .db` + `_current_nfl_season()` |
+| 6 | `_waitlist_rate` dict pruning to prevent memory leak | server.py:1904-1907 | Added stale entry cleanup when dict exceeds 5000 entries |
+
+### Dark Mode + Design Fixes (5 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | Cold gray sidebar shadow `rgba(15,15,26)` → warm `rgba(45,31,20)` | lab.html:578 | Violated "no cold grays" rule |
+| 2 | `.pos-badge` font-display at 10px → font-mono | lab.html:1587 | Design guide: display font only at 16px+ |
+| 3 | `.profile-pos-badge` font-display at 14px → font-mono | lab.html:1857 | Same rule |
+| 4 | `.tier-card-name` font-size 15px → 16px | lab.html:2323 | Met display font minimum threshold |
+| 5 | Tier badge hardcoded rgba → CSS vars | lab-panels.css:771-775 | `rgba(...)` backgrounds invisible in dark mode → `var(--red-light)`, `var(--orange-light)`, etc. |
+| 6 | `#e8a838` amber → `var(--yellow)` | lab-panels.css:427 | Hardcoded hex not in design token system |
+
+### UX + Accessibility Fixes (6 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | 404 page: removed `class="active"` from Screener nav link | 404.html:140 | Wrong nav item highlighted |
+| 2 | Auth modal: aria-labels on all 5 inputs | app.js:689-697 | WCAG 4.1.2 — screen readers could not identify inputs |
+| 3 | Pricing toggle: `role="switch"`, `aria-checked`, `tabindex`, keyboard handler | pricing.html:204 | WCAG 2.1.1 — was mouse-only, now keyboard accessible (Space/Enter) |
+| 4 | Pricing toggle: `aria-checked` updates on state change | pricing.html:515 | Keeps switch state in sync for screen readers |
+| 5 | Sleeper input: `aria-label="Sleeper username"` | league-intel.html:1675 | WCAG 4.1.2 — input had no accessible label |
+| 6 | "BYOK" jargon → "bring your own key" / "your key" | index.html:615, pricing.html:327-328 | Removed unexplained acronym from conversion-critical surfaces |
+
+### Verified Clean
+- All 11 JS files syntax clean
+- All Python files compile clean
+- 59/59 tests pass (5.64s)
+- 0 regressions

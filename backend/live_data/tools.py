@@ -12,7 +12,7 @@ import math
 from collections import defaultdict
 
 from ..db import get_db
-from .core import _cached, _CACHE_TTL_STABLE, _current_nfl_season, _current_draft_year, compute_trade_value
+from .core import _cached, _CACHE_TTL_STABLE, _current_nfl_season, _current_draft_year, compute_trade_value, _safe_int
 
 logger = logging.getLogger("razzle.live_data.tools")
 
@@ -902,9 +902,10 @@ def fetch_streaks(season=None, position=None, window=4, limit=25, week=None):
                   AND p.fantasy_relevant = 1
             """
             params = [season]
-            if week and int(week) > 0:
+            _week = _safe_int(week)
+            if _week > 0:
                 query += " AND s.week = ?"
-                params.append(int(week))
+                params.append(_week)
             if position:
                 query += " AND p.position = ?"
                 params.append(position)
@@ -2463,9 +2464,10 @@ def fetch_target_premium(season=None, position=None, limit=50, week=None):
             pos_filter = "AND p.position IN ('WR','TE','RB')"
             params = [season]
             week_filter = ""
-            if week and int(week) > 0:
+            _week = _safe_int(week)
+            if _week > 0:
                 week_filter = "AND w.week = ?"
-                params.append(int(week))
+                params.append(_week)
             if position and position in ("WR", "TE", "RB"):
                 pos_filter = "AND p.position = ?"
                 params.append(position)
@@ -2673,9 +2675,10 @@ def fetch_drop_rate(season=None, position=None, limit=50, week=None):
             pos_filter = ""
             params = [season]
             week_filter = ""
-            if week and int(week) > 0:
+            _week = _safe_int(week)
+            if _week > 0:
                 week_filter = "AND w.week = ?"
-                params.append(int(week))
+                params.append(_week)
             if position:
                 pos_filter = "AND p.position = ?"
                 params.append(position)
@@ -2761,9 +2764,10 @@ def fetch_success_rate(season=None, position=None, limit=50, week=None):
             pos_filter = ""
             params = [season]
             week_filter = ""
-            if week and int(week) > 0:
+            _week = _safe_int(week)
+            if _week > 0:
                 week_filter = "AND w.week = ?"
-                params.append(int(week))
+                params.append(_week)
             if position:
                 pos_filter = "AND p.position = ?"
                 params.append(position)
@@ -2858,9 +2862,10 @@ def fetch_game_script(season=None, position=None, limit=40, week=None):
             pos_filter = ""
             params = [season]
             week_filter = ""
-            if week and int(week) > 0:
+            _week = _safe_int(week)
+            if _week > 0:
                 week_filter = "AND w.week = ?"
-                params.append(int(week))
+                params.append(_week)
             if position:
                 pos_filter = "AND p.position = ?"
                 params.append(position)

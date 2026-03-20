@@ -1672,7 +1672,7 @@
       <h2>Connect Your Sleeper</h2>
       <p>enter your Sleeper username to see your leagues</p>
       <div class="connect-form">
-        <input type="text" class="input-chunky" id="sleeperUsername" placeholder="sleeper username" onkeydown="if(event.key==='Enter'){event.preventDefault();connectSleeper();}">
+        <input type="text" class="input-chunky" id="sleeperUsername" placeholder="sleeper username" aria-label="Sleeper username" onkeydown="if(event.key==='Enter'){event.preventDefault();connectSleeper();}">
         <button class="btn-primary" id="connectBtn" onclick="connectSleeper()">Connect</button>
       </div>
       <div class="connect-error" id="connectError"></div>

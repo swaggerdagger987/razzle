@@ -6940,7 +6940,8 @@ async function openProspectProfile(name, position, draftYear) {
 
 function renderProspectProfile(data, container, compsData) {
   if (!data) { container.innerHTML = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">prospect not found on the board</div>'; return; }
-  const { prospect, percentiles } = data;
+  const { prospect } = data;
+  const percentiles = data.percentiles || {};
   if (!prospect || !prospect.player_name) {
     container.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">prospect not found on the board</div>`;
     return;
@@ -7012,7 +7013,7 @@ function renderProspectProfile(data, container, compsData) {
   // ── College Production Section ──────────────────────────────────
   const college = data.college;
   if (college && college.seasons && college.seasons.length > 0) {
-    const career = college.career;
+    const career = college.career || {};
     html += `<div class="profile-section-title" style="color:var(--blue);">College Production</div>`;
 
     // Headline stats bar (position-specific)
@@ -11968,7 +11969,7 @@ function renderPlayerComps(data, container) {
   html += `<th style="text-align:left;">Stat</th>`;
   html += `<th>${escapeHtml(player.full_name)}</th>`;
   for (const c of comps.slice(0, 3)) {
-    html += `<th>${escapeHtml(c.full_name.split(" ").pop())}</th>`;
+    html += `<th>${escapeHtml((c.full_name || "").split(" ").pop())}</th>`;
   }
   html += `</tr></thead><tbody>`;
 
@@ -12300,7 +12301,7 @@ function exportCompsImage() {
 
   // Download
   const link = document.createElement("a");
-  const safeName = player.full_name.replace(/[^a-zA-Z0-9]/g, "-").toLowerCase();
+  const safeName = (player.full_name || "player").replace(/[^a-zA-Z0-9]/g, "-").toLowerCase();
   link.download = `razzle-comps-${safeName}.png`;
   link.href = canvas.toDataURL("image/png");
   link.click();

@@ -3350,7 +3350,7 @@
         var va, vb;
         if (sortCol === 'total') { va = a.total_pts || 0; vb = b.total_pts || 0; }
         else if (sortCol === 'ppg') { va = a.ppg || 0; vb = b.ppg || 0; }
-        else { va = a.weeks[String(sortCol)]; vb = b.weeks[String(sortCol)]; va = va == null ? -999 : va; vb = vb == null ? -999 : vb; }
+        else { va = (a.weeks || {})[String(sortCol)]; vb = (b.weeks || {})[String(sortCol)]; va = va == null ? -999 : va; vb = vb == null ? -999 : vb; }
         return (va - vb) * sortDir;
       });
 
@@ -3378,7 +3378,7 @@
         html += '</div></td>';
 
         weeks.forEach(function(w) {
-          var score = p.weeks[String(w)];
+          var score = (p.weeks || {})[String(w)];
           if (score === null || score === undefined) {
             html += '<td class="wh-bye">bye</td>';
           } else {
@@ -3545,7 +3545,7 @@
       positions.forEach(function(pos) {
         posValues[pos] = [];
         teams.forEach(function(t) {
-          var v = (t.positions[pos] || {}).avg_ppg || 0;
+          var v = ((t.positions || {})[pos] || {}).avg_ppg || 0;
           if (v > 0) posValues[pos].push(v);
         });
       });
@@ -3555,7 +3555,7 @@
           var va, vb;
           if (sortCol === 'team') { va = a.team; vb = b.team; return sortAsc ? va.localeCompare(vb) : vb.localeCompare(va); }
           else if (sortCol === 'total') { va = a.total_avg; vb = b.total_avg; }
-          else { va = (a.positions[sortCol] || {}).avg_ppg || 0; vb = (b.positions[sortCol] || {}).avg_ppg || 0; }
+          else { va = ((a.positions || {})[sortCol] || {}).avg_ppg || 0; vb = ((b.positions || {})[sortCol] || {}).avg_ppg || 0; }
           return sortAsc ? va - vb : vb - va;
         });
       }
@@ -3582,7 +3582,7 @@
         html += '<td class="mh-team-cell">' + escapeHtml(t.team) + '<span style="font-family:var(--font-mono);font-size:11px;color:var(--ink-light);margin-left:6px;">' + t.games + 'G</span></td>';
 
         positions.forEach(function(pos) {
-          var d = t.positions[pos] || {};
+          var d = (t.positions || {})[pos] || {};
           var ppg = d.avg_ppg || 0;
           var rank = d.rank || 0;
           var bg = getHeatColor(ppg, posValues[pos]);

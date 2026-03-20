@@ -49,10 +49,10 @@ def _resp_cache_get(key: str):
 def _resp_cache_set(key: str, body: bytes, headers: dict):
     """Cache response bytes."""
     if len(_resp_cache) >= _RESP_CACHE_MAX:
-        # Evict oldest entries
-        oldest = sorted(_resp_cache.items(), key=lambda x: x[1]["t"])
+        # Evict oldest entries — snapshot to avoid RuntimeError on concurrent access
+        oldest = sorted(list(_resp_cache.items()), key=lambda x: x[1]["t"])
         for k, _ in oldest[:20]:
-            del _resp_cache[k]
+            _resp_cache.pop(k, None)
     _resp_cache[key] = {"body": body, "t": _time.time(), "headers": headers}
 
 
@@ -1609,11 +1609,11 @@ def filter_options():
 
 @app.get("/api/available-weeks")
 def available_weeks(season: int = 0):
-    from backend.db import get_db
+    from .db import get_db
     with get_db() as conn:
         if not season:
             row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
-            season = row[0] if row and row[0] else 2025
+            season = row[0] if row and row[0] else live_data._current_nfl_season()
         rows = conn.execute(
             "SELECT DISTINCT week FROM player_week_stats WHERE season = ? AND season_type = 'regular' ORDER BY week",
             (season,),
@@ -1902,6 +1902,11 @@ async def waitlist(request: Request):
         return JSONResponse({"error": "Invalid email format"}, status_code=400)
     ip = _get_client_ip(request)
     now_ts = _time.time()
+    # Prune stale entries to prevent memory leak
+    if len(_waitlist_rate) > 5000:
+        stale = [k for k, v in _waitlist_rate.items() if now_ts - v > 120]
+        for k in stale:
+            del _waitlist_rate[k]
     if ip in _waitlist_rate and now_ts - _waitlist_rate[ip] < 60:
         return JSONResponse({"error": "Rate limited. Try again in 60 seconds."}, status_code=429)
     _waitlist_rate[ip] = now_ts
