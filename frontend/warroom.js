@@ -1284,7 +1284,7 @@ function updateRosterSelection() {
   const rows = document.querySelectorAll('.roster-agent');
   rows.forEach(row => {
     const id = parseInt(row.dataset.agentId);
-    row.classList.toggle('selected', agents[id].selected);
+    if (agents[id]) row.classList.toggle('selected', agents[id].selected);
   });
 }
 
@@ -1292,7 +1292,7 @@ function updateRosterStatus() {
   const rows = document.querySelectorAll('.roster-agent');
   rows.forEach(row => {
     const id = parseInt(row.dataset.agentId);
-    const a = agents[id];
+    const a = agents[id]; if (!a) return;
     const statusEl = row.querySelector('.roster-status');
     if (statusEl) {
       const dot = statusEl.querySelector('.roster-dot');

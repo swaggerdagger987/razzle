@@ -10008,7 +10008,7 @@ function exportTierBoardPNG() {
     ctx.fill();
     ctx.stroke();
     ctx.fillStyle = "#ffffff";
-    ctx.font = "bold 12px 'Luckiest Guy', cursive";
+    ctx.font = "bold 12px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(TIER_LABELS[tier], 26, 5);
     ctx.restore();
@@ -10059,7 +10059,7 @@ function exportTierBoardPNG() {
 
       // Player name
       ctx.fillStyle = "#2d1f14";
-      ctx.font = "bold 11px 'Luckiest Guy', cursive";
+      ctx.font = "bold 11px 'Space Mono', monospace";
       var nameW = cardW - 64;
       var dispName = p.name;
       while (ctx.measureText(dispName).width > nameW && dispName.length > 3) {

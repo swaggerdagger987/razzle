@@ -1089,6 +1089,8 @@ function migrateLocalFormulas() {
       method: "POST",
       headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
       body: JSON.stringify({ formulas: formulas })
+    }).then(function(r) {
+      if (r.ok) localStorage.removeItem("razzle_formulas");
     }).catch(function() {});
   } catch (e) { /* ignore */ }
 }

@@ -4136,7 +4136,7 @@ async function runH2HComparison(state, leftId, rightId) {
       // Left side
       html += '<div style="flex:1;">';
       html += '<span style="font-weight:700;">' + leftAvg.toFixed(1) + '</span>';
-      if (left.length > 0) html += ' <span style="font-size:9px;color:var(--ink-light);">' + escapeHtml(left[0].name.split(' ').pop()) + '</span>';
+      if (left.length > 0) html += ' <span style="font-size:9px;color:var(--ink-light);">' + escapeHtml((left[0].name || '').split(' ').pop()) + '</span>';
       if (edge === "left") html += ' <span class="h2h-edge" style="background:var(--green-light);color:var(--green);">EDGE</span>';
       html += '</div>';
 
@@ -4146,7 +4146,7 @@ async function runH2HComparison(state, leftId, rightId) {
       // Right side
       html += '<div style="flex:1;text-align:right;">';
       if (edge === "right") html += '<span class="h2h-edge" style="background:var(--green-light);color:var(--green);">EDGE</span> ';
-      if (right.length > 0) html += '<span style="font-size:9px;color:var(--ink-light);">' + escapeHtml(right[0].name.split(' ').pop()) + '</span> ';
+      if (right.length > 0) html += '<span style="font-size:9px;color:var(--ink-light);">' + escapeHtml((right[0].name || '').split(' ').pop()) + '</span> ';
       html += '<span style="font-weight:700;">' + rightAvg.toFixed(1) + '</span>';
       html += '</div>';
 

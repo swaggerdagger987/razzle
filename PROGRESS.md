@@ -695,3 +695,32 @@ All 59 tests pass. All 11 JS files syntax-clean. 0 remaining issues found.
 - Dark mode CSS: 99% complete (only canvas colors remain as known limitation)
 - Error personality: 0 generic "something went wrong" messages remaining
 - 59/59 tests pass, all JS syntax clean
+
+---
+
+## Quality Pass: Deep Audit (Mar 19)
+
+**Goal**: 6-agent parallel quality audit across all major files. Fix every edge case, design violation, and crash bug.
+
+| # | Fix | Category | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | Luckiest Guy at 12px/11px in tier board canvas | Design | lab.js:10011,10062 | Changed to Space Mono — design guide: display font only at 16px+ |
+| 2 | Sparkline division by zero when scores.length < 2 | Edge case | lab-panels.js:4454 | Added early return guard in drawSparkline() |
+| 3 | Missing .catch() on dynasty compare search fetch | Robustness | lab-panels.js:328 | Added .catch() to prevent unhandled rejection |
+| 4 | Dark mode html2canvas export background | Dark mode | lab-panels.js:260 | Detects data-theme="dark", uses espresso bg and sand watermark |
+| 5 | agents[id] array access without bounds check | Edge case | warroom.js:1287,1295 | Added null guards in updateRosterSelection/updateRosterStatus |
+| 6 | Null name.split() crash in H2H comparison | Crash bug | league-intel.html:4139,4149 | Added (name \|\| '') guard on player name split |
+| 7 | Formula migration silently swallowed errors | UX | app.js:1088 | Now clears localStorage on successful import |
+
+### Verified Clean (6-agent audit)
+- 0 remaining Luckiest Guy at <16px (except canvas fillStyle — known limitation)
+- 0 unguarded Math.min/max on potentially empty arrays
+- 0 missing .catch() on user-facing fetch chains
+- 0 unescaped innerHTML with user data
+- 0 1px borders on components (table row dividers are intentional)
+- 0 cold gray hex colors
+- All JSON.parse wrapped in try-catch
+- All division operations guarded
+- All 11 JS files syntax clean
+- All 16 Python files compile clean
+- 59/59 tests pass

@@ -257,10 +257,11 @@
         exportBtn.addEventListener('click', function() {
           var wrap = content.querySelector('.dh-wrap');
           if (wrap && typeof html2canvas !== 'undefined') {
-            html2canvas(wrap, { backgroundColor: '#ede0cf', scale: 2, useCORS: true, logging: false }).then(function(canvas) {
+            var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            html2canvas(wrap, { backgroundColor: isDark ? '#2d1f14' : '#ede0cf', scale: 2, useCORS: true, logging: false }).then(function(canvas) {
               var ctx = canvas.getContext('2d');
               ctx.font = '600 28px Caveat, cursive';
-              ctx.fillStyle = 'rgba(45, 31, 20, 0.25)';
+              ctx.fillStyle = isDark ? 'rgba(237, 224, 207, 0.25)' : 'rgba(45, 31, 20, 0.25)';
               ctx.textAlign = 'right';
               ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 16);
               var link = document.createElement('a');
@@ -325,7 +326,7 @@
               dropdown.appendChild(row);
             });
             input.parentNode.appendChild(dropdown);
-          });
+          }).catch(function() {});
         }, 250);
       });
     }
@@ -4452,6 +4453,7 @@
     }
 
     function drawSparkline(canvas, scores, isRiser) {
+      if (!scores || scores.length < 2) return;
       var ctx = canvas.getContext('2d');
       var w = canvas.width;
       var h = canvas.height;
