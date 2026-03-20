@@ -1666,8 +1666,16 @@ All `ctx.fillStyle = 'rgba(45,31,20,...)'` → theme-branching with sand rgba fo
 | 12 | Monte Carlo NaN from missing mean/stdev | league-intel.html:5764 | Added `dist.mean == null || dist.stdev == null` guard. |
 | 13 | prospects.html dark mode PNG export | prospects.html:706 | Hardcoded light background → theme-aware branching. |
 
+### Wave 2: Feature + Robustness Fixes (4)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 14 | `loadBriefingById` ignored ID param | warroom.js:3745 + auth.py + server.py | Was always loading latest briefing. Added `GET /api/briefings/{id}` endpoint with user ownership check. Frontend now fetches specific briefing. |
+| 15 | Double-click fires both copy AND filter | lab.js:2245 | tbody copy handler and table filter handler both fired on same dblclick. Removed copy handler — copy available via right-click context menu. |
+| 16 | POST screener `Cache-Control: public` | server.py:504 | POST responses must not be publicly cached by CDN. Changed to `private, max-age=60`. |
+
 ### Verified Clean
 - All 11 JS files syntax clean
 - All Python files compile clean
-- 59/59 tests pass (5.70s)
+- 59/59 tests pass (5.80s)
 - 0 regressions
