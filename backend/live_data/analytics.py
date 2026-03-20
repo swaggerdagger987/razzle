@@ -1670,6 +1670,7 @@ def fetch_matchup_heatmap(season=None, position=None):
                     FROM player_week_stats s
                     JOIN players p ON p.player_id = s.player_id
                     WHERE s.season = ?
+                      AND s.season_type = 'regular'
                       AND p.position = ?
                       AND s.opponent_team IS NOT NULL AND s.opponent_team != ''
                       AND s.fantasy_points_ppr > 0

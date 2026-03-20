@@ -662,7 +662,7 @@ def fetch_weekly_leaders(season=None, week=None, position=None, limit=25):
 
             # Available weeks for this season
             wk_rows = conn.execute(
-                "SELECT DISTINCT week FROM player_week_stats WHERE season = ? ORDER BY week",
+                "SELECT DISTINCT week FROM player_week_stats WHERE season = ? AND season_type = 'regular' ORDER BY week",
                 (season,)
             ).fetchall()
             available_weeks = [r[0] for r in wk_rows] if wk_rows else list(range(1, 19))
@@ -1423,6 +1423,7 @@ def fetch_playoff_schedule(season=None, position=None, limit=40):
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ?
+                  AND s.season_type = 'regular'
                   AND p.position IN ('QB', 'RB', 'WR', 'TE')
                   AND p.fantasy_relevant = 1
                   AND s.week BETWEEN 14 AND 17
