@@ -1990,3 +1990,56 @@ All `ctx.fillStyle = 'rgba(45,31,20,...)'` → theme-branching with sand rgba fo
 - All Python files compile clean
 - 59/59 tests pass
 - 0 regressions
+
+---
+
+## Quality Audit: 5-Agent Deep Sweep (Mar 20 — Session 12)
+
+**Goal**: Fresh 5-agent parallel audit (crash bugs, dark mode/design, mobile/a11y, backend security, UX/conversion). Fix every finding.
+
+### P0 Conversion Fixes (4)
+
+| # | Fix | Category | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | Checkout loading state + double-click guard | Conversion | app.js | `_checkoutInProgress` flag, button disabled + "processing..." text during fetch, re-enabled on error |
+| 2 | Pricing page handleCheckout stores checkout intent | Conversion | pricing.html | `sessionStorage.setItem('razzle_pending_checkout', interval)` before `openAuthModal()` — was lost, now `_resumePendingCheckout()` fires after auth |
+| 3 | Gate messages now link to pricing | Conversion | app.js, lab.js, formulas.js | CSV export toast, filter limit, saved views badge, formulas badge — all now have `<a href="/pricing.html">` links. `_showToast()` upgraded to render trusted internal links via innerHTML |
+| 4 | Pricing page reacts to auth state changes | Conversion | pricing.html | Added `razzle-plan-changed` event listener → `checkSubscription()` re-runs after login/register within the page |
+
+### P0/P1 Security Fixes (7)
+
+| # | Fix | Category | Files | Notes |
+|---|-----|----------|-------|-------|
+| 5 | Rate limit promo code validation | Security | server.py | `/api/billing/validate-promo` now uses `_check_sensitive_rate()` — prevents brute-force of Stripe coupon codes |
+| 6 | Rate limit pageview endpoint | DoS prevention | server.py | `/api/analytics/pageview` now uses `_check_rate_limit()`, silently drops excess. Page string capped at 200 chars |
+| 7 | LLM message content length validation | Financial DoS | server.py | Both `/api/llm/chat` and `/api/llm/chat-free` cap messages at 20 and total content at 10,000 chars |
+| 8 | billing.py env var int() safety | Crash prevention | billing.py | `_env_int()` helper replaces bare `int()` on EA_PRO_LIMIT, EA_ELITE_LIMIT, LIFETIME_LIMIT |
+| 9 | Cap player IDs on compare/trade endpoints | DoS prevention | server.py | `/api/players/compare` capped at 20, `/api/trade/values` capped at 100 |
+| 10 | Cap screener filters list | DoS prevention | players.py | `filters[:50]` — prevents unbounded HAVING clause generation |
+| 11 | Cache lock threading fix | Thread safety | core.py | `_cache_evict()` cleans locks under `_cache_meta_lock`. `cache_clear()` acquires meta lock |
+
+### P1 UX + Accessibility Fixes (5)
+
+| # | Fix | Category | Files | Notes |
+|---|-----|----------|-------|-------|
+| 12 | --ink-light contrast fix (WCAG AA) | Accessibility | styles.css | Light: #8a7565→#6d5a4d (4.5:1). Dark: #8a7565→#b09a88 (4.5:1). Fixes ~100+ elements |
+| 13 | Mobile nav "Sign Out" clarity | UX | app.js | Shows "Sign Out" instead of misleading username-as-logout-button |
+| 14 | Mobile touch targets (WCAG 2.5.8) | Accessibility | styles.css, lab.html | auth-modal-close, btn-sm, sidebar items, footer links — all 44px min on mobile |
+| 15 | Semantic HTML landmarks (WCAG 1.3.1) | Accessibility | 5 HTML files | `<main>` and `<footer>` on index, lab, agents, league-intel, pricing |
+
+### P2 Edge Cases + Design (5)
+
+| # | Fix | Category | Files | Notes |
+|---|-----|----------|-------|-------|
+| 16 | Aging curves division by zero | Edge case | lab.js | `(maxAge - minAge) || 1` guard |
+| 17 | Invalid Date in saved views | Edge case | lab.js | `isNaN(date.getTime())` guard |
+| 18 | prospect-metric-row 1px → 2px dashed | Design | lab.html | Component divider fix |
+| 19 | trade-autocomplete-item 1px → 2px dashed | Design | lab.html | Interactive dropdown fix |
+| 20 | profile-stripe 4px → 6px | Design | league-intel.html | Card stripe consistency |
+
+### Session 12 Verified Clean
+- All 11 JS files syntax clean
+- All Python files compile clean
+- 59/59 tests pass
+- 0 regressions
+- 20 fixes across 12 files

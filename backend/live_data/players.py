@@ -214,7 +214,7 @@ def _fetch_screener_uncached(body):
         sort_dir = body.get("sort_direction", "desc")
         limit = min(body.get("limit", 200), 1000)
         offset = body.get("offset", 0)
-        filters = body.get("filters", [])
+        filters = body.get("filters", [])[:50]
         relevance = body.get("relevance", "fantasy")
 
         # Determine season: 0 = latest, "career" = all seasons

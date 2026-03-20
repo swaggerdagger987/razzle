@@ -197,8 +197,7 @@ function _injectHamburgerMenu() {
     try {
       var user = JSON.parse(localStorage.getItem("razzle_user") || "null");
       if (user && user.email) {
-        var name = user.sleeper_username || (user.email ? user.email.split("@")[0] : "user");
-        mobileSignIn.textContent = name;
+        mobileSignIn.textContent = "Sign Out";
         mobileSignIn.onclick = function(e) {
           e.preventDefault();
           _closeMobileNav();
@@ -283,7 +282,7 @@ function checkFeatureGate(feature, currentCount) {
       allowed: false,
       limit: limit,
       message: plan === "free"
-        ? "Screener limit (" + limit + "). Subscribe to Pro for unlimited."
+        ? "Screener limit (" + limit + "). <a href='/pricing.html' style='color:var(--orange);text-decoration:underline;'>Subscribe to Pro</a> for unlimited."
         : "Plan limit reached (" + limit + ")."
     };
   }
@@ -423,7 +422,12 @@ function _showToast(msg, type, duration) {
   toast.className = 'razzle-toast';
   if (type === 'warning') toast.style.borderColor = 'var(--orange)';
   if (type === 'error') toast.style.borderColor = 'var(--red)';
-  toast.textContent = msg;
+  // Use innerHTML only for messages with trusted internal links (contains <a href="/...)
+  if (msg.indexOf('<a href="/') !== -1) {
+    toast.innerHTML = msg;
+  } else {
+    toast.textContent = msg;
+  }
   document.body.appendChild(toast);
   setTimeout(function() { toast.classList.add('razzle-toast-show'); }, 10);
   setTimeout(function() {
@@ -999,12 +1003,25 @@ function updateAuthUI(user) {
   window.dispatchEvent(new CustomEvent("razzle-plan-changed", { detail: user }));
 }
 
+var _checkoutInProgress = false;
 async function startCheckout(interval) {
+  if (_checkoutInProgress) return;
   var token = localStorage.getItem("razzle_token");
   if (!token) {
     try { sessionStorage.setItem("razzle_pending_checkout", interval || "year"); } catch(_) {}
     openAuthModal();
     return;
+  }
+
+  // Disable the triggering button and show loading
+  _checkoutInProgress = true;
+  var btn = document.activeElement;
+  var origText = "";
+  if (btn && (btn.tagName === "BUTTON" || btn.tagName === "A")) {
+    origText = btn.textContent;
+    btn.textContent = "processing...";
+    btn.disabled = true;
+    btn.style.opacity = "0.6";
   }
 
   // Check for promo code input on page
@@ -1027,11 +1044,19 @@ async function startCheckout(interval) {
     var data = await resp.json();
     if (data.checkout_url) {
       window.location.href = data.checkout_url;
+      return; // Don't reset — navigating away
     } else {
       _showToast(data.error || "could not start checkout. try again.", "error");
     }
   } catch (e) {
     _showToast("network fumble. try again.", "error");
+  } finally {
+    _checkoutInProgress = false;
+    if (btn && origText) {
+      btn.textContent = origText;
+      btn.disabled = false;
+      btn.style.opacity = "";
+    }
   }
 }
 

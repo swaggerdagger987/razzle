@@ -70,20 +70,24 @@ def _cache_evict(now):
     expired = [k for k, v in list(_cache.items()) if now - v["t"] >= v.get("ttl", _CACHE_TTL_STABLE)]
     for k in expired:
         _cache.pop(k, None)
-        _cache_locks.pop(k, None)
     # Phase 2: if still over limit, remove least-recently-accessed
     if len(_cache) >= _CACHE_MAX_SIZE:
         by_access = sorted(list(_cache.items()), key=lambda x: x[1].get("a", 0))
         remove_count = len(_cache) - _CACHE_MAX_SIZE + 20  # free 20 extra slots
         for k, _ in by_access[:remove_count]:
             _cache.pop(k, None)
+    # Clean up locks for evicted keys under the meta lock
+    with _cache_meta_lock:
+        stale_locks = [k for k in list(_cache_locks.keys()) if k not in _cache]
+        for k in stale_locks:
             _cache_locks.pop(k, None)
 
 
 def cache_clear():
     """Flush all cached data. Called after adapter data sync to ensure fresh results."""
-    _cache.clear()
-    _cache_locks.clear()
+    with _cache_meta_lock:
+        _cache.clear()
+        _cache_locks.clear()
     logger.info("Data cache cleared")
 
 

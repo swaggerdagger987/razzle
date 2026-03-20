@@ -6,7 +6,7 @@
 function exportPanelCSV(panelName) {
   // Pro+ gating
   if (typeof isPaidUser === "function" && !isPaidUser()) {
-    _showToast('CSV export requires Pro. Visit the pricing page to upgrade.', 'warning');
+    _showToast('CSV export requires Pro. <a href="/pricing.html" style="color:var(--orange);text-decoration:underline;">upgrade now</a>', 'warning');
     return;
   }
   var panel = document.getElementById('panel-' + panelName);
@@ -4356,7 +4356,8 @@ function _showViewsSyncHint(isPaid) {
   } else {
     badge.style.color = "var(--ink-light)";
     badge.style.border = "2px dashed var(--ink-faint)";
-    badge.textContent = "upgrade to sync views across devices";
+    badge.innerHTML = '<a href="/pricing.html" style="color:var(--ink-light);text-decoration:underline;">upgrade to sync views across devices</a>';
+    badge.style.cursor = "pointer";
   }
   container.insertBefore(badge, container.firstChild);
 }
@@ -4384,7 +4385,7 @@ function renderSavedViewsList() {
 
   container.innerHTML = views.map(v => {
     const date = new Date(v.createdAt);
-    const dateStr = date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    const dateStr = isNaN(date.getTime()) ? "" : date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
     const filterCount = (v.filters && v.filters.length) ? ` <span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">${v.filters.length} filter${v.filters.length > 1 ? "s" : ""}</span>` : "";
 
     return `<div style="display:flex; align-items:center; gap:10px; padding:10px 12px; border:2px solid var(--ink); border-radius:8px; margin-bottom:8px; background:var(--bg); cursor:pointer; transition:transform 0.1s, box-shadow 0.1s;" onmouseenter="this.style.transform='translate(-2px,-2px)';this.style.boxShadow='4px 4px 0 var(--ink)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
@@ -5700,7 +5701,7 @@ function exportCSV() {
 
   // Pro+ gating: CSV export requires Pro or Elite plan
   if (typeof isPaidUser === "function" && !isPaidUser()) {
-    _showToast('CSV export requires Pro. Visit the pricing page to upgrade.', 'warning');
+    _showToast('CSV export requires Pro. <a href="/pricing.html" style="color:var(--orange);text-decoration:underline;">upgrade now</a>', 'warning');
     return;
   }
 
@@ -9404,9 +9405,10 @@ function renderAgingCurveChart(targetCanvas) {
   }
   maxPPG = Math.ceil(maxPPG / 5) * 5 + 5; // Round up with padding
 
-  // Scale functions
-  const xScale = (age) => padL + ((age - minAge) / (maxAge - minAge)) * chartW;
-  const yScale = (ppg) => padT + chartH - (ppg / maxPPG) * chartH;
+  // Scale functions (guard against zero range)
+  const ageRange = (maxAge - minAge) || 1;
+  const xScale = (age) => padL + ((age - minAge) / ageRange) * chartW;
+  const yScale = (ppg) => padT + chartH - (ppg / (maxPPG || 1)) * chartH;
 
   // Grid lines
   ctx.strokeStyle = t.inkFaint;

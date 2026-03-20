@@ -171,7 +171,7 @@
   </div>
 </nav>
 
-<div class="pricing-page" id="main-content">
+<main class="pricing-page" id="main-content">
 
   <!-- Already subscribed banner (shown for Pro/Elite users) -->
   <div class="subscribed-banner" id="subscribedBanner">
@@ -415,11 +415,11 @@
     Already subscribed? <a href="#" onclick="openManageSubscription(); return false;">Manage your subscription</a>
   </div>
 
-</div>
+</main>
 
 
 <!-- FOOTER -->
-<div class="site-footer">
+<footer class="site-footer">
   <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:24px 16px; max-width:900px; margin:0 auto 24px; padding:0 24px; font-family:var(--font-mono); font-size:11px; text-align:left;">
 
     <div>
@@ -483,7 +483,7 @@
   </div>
   <p style="text-align:center;"><a href="/" style="color:var(--orange); text-decoration:none;">razzle.lol</a></p>
   <p style="text-align:center; margin-top:6px;">made for Reddit | <a href="/about.html" style="color:var(--ink-light);">attribution &amp; privacy</a></p>
-</div>
+</footer>
 
 <script src="app.js"></script>
 <script>
@@ -539,7 +539,9 @@
   function handleCheckout(plan) {
     var token = localStorage.getItem('razzle_token');
     if (!token) {
-      // Need to sign in first
+      // Store checkout intent so _resumePendingCheckout() fires after auth
+      var interval = plan + '_' + _pricingInterval;
+      try { sessionStorage.setItem('razzle_pending_checkout', interval); } catch(_) {}
       if (typeof openAuthModal === 'function') {
         openAuthModal();
       }
@@ -755,6 +757,9 @@
     }
     _origHandleCheckout(plan);
   };
+
+  // Re-check subscription state after auth changes (login/register within page)
+  window.addEventListener('razzle-plan-changed', checkSubscription);
 
   // Init — default to yearly per pricing strategy
   checkSubscription();

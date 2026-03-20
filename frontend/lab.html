@@ -589,6 +589,12 @@
     .lab-sidebar-category .cat-chevron {
       font-size: 14px;
     }
+    .lab-sidebar-item {
+      padding: 10px 22px 10px 16px;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+    }
   }
 
   @media (min-width: 769px) {
@@ -2037,7 +2043,7 @@
     align-items: center;
     gap: 10px;
     padding: 6px 8px;
-    border-bottom: 1px solid var(--ink-faint);
+    border-bottom: 2px dashed var(--ink-faint);
   }
 
   .prospect-metric-row:last-child { border-bottom: none; }
@@ -2849,7 +2855,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    border-bottom: 1px solid var(--ink-faint);
+    border-bottom: 2px dashed var(--ink-faint);
     transition: background 0.1s;
   }
   .trade-autocomplete-item:hover {
@@ -3105,7 +3111,7 @@
   </div>
 </nav>
 
-<span id="main-content"></span>
+<main id="main-content">
 <!-- SIDEBAR -->
 <aside class="lab-sidebar" id="labSidebar" role="navigation" aria-label="Screener panels">
   <div class="lab-sidebar-inner">
@@ -3966,6 +3972,7 @@
 </div><!-- /panel-screener -->
 
 </div><!-- /lab-main -->
+</main>
 
 <script src="app.js"></script>
 <script defer src="lab.js"></script>

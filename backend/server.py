@@ -927,6 +927,13 @@ async def billing_status(request: Request):
 @app.post("/api/billing/validate-promo")
 async def validate_promo(request: Request):
     """Validate a promo code before checkout."""
+    ip = _get_client_ip(request)
+    if not _check_sensitive_rate(ip):
+        return JSONResponse(
+            {"valid": False, "error": "Too many requests. Try again in a minute."},
+            status_code=429,
+            headers={"Retry-After": "60"},
+        )
     body = await request.json()
     code = body.get("code", "")
     if not code:
@@ -1074,6 +1081,16 @@ async def llm_chat(request: Request):
 
     # Security: strip all client-supplied system messages to prevent prompt injection
     user_messages = [m for m in messages if m.get("role") != "system"]
+
+    # Cap message count and total content length to prevent financial DoS
+    user_messages = user_messages[:20]
+    total_chars = sum(len(m.get("content", "")) for m in user_messages)
+    if total_chars > 10000:
+        return JSONResponse(
+            {"error": "Message too long. Keep it under 10,000 characters."},
+            status_code=400,
+        )
+
     # Prepend mandatory server-side system prompt
     system_prompt = (
         "You are a fantasy football analyst for Razzle, a dynasty and redraft analytics platform. "
@@ -1180,6 +1197,16 @@ async def llm_chat_free(request: Request):
 
     # Enforce server-side system prompt — strip any client system messages
     user_messages = [m for m in messages if m.get("role") != "system"]
+
+    # Cap message count and total content length
+    user_messages = user_messages[:20]
+    total_chars = sum(len(m.get("content", "")) for m in user_messages)
+    if total_chars > 10000:
+        return JSONResponse(
+            {"error": "Message too long. Keep it under 10,000 characters."},
+            status_code=400,
+        )
+
     system_prompt = (
         "You are a fantasy football analyst for Razzle, a dynasty and redraft analytics platform. "
         "Provide helpful, concise analysis based on the scenario provided. "
@@ -1687,7 +1714,7 @@ def player_boom_bust(player_id: str, season: int = 0):
 
 @app.get("/api/players/compare")
 def players_compare(ids: str = "", season: str = "0"):
-    player_ids = [p.strip() for p in ids.split(",") if p.strip()]
+    player_ids = [p.strip() for p in ids.split(",") if p.strip()][:20]
     return live_data.fetch_players_compare(player_ids, season=season)
 
 
@@ -2366,7 +2393,7 @@ Sitemap: https://razzle.lol/sitemap.xml
 
 @app.get("/api/trade/values")
 def trade_values(player_ids: str = ""):
-    ids = [pid.strip() for pid in player_ids.split(",") if pid.strip()]
+    ids = [pid.strip() for pid in player_ids.split(",") if pid.strip()][:100]
     if not ids:
         return {"players": []}
     return {"players": live_data.fetch_trade_values(ids)}
@@ -2451,8 +2478,11 @@ def team_roster(team: str = "", season: int = 0):
 
 @app.post("/api/analytics/pageview")
 async def log_pageview(request: Request):
+    ip = _get_client_ip(request)
+    if not _check_rate_limit(ip):
+        return {"status": "ok"}  # silently drop
     body = await request.json()
-    page = body.get("page", "/")
+    page = body.get("page", "/")[:200]
     live_data.log_pageview(page)
     return {"status": "ok"}
 

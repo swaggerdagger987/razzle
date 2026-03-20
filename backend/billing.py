@@ -27,15 +27,21 @@ STRIPE_PRICE_ELITE_YEARLY = os.environ.get("STRIPE_PRICE_ELITE_YEARLY", "")
 # Early adopter pricing — discounted rates for first N subscribers
 STRIPE_PRICE_EA_PRO_YEARLY = os.environ.get("STRIPE_PRICE_EA_PRO_YEARLY", "")     # $59.99/yr (25% off)
 STRIPE_PRICE_EA_ELITE_YEARLY = os.environ.get("STRIPE_PRICE_EA_ELITE_YEARLY", "")  # $99.99/yr (33% off)
-EA_PRO_LIMIT = int(os.environ.get("EA_PRO_LIMIT", "500"))    # First 500 Pro subscribers
-EA_ELITE_LIMIT = int(os.environ.get("EA_ELITE_LIMIT", "200"))  # First 200 Elite subscribers
+def _env_int(key, default):
+    try:
+        return int(os.environ.get(key, str(default)))
+    except (ValueError, TypeError):
+        return default
+
+EA_PRO_LIMIT = _env_int("EA_PRO_LIMIT", 500)    # First 500 Pro subscribers
+EA_ELITE_LIMIT = _env_int("EA_ELITE_LIMIT", 200)  # First 200 Elite subscribers
 # Feature flag — set to "1" to enable early adopter pricing
 EA_ENABLED = os.environ.get("EA_ENABLED", "0") == "1"
 
 # Lifetime deal pricing — one-time payment
 STRIPE_PRICE_LIFETIME_PRO = os.environ.get("STRIPE_PRICE_LIFETIME_PRO", "")      # $249.99
 STRIPE_PRICE_LIFETIME_ELITE = os.environ.get("STRIPE_PRICE_LIFETIME_ELITE", "")  # $399.99
-LIFETIME_LIMIT = int(os.environ.get("LIFETIME_LIMIT", "100"))  # First 100 only
+LIFETIME_LIMIT = _env_int("LIFETIME_LIMIT", 100)  # First 100 only
 LIFETIME_ENABLED = os.environ.get("LIFETIME_ENABLED", "0") == "1"
 
 # Legacy fallback (single-tier) — maps to Pro
