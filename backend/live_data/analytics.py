@@ -221,6 +221,7 @@ def fetch_heatmap(position="WR", group="production", season=None):
                 JOIN player_week_stats s ON p.player_id = s.player_id
                 WHERE p.position = ?
                   AND s.season = ?
+                  AND s.season_type = 'regular'
                   AND s.fantasy_points_ppr IS NOT NULL
                 GROUP BY p.player_id
                 HAVING games >= 4
