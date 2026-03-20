@@ -3124,7 +3124,7 @@
 }
 .arc-player:last-child { border-bottom: none; }
 .arc-player-pos { font-size: 8px; color: #fff; padding: 1px 4px; border-radius: 3px; font-weight: 700; }
-.arc-player-name { font-weight: 700; }
+.arc-player-name { font-family: var(--font-mono); font-weight: 700; }
 .arc-player-team { color: var(--ink-light); }
 .arc-player-age { color: var(--ink-light); font-size: 10px; }
 .arc-player-ppg { color: var(--orange); font-weight: 700; margin-left: auto; }
@@ -3481,7 +3481,7 @@
 .rbld-roster-list { list-style: none; padding: 0; margin: 0; }
 .rbld-empty { font-family: var(--font-hand); font-size: 16px; color: var(--ink-light); padding: 20px; text-align: center; }
 .rbld-player-row { display: flex; align-items: center; gap: 6px; padding: 6px 0; border-bottom: 2px dashed var(--ink-faint); font-family: var(--font-mono); font-size: 12px; }
-.rbld-player-name { flex: 1; font-weight: 700; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rbld-player-name { flex: 1; font-family: var(--font-mono); font-weight: 700; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .rbld-player-team { color: var(--ink-light); font-size: 11px; }
 .rbld-player-tv { font-weight: 700; }
 .rbld-player-vorp { font-size: 11px; }
@@ -3597,7 +3597,7 @@
 .td2-player-row { display: flex; align-items: center; gap: 8px; padding: 4px 0; border-bottom: 2px dashed var(--ink-faint); font-family: var(--font-mono); font-size: 12px; cursor: pointer; }
 .td2-player-row:hover { background: var(--bg-warm); }
 .td2-player-pos { padding: 1px 6px; border-radius: 3px; color: #fff; font-size: 9px; font-weight: 700; }
-.td2-player-name { flex: 1; font-weight: 700; }
+.td2-player-name { flex: 1; font-family: var(--font-mono); font-weight: 700; }
 .td2-player-stat { color: var(--ink-light); }
 .td2-player-share { font-weight: 700; min-width: 36px; text-align: right; }
 
