@@ -724,3 +724,66 @@ All 59 tests pass. All 11 JS files syntax-clean. 0 remaining issues found.
 - All 11 JS files syntax clean
 - All 16 Python files compile clean
 - 59/59 tests pass
+
+---
+
+## Quality Pass: Launch Polish (Mar 19)
+
+**Goal**: Deep multi-agent quality audit focused on crash bugs, mobile layout, brand voice, and UX polish. Every pixel, every interaction, every error state.
+
+### Pass 1: Edge Case Crash Bugs (18 fixes)
+
+| # | Fix | Category | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | Division by zero in aging curve xScale | Crash | lab.js:9266 | `maxAge - minAge` can be 0 if all ages identical — added `ageRange` guard |
+| 2 | Column stats mean div/zero when 1 value | Crash | lab.js:3342 | Changed min vals check from `< 2` to `< 1` |
+| 3 | Math.max on null avg_ppg values | Edge case | lab.js:9255 | Added `.filter(v => v != null)` with fallback `1` |
+| 4 | Null name.split().pop() in aging curve labels | Crash | lab.js:9357 | Added `(p.name \|\| '')` guard |
+| 5 | Null name.split().pop() in comp table header | Display | lab.js:11823 | Added `(c.full_name \|\| '')` guard |
+| 6 | Null name.split().pop() in comp canvas (2x) | Crash | lab.js:12109,12111 | Added `(full_name \|\| '')` guards |
+| 7 | Empty sparkline pts array access | Crash | lab.js:6417 | Added `if (!pts.length) return` guard |
+| 8 | Stock Watch API missing `.rising` key | Crash | lab-panels.js:1837 | Added `data.rising &&` property check |
+| 9 | Red Zone API missing `.dominators` key | Crash | lab-panels.js:3836 | Added `data.dominators &&` property check |
+| 10 | Opportunity API missing `.alpha_dogs` key | Crash | lab-panels.js:7704 | Added `data.alpha_dogs &&` property check |
+| 11 | SOS API missing `.schedule_suppressed` key | Crash | lab-panels.js:8627 | Added `data.schedule_suppressed &&` property check |
+| 12 | Hardcoded hex in matchup legend | Design | lab-panels.js:3405-3409 | 5 hex colors to CSS var() refs for dark mode |
+| 13 | Hardcoded hex in draft accuracy bar | Design | lab-panels.js:9402 | `#e8d5c4` to `var(--ink-faint)` |
+| 14 | Null name.split().pop() in targets (3x) | Crash | targets.html:490,491,529 | Added `(name \|\| '')` guards |
+| 15 | Null rush_pct/rec_pct bar widths | Display | dualthreat.html:286 | Added `\|\| 0` fallback |
+| 16 | Hardcoded year without NFL season awareness | Data bug | league-intel.html:2585 | Added month >= 7 check for free users |
+| 17 | AGENT_DEFS[id] without bounds check | Crash | warroom.js:3271 | Added null guard before `.name` access |
+
+### Pass 2: Mobile + UX Polish
+
+| # | Fix | Category | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | Footer grid horizontal scroll at 375px | Mobile | 73 HTML files + template | `minmax(160px)` to `minmax(140px)` — fits 327px viewport |
+| 2 | Note editor popup overflow on mobile | Mobile | styles.css:1338 | Added `max-width: 90vw` |
+| 3 | Filter badge "2/3" counter for free users | UX | lab.js | Free users see filter usage against limit, preventing surprise paywall |
+
+### Pass 3: Brand Voice Consistency
+
+| # | Fix | Category | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | 27 "could not load X" generic errors | Personality | lab-panels.js | All replaced with `razzleError()` random personality messages |
+| 2 | 3 generic loading/error messages | Personality | warroom.js | "loading memory" to "recalling old film sessions", etc. |
+| 3 | 2 generic auth error fallbacks | Personality | app.js | "Login failed" to "fumbled the login", etc. |
+
+### Verified Clean (12-agent audit)
+- 0 generic "could not load" / "Loading..." / "Something went wrong" messages
+- 0 unguarded division operations
+- 0 null name.split().pop() without guards
+- 0 Math.min/max on potentially empty arrays without fallbacks
+- 0 API response property access without null checks
+- 0 horizontal scroll at 375px viewport
+- CSV export lock icons already implemented (Phase 11 launch fix)
+- Season selector lock emojis already implemented
+- Formula Store Pro gate already implemented with blur + CTA
+- All 11 JS files syntax clean
+- 59/59 tests pass
+
+### Decisions Log
+- Dark mode accent colors (--orange, --green, etc.) are intentionally unchanged per DESIGN.md: "The orange accent stays the same — it works on both"
+- Agents.html bio grid already has proper mobile breakpoints (3 to 2 at 768px, 1 at 480px)
+- Canvas hardcoded colors (70+ fillStyle) remain a known dark mode limitation — deferred to post-launch
+- Footer touch targets (16px height) are acceptable for non-primary links — not a launch blocker
