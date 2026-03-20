@@ -279,6 +279,9 @@ def _user_dict(row) -> dict:
     if trial_end_str:
         d["trial_end"] = trial_end_str
 
+    # Preserve raw DB plan before trial elevation (used by billing checkout check)
+    d["raw_plan"] = d["plan"]
+
     # Effective plan: if trial is active and user has no paid plan, they get Pro
     if trial_active and d["plan"] == "free":
         d["plan"] = "pro"

@@ -2329,3 +2329,26 @@ Same root cause as FUNC-009: playoff games inflated game counts for playoff team
 
 ### Smoke test note
 week_filter failure (10/11) is a stale server process issue, not a code bug. Verified: calling _fetch_screener_uncached() directly with week=1 returns games=1 correctly. The running server process needs restart to pick up code changes.
+
+---
+
+## Ship Loop: Sweep Round 4 (Mar 20) — Branch: ship/launch-fixes
+
+**Goal**: 3-agent parallel audit (backend security, frontend crash bugs, standalone HTML panels). Fix all findings.
+
+| # | Fix | Severity | File(s) | Notes |
+|---|-----|----------|---------|-------|
+| 1 | Trial users blocked from purchasing | P1 | auth.py, billing.py | `_user_dict()` elevated trial plan to "pro", causing checkout to reject with "already subscribed." Added `raw_plan` field to user dict; billing uses raw_plan for idempotency check. |
+| 2 | Cache race condition (KeyError) | P2 | core.py | Fast-path cache hit used multiple dict accesses without lock. Concurrent eviction could pop the key between `in` check and access. Refactored to single `entry = _cache[key]` with try/except KeyError. |
+| 3 | comptable.html broken HTML attribute | P1 | comptable.html | Autocomplete item: `class="ct-ac-item style="opacity:0.4""` — style attribute was concatenated into class value. Fixed closing quote placement. |
+| 4 | Season default off-by-one (13 files) | P2 | 10 standalone HTML + lab.js + lab-panels.js + league-intel.html | `getMonth() >= 7` (August) should be `>= 8` (September). NFL regular season starts in September; August would default to current year with no data. |
+| 5 | Unguarded available_seasons.forEach (40 instances) | P2 | lab-panels.js | All `data.available_seasons.forEach()` calls now use `(data.available_seasons || []).forEach()` to prevent crash if API omits field. |
+| 6 | Analytics fetch missing .catch() (3 pages) | P2 | usage.html, yoy.html, airyards.html | `try { fetch(...) } catch(e) {}` doesn't catch async rejections. Changed to `fetch(...).catch(function(){})`. |
+| 7 | efficiency.html catch_rate zero coercion | P2 | efficiency.html | `p.catch_rate > 0` treated 0.0% as null. Changed to `p.catch_rate != null` to correctly display zero catch rate. |
+
+### Verified Clean
+- 10/11 smoke tests pass (week_filter is pre-existing local DB issue)
+- All 11 JS files syntax clean
+- All modified Python files compile clean
+- 0 remaining `getMonth() >= 7` in frontend
+- 0 remaining unguarded `data.available_seasons.forEach` in lab-panels.js

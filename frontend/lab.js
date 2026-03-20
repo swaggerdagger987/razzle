@@ -1082,7 +1082,7 @@ function _syncUndoRedoButtons() {
 
   // Dynamic year fallbacks (shared by try + catch)
   const _curYear = new Date().getFullYear();
-  const _nflYear = new Date().getMonth() >= 7 ? _curYear : _curYear - 1;
+  const _nflYear = new Date().getMonth() >= 8 ? _curYear : _curYear - 1;
 
   // Load NFL, prospect, and college options in parallel
   try {

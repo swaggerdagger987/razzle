@@ -239,8 +239,9 @@ def create_checkout_session(user: dict, interval: str = "year", promo_code: str 
         return {"error": "Stripe not configured", "status": 503}
 
     # Idempotency: reject if user already has an active paid plan
-    current_plan = user.get("plan", "free")
-    if current_plan in ("pro", "elite", "pro_lifetime", "elite_lifetime"):
+    # Use raw_plan (not user["plan"]) because _user_dict() elevates trial users to "pro"
+    raw_plan = user.get("raw_plan", user.get("plan", "free"))
+    if raw_plan in ("pro", "elite", "pro_lifetime", "elite_lifetime"):
         return {"error": "You already have an active subscription. Manage it from your billing portal.", "status": 400}
 
     is_lifetime = interval.startswith("lifetime_")

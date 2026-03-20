@@ -200,7 +200,7 @@ let state = { season: null, position: "", data: null };
 
 function initSeasons() {
   const sel = document.getElementById("tdr-season");
-  const _d = new Date(); const now = _d.getMonth() >= 7 ? _d.getFullYear() : _d.getFullYear() - 1;
+  const _d = new Date(); const now = _d.getMonth() >= 8 ? _d.getFullYear() : _d.getFullYear() - 1;
   for (let y = now; y >= 2020; y--) {
     const opt = document.createElement("option");
     opt.value = y; opt.textContent = y;
