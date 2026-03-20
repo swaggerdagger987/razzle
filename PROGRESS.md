@@ -2114,3 +2114,18 @@ All `ctx.fillStyle = 'rgba(45,31,20,...)'` → theme-branching with sand rgba fo
 - 59/59 tests pass
 - 0 regressions
 - 28 fixes across 12 files
+
+### Session 13b: Remaining Design Token Cleanup
+
+| # | Fix | Category | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | Draft class hit rate bar → CSS vars | Design tokens | lab-panels.js:9555 | `#d44040` → `var(--red)`, `#2ec4b6` → `var(--green)` |
+| 2 | Usage trends sparkline → system hex | Canvas colors | lab-panels.js:4553 | `#16a34a`/`#dc2626` → `#2ec4b6`/`#e63946` (system green/red) |
+
+### Brand Voice Final Check — CLEAN
+- 0 "Loading..." in user-facing text
+- 0 "Something went wrong"
+- 0 "No data" / "No results"
+- 0 "free forever"
+- 0 "Cancel" buttons
+- 0 "failed. try again" error messages

@@ -4550,7 +4550,7 @@
       var min = Math.min.apply(null, scores.concat([0]));
       var max = Math.max.apply(null, scores.concat([1]));
       var range = max - min || 1;
-      var color = isRiser ? '#16a34a' : '#dc2626';
+      var color = isRiser ? '#2ec4b6' : '#e63946';
       ctx.strokeStyle = color;
       ctx.lineWidth = 1.5;
       ctx.beginPath();
@@ -9552,7 +9552,7 @@
       var html = '<div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px;">';
       rounds.forEach(function(rd) {
         var hitPct = rd.hit_rate;
-        var barColor = hitPct >= 50 ? '#2ec4b6' : hitPct >= 30 ? '#d97757' : '#d44040';
+        var barColor = hitPct >= 50 ? 'var(--green)' : hitPct >= 30 ? 'var(--orange)' : 'var(--red)';
         html += '<div style="background:var(--bg-card); border:2px solid var(--ink); border-radius:6px; padding:8px 12px; min-width:100px; text-align:center;">' +
           '<div style="font-family:var(--font-mono); font-size:14px; color:var(--ink);">Round ' + rd.round + '</div>' +
           '<div style="margin:4px 0; height:6px; background:var(--ink-faint); border-radius:3px;">' +
