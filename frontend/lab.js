@@ -106,7 +106,7 @@ function screenshotPanel(panelName) {
     document.body.removeChild(link);
     _showToast('screenshot saved');
   }).catch(function() {
-    _showToast('screenshot failed');
+    _showToast('fumbled the screenshot — try again');
   });
   }); // end _loadHtml2Canvas callback
 }
@@ -144,7 +144,7 @@ function _fallbackCopy(text) {
   document.body.appendChild(ta);
   ta.select();
   try { document.execCommand('copy'); _showToast('link copied — share it on Reddit'); }
-  catch (e) { _showToast('could not copy link'); }
+  catch (e) { _showToast('fumbled the copy — try again'); }
   document.body.removeChild(ta);
 }
 
@@ -2365,8 +2365,8 @@ function _ctxMenuAction(action) {
       _showToast("highlights cleared");
       break;
     case "copy":
-      try { navigator.clipboard.writeText(d.pName).then(function() { _showToast("copied"); }).catch(function() { _showToast("copy failed"); }); }
-      catch(e) { _showToast("copy failed"); }
+      try { navigator.clipboard.writeText(d.pName).then(function() { _showToast("copied to clipboard"); }).catch(function() { _showToast("fumbled the copy — try again"); }); }
+      catch(e) { _showToast("fumbled the copy — try again"); }
       break;
   }
   hideContextMenu();
@@ -4141,7 +4141,7 @@ function saveCurrentView() {
   try {
     localStorage.setItem("razzle_saved_views", JSON.stringify(views));
   } catch(e) {
-    _showToast("failed to save view");
+    _showToast("couldn't save the view — storage might be full");
     return;
   }
 
@@ -5762,7 +5762,7 @@ function csvEscape(val) {
 // ─── Copy Table to Clipboard (TSV for Excel/Sheets) ──────────────
 
 function copyTableToClipboard() {
-  if (!state.items.length) { _showToast("no data to copy"); return; }
+  if (!state.items.length) { _showToast("no film to copy — run a query first"); return; }
 
   let colDefs, visCols;
   if (isProspectView()) {
@@ -5814,7 +5814,7 @@ function copyTableToClipboard() {
 }
 
 function copyTableAsReddit() {
-  if (!state.items.length) { _showToast("no data to copy"); return; }
+  if (!state.items.length) { _showToast("no film to copy — run a query first"); return; }
   var colDefs, visCols;
   if (isProspectView()) { colDefs = PROSPECT_COLUMNS; visCols = state.prospectColumns; }
   else if (state.universe === "college") { colDefs = COLLEGE_COLUMNS; visCols = state.collegeColumns; }
@@ -11297,7 +11297,7 @@ async function calculateRosterValue() {
     _rosterReport = data;
     renderRosterReport();
   } catch (err) {
-    if (reportArea) reportArea.innerHTML = '<div style="color:var(--red); padding:20px; text-align:center;">failed to calculate roster value</div>';
+    if (reportArea) reportArea.innerHTML = '<div style="color:var(--red); padding:20px; text-align:center;">fumbled the roster math... try reloading.</div>';
   }
 }
 

@@ -1301,7 +1301,7 @@ async function cmdSearch(query) {
     _cmdActiveIdx = _cmdItems.length > 0 ? 0 : -1;
     renderCmdResults(_cmdItems, "Results");
   } catch (e) {
-    _cmdResultsEl.innerHTML = '<div class="cmd-palette-status">search failed</div>';
+    _cmdResultsEl.innerHTML = '<div class="cmd-palette-status">fumbled the search... try again.</div>';
     _cmdItems = [];
     _cmdActiveIdx = -1;
   }

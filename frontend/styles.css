@@ -161,7 +161,7 @@ h1, h2, h3 {
   align-items: center;
   justify-content: center;
   font-size: 22px;
-  box-shadow: 3px 3px 0 var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
   transform: rotate(-2deg);
   line-height: 1;
 }

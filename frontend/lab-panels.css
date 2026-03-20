@@ -3244,7 +3244,7 @@
 
 /* ===== DASHBOARD PANEL (db2-) ===== */
 .db2-top5-row { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
-.db2-top5-card { background: var(--bg-card); border: 3px solid var(--ink); border-radius: 10px; padding: 12px 16px; text-align: center; min-width: 140px; box-shadow: 3px 3px 0 var(--ink); }
+.db2-top5-card { background: var(--bg-card); border: 3px solid var(--ink); border-radius: 10px; padding: 12px 16px; text-align: center; min-width: 140px; box-shadow: 4px 4px 0 var(--ink); }
 .db2-top5-rank { font-family: var(--font-mono); font-size: 20px; color: var(--orange); }
 .db2-top5-name { font-family: var(--font-mono); font-size: 14px; color: var(--ink); }
 .db2-top5-tv { font-family: var(--font-mono); font-size: 18px; font-weight: 700; color: var(--ink); }
@@ -3325,7 +3325,7 @@
 
 /* ===== LEADERS PANEL (ld2-) ===== */
 .ld2-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
-.ld2-card { background: var(--bg-card); border: 3px solid var(--ink); border-radius: 10px; padding: 16px; box-shadow: 3px 3px 0 var(--ink); }
+.ld2-card { background: var(--bg-card); border: 3px solid var(--ink); border-radius: 10px; padding: 16px; box-shadow: 4px 4px 0 var(--ink); }
 .ld2-card-header { display: flex; align-items: baseline; gap: 8px; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 2px dashed var(--ink-faint); }
 .ld2-card-title { font-family: var(--font-display); font-size: 16px; color: var(--ink); }
 .ld2-card-annotation { font-family: var(--font-hand); font-size: 14px; color: var(--ink-light); }
@@ -3376,7 +3376,7 @@
 .opp2-share-badge.poor, .opp2-dom-badge.poor { background: var(--semantic-red-light); color: var(--semantic-red); }
 
 /* ===== PERCENTILES PANEL (pct2-) ===== */
-.pct2-player-card { display: flex; align-items: center; gap: 16px; background: var(--bg-card); border: 3px solid var(--ink); border-radius: 10px; padding: 16px; margin-bottom: 12px; box-shadow: 3px 3px 0 var(--ink); }
+.pct2-player-card { display: flex; align-items: center; gap: 16px; background: var(--bg-card); border: 3px solid var(--ink); border-radius: 10px; padding: 16px; margin-bottom: 12px; box-shadow: 4px 4px 0 var(--ink); }
 .pct2-player-name { font-family: var(--font-display); font-size: 20px; margin: 0; }
 .pct2-player-meta { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 12px; color: var(--ink-light); }
 .pct2-pos-badge { padding: 2px 8px; border-radius: 4px; color: #fff; font-size: 10px; font-weight: 700; }
@@ -3400,7 +3400,7 @@
 .bb-tier-label { font-family: var(--font-hand); font-size: 18px; color: var(--ink-light); }
 .bb-tier-count { font-family: var(--font-mono); font-size: 11px; color: var(--ink-light); margin-left: auto; }
 .bb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
-.bb-card { background: var(--bg-card); border: 3px solid var(--ink); border-radius: 10px; padding: 14px; box-shadow: 3px 3px 0 var(--ink); }
+.bb-card { background: var(--bg-card); border: 3px solid var(--ink); border-radius: 10px; padding: 14px; box-shadow: 4px 4px 0 var(--ink); }
 .bb-card-top { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
 .bb-rank { font-family: var(--font-mono); font-size: 16px; color: var(--orange); min-width: 30px; }
 .bb-pos-badge { padding: 2px 8px; border-radius: 4px; color: #fff; font-size: 10px; font-weight: 700; }
@@ -3584,7 +3584,7 @@
 .td2-mode-tab { font-family: var(--font-mono); font-size: 13px; padding: 6px 14px; background: var(--bg-card); color: var(--ink); border: none; cursor: pointer; border-right: 2px solid var(--ink); }
 .td2-mode-tab:last-child { border-right: none; }
 .td2-mode-tab.active { background: var(--ink); color: var(--bg-card); }
-.td2-team-card { background: var(--bg-card); border: 3px solid var(--ink); border-radius: 10px; padding: 16px; margin-bottom: 16px; box-shadow: 3px 3px 0 var(--ink); }
+.td2-team-card { background: var(--bg-card); border: 3px solid var(--ink); border-radius: 10px; padding: 16px; margin-bottom: 16px; box-shadow: 4px 4px 0 var(--ink); }
 .td2-team-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
 .td2-team-name { font-family: var(--font-mono); font-size: 16px; }
 .td2-team-abbr { font-family: var(--font-mono); font-size: 12px; color: var(--ink-light); margin-left: 8px; }

@@ -268,7 +268,7 @@
               link.download = 'razzle-dynasty-history.png';
               link.href = canvas.toDataURL('image/png');
               link.click();
-            }).catch(function() { if (typeof _showToast === 'function') _showToast('screenshot failed'); });
+            }).catch(function() { if (typeof _showToast === 'function') _showToast('fumbled the screenshot — try again'); });
           }
         });
       }
@@ -9355,7 +9355,7 @@
         targetPosFilter = '';
         render(data);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">failed to find trade targets</div>';
+        body.innerHTML = '<div class="lp-error">' + (typeof razzleError === 'function' ? razzleError() : 'the trade finder fumbled... try again.') + '</div>';
       });
     }
 
