@@ -576,7 +576,7 @@
   .pressure-locked-overlay {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(237,224,207,0.85);
+    background: color-mix(in srgb, var(--bg) 92%, transparent);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -585,13 +585,13 @@
     z-index: 2;
   }
   .pressure-locked-overlay span {
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 12px;
     color: var(--ink-medium);
     margin-bottom: 4px;
   }
   .pressure-locked-overlay a {
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 11px;
     color: var(--orange);
     text-decoration: none;
@@ -2260,7 +2260,7 @@ async function toggleLeague(card, leagueId, userId) {
           const managerName = userMap[r.owner_id] || "Unknown";
           const rosterNames = (r.players || []).slice(0, 8).map(pid => {
             const pl = allPlayers[pid];
-            return pl ? (pl.first_name + " " + pl.last_name + " (" + (pl.position || "?") + ")") : pid;
+            return pl ? (((pl.first_name || '') + " " + (pl.last_name || '')).trim() + " (" + (pl.position || "?") + ")") : pid;
           });
           return { manager: managerName, topPlayers: rosterNames,
             wins: r.settings?.wins || 0, losses: r.settings?.losses || 0 };
@@ -2365,11 +2365,11 @@ async function loadActivityFeed(leagueId, userMap, allPlayers, rosters) {
         var dropNames = [];
         for (var pid in (txn.adds || {})) {
           var pl = allPlayers[pid];
-          addNames.push(pl ? (pl.first_name + " " + pl.last_name + " (" + (pl.position || "?") + ")") : pid);
+          addNames.push(pl ? (((pl.first_name || '') + " " + (pl.last_name || '')).trim() + " (" + (pl.position || "?") + ")") : pid);
         }
         for (var pid2 in (txn.drops || {})) {
           var pl2 = allPlayers[pid2];
-          dropNames.push(pl2 ? (pl2.first_name + " " + pl2.last_name + " (" + (pl2.position || "?") + ")") : pid2);
+          dropNames.push(pl2 ? (((pl2.first_name || '') + " " + (pl2.last_name || '')).trim() + " (" + (pl2.position || "?") + ")") : pid2);
         }
         return {
           type: txn.type,
@@ -2424,7 +2424,7 @@ async function loadActivityFeed(leagueId, userMap, allPlayers, rosters) {
           var arid = adds[apid];
           if (!sideMap[arid]) sideMap[arid] = { adds: [], drops: [] };
           var apl = allPlayers[apid];
-          var aname = apl ? (apl.first_name + " " + apl.last_name) : apid;
+          var aname = apl ? ((apl.first_name || '') + " " + (apl.last_name || '')).trim() || apid : apid;
           var apos = apl ? (apl.position || "") : "";
           sideMap[arid].adds.push({ name: aname, pos: apos });
         }
@@ -2432,7 +2432,7 @@ async function loadActivityFeed(leagueId, userMap, allPlayers, rosters) {
           var drid = drops[dpid];
           if (!sideMap[drid]) sideMap[drid] = { adds: [], drops: [] };
           var dpl = allPlayers[dpid];
-          var dname = dpl ? (dpl.first_name + " " + dpl.last_name) : dpid;
+          var dname = dpl ? ((dpl.first_name || '') + " " + (dpl.last_name || '')).trim() || dpid : dpid;
           var dpos = dpl ? (dpl.position || "") : "";
           sideMap[drid].drops.push({ name: dname, pos: dpos });
         }
@@ -2470,14 +2470,14 @@ async function loadActivityFeed(leagueId, userMap, allPlayers, rosters) {
 
         for (var apid2 in adds) {
           var apl2 = allPlayers[apid2];
-          var aname2 = apl2 ? (apl2.first_name + " " + apl2.last_name) : apid2;
+          var aname2 = apl2 ? ((apl2.first_name || '') + " " + (apl2.last_name || '')).trim() || apid2 : apid2;
           var apos2 = apl2 ? (apl2.position || "") : "";
           var posColor2 = getPositionColor(apos2);
           html += '<span class="add" style="color:' + posColor2 + '">+ ' + escapeHtml(aname2) + '</span> ';
         }
         for (var dpid2 in drops) {
           var dpl2 = allPlayers[dpid2];
-          var dname2 = dpl2 ? (dpl2.first_name + " " + dpl2.last_name) : dpid2;
+          var dname2 = dpl2 ? ((dpl2.first_name || '') + " " + (dpl2.last_name || '')).trim() || dpid2 : dpid2;
           html += '<span class="drop">- ' + escapeHtml(dname2) + '</span> ';
         }
 
@@ -3425,7 +3425,7 @@ function drawCompareRadar(a, b) {
   ctx.stroke();
 
   // Legend
-  ctx.font = '10px "Luckiest Guy", cursive';
+  ctx.font = '11px monospace';
   ctx.fillStyle = orangeHex;
   ctx.textAlign = 'left';
   ctx.fillText(a.name, 10, 18);
@@ -4774,7 +4774,7 @@ async function loadTradeNetwork(leagueId, userId, rosters, allPlayers, userMap) 
         if (!received[addOwner]) received[addOwner] = [];
         var addP = allPlayers[addPid];
         received[addOwner].push({
-          name: addP ? (addP.first_name + " " + addP.last_name) : addPid,
+          name: addP ? ((addP.first_name || '') + " " + (addP.last_name || '')).trim() || addPid : addPid,
           pos: addP ? (addP.position || "?") : "?"
         });
       }

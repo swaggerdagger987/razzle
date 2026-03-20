@@ -2054,8 +2054,8 @@ function buildSparklineSVG(pts) {
   // Trend: compare average of last 4 weeks vs first 4 weeks
   const last4 = pts.slice(-4);
   const first4 = pts.slice(0, 4);
-  const avgLast = last4.reduce((a, b) => a + b, 0) / last4.length;
-  const avgFirst = first4.reduce((a, b) => a + b, 0) / first4.length;
+  const avgLast = last4.length ? last4.reduce((a, b) => a + b, 0) / last4.length : 0;
+  const avgFirst = first4.length ? first4.reduce((a, b) => a + b, 0) / first4.length : 0;
   const color = avgLast >= avgFirst ? "var(--green)" : "var(--orange)";
 
   // End dot

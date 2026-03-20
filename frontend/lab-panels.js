@@ -303,6 +303,7 @@
             return;
           }
           fetch('/api/players/quick-search?q=' + encodeURIComponent(q) + '&limit=5').then(function(r) {
+            if (!r.ok) throw new Error('search failed');
             return r.json();
           }).then(function(results) {
             var existing = content.querySelector('.dh-compare-results');
@@ -8894,8 +8895,8 @@
       if (!team.players || !team.players.length) return '';
       var top = team.players[0];
       var share = mode === 'targets' ? top.target_share : top.carry_share;
-      if (share > 30) return escapeHtml(top.name.split(' ').pop()) + ' owns this ' + mode.slice(0, -1) + ' tree';
-      if (share > 22) return escapeHtml(top.name.split(' ').pop()) + ' leads the way';
+      if (share > 30) return escapeHtml((top.name || '').split(' ').pop() || top.name || '') + ' owns this ' + mode.slice(0, -1) + ' tree';
+      if (share > 22) return escapeHtml((top.name || '').split(' ').pop() || top.name || '') + ' leads the way';
       return 'spread it around';
     }
 
@@ -8964,7 +8965,7 @@
           otherPct -= share;
           var posColor = POS_COLORS[p.position] || '#d97757';
           var lightColor = POS_LIGHT[p.position] || '#f7e4d8';
-          var lastName = p.name.split(' ').pop();
+          var lastName = (p.name || '').split(' ').pop() || p.name || '';
           html += '<div class="td2-dist-seg" style="width:' + share + '%;background:' + lightColor + ';border-right:2px solid ' + posColor + '" title="' + escapeAttr(p.name) + ': ' + share + '%">';
           if (share > 8) html += '<span class="td2-seg-label">' + escapeHtml(lastName) + '</span>';
           html += '</div>';

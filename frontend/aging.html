@@ -473,8 +473,8 @@
     playersData.forEach(function(p) { if (p.ppg > maxPpg) maxPpg = p.ppg; });
     maxPpg = Math.ceil(maxPpg / 5) * 5 + 2;
 
-    function xScale(age) { return ml + ((age - minAge) / (maxAge - minAge)) * cw; }
-    function yScale(ppg) { return mt + ch - (ppg / maxPpg) * ch; }
+    function xScale(age) { return ml + ((age - minAge) / Math.max(maxAge - minAge, 1)) * cw; }
+    function yScale(ppg) { return mt + ch - (ppg / Math.max(maxPpg, 1)) * ch; }
 
     // Grid lines
     ctx.strokeStyle = '#e0d6c8';

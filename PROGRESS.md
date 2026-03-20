@@ -631,3 +631,35 @@ All 59 tests pass. All 11 JS files syntax-clean. 0 remaining issues found.
 - Silent .catch(function(){}) on analytics pageview and background sync fetches (formulas, watchlist) are intentional fire-and-forget patterns. Not bugs.
 - #fff on colored badges (position badges, tier badges) is correct — white text on saturated backgrounds for contrast regardless of theme.
 - Functional gradients (skeleton shimmer, data bar viz, resize handle) are not decorative and don't violate the "NO gradients" design rule.
+
+---
+
+## Quality Pass: Full Codebase Audit (Mar 19)
+
+**Goal**: Systematic multi-agent quality audit across all files. Every pixel, every interaction, every error state. Pre-launch quality gate.
+
+| # | Fix | Category | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | Missing r.ok on dynasty rankings compare search fetch | Crash bug | lab-panels.js:305 | Would crash on API error — added r.ok guard |
+| 2 | Division by zero in sparkline trend calculation | Edge case | lab.js:2057-2058 | avgLast/avgFirst on empty slice — added length guard |
+| 3 | Unguarded split().pop() on player names | Edge case | lab-panels.js:8897,8898,8967 | Could render "undefined" — added (name \|\| '') guard |
+| 4 | Null name concatenation ("null null") | Edge case | league-intel.html:4777,2263,2368,2372,2427,2435,2473,2480 | 8 instances of first_name + last_name without null guard — all fixed with (x \|\| '').trim() |
+| 5 | Luckiest Guy at 10px in canvas legend | Design | league-intel.html:3428 | Changed to 11px monospace |
+| 6 | Dark mode pressure overlay uses hardcoded sand rgba | Dark mode | league-intel.html:578 | Changed to color-mix(in srgb, var(--bg) 92%, transparent) — theme-responsive |
+| 7 | Luckiest Guy at 12px/11px on pressure overlay text | Design | league-intel.html:588,595 | Changed to var(--font-mono) |
+| 8 | Font-display at <16px across agents.html | Design | agents.html | 24 CSS rules changed from --font-display to --font-mono (9-14px elements) |
+| 9 | Font-display at <16px in about.html | Design | about.html | 2 CSS rules changed (11px, 14px elements) |
+| 10 | Division by zero in aging curves xScale/yScale | Edge case | aging.html:476-477 | Added Math.max(denominator, 1) guard |
+
+### Verified Clean (6-agent parallel audit)
+- 0 missing resp.ok checks on fetches (all 74 pages verified)
+- 0 hardcoded 2026 in JavaScript logic
+- 0 unescaped innerHTML with user data (840+ escapeHtml calls verified)
+- 0 1px solid borders in JS inline styles
+- 0 SQL injection vectors in backend (all parameterized)
+- 0 connection leaks (all use context managers)
+- 0 bare except blocks in backend
+- lab-panels.css display font — all 16px+ (clean)
+- All 11 JS files syntax clean
+- All Python files compile clean
+- 59/59 tests pass
