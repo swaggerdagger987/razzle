@@ -6563,7 +6563,7 @@ function loadDynastySparkline(playerId, container) {
 function getHeadlineStats(pos, career) {
   if (!career || !career.games) return [];
   const fmt0 = v => v != null ? Math.round(v).toLocaleString() : "—";
-  const fmt1 = v => v != null ? v.toFixed(1) : "—";
+  const fmt1 = v => v != null ? Number(v).toFixed(1) : "—";
 
   const common = [
     { label: "PPR Total", value: fmt1(career.fantasy_points_ppr) },
@@ -9404,7 +9404,7 @@ function renderAgingCurveChart(targetCanvas) {
 
   // Include player data in max PPG
   let maxPPG = Math.max(...baseline.map(b => b.avg_ppg));
-  for (const p of data.players) {
+  for (const p of (data.players || [])) {
     if (_acState.enabledPlayers[p.name]) {
       for (const pt of p.points) {
         if (pt.ppg > maxPPG) maxPPG = pt.ppg;
@@ -9575,7 +9575,7 @@ function renderACLegend() {
   ];
 
   let html = '<div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--ink-light); margin-right:8px; padding-top:6px;">Players</div>';
-  data.players.forEach((p, i) => {
+  (data.players || []).forEach((p, i) => {
     const color = playerColors[i % playerColors.length];
     const enabled = _acState.enabledPlayers[p.name];
     const opacity = enabled ? "1" : "0.4";
@@ -12392,12 +12392,12 @@ function renderBoomBust(data, container) {
 
   // Stat cards
   const stats = [
-    { label: "Median", value: median_ppg.toFixed(1), sub: "PPR/G" },
-    { label: "Floor", value: floor_ppg.toFixed(1), sub: "10th pct" },
-    { label: "Ceiling", value: ceiling_ppg.toFixed(1), sub: "90th pct" },
-    { label: "Boom%", value: boom_rate.toFixed(0) + "%", sub: `${Math.round(boom_rate * games_played / 100)}/${games_played} wks` },
-    { label: "Bust%", value: bust_rate.toFixed(0) + "%", sub: `${Math.round(bust_rate * games_played / 100)}/${games_played} wks` },
-    { label: "Score", value: consistency_score.toFixed(0), sub: `of 100` },
+    { label: "Median", value: median_ppg != null ? median_ppg.toFixed(1) : "—", sub: "PPR/G" },
+    { label: "Floor", value: floor_ppg != null ? floor_ppg.toFixed(1) : "—", sub: "10th pct" },
+    { label: "Ceiling", value: ceiling_ppg != null ? ceiling_ppg.toFixed(1) : "—", sub: "90th pct" },
+    { label: "Boom%", value: boom_rate != null ? boom_rate.toFixed(0) + "%" : "—", sub: `${Math.round((boom_rate || 0) * games_played / 100)}/${games_played} wks` },
+    { label: "Bust%", value: bust_rate != null ? bust_rate.toFixed(0) + "%" : "—", sub: `${Math.round((bust_rate || 0) * games_played / 100)}/${games_played} wks` },
+    { label: "Score", value: consistency_score != null ? consistency_score.toFixed(0) : "—", sub: `of 100` },
     { label: "Rank", value: `#${position_rank}`, sub: `of ${position_total} ${pos}s` },
   ];
 
@@ -12450,7 +12450,7 @@ function drawBoomBustHistogram(data) {
   ctx.clearRect(0, 0, W, H);
 
   const { weekly_scores, boom_threshold, bust_threshold, player } = data;
-  const scores = weekly_scores.map(w => w.score);
+  const scores = (weekly_scores || []).map(w => w.score);
   const pos = (player.position || "").toUpperCase();
   const posHex = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
   const posColor = posHex[pos] || "#d97757";

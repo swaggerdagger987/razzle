@@ -201,7 +201,7 @@
     <button class="mv-export" id="mvExport">Export PNG</button>
   </div>
 
-  <div id="mvContent">
+  <div id="mvContent" style="overflow-x:auto;-webkit-overflow-scrolling:touch">
     <div class="mv-loading">pulling film...</div>
   </div>
 </main>
@@ -337,7 +337,7 @@
     if (sel.options.length <= 1) {
       sel.innerHTML = '';
       var now = new Date();
-      var latestSeason = now.getMonth() >= 6 ? now.getFullYear() : now.getFullYear() - 1;
+      var latestSeason = now.getMonth() >= 8 ? now.getFullYear() : now.getFullYear() - 1;
       for (var y = latestSeason; y >= 2015; y--) {
         var opt = document.createElement('option');
         opt.value = y;

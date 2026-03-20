@@ -3489,10 +3489,10 @@ function renderCompareStats(a, b) {
 
   var rows = [
     { label: 'record', aVal: a.wins + '-' + a.losses, bVal: b.wins + '-' + b.losses, aNum: a.wins, bNum: b.wins },
-    { label: 'trades/yr', aVal: (a.prof.trades / aS).toFixed(1), bVal: (b.prof.trades / bS).toFixed(1), aNum: a.prof.trades / aS, bNum: b.prof.trades / bS },
-    { label: 'waivers/yr', aVal: (a.prof.waivers / aS).toFixed(1), bVal: (b.prof.waivers / bS).toFixed(1), aNum: a.prof.waivers / aS, bNum: b.prof.waivers / bS },
-    { label: 'FAAB/yr', aVal: '$' + Math.round(a.prof.faabSpent / aS), bVal: '$' + Math.round(b.prof.faabSpent / bS), aNum: a.prof.faabSpent / aS, bNum: b.prof.faabSpent / bS },
-    { label: 'total moves/yr', aVal: (a.prof.total / aS).toFixed(1), bVal: (b.prof.total / bS).toFixed(1), aNum: a.prof.total / aS, bNum: b.prof.total / bS },
+    { label: 'trades/yr', aVal: ((a.prof && a.prof.trades || 0) / aS).toFixed(1), bVal: ((b.prof && b.prof.trades || 0) / bS).toFixed(1), aNum: (a.prof && a.prof.trades || 0) / aS, bNum: (b.prof && b.prof.trades || 0) / bS },
+    { label: 'waivers/yr', aVal: ((a.prof && a.prof.waivers || 0) / aS).toFixed(1), bVal: ((b.prof && b.prof.waivers || 0) / bS).toFixed(1), aNum: (a.prof && a.prof.waivers || 0) / aS, bNum: (b.prof && b.prof.waivers || 0) / bS },
+    { label: 'FAAB/yr', aVal: '$' + Math.round((a.prof && a.prof.faabSpent || 0) / aS), bVal: '$' + Math.round((b.prof && b.prof.faabSpent || 0) / bS), aNum: (a.prof && a.prof.faabSpent || 0) / aS, bNum: (b.prof && b.prof.faabSpent || 0) / bS },
+    { label: 'total moves/yr', aVal: ((a.prof && a.prof.total || 0) / aS).toFixed(1), bVal: ((b.prof && b.prof.total || 0) / bS).toFixed(1), aNum: (a.prof && a.prof.total || 0) / aS, bNum: (b.prof && b.prof.total || 0) / bS },
     { label: 'pressure', aVal: computeSinglePressure(a), bVal: computeSinglePressure(b), aNum: computeSinglePressure(a), bNum: computeSinglePressure(b) }
   ];
 
