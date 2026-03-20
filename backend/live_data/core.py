@@ -83,6 +83,7 @@ def _cache_evict(now):
 def cache_clear():
     """Flush all cached data. Called after adapter data sync to ensure fresh results."""
     _cache.clear()
+    _cache_locks.clear()
     logger.info("Data cache cleared")
 
 

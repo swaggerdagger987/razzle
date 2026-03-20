@@ -1239,7 +1239,6 @@ async function fetchAndRenderNFL(signal, myId) {
   const tbody = document.getElementById("tableBody");
   loading.style.display = "block";
   _resetLoadingSkeleton(loading);
-  tbody.innerHTML = "";
 
   const positions = state.position === "ALL"
     ? (state.relevance === "fantasy" ? ["QB", "RB", "WR", "TE"] : [])
@@ -1281,6 +1280,9 @@ async function fetchAndRenderNFL(signal, myId) {
 
     if (myId !== _fetchId) return; // stale response
 
+    // Clear table only after successful fetch — preserves previous data on error
+    tbody.innerHTML = "";
+
     // Deep-clone items to prevent mutations from corrupting the cache
     state.items = (data.items || []).map(function(p) { return Object.assign({}, p); });
     state.totalCount = data.count || 0;
@@ -1305,10 +1307,10 @@ async function fetchAndRenderNFL(signal, myId) {
     saveStateToURL();
   } catch (e) {
     if (e.name === 'AbortError') return;
-    _setLoadingError(loading, "fumbled the data fetch...");
-    console.error('Screener fetch error:', e);
+    loading.style.display = "none";
     _showToast('fumbled the data fetch... try again');
-    // Don't clear state.items — keep previous data visible
+    // Keep previous table data visible — don't clear tbody
+    renderTable();
     updateResultCount();
   }
 }
@@ -1318,7 +1320,6 @@ async function fetchAndRenderProspects(signal, myId) {
   const tbody = document.getElementById("tableBody");
   loading.style.display = "block";
   _resetLoadingSkeleton(loading);
-  tbody.innerHTML = "";
 
   const positions = state.position === "ALL" ? "" : state.position;
 
@@ -1339,6 +1340,7 @@ async function fetchAndRenderProspects(signal, myId) {
 
     if (myId !== _fetchId) return; // stale response
 
+    tbody.innerHTML = "";
     state.items = data.items || [];
     state.totalCount = data.count || 0;
     state.draftYear = data.draft_year || state.draftYear;
@@ -1352,10 +1354,9 @@ async function fetchAndRenderProspects(signal, myId) {
     saveStateToURL();
   } catch (e) {
     if (e.name === 'AbortError') return;
-    _setLoadingError(loading, "fumbled the prospect fetch...");
-    console.error('Prospect fetch error:', e);
+    loading.style.display = "none";
     _showToast('fumbled the prospect fetch... try again');
-    // Don't clear state.items — keep previous data visible
+    renderTable();
     updateResultCount();
   }
 }
@@ -1365,7 +1366,6 @@ async function fetchAndRenderCollege(signal, myId) {
   const tbody = document.getElementById("tableBody");
   loading.style.display = "block";
   _resetLoadingSkeleton(loading);
-  tbody.innerHTML = "";
 
   const positions = state.position === "ALL" ? "" : state.position;
 
@@ -1386,6 +1386,7 @@ async function fetchAndRenderCollege(signal, myId) {
 
     if (myId !== _fetchId) return; // stale response
 
+    tbody.innerHTML = "";
     state.items = data.items || [];
     state.totalCount = data.count || 0;
     state.collegeSeason = data.season || state.collegeSeason;
@@ -1399,10 +1400,9 @@ async function fetchAndRenderCollege(signal, myId) {
     saveStateToURL();
   } catch (e) {
     if (e.name === 'AbortError') return;
-    _setLoadingError(loading, "fumbled the college data fetch...");
-    console.error('College fetch error:', e);
+    loading.style.display = "none";
     _showToast('fumbled the college data fetch... try again');
-    // Don't clear state.items — keep previous data visible
+    renderTable();
     updateResultCount();
   }
 }

@@ -1911,3 +1911,44 @@ All `ctx.fillStyle = 'rgba(45,31,20,...)'` → theme-branching with sand rgba fo
 - All Python files compile clean
 - 59/59 tests pass
 - 0 regressions
+
+---
+
+## Quality Audit: 5-Agent Deep Sweep (Mar 20 — Session 11)
+
+**Goal**: Fresh 5-agent parallel audit across backend API edge cases, frontend crash bugs, dark mode + design gaps, UX flows + conversion funnel, and brand voice consistency.
+
+### P0 Crash Bug Fix (1)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | Screener fetch error destroys table before fetch completes | lab.js | `tbody.innerHTML = ""` ran BEFORE async fetch — on error, table was empty despite "keep previous data" comment. Moved clear to AFTER successful fetch in all 3 fetch functions (NFL, Prospects, College). Error handler now re-renders previous data via `renderTable()`. |
+
+### P1 Conversion + Security Fixes (2)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 2 | Checkout intent lost after auth modal | app.js | Non-auth user clicks "Get Pro" → auth modal opens → user registers → modal closes → must click "Get Pro" AGAIN. Fix: store pending checkout in `sessionStorage` before opening auth. After login/register, `_resumePendingCheckout()` auto-resumes checkout with 500ms delay. |
+| 3 | Screener cache memory exhaustion via unique POST bodies | players.py | `fetch_screener()` cached every unique POST body (user-controlled) in `_cache` (500 slots). Attacker could fill all slots with 500 unique queries, evicting all other cached data and causing cold-cache stampedes. Fix: removed data-level caching on screener — response-level cache in server.py (100 entries) handles repeat queries. |
+
+### P2 Robustness + Design Fixes (4)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 4 | `cache_clear()` does not clear `_cache_locks` dict | core.py | Lock objects leaked on every cache clear. Added `_cache_locks.clear()`. |
+| 5 | Cold white `rgba(255,255,255,...)` on tier labels | lab-panels.css, tiers.html | 4 instances of cold white text on colored tier badges → warm sand `rgba(237,224,207,...)`. |
+| 6 | Cold black thead shadow in dark mode | lab.html | `rgba(0,0,0,0.25)` → `rgba(45,31,20,0.25)` on dark mode table header shadow. |
+
+### Audit Triage (Not Bugs — Prior Decisions Confirmed)
+
+- `changePageSize` restricted to [25]: intentional (Ship Loop item 7 — prevents slow loads)
+- `agents.html` cold `rgba(0,0,0,...)` shadows: intentionally changed FROM warm brown in Session 4 because warm was invisible on dark bg
+- Gold/bronze `#ffd700`/`#cd7f32` hardcoded hex: triaged as intentional metallic colors in prior sweeps
+- Demo card hardcoded `#1a110a`/`#c4b5a5`: correct — always-dark section like Situation Room, CSS vars would flip incorrectly
+- 64 standalone HTML panels: ALL pass brand voice, script ordering, escapeHtml, overflow-x, error handling checks
+
+### Verified Clean
+- All 11 JS files syntax clean
+- All Python files compile clean
+- 59/59 tests pass
+- 0 regressions

@@ -494,10 +494,10 @@ def _fetch_screener_uncached(body):
 
 
 def fetch_screener(body):
-    """Complex multi-filter screener query (POST body)."""
-    import json as _json
-    _cache_key = f"fetch_screener:{_json.dumps(body, sort_keys=True, default=str)}"
-    return _cached(_cache_key, lambda: _fetch_screener_uncached(body))
+    """Complex multi-filter screener query (POST body).
+    Not cached at data level — user-controlled POST bodies would fill the cache
+    with unique keys. Response-level caching in server.py handles repeat queries."""
+    return _fetch_screener_uncached(body)
 
 
 def get_filter_options():

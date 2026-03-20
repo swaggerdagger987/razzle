@@ -827,6 +827,7 @@ async function handleLogin(e) {
     if (!data.user.sleeper_username) { showSleeperPrompt(); } else { closeAuthModal(); }
     updateAuthUI(data.user);
     migrateLocalFormulas();
+    _resumePendingCheckout();
   } catch (err) {
     errEl.textContent = "network fumble. try again.";
   } finally {
@@ -860,11 +861,22 @@ async function handleRegister(e) {
     if (!data.user.sleeper_username) { showSleeperPrompt(); } else { closeAuthModal(); }
     updateAuthUI(data.user);
     migrateLocalFormulas();
+    _resumePendingCheckout();
   } catch (err) {
     errEl.textContent = "network fumble. try again.";
   } finally {
     if (btn) btn.disabled = false;
   }
+}
+
+function _resumePendingCheckout() {
+  try {
+    var pending = sessionStorage.getItem("razzle_pending_checkout");
+    if (pending) {
+      sessionStorage.removeItem("razzle_pending_checkout");
+      setTimeout(function() { startCheckout(pending); }, 500);
+    }
+  } catch(_) {}
 }
 
 function signOut() {
@@ -986,7 +998,11 @@ function updateAuthUI(user) {
 
 async function startCheckout(interval) {
   var token = localStorage.getItem("razzle_token");
-  if (!token) { openAuthModal(); return; }
+  if (!token) {
+    try { sessionStorage.setItem("razzle_pending_checkout", interval || "year"); } catch(_) {}
+    openAuthModal();
+    return;
+  }
 
   // Check for promo code input on page
   var promoInput = document.getElementById("promoCodeInput");
