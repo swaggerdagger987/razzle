@@ -102,8 +102,8 @@ def get_connection():
         _root = str(Path(__file__).parent.parent)
         if _root not in sys.path:
             sys.path.insert(0, _root)
-        from backend.db import get_conn as _get_conn
-        conn = _get_conn()
+        from backend.db import get_write_conn as _get_write_conn
+        conn = _get_write_conn()
     except ImportError:
         DB_PATH.parent.mkdir(parents=True, exist_ok=True)
         conn = sqlite3.connect(str(DB_PATH), timeout=60)
