@@ -2431,11 +2431,11 @@ def positional_scarcity(season: int = 0):
 
 
 @app.get("/api/breakout-candidates")
-def breakout_candidates(season: int = 0, position: str = "", limit: int = 50):
+def breakout_candidates(season: int = 0, position: str = "", limit: int = 50, week: int = 0):
     """Return players ranked by breakout potential (opportunity-production gap)."""
     s = season if season > 0 else None
     pos = position.upper() if position else None
-    return live_data.fetch_breakout_candidates(season=s, position=pos, limit=max(1, min(limit, 100)))
+    return live_data.fetch_breakout_candidates(season=s, position=pos, limit=max(1, min(limit, 100)), week=week if week > 0 else None)
 
 
 @app.get("/api/buy-sell-candidates")
@@ -2471,12 +2471,12 @@ def weekly_heatmap(season: int = 0, position: str = "", limit: int = 40):
 
 
 @app.get("/api/target-distribution")
-def target_distribution(season: int = 0, team: str = ""):
+def target_distribution(season: int = 0, team: str = "", week: int = 0):
     """Return target and carry distribution by team."""
     try:
         s = season if season > 0 else None
         t = team.upper() if team else None
-        return live_data.fetch_target_distribution(season=s, team=t)
+        return live_data.fetch_target_distribution(season=s, team=t, week=week if week > 0 else None)
     except Exception as e:
         logger.exception("target_distribution error")
         return JSONResponse({"error": "Failed to fetch target distribution"}, status_code=500)
@@ -2495,14 +2495,14 @@ def matchup_heatmap(season: int = 0, position: str = ""):
 
 
 @app.get("/api/usage-trends")
-def usage_trends(season: int = 0, position: str = "", window: int = 5, limit: int = 30):
+def usage_trends(season: int = 0, position: str = "", window: int = 5, limit: int = 30, week: int = 0):
     """Return snap count usage trends — risers and fallers."""
     try:
         s = season if season > 0 else None
         pos = position.upper() if position else None
         w = max(3, min(window, 18))
         lim = max(1, min(limit, 50))
-        return live_data.fetch_usage_trends(season=s, position=pos, window=w, limit=lim)
+        return live_data.fetch_usage_trends(season=s, position=pos, window=w, limit=lim, week=week if week > 0 else None)
     except Exception as e:
         logger.exception("usage_trends error")
         return JSONResponse({"error": "Failed to fetch usage trends"}, status_code=500)
@@ -2548,39 +2548,39 @@ def air_yards(season: int = 0, position: str = "", limit: int = 25):
 
 
 @app.get("/api/redzone-usage")
-def redzone_usage(season: int = 0, position: str = "", limit: int = 30):
+def redzone_usage(season: int = 0, position: str = "", limit: int = 30, week: int = 0):
     """Return goal-line usage leaders and TD-dependent players."""
     try:
         s = season if season > 0 else None
         pos = position.upper() if position else None
         lim = max(1, min(limit, 50))
-        return live_data.fetch_redzone_usage(season=s, position=pos, limit=lim)
+        return live_data.fetch_redzone_usage(season=s, position=pos, limit=lim, week=week if week > 0 else None)
     except Exception as e:
         logger.exception("redzone_usage error")
         return JSONResponse({"error": "Failed to fetch red zone data"}, status_code=500)
 
 
 @app.get("/api/efficiency-rankings")
-def efficiency_rankings(season: int = 0, position: str = "", limit: int = 30):
+def efficiency_rankings(season: int = 0, position: str = "", limit: int = 30, week: int = 0):
     """Return fantasy efficiency rankings: most efficient + volume kings."""
     try:
         s = season if season > 0 else None
         pos = position.upper() if position else None
         lim = max(1, min(limit, 50))
-        return live_data.fetch_efficiency_rankings(season=s, position=pos, limit=lim)
+        return live_data.fetch_efficiency_rankings(season=s, position=pos, limit=lim, week=week if week > 0 else None)
     except Exception as e:
         logger.exception("efficiency_rankings error")
         return JSONResponse({"error": "Failed to fetch efficiency data"}, status_code=500)
 
 
 @app.get("/api/consistency-rankings")
-def consistency_rankings(season: int = 0, position: str = "", limit: int = 30):
+def consistency_rankings(season: int = 0, position: str = "", limit: int = 30, week: int = 0):
     """Return consistency rankings: rock solid (low variance) + wild cards (high variance)."""
     try:
         s = season if season > 0 else None
         pos = position.upper() if position else None
         lim = max(1, min(limit, 50))
-        return live_data.fetch_consistency_rankings(season=s, position=pos, limit=lim)
+        return live_data.fetch_consistency_rankings(season=s, position=pos, limit=lim, week=week if week > 0 else None)
     except Exception as e:
         logger.exception("consistency_rankings error")
         return JSONResponse({"error": "Failed to fetch consistency data"}, status_code=500)
@@ -2613,26 +2613,26 @@ def stock_watch(season: int = 0, position: str = "", limit: int = 30):
 
 
 @app.get("/api/opportunity-share")
-def opportunity_share(season: int = 0, position: str = "", limit: int = 30):
+def opportunity_share(season: int = 0, position: str = "", limit: int = 30, week: int = 0):
     """Return opportunity share leaders and dominator rating leaders."""
     try:
         s = season if season > 0 else None
         pos = position.upper() if position else None
         lim = max(1, min(limit, 50))
-        return live_data.fetch_opportunity_share(season=s, position=pos, limit=lim)
+        return live_data.fetch_opportunity_share(season=s, position=pos, limit=lim, week=week if week > 0 else None)
     except Exception as e:
         logger.exception("opportunity_share error")
         return JSONResponse({"error": "Failed to fetch opportunity share data"}, status_code=500)
 
 
 @app.get("/api/report-cards")
-def report_cards(season: int = 0, position: str = "", limit: int = 25):
+def report_cards(season: int = 0, position: str = "", limit: int = 25, week: int = 0):
     """Return player report cards with composite Fantasy GPA."""
     try:
         s = season if season > 0 else None
         pos = position.upper() if position else None
         lim = max(1, min(limit, 50))
-        return live_data.fetch_report_cards(season=s, position=pos, limit=lim)
+        return live_data.fetch_report_cards(season=s, position=pos, limit=lim, week=week if week > 0 else None)
     except Exception as e:
         logger.exception("report_cards error")
         return JSONResponse({"error": "Failed to fetch report card data"}, status_code=500)
@@ -2960,13 +2960,13 @@ def game_log(player_id: str = "", season: int = 0):
 
 
 @app.get("/api/streaks")
-def streaks(season: int = 0, position: str = "", window: int = 4):
+def streaks(season: int = 0, position: str = "", window: int = 4, week: int = 0):
     """Return players on hot or cold scoring streaks."""
     try:
         s = season if season > 0 else None
         pos = position if position else None
         w = window if window > 0 else 4
-        return live_data.fetch_streaks(season=s, position=pos, window=w)
+        return live_data.fetch_streaks(season=s, position=pos, window=w, week=week if week > 0 else None)
     except Exception as e:
         logger.exception("streaks error")
         return JSONResponse({"error": "Failed to fetch streaks"}, status_code=500)
@@ -3021,40 +3021,40 @@ def workload_monitor(season: int = None, position: str = None):
 
 
 @app.get("/api/drop-rate")
-def drop_rate(season: int = None, position: str = None):
+def drop_rate(season: int = None, position: str = None, week: int = 0):
     try:
         pos = position.upper() if position else None
-        return live_data.fetch_drop_rate(season=season, position=pos)
+        return live_data.fetch_drop_rate(season=season, position=pos, week=week if week > 0 else None)
     except Exception as e:
         logger.exception("drop-rate error")
         return JSONResponse({"error": "Failed to fetch drop rate data"}, status_code=500)
 
 
 @app.get("/api/success-rate")
-def success_rate(season: int = None, position: str = None):
+def success_rate(season: int = None, position: str = None, week: int = 0):
     try:
         pos = position.upper() if position else None
-        return live_data.fetch_success_rate(season=season, position=pos)
+        return live_data.fetch_success_rate(season=season, position=pos, week=week if week > 0 else None)
     except Exception as e:
         logger.exception("success-rate error")
         return JSONResponse({"error": "Failed to fetch success rate data"}, status_code=500)
 
 
 @app.get("/api/game-script")
-def game_script(season: int = None, position: str = None):
+def game_script(season: int = None, position: str = None, week: int = 0):
     try:
         pos = position.upper() if position else None
-        return live_data.fetch_game_script(season=season, position=pos)
+        return live_data.fetch_game_script(season=season, position=pos, week=week if week > 0 else None)
     except Exception as e:
         logger.exception("game-script error")
         return JSONResponse({"error": "Failed to fetch game script data"}, status_code=500)
 
 
 @app.get("/api/target-premium")
-def target_premium(season: int = None, position: str = None):
+def target_premium(season: int = None, position: str = None, week: int = 0):
     try:
         pos = position.upper() if position else None
-        return live_data.fetch_target_premium(season=season, position=pos)
+        return live_data.fetch_target_premium(season=season, position=pos, week=week if week > 0 else None)
     except Exception as e:
         logger.exception("target-premium error")
         return JSONResponse({"error": "Failed to fetch target premium"}, status_code=500)

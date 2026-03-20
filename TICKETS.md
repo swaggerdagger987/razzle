@@ -13,6 +13,24 @@ The database file `data/terminal.db` uses WAL journal mode locally. Uploading it
 
 ---
 
+## Phase: Hotfix — Welcome to Pro page after checkout
+
+**PRIORITY: BUILD NOW.** After a user completes Stripe checkout and lands back on razzle.lol, there's no celebration, no onboarding, no acknowledgment that they just paid. They need a "Welcome to Pro" moment. This is the first impression of being a paying customer — make it count. Razzle personality, not corporate.
+
+### Task 1: Create post-checkout welcome experience
+**Accept when**: After Stripe checkout completes (user lands on the success URL, currently `agents?session_id=...`), the user sees a welcome modal or dedicated welcome page with:
+- A big Razzle-flavored headline: "welcome to the film room." or "the tiger sees you now." — something warm, not corporate
+- Summary of what they just unlocked (Pro features: full Bureau deep-dive, CSV export, unlimited formulas, cloud sync, etc.)
+- Clear CTA buttons: "Open the Bureau" and "Back to the Lab"
+- Confetti or a subtle micro-celebration animation (CSS-only, no library) — sticker/badge aesthetic
+- Their plan name and billing cycle shown ("Pro — $9.99/month" or "Pro — $79.99/year")
+- Uses Razzle design language: sand background, chunky borders, Luckiest Guy heading, Space Mono details, Caveat aside ("you just made the tiger very happy")
+- Works for both Pro and Elite tiers with appropriate messaging
+- The welcome only shows ONCE per checkout (use sessionStorage or URL param to prevent re-showing on refresh)
+**Status**: PENDING
+
+---
+
 ## Phase: Weekly Data Filter — Screener + All Panels
 
 **Context**: The `player_week_stats` table already has per-week data (40+ stat columns, every player, every week, 2015-2025). Several endpoints already support week params (`/api/weekly-leaders`, `/api/players/{id}/weeks`). But the main screener and most analytical panels only show season-aggregated data. This phase adds a universal week selector so users can slice any view by individual week — critical for in-season use.

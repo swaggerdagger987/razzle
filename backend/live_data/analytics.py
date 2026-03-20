@@ -595,7 +595,7 @@ _BREAKOUT_ANNOTATIONS = [
 ]
 
 
-def fetch_breakout_candidates(season=None, position=None, limit=50):
+def fetch_breakout_candidates(season=None, position=None, limit=50, week=None):
     """Return players ranked by breakout potential (opportunity-production gap)."""
     def _query():
         nonlocal season
@@ -607,7 +607,11 @@ def fetch_breakout_candidates(season=None, position=None, limit=50):
                 season = available_seasons[0] if available_seasons else _current_nfl_season()
 
             pos_filter = ""
+            week_filter = ""
             params = [season]
+            if week and int(week) > 0:
+                week_filter = "AND s.week = ?"
+                params.append(int(week))
             if position and position.upper() in ("QB", "RB", "WR", "TE"):
                 pos_filter = "AND p.position = ?"
                 params.append(position.upper())
@@ -631,6 +635,7 @@ def fetch_breakout_candidates(season=None, position=None, limit=50):
                   AND p.fantasy_relevant = 1
                   AND p.age IS NOT NULL
                   AND p.age <= 27
+                  {week_filter}
                   {pos_filter}
                 GROUP BY p.player_id
                 HAVING games >= 6
@@ -676,14 +681,20 @@ def fetch_breakout_candidates(season=None, position=None, limit=50):
             # Fetch target_share from player_week_metrics
             pids = [p["player_id"] for p in players]
             placeholders = ",".join("?" * len(pids))
+            metrics_week_filter = ""
+            metrics_params = pids + [season]
+            if week and int(week) > 0:
+                metrics_week_filter = "AND week = ?"
+                metrics_params.append(int(week))
             ts_rows = conn.execute(f"""
                 SELECT player_id, AVG(stat_value) as avg_ts
                 FROM player_week_metrics
                 WHERE player_id IN ({placeholders})
                   AND season = ?
                   AND stat_key = 'target_share'
+                  {metrics_week_filter}
                 GROUP BY player_id
-            """, pids + [season]).fetchall()
+            """, metrics_params).fetchall()
             ts_lookup = {r[0]: round(r[1] * 100, 1) if r[1] else 0 for r in ts_rows}
             for p in players:
                 p["target_share"] = ts_lookup.get(p["player_id"], 0)
@@ -754,7 +765,7 @@ def fetch_breakout_candidates(season=None, position=None, limit=50):
                 "total": len(candidates),
             }
 
-    return _cached(f"breakout_candidates:{season}:{position}:{limit}", _query)
+    return _cached(f"breakout_candidates:{season}:{position}:{limit}:{week}", _query)
 
 
 # ---------------------------------------------------------------------------
@@ -1413,7 +1424,7 @@ def fetch_weekly_heatmap(season=None, position=None, limit=40):
     return _cached(f"weekly_heatmap:{season}:{position}:{limit}", _query)
 
 
-def fetch_target_distribution(season=None, team=None):
+def fetch_target_distribution(season=None, team=None, week=None):
     """Return target and carry distribution by team.
 
     For each team, returns players sorted by targets (or carries for RB-heavy),
@@ -1428,7 +1439,11 @@ def fetch_target_distribution(season=None, team=None):
                 season = available_seasons[0] if available_seasons else _current_nfl_season()
 
             teams_filter = ""
+            week_filter = ""
             params = [season]
+            if week and int(week) > 0:
+                week_filter = "AND s.week = ?"
+                params.append(int(week))
             if team and team.upper() in ABBREV_TO_TEAM:
                 teams_filter = "AND p.team = ?"
                 params.append(team.upper())
@@ -1450,6 +1465,7 @@ def fetch_target_distribution(season=None, team=None):
                 JOIN player_week_stats s ON s.player_id = p.player_id AND s.season = ?
                 WHERE p.position IN ('QB', 'RB', 'WR', 'TE')
                   AND p.team IS NOT NULL AND p.team != ''
+                  {week_filter}
                   {teams_filter}
                 GROUP BY p.player_id
                 HAVING (targets > 0 OR carries > 0) AND games >= 3
@@ -1508,7 +1524,7 @@ def fetch_target_distribution(season=None, team=None):
                 "teams": teams_out,
             }
 
-    return _cached(f"target_dist:{season}:{team}", _query)
+    return _cached(f"target_dist:{season}:{team}:{week}", _query)
 
 
 # ---------------------------------------------------------------------------
@@ -1694,7 +1710,7 @@ _USAGE_FALLER_ANNOTATIONS = [
 ]
 
 
-def fetch_usage_trends(season=None, position=None, window=5, limit=30):
+def fetch_usage_trends(season=None, position=None, window=5, limit=30, week=None):
     """Return players with weekly snap% trends, identifying risers and fallers."""
     window = max(3, min(window, 18))
 
@@ -1708,7 +1724,11 @@ def fetch_usage_trends(season=None, position=None, window=5, limit=30):
                 season = available_seasons[0] if available_seasons else _current_nfl_season()
 
             pos_filter = ""
+            week_filter = ""
             params = [season]
+            if week and int(week) > 0:
+                week_filter = "AND s.week = ?"
+                params.append(int(week))
             if position and position.upper() in FANTASY_POSITIONS:
                 pos_filter = "AND p.position = ?"
                 params.append(position.upper())
@@ -1727,6 +1747,7 @@ def fetch_usage_trends(season=None, position=None, window=5, limit=30):
                   AND p.fantasy_relevant = 1
                   AND s.offense_pct IS NOT NULL
                   AND s.offense_pct > 0
+                  {week_filter}
                   {pos_filter}
                 ORDER BY p.player_id, s.week
             """
@@ -1832,7 +1853,7 @@ def fetch_usage_trends(season=None, position=None, window=5, limit=30):
                 "window": window,
             }
 
-    return _cached(f"usage_trends:{season}:{position}:{window}:{limit}", _query)
+    return _cached(f"usage_trends:{season}:{position}:{window}:{limit}:{week}", _query)
 
 
 # -- Year-over-Year Comparison -----------------------------------------------
@@ -2176,7 +2197,7 @@ _TD_DEPENDENT_ANNOTATIONS = [
 ]
 
 
-def fetch_redzone_usage(season=None, position=None, limit=30):
+def fetch_redzone_usage(season=None, position=None, limit=30, week=None):
     """Return goal-line usage leaders and TD-dependent players."""
     def _query():
         nonlocal season
@@ -2188,7 +2209,11 @@ def fetch_redzone_usage(season=None, position=None, limit=30):
                 season = available_seasons[0] if available_seasons else _current_nfl_season()
 
             pos_filter = ""
+            week_filter = ""
             params = [season]
+            if week and int(week) > 0:
+                week_filter = "AND s.week = ?"
+                params.append(int(week))
             if position and position.upper() in ("QB", "RB", "WR", "TE"):
                 pos_filter = "AND p.position = ?"
                 params.append(position.upper())
@@ -2208,6 +2233,7 @@ def fetch_redzone_usage(season=None, position=None, limit=30):
                     ON s.player_id = p.player_id AND s.season = ?
                 WHERE p.position IN ('QB','RB','WR','TE')
                   AND p.fantasy_relevant = 1
+                  {week_filter}
                   {pos_filter}
                 GROUP BY p.player_id
                 HAVING games >= 4
@@ -2311,4 +2337,4 @@ def fetch_redzone_usage(season=None, position=None, limit=30):
                 "td_dependent": td_dependent,
             }
 
-    return _cached(f"redzone:{season}:{position}:{limit}", _query)
+    return _cached(f"redzone:{season}:{position}:{limit}:{week}", _query)

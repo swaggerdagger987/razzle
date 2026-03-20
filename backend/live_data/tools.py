@@ -877,7 +877,7 @@ def fetch_pace_tracker(season=None, position=None, limit=50):
                 "players": players,
             }
     return _cached(f"pace_tracker:{season}:{position}:{limit}", _query)
-def fetch_streaks(season=None, position=None, window=4, limit=25):
+def fetch_streaks(season=None, position=None, window=4, limit=25, week=None):
     """Identify players on hot or cold scoring streaks vs their season average."""
     def _query():
         nonlocal season, window
@@ -902,6 +902,9 @@ def fetch_streaks(season=None, position=None, window=4, limit=25):
                   AND p.fantasy_relevant = 1
             """
             params = [season]
+            if week and int(week) > 0:
+                query += " AND s.week = ?"
+                params.append(int(week))
             if position:
                 query += " AND p.position = ?"
                 params.append(position)
@@ -965,7 +968,7 @@ def fetch_streaks(season=None, position=None, window=4, limit=25):
                 "hot": hot[:limit],
                 "cold": cold[:limit],
             }
-    return _cached(f"streaks:{season}:{position}:{window}:{limit}", _query)
+    return _cached(f"streaks:{season}:{position}:{window}:{limit}:{week}", _query)
 
 
 def fetch_season_recap(season=None):
@@ -2445,7 +2448,7 @@ def fetch_season_pace(season=None, position=None, limit=50):
     return _cached(f"season_pace:{season}:{position}:{limit}", _query)
 
 
-def fetch_target_premium(season=None, position=None, limit=50):
+def fetch_target_premium(season=None, position=None, limit=50, week=None):
     """Target premium — target quality composite for pass catchers."""
     def _query():
         nonlocal season
@@ -2459,6 +2462,10 @@ def fetch_target_premium(season=None, position=None, limit=50):
 
             pos_filter = "AND p.position IN ('WR','TE','RB')"
             params = [season]
+            week_filter = ""
+            if week and int(week) > 0:
+                week_filter = "AND w.week = ?"
+                params.append(int(week))
             if position and position in ("WR", "TE", "RB"):
                 pos_filter = "AND p.position = ?"
                 params.append(position)
@@ -2474,6 +2481,7 @@ def fetch_target_premium(season=None, position=None, limit=50):
                 FROM player_week_stats w
                 JOIN players p ON p.gsis_id = w.player_id
                 WHERE w.season = ? AND p.fantasy_relevant = 1
+                {week_filter}
                 {pos_filter}
                 GROUP BY p.gsis_id
                 HAVING gp >= 4 AND tot_targets >= 20
@@ -2556,7 +2564,7 @@ def fetch_target_premium(season=None, position=None, limit=50):
                 "available_seasons": available_seasons,
                 "count": len(players),
             }
-    return _cached(f"target_premium:{season}:{position}:{limit}", _query)
+    return _cached(f"target_premium:{season}:{position}:{limit}:{week}", _query)
 
 
 def fetch_workload_monitor(season=None, position=None, limit=50):
@@ -2651,7 +2659,7 @@ def fetch_workload_monitor(season=None, position=None, limit=50):
     return _cached(f"workload_monitor:{season}:{position}:{limit}", _query)
 
 
-def fetch_drop_rate(season=None, position=None, limit=50):
+def fetch_drop_rate(season=None, position=None, limit=50, week=None):
     """Rank pass catchers by drop rate — sure hands vs butterfingers."""
     def _query():
         nonlocal season
@@ -2664,6 +2672,10 @@ def fetch_drop_rate(season=None, position=None, limit=50):
 
             pos_filter = ""
             params = [season]
+            week_filter = ""
+            if week and int(week) > 0:
+                week_filter = "AND w.week = ?"
+                params.append(int(week))
             if position:
                 pos_filter = "AND p.position = ?"
                 params.append(position)
@@ -2684,6 +2696,7 @@ def fetch_drop_rate(season=None, position=None, limit=50):
                   AND p.position IN ('WR','TE','RB')
                   AND p.fantasy_relevant = 1
                   AND pb.drops IS NOT NULL
+                  {week_filter}
                   {pos_filter}
                 GROUP BY p.player_id
                 HAVING tot_targets >= 20
@@ -2733,10 +2746,10 @@ def fetch_drop_rate(season=None, position=None, limit=50):
                 "available_seasons": available_seasons,
                 "count": len(sure_hands) + len(butterfingers),
             }
-    return _cached(f"drop_rate:{season}:{position}:{limit}", _query)
+    return _cached(f"drop_rate:{season}:{position}:{limit}:{week}", _query)
 
 
-def fetch_success_rate(season=None, position=None, limit=50):
+def fetch_success_rate(season=None, position=None, limit=50, week=None):
     """Rank players by rush/pass success rate from PBP data."""
     def _query():
         nonlocal season
@@ -2747,6 +2760,10 @@ def fetch_success_rate(season=None, position=None, limit=50):
 
             pos_filter = ""
             params = [season]
+            week_filter = ""
+            if week and int(week) > 0:
+                week_filter = "AND w.week = ?"
+                params.append(int(week))
             if position:
                 pos_filter = "AND p.position = ?"
                 params.append(position)
@@ -2770,6 +2787,7 @@ def fetch_success_rate(season=None, position=None, limit=50):
                   AND p.position IN ('QB','RB','WR','TE')
                   AND p.fantasy_relevant = 1
                   AND (pb.rush_success_rate IS NOT NULL OR pb.pass_success_rate IS NOT NULL)
+                  {week_filter}
                   {pos_filter}
                 GROUP BY p.player_id
             """, params).fetchall()
@@ -2824,10 +2842,10 @@ def fetch_success_rate(season=None, position=None, limit=50):
                 "season": season,
                 "count": len(players),
             }
-    return _cached(f"success_rate:{season}:{position}:{limit}", _query)
+    return _cached(f"success_rate:{season}:{position}:{limit}:{week}", _query)
 
 
-def fetch_game_script(season=None, position=None, limit=40):
+def fetch_game_script(season=None, position=None, limit=40, week=None):
     """Show how game script (avg score diff) correlates with fantasy production."""
     def _query():
         nonlocal season
@@ -2839,6 +2857,10 @@ def fetch_game_script(season=None, position=None, limit=40):
 
             pos_filter = ""
             params = [season]
+            week_filter = ""
+            if week and int(week) > 0:
+                week_filter = "AND w.week = ?"
+                params.append(int(week))
             if position:
                 pos_filter = "AND p.position = ?"
                 params.append(position)
@@ -2856,6 +2878,7 @@ def fetch_game_script(season=None, position=None, limit=40):
                   AND p.position IN ('QB','RB','WR','TE')
                   AND p.fantasy_relevant = 1
                   AND pb.avg_score_differential IS NOT NULL
+                  {week_filter}
                   {pos_filter}
                 GROUP BY p.player_id
                 HAVING gp >= 4 AND tot_ppr > 0
@@ -2898,7 +2921,7 @@ def fetch_game_script(season=None, position=None, limit=40):
                 "available_seasons": available_seasons,
                 "count": len(positive_script) + len(negative_script),
             }
-    return _cached(f"game_script:{season}:{position}:{limit}", _query)
+    return _cached(f"game_script:{season}:{position}:{limit}:{week}", _query)
 
 
 # ---------------------------------------------------------------------------

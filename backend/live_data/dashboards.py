@@ -39,7 +39,7 @@ _VOLUME_ANNOTATIONS = [
 ]
 
 
-def fetch_efficiency_rankings(season=None, position=None, limit=30):
+def fetch_efficiency_rankings(season=None, position=None, limit=30, week=None):
     """Return efficiency rankings: most efficient and volume kings."""
     def _query():
         with get_db() as conn:
@@ -49,10 +49,15 @@ def fetch_efficiency_rankings(season=None, position=None, limit=30):
             _season = season if season else (available_seasons[0] if available_seasons else _current_nfl_season())
 
             pos_filter = ""
+            week_filter = ""
             params = [_season]
             if position and position.upper() in ("QB", "RB", "WR", "TE"):
                 pos_filter = "AND p.position = ?"
                 params.append(position.upper())
+            _week = int(week) if week else 0
+            if _week > 0:
+                week_filter = "AND s.week = ?"
+                params.append(_week)
 
             query = f"""
                 SELECT
@@ -75,6 +80,7 @@ def fetch_efficiency_rankings(season=None, position=None, limit=30):
                 WHERE p.position IN ('QB','RB','WR','TE')
                   AND p.fantasy_relevant = 1
                   {pos_filter}
+                  {week_filter}
                 GROUP BY p.player_id
                 HAVING games >= 4
                 ORDER BY total_ppr DESC
@@ -180,7 +186,7 @@ def fetch_efficiency_rankings(season=None, position=None, limit=30):
                 "volume_kings": volume_kings,
             }
 
-    return _cached(f"efficiency_rankings:{season}:{position}:{limit}", _query)
+    return _cached(f"efficiency_rankings:{season}:{position}:{limit}:{week}", _query)
 
 
 # ---------------------------------------------------------------------------
@@ -204,7 +210,7 @@ _WILD_CARD_ANNOTATIONS = [
 ]
 
 
-def fetch_consistency_rankings(season=None, position=None, limit=30):
+def fetch_consistency_rankings(season=None, position=None, limit=30, week=None):
     """Return consistency rankings: rock solid (low CoV) and wild cards (high CoV)."""
     def _query():
         import math
@@ -216,10 +222,15 @@ def fetch_consistency_rankings(season=None, position=None, limit=30):
             _season = season if season else (available_seasons[0] if available_seasons else _current_nfl_season())
 
             pos_filter = ""
+            week_filter = ""
             params = [_season]
             if position and position.upper() in ("QB", "RB", "WR", "TE"):
                 pos_filter = "AND p.position = ?"
                 params.append(position.upper())
+            _week = int(week) if week else 0
+            if _week > 0:
+                week_filter = "AND s.week = ?"
+                params.append(_week)
 
             # Get weekly fantasy points per player
             query = f"""
@@ -233,6 +244,7 @@ def fetch_consistency_rankings(season=None, position=None, limit=30):
                 WHERE p.position IN ('QB','RB','WR','TE')
                   AND p.fantasy_relevant = 1
                   {pos_filter}
+                  {week_filter}
                 ORDER BY p.player_id, s.week
             """
             rows = conn.execute(query, params).fetchall()
@@ -337,7 +349,7 @@ def fetch_consistency_rankings(season=None, position=None, limit=30):
                 "wild_cards": wild_cards,
             }
 
-    return _cached(f"consistency_rankings:{season}:{position}:{limit}", _query)
+    return _cached(f"consistency_rankings:{season}:{position}:{limit}:{week}", _query)
 
 
 # ---------------------------------------------------------------------------
@@ -835,7 +847,7 @@ _DOMINATOR_ANNOTATIONS = [
 ]
 
 
-def fetch_opportunity_share(season=None, position=None, limit=30):
+def fetch_opportunity_share(season=None, position=None, limit=30, week=None):
     """Return opportunity share leaders (alpha dogs) and dominator rating leaders.
 
     Opportunity Share = (player targets + carries) / (team targets + carries) * 100
@@ -853,10 +865,15 @@ def fetch_opportunity_share(season=None, position=None, limit=30):
             _season = season if season else (available_seasons[0] if available_seasons else _current_nfl_season())
 
             pos_filter = ""
+            week_filter = ""
             params = [_season]
             if position and position.upper() in FANTASY_POSITIONS:
                 pos_filter = "AND p.position = ?"
                 params.append(position.upper())
+            _week = int(week) if week else 0
+            if _week > 0:
+                week_filter = "AND s.week = ?"
+                params.append(_week)
 
             # Gather per-player season totals
             rows = conn.execute(f"""
@@ -876,6 +893,7 @@ def fetch_opportunity_share(season=None, position=None, limit=30):
                   AND p.position IN ('QB', 'RB', 'WR', 'TE')
                   AND p.fantasy_relevant = 1
                   {pos_filter}
+                  {week_filter}
                 GROUP BY s.player_id
             """, params).fetchall()
 
@@ -893,7 +911,9 @@ def fetch_opportunity_share(season=None, position=None, limit=30):
                 "rec_yards": 0, "rec_tds": 0,
                 "rush_yards": 0, "rush_tds": 0,
             })
-            tt_rows = conn.execute("""
+            tt_week_filter = "AND s.week = ?" if _week > 0 else ""
+            tt_params = [_season, _week] if _week > 0 else [_season]
+            tt_rows = conn.execute(f"""
                 SELECT p.team,
                        COALESCE(SUM(s.targets), 0),
                        COALESCE(SUM(s.carries), 0),
@@ -906,8 +926,9 @@ def fetch_opportunity_share(season=None, position=None, limit=30):
                 WHERE s.season = ?
                   AND p.position IN ('QB', 'RB', 'WR', 'TE')
                   AND p.fantasy_relevant = 1
+                  {tt_week_filter}
                 GROUP BY p.team
-            """, [season]).fetchall()
+            """, tt_params).fetchall()
             for tr in tt_rows:
                 t = team_totals[tr[0] or "FA"]
                 t["targets"] = tr[1]
@@ -1006,7 +1027,7 @@ def fetch_opportunity_share(season=None, position=None, limit=30):
                 "dominators": dominators,
             }
 
-    return _cached(f"opportunity_share:{season}:{position}:{limit}", _query)
+    return _cached(f"opportunity_share:{season}:{position}:{limit}:{week}", _query)
 
 
 # ---------------------------------------------------------------------------
@@ -1028,7 +1049,7 @@ _NEEDS_WORK_ANNOTATIONS = [
 ]
 
 
-def fetch_report_cards(season=None, position=None, limit=25):
+def fetch_report_cards(season=None, position=None, limit=25, week=None):
     """Composite player report card — aggregates efficiency, consistency,
     SOS, stock score, and opportunity share into a Fantasy GPA (A+ to F).
 
@@ -1048,10 +1069,15 @@ def fetch_report_cards(season=None, position=None, limit=25):
             _season = season if season else (available_seasons[0] if available_seasons else _current_nfl_season())
 
             pos_filter = ""
+            week_filter = ""
             params = [_season]
             if position and position.upper() in FANTASY_POSITIONS:
                 pos_filter = "AND p.position = ?"
                 params.append(position.upper())
+            _week = int(week) if week else 0
+            if _week > 0:
+                week_filter = "AND s.week = ?"
+                params.append(_week)
 
             # Gather weekly data per player
             rows = conn.execute(f"""
@@ -1068,6 +1094,7 @@ def fetch_report_cards(season=None, position=None, limit=25):
                   AND p.fantasy_relevant = 1
                   AND s.opponent_team IS NOT NULL AND s.opponent_team != ''
                   {pos_filter}
+                  {week_filter}
                 ORDER BY s.player_id, s.week
             """, params).fetchall()
 
@@ -1080,7 +1107,9 @@ def fetch_report_cards(season=None, position=None, limit=25):
                 }
 
             # Build defense PPG-allowed grid for SOS
-            def_rows = conn.execute("""
+            def_week_filter = "AND s.week = ?" if _week > 0 else ""
+            def_params = [_season, _week] if _week > 0 else [_season]
+            def_rows = conn.execute(f"""
                 SELECT s.opponent_team, p.position,
                        COALESCE(SUM(s.fantasy_points_ppr), 0) as total_ppr,
                        COUNT(DISTINCT s.week) as games
@@ -1089,8 +1118,9 @@ def fetch_report_cards(season=None, position=None, limit=25):
                 WHERE s.season = ?
                   AND p.position IN ('QB', 'RB', 'WR', 'TE')
                   AND s.opponent_team IS NOT NULL AND s.opponent_team != ''
+                  {def_week_filter}
                 GROUP BY s.opponent_team, p.position
-            """, [season]).fetchall()
+            """, def_params).fetchall()
 
             defense_ppg = {}
             for r in def_rows:
@@ -1108,7 +1138,9 @@ def fetch_report_cards(season=None, position=None, limit=25):
 
             # Build team totals from ALL positions (unfiltered) for correct opp_share
             team_totals = defaultdict(lambda: {"targets": 0, "carries": 0, "rec_yards": 0, "rec_tds": 0, "rush_yards": 0})
-            tt_rows = conn.execute("""
+            tt_week_filter = "AND s.week = ?" if _week > 0 else ""
+            tt_params = [_season, _week] if _week > 0 else [_season]
+            tt_rows = conn.execute(f"""
                 SELECT p.team,
                        COALESCE(SUM(s.targets), 0),
                        COALESCE(SUM(s.carries), 0),
@@ -1120,8 +1152,9 @@ def fetch_report_cards(season=None, position=None, limit=25):
                 WHERE s.season = ?
                   AND p.position IN ('QB', 'RB', 'WR', 'TE')
                   AND p.fantasy_relevant = 1
+                  {tt_week_filter}
                 GROUP BY p.team
-            """, [season]).fetchall()
+            """, tt_params).fetchall()
             for tr in tt_rows:
                 t = team_totals[tr[0] or "FA"]
                 t["targets"] = tr[1]
@@ -1312,7 +1345,7 @@ def fetch_report_cards(season=None, position=None, limit=25):
                 "needs_improvement": needs_improvement,
             }
 
-    return _cached(f"report_cards:{season}:{position}:{limit}", _query)
+    return _cached(f"report_cards:{season}:{position}:{limit}:{week}", _query)
 
 
 _AWARD_ANNOTATIONS = {
