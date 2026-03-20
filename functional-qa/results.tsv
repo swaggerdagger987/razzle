@@ -347,3 +347,29 @@ re-audit	OK	frontend/lab.html	-	dark mode	pass	FUNC-001 re-audit: Dark mode clea
 63	OK	frontend/league-intel.html	-	darkMode	pass	Bureau: dark mode clean, proper espresso palette, input fields visible	95	2026-03-20T14:40
 64	OK	frontend/agents.html	-	pixelCanvas	pass	Situation Room: canvas renders+animates, 6 agent cards, scenario textarea, What Can I Ask panel	95	2026-03-20T14:45
 64	OK	frontend/agents.html	-	setupGuide	pass	Situation Room: first-run setup guide, demo briefings, 0 JS errors. Ship D-1 through D-7 hardened.	95	2026-03-20T14:45
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	P0	backend/live_data/players.py	-	_fetch_screener_uncached	ticket	smoke:week_filter — Week 1 player has 21 games — week filter not working
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	P0	backend/live_data/players.py	-	_fetch_screener_uncached	ticket	smoke:week_filter — Week 1 player has 21 games — week filter not working
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+27	P0	backend/live_data/players.py	205	_fetch_screener_uncached	ticket	re-audit: FUNC-012 — season_type column ALL 'regular' in prod DB, playoff weeks 19-22 included in all stats. PHI=21 games, Lamar=19 games. 108/137 backend functions missing season_type filter. Even functions with filter show wrong data (matchup heatmap PHI=21).	100	2026-03-20T14:45
+45	OK	frontend/lab.js	7881	renderTierView	pass	re-audit: Ship Loop XSS fix verified — escapeHtml() on draft_year and position in renderTierView/renderBigBoard. Not deployed yet. Code correct.	95	2026-03-20T14:50
+62	P0	backend/live_data/dashboards.py	407	fetch_strength_of_schedule	ticket	re-audit: Ship Loop added season_type=regular to 4 functions. Code correct but not deployed, and blocked by FUNC-012 (DB data layer). Prod: Iron Man=19 games, awards/leaders contaminated.	95	2026-03-20T14:55
+69	OK	frontend/lab.js	1192	_queryCacheGet	pass	Stale state: PASS. Backend cache 2-5min TTL expires cleanly. JWT 7-day. AbortController prevents races. Error handling preserves table + toast. P2: frontend query cache has no TTL.	90	2026-03-20T15:00
