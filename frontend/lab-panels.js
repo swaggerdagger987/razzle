@@ -1510,7 +1510,7 @@
           html += '<div class="breakout-bar-track"><div class="breakout-bar-fill opportunity" style="width:' + parseFloat(p.opportunity_pct || 0) + '%"></div></div></div>';
           html += '<div class="breakout-bar-group"><div class="breakout-bar-label"><span>Production</span><span>' + escapeHtml(fmtD(p.production_pct)) + '%</span></div>';
           html += '<div class="breakout-bar-track"><div class="breakout-bar-fill production" style="width:' + parseFloat(p.production_pct || 0) + '%"></div></div></div></div>';
-          html += '<div class="breakout-gap"><span class="breakout-gap-arrow">&#9650;</span><span class="breakout-gap-text">' + escapeHtml(p.annotation) + '</span></div>';
+          html += '<div class="breakout-gap"><span class="breakout-gap-arrow">&#9650;</span><span class="breakout-gap-text">' + escapeHtml(p.annotation || '') + '</span></div>';
           html += '<div class="breakout-stats">';
           if (isCollege) {
             html += '<div class="breakout-stat"><div class="breakout-stat-val">' + escapeHtml(fmtD(p.yards_per_game || 0)) + '</div><div class="breakout-stat-key">YD/G</div></div>';
@@ -3373,7 +3373,7 @@
 
         html += '<td class="wh-ppg-cell" style="color:var(--ink-light)">' + p.games + '</td>';
         var ppgColor = getHeatColor(p.ppg, t);
-        html += '<td class="wh-ppg-cell wh-score-cell" style="background:' + (ppgColor ? ppgColor.bg : '') + '; color:' + (ppgColor ? ppgColor.text : '') + ';">' + p.ppg.toFixed(1) + '</td>';
+        html += '<td class="wh-ppg-cell wh-score-cell" style="background:' + (ppgColor ? ppgColor.bg : '') + '; color:' + (ppgColor ? ppgColor.text : '') + ';">' + fmt(p.ppg) + '</td>';
         html += '</tr>';
       });
 

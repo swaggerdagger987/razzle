@@ -994,6 +994,7 @@ const keys = {};
 document.addEventListener('keydown', e => {
   // Only handle when canvas is visible
   if (!document.getElementById('canvasContainer')) return;
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return;
   keys[e.key] = true;
   if (e.key >= '1' && e.key <= '6') {
     selectAgent(parseInt(e.key) - 1);
@@ -2388,19 +2389,31 @@ async function callFreeLLM(userMessage) {
   var token = localStorage.getItem('razzle_token');
   if (!token) throw new Error('Sign in required for free AI queries');
 
-  var resp = await fetch('/api/llm/chat-free', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + token,
-    },
-    body: JSON.stringify({
-      messages: [
-        { role: 'user', content: userMessage },
-      ],
-      temperature: LLM_TEMPERATURE,
-    }),
-  });
+  var ac = new AbortController();
+  var _freeTimeout = setTimeout(function() { ac.abort(); }, 30000);
+
+  var resp;
+  try {
+    resp = await fetch('/api/llm/chat-free', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token,
+      },
+      body: JSON.stringify({
+        messages: [
+          { role: 'user', content: userMessage },
+        ],
+        temperature: LLM_TEMPERATURE,
+      }),
+      signal: ac.signal,
+    });
+  } catch (e) {
+    clearTimeout(_freeTimeout);
+    if (e.name === 'AbortError') throw new Error('request timed out — try again');
+    throw e;
+  }
+  clearTimeout(_freeTimeout);
 
   if (!resp.ok) {
     var detail = await resp.json().catch(function() { return {}; });
@@ -2677,7 +2690,7 @@ async function runAllAgents(scenario) {
   var specialistPromises = specialistIds.map(function(id) {
     return (async function() {
       var s = getAgentSettings(id);
-      if (!s.apiKey && !elite) {
+      if (!s.apiKey && !elite && !isLoggedIn()) {
         errors[id] = 'no API key';
         setAgentStatus(id, 'error');
         return;
@@ -3247,10 +3260,12 @@ async function getWarRoomMemoryFull() {
 }
 
 function _parseFindings(findingsStr) {
+  if (!findingsStr) return [];
   try {
-    return JSON.parse(findingsStr);
+    var parsed = JSON.parse(findingsStr);
+    return Array.isArray(parsed) ? parsed : [];
   } catch (e) {
-    return [{ name: 'Razzle', finding: findingsStr.slice(0, 200) }];
+    return [{ name: 'Razzle', finding: String(findingsStr).slice(0, 200) }];
   }
 }
 

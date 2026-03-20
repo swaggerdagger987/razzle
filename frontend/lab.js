@@ -1884,7 +1884,7 @@ function renderVisibleRows() {
     html += '<tr style="height:' + topHeight + 'px;"><td colspan="' + colCount + '"></td></tr>';
   }
   for (let i = startRow; i < endRow; i++) {
-    html += _vscrollRows[i];
+    html += _vscrollRows[i] || '';
   }
   if (bottomHeight > 0) {
     html += '<tr style="height:' + bottomHeight + 'px;"><td colspan="' + colCount + '"></td></tr>';
@@ -4000,8 +4000,12 @@ function closeShareModal(e) {
 
 function copyShareURLFromModal() {
   const input = document.getElementById("shareURLInput");
+  const btn = document.getElementById("shareURLCopyBtn");
   navigator.clipboard.writeText(input.value).then(() => {
-    const btn = document.getElementById("shareURLCopyBtn");
+    btn.textContent = "Copied.";
+    setTimeout(() => btn.textContent = "Copy URL", 1500);
+  }).catch(function() {
+    input.select(); document.execCommand("copy");
     btn.textContent = "Copied.";
     setTimeout(() => btn.textContent = "Copy URL", 1500);
   });
@@ -4009,8 +4013,12 @@ function copyShareURLFromModal() {
 
 function copyRedditTitle() {
   const input = document.getElementById("redditTitleInput");
+  const btn = document.getElementById("redditTitleCopyBtn");
   navigator.clipboard.writeText(input.value).then(() => {
-    const btn = document.getElementById("redditTitleCopyBtn");
+    btn.textContent = "Copied.";
+    setTimeout(() => btn.textContent = "Copy", 1500);
+  }).catch(function() {
+    input.select(); document.execCommand("copy");
     btn.textContent = "Copied.";
     setTimeout(() => btn.textContent = "Copy", 1500);
   });
@@ -11180,7 +11188,7 @@ async function rosterSearchPlayers(query) {
   if (!query || query.length < 2) { results.innerHTML = ""; return; }
   try {
     var data = await apiFetch("/api/players?search=" + encodeURIComponent(query) + "&limit=8");
-    var players = data.players || data || [];
+    var players = data.items || [];
     var roster = getMyRoster();
     var html = "";
     players.forEach(function(p) {
