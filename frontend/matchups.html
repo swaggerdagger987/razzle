@@ -150,7 +150,7 @@
     font-size: 13px;
   }
   .matchups-table thead th {
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 14px;
     font-weight: 700;
     background: var(--bg-warm);
@@ -192,7 +192,7 @@
   }
   .matchups-table tbody td.team-cell {
     text-align: left;
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 14px;
     font-weight: 700;
     position: sticky;
@@ -704,7 +704,7 @@
       players.forEach(function(p) {
         var posColor = POS_COLORS[p.position] || (_cs.getPropertyValue('--ink-light').trim() || '#8a7565');
         var img = p.headshot_url ? '<img src="' + escapeHtml(p.headshot_url) + '" alt="" onerror="this.style.display=\'none\'">' : '';
-        html += '<div class="detail-player" onclick="window.location.href=\'/player/' + escapeHtml(p.player_id) + '\'">';
+        html += '<div class="detail-player" data-pid="' + escapeAttr(p.player_id) + '" style="cursor:pointer;">';
         html += img;
         html += '<div class="detail-player-info">';
         html += '<div class="detail-player-name">' + escapeHtml(p.name) + '</div>';
@@ -715,6 +715,13 @@
       });
       html += '</div>';
       panel.innerHTML = html;
+      panel.querySelectorAll('.detail-player[data-pid]').forEach(function(el) {
+        el.addEventListener('click', function() {
+          var pid = el.getAttribute('data-pid');
+          if (typeof openPlayerPopup === 'function') openPlayerPopup(pid);
+          else window.location.href = '/player/' + encodeURIComponent(pid);
+        });
+      });
       panel.classList.add('visible');
       panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     } else {

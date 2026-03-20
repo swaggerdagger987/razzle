@@ -78,7 +78,7 @@ const C = {
 
 // ── CANVAS SETUP ───────────────────────────────────────────────────────
 const cvs = document.getElementById('warRoomCanvas');
-const ctx = cvs.getContext('2d');
+const ctx = cvs ? cvs.getContext('2d') : null;
 
 function resizeCanvas() {
   const container = document.getElementById('canvasContainer');

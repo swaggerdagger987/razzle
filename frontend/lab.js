@@ -11421,8 +11421,8 @@ function renderRosterReport() {
   html += '</div>';
   // Stats
   html += '<div style="flex:1;">';
-  html += '<div style="font-family:var(--font-display); font-size:24px;">' + r.total_value + ' <span style="font-family:var(--font-mono); font-size:14px; color:var(--ink-light);">total value</span></div>';
-  html += '<div style="font-family:var(--font-mono); font-size:13px; color:var(--ink-light);">avg age: ' + r.average_age + '</div>';
+  html += '<div style="font-family:var(--font-display); font-size:24px;">' + escapeHtml(String(r.total_value)) + ' <span style="font-family:var(--font-mono); font-size:14px; color:var(--ink-light);">total value</span></div>';
+  html += '<div style="font-family:var(--font-mono); font-size:13px; color:var(--ink-light);">avg age: ' + escapeHtml(String(r.average_age)) + '</div>';
   html += '</div>';
   // Status badge with explainer
   html += '<div style="text-align:center;">';
