@@ -2379,3 +2379,55 @@ week_filter failure (10/11) is a stale server process issue, not a code bug. Ver
 ### Verified Clean
 - 10/11 smoke tests pass (week_filter pre-existing)
 - All JS/Python syntax clean
+
+---
+
+## Quality Audit: 5-Agent Parallel Sweep (Mar 20 — Ship Loop)
+
+**Goal**: Fresh 5-agent parallel audit (backend SQL data correctness, frontend crash bugs, server security, standalone HTML panels, season_type filter audit).
+
+### Crash Bug Fixes (7 frontend + 1 backend)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | `v.toFixed(1)` on string value | lab.js:6566 | getHeadlineStats — wrapped in `Number()` |
+| 2 | `data.players` forEach on undefined | lab.js:9407,9578 | Aging curves — added `(data.players \|\| [])` guard |
+| 3 | `.toFixed()` on null boom/bust fields | lab.js:12395-12400 | 6 fields (median, floor, ceiling, boom%, bust%, score) — null guards |
+| 4 | `weekly_scores.map()` on null | lab.js:12453 | Boom/bust histogram — `(weekly_scores \|\| [])` guard |
+| 5 | `p.name.split()` on null | aging.html:603 | `(p.name \|\| '').split()` |
+| 6 | `data.strengths/weaknesses` undefined | strengths.html:712-726 | `(data.strengths \|\| [])` guards on 3 sites |
+| 7 | `a.prof.trades` on undefined prof | league-intel.html:3492-3495 | `(a.prof && a.prof.trades \|\| 0)` guards on all 4 rows |
+| 8 | `int(season)` without guard | dashboards.py:1968 | Changed to `_safe_int(season)` in fetch_stat_correlations |
+
+### Security Fixes (cache poisoning + rate limits + input bounds)
+
+| # | Fix | Severity | File | Notes |
+|---|-----|----------|------|-------|
+| 1 | /api/health removed from response cache | MEDIUM | server.py:463 | Cached diagnostic response leaked to unauthenticated users |
+| 2 | Rate limit on POST /api/roster-value | MEDIUM | server.py:2432 | Unauthenticated expensive computation, now rate-limited |
+| 3 | Rate limit on POST /api/monte-carlo/projections | MEDIUM | server.py:3358 | Same — up to 200 player IDs, now rate-limited |
+| 4 | Clamp limit on 12 college endpoints | LOW | server.py:1860-1949 | `max(1, min(limit, 200))` prevents unbounded results |
+| 5 | Clamp vorp limit | LOW | server.py:2743 | `max(1, min(limit, 100))` |
+| 6 | Clamp auction budget + roster_size | LOW | server.py:2892 | budget: 50-2000, roster_size: 1-30 |
+| 7 | Clamp streaks window | LOW | server.py:3052 | `max(1, min(window, 18))` |
+| 8 | Clamp waivers window | LOW | server.py:3248 | `max(1, min(window, 18))` |
+
+### Standalone HTML Fixes (6 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | Season default `>= 6` (July) → `>= 8` (September) | playoffs.html:393 | NFL season starts September |
+| 2 | Season default `>= 6` → `>= 8` | stacks.html:344 | Same fix |
+| 3 | Season default `>= 6` → `>= 8` | waivers.html:401 | Same fix |
+| 4 | Season default `>= 6` → `>= 8` | weeklymvp.html:340 | Same fix |
+| 5 | Missing `.catch()` on autocomplete fetch | comptable.html:417 | Unhandled promise rejection |
+| 6 | Missing `overflow-x:auto` on content div | weeklymvp.html:204 | MVP table clips on mobile |
+
+### Audit Clean Areas
+- 0 missing season_type='regular' filters (all 5 backend files exhaustively verified)
+- 0 JOIN column mismatches (all use player_id correctly)
+- 0 division-by-zero unguarded
+- All 11 JS files syntax clean
+- All Python files compile clean
+- 11/11 smoke tests pass
+- 0 regressions
