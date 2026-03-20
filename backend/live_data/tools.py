@@ -1646,7 +1646,7 @@ def fetch_garbage_time(season=None, position=None, limit=40):
                 params.append(position)
 
             cursor.execute(f"""
-                SELECT p.gsis_id, p.full_name, p.position, p.team,
+                SELECT p.player_id, p.full_name, p.position, p.team,
                        s.games,
                        s.passing_yards, s.passing_tds, s.interceptions,
                        s.rushing_yards, s.rushing_tds,
@@ -1739,7 +1739,7 @@ def fetch_snap_efficiency(season=None, position=None, limit=50):
                 params.append(position)
 
             cursor.execute(f"""
-                SELECT p.gsis_id, p.full_name, p.position, p.team,
+                SELECT p.player_id, p.full_name, p.position, p.team,
                        s.offense_snaps, s.games,
                        s.passing_yards, s.passing_tds, s.interceptions,
                        s.rushing_yards, s.rushing_tds,
@@ -2179,7 +2179,7 @@ def fetch_td_regression(season=None, position=None, limit=50):
                 params.append(position)
 
             cursor.execute(f"""
-                SELECT p.gsis_id, p.full_name, p.position, p.team,
+                SELECT p.player_id, p.full_name, p.position, p.team,
                        s.rushing_tds, s.receiving_tds, s.passing_tds,
                        s.carries, s.targets, s.attempts,
                        s.games
@@ -2288,7 +2288,7 @@ def fetch_dual_threat(season=None, position=None, limit=50):
                 params.append(position)
 
             cursor.execute(f"""
-                SELECT p.gsis_id, p.full_name, p.position, p.team,
+                SELECT p.player_id, p.full_name, p.position, p.team,
                        s.rushing_yards, s.receiving_yards, s.carries, s.receptions,
                        s.targets, s.rushing_tds, s.receiving_tds, s.games
                 FROM player_season_stats s
@@ -2378,7 +2378,7 @@ def fetch_season_pace(season=None, position=None, limit=50):
                 params.append(position)
 
             cursor.execute(f"""
-                SELECT p.gsis_id, p.full_name, p.position, p.team,
+                SELECT p.player_id, p.full_name, p.position, p.team,
                        s.games, s.passing_yards, s.passing_tds,
                        s.rushing_yards, s.rushing_tds,
                        s.receiving_yards, s.receiving_tds, s.receptions,
@@ -2493,7 +2493,7 @@ def fetch_target_premium(season=None, position=None, limit=50, week=None):
                 params.append(position)
 
             cursor.execute(f"""
-                SELECT p.gsis_id, p.full_name, p.position, p.team,
+                SELECT p.player_id, p.full_name, p.position, p.team,
                        SUM(w.targets) as tot_targets,
                        SUM(w.receptions) as tot_receptions,
                        SUM(w.receiving_yards) as tot_rec_yards,
@@ -2506,7 +2506,7 @@ def fetch_target_premium(season=None, position=None, limit=50, week=None):
                   AND p.fantasy_relevant = 1
                 {week_filter}
                 {pos_filter}
-                GROUP BY p.gsis_id
+                GROUP BY p.player_id
                 HAVING gp >= 4 AND tot_targets >= 20
             """, params)
 
@@ -2609,7 +2609,7 @@ def fetch_workload_monitor(season=None, position=None, limit=50):
                 params.append(position)
 
             cursor.execute(f"""
-                SELECT p.gsis_id, p.full_name, p.position, p.team,
+                SELECT p.player_id, p.full_name, p.position, p.team,
                        s.games, s.offense_snaps, s.offense_pct,
                        s.carries, s.targets, s.receptions,
                        s.rushing_yards, s.receiving_yards

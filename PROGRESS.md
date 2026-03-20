@@ -2431,3 +2431,53 @@ week_filter failure (10/11) is a stale server process issue, not a code bug. Ver
 - All Python files compile clean
 - 11/11 smoke tests pass
 - 0 regressions
+
+---
+
+## Ship Loop Quality Sweep (Mar 20 — Session 15)
+
+**Goal**: Consume QA ticket (FUNC-012), then sweep for bugs via 3-agent parallel audit (backend, frontend, standalone HTML).
+
+### Ticket Consumed
+- FUNC-012 (playoff data contamination): CODE FIXED in prior sessions, closed ticket. Deploy is human action.
+
+### P0 Backend Bugs (3 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | 7 functions used `p.gsis_id` in SELECT instead of `p.player_id` | tools.py | Returns null player IDs for players without gsis_id. `GROUP BY p.gsis_id` collapsed nulls. Affects garbage_time, snap_efficiency, td_regression, dual_threat, season_pace, target_premium, workload_monitor. |
+| 2 | `boom_threshold` undefined → RangeError in histogram | lab.js:12459 | `undefined + 5` = NaN → `new Array(NaN)` throws. Added `|| 20` guard (matches existing fix at line 12728). |
+| 3 | `sort_dir.lower()` crash on null input | players.py:120,312 | Client sending `"sort_direction": null` in POST body crashed `.lower()`. Added null coalescing. |
+
+### CRITICAL Security Fixes (3 fixes)
+
+| # | Fix | Severity | File | Notes |
+|---|-----|----------|------|-------|
+| 1 | Inverted rate limit on roster-value and monte-carlo | **CRITICAL** | server.py:2434,3362 | `if _check_screener_rate(ip)` blocked legitimate users (returns True when allowed), allowed unlimited after bucket full. Fixed to `if not _check_screener_rate(ip)`. |
+| 2 | X-Forwarded-For trusted first entry (spoofable) | **HIGH** | server.py:63-70 | All IP rate limits bypassable by sending fake X-Forwarded-For. Changed to trust last entry (appended by Render proxy). |
+| 3 | CORS env var name mismatch | **MEDIUM** | server.py:441 | Used `RAZZLE_ENV` but production sets `ENVIRONMENT`. Changed to `ENVIRONMENT`. Not currently exploitable but a latent footgun. |
+
+### Frontend Data Display Fixes (4 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | `fmt()` renders "NaN" for non-numeric input | lab-panels.js:14 | Added `isNaN()` check after `Number()` coercion — returns '-' instead of "NaN" |
+| 2 | Dynasty roster chart divide-by-zero | lab-panels.js:10050 | `maxVal` init 0→1 prevents Infinity pixel coordinates |
+| 3 | Aging curve xPos divide-by-zero | lab-panels.js:4896 | Added `Math.max(denominator, 1)` guard |
+| 4 | Target distribution undefined share passes `< 2` guard | lab-panels.js:9121 | `undefined < 2` is false in JS — added `!share` guard |
+
+### Robustness Fix (1)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | `saveAgentConfig` no try-catch on localStorage | warroom.js:1369 | QuotaExceededError silently lost API key config. Wrapped in try-catch. |
+
+### Standalone HTML Panels
+- 15 most complex panels audited (targets, matchups, weekly, aging, explorer, usage, redzone, airyards, consistency, tradevalues, vorp, stocks, yoy, efficiency, opportunity)
+- **0 bugs found** — all pass 7 checks (app.js, fetch error handling, escapeHtml, season defaults, .toFixed guards, div/zero, hardcoded years)
+
+### Verified Clean
+- All 11 JS files syntax clean
+- All Python files compile clean
+- 11/11 smoke tests pass
+- 0 regressions

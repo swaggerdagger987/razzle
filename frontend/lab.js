@@ -12456,7 +12456,7 @@ function drawBoomBustHistogram(data) {
   const posColor = posHex[pos] || "#d97757";
 
   // Build histogram buckets (5-point buckets)
-  const maxScore = Math.max(...scores, boom_threshold + 5);
+  const maxScore = Math.max(...scores, (boom_threshold || 20) + 5);
   const bucketSize = 5;
   const numBuckets = Math.ceil(maxScore / bucketSize) + 1;
   const buckets = new Array(numBuckets).fill(0);
