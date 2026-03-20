@@ -2530,3 +2530,47 @@ week_filter failure (10/11) is a stale server process issue, not a code bug. Ver
 - 11/11 smoke tests pass after every fix
 - 0 regressions
 - 4 commits pushed to ship/launch-fixes
+
+---
+
+## Ship Loop Session 18 (Mar 20)
+
+### Ticket Queue
+- Merged origin/qa/findings → FUNC-014 ticket (resolved in Session 17, re-merged from QA branch)
+- Deleted FUNC-014 ticket — already fixed by scripts/build_dist.py (commit a66dce5)
+- TICKETS.md — all items DONE, no new work
+- **Both queues empty → entered SWEEP MODE**
+
+### Sweep Mode (Mar 20)
+
+| Pass | Area | Findings | Status |
+|------|------|----------|--------|
+| Smoke tests | 11/11 pass | Baseline green | Clean |
+| Pytest suite | 59/59 pass | Full test suite | Clean |
+| Python compilation | All 16 backend files | py_compile check | Clean |
+| JS syntax | All 11 frontend JS files | node --check | Clean |
+| Build pipeline | scripts/build_dist.py | Minified output verified, syntax-checked | Clean |
+| SQL injection | All ORDER BY with sort params | Whitelisted via dicts/sets with fallbacks | Clean |
+| XSS | innerHTML assignments (599 total) | All user data paths use escapeHtml() | Clean |
+| eval/Function | No eval() or new Function() | 0 instances | Clean |
+| document.write | No document.write() | 0 instances | Clean |
+| postMessage | No message handlers | 0 instances | Clean |
+| Bare except | Backend Python files | 0 bare except blocks | Clean |
+| console.log | Frontend JS files | Only branded easter eggs in app.js | Clean |
+| Hardcoded years | Backend: only "nfl2026" in password blocklist | Frontend: only demo text strings | Clean |
+| Connection leaks | Adapters use get_write_conn(), backend uses get_db() context manager | 0 leaks | Clean |
+| Auth token | warroom.js + league-intel.html | All read razzle_token directly | Clean |
+| 404 handling | server.py:678 + frontend/404.html | Correct path check, page exists | Clean |
+| Monte Carlo | 3 cases handled (2+ games, 1 game, 0 games) | Scoring col whitelisted | Clean |
+| Response cache | Thread-safe snapshot eviction | .pop(k, None) pattern | Clean |
+| Requirements | All imports match requirements.txt | 9 packages | Clean |
+| Deferred scripts | lab-mockdraft.js, lab-prospect-radar.js | escapeHtml, resp.ok checks | Clean |
+| Week selector | state.week serialized to URL, localStorage, backend params | Consistent int=0 default | Clean |
+
+### Verified Clean
+- 11/11 smoke tests pass
+- 59/59 pytest tests pass
+- All Python files compile clean
+- All JS files syntax clean
+- 0 new bugs found
+- Codebase is exceptionally well-hardened from 17 prior sessions
