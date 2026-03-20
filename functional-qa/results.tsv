@@ -672,3 +672,88 @@ quality-sweep	OK	backend/server.py	-	-	pass	Rate limits + input clamping verifie
 broad-sweep	OK	-	-	-	pass	20/20 key pages on prod: 0 JS errors, 0 crashes post-deploy	100	2026-03-20T18:06
 stock-watch	P2	backend/live_data/analytics.py	-	fetch_stock_watch	ticket	FUNC-013: Stock Watch rising WRs are all scrubs (Powell 2PPG, Shenault 2.5PPG) — no min threshold	90	2026-03-20T18:08
 buy-sell	P2	backend/live_data/analytics.py	-	fetch_buy_sell_candidates	ticket	FUNC-013: Buy/Sell buy-low WRs are scrubs (Hodge 5PPG A+, Dulin 2PPG A+) — same threshold issue	90	2026-03-20T18:08
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke-prod	OK	-	-	-	pass	session13:smoke:health — Server healthy (HTTP 200)	100	2026-03-20T22:15
+smoke-prod	OK	-	-	-	pass	session13:smoke:players — 200 players returned	100	2026-03-20T22:15
+smoke-prod	OK	-	-	-	pass	session13:smoke:position_filter — QB/WR all correct	100	2026-03-20T22:15
+smoke-prod	OK	-	-	-	pass	session13:smoke:sort — PPR desc correct	100	2026-03-20T22:15
+smoke-prod	OK	-	-	-	pass	session13:smoke:season_switch — Different seasons return different data	100	2026-03-20T22:15
+smoke-prod	OK	-	-	-	pass	session13:smoke:week_filter — season=16gp, week1=1gp (FUNC-012 holding)	100	2026-03-20T22:15
+smoke-prod	OK	-	-	-	pass	session13:smoke:screener_query — 10 RBs correct	100	2026-03-20T22:15
+smoke-prod	OK	-	-	-	pass	session13:smoke:no_nan — No NaN/Inf in 50 players	100	2026-03-20T22:15
+smoke-prod	OK	-	-	-	pass	session13:smoke:no_negative — No impossible negatives	100	2026-03-20T22:15
+smoke-prod	OK	-	-	-	pass	session13:smoke:filter_options — Returns positions/teams	100	2026-03-20T22:15
+re-audit-phaseF	OK	-	-	-	pass	session13: 2025 data verified — CMC 416.6 PPR exact, Nacua 375.0, Bijan 370.8. PPR calc math checked.	100	2026-03-20T22:17
+re-audit-phaseF	OK	-	-	-	pass	session13: 2025 QB data — Allen 364.6, Maye 351.96, Stafford 350.38. All PPR calcs match (diffs = INTs+fumbles).	100	2026-03-20T22:17
+re-audit-phaseF	OK	-	-	-	pass	session13: Career mode verified — Wilson 2890.14/157GP, Rodgers 2841.24/154GP, Allen 2821.18/126GP.	100	2026-03-20T22:19
+re-audit-phaseF	OK	-	-	-	pass	session13: College 2025 data — Pavia/Tennessee 4392 total yds, Brungard/Youngstown 4242. Real college data confirmed.	100	2026-03-20T22:20
+re-audit-phaseF	OK	-	-	-	pass	session13: 2026 prospects — 319 prospects, Taylen Green QB1 RPS 72.8, combine data present.	100	2026-03-20T22:20
+re-audit-phaseE	OK	-	-	-	pass	session13: Landing page — hero+CTA+live data+Bureau+SitRoom+Pricing. 4 pricing links. 0 JS errors.	100	2026-03-20T22:18
+re-audit-phaseE	OK	-	-	-	pass	session13: og:image — All .png (not .svg), width=1200 height=630 on index/lab/agents.	100	2026-03-20T22:19
+re-audit-phaseE	OK	-	-	-	pass	session13: Pricing page — trial CTA, 3 tiers, comparison table. 0 JS errors.	100	2026-03-20T22:19
+re-audit-phaseE	OK	-	-	-	pass	session13: Nav funnel — Home/Screener/Bureau/Situation Room/Pricing on all pages.	100	2026-03-20T22:18
+re-audit-phaseG	P2	render.yaml	15	npx esbuild	ticket	session13: FUNC-014 — lab.js 520KB raw source on prod. Minification step fails silently.	90	2026-03-20T22:19
+re-audit-phaseH	OK	-	-	-	pass	session13: BYOK decrypt endpoint returns 404 (removed). Disclosure text present in agents.html.	100	2026-03-20T22:19
+re-audit-phaseH	OK	-	-	-	pass	session13: Cloud sync save-only, no load/decrypt button. warroom.js comment confirms.	100	2026-03-20T22:19
+js-sweep	OK	-	-	-	pass	session13: 23 pages on prod — 0 JS errors. index/lab/pricing/league-intel/agents + 18 panel pages.	100	2026-03-20T22:20
+func-013-check	P2	backend/live_data/analytics.py	-	fetch_stock_watch	open	session13: FUNC-013 still open in 2025 data. Rising WRs: Thrash 2.59PPG, Conner 2.26PPG. Falling: Chase 19.6PPG.	90	2026-03-20T22:18
+analytics-2025	OK	-	-	-	pass	session13: Dynasty rankings 2025 — age+production correct. Nacua#1(24.8yr,23.4PPG), Chase#7(26yr,19.6PPG).	100	2026-03-20T22:20
+analytics-2025	OK	-	-	-	pass	session13: Weekly heatmap 2025 — weeks 1-18 only, FUNC-012 holding. Allen 16GP, Stafford 17GP.	100	2026-03-20T22:20
+analytics-2025	OK	-	-	-	pass	session13: TD regression 2025 — math correct. Stafford +16.5 (sell), Jefferson -5.0 (buy).	100	2026-03-20T22:20
+analytics-2025	OK	-	-	-	pass	session13: Breakout candidates 2025 — Cam Ward #1 RBS 66.4, algorithm sound.	100	2026-03-20T22:20
+analytics-2025	OK	-	-	-	pass	session13: Efficiency RB 2025 — no NaN/Inf, PPO calcs correct. Gibbs 1.09 PPO A+.	100	2026-03-20T22:20
+analytics-2025	OK	-	-	-	pass	session13: Drake Maye (2025 rookie) — full stats present, 17GP, 351.96 PPR. New player data works.	100	2026-03-20T22:20

@@ -15,14 +15,14 @@
 
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
-| 1 | Landing -> Lab | CTA click, initial data load, screener populates with real player data | DONE — SESSION 12 VERIFIED. FUNC-012 DEPLOYED. Prod: Lamar=17 GP/430.4 PPR, Barkley=16 GP/2005 rush yds. 0 JS errors. |
+| 1 | Landing -> Lab | CTA click, initial data load, screener populates with real player data | RE-AUDIT SESSION 13 — PASS. 2025 data live: CMC=17GP/416.6 PPR, Nacua=16GP/375.0. Landing page Phase E verified (hero+Bureau+SitRoom+Pricing). 0 JS errors. |
 | 2 | Screener: Position filter | Filter QB/RB/WR/TE individually. Count matches. Remove filter. Table resets? | DONE — PASS (all 4 positions clean) |
 | 3 | Screener: Multi-filter | Chain 3 filters (pos + team + min stat). Results are the correct intersection? | DONE — PASS (RB+800yd = 27, all correct) |
 | 4 | Screener: Sort | Sort every stat column. #1 player is actually the leader? Reverse sort works? | DONE — PASS (desc+asc both correct) |
 | 5 | Screener: Search | Search "Mahomes", "McCaffrey", "Amon-Ra". Results correct? Clear resets? | DONE — PASS. FUNC-002 FIXED on prod. Amon-Ra=1 result, Ja'Marr=1 result, D'Andre=1 result. Browser-verified. |
-| 6 | Screener: Season switch | Switch 2025 -> 2024 -> 2023. Data actually changes? Stat values match that season? | DONE — PASS |
+| 6 | Screener: Season switch | Switch 2025 -> 2024 -> 2023. Data actually changes? Stat values match that season? | RE-AUDIT SESSION 13 — PASS. 2025 (CMC 416.6) vs 2024 (Lamar 430.4) confirmed different. Career mode verified (Wilson 2890.14/157GP). |
 | 7 | Screener: Week filter | Select Week 1. Stats are single-week, not season totals? Switch back to All Weeks. | DONE — PASS (production only, local server stale) |
-| 8 | Screener: Universe toggle | NFL -> College -> Prospects -> NFL. Correct data loads? Wrong-universe panels hide? | DONE — API PASS, UI now unblocked (FUNC-001 fixed). |
+| 8 | Screener: Universe toggle | NFL -> College -> Prospects -> NFL. Correct data loads? Wrong-universe panels hide? | RE-AUDIT SESSION 13 — API PASS. College: Pavia/Tennessee 4392 yds. Prospects: 319 2026 class. Separate endpoints verified (/api/college/players, /api/prospects). |
 | 9 | Screener: Column picker | Add/remove columns. Presets load correct column sets? Custom columns persist? | DONE — PASS. 87 columns, 8 presets, modal opens on prod. Browser-verified. |
 | 10 | Screener: Pin player | Pin a row. Survives sort? Survives filter? Unpin works? Multiple pins? | DONE — PASS. FUNC-008 FIXED. Pin cache (_pinnedDataCache) survives filter changes. Separator row appears on prod. |
 | 11 | Screener: Pagination | Next/prev pages. Data advances? Page count correct? Sort persists across pages? | DONE — API PASS, UI now unblocked (FUNC-001 fixed). |
@@ -42,7 +42,7 @@
 
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
-| 18 | Dynasty Rankings | Rankings load? Sortable? Position filter? Do rankings reflect age + production reality? | DONE — SESSION 12 VERIFIED. FUNC-012 DEPLOYED. Prod: Nacua=16 GP, Robinson=17 GP. Dynasty values correct. |
+| 18 | Dynasty Rankings | Rankings load? Sortable? Position filter? Do rankings reflect age + production reality? | RE-AUDIT SESSION 13 — PASS. 2025 data: Nacua#1(24.8yr,23.4PPG,95.8val), Robinson#3(24.1yr,21.8PPG). Age+production reality correct. |
 | 19 | Trade Values | Values load? Positional adjustment? Do elite young WRs > aging vets? Sensible tiers? | DONE — PASS (same clustering note as #18) |
 | 20 | Trade Finder | Suggest trades? Values make sense? Not suggesting obviously lopsided deals? | DONE — PASS |
 | 21 | Tiers | Tiers load? Players grouped sensibly? Tier breaks at reasonable spots? | DONE — PASS (functional), P2 S-tier bloated (76 players, FUNC-003) |
@@ -54,7 +54,7 @@
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
 | 24 | Cheat Sheet | Loads? Sortable? Position ranks correct? Matches screener sort order? | DONE — PASS (4 pos groups, Jackson QB#1 PPG=24.82, tiers+ranks correct) |
-| 25 | Weekly Heatmap | Loads? Week selector works? Colors match stat intensity? | DONE — PASS (22 weeks data, sums match season totals within rounding) |
+| 25 | Weekly Heatmap | Loads? Week selector works? Colors match stat intensity? | RE-AUDIT SESSION 13 — PASS. 2025 data: weeks 1-18 only (FUNC-012 holding). Allen 16GP, Stafford 17GP. |
 | 26 | Weekly Leaders | Loads? Leaders match that week's actual stat leaders? Category switch works? | DONE — PASS. API returns ranked weekly performers (verified Barkley Wk1 2024 = 33.2 PPR, exact calc confirmed). Position filter works (QB-only returns QBs). Season/week navigation, sortable columns, top 3 badges, points tiers (elite/great/good). P2: 0 shows as '-' due to JS falsy (0 || '-'). |
 | 27 | Matchups | Loads? Correct matchups for selected week? Opponent data shown? | DONE — SESSION 12 VERIFIED. FUNC-012 DEPLOYED. Prod: Weekly heatmap weeks 1-18 only, Lamar GP=17. |
 | 28 | Stacks | QB-WR/TE stacks shown? Correlation data makes sense? | DONE — PASS (30 stacks, Pearson math correct). P2: min 5 common games too low, small-sample flukes dominate (Dalton+Johnson r=0.988 in 6G). Elite stacks (Allen, Hurts, Burrow) absent from top 30. |
@@ -71,7 +71,7 @@
 | 34 | Red Zone | RZ targets/carries shown? RZ stats don't include non-RZ plays? | DONE — PASS (calcs correct, annotations good) |
 | 35 | Opportunity Share | Opportunity = targets + carries? Per-team shares sum to ~100%? | DONE — PASS (alpha dogs), P2 FUNC-005: dominator rec shares null |
 | 36 | Efficiency metrics | YPC, YPR, YPT calculated correctly from raw stats? Not showing NaN/Infinity for 0 attempts? | DONE — PASS (0 NaN/Inf in 200 players) |
-| 37 | Regression candidates | TD regression logic sound? Flagging high-TD players with low expected TDs? | DONE — PASS (calcs exact, rates sensible) |
+| 37 | Regression candidates | TD regression logic sound? Flagging high-TD players with low expected TDs? | RE-AUDIT SESSION 13 — PASS. 2025 data: Stafford +16.5 TD delta (sell), Jefferson -5.0 (buy). Math verified. |
 | 38 | Garbage Time | Identified correctly? Based on game script, not arbitrary cutoff? | DONE — PASS (data sound, clean producers sensible). P2: no gt_ppg/clean_ppg split, backup scrubs dominate padders |
 | 39 | Gamescript | Game script data per player? Shows performance in various score differentials? | DONE — PASS. API returns positive_script (winning) + negative_script (losing) splits. Barkley 22.2 PPG positive, B.Robinson 20.1 PPG negative — sensible. Position filter, season selector, diff badges, GT% chips, escapeHtml on all data. |
 | 40 | Dual Threat | QB rushing + passing combined? RB receiving + rushing? Correct dual-threat metrics? | DONE — PASS (DTI=geometric mean of rush+rec yd/g, all 3 verified exact) |
@@ -84,7 +84,7 @@
 
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
-| 45 | Big Board | Prospects ranked? Positional filter? Athletic data shown? | RE-AUDIT SESSION 9 — PASS. XSS fix deployed to prod. API returns correct prospect data (QB #1 RPS 72.8). Big Board not affected by FUNC-012 (uses college/draft data, not player_week_stats). |
+| 45 | Big Board | Prospects ranked? Positional filter? Athletic data shown? | RE-AUDIT SESSION 13 — PASS. 2026 class: 319 prospects, Green QB#1 RPS 72.8, combine data present (height/weight/forty). Phase F college refresh verified. |
 | 46 | Draft Class | Aggregate class metrics? Per-position breakdown? | DONE — 7-round breakdown, per-round math correct. P0 FUNC-011: PPG inflated for multi-season players (COUNT DISTINCT week collapses across seasons — Bo Nix shows 33 PPG, actual ~20). |
 | 47 | Prospect profiles | Click a prospect. Combine data correct? College stats shown? | SKIP — /api/prospect-profiles returns 404. No dedicated endpoint. Prospect data available via /api/prospect-scores (Big Board, flow 45). |
 | 48 | Mock Draft Board | Board loads? Picks assignable? Trade pick functionality? | SKIP — /api/mock-draft returns 404. Not implemented. |
@@ -110,7 +110,7 @@
 | 58 | Command palette (Ctrl+K) | Opens? Finds panels by name? Finds players? Selection navigates correctly? | DONE — PASS. Opens via nav button, search input focused, "Search players... (Ctrl+K)" placeholder. Browser-verified on prod. |
 | 59 | Dark mode | Every element switches? Data readable in dark? Charts visible? No white flashes? | DONE — PASS (visual). Dark mode applies cleanly: brown palette, readable text, proper contrast, no white flashes. Sidebar and main area both switch correctly. Charts untestable (FUNC-001). |
 | 60 | Auth flow | Sign in modal opens? Closes cleanly? Error states for bad input? | DONE — PASS. Modal opens, Sign In/Register tabs, email/password fields. Focus trap, Escape close, overlay click close. Rate limiting (3 reg/24hr), generic errors, loading states. Browser-verified on prod. |
-| 61 | Pricing page | All plans shown? CTAs work? Correct prices? Checkout starts? | DONE — PASS. 3 tiers: Free $0, Pro $79.99/yr ($6.67/mo), Elite $149.99/yr ($12.50/mo). Monthly toggle: $9.99/$19.99. 7-day free trial CTA. 0 JS errors. |
+| 61 | Pricing page | All plans shown? CTAs work? Correct prices? Checkout starts? | RE-AUDIT SESSION 13 — PASS. Trial CTA "7 days of Pro. On the house." Phase E verified. Comparison table, FAQ. 0 JS errors. |
 | 62 | Dashboard / Stat Leaders | Summary stats populated? Leaders match screener data? Category switching works? | DONE — SESSION 12 VERIFIED. FUNC-012 DEPLOYED. Prod: Lamar GP=17, Burrow GP=17, PPG=25.3. Correct regular-season values. |
 
 ## Group 9: Bureau & Situation Room (the paid tier)
@@ -118,7 +118,7 @@
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
 | 63 | Bureau: League Intel | Sleeper connect flow? Roster loads? Insights generated from real league data? | DONE — PASS. Page loads clean (0 JS errors). Sleeper username input + Connect button. Error states verified: "agent not found" for invalid user (Razzle personality), timeout handling (AbortController 10s), network error. Account lock (one Sleeper ID per account). Loading state on button. Enter key support. Dark mode clean. Ship Loop C-1 through C-7 hardened. Can't test successful connection without real Sleeper account. |
-| 64 | Situation Room | Canvas loads? Agents rendered? Interaction works? | DONE — PASS. Page loads (0 JS errors). 6 agent cards (Razzle/Scout/Diplomat/Quant/Medical/Historian). Pixel canvas renders and animates (confirmed via animation snapshot diff). Scenario textarea present. "What can I ask?" collapsible panel. Setup guide for first-time users (3-step BYOK flow). Demo briefings rendered. Dark mode always-on in canvas section. Ship Loop D-1 through D-7 hardened all agent execution, cross-agent triggers, error states, and context bridges. |
+| 64 | Situation Room | Canvas loads? Agents rendered? Interaction works? | RE-AUDIT SESSION 13 — PASS. Phase H verified: decrypt endpoint 404 (removed), BYOK disclosure present, save-only cloud sync. 0 JS errors. D-1 through D-8 hardening confirmed. |
 
 ## Group 10: Edge Cases (the stuff that separates demos from products)
 
