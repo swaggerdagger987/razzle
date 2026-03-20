@@ -545,7 +545,7 @@ def fetch_draft_class(draft_year=None, position=None):
                     p.player_id, p.team as current_team, p.age,
                     SUM(s.fantasy_points_ppr) as total_ppr,
                     COUNT(DISTINCT s.season) as seasons_played,
-                    COUNT(DISTINCT s.week) as total_games
+                    COUNT(DISTINCT s.season || '-' || s.week) as total_games
                 FROM draft_picks d
                 LEFT JOIN players p ON p.position = d.position
                     AND (LOWER(p.full_name) = LOWER(d.player_name)

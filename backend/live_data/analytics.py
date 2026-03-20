@@ -1566,6 +1566,7 @@ def fetch_matchup_heatmap(season=None, position=None):
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ?
+                  AND s.season_type = 'regular'
                   AND p.position IN ('QB', 'RB', 'WR', 'TE')
                   AND s.opponent_team IS NOT NULL AND s.opponent_team != ''
                   {pos_filter}
@@ -1580,7 +1581,8 @@ def fetch_matchup_heatmap(season=None, position=None):
             game_rows = conn.execute("""
                 SELECT opponent_team, COUNT(DISTINCT week) as games
                 FROM player_week_stats
-                WHERE season = ? AND opponent_team IS NOT NULL AND opponent_team != ''
+                WHERE season = ? AND season_type = 'regular'
+                  AND opponent_team IS NOT NULL AND opponent_team != ''
                 GROUP BY opponent_team
             """, [season]).fetchall()
             defense_games = {r[0]: r[1] for r in game_rows}

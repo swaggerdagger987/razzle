@@ -2294,3 +2294,15 @@ All 11 JS files syntax clean. 16 Python files compile clean.
 | Frontend XSS | All dynamic data in innerHTML uses escapeHtml() | Clean |
 | Backend week param coverage | All panel endpoints correctly aligned with function signatures | Clean |
 | Event listener leaks | innerHTML replacement handles cleanup; no persistent element leaks | Clean |
+
+---
+
+## QA Ticket Consumption (Mar 20 — Ship Loop)
+
+| Ticket | Severity | Status | Fix |
+|--------|----------|--------|-----|
+| FUNC-010: Production 502 | P0 | ESCALATE | Requires human action — check Render dashboard logs and restart service. Cannot fix from code. |
+| FUNC-011: Draft class PPG inflated | P0 | FIXED | `COUNT(DISTINCT s.week)` collapsed games across seasons. Changed to `COUNT(DISTINCT s.season \|\| '-' \|\| s.week)` in tools.py:548. Bo Nix was showing 33 PPG instead of ~20. |
+| FUNC-009: Matchup heatmap playoff data | P2 | FIXED | Added `AND s.season_type = 'regular'` to both queries in analytics.py:fetch_matchup_heatmap(). Playoff teams had inflated game counts (21 vs 17), diluting their defensive PPG. |
+
+Smoke tests: 10/11 pass (week_filter is pre-existing, unrelated to these fixes).
