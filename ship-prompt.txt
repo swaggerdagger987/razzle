@@ -9,6 +9,7 @@ STARTUP — run these steps in order:
 3. git config user.email "swaggerdagger987@users.noreply.github.com"
 4. git pull origin ship/launch-fixes
 5. git merge origin/qa/findings --no-edit (pull in QA Loop's ticket files)
+5b. git merge origin/ceo/strategy --no-edit (pull in Razzle CEO's strategic tickets)
 6. List files in tickets/ directory — these are your work queue:
    - Sort by filename (oldest first)
    - Read each ticket's frontmatter for severity and confidence
