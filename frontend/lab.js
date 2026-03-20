@@ -1131,7 +1131,7 @@ function _syncUndoRedoButtons() {
     setTimeout(function() {
       var toast = document.createElement("div");
       toast.className = "razzle-onboarding-toast";
-      toast.innerHTML = '70 tools in the sidebar \u2014 press <kbd>?</kbd> for shortcuts';
+      toast.innerHTML = 'Filter by position above, explore panels in the sidebar \u2014 press <kbd>?</kbd> for shortcuts';
       toast.onclick = function() { toast.classList.remove("razzle-onboarding-show"); setTimeout(function() { toast.remove(); }, 300); };
       document.body.appendChild(toast);
       setTimeout(function() { toast.classList.add("razzle-onboarding-show"); }, 10);

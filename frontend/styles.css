@@ -778,6 +778,9 @@ a.btn-pro-upgrade:focus-visible {
   border-radius: 2px;
   color: inherit;
 }
+[data-theme="dark"] .search-hl {
+  background: rgba(217, 119, 87, 0.35);
+}
 
 /* ===== ERROR STATE ===== */
 .error-msg {
