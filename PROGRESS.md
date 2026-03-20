@@ -2573,6 +2573,10 @@ week_filter failure (10/11) is a stale server process issue, not a code bug. Ver
 |---|-----|----------|-------|-------|
 | 1 | XSS in matchups.html detail player onclick | P1 | matchups.html:707 | Inline onclick with escapeHtml() didn't escape single quotes — replaced with data-pid + event delegation |
 | 2 | Font-display at <16px across 31 HTML files | P2 | 31 standalone pages | 96 CSS rules changed from --font-display to --font-mono (table headers at 11px, badges at 10-13px, tabs at 13px, rank numbers at 14px) |
+| 3 | XSS in lab.js roster report | P1 | lab.js:11424 | r.total_value and r.average_age unescaped in innerHTML — added escapeHtml(String()) |
+| 4 | XSS in player.js season table + combine | P1 | player.js:234,316 | s.season and combine display values unescaped — added esc(String()) |
+| 5 | XSS in formula-store.js inline handlers | P1 | formula-store.js:112,540,545 | formula.id interpolated in onclick/id — added parseInt() sanitization |
+| 6 | Crash risk in warroom.js canvas init | P1 | warroom.js:81 | cvs.getContext('2d') with no null guard — added ternary check |
 
 ### Verified Clean
 - 11/11 smoke tests pass after every fix
@@ -2580,3 +2584,4 @@ week_filter failure (10/11) is a stale server process issue, not a code bug. Ver
 - All Python files compile clean
 - All JS files syntax clean
 - 0 remaining font-display violations in CSS (verified via script)
+- 0 unescaped API data in innerHTML (6-agent parallel audit + manual verification)
