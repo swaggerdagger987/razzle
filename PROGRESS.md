@@ -1882,3 +1882,32 @@ All `ctx.fillStyle = 'rgba(45,31,20,...)'` → theme-branching with sand rgba fo
 - All Python files compile clean
 - 59/59 tests pass
 - 0 regressions
+
+---
+
+## Quality Audit: Waves 3-4 (Mar 20 — Session 10 continued)
+
+### Wave 3: Backend + Charts Cleanup (4 fixes)
+
+| # | Fix | Category | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | Dead JSON exception handler | Backend | server.py | Duplicate @app.exception_handler(Exception) — first handler silently overwritten. Merged into single handler. |
+| 2 | Monte Carlo season type error | Input validation | server.py | int(body.get("season")) on non-numeric input raised TypeError. Added try/except. |
+| 3 | Sparklines rate limit missing | Security | server.py | Only screener endpoint without throttling. Added _check_screener_rate. |
+| 4 | Null guard on p.full_name.split() | Crash prevention | charts.js | Compare export canvas crashed if name was null. |
+
+### Wave 4: Conversion Funnel + Billing Safety (5 fixes)
+
+| # | Fix | Category | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | int(user_id) crash in billing webhook | **CRITICAL** | billing.py | Stripe metadata could contain non-numeric value, crashing webhook handler and causing infinite retries. Added try/except with early return. |
+| 2 | int(_season) on user query param | Input validation | players.py | GET /api/players?season=abc crashed with ValueError. Changed to _safe_int(). |
+| 3 | int(season)/int(week) in enrichment | Input validation | core.py (3 sites) | Defensive _safe_int() for rate metrics and team shares. |
+| 4 | Situation Room pricing inconsistency | Conversion | agents.html | Led with monthly ($9.99/mo) but home page led with yearly. Flipped to lead with yearly ($79.99/year), checkout buttons changed to pro_year/elite_year. |
+| 5 | Missing Sign In button on About page | Auth UX | about.html | Only page without sign-in nav button. Added to match all other pages. |
+
+### Verified Clean
+- All 11 JS files syntax clean
+- All Python files compile clean
+- 59/59 tests pass
+- 0 regressions
