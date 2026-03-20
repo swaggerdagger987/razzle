@@ -128,7 +128,7 @@ function getPlayerOptions() {
     ? state.selectedPlayers
     : state.items.slice(0, 20);
   return players.map(p =>
-    `<option value="${p.player_id}">${p.full_name} (${p.position} - ${p.team})</option>`
+    `<option value="${escapeHtml(p.player_id)}">${escapeHtml(p.full_name)} (${escapeHtml(p.position)} - ${escapeHtml(p.team)})</option>`
   ).join("");
 }
 
@@ -880,8 +880,8 @@ function renderCompareTable(players) {
   for (const p of players) {
     const posColor = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" }[p.position] || "var(--ink)";
     html += `<th style="text-align:right; padding:8px; border-bottom:3px solid var(--ink);">
-      <span style="font-family:var(--font-mono); font-size:13px;">${p.full_name}</span>
-      <span style="display:inline-block; background:${posColor}; color:white; padding:1px 5px; border-radius:4px; border:2px solid var(--ink); font-size:9px; margin-left:4px;">${p.position}</span>
+      <span style="font-family:var(--font-mono); font-size:13px;">${escapeHtml(p.full_name)}</span>
+      <span style="display:inline-block; background:${posColor}; color:white; padding:1px 5px; border-radius:4px; border:2px solid var(--ink); font-size:9px; margin-left:4px;">${escapeHtml(p.position)}</span>
     </th>`;
   }
   html += '</tr>';
