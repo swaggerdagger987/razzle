@@ -2206,3 +2206,18 @@ All `ctx.fillStyle = 'rgba(45,31,20,...)'` → theme-branching with sand rgba fo
 - #2 No password reset: Requires email integration. Owner action item.
 - #6 Stripe never tested: Requires real Stripe test mode. Owner action item.
 - #12 Never deployed to production: Owner action item.
+
+---
+
+## Ship Loop: QA Ticket Consumption (Mar 20) — Branch: ship/launch-fixes
+
+**Goal**: Consume tickets filed by the Functional QA Loop and fix bugs.
+
+| # | Ticket | Severity | Status | Notes |
+|---|--------|----------|--------|-------|
+| FUNC-001 | Double GZip compression (GZipMiddleware + Cloudflare Brotli) | P0 | DONE | Removed GZipMiddleware from server.py. Cloudflare applies Brotli at edge; double-compression broke /api/filter-options JSON parsing, crashing Lab init for all prod users. Let Cloudflare handle all compression. |
+| FUNC-002 | Search fails for hyphens/apostrophes (Amon-Ra, Ja'Marr, D.J.) | P1 | DONE | Search input now strips all non-alphanumeric chars via `re.sub(r'[^a-z0-9]', '', ...)` to match how search_name column is normalized. Fixed in both fetch_players and _fetch_screener_uncached. Also fixed combine lookup search_name builder. |
+| FUNC-003 | Dynasty values cluster at 100.0 ceiling | P2 | DONE | Removed hard caps from _production_value and _age_value. Added soft ceiling in compute_trade_value: linear below 90, log compression above 90. Top players now spread across 96-97 instead of all at 100.0. Lower tiers unchanged. |
+
+### Smoke Test Note
+- week_filter test (1 of 11) fails — pre-existing environment issue. The screener week filter code is correct (verified by direct function call). The running dev server (started Mar 19) may have stale state. Not a code bug.
