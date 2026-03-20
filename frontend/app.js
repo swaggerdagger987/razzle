@@ -816,7 +816,8 @@ function clearAuthErrors() {
 async function handleLogin(e) {
   e.preventDefault();
   var btn = e.target.querySelector('button[type="submit"]');
-  if (btn) btn.disabled = true;
+  var origText = btn ? btn.textContent : "";
+  if (btn) { btn.disabled = true; btn.textContent = "signing in..."; }
   var email = document.getElementById("authLoginEmail").value.trim();
   var password = document.getElementById("authLoginPassword").value;
   var errEl = document.getElementById("authLoginError");
@@ -838,14 +839,15 @@ async function handleLogin(e) {
   } catch (err) {
     errEl.textContent = "network fumble. try again.";
   } finally {
-    if (btn) btn.disabled = false;
+    if (btn) { btn.disabled = false; btn.textContent = origText; }
   }
 }
 
 async function handleRegister(e) {
   e.preventDefault();
   var btn = e.target.querySelector('button[type="submit"]');
-  if (btn) btn.disabled = true;
+  var origText = btn ? btn.textContent : "";
+  if (btn) { btn.disabled = true; btn.textContent = "creating account..."; }
   var email = document.getElementById("authRegisterEmail").value.trim();
   var password = document.getElementById("authRegisterPassword").value;
   var confirm = document.getElementById("authRegisterConfirm").value;
@@ -872,7 +874,7 @@ async function handleRegister(e) {
   } catch (err) {
     errEl.textContent = "network fumble. try again.";
   } finally {
-    if (btn) btn.disabled = false;
+    if (btn) { btn.disabled = false; btn.textContent = origText; }
   }
 }
 
@@ -1046,7 +1048,7 @@ async function startCheckout(interval) {
       window.location.href = data.checkout_url;
       return; // Don't reset — navigating away
     } else {
-      _showToast(data.error || "could not start checkout. try again.", "error");
+      _showToast(data.error || "checkout got stuffed at the line. give it another shot.", "error");
     }
   } catch (e) {
     _showToast("network fumble. try again.", "error");
@@ -1096,7 +1098,10 @@ async function validatePromoCode() {
 
 async function openManageSubscription() {
   var token = localStorage.getItem("razzle_token");
-  if (!token) return;
+  if (!token) {
+    if (typeof openAuthModal === "function") openAuthModal();
+    return;
+  }
   try {
     var resp = await fetch(API_BASE + "/api/billing/status", {
       headers: { "Authorization": "Bearer " + token }

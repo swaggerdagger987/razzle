@@ -727,7 +727,7 @@ function openCompareSearch() {
     '<div style="font-family:var(--font-display);font-size:18px;margin-bottom:12px;">Compare ' + esc(_profileData.player.full_name) + ' with...</div>' +
     '<input id="compareSearchInput" type="text" placeholder="Search player name..." style="width:100%;box-sizing:border-box;padding:10px 14px;border:2px solid var(--ink);border-radius:8px;font-family:var(--font-mono);font-size:14px;background:var(--bg);margin-bottom:8px;">' +
     '<div id="compareSearchResults" style="max-height:200px;overflow-y:auto;"></div>' +
-    '<button onclick="document.getElementById(\'compareOverlay\').remove()" class="btn-chunky" style="margin-top:10px;font-size:12px;width:100%;">Cancel</button>' +
+    '<button onclick="document.getElementById(\'compareOverlay\').remove()" class="btn-chunky" style="margin-top:10px;font-size:12px;width:100%;">Never Mind</button>' +
     '</div>';
   document.body.appendChild(overlay);
   overlay.addEventListener("click", function(e) { if (e.target === overlay) overlay.remove(); });

@@ -697,7 +697,7 @@ def health(request: Request):
         }
     except Exception as e:
         logger.error("Health check terminal_db error: %s", e, exc_info=True)
-        checks["terminal_db"] = {"status": "error", "error": str(e)}
+        checks["terminal_db"] = {"status": "error", "error": "database unavailable"}
         overall = "degraded"
 
     # Check 2: users.db (auth/billing)
@@ -712,7 +712,7 @@ def health(request: Request):
             }
     except Exception as e:
         logger.error("Health check users_db error: %s", e, exc_info=True)
-        checks["users_db"] = {"status": "error", "error": str(e)}
+        checks["users_db"] = {"status": "error", "error": "database unavailable"}
         overall = "degraded"
 
     # Check 3: bootstrap status
@@ -721,7 +721,7 @@ def health(request: Request):
         "running": _bootstrap_status["running"],
     }
     if _bootstrap_status["error"]:
-        checks["bootstrap"]["error"] = _bootstrap_status["error"]
+        checks["bootstrap"]["error"] = "bootstrap failed"
         overall = "degraded"
 
     # Check 4: cache stats
@@ -2732,9 +2732,9 @@ def vorp(season: int = 0, position: str = "", limit: int = 30):
 
 @app.get("/api/analytics/summary")
 async def analytics_summary(request: Request):
-    user = require_auth(request)
-    if not user:
-        return JSONResponse({"error": "Authentication required"}, status_code=401)
+    secret = request.headers.get("x-admin-secret", "")
+    if not _ADMIN_SECRET or not _hmac.compare_digest(secret, _ADMIN_SECRET):
+        return JSONResponse({"error": "unauthorized"}, status_code=403)
     return live_data.get_analytics_summary()
 
 

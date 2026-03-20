@@ -5254,7 +5254,7 @@
         var diffClass = diff >= 0 ? 'tdr-diff-pos' : 'tdr-diff-neg';
         var sign = diff >= 0 ? '+' : '';
         var barPct = Math.min(100, (Math.abs(diff) / maxDiff) * 100);
-        var barColor = isBuy ? '#16a34a' : '#dc2626';
+        var barColor = isBuy ? 'var(--green)' : 'var(--red)';
         html += '<tr>';
         html += '<td class="tdr-rank">' + (i + 1) + '</td>';
         html += '<td class="tdr-name">' + pLink(p.name, p.player_id) + ' <span class="tdr-team">' + escapeHtml(p.team || '') + '</span></td>';
@@ -5595,7 +5595,7 @@
         return 'declining';
       })() : 'new';
       var trajLabels = { ascending: 'Rising', plateau: 'Steady', declining: 'Declining', 'new': 'New' };
-      var trajColors = { ascending: '#16a34a', plateau: '#5b7fff', declining: '#dc2626', 'new': '#8b5cf6' };
+      var trajColors = { ascending: 'var(--green)', plateau: 'var(--blue)', declining: 'var(--red)', 'new': 'var(--purple)' };
 
       var html = '<div class="cst-player-card">';
       html += playerHeadshot(p, pos);
@@ -6074,19 +6074,19 @@
     el.querySelector('#sw2-season').addEventListener('change', function() { curSeason = parseInt(this.value); });
 
     function gradeColor(g) {
-      if (!g) return '#8a7565';
-      if (g === 'A+' || g === 'A') return '#16a34a';
-      if (g === 'B+' || g === 'B') return '#5b7fff';
-      if (g === 'C+' || g === 'C') return '#eab308';
-      if (g === 'D') return '#f97316';
-      return '#dc2626';
+      if (!g) return 'var(--ink-light)';
+      if (g === 'A+' || g === 'A') return 'var(--green)';
+      if (g === 'B+' || g === 'B') return 'var(--blue)';
+      if (g === 'C+' || g === 'C') return 'var(--yellow)';
+      if (g === 'D') return 'var(--orange)';
+      return 'var(--red)';
     }
     function barColor(pct) {
-      if (pct >= 90) return '#16a34a';
-      if (pct >= 75) return '#5b7fff';
-      if (pct >= 50) return '#eab308';
-      if (pct >= 25) return '#f97316';
-      return '#dc2626';
+      if (pct >= 90) return 'var(--green)';
+      if (pct >= 75) return 'var(--blue)';
+      if (pct >= 50) return 'var(--yellow)';
+      if (pct >= 25) return 'var(--orange)';
+      return 'var(--red)';
     }
 
     function loadStrengths(pid) {
@@ -7902,11 +7902,11 @@
     var currentPlayerId = null;
 
     function barColor(pctile) {
-      if (pctile >= 90) return '#2ec4b6';
-      if (pctile >= 75) return '#5b7fff';
-      if (pctile >= 50) return '#d97757';
-      if (pctile >= 25) return '#e87422';
-      return '#d44040';
+      if (pctile >= 90) return 'var(--green)';
+      if (pctile >= 75) return 'var(--blue)';
+      if (pctile >= 50) return 'var(--orange)';
+      if (pctile >= 25) return 'var(--yellow)';
+      return 'var(--red)';
     }
 
     el.innerHTML =
@@ -8017,8 +8017,8 @@
     var PCT_LABELS = { forty: '40yd', vertical: 'Vert', broad_jump: 'Broad', bench: 'Bench', cone: '3Cone', shuttle: 'Shuttle' };
 
     function pctColor(val) {
-      if (val >= 80) return '#2ec4b6'; if (val >= 60) return '#5b7fff';
-      if (val >= 40) return '#d97757'; if (val >= 20) return '#e87422'; return '#d44040';
+      if (val >= 80) return 'var(--green)'; if (val >= 60) return 'var(--blue)';
+      if (val >= 40) return 'var(--orange)'; if (val >= 20) return 'var(--yellow)'; return 'var(--red)';
     }
 
     el.innerHTML =
@@ -9488,7 +9488,7 @@
       stud: '#2ec4b6',
       hit: '#5b7fff',
       average: '#d97757',
-      bust: '#d44040',
+      bust: '#e63946',
       too_early: '#8a7565'
     };
     var CLASSIFICATION_LABELS = {

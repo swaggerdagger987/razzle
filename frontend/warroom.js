@@ -2587,6 +2587,9 @@ async function trackQueryServerSide() {
     if (token) headers['Authorization'] = 'Bearer ' + token;
     var base = typeof API_BASE !== 'undefined' ? API_BASE : '';
     var resp = await fetch(base + '/api/agents/track', { method: 'POST', headers: headers });
+    if (!resp.ok && resp.status !== 429) {
+      return { allowed: true, local: true };
+    }
     var data = await resp.json();
     if (resp.status === 429) {
       // Sync local cache with server truth

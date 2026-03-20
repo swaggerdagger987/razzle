@@ -1522,8 +1522,8 @@ function renderTableHead() {
       for (const p of state.items) { const v = parseFloat(p[key]); if (!isNaN(v)) vals.push(v); }
       if (vals.length > 0) {
         const dec = col.decimals != null ? col.decimals : 1;
-        const mn = Math.min(...vals).toFixed(dec);
-        const mx = Math.max(...vals).toFixed(dec);
+        const mn = vals.reduce((a, b) => a < b ? a : b, vals[0]).toFixed(dec);
+        const mx = vals.reduce((a, b) => a > b ? a : b, vals[0]).toFixed(dec);
         const av = (vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(dec);
         tipText += `\nMin: ${mn}  Avg: ${av}  Max: ${mx}  (${vals.length} players)`;
       }
@@ -7056,7 +7056,7 @@ function renderProspectProfile(data, container, compsData) {
 
     // Dominator rating badge (WR/TE)
     if (college.dominator_rating) {
-      const domColor = college.dominator_rating >= 30 ? "#22a06b" : college.dominator_rating >= 20 ? "#2ec4b6" : "#ffc857";
+      const domColor = college.dominator_rating >= 30 ? "var(--green)" : college.dominator_rating >= 20 ? "var(--green)" : "var(--yellow)";
       html += `<div style="display:flex; align-items:center; gap:8px; margin:8px 0 12px 0;">`;
       html += `<span class="tier-badge" style="background:${domColor}; transform:rotate(-2deg); font-size:11px;">${college.dominator_rating.toFixed(1)}% DOM</span>`;
       html += `<span style="font-family:var(--font-hand); font-size:15px; color:var(--ink-light);">peak dominator rating (team rec share)</span>`;
@@ -7215,7 +7215,7 @@ function renderProspectProfile(data, container, compsData) {
 
     for (const comp of comps) {
       const simPct = Math.round(comp.similarity);
-      const simColor = simPct >= 85 ? "#22a06b" : simPct >= 70 ? "#2ec4b6" : simPct >= 55 ? "#ffc857" : "#e87422";
+      const simColor = simPct >= 85 ? "var(--green)" : simPct >= 70 ? "var(--green)" : simPct >= 55 ? "var(--yellow)" : "var(--orange)";
 
       // Career headline stat based on position
       let headline = "";
@@ -7270,7 +7270,7 @@ function renderProspectProfile(data, container, compsData) {
     }
     html += `</div>`;
     if (compProjection.confidence) {
-      const confColor = compProjection.confidence >= 75 ? "#22a06b" : compProjection.confidence >= 50 ? "#ffc857" : "#e87422";
+      const confColor = compProjection.confidence >= 75 ? "var(--green)" : compProjection.confidence >= 50 ? "var(--yellow)" : "var(--orange)";
       html += `<div class="prospect-proj-confidence">`;
       html += `<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">Comp confidence:</span> `;
       html += `<span style="font-family:var(--font-mono); font-size:14px; font-weight:700; color:${confColor};">${Math.round(compProjection.confidence)}%</span>`;
@@ -7398,11 +7398,11 @@ function drawCollegeArc(college, pos) {
 
 function getPercentileColor(pct) {
   // Red (0) → Yellow (50) → Green (100)
-  if (pct <= 20) return "#e63946";
-  if (pct <= 40) return "#e87422";
-  if (pct <= 60) return "#ffc857";
-  if (pct <= 80) return "#2ec4b6";
-  return "#22a06b";
+  if (pct <= 20) return "var(--red)";
+  if (pct <= 40) return "var(--orange)";
+  if (pct <= 60) return "var(--yellow)";
+  if (pct <= 80) return "var(--green)";
+  return "var(--green)";
 }
 
 function drawProspectSpider(prospect, percentiles, metrics) {
@@ -7866,11 +7866,11 @@ async function loadTierData(position) {
 
 function renderTierView(data, container) {
   const tierDefs = [
-    { key: "elite", label: "Elite", color: "#22a06b", desc: "80th+ percentile avg" },
-    { key: "above_avg", label: "Above Average", color: "#2ec4b6", desc: "60th-80th percentile" },
-    { key: "average", label: "Average", color: "#ffc857", desc: "40th-60th percentile" },
-    { key: "below_avg", label: "Below Average", color: "#e87422", desc: "below 40th percentile" },
-    { key: "no_data", label: "No Combine Data", color: "#8a7565", desc: "did not test" },
+    { key: "elite", label: "Elite", color: "var(--green)", desc: "80th+ percentile avg" },
+    { key: "above_avg", label: "Above Average", color: "var(--green)", desc: "60th-80th percentile" },
+    { key: "average", label: "Average", color: "var(--yellow)", desc: "40th-60th percentile" },
+    { key: "below_avg", label: "Below Average", color: "var(--orange)", desc: "below 40th percentile" },
+    { key: "no_data", label: "No Combine Data", color: "var(--ink-light)", desc: "did not test" },
   ];
 
   let html = `<div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); margin-bottom:16px;">${data.draft_year} ${data.position} prospects — grouped by average combine percentile</div>`;
@@ -7969,7 +7969,7 @@ function exportTierImage() {
   y += 30;
 
   // Draw each tier group
-  const tierColors = { elite: "#22a06b", above_avg: "#2ec4b6", average: "#ffc857", below_avg: "#e87422", no_data: "#8a7565" };
+  const tierColors = { elite: "#2ec4b6", above_avg: "#2ec4b6", average: "#ffc857", below_avg: "#d97757", no_data: "#8a7565" };
   const tierLabels = { elite: "ELITE", above_avg: "ABOVE AVG", average: "AVERAGE", below_avg: "BELOW AVG", no_data: "NO DATA" };
 
   tierGroups.forEach(g => {
@@ -8195,10 +8195,10 @@ function computeCompProjection(comps, pos) {
 }
 
 function getRPSTierDef(rps) {
-  if (rps >= 85) return { key: "elite", label: "Elite", color: "#22a06b" };
-  if (rps >= 70) return { key: "premium", label: "Premium", color: "#2ec4b6" };
-  if (rps >= 55) return { key: "solid", label: "Solid", color: "#ffc857" };
-  return { key: "flier", label: "Flier", color: "#e87422" };
+  if (rps >= 85) return { key: "elite", label: "Elite", color: "var(--green)" };
+  if (rps >= 70) return { key: "premium", label: "Premium", color: "var(--green)" };
+  if (rps >= 55) return { key: "solid", label: "Solid", color: "var(--yellow)" };
+  return { key: "flier", label: "Flier", color: "var(--orange)" };
 }
 
 function renderBigBoard(data, container) {
@@ -8218,10 +8218,10 @@ function renderBigBoard(data, container) {
   }
 
   const tierDefs = [
-    { key: "elite", label: "Elite", color: "#22a06b", desc: "RPS 85+" },
-    { key: "premium", label: "Premium", color: "#2ec4b6", desc: "RPS 70-85" },
-    { key: "solid", label: "Solid", color: "#ffc857", desc: "RPS 55-70" },
-    { key: "flier", label: "Flier", color: "#e87422", desc: "RPS below 55" },
+    { key: "elite", label: "Elite", color: "var(--green)", desc: "RPS 85+" },
+    { key: "premium", label: "Premium", color: "var(--green)", desc: "RPS 70-85" },
+    { key: "solid", label: "Solid", color: "var(--yellow)", desc: "RPS 55-70" },
+    { key: "flier", label: "Flier", color: "var(--orange)", desc: "RPS below 55" },
   ];
 
   let html = `<div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); margin-bottom:16px;">${data.draft_year} ${data.position} Big Board — ranked by Razzle Prospect Score</div>`;
@@ -8290,10 +8290,10 @@ function exportBigBoardImage() {
     tiers[td.key].push(p);
   }
   const tierDefs = [
-    { key: "elite", label: "ELITE", color: "#22a06b" },
+    { key: "elite", label: "ELITE", color: "#2ec4b6" },
     { key: "premium", label: "PREMIUM", color: "#2ec4b6" },
     { key: "solid", label: "SOLID", color: "#ffc857" },
-    { key: "flier", label: "FLIER", color: "#e87422" },
+    { key: "flier", label: "FLIER", color: "#d97757" },
   ];
 
   // Calculate height
@@ -11847,7 +11847,7 @@ function exportRosterTeamCard() {
 
   // Watermark
   ctx.fillStyle = t.ink;
-  ctx.font = "bold 14px 'Luckiest Guy', cursive";
+  ctx.font = "bold 16px 'Luckiest Guy', cursive";
   ctx.textAlign = "right";
   ctx.globalAlpha = 0.3;
   ctx.fillText("razzle.lol", W - 20, H - 12);
@@ -12356,9 +12356,9 @@ function renderBoomBust(data, container) {
   // Grade color
   const safeGrade = grade || "C";
   const gradeColor = safeGrade.startsWith("A") ? "var(--green)" :
-                     safeGrade.startsWith("B") ? "#5b7fff" :
+                     safeGrade.startsWith("B") ? "var(--blue)" :
                      safeGrade.startsWith("C") ? "var(--orange)" :
-                     safeGrade.startsWith("D") ? "#e87422" : "var(--red)";
+                     safeGrade.startsWith("D") ? "var(--yellow)" : "var(--red)";
 
   let html = "";
 
@@ -12632,7 +12632,7 @@ function exportBoomBustImage() {
   const gradeColor = safeGrade.startsWith("A") ? "#2ec4b6" :
                      safeGrade.startsWith("B") ? "#5b7fff" :
                      safeGrade.startsWith("C") ? "#d97757" :
-                     safeGrade.startsWith("D") ? "#e87422" : "#e63946";
+                     safeGrade.startsWith("D") ? "#ffc857" : "#e63946";
 
   const canvas = document.createElement("canvas");
   canvas.width = 800;

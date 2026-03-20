@@ -517,6 +517,12 @@ def save_agent_memory(user_id: int, scenario: str, findings: str,
     if not scenario or not findings:
         return {"error": "Scenario and findings are required", "status": 400}
 
+    # Cap field sizes to prevent disk exhaustion
+    scenario = scenario[:2000]
+    findings = findings[:50000]
+    if league_name:
+        league_name = league_name[:200]
+
     with get_users_db() as conn:
         # Check count — enforce max per user
         count = conn.execute(
@@ -784,6 +790,15 @@ def save_weekly_briefing(user_id: int, league_id: str, league_name: str,
                          opportunity_items: str = "[]",
                          agent_highlights: str = "[]") -> dict:
     """Save a weekly briefing for an Elite user."""
+    # Cap field sizes to prevent disk exhaustion
+    summary = (summary or "")[:10000]
+    urgency_items = (urgency_items or "[]")[:10000]
+    monitor_items = (monitor_items or "[]")[:10000]
+    opportunity_items = (opportunity_items or "[]")[:10000]
+    agent_highlights = (agent_highlights or "[]")[:10000]
+    league_name = (league_name or "")[:200]
+    week_label = (week_label or "")[:50]
+
     with get_users_db() as conn:
         # Upsert: replace if same user+week+league already exists
         conn.execute(

@@ -284,7 +284,7 @@ def create_checkout_session(user: dict, interval: str = "year", promo_code: str 
         code_upper = promo_code.strip().upper()
         coupon_id = _PROMO_CODES.get(code_upper)
         if not coupon_id:
-            return {"error": f"Invalid promo code: {promo_code}", "status": 400}
+            return {"error": "Invalid promo code", "status": 400}
 
     try:
         # Get or create Stripe customer

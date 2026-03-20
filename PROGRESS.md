@@ -2043,3 +2043,74 @@ All `ctx.fillStyle = 'rgba(45,31,20,...)'` → theme-branching with sand rgba fo
 - 59/59 tests pass
 - 0 regressions
 - 20 fixes across 12 files
+
+---
+
+## Quality Audit: 5-Agent Deep Sweep (Mar 20 — Session 13)
+
+**Goal**: Fresh 5-agent parallel audit (crash bugs, dark mode/design, backend security, mobile/UX, brand voice). Fix every finding.
+
+### P0 Security Fixes (5)
+
+| # | Fix | Category | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | Analytics summary endpoint admin-only | Auth bypass | server.py | Was accessible to any authenticated user — now requires X-Admin-Secret header |
+| 2 | Stop reflecting promo codes in errors | Info leakage | billing.py | `f"Invalid promo code: {code}"` → `"Invalid promo code"` |
+| 3 | Sanitize health check error messages | Info leakage | server.py | `str(e)` → `"database unavailable"` / `"bootstrap failed"` in 3 places |
+| 4 | Cap agent memory field sizes | Disk DoS | auth.py | scenario:2000, findings:50000, league_name:200 chars |
+| 5 | Cap weekly briefing field sizes | Disk DoS | auth.py | summary/urgency/monitor/opportunity/highlights:10000, league_name:200, week_label:50 |
+
+### P1 Security + Robustness (2)
+
+| # | Fix | Category | Files | Notes |
+|---|-----|----------|-------|-------|
+| 6 | Reduce screener internal limit 1000→500 | DoS mitigation | players.py | When python_sort or post_filters are active, SQL now fetches max 500 rows (was 1000), reducing enrichment chain load |
+| 7 | resp.ok guard on trackQueryServerSide | Crash prevention | warroom.js | Non-JSON 502/503 responses no longer crash .json() parsing |
+
+### Crash/Edge Case Fix (1)
+
+| # | Fix | Category | Files | Notes |
+|---|-----|----------|-------|-------|
+| 8 | Math.min/max spread→reduce on column tooltips | Stack overflow | lab.js:1525 | Spread operator on 1000+ items could stack-overflow; now uses safe reduce() |
+
+### Design Token Fixes (20+)
+
+| # | Fix | Category | Files | Notes |
+|---|-----|----------|-------|-------|
+| 9 | gradeColor/barColor: 10 Tailwind hex → CSS vars | Design tokens | lab-panels.js:6076-6089 | `#16a34a`→`var(--green)`, `#dc2626`→`var(--red)`, `#eab308`→`var(--yellow)`, `#f97316`→`var(--orange)` |
+| 10 | TD regression bar colors | Design tokens | lab-panels.js:5257 | `#16a34a`/`#dc2626` → `var(--green)`/`var(--red)` |
+| 11 | Career trajectory colors | Design tokens | lab-panels.js:5598 | 4 hardcoded hex → CSS var refs |
+| 12 | Percentile barColor (2 functions) | Design tokens | lab-panels.js:7905,8019 | `#e87422`/`#d44040` → `var(--orange)`/`var(--red)` |
+| 13 | Draft class bust color | Design tokens | lab-panels.js:9491 | `#d44040` → `#e63946` (system --red) |
+| 14 | getPercentileColor function | Design tokens | lab.js:7399-7405 | 5 hex → CSS var refs |
+| 15 | Dominator rating badge | Design tokens | lab.js:7059 | `#22a06b` → `var(--green)` |
+| 16 | Comp similarity/confidence colors | Design tokens | lab.js:7218,7273 | `#22a06b`/`#e87422` → `var(--green)`/`var(--orange)` |
+| 17 | Prospect tier system (5 locations) | Design tokens | lab.js:7869-8296 | All `#22a06b`/`#e87422` → CSS vars (DOM) or system hex (canvas) |
+| 18 | Roster grade inline color | Design tokens | lab.js:12359 | `#e87422` → `var(--yellow)` |
+| 19 | Roster grade canvas color | Design tokens | lab.js:12635 | `#e87422` → `#ffc857` (system hex for canvas) |
+| 20 | Canvas watermark font 14px→16px | Typography | lab.js:11850 | Design guide: Luckiest Guy only at 16px+ |
+
+### Brand Voice Fixes (12)
+
+| # | Fix | Category | Files | Notes |
+|---|-----|----------|-------|-------|
+| 21 | 5 generic "failed" errors → personality | Brand voice | league-intel.html | "power rankings failed" → "fumbled the power rankings..." (×5) |
+| 22 | Sleeper timeout message | Brand voice | league-intel.html | "took too long to load" → "got delayed at the snap" |
+| 23 | Checkout error message | Brand voice | app.js | "could not start checkout" → "checkout got stuffed at the line" |
+| 24 | 5 Cancel buttons → "Never Mind" | Brand voice | lab.html (×4), player.js (×1) | Action-oriented button text |
+
+### UX Fixes (4)
+
+| # | Fix | Category | Files | Notes |
+|---|-----|----------|-------|-------|
+| 25 | Auth login button loading state | UX | app.js | Shows "signing in..." during fetch |
+| 26 | Auth register button loading state | UX | app.js | Shows "creating account..." during fetch |
+| 27 | Manage Subscription shows auth modal | UX | app.js | Was silently returning when not signed in |
+| 28 | Landing page checkout intent storage | Conversion | index.html | Pro/Elite CTAs now store intent to sessionStorage before auth modal — _resumePendingCheckout() fires after registration |
+
+### Session 13 Verified Clean
+- All 11 JS files syntax clean
+- All Python files compile clean
+- 59/59 tests pass
+- 0 regressions
+- 28 fixes across 12 files

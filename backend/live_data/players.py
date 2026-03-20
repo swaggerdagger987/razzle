@@ -424,7 +424,7 @@ def _fetch_screener_uncached(body):
         # When sorting by derived/rate metric or applying post-filters, fetch all matching
         # rows so Python sort/filter operates on complete dataset before pagination
         if python_sort or post_filters:
-            sql_limit = 1000
+            sql_limit = 500
             sql_offset = 0
         else:
             sql_limit = limit

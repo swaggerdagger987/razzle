@@ -1985,7 +1985,7 @@ async function getSleeperPlayers() {
   } catch (e) {
     clearTimeout(timer);
     if (e.name === "AbortError") {
-      throw new Error("Sleeper player data took too long to load. check your connection and try again.");
+      throw new Error("Sleeper player data got delayed at the snap. check your connection and give it another shot.");
     }
     throw e;
   }
@@ -4470,7 +4470,7 @@ async function loadPowerRankings(leagueId, userId, rosters, allPlayers, userMap)
 
   } catch (e) {
     container.innerHTML = '<div class="loading-intel" style="color:var(--red);font-size:14px;">' +
-      (e.name === "AbortError" ? "power rankings timed out. try again." : "power rankings failed. try again.") + '</div>';
+      (e.name === "AbortError" ? "power rankings timed out. give it another shot." : "fumbled the power rankings... give it another shot.") + '</div>';
     var btn = document.getElementById("powerBtn-" + leagueId);
     if (btn) { btn.disabled = false; btn.textContent = "league power rankings"; }
     console.error(e);
@@ -4723,7 +4723,7 @@ async function loadWaiverTendencies(leagueId, userId, rosters, allPlayers, userM
 
   } catch (e) {
     container.innerHTML = '<div class="loading-intel" style="color:var(--red);font-size:14px;">' +
-      (e.name === "AbortError" ? "waiver scan timed out. try again." : "waiver scan failed. try again.") + '</div>';
+      (e.name === "AbortError" ? "waiver scan timed out. give it another shot." : "fumbled the waiver scan... give it another shot.") + '</div>';
     var btn2 = document.getElementById("waiverBtn-" + leagueId);
     if (btn2) { btn2.disabled = false; btn2.textContent = "waiver tendencies"; }
     console.error(e);
@@ -4980,7 +4980,7 @@ async function loadTradeNetwork(leagueId, userId, rosters, allPlayers, userMap) 
 
   } catch (e) {
     container.innerHTML = '<div class="loading-intel" style="color:var(--red);font-size:14px;">' +
-      (e.name === "AbortError" ? "trade network timed out. try again." : "trade network failed. try again.") + '</div>';
+      (e.name === "AbortError" ? "trade network timed out. give it another shot." : "fumbled the trade network... give it another shot.") + '</div>';
     var btn2 = document.getElementById("tradeNetworkBtn-" + leagueId);
     if (btn2) { btn2.disabled = false; btn2.textContent = "trade network"; }
     console.error(e);
@@ -5183,7 +5183,7 @@ async function loadBuildProfiles(leagueId, userId, rosters, allPlayers, userMap)
 
   } catch (e) {
     container.innerHTML = '<div class="loading-intel" style="color:var(--red);font-size:14px;">' +
-      (e.name === "AbortError" ? "profiling timed out. try again." : "profiling failed. try again.") + '</div>';
+      (e.name === "AbortError" ? "profiling timed out. give it another shot." : "fumbled the profiling... give it another shot.") + '</div>';
     var btn = document.getElementById("buildProfileBtn-" + leagueId);
     if (btn) { btn.disabled = false; btn.textContent = "roster build profiles"; }
     console.error(e);
@@ -5546,7 +5546,7 @@ async function loadRosterDepth(leagueId, userId, rosters, allPlayers, userMap) {
 
   } catch (e) {
     container.innerHTML = '<div class="loading-intel" style="color:var(--red); font-size:14px;">' +
-      (e.name === "AbortError" ? "depth analysis timed out. try again." : "depth analysis failed. try again.") + '</div>';
+      (e.name === "AbortError" ? "depth analysis timed out. give it another shot." : "fumbled the depth analysis... give it another shot.") + '</div>';
     // Re-enable button
     var btn = document.getElementById("depthBtn-" + leagueId);
     if (btn) { btn.disabled = false; btn.textContent = "analyze roster depth"; }
