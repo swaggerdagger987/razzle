@@ -401,8 +401,8 @@
           acList.innerHTML = players.map(function(p, i) {
             var pc = POS_COLORS[p.position] || '#8a7565';
             var already = selectedPlayers.some(function(s) { return s.id === p.player_id; });
-            return '<div class="ct-ac-item' + (already ? ' style="opacity:0.4"' : '') +
-              '" data-id="' + escapeHtml(p.player_id) + '" data-name="' + escapeHtml(p.name) +
+            return '<div class="ct-ac-item"' + (already ? ' style="opacity:0.4"' : '') +
+              ' data-id="' + escapeHtml(p.player_id) + '" data-name="' + escapeHtml(p.name) +
               '" data-pos="' + escapeHtml(p.position) + '" data-team="' + escapeHtml(p.team) +
               '" data-idx="' + i + '">' +
               '<span>' + escapeHtml(p.name) + ' <span style="color:' + pc + ';font-weight:700;font-size:11px">' +

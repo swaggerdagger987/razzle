@@ -207,7 +207,7 @@ def initialize_users_db():
             try:
                 conn.execute(f"ALTER TABLE users ADD COLUMN {col} DEFAULT {default}")
                 conn.commit()
-            except Exception:
+            except sqlite3.OperationalError:
                 pass  # Column already exists
 
     logger.info("Users database initialized")
@@ -278,6 +278,9 @@ def _user_dict(row) -> dict:
     d["trial_days_remaining"] = trial_days_remaining
     if trial_end_str:
         d["trial_end"] = trial_end_str
+
+    # Preserve raw DB plan before trial elevation (used by billing checkout check)
+    d["raw_plan"] = d["plan"]
 
     # Effective plan: if trial is active and user has no paid plan, they get Pro
     if trial_active and d["plan"] == "free":

@@ -2911,8 +2911,6 @@ async function runAllAgents(scenario) {
     var statusMsg = successCount + ' specialists done' + (errorCount ? ', ' + errorCount + ' failed' : '');
   }
   setScenarioStatus(statusMsg, razzleSynthesis ? 'done' : 'error');
-  setScenarioButtonsDisabled(false);
-  _runningAllAgents = false;
 
   // ── CROSS-AGENT TRIGGERS ──────────────────────────────────────────────
   // Scan specialist outputs for trigger signals and auto-invoke follow-ups
@@ -2943,7 +2941,12 @@ async function runAllAgents(scenario) {
     });
 
     await Promise.all(followUpPromises);
+    setScenarioStatus(statusMsg, razzleSynthesis ? 'done' : 'error');
   }
+
+  // Re-enable buttons only after all work (including cross-agent triggers) is done
+  setScenarioButtonsDisabled(false);
+  _runningAllAgents = false;
 
   window.dispatchEvent(new CustomEvent('razzle:all-agents-done', {
     detail: {

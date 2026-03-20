@@ -1082,7 +1082,7 @@ function _syncUndoRedoButtons() {
 
   // Dynamic year fallbacks (shared by try + catch)
   const _curYear = new Date().getFullYear();
-  const _nflYear = new Date().getMonth() >= 7 ? _curYear : _curYear - 1;
+  const _nflYear = new Date().getMonth() >= 8 ? _curYear : _curYear - 1;
 
   // Load NFL, prospect, and college options in parallel
   try {
@@ -4591,9 +4591,9 @@ function _formatDiffCell(val, baseVal, col, key) {
 // ─── Player selection (for compare/charts) ───────────────────────
 function toggleSelectAll(checked) {
   if (checked) {
-    // Select all visible players (up to 5)
+    // Select all visible players (up to compare limit)
     state.selectedPlayers = [];
-    const max = Math.min(state.items.length, 5);
+    const max = Math.min(state.items.length, _getCompareLimit());
     for (let i = 0; i < max; i++) {
       const p = state.items[i];
       const pid = p.player_id || p.player_name;
@@ -7881,7 +7881,7 @@ function renderTierView(data, container) {
     { key: "no_data", label: "No Combine Data", color: "var(--ink-light)", desc: "did not test" },
   ];
 
-  let html = `<div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); margin-bottom:16px;">${data.draft_year} ${data.position} prospects — grouped by average combine percentile</div>`;
+  let html = `<div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); margin-bottom:16px;">${escapeHtml(String(data.draft_year))} ${escapeHtml(data.position)} prospects — grouped by average combine percentile</div>`;
 
   let hasAnyProspects = false;
 
@@ -7927,7 +7927,7 @@ function renderTierView(data, container) {
   }
 
   if (!hasAnyProspects) {
-    html += `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">no ${data.position} prospects found for ${data.draft_year}</div>`;
+    html += `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">no ${escapeHtml(data.position)} prospects found for ${escapeHtml(String(data.draft_year))}</div>`;
   }
 
   container.innerHTML = html;
@@ -8212,7 +8212,7 @@ function getRPSTierDef(rps) {
 function renderBigBoard(data, container) {
   const prospects = data.prospects || [];
   if (prospects.length === 0) {
-    container.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">no prospects found for ${data.draft_year} ${data.position}</div>`;
+    container.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">no prospects found for ${escapeHtml(String(data.draft_year))} ${escapeHtml(data.position)}</div>`;
     return;
   }
 
@@ -8232,7 +8232,7 @@ function renderBigBoard(data, container) {
     { key: "flier", label: "Flier", color: "var(--orange)", desc: "RPS below 55" },
   ];
 
-  let html = `<div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); margin-bottom:16px;">${data.draft_year} ${data.position} Big Board — ranked by Razzle Prospect Score</div>`;
+  let html = `<div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); margin-bottom:16px;">${escapeHtml(String(data.draft_year))} ${escapeHtml(data.position)} Big Board — ranked by Razzle Prospect Score</div>`;
 
   for (const td of tierDefs) {
     const tierProspects = tiers[td.key];

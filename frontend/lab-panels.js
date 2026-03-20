@@ -6,7 +6,7 @@
 (function() {
   'use strict';
 
-  var _latestSeason = (function() { var n = new Date(); return n.getMonth() >= 7 ? n.getFullYear() : n.getFullYear() - 1; })();
+  var _latestSeason = (function() { var n = new Date(); return n.getMonth() >= 8 ? n.getFullYear() : n.getFullYear() - 1; })();
 
   var defs = window._labPanelDefs = window._labPanelDefs || [];
 
@@ -145,7 +145,7 @@
         if (!seasonsLoaded && data.available_seasons) {
           seasonsLoaded = true;
           seasonSel.innerHTML = '';
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             var opt = document.createElement('option');
             opt.value = s; opt.textContent = s;
             seasonSel.appendChild(opt);
@@ -478,7 +478,7 @@
         if (!seasonsLoaded && data.available_seasons) {
           seasonsLoaded = true;
           seasonSel.innerHTML = '';
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             var opt = document.createElement('option');
             opt.value = s; opt.textContent = s;
             if (s === data.season) opt.selected = true;
@@ -649,7 +649,7 @@
       html += '<div class="tv-value">' + fmt(p.trade_value) + '</div></div>';
       html += '<div class="tv-stats">';
       html += '<div class="tv-stat"><div>' + fmt(p.ppg) + '</div><div class="tv-stat-label">PPG</div></div>';
-      html += '<div class="tv-stat"><div>' + (p.games || '-') + '</div><div class="tv-stat-label">GP</div></div>';
+      html += '<div class="tv-stat"><div>' + (p.games != null ? p.games : '-') + '</div><div class="tv-stat-label">GP</div></div>';
       html += '</div>';
       html += '<span class="tv-tier-badge t' + p.tier + '">' + escapeHtml(p.tier_label) + '</span>';
       html += '</div>';
@@ -735,7 +735,7 @@
         if (!seasonsLoaded && data.available_seasons) {
           seasonsLoaded = true;
           seasonSel.innerHTML = '';
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             var opt = document.createElement('option');
             opt.value = s; opt.textContent = s;
             seasonSel.appendChild(opt);
@@ -937,7 +937,7 @@
         html += '<td class="center"><span class="vorp-badge ' + tier + '">' + sign + fmt(p.vorp, 2) + '</span></td>';
         html += '<td class="center" style="font-weight:700">' + fmt(p.ppg) + '</td>';
         html += '<td class="center" style="color:var(--ink-medium)">' + fmt(p.replacement_ppg) + '</td>';
-        html += '<td class="center">' + (p.pos_rank || '-') + '</td>';
+        html += '<td class="center">' + (p.pos_rank != null ? p.pos_rank : '-') + '</td>';
         html += '</tr>';
       });
       html += '</tbody></table></div>';
@@ -1009,7 +1009,7 @@
         if (!seasonsLoaded && data.available_seasons) {
           seasonsLoaded = true;
           seasonSel.innerHTML = '';
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             var opt = document.createElement('option');
             opt.value = s; opt.textContent = s;
             seasonSel.appendChild(opt);
@@ -1080,7 +1080,7 @@
         if (!seasonsLoaded && data.available_seasons) {
           seasonsLoaded = true;
           seasonSel.innerHTML = '';
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             var opt = document.createElement('option');
             opt.value = s; opt.textContent = s;
             if (s === data.season) opt.selected = true;
@@ -1220,7 +1220,7 @@
         if (!seasonsLoaded && data.available_seasons) {
           seasonsLoaded = true;
           seasonSel.innerHTML = '';
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             var opt = document.createElement('option');
             opt.value = s; opt.textContent = s;
             if (s === data.season) opt.selected = true;
@@ -1352,7 +1352,7 @@
         if (!seasonsLoaded && data.available_seasons) {
           seasonsLoaded = true;
           seasonSel.innerHTML = '';
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             var opt = document.createElement('option');
             opt.value = s; opt.textContent = s;
             if (s === data.season) opt.selected = true;
@@ -1473,7 +1473,7 @@
       fetch(url).then(function(r) { if (!r.ok) throw new Error('API error'); return r.json(); }).then(function(data) {
         if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#bo-season');
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             var o = document.createElement('option');
             o.value = s; o.textContent = s;
             if (s == (data.season || (data.available_seasons.length ? data.available_seasons[0] : null))) o.selected = true;
@@ -1663,7 +1663,7 @@
       fetch(url).then(function(r) { if (!r.ok) throw new Error('API error'); return r.json(); }).then(function(data) {
         if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#bs-season');
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             var o = document.createElement('option');
             o.value = s; o.textContent = s;
             if (s == (data.season || (data.available_seasons.length ? data.available_seasons[0] : null))) o.selected = true;
@@ -1881,7 +1881,7 @@
       fetch(url).then(function(r) { if (!r.ok) throw new Error('API error'); return r.json(); }).then(function(data) {
         if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#stk-season');
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             var o = document.createElement('option');
             o.value = s; o.textContent = s;
             if (s == data.season) o.selected = true;
@@ -1947,7 +1947,7 @@
         if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#ww-season');
           sel.innerHTML = '';
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             var o = document.createElement('option');
             o.value = s; o.textContent = s;
             if (s === data.season) o.selected = true;
@@ -2035,7 +2035,7 @@
       fetch(url).then(function(r) { if (!r.ok) throw new Error('API error'); return r.json(); }).then(function(data) {
         if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#sc-season');
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             var o = document.createElement('option');
             o.value = s; o.textContent = s;
             if (s === data.season) o.selected = true;
@@ -2143,7 +2143,7 @@
         if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#hc-season');
           sel.innerHTML = '';
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             var o = document.createElement('option');
             o.value = s; o.textContent = s;
             if (s === data.season) o.selected = true;
@@ -2380,7 +2380,7 @@
       }).then(function(data) {
         if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#eff-season');
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             var o = document.createElement('option');
             o.value = s; o.textContent = s;
             if (s == data.season) o.selected = true;
@@ -2594,7 +2594,7 @@
       }).then(function(data) {
         if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#con-season');
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             var o = document.createElement('option');
             o.value = s; o.textContent = s;
             if (s == data.season) o.selected = true;
@@ -2673,7 +2673,7 @@
         if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#se-season');
           var snapSeasons = data.snap_seasons || [];
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             var o = document.createElement('option');
             o.value = s;
             var hasSnaps = isCollege || snapSeasons.indexOf(s) > -1;
@@ -2780,7 +2780,7 @@
       }).then(function(data) {
         if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#wl-season');
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             var o = document.createElement('option');
             o.value = s; o.textContent = s;
             if (s == data.season) o.selected = true;
@@ -2887,7 +2887,7 @@
       }).then(function(data) {
         if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#dt-season');
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             var o = document.createElement('option');
             o.value = s; o.textContent = s;
             if (s == data.season) o.selected = true;
@@ -2982,7 +2982,7 @@
       }).then(function(data) {
         if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#tp-season');
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             var o = document.createElement('option');
             o.value = s; o.textContent = s;
             if (s == data.season) o.selected = true;
@@ -3111,7 +3111,7 @@
       }).then(function(data) {
         if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#dr-season');
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             var o = document.createElement('option');
             o.value = s; o.textContent = s;
             if (s == data.season) o.selected = true;
@@ -3218,7 +3218,7 @@
       }).then(function(data) {
         if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#gt-season');
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             var o = document.createElement('option');
             o.value = s; o.textContent = s;
             if (s == data.season) o.selected = true;
@@ -3321,7 +3321,7 @@
         currentData = data;
         if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#wh-season');
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             var o = document.createElement('option');
             o.value = s; o.textContent = s;
             if (s === data.season) o.selected = true;
@@ -3517,7 +3517,7 @@
         currentData = data;
         if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#mh-season');
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             var o = document.createElement('option');
             o.value = s; o.textContent = s;
             if (s == data.season) o.selected = true;
@@ -3704,7 +3704,7 @@
       }).then(function(data) {
         if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#sk-season');
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             var o = document.createElement('option');
             o.value = s; o.textContent = s;
             if (s === data.season) o.selected = true;
@@ -3943,7 +3943,7 @@
       }).then(function(data) {
         if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#rz-season');
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             var o = document.createElement('option');
             o.value = s; o.textContent = s;
             sel.appendChild(o);
@@ -4021,7 +4021,7 @@
         currentData = data;
         if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#str-season');
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             var o = document.createElement('option');
             o.value = s; o.textContent = s;
             if (s === data.season) o.selected = true;
@@ -4171,7 +4171,7 @@
         availableWeeks = data.available_weeks || [];
         if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#wkl-season');
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             var o = document.createElement('option');
             o.value = s; o.textContent = s;
             if (String(s) === String(data.season)) o.selected = true;
@@ -4241,14 +4241,14 @@
         var ptsCls = pts >= 30 ? 'elite' : pts >= 20 ? 'great' : 'good';
         html += '<td class="center"><span class="wkl-pts ' + ptsCls + '">' + fmt(pts, 1) + '</span></td>';
 
-        html += '<td class="center hide-mobile">' + (p.pass_yd || '-') + '</td>';
-        html += '<td class="center hide-mobile">' + (p.pass_td || '-') + '</td>';
-        html += '<td class="center">' + (p.rush_yd || '-') + '</td>';
-        html += '<td class="center hide-mobile">' + (p.rush_td || '-') + '</td>';
-        html += '<td class="center">' + (p.rec || '-') + '</td>';
-        html += '<td class="center">' + (p.rec_yd || '-') + '</td>';
-        html += '<td class="center hide-mobile">' + (p.rec_td || '-') + '</td>';
-        html += '<td class="center hide-mobile">' + (p.tgt || '-') + '</td>';
+        html += '<td class="center hide-mobile">' + (p.pass_yd != null ? p.pass_yd : '-') + '</td>';
+        html += '<td class="center hide-mobile">' + (p.pass_td != null ? p.pass_td : '-') + '</td>';
+        html += '<td class="center">' + (p.rush_yd != null ? p.rush_yd : '-') + '</td>';
+        html += '<td class="center hide-mobile">' + (p.rush_td != null ? p.rush_td : '-') + '</td>';
+        html += '<td class="center">' + (p.rec != null ? p.rec : '-') + '</td>';
+        html += '<td class="center">' + (p.rec_yd != null ? p.rec_yd : '-') + '</td>';
+        html += '<td class="center hide-mobile">' + (p.rec_td != null ? p.rec_td : '-') + '</td>';
+        html += '<td class="center hide-mobile">' + (p.tgt != null ? p.tgt : '-') + '</td>';
         html += '</tr>';
       });
 
@@ -4320,7 +4320,7 @@
       }).then(function(data) {
         if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#mv-season');
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             var o = document.createElement('option');
             o.value = s; o.textContent = s;
             if (s === data.season) o.selected = true;
@@ -4416,7 +4416,7 @@
       }).then(function(data) {
         if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#po-season');
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             var o = document.createElement('option');
             o.value = s; o.textContent = s;
             if (s === data.season) o.selected = true;
@@ -4861,12 +4861,12 @@
       html += '<div class="ag-summary">';
       var agIsCollege = typeof state !== 'undefined' && state.universe === 'college';
       var agPeakLabel = agIsCollege ? 'Peak Year' : 'Peak Age';
-      var agPeakVal = agIsCollege ? ('Yr ' + (peak.age || '-')) : (peak.age || '-');
+      var agPeakVal = agIsCollege ? ('Yr ' + (peak.age != null ? peak.age : '-')) : (peak.age != null ? peak.age : '-');
       var agStatLabel = agIsCollege ? 'Peak YPG' : 'Peak PPG';
       html += '<div class="ag-card"><div class="ag-card-label">' + agPeakLabel + '</div><div class="ag-card-value">' + agPeakVal + '</div></div>';
       html += '<div class="ag-card"><div class="ag-card-label">' + agStatLabel + '</div><div class="ag-card-value">' + fmt(peak.ppg) + '</div></div>';
       html += '<div class="ag-card"><div class="ag-card-label">Decline Start</div><div class="ag-card-value">' + (data.decline_start ? (agIsCollege ? 'Yr ' + data.decline_start : data.decline_start) : '-') + '</div></div>';
-      html += '<div class="ag-card"><div class="ag-card-label">Sample Size</div><div class="ag-card-value">' + (data.sample_size || '-') + '</div></div>';
+      html += '<div class="ag-card"><div class="ag-card-label">Sample Size</div><div class="ag-card-value">' + (data.sample_size != null ? data.sample_size : '-') + '</div></div>';
       html += '</div>';
       body.innerHTML = html;
 
@@ -5133,7 +5133,7 @@
         html += '<td class="spc-rank">' + (i + 1) + '</td>';
         html += '<td class="spc-name">' + pLink(p.name, p.player_id) + ' <span class="spc-team">' + escapeHtml(p.team || '') + '</span></td>';
         html += '<td><span class="spc-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
-        html += '<td class="spc-num">' + (p.games_played || '-') + '</td>';
+        html += '<td class="spc-num">' + (p.games_played != null ? p.games_played : '-') + '</td>';
         html += '<td class="spc-num">' + fmt(p.ppg) + '</td>';
         html += '<td class="spc-milestones">';
         var milestones = p.milestones || [];
@@ -5427,7 +5427,7 @@
         html += '<td class="ay-num">' + fmt(p.racr, 2) + '</td>';
         html += '<td class="ay-num">' + fmt(p.ppg) + '</td>';
         html += '<td class="ay-num"><span class="ay-regr-badge ' + regrClass + '">' + regrSign + fmt(regrDelta) + '</span></td>';
-        html += '<td class="ay-num">' + (p.games_played || '-') + '</td>';
+        html += '<td class="ay-num">' + (p.games_played != null ? p.games_played : '-') + '</td>';
         html += '<td class="ay-annotation hide-mobile">' + escapeHtml(p.annotation || '') + '</td>';
         html += '</tr>';
       });
@@ -5507,7 +5507,7 @@
   function seasonOptions(selected) {
     var html = '';
     var now = new Date();
-    var latest = now.getMonth() >= 7 ? now.getFullYear() : now.getFullYear() - 1;
+    var latest = now.getMonth() >= 8 ? now.getFullYear() : now.getFullYear() - 1;
     for (var y = latest; y >= 2015; y--) {
       html += '<option value="' + y + '"' + (y === (selected || latest) ? ' selected' : '') + '>' + y + '</option>';
     }
@@ -6303,8 +6303,8 @@
         html += '<td class="rpc-num">' + fmt(p.dominator) + '%</td>';
         // PPG / Age / GP
         html += '<td class="rpc-num">' + fmt(p.ppg) + '</td>';
-        html += '<td class="rpc-num">' + (p.age || '-') + '</td>';
-        html += '<td class="rpc-num">' + (p.games_played || '-') + '</td>';
+        html += '<td class="rpc-num">' + (p.age != null ? p.age : '-') + '</td>';
+        html += '<td class="rpc-num">' + (p.games_played != null ? p.games_played : '-') + '</td>';
         html += '<td class="rpc-annotation">' + escapeHtml(p.annotation || '') + '</td>';
         html += '</tr>';
       });
@@ -6918,7 +6918,7 @@
         if (data.available_seasons && data.available_seasons.length) {
           var sel = el.querySelector('.aw2-season');
           sel.innerHTML = '';
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             sel.innerHTML += '<option value="' + s + '"' + (s === data.season ? ' selected' : '') + '>' + s + '</option>';
           });
         }
@@ -7407,7 +7407,7 @@
           var sSel = el.querySelector('.exp-season');
           var curSeason = sSel.value;
           sSel.innerHTML = '';
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             sSel.innerHTML += '<option value="' + s + '"' + (String(s) === curSeason ? ' selected' : '') + '>' + s + '</option>';
           });
         }
@@ -7870,7 +7870,7 @@
         if (data.available_seasons) {
           var sel = el.querySelector('.opp2-season');
           sel.innerHTML = '';
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             sel.innerHTML += '<option value="' + s + '"' + (s === data.season ? ' selected' : '') + '>' + s + '</option>';
           });
           populateWeekSelect(el, 'opp2-week', sel.value, load);
@@ -8801,7 +8801,7 @@
         if (data.available_seasons) {
           var sel = el.querySelector('.sos2-season');
           sel.innerHTML = '';
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             sel.innerHTML += '<option value="' + s + '"' + (s === data.season ? ' selected' : '') + '>' + s + '</option>';
           });
         }
@@ -9242,7 +9242,7 @@
         if (data.available_seasons) {
           var sSel = el.querySelector('.tm-season');
           sSel.innerHTML = '';
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             sSel.innerHTML += '<option value="' + s + '"' + (s === data.season ? ' selected' : '') + '>' + s + '</option>';
           });
         }
@@ -9362,7 +9362,7 @@
         }
         if (!seasonLoaded && data.available_seasons) {
           var sel = el.querySelector('.tf2-season');
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             sel.innerHTML += '<option value="' + s + '">' + s + '</option>';
           });
           sel.value = data.season;
@@ -9428,7 +9428,7 @@
       html += '<div class="tf2-sel-stats">';
       html += '<div class="tf2-sel-stat"><div class="tf2-sel-stat-val">' + fmt(sel.trade_value) + '</div><div class="tf2-sel-stat-label">Trade Value</div></div>';
       html += '<div class="tf2-sel-stat"><div class="tf2-sel-stat-val">' + fmt(sel.ppg) + '</div><div class="tf2-sel-stat-label">PPG</div></div>';
-      html += '<div class="tf2-sel-stat"><div class="tf2-sel-stat-val">' + (sel.games || '-') + '</div><div class="tf2-sel-stat-label">GP</div></div>';
+      html += '<div class="tf2-sel-stat"><div class="tf2-sel-stat-val">' + (sel.games != null ? sel.games : '-') + '</div><div class="tf2-sel-stat-label">GP</div></div>';
       html += '</div></div>';
 
       html += '<div class="tf2-target-controls"><div class="tf2-pos-tabs">';
@@ -9702,7 +9702,7 @@
         // Populate season selector
         var sel = el.querySelector('.corr-season');
         if (sel.options.length <= 1 && data.available_seasons) {
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             var opt = document.createElement('option');
             opt.value = s; opt.textContent = s;
             sel.appendChild(opt);
@@ -10005,7 +10005,7 @@
         // Populate season selector
         var sSel = el.querySelector('.pr-season');
         if (data.available_seasons && sSel.options.length === 0) {
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             var opt = document.createElement('option');
             opt.value = s; opt.textContent = s;
             if (s === data.season) opt.selected = true;
@@ -10179,7 +10179,7 @@
           html += '<td style="padding:4px 6px;">' + escapeHtml(p.full_name) + '</td>';
           html += '<td style="text-align:center;padding:4px 6px;color:' + posColor + ';font-weight:bold;">' + escapeHtml(p.position) + '</td>';
           html += '<td style="text-align:right;padding:4px 6px;">' + fmt(p.ppg) + '</td>';
-          html += '<td style="text-align:right;padding:4px 6px;">' + (p.age || '-') + '</td>';
+          html += '<td style="text-align:right;padding:4px 6px;">' + (p.age != null ? p.age : '-') + '</td>';
           html += '<td style="text-align:right;padding:4px 6px;font-weight:bold;">' + fmt(p.trade_value) + '</td></tr>';
         });
         html += '</table>';
@@ -10288,7 +10288,7 @@
       fetch(url).then(function(r) { if (!r.ok) throw new Error('API error'); return r.json(); }).then(function(data) {
         if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#gs-season');
-          data.available_seasons.forEach(function(s) {
+          (data.available_seasons || []).forEach(function(s) {
             var o = document.createElement('option');
             o.value = s; o.textContent = s;
             if (s == data.season) o.selected = true;

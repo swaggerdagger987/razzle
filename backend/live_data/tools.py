@@ -545,13 +545,14 @@ def fetch_draft_class(draft_year=None, position=None):
                     p.player_id, p.team as current_team, p.age,
                     SUM(s.fantasy_points_ppr) as total_ppr,
                     COUNT(DISTINCT s.season) as seasons_played,
-                    COUNT(DISTINCT s.week) as total_games
+                    COUNT(DISTINCT s.season || '-' || s.week) as total_games
                 FROM draft_picks d
                 LEFT JOIN players p ON p.position = d.position
                     AND (LOWER(p.full_name) = LOWER(d.player_name)
                          OR LOWER(REPLACE(REPLACE(REPLACE(p.full_name, ' Jr.', ''), ' III', ''), ' II', ''))
                             = LOWER(REPLACE(REPLACE(REPLACE(d.player_name, ' Jr.', ''), ' III', ''), ' II', '')))
                 LEFT JOIN player_week_stats s ON s.player_id = p.player_id
+                    AND s.season_type = 'regular'
                 WHERE d.season = ?
                   AND d.position IN ('QB', 'RB', 'WR', 'TE')
                   {pos_filter}
@@ -1376,6 +1377,7 @@ def fetch_playoff_schedule(season=None, position=None, limit=40):
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ?
+                  AND s.season_type = 'regular'
                   AND p.position IN ('QB', 'RB', 'WR', 'TE')
                   AND s.opponent_team IS NOT NULL AND s.opponent_team != ''
                 GROUP BY s.opponent_team, p.position
@@ -2481,7 +2483,7 @@ def fetch_target_premium(season=None, position=None, limit=50, week=None):
                        SUM(w.receiving_yards_after_catch) as tot_yac,
                        COUNT(DISTINCT w.week) as gp
                 FROM player_week_stats w
-                JOIN players p ON p.gsis_id = w.player_id
+                JOIN players p ON p.player_id = w.player_id
                 WHERE w.season = ? AND p.fantasy_relevant = 1
                 {week_filter}
                 {pos_filter}

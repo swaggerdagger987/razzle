@@ -2281,3 +2281,101 @@ All 11 JS files syntax clean. 16 Python files compile clean.
 | XSS in charts.js | 2 HIGH: unescaped player names/positions in getPlayerOptions() innerHTML and compare table header | FIXED — escapeHtml() added to both |
 | Backend security | ALTER TABLE f-string in auth.py (LOW — hardcoded column names, not user input) | Noted, no fix needed |
 | Smoke tests | 10/11 pass (week_filter failure is pre-existing local DB issue) | No regressions |
+
+### Sweep Mode (Mar 20 — session 3)
+
+| Audit | Findings | Action |
+|-------|----------|--------|
+| JS falsy zero display | 12 instances of (val \|\| '-') on numeric stats (games, age, pos_rank, weekly leader stats) treated 0 as null | FIXED — all changed to (val != null ? val : '-') in lab-panels.js lines 652, 940, 4244-4251, 4864, 4869, 5136, 5430, 6306-6307, 9431, 10182 |
+| Division by zero | compare.js:267 getStatValue division by games without guard | FIXED — added (games \|\| 1) |
+| Bare except blocks | server.py:179, server.py:219 caught all exceptions; auth.py:210 caught all exceptions | FIXED — narrowed to sqlite3.OperationalError/DatabaseError |
+| Backend fetchone()[0] | 5+ locations use .fetchone()[0] on aggregate queries | VERIFIED SAFE — COUNT(*)/MAX() always return a row (never None) |
+| Frontend fetch error handling | All fetch() calls in 11 JS files have .catch() or try/catch | Clean |
+| Frontend XSS | All dynamic data in innerHTML uses escapeHtml() | Clean |
+| Backend week param coverage | All panel endpoints correctly aligned with function signatures | Clean |
+| Event listener leaks | innerHTML replacement handles cleanup; no persistent element leaks | Clean |
+
+---
+
+## QA Ticket Consumption (Mar 20 — Ship Loop)
+
+| Ticket | Severity | Status | Fix |
+|--------|----------|--------|-----|
+| FUNC-010: Production 502 | P0 | ESCALATE | Requires human action — check Render dashboard logs and restart service. Cannot fix from code. |
+| FUNC-011: Draft class PPG inflated | P0 | FIXED | `COUNT(DISTINCT s.week)` collapsed games across seasons. Changed to `COUNT(DISTINCT s.season \|\| '-' \|\| s.week)` in tools.py:548. Bo Nix was showing 33 PPG instead of ~20. |
+| FUNC-009: Matchup heatmap playoff data | P2 | FIXED | Added `AND s.season_type = 'regular'` to both queries in analytics.py:fetch_matchup_heatmap(). Playoff teams had inflated game counts (21 vs 17), diluting their defensive PPG. |
+
+Smoke tests: 10/11 pass (week_filter is pre-existing, unrelated to these fixes).
+
+### Sweep: Regular-season filter audit (Mar 20)
+
+| Function | File | Fix |
+|----------|------|-----|
+| fetch_strength_of_schedule | dashboards.py:403,438 | Added season_type='regular' to defense grid + player weekly queries |
+| fetch_stock_watch | dashboards.py:645 | Added season_type='regular' to defense grid query |
+| fetch_season_awards | dashboards.py:1390,1415,1475 | Added season_type='regular' to player weekly, defense grid, and team totals queries |
+| fetch_report_cards | dashboards.py:1082,1111,1142 | Added season_type='regular' to player weekly, defense grid, and team totals queries |
+
+Same root cause as FUNC-009: playoff games inflated game counts for playoff teams, diluting PPG averages. All 4 functions compute defense PPG-allowed grids used for SOS, stock watch, awards, and report cards.
+
+### Sweep: XSS escape in prospect views (Mar 20)
+
+| File | Line | Fix |
+|------|------|-----|
+| lab.js | 7884 | escapeHtml() on draft_year/position in prospect tier header |
+| lab.js | 7930 | escapeHtml() on position/draft_year in prospect tier empty state |
+| lab.js | 8215 | escapeHtml() on draft_year/position in big board empty state |
+| lab.js | 8235 | escapeHtml() on draft_year/position in big board header |
+
+### Smoke test note
+week_filter failure (10/11) is a stale server process issue, not a code bug. Verified: calling _fetch_screener_uncached() directly with week=1 returns games=1 correctly. The running server process needs restart to pick up code changes.
+
+---
+
+## Ship Loop: Sweep Round 4 (Mar 20) — Branch: ship/launch-fixes
+
+**Goal**: 3-agent parallel audit (backend security, frontend crash bugs, standalone HTML panels). Fix all findings.
+
+| # | Fix | Severity | File(s) | Notes |
+|---|-----|----------|---------|-------|
+| 1 | Trial users blocked from purchasing | P1 | auth.py, billing.py | `_user_dict()` elevated trial plan to "pro", causing checkout to reject with "already subscribed." Added `raw_plan` field to user dict; billing uses raw_plan for idempotency check. |
+| 2 | Cache race condition (KeyError) | P2 | core.py | Fast-path cache hit used multiple dict accesses without lock. Concurrent eviction could pop the key between `in` check and access. Refactored to single `entry = _cache[key]` with try/except KeyError. |
+| 3 | comptable.html broken HTML attribute | P1 | comptable.html | Autocomplete item: `class="ct-ac-item style="opacity:0.4""` — style attribute was concatenated into class value. Fixed closing quote placement. |
+| 4 | Season default off-by-one (13 files) | P2 | 10 standalone HTML + lab.js + lab-panels.js + league-intel.html | `getMonth() >= 7` (August) should be `>= 8` (September). NFL regular season starts in September; August would default to current year with no data. |
+| 5 | Unguarded available_seasons.forEach (40 instances) | P2 | lab-panels.js | All `data.available_seasons.forEach()` calls now use `(data.available_seasons || []).forEach()` to prevent crash if API omits field. |
+| 6 | Analytics fetch missing .catch() (3 pages) | P2 | usage.html, yoy.html, airyards.html | `try { fetch(...) } catch(e) {}` doesn't catch async rejections. Changed to `fetch(...).catch(function(){})`. |
+| 7 | efficiency.html catch_rate zero coercion | P2 | efficiency.html | `p.catch_rate > 0` treated 0.0% as null. Changed to `p.catch_rate != null` to correctly display zero catch rate. |
+
+### Verified Clean
+- 10/11 smoke tests pass (week_filter is pre-existing local DB issue)
+- All 11 JS files syntax clean
+- All modified Python files compile clean
+- 0 remaining `getMonth() >= 7` in frontend
+- 0 remaining unguarded `data.available_seasons.forEach` in lab-panels.js
+
+---
+
+## Ship Loop: Sweep Round 5 — Data Correctness + Interaction (Mar 20)
+
+**Goal**: Deep audit via 2 agents (backend data correctness, frontend interaction edge cases).
+
+| # | Fix | Severity | File(s) | Notes |
+|---|-----|----------|---------|-------|
+| 1 | target_premium JOIN on gsis_id instead of player_id | P0 | tools.py:2484 | Wrong JOIN column caused player mismatches/exclusions. Every other function uses player_id. |
+| 2 | draft_class missing season_type='regular' filter | P0 | tools.py:554 | LEFT JOIN to player_week_stats included playoff data, inflating PPG. Bo Nix-style inflation. |
+| 3 | stock_watch player query missing season_type filter | P1 | dashboards.py:630 | Player PPG included playoffs but defense grid used regular-season-only data. Mismatch distorted stock scores. |
+| 4 | heatmap missing season_type filter | P1 | analytics.py:222 | Stat aggregation included playoff weeks, inflating totals for playoff teams. |
+| 5 | opportunity_share player+team queries missing season_type | P1 | dashboards.py:895,929 | Both player totals and team denominators included playoff data. Opp share percentages were wrong. |
+| 6 | playoff_schedule defense grid missing season_type | P1 | tools.py:1379 | Defense PPG-allowed included playoff games, distorting matchup grades. |
+| 7 | runAllAgents re-enables buttons before cross-agent triggers finish | P1 | warroom.js:2806 | Moved setScenarioButtonsDisabled(false) and _runningAllAgents=false after Promise.all(followUpPromises). Prevents double-click corruption. |
+| 8 | toggleSelectAll bypasses free user compare limit | P1 | lab.js:4596 | Hard-coded max=5 instead of using _getCompareLimit() (returns 2 for free). Free users could select 5 players. |
+| 9 | toggleLeague collapse-then-refetch on retry | P2 | league-intel.html:1994 | Toggle collapsed card on retry click, loading data into hidden container. Refactored to only toggle on loaded state, keep expanded during retry. |
+
+### Deferred (architectural, post-launch)
+- Virtual scroll destroying row highlights/expanded rows — needs row state persistence in HTML strings, major refactor
+- HAVING clause with week filter returning empty — documented, endpoints where weekly doesn't make sense
+- "Top 10" quick filter threshold computed from current page — cosmetic, threshold is approximate
+
+### Verified Clean
+- 10/11 smoke tests pass (week_filter pre-existing)
+- All JS/Python syntax clean

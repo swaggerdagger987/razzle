@@ -17,6 +17,7 @@ import httpx
 import logging
 import os
 import re
+import sqlite3
 import time as _time
 import uvicorn
 
@@ -176,7 +177,7 @@ def bootstrap_database():
         # Check if we already have data
         try:
             count = conn.execute("SELECT COUNT(*) FROM players").fetchone()[0]
-        except Exception:
+        except (sqlite3.OperationalError, sqlite3.DatabaseError):
             logger.warning("Could not count players table — may not exist yet", exc_info=True)
             count = 0
 
@@ -216,7 +217,7 @@ def bootstrap_database():
                 snap_count = conn.execute(
                     "SELECT COUNT(*) FROM player_week_stats WHERE offense_snaps IS NOT NULL"
                 ).fetchone()[0]
-            except Exception:
+            except (sqlite3.OperationalError, sqlite3.DatabaseError):
                 snap_count = -1
             if snap_count == 0:
                 logger.info("Snap counts missing — syncing offense_snaps...")

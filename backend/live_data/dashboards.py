@@ -407,6 +407,7 @@ def fetch_strength_of_schedule(season=None, position=None, limit=30):
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ?
+                  AND s.season_type = 'regular'
                   AND p.position IN ('QB', 'RB', 'WR', 'TE')
                   AND s.opponent_team IS NOT NULL AND s.opponent_team != ''
                 GROUP BY s.opponent_team, p.position
@@ -442,6 +443,7 @@ def fetch_strength_of_schedule(season=None, position=None, limit=30):
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ?
+                  AND s.season_type = 'regular'
                   AND p.position IN ('QB', 'RB', 'WR', 'TE')
                   AND p.fantasy_relevant = 1
                   AND s.opponent_team IS NOT NULL AND s.opponent_team != ''
@@ -626,6 +628,7 @@ def fetch_stock_watch(season=None, position=None, limit=30):
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ?
+                  AND s.season_type = 'regular'
                   AND p.position IN ('QB', 'RB', 'WR', 'TE')
                   AND p.fantasy_relevant = 1
                   AND s.opponent_team IS NOT NULL AND s.opponent_team != ''
@@ -649,6 +652,7 @@ def fetch_stock_watch(season=None, position=None, limit=30):
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ?
+                  AND s.season_type = 'regular'
                   AND p.position IN ('QB', 'RB', 'WR', 'TE')
                   AND s.opponent_team IS NOT NULL AND s.opponent_team != ''
                 GROUP BY s.opponent_team, p.position
@@ -890,6 +894,7 @@ def fetch_opportunity_share(season=None, position=None, limit=30, week=None):
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ?
+                  AND s.season_type = 'regular'
                   AND p.position IN ('QB', 'RB', 'WR', 'TE')
                   AND p.fantasy_relevant = 1
                   {pos_filter}
@@ -924,6 +929,7 @@ def fetch_opportunity_share(season=None, position=None, limit=30, week=None):
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ?
+                  AND s.season_type = 'regular'
                   AND p.position IN ('QB', 'RB', 'WR', 'TE')
                   AND p.fantasy_relevant = 1
                   {tt_week_filter}
@@ -1089,6 +1095,7 @@ def fetch_report_cards(season=None, position=None, limit=25, week=None):
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ?
+                  AND s.season_type = 'regular'
                   AND p.position IN ('QB', 'RB', 'WR', 'TE')
                   AND p.fantasy_relevant = 1
                   AND s.opponent_team IS NOT NULL AND s.opponent_team != ''
@@ -1115,6 +1122,7 @@ def fetch_report_cards(season=None, position=None, limit=25, week=None):
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ?
+                  AND s.season_type = 'regular'
                   AND p.position IN ('QB', 'RB', 'WR', 'TE')
                   AND s.opponent_team IS NOT NULL AND s.opponent_team != ''
                   {def_week_filter}
@@ -1149,6 +1157,7 @@ def fetch_report_cards(season=None, position=None, limit=25, week=None):
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ?
+                  AND s.season_type = 'regular'
                   AND p.position IN ('QB', 'RB', 'WR', 'TE')
                   AND p.fantasy_relevant = 1
                   {tt_week_filter}
@@ -1397,6 +1406,7 @@ def fetch_season_awards(season=None, position=None):
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ?
+                  AND s.season_type = 'regular'
                   AND p.position IN ('QB', 'RB', 'WR', 'TE')
                   AND p.fantasy_relevant = 1
                   AND s.opponent_team IS NOT NULL AND s.opponent_team != ''
@@ -1419,6 +1429,7 @@ def fetch_season_awards(season=None, position=None):
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ?
+                  AND s.season_type = 'regular'
                   AND p.position IN ('QB', 'RB', 'WR', 'TE')
                   AND s.opponent_team IS NOT NULL AND s.opponent_team != ''
                 GROUP BY s.opponent_team, p.position
@@ -1482,6 +1493,7 @@ def fetch_season_awards(season=None, position=None):
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ?
+                  AND s.season_type = 'regular'
                   AND p.position IN ('QB', 'RB', 'WR', 'TE')
                   AND p.fantasy_relevant = 1
                 GROUP BY p.team
