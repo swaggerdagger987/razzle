@@ -18,7 +18,7 @@ FRONTEND = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__
 # The canonical modernized footer (matches index.html)
 MODERN_FOOTER = '''<!-- FOOTER -->
 <div class="site-footer">
-  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:24px 16px; max-width:900px; margin:0 auto 24px; padding:0 24px; font-family:var(--font-mono); font-size:11px; text-align:left;">
+  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:24px 16px; max-width:900px; margin:0 auto 24px; padding:0 24px; font-family:var(--font-mono); font-size:11px; text-align:left;">
 
     <div>
       <div style="font-family:var(--font-display); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Razzle</div>
@@ -175,7 +175,7 @@ def main():
         # Skip if already has modern footer
         with open(filepath, "r", encoding="utf-8") as f:
             content = f.read()
-        if 'grid-template-columns:repeat(auto-fit, minmax(160px, 1fr))' in content:
+        if 'grid-template-columns:repeat(auto-fit, minmax(140px, 1fr))' in content:
             results.append(f"  ALREADY MODERN: {fname}")
             skipped += 1
             continue

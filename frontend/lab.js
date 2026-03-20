@@ -3054,9 +3054,15 @@ function renderActiveFilters() {
   if (filterBtn) {
     var count = state.filters.length + (state.minGP > 0 ? 1 : 0) + state.teams.length + (state.tagFilter ? 1 : 0);
     var badge = filterBtn.querySelector(".filter-badge");
+    // Show "2/3" for free users so they see their limit
+    var badgeText = String(count);
+    if (typeof checkFeatureGate === "function" && typeof getUserPlan === "function" && getUserPlan() === "free" && count > 0) {
+      var gate = checkFeatureGate("filters", 0);
+      if (gate.limit && gate.limit < Infinity) badgeText = count + "/" + gate.limit;
+    }
     if (count > 0) {
       if (!badge) { badge = document.createElement("span"); badge.className = "filter-badge"; filterBtn.appendChild(badge); }
-      badge.textContent = count;
+      badge.textContent = badgeText;
     } else if (badge) { badge.remove(); }
   }
 }

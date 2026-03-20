@@ -1336,6 +1336,7 @@ tr:hover .notes-cell .note-pencil {
   box-shadow: 4px 4px 0 var(--ink);
   padding: 10px;
   width: 260px;
+  max-width: 90vw;
   display: none;
 }
 .note-editor-title {
