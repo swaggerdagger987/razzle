@@ -15,7 +15,7 @@
 
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
-| 1 | Landing -> Lab | CTA click, initial data load, screener populates with real player data | RE-AUDIT SESSION 14 — PASS. Landing: Hero+Bureau+SitRoom+Pricing sections all present. Lab: CMC#1 416.6, 607 players, 25/page. Sidebar reorg + tier gating verified. 0 JS errors. Launch Fixes #4-#7 confirmed. |
+| 1 | Landing -> Lab | CTA click, initial data load, screener populates with real player data | RE-AUDIT SESSION 16 — PASS. Post Phase B+E+G re-audit. Lab: CMC#1 416.6 PPR, 607 players, 25/page. Sidebar: FOREVER FREE + FREE PANELS (10) + PRO sections. Formula modal opens (B-2 verified). Breakouts panel loads via URL. esbuild minification intact. 0 JS errors in light+dark. Landing: hero CTA, Bureau section, 4 pricing links, full nav. |
 | 2 | Screener: Position filter | Filter QB/RB/WR/TE individually. Count matches. Remove filter. Table resets? | DONE — PASS (all 4 positions clean) |
 | 3 | Screener: Multi-filter | Chain 3 filters (pos + team + min stat). Results are the correct intersection? | DONE — PASS (RB+800yd = 27, all correct) |
 | 4 | Screener: Sort | Sort every stat column. #1 player is actually the leader? Reverse sort works? | DONE — PASS (desc+asc both correct) |
@@ -96,7 +96,7 @@
 |---|------|-------------|--------|
 | 50 | Custom Scoring | Change scoring weights. Screener recalculates? Values change appropriately? | SKIP — /api/custom-scoring returns 404. Not implemented as API endpoint. May be frontend-only. UI blocked by FUNC-001. |
 | 51 | Saved Views | Save a view. Reload page. Load the view. Exact state restored? | DONE — PASS. Save works (typed name, clicked Save, toast confirms). View appears in dropdown + manage modal list. Restores: universe, position, search, sort, filters, visual modes, columns, columnWidths. Max 20 enforced. Cloud sync for Pro. Delete with confirm. 0 JS errors. |
-| 52 | Formula Builder | Create a formula. Calculates? Appears as column? Math correct? | DONE — PASS. Modal opens, stat selector populates from COLUMNS, weight input works. Created "PPR Score" formula — saved to localStorage, registered as column, added to visible columns, renders in table (28 th vs 27 baseline). XSS-safe (data attributes, escapeHtml). Cloud sync for Pro. Free limit 3 formulas with gate check. 0 JS errors. |
+| 52 | Formula Builder | Create a formula. Calculates? Appears as column? Math correct? | RE-AUDIT SESSION 16 — PASS. B-2 fixes verified: modal opens on prod, stat selector populated, name+weight inputs work. XSS escape on delete button (B-2 fix). Init ordering fix (loadFormulas before loadStateFromURL) prevents formula column loss on URL restore. 0 JS errors. |
 | 53 | Formula Store | Browse formulas. Install one. It works? Shows in column picker? | DONE — PASS. Store opens via Tools dropdown, fetches from /api/formulas/store (10 seed formulas). Cards render with ratings, position tags, descriptions. Search with 300ms debounce, sort (popular/top rated/recent). Install requires Pro (gated). XSS-safe. 0 JS errors. |
 | 54 | Export PNG | Exports an image? Contains visible data? Watermark present? | DONE — PASS. Custom canvas renderer: title bar (mode/position/season/sort), column headers with sort indicator, position-colored badges, alternating row backgrounds, sort column highlight, "razzle.lol" watermark at 30% opacity. Downloads as PNG with season in filename. No html2canvas dependency for screener (only panels). Share modal also has PNG download button. 0 JS errors. |
 | 55 | Export CSV | Downloads a CSV? Columns match what's on screen? Data correct? | DONE — PASS. Pro-gated with upgrade toast+link. Includes branding header, Player/POS/Team + all visible columns, csvEscape for special chars, BOM prefix for Excel compat. Descriptive filename (position-season-date). URL.revokeObjectURL cleanup. Toast with row count. Also available in Share modal. 0 JS errors. |
@@ -106,19 +106,19 @@
 
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
-| 57 | Sidebar navigation | Every sidebar item loads its panel? No dead links? Category headers correct? | RE-AUDIT SESSION 14 — PASS. 69 sidebar items, 59 pro-locked, 10 free. FOREVER FREE header + FREE PANELS + PRO sections. Tier gating verified (VORP shows upgrade gate). Launch Fix #6 confirmed. |
+| 57 | Sidebar navigation | Every sidebar item loads its panel? No dead links? Category headers correct? | RE-AUDIT SESSION 16 — PASS. 69 sidebar items, 10 free + 59 pro-locked. FOREVER FREE + FREE PANELS + PRO sections. Panel switching via URL params (?panel=breakouts, ?panel=rankings) works. Tier gating intact (switchPanel checks FREE_PANELS + isPaidUser). 0 JS errors. |
 | 58 | Command palette (Ctrl+K) | Opens? Finds panels by name? Finds players? Selection navigates correctly? | DONE — PASS. Opens via nav button, search input focused, "Search players... (Ctrl+K)" placeholder. Browser-verified on prod. |
 | 59 | Dark mode | Every element switches? Data readable in dark? Charts visible? No white flashes? | RE-AUDIT SESSION 14 — PASS. Espresso flip palette verified via screenshot. 25 rows visible, text readable, position badges clear, no white flashes. Toggle works (0 JS errors). |
 | 60 | Auth flow | Sign in modal opens? Closes cleanly? Error states for bad input? | DONE — PASS. Modal opens, Sign In/Register tabs, email/password fields. Focus trap, Escape close, overlay click close. Rate limiting (3 reg/24hr), generic errors, loading states. Browser-verified on prod. |
-| 61 | Pricing page | All plans shown? CTAs work? Correct prices? Checkout starts? | RE-AUDIT SESSION 13 — PASS. Trial CTA "7 days of Pro. On the house." Phase E verified. Comparison table, FAQ. 0 JS errors. |
+| 61 | Pricing page | All plans shown? CTAs work? Correct prices? Checkout starts? | RE-AUDIT SESSION 16 — PASS. Post Phase E re-audit. "PICK YOUR PLAYBOOK" title, 3 plans (Free/$0, Pro/$79.99/yr, Elite/$149.99/yr), monthly/yearly toggle, trial banner "7 DAYS OF PRO. ON THE HOUSE.", feature lists, 13 buttons. 0 JS errors. |
 | 62 | Dashboard / Stat Leaders | Summary stats populated? Leaders match screener data? Category switching works? | DONE — SESSION 12 VERIFIED. FUNC-012 DEPLOYED. Prod: Lamar GP=17, Burrow GP=17, PPG=25.3. Correct regular-season values. |
 
 ## Group 9: Bureau & Situation Room (the paid tier)
 
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
-| 63 | Bureau: League Intel | Sleeper connect flow? Roster loads? Insights generated from real league data? | RE-AUDIT SESSION 14 — PASS. C-1 thru C-7 verified on prod. Invalid username "zzz_fake_user_999" → "agent not found in the field" error (personality-correct). 0 JS errors. 7 inputs, 12 buttons, upgrade CTAs present. Nav links correct (Bureau highlighted). |
-| 64 | Situation Room | Canvas loads? Agents rendered? Interaction works? | RE-AUDIT SESSION 14 — PASS. Canvas present, 7 demo briefing cards, 6 scenario chips, 44 agent-related elements. 0 JS errors. D-1 thru D-8 + H-1 thru H-3 confirmed on prod. |
+| 63 | Bureau: League Intel | Sleeper connect flow? Roster loads? Insights generated from real league data? | RE-AUDIT SESSION 16 — PASS. Post Phase C re-audit. Connect card centered, input+button functional. Invalid "zzz_fake_user_999" → "agent not found in the field" error. Privacy note present. Dark mode clean (espresso flip). 0 JS errors. 7 inputs, 12 buttons. |
+| 64 | Situation Room | Canvas loads? Agents rendered? Interaction works? | RE-AUDIT SESSION 16 — PASS. Post Phase D+H re-audit. "THE SITUATION ROOM" title, 6 agent tabs (Razzle/Scout/Diplomat/Quant/Medical/Historian), agent bio cards, pixel canvas with animated agents. Dark mode: warm espresso palette, no white flashes. 56 buttons, 16 inputs, 62 links. 0 JS errors. |
 
 ## Group 10: Edge Cases (the stuff that separates demos from products)
 
