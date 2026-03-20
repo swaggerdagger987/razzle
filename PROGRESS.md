@@ -2270,3 +2270,14 @@ All 11 JS files syntax clean. 16 Python files compile clean.
 | FUNC-001 | Response cache strips content-encoding header | P0 | DONE | Added "content-encoding" to save_headers allowlist in response_cache_middleware. GZipMiddleware already removed (previous fix). Cache now preserves encoding header on subsequent requests. |
 | FUNC-004 | Production headshots missing | P1 | ESCALATE (human) | Local DB has 0 players (empty). Production DB on Render needs headshot-populated terminal.db uploaded to GitHub release data-v1, then Render redeploy. Code cannot fix this — requires manual DB upload. |
 | FUNC-005 | Dominator rec_yd_share/rec_td_share null | P2 | DONE | All share fields (rec_yd_share, rec_td_share, rush_share) now computed for every position. Previously RB/QB had null receiving shares because dominator_rating used rush_share only. Dominator rating calc still position-specific, but share data always populated. |
+| FUNC-006 | Ship fixes not deployed to production | P0 | DONE | Fast-forward pushed ship/launch-fixes to master. Fixes FUNC-001/002/003 now live on razzle.lol. |
+| FUNC-007 | offense_snaps NULL for all players | P1 | DONE | Root cause: bootstrap_database() only syncs snap counts when DB is empty (<50 players). Production DB on persistent disk already had players, so snap sync was always skipped. Added separate check: if offense_snaps are all NULL but players exist, run sync_snap_counts as backfill during background bootstrap. |
+| FUNC-008 | Pinned rows vanish on filter change | P2 | DONE | Added _pinnedDataCache to store player objects when pinned. Pinned rows now survive filter changes by falling back to cached data. Cache cleaned on unpin/clearAll. Diff mode baseline lookups also use cache. |
+
+### Sweep Mode (Mar 20 — post-ticket session 2)
+
+| Audit | Findings | Action |
+|-------|----------|--------|
+| XSS in charts.js | 2 HIGH: unescaped player names/positions in getPlayerOptions() innerHTML and compare table header | FIXED — escapeHtml() added to both |
+| Backend security | ALTER TABLE f-string in auth.py (LOW — hardcoded column names, not user input) | Noted, no fix needed |
+| Smoke tests | 10/11 pass (week_filter failure is pre-existing local DB issue) | No regressions |
