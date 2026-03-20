@@ -154,7 +154,7 @@
         }
         renderTiers(data.tiers || [], content);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">could not load rankings</div>';
+        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -176,7 +176,7 @@
         state.historyData = data;
         renderHistory(data, content);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">could not load history</div>';
+        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -4448,7 +4448,7 @@
       }).then(function(data) {
         renderUT(data, body);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">could not load usage trends</div>';
+        body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -4628,7 +4628,7 @@
       }).then(function(data) {
         renderYY(data, body, isCollege);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">could not load year-over-year data</div>';
+        body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -4757,7 +4757,7 @@
       }).then(function(data) {
         renderAG(data, body);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">could not load aging curves</div>';
+        body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -4934,7 +4934,7 @@
       }).then(function(data) {
         renderPT(data, body);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">could not load pace data</div>';
+        body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -5021,7 +5021,7 @@
       }).then(function(data) {
         renderSPC(data, body);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">could not load season pace data</div>';
+        body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -5109,7 +5109,7 @@
       }).then(function(data) {
         renderTDR(data, body);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">could not load TD regression data</div>';
+        body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -5243,7 +5243,7 @@
       }).then(function(data) {
         renderAY(data, body);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">could not load air yards data</div>';
+        body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -5457,7 +5457,7 @@
       }).then(function(data) {
         renderCareer(data, content);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">could not load career stats</div>';
+        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -5656,7 +5656,7 @@
         entry.data = data;
         renderComparison();
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">could not load career data</div>';
+        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -5871,7 +5871,7 @@
       }).then(function(data) {
         renderTable(data.players || data, content);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">could not load comparison</div>';
+        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -5983,7 +5983,7 @@
       }).then(function(data) {
         renderStrengths(data, content);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">could not load strengths data</div>';
+        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -6100,7 +6100,7 @@
         lastData = data;
         renderCards(data, content);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">could not load report cards</div>';
+        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -6235,7 +6235,7 @@
       }).then(function(data) {
         renderBreakdown(data.players || data, content);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">could not load breakdown data</div>';
+        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -6340,7 +6340,7 @@
       }).then(function(data) {
         renderGameLog(data, content);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">could not load game log</div>';
+        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -6486,7 +6486,7 @@
       }).then(function(data) {
         renderArchetypes(data.archetypes || data, content);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">could not load archetypes</div>';
+        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -6567,7 +6567,7 @@
       }).then(function(data) {
         renderBreakdown(data, playerInfo, content);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">could not load breakdown</div>';
+        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -6800,7 +6800,7 @@
         }
         renderAwards(data, isCollege);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">could not load awards data</div>';
+        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -7288,7 +7288,7 @@
         }
         drawChart(data);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">could not load explorer data</div>';
+        body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -7519,7 +7519,7 @@
         }
         renderCategories(data.categories || [], isCollege);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">could not load stat leaders</div>';
+        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -7745,7 +7745,7 @@
         }
         render(data);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">could not load opportunity data</div>';
+        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -7928,7 +7928,7 @@
         state.data = data;
         renderBoard(data.prospects || []);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">could not load prospect data</div>';
+        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -8668,7 +8668,7 @@
         }
         render(data);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">could not load schedule data</div>';
+        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -9089,7 +9089,7 @@
         }
         renderGroups(data.groups || {});
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">could not load team roster</div>';
+        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -9550,7 +9550,7 @@
           });
         }
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">could not load correlations</div>';
+        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 
@@ -9847,7 +9847,7 @@
 
         drawChart(data);
       }).catch(function() {
-        loadEl.innerHTML = '<div class="lp-error">could not load power rankings</div>';
+        loadEl.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
       });
     }
 

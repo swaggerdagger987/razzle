@@ -714,7 +714,7 @@ async function handleLogin(e) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: email, password: password })
     });
-    if (!resp.ok) { try { var d = await resp.json(); errEl.textContent = d.error || d.detail || "Login failed"; } catch(_) { errEl.textContent = "Login failed"; } return; }
+    if (!resp.ok) { try { var d = await resp.json(); errEl.textContent = d.error || d.detail || "fumbled the login. check your credentials."; } catch(_) { errEl.textContent = "fumbled the login. try again."; } return; }
     var data = await resp.json();
     localStorage.setItem("razzle_token", data.token);
     localStorage.setItem("razzle_user", JSON.stringify(data.user));
@@ -747,7 +747,7 @@ async function handleRegister(e) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: email, password: password })
     });
-    if (!resp.ok) { try { var d = await resp.json(); errEl.textContent = d.error || d.detail || "Registration failed"; } catch(_) { errEl.textContent = "Registration failed"; } return; }
+    if (!resp.ok) { try { var d = await resp.json(); errEl.textContent = d.error || d.detail || "couldn't get you signed up. try again."; } catch(_) { errEl.textContent = "couldn't get you signed up. try again."; } return; }
     var data = await resp.json();
     localStorage.setItem("razzle_token", data.token);
     localStorage.setItem("razzle_user", JSON.stringify(data.user));

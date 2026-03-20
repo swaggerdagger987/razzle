@@ -3408,7 +3408,7 @@ function renderMemoryPanel() {
 
   // Elite users get server-synced memories
   if (isEliteUser()) {
-    panel.innerHTML = '<div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); text-align:center; padding:8px;">loading memory...</div>';
+    panel.innerHTML = '<div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); text-align:center; padding:8px;">recalling old film sessions...</div>';
     getWarRoomMemoryFull().then(function(memories) {
       _renderMemoryEntries(panel, memories, true);
     });
@@ -3525,7 +3525,7 @@ function loadLatestBriefing() {
     renderBriefingContent(body, b);
   })
   .catch(function() {
-    body.innerHTML = '<div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); text-align:center; padding:12px;">could not load briefing</div>';
+    body.innerHTML = '<div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); text-align:center; padding:12px;">briefing got intercepted... try again</div>';
   });
 }
 
@@ -3678,7 +3678,7 @@ function toggleBriefingHistory() {
     return;
   }
   panel.style.display = 'block';
-  panel.innerHTML = '<div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); text-align:center; padding:8px;">loading history...</div>';
+  panel.innerHTML = '<div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); text-align:center; padding:8px;">pulling the game tape...</div>';
 
   var token = localStorage.getItem('razzle_token');
   if (!token) return;
