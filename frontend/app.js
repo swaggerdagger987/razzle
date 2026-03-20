@@ -627,7 +627,8 @@ function _showWelcomeModal(user) {
       ];
 
   var overlay = document.createElement("div");
-  overlay.style.cssText = "position:fixed;inset:0;background:rgba(45,31,20,0.6);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;";
+  var overlayBg = document.documentElement.getAttribute("data-theme") === "dark" ? "rgba(0,0,0,0.6)" : "rgba(45,31,20,0.6)";
+  overlay.style.cssText = "position:fixed;inset:0;background:" + overlayBg + ";z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;";
   overlay.onclick = function(e) { if (e.target === overlay) overlay.remove(); };
 
   var featureHTML = features.map(function(f) {
@@ -1597,7 +1598,8 @@ function openPlayerPopup(playerId) {
   if (!overlay) {
     overlay = document.createElement("div");
     overlay.id = "razzlePlayerPopup";
-    overlay.style.cssText = "position:fixed;inset:0;background:rgba(45,31,20,0.5);z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px;";
+    var popupBg = document.documentElement.getAttribute("data-theme") === "dark" ? "rgba(0,0,0,0.5)" : "rgba(45,31,20,0.5)";
+    overlay.style.cssText = "position:fixed;inset:0;background:" + popupBg + ";z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px;";
     overlay.innerHTML =
       '<div style="background:var(--bg-card);border:3px solid var(--ink);border-radius:12px;box-shadow:6px 6px 0 var(--ink);max-width:600px;width:100%;max-height:80vh;overflow-y:auto;padding:24px;position:relative;">' +
         '<button onclick="closePlayerPopup()" style="position:absolute;top:8px;right:12px;font-size:24px;background:none;border:none;cursor:pointer;color:var(--ink);font-family:var(--font-display);">&times;</button>' +

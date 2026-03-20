@@ -5555,7 +5555,7 @@ function exportImage() {
   }
 
   ctx.font = "bold 10px 'Space Mono', monospace";
-  ctx.fillStyle = "#8a7565";
+  ctx.fillStyle = t.inkLight;
   ctx.textAlign = "center";
   ctx.fillText("#", padX + rankColW / 2, hdrY + headerH / 2 + 4);
 
@@ -6738,7 +6738,7 @@ function drawProfileArc(seasons, pos) {
   ctx.save();
   ctx.translate(14, pad.top + plotH / 2);
   ctx.rotate(-Math.PI / 2);
-  ctx.fillStyle = "#8a7565";
+  ctx.fillStyle = t.inkLight;
   ctx.font = "10px 'Space Mono', monospace";
   ctx.textAlign = "center";
   ctx.fillText("PPR Points", 0, 0);
@@ -11174,7 +11174,7 @@ function _taDrawPickChart() {
       ctx.fillStyle = t.ink;
       ctx.font = "bold 10px monospace";
       ctx.textAlign = "center";
-      ctx.fillText(pk.pick_label.split(" ")[1], x, y - 10);
+      ctx.fillText((pk.pick_label || "").split(" ")[1] || "", x, y - 10);
     }
   }
 
@@ -12028,7 +12028,7 @@ function drawCompRadar(data) {
   }
 
   // Draw grid circles
-  ctx.strokeStyle = "#c4b5a5";
+  ctx.strokeStyle = t.inkFaint;
   ctx.lineWidth = 1;
   for (let ring = 1; ring <= 4; ring++) {
     const r = (R / 4) * ring;
@@ -12490,7 +12490,7 @@ function drawBoomBustHistogram(data) {
   }
 
   // X-axis title
-  ctx.fillStyle = "#5c4a3d";
+  ctx.fillStyle = t.inkMedium;
   ctx.font = "11px 'Space Mono', monospace";
   ctx.textAlign = "center";
   ctx.fillText("Fantasy Points (PPR)", W / 2, H - 5);
@@ -12499,7 +12499,7 @@ function drawBoomBustHistogram(data) {
   ctx.save();
   ctx.translate(12, H / 2);
   ctx.rotate(-Math.PI / 2);
-  ctx.fillStyle = "#5c4a3d";
+  ctx.fillStyle = t.inkMedium;
   ctx.font = "11px 'Space Mono', monospace";
   ctx.textAlign = "center";
   ctx.fillText("Weeks", 0, 0);
@@ -12540,7 +12540,7 @@ function drawBoomBustHistogram(data) {
   }
 
   // Title annotation
-  ctx.fillStyle = "#8a7565";
+  ctx.fillStyle = t.inkLight;
   ctx.font = "16px 'Caveat', cursive";
   ctx.textAlign = "right";
   ctx.fillText("weekly score distribution", W - pad.right, pad.top - 8);
@@ -12591,7 +12591,7 @@ function drawBoomBustRangeBar(data) {
 
   // Tiny labels
   ctx.font = "9px 'Space Mono', monospace";
-  ctx.fillStyle = "#8a7565";
+  ctx.fillStyle = t.inkLight;
   ctx.textAlign = "center";
   ctx.fillText("FLOOR", floorX, H - 2);
   ctx.fillText("MED", medX, barY - 14 > 0 ? barY - 14 : barY + barH + 14);

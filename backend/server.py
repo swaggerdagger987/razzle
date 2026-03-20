@@ -1937,7 +1937,7 @@ async def publish_formula(request: Request):
         description=body.get("description", ""),
         position_tags=body.get("position_tags", []),
         stat_weights=body.get("stat_weights", {}),
-        creator_name=user.get("sleeper_username") or user["email"].split("@")[0],
+        creator_name=user.get("sleeper_username") or user.get("email", "unknown").split("@")[0],
     )
 
 
