@@ -47,6 +47,7 @@ def _fetch_trade_values_uncached(player_ids):
             FROM players p
             LEFT JOIN player_week_stats s
                 ON s.player_id = p.player_id AND s.season = ?
+                AND s.season_type = 'regular'
             WHERE p.player_id IN ({placeholders})
             GROUP BY p.player_id
         """
@@ -192,6 +193,7 @@ def _fetch_dynasty_rankings_uncached(season=None, position=None, limit=200):
             FROM players p
             JOIN player_week_stats s
                 ON s.player_id = p.player_id AND s.season = ?
+                AND s.season_type = 'regular'
             WHERE p.position IN ('QB','RB','WR','TE')
               AND p.fantasy_relevant = 1
               {pos_filter}
@@ -295,6 +297,7 @@ def _fetch_dynasty_history_uncached(position=None, limit=20, player_ids=None):
                        SUM(s.fantasy_points_ppr) / COUNT(DISTINCT s.week) as ppg
                 FROM players p
                 JOIN player_week_stats s ON s.player_id = p.player_id AND s.season = ?
+                    AND s.season_type = 'regular'
                 WHERE p.position IN ('QB','RB','WR','TE')
                   AND p.fantasy_relevant = 1
                   {pos_filter}
@@ -400,6 +403,7 @@ def _fetch_trade_value_chart_uncached(season=None, position=None, limit=150):
             FROM players p
             JOIN player_week_stats s
                 ON s.player_id = p.player_id AND s.season = ?
+                AND s.season_type = 'regular'
             WHERE p.position IN ('QB','RB','WR','TE')
               AND p.fantasy_relevant = 1
               {pos_filter}
@@ -490,6 +494,7 @@ def _fetch_trade_finder_uncached(player_id, season=None):
             FROM players p
             JOIN player_week_stats s
                 ON s.player_id = p.player_id AND s.season = ?
+                AND s.season_type = 'regular'
             WHERE p.position IN ('QB','RB','WR','TE')
               AND p.fantasy_relevant = 1
             GROUP BY p.player_id
@@ -548,6 +553,7 @@ def _fetch_trade_finder_uncached(player_id, season=None):
                        COUNT(DISTINCT s.week) as gp
                 FROM players p
                 LEFT JOIN player_week_stats s ON s.player_id = p.player_id AND s.season = ?
+                    AND s.season_type = 'regular'
                 WHERE p.player_id = ?
                 GROUP BY p.player_id
             """, [season, player_id]).fetchone()
@@ -1073,6 +1079,7 @@ def _fetch_auction_values_uncached(season=None, budget=200, roster_size=15):
             FROM players p
             JOIN player_week_stats s
                 ON s.player_id = p.player_id AND s.season = ?
+                AND s.season_type = 'regular'
             WHERE p.position IN ('QB','RB','WR','TE')
               AND p.fantasy_relevant = 1
             GROUP BY p.player_id
@@ -1185,6 +1192,7 @@ def _fetch_dynasty_dashboard_uncached(season=None):
             FROM players p
             JOIN player_week_stats s
                 ON s.player_id = p.player_id AND s.season = ?
+                AND s.season_type = 'regular'
             WHERE p.position IN ('QB','RB','WR','TE')
               AND p.fantasy_relevant = 1
             GROUP BY p.player_id
@@ -1336,6 +1344,7 @@ def _fetch_tier_list_uncached(season=None, position=None):
             FROM players p
             JOIN player_week_stats s
                 ON s.player_id = p.player_id AND s.season = ?
+                AND s.season_type = 'regular'
             WHERE p.position IN ('QB','RB','WR','TE')
               AND p.fantasy_relevant = 1
               {pos_filter}

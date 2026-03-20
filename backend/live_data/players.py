@@ -54,7 +54,8 @@ def quick_search_players(query, limit=8):
                            (SELECT ROUND(SUM(s.fantasy_points_ppr) * 1.0 / COUNT(DISTINCT s.week), 1)
                             FROM player_week_stats s, ms
                             WHERE s.player_id = p.player_id
-                              AND s.season = ms.s),
+                              AND s.season = ms.s
+                              AND s.season_type = 'regular'),
                            0) AS ppg
                 FROM players p
                 WHERE p.search_name LIKE ? ESCAPE '\\'
@@ -119,11 +120,11 @@ def fetch_players(
             if _sort_dir.lower() not in ("asc", "desc"):
                 _sort_dir = "desc"
 
-            where = []
+            where = ["s.season_type = 'regular'"]
             params = []
 
             if _career_mode:
-                pass  # no season filter — aggregate all
+                pass  # no season filter — aggregate all seasons
             else:
                 where.append("s.season = ?")
                 params.append(_season)
@@ -238,11 +239,11 @@ def _fetch_screener_uncached(body):
         if relevance == "fantasy" and not pos_list:
             pos_list = list(FANTASY_POSITIONS)
 
-        where = []
+        where = ["s.season_type = 'regular'"]
         params = []
 
         if career_mode:
-            pass  # no season filter
+            pass  # no season filter — aggregate all seasons
         else:
             where.append("s.season = ?")
             params.append(season)
