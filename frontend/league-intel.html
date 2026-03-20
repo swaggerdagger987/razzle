@@ -1081,7 +1081,7 @@
     padding: 4px 0;
     font-family: var(--font-mono);
     font-size: 11px;
-    border-bottom: 1px dashed var(--ink-faint);
+    border-bottom: 2px dashed var(--ink-faint);
   }
 
   .h2h-edge {
@@ -3569,7 +3569,7 @@ async function loadLeagueTradeFinder(leagueId, userId, myRoster, rosters, allPla
     }
 
     if (!resp.ok) {
-      container.innerHTML = '<div class="loading-intel" style="color:var(--ink-light);">trade finder returned an error. try again.</div>';
+      container.innerHTML = '<div class="loading-intel" style="color:var(--ink-light);">trade finder hit a snag. give it another shot.</div>';
       return;
     }
     var data = await resp.json();
@@ -4202,7 +4202,7 @@ async function runH2HComparison(state, leftId, rightId) {
     resultDiv.innerHTML = html;
 
   } catch (e) {
-    resultDiv.innerHTML = '<div class="loading-intel" style="color:var(--red);font-size:14px;">comparison failed. try again.</div>';
+    resultDiv.innerHTML = '<div class="loading-intel" style="color:var(--red);font-size:14px;">film got tangled in the projector. run that comparison again.</div>';
     console.error(e);
   }
 }
@@ -6453,9 +6453,11 @@ async function loadScheduleStrength(leagueId, userId, rosters, allPlayers, userM
       var grade = getSosGrade(mgr.sensitivity);
       var isBlurred = !paid && ci >= 3;
 
-      html += '<div class="sos-card"' +
-        (mgr.isUser ? ' style="border-color:var(--orange);"' : '') +
-        (isBlurred ? ' style="filter:blur(3px);opacity:0.4;pointer-events:none;"' : '') + '>';
+      var cardStyle = '';
+      if (mgr.isUser && isBlurred) cardStyle = ' style="border-color:var(--orange);filter:blur(3px);opacity:0.4;pointer-events:none;"';
+      else if (mgr.isUser) cardStyle = ' style="border-color:var(--orange);"';
+      else if (isBlurred) cardStyle = ' style="filter:blur(3px);opacity:0.4;pointer-events:none;"';
+      html += '<div class="sos-card"' + cardStyle + '>';
 
       html += '<div class="sos-rank">' + rank + '</div>';
       html += '<div class="sos-info">';
