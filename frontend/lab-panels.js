@@ -8531,6 +8531,9 @@
             el.querySelector('.rbld-search').value = '';
           });
         });
+      }).catch(function() {
+        var ac = el.querySelector('.rbld-autocomplete');
+        if (ac) ac.style.display = 'none';
       });
     }
 

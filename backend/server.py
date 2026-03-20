@@ -480,7 +480,7 @@ async def response_cache_middleware(request: Request, call_next):
             async for chunk in response.body_iterator:
                 body += chunk if isinstance(chunk, bytes) else chunk.encode()
             save_headers = {k: v for k, v in response.headers.items()
-                           if k.lower() in ("cache-control", "content-type")}
+                           if k.lower() in ("cache-control", "content-type", "content-encoding")}
             _resp_cache_set(cache_key, body, save_headers)
             return Response(content=body, status_code=200,
                            media_type=response.media_type, headers=dict(response.headers))
@@ -2040,8 +2040,7 @@ async def lab_with_og_tags(request: Request):
     params = request.query_params
     position = params.get("position", "").upper()
     sort_key = params.get("sort", "fantasy_points_ppr")
-    from backend.live_data.core import _current_nfl_season
-    season = params.get("season", str(_current_nfl_season()))
+    season = params.get("season", str(live_data._current_nfl_season()))
     universe = params.get("universe", "nfl").upper()
 
     # Build dynamic title
@@ -2401,8 +2400,7 @@ def trade_values(player_ids: str = ""):
 def trade_pick_values(year: int = 0, rounds: int = 4, teams: int = 12):
     """Return dynasty draft pick trade values."""
     if year <= 0:
-        from backend.live_data.core import _current_draft_year
-        year = _current_draft_year()
+        year = live_data._current_draft_year()
     year = max(2024, min(2030, year))
     rounds = max(1, min(5, rounds))
     teams = max(4, min(16, teams))

@@ -3496,7 +3496,7 @@ function _renderMemoryEntries(panel, memory, isElite) {
 
   memory.forEach(function(m) {
     var ago = formatTimeAgo(m.ts);
-    var agentSummary = m.agents.map(function(a) { return a.name; }).join(', ');
+    var agentSummary = m.agents.map(function(a) { return escapeHtml(a.name); }).join(', ');
     var syncIcon = m.synced ? '<span title="Synced to cloud" style="font-size:10px; color:var(--pos-qb); margin-left:4px;">&#9729;</span>' : '';
     var leagueTag = m.leagueName ? '<span style="font-family:var(--font-mono); font-size:9px; color:var(--orange); margin-left:4px;">[' + escapeHtml(m.leagueName) + ']</span>' : '';
 
