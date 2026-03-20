@@ -1994,6 +1994,7 @@ async function getSleeperPlayers() {
 async function toggleLeague(card, leagueId, userId) {
   card.classList.toggle("expanded");
   const rosterDiv = document.getElementById(`roster-${escapeAttr(leagueId)}`);
+  if (!rosterDiv) return;
 
   // Only load once (set after successful fetch to avoid race condition)
   if (rosterDiv.dataset.loaded) return;

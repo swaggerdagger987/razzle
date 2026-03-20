@@ -9743,7 +9743,7 @@
           '<div class="corr-pred-bar-bg">' +
             '<div class="corr-pred-bar" style="width:' + pct + '%;background:' + color + '"></div>' +
           '</div>' +
-          '<span class="corr-pred-val" style="color:' + color + '">' + (p.r > 0 ? '+' : '') + p.r.toFixed(2) + '</span>' +
+          '<span class="corr-pred-val" style="color:' + color + '">' + (p.r > 0 ? '+' : '') + (p.r != null ? p.r.toFixed(2) : '—') + '</span>' +
         '</div>';
       });
       html += '</div></div>';
@@ -9849,7 +9849,7 @@
         var xLabel = labels[xKey] || xKey;
         var yLabel = labels[yKey] || yKey;
         var r = matrix[yKey] ? matrix[yKey][xKey] : null;
-        el.querySelector('#corr-scatter-title').textContent = xLabel + ' vs ' + yLabel + (r !== null ? ' (r = ' + r.toFixed(2) + ')' : '');
+        el.querySelector('#corr-scatter-title').textContent = xLabel + ' vs ' + yLabel + (r != null ? ' (r = ' + r.toFixed(2) + ')' : '');
 
         var sc = el.querySelector('#corr-scatter');
         var sctx = sc.getContext('2d');

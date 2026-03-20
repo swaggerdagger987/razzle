@@ -173,7 +173,7 @@ function drawRadar() {
   // Find max values for normalization
   const maxVals = {};
   for (const s of stats) {
-    maxVals[s] = Math.max(...state.items.map(i => Math.abs(i[s] || 0)), 1);
+    maxVals[s] = state.items.reduce(function(mx, i) { return Math.max(mx, Math.abs(i[s] || 0)); }, 1);
   }
 
   // Draw grid
@@ -285,8 +285,10 @@ function drawScatter() {
 
   const xVals = data.map(p => p[xKey]);
   const yVals = data.map(p => p[yKey]);
-  const xMin = Math.min(...xVals), xMax = Math.max(...xVals);
-  const yMin = Math.min(...yVals), yMax = Math.max(...yVals);
+  const xMin = xVals.reduce(function(a, b) { return Math.min(a, b); }, Infinity);
+  const xMax = xVals.reduce(function(a, b) { return Math.max(a, b); }, -Infinity);
+  const yMin = yVals.reduce(function(a, b) { return Math.min(a, b); }, Infinity);
+  const yMax = yVals.reduce(function(a, b) { return Math.max(a, b); }, -Infinity);
   const xRange = xMax - xMin || 1;
   const yRange = yMax - yMin || 1;
 
@@ -488,7 +490,7 @@ async function drawSeasonTrend() {
 
 function _drawTrendLine(ctx, W, H, pad, vals, labels, playerName, statKey, subtitle) {
   var t = getCanvasTheme();
-  const maxVal = Math.max(...vals, 1);
+  const maxVal = vals.reduce(function(a, b) { return Math.max(a, b); }, 1);
   const plotW = W - pad.left - pad.right;
   const plotH = H - pad.top - pad.bottom;
 
@@ -752,7 +754,7 @@ function drawHeatmap() {
       if (val != null) {
         const dec = col ? col.decimals : 1;
         const pctSuffix = col && col.pct ? "%" : "";
-        const formatted = dec !== null ? val.toFixed(dec) + pctSuffix : val;
+        const formatted = dec != null ? Number(val).toFixed(dec) + pctSuffix : val;
         ctx.font = "bold 11px 'Space Mono', monospace";
         ctx.fillStyle = pct !== null && pct > 75 ? "#ffffff" : t.ink;
         ctx.textAlign = "center";

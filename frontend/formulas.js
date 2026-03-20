@@ -126,20 +126,30 @@ function renderSavedFormulas() {
         return `${col ? col.label : c.stat} × ${c.weight}%`;
       }).join(" + ");
       const isPublished = f.fromStore || isFormulaPublished(f.name);
+      var _esc = typeof escapeHtml === "function" ? escapeHtml : function(s) { return s; };
+      var _escAttr = typeof escapeAttr === "function" ? escapeAttr : function(s) { return s.replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/'/g,"&#39;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); };
       const publishBtn = isPublished
         ? `<span style="font-family:var(--font-mono); font-size:9px; color:var(--green); font-weight:700; padding:2px 6px; border:2px solid var(--green); border-radius:4px;">Published</span>`
-        : `<button class="btn-chunky" style="font-size:9px; padding:2px 8px;" onclick="event.stopPropagation(); openPublishFlow('${f.name.replace(/'/g, "\\'")}')">Publish</button>`;
+        : `<button class="btn-chunky" style="font-size:9px; padding:2px 8px;" data-publish-formula="${_escAttr(f.name)}">Publish</button>`;
       return `<div style="display:flex; align-items:center; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--ink-faint); gap:6px;">
         <div style="flex:1; min-width:0;">
-          <strong style="font-family:var(--font-mono); font-size:13px;">${(typeof escapeHtml === "function" ? escapeHtml(f.name) : f.name)}</strong>
+          <strong style="font-family:var(--font-mono); font-size:13px;">${_esc(f.name)}</strong>
           <span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); margin-left:8px;">${desc}</span>
         </div>
         <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
           ${publishBtn}
-          <span style="cursor:pointer; color:var(--red); font-weight:700; font-size:14px;" onclick="deleteFormula('${f.name.replace(/\\/g, "\\\\").replace(/'/g, "\\'")}')">×</span>
+          <span style="cursor:pointer; color:var(--red); font-weight:700; font-size:14px;" data-delete-formula="${_escAttr(f.name)}">×</span>
         </div>
       </div>`;
     }).join("");
+
+  // Event delegation for publish/delete buttons (avoids inline onclick XSS)
+  container.addEventListener("click", function(e) {
+    var pub = e.target.closest("[data-publish-formula]");
+    if (pub) { e.stopPropagation(); openPublishFlow(pub.dataset.publishFormula); return; }
+    var del = e.target.closest("[data-delete-formula]");
+    if (del) { deleteFormula(del.dataset.deleteFormula); return; }
+  });
 }
 
 // ── Cloud sync (Pro+ feature) ──────────────────────────────────────

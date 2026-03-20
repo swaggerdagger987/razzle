@@ -180,6 +180,7 @@ async function submitReview(formulaId) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ rating, review: text })
     });
+    if (!resp.ok) { showStoreToast("fumbled the review... try again."); return; }
     const data = await resp.json();
     if (data.status === "ok") {
       // Mark review submitted in localStorage so we don't show input again

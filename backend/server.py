@@ -416,6 +416,14 @@ app = FastAPI(
     openapi_url=None if _is_prod else "/openapi.json",
 )
 
+@app.exception_handler(Exception)
+async def _global_json_error_handler(request: Request, exc: Exception):
+    """Catch JSON decode errors from malformed POST bodies."""
+    import json
+    if isinstance(exc, (json.JSONDecodeError, ValueError)) and request.method == "POST":
+        return JSONResponse({"error": "invalid JSON body"}, status_code=400)
+    raise exc
+
 app.add_middleware(GZipMiddleware, minimum_size=500)
 _CORS_ORIGINS = ["https://razzle.lol"]
 if os.environ.get("RAZZLE_ENV", "production") != "production":
@@ -1022,6 +1030,11 @@ def _check_llm_rate(user_id: int) -> bool:
     bucket = _llm_rate_buckets[user_id]
     # Prune old entries
     _llm_rate_buckets[user_id] = [t for t in bucket if now - t < _LLM_RATE_WINDOW]
+    # Periodically prune stale users to prevent unbounded growth
+    if len(_llm_rate_buckets) > 500:
+        stale = [uid for uid, ts in _llm_rate_buckets.items() if not ts or now - ts[-1] > _LLM_RATE_WINDOW]
+        for uid in stale:
+            del _llm_rate_buckets[uid]
     if len(_llm_rate_buckets[user_id]) >= _LLM_RATE_LIMIT_ELITE:
         return False
     _llm_rate_buckets[user_id].append(now)

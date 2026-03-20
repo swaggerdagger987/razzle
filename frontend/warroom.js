@@ -2476,10 +2476,14 @@ async function runSingleAgent(agentId, scenario) {
   const agent = AGENT_DEFS[agentId];
   if (!agent) return;
 
+  // Disable buttons immediately to prevent double-click race condition
+  setScenarioButtonsDisabled(true);
+
   // Check rate limit
   var limitMsg = getQueryLimitMessage();
   if (limitMsg) {
     setScenarioStatus(limitMsg, 'error');
+    setScenarioButtonsDisabled(false);
     return;
   }
 
@@ -2491,12 +2495,14 @@ async function runSingleAgent(agentId, scenario) {
     else if (serverQuota.plan === 'pro') serverMsg += ' Upgrade to Elite for unlimited.';
     setScenarioStatus(serverMsg, 'error');
     updateQueryLimitBadge();
+    setScenarioButtonsDisabled(false);
     return;
   }
 
   const settings = getAgentSettings(agentId);
   if (!settings.apiKey && !isEliteUser() && !isLoggedIn()) {
     setScenarioStatus('sign in to use free AI queries, or add your own API key in Config', 'error');
+    setScenarioButtonsDisabled(false);
     return;
   }
 
@@ -2506,7 +2512,6 @@ async function runSingleAgent(agentId, scenario) {
   initAgentStatusTracker([agentId]);
   setAgentStatus(agentId, 'running');
   setScenarioStatus('running ' + agent.name + '...', 'running');
-  setScenarioButtonsDisabled(true);
 
   const canvasAgent = agents[agentId];
   if (canvasAgent) {
@@ -2644,10 +2649,14 @@ setTimeout(function() {
 }, 100);
 
 async function runAllAgents(scenario) {
+  // Disable buttons immediately to prevent double-click race condition
+  setScenarioButtonsDisabled(true);
+
   // Check rate limit (local cache first for instant UX)
   var limitMsg = getQueryLimitMessage();
   if (limitMsg) {
     setScenarioStatus(limitMsg, 'error');
+    setScenarioButtonsDisabled(false);
     return;
   }
 
@@ -2659,6 +2668,7 @@ async function runAllAgents(scenario) {
     else if (serverQuota.plan === 'pro') serverMsg += ' Upgrade to Elite for unlimited.';
     setScenarioStatus(serverMsg, 'error');
     updateQueryLimitBadge();
+    setScenarioButtonsDisabled(false);
     return;
   }
 
@@ -2666,6 +2676,7 @@ async function runAllAgents(scenario) {
   const elite = isEliteUser();
   if (!hasKey && !elite && !isLoggedIn()) {
     setScenarioStatus('sign in to use free AI queries, or add your own API key in Config', 'error');
+    setScenarioButtonsDisabled(false);
     return;
   }
 
@@ -2679,7 +2690,6 @@ async function runAllAgents(scenario) {
   initAgentStatusTracker([1, 2, 3, 4, 5, 0]);
 
   setScenarioStatus('pulling film on all agents...', 'running');
-  setScenarioButtonsDisabled(true);
 
   agents.forEach(function(a) {
     a.workBubble = '📡';
@@ -3730,12 +3740,16 @@ function toggleBriefingHistory() {
     var html = '';
     data.briefings.forEach(function(b) {
       var leagueTag = b.league_name ? ' [' + escapeHtml(b.league_name) + ']' : '';
-      html += '<div style="padding:6px 0; border-bottom:2px dashed var(--ink-faint); cursor:pointer;" onclick="loadBriefingById(' + b.id + ')">';
+      html += '<div style="padding:6px 0; border-bottom:2px dashed var(--ink-faint); cursor:pointer;" data-briefing-id="' + parseInt(b.id) + '">';
       html += '<div style="font-family:var(--font-mono); font-size:12px;">' + escapeHtml(b.week_label) + leagueTag + '</div>';
       html += '<div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + escapeHtml(b.summary.slice(0, 80)) + '...</div>';
       html += '</div>';
     });
     panel.innerHTML = html;
+    panel.addEventListener('click', function(e) {
+      var row = e.target.closest('[data-briefing-id]');
+      if (row) loadBriefingById(parseInt(row.dataset.briefingId));
+    });
   })
   .catch(function() {
     panel.innerHTML = '<div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); text-align:center; padding:8px;">fumbled the briefing. try again in a sec.</div>';
