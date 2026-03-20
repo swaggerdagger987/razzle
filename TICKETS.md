@@ -108,3 +108,13 @@ The database file `data/terminal.db` uses WAL journal mode locally. Uploading it
 ### Task 5: Screener column headers — indicate weekly vs season context
 **Accept when**: When a specific week is selected (not "All Weeks"), the screener shows a subtle indicator — e.g., a Caveat-font annotation below the toolbar saying "showing Week 5, 2025 stats" or a small badge on the week dropdown. This prevents confusion where a user sees low numbers and forgets they're looking at a single week instead of season totals. Matches Razzle design language (Caveat, slightly rotated, annotation style).
 **Status**: DONE
+
+---
+
+## Phase: Bugfix — Push pin blinking in screener
+
+**PRIORITY: FIX NOW.** The push pin icon in the screener is blinking/flickering. It should be static — no animation, no flashing. Find the pin element in the screener UI, identify what's causing the blink (likely a CSS animation, transition, or JS re-render loop), and make it stop.
+
+### Task 1: Fix push pin blinking
+**Accept when**: The push pin in the screener is completely static — no blinking, flickering, or animation. Verify across light and dark mode.
+**Status**: TODO
