@@ -1094,7 +1094,7 @@ function exportNFLCompareImage() {
 
     // Team + Age
     ctx.fillStyle = t.inkLight;
-    ctx.font = "12px monospace";
+    ctx.font = "12px 'Space Mono', monospace";
     const ageText = p.age ? ` | Age ${p.age}` : "";
     ctx.fillText((p.team || "FA") + ageText, nameX, cardY + 48);
 
@@ -1112,7 +1112,7 @@ function exportNFLCompareImage() {
       ctx.lineWidth = 2;
       ctx.strokeRect(dvsX, dvsY, dvsW, dvsH);
       ctx.fillStyle = dvsColor;
-      ctx.font = "bold 13px monospace";
+      ctx.font = "bold 13px 'Space Mono', monospace";
       ctx.textAlign = "center";
       ctx.fillText("DVS " + dvs.toFixed(1), dvsX + dvsW / 2, dvsY + 16);
 
@@ -1145,7 +1145,7 @@ function exportNFLCompareImage() {
   ctx.stroke();
 
   ctx.fillStyle = t.ink;
-  ctx.font = "bold 10px monospace";
+  ctx.font = "bold 10px 'Space Mono', monospace";
   ctx.textAlign = "left";
   ctx.fillText("STAT", padX + 8, tY + 18);
   players.forEach((p, i) => {
@@ -1187,7 +1187,7 @@ function exportNFLCompareImage() {
       const val = p[statKey] || 0;
       const isBest = val === maxVal && maxVal > 0;
       ctx.fillStyle = isBest ? "#2ec4b6" : t.ink;
-      ctx.font = isBest ? "bold 12px monospace" : "12px monospace";
+      ctx.font = isBest ? "bold 12px 'Space Mono', monospace" : "12px 'Space Mono', monospace";
       ctx.textAlign = "right";
       const dec = col.decimals != null ? col.decimals : (statKey === "ppg" ? 1 : 0);
       ctx.fillText(formatStat(val, dec), padX + (i + 2) * colW - 8, rY + 18);
