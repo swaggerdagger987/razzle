@@ -547,10 +547,7 @@ function _detectCheckoutReturn() {
         localStorage.setItem("razzle_user", JSON.stringify(data.user));
         updateAuthUI(data.user);
         window.dispatchEvent(new CustomEvent("razzle-plan-changed", { detail: data.user }));
-        if (typeof _showToast === "function") {
-          var planName = data.user.plan || "pro";
-          _showToast("welcome to Razzle " + planName.charAt(0).toUpperCase() + planName.slice(1) + ".");
-        }
+        _showWelcomeModal(data.user);
       } else if (attempts < maxAttempts) {
         setTimeout(pollForPlanChange, pollInterval);
       } else {
@@ -571,6 +568,76 @@ function _detectCheckoutReturn() {
   }
 
   setTimeout(pollForPlanChange, 1000);
+}
+
+function _showWelcomeModal(user) {
+  // Only show once per checkout session
+  if (sessionStorage.getItem("razzle_welcome_shown")) return;
+  sessionStorage.setItem("razzle_welcome_shown", "1");
+
+  var plan = (user.plan || "pro").replace("_lifetime", "");
+  var isElite = plan.indexOf("elite") !== -1;
+  var planLabel = isElite ? "Elite" : "Pro";
+  var interval = user.billing_interval || "year";
+  var price = isElite
+    ? (interval === "year" ? "$149.99/year" : "$19.99/month")
+    : (interval === "year" ? "$79.99/year" : "$9.99/month");
+
+  var features = isElite
+    ? [
+        "All 60+ Lab analytical panels",
+        "Full Bureau deep-dive + league intelligence",
+        "Situation Room with AI key included",
+        "Unlimited formulas + cloud sync",
+        "CSV export on every table",
+      ]
+    : [
+        "All 60+ Lab analytical panels",
+        "Full Bureau deep-dive + league intelligence",
+        "Situation Room (bring your own AI key)",
+        "Unlimited formulas + cloud sync",
+        "CSV export on every table",
+      ];
+
+  var overlay = document.createElement("div");
+  overlay.style.cssText = "position:fixed;inset:0;background:rgba(45,31,20,0.6);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;";
+  overlay.onclick = function(e) { if (e.target === overlay) overlay.remove(); };
+
+  var featureHTML = features.map(function(f) {
+    return '<li style="padding:4px 0;font-family:var(--font-mono);font-size:13px;color:var(--ink);">' + escapeHtml(f) + '</li>';
+  }).join("");
+
+  overlay.innerHTML =
+    '<div style="background:var(--bg);border:3px solid var(--ink);border-radius:12px;box-shadow:6px 6px 0 var(--ink);max-width:480px;width:100%;padding:32px;text-align:center;position:relative;">' +
+      '<div style="font-size:48px;margin-bottom:8px;">🐯</div>' +
+      '<h2 style="font-family:var(--font-display);font-size:28px;color:var(--ink);margin:0 0 4px;">welcome to the film room.</h2>' +
+      '<p style="font-family:var(--font-hand);font-size:18px;color:var(--ink-light);margin:0 0 16px;">you just made the tiger very happy</p>' +
+      '<div style="display:inline-block;background:var(--orange);color:#fff;font-family:var(--font-mono);font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;border:2px solid var(--ink);margin-bottom:20px;">' +
+        escapeHtml(planLabel) + ' — ' + escapeHtml(price) +
+      '</div>' +
+      '<ul style="list-style:none;padding:0;margin:0 0 24px;text-align:left;">' +
+        featureHTML +
+      '</ul>' +
+      '<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">' +
+        '<a href="/league-intel" style="font-family:var(--font-mono);font-size:13px;font-weight:700;padding:10px 20px;background:var(--orange);color:#fff;border:2px solid var(--ink);border-radius:8px;box-shadow:3px 3px 0 var(--ink);text-decoration:none;cursor:pointer;">Open the Bureau</a>' +
+        '<a href="/lab" style="font-family:var(--font-mono);font-size:13px;font-weight:700;padding:10px 20px;background:var(--bg-warm);color:var(--ink);border:2px solid var(--ink);border-radius:8px;box-shadow:3px 3px 0 var(--ink);text-decoration:none;cursor:pointer;">Back to the Screener</a>' +
+      '</div>' +
+      '<button onclick="this.closest(\'div\').parentElement.remove();" style="position:absolute;top:12px;right:12px;background:none;border:none;font-size:20px;color:var(--ink-light);cursor:pointer;font-family:var(--font-mono);">&times;</button>' +
+    '</div>';
+
+  document.body.appendChild(overlay);
+
+  // CSS confetti burst
+  var style = document.createElement("style");
+  style.textContent = "@keyframes welcome-confetti{0%{opacity:1;transform:translateY(0) rotate(0deg);}100%{opacity:0;transform:translateY(-200px) rotate(720deg);}}";
+  document.head.appendChild(style);
+  var colors = ["var(--orange)", "var(--pos-qb)", "var(--pos-rb)", "var(--pos-te)", "var(--green)"];
+  for (var ci = 0; ci < 20; ci++) {
+    var dot = document.createElement("div");
+    dot.style.cssText = "position:fixed;width:" + (6 + Math.random() * 8) + "px;height:" + (6 + Math.random() * 8) + "px;background:" + colors[ci % colors.length] + ";border-radius:" + (Math.random() > 0.5 ? "50%" : "2px") + ";left:" + (10 + Math.random() * 80) + "%;top:" + (40 + Math.random() * 30) + "%;z-index:10001;pointer-events:none;animation:welcome-confetti " + (0.8 + Math.random() * 1.2) + "s ease-out forwards;animation-delay:" + (Math.random() * 0.3) + "s;";
+    document.body.appendChild(dot);
+    setTimeout((function(d) { return function() { d.remove(); }; })(dot), 2500);
+  }
 }
 
 function _injectAuthModal() {

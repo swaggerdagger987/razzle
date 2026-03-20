@@ -954,6 +954,55 @@ All 59 tests pass. All 11 JS files syntax-clean. 0 remaining issues found.
 
 ---
 
+## Quality Audit: Multi-Agent Deep Sweep (Mar 19)
+
+**Goal**: 5-agent parallel audit across all files — crash bugs, data corruption, dark mode, mobile, brand voice.
+
+| # | Fix | Category | Notes |
+|---|-----|----------|-------|
+| 1 | season vs _season in dashboards.py (3 functions) | DATA BUG | fetch_strength_of_schedule, fetch_stock_watch, fetch_season_awards all used raw `season` (None) instead of resolved `_season` in defense PPG queries — produced empty/wrong results when called without explicit season |
+| 2 | setPosition undefined → togglePosition | CRASH | Keyboard shortcuts 1-5 called nonexistent function, threw ReferenceError |
+| 3 | data.players → data.items in rosterSearchPlayers | BROKEN | API returns `{ items: [...] }`, code read `data.players` — roster search never returned results |
+| 4 | Sparse vscroll array "undefined" in HTML | DISPLAY | `_vscrollRows[i]` on unbuilt rows appended literal "undefined" string |
+| 5 | ppg.toFixed(1) crash on null | CRASH | Weekly heatmap panel called .toFixed() on potentially null ppg |
+| 6 | escapeHtml(p.annotation) on undefined | DISPLAY | Breakouts panel rendered "undefined" text when annotation missing |
+| 7 | _parseFindings crash on null findingsStr | CRASH | warroom.js — .slice() on null/undefined in catch block |
+| 8 | Free-tier specialist execution blocked | LOGIC | runAllAgents early-exit checked `!apiKey && !elite` but didn't check isLoggedIn() — blocked free-tier logged-in users from using free LLM |
+| 9 | Keyboard handler captured text input | UX | WASD/1-6 keys intercepted while typing in scenario input or config fields |
+| 10 | callFreeLLM no timeout | HANG | Free-tier LLM fetch had no AbortController — request could hang forever |
+| 11 | Double-click race in toggleLeague | RACE | dataset.loaded guard only checked "true", not "loading" — double-click loaded roster twice |
+| 12 | Monte Carlo Math.log(0) → Infinity | DATA | Math.random() can return 0, producing Infinity in simulation |
+| 13 | Clipboard .catch() missing | UX | Share modal copy buttons had no fallback on clipboard API rejection |
+| 14 | Zebra stripe hardcoded rgba | DARK MODE | Used rgba(45,31,20,0.02) instead of var(--zebra-stripe) |
+| 15 | Thead shadow invisible in dark mode | DARK MODE | Added [data-theme="dark"] override with rgba(0,0,0,0.25) |
+| 16 | Prospect bar backgrounds invisible in dark mode | DARK MODE | rgba(45,31,20,0.06) → var(--bg-warm) |
+
+---
+
+## Headshot URL Hotfix (Mar 19)
+
+**Goal**: Repopulate NULL headshot_url values in players table.
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Fix sync_rosters to include headshot_url | DONE | Added headshot_url to UPDATE query in nflverse_adapter.py |
+| 2 | Run roster sync for 2015-2025 | DONE | 3398/3407 players now have headshots (99.7%). Was 2116 before. |
+
+### Note
+User needs to manually upload updated terminal.db to Render persistent disk at /data/terminal.db.
+
+---
+
+## Welcome to Pro Modal (Mar 19)
+
+**Goal**: Post-checkout welcome experience after Stripe payment.
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Build _showWelcomeModal in app.js | DONE | Tiger emoji + "welcome to the film room" headline, Caveat aside ("you just made the tiger very happy"), plan/price badge, 5-item feature list, CTA buttons (Bureau + Screener), CSS confetti burst (20 dots, position colors), sessionStorage one-time guard. Works for Pro and Elite with tier-specific messaging. |
+
+---
+
 ## Player Name Font Consistency (Mar 19)
 
 **Goal**: Enforce Space Mono bold 700 on all player names in data tables.

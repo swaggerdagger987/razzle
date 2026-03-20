@@ -13,13 +13,39 @@ The database file `data/terminal.db` uses WAL journal mode locally. Uploading it
 
 ---
 
+## Phase: Hotfix — Global data font consistency
+
+**PRIORITY: FIX NOW.** All data-level text across the entire site must use Space Mono (`var(--font-mono)`). This includes: player names, stat values, table cells, position badges, team labels, score numbers, ranking numbers, trade values, percentages, column headers in tables, filter chips, dropdown options, search results, compare tables, profile stats, and any text that displays player/stat/league information. Luckiest Guy stays for page headings and section titles ONLY. Caveat stays for annotations and loading states ONLY. Everything else = Space Mono. If it's data, it's mono.
+
+### Task 1: Audit and fix all inline font-family in lab.js
+**Accept when**: Grep lab.js for every `font-family` and `fontFamily` reference. Any that set `var(--font-display)` or `var(--font-hand)` on data elements (player names, stats, badges, table cells, scores) must be changed to `var(--font-mono)`. Only headings (h1, h2, panel titles) should keep display font. Only annotations, loading messages, and aside text should keep hand font.
+**Status**: PENDING
+
+### Task 2: Audit and fix all inline font-family in lab-panels.js
+**Accept when**: Same audit for lab-panels.js. Every player name, stat value, table cell, badge, and score rendered by panel code uses `var(--font-mono)`. Grep confirms zero `font-display` on data elements.
+**Status**: PENDING
+
+### Task 3: Audit and fix all font-family in lab-panels.css
+**Accept when**: Every CSS rule targeting data elements (table td, table th, .player-name, stat cells, badges, score displays) uses `font-family: var(--font-mono)`. Any rule that sets `var(--font-display)` on a data element is fixed. Panel headers (h2, section titles) can keep display font.
+**Status**: PENDING
+
+### Task 4: Audit and fix fonts in warroom.js, compare.js, player.js, formulas.js
+**Accept when**: All data text in these files uses `var(--font-mono)`. Agent briefing cards, comparison tables, player profile stats, formula results — all Space Mono. Only headings and annotations keep their respective fonts.
+**Status**: PENDING
+
+### Task 5: Audit and fix fonts across all 60+ standalone HTML panel pages
+**Accept when**: Grep all HTML files in frontend/ for inline `font-family` on data elements. Fix any that aren't `var(--font-mono)`. This catches any hardcoded `sans-serif`, `Arial`, `Luckiest Guy`, or missing font-family on data text.
+**Status**: PENDING
+
+---
+
 ## Phase: Hotfix — Repopulate player headshot URLs
 
 **PRIORITY: FIX NOW.** All player headshot_url values are NULL in the database. The headshots come from nflverse roster CSVs. Run `sync_rosters()` from the nflverse adapter to re-populate headshot_url for all players. This is a data fix, not a code fix.
 
 ### Task 1: Run roster sync to repopulate headshot URLs
 **Accept when**: Run the nflverse `sync_rosters()` function against the local terminal.db for all seasons 2015-2025. After sync, verify with `SELECT COUNT(*) FROM players WHERE headshot_url IS NOT NULL AND headshot_url != ''` — should be 1500+ (all active/recent players with ESPN/nflverse headshot URLs). Verify star players have URLs: Mahomes, Allen, Jefferson, Chase, etc. Commit the repopulated database state by noting in PROGRESS.md that headshots were re-synced. NOTE: After this fix, the user needs to manually upload the updated terminal.db to the Render persistent disk at /data/terminal.db.
-**Status**: PENDING
+**Status**: DONE
 
 ---
 
@@ -37,7 +63,7 @@ The database file `data/terminal.db` uses WAL journal mode locally. Uploading it
 - Uses Razzle design language: sand background, chunky borders, Luckiest Guy heading, Space Mono details, Caveat aside ("you just made the tiger very happy")
 - Works for both Pro and Elite tiers with appropriate messaging
 - The welcome only shows ONCE per checkout (use sessionStorage or URL param to prevent re-showing on refresh)
-**Status**: PENDING
+**Status**: DONE
 
 ---
 
