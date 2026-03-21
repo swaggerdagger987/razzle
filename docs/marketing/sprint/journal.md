@@ -1276,3 +1276,69 @@ Sources:
 ## NEXT QUESTION: How does Razzle map Sleeper player IDs to nflverse gsis_ids — and what's the fallback when mapping fails?
 
 ---
+
+## Question 18: How does Razzle map Sleeper player IDs to nflverse gsis_ids — and what's the fallback when mapping fails?
+
+**Why this matters**: The Bureau features (Self-Scout, Championship Odds, Scouting Reports) all require matching Sleeper roster data to Razzle's nflverse-backed stats. Sleeper uses its own numeric IDs ("1042", "2403"). Razzle's DB uses nflverse gsis_ids as player_id. If the mapping fails, roster grades show gaps, trade values are missing, and the entire Bureau looks broken.
+
+### Answer
+
+**Verdict: Razzle ALREADY solves this — and the solution is surprisingly robust, though it has a known ceiling.**
+
+Here's how the three-layer resolution currently works:
+
+**Layer 1 — Sleeper provides gsis_id directly.** The Sleeper `/players/nfl` endpoint (~5MB JSON, cached once per session in `_sleeperPlayersCache`) returns a `gsis_id` field per player. This is the GSIS ID that nflverse uses as its primary key. For active NFL players, Sleeper's gsis_id coverage is high — most rostered skill players have it populated. This is the ideal path: Sleeper gsis_id → Razzle player_id, zero ambiguity.
+
+**Layer 2 — Name + team fuzzy matching (current production method).** Razzle does NOT use Layer 1. Instead, the frontend extracts `first_name + last_name` from Sleeper's player object and sends `{name, position, team}` dicts to the backend. The backend's `_normalize_name()` function (dynasty.py:712) strips suffixes (Jr., Sr., II, III), removes periods, lowercases, and matches against a `name_map` and `team_name_map` built from all players in `terminal.db`. The match cascade is: team+name first (most precise), then name-only fallback.
+
+**Layer 3 — Unmatched list.** Failed matches are returned in an `unmatched[]` array. The frontend currently silently skips these. No user-facing error. This is fine at 90%+ match rates but problematic below that.
+
+**What's the actual match rate?** Based on the code pattern and typical Sleeper league rosters (25-30 players per team, ~90% active NFL with nflverse records):
+- Active starters (QB/RB/WR/TE): ~95%+ match rate. Name normalization handles most edge cases.
+- Taxi squad/deep stashes: Lower. Rookies pre-NFL-debut won't have nflverse stats. Players with unusual name formats (hyphenated, non-ASCII) may fail normalization.
+- Draft picks, DEF, K: Not matched to nflverse data (different schema). Draft picks use Sleeper's own ID format ("CAR", pick objects).
+
+**The missed opportunity: Sleeper already gives us gsis_id — we're just not using it.** The frontend sends names instead of IDs because the code was written for simplicity. A direct gsis_id passthrough would:
+1. Eliminate name normalization failures entirely for any player with a gsis_id
+2. Still need name fallback for players missing gsis_id in Sleeper's data
+3. Be a ~30-line change (pass `gsis_id` from `allPlayers[pid]` alongside the name)
+
+**The nuclear option (not needed yet): nflverse's crosswalk file.** The `dynastyprocess/data` repo publishes `ff_player_ids.csv` mapping sleeper_id ↔ gsis_id ↔ espn_id ↔ 30+ other ID systems. Razzle could download this ~1MB file during DB build and create a `player_id_crosswalk` table. This would handle edge cases where neither Sleeper's gsis_id nor name matching works. But at current scale, this is overengineering.
+
+**Recommendation for MVP Bureau launch:**
+1. Pass `allPlayers[pid].gsis_id` from frontend → backend (30-line change)
+2. Keep name fallback for null gsis_id cases
+3. Show unmatched count in UI: "24/26 players matched" (transparency > silent failure)
+4. Log unmatched names server-side for monitoring
+
+### Self-Critique
+
+**What's backed by data**: The code analysis is from the actual production codebase — `_normalize_name()` at dynasty.py:712, `allPlayers[pid]` at league-intel.html:2384, the `gsis_id` field in Sleeper's API response (confirmed by Sleeper docs and ffscrapr's str_squish on gsis_id). The dynastyprocess crosswalk is a real, maintained dataset (last updated 2026-01-10).
+
+**What's speculation**: The "95%+ match rate for starters" is an estimate based on code review, not measured telemetry. The actual match rate could be lower if name normalization has edge cases I haven't identified (e.g., D'Andre vs. DeAndre, Amon-Ra St. Brown). The claim that "most rostered skill players have gsis_id in Sleeper" is based on API structure docs, not an actual audit of null rates.
+
+**Confidence: 8/10** — The technical path is clear and the code already works in production. The gap (not using gsis_id directly) is a known optimization, not a blocker. The only real risk is unmeasured null-rate in Sleeper's gsis_id field.
+
+Sources:
+- [Sleeper API Documentation](https://docs.sleeper.com/)
+- [nflreadr load_ff_playerids](https://nflreadr.nflverse.com/reference/load_ff_playerids.html) — crosswalk with sleeper_id + gsis_id
+- [DynastyProcess Data Repository](https://github.com/dynastyprocess/data) — ff_player_ids.csv
+- [nflverse Players Data](https://nflreadr.nflverse.com/reference/load_players.html) — single source of truth for NFL player IDs
+- [ffscrapr Sleeper Integration](https://ffscrapr.ffverse.com/articles/sleeper_getendpoint.html) — documents gsis_id whitespace issues
+- Razzle codebase: `backend/live_data/dynasty.py` lines 712-831 (name normalization + match cascade)
+- Razzle codebase: `frontend/league-intel.html` lines 2301-2388 (Sleeper player cache + roster resolution)
+- Razzle codebase: `adapters/nflverse_adapter.py` lines 401-433 (build_player_lookup + resolve_player_id)
+
+---
+
+### Next 3 Questions This Raises
+
+1. **What is the Sleeper connection trust barrier — why would a dynasty manager give their Sleeper username to a new tool, and what social proof or privacy messaging reduces friction?** (The Bureau requires users to enter their Sleeper username. Unlike OAuth, this is low-friction technically but high-friction psychologically. "Who are you and why do you want my league data?" This is the funnel bottleneck.)
+
+2. **What tone should Bones use in scouting report quotes — and can template-based quotes achieve 80% of LLM quality at 0% of the cost?** (The Bones quote is the card's personality. LLM-generated quotes would be better but add cost and latency. Template quotes ("sells after {N} straight losses") may be good enough if the templates are well-written. What's the minimum viable Bones voice?)
+
+3. **What's the minimum Sleeper league history needed for behavioral profiling to look credible — and how does Razzle handle leagues with <1 year of data?** (The scouting report card from Q17 shows stats like "Trades/yr: 4.2" and "Panic score: 42%". One season of data makes these look thin. Two seasons minimum for trend lines. How does the UI degrade gracefully for new leagues?)
+
+## NEXT QUESTION: What is the Sleeper connection trust barrier — why would a dynasty manager give their Sleeper username to a new tool, and what social proof or privacy messaging reduces friction?
+
+---
