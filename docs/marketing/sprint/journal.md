@@ -725,6 +725,76 @@ Sources:
 
 3. **What are the first 5 "data drop" posts Razzle should publish on r/DynastyFF — which specific player analyses using which specific Lab views will generate the most engagement during the April-May draft window?** (Moves from format theory to actual content calendar with specific posts.)
 
-## NEXT QUESTION: How should Razzle run a willingness-to-pay test BEFORE building the full Bureau — landing page with pricing, survey, or waitlist with tier selection?
+## Question 12: How should Razzle run a willingness-to-pay test BEFORE building the full Bureau — landing page with pricing, survey, or waitlist with tier selection?
+
+**Why this matters**: Q8 proposed $149/yr Founding Members pricing, but that number is an informed guess based on competitive positioning — not validated demand. Building the Bureau (behavioral profiling engine, profile storage, shareable League Pulse pages) is months of work. If the price is wrong or demand is weak, that's wasted effort. A pre-build WTP test de-risks the entire paid tier before writing a single line of Bureau code.
+
+### Answer
+
+**Verdict: Run a "fake door" pricing page on razzle.lol/pro — not a survey, not a separate landing page. A pricing page inside the existing product that captures click intent on specific tiers, with a "You're early — join the founding member list" reveal. 7-14 day test, 300+ unique visitors minimum.**
+
+Evidence:
+
+1. **Surveys lie. Clicks don't.** Van Westendorp price sensitivity surveys (4-question "too cheap / too expensive" format) are the academic standard, but they measure STATED preference, not REVEALED preference. SurveyMonkey and Conjointly both offer Van Westendorp templates, but the method requires 200+ qualified respondents and historically over-indexes willingness vs. actual purchase behavior. For a pre-launch product with no email list, recruiting 200 dynasty managers to complete a pricing survey is harder than just building the fake door test. The Buffer case study proves this: Joel Gascoigne added a pricing page between two steps of his MVP signup. Users who clicked a paid tier revealed their price tolerance through ACTION, not opinion. Buffer achieved 4% conversion to paid from this exact methodology.
+
+2. **The fake door test is the right method for Razzle's situation.** Amplitude and Userpilot both document fake door testing as the gold standard for pre-build feature validation. The pattern: (a) create a real-looking pricing page at razzle.lol/pro, (b) show 2-3 tiers with real prices and real feature lists, (c) when a user clicks "Subscribe" or "Get Started," reveal: "You're early. The Bureau launches September 2026. Lock in the Founding Member rate — no charge until launch." (d) Collect email + which tier they clicked. The ethical version (recommended by BuildVoyage's fake door ethics guide) is transparent: don't process payment, don't pretend the product exists, DO capture intent signal.
+
+3. **The specific test structure for Razzle:**
+
+   | Element | Spec |
+   |---------|------|
+   | **URL** | razzle.lol/pro (linked from Lab nav + footer) |
+   | **Page design** | Sand background, Razzle aesthetic, same design system as Lab |
+   | **Tier 1: Lab Pro** | $49/yr — advanced Lab features (unlimited exports, saved views sync, custom formulas). This is the "anchor low" tier that makes $149 look reasonable. |
+   | **Tier 2: Bureau** | ~~$240~~ $149/yr Founding Member — behavioral profiling, manager archetypes, exploit windows, full scouting reports. HERO tier with "Most Popular" badge. |
+   | **Tier 3: Bureau+** | $199/yr — everything in Bureau + league-wide AI agent analysis, priority features, beta access. "Power User" tier. |
+   | **CTA button** | "Lock In Founding Rate" (not "Subscribe" — honest about pre-launch status) |
+   | **Post-click reveal** | Modal: "The Bureau launches Week 1, 2026. Join the founding member list to lock in this rate. No charge until launch." + email capture + optional: "Which feature matters most?" (3 radio buttons: behavioral profiles, exploit alerts, AI agents) |
+   | **Tracking** | GA4 events: page_view, tier_click (with tier label), email_submit, feature_preference |
+   | **Traffic source** | Existing Lab users (nav link), Reddit data drop posts (watermark → site → /pro), organic search |
+   | **Duration** | 14 days minimum, or until 300+ unique page visitors |
+   | **Success metric** | >5% tier click rate (15+ of 300 visitors click a tier) AND >30% email capture of clickers (5+ emails). If both pass, the price and demand are validated. |
+
+4. **Why not a standalone landing page or waitlist tool?** Waitlist tools (Waitlister, LaunchList, GetWaitlist) add a third-party dependency, create a separate domain/subdomain experience, and don't benefit from Razzle's existing Lab traffic. The whole point of the Lab-first strategy (Q9, Q10) is that Lab users convert to Bureau users. The WTP test should mirror this exact funnel: use the Lab → see /pro in nav → click → reveal intent. A standalone landing page with paid Reddit ads tests a DIFFERENT audience (cold traffic) against a DIFFERENT funnel (ad → landing page). That's useful later, but for the first WTP test, existing Lab users are the right sample.
+
+5. **What the data tells you and what to do with it:**
+   - **>5% click on $149 Bureau tier**: Price validated. Ship at $149 Founding Member rate.
+   - **>5% click but mostly on $49 Lab Pro tier**: Demand exists but price sensitivity is high. Consider shipping Lab Pro first at $49, Bureau later at $149.
+   - **<3% click on any tier**: Either the feature descriptions don't resonate, or the audience isn't ready to pay. Run a Van Westendorp survey on the email list from Q10's Reddit strategy to find the right price anchor.
+   - **Feature preference radio buttons**: If "behavioral profiles" wins, ship archetypes first. If "exploit alerts" wins, ship the action layer first. If "AI agents" wins, the Situation Room is the conversion driver, not the Bureau.
+
+6. **Timeline: This can ship in 1-2 days.** It's a static HTML page at razzle.lol/pro with the Razzle design system, 3 tier cards, click event tracking, and a modal with an email form. No backend changes. No Stripe integration. No Bureau code. The hardest part is writing compelling feature descriptions for a product that doesn't exist yet — which is exactly the exercise that forces product clarity.
+
+### Self-Critique
+
+**What's backed by data**: Buffer's fake door pricing test (2-page MVP → 4% paid conversion) is a documented case study from their own blog. Fake door testing methodology is well-established (Amplitude, Userpilot, ProdPad all document it). Van Westendorp's 200+ respondent requirement is from academic methodology. The 5% click rate threshold is derived from industry benchmarks for feature interest tests (Amplitude cites 3-8% as the typical range for fake door click-through). Waitlist tool pricing (Waitlister free to $99/mo) is confirmed from their pricing pages.
+
+**What's speculation**: The 300-visitor minimum assumes Razzle's Lab gets enough traffic — if it's only getting 20 visitors/day, the test takes 15 days just to reach sample size. The $49 "Lab Pro" tier is invented here as a test anchor and hasn't been validated as a viable standalone product. The "feature preference" radio buttons assume users can articulate which Bureau feature they want before experiencing any of them — this is stated preference, the exact problem we're trying to avoid. The success thresholds (5% click, 30% email capture) are informed judgment, not proven benchmarks for fantasy football tools specifically.
+
+**Confidence: 8/10** — The fake door method is proven and low-cost. The specific implementation (in-product pricing page, not standalone) is the right call for Razzle's current stage. The main risk is traffic volume — if the Lab doesn't have enough visitors yet, the test is inconclusive regardless of methodology.
+
+Sources:
+- [Buffer: Idea to Paying Customers in 7 Weeks](https://buffer.com/resources/idea-to-paying-customers-in-7-weeks-how-we-did-it/)
+- [Amplitude: What Is Fake Door Testing](https://amplitude.com/explore/experiment/fake-door-testing)
+- [Userpilot: Fake Door Testing Definition + How to Run](https://userpilot.com/blog/fake-door-testing/)
+- [BuildVoyage: Fake Door Tests and Ethics](https://buildvoyage.com/articles/fake-door-tests-and-ethics)
+- [Conjointly: Van Westendorp Price Sensitivity Meter](https://conjointly.com/products/van-westendorp/)
+- [SurveyMonkey: Van Westendorp Price Sensitivity Meter Guide](https://www.surveymonkey.com/market-research/resources/van-westendorp-price-sensitivity-meter/)
+- [Smoke Tests in Market Research — Horizon](https://www.gethorizon.net/guides/smoke-tests-in-market-research-the-complete-guide)
+- [Fake Door Test for B2B SaaS — Do What Matter](https://dowhatmatter.com/guides/fake-door-test)
+- [FounderFAQs: How to Run a Smoke Test Landing Page](https://founderfaqs.com/blogs/how-to-run-a-smoke-test-landing-page-to-prove-demand)
+- Prior journal: Q7 (competitive landscape), Q8 ($149 Founding Member pricing), Q9 (launch sequence), Q10 (Reddit strategy)
+
+---
+
+### Next 3 Questions This Raises
+
+1. **What are the first 5 "data drop" posts Razzle should publish on r/DynastyFF — which specific player analyses using which specific Lab views will generate the most engagement during the April-May draft window?** (Carried from Q11 — the Reddit content strategy depends on specific posts, not just format theory. This is the execution layer.)
+
+2. **What should the /pro pricing page copy say — how do you describe behavioral profiling, exploit windows, and manager archetypes to a dynasty manager who's never heard of these concepts?** (The fake door test lives or dies on whether the feature descriptions make people click. "Behavioral profiling" is jargon. The copy needs to translate to dynasty language: "Know who panics after losses. Trade them on Tuesdays.")
+
+3. **What is Razzle's email capture and nurture strategy — once someone joins the founding member list, what do they receive between now and Bureau launch to stay engaged and convert?** (The fake door captures emails. But a 6-month gap between signup and launch kills conversion unless there's a drip sequence keeping them warm with Lab data drops, feature previews, and early access invites.)
+
+## NEXT QUESTION: What are the first 5 "data drop" posts Razzle should publish on r/DynastyFF — which specific player analyses using which specific Lab views will generate the most engagement during the April-May draft window?
 
 ---
