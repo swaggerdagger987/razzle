@@ -3,6 +3,7 @@ NFL player CRUD functions — search, screener, profiles, comparisons, boom/bust
 Extracted from _monolith.py in Phase 27 Task 3.
 """
 
+import json
 import logging
 import re
 import statistics
@@ -611,8 +612,7 @@ def fetch_screener_sparklines(player_ids, season=0):
                 if pid not in sparklines:
                     sparklines[pid] = []
             return {"sparklines": sparklines, "season": _season}
-    import json as _json
-    _ck = f"sparklines:{_json.dumps(sorted(ids))}:{season}"
+    _ck = f"sparklines:{json.dumps(sorted(ids))}:{season}"
     return _cached(_ck, _query)
 
 
@@ -1672,7 +1672,7 @@ def _fetch_player_boom_bust_uncached(player_id, season=0):
         # Position rank by consistency among same-position players
         all_pos_players = conn.execute("""
             SELECT s.player_id,
-                   AVG(s.fantasy_points_ppr) as avg_ppg,
+                   ROUND(AVG(s.fantasy_points_ppr), 1) as avg_ppg,
                    GROUP_CONCAT(s.fantasy_points_ppr) as scores_csv
             FROM player_week_stats s
             JOIN players p ON s.player_id = p.player_id

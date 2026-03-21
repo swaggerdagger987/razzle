@@ -5,6 +5,7 @@ College football functions — cfb player stats, analytics, records, awards.
 import logging
 import math
 import re
+from collections import defaultdict
 
 from ..db import get_db
 from .core import _cached, _CACHE_TTL_STABLE, _current_nfl_season, _enrich_college_derived, TEAM_ABBREV
@@ -1311,7 +1312,7 @@ def fetch_college_scarcity(season=None):
 
 def _fetch_college_consistency_uncached(season=None, position=None, limit=30):
     """College consistency: cross-season per-game stat variance for multi-year players."""
-    import math as _math
+
 
     with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
@@ -1343,7 +1344,7 @@ def _fetch_college_consistency_uncached(season=None, position=None, limit=30):
             return {"season": season, "available_seasons": available_seasons,
                     "rock_solid": [], "wild_cards": []}
 
-        from collections import defaultdict
+
         player_seasons = defaultdict(list)
         player_info = {}
         for r in rows:
@@ -1381,7 +1382,7 @@ def _fetch_college_consistency_uncached(season=None, position=None, limit=30):
 
             if n >= 2:
                 variance = sum((v - mean) ** 2 for v in ppg_values) / (n - 1)
-                stddev = _math.sqrt(variance)
+                stddev = math.sqrt(variance)
             else:
                 stddev = 0.0
             cov = round(stddev / mean, 3) if mean > 0 else 0
@@ -1520,7 +1521,7 @@ def fetch_college_workload(season=None, position=None, limit=50):
 
 def _fetch_college_dual_threat_uncached(season=None, position=None, limit=50):
     """College dual-threat index: rush + receiving versatility."""
-    import math as _math
+
 
     with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
@@ -1568,7 +1569,7 @@ def _fetch_college_dual_threat_uncached(season=None, position=None, limit=50):
 
             rush_comp = max(rush_yd_pg, 0.1)
             rec_comp = max(rec_yd_pg, 0.1)
-            dti = _math.sqrt(rush_comp * rec_comp)
+            dti = math.sqrt(rush_comp * rec_comp)
 
             total = rush_yd + rec_yd
             rush_pct = (rush_yd / total * 100) if total > 0 else 50
@@ -1724,7 +1725,7 @@ def _fetch_college_aging_curves_uncached(position=None):
         rows = conn.execute(query, pos_params).fetchall()
 
         # Group by player, assign experience year
-        from collections import defaultdict
+
         player_seasons: dict = {}
         for r in rows:
             d = dict(r)

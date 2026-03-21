@@ -225,7 +225,7 @@ _WILD_CARD_ANNOTATIONS = [
 def fetch_consistency_rankings(season=None, position=None, limit=30, week=None):
     """Return consistency rankings: rock solid (low CoV) and wild cards (high CoV)."""
     def _query():
-        import math
+
 
         with get_db() as conn:
             # Determine season + available seasons
@@ -271,7 +271,7 @@ def fetch_consistency_rankings(season=None, position=None, limit=30, week=None):
                 }
 
             # Group weekly scores by player
-            from collections import defaultdict
+
             player_info = {}
             player_weeks = defaultdict(list)
             for r in rows:
@@ -473,7 +473,7 @@ def fetch_strength_of_schedule(season=None, position=None, limit=30):
                 }
 
             # Step 3: Aggregate per player
-            from collections import defaultdict
+
             player_agg = defaultdict(lambda: {
                 "opp_ppg_list": [], "total_pts": 0, "games": 0, "team": "",
             })
@@ -616,8 +616,8 @@ def fetch_stock_watch(season=None, position=None, limit=30):
     into a 0-100 stock score.  Rising = undervalued (stock > PPG rank).
     Falling = overvalued (stock < PPG rank)."""
     def _query():
-        import math
-        from collections import defaultdict
+
+
 
         with get_db() as conn:
             row = conn.execute(
@@ -880,7 +880,7 @@ def fetch_opportunity_share(season=None, position=None, limit=30, week=None):
     For RB/QB: Rush Dominator = (player rush yards / team rush yards) * 100
     """
     def _query():
-        from collections import defaultdict
+
 
         with get_db() as conn:
             row = conn.execute(
@@ -1083,8 +1083,8 @@ def fetch_report_cards(season=None, position=None, limit=25, week=None):
       20% PPG, 20% opportunity share.
     """
     def _query():
-        import math
-        from collections import defaultdict
+
+
 
         with get_db() as conn:
             row = conn.execute(
@@ -1406,8 +1406,8 @@ def fetch_season_awards(season=None, position=None):
     Dominator (dominator rating), Red Zone King (GL TDs), Best Floor (10th pctile).
     """
     def _query():
-        import math
-        from collections import defaultdict
+
+
 
         with get_db() as conn:
             row = conn.execute(

@@ -57,7 +57,7 @@ def _fetch_featured_uncached():
                   {age_filter}
                 GROUP BY p.player_id
                 HAVING games >= 8
-                ORDER BY (total_ppr / games) DESC
+                ORDER BY (total_ppr / NULLIF(games, 0)) DESC
                 LIMIT 5
             """, (season,)).fetchall()
 
