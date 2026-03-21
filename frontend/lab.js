@@ -9157,7 +9157,7 @@ function setupTradeSearchInput(side) {
       const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
       autoDiv.innerHTML = matches.map(p => {
         const pc = posColors[p.position] || getCanvasTheme().ink;
-        return '<div style="padding:6px 10px; cursor:pointer; display:flex; align-items:center; gap:6px; border-bottom:1px solid var(--ink-faint);" onmousedown="addToTradeSide(\'' + side + '\', \'' + escapeAttr(p.player_id || p.full_name) + '\')">'
+        return '<div class="tv-auto-row" data-side="' + side + '" data-pid="' + escapeAttr(p.player_id || p.full_name) + '" style="padding:6px 10px; cursor:pointer; display:flex; align-items:center; gap:6px; border-bottom:1px solid var(--ink-faint);">'
           + '<span style="font-family:var(--font-mono); font-size:9px; font-weight:bold; color:#fff; background:' + pc + '; padding:1px 5px; border-radius:3px;">' + escapeHtml(p.position) + '</span>'
           + '<span style="font-family:var(--font-mono); font-size:12px;">' + escapeHtml(p.full_name) + '</span>'
           + '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); margin-left:auto;">' + p._tv + '</span>'
@@ -9169,6 +9169,12 @@ function setupTradeSearchInput(side) {
 
   input.addEventListener("blur", () => {
     setTimeout(() => { autoDiv.style.display = "none"; }, 200);
+  });
+
+  autoDiv.addEventListener("mousedown", (e) => {
+    const row = e.target.closest(".tv-auto-row");
+    if (!row) return;
+    addToTradeSide(row.dataset.side, row.dataset.pid);
   });
 }
 
