@@ -633,6 +633,7 @@ def sync_saved_views(user_id: int, views: list) -> dict:
                 )
                 count += 1
             except Exception:
+                logger.warning("Failed to sync saved view for user %s", user_id, exc_info=True)
                 continue
         conn.commit()
         return {"status": "ok", "synced": count}
@@ -687,6 +688,7 @@ def sync_watchlist(user_id: int, players: list) -> dict:
                 )
                 count += 1
             except Exception:
+                logger.warning("Failed to sync watchlist item for user %s", user_id, exc_info=True)
                 continue
         conn.commit()
         return {"status": "ok", "synced": count}
