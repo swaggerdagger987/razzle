@@ -1792,3 +1792,47 @@ smoke-prod	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams	10
 36	OK	backend/live_data/core.py	119	_STAT_SUM_COLS	pass	re-audit: FUNC-040 ROUND(SUM(fantasy_points_*), 1) applied in _STAT_SUM_COLS and inline HPPR. Prod still has IEEE 754 artifacts. Not deployed.	95	2026-03-21T02:50
 63	OK	frontend/league-intel.html	7351	demoManagers	pass	re-audit: FUNC-041 fixed — 12 demo managers now match "12-team" label. RookieSZN + BuyLowSellHigh added. Not deployed.	95	2026-03-21T02:50
 69	OK	frontend/lab.js	1205	_QUERY_CACHE_TTL	pass	re-audit: Frontend cache TTL fixed — 5-min TTL (300000ms), staleness check in _queryCacheGet(). P2 resolved. Not deployed.	95	2026-03-21T02:55
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	Session 43 smoke: 11/11 passed locally (health, players, position filter, sort, week, screener, no NaN)	100	2026-03-21T03:21
+re-audit	OK	frontend/formula-store.js	482	renderFormulaStore	pass	re-audit: Ship c613fc6 XSS fix — escapeHtml→escapeAttr in value="" attribute. Correct fix, escapeAttr encodes " to &quot;	100	2026-03-21T03:25
+re-audit	OK	frontend/lab.js	11401	rosterSearchPlayers	pass	re-audit: Ship c613fc6 roster search XSS fix — inline onclick replaced with data-attributes + addEventListener delegation. Correct pattern.	100	2026-03-21T03:25
+re-audit	OK	frontend/lab.js	1257	fetchAndRenderNFL	pass	re-audit: Ship c613fc6 null guards — defensive checks on 7 DOM elements. All elements exist in lab.html. No regression risk.	100	2026-03-21T03:27
+re-audit	OK	backend/server.py	37	_resp_cache	pass	re-audit: Ship b8d6a83 cache thread safety — threading.Lock wraps all dict mutations in get/set. Stale read outside lock is safe (reference held).	100	2026-03-21T03:28
+re-audit	OK	backend/server.py	486	body_size_limit	pass	re-audit: Ship b8d6a83 body size limit — now reads actual body for POST/PUT/PATCH without Content-Length. Prevents chunked-encoding bypass.	100	2026-03-21T03:28
+re-audit	OK	backend/server.py	1142	llm_chat	pass	re-audit: Ship 3ed5b36 LLM sanitization — temperature clamped [0.0,2.0], max_tokens clamped [1,cap], both with try/except fallbacks. Both endpoints consistent.	100	2026-03-21T03:29
+22	P1	frontend/lab.js	9687	toggleACPlayer	ticket	FUNC-044: escapeAttr-in-onclick dead clicks for 11 players with apostrophes on aging curves (Ja'Marr Chase, De'Von Achane, D'Andre Swift). Same broken pattern Ship fixed in c613fc6 for roster search but missed here.	100	2026-03-21T03:35
+22	P1	frontend/lab.js	1765	openProspectProfile	ticket	FUNC-044: Same escapeAttr-in-onclick pattern for prospect profile links. Prospect names with apostrophes would dead-click.	90	2026-03-21T03:35
+19	OK	backend/live_data/core.py	857	dynasty_value	pass	re-audit: Ship 2fcc021 trade value spread fix verified. Top 4 spread=1.8 (Chase 95.8, Gibbs 95.2, Bijan 94.7, Bowers 94.0). TE overval reduced (2 TEs in top 30, was 5). P2 residual: all top-30 still tier 1.	90	2026-03-21T03:40
+29	OK	-	-	-	pass	re-audit: FUNC-043 still open — 25/50 breakout candidates have IEEE 754 rbs_score artifacts. Ticket unchanged.	100	2026-03-21T03:36
