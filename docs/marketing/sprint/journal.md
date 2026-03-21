@@ -158,6 +158,125 @@ Sources:
 
 3. **How should the League Pulse page be designed so that one manager connecting their league automatically creates 11 more potential users?** (The multiplayer conversion mechanic needs a specific UX flow — URL sharing, no-account viewing, group chat optimization.)
 
-## NEXT QUESTION: What Sleeper API data points are actually available to compute each of the 8 behavioral archetypes, and which archetypes are computationally feasible vs. aspirational?
+## Question 4: What Sleeper API data points are actually available to compute each of the 8 behavioral archetypes, and which archetypes are computationally feasible vs. aspirational?
+
+**Why this matters**: Q3 proposed 8 behavioral archetypes as the free-tier conversion hook. But an archetype that requires data Sleeper doesn't expose is vaporware. This question validates each archetype against the actual API surface.
+
+### Answer
+
+**Verdict: All 8 archetypes are computationally feasible with existing Sleeper API endpoints. Zero require private/authenticated data. The API surface is richer than expected — 6 endpoints provide everything needed.**
+
+### The 6 Core Data Sources
+
+| Endpoint | Key Fields | Rate Limit |
+|----------|-----------|------------|
+| `GET /league/{id}/transactions/{week}` | `type` (trade/waiver/free_agent), `creator` (user_id), `created` (ms timestamp), `adds` {roster_id: [player_ids]}, `drops`, `roster_ids`, `consenter_ids` | 1000/min |
+| `GET /league/{id}/matchups/{week}` | `roster_id`, `points`, `starters` [player_ids], `matchup_id` | 1000/min |
+| `GET /draft/{id}/picks` | `picked_by` (user_id), `round`, `pick_no`, `draft_slot`, `player_id`, `is_keeper`, metadata (position, team) | 1000/min |
+| `GET /league/{id}/rosters` | `owner_id`, `players` [ids], `settings` {wins, losses, fpts, total_moves, waiver_budget_used, waiver_position} | 1000/min |
+| `GET /league/{id}/users` | `user_id`, `display_name`, `avatar` | 1000/min |
+| `GET /players/nfl` | `player_id`, `position`, `team`, `status`, `age` (~5MB, cache once) | 1000/min |
+
+**Multi-season access**: League objects contain `previous_league_id`, enabling backward traversal through dynasty league history. Each prior season is a separate league_id with its own transactions, matchups, and drafts — all publicly accessible.
+
+### Archetype-by-Archetype Feasibility
+
+**1. Panic Seller** — Trades away players within 48-72hrs of a bad game or personal loss.
+- **Data**: `/transactions/{week}` (trade type, `created` timestamp, `drops`) × `/matchups/{week}` (manager's `points` that week, win/loss via `matchup_id` pairs)
+- **Algorithm**: For each trade, check if the manager lost their matchup that week or the previous week. Calculate `panic_ratio = trades_after_loss / total_trades`. If >0.6, Panic Seller.
+- **Feasibility: 10/10** — All fields directly available. Timestamp precision is milliseconds.
+
+**2. The Hoarder** — Never trades. Clings to players across seasons.
+- **Data**: `/transactions/{week}` (count trades per manager), `/rosters` across seasons (via `previous_league_id` chain)
+- **Algorithm**: `trade_count` per season. If <2 trades per season across 2+ seasons, Hoarder. Bonus: compare roster overlap across seasons — high overlap = extreme hoarding.
+- **Feasibility: 10/10** — Simple counting.
+
+**3. Tilt Machine** — Roster churn spikes after losses.
+- **Data**: `/matchups/{week}` (win/loss), `/transactions/{week}` (all types, timestamps)
+- **Algorithm**: Calculate `churn_after_loss` (adds+drops in 72hrs post-loss) vs `churn_after_win`. If ratio >2.0, Tilt Machine. The `created` timestamp enables precise loss-to-transaction correlation.
+- **Feasibility: 10/10** — Direct correlation available.
+
+**4. Draft Creature** — Predictable draft patterns (always reaches for same position).
+- **Data**: `/draft/{id}/picks` (round, pick_no, player_id, picked_by) × `/players/nfl` (position mapping)
+- **Algorithm**: Map each pick to position. Calculate `position_concentration = max_position_picks / total_picks`. If >0.45 in rounds 1-3 across 2+ drafts, Draft Creature. Also detect ADP deviation (pick_no vs player's ADP from nflverse).
+- **Feasibility: 10/10** — Draft data is complete with position metadata included.
+
+**5. Waiver Hawk** — First to claim, highest FAAB spend, most active on waivers.
+- **Data**: `/transactions/{week}` (type=waiver, creator, created), `/rosters` (settings.waiver_budget_used, settings.total_moves)
+- **Algorithm**: Count waiver claims, sum FAAB spent, measure claim velocity (how early in the week). `waiver_activity_score = (claims / league_avg_claims) × (faab_spent / league_avg_faab)`.
+- **Feasibility: 10/10** — `waiver_budget_used` and `total_moves` are in the roster settings object.
+
+**6. Trade Addict** — Constantly making deals.
+- **Data**: `/transactions/{week}` (type=trade, roster_ids, creator)
+- **Algorithm**: Count trades per manager. If >2× league average, Trade Addict. `creator` field reveals who INITIATES — a Trade Addict initiates >70% of their trades.
+- **Feasibility: 10/10** — The `creator` field is the key differentiator (initiator vs responder).
+
+**7. Steady Hand** — Low churn, consistent performance, no panic moves.
+- **Data**: `/transactions/{week}` (low volume), `/matchups/{week}` (consistent scoring)
+- **Algorithm**: Inverse of Tilt Machine. `consistency = 1 - coefficient_of_variation(weekly_points)`. Combined with `churn_ratio_after_loss < 1.2` and `total_transactions < league_median`.
+- **Feasibility: 10/10** — Composite of metrics already computed for other archetypes.
+
+**8. The Ghost** — Inactive. Rarely touches roster.
+- **Data**: `/transactions/{week}` (near-zero activity), `/matchups/{week}` (check for 0-point weeks indicating empty starters), `/rosters` (settings.total_moves)
+- **Algorithm**: `total_moves < 5` for the season AND/OR weeks with starters scoring 0 (player on bye/IR left in lineup). `ghost_score = (league_avg_moves - manager_moves) / league_avg_moves`.
+- **Feasibility: 9/10** — Transaction counting is trivial. Detecting "empty starters" requires cross-referencing starters with player bye weeks (available from `/players/nfl` but requires extra logic).
+
+### API Call Budget
+
+For a single league analysis (12-team, 18-week season):
+- Transactions: 18 calls (1 per week)
+- Matchups: 18 calls (1 per week)
+- Rosters: 1 call
+- Users: 1 call
+- League: 1 call
+- Draft picks: 1-2 calls (league drafts → draft picks)
+- Players: 1 call (cached globally)
+- **Total: ~42 API calls per season**
+
+For a dynasty league with 3 seasons of history: ~126 calls. Well within the 1000/min limit — entire behavioral profile computable in <10 seconds.
+
+### What's NOT Available (Limitations)
+
+1. **No chat/message data** — Cannot analyze negotiation style, counter-offer patterns, or trash talk. The "Jake counters 80% of the time" insight from Q2 is NOT computable. Only completed transactions are visible.
+2. **No rejected trade offers** — Only accepted trades appear. Cannot measure "sends 10 offers, 1 accepted" behavior.
+3. **No lineup-set timestamps** — Cannot tell if a manager set their lineup at 12:55 PM Sunday (last-minute) vs. Tuesday (prepared). Only the final starters are visible.
+4. **No waiver claim priority/order** — Can see FAAB spent but not failed waiver claims or bid amounts on lost waivers.
+5. **No in-app engagement metrics** — Cannot measure "checks Sleeper 50x/day" vs "once a week."
+
+### Revised Archetype Labels (Accounting for Limitations)
+
+The Q2 insights that DON'T work with available data:
+- ❌ "Jake has never initiated a trade. He only responds. He counters 80% of the time." — `creator` field shows initiation, but counter-offer behavior is invisible.
+- ❌ "Send this trade Tuesday after they lose" — Timing advice is inferrable from patterns but not precisely validated.
+- ✅ Everything else from Q2's scouting report concept is buildable.
+
+### Self-Critique
+
+**What's backed by data**: Every endpoint, field, and data structure referenced above is confirmed from the official Sleeper API docs and validated against Razzle's existing integration code (which already calls 7 of these endpoints in `league-intel.html`). The API call budget calculation is based on actual endpoint structures. The `previous_league_id` chain for multi-season data is documented.
+
+**What's speculation**: The specific algorithmic thresholds (panic_ratio >0.6, position_concentration >0.45, churn_ratio >2.0) are invented — they'll need calibration against real league data. The claim that 42 API calls completes in <10 seconds assumes Sleeper's API responds within 200ms per call average, which is untested under load. The Ghost archetype's "empty starters" detection is theoretically sound but may have edge cases (taxi squad players, IR slots, league-specific roster rules).
+
+**Confidence: 9/10** — All 8 archetypes are confirmed feasible against the actual API surface. The only unknowns are threshold calibration (requires real data) and the missing data limitations (chat, rejected offers, lineup timing). The core finding is strong: Razzle can build the ENTIRE behavioral profiling engine without any private API access or Sleeper partnership.
+
+Sources:
+- [Sleeper API Official Documentation](https://docs.sleeper.com/)
+- [Sleeper API Guide — Zuplo](https://zuplo.com/learning-center/sleeper-api)
+- [Sleeper API Guide — SportsFirst](https://www.sportsfirst.net/post/sleeper-api-explained-a-complete-guide-for-developers-fantasy-founders)
+- [sleeper-go Package (struct definitions)](https://pkg.go.dev/github.com/lum8rjack/sleeper-go)
+- [sleeper-api-wrapper (Python)](https://github.com/SwapnikKatkoori/sleeper-api-wrapper)
+- [ffscrapr (R package for Sleeper)](https://ffscrapr.ffverse.com/articles/sleeper_getendpoint.html)
+- [Sleeper League History Support](https://support.sleeper.com/en/articles/3941297-how-do-i-view-previous-seasons-of-my-leagues)
+
+---
+
+### Next 3 Questions This Raises
+
+1. **What is the optimal "embarrassment threshold" for free archetype labels — funny enough to screenshot, not mean enough to alienate?** (The archetype names need tone calibration. "Panic Seller" is funny in a group chat. "The Ghost" could feel like calling someone a bad manager. Where's the line?)
+
+2. **What's the technical architecture for the behavioral profiling engine — should it run client-side (like current Sleeper integration) or server-side (for caching, cross-league analysis, and Pro gating)?** (Current Sleeper calls are all client-side in league-intel.html. Behavioral profiling needs cross-season data and Pro/free tier gating — that suggests server-side processing.)
+
+3. **How do dynasty managers currently discover and evaluate competing behavioral analysis tools (leaguemate.fyi, Dynasty Assistant, Fantasy Wrapped), and what specific gap does Razzle fill that they don't?** (We know no competitor automates behavioral profiling, but we haven't mapped the competitive landscape for adjacent features like league history and trade grading.)
+
+## NEXT QUESTION: What is the optimal "embarrassment threshold" for free archetype labels — funny enough to screenshot, not mean enough to alienate?
 
 ---
