@@ -2899,3 +2899,42 @@ All data enrichments (PBP, roster demographics, bye weeks, injuries) are local-o
 - **Secrets**: No hardcoded API keys, no debug endpoints, CORS origins environment-gated
 
 ### 11/11 smoke tests pass after fix
+
+---
+
+## Ship Loop Session 30: 3-Agent Parallel Sweep (Mar 21)
+
+**Goal**: Ticket directories empty, TICKETS.md blocked on external infrastructure. Full sweep mode with Backend Architect, Frontend Developer, and HTML Panel QA agents.
+
+### Fixes Applied (10 bugs across 15 files)
+
+| # | Fix | Severity | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | `f.stat` → `f.key` in warroom filter context | P1 | warroom.js:2106 | Agent context showed "undefined >= 10" instead of actual filter field name |
+| 2 | clearTimeout before resp.json() in callServerLLM | P1 | warroom.js:2485 | Timeout cleared after headers but before body — resp.json() could hang forever |
+| 3 | clearTimeout before resp.json() in callFreeLLM | P1 | warroom.js:2534 | Same pattern — moved clearTimeout after body consumed |
+| 4 | `p.flags.map()` crash on null | P1 | workload.html:274 | API could return null flags array — added `|| []` guard |
+| 5 | `p.milestones.map()` crash on null | P1 | seasonpace.html:261 | API could return null milestones — added `|| []` guard |
+| 6 | escapeHtml(null) renders "null" string | P1 | 10 HTML panels | DOM-based escapeHtml had no null guard — added `if (t == null) return ""` |
+| 7 | Note editor title double-escaped | P2 | lab.js:563 | `escapeHtml(name)` on already-escaped name showed `&amp;amp;` |
+| 8 | NaN bar heights on null scores | P2 | streaks.html:461 | `null / maxScore` → NaN → `height:NaNpx`. Added `|| 0` guard |
+| 9 | records.html null fields show "null" | P2 | records.html | No fmt() helper — added null-safe number formatter |
+| 10 | billing trial_used set unconditionally | P2 | billing.py:440,447 | `trial_used=1` on all checkouts burned trial eligibility for direct purchases. Now `MAX(trial_used, ?)` with is_trial flag |
+
+### Triaged (not fixing)
+- COUNT(*) vs COUNT(DISTINCT week) — single data source, no duplicates (Session 24 triage)
+- Week filter on consistency/efficiency endpoints — frontend excludes week selector (Session 23 triage)
+- Stripe TOCTOU race on customer creation — architectural, needs DB-level locking (Session 26 triage)
+- Cache key raw query — cache-inefficient, not a correctness bug (Session 25 triage)
+- changePageSize only accepts 25 — intentional per Session 7 (prevents slow loads)
+- Formula label pre-escaped double-encoding — extremely rare (formula names with `&`), fixing risks XSS
+- Sprite COLS/ROWS naming — coincidentally correct for 2x2 grid, sprites won't change
+- Season cutoff >= 8 vs >= 6 — inconsistent but functional (all resolve to 2025 in March)
+- LLM rate limit consumed before request — acceptable, refund-on-failure adds complexity
+- Subscription reactivation plan restore — edge case requiring Stripe metadata present
+
+### Verified Clean
+- 11/11 smoke tests pass
+- All modified JS files syntax clean (node --check)
+- All modified Python files compile clean
+- 0 regressions
