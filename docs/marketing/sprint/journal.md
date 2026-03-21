@@ -997,6 +997,95 @@ Sources:
 
 3. **What does the "Manager Scouting Report" page actually look like — what data points, layout, and visual format would make a dynasty manager screenshot their leaguemate's report and drop it in the group chat?** (The /pro copy promises "one page per manager, updated weekly." What's on that page? This is where copy meets product design.)
 
-## NEXT QUESTION: What is Razzle's email capture and nurture strategy — once someone joins the founding member list, what do they receive between now and Bureau launch to stay engaged and convert?
+## Question 15: What is Razzle's email capture and nurture strategy — once someone joins the founding member list, what do they receive between now and Bureau launch to stay engaged and convert?
+
+**Why this matters**: Q12 designed the fake door pricing test at /pro. Q14 wrote the copy. But between someone clicking "Lock In Founding Rate" (March-April 2026) and Bureau launch (September 2026), there's a 5-6 month gap. SaaS pre-launch research shows conversion drops from ~50% to under 20% when access is delayed beyond 3 months. Without a nurture sequence, founding member emails are dead leads by Week 1.
+
+### Answer
+
+**Verdict: Gate a FEATURE (not content) for email capture, run a 2-phase nurture cadence (biweekly offseason → weekly draft season), and send exactly 18-22 emails between signup and launch. Every email must deliver standalone value — a Lab insight, a data drop, or a vote — not "update on our progress."**
+
+Evidence:
+
+1. **How to capture email without gating the free Screener.** The Screener must stay ungated — every screenshot is a billboard (North Star, Section 1). But specific FEATURES can require email. The highest-converting approach (25-40% capture rate vs. 1-3% for generic "subscribe" boxes) is value-exchange feature gates:
+
+   - **"Save this view"** — after a user builds a screener config, prompt: "Want to save this? Drop your email." They've already invested effort; email is the price of preservation.
+   - **"Get alerts on this player"** — after viewing a player profile, offer weekly value-change alerts. Ties email to a specific player they care about.
+   - **"Export PNG without watermark"** — free export keeps the watermark. Email gets a clean version (but watermarked stays default for sharing — this gates the PERSONAL copy).
+   - **Post-action behavioral trigger** — after 3+ screener queries or 5+ player views, show a non-modal banner: "You're clearly doing your homework. We send one email/week with dynasty movers. 50%+ open rates in fantasy." Convert: 8-15%.
+
+   What NOT to do: generic "subscribe to our newsletter" box (1-3% conversion), content paywalls on free tools (kills sharing/screenshots), immediate popups before value delivery (high bounce).
+
+2. **The nurture sequence: 18-22 emails across 3 phases.** Based on SaaS pre-launch best practices (Stormy AI, Sequenzy, ScoreApp 2026) adapted to the NFL calendar:
+
+   **Phase 1: Welcome + Edu-Selling (Emails 1-4, Days 0-14)**
+   - Email 1 (instant): Confirmation + founding member number. "You're Founding Member #47. Here's what that means." Include the locked-in price, what they'll get, and a shareable referral link.
+   - Email 2 (Day 3): "The problem we're solving" — the ChatGPT context problem from North Star. "Every time you paste your roster into ChatGPT..." Short, punchy, ends with a Lab screener link.
+   - Email 3 (Day 7): "Your first Lab data drop" — a screenshottable insight from the Lab. "Here are the 5 most overvalued dynasty assets right now, according to 100+ metrics." This proves the Lab is real and useful NOW.
+   - Email 4 (Day 14): "Vote on what ships first" — ask founding members to pick between 2 Bureau features. Creates investment. SaaS research shows decision emails keep subscribers replying and convert at 2-3x passive subscribers.
+
+   **Phase 2: Offseason Cadence (Emails 5-14, biweekly March→July)**
+   Tied to the NFL offseason calendar — 30% of NFL content consumption happens Feb-Sept (DataSkrive 2026). Every email delivers a standalone Lab insight:
+
+   | Email | Timing | Content |
+   |-------|--------|---------|
+   | 5 | Free agency week (Mar 11) | "Landing spot winners/losers — dynasty values that just moved 20%+" |
+   | 6 | Post-free-agency (late Mar) | "3 buy-low targets after the market overreacted" |
+   | 7 | Pre-draft (early Apr) | "Rookie Big Board: who the Lab says to draft" |
+   | 8 | NFL Draft night (Apr 23) | "Live: landing spot analysis + dynasty value shifts" |
+   | 9 | Post-draft (May) | "Your updated dynasty rankings after the draft" |
+   | 10 | OTAs begin (May/Jun) | "Bureau preview: here's what a Manager Scouting Report looks like" (screenshot of a sample report) |
+   | 11 | Minicamp (Jun) | "Vote: which Bureau feature do you want to see next?" |
+   | 12 | Pre-camp (Jul) | "Breakout candidates the Lab flagged that camp is confirming" |
+   | 13 | Training camp (late Jul) | "Bureau beta invites going out next week — founding members first" |
+   | 14 | Preseason (Aug) | "Your Bureau is live. Connect your Sleeper league." |
+
+   **Phase 3: Launch Ramp (Emails 15-18, August→Week 1)**
+   - Email 15 (Aug, 3 weeks pre-launch): Beta access invitation. "You're in. Connect your Sleeper league."
+   - Email 16 (Aug, 2 weeks pre-launch): "Your first Manager Scouting Report is ready" — the aha moment.
+   - Email 17 (Week 1 eve): Launch announcement. "Bureau is live. Your founding rate locks in tonight."
+   - Email 18 (Week 1 +1 day): Follow-up for openers who didn't convert. "Your league's first Pressure Map just updated."
+
+3. **Cadence benchmarks that justify this schedule.** Fantasy Life achieves 50%+ open rates with 300K+ subscribers on daily cadence during season. Footballguys sends twice/week in offseason, daily in-season. Dynasty Nerds publishes daily year-round. The biweekly offseason cadence (Phase 2) is conservative — fantasy audiences are conditioned to frequent contact. The key: every email must be a DATA DROP, not a product update. "Here's what the Lab found this week" > "Here's what we built this week."
+
+4. **Conversion targets.** SaaS pre-launch benchmarks (ScaleMath, Prefinery 2026):
+   - Waitlist-to-free-signup: 25-50% with proper nurture
+   - Waitlist-to-paid: 5-25% (founding member lists skew higher)
+   - 6-month-old subscribers convert at ~15%; 1-month-old at ~45% (Cleo case study)
+   - Target: 15-20% founding member → paid conversion at launch. At 500 founding members, that's 75-100 paid users on Day 1.
+
+5. **The tool for implementation.** Kit (formerly ConvertKit) — free tier, easy welcome sequence automation, subscriber tagging, referral tracking. Mailchimp works too but Kit is better for creator-type products. No code needed; embed a form on the /pro page that triggers the drip sequence.
+
+### Self-Critique
+
+**What's backed by data**: SaaS pre-launch nurture research consistently shows 10-email minimum sequences with edu-selling convert at 2-3x vs. launch-blast-only (Stormy AI, Sequenzy, ScoreApp). The 25-40% conversion rate for feature-gate email capture vs. 1-3% for generic subscribe is well-documented (Omnisend, HubSpot 2026). Fantasy Life's 50%+ open rates prove fantasy audiences tolerate and even expect frequent email. The NFL offseason calendar provides real content hooks that make biweekly cadence natural, not forced. The conversion drop from 50% to under 20% when access is delayed beyond 3 months is documented (ScaleMath).
+
+**What's speculation**: The specific feature-gate mechanisms ("save this view" requires email) are untested for Razzle specifically — conversion rates will vary based on implementation and UX friction. Whether 500 founding members is achievable from Reddit + Twitter with zero existing audience is an open question (Q6 territory). The 15-20% conversion target assumes the Bureau actually delivers a compelling "aha moment" when connected — if the Manager Scouting Report is underwhelming, nurture quality won't matter. The biweekly cadence in Phase 2 assumes enough Lab data drops to fill 10 emails — the Lab has the data, but someone has to write compelling email copy for each one.
+
+**Confidence: 7/10** — The framework is solid SaaS + fantasy best practice. The NFL calendar makes the cadence natural. The biggest risk is execution: writing 18 genuinely valuable emails over 6 months as a solo operator, AND building the Bureau, AND doing Reddit/Twitter distribution. This is a time management question more than a strategy question.
+
+Sources:
+- [Stormy AI: How to Nurture a SaaS Waitlist](https://stormy.ai/blog/how-to-nurture-saas-waitlist-email-sequence)
+- [Sequenzy: Waitlist Email Sequence](https://www.sequenzy.com/blog/waitlist-email-sequence)
+- [ScoreApp: 19-Part Waitlist Email Sequence](https://www.scoreapp.com/waitlist-email-sequence/)
+- [ScaleMath: Waitlist Conversion Rate](https://scalemath.com/blog/what-is-a-good-waitlist-conversion-rate/)
+- [Omnisend: Email Capture Best Practices](https://www.omnisend.com/blog/email-capture/)
+- [HubSpot: Email Capture](https://blog.hubspot.com/marketing/email-capture)
+- [DataSkrive: NFL Year-Round Content](https://dataskrive.com/nfl-year-round-boost-traffic-and-engagement-with-strategic-content/)
+- [Fantasy Life on BuySellAds](https://discover.buysellads.com/matthew-berrys-fantasy-life) (50%+ open rates, 300k+ subscribers)
+- [Footballguys Daily Update](https://newsletter.footballguys.com/) (700k+ subscribers, biweekly offseason)
+- Prior journal: Q8 (pricing), Q12 (fake door test), Q14 (/pro copy)
+
+---
+
+### Next 3 Questions This Raises
+
+1. **What is the minimum viable Bureau feature set for NFL Week 1 launch — which behavioral archetypes ship first, and how much Sleeper data is needed to generate useful profiles?** (Carried from Q9 — still unanswered, now URGENT. The email nurture promises "Your first Manager Scouting Report is ready" by August. What data does Razzle need from Sleeper to generate that report, and which 2-3 of the 8 archetypes produce the most exploitable insights with minimal league history?)
+
+2. **What does the "Manager Scouting Report" page actually look like — what data points, layout, and visual format would make a dynasty manager screenshot their leaguemate's report and drop it in the group chat?** (Carried from Q14 — the nurture sequence promises a screenshot of a sample report in Email 10. This needs to exist before June.)
+
+3. **What is Razzle's referral mechanism — how does a founding member share their referral link, and what do they get for bringing others?** (The nurture Email 1 mentions a "shareable referral link." Referral programs are the highest-ROI growth channel for pre-launch SaaS. What's the incentive? Extra month free? Priority beta access? Discord role? This determines whether the 500-founding-member target is reachable organically.)
+
+## NEXT QUESTION: What is the minimum viable Bureau feature set for NFL Week 1 launch — which behavioral archetypes ship first, and how much Sleeper data is needed to generate useful profiles?
 
 ---
