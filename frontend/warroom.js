@@ -3104,12 +3104,30 @@ function renderBriefingCard(agentId, content, isError) {
     contextPill = '<span class="briefing-generic-hint">generic analysis \u2014 upgrade for league-specific intel</span>';
   }
 
-  // Free model footer
+  // Free model footer + contextual upsell
   var freeFooter = '';
   var agentEntry = agentResults.get(agentId);
   if (agentEntry && agentEntry.freeModel) {
     var modelShort = (agentEntry.freeModel || 'unknown').split('/').pop().split(':')[0];
     freeFooter = '<div style="font-family:var(--font-hand);font-size:12px;color:var(--ink-light);padding:8px 0 0;border-top:2px dashed var(--ink-faint);margin-top:8px;">powered by ' + escapeHtml(modelShort) + ' \u2014 <a href="/pricing.html" style="color:var(--orange);">upgrade to Pro</a> for premium models</div>';
+  }
+
+  // Contextual upsell for free-mode (no league context)
+  var upsellBlock = '';
+  if (!isLeagueContextMode() && !isProUser()) {
+    var UPSELL_EXAMPLES = [
+      'which of your leaguemates needs this player most — and what to ask for in return',
+      'how this move changes your championship odds from X% to Y%',
+      'your rivals\' roster weaknesses and trade history patterns',
+      'whether this player fits your specific scoring settings and roster construction',
+      'which leaguemate panic-traded a similar player last season — and how to exploit it'
+    ];
+    var upsellExample = UPSELL_EXAMPLES[agentId % UPSELL_EXAMPLES.length];
+    upsellBlock = '<div style="background:rgba(217,119,87,0.08);border:2px dashed var(--orange);border-radius:8px;padding:12px;margin-top:10px;">' +
+      '<div style="font-family:var(--font-mono);font-size:11px;color:var(--orange);font-weight:700;margin-bottom:4px;">With your league connected, ' + escapeHtml(agent.name) + ' would also tell you:</div>' +
+      '<div style="font-family:var(--font-mono);font-size:12px;color:var(--ink-medium);line-height:1.5;">' + escapeHtml(upsellExample) + '</div>' +
+      '<a href="/league-intel.html" style="display:inline-block;margin-top:8px;font-family:var(--font-mono);font-size:11px;font-weight:700;color:var(--orange);text-decoration:none;">Connect your league + upgrade to Pro &rarr;</a>' +
+    '</div>';
   }
 
   return '<div class="' + cardClass + collapsed + '" data-briefing-agent="' + agentId + '">' +
@@ -3120,7 +3138,7 @@ function renderBriefingCard(agentId, content, isError) {
       contextPill +
       '<span class="briefing-card-toggle">' + toggleText + '</span>' +
     '</div>' +
-    '<div class="briefing-card-body">' + bodyHtml + freeFooter + '</div>' +
+    '<div class="briefing-card-body">' + bodyHtml + upsellBlock + freeFooter + '</div>' +
   '</div>';
 }
 
