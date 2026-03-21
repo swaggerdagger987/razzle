@@ -33,8 +33,18 @@ def _fetch_featured_uncached():
         results = {}
 
         # 1. Dynasty Risers — young + productive (PPG/age ratio)
+        #    Fallback to top PPG if age data is unavailable
         try:
-            rows = conn.execute("""
+            has_ages = conn.execute(
+                "SELECT COUNT(*) FROM players WHERE age IS NOT NULL AND age > 0 AND fantasy_relevant = 1"
+            ).fetchone()[0] > 10
+
+            if has_ages:
+                age_filter = "AND p.age IS NOT NULL AND p.age > 0 AND p.age <= 26"
+            else:
+                age_filter = ""
+
+            rows = conn.execute(f"""
                 SELECT p.player_id, p.full_name, p.position, p.team, p.age,
                        SUM(s.fantasy_points_ppr) as total_ppr,
                        COUNT(DISTINCT s.week) as games
@@ -42,8 +52,8 @@ def _fetch_featured_uncached():
                 JOIN player_week_stats s ON p.player_id = s.player_id AND s.season = ?
                     AND s.season_type = 'regular'
                 WHERE p.position IN ('QB','RB','WR','TE')
-                  AND p.age IS NOT NULL AND p.age > 0 AND p.age <= 26
                   AND p.fantasy_relevant = 1
+                  {age_filter}
                 GROUP BY p.player_id
                 HAVING games >= 8
                 ORDER BY (total_ppr / games) DESC
@@ -51,7 +61,8 @@ def _fetch_featured_uncached():
             """, (season,)).fetchall()
 
             results["dynasty_risers"] = [{
-                "name": r[1], "position": r[2], "team": r[3], "age": round(r[4]),
+                "name": r[1], "position": r[2], "team": r[3],
+                "age": round(r[4]) if r[4] else None,
                 "ppg": round(r[5] / r[6], 1) if r[6] else 0, "games": r[6]
             } for r in rows]
         except Exception:
@@ -88,7 +99,8 @@ def _fetch_featured_uncached():
 
         # 3. Breakout Candidates — high target share, below-average PPG (upside)
         try:
-            rows = conn.execute("""
+            breakout_age_filter = "AND p.age IS NOT NULL AND p.age <= 27" if has_ages else ""
+            rows = conn.execute(f"""
                 SELECT p.player_id, p.full_name, p.position, p.team, p.age,
                        SUM(s.fantasy_points_ppr) as total_ppr,
                        COUNT(DISTINCT s.week) as games,
@@ -98,8 +110,8 @@ def _fetch_featured_uncached():
                 JOIN player_week_stats s ON p.player_id = s.player_id AND s.season = ?
                     AND s.season_type = 'regular'
                 WHERE p.position IN ('WR','TE')
-                  AND p.age IS NOT NULL AND p.age <= 27
                   AND p.fantasy_relevant = 1
+                  {breakout_age_filter}
                 GROUP BY p.player_id
                 HAVING games >= 8 AND total_targets >= 50
                 ORDER BY (CAST(total_targets AS FLOAT) / games) DESC
@@ -107,7 +119,8 @@ def _fetch_featured_uncached():
             """, (season,)).fetchall()
 
             results["breakout_candidates"] = [{
-                "name": r[1], "position": r[2], "team": r[3], "age": round(r[4]),
+                "name": r[1], "position": r[2], "team": r[3],
+                "age": round(r[4]) if r[4] else None,
                 "ppg": round(r[5] / r[6], 1) if r[6] else 0,
                 "tpg": round(r[7] / r[6], 1) if r[6] else 0,
                 "games": r[6]
@@ -527,6 +540,20 @@ def fetch_draft_class(draft_year=None, position=None):
     def _query():
         nonlocal draft_year
         with get_db() as conn:
+            # Check if draft_picks table exists
+            table_check = conn.execute(
+                "SELECT name FROM sqlite_master WHERE type='table' AND name='draft_picks'"
+            ).fetchone()
+            if not table_check:
+                return {
+                    "draft_year": draft_year or _current_nfl_season(),
+                    "available_classes": [],
+                    "position": position or "ALL",
+                    "summary": {"draft_year": draft_year or _current_nfl_season(), "total_players": 0, "total_ppr": 0, "avg_ppg": 0, "hits": 0, "busts": 0, "hit_rate": 0},
+                    "rounds": [],
+                    "players": [],
+                }
+
             available_classes = [
                 r[0] for r in conn.execute(
                     "SELECT DISTINCT season FROM draft_picks ORDER BY season DESC"
@@ -2962,6 +2989,20 @@ def fetch_draft_class_tracker(draft_year=None, position=None):
     def _query():
         nonlocal draft_year
         with get_db() as conn:
+            # Check if draft_picks table exists
+            table_check = conn.execute(
+                "SELECT name FROM sqlite_master WHERE type='table' AND name='draft_picks'"
+            ).fetchone()
+            if not table_check:
+                return {
+                    "draft_year": draft_year or _current_draft_year(),
+                    "available_years": [],
+                    "position": position or "ALL",
+                    "summary": {"total": 0, "hits": 0, "busts": 0, "hit_rate": 0, "bust_rate": 0},
+                    "rounds": [],
+                    "players": [],
+                }
+
             # Available draft years
             year_rows = conn.execute(
                 "SELECT DISTINCT season FROM draft_picks WHERE position IN ('QB','RB','WR','TE') ORDER BY season DESC"
