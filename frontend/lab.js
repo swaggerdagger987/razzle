@@ -12848,7 +12848,7 @@ function exportBoomBustImage() {
   ctx.fillStyle = t.inkMedium;
   ctx.font = "13px 'Space Mono', monospace";
   ctx.textAlign = "left";
-  ctx.fillText(`${player.team || "FA"} · ${season} Season · ${games_played} Games · Avg ${mean_ppg} PPR/G`, 20, 80);
+  ctx.fillText(`${player.team || "FA"} · ${season || ""} Season · ${games_played || 0} Games · Avg ${mean_ppg || 0} PPR/G`, 20, 80);
 
   // Grade sticker
   ctx.save();
@@ -12864,7 +12864,7 @@ function exportBoomBustImage() {
   ctx.fillStyle = t.white;
   ctx.font = "bold 32px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
-  ctx.fillText(grade, 0, 12);
+  ctx.fillText(safeGrade, 0, 12);
   ctx.restore();
 
   // Stat cards row
@@ -12874,7 +12874,7 @@ function exportBoomBustImage() {
     { label: "CEILING", value: ceiling_ppg.toFixed(1), color: "#2ec4b6" },
     { label: "BOOM%", value: boom_rate.toFixed(0) + "%", color: "#2ec4b6" },
     { label: "BUST%", value: bust_rate.toFixed(0) + "%", color: "#e63946" },
-    { label: "RANK", value: `#${position_rank}`, color: posColor },
+    { label: "RANK", value: `#${position_rank || "—"}`, color: posColor },
   ];
   const cardW = 105, cardH = 60, startX = 20, startY = 100;
   for (let i = 0; i < cardStats.length; i++) {
