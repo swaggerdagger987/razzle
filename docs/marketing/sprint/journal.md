@@ -1185,6 +1185,94 @@ Sources:
 
 3. **What is the Sleeper connection trust barrier — why would a dynasty manager give their Sleeper username to a new tool, and what social proof or privacy messaging reduces friction?** (The Bureau requires users to enter their Sleeper username. Unlike OAuth, this is low-friction technically but high-friction psychologically. "Who are you and why do you want my league data?" This is the funnel bottleneck.)
 
-## NEXT QUESTION: What does the "Manager Scouting Report" page actually look like — what data points, layout, and visual format would make a dynasty manager screenshot their leaguemate's report and drop it in the group chat?
+## Question 17: What does the "Manager Scouting Report" page actually look like — what data points, layout, and visual format would make a dynasty manager screenshot their leaguemate's report and drop it in the group chat?
+
+**Why this matters**: The Manager Scouting Report is the Pro paywall hero feature — the thing that makes someone think "my leaguemates HAVE to see this." If the card doesn't trigger a screenshot impulse, the entire Bureau conversion funnel breaks. This isn't a data question — it's a visual design question with monetary consequences.
+
+### Answer
+
+**Verdict: The card must look like a baseball card for fantasy managers — a self-contained, information-dense portrait that's instantly readable AND immediately gossip-worthy.**
+
+The screenshot trigger isn't "look at this data" — it's "look what it says about Dave." Here's the exact layout, grounded in what works on Reddit and what Razzle's existing code already computes:
+
+**1. THE CARD FORMAT: Single manager per card, portrait orientation, PNG-exportable**
+
+The card must work as a standalone image dropped in a group chat. That means:
+- Fixed aspect ratio (~3:4, like a trading card)
+- Manager name as the hero text (large, Luckiest Guy font)
+- Razzle watermark in corner (free distribution = brand awareness)
+- Self-contained — no context needed to understand it
+
+**2. THE FIVE DATA ZONES (top to bottom)**
+
+**ZONE 1 — Identity Strip** (top 15%)
+- Manager display name (huge, Luckiest Guy)
+- Behavioral archetype badge: PANIC SELLER (red) / AGGRESSIVE (orange) / HOARDER (purple) / PATIENT (teal) / STEADY (gray). This is THE screenshot trigger — it's a personality label. The existing `league-intel.html` code already classifies these (lines 3237-3261).
+- Current record: "7-4" with all-time record in smaller text
+- Seasons scouted badge: "3yr" orange pill (credibility signal — more seasons = stronger read)
+
+**ZONE 2 — The Bones Quote** (10%)
+- Handwritten-style annotation (Caveat font, slightly rotated)
+- Agent-flavored behavioral insight, NOT generic: "sells after 2 straight losses. he's at 1. one more and he'll move a starter."
+- This is where the comedy lives. Bones reads like a snarky intel briefing. Per Footballguys' leaguemate analysis framework: track "scouting ability, positional preferences, BPA philosophy, situation over talent, team loyalty bias." Bones translates these into trash-talk-ready one-liners.
+
+**ZONE 3 — Stat Block** (30%)
+Three rows of key-value pairs in Space Mono:
+- **Trades/yr**: 4.2 | **FAAB burn**: 67% by Week 8 | **Panic score**: 42%
+- **Top add position**: WR (always chases WRs) | **Net direction**: buyer
+- **Moves/yr**: 12.3 | **Post-loss spike**: +3.2 moves/wk after loss
+
+These all exist in the current `ownerProfiles` object (`prof.trades`, `prof.faabSpent`, `panicScore`, `movesPerSeason`, `posAdds`, weekly panic detection).
+
+**ZONE 4 — Exploit Playbook** (30%)
+The money zone. 2-3 bullet points of ACTIONABLE advice:
+- "Send trade offers Tuesday after his losses — his panic window is 24-48 hours"
+- "He overpays for WRs — offer your WR3 for his undervalued RB2"
+- "FAAB front-loader — empty by Week 10. Target late-season waivers he can't bid on"
+
+This is what Q1's research proved: people pay for the EXPLOITATION angle, not the profiling itself. KeepTradeCut's power rankings get screenshots because they tell you who's #1 — but they DON'T tell you how to exploit the #12 team's desperation. That's Razzle's wedge.
+
+**ZONE 5 — Activity Sparkline** (15%)
+A tiny bar chart showing moves-per-week across the season (already in `weeklyMoves` data). Visual pattern — spiky = reactive, flat = steady. The shape itself tells a story without reading a single number.
+
+**3. WHAT MAKES IT SCREENSHOT-WORTHY (lessons from Reddit)**
+
+What gets shared on r/DynastyFF isn't complexity — it's provocation. The most upvoted tool posts are ones where someone says "look what this tool said about my league." The behavioral tag ("PANIC SELLER") and the Bones quote are the provocation layer. The stat block is the credibility layer. The exploit playbook is the value layer.
+
+KeepTradeCut's power rankings succeed because telling your league "I'm #1" is inherently shareable. Razzle's scouting report succeeds because telling your group chat "Dave is a PANIC SELLER and Bones says to send him a trade after his next loss" is even MORE shareable — it's personalized gossip backed by data.
+
+**4. EXISTING CODE COVERAGE**
+
+The current `league-intel.html` already computes: behavioral tags (5 archetypes), panic scores, moves/yr, FAAB spend, position bias, per-season breakdown, win/loss correlation with activity, trade trends. The visual card format and Bones quotes are the ONLY new work — the data engine exists.
+
+### Self-Critique
+
+**What's backed by data**: The behavioral archetype system is already built and running in production code (league-intel.html lines 3237-3261). The Footballguys leaguemate tendencies framework (2018, 2020, 2024 articles) validates the specific data points tracked. KeepTradeCut's "screenshot your #1 ranking" instruction confirms that screenshot-as-distribution is a proven pattern in dynasty tools. The trading-card format draws from proven virality of personality-type content (MBTI, Spotify Wrapped, etc.).
+
+**What's speculation**: Whether "PANIC SELLER" reads as fun-insightful vs. mean-judgmental in real league group chats hasn't been tested. The Bones quotes require either templates (limited personality) or LLM generation (cost + latency). The 3:4 card aspect ratio is an assumption — it may need to be wider for group chat readability on mobile. The exploit playbook bullets may be too aggressive for some league cultures. The assumption that 1 season of data produces a credible-looking card is shaky — a card that says "1yr scouted" next to "PANIC SELLER" invites "you can't tell that from one season" pushback.
+
+**Confidence: 7/10** — The data is there, the format is grounded in proven sharing patterns, but the Bones voice and exploit framing haven't been user-tested. The biggest risk is tone — too aggressive and it feels toxic, too bland and nobody screenshots it.
+
+Sources:
+- Footballguys: [Finding the Truth in Leaguemate Tendencies (2024)](https://www.footballguys.com/article/2024-finding-truth-in-leaguemate-tendencies)
+- Footballguys: [Know Your Leaguemates (2018)](https://www.footballguys.com/article/2018-know-your-leaguemates)
+- [KeepTradeCut Power Rankings](https://keeptradecut.com/dynasty/power-rankings) — "screenshot your team at #1" as distribution mechanic
+- [FF Ranker](https://fantasyfootballranker.com/) — roster grades and power rankings card format
+- Razzle codebase: `frontend/league-intel.html` lines 3237-3261 (behavioral tag classification)
+- Razzle codebase: `frontend/league-intel.html` lines 3006-3047 (ownerProfiles data model)
+- Razzle codebase: `docs/bureau-design.md` lines 111-121 (Rivals tab card spec)
+- Prior journal: Q1 (behavioral profiling willingness to pay), Q16 (MVP Bureau features)
+
+---
+
+### Next 3 Questions This Raises
+
+1. **How does Razzle map Sleeper player IDs to nflverse gsis_ids — and what's the fallback when mapping fails?** (Technical blocker. The Self-Scout and Championship Odds features require matching Sleeper roster player_ids to Lab stats. Sleeper uses its own ID system. The mapping is historically messy in fantasy football data. A 90% match rate might be acceptable; below 80% the grades look broken.)
+
+2. **What is the Sleeper connection trust barrier — why would a dynasty manager give their Sleeper username to a new tool, and what social proof or privacy messaging reduces friction?** (The Bureau requires users to enter their Sleeper username. Unlike OAuth, this is low-friction technically but high-friction psychologically. "Who are you and why do you want my league data?" This is the funnel bottleneck.)
+
+3. **What tone should Bones use in scouting report quotes — and can template-based quotes achieve 80% of LLM quality at 0% of the cost?** (The Bones quote is the card's personality. LLM-generated quotes would be better but add cost and latency. Template quotes ("sells after {N} straight losses") may be good enough if the templates are well-written. What's the minimum viable Bones voice?)
+
+## NEXT QUESTION: How does Razzle map Sleeper player IDs to nflverse gsis_ids — and what's the fallback when mapping fails?
 
 ---
