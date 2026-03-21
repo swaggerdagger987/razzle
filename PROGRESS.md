@@ -2714,3 +2714,41 @@ week_filter failure (10/11) is a stale server process issue, not a code bug. Ver
 - All JS files syntax clean (node --check)
 - All Python files compile clean
 - CSS/Design sweep: 0 border violations, 0 font violations, `#fff` on colored badges is intentional for contrast
+
+---
+
+## Ship Loop Session 24: QA Ticket Consumption + Sweep (Mar 20)
+
+**Goal**: Consume FUNC-015 through FUNC-018 QA tickets, sweep for new issues.
+
+### QA Tickets Consumed
+
+| Ticket | Severity | Action | Notes |
+|--------|----------|--------|-------|
+| FUNC-018 | P1 NEW | **FIXED** | Added `<base href="/">` to player.html, compare.html, team.html. SEO routes `/player/{id}`, `/compare/{id1}/{id2}`, `/team/{abbr}` had relative asset paths resolving against wrong directory, breaking CSS/JS loading. |
+| FUNC-017 | P1 | Verified fixed | player.js breakout badge already uses PPG with 6GP min + 3 PPG floor (Session 20 fix confirmed) |
+| FUNC-015 | P2 | Verified fixed | `_enrich_with_dynasty_value()` already calls `compute_trade_value()` (Session 20 fix confirmed) |
+| FUNC-016 | P2 | Verified fixed | cheatsheet.html and scoring.html no longer use `escapeHtml` in onclick (Session 20 fix confirmed) |
+
+### TICKETS.md: All entries DONE (no new work)
+
+### Sweep Fixes (3-agent parallel: Backend Architect, Frontend Developer, SEO Verifier)
+
+| # | Fix | Severity | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | quick_search_players doesn't strip special chars | P1 | players.py:48 | Input like "Ja'Marr" or "D.J." failed to match search_name (alphanumeric-only). Added re.sub strip matching fetch_players pattern. |
+| 2 | copyCompareURL/copyPlayerURL crash without Clipboard API | P1 | compare.js:852, player.js:760 | navigator.clipboard is undefined in non-HTTPS/embedded contexts. Added guard + execCommand fallback matching lab.js pattern. |
+| 3 | openPlayerProfile doesn't URL-encode player ID | P1 | lab.js:6123 | Raw string interpolation in fetch path. Added encodeURIComponent() matching player.js pattern. |
+| 4 | Skip-link broken by base href | MEDIUM | player.html:313, compare.html:317, team.html:276 | href="#main-content" resolves to /#main-content due to base tag. Replaced with JS scrollIntoView. |
+| 5 | Compare diff bar overflows for negative stats (EPA) | P2 | compare.js:246-249 | v1/(v1+v2) produces >100% when values are negative. Now uses Math.abs() for proportional width. |
+| 6 | Saved views don't preserve week/team/minGP state | P2 | lab.js:4122-4144, 4201-4209 | Added week, teams, minGP, tierBreaks, groupHeaders, summaryBar, tagFilter to save/load cycle. |
+
+### Triaged (not fixing)
+- `COUNT(*)` vs `COUNT(DISTINCT s.week)` in 7 player queries: latent bug, only triggers if a second data source is added. Single nflverse source means no duplicate week rows. Noted for future adapter additions.
+- `changePageSize()` rejects sizes != 25: intentional per Session 7 fix (prevents slow loads).
+
+### Verified Clean
+- 11/11 smoke tests pass after all fixes
+- All JS files syntax clean (node --check)
+- All Python files compile clean
+- 0 regressions
