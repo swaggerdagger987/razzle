@@ -5139,7 +5139,7 @@
         html += '<td class="spc-rank">' + (i + 1) + '</td>';
         html += '<td class="spc-name">' + pLink(p.name, p.player_id) + ' <span class="spc-team">' + escapeHtml(p.team || '') + '</span></td>';
         html += '<td><span class="spc-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
-        html += '<td class="spc-num">' + (p.games_played != null ? p.games_played : '-') + '</td>';
+        html += '<td class="spc-num">' + (p.games != null ? p.games : '-') + '</td>';
         html += '<td class="spc-num">' + fmt(p.ppg) + '</td>';
         html += '<td class="spc-milestones">';
         var milestones = p.milestones || [];
@@ -5302,12 +5302,12 @@
       { key: 'air_yards', label: 'AirYd', sortable: true, tip: 'Total air yards' },
       { key: 'air_yards_g', label: 'AY/G', sortable: true, tip: 'Air yards per game' },
       { key: 'adot', label: 'aDOT', sortable: true, tip: 'Average depth of target' },
-      { key: 'air_yard_pct', label: 'AY%', sortable: true, tip: 'Air yard share of team total' },
+      { key: 'air_yards_share', label: 'AY%', sortable: true, tip: 'Air yard share of team total' },
       { key: 'wopr', label: 'WOPR', sortable: true, tip: 'Weighted Opportunity Rating' },
       { key: 'racr', label: 'RACR', sortable: true, tip: 'Receiver Air Conversion Ratio' },
       { key: 'ppg', label: 'PPG', sortable: true, tip: 'Fantasy points per game' },
       { key: 'regression_delta', label: 'Regr', sortable: true, tip: 'Regression delta — positive = buy, negative = sell' },
-      { key: 'games_played', label: 'GP', sortable: true, tip: 'Games played' },
+      { key: 'games', label: 'GP', sortable: true, tip: 'Games played' },
       { key: 'annotation', label: 'Annotation', sortable: false, tip: 'Context note', mobile_hide: true }
     ];
 
@@ -5428,12 +5428,12 @@
         html += '<td class="ay-num">' + fmt(p.air_yards, 0) + '</td>';
         html += '<td class="ay-num">' + fmt(p.air_yards_g) + '</td>';
         html += '<td class="ay-num">' + fmt(p.adot) + '</td>';
-        html += '<td class="ay-num">' + fmt(p.air_yard_pct) + '%</td>';
+        html += '<td class="ay-num">' + fmt(p.air_yards_share != null ? (p.air_yards_share * 100) : null) + '%</td>';
         html += '<td class="ay-num">' + fmt(p.wopr, 2) + '</td>';
         html += '<td class="ay-num">' + fmt(p.racr, 2) + '</td>';
         html += '<td class="ay-num">' + fmt(p.ppg) + '</td>';
         html += '<td class="ay-num"><span class="ay-regr-badge ' + regrClass + '">' + regrSign + fmt(regrDelta) + '</span></td>';
-        html += '<td class="ay-num">' + (p.games_played != null ? p.games_played : '-') + '</td>';
+        html += '<td class="ay-num">' + (p.games != null ? p.games : '-') + '</td>';
         html += '<td class="ay-annotation hide-mobile">' + escapeHtml(p.annotation || '') + '</td>';
         html += '</tr>';
       });
@@ -6268,16 +6268,16 @@
       html += '<div class="rpc-table-wrap"><table class="rpc-table"><thead><tr>';
       var thCols = [
         { key: 'name', label: 'Player', sort: false },
-        { key: 'gpa', label: 'GPA', sort: true },
+        { key: 'gpa_pct', label: 'GPA', sort: true },
         { key: 'efficiency_grade', label: 'Eff', sort: true },
         { key: 'consistency_grade', label: 'Con', sort: true },
         { key: 'sos_grade', label: 'SOS', sort: true },
         { key: 'stock_score', label: 'Stock', sort: true },
         { key: 'opp_share', label: 'Opp%', sort: true },
-        { key: 'dominator', label: 'Dom', sort: true },
+        { key: 'dom_rating', label: 'Dom', sort: true },
         { key: 'ppg', label: 'PPG', sort: true },
         { key: 'age', label: 'Age', sort: true },
-        { key: 'games_played', label: 'GP', sort: true },
+        { key: 'games', label: 'GP', sort: true },
         { key: 'annotation', label: 'Note', sort: false }
       ];
       thCols.forEach(function(c) {
@@ -6306,11 +6306,11 @@
         html += '<td><span class="rpc-grade-badge ' + stockClass(p.stock_score || 0) + '">' + fmt(p.stock_score, 0) + '</span></td>';
         // Opp% / Dom
         html += '<td class="rpc-num">' + fmt(p.opp_share) + '%</td>';
-        html += '<td class="rpc-num">' + fmt(p.dominator) + '%</td>';
+        html += '<td class="rpc-num">' + fmt(p.dom_rating) + '%</td>';
         // PPG / Age / GP
         html += '<td class="rpc-num">' + fmt(p.ppg) + '</td>';
         html += '<td class="rpc-num">' + (p.age != null ? p.age : '-') + '</td>';
-        html += '<td class="rpc-num">' + (p.games_played != null ? p.games_played : '-') + '</td>';
+        html += '<td class="rpc-num">' + (p.games != null ? p.games : '-') + '</td>';
         html += '<td class="rpc-annotation">' + escapeHtml(p.annotation || '') + '</td>';
         html += '</tr>';
       });
