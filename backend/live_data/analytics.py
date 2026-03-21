@@ -753,7 +753,7 @@ def fetch_breakout_candidates(season=None, position=None, limit=50, week=None):
                     gap = p["opportunity_pct"] - p["production_pct"]
                     # Age bonus: younger = higher breakout potential
                     age_bonus = max(0, (28 - (p["age"] or 27)) * 2)
-                    p["rbs_score"] = max(0, gap + age_bonus)
+                    p["rbs_score"] = round(max(0, gap + age_bonus), 1)
                     del p["_opp_raw"]
 
             # Flatten, sort by RBS, take top N
