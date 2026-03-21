@@ -8384,7 +8384,7 @@ function renderBigBoard(data, container) {
       html += `<div class="bb-card-meta">${escapeHtml(p.school || "")} · ${draftInfo}</div>`;
       html += `<div class="bb-card-rps-row">`;
       html += `<div class="bb-card-rps-bar"><div class="bb-card-rps-fill" style="width:${rpsPct}%; background:${td.color};"></div></div>`;
-      html += `<span class="bb-card-rps-val">${p.rps.toFixed(1)}</span>`;
+      html += `<span class="bb-card-rps-val">${(p.rps || 0).toFixed(1)}</span>`;
       html += `</div>`;
       html += `<div class="bb-card-stats">`;
       html += `<span>Ath: ${athStr}</span>`;
@@ -8762,7 +8762,7 @@ function drawClassAnalyticsChart(classes, maxRPS) {
     ctx.fillStyle = t.ink;
     ctx.font = "bold 12px 'Space Mono', monospace";
     ctx.textAlign = "center";
-    ctx.fillText(cls.avg_rps.toFixed(1), x + barW / 2, y - 8);
+    ctx.fillText((cls.avg_rps || 0).toFixed(1), x + barW / 2, y - 8);
 
     // Grade badge on top
     const badgeW = 22, badgeH = 18;
@@ -8880,7 +8880,7 @@ function exportClassAnalyticsImage() {
     ctx.fillStyle = t.ink;
     ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.textAlign = "center";
-    ctx.fillText(cls.avg_rps.toFixed(1), x + barW / 2, by - 6);
+    ctx.fillText((cls.avg_rps || 0).toFixed(1), x + barW / 2, by - 6);
 
     // Grade
     const gw = 20, gh = 16;
@@ -8948,7 +8948,7 @@ function exportClassAnalyticsImage() {
     // Stats
     ctx.font = "12px 'Space Mono', monospace";
     ctx.fillStyle = t.inkMedium;
-    ctx.fillText(`${cls.count} prospects  |  Avg RPS: ${cls.avg_rps.toFixed(1)}`, cx + 10, cy + 44);
+    ctx.fillText(`${cls.count} prospects  |  Avg RPS: ${(cls.avg_rps || 0).toFixed(1)}`, cx + 10, cy + 44);
 
     // Tier counts
     ctx.font = "11px 'Space Mono', monospace";
@@ -8963,7 +8963,7 @@ function exportClassAnalyticsImage() {
       ctx.fillStyle = t.ink;
       ctx.font = "bold 11px 'Space Mono', monospace";
       const name = cls.top_prospect.name.length > 22 ? cls.top_prospect.name.slice(0, 20) + "..." : cls.top_prospect.name;
-      ctx.fillText(`${name} (${cls.top_prospect.rps.toFixed(1)})`, cx + 10, cy + 96);
+      ctx.fillText(`${name} (${(cls.top_prospect.rps || 0).toFixed(1)})`, cx + 10, cy + 96);
     }
 
     // Tier bar at bottom
@@ -9523,7 +9523,7 @@ function renderAgingCurveChart(targetCanvas) {
   const maxAge = Math.max(...ages);
 
   // Include player data in max PPG
-  let maxPPG = Math.max(...baseline.map(b => b.avg_ppg));
+  let maxPPG = Math.max(...baseline.map(b => b.avg_ppg).filter(v => v != null), 1);
   for (const p of (data.players || [])) {
     if (_acState.enabledPlayers[p.name]) {
       for (const pt of p.points) {
@@ -12713,7 +12713,10 @@ function drawBoomBustRangeBar(data) {
   const W = canvas.width, H = canvas.height;
   ctx.clearRect(0, 0, W, H);
 
-  const { floor_ppg, ceiling_ppg, median_ppg, mean_ppg, player } = data;
+  const { mean_ppg, player } = data;
+  const floor_ppg = data.floor_ppg || 0;
+  const ceiling_ppg = data.ceiling_ppg || 0;
+  const median_ppg = data.median_ppg || 0;
   const pos = (player.position || "").toUpperCase();
   const posHex = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
   const posColor = posHex[pos] || "#d97757";
@@ -12761,10 +12764,14 @@ function drawBoomBustRangeBar(data) {
 function exportBoomBustImage() {
   if (!_boomBustData) return;
   const data = _boomBustData;
-  const { player, season, games_played, weekly_scores, mean_ppg, median_ppg,
-          floor_ppg, ceiling_ppg, boom_rate, bust_rate,
+  const { player, season, games_played, weekly_scores, mean_ppg,
           boom_threshold, bust_threshold, consistency_score, grade,
           position_rank, position_total } = data;
+  const median_ppg = data.median_ppg || 0;
+  const floor_ppg = data.floor_ppg || 0;
+  const ceiling_ppg = data.ceiling_ppg || 0;
+  const boom_rate = data.boom_rate || 0;
+  const bust_rate = data.bust_rate || 0;
 
   const pos = (player.position || "").toUpperCase();
   const posHex = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };

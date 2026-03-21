@@ -6205,6 +6205,7 @@ function _mcSimulate(rosterPlayers, distributions, rosterIds, playoffSpots, SIMS
     var scores = {};
     rosterIds.forEach(function(rid) {
       var roster = rosterPlayers[rid];
+      if (!roster || !roster.players) { scores[rid] = 0; return; }
       var playerScores = [];
       roster.players.forEach(function(pid) {
         if (excludedPlayers && excludedPlayers[pid]) return;
