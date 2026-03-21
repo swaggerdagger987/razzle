@@ -2698,7 +2698,19 @@ week_filter failure (10/11) is a stale server process issue, not a code bug. Ver
 | 3 | Canvas null crash on non-Situation Room pages | P1 | warroom.js:83-90, 1060-1117 | `resizeCanvas()` and 6 mouse/touch event listeners accessed `cvs` without null guard. Crashes if `warRoomCanvas` element missing from DOM. Added `if (!cvs)` guards. |
 | 4 | IDP players silently dropped from Bureau roster | P1 | league-intel.html:2054-2058 | `posGroups[pos]` re-check after DEF fallback was always false for IDP positions (DL, LB, DB). Now creates position groups dynamically for any position. |
 
+### Backend Sweep Fixes
+
+| # | Fix | Severity | Files | Notes |
+|---|-----|----------|-------|-------|
+| 5 | Lifetime checkout doesn't set plan_type | P2 | billing.py:433-446 | `plan_type` column added for lifetime tracking but never set in checkout. Lifetime purchases recorded as `plan_type='subscription'`. Now sets `plan_type='lifetime'` when `plan_tier.endswith('_lifetime')`. |
+| 6 | Null subscription status written to DB | P2 | billing.py:456 | `subscription.get("status")` could be None on malformed Stripe webhook. Now defaults to `"unknown"`. |
+
+### Backend Sweep: Triaged as Not Bugs
+- Findings 1-4, 7: Week param + `HAVING games >= N` returns empty for single-week queries in aggregate endpoints (breakouts, redzone, usage trends, targets, streaks). These endpoints are semantically multi-week — already excluded from the frontend week selector. Empty results are graceful, not crashes.
+- Finding 8: Dynasty history cache key uses first 5 IDs. In practice, only called with 1-3 IDs. Collision risk negligible.
+
 ### Verified Clean
 - 11/11 smoke tests pass after all fixes
 - All JS files syntax clean (node --check)
+- All Python files compile clean
 - CSS/Design sweep: 0 border violations, 0 font violations, `#fff` on colored badges is intentional for contrast
