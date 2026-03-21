@@ -362,7 +362,7 @@
           html += '<div class="rankings-meta">';
           html += '<span class="rankings-pos-badge ' + posLc + '">' + escapeHtml(p.position) + '</span>';
           html += '<span class="rankings-team">' + escapeHtml(p.team) + '</span>';
-          if (p.age) html += '<span class="rankings-age ' + ageCls + '">Age ' + p.age + '</span>';
+          if (p.age) html += '<span class="rankings-age ' + ageCls + '">Age ' + escapeHtml(String(p.age)) + '</span>';
           html += '</div></div>';
           html += '<div class="rankings-scores">';
           html += '<div class="rankings-value">' + fmt(p.dynasty_value) + ' <span style="font-size:10px;font-weight:400;color:var(--ink-light)">DVS</span></div>';
@@ -645,7 +645,7 @@
       html += '<div class="tv-player-meta">';
       html += '<span class="tv-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
       html += '<span class="tv-team-label">' + escapeHtml(p.team) + '</span>';
-      if (p.age) html += '<span class="tv-age">age ' + p.age + '</span>';
+      if (p.age) html += '<span class="tv-age">age ' + escapeHtml(String(p.age)) + '</span>';
       html += '</div></div>';
       html += '<div class="tv-bar-area"><div class="tv-bar-track"><div class="tv-bar-fill ' + pos + '" style="width:' + pct + '%"></div></div>';
       html += '<div class="tv-value">' + fmt(p.trade_value) + '</div></div>';
@@ -1509,7 +1509,7 @@
           } else {
             html += '<span class="breakout-team">' + escapeHtml(p.team) + '</span>';
           }
-          if (p.age) html += '<span class="breakout-age-badge ' + ac + '">' + ac + ' ' + p.age + '</span>';
+          if (p.age) html += '<span class="breakout-age-badge ' + ac + '">' + ac + ' ' + escapeHtml(String(p.age)) + '</span>';
           html += '</div></div>';
           html += '<div class="breakout-rbs"><div class="breakout-rbs-score">' + escapeHtml(String(rbsVal)) + '</div>';
           html += '<div class="breakout-rbs-label">' + (isCollege ? 'BKO' : 'RBS') + '</div></div></div>';
@@ -1636,7 +1636,7 @@
       h += '<div class="buysell-info"><div class="buysell-name">' + pLink(p.name, p.player_id) + '</div>';
       h += '<div class="buysell-meta"><span class="buysell-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
       h += '<span class="buysell-team">' + escapeHtml(p.team) + '</span>';
-      if (p.age) h += '<span class="buysell-age-badge ' + ac + '">' + ac + ' ' + p.age + '</span>';
+      if (p.age) h += '<span class="buysell-age-badge ' + ac + '">' + ac + ' ' + escapeHtml(String(p.age)) + '</span>';
       h += '</div></div>';
       h += '<div class="buysell-badges"><div class="buysell-grade ' + gc + '">' + escapeHtml(p.efficiency_grade) + '</div>';
       h += '<div class="buysell-grade-label">efficiency</div></div></div>';
@@ -5612,7 +5612,7 @@
       html += '<div class="cst-player-name">' + escapeHtml(p.full_name || p.name || '') + '</div>';
       html += '<span class="cst-pos-badge" style="background:' + posColor + '">' + escapeHtml(pos) + '</span>';
       html += '<span class="cst-team">' + escapeHtml(p.team || '') + '</span>';
-      if (p.age) html += '<span class="cst-age">Age ' + p.age + '</span>';
+      if (p.age) html += '<span class="cst-age">Age ' + escapeHtml(String(p.age)) + '</span>';
       html += '<span class="cst-traj" style="background:' + trajColors[trajectory] + '">' + trajLabels[trajectory] + '</span>';
       html += '</div></div>';
 
@@ -6647,7 +6647,7 @@
           html += '<span class="arc-player-pos" style="background:' + pPosColor + '">' + escapeHtml(p.position || '') + '</span>';
           html += '<span class="arc-player-name">' + escapeHtml(p.full_name || p.name || '') + '</span>';
           html += '<span class="arc-player-team">' + escapeHtml(p.team || '') + '</span>';
-          if (p.age) html += '<span class="arc-player-age">Age ' + p.age + '</span>';
+          if (p.age) html += '<span class="arc-player-age">Age ' + escapeHtml(String(p.age)) + '</span>';
           html += '<span class="arc-player-ppg">' + fmt(p.ppg) + ' ppg</span>';
           if (p.key_stat) html += '<span class="arc-player-stat">' + escapeHtml(p.key_stat) + '</span>';
           html += '</div>';
@@ -9291,7 +9291,7 @@
           var ageBadge = '';
           if (p.age) {
             var ageCls = p.age <= 25 ? 'young' : p.age <= 28 ? 'prime' : 'aging';
-            ageBadge = '<span class="tm-age-badge ' + ageCls + '">' + p.age + '</span>';
+            ageBadge = '<span class="tm-age-badge ' + ageCls + '">' + escapeHtml(String(p.age)) + '</span>';
           }
           html += '<li class="tm-player-row" data-pid="' + escapeAttr(p.player_id) + '">';
           html += '<span class="tm-player-rank">' + (i + 1) + '</span>';

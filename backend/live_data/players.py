@@ -1551,7 +1551,8 @@ def _fetch_compare_table_uncached(player_ids, season=None):
 
         if not season:
             cursor.execute("SELECT MAX(season) FROM player_week_stats")
-            season = cursor.fetchone()[0] or _current_nfl_season()
+            row = cursor.fetchone()
+            season = (row[0] if row else None) or _current_nfl_season()
 
         placeholders = ",".join("?" for _ in player_ids)
         cursor.execute(f"""
