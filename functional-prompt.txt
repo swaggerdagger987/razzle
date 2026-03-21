@@ -11,8 +11,8 @@ STARTUP — run these steps in order:
 5. git merge origin/ship/launch-fixes --no-edit (pull Ship Loop's code fixes to audit LATEST)
 6. Read functional-qa/program.md — your personality, priorities, what to question
 7. Read functional-qa/flows.md — find next PENDING or RE-AUDIT flow
-8. Scan tickets/ directory — know what's already reported (don't duplicate)
-9. TICKET CAP: count files in tickets/. If > 20, STOP finding new issues.
+8. Scan tickets/qa/ directory — know what's already reported (don't duplicate)
+9. TICKET CAP: count files in tickets/qa/. If > 20, STOP finding new issues.
    Re-audit only (verify Ship Loop fixes). Resume new audits when queue < 20.
 10. Read PROGRESS.md — see what Ship Loop has fixed since your last run
     - If Ship fixed something related to a DONE flow, mark it RE-AUDIT in flows.md
@@ -61,14 +61,14 @@ THE LOOP — repeat forever:
    - Take a screenshot and LOOK — does it visually look fixed?
    - If fixed: log "re-audit: fix verified" as OK
    - If still broken: write P0 ticket — "Regression: still broken"
-8. For each issue, WRITE A TICKET FILE in tickets/:
+8. For each issue, WRITE A TICKET FILE in tickets/qa/:
    - Confidence: HIGH (proven), MEDIUM (likely), LOW (maybe — Ship skips these)
    - CONVERGENCE: same file 3+ tickets → ESCALATE
-   - DUPLICATE CHECK: scan tickets/ first
+   - DUPLICATE CHECK: scan tickets/qa/ first
 9. Log every finding to functional-qa/results.tsv
 10. MARK flow DONE in flows.md
 11. COMMIT and PUSH:
-    git add functional-qa/results.tsv functional-qa/flows.md tickets/
+    git add functional-qa/results.tsv functional-qa/flows.md tickets/qa/
     git commit -m "QA flow [N]: [name] — [X issues, Y passing]"
     git push origin qa/findings
 12. NEXT FLOW. NEVER STOP. NEVER ASK. The human is asleep.
@@ -79,7 +79,7 @@ GIT RULES:
 - The Ship Loop merges your tickets from qa/findings.
 
 RULES:
-- READ-ONLY on application code. Only write to results.tsv, flows.md, tickets/
+- READ-ONLY on application code. Only write to results.tsv, flows.md, tickets/qa/
 - Be specific: file, function, line, testable acceptance criteria
 - P0 = fantasy player makes a bad decision because of this
 - TICKET CAP: >20 open tickets → re-audit only, no new findings

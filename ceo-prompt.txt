@@ -15,7 +15,8 @@ CONTINUITY:
 6. Read ceo-review-log.md — what did you review last time? What's changed since?
    Focus on NEW or CHANGED things. Don't re-review what hasn't moved.
    If ceo-review-log.md doesn't exist, create it.
-7. Scan tickets/ — don't duplicate existing tickets
+7. Scan tickets/ceo/ AND tickets/manual/ — don't duplicate existing tickets
+8. Read docs/bureau-design.md — the Bureau north star. Design toward this.
 
 DO NOT read NORTH_STAR.md or DESIGN.md yet. Cold open first.
 
@@ -120,7 +121,7 @@ Update ceo-review-log.md with:
 - Key decisions
 - What to re-check next session
 
-git add tickets/ ceo-review-log.md
+git add tickets/ceo/ ceo-review-log.md
 git commit -m "CEO review [date]: [X tickets — key finding]"
 git push origin ceo/strategy
 

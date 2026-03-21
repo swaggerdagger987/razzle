@@ -1009,9 +1009,9 @@ window._miniFilter = function(pos) {
 fetch('/api/players?limit=60&sort=ppg&dir=desc&min_gp=4')
   .then(function(r) { return r.json(); })
   .then(function(data) {
-    _miniData = (data.players || data || []).map(function(p) {
+    _miniData = (data.items || data.players || []).map(function(p) {
       return {
-        name: p.display_name || p.name || '',
+        name: p.full_name || p.display_name || p.name || '',
         position: p.position || '',
         ppg: parseFloat(p.ppg) || 0,
         games: parseInt(p.games_played || p.games) || 0,

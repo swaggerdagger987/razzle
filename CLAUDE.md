@@ -183,3 +183,31 @@ The Razzle Loop is an autonomous multi-agent workflow defined in `~/.claude/agen
 - **Agents used**: Sprint Prioritizer, UI Designer, Whimsy Injector, Frontend Developer, Evidence Collector, Reality Checker
 - **Loop logic**: Each task gets max 3 attempts. PASS → commit + next task. FAIL → fix loop. All tasks PASS → phase gate → push.
 - **Full autonomy**: The loop reads north star, roadmap, design guide, and progress tracker. It makes its own decisions. It does not stop to ask.
+
+## gstack (Garry Tan's Engineering Skills)
+
+gstack is installed at `.claude/skills/gstack`. Use `/browse` from gstack for all web browsing, never use mcp__claude-in-chrome__* tools. Available skills:
+
+| Skill | When to use |
+|-------|------------|
+| `/office-hours` | Brainstorming a new idea, reframing a problem before code |
+| `/plan-ceo-review` | Strategic review of a plan or feature idea |
+| `/plan-eng-review` | Architecture review, data flow, edge cases, test plan |
+| `/plan-design-review` | Design system audit, rates each dimension 0-10 |
+| `/design-consultation` | Create a complete design system from scratch |
+| `/review` | Code review before merge, find production bugs |
+| `/investigate` | Systematic root-cause debugging |
+| `/qa` | Test the app, find bugs, fix them, re-verify |
+| `/qa-only` | Report-only QA, no code changes |
+| `/design-review` | Visual QA, find and fix design issues with screenshots |
+| `/ship` | Sync main, run tests, push, open PR |
+| `/browse` | Headless browser: navigate, click, screenshot, verify |
+| `/setup-browser-cookies` | Import real browser cookies for authenticated testing |
+| `/document-release` | Update docs after shipping |
+| `/retro` | Weekly retrospective with per-person stats |
+| `/careful` | Safety mode: warns before destructive commands |
+| `/freeze` | Restrict edits to a specific directory |
+| `/guard` | Maximum safety: careful + freeze combined |
+| `/unfreeze` | Remove edit restrictions |
+| `/codex` | Adversarial second-opinion code review |
+| `/gstack-upgrade` | Update gstack to latest version |

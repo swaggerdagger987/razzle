@@ -453,7 +453,7 @@
         var posLc = (p.position || "").toLowerCase();
         var ageCls = !p.age ? "" : p.age <= 25 ? "young" : p.age <= 28 ? "prime" : "aging";
 
-        html += '<div class="rankings-card" data-pid="' + escapeAttr(p.player_id) + '">';
+        html += '<div class="rankings-card pos-stripe-' + posLc + '" data-pid="' + escapeAttr(p.player_id) + '">';
         html += '<div class="rankings-rank">#' + overallRank + '</div>';
         html += playerHeadshot(p, p.position);
         html += '<div class="rankings-info">';
