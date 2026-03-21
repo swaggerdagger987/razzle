@@ -35,7 +35,7 @@
 | 13 | Player profile: NFL | Click a player name. Profile loads? Stats match screener row? Season selector works? | RE-AUDIT SESSION 72 — PASS. Ship Loop app.js escapeHtml(String(p.age)) fix verified. Age is float (30.5) from API. Mahomes profile loads with stats, radar chart, career arc. 0 JS errors. |
 | 14 | Player profile: Career stats | Career numbers add up across seasons? Per-game averages calculated correctly? | RE-AUDIT SESSION 47 — FUNC-046 FIXED. Ship Loop e0c4a3c added round(..., 1) to career sum in players.py:743. McCaffrey fantasy_points_std now 1889.3 (was 1889.2999999999997). Chase fantasy_points_ppr now 1526.3 (was 1526.3000000000002). Allen 2825.9 clean. 0 IEEE 754 artifacts in 3 tested profiles. |
 | 15 | Player profile: Game log | Individual game stats shown? Sum of game log = season total? Week numbers correct? | DONE — SESSION 12 VERIFIED. FUNC-012 DEPLOYED. Prod: Lamar 2024 game log=17 weeks (1-18 only), 17 GP. |
-| 16 | Player comparison | Compare 2 players. Stats aligned? Same season? Difference calculations correct? | RE-AUDIT SESSION 75 — FUNC-069 STILL OPEN. player.js:750 still reads data.players (API returns data.items). Ship Loop fixed listener leak (event delegation at line 761) but NOT the data access bug. Compare search in profile modal shows 0 results. Standalone /compare works fine (uses /api/players/{id}/profile). Systematic search: only player.js:750 has this bug — all other data.players refs hit endpoints that return {players:[...]}. |
+| 16 | Player comparison | Compare 2 players. Stats aligned? Same season? Difference calculations correct? | RE-AUDIT SESSION 76 — FUNC-069 FIXED (ffc88e0). player.js:750 now reads `data.items || data.players || []`. API /api/players returns {items:[...]}. Compare search in profile modal functional. Event delegation listener leak fix also verified. |
 | 17 | Player charts | Radar/scatter/trend for a player. Data matches profile? Axes labeled correctly? | RE-AUDIT SESSION 73 — PASS. Ship Loop charts.js escapeAttr fix verified. formatStat NaN guard now protects chart stat displays. 0 JS errors on Lab. |
 
 ## Group 3: Dynasty & Trade Tools (the stuff people pay for)
@@ -117,8 +117,8 @@
 
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
-| 63 | Bureau: League Intel | Sleeper connect flow? Roster loads? Insights generated from real league data? | RE-AUDIT SESSION 75 — PASS. Ship Loop parseInt NaN fallbacks verified in runComparison (parseInt mgrCompareA/B || 0). /api/league-trade-finder returns {players:[...]} correctly. 0 JS errors. No regressions from parseInt sweep. |
-| 64 | Situation Room | Canvas loads? Agents rendered? Interaction works? | RE-AUDIT SESSION 74 — PASS. 0 JS errors, 63 links, 63 buttons. Ship Loop warroom.js: SELECT tag in keydown exclusion, escapeAttr on API key input, listener leak fix. lab.js: note editor XSS (escapeHtml on title), resize handle listener cleanup, formatStat NaN guard. All verified. |
+| 63 | Bureau: League Intel | Sleeper connect flow? Roster loads? Insights generated from real league data? | RE-AUDIT SESSION 76 — PASS (P2 filed). Phase C Bureau hardening verified: AbortController timeouts on all Sleeper fetches (10s user, 15s leagues/rosters, 8s crawl, 20s transactions), lazy-load tab switching, trade finder with 403 fallback, bridge CTAs with escapeJsString. FUNC-070 filed: 2 dead conditional error messages (loadLeagues + toggleLeague catch blocks have identical AbortError/default branches). 0 JS errors. |
+| 64 | Situation Room | Canvas loads? Agents rendered? Interaction works? | RE-AUDIT SESSION 76 — PASS. Phase C bridge CTAs verified: prefillScenario saves to localStorage, warroom.js reads on init, clears after use. 5 bridge paths (manager profiles, pressure map, trade finder, trades, waivers) all wired correctly. 0 JS errors, 63 links, 63 buttons. |
 
 ## Group 10: Edge Cases (the stuff that separates demos from products)
 
