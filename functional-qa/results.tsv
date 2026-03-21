@@ -1256,3 +1256,54 @@ smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
 1	OK	-	-	-	pass	re-audit: Prod Lab 0 JS errors, 25 rows, 607 players (2025), all positions render correctly	high	2026-03-21T02:40:23Z
 13	OK	-	-	-	pass	re-audit: Prod player profile (/player/00-0034796) loads cleanly, 0 JS errors	high	2026-03-21T02:40:23Z
 16	OK	-	-	-	pass	re-audit: Prod compare page (/compare/00-0034796/00-0034857) loads cleanly, 0 JS errors, 11 rows	high	2026-03-21T02:40:23Z
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	Session 27 smoke: 11/11 prod tests pass (health, players, filters, sort, season, week, screener, nan, negative, options)	high	2026-03-21T02:58:00Z
+59	OK	frontend/lab.js	5134	getHeatColor	pass	re-audit: Ship Loop dark mode heat colors verified — isDark branch with higher opacity (0.35/0.20/0.10 green, 0.30/0.18/0.08 red)	high	2026-03-21T02:58:00Z
+59	OK	frontend/lab-panels.css	4870	hover-overrides	pass	re-audit: Ship Loop dark mode hover tints verified — 29 panel tables with [data-theme=dark] override at 0.18 opacity	high	2026-03-21T02:58:00Z
+59	OK	frontend/styles.css	243	modal-overlays	pass	re-audit: Dark mode modal overlays (mobile-nav, auth, filter, column-picker) use rgba(0,0,0,...) for visibility	high	2026-03-21T02:58:00Z
+59	OK	-	-	-	pass	re-audit: Dark mode Lab screenshot clean — espresso palette, readable text, position badges visible, no white flashes	high	2026-03-21T02:58:00Z
+59	OK	-	-	-	pass	re-audit: Dark mode landing page screenshot clean — warm background, CTA buttons visible	high	2026-03-21T02:58:00Z
+26	OK	-	-	-	pass	re-audit: Weekly Leaders API — Week 1 2025 correct (Allen 38.8 PPR #1), position filter works (RB-only=all RBs), different weeks return different data (Week 10: JTaylor 49.6)	high	2026-03-21T02:58:00Z
+26	OK	frontend/lab-panels.js	4246	renderWKL	pass	re-audit: Weekly leaders 0 vs null handling correct — uses p.field != null ternary (not || falsy). RB pass_yd=0 displays as 0, not dash.	high	2026-03-21T02:58:00Z
+28	OK	backend/live_data/tools.py	2037	fetch_stacks	pass	re-audit: Stacks Pearson math correct (division guard den_q>0 && den_r>0). P2 unchanged: min 5 games too low, small-sample artifacts dominate top 30.	high	2026-03-21T02:58:00Z
+7	P1	backend/live_data/core.py	481	_enrich_with_pbp_stats	open	FUNC-023: PBP stats leak season totals into per-week queries. scramble_attempts=48 for Allen in Week 1 (impossible, season total). week param unused in query.	high	2026-03-21T02:58:00Z
+36	P0	backend/live_data/dashboards.py	119	fetch_efficiency_rankings	open	FUNC-021 still live on prod: 5/5 top most_efficient are QBs (Prescott PPO=5.92 on 53 opps)	high	2026-03-21T02:58:00Z
+36	P0	backend/live_data/core.py	258	_enrich_derived_stats	open	FUNC-022 still live on prod: Stafford td_rate=158.6% (46 TDs / 29 carries)	high	2026-03-21T02:58:00Z
+1	OK	-	-	-	pass	Lab prod: 0 JS errors, 0 page crashes, 27 table rows, 69 sidebar items	high	2026-03-21T02:58:00Z
+13	OK	-	-	-	pass	Player profile prod: 0 JS errors, /player/00-0036389 loads cleanly	high	2026-03-21T02:58:00Z
+16	OK	-	-	-	pass	Compare page prod: 0 JS errors, /compare/00-0034796/00-0034857 loads cleanly	high	2026-03-21T02:58:00Z
+5	OK	-	-	-	pass	Special char search verified on prod: Ja'Marr→Chase, Amon-Ra→St.Brown, D'Andre→Swift	high	2026-03-21T02:58:00Z
+43	OK	-	-	-	pass	re-audit: VORP calcs exact — McCaffrey VORP=12.36 = PPG(24.51) - replace(12.15). Thresholds sensible (QB12=17.47, RB24=12.15).	high	2026-03-21T02:58:00Z
+41	OK	-	-	-	pass	re-audit: Consistency rankings data correct — Drake Maye CoV=0.26 StdDev=5.39 PPG=20.7 Grade=A+ (most consistent QB)	high	2026-03-21T02:58:00Z
