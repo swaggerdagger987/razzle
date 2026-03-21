@@ -189,18 +189,7 @@ def fetch_efficiency_rankings(season=None, position=None, limit=30, week=None):
                     continue
                 rank = sum(1 for v in ppo_values if v < p["ppo"])
                 percentile = rank / n * 100
-                if percentile >= 95:
-                    p["grade"] = "A+"
-                elif percentile >= 85:
-                    p["grade"] = "A"
-                elif percentile >= 70:
-                    p["grade"] = "B"
-                elif percentile >= 45:
-                    p["grade"] = "C"
-                elif percentile >= 25:
-                    p["grade"] = "D"
-                else:
-                    p["grade"] = "F"
+                p["grade"] = _grade_from_percentile(percentile)
 
             # Most Efficient: highest PPO
             most_efficient = sorted(players, key=lambda x: x["ppo"], reverse=True)[:limit]
@@ -354,18 +343,7 @@ def fetch_consistency_rankings(season=None, position=None, limit=30, week=None):
                 # Lower CoV = more consistent = higher percentile
                 rank = sum(1 for v in cov_values if v > p["cov"])
                 percentile = rank / total * 100
-                if percentile >= 95:
-                    p["grade"] = "A+"
-                elif percentile >= 85:
-                    p["grade"] = "A"
-                elif percentile >= 70:
-                    p["grade"] = "B"
-                elif percentile >= 45:
-                    p["grade"] = "C"
-                elif percentile >= 25:
-                    p["grade"] = "D"
-                else:
-                    p["grade"] = "F"
+                p["grade"] = _grade_from_percentile(percentile)
 
             # Rock Solid: lowest CoV (most consistent)
             rock_solid = sorted(players, key=lambda x: x["cov"])[:limit]
@@ -567,18 +545,7 @@ def fetch_strength_of_schedule(season=None, position=None, limit=30):
             total = len(players)
             for i, p in enumerate(players):
                 percentile = ((total - 1 - i) / max(total - 1, 1)) * 100
-                if percentile >= 95:
-                    p["grade"] = "A+"
-                elif percentile >= 85:
-                    p["grade"] = "A"
-                elif percentile >= 70:
-                    p["grade"] = "B"
-                elif percentile >= 45:
-                    p["grade"] = "C"
-                elif percentile >= 25:
-                    p["grade"] = "D"
-                else:
-                    p["grade"] = "F"
+                p["grade"] = _grade_from_percentile(percentile)
 
             # Schedule Suppressed: hardest schedule (highest sos_delta)
             suppressed = [p for p in players if p["sos_delta"] > 0]
