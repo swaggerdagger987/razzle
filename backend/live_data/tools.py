@@ -2834,7 +2834,7 @@ def fetch_success_rate(season=None, position=None, limit=50, week=None):
                        SUM(w.attempts) as pass_att,
                        SUM(w.passing_yards) as pass_yds,
                        SUM(w.passing_tds) as pass_tds,
-                       SUM(w.fantasy_points_ppr) as total_ppr,
+                       ROUND(SUM(w.fantasy_points_ppr), 1) as total_ppr,
                        COUNT(DISTINCT w.week) as games
                 FROM player_season_pbp pb
                 JOIN players p ON p.player_id = pb.player_id
@@ -2926,7 +2926,7 @@ def fetch_game_script(season=None, position=None, limit=40, week=None):
             rows = conn.execute(f"""
                 SELECT p.player_id, p.full_name, p.position, p.team,
                        pb.avg_score_differential, pb.garbage_time_pct,
-                       SUM(w.fantasy_points_ppr) as tot_ppr,
+                       ROUND(SUM(w.fantasy_points_ppr), 1) as tot_ppr,
                        COUNT(DISTINCT w.week) as gp
                 FROM player_season_pbp pb
                 JOIN players p ON p.player_id = pb.player_id
