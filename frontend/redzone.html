@@ -579,7 +579,7 @@
     currentData = data;
     var body = document.getElementById('rz-body');
 
-    if (!data || (!data.dominators.length && !data.td_dependent.length)) {
+    if (!data || (!(data.dominators || []).length && !(data.td_dependent || []).length)) {
       body.innerHTML = '<div class="rz-empty">no red zone data found for this selection</div>';
       return;
     }

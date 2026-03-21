@@ -613,7 +613,7 @@
     currentData = data;
     var body = document.getElementById('air-body');
 
-    if (!data || (!data.buy_low.length && !data.sell_high.length)) {
+    if (!data || (!(data.buy_low || []).length && !(data.sell_high || []).length)) {
       body.innerHTML = '<div class="air-empty">no air yards data found for this selection</div>';
       return;
     }
