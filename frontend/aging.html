@@ -753,7 +753,7 @@
       sel.appendChild(opt);
     });
     sel.addEventListener('change', function() {
-      loadData(parseInt(sel.value));
+      loadData(parseInt(sel.value, 10) || 0);
     });
   }
 

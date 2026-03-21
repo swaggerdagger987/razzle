@@ -215,8 +215,8 @@ function initSeasons() {
       t.classList.toggle("active", t.dataset.pos === state.position);
     });
   }
-  state.season = parseInt(sel.value);
-  sel.addEventListener("change", () => { state.season = parseInt(sel.value); updateURL(); loadData(); });
+  state.season = parseInt(sel.value, 10) || 0;
+  sel.addEventListener("change", () => { state.season = parseInt(sel.value, 10) || 0; updateURL(); loadData(); });
 }
 
 function updateURL() {
