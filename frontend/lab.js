@@ -10695,10 +10695,22 @@ const _taState = { give: [], get: [], valueCache: {} };
 
 function openTradeAnalyzer() {
   document.getElementById("tradeAnalyzerOverlay").classList.add("open");
+  _taPopulatePickYears();
   // Focus give search
   setTimeout(() => document.getElementById("taSearchGive").focus(), 100);
   // Load pick value chart
   _taLoadPickChart();
+}
+
+function _taPopulatePickYears() {
+  var baseYear = new Date().getFullYear();
+  ["Give", "Get"].forEach(function(side) {
+    var sel = document.getElementById("taPickYear" + side);
+    if (!sel || sel.options.length > 0) return;
+    for (var y = baseYear; y <= baseYear + 2; y++) {
+      sel.add(new Option(y, y));
+    }
+  });
 }
 
 async function _taLoadPickChart() {

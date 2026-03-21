@@ -3779,7 +3779,7 @@
           <div class="trade-autocomplete" id="taAutoGive"></div>
         </div>
         <div class="trade-pick-row">
-          <select id="taPickYearGive"><option>2025</option><option>2026</option><option>2027</option></select>
+          <select id="taPickYearGive"></select>
           <select id="taPickRdGive"><option value="1">Rd 1</option><option value="2">Rd 2</option><option value="3">Rd 3</option><option value="4">Rd 4</option></select>
           <select id="taPickNumGive"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option></select>
           <button class="btn-chunky" onclick="_taAddPick('give')">+ Pick</button>
@@ -3808,7 +3808,7 @@
           <div class="trade-autocomplete" id="taAutoGet"></div>
         </div>
         <div class="trade-pick-row">
-          <select id="taPickYearGet"><option>2025</option><option>2026</option><option>2027</option></select>
+          <select id="taPickYearGet"></select>
           <select id="taPickRdGet"><option value="1">Rd 1</option><option value="2">Rd 2</option><option value="3">Rd 3</option><option value="4">Rd 4</option></select>
           <select id="taPickNumGet"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option></select>
           <button class="btn-chunky" onclick="_taAddPick('get')">+ Pick</button>
@@ -4323,7 +4323,7 @@
     targetpremium: 'Target Premium composite: YPT (yards per target) + catch rate + YAC/rec (yards after catch) + aDOT (target depth). Measures target quality over quantity — who does the most per target?',
     consistency: 'Consistency grade is based on inverse Coefficient of Variation (StdDev / Mean PPG). Lower CoV = more consistent. A+ = rock solid weekly scores. F = wild swings. Minimum 6 games and 2 PPG to qualify.',
   };
-  var PANEL_METHOD_DEFAULT = 'Player statistics sourced from publicly available NFL and NCAA data (2015-2025).';
+  var PANEL_METHOD_DEFAULT = 'Player statistics sourced from publicly available NFL and NCAA data (2015-' + (new Date().getMonth() >= 8 ? new Date().getFullYear() : new Date().getFullYear() - 1) + ').';
 
   // Map each panel to its sidebar category for breadcrumbs
   var PANEL_CATEGORIES = {};
