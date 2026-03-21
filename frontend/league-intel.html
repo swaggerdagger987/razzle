@@ -1908,7 +1908,7 @@ async function loadLeagues(userId) {
         : "Redraft";
 
       html += `
-        <div class="league-card" id="lc-${escapeAttr(league.league_id)}">
+        <div class="league-card" id="lc-${escapeAttr(league.league_id)}" data-scoring="${escapeAttr(scoringType.toLowerCase().replace(' ', '_'))}" data-user="${escapeAttr(userId)}">
           <div class="league-header" onclick="toggleLeague(this.parentElement, '${escapeAttr(league.league_id)}', '${escapeAttr(userId)}')" style="cursor:pointer;">
             <span class="league-name">${escapeHtml(league.name)}</span>
             <div class="league-meta">
@@ -1919,10 +1919,10 @@ async function loadLeagues(userId) {
               <button id="odds-btn-${escapeAttr(league.league_id)}" class="btn-chunky" style="font-size:10px; padding:3px 10px; margin-left:8px; border-color:var(--green);" onclick="event.stopPropagation(); runLeagueOdds('${escapeAttr(league.league_id)}', '${escapeAttr(userId)}', '${escapeAttr(scoringType.toLowerCase().replace(' ', '_'))}');">League Odds</button>
             </div>
           </div>
+          <div class="league-odds" id="odds-${escapeAttr(league.league_id)}" style="display:none;"></div>
           <div class="league-roster" id="roster-${escapeAttr(league.league_id)}">
             <div class="loading-intel" style="font-size:18px; padding:16px;">checking the tape...</div>
           </div>
-          <div class="league-odds" id="odds-${escapeAttr(league.league_id)}" style="display:none;"></div>
         </div>`;
     }
 
@@ -2298,6 +2298,17 @@ async function toggleLeague(card, leagueId, userId) {
       localStorage.setItem("razzle_league_context", JSON.stringify(existing));
     } catch (e) { /* ignore storage errors */ }
     rosterDiv.dataset.loaded = "true"; // Mark loaded only after success
+
+    // Auto-trigger League Odds (CEO-013: odds cards are the first thing visible)
+    try {
+      var _lcCard = card;
+      var _lcScoring = _lcCard.dataset.scoring || 'half_ppr';
+      var _lcUser = _lcCard.dataset.user || userId;
+      var _oddsDiv = document.getElementById('odds-' + leagueId);
+      if (_oddsDiv && _oddsDiv.innerHTML.trim() === '') {
+        runLeagueOdds(leagueId, _lcUser, _lcScoring);
+      }
+    } catch(e) { console.error('Auto-odds error:', e); }
   } catch (e) {
     rosterDiv.dataset.loaded = ""; // Allow retry on failure
     var rosterErr = e.name === "AbortError"
