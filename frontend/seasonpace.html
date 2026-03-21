@@ -175,6 +175,7 @@
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script>
 function escapeHtml(t) {
+  if (t == null) return "";
   const d = document.createElement("div");
   d.appendChild(document.createTextNode(t));
   return d.innerHTML;
@@ -258,7 +259,7 @@ function render() {
 
   players.forEach((p, i) => {
     const posColor = POS_COLORS[p.position] || "var(--ink-light)";
-    const milestoneHtml = p.milestones.map(m => {
+    const milestoneHtml = (p.milestones || []).map(m => {
       const cls = ELITE_MILESTONES.includes(m) ? "sp-milestone-gold" : "sp-milestone-silver";
       return '<span class="sp-milestone ' + cls + '">' + escapeHtml(m) + '</span>';
     }).join(" ");

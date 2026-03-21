@@ -180,6 +180,7 @@
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script>
 function escapeHtml(t) {
+  if (t == null) return "";
   const d = document.createElement("div");
   d.appendChild(document.createTextNode(t));
   return d.innerHTML;
@@ -271,7 +272,7 @@ function render() {
     const posColor = POS_COLORS[p.position] || "var(--ink-light)";
     const cls = scoreClass(p.workload);
     const barPct = maxWL > 0 ? p.workload / maxWL * 100 : 0;
-    const flagsHtml = p.flags.map(f => '<span class="wl-flag">' + escapeHtml(f) + '</span>').join("");
+    const flagsHtml = (p.flags || []).map(f => '<span class="wl-flag">' + escapeHtml(f) + '</span>').join("");
     const snapPct = p.snap_pct !== null ? escapeHtml(String(p.snap_pct)) + "%" : "-";
 
     html += '<tr>';

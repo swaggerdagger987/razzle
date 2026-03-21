@@ -221,6 +221,8 @@
     return '<span class="rb-pos-chip" style="background:' + c + '">' + escapeHtml(pos) + '</span>';
   }
 
+  function fmt(v, d) { return v != null ? Number(v).toFixed(d || 1) : '-'; }
+
   function rankClass(i) {
     if (i === 0) return 'gold';
     if (i === 1) return 'silver';
@@ -256,7 +258,7 @@
       html += '<td>' + escapeHtml(p.name) + posChip(p.position) + '</td>';
       html += '<td><span class="rb-season-badge">' + escapeHtml(String(p.season)) + '</span></td>';
       html += '<td>' + escapeHtml(String(p.week)) + '</td>';
-      html += '<td class="rb-fpts">' + escapeHtml(String(p.fpts)) + '</td></tr>';
+      html += '<td class="rb-fpts">' + escapeHtml(fmt(p.fpts)) + '</td></tr>';
     });
     html += '</tbody></table></div>';
 
@@ -268,9 +270,9 @@
       html += '<tr><td><span class="rb-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
       html += '<td>' + escapeHtml(p.name) + posChip(p.position) + '</td>';
       html += '<td><span class="rb-season-badge">' + escapeHtml(String(p.season)) + '</span></td>';
-      html += '<td>' + escapeHtml(String(p.games)) + '</td>';
-      html += '<td class="rb-fpts">' + escapeHtml(String(p.total_fpts)) + '</td>';
-      html += '<td>' + escapeHtml(String(p.ppg)) + '</td></tr>';
+      html += '<td>' + escapeHtml(fmt(p.games, 0)) + '</td>';
+      html += '<td class="rb-fpts">' + escapeHtml(fmt(p.total_fpts)) + '</td>';
+      html += '<td>' + escapeHtml(fmt(p.ppg)) + '</td></tr>';
     });
     html += '</tbody></table></div>';
 
@@ -294,9 +296,9 @@
     (data.career_total || []).forEach(function(p, i) {
       html += '<tr><td><span class="rb-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
       html += '<td>' + escapeHtml(p.name) + posChip(p.position) + '</td>';
-      html += '<td>' + escapeHtml(String(p.games)) + '</td>';
-      html += '<td class="rb-fpts">' + escapeHtml(String(p.total_fpts)) + '</td>';
-      html += '<td>' + escapeHtml(String(p.ppg)) + '</td></tr>';
+      html += '<td>' + escapeHtml(fmt(p.games, 0)) + '</td>';
+      html += '<td class="rb-fpts">' + escapeHtml(fmt(p.total_fpts)) + '</td>';
+      html += '<td>' + escapeHtml(fmt(p.ppg)) + '</td></tr>';
     });
     html += '</tbody></table></div>';
 

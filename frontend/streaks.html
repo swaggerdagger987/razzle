@@ -458,8 +458,9 @@
       var maxScore = Math.max.apply(null, scores.concat([1]));
       html += '<td><div class="str-recent">';
       for (var j = 0; j < scores.length; j++) {
-        var h = Math.max(2, Math.round((scores[j] / maxScore) * 20));
-        var barColor = scores[j] >= p.season_avg ? 'var(--green)' : 'var(--orange)';
+        var sc = scores[j] || 0;
+        var h = Math.max(2, Math.round((sc / maxScore) * 20));
+        var barColor = sc >= p.season_avg ? 'var(--green)' : 'var(--orange)';
         html += '<div class="str-recent-bar" style="height:' + h + 'px;background:' + barColor + '" title="Wk: ' + escapeHtml(String(fmt(scores[j]))) + '"></div>';
       }
       html += '</div></td>';

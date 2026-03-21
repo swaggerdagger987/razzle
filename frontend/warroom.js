@@ -2103,7 +2103,7 @@ function formatLabContext(ctx) {
   }
   if (ctx.filters && ctx.filters.length) {
     lines.push('Active filters: ' + ctx.filters.map(function(f) {
-      return f.stat + ' ' + f.op + ' ' + f.value;
+      return (f.key || f.stat || '?') + ' ' + f.op + ' ' + f.value;
     }).join('; '));
   }
   if (ctx.formulas && ctx.formulas.length) {
@@ -2482,7 +2482,6 @@ async function callServerLLM(systemPrompt, userMessage) {
       }),
       signal: controller.signal,
     });
-    clearTimeout(timeout);
 
     if (!resp.ok) {
       var detail = await resp.json().catch(function() { return {}; });
@@ -2490,6 +2489,7 @@ async function callServerLLM(systemPrompt, userMessage) {
     }
 
     var data = await resp.json();
+    clearTimeout(timeout);
     var content = data && data.choices && data.choices[0] && data.choices[0].message
       ? data.choices[0].message.content : null;
     if (!content) throw new Error('No content in model response');
@@ -2532,7 +2532,6 @@ async function callFreeLLM(userMessage) {
     if (e.name === 'AbortError') throw new Error('request timed out — try again');
     throw e;
   }
-  clearTimeout(_freeTimeout);
 
   if (!resp.ok) {
     var detail = await resp.json().catch(function() { return {}; });
@@ -2540,6 +2539,7 @@ async function callFreeLLM(userMessage) {
   }
 
   var data = await resp.json();
+  clearTimeout(_freeTimeout);
   var content = data && data.choices && data.choices[0] && data.choices[0].message
     ? data.choices[0].message.content : null;
   if (!content) throw new Error('No content in model response');
