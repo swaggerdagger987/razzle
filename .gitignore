@@ -34,3 +34,5 @@ users.db
 
 # Claude
 .claude/
+data/terminal.db-shm
+data/terminal.db-wal
