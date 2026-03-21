@@ -568,9 +568,11 @@ def _fetch_college_efficiency_uncached(season=None, position=None, limit=30):
             total_yards = d["total_yards"] or 0
             total_tds = d["total_tds"] or 0
 
+            pos = d["position"] or "ATH"
             opportunities = carries + targets
             touches = carries + receptions
-            if opportunities < 30:
+            opp_min = {"QB": 30, "RB": 25, "WR": 20, "TE": 15}.get(pos, 25)
+            if opportunities < opp_min:
                 continue
 
             # Approximate fantasy points (standard college scoring: 0.1 yd, 6 TD, 1 rec PPR)
@@ -1080,7 +1082,9 @@ def _fetch_college_stock_watch_uncached(season=None, position=None, limit=30):
 
             # Efficiency: points per opportunity
             opportunities = carries + targets + (d["pass_attempts"] or 0)
-            ppo = round(fpts / opportunities, 2) if opportunities > 20 else None
+            col_pos = d["position"] or "ATH"
+            col_opp_min = {"QB": 25, "RB": 20, "WR": 15, "TE": 10}.get(col_pos, 20)
+            ppo = round(fpts / opportunities, 2) if opportunities > col_opp_min else None
 
             # Yards per touch
             touches = carries + receptions

@@ -256,7 +256,7 @@ function _pushAllFormulasToServer(token, base) {
     method: "POST",
     headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
     body: JSON.stringify({ formulas: payload })
-  }).then(function(r) { if (!r.ok) console.warn("Formula import failed:", r.status); }).catch(function() {});
+  }).then(function(r) { if (!r.ok) console.warn("Formula import failed:", r.status); }).catch(function(e) { console.warn("Formula import error:", e.message); });
 }
 
 function _showCloudSyncHint(isPaid) {

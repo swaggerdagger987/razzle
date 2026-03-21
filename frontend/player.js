@@ -726,7 +726,7 @@ function openCompareSearch() {
   var overlayBg = document.documentElement.getAttribute("data-theme") === "dark" ? "rgba(0,0,0,0.5)" : "rgba(45,31,20,0.5)";
   overlay.style.cssText = "position:fixed;top:0;left:0;right:0;bottom:0;background:" + overlayBg + ";z-index:9999;display:flex;align-items:center;justify-content:center;";
   overlay.innerHTML = '<div style="background:var(--bg-card);border:3px solid var(--ink);border-radius:12px;box-shadow:4px 4px 0 var(--ink);padding:24px;width:380px;max-width:90vw;">' +
-    '<div style="font-family:var(--font-display);font-size:18px;margin-bottom:12px;">Compare ' + esc(_profileData.player.full_name) + ' with...</div>' +
+    '<div style="font-family:var(--font-display);font-size:18px;margin-bottom:12px;">Compare ' + esc((_profileData.player || {}).full_name || "Player") + ' with...</div>' +
     '<input id="compareSearchInput" type="text" placeholder="Search player name..." style="width:100%;box-sizing:border-box;padding:10px 14px;border:2px solid var(--ink);border-radius:8px;font-family:var(--font-mono);font-size:14px;background:var(--bg);margin-bottom:8px;">' +
     '<div id="compareSearchResults" style="max-height:200px;overflow-y:auto;"></div>' +
     '<button onclick="document.getElementById(\'compareOverlay\').remove()" class="btn-chunky" style="margin-top:10px;font-size:12px;width:100%;">Never Mind</button>' +
@@ -741,7 +741,7 @@ function openCompareSearch() {
     clearTimeout(debounce);
     debounce = setTimeout(function() {
       var q = input.value.trim();
-      if (q.length < 2) { document.getElementById("compareSearchResults").innerHTML = ""; return; }
+      if (q.length < 2) { var el = document.getElementById("compareSearchResults"); if (el) el.innerHTML = ""; return; }
       fetch("/api/players?search=" + encodeURIComponent(q) + "&limit=8")
         .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
         .then(function(data) {

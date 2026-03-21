@@ -2242,7 +2242,8 @@ def fetch_td_regression(season=None, position=None, limit=50):
                     opportunities = carries + targets
                     actual_tds = rush_td + rec_td
 
-                if opportunities < 20:
+                opp_min = {"QB": 20, "RB": 20, "WR": 15, "TE": 10}.get(pos, 20)
+                if opportunities < opp_min:
                     continue
 
                 td_rate = actual_tds / opportunities if opportunities > 0 else 0

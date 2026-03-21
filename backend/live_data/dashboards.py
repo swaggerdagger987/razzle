@@ -126,8 +126,9 @@ def fetch_efficiency_rankings(season=None, position=None, limit=30, week=None):
                 total_yards = rec_yards + rush_yards
                 total_tds = rec_tds + rush_tds + pass_tds
 
-                # Skip players with too few opportunities
-                if opportunities < 50:
+                # Skip players with too few opportunities (position-specific)
+                opp_min = {"QB": 50, "RB": 50, "WR": 40, "TE": 20}.get(pos, 50)
+                if opportunities < opp_min:
                     continue
 
                 ppg = round(total_ppr / games, 2)
@@ -743,7 +744,8 @@ def fetch_stock_watch(season=None, position=None, limit=30):
                     opportunities = opps_d["attempts"] + opps_d["carries"]
                 else:
                     opportunities = opps_d["targets"] + opps_d["carries"]
-                ppo = round(total_pts / opportunities, 2) if opportunities > 50 else None
+                opp_threshold = {"QB": 50, "RB": 50, "WR": 40, "TE": 20}.get(pos, 50)
+                ppo = round(total_pts / opportunities, 2) if opportunities > opp_threshold else None
 
                 # Consistency: CoV
                 mean = sum(weeks) / n
@@ -1256,7 +1258,8 @@ def fetch_report_cards(season=None, position=None, limit=25, week=None):
                     opportunities = opps_d["attempts"] + opps_d["carries"]
                 else:
                     opportunities = opps_d["targets"] + opps_d["carries"]
-                if opportunities < 50:
+                opp_min = {"QB": 50, "RB": 50, "WR": 40, "TE": 20}.get(pos, 50)
+                if opportunities < opp_min:
                     continue
 
                 # Efficiency: PPO
@@ -1728,6 +1731,7 @@ def fetch_season_awards(season=None, position=None):
                     "sort_key": "ppo",
                     "stat_label": "PPO",
                     "stat_fn": lambda p: str(p["ppo"]),
+                    "filter": lambda p: p["opportunities"] >= 40,
                 },
                 {
                     "key": "iron_man",
@@ -1753,6 +1757,7 @@ def fetch_season_awards(season=None, position=None):
                     "sort_key": "opp_share",
                     "stat_label": "Opp%",
                     "stat_fn": lambda p: str(p["opp_share"]) + "%",
+                    "filter": lambda p: p["position"] != "QB",
                 },
                 {
                     "key": "breakout_star",
@@ -1799,7 +1804,8 @@ def fetch_season_awards(season=None, position=None):
             awards = []
             for ad in award_defs:
                 reverse = ad.get("reverse", True)
-                sorted_players = sorted(players, key=lambda x: x[ad["sort_key"]], reverse=reverse)
+                eligible = [p for p in players if ad.get("filter", lambda _: True)(p)]
+                sorted_players = sorted(eligible, key=lambda x: x[ad["sort_key"]], reverse=reverse)
                 top5 = sorted_players[:5]
                 if not top5:
                     continue

@@ -513,8 +513,7 @@ async function apiFetch(path, options = {}) {
   options.headers = Object.assign({}, authHeaders, options.headers || {});
   const resp = await fetch(url, options);
   if (resp.status === 401) {
-    localStorage.removeItem("razzle_token");
-    localStorage.removeItem("razzle_user");
+    try { localStorage.removeItem("razzle_token"); localStorage.removeItem("razzle_user"); } catch (e) {}
     if (typeof openAuthModal === "function") openAuthModal();
     throw new Error("session expired. sign in again.");
   }
@@ -968,13 +967,12 @@ async function checkAuth() {
       headers: { "Authorization": "Bearer " + token }
     });
     if (!resp.ok) {
-      localStorage.removeItem("razzle_token");
-      localStorage.removeItem("razzle_user");
+      try { localStorage.removeItem("razzle_token"); localStorage.removeItem("razzle_user"); } catch (e) {}
       updateAuthUI(null);
       return;
     }
     var data = await resp.json();
-    localStorage.setItem("razzle_user", JSON.stringify(data.user));
+    try { localStorage.setItem("razzle_user", JSON.stringify(data.user)); } catch (e) {}
     updateAuthUI(data.user);
   } catch (e) {
     // Network error — keep cached user if any
