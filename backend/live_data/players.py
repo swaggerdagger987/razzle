@@ -305,6 +305,8 @@ def _fetch_screener_uncached(body):
             "passing_epa", "receiving_epa", "rushing_epa", "dakota", "cpoe",
             # Derived post-enrichment
             "half_ppr_ppg", "epa_per_play",
+            "td_rate", "fumble_rate", "passer_rating", "ay_per_att",
+            "ppfd", "ppfd_per_game", "yprr",
             # Dynasty value
             "dynasty_value", "age",
         }
