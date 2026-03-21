@@ -366,8 +366,11 @@ def handle_webhook(payload: bytes, sig_header: str) -> dict:
     except ValueError:
         return {"error": "Invalid payload", "status": 400}
 
-    event_type = event["type"]
-    data = event["data"]["object"]
+    event_type = event.get("type")
+    data = event.get("data", {}).get("object")
+    if not event_type or data is None:
+        logger.error("Malformed Stripe webhook: missing type or data.object")
+        return {"error": "Invalid event structure", "status": 400}
 
     if event_type == "checkout.session.completed":
         _handle_checkout_completed(data)

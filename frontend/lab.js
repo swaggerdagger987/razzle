@@ -2931,7 +2931,7 @@ function populateSeasonSelect() {
     sel.innerHTML = html;
     sel.onchange = (e) => {
       var val = e.target.value;
-      state.season = val === "career" ? "career" : parseInt(val);
+      state.season = val === "career" ? "career" : (parseInt(val, 10) || _nflYear);
       state.week = 0;
       state.offset = 0;
       clearTimeout(_seasonDebounce);
@@ -11358,6 +11358,20 @@ function _taDrawPickChart() {
 
 // Initialize trade analyzer search inputs
 (function initTradeAnalyzer() {
+  // Dynamically populate pick year selects (current year + 2)
+  var baseYear = new Date().getFullYear();
+  ["Give", "Get"].forEach(function(side) {
+    var sel = document.getElementById("taPickYear" + side);
+    if (sel) {
+      sel.innerHTML = "";
+      for (var y = baseYear; y <= baseYear + 2; y++) {
+        var opt = document.createElement("option");
+        opt.value = y;
+        opt.textContent = y;
+        sel.appendChild(opt);
+      }
+    }
+  });
   _taSetupSearch("give");
   _taSetupSearch("get");
 })();

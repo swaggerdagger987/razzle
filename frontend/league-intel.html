@@ -3648,8 +3648,8 @@ function toggleComparePanel() {
 
 function runComparison() {
   if (!_compareCards || _compareCards.length < 2) return;
-  var aIdx = parseInt(document.getElementById('mgrCompareA').value);
-  var bIdx = parseInt(document.getElementById('mgrCompareB').value);
+  var aIdx = parseInt(document.getElementById('mgrCompareA').value, 10) || 0;
+  var bIdx = parseInt(document.getElementById('mgrCompareB').value, 10) || 0;
   if (aIdx === bIdx) { bIdx = aIdx === 0 ? 1 : 0; }
   var a = _compareCards[aIdx];
   var b = _compareCards[bIdx];

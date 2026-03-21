@@ -588,7 +588,7 @@
     var gc = gradeClass(p.efficiency_grade);
     var type = isBuy ? 'buy' : 'sell';
     var maxMismatch = 60;
-    var barWidth = Math.min(100, Math.round((p.mismatch_score / maxMismatch) * 100));
+    var barWidth = Math.min(100, Math.round(((p.mismatch_score || 0) / (maxMismatch || 1)) * 100));
 
     var html = '<div class="buysell-card" data-pid="' + escapeHtml(p.player_id) + '">';
     html += '<div class="buysell-card-top ' + pos + '"></div>';
