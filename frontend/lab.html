@@ -4432,7 +4432,7 @@
           try {
             entry.render(contentEl);
           } catch (err) {
-            contentEl.innerHTML = '<div class="lab-panel-loading"><div class="loading-msg" style="color:var(--red);">something broke... try refreshing</div></div>';
+            contentEl.innerHTML = '<div class="lab-panel-loading"><div class="loading-msg" style="color:var(--red);">something went sideways. Razzle knocked the server off the table. refresh and we\'ll pretend it didn\'t happen.</div></div>';
             console.error('Panel render error (' + panelName + '):', err);
           }
           entry.loaded = true;

@@ -1823,9 +1823,9 @@ async function connectSleeper() {
     if (e.name === "AbortError") {
       errorEl.textContent = "field transmission timed out. try again, agent.";
     } else if (e.message === "User not found") {
-      errorEl.textContent = "agent not found in the field. check the callsign and try again.";
+      errorEl.textContent = "can't find that user. double-check the name \u2014 even Razzle makes typos. rarely, but it happens.";
     } else {
-      errorEl.textContent = "the wire went dark. check your connection and retry.";
+      errorEl.textContent = "connection dropped. the film room went dark. check your internet and try again.";
     }
     btn.disabled = false;
     btn.textContent = "Connect";
@@ -1879,7 +1879,7 @@ async function loadLeagues(userId) {
     const leagues = await resp.json();
 
     if (!leagues || !leagues.length) {
-      container.innerHTML = '<div class="loading-intel">no active operations this season. try a different year.</div>';
+      container.innerHTML = '<div class="loading-intel">no leagues found this season. either they took the year off, or we need better intel. try another year.</div>';
       return;
     }
 
@@ -1962,8 +1962,8 @@ async function loadLeagues(userId) {
     } catch (e) { /* ignore storage errors */ }
   } catch (e) {
     var errMsg = e.name === "AbortError"
-      ? "field transmission timed out. try refreshing."
-      : "lost contact with Sleeper HQ. the wire went dark.";
+      ? "transmission timed out. Sleeper's servers might be napping. give it another shot."
+      : "connection dropped. Razzle fumbled the handoff to Sleeper. check your internet and try again.";
     container.innerHTML = '<div class="loading-intel" style="color:var(--red);">' + errMsg + '</div>';
     console.error(e);
   }
@@ -1985,7 +1985,7 @@ async function getSleeperPlayers() {
   } catch (e) {
     clearTimeout(timer);
     if (e.name === "AbortError") {
-      throw new Error("Sleeper player data got delayed at the snap. check your connection and give it another shot.");
+      throw new Error("Sleeper player data got held up at the line. check your connection and give it another shot.");
     }
     throw e;
   }
@@ -3092,7 +3092,7 @@ async function loadManagerProfiles(leagueId, userId, allPlayers, userMap, roster
     } catch (e) { /* ignore */ }
 
   } catch (e) {
-    profileDiv.innerHTML = '<div style="font-family:var(--font-hand); font-size:16px; color:var(--red); text-align:center; padding:12px;">recon mission failed. the wire went dark.</div>';
+    profileDiv.innerHTML = '<div style="font-family:var(--font-hand); font-size:16px; color:var(--red); text-align:center; padding:12px;">couldn\'t load this manager\'s profile. Razzle tripped over the data cable. try again in a sec.</div>';
     console.error(e);
   }
 }

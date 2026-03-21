@@ -318,7 +318,7 @@
       populateSeasons(data.available_seasons, data.season);
       render(data);
     }).catch(function() {
-      document.getElementById('hcContent').innerHTML = '<div class="hc-loading">false start on the server. try refreshing</div>';
+      document.getElementById('hcContent').innerHTML = '<div class="hc-loading">something went sideways. Razzle knocked the data cable loose. try refreshing</div>';
     });
   }
 
