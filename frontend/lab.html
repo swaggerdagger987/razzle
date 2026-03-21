@@ -4141,6 +4141,37 @@
   document.addEventListener('DOMContentLoaded', _updateSidebarLocks);
   window.addEventListener('razzle-plan-changed', _updateSidebarLocks);
 
+  // ─── Agent attribution on sidebar categories (Pro+) ────────────
+  var CATEGORY_AGENTS = {
+    'Rankings & Values': 'bones',
+    'Performance': 'octo',
+    'Game Analysis': 'hawkeye',
+    'Trends & Projections': 'atlas',
+    'Records & History': 'atlas',
+    'League Tools': 'bones',
+  };
+  function _updateSidebarAgents() {
+    var paid = typeof isPaidUser === 'function' && isPaidUser();
+    document.querySelectorAll('.lab-sidebar-category').forEach(function(cat) {
+      var existing = cat.querySelector('.cat-agent');
+      if (existing) existing.remove();
+      if (!paid || typeof AGENT_TERRITORY === 'undefined') return;
+      var catText = cat.querySelector('.cat-text');
+      var name = catText ? catText.textContent.trim() : '';
+      var agentId = CATEGORY_AGENTS[name];
+      if (!agentId) return;
+      var agent = AGENT_TERRITORY[agentId];
+      if (!agent) return;
+      var badge = document.createElement('span');
+      badge.className = 'cat-agent';
+      badge.style.cssText = 'display:inline-flex; align-items:center; gap:3px; margin-left:6px; font-family:var(--font-hand); font-size:10px; opacity:0.5; font-weight:400; letter-spacing:0;';
+      badge.innerHTML = '<img src="' + agent.icon + '" width="12" height="12" alt="" style="vertical-align:middle;">' + agent.name;
+      catText.parentNode.insertBefore(badge, catText.nextSibling);
+    });
+  }
+  document.addEventListener('DOMContentLoaded', _updateSidebarAgents);
+  window.addEventListener('razzle-plan-changed', _updateSidebarAgents);
+
   // CSV export lock styling for free users
   // Hide CSV button on panels without table data (checks on render + after async load)
   function _updateCsvVisibility(container) {
@@ -4408,9 +4439,18 @@
                              (function() {
                                var pa = typeof getPanelAgent === 'function' ? getPanelAgent(panelName) : null;
                                if (!pa) return '';
-                               return '<div class="panel-agent-attr" style="font-family:var(--font-hand); font-size:13px; opacity:0.6; display:flex; align-items:center; gap:5px; margin-top:2px;">' +
+                               var html = '<div class="panel-agent-attr" style="font-family:var(--font-hand); font-size:13px; opacity:0.6; display:flex; align-items:center; gap:5px; margin-top:2px;">' +
                                  '<img src="' + escapeAttr(pa.icon) + '" alt="" width="20" height="20" style="vertical-align:middle;">' +
                                  '<span>' + escapeHtml(pa.name) + '</span></div>';
+                               // One-liner insight (Pro+ only)
+                               var paid = typeof isPaidUser === 'function' && isPaidUser();
+                               if (paid && typeof getOneLiner === 'function') {
+                                 var liner = getOneLiner(panelName);
+                                 if (liner) {
+                                   html += '<div class="panel-one-liner" style="font-family:var(--font-hand); font-size:14px; opacity:0.5; font-style:italic; margin-top:4px; max-width:500px;">' + escapeHtml(liner) + '</div>';
+                                 }
+                               }
+                               return html;
                              })() +
                              '<div class="panel-methodology" id="' + escapeAttr(methodId) + '" style="display:none;">' + escapeHtml(methodText) + '</div>';
           section.appendChild(header);

@@ -11,6 +11,11 @@ const AGENT_TERRITORY = {
     columns: ["injury_status", "games_missed", "durability_score", "workload_flag"],
     panels: ["injury-report", "durability", "workload-sustainability", "workload-monitor"],
     bureau: ["roster-depth-health"],
+    one_liners: [
+      "Soft tissue injuries have a 40% recurrence rate within 8 weeks.",
+      "The snap count doesn't lie. Watch the trend, not the headline.",
+      "Practice report says limited. Film says he's fine. Trust the film.",
+    ],
     loading: [
       "checking the injury wire...",
       "reviewing practice reports...",
@@ -34,6 +39,11 @@ const AGENT_TERRITORY = {
     columns: ["target_share", "snap_pct", "snap_share", "route_participation", "wopr", "usage_trend"],
     panels: ["breakout-finder", "waiver-wire", "usage-trends", "rostership", "breakouts"],
     bureau: ["self-scout-usage", "roster-depth-trends"],
+    one_liners: [
+      "3 names here weren't on this list 2 weeks ago.",
+      "Snap share tells the story. Everything else is noise.",
+      "The tape doesn't care about your narrative.",
+    ],
     loading: [
       "scanning the tape...",
       "reviewing snap counts...",
@@ -57,6 +67,11 @@ const AGENT_TERRITORY = {
     columns: ["trade_value", "buy_sell", "contract_value"],
     panels: ["trade-values", "buy-low-sell-high", "trade-finder", "tradefinder", "tradevalues"],
     bureau: ["trade-finder", "trade-network", "pressure-map", "manager-profiles"],
+    one_liners: [
+      "Trade market heats up after bye weeks.",
+      "The best trades happen when both sides think they won.",
+      "Value is what you pay. Worth is what you get.",
+    ],
     loading: [
       "reading the room...",
       "checking the market...",
@@ -80,6 +95,11 @@ const AGENT_TERRITORY = {
     columns: ["projection", "floor", "ceiling", "ppg", "efficiency", "composite_score", "ppo", "fantasy_points_ppr"],
     panels: ["monte-carlo", "projections", "efficiency", "aging-curves", "consistency", "vorp", "report-cards"],
     bureau: ["monte-carlo", "power-rankings", "strength-of-schedule"],
+    one_liners: [
+      "Players above the curve are beating the model.",
+      "Sample size matters. 4 games is a vibe, not a trend.",
+      "The numbers don't pick sides. They just are.",
+    ],
     loading: [
       "running the numbers...",
       "calculating confidence intervals...",
@@ -103,6 +123,11 @@ const AGENT_TERRITORY = {
     columns: ["career_stats", "yoy_delta", "player_comp"],
     panels: ["career-trajectories", "historical-comps", "season-recaps", "game-logs", "aging", "yoy"],
     bureau: ["manager-profiles-history", "transaction-history", "build-profiles"],
+    one_liners: [
+      "History doesn't repeat, but it rhymes.",
+      "This happened before. Three times, actually.",
+      "The archives remember what your league forgot.",
+    ],
     loading: [
       "pulling the archives...",
       "searching the record books...",
@@ -126,6 +151,11 @@ const AGENT_TERRITORY = {
     columns: [],
     panels: [],
     bureau: ["overview", "executive-summary"],
+    one_liners: [
+      "The best move is the one your league doesn't see coming.",
+      "Trust the process. But also check the data.",
+      "Razzle checked the film. Here's what matters.",
+    ],
     loading: [
       "pulling film...",
       "getting the board ready...",
@@ -198,6 +228,13 @@ function getEmptyText(panelId) {
 function getErrorText(panelId) {
   const agentId = PANEL_TO_AGENT[panelId] || "razzle";
   return getAgentCopy(agentId, "errors");
+}
+
+// Get a one-liner insight for a panel's owning agent (Pro+ only)
+function getOneLiner(panelId) {
+  const agentId = PANEL_TO_AGENT[panelId];
+  if (!agentId) return null;
+  return getAgentCopy(agentId, "one_liners");
 }
 
 // Watermark with random character is defined in app.js (drawRazzleWatermark)
