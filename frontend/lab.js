@@ -89,13 +89,19 @@ function screenshotPanel(panelName) {
     useCORS: true,
     logging: false
   }).then(function(canvas) {
-    // Add watermark
+    // Add watermark with shareable URL
     var ctx = canvas.getContext('2d');
-    var wm = 'razzle.lol';
-    ctx.font = '600 28px Caveat, cursive';
-    ctx.fillStyle = _t.isDark ? 'rgba(237, 224, 207, 0.25)' : 'rgba(45, 31, 20, 0.25)';
+    var wmAlpha = _t.isDark ? 'rgba(237, 224, 207, 0.25)' : 'rgba(45, 31, 20, 0.25)';
+    ctx.fillStyle = wmAlpha;
     ctx.textAlign = 'right';
-    ctx.fillText(wm, canvas.width - 20, canvas.height - 16);
+    ctx.font = '600 28px Caveat, cursive';
+    ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 30);
+    // Add current URL below domain
+    try { if (typeof saveStateToURL === 'function') saveStateToURL(); } catch(e) {}
+    var _wmUrl = window.location.href.replace(/^https?:\/\//, '');
+    if (_wmUrl.length > 60) _wmUrl = _wmUrl.substring(0, 57) + '...';
+    ctx.font = '400 16px "Space Mono", monospace';
+    ctx.fillText(_wmUrl, canvas.width - 20, canvas.height - 12);
     // Download
     var link = document.createElement('a');
     var date = new Date().toISOString().slice(0, 10);
@@ -5722,13 +5728,18 @@ function exportImage() {
   ctx.lineTo(padX + rankColW + playerColW, hdrY + headerH + rowCount * rowH);
   ctx.stroke();
 
-  // Watermark
+  // Watermark with shareable URL
   const wmY = H - watermarkH / 2;
   ctx.font = "bold 16px 'Luckiest Guy', cursive";
   ctx.fillStyle = t.ink;
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
-  ctx.fillText("razzle.lol", W / 2, wmY);
+  ctx.fillText("razzle.lol", W / 2, wmY - 8);
+  try { if (typeof saveStateToURL === 'function') saveStateToURL(); } catch(e) {}
+  let _wmUrl2 = window.location.href.replace(/^https?:\/\//, '');
+  if (_wmUrl2.length > 60) _wmUrl2 = _wmUrl2.substring(0, 57) + '...';
+  ctx.font = "11px 'Space Mono', monospace";
+  ctx.fillText(_wmUrl2, W / 2, wmY + 8);
   ctx.globalAlpha = 1.0;
 
   // Download
