@@ -3559,6 +3559,9 @@ All 50+ open QA findings verified against current code:
 | 10 | Pick chart year/round/pick parseInt || defaults | lab.js:11221-11223 | Prevents "NaN_NaN_NaN" pick ID |
 | 11 | Draft year parseInt || state.draftYear | lab.js:2909 | Preserves current state on parse failure |
 | 12 | College season parseInt || state.collegeSeason | lab.js:2919 | Preserves current state on parse failure |
+| 13 | URL param draft_year parseInt || state.draftYear | lab.js:3929 | User-controllable URL param |
+| 14 | URL param college season parseInt || state.collegeSeason | lab.js:3934 | User-controllable URL param |
+| 15 | URL param NFL season parseInt || state.season | lab.js:3941 | User-controllable URL param |
 
 ### Verification
 - All 11 JS files syntax clean (node --check)
