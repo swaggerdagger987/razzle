@@ -2251,6 +2251,109 @@ Sources:
 
 3. **What does the Week 5-8 content calendar look like after the warm-up — and how does it sync with NFL Draft week and rookie draft season?**
 
-## NEXT QUESTION: What specific r/DynastyFF thread types and content formats get the most engagement during March-April pre-draft season, and what should Razzle's first data drop post look like?
+## Question 27: What specific r/DynastyFF thread types and content formats get the most engagement during March-April pre-draft season, and what should Razzle's first data drop post look like?
+
+**Why this matters**: The warm-up calendar (Q26) says start commenting now and post the first data drop April 19. But WHAT should that post look like? Wrong format = buried. Right format = front page + 500 upvotes + DMs asking "what tool is that?"
+
+### Answer
+
+**Verdict: Text post with embedded screenshot image, contrarian player-specific title, and data table in the body. NOT an image-only post.**
+
+**1. What thread types dominate r/DynastyFF during March-April:**
+
+Based on Razzle's scraped data (8,267 posts across 13 subs) and engagement patterns:
+
+- **Player news/hot takes** — highest raw upvotes. "Ashton Jeanty. To. The. Moon." (1,123 upvotes), prospect combine results (778 upvotes), Gruden interviews (685 upvotes). These are reactive — you can't plan them, but you CAN comment on them fast.
+- **Prospect evaluations/scouting** — sustained engagement during March-April. Rookie profiles, combine analysis, prospect rankings. This is where data-literate commenters build reputation.
+- **Trade advice/grades** — year-round evergreen. "Dynasty Trade Grades" recurring series (Dynasty Nerds) gets consistent engagement. Trade threads generate the most COMMENTS (discussion-heavy), which Reddit's algorithm rewards.
+- **Tool/data announcements** — risky but high-ceiling. "Create Your League's Own Pro-Football-Reference In Minutes!" (35 upvotes on r/DynastyFF) shows tools CAN work if positioned as utility, not promotion. The fake trade calculator post hit 1,297 upvotes because it was entertainment-first.
+- **Contrarian analysis** — "Is JSN having the most consistent WR season ever?" (1,300 upvotes on r/SleeperApp). Data-backed contrarian takes generate massive engagement because they invite argument.
+
+**2. Image post vs. text post — the data is clear:**
+
+On r/fantasyfootball, the top 20 posts by score are ALL news/text posts (7,292, 6,565, 6,219 upvotes). Image-only posts underperform in fantasy football subs because the community values DISCUSSION over aesthetics. However, text posts WITH an embedded image link get the best of both worlds: the image drives curiosity, the text body enables discussion.
+
+Key engagement research findings:
+- Posts with images get 65% more upvotes than text-only — but this is Reddit-wide, not fantasy-specific
+- Reddit's algorithm weights comments heavily; the first 30 minutes determine visibility
+- Posts between 9 AM-12 PM ET earn median 6,479 upvotes vs 783 for late-night posts
+- Responding to every comment in the first hour signals to the algorithm your post is worth promoting
+
+**3. What Razzle's first data drop should look like:**
+
+**Title format**: `[OC] I analyzed 3 years of [specific stat] and [contrarian finding about specific player]`
+
+Example: `[OC] I analyzed 3 years of rookie WR target shares and the 2026 class has a problem nobody's talking about`
+
+**Post structure:**
+1. **Hook** (2-3 sentences): The contrarian finding, stated plainly. "Everyone's hyping [player X] as WR1 in rookie drafts, but the data says..."
+2. **Screenshot** (1 image): A single Lab screenshot showing the data table/chart that proves the point. Watermarked with razzle.lol URL. Landscape 4:3 format, bold headers, readable at mobile preview size.
+3. **Data table** (markdown): The key numbers in a Reddit markdown table (5-10 rows max). This is scannable and quotable.
+4. **Analysis** (3-5 paragraphs): What the data means for dynasty managers. Specific, actionable. "If you're picking at 1.04, consider..."
+5. **Discussion hook** (1 sentence): "Am I wrong? What am I missing?" — invites comments, which is the algorithm fuel.
+
+**What NOT to do:**
+- Don't post an image-only post (no discussion surface area)
+- Don't mention the tool/site in the post body (let the watermark do the work)
+- Don't post a generic "here are my rookie rankings" (commodity content, already done by 50 sites)
+- Don't post on Sunday or Monday (fantasy managers aren't thinking about dynasty during NFL game days — offseason posting peaks Tuesday-Thursday)
+
+**4. The Subvertadown/PeakedInHighSkool format model:**
+
+Both built massive followings with the RECURRING SERIES model:
+- Subvertadown: Weekly "Defensive Maneuvers" and "Here's the Kicker" posts, same format every week, consistency built brand
+- PeakedInHighSkool: Weekly "Reddit Adjusted Trade Value Charts" — image post with chart, consistent visual format
+- Dynasty Nerds: "Dynasty Trade Grades: Volume X" — numbered series invites collection behavior
+
+Razzle's first post should SEED a series. Not "here's one analysis" but "Part 1 of [series name]." This creates return visitors and anticipation for future posts.
+
+**Suggested series name**: "The Tape Room" or "Film Room Finds" — aligns with Razzle's scouting/data identity.
+
+---
+
+### Self-Critique
+
+1. **The scraped data has deduplication issues** — the top 20 posts show the same post repeated 5-6 times with slightly different scores, likely from multiple scrape runs. The engagement numbers are directionally correct but not precisely deduplicated. The relative ranking of post types is still valid.
+
+2. **I could not access r/DynastyFF directly to see the actual top posts from March-April 2025.** The analysis is based on the scraped dataset (which covers a year of data) and general Reddit engagement research. The March-April specific content mix may differ slightly from the full-year average — prospect/rookie content likely represents a higher share during draft season.
+
+3. **The "text post + image" recommendation is strongly supported** by both the fantasy football community norms (discussion-heavy culture) and Reddit-wide engagement data (images boost upvotes, comments boost algorithm ranking). This is the highest-confidence recommendation.
+
+4. **The 9 AM-12 PM ET posting window is from Reddit-wide data**, not r/DynastyFF specifically. Dynasty fantasy skews toward engaged, year-round hobbyists who may browse at different times than the general Reddit population. However, the morning window aligns with when people browse Reddit at work — which is exactly when dynasty managers do their research.
+
+**Confidence: 8/10** — Strong convergence across multiple data sources on format (text + image), timing (weekday mornings), and content type (contrarian player analysis). The main uncertainty is whether the specific title formula will resonate with this particular community in April 2026 — that can only be tested live.
+
+Sources:
+- Razzle scraped data: `docs/marketing/marketing_research.md` (8,267 posts, score distribution, flair engagement)
+- [Subvertadown Compendium 2017-2024](https://subvertadown.com/article/compendium-of-subvertadown-reddit-posts-2017---2024) — 7-year recurring post series model
+- [PeakedInHighSkool Trade Value Charts](https://peakedinhighskool.com/) — weekly image-based Reddit series
+- [Dynasty Nerds — Grade the Trade](https://www.dynastynerds.com/trades/grade-the-trade-reviewing-reddit-submissions-july-6th/) — numbered recurring series format
+- [SocialPixOptimizer — Reddit Image Formats](https://socialpixoptimizer.com/academy/reddit-post-images-formats-that-get-upvoted-and-shared/) — landscape 4:3 for charts, legibility under compression
+- [Mastering Reddit Engagement](https://www.rickyspears.com/tech/mastering-reddit-engagement-a-data-scientists-guide-to-optimal-posting-strategies/) — 9AM-12PM ET window, first-hour comment engagement
+- [Reddit Content Marketing 2026](https://painonsocial.com/blog/reddit-content-marketing) — community-first storytelling
+- [MEXC/Upvote.net 1000-Post Study](https://www.mexc.co/en-PH/news/933006) — timing, format, and subreddit size as dominant engagement factors
+- Prior journal: Q25 (seeding strategy), Q26 (account warm-up calendar), Q13 (first 5 data drop concepts)
+
+### Implications for Razzle
+
+1. **The first data drop (April 19) should be a text post with one embedded Lab screenshot.** Title: `[OC] I analyzed 3 years of rookie WR [specific stat] and found [contrarian take]`. Body: hook, screenshot, markdown table, analysis, discussion question. The watermark on the screenshot is the only promotion.
+
+2. **Post between 9-11 AM ET on a Tuesday or Wednesday.** This maximizes both the Reddit algorithm window and the dynasty offseason browsing pattern.
+
+3. **Frame it as "Part 1" of a series.** "Film Room Finds: Vol. 1" or similar. The series format creates return visitors, builds brand recognition, and gives you a recurring content vehicle through rookie draft season.
+
+4. **The warm-up commenting (Weeks 1-4) should focus on prospect evaluation threads and trade advice threads.** These are the highest-engagement thread types during March-April, and commenting with data-backed takes in these threads builds the credibility needed for the data drop to land.
+
+5. **Prepare the Lab screenshot in advance.** Landscape 4:3, razzle.lol watermark visible but not obnoxious, bold column headers, position-colored cells, max 10-15 rows. It should be readable at Reddit's inline image preview size on mobile.
+
+### Open Questions
+
+1. **What specific 2026 rookie class contrarian take has the most debate potential — and which Lab view produces the most compelling screenshot to support it?**
+
+2. **How should the "Film Room Finds" series be structured across Weeks 5-8 to align with NFL Draft week and rookie draft ADP shifts?**
+
+3. **What's the ideal watermark design — URL only, URL + logo, or URL + tagline — and where should it be positioned to maximize visibility without triggering spam reports?**
+
+## NEXT QUESTION: What specific 2026 rookie class contrarian take has the most debate potential for Razzle's first data drop — and which Lab view produces the most compelling screenshot to support it?
 
 ---
