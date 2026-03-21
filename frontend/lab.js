@@ -2906,7 +2906,7 @@ function populateSeasonSelect() {
       `<option value="${y}" ${y === state.draftYear ? "selected" : ""}>${y} Draft</option>`
     ).join("");
     sel.onchange = (e) => {
-      state.draftYear = parseInt(e.target.value);
+      state.draftYear = parseInt(e.target.value) || state.draftYear;
       state.offset = 0;
       clearTimeout(_seasonDebounce);
       _seasonDebounce = setTimeout(() => fetchAndRender(), 200);
@@ -2916,7 +2916,7 @@ function populateSeasonSelect() {
       `<option value="${s}" ${s === state.collegeSeason ? "selected" : ""}>${s}</option>`
     ).join("");
     sel.onchange = (e) => {
-      state.collegeSeason = parseInt(e.target.value);
+      state.collegeSeason = parseInt(e.target.value) || state.collegeSeason;
       state.offset = 0;
       clearTimeout(_seasonDebounce);
       _seasonDebounce = setTimeout(() => fetchAndRender(), 200);
@@ -11218,9 +11218,9 @@ async function _taAddPick(side) {
   const yearSel = document.getElementById("taPickYear" + side.charAt(0).toUpperCase() + side.slice(1));
   const rdSel = document.getElementById("taPickRd" + side.charAt(0).toUpperCase() + side.slice(1));
   const numSel = document.getElementById("taPickNum" + side.charAt(0).toUpperCase() + side.slice(1));
-  const year = parseInt(yearSel.value);
-  const rd = parseInt(rdSel.value);
-  const pk = parseInt(numSel.value);
+  const year = parseInt(yearSel.value) || new Date().getFullYear();
+  const rd = parseInt(rdSel.value) || 1;
+  const pk = parseInt(numSel.value) || 1;
   const pickId = year + "_" + rd + "_" + pk;
 
   const arr = _taState[side];

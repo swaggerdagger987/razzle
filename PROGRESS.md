@@ -3520,3 +3520,47 @@ All 50+ open QA findings verified against current code:
 - Codebase is production-clean across all dimensions: crash safety, data correctness, design compliance, dark mode, security
 - 11/11 smoke tests pass
 - Previous sweep fixes (14 UI + 5 crash guards) all verified in place
+
+---
+
+## Ship Loop: Sweep Mode (Mar 21 — third pass)
+
+**Goal**: All ticket directories empty. Fresh 4-agent parallel audit with new perspectives: Agent Connective Tissue verification, backend edge cases, HTML panel compliance, JS runtime safety.
+
+### Startup
+- Merged origin/qa/findings (already up to date)
+- Merged origin/ceo/strategy (already up to date)
+- tickets/qa/, tickets/ceo/, tickets/manual/ all empty
+- TICKETS.md has only infrastructure-gated items (Playwright, Claude API, MiroFish)
+- 11/11 smoke tests pass
+
+### 4-Agent Parallel Audit Results
+
+| Agent | Scope | Findings |
+|-------|-------|----------|
+| Agent Connective Tissue | agent-config.js, agent-nudges.js, lab/bureau integration, watermarks, ambient peek, FAAB panel, briefings | PRODUCTION READY — all 10 components verified correct, XSS-safe, null-guarded, design-compliant. Minor: hawkeye.columns has 3 aspirational columns (snap_pct, route_participation, usage_trend) not in lab.js COLUMNS — no runtime impact. |
+| Backend Edge Cases | All 9 live_data modules, server.py, auth.py, billing.py | 0 bugs — all division guards, fetchone null checks, parameterized queries, JWT validation, Stripe webhooks verified correct |
+| HTML Panel Compliance | 10 standalone panels sampled (breakouts, stocks, redzone, airyards, targets, usage, matchups, efficiency, consistency, vorp) | CLEAN — all include app.js, NFL-season-aware defaults, overflow-x:auto, error handling, escapeHtml, analytics, Pricing nav link. 0 cold grays, 0 font violations |
+| JS Runtime Safety | lab.js, lab-panels.js, warroom.js, app.js | 12 parseInt() calls without NaN fallbacks — could send "NaN" to API on malformed select/slider values |
+
+### parseInt NaN Fallback Fixes (12 total)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | Budget slider parseInt || 200 | lab-panels.js:1199 | Prevents "$NaN" display |
+| 2 | Compare table season parseInt || _latestSeason | lab-panels.js:5984 | Prevents "NaN" in API URL |
+| 3 | Strengths/weaknesses season parseInt || _latestSeason | lab-panels.js:6083 | Prevents "NaN" in API URL |
+| 4 | Report card season parseInt || _latestSeason | lab-panels.js:6335 | Prevents "NaN" in API URL |
+| 5 | Full profile season parseInt || _latestSeason | lab-panels.js:6432 | Prevents "NaN" in API URL |
+| 6 | Game log season parseInt || _latestSeason | lab-panels.js:6458 | Prevents "NaN" in API URL |
+| 7 | Archetypes season parseInt || _latestSeason | lab-panels.js:6669 | Prevents "NaN" in API URL |
+| 8 | Points breakdown season parseInt || _latestSeason | lab-panels.js:6691 | Prevents "NaN" in API URL |
+| 9 | Draft class year parseInt || _latestSeason | lab-panels.js:9661 | Prevents "NaN" in API URL |
+| 10 | Pick chart year/round/pick parseInt || defaults | lab.js:11221-11223 | Prevents "NaN_NaN_NaN" pick ID |
+| 11 | Draft year parseInt || state.draftYear | lab.js:2909 | Preserves current state on parse failure |
+| 12 | College season parseInt || state.collegeSeason | lab.js:2919 | Preserves current state on parse failure |
+
+### Verification
+- All 11 JS files syntax clean (node --check)
+- 11/11 smoke tests pass
+- 0 regressions
