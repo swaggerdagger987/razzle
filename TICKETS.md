@@ -19,15 +19,43 @@ All tickets below implement the Agent Connective Tissue design. Full design doc:
 
 ---
 
-## Phase: P0 — League Intel Is Broken + Nav Names Changed Without Permission
+## Phase: P0 — CRITICAL: Half the Product Is Broken
 
-**PRIORITY: P0 — core product page is broken and brand names were changed.**
+**PRIORITY: P0 — THE SITE IS LIVE. PEOPLE ARE VISITING FROM TWITTER. HALF THE PANELS DO NOT LOAD AND THE ENTIRE BUREAU IS DOWN.**
 
-### Task 1: Fix League Intel (Bureau of Intelligence)
+The QA and Ship loops have been running for hundreds of sessions claiming things are fixed, but the actual user experience is broken. This is not a polish issue. This is a "the product doesn't work" issue. The two main things that needed hardening — Lab panels and the Bureau — are both failing.
+
+**DO NOT mark tasks as DONE unless you have loaded the page in a browser and visually confirmed the data renders.** Screenshots required for every fix. No more claiming completion without evidence.
+
+### Task 1: Fix EVERY broken Lab panel
+
+**Accept when**: Open EVERY panel in the Lab sidebar on localhost:8000. For each panel:
+1. Click it
+2. Wait 5 seconds for data to load
+3. Does it show data? Or does it show an error, empty state, or infinite loading?
+4. Screenshot it
+
+Any panel that does not load data is a bug. Fix it. The panels that are known to be broken need to be identified first — open all 70+ panels one by one and log which ones work and which don't. Then fix every broken one. This is not optional work. This is the core product.
+
+**Evidence required**: A checklist of all panels with PASS/FAIL and a screenshot of each broken panel after fixing.
+
+### Task 2: Fix the Bureau of Intelligence completely
 
 **Accept when**: league-intel.html fully works again — Sleeper connection flow, league loading, odds cards, self-scout, trade finder, all Bureau features functional. Test the full flow: enter a Sleeper username, select a league, see odds cards. If any step fails, fix it. This was working before the ship loop touched it.
 
-### Task 2: Restore original nav names
+**Accept when**: The FULL Bureau flow works end-to-end:
+1. Open league-intel.html
+2. Enter a Sleeper username — does the input work?
+3. Click connect — does it fetch leagues?
+4. Select a league — does it load rosters?
+5. Do odds cards render with championship/playoff percentages?
+6. Does Self-Scout load and show roster analysis?
+7. Does Trade Finder load and show trade suggestions?
+8. Does Pressure Map load?
+9. Does Manager Profiles load?
+Every single step must work. If ANY step fails, fix it before moving on. Screenshot each step after fixing.
+
+### Task 3: Restore original nav names
 
 The ship loop renamed the navigation tabs. The correct names are:
 
