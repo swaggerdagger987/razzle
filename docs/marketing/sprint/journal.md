@@ -344,6 +344,68 @@ Sources:
 
 3. **What is the competitive landscape for league analysis tools (leaguemate.fyi, Dynasty Assistant, Fantasy Wrapped, FFRec), and what specific gap does Razzle's behavioral profiling fill?** (We've established no competitor does behavioral profiling — but we haven't mapped what they DO offer and where Razzle overlaps vs. differentiates.)
 
-## NEXT QUESTION: What's the technical architecture for the behavioral profiling engine — should it run client-side or server-side?
+## Question 6: What's the technical architecture for the behavioral profiling engine — should it run client-side or server-side?
+
+**Why this matters**: The Bureau's behavioral profiling engine is the paid moat. The architecture decision determines: (a) whether the multiplayer sharing mechanic from Q3 works, (b) how Pro gating is enforced, (c) server cost, and (d) privacy posture. Get this wrong and either the sharing flywheel breaks or the server bill kills the lifestyle business model.
+
+### Answer
+
+**Verdict: Hybrid — "Fetch client-side, compute client-side, store server-side." This is the Dynasty Daddy pattern plus a profile persistence layer for sharing and Pro gating.**
+
+Evidence:
+
+1. **Dynasty Daddy (open-source, most comparable tool) already validates this pattern.** Their Angular frontend calls Sleeper's API directly from the browser for league data (rosters, matchups, users). Their Node/Express backend only serves pre-computed shared data (player rankings scraped from KeepTradeCut via Python cron into Postgres). They never store user league data server-side. This architecture has scaled to thousands of active dynasty users with minimal server cost. Razzle's current league-intel.html already follows this exact model — all 7 Sleeper API calls run client-side, with only `/api/auth/link-sleeper` (username validation) and `/api/league-trade-finder` (trade values) touching the backend.
+
+2. **The multiplayer sharing mechanic (Q3) REQUIRES server-side profile storage.** When Manager A connects their league, the 11 other managers should see their archetype badges via a shareable URL — even when Manager A's browser is closed. This is impossible with pure client-side. The profile must be persisted server-side so the URL resolves independently. Architecture: client computes profiles → POSTs computed results to backend → backend stores in `league_profiles` table → shareable URL serves profiles from backend.
+
+3. **Pro gating must be enforced server-side to prevent bypass.** Client-side gating (blurring, hiding elements) is trivially defeatable with browser DevTools. The free tier returns archetype label + headline stat. The Pro tier returns the full scouting report (exploit windows, trade timing, tendency breakdowns). The backend must control which fields are returned based on JWT plan tier — the same `require_plan()` pattern already in server.py (line 823).
+
+4. **Client-side computation eliminates server cost for the expensive part.** The behavioral profiling algorithm (Q4) requires ~42 API calls per season, ~126 for a 3-season dynasty league. If this runs server-side, Razzle's Render instance makes every Sleeper API call for every user — at scale, that's a single IP hammering Sleeper's API and a real rate-limit risk. Client-side, each user's browser makes its own calls from its own IP, distributing the load across the entire user base. At 1,000 paid users with 3 leagues each = 378,000 API calls — trivial when distributed, problematic from one server IP.
+
+5. **The proposed architecture has exactly 5 components:**
+
+   | Component | Location | Purpose |
+   |-----------|----------|---------|
+   | **Sleeper Data Fetch** | Client (browser) | Direct calls to api.sleeper.app — transactions, matchups, drafts, rosters (existing pattern) |
+   | **Behavioral Compute Engine** | Client (JS module) | Runs archetype algorithms on fetched data — panic_ratio, churn_after_loss, position_concentration, etc. (new: ~300 lines of JS) |
+   | **Profile Storage API** | Server (FastAPI) | `POST /api/bureau/profiles` — receives computed profiles, stores in SQLite. `GET /api/bureau/profiles/{league_id}` — serves profiles for shareable URLs. Pro gating on response fields. |
+   | **Profile Cache** | Server (SQLite) | `league_profiles` table: league_id, manager_id, archetype, headline_stat, full_report (JSON), computed_at, computed_by (user_id). TTL: recompute on demand, not automatic. |
+   | **Shareable League Page** | Server (HTML) | `/league/{league_id}/bureau` — renders cached profiles. og:image meta tags for social embeds. No Sleeper API dependency for viewers. |
+
+6. **Privacy posture: store profiles, not raw league data.** The backend never stores Sleeper transactions, rosters, or matchups. It only stores the COMPUTED output: archetype label, headline stat, and full report. Raw data stays in the client's browser and is discarded after computation. This means: (a) no GDPR concern for raw league data, (b) minimal storage footprint (~5KB per manager profile × 12 managers × N leagues), (c) if Sleeper changes their API, only the client-side fetch layer needs updating.
+
+7. **Recomputation model: on-demand, not automatic.** Profiles are computed when a manager clicks "Analyze League" and POSTed to the backend. A "Last updated: 3 days ago" badge with a "Refresh" button triggers recomputation. No server-side cron, no background polling, no Sleeper API calls from the server. This keeps server cost at zero for the Sleeper data layer — the only server cost is SQLite storage and API endpoint serving (already handled by the existing FastAPI instance on Render).
+
+8. **The shareable URL is the viral mechanism.** `razzle.lol/league/{league_id}/bureau` renders all 12 manager archetype cards from the cached profiles. The connector (Manager A) shares this URL in their group chat. Every manager sees their badge. The page includes: (a) free: archetype badge + headline stat for all managers, (b) blurred: full scouting report with "Unlock with Pro" overlay, (c) CTA: "Connect YOUR league" for managers from other leagues who find the page. This URL works without any Sleeper API calls — it serves entirely from cached profiles.
+
+### Self-Critique
+
+**What's backed by data**: Dynasty Daddy's open-source codebase confirms the client-side Sleeper fetch pattern works at scale. Razzle's existing league-intel.html already implements 7 client-side Sleeper API calls — this is proven code. The `require_plan()` server-side gating is already implemented (line 823, server.py). The Sleeper API rate limit of 1000/min with client-side distribution is confirmed from official docs. Storage math: 5KB × 12 managers × 1000 leagues = 60MB — trivial for SQLite.
+
+**What's speculation**: The "compute client-side, store server-side" hybrid hasn't been validated at scale for behavioral profiling specifically. The assumption that ~300 lines of JS can run the archetype algorithms fast enough in-browser is plausible (the computation is simple arithmetic on ~126 API responses) but untested. The shareable URL's viral mechanics (Q3's multiplayer theory) are unproven. The privacy claim ("store profiles, not raw data") may face edge cases where the headline stat reveals more about league activity than expected.
+
+**Confidence: 9/10** — The architecture follows proven industry patterns (Dynasty Daddy), extends Razzle's existing client-side Sleeper integration, and solves the three key requirements (sharing, Pro gating, cost). The only unknowns are JS computation performance (low risk) and viral URL mechanics (unvalidated but architecturally sound).
+
+Sources:
+- [Dynasty Daddy — GitHub (open source, Angular + Node + Postgres)](https://github.com/G-Sher/dynasty-daddy)
+- [Sleeper API Official Documentation — rate limits, endpoints](https://docs.sleeper.com/)
+- [Sleeper API Guide — Zuplo (comprehensive endpoint reference)](https://zuplo.com/learning-center/sleeper-api)
+- [Sleeper API Guide — SportsFirst (developer patterns)](https://www.sportsfirst.net/post/sleeper-api-explained-a-complete-guide-for-developers-fantasy-founders)
+- [FantasyPros Architecture — job listing reveals LAMP + Python + AWS](https://www.fantasypros.com/about/careers/web-developer/)
+- [Sportmonks — Caching strategies for high-volume football API usage](https://www.sportmonks.com/blogs/caching-and-optimisation-strategies-for-high-volume-football-api-usage/)
+- [Sleeper React Native Engineering Blog](https://blog.sleeper.app/switching-to-react-native-in-production-on-ios-and-android/)
+- Razzle codebase: `frontend/league-intel.html` (existing client-side Sleeper calls), `backend/server.py` lines 823-885 (require_plan + link-sleeper)
+
+---
+
+### Next 3 Questions This Raises
+
+1. **What is the competitive landscape for league analysis tools (leaguemate.fyi, Dynasty Assistant, Fantasy Wrapped, FFRec), and what specific gap does Razzle's behavioral profiling fill?** (We've confirmed no competitor automates behavioral profiling — but we haven't mapped what they DO offer, their pricing, and where users currently spend money on league-specific analysis.)
+
+2. **What does the League Pulse page UX flow look like — from "connect your Sleeper league" to "see all 12 manager archetypes" to "upgrade to Pro for the full scouting report"?** (The architecture is defined. Now the UX needs design: how does the shareable URL page look? What's the information hierarchy? How does the blur/CTA conversion flow work?)
+
+3. **What is the realistic timeline and effort estimate to build the behavioral profiling MVP — client-side compute engine, server-side profile storage, and shareable League Pulse page?** (Architecture is designed, archetypes are defined, API data is confirmed. How many dev days to ship a working v1?)
+
+## NEXT QUESTION: What is the competitive landscape for league analysis tools (leaguemate.fyi, Dynasty Assistant, Fantasy Wrapped, FFRec), and what specific gap does Razzle's behavioral profiling fill?
 
 ---
