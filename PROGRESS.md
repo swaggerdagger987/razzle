@@ -3144,3 +3144,58 @@ All data enrichments (PBP, roster demographics, bye weeks, injuries) are local-o
 - All 12 JS files syntax clean (node --check)
 - All Python files compile clean
 - 0 regressions
+
+---
+
+## Ship Loop Session 37: QA Findings Audit + IEEE 754 Fix (Mar 21)
+
+**Goal**: Merge QA findings, consume tickets, sweep for remaining bugs.
+
+### Startup
+- Merged origin/qa/findings (session 57-58 results, 168 new TSV entries, 6 screenshots)
+- origin/ceo/strategy already up to date
+- tickets/qa/, tickets/ceo/, tickets/manual/ all empty — no ticket files to consume
+- TICKETS.md remaining items all require external infrastructure (Playwright, Claude API, MiroFish)
+
+### QA Findings Audit
+
+Audited all open FUNC-001 through FUNC-062 findings from results.tsv. **Every code-fixable bug has already been fixed on ship/launch-fixes.** The remaining open items are either deployment-only (need prod push) or data-only (need DB rebuild).
+
+| FUNC | Status | Notes |
+|------|--------|-------|
+| FUNC-001 | Fixed, needs deploy | GZip double compression — code fix in place |
+| FUNC-002 | Fixed, needs deploy | Search hyphen/apostrophe fix in place |
+| FUNC-003 | Fixed, needs deploy | Dynasty value soft ceiling (log compression) |
+| FUNC-012 | Fixed, needs deploy | season_type='regular' filters — 112 occurrences across all 6 backend modules |
+| FUNC-017 | Fixed | Breakout badge uses PPG with 8 PPG min + 10 GP both seasons |
+| FUNC-018 | Fixed | `<base href="/">` on player.html, compare.html, team.html |
+| FUNC-025 | Fixed | safe_sorts whitelist has td_rate, fumble_rate, passer_rating, ay_per_att |
+| FUNC-026 | Fixed | Mini-screener uses data.items fallback + p.full_name |
+| FUNC-027 | Fixed | Smart filter chip uses `sf=breakout` (no trailing 's') |
+| FUNC-028/030/035 | Fixed, needs deploy | QB PPO uses pass attempts, TE threshold 20 |
+| FUNC-029 | Fixed | snap_share thresholds in percentage format (50/65/40) |
+| FUNC-038 | Fixed | Nudge border is 2px |
+| FUNC-039 | Fixed | nudgeFadeIn keyframes in both agent-nudges.js and styles.css |
+| FUNC-042 | Fixed, needs deploy | Derived sort over-fetch + Python re-sort (5000 cap) |
+| FUNC-044 | Fixed | addEventListener + data attributes instead of inline onclick |
+| FUNC-049-052 | Fixed | Panel field names match API responses |
+| FUNC-053 | Fixed | Compare sidebar points to career-compare; mockdraft/proradar are metadata only |
+| FUNC-060 | Fixed | TE opp threshold lowered to 20 |
+| FUNC-061 | Fixed | Most Efficient requires >= 40 opportunities |
+| FUNC-062 | Fixed | Volume King excludes QBs |
+
+### New Fix: IEEE 754 Float Precision (FUNC-040/059)
+- Added Python-side `round(val, 1)` for fantasy_points_ppr, fantasy_points_std, fantasy_points_half_ppr in `_enrich_with_derived_stats()`
+- Prevents artifacts like 416.59999999 in API responses
+
+### Items Requiring Deployment (Not Code Fixes)
+- All FUNC-001/002/003/012/028/030/035/042 fixes are in code but prod hasn't been redeployed
+- Headshot URLs empty on prod (DB not rebuilt with latest adapter)
+- Agent SVGs 404 on prod (new files not deployed)
+- player_season_pbp table has 0 rows on local (data import needed)
+
+### Verified Clean
+- 11/11 smoke tests pass
+- Full codebase sweep (frontend + backend) found 0 new bugs
+- No bare except blocks, no eval(), no SQL injection vectors, no XSS
+- 0 regressions

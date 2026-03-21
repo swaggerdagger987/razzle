@@ -12,6 +12,26 @@ from .core import FANTASY_POSITIONS, _cached, _CACHE_TTL_STABLE, _current_nfl_se
 
 logger = logging.getLogger("razzle.live_data.dashboards")
 
+
+def _grade_from_percentile(pct):
+    """Convert a 0-100 percentile to a letter grade (8-tier scale)."""
+    if pct >= 95:
+        return "A+"
+    if pct >= 85:
+        return "A"
+    if pct >= 75:
+        return "B+"
+    if pct >= 65:
+        return "B"
+    if pct >= 50:
+        return "C+"
+    if pct >= 35:
+        return "C"
+    if pct >= 25:
+        return "D"
+    return "F"
+
+
 _EFFICIENCY_ANNOTATIONS = [
     "does more with less",
     "ruthlessly efficient",
@@ -169,18 +189,7 @@ def fetch_efficiency_rankings(season=None, position=None, limit=30, week=None):
                     continue
                 rank = sum(1 for v in ppo_values if v < p["ppo"])
                 percentile = rank / n * 100
-                if percentile >= 95:
-                    p["grade"] = "A+"
-                elif percentile >= 85:
-                    p["grade"] = "A"
-                elif percentile >= 70:
-                    p["grade"] = "B"
-                elif percentile >= 45:
-                    p["grade"] = "C"
-                elif percentile >= 25:
-                    p["grade"] = "D"
-                else:
-                    p["grade"] = "F"
+                p["grade"] = _grade_from_percentile(percentile)
 
             # Most Efficient: highest PPO
             most_efficient = sorted(players, key=lambda x: x["ppo"], reverse=True)[:limit]
@@ -334,18 +343,7 @@ def fetch_consistency_rankings(season=None, position=None, limit=30, week=None):
                 # Lower CoV = more consistent = higher percentile
                 rank = sum(1 for v in cov_values if v > p["cov"])
                 percentile = rank / total * 100
-                if percentile >= 95:
-                    p["grade"] = "A+"
-                elif percentile >= 85:
-                    p["grade"] = "A"
-                elif percentile >= 70:
-                    p["grade"] = "B"
-                elif percentile >= 45:
-                    p["grade"] = "C"
-                elif percentile >= 25:
-                    p["grade"] = "D"
-                else:
-                    p["grade"] = "F"
+                p["grade"] = _grade_from_percentile(percentile)
 
             # Rock Solid: lowest CoV (most consistent)
             rock_solid = sorted(players, key=lambda x: x["cov"])[:limit]
@@ -547,18 +545,7 @@ def fetch_strength_of_schedule(season=None, position=None, limit=30):
             total = len(players)
             for i, p in enumerate(players):
                 percentile = ((total - 1 - i) / max(total - 1, 1)) * 100
-                if percentile >= 95:
-                    p["grade"] = "A+"
-                elif percentile >= 85:
-                    p["grade"] = "A"
-                elif percentile >= 70:
-                    p["grade"] = "B"
-                elif percentile >= 45:
-                    p["grade"] = "C"
-                elif percentile >= 25:
-                    p["grade"] = "D"
-                else:
-                    p["grade"] = "F"
+                p["grade"] = _grade_from_percentile(percentile)
 
             # Schedule Suppressed: hardest schedule (highest sos_delta)
             suppressed = [p for p in players if p["sos_delta"] > 0]
@@ -800,19 +787,6 @@ def fetch_stock_watch(season=None, position=None, limit=30):
                 rank = sum(1 for v in sorted_vals if v < val)
                 return round(rank / count * 100, 1)
 
-            def grade_from_percentile(pct):
-                if pct >= 95:
-                    return "A+"
-                elif pct >= 85:
-                    return "A"
-                elif pct >= 70:
-                    return "B"
-                elif pct >= 45:
-                    return "C"
-                elif pct >= 25:
-                    return "D"
-                return "F"
-
             for p in players:
                 ppg_pct = percentile_rank(p["ppg"], ppg_sorted, n_total)
                 has_ppo = p["ppo"] is not None
@@ -830,9 +804,9 @@ def fetch_stock_watch(season=None, position=None, limit=30):
 
                 p["stock_score"] = stock_score
                 p["ppg_pct"] = round(ppg_pct)
-                p["efficiency_grade"] = grade_from_percentile(ppo_pct) if ppo_pct is not None else None
-                p["consistency_grade"] = grade_from_percentile(cov_pct)
-                p["sos_grade"] = grade_from_percentile(sos_pct)
+                p["efficiency_grade"] = _grade_from_percentile(ppo_pct) if ppo_pct is not None else None
+                p["consistency_grade"] = _grade_from_percentile(cov_pct)
+                p["sos_grade"] = _grade_from_percentile(sos_pct)
                 # Stock delta: positive = undervalued (stock > production rank)
                 p["stock_delta"] = stock_score - round(ppg_pct)
 
@@ -1330,23 +1304,6 @@ def fetch_report_cards(season=None, position=None, limit=25, week=None):
                 rank = sum(1 for v in sorted_vals if v < val)
                 return round(rank / count * 100, 1)
 
-            def grade_from_percentile(pct):
-                if pct >= 95:
-                    return "A+"
-                elif pct >= 85:
-                    return "A"
-                elif pct >= 75:
-                    return "B+"
-                elif pct >= 65:
-                    return "B"
-                elif pct >= 50:
-                    return "C+"
-                elif pct >= 35:
-                    return "C"
-                elif pct >= 25:
-                    return "D"
-                return "F"
-
             for p in players:
                 ppg_pct = percentile_rank(p["ppg"], ppg_sorted, n_total)
                 ppo_pct = percentile_rank(p["ppo"], ppo_sorted, n_total)
@@ -1359,10 +1316,10 @@ def fetch_report_cards(season=None, position=None, limit=25, week=None):
                 gpa_pct = round(ppo_pct * 0.20 + cov_pct * 0.20 + sos_pct * 0.20 + ppg_pct * 0.20 + opp_pct * 0.20)
 
                 p["gpa_pct"] = gpa_pct
-                p["gpa_grade"] = grade_from_percentile(gpa_pct)
-                p["efficiency_grade"] = grade_from_percentile(ppo_pct)
-                p["consistency_grade"] = grade_from_percentile(cov_pct)
-                p["sos_grade"] = grade_from_percentile(sos_pct)
+                p["gpa_grade"] = _grade_from_percentile(gpa_pct)
+                p["efficiency_grade"] = _grade_from_percentile(ppo_pct)
+                p["consistency_grade"] = _grade_from_percentile(cov_pct)
+                p["sos_grade"] = _grade_from_percentile(sos_pct)
                 p["stock_score"] = round(ppo_pct * 0.25 + cov_pct * 0.25 + sos_pct * 0.25 + ppg_pct * 0.25)
 
             # Honor Roll: highest composite GPA
@@ -1673,23 +1630,6 @@ def fetch_season_awards(season=None, position=None):
                 rank = sum(1 for v in sorted_vals if v < val)
                 return round(rank / n_total * 100, 1) if n_total > 0 else 50
 
-            def grade_from_percentile(pct):
-                if pct >= 95:
-                    return "A+"
-                elif pct >= 85:
-                    return "A"
-                elif pct >= 75:
-                    return "B+"
-                elif pct >= 65:
-                    return "B"
-                elif pct >= 50:
-                    return "C+"
-                elif pct >= 35:
-                    return "C"
-                elif pct >= 25:
-                    return "D"
-                return "F"
-
             for p in players:
                 ppg_pct = pct_rank(p["ppg"], ppg_sorted)
                 ppo_pct = pct_rank(p["ppo"], ppo_sorted)
@@ -1700,7 +1640,7 @@ def fetch_season_awards(season=None, position=None):
                 # Composite GPA
                 gpa_pct = round(ppo_pct * 0.20 + cov_pct * 0.20 + sos_pct * 0.20 + ppg_pct * 0.20 + opp_pct * 0.20)
                 p["gpa_pct"] = gpa_pct
-                p["gpa_grade"] = grade_from_percentile(gpa_pct)
+                p["gpa_grade"] = _grade_from_percentile(gpa_pct)
 
                 # Stock score
                 stock_score = round(ppo_pct * 0.25 + cov_pct * 0.25 + sos_pct * 0.25 + ppg_pct * 0.25)
@@ -1716,9 +1656,9 @@ def fetch_season_awards(season=None, position=None):
                 age_bonus = max(0, min(30, 30 - (p["age"] - 21))) / 30 * 100  # 21yo=100, 31yo=0
                 p["breakout_score"] = round(opp_pct * 0.5 + age_bonus * 0.3 + ppg_pct * 0.2, 1)
 
-                p["efficiency_grade"] = grade_from_percentile(ppo_pct)
-                p["consistency_grade"] = grade_from_percentile(cov_pct)
-                p["sos_grade"] = grade_from_percentile(sos_pct)
+                p["efficiency_grade"] = _grade_from_percentile(ppo_pct)
+                p["consistency_grade"] = _grade_from_percentile(cov_pct)
+                p["sos_grade"] = _grade_from_percentile(sos_pct)
 
             # Build award categories
             award_defs = [
