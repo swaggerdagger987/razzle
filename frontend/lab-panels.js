@@ -5050,14 +5050,14 @@
         html += '<span class="pt-team">' + escapeHtml(p.team || '') + '</span>';
         html += '</div>';
         html += '<div class="pt-stats">';
-        var stats = p.projections || [];
+        var stats = p.milestones || [];
         stats.forEach(function(s) {
-          var pct = s.milestone ? Math.min(100, ((s.projected || 0) / s.milestone) * 100) : 0;
+          var pct = s.target ? Math.min(100, ((s.projected || 0) / s.target) * 100) : 0;
           var onPace = pct >= 100;
           html += '<div class="pt-stat-row">';
           html += '<span class="pt-stat-label">' + escapeHtml(s.label || s.stat) + '</span>';
           html += '<span class="pt-stat-vals">' + fmt(s.current, 0) + ' → ' + fmt(s.projected, 0) + '</span>';
-          if (s.milestone) {
+          if (s.target) {
             html += '<div class="pt-pace-bar-wrap">';
             html += '<div class="pt-pace-bar" style="width:' + Math.min(100, pct) + '%;background:' + posColor + '"></div>';
             html += '</div>';
