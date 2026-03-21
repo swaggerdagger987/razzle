@@ -3286,6 +3286,7 @@
 
 <!-- PANEL: SCREENER (default) -->
 <div class="lab-panel" id="panel-screener">
+<div id="lab-nudge-container"></div>
 
 <!-- TOOLBAR -->
 <div class="lab-container">
@@ -4010,6 +4011,7 @@
 
 <script src="app.js"></script>
 <script src="agent-config.js"></script>
+<script src="agent-nudges.js"></script>
 <script defer src="lab.js"></script>
 <script defer src="formulas.js"></script>
 <script defer src="formula-store.js"></script>
@@ -4124,6 +4126,13 @@
   } else {
     document.addEventListener('DOMContentLoaded', _registerDeferredPanels);
   }
+
+  // ─── Trigger Elite nudges after page settles ───────────────────
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+      if (typeof checkNudges === 'function') checkNudges('lab', 'lab-nudge-container');
+    }, 3000);
+  });
 
   // ─── Lock icons on Pro sidebar items for free users ────────────
   function _updateSidebarLocks() {
