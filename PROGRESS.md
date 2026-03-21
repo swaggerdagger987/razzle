@@ -2977,6 +2977,7 @@ All data enrichments (PBP, roster demographics, bye weeks, injuries) are local-o
 | # | Fix | Severity | Files | Notes |
 |---|-----|----------|-------|-------|
 | 1 | Player popup `games_played` → `games` field mismatch | P2 | app.js:1754 | Player popup (openPlayerPopup) read `stats.games_played` for GP stat, but profile API returns `games`. GP never displayed in popup. |
+| 2 | Season cutoff `>= 6` (July) → `>= 8` (September) | P2 | advantage.html, fptsbreakdown.html, pace.html, streaks.html | 4 pages used July cutoff while canonical _latestSeason uses September. Would break in Jul/Aug by trying to load non-existent current-year data. |
 
 ### Verified Clean (manual sweep + 4 parallel agents)
 - 11/11 smoke tests pass
@@ -2994,3 +2995,5 @@ All data enrichments (PBP, roster demographics, bye weeks, injuries) are local-o
 - Agent connective tissue (agent-config.js, agent-nudges.js) properly escaped
 - Monte Carlo worker has proper edge case guards (Box-Muller log(0), z-score clamp)
 - boom-bust `games_played` field is internally consistent (API + frontend) — not changed
+- All season cutoffs now consistently use `>= 8` (September) — 0 remaining `>= 6` or `>= 7`
+- All f-string SQL in prospects.py uses hardcoded column names from dicts/whitelists — no injection risk
