@@ -2819,3 +2819,52 @@ smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
 smoke-local	OK	-	-	-	pass	smoke S68: 11/11 passed (health, players, pos filter QB/WR, sort, season switch, week filter, screener, no NaN, no negatives, filter options)	100	2026-03-21T10:52
 36	OK	backend/live_data/college.py	11	_efficiency_grade import	pass	re-audit S68: college.py imports _efficiency_grade from core (no duplicate definition). College efficiency grades verified 8-tier (Ward A+, Hoover A+). 0 invalid grades.	100	2026-03-21T11:10
 36	OK	backend/live_data/analytics.py	1022	_efficiency_grade	pass	re-audit S68: buy-sell uses _efficiency_grade from core. Sinnott eff=A+ (100 ppo_pct), Jeanty eff=D (17 ppo_pct). All 8-tier.	100	2026-03-21T11:10
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke-local	OK	-	-	-	pass	smoke S69: 11/11 passed (health, players, pos filter QB/WR, sort, season switch, week filter, screener, no NaN, no negatives, filter options)	100	2026-03-21T11:09
+1	OK	frontend/lab.html	-	screener	pass	re-audit S69: Lab 0 JS errors, 610 players, result count correct (1-25 of 610 + position breakdown). No regressions from Ship Loop Phases C-H.	100	2026-03-21T11:15
+57	OK	frontend/lab.html	-	sidebar	pass	re-audit S69: 73 sidebar items, all panels clickable. Pro-gated panels (reportcard, efficiency) show lock correctly. 0 JS errors.	100	2026-03-21T11:15
+62	OK	frontend/lab-panels.js	6894	awards_runner_stat	open	re-audit S69: FUNC-067 still unfixed. r.ppg || '' treats 0 as falsy. No API data triggers it (runners ppg 14-20 range). Ship Loop hasn't consumed ticket.	95	2026-03-21T11:15
+63	P2	frontend/league-intel.html	2956	setTimeout_leak	open	S69 NEW: FUNC-068. 3 setTimeout() calls without storing timer ID (lines 2956, 4705, 4911). Line 2956 inside loop. Same file has 15+ correct patterns. Self-cleaning timers (10s), low practical impact.	90	2026-03-21T11:20
+19	OK	frontend/tradevalues.html	-	tradevalues	pass	re-audit S69: 0 JS errors. Trade values page loads. 5 broken NFL headshots (CDN 404, known FUNC-004).	100	2026-03-21T11:15
+43	OK	frontend/vorp.html	-	vorp	pass	re-audit S69: 0 JS errors. VORP page loads. Data rendering verified.	100	2026-03-21T11:15
+26	OK	frontend/weeklyleaders.html	-	weekly_leaders	pass	re-audit S69: 0 JS errors. Weekly Leaders page loads.	100	2026-03-21T11:15
+64	OK	frontend/agents.html	-	situation_room	pass	re-audit S69: 0 JS errors. 63 links, 63 buttons, 6 agent tabs. Canvas renders. Phase D hardening verified.	100	2026-03-21T11:15
+60	OK	frontend/league-intel.html	-	bureau	pass	re-audit S69: 0 JS errors. 55 links, 14 buttons. Connect flow UI present. Phase C changes verified.	100	2026-03-21T11:15
+-	OK	backend/server.py	1372	decrypt_removed	pass	S69: Phase H decrypt endpoint removal verified. No frontend references to decrypt/loadFromCloud. Comment documents decision.	100	2026-03-21T11:20
+-	OK	adapters/nflverse_adapter.py	357	col_normalization	pass	S69: Phase F column normalization verified. NEW_FORMAT_COLUMN_MAP handles passing_interceptions→interceptions, sacks_suffered→sacks, team→recent_team. CORE_STATS uses mapped names.	100	2026-03-21T11:20
+-	OK	-	-	half_ppr_calc	pass	S69: Phase F half-PPR backfill verified. McCaffrey HPPR=365.6 = (416.6+314.6)/2. Nacua HPPR=310.5. Robinson HPPR=331.3. All exact matches.	100	2026-03-21T11:20
+-	OK	-	-	season_data	pass	S69: Phase F 2025 data verified. Different leaders from 2024 (overlap: Josh Allen only). 2019 count. 319 prospects with combine data.	100	2026-03-21T11:20
+-	OK	-	-	report_card_sort	pass	S69: Report card honor roll correctly sorted by gpa_pct desc (82→82→80→79→77→77→76→76→75→75). cc58114 fix holding.	100	2026-03-21T11:20
+-	OK	-	-	efficiency_grade	pass	S69: 8-tier efficiency grades consistent across endpoints. Efficiency API: Boutte A+. Report card: McCaffrey C. Buy-sell: separate grading. No invalid grades.	100	2026-03-21T11:20
