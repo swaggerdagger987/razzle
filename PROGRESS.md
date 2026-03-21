@@ -3283,3 +3283,43 @@ Trade analyzer autocomplete used `escapeAttr()` in inline `onmousedown` handler 
 
 ### Smoke Tests: 11/11 pass
 - Week filter: WORKING locally (season=2024, week=1 returns games=1). Prior smoke failures were from stale code.
+
+---
+
+## Ship Loop Session 40: Deep Sweep (Mar 21)
+
+**Goal**: Ticket directories empty, TICKETS.md items need external infrastructure. Enter sweep mode.
+
+### Startup
+- Merged origin/qa/findings (already up to date)
+- Merged origin/ceo/strategy (already up to date)
+- tickets/qa/, tickets/ceo/, tickets/manual/ all empty
+- TICKETS.md remaining items require Playwright, Claude API, MiroFish
+
+### 5-Agent Deep Sweep Results
+
+| Agent | Scope | Findings |
+|-------|-------|----------|
+| Backend Architect | SQL correctness (season_type, JOINs, div-by-zero, _safe_int, bare excepts) | 0 bugs — all clean |
+| Frontend Developer (crash bugs) | .toFixed/null, .split/null, forEach/undefined, Math.max/empty, missing .catch | 0 bugs — all guarded |
+| Frontend Developer (standalone HTML) | 68 panel pages (app.js order, seasons, .catch, escapeHtml, overflow-x) | 2 bugs found |
+| Frontend Developer (newer files) | agent-config.js, agent-nudges.js, monte-carlo-worker.js | 1 crash bug |
+| Security Engineer (XSS) | 6 main HTML + 3 main JS files, inline onclick handlers | 1 security hardening |
+
+### Fixes Applied (4 total)
+
+| # | Fix | Severity | File | Notes |
+|---|-----|----------|------|-------|
+| 1 | Missing .catch() on roster builder search | P2 | rosterbuilder.html:636 | Network error left unhandled promise rejection |
+| 2 | Missing overflow-x:auto on regression table | P2 | regression.html:138 | Table clips on mobile viewports |
+| 3 | Monte Carlo worker null crash | P1 | monte-carlo-worker.js:50-51 | rp.wins/rp.losses accessed without null guard on rp |
+| 4 | escapeJS() security hardening | P1 | app.js:495-498 | Backslash escapes (\' \") replaced with hex escapes (\x27 \x22 \x3c \x3e \x26) — safe in both JS string and HTML attribute contexts. Hardens ~60 inline event handlers across codebase. |
+
+### Verified Clean
+- All 12 JS files syntax clean
+- All Python files compile clean
+- 11/11 smoke tests pass
+- 0 regressions
+- Backend: 0 missing season_type filters, 0 JOIN mismatches, 0 div-by-zero, 0 bare excepts
+- Frontend: 0 unguarded .toFixed/.split/.forEach, 0 Math.max/min on empty arrays
+- Standalone HTML: 68/68 pages pass all checks (app.js order, seasons, .catch, escapeHtml, overflow-x)

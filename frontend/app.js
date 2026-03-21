@@ -491,10 +491,11 @@ function escapeAttr(str) {
   return String(str).replace(/&/g, "&amp;").replace(/'/g, "&#39;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-/** Escape a string for use inside a JavaScript string literal (e.g. inline onclick handlers). */
+/** Escape a string for use inside a JavaScript string literal in HTML attributes (e.g. inline onclick handlers).
+ *  Uses hex escapes so output never contains literal quotes or angle brackets — safe in both JS and HTML attribute contexts. */
 function escapeJS(str) {
   if (!str) return "";
-  return String(str).replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/"/g, '\\"').replace(/\n/g, "\\n").replace(/\r/g, "\\r");
+  return String(str).replace(/\\/g, "\\\\").replace(/'/g, "\\x27").replace(/"/g, "\\x22").replace(/</g, "\\x3c").replace(/>/g, "\\x3e").replace(/&/g, "\\x26").replace(/\n/g, "\\n").replace(/\r/g, "\\r");
 }
 
 const API_BASE = window.location.origin;
