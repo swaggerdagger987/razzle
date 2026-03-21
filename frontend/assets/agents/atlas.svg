@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#d44040">
+  <!-- Elephant: round head + big ears + trunk -->
+  <circle cx="10" cy="10" r="6"/>
+  <ellipse cx="3.5" cy="10" rx="3" ry="4" fill="#d44040"/>
+  <ellipse cx="16.5" cy="10" rx="3" ry="4" fill="#d44040"/>
+  <path d="M10,13 Q10,17 8,18" fill="none" stroke="#d44040" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="7.5" cy="9" r="1" fill="#fff"/>
+  <circle cx="12.5" cy="9" r="1" fill="#fff"/>
+  <circle cx="7.5" cy="9" r="0.5" fill="#2d1f14"/>
+  <circle cx="12.5" cy="9" r="0.5" fill="#2d1f14"/>
+</svg>

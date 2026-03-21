@@ -160,9 +160,18 @@ var _skeletonHTML = '';
 function _resetLoadingSkeleton(el) {
   if (!_skeletonHTML) _skeletonHTML = el.innerHTML;
   if (!el.querySelector('.skeleton-table')) el.innerHTML = _skeletonHTML;
+  // Agent-voiced loading text
+  var lt = el.querySelector('#loadingText');
+  if (lt && typeof getLoadingText === 'function') {
+    lt.textContent = getLoadingText('screener');
+  }
 }
 function _setLoadingError(el, msg) {
-  el.innerHTML = '<div style="text-align:center; font-family:var(--font-hand); font-size:22px; color:var(--ink-light); padding:40px 20px;">' + escapeHtml(msg) + '</div>';
+  var errorMsg = msg;
+  if (!msg && typeof getErrorText === 'function') {
+    errorMsg = getErrorText('screener');
+  }
+  el.innerHTML = '<div style="text-align:center; font-family:var(--font-hand); font-size:22px; color:var(--ink-light); padding:40px 20px;">' + escapeHtml(errorMsg) + '</div>';
 }
 function _highlightSearch(escaped) {
   if (!state.search) return escaped;
@@ -1314,7 +1323,7 @@ async function fetchAndRenderNFL(signal, myId) {
   } catch (e) {
     if (e.name === 'AbortError') return;
     loading.style.display = "none";
-    _showToast('fumbled the data fetch... try again');
+    _showToast(typeof getErrorText === 'function' ? getErrorText('screener') : 'fumbled the data fetch... try again');
     // Keep previous table data visible — don't clear tbody
     renderTable();
     updateResultCount();
@@ -1361,7 +1370,7 @@ async function fetchAndRenderProspects(signal, myId) {
   } catch (e) {
     if (e.name === 'AbortError') return;
     loading.style.display = "none";
-    _showToast('fumbled the prospect fetch... try again');
+    _showToast(typeof getErrorText === 'function' ? getErrorText('screener') : 'fumbled the prospect fetch... try again');
     renderTable();
     updateResultCount();
   }
@@ -1407,7 +1416,7 @@ async function fetchAndRenderCollege(signal, myId) {
   } catch (e) {
     if (e.name === 'AbortError') return;
     loading.style.display = "none";
-    _showToast('fumbled the college data fetch... try again');
+    _showToast(typeof getErrorText === 'function' ? getErrorText('screener') : 'fumbled the college data fetch... try again');
     renderTable();
     updateResultCount();
   }
@@ -1520,9 +1529,11 @@ function renderTableHead() {
     const lockCls = _getTierLockClass(key);
     const cls = [sortCls, lockCls].filter(Boolean).join(" ");
     const tierLabel = lockCls === "elite-locked" ? " [Elite]" : lockCls === "pro-locked" ? " [Pro]" : "";
-    // Build tooltip with optional column stats
+    // Build tooltip with optional column stats + agent attribution
     let tipText = col.tip || col.label;
     if (tierLabel) tipText += tierLabel;
+    var colAgent = typeof getColumnAgent === 'function' ? getColumnAgent(key) : null;
+    if (colAgent) tipText += '\n' + colAgent.name + ' \u2014 ' + colAgent.role;
     if (!col.isText && !col.isSparkline && !col.isNotes && state.items.length > 0) {
       const vals = [];
       for (const p of state.items) { const v = parseFloat(p[key]); if (!isNaN(v)) vals.push(v); }
@@ -1923,7 +1934,7 @@ function renderTableBody() {
   _expandedRows = {};
   const tbody = document.getElementById("tableBody");
   const cols = getActiveColumns();
-  const emptyMsg = razzleEmpty();
+  const emptyMsg = typeof getEmptyText === 'function' ? getEmptyText('screener') : razzleEmpty();
 
   if (!state.items.length) {
     _vscrollRows = [];
