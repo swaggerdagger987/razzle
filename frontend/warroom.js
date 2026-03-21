@@ -1094,7 +1094,7 @@ const keys = {};
 document.addEventListener('keydown', e => {
   // Only handle when canvas is visible
   if (!document.getElementById('canvasContainer')) return;
-  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return;
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT' || e.target.isContentEditable) return;
   keys[e.key] = true;
   if (e.key >= '1' && e.key <= '6') {
     selectAgent(parseInt(e.key) - 1);
@@ -1516,7 +1516,7 @@ function setupConfigPanel() {
       <span class="config-agent-dot" style="background:${a.color}"></span>
       <span class="config-agent-name">${a.name}</span>
       <input class="config-agent-key" type="password" autocomplete="off"
-        placeholder="shared key" value="${escapeHtml(key)}">
+        placeholder="shared key" value="${escapeAttr(key)}">
     </div>`;
   }).join('');
 

@@ -1175,7 +1175,7 @@ def fetch_season_recap(season=None):
                 "most_volatile": volatile[:5],
                 "breakouts": breakouts[:5],
                 "busts": busts[:5],
-                "total_players": total_players,
+                "total_players": len(season_rows),
                 "avg_ppg": avg_ppg,
             }
     return _cached(f"season_recap:{season}", _query)
