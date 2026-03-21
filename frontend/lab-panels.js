@@ -10335,4 +10335,98 @@
     loadGS();
   }});
 
+  // ─── FAAB STRATEGY ────────────────────────────────────────────────
+  defs.push({ name: 'faab', render: function(el) {
+    if (showNflOnlyMsg(el, 'faab', 'FAAB Strategy', 'waiver budget pacing and spend patterns')) return;
+
+    // Historical FAAB spend patterns (typical dynasty league averages)
+    var WEEKLY_SPEND = [
+      { week: 1, pct: 12, label: 'Wk 1' },
+      { week: 2, pct: 9, label: 'Wk 2' },
+      { week: 3, pct: 8, label: 'Wk 3' },
+      { week: 4, pct: 7, label: 'Wk 4' },
+      { week: 5, pct: 6, label: 'Wk 5' },
+      { week: 6, pct: 5, label: 'Wk 6' },
+      { week: 7, pct: 5, label: 'Wk 7' },
+      { week: 8, pct: 6, label: 'Wk 8' },
+      { week: 9, pct: 7, label: 'Wk 9' },
+      { week: 10, pct: 8, label: 'Wk 10' },
+      { week: 11, pct: 6, label: 'Wk 11' },
+      { week: 12, pct: 5, label: 'Wk 12' },
+      { week: 13, pct: 4, label: 'Wk 13' },
+      { week: 14, pct: 4, label: 'Wk 14' },
+      { week: 15, pct: 3, label: 'Wk 15' },
+      { week: 16, pct: 3, label: 'Wk 16' },
+      { week: 17, pct: 2, label: 'Wk 17' },
+    ];
+
+    var POS_SPEND = [
+      { pos: 'RB', pct: 42, color: POS_COLORS.RB },
+      { pos: 'WR', pct: 32, color: POS_COLORS.WR },
+      { pos: 'QB', pct: 14, color: POS_COLORS.QB },
+      { pos: 'TE', pct: 12, color: POS_COLORS.TE },
+    ];
+
+    var PACING = [
+      { phase: 'Early (Wk 1-4)', budget: '35-40%', advice: 'Be aggressive. Early breakouts set your season. Don\'t be the manager who saves FAAB for Week 16.' },
+      { phase: 'Mid (Wk 5-10)', budget: '30-35%', advice: 'Stay active but selective. Bye weeks create opportunities. Target the second wave of breakouts.' },
+      { phase: 'Late (Wk 11-14)', budget: '15-20%', advice: 'Playoff push mode. Spend on starters, not stashes. Win-now moves only.' },
+      { phase: 'Playoffs (Wk 15-17)', budget: '5-10%', advice: 'Emergency reserves. Stream defenses and kickers. One big waiver pickup can win the ship.' },
+    ];
+
+    el.innerHTML =
+      '<div class="lp-page">' +
+        '<div class="lp-header"><h2>FAAB Strategy</h2>' +
+        '<div class="lp-subtitle">waiver budget pacing and spend patterns</div></div>' +
+
+        // Weekly spend chart
+        '<div class="lp-section" style="margin-bottom:24px;">' +
+          '<h3 style="font-family:var(--font-display); font-size:16px; margin-bottom:12px;">Average FAAB Spend by Week</h3>' +
+          '<div style="display:flex; align-items:flex-end; gap:4px; height:160px; padding:8px 0;">' +
+            WEEKLY_SPEND.map(function(w) {
+              var h = Math.round(w.pct / 12 * 140);
+              var isHigh = w.pct >= 8;
+              return '<div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:2px;">' +
+                '<div style="font-family:var(--font-mono); font-size:9px; color:var(--ink-light);">' + w.pct + '%</div>' +
+                '<div style="width:100%; height:' + h + 'px; background:' + (isHigh ? 'var(--orange)' : 'var(--ink-faint)') + '; border-radius:4px 4px 0 0; border:2px solid var(--ink); min-width:16px;"></div>' +
+                '<div style="font-family:var(--font-mono); font-size:8px; color:var(--ink-light); white-space:nowrap;">' + w.label + '</div>' +
+              '</div>';
+            }).join('') +
+          '</div>' +
+          '<div style="font-family:var(--font-hand); font-size:13px; color:var(--ink-light); margin-top:6px; text-align:center;">early season and bye weeks see the biggest FAAB burns</div>' +
+        '</div>' +
+
+        // Position breakdown
+        '<div class="lp-section" style="margin-bottom:24px;">' +
+          '<h3 style="font-family:var(--font-display); font-size:16px; margin-bottom:12px;">FAAB Spend by Position</h3>' +
+          '<div style="display:flex; gap:12px; flex-wrap:wrap;">' +
+            POS_SPEND.map(function(p) {
+              return '<div style="flex:1; min-width:100px; background:var(--bg-card); border:2px solid var(--ink); border-radius:8px; padding:12px; text-align:center;">' +
+                '<div style="font-family:var(--font-display); font-size:24px; color:' + p.color + ';">' + p.pct + '%</div>' +
+                '<div style="font-family:var(--font-mono); font-size:12px; font-weight:700; color:' + p.color + ';">' + p.pos + '</div>' +
+              '</div>';
+            }).join('') +
+          '</div>' +
+          '<div style="font-family:var(--font-hand); font-size:13px; color:var(--ink-light); margin-top:6px; text-align:center;">RBs command the most waiver spend — scarcity is real</div>' +
+        '</div>' +
+
+        // Budget pacing guide
+        '<div class="lp-section">' +
+          '<h3 style="font-family:var(--font-display); font-size:16px; margin-bottom:12px;">Budget Pacing Guide</h3>' +
+          '<div style="display:grid; gap:10px;">' +
+            PACING.map(function(p) {
+              return '<div style="display:flex; gap:12px; align-items:flex-start; background:var(--bg-card); border:2px solid var(--ink); border-radius:8px; padding:12px;">' +
+                '<div style="min-width:80px;">' +
+                  '<div style="font-family:var(--font-mono); font-size:11px; font-weight:700;">' + escapeHtml(p.phase) + '</div>' +
+                  '<div style="font-family:var(--font-display); font-size:18px; color:var(--orange);">' + p.budget + '</div>' +
+                '</div>' +
+                '<div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-medium); line-height:1.4;">' + escapeHtml(p.advice) + '</div>' +
+              '</div>';
+            }).join('') +
+          '</div>' +
+        '</div>' +
+
+      '</div>';
+  }});
+
 })();

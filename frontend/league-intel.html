@@ -1954,6 +1954,7 @@
 </nav>
 
 <main class="intel-container" id="main-content">
+  <div id="bureau-nudge-container"></div>
   <!-- Connect Card (shown when no username) -->
   <div id="connectView">
     <div class="connect-card">
@@ -2069,6 +2070,8 @@
 
 <script src="app.js"></script>
 <script src="agent-config.js"></script>
+<script src="agent-nudges.js"></script>
+<script>document.addEventListener('DOMContentLoaded', function() { setTimeout(function() { if (typeof checkNudges === 'function') checkNudges('bureau', 'bureau-nudge-container'); }, 3000); });</script>
 <script>
 const SLEEPER_API = "https://api.sleeper.app/v1";
 

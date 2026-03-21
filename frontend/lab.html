@@ -3191,6 +3191,7 @@
     <a class="lab-sidebar-item pro-locked" data-panel="buysell" data-icon="&#x21C5;" onclick="switchPanel('buysell')">Buy / Sell<span class="sidebar-tooltip">Buy / Sell</span></a>
     <a class="lab-sidebar-item pro-locked" data-panel="stocks" data-icon="&#x2197;" onclick="switchPanel('stocks')">Stock Watch<span class="sidebar-tooltip">Stock Watch</span></a>
     <a class="lab-sidebar-item pro-locked" data-panel="waivers" data-icon="&#x2295;" onclick="switchPanel('waivers')">Waivers<span class="sidebar-tooltip">Waivers</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="faab" data-icon="&#x1F4B0;" onclick="switchPanel('faab')">FAAB Strategy<span class="sidebar-tooltip">FAAB Strategy</span></a>
     <a class="lab-sidebar-item pro-locked" data-panel="scarcity" data-icon="&#x25EF;" onclick="switchPanel('scarcity')">Scarcity<span class="sidebar-tooltip">Scarcity</span></a>
     <a class="lab-sidebar-item pro-locked" data-panel="handcuffs" data-icon="&#x26D3;" onclick="switchPanel('handcuffs')">Handcuffs<span class="sidebar-tooltip">Handcuffs</span></a>
 
@@ -3286,6 +3287,7 @@
 
 <!-- PANEL: SCREENER (default) -->
 <div class="lab-panel" id="panel-screener">
+<div id="lab-nudge-container"></div>
 
 <!-- TOOLBAR -->
 <div class="lab-container">
@@ -4010,6 +4012,7 @@
 
 <script src="app.js"></script>
 <script src="agent-config.js"></script>
+<script src="agent-nudges.js"></script>
 <script defer src="lab.js"></script>
 <script defer src="formulas.js"></script>
 <script defer src="formula-store.js"></script>
@@ -4125,6 +4128,13 @@
     document.addEventListener('DOMContentLoaded', _registerDeferredPanels);
   }
 
+  // ─── Trigger Elite nudges after page settles ───────────────────
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+      if (typeof checkNudges === 'function') checkNudges('lab', 'lab-nudge-container');
+    }, 3000);
+  });
+
   // ─── Lock icons on Pro sidebar items for free users ────────────
   function _updateSidebarLocks() {
     var paid = typeof isPaidUser === 'function' && isPaidUser();
@@ -4231,7 +4241,8 @@
     proradar: 'Athletic Radar',
     drafttracker: 'Draft Class Tracker',
     powerrankings: 'Power Rankings',
-    gamescript: 'Game Script'
+    gamescript: 'Game Script',
+    faab: 'FAAB Strategy'
   };
 
   var PANEL_FLAVORS = {
@@ -4303,7 +4314,8 @@
     proradar: 'see who\'s a freak athlete and who\'s just hype',
     drafttracker: 'how each draft class actually produced in fantasy',
     powerrankings: 'which teams have the most dynasty firepower?',
-    gamescript: 'who produces when their team is winning vs losing?'
+    gamescript: 'who produces when their team is winning vs losing?',
+    faab: 'when to be aggressive vs conservative with your budget'
   };
 
   // Panel methodology descriptions (top 10 complex panels + generic fallback)
