@@ -216,8 +216,8 @@ def _fetch_screener_uncached(body):
         week = body.get("week", 0)
         sort_key = body.get("sort_key", "fantasy_points_ppr")
         sort_dir = body.get("sort_direction", "desc")
-        limit = min(body.get("limit", 200), 1000)
-        offset = body.get("offset", 0)
+        limit = max(1, min(_safe_int(body.get("limit", 200), 200), 1000))
+        offset = max(0, _safe_int(body.get("offset", 0)))
         filters = body.get("filters", [])[:50]
         relevance = body.get("relevance", "fantasy")
 

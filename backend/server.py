@@ -985,7 +985,7 @@ async def get_query_quota(request: Request):
                 user_id = result["user"]["id"]
                 plan = result["user"].get("plan", "free")
         except Exception:
-            pass
+            logger.warning("Failed to resolve user for quota check", exc_info=True)
 
     return auth_module.check_query_quota(user_id=user_id, ip_address=ip, plan=plan)
 
@@ -1006,7 +1006,7 @@ async def track_query(request: Request):
                 user_id = result["user"]["id"]
                 plan = result["user"].get("plan", "free")
         except Exception:
-            pass
+            logger.warning("Failed to resolve user for query tracking", exc_info=True)
 
     # Check quota first
     quota = auth_module.check_query_quota(user_id=user_id, ip_address=ip, plan=plan)
@@ -1201,9 +1201,6 @@ async def llm_chat_free(request: Request):
             "limit": quota.get("limit", 5),
         }, status_code=429)
 
-    # Record the query
-    auth_module.record_query(user_id=user["id"], ip_address=ip)
-
     # Parse request
     try:
         body = await request.json()
@@ -1265,6 +1262,8 @@ async def llm_chat_free(request: Request):
             return JSONResponse({"error": "Agent returned an unexpected response. Try again."}, status_code=502)
         # Tag response with free model info
         data["_razzle_free_model"] = _LLM_FREE_MODEL
+        # Record quota only on success (don't burn quota on LLM failures)
+        auth_module.record_query(user_id=user["id"], ip_address=ip)
         live_data.log_event("agent_query", "free")
         return JSONResponse(data)
     except httpx.TimeoutException:

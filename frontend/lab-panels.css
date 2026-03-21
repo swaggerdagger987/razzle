@@ -4865,3 +4865,38 @@
   .gs-column-note { display: none; }
   .gs-team { display: none; }
 }
+
+/* Dark mode overrides — higher opacity hover tints and inverted brightness */
+[data-theme="dark"] .dh-table tr:hover,
+[data-theme="dark"] .dh-compare-results > div:hover,
+[data-theme="dark"] .pa-table tbody tr:hover,
+[data-theme="dark"] .av-table tr:hover,
+[data-theme="dark"] .ww-table tbody tr:hover,
+[data-theme="dark"] .hc-table tbody tr:hover,
+[data-theme="dark"] .se-table tbody tr:hover,
+[data-theme="dark"] .wl-table tbody tr:hover,
+[data-theme="dark"] .dt-table tbody tr:hover,
+[data-theme="dark"] .tp-table tbody tr:hover,
+[data-theme="dark"] .dr-table tbody tr:hover,
+[data-theme="dark"] .gt-table tbody tr:hover,
+[data-theme="dark"] .sk-table tbody tr:hover,
+[data-theme="dark"] .rz-table tbody tr:hover,
+[data-theme="dark"] .str-table tbody tr:hover,
+[data-theme="dark"] .wkl-table tbody tr:hover,
+[data-theme="dark"] .mv-grid tbody tr:hover,
+[data-theme="dark"] .po-table tbody tr:hover,
+[data-theme="dark"] .ut-table tbody tr:hover,
+[data-theme="dark"] .yy-table tbody tr:hover,
+[data-theme="dark"] .spc-table tbody tr:hover,
+[data-theme="dark"] .tdr-table tbody tr:hover,
+[data-theme="dark"] .ay-table tbody tr:hover,
+[data-theme="dark"] .lp-search-list > div:hover,
+[data-theme="dark"] .cst-table tbody tr:hover,
+[data-theme="dark"] .ccp-table tbody tr:hover,
+[data-theme="dark"] .cmt-table tbody tr:hover,
+[data-theme="dark"] .rpc-table tbody tr:hover,
+[data-theme="dark"] .glo-table tbody tr:hover { background: rgba(217, 119, 87, 0.18); }
+[data-theme="dark"] .wh-table tr:hover td { background-color: rgba(217, 119, 87, 0.18); }
+[data-theme="dark"] .cst-totals,
+[data-theme="dark"] .glo-totals { background: rgba(217, 119, 87, 0.12); }
+[data-theme="dark"] .mh-table tbody tr:hover td { filter: brightness(1.15); }

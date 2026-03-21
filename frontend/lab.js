@@ -2573,6 +2573,7 @@ function setUniverse(u) {
   }
 
   state.week = 0;
+  state.tagFilter = false;
   applyUniverseUI();
 
   // If currently on an NFL-only panel and switching to college (or vice versa), go to screener
@@ -2593,6 +2594,7 @@ function setUniverse(u) {
   renderPresets();
   populatePresetSelect();
   renderActiveFilters();
+  updateTagFilterBadge();
   fetchAndRender();
 
   // Invalidate cached panels so they re-fetch with new universe
@@ -2602,6 +2604,7 @@ function setUniverse(u) {
 function setCollegeView(view) {
   if (state.collegeView === view) return;
   state.collegeView = view;
+  state.tagFilter = false;
   try { localStorage.setItem('razzle_college_view', view); } catch(e) {}
   state.offset = 0;
   state.search = "";
@@ -2891,6 +2894,7 @@ function populateSeasonSelect() {
 
 // ─── Week select ─────────────────────────────────────────────────
 let _weekDebounce = null;
+var _weekFetchController = null;
 
 function populateWeekSelect() {
   const weekSel = document.getElementById("weekSelect");
@@ -2907,7 +2911,11 @@ function populateWeekSelect() {
   var season = state.season || 0;
   weekSel.style.display = "";
 
-  fetch(window.location.origin + "/api/available-weeks?season=" + season)
+  // Abort any in-flight week fetch to prevent stale data on rapid season switch
+  if (_weekFetchController) _weekFetchController.abort();
+  _weekFetchController = new AbortController();
+
+  fetch(window.location.origin + "/api/available-weeks?season=" + season, { signal: _weekFetchController.signal })
     .then(function(r) { return r.ok ? r.json() : { weeks: [] }; })
     .then(function(data) {
       state.availableWeeks = data.weeks || [];
@@ -2918,7 +2926,8 @@ function populateWeekSelect() {
       weekSel.innerHTML = html;
       _updateWeekAnnotation();
     })
-    .catch(function() {
+    .catch(function(e) {
+      if (e && e.name === "AbortError") return;
       weekSel.innerHTML = '<option value="0">All Weeks</option>';
     });
 
@@ -3306,7 +3315,7 @@ function toggleToolsDropdown() {
   var isOpen = dd.classList.contains("open");
   dd.classList.toggle("open", !isOpen);
   if (bd) bd.classList.toggle("open", !isOpen);
-  if (btn) btn.classList.toggle("active", !isOpen);
+  if (btn) { btn.classList.toggle("active", !isOpen); btn.setAttribute("aria-expanded", String(!isOpen)); }
 }
 
 function closeToolsDropdown() {
@@ -3315,7 +3324,7 @@ function closeToolsDropdown() {
   var btn = document.getElementById("toolsDropdownBtn");
   if (dd) dd.classList.remove("open");
   if (bd) bd.classList.remove("open");
-  if (btn) btn.classList.remove("active");
+  if (btn) { btn.classList.remove("active"); btn.setAttribute("aria-expanded", "false"); }
 }
 
 // ─── Column picker ───────────────────────────────────────────────
@@ -4147,7 +4156,7 @@ function saveCurrentView() {
     tierBreaks: !!state.tierBreaks,
     groupHeaders: !!state.groupHeaders,
     summaryBar: !!state.summaryBar,
-    tagFilter: state.tagFilter || "",
+    tagFilter: !!state.tagFilter,
   };
 
   views.unshift(view);
@@ -5123,7 +5132,18 @@ function computePercentiles() {
 }
 
 function getHeatColor(pct) {
-  // Warm-shifted colors that work on Anthropic sand background
+  var isDark = document.documentElement.getAttribute("data-theme") === "dark";
+  if (isDark) {
+    // Higher opacity for dark espresso background
+    if (pct >= 90) return "rgba(46, 196, 182, 0.35)";
+    if (pct >= 75) return "rgba(46, 196, 182, 0.20)";
+    if (pct >= 60) return "rgba(46, 196, 182, 0.10)";
+    if (pct <= 10) return "rgba(230, 57, 70, 0.30)";
+    if (pct <= 25) return "rgba(230, 57, 70, 0.18)";
+    if (pct <= 40) return "rgba(230, 57, 70, 0.08)";
+    return "";
+  }
+  // Warm-shifted colors for Anthropic sand background
   if (pct >= 90) return "rgba(46, 196, 182, 0.22)";  // elite green-tinted
   if (pct >= 75) return "rgba(46, 196, 182, 0.12)";  // good green
   if (pct >= 60) return "rgba(46, 196, 182, 0.05)";  // slight green
@@ -5496,6 +5516,8 @@ function computePosRanks() {
   for (const pos of Object.keys(byPos)) {
     byPos[pos].sort((a, b) => {
       const av = a[key] ?? 0, bv = b[key] ?? 0;
+      if (typeof av === "string" || typeof bv === "string")
+        return String(av).localeCompare(String(bv)) * (desc ? -1 : 1);
       return desc ? bv - av : av - bv;
     });
     byPos[pos].forEach((p, i) => {
@@ -6391,7 +6413,7 @@ function renderProfile(data, container) {
   // Header
   html += `<div class="profile-header">`;
   if (player.headshot_url) {
-    html += `<img class="profile-headshot" src="${escapeAttr(player.headshot_url)}" alt="" onerror="this.style.display='none';">`;
+    html += `<img class="profile-headshot" src="${escapeAttr(player.headshot_url)}" alt="${escapeAttr(player.full_name || 'Player')} headshot" onerror="this.style.display='none';">`;
   }
   html += `<span class="profile-pos-badge" style="background:${posColor};">${pos}</span>`;
   html += `<div>`;
@@ -10428,7 +10450,7 @@ document.addEventListener("keydown", function(e) {
 
   // N: toggle notes column
   if (e.key === "n" || e.key === "N") {
-    toggleColumn("notes", !state.visibleColumns.includes("notes"));
+    toggleColumn("notes", !getActiveColumns().includes("notes"));
     renderTableHead(); renderTable(); renderColumnPicker(); saveStateToURL();
     return;
   }
@@ -11955,7 +11977,7 @@ function renderPlayerComps(data, container) {
     // Headshot + name
     html += `<div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">`;
     if (comp.headshot_url) {
-      html += `<img src="${escapeAttr(comp.headshot_url)}" style="width:36px; height:36px; border-radius:50%; border:2px solid var(--ink); object-fit:cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">`;
+      html += `<img src="${escapeAttr(comp.headshot_url)}" alt="" style="width:36px; height:36px; border-radius:50%; border:2px solid var(--ink); object-fit:cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">`;
       html += `<span style="display:none; width:36px; height:36px; border-radius:50%; border:2px solid var(--ink); background:${posColor}; color:white; font-family:var(--font-mono); font-size:14px; align-items:center; justify-content:center;">${escapeHtml((comp.full_name || "").split(" ").map(n => n[0]).join(""))}</span>`;
     } else {
       html += `<span style="display:flex; width:36px; height:36px; border-radius:50%; border:2px solid var(--ink); background:${posColor}; color:white; font-family:var(--font-mono); font-size:14px; align-items:center; justify-content:center;">${escapeHtml((comp.full_name || "").split(" ").map(n => n[0]).join(""))}</span>`;
