@@ -686,8 +686,14 @@ async def custom_http_exception_handler(request: Request, exc: StarletteHTTPExce
 async def global_exception_handler(request: Request, exc: Exception):
     """Catch unhandled exceptions — log full traceback, return generic 500."""
     import json
+    import sqlite3
     if isinstance(exc, json.JSONDecodeError) and request.method == "POST":
         return JSONResponse({"error": "invalid JSON body"}, status_code=400)
+    # Missing tables (college adapter not run, etc.) → return empty data, not 500
+    if isinstance(exc, sqlite3.OperationalError) and "no such table" in str(exc):
+        logger.warning("Missing table on %s %s: %s", request.method, request.url.path, exc)
+        if request.url.path.startswith("/api/"):
+            return JSONResponse({"items": [], "count": 0, "error": "data not available"}, status_code=200)
     logger.exception("Unhandled exception on %s %s", request.method, request.url.path)
     if request.url.path.startswith("/api/"):
         return JSONResponse({"error": "Internal server error"}, status_code=500)

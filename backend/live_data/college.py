@@ -12,6 +12,13 @@ from .core import _cached, _CACHE_TTL_STABLE, _current_nfl_season, _enrich_colle
 logger = logging.getLogger("razzle.live_data.college")
 
 
+def _has_table(conn, table_name):
+    """Check if a table exists in the database."""
+    return conn.execute(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name=?", (table_name,)
+    ).fetchone() is not None
+
+
 def _efficiency_grade(percentile):
     """Convert a 0-100 percentile to a letter grade."""
     if percentile >= 95:
@@ -41,6 +48,8 @@ def _fetch_college_players_uncached(
 ):
     """Return paginated college player stats from cfb_player_season_stats."""
     with get_db() as conn:
+        if not _has_table(conn, "cfb_player_season_stats"):
+            return {"items": [], "count": 0, "season": season or _current_nfl_season(), "available_seasons": []}
 
         # Default to latest season
         if not season:
@@ -162,6 +171,8 @@ def fetch_college_players(search="", position="", positions="", team="", confere
 def _fetch_college_player_profile_uncached(player_id):
     """Return a rich college player profile with all seasons + combine/draft data."""
     with get_db() as conn:
+        if not _has_table(conn, "cfb_player_season_stats"):
+            return {"player": None, "seasons": [], "combine": None, "draft": None}
         # Get all seasons for this player
         seasons = conn.execute("""
             SELECT player_id, player_name, position, team, conference, season,
@@ -304,6 +315,8 @@ def fetch_college_player_profile(player_id):
 def _fetch_college_filter_options_uncached():
     """Return available filter values for the college screener."""
     with get_db() as conn:
+        if not _has_table(conn, "cfb_player_season_stats"):
+            return {"seasons": [], "teams": [], "conferences": [], "positions": []}
 
         seasons = [r[0] for r in conn.execute(
             "SELECT DISTINCT season FROM cfb_player_season_stats ORDER BY season DESC"
