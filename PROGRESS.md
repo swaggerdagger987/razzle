@@ -3388,3 +3388,30 @@ All 9 fixes change `(val || '-')` to `(val != null ? val : '-')` to correctly di
 - Backend: all division-by-zero guarded by preceding min-count checks
 - Frontend: 0 unguarded .toFixed/.split/.forEach, 0 missing .catch(), 0 XSS vectors
 - 0 remaining `getComputedStyle` export patterns (all use `dataset.theme` now)
+
+---
+
+## Ship Loop: QA Findings Triage (Mar 21)
+
+**Goal**: Consume all open QA findings from functional-qa/results.tsv.
+
+| # | Finding | Status | Notes |
+|---|---------|--------|-------|
+| 1 | FUNC-051: Report Card GPA sort broken | FIXED | Initial sort state used `col: 'gpa'` (undefined) instead of `col: 'gpa_pct'`. Honor roll/needs improvement rendered in random order on panel load. |
+| 2 | FUNC-053/054: Orphan panel refs | CLEANED | Removed dead `mockdraft` and `proradar` entries from PANEL_NAMES, PANEL_FLAVORS, PANEL_EXPLANATIONS in lab.html and COLLEGE_ONLY arrays in lab.js. No sidebar items existed for these — just dead lookup entries. |
+| 3 | P2: Timer leaks in league-intel.html | FIXED | Added clearTimeout(crawlTimer) and clearTimeout(txnTimer) in catch blocks of crawlLeagueHistory and loadActivityFeed. |
+| 4 | FUNC-064: gradeClass B+/C+ | VERIFIED | All 5 gradeClass functions already use charAt(0) — handles B+/C+ correctly. Backend 8-tier fix shipped in f3726b5. |
+| 5 | FUNC-052: TD Regression fields | VERIFIED | Frontend already uses correct field names (positive_regression, negative_regression, pos_avg_td_rates, td_diff). |
+| 6 | FUNC-028: QB PPO cascade | VERIFIED | All 4 dashboard functions already have QB fix (attempts+carries vs targets+carries). |
+| 7 | FUNC-026: Mini-screener fields | VERIFIED | Code already has data.items/data.players and full_name/display_name/name fallbacks. |
+| 8 | FUNC-049/050: Season Pace + Air Yards fields | VERIFIED | Already use p.games and p.air_yards_share. |
+| 9 | FUNC-017: Breakout badge | VERIFIED | Already uses PPG with prevPPG>=8 and >=10 games checks. |
+| 10 | FUNC-025: safe_sorts whitelist | VERIFIED | td_rate, fumble_rate, passer_rating, ay_per_att already in whitelist. |
+| 11 | FUNC-027/029: Smart filter keys | VERIFIED | ?sf=breakout already correct. Thresholds already in percentage format (50/65/40). |
+| 12 | FUNC-038/039: Nudge CSS | VERIFIED | Border already 2px. nudgeFadeIn keyframes exist in both agent-nudges.js and styles.css. |
+
+### Summary
+- 3 real fixes applied (report card sort, orphan panel cleanup, timer leaks)
+- 9 findings verified as already fixed (stale QA data)
+- Remaining open findings are deployment-only (code exists, prod needs deploy)
+- 11/11 smoke tests pass
