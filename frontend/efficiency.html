@@ -498,7 +498,7 @@
       } else if (col.key === 'catch_rate') {
         html += '<td class="' + classes.join(' ') + '">' + (p.catch_rate != null ? fmt(p.catch_rate, 1) + '%' : '-') + '</td>';
       } else if (col.key === 'td_rate') {
-        html += '<td class="' + classes.join(' ') + '">' + fmt(p.td_rate, 1) + '%</td>';
+        html += '<td class="' + classes.join(' ') + '">' + (p.td_rate != null ? fmt(p.td_rate, 1) + '%' : '-') + '</td>';
       } else if (col.key === 'annotation') {
         html += '<td class="' + classes.join(' ') + '"><span class="eff-annotation">' + escapeHtml(p.annotation || '') + '</span></td>';
       } else {

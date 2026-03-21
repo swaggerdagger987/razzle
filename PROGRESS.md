@@ -3086,6 +3086,10 @@ All data enrichments (PBP, roster demographics, bye weeks, injuries) are local-o
 
 ## Ship Loop Session 35: Data Quality Sweep (Mar 21)
 
+> **Note**: Session numbering reflects continuity from prior sessions tracked in PROGRESS.md.
+
+
+
 **Goal**: Ticket directories empty, TICKETS.md blocked on external infrastructure. Targeted sweep on QA-reported data quality issues (FUNC-060, FUNC-061/062) and crash-prone patterns.
 
 ### Fixes Applied (4 issues across 5 files)
@@ -3106,5 +3110,37 @@ All data enrichments (PBP, roster demographics, bye weeks, injuries) are local-o
 ### Verified Clean
 - 11/11 smoke tests pass
 - All 14 JS files syntax clean (node --check)
+- All Python files compile clean
+- 0 regressions
+
+---
+
+## Ship Loop Session 36: Null Guard Sweep (Mar 21)
+
+**Goal**: Ticket directories empty. 4-agent parallel sweep targeting crash bugs across frontend, backend, and standalone HTML panels.
+
+### Fixes Applied (9 issues across 5 files)
+
+| # | Fix | Severity | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | `p.rps.toFixed(1)` null guard in Big Board | P0 | lab.js:8387 | Crash when prospect has null RPS (no combine data). Added `(p.rps \|\| 0)` fallback. |
+| 2 | `cls.avg_rps.toFixed(1)` null guard (3 instances) | P0 | lab.js:8765,8883,8951 | Class Analytics chart + export crashed on null avg_rps. Added `(cls.avg_rps \|\| 0)` fallback. |
+| 3 | `cls.top_prospect.rps.toFixed(1)` null guard | P0 | lab.js:8966 | Class Analytics export crashed on null top prospect RPS. |
+| 4 | Boom/bust export + range bar `.toFixed()` on null (9 call sites) | P0 | lab.js:12716-12966 | `exportBoomBustImage()` and `drawBoomBustRangeBar()` used floor_ppg/ceiling_ppg/median_ppg/boom_rate/bust_rate without null guards. Render function was guarded but export/canvas weren't. Fixed via `\|\| 0` at destructuring. |
+| 5 | Aging curve `Math.max` NaN cascade | P1 | lab.js:9526 | `Math.max(...baseline.map(b => b.avg_ppg))` returns NaN when avg_ppg is undefined. Added `.filter(v => v != null)` with fallback 1. |
+| 6 | Monte Carlo worker null roster crash | P1 | monte-carlo-worker.js:32-34 | `roster.players.length` crashes if roster is undefined (corrupted trade scenario). Added guard with empty dists fallback. |
+| 7 | Monte Carlo inline fallback same crash | P1 | league-intel.html:6207-6209 | Inline `_mcSimulate` had identical vulnerability. Added same guard. |
+| 8 | playoffs.html `p.weeks` null crash | P1 | playoffs.html:439 | `p.weeks.length` crashes if API returns null weeks. Added `\|\| []` guard. |
+| 9 | efficiency.html td_rate `-%` display | P2 | efficiency.html:501 | `fmt(p.td_rate, 1) + '%'` produced `-%` when null. Added null check matching catch_rate pattern. |
+
+### Sweep Coverage (4 parallel agents)
+- **agent-config.js + agent-nudges.js + monte-carlo-worker.js**: 1 issue found (worker null roster). Config/nudges clean.
+- **Backend (analytics, dashboards, tools, dynasty, prospects)**: Clean -- no P0/P1 crash bugs found after 35+ prior QA passes.
+- **lab.js crash paths**: 6 issues found and fixed (RPS toFixed, boom/bust export, aging curve NaN).
+- **Standalone HTML panels (13 files)**: 2 issues found and fixed (playoffs weeks, efficiency td_rate).
+
+### Verified Clean
+- 11/11 smoke tests pass
+- All 12 JS files syntax clean (node --check)
 - All Python files compile clean
 - 0 regressions

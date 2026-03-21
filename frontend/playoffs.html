@@ -436,8 +436,9 @@
 
         // Build week lookup
         var weekMap = {};
-        for (var j = 0; j < p.weeks.length; j++) {
-          weekMap[p.weeks[j].week] = p.weeks[j];
+        var pWeeks = p.weeks || [];
+        for (var j = 0; j < pWeeks.length; j++) {
+          weekMap[pWeeks[j].week] = pWeeks[j];
         }
 
         for (var w = 0; w < weekNums.length; w++) {

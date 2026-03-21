@@ -31,6 +31,7 @@ function simulate(rosterPlayers, distributions, rosterIds, playoffSpots, SIMS, e
   for (var ri = 0; ri < nRosters; ri++) {
     var roster = rosterPlayers[rosterIds[ri]];
     var dists = [];
+    if (!roster || !roster.players) { rosterDists[ri] = dists; continue; }
     for (var pi = 0; pi < roster.players.length; pi++) {
       var pid = roster.players[pi];
       if (excludedPlayers && excludedPlayers[pid]) continue;
