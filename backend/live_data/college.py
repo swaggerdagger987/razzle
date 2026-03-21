@@ -1379,6 +1379,8 @@ def _fetch_college_consistency_uncached(season=None, position=None, limit=30):
                 continue
             ppg_values = [s["ppg"] for s in seasons_data]
             n = len(ppg_values)
+            if n == 0:
+                continue
             total_games = sum(s["games"] for s in seasons_data)
             mean = sum(ppg_values) / n
             if mean < 2:

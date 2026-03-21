@@ -1793,8 +1793,11 @@
         } else if (c.key === 'ppg') {
           h += '<td class="' + cls.join(' ') + '" style="font-weight:700">' + fmt(p.ppg) + '</td>';
         } else if (c.key === 'efficiency_grade' || c.key === 'consistency_grade' || c.key === 'sos_grade') {
-          var g = p[c.key] || 'C';
-          h += '<td class="' + cls.join(' ') + '"><span class="stk-grade-badge ' + gradeClass(g) + '">' + escapeHtml(g) + '</span></td>';
+          var g = p[c.key];
+          h += '<td class="' + cls.join(' ') + '">';
+          if (g) { h += '<span class="stk-grade-badge ' + gradeClass(g) + '">' + escapeHtml(g) + '</span>'; }
+          else { h += '<span class="stk-grade-badge" style="opacity:0.5">-</span>'; }
+          h += '</td>';
         } else if (c.key === 'stock_delta') {
           var d = p.stock_delta || 0;
           var sign = d > 0 ? '+' : '';
@@ -6299,9 +6302,10 @@
         // GPA
         html += '<td><span class="rpc-grade-badge ' + gradeClass(p.gpa_grade || p.grade) + '">' + escapeHtml(p.gpa_grade || p.grade || fmt(p.gpa)) + '</span></td>';
         // Eff/Con/SOS
-        html += '<td><span class="rpc-grade-badge ' + gradeClass(p.efficiency_grade) + '">' + escapeHtml(p.efficiency_grade || '-') + '</span></td>';
-        html += '<td><span class="rpc-grade-badge ' + gradeClass(p.consistency_grade) + '">' + escapeHtml(p.consistency_grade || '-') + '</span></td>';
-        html += '<td><span class="rpc-grade-badge ' + gradeClass(p.sos_grade) + '">' + escapeHtml(p.sos_grade || '-') + '</span></td>';
+        var _eg = p.efficiency_grade, _cg = p.consistency_grade, _sg = p.sos_grade;
+        html += '<td>' + (_eg ? '<span class="rpc-grade-badge ' + gradeClass(_eg) + '">' + escapeHtml(_eg) + '</span>' : '<span class="rpc-grade-badge" style="opacity:0.5">-</span>') + '</td>';
+        html += '<td>' + (_cg ? '<span class="rpc-grade-badge ' + gradeClass(_cg) + '">' + escapeHtml(_cg) + '</span>' : '<span class="rpc-grade-badge" style="opacity:0.5">-</span>') + '</td>';
+        html += '<td>' + (_sg ? '<span class="rpc-grade-badge ' + gradeClass(_sg) + '">' + escapeHtml(_sg) + '</span>' : '<span class="rpc-grade-badge" style="opacity:0.5">-</span>') + '</td>';
         // Stock
         html += '<td><span class="rpc-grade-badge ' + stockClass(p.stock_score || 0) + '">' + fmt(p.stock_score, 0) + '</span></td>';
         // Opp% / Dom
