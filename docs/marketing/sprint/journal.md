@@ -1339,6 +1339,80 @@ Sources:
 
 3. **What's the minimum Sleeper league history needed for behavioral profiling to look credible — and how does Razzle handle leagues with <1 year of data?** (The scouting report card from Q17 shows stats like "Trades/yr: 4.2" and "Panic score: 42%". One season of data makes these look thin. Two seasons minimum for trend lines. How does the UI degrade gracefully for new leagues?)
 
-## NEXT QUESTION: What is the Sleeper connection trust barrier — why would a dynasty manager give their Sleeper username to a new tool, and what social proof or privacy messaging reduces friction?
+## Question 19: What is the Sleeper connection trust barrier — why would a dynasty manager give their Sleeper username to a new tool, and what social proof or privacy messaging reduces friction?
+
+**Why this matters**: The Bureau of Intelligence requires users to enter their Sleeper username — the single funnel bottleneck between "browsing the free Lab" and "getting hooked on league-contextual features." If trust friction kills this step, the entire Bureau/Pro conversion thesis dies. Every competitor (Dynasty Daddy, KeepTradeCut, FantasyCalc, League Legacy) asks for the same thing, so the question isn't IF users will do it — it's what makes them do it HERE vs. bouncing.
+
+### Answer
+
+**Verdict: The trust barrier is LOW technically but MODERATE psychologically — and 4 specific interventions collapse it to near-zero.**
+
+Here's why the barrier is lower than it looks, and what still needs solving:
+
+**1. Sleeper's API is read-only, unauthenticated, and public. This is the trump card.**
+
+The Sleeper API requires no authentication token, no OAuth flow, no password. A username is enough. The API can never modify a league, change a lineup, or execute a trade. This is fundamentally different from Yahoo (OAuth 2.0) or ESPN (private league cookies). Razzle isn't asking for credentials — it's asking for a public lookup key. The data exposed is: username, avatar, league memberships, rosters, transactions, and draft history. All of this is already visible to anyone in the same league.
+
+**The user doesn't know this.** That's the entire problem. The mental model is "I'm giving a stranger my account info," not "I'm typing a public handle into a search box." Fixing this perception gap is the highest-ROI trust intervention.
+
+**2. Every serious competitor already asks for the same thing — and users comply.**
+
+- **Dynasty Daddy**: "Sync all your teams from whatever platform you play on" — username entry, no auth
+- **KeepTradeCut**: Power Rankings require league sync (Sleeper, MFL, FFPC, Fleaflicker, Fantrax)
+- **FantasyCalc**: "Enter your Sleeper username" → league import, trade values customized to settings
+- **League Legacy**: Sleeper league history, transaction timelines, all via username
+- **FF Ranker**: "Enter your league ID" → instant power rankings, no signup
+
+The pattern is universal and normalized in the dynasty community. Users who've used ANY of these tools have already cleared the trust barrier. Razzle's challenge is with first-time tool users or users who've only used generic tools (FantasyPros, ESPN app).
+
+**3. Four trust interventions that collapse the barrier:**
+
+**A. Inline privacy micro-copy (highest impact, zero cost).** Directly below the username input:
+> "Read-only. We can see your leagues but can never change your lineup, make trades, or access your password. Same API that Dynasty Daddy and KeepTradeCut use."
+
+This does three things: explains the technical reality, name-drops trusted competitors (social proof by association), and uses "never" language that addresses the unspoken fear. 88% of consumers trust peer validation as much as personal recommendations — naming tools they already use IS the trust signal.
+
+**B. Show value BEFORE asking for the username.** The current flow is: land on Bureau page → see empty state → asked for username. This is backwards. The fix: show the demo league scouting reports (Razzle already has `demo_league` mode) FIRST, with a banner: "This is a demo league. Enter your username to see YOUR leaguemates." Let them taste the behavioral profiling before asking for anything. SaaS onboarding research shows value-first flows convert 2-3x higher than gate-first flows.
+
+**C. User count / social proof badge.** Once Razzle has >100 connected users: "1,247 dynasty managers connected this week." Dynamic social proof implementations showing live activity achieve 98% conversion increases over static pages. Even before real numbers, showing "Powered by the same Sleeper API used by 50+ fantasy tools" establishes ecosystem legitimacy.
+
+**D. One-click from Reddit.** The Bureau's primary acquisition channel is Reddit posts showing scouting report screenshots. The URL should pre-populate context: `razzle.lol/bureau?ref=reddit`. When a user arrives from a screenshot post, they've already seen the OUTPUT — the only question is "can I get this for MY league?" The username field should be the ONLY thing on the landing page for this flow. No nav, no explanation, just: input box + "see your leaguemates" button.
+
+**4. What about the lock-in concern?**
+
+Razzle currently locks one Sleeper username per account ("One Sleeper ID per account keeps the free trial fair for everyone"). This is correct for abuse prevention but the messaging feels restrictive. Reframe as: "Your Bureau is tied to your dynasty identity" — positions it as personalization, not restriction.
+
+### Self-Critique
+
+**What's backed by data**: Sleeper API being read-only and unauthenticated is confirmed by official Sleeper documentation and the Zuplo API guide. Competitor onboarding patterns (Dynasty Daddy, KeepTradeCut, FantasyCalc, League Legacy) are confirmed from their live sites. The 88% trust-peer-reviews stat is from multiple SaaS conversion studies (Nudgify, Genesys Growth, CrazyEgg). The 98% dynamic social proof stat is from Genesys Growth's 2026 analysis. Razzle's current implementation (demo mode, username lock, inline input) is confirmed from the codebase at `league-intel.html`.
+
+**What's speculation**: The claim that "value-first flows convert 2-3x higher" is directional from SaaS onboarding literature but not measured in the fantasy football tool context specifically. The "Reddit screenshot → Bureau landing page" funnel hasn't been tested. The assertion that naming competitors in micro-copy helps rather than hurts (sending users to check out those competitors) is a judgment call — it could backfire if users discover a competitor meets their needs.
+
+**Confidence: 8/10** — The technical trust barrier (read-only, no auth) is objectively low. The psychological interventions are well-established in SaaS conversion research. The main uncertainty is whether dynasty football users respond to the same trust signals as general SaaS users, or if the community has unique skepticism patterns.
+
+Sources:
+- [Sleeper API Documentation](https://docs.sleeper.com/) — confirms read-only, no authentication required
+- [Zuplo Sleeper API Guide](https://zuplo.com/learning-center/sleeper-api) — "read-only access... simplifies development while maintaining security"
+- [Dynasty Daddy](https://dynasty-daddy.com/) — sync leagues from any platform via username
+- [FantasyCalc League Import](https://fantasycalc.com/league/import) — Sleeper username entry flow
+- [League Legacy Sleeper Tools](https://leaguelegacy.io/services/sleeper) — league history via username
+- [FF Ranker](https://fantasyfootballranker.com/) — league ID entry, no signup
+- [Genesys Growth: Social Proof Stats 2026](https://genesysgrowth.com/blog/social-proof-conversion-stats-for-marketing-leaders) — 98% conversion increase with dynamic social proof
+- [Nudgify: 17 Ways to Boost SaaS Conversions](https://www.nudgify.com/social-proof-saas/) — social proof in SaaS onboarding
+- [CrazyEgg: 5 Trust Signals](https://www.crazyegg.com/blog/trust-signals/) — trust signals that boost conversions
+- [ProductLed SaaS Onboarding 2025](https://productled.com/blog/5-best-practices-for-better-saas-user-onboarding) — value-first onboarding patterns
+- Razzle codebase: `frontend/league-intel.html` lines 1963-2194 (Sleeper connection flow, demo mode, username lock)
+
+---
+
+### Next 3 Questions This Raises
+
+1. **What tone should Bones use in scouting report quotes — and can template-based quotes achieve 80% of LLM quality at 0% of the cost?** (The Bones quote is the card's personality. LLM-generated quotes would be better but add cost and latency. Template quotes ("sells after {N} straight losses") may be good enough if the templates are well-written. What's the minimum viable Bones voice?)
+
+2. **What's the minimum Sleeper league history needed for behavioral profiling to look credible — and how does Razzle handle leagues with <1 year of data?** (The scouting report card from Q17 shows stats like "Trades/yr: 4.2" and "Panic score: 42%". One season of data makes these look thin. Two seasons minimum for trend lines. How does the UI degrade gracefully for new leagues?)
+
+3. **What does the "Reddit screenshot → Bureau" funnel look like end-to-end — what's the exact URL, landing page, and CTA sequence from seeing a scouting report screenshot to entering a Sleeper username?** (Q19's answer proposes a `?ref=reddit` flow with a stripped landing page. But what exactly should that page look like? What's above the fold? Is it the same Bureau page or a dedicated landing page? What's the copy?)
+
+## NEXT QUESTION: What tone should Bones use in scouting report quotes — and can template-based quotes achieve 80% of LLM quality at 0% of the cost?
 
 ---
