@@ -795,6 +795,114 @@ Sources:
 
 3. **What is Razzle's email capture and nurture strategy — once someone joins the founding member list, what do they receive between now and Bureau launch to stay engaged and convert?** (The fake door captures emails. But a 6-month gap between signup and launch kills conversion unless there's a drip sequence keeping them warm with Lab data drops, feature previews, and early access invites.)
 
-## NEXT QUESTION: What are the first 5 "data drop" posts Razzle should publish on r/DynastyFF — which specific player analyses using which specific Lab views will generate the most engagement during the April-May draft window?
+## Question 13: What are the first 5 "data drop" posts Razzle should publish on r/DynastyFF — which specific player analyses using which specific Lab views will generate the most engagement during the April-May draft window?
+
+**Why this matters**: Q10 defined the 3-phase Reddit strategy and post archetypes. Q11 defined the screenshot formats. But "post data drops" is useless without specific posts — which player, which stat, which Lab view, which title. This is the execution layer. The April-May window is critical: it's peak dynasty engagement (post-free agency, pre-NFL Draft April 23-25, rookie draft season). These 5 posts are the opening salvo.
+
+### Answer
+
+**Verdict: Five posts, sequenced across April-May 2026, each using a different Lab view to maximize visual variety. Every post follows the Q10 title formula and Q11 screenshot spec. The posts are ordered from "safest engagement" to "most controversial" — credibility before hot takes.**
+
+### The 5 Posts
+
+**Post 1 (Early April): "Free Agency Winners & Losers by the Numbers — Which New Situations Actually Help?"**
+
+- **Lab view**: Dynasty Stock Watch (/stocks.html) — rising/falling stocks filtered to players who changed teams
+- **Screenshot format**: Heat-colored table (Q11 Format 1) — 8-10 rows, stock score 0-100, efficiency/consistency/SOS grades color-coded, green arrows for risers (Kenneth Walker → Chiefs, Alec Pierce → WR1 role, Kyler Murray → Vikings), red arrows for fallers (DK Metcalf targets shared with Pittman, Alvin Kamara behind Etienne, James Conner behind Allgeier)
+- **Why this works**: Free agency just happened (March 11). Every dynasty manager is re-evaluating rosters. "Winners and losers" is r/DynastyFF's most reliably upvoted format — every major site publishes one, but NONE back it with a composite data score. Razzle's stock score (25% PPO + 25% CoV + 25% SOS + 25% PPG) is the differentiator. The post shows the DATA behind the take, not just opinion.
+- **Title**: "I scored every free agency move by efficiency, consistency, and situation — here's who actually won and lost"
+- **Engagement hook**: Controversial rankings inevitable. "How is Walker above X?" drives comments. The data-backed methodology makes arguments productive, not tribal.
+- **Target subreddits**: r/DynastyFF (primary), r/fantasyfootball (cross-post after 24h if traction)
+
+**Post 2 (Mid-April): "The 2026 Rookie Class Has a Problem — Here's What 10 Years of College Data Shows"**
+
+- **Lab view**: Lab screener in College mode — filtered to 2026 draft-eligible prospects, showing college stats (yards/game, TD rate, target share, dominator rating) benchmarked against historical NFL successes since 2015
+- **Screenshot format**: Heat-colored table (Format 1) with headline baked in — 12 rows showing Love, Carnell Tate, Makai Lemon, Jordyn Tyson, Fernando Mendoza, and 6-7 other top prospects. Heat coloring reveals which prospects hit historical "hit rate" thresholds and which fall short.
+- **Why this works**: Pre-draft prospect analysis is the PEAK engagement window on r/DynastyFF. Every dynasty manager is preparing for rookie drafts. But most prospect analysis is film-based opinion ("I like his burst"). Razzle's college stats screener provides STATISTICAL comps that no free tool offers at this depth. The "problem" in the title creates controversy: is this class weaker than 2025? Which WRs are actually hitting the production profile?
+- **Title**: "I pulled 10 years of college stats to see which 2026 prospects hit the profile of NFL fantasy producers — the WR class might be overrated"
+- **Engagement hook**: "Overrated" is a lightning rod. WR managers will argue. The data table lets them see exactly which thresholds each prospect hits or misses. Commenters will demand you add their guy.
+- **Target subreddits**: r/DynastyFF, r/NFL_Draft (for cross-pollination)
+
+**Post 3 (Late April, post-NFL Draft): "Landing Spot Grades for Every 2026 Rookie — Opportunity Share Data from Their New Teams"**
+
+- **Lab view**: Opportunity Share (/opportunity.html) + Target Distribution (/targets.html) for the teams that drafted top rookies — showing the target/carry vacuum each rookie walks into
+- **Screenshot format**: Comparison card (Format 2) — side-by-side panels showing "Team Target Distribution Before" vs. "Opportunity Available for Rookie." For example: if the Titans draft Jeremiyah Love, show the Titans' 2025 RB carry share breakdown and the carries now available. If the Raiders take Carnell Tate, show the Raiders' 2025 WR target distribution and the target vacuum post-Davante Adams trade.
+- **Why this works**: Landing spots dominate r/DynastyFF for 2+ weeks after the draft. Every comment is "where did X go?" and "is this a good spot?" But nobody quantifies the opportunity with DATA. They just say "good offense" or "bad O-line." Razzle can show the EXACT target/carry share available — backed by 2025 team data. This is the most valuable post of the 5 because it's time-sensitive and impossible to replicate without a tool.
+- **Title**: "Every 1st-round rookie's opportunity share — I used team target/carry data to grade each landing spot"
+- **Engagement hook**: Immediate utility. Dynasty managers are making rookie draft decisions RIGHT NOW. A data-backed landing spot grade directly influences their pick order. High save rate.
+- **Target subreddits**: r/DynastyFF (primary), r/fantasyfootball
+
+**Post 4 (Early May): "The Players Everyone Is Selling That the Data Says to Hold — Post-Free Agency Buy Low Targets"**
+
+- **Lab view**: Buy Low / Sell High (/buysell.html) cross-referenced with TD Regression (/tdregression.html) and Efficiency Rankings (/efficiency.html)
+- **Screenshot format**: Grade card (Format 3) — 5-6 player cards showing "consensus: SELL" vs. "Razzle data: HOLD/BUY" with efficiency grade, TD regression indicator (positive expected TDs = buy signal), and consistency grade. Featured players: targets where dynasty consensus has cratered but underlying metrics remain strong. Current candidates based on market: Trey McBride (sell consensus but elite efficiency), Courtland Sutton (sell consensus but undervalued target share), Lamar Jackson (down year but QB4 age curve).
+- **Why this works**: Contrarian takes with data (Q10's archetype #3) are r/DynastyFF's most upvoted format. "Everyone says sell X, here's why you shouldn't" is inherently engaging because it either validates the reader's existing hold or challenges them to reconsider. The grade card format is bookmarkable — people screenshot these and send them to leaguemates as ammunition in trade negotiations.
+- **Title**: "3 players everyone is selling that the data says to hold — efficiency, TD regression, and consistency say the consensus is wrong"
+- **Engagement hook**: Every reader immediately checks if they own these players. If yes, they feel validated. If they just traded one away, they feel attacked. Both drive comments.
+- **Target subreddits**: r/DynastyFF
+
+**Post 5 (Mid-May): "Aging Curves Don't Lie — Which Dynasty Assets Are About to Fall Off a Cliff?"**
+
+- **Lab view**: Aging Curves (/aging.html) — canvas-drawn PPG-by-age line charts with current player dots plotted, plus Year-over-Year (/yoy.html) for specific decline evidence
+- **Screenshot format**: Heat table (Format 1) with embedded aging curve chart — showing players currently aged 28-31 plotted against historical PPG-by-age curves for their position. Red zone = past the cliff. Green zone = still in prime window. Featured players: Saquon Barkley (RB, age 29), Lamar Jackson (QB, age 29), Travis Kelce (TE, age 36), Davante Adams (WR, age 33). The aging curve chart is visually distinctive — canvas-drawn with position-colored lines that no other free tool produces.
+- **Why this works**: "When do I sell my aging star?" is the single most asked question in dynasty. Most answers are vibes. Razzle can show the EXACT historical curve and where the player sits on it. The aging curves dashboard is one of Razzle's most visually distinctive views — the canvas-drawn charts with player dots are immediately recognizable and screenshottable. This post becomes reference material that gets linked in future "should I sell X?" threads for months.
+- **Title**: "I plotted every dynasty asset over 28 against 10 years of aging curves — here's who's past the cliff and who has 2+ years left"
+- **Engagement hook**: Personal stakes. Every dynasty manager holds aging assets and wants validation for either holding or selling. The chart settles arguments with data, not opinions.
+- **Target subreddits**: r/DynastyFF, r/fantasyfootball
+
+### Sequencing and Calendar
+
+| Week | Post | Lab View | Format | Risk Level |
+|------|------|----------|--------|------------|
+| Apr 1-7 | Free agency winners/losers | Stock Watch | Heat table | Low (consensus-adjacent) |
+| Apr 14-18 | Rookie class college stats | Lab screener (College) | Heat table | Medium (contrarian WR take) |
+| Apr 25-30 | Landing spot grades | Opportunity Share + Targets | Comparison panel | Low (high utility) |
+| May 5-9 | Contrarian buy-lows | Buy/Sell + TD Regression | Grade cards | High (against consensus) |
+| May 12-16 | Aging curve cliff watch | Aging Curves + YoY | Chart + heat table | Medium (personal stakes) |
+
+### Key Execution Rules
+
+1. **Every screenshot must follow Q11 spec**: Sand background, 3px espresso borders, position-colored data, Luckiest Guy headline baked into the export, razzle.lol watermark bottom-right. The sand palette IS the brand signal.
+2. **8-12 rows per table screenshot**. Crop to the story. Don't dump 50 rows.
+3. **The text post is 3-5 paragraphs max.** Open with the claim. Show the screenshot. Explain the methodology briefly. Close with "What do you think — who am I missing?" to invite engagement.
+4. **These posts are Phase 2 content (Q10)** — they assume 2-4 weeks of Phase 1 credibility farming has already happened. The account should have 500+ karma from genuine community comments before posting any of these.
+5. **Never mention Razzle by name in the title.** The watermark does the marketing. If someone asks "what tool is this?" in comments, reply: "It's razzle.lol — free, no signup needed."
+
+### Self-Critique
+
+**What's backed by data**: Free agency winners/losers is confirmed as a high-engagement format (FantasyPros, DraftSharks, RotoWire, PlayerProfiler, FantraxHQ all publish this exact format post-free agency — proving demand). Landing spot analysis is confirmed as peak-engagement content post-draft (every dynasty site publishes landing spot grades). The specific player names (Walker, Pierce, McBride, Barkley, Love, Tate, Lemon) are sourced from current March 2026 dynasty rankings and free agency coverage. The post title formulas are derived from Q10's analysis of top-performing r/DynastyFF posts. Aging curves as a reference-material format is confirmed by the popularity of JJ Zachariason's aging curve work and PlayerProfiler's historical research.
+
+**What's speculation**: The exact titles haven't been A/B tested — they follow Q10's formula but may need tuning based on community reception. The "WR class is overrated" angle in Post 2 is my read of the data, not a confirmed contrarian take — if the college stats actually show the WR class IS strong, the post pivots to "which WRs hit the profile." The May timing for aging curves assumes dynasty managers are still active — engagement may drop after rookie drafts complete. The assumption that 500+ karma from Phase 1 is sufficient credibility is based on general Reddit marketing guidelines, not r/DynastyFF-specific thresholds.
+
+**Confidence: 7/10** — The 5 posts are well-mapped to current dynasty hot topics (free agency fallout, rookie class evaluation, landing spots, buy/sell, aging). The Lab views that generate each screenshot are confirmed to exist in Razzle. The main risk is execution quality: do the screenshots actually look compelling enough to stop a scroll? That depends on the Lab's export/screenshot tooling and whether the watermark/design system renders correctly in PNG exports.
+
+Sources:
+- [14 Dynasty Trade Targets Experts Love — FantasyPros](https://www.fantasypros.com/2026/03/12-dynasty-trade-targets-experts-love-2026-fantasy-football/)
+- [Dynasty Buys and Sells: March 2026 — Fantasy Points](https://www.fantasypoints.com/nfl/articles/2026/dynasty-buys-and-sells-march)
+- [8 Dynasty Players to Sell — FantasyPros](https://www.fantasypros.com/2026/03/8-dynasty-players-to-sell-fantasy-football/)
+- [2026 Free Agency Winners & Losers: RB and WR — PlayerProfiler](https://www.playerprofiler.com/article/2026-free-agency-winners-and-losers-running-backs-wide-receivers/)
+- [2026 Free Agency Winners & Losers: QB and TE — PlayerProfiler](https://www.playerprofiler.com/article/2026-free-agency-players-winners-losers-quarterbacks-tight-ends/)
+- [Dynasty Fantasy Football: 7 Losers of 2026 Free Agency — FantraxHQ](https://fantraxhq.com/dynasty-fantasy-football-7-losers-of-2026-nfl-free-agency/)
+- [Fantasy Football Free Agency Risers and Fallers — RotoBaller](https://www.rotoballer.com/fantasy-football-free-agency-risers-and-fallers-dynasty-leagues-2026/1825108)
+- [2026 Dynasty Rookie Rankings — DraftSharks](https://www.draftsharks.com/article/2026-rookie-rankings)
+- [Jeremiyah Love Rookie Profile — Dynasty Nerds](https://www.dynastynerds.com/nfl-prospect/jeremiyah-love-rookie-profile-2026/)
+- [2026 Dynasty Rookie Rankings — FantasyLife](https://www.fantasylife.com/articles/dynasty/ranking-the-2026-rookie-draft-class-for-dynasty-fantasy-football-jeremiyah-love-in-his-own-tier)
+- [Mike Clay's 2026 Rookie Rankings — ESPN](https://www.espn.com/fantasy/football/story/_/id/48100578/fantasy-football-rankings-2026-nfl-rookies-draft-preview)
+- [Kenneth Walker to Chiefs — NFL.com](https://www.nfl.com/news/chiefs-signing-ex-seahawks-rb-kenneth-walker-iii-mvp-of-super-bowl-lx)
+- [Dynasty Stock Watch: Free Agency — Campus2Canton](https://campus2canton.com/dynasty-stock-watch-free-agency-winners-and-losers/)
+- [Justin Boone's 2026 WR Dynasty Rankings Post-Free Agency — Yahoo](https://sports.yahoo.com/fantasy/article/justin-boones-2026-wr-dynasty-rankings-and-trade-value-charts-after-nfl-free-agency-in-march-182932158.html)
+- Prior journal: Q10 (Reddit content strategy), Q11 (screenshot format spec), Q7 (competitive landscape)
+
+---
+
+### Next 3 Questions This Raises
+
+1. **What should the /pro pricing page copy say — how do you describe behavioral profiling, exploit windows, and manager archetypes to a dynasty manager who's never heard of these concepts?** (Carried from Q12 — the fake door test lives or dies on whether the feature descriptions make people click. "Behavioral profiling" is jargon. The copy needs to translate to dynasty language.)
+
+2. **What is Razzle's email capture and nurture strategy — once someone joins the founding member list, what do they receive between now and Bureau launch to stay engaged and convert?** (Carried from Q12 — a 6-month gap between signup and Bureau launch kills conversion unless there's a drip sequence keeping them warm.)
+
+3. **What is the minimum viable Bureau feature set for NFL Week 1 launch — which behavioral archetypes ship first, and how much Sleeper data is needed to generate useful profiles?** (Carried from Q9 — still unanswered and critical for the September timeline. Which 2-3 of the 8 archetypes produce the most screenshottable, exploitable insights with minimal league history?)
+
+## NEXT QUESTION: What should the /pro pricing page copy say — how do you describe behavioral profiling, exploit windows, and manager archetypes to a dynasty manager who's never heard of these concepts?
 
 ---
