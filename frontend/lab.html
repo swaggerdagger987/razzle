@@ -4681,7 +4681,7 @@
     wrapper.classList.add('has-items');
     container.innerHTML = display.map(function(p) {
       var label = PANEL_LABELS[p] || p;
-      return '<a class="sidebar-recent-chip" onclick="switchPanel(\'' + escapeHtml(p) + '\')">' + escapeHtml(label) + '</a>';
+      return '<a class="sidebar-recent-chip" onclick="switchPanel(\'' + escapeAttr(p) + '\')">' + escapeHtml(label) + '</a>';
     }).join('');
   }
 
@@ -4735,7 +4735,7 @@
     wrapper.classList.add('has-items');
     container.innerHTML = favs.map(function(p) {
       var label = PANEL_LABELS[p] || p;
-      return '<a class="sidebar-recent-chip" onclick="switchPanel(\'' + escapeHtml(p) + '\')">' + escapeHtml(label) + '</a>';
+      return '<a class="sidebar-recent-chip" onclick="switchPanel(\'' + escapeAttr(p) + '\')">' + escapeHtml(label) + '</a>';
     }).join('');
   }
 
