@@ -702,6 +702,7 @@ def fetch_breakout_candidates(season=None, position=None, limit=50, week=None):
                 WHERE player_id IN ({placeholders})
                   AND season = ?
                   AND stat_key = 'target_share'
+                  AND season_type = 'regular'
                   {metrics_week_filter}
                 GROUP BY player_id
             """, metrics_params).fetchall()
@@ -1171,6 +1172,7 @@ def fetch_stat_explorer(season=None, position=None, x_stat="targets_g", y_stat="
                     WHERE m.player_id IN ({placeholders})
                       AND m.stat_key IN ({stat_ph})
                       AND m.season = ?
+                      AND m.season_type = 'regular'
                     GROUP BY m.player_id, m.stat_key
                 """, pid_list + rate_keys + [season]).fetchall()
 
@@ -2159,6 +2161,7 @@ def fetch_air_yards(season=None, position=None, limit=25):
                 WHERE m.player_id IN ({placeholders})
                   AND m.stat_key IN ({stat_ph})
                   AND m.season = ?
+                  AND m.season_type = 'regular'
                 GROUP BY m.player_id, m.stat_key
             """, pid_list + rate_keys + [season]).fetchall()
 
