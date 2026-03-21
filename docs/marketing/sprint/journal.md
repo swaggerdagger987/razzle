@@ -1500,6 +1500,92 @@ Sources:
 
 3. **How should Razzle's free tier limit Bureau access — by number of scouting reports generated, by league count, or by feature depth (e.g., stat block free, exploit playbook Pro-only)?** (The Bureau is the conversion engine. Too much free = no reason to pay. Too little free = no viral screenshots. What's the right gate?)
 
-## NEXT QUESTION: What's the minimum Sleeper league history needed for behavioral profiling to look credible — and how does Razzle handle leagues with <1 year of data?
+## Question 21: What's the minimum Sleeper league history needed for behavioral profiling to look credible — and how does Razzle handle leagues with <1 year of data?
+
+**Date**: 2026-03-21
+
+### Answer
+
+The answer splits into three layers: what data Sleeper actually provides, how much of it you need for each behavioral metric, and how the UI should degrade when data is thin.
+
+**1. What Sleeper gives you per season.**
+
+The Sleeper API exposes transactions per week via `GET /league/{id}/transactions/{round}`, traded picks via `/traded_picks`, rosters with `settings.wins/losses/fpts`, and a `previous_league_id` chain that links dynasty seasons backwards. Razzle's `crawlLeagueHistory()` already walks this chain up to 5 seasons (hardcoded `maxSeasons = 5` in `league-intel.html:2590`). Each season yields: trade count, waiver count, FAAB spent, weekly move bursts, win/loss record, positional adds/drops. That's the raw material.
+
+**2. Minimum data thresholds by metric type.**
+
+Not all behavioral metrics need the same depth:
+
+| Metric | Min seasons | Why |
+|--------|------------|-----|
+| **Archetype label** (PANIC SELLER / HOARDER / AGGRESSIVE / PATIENT / STEADY) | **1** | Requires only `total >= 8` transactions (current gate at `league-intel.html:3241`). One active season of a dynasty league (17 weeks) typically generates 8+ moves for any non-dormant manager. |
+| **Moves/yr, FAAB/yr** | **1** | Per-season averages are meaningful with one season — they're just not *trend-able*. |
+| **Panic score** | **1** | Burst detection (3+ moves in a single week) works within one season. One season can surface 0-17 burst weeks. |
+| **Trend traits** ("trading more lately", "FAAB spending up") | **2** | Need at least two seasons to compute a delta. Current code gates these behind `seasonsTracked >= 2` (`league-intel.html:3093, 3118`). |
+| **Win/loss correlation** ("panic-trades when losing") | **2** | Requires multiple season records to compare behavior under different record conditions (`league-intel.html:3188`). |
+| **Consistency trait** ("consistent pattern" vs "unpredictable") | **2** | Needs variance across seasons (`league-intel.html:3134`). |
+| **Positional obsession** ("always chases WRs") | **2** | Needs same position to dominate adds in multiple seasons (`league-intel.html:3145`). |
+| **Bones scouting report quote** (from Q20) | **1** | Templates use variables already computed from one season's data (trades, panic weeks, FAAB). |
+
+**The verdict: 1 season is the credible minimum for a useful profile. 2 seasons is the credible minimum for a *trustworthy* profile.** At 3+ seasons, you unlock trend arrows and pattern confidence. The existing code already enforces these gates correctly.
+
+**3. How the UI should degrade for thin data.**
+
+The current code has two degradation states and they're good but incomplete:
+
+- **< 8 transactions**: Shows `NOT ENOUGH DATA` badge in gray (`league-intel.html:3260`). This is correct — a manager with 7 moves could be inactive or mid-season.
+- **1 season**: Shows current-season stats only, no trend traits, no season badge. The upgrade banner nudges to Pro for multi-season depth (`league-intel.html:3291`).
+
+**What's missing for the scouting report card (Q17 design):**
+
+The scouting report card should add a **confidence indicator** — a visual signal of how much data backs the profile. Three tiers:
+
+| Seasons | Confidence label | Visual |
+|---------|-----------------|--------|
+| 1 | "first read" | Single dot, dimmed card edges |
+| 2-3 | "developing file" | Two dots, normal card |
+| 4-5 | "deep dossier" | Three dots, highlighted card edges |
+
+This follows the Spotify Wrapped pattern (Q20): don't hide thin data, *frame* it. A "first read" label tells the user "we see them, but the picture gets sharper with time" — which is also a retention hook (come back next season for deeper intel).
+
+**4. Redraft leagues: the special case.**
+
+Redraft leagues have no `previous_league_id` chain — each season is a new league. For these, Razzle gets exactly one season of data. The behavioral profile is thinner but still useful: you can classify archetypes, detect panic weeks, and show FAAB aggression. The scouting report should label redraft leagues as "single season snapshot" and skip trend metrics entirely. The code already handles this — `crawlLeagueHistory` returns a 1-entry chain for redraft, and trend traits are gated behind `seasonsTracked >= 2`.
+
+**5. The nuclear option for zero data.**
+
+If a manager has literally zero transactions (joined the league but never made a move), the profile should show a Bones quote: *"clean slate. either this manager is patient or this is a burner account. watch the first waiver run."* This is the empty state as personality, not dead end — exactly the pattern recommended by UserOnboard's empty state UX research.
+
+### Self-Critique
+
+**What's backed by data**: The transaction threshold of `>= 8` is confirmed in the existing codebase (`league-intel.html:3241`). The `seasonsTracked >= 2` gates for trend metrics are verified in 5 code locations. The Sleeper API's `previous_league_id` chain is documented and implemented in `crawlLeagueHistory()`. The statistical claim that trend detection requires 2+ data points is trivially true (you need at least two values to compute a delta). The empty state UX research from UserOnboard ("two parts instruction, one part delight") is published and widely cited.
+
+**What's speculation**: The three-tier confidence indicator (first read / developing file / deep dossier) is a design proposal that hasn't been validated with users. The specific visual treatment (dots, dimmed edges) is aesthetic judgment. The claim that "1 season is credible minimum" assumes typical dynasty league activity — a casual league where managers make 3 moves total per season would produce thin profiles even with multiple years. The Bones quote for zero-data managers is a tone choice that could feel condescending if the manager simply hasn't been active yet this season (mid-August, league just started). The assertion that redraft leagues produce useful profiles from one season assumes 17 weeks of data — a league connected mid-season would have partial data.
+
+**Confidence: 8/10** — The technical analysis of what data is available and what thresholds exist is solid (code-verified). The UX degradation tiers are reasonable but untested. The redraft edge case handling is already implemented. The main risk is that "1 season credible minimum" may be too generous for low-activity leagues where 8 transactions is barely met.
+
+Sources:
+- [Sleeper API Documentation](https://docs.sleeper.com/) — `previous_league_id` field, transaction endpoints, traded picks
+- [Sleeper Support: Adding League History](https://support.sleeper.com/en/articles/5704241-adding-league-history-to-sleeper) — how dynasty league chains work
+- [Sleeper Support: View Previous Seasons](https://support.sleeper.com/en/articles/3941297-how-do-i-view-previous-seasons-of-my-leagues) — season history in app
+- [Sleeper Support: Transaction History for Past Leagues](https://support.sleeper.com/en/articles/4427447-how-can-i-view-transaction-history-for-a-past-league) — historical transaction access
+- [UserOnboard: Empty State UX Patterns](https://www.useronboard.com/onboarding-ux-patterns/empty-states/) — "two parts instruction, one part delight"
+- [Toptal: Empty States – The Most Overlooked Aspect of UX](https://www.toptal.com/designers/ux/empty-state-ux-design) — empty states as onboarding
+- [MeasuringU: Best Practices for Small Sample Sizes](https://measuringu.com/small-n/) — statistical significance at N < 30
+- [Pencil & Paper: Dashboard Design UX Patterns](https://www.pencilandpaper.io/articles/ux-pattern-analysis-data-dashboards) — data threshold handling
+- Razzle codebase: `frontend/league-intel.html` lines 2589-2613 (crawlLeagueHistory), 3006-3016 (ownerProfiles init), 3082-3261 (behavioral classification with season gates), 3285-3298 (season badge + upgrade banner)
+- Prior journal: Q17 (scouting report card design), Q19 (trust barrier), Q20 (Bones quote templates)
+
+---
+
+### Next 3 Questions This Raises
+
+1. **What does the "Reddit screenshot → Bureau" funnel look like end-to-end — what's the exact URL, landing page, and CTA sequence from seeing a scouting report screenshot to entering a Sleeper username?** (Q19's answer proposes a `?ref=reddit` flow with a stripped landing page. But what exactly should that page look like? What's above the fold? What's the copy?)
+
+2. **How should Razzle's free tier limit Bureau access — by number of scouting reports generated, by league count, or by feature depth (e.g., stat block free, exploit playbook Pro-only)?** (The Bureau is the conversion engine. Too much free = no reason to pay. Too little free = no viral screenshots. What's the right gate?)
+
+3. **What's the data retention and privacy story — does Razzle store manager behavioral data server-side, and what does the privacy page say about analyzing other people's Sleeper league activity?** (Behavioral profiling of *other people's* transaction history raises privacy questions. Users might feel uncomfortable knowing their leaguemates can see their panic score. What's the messaging?)
+
+## NEXT QUESTION: What does the "Reddit screenshot → Bureau" funnel look like end-to-end — what's the exact URL, landing page, and CTA sequence from seeing a scouting report screenshot to entering a Sleeper username?
 
 ---
