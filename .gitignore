@@ -36,3 +36,4 @@ users.db
 .claude/
 data/terminal.db-shm
 data/terminal.db-wal
+.gstack/
