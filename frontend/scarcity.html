@@ -497,7 +497,7 @@
       const tierBreaks = posData.tier_breaks || [];
       let nextBreakIdx = 0;
 
-      posData.players.forEach(function(p) {
+      (posData.players || []).forEach(function(p) {
         // Check if we need to insert a tier break before this player
         while (nextBreakIdx < tierBreaks.length && p.rank > tierBreaks[nextBreakIdx].end) {
           var tb = tierBreaks[nextBreakIdx];

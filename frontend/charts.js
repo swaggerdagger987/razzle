@@ -1450,7 +1450,7 @@ function drawProspectCompareSpider(prospects) {
     ctx.strokeRect(10, 10 + pIdx * 22, 12, 12);
     ctx.fillStyle = t.ink;
     ctx.font = 'bold 12px "Space Mono", monospace';
-    ctx.fillText(pData.prospect.player_name, 28, 21 + pIdx * 22);
+    ctx.fillText((pData.prospect || {}).player_name || "?", 28, 21 + pIdx * 22);
   });
 
   // Title

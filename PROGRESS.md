@@ -3038,3 +3038,46 @@ All data enrichments (PBP, roster demographics, bye weeks, injuries) are local-o
 - All 14 JS files syntax clean (node --check)
 - All Python files compile clean
 - 0 regressions
+
+---
+
+## Ship Loop Session 34: Deep Sweep (Mar 21)
+
+**Goal**: Ticket directories empty, TICKETS.md blocked on external infrastructure. 6-agent deep sweep targeting patterns found in Session 33.
+
+### Fixes Applied (9 bugs across 6 files)
+
+| # | Fix | Severity | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | `.toFixed()` crash on null `rpsData.rps` in prospect profile | P1 | lab.js:7138 | `rpsData.rps.toFixed(1)` → `(rpsData.rps \|\| 0).toFixed(1)` |
+| 2 | `.toFixed()` crash on null `p.rps` in prospect canvas | P1 | lab.js:8544 | `p.rps.toFixed(1)` → `(p.rps \|\| 0).toFixed(1)` |
+| 3 | `.toFixed()` crash on null `cls.top_prospect.rps` | P1 | lab.js:8641 | `cls.top_prospect.rps.toFixed(1)` → `(cls.top_prospect.rps \|\| 0).toFixed(1)` |
+| 4 | `.toFixed()` crash on null `cls.avg_rps` in draft class | P1 | lab.js:8657 | `cls.avg_rps.toFixed(1)` → `(cls.avg_rps \|\| 0).toFixed(1)` |
+| 5 | `.forEach()` crash on undefined `arch.players` | P1 | archetypes.html:476 | `arch.players.forEach()` → `(arch.players \|\| []).forEach()` |
+| 6 | `.forEach()` crash on undefined `posData.players` | P1 | scarcity.html:500 | `posData.players.forEach()` → `(posData.players \|\| []).forEach()` |
+| 7 | `.forEach()` and `.sort()` crash on undefined `team.players` | P1 | targets.html:507,524,554 | Extract `teamPlayers = team.players \|\| []`, use throughout |
+| 8 | `.length` and `.forEach()` crash on undefined `tier.players` | P1 | tiers.html:468,472,475 | Extract `tierPlayers = tier.players \|\| []`, use throughout |
+| 9 | `pData.prospect.player_name` crash in canvas legend | P2 | charts.js:1453 | `pData.prospect.player_name` → `(pData.prospect \|\| {}).player_name \|\| "?"` |
+
+### Triaged (not fixing)
+- Trophy/medal hex colors (#ffd700, #cd7f32, #b8860b) in lab-panels.css: intentional semantic colors, already reviewed in prior audits
+- league-intel.html rosterPlayers[rid].players: guaranteed array at construction (line 6680 does `r.players \|\| []`)
+- rosterbuilder.html d.players: already guarded by `if (!d \|\| !d.players) return renderEmpty()` on line 731
+- compare.js formatters f1/fp: only called inside `v != null` guard (line 239-240)
+- lab.js dynasty sparkline first.tv/latest.tv: guaranteed non-null at construction (line 6641 filters `entry.trade_value != null`)
+- lab.js:6213 Number(p.ppg).toFixed: already inside `if (p.ppg != null)` guard (line 6209)
+- charts.js radar loops (activeMetrics[i], axes[i]): loop bound equals array length, always valid
+- Backend: all divisions properly guarded with `or 1`, `if > 0 else`, HAVING clauses, and CASE WHEN
+
+### Sweep Coverage (6 parallel agents)
+- **Quick-search response shape**: All 9 pages handling correctly (Pattern A: Array.isArray check, Pattern B: direct array, Pattern C: data.players fallback)
+- **Backend division-by-zero**: All Python files clean — `or 1`, `if > 0 else`, SQL HAVING/CASE guards
+- **1px borders**: All 57 instances are table row separators (intentional)
+- **Cold gray hex**: None in CSS/HTML (all in warroom pixel art, exempted)
+- **Agent connective tissue**: agent-config.js (3 pages), agent-nudges.js (2 pages) — proper escaping, XSS prevention, null guards
+
+### Verified Clean
+- 11/11 smoke tests pass
+- All 14 JS files syntax clean (node --check)
+- All Python files compile clean
+- 0 regressions

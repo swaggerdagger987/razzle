@@ -7135,7 +7135,7 @@ function renderProspectProfile(data, container, compsData) {
     html += `<div class="tier-badge" style="background:${tier.color}; transform:rotate(-3deg); margin-left:10px;">${tier.label}</div>`;
     html += `</div>`;
     html += `<div class="prospect-rps-score-row">`;
-    html += `<div class="prospect-rps-big">${rpsData.rps.toFixed(1)}</div>`;
+    html += `<div class="prospect-rps-big">${(rpsData.rps || 0).toFixed(1)}</div>`;
     html += `<div class="prospect-rps-bar-wrap"><div class="prospect-rps-bar-fill" style="width:${Math.min(100, rpsData.rps)}%; background:${tier.color};"></div></div>`;
     html += `</div>`;
     html += `<div class="prospect-rps-breakdown">`;
@@ -8541,7 +8541,7 @@ function exportBigBoardImage() {
       ctx.font = "bold 14px 'Space Mono', monospace";
       ctx.fillStyle = t.ink;
       ctx.textAlign = "left";
-      ctx.fillText(p.rps.toFixed(1), barX + barW + 8, rowY + 27);
+      ctx.fillText((p.rps || 0).toFixed(1), barX + barW + 8, rowY + 27);
 
       // Key metrics
       ctx.font = "10px 'Space Mono', monospace";
@@ -8638,7 +8638,7 @@ function renderClassAnalytics(data, container) {
   for (const cls of classes) {
     const gradeColor = gradeColors[cls.grade] || "var(--ink-light)";
     const topName = cls.top_prospect ? cls.top_prospect.name : "N/A";
-    const topRPS = cls.top_prospect ? cls.top_prospect.rps.toFixed(1) : "-";
+    const topRPS = cls.top_prospect ? (cls.top_prospect.rps || 0).toFixed(1) : "-";
     const totalElitePrem = cls.tiers.elite + cls.tiers.premium;
 
     html += `
@@ -8654,7 +8654,7 @@ function renderClassAnalytics(data, container) {
         <!-- Stats row -->
         <div style="display:flex; gap:16px; margin-bottom:12px; font-family:var(--font-mono); font-size:13px;">
           <div><span style="color:var(--ink-light);">Prospects:</span> ${cls.count}</div>
-          <div><span style="color:var(--ink-light);">Avg RPS:</span> <strong>${cls.avg_rps.toFixed(1)}</strong></div>
+          <div><span style="color:var(--ink-light);">Avg RPS:</span> <strong>${(cls.avg_rps || 0).toFixed(1)}</strong></div>
         </div>
 
         <!-- Tier distribution bar -->

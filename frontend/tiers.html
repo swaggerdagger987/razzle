@@ -465,14 +465,15 @@
       html += '<div class="tl-tier">';
       html += '<div class="tl-tier-label ' + escapeHtml(tier.tier) + '">';
       html += '<div class="tl-tier-letter">' + escapeHtml(tier.tier) + '</div>';
-      html += '<div class="tl-tier-count">' + escapeHtml(String(tier.players.length)) + '</div>';
+      var tierPlayers = tier.players || [];
+      html += '<div class="tl-tier-count">' + escapeHtml(String(tierPlayers.length)) + '</div>';
       html += '<div class="tl-tier-desc">' + escapeHtml(tier.label || '') + '</div>';
       html += '</div>';
       html += '<div class="tl-tier-players">';
-      if (tier.players.length === 0) {
+      if (tierPlayers.length === 0) {
         html += '<span class="tl-empty-tier">' + razzleEmpty() + '</span>';
       } else {
-        tier.players.forEach(function(p) {
+        tierPlayers.forEach(function(p) {
           html += '<div class="tl-player-chip">';
           html += '<span class="tl-chip-pos ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span>';
           html += '<span class="tl-chip-name">' + escapeHtml(p.full_name) + '</span>';
