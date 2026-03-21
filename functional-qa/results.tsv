@@ -2437,3 +2437,66 @@ re-audit	OK	backend/live_data/dashboards.py	1260	fetch_report_cards	pass	re-audi
 re-audit	OK	frontend/player.js	729	openCompareSearch	pass	re-audit: Ship Loop null guard (_profileData.player||{}).full_name verified. Defensive — normal flow unaffected. McCaffrey profile opens from Lab click, 0 JS errors	100	2026-03-21T14:33
 re-audit	OK	frontend/app.js	516	apiFetch	pass	re-audit: Ship Loop try-catch on localStorage in 401 handler + checkAuth. Defensive for quota/blocked storage. Normal auth flow unaffected. 0 JS errors	100	2026-03-21T14:33
 re-audit	OK	frontend/formulas.js	259	_pushAllFormulasToServer	pass	re-audit: catch handler now logs error message (was silent swallow). No behavior change. Formula store listing verified working	100	2026-03-21T14:33
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)	100	2026-03-21T08:03
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players	100	2026-03-21T08:03
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs	100	2026-03-21T08:03
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs	100	2026-03-21T08:03
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct	100	2026-03-21T08:03
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data	100	2026-03-21T08:03
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp	100	2026-03-21T08:03
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct	100	2026-03-21T08:03
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players	100	2026-03-21T08:03
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values	100	2026-03-21T08:03
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams	100	2026-03-21T08:03
+smoke-prod	OK	-	-	-	pass	smoke-prod:health — Server healthy (HTTP 200)	100	2026-03-21T08:04
+smoke-prod	OK	-	-	-	pass	smoke-prod:all 11 checks — All 11/11 passed on prod	100	2026-03-21T08:04
+28	OK	backend/live_data/tools.py	2069	fetch_stacks	pass	re-audit: Stacks min_games=8 working locally, Pearson math correct, Pro-gated 0 JS errors	95	2026-03-21T08:10
+31	OK	backend/live_data/tools.py	-	fetch_streaks	pass	re-audit: 25 hot + 25 cold streaks, local=prod, Lawrence +10.6 delta, Flacco -8.5, 0 nulls	100	2026-03-21T08:15
+34	OK	backend/live_data/analytics.py	2235	fetch_redzone_usage	pass	re-audit: Prod 30 dominators (Henry/Taylor/McCaffrey), td_pct math verified (Heyward 65.7%), local PBP empty (known)	95	2026-03-21T08:12
+38	OK	backend/live_data/tools.py	1661	fetch_garbage_time	pass	re-audit: ppg>=5/>=8 thresholds in code, local PBP empty, prod old code (known deploy gap)	90	2026-03-21T08:13
+42	OK	backend/live_data/dashboards.py	-	fetch_workload	pass	re-audit: Prod McCaffrey #1 workload=106, local stale teams (FUNC-058 adapter fix), 0 JS errors	90	2026-03-21T08:14
+44	OK	backend/live_data/core.py	-	scoring	pass	re-audit: McCaffrey PPR=416.6 STD=314.6 HPPR=365.6 hand-verified, 15 players 0 errors, ROUND sweep clean	100	2026-03-21T08:18
