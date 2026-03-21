@@ -2703,3 +2703,69 @@ all	OK	frontend/*.html	-	-	pass	bulk test: all 50 standalone HTML pages HTTP 200
 all	OK	frontend/index.html	-	topnav	pass	topnav consistency: 7 links across all 5 primary pages (index, lab, league-intel, agents, pricing)	100	2026-03-21T09:30
 all	OK	backend/live_data/players.py	-	_fetch_screener_uncached	pass	screener filters work correctly with key/op/value format. Chained RB+games>=10+PPR>=200 returns 21 correct players	100	2026-03-21T09:20
 all	OK	backend/live_data/core.py	-	_enrich_with_derived_stats	pass	half-PPR verified: MCF (416.6+314.6)/2=365.6, Robinson 331.3, Gibbs 328.4, Allen 364.6 (QB PPR=STD)	100	2026-03-21T09:20
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)	100	2026-03-21T10:00
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players	100	2026-03-21T10:00
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs	100	2026-03-21T10:00
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs	100	2026-03-21T10:00
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct	100	2026-03-21T10:00
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data	100	2026-03-21T10:00
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp	100	2026-03-21T10:00
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct	100	2026-03-21T10:00
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players	100	2026-03-21T10:00
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values	100	2026-03-21T10:00
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams	100	2026-03-21T10:00
+re-audit-64	OK	frontend/efficiency.html	422	gradeClass	pass	re-audit FUNC-064: FIXED. All 17 gradeClass functions now use charAt(0) or explicit B+/C+ matching. B+ maps to grade-b, C+ maps to grade-c. Backend returns all 8 grades (A+:13, A:28, B+:34, B:26, C+:45, C:50, D:24, F:79 in stock-watch)	100	2026-03-21T10:00
+re-audit-64	OK	frontend/consistency.html	422	gradeClass	pass	re-audit FUNC-064: FIXED. charAt(0) approach maps B+ to grade-b, C+ to grade-c. 0 JS errors	100	2026-03-21T10:00
+re-audit-64	OK	frontend/schedule.html	435	gradeClass	pass	re-audit FUNC-064: FIXED. charAt(0) approach. SOS grades via field name 'grade' (not sos_grade). 0 JS errors	100	2026-03-21T10:00
+re-audit-64	OK	frontend/stocks.html	440	gradeClass	pass	re-audit FUNC-064: FIXED. charAt(0) approach. 0 JS errors	100	2026-03-21T10:00
+re-audit-64	OK	frontend/lab-panels.js	8679	gradeClass	pass	re-audit FUNC-064: FIXED. SOS lab panel uses charAt(0). All 8 gradeClass instances in lab-panels.js handle B+/C+	100	2026-03-21T10:00
+re-audit-C	OK	frontend/league-intel.html	-	-	pass	re-audit Phase C Bureau hardening: 0 JS errors, Sleeper connect UI renders, 8 inputs + 14 buttons, topnav has Pricing link. AbortController timeouts on all Sleeper API fetches	100	2026-03-21T10:00
+re-audit-D	OK	frontend/agents.html	-	-	pass	re-audit Phase D Situation Room: 0 JS errors, 1 canvas + 1 textarea + 1 details panel. 6 agent tabs, demo briefings, pixel canvas. First-run guide correctly hidden (no API key set)	100	2026-03-21T10:00
+re-audit-E	OK	frontend/index.html	-	-	pass	re-audit Phase E landing page: 0 JS errors, Bureau section present, topnav 5 links (Home/Screener/League Intel/AI Agents/Pricing), 68 links + 17 buttons	100	2026-03-21T10:00
+re-audit-E	OK	frontend/pricing.html	-	-	pass	re-audit Phase E pricing: 0 JS errors, Pro/Elite cards, feature comparison table (26 rows), trial banner, promo input	100	2026-03-21T10:00
+re-audit-F	OK	backend/live_data/players.py	-	fetch_players	pass	re-audit Phase F data refresh: 2025 season 2019 players, MCF PPR=416.6 STD=314.6 HPPR=365.6 ((416.6+314.6)/2=365.6 OK). QB PPR=STD (Allen 364.6). 10 players checked, 0 half-PPR mismatches	100	2026-03-21T10:00
+re-audit-F	OK	adapters/cfbfastr_adapter.py	-	sync_combine_data	pass	re-audit Phase F combine data: 319 prospects, 189 with 40 times, 190 with verticals. Taylen Green #1 (4.36/43.5"/134"broad, 99.6 athl). Data properly integrated	100	2026-03-21T10:00
+3	OK	backend/live_data/players.py	-	_fetch_screener_uncached	pass	multi-filter chain: RB+800yd=23 players all correct, WR+100tgt+1000recyd=18 players all match criteria. Sort order correct	100	2026-03-21T10:00
+7	OK	backend/live_data/players.py	-	_fetch_screener_uncached	pass	week filter: Week 1 QBs all have GP=1 (Allen 38.8, Fields 29.5, Jones 29.5, Lamar 29.4). No season totals leaking	100	2026-03-21T10:00
+20	OK	backend/live_data/dynasty.py	-	trade_finder	pass	trade finder: MCF val=90.4 (25 equal, 0 buy-low, 1 sell-high), Lamar val=82.9 (25 equal, 15 buy-low, 12 sell-high). Suggestions sensible	100	2026-03-21T10:00
+all	OK	frontend/*.html	-	-	pass	bulk page test: 8 newer standalone pages (workload/targetpremium/seasonpace/garbagetime/snapefficiency/dualthreat/tdregression/advantage) all HTTP 200, 0 JS errors	100	2026-03-21T10:00
+all	OK	frontend/*.html	-	topnav	pass	topnav consistency: all 5 primary pages + standalone pages have 5 nav links (Home/Screener/League Intel/AI Agents/Pricing). prompts.html also has Prompts link	100	2026-03-21T10:00
+62	OK	backend/live_data/dashboards.py	-	fetch_report_cards	pass	report cards: MCF GPA=B+ pct=82 (eff=C, con=A+, sos=B+), Nacua GPA=B+ pct=82 (eff=A, con=A, sos=C+). Component grades make sense	100	2026-03-21T10:00
+62	OK	backend/live_data/dashboards.py	-	fetch_season_awards	pass	10 season awards populated: MVP=Nacua, Volume King=MCF. Winners sensible	100	2026-03-21T10:00
+43	OK	backend/live_data/dashboards.py	-	fetch_vorp	pass	VORP: MCF VORP=12.36 (PPG=24.51, repl=12.15). Replacement thresholds working	100	2026-03-21T10:00
+37	OK	backend/live_data/dashboards.py	-	fetch_td_regression	pass	TD regression: Stafford 46 actual vs 29.5 expected (negative), Cam Ward 17 vs 27.3 (positive). Pos avg rates: QB=4.7%, RB=3.3%, WR=4.9%, TE=5.9%	100	2026-03-21T10:00
+63	P2	frontend/league-intel.html	2608	crawlLeagueHistory	open	Timer leak: crawlTimer (8s) not cleared in catch block. Fires on dead AbortController after error. No functional impact	70	2026-03-21T10:00
+63	P2	frontend/league-intel.html	2811	loadActivityFeed	open	Timer leak: txnTimer (20s) not cleared in catch block. Same pattern as crawl timer. No functional impact	70	2026-03-21T10:00
