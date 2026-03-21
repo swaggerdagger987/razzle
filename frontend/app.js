@@ -249,12 +249,6 @@ function isPaidUser() {
   return p === "pro" || p === "elite" || p === "pro_lifetime" || p === "elite_lifetime";
 }
 
-/** Returns true if user is on Elite plan (includes lifetime). */
-function isEliteUser_global() {
-  var p = getUserPlan();
-  return p === "elite" || p === "elite_lifetime";
-}
-
 /**
  * Get the allowed season range for the current user.
  * All seasons are free for everyone — the data is the billboard.
@@ -359,16 +353,6 @@ function getEliteCtaText() {
   if (t.isElite) return "Current Plan";
   if (t.isPaid) return "Upgrade to Elite";
   return "Subscribe to Elite";
-}
-
-/**
- * Get trial status text (returns empty string if not relevant).
- */
-function getTrialStatusText() {
-  var t = getUserTierInfo();
-  if (t.isTrial) return "You're on Pro (" + t.daysLeft + " day" + (t.daysLeft !== 1 ? "s" : "") + " left). Subscribe to keep Pro.";
-  if (t.isExpiredTrial) return "Your trial ended. Subscribe to keep Pro.";
-  return "";
 }
 
 /* ===== Brand Voice — Shared Vocabulary ===== */

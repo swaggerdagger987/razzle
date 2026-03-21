@@ -165,13 +165,6 @@ function _resetLoadingSkeleton(el) {
     lt.textContent = getLoadingText('screener');
   }
 }
-function _setLoadingError(el, msg) {
-  var errorMsg = msg;
-  if (!msg && typeof getErrorText === 'function') {
-    errorMsg = getErrorText('screener');
-  }
-  el.innerHTML = '<div style="text-align:center; font-family:var(--font-hand); font-size:22px; color:var(--ink-light); padding:40px 20px;">' + escapeHtml(errorMsg) + '</div>';
-}
 function _highlightSearch(escaped) {
   if (!state.search) return escaped;
   var q = escapeHtml(state.search);
@@ -534,10 +527,6 @@ function setPlayerNote(playerId, text) {
     delete notes[playerId];
   }
   savePlayerNotes(notes);
-}
-
-function getNotedCount() {
-  return Object.keys(getPlayerNotes()).length;
 }
 
 let _noteEditorVisible = false;
@@ -3284,15 +3273,6 @@ function resetAllFilters() {
   _showToast("all filters cleared");
 }
 
-function clearTeamFilter() {
-  state.teams = [];
-  state.offset = 0;
-  const sel = document.getElementById("teamFilter");
-  if (sel) sel.value = "";
-  renderActiveFilters();
-  renderTeamChips();
-  fetchAndRender();
-}
 
 function clearMinGP() {
   state.minGP = 0;
@@ -3353,11 +3333,6 @@ function setMinGP(val) {
   state.offset = 0;
   renderActiveFilters();
   fetchAndRender();
-}
-
-// ─── Settings panel toggle (legacy — now uses Tools dropdown) ────
-function toggleSettingsPanel() {
-  toggleToolsDropdown();
 }
 
 // ─── Tools dropdown ─────────────────────────────────────────────
