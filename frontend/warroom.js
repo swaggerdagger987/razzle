@@ -3717,6 +3717,7 @@ function loadLatestBriefing() {
   var token = localStorage.getItem('razzle_token');
   if (!token) return;
   var body = document.getElementById('weeklyBriefingBody');
+  if (!body) return;
   var weekLabel = document.getElementById('briefingWeekLabel');
 
   fetch(
@@ -3931,6 +3932,7 @@ function loadBriefingById(id) {
   var token = localStorage.getItem('razzle_token');
   if (!token) return;
   var body = document.getElementById('weeklyBriefingBody');
+  if (!body) return;
   var weekLabel = document.getElementById('briefingWeekLabel');
 
   fetch(
