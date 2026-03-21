@@ -6084,10 +6084,11 @@
 
     function gradeColor(g) {
       if (!g) return 'var(--ink-light)';
-      if (g === 'A+' || g === 'A') return 'var(--green)';
-      if (g === 'B+' || g === 'B') return 'var(--blue)';
-      if (g === 'C+' || g === 'C') return 'var(--yellow)';
-      if (g === 'D') return 'var(--orange)';
+      var c = g.charAt(0);
+      if (c === 'A') return 'var(--green)';
+      if (c === 'B') return 'var(--blue)';
+      if (c === 'C') return 'var(--yellow)';
+      if (c === 'D') return 'var(--orange)';
       return 'var(--red)';
     }
     function barColor(pct) {
