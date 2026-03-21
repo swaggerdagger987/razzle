@@ -750,9 +750,16 @@ function openCompareSearch() {
           var players = data.players || [];
           results.innerHTML = players.map(function(p) {
             if (p.player_id === currentId) return "";
-            return '<div onclick="window.location.href=\'/compare/' + encodeURIComponent(currentId) + '/' + encodeURIComponent(p.player_id) + '\'" style="padding:8px 12px;cursor:pointer;border-bottom:1px solid var(--ink-faint);font-family:var(--font-mono);font-size:13px;" onmouseover="this.style.background=\'var(--bg-warm)\'" onmouseout="this.style.background=\'transparent\'">' +
+            return '<div class="compare-search-item" data-current="' + escapeAttr(currentId) + '" data-target="' + escapeAttr(p.player_id) + '" style="padding:8px 12px;cursor:pointer;border-bottom:1px solid var(--ink-faint);font-family:var(--font-mono);font-size:13px;">' +
               '<span style="font-weight:700;">' + esc(p.full_name) + '</span> <span style="color:var(--ink-light);">' + esc(p.position || "") + ' ' + esc(p.team || "") + '</span></div>';
           }).join("");
+          results.querySelectorAll(".compare-search-item").forEach(function(el) {
+            el.addEventListener("click", function() {
+              window.location.href = "/compare/" + encodeURIComponent(el.dataset.current) + "/" + encodeURIComponent(el.dataset.target);
+            });
+            el.addEventListener("mouseover", function() { el.style.background = "var(--bg-warm)"; });
+            el.addEventListener("mouseout", function() { el.style.background = "transparent"; });
+          });
         }).catch(function() {});
     }, 250);
   });

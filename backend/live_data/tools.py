@@ -1161,8 +1161,8 @@ def fetch_season_recap(season=None):
             busts.sort(key=lambda x: x["delta"])
 
             # 6. Season stats summary
-            total_players = len(season_rows)
-            avg_ppg = round(sum(r[5] / r[4] for r in season_rows if r[4]) / total_players, 1) if total_players else 0
+            eligible = [r for r in season_rows if r[4]]
+            avg_ppg = round(sum(r[5] / r[4] for r in eligible) / len(eligible), 1) if eligible else 0
 
             return {
                 "season": season,

@@ -550,7 +550,7 @@ function showNoteEditor(playerId, anchorEl) {
 
   const existing = getPlayerNote(playerId);
   const player = state.items.find(p => p.player_id === playerId);
-  const name = player ? escapeHtml(player.full_name) : playerId;
+  const name = player ? escapeHtml(player.full_name) : escapeHtml(playerId);
 
   let editor = document.getElementById("noteEditor");
   if (!editor) {
