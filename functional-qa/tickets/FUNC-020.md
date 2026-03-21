@@ -1,52 +1,51 @@
-# FUNC-020: Derived column sort returns wrong order on production
+# FUNC-020: GET /api/players silently falls back to PPR for derived sort keys
 
-## Severity: P1
+## Severity: P2 (downgraded from P1)
 
 ## Summary
-Sorting by derived/rate columns (WOPR, target_share, yards_per_carry, catch_rate, etc.) returns players in default PPR order, NOT sorted by the requested column. The Python re-sort after SQL query is not functioning correctly on production.
+The GET `/api/players` endpoint silently ignores derived sort keys (wopr, target_share, yards_per_carry, catch_rate, etc.) and falls back to PPR order. The POST `/api/screener/query` endpoint handles these correctly with Python re-sort.
+
+## Status Update (Session 24)
+**Partially fixed.** The main screener uses POST `/api/screener/query` which has:
+- `python_sort` flag for derived/rate metrics
+- `sql_limit = 2000` for wider fetch window
+- `float('-inf')`/`float('inf')` null sentinels
+- Post-query Python re-sort with correct pagination
+
+**Severity downgraded to P2** because:
+1. The frontend screener exclusively uses POST `/api/screener/query` (line 1277 of lab.js)
+2. The GET `/api/players` endpoint is only used for secondary lookups (compare, trade values)
+3. No user-facing sort is affected
 
 ## Root Cause
-Two issues in the deployed `master` branch players.py:
-
-1. **`sql_limit = 500`**: When sorting by derived columns, SQL fetches only 500 rows sorted by PPR. Python re-sorts these 500 rows, but the top players by the derived metric may not be in this 500-row window. The fix (sql_limit=2000) exists in ship/launch-fixes but is not deployed.
-
-2. **Null sentinel sort**: The deployed code uses `x.get(sort_key) or 0` which treats null/None as 0, mixing null-value players with legitimate 0-value players. The fix uses `float('-inf')`/`float('inf')` sentinels to push nulls to the end.
+In `fetch_players()` (players.py lines 117-119):
+```python
+_sort_key = sort_key
+if _sort_key not in safe_sorts:
+    _sort_key = "fantasy_points_ppr"
+```
+Derived sort keys (wopr, target_share, etc.) are not in `safe_sorts`, so they silently fall back to PPR. Unlike `screener_query()`, this function has no `python_sort` re-sort step.
 
 ## Evidence
 ```
 # Production test (2026-03-20):
-GET /api/players?limit=5&sort=wopr&direction=desc&season=2025
+GET /api/players?limit=5&sort=wopr&direction=desc&position=WR&season=2025
+  Puka Nacua: WOPR=0.709, PPR=375.0  (should be 4th by WOPR)
+  JSN: WOPR=0.867, PPR=360.0          (should be 1st by WOPR)
+  → Returns PPR order, not WOPR order
 
-  Christian McCaffrey - WOPR: 0.41   (PPR: 416.6)
-  Puka Nacua - WOPR: 0.709          (PPR: 375.0)
-  Bijan Robinson - WOPR: 0.311      (PPR: 370.8)
-
-Expected (descending WOPR): Nacua (0.709) should be FIRST.
-Actual: Players in PPR order, not WOPR order.
-
-GET /api/players?limit=5&sort=target_share&direction=desc&position=WR&season=2025
-
-  Puka Nacua - Target Share: 0.311
-  Jaxon Smith-Njigba - Target Share: 0.357
-
-Expected: JSN (0.357) before Nacua (0.311).
-Actual: PPR order again.
+POST /api/screener/query {sort_key:"wopr",sort_dir:"desc",position:"WR",limit:5}
+  Garrett Wilson: WOPR=0.925  ✓ correct
+  JSN: WOPR=0.867              ✓ correct
+  → Returns correct WOPR order
 ```
 
-## Impact
-- Users sorting by derived metrics see misleading results
-- "Sort by WOPR" or "Sort by target share" returns PPR order with derived values shown — looks like a broken sort
-- Fantasy managers making decisions based on derived metric rankings get wrong player order
-- Screener URL shares with derived sort (?sort=wopr) show wrong order to recipients
-
-## Additional Risk
-Rapid consecutive derived-sort requests caused a 502 server crash during testing (likely OOM from concurrent enrichment pipelines on Render free tier). Server auto-recovered after ~40 seconds.
-
 ## Fix
-Deploy ship/launch-fixes to master. Key changes in players.py:
-- `sql_limit = 500` → `sql_limit = 2000` (line ~431)
-- Null sentinel sort: `float('-inf')` for desc, `float('inf')` for asc (line ~488)
-- `total = len(items)` after Python re-sort for correct pagination count
+Add `python_sort` logic to `fetch_players()` matching `screener_query()`:
+1. Detect when sort_key is a derived/rate metric
+2. Fetch 2000 rows sorted by PPR
+3. Enrich with rate metrics
+4. Python re-sort by requested metric
+5. Paginate after re-sort
 
-## Related
-- FUNC-019 (deployment gap — same root cause: ship/launch-fixes not pushed to master)
+Low priority since no user-facing feature depends on GET sort for derived metrics.

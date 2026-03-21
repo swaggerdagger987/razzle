@@ -1124,3 +1124,60 @@ prod-sweep	OK	-	-	-	pass	prod sweep: 24 pages tested (4 main + 20 standalone pan
 prod-sweep	P0	-	-	-	fail	prod: /player/{id}, /compare/{id1}/{id2}, /team/{abbr} SEO routes broken (3/3/2 JS errors). FUNC-019.	100	2026-03-21T01:55
 prod-sweep	P1	-	-	-	fail	prod: derived column sorts (WOPR, target_share) return PPR order, not sorted by metric. FUNC-020.	100	2026-03-21T01:55
 prod-sweep	P1	-	-	-	fail	prod: 3 concurrent derived sort requests caused 502 crash (~40s recovery). Likely OOM on Render free tier.	90	2026-03-21T01:55
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+re-audit-5	OK	backend/live_data/players.py	48	quick_search_players	pass	re-audit: search special chars fix deployed to prod — Ja'Marr/Amon-Ra/D'Andre all return correct results via quick_search and screener_query	100	2026-03-20T22:10
+re-audit-67	OK	backend/live_data/players.py	48	quick_search_players	pass	re-audit: apostrophe/hyphen/period stripping via re.sub(r"[^a-z0-9]","") — all 3 search endpoints consistent	100	2026-03-20T22:10
+re-audit-10	OK	frontend/lab.js	1718	buildRowHTML	pass	re-audit: pinned row expand disabled (rowIdx null guard) — no orphan DOM elements in pinned tbody	100	2026-03-20T22:12
+re-audit-13	OK	frontend/player.js	37	loadPlayer	pass	re-audit: FUNC-019 RESOLVED — /player/{id} loads 0 JS errors on prod, URL encode + skip-link + clipboard fixes deployed	100	2026-03-20T22:14
+re-audit-16	OK	frontend/compare.js	248	renderComparison	pass	re-audit: compare diff bar normalization (Math.abs + sum to 100%) + clipboard fallback — 20 diff bars, 0 JS errors on prod	100	2026-03-20T22:14
+re-audit-17	OK	frontend/charts.js	173	drawRadar	pass	re-audit: radar chart min/max range normalization supports negative EPA values — no longer clamps to zero	100	2026-03-20T22:15
+re-audit-22	OK	frontend/lab.js	9507	drawAgingCurves	pass	re-audit: globalAlpha restored to 1.0 after dashed player lines (was stuck at 0.7 for data points)	100	2026-03-20T22:15
+re-audit-51	OK	frontend/lab.js	4144	saveNamedView	pass	re-audit: 7 additional fields (week, teams, minGP, tierBreaks, groupHeaders, summaryBar, tagFilter) now saved and restored	100	2026-03-20T22:16
+re-audit-61	OK	backend/billing.py	522	_handle_payment_failed	pass	re-audit: payment_failed no longer downgrades plan — marks status only, waits for Stripe retry/cancel	100	2026-03-20T22:17
+re-audit-4	OK	backend/live_data/players.py	488	screener_query	pass	re-audit: screener derived sort works on prod — WOPR desc = Wilson(0.925)>JSN(0.867)>Amon-Ra(0.746). GET /api/players still falls back (P2)	95	2026-03-20T22:18
+FUNC-019	OK	frontend/player.html	4	base_href	pass	FUNC-019 RESOLVED: SEO routes (/player/, /compare/, /team/) all load 0 JS errors on prod after ship/launch-fixes merge to master	100	2026-03-20T22:08
+smoke-prod-s24	OK	-	-	-	pass	smoke:prod API — health=200, players=2020, screener=81 QBs, quick_search=Mahomes, filter-options=4pos/32teams/11seasons	100	2026-03-20T22:08
+smoke-prod-s24	OK	-	-	-	pass	smoke:prod browser — Lab 25 rows, 69 sidebar items, 0 JS errors, dark mode clean	100	2026-03-20T22:10
