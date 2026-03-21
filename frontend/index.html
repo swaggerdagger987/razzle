@@ -312,6 +312,33 @@
     user-select: none;
   }
 
+  /* ===== FEATURE CARDS ===== */
+  .feature-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 20px;
+  }
+
+  .feature-card-icon {
+    font-size: 28px;
+    margin-bottom: 8px;
+  }
+
+  .feature-card-title {
+    font-family: var(--font-display);
+    font-size: 16px;
+    margin-bottom: 6px;
+  }
+
+  .feature-card-desc {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-medium);
+    line-height: 1.5;
+  }
+
   /* ===== PRICING ===== */
   .pricing-section {
     max-width: 960px;
@@ -479,8 +506,8 @@
   <ul class="nav-links">
     <li><a href="/" class="active">Home</a></li>
     <li><a href="/lab.html">Screener</a></li>
-    <li><a href="/league-intel.html" title="Connect your Sleeper league">Bureau</a></li>
-    <li><a href="/agents.html" title="AI agents for your league">Situation Room</a></li>
+    <li><a href="/league-intel.html" title="Connect your Sleeper league">League Intel</a></li>
+    <li><a href="/agents.html" title="AI agents for your league">AI Agents</a></li>
     <li><a href="/pricing.html">Pricing</a></li>
   </ul>
   <div class="nav-auth" id="nav-auth">
@@ -493,11 +520,11 @@
 <!-- 1. HERO -->
 <div class="hero">
   <div class="hero-mascot">🐯</div>
-  <h1>ChatGPT doesn't know your league. <span>Razzle does.</span></h1>
-  <div class="hero-sub">The Screener is forever free. The intelligence is what you pay for.</div>
+  <h1>The fantasy football research lab. <span>Forever free.</span></h1>
+  <div class="hero-sub">100+ stat columns. Custom formulas. Shareable views. No account required. No catch.</div>
   <div class="hero-cta">
     <a href="/lab.html" class="btn-hero btn-hero-primary">Open the Screener</a>
-    <a href="/league-intel.html" class="btn-hero btn-hero-secondary">Connect your league</a>
+    <a href="#features" class="btn-hero btn-hero-secondary">See what's inside</a>
   </div>
 </div>
 
@@ -548,18 +575,45 @@
   </div>
 </div>
 
-<div class="lp-divider"></div>
-
-<!-- 3. BUREAU — one sentence -->
-<div class="lp-section">
-  <h2>Connect your Sleeper league. <span>See what your rivals are doing.</span></h2>
-  <p>Championship odds. Roster depth. Panic patterns. Trade targets. One username. Ten seconds.</p>
-  <a href="/league-intel.html" class="btn-hero btn-hero-primary" style="font-size:14px; padding:10px 28px;">Connect</a>
+<!-- 3. FEATURE SHOWCASE -->
+<div id="features" class="lp-section" style="max-width:860px;">
+  <h2>What you get. <span>Right now. Free.</span></h2>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:16px; margin-top:24px; text-align:left;">
+    <div class="feature-card">
+      <div class="feature-card-icon">📊</div>
+      <div class="feature-card-title">100+ Stat Columns</div>
+      <div class="feature-card-desc">NFL, college, and prospect data. 10 seasons deep. Every metric that matters.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-card-icon">🧮</div>
+      <div class="feature-card-title">Custom Formulas</div>
+      <div class="feature-card-desc">Build your own metrics. Combine any stats. Share with the community.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-card-icon">📸</div>
+      <div class="feature-card-title">PNG Export</div>
+      <div class="feature-card-desc">Screenshot-ready views with your filters baked in. Share anywhere.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-card-icon">🔗</div>
+      <div class="feature-card-title">Shareable URLs</div>
+      <div class="feature-card-desc">Every filter, sort, and column saved in the URL. Send the exact view.</div>
+    </div>
+  </div>
 </div>
 
 <div class="lp-divider"></div>
 
-<!-- 4. SITUATION ROOM — one sentence + example briefing -->
+<!-- 4. BUREAU — connect your league -->
+<div class="lp-section">
+  <h2>Now connect your league. <span>See what your rivals can't.</span></h2>
+  <p>ChatGPT doesn't know your league. Razzle does. Championship odds. Roster depth. Panic patterns. Trade targets. One Sleeper username. Ten seconds.</p>
+  <a href="/league-intel.html" class="btn-hero btn-hero-primary" style="font-size:14px; padding:10px 28px;">Connect your league</a>
+</div>
+
+<div class="lp-divider"></div>
+
+<!-- 5. SITUATION ROOM — unredacted example briefings -->
 <div class="lp-section">
   <h2>Six AI agents that <span>already know your league.</span></h2>
   <p>Personalized briefings. Trade strategies. Championship probability. All contextualized to your roster and your rivals.</p>
@@ -567,25 +621,26 @@
   <div class="briefing-example">
     <div class="demo-card">
       <div class="agent-name">🐯 Razzle <span class="urgency urgency-urgent">urgent</span></div>
-      <span class="redacted">████████</span> just dropped <span class="redacted">██████</span> to waivers. Based on <span class="redacted">████</span>'s FAAB patterns, they'll bid $<span class="redacted">██</span>. You should bid $<span class="redacted">██</span> to guarantee the pickup. This changes your championship odds from <span class="redacted">██</span>% to <span class="redacted">██</span>%.
+      Team "Dynasty or Bust" just dropped Keenan Allen to waivers. Based on "Taco Tuesday"'s FAAB patterns (they bid 40%+ on WR2s three times this season), they'll bid $47. You should bid $52 to guarantee the pickup. This changes your championship odds from 6.2% to 11.8%.
     </div>
     <div class="demo-card">
-      <div class="agent-name">🐙 The Quant <span class="urgency urgency-opportunity">opportunity</span></div>
-      Trade value model flags <span class="redacted">██████</span> as <span class="redacted">██</span>% undervalued relative to production. Selling <span class="redacted">████████</span> + a <span class="redacted">███</span> round pick returns <span class="redacted">██</span>% expected surplus. Your championship probability increases from <span class="redacted">██</span>% to <span class="redacted">██</span>%.
+      <div class="agent-name">🦊 The Diplomat <span class="urgency urgency-opportunity">opportunity</span></div>
+      "RedZoneKing_99" panic-sold two WRs after their Week 8 loss. They're desperate for receiver depth. Offer Diontae Johnson now while they're nervous — they accepted a worse deal for a WR3 last month. Package with your 2026 2nd for their De'Von Achane. Your expected surplus: +22%.
     </div>
   </div>
+  <p style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); margin-top:16px;">this is what your agents see when they know your league</p>
 
-  <div style="margin-top:20px;">
-    <a href="/agents.html" class="btn-hero btn-hero-secondary" style="font-size:14px; padding:10px 28px;">Learn more</a>
+  <div style="margin-top:16px;">
+    <a href="/agents.html" class="btn-hero btn-hero-secondary" style="font-size:14px; padding:10px 28px;">Meet the agents</a>
   </div>
 </div>
 
 <div class="lp-divider"></div>
 
-<!-- 5. PRICING -->
+<!-- 6. PRICING (last — after all value is shown) -->
 <div class="pricing-section">
-  <h2>Pick Your <span>Playbook</span></h2>
-  <p style="font-family:var(--font-hand); font-size:20px; color:var(--ink-medium); margin-bottom:4px;">The Screener is free. The intelligence is what you pay for.</p>
+  <h2>The Screener is <span>forever free.</span></h2>
+  <p style="font-family:var(--font-hand); font-size:20px; color:var(--ink-medium); margin-bottom:4px;">No account. No catch. No trial that expires. Pro and Elite add the intelligence layer.</p>
 
   <div class="pricing-cols">
     <!-- FREE -->
@@ -654,8 +709,8 @@
       <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Razzle</div>
       <a href="/" class="footer-link">Home</a>
       <a href="/lab.html" class="footer-link">Screener</a>
-      <a href="/league-intel.html" class="footer-link">Bureau</a>
-      <a href="/agents.html" class="footer-link">Situation Room</a>
+      <a href="/league-intel.html" class="footer-link">League Intel</a>
+      <a href="/agents.html" class="footer-link">AI Agents</a>
       <a href="/pricing.html" class="footer-link">Pricing</a>
       <a href="/about.html" class="footer-link">About</a>
     </div>
