@@ -617,7 +617,7 @@ def fetch_stock_watch(season=None, position=None, limit=30):
     Falling = overvalued (stock < PPG rank)."""
     def _query():
 
-        from collections import defaultdict
+
 
         with get_db() as conn:
             row = conn.execute(
@@ -880,7 +880,7 @@ def fetch_opportunity_share(season=None, position=None, limit=30, week=None):
     For RB/QB: Rush Dominator = (player rush yards / team rush yards) * 100
     """
     def _query():
-        from collections import defaultdict
+
 
         with get_db() as conn:
             row = conn.execute(
@@ -1084,7 +1084,7 @@ def fetch_report_cards(season=None, position=None, limit=25, week=None):
     """
     def _query():
 
-        from collections import defaultdict
+
 
         with get_db() as conn:
             row = conn.execute(
@@ -1407,7 +1407,7 @@ def fetch_season_awards(season=None, position=None):
     """
     def _query():
 
-        from collections import defaultdict
+
 
         with get_db() as conn:
             row = conn.execute(
