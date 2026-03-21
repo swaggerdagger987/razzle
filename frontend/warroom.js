@@ -3788,7 +3788,7 @@ function renderBriefingContent(container, briefing) {
 
   // Timestamp
   if (briefing.created_at) {
-    html += '<div style="font-family:var(--font-hand); font-size:12px; color:var(--ink-light); text-align:right; margin-top:8px;">generated ' + briefing.created_at + '</div>';
+    html += '<div style="font-family:var(--font-hand); font-size:12px; color:var(--ink-light); text-align:right; margin-top:8px;">generated ' + escapeHtml(briefing.created_at) + '</div>';
   }
 
   container.innerHTML = html;
@@ -3912,7 +3912,7 @@ function toggleBriefingHistory() {
     var html = '';
     data.briefings.forEach(function(b) {
       var leagueTag = b.league_name ? ' [' + escapeHtml(b.league_name) + ']' : '';
-      html += '<div style="padding:6px 0; border-bottom:2px dashed var(--ink-faint); cursor:pointer;" data-briefing-id="' + parseInt(b.id) + '">';
+      html += '<div style="padding:6px 0; border-bottom:2px dashed var(--ink-faint); cursor:pointer;" data-briefing-id="' + (parseInt(b.id) || 0) + '">';
       html += '<div style="font-family:var(--font-mono); font-size:12px;">' + escapeHtml(b.week_label) + leagueTag + '</div>';
       html += '<div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + escapeHtml(b.summary.slice(0, 80)) + '...</div>';
       html += '</div>';
@@ -3920,7 +3920,7 @@ function toggleBriefingHistory() {
     panel.innerHTML = html;
     panel.addEventListener('click', function(e) {
       var row = e.target.closest('[data-briefing-id]');
-      if (row) loadBriefingById(parseInt(row.dataset.briefingId));
+      if (row) loadBriefingById(parseInt(row.dataset.briefingId) || 0);
     });
   })
   .catch(function() {

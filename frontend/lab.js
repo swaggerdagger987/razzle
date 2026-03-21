@@ -560,7 +560,7 @@ function showNoteEditor(playerId, anchorEl) {
     document.body.appendChild(editor);
   }
 
-  editor.innerHTML = `<div class="note-editor-title">${name}</div>`
+  editor.innerHTML = `<div class="note-editor-title">${escapeHtml(name)}</div>`
     + `<textarea class="note-editor-input" id="noteEditorInput" maxlength="140" placeholder="Add a note... (140 chars)">${escapeHtml(existing)}</textarea>`
     + `<div class="note-editor-footer">`
     + `<span class="note-editor-count" id="noteCharCount">${existing.length}/140</span>`
@@ -1590,6 +1590,8 @@ var _colResize = { active: false, key: null, startX: 0, startW: 0 };
 function _initColResizeHandles() {
   var handles = document.querySelectorAll(".col-resize-handle");
   for (var i = 0; i < handles.length; i++) {
+    handles[i].removeEventListener("mousedown", _onColResizeStart);
+    handles[i].removeEventListener("dblclick", _onColResizeReset);
     handles[i].addEventListener("mousedown", _onColResizeStart);
     handles[i].addEventListener("dblclick", _onColResizeReset);
   }

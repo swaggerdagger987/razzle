@@ -1455,11 +1455,11 @@ function renderCmdResults(items, sectionLabel) {
   var els = _cmdResultsEl.querySelectorAll(".cmd-palette-item");
   els.forEach(function(el) {
     el.addEventListener("click", function() {
-      _cmdActiveIdx = parseInt(el.dataset.idx);
+      _cmdActiveIdx = parseInt(el.dataset.idx, 10) || 0;
       cmdSelect();
     });
     el.addEventListener("mouseenter", function() {
-      _cmdActiveIdx = parseInt(el.dataset.idx);
+      _cmdActiveIdx = parseInt(el.dataset.idx, 10) || 0;
       updateCmdActive();
     });
   });
