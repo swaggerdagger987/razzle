@@ -2168,3 +2168,51 @@ cross	OK	-	-	-	pass	Cross-endpoint data consistency: McCaffrey PPR=416.6/17GP=24
 cross	OK	-	-	-	pass	IEEE 754 artifact scan: 0 issues across 6 endpoints (trade-value-chart, breakout-candidates, consistency, efficiency, stock-watch, report-cards). All float values clean.	100	2026-03-21T06:36
 panel	OK	-	-	-	pass	Free panel browser test: Rankings (27 rows), Breakouts (27 rows), Stat Leaders (27 rows), Dashboard. All 0 JS errors, data loads correctly.	100	2026-03-21T06:38
 prod	OK	-	-	-	pass	Prod verification: landing page (0 errors), Lab (27 rows, 0 errors), compare page (11 rows, 0 errors), special char search (Ja'Marr→Chase, Amon-Ra→St.Brown). All functional.	100	2026-03-21T06:40
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke-local	OK	-	-	-	pass	Session 54: 11/11 smoke tests pass on local backend	100	2026-03-21T06:29
+re-audit-21	OK	frontend/tiers.html	465	renderTiers	pass	re-audit: Ship Loop null guard (tier.players || []) verified. 6 tiers, 390 chips, 0 JS errors	95	2026-03-21T06:35
+re-audit-32	OK	frontend/targets.html	504	renderDistribution	pass	re-audit: Ship Loop null guard (team.players || []) verified. Panel Pro-gated, API returns correct data	95	2026-03-21T06:38
+re-audit-ship	OK	frontend/archetypes.html	473	-	pass	re-audit: Ship Loop null guard (arch.players || []) verified. 19 archetypes, data correct	95	2026-03-21T06:40
+re-audit-ship	OK	frontend/scarcity.html	497	-	pass	re-audit: Ship Loop null guard (posData.players || []) verified. 4 positions, data correct	95	2026-03-21T06:40
+re-audit-ship	OK	frontend/charts.js	1450	drawProspectCompareSpider	pass	re-audit: Ship Loop null guard (pData.prospect || {}).player_name verified. 319 prospects all have player_name	95	2026-03-21T06:42
+re-audit-ship	OK	frontend/lab.js	7135	renderProspectProfile	pass	re-audit: Ship Loop null guards (rpsData.rps || 0).toFixed(1) across 4 locations verified. 0 null RPS in API	95	2026-03-21T06:42
+data-audit	OK	-	-	-	pass	Free panel data accuracy: rankings, breakouts, cheat sheet, leaders, heatmap all cross-verified correct	90	2026-03-21T06:50
+data-audit	OK	-	-	-	pass	Dynasty trade value sanity: young WR (Nacua 94.0) > old RB (McCaffrey 90.4). Age curves working	90	2026-03-21T06:52
+data-audit	OK	-	-	-	pass	Weekly heatmap confirmed per-week data not cumulative: Allen wk1=38.8, wk2=11.8	100	2026-03-21T06:55
+data-audit	P2	adapters/nflverse_adapter.py	401	build_player_lookup	FUNC-058	Snap count sync fails for players with stale team in players table. LOCAL DB ONLY — prod has correct data	85	2026-03-21T07:05
+data-audit	P2	backend/live_data/core.py	-	compute_screener	FUNC-059	IEEE 754 artifacts in screener PPR totals on prod: 13/20 top players show 416.59999999999997 not 416.6	90	2026-03-21T07:10
+prod-audit	P0	backend/live_data/players.py	-	fetch_players	existing	FUNC-042 still on prod: GET /api/players sort by target_share returns PPR order instead	95	2026-03-21T07:15
+prod-audit	OK	-	-	-	pass	Prod edge cases: invalid season=empty, bad search=empty, no-position=works. All clean	100	2026-03-21T07:18
+prod-visual	OK	-	-	-	pass	Prod Lab + home page visual audit: 0 JS errors, correct layout, proper design, dark mode clean	95	2026-03-21T07:20
