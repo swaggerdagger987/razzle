@@ -360,6 +360,64 @@
     box-shadow: 4px 4px 0 var(--ink);
   }
 
+  /* ===== MINI SCREENER ===== */
+  .mini-tab {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 8px 16px;
+    border: none;
+    background: var(--bg-card);
+    color: var(--ink-light);
+    cursor: pointer;
+    flex: 1;
+    transition: all 0.15s;
+  }
+  .mini-tab.active { background: var(--orange); color: white; }
+  .mini-tab:hover:not(.active) { background: var(--bg-warm); }
+
+  .mini-screener-body {
+    max-height: 360px;
+    overflow-y: auto;
+  }
+
+  .mini-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+  .mini-table th {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--ink-light);
+    padding: 6px 8px;
+    border-bottom: 2px solid var(--ink-faint);
+    text-align: center;
+    cursor: default;
+  }
+  .mini-table th.mini-sortable { cursor: pointer; }
+  .mini-table th.mini-sortable:hover { color: var(--orange); }
+  .mini-table th.sort-active { color: var(--orange); font-weight: 700; }
+
+  .mini-table td {
+    padding: 5px 8px;
+    border-bottom: 1px solid var(--ink-faint);
+    text-align: center;
+  }
+  .mini-table tr { cursor: pointer; transition: background 0.1s; }
+  .mini-table tbody tr:hover { background: var(--bg-warm); }
+
+  .mini-pos {
+    font-size: 9px;
+    font-weight: 700;
+    color: white;
+    padding: 1px 5px;
+    border-radius: 3px;
+    display: inline-block;
+  }
+
   /* ===== PRICING ===== */
   .pricing-section {
     max-width: 960px;
@@ -549,49 +607,38 @@
   </div>
 </div>
 
-<!-- 2. SCREENER VISUAL -->
+<!-- 2. LIVE MINI-SCREENER -->
 <div class="screener-visual">
   <div class="screener-visual-card">
-    <div class="screener-visual-placeholder" aria-label="The Screener showing player stats">
-      <div class="fake-row">
-        <span class="fake-rank">1</span>
-        <span class="fake-pos" style="background:var(--pos-rb);">RB</span>
-        <span class="fake-name">Bijan Robinson</span>
-        <span class="fake-stat">22.4 PPG</span>
-        <span class="fake-stat" style="margin-left:8px;">78% snap</span>
-      </div>
-      <div class="fake-row">
-        <span class="fake-rank">2</span>
-        <span class="fake-pos" style="background:var(--pos-wr);">WR</span>
-        <span class="fake-name">Ja'Marr Chase</span>
-        <span class="fake-stat">21.8 PPG</span>
-        <span class="fake-stat" style="margin-left:8px;">28% tgt</span>
-      </div>
-      <div class="fake-row">
-        <span class="fake-rank">3</span>
-        <span class="fake-pos" style="background:var(--pos-qb);">QB</span>
-        <span class="fake-name">Josh Allen</span>
-        <span class="fake-stat">24.1 PPG</span>
-        <span class="fake-stat" style="margin-left:8px;">42 rush/g</span>
-      </div>
-      <div class="fake-row">
-        <span class="fake-rank">4</span>
-        <span class="fake-pos" style="background:var(--pos-te);">TE</span>
-        <span class="fake-name">Brock Bowers</span>
-        <span class="fake-stat">16.2 PPG</span>
-        <span class="fake-stat" style="margin-left:8px;">24% tgt</span>
-      </div>
-      <div class="fake-row">
-        <span class="fake-rank">5</span>
-        <span class="fake-pos" style="background:var(--pos-wr);">WR</span>
-        <span class="fake-name">CeeDee Lamb</span>
-        <span class="fake-stat">20.3 PPG</span>
-        <span class="fake-stat" style="margin-left:8px;">31% tgt</span>
-      </div>
+    <!-- Position filter tabs -->
+    <div class="mini-screener-tabs" style="display:flex; gap:0; border-bottom:3px solid var(--ink);">
+      <button class="mini-tab active" data-pos="" onclick="_miniFilter('')">ALL</button>
+      <button class="mini-tab" data-pos="QB" onclick="_miniFilter('QB')">QB</button>
+      <button class="mini-tab" data-pos="RB" onclick="_miniFilter('RB')">RB</button>
+      <button class="mini-tab" data-pos="WR" onclick="_miniFilter('WR')">WR</button>
+      <button class="mini-tab" data-pos="TE" onclick="_miniFilter('TE')">TE</button>
+    </div>
+    <!-- Live data table -->
+    <div id="miniScreenerBody" class="mini-screener-body" aria-label="Live screener preview">
+      <table class="mini-table">
+        <thead>
+          <tr>
+            <th style="width:30px;">#</th>
+            <th style="width:36px;">POS</th>
+            <th style="text-align:left;">Player</th>
+            <th class="mini-sortable" data-sort="ppg" onclick="_miniSort('ppg')">PPG</th>
+            <th class="mini-sortable" data-sort="games" onclick="_miniSort('games')">GP</th>
+            <th class="mini-sortable" data-sort="age" onclick="_miniSort('age')">Age</th>
+          </tr>
+        </thead>
+        <tbody id="miniScreenerRows">
+          <tr><td colspan="6" style="text-align:center; padding:32px; font-family:var(--font-hand); color:var(--ink-light);">pulling film...</td></tr>
+        </tbody>
+      </table>
     </div>
     <div class="screener-visual-footer">
-      <p>The Screener is forever free.</p>
-      <a href="/lab.html" class="btn-hero btn-hero-primary" style="font-size:14px; padding:10px 24px;">Open the Screener</a>
+      <p style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); margin:0;">live data from razzle.lol</p>
+      <a href="/lab.html" class="btn-hero btn-hero-primary" style="font-size:14px; padding:10px 24px;">Open the full Screener</a>
     </div>
   </div>
 </div>
@@ -840,6 +887,90 @@ function _updateHomeCTAs() {
 _updateHomeCTAs();
 // Re-run when auth state changes (async checkAuth or plan change)
 window.addEventListener('razzle-plan-changed', _updateHomeCTAs);
+
+// ─── Live Mini-Screener ──────────────────────────────────────────
+var _miniData = [];
+var _miniPos = '';
+var _miniSort = function(key) { /* defined below */ };
+var _miniSortKey = 'ppg';
+var _miniSortDir = 'desc';
+
+var POS_COLORS = { QB: 'var(--pos-qb)', RB: 'var(--pos-rb)', WR: 'var(--pos-wr)', TE: 'var(--pos-te)' };
+
+function _escHtml(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+function _renderMiniRows() {
+  var tbody = document.getElementById('miniScreenerRows');
+  if (!tbody) return;
+  var filtered = _miniPos ? _miniData.filter(function(p) { return p.position === _miniPos; }) : _miniData;
+  // Sort
+  filtered.sort(function(a, b) {
+    var va = a[_miniSortKey] || 0, vb = b[_miniSortKey] || 0;
+    return _miniSortDir === 'desc' ? vb - va : va - vb;
+  });
+  var rows = filtered.slice(0, 15);
+  if (!rows.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:24px; font-family:var(--font-hand); color:var(--ink-light);">no players found</td></tr>';
+    return;
+  }
+  var html = '';
+  for (var i = 0; i < rows.length; i++) {
+    var p = rows[i];
+    var posCol = POS_COLORS[p.position] || 'var(--ink-light)';
+    html += '<tr onclick="window.location=\'/lab.html\'">';
+    html += '<td style="color:var(--ink-light);">' + (i + 1) + '</td>';
+    html += '<td><span class="mini-pos" style="background:' + posCol + ';">' + _escHtml(p.position || '') + '</span></td>';
+    html += '<td style="text-align:left; font-weight:600;">' + _escHtml(p.name || '') + '</td>';
+    html += '<td>' + (p.ppg != null ? p.ppg.toFixed(1) : '-') + '</td>';
+    html += '<td>' + (p.games || '-') + '</td>';
+    html += '<td>' + (p.age || '-') + '</td>';
+    html += '</tr>';
+  }
+  tbody.innerHTML = html;
+  // Update sort headers
+  document.querySelectorAll('.mini-sortable').forEach(function(th) {
+    th.classList.toggle('sort-active', th.getAttribute('data-sort') === _miniSortKey);
+  });
+}
+
+_miniSort = function(key) {
+  if (_miniSortKey === key) {
+    _miniSortDir = _miniSortDir === 'desc' ? 'asc' : 'desc';
+  } else {
+    _miniSortKey = key;
+    _miniSortDir = 'desc';
+  }
+  _renderMiniRows();
+};
+
+window._miniFilter = function(pos) {
+  _miniPos = pos;
+  document.querySelectorAll('.mini-tab').forEach(function(t) {
+    t.classList.toggle('active', t.getAttribute('data-pos') === pos);
+  });
+  _renderMiniRows();
+};
+
+// Fetch live data
+fetch('/api/players?limit=60&sort=ppg&dir=desc&min_gp=4')
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    _miniData = (data.players || data || []).map(function(p) {
+      return {
+        name: p.display_name || p.name || '',
+        position: p.position || '',
+        ppg: parseFloat(p.ppg) || 0,
+        games: parseInt(p.games_played || p.games) || 0,
+        age: parseInt(p.age) || null
+      };
+    });
+    _renderMiniRows();
+  })
+  .catch(function() {
+    // Fallback: keep the static placeholder
+    var tbody = document.getElementById('miniScreenerRows');
+    if (tbody) tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:24px; font-family:var(--font-hand); color:var(--ink-light);">couldn\'t reach the film room. <a href="/lab.html" style="color:var(--orange);">open the screener</a> directly.</td></tr>';
+  });
 </script>
 </body>
 </html>
