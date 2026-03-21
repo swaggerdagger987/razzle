@@ -2931,7 +2931,7 @@ function populateSeasonSelect() {
     sel.innerHTML = html;
     sel.onchange = (e) => {
       var val = e.target.value;
-      state.season = val === "career" ? "career" : parseInt(val);
+      state.season = val === "career" ? "career" : (parseInt(val, 10) || 2025);
       state.week = 0;
       state.offset = 0;
       clearTimeout(_seasonDebounce);

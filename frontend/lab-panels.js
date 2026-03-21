@@ -8535,14 +8535,6 @@
         });
         ac.innerHTML = html;
         ac.style.display = html ? 'block' : 'none';
-        ac.querySelectorAll('.rbld-ac-item').forEach(function(item) {
-          item.addEventListener('click', function() {
-            var pid = this.getAttribute('data-pid');
-            addPlayer(pid);
-            ac.style.display = 'none';
-            el.querySelector('.rbld-search').value = '';
-          });
-        });
       }).catch(function() {
         var ac = el.querySelector('.rbld-autocomplete');
         if (ac) ac.style.display = 'none';
@@ -8657,6 +8649,16 @@
       var q = this.value.trim();
       if (q.length < 2) { el.querySelector('.rbld-autocomplete').style.display = 'none'; return; }
       searchTimeout = setTimeout(function() { searchPlayers(q); }, 200);
+    });
+
+    // Event delegation for autocomplete items (avoids listener leak per search)
+    el.querySelector('.rbld-autocomplete').addEventListener('click', function(e) {
+      var item = e.target.closest('.rbld-ac-item');
+      if (!item) return;
+      var pid = item.getAttribute('data-pid');
+      addPlayer(pid);
+      this.style.display = 'none';
+      el.querySelector('.rbld-search').value = '';
     });
 
     document.addEventListener('click', function(e) {

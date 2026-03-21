@@ -497,7 +497,7 @@
     for (var k = 0; k < removes.length; k++) {
       (function(btn) {
         btn.addEventListener('click', function() {
-          var idx = parseInt(btn.getAttribute('data-rm'), 10);
+          var idx = parseInt(btn.getAttribute('data-rm'), 10) || 0;
           players.splice(idx, 1);
           updateUrl();
           renderSlots();
@@ -514,7 +514,7 @@
   }
 
   function bindSearch(input) {
-    var slot = parseInt(input.getAttribute('data-slot'), 10);
+    var slot = parseInt(input.getAttribute('data-slot'), 10) || 0;
     var dd = slotsEl.querySelector('[data-dd="' + slot + '"]');
     var timer = null;
 
