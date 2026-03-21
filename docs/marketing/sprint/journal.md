@@ -1413,6 +1413,93 @@ Sources:
 
 3. **What does the "Reddit screenshot → Bureau" funnel look like end-to-end — what's the exact URL, landing page, and CTA sequence from seeing a scouting report screenshot to entering a Sleeper username?** (Q19's answer proposes a `?ref=reddit` flow with a stripped landing page. But what exactly should that page look like? What's above the fold? Is it the same Bureau page or a dedicated landing page? What's the copy?)
 
-## NEXT QUESTION: What tone should Bones use in scouting report quotes — and can template-based quotes achieve 80% of LLM quality at 0% of the cost?
+## Question 20: What tone should Bones use in scouting report quotes — and can template-based quotes achieve 80% of LLM quality at 0% of the cost?
+
+**Why this matters**: The Bones quote in Zone 2 of the scouting report card (Q17) is the personality layer — it's what makes the card feel alive vs. a spreadsheet printout. The question is whether this needs an LLM call ($0.01-0.03/quote, 1-3s latency, API dependency) or whether well-crafted templates with variable injection achieve the same screenshot-worthy effect at zero marginal cost.
+
+### Answer
+
+**Verdict: Templates win — and it's not close. The Bones voice is a Mad Libs problem, not a creative writing problem.**
+
+**1. The Bones Voice: Snarky intel briefing, not comedy routine.**
+
+Bones is Razzle's Bengal tiger — "film room junkie energy, earnest, slightly obsessive about precision, dry wit in the margins" (NORTH_STAR.md). The scouting report quote isn't stand-up comedy. It's a field intelligence note — terse, observational, slightly menacing. Think: scout's notebook, not Twitter joke.
+
+The tone spectrum:
+- **Too bland**: "This manager trades frequently." (This is a stat label, not a voice.)
+- **Too try-hard**: "LOL this guy panic-trades harder than me chasing a laser pointer 😂" (Cringe. Kills credibility.)
+- **The sweet spot**: "sells after 2 straight losses. he's at 1. one more and he'll move a starter." (Lowercase. Clipped. Observational. The humor is in the *implication*, not the punchline.)
+
+The voice rules: lowercase (feels like scribbled notes), short sentences (max 15 words), present tense, never uses exclamation points, states facts that *imply* the roast. The comedy comes from Bones treating your leaguemate like a scouting target — clinical detachment applied to your buddy Dave.
+
+**2. Why templates beat LLMs for THIS specific use case.**
+
+Emily Short's research on procedural text in interactive fiction identifies a key insight: "Among the most straightforward effects of procedurally-generated text is snark or comedy — a function for which not getting it perfectly right is a distinct advantage." Slight awkwardness in template text reads as *personality* rather than error — the reader's brain fills in the character behind the words.
+
+Spotify Wrapped proves this at scale: 425 million tweets in 3 days (2022), all driven by templated text with variable injection — "You were in the top 0.5% of [artist] listeners" isn't LLM-generated, it's `template + data = feels personal`. The virality comes from the DATA being personal, not the prose being artful.
+
+The Bones quote has exactly 5 behavioral archetypes × ~8 data variables = ~40 template variations needed. That's a copywriting afternoon, not an engineering problem.
+
+**3. The Template Library: 8 templates per archetype, variable-injected.**
+
+**PANIC SELLER templates** (triggered when `behaviorTag === 'PANIC SELLER'`):
+- `"sells after {lossStreak} straight losses. he's at {currentStreak}. clock's ticking."`
+- `"dumped {panicTrade} after week {panicWeek}. that player scored {nextWeekPts} the next week."`
+- `"{tradeCount} trades this season. {burstCount} came after losses. pattern's not subtle."`
+- `"burns {faabPct}% of FAAB by week {faabDepletionWeek}. late-season waivers are free money against him."`
+
+**HOARDER templates**:
+- `"{pickCount} draft picks stashed. hasn't used one in {dormantWeeks} weeks. collecting, not competing."`
+- `"roster's aging at {avgAge}. still won't sell. loyalty isn't a strategy."`
+- `"{tradeCount} trades in {seasons} seasons. get him a 'just browsing' sign."`
+
+**AGGRESSIVE templates**:
+- `"already made {tradeCount} moves this month. if it's on the wire, he's claimed it."`
+- `"trades at {tradesPerWeek}/week. by december he'll have churned the entire roster."`
+
+**PATIENT / STEADY templates**:
+- `"hasn't made a move in {dormantWeeks} weeks. either confident or asleep. check the roster age."`
+- `"only {tradeCount} trades all season. when he does move, pay attention — it's calculated."`
+
+Each template uses 1-3 variables already computed in `ownerProfiles`. The randomization is: pick 1 of ~8 templates for the archetype, inject the numbers. That's `Math.random()`, not `fetch('/api/llm')`.
+
+**4. When to upgrade to LLM (later, not now).**
+
+Templates handle the MVP. LLM quotes become worthwhile when: (a) Razzle has Pro subscribers paying $20/mo and can absorb $0.03/quote, (b) the card needs to reference *cross-manager* patterns ("he always trades with {rivalName} — they've done {mutualTrades} deals"), or (c) users see the same quote twice and complain. At 40 templates across 5 archetypes, a user with a 12-team league sees 12 quotes — repetition is unlikely in the first few views. Template fatigue is a Year 2 problem.
+
+**5. The secret weapon: template SELECTION based on data extremes.**
+
+The quote doesn't just need personality — it needs to pick the MOST interesting fact. Template selection logic: for each manager, score each template by how extreme its variable is (percentile rank within the league). "Burns 92% of FAAB by week 6" is more interesting than "burns 45% by week 10." Pick the template whose variable is most extreme (highest or lowest percentile). This makes every quote feel hand-picked even though it's algorithmic. Spotify Wrapped does this — it doesn't tell you your 50th-percentile stat, it tells you your 99th-percentile one.
+
+### Self-Critique
+
+**What's backed by data**: Emily Short's procedural text research (2014, widely cited in game narrative design) confirms template text produces effective snark. Spotify Wrapped's template-based personalization driving 425M tweets is documented by Customer.io and Yahoo. The behavioral archetype system and data variables already exist in production (`league-intel.html` lines 3237-3261, `ownerProfiles` object). The 5 archetypes × 8 templates = 40 variations math is straightforward. The "extreme value selection" pattern is confirmed by Spotify's approach of surfacing outlier stats.
+
+**What's speculation**: The specific template examples haven't been A/B tested with real dynasty users. The claim that "40 templates prevent repetition fatigue" assumes 12-team leagues — a 16-team league with repeat visits could hit repeats faster. The assertion that lowercase + clipped sentences = "snarky intel briefing" is a tonal judgment that could read as lazy rather than stylish to some users. The line between "observational roast" and "mean-spirited" hasn't been tested with real league group chats.
+
+**Confidence: 9/10** — Template-based quotes are the correct MVP approach. The data is already computed, the voice rules are clear, the Spotify Wrapped precedent proves templates + personalization = viral sharing. The only risk is tone calibration, which requires real user feedback (ship → iterate, not theorize → perfect).
+
+Sources:
+- [Emily Short: Procedural Text Generation in IF](https://emshort.blog/2014/11/18/procedural-text-generation-in-if/) — "snark or comedy is one of the straightforward effects of procedurally-generated text"
+- [Customer.io: Create Your Own Spotify Wrapped Campaign](https://learn.customer.io/personalization/create-spotify-wrapped-campaign) — template-based personalization driving viral sharing
+- [Yahoo: Spotify Wrapped as Identity Test](https://creators.yahoo.com/lifestyle/story/spotify-wrapped-isnt-just-a-recap-its-the-internets-favorite-identity-test-and-heres-how-to-find-yours-005802126.html) — 425M tweets, outlier stats as personality
+- [Buzz Music: How Spotify Wrapped Became Our Personality Test](https://www.buzz-music.com/post/how-spotify-wrapped-became-our-personality-test) — data + templates = feels personal
+- [Pyxidis: Using LLMs for Game Dialogue](https://pyxidis.tech/llm-for-dialogue) — template constraints vs LLM freedom tradeoffs
+- [Bracery: Procedural Text Generator](https://github.com/ihh/bracery) — grammar-based template systems for humor
+- Razzle codebase: `frontend/league-intel.html` lines 3237-3261 (behavioral tag classification, 5 archetypes)
+- Razzle codebase: `docs/NORTH_STAR.md` line 16 (Razzle voice: "film room junkie, dry wit in the margins")
+- Prior journal: Q17 (scouting report card design, Zone 2 = Bones quote), Q19 (trust barrier interventions)
+
+---
+
+### Next 3 Questions This Raises
+
+1. **What's the minimum Sleeper league history needed for behavioral profiling to look credible — and how does Razzle handle leagues with <1 year of data?** (The scouting report card shows stats like "Trades/yr: 4.2" and "Panic score: 42%". One season of data makes these look thin. Two seasons minimum for trend lines. How does the UI degrade gracefully for new leagues?)
+
+2. **What does the "Reddit screenshot → Bureau" funnel look like end-to-end — what's the exact URL, landing page, and CTA sequence from seeing a scouting report screenshot to entering a Sleeper username?** (Q19's answer proposes a `?ref=reddit` flow with a stripped landing page. But what exactly should that page look like? What's above the fold? What's the copy?)
+
+3. **How should Razzle's free tier limit Bureau access — by number of scouting reports generated, by league count, or by feature depth (e.g., stat block free, exploit playbook Pro-only)?** (The Bureau is the conversion engine. Too much free = no reason to pay. Too little free = no viral screenshots. What's the right gate?)
+
+## NEXT QUESTION: What's the minimum Sleeper league history needed for behavioral profiling to look credible — and how does Razzle handle leagues with <1 year of data?
 
 ---
