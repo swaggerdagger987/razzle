@@ -2159,12 +2159,25 @@ smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correc
 smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
 smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
 smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
-smoke-local	OK	-	-	-	pass	smoke: 11/11 pass (health, players, pos filter, sort, season, week, screener, nan, neg, options)	100	2026-03-21T06:07
-smoke-prod	OK	-	-	-	pass	smoke: 11/11 pass (health, players, pos filter, sort, season, week, screener, nan, neg, options)	100	2026-03-21T06:07
-37	OK	frontend/regression.html	486-608	render	pass	re-audit: FUNC-055 VERIFIED FIXED. regression.html uses correct API fields (positive_regression, negative_regression, pos_avg_td_rates, td_diff). API returns 50+50 candidates. Data sanity: positive regression all td_diff<0, negative all td_diff>0. Pro-gated in Lab.	100	2026-03-21T06:15
-37	OK	frontend/lab-panels.js	5037-5072	renderPT	pass	re-audit: FUNC-056 VERIFIED FIXED. pace panel uses /api/pace-tracker which returns milestone objects with {label, target, current, projected}. Ship Loop fix (p.projections→p.milestones, s.milestone→s.target) matches API shape. McCaffrey: 1000 rush yd ON PACE (cur=1202, proj=1202, tgt=1000). Progress bars will render correctly.	100	2026-03-21T06:25
-13	OK	frontend/career.html	962-971	initialLoad	pass	re-audit: FUNC-057 VERIFIED FIXED. Array.isArray(d) guard handles /api/players/quick-search returning raw array. Standalone career.html redirects to Lab panel — fix is defensive for iframe edge case only.	100	2026-03-21T06:30
-cross	OK	-	-	-	pass	Cross-endpoint data consistency: McCaffrey PPR=416.6/17GP=24.51 PPG matches across screener, VORP, profile. Nacua 375.0/16=23.44 consistent. Replacement thresholds: QB=17.48, RB=12.15, WR=11.31, TE=10.58.	100	2026-03-21T06:35
-cross	OK	-	-	-	pass	IEEE 754 artifact scan: 0 issues across 6 endpoints (trade-value-chart, breakout-candidates, consistency, efficiency, stock-watch, report-cards). All float values clean.	100	2026-03-21T06:36
-panel	OK	-	-	-	pass	Free panel browser test: Rankings (27 rows), Breakouts (27 rows), Stat Leaders (27 rows), Dashboard. All 0 JS errors, data loads correctly.	100	2026-03-21T06:38
-prod	OK	-	-	-	pass	Prod verification: landing page (0 errors), Lab (27 rows, 0 errors), compare page (11 rows, 0 errors), special char search (Ja'Marr→Chase, Amon-Ra→St.Brown). All functional.	100	2026-03-21T06:40
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
