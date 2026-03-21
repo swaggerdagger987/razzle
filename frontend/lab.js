@@ -4141,6 +4141,13 @@ function saveCurrentView() {
     columnWidths: state.columnWidths ? JSON.parse(JSON.stringify(state.columnWidths)) : {},
     filters: JSON.parse(JSON.stringify(state.filters)),
     columns: isProspectView() ? [...state.prospectColumns] : state.universe === "college" ? [...state.collegeColumns] : [...state.visibleColumns],
+    week: state.week || 0,
+    teams: state.teams ? [...state.teams] : [],
+    minGP: state.minGP || 0,
+    tierBreaks: !!state.tierBreaks,
+    groupHeaders: !!state.groupHeaders,
+    summaryBar: !!state.summaryBar,
+    tagFilter: state.tagFilter || "",
   };
 
   views.unshift(view);
@@ -4192,6 +4199,13 @@ function loadSavedView(id) {
   if (view.leaderBadges !== undefined) state.leaderBadges = view.leaderBadges;
   if (view.density !== undefined) state.density = view.density;
   if (view.columnWidths) state.columnWidths = view.columnWidths;
+  if (view.week !== undefined) state.week = view.week;
+  if (view.teams) state.teams = [...view.teams];
+  if (view.minGP !== undefined) state.minGP = view.minGP;
+  if (view.tierBreaks !== undefined) state.tierBreaks = view.tierBreaks;
+  if (view.groupHeaders !== undefined) state.groupHeaders = view.groupHeaders;
+  if (view.summaryBar !== undefined) state.summaryBar = view.summaryBar;
+  if (view.tagFilter !== undefined) state.tagFilter = view.tagFilter;
 
   // Legacy column arrays (old format) + new format — validate against universe
   if (view.columns) {
@@ -6120,7 +6134,7 @@ async function openPlayerProfile(playerId) {
   content.innerHTML = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">' + razzleLoading() + '</div>';
 
   try {
-    const data = await apiFetch(`/api/players/${playerId}/profile`);
+    const data = await apiFetch(`/api/players/${encodeURIComponent(playerId)}/profile`);
     renderProfile(data, content);
   } catch (err) {
     content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the data fetch... try again in a sec.</div>`;

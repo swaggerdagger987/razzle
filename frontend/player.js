@@ -758,11 +758,27 @@ function openCompareSearch() {
 }
 
 function copyPlayerURL() {
-  navigator.clipboard.writeText(window.location.href).then(() => {
-    showToast("link copied.");
-  }).catch(() => {
-    showToast("fumbled the copy — try again");
-  });
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      showToast("link copied.");
+    }).catch(() => {
+      showToast("fumbled the copy — try again");
+    });
+  } else {
+    try {
+      const ta = document.createElement("textarea");
+      ta.value = window.location.href;
+      ta.style.position = "fixed";
+      ta.style.left = "-9999px";
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      showToast("link copied.");
+    } catch(e) {
+      showToast("fumbled the copy — try again");
+    }
+  }
 }
 
 function showToast(msg) {

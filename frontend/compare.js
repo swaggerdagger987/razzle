@@ -241,10 +241,11 @@ function renderStatDiffTable(p1, p2, c1, c2, pos1, pos2, color1, color2) {
     var cls1 = winner === 1 ? ' class="stat-win" style="color:' + color1 + ';"' : '';
     var cls2 = winner === 2 ? ' class="stat-win" style="color:' + color2 + ';"' : '';
 
-    // Diff bar
+    // Diff bar (use absolute values to handle negative stats like EPA)
     var bar = "";
-    if (v1 != null && v2 != null && (v1 + v2) > 0 && isFinite(v1 + v2)) {
-      var pct1 = (v1 / (v1 + v2)) * 100;
+    var absTotal = (v1 != null && v2 != null) ? (Math.abs(v1) + Math.abs(v2)) : 0;
+    if (absTotal > 0 && isFinite(absTotal)) {
+      var pct1 = (Math.abs(v1) / absTotal) * 100;
       bar = '<span class="compare-diff-bar" style="width:' + Math.max(pct1, 5) + '%; background:' + color1 + '; opacity:0.5;"></span>' +
             '<span class="compare-diff-bar" style="width:' + Math.max(100 - pct1, 5) + '%; background:' + color2 + '; opacity:0.5;"></span>';
     }
@@ -850,11 +851,27 @@ function adjustColor(hex, amount) {
 }
 
 function copyCompareURL() {
-  navigator.clipboard.writeText(window.location.href).then(function() {
-    showToast("link copied.");
-  }).catch(function() {
-    showToast("fumbled the copy — try again");
-  });
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(window.location.href).then(function() {
+      showToast("link copied.");
+    }).catch(function() {
+      showToast("fumbled the copy — try again");
+    });
+  } else {
+    try {
+      var ta = document.createElement("textarea");
+      ta.value = window.location.href;
+      ta.style.position = "fixed";
+      ta.style.left = "-9999px";
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      showToast("link copied.");
+    } catch(e) {
+      showToast("fumbled the copy — try again");
+    }
+  }
 }
 
 function showToast(msg) {
