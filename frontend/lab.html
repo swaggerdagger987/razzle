@@ -180,6 +180,18 @@
   .sidebar-recent.has-items {
     display: block;
   }
+  .start-here-hint {
+    display: block;
+    font-family: var(--font-hand);
+    font-size: 12px;
+    color: var(--ink-light);
+    line-height: 1.2;
+    margin-top: 1px;
+  }
+  .start-here-item {
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+  }
   .sidebar-recent-label {
     font-family: var(--font-mono);
     font-size: 9px;
@@ -3137,6 +3149,17 @@
       <div class="sidebar-recent-chips" id="sidebarFavChips"></div>
     </div>
 
+    <!-- START HERE — for first-time visitors -->
+    <div class="sidebar-start-here" id="sidebarStartHere" style="display:none;">
+      <div style="font-family:var(--font-display); font-size:13px; color:var(--orange); padding:0 12px 4px; letter-spacing:0.5px;">START HERE</div>
+      <a class="lab-sidebar-item start-here-item" data-panel="screener" onclick="switchPanel('screener');_trackStartHere()">The Screener<span class="start-here-hint">the research lab</span></a>
+      <a class="lab-sidebar-item start-here-item" data-panel="rankings" onclick="switchPanel('rankings');_trackStartHere()">Dynasty Rankings<span class="start-here-hint">know what your roster is worth</span></a>
+      <a class="lab-sidebar-item start-here-item" data-panel="tradevalues" onclick="switchPanel('tradevalues');_trackStartHere()">Trade Values<span class="start-here-hint">every player's trade stock</span></a>
+      <a class="lab-sidebar-item start-here-item" data-panel="breakouts" onclick="switchPanel('breakouts');_trackStartHere()">Breakout Finder<span class="start-here-hint">find your next sleeper</span></a>
+      <a class="lab-sidebar-item start-here-item" data-panel="compare" onclick="switchPanel('compare');_trackStartHere()">Compare<span class="start-here-hint">head-to-head matchups</span></a>
+      <div style="border-bottom:2px dashed var(--ink-faint); margin:8px 12px;"></div>
+    </div>
+
     <div class="sidebar-recent" id="sidebarRecent">
       <div class="sidebar-recent-label">Recent</div>
       <div class="sidebar-recent-chips" id="sidebarRecentChips"></div>
@@ -4438,6 +4461,17 @@
     // Update recently viewed panels
     _updateRecentPanels(panelName);
 
+    // Track panel visits for Start Here auto-collapse
+    try {
+      var _pv = parseInt(localStorage.getItem('razzle_panel_visits') || '0', 10);
+      _pv++;
+      localStorage.setItem('razzle_panel_visits', String(_pv));
+      if (_pv >= 5) {
+        var _sh = document.getElementById('sidebarStartHere');
+        if (_sh) _sh.style.display = 'none';
+      }
+    } catch(e) {}
+
     // Update URL state (include universe if not NFL)
     var urlParams = new URLSearchParams();
     if (panelName !== 'screener') urlParams.set('panel', panelName);
@@ -4461,6 +4495,31 @@
       document.getElementById('labSidebar').classList.add('collapsed');
     }
   } catch(e) {}
+
+  // ─── Start Here section for new users ──────────────────────────
+  (function _initStartHere() {
+    try {
+      var visits = parseInt(localStorage.getItem('razzle_panel_visits') || '0', 10);
+      var dismissed = localStorage.getItem('razzle_start_here_dismissed');
+      var el = document.getElementById('sidebarStartHere');
+      if (!el) return;
+      if (visits < 5 && !dismissed) {
+        el.style.display = 'block';
+      }
+    } catch(e) {}
+  })();
+
+  window._trackStartHere = function() {
+    try {
+      var visits = parseInt(localStorage.getItem('razzle_panel_visits') || '0', 10);
+      visits++;
+      localStorage.setItem('razzle_panel_visits', String(visits));
+      if (visits >= 5) {
+        var el = document.getElementById('sidebarStartHere');
+        if (el) el.style.display = 'none';
+      }
+    } catch(e) {}
+  };
 
   // ─── Sidebar keyboard navigation ─────────────────────────────
   (function() {
