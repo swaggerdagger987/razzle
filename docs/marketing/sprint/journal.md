@@ -1847,6 +1847,283 @@ Sources:
 
 3. **Should Razzle offer a "defensive purchase" — where a manager pays to HIDE their own scouting report from leaguemates, or to see who has viewed their report?** (If behavioral profiling is powerful enough to exploit, some managers will want to BLOCK it. This creates a second revenue stream from the same feature.)
 
-## NEXT QUESTION: What should Razzle's initial Reddit seeding strategy look like — which subreddits, what post formats, what time of day, and how many posts before it feels like spam?
+## Question 25: What should Razzle's initial Reddit seeding strategy look like — which subreddits, what post formats, what time of day, and how many posts before it feels like spam?
+
+**Why this matters**: The North Star says Razzle is "grown organically through Twitter and Reddit." Reddit is the primary discovery channel for dynasty managers. Getting the seeding strategy wrong means either (a) invisible posts that get zero traction, or (b) getting flagged as spam and burned before launch. This research covers the full tactical picture.
+
+### Answer
+
+**Verdict: r/DynastyFF is the primary target (126K subs, year-round activity, tool-friendly). r/fantasyfootball is the reach play (2M+ subs, strict rules, seasonal). The strategy is "be a redditor with a tool, not a tool with a reddit account" — minimum 2-3 weeks of pure value comments before any link drops, then weekly recurring data series during draft season (April-August).**
+
+---
+
+### 1. Subreddit Landscape: Size, Activity, and Tool-Friendliness
+
+| Subreddit | Subscribers | Comments/Day Rank | Posts/Day Rank | Year-Round? | Tool-Friendly? |
+|-----------|------------|-------------------|----------------|-------------|----------------|
+| r/fantasyfootball | ~2,045,000 | #28 | #35 | No (Sep-Dec spike) | Moderate — strict rules, high mod activity |
+| r/DynastyFF | ~126,000 | #188 | #173 | Yes (dynasty is 365) | High — tools regularly shared and welcomed |
+| r/Fantasy_Football | ~134,000 | #513 | #622 | Minimal (appears low-activity) | Unknown — low engagement suggests less moderation |
+| r/SleeperApp | ~14,000 | #9,492 | #8,296 | Minimal | Platform-specific — only Sleeper-related content |
+| r/KTC | Unknown (small) | Unknown | Unknown | Niche | KeepTradeCut-focused only |
+| r/DynastyFFTradeAdvice | Unknown | Unknown | Unknown | Yes | Trade-specific, not tool discussion |
+
+**Key findings:**
+
+- **r/DynastyFF is the beachhead.** It has 126K dedicated dynasty managers who are active year-round. Dynasty players are Razzle's exact target — they care about long-term analytics, behavioral patterns, and trade optimization. The subreddit directs trade/team questions to r/DynastyFFTradeAdvice, indicating mature moderation that values signal over noise. Tools like Dynasty Daddy, KeepTradeCut, and FantasyCalc are regularly discussed and linked. This subreddit experienced 6x subscriber growth between 2023-2024, indicating a rapidly expanding audience.
+
+- **r/fantasyfootball is the mass play.** At 2M+ subscribers it has 16x the audience, but it is overwhelmingly seasonal (August-December), highly moderated, and has strict rules about self-promotion. It ranks #28 in daily comments and #35 in daily posts across ALL of Reddit during peak season. Best used for "data drop" posts during NFL season, not tool promotion. The mod team is active on Twitter (@RedditFFMod).
+
+- **r/Fantasy_Football is mostly dead.** Despite 134K subscribers, actual engagement is minimal (last tracked comment: December 2023 per subreddit stats). It appears to be a less-moderated alternative that lost its community to the main sub. Skip it.
+
+- **r/SleeperApp is too small and too narrow.** At 14K subscribers with near-zero daily activity, it is not worth targeting for launches. Useful only for answering Sleeper-specific questions as a credibility builder.
+
+---
+
+### 2. Best Days and Times to Post
+
+**General Reddit optimal windows (all times Eastern):**
+
+| Window | Why |
+|--------|-----|
+| 6-9 AM ET weekdays | Pre-work browsing, posts gain momentum before peak hours |
+| 12-2 PM ET weekdays | Lunch break browsing |
+| 7-9 PM ET weekdays | Evening wind-down |
+| 8-10 AM ET weekends | Relaxed late-morning browsing |
+
+**Best days:** Tuesday, Wednesday, Thursday see highest general Reddit engagement. Monday and Friday show slight dips.
+
+**Fantasy football-specific timing:**
+- **r/fantasyfootball peaks:** Late August through early September (draft season) is the traffic supernova. The subreddit's traffic pattern is extremely seasonal — nearly dead February-June, ramping July, explosive August-December.
+- **r/DynastyFF peaks:** More evenly distributed year-round because dynasty is a 365-day format. However, there are clear spikes around the NFL Draft (late April), rookie draft season (May-June), and preseason (August).
+- **For Razzle's April-May launch window:** Tuesday or Wednesday morning, 7-9 AM ET is the sweet spot. Dynasty managers are thinking about rookie drafts and offseason trades during this window.
+
+**NFL game day consideration:** Sunday mornings 8-10 AM ET for in-season posts (lineup-adjacent content). Avoid Sunday afternoon through Monday morning — users are watching games and checking scores, not reading analysis posts.
+
+---
+
+### 3. Post Formats That Perform Best
+
+**Proven high-performers on fantasy football Reddit, ranked by engagement:**
+
+1. **Recurring weekly data series** — The gold standard. PeakedInHighSkool posts weekly trade value charts and became the most-referenced trade resource on r/fantasyfootball. Subvertadown posted weekly streaming rankings (D/ST, Kicker, QB) under branded series names ("Defensive Maneuvers", "But Here's the Kicker") from 2017-2024, building an 8-year reputation. Key insight: **consistency beats virality**. A weekly series that delivers value every single week builds compound credibility that a one-off viral post cannot.
+
+2. **Data drops with original analysis** — Posts that present original data with clear takeaways. Not "here's a link to my tool" but "I analyzed 3 years of Sleeper trade data and found that managers who lose 3+ games in a row accept trades at 15% below market value — here's the data." The analysis IS the content; the tool is mentioned as the source.
+
+3. **Screenshot/visualization posts** — Images get higher engagement than text on Reddit. Clean, visually compelling data visualizations (charts, heatmaps, tier lists) that tell a story at a glance. The watermarked screenshot is the Razzle playbook per the North Star.
+
+4. **"I built a thing" posts** — Common on r/DynastyFF. Dynasty Daddy's launch post received 831 upvotes. The format works when: (a) the tool solves a real pain point, (b) the post leads with the problem not the solution, (c) the developer engages heavily in comments. The title matters enormously — "I built a free tool that..." outperforms "Check out my new site."
+
+5. **[Discussion] / hot takes backed by data** — Controversial-but-defensible takes with data support generate engagement through debate. "Saquon Barkley is the most overvalued player in dynasty — here's the data" with a compelling chart will outperform a neutral analysis post.
+
+6. **Trade value Tuesday threads** — r/fantasyfootball has a recurring "Trade Value Tuesday" thread where users discuss trade values. Participating in these threads with data-backed opinions is a natural way to build credibility and mention tools organically.
+
+**Post formats that underperform or get removed:**
+- Direct link posts to external tools (removed as self-promotion)
+- Short text posts without substance
+- Anything that reads like a press release or marketing copy
+- Paywalled content without free value upfront
+
+---
+
+### 4. The Self-Promotion Line: Where "Valuable" Becomes "Spam"
+
+**Reddit's official sitewide policy:**
+- Repeatedly posting links to your own content/site is spam
+- If your contribution to Reddit consists primarily of links to your own site, you are a spammer
+- Using multiple accounts to upvote your own content results in permanent + IP bans
+- As of fall 2024, the FTC's Fake Reviews and Testimonials ruling made buying upvotes and paying for mentions explicitly illegal at the federal level
+
+**The 90/10 Rule (a.k.a. 9:1 Rule):**
+- 90% of your Reddit activity should be genuine, non-promotional participation — commenting, answering questions, sharing insights unrelated to your product
+- 10% maximum can include self-promotional elements
+- This ratio is measured across your entire account history, not per subreddit
+- Moderators and users WILL check your post history when you share a tool
+
+**The golden principle:** "It's perfectly fine to be a Redditor with a website. It's not okay to be a website with a Reddit account."
+
+**Practical posting cadence for Razzle:**
+- **Week 1-3 (pre-launch):** Zero promotion. Comment helpfully on 3-5 threads per day across r/DynastyFF, r/fantasyfootball, and dynasty-related threads. Answer trade questions, share analysis, be genuinely useful. Build to ~50+ karma minimum.
+- **Week 4:** First "data drop" post — original analysis from the Lab, no direct tool promotion. Mention the tool only if someone asks "how did you make this?"
+- **Weeks 5-8:** One data drop per week, alternating between subreddits. Continue daily commenting (3-5 comments/day).
+- **Ongoing:** Maximum 1 promotional-adjacent post per week per subreddit. Continue daily value comments. The ratio should always stay well above 90/10.
+
+**What crosses the line:**
+- More than 1 tool post per week in the same subreddit
+- Posting the same link to multiple subreddits simultaneously (crosspost spam)
+- Copy-pasting identical comments about your tool across threads
+- Failing to engage in comments on your own posts
+- Posting tool links without being asked in "what tools do you use?" threads when your account history shows nothing but tool promotion
+- Using alts to boost your posts or comment favorably
+
+**What stays on the right side:**
+- Weekly data series with genuine original analysis (the tool is the source, not the pitch)
+- Transparently disclosing "Full disclosure: I built this" when sharing
+- Engaging deeply in comments — answering every question, taking feedback, being humble
+- Offering free value with no strings — no email gates, no paywalls on the shared content
+- Letting other users share your tool (the best outcome — organic word-of-mouth)
+
+---
+
+### 5. Successful Tool Launch Case Studies
+
+**Subvertadown (2017-2024) — The Blueprint for Recurring Series:**
+- Posted exclusively to r/fantasyfootball for 8 years
+- Created branded weekly series: "Defensive Maneuvers" (D/ST), "But Here's the Kicker" (K), "Two Cents for a Quarterback" (QB)
+- Published accuracy reports and analytical deep-dives alongside rankings to build credibility
+- Initially Reddit-exclusive content; by 2022 introduced a paid website while maintaining free Reddit content
+- Published a full "Compendium of Reddit Posts 2017-2024" on their site — proving the scale of consistent Reddit engagement
+- **Lesson for Razzle:** Consistency over years, not viral one-offs. Start a branded weekly series during rookie draft season (April-June) that becomes expected content.
+
+**PeakedInHighSkool — Trade Value Charts:**
+- Created a model combining expert data and user data to generate weekly trade value charts
+- Became the single most-referenced trade resource on r/fantasyfootball
+- Charts released to Patreon subscribers on Tuesdays, then shared with the Reddit community
+- Built enough reputation to quit full-time job and become Product Manager at DraftSharks.com in 2023
+- **Lesson for Razzle:** Provide the most useful version free on Reddit. The paid version adds convenience/early access, not core functionality. The free version IS the marketing.
+
+**Dynasty Daddy — "I Built a Thing" Launch:**
+- Open-source webapp integrating Sleeper API + KeepTradeCut data
+- Launch post on r/DynastyFF received 831 upvotes — a strong signal for that subreddit's size
+- GitHub repository public, transparent about being a community project
+- **Lesson for Razzle:** Open, transparent, free tools get celebrated on r/DynastyFF. The community rewards builders who give back.
+
+**KeepTradeCut — Crowdsourced Community Tool:**
+- Core mechanic (Keep/Trade/Cut voting) is inherently social and Reddit-native — users participate in creating the rankings
+- Became the consensus dynasty trade value source
+- "A resource that's both for dynasty players and by dynasty players"
+- **Lesson for Razzle:** Tools that make users feel like contributors, not just consumers, spread organically. If Razzle's Lab can create content that users feel ownership over (custom formulas, community-voted rankings), it becomes self-spreading.
+
+**Sleeper — Word of Mouth Growth:**
+- Grew to 5 million MAU with zero ad spend in early years
+- Strategy: "allowed the app to grow by word of mouth and by engaging with users on Twitter and Reddit"
+- 50% retention rate on every app download — product quality drove organic growth
+- Every league creation invites 11 other users — built-in viral coefficient
+- **Lesson for Razzle:** Product quality and shareability are the growth engine. Reddit seeding lights the match, but the product has to be the fuel.
+
+---
+
+### 6. Failed Approaches and Anti-Patterns
+
+While I could not find specific documented cases of fantasy football tools being permanently banned from r/DynastyFF or r/fantasyfootball, the broader Reddit ecosystem provides clear anti-patterns:
+
+**Common failure modes for tool promoters on Reddit:**
+1. **The "Drive-By Link Drop"** — Creating an account, posting a link to your tool with minimal context, and disappearing. Reddit communities detect this instantly. The post gets downvoted, reported, and the account flagged.
+
+2. **The "Astroturf Campaign"** — Using multiple accounts to upvote your own posts or comment favorably. Reddit's spam detection has dramatically improved since 2024, and the FTC ruling makes this explicitly illegal.
+
+3. **The "Every Thread Mentions My Tool" Pattern** — When every comment from your account manages to work in a mention of your tool, users notice. Even if individual comments seem organic, the pattern across your post history exposes the strategy.
+
+4. **The "Paywall Bait"** — Sharing a teaser that requires sign-up or payment to see the full analysis. Reddit communities hate this. The free content must be genuinely complete and useful.
+
+5. **The "Crosspost Carpet Bomb"** — Posting the same content to 5+ subreddits simultaneously. Moderators see this in your post history and flag it as spam.
+
+6. **Ignoring feedback or being defensive** — When users criticize your tool in comments, getting defensive or dismissive kills trust immediately. The successful tool builders above all engaged deeply with criticism.
+
+**Key warning from Reddit marketing experts:** Enforcement is inconsistent and "maddening" — identical posts face different outcomes depending on the moderator, the time of day, and the community mood. There is no foolproof formula, only principle-based approaches. Build genuine relationships with the community, and the occasional promotional post gets tolerated. Skip the relationship-building, and even great content gets nuked.
+
+---
+
+### 7. Reddit's Official Spam Policy
+
+**Reddit's sitewide rules define spam as:**
+- Repeatedly posting the same or similar content
+- Repeatedly posting links to your own content without participating in the community
+- Sending bulk, unsolicited messages
+- Using bots or scripts to mass-post or mass-upvote
+- Manipulating votes with multiple accounts
+
+**Account requirements:**
+- New accounts with 0 karma will have promotional posts permanently blocked
+- Approximately 25+ karma required before most subreddits allow posting (varies by sub)
+- Account age matters — most subreddits have minimum account age requirements
+
+**Disclosure requirements:**
+- Transparency about your connection to the tool is acceptable and often appreciated
+- "Full disclosure: I'm the founder of [product]" placed at the beginning of posts or before product mentions
+- Hiding your affiliation and getting discovered is worse than being upfront
+
+**2024 FTC changes:**
+- The FTC's Fake Reviews and Testimonials ruling (fall 2024) made buying upvotes, paying for mentions, and orchestrating fake campaigns explicitly illegal at the federal level
+- Reddit responded by dramatically increasing bot detection and fake engagement identification
+
+---
+
+### 8. Off-Season vs In-Season Timing for Razzle
+
+**The fantasy football calendar for Reddit activity:**
+
+| Period | r/fantasyfootball Activity | r/DynastyFF Activity | Razzle Opportunity |
+|--------|---------------------------|---------------------|-------------------|
+| Jan-Feb (playoffs/offseason) | Declining rapidly | Moderate (post-season analysis) | Low priority |
+| Mar-Apr (free agency/pre-draft) | Low | Rising (trade season, draft prep) | **Prime seeding window for dynasty content** |
+| May-Jun (post-NFL Draft, rookie drafts) | Low | **Peak offseason** (rookie drafts happening) | **Prime window for rookie/draft analysis** |
+| Jul-Aug (draft prep, preseason) | **Exploding** (draft season) | High | **Launch window for redraft content** |
+| Sep-Dec (NFL season) | **Maximum** | High | **Peak reach for weekly series** |
+
+**For Razzle's current timeline (March 2026):**
+
+The ideal seeding sequence is:
+1. **Now through April:** Build account credibility on r/DynastyFF through pure value comments. Participate in trade discussions, answer questions, share dynasty analysis. No tool mentions.
+2. **Late April (NFL Draft week):** First "data drop" post — original analysis of draft capital vs. dynasty value using Lab data. This is the natural content hook.
+3. **May-June (rookie draft season):** Weekly "Rookie Scouting Report" series on r/DynastyFF using Lab screenshots. This is the recurring series that builds the audience. Watermarked screenshots drive curiosity.
+4. **July-August (draft prep):** Expand to r/fantasyfootball with redraft-focused content. "I built a free research screener — here's what the data says about Round 3 RB value this year."
+5. **September (NFL Week 1):** Bureau launch timed to NFL season start. By now the account has 4-5 months of credibility on r/DynastyFF.
+
+**Critical insight: Dynasty subreddits are active year-round. The off-season IS the on-season for dynasty.** March-June is actually the sweet spot for dynasty content because (a) there's less content competition from major sites, (b) dynasty managers are actively making trades and preparing for rookie drafts, and (c) the audience is hungry for analysis during the "dead" period when r/fantasyfootball is asleep.
+
+---
+
+### Self-Critique
+
+1. **I could not directly access subreddit rules pages** (Reddit blocked direct fetching). The specific self-promotion rules for r/DynastyFF and r/fantasyfootball were inferred from community behavior patterns and general Reddit policies rather than reading the actual sidebar rules. Before executing this strategy, someone should manually check each subreddit's sidebar rules and wiki.
+
+2. **Subscriber counts vary across tracking services.** SubredditStats, GummySearch, NicheProwler, and The Hive Index all report different numbers for the same subreddits. Reddit also recently replaced public subscriber counts with engagement metrics, making exact numbers harder to pin down. The numbers above are directionally correct but not exact.
+
+3. **The "tools are welcome on r/DynastyFF" claim is based on observed behavior** (Dynasty Daddy's 831 upvotes, KeepTradeCut/FantasyCalc being regularly referenced) rather than an explicit moderator statement. Tool reception depends heavily on execution quality and the developer's community standing.
+
+4. **Seasonal traffic data for specific subreddits is sparse.** The off-season vs. in-season activity patterns are inferred from general fantasy football behavior and content calendars rather than from granular subreddit analytics.
+
+**Confidence: 8/10** — The subreddit targeting (r/DynastyFF first, r/fantasyfootball second) is strongly supported by subscriber data, activity patterns, and case studies. The 90/10 rule and warm-up period are well-established Reddit norms. The case studies (Subvertadown, PeakedInHighSkool, Dynasty Daddy) provide real proof of what works. The main uncertainty is whether the specific timing recommendations (Tuesday 7-9 AM ET) hold for dynasty-specific subreddits versus Reddit-wide averages, and whether moderator reception will match the observed pattern of tool-friendliness.
+
+Sources:
+- [Reddit Spam Policy (Official)](https://support.reddithelp.com/hc/en-us/articles/360043504051-Spam) — sitewide rules on self-promotion
+- [Reddit 90/10 Rule Explained (Gleam)](https://gleam.io/faq/marketing-and-growth-strategies/promotion/reddit-90-10-rule-explained) — self-promotion ratio
+- [Subvertadown Compendium of Reddit Posts 2017-2024](https://subvertadown.com/article/compendium-of-subvertadown-reddit-posts-2017---2024) — 8-year weekly series history
+- [PeakedInHighSkool Fantasy Football Tools](https://peakedinhighskool.com/) — trade value chart series
+- [PeakedInHighSkool Patreon](https://www.patreon.com/posts/reddit-adjusted-88975652) — Reddit-adjusted trade values, paid tier
+- [Dynasty Daddy GitHub](https://github.com/G-Sher/dynasty-daddy) — open-source launch, Sleeper+KTC integration
+- [KeepTradeCut Dynasty Rankings](https://keeptradecut.com/dynasty-rankings) — crowdsourced mechanic
+- [NFL Expands Reddit Relationship (Sportico)](https://www.sportico.com/business/tech/2025/nfl-reddit-deal-relationship-highlights-community-1234873708/) — 223% engagement increase, 10x subscriber growth
+- [Reddit Fantasy Football Subreddit Stats (NicheProwler)](https://www.nicheprowler.com/tools/reddit/subreddit-analysis/fantasyfootball) — activity data
+- [r/DynastyFF Stats (GummySearch)](https://gummysearch.com/r/DynastyFF/) — subscriber and activity data
+- [Best Time to Post on Reddit 2026 (RecurPost)](https://recurpost.com/blog/best-time-to-post-on-reddit/) — posting time analysis
+- [Best Time to Post on Reddit (SingleGrain)](https://www.singlegrain.com/search-everywhere-optimization/best-times-to-post-on-reddit-for-maximum-engagement/) — engagement data by time
+- [How to Promote SaaS on Reddit 2026 (ReplyAgent)](https://www.replyagent.ai/blog/how-promote-saas-reddit-without-getting-banned) — self-promotion tactics
+- [Reddit Shadowban Fix 2026 (ReddiReach)](https://www.reddireach.com/blog/shadowbanned-on-reddit-2026-fixes-and-safe-posting-system) — account age/karma requirements
+- [FTC Fake Reviews Rule (via Reddit Anti-Spam)](https://painonsocial.com/blog/how-to-avoid-reddit-spam-rules) — 2024 federal ruling on fake engagement
+- Prior journal: Q1 (behavioral profiling willingness-to-pay), Q12 (fake door pricing), Q22 (Reddit screenshot funnel), Q23 (free tier gating), Q24 (privacy story)
+
+### Implications for Razzle
+
+1. **Start commenting today.** The 2-3 week warm-up period before any promotional content is non-negotiable. Every day of delay compresses the timeline before the April NFL Draft window.
+
+2. **The recurring weekly series is the strategy.** Not viral posts, not "I built a thing" announcements. A branded weekly data series ("Razzle's Rookie Radar" or "The Tiger's Take") that becomes expected content on r/DynastyFF during rookie draft season.
+
+3. **r/DynastyFF first, r/fantasyfootball second.** Dynasty managers are the core audience, they are active year-round, and the subreddit is more welcoming to tools. r/fantasyfootball is the reach play for August-December.
+
+4. **Screenshots are the currency.** Per the North Star, every watermarked Lab screenshot is a billboard. The Reddit strategy should be built around producing screenshots so compelling that other users screenshot and share them — making Razzle go viral through user-generated distribution, not self-promotion.
+
+5. **Account hygiene matters more than post quality.** A brilliant analysis post from an account with zero post history and a 3-day-old account will get removed. A decent analysis post from an account with months of genuine r/DynastyFF participation will get upvoted. Build the account first.
+
+### Open Questions
+
+1. **Should Razzle use a personal account (u/swaggerdagger987) or a branded account (u/razzle_lol)?** Personal accounts feel more authentic and avoid the "brand account" stigma. But a branded account builds name recognition. The Subvertadown model (personal account, branded series) may be optimal.
+
+2. **What specific moderator outreach would help?** Messaging r/DynastyFF mods before posting tool content to ask permission and get feedback could prevent removal and build goodwill. Is this worth doing, and when?
+
+3. **How does Razzle handle the free-to-paid transition on Reddit?** Subvertadown introduced a paid tier after years of free content and faced some backlash. Razzle's "Screener is forever free, Bureau is paid" model is cleaner, but the community transition still needs careful framing.
+
+## NEXT QUESTION: Should Razzle use a personal Reddit account or a branded one — and what does the specific 4-week comment warm-up calendar look like for r/DynastyFF?
 
 ---
