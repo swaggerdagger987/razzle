@@ -2791,3 +2791,31 @@ smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correc
 smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
 smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
 smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+36	OK	backend/live_data/core.py	999	_efficiency_grade	pass	re-audit S68: FUNC-066 FIXED. core.py unified to 8-tier (A+/A/B+/B/C+/C/D/F) matching dashboards.py. Cross-endpoint verified: MCF eff=B+ in efficiency-rankings AND report-cards. College imports from core. 0 invalid grades across 9 endpoints.	100	2026-03-21T11:05
+62	OK	frontend/lab-panels.js	6184	honorSort	pass	re-audit S68: cc58114 FIXED. Report card sort uses gpa_pct (was gpa). API returns honor_roll sorted desc (82→75=True), needs_improvement asc (14→18=True). Orphan mockdraft/proradar refs removed. Timer leaks fixed (5 clearTimeout calls).	100	2026-03-21T11:05
+62	P2	frontend/lab-panels.js	6894	awards_runner_stat	open	re-audit S68: FUNC-067 still unfixed. r.ppg || '' treats 0 as falsy. Ship Loop hasn't consumed ticket yet.	95	2026-03-21T11:05
+smoke-local	OK	-	-	-	pass	smoke S68: 11/11 passed (health, players, pos filter QB/WR, sort, season switch, week filter, screener, no NaN, no negatives, filter options)	100	2026-03-21T10:52
+36	OK	backend/live_data/college.py	11	_efficiency_grade import	pass	re-audit S68: college.py imports _efficiency_grade from core (no duplicate definition). College efficiency grades verified 8-tier (Ward A+, Hoover A+). 0 invalid grades.	100	2026-03-21T11:10
+36	OK	backend/live_data/analytics.py	1022	_efficiency_grade	pass	re-audit S68: buy-sell uses _efficiency_grade from core. Sinnott eff=A+ (100 ppo_pct), Jeanty eff=D (17 ppo_pct). All 8-tier.	100	2026-03-21T11:10
