@@ -277,6 +277,73 @@ Sources:
 
 3. **How do dynasty managers currently discover and evaluate competing behavioral analysis tools (leaguemate.fyi, Dynasty Assistant, Fantasy Wrapped), and what specific gap does Razzle fill that they don't?** (We know no competitor automates behavioral profiling, but we haven't mapped the competitive landscape for adjacent features like league history and trade grading.)
 
-## NEXT QUESTION: What is the optimal "embarrassment threshold" for free archetype labels — funny enough to screenshot, not mean enough to alienate?
+## Question 5: What is the optimal "embarrassment threshold" for free archetype labels — funny enough to screenshot, not mean enough to alienate?
+
+**Why this matters**: The Q2 scouting report concept depends on labels like "Panic Seller" and "Tilt Machine" being funny enough to screenshot and send to a group chat — but not mean enough to make someone uninstall. Get the tone wrong in either direction and the viral flywheel breaks.
+
+### Answer
+
+**Verdict: Roast the behavior, celebrate the person. Every label must sound like something you'd put in your Twitter bio. The "worst" labels should be the funniest — not the meanest.**
+
+Evidence:
+
+1. **Spotify Wrapped proves the formula: frame traits as identity, not judgment.** Wrapped assigns 12-16 "Listening Personalities" (Vampire, Alchemist, Shapeshifter) — none are bad. Even "Vampire" (emotional/atmospheric music) sounds intentionally cool. The design philosophy is "raw, playful, and honest" but never mean. When Wrapped 2024 tried AI micro-genres like "Pink Pilates Princess" that users didn't identify with, backlash was immediate — not because it was mean, but because users felt *unseen*. Lesson: labels that don't resonate are worse than labels that mildly roast.
+
+2. **Fantasy football awards already have the right tone dialed in.** The most popular categories across recap tools target *game decisions*, never *personal character*: "The Armchair Quarterback" (questionable lineups), "Most Points on Bench" (worst lineup management), "Dream Crusher" (eliminated but ruins others' chances), "Auto-Draft King" (instead of "Worst Manager"). The Sacko trophy (skeleton on a toilet) works because it's absurd — the worst award is the funniest one to win.
+
+3. **RoastMyWrapped (100K+ roasts served) proves opt-in intensity works.** Users upload Wrapped screenshots for AI-generated insults — and they choose the harshness level. People love being roasted when they control the intensity. Razzle's free tier should default to affectionate; the full scouting report (Pro) can go harder.
+
+4. **Fortnite's "Bot/Sweat" binary is the cautionary tale.** These community-generated labels created a harmful binary with no middle ground — you're either terrible or oppressively try-hard. Binary systems with one clearly "bad" pole are dangerous. Spotify uses 16 types. Fantasy awards have dozens. More types = personality spectrum, not judgment.
+
+5. **Psychology of sharing: people share labels that confirm, not expose.** Quiz psychology research shows users share results they "choose to accept as true." If a label is purely negative, users either don't share it (killing virality), feel attacked (damaging trust), or stop using the tool (churn). The viral potential comes from labels that are *slightly* embarrassing but ultimately endearing.
+
+6. **Dynasty Daddy's Fantasy Wrapped labels hit the right tone.** They use "Contender / Pretender / Rebuilder" — even "Pretender" sounds like a strategic assessment, not an insult. The awards that go viral are the ones where friends tag each other: "This is SO you." That requires recognition, not humiliation.
+
+### Revised Archetype Labels (Applying the Framework)
+
+| Original (Q3) | Revised | Why It Works |
+|---|---|---|
+| Panic Seller | **The Fire Sale** | References a real sports term. Sounds like a strategy, not a panic. |
+| The Hoarder | **The Collector** | Pokemon-esque. Implies intentional roster building. |
+| Tilt Machine | **The Tinkerer** | Reframes emotional churn as "always optimizing." |
+| Draft Creature | **The Type** | "She has a type" is funny and relatable. |
+| Waiver Hawk | **The Scavenger** | Sounds resourceful, not desperate. |
+| Trade Addict | **The Dealmaker** | Sounds like a skill. Wolf of Dynasty Street. |
+| Steady Hand | **The Surgeon** | Precision. Deliberate. Aspirational. |
+| The Ghost | **The Phantom** | Mysterious > lazy. Batman > deadbeat. |
+
+**The Rule**: Every label should be one a user would put in their league bio. If you wouldn't say it about yourself, it's too mean.
+
+### Self-Critique
+
+**What's backed by data**: Spotify's 12-16 non-judgmental personality types driving massive shareability is well-documented. RoastMyWrapped's opt-in intensity model (100K+ uses) validates the "control the roast" approach. Fantasy community norms (roast decisions, not character) are consistent across Reddit posts, award guides, and trash talk articles. The Fortnite Bot/Sweat backlash is documented as a case study in harmful binary labeling.
+
+**What's speculation**: The revised archetype labels are my invention — no A/B testing on which specific names resonate with dynasty managers. The claim that "every label must sound like a Twitter bio" is a design principle extrapolated from Spotify/BuzzFeed patterns, not tested in the fantasy context. The opt-in harshness model hasn't been validated for fantasy tools specifically.
+
+**Confidence: 8/10** — The design principles are strongly supported by cross-industry evidence (Spotify, gaming, quiz psychology, fantasy awards). The specific revised label names are untested hypotheses that need user validation.
+
+Sources:
+- [Spotify Wrapped Listening Personalities — Spotify Newsroom](https://newsroom.spotify.com/2022-11-30/get-to-know-your-music-listening-personality-from-2022-wrapped/)
+- [Spotify Wrapped 2023 Characters — The Tab](https://thetab.com/2023/11/29/what-exactly-are-the-new-spotify-wrapped-2023-listening-characters-and-what-do-they-mean)
+- [Spotify Wrapped 2024 Backlash — Today.com](https://www.today.com/popculture/music/spotify-wrapped-2024-controversy-rcna183189)
+- [RoastMyWrapped — Product Hunt](https://www.producthunt.com/products/roastmywrapped)
+- [Fantasy Football Award Categories — Viking Awards](https://viking-awards.com/fantasy-football-award-categories-thatll-make-your-league-legendary/)
+- [Fortnite Bots vs Sweats — ZLeague](https://www.zleague.gg/theportal/fortnite-debates-bots-vs-sweats-a-community-quandary/)
+- [Personality Quiz Sharing Psychology — Psychology Today](https://www.psychologytoday.com/us/blog/positively-media/202506/tell-me-my-story-from-myers-briggs-to-buzzfeed)
+- [Overwatch Endorsement System Design — Inven Global](https://www.invenglobal.com/articles/5252/interview-with-overwatch-designer-scott-mercer-we-think-that-the-endorsement-system-will-be-the-key-to-bringing-out-the-goodness-in-players)
+- [LoL Honor System Behavioral Modification — Psychology of Games](https://www.psychologyofgames.com/2013/01/modifying-player-behavior-in-league-of-legends-with-honor/)
+- [Self-Deprecating Humor Psychology — PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC4958488/)
+
+---
+
+### Next 3 Questions This Raises
+
+1. **What's the technical architecture for the behavioral profiling engine — should it run client-side (like current Sleeper integration) or server-side (for caching, cross-league analysis, and Pro gating)?** (Current Sleeper calls are all client-side in league-intel.html. Behavioral profiling needs cross-season data and Pro/free tier gating — that suggests server-side.)
+
+2. **What does the League Pulse page UX flow look like — from "connect your Sleeper league" to "see all 12 manager archetypes" to "upgrade to Pro for the full scouting report"?** (The multiplayer conversion mechanic needs a specific UX design. How does one manager connecting create 11 more potential users?)
+
+3. **What is the competitive landscape for league analysis tools (leaguemate.fyi, Dynasty Assistant, Fantasy Wrapped, FFRec), and what specific gap does Razzle's behavioral profiling fill?** (We've established no competitor does behavioral profiling — but we haven't mapped what they DO offer and where Razzle overlaps vs. differentiates.)
+
+## NEXT QUESTION: What's the technical architecture for the behavioral profiling engine — should it run client-side or server-side?
 
 ---
