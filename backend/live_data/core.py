@@ -209,6 +209,11 @@ def _safe_div(a, b, decimals=1):
 def _enrich_with_derived_stats(items):
     """Add derived efficiency stats computed from existing aggregates."""
     for item in items:
+        # Round totals to avoid IEEE 754 artifacts (e.g. 416.59999999 → 416.6)
+        for _fk in ("fantasy_points_ppr", "fantasy_points_std", "fantasy_points_half_ppr"):
+            _fv = item.get(_fk)
+            if isinstance(_fv, float):
+                item[_fk] = round(_fv, 1)
         g = item.get("games") or 1
         item["ppg"] = _safe_div(item.get("fantasy_points_ppr") or 0, g)
         item["yards_per_carry"] = _safe_div(item.get("rushing_yards") or 0, item.get("carries") or 0)
