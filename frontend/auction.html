@@ -625,7 +625,7 @@
       html += '<td>' + escapeHtml(p.full_name) + '</td>';
       html += '<td><span class="av-pos-badge ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span></td>';
       html += '<td>' + escapeHtml(p.team) + '</td>';
-      html += '<td>' + escapeHtml(String(p.age || '-')) + '</td>';
+      html += '<td>' + (p.age != null ? escapeHtml(String(p.age)) : '-') + '</td>';
       html += '<td><span class="av-dollar ' + tierClass(p.tier) + '">$' + escapeHtml(String(p.auction_value)) + '</span></td>';
       html += '<td>';
       html += '<div class="av-tv-bar"><div class="av-tv-fill" style="width:' + Math.min(100, p.trade_value) + '%"></div></div>';
