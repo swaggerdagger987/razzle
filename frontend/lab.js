@@ -89,19 +89,18 @@ function screenshotPanel(panelName) {
     useCORS: true,
     logging: false
   }).then(function(canvas) {
-    // Add watermark with shareable URL
+    // Add watermark with random character + shareable URL
     var ctx = canvas.getContext('2d');
-    var wmAlpha = _t.isDark ? 'rgba(237, 224, 207, 0.25)' : 'rgba(45, 31, 20, 0.25)';
-    ctx.fillStyle = wmAlpha;
-    ctx.textAlign = 'right';
-    ctx.font = '600 28px Caveat, cursive';
-    ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 30);
-    // Add current URL below domain
     try { if (typeof saveStateToURL === 'function') saveStateToURL(); } catch(e) {}
-    var _wmUrl = window.location.href.replace(/^https?:\/\//, '');
-    if (_wmUrl.length > 60) _wmUrl = _wmUrl.substring(0, 57) + '...';
-    ctx.font = '400 16px "Space Mono", monospace';
-    ctx.fillText(_wmUrl, canvas.width - 20, canvas.height - 12);
+    if (typeof drawRazzleWatermark === 'function') {
+      drawRazzleWatermark(ctx, canvas, { url: window.location.href, isDark: _t.isDark });
+    } else {
+      var wmAlpha = _t.isDark ? 'rgba(237, 224, 207, 0.25)' : 'rgba(45, 31, 20, 0.25)';
+      ctx.fillStyle = wmAlpha;
+      ctx.textAlign = 'right';
+      ctx.font = '600 28px Caveat, cursive';
+      ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 30);
+    }
     // Download
     var link = document.createElement('a');
     var date = new Date().toISOString().slice(0, 10);

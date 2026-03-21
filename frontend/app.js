@@ -413,6 +413,45 @@ function razzleError() { return RAZZLE_ERRORS[Math.floor(Math.random() * RAZZLE_
 function razzleEmpty() { return RAZZLE_EMPTY[Math.floor(Math.random() * RAZZLE_EMPTY.length)]; }
 function razzleLoading() { return RAZZLE_LOADING[Math.floor(Math.random() * RAZZLE_LOADING.length)]; }
 
+/* ===== Rarity Watermark — Random Character on Screenshots ===== */
+var _wmAgentIcons = [
+  "/assets/agents/razzle.svg", "/assets/agents/dolphin.svg",
+  "/assets/agents/hawkeye.svg", "/assets/agents/bones.svg",
+  "/assets/agents/octo.svg", "/assets/agents/atlas.svg"
+];
+var _wmImgCache = {};
+(function() {
+  for (var i = 0; i < _wmAgentIcons.length; i++) {
+    var img = new Image();
+    img.src = _wmAgentIcons[i];
+    _wmImgCache[_wmAgentIcons[i]] = img;
+  }
+})();
+
+function drawRazzleWatermark(ctx, canvas, opts) {
+  opts = opts || {};
+  var isDark = opts.isDark || (document.documentElement.dataset && document.documentElement.dataset.theme === "dark");
+  var wmAlpha = isDark ? "rgba(237, 224, 207, 0.25)" : "rgba(45, 31, 20, 0.25)";
+  var pick = _wmAgentIcons[Math.floor(Math.random() * _wmAgentIcons.length)];
+  var img = _wmImgCache[pick];
+  if (img && img.complete && img.naturalWidth > 0) {
+    var sz = 32;
+    ctx.globalAlpha = isDark ? 0.3 : 0.2;
+    ctx.drawImage(img, canvas.width - 180, canvas.height - sz - 16, sz, sz);
+    ctx.globalAlpha = 1.0;
+  }
+  ctx.fillStyle = wmAlpha;
+  ctx.textAlign = "right";
+  ctx.font = "600 28px Caveat, cursive";
+  ctx.fillText("razzle.lol", canvas.width - 20, canvas.height - 30);
+  if (opts.url) {
+    var u = opts.url.replace(/^https?:\/\//, "");
+    if (u.length > 60) u = u.substring(0, 57) + "...";
+    ctx.font = '400 16px "Space Mono", monospace';
+    ctx.fillText(u, canvas.width - 20, canvas.height - 12);
+  }
+}
+
 /**
  * Show a toast notification. Available on all pages (defined in app.js).
  */

@@ -302,9 +302,8 @@ function exportPNG() {
   const el = document.getElementById("gs-container");
   html2canvas(el, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2 }).then(canvas => {
     const ctx = canvas.getContext("2d");
-    ctx.font = "bold 28px 'Space Mono', monospace";
-    ctx.fillStyle = document.documentElement.dataset.theme === 'dark' ? 'rgba(237,224,207,0.15)' : 'rgba(45,31,20,0.13)';
-    ctx.fillText("razzle.lol", canvas.width - 220, canvas.height - 20);
+    if (typeof drawRazzleWatermark === 'function') { drawRazzleWatermark(ctx, canvas); }
+    else { ctx.font = "bold 28px 'Space Mono', monospace"; ctx.fillStyle = 'rgba(45,31,20,0.13)'; ctx.fillText("razzle.lol", canvas.width - 220, canvas.height - 20); }
     const link = document.createElement("a");
     link.download = "razzle-gamescript.png";
     link.href = canvas.toDataURL();

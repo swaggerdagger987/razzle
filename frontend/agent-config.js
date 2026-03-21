@@ -199,3 +199,5 @@ function getErrorText(panelId) {
   const agentId = PANEL_TO_AGENT[panelId] || "razzle";
   return getAgentCopy(agentId, "errors");
 }
+
+// Watermark with random character is defined in app.js (drawRazzleWatermark)
