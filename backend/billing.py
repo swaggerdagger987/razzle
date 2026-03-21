@@ -520,23 +520,26 @@ def _handle_subscription_deleted(subscription):
 
 
 def _handle_payment_failed(invoice):
-    """Downgrade user to free when payment fails. Skips lifetime users."""
+    """Mark subscription as payment_failed but do NOT downgrade plan.
+
+    Stripe retries failed payments multiple times over days. The actual
+    downgrade happens in _handle_subscription_deleted when Stripe gives up
+    and cancels the subscription.
+    """
     customer_id = invoice.get("customer")
 
     with auth_module.get_users_db() as conn:
         row = conn.execute("SELECT id, plan FROM users WHERE stripe_customer_id = ?", (customer_id,)).fetchone()
         if row:
-            # Never downgrade lifetime plans on payment failure
             if row["plan"] in ("pro_lifetime", "elite_lifetime"):
-                logger.info(f"User {row['id']} has lifetime plan — skipping payment failure downgrade")
+                logger.info(f"User {row['id']} has lifetime plan — skipping payment failure")
                 return
             conn.execute("""
                 UPDATE subscriptions SET status = 'payment_failed', updated_at = CURRENT_TIMESTAMP
                 WHERE user_id = ?
             """, (row["id"],))
-            conn.execute("UPDATE users SET plan = 'free' WHERE id = ?", (row["id"],))
             conn.commit()
-            logger.warning(f"Payment failed for user {row['id']} — downgraded to free")
+            logger.warning(f"Payment failed for user {row['id']} — marked payment_failed (plan unchanged, awaiting Stripe retry)")
 
 
 def get_billing_status(user: dict) -> dict:

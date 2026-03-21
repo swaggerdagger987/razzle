@@ -45,7 +45,8 @@ def quick_search_players(query, limit=8):
     limit = max(1, min(limit, 20))
     def _query():
         with get_db() as conn:
-            escaped_q = query.lower().replace(" ", "").replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+            escaped_q = re.sub(r"[^a-z0-9]", "", query.lower())
+            escaped_q = escaped_q.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
             search_term = "%" + escaped_q + "%"
             rows = conn.execute("""
                 WITH ms AS (SELECT MAX(season) AS s FROM player_week_stats)

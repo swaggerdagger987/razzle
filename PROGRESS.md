@@ -2714,3 +2714,68 @@ week_filter failure (10/11) is a stale server process issue, not a code bug. Ver
 - All JS files syntax clean (node --check)
 - All Python files compile clean
 - CSS/Design sweep: 0 border violations, 0 font violations, `#fff` on colored badges is intentional for contrast
+
+---
+
+## Ship Loop Session 24: QA Ticket Consumption + Sweep (Mar 20)
+
+**Goal**: Consume FUNC-015 through FUNC-018 QA tickets, sweep for new issues.
+
+### QA Tickets Consumed
+
+| Ticket | Severity | Action | Notes |
+|--------|----------|--------|-------|
+| FUNC-018 | P1 NEW | **FIXED** | Added `<base href="/">` to player.html, compare.html, team.html. SEO routes `/player/{id}`, `/compare/{id1}/{id2}`, `/team/{abbr}` had relative asset paths resolving against wrong directory, breaking CSS/JS loading. |
+| FUNC-017 | P1 | Verified fixed | player.js breakout badge already uses PPG with 6GP min + 3 PPG floor (Session 20 fix confirmed) |
+| FUNC-015 | P2 | Verified fixed | `_enrich_with_dynasty_value()` already calls `compute_trade_value()` (Session 20 fix confirmed) |
+| FUNC-016 | P2 | Verified fixed | cheatsheet.html and scoring.html no longer use `escapeHtml` in onclick (Session 20 fix confirmed) |
+
+### TICKETS.md: All entries DONE (no new work)
+
+### Sweep Fixes (3-agent parallel: Backend Architect, Frontend Developer, SEO Verifier)
+
+| # | Fix | Severity | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | quick_search_players doesn't strip special chars | P1 | players.py:48 | Input like "Ja'Marr" or "D.J." failed to match search_name (alphanumeric-only). Added re.sub strip matching fetch_players pattern. |
+| 2 | copyCompareURL/copyPlayerURL crash without Clipboard API | P1 | compare.js:852, player.js:760 | navigator.clipboard is undefined in non-HTTPS/embedded contexts. Added guard + execCommand fallback matching lab.js pattern. |
+| 3 | openPlayerProfile doesn't URL-encode player ID | P1 | lab.js:6123 | Raw string interpolation in fetch path. Added encodeURIComponent() matching player.js pattern. |
+| 4 | Skip-link broken by base href | MEDIUM | player.html:313, compare.html:317, team.html:276 | href="#main-content" resolves to /#main-content due to base tag. Replaced with JS scrollIntoView. |
+| 5 | Compare diff bar overflows for negative stats (EPA) | P2 | compare.js:246-249 | v1/(v1+v2) produces >100% when values are negative. Now uses Math.abs() for proportional width. |
+| 6 | Saved views don't preserve week/team/minGP state | P2 | lab.js:4122-4144, 4201-4209 | Added week, teams, minGP, tierBreaks, groupHeaders, summaryBar, tagFilter to save/load cycle. |
+
+### Triaged (not fixing)
+- `COUNT(*)` vs `COUNT(DISTINCT s.week)` in 7 player queries: latent bug, only triggers if a second data source is added. Single nflverse source means no duplicate week rows. Noted for future adapter additions.
+- `changePageSize()` rejects sizes != 25: intentional per Session 7 fix (prevents slow loads).
+
+### Verified Clean
+- 11/11 smoke tests pass after all fixes
+- All JS files syntax clean (node --check)
+- All Python files compile clean
+- 0 regressions
+
+---
+
+## Ship Loop Session 25: 3-Agent Sweep (Mar 20)
+
+**Goal**: Parallel sweep with Backend Architect, Frontend Developer, and Data Integrity agents. Found 5 real bugs.
+
+### Fixes Applied
+
+| # | Fix | Severity | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | Payment failure instantly downgrades user plan | P0 | billing.py:522-539 | `_handle_payment_failed` was downgrading to free on first `invoice.payment_failed`. Stripe retries payments over days before cancelling. Now only marks subscription status as `payment_failed`; actual downgrade deferred to `_handle_subscription_deleted`. |
+| 2 | Radar chart hides negative EPA values | P1 | charts.js:174-230 | `Math.abs` normalization clamped all negative values to 0 on radar. Changed to min/max range normalization so negative EPA displays proportionally (worst=center, best=edge). |
+| 3 | Pinned row expand creates orphan DOM elements | P1 | lab.js:1718 | `buildRowHTML` added expand arrow to pinned rows (rowIdx=null). Clicking inserts expand row into pinned tbody where virtual scroll never cleans it up. Now skips expand arrow when rowIdx is null. |
+| 4 | Aging curves player dots/labels drawn at 70% alpha | P2 | lab.js:9506 | globalAlpha was set to 0.7 for dashed connecting lines but not restored before drawing data point circles and name labels. Moved alpha restore before data points. |
+| 5 | Compare diff bar widths sum to >100% at extremes | P2 | compare.js:248-251 | `Math.max(pct, 5)` min-clamp caused pct1+pct2 to exceed 100% (e.g., 5%+99%=104%). Now normalizes both clamped widths so they sum to exactly 100%. |
+
+### Triaged (not fixing)
+- Consistency rankings return empty with week param: Known — frontend already excludes week selector for consistency panel (Session 23 triage)
+- Pinned rows get percentiles from current view population: Arguable UX — comparing pinned player against current view is valid behavior
+- Quick search cache uses raw input as key: Cache-inefficient but not a correctness bug
+- Data integrity/HTML sweep: Clean — 0 new bugs across 15+ HTML pages, all API routes match
+
+### Verified Clean
+- 11/11 smoke tests pass after all fixes
+- All 4 modified files syntax clean (node --check, py_compile)
+- 0 regressions
