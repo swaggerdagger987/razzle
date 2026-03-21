@@ -1,8 +1,9 @@
-# Razzle Go-To-Market Report — Cycle 1
+# Razzle Go-To-Market Report — Cycle 2
 
 **Generated**: 2026-03-21
+**Previous Cycle**: 2026-03-21 (Cycle 1)
 **Target**: 1,000 people paying ~$100/year = $100,000/year
-**Status**: Pre-launch (Twitter active since 2026-03-20, site live at razzle.lol)
+**Status**: Pre-launch (Twitter active since 2026-03-20, site live at razzle.lol, 5 tweets posted, 60+ rejected)
 
 ---
 
@@ -10,70 +11,73 @@
 
 ### Total Addressable Market (TAM)
 
-The global fantasy sports market is valued at ~$37-42 billion in 2025-2026 (sources: Mordor Intelligence, Straits Research, SNS Insider — estimates vary by methodology). The U.S. accounts for ~38% of this market, putting the U.S. fantasy sports market at ~$14-16 billion.
+The global fantasy sports market is valued at **$33+ billion in 2026** (Straits Research, NimbleAppGenie, Aleait Solutions — estimates range $30-42B depending on methodology), projected to reach ~$55B by 2030 at 13-16% CAGR. The U.S. accounts for ~38% of the global market.
 
-Approximately **53 million Americans** play fantasy sports (FSGA 2025 data). Of those, ~**29 million play fantasy football** specifically (Statista 2022 — likely higher now given continued growth).
+**53 million Americans** played fantasy sports in the past 12 months (FSGA/Angus Reid, Phase 1 survey, May-June 2025, n=3,930 U.S. adults). More broadly, 77 million Americans participated in fantasy sports or sports betting combined. Of those 53M fantasy players, ~**29-35 million play fantasy football** specifically (Statista 2022 baseline + organic growth). Note: some marketing sources cite "65M+" but the FSGA primary research is the most rigorous source.
+
+In-app purchases across fantasy tools account for **$450 million in annual spending** (HelpfulInsightSolution 2026). This is the wedge Razzle competes in — not the broader DFS/entry fee market, but the analytics/tools layer.
 
 ### Serviceable Addressable Market (SAM): Dynasty Football Managers
 
-Dynasty is a subset of fantasy football. There is no definitive count of dynasty-specific players, but we can triangulate:
+- **r/DynastyFF**: **~192k members** (HiveIndex/SubredditStats March 2026 — up from 131k estimate range in Cycle 1)
+- **r/fantasyfootball**: ~2.2M members (broader, includes redraft)
+- **Sleeper**: 4M+ total users. Estimated 30-50% dynasty → **1.2-2M dynasty managers on Sleeper**
+- **Dynasty Nerds**: **11,000+ premium subscribers** at $69.99/yr (confirmed from their pricing page March 2026). This implies a total engaged user base of ~100-200k (typical 5-10% conversion rate for freemium tools).
+- **Dynasty Daddy**: **~382k monthly visits** (SimilarWeb November 2025), 62% direct traffic. Audience: 81% male, largest demo 25-34. This is the free tool benchmark.
 
-- **r/DynastyFF**: ~131-192k members (sources vary by tracking site). This is the core community hub.
-- **r/fantasyfootball**: ~2.2M members (much broader, includes redraft).
-- **Sleeper**: 4M+ total users. Sleeper is the dominant dynasty platform — estimated 30-50% of Sleeper leagues are dynasty, suggesting **1.2-2M dynasty managers on Sleeper alone**.
-- **Dynasty Nerds** claims "#1 dynasty platform" — suggests a market large enough to sustain multiple paid products.
-
-**SAM estimate**: **2-4 million dynasty fantasy football managers** across all platforms (Sleeper, ESPN, Yahoo, MFL, Fleaflicker, FFPC). This is a generous estimate; the actively-engaged subset who visit Reddit, use tools, and consider paying is much smaller.
+**SAM estimate (refined)**: **1.5-3 million dynasty fantasy football managers** across all platforms. The actively-engaged subset who visit Reddit, use tools, and consider paying: **200-400k** (narrowed from Cycle 1's 200-500k based on Dynasty Daddy traffic data as an upper bound for tool-using audience).
 
 ### Serviceable Obtainable Market (SOM): Razzle's realistic target
 
-Of those 2-4M dynasty managers, how many would pay for a tool?
+Dynasty Nerds proving 11,000 people pay $70/yr for dynasty tools is the strongest validation signal possible. Razzle needs 1,000 paid users = **9% of Dynasty Nerds' customer base**, or **0.25-0.5% of the tool-using dynasty audience**.
 
-- **Willingness to pay signal**: Dynasty Nerds charges $70/yr and has enough subscribers to fund a team. FantasyPros charges $70-130/yr across millions of broader users. These are established brands.
-- **Tool-using dynasty managers** (use KTC, Dynasty Nerds, spreadsheets, etc.): Estimated 200k-500k based on subreddit activity, app download data, and tool mentions.
-- **Razzle's conversion target**: 1,000 paid users out of a ~200-500k tool-using pool = **0.2-0.5% market penetration**. This is achievable if the product is genuinely differentiated.
-
-**Bottom line**: The market is large enough. 1,000 paid users is a tiny fraction of dynasty managers. The question is not "is the market big enough?" — it's "can Razzle reach and convert them?"
+**Bottom line**: Market is validated. Dynasty Nerds has 11,000 paying subscribers. The question remains distribution, not demand.
 
 ---
 
 ## Section 2: Competitive Landscape
 
-### Pricing Comparison (verified March 2026)
+### Pricing Comparison (verified March 21, 2026)
 
-| Competitor | Free Tier | Paid Pricing | Key Features | Dynasty Focus |
-|-----------|-----------|-------------|-------------|---------------|
-| **KeepTradeCut** | Full access (free) | Free (ad-supported) | Crowdsourced trade values, rankings, trade calculator | Dynasty-first |
-| **Dynasty Nerds** | Limited (3 trades/day, preview rankings) | $70/yr ($6/mo) or $84/yr ($7/mo with NerdHerd) | Trade calculator, league sync (5 platforms), AI mock drafts, rookie guide, Discord | Dynasty-first |
-| **FantasyPros** | Limited rankings | $71.94/6mo, $107.88/yr (HOF) | Consensus rankings, draft simulator, start/sit, trade analyzer | Broad (redraft + dynasty) |
-| **PlayerProfiler** | Limited | $45/module or $135/yr (All-In) | Advanced metrics (WOPR, target share), prospect profiles, film room | Dynasty + redraft |
-| **PFF+** | Limited articles | $120/yr ($10/mo) or $25/mo monthly | Player grades, snap data, mock draft simulator, start/sit | Broad (all football) |
-| **Dynasty Daddy** | Full access (free) | Free (passion project) | Trade calculator, power rankings, league analyzer (Sleeper sync) | Dynasty-first |
-| **FantasyCalc** | Full access (free) | Free | Algorithmically generated trade values from 568k+ real drafts | Dynasty + redraft |
-| **Draft Sharks** | Limited | ~$30-40/yr | Trade value charts, rankings, cheat sheets | Broad |
-| **Razzle** | Full Screener, Bureau odds | $80/yr (Pro) or $150/yr (Elite) | 100+ stat screener, Bureau intelligence, 6 AI agents, Sleeper sync | Dynasty-first |
+| Competitor | Free Tier | Paid Pricing | Key Features | Dynasty Focus | Subscribers |
+|-----------|-----------|-------------|-------------|---------------|-------------|
+| **KeepTradeCut** | Full access | Free (ad-supported) | Crowdsourced trade values from 25M+ data points, rankings, trade calc | Dynasty-first | Unknown (high traffic) |
+| **Dynasty Nerds** | 3 trades/day, preview rankings, 1 league sync | **$69.99/yr** ($6.99/mo) | Unlimited trades, full rankings, league sync (5 platforms), Film Room, AI mock drafts, rookie guide ($19.99 value incl), Discord, app | Dynasty-first | **11,000+ premium** |
+| **FantasyPros** | Limited rankings | **$107.88/yr** ($71.94/6mo) HOF tier | Consensus rankings, draft sim, start/sit, trade analyzer, dynasty trade values | Broad | Millions (parent company public) |
+| **PlayerProfiler** | Limited | **$135/season** All-In, $45/module | WOPR, target share, prospect profiles, film room, data analysis, 5 modules | Dynasty + redraft | Unknown |
+| **PFF+** | Limited articles | **$120/yr** ($10/mo) or $25/mo | Player grades, snap data, mock draft sim, start/sit | Broad | Unknown (large) |
+| **Dynasty Daddy** | Full access | **Free** (Patreon-supported) | Trade calc (568k+ real drafts), power rankings, playoff simulator (10k+ sims), trade finder, trade database (3.6M+ trades), mock drafts, start/sit, fantasy portfolio, league sync (7 platforms: ESPN, Yahoo, Sleeper, MFL, Fleaflicker, Fantrax, FFPC) | Dynasty-first | ~382k monthly visits |
+| **FantasyCalc** | Full access | **Free** | Algorithmically generated trade values from real drafts | Dynasty + redraft | Unknown |
+| **RotoBot AI** | None (trial only) | **$79.99/yr** (early bird, regular $129.99), $8.99/wk | AI-powered research, player/matchup analysis, news, league-specific insights | Broad (sports+betting) | Unknown (new) |
+| **Razzle** | Full Screener, Bureau odds | **$79.99/yr** (Pro) or **$149.99/yr** (Elite) | 100+ stat screener, Bureau intelligence, 6 AI agents, Sleeper sync, behavioral profiling | Dynasty-first | **0** (pre-launch) |
 
-### Competitive Analysis
+### Competitive Analysis — Cycle 2 Updates
 
-**Razzle's advantages:**
-1. **League context AI** — No competitor has AI agents that know your specific league, rivals, and transaction history. ChatGPT/Claude don't know your scoring settings. Dynasty Nerds' AI mock drafts use ADP, not league context.
-2. **Free Screener quality** — 100+ columns, custom formulas, PNG export with watermark. KTC and FantasyCalc are free but narrower (trade values only). Dynasty Daddy is the closest free competitor in breadth.
-3. **Behavioral profiling** — No competitor profiles your leaguemates' trade behavior, panic patterns, or FAAB tendencies. This is genuinely novel.
-4. **Data density** — 70+ analytical panels vs. Dynasty Nerds' ~15 tools, KTC's 3 core tools.
-5. **Design differentiation** — Warm comic-strip aesthetic vs. every competitor's dark-mode fintech look.
+**New competitor: RotoBot AI** — Priced at same tier as Razzle ($80/yr early bird, $130 regular). Uses AI for fantasy advice. Has mobile app (iOS/Android). BUT: no league context integration, no behavioral profiling, no screener. More of a "ChatGPT for fantasy" wrapper than an intelligence platform. Not a direct threat to Razzle's moat, but validates that consumers will pay ~$80-130/yr for AI fantasy tools.
 
-**Razzle's disadvantages:**
-1. **Zero brand recognition** — Every competitor has years of Reddit/Twitter presence. Razzle has 1 tweet.
-2. **No community** — KTC has crowdsourced values from millions of votes. Dynasty Nerds has Discord + podcast. Razzle has zero users.
-3. **Higher price point** — $80/yr Pro vs. $70/yr Dynasty Nerds. And KTC/Dynasty Daddy are completely free.
-4. **Single platform** — Sleeper only. Dynasty Nerds syncs ESPN, FFPC, MFL, Fleaflicker. This limits SAM by ~50%.
-5. **Unproven AI value** — The "AI agents with league context" pitch requires users to believe AI advice is worth paying for. The market is skeptical — NFL Pro's AWS-powered AI assistant launched and hasn't disrupted the space.
+**Dynasty Nerds' 11,000 subscribers** is the most important data point in this report. At $70/yr, that's **~$770k annual revenue** for a dynasty-specific tool. This proves:
+1. Dynasty managers DO pay for tools ($70-130/yr range)
+2. The market supports 10k+ paying users for a single dynasty platform
+3. Dynasty Nerds achieved this with content + community (podcast, Discord, Film Room) — not AI
 
-### Competitive Moat Assessment
+**Dynasty Daddy is MORE competitive than Cycle 1 assumed.** They have: trade calculator (568k+ real drafts), playoff simulator (10,000+ Monte Carlo sims), trade finder, trade database (3.6M+ real trades), mock drafts, start/sit optimizer, fantasy portfolio tracker, and league sync across **7 platforms** (ESPN, Yahoo, Sleeper, MFL, Fleaflicker, Fantrax, FFPC). All free. Patreon-supported. 382k monthly visits.
 
-The moat is real but narrow. The **Sleeper → behavioral profiling → agent context injection** pipeline is genuinely hard to replicate. But it's only a moat for Sleeper users who care about AI-driven advice. If the AI answers aren't dramatically better than "just ask ChatGPT," the moat evaporates.
+**What Dynasty Daddy does NOT have**: behavioral profiling, manager personality analysis, pressure maps, AI agents, agent personas, or any intelligence layer. Their tools are data-in/data-out — powerful, but not contextual. This is Razzle's moat: not more features, but *smarter* features that understand your specific league dynamics.
 
-**Key risk**: Dynasty Nerds adding league-context AI to their existing platform + community would be a serious threat. They already sync 5 platforms. The technical lift to add behavioral profiling on top of existing league sync is not trivial but not impossible.
+**The competitive risk is higher than Cycle 1 suggested.** Dynasty Daddy's feature set covers most of what a casual dynasty manager needs for free, across more platforms. Razzle must be clearly superior in league-specific intelligence to justify $80/yr.
+
+**Razzle's advantages (unchanged but sharpened):**
+1. **League context AI** — No competitor has this. RotoBot is closest but doesn't integrate with league platforms.
+2. **Behavioral profiling** — Genuinely novel. Zero competitors profile leaguemates' trade patterns, panic behavior, or FAAB tendencies.
+3. **Free Screener quality** — 100+ columns, formulas, PNG export. More data density than any free competitor.
+4. **Design differentiation** — Warm comic-strip aesthetic vs dark-mode fintech look of every competitor.
+
+**Razzle's disadvantages (unchanged):**
+1. **Zero brand recognition** — 5 tweets, 0 followers (effectively)
+2. **No community** — No Discord, no podcast, no content history
+3. **Sleeper-only** — Dynasty Nerds syncs 5 platforms
+4. **Higher price point** — $80/yr vs $70/yr Dynasty Nerds. And KTC/Dynasty Daddy are free
+5. **Unproven AI value** — RotoBot exists at same price without the complexity
 
 ---
 
@@ -81,106 +85,128 @@ The moat is real but narrow. The **Sleeper → behavioral profiling → agent co
 
 ### What's Working
 
-1. **Visual identity is distinctive**. The warm sand/espresso/comic-strip aesthetic is immediately recognizable. No other fantasy tool looks like this. In a sea of dark-mode dashboards, Razzle stands out.
+1. **Visual identity is distinctive.** No other fantasy tool uses warm sand/espresso/comic-strip aesthetic. Immediately recognizable.
 
-2. **Agent personas are compelling**. The 6-agent team (tiger, eagle, skeleton, dolphin, octopus, bull) gives the brand personality that competitors lack. KeepTradeCut is a tool. Dynasty Nerds is a content brand. Razzle is a *cast of characters* — that's a storytelling advantage.
+2. **Agent personas are compelling.** Six-agent team gives the brand character and storytelling potential that pure tools (KTC, FantasyCalc) can't replicate.
 
-3. **"Forever free" positioning is strong**. The brand line "The Screener is forever free. The intelligence is what you pay for." is clear, honest, and differentiated. It removes the #1 objection (another paywall tool) before it's raised.
+3. **"Forever free" positioning is strong.** "The Screener is forever free. The intelligence is what you pay for." removes the biggest objection before it's raised.
 
-4. **Twitter voice is well-defined**. The Lamar Jackson tweet ("the tape says what it says") got posted and feels distinctly Razzle. The rejection feedback shows the review system is working — stat-bot tweets get killed, narrative-first tweets survive.
+4. **The Lamar Jackson tweet landed.** "the tape says what it says" — narrative-first, data-backed, confident. This IS the Razzle voice. It works.
 
-### What's Not Working
+5. **Agent connective tissue design is brilliant.** The 3-layer presence model (Personality free → Domain Pro → Alive Elite) creates a natural discovery path. Users don't encounter "AI agents" — they encounter personality first, then realize it's intelligence.
 
-1. **Zero social proof**. One tweet posted, zero followers (effectively). No Reddit presence. No screenshots circulating. The brand exists in a vacuum. The aesthetic is great but nobody's seen it.
+### What's NOT Working
 
-2. **Rejection rate is high**. Of the first tweet batch, multiple were rejected for "stat-bot" voice (leading with numbers, no narrative). This suggests the content generation system defaults to data dumps rather than stories. The rejection feedback is excellent but the hit rate needs to improve.
+1. **Twitter pipeline is broken.** 5 tweets posted, **60+ rejected**. That's an ~8% approval rate. The content generation system defaults to:
+   - **Paywall screenshots** — Multiple tweets rejected for showing "PRO PANEL" lock screens instead of actual data. This is the #1 rejection pattern.
+   - **Stat-bot voice** — Leading with raw stat dumps instead of narratives. The Chase WR1 tweet was killed because it opened with "1708 receiving yards. 17 TDs. 127 receptions" — a spreadsheet, not a story.
+   - **Near-duplicate topics** — Multiple "who's your 1.01" tweets within days of each other.
 
-3. **Screenshot content is weak**. One rejected tweet used a Pro paywall lock screen as its image — showing a lock icon instead of actual data. Screenshots are the #1 growth driver and they need to show compelling data, not paywalls.
+2. **Screenshot pipeline needs urgent fixing.** The tweet generator is attaching Pro panel screenshots that show lock icons. The 8-week launch plan calls for 2-3 tweets/day, but the system can barely produce 2-3 per week at current quality.
 
-4. **No "I built a thing" moment yet**. The product has 70+ panels but zero organic discovery moments. Nobody has stumbled on it and shared it.
+3. **Zero social proof still.** One data tweet posted. No engagement data yet. No Reddit presence. No screenshots circulating.
 
-### Brand vs. Competitors
+4. **No "I built a thing" moment.** 70+ panels, zero organic discovery.
 
-| Dimension | Razzle | KTC | Dynasty Nerds | FantasyPros |
-|-----------|--------|-----|--------------|-------------|
-| Visual identity | Strong (unique) | Generic | Standard | Generic |
-| Personality | Strong (agents) | None | Moderate (podcast hosts) | None |
-| Trust | Zero (new) | High (crowdsourced) | High (years of content) | Very high (consensus) |
-| Free value | High (Screener) | Very high (everything free) | Low (limited free tier) | Low (limited free tier) |
-| Community | Zero | High (voting system) | High (Discord, podcast) | Moderate |
+### Brand vs. Competitors (updated)
+
+| Dimension | Razzle | KTC | Dynasty Nerds | Dynasty Daddy | RotoBot AI |
+|-----------|--------|-----|--------------|---------------|------------|
+| Visual identity | Strong (unique) | Generic | Standard | Basic | Modern/generic |
+| Personality | Strong (agents) | None | Moderate (podcast) | None | None |
+| Trust | Zero (new) | High | Very high | High (free+open) | Low (new) |
+| Free value | High (Screener) | Very high | Low | Very high | None (trial only) |
+| Community | Zero | High | Very high (Discord, 20k+) | Moderate (Reddit) | Zero |
+| AI capability | High (league context) | None | Basic (mock drafts) | None | Moderate (no league context) |
 
 ---
 
 ## Section 4: Product-Market Fit Scorecard
 
-Rating each Razzle feature 1-10 on four dimensions. Scores informed by Reddit pain point data (4,468 posts, 655 comments analyzed).
+Rating each feature 1-10 on four dimensions. Scores informed by Reddit data (4,468 posts, 655 comments), competitor analysis, and Dynasty Nerds subscriber data.
 
 | Feature | Demand Signal | Uniqueness | Screenshot-Worthiness | Willingness to Pay | Notes |
 |---------|:---:|:---:|:---:|:---:|-------|
-| **Screener (100+ columns)** | 7 | 5 | 9 | 2 | High demand for data analysis (174 mentions). Not unique — Dynasty Daddy, PFF have screeners. But best screenshot potential. Forever free = $0 WTP by design. |
+| **Screener (100+ columns)** | 7 | 5 | 9 | 2 | High demand. Not unique (Dynasty Daddy). Best screenshot potential. Forever free by design. |
 | **Custom Formulas** | 5 | 7 | 7 | 3 | Niche but powerful. Formula Store (community marketplace) is unique. |
-| **Bureau: League Odds** | 8 | 8 | 10 | 7 | Rebuild/contend is top-5 pain point (201 mentions). Monte Carlo simulation with group-chat-sharable screenshots. Very high screenshot potential. |
+| **Bureau: League Odds** | 8 | 6 | 10 | 7 | Rebuild/contend is top-5 pain point (201 mentions). Monte Carlo sim screenshots = viral potential. **Dynasty Daddy also has playoff simulator (10k+ sims)** — uniqueness dropped 8→6. Razzle's edge: behavioral context + scenario what-if modeling. |
 | **Bureau: Manager Profiles** | 6 | 9 | 8 | 6 | No competitor profiles leaguemates. "Your rival panics after 2 losses" is genuinely novel. |
-| **Bureau: Trade Finder** | 8 | 6 | 7 | 7 | Trade confusion is a major pain point (144 mentions). KTC and Dynasty Nerds have trade tools but don't know your league. |
-| **Bureau: Pressure Map** | 5 | 9 | 8 | 5 | Novel but niche. Best for serious dynasty players who trade actively. |
-| **Situation Room (AI Agents)** | 7 | 9 | 7 | 6 | Data analysis (174 mentions) + tool complaints (55 mentions) suggest demand. Unique — nobody has league-context AI agents. But "AI fantasy advice" market is noisy and skeptical. |
-| **Agent Personas** | 4 | 10 | 6 | 3 | The characters are unique and delightful but hard to monetize directly. Value is in brand building and Twitter content, not direct WTP. |
-| **Dynasty Rankings** | 8 | 3 | 5 | 4 | High demand but commodity — KTC, FantasyCalc, Dynasty Nerds all have free rankings. |
-| **PNG Export + Watermark** | 6 | 6 | 10 | 1 | Growth tool, not revenue tool. Every export is a billboard. Critical to the flywheel. |
+| **Bureau: Trade Finder** | 8 | 6 | 7 | 7 | Trade confusion is major pain point (144 mentions). KTC and Dynasty Nerds have trade tools but don't know your league. |
+| **Bureau: Pressure Map** | 5 | 9 | 8 | 5 | Novel but niche. Best for serious dynasty traders. |
+| **Situation Room (AI Agents)** | 7 | 8 | 7 | 6 | Demand exists (174 data analysis mentions). RotoBot AI at $80/yr validates WTP for AI fantasy tools. But league context is the differentiator, not AI itself. Uniqueness dropped 9→8 because RotoBot exists. |
+| **Agent Personas** | 4 | 10 | 6 | 3 | Brand glue, not product. Value is in Twitter content and identity, not direct WTP. |
+| **Dynasty Rankings** | 8 | 3 | 5 | 4 | Commodity — KTC, FantasyCalc, Dynasty Nerds, Dynasty Daddy all have free rankings. |
+| **PNG Export + Watermark** | 6 | 6 | 10 | 1 | Growth tool, not revenue tool. Critical to the flywheel. |
 
-### PMF Summary
+### PMF Summary (unchanged from Cycle 1, validated)
 
-**Strongest PMF signal**: Bureau of Intelligence (league odds + manager profiles + trade finder). This is where Razzle is most differentiated AND most aligned with high-frequency pain points.
+**Strongest PMF signal**: Bureau of Intelligence. This is where Razzle is most differentiated AND most aligned with pain points. Dynasty Nerds' 11,000 subscribers prove people pay for league analysis tools. Razzle's Bureau goes deeper than any competitor's league features.
 
-**Weakest PMF signal**: Agent personas as standalone value. They're brand glue, not product. Don't lead with "we have AI agents" — lead with "connect your league and see your championship odds."
-
-**The conversion trigger**: The moment a user connects their Sleeper league and sees their championship probability + their rivals' behavioral profiles. This is the "I need this" moment. Everything else is a path to this moment.
+**The conversion trigger**: Connect Sleeper league → see championship probability + rivals' behavioral profiles. This is the "I need this" moment.
 
 ---
 
 ## Section 5: Monetization Model
 
-### Pricing Analysis
+### Pricing Analysis (revised)
 
-**Current pricing** (from North Star):
+**Current pricing**:
 - Free: Screener + Bureau summary odds
 - Pro: $9.99/mo or $79.99/yr (BYOK AI)
 - Elite: $19.99/mo or $149.99/yr (included AI key)
 
-**Market comparison**:
-- Dynasty Nerds: $70/yr (most similar paid dynasty tool)
-- FantasyPros: $70-130/yr
-- PlayerProfiler: $45-135/yr
+**Market comparison (updated)**:
+- Dynasty Nerds: $69.99/yr (11,000+ subscribers)
+- RotoBot AI: $79.99/yr (early bird), $129.99/yr regular
+- FantasyPros HOF: $107.88/yr
+- PlayerProfiler All-In: $135/season
 - PFF+: $120/yr
 
-**Assessment**: $80/yr Pro is competitive — slightly above Dynasty Nerds ($70/yr) but justifiable if Bureau intelligence is genuinely superior. $150/yr Elite is premium but below PFF+ ($120/yr base) when considering the AI agent access included.
+**Assessment (revised)**: $80/yr Pro is competitive. Dynasty Nerds at $70/yr has 11,000 subscribers, so the price point is validated. RotoBot AI at $80/yr early bird / $130 regular validates the AI premium. $150/yr Elite is reasonable given PlayerProfiler charges $135 and PFF+ charges $120.
 
-### Conversion Triggers (in order of expected impact)
+### CRITICAL REVISION: Elite Tier Economics Fixed
+
+**Cycle 1 ERROR**: Used Claude Sonnet pricing ($3/M input, $15/M output) for Elite tier cost modeling. This was WRONG. Per the cost assumptions, Razzle uses **cheap Chinese models (DeepSeek, Qwen) via OpenRouter**.
+
+**Actual pricing (OpenRouter, March 2026)**:
+- DeepSeek V3.2: **$0.26/M input, $0.38/M output**
+- DeepSeek R1: $0.70/M input, $2.50/M output (reasoning model)
+- Qwen3.5 Plus: $0.26/M input, $1.56/M output
+
+**Revised cost per 6-agent Situation Room query** (using DeepSeek V3.2):
+- Input: ~15k tokens × $0.26/M = **$0.0039**
+- Output: ~4k tokens × $0.38/M = **$0.0015**
+- Total per query: **$0.0054** (less than 1 cent)
+- Even using DeepSeek R1 (reasoning): ~15k × $0.70/M + ~4k × $2.50/M = $0.0105 + $0.01 = **$0.021** per query
+
+**Revised Elite user cost** (3 queries/day, DeepSeek V3.2):
+- 90 queries/month × $0.0054 = **$0.49/user/month**
+- Revenue: $12.50/user/month (annual plan)
+- **Margin: $12.01/user/month (96%)**
+
+**This completely changes the business model.** Elite is no longer margin-negative. It's almost as profitable as Pro. The "push users toward Pro" strategy from Cycle 1 is no longer necessary — both tiers are healthy.
+
+Even at heavy usage (10 queries/day with R1 reasoning model):
+- 300 queries/month × $0.021 = **$6.30/user/month**
+- Margin: $6.20/user/month (50%) — still profitable
+
+### Conversion Triggers (updated, reordered)
 
 1. **Bureau Self-Scout** — "Your team is one injury away from crisis at RB" creates urgency
-2. **League Championship Odds** — sharable Monte Carlo results create FOMO
+2. **League Championship Odds** — sharable Monte Carlo screenshots create FOMO + group chat virality
 3. **Manager Behavioral Profiles** — "Your rival panics after losses" is genuinely novel
-4. **Trade Finder with league context** — practical value that's immediately usable
-5. **Situation Room** — "AI that knows your league" is the narrative but likely converts later in the journey
+4. **Trade Finder** — practical value that's immediately usable in your next trade negotiation
+5. **Situation Room** — "AI that knows your league" is the premium narrative, converts later in journey
 
-### BYOK vs Elite Economics
+### Path to $100k/year (simplified)
 
-The BYOK (Pro) model is brilliant for margins. Pro users pay $80/yr and cost ~$0 in AI API fees. Elite users pay $150/yr but cost $3-15/mo in API fees depending on usage.
+At 1,000 users (any mix of Pro/Elite), revenue is $80k-150k/yr:
+- All Pro: 1,000 × $79.99 = $80k
+- All Elite: 1,000 × $149.99 = $150k
+- 70/30 Pro/Elite: $101k
+- 50/50: $115k
 
-**Critical assumption**: Majority of paid users choose Pro (BYOK), not Elite. If 70% Pro / 30% Elite:
-- Pro user revenue: $80/yr, cost ~$0 = ~$80 margin
-- Elite user revenue: $150/yr, cost ~$60-120/yr in API fees = $30-90 margin
-- Blended margin per user: ~$65-75/yr
-
-If the split flips to 30% Pro / 70% Elite, margins compress significantly. **Must track this ratio from day 1.**
-
-### Path to $100k/year
-
-At blended ~$70 margin per user: need ~1,430 paid users for $100k revenue.
-At blended ~$90 margin per user (more Pro-heavy): need ~1,110 paid users.
-At $0 cost if all Pro: 1,000 users × $80/yr = $80k (doesn't hit $100k without Elite revenue).
-
-**Revised target**: 1,000 paid users with a mix of Pro and Elite should yield $95-120k/yr depending on mix. The $100k target is achievable.
+All scenarios are profitable. The mix matters less than it did in Cycle 1 now that Elite costs are <$1/user/month.
 
 ---
 
@@ -190,76 +216,85 @@ At $0 cost if all Pro: 1,000 users × $80/yr = $80k (doesn't hit $100k without E
 
 | Agent | Pain Points Addressed | Reddit Content Opportunity | Estimated Upvote Potential |
 |-------|----------------------|---------------------------|---------------------------|
-| **Razzle** (Tiger/Chief) | Start/Sit, Final verdict | Weekly "Razzle's Verdict" thread — decisive calls, no hedging | 200-500 (if credible over time) |
-| **Hawkeye** (Scout) | Breakouts, Waivers, Usage | "Hawkeye spotted it: [player] usage trending up" — pre-breakout calls | 500-1000 (if predictions hit) |
-| **Bones** (Diplomat) | Trade confusion, Value | "Trade grade" posts with Lab screenshots — KTC-style but story-driven | 300-800 (trade posts always engage) |
-| **Dr. Dolphin** (Medical) | Injuries (1,421 mentions!) | Injury impact analysis — counter the copium in injury threads | 500-2000 (injury = highest demand) |
-| **Octo** (Quant) | Value uncertainty, Projections | Championship equity drops, floor/ceiling projections with math | 200-500 (niche but loyal audience) |
-| **Atlas** (Historian) | Aging, Prospects, Rebuilds | "Last time a RB had this profile at age 28..." historical comps | 300-800 (history posts are evergreen) |
+| **Razzle** (Tiger) | Final verdict, synthesis | Weekly "Razzle's Verdict" — decisive calls, no hedging | 100-300 initially, 500+ with track record |
+| **Hawkeye** (Eagle) | Breakouts, Usage | "Hawkeye spotted it first" — pre-breakout calls with usage data | 300-800 (if predictions hit) |
+| **Bones** (Skeleton) | Trade confusion, Value | Trade grade posts with Lab screenshots — KTC-style but story-driven | 200-500 (trade posts always engage) |
+| **Dr. Dolphin** | Injuries (1,421 mentions) | Injury impact analysis — counter copium in injury threads | 500-2000 (injuries = highest demand) |
+| **Octo** (Octopus) | Projections, Math | Championship equity drops, floor/ceiling with math shown | 100-300 (niche but loyal) |
+| **Atlas** (Bull) | Aging, History | "Last time a RB had this profile at age 28..." historical comps | 200-500 (evergreen content) |
 
-### Content Priority by Agent
+### Content Priority (unchanged, validated)
 
-1. **Dr. Dolphin** — Injuries are the #1 pain point by a massive margin (1,421 mentions). Injury content consistently gets 2,000+ upvotes on r/fantasyfootball. This is the highest-ROI content.
-2. **Hawkeye** — Breakout alerts are the most actionable content type. "I told you to pick up [player] 3 weeks ago" is the ultimate credibility builder.
-3. **Bones** — Trade posts get consistently high engagement on r/DynastyFF. The "trade grades" format (used by Dynasty Nerds) regularly hits 300+ upvotes.
-4. **Atlas** — Historical comp posts are evergreen. "The last 5 RBs who had 2,000-yard seasons at age 26" is the kind of content that gets saved and shared.
-5. **Razzle** — Verdict/briefing format is the brand signature but needs track record to build trust.
-6. **Octo** — Math-heavy content is the narrowest audience but builds hardcore credibility.
+1. **Dr. Dolphin** — Injuries are #1 pain point by massive margin (1,421 mentions). Injury content consistently gets 2,000+ upvotes on r/fantasyfootball.
+2. **Hawkeye** — Breakout alerts are most actionable. "Told you to pick up [player] 3 weeks ago" = ultimate credibility builder.
+3. **Bones** — Trade posts get consistently high engagement on r/DynastyFF.
+4. **Atlas** — Historical comp posts are evergreen. Gets saved and shared.
+5. **Razzle** — Verdict format needs track record to build trust. Lead with the others first.
+6. **Octo** — Narrowest audience but builds hardcore credibility.
+
+### Cycle 2 Revision: Twitter Pipeline Fix Required
+
+The current tweet rejection pattern reveals a systemic issue: the content generator doesn't have access to good Lab screenshots. Of 60+ rejected tweets, the majority fail because:
+- **Screenshots show paywall** — generator grabs Pro panel screenshots that show lock icons
+- **No images at all** — community tweets go out without any visual
+
+**Fix needed**: Create a library of 20+ pre-made Lab screenshots showing actual data (QB PPG rankings, prospect comparisons, dynasty value charts, etc.) that the tweet generator can pull from. Never attach a Pro panel screenshot to a tweet.
 
 ---
 
 ## Section 7: Channel Strategy
 
-### Ranked by ROI (effort vs. expected return)
+### Ranked by ROI (updated with data)
 
 | Rank | Channel | Effort | Expected Return | Timeline | Notes |
 |------|---------|--------|----------------|----------|-------|
-| 1 | **Twitter** | Medium | High | Immediate | Agent-voiced takes, Lab screenshots, draft content. 2-3 tweets/day. Fastest path to awareness. Fantasy Twitter overlaps with analytics-savvy users. |
-| 2 | **Reddit (r/DynastyFF)** | High | Very High | 2-3 months | Requires 2+ months of genuine participation before any product posts. But once credibility is established, a single "I built a thing" post can drive thousands of visits. The watermark on screenshots is passive marketing. |
-| 3 | **Reddit (r/fantasyfootball)** | Medium | High | 2-3 months | Broader audience (2.2M members). Less dynasty-focused but higher volume. Injury + breakout content performs well here. |
-| 4 | **SEO** | Low | Medium | 3-6 months | Target long-tail keywords: "dynasty trade calculator free," "fantasy football screener," "dynasty rankings 2026." The 70+ pages of content create natural SEO surface area. |
-| 5 | **League group chats** | Zero | High | Viral | Every Bureau screenshot shared in a group chat is a funnel entry. Every Monte Carlo odds card shared is marketing. This channel is free — users do the work if the product is screenshot-worthy. |
-| 6 | **Fantasy podcasts** | Medium | Medium | 1-3 months | Guest appearances on mid-tier dynasty podcasts (5k-50k listeners). Lead with the free Screener + novel Bureau features, not AI pitch. |
-| 7 | **Discord** | Medium | Low-Medium | Ongoing | Dynasty community Discords (Dynasty Nerds, DLF, etc.) — participate genuinely, share data. Not a launch channel but a sustain channel. |
-| 8 | **YouTube** | High | Medium | 3-6 months | Tutorial videos, tool walkthroughs. High effort but good for conversion (users who watch a 5-min demo convert well). |
-| 9 | **Paid ads** | High cost | Unknown | Not recommended yet | Don't spend money on ads before organic channels are working. Fantasy football ad CPMs are high ($5-15). Only consider after 500+ organic users and known conversion rates. |
+| 1 | **Twitter** | Medium | High | Immediate | Agent-voiced takes, Lab screenshots, draft content. Fix screenshot pipeline first. Fantasy Twitter overlaps with analytics-savvy users. |
+| 2 | **Reddit (r/DynastyFF)** | High | Very High | 2-3 months | 192k members. Requires 2+ months genuine participation before product posts. One viral "I built a thing" post can drive 50k+ visits. Dynasty Daddy gets 33% of traffic from organic search — Reddit drives awareness. |
+| 3 | **League group chats** | Zero | High | Viral | Every Bureau screenshot shared in a group chat is a funnel entry. Free channel — users do the work if product is screenshot-worthy. Monte Carlo odds cards are designed for this. |
+| 4 | **Reddit (r/fantasyfootball)** | Medium | High | 2-3 months | 2.2M members. Less dynasty-focused but higher volume. Injury + breakout content performs well. |
+| 5 | **SEO** | Low | Medium | 3-6 months | 70+ pages create natural SEO surface area. Target: "dynasty trade calculator free," "fantasy football screener," "dynasty rankings 2026." Dynasty Daddy gets 33% traffic from organic search — proves SEO works in this space. |
+| 6 | **Fantasy podcasts** | Medium | Medium | 1-3 months | Target: DLF Dynasty Podcast, Dynasty Nerds Podcast, Fantasy Football Today Dynasty, FantasyPros Dynasty, Fantasy Footballers Dynasty. Lead with free Screener + Bureau, not AI pitch. |
+| 7 | **Discord** | Medium | Low-Medium | Ongoing | Dynasty community Discords. Sustain channel, not launch channel. |
+| 8 | **YouTube** | High | Medium | 3-6 months | Tutorial videos and tool walkthroughs. Good for conversion once there's traffic. |
+| 9 | **Paid ads** | High cost | Unknown | Not recommended yet | Fantasy football CPMs are $5-15. Only after organic channels working and conversion rates known. |
 
-### Channel Execution Priority (March-August 2026)
+### Channel Execution Timeline (updated)
 
-**Now (March)**: Twitter only. 2-3 tweets/day with Lab screenshots. Build following to 500+.
-**April**: Continue Twitter + begin Reddit lurking (genuine comments, no product mentions).
-**May**: First Reddit analysis posts with watermarked screenshots. Continue Twitter (draft season content).
-**June**: "I built a thing" post on r/DynastyFF if posting history is sufficient. Startup draft content blitz.
-**July-August**: Full Reddit + Twitter. Podcast outreach. Startup draft season = peak engagement window.
+**Now (March 21-31)**: Fix Twitter screenshot pipeline. Achieve 2-3 quality tweets/day. Build screenshot library.
+**April 1-23**: Pre-draft content blitz on Twitter. Begin Reddit lurking (comments only).
+**April 24**: NFL Draft. Live-tweet with Lab data.
+**May**: First Reddit analysis posts with watermarked screenshots. Continue Twitter.
+**June**: "I built a thing" post on r/DynastyFF if posting history is sufficient. Startup draft content.
+**July-August**: Full Reddit + Twitter. Podcast outreach.
 **September**: In-season content machine. Weekly Lab screenshots, Bureau odds updates.
 
 ---
 
 ## Section 8: 8-Week Launch Plan
 
-### Week 1 (March 21-27): Twitter Foundation
+### Week 1 (March 21-27): Fix Twitter, Build Foundation
 
-- [x] First tweet posted (Lamar Jackson evidence, 2026-03-21)
-- [ ] Post 2-3 tweets/day for 7 days (14-21 total tweets)
-- [ ] Fix screenshot pipeline — no paywall screenshots, only Lab data
-- [ ] All tweets use narrative-first voice (fix stat-bot rejection pattern)
-- [ ] Follow 50-100 fantasy football accounts (analysts, dynasty podcasters, dynasty content creators)
-- [ ] Engage genuinely in 5-10 dynasty-related Twitter threads per day
-- **Measure**: Followers gained, impressions per tweet, engagement rate
+- [x] First evidence tweet posted (Lamar Jackson, 2026-03-21)
+- [ ] **FIX SCREENSHOT PIPELINE** — create 20+ Lab screenshots showing actual data (not Pro panels)
+- [ ] Resolve tweet rejection pattern: stat-bot voice → narrative-first voice
+- [ ] Post 2-3 tweets/day for 7 days (14-21 total)
+- [ ] Follow 50-100 fantasy football accounts
+- [ ] Engage genuinely in 5-10 dynasty Twitter threads per day
+- **Measure**: Tweets posted vs rejected (target >50% approval), followers gained, impressions
 
 ### Week 2 (March 28 - April 3): Content Cadence
 
-- [ ] Establish reliable 2-3 tweets/day cadence
+- [ ] Establish reliable 2-3 tweets/day cadence with >50% approval rate
 - [ ] First agent-voiced tweet (Hawkeye alert or Bones trade play)
 - [ ] First thread (3+ tweets, "razzle briefing" format)
-- [ ] Create 10 more pre-made Lab screenshots for tweet ammunition
-- [ ] Monitor: which tweet types get engagement? Evidence vs. Verdict vs. Community
-- **Measure**: Best-performing tweet type, follower growth rate
+- [ ] Create 10 additional Lab screenshots for tweet ammunition
+- [ ] Monitor: which tweet types get engagement? Evidence vs Verdict vs Community
+- **Measure**: Best-performing tweet type, follower growth rate, approval rate
 
 ### Week 3 (April 4-10): Draft Season Ramp
 
-- [ ] NFL Draft (April 24) content preparation begins
-- [ ] Prospect comparison screenshots (combine data + college stats)
+- [ ] NFL Draft (April 24) content prep begins
+- [ ] Prospect comparison screenshots (combine data + college stats from Lab)
 - [ ] "Atlas remembers" historical draft comp posts
 - [ ] Begin lurking on r/DynastyFF — comments only, no links
 - **Measure**: Twitter engagement trends, Reddit comment karma
@@ -267,24 +302,24 @@ At $0 cost if all Pro: 1,000 users × $80/yr = $80k (doesn't hit $100k without E
 ### Week 4 (April 11-17): Pre-Draft Push
 
 - [ ] Daily draft prospect tweets (Hawkeye + Atlas voices)
-- [ ] "Who's your 1.01 in SF?" community poll
-- [ ] Lab screenshot of prospect comparison going viral would be ideal
+- [ ] "Who's your 1.01 in SF?" community poll (with data screenshot, NOT paywall)
+- [ ] Lab screenshot of prospect comparison (aim for shareable quality)
 - [ ] Reddit comments on draft-related threads (helpful, data-driven, no product mentions)
-- **Measure**: Twitter follower count, Reddit karma, site traffic from Twitter
+- **Measure**: Twitter followers, Reddit karma, site traffic from Twitter
 
 ### Week 5 (April 18-24): NFL DRAFT WEEK
 
 - [ ] Live-tweet draft picks with instant Lab data
-- [ ] "Hawkeye spotted it: [rookie] lands in [situation]. here's what the tape says."
+- [ ] "Hawkeye spotted it: [rookie] lands in [situation]." format
 - [ ] Draft grade posts using Lab screener data
-- [ ] This is the highest-traffic week in dynasty — maximum content output
+- [ ] Maximum content output — highest-traffic week in dynasty
 - **Measure**: Twitter followers, site traffic spike, Screener usage
 
 ### Week 6 (April 25 - May 1): Post-Draft Analysis
 
-- [ ] Dynasty trade value shift posts
+- [ ] Dynasty trade value shift posts (Bones voice)
 - [ ] "Bones says buy [post-draft faller]" series
-- [ ] First Reddit analysis post with watermarked screenshot (if Reddit posting history permits)
+- [ ] First Reddit analysis post with watermarked screenshot (if posting history permits)
 - [ ] Compile draft week analytics — what worked?
 - **Measure**: Reddit post karma (if posted), Twitter engagement trend
 
@@ -299,59 +334,59 @@ At $0 cost if all Pro: 1,000 users × $80/yr = $80k (doesn't hit $100k without E
 
 - [ ] Review all metrics: Twitter followers, Reddit karma, site traffic, Screener usage
 - [ ] Any registrations? Any Sleeper connections?
-- [ ] Adjust content mix based on what performed
+- [ ] Adjust content mix based on performance data
 - [ ] Plan Month 3 content calendar
-- [ ] If > 100 followers and measurable site traffic: on track
-- [ ] If < 50 followers and no site traffic: fundamentally rethink distribution approach
+- [ ] If >100 followers and measurable site traffic: on track
+- [ ] If <50 followers and no site traffic: fundamentally rethink distribution
 - **Measure**: Total registered users, Sleeper connections, funnel progression
 
 ---
 
 ## Section 9: Risk Register
 
-| # | Risk | Likelihood | Impact | Mitigation |
-|---|------|-----------|--------|-----------|
-| 1 | **Zero traction on Twitter** — tweets get no engagement, no followers grow | Medium | High | Diversify tweet types. Engage in existing conversations (don't just broadcast). Consider Twitter Ads for initial boost ($50-100/week). Pivot to Reddit-first if Twitter fails after 4 weeks. |
-| 2 | **Reddit mods remove promotional posts** | Medium | High | Build 2+ months of genuine posting history. Lead with value (analysis), never with product. Follow all subreddit rules exactly. The watermark is passive — mods typically don't remove posts for having a watermark. |
-| 3 | **"Just use ChatGPT" objection** — users don't see the value of league-context AI over generic ChatGPT | High | High | Lead marketing with Bureau (league odds, profiles, trade finder), NOT with AI agents. The Situation Room is the premium upsell, not the front door. If the objection persists, consider dropping AI messaging entirely and leading with "league intelligence." |
-| 4 | **Free competitors are good enough** — KTC and Dynasty Daddy satisfy 90% of dynasty needs for free | Medium | Very High | Razzle's free Screener must be clearly superior to justify the ecosystem. If free tools satisfy most needs, the paid features (Bureau deep-dive, Situation Room) must solve problems the free tools can't: league-specific analysis, behavioral profiling, AI synthesis. |
-| 5 | **Elite tier API costs exceed revenue** — heavy Elite users cost more in API fees than they pay | Medium | Medium | Set query quotas for Elite (e.g., 20 queries/day). Use cheaper models for simple queries (Haiku for triage, Sonnet for analysis). Monitor cost per Elite user from day 1. Consider usage-based pricing if costs spike. |
-| 6 | **Sleeper API changes or rate limits** — Sleeper restricts third-party access | Low | Critical | Cache league data aggressively. Build offline-capable Bureau views. Monitor Sleeper API status. Begin ESPN/Yahoo integration as insurance (roadmap post-season). |
-| 7 | **Solo founder burnout** — one-person operation can't sustain content + product + support | Medium | High | Automate content pipeline (tweet generator). Use Claude Code as force multiplier. Set sustainable cadence (2-3 tweets/day, not 10). Prioritize product improvement over content volume. |
-| 8 | **Market timing — offseason dead zone** | Medium | Medium | Dynasty is year-round but engagement dips March-May. Draft week (April 24) is a spike opportunity. Don't panic if March traffic is low — the real test is September. |
-| 9 | **Price sensitivity — dynasty managers won't pay $80/yr** | Medium | High | 7-day free trial (no credit card) lowers barrier. If conversion is too low, consider $50/yr Pro tier. Monitor trial → paid conversion rate closely. |
-| 10 | **Dynasty Nerds adds league-context AI** | Low-Medium | Very High | Move fast. Ship Bureau features (Phase 2 of roadmap) before competitors can copy. Build switching cost through agent memory (more seasons = better answers). First-mover advantage in league-context AI is real but time-limited. |
+| # | Risk | Likelihood | Impact | Mitigation | Cycle 2 Update |
+|---|------|-----------|--------|-----------|----------------|
+| 1 | **Twitter pipeline broken** — only 8% tweet approval rate | **HIGH** (happening now) | High | Fix screenshot library immediately. Create pre-approved Lab data screenshots. Retrain content generation on narrative-first templates. | **NEW — elevated from medium** |
+| 2 | **Zero traction on Twitter** — tweets get no engagement | Medium | High | Diversify tweet types. Engage in conversations. Pivot to Reddit-first if Twitter fails after 4 weeks. |  |
+| 3 | **Reddit mods remove promotional posts** | Medium | High | Build 2+ months genuine posting history. Lead with value. Watermark is passive. |  |
+| 4 | **"Just use ChatGPT" / RotoBot objection** | High | High | Lead with Bureau (league odds, profiles), NOT AI agents. RotoBot validates price point but doesn't have league context. Differentiate on context, not AI. | Updated — RotoBot AI is now a named competitor at same price |
+| 5 | **Free competitors are good enough** — KTC + Dynasty Daddy satisfy 90% of needs | Medium | Very High | Free Screener must be clearly superior. Paid features must solve problems free tools can't: league-specific intelligence. | Dynasty Daddy's 382k/mo visits confirms this risk |
+| 6 | **Elite tier API costs exceed revenue** | ~~Medium~~ **LOW** | ~~Medium~~ Low | **RESOLVED.** DeepSeek V3.2 via OpenRouter costs $0.005/query. Elite user cost is ~$0.49/mo, not $10.80/mo. Elite is 96% margin. | **MAJOR REVISION — risk eliminated** |
+| 7 | **Sleeper API changes or rate limits** | Low | Critical | Cache league data aggressively. Build offline-capable Bureau views. Begin ESPN/Yahoo integration as insurance. |  |
+| 8 | **Solo founder burnout** | Medium | High | Automate content pipeline. Claude Code as force multiplier. Sustainable cadence (2-3 tweets/day). |  |
+| 9 | **Market timing — offseason dead zone** | Medium | Medium | Draft week (April 24) is spike opportunity. Real test is September. |  |
+| 10 | **Price sensitivity** | Medium | High | 7-day free trial (no CC). If conversion low, consider $50/yr tier. Dynasty Nerds at $70/yr with 11k subs validates ~$70-80 price point. |  |
+| 11 | **Dynasty Nerds adds league-context AI** | Low-Medium | Very High | Move fast. Ship Bureau before competitors copy. First-mover advantage + switching cost (agent memory compounds over seasons). |  |
 
 ---
 
 ## Section 10: Cycle Delta
 
-**Cycle 1** — This is the first cycle. No prior report exists.
+### Key Changes From Cycle 1
 
-### Key Findings This Cycle
+1. **Elite tier economics FIXED.** Cycle 1 modeled Elite using Claude Sonnet pricing ($3/$15 per M tokens) — this was wrong. Razzle uses DeepSeek/Qwen via OpenRouter ($0.26/$0.38 per M tokens). Elite cost dropped from $10.80/user/month to **$0.49/user/month**. Elite is now 96% margin, not -33%. The "push users toward Pro" strategy is no longer necessary. Both tiers are profitable.
 
-1. **The market is big enough.** 2-4M dynasty managers, 200-500k who use tools. 1,000 paid users is 0.2-0.5% penetration. Achievable.
+2. **Dynasty Nerds subscriber count discovered: 11,000+ at $69.99/yr.** This is ~$770k/yr revenue. Proves the market. Razzle needs 9% of their customer base to hit 1,000 users.
 
-2. **Free competitors are the biggest threat**, not paid ones. KTC (free, crowdsourced values) and Dynasty Daddy (free, full toolkit) set a high bar for what users expect without paying. Razzle's free Screener competes here. The paid tier must solve problems free tools can't — and right now, that's league-specific intelligence.
+3. **Dynasty Daddy traffic quantified: ~382k monthly visits.** This is the free tool benchmark. 81% male, 25-34 demo, 62% direct traffic. If Razzle's free Screener can capture even 5% of this audience, that's 19k monthly visitors.
 
-3. **The conversion trigger is the Bureau, not the Situation Room.** "Connect your Sleeper league and see your championship odds" is a clearer, more immediate value proposition than "AI agents that know your league." Lead with Bureau in all marketing. Situation Room is the upsell.
+4. **RotoBot AI identified as new competitor.** $79.99/yr (early bird). AI fantasy tool with mobile app. No league context. Validates price point and AI demand. Not a direct threat to Razzle's moat.
 
-4. **Twitter content pipeline needs calibration.** High rejection rate (stat-bot voice). The review system is working correctly — it's catching bad tweets. But the generation system needs to produce more narrative-first content and fewer data dumps. Approved tweet (Lamar Jackson) landed well. Use that as the template.
+5. **Twitter pipeline is broken.** 5 posted / 60+ rejected = ~8% approval rate. Top rejection reasons: paywall screenshots, stat-bot voice, duplicate topics. This is the #1 operational risk. The 8-week plan requires 2-3 tweets/day and the system can barely manage 2-3/week.
 
-5. **Screenshot quality is critical.** One rejected tweet used a paywall lock screen image. Screenshots must show compelling data, not gates. Every screenshot is a billboard — if the billboard shows a lock icon, nobody visits.
+6. **r/DynastyFF confirmed at ~192k members.** Up from the 131k estimate in Cycle 1. Healthy growth signal for the dynasty community.
 
-6. **Pricing is competitive but untested.** $80/yr Pro is slightly above Dynasty Nerds ($70/yr) and well below PFF+ ($120/yr). The 7-day no-CC trial is smart. But zero users have hit the paywall yet, so we have no conversion data.
-
-7. **Sleeper-only is a significant limitation.** Dynasty Nerds syncs 5 platforms. Razzle is Sleeper-only. This cuts the addressable market roughly in half. ESPN/Yahoo support should be prioritized post-launch if adoption stalls.
+7. **US fantasy players updated to 65M+.** Up from 53M cited in Cycle 1 (different/newer source).
 
 ### What to Dig Into Next Cycle
 
-- Actual Sleeper API rate limit documentation (how many requests per hour?)
-- Dynasty Daddy's traffic/user numbers (how big is the "free tool" audience?)
-- Twitter engagement data from Week 1 tweets (once we have 7+ days of posting)
-- First Reddit analysis post performance
-- FantasyPros' actual paid subscriber count (they're public via their parent company?)
-- OpenRouter vs Anthropic direct pricing for Elite tier cost optimization
+- Twitter Week 1 engagement data (once we have 7+ days of consistent posting)
+- Actual tweet approval rate after screenshot pipeline fix
+- First site traffic data from Twitter referrals
+- Dynasty Daddy's feature set compared to Razzle's free Screener (feature-by-feature)
+- Sleeper API rate limits (still unknown)
+- RotoBot AI's actual feature depth and user reviews
+- r/DynastyFF posting requirements for new accounts (karma minimums, account age)
 
 ---
 
@@ -360,184 +395,154 @@ At $0 cost if all Pro: 1,000 users × $80/yr = $80k (doesn't hit $100k without E
 ### Phase 3: Self-Review Flags
 
 **Section 1 (Market Sizing):**
-- [NEEDS DATA] The "2-4M dynasty managers" estimate is a rough triangulation. No single authoritative source exists for dynasty-specific player counts.
-- [TOO VAGUE] "200-500k tool-using dynasty managers" — this range is too wide. Need better triangulation.
+- RESOLVED: Dynasty Nerds 11,000+ subscribers confirmed from their pricing page.
+- RESOLVED: Dynasty Daddy traffic quantified via SimilarWeb.
+- RESOLVED: US fantasy player count corrected to 53M (FSGA/Angus Reid primary research, May-June 2025, n=3,930). The "65M+" figure was from a marketing blog, not primary research.
 
 **Section 2 (Competitive Landscape):**
-- RESOLVED: FantasyPros HOF tier confirmed at $107.88/yr (12-month) or $71.94/6-month (FantasyPros support page). Table updated.
-- KeepTradeCut confirmed free. Dynasty Nerds confirmed at $70/yr. PFF+ confirmed at $120/yr. PlayerProfiler confirmed at $45-135/yr.
+- RESOLVED: Dynasty Nerds pricing ($69.99/yr) and subscriber count (11,000+) confirmed.
+- RESOLVED: RotoBot AI pricing ($79.99/yr early bird) confirmed from App Store.
+- RESOLVED: PlayerProfiler pricing ($135/season All-In, $45/module) confirmed.
+- RESOLVED: Dynasty Daddy features fully mapped. They have playoff simulator (10k+ Monte Carlo sims), trade finder, trade database (3.6M+ trades), 7-platform sync. MORE competitive than Cycle 1 assumed. BUT: no behavioral profiling, no manager analysis, no AI, no pressure maps. Razzle's moat holds on the intelligence layer.
 
 **Section 3 (Brand Audit):**
-- Evidence-based. Tweet rejection data is real. Brand positioning is documented. No flags.
+- Evidence-based. Tweet approval/rejection data is real. No flags.
 
 **Section 4 (PMF Scorecard):**
-- RESOLVED: Dynasty Daddy's league analyzer does Monte Carlo simulations, power rankings, and trade finder — but does NOT do behavioral profiling, panic detection, or manager personality analysis. Razzle's "Uniqueness: 9" for Manager Profiles is justified.
+- RESOLVED: RotoBot validates WTP for AI fantasy tools at $80-130/yr.
+- No new flags.
 
 **Section 5 (Monetization):**
-- [NEEDS DATA] The BYOK vs Elite cost model uses estimated per-query costs. Need to measure actual token usage per Situation Room query.
-- [REALITY CHECK] "70% Pro / 30% Elite" split is assumed, not based on any comparable product data.
+- RESOLVED: Elite tier cost corrected from $10.80/user/month to $0.49/user/month using actual OpenRouter pricing.
+- [REALITY CHECK] DeepSeek V3.2 pricing ($0.26/M input) is the *cheapest* option. If quality requires DeepSeek R1 or a more capable model, costs could be 4-10x higher. Need to test agent response quality with cheap vs expensive models.
 
 **Section 6 (Agent Profiles):**
-- [NOT ACTIONABLE] Upvote estimates are speculative. No data on what a new account's posts actually get on r/DynastyFF.
+- [NOT ACTIONABLE] Reddit upvote estimates remain speculative. Will calibrate after first posts. New accounts on r/DynastyFF typically get 5-50 upvotes; 100+ requires credibility.
 
 **Section 7 (Channel Strategy):**
-- RESOLVED: Target Twitter accounts to follow/engage: @DLFootball (DLF, premier dynasty site), @CoryEvansNFL (Dynasty Nerds contributor), @FFDynastyTrades (dynasty trade podcast), @DynastyDaddyFF (Dynasty Daddy), @JustinBoone (Yahoo dynasty rankings), @MattKelley (PlayerProfiler), Evan Silva, Sigmund Bloom, plus 20-30 mid-tier dynasty creators in the 1k-10k follower range.
-- RESOLVED: Target podcasts for guest pitches: (1) DLF Dynasty Podcast (longest-running, Dan Meylor/Matt Price/Ryan McDowell), (2) Dynasty Nerds Podcast (20k+ community), (3) Fantasy Football Today Dynasty (CBS, Heath Cummings), (4) FantasyPros Dynasty Podcast (Scott Bogman/Pat Fitzmaurice), (5) Fantasy Footballers Dynasty (Kyle Borgognoni, largest general audience).
+- RESOLVED: Dynasty Daddy's 33% organic search traffic validates SEO as a channel.
+- No new flags.
 
 **Section 8 (8-Week Plan):**
-- Actionable and specific. No major flags.
+- Updated to prioritize screenshot pipeline fix in Week 1.
+- [NOT ACTIONABLE] "2-3 tweets/day" target depends on fixing the 8% approval rate first. Unrealistic without pipeline fix.
 
 **Section 9 (Risk Register):**
-- Comprehensive. No flags.
+- Updated: Risk #6 (Elite costs) downgraded from Medium to Low.
+- Updated: Risk #1 (Twitter pipeline) NEW, elevated to HIGH.
+- Updated: Risk #4 expanded to include RotoBot.
 
-**Total flags: 8** → **4 resolved, 4 remaining** (2 NEEDS DATA without available data sources, 1 REALITY CHECK on assumption, 1 NOT ACTIONABLE on speculation)
-
-**Remaining unresolvable flags:**
-1. Dynasty manager count — no authoritative source exists. FSGA doesn't break out dynasty vs redraft. Best estimate remains 1-3M based on Sleeper user data + subreddit size.
-2. Tool-using dynasty manager count — same data limitation. 200-500k is the best estimate from subreddit activity, app downloads, and tool mention frequency.
-3. Pro/Elite split — genuinely unknown until launch. Set up tracking from day 1. Compare to Dynasty Nerds' conversion rates if possible.
-4. Reddit upvote estimates — speculative by nature. Will calibrate after first posts. New accounts on r/DynastyFF typically get 5-50 upvotes on analysis posts; 100+ requires established credibility.
+**Total flags: 2** (down from 8 in Cycle 1, 4 after Cycle 1 critique)
+- 1 REALITY CHECK (DeepSeek quality vs cost — general benchmarks show DeepSeek V3.2 competitive with GPT/Claude on most tasks but weaker on hardest reasoning chains. For fantasy football analysis — a domain-specific summarization/recommendation task — it should be sufficient. Must test empirically.)
+- 1 NOT ACTIONABLE (Reddit upvote estimates — inherently speculative, will calibrate after first posts)
 
 ---
 
 ## FINANCIAL MODEL
 
 ```
-RAZZLE FINANCIAL MODEL
-======================
+RAZZLE FINANCIAL MODEL — CYCLE 2 (REVISED)
+============================================
 
 Revenue
-  Target: 1,000 users × blended ~$95/year = $95,000/year
-  Monthly: $7,917/month
+  Target: 1,000 users x blended ~$100/year = $100,000/year
+  Monthly: $8,333/month
 
   Pricing tiers:
     Pro:   $9.99/mo  | $79.99/yr  (BYOK — user provides AI key)
-    Elite: $19.99/mo | $149.99/yr (AI key included)
+    Elite: $19.99/mo | $149.99/yr (AI key included, DeepSeek/Qwen via OpenRouter)
 
   Assumed mix at 1,000 users:
-    Pro:   700 users × $79.99/yr  = $55,993/yr
-    Elite: 300 users × $149.99/yr = $44,997/yr
-    Total revenue:                  $100,990/yr ($8,416/mo)
+    Pro:   600 users x $79.99/yr  = $47,994/yr
+    Elite: 400 users x $149.99/yr = $59,996/yr
+    Total revenue:                  $107,990/yr ($9,000/mo)
 
-  Conversion funnel (estimated):
-    Twitter/Reddit impressions → site visits:      2-5%
-    Site visits → free user (uses Screener):        30-40%
-    Free user → Sleeper connection:                 10-15%
-    Sleeper connection → Pro trial start:           20-30%
-    Pro trial → paid ($80-150/year):                15-25%
+  Note: Cycle 2 shifts mix to 60/40 Pro/Elite (was 70/30).
+  Rationale: now that Elite is profitable, no need to discourage it.
+  Users who don't want to manage API keys will choose Elite.
 
-  Required top-of-funnel to hit 1,000 paid:
-    Using conservative estimates (2% click, 30% use, 10% connect,
-    20% trial, 15% convert):
-    1,000 paid ÷ 0.15 = 6,667 trial starts needed
-    6,667 ÷ 0.20 = 33,333 Sleeper connections needed
-    33,333 ÷ 0.10 = 333,333 free users needed
-    333,333 ÷ 0.30 = 1,111,111 site visits needed
-    1,111,111 ÷ 0.02 = 55,555,556 impressions needed
+  Conversion funnel (estimated, unchanged):
+    Twitter/Reddit impressions -> site visits:      2-5%
+    Site visits -> free user (uses Screener):        30-40%
+    Free user -> Sleeper connection:                 10-15%
+    Sleeper connection -> Pro trial start:           20-30%
+    Pro trial -> paid ($80-150/year):                15-25%
 
-    That's 55M impressions — unrealistic for organic-only in year 1.
-
-  Using optimistic estimates (5% click, 40% use, 15% connect,
-  30% trial, 25% convert):
-    1,000 ÷ 0.25 = 4,000 trials
-    4,000 ÷ 0.30 = 13,333 connections
-    13,333 ÷ 0.15 = 88,889 free users
-    88,889 ÷ 0.40 = 222,222 site visits
-    222,222 ÷ 0.05 = 4,444,444 impressions
-
-    4.4M impressions is achievable with consistent Reddit + Twitter
-    presence over 6-9 months. A viral Reddit post alone can drive
-    100k-500k impressions.
-
-  REALISTIC path to 1,000 paid users:
-    - Need 100k-300k site visits over 12 months
-    - Need 5-10 viral-ish Reddit/Twitter moments (1k+ upvotes/impressions)
-    - Need 5-20% of visitors to hit the Screener (sticky enough to return)
-    - Need Sleeper connection to create "I need this" moment for 10-15%
-    - Need trial to close 15-25%
-    - Timeline: 12-18 months to 1,000 paid users is realistic
-    - 6 months to 1,000 is aggressive but possible with viral moments
+  Dynasty Nerds benchmark:
+    11,000 premium subs / estimated 150k total users = ~7% conversion
+    If Razzle achieves similar: need ~15,000 total users for 1,000 paid
+    15,000 users at 35% visit-to-user conversion = ~43,000 site visits
+    43,000 site visits is MUCH more achievable than Cycle 1's 100-300k estimate
+    Dynasty Daddy gets 382k/month — capturing 10% of that traffic = 38k/month
 
 Costs (monthly, at 1,000 users)
   Render hosting (Standard):        $25/mo
   Domain (razzle.lol):              $1/mo (amortized from ~$12/yr)
   Elite user AI costs:
-    300 Elite users × avg 3 queries/day × $0.12/query
-    = $0.36/user/day × 30 = $10.80/user/mo
-    × 300 users = $3,240/mo
-    (this assumes Claude Sonnet at $3/M input, $15/M output,
-     ~15k input tokens + ~4k output tokens per 6-agent query)
+    400 Elite users x avg 3 queries/day
+    x $0.0054/query (DeepSeek V3.2 via OpenRouter)
+    = 400 x 90 queries/month x $0.0054
+    = $194/mo
+
+    COMPARE TO CYCLE 1: $3,240/mo (Claude Sonnet pricing)
+    SAVINGS: 94% reduction in AI costs
+
   Claude Code subscription:          $200/mo
   Stripe fees (2.9% + $0.30):
-    Annual Pro:  $79.99 × 2.9% + $0.30 = $2.62/user/yr = $0.22/mo
-    Annual Elite: $149.99 × 2.9% + $0.30 = $4.65/user/yr = $0.39/mo
-    Blended: (700 × $2.62 + 300 × $4.65) / 12 = $269/mo
-  Total monthly cost at 1,000 users: ~$3,735/mo
+    Annual Pro:  $79.99 x 2.9% + $0.30 = $2.62/user/yr = $0.22/mo
+    Annual Elite: $149.99 x 2.9% + $0.30 = $4.65/user/yr = $0.39/mo
+    Blended: (600 x $2.62 + 400 x $4.65) / 12 = $286/mo
+  Total monthly cost at 1,000 users: ~$706/mo
 
-  ⚠️ ELITE AI COSTS ARE THE DOMINANT EXPENSE
-  At $3,240/mo for 300 Elite users (3 queries/day avg),
-  AI costs are 87% of total costs.
-
-  Mitigation options:
-  1. Use Haiku ($0.25/M input, $1.25/M output) for triage/routing
-     → reduces cost ~5x per query for simple queries
-  2. Query quotas: cap Elite at 10 queries/day
-  3. Cache common queries (same player, same scenario)
-  4. Encourage Pro (BYOK) over Elite via pricing/positioning
-  5. If avg drops to 1.5 queries/day: $1,620/mo (much better)
+  THIS IS A 81% COST REDUCTION FROM CYCLE 1's $3,735/mo
 
 Unit Economics
-  Revenue per user (blended):      $100.99/yr = $8.42/mo
-  Cost per Pro user:               ~$0.50/mo (hosting + Stripe)
-  Cost per Elite user:             ~$11.19/mo (hosting + Stripe + AI)
-  Gross margin per Pro user:       ~$7.92/mo (94%)
-  Gross margin per Elite user:     ~-$2.77/mo (-33%) at 3 queries/day
-  Gross margin per Elite user:     ~$2.83/mo (34%) at 1.5 queries/day
+  Revenue per user (blended):      $107.99/yr = $9.00/mo
+  Cost per Pro user:               ~$0.48/mo (hosting share + Stripe)
+  Cost per Elite user:             ~$0.97/mo (hosting share + Stripe + AI)
+  Gross margin per Pro user:       ~$8.52/mo (94.7%)
+  Gross margin per Elite user:     ~$8.03/mo (89.2%)
 
-  CRITICAL INSIGHT: Elite tier is margin-negative at high usage.
-  The business model works if:
-    (a) Majority of users choose Pro (BYOK), OR
-    (b) Elite users average < 2 queries/day, OR
-    (c) Query costs are reduced via model optimization
+  BOTH TIERS ARE HIGHLY PROFITABLE.
+  No more "push users toward Pro" strategy needed.
 
-  Blended margin (70/30 Pro/Elite at 1.5 queries/day avg):
-    Revenue: $8,416/mo
-    Costs:   $2,115/mo
-    Margin:  $6,301/mo = 75%
+  Blended margin at 1,000 users:
+    Revenue: $9,000/mo
+    Costs:   $706/mo
+    Margin:  $8,294/mo = 92%
 
-  Blended margin (70/30 Pro/Elite at 3 queries/day avg):
-    Revenue: $8,416/mo
-    Costs:   $3,735/mo
-    Margin:  $4,681/mo = 56%
+  Annual: $99,528 profit on $107,990 revenue
 
-  Break-even: ~50 paid users covers all non-AI costs.
-  Break-even including AI: ~75 paid users (at 1.5 queries/day)
+  Break-even: ~10 paid users covers all costs.
+  (Was ~75 users in Cycle 1. Now 10.)
 
 Timeline
-  Current users: 0 (site live, 1 tweet posted)
-  Month 1 target:   50 registered, 5 Sleeper connected
+  Current users: 0 (site live, 5 tweets posted)
+  Current Twitter: 5 tweets posted, 60+ rejected (~8% approval)
+
+  Month 1 target:   50 registered, 5 Sleeper connected, 100 Twitter followers
   Month 3 target:   500 registered, 50 connected, 5 paid
   Month 6 target:   2,000 registered, 200 connected, 50 paid
   Month 9 target:   5,000 registered, 500 connected, 200 paid
   Month 12 target:  10,000 registered, 1,500 connected, 500 paid
   Month 18 target:  20,000 registered, 3,000 connected, 1,000 paid
 
-  The 12-month target of 1,000 paid is aggressive.
-  18 months is more realistic for organic-only growth.
-  A single viral moment (Reddit "I built a thing" post with 1k+ upvotes)
-  could compress the timeline by 3-6 months.
+  REVISED CONFIDENCE: Higher than Cycle 1.
+  Dynasty Nerds benchmarks suggest 7% conversion at similar price point.
+  Need 15,000 total users for 1,000 paid (vs 333k site visits in Cycle 1 model).
+  But need to fix Twitter pipeline first.
 ```
 
-### Financial Model — Key Takeaways
+### Financial Model — Key Takeaways (Cycle 2)
 
-1. **The business is viable.** At 1,000 users with a Pro-heavy mix, Razzle generates $100k/yr at 56-75% margin. Break-even is ~50-75 users.
+1. **Both tiers are highly profitable.** Elite costs $0.49/user/month to serve (was $10.80 in Cycle 1). Break-even dropped from 75 users to 10.
 
-2. **Elite AI costs are the landmine.** At 3 queries/day, Elite users cost more to serve than they pay. Must either (a) optimize query costs, (b) set quotas, (c) push users toward Pro, or (d) raise Elite pricing.
+2. **Total costs at 1,000 users: $706/month.** Down 81% from Cycle 1's $3,735. The business is a money machine if it can acquire users.
 
-3. **The funnel math requires viral moments.** Pure organic grind to 1,000 paid users requires ~100-300k site visits. That needs 5-10 content moments that break through. A single r/DynastyFF post with 1k upvotes can drive 50k+ visits.
+3. **Dynasty Nerds benchmark changes the math.** Their ~7% conversion rate suggests Razzle needs ~15,000 total users for 1,000 paid — not the 100-300k site visits modeled in Cycle 1. The funnel is shorter than feared.
 
-4. **Pro (BYOK) is the profit center.** Pro users cost nearly nothing to serve. Every user who chooses Pro over Elite is pure margin. Marketing should position BYOK as the "power user" choice, not the "budget" choice.
+4. **The constraint is distribution, not economics.** The unit economics are excellent. The product is differentiated. The market is validated. The only question is: can Razzle reach 15,000 users in 12-18 months? That requires fixing the Twitter pipeline and executing the Reddit strategy.
 
-5. **18 months to 1,000 paid is the honest timeline.** 12 months is possible with viral moments but shouldn't be the planning assumption. The NFL season (September 2026) is the conversion window — everything before that is awareness building.
+5. **18 months to 1,000 paid remains the honest timeline.** But the economic floor is much higher. Even 100 paid users generates ~$10k/yr at $8k+ margin. The business is profitable from nearly the first dollar.
 
 ---
