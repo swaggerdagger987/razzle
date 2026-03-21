@@ -1747,7 +1747,7 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
   }
 
   if (state.universe === "college") {
-    const cid = escapeAttr(player.player_id || "");
+    const cid = escapeJS(player.player_id || "");
     html += `<td class="col-player"><div class="player-name-cell">`;
     html += playerHeadshot(player, pos);
     html += `<span class="pos-badge ${posClass(pos)}">${escapeHtml(pos)}</span>`;
