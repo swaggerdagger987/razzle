@@ -1257,6 +1257,7 @@ async function fetchAndRender() {
 async function fetchAndRenderNFL(signal, myId) {
   const loading = document.getElementById("loadingMsg");
   const tbody = document.getElementById("tableBody");
+  if (!loading || !tbody) return;
   loading.style.display = "block";
   _resetLoadingSkeleton(loading);
 
@@ -1338,6 +1339,7 @@ async function fetchAndRenderNFL(signal, myId) {
 async function fetchAndRenderProspects(signal, myId) {
   const loading = document.getElementById("loadingMsg");
   const tbody = document.getElementById("tableBody");
+  if (!loading || !tbody) return;
   loading.style.display = "block";
   _resetLoadingSkeleton(loading);
 
@@ -1384,6 +1386,7 @@ async function fetchAndRenderProspects(signal, myId) {
 async function fetchAndRenderCollege(signal, myId) {
   const loading = document.getElementById("loadingMsg");
   const tbody = document.getElementById("tableBody");
+  if (!loading || !tbody) return;
   loading.style.display = "block";
   _resetLoadingSkeleton(loading);
 
@@ -2675,8 +2678,10 @@ function applyUniverseUI() {
   }
 
   // Toggle universe buttons (only NFL and College now)
-  document.getElementById("universeNFL").classList.toggle("active", isNFL);
-  document.getElementById("universeCollege").classList.toggle("active", isCollege);
+  var nflBtn = document.getElementById("universeNFL");
+  var collegeBtn = document.getElementById("universeCollege");
+  if (nflBtn) nflBtn.classList.toggle("active", isNFL);
+  if (collegeBtn) collegeBtn.classList.toggle("active", isCollege);
 
   // Toggle college sub-view buttons
   const subToggle = document.getElementById("collegeSubToggle");
@@ -2689,7 +2694,8 @@ function applyUniverseUI() {
   }
 
   // Search placeholder
-  document.getElementById("searchInput").placeholder = prospectMode
+  var searchInput = document.getElementById("searchInput");
+  if (searchInput) searchInput.placeholder = prospectMode
     ? "search prospects..." : isCollege ? "search college players..." : "search players...";
 
   // Hide formula button in non-NFL modes
@@ -2697,14 +2703,16 @@ function applyUniverseUI() {
   if (formulaBtn) formulaBtn.style.display = isNFL ? "" : "none";
 
   // Hide relevance toggle in non-NFL modes
-  document.getElementById("relevanceToggle").style.display = isNFL ? "" : "none";
+  var relToggle = document.getElementById("relevanceToggle");
+  if (relToggle) relToggle.style.display = isNFL ? "" : "none";
 
   // Hide tag filter in non-NFL modes
   const tagFilterBtn = document.getElementById("tagFilterBtn");
   if (tagFilterBtn) tagFilterBtn.style.display = isNFL ? "" : "none";
 
   // Hide filter bar in non-NFL modes
-  document.getElementById("filterBar").style.display = isNFL ? "" : "none";
+  var filterBar = document.getElementById("filterBar");
+  if (filterBar) filterBar.style.display = isNFL ? "" : "none";
 
   // Data source label
   const ds = document.getElementById("dataSource");
@@ -2982,9 +2990,12 @@ function _updateWeekAnnotation() {
 function renderPagination() {
   const page = Math.floor(state.offset / state.limit) + 1;
   const totalPages = Math.ceil(state.totalCount / state.limit) || 1;
-  document.getElementById("pageInfo").textContent = `${page} / ${totalPages}`;
-  document.getElementById("prevBtn").disabled = state.offset === 0;
-  document.getElementById("nextBtn").disabled = state.offset + state.limit >= state.totalCount;
+  var pageInfo = document.getElementById("pageInfo");
+  var prevBtn = document.getElementById("prevBtn");
+  var nextBtn = document.getElementById("nextBtn");
+  if (pageInfo) pageInfo.textContent = `${page} / ${totalPages}`;
+  if (prevBtn) prevBtn.disabled = state.offset === 0;
+  if (nextBtn) nextBtn.disabled = state.offset + state.limit >= state.totalCount;
   const sel = document.getElementById("pageSizeSelect");
   if (sel) sel.value = String(state.limit);
   const pag = document.querySelector(".footer-bar .pagination");
@@ -10673,7 +10684,8 @@ async function _taLoadPickChart() {
 
 function closeTradeAnalyzer(e) {
   if (e && e.target !== e.currentTarget) return;
-  document.getElementById("tradeAnalyzerOverlay").classList.remove("open");
+  var overlay = document.getElementById("tradeAnalyzerOverlay");
+  if (overlay) overlay.classList.remove("open");
 }
 
 function _taSetupSearch(side) {
@@ -11386,7 +11398,7 @@ async function rosterSearchPlayers(query) {
       var inRoster = roster.find(function(r) { return r.player_id === pid; });
       if (inRoster) return;
       var pos = p.position || "??";
-      html += '<div style="display:flex; align-items:center; gap:6px; padding:4px 8px; cursor:pointer; border-radius:4px; margin-bottom:2px; background:var(--bg);" onclick="addToRoster(\'' + escapeAttr(pid) + '\',\'' + escapeAttr(p.full_name || p.name || "") + '\',\'' + escapeAttr(pos) + '\',\'' + escapeAttr(p.team || "FA") + '\'); rosterSearchPlayers(\'' + escapeAttr(query) + '\'); renderMyRosterPanel();">';
+      html += '<div class="roster-search-row" style="display:flex; align-items:center; gap:6px; padding:4px 8px; cursor:pointer; border-radius:4px; margin-bottom:2px; background:var(--bg);" data-pid="' + escapeAttr(pid) + '" data-name="' + escapeAttr(p.full_name || p.name || "") + '" data-pos="' + escapeAttr(pos) + '" data-team="' + escapeAttr(p.team || "FA") + '" data-query="' + escapeAttr(query) + '">';
       html += '<span class="pos-badge pos-' + pos.toLowerCase() + '" style="font-size:9px; padding:1px 5px;">' + escapeHtml(pos) + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:12px;">' + escapeHtml(p.full_name || p.name || "") + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + escapeHtml(p.team || "FA") + '</span>';
@@ -11395,6 +11407,13 @@ async function rosterSearchPlayers(query) {
     });
     if (players.length === 0) html = '<div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-faint); padding:8px;">' + razzleEmpty() + '</div>';
     results.innerHTML = html;
+    results.querySelectorAll(".roster-search-row").forEach(function(row) {
+      row.addEventListener("click", function() {
+        addToRoster(row.dataset.pid, row.dataset.name, row.dataset.pos, row.dataset.team);
+        rosterSearchPlayers(row.dataset.query);
+        renderMyRosterPanel();
+      });
+    });
   } catch (err) {
     results.innerHTML = '<div style="color:var(--red); font-size:12px;">' + razzleError() + '</div>';
   }
