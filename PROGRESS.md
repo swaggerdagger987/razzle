@@ -2983,6 +2983,7 @@ All data enrichments (PBP, roster demographics, bye weeks, injuries) are local-o
 | 5 | draftclass.html null guards | P1 | draftclass.html | `d.summary` and `d.players` accessed without null checks. Added `\|\| {}` and `\|\| []` guards. |
 | 6 | 4 more `.length` on undefined arrays | P1 | airyards, redzone, usage, vorp | Same crash pattern as #4. Added `(data.x \|\| []).length` guards. |
 | 7 | regression.html inner `.length` checks | P2 | regression.html | Early-return guard fixed in #4, but inner section rendering still accessed `.length` directly — would crash if one array existed but the other was undefined. |
+| 8 | warroom.js briefing loaders null body | P2 | warroom.js | `loadLatestBriefing` and `loadBriefingById` accessed `body.innerHTML` without checking if `getElementById('weeklyBriefingBody')` returned null. Added `if (!body) return` guard to both. |
 
 ### Verified Clean (manual sweep + 4 parallel agents)
 - 11/11 smoke tests pass
