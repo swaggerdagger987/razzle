@@ -997,31 +997,25 @@ def _tv_tier(value):
 # ---------------------------------------------------------------------------
 
 def _efficiency_grade(pct):
-    """Convert efficiency percentile (0-100) to letter grade."""
+    """Convert a 0-100 percentile to a letter grade (canonical 8-tier scale).
+
+    Matches _grade_from_percentile() in dashboards.py so grades are
+    consistent across all endpoints (efficiency, report cards, etc.).
+    """
     if pct >= 95:
         return "A+"
-    if pct >= 88:
+    if pct >= 85:
         return "A"
-    if pct >= 80:
-        return "A-"
-    if pct >= 72:
+    if pct >= 75:
         return "B+"
-    if pct >= 64:
+    if pct >= 65:
         return "B"
-    if pct >= 56:
-        return "B-"
-    if pct >= 48:
+    if pct >= 50:
         return "C+"
-    if pct >= 40:
+    if pct >= 35:
         return "C"
-    if pct >= 32:
-        return "C-"
-    if pct >= 24:
-        return "D+"
-    if pct >= 16:
+    if pct >= 25:
         return "D"
-    if pct >= 8:
-        return "D-"
     return "F"
 
 

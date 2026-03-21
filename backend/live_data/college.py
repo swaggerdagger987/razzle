@@ -8,7 +8,7 @@ import re
 from collections import defaultdict
 
 from ..db import get_db
-from .core import _cached, _CACHE_TTL_STABLE, _current_nfl_season, _enrich_college_derived, TEAM_ABBREV
+from .core import _cached, _CACHE_TTL_STABLE, _current_nfl_season, _enrich_college_derived, TEAM_ABBREV, _efficiency_grade
 
 logger = logging.getLogger("razzle.live_data.college")
 
@@ -19,24 +19,6 @@ def _has_table(conn, table_name):
         "SELECT name FROM sqlite_master WHERE type='table' AND name=?", (table_name,)
     ).fetchone() is not None
 
-
-def _efficiency_grade(percentile):
-    """Convert a 0-100 percentile to a letter grade (canonical 8-tier)."""
-    if percentile >= 95:
-        return "A+"
-    if percentile >= 85:
-        return "A"
-    if percentile >= 75:
-        return "B+"
-    if percentile >= 65:
-        return "B"
-    if percentile >= 50:
-        return "C+"
-    if percentile >= 35:
-        return "C"
-    if percentile >= 25:
-        return "D"
-    return "F"
 
 
 def _fetch_college_players_uncached(
