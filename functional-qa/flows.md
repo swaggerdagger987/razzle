@@ -18,7 +18,7 @@
 | 1 | Landing -> Lab | CTA click, initial data load, screener populates with real player data | RE-AUDIT SESSION 20 — PASS. Prod: 0 JS errors, 25 rows, 69 sidebar items. FUNC-015 code fix verified (compute_trade_value unified). NOT YET DEPLOYED: prod Nacua=75.2 (old), Chase=94.8 vs trade_value=95.8. Weekly filter works (screener/query). All Ship Loop crash guards, dark mode canvas, thread-safe cache verified. |
 | 2 | Screener: Position filter | Filter QB/RB/WR/TE individually. Count matches. Remove filter. Table resets? | DONE — PASS (all 4 positions clean) |
 | 3 | Screener: Multi-filter | Chain 3 filters (pos + team + min stat). Results are the correct intersection? | DONE — PASS (RB+800yd = 27, all correct) |
-| 4 | Screener: Sort | Sort every stat column. #1 player is actually the leader? Reverse sort works? | DONE — PASS (desc+asc both correct) |
+| 4 | Screener: Sort | Sort every stat column. #1 player is actually the leader? Reverse sort works? | RE-AUDIT SESSION 22 — PASS. Sort null sentinel fix verified (None→-inf for desc, inf for asc). sql_limit 500→2000 ensures complete dataset for derived metric Python re-sort. Prod: WOPR/target_share sorts return correct order. Perf note: derived sorts ~1.4s vs SQL sorts ~0.4s. |
 | 5 | Screener: Search | Search "Mahomes", "McCaffrey", "Amon-Ra". Results correct? Clear resets? | DONE — PASS. FUNC-002 FIXED on prod. Amon-Ra=1 result, Ja'Marr=1 result, D'Andre=1 result. Browser-verified. |
 | 6 | Screener: Season switch | Switch 2025 -> 2024 -> 2023. Data actually changes? Stat values match that season? | RE-AUDIT SESSION 13 — PASS. 2025 (CMC 416.6) vs 2024 (Lamar 430.4) confirmed different. Career mode verified (Wilson 2890.14/157GP). |
 | 7 | Screener: Week filter | Select Week 1. Stats are single-week, not season totals? Switch back to All Weeks. | DONE — PASS (production only, local server stale) |
@@ -66,11 +66,11 @@
 
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
-| 32 | Target Share / Air Yards | Values are percentages that sum correctly per team? WOPR calculated right? | DONE — PASS (per-team sums 89-93%) |
+| 32 | Target Share / Air Yards | Values are percentages that sum correctly per team? WOPR calculated right? | RE-AUDIT SESSION 22 — PASS. WOPR/G fix code verified: AVG(stat_value) is already per-game, old code double-divided by GP. Fix: wopr_per_game = wopr (rounded). Prod still has old code (not deployed). WOPR sort works correctly on prod (JSN 0.867 > St.Brown 0.746 > Nacua 0.709). |
 | 33 | Snap Efficiency | Snap % shown? Fantasy points per snap derived correctly? | DONE — PASS (calcs correct), P2 no min snap threshold |
 | 34 | Red Zone | RZ targets/carries shown? RZ stats don't include non-RZ plays? | DONE — PASS (calcs correct, annotations good) |
-| 35 | Opportunity Share | Opportunity = targets + carries? Per-team shares sum to ~100%? | DONE — PASS (alpha dogs), P2 FUNC-005: dominator rec shares null |
-| 36 | Efficiency metrics | YPC, YPR, YPT calculated correctly from raw stats? Not showing NaN/Infinity for 0 attempts? | DONE — PASS (0 NaN/Inf in 200 players) |
+| 35 | Opportunity Share | Opportunity = targets + carries? Per-team shares sum to ~100%? | RE-AUDIT SESSION 22 — PASS. Team shares fix code verified: s.team (historical per-game) replaces p.team (current team). Also fixed in report_cards, season_awards, opportunity_share. Removed fantasy_relevant filter for correct team totals. P2 FUNC-005: dominator rec shares still null on prod (fix pending deploy). |
+| 36 | Efficiency metrics | YPC, YPR, YPT calculated correctly from raw stats? Not showing NaN/Infinity for 0 attempts? | RE-AUDIT SESSION 22 — PASS. YAC/Rec fix code verified: old code used max(0, rec_yards - air_yards) which was usually 0 or negative. New code uses actual receiving_yards_after_catch column. Prod still shows 0.00 YAC/Rec for most WRs (old code). Fix pending deploy. |
 | 37 | Regression candidates | TD regression logic sound? Flagging high-TD players with low expected TDs? | RE-AUDIT SESSION 13 — PASS. 2025 data: Stafford +16.5 TD delta (sell), Jefferson -5.0 (buy). Math verified. |
 | 38 | Garbage Time | Identified correctly? Based on game script, not arbitrary cutoff? | DONE — PASS (data sound, clean producers sensible). P2: no gt_ppg/clean_ppg split, backup scrubs dominate padders |
 | 39 | Gamescript | Game script data per player? Shows performance in various score differentials? | DONE — PASS. API returns positive_script (winning) + negative_script (losing) splits. Barkley 22.2 PPG positive, B.Robinson 20.1 PPG negative — sensible. Position filter, season selector, diff badges, GT% chips, escapeHtml on all data. |
@@ -78,7 +78,7 @@
 | 41 | Consistency | Week-to-week consistency calculated? Boom/bust rates make sense? | DONE — PASS (CoV/StdDev/floor/ceiling verified from weekly data, grades sensible) |
 | 42 | Workload | Snap counts + touches trending? Workload share within team correct? | DONE — MOSTLY FIXED. FUNC-007 snap backfill deployed: McCaffrey 54.8 snaps/g, Taylor 51.9. 3 edge-case players still at 0. |
 | 43 | VORP | Value over replacement calculated? Replacement level defined per position? Sensible? | DONE — PASS (exact calcs), P2 missing tier badges |
-| 44 | Scoring breakdown | Fantasy point sources broken down correctly? Passing + rushing + receiving = total? | DONE — PASS (nflverse ground truth PPR, small diffs from 2pt conv/fumbles not in basic stats) |
+| 44 | Scoring breakdown | Fantasy point sources broken down correctly? Passing + rushing + receiving = total? | RE-AUDIT SESSION 22 — PASS. Half-PPR falsy fix (hppr is None, not 'not hppr') and STD fallback (PPR - receptions) verified code-correct. Prod data verified: PPR/Half-PPR/STD all match manual calc with delta=0.0 across top 10 players. |
 
 ## Group 6: Draft & Prospects (draft season critical path)
 
@@ -109,7 +109,7 @@
 | 57 | Sidebar navigation | Every sidebar item loads its panel? No dead links? Category headers correct? | RE-AUDIT SESSION 16 — PASS. 69 sidebar items, 10 free + 59 pro-locked. FOREVER FREE + FREE PANELS + PRO sections. Panel switching via URL params (?panel=breakouts, ?panel=rankings) works. Tier gating intact (switchPanel checks FREE_PANELS + isPaidUser). 0 JS errors. |
 | 58 | Command palette (Ctrl+K) | Opens? Finds panels by name? Finds players? Selection navigates correctly? | DONE — PASS. Opens via nav button, search input focused, "Search players... (Ctrl+K)" placeholder. Browser-verified on prod. |
 | 59 | Dark mode | Every element switches? Data readable in dark? Charts visible? No white flashes? | RE-AUDIT SESSION 14 — PASS. Espresso flip palette verified via screenshot. 25 rows visible, text readable, position badges clear, no white flashes. Toggle works (0 JS errors). |
-| 60 | Auth flow | Sign in modal opens? Closes cleanly? Error states for bad input? | DONE — PASS. Modal opens, Sign In/Register tabs, email/password fields. Focus trap, Escape close, overlay click close. Rate limiting (3 reg/24hr), generic errors, loading states. Browser-verified on prod. |
+| 60 | Auth flow | Sign in modal opens? Closes cleanly? Error states for bad input? | RE-AUDIT SESSION 22 — PASS. Registration button UX fix verified: btn.textContent restored to origText on all 4 validation error paths + finally block handles network/API errors. Prod verified. |
 | 61 | Pricing page | All plans shown? CTAs work? Correct prices? Checkout starts? | RE-AUDIT SESSION 16 — PASS. Post Phase E re-audit. "PICK YOUR PLAYBOOK" title, 3 plans (Free/$0, Pro/$79.99/yr, Elite/$149.99/yr), monthly/yearly toggle, trial banner "7 DAYS OF PRO. ON THE HOUSE.", feature lists, 13 buttons. 0 JS errors. |
 | 62 | Dashboard / Stat Leaders | Summary stats populated? Leaders match screener data? Category switching works? | DONE — SESSION 12 VERIFIED. FUNC-012 DEPLOYED. Prod: Lamar GP=17, Burrow GP=17, PPG=25.3. Correct regular-season values. |
 
