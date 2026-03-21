@@ -1181,3 +1181,45 @@ re-audit-4	OK	backend/live_data/players.py	488	screener_query	pass	re-audit: scr
 FUNC-019	OK	frontend/player.html	4	base_href	pass	FUNC-019 RESOLVED: SEO routes (/player/, /compare/, /team/) all load 0 JS errors on prod after ship/launch-fixes merge to master	100	2026-03-20T22:08
 smoke-prod-s24	OK	-	-	-	pass	smoke:prod API — health=200, players=2020, screener=81 QBs, quick_search=Mahomes, filter-options=4pos/32teams/11seasons	100	2026-03-20T22:08
 smoke-prod-s24	OK	-	-	-	pass	smoke:prod browser — Lab 25 rows, 69 sidebar items, 0 JS errors, dark mode clean	100	2026-03-20T22:10
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+session25-smoke	OK	-	-	-	pass	smoke: 11/11 local pass, prod 200 on health/players/screener/filter-options	100	2026-03-20T22:15
+session25-visual	OK	-	-	-	pass	visual: Landing+Lab light/dark clean, warm sand, espresso dark, no white flashes, 0 JS errors	100	2026-03-20T22:17
+session25-pages	OK	-	-	-	pass	pages: index(0err), lab(0err), agents(0err), league-intel(0err), pricing(0err) all clean on prod	100	2026-03-20T22:18
+session25-panels	OK	-	-	-	pass	panels: breakouts(23tr), rankings(23tr), weekly(64tr), dashboard(23tr), cheatsheet(23tr), consistency(23tr), vorp(23tr), stocks(23tr) — all 0 JS errors on prod	100	2026-03-20T22:20
+session25-seo	OK	-	-	-	pass	SEO routes: /player/00-0038542(0err), /compare/00-0038542/00-0039139(0err), /team/ATL(0err) all load on prod	100	2026-03-20T22:25
+session25-derived	OK	-	-	-	pass	derived stats: WR top5 YPR/YPT/CR/PPG exact match. QB top5 CompPct/YPA/PPG exact match. WOPR desc correct (Wilson 0.925 > JSN 0.867 > St.Brown 0.746)	100	2026-03-20T22:22
+session25-dynasty	OK	-	-	-	pass	dynasty values: Nacua(95.8)>McBride(95.6)>Robinson(95.4)>Gibbs(95.3)>JSN(94.9) — age/production/scarcity model sensible. McCaffrey(29.8) not in top 20.	100	2026-03-20T22:21
+session25-brand	OK	-	-	-	pass	brand: "forever free" used consistently across 6 pages + lab.js, matches DESIGN.md canonical copy. No "free forever" or "free tier" found.	100	2026-03-20T22:23
+36	P1	backend/live_data/dashboards.py	119	fetch_efficiency_rankings	ticket	FUNC-021: Efficiency PPO metric broken for QBs — opportunities=targets+carries ignores pass attempts. Top 10 most efficient are ALL QBs with PPO 3-6x (Prescott 5.92) vs RBs 0.7-1.1x. TD rate also broken (60%+ for QBs).	100	2026-03-20T22:24
