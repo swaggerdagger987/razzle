@@ -2643,3 +2643,33 @@ week_filter failure (10/11) is a stale server process issue, not a code bug. Ver
 - All Python files compile clean
 - All JS files syntax clean
 - 0 regressions
+
+---
+
+## Ship Loop Session 22: 3-Agent Deep Sweep — 9 Bug Fixes (Mar 20)
+
+**Goal**: Parallel sweep with Backend Architect, Frontend Developer, and Data Integrity agents. Found 9 real bugs.
+
+### Fixes Applied
+
+| # | Fix | Severity | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | Register button text not restored on validation failure | P0 | app.js:856-859 | Validation early-returns restored `btn.disabled = false` but not `btn.textContent = origText` — button showed "creating account..." permanently |
+| 2 | Half-PPR fallback triggered on valid zero value | P0 | core.py:232-233 | `if not hppr` is True when `hppr = 0.0` (valid score). Changed to `if hppr is None`. Previously produced negative half-PPR for zero-point players with receptions |
+| 3 | PPFD scoring used PPR instead of Standard as base | P1 | core.py:276 | Comment said "standard + 1pt per first down" but code used `fantasy_points_ppr`. PPR double-counts receptions. Now uses `fantasy_points_std` with PPR-receptions fallback |
+| 4 | YAC per reception used wrong calculation | P1 | dashboards.py:63-130 | Was computing `max(0, rec_yards - air_yards)` which is wrong because `receiving_air_yards` includes incomplete targets. Now queries `receiving_yards_after_catch` directly |
+| 5 | Ascending sort on derived stats put nulls first | P1 | players.py:488-489 | `sort(key=lambda x: x.get(k) or 0)` treats None as 0, which sorts to top in ascending. Now uses `float('inf')` sentinel for nulls in ascending, `float('-inf')` in descending |
+| 6 | Diff mode stale baseline after season/week change | P1 | lab.js:4551 | Cache key was `baseId:itemCount` — if new season had same row count, stale baseline was reused. Added `season` and `week` to cache key |
+| 7 | ValueError masking in global exception handler | P1 | server.py:689 | `isinstance(exc, (json.JSONDecodeError, ValueError))` caught non-JSON ValueErrors from endpoint logic and returned misleading "invalid JSON body" 400 error. Narrowed to `json.JSONDecodeError` only |
+| 8 | N shortcut toggled notes column without re-rendering | P2 | lab.js:10416-10417 | `toggleColumn()` modifies state but doesn't render. Added `renderTableHead(); renderTable(); renderColumnPicker(); saveStateToURL()` |
+| 9 | Team totals for opp share filtered by fantasy_relevant | P2 | dashboards.py (3 queries) | `AND p.fantasy_relevant = 1` on team total denominators excluded non-fantasy players, inflating every player's opportunity share and dominator rating. Removed filter from opportunity share (line 940), report cards (line 1167), and season awards (line 1503). Also fixed awards query using `p.team` instead of `s.team` |
+
+### False Positives (investigated, not bugs)
+- `openPlayerPopup` in lab-panels.js — agent reported as undefined but it IS defined in app.js (loaded sync before lab-panels.js defer)
+- Page size locked to 25 — intentional per prior fix (Session 7, preventing slow loads)
+
+### Verified Clean
+- 11/11 smoke tests pass after all fixes
+- All Python files compile clean
+- All JS files syntax clean
+- 0 regressions
