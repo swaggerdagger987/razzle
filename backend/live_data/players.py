@@ -198,7 +198,7 @@ def fetch_players(
                     p.player_id, p.full_name, p.position, p.team, p.age, p.college, p.headshot_url,
                     COUNT(*) as games,
                     COUNT(DISTINCT s.season) as seasons,
-                    COALESCE(SUM(s.fantasy_points_half_ppr), SUM(s.fantasy_points_ppr) - 0.5 * SUM(s.receptions)) as fantasy_points_half_ppr,
+                    ROUND(COALESCE(SUM(s.fantasy_points_half_ppr), SUM(s.fantasy_points_ppr) - 0.5 * SUM(s.receptions)), 1) as fantasy_points_half_ppr,
                     {_STAT_SUM_COLS}
                 FROM players p
                 JOIN player_week_stats s ON p.player_id = s.player_id
@@ -455,7 +455,7 @@ def _fetch_screener_uncached(body):
                 p.player_id, p.full_name, p.position, p.team, p.age, p.college, p.headshot_url,
                 COUNT(*) as games,
                 COUNT(DISTINCT s.season) as seasons,
-                COALESCE(SUM(s.fantasy_points_half_ppr), SUM(s.fantasy_points_ppr) - 0.5 * SUM(s.receptions)) as fantasy_points_half_ppr,
+                ROUND(COALESCE(SUM(s.fantasy_points_half_ppr), SUM(s.fantasy_points_ppr) - 0.5 * SUM(s.receptions)), 1) as fantasy_points_half_ppr,
                 {_STAT_SUM_COLS}
             FROM players p
             JOIN player_week_stats s ON p.player_id = s.player_id
@@ -863,7 +863,7 @@ def _fetch_team_roster_uncached(team=None, season=None):
             SELECT
                 p.player_id, p.full_name, p.position, p.team, p.age,
                 p.headshot_url,
-                SUM(s.fantasy_points_ppr) as total_ppr,
+                ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                 COUNT(DISTINCT s.week) as games,
                 SUM(s.passing_yards) as passing_yards,
                 SUM(s.passing_tds) as passing_tds,
@@ -962,9 +962,9 @@ def _fetch_career_stats_uncached(player_id):
             SELECT
                 s.season,
                 COUNT(DISTINCT s.week) as games,
-                SUM(s.fantasy_points_ppr) as total_ppr,
-                COALESCE(SUM(s.fantasy_points_half_ppr), SUM(s.fantasy_points_ppr) - 0.5 * SUM(s.receptions)) as total_hppr,
-                SUM(s.fantasy_points_std) as total_std,
+                ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
+                ROUND(COALESCE(SUM(s.fantasy_points_half_ppr), SUM(s.fantasy_points_ppr) - 0.5 * SUM(s.receptions)), 1) as total_hppr,
+                ROUND(SUM(s.fantasy_points_std), 1) as total_std,
                 SUM(s.receptions) as rec,
                 SUM(s.targets) as tgt,
                 SUM(s.receiving_yards) as rec_yd,
@@ -1176,7 +1176,7 @@ def _fetch_player_percentiles_uncached(player_id, season=None):
         rows = conn.execute("""
             SELECT
                 s.player_id,
-                SUM(s.fantasy_points_ppr) as total_ppr,
+                ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                 COUNT(DISTINCT s.week) as games,
                 SUM(s.receptions) as rec,
                 SUM(s.targets) as tgt,
@@ -1385,7 +1385,7 @@ def _fetch_points_breakdown_uncached(player_id, season=None):
                 SUM(receiving_yards) as rec_yd,
                 SUM(receiving_tds) as rec_td,
                 SUM(receptions) as rec,
-                SUM(fantasy_points_ppr) as total_ppr,
+                ROUND(SUM(fantasy_points_ppr), 1) as total_ppr,
                 COUNT(DISTINCT week) as games,
                 SUM(turnovers) as turnovers
             FROM player_week_stats
@@ -1555,7 +1555,7 @@ def _fetch_compare_table_uncached(player_ids, season=None):
         cursor.execute(f"""
             SELECT p.player_id, p.full_name, p.position, p.team,
                    COUNT(DISTINCT s.week) as games,
-                   COALESCE(SUM(s.fantasy_points_ppr), 0) as total_fpts,
+                   ROUND(COALESCE(SUM(s.fantasy_points_ppr), 0), 1) as total_fpts,
                    COALESCE(SUM(s.passing_yards), 0) as pass_yd,
                    COALESCE(SUM(s.passing_tds), 0) as pass_td,
                    COALESCE(SUM(s.interceptions), 0) as ints,

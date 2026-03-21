@@ -47,7 +47,7 @@ def _fetch_featured_uncached():
 
             rows = conn.execute(f"""
                 SELECT p.player_id, p.full_name, p.position, p.team, p.age,
-                       SUM(s.fantasy_points_ppr) as total_ppr,
+                       ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                        COUNT(DISTINCT s.week) as games
                 FROM players p
                 JOIN player_week_stats s ON p.player_id = s.player_id AND s.season = ?
@@ -103,7 +103,7 @@ def _fetch_featured_uncached():
             breakout_age_filter = "AND p.age IS NOT NULL AND p.age <= 27" if has_ages else ""
             rows = conn.execute(f"""
                 SELECT p.player_id, p.full_name, p.position, p.team, p.age,
-                       SUM(s.fantasy_points_ppr) as total_ppr,
+                       ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                        COUNT(DISTINCT s.week) as games,
                        SUM(s.targets) as total_targets,
                        SUM(s.receptions) as total_rec
@@ -154,8 +154,8 @@ def fetch_scoring_comparison(season=None, position=None, limit=40):
                 SELECT
                     p.player_id, p.full_name, p.position, p.team,
                     p.headshot_url,
-                    SUM(s.fantasy_points_ppr) as total_ppr,
-                    COALESCE(SUM(s.fantasy_points_half_ppr), SUM(s.fantasy_points_ppr) - 0.5 * SUM(s.receptions)) as total_half,
+                    ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
+                    ROUND(COALESCE(SUM(s.fantasy_points_half_ppr), SUM(s.fantasy_points_ppr) - 0.5 * SUM(s.receptions)), 1) as total_half,
                     SUM(s.receptions) as total_rec,
                     COUNT(DISTINCT s.week) as games
                 FROM players p
@@ -425,7 +425,7 @@ def fetch_player_archetypes(season=None, position=None):
                 SELECT
                     p.player_id, p.full_name, p.position, p.team, p.age,
                     p.headshot_url,
-                    SUM(s.fantasy_points_ppr) as total_ppr,
+                    ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                     COUNT(DISTINCT s.week) as games,
                     SUM(s.receptions) as total_rec,
                     SUM(s.targets) as total_tgt,
@@ -576,7 +576,7 @@ def fetch_draft_class(draft_year=None, position=None):
                     d.player_name, d.position, d.round, d.pick, d.team as draft_team,
                     d.college,
                     p.player_id, p.team as current_team, p.age,
-                    SUM(s.fantasy_points_ppr) as total_ppr,
+                    ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                     COUNT(DISTINCT s.season) as seasons_played,
                     COUNT(DISTINCT s.season || '-' || s.week) as total_games
                 FROM draft_picks d
@@ -780,7 +780,7 @@ def fetch_pace_tracker(season=None, position=None, limit=50):
                        COALESCE(SUM(s.receptions), 0) as total_rec,
                        COALESCE(SUM(s.targets), 0) as total_tgt,
                        COALESCE(SUM(s.carries), 0) as total_car,
-                       COALESCE(SUM(s.fantasy_points_ppr), 0) as total_fpts
+                       ROUND(COALESCE(SUM(s.fantasy_points_ppr), 0), 1) as total_fpts
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ?
@@ -1028,7 +1028,7 @@ def fetch_season_recap(season=None):
             cursor.execute("""
                 SELECT p.player_id, p.full_name, p.position, p.team,
                        COUNT(DISTINCT s.week) as games,
-                       COALESCE(SUM(s.fantasy_points_ppr), 0) as total_fpts
+                       ROUND(COALESCE(SUM(s.fantasy_points_ppr), 0), 1) as total_fpts
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ? AND s.season_type = 'regular'
@@ -1124,7 +1124,7 @@ def fetch_season_recap(season=None):
             cursor.execute("""
                 SELECT p.player_id, p.full_name, p.position, p.team,
                        COUNT(DISTINCT s.week) as games,
-                       COALESCE(SUM(s.fantasy_points_ppr), 0) as total_fpts
+                       ROUND(COALESCE(SUM(s.fantasy_points_ppr), 0), 1) as total_fpts
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ? AND s.season_type = 'regular'
@@ -1213,7 +1213,7 @@ def fetch_records(position=None, limit=10):
             cursor.execute(f"""
                 SELECT p.player_id, p.full_name, p.position, p.team,
                        s.season, COUNT(DISTINCT s.week) as games,
-                       SUM(s.fantasy_points_ppr) as total_fpts
+                       ROUND(SUM(s.fantasy_points_ppr), 1) as total_fpts
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE p.fantasy_relevant = 1 AND s.season_type = 'regular' {pos_filter}
@@ -1238,7 +1238,7 @@ def fetch_records(position=None, limit=10):
             cursor.execute(f"""
                 SELECT p.player_id, p.full_name, p.position, p.team,
                        COUNT(DISTINCT s.week || '-' || s.season) as games,
-                       SUM(s.fantasy_points_ppr) as total_fpts,
+                       ROUND(SUM(s.fantasy_points_ppr), 1) as total_fpts,
                        MIN(s.season) as first_season,
                        MAX(s.season) as last_season
                 FROM player_week_stats s
@@ -1265,7 +1265,7 @@ def fetch_records(position=None, limit=10):
             cursor.execute(f"""
                 SELECT p.player_id, p.full_name, p.position, p.team,
                        COUNT(DISTINCT s.week || '-' || s.season) as games,
-                       SUM(s.fantasy_points_ppr) as total_fpts
+                       ROUND(SUM(s.fantasy_points_ppr), 1) as total_fpts
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE p.fantasy_relevant = 1 AND s.season_type = 'regular' {pos_filter}
@@ -1412,7 +1412,7 @@ def fetch_playoff_schedule(season=None, position=None, limit=40):
             # Build defense PPG-allowed-by-position for the season
             cursor.execute("""
                 SELECT s.opponent_team, p.position,
-                       COALESCE(SUM(s.fantasy_points_ppr), 0) as total_ppr,
+                       ROUND(COALESCE(SUM(s.fantasy_points_ppr), 0), 1) as total_ppr,
                        COUNT(DISTINCT s.week) as games
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
@@ -1586,7 +1586,7 @@ def fetch_fpts_breakdown(season=None, position=None, limit=40):
                        SUM(s.rushing_tds) as rush_td,
                        SUM(s.receiving_tds) as rec_td,
                        SUM(s.interceptions) as ints,
-                       SUM(s.fantasy_points_ppr) as total_ppr,
+                       ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                        COUNT(DISTINCT s.week) as games
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
@@ -1855,7 +1855,7 @@ def fetch_handcuffs(season=None, limit=30):
                        SUM(s.rushing_tds) as total_rush_td,
                        SUM(s.targets) as total_tgt,
                        SUM(s.receptions) as total_rec,
-                       SUM(s.fantasy_points_ppr) as total_ppr,
+                       ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                        COUNT(DISTINCT s.week) as games
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
@@ -1986,7 +1986,7 @@ def fetch_weekly_mvp(season=None):
     return _cached(f"weekly_mvp:{season}", _query)
 
 
-def fetch_stacks(season=None, limit=30):
+def fetch_stacks(season=None, limit=30, min_games=8):
     """
     Stack correlation finder — QB + WR/TE same-team scoring correlations.
     Computes Pearson correlation between QB weekly scores and their pass
@@ -2046,7 +2046,7 @@ def fetch_stacks(season=None, limit=30):
                 for qb_id in team_qbs[team]:
                     qb_info = player_info[qb_id]
                     qb_weeks = player_weeks[qb_id]
-                    if len(qb_weeks) < 5:
+                    if len(qb_weeks) < min_games:
                         continue
 
                     qb_ppg = sum(qb_weeks.values()) / len(qb_weeks)
@@ -2057,7 +2057,7 @@ def fetch_stacks(season=None, limit=30):
 
                         # Find common weeks
                         common = sorted(set(qb_weeks.keys()) & set(rec_weeks.keys()))
-                        if len(common) < 5:
+                        if len(common) < min_games:
                             continue
 
                         qb_scores = [qb_weeks[w] for w in common]
@@ -2097,7 +2097,7 @@ def fetch_stacks(season=None, limit=30):
                 "available_seasons": available_seasons,
                 "count": len(stacks),
             }
-    return _cached(f"stacks:{season}:{limit}", _query)
+    return _cached(f"stacks:{season}:{limit}:{min_games}", _query)
 
 
 def fetch_positional_advantage(season=None, position=None, limit=40):
@@ -2125,7 +2125,7 @@ def fetch_positional_advantage(season=None, position=None, limit=40):
             # Get all player season stats
             cursor.execute(f"""
                 SELECT p.player_id, p.full_name, p.position, p.team,
-                       SUM(s.fantasy_points_ppr) as total_ppr,
+                       ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                        COUNT(DISTINCT s.week) as games
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id

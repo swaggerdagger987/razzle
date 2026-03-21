@@ -116,8 +116,8 @@ RATE_METRICS = ["target_share", "air_yards_share", "wopr", "racr", "passing_epa"
 
 # Shared stat SUM columns used across multiple query functions
 _STAT_SUM_COLS = """
-            SUM(s.fantasy_points_ppr) as fantasy_points_ppr,
-            SUM(s.fantasy_points_std) as fantasy_points_std,
+            ROUND(SUM(s.fantasy_points_ppr), 1) as fantasy_points_ppr,
+            ROUND(SUM(s.fantasy_points_std), 1) as fantasy_points_std,
             SUM(s.passing_yards) as passing_yards,
             SUM(s.passing_tds) as passing_tds,
             SUM(s.rushing_yards) as rushing_yards,
@@ -395,7 +395,7 @@ def _enrich_with_breakout(conn, items, season=None, career_mode=False):
 
     # Get per-season PPR totals for all returned players
     rows = conn.execute(f"""
-        SELECT player_id, season, SUM(fantasy_points_ppr) as ppr
+        SELECT player_id, season, ROUND(SUM(fantasy_points_ppr), 1) as ppr
         FROM player_week_stats
         WHERE player_id IN ({placeholders}) AND season_type = 'regular'
         GROUP BY player_id, season
@@ -854,10 +854,11 @@ def compute_trade_value(ppg, age, position):
     raw = prod * 0.50 + age_v * 0.30 + scar * 0.20
     # Soft ceiling: below 90 is linear, above 90 uses log compression
     # so elite players get meaningful spread instead of clustering at 100
+    # Denominator 50 gives wider spread in elite tier (vs 30 which clustered top-25 in 90-96)
     if raw <= 90.0:
         return round(max(0.0, raw), 1)
     excess = raw - 90.0
-    value = 90.0 + 10.0 * (1.0 - math.exp(-excess / 30.0))
+    value = 90.0 + 10.0 * (1.0 - math.exp(-excess / 50.0))
     return round(value, 1)
 
 
