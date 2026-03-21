@@ -2052,10 +2052,8 @@ async function toggleLeague(card, leagueId, userId) {
       const p = allPlayers[pid];
       if (!p) continue;
       const pos = p.position || "?";
-      const group = posGroups[pos] || (posGroups["DEF"] = posGroups["DEF"] || []);
-      if (posGroups[pos]) {
-        posGroups[pos].push({ name: ((p.first_name || '') + ' ' + (p.last_name || '')).trim() || 'Unknown', team: p.team || "", pos });
-      }
+      if (!posGroups[pos]) posGroups[pos] = [];
+      posGroups[pos].push({ name: ((p.first_name || '') + ' ' + (p.last_name || '')).trim() || 'Unknown', team: p.team || "", pos });
     }
 
     let html = `<div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); margin-bottom:12px;">

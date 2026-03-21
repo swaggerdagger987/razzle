@@ -1496,7 +1496,7 @@ function renderTableHead() {
   if (state.universe === "nfl") {
     const pinCount = state.pinnedPlayers.length;
     const pinTitle = pinCount > 0 ? `${pinCount} pinned — click to clear` : "Pin players to top";
-    html += `<th scope="col" class="col-pin" style="width:28px; text-align:center; padding:8px 2px; cursor:${pinCount ? 'pointer' : 'default'}; font-size:12px;" title="${pinTitle}"${pinCount ? ' onclick="clearAllPins()"' : ''}>&#128204;${pinCount ? '<span style="font-size:9px; color:var(--orange); font-weight:700;"> ' + pinCount + '</span>' : ''}</th>`;
+    html += `<th scope="col" class="col-pin" style="width:28px; text-align:center; padding:8px 2px; cursor:${pinCount ? 'pointer' : 'default'}; font-size:12px;" title="${pinTitle}"${pinCount ? ' onclick="clearAllPins()"' : ''}><span class="pin-icon${pinCount ? ' pin-active' : ''}"></span>${pinCount ? '<span style="font-size:9px; color:var(--orange); font-weight:700;"> ' + pinCount + '</span>' : ''}</th>`;
   }
   html += '<th scope="col" class="col-rank" title="Overall rank by current sort">#</th>';
   html += `<th scope="col" class="col-player" onclick="sortBy('${nameKey}', event)">Player`;
@@ -1710,7 +1710,7 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
   // Pin icon (NFL only)
   if (state.universe === "nfl") {
     const pinned = isPlayerPinned(playKey);
-    html += `<td class="pin-cell col-pin" style="text-align:center; padding:7px 2px; cursor:pointer; font-size:13px;" onclick="event.stopPropagation(); togglePinPlayer('${escapeAttr(playKey)}')" title="${pinned ? 'Unpin player' : 'Pin to top'}">${pinned ? '<span style="color:var(--orange);">&#128204;</span>' : '<span class="pin-icon-faint">&#128204;</span>'}</td>`;
+    html += `<td class="pin-cell col-pin" style="text-align:center; padding:7px 2px; cursor:pointer;" onclick="event.stopPropagation(); togglePinPlayer('${escapeAttr(playKey)}')" title="${pinned ? 'Unpin player' : 'Pin to top'}"><span class="pin-icon ${pinned ? 'pin-active' : 'pin-faint'}"></span></td>`;
   }
 
   // Rank column (with expand arrow for NFL)
