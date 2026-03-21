@@ -106,21 +106,69 @@ The ship loop claimed Layers 1-3 were done. The code exists but may not be rende
 
 ---
 
-## REMAINING PHASES (require external infrastructure)
+## Phase: Autoresearch Engine — Synthetic User Simulation
 
-The following phases require Playwright, Claude API credentials, and/or MiroFish service. They should be built when infrastructure is ready.
+**PRIORITY: Build this. Nothing is blocking it.** Playwright is installed. Claude API is available. This is pure Python logic.
 
-### Phase: Autoresearch Engine — Synthetic User Simulation
-- 20+ user persona JSON files
-- Playwright + Sonnet simulation runner
-- Interaction instrumentation + logging
-- Batch runner for parallel persona sessions
+**Design ref**: `docs/plans/2026-03-20-agent-connective-tissue-design.md` — Section "Autoresearch Self-Improvement Engine"
 
-### Phase: Autoresearch Engine — Self-Reflection Loop
-- Per-agent self-reflection (Opus)
-- Razzle cross-agent strategy synthesis
-- Peer review runner
-- Config deployment pipeline
+**Exit criterion**: 20+ user personas defined. Simulation runner executes full site journeys via Playwright with Sonnet making navigation decisions. All interactions instrumented and logged.
+
+### Task 1: Create user persona definitions
+
+**Accept when**: `self-improvement/personas/` directory contains 20+ JSON persona files. Each defines: id, description, experience level, league format, behavior type, goals, patience, upgrade likelihood, session length. Personas span: dynasty veteran, redraft casual, first-timer, trade junkie, data nerd, lurker, mobile-only, prospect obsessed, weekly grinder, commissioner, IDP enthusiast, DFS crossover, podcast listener, spreadsheet migrator, group chat screenshot sharer, auction league player, keeper league player, best ball player, superflex player, TE premium player.
+
+### Task 2: Build simulation runner
+
+**Accept when**: `self-improvement/simulate.py` runs a single simulated user journey:
+1. Launches Playwright browser pointed at localhost:8000
+2. Takes a screenshot at each navigation step
+3. Sends screenshot + persona context to Sonnet via Claude API (`anthropic` Python SDK)
+4. Sonnet responds with the next action (click element, scroll, hover, navigate, leave)
+5. Executes the action, captures the result
+6. Logs every interaction to `self-improvement/simulation-log.jsonl` with: persona, session id, step number, page, action, target element, agent callouts visible, agent callouts clicked, timestamp
+7. Continues until persona "leaves" (Sonnet decides session is over) or max 50 steps
+8. CLI: `python simulate.py --persona dynasty-veteran --sessions 5`
+
+### Task 3: Build instrumentation layer
+
+**Accept when**: The simulation runner captures per interaction: agent callout impressions, agent callout clicks, agent callout dismissals, hover duration on agent elements, navigation path, time-on-page, conversion events (pricing page visits), feature discovery (which panels found), session depth, session duration. All logged to `simulation-log.jsonl`.
+
+### Task 4: Build batch runner
+
+**Accept when**: `self-improvement/run_batch.py` runs N sessions per persona across all personas, parallelizes with configurable concurrency, aggregates results into `batch-results.json` with overall CTR, conversion rate, avg session depth, per-agent and per-persona breakdowns. CLI: `python run_batch.py --sessions-per-persona 10 --concurrency 2`
+
+---
+
+## Phase: Autoresearch Engine — Self-Reflection Loop
+
+**PRIORITY: Build this right after simulation.** Same tools — Python + Claude API.
+
+**Exit criterion**: Each agent produces insights and updated config. Razzle produces cross-agent strategy. Updated config deploys to frontend.
+
+### Task 1: Build per-agent self-reflection runner
+
+**Accept when**: `self-improvement/reflect.py` reads `simulation-log.jsonl` filtered to one agent's placements, calculates CTR/engagement metrics, sends data + agent persona to Claude API (Opus), agent writes insights markdown + updated placement/copy/timing JSON configs. CLI: `python reflect.py --agent dolphin` or `python reflect.py --all`
+
+### Task 2: Build Razzle strategy session
+
+**Accept when**: `self-improvement/strategize.py` reads all 6 agents' insight files, sends to Opus with Razzle's persona, Razzle writes cross-agent strategy markdown + stitching config JSON. CLI: `python strategize.py`
+
+### Task 3: Build peer review runner
+
+**Accept when**: `self-improvement/peer_review.py` has each agent review one other agent's proposed changes (rotation). Checks for brand drift, spam creep, territory conflicts. Flags go to Razzle for arbitration. CLI: `python peer_review.py`
+
+### Task 4: Build config deployment
+
+**Accept when**: `self-improvement/deploy_config.py` merges approved configs into `frontend/agent-config-optimized.json`, bumps versions, logs to `optimization-log.tsv`. Frontend reads optimized config at runtime if it exists, falls back to defaults.
+
+### Task 5: Build full autoresearch cycle runner
+
+**Accept when**: `self-improvement/run_cycle.py` orchestrates: simulate -> reflect -> strategize -> peer review -> deploy -> log. Optional `--auto-revert` reverts if metrics regress. CLI: `python run_cycle.py --sessions-per-persona 10`
+
+---
+
+## DEFERRED PHASES (need MiroFish service — build post-launch)
 
 ### Phase: MiroFish Integration — Decision Sandbox (Pro)
 - MiroFish backend service + adapter
