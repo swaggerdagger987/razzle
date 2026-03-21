@@ -74,7 +74,8 @@ def fetch_efficiency_rankings(season=None, position=None, limit=30, week=None):
                     SUM(s.receiving_yards_after_catch) as yac,
                     SUM(s.receiving_tds) as rec_tds,
                     SUM(s.rushing_tds) as rush_tds,
-                    SUM(s.passing_tds) as pass_tds
+                    SUM(s.passing_tds) as pass_tds,
+                    SUM(s.attempts) as pass_attempts
                 FROM players p
                 JOIN player_week_stats s
                     ON s.player_id = p.player_id AND s.season = ?
@@ -113,10 +114,14 @@ def fetch_efficiency_rankings(season=None, position=None, limit=30, week=None):
                 rec_tds = r[14] or 0
                 rush_tds = r[15] or 0
                 pass_tds = r[16] or 0
+                pass_attempts = r[17] or 0
                 pos = r[2] or "RB"
 
-                # Opportunities = targets + carries (for QBs: attempts/carries)
-                opportunities = targets + carries
+                # Opportunities: QBs use pass attempts + carries; others use targets + carries
+                if pos == "QB":
+                    opportunities = pass_attempts + carries
+                else:
+                    opportunities = targets + carries
                 touches = receptions + carries
                 total_yards = rec_yards + rush_yards
                 total_tds = rec_tds + rush_tds + pass_tds
@@ -130,7 +135,11 @@ def fetch_efficiency_rankings(season=None, position=None, limit=30, week=None):
                 ypt = round(total_yards / touches, 2) if touches > 0 else 0
                 catch_rate = round(receptions / targets * 100, 1) if targets > 0 else 0
                 yac_per_rec = round(yac / receptions, 2) if receptions > 0 else 0
-                td_rate = round(total_tds / touches * 100, 1) if touches > 0 else 0
+                # TD rate: QBs use passing TDs / pass attempts; others use total TDs / touches
+                if pos == "QB":
+                    td_rate = round(pass_tds / pass_attempts * 100, 1) if pass_attempts > 0 else 0
+                else:
+                    td_rate = round(total_tds / touches * 100, 1) if touches > 0 else 0
 
                 players.append({
                     "player_id": pid,
@@ -1953,7 +1962,7 @@ _CORR_STATS = {
     "ypc": ("CASE WHEN SUM(s.carries) > 0 THEN SUM(s.rushing_yards) * 1.0 / SUM(s.carries) ELSE NULL END", "YPC"),
     "ypr": ("CASE WHEN SUM(s.receptions) > 0 THEN SUM(s.receiving_yards) * 1.0 / SUM(s.receptions) ELSE NULL END", "YPR"),
     "snap_pct": ("AVG(s.offense_pct)", "Snap%"),
-    "td_rate": ("CASE WHEN (SUM(s.carries) + SUM(s.targets)) > 0 THEN SUM(s.touchdowns) * 100.0 / (SUM(s.carries) + SUM(s.targets)) ELSE NULL END", "TD Rate"),
+    "td_rate": ("CASE WHEN p.position = 'QB' THEN CASE WHEN SUM(s.attempts) > 0 THEN SUM(s.passing_tds) * 100.0 / SUM(s.attempts) ELSE NULL END ELSE CASE WHEN (SUM(s.carries) + SUM(s.targets)) > 0 THEN SUM(s.touchdowns) * 100.0 / (SUM(s.carries) + SUM(s.targets)) ELSE NULL END END", "TD Rate"),
 }
 
 

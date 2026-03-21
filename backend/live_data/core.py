@@ -255,18 +255,29 @@ def _enrich_with_derived_stats(items):
             item["passer_rating"] = None
             item["ay_per_att"] = None
 
-        # TD Rate: total TDs / (carries + targets)
+        # TD Rate and Fumble Rate: position-specific formulas for QBs
         car = item.get("carries") or 0
         tgt = item.get("targets") or 0
-        total_opps = car + tgt
-        tds = item.get("touchdowns") or 0
-        item["td_rate"] = round(tds / total_opps * 100, 1) if total_opps > 0 else None
-
-        # Fumble Rate: fumbles_lost / (carries + receptions)
         rec = item.get("receptions") or 0
         fl = item.get("fumbles_lost") or 0
-        touch_opps = car + rec
-        item["fumble_rate"] = round(fl / touch_opps * 100, 1) if touch_opps > 0 else None
+        pos = (item.get("position") or "").upper()
+        att = item.get("attempts") or 0
+
+        if pos == "QB" and att > 0:
+            # QBs: TD rate = passing TDs / pass attempts
+            p_td = item.get("passing_tds") or 0
+            item["td_rate"] = round(p_td / att * 100, 1)
+            # QBs: Fumble rate = fumbles_lost / (pass attempts + carries)
+            qb_plays = att + car
+            item["fumble_rate"] = round(fl / qb_plays * 100, 1) if qb_plays > 0 else None
+        else:
+            # Non-QBs: TD rate = total TDs / (carries + targets)
+            total_opps = car + tgt
+            tds = item.get("touchdowns") or 0
+            item["td_rate"] = round(tds / total_opps * 100, 1) if total_opps > 0 else None
+            # Non-QBs: Fumble rate = fumbles_lost / (carries + receptions)
+            touch_opps = car + rec
+            item["fumble_rate"] = round(fl / touch_opps * 100, 1) if touch_opps > 0 else None
 
         # Points Per First Down scoring: standard + 1pt per first down
         pass_fd = item.get("passing_first_downs") or 0
@@ -481,6 +492,11 @@ def _enrich_with_dynasty_value(items):
 def _enrich_with_pbp_stats(conn, items, season=None, career_mode=False, week=0):
     """Fetch play-by-play derived stats from player_season_pbp table."""
     if not items:
+        return items
+
+    # PBP data is season-level only (no week column) — skip for per-week queries
+    # to avoid showing season totals alongside single-week core stats
+    if week and int(week) > 0:
         return items
 
     player_ids = [item["player_id"] for item in items if item.get("player_id")]
