@@ -15,7 +15,7 @@
 
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
-| 1 | Landing -> Lab | CTA click, initial data load, screener populates with real player data | RE-AUDIT SESSION 35 — PASS. FUNC-029 FIXED: snap_share thresholds corrected to 50/65/40 (percentages). Prod verified: RB snap_share>=65 returns 9 players (McCaffrey 83.1%, Gibbs 67.0%). Smart filter URL handler still not deployed to prod (FUNC-036). |
+| 1 | Landing -> Lab | CTA click, initial data load, screener populates with real player data | RE-AUDIT SESSION 71 — PASS. 0 JS errors, 610 players, 25 rows. Filter chain verified: RB+PPR>=15 returns 10 correct RBs. Scoring formulas hand-verified (PPR/STD/HPPR/PPG all correct for 5 players). Game log sum matches season total exactly. |
 | 2 | Screener: Position filter | Filter QB/RB/WR/TE individually. Count matches. Remove filter. Table resets? | RE-AUDIT SESSION 48 — FUNC-047 FIXED on prod. Goff=DET, Barkley=PHI, McCaffrey=SF all correct. POST screener teams=["DET"] returns 5 DET players (Gibbs, Montgomery). Adapter 406e6a3 adds per-row team UPDATE + bulk refresh from latest game data. Position filter continues to pass. |
 | 3 | Screener: Multi-filter | Chain 3 filters (pos + team + min stat). Results are the correct intersection? | RE-AUDIT SESSION 48 — FUNC-047 fixed. Team filter now returns correct players on prod. Multi-filter with team should be reliable post-deploy. |
 | 4 | Screener: Sort | Sort every stat column. #1 player is actually the leader? Reverse sort works? | RE-AUDIT SESSION 64 — FUNC-042 FIXED. GET /api/players sort=target_share now correctly returns target_share order (JSN 0.368 > Wilson 0.354 > Chase 0.321 > StBrown 0.317 > Jefferson 0.307). POST screener also sorts correctly. Both endpoints verified. |
@@ -106,7 +106,7 @@
 
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
-| 57 | Sidebar navigation | Every sidebar item loads its panel? No dead links? Category headers correct? | RE-AUDIT SESSION 69 — PASS. 73 sidebar items rendered, all clickable. Pro-gated panels (reportcard, efficiency) show lock correctly. Phase E topnav: Lab, Bureau, Agents, Pricing all present. 0 JS errors. |
+| 57 | Sidebar navigation | Every sidebar item loads its panel? No dead links? Category headers correct? | RE-AUDIT SESSION 71 — PASS. 73 sidebar items rendered. Free panels at top, Pro panels with locks. 0 JS errors. No regressions from Ship Loop parseInt sweep. |
 | 58 | Command palette (Ctrl+K) | Opens? Finds panels by name? Finds players? Selection navigates correctly? | DONE — PASS. Opens via nav button, search input focused, "Search players... (Ctrl+K)" placeholder. Browser-verified on prod. |
 | 59 | Dark mode | Every element switches? Data readable in dark? Charts visible? No white flashes? | RE-AUDIT SESSION 27 — PASS. Ship Loop Session 25-26 dark mode fixes verified: heat colors (isDark branch, higher opacity), 29 panel hover tints (0.18 opacity), modal overlays (rgba(0,0,0,...)). Lab and landing page screenshots clean. Espresso palette, readable text, no white flashes. |
 | 60 | Auth flow | Sign in modal opens? Closes cleanly? Error states for bad input? | RE-AUDIT SESSION 58 — PASS. Ship Loop app.js: localStorage operations in apiFetch 401 handler and checkAuth wrapped in try-catch (lines 516, 970, 975). Defensive for quota-exceeded/blocked-storage edge cases. Normal auth flow unaffected. formulas.js: catch handler now logs error message (was silent). 0 JS errors on Lab load. |
@@ -117,8 +117,8 @@
 
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
-| 63 | Bureau: League Intel | Sleeper connect flow? Roster loads? Insights generated from real league data? | RE-AUDIT SESSION 70 — PASS with P2. Ship Loop fixed crawlTimer/txnTimer leaks (clearTimeout in catch blocks), but FUNC-068 (3 locations: _hrAc line 2956, _prAc line 4705, _wvAc line 4911) STILL UNFIXED. Ship Loop fixed adjacent but different timer patterns. 0 JS errors, 55 links, 14 buttons. |
-| 64 | Situation Room | Canvas loads? Agents rendered? Interaction works? | RE-AUDIT SESSION 70 — PASS. 0 JS errors, 63 links, 63 buttons. Canvas animation loop has isConnected check. No regressions from Ship Loop sweep. |
+| 63 | Bureau: League Intel | Sleeper connect flow? Roster loads? Insights generated from real league data? | RE-AUDIT SESSION 71 — PASS with P2. FUNC-068 (3 locations: _hrAc:2956, _prAc:4705, _wvAc:4911) STILL UNFIXED. Ship Loop parseInt sweep did not touch these. Self-cleaning 10s timers, low practical impact. 0 JS errors, 55 links, 14 buttons. |
+| 64 | Situation Room | Canvas loads? Agents rendered? Interaction works? | RE-AUDIT SESSION 71 — PASS. 0 JS errors, 63 links, 63 buttons. Canvas isConnected check present. No regressions from Ship Loop parseInt sweep. |
 
 ## Group 10: Edge Cases (the stuff that separates demos from products)
 
