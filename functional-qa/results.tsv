@@ -1867,6 +1867,51 @@ p2-fixes	OK	frontend/agents.html	-	resp-ok-checks	pass	re-audit: 3 resp.ok guard
 tdregression	P1	frontend/lab-panels.js	5213	tdr-field-mismatch	open	FUNC-052: TD Regression panel renders EMPTY — 4 field mismatches: buy_low vs positive_regression, sell_high vs negative_regression, position_rates vs pos_avg_td_rates, p.diff vs p.td_diff. Standalone tdregression.html works correctly.	high	2026-03-21T05:10
 panel-audit	OK	frontend/lab-panels.js	-	systematic-field-audit	pass	Systematic audit of 15+ panels (snap eff, target premium, garbage time, success rate, drops, gamescript, dual threat, advantage, stocks, schedule, workload, playoffs, handcuffs, stacks) — all field names match between frontend and backend. Only mismatches are FUNC-049/050/051 (known) and FUNC-052 (new).	high	2026-03-21T05:15
 deployment	P2	-	-	deployment-gap	open	IEEE 754 artifacts visible on prod (Allen PPR=364.61999999999995) — ROUND() calls exist in code but not deployed. player_season_stats table creation also lacks ROUND on SUM(fantasy_points_half_ppr) at adapter:1379 and server.py:303.	high	2026-03-21T05:00
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
 flow-10	OK	frontend/lab.js	2278	delegated-star-click	pass	re-audit: FUNC-045 watchlist star fix verified — data-pid + addEventListener, 25 stars with data-pid, apostrophe names safe	high	2026-03-21T04:40
 flow-14	OK	backend/live_data/players.py	743	career-sum-round	pass	re-audit: FUNC-046 IEEE 754 fix verified — McCaffrey 1889.3, Chase 1526.3, Allen 2825.9, 0 artifacts	high	2026-03-21T04:40
 records	OK	backend/live_data/tools.py	1265	records-career-total	pass	records data accuracy verified — all PPG calculations correct, single game/season/career all reasonable	high	2026-03-21T04:40

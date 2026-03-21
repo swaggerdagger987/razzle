@@ -1516,6 +1516,11 @@ tr:hover .notes-cell .note-pencil {
   75% { content: '...'; }
 }
 
+@keyframes nudgeFadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 /* ===== REDUCED MOTION ===== */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
