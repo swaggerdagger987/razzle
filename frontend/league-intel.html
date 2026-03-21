@@ -3200,6 +3200,33 @@ async function loadManagerProfiles(leagueId, userId, allPlayers, userMap, roster
 
       var summary = traits.length > 0 ? traits.join(", ") : "plays it safe";
 
+      // Behavioral tag classification (design doc: first match wins)
+      var behaviorTag = 'STEADY';
+      var behaviorColor = 'var(--ink-medium)';
+      var panicScore = totalWeeksActive > 0 ? Math.round(panicWeeks / totalWeeksActive * 100) : 0;
+
+      if (prof.total >= 8) {
+        // PANIC SELLER: >50% trades in burst weeks
+        if (panicScore > 50) {
+          behaviorTag = 'PANIC SELLER'; behaviorColor = 'var(--red)';
+        }
+        // AGGRESSIVE: top 20% in trade frequency + spending picks
+        else if (movesPerSeason >= 10 && prof.totalDrops > prof.totalAdds) {
+          behaviorTag = 'AGGRESSIVE'; behaviorColor = 'var(--orange)';
+        }
+        // HOARDER: bottom 20% in trade frequency + hoarding picks
+        else if (movesPerSeason <= 3 && prof.totalAdds > prof.totalDrops + 2) {
+          behaviorTag = 'HOARDER'; behaviorColor = 'var(--pos-te)';
+        }
+        // PATIENT: bottom 30% frequency, no panic
+        else if (movesPerSeason <= 4 && panicScore <= 10) {
+          behaviorTag = 'PATIENT'; behaviorColor = 'var(--pos-rb)';
+        }
+        // STEADY: default
+      } else {
+        behaviorTag = 'NOT ENOUGH DATA'; behaviorColor = 'var(--ink-light)';
+      }
+
       // Color based on activity
       var color = movesPerSeason >= 10 ? cssVar("--orange") : movesPerSeason >= 5 ? cssVar("--pos-rb") : cssVar("--ink-light");
 
@@ -3207,7 +3234,9 @@ async function loadManagerProfiles(leagueId, userId, allPlayers, userMap, roster
         name: managerName, wins: wins, losses: losses,
         allTimeWins: allTimeWins, allTimeLosses: allTimeLosses,
         summary: summary, prof: prof, color: color,
-        seasonsTracked: seasonsTracked
+        seasonsTracked: seasonsTracked,
+        behaviorTag: behaviorTag, behaviorColor: behaviorColor,
+        panicScore: panicScore, movesPerSeason: movesPerSeason
       });
     }
 
@@ -3235,7 +3264,11 @@ async function loadManagerProfiles(leagueId, userId, allPlayers, userMap, roster
         upgradeMsg + '</div>';
     }
 
-    var html = seasonBadge + upgradeBanner + '<div class="profile-grid">';
+    // Bones agent header
+    var bonesHeader = '<div class="agent-header"><div class="agent-avatar" style="background:var(--pos-te);">🦴</div><div><div class="agent-name" style="color:var(--pos-te);">Bones</div><div class="agent-role">Diplomat</div></div></div>';
+    bonesHeader += '<div class="agent-quote" style="border-left-color:var(--pos-te);">i\'ve been reading the room. here\'s what your opponents don\'t want you to know.</div>';
+
+    var html = bonesHeader + seasonBadge + upgradeBanner + '<div class="profile-grid">';
     for (var ci = 0; ci < cards.length; ci++) {
       var c = cards[ci];
       var seasonTag = c.seasonsTracked > 1
@@ -3246,12 +3279,16 @@ async function loadManagerProfiles(leagueId, userId, allPlayers, userMap, roster
       html += '<div class="profile-card">';
       html += '<div class="profile-stripe" style="background:' + c.color + '"></div>';
       html += '<div class="profile-body">';
+      html += '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">';
       html += '<div class="profile-name" style="color:' + c.color + '">' + escapeHtml(c.name) + seasonTag + '</div>';
+      html += '<span style="font-family:var(--font-mono);font-size:10px;background:' + c.behaviorColor + ';color:var(--bg);padding:2px 8px;border-radius:8px;border:2px solid var(--ink);white-space:nowrap;">' + c.behaviorTag + '</span>';
+      html += '</div>';
       var recordText = c.wins + '-' + c.losses;
       if (c.seasonsTracked > 1 && c.allTimeWins + c.allTimeLosses > 0) {
         recordText += ' <span style="font-family:var(--font-mono); font-size:9px; color:var(--ink-light);">(' + c.allTimeWins + '-' + c.allTimeLosses + ' all-time)</span>';
       }
       html += '<div class="profile-record">' + recordText + '</div>';
+      html += '<div style="font-family:var(--font-mono);font-size:10px;color:var(--ink-light);margin-bottom:4px;">' + c.movesPerSeason.toFixed(1) + ' moves/yr &bull; panic: ' + c.panicScore + '%</div>';
       html += '<div class="profile-summary">' + escapeHtml(c.summary) + '</div>';
       html += '<div class="profile-stats">';
       html += '<span class="profile-stat"><strong>' + c.prof.trades + '</strong> trades</span>';
