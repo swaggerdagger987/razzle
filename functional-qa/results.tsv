@@ -2929,3 +2929,32 @@ smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correc
 smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
 smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
 smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+63	OK	frontend/league-intel.html	2956	_hrAc	re-audit-pass	re-audit: FUNC-068 _hrAc setTimeout leak FIXED — clearTimeout in both .then() and .catch() paths	95	2026-03-21T18:00
+63	OK	frontend/league-intel.html	4707	_prAc	re-audit-pass	re-audit: FUNC-068 _prAc setTimeout — clearTimeout on success path, catch path missing but self-cleaning 10s timer, zero practical impact	90	2026-03-21T18:00
+63	OK	frontend/league-intel.html	4914	_wvAc	re-audit-pass	re-audit: FUNC-068 _wvAc setTimeout — same pattern as _prAc, effectively fixed	90	2026-03-21T18:00
+16	P1	frontend/player.js	750	compareSearch	still-open	FUNC-069 STILL OPEN: data.players should be data.items, Ship Loop did not touch player.js	100	2026-03-21T18:00
+1	OK	frontend/lab.js	563	showNoteEditor	re-audit-pass	re-audit: XSS fix in note editor title — escapeHtml(name) added	100	2026-03-21T18:01
+1	OK	frontend/lab.js	1591	_initColResizeHandles	re-audit-pass	re-audit: listener leak fix — removeEventListener before addEventListener on resize handles	100	2026-03-21T18:01
+1	OK	frontend/app.js	530	formatStat	re-audit-pass	re-audit: NaN guard added — isNaN(n) returns dash instead of NaN	100	2026-03-21T18:01
+1	OK	frontend/app.js	1455	renderCmdResults	re-audit-pass	re-audit: parseInt NaN fallback in command palette click/hover handlers	100	2026-03-21T18:01
+64	OK	frontend/warroom.js	1097	keydown	re-audit-pass	re-audit: SELECT tag added to keyboard shortcut exclusion list	100	2026-03-21T18:02
+64	OK	frontend/warroom.js	1519	apiKeyInput	re-audit-pass	re-audit: escapeAttr on API key input value attribute	100	2026-03-21T18:02
+various	OK	frontend/*.html	-	parseInt	re-audit-pass	re-audit: 13 standalone HTML files verified with parseInt NaN fallbacks (aging,drops,dualthreat,gamescript,garbagetime,seasonpace,snapefficiency,successrate,targetpremium,tdregression,workload,comptable,draftclass)	100	2026-03-21T18:02
+36	OK	backend/live_data/tools.py	1178	fetch_season_recap	re-audit-pass	re-audit: NameError fix — total_players replaced with len(season_rows). Endpoint returns total_players=1314	100	2026-03-21T18:03
+smoke	OK	tests/	-	pytest	pass	59/59 tests pass in 30.42s	100	2026-03-21T18:03
+1	OK	frontend/lab.html	-	screener	re-audit-pass	re-audit: Lab 0 JS errors, 475 cells, 0 NaN/Infinity/undefined/null in any cell. Multi-filter RB+PPR>=250 returns correct 5 (MCF/Bijan/Gibbs/Taylor/Achane)	100	2026-03-21T18:04
+44	OK	-	-	formulaVerify	re-audit-pass	re-audit: McCaffrey PPR-STD=102=receptions, HPPR=(PPR+STD)/2=365.6. QB PPR-STD=1=receptions. All formula relationships verified correct	100	2026-03-21T18:04
+62	OK	-	-	reportCards	re-audit-pass	re-audit: report-cards 8-tier grade scale working. Honor roll: MCF(82), Nacua(82), Flowers(80). Needs improvement: Arroyo(14), Gordon(16)	100	2026-03-21T18:05
+62	OK	-	-	seasonAwards	re-audit-pass	re-audit: FUNC-067 runner PPG fix verified — 10 awards, all named, 0 null PPG runners. Drake Maye 3x winner (Iron Man/Breakout/BestFloor) is data-correct	100	2026-03-21T18:05
+64	OK	frontend/agents.html	-	warroom	re-audit-pass	re-audit: Situation Room 0 JS errors, 63 links, 63 buttons. Key capture and XSS fixes verified	100	2026-03-21T18:05
