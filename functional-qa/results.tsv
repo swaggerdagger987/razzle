@@ -2980,3 +2980,57 @@ smoke-prod	OK	-	-	-	pass	smoke-prod S71: health OK, top 3 PPR correct (McCaffrey
 60	OK	frontend/league-intel.html	-	bureau	pass	re-audit S71: 0 JS errors, 55 links, 14 buttons. Connect flow present. FUNC-068 3 locations still unfixed (P2).	100	2026-03-21T12:00
 -	OK	frontend/index.html	-	home	pass	S71: Home page 0 JS errors, 68 links, 17 buttons. All sections rendering.	100	2026-03-21T12:00
 -	OK	-	-	prod_parity	pass	S71: Prod vs local parity check. Lab: identical element counts (39 links, 114 buttons, 73 sidebar items, 27 rows). API: same top 3 PPR. Only diff: team field (prod=SF/LA/ATL, local=CAR/LA/ATL — known adapter snapshot).	100	2026-03-21T12:02
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2026) — switch test skipped
+smoke	P1	-	-	-	ticket	smoke:week_filter — One or both returned empty
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2026) — switch test skipped
+smoke	P1	-	-	-	ticket	smoke:week_filter — One or both returned empty
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke-local	OK	-	-	-	pass	smoke: 11/11 pass — health, players, position filter QB/WR, sort PPR, season switch, week filter, screener query, no NaN, no negative, filter options	100	2026-03-21T12:01
+flow-16	P1	frontend/player.js	750	openCompareSearch	fail	FUNC-069: Compare search on player profile broken — data.players should be data.items. API returns {items:[...]} but code reads data.players which is undefined → always empty results	95	2026-03-21T12:15
+flow-16	OK	frontend/player.js	753	openCompareSearch	pass	re-audit: Ship Loop XSS fix (inline onclick → data-attributes + addEventListener) structurally correct, escapeAttr available from app.js. Would work once FUNC-069 fixed	90	2026-03-21T12:15
+flow-16	OK	-	-	-	pass	re-audit: standalone /compare/{id1}/{id2} page works — 0 JS errors, 11 stat rows, Mahomes vs Allen	100	2026-03-21T12:16
+flow-13	OK	frontend/app.js	1752	openPlayerPopup	pass	re-audit: escapeHtml(String(p.age)) fix verified. Age is float from API (30.5). Player profile loads, career arc + radar chart render. 0 JS errors	100	2026-03-21T12:20
+flow-17	OK	frontend/charts.js	131	getPlayerOptions	pass	re-audit: escapeAttr on player_id in option value (was escapeHtml). Defensive — player IDs are alphanumeric. 0 JS errors on Lab load, 76 option elements	100	2026-03-21T12:22
+flow-18	OK	frontend/lab-panels.js	365	renderRankings	pass	re-audit: escapeHtml(String(p.age)) in 7 panels verified. Dynasty Rankings: 200 cards, Tier 1 Elite. Trade Values: 150 cards. Breakouts: 50 cards. All 0 JS errors	100	2026-03-21T12:25
+deep-backend	OK	backend/live_data/tools.py	1165	fetch_season_recap	pass	re-audit: avg_ppg denominator fix (eligible vs total). Both same due to HAVING games>=6. Season recap 2024: Lamar #1, 25.3 PPG. 2025: MCF #1, 24.5 PPG	95	2026-03-21T12:30
+deep-backend	OK	backend/live_data/tools.py	1021	fetchone_null_guards	pass	re-audit: 5 fetchone null guards in tools.py + 1 in players.py. All endpoints tested: fpts-breakdown (40 QB), season-pace (25 RB), compare-table (2 players), playoff-schedule (40), success-rate (0, PBP empty). None crash	100	2026-03-21T12:32
+deep-backend	OK	backend/server.py	698	custom_http_exception_handler	pass	re-audit: html.escape(str(exc.detail)) prevents XSS through error messages. 404 returns custom page correctly	100	2026-03-21T12:33
