@@ -1086,6 +1086,105 @@ Sources:
 
 3. **What is Razzle's referral mechanism — how does a founding member share their referral link, and what do they get for bringing others?** (The nurture Email 1 mentions a "shareable referral link." Referral programs are the highest-ROI growth channel for pre-launch SaaS. What's the incentive? Extra month free? Priority beta access? Discord role? This determines whether the 500-founding-member target is reachable organically.)
 
-## NEXT QUESTION: What is the minimum viable Bureau feature set for NFL Week 1 launch — which behavioral archetypes ship first, and how much Sleeper data is needed to generate useful profiles?
+## Question 16: What is the minimum viable Bureau feature set for NFL Week 1 launch — which behavioral archetypes ship first, and how much Sleeper data is needed to generate useful profiles?
+
+**Why this matters**: Q14 wrote the /pro copy. Q15 designed an 18-email nurture sequence that promises "Your first Manager Scouting Report is ready" by August. The Bureau is the conversion engine — the moment a free Screener user realizes Razzle knows their league better than they do. But the Bureau design doc describes 6 agent personas, Monte Carlo simulations, scenario modeling, trade finders, and behavioral profiling across 8 seasons of history. That's a year of engineering. What ships by September 4 (Week 1)?
+
+### Answer
+
+**Verdict: Ship 3 features for Week 1: Manager Scouting Reports (behavioral tags from transactions), Championship Odds (Monte Carlo), and Self-Scout (roster grading). These require just 2 Sleeper API data sources (transactions + rosters) and the existing league-intel.html already does 80% of the behavioral profiling work. The "Panic Seller" and "Hoarder" archetypes ship first because they require the least data and produce the most screenshottable, exploitable insights.**
+
+Evidence:
+
+1. **The existing codebase already does behavioral profiling.** The `league-intel.html` file (lines ~2848-3300) already traverses `previous_league_id` chains for multi-season transaction data, fetches all 18 weeks of transactions per season, builds per-manager profiles keyed by `owner_id`, tracks trades/waivers/FAAB/position biases, computes behavioral traits (panic mover, stockpiler, FAAB whale, set-and-forget), and classifies managers into 5 behavioral tags: PANIC SELLER, AGGRESSIVE, HOARDER, PATIENT, STEADY. This isn't theoretical — it's running code. The MVP Bureau is mostly a UI/packaging exercise on top of existing logic, not a ground-up build.
+
+2. **Sleeper API provides everything needed with zero authentication.** The Sleeper API is fully public, read-only, no API key required. Key endpoints:
+   - `GET /v1/league/{id}/transactions/{week}` — trades, waivers, drops, FAAB bids (iterate weeks 1-18)
+   - `GET /v1/league/{id}/rosters` — current rosters with win/loss records, total moves, FAAB budget used
+   - `GET /v1/league/{id}/users` — manager names and avatars
+   - `GET /v1/league/{id}` — scoring settings, roster positions, playoff format
+   - `GET /v1/league/{id}/matchups/{week}` — weekly scores for Monte Carlo inputs
+
+   Dynasty history via `previous_league_id` chaining goes back to Sleeper's 2018 launch — up to 8 seasons. Rate limit: 1,000 calls/minute per IP. A 12-team dynasty league with 4 seasons of history requires ~80 API calls total (18 weeks × 4 seasons + rosters + users + settings). Well within limits.
+
+3. **Which archetypes ship first and why.** Of the 5 behavioral tags, rank by (a) minimum data required, (b) screenshotability, and (c) exploit value:
+
+   | Archetype | Min Data | Screenshot Value | Exploit Value | Ship Priority |
+   |-----------|----------|-----------------|---------------|---------------|
+   | PANIC SELLER | 1 season (need loss→trade correlation) | **Highest** — "Dave is a PANIC SELLER" gets dropped in every group chat | **Highest** — tells you exactly when to send offers | **WEEK 1** |
+   | HOARDER | 1 season (low trade freq + net pick accumulation) | **High** — "Kevin has made 3 trades in 2 years" is funny and useful | **High** — you know not to waste time offering trades to Kevin | **WEEK 1** |
+   | AGGRESSIVE | 1 season (high trade freq + net pick spending) | Medium — less surprising, aggressive traders are visible | Medium — you already know who this is | **WEEK 1** |
+   | PATIENT | 1 season (low freq, no panic pattern) | Low — "this person is normal" isn't interesting | Low — no exploit | Week 1 (default) |
+   | STEADY | 0 additional (default fallback) | Lowest — it's the "nothing to report" tag | None | Week 1 (default) |
+
+   **Panic Seller is the hero archetype.** It requires correlating trade timing with matchup results (did they trade within 48h of a loss?). The matchups endpoint provides win/loss data; the transactions endpoint provides trade timestamps. The correlation is simple math. And the output — "This manager sells after back-to-back losses. He's at 1 loss. One more and he'll move a starter." — is the single most screenshottable, group-chat-droppable insight Razzle can produce.
+
+4. **The 3-feature MVP and what each requires:**
+
+   **Feature 1: Manager Scouting Reports** (the conversion trigger)
+   - Data: transactions (all weeks × all seasons) + matchups (for panic correlation) + rosters (for current state)
+   - Output per manager: behavioral tag, trade frequency, position bias, panic score, FAAB burn rate
+   - Engineering: Mostly done in league-intel.html. Package into a clean per-manager card with the Bureau design system (Bones/Diplomat voice for annotations).
+   - Minimum viable with: 1 season of data. Better with 2+.
+   - **Threshold rule from bureau-design.md: 8+ transactions required.** Below that, show "Not enough data — check back after more roster moves."
+
+   **Feature 2: Championship Odds** (the free hook)
+   - Data: rosters (starters) + matchups (remaining schedule) + player stats from Lab
+   - Output: % championship probability per manager, displayed as a league-wide odds grid
+   - Engineering: Monte Carlo simulation (10K iterations) in a Web Worker. The bureau-design.md spec is complete: Box-Muller normal distribution, PPG mean+stddev from last 3 seasons, single-elimination playoff bracket.
+   - **This is the FREE feature** that gets people to connect their Sleeper league. Show odds for everyone. Blur the Rivals tab behind Pro.
+   - Minimum viable with: current-season rosters only. No historical data needed.
+
+   **Feature 3: Self-Scout** (the "aha" moment)
+   - Data: rosters (player IDs) + Lab player stats (PPG, age, value)
+   - Output: roster grade (A+ to F), competitive window (CONTENDER/RETOOLING/REBUILDING), positional depth grades, build profile (Hero RB, Zero RB, Stars & Scrubs, Youth Movement, Win Now, Balanced)
+   - Engineering: Cross-reference roster player IDs with existing Lab data. No new data pipeline — just matching Sleeper player_ids to nflverse gsis_ids and computing aggregates.
+   - Minimum viable with: current-season roster only.
+
+5. **What does NOT ship for Week 1.** Cut ruthlessly:
+   - ❌ AI War Room / LLM agent conversations (Situation Room) — requires OpenRouter API, prompt engineering, cost management. Phase 2.
+   - ❌ Trade Finder with network visualization — complex UI, requires computing trade value differentials across all managers. Phase 2.
+   - ❌ Scenario explorer / what-if simulations — depends on Monte Carlo + trade modeling. Phase 2.
+   - ❌ Agent breadcrumb nudges — requires all 6 agents to have active domains. Phase 2.
+   - ❌ Multi-league support — Week 1 = one league. Multi-league is a Bureau+ upsell.
+   - ❌ Weekly automated briefings — requires scheduled jobs, email integration. Phase 2.
+
+6. **Timeline reality check.** With the existing league-intel.html behavioral profiling code as foundation:
+   - Manager Scouting Reports: 2-3 weeks (UI packaging, Bones voice copy, per-manager card layout, panic score refinement)
+   - Championship Odds: 2-3 weeks (Monte Carlo engine in Web Worker, matchup schedule integration, odds grid UI)
+   - Self-Scout: 1-2 weeks (roster-to-Lab-data matching, grade computation, build profile classification)
+   - Integration + polish: 2 weeks (Bureau tab structure, free/Pro gating, Sleeper connection flow improvements)
+
+   Total: ~8-10 weeks of solo development. Starting June → ready for beta by mid-August → founding member beta invites per Q15's nurture Email 13 (late July) → live for Week 1 (September 4).
+
+### Self-Critique
+
+**What's backed by data**: The Sleeper API capabilities are verified — fully public, no auth, transaction history via `previous_league_id` chaining confirmed through live API testing. The existing league-intel.html behavioral profiling code is real and running — this isn't theoretical. The bureau-design.md specifications for Monte Carlo (10K iterations, Box-Muller, Web Worker) and behavioral tags (5 archetypes, 8-transaction minimum) are complete design docs, not sketches. The "no competitors do manager profiling" finding is verified — GitHub search, KeepTradeCut, DynastyProcess, FantasyCalc, Dynasty Nerds all confirmed to have zero behavioral profiling features.
+
+**What's speculation**: The 8-10 week timeline assumes no major technical surprises in Monte Carlo implementation or Sleeper player_id → nflverse gsis_id mapping (historically a messy problem in fantasy football data). Whether "Panic Seller" as a label is perceived as fun-insightful vs. mean-judgmental by dynasty managers hasn't been tested — some leagues may find it toxic rather than useful. The claim that Championship Odds as a free feature is sufficient to drive Sleeper connections is a hypothesis — users may not trust a new tool with their league data without social proof. The assumption that 1 season of data produces meaningful behavioral tags is optimistic — 8 transactions in one season may not distinguish a Panic Seller from someone who just made a few bad trades after losses by coincidence.
+
+**Confidence: 8/10** — The technical feasibility is high (existing code + public API + complete specs). The feature selection is well-grounded (odds as free hook, scouting reports as Pro paywall, self-scout as aha moment). The biggest risk is execution timeline as a solo developer shipping Bureau, nurture emails, and Reddit distribution simultaneously May-August.
+
+Sources:
+- Sleeper API documentation (https://docs.sleeper.com/)
+- Sleeper API live testing (verified `previous_league_id` chaining, transaction structure, roster fields)
+- Razzle codebase: `frontend/league-intel.html` (behavioral profiling implementation, lines ~2848-3300)
+- Razzle codebase: `docs/bureau-design.md` (complete Bureau specification)
+- Razzle codebase: `docs/NORTH_STAR.md` (Bureau as conversion engine, Section 3)
+- Razzle codebase: `frontend/agent-config.js` (agent territory definitions)
+- GitHub search: 0 results for "sleeper manager profiling" or "fantasy football behavioral analysis"
+- Prior journal: Q9 (launch sequence), Q12 (fake door test), Q14 (/pro copy), Q15 (email nurture)
+
+---
+
+### Next 3 Questions This Raises
+
+1. **What does the "Manager Scouting Report" page actually look like — what data points, layout, and visual format would make a dynasty manager screenshot their leaguemate's report and drop it in the group chat?** (Carried from Q14 — now URGENT. The MVP Bureau ships 3 features, and the Scouting Report is the hero. What's the card layout? What does Bones say? What's the visual hierarchy that makes someone think "I need to send this to my group chat"?)
+
+2. **How does Razzle map Sleeper player IDs to nflverse gsis_ids — and what's the fallback when mapping fails?** (Technical blocker. The Self-Scout and Championship Odds features require matching Sleeper roster player_ids to Lab stats. Sleeper uses its own ID system. The mapping is historically messy in fantasy football data. A 90% match rate might be acceptable; below 80% the grades look broken.)
+
+3. **What is the Sleeper connection trust barrier — why would a dynasty manager give their Sleeper username to a new tool, and what social proof or privacy messaging reduces friction?** (The Bureau requires users to enter their Sleeper username. Unlike OAuth, this is low-friction technically but high-friction psychologically. "Who are you and why do you want my league data?" This is the funnel bottleneck.)
+
+## NEXT QUESTION: What does the "Manager Scouting Report" page actually look like — what data points, layout, and visual format would make a dynasty manager screenshot their leaguemate's report and drop it in the group chat?
 
 ---
