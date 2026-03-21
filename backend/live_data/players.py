@@ -486,7 +486,8 @@ def _fetch_screener_uncached(body):
         # Re-sort in Python if sorting by a derived/rate metric
         if python_sort:
             reverse = sort_dir.lower() == "desc"
-            items.sort(key=lambda x: x.get(sort_key) or 0, reverse=reverse)
+            _null_sentinel = float('-inf') if reverse else float('inf')
+            items.sort(key=lambda x: x.get(sort_key) if x.get(sort_key) is not None else _null_sentinel, reverse=reverse)
             total = len(items)
 
         # Apply pagination after post-filtering and Python re-sort

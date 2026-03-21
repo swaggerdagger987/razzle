@@ -853,10 +853,10 @@ async function handleRegister(e) {
   var confirm = document.getElementById("authRegisterConfirm").value;
   var errEl = document.getElementById("authRegisterError");
   errEl.textContent = "";
-  if (password !== confirm) { errEl.textContent = "Passwords don't match"; if (btn) btn.disabled = false; return; }
-  if (password.length < 8) { errEl.textContent = "Password must be at least 8 characters"; if (btn) btn.disabled = false; return; }
-  if (!/[a-zA-Z]/.test(password)) { errEl.textContent = "Password must contain at least one letter"; if (btn) btn.disabled = false; return; }
-  if (!/[0-9]/.test(password)) { errEl.textContent = "Password must contain at least one number"; if (btn) btn.disabled = false; return; }
+  if (password !== confirm) { errEl.textContent = "Passwords don't match"; if (btn) { btn.disabled = false; btn.textContent = origText; } return; }
+  if (password.length < 8) { errEl.textContent = "Password must be at least 8 characters"; if (btn) { btn.disabled = false; btn.textContent = origText; } return; }
+  if (!/[a-zA-Z]/.test(password)) { errEl.textContent = "Password must contain at least one letter"; if (btn) { btn.disabled = false; btn.textContent = origText; } return; }
+  if (!/[0-9]/.test(password)) { errEl.textContent = "Password must contain at least one number"; if (btn) { btn.disabled = false; btn.textContent = origText; } return; }
   try {
     var resp = await fetch(API_BASE + "/api/auth/register", {
       method: "POST",

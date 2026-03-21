@@ -4548,7 +4548,7 @@ var _diffBaselineCacheKey = "";
 function _getDiffBaseline() {
   if (!state.diffMode || state.pinnedPlayers.length < 2) return null;
   var baseId = state.pinnedPlayers[0];
-  var cacheKey = baseId + ":" + state.items.length;
+  var cacheKey = baseId + ":" + state.items.length + ":" + state.season + ":" + (state.week || 0);
   if (_diffBaselineCacheKey === cacheKey && _diffBaselineCache) return _diffBaselineCache;
   _diffBaselineCache = state.items.find(function(pl) { return pl.player_id === baseId; }) || _pinnedDataCache[baseId] || null;
   _diffBaselineCacheKey = cacheKey;
@@ -10414,6 +10414,7 @@ document.addEventListener("keydown", function(e) {
   // N: toggle notes column
   if (e.key === "n" || e.key === "N") {
     toggleColumn("notes", !state.visibleColumns.includes("notes"));
+    renderTableHead(); renderTable(); renderColumnPicker(); saveStateToURL();
     return;
   }
 
