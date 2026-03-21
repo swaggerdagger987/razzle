@@ -453,10 +453,24 @@ This is not a minor messaging change — it's a fundamental reframe of the value
 **Section 9 (Risk Register):**
 - NEW risks added: competitive moat (#2), Sleeper-only (#7), price sensitivity (#11), DN adds profiling (#12).
 
-**Total flags: 4** (stable from Cycle 2)
-- 2 REALITY CHECK (Dynasty Daddy traffic age, pricing pressure)
-- 1 NEEDS DATA (cross-source traffic methodology)
-- 1 NOT ACTIONABLE (Reddit upvote estimates)
+### Phase 5: Second Critique (post gap-filling)
+
+**New findings from gap-filling research:**
+
+1. **KeepTradeCut deeper data** (HypeStat): 121.5K monthly visitors, 109% growth MoM, 85% direct traffic, **73% mobile traffic**. High engagement: 3.47 pages/visit, 8 min avg duration, 39.82% bounce rate.
+
+2. [REALITY CHECK] **73% of KTC traffic is mobile.** Razzle has no mobile app. RotoBot and Dynasty Nerds have iOS/Android apps. Mobile-first fantasy users may not convert on a web-only product. This should be monitored — if early users disproportionately come from desktop, a mobile strategy will be needed.
+
+3. **KTC growth (109% MoM)** suggests free dynasty tools are gaining users, not losing them. The free tool market is expanding, which is good for Razzle's free Screener as a funnel entry, but bad for conversion (more free alternatives).
+
+4. Dynasty Daddy August 2025 traffic may be seasonal peak (preseason). The 502K figure is the best available but could overstate current traffic by 20-40%.
+
+**Updated flag count: 5** (up from 4)
+- 3 REALITY CHECK (Dynasty Daddy traffic age, pricing pressure, mobile traffic risk)
+- 1 NEEDS DATA (cross-source traffic methodology — partially resolved, different tools use different estimation methods, noted in report)
+- 1 NOT ACTIONABLE (Reddit upvote estimates — inherently speculative)
+
+No critical gaps remain. All flags are either acknowledged caveats or items that cannot be resolved without real-world data (user behavior, Twitter engagement).
 
 ---
 
