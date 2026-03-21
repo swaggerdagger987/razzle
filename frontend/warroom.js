@@ -3121,14 +3121,20 @@ setupScenarioPanel();
       '<div class="warroom-bio-stripe" style="background:' + a.color + '"></div>' +
       '<div class="warroom-bio-body">' +
         '<div class="warroom-bio-avatar" style="background-image:url(\'assets/characters/' + a.sprite + '.png\'); background-position:0 0; background-size:448px 192px;"></div>' +
-        '<div class="warroom-bio-name" style="color:' + a.color + '">' + a.emoji + ' ' + a.name + '</div>' +
+        '<div class="warroom-bio-name" style="color:' + a.color + '">' + a.emoji + ' ' + escapeHtml(a.name) + '</div>' +
         '<div class="warroom-bio-role">' + a.role + (a.isLeader ? ' <span style="font-family:var(--font-mono); font-size:9px; background:var(--orange); color:white; padding:1px 6px; border-radius:3px;">LEADER</span>' : '') + '</div>' +
         '<div class="warroom-bio-quote">"' + a.quote + '"</div>' +
         '<div class="warroom-bio-tags">' + tagsHtml + '</div>' +
-        '<button class="warroom-bio-ask" onclick="var i=document.getElementById(\'scenarioInput\'); if(i){i.focus();i.placeholder=\'Ask ' + a.name + '...\';}" style="color:' + a.color + '">Ask ' + a.name + '</button>' +
+        '<button class="warroom-bio-ask" data-agent-name="' + escapeAttr(a.name) + '" style="color:' + a.color + '">Ask ' + escapeHtml(a.name) + '</button>' +
       '</div>' +
     '</div>';
   }).join('');
+  document.querySelectorAll('.warroom-bio-ask').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var input = document.getElementById('scenarioInput');
+      if (input) { input.focus(); input.placeholder = 'Ask ' + btn.dataset.agentName + '...'; }
+    });
+  });
 })();
 
 // ── BRIEFING CARD RENDERER ────────────────────────────────────────────

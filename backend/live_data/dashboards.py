@@ -509,7 +509,7 @@ def fetch_strength_of_schedule(season=None, position=None, limit=30):
                 if ppg < 2:
                     continue
 
-                avg_opp_ppg = round(sum(d["opp_ppg_list"]) / len(d["opp_ppg_list"]), 1)
+                avg_opp_ppg = round(sum(d["opp_ppg_list"]) / (len(d["opp_ppg_list"]) or 1), 1)
                 info = player_info[pid]
                 pos = info["position"]
 

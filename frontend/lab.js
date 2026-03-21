@@ -1762,7 +1762,7 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
     html += `<td class="col-player"><div class="player-name-cell">`;
     html += playerHeadshot(player, pos);
     html += `<span class="pos-badge ${posClass(pos)}">${escapeHtml(pos)}</span>`;
-    html += `<a href="#" onclick="openProspectProfile('${pn}', '${escapeAttr(pPos)}', ${pYear}); return false;" style="color:var(--ink); text-decoration:none; border-bottom:2px dashed var(--pos-qb);">${_highlightSearch(escapeHtml(player.player_name))}</a>`;
+    html += `<a href="#" class="prospect-link" data-name="${pn}" data-pos="${escapeAttr(pPos)}" data-year="${pYear}" style="color:var(--ink); text-decoration:none; border-bottom:2px dashed var(--pos-qb);">${_highlightSearch(escapeHtml(player.player_name))}</a>`;
     html += `<span class="school-label">${escapeHtml(player.school)}</span>`;
     html += `</div></td>`;
   } else {
@@ -2265,6 +2265,14 @@ function renderProspectTable() {
     var tr = e.target.closest("tr");
     if (!tr) return;
     tr.classList.toggle("row-highlighted");
+  });
+
+  // Prospect profile links — delegated to avoid escapeAttr-in-onclick issues
+  tbody.addEventListener("click", function(e) {
+    var link = e.target.closest(".prospect-link");
+    if (!link) return;
+    e.preventDefault();
+    openProspectProfile(link.dataset.name, link.dataset.pos, parseInt(link.dataset.year));
   });
 
   // Double-click stat cell → filter creation (handled on table element below).
@@ -9684,7 +9692,7 @@ function renderACLegend() {
     const enabled = _acState.enabledPlayers[p.name];
     const opacity = enabled ? "1" : "0.4";
     const border = enabled ? "2px solid " + color : "2px solid var(--ink-faint)";
-    html += '<button onclick="toggleACPlayer(\'' + escapeAttr(p.name) + '\')" style="'
+    html += '<button class="ac-player-toggle" data-name="' + escapeAttr(p.name) + '" style="'
       + 'display:inline-flex; align-items:center; gap:6px; padding:4px 10px; border-radius:20px;'
       + 'border:' + border + '; background:' + (enabled ? color + '15' : 'transparent') + ';'
       + 'cursor:pointer; opacity:' + opacity + '; font-family:var(--font-mono); font-size:11px;'
@@ -9694,6 +9702,9 @@ function renderACLegend() {
       + '</button>';
   });
   container.innerHTML = html;
+  container.querySelectorAll('.ac-player-toggle').forEach(btn => {
+    btn.addEventListener('click', () => toggleACPlayer(btn.dataset.name));
+  });
 }
 
 function toggleACPlayer(name) {

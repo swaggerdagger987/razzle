@@ -974,7 +974,7 @@ def fetch_streaks(season=None, position=None, window=4, limit=25, week=None):
                     continue
 
                 recent = weeks[-window:]
-                recent_avg = sum(w["fpts"] for w in recent) / len(recent)
+                recent_avg = sum(w["fpts"] for w in recent) / (len(recent) or 1)
                 delta = recent_avg - season_avg
                 delta_pct = round((delta / season_avg) * 100, 1) if season_avg else 0
 

@@ -753,7 +753,7 @@ def fetch_breakout_candidates(season=None, position=None, limit=50, week=None):
                     gap = p["opportunity_pct"] - p["production_pct"]
                     # Age bonus: younger = higher breakout potential
                     age_bonus = max(0, (28 - (p["age"] or 27)) * 2)
-                    p["rbs_score"] = max(0, gap + age_bonus)
+                    p["rbs_score"] = round(max(0, gap + age_bonus), 1)
                     del p["_opp_raw"]
 
             # Flatten, sort by RBS, take top N
@@ -1846,7 +1846,7 @@ def fetch_usage_trends(season=None, position=None, window=5, limit=30, week=None
                 delta = round(second_avg - first_avg, 1)
 
                 current_snap = recent[-1]["snap_pct"]
-                season_avg = round(sum(w["snap_pct"] for w in weeks) / len(weeks), 1)
+                season_avg = round(sum(w["snap_pct"] for w in weeks) / (len(weeks) or 1), 1)
 
                 info = player_info[pid]
                 info["weeks"] = all_weeks_data
