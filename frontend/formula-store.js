@@ -106,7 +106,7 @@ function renderStars(rating, size = 14) {
 function renderClickableStars(formulaId, currentRating, size = 18) {
   let html = "";
   const safeId = parseInt(formulaId) || 0;
-  const safeRating = parseInt(currentRating) || 0;
+  const safeRating = Math.round(currentRating) || 0;
   for (let i = 1; i <= 5; i++) {
     const filled = i <= safeRating;
     html += `<span

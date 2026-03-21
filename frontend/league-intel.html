@@ -3321,7 +3321,7 @@ async function loadManagerProfiles(leagueId, userId, allPlayers, userMap, roster
         recordText += ' <span style="font-family:var(--font-mono); font-size:9px; color:var(--ink-light);">(' + c.allTimeWins + '-' + c.allTimeLosses + ' all-time)</span>';
       }
       html += '<div class="profile-record">' + recordText + '</div>';
-      html += '<div style="font-family:var(--font-mono);font-size:10px;color:var(--ink-light);margin-bottom:4px;">' + c.movesPerSeason.toFixed(1) + ' moves/yr &bull; panic: ' + c.panicScore + '%</div>';
+      html += '<div style="font-family:var(--font-mono);font-size:10px;color:var(--ink-light);margin-bottom:4px;">' + (c.movesPerSeason || 0).toFixed(1) + ' moves/yr &bull; panic: ' + (c.panicScore || 0) + '%</div>';
       html += '<div class="profile-summary">' + escapeHtml(c.summary) + '</div>';
       html += '<div class="profile-stats">';
       html += '<span class="profile-stat"><strong>' + c.prof.trades + '</strong> trades</span>';
@@ -4301,7 +4301,7 @@ async function loadSelfScout(leagueId, userId, myRoster, rosters, allPlayers, us
       posGrades[gp] = {
         grade: grade,
         starterName: posPlayers[gp].length > 0 ? posPlayers[gp][0].name : 'Empty',
-        starterPPG: posPlayers[gp].length > 0 ? posPlayers[gp][0].ppg.toFixed(1) : '0',
+        starterPPG: posPlayers[gp].length > 0 ? (posPlayers[gp][0].ppg || 0).toFixed(1) : '0',
         depth: posPlayers[gp].length,
         avgAge: avgStarterAge,
         pctile: pctile
@@ -4375,7 +4375,7 @@ async function loadSelfScout(leagueId, userId, myRoster, rosters, allPlayers, us
     // Hawkeye's recommendation
     html += '<div class="agent-quote" style="border-left-color:var(--pos-rb);">';
     if (weakest && strongest && weakest !== strongest) {
-      html += 'your ' + weakest + ' room needs work. ' + (posPlayers[weakest].length > 0 ? escapeHtml(posPlayers[weakest][0].name) + ' is your best option at ' + posPlayers[weakest][0].ppg.toFixed(1) + ' PPG — ' : '') + 'the tape says buy before the draft. you have surplus ' + strongest + ' to deal from.';
+      html += 'your ' + weakest + ' room needs work. ' + (posPlayers[weakest].length > 0 ? escapeHtml(posPlayers[weakest][0].name) + ' is your best option at ' + (posPlayers[weakest][0].ppg || 0).toFixed(1) + ' PPG — ' : '') + 'the tape says buy before the draft. you have surplus ' + strongest + ' to deal from.';
     } else {
       html += 'balanced roster. no glaring weakness, but no dominant position group either. look for a difference-maker at the draft.';
     }
