@@ -504,7 +504,8 @@
     data.teams.forEach(function(team) {
       // Re-sort players by active mode metric
       var sortKey = activeMode === 'targets' ? 'targets' : 'carries';
-      team.players.sort(function(a, b) { return b[sortKey] - a[sortKey]; });
+      var teamPlayers = team.players || [];
+      teamPlayers.sort(function(a, b) { return b[sortKey] - a[sortKey]; });
       var total = activeMode === 'targets' ? team.total_targets : team.total_carries;
       var label = activeMode === 'targets' ? 'Targets' : 'Carries';
 
@@ -521,7 +522,7 @@
       html += '<div class="dist-bar">';
 
       var otherPct = 100;
-      team.players.forEach(function(p) {
+      teamPlayers.forEach(function(p) {
         var share = activeMode === 'targets' ? p.target_share : p.carry_share;
         if (share < 2) return;
         otherPct -= share;
@@ -551,7 +552,7 @@
 
       // Player detail rows
       html += '<div class="team-players">';
-      team.players.forEach(function(p) {
+      teamPlayers.forEach(function(p) {
         var share = activeMode === 'targets' ? p.target_share : p.carry_share;
         var count = activeMode === 'targets' ? p.targets : p.carries;
         if (count === 0) return;

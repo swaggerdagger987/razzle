@@ -473,7 +473,7 @@
       html += '</div>';
 
       html += '<div class="ar-players">';
-      arch.players.forEach(function(p) {
+      (arch.players || []).forEach(function(p) {
         html += '<div class="ar-player-card">';
         html += '<span class="ar-pos-sm ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span>';
         html += '<div style="flex:1;min-width:0;">';
