@@ -87,11 +87,11 @@ const C = {
 
 // ── CANVAS SETUP ───────────────────────────────────────────────────────
 const cvs = document.getElementById('warRoomCanvas');
-const ctx = cvs.getContext('2d');
+const ctx = cvs ? cvs.getContext('2d') : null;
 
 function resizeCanvas() {
   const container = document.getElementById('canvasContainer');
-  if (!container) return;
+  if (!container || !cvs) return;
   const rect = container.getBoundingClientRect();
   cvs.width = WORLD_W;
   cvs.height = WORLD_H;
@@ -1156,6 +1156,7 @@ function handleInput(dt) {
 let dragging = false, dragStartX = 0, dragStartY = 0, dragCamX = 0, dragCamY = 0;
 let mouseDownTime = 0;
 
+if (cvs) {
 cvs.addEventListener('mousedown', e => {
   dragging = true;
   dragStartX = e.clientX;
@@ -1214,6 +1215,7 @@ cvs.addEventListener('touchmove', e => {
 cvs.addEventListener('touchend', () => {
   dragging = false;
 }, { passive: true });
+} // end if (cvs)
 
 // ── AMBIENT EFFECTS ────────────────────────────────────────────────────
 function ambientEffects() {
@@ -1474,7 +1476,7 @@ function loadAgentConfig() {
 }
 
 function saveAgentConfig(cfg) {
-  localStorage.setItem(AGENT_CONFIG_KEY, JSON.stringify(cfg));
+  try { localStorage.setItem(AGENT_CONFIG_KEY, JSON.stringify(cfg)); } catch (_) {}
 }
 
 function getAgentSettings(agentId) {
@@ -2738,8 +2740,8 @@ function updateQueryLimitBadge() {
     var remaining = Math.max(0, limit - used);
     var tier = isProUser() ? 'Pro' : 'Free';
     el.textContent = remaining + '/' + limit + ' queries remaining today (' + tier + ')';
-    if (remaining <= 1) el.style.color = 'var(--orange)';
-    else if (remaining <= 0) el.style.color = 'var(--red)';
+    if (remaining <= 0) el.style.color = 'var(--red)';
+    else if (remaining <= 1) el.style.color = 'var(--orange)';
     else el.style.color = 'var(--ink-light)';
   }
 }

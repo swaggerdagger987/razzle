@@ -230,7 +230,7 @@ def _enrich_with_derived_stats(items):
             item["adot"] = _safe_div(item.get("receiving_air_yards") or 0, item.get("targets") or 0)
         # Half-PPR per game (fallback: compute from PPR - 0.5*rec if column is NULL)
         hppr = item.get("fantasy_points_half_ppr")
-        if not hppr and item.get("fantasy_points_ppr"):
+        if hppr is None and item.get("fantasy_points_ppr") is not None:
             hppr = (item.get("fantasy_points_ppr") or 0) - 0.5 * (item.get("receptions") or 0)
         item["half_ppr_ppg"] = _safe_div(hppr or 0, g)
         # Snap share (already averaged in SQL, just round)
@@ -273,7 +273,7 @@ def _enrich_with_derived_stats(items):
         rush_fd = item.get("rushing_first_downs") or 0
         rec_fd = item.get("receiving_first_downs") or 0
         total_fd = pass_fd + rush_fd + rec_fd
-        std_pts = item.get("fantasy_points_ppr") or 0
+        std_pts = item.get("fantasy_points_std") or (item.get("fantasy_points_ppr") or 0) - (item.get("receptions") or 0)
         if total_fd > 0:
             item["ppfd"] = round(std_pts + total_fd, 1)
             item["ppfd_per_game"] = _safe_div(item["ppfd"], g)
@@ -313,9 +313,9 @@ def _enrich_with_epa_per_play(items):
             item["epa_per_play"] = round(total_epa / total_plays, 3)
         else:
             item["epa_per_play"] = None
-        # WOPR per game (wopr is populated by _enrich_with_rate_metrics)
+        # WOPR per game (wopr from _enrich_with_rate_metrics is already AVG per game)
         wopr_val = item.get("wopr")
-        item["wopr_per_game"] = round(wopr_val / g, 3) if wopr_val and g > 0 else None
+        item["wopr_per_game"] = round(wopr_val, 3) if wopr_val else None
     return items
 
 
@@ -463,24 +463,17 @@ def _age_multiplier(position, age):
 def _enrich_with_dynasty_value(items):
     """Compute Dynasty Value Score (DVS) for each player.
 
-    DVS = production_score x age_multiplier
-    production_score: PPR/game normalized to 0-100 (25 PPG = 100)
-    age_multiplier: position-specific curve (0.1 to 1.0)
+    Uses the same composite formula as compute_trade_value() so the screener's
+    dynasty_value column matches the Trade Value Chart, Trade Finder, Dynasty
+    Rankings, and Tier List.  Formula: production 50% + age 30% + scarcity 20%
+    with soft ceiling above 90.
     """
     for item in items:
         ppg = item.get("ppg") or 0
         age = item.get("age")
         pos = item.get("position", "WR")
 
-        # Production score: 25 PPG maps to 100 (elite), capped at 100
-        production = min(100.0, ppg * 4.0)
-
-        # Age multiplier
-        age_mult = _age_multiplier(pos, age)
-
-        # Dynasty value = production weighted by remaining career value
-        dvs = round(production * age_mult, 1)
-        item["dynasty_value"] = dvs
+        item["dynasty_value"] = compute_trade_value(ppg, age, pos)
 
     return items
 
@@ -600,14 +593,13 @@ def _enrich_with_team_shares(conn, items, season=None, career_mode=False, week=0
 
     if career_mode:
         team_query = f"""
-            SELECT p.team,
+            SELECT s.team,
                    SUM(s.receiving_yards) as team_rec_yds,
                    SUM(s.receiving_tds) as team_rec_tds,
                    SUM(s.carries) as team_carries
-            FROM players p
-            JOIN player_week_stats s ON p.player_id = s.player_id
-            WHERE p.team IN ({team_placeholders}) AND s.season_type = 'regular'
-            GROUP BY p.team
+            FROM player_week_stats s
+            WHERE s.team IN ({team_placeholders}) AND s.season_type = 'regular'
+            GROUP BY s.team
         """
         team_rows = conn.execute(team_query, team_list).fetchall()
         team_map = {}
@@ -621,14 +613,13 @@ def _enrich_with_team_shares(conn, items, season=None, career_mode=False, week=0
         week = _safe_int(week)
         week_clause = " AND s.week = ?" if week > 0 else ""
         team_query = f"""
-            SELECT p.team,
+            SELECT s.team,
                    SUM(s.receiving_yards) as team_rec_yds,
                    SUM(s.receiving_tds) as team_rec_tds,
                    SUM(s.carries) as team_carries
-            FROM players p
-            JOIN player_week_stats s ON p.player_id = s.player_id
-            WHERE p.team IN ({team_placeholders}) AND s.season = ? AND s.season_type = 'regular'{week_clause}
-            GROUP BY p.team
+            FROM player_week_stats s
+            WHERE s.team IN ({team_placeholders}) AND s.season = ? AND s.season_type = 'regular'{week_clause}
+            GROUP BY s.team
         """
         team_params = team_list + [s] + ([week] if week > 0 else [])
         team_rows = conn.execute(team_query, team_params).fetchall()

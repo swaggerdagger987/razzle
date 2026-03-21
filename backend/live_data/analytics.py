@@ -246,7 +246,7 @@ def fetch_heatmap(position="WR", group="production", season=None):
                 d["yards_per_reception"] = _safe_div(d.get("receiving_yards") or 0, d.get("receptions"), 1)
                 d["yards_per_target"] = _safe_div(d.get("receiving_yards") or 0, d.get("targets"), 1)
                 d["catch_rate"] = _safe_div((d.get("receptions") or 0) * 100, d.get("targets"), 1)
-                d["snap_pct"] = None  # will be filled from rate metrics
+                d["snap_pct"] = round(d.get("offense_pct") or 0, 1) or None
                 all_players.append(d)
 
             # Enrich with rate metrics from player_week_metrics
@@ -863,7 +863,7 @@ def fetch_buy_sell_candidates(season=None, position=None, limit=15):
                   AND s.season_type = 'regular'
                   {pos_filter}
                 GROUP BY p.player_id
-                HAVING games >= 6
+                HAVING games >= 8
                 ORDER BY total_ppr DESC
                 LIMIT 500
             """
@@ -878,10 +878,15 @@ def fetch_buy_sell_candidates(season=None, position=None, limit=15):
                 }
 
             # Build player list with raw stats + dynasty value
+            # Position-specific PPG floors to exclude scrub/depth players
+            MIN_PPG = {"QB": 10, "RB": 5, "WR": 5, "TE": 3}
             players = []
             for r in rows:
                 games = r[7] or 1
                 ppg = round((r[6] or 0) / games, 2)
+                pos = r[2] or "WR"
+                if ppg < MIN_PPG.get(pos, 5):
+                    continue
                 rush_yds = r[8] or 0
                 carries = r[9] or 0
                 rec_yds = r[10] or 0

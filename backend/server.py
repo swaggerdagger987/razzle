@@ -61,12 +61,13 @@ def _resp_cache_set(key: str, body: bytes, headers: dict):
 # ---------------------------------------------------------------------------
 
 def _get_client_ip(request: Request) -> str:
-    """Extract real client IP from X-Forwarded-For header (first entry),
+    """Extract real client IP from X-Forwarded-For header (last entry),
     falling back to request.client.host for direct connections."""
     forwarded = request.headers.get("x-forwarded-for", "")
     if forwarded:
-        # X-Forwarded-For: client, proxy1, proxy2 — first entry is the real client
-        return forwarded.split(",")[0].strip()
+        # X-Forwarded-For: spoofable, ..., real_client (appended by Render proxy)
+        # Trust the LAST entry — it's appended by the reverse proxy and can't be spoofed
+        return forwarded.split(",")[-1].strip()
     return request.client.host if request.client else "unknown"
 
 
@@ -438,7 +439,7 @@ app = FastAPI(
 # JSON decode errors are handled in global_exception_handler below
 
 _CORS_ORIGINS = ["https://razzle.lol"]
-if os.environ.get("RAZZLE_ENV", "production") != "production":
+if os.environ.get("ENVIRONMENT", "development") != "production":
     _CORS_ORIGINS += ["http://localhost:8000", "http://localhost:5173", "http://127.0.0.1:8000"]
 
 app.add_middleware(
@@ -685,7 +686,7 @@ async def custom_http_exception_handler(request: Request, exc: StarletteHTTPExce
 async def global_exception_handler(request: Request, exc: Exception):
     """Catch unhandled exceptions — log full traceback, return generic 500."""
     import json
-    if isinstance(exc, (json.JSONDecodeError, ValueError)) and request.method == "POST":
+    if isinstance(exc, json.JSONDecodeError) and request.method == "POST":
         return JSONResponse({"error": "invalid JSON body"}, status_code=400)
     logger.exception("Unhandled exception on %s %s", request.method, request.url.path)
     if request.url.path.startswith("/api/"):
@@ -2187,7 +2188,8 @@ async def player_profile_page(player_id: str):
             jsonld["jobTitle"] = f"{pos} — Fantasy Football"
         if team:
             jsonld["affiliation"] = {"@type": "SportsTeam", "name": team}
-        jsonld_tag = f'<script type="application/ld+json">{_json.dumps(jsonld)}</script>'
+        jsonld_safe = _json.dumps(jsonld).replace("<", r"\u003c")
+        jsonld_tag = f'<script type="application/ld+json">{jsonld_safe}</script>'
         html = html.replace("</head>", f"{jsonld_tag}\n</head>")
     except Exception:
         logger.debug("JSON-LD injection failed for player page", exc_info=True)
@@ -2421,7 +2423,8 @@ def trade_pick_values(year: int = 0, rounds: int = 4, teams: int = 12):
     """Return dynasty draft pick trade values."""
     if year <= 0:
         year = live_data._current_draft_year()
-    year = max(2024, min(2030, year))
+    current_yr = live_data._current_draft_year()
+    year = max(current_yr - 2, min(current_yr + 4, year))
     rounds = max(1, min(5, rounds))
     teams = max(4, min(16, teams))
     return {"picks": live_data.fetch_pick_values(year, rounds, teams)}
@@ -2431,7 +2434,7 @@ def trade_pick_values(year: int = 0, rounds: int = 4, teams: int = 12):
 async def roster_value(request: Request):
     """Calculate dynasty roster value analysis."""
     ip = _get_client_ip(request)
-    if _check_screener_rate(ip):
+    if not _check_screener_rate(ip):
         return JSONResponse({"error": "Rate limit exceeded"}, status_code=429)
     body = await request.json()
     player_ids = body.get("player_ids", [])
@@ -3359,7 +3362,7 @@ async def monte_carlo_projections(request: Request):
     """Return weekly scoring distributions for a list of player IDs.
     Used by the frontend Monte Carlo simulation engine."""
     ip = _get_client_ip(request)
-    if _check_screener_rate(ip):
+    if not _check_screener_rate(ip):
         return JSONResponse({"error": "Rate limit exceeded"}, status_code=429)
     try:
         body = await request.json()

@@ -431,19 +431,21 @@ def _handle_checkout_completed(session):
             "SELECT id FROM subscriptions WHERE user_id = ?", (_uid,)
         ).fetchone()
         status = "trialing" if is_trial else "active"
+        is_lifetime = plan_tier.endswith("_lifetime")
+        p_type = "lifetime" if is_lifetime else "subscription"
         if existing:
             conn.execute("""
                 UPDATE subscriptions SET
                     stripe_customer_id = ?, stripe_subscription_id = ?,
                     plan = ?, status = ?, trial_used = 1, trial_end = ?,
-                    updated_at = CURRENT_TIMESTAMP
+                    plan_type = ?, updated_at = CURRENT_TIMESTAMP
                 WHERE user_id = ?
-            """, (customer_id, subscription_id, plan_tier, status, trial_end, _uid))
+            """, (customer_id, subscription_id, plan_tier, status, trial_end, p_type, _uid))
         else:
             conn.execute("""
-                INSERT INTO subscriptions (user_id, stripe_customer_id, stripe_subscription_id, plan, status, trial_used, trial_end)
-                VALUES (?, ?, ?, ?, ?, 1, ?)
-            """, (_uid, customer_id, subscription_id, plan_tier, status, trial_end))
+                INSERT INTO subscriptions (user_id, stripe_customer_id, stripe_subscription_id, plan, status, trial_used, trial_end, plan_type)
+                VALUES (?, ?, ?, ?, ?, 1, ?, ?)
+            """, (_uid, customer_id, subscription_id, plan_tier, status, trial_end, p_type))
 
         conn.commit()
     logger.info(f"User {user_id} upgraded to {plan_tier} (subscription {subscription_id}, trial={is_trial})")
@@ -453,7 +455,7 @@ def _handle_subscription_updated(subscription):
     """Sync plan when subscription is updated via Stripe portal (plan change, reactivation, etc.).
     Skips lifetime users — their plan is permanent."""
     customer_id = subscription.get("customer")
-    status = subscription.get("status")  # active, past_due, trialing, canceled, etc.
+    status = subscription.get("status") or "unknown"  # active, past_due, trialing, canceled, etc.
     metadata = subscription.get("metadata", {})
     plan_tier = metadata.get("plan_tier")
 
@@ -518,23 +520,26 @@ def _handle_subscription_deleted(subscription):
 
 
 def _handle_payment_failed(invoice):
-    """Downgrade user to free when payment fails. Skips lifetime users."""
+    """Mark subscription as payment_failed but do NOT downgrade plan.
+
+    Stripe retries failed payments multiple times over days. The actual
+    downgrade happens in _handle_subscription_deleted when Stripe gives up
+    and cancels the subscription.
+    """
     customer_id = invoice.get("customer")
 
     with auth_module.get_users_db() as conn:
         row = conn.execute("SELECT id, plan FROM users WHERE stripe_customer_id = ?", (customer_id,)).fetchone()
         if row:
-            # Never downgrade lifetime plans on payment failure
             if row["plan"] in ("pro_lifetime", "elite_lifetime"):
-                logger.info(f"User {row['id']} has lifetime plan — skipping payment failure downgrade")
+                logger.info(f"User {row['id']} has lifetime plan — skipping payment failure")
                 return
             conn.execute("""
                 UPDATE subscriptions SET status = 'payment_failed', updated_at = CURRENT_TIMESTAMP
                 WHERE user_id = ?
             """, (row["id"],))
-            conn.execute("UPDATE users SET plan = 'free' WHERE id = ?", (row["id"],))
             conn.commit()
-            logger.warning(f"Payment failed for user {row['id']} — downgraded to free")
+            logger.warning(f"Payment failed for user {row['id']} — marked payment_failed (plan unchanged, awaiting Stripe retry)")
 
 
 def get_billing_status(user: dict) -> dict:

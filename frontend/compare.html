@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<base href="/">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Player Comparison — Razzle</title>
@@ -83,7 +84,7 @@
 
   .compare-pos-badge {
     display: inline-block;
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 14px;
     color: white;
     padding: 3px 10px;
@@ -188,7 +189,7 @@
   .compare-stat-table th {
     padding: 8px 10px;
     border-bottom: 2px solid var(--ink);
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -285,7 +286,7 @@
     position: fixed;
     bottom: 12px;
     right: 16px;
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 14px;
     color: var(--ink-faint);
     opacity: 0.5;
@@ -313,7 +314,7 @@
 </style>
 </head>
 <body>
-<a href="#main-content" class="sr-only" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;" onfocus="this.style.position='static';this.style.width='auto';this.style.height='auto';" onblur="this.style.position='absolute';this.style.left='-9999px';this.style.width='1px';this.style.height='1px';">Skip to main content</a>
+<a href="javascript:void(0)" onclick="var el=document.getElementById('main-content');if(el){el.scrollIntoView();el.focus();}" class="sr-only" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;" onfocus="this.style.position='static';this.style.width='auto';this.style.height='auto';" onblur="this.style.position='absolute';this.style.left='-9999px';this.style.width='1px';this.style.height='1px';">Skip to main content</a>
 
 <!-- NAV -->
 <nav class="topnav" aria-label="Main navigation">

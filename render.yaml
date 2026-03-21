@@ -10,14 +10,8 @@ services:
       pip install -r requirements.txt
       # DB lives on persistent disk at /data (mounted below). Uploaded manually via
       # gh release + SCP. No download needed during build.
-      echo "--- Minifying JS/CSS with esbuild ---"
-      mkdir -p frontend/dist
-      npx --yes esbuild frontend/*.js --minify --outdir=frontend/dist/
-      npx --yes esbuild frontend/*.css --minify --outdir=frontend/dist/
-      cp frontend/*.html frontend/dist/
-      cp -r frontend/assets frontend/dist/assets
-      cp frontend/favicon.svg frontend/dist/
-      echo "Minified build: $(ls frontend/dist/*.js | wc -l) JS, $(ls frontend/dist/*.css | wc -l) CSS, $(ls frontend/dist/*.html | wc -l) HTML"
+      echo "--- Minifying JS/CSS with Python (rjsmin + rcssmin) ---"
+      python scripts/build_dist.py
     startCommand: uvicorn backend.server:app --host 0.0.0.0 --port $PORT --workers 2
     disk:
       name: razzle-data

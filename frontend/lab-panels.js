@@ -12,7 +12,9 @@
 
   function fmt(v, dec) {
     if (v === null || v === undefined) return '-';
-    return Number(v).toFixed(dec === undefined ? 1 : dec);
+    var n = Number(v);
+    if (isNaN(n)) return '-';
+    return n.toFixed(dec === undefined ? 1 : dec);
   }
 
   var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
@@ -202,7 +204,7 @@
       html += '<div class="dh-wrap">';
       html += '<table class="dh-table"><thead><tr>';
       html += '<th>Player</th>';
-      seasons.forEach(function(s) { html += '<th class="center">' + s + '</th>'; });
+      seasons.forEach(function(s) { html += '<th class="center">' + escapeHtml(String(s)) + '</th>'; });
       html += '<th class="center">Trend</th>';
       html += '</tr></thead><tbody>';
 
@@ -888,7 +890,7 @@
         if (va == null) return 1;
         if (vb == null) return -1;
         if (typeof va === 'string') return dir * va.localeCompare(String(vb));
-        return dir * ((Number(vb) || 0) - (Number(va) || 0));
+        return dir * ((Number(va) || 0) - (Number(vb) || 0));
       });
     }
 
@@ -2305,7 +2307,7 @@
         if (va == null) return 1;
         if (vb == null) return -1;
         if (typeof va === 'string') return dir * va.localeCompare(String(vb));
-        return dir * ((Number(vb) || 0) - (Number(va) || 0));
+        return dir * ((Number(va) || 0) - (Number(vb) || 0));
       });
     }
 
@@ -2520,7 +2522,7 @@
         if (va == null) return 1;
         if (vb == null) return -1;
         if (typeof va === 'string') return dir * va.localeCompare(String(vb));
-        return dir * ((Number(vb) || 0) - (Number(va) || 0));
+        return dir * ((Number(va) || 0) - (Number(vb) || 0));
       });
     }
 
@@ -3871,7 +3873,7 @@
         if (va == null) return 1;
         if (vb == null) return -1;
         if (typeof va === 'string') return dir * va.localeCompare(String(vb));
-        return dir * ((Number(vb) || 0) - (Number(va) || 0));
+        return dir * ((Number(va) || 0) - (Number(vb) || 0));
       });
     }
 
@@ -4893,7 +4895,7 @@
       var maxAge = Math.max.apply(null, ages.concat([35]));
       var maxPPG = Math.max.apply(null, ppgs.concat([1])) * 1.1;
 
-      function xPos(age) { return pad.left + ((age - minAge) / (maxAge - minAge)) * cw; }
+      function xPos(age) { return pad.left + ((age - minAge) / (Math.max(maxAge - minAge, 1))) * cw; }
       function yPos(ppg) { return pad.top + ch - (ppg / maxPPG) * ch; }
 
       // grid lines
@@ -9119,7 +9121,7 @@
         var otherPct = 100;
         team.players.forEach(function(p) {
           var share = activeMode === 'targets' ? p.target_share : p.carry_share;
-          if (share < 2) return;
+          if (!share || share < 2) return;
           otherPct -= share;
           var posColor = POS_COLORS[p.position] || '#d97757';
           var lightColor = getPosLight()[p.position] || '#f7e4d8';
@@ -10047,7 +10049,7 @@
       ctx.fillRect(0, 0, W, totalH);
 
       // Find max value for scaling
-      var maxVal = 0;
+      var maxVal = 1;
       teams.forEach(function(tm) { if (tm.total_value > maxVal) maxVal = tm.total_value; });
       var barAreaW = W - padLeft - padRight;
 

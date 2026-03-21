@@ -71,6 +71,7 @@ def fetch_efficiency_rankings(season=None, position=None, limit=30, week=None):
                     SUM(s.receiving_yards) as receiving_yards,
                     SUM(s.rushing_yards) as rushing_yards,
                     SUM(s.receiving_air_yards) as receiving_air_yards,
+                    SUM(s.receiving_yards_after_catch) as yac,
                     SUM(s.receiving_tds) as rec_tds,
                     SUM(s.rushing_tds) as rush_tds,
                     SUM(s.passing_tds) as pass_tds
@@ -108,9 +109,10 @@ def fetch_efficiency_rankings(season=None, position=None, limit=30, week=None):
                 rec_yards = r[10] or 0
                 rush_yards = r[11] or 0
                 air_yards = r[12] or 0
-                rec_tds = r[13] or 0
-                rush_tds = r[14] or 0
-                pass_tds = r[15] or 0
+                yac = r[13] or 0
+                rec_tds = r[14] or 0
+                rush_tds = r[15] or 0
+                pass_tds = r[16] or 0
                 pos = r[2] or "RB"
 
                 # Opportunities = targets + carries (for QBs: attempts/carries)
@@ -127,7 +129,7 @@ def fetch_efficiency_rankings(season=None, position=None, limit=30, week=None):
                 ppo = round(total_ppr / opportunities, 2) if opportunities > 0 else 0
                 ypt = round(total_yards / touches, 2) if touches > 0 else 0
                 catch_rate = round(receptions / targets * 100, 1) if targets > 0 else 0
-                yac_per_rec = round(max(0, (rec_yards - air_yards)) / receptions, 2) if receptions > 0 else 0
+                yac_per_rec = round(yac / receptions, 2) if receptions > 0 else 0
                 td_rate = round(total_tds / touches * 100, 1) if touches > 0 else 0
 
                 players.append({
@@ -708,18 +710,20 @@ def fetch_stock_watch(season=None, position=None, limit=30):
                 opp_allows = defense_ppg.get(opp, {}).get(pos, league_avg.get(pos, 0))
                 player_sos[pid].append(opp_allows)
 
-            # ---- Compute metrics per player (min 6 games, 2 PPG) ----
+            # ---- Compute metrics per player (min 8 games, position PPG floor) ----
+            MIN_PPG = {"QB": 10, "RB": 5, "WR": 5, "TE": 3}
             players = []
             for pid, weeks in player_weeks.items():
                 n = len(weeks)
-                if n < 6:
+                if n < 8:
                     continue
                 info = player_info[pid]
                 opps_d = player_opps[pid]
                 total_pts = opps_d["total_pts"]
                 games = opps_d["games"]
                 ppg = round(total_pts / games, 2) if games > 0 else 0
-                if ppg < 2:
+                pos = info["position"]
+                if ppg < MIN_PPG.get(pos, 5):
                     continue
 
                 # Efficiency: PPO
@@ -921,7 +925,7 @@ def fetch_opportunity_share(season=None, position=None, limit=30, week=None):
             tt_week_filter = "AND s.week = ?" if _week > 0 else ""
             tt_params = [_season, _week] if _week > 0 else [_season]
             tt_rows = conn.execute(f"""
-                SELECT p.team,
+                SELECT s.team,
                        COALESCE(SUM(s.targets), 0),
                        COALESCE(SUM(s.carries), 0),
                        COALESCE(SUM(s.receiving_yards), 0),
@@ -933,9 +937,8 @@ def fetch_opportunity_share(season=None, position=None, limit=30, week=None):
                 WHERE s.season = ?
                   AND s.season_type = 'regular'
                   AND p.position IN ('QB', 'RB', 'WR', 'TE')
-                  AND p.fantasy_relevant = 1
                   {tt_week_filter}
-                GROUP BY p.team
+                GROUP BY s.team
             """, tt_params).fetchall()
             for tr in tt_rows:
                 t = team_totals[tr[0] or "FA"]
@@ -1150,7 +1153,7 @@ def fetch_report_cards(season=None, position=None, limit=25, week=None):
             tt_week_filter = "AND s.week = ?" if _week > 0 else ""
             tt_params = [_season, _week] if _week > 0 else [_season]
             tt_rows = conn.execute(f"""
-                SELECT p.team,
+                SELECT s.team,
                        COALESCE(SUM(s.targets), 0),
                        COALESCE(SUM(s.carries), 0),
                        COALESCE(SUM(s.receiving_yards), 0),
@@ -1161,9 +1164,8 @@ def fetch_report_cards(season=None, position=None, limit=25, week=None):
                 WHERE s.season = ?
                   AND s.season_type = 'regular'
                   AND p.position IN ('QB', 'RB', 'WR', 'TE')
-                  AND p.fantasy_relevant = 1
                   {tt_week_filter}
-                GROUP BY p.team
+                GROUP BY s.team
             """, tt_params).fetchall()
             for tr in tt_rows:
                 t = team_totals[tr[0] or "FA"]
@@ -1486,7 +1488,7 @@ def fetch_season_awards(season=None, position=None):
                 "rec_tds": 0, "rush_yards": 0,
             })
             tt_rows = conn.execute("""
-                SELECT p.team,
+                SELECT s.team,
                        COALESCE(SUM(s.targets), 0),
                        COALESCE(SUM(s.carries), 0),
                        COALESCE(SUM(s.receiving_yards), 0),
@@ -1497,8 +1499,7 @@ def fetch_season_awards(season=None, position=None):
                 WHERE s.season = ?
                   AND s.season_type = 'regular'
                   AND p.position IN ('QB', 'RB', 'WR', 'TE')
-                  AND p.fantasy_relevant = 1
-                GROUP BY p.team
+                GROUP BY s.team
             """, [_season]).fetchall()
             for tr in tt_rows:
                 t = team_totals[tr[0] or "FA"]

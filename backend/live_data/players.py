@@ -45,7 +45,8 @@ def quick_search_players(query, limit=8):
     limit = max(1, min(limit, 20))
     def _query():
         with get_db() as conn:
-            escaped_q = query.lower().replace(" ", "").replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+            escaped_q = re.sub(r"[^a-z0-9]", "", query.lower())
+            escaped_q = escaped_q.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
             search_term = "%" + escaped_q + "%"
             rows = conn.execute("""
                 WITH ms AS (SELECT MAX(season) AS s FROM player_week_stats)
@@ -116,8 +117,8 @@ def fetch_players(
             _sort_key = sort_key
             if _sort_key not in safe_sorts:
                 _sort_key = "fantasy_points_ppr"
-            _sort_dir = sort_dir
-            if _sort_dir.lower() not in ("asc", "desc"):
+            _sort_dir = sort_dir or "desc"
+            if str(_sort_dir).lower() not in ("asc", "desc"):
                 _sort_dir = "desc"
 
             where = ["s.season_type = 'regular'"]
@@ -309,7 +310,8 @@ def _fetch_screener_uncached(body):
         }
         if sort_key not in safe_sorts:
             sort_key = "fantasy_points_ppr"
-        if sort_dir.lower() not in ("asc", "desc"):
+        sort_dir = sort_dir or "desc"
+        if str(sort_dir).lower() not in ("asc", "desc"):
             sort_dir = "desc"
 
         # Columns that can be filtered via SQL HAVING (not derived/rate metrics)
@@ -428,7 +430,7 @@ def _fetch_screener_uncached(body):
         # When sorting by derived/rate metric or applying post-filters, fetch all matching
         # rows so Python sort/filter operates on complete dataset before pagination
         if python_sort or post_filters:
-            sql_limit = 500
+            sql_limit = 2000
             sql_offset = 0
         else:
             sql_limit = limit
@@ -485,7 +487,9 @@ def _fetch_screener_uncached(body):
         # Re-sort in Python if sorting by a derived/rate metric
         if python_sort:
             reverse = sort_dir.lower() == "desc"
-            items.sort(key=lambda x: x.get(sort_key) or 0, reverse=reverse)
+            _null_sentinel = float('-inf') if reverse else float('inf')
+            items.sort(key=lambda x: x.get(sort_key) if x.get(sort_key) is not None else _null_sentinel, reverse=reverse)
+            total = len(items)
 
         # Apply pagination after post-filtering and Python re-sort
         if python_sort or post_filters:
@@ -666,12 +670,22 @@ def _fetch_player_profile_uncached(player_id):
         seasons = [dict(r) for r in rows]
         _enrich_with_derived_stats(seasons)
 
-        # Enrich each season with rate metrics
-        for season_row in seasons:
-            items_for_rate = [{"player_id": player_id, **season_row}]
-            _enrich_with_rate_metrics(conn, items_for_rate, season=season_row["season"])
-            for metric in RATE_METRICS:
-                season_row[metric] = items_for_rate[0].get(metric)
+        # Enrich each season with rate metrics (single query for all seasons)
+        if seasons:
+            stat_placeholders = ",".join("?" * len(RATE_METRICS))
+            rate_rows = conn.execute(f"""
+                SELECT m.season, m.stat_key, AVG(m.stat_value) as avg_val
+                FROM player_week_metrics m
+                WHERE m.player_id = ? AND m.stat_key IN ({stat_placeholders})
+                GROUP BY m.season, m.stat_key
+            """, [player_id] + list(RATE_METRICS)).fetchall()
+            rate_lookup = {}
+            for r in rate_rows:
+                rate_lookup.setdefault(r[0], {})[r[1]] = round(r[2], 3) if r[2] is not None else None
+            for season_row in seasons:
+                s_rates = rate_lookup.get(season_row["season"], {})
+                for metric in RATE_METRICS:
+                    season_row[metric] = s_rates.get(metric)
 
         # Career totals
         career = {}
@@ -690,9 +704,12 @@ def _fetch_player_profile_uncached(player_id):
 
         # Combine/draft data (match by name + position)
         combine = None
+        has_combine = conn.execute(
+            "SELECT name FROM sqlite_master WHERE type='table' AND name='combine_data'"
+        ).fetchone()
         name = player.get("full_name", "")
         pos = player.get("position", "")
-        if name and pos:
+        if has_combine and name and pos:
             search_name = re.sub(r"[^a-z]", "", name.lower())
             combine_row = conn.execute("""
                 SELECT c.*, d.career_av, d.draft_av, d.allpro, d.probowls, d.seasons_started

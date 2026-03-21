@@ -2431,3 +2431,351 @@ week_filter failure (10/11) is a stale server process issue, not a code bug. Ver
 - All Python files compile clean
 - 11/11 smoke tests pass
 - 0 regressions
+
+---
+
+## Ship Loop Quality Sweep (Mar 20 — Session 15)
+
+**Goal**: Consume QA ticket (FUNC-012), then sweep for bugs via 3-agent parallel audit (backend, frontend, standalone HTML).
+
+### Ticket Consumed
+- FUNC-012 (playoff data contamination): CODE FIXED in prior sessions, closed ticket. Deploy is human action.
+
+### P0 Backend Bugs (3 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | 7 functions used `p.gsis_id` in SELECT instead of `p.player_id` | tools.py | Returns null player IDs for players without gsis_id. `GROUP BY p.gsis_id` collapsed nulls. Affects garbage_time, snap_efficiency, td_regression, dual_threat, season_pace, target_premium, workload_monitor. |
+| 2 | `boom_threshold` undefined → RangeError in histogram | lab.js:12459 | `undefined + 5` = NaN → `new Array(NaN)` throws. Added `|| 20` guard (matches existing fix at line 12728). |
+| 3 | `sort_dir.lower()` crash on null input | players.py:120,312 | Client sending `"sort_direction": null` in POST body crashed `.lower()`. Added null coalescing. |
+
+### CRITICAL Security Fixes (3 fixes)
+
+| # | Fix | Severity | File | Notes |
+|---|-----|----------|------|-------|
+| 1 | Inverted rate limit on roster-value and monte-carlo | **CRITICAL** | server.py:2434,3362 | `if _check_screener_rate(ip)` blocked legitimate users (returns True when allowed), allowed unlimited after bucket full. Fixed to `if not _check_screener_rate(ip)`. |
+| 2 | X-Forwarded-For trusted first entry (spoofable) | **HIGH** | server.py:63-70 | All IP rate limits bypassable by sending fake X-Forwarded-For. Changed to trust last entry (appended by Render proxy). |
+| 3 | CORS env var name mismatch | **MEDIUM** | server.py:441 | Used `RAZZLE_ENV` but production sets `ENVIRONMENT`. Changed to `ENVIRONMENT`. Not currently exploitable but a latent footgun. |
+
+### Frontend Data Display Fixes (4 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | `fmt()` renders "NaN" for non-numeric input | lab-panels.js:14 | Added `isNaN()` check after `Number()` coercion — returns '-' instead of "NaN" |
+| 2 | Dynasty roster chart divide-by-zero | lab-panels.js:10050 | `maxVal` init 0→1 prevents Infinity pixel coordinates |
+| 3 | Aging curve xPos divide-by-zero | lab-panels.js:4896 | Added `Math.max(denominator, 1)` guard |
+| 4 | Target distribution undefined share passes `< 2` guard | lab-panels.js:9121 | `undefined < 2` is false in JS — added `!share` guard |
+
+### Robustness Fix (1)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | `saveAgentConfig` no try-catch on localStorage | warroom.js:1369 | QuotaExceededError silently lost API key config. Wrapped in try-catch. |
+
+### Standalone HTML Panels
+- 15 most complex panels audited (targets, matchups, weekly, aging, explorer, usage, redzone, airyards, consistency, tradevalues, vorp, stocks, yoy, efficiency, opportunity)
+- **0 bugs found** — all pass 7 checks (app.js, fetch error handling, escapeHtml, season defaults, .toFixed guards, div/zero, hardcoded years)
+
+### Verified Clean
+- All 11 JS files syntax clean
+- All Python files compile clean
+- 11/11 smoke tests pass
+- 0 regressions
+
+---
+
+## Ship Loop Session 16 (Mar 20)
+
+### FUNC-013: Stock Watch & Buy/Sell scrub player fix
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | Stock Watch min games 6→8, position PPG floors (QB>=10, RB/WR>=5, TE>=3) | dashboards.py:711-723 | Brandon Powell / Laviska Shenault no longer dominate rising stocks |
+| 2 | Buy/Sell min games 6→8, position PPG floors | analytics.py:866,882 | KhaDarel Hodge / Ashton Dulin no longer show as A+ buy-low |
+
+### Sweep Mode (Mar 20)
+
+| Pass | Findings | Fixes |
+|------|----------|-------|
+| Backend audit | 1 hardcoded year in pick values endpoint | server.py:2425 — dynamic range from _current_draft_year() |
+| Frontend audit | 1 XSS in dynasty history season headers | lab-panels.js:207 — escapeHtml(String(s)) on season values |
+
+### Verified Clean
+- 11/11 smoke tests pass
+- 0 regressions
+
+---
+
+## Ship Loop Session 17 (Mar 20)
+
+### FUNC-014: Production serving unminified JS/CSS
+- **Root cause**: `npx --yes esbuild` in render.yaml requires Node.js, fails silently on Render's Python runtime
+- **Fix**: Replaced with Python-based minifiers (rjsmin + rcssmin) via `scripts/build_dist.py`
+- **Impact**: 360KB saved from minification (lab.js: 534KB→403KB, etc.)
+- Files changed: `render.yaml`, `requirements.txt`, `scripts/build_dist.py` (new)
+
+### Sweep Mode (Mar 20)
+
+| Pass | Findings | Fixes |
+|------|----------|-------|
+| XSS scan | Column group name unescaped in onclick handler | lab.js:1476 — escapeAttr(g.name) + escapeHtml(g.name) |
+| Hardcoded years | 3 locations with hardcoded 2024/2025 | tools.py:532 (removed >= 2020 filter), smoke.py:202,248 (→ datetime.now().year) |
+| Hardcoded years | Load test with 9 hardcoded "2025" season values | load_test.py — dynamic season discovery via /api/filter-options |
+| Connection leaks | All 3 adapters calling get_conn() (pooled) then .close() | Changed to get_write_conn() (non-pooled, designed for adapter writes) |
+| CSS design | 1 gradient (skeleton shimmer) — intentional loading animation | No change needed |
+| HTML refs | All 74 HTML files, all JS/CSS refs valid | Clean |
+| Runtime patterns | All fetch() calls check .ok, all get_db() in context managers | Clean |
+
+### Verified Clean
+- 11/11 smoke tests pass after every fix
+- 0 regressions
+- 4 commits pushed to ship/launch-fixes
+
+---
+
+## Ship Loop Session 18 (Mar 20)
+
+### Ticket Queue
+- Merged origin/qa/findings → FUNC-014 ticket (resolved in Session 17, re-merged from QA branch)
+- Deleted FUNC-014 ticket — already fixed by scripts/build_dist.py (commit a66dce5)
+- TICKETS.md — all items DONE, no new work
+- **Both queues empty → entered SWEEP MODE**
+
+### Sweep Mode (Mar 20)
+
+| Pass | Area | Findings | Status |
+|------|------|----------|--------|
+| Smoke tests | 11/11 pass | Baseline green | Clean |
+| Pytest suite | 59/59 pass | Full test suite | Clean |
+| Python compilation | All 16 backend files | py_compile check | Clean |
+| JS syntax | All 11 frontend JS files | node --check | Clean |
+| Build pipeline | scripts/build_dist.py | Minified output verified, syntax-checked | Clean |
+| SQL injection | All ORDER BY with sort params | Whitelisted via dicts/sets with fallbacks | Clean |
+| XSS | innerHTML assignments (599 total) | All user data paths use escapeHtml() | Clean |
+| eval/Function | No eval() or new Function() | 0 instances | Clean |
+| document.write | No document.write() | 0 instances | Clean |
+| postMessage | No message handlers | 0 instances | Clean |
+| Bare except | Backend Python files | 0 bare except blocks | Clean |
+| console.log | Frontend JS files | Only branded easter eggs in app.js | Clean |
+| Hardcoded years | Backend: only "nfl2026" in password blocklist | Frontend: only demo text strings | Clean |
+| Connection leaks | Adapters use get_write_conn(), backend uses get_db() context manager | 0 leaks | Clean |
+| Auth token | warroom.js + league-intel.html | All read razzle_token directly | Clean |
+| 404 handling | server.py:678 + frontend/404.html | Correct path check, page exists | Clean |
+| Monte Carlo | 3 cases handled (2+ games, 1 game, 0 games) | Scoring col whitelisted | Clean |
+| Response cache | Thread-safe snapshot eviction | .pop(k, None) pattern | Clean |
+| Requirements | All imports match requirements.txt | 9 packages | Clean |
+| Deferred scripts | lab-mockdraft.js, lab-prospect-radar.js | escapeHtml, resp.ok checks | Clean |
+| Week selector | state.week serialized to URL, localStorage, backend params | Consistent int=0 default | Clean |
+
+### Fixes Applied
+
+| # | Fix | Severity | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | XSS in matchups.html detail player onclick | P1 | matchups.html:707 | Inline onclick with escapeHtml() didn't escape single quotes — replaced with data-pid + event delegation |
+| 2 | Font-display at <16px across 31 HTML files | P2 | 31 standalone pages | 96 CSS rules changed from --font-display to --font-mono (table headers at 11px, badges at 10-13px, tabs at 13px, rank numbers at 14px) |
+| 3 | XSS in lab.js roster report | P1 | lab.js:11424 | r.total_value and r.average_age unescaped in innerHTML — added escapeHtml(String()) |
+| 4 | XSS in player.js season table + combine | P1 | player.js:234,316 | s.season and combine display values unescaped — added esc(String()) |
+| 5 | XSS in formula-store.js inline handlers | P1 | formula-store.js:112,540,545 | formula.id interpolated in onclick/id — added parseInt() sanitization |
+| 6 | Crash risk in warroom.js canvas init | P1 | warroom.js:81 | cvs.getContext('2d') with no null guard — added ternary check |
+| 7 | XSS in JSON-LD via player_id | P0 | server.py:2191 | json.dumps doesn't escape </script> — added .replace("<", "\u003c") |
+| 8 | Dynasty history age always None | P1 | dynasty.py:344 | age_in_season never computed — now calculates current_age - (latest - season) |
+
+### Verified Clean
+- 11/11 smoke tests pass after every fix
+- 59/59 pytest tests pass
+- All Python files compile clean
+- All JS files syntax clean
+- 0 remaining font-display violations in CSS (verified via script)
+- 0 unescaped API data in innerHTML (6-agent parallel audit + manual verification)
+- JSON-LD injection vectors neutralized
+
+---
+
+## Ship Loop Session 20: FUNC-015 + Sweep (Mar 20)
+
+**Goal**: Consume QA tickets, then sweep for backend issues.
+
+### Tickets Consumed
+
+| # | Ticket | Severity | Fix | Notes |
+|---|--------|----------|-----|-------|
+| 1 | FUNC-015: Screener dynasty_value vs trade value formula mismatch | P2 | Replaced simple DVS formula (ppg×4 × age_mult) in _enrich_with_dynasty_value() with compute_trade_value() | Now screener, Trade Value Chart, Trade Finder, Dynasty Rankings, and Tier List all use same formula. One source of truth. |
+
+### Sweep Fixes
+
+| # | Fix | Category | Notes |
+|---|-----|----------|-------|
+| 1 | Add cache_stats/cache_clear to live_data __init__ exports | Consistency | Were imported directly from core.py in server.py, bypassing package re-export convention |
+| 2 | Fix N+1 query in player profile rate metrics | Performance | Replaced per-season loop calling _enrich_with_rate_metrics (N queries) with single query grouped by season |
+| 3 | Guard missing combine_data table in player profile | Robustness | Added table existence check before querying combine_data. Prevents crash on DBs without prospect tables |
+
+### Sweep Audit (Clean)
+
+| Pass | Area | Result |
+|------|------|--------|
+| XSS scan | 700+ escapeHtml uses, all innerHTML safe | Clean |
+| Backend API | All imports valid, no bare excepts, parameterized queries | Clean |
+| Design rules | No gradients, no hardcoded colors, no "Loading..." text | Clean |
+| Endpoint test | 40+ endpoints return 200 (prospects 500 expected — missing combine_data in local DB only) | Clean |
+| Python compile | All backend .py files compile | Clean |
+| TODO/FIXME | Zero in backend or frontend | Clean |
+| 11/11 smoke tests pass after every fix |
+
+---
+
+## Ship Loop Session 21: Sweep Mode — Data Integrity Fixes (Mar 20)
+
+**Goal**: Deep 3-agent parallel sweep (backend robustness, frontend runtime, data integrity) found 6 real bugs.
+
+### Fixes Applied
+
+| # | Fix | Severity | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | WOPR/G double-divided by games | P0 | core.py:317-318 | `wopr` from `_enrich_with_rate_metrics` is already `AVG()` per game. Dividing by `g` again made values ~17x too small. Removed division. |
+| 2 | Team share queries use wrong team column | P0 | core.py:594-630, dashboards.py:925-941, dashboards.py:1154-1169 | `p.team` (current roster team) instead of `s.team` (game-week team). Wrong dominator rating/rush share/opp share for 73 traded players. Fixed 3 SQL queries across 2 files. |
+| 3 | Heatmap snap_pct always null | P1 | analytics.py:249 | `snap_pct` key set to None but never populated — `offense_pct` was the correct source from `_STAT_SUM_COLS`. Mapped `offense_pct` → `snap_pct`. |
+| 4 | Screener derived sort truncation | P1 | players.py:431-432,490 | Sorting by derived metrics (yards_per_carry, dynasty_value, etc.) only evaluated top 500 by PPR, silently dropping qualifying players. Raised to 2000 and fixed total count. |
+| 5 | formula-store.js localStorage crash | P2 | formula-store.js:222,240,269,273,375 | 5 `localStorage.setItem` calls without try-catch — crashes in Safari private browsing or when storage full. |
+| 6 | Lab page size init mismatch | P2 | lab.js:947 | Old localStorage values (50/100/200) loaded but dropdown only has 25. Caused blank select. Hardcoded to 25. |
+
+### Verified Clean
+- 11/11 smoke tests pass
+- All Python files compile clean
+- All JS files syntax clean
+- 0 regressions
+
+---
+
+## Ship Loop Session 22: 3-Agent Deep Sweep — 9 Bug Fixes (Mar 20)
+
+**Goal**: Parallel sweep with Backend Architect, Frontend Developer, and Data Integrity agents. Found 9 real bugs.
+
+### Fixes Applied
+
+| # | Fix | Severity | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | Register button text not restored on validation failure | P0 | app.js:856-859 | Validation early-returns restored `btn.disabled = false` but not `btn.textContent = origText` — button showed "creating account..." permanently |
+| 2 | Half-PPR fallback triggered on valid zero value | P0 | core.py:232-233 | `if not hppr` is True when `hppr = 0.0` (valid score). Changed to `if hppr is None`. Previously produced negative half-PPR for zero-point players with receptions |
+| 3 | PPFD scoring used PPR instead of Standard as base | P1 | core.py:276 | Comment said "standard + 1pt per first down" but code used `fantasy_points_ppr`. PPR double-counts receptions. Now uses `fantasy_points_std` with PPR-receptions fallback |
+| 4 | YAC per reception used wrong calculation | P1 | dashboards.py:63-130 | Was computing `max(0, rec_yards - air_yards)` which is wrong because `receiving_air_yards` includes incomplete targets. Now queries `receiving_yards_after_catch` directly |
+| 5 | Ascending sort on derived stats put nulls first | P1 | players.py:488-489 | `sort(key=lambda x: x.get(k) or 0)` treats None as 0, which sorts to top in ascending. Now uses `float('inf')` sentinel for nulls in ascending, `float('-inf')` in descending |
+| 6 | Diff mode stale baseline after season/week change | P1 | lab.js:4551 | Cache key was `baseId:itemCount` — if new season had same row count, stale baseline was reused. Added `season` and `week` to cache key |
+| 7 | ValueError masking in global exception handler | P1 | server.py:689 | `isinstance(exc, (json.JSONDecodeError, ValueError))` caught non-JSON ValueErrors from endpoint logic and returned misleading "invalid JSON body" 400 error. Narrowed to `json.JSONDecodeError` only |
+| 8 | N shortcut toggled notes column without re-rendering | P2 | lab.js:10416-10417 | `toggleColumn()` modifies state but doesn't render. Added `renderTableHead(); renderTable(); renderColumnPicker(); saveStateToURL()` |
+| 9 | Team totals for opp share filtered by fantasy_relevant | P2 | dashboards.py (3 queries) | `AND p.fantasy_relevant = 1` on team total denominators excluded non-fantasy players, inflating every player's opportunity share and dominator rating. Removed filter from opportunity share (line 940), report cards (line 1167), and season awards (line 1503). Also fixed awards query using `p.team` instead of `s.team` |
+
+### False Positives (investigated, not bugs)
+- `openPlayerPopup` in lab-panels.js — agent reported as undefined but it IS defined in app.js (loaded sync before lab-panels.js defer)
+- Page size locked to 25 — intentional per prior fix (Session 7, preventing slow loads)
+
+### Verified Clean
+- 11/11 smoke tests pass after all fixes
+- All Python files compile clean
+- All JS files syntax clean
+- 0 regressions
+
+---
+
+## Ship Loop Session 23: Ticket Consumption + Sweep (Mar 20)
+
+**Goal**: Consume QA tickets + TICKETS.md backlog, then sweep for new bugs.
+
+### QA Tickets (all VERIFIED FIXED — cleaned up)
+- FUNC-015: Dynasty value formula mismatch (fixed Session 20)
+- FUNC-016: XSS escapeAttr consistency (fixed Session 20)
+- FUNC-017: Breakout badge PPG calc (fixed Session 20)
+
+### TICKETS.md: Push Pin Blinking Fix
+- **Root cause**: Pushpin emoji (U+1F4CC) triggered color emoji font substitution (Segoe UI Emoji) during virtual scroll innerHTML replacement, causing per-frame rendering flicker
+- **Fix**: Replaced emoji with CSS-mask SVG pushpin icon. Uses `background: var(--ink)` with mask data URI. Pin states (faint/active) via CSS classes. Renders instantly via regular font pipeline, no emoji substitution needed. Works in both light and dark mode.
+
+### Sweep Fixes (3-agent parallel: Backend Architect, Frontend Developer, CSS/Design)
+
+| # | Fix | Severity | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | Sort direction inverted in 4 panel sortPlayers() | P1 | lab-panels.js (lines 893, 2310, 2525, 3876) | `dir*(vb-va)` was backwards from arrow convention. `dir=-1` showed ▼ but sorted ascending. Fixed to `dir*(va-vb)`. Affects vorp, efficiency, consistency, redzone panels. |
+| 2 | Query limit badge color order | P2 | warroom.js:2633 | `remaining<=1` caught `remaining=0` first, showing orange instead of red when queries exhausted. Swapped check order. |
+| 3 | Canvas null crash on non-Situation Room pages | P1 | warroom.js:83-90, 1060-1117 | `resizeCanvas()` and 6 mouse/touch event listeners accessed `cvs` without null guard. Crashes if `warRoomCanvas` element missing from DOM. Added `if (!cvs)` guards. |
+| 4 | IDP players silently dropped from Bureau roster | P1 | league-intel.html:2054-2058 | `posGroups[pos]` re-check after DEF fallback was always false for IDP positions (DL, LB, DB). Now creates position groups dynamically for any position. |
+
+### Backend Sweep Fixes
+
+| # | Fix | Severity | Files | Notes |
+|---|-----|----------|-------|-------|
+| 5 | Lifetime checkout doesn't set plan_type | P2 | billing.py:433-446 | `plan_type` column added for lifetime tracking but never set in checkout. Lifetime purchases recorded as `plan_type='subscription'`. Now sets `plan_type='lifetime'` when `plan_tier.endswith('_lifetime')`. |
+| 6 | Null subscription status written to DB | P2 | billing.py:456 | `subscription.get("status")` could be None on malformed Stripe webhook. Now defaults to `"unknown"`. |
+
+### Backend Sweep: Triaged as Not Bugs
+- Findings 1-4, 7: Week param + `HAVING games >= N` returns empty for single-week queries in aggregate endpoints (breakouts, redzone, usage trends, targets, streaks). These endpoints are semantically multi-week — already excluded from the frontend week selector. Empty results are graceful, not crashes.
+- Finding 8: Dynasty history cache key uses first 5 IDs. In practice, only called with 1-3 IDs. Collision risk negligible.
+
+### Verified Clean
+- 11/11 smoke tests pass after all fixes
+- All JS files syntax clean (node --check)
+- All Python files compile clean
+- CSS/Design sweep: 0 border violations, 0 font violations, `#fff` on colored badges is intentional for contrast
+
+---
+
+## Ship Loop Session 24: QA Ticket Consumption + Sweep (Mar 20)
+
+**Goal**: Consume FUNC-015 through FUNC-018 QA tickets, sweep for new issues.
+
+### QA Tickets Consumed
+
+| Ticket | Severity | Action | Notes |
+|--------|----------|--------|-------|
+| FUNC-018 | P1 NEW | **FIXED** | Added `<base href="/">` to player.html, compare.html, team.html. SEO routes `/player/{id}`, `/compare/{id1}/{id2}`, `/team/{abbr}` had relative asset paths resolving against wrong directory, breaking CSS/JS loading. |
+| FUNC-017 | P1 | Verified fixed | player.js breakout badge already uses PPG with 6GP min + 3 PPG floor (Session 20 fix confirmed) |
+| FUNC-015 | P2 | Verified fixed | `_enrich_with_dynasty_value()` already calls `compute_trade_value()` (Session 20 fix confirmed) |
+| FUNC-016 | P2 | Verified fixed | cheatsheet.html and scoring.html no longer use `escapeHtml` in onclick (Session 20 fix confirmed) |
+
+### TICKETS.md: All entries DONE (no new work)
+
+### Sweep Fixes (3-agent parallel: Backend Architect, Frontend Developer, SEO Verifier)
+
+| # | Fix | Severity | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | quick_search_players doesn't strip special chars | P1 | players.py:48 | Input like "Ja'Marr" or "D.J." failed to match search_name (alphanumeric-only). Added re.sub strip matching fetch_players pattern. |
+| 2 | copyCompareURL/copyPlayerURL crash without Clipboard API | P1 | compare.js:852, player.js:760 | navigator.clipboard is undefined in non-HTTPS/embedded contexts. Added guard + execCommand fallback matching lab.js pattern. |
+| 3 | openPlayerProfile doesn't URL-encode player ID | P1 | lab.js:6123 | Raw string interpolation in fetch path. Added encodeURIComponent() matching player.js pattern. |
+| 4 | Skip-link broken by base href | MEDIUM | player.html:313, compare.html:317, team.html:276 | href="#main-content" resolves to /#main-content due to base tag. Replaced with JS scrollIntoView. |
+| 5 | Compare diff bar overflows for negative stats (EPA) | P2 | compare.js:246-249 | v1/(v1+v2) produces >100% when values are negative. Now uses Math.abs() for proportional width. |
+| 6 | Saved views don't preserve week/team/minGP state | P2 | lab.js:4122-4144, 4201-4209 | Added week, teams, minGP, tierBreaks, groupHeaders, summaryBar, tagFilter to save/load cycle. |
+
+### Triaged (not fixing)
+- `COUNT(*)` vs `COUNT(DISTINCT s.week)` in 7 player queries: latent bug, only triggers if a second data source is added. Single nflverse source means no duplicate week rows. Noted for future adapter additions.
+- `changePageSize()` rejects sizes != 25: intentional per Session 7 fix (prevents slow loads).
+
+### Verified Clean
+- 11/11 smoke tests pass after all fixes
+- All JS files syntax clean (node --check)
+- All Python files compile clean
+- 0 regressions
+
+---
+
+## Ship Loop Session 25: 3-Agent Sweep (Mar 20)
+
+**Goal**: Parallel sweep with Backend Architect, Frontend Developer, and Data Integrity agents. Found 5 real bugs.
+
+### Fixes Applied
+
+| # | Fix | Severity | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | Payment failure instantly downgrades user plan | P0 | billing.py:522-539 | `_handle_payment_failed` was downgrading to free on first `invoice.payment_failed`. Stripe retries payments over days before cancelling. Now only marks subscription status as `payment_failed`; actual downgrade deferred to `_handle_subscription_deleted`. |
+| 2 | Radar chart hides negative EPA values | P1 | charts.js:174-230 | `Math.abs` normalization clamped all negative values to 0 on radar. Changed to min/max range normalization so negative EPA displays proportionally (worst=center, best=edge). |
+| 3 | Pinned row expand creates orphan DOM elements | P1 | lab.js:1718 | `buildRowHTML` added expand arrow to pinned rows (rowIdx=null). Clicking inserts expand row into pinned tbody where virtual scroll never cleans it up. Now skips expand arrow when rowIdx is null. |
+| 4 | Aging curves player dots/labels drawn at 70% alpha | P2 | lab.js:9506 | globalAlpha was set to 0.7 for dashed connecting lines but not restored before drawing data point circles and name labels. Moved alpha restore before data points. |
+| 5 | Compare diff bar widths sum to >100% at extremes | P2 | compare.js:248-251 | `Math.max(pct, 5)` min-clamp caused pct1+pct2 to exceed 100% (e.g., 5%+99%=104%). Now normalizes both clamped widths so they sum to exactly 100%. |
+
+### Triaged (not fixing)
+- Consistency rankings return empty with week param: Known — frontend already excludes week selector for consistency panel (Session 23 triage)
+- Pinned rows get percentiles from current view population: Arguable UX — comparing pinned player against current view is valid behavior
+- Quick search cache uses raw input as key: Cache-inefficient but not a correctness bug
+- Data integrity/HTML sweep: Clean — 0 new bugs across 15+ HTML pages, all API routes match
+
+### Verified Clean
+- 11/11 smoke tests pass after all fixes
+- All 4 modified files syntax clean (node --check, py_compile)
+- 0 regressions

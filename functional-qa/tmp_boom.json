@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 — Razzle</title>
+<meta property="og:title" content="404 — Razzle">
+<meta property="og:description" content="This page doesn't exist. Head to the Screener instead.">
+<meta property="og:site_name" content="razzle.lol">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://razzle.lol/404.html">
+<meta property="og:image" content="https://razzle.lol/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="404 — Razzle">
+<meta name="twitter:description" content="This page doesn't exist. Head to the Screener instead.">
+<meta name="twitter:image" content="https://razzle.lol/assets/og-image.png">
+<meta name="description" content="Page not found. Head back to the Screener at razzle.lol — free fantasy football research lab.">
+<link rel="canonical" href="https://razzle.lol/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .four-oh-four {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 56px);
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  .four-oh-four-code {
+    font-family: var(--font-display);
+    font-size: 120px;
+    color: var(--orange);
+    line-height: 1;
+    margin-bottom: 8px;
+    text-shadow: 4px 4px 0 var(--ink);
+  }
+
+  .four-oh-four-mascot {
+    font-size: 64px;
+    margin-bottom: 16px;
+    transform: rotate(-5deg);
+  }
+
+  .four-oh-four-title {
+    font-family: var(--font-display);
+    font-size: 28px;
+    margin-bottom: 8px;
+  }
+
+  .four-oh-four-subtitle {
+    font-family: var(--font-hand);
+    font-size: 22px;
+    color: var(--ink-light);
+    margin-bottom: 32px;
+  }
+
+  .four-oh-four-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 24px 32px;
+    max-width: 400px;
+  }
+
+  .four-oh-four-card p {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--ink-medium);
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+
+  .four-oh-four-links {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 480px) {
+    .four-oh-four-code { font-size: 80px; }
+    .four-oh-four-mascot { font-size: 48px; }
+    .four-oh-four-title { font-size: 22px; }
+  }
+
+  /* Tiger walk Easter egg */
+  .four-oh-four-mascot {
+    animation: tigerWalk 10s ease-in-out 3s infinite;
+  }
+
+  @keyframes tigerWalk {
+    0%   { transform: rotate(-5deg) translateX(0); }
+    5%   { transform: rotate(-5deg) translateX(0); }
+    25%  { transform: rotate(0deg) translateX(120vw); }
+    26%  { transform: rotate(0deg) scaleX(-1) translateX(120vw); }
+    50%  { transform: rotate(0deg) scaleX(-1) translateX(0); }
+    55%  { transform: rotate(-5deg) scaleX(1) translateX(0); }
+    100% { transform: rotate(-5deg) scaleX(1) translateX(0); }
+  }
+
+  .tiger-annotation {
+    font-family: var(--font-hand);
+    font-size: 18px;
+    color: var(--ink-light);
+    opacity: 0;
+    margin-top: -8px;
+    margin-bottom: 8px;
+    animation: annotationFade 10s ease-in-out 3s infinite;
+  }
+
+  @keyframes annotationFade {
+    0%   { opacity: 0; }
+    8%   { opacity: 1; }
+    22%  { opacity: 1; }
+    28%  { opacity: 0; }
+    100% { opacity: 0; }
+  }
+</style>
+</head>
+<body>
+<a href="#main-content" class="sr-only" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;" onfocus="this.style.position='static';this.style.width='auto';this.style.height='auto';" onblur="this.style.position='absolute';this.style.left='-9999px';this.style.width='1px';this.style.height='1px';">Skip to main content</a>
+
+<!-- NAV -->
+<nav class="topnav" aria-label="Main navigation">
+  <a href="/" class="logo">
+    <div class="logo-mark">🐯</div>
+    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/lab.html">Screener</a></li>
+    <li><a href="/league-intel.html">Bureau</a></li>
+    <li><a href="/agents.html">Situation Room</a></li>
+    <li><a href="/pricing.html">Pricing</a></li>
+  </ul>
+  <div class="nav-auth" id="nav-auth">
+    <button class="nav-search-hint" aria-label="Open quick search (Ctrl+K)" onclick="if(typeof openCmdPalette==='function') openCmdPalette();" title="Quick search"><kbd>Ctrl+K</kbd> Search</button>
+    <a href="#" class="btn-chunky btn-sm" onclick="if(typeof openAuthModal==='function') openAuthModal(); return false;">Sign In</a>
+  </div>
+</nav>
+
+<div class="four-oh-four" id="main-content">
+  <div class="four-oh-four-mascot">&#x1F42F;</div>
+  <div class="tiger-annotation">gone scouting the waiver wire...</div>
+  <div class="four-oh-four-code">404</div>
+  <div class="four-oh-four-title">Page Not Found</div>
+  <div class="four-oh-four-subtitle">This page got cut from the roster.</div>
+  <div class="four-oh-four-card">
+    <p>Razzle checked the film. This play doesn't exist. Head back to the Screener.</p>
+    <div class="four-oh-four-links">
+      <a href="/" class="btn-primary">Home</a>
+      <a href="/lab.html" class="btn-chunky">Screener</a>
+      <a href="/agents.html" class="btn-chunky">Situation Room</a>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

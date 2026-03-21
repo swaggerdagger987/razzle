@@ -59,7 +59,7 @@
   }
   .sc-pos-tab {
     padding: 5px 14px;
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 13px;
     border: 2px solid var(--ink);
     border-radius: 20px;
@@ -125,7 +125,7 @@
   }
   .sc-table th {
     background: var(--bg-warm);
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -222,7 +222,7 @@
     margin-top: 16px;
   }
   .sc-export button {
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 13px;
     padding: 8px 18px;
     border: 2px solid var(--ink);
@@ -488,7 +488,7 @@
       var shiftClass = p.rank_diff > 0 ? 'up' : (p.rank_diff < 0 ? 'down' : 'neutral');
       var shiftText = p.rank_diff > 0 ? ('+' + p.rank_diff) : String(p.rank_diff);
 
-      html += '<tr onclick="window.location.href=\'/player.html?id=' + escapeHtml(p.player_id) + '\'">';
+      html += '<tr data-pid="' + escapeAttr(p.player_id) + '" style="cursor:pointer">';
       html += '<td><span class="sc-pos-badge ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span></td>';
       html += '<td>';
       html += '<img class="sc-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="" onerror="this.style.display=\'none\'">';
@@ -515,6 +515,12 @@
     var d = state.data;
     document.getElementById('risers-table').innerHTML = buildTable(d.risers);
     document.getElementById('fallers-table').innerHTML = buildTable(d.fallers);
+    ['risers-table', 'fallers-table'].forEach(function(id) {
+      document.getElementById(id).addEventListener('click', function(e) {
+        var el = e.target.closest('[data-pid]');
+        if (el) window.location.href = '/player.html?id=' + encodeURIComponent(el.dataset.pid);
+      });
+    });
   }
 
   window.exportPng = function() {

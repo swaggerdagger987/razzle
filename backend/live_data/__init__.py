@@ -12,6 +12,8 @@ from .core import (  # noqa: F401
     ABBREV_TO_TEAM,
     _current_nfl_season,
     _current_draft_year,
+    cache_stats,
+    cache_clear,
 )
 
 # --- players (NFL CRUD, screener, profiles) ---

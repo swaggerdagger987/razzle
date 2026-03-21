@@ -944,7 +944,7 @@ const state = {
   sortDir: "desc",
   sortKey2: "",
   sortDir2: "desc",
-  limit: (function() { try { var v = parseInt(localStorage.getItem("razzle_page_size")); return [25,50,100,200].includes(v) ? v : 25; } catch(e) { return 25; } })(),
+  limit: 25,
   offset: 0,
   filters: [],
   teams: [],    // selected team abbreviations for team filter
@@ -1473,7 +1473,7 @@ function buildGroupHeaderRow(cols) {
   let first = true;
   for (const g of groups) {
     const sepCls = first ? "" : " group-sep";
-    html += `<th colspan="${g.span}" class="${sepCls}" style="cursor:pointer;" onclick="toggleColumnGroup('${g.name}')" title="Click to toggle all ${g.name} columns">${g.name}</th>`;
+    html += `<th colspan="${g.span}" class="${sepCls}" style="cursor:pointer;" onclick="toggleColumnGroup('${escapeAttr(g.name)}')" title="Click to toggle all ${escapeHtml(g.name)} columns">${escapeHtml(g.name)}</th>`;
     first = false;
   }
   html += '<th style="width:32px;"></th>'; // spacer for "+" column
@@ -1496,7 +1496,7 @@ function renderTableHead() {
   if (state.universe === "nfl") {
     const pinCount = state.pinnedPlayers.length;
     const pinTitle = pinCount > 0 ? `${pinCount} pinned — click to clear` : "Pin players to top";
-    html += `<th scope="col" class="col-pin" style="width:28px; text-align:center; padding:8px 2px; cursor:${pinCount ? 'pointer' : 'default'}; font-size:12px;" title="${pinTitle}"${pinCount ? ' onclick="clearAllPins()"' : ''}>&#128204;${pinCount ? '<span style="font-size:9px; color:var(--orange); font-weight:700;"> ' + pinCount + '</span>' : ''}</th>`;
+    html += `<th scope="col" class="col-pin" style="width:28px; text-align:center; padding:8px 2px; cursor:${pinCount ? 'pointer' : 'default'}; font-size:12px;" title="${pinTitle}"${pinCount ? ' onclick="clearAllPins()"' : ''}><span class="pin-icon${pinCount ? ' pin-active' : ''}"></span>${pinCount ? '<span style="font-size:9px; color:var(--orange); font-weight:700;"> ' + pinCount + '</span>' : ''}</th>`;
   }
   html += '<th scope="col" class="col-rank" title="Overall rank by current sort">#</th>';
   html += `<th scope="col" class="col-player" onclick="sortBy('${nameKey}', event)">Player`;
@@ -1710,12 +1710,12 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
   // Pin icon (NFL only)
   if (state.universe === "nfl") {
     const pinned = isPlayerPinned(playKey);
-    html += `<td class="pin-cell col-pin" style="text-align:center; padding:7px 2px; cursor:pointer; font-size:13px;" onclick="event.stopPropagation(); togglePinPlayer('${escapeAttr(playKey)}')" title="${pinned ? 'Unpin player' : 'Pin to top'}">${pinned ? '<span style="color:var(--orange);">&#128204;</span>' : '<span class="pin-icon-faint">&#128204;</span>'}</td>`;
+    html += `<td class="pin-cell col-pin" style="text-align:center; padding:7px 2px; cursor:pointer;" onclick="event.stopPropagation(); togglePinPlayer('${escapeAttr(playKey)}')" title="${pinned ? 'Unpin player' : 'Pin to top'}"><span class="pin-icon ${pinned ? 'pin-active' : 'pin-faint'}"></span></td>`;
   }
 
-  // Rank column (with expand arrow for NFL)
+  // Rank column (with expand arrow for NFL — skip on pinned rows where rowIdx is null)
   const rank = (rowIdx != null) ? (state.offset + rowIdx + 1) : "";
-  if (state.universe === "nfl" && player.player_id) {
+  if (state.universe === "nfl" && player.player_id && rowIdx != null) {
     html += `<td class="col-rank" style="cursor:pointer;" onclick="event.stopPropagation(); toggleRowExpand('${escapeAttr(player.player_id)}', this)" title="Click to expand weekly stats"><span class="row-expand-arrow" style="font-size:8px; margin-right:2px;">&#9654;</span>${rank}</td>`;
   } else {
     html += `<td class="col-rank">${rank}</td>`;
@@ -4141,6 +4141,13 @@ function saveCurrentView() {
     columnWidths: state.columnWidths ? JSON.parse(JSON.stringify(state.columnWidths)) : {},
     filters: JSON.parse(JSON.stringify(state.filters)),
     columns: isProspectView() ? [...state.prospectColumns] : state.universe === "college" ? [...state.collegeColumns] : [...state.visibleColumns],
+    week: state.week || 0,
+    teams: state.teams ? [...state.teams] : [],
+    minGP: state.minGP || 0,
+    tierBreaks: !!state.tierBreaks,
+    groupHeaders: !!state.groupHeaders,
+    summaryBar: !!state.summaryBar,
+    tagFilter: state.tagFilter || "",
   };
 
   views.unshift(view);
@@ -4192,6 +4199,13 @@ function loadSavedView(id) {
   if (view.leaderBadges !== undefined) state.leaderBadges = view.leaderBadges;
   if (view.density !== undefined) state.density = view.density;
   if (view.columnWidths) state.columnWidths = view.columnWidths;
+  if (view.week !== undefined) state.week = view.week;
+  if (view.teams) state.teams = [...view.teams];
+  if (view.minGP !== undefined) state.minGP = view.minGP;
+  if (view.tierBreaks !== undefined) state.tierBreaks = view.tierBreaks;
+  if (view.groupHeaders !== undefined) state.groupHeaders = view.groupHeaders;
+  if (view.summaryBar !== undefined) state.summaryBar = view.summaryBar;
+  if (view.tagFilter !== undefined) state.tagFilter = view.tagFilter;
 
   // Legacy column arrays (old format) + new format — validate against universe
   if (view.columns) {
@@ -4548,7 +4562,7 @@ var _diffBaselineCacheKey = "";
 function _getDiffBaseline() {
   if (!state.diffMode || state.pinnedPlayers.length < 2) return null;
   var baseId = state.pinnedPlayers[0];
-  var cacheKey = baseId + ":" + state.items.length;
+  var cacheKey = baseId + ":" + state.items.length + ":" + state.season + ":" + (state.week || 0);
   if (_diffBaselineCacheKey === cacheKey && _diffBaselineCache) return _diffBaselineCache;
   _diffBaselineCache = state.items.find(function(pl) { return pl.player_id === baseId; }) || _pinnedDataCache[baseId] || null;
   _diffBaselineCacheKey = cacheKey;
@@ -6120,7 +6134,7 @@ async function openPlayerProfile(playerId) {
   content.innerHTML = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">' + razzleLoading() + '</div>';
 
   try {
-    const data = await apiFetch(`/api/players/${playerId}/profile`);
+    const data = await apiFetch(`/api/players/${encodeURIComponent(playerId)}/profile`);
     renderProfile(data, content);
   } catch (err) {
     content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the data fetch... try again in a sec.</div>`;
@@ -9490,6 +9504,7 @@ function renderAgingCurveChart(targetCanvas) {
     }
     ctx.stroke();
     ctx.setLineDash([]);
+    ctx.globalAlpha = 1.0;
 
     // Data points
     for (const pt of pts) {
@@ -10414,6 +10429,7 @@ document.addEventListener("keydown", function(e) {
   // N: toggle notes column
   if (e.key === "n" || e.key === "N") {
     toggleColumn("notes", !state.visibleColumns.includes("notes"));
+    renderTableHead(); renderTable(); renderColumnPicker(); saveStateToURL();
     return;
   }
 
@@ -11421,8 +11437,8 @@ function renderRosterReport() {
   html += '</div>';
   // Stats
   html += '<div style="flex:1;">';
-  html += '<div style="font-family:var(--font-display); font-size:24px;">' + r.total_value + ' <span style="font-family:var(--font-mono); font-size:14px; color:var(--ink-light);">total value</span></div>';
-  html += '<div style="font-family:var(--font-mono); font-size:13px; color:var(--ink-light);">avg age: ' + r.average_age + '</div>';
+  html += '<div style="font-family:var(--font-display); font-size:24px;">' + escapeHtml(String(r.total_value)) + ' <span style="font-family:var(--font-mono); font-size:14px; color:var(--ink-light);">total value</span></div>';
+  html += '<div style="font-family:var(--font-mono); font-size:13px; color:var(--ink-light);">avg age: ' + escapeHtml(String(r.average_age)) + '</div>';
   html += '</div>';
   // Status badge with explainer
   html += '<div style="text-align:center;">';
@@ -12456,7 +12472,7 @@ function drawBoomBustHistogram(data) {
   const posColor = posHex[pos] || "#d97757";
 
   // Build histogram buckets (5-point buckets)
-  const maxScore = Math.max(...scores, boom_threshold + 5);
+  const maxScore = Math.max(...scores, (boom_threshold || 20) + 5);
   const bucketSize = 5;
   const numBuckets = Math.ceil(maxScore / bucketSize) + 1;
   const buckets = new Array(numBuckets).fill(0);
