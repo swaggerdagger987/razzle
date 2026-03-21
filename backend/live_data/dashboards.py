@@ -1731,6 +1731,7 @@ def fetch_season_awards(season=None, position=None):
                     "sort_key": "ppo",
                     "stat_label": "PPO",
                     "stat_fn": lambda p: str(p["ppo"]),
+                    "filter": lambda p: p["opportunities"] >= 40,
                 },
                 {
                     "key": "iron_man",
@@ -1756,6 +1757,7 @@ def fetch_season_awards(season=None, position=None):
                     "sort_key": "opp_share",
                     "stat_label": "Opp%",
                     "stat_fn": lambda p: str(p["opp_share"]) + "%",
+                    "filter": lambda p: p["position"] != "QB",
                 },
                 {
                     "key": "breakout_star",
@@ -1802,7 +1804,8 @@ def fetch_season_awards(season=None, position=None):
             awards = []
             for ad in award_defs:
                 reverse = ad.get("reverse", True)
-                sorted_players = sorted(players, key=lambda x: x[ad["sort_key"]], reverse=reverse)
+                eligible = [p for p in players if ad.get("filter", lambda _: True)(p)]
+                sorted_players = sorted(eligible, key=lambda x: x[ad["sort_key"]], reverse=reverse)
                 top5 = sorted_players[:5]
                 if not top5:
                     continue
