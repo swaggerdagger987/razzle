@@ -32,10 +32,10 @@
 
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
-| 13 | Player profile: NFL | Click a player name. Profile loads? Stats match screener row? Season selector works? | RE-AUDIT SESSION 20 — PASS. Prod: Lamar 8 seasons, 20.3 PPG, 0 JS errors. FUNC-017 FIXED in code (PPG+6GP min). Breakout now shows +164% (2019 MVP) correctly. N+1 fix + combine_data guard verified. Game log SQL column names verified (passing_yards not pass_yards). FUNC-004 (headshots) still open. |
+| 13 | Player profile: NFL | Click a player name. Profile loads? Stats match screener row? Season selector works? | RE-AUDIT SESSION 21 — PARTIAL. Via player.html?id= PASS (0 JS errors). Via /player/{id} FAIL: 3 JS errors (FUNC-018 relative asset paths). FUNC-017 still NOT deployed (CMC shows +772%). Lab popup + profile link → broken page. FUNC-004 (headshots) still open. |
 | 14 | Player profile: Career stats | Career numbers add up across seasons? Per-game averages calculated correctly? | DONE — PASS (Lamar 8 seasons sum exactly matches career totals: GP=124, PPR=2531.04, PassYds=24361) |
 | 15 | Player profile: Game log | Individual game stats shown? Sum of game log = season total? Week numbers correct? | DONE — SESSION 12 VERIFIED. FUNC-012 DEPLOYED. Prod: Lamar 2024 game log=17 weeks (1-18 only), 17 GP. |
-| 16 | Player comparison | Compare 2 players. Stats aligned? Same season? Difference calculations correct? | DONE — PASS (Jackson vs Stroud 2024, data aligned, same season) |
+| 16 | Player comparison | Compare 2 players. Stats aligned? Same season? Difference calculations correct? | RE-AUDIT SESSION 21 — PARTIAL. API PASS (compare endpoint returns correct data). Via /compare/{id1}/{id2} FAIL: 3 JS errors (FUNC-018 relative asset paths). Same broken page as player profiles. |
 | 17 | Player charts | Radar/scatter/trend for a player. Data matches profile? Axes labeled correctly? | DONE — Code PASS, API PASS. Career arc (multi-season PPG line), comp radar (5-6 stats, normalized), scatter (regression line div-by-zero fixed B-3), heat map (div-by-zero fixed B-3). All position-colored, theme-aware, DPI-scaled. |
 
 ## Group 3: Dynasty & Trade Tools (the stuff people pay for)
