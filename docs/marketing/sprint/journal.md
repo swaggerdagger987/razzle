@@ -507,6 +507,63 @@ Sources:
 
 3. **What is the realistic launch sequence — should the Bureau ship before or after the free Lab has Reddit traction?** (The Lab is the free acquisition engine. The Bureau is the paid moat. Launching the Bureau too early means no users to convert. Launching too late means competitors could copy the concept.)
 
-## NEXT QUESTION: Is $240/yr the right price point, or should Razzle launch at a lower anchor ($99-149/yr) to reduce friction and build the user base before raising prices?
+## Question 8: Is $240/yr the right price point, or should Razzle launch at a lower anchor ($99-149/yr) to reduce friction and build the user base before raising prices?
+
+**Why this matters**: The competitive landscape (Q7) showed $70/yr as the ceiling for commodity dynasty tools and zero competitors in Razzle's behavioral profiling category. $240/yr ($20/mo) is 3.4x the nearest comp. If the price is too high, the free-to-paid funnel dies regardless of product quality. If too low, Razzle leaves revenue on the table and signals "commodity" instead of "intelligence."
+
+### Answer
+
+**Verdict: Launch at $149/yr ($12.50/mo) with a "Founding Members" anchor, not $240/yr. The $240 price is defensible long-term but lethal at launch with zero social proof.**
+
+Evidence:
+
+1. **The competitive pricing ceiling is clear and immovable at launch.** The entire dynasty tool market clusters in a tight band: Dynasty Nerds $50-70/yr, Footballguys $48-70/yr (PRO to ELITE), Dynasty League Football ~$60/yr, FantasyPros $36-100/yr. The most premium option (FantasyPros MVP at ~$100/yr) bundles ALL sports, not just football. No single-sport fantasy tool charges over $100/yr. Razzle at $240 isn't just above the ceiling — it's in a completely different category. That CAN work (SaaStr's "Anchor High" strategy), but only when the buyer already trusts the brand. Razzle has zero brand trust at launch.
+
+2. **SaaS pricing research confirms: underpricing is 2x more common than overpricing, but overpricing an UNKNOWN brand kills it.** Price Intelligently data shows most SaaS companies underprice. Jason Lemkin (SaaStr) advocates "Anchor High" — but with a critical caveat: "If you aren't the most enterprise, nor the #1 brand, charging the most sends a very confusing signal to prospects." Razzle is neither the #1 brand nor enterprise. At launch, "Anchor High" = "Anchor Dead."
+
+3. **Subscription fatigue is real and rising.** 43% of subscribers feel they overspend on subscriptions. A $5 price hike causes 60% of consumers to consider canceling their favorite service. The average US consumer has 12 paid subscriptions at $273/month total. A $20/mo fantasy tool competes against Netflix, Spotify, and gym memberships in the "do I really need this?" monthly audit. At $12.50/mo, it's below the psychological "I should cancel this" threshold.
+
+4. **The $149/yr "Founding Members" strategy has three advantages:**
+   - **Psychological anchor**: List the price as ~~$240/yr~~ → $149/yr "Founding Member Rate — locked for life." This establishes $240 as the real value while making $149 feel like a steal. When Razzle raises prices later, early adopters feel smart, not trapped.
+   - **Lower friction**: $149/yr = $12.50/mo. This sits between Dynasty Nerds ($50-70/yr) and the "premium analytics" tier — high enough to signal quality, low enough to not trigger subscription audit reflexes.
+   - **Revenue math still works**: At 500 Founding Members × $149 = $74,500 ARR. At 1,000 members = $149K ARR. This funds development while building the social proof needed to justify $240 later.
+
+5. **The price escalation path is built-in.** Year 1: $149/yr Founding Member rate. Year 2: new users pay $199/yr, founders keep $149. Year 3: new users pay $240/yr. This is the Notion/Figma playbook — start low to build community density, then raise prices as the product becomes essential. Dynasty managers who've built 2 seasons of behavioral data inside Razzle won't churn over a $50/yr increase — the switching cost is their league history.
+
+6. **A two-tier Pro structure captures both segments.** Consider:
+   - **Pro** ($99/yr): Behavioral archetypes for all managers + 3 full scouting reports/month + exploit alerts. Captures the "I'll try it" crowd.
+   - **Pro+** ($199/yr): Unlimited scouting reports + league-wide AI agent analysis + priority features. Captures the power dynasty manager. This replaces the binary $240 bet with a graduated funnel. The $99 tier converts skeptics; Pro+ converts believers.
+
+### Self-Critique
+
+**What's backed by data**: All competitor pricing is confirmed from official sites (Dynasty Nerds $50-70, Footballguys $48-70, FantasyPros $36-100). Subscription fatigue stats ($5 hike = 60% cancel risk) are from Parks Associates 2024 research. SaaStr's "Anchor High" framework and its caveats are directly sourced. The Founding Member pricing pattern is established (Notion, Figma, Superhuman all used it).
+
+**What's speculation**: The specific $149 number is my recommendation, not market-tested. The two-tier Pro/$99 vs Pro+/$199 structure is invented — no fantasy tool uses this exact model. The claim that "500 Founding Members at $149 is achievable" assumes the Lab-to-Bureau conversion funnel works — unvalidated. The "locked for life" founding rate assumes Razzle can operationally honor legacy pricing, which creates long-term revenue drag.
+
+**Confidence: 7/10** — The directional answer (launch lower, raise later) is strongly supported by SaaS pricing literature and competitive positioning. The specific price point ($149 vs $129 vs $179) needs willingness-to-pay testing. The two-tier structure is a hypothesis worth validating.
+
+Sources:
+- [Plans and Pricing - Dynasty Nerds ($50-70/yr)](https://www.dynastynerds.com/plans-and-pricing/)
+- [Plans - Footballguys ($48-70/yr)](https://www.footballguys.com/plans)
+- [Premium Membership - Dynasty League Football](https://dynastyleaguefootball.com/premium-signup/)
+- [Premium Plans - FantasyPros ($36-100/yr)](https://www.fantasypros.com/premium/plans/wp/)
+- [The 3 Types of Day 1 Pricing — SaaStr](https://www.saastr.com/the-3-types-of-day-1-pricing-low-end-of-normal-identical-and-anchor-high/)
+- [Anchoring High in Pricing — SaaStr](https://www.saastr.com/if-i-produce-a-better-product-than-my-competitors-but-charge-a-little-more-how-would-i-go-about-selling-it-to-new-customers-and-my-competitors-customers/)
+- [Subscription Fatigue Hits 47% Churn — Parks Associates](https://www.parksassociates.com/blogs/in-the-news/subscription-fatigue-growing-as-churn-rate-hits-47-price-considerations-most-common-reason)
+- [Consumer Behavior 2026: Subscription Fatigue — European Business Review](https://www.europeanbusinessreview.com/consumer-behaviour-in-the-digital-age-from-subscription-fatigue-to-instant-access-experiences/)
+- [SaaS Pricing Strategy Playbook — Monetizely](https://www.getmonetizely.com/articles/the-saas-pricing-strategy-playbook-from-launch-to-scale)
+- [Pricing Strategies for New Products — Stripe](https://stripe.com/resources/more/pricing-strategies-for-new-products)
+
+---
+
+### Next 3 Questions This Raises
+
+1. **What is the realistic launch sequence — should the Bureau ship before or after the free Lab has Reddit traction?** (The Lab is the free acquisition engine. The Bureau is the paid moat. Launching the Bureau too early means no users to convert. Launching too late means competitors could copy the concept. Need to define the minimum Lab traction threshold before Bureau launch.)
+
+2. **How should Razzle run a willingness-to-pay test BEFORE building the full Bureau — landing page with pricing, survey, or waitlist with tier selection?** (The $149 recommendation is directional but unvalidated. A pre-launch pricing test could validate the price point with zero code investment.)
+
+3. **What is the expected conversion rate from free Lab users to paid Pro subscribers, and how many free users does Razzle need to hit $74K ARR?** (If the Lab-to-Pro conversion rate is 2-3% (SaaS freemium benchmark), Razzle needs 17,000-25,000 free Lab users to hit 500 paying subscribers. Is that realistic for a dynasty fantasy football niche tool?)
+
+## NEXT QUESTION: What is the realistic launch sequence — should the Bureau ship before or after the free Lab has Reddit traction, and what is the minimum traction threshold?
 
 ---
