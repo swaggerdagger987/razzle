@@ -6807,21 +6807,56 @@ function _bureauRenderRazzleSummary(myResult, rank, results, rosterPlayers, user
   var html = '';
   html += '<div class="agent-header"><div class="agent-avatar" style="background:var(--orange);">🐯</div><div><div class="agent-name" style="color:var(--orange);">Razzle</div><div class="agent-role">Chief of Staff</div></div></div>';
 
-  // Template-driven briefing
+  // Template-driven briefing with roster context
   var topRival = results[0];
   var topRivalName = topRival ? escapeHtml(topRival.name) : 'the top dog';
-  var briefing = '';
-  if (rank === 1) {
-    briefing = 'you\'re #1. ' + myResult.champPct + '% championship probability leads the league. don\'t get comfortable — ' + (results[1] ? escapeHtml(results[1].name) : 'the field') + ' is right behind you.';
-  } else if (rank <= 3) {
-    briefing = 'you\'re #' + rank + '. ' + myResult.champPct + '% isn\'t dominant, but ' + topRivalName + ' has ' + topRival.champPct + '% and they\'re beatable. your path: stay aggressive.';
-  } else if (myResult.champPct >= 5) {
-    briefing = 'you\'re #' + rank + '. the math gives you ' + myResult.champPct + '% — that\'s not nothing, but you need a move. ' + topRivalName + ' is the team to catch.';
-  } else {
-    briefing = 'you\'re #' + rank + '. ' + myResult.champPct + '% is honest. this isn\'t your year. the play: sell aging starters and stack picks for next season.';
+  var runnerUp = results.length > 1 ? results[1] : null;
+  var totalManagers = results.length;
+
+  // Find thinnest position group for advice
+  var thinPos = '';
+  var thinCount = Infinity;
+  var deepPos = '';
+  var deepCount = 0;
+  var positions = ['QB', 'RB', 'WR', 'TE'];
+  for (var i = 0; i < positions.length; i++) {
+    var ct = (posGroups[positions[i]] || []).length;
+    if (ct < thinCount) { thinCount = ct; thinPos = positions[i]; }
+    if (ct > deepCount) { deepCount = ct; deepPos = positions[i]; }
   }
 
-  html += '<div class="agent-quote">' + briefing + '</div>';
+  var briefing = '';
+  var advice = '';
+
+  if (rank === 1) {
+    // Leading the league
+    var gap = runnerUp ? (myResult.champPct - runnerUp.champPct).toFixed(1) : '?';
+    if (parseFloat(gap) > 5) {
+      briefing = 'you\'re #1 by a mile. ' + myResult.champPct + '% championship probability — ' + gap + ' points clear of ' + (runnerUp ? escapeHtml(runnerUp.name) : 'second place') + '. the simulations say this is your year.';
+    } else {
+      briefing = 'you\'re #1, but barely. ' + myResult.champPct + '% with ' + (runnerUp ? escapeHtml(runnerUp.name) : 'someone') + ' breathing down your neck at ' + (runnerUp ? runnerUp.champPct : '?') + '%.';
+    }
+    advice = 'don\'t get cute. protect the lead.';
+  } else if (rank === 2) {
+    briefing = 'you\'re #2. ' + myResult.champPct + '% to ' + topRivalName + '\'s ' + topRival.champPct + '%. the gap is closeable — one trade could flip it.';
+    if (thinCount <= 2) advice = 'your ' + thinPos + ' room is thin. fix it and you\'re the favorite.';
+    else advice = 'stay patient. let ' + topRivalName + ' make a mistake.';
+  } else if (rank <= 4) {
+    briefing = 'you\'re #' + rank + ' in a ' + totalManagers + '-team league. ' + myResult.champPct + '% says you\'re in the conversation, but ' + topRivalName + ' at ' + topRival.champPct + '% is the team to beat.';
+    advice = 'you need a move. ' + deepPos + ' depth is your trade chip.';
+  } else if (myResult.champPct >= 5) {
+    briefing = 'you\'re #' + rank + '. ' + myResult.champPct + '% isn\'t zero — stranger things have happened in dynasty. but the math wants you to make a move.';
+    if (thinCount <= 1) advice = thinPos + ' is a disaster. one injury and you\'re toast. buy now while prices are reasonable.';
+    else advice = 'target a contender who\'s overpaying for depth. sell your ' + deepPos + ' surplus.';
+  } else if (myResult.champPct >= 2) {
+    briefing = 'you\'re #' + rank + '. ' + myResult.champPct + '% is fringe playoff territory. this is where dynasties are built or burned.';
+    advice = 'the play: be aggressive in trades. you have nothing to lose at this odds.';
+  } else {
+    briefing = 'you\'re #' + rank + '. ' + myResult.champPct + '% is honest. 10,000 simulations don\'t sugarcoat it — this isn\'t your year.';
+    advice = 'the play: sell aging starters to contenders and stack picks. ' + topRivalName + ' is desperate for depth — make them pay.';
+  }
+
+  html += '<div class="agent-quote">' + briefing + ' ' + advice + '</div>';
   return html;
 }
 
