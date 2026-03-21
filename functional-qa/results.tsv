@@ -2327,3 +2327,59 @@ re-audit	OK	backend/live_data/tools.py	2837	fetch_success_rate	pass	re-audit: FU
 62	OK	-	-	-	pass	awards: MVP (Nacua WR 23.44PPG), Iron Man (Maye QB CoV=0.26), Schedule Survivor (JTaylor), Dominator (Henry), Best Floor (Maye) — all reasonable	90	2026-03-21T07:30
 3	OK	-	-	-	pass	re-audit: multi-filter RB+rush_yards>=1000 returns 17 players, all correct, sorted desc. Filter intersection verified	100	2026-03-21T07:35
 1	OK	-	-	-	pass	re-audit: 9 panels tested for JS errors (screener/rankings/tradevalues/awards/stock-watch/consistency/aging/efficiency/leaders) — all 0 errors	100	2026-03-21T07:35
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke: session 57 — 11/11 local smoke tests pass	100	2026-03-21T11:35
+re-audit	OK	backend/live_data/dashboards.py	8	module_imports	pass	re-audit: Ship Loop import refactor — math+defaultdict at module level, all 6 dashboard endpoints return 200. consistency/SOS/opportunity/reportcards/vorp/awards verified	100	2026-03-21T11:36
+re-audit	OK	backend/live_data/college.py	7	module_imports	pass	re-audit: Ship Loop import refactor — math+defaultdict at module level, math.sqrt rename (_math→math). college/consistency + college/dual-threat verified (Milroe DTI=51.7, Horvath DTI=39.1)	100	2026-03-21T11:37
+re-audit	OK	backend/live_data/players.py	4	module_imports	pass	re-audit: Ship Loop ROUND(AVG,1) in boom-bust positional ranking + json import hoisted. Mahomes boom-bust: mean_ppg=20.41 clean, 0 artifacts	100	2026-03-21T11:37
+re-audit	OK	backend/live_data/storage.py	8	module_imports	pass	re-audit: Ship Loop removed 4 in-function import json (already at module level). Formula store listing (10 formulas) + detail (PPR Workhorse: 5 stat_weights) both work	100	2026-03-21T11:38
+re-audit	OK	backend/live_data/tools.py	60	NULLIF_fix	pass	re-audit: Ship Loop NULLIF(games,0) in featured endpoint. Nacua #1 dynasty riser (23.4 PPG). No players with 0 games in 2025 data so guard is defensive	100	2026-03-21T11:38
+re-audit	OK	backend/server.py	17	module_imports	pass	re-audit: Ship Loop hoisted json/statistics/urllib/uuid/get_db imports to module level. Monte-carlo verified: 2 players, mean=20.41/23.44, stdev=8.0/10.21	100	2026-03-21T11:39
+re-audit	OK	frontend/lab-panels.js	1485	available_seasons_guard	pass	re-audit: Ship Loop null guard (data.available_seasons && .length) on breakouts+buysell season selectors. Both panels 0 JS errors	100	2026-03-21T11:39
+re-audit	OK	backend/auth.py	8	import_json	pass	re-audit: Ship Loop hoisted import json to module level in auth.py (was inside sync_saved_views). Module structure verified	100	2026-03-21T11:40
+43	OK	backend/live_data/dashboards.py	616	fetch_stock_watch	pass	re-audit: FUNC-060 still open. 14/19 rising TEs null PPO, eff_grade=C fallback. Import refactor didn't change logic. No regression	95	2026-03-21T11:40
+62	OK	backend/live_data/dashboards.py	1406	fetch_season_awards	pass	re-audit: FUNC-061/062 still open. Chism III still wins Most Efficient (3 opps), Bo Nix still Volume King (all QBs). Import refactor didn't change logic. No regression	95	2026-03-21T11:40
+all	OK	-	-	-	pass	browser: session 57 — Lab loaded (0 JS errors), awards/stocks/consistency/efficiency/opportunity/vorp/breakouts/buysell panels all 0 JS errors. College toggle 0 errors (26 rows)	100	2026-03-21T11:41
