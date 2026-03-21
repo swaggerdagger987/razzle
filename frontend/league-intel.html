@@ -1574,6 +1574,287 @@
     margin-top: 8px;
   }
 
+  /* ===== BUREAU TABBED VIEW ===== */
+  .bureau-hero {
+    text-align: center;
+    padding: 32px 16px 20px;
+    margin-bottom: 0;
+  }
+
+  .bureau-hero-odds {
+    font-family: var(--font-display);
+    font-size: 72px;
+    color: var(--orange);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .bureau-hero-league {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--ink-medium);
+    margin-bottom: 4px;
+  }
+
+  .bureau-hero-rank {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    background: var(--bg-warm);
+    border: 2px solid var(--ink);
+    border-radius: 20px;
+    padding: 3px 14px;
+    margin-bottom: 8px;
+  }
+
+  .bureau-hero-annotation {
+    font-family: var(--font-hand);
+    font-size: 18px;
+    color: var(--ink-light);
+    font-style: italic;
+  }
+
+  .bureau-hero-loading {
+    font-family: var(--font-hand);
+    font-size: 18px;
+    color: var(--ink-light);
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .bureau-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 3px solid var(--ink);
+    margin-bottom: 20px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .bureau-tab {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 10px 18px;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: var(--ink-light);
+    white-space: nowrap;
+    border-bottom: 4px solid transparent;
+    margin-bottom: -3px;
+    transition: color 0.15s, border-color 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .bureau-tab:hover {
+    color: var(--ink);
+  }
+
+  .bureau-tab.active {
+    color: var(--ink);
+    border-bottom-color: var(--orange);
+    background: var(--bg);
+  }
+
+  .bureau-tab .tab-lock {
+    font-size: 10px;
+    opacity: 0.5;
+  }
+
+  .bureau-tab .tab-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .bureau-tab-content {
+    display: none;
+  }
+
+  .bureau-tab-content.active {
+    display: block;
+  }
+
+  /* Agent header used in each tab section */
+  .agent-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px dashed var(--ink-faint);
+  }
+
+  .agent-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .agent-name {
+    font-family: var(--font-display);
+    font-size: 16px;
+  }
+
+  .agent-role {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-light);
+    text-transform: uppercase;
+  }
+
+  .agent-quote {
+    font-family: var(--font-hand);
+    font-size: 16px;
+    color: var(--ink-medium);
+    border-left: 3px dashed var(--ink-faint);
+    padding-left: 12px;
+    margin: 12px 0 20px;
+    line-height: 1.4;
+  }
+
+  /* League odds grid */
+  .bureau-odds-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .bureau-odds-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 16px;
+    text-align: center;
+    transition: all 0.15s;
+  }
+
+  .bureau-odds-card:hover {
+    box-shadow: 6px 6px 0 var(--ink);
+    transform: translate(-1px, -1px);
+  }
+
+  .bureau-odds-card.is-user {
+    border-color: var(--orange);
+    box-shadow: 4px 4px 0 var(--orange);
+  }
+
+  .bureau-odds-card.blurred {
+    filter: blur(3px);
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  .bureau-odds-name {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .bureau-odds-record {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-light);
+    margin-bottom: 8px;
+  }
+
+  .bureau-odds-champ {
+    font-family: var(--font-display);
+    font-size: 28px;
+    line-height: 1;
+    margin-bottom: 2px;
+  }
+
+  .bureau-odds-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: var(--ink-light);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* Position grade cards for self-scout preview */
+  .pos-grade-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin: 16px 0;
+  }
+
+  .pos-grade-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    box-shadow: 3px 3px 0 var(--ink);
+    padding: 12px;
+    text-align: center;
+  }
+
+  .pos-grade-letter {
+    font-family: var(--font-display);
+    font-size: 32px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .pos-grade-pos {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+
+  .pos-grade-detail {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-light);
+  }
+
+  /* Rivals blurred preview */
+  .rivals-preview {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    margin-top: 20px;
+  }
+
+  .rivals-preview-blur {
+    filter: blur(4px);
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .rivals-preview-cta {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 2;
+  }
+
   /* ===== MOBILE ===== */
   @media (max-width: 768px) {
     html, body { overflow-x: hidden; }
@@ -1616,6 +1897,10 @@
     .sos-card { padding: 12px; }
     .odds-grid { grid-template-columns: 1fr; }
     .odds-card { padding: 12px; }
+    .bureau-hero-odds { font-size: 48px; }
+    .bureau-odds-grid { grid-template-columns: repeat(2, 1fr); }
+    .pos-grade-grid { grid-template-columns: repeat(2, 1fr); }
+    .bureau-tab { font-size: 11px; padding: 8px 12px; }
   }
 
   @media (max-width: 480px) {
@@ -1639,6 +1924,10 @@
     .self-scout { padding: 10px; }
     .bureau-cta a { font-size: 11px; padding: 4px 8px; }
     .activity-nudge { font-size: 10px; }
+    .bureau-hero-odds { font-size: 40px; }
+    .bureau-odds-grid { grid-template-columns: 1fr; }
+    .pos-grade-grid { grid-template-columns: repeat(2, 1fr); }
+    .bureau-tab { font-size: 10px; padding: 6px 10px; }
   }
 </style>
 </head>
@@ -2067,207 +2356,150 @@ async function toggleLeague(card, leagueId, userId) {
       if (!p) continue;
       const pos = p.position || "?";
       if (!posGroups[pos]) posGroups[pos] = [];
-      posGroups[pos].push({ name: ((p.first_name || '') + ' ' + (p.last_name || '')).trim() || 'Unknown', team: p.team || "", pos });
+      posGroups[pos].push({ name: ((p.first_name || '') + ' ' + (p.last_name || '')).trim() || 'Unknown', team: p.team || "", pos, pid });
     }
 
-    let html = `<div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); margin-bottom:12px;">
-      ${escapeHtml(userMap[userId] || "your")} roster — ${myRoster.players?.length || 0} players
-    </div>`;
-
-    for (const [pos, players] of Object.entries(posGroups)) {
-      if (!players.length) continue;
-      html += `<div class="roster-section">
-        <div class="roster-section-title">${escapeHtml(pos)} (${players.length})</div>`;
-      for (const p of players) {
-        html += `<div class="roster-player">
-          <span class="roster-pos ${escapeAttr(pos.toLowerCase())}">${escapeHtml(pos)}</span>
-          <span>${escapeHtml(p.name)}</span>
-          <span style="color:var(--ink-light); font-size:10px;">${escapeHtml(p.team)}</span>
-        </div>`;
-      }
-      html += `</div>`;
-    }
-
-    // Record and standings
     const wins = myRoster.settings?.wins || 0;
     const losses = myRoster.settings?.losses || 0;
     const fpts = myRoster.settings?.fpts || 0;
-    html += `<div style="margin-top:12px; padding-top:12px; border-top:2px dashed var(--ink-faint);">
-      <span style="font-family:var(--font-mono); font-size:12px; color:var(--ink-light);">
-        Record: <strong style="color:var(--ink);">${wins}-${losses}</strong> &nbsp;|&nbsp;
-        Points: <strong style="color:var(--ink);">${fpts}</strong>
-      </span>
-    </div>`;
+    var leagueName = card.querySelector('.league-name')?.textContent || 'League';
+    var teamCount = rosters.length;
+    var paid = typeof isPaidUser === 'function' && isPaidUser();
 
-    // Add self-scout section (auto-loads)
+    // ===== BUREAU TABBED INTERFACE =====
+    let html = '';
+
+    // HERO SECTION: Championship probability (populated by MC Worker)
+    html += '<div class="bureau-hero" id="bureau-hero-' + leagueId + '">';
+    html += '<div class="bureau-hero-odds bureau-hero-loading" id="bureau-hero-odds-' + leagueId + '">...</div>';
+    html += '<div class="bureau-hero-league">' + escapeHtml(leagueName) + ' (' + teamCount + '-team)</div>';
+    html += '<div class="bureau-hero-rank" id="bureau-hero-rank-' + leagueId + '">' + wins + '-' + losses + '</div>';
+    html += '<div class="bureau-hero-annotation" id="bureau-hero-annotation-' + leagueId + '">octo\'s crunching 10,000 simulations...</div>';
+    html += '</div>';
+
+    // TAB BAR
+    html += '<div class="bureau-tabs" id="bureau-tabs-' + leagueId + '">';
+    html += '<button class="bureau-tab active" data-tab="overview" onclick="switchBureauTab(\'' + escapeAttr(leagueId) + '\',\'overview\')"><span class="tab-dot" style="background:var(--orange);"></span>Overview</button>';
+    html += '<button class="bureau-tab" data-tab="selfscout" onclick="switchBureauTab(\'' + escapeAttr(leagueId) + '\',\'selfscout\')"><span class="tab-dot" style="background:var(--pos-rb);"></span>Self-Scout</button>';
+    html += '<button class="bureau-tab" data-tab="rivals" onclick="switchBureauTab(\'' + escapeAttr(leagueId) + '\',\'rivals\')">' + (paid ? '' : '<span class="tab-lock">🔒</span>') + '<span class="tab-dot" style="background:var(--pos-te);"></span>Rivals</button>';
+    html += '<button class="bureau-tab" data-tab="trades" onclick="switchBureauTab(\'' + escapeAttr(leagueId) + '\',\'trades\')">' + (paid ? '' : '<span class="tab-lock">🔒</span>') + '<span class="tab-dot" style="background:var(--pos-te);"></span>Trades</button>';
+    html += '<button class="bureau-tab" data-tab="history" onclick="switchBureauTab(\'' + escapeAttr(leagueId) + '\',\'history\')">' + (paid ? '' : '<span class="tab-lock">🔒</span>') + '<span class="tab-dot" style="background:var(--red, #e63946);"></span>History</button>';
+    html += '</div>';
+
+    // ===== OVERVIEW TAB (default) =====
+    html += '<div class="bureau-tab-content active" id="bureau-overview-' + leagueId + '">';
+
+    // League Odds Grid (populated by MC Worker callback)
+    html += '<div id="bureau-odds-grid-' + leagueId + '" style="margin-bottom:24px;">';
+    html += '<div style="text-align:center;padding:20px;font-family:var(--font-hand);font-size:16px;color:var(--ink-light);">running simulations...</div>';
+    html += '</div>';
+
+    // Razzle's Summary (populated after MC completes)
+    html += '<div id="bureau-razzle-summary-' + leagueId + '"></div>';
+
+    // Self-Scout Preview: Hawkeye's 4 position grade cards
+    html += '<div style="margin-top:24px;padding-top:20px;border-top:2px dashed var(--ink-faint);">';
+    html += '<div class="agent-header"><div class="agent-avatar" style="background:var(--pos-rb);">🦅</div><div><div class="agent-name" style="color:var(--pos-rb);">Hawkeye</div><div class="agent-role">Scout</div></div></div>';
+    html += '<div id="bureau-scout-preview-' + leagueId + '"><div style="font-family:var(--font-hand);font-size:14px;color:var(--ink-light);">hawkeye\'s reviewing the tape...</div></div>';
+    html += '</div>';
+
+    // Rivals Blurred Preview with Pro CTA
+    html += '<div class="rivals-preview" style="margin-top:24px;padding-top:20px;border-top:2px dashed var(--ink-faint);">';
+    html += '<div class="agent-header"><div class="agent-avatar" style="background:var(--pos-te);">🦴</div><div><div class="agent-name" style="color:var(--pos-te);">Bones</div><div class="agent-role">Diplomat</div></div></div>';
+    if (!paid) {
+      html += '<div class="rivals-preview-blur">';
+      html += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">';
+      for (var ri = 0; ri < 3; ri++) {
+        html += '<div style="background:var(--bg-card);border:3px solid var(--ink);border-radius:10px;padding:16px;text-align:center;">';
+        html += '<div style="font-family:var(--font-mono);font-size:13px;font-weight:700;margin-bottom:4px;">Manager Name</div>';
+        html += '<div style="font-family:var(--font-mono);font-size:10px;background:var(--pos-te);color:var(--bg);padding:2px 8px;border-radius:8px;display:inline-block;">BEHAVIORAL TAG</div>';
+        html += '<div style="margin-top:8px;font-family:var(--font-mono);font-size:11px;color:var(--ink-light);">trades/yr: 4.2 &bull; panic: 62%</div>';
+        html += '</div>';
+      }
+      html += '</div></div>';
+      html += '<div class="rivals-preview-cta">';
+      html += '<a href="/pricing.html" class="btn-primary" style="font-size:14px;padding:12px 28px;">Unlock Rival Intel — Go Pro</a>';
+      html += '</div>';
+    } else {
+      html += '<div id="bureau-rivals-preview-' + leagueId + '"><div style="font-family:var(--font-hand);font-size:14px;color:var(--ink-light);">bones is reading the room...</div></div>';
+    }
+    html += '</div>';
+
+    html += '</div>'; // end overview tab
+
+    // ===== SELF-SCOUT TAB =====
+    html += '<div class="bureau-tab-content" id="bureau-selfscout-' + leagueId + '">';
     html += '<div id="selfScout-' + leagueId + '"></div>';
+    html += '</div>';
 
-    // Add activity feed section (auto-loads)
-    html += '<div class="activity-feed">' +
-      '<div class="activity-feed-header">recent activity</div>' +
-      '<div id="activityFeed-' + leagueId + '" class="activity-loading">checking the wire...</div>' +
-      '</div>';
+    // ===== RIVALS TAB (PRO) =====
+    html += '<div class="bureau-tab-content" id="bureau-rivals-' + leagueId + '">';
+    if (!paid) {
+      html += '<div style="text-align:center;padding:40px 20px;">';
+      html += '<div style="font-family:var(--font-display);font-size:20px;margin-bottom:8px;">Rival Intel is Pro</div>';
+      html += '<div style="font-family:var(--font-hand);font-size:16px;color:var(--ink-medium);margin-bottom:16px;">see what your opponents don\'t want you to know</div>';
+      html += '<a href="/pricing.html" class="btn-primary" style="font-size:14px;padding:12px 28px;">Go Pro</a>';
+      html += '</div>';
+    } else {
+      html += '<div id="profiles-' + leagueId + '"></div>';
+    }
+    html += '</div>';
 
-    // Add manager profiles trigger
-    html += '<div class="profiles-trigger">' +
-      '<button id="profileBtn-' + leagueId + '">scout rival managers</button>' +
-      '</div>' +
-      '<div id="profiles-' + leagueId + '"></div>';
+    // ===== TRADES TAB (PRO) =====
+    html += '<div class="bureau-tab-content" id="bureau-trades-' + leagueId + '">';
+    if (!paid) {
+      html += '<div style="text-align:center;padding:40px 20px;">';
+      html += '<div style="font-family:var(--font-display);font-size:20px;margin-bottom:8px;">Trade Finder is Pro</div>';
+      html += '<div style="font-family:var(--font-hand);font-size:16px;color:var(--ink-medium);margin-bottom:16px;">value-matched trade suggestions based on your roster + rival tendencies</div>';
+      html += '<a href="/pricing.html" class="btn-primary" style="font-size:14px;padding:12px 28px;">Go Pro</a>';
+      html += '</div>';
+    } else {
+      html += '<div id="tradeFinder-' + leagueId + '"></div>';
+      html += '<div id="tradeNetwork-' + leagueId + '"></div>';
+    }
+    html += '</div>';
 
-    // Add league trade finder trigger
-    html += '<div class="trade-finder-trigger">' +
-      '<button id="tradeFinderBtn-' + leagueId + '">find trade partners</button>' +
-      '</div>' +
-      '<div id="tradeFinder-' + leagueId + '"></div>';
+    // ===== HISTORY TAB (PRO) =====
+    html += '<div class="bureau-tab-content" id="bureau-history-' + leagueId + '">';
+    if (!paid) {
+      html += '<div style="text-align:center;padding:40px 20px;">';
+      html += '<div style="font-family:var(--font-display);font-size:20px;margin-bottom:8px;">League History is Pro</div>';
+      html += '<div style="font-family:var(--font-hand);font-size:16px;color:var(--ink-medium);margin-bottom:16px;">championship paths, draft pick ROI, and trade precedents</div>';
+      html += '<a href="/pricing.html" class="btn-primary" style="font-size:14px;padding:12px 28px;">Go Pro</a>';
+      html += '</div>';
+    } else {
+      html += '<div id="buildProfiles-' + leagueId + '"></div>';
+      html += '<div id="powerRankings-' + leagueId + '"></div>';
+      html += '<div id="waiverTendencies-' + leagueId + '"></div>';
+      html += '<div id="h2hRivalry-' + leagueId + '"></div>';
+      html += '<div id="scheduleStrength-' + leagueId + '"></div>';
+    }
+    html += '</div>';
 
-    // Add roster depth trigger
-    html += '<div class="depth-trigger">' +
-      '<button id="depthBtn-' + leagueId + '">analyze roster depth</button>' +
-      '</div>' +
-      '<div id="rosterDepth-' + leagueId + '"></div>';
+    // Hidden sections for features that load into Overview tab
+    html += '<div id="activityFeed-' + leagueId + '" style="display:none;"></div>';
+    html += '<div id="rosterDepth-' + leagueId + '" style="display:none;"></div>';
 
-    // Add build profiles trigger
-    html += '<div class="build-profiles-trigger">' +
-      '<button id="buildProfileBtn-' + leagueId + '">roster build profiles</button>' +
-      '</div>' +
-      '<div id="buildProfiles-' + leagueId + '"></div>';
-
-    // Add trade network trigger
-    html += '<div class="trade-network-trigger">' +
-      '<button id="tradeNetworkBtn-' + leagueId + '">trade network</button>' +
-      '</div>' +
-      '<div id="tradeNetwork-' + leagueId + '"></div>';
-
-    // Add waiver tendencies trigger
-    html += '<div class="waiver-trigger">' +
-      '<button id="waiverBtn-' + leagueId + '">waiver tendencies</button>' +
-      '</div>' +
-      '<div id="waiverTendencies-' + leagueId + '"></div>';
-
-    // Add power rankings trigger
-    html += '<div class="power-trigger">' +
-      '<button id="powerBtn-' + leagueId + '">league power rankings</button>' +
-      '</div>' +
-      '<div id="powerRankings-' + leagueId + '"></div>';
-
-    // Add H2H rivalry trigger
-    html += '<div class="h2h-trigger">' +
-      '<button id="h2hBtn-' + leagueId + '">head-to-head rivalry</button>' +
-      '</div>' +
-      '<div id="h2hRivalry-' + leagueId + '"></div>';
-
-    // Add schedule strength trigger
-    html += '<div class="sos-trigger">' +
-      '<button id="sosBtn-' + leagueId + '">schedule strength</button>' +
-      '</div>' +
-      '<div id="scheduleStrength-' + leagueId + '"></div>';
+    // Odds div for MC (hidden — we render into bureau-odds-grid instead)
+    html += '<div id="odds-' + leagueId + '" style="display:none;"></div>';
 
     rosterDiv.innerHTML = html;
 
-    // Bind profile button with closure over variables
-    var profileBtn = document.getElementById("profileBtn-" + leagueId);
-    if (profileBtn) {
-      profileBtn.addEventListener("click", function(e) {
-        e.stopPropagation();
-        this.disabled = true;
-        this.textContent = "scouting...";
-        loadManagerProfiles(leagueId, userId, allPlayers, userMap, rosters);
-      });
-    }
+    // ===== AUTO-LOAD FEATURES =====
 
-    // Bind trade finder button
-    var tradeFinderBtn = document.getElementById("tradeFinderBtn-" + leagueId);
-    if (tradeFinderBtn) {
-      tradeFinderBtn.addEventListener("click", function(e) {
-        e.stopPropagation();
-        this.disabled = true;
-        this.textContent = "scouting the market...";
-        loadLeagueTradeFinder(leagueId, userId, myRoster, rosters, allPlayers, userMap);
-      });
-    }
-
-    // Bind depth button
-    var depthBtn = document.getElementById("depthBtn-" + leagueId);
-    if (depthBtn) {
-      depthBtn.addEventListener("click", function(e) {
-        e.stopPropagation();
-        this.disabled = true;
-        this.textContent = "analyzing depth charts...";
-        loadRosterDepth(leagueId, userId, rosters, allPlayers, userMap);
-      });
-    }
-
-    // Bind build profiles button
-    var buildProfileBtn = document.getElementById("buildProfileBtn-" + leagueId);
-    if (buildProfileBtn) {
-      buildProfileBtn.addEventListener("click", function(e) {
-        e.stopPropagation();
-        this.disabled = true;
-        this.textContent = "profiling roster builds...";
-        loadBuildProfiles(leagueId, userId, rosters, allPlayers, userMap);
-      });
-    }
-
-    // Bind trade network button
-    var tradeNetworkBtn = document.getElementById("tradeNetworkBtn-" + leagueId);
-    if (tradeNetworkBtn) {
-      tradeNetworkBtn.addEventListener("click", function(e) {
-        e.stopPropagation();
-        this.disabled = true;
-        this.textContent = "mapping trade networks...";
-        loadTradeNetwork(leagueId, userId, rosters, allPlayers, userMap);
-      });
-    }
-
-    // Bind waiver tendencies button
-    var waiverBtn = document.getElementById("waiverBtn-" + leagueId);
-    if (waiverBtn) {
-      waiverBtn.addEventListener("click", function(e) {
-        e.stopPropagation();
-        this.disabled = true;
-        this.textContent = "scanning waiver wire activity...";
-        loadWaiverTendencies(leagueId, userId, rosters, allPlayers, userMap);
-      });
-    }
-
-    // Bind power rankings button
-    var powerBtn = document.getElementById("powerBtn-" + leagueId);
-    if (powerBtn) {
-      powerBtn.addEventListener("click", function(e) {
-        e.stopPropagation();
-        this.disabled = true;
-        this.textContent = "computing power rankings...";
-        loadPowerRankings(leagueId, userId, rosters, allPlayers, userMap);
-      });
-    }
-
-    // Bind H2H rivalry button
-    var h2hBtn = document.getElementById("h2hBtn-" + leagueId);
-    if (h2hBtn) {
-      h2hBtn.addEventListener("click", function(e) {
-        e.stopPropagation();
-        this.disabled = true;
-        this.textContent = "loading matchup intel...";
-        loadH2HRivalry(leagueId, userId, rosters, allPlayers, userMap);
-      });
-    }
-
-    // Bind schedule strength button
-    var sosBtn = document.getElementById("sosBtn-" + leagueId);
-    if (sosBtn) {
-      sosBtn.addEventListener("click", function(e) {
-        e.stopPropagation();
-        this.disabled = true;
-        this.textContent = "analyzing schedule matchups...";
-        loadScheduleStrength(leagueId, userId, rosters, allPlayers, userMap);
-      });
-    }
-
-    // Auto-load self-scout (user's own team analysis)
+    // Self-Scout tab (loads into both preview and full tab)
     loadSelfScout(leagueId, userId, myRoster, rosters, allPlayers, userMap);
 
-    // Auto-load activity feed
+    // Activity feed (background)
     loadActivityFeed(leagueId, userMap, allPlayers, rosters);
+
+    // Pro features: load on tab switch (lazy)
+    if (paid) {
+      // Store data for lazy loading
+      rosterDiv.dataset.bureauReady = JSON.stringify({
+        leagueId: leagueId, userId: userId, paid: paid
+      });
+    }
 
     // Save roster data for Situation Room context bridge
     try {
@@ -2280,7 +2512,6 @@ async function toggleLeague(card, leagueId, userId) {
       const existing = JSON.parse(localStorage.getItem("razzle_league_context") || "{}");
       existing.roster = rosterPlayers;
       existing.record = { wins, losses, fpts };
-      // Save rival rosters (other managers)
       const rivals = rosters
         .filter(r => r.owner_id !== userId)
         .slice(0, 5)
@@ -2297,18 +2528,18 @@ async function toggleLeague(card, leagueId, userId) {
       existing.updatedAt = Date.now();
       localStorage.setItem("razzle_league_context", JSON.stringify(existing));
     } catch (e) { /* ignore storage errors */ }
-    rosterDiv.dataset.loaded = "true"; // Mark loaded only after success
+    rosterDiv.dataset.loaded = "true";
 
-    // Auto-trigger League Odds (CEO-013: odds cards are the first thing visible)
-    try {
-      var _lcCard = card;
-      var _lcScoring = _lcCard.dataset.scoring || 'half_ppr';
-      var _lcUser = _lcCard.dataset.user || userId;
-      var _oddsDiv = document.getElementById('odds-' + leagueId);
-      if (_oddsDiv && _oddsDiv.innerHTML.trim() === '') {
-        runLeagueOdds(leagueId, _lcUser, _lcScoring);
-      }
-    } catch(e) { console.error('Auto-odds error:', e); }
+    // Store context for lazy tab loading
+    rosterDiv._bureauCtx = {
+      leagueId: leagueId, userId: userId,
+      rosters: rosters, allPlayers: allPlayers,
+      userMap: userMap, myRoster: myRoster
+    };
+
+    // ===== RUN MONTE CARLO (Web Worker) =====
+    // This populates the hero section and odds grid
+    _runBureauMC(leagueId, userId, card.dataset.scoring || 'half_ppr', rosters, users, allPlayers, posGroups, userMap);
   } catch (e) {
     rosterDiv.dataset.loaded = ""; // Allow retry on failure
     var rosterErr = e.name === "AbortError"
@@ -6240,6 +6471,262 @@ function _mcResetScenarios(leagueId) {
   st.excludedPlayers = {};
   st.trades = [];
   _mcResimulate(leagueId);
+}
+
+// ===== BUREAU TAB SWITCHING =====
+function switchBureauTab(leagueId, tabName) {
+  // Update tab buttons
+  var tabBar = document.getElementById('bureau-tabs-' + leagueId);
+  if (tabBar) {
+    var tabs = tabBar.querySelectorAll('.bureau-tab');
+    for (var i = 0; i < tabs.length; i++) {
+      tabs[i].classList.toggle('active', tabs[i].dataset.tab === tabName);
+    }
+  }
+
+  // Show/hide tab content
+  var allTabs = ['overview', 'selfscout', 'rivals', 'trades', 'history'];
+  for (var t = 0; t < allTabs.length; t++) {
+    var el = document.getElementById('bureau-' + allTabs[t] + '-' + leagueId);
+    if (el) el.classList.toggle('active', allTabs[t] === tabName);
+  }
+
+  // Lazy-load Pro tab content on first switch
+  var rosterDiv = document.getElementById('roster-' + leagueId);
+  if (!rosterDiv) return;
+  var readyData = rosterDiv.dataset.bureauReady;
+  if (!readyData) return;
+  var rd = JSON.parse(readyData);
+  var loadKey = 'bureau-loaded-' + tabName;
+  if (rosterDiv.dataset[loadKey]) return;
+
+  // Mark as loading to prevent duplicate loads
+  rosterDiv.dataset[loadKey] = 'true';
+
+  // Lazy load features per tab (Pro users only)
+  var _bureauCtx = rosterDiv._bureauCtx;
+  if (!_bureauCtx) return;
+  var _lId = _bureauCtx.leagueId, _uId = _bureauCtx.userId;
+  var _rosters = _bureauCtx.rosters, _allPlayers = _bureauCtx.allPlayers;
+  var _userMap = _bureauCtx.userMap, _myRoster = _bureauCtx.myRoster;
+
+  if (tabName === 'rivals' && rd.paid) {
+    loadManagerProfiles(_lId, _uId, _allPlayers, _userMap, _rosters);
+  } else if (tabName === 'trades' && rd.paid) {
+    loadLeagueTradeFinder(_lId, _uId, _myRoster, _rosters, _allPlayers, _userMap);
+    loadTradeNetwork(_lId, _uId, _rosters, _allPlayers, _userMap);
+  } else if (tabName === 'history' && rd.paid) {
+    loadBuildProfiles(_lId, _uId, _rosters, _allPlayers, _userMap);
+    loadPowerRankings(_lId, _uId, _rosters, _allPlayers, _userMap);
+    loadWaiverTendencies(_lId, _uId, _rosters, _allPlayers, _userMap);
+  }
+}
+
+// ===== BUREAU MC: Run simulation and populate hero + odds grid =====
+async function _runBureauMC(leagueId, userId, scoring, rosters, users, allPlayers, posGroups, userMap) {
+  try {
+    // Collect all player IDs across all rosters
+    var allPlayerIds = [];
+    var rosterPlayers = {};
+    rosters.forEach(function(r) {
+      var players = (r.players || []).slice(0, 30);
+      rosterPlayers[r.roster_id] = { players: players, ownerId: r.owner_id, wins: (r.settings || {}).wins || 0, losses: (r.settings || {}).losses || 0 };
+      players.forEach(function(pid) { if (allPlayerIds.indexOf(pid) === -1) allPlayerIds.push(pid); });
+    });
+
+    if (allPlayerIds.length === 0) {
+      _bureauHeroError(leagueId, 'no roster data found');
+      return;
+    }
+
+    // Fetch projections from backend
+    var scoringType = scoring === 'half_ppr' ? 'half_ppr' : scoring === 'standard' ? 'standard' : 'ppr';
+    var projResp = await fetch('/api/monte-carlo/projections', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ player_ids: allPlayerIds.slice(0, 200), scoring: scoringType })
+    });
+    if (!projResp.ok) throw new Error('Projection API returned ' + projResp.status);
+    var projData = await projResp.json();
+    var distributions = projData.distributions || {};
+
+    // Run MC in Web Worker (10K sims)
+    var SIMS = 10000;
+    var playoffSpots = Math.max(4, Math.floor(rosters.length / 2));
+    var rosterIds = Object.keys(rosterPlayers);
+
+    var simResult = await _mcRunSimulation(rosterPlayers, distributions, rosterIds, playoffSpots, SIMS, null);
+    var results = _mcBuildResults(rosterIds, rosterPlayers, userMap, simResult, SIMS);
+
+    // Store state for scenario re-simulation
+    _mcState[leagueId] = {
+      rosterPlayers: rosterPlayers,
+      distributions: distributions,
+      userMap: userMap,
+      playoffSpots: playoffSpots,
+      SIMS: SIMS,
+      baseResults: results,
+      currentResults: results,
+      excludedPlayers: {},
+      trades: [],
+    };
+
+    // Find user's result
+    var myResult = null;
+    for (var i = 0; i < results.length; i++) {
+      var rp = rosterPlayers[results[i].rid];
+      if (rp && rp.ownerId === userId) { myResult = results[i]; break; }
+    }
+
+    // Populate hero section
+    var heroOdds = document.getElementById('bureau-hero-odds-' + leagueId);
+    var heroRank = document.getElementById('bureau-hero-rank-' + leagueId);
+    var heroAnnotation = document.getElementById('bureau-hero-annotation-' + leagueId);
+
+    if (heroOdds && myResult) {
+      heroOdds.textContent = myResult.champPct + '%';
+      heroOdds.classList.remove('bureau-hero-loading');
+      var myRank = results.indexOf(myResult) + 1;
+      if (heroRank) heroRank.textContent = '#' + myRank + ' of ' + results.length + ' managers';
+      if (heroAnnotation) {
+        heroAnnotation.textContent = _bureauOctoAnnotation(myResult, myRank, results);
+      }
+    } else if (heroOdds) {
+      heroOdds.textContent = '—';
+      heroOdds.classList.remove('bureau-hero-loading');
+      if (heroAnnotation) heroAnnotation.textContent = 'couldn\'t find your roster in the simulation';
+    }
+
+    // Populate odds grid
+    var oddsGrid = document.getElementById('bureau-odds-grid-' + leagueId);
+    if (oddsGrid) {
+      var paid = typeof isPaidUser === 'function' && isPaidUser();
+      oddsGrid.innerHTML = _bureauRenderOddsGrid(results, userId, rosterPlayers, paid, leagueId);
+    }
+
+    // Populate Razzle's summary
+    var summaryDiv = document.getElementById('bureau-razzle-summary-' + leagueId);
+    if (summaryDiv && myResult) {
+      var myRank = results.indexOf(myResult) + 1;
+      summaryDiv.innerHTML = _bureauRenderRazzleSummary(myResult, myRank, results, rosterPlayers, userMap, userId, posGroups);
+    }
+
+    // Populate self-scout preview (4 position grades)
+    _bureauRenderScoutPreview(leagueId, posGroups, allPlayers, distributions);
+
+  } catch (e) {
+    console.error('Bureau MC error:', e);
+    _bureauHeroError(leagueId, 'fumbled the simulation... reload to retry');
+  }
+}
+
+function _bureauHeroError(leagueId, msg) {
+  var heroOdds = document.getElementById('bureau-hero-odds-' + leagueId);
+  if (heroOdds) { heroOdds.textContent = '—'; heroOdds.classList.remove('bureau-hero-loading'); }
+  var heroAnnotation = document.getElementById('bureau-hero-annotation-' + leagueId);
+  if (heroAnnotation) heroAnnotation.textContent = msg;
+}
+
+function _bureauOctoAnnotation(myResult, rank, results) {
+  if (myResult.champPct >= 15) return 'ran 10,000 simulations. you\'re a legitimate contender.';
+  if (myResult.champPct >= 8) return 'ran 10,000 simulations. not bad, not safe. the math says you\'re in the mix.';
+  if (myResult.champPct >= 3) return 'ran 10,000 simulations. you\'re on the fringe. one trade could change everything.';
+  return 'ran 10,000 simulations. the math doesn\'t lie. this is a rebuild year.';
+}
+
+function _bureauRenderOddsGrid(results, userId, rosterPlayers, paid, leagueId) {
+  var html = '<div class="bureau-odds-grid">';
+  for (var k = 0; k < results.length; k++) {
+    var r = results[k];
+    var rp = rosterPlayers[r.rid];
+    var isUser = rp && rp.ownerId === userId;
+    var isBlurred = !paid && k >= 6;
+    var champColor = r.champPct >= 15 ? 'var(--green)' : r.champPct >= 8 ? 'var(--orange)' : 'var(--ink-light)';
+
+    html += '<div class="bureau-odds-card' + (isUser ? ' is-user' : '') + (isBlurred ? ' blurred' : '') + '">';
+    html += '<div class="bureau-odds-name">' + escapeHtml(isBlurred ? 'Manager' : r.name) + '</div>';
+    html += '<div class="bureau-odds-record">' + (isBlurred ? '?-?' : r.wins + '-' + r.losses) + '</div>';
+    html += '<div class="bureau-odds-champ" style="color:' + champColor + ';">' + (isBlurred ? '??' : r.champPct) + '%</div>';
+    html += '<div class="bureau-odds-label">championship</div>';
+    html += '<div style="margin-top:6px;font-family:var(--font-mono);font-size:12px;color:var(--ink-medium);">' + (isBlurred ? '??' : r.playoffPct) + '% playoff</div>';
+    html += '</div>';
+  }
+  html += '</div>';
+
+  if (!paid && results.length > 6) {
+    html += '<div style="text-align:center;margin-top:12px;font-family:var(--font-hand);font-size:14px;color:var(--ink-medium);">';
+    html += 'showing 6 of ' + results.length + ' managers. <a href="/pricing.html" style="color:var(--orange);">go Pro</a> to see all + scenario explorer.</div>';
+  }
+  return html;
+}
+
+function _bureauRenderRazzleSummary(myResult, rank, results, rosterPlayers, userMap, userId, posGroups) {
+  var html = '';
+  html += '<div class="agent-header"><div class="agent-avatar" style="background:var(--orange);">🐯</div><div><div class="agent-name" style="color:var(--orange);">Razzle</div><div class="agent-role">Chief of Staff</div></div></div>';
+
+  // Template-driven briefing
+  var topRival = results[0];
+  var topRivalName = topRival ? escapeHtml(topRival.name) : 'the top dog';
+  var briefing = '';
+  if (rank === 1) {
+    briefing = 'you\'re #1. ' + myResult.champPct + '% championship probability leads the league. don\'t get comfortable — ' + (results[1] ? escapeHtml(results[1].name) : 'the field') + ' is right behind you.';
+  } else if (rank <= 3) {
+    briefing = 'you\'re #' + rank + '. ' + myResult.champPct + '% isn\'t dominant, but ' + topRivalName + ' has ' + topRival.champPct + '% and they\'re beatable. your path: stay aggressive.';
+  } else if (myResult.champPct >= 5) {
+    briefing = 'you\'re #' + rank + '. the math gives you ' + myResult.champPct + '% — that\'s not nothing, but you need a move. ' + topRivalName + ' is the team to catch.';
+  } else {
+    briefing = 'you\'re #' + rank + '. ' + myResult.champPct + '% is honest. this isn\'t your year. the play: sell aging starters and stack picks for next season.';
+  }
+
+  html += '<div class="agent-quote">' + briefing + '</div>';
+  return html;
+}
+
+function _bureauRenderScoutPreview(leagueId, posGroups, allPlayers, distributions) {
+  var previewDiv = document.getElementById('bureau-scout-preview-' + leagueId);
+  if (!previewDiv) return;
+
+  var positions = ['QB', 'RB', 'WR', 'TE'];
+  var posColors = { QB: 'var(--pos-qb)', RB: 'var(--pos-rb)', WR: 'var(--orange)', TE: 'var(--pos-te)' };
+  var html = '<div class="pos-grade-grid">';
+
+  for (var pi = 0; pi < positions.length; pi++) {
+    var pos = positions[pi];
+    var players = posGroups[pos] || [];
+    var grade = 'C';
+    var starterName = players.length > 0 ? players[0].name : 'Empty';
+    var depth = players.length;
+
+    // Simple grade based on depth + starter quality
+    if (depth >= 4) grade = 'A';
+    else if (depth >= 3) grade = 'B+';
+    else if (depth >= 2) grade = 'B';
+    else if (depth >= 1) grade = 'C';
+    else grade = 'F';
+
+    // Refine grade based on starter PPG from distributions
+    if (players.length > 0 && distributions) {
+      var dist = distributions[players[0].pid];
+      if (dist && dist.mean) {
+        if (dist.mean >= 18) grade = 'A+';
+        else if (dist.mean >= 15) grade = 'A';
+        else if (dist.mean >= 12) { if (grade < 'B') grade = 'B+'; }
+      }
+    }
+
+    var gradeColor = grade.startsWith('A') ? 'var(--green)' : grade.startsWith('B') ? 'var(--orange)' : grade.startsWith('C') ? 'var(--ink-medium)' : 'var(--red)';
+
+    html += '<div class="pos-grade-card">';
+    html += '<div class="pos-grade-pos" style="color:' + posColors[pos] + ';">' + pos + '</div>';
+    html += '<div class="pos-grade-letter" style="color:' + gradeColor + ';">' + grade + '</div>';
+    html += '<div class="pos-grade-detail">' + escapeHtml(starterName.split(' ').pop()) + '</div>';
+    html += '<div class="pos-grade-detail">' + depth + ' deep</div>';
+    html += '</div>';
+  }
+
+  html += '</div>';
+  html += '<div style="text-align:center;"><button class="btn-chunky" style="font-size:11px;padding:6px 16px;" onclick="switchBureauTab(\'' + escapeAttr(leagueId) + '\',\'selfscout\')">Full Self-Scout Report</button></div>';
+  previewDiv.innerHTML = html;
 }
 
 async function runLeagueOdds(leagueId, userId, scoring) {
