@@ -1,8 +1,8 @@
 # Razzle Market Research — Reddit Analysis
 
 Generated: 2026-03-20
-Data: 275 posts, 655 comments
-Subreddits: r/DynastyFF (135), r/SleeperApp (120), r/fantasyfootball (20)
+Data: 4468 posts, 655 comments
+Subreddits: r/DynastyFF (735), r/SleeperApp (719), r/fantasyfootball (615), r/fantasyfootballadvice (600), r/Fantasy_Football (599), r/DynastyFootballLeague (300), r/NFL_Draft (300), r/TradeAnalyzerFF (300), r/FantasyFootballers (300)
 
 ---
 
@@ -12,17 +12,18 @@ Ranked by frequency across all posts and comments:
 
 | Rank | Pain Point | Mentions | Razzle Solution |
 |------|-----------|----------|-----------------|
-| 1 | Injury Concern | 170 | Dr. Dolphin (Medical) + Injury panel + Durability ratings |
-| 2 | Aging Decline | 122 | Atlas (Historian) + Aging Curves panel + Career Trajectories |
-| 3 | Prospect Research | 42 | Hawkeye (Scout) + College data + Draft Class panel |
-| 4 | Rookie Draft | 39 | Hawkeye + Atlas + Big Board + Prospect panels |
-| 5 | Data Analysis | 27 | The entire Lab — target share, snap %, usage, efficiency, everything |
-| 6 | Rebuild Contend | 20 | Bureau Self-Scout + Monte Carlo odds + Razzle briefing |
-| 7 | Tool Complaints | 5 | The Lab itself — free, better data, better UX |
-| 8 | League Management | 5 | Bureau of Intelligence — league analysis, not management |
-| 9 | Trade Confusion | 5 | Bones (Diplomat) + Trade Finder + Trade Values panel |
-| 10 | Waiver Wire | 4 | Hawkeye (Scout) + Waiver Wire panel + FAAB strategy |
-| 11 | Value Uncertainty | 4 | Octo (Quant) + Trade Values + floor/ceiling projections |
+| 1 | Injury Concern | 1421 | Dr. Dolphin (Medical) + Injury panel + Durability ratings |
+| 2 | Aging Decline | 908 | Atlas (Historian) + Aging Curves panel + Career Trajectories |
+| 3 | Rookie Draft | 334 | Hawkeye + Atlas + Big Board + Prospect panels |
+| 4 | Prospect Research | 327 | Hawkeye (Scout) + College data + Draft Class panel |
+| 5 | Rebuild Contend | 201 | Bureau Self-Scout + Monte Carlo odds + Razzle briefing |
+| 6 | Data Analysis | 174 | The entire Lab — target share, snap %, usage, efficiency, everything |
+| 7 | Trade Confusion | 144 | Bones (Diplomat) + Trade Finder + Trade Values panel |
+| 8 | League Management | 139 | Bureau of Intelligence — league analysis, not management |
+| 9 | Waiver Wire | 92 | Hawkeye (Scout) + Waiver Wire panel + FAAB strategy |
+| 10 | Value Uncertainty | 66 | Octo (Quant) + Trade Values + floor/ceiling projections |
+| 11 | Tool Complaints | 55 | The Lab itself — free, better data, better UX |
+| 12 | Start Sit | 3 | Razzle verdict + Situation Room briefing |
 
 ### Top Examples per Pain Point
 
@@ -30,6 +31,11 @@ Ranked by frequency across all posts and comments:
 - [Made this fake calculator to mess with my friends when proposing trade offers - no matter what you p](https://www.reddit.com/r/DynastyFF/comments/1mqi21k/made_this_fake_calculator_to_mess_with_my_friends/) (score: 1297, r/DynastyFF)
 - [Made this fake calculator to mess with my friends when proposing trade offers - no matter what you p](https://www.reddit.com/r/DynastyFF/comments/1mqi21k/made_this_fake_calculator_to_mess_with_my_friends/) (score: 1298, r/DynastyFF)
 - [Dolphins Not Listening to Trade Offers for De'Von Achane [Schefter]](https://www.reddit.com/r/DynastyFF/comments/1rxg44i/dolphins_not_listening_to_trade_offers_for_devon/) (score: 64, r/DynastyFF)
+
+**Start Sit:**
+- [And now we transition from 1 million “hows my draft” posts to 1 million “who do I start” posts 👎](https://www.reddit.com/r/SleeperApp/comments/1n7kq6n/and_now_we_transition_from_1_million_hows_my/) (score: 453, r/SleeperApp)
+- [Does anyone check player props when deciding start or sit?](https://www.reddit.com/r/fantasyfootballadvice/comments/1rlza6h/does_anyone_check_player_props_when_deciding/) (score: 11, r/fantasyfootballadvice)
+- [And now we transition from 1 million “hows my draft” posts to 1 million “who do I start” posts 👎](https://www.reddit.com/r/SleeperApp/comments/1n7kq6n/and_now_we_transition_from_1_million_hows_my/) (score: 453, r/SleeperApp)
 
 **Waiver Wire:**
 - [Dynasty Commissioner Help: Trade partner backed out of a confirmed deal citing "injury concerns."](https://www.reddit.com/r/DynastyFF/comments/1rr4wud/dynasty_commissioner_help_trade_partner_backed/) (score: 553, r/DynastyFF)
@@ -44,6 +50,7 @@ Ranked by frequency across all posts and comments:
 **Value Uncertainty:**
 - [Jon Gruden interviewing Dart pre-draft:"I want you to change your playstyle...it's reckless, it's ca](https://www.reddit.com/r/DynastyFF/comments/1oui28a/jon_gruden_interviewing_dart_predrafti_want_you/) (score: 685, r/DynastyFF)
 - [My fantasy superpower is podcasts](https://www.reddit.com/r/DynastyFF/comments/1ryinma/my_fantasy_superpower_is_podcasts/) (score: 76, r/DynastyFF)
+- [Jon Gruden interviewing Dart pre-draft:"I want you to change your playstyle...it's reckless, it's ca](https://www.reddit.com/r/DynastyFF/comments/1oui28a/jon_gruden_interviewing_dart_predrafti_want_you/) (score: 684, r/DynastyFF)
 
 **Tool Complaints:**
 - [Dynasty Trade Grades: Volume 7](https://www.reddit.com/r/DynastyFF/comments/1rz58ra/dynasty_trade_grades_volume_7/) (score: 3, r/DynastyFF)
@@ -89,21 +96,21 @@ Ranked by frequency across all posts and comments:
 
 | Flair | Avg Score | Post Count |
 |-------|-----------|------------|
-| Another 49ers Practice Update | 6219 | 1 |
-| Misleading | 5531 | 1 |
-| No Flair | 3137 | 11 |
-| :Sleeper2: APP/Tech Assistance | 1122 | 3 |
-| :Sleeper2: Breaking News | 964 | 4 |
-| :Sleeper2: Discussion | 861 | 32 |
-| :Sleeper2: Fantasy Advice | 847 | 5 |
-| :Sleeper2: NFL/Player News  | 790 | 5 |
-| Speculation | 741 | 1 |
-| :NFL: News | 716 | 34 |
-| League Discussion | 683 | 3 |
-| Player Discussion | 573 | 77 |
-| Help! | 557 | 0 |
-| Satire | 553 | 0 |
-| Tools and Resources | 459 | 8 |
+| Misleading | 5535 | 0 |
+| Reddit Consensus Rankings | 3299 | 0 |
+| Another 49ers Practice Update | 3163 | 0 |
+| Breaking News | 2568 | 0 |
+| Injury Report | 2381 | 37 |
+| Travis Hunter Content | 2304 | 0 |
+| Hail to the JCM Hype Train | 2002 | 0 |
+| Training Camp News and Vibes | 1733 | 0 |
+| :NFL: NFL Question  | 1122 | 0 |
+| Speculation | 1093 | 0 |
+| :Sleeper2: Breaking News | 928 | 0 |
+| :NFL: League Issue  | 893 | 0 |
+| :NFL: NFL Meme | 720 | 0 |
+| :Sleeper2: APP/Tech Assistance | 711 | 0 |
+| For Love of the Game! | 679 | 70 |
 
 ### Top 20 Posts by Score
 
@@ -112,26 +119,36 @@ Ranked by frequency across all posts and comments:
 1) Calvin Johnson — 1,964 (in 2012)
 
 2) Cooper Kupp — 1,947 (in 2021)
+** — 7292 upvotes, 325 comments (r/fantasyfootball)
+2. **Most receiving yards in a season in NFL history:
+
+1) Calvin Johnson — 1,964 (in 2012)
+
+2) Cooper Kupp — 1,947 (in 2021)
+** — 7290 upvotes, 325 comments (r/fantasyfootball)
+3. **Most receiving yards in a season in NFL history:
+
+1) Calvin Johnson — 1,964 (in 2012)
+
+2) Cooper Kupp — 1,947 (in 2021)
 ** — 7289 upvotes, 325 comments (r/fantasyfootball)
-2. **AJ Brown to fantasy owners: "if you have me, get rid of me"** — 6556 upvotes, 726 comments (r/fantasyfootball)
-3. **Christian McCaffrey just surfaced on 49ers practice report as limited by calf issue** — 6219 upvotes, 1595 comments (r/fantasyfootball)
-4. **Last year, Aaron Rodgers said that he plans to “call aliens” using meditation circles and green lasers. This morning on ** — 5589 upvotes, 330 comments (r/fantasyfootball)
-5. **Pollard to the Pats is a done deal** — 5531 upvotes, 1209 comments (r/fantasyfootball)
-6. **Rome Odunze in a BARNBURNER 47-42 win against the Bengals: 0 receptions on 3 targets and 0 total yards.** — 5031 upvotes, 596 comments (r/fantasyfootball)
-7. **RIP my best friend** — 4963 upvotes, 237 comments (r/fantasyfootball)
-8. **Ja'Marr Chase had a career-high THREE tackles to go along with his 2-TD, 110-yard game** — 4734 upvotes, 164 comments (r/fantasyfootball)
-9. **Ja’Marr Chase broke his own Bengals franchise record for catches in a game. Chase - 16 catches, 161 yards, TD on 23 targ** — 4532 upvotes, 586 comments (r/fantasyfootball)
-10. **BREAKING: Maxx Crosby has left the building after the Raiders informed him they want to shut him down the last two games** — 4358 upvotes, 675 comments (r/fantasyfootball)
-11. **Wow: An NFL assistant coach on Shedeur Sanders, via @TomPelissero “The worst formal interview I’ve ever been in in my li** — 2248 upvotes, 286 comments (r/DynastyFF)
-12. **Wow: An NFL assistant coach on Shedeur Sanders, via @TomPelissero “The worst formal interview I’ve ever been in in my li** — 2246 upvotes, 286 comments (r/DynastyFF)
-13. **Huge trade just went down in our league** — 1714 upvotes, 53 comments (r/SleeperApp)
-14. **Huge trade just went down in our league** — 1713 upvotes, 53 comments (r/SleeperApp)
-15. **What a difference an hour makes** — 1668 upvotes, 112 comments (r/DynastyFF)
-16. **What a difference an hour makes** — 1666 upvotes, 112 comments (r/DynastyFF)
-17. **Why is skattebos portrait like this whilst everyone else is the same? lol** — 1541 upvotes, 82 comments (r/SleeperApp)
-18. **Why is skattebos portrait like this whilst everyone else is the same? lol** — 1537 upvotes, 82 comments (r/SleeperApp)
-19. **Sleeper - please don’t turn IR players to questionable unless they have actually practiced** — 1407 upvotes, 167 comments (r/SleeperApp)
-20. **Sleeper - please don’t turn IR players to questionable unless they have actually practiced** — 1404 upvotes, 167 comments (r/SleeperApp)
+4. **AJ Brown to fantasy owners: "if you have me, get rid of me"** — 6558 upvotes, 726 comments (r/fantasyfootball)
+5. **AJ Brown to fantasy owners: "if you have me, get rid of me"** — 6556 upvotes, 726 comments (r/fantasyfootball)
+6. **AJ Brown to fantasy owners: "if you have me, get rid of me"** — 6556 upvotes, 726 comments (r/fantasyfootball)
+7. **Christian McCaffrey just surfaced on 49ers practice report as limited by calf issue** — 6219 upvotes, 1595 comments (r/fantasyfootball)
+8. **Christian McCaffrey just surfaced on 49ers practice report as limited by calf issue** — 6214 upvotes, 1595 comments (r/fantasyfootball)
+9. **Christian McCaffrey just surfaced on 49ers practice report as limited by calf issue** — 6211 upvotes, 1595 comments (r/fantasyfootball)
+10. **Last Week My Friend Passed Away… and Our Fantasy Match Ended in a Perfect Tie** — 5749 upvotes, 154 comments (r/FantasyFootballers)
+11. **Last Week My Friend Passed Away… and Our Fantasy Match Ended in a Perfect Tie** — 5739 upvotes, 154 comments (r/FantasyFootballers)
+12. **Last year, Aaron Rodgers said that he plans to “call aliens” using meditation circles and green lasers. This morning on ** — 5593 upvotes, 330 comments (r/fantasyfootball)
+13. **Last year, Aaron Rodgers said that he plans to “call aliens” using meditation circles and green lasers. This morning on ** — 5589 upvotes, 330 comments (r/fantasyfootball)
+14. **Last year, Aaron Rodgers said that he plans to “call aliens” using meditation circles and green lasers. This morning on ** — 5589 upvotes, 330 comments (r/fantasyfootball)
+15. **Pollard to the Pats is a done deal** — 5538 upvotes, 1209 comments (r/fantasyfootball)
+16. **Pollard to the Pats is a done deal** — 5537 upvotes, 1209 comments (r/fantasyfootball)
+17. **Pollard to the Pats is a done deal** — 5531 upvotes, 1209 comments (r/fantasyfootball)
+18. **Rome Odunze in a BARNBURNER 47-42 win against the Bengals: 0 receptions on 3 targets and 0 total yards.** — 5031 upvotes, 596 comments (r/fantasyfootball)
+19. **Rome Odunze in a BARNBURNER 47-42 win against the Bengals: 0 receptions on 3 targets and 0 total yards.** — 5031 upvotes, 596 comments (r/fantasyfootball)
+20. **Rome Odunze in a BARNBURNER 47-42 win against the Bengals: 0 receptions on 3 targets and 0 total yards.** — 5029 upvotes, 596 comments (r/fantasyfootball)
 
 ---
 
@@ -141,63 +158,76 @@ Ranked by frequency across all posts and comments:
 
 | Player | Mentions |
 |--------|----------|
-| Malik Willis | 15 |
-| Kyler Murray | 12 |
-| Trade Addicts | 12 |
-| Isaiah Likely | 11 |
-| Bhayshul Tuten | 9 |
-| Colston Loveland | 9 |
-| Jordyn Tyson | 8 |
-| Makai Lemon | 8 |
-| Von Achane | 8 |
-| Jaylen Waddle | 8 |
-| Drake London | 8 |
-| Cam Ward | 8 |
-| Josh Allen | 7 |
-| Kenneth Walker | 7 |
-| Trevor Lawrence | 7 |
-| Chris Bell | 6 |
-| Elijah Sarratt | 6 |
-| Follow Fantasy | 6 |
-| Puka Nacua | 6 |
-| Bijan Robinson | 6 |
+| Closest Matchup | 124 |
+| Biggest Blowout | 124 |
+| Biggest Upset | 124 |
+| Lowest Scorer | 124 |
+| Most Expensive | 124 |
+| Waiver Add | 124 |
+| Highest Scorer | 123 |
+| Points Leader | 120 |
+| Malik Willis | 110 |
+| Josh Allen | 100 |
+| Fantasy Football | 90 |
+| North Cackalacky | 83 |
+| Cardiac Cats | 83 |
+| Kyler Murray | 82 |
+| View Poll | 81 |
+| Ashton Spectres | 81 |
+| Scranton Paper | 78 |
+| The Pit | 73 |
+| Kenneth Walker | 71 |
+| The The | 69 |
 
 ### Fantasy Term Frequency
 
 | Term | Mentions |
 |------|----------|
-| dynasty | 224 |
-| ppr | 73 |
-| sf | 44 |
-| sleeper | 38 |
-| tep | 33 |
-| superflex | 32 |
-| data | 22 |
-| playoff | 16 |
-| bust | 15 |
-| rebuild | 15 |
-| championship | 12 |
-| redraft | 10 |
-| startup | 8 |
-| stats | 7 |
-| breakout | 6 |
-| league mate | 5 |
-| keeper | 4 |
-| half ppr | 4 |
-| metrics | 4 |
-| waiver wire | 3 |
-| contender | 3 |
-| target share | 2 |
-| decline | 2 |
-| group chat | 2 |
-| standard | 1 |
+| dynasty | 1423 |
+| ppr | 809 |
+| playoff | 430 |
+| sf | 398 |
+| tep | 295 |
+| superflex | 261 |
+| sleeper | 192 |
+| championship | 161 |
+| data | 159 |
+| redraft | 150 |
+| rebuild | 139 |
+| keeper | 96 |
+| startup | 69 |
+| bust | 67 |
+| stats | 64 |
+| faab | 58 |
+| breakout | 56 |
+| contender | 51 |
+| half ppr | 50 |
+| metrics | 46 |
+| league mate | 44 |
+| trade value | 36 |
+| standard | 33 |
+| te premium | 31 |
+| trade calculator | 29 |
 
 ---
 
 ## Tool Sentiment — What People Say About Competitors
 
 
-### KeepTradeCut (4 mentions)
+### KeepTradeCut (16 mentions)
+**Complaints:**
+- "Alec Pierce - What am I missing? **Alec Pierce**
+
+* WR1 Dealt in FA (Pittman, 111 Vacated Targets)
+* 25 y/o
+* No competition added in FA
+* No first-ro..."
+- "The Dynasty Trade Grades: Volume 4 It’s a new week, which means I’m back grading dynasty fantasy football trades using KeepTradeCut.
+
+If you’re new to..."
+- "The Dynasty Trade Grades: Volume 3 I’m back again this week for Volume 3 of digging through trades I found on KeepTradeCut.
+
+These trades are JUICY, s..."
 **Praise:**
 - "Dynasty Trade Grades: Volume 7 Another week has passed, and with free agency settling in, I took a look at more trades involving some big names that m..."
 - "Chuba Hubbard is a real time example of how challenging RB value can be in dynasty Before I write anything, I have no shares of Hubbard. 
@@ -205,21 +235,50 @@ Ranked by frequency across all posts and comments:
 Chuba Hubba..."
 - "Dynasty Trade Grades: Volume 7 Another week has passed, and with free agency settling in, I took a look at more trades involving some big names that m..."
 
-### FantasyPros (2 mentions)
+### FantasyPros (11 mentions)
 **Complaints:**
 - "Yeah, and they got rid of the fantasy pros and other team analysis apps that were in the side of your profile. It sucks because I loved checking out t..."
 **Praise:**
 - "Jon Gruden interviewing Dart pre-draft:"I want you to change your playstyle...it's reckless, it's careless, it's dangerous...You're going to be in tha..."
+- "Jon Gruden interviewing Dart pre-draft:"I want you to change your playstyle...it's reckless, it's careless, it's dangerous...You're going to be in tha..."
+- "Christian McCaffrey ends the 2025 Fantasy Football season as the overall RB1 in Half PPR/Full PPR and as the overall RB2 in Standard Those who risked ..."
 
-### Yahoo (3 mentions)
+### ESPN (1 mentions)
+**Praise:**
+- "Rate our in-person Draft! 10-team 2QB/2Flex/IDP PPR. This is our 5th year in this league and the stakes have never been higher. We bought one of those..."
+
+### Yahoo (12 mentions)
 **Complaints:**
+- "My fantasy superpower is podcasts After years of wandering though so much bad advice on twitter and reddit, I realized how much expert analysis podcas..."
+- "My fantasy superpower is podcasts After years of wandering though so much bad advice on twitter and reddit, I realized how much expert analysis podcas..."
 - "My fantasy superpower is podcasts After years of wandering though so much bad advice on twitter and reddit, I realized how much expert analysis podcas..."
 **Praise:**
 - "Create Your League's Own Pro-Football-Reference In Minutes! Site (no login required): [https://www.leaguehistory.app](https://www.leaguehistory.app)
 
 ..."
+- "Create Your League's Own Pro-Football-Reference In Minutes! Site (no login required): [https://www.leaguehistory.app](https://www.leaguehistory.app)
 
-### Dynasty Nerds (5 mentions)
+..."
+- "This might be the most disrespectful thing anyone has done to me. I sent a trade offer almost two weeks ago to a (maybe former) friend in my yahoo lea..."
+
+### Sleeper (6 mentions)
+**Praise:**
+- "need 2 sickos for dynasty Sflex TEP PPC sleeper league honorable degens only. if you do your own scouting, player rankings/equity analysis this is the..."
+- "need 2 sickos for dynasty Sflex TEP PPC sleeper league honorable degens only. if you do your own scouting, player rankings/equity analysis this is the..."
+
+### Dynasty Nerds (24 mentions)
+**Complaints:**
+- "Which RBs Will Dominate the Fantasy Playoffs | Advanced Matchup Stats Reveal All We’re one week closer to the fantasy playoffs, and trade deadlines ar..."
+**Praise:**
+- "Who are the most accurate rookie evaluators in the fantasy industry? Or is there even anyone that’s consistently above the others? Personally I watch ..."
+- "Dynasty Fallout From 2026 NFL Free Agency Free Agency has begun and things are off to a wild start, as they usually are! In this article we are going ..."
+- "Bryce Lance Rookie Profile (2026) — Dynasty Fantasy The YAC Receiver? Full **2026 Rookie Profile** on wide receiver **Bryce Lance** from North Dakota ..."
+
+### PlayerProfiler (2 mentions)
+**Complaints:**
+- "Dynasty Stock Market - 5 Players Being Traded - Ken Walker Hype Smoke Or Fire? The Dynasty Stock Market is back. We discuss 5 players being traded hea..."
+**Praise:**
+- "2-Round SF Rookie Draft | Mock Using Dane Brugler’s Latest We recently did a 2 round rookie mock draft over on the new PlayerProfiler Dynasty YouTube ..."
 
 ---
 

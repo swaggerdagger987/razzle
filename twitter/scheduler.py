@@ -2,12 +2,12 @@
 """
 Razzle Twitter Scheduler
 
-Posts ONE tweet every 2 hours from queue/approved/.
-Takes the oldest ready draft, posts it, waits 2 hours, repeats.
+Posts ONE tweet every hour from queue/approved/.
+Takes the oldest ready draft, posts it, waits 1 hour, repeats.
 
 Usage:
     python scheduler.py
-    python scheduler.py --interval 7200   # custom interval in seconds (default 2h)
+    python scheduler.py --interval 3600   # custom interval in seconds (default 1h)
 
 Stop with Ctrl+C.
 """
@@ -24,7 +24,7 @@ sys.path.insert(0, str(SCRIPT_DIR))
 
 from post import get_ready_drafts, parse_draft, post_tweet, get_client, log_to_results, move_to_posted, QUEUE_DIR, SCRIPT_DIR
 
-DEFAULT_INTERVAL = 7200  # 2 hours in seconds
+DEFAULT_INTERVAL = 3600  # 1 hour in seconds
 LOW_QUEUE_THRESHOLD = 10  # warn when fewer than this many drafts remain
 
 
@@ -128,6 +128,21 @@ def run_scheduler(interval: int):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Razzle Twitter Scheduler")
     parser.add_argument("--interval", type=int, default=DEFAULT_INTERVAL,
-                        help="Seconds between posts (default: 7200 = 2 hours)")
+                        help="Seconds between posts (default: 3600 = 1 hour)")
+    parser.add_argument("--once", action="store_true",
+                        help="Post one tweet and exit (no loop)")
     args = parser.parse_args()
-    run_scheduler(args.interval)
+
+    if args.once:
+        log("Posting one tweet (--once mode)...")
+        pending = count_pending_drafts()
+        if pending > 0:
+            posted = post_one()
+            if posted:
+                log(f"Posted. {count_pending_drafts()} remaining.")
+            else:
+                log("Nothing posted.")
+        else:
+            log("Queue empty.")
+    else:
+        run_scheduler(args.interval)

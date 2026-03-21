@@ -157,7 +157,7 @@ if (-not $ScheduleOnly) {
     }
 }
 
-# --- STEP 6: Scheduler ---
+# --- STEP 6: Start Scheduler (background, automatic) ---
 $approvedCount = (Get-ChildItem "$razzleDir\twitter\queue\approved\*.md" -ErrorAction SilentlyContinue).Count
 
 if ($approvedCount -eq 0) {
@@ -169,14 +169,36 @@ if ($approvedCount -eq 0) {
 
 Write-Host ""
 Write-Host "======================================" -ForegroundColor Cyan
-Write-Host "  [Step 6] SCHEDULER" -ForegroundColor Cyan
+Write-Host "  [Step 6] SCHEDULER - STARTING" -ForegroundColor Cyan
 Write-Host "======================================" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "  Approved tweets in queue: $approvedCount" -ForegroundColor Green
 Write-Host "  Every tweet has a Lab screenshot attached" -ForegroundColor Green
-Write-Host "  Posting 1 tweet every 2 hours" -ForegroundColor Green
-Write-Host ""
-Write-Host "  Press Ctrl+C to stop the scheduler." -ForegroundColor Yellow
+Write-Host "  Posting 1 tweet every hour" -ForegroundColor Green
 Write-Host ""
 
-python twitter/scheduler.py
+# Post the first tweet immediately
+Write-Host "  Posting first tweet now..." -ForegroundColor Yellow
+python twitter/scheduler.py --once
+
+# Start the scheduler as a background job that survives this script
+Write-Host ""
+Write-Host "  Starting background scheduler (1 tweet/hour)..." -ForegroundColor Yellow
+$schedulerJob = Start-Process -FilePath "python" -ArgumentList "twitter/scheduler.py" -WorkingDirectory $razzleDir -WindowStyle Hidden -PassThru
+Write-Host "  Scheduler running in background (PID: $($schedulerJob.Id))" -ForegroundColor Green
+Write-Host "  To stop: Stop-Process -Id $($schedulerJob.Id)" -ForegroundColor Gray
+Write-Host ""
+
+# Save PID so we can check/kill later
+$schedulerJob.Id | Out-File "$razzleDir\twitter\.scheduler-pid" -Force
+
+Write-Host "======================================" -ForegroundColor Cyan
+Write-Host "  CONTENT LOOP COMPLETE" -ForegroundColor Cyan
+Write-Host "======================================" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "  Scheduler is running. Tweets will post every hour." -ForegroundColor Green
+Write-Host "  $approvedCount tweets in queue = ~$approvedCount hours of content." -ForegroundColor Green
+Write-Host ""
+Write-Host "  To check status:  Get-Process -Id (Get-Content $razzleDir\twitter\.scheduler-pid)" -ForegroundColor Gray
+Write-Host "  To stop:          Stop-Process -Id (Get-Content $razzleDir\twitter\.scheduler-pid)" -ForegroundColor Gray
+Write-Host "  To re-run loop:   .\run-content-loop.ps1 -SkipScrape" -ForegroundColor Gray
