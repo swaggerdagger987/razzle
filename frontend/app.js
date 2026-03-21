@@ -528,7 +528,9 @@ async function apiFetch(path, options = {}) {
 
 function formatStat(val, decimals = 1) {
   if (val === null || val === undefined) return "—";
-  return Number(val).toFixed(decimals);
+  var n = Number(val);
+  if (isNaN(n)) return "—";
+  return n.toFixed(decimals);
 }
 
 function posClass(pos) {
