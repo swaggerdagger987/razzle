@@ -526,7 +526,7 @@
         fetch('/api/players/quick-search?q=' + encodeURIComponent(q) + '&limit=6')
           .then(function(r) { if (!r.ok) throw new Error('fail'); return r.json(); })
           .then(function(data) {
-            var list = data.players || [];
+            var list = Array.isArray(data) ? data : (data.players || []);
             if (list.length === 0) { dd.style.display = 'none'; return; }
             var html = '';
             for (var i = 0; i < list.length; i++) {
@@ -849,7 +849,7 @@
         ctx.font = 'bold 11px "Space Mono", monospace';
         ctx.textAlign = 'center';
         var yOff = pi === 0 ? -10 : (pi === 1 ? 16 : -18);
-        ctx.fillText(sorted[di].ppg.toFixed(1), dx, dy + yOff);
+        ctx.fillText((sorted[di].ppg || 0).toFixed(1), dx, dy + yOff);
       }
     }
 

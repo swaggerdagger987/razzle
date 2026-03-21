@@ -848,7 +848,7 @@ def _fetch_prospect_scores_uncached(position="", draft_year=0):
             wt = p.get("weight")
             if wt and pos in size_benchmarks:
                 all_wts = size_benchmarks[pos]["values"]
-                size_pct = sum(1 for w in all_wts if w < wt) / len(all_wts) * 100
+                size_pct = sum(1 for w in all_wts if w < wt) / max(len(all_wts), 1) * 100
                 size_score = round(min(100, size_pct), 1)
             else:
                 size_score = 50  # default median
@@ -912,8 +912,8 @@ def _fetch_draft_class_analytics_uncached(position=""):
             })
             continue
 
-        rps_values = [p["rps"] for p in prospects]
-        avg_rps = round(sum(rps_values) / len(rps_values), 1)
+        rps_values = [p["rps"] for p in prospects if p.get("rps") is not None]
+        avg_rps = round(sum(rps_values) / max(len(rps_values), 1), 1)
 
         # Tier distribution
         tiers = {"elite": 0, "premium": 0, "solid": 0, "flier": 0}

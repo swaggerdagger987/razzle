@@ -5210,16 +5210,16 @@
     }
 
     function renderTDR(data, body) {
-      var buyLow = data.buy_low || [];
-      var sellHigh = data.sell_high || [];
-      var rates = data.position_rates || {};
+      var buyLow = data.positive_regression || [];
+      var sellHigh = data.negative_regression || [];
+      var rates = data.pos_avg_td_rates || {};
       if (!buyLow.length && !sellHigh.length) {
         body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
         return;
       }
 
       // find max diff for bar scaling
-      var allDiffs = buyLow.concat(sellHigh).map(function(p) { return Math.abs(p.diff || 0); });
+      var allDiffs = buyLow.concat(sellHigh).map(function(p) { return Math.abs(p.td_diff || 0); });
       var maxDiff = Math.max.apply(null, allDiffs) || 1;
 
       var html = '';
@@ -5256,7 +5256,7 @@
       html += '</tr></thead><tbody>';
       players.forEach(function(p, i) {
         var posColor = POS_COLORS[p.position] || '#8a7565';
-        var diff = p.diff || 0;
+        var diff = p.td_diff || 0;
         var diffClass = diff >= 0 ? 'tdr-diff-pos' : 'tdr-diff-neg';
         var sign = diff >= 0 ? '+' : '';
         var barPct = Math.min(100, (Math.abs(diff) / maxDiff) * 100);

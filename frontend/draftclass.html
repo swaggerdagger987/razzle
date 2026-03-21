@@ -638,7 +638,7 @@
       ctx.fillStyle = t.ink;
       ctx.font = 'bold 12px "Space Mono", monospace';
       ctx.textAlign = 'center';
-      ctx.fillText(r.avg_ppg.toFixed(1), bx + barW / 2, by - 6);
+      ctx.fillText((r.avg_ppg || 0).toFixed(1), bx + barW / 2, by - 6);
 
       // X label
       ctx.fillStyle = t.inkMedium;
