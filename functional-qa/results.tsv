@@ -2878,3 +2878,58 @@ smoke-local	OK	-	-	-	pass	smoke S69: 11/11 passed (health, players, pos filter Q
 54	OK	frontend	-	watermark	pass	re-audit S67: Ship Loop watermark font fix verified. 0 remaining sans-serif watermarks. 4 fixed files now use bold 28px Space Mono. Pre-existing P2: Caveat vs Space Mono inconsistency across pages	95	2026-03-21T11:16
 62	P2	frontend/lab-panels.js	6894	renderAwardCard	open	FUNC-067: Awards runner-up PPG falsy-zero. String(r.ppg||'') shows empty for PPG=0. Winner (line 6858) correctly uses String(w.ppg). Missed in Ship Loop sweep	90	2026-03-21T11:20
 -	OK	frontend	-	falsy-zero-scan	pass	S67 codebase scan: all || 0 patterns safe (0||0=0). Only bug: FUNC-067. All || '-' patterns fixed or for string fields only	100	2026-03-21T11:25
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke-local	OK	-	-	-	pass	smoke S70: 11/11 passed (health, players, pos filter QB/WR, sort, season switch, week filter, screener, no NaN, no negatives, filter options)	100	2026-03-21T11:35
+62	OK	frontend/lab-panels.js	6895	renderAwardCard	pass	re-audit S70: FUNC-067 FIXED. Runner PPG now uses r.ppg != null ? r.ppg : '' (correct falsy-zero handling). Report card sort FIXED: col: 'gpa_pct'. award.winner null guard added (line 6840). 10 awards, 0 null winners, 0 JS errors.	100	2026-03-21T11:40
+63	P2	frontend/league-intel.html	2956	setTimeout_leak	open	re-audit S70: FUNC-068 STILL UNFIXED. Ship Loop fixed crawlTimer/txnTimer (different timers), but 3 FUNC-068 locations (_hrAc:2956, _prAc:4705, _wvAc:4911) remain. No stored timer ID, no clearTimeout. Lines unchanged from S69.	95	2026-03-21T11:40
+35	OK	backend/live_data/dashboards.py	988	opportunity_share	pass	re-audit S70: QB PPO fix VERIFIED. dashboards.py:988 QBs use attempts+carries. Allen total_opps=572 (460att+112car). Maye=595. dynasty.py:598 and college.py:559 also fixed. All 3 files verified.	100	2026-03-21T11:40
+22	OK	frontend/lab.js	9534	aging_curves	pass	re-audit S70: Ship Loop dark mode + null guards verified. maxPPG filter+fallback (line 9534), data.players || [] (line 9535). 6 canvas dark mode ternaries verified (spider:7574/7585, heatmap:9967/9996/10021, pick:11282). 0 JS errors.	100	2026-03-21T11:40
+-	OK	frontend/lab.js	5624	exportImage	pass	S70: Ship Loop crash fix verified. null guard on getElementById('screenerTable') (line 5624-5625). Correct.	100	2026-03-21T11:40
+-	OK	frontend/lab.js	1040	_restoreState	pass	S70: Ship Loop crash fix verified. JSON.parse wrapped in try-catch (line 1040). Corrupted history stack no longer crashes undo/redo.	100	2026-03-21T11:40
+-	OK	frontend/lab.js	11274	pick_chart	pass	S70: Ship Loop crash fix verified. allPicks.length < 2 guard (line 11274) + maxVal || 1 fallback (line 11279). Prevents division-by-zero and NaN coordinates.	100	2026-03-21T11:40
+-	OK	frontend/lab.html	3154	start_here_label	pass	S70: Ship Loop design fix verified. START HERE label uses font-mono 11px bold uppercase (was font-display 13px). Correct.	100	2026-03-21T11:40
+-	OK	frontend/league-intel.html	7361	champ_probability	pass	S70: Ship Loop design fix verified. Championship Probability label at 16px font-display (was 14px). Meets minimum threshold.	100	2026-03-21T11:40
+64	OK	frontend/agents.html	-	situation_room	pass	re-audit S70: 0 JS errors, 63 links, 63 buttons. Canvas isConnected check present. No regressions from Ship Loop sweep.	100	2026-03-21T11:40
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams

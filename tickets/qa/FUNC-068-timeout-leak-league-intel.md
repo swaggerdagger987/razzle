@@ -61,6 +61,10 @@ var _prTimer = setTimeout(function() { _prAc.abort(); }, 10000);
 
 Low practical impact. Timers fire after 10 seconds, abort an already-completed fetch (harmless), and self-clean. But line 2956 is inside a loop — Pro users with 5 seasons of history create 4 dangling timers per profile view. Inconsistent with the 15+ correct patterns in the same file.
 
+## Re-Audit Notes
+
+**Session 70 (2026-03-21)**: Ship Loop sweep (Mar 21) claims "Timer leaks: FIXED — Added clearTimeout(crawlTimer) and clearTimeout(txnTimer)." However, those are DIFFERENT timers (crawlLeagueHistory and loadActivityFeed). The 3 FUNC-068 locations (_hrAc line 2956, _prAc line 4705, _wvAc line 4911) are STILL UNFIXED. Lines unchanged. Ship Loop fixed adjacent but different timer patterns.
+
 ## Found
 
 Session 69, 2026-03-21. Code audit of Phase C (Bureau) changes.
