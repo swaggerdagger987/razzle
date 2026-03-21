@@ -1125,12 +1125,22 @@ async def llm_chat(request: Request):
     )
     sanitized_messages = [{"role": "system", "content": system_prompt}] + user_messages
 
-    # Sanitize: enforce max_tokens and model (Elite gets the good model)
+    # Sanitize: enforce max_tokens, temperature, and model (Elite gets the good model)
+    try:
+        _temp = float(body.get("temperature", 0.3))
+        _temp = max(0.0, min(_temp, 2.0))
+    except (TypeError, ValueError):
+        _temp = 0.3
+    try:
+        _mt = int(body.get("max_tokens", _LLM_MAX_TOKENS))
+        _mt = max(1, min(_mt, _LLM_MAX_TOKENS))
+    except (TypeError, ValueError):
+        _mt = _LLM_MAX_TOKENS
     llm_body = {
         "model": _LLM_MODEL,
         "messages": sanitized_messages,
-        "temperature": body.get("temperature", 0.3),
-        "max_tokens": min(body.get("max_tokens", _LLM_MAX_TOKENS), _LLM_MAX_TOKENS),
+        "temperature": _temp,
+        "max_tokens": _mt,
     }
 
     # Proxy to LLM provider
@@ -1236,11 +1246,21 @@ async def llm_chat_free(request: Request):
     )
     sanitized_messages = [{"role": "system", "content": system_prompt}] + user_messages
 
+    try:
+        _temp = float(body.get("temperature", 0.3))
+        _temp = max(0.0, min(_temp, 2.0))
+    except (TypeError, ValueError):
+        _temp = 0.3
+    try:
+        _mt = int(body.get("max_tokens", _LLM_FREE_MAX_TOKENS))
+        _mt = max(1, min(_mt, _LLM_FREE_MAX_TOKENS))
+    except (TypeError, ValueError):
+        _mt = _LLM_FREE_MAX_TOKENS
     llm_body = {
         "model": _LLM_FREE_MODEL,
         "messages": sanitized_messages,
-        "temperature": body.get("temperature", 0.3),
-        "max_tokens": min(body.get("max_tokens", _LLM_FREE_MAX_TOKENS), _LLM_FREE_MAX_TOKENS),
+        "temperature": _temp,
+        "max_tokens": _mt,
     }
 
     try:

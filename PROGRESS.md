@@ -2860,3 +2860,28 @@ week_filter failure (10/11) is a stale server process issue, not a code bug. Ver
 
 ### IMPORTANT: Production DB Needs Rebuild
 All data enrichments (PBP, roster demographics, bye weeks, injuries) are local-only. Production razzle.lol still has the old DB. Human must rebuild terminal.db and upload to GitHub release for Render.
+
+---
+
+## Ship Loop Session 29: Full Codebase Sweep (Mar 21)
+
+**Goal**: Deep security and robustness sweep with zero tickets. All ticket directories empty, TICKETS.md remaining items blocked on external infrastructure.
+
+### Sweep Results
+
+| # | Fix | Severity | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | LLM endpoint temperature/max_tokens input sanitization | P2 | server.py:1128-1134, 1239-1243 | Both `/api/llm/chat` and `/api/llm/chat-free` passed user-supplied `temperature` and `max_tokens` without type validation. A non-numeric `max_tokens` (e.g., `"foo"`) would crash `min()` with TypeError before the try/except block. Now: temperature clamped to [0.0, 2.0] with float cast + fallback, max_tokens clamped to [1, cap] with int cast + fallback. |
+
+### Areas Verified Clean
+- **SQL injection**: All query builders use allowlists (safe_sorts, FILTER_COLUMN_MAP, ops dict) + parameterized queries
+- **Division by zero**: All 40+ division sites guarded with `or 1`, `if > 0`, or `HAVING games >= N` clauses
+- **Auth**: All sensitive endpoints use `require_auth` + `require_plan`, briefing retrieval scoped by user_id (no IDOR)
+- **XSS**: `escapeHtml` used consistently, no `eval()` or `new Function()`, agent nudges validate colors with regex and block `javascript:` URLs
+- **CORS**: Production-only origin (`https://razzle.lol`), dev adds localhost
+- **LLM security**: System messages stripped, message count/length capped, server-controlled system prompt
+- **Password security**: bcrypt 12 rounds, common password blocklist, min 8 chars with complexity
+- **Rate limiting**: IP-based on sensitive endpoints, per-user on LLM proxy, waitlist rate limiter
+- **Secrets**: No hardcoded API keys, no debug endpoints, CORS origins environment-gated
+
+### 11/11 smoke tests pass after fix
