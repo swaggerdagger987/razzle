@@ -1168,8 +1168,8 @@ cvs.addEventListener('mousedown', e => {
 
 cvs.addEventListener('mousemove', e => {
   if (!dragging) return;
-  const scaleX = cvs.width / cvs.clientWidth;
-  const scaleY = cvs.height / cvs.clientHeight;
+  const scaleX = cvs.clientWidth ? cvs.width / cvs.clientWidth : 1;
+  const scaleY = cvs.clientHeight ? cvs.height / cvs.clientHeight : 1;
   cam.targetX = dragCamX - (e.clientX - dragStartX) * scaleX;
   cam.targetY = dragCamY - (e.clientY - dragStartY) * scaleY;
 });
@@ -1179,8 +1179,8 @@ cvs.addEventListener('mouseup', e => {
   dragging = false;
   if (!wasDrag && now() - mouseDownTime < 300) {
     const rect = cvs.getBoundingClientRect();
-    const scaleX = cvs.width / rect.width;
-    const scaleY = cvs.height / rect.height;
+    const scaleX = rect.width ? cvs.width / rect.width : 1;
+    const scaleY = rect.height ? cvs.height / rect.height : 1;
     const wx = (e.clientX - rect.left) * scaleX + cam.x;
     const wy = (e.clientY - rect.top) * scaleY + cam.y;
     let closest = null, closestDist = 40;
@@ -1206,8 +1206,8 @@ cvs.addEventListener('touchstart', e => {
 cvs.addEventListener('touchmove', e => {
   if (!dragging) return;
   const t = e.touches[0];
-  const scaleX = cvs.width / cvs.clientWidth;
-  const scaleY = cvs.height / cvs.clientHeight;
+  const scaleX = cvs.clientWidth ? cvs.width / cvs.clientWidth : 1;
+  const scaleY = cvs.clientHeight ? cvs.height / cvs.clientHeight : 1;
   cam.targetX = dragCamX - (t.clientX - dragStartX) * scaleX;
   cam.targetY = dragCamY - (t.clientY - dragStartY) * scaleY;
 }, { passive: true });

@@ -164,7 +164,8 @@ function renderAgentNudge(containerId, nudge) {
     '<a href="' + safeLink + '" style="font-family:var(--font-mono); font-size:11px; color:var(--orange); text-decoration:none; white-space:nowrap;">' + esc(nudge.link_label) + ' &rarr;</a>' +
     '<button style="background:none; border:none; cursor:pointer; font-size:14px; color:var(--ink-light); padding:0 2px;" title="Dismiss" aria-label="Dismiss nudge">&times;</button>';
 
-  el.querySelector("button").addEventListener("click", function() {
+  var btn = el.querySelector("button");
+  if (btn) btn.addEventListener("click", function() {
     _dismissNudge(nudge.id);
     el.style.opacity = "0";
     el.style.transition = "opacity 0.3s";
