@@ -2813,56 +2813,9 @@ smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correc
 smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
 smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
 smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
-smoke-local	OK	-	-	-	pass	Session 66 smoke: 11/11 passed (local)	100	2026-03-21T10:14
-smoke-prod	OK	-	-	-	pass	Session 66 smoke: 11/11 passed (prod)	100	2026-03-21T10:15
-37	OK	frontend/regression.html	138	.reg-section	pass	re-audit: Ship Loop overflow-x:auto fix verified. 0 JS errors, 23 table rows. Prod data: 50+50 regression candidates, Stafford #1 negative (46 vs 29.5 exp)	100	2026-03-21T10:20
-63	OK	frontend/monte-carlo-worker.js	50	simulate	pass	re-audit: Ship Loop null guard (rp && rp.wins) verified. Bureau 0 JS errors, 55 links, 14 buttons	100	2026-03-21T10:25
-10	OK	frontend/app.js	496	escapeJS	pass	re-audit: Ship Loop hex escape hardening (\x27/\x22/\x3c/\x3e/\x26). 42 call sites across 4 files. Lab 0 JS errors, 25 pin/rank cells rendered	100	2026-03-21T10:30
-44	OK	frontend/rosterbuilder.html	637	searchPlayers	pass	re-audit: Ship Loop .catch() hides autocomplete on API error. Pro-gated panel. Code review clean	100	2026-03-21T10:35
-36	P1	backend/live_data/core.py	999	_efficiency_grade	open	FUNC-066: Grade scale inconsistency. core.py 12-tier vs dashboards.py 8-tier. MCF eff=C (report cards) vs eff=D (efficiency rankings). Buy-sell produces A-/C-/D+/D- not in 8-tier	95	2026-03-21T10:40
-36	OK	-	-	-	pass	33/34 API endpoints return 200 on prod (trade-finder 400 expected — requires player_id)	100	2026-03-21T10:45
-19	P2	backend/live_data/analytics.py	-	compute_trade_value	info	Trade value: JJ rank #71 (TV=82.0, PPG=11.8). Algorithm overweights single-season prod. 141 targets suggest regression UP but model doesn't factor opportunity	80	2026-03-21T10:50
-62	P2	backend/live_data/dashboards.py	-	fetch_season_awards	info	Season MVP = Zay Flowers (PPG 14.31) over Nacua (23.44) and MCF (24.51). GPA composite rewards schedule-adjusted efficiency over raw production	75	2026-03-21T10:55
-smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
-smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
-smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
-smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
-smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
-smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
-smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
-smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
-smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
-smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
-smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
-smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
-smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
-smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
-smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
-smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
-smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
-smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
-smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
-smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
-smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
-smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
-smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
-smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
-smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
-smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
-smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
-smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
-smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
-smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
-smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
-smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
-smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
-26	OK	frontend/weeklyleaders.html	535	render	pass	re-audit S67: Ship Loop falsy-zero fix verified. 9 stat fields (pass_yd/td, rush_yd/td, rec, rec_yd/td, tgt, fantasy_points) all use != null check. Code correct. Pro-gated, can't browser-verify	95	2026-03-21T11:00
-19	OK	frontend/tradevalues.html	590	renderCard	pass	re-audit S67: Ship Loop falsy-zero fix verified. games field uses != null. Page renders 100+ cards, 0 JS errors	95	2026-03-21T11:05
-20	OK	frontend/tradefinder.html	809	renderSelected	pass	re-audit S67: Ship Loop falsy-zero fix verified. games field uses != null. Code correct. Pro-gated	95	2026-03-21T11:06
-43	OK	frontend/vorp.html	495	renderTable	pass	re-audit S67: Ship Loop falsy-zero fix verified. pos_rank uses != null. Pro-gated, code correct	95	2026-03-21T11:07
-40	OK	frontend/dualthreat.html	43	CSS	pass	re-audit S67: Ship Loop CSS+export fix verified. hover bg=var(--bg-warm), DTI mid-badge uses clean CSS vars (no fallbacks), export bg uses dataset.theme dark check. Pro-gated	95	2026-03-21T11:08
-45	OK	frontend/lab-panels.js	8132	renderBigBoard	pass	re-audit S67: Ship Loop falsy-zero fix verified. prospect rank uses != null. prospects.html renders 319 cards with #1, #2 ranks. 0 JS errors	100	2026-03-21T11:10
-54	OK	frontend	-	html2canvas	pass	re-audit S67: Ship Loop dark mode export bg fix verified. ALL 60+ html2canvas calls use dataset.theme==='dark'?'#2d1f14':'#ede0cf'. 0 remaining getComputedStyle export patterns	100	2026-03-21T11:15
-54	OK	frontend	-	watermark	pass	re-audit S67: Ship Loop watermark font fix verified. 0 remaining sans-serif watermarks. 4 fixed files now use bold 28px Space Mono. Pre-existing P2: Caveat vs Space Mono inconsistency across pages	95	2026-03-21T11:16
-62	P2	frontend/lab-panels.js	6894	renderAwardCard	open	FUNC-067: Awards runner-up PPG falsy-zero. String(r.ppg||'') shows empty for PPG=0. Winner (line 6858) correctly uses String(w.ppg). Missed in Ship Loop sweep	90	2026-03-21T11:20
--	OK	frontend	-	falsy-zero-scan	pass	S67 codebase scan: all || 0 patterns safe (0||0=0). Only bug: FUNC-067. All || '-' patterns fixed or for string fields only	100	2026-03-21T11:25
+36	OK	backend/live_data/core.py	999	_efficiency_grade	pass	re-audit S68: FUNC-066 FIXED. core.py unified to 8-tier (A+/A/B+/B/C+/C/D/F) matching dashboards.py. Cross-endpoint verified: MCF eff=B+ in efficiency-rankings AND report-cards. College imports from core. 0 invalid grades across 9 endpoints.	100	2026-03-21T11:05
+62	OK	frontend/lab-panels.js	6184	honorSort	pass	re-audit S68: cc58114 FIXED. Report card sort uses gpa_pct (was gpa). API returns honor_roll sorted desc (82→75=True), needs_improvement asc (14→18=True). Orphan mockdraft/proradar refs removed. Timer leaks fixed (5 clearTimeout calls).	100	2026-03-21T11:05
+62	P2	frontend/lab-panels.js	6894	awards_runner_stat	open	re-audit S68: FUNC-067 still unfixed. r.ppg || '' treats 0 as falsy. Ship Loop hasn't consumed ticket yet.	95	2026-03-21T11:05
+smoke-local	OK	-	-	-	pass	smoke S68: 11/11 passed (health, players, pos filter QB/WR, sort, season switch, week filter, screener, no NaN, no negatives, filter options)	100	2026-03-21T10:52
+36	OK	backend/live_data/college.py	11	_efficiency_grade import	pass	re-audit S68: college.py imports _efficiency_grade from core (no duplicate definition). College efficiency grades verified 8-tier (Ward A+, Hoover A+). 0 invalid grades.	100	2026-03-21T11:10
+36	OK	backend/live_data/analytics.py	1022	_efficiency_grade	pass	re-audit S68: buy-sell uses _efficiency_grade from core. Sinnott eff=A+ (100 ppo_pct), Jeanty eff=D (17 ppo_pct). All 8-tier.	100	2026-03-21T11:10
