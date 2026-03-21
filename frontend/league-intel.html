@@ -5779,6 +5779,41 @@ function prefillScenario(text) {
 
 // Store simulation state per league for scenario re-simulation
 var _mcState = {};
+var _mcWorker = null;
+
+function _mcGetWorker() {
+  if (!_mcWorker) {
+    try { _mcWorker = new Worker('monte-carlo-worker.js'); } catch (e) { _mcWorker = null; }
+  }
+  return _mcWorker;
+}
+
+function _mcRunSimulation(rosterPlayers, distributions, rosterIds, playoffSpots, SIMS, excludedPlayers) {
+  return new Promise(function(resolve) {
+    var worker = _mcGetWorker();
+    if (!worker) {
+      // Fallback: run inline if Worker unavailable
+      resolve(_mcSimulate(rosterPlayers, distributions, rosterIds, playoffSpots, SIMS, excludedPlayers));
+      return;
+    }
+    worker.onmessage = function(e) {
+      if (e.data.type === 'result') resolve(e.data);
+    };
+    worker.onerror = function() {
+      // Fallback to inline on error
+      resolve(_mcSimulate(rosterPlayers, distributions, rosterIds, playoffSpots, SIMS, excludedPlayers));
+    };
+    worker.postMessage({
+      type: 'simulate',
+      rosterPlayers: rosterPlayers,
+      distributions: distributions,
+      rosterIds: rosterIds,
+      playoffSpots: playoffSpots,
+      sims: SIMS,
+      excludedPlayers: excludedPlayers
+    });
+  });
+}
 
 function _mcSimulate(rosterPlayers, distributions, rosterIds, playoffSpots, SIMS, excludedPlayers) {
   var playoffCount = {};
@@ -6036,7 +6071,7 @@ function _mcFindPlayerRoster(leagueId, pid) {
   return null;
 }
 
-function _mcResimulate(leagueId) {
+async function _mcResimulate(leagueId) {
   var st = _mcState[leagueId];
   if (!st) return;
 
@@ -6060,7 +6095,7 @@ function _mcResimulate(leagueId) {
     if (idxB >= 0) { modRosters[rB].players.splice(idxB, 1); modRosters[rB].players.push(tr.playerA); }
   }
 
-  var simResult = _mcSimulate(modRosters, st.distributions, rosterIds, st.playoffSpots, st.SIMS, st.excludedPlayers);
+  var simResult = await _mcRunSimulation(modRosters, st.distributions, rosterIds, st.playoffSpots, st.SIMS, st.excludedPlayers);
   var results = _mcBuildResults(rosterIds, modRosters, st.userMap, simResult, st.SIMS);
 
   // Store baseline for comparison
@@ -6213,7 +6248,7 @@ async function runLeagueOdds(leagueId, userId, scoring) {
   var oddsDiv = document.getElementById('odds-' + leagueId);
   if (!oddsDiv) { if (oddsBtn) { oddsBtn.disabled = false; oddsBtn.style.opacity = ''; } return; }
   oddsDiv.style.display = 'block';
-  oddsDiv.innerHTML = '<div style="text-align:center;padding:24px;font-family:var(--font-hand);font-size:18px;color:var(--ink-light);">running the numbers... (Monte Carlo simulation)</div>';
+  oddsDiv.innerHTML = '<div style="text-align:center;padding:24px;font-family:var(--font-hand);font-size:18px;color:var(--ink-light);">pulling your league data...</div>';
 
   try {
     // 1. Fetch rosters and standings from Sleeper
@@ -6257,12 +6292,13 @@ async function runLeagueOdds(leagueId, userId, scoring) {
     var projData = await projResp.json();
     var distributions = projData.distributions || {};
 
-    // 4. Run Monte Carlo simulation
-    var SIMS = 1000;
+    // 4. Run Monte Carlo simulation (10K sims in Web Worker)
+    var SIMS = 10000;
     var playoffSpots = Math.max(4, Math.floor(rosters.length / 2));
     var rosterIds = Object.keys(rosterPlayers);
 
-    var simResult = _mcSimulate(rosterPlayers, distributions, rosterIds, playoffSpots, SIMS, null);
+    oddsDiv.innerHTML = '<div style="text-align:center;padding:24px;font-family:var(--font-hand);font-size:18px;color:var(--ink-light);">octo\'s crunching 10,000 simulations...</div>';
+    var simResult = await _mcRunSimulation(rosterPlayers, distributions, rosterIds, playoffSpots, SIMS, null);
     var results = _mcBuildResults(rosterIds, rosterPlayers, userMap, simResult, SIMS);
 
     // 5. Store state for scenario re-simulation
