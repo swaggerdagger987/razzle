@@ -442,12 +442,12 @@ function showTagPicker(playerId, anchorEl) {
     const isActive = currentTag === key;
     html += `<button class="tag-picker-option${isActive ? " active" : ""}" `
       + `style="--tag-color:${opt.color}; --tag-bg:${opt.bg};" `
-      + `onclick="onTagSelect('${escapeAttr(playerId)}', '${isActive ? "" : key}')">`
+      + `onclick="onTagSelect('${escapeJS(playerId)}', '${isActive ? "" : key}')">`
       + `<span class="tag-picker-dot" style="background:${opt.color};"></span>`
       + `${opt.label}</button>`;
   }
   if (currentTag) {
-    html += `<button class="tag-picker-option tag-picker-clear" onclick="onTagSelect('${escapeAttr(playerId)}', '')">Remove Tag</button>`;
+    html += `<button class="tag-picker-option tag-picker-clear" onclick="onTagSelect('${escapeJS(playerId)}', '')">Remove Tag</button>`;
   }
   picker.innerHTML = html;
 
@@ -565,7 +565,7 @@ function showNoteEditor(playerId, anchorEl) {
     + `<div class="note-editor-footer">`
     + `<span class="note-editor-count" id="noteCharCount">${existing.length}/140</span>`
     + `<div style="display:flex; gap:6px;">`
-    + `<button class="btn-chunky note-editor-clear" onclick="clearPlayerNote('${escapeAttr(playerId)}')" style="font-size:10px; padding:3px 8px; ${existing ? '' : 'display:none;'}">Clear</button>`
+    + `<button class="btn-chunky note-editor-clear" onclick="clearPlayerNote('${escapeJS(playerId)}')" style="font-size:10px; padding:3px 8px; ${existing ? '' : 'display:none;'}">Clear</button>`
     + `<button class="btn-primary note-editor-save" onclick="saveNoteFromEditor()" style="font-size:10px; padding:3px 10px;">Save</button>`
     + `</div></div>`;
 
@@ -1496,7 +1496,7 @@ function buildGroupHeaderRow(cols) {
   let first = true;
   for (const g of groups) {
     const sepCls = first ? "" : " group-sep";
-    html += `<th colspan="${g.span}" class="${sepCls}" style="cursor:pointer;" onclick="toggleColumnGroup('${escapeAttr(g.name)}')" title="Click to toggle all ${escapeHtml(g.name)} columns">${escapeHtml(g.name)}</th>`;
+    html += `<th colspan="${g.span}" class="${sepCls}" style="cursor:pointer;" onclick="toggleColumnGroup('${escapeJS(g.name)}')" title="Click to toggle all ${escapeHtml(g.name)} columns">${escapeHtml(g.name)}</th>`;
     first = false;
   }
   html += '<th style="width:32px;"></th>'; // spacer for "+" column
@@ -1728,20 +1728,20 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
   let html = '<tr tabindex="0" data-player-id="' + escapeAttr(playKey) + '" style="height:' + getVScrollRowHeight() + 'px; border-left:3px solid ' + posStripeColor + ';' + zebraBg + '">';
   html += `<td class="col-star" data-pid="${escapeAttr(playKey)}" data-pname="${escapeAttr(player.full_name || player.player_name || '')}" data-pos="${escapeAttr(pos)}" data-team="${escapeAttr(player.team || player.school || '')}" data-universe="${escapeAttr(state.universe)}" style="text-align:center; padding:7px 4px; cursor:pointer; font-size:16px;" title="${starred ? 'Remove from watchlist' : 'Add to watchlist'}">${starred ? '<span style="color:var(--orange);">&#9733;</span>' : '<span style="color:var(--ink-faint);">&#9734;</span>'}</td>`;
   html += `<td class="col-select" style="text-align:center; padding:7px 6px;">
-    <input type="checkbox" ${selected ? "checked" : ""} onchange="togglePlayerSelect('${escapeAttr(player.player_id || player.player_name)}', this.checked)"
+    <input type="checkbox" ${selected ? "checked" : ""} onchange="togglePlayerSelect('${escapeJS(player.player_id || player.player_name)}', this.checked)"
       style="accent-color:${state.universe === 'college' ? 'var(--pos-qb)' : 'var(--orange)'}; width:15px; height:15px; cursor:pointer;">
   </td>`;
 
   // Pin icon (NFL only)
   if (state.universe === "nfl") {
     const pinned = isPlayerPinned(playKey);
-    html += `<td class="pin-cell col-pin" style="text-align:center; padding:7px 2px; cursor:pointer;" onclick="event.stopPropagation(); togglePinPlayer('${escapeAttr(playKey)}')" title="${pinned ? 'Unpin player' : 'Pin to top'}"><span class="pin-icon ${pinned ? 'pin-active' : 'pin-faint'}"></span></td>`;
+    html += `<td class="pin-cell col-pin" style="text-align:center; padding:7px 2px; cursor:pointer;" onclick="event.stopPropagation(); togglePinPlayer('${escapeJS(playKey)}')" title="${pinned ? 'Unpin player' : 'Pin to top'}"><span class="pin-icon ${pinned ? 'pin-active' : 'pin-faint'}"></span></td>`;
   }
 
   // Rank column (with expand arrow for NFL — skip on pinned rows where rowIdx is null)
   const rank = (rowIdx != null) ? (state.offset + rowIdx + 1) : "";
   if (state.universe === "nfl" && player.player_id && rowIdx != null) {
-    html += `<td class="col-rank" style="cursor:pointer;" onclick="event.stopPropagation(); toggleRowExpand('${escapeAttr(player.player_id)}', this)" title="Click to expand weekly stats"><span class="row-expand-arrow" style="font-size:8px; margin-right:2px;">&#9654;</span>${rank}</td>`;
+    html += `<td class="col-rank" style="cursor:pointer;" onclick="event.stopPropagation(); toggleRowExpand('${escapeJS(player.player_id)}', this)" title="Click to expand weekly stats"><span class="row-expand-arrow" style="font-size:8px; margin-right:2px;">&#9654;</span>${rank}</td>`;
   } else {
     html += `<td class="col-rank">${rank}</td>`;
   }
@@ -1801,9 +1801,9 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
       const pid = player.player_id || player.player_name || "";
       const note = getPlayerNote(pid);
       if (note) {
-        html += `<td class="notes-cell has-note" onclick="event.stopPropagation(); showNoteEditor('${escapeAttr(pid)}', this)" title="${escapeAttr(note)}"><span class="note-text">${escapeHtml(note)}</span></td>`;
+        html += `<td class="notes-cell has-note" onclick="event.stopPropagation(); showNoteEditor('${escapeJS(pid)}', this)" title="${escapeAttr(note)}"><span class="note-text">${escapeHtml(note)}</span></td>`;
       } else {
-        html += `<td class="notes-cell" onclick="event.stopPropagation(); showNoteEditor('${escapeAttr(pid)}', this)" title="Click to add note"><span class="note-pencil">&#9998;</span></td>`;
+        html += `<td class="notes-cell" onclick="event.stopPropagation(); showNoteEditor('${escapeJS(pid)}', this)" title="Click to add note"><span class="note-pencil">&#9998;</span></td>`;
       }
       continue;
     }
@@ -3339,7 +3339,7 @@ function renderTeamChips() {
   const container = document.getElementById("teamChips");
   if (!container) return;
   container.innerHTML = state.teams.map(t =>
-    `<span class="team-chip">${escapeHtml(t)} <span class="remove" onclick="removeTeam('${escapeAttr(t)}')">×</span></span>`
+    `<span class="team-chip">${escapeHtml(t)} <span class="remove" onclick="removeTeam('${escapeJS(t)}')">×</span></span>`
   ).join("");
 }
 
@@ -4471,11 +4471,11 @@ function renderSavedViewsList() {
     const filterCount = (v.filters && v.filters.length) ? ` <span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">${v.filters.length} filter${v.filters.length > 1 ? "s" : ""}</span>` : "";
 
     return `<div style="display:flex; align-items:center; gap:10px; padding:10px 12px; border:2px solid var(--ink); border-radius:8px; margin-bottom:8px; background:var(--bg); cursor:pointer; transition:transform 0.1s, box-shadow 0.1s;" onmouseenter="this.style.transform='translate(-2px,-2px)';this.style.boxShadow='4px 4px 0 var(--ink)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
-      <div style="flex:1; min-width:0;" onclick="loadSavedView('${escapeAttr(v.id)}')">
+      <div style="flex:1; min-width:0;" onclick="loadSavedView('${escapeJS(v.id)}')">
         <div style="font-family:var(--font-mono); font-size:14px; font-weight:600; margin-bottom:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHtml(v.name)}</div>
         <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">${universeBadge(v.universe)}${posBadge(v.position)}${filterCount}<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">${dateStr}</span></div>
       </div>
-      <button onclick="event.stopPropagation(); deleteSavedView('${escapeAttr(v.id)}')" style="background:none; border:2px solid var(--ink-faint); border-radius:6px; padding:4px 8px; cursor:pointer; font-family:var(--font-mono); font-size:11px; color:var(--ink-light);" title="Delete view">✕</button>
+      <button onclick="event.stopPropagation(); deleteSavedView('${escapeJS(v.id)}')" style="background:none; border:2px solid var(--ink-faint); border-radius:6px; padding:4px 8px; cursor:pointer; font-family:var(--font-mono); font-size:11px; color:var(--ink-light);" title="Delete view">✕</button>
     </div>`;
   }).join("");
 }
@@ -6516,8 +6516,8 @@ function renderProfile(data, container) {
   html += `</div>`;
   html += `<div style="margin-left:auto; display:flex; gap:8px; flex-wrap:wrap;">`;
   html += `<a href="/player/${encodeURIComponent(player.player_id)}" class="btn-chunky" style="font-size:11px; padding:6px 14px; text-decoration:none; display:inline-flex; align-items:center;">Full Profile</a>`;
-  html += `<button class="btn-chunky" onclick="loadBoomBust('${escapeAttr(player.player_id)}')" style="font-size:11px; padding:6px 14px; border-color:var(--green);">Boom/Bust</button>`;
-  html += `<button class="btn-chunky" onclick="loadPlayerComps('${escapeAttr(player.player_id)}')" style="font-size:11px; padding:6px 14px; border-color:var(--orange);">Find Comps</button>`;
+  html += `<button class="btn-chunky" onclick="loadBoomBust('${escapeJS(player.player_id)}')" style="font-size:11px; padding:6px 14px; border-color:var(--green);">Boom/Bust</button>`;
+  html += `<button class="btn-chunky" onclick="loadPlayerComps('${escapeJS(player.player_id)}')" style="font-size:11px; padding:6px 14px; border-color:var(--orange);">Find Comps</button>`;
   html += `<button class="btn-primary" onclick="exportProfileImage()" style="font-size:11px; padding:6px 14px;">Export PNG</button>`;
   html += `</div>`;
   html += `</div>`;
@@ -10117,12 +10117,12 @@ function renderWatchlistPanel() {
       html += '<span class="pos-badge pos-' + p.position.toLowerCase() + '" style="font-size:10px; padding:1px 6px;">' + escapeHtml(p.position) + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:13px; flex:1;">' + escapeHtml(p.name) + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + escapeHtml(p.team) + '</span>';
-      html += '<select class="select-chunky" style="font-size:11px; padding:2px 6px; width:90px;" onchange="setWatchlistTier(\'' + escapeAttr(p.player_id) + '\', this.value); renderWatchlistPanel();">';
+      html += '<select class="select-chunky" style="font-size:11px; padding:2px 6px; width:90px;" onchange="setWatchlistTier(\'' + escapeJS(p.player_id) + '\', this.value); renderWatchlistPanel();">';
       for (var t = 0; t <= 5; t++) {
         html += '<option value="' + t + '"' + (p.tier === t ? ' selected' : '') + '>' + tierNames[t] + '</option>';
       }
       html += '</select>';
-      html += '<button class="btn-chunky" style="font-size:10px; padding:2px 6px; color:var(--red);" onclick="removeFromWatchlist(\'' + escapeAttr(p.player_id) + '\'); renderWatchlistPanel(); renderTable();" title="Remove">&#10005;</button>';
+      html += '<button class="btn-chunky" style="font-size:10px; padding:2px 6px; color:var(--red);" onclick="removeFromWatchlist(\'' + escapeJS(p.player_id) + '\'); renderWatchlistPanel(); renderTable();" title="Remove">&#10005;</button>';
       html += '</div>';
     });
     html += '</div>';
@@ -10202,7 +10202,7 @@ function renderTierBoard() {
       html += '<span class="pos-badge pos-' + p.position.toLowerCase() + '" style="font-size:9px; padding:1px 5px; margin-left:4px;">' + escapeHtml(p.position) + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:12px;">' + escapeHtml(p.name) + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + escapeHtml(p.team) + '</span>';
-      html += '<select class="select-chunky" style="font-size:10px; padding:1px 4px; width:72px; border-width:2px;" onchange="setWatchlistTier(\'' + escapeAttr(p.player_id) + '\', this.value); renderTierBoard();">';
+      html += '<select class="select-chunky" style="font-size:10px; padding:1px 4px; width:72px; border-width:2px;" onchange="setWatchlistTier(\'' + escapeJS(p.player_id) + '\', this.value); renderTierBoard();">';
       for (var t = 0; t <= 5; t++) {
         html += '<option value="' + t + '"' + (p.tier === t ? ' selected' : '') + '>' + TIER_LABELS[t] + '</option>';
       }
@@ -11504,7 +11504,7 @@ function renderMyRosterPanel() {
       html += '<span class="pos-badge pos-' + p.position.toLowerCase() + '" style="font-size:9px; padding:1px 5px;">' + escapeHtml(p.position) + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:12px; flex:1;">' + escapeHtml(p.name) + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + escapeHtml(p.team) + '</span>';
-      html += '<button class="btn-chunky" style="font-size:10px; padding:2px 6px; color:var(--red);" onclick="removeFromRoster(\'' + escapeAttr(p.player_id) + '\'); renderMyRosterPanel();" title="Remove">&#10005;</button>';
+      html += '<button class="btn-chunky" style="font-size:10px; padding:2px 6px; color:var(--red);" onclick="removeFromRoster(\'' + escapeJS(p.player_id) + '\'); renderMyRosterPanel();" title="Remove">&#10005;</button>';
       html += '</div>';
     });
     html += '</div>';
@@ -12066,7 +12066,7 @@ function renderPlayerComps(data, container) {
 
   for (const comp of comps) {
     const simColor = comp.similarity >= 95 ? "var(--green)" : comp.similarity >= 90 ? "var(--orange)" : "var(--ink-medium)";
-    html += `<div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:10px; box-shadow:4px 4px 0 var(--ink); padding:14px; cursor:pointer; transition:transform 0.15s, box-shadow 0.15s;" onmouseover="this.style.transform='translate(-2px,-2px)';this.style.boxShadow='6px 6px 0 var(--ink)'" onmouseout="this.style.transform='';this.style.boxShadow='4px 4px 0 var(--ink)'" onclick="openPlayerProfile('${escapeAttr(comp.player_id)}')">`;
+    html += `<div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:10px; box-shadow:4px 4px 0 var(--ink); padding:14px; cursor:pointer; transition:transform 0.15s, box-shadow 0.15s;" onmouseover="this.style.transform='translate(-2px,-2px)';this.style.boxShadow='6px 6px 0 var(--ink)'" onmouseout="this.style.transform='';this.style.boxShadow='4px 4px 0 var(--ink)'" onclick="openPlayerProfile('${escapeJS(comp.player_id)}')">`;
 
     // Headshot + name
     html += `<div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">`;
